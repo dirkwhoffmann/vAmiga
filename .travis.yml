@@ -4,4 +4,4 @@ xcode_project: vAmiga.xcodeproj
 xcode_scheme: vAmiga
 xcode_destination: platform=macOS
 script: 
-- set -o pipefail && xcodebuild -project vAmiga.xcodeproj -scheme VirtualC64 -destination platform\=macOS build | xcpretty
+- set -o pipefail && xcodebuild -project vAmiga.xcodeproj -scheme vAmiga -destination platform\=macOS build | xcpretty
