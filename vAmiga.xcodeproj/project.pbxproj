@@ -172,6 +172,7 @@
 		508FE05D21EA22CC0043D0E9 /* TapeMountController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04B21EA22CC0043D0E9 /* TapeMountController.swift */; };
 		508FE05E21EA22CC0043D0E9 /* CartridgeMountController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04C21EA22CC0043D0E9 /* CartridgeMountController.swift */; };
 		508FE05F21EA22CC0043D0E9 /* ExportDiskController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04D21EA22CC0043D0E9 /* ExportDiskController.swift */; };
+		508FE06521EA318D0043D0E9 /* VAFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FE06321EA318D0043D0E9 /* VAFile.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -470,6 +471,10 @@
 		508FE04B21EA22CC0043D0E9 /* TapeMountController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TapeMountController.swift; sourceTree = "<group>"; };
 		508FE04C21EA22CC0043D0E9 /* CartridgeMountController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CartridgeMountController.swift; sourceTree = "<group>"; };
 		508FE04D21EA22CC0043D0E9 /* ExportDiskController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExportDiskController.swift; sourceTree = "<group>"; };
+		508FE06121EA318D0043D0E9 /* VAFile_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VAFile_types.h; sourceTree = "<group>"; };
+		508FE06221EA318D0043D0E9 /* Amiga_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Amiga_types.h; sourceTree = "<group>"; };
+		508FE06321EA318D0043D0E9 /* VAFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VAFile.cpp; sourceTree = "<group>"; };
+		508FE06421EA318D0043D0E9 /* VAFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VAFile.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -506,6 +511,7 @@
 		508FDE5B21EA1FA40043D0E9 = {
 			isa = PBXGroup;
 			children = (
+				508FE06021EA318D0043D0E9 /* Amiga */,
 				508FDFDC21EA20600043D0E9 /* GUI */,
 				508FDFAE21EA1FF10043D0E9 /* XIB files */,
 				508FDE9521EA1FBC0043D0E9 /* C64 */,
@@ -1011,6 +1017,25 @@
 			path = MediaBrowsers;
 			sourceTree = "<group>";
 		};
+		508FE06021EA318D0043D0E9 /* Amiga */ = {
+			isa = PBXGroup;
+			children = (
+				508FE06621EA31E50043D0E9 /* Files */,
+			);
+			path = Amiga;
+			sourceTree = "<group>";
+		};
+		508FE06621EA31E50043D0E9 /* Files */ = {
+			isa = PBXGroup;
+			children = (
+				508FE06121EA318D0043D0E9 /* VAFile_types.h */,
+				508FE06221EA318D0043D0E9 /* Amiga_types.h */,
+				508FE06321EA318D0043D0E9 /* VAFile.cpp */,
+				508FE06421EA318D0043D0E9 /* VAFile.h */,
+			);
+			path = Files;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1260,6 +1285,7 @@
 				508FDFDB21EA20510043D0E9 /* Shaders.swift in Sources */,
 				508FE01D21EA227B0043D0E9 /* UserDefaults.swift in Sources */,
 				508FE04E21EA22CC0043D0E9 /* RomPrefs.swift in Sources */,
+				508FE06521EA318D0043D0E9 /* VAFile.cpp in Sources */,
 				508FE05621EA22CC0043D0E9 /* PreferencesController.swift in Sources */,
 				508FE05321EA22CC0043D0E9 /* VideoPrefs.swift in Sources */,
 				508FE02321EA227B0043D0E9 /* KeyboardController.swift in Sources */,
