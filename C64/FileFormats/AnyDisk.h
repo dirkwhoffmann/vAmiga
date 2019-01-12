@@ -90,7 +90,7 @@ public:
     virtual int readTrack() { return readHalftrack(); }
     
     /*! @brief    Reads multiple bytes in form of a hex dump string.
-     *  @param    Number of bytes ranging from 1 to 85.
+     *  @param    num Number of bytes ranging from 1 to 85.
      */
     virtual const char *readHalftrackHex(size_t num);
     virtual const char *readTrackHex(size_t num) { return readHalftrackHex(num); }

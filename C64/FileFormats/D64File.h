@@ -252,7 +252,7 @@ private:
     
     /*! @brief   Looks up a directory item by number.
      *  @details This function searches the directory for the requested item. 
-     *  @param   itemBumber Number of the item. The first item has number 0.
+     *  @param   item Number of the item. The first item has number 0.
      *  @param   skipInvisibleFiles If set to true, only those files are
      *           considered that would show up when loading the directory via
      *           LOAD "$",8. Otherwise, all files are considered, i.e. those

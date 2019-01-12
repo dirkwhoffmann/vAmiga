@@ -152,12 +152,7 @@ static const uint16_t NTSC_LOWER_VBLANK = 12;
 static const uint16_t NTSC_HEIGHT = 263; // 16 + 10 + 200 + 25 + 12
 
 //! @brief    Number of drawn rasterlines per frame in NTSC mode
-//! @deprecated because the value differes between NTSC models
 static const uint16_t NTSC_RASTERLINES = 235; // 10 + 200 + 25
-
-//! @brief    Number of viewable rasterlines per frame in NTSC mode
-//! @deprecated because the value differes between NTSC models
-// static const uint16_t NTSC_VISIBLE_RASTERLINES = 235;
 
 
 //

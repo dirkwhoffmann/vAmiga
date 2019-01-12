@@ -742,10 +742,10 @@ extension MyController {
             let image = NSImage.init(named: "LEDred")
             if firstDrive() {
                 redLED1.image = image
-                redLED1.setNeedsDisplay()
+                redLED1.needsDisplay = true
             } else {
                 redLED2.image = image
-                redLED2.setNeedsDisplay()
+                redLED2.needsDisplay = true
             }
             
         case MSG_VC1541_RED_LED_OFF:
@@ -753,10 +753,10 @@ extension MyController {
             let image = NSImage.init(named: "LEDgray")
             if firstDrive() {
                 redLED1.image = image
-                redLED1.setNeedsDisplay()
+                redLED1.needsDisplay = true
             } else {
                 redLED2.image = image
-                redLED2.setNeedsDisplay()
+                redLED2.needsDisplay = true
             }
     
         case MSG_IEC_BUS_BUSY:

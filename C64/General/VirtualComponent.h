@@ -165,20 +165,20 @@ public:
     //
     
     /*! @brief    Registers all sub components for this component
-     *  @abstract Sub components are usually registered in the constructor of
+     *  @details  components are usually registered in the constructor of
      *            a virtual component.
-     *  @param    items Pointer to the first element of a VirtualComponet* array.
+     *  @param    subComponents Pointer to the first element of a VirtualComponet* array.
      *            The end of the array is marked by a NULL pointer.
-     *  @param    legth Size of the subComponent array in bytes.
+     *  @param    length Size of the subComponent array in bytes.
      */
     void registerSubComponents(VirtualComponent **subComponents, unsigned length);
     
     /*! @brief    Registers all snapshot items for this component
-     *  @abstract Snaphshot items are usually registered in the constructor of
+     *  @details  Snaphshot items are usually registered in the constructor of
      *            a virtual component.
      *  @param    items Pointer to the first element of a SnapshotItem* array.
      *            The end of the array is marked by a NULL pointer.
-     *  @param    legth Size of the SnapshotItem array in bytes.
+     *  @param    length Size of the SnapshotItem array in bytes.
      */
     void registerSnapshotItems(SnapshotItem *items, unsigned length);
     

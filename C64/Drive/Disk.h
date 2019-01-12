@@ -254,7 +254,6 @@ public:
     void encodeGcr(uint8_t *values, size_t length, Track t, HeadPosition offset);
 
     /*! @brief   Translates four data bytes into five GCR encodes bytes
-     *! @deprecated
      */
     void encodeGcr(uint8_t b1, uint8_t b2, uint8_t b3, uint8_t b4, Track t, unsigned offset);
     
@@ -515,10 +514,8 @@ private:
      *  @details This function translates the logical byte sequence of a single track into
      *           the native VC1541 byte representation. The native representation includes
      *           sync marks, GCR data etc.
-     *  @param   tailGapEven
-     *           Number of tail bytes follwowing sectors with even sector numbers.
-     *  @param   tailGapOdd
-     *           Number of tail bytes follwowing sectors with odd sector numbers.
+     *  @param   tailGap
+     *           Number of tail bytes follwowing a sector numbers.
      *  @return  Number of written bits.
      */
     size_t encodeTrack(D64File *a, Track t, uint8_t tailGap, HeadPosition start);

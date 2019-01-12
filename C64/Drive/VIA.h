@@ -117,7 +117,7 @@ class VIA6522 : public VirtualComponent {
      */
     uint8_t pb;
     
-    //! @brief
+    //! @brief    CB pins
     /*! @details  "The Peripheral B control lines act as interrupt inputs or
      *             as handshake outputs. As with CA1 and CA2, each line
      *             controls an interrupt flag with a corresponding interrupt

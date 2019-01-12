@@ -299,7 +299,7 @@ class C64 : public VirtualComponent {
     C64Model getModel();
     
     /*! @brief    Sets the currently emulated C64 model
-     *  @param    model is any C64Model other than C64_CUSTOM.
+     *  @param    m is any C64Model other than C64_CUSTOM.
      *  @note     It it safe to call this function on a running emulator.
      */
     void setModel(C64Model m);

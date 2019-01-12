@@ -287,12 +287,12 @@ public:
 public:
     
     /*! @brief    Executes SID until a certain cycle is reached
-     *  @param    cycle The target cycle
+     *  @param    targetCycle The target cycle
      */
     void executeUntil(uint64_t targetCycle);
 
     /*! @brief    Executes SID for a certain number of cycles
-     *  @param    cycles Number of cycles to execute
+     *  @param    numCycles Number of cycles to execute
      */
 	void execute(uint64_t numCycles);
 

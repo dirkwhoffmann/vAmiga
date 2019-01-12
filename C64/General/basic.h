@@ -327,7 +327,7 @@ uint8_t localTimeHour();
 void sleepMicrosec(unsigned usec);
 
 /*! @brief    Sleeps until kernel timer reaches kernelTargetTime
- *  @param    kernelEarlyWakeup: To increase timing precision, the function
+ *  @param    kernelEarlyWakeup To increase timing precision, the function
  *            wakes up the thread earlier by this amount and waits actively in
  *            a delay loop until the deadline is reached.
  *  @return   Overshoot time (jitter), measured in kernel time. Smaller values

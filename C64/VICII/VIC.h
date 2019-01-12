@@ -403,7 +403,6 @@ private:
     /*! @brief    Set to true in cycle 1, cycle 63 (65) iff yCounter matches D012
      *  @details  Variable is needed to determine if a rasterline should be
      *            issued in cycle 1 or 2.
-     *  @deprecated Will be replaced by rasterlineMatchesIrqLine
      */
     bool yCounterEqualsIrqRasterline;
     

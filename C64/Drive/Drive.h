@@ -447,7 +447,7 @@ public:
     bool getZone() { return zone; }
 
     /*! @brief    Sets the current track zone
-     *  @param    z drive zone (0 to 3)
+     *  @param    value drive zone (0 to 3)
      */
     void setZone(uint2_t value);
 

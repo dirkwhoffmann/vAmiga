@@ -112,7 +112,7 @@ public:
     virtual int readItem();
     
     /*! @brief    Reads multiple bytes in form of a hex dump string.
-     *  @param    Number of bytes ranging from 1 to 85.
+     *  @param    num Number of bytes ranging from 1 to 85.
      */
     virtual const char *readItemHex(size_t num);
     
