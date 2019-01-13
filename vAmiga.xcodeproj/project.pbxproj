@@ -543,7 +543,7 @@
 				508FDFDC21EA20600043D0E9 /* GUI */,
 				508FDFAE21EA1FF10043D0E9 /* XIB files */,
 				508FDE9521EA1FBC0043D0E9 /* C64 */,
-				508FDE6621EA1FA40043D0E9 /* vAmiga */,
+				508FDE6621EA1FA40043D0E9 /* Resources */,
 				508FDE7B21EA1FA50043D0E9 /* vAmigaTests */,
 				508FDE8621EA1FA50043D0E9 /* vAmigaUITests */,
 				508FDE6521EA1FA40043D0E9 /* Products */,
@@ -561,7 +561,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		508FDE6621EA1FA40043D0E9 /* vAmiga */ = {
+		508FDE6621EA1FA40043D0E9 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
 				50B14C1321EB8445002E32A6 /* sounds */,
@@ -570,7 +570,7 @@
 				508FDE7221EA1FA50043D0E9 /* Info.plist */,
 				508FDE7321EA1FA50043D0E9 /* vAmiga.entitlements */,
 			);
-			path = vAmiga;
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		508FDE7B21EA1FA50043D0E9 /* vAmigaTests */ = {
