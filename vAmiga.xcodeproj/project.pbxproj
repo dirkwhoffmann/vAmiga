@@ -186,6 +186,7 @@
 		50B14C2221EB8445002E32A6 /* drive_snatch_uae.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 50B14C1A21EB8445002E32A6 /* drive_snatch_uae.aiff */; };
 		50B14C2321EB8445002E32A6 /* 1541_door_open_1.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 50B14C1B21EB8445002E32A6 /* 1541_door_open_1.aiff */; };
 		50B14C2621EB905A002E32A6 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 50B14C2521EB9059002E32A6 /* Credits.rtf */; };
+		50B14C2821EB97EC002E32A6 /* AmigaProxy.mm in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C2721EB97EC002E32A6 /* AmigaProxy.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -505,6 +506,8 @@
 		50B14C1A21EB8445002E32A6 /* drive_snatch_uae.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = drive_snatch_uae.aiff; sourceTree = "<group>"; };
 		50B14C1B21EB8445002E32A6 /* 1541_door_open_1.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = 1541_door_open_1.aiff; sourceTree = "<group>"; };
 		50B14C2521EB9059002E32A6 /* Credits.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
+		50B14C2721EB97EC002E32A6 /* AmigaProxy.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AmigaProxy.mm; sourceTree = "<group>"; };
+		50B14C2921EB9806002E32A6 /* AmigaProxy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaProxy.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1101,6 +1104,8 @@
 		50B14C2421EB8F25002E32A6 /* Proxy */ = {
 			isa = PBXGroup;
 			children = (
+				50B14C2921EB9806002E32A6 /* AmigaProxy.h */,
+				50B14C2721EB97EC002E32A6 /* AmigaProxy.mm */,
 				508FDFEC21EA22780043D0E9 /* C64Proxy.h */,
 				508FE00621EA227A0043D0E9 /* C64Proxy.mm */,
 			);
@@ -1337,6 +1342,7 @@
 				508FDF7821EA1FBC0043D0E9 /* P00File.cpp in Sources */,
 				508FE02621EA227B0043D0E9 /* Debugger.swift in Sources */,
 				508FE02B21EA227B0043D0E9 /* WindowDelegate.swift in Sources */,
+				50B14C2821EB97EC002E32A6 /* AmigaProxy.mm in Sources */,
 				508FDFA921EA1FBC0043D0E9 /* VIA.cpp in Sources */,
 				508FE01721EA227B0043D0E9 /* CpuTraceView.swift in Sources */,
 				508FDF7621EA1FBC0043D0E9 /* T64File.cpp in Sources */,
@@ -1590,7 +1596,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = vAmiga/vAmiga.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Resources/vAmiga.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = Resources/Info.plist;
@@ -1608,7 +1614,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = vAmiga/vAmiga.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Resources/vAmiga.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = Resources/Info.plist;

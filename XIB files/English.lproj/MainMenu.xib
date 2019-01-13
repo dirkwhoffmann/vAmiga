@@ -204,32 +204,29 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="qq8-Qm-VmD"/>
-                            <menuItem isSeparatorItem="YES" id="rLR-9y-0BS"/>
+                            <menuItem title="Pause" id="430">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="pauseAction:" target="-1" id="505"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Reset" id="432">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="continueAction:" target="-1" id="484"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Power Down" id="434">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="resetAction:" target="-1" id="506"/>
+                                </connections>
+                            </menuItem>
                             <menuItem title="Debug" id="414">
                                 <menu key="submenu" title="Debug" id="415">
                                     <items>
-                                        <menuItem title="Reset Emulator" id="434">
-                                            <string key="keyEquivalent" base64-UTF8="YES">
-CA
-</string>
-                                            <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
-                                            <connections>
-                                                <action selector="resetAction:" target="-1" id="506"/>
-                                            </connections>
-                                        </menuItem>
                                         <menuItem isSeparatorItem="YES" id="433">
                                             <modifierMask key="keyEquivalentModifierMask" command="YES"/>
-                                        </menuItem>
-                                        <menuItem title="Pause" keyEquivalent="p" id="430">
-                                            <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
-                                            <connections>
-                                                <action selector="pauseAction:" target="-1" id="505"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Continue" keyEquivalent="&gt;" id="432">
-                                            <connections>
-                                                <action selector="continueAction:" target="-1" id="484"/>
-                                            </connections>
                                         </menuItem>
                                         <menuItem title="Step Into" keyEquivalent="I" id="429">
                                             <connections>

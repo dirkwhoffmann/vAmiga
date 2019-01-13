@@ -54,8 +54,8 @@ private:
     unsigned suspendCounter = 0;
     
     /* The emulator thread
-     * The thread is created when the emulator starts and destroyed when it
-     * halts.
+     * The thread is created when the emulator starts and destroyed when the
+     * emulator is paused or shut down.
      */
     pthread_t p = NULL;
     
@@ -137,8 +137,8 @@ public:
 
 public:
 
-    void _powerUp();
-    void _powerDown();
+    void _powerOn();
+    void _powerOff();
     void _reset();
     void _ping();
     void _dump();
@@ -200,7 +200,76 @@ public:
     // Running the emulator
     //
     
-public:
+    public:
+    
+    /* Checks for missing resources.
+     * If an Amiga 500 or Amiga 1000 is emulated, this function always returns
+     * true. If you emulate an Amiga 1000, it returns false if no Boot Rom
+     * is present.
+     */
+    bool isReadyToGo();
+    
+    /* The operational state of the emulator is defined by variable 'power'
+     * which is defined in AmigaComponent and variable 'p' which represents
+     * the emulator thread. From the four possible combinations, only three
+     * are valid:
+     *
+     *     power     | thread     | State
+     *     --------------------------------------
+     *     true      | created    | Running
+     *     true      | NULL       | Paused
+     *     false     | created    | (INVALID)
+     *     false     | NULL       | Off
+     *
+     * The state can be queried by various methods with the following meaning:
+     *
+     * Methods defined in class HardwareComponent:
+     *
+     *    isPoweredOn() == true  <==>  'Running' or 'Paused'
+     *   isPoweredOff() == true  <==>  'Off'
+     *
+     * Methods defined in class Amiga:
+     *
+     *      isRunning() == true  <==>  'Running'
+     *       isPaused() == true  <==>  'Paused'
+     */
+    bool isRunning() { return p != NULL; }
+    bool isPaused() { return isPoweredOn() && p == NULL; }
+    
+    /* The emulator state can be controlled by the following functions:
+     *
+     *     Function    | Current | Next    | Action
+     *     -------------------------------------------------------------------
+     *     run()       | Running | Running | none
+     *                 | Paused  | Running | create thread
+     *                 | Off     | Running | powerOn(), create thread
+     *     -------------------------------------------------------------------
+     *     halt()      | Running | Paused  | destroy thread
+     *                 | Paused  | Paused  | none
+     *                 | Off     | Off     | none
+     *     -------------------------------------------------------------------
+     *     powerOn()   | Running | Running | none
+     *                 | Paused  | Paused  | none
+     *                 | Off     | Running | powerOn(), create thread
+     *     -------------------------------------------------------------------
+     *     powerOff()  | Running | Off     | destroy thread, powerOff()
+     *                 | Paused  | Off     | powerOff()
+     *                 | Off     | Off     | none
+     *     -------------------------------------------------------------------
+     *     coldStart() | Running | Running | powerOff(), powerOn()
+     *                 | Paused  | Running | powerOff(), powerOn()
+     *                 | Off     | Running | powerOff(), powerOn()
+     *
+     */
+    
+    
+    
+
+    
+
+    
+    // Returns true if the emulator is not running.
+    bool isHalted() { return p == NULL; }
     
     /* Creates and launches the emulator thread.
      * This method is usually called after emulation was stopped by a call to
@@ -215,20 +284,10 @@ public:
      * Calling this functions on a running emulator has no effect.
      */
     void halt();
-    
-    /* Indicates if the virtual Amiga is ready to run.
-     * Under normal conditions, the emulator is ready to run and this function
-     * returns true. In rare cases, false is returned, e.g., if you emulate an
-     * Amiga 1000 with no Boot Rom installed.
-     */
-    bool isRunnable();
-    
-    // Returns true if the emulator is running.
-    bool isRunning() { return p != NULL; }
-    
-    // Returns true if the emulator is not running.
-    bool isHalted() { return p == NULL; }
 
+    // Calls run() or halt(), depending on the current state.
+    void runOrHalt() { isRunning() ? halt() : run(); }
+    
     /* The thread enter function.
      * This (private) method is invoked when the emulator thread launches. It
      * has to be declared public to make it accessible by the emulator thread.

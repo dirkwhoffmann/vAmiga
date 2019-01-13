@@ -229,6 +229,7 @@ extension MyController {
         refresh()
     }
     
+    // DEPRECATED (use pauseContinueAction instead)
     @IBAction func pauseAction(_ sender: Any!) {
         
         if c64.isRunning() {
@@ -237,7 +238,8 @@ extension MyController {
         }
         refresh()
     }
-    
+
+    // DEPRECATED (use pauseContinueAction instead)
     @IBAction func continueAction(_ sender: Any!) {
         
         needsSaving = true

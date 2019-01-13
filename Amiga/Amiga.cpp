@@ -88,17 +88,17 @@ Amiga::~Amiga()
 }
 
 void
-Amiga::_powerUp()
+Amiga::_powerOn()
 {
-    msg("Powering up\n");
+    msg("Powering on\n");
     
     ping();
 }
 
 void
-Amiga::_powerDown()
+Amiga::_powerOff()
 {
-    msg("Powering down\n");
+    msg("Powering off\n");
     
     ping();
 }
@@ -161,13 +161,19 @@ Amiga::setModel(AmigaModel model)
     this->model = model;
 }
 
+bool
+Amiga::isReadyToGo()
+{
+    return true;
+}
+
 void
 Amiga::run()
 {
     if (isHalted()) {
         
-        // Check for ROM images
-        if (!isRunnable()) {
+        // Check for missing Roms
+        if (!isReadyToGo()) {
             putMessage(MSG_ROM_MISSING);
             return;
         }
@@ -188,12 +194,6 @@ Amiga::halt()
         // Wait until the thread has terminated
         pthread_join(p, NULL);
     }
-}
-
-bool
-Amiga::isRunnable()
-{
-    return true;
 }
 
 void

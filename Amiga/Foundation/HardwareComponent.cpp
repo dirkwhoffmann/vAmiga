@@ -36,29 +36,31 @@ HardwareComponent::setAmiga(Amiga *amiga)
 }
 
 void
-HardwareComponent::powerUp()
+HardwareComponent::powerOn()
 {
-    // Power up all sub components
+    // Power on all sub components
     if (subComponents != NULL)
         for (unsigned i = 0; subComponents[i] != NULL; i++)
-            subComponents[i]->powerUp();
+            subComponents[i]->powerOn();
 
     // Power up this component
-    debug(2, "Powering up[%p]\n", this);
-    _powerUp();
+    debug(2, "Powering on[%p]\n", this);
+    power = true;
+    _powerOn();
 }
 
 void
-HardwareComponent::powerDown()
+HardwareComponent::powerOff()
 {
-    // Power down all sub components
+    // Power off all sub components
     if (subComponents != NULL)
         for (unsigned i = 0; subComponents[i] != NULL; i++)
-            subComponents[i]->powerDown();
+            subComponents[i]->powerOff();
     
-    // Power up this component
-    debug(2, "Powering down[%p]\n", this);
-    _powerDown();
+    // Power off this component
+    debug(2, "Powering off[%p]\n", this);
+    power = false;
+    _powerOff();
 }
 
 void

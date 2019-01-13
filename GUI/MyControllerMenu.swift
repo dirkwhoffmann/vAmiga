@@ -35,6 +35,17 @@ extension MyController : NSMenuItemValidation {
             return true
         }
         
+        // Edit menu
+        if item.action == #selector(MyController.runOrHaltAction(_:)) {
+            // item.title = amiga.isRunning() ? "Pause" : "Continue"
+            return true
+        }
+        if item.action == #selector(MyController.powerOnOrOffAction(_:)) {
+            // item.title = amiga.isPoweredOn() ? "Power Off" : "Power On"
+            return true
+        }
+
+        
         // View menu
         if item.action == #selector(MyController.toggleStatusBarAction(_:)) {
             item.title = statusBar ? "Hide Status Bar" : "Show Status Bar"
@@ -102,63 +113,6 @@ extension MyController : NSMenuItemValidation {
         }
         if item.action == #selector(MyController.rewindAction(_:)) {
             return c64.datasette.hasTape()
-        }
-        
-        // Cartridge menu
-        if item.action == #selector(MyController.attachRecentCartridgeAction(_:)) {
-            return validateURLlist(mydocument.recentlyAttachedCartridgeURLs, image: "cartridge_small")
-        }
-        if item.action == #selector(MyController.attachGeoRamDummyAction(_:)) {
-            item.state = (c64.expansionport.cartridgeType() == CRT_GEO_RAM) ? .on : .off
-        }
-        if item.action == #selector(MyController.attachIsepicAction(_:)) {
-            item.state = (c64.expansionport.cartridgeType() == CRT_ISEPIC) ? .on : .off
-        }
-        if item.action == #selector(MyController.detachCartridgeAction(_:)) {
-            return c64.expansionport.cartridgeAttached()
-        }
-        if item.action == #selector(MyController.pressButtonDummyAction(_:)) {
-            return c64.expansionport.numButtons() > 0
-        }
-        if item.action == #selector(MyController.pressCartridgeButton1Action(_:)) {
-            let title = c64.expansionport.getButtonTitle(1)
-            item.title = title ?? ""
-            item.isHidden = title == nil
-            return title != nil
-        }
-        if item.action == #selector(MyController.pressCartridgeButton2Action(_:)) {
-            let title = c64.expansionport.getButtonTitle(2)
-            item.title = title ?? ""
-            item.isHidden = title == nil
-            return title != nil
-        }
-        if item.action == #selector(MyController.setSwitchDummyAction(_:)) {
-            return c64.expansionport.hasSwitch()
-        }
-        if item.action == #selector(MyController.setSwitchNeutralAction(_:)) {
-            let title = c64.expansionport.switchDescription(0)
-            item.title = title ?? ""
-            item.isHidden = title == nil
-            item.state = c64.expansionport.switchIsNeutral() ? .on : .off
-            return title != nil
-        }
-        if item.action == #selector(MyController.setSwitchLeftAction(_:)) {
-            let title = c64.expansionport.switchDescription(-1)
-            item.title = title ?? ""
-            item.isHidden = title == nil
-            item.state = c64.expansionport.switchIsLeft() ? .on : .off
-            return title != nil
-        }
-        if item.action == #selector(MyController.setSwitchRightAction(_:)) {
-            let title = c64.expansionport.switchDescription(1)
-            item.title = title ?? ""
-            item.isHidden = title == nil
-            item.state = c64.expansionport.switchIsRight() ? .on : .off
-            return title != nil
-        }
-        if item.action == #selector(MyController.geoRamBatteryAction(_:)) {
-            item.state = c64.expansionport.hasBattery() ? .on : .off
-            return c64.expansionport.cartridgeType() == CRT_GEO_RAM
         }
         
         // Debug menu
@@ -347,6 +301,26 @@ extension MyController : NSMenuItemValidation {
         keyboardcontroller.type(string: text, completion: nil)
     }
 
+    @IBAction func runOrHaltAction(_ sender: Any!) {
+        
+        // amiga.runOrHalt()
+        refresh()
+    }
+    
+    @IBAction func resetAction(_ sender: Any!) {
+        
+        // TODO: amiga.reset()
+        c64.powerUp() // REMOVE
+        refresh()
+    }
+ 
+    @IBAction func powerOnOrOffAction(_ sender: Any!) {
+        
+        // TODO: amiga.powerOnOrOff()
+        refresh()
+    }
+    
+    
     //
     // Action methods (View menu)
     //
@@ -705,144 +679,10 @@ extension MyController : NSMenuItemValidation {
 
     
     //
-    // Action methods (Cartridge menu)
+    // Action methods ()
     //
 
-    @IBAction func attachCartridgeAction(_ sender: Any!) {
-        
-        // Show the OpenPanel
-        let openPanel = NSOpenPanel()
-        openPanel.allowsMultipleSelection = false
-        openPanel.canChooseDirectories = false
-        openPanel.canCreateDirectories = false
-        openPanel.canChooseFiles = true
-        openPanel.prompt = "Attach"
-        openPanel.allowedFileTypes = ["crt"]
-        openPanel.beginSheetModal(for: window!, completionHandler: { result in
-            if result == .OK {
-                if let url = openPanel.url {
-                    do {
-                        try self.mydocument.createAttachment(from: url)
-                        self.mydocument.mountAttachmentAsCartridge()
-                    } catch {
-                        NSApp.presentError(error)
-                    }
-                }
-            }
-        })
-    }
-    
-    @IBAction func attachRecentCartridgeAction(_ sender: NSMenuItem!) {
-        
-        track()
-        let tag = sender.tag
-        
-        if let url = mydocument.getRecentlyAtachedCartridgeURL(tag) {
-            do {
-                try mydocument.createAttachment(from: url)
-                mydocument.mountAttachmentAsCartridge()
-            } catch {
-                NSApp.presentError(error)
-            }
-        }
-    }
-    
-    @IBAction func detachCartridgeAction(_ sender: Any!) {
-        track()
-        c64.expansionport.detachCartridgeAndReset()
-    }
 
-    @IBAction func attachGeoRamDummyAction(_ sender: Any!) {
-        // Dummy action method to enable menu item validation
-    }
-
-    @IBAction func attachGeoRamAction(_ sender: Any!) {
-        let sender = sender as! NSMenuItem
-        let capacity = sender.tag
-        track("RAM capacity = \(capacity)")
-        c64.expansionport.attachGeoRamCartridge(capacity)
-    }
-    
-    @IBAction func attachIsepicAction(_ sender: Any!) {
-        track("")
-        c64.expansionport.attachIsepicCartridge()
-    }
-    
-    @IBAction func geoRamBatteryAction(_ sender: Any!) {
-        c64.expansionport.setBattery(!c64.expansionport.hasBattery())
-    }
-    
-    @IBAction func pressCartridgeButton1Action(_ sender: NSButton!) {
-        
-        c64.expansionport.pressButton(1)
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            self.c64.expansionport.releaseButton(1)
-        }
-    }
-
-    @IBAction func pressCartridgeButton2Action(_ sender: NSButton!) {
-        
-        c64.expansionport.pressButton(2)
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            self.c64.expansionport.releaseButton(2)
-        }
-    }
-    
-    @IBAction func pressButtonDummyAction(_ sender: Any!) {
-        // Dummy action method to enable menu item validation
-    }
-
-    @IBAction func setSwitchNeutralAction(_ sender: Any!) {
-        
-        c64.expansionport.setSwitchPosition(0)
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            // TODO: Delete or call a method here if it is really needed.
-        }
-    }
-
-    @IBAction func setSwitchLeftAction(_ sender: Any!) {
-        
-        c64.expansionport.setSwitchPosition(-1)
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            // TODO: Delete or call a method here if it is really needed.
-        }
-    }
-
-    @IBAction func setSwitchRightAction(_ sender: Any!) {
-        
-        c64.expansionport.setSwitchPosition(1)
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            // TODO: Delete or call a method here if it is really needed.
-        }
-    }
-
-    @IBAction func setSwitchDummyAction(_ sender: Any!) {
-        // Dummy action method to enable menu item validation
-    }
-    
-    @IBAction func toggleSwitchAction(_ sender: NSButton!) {
-        
-        // tag remembers if we previously pulled left or right
-        let dir = sender.tag
-        let pos = c64.expansionport.switchPosition()
-        
-        // Move to the next valid switch position
-        for newPos in [pos + dir, pos + 2 * dir, pos - dir, pos - 2 * dir] {
-            
-            if c64.expansionport.validSwitchPosition(newPos) {
-                track("old pos = \(pos) new pos = \(newPos)")
-                
-                c64.expansionport.setSwitchPosition(newPos)
-                sender.tag = (newPos > pos) ? 1 : -1
-                break
-            }
-        }
-    }
         
     //
     // Action methods (Debug menu)
@@ -930,15 +770,9 @@ extension MyController : NSMenuItemValidation {
     @IBAction func dumpC64ExpansionPort(_ sender: Any!) { c64.expansionport.dump() }
     
     //
-    // Action methods (Toolbar)
+    // Action methods ()
     //
     
-    @IBAction func resetAction(_ sender: Any!) {
-        
-        needsSaving = true
-        metalScreen.rotateBack()
-        c64.powerUp()
-        refresh()
-    }
+
     
 }

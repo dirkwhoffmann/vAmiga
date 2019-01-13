@@ -63,6 +63,9 @@ public:
     
 protected:
     
+    // Indicates if the component is powered up or down.
+    bool power = false;
+    
     // Sub components of this component
     HardwareComponent **subComponents = NULL;
     
@@ -88,21 +91,30 @@ public:
      */
     virtual void setAmiga(Amiga *amiga);
     
-    /* Emulates a power up event on the virtual Amiga.
-     * By default, each component powers up its sub components.
-     */
-    void powerUp();
+    // Returns true if the component is powered on
+    bool isPoweredOn() { return power; }
 
-    // Subclass specific powerUp behaviour
-    virtual void _powerUp() { _reset(); }
+    // Returns true if the component is powered off
+    bool isPoweredOff() { return !power; }
+
+    /* Emulates a power on event on the virtual Amiga.
+     * By default, each component powers on its sub components.
+     */
+    void powerOn();
+
+    // Subclass specific powerOn behaviour
+    virtual void _powerOn() { _reset(); }
     
-    /* Emulates a power down event on the virtual Amiga.
-     * By default, each component powers down its sub components.
+    /* Emulates a power off event on the virtual Amiga.
+     * By default, each component powers off its sub components.
      */
-    void powerDown();
+    void powerOff();
 
-    // Subclass specific powerDown behaviour
-    virtual void _powerDown() { };
+    // Subclass specific powerOff behaviour
+    virtual void _powerOff() { };
+    
+    // Calls powerOn() or powerOff(), depending on the current state.
+    void powerOnOrOff() { isPoweredOn() ? powerOff() : powerOn(); }
     
     /* Emulates a reset event on the virtual Amiga.
      * By default, each component resets its sub components.
