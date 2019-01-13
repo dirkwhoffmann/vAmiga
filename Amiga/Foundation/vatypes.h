@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef VATYPES_H
-#define VATYPES_H
+#ifndef _VATYPES_H
+#define _VATYPES_H
 
 //
 // Amiga hardware
@@ -18,10 +18,17 @@ typedef enum {
     AMIGA_500,
     AMIGA_1000,
     AMIGA_2000
-} VAModel;
+} AmigaModel;
 
-inline bool isVAModel(VAModel model) {
+inline bool isAmigaModel(AmigaModel model) {
     return model >= AMIGA_500 && model <= AMIGA_2000;
+}
+
+inline const char *modelName(AmigaModel model) {
+    return
+    model == AMIGA_500 ? "Amiga 500" :
+    model == AMIGA_1000 ? "Amiga 1000" :
+    model == AMIGA_2000 ? "Amiga 2000" : "???";
 }
 
 

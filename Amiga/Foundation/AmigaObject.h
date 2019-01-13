@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _VAOBJECT_INC
-#define _VAOBJECT_INC
+#ifndef _AMIGAOBJECT_INC
+#define _AMIGAOBJECT_INC
 
 #include "vastd.h"
 
@@ -16,7 +16,7 @@
  * This class stores a textual description of the object and offers various
  * functions for printing debug messages and warnings.
  */
-class VAObject {
+class AmigaObject {
     
 protected:
     
@@ -68,6 +68,8 @@ public:
     // Prints a trace message if tracing is enabled
     void trace();
     
+private:
+    
     /* Prints the actual trace message to the console
      * This method is overwritten by sub-classes that support tracing.
      */
@@ -87,6 +89,8 @@ public:
      * All messages are prefixed by the string description of the printing
      * object. To omit the prefix, use plainmsg or plaindebug instead.
      */
+    
+protected:
     
     void msg(const char *fmt, ...);
     void plainmsg(const char *fmt, ...);

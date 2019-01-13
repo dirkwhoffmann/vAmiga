@@ -16,7 +16,7 @@
 #define V_SUBMINOR 1
 
 // Disable assertion checking (Uncomment in release build)
-#define NDEBUG
+// #define NDEBUG
 
 // Default debug level for all components (Set to 1 in release build)
 #define DEBUG_LEVEL 1

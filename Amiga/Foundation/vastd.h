@@ -330,10 +330,19 @@ int64_t sleepUntil(uint64_t kernelTargetTime, uint64_t kernelEarlyWakeup);
 
 
 //
-//! @functiongroup Computing fingerprints
+// Computing fingerprints
 //
 
 //! @brief    Computes a fingeprint based on the FNV-1a hash algorithm
 uint64_t fnv_1a(uint8_t *addr, size_t size);
 
+
+//
+// Debugging
+//
+
+// Returns true if we're running a release build.
+bool releaseBuild();
+    
+    
 #endif

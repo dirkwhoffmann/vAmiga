@@ -22,10 +22,6 @@
 #ifndef CONFIGURE_H
 #define CONFIGURE_H
 
-// Snapshot version number of this release
-#define V_MAJOR 3
-#define V_MINOR 3
-#define V_SUBMINOR 0
 
 // Disable assertion checking (Uncomment in release build)
 #define NDEBUG

@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "VAObject.h"
+#include "AmigaObject.h"
 #include <cstdlib>
 
 #define VAOBJ_PARSE \
@@ -27,7 +27,7 @@ else \
 fprintf(stderr, "%s%s", prefix, buf);
 
 void
-VAObject::trace()
+AmigaObject::trace()
 {
 #ifndef NDEBUG // Generate code in debug build, only.
 
@@ -52,21 +52,21 @@ void panic(const char *fmt, ...);
 
 
 void
-VAObject::msg(const char *fmt, ...)
+AmigaObject::msg(const char *fmt, ...)
 {
     VAOBJ_PARSE
     VAPRINT("")
 }
 
 void
-VAObject::plainmsg(const char *fmt, ...)
+AmigaObject::plainmsg(const char *fmt, ...)
 {
     VAOBJ_PARSE
     VAPRINTPLAIN("")
 }
 
 void
-VAObject::debug(const char *fmt, ...)
+AmigaObject::debug(const char *fmt, ...)
 {
 #ifndef NDEBUG
     VAOBJ_PARSE
@@ -75,7 +75,7 @@ VAObject::debug(const char *fmt, ...)
 }
 
 void
-VAObject::debug(int level, const char *fmt, ...)
+AmigaObject::debug(int level, const char *fmt, ...)
 {
 #ifndef NDEBUG
     if (level <= debugLevel) {
@@ -86,7 +86,7 @@ VAObject::debug(int level, const char *fmt, ...)
 }
 
 void
-VAObject::plaindebug(const char *fmt, ...)
+AmigaObject::plaindebug(const char *fmt, ...)
 {
 #ifndef NDEBUG
     VAOBJ_PARSE
@@ -95,7 +95,7 @@ VAObject::plaindebug(const char *fmt, ...)
 }
 
 void
-VAObject::plaindebug(int level, const char *fmt, ...)
+AmigaObject::plaindebug(int level, const char *fmt, ...)
 {
 #ifndef NDEBUG
     if (level <= debugLevel) {
@@ -106,14 +106,14 @@ VAObject::plaindebug(int level, const char *fmt, ...)
 }
 
 void
-VAObject::warn(const char *fmt, ...)
+AmigaObject::warn(const char *fmt, ...)
 {
     VAOBJ_PARSE;
     VAPRINT("WARNING: ")
 }
 
 void
-VAObject::panic(const char *fmt, ...)
+AmigaObject::panic(const char *fmt, ...)
 {
     VAOBJ_PARSE;
     VAPRINT("PANIC: ")

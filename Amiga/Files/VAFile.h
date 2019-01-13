@@ -10,12 +10,12 @@
 #ifndef _VAFILE_INC
 #define _VAFILE_INC
 
-#include "VAObject.h"
+#include "AmigaObject.h"
 
 /* Base class of all file readable types.
  * Provides the basic functionality for reading and writing files.
  */
-class VAFile : public VAObject {
+class VAFile : public AmigaObject {
     
 protected:
     
