@@ -177,6 +177,14 @@
 		50B14C0D21EB3708002E32A6 /* HardwareComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0B21EB3708002E32A6 /* HardwareComponent.cpp */; };
 		50B14C1021EB410B002E32A6 /* Amiga.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0E21EB410B002E32A6 /* Amiga.cpp */; };
 		50B14C1221EB4314002E32A6 /* vastd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C1121EB4314002E32A6 /* vastd.cpp */; };
+		50B14C1C21EB8445002E32A6 /* 1541_door_closed_2.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 50B14C1421EB8445002E32A6 /* 1541_door_closed_2.aiff */; };
+		50B14C1D21EB8445002E32A6 /* 1541_power_on_0.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 50B14C1521EB8445002E32A6 /* 1541_power_on_0.aiff */; };
+		50B14C1E21EB8445002E32A6 /* 1541_track_change_2.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 50B14C1621EB8445002E32A6 /* 1541_track_change_2.aiff */; };
+		50B14C1F21EB8445002E32A6 /* drive_click.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 50B14C1721EB8445002E32A6 /* drive_click.aiff */; };
+		50B14C2021EB8445002E32A6 /* 1541_track_change_0.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 50B14C1821EB8445002E32A6 /* 1541_track_change_0.aiff */; };
+		50B14C2121EB8445002E32A6 /* 1541_track_change_1.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 50B14C1921EB8445002E32A6 /* 1541_track_change_1.aiff */; };
+		50B14C2221EB8445002E32A6 /* drive_snatch_uae.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 50B14C1A21EB8445002E32A6 /* drive_snatch_uae.aiff */; };
+		50B14C2321EB8445002E32A6 /* 1541_door_open_1.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 50B14C1B21EB8445002E32A6 /* 1541_door_open_1.aiff */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -487,6 +495,14 @@
 		50B14C0E21EB410B002E32A6 /* Amiga.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Amiga.cpp; sourceTree = "<group>"; };
 		50B14C0F21EB410B002E32A6 /* Amiga.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Amiga.h; sourceTree = "<group>"; };
 		50B14C1121EB4314002E32A6 /* vastd.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = vastd.cpp; sourceTree = "<group>"; };
+		50B14C1421EB8445002E32A6 /* 1541_door_closed_2.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = 1541_door_closed_2.aiff; sourceTree = "<group>"; };
+		50B14C1521EB8445002E32A6 /* 1541_power_on_0.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = 1541_power_on_0.aiff; sourceTree = "<group>"; };
+		50B14C1621EB8445002E32A6 /* 1541_track_change_2.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = 1541_track_change_2.aiff; sourceTree = "<group>"; };
+		50B14C1721EB8445002E32A6 /* drive_click.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = drive_click.aiff; sourceTree = "<group>"; };
+		50B14C1821EB8445002E32A6 /* 1541_track_change_0.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = 1541_track_change_0.aiff; sourceTree = "<group>"; };
+		50B14C1921EB8445002E32A6 /* 1541_track_change_1.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = 1541_track_change_1.aiff; sourceTree = "<group>"; };
+		50B14C1A21EB8445002E32A6 /* drive_snatch_uae.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = drive_snatch_uae.aiff; sourceTree = "<group>"; };
+		50B14C1B21EB8445002E32A6 /* 1541_door_open_1.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = 1541_door_open_1.aiff; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -548,6 +564,7 @@
 		508FDE6621EA1FA40043D0E9 /* vAmiga */ = {
 			isa = PBXGroup;
 			children = (
+				50B14C1321EB8445002E32A6 /* sounds */,
 				508FDE6D21EA1FA50043D0E9 /* Assets.xcassets */,
 				508FDE6F21EA1FA50043D0E9 /* Main.storyboard */,
 				508FDE7221EA1FA50043D0E9 /* Info.plist */,
@@ -1064,6 +1081,21 @@
 			path = Foundation;
 			sourceTree = "<group>";
 		};
+		50B14C1321EB8445002E32A6 /* sounds */ = {
+			isa = PBXGroup;
+			children = (
+				50B14C1421EB8445002E32A6 /* 1541_door_closed_2.aiff */,
+				50B14C1521EB8445002E32A6 /* 1541_power_on_0.aiff */,
+				50B14C1621EB8445002E32A6 /* 1541_track_change_2.aiff */,
+				50B14C1721EB8445002E32A6 /* drive_click.aiff */,
+				50B14C1821EB8445002E32A6 /* 1541_track_change_0.aiff */,
+				50B14C1921EB8445002E32A6 /* 1541_track_change_1.aiff */,
+				50B14C1A21EB8445002E32A6 /* drive_snatch_uae.aiff */,
+				50B14C1B21EB8445002E32A6 /* 1541_door_open_1.aiff */,
+			);
+			path = sounds;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1172,18 +1204,26 @@
 				508FDFC221EA1FF10043D0E9 /* DiskInspector.xib in Resources */,
 				508FDFC821EA1FF10043D0E9 /* Preferences.xib in Resources */,
 				508FDFC421EA1FF10043D0E9 /* ExportDiskDialog.xib in Resources */,
+				50B14C1F21EB8445002E32A6 /* drive_click.aiff in Resources */,
 				508FE03721EA22C30043D0E9 /* VirtualC64.sdef in Resources */,
+				50B14C1C21EB8445002E32A6 /* 1541_door_closed_2.aiff in Resources */,
 				508FDFC721EA1FF10043D0E9 /* DiskMountDialog.xib in Resources */,
 				508FDFC321EA1FF10043D0E9 /* TapeMountDialog.xib in Resources */,
+				50B14C2321EB8445002E32A6 /* 1541_door_open_1.aiff in Resources */,
 				508FDFBE21EA1FF10043D0E9 /* MyDocument.xib in Resources */,
 				508FDFC521EA1FF10043D0E9 /* VirtualKeyboard.xib in Resources */,
+				50B14C2021EB8445002E32A6 /* 1541_track_change_0.aiff in Resources */,
 				508FDFC021EA1FF10043D0E9 /* SnapshotDialog.xib in Resources */,
+				50B14C1D21EB8445002E32A6 /* 1541_power_on_0.aiff in Resources */,
 				508FDE6E21EA1FA50043D0E9 /* Assets.xcassets in Resources */,
 				508FDFCA21EA1FF10043D0E9 /* ArchiveMountDialog.xib in Resources */,
 				508FDFC621EA1FF10043D0E9 /* CartridgeMountDialog.xib in Resources */,
 				508FDE7121EA1FA50043D0E9 /* Main.storyboard in Resources */,
+				50B14C2221EB8445002E32A6 /* drive_snatch_uae.aiff in Resources */,
+				50B14C1E21EB8445002E32A6 /* 1541_track_change_2.aiff in Resources */,
 				508FDFBF21EA1FF10043D0E9 /* MainMenu.xib in Resources */,
 				508FDFC121EA1FF10043D0E9 /* KeyViewItem.xib in Resources */,
+				50B14C2121EB8445002E32A6 /* 1541_track_change_1.aiff in Resources */,
 				508FDFC921EA1FF10043D0E9 /* ExportScreenshotDialog.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

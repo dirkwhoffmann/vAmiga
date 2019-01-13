@@ -549,12 +549,12 @@ extension MyController {
         case MSG_POWER_ON:
             
             track()
-            powerLED.image = NSImage.init(named: "LEDgreen")
+            powerLED.image = NSImage.init(named: "powerLedOn")
             
         case MSG_POWER_OFF:
             
             track()
-            powerLED.image = NSImage.init(named: "LEDgray")
+            powerLED.image = NSImage.init(named: "powerLedOff")
             
         case MSG_RESET:
             track()
@@ -577,13 +577,13 @@ extension MyController {
             
             track()
             assert(msg.data == 0) // df0
-            df0LED.image = NSImage.init(named: "LEDgreen")
+            df0LED.image = NSImage.init(named: "driveLedOn")
             
         case MSG_DRIVE_LED_OFF:
             
             track()
             assert(msg.data == 0) // df0
-            df0LED.image = NSImage.init(named: "LEDgray")
+            df0LED.image = NSImage.init(named: "driveLedOff")
             
         case MSG_DRIVE_DISK_INSERT:
             
@@ -694,29 +694,9 @@ extension MyController {
             // virtualKeyboard?.refresh()
             virtualKeyboardSheet?.refresh()
 
-        case MSG_VC1541_ATTACHED:
+        case MSG_VC1541_ATTACHED,
+             MSG_VC1541_DETACHED:
             track()
-            /*
-            let image = NSImage.init(named: "LEDgreen")
-            
-            if firstDrive() {
-                greenLED1.image = image
-            } else {
-                greenLED2.image = image
-            }
-            */
-
-        case MSG_VC1541_DETACHED:
-            track()
-            /*
-            let image = NSImage.init(named: "LEDgray")
-            
-            if firstDrive() {
-                greenLED1.image = image
-            } else {
-                greenLED2.image = image
-            }
-            */
             
         case MSG_VC1541_ATTACHED_SOUND:
             
