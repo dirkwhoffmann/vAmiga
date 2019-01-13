@@ -742,10 +742,8 @@
 				508FDEF221EA1FBC0043D0E9 /* VirtualComponent.cpp */,
 				508FDEF321EA1FBC0043D0E9 /* basic.cpp */,
 				508FDEF421EA1FBC0043D0E9 /* TimeDelayed.h */,
-				508FDEF521EA1FBC0043D0E9 /* MessageQueue.cpp */,
 				508FDEF621EA1FBC0043D0E9 /* basic.h */,
 				508FDEF721EA1FBC0043D0E9 /* TimeDelayed.cpp */,
-				508FDEF821EA1FBC0043D0E9 /* MessageQueue.h */,
 				508FDEF921EA1FBC0043D0E9 /* VirtualComponent.h */,
 			);
 			path = General;
@@ -1077,6 +1075,8 @@
 				50B14C0521EB218E002E32A6 /* AmigaObject.cpp */,
 				50B14C0C21EB3708002E32A6 /* HardwareComponent.h */,
 				50B14C0B21EB3708002E32A6 /* HardwareComponent.cpp */,
+				508FDEF821EA1FBC0043D0E9 /* MessageQueue.h */,
+				508FDEF521EA1FBC0043D0E9 /* MessageQueue.cpp */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";

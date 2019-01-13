@@ -50,4 +50,117 @@ inline bool isVAFileType(VAFileType model) {
     return model >= FILETYPE_UKNOWN && model <= FILETYPE_KICKSTART_ROM;
 }
 
+//
+// Notification messages (GUI communication)
+//
+
+// List of all known message id's
+typedef enum
+{
+    MSG_NONE = 0,
+    
+    // Emulator state
+    MSG_READY_TO_RUN,
+    MSG_RUN,
+    MSG_HALT,
+    MSG_POWER_ON,
+    MSG_POWER_OFF,
+    MSG_RESET,
+    
+    // Floppy drives
+    MSG_DRIVE_CONNECT,
+    MSG_DRIVE_DISCONNECT,
+    MSG_DRIVE_LED_ON,
+    MSG_DRIVE_LED_OFF,
+    MSG_DRIVE_DISK_INSERT,
+    MSG_DRIVE_DISK_EJECT,
+    MSG_DRIVE_DISK_SAVED,
+    MSG_DRIVE_DISK_UNSAVED,
+    MSG_DRIVE_DMA_ON,
+    MSG_DRIVE_DMA_OFF,
+    MSG_DRIVE_HEAD_UP,
+    MSG_DRIVE_HEAD_DOWN,
+    
+    
+    
+    //
+    // DEPRECATED C64 related messages ...
+    //
+    
+    // ROM and snapshot handling
+    MSG_BASIC_ROM_LOADED,
+    MSG_CHAR_ROM_LOADED,
+    MSG_KERNAL_ROM_LOADED,
+    MSG_VC1541_ROM_LOADED,
+    MSG_ROM_MISSING,
+    MSG_SNAPSHOT_TAKEN,
+    
+    // CPU related messages
+    MSG_CPU_OK,
+    MSG_CPU_SOFT_BREAKPOINT_REACHED,
+    MSG_CPU_HARD_BREAKPOINT_REACHED,
+    MSG_CPU_ILLEGAL_INSTRUCTION,
+    MSG_WARP_ON,
+    MSG_WARP_OFF,
+    MSG_ALWAYS_WARP_ON,
+    MSG_ALWAYS_WARP_OFF,
+    
+    // VIC related messages
+    MSG_PAL,
+    MSG_NTSC,
+    
+    // IEC Bus
+    MSG_IEC_BUS_BUSY,
+    MSG_IEC_BUS_IDLE,
+    
+    // Keyboard
+    MSG_KEYMATRIX,
+    MSG_CHARSET,
+    
+    // Peripherals (Disk drive)
+    MSG_VC1541_ATTACHED,
+    MSG_VC1541_ATTACHED_SOUND,
+    MSG_VC1541_DETACHED,
+    MSG_VC1541_DETACHED_SOUND,
+    MSG_VC1541_DISK,
+    MSG_VC1541_DISK_SOUND,
+    MSG_VC1541_NO_DISK,
+    MSG_VC1541_NO_DISK_SOUND,
+    MSG_VC1541_RED_LED_ON,
+    MSG_VC1541_RED_LED_OFF,
+    MSG_VC1541_MOTOR_ON,
+    MSG_VC1541_MOTOR_OFF,
+    MSG_VC1541_HEAD_UP,
+    MSG_VC1541_HEAD_UP_SOUND,
+    MSG_VC1541_HEAD_DOWN,
+    MSG_VC1541_HEAD_DOWN_SOUND,
+    
+    // Peripherals (Disk)
+    MSG_DISK_SAVED,
+    MSG_DISK_UNSAVED,
+    
+    // Peripherals (Datasette)
+    MSG_VC1530_TAPE,
+    MSG_VC1530_NO_TAPE,
+    MSG_VC1530_PROGRESS,
+    
+    // Peripherals (Expansion port)
+    MSG_CARTRIDGE,
+    MSG_NO_CARTRIDGE,
+    MSG_CART_SWITCH
+    
+} MessageType;
+
+/* A single message
+ * Only a very messages utilize the data file. E.g., the drive related message
+ * use it to code the drive number (0 = df0 etc.).
+ */
+typedef struct {
+    MessageType type;
+    long data;
+} Message;
+
+// Callback function signature
+typedef void Callback(const void *, int, long);
+
 #endif
