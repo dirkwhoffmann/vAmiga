@@ -173,6 +173,7 @@
 		508FE05E21EA22CC0043D0E9 /* CartridgeMountController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04C21EA22CC0043D0E9 /* CartridgeMountController.swift */; };
 		508FE05F21EA22CC0043D0E9 /* ExportDiskController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04D21EA22CC0043D0E9 /* ExportDiskController.swift */; };
 		508FE06521EA318D0043D0E9 /* VAFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FE06321EA318D0043D0E9 /* VAFile.cpp */; };
+		50B14C0721EB218E002E32A6 /* VAObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0521EB218E002E32A6 /* VAObject.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -471,10 +472,13 @@
 		508FE04B21EA22CC0043D0E9 /* TapeMountController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TapeMountController.swift; sourceTree = "<group>"; };
 		508FE04C21EA22CC0043D0E9 /* CartridgeMountController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CartridgeMountController.swift; sourceTree = "<group>"; };
 		508FE04D21EA22CC0043D0E9 /* ExportDiskController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExportDiskController.swift; sourceTree = "<group>"; };
-		508FE06121EA318D0043D0E9 /* VAFile_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VAFile_types.h; sourceTree = "<group>"; };
-		508FE06221EA318D0043D0E9 /* Amiga_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Amiga_types.h; sourceTree = "<group>"; };
 		508FE06321EA318D0043D0E9 /* VAFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VAFile.cpp; sourceTree = "<group>"; };
 		508FE06421EA318D0043D0E9 /* VAFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VAFile.h; sourceTree = "<group>"; };
+		50B14C0521EB218E002E32A6 /* VAObject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VAObject.cpp; sourceTree = "<group>"; };
+		50B14C0621EB218E002E32A6 /* VAObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VAObject.h; sourceTree = "<group>"; };
+		50B14C0821EB2248002E32A6 /* vastd.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = vastd.h; sourceTree = "<group>"; };
+		50B14C0921EB228E002E32A6 /* vaconfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = vaconfig.h; sourceTree = "<group>"; };
+		50B14C0A21EB2379002E32A6 /* vatypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = vatypes.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1020,6 +1024,7 @@
 		508FE06021EA318D0043D0E9 /* Amiga */ = {
 			isa = PBXGroup;
 			children = (
+				50B14C0421EB212E002E32A6 /* Foundation */,
 				508FE06621EA31E50043D0E9 /* Files */,
 			);
 			path = Amiga;
@@ -1028,12 +1033,22 @@
 		508FE06621EA31E50043D0E9 /* Files */ = {
 			isa = PBXGroup;
 			children = (
-				508FE06121EA318D0043D0E9 /* VAFile_types.h */,
-				508FE06221EA318D0043D0E9 /* Amiga_types.h */,
 				508FE06321EA318D0043D0E9 /* VAFile.cpp */,
 				508FE06421EA318D0043D0E9 /* VAFile.h */,
 			);
 			path = Files;
+			sourceTree = "<group>";
+		};
+		50B14C0421EB212E002E32A6 /* Foundation */ = {
+			isa = PBXGroup;
+			children = (
+				50B14C0921EB228E002E32A6 /* vaconfig.h */,
+				50B14C0A21EB2379002E32A6 /* vatypes.h */,
+				50B14C0821EB2248002E32A6 /* vastd.h */,
+				50B14C0621EB218E002E32A6 /* VAObject.h */,
+				50B14C0521EB218E002E32A6 /* VAObject.cpp */,
+			);
+			path = Foundation;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1271,6 +1286,7 @@
 				508FDFA321EA1FBC0043D0E9 /* IEC.cpp in Sources */,
 				508FE05B21EA22CC0043D0E9 /* ArchiveMountController.swift in Sources */,
 				508FDF7321EA1FBC0043D0E9 /* CartridgeRom.cpp in Sources */,
+				50B14C0721EB218E002E32A6 /* VAObject.cpp in Sources */,
 				508FDF8D21EA1FBC0043D0E9 /* Mouse1351.cpp in Sources */,
 				508FDF8A21EA1FBC0043D0E9 /* Mouse.cpp in Sources */,
 				508FDF9721EA1FBC0043D0E9 /* envelope.cc in Sources */,

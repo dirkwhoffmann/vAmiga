@@ -82,10 +82,8 @@ class MyController : NSWindowController, MessageReceiver {
     var inputDevice2 = Defaults.inputDevice2
 
     /// Rom file URLs
-    var basicRomURL: URL = Defaults.basicRom
-    var charRomURL: URL = Defaults.charRom
-    var kernalRomURL: URL = Defaults.kernalRom
-    var vc1541RomURL: URL = Defaults.vc1541Rom
+    var bootRomURL: URL = Defaults.bootRom
+    var kickstartRomURL: URL = Defaults.kickstartRom
 
     /// Screenshot resolution (0 = low, 1 = high)
     var screenshotSource = Defaults.screenshotSource
@@ -850,19 +848,19 @@ extension MyController {
         }
         
         if c64.loadBasicRom(url!) {
-            basicRomURL = url!
+            // basicRomURL = url!
             return true
         }
         if c64.loadCharRom(url!) {
-            charRomURL = url!
+            // charRomURL = url!
             return true
         }
         if c64.loadKernalRom(url!) {
-            kernalRomURL = url!
+            // kernalRomURL = url!
             return true
         }
         if c64.loadVC1541Rom(url!) {
-            vc1541RomURL = url!
+            // vc1541RomURL = url!
             return true
         }
         

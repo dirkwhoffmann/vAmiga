@@ -21,29 +21,19 @@ class PreferencesController : UserDialogController {
     @IBOutlet weak var romHeaderText: NSTextField!
     @IBOutlet weak var romHeaderSubText: NSTextField!
     
-    @IBOutlet weak var romBasicImage: RomDropView!
-    @IBOutlet weak var romBasicHashText: NSTextField!
-    @IBOutlet weak var romBasicPathText: NSTextField!
-    @IBOutlet weak var romBasicDescription: NSTextField!
-    @IBOutlet weak var romBasicButton: NSButton!
-    
-    @IBOutlet weak var romKernalImage: RomDropView!
-    @IBOutlet weak var romKernalHashText: NSTextField!
-    @IBOutlet weak var romKernalPathText: NSTextField!
-    @IBOutlet weak var romKernalDescription: NSTextField!
-    @IBOutlet weak var romKernelButton: NSButton!
-    
-    @IBOutlet weak var romCharImage: RomDropView!
-    @IBOutlet weak var romCharHashText: NSTextField!
-    @IBOutlet weak var romCharPathText: NSTextField!
-    @IBOutlet weak var romCharDescription: NSTextField!
-    @IBOutlet weak var romCharButton: NSButton!
-    
-    @IBOutlet weak var romVc1541Image: RomDropView!
-    @IBOutlet weak var romVc1541HashText: NSTextField!
-    @IBOutlet weak var romVc1541PathText: NSTextField!
-    @IBOutlet weak var romVc1541Description: NSTextField!
-    @IBOutlet weak var romVc1541Button: NSButton!
+    @IBOutlet weak var romBootDropView: RomDropView!
+    @IBOutlet weak var romBootHashText: NSTextField!
+    @IBOutlet weak var romBootPathText: NSTextField!
+    @IBOutlet weak var romBootDescription: NSTextField!
+    @IBOutlet weak var romBootCopyright: NSTextField!
+    @IBOutlet weak var romBootButton: NSButton!
+
+    @IBOutlet weak var romKickstartDropView: RomDropView!
+    @IBOutlet weak var romKickstartHashText: NSTextField!
+    @IBOutlet weak var romKickstartPathText: NSTextField!
+    @IBOutlet weak var romKickstartDescription: NSTextField!
+    @IBOutlet weak var romKickstartCopyright: NSTextField!
+    @IBOutlet weak var romKickstartButton: NSButton!
     
     @IBOutlet weak var romOkButton: NSButton!
     @IBOutlet weak var romCancelButton: NSButton!

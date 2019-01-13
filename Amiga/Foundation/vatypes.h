@@ -7,8 +7,27 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef AMIGA_FILE_TYPES_H
-#define AMIGA_FILE_TYPES_H
+#ifndef VATYPES_H
+#define VATYPES_H
+
+//
+// Amiga hardware
+//
+
+typedef enum {
+    AMIGA_500,
+    AMIGA_1000,
+    AMIGA_2000
+} VAModel;
+
+inline bool isVAModel(VAModel model) {
+    return model >= AMIGA_500 && model <= AMIGA_2000;
+}
+
+
+//
+// External files (snapshots, disk images, etc.)
+//
 
 typedef enum
 {
@@ -19,5 +38,9 @@ typedef enum
     FILETYPE_KICKSTART_ROM
     
 } VAFileType;
+
+inline bool isVAFileType(VAFileType model) {
+    return model >= FILETYPE_UKNOWN && model <= FILETYPE_KICKSTART_ROM;
+}
 
 #endif

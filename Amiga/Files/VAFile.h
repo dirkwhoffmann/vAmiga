@@ -10,13 +10,12 @@
 #ifndef _VAFILE_INC
 #define _VAFILE_INC
 
-#include "VC64Object.h"
-#include "VAFile_types.h"
+#include "VAObject.h"
 
 /* Base class of all file readable types.
  * Provides the basic functionality for reading and writing files.
  */
-class VAFile : public VC64Object {
+class VAFile : public VAObject {
     
 protected:
     

@@ -7,22 +7,18 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef AMIGA_TYPES_H
-#define AMIGA_TYPES_H
+#ifndef VACONFIG_H
+#define VACONFIG_H
 
-#include "VAFile_types.h"
+// Snapshot version number of this release
+#define V_MAJOR 0
+#define V_MINOR 0
+#define V_SUBMINOR 1
 
-// DEPRECATED
-#include "C64_types.h"
+// Disable assertion checking (Uncomment in release build)
+#define NDEBUG
 
-typedef enum {
-    AMIGA_500,
-    AMIGA_1000,
-    AMIGA_2000
-} AmigaModel;
-
-inline bool isAmigaModel(AmigaModel model) {
-    return model >= AMIGA_500 && model <= AMIGA_2000;
-}
+// Default debug level for all components (Set to 1 in release build)
+#define DEBUG_LEVEL 1
 
 #endif

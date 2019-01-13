@@ -216,18 +216,21 @@ extension MyController {
 
 extension VC64Keys {
     
+    static let bootRom      = "VABootRomFileKey"
+    static let kickstartRom = "VAKickstartRomFileKey"
+    
+    // DEPRECATED
     static let basicRom          = "VC64BasicRomFileKey"
     static let charRom           = "VC64CharRomFileKey"
     static let kernalRom         = "VC64KernelRomFileKey"
     static let vc1541Rom         = "VC64VC1541RomFileKey"
+    
 }
 
 extension Defaults {
     
-    static let basicRom = URL(fileURLWithPath: "/")
-    static let charRom = URL(fileURLWithPath: "/")
-    static let kernalRom = URL(fileURLWithPath: "/")
-    static let vc1541Rom = URL(fileURLWithPath: "/")
+    static let bootRom = URL(fileURLWithPath: "/")
+    static let kickstartRom = URL(fileURLWithPath: "/")
 }
 
 extension MyController {
@@ -236,10 +239,8 @@ extension MyController {
         
         let dictionary : [String:Any] = [
             
-            VC64Keys.basicRom: Defaults.basicRom,
-            VC64Keys.charRom: Defaults.charRom,
-            VC64Keys.kernalRom: Defaults.kernalRom,
-            VC64Keys.vc1541Rom: Defaults.vc1541Rom,
+            VC64Keys.bootRom: Defaults.bootRom,
+            VC64Keys.kickstartRom: Defaults.kickstartRom,
             ]
         
         let defaults = UserDefaults.standard
@@ -250,10 +251,8 @@ extension MyController {
         
         let defaults = UserDefaults.standard
         
-        for key in [ VC64Keys.basicRom,
-                     VC64Keys.charRom,
-                     VC64Keys.kernalRom,
-                     VC64Keys.vc1541Rom]
+        for key in [ VC64Keys.bootRom,
+                     VC64Keys.kickstartRom]
         {
             defaults.removeObject(forKey: key)
         }
@@ -271,6 +270,10 @@ extension MyController {
         loadRom(defaults.url(forKey: VC64Keys.charRom))
         loadRom(defaults.url(forKey: VC64Keys.kernalRom))
         loadRom(defaults.url(forKey: VC64Keys.vc1541Rom))
+        /*
+        loadRom(defaults.url(forKey: VC64Keys.bootRom))
+        loadRom(defaults.url(forKey: VC64Keys.kickstartRom))
+        */
         
         c64.resume()
     }
@@ -279,10 +282,8 @@ extension MyController {
         
         let defaults = UserDefaults.standard
         
-        defaults.set(basicRomURL, forKey: VC64Keys.basicRom)
-        defaults.set(charRomURL, forKey: VC64Keys.charRom)
-        defaults.set(kernalRomURL, forKey: VC64Keys.kernalRom)
-        defaults.set(vc1541RomURL, forKey: VC64Keys.vc1541Rom)
+        defaults.set(bootRomURL, forKey: VC64Keys.bootRom)
+        defaults.set(kickstartRomURL, forKey: VC64Keys.kickstartRom)
     }
 }
 
