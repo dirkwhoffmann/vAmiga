@@ -78,11 +78,34 @@ typedef enum {
     
     MSG_NONE = 0,
     
-    // Running the emulator
+    // Emulator state
     MSG_READY_TO_RUN,
     MSG_RUN,
     MSG_HALT,
-
+    
+    MSG_POWER_ON,
+    MSG_POWER_OFF,
+    MSG_RESET,
+    
+    MSG_DRIVE_CONNECT,
+    MSG_DRIVE_DISCONNECT,
+    MSG_DRIVE_LED_ON,
+    MSG_DRIVE_LED_OFF,
+    MSG_DRIVE_DISK_INSERT,
+    MSG_DRIVE_DISK_EJECT,
+    MSG_DRIVE_DISK_SAVED,
+    MSG_DRIVE_DISK_UNSAVED,
+    MSG_DRIVE_DMA_ON,
+    MSG_DRIVE_DMA_OFF,
+    MSG_DRIVE_HEAD_UP,
+    MSG_DRIVE_HEAD_DOWN,
+    
+    
+    
+    //
+    // DEPRECATED C64 related messages ...
+    //
+    
     // ROM and snapshot handling
     MSG_BASIC_ROM_LOADED,
     MSG_CHAR_ROM_LOADED,

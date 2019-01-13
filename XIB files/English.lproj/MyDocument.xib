@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
-        <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -53,17 +52,15 @@
                 <outlet property="controlPort2" destination="4MP-rV-xX2" id="6Ux-IE-l65"/>
                 <outlet property="cpuTableView" destination="767" id="945"/>
                 <outlet property="cpuTraceView" destination="gDD-e1-Fh0" id="sy3-BG-K54"/>
-                <outlet property="crtButton1" destination="lFn-7a-MSQ" id="PDj-6q-G6u"/>
-                <outlet property="crtButton2" destination="WXT-md-2lk" id="kGk-bZ-cof"/>
-                <outlet property="crtIcon" destination="2003" id="CVl-nZ-xP2"/>
-                <outlet property="crtSwitch" destination="nGE-Yp-TgF" id="i83-HJ-RBg"/>
                 <outlet property="debugPanel" destination="42" id="KyW-HY-D2p"/>
                 <outlet property="debugger" destination="35" id="Sfw-lz-Vnh"/>
                 <outlet property="decayRate" destination="H4H-4t-pmr" id="GJp-Nq-b9R"/>
                 <outlet property="dezHexSelector" destination="367" id="759"/>
                 <outlet property="dflag" destination="188" id="UAV-Er-hPK"/>
-                <outlet property="diskIcon1" destination="1045" id="n8q-mY-NbG"/>
                 <outlet property="diskIcon2" destination="D1i-Ep-fTN" id="KXI-nI-XNr"/>
+                <outlet property="driveBusy1" destination="xzf-hU-AKK" id="4YQ-OI-qKf"/>
+                <outlet property="driveDisk1" destination="D1i-Ep-fTN" id="FeM-cm-ydt"/>
+                <outlet property="driveLED1" destination="iKN-RM-vsV" id="DYl-XV-Eas"/>
                 <outlet property="filter1" destination="0Xk-c5-4dD" id="3iB-GJ-Dhl"/>
                 <outlet property="filter2" destination="tlW-U7-68D" id="OzC-gB-NkA"/>
                 <outlet property="filter3" destination="eg3-b5-F1Z" id="hSw-4a-8nU"/>
@@ -73,7 +70,6 @@
                 <outlet property="frequency" destination="wEw-3d-tZe" id="z6X-2V-r52"/>
                 <outlet property="gateBit" destination="nSu-jQ-U43" id="FdF-zb-5ze"/>
                 <outlet property="greenLED1" destination="1208" id="m2j-eC-ad3"/>
-                <outlet property="greenLED2" destination="FWS-Ng-oe6" id="dka-fH-HFG"/>
                 <outlet property="iflag" destination="189" id="mWe-Ir-7Om"/>
                 <outlet property="memTableView" destination="67" id="515"/>
                 <outlet property="metalScreen" destination="DD4-5B-w9h" id="rGV-rL-MLo"/>
@@ -82,11 +78,10 @@
                 <outlet property="pc" destination="47" id="163"/>
                 <outlet property="potX" destination="3YT-QQ-S7K" id="1yu-aO-gLC"/>
                 <outlet property="potY" destination="gEF-Sx-fBJ" id="nBd-zm-heN"/>
-                <outlet property="progress1" destination="2203" id="atA-PK-Pgb"/>
+                <outlet property="powerLED" destination="1208" id="hey-Hi-zTq"/>
                 <outlet property="progress2" destination="xzf-hU-AKK" id="hSk-HV-url"/>
                 <outlet property="pulseWidth" destination="9TK-r7-7WA" id="nXS-il-RQ5"/>
                 <outlet property="pulseWidthText" destination="JQn-Cc-SSF" id="BpL-T8-5Nv"/>
-                <outlet property="redLED1" destination="1210" id="0oc-Dc-53z"/>
                 <outlet property="redLED2" destination="iKN-RM-vsV" id="jl7-Pu-DM1"/>
                 <outlet property="releaseRate" destination="NEG-EB-tbc" id="wxu-tJ-Edy"/>
                 <outlet property="ringBit" destination="9lM-DR-BPP" id="sb1-4n-3vQ"/>
@@ -116,8 +111,6 @@
                 <outlet property="stopAndGoButton" destination="2100" id="2102"/>
                 <outlet property="sustainRate" destination="H1K-GI-GVr" id="2dU-6j-fNm"/>
                 <outlet property="syncBit" destination="4pG-BL-eQ1" id="RaM-EB-mAR"/>
-                <outlet property="tapeIcon" destination="NlM-JA-g9p" id="uQv-wG-QgZ"/>
-                <outlet property="tapeProgress" destination="H1X-Kk-fcE" id="x5B-ie-sqw"/>
                 <outlet property="testBit" destination="Yhs-rx-gWq" id="dyd-et-red"/>
                 <outlet property="todHours" destination="pO4-hT-6qc" id="Olf-rT-aRp"/>
                 <outlet property="todIntEnable" destination="u6w-5H-I25" id="16u-Sv-ErQ"/>
@@ -206,74 +199,12 @@
                             <action selector="alwaysWarpAction:" target="-2" id="qwQ-Ql-wzH"/>
                         </connections>
                     </button>
-                    <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" id="2203">
-                        <rect key="frame" x="74" y="4" width="16" height="16"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    </progressIndicator>
-                    <button toolTip="Drive LED" tag="1" id="1210">
-                        <rect key="frame" x="25" y="3" width="17" height="17"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="LEDgray" imagePosition="only" alignment="right" imageScaling="proportionallyDown" id="1710">
-                            <behavior key="behavior" lightByContents="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                    </button>
-                    <button hidden="YES" id="NlM-JA-g9p">
-                        <rect key="frame" x="188" y="2" width="20" height="20"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="mediaTapeTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="Rze-Qf-HUV">
-                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system" size="10"/>
-                        </buttonCell>
-                    </button>
-                    <button hidden="YES" tag="1" id="1045">
-                        <rect key="frame" x="48" y="2" width="20" height="20"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="mediaDiskSavedTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="1706">
-                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system" size="10"/>
-                        </buttonCell>
-                    </button>
-                    <button hidden="YES" id="2003">
-                        <rect key="frame" x="258" y="2" width="20" height="20"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="crtTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="2004">
-                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system" size="10"/>
-                        </buttonCell>
-                    </button>
-                    <button hidden="YES" tag="1" id="lFn-7a-MSQ">
-                        <rect key="frame" x="282" y="2" width="20" height="20"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="crtButtonOffTemplate" imagePosition="only" alignment="right" alternateImage="crtButtonOnTemplate" imageScaling="proportionallyUpOrDown" id="IJt-r3-Tyd">
-                            <behavior key="behavior" lightByContents="YES"/>
-                            <font key="font" metaFont="system" size="10"/>
-                        </buttonCell>
-                        <connections>
-                            <action selector="pressCartridgeButton1Action:" target="-2" id="G7M-GS-6Os"/>
-                        </connections>
-                    </button>
-                    <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" id="H1X-Kk-fcE">
-                        <rect key="frame" x="214" y="4" width="16" height="16"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    </progressIndicator>
-                    <button toolTip="Connect / Disconnect drive" tag="2" id="FWS-Ng-oe6">
-                        <rect key="frame" x="97" y="3" width="17" height="17"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="LEDgray" imagePosition="only" alignment="right" imageScaling="proportionallyDown" id="i9n-Ra-mbF">
-                            <behavior key="behavior" lightByContents="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                        <connections>
-                            <action selector="drivePowerButtonAction:" target="-1" id="epN-b4-Xzf"/>
-                        </connections>
-                    </button>
                     <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" id="xzf-hU-AKK">
-                        <rect key="frame" x="166" y="4" width="16" height="16"/>
+                        <rect key="frame" x="79" y="4" width="16" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </progressIndicator>
                     <button toolTip="Drive LED" tag="2" id="iKN-RM-vsV">
-                        <rect key="frame" x="117" y="3" width="17" height="17"/>
+                        <rect key="frame" x="30" y="3" width="17" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="LEDgray" imagePosition="only" alignment="right" imageScaling="proportionallyDown" id="v9S-no-L5h">
                             <behavior key="behavior" lightByContents="YES"/>
@@ -281,42 +212,20 @@
                         </buttonCell>
                     </button>
                     <button hidden="YES" tag="1" id="D1i-Ep-fTN">
-                        <rect key="frame" x="140" y="2" width="20" height="20"/>
+                        <rect key="frame" x="53" y="2" width="20" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="mediaDiskSavedTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="dWc-LE-E52">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system" size="10"/>
                         </buttonCell>
                     </button>
-                    <customView id="DD4-5B-w9h" customClass="MetalView" customModule="VirtualC64" customModuleProvider="target">
+                    <customView id="DD4-5B-w9h" customClass="MetalView" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="24" width="804" height="621"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <connections>
                             <outlet property="controller" destination="-2" id="DoA-Vt-vqv"/>
                         </connections>
                     </customView>
-                    <button hidden="YES" tag="2" id="WXT-md-2lk">
-                        <rect key="frame" x="306" y="2" width="20" height="20"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="crtButtonOffTemplate" imagePosition="only" alignment="right" alternateImage="crtButtonOnTemplate" imageScaling="proportionallyUpOrDown" id="daD-pA-smb">
-                            <behavior key="behavior" lightByContents="YES"/>
-                            <font key="font" metaFont="system" size="10"/>
-                        </buttonCell>
-                        <connections>
-                            <action selector="pressCartridgeButton2Action:" target="-1" id="465-Oy-aeF"/>
-                        </connections>
-                    </button>
-                    <button hidden="YES" tag="1" id="nGE-Yp-TgF">
-                        <rect key="frame" x="234" y="2" width="20" height="20"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="crtSwitchNeutralTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="0s7-pA-Q79">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system" size="10"/>
-                        </buttonCell>
-                        <connections>
-                            <action selector="toggleSwitchAction:" target="-1" id="MvY-UF-tSi"/>
-                        </connections>
-                    </button>
                 </subviews>
             </view>
             <toolbar key="toolbar" implicitIdentifier="562FDE63-25B0-4E4E-80C7-EF6E742B5F6F" displayMode="iconAndLabel" sizeMode="regular" id="1845">
@@ -778,7 +687,7 @@
                                                                 <rect key="frame" x="1" y="0.0" width="266" height="408"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <subviews>
-                                                                    <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="1838" id="767" customClass="CpuTableView" customModule="VirtualC64" customModuleProvider="target">
+                                                                    <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="1838" id="767" customClass="CpuTableView" customModule="vAmiga" customModuleProvider="target">
                                                                         <rect key="frame" x="0.0" y="0.0" width="266" height="391"/>
                                                                         <autoresizingMask key="autoresizingMask"/>
                                                                         <size key="intercellSpacing" width="3" height="2"/>
@@ -895,7 +804,7 @@
                                                                 <rect key="frame" x="1" y="0.0" width="266" height="402"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <subviews>
-                                                                    <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="js2-BW-04W" id="gDD-e1-Fh0" customClass="CpuTraceView" customModule="VirtualC64" customModuleProvider="target">
+                                                                    <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="js2-BW-04W" id="gDD-e1-Fh0" customClass="CpuTraceView" customModule="vAmiga" customModuleProvider="target">
                                                                         <rect key="frame" x="0.0" y="0.0" width="272" height="379"/>
                                                                         <autoresizingMask key="autoresizingMask"/>
                                                                         <size key="intercellSpacing" width="3" height="2"/>
@@ -1017,7 +926,7 @@
                                             <rect key="frame" x="1" y="0.0" width="270" height="484"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <tableView focusRingType="exterior" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="1841" id="67" customClass="MemTableView" customModule="VirtualC64" customModuleProvider="target">
+                                                <tableView focusRingType="exterior" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="1841" id="67" customClass="MemTableView" customModule="vAmiga" customModuleProvider="target">
                                                     <rect key="frame" x="0.0" y="0.0" width="270" height="467"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <size key="intercellSpacing" width="3" height="2"/>
@@ -2710,7 +2619,7 @@
                                                     <levelIndicatorCell key="cell" alignment="left" doubleValue="50" maxValue="100" levelIndicatorStyle="continuousCapacity" id="3WC-5t-42a"/>
                                                     <color key="fillColor" name="keyboardFocusIndicatorColor" catalog="System" colorSpace="catalog"/>
                                                 </levelIndicator>
-                                                <customView id="sjP-8p-7lE" customClass="WaveformView" customModule="VirtualC64" customModuleProvider="target">
+                                                <customView id="sjP-8p-7lE" customClass="WaveformView" customModule="vAmiga" customModuleProvider="target">
                                                     <rect key="frame" x="10" y="56" width="256" height="95"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <connections>
@@ -2958,10 +2867,6 @@
     </objects>
     <resources>
         <image name="LEDgray" width="128" height="128"/>
-        <image name="crtButtonOffTemplate" width="24" height="24"/>
-        <image name="crtButtonOnTemplate" width="24" height="24"/>
-        <image name="crtSwitchNeutralTemplate" width="24" height="24"/>
-        <image name="crtTemplate" width="24" height="24"/>
         <image name="debugTemplate" width="240" height="241"/>
         <image name="devGamepad1Template" width="24" height="24"/>
         <image name="devGamepad2Template" width="24" height="24"/>
@@ -2973,7 +2878,6 @@
         <image name="joyKeys2Template" width="24" height="24"/>
         <image name="keyboardTemplate" width="24" height="24"/>
         <image name="mediaDiskSavedTemplate" width="241" height="241"/>
-        <image name="mediaTapeTemplate" width="241" height="240"/>
         <image name="pauseTemplate" width="240" height="241"/>
         <image name="powerTemplate" width="241" height="240"/>
         <image name="prefEmulatorTemplate" width="241" height="240"/>

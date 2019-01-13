@@ -74,7 +74,13 @@ class MyController : NSWindowController, MessageReceiver {
     
     /// Indicates if a status bar is shown
     var statusBar = true
-    
+
+    /// Keeps track of the connected disk drives
+    var df0 = true
+    var df1 = false
+    var df2 = false
+    var df3 = false
+
     /// Selected game pad slot for joystick in port A
     var inputDevice1 = Defaults.inputDevice1
     
@@ -127,20 +133,11 @@ class MyController : NSWindowController, MessageReceiver {
     @IBOutlet weak var debugger: NSDrawer!
     
     // Bottom bar
-    @IBOutlet weak var greenLED1: NSButton!
-    @IBOutlet weak var greenLED2: NSButton!
-    @IBOutlet weak var redLED1: NSButton!
-    @IBOutlet weak var redLED2: NSButton!
-    @IBOutlet weak var progress1: NSProgressIndicator!
-    @IBOutlet weak var progress2: NSProgressIndicator!
-    @IBOutlet weak var diskIcon1: NSButton!
-    @IBOutlet weak var diskIcon2: NSButton!
-    @IBOutlet weak var tapeIcon: NSButton!
-    @IBOutlet weak var tapeProgress: NSProgressIndicator!
-    @IBOutlet weak var crtIcon: NSButton!
-    @IBOutlet weak var crtSwitch: NSButton!
-    @IBOutlet weak var crtButton1: NSButton!
-    @IBOutlet weak var crtButton2: NSButton!
+    @IBOutlet weak var powerLED: NSButton!
+    @IBOutlet weak var df0LED: NSButton!
+    @IBOutlet weak var df0Disk: NSButton!
+    @IBOutlet weak var df0Busy: NSProgressIndicator!
+    
     @IBOutlet weak var clockSpeed: NSTextField!
     @IBOutlet weak var clockSpeedBar: NSLevelIndicator!
     @IBOutlet weak var warpIcon: NSButton!
@@ -487,42 +484,11 @@ extension MyController {
                     refresh()
                 }
             }
-            
-            // Update cartridge LED
-            if c64.expansionport.hasLed() {
-                let led = c64.expansionport.led() ? 1 : 0
-                if crtIcon.tag != led {
-                    crtIcon.tag = led
-                    crtIcon.image = NSImage(named: led == 1 ? "crtLedOnTemplate" : "crtTemplate")
-                    crtIcon.needsDisplay = true
-                }
-            }
         }
         
         // Do 6 times a second ...
         if (animationCounter % 2) == 0 {
  
-            // Update tape progress icon
-            // Note: The tape progress icon is not switched on or off by push
-            // notification (message), because some games continously switch the
-            // datasette motor on and off.
-            if (c64.datasette.motor() && c64.datasette.playKey()) {
-                tapeProgress.startAnimation(self)
-            } else {
-                tapeProgress.stopAnimation(self)
-            }
-
-            /* Original code: Why so complicated???
-            if ([[c64 datasette] motor] != [c64 tapeBusIsBusy]) {
-                if ([[c64 datasette] motor] && [[c64 datasette] playKey]) {
-                    [tapeProgress startAnimation:nil];
-                    [c64 setTapeBusIsBusy:YES];
-                } else {
-                    [tapeProgress stopAnimation:nil];
-                    [c64 setTapeBusIsBusy:NO];
-                }
-            }
-            */
         }
         
         // Do 3 times a second ...
@@ -558,7 +524,7 @@ extension MyController {
             // Start emulator
             c64.run()
             
-            // Blend in C64 screen
+            // Blend in emulator texture
             if (!metalScreen.drawC64texture) {
                 metalScreen.blendIn()
                 metalScreen.drawC64texture = true
@@ -566,7 +532,7 @@ extension MyController {
             
             // Process attachment (if any)
             mydocument.mountAttachment()
-    
+        
         case MSG_RUN:
             
             needsSaving = true
@@ -580,6 +546,92 @@ extension MyController {
             validateToolbarItems()
             refresh()
     
+        case MSG_POWER_ON:
+            
+            track()
+            powerLED.image = NSImage.init(named: "LEDgreen")
+            
+        case MSG_POWER_OFF:
+            
+            track()
+            powerLED.image = NSImage.init(named: "LEDgray")
+            
+        case MSG_RESET:
+            track()
+            
+        case MSG_DRIVE_CONNECT:
+            
+            track()
+            assert(msg.data == 0) // df0
+            df0 = true
+            df0LED.isHidden = !df0 // || hideBottomBar
+            
+        case MSG_DRIVE_DISCONNECT:
+            
+            track()
+            assert(msg.data == 0) // df0
+            df0 = false
+            df0LED.isHidden = !df0 // || hideBottomBar
+            
+        case MSG_DRIVE_LED_ON:
+            
+            track()
+            assert(msg.data == 0) // df0
+            df0LED.image = NSImage.init(named: "LEDgreen")
+            
+        case MSG_DRIVE_LED_OFF:
+            
+            track()
+            assert(msg.data == 0) // df0
+            df0LED.image = NSImage.init(named: "LEDgray")
+            
+        case MSG_DRIVE_DISK_INSERT:
+            
+            track()
+            assert(msg.data == 0) // df0
+            df0Disk.isHidden = false // || hideBottomBar
+            
+        case MSG_DRIVE_DISK_EJECT:
+            
+            track()
+            assert(msg.data == 0) // df0
+            df0Disk.isHidden = false // || hideBottomBar
+            
+        case MSG_DRIVE_DISK_SAVED:
+            
+            track()
+            assert(msg.data == 0) // df0
+            df0Disk.image = NSImage.init(named: "mediaDiskSavedTemplate")
+            
+        case MSG_DRIVE_DISK_UNSAVED:
+            
+            track()
+            assert(msg.data == 0) // df0
+            df0Disk.image = NSImage.init(named: "mediaDiskUnsavedTemplate")
+            
+        case MSG_DRIVE_DMA_ON:
+            
+            track()
+            assert(msg.data == 0) // df0
+            df0Busy.startAnimation(self)
+
+        case MSG_DRIVE_DMA_OFF:
+            
+            track()
+            assert(msg.data == 0) // df0
+            df0Busy.stopAnimation(self)
+
+        case MSG_DRIVE_HEAD_UP,
+             MSG_DRIVE_HEAD_DOWN:
+            
+            track()
+            playSound(name: "drive_click", volume: 1.0)
+            
+ 
+            
+            
+            
+        // DEPRECATED MESSAGES BELOW...
         case MSG_BASIC_ROM_LOADED,
              MSG_CHAR_ROM_LOADED,
              MSG_KERNAL_ROM_LOADED,
@@ -643,7 +695,8 @@ extension MyController {
             virtualKeyboardSheet?.refresh()
 
         case MSG_VC1541_ATTACHED:
-            
+            track()
+            /*
             let image = NSImage.init(named: "LEDgreen")
             
             if firstDrive() {
@@ -651,9 +704,11 @@ extension MyController {
             } else {
                 greenLED2.image = image
             }
+            */
 
         case MSG_VC1541_DETACHED:
-            
+            track()
+            /*
             let image = NSImage.init(named: "LEDgray")
             
             if firstDrive() {
@@ -661,7 +716,8 @@ extension MyController {
             } else {
                 greenLED2.image = image
             }
-
+            */
+            
         case MSG_VC1541_ATTACHED_SOUND:
             
             // Not sure about the copyright of the following sound:
@@ -700,121 +756,28 @@ extension MyController {
             // Sound from Commodore 64 (C64) Preservation Project (c64preservation.com):
             playSound(name: "drive_click", volume: 1.0)
             
-        case MSG_VC1541_DISK:
-            
-            if firstDrive() {
-                diskIcon1.isHidden = false
-            } else {
-                diskIcon2.isHidden = false
-            }
-  
-        case MSG_VC1541_NO_DISK:
-            
-            if firstDrive() {
-                diskIcon1.isHidden = true
-            } else {
-                diskIcon2.isHidden = true
-            }
-            
-        case MSG_DISK_SAVED:
-            
-            let image = NSImage.init(named: "mediaDiskSavedTemplate")
-            if firstDrive() {
-                diskIcon1.image = image
-            } else {
-                diskIcon2.image = image
-            }
-            
-        case MSG_DISK_UNSAVED:
-            
-            track("Disk is unsaved")
-            let image = NSImage.init(named: "mediaDiskUnsavedTemplate")
-            if firstDrive() {
-                diskIcon1.image = image
-            } else {
-                diskIcon2.image = image
-            }
-            
-        case MSG_VC1541_RED_LED_ON:
-            
-            let image = NSImage.init(named: "LEDred")
-            if firstDrive() {
-                redLED1.image = image
-                redLED1.needsDisplay = true
-            } else {
-                redLED2.image = image
-                redLED2.needsDisplay = true
-            }
-            
-        case MSG_VC1541_RED_LED_OFF:
-            
-            let image = NSImage.init(named: "LEDgray")
-            if firstDrive() {
-                redLED1.image = image
-                redLED1.needsDisplay = true
-            } else {
-                redLED2.image = image
-                redLED2.needsDisplay = true
-            }
-    
-        case MSG_IEC_BUS_BUSY:
-            
-            if c64.drive1.isRotating() {
-                progress1.startAnimation(self)
-            }
-            if c64.drive2.isRotating() {
-                progress2.startAnimation(self)
-            }
-    
-        case MSG_IEC_BUS_IDLE:
-            
-            progress1.stopAnimation(self)
-            progress2.stopAnimation(self)
-            
-        case MSG_VC1541_MOTOR_ON,
+        case MSG_VC1541_DISK,
+             MSG_VC1541_NO_DISK,
+             MSG_DISK_SAVED,
+             MSG_DISK_UNSAVED,
+             MSG_VC1541_RED_LED_ON,
+             MSG_VC1541_RED_LED_OFF,
+             MSG_VC1541_RED_LED_OFF,
+             MSG_IEC_BUS_BUSY,
+             MSG_IEC_BUS_IDLE,
+             MSG_VC1541_MOTOR_ON,
              MSG_VC1541_MOTOR_OFF,
              MSG_VC1541_HEAD_UP,
-             MSG_VC1541_HEAD_DOWN:
+             MSG_VC1541_HEAD_DOWN,
+             MSG_VC1530_TAPE,
+             MSG_VC1530_NO_TAPE,
+             MSG_VC1530_PROGRESS,
+             MSG_CARTRIDGE,
+             MSG_NO_CARTRIDGE,
+             MSG_NO_CARTRIDGE,
+             MSG_CART_SWITCH:
             break
     
-        case MSG_VC1530_TAPE:
-            
-            tapeIcon.isHidden = false
-
-        case MSG_VC1530_NO_TAPE:
-            
-            tapeIcon.isHidden = true
-
-        //case MSG_VC1530_PLAY:
-        //    break
-    
-        case MSG_VC1530_PROGRESS:
-            break
-    
-        case MSG_CARTRIDGE:
-            
-            crtIcon.isHidden = false
-            crtSwitch.isHidden = !c64.expansionport.hasSwitch()
-            crtButton1.isHidden = c64.expansionport.numButtons() < 1
-            crtButton2.isHidden = c64.expansionport.numButtons() < 2
-            crtButton1.toolTip = c64.expansionport.getButtonTitle(1)
-            crtButton2.toolTip = c64.expansionport.getButtonTitle(2)
-
-        case MSG_NO_CARTRIDGE:
-            
-            crtIcon.isHidden = true
-            crtSwitch.isHidden = true
-            crtButton1.isHidden = true
-            crtButton2.isHidden = true
-            
-        case MSG_CART_SWITCH:
-            
-            let pos = c64.expansionport.switchPosition()
-            crtSwitch.image = NSImage(named:
-                (pos < 0) ? "crtSwitchLeftTemplate"
-                    : (pos > 0) ? "crtSwitchRightTemplate"
-                    : "crtSwitchNeutralTemplate")
-            crtSwitch.toolTip = c64.expansionport.switchDescription(pos)
             
         default:
             

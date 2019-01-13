@@ -363,20 +363,6 @@ extension MyController : NSMenuItemValidation {
     public func showStatusBar(_ value: Bool) {
         
         let items: [NSView : Bool] = [
-            greenLED1: false,
-            redLED1: false,
-            progress1: false,
-            diskIcon1: !c64.drive1.hasDisk(),
-            greenLED2: false,
-            redLED2: false,
-            progress2: false,
-            diskIcon2: !c64.drive2.hasDisk(),
-            crtIcon: !c64.expansionport.cartridgeAttached(),
-            crtSwitch: !c64.expansionport.hasSwitch(),
-            crtButton1: c64.expansionport.numButtons() < 1,
-            crtButton2: c64.expansionport.numButtons() < 2,
-            tapeIcon: !c64.datasette.hasTape(),
-            tapeProgress: false,
             clockSpeed: false,
             clockSpeedBar: false,
             warpIcon: false
