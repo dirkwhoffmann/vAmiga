@@ -62,7 +62,7 @@ public:
     const char *getDescription() { return description ? description : ""; }
 
     //! @brief    Assigns a textual description.
-    void setDescription(const char *str) { description = strdup(str); }
+    void setDescription(const char *str);
 
     
     //

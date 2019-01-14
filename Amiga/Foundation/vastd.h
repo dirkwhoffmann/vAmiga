@@ -61,6 +61,22 @@ inline bool is_uint5_t(uint5_t value) { return value < 32; }
 #endif
 
 //
+//! @functiongroup Converting units
+//
+
+// Macros for converting bytes to kilo bytes or mega bytes and vice versa
+/*
+#define B2KB(x) ((x) >> 10)
+#define B2MB(x) ((x) >> 20)
+#define KB2B(x) ((x) << 10)
+#define MB2B(x) ((x) << 20)
+*/
+
+// Macros for converting kilo bytes and mega bytes to bytes
+#define KB(x) ((x) << 10)
+#define MB(x) ((x) << 20)
+
+//
 //! @functiongroup Handling low level data objects
 //
 

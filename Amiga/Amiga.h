@@ -11,14 +11,12 @@
 #ifndef _AMIGA_INC
 #define _AMIGA_INC
 
+// General
 #include "HardwareComponent.h"
 #include "MessageQueue.h"
 
-// General
-// #include "MessageQueue.h"
-
 // Sub components
-// #include "AmigaMemory.h"
+#include "AmigaMemory.h"
 
 
 /* A complete virtual Amiga
@@ -33,6 +31,9 @@ class Amiga : public HardwareComponent {
     
 public:
     
+    // Specification of the machine we are going to emulate...
+    AmigaConfiguration config;
+    
     //
     // Hardware components
     //
@@ -41,14 +42,12 @@ public:
     // AmigaMemory mem;
     
     
+    
 private:
     
     //
     // Emulator thread
     //
-    
-    // The currently emulated Amiga model
-    AmigaModel model = AMIGA_500;
     
     // The invocation counter for implementing suspend() / resume()
     unsigned suspendCounter = 0;
@@ -145,6 +144,30 @@ public:
     Amiga();
     ~Amiga();
 
+    //
+    // Configuring the emulated machine
+    //
+    
+public:
+    
+    // Returns the currently set configuration.
+    AmigaConfiguration getConfig() { return config; }
+    
+    // Chooses the emulated Amiga model.
+    bool configureModel(AmigaModel model);
+    
+    // Chooses the amount of memory to emulate.
+    bool configureChipMemory(unsigned size);
+    bool configureSlowMemory(unsigned size);
+    bool configureFastMemory(unsigned size);
+    
+    // Chooses if a real-time clock should be emulated.
+    bool configureRealTimeClock(bool value);
+    
+    // Chooses if a drive is connected or not.
+    bool configureDrive(unsigned driveNr, bool connected);
+
+    
     //
     // Methods from HardwareComponent
     //
@@ -253,16 +276,7 @@ public:
     void suspend();
     void resume();
   
-    
-    //
-    // Configuring the emulator
-    //
-    
-public:
-    
-    AmigaModel getModel() { return model; }
-    void setModel(AmigaModel m);
-    
+
     
     //
     // Accessing the message queue

@@ -53,12 +53,21 @@ void
 Amiga::Amiga()
 {
     setDescription("Amiga");
-    debug(2, "Creating Amiga[%p]\n", this);
     
-    p = NULL;
-    warp = false;
-    alwaysWarp = false;
-    warpLoad = false;
+    /* Set up a meaningful initial configuration.
+     * This configuration is unlikely to be used though. Under normal
+     * circumstances, the GUI overwrites it with it's own settings before
+     * powering on.
+     */
+    config.model         = A500;
+    config.chipRamSize   = 512;
+    config.slowRamSize   = 0;
+    config.fastRamSize   = 0;
+    config.realTimeClock = false;
+    config.df0           = true;
+    config.df1           = false;
+    config.df2           = false;
+    config.df3           = false;
     
     // Register sub components
     HardwareComponent *subcomponents[] = {
@@ -85,6 +94,75 @@ Amiga::~Amiga()
 {
     debug(1, "Destroying Amiga[%p]\n", this);
     powerOff();
+}
+
+bool
+Amiga::configureModel(AmigaModel model)
+{
+    if (!isAmigaModel(model)) {
+        warn("Invalid Amiga model: %d\n", model);
+        warn("       Valid values: %d, %d, %d\n", A500, A1000, A2000);
+        return false;
+    }
+    config.model = model;
+    return true;
+}
+
+bool
+Amiga::configureChipMemory(unsigned size)
+{
+    if (size != 256 && size != 512) {
+        warn("Invalid Chip Ram size: %d\n", size);
+        warn("         Valid values: 256KB, 512KB\n");
+        return false;
+    }
+    config.chipRamSize = size;
+    return true;
+}
+
+bool
+Amiga::configureSlowMemory(unsigned size)
+{
+    if ((size % 256) != 0 || size > 512) {
+        warn("Invalid Slow Ram size: %d\n", size);
+        warn("         Valid values: 0KB, 256KB, 512KB\n");
+        return false;
+    }
+    config.slowRamSize = size;
+    return true;
+}
+
+bool
+Amiga::configureFastMemory(unsigned size)
+{
+    if ((size % 64) != 0 || size > 8192) {
+        warn("Invalid Fast Ram size: %d\n", size);
+        warn("         Valid values: 0KB, 64KB, 128KB, ..., 8192KB (8MB)\n");
+        return false;
+    }
+    config.fastRamSize = size;
+    return true;
+}
+
+bool
+Amiga::configureRealTimeClock(bool value)
+{
+    config.realTimeClock = value;
+    return true;
+}
+
+bool
+Amiga::configureDrive(unsigned driveNr, bool connected)
+{
+    switch (driveNr) {
+        case 0: config.df0 = connected; return true;
+        case 1: config.df1 = connected; return true;
+        case 2: config.df2 = connected; return true;
+        case 3: config.df3 = connected; return true;
+    }
+    
+    warn("Invalid drive number (%d). Ignoring.\n", driveNr);
+    return false;
 }
 
 void
@@ -131,8 +209,19 @@ Amiga::_ping()
 void
 Amiga::_dump()
 {
-    plainmsg("               Amiga Model : %s\n", modelName(model));
-    plainmsg("warp, warpLoad, alwaysWarp : %d %d %d\n", warp, warpLoad, alwaysWarp);
+    plainmsg("Current configuration:\n\n");
+    plainmsg("   AmigaModel: %s\n", modelName(config.model));
+    plainmsg("  chipRamSize: %d KB\n", config.chipRamSize);
+    plainmsg("  slowRamSize: %d KB\n", config.slowRamSize);
+    plainmsg("  fastRamSize: %d KB\n", config.fastRamSize);
+    plainmsg("realTimeClock: %s\n", config.realTimeClock ? "yes" : "no");
+    plainmsg("          df0: %s\n", config.df0 ? "yes" : "no");
+    plainmsg("          df1: %s\n", config.df1 ? "yes" : "no");
+    plainmsg("          df2: %s\n", config.df2 ? "yes" : "no");
+    plainmsg("          df3: %s\n", config.df3 ? "yes" : "no");
+    
+    plainmsg("\n");
+    plainmsg("    warp mode: %d (%d) (%d)", warp, warpLoad, alwaysWarp);
     plainmsg("\n");
 }
 
@@ -158,17 +247,6 @@ Amiga::resume()
     
     if (--suspendCounter == 0)
         run();
-}
-
-void
-Amiga::setModel(AmigaModel model)
-{
-    if (!isAmigaModel(model)) {
-        warn("Unknown Amiga model (%d). Using an A500 instead.\n");
-        model = AMIGA_500;
-    }
-    
-    this->model = model;
 }
 
 bool

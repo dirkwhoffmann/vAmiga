@@ -58,8 +58,13 @@ struct AmigaWrapper;
 - (void) suspend;
 - (void) resume;
 
-- (NSInteger) model;
-- (void) setModel:(NSInteger)model;
+- (AmigaConfiguration) config;
+- (BOOL) configureModel:(NSInteger)model;
+- (BOOL) configureChipMemory:(NSInteger)size;
+- (BOOL) configureSlowMemory:(NSInteger)size;
+- (BOOL) configureFastMemory:(NSInteger)size;
+- (BOOL) configureRealTimeClock:(BOOL)value;
+- (BOOL) configureDrive:(NSInteger)driveNr connected:(BOOL)value;
 
 - (void) addListener:(const void *)sender function:(Callback *)func;
 - (void) removeListener:(const void *)sender;

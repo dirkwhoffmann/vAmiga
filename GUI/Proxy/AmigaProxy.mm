@@ -114,14 +114,35 @@ struct AmigaWrapper { Amiga *amiga; };
     return wrapper->amiga->resume();
 }
 
-- (NSInteger) model
+- (AmigaConfiguration) config
 {
-    return wrapper->amiga->getModel();
+    return wrapper->amiga->getConfig();
 }
-- (void) setModel:(NSInteger)model
+- (BOOL) configureModel:(NSInteger)model
 {
-    wrapper->amiga->setModel((AmigaModel)model);
+    return wrapper->amiga->configureModel((AmigaModel)model);
 }
+- (BOOL) configureChipMemory:(NSInteger)size
+{
+    return wrapper->amiga->configureChipMemory((unsigned)size);
+}
+- (BOOL) configureSlowMemory:(NSInteger)size
+{
+    return wrapper->amiga->configureSlowMemory((unsigned)size);
+}
+- (BOOL) configureFastMemory:(NSInteger)size
+{
+    return wrapper->amiga->configureFastMemory((unsigned)size);
+}
+- (BOOL) configureRealTimeClock:(BOOL)value
+{
+    return wrapper->amiga->configureRealTimeClock(value);
+}
+- (BOOL) configureDrive:(NSInteger)driveNr connected:(BOOL)value
+{
+    return wrapper->amiga->configureDrive((unsigned)driveNr, value);
+}
+
 
 - (void) addListener:(const void *)sender function:(Callback *)func
 {

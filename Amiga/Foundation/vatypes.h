@@ -14,22 +14,69 @@
 // Amiga hardware
 //
 
-typedef enum {
-    AMIGA_500,
-    AMIGA_1000,
-    AMIGA_2000
-} AmigaModel;
+typedef enum
+{
+    A500,
+    A1000,
+    A2000
+}
+AmigaModel;
 
-inline bool isAmigaModel(AmigaModel model) {
-    return model >= AMIGA_500 && model <= AMIGA_2000;
+inline bool isAmigaModel(AmigaModel model)
+{
+    return model >= A500 && model <= A2000;
 }
 
-inline const char *modelName(AmigaModel model) {
+inline const char *modelName(AmigaModel model)
+{
     return
-    model == AMIGA_500 ? "Amiga 500" :
-    model == AMIGA_1000 ? "Amiga 1000" :
-    model == AMIGA_2000 ? "Amiga 2000" : "???";
+    model == A500 ? "Amiga 500" :
+    model == A1000 ? "Amiga 1000" :
+    model == A2000 ? "Amiga 2000" : "???";
 }
+
+//
+// Amiga configuration
+//
+
+/* Amiga configuration
+ * This is a full description of the computer we are going to emulate.
+ */
+typedef struct
+{
+    AmigaModel model;
+    size_t chipRamSize; // KB
+    size_t slowRamSize; // KB
+    size_t fastRamSize; // KB
+    bool realTimeClock;
+    bool df0;
+    bool df1;
+    bool df2;
+    bool df3;
+}
+AmigaConfiguration;
+
+
+//
+// Memory
+//
+
+/* Memory source identifiers
+ * The identifiers are used in the mem source lookup table to specify the
+ * source and target of a peek or poke operation, respectively.
+ */
+typedef enum
+{
+    MEM_UNMAPPED,
+    MEM_ROM,
+    MEM_WOM,
+    MEM_CHIP,
+    MEM_SLOW,
+    MEM_FAST,
+    MEM_CIA,
+    MEM_RTC,
+    MEM_CUSTOM
+} MemorySource;
 
 
 //

@@ -21,6 +21,14 @@
 
 #include "VC64Object.h"
 
+void
+VC64Object::setDescription(const char *str)
+{
+    assert(str != NULL);
+    debug(2, "Creating %s [%p]\n", str, this);
+    description = strdup(str);
+}
+
 bool
 VC64Object::tracingEnabled()
 {
