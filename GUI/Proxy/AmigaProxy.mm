@@ -142,7 +142,10 @@ struct AmigaWrapper { Amiga *amiga; };
 {
     return wrapper->amiga->configureDrive((unsigned)driveNr, value);
 }
-
+- (BOOL) configureDrive:(NSInteger)driveNr type:(NSInteger)type
+{
+    return wrapper->amiga->configureDrive((unsigned)driveNr, (DriveType)type);
+}
 
 - (void) addListener:(const void *)sender function:(Callback *)func
 {

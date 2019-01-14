@@ -11,6 +11,13 @@
 import Foundation
 
 class MyDocument : NSDocument {
+
+    /**
+     Emulator proxy object. This object is an Objective-C bridge between
+     the GUI (written in Swift) an the core emulator (written in C++).
+     */
+    var amiga: AmigaProxy!
+
     
     /**
      Emulator proxy object. This object is an Objective-C bridge between
@@ -59,6 +66,7 @@ class MyDocument : NSDocument {
         MyController.registerUserDefaults()
         
         // Create emulator instance
+        amiga = AmigaProxy()
         c64 = C64Proxy()
     }
  
@@ -540,9 +548,10 @@ class MyDocument : NSDocument {
 
         super.removeWindowController(windowController)
         
-        // Shut down the emulator.
+        // Trash the emulator.
         // Note that all GUI elements have to be inactive when the proxy is set
         // to nil. Hence, the emulator should be shut down as late as possible.
+        amiga.kill()
         c64.kill()
     }
 }

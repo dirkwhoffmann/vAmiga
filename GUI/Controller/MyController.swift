@@ -25,6 +25,13 @@ protocol MessageReceiver {
 
 class MyController : NSWindowController, MessageReceiver {
 
+    /// Proxy
+    /// Implements a bridge between the emulator written in C++ and the
+    /// GUI written in Swift. Because Swift cannot interact with C++ directly,
+    //  the proxy is written in Objective-C.
+    var amiga: AmigaProxy!
+
+    
     /// Proxy object.
     /// Implements a bridge between the emulator written in C++ and the
     /// GUI written in Swift. Because Swift cannot interact with C++ directly,

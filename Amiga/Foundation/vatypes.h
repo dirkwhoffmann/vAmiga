@@ -14,7 +14,7 @@
 // Amiga hardware
 //
 
-typedef enum
+typedef enum : long
 {
     A500,
     A1000,
@@ -35,7 +35,7 @@ inline const char *modelName(AmigaModel model)
     model == A2000 ? "Amiga 2000" : "???";
 }
 
-typedef enum
+typedef enum : long
 {
     A1010_ORIG, // Amiga 3,5" drive, emulated with original speed
     A1010_2X,   // Amiga 3,5" drive, emulated 2x faster
@@ -78,9 +78,9 @@ DriveConfiguration;
 typedef struct
 {
     AmigaModel model;
-    unsigned chipRamSize; // size in KB
-    unsigned slowRamSize; // size in KB
-    unsigned fastRamSize; // size in KB
+    long chipRamSize; // size in KB
+    long slowRamSize; // size in KB
+    long fastRamSize; // size in KB
     bool realTimeClock;
     DriveConfiguration df0;
     DriveConfiguration df1;

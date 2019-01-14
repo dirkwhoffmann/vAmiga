@@ -1,11 +1,11 @@
-//
-// This file is part of VirtualC64 - A cycle accurate Commodore 64 emulator
+// -----------------------------------------------------------------------------
+// This file is part of vAmiga
 //
 // Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
 // Licensed under the GNU General Public License v3
 //
 // See https://www.gnu.org for license information
-//
+// -----------------------------------------------------------------------------
 
 import Foundation
 
@@ -42,29 +42,29 @@ class PreferencesController : UserDialogController {
     // Hardware preferences
     //
     
-    // VIC
-    @IBOutlet weak var hwVicModelPopup: NSPopUpButton!
-    @IBOutlet weak var hwVicIcon: NSImageView!
-    @IBOutlet weak var hwVicDescription: NSTextField!
-    @IBOutlet weak var hwVicGrayDotBug: NSButton!
-    
-    // CIA
-    @IBOutlet weak var hwCiaModelPopup: NSPopUpButton!
-    @IBOutlet weak var hwCiaTimerBBug: NSButton!
-    
-    // SID
-    @IBOutlet weak var hwSidModelPopup: NSPopUpButton!
-    @IBOutlet weak var hwSidFilter: NSButton!
-    @IBOutlet weak var hwSidEnginePopup: NSPopUpButton!
-    @IBOutlet weak var hwSidSamplingPopup: NSPopUpButton!
-    
-    // Board logic
-    @IBOutlet weak var hwGlueLogicPopup: NSPopUpButton!
-    @IBOutlet weak var hwRamInitPatternPopup: NSPopUpButton!
-    @IBOutlet weak var hwInfoText: NSTextField!
+    // Machine
+    @IBOutlet weak var hwAmigaModelPopup: NSPopUpButton!
+    @IBOutlet weak var hwRealTimeClock: NSButton!
 
-    @IBOutlet weak var hwOkButton: NSButton!
-    @IBOutlet weak var hwCancelButton: NSButton!
+    // Memory
+    @IBOutlet weak var hwChipRamPopup: NSPopUpButton!
+    @IBOutlet weak var hwSlowRamPopup: NSPopUpButton!
+    @IBOutlet weak var hwFastRamPopup: NSPopUpButton!
+
+    // Drive
+    @IBOutlet weak var hwDf0Connect: NSButton!
+    @IBOutlet weak var hwDf0Type: NSPopUpButton!
+    @IBOutlet weak var hwDf1Connect: NSButton!
+    @IBOutlet weak var hwDf1Type: NSPopUpButton!
+    @IBOutlet weak var hwDf2Connect: NSButton!
+    @IBOutlet weak var hwDf2Type: NSPopUpButton!
+    @IBOutlet weak var hwDf3Connect: NSButton!
+    @IBOutlet weak var hwDf3Type: NSPopUpButton!
+
+    // Lock
+    @IBOutlet weak var hwLockImage: NSImageView!
+    @IBOutlet weak var hwLockText: NSTextField!
+    @IBOutlet weak var hwLockSubText: NSTextField!
     
     //
     // Video preferences

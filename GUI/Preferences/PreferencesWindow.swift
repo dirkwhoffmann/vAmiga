@@ -1,9 +1,11 @@
+// -----------------------------------------------------------------------------
+// This file is part of vAmiga
 //
-//  PreferencesWindow.swift
-//  VirtualC64
+// Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
+// Licensed under the GNU General Public License v3
 //
-//  Created by Dirk Hoffmann on 13.12.18.
-//
+// See https://www.gnu.org for license information
+// -----------------------------------------------------------------------------
 
 import Foundation
 

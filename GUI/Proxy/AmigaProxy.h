@@ -65,6 +65,7 @@ struct AmigaWrapper;
 - (BOOL) configureFastMemory:(NSInteger)size;
 - (BOOL) configureRealTimeClock:(BOOL)value;
 - (BOOL) configureDrive:(NSInteger)driveNr connected:(BOOL)value;
+- (BOOL) configureDrive:(NSInteger)driveNr type:(NSInteger)value;
 
 - (void) addListener:(const void *)sender function:(Callback *)func;
 - (void) removeListener:(const void *)sender;

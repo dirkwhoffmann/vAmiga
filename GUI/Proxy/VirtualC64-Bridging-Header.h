@@ -3,4 +3,4 @@
 //
 
 #import "C64Proxy.h"
-
+#import "AmigaProxy.h"

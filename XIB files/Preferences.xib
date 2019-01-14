@@ -63,11 +63,25 @@
                 <outlet property="emuTapAutoTypeText" destination="nFD-Hf-VAg" id="twr-4e-tmw"/>
                 <outlet property="emuTapPopup" destination="lgb-kz-IcQ" id="0OQ-4W-pRk"/>
                 <outlet property="emuWarpLoad" destination="jQ0-jt-CGq" id="m2W-9e-r5B"/>
-                <outlet property="hwCancelButton" destination="B3P-il-3nh" id="bC8-or-l9N"/>
+                <outlet property="hwAmigaModelPopup" destination="ZQk-5s-Q3i" id="KW3-9z-ZQs"/>
+                <outlet property="hwChipRamPopup" destination="Htk-aA-fCu" id="6Mo-Ea-f4z"/>
                 <outlet property="hwCiaTimerBBug" destination="4rD-qd-qGj" id="6Nf-wz-IRb"/>
-                <outlet property="hwOkButton" destination="cMh-0b-Yb2" id="Baw-Q8-cGK"/>
+                <outlet property="hwDf0Connect" destination="4rD-qd-qGj" id="l2k-Wm-cut"/>
+                <outlet property="hwDf0Type" destination="kgt-j5-t6P" id="I7j-Yw-MrC"/>
+                <outlet property="hwDf1Connect" destination="kmc-nb-gBK" id="ALa-RV-61O"/>
+                <outlet property="hwDf1Type" destination="40w-GY-Enr" id="iU3-YP-Eci"/>
+                <outlet property="hwDf2Connect" destination="Zh1-EV-wJ1" id="XdM-Fn-2dP"/>
+                <outlet property="hwDf2Type" destination="Rgb-eW-8uI" id="ME1-d9-T1O"/>
+                <outlet property="hwDf3Connect" destination="g9I-e5-OlF" id="1Cr-b8-1Bq"/>
+                <outlet property="hwDf3Type" destination="zAq-Lw-d3w" id="a5h-0I-2Lu"/>
+                <outlet property="hwFastRamPopup" destination="BTz-kT-JtT" id="oec-CI-f3J"/>
+                <outlet property="hwLockImage" destination="9Fp-ku-lua" id="ksf-wH-YdK"/>
+                <outlet property="hwLockSubText" destination="M4r-6P-yfY" id="wxV-Tm-80C"/>
+                <outlet property="hwLockText" destination="3ER-DN-63K" id="aH1-Iu-24q"/>
+                <outlet property="hwRealTimeClock" destination="T70-4F-bOm" id="eAd-aV-2Nk"/>
                 <outlet property="hwSidEnginePopup" destination="BTz-kT-JtT" id="tcq-vb-6f3"/>
                 <outlet property="hwSidModelPopup" destination="Htk-aA-fCu" id="5ni-vE-Vtl"/>
+                <outlet property="hwSlowRamPopup" destination="W0y-DM-pGD" id="bNq-71-Or8"/>
                 <outlet property="hwVicModelPopup" destination="ZQk-5s-Q3i" id="GTx-Ou-jHT"/>
                 <outlet property="info" destination="cf0-iO-MNj" id="62M-ws-4Ax"/>
                 <outlet property="keyCancelButton" destination="KU9-uV-hRQ" id="1kK-9n-e1e"/>
@@ -403,7 +417,7 @@ Gw
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cMh-0b-Yb2">
                                             <rect key="frame" x="515" y="5" width="82" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                            <buttonCell key="cell" type="push" title="Quit" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="P7R-5S-bK5">
+                                            <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="P7R-5S-bK5">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                                 <string key="keyEquivalent" base64-UTF8="YES">
