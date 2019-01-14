@@ -48,6 +48,13 @@ struct AmigaWrapper;
 - (void) ping;
 - (void) dump;
 
+- (BOOL) readyToPowerUp;
+- (BOOL) isRunning;
+- (BOOL) isPaused;
+- (void) run;
+- (void) pause;
+- (void) runOrPause;
+
 - (void) suspend;
 - (void) resume;
 
@@ -58,12 +65,7 @@ struct AmigaWrapper;
 - (void) removeListener:(const void *)sender;
 - (Message)message;
 
-- (BOOL) isRunnable;
-- (BOOL) isRunning;
-- (BOOL) isHalted;
-- (void) run;
-- (void) halt;
-- (void) runOrHalt;
+
 
 // - (BOOL) warp;
 - (BOOL) alwaysWarp;

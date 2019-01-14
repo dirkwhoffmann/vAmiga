@@ -81,6 +81,30 @@ struct AmigaWrapper { Amiga *amiga; };
     return wrapper->amiga->dump();
 }
 
+- (BOOL) readyToPowerUp
+{
+    return wrapper->amiga->readyToPowerUp();
+}
+- (BOOL) isRunning
+{
+    return wrapper->amiga->isRunning();
+}
+- (BOOL) isPaused
+{
+    return wrapper->amiga->isPaused();
+}
+- (void) run
+{
+    wrapper->amiga->run();
+}
+- (void) pause
+{
+    wrapper->amiga->pause();
+}
+- (void) runOrPause
+{
+    wrapper->amiga->runOrPause();
+}
 - (void) suspend
 {
     return wrapper->amiga->suspend();
@@ -110,31 +134,6 @@ struct AmigaWrapper { Amiga *amiga; };
 - (Message)message
 {
     return wrapper->amiga->getMessage();
-}
-
-- (BOOL) isReadyToGo
-{
-    return wrapper->amiga->isReadyToGo();
-}
-- (BOOL) isRunning
-{
-    return wrapper->amiga->isRunning();
-}
-- (BOOL) isHalted
-{
-    return wrapper->amiga->isHalted();
-}
-- (void) run
-{
-    wrapper->amiga->run();
-}
-- (void) halt
-{
-    wrapper->amiga->halt();
-}
-- (void) runOrHalt
-{
-    wrapper->amiga->runOrHalt();
 }
 
 - (BOOL) alwaysWarp

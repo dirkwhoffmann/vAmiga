@@ -18,7 +18,7 @@
  */
 class AmigaObject {
     
-protected:
+public:
     
     // Debug level for this component
     unsigned debugLevel = DEBUG_LEVEL;
@@ -41,11 +41,12 @@ private:
      */
     const char *description = NULL;
     
-public:
     
     //
     // Initializing the component
     //
+    
+public:
     
     // Getter and setter for the textual description.
     const char *getDescription() { return description ? description : ""; }
@@ -55,6 +56,8 @@ public:
     //
     // Debugging the component
     //
+    
+public:
     
     // Returns if trace mode is enabled.
     bool tracingEnabled() { return traceCounter != 0; }
@@ -79,6 +82,8 @@ private:
     // Printing messages to the console
     //
     
+protected:
+    
     /* There a four types of messages:
      *
      *   - msg     Debug message   (Shows up in debug and release build)
@@ -89,9 +94,6 @@ private:
      * All messages are prefixed by the string description of the printing
      * object. To omit the prefix, use plainmsg or plaindebug instead.
      */
-    
-protected:
-    
     void msg(const char *fmt, ...);
     void plainmsg(const char *fmt, ...);
     

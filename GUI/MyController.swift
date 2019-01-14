@@ -519,7 +519,7 @@ extension MyController {
 
         switch (msg.type) {
     
-        case MSG_READY_TO_RUN:
+        case MSG_READY_TO_POWER_ON:
     
             // Start emulator
             c64.run()
@@ -540,7 +540,7 @@ extension MyController {
             validateToolbarItems()
             refresh()
     
-        case MSG_HALT:
+        case MSG_PAUSE:
             
             enableUserEditing()
             validateToolbarItems()

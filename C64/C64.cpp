@@ -35,7 +35,7 @@ threadCleanup(void* thisC64)
     c64->sid.halt();
     
     c64->debug(2, "Execution thread terminated\n");
-    c64->putMessage(MSG_HALT);
+    c64->putMessage(MSG_PAUSE);
 }
 
 void 
@@ -863,7 +863,7 @@ C64::loadRom(const char *filename)
     }
     
     if (!wasRunnable && isRunnable())
-        putMessage(MSG_READY_TO_RUN);
+        putMessage(MSG_READY_TO_POWER_ON);
     
     delete rom;
     return result;

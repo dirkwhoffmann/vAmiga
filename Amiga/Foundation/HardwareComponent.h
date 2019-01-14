@@ -102,7 +102,7 @@ public:
      */
     void powerOn();
 
-    // Subclass specific powerOn behaviour
+    // Defines the subclass specific behaviour of powerOn().
     virtual void _powerOn() { _reset(); }
     
     /* Emulates a power off event on the virtual Amiga.
@@ -110,11 +110,14 @@ public:
      */
     void powerOff();
 
-    // Subclass specific powerOff behaviour
+    // Defines the subclass specific behaviour of powerOff().
     virtual void _powerOff() { };
     
     // Calls powerOn() or powerOff(), depending on the current state.
     void powerOnOrOff() { isPoweredOn() ? powerOff() : powerOn(); }
+    
+    // Emulates a cold start of this component.
+    void coldStart() { powerOff(); powerOn(); }
     
     /* Emulates a reset event on the virtual Amiga.
      * By default, each component resets its sub components.

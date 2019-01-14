@@ -18,8 +18,9 @@ threadTerminated(void* thisAmiga)
 {
     assert(thisAmiga != NULL);
     
+    // Inform the Amiga that the thread has been canceled
     Amiga *amiga = (Amiga *)thisAmiga;
-    amiga->threadTerminated();
+    amiga->threadDidTerminate();
 }
 
 void
@@ -27,8 +28,9 @@ void
     
     assert(thisAmiga != NULL);
     
+    // Inform the Amiga that the thread is about to start
     Amiga *amiga = (Amiga *)thisAmiga;
-    amiga->threadStarted();
+    amiga->threadWillStart();
     
     // Configure the thread
     pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
@@ -82,9 +84,7 @@ Amiga::Amiga()
 Amiga::~Amiga()
 {
     debug(1, "Destroying Amiga[%p]\n", this);
-    
-    // Terminate the emulator thread
-    halt();
+    powerOff();
 }
 
 void
@@ -92,6 +92,12 @@ Amiga::_powerOn()
 {
     msg("Powering on\n");
     
+    // Initialize internal state
+    
+    // Start the emulator
+    run();
+    
+    // Update GUI elements
     ping();
 }
 
@@ -100,6 +106,10 @@ Amiga::_powerOff()
 {
     msg("Powering off\n");
     
+    // Stop the emulator
+    pause();
+    
+    // Update GUI elements
     ping();
 }
 
@@ -131,10 +141,10 @@ Amiga::suspend()
 {
     debug(2, "Suspending...\n");
     
-    if (suspendCounter == 0 && isHalted())
+    if (suspendCounter == 0 && !isRunning())
         return;
     
-    halt();
+    pause();
     suspendCounter++;
 }
 
@@ -162,7 +172,7 @@ Amiga::setModel(AmigaModel model)
 }
 
 bool
-Amiga::isReadyToGo()
+Amiga::readyToPowerUp()
 {
     return true;
 }
@@ -170,10 +180,10 @@ Amiga::isReadyToGo()
 void
 Amiga::run()
 {
-    if (isHalted()) {
+    if (isPaused()) {
         
         // Check for missing Roms
-        if (!isReadyToGo()) {
+        if (!readyToPowerUp()) {
             putMessage(MSG_ROM_MISSING);
             return;
         }
@@ -184,7 +194,7 @@ Amiga::run()
 }
 
 void
-Amiga::halt()
+Amiga::pause()
 {
     if (isRunning()) {
         
@@ -289,10 +299,18 @@ Amiga::synchronizeTiming()
 //
 
 void
-Amiga::threadStarted()
+Amiga::threadWillStart()
 {
     debug(2, "Emulator thread started\n");
     amiga->putMessage(MSG_RUN);
+}
+
+void
+Amiga::threadDidTerminate()
+{
+    debug(2, "Emulator thread terminated\n");
+    p = NULL;
+    amiga->putMessage(MSG_PAUSE);
 }
 
 void
@@ -304,12 +322,4 @@ Amiga::runLoop()
     //
     // TODO: Emulate the Amiga here ...
     //
-}
-
-void
-Amiga::threadTerminated()
-{
-    debug(2, "Emulator thread terminated\n");
-    p = NULL;
-    amiga->putMessage(MSG_HALT);
 }

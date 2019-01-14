@@ -54,8 +54,22 @@ private:
     unsigned suspendCounter = 0;
     
     /* The emulator thread
-     * The thread is created when the emulator starts and destroyed when the
-     * emulator is paused or shut down.
+     * Together with variable 'power' (inherited from HardwareComponent), this
+     * variable defines the operational state of the emulator. From four
+     * possible combinations, only three are considered valid:
+     *
+     *     power     | thread     | State
+     *     --------------------------------------
+     *     true      | created    | Running
+     *     true      | NULL       | Paused
+     *     false     | created    | (INVALID)
+     *     false     | NULL       | Off
+     *
+     * According to this table, the semantics of function isPoweredOn() and
+     * isPoweredOff() can be stated as follows:
+     *
+     *    isPoweredOn() == true  <==>  'Running' or 'Paused'
+     *   isPoweredOff() == true  <==>  'Off'
      */
     pthread_t p = NULL;
     
@@ -135,21 +149,99 @@ public:
     // Methods from HardwareComponent
     //
 
-public:
+private:
 
-    void _powerOn();
-    void _powerOff();
-    void _reset();
-    void _ping();
-    void _dump();
+    /* Initializes the internal state and starts the emulator thread.
+     * In detail, this function affects the emulator state as follows:
+     *
+     *                    | State   | Next    | Actions taken
+     *     -------------------------------------------------------------------
+     *     powerOn()      | Running | Running | none
+     *                    | Paused  | Paused  | none
+     *                    | Off     | Running | _powerOn(), create thread
+     */
+    void _powerOn() override;
 
+    /* Destroys the emulator thread.
+     * In detail, this function affects the emulator state as follows:
+     *
+     *                    | State   | Next    | Actions taken
+     *     -------------------------------------------------------------------
+     *     powerOff()     | Running | Off     | destroy thread, _powerOff()
+     *                    | Paused  | Off     | _powerOff()
+     *                    | Off     | Off     | none
+     */
+    void _powerOff() override;
+    
+    void _reset() override;
+    void _ping() override;
+    void _dump() override;
+
+    
     //
     // Controlling the emulation thread
     //
     
-    /* Halts the emulation thread temporarily.
+public:
+    
+    /* Returns true if a call to powerUp() will be successful.
+     * An Amiga 500 or Amiga 2000 can be powered up any time (if no original
+     * Kickstart is present, the emulator falls back to using the free Aros
+     * replacement). An Amiga 1000 requires a Boot Rom which is not part of
+     * the emulator.
+     */
+    bool readyToPowerUp();
+    
+    /* Returns true if the emulator is in 'Running' state
+     * According to the table above, 'Running' means that the component is
+     * powered on and the emulator thread running.
+     */
+    bool isRunning() { return p != NULL; }
+    
+    /* Returns true if the emulator is in 'Paused' state
+     * According to the table above, 'Running' means that the component is
+     * powered on and the emulator thread has not been created yet or it has
+     * been destroyed.
+     */
+    bool isPaused() { return isPoweredOn() && p == NULL; }
+    
+    /* Puts a 'Paused' emulator into 'Running' state.
+     * In detail, this function affects the emulator state as follows:
+     *
+     *                    | State   | Next    | Actions taken
+     *     -------------------------------------------------------------------
+     *     run()          | Running | Running | none
+     *                    | Paused  | Running | create thread
+     *                    | Off     | Off     | none
+     */
+    void run();
+    
+    /* Puts a 'Running' emulator into 'Pause' state.
+     * In detail, this function affects the emulator state as follows:
+     *
+     *                    | State   | Next    | Actions taken
+     *     -------------------------------------------------------------------
+     *     pause()        | Running | Paused  | destroy thread
+     *                    | Paused  | Paused  | none
+     *                    | Off     | Off     | none
+     */
+    void pause();
+    
+    /* Toggles between 'Running' and 'Pause' state.
+     * In detail, this function affects the emulator state as follows:
+     *
+     *                    | State   | Next    | Actions taken
+     *     -------------------------------------------------------------------
+     *     runOrPause()   | Running | Paused  | destroy thread
+     *                    | Paused  | Running | create thread
+     *                    | Off     | Off     | none
+     */
+    void runOrPause() { isRunning() ? pause() : run(); }
+    
+    
+    /* Pauses the emulation thread temporarily.
      * Because the emulator is running in a separate thread, the GUI has to
-     * halt the emulator before changing it's internal state. This is done by
+     * pause the emulator before changing it's internal state. This is done by
      * embedding the code inside a suspend / resume block:
      *
      *            suspend();
@@ -202,98 +294,18 @@ public:
     
     public:
     
-    /* Checks for missing resources.
-     * If an Amiga 500 or Amiga 1000 is emulated, this function always returns
-     * true. If you emulate an Amiga 1000, it returns false if no Boot Rom
-     * is present.
-     */
-    bool isReadyToGo();
-    
-    /* The operational state of the emulator is defined by variable 'power'
-     * which is defined in AmigaComponent and variable 'p' which represents
-     * the emulator thread. From the four possible combinations, only three
-     * are valid:
-     *
-     *     power     | thread     | State
-     *     --------------------------------------
-     *     true      | created    | Running
-     *     true      | NULL       | Paused
-     *     false     | created    | (INVALID)
-     *     false     | NULL       | Off
-     *
-     * The state can be queried by various methods with the following meaning:
-     *
-     * Methods defined in class HardwareComponent:
-     *
-     *    isPoweredOn() == true  <==>  'Running' or 'Paused'
-     *   isPoweredOff() == true  <==>  'Off'
-     *
-     * Methods defined in class Amiga:
-     *
-     *      isRunning() == true  <==>  'Running'
-     *       isPaused() == true  <==>  'Paused'
-     */
-    bool isRunning() { return p != NULL; }
-    bool isPaused() { return isPoweredOn() && p == NULL; }
-    
-    /* The emulator state can be controlled by the following functions:
-     *
-     *     Function    | Current | Next    | Action
-     *     -------------------------------------------------------------------
-     *     run()       | Running | Running | none
-     *                 | Paused  | Running | create thread
-     *                 | Off     | Running | powerOn(), create thread
-     *     -------------------------------------------------------------------
-     *     halt()      | Running | Paused  | destroy thread
-     *                 | Paused  | Paused  | none
-     *                 | Off     | Off     | none
-     *     -------------------------------------------------------------------
-     *     powerOn()   | Running | Running | none
-     *                 | Paused  | Paused  | none
-     *                 | Off     | Running | powerOn(), create thread
-     *     -------------------------------------------------------------------
-     *     powerOff()  | Running | Off     | destroy thread, powerOff()
-     *                 | Paused  | Off     | powerOff()
-     *                 | Off     | Off     | none
-     *     -------------------------------------------------------------------
-     *     coldStart() | Running | Running | powerOff(), powerOn()
-     *                 | Paused  | Running | powerOff(), powerOn()
-     *                 | Off     | Running | powerOff(), powerOn()
-     *
-     */
-    
-    
-    
-
-    
-
-    
-    // Returns true if the emulator is not running.
-    bool isHalted() { return p == NULL; }
-    
-    /* Creates and launches the emulator thread.
-     * This method is usually called after emulation was stopped by a call to
-     * halt() or by reaching a breakpoint.
-     * Calling this functions on a running emulator has no effect.
-     */
-    void run();
-    
-    /* Terminates the emulator thread.
-     * The emulator thread is canceled, but the internal state stays intact.
-     * Emulation can be continued any time by a call to run().
-     * Calling this functions on a running emulator has no effect.
-     */
-    void halt();
-
-    // Calls run() or halt(), depending on the current state.
-    void runOrHalt() { isRunning() ? halt() : run(); }
-    
     /* The thread enter function.
      * This (private) method is invoked when the emulator thread launches. It
      * has to be declared public to make it accessible by the emulator thread.
      */
-    void threadStarted();
+    void threadWillStart();
 
+    /* The thread exit function.
+     * This (private) method is invoked when the emulator thread terminates. It
+     * has to be declared public to make it accessible by the emulator thread.
+     */
+    void threadDidTerminate();
+    
     /* The Amiga run loop.
      * This function is one of the most prominent ones. It implements the
      * outermost loop of the emulator and therefore the place where emulation
@@ -302,19 +314,14 @@ public:
      */
     void runLoop();
     
-    /* The thread exit function.
-     * This (private) method is invoked when the emulator thread terminates. It
-     * has to be declared public to make it accessible by the emulator thread.
-     */
-    void threadTerminated();
-
+  
     
     //
-    // Managing the execution thread
+    // Managing emulation speed
     //
 
 public:
-    
+
     /* Getter and setter for 'alwaysWarp'
      * Side effects:
      *   setAlwaysWarp sends a notification message if the value changes.

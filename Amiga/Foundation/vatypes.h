@@ -60,13 +60,14 @@ typedef enum
     MSG_NONE = 0,
     
     // Emulator state
-    MSG_READY_TO_RUN,
-    MSG_RUN,
-    MSG_HALT,
+    MSG_READY_TO_POWER_ON,
     MSG_POWER_ON,
     MSG_POWER_OFF,
+    MSG_RUN,
+    MSG_PAUSE,
     MSG_RESET,
-    
+    MSG_ROM_MISSING,
+
     // Floppy drives
     MSG_DRIVE_CONNECT,
     MSG_DRIVE_DISCONNECT,
@@ -92,7 +93,6 @@ typedef enum
     MSG_CHAR_ROM_LOADED,
     MSG_KERNAL_ROM_LOADED,
     MSG_VC1541_ROM_LOADED,
-    MSG_ROM_MISSING,
     MSG_SNAPSHOT_TAKEN,
     
     // CPU related messages
