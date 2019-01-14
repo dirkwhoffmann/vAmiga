@@ -23,9 +23,13 @@ AmigaMemory::~AmigaMemory()
 void
 AmigaMemory::_powerOn()
 {
+    // Allocate memory
     allocateBootRom();
     allocateKickstartRom();
     allocateChipRam(amiga->config.chipRamSize);
+    
+    // Set up the memory lookup table
+    // TODO
     
 }
 
@@ -61,7 +65,12 @@ AmigaMemory::_dump()
 bool
 AmigaMemory::allocateBootRom()
 {
-    return alloc(KB(64), bootRom, bootRomSize);
+    // Only the Amiga 1000 has a Boot Rom
+    if (amiga->config.model == A1000) {
+        return alloc(KB(64), bootRom, bootRomSize);
+    }
+    dealloc(bootRom, bootRomSize);
+    return true;
 }
 
 bool
@@ -128,6 +137,31 @@ AmigaMemory::dealloc(uint8_t *&ptrref, size_t &sizeref)
         sizeref = 0;
     }
 }
+
+void
+AmigaMemory::updateMemSrcTable()
+{
+    unsigned chipRamBanks = amiga->config.chipRamSize / 64;
+    assert(chipRamBanks == 4 || chipRamBanks == 8);
+    
+    // Start from scratch
+    for (unsigned bank = 0; bank < 256; bank++) {
+        memSrc[bank] = MEM_UNMAPPED;
+    }
+    
+    // TODO: HOW DOES THE MIRRORED CHIP RAM LOOK IF ONLY 256KB are present?
+    // Chip Ram
+    for (unsigned bank = 0; bank < chipRamBanks; bank++) {
+        memSrc[bank] = MEM_CHIP;
+    }
+
+    // Chip Ram (mirrored)
+    for (unsigned bank = 0; bank < chipRamBanks; bank++) {
+        memSrc[bank] = MEM_CHIP;
+    }
+
+}
+
 
 uint8_t
 AmigaMemory::peek8(uint32_t addr)

@@ -166,6 +166,7 @@ public:
     
     // Chooses if a drive is connected or not.
     bool configureDrive(unsigned driveNr, bool connected);
+    bool configureDrive(unsigned driveNr, DriveType type);
 
     
     //

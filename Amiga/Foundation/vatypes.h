@@ -35,6 +35,32 @@ inline const char *modelName(AmigaModel model)
     model == A2000 ? "Amiga 2000" : "???";
 }
 
+typedef enum
+{
+    A1010_ORIG, // Amiga 3,5" drive, emulated with original speed
+    A1010_2X,   // Amiga 3,5" drive, emulated 2x faster
+    A1010_4X,   // Amiga 3,5" drive, emulated 4x faster
+    A1010_8X,   // Amiga 3,5" drive, emulated 8x faster
+    A1010_WARP  // Amiga 3,5" drive, emulated as fast as possible
+}
+DriveType;
+
+inline bool isDriveType(DriveType model)
+{
+    return model >= A1010_ORIG && model <= A1010_WARP;
+}
+
+inline const char *driveTypeName(DriveType type)
+{
+    return
+    type == A1010_ORIG ? "A1010 (original speed)" :
+    type == A1010_2X   ? "A1010 (2x faster)" :
+    type == A1010_4X   ? "A1010 (4x faster)" :
+    type == A1010_8X   ? "A1010 (8x faster)" :
+    type == A1010_WARP ? "A1010 (warp speed)" : "???";
+}
+
+
 //
 // Amiga configuration
 //
@@ -44,15 +70,22 @@ inline const char *modelName(AmigaModel model)
  */
 typedef struct
 {
+    DriveType type;
+    bool connected;
+}
+DriveConfiguration;
+
+typedef struct
+{
     AmigaModel model;
-    size_t chipRamSize; // KB
-    size_t slowRamSize; // KB
-    size_t fastRamSize; // KB
+    unsigned chipRamSize; // size in KB
+    unsigned slowRamSize; // size in KB
+    unsigned fastRamSize; // size in KB
     bool realTimeClock;
-    bool df0;
-    bool df1;
-    bool df2;
-    bool df3;
+    DriveConfiguration df0;
+    DriveConfiguration df1;
+    DriveConfiguration df2;
+    DriveConfiguration df3;
 }
 AmigaConfiguration;
 

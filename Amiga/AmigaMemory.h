@@ -43,6 +43,13 @@ public:
      */
     bool kickstartIsWritable = false;
     
+    /* We divide the memory into banks of size 64KB.
+     * The Amiga has 24 address lines. Hence, the accessible memory is divided
+     * into 256 different banks. For each bank, this array indicates the
+     * type of memory that is seen by the Amiga.
+     */
+    MemorySource memSrc[256];
+    
 public:
     
     //
@@ -88,7 +95,9 @@ private:
     // Convenience wrapper around 'new'
     void dealloc(uint8_t *&ptrref, size_t &sizeref);
 
- 
+    // Updates the memory source lookup table.
+    void updateMemSrcTable();
+    
 public: 
     
     /* Peeks a byte from memory.

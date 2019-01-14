@@ -64,11 +64,15 @@ Amiga::Amiga()
     config.slowRamSize   = 0;
     config.fastRamSize   = 0;
     config.realTimeClock = false;
-    config.df0           = true;
-    config.df1           = false;
-    config.df2           = false;
-    config.df3           = false;
-    
+    config.df0.type      = A1010_ORIG;
+    config.df0.connected = true;
+    config.df1.type      = A1010_ORIG;
+    config.df1.connected = false;
+    config.df2.type      = A1010_ORIG;
+    config.df2.connected = false;
+    config.df3.type      = A1010_ORIG;
+    config.df3.connected = false;
+
     // Register sub components
     HardwareComponent *subcomponents[] = {
         
@@ -155,10 +159,28 @@ bool
 Amiga::configureDrive(unsigned driveNr, bool connected)
 {
     switch (driveNr) {
-        case 0: config.df0 = connected; return true;
-        case 1: config.df1 = connected; return true;
-        case 2: config.df2 = connected; return true;
-        case 3: config.df3 = connected; return true;
+        case 0: config.df0.connected = connected; return true;
+        case 1: config.df1.connected = connected; return true;
+        case 2: config.df2.connected = connected; return true;
+        case 3: config.df3.connected = connected; return true;
+    }
+    
+    warn("Invalid drive number (%d). Ignoring.\n", driveNr);
+    return false;
+}
+
+bool
+Amiga::configureDrive(unsigned driveNr, DriveType type)
+{
+    if (!isDriveType(type)) {
+        warn("Invalid drive type: %d\n", type);
+        return false;
+    }
+    switch (driveNr) {
+        case 0: config.df0.type = type; return true;
+        case 1: config.df1.type = type; return true;
+        case 2: config.df2.type = type; return true;
+        case 3: config.df3.type = type; return true;
     }
     
     warn("Invalid drive number (%d). Ignoring.\n", driveNr);
@@ -215,11 +237,15 @@ Amiga::_dump()
     plainmsg("  slowRamSize: %d KB\n", config.slowRamSize);
     plainmsg("  fastRamSize: %d KB\n", config.fastRamSize);
     plainmsg("realTimeClock: %s\n", config.realTimeClock ? "yes" : "no");
-    plainmsg("          df0: %s\n", config.df0 ? "yes" : "no");
-    plainmsg("          df1: %s\n", config.df1 ? "yes" : "no");
-    plainmsg("          df2: %s\n", config.df2 ? "yes" : "no");
-    plainmsg("          df3: %s\n", config.df3 ? "yes" : "no");
-    
+    plainmsg("          df0: %s\n", config.df0.connected ? "yes" : "no");
+    plainmsg("               %s\n", driveTypeName(config.df0.type));
+    plainmsg("          df1: %s\n", config.df1.connected ? "yes" : "no");
+    plainmsg("               %s\n", driveTypeName(config.df1.type));
+    plainmsg("          df2: %s\n", config.df2.connected ? "yes" : "no");
+    plainmsg("               %s\n", driveTypeName(config.df2.type));
+    plainmsg("          df3: %s\n", config.df3.connected ? "yes" : "no");
+    plainmsg("               %s\n", driveTypeName(config.df3.type));
+
     plainmsg("\n");
     plainmsg("    warp mode: %d (%d) (%d)", warp, warpLoad, alwaysWarp);
     plainmsg("\n");
