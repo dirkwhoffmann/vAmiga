@@ -26,7 +26,7 @@ class RomDropView : NSImageView
     @IBOutlet var dialogController: UserDialogController!
 
     func acceptDragSource(url: URL) -> Bool {
-        return proxy?.isRom(url) ?? false
+        return false
     }
     
     override func awakeFromNib()
@@ -54,21 +54,6 @@ class RomDropView : NSImageView
     {
         return true
     }
-
-    override func performDragOperation(_ sender: NSDraggingInfo) -> Bool
-    {
-        guard let url = sender.url else { return false }
-        guard let controller = myController else { return false }
-        guard let c64 = proxy else { return false }
-        
-        if !controller.loadRom(url) {
-            return false
-        }
-        if c64.isRunnable() {
-            dialogController.okAction(self)
-        }
-        return true
-    }
     
     override func concludeDragOperation(_ sender: NSDraggingInfo?)
     {
@@ -76,30 +61,31 @@ class RomDropView : NSImageView
     }
 }
 
-class BasicRomDropView : RomDropView
+class BootRomDropView : RomDropView
 {
-    override func acceptDragSource(url: URL) -> Bool {
-        return proxy?.isBasicRom(url) ?? false
+    
+    override func acceptDragSource(url: URL) -> Bool
+    {
+        return amigaProxy?.isBootRom(url) ?? false
+    }
+    
+    override func performDragOperation(_ sender: NSDraggingInfo) -> Bool
+    {
+        guard let url = sender.url else { return false }
+        return amigaProxy?.loadBootRom(url) ?? false
     }
 }
 
-class CharRomDropView : RomDropView
+class KickstartRomDropView : RomDropView
 {
-    override func acceptDragSource(url: URL) -> Bool {
-        return proxy?.isCharRom(url) ?? false
+    override func acceptDragSource(url: URL) -> Bool
+    {
+        return amigaProxy?.isKickstartRom(url) ?? false
     }
-}
-
-class KernalRomDropView : RomDropView
-{
-    override func acceptDragSource(url: URL) -> Bool {
-        return proxy?.isKernalRom(url) ?? false
-    }
-}
-
-class Vc1541RomDropView : RomDropView
-{
-    override func acceptDragSource(url: URL) -> Bool {
-        return proxy?.isVC1541Rom(url) ?? false
+    
+    override func performDragOperation(_ sender: NSDraggingInfo) -> Bool
+    {
+        guard let url = sender.url else { return false }
+        return amigaProxy?.loadKickstartRom(url) ?? false
     }
 }

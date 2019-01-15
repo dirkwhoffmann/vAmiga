@@ -386,6 +386,62 @@ Amiga::synchronizeTiming()
     }
 }
 
+
+//
+// Handling Roms
+//
+
+void
+Amiga::deleteBootRom()
+{
+    if (bootRom) delete bootRom;
+    bootRom = NULL;
+}
+
+bool
+Amiga::loadBootRom(const char *path)
+{
+    assert(path != NULL);
+    
+    // Try to load the new Rom
+    BootRom *rom = BootRom::makeWithFile(path);
+    if (!rom) {
+        msg("Failed to read Boot Rom from file %s\n", path);
+        return false;
+    }
+    
+    // Replace the old Rom by the new one
+    deleteBootRom();
+    bootRom = rom;
+    return true;
+}
+
+void
+Amiga::deleteKickstartRom()
+{
+    if (bootRom) delete bootRom;
+    bootRom = NULL;
+}
+
+bool
+Amiga::loadKickstartRom(const char *path)
+{
+    assert(path != NULL);
+    
+    // Try to load the new Rom
+    KickstartRom *rom = KickstartRom::makeWithFile(path);
+    if (!rom) {
+        msg("Failed to read Kickstart Rom from file %s\n", path);
+        return false;
+    }
+    
+    // Replace the old Rom by the new one
+    deleteKickstartRom();
+    kickstartRom = rom;
+    return true;
+}
+
+
 //
 // The run loop
 //

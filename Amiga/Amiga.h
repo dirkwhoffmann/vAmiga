@@ -15,6 +15,10 @@
 #include "HardwareComponent.h"
 #include "MessageQueue.h"
 
+// Roms
+#include "BootRom.h"
+#include "KickstartRom.h"
+
 // Sub components
 #include "AmigaMemory.h"
 
@@ -34,9 +38,17 @@ public:
     // Specification of the machine we are going to emulate...
     AmigaConfiguration config;
     
+    // Boot Rom (needed for A1000 emulation)
+    BootRom *bootRom = NULL;
+    
+    // Kickstart Rom (needed for A500 and A2000 emulation)
+    KickstartRom *kickstartRom = NULL;
+    
+    
     //
     // Hardware components
     //
+    
     
     // The Amiga's virtual memory
     // AmigaMemory mem;
@@ -277,6 +289,34 @@ public:
     void suspend();
     void resume();
   
+
+    //
+    // Handling Roms
+    //
+
+    // Returns true if a Boot Rom is present.
+    bool hasBootRom() { return bootRom != NULL; }
+
+    // Deletes the current Boot Rom.
+    void deleteBootRom();
+    
+    // Loads a Boot Rom from disk.
+    bool loadBootRom(const char *path);
+    
+    // Returns a fingerprint for the current Boot Rom
+    bool bootRomFingerprint() { return bootRom ? bootRom->fingerprint() : 0; }
+    
+    // Returns true if a Kickstart Rom is present.
+    bool hasKickstartRom() { return kickstartRom != NULL; }
+
+    // Deletes the current Kickstart Rom.
+    void deleteKickstartRom();
+    
+    // Loads a Kickstart Rom from disk.
+    bool loadKickstartRom(const char *path);
+
+    // Returns a fingerprint for the current Kickstart Rom
+    bool kickstartRomFingerprint() { return kickstartRom ? kickstartRom->fingerprint() : 0; }
 
     
     //

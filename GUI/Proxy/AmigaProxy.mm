@@ -147,6 +147,43 @@ struct AmigaWrapper { Amiga *amiga; };
     return wrapper->amiga->configureDrive((unsigned)driveNr, (DriveType)type);
 }
 
+- (BOOL) hasBootRom
+{
+    return wrapper->amiga->hasBootRom();
+}
+- (BOOL) isBootRom:(NSURL *)url
+{
+    return BootRom::isBootRomFile([[url path] UTF8String]);
+}
+- (BOOL) loadBootRom:(NSURL *)url
+{
+    return wrapper->amiga->loadBootRom([[url path] UTF8String]);
+}
+- (uint64_t) bootRomFingerprint
+{
+    return wrapper->amiga->bootRomFingerprint();
+}
+- (BOOL) hasKickstartRom
+{
+    return wrapper->amiga->hasKickstartRom();
+}
+- (BOOL) isKickstartRom:(NSURL *)url
+{
+    return KickstartRom::isKickstartRomFile([[url path] UTF8String]);
+}
+- (BOOL) loadKickstartRom:(NSURL *)url
+{
+    return wrapper->amiga->loadKickstartRom([[url path] UTF8String]);
+}
+- (uint64_t) kickstartRomFingerprint
+{
+    return wrapper->amiga->kickstartRomFingerprint();
+}
+
+
+
+
+
 - (void) addListener:(const void *)sender function:(Callback *)func
 {
     wrapper->amiga->addListener(sender, func);

@@ -67,10 +67,20 @@ struct AmigaWrapper;
 - (BOOL) configureDrive:(NSInteger)driveNr connected:(BOOL)value;
 - (BOOL) configureDrive:(NSInteger)driveNr type:(NSInteger)value;
 
+- (BOOL) hasBootRom;
+- (BOOL) isBootRom:(NSURL *)url;
+- (BOOL) loadBootRom:(NSURL *)url;
+- (uint64_t) bootRomFingerprint;
+
+- (BOOL) hasKickstartRom;
+- (BOOL) isKickstartRom:(NSURL *)url;
+- (BOOL) loadKickstartRom:(NSURL *)url;
+- (uint64_t) kickstartRomFingerprint;
+
+// Message queue
 - (void) addListener:(const void *)sender function:(Callback *)func;
 - (void) removeListener:(const void *)sender;
 - (Message)message;
-
 
 
 // - (BOOL) warp;

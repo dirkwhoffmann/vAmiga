@@ -216,8 +216,8 @@ extension MyController {
 
 extension VC64Keys {
     
-    static let bootRom      = "VABootRomFileKey"
-    static let kickstartRom = "VAKickstartRomFileKey"
+    static let bootRom           = "VABootRomFileKey"
+    static let kickstartRom      = "VAKickstartRomFileKey"
     
     // DEPRECATED
     static let basicRom          = "VC64BasicRomFileKey"
@@ -265,17 +265,16 @@ extension MyController {
         let defaults = UserDefaults.standard
 
         c64.suspend()
-        
         loadRom(defaults.url(forKey: VC64Keys.basicRom))
         loadRom(defaults.url(forKey: VC64Keys.charRom))
         loadRom(defaults.url(forKey: VC64Keys.kernalRom))
         loadRom(defaults.url(forKey: VC64Keys.vc1541Rom))
-        /*
-        loadRom(defaults.url(forKey: VC64Keys.bootRom))
-        loadRom(defaults.url(forKey: VC64Keys.kickstartRom))
-        */
-        
         c64.resume()
+        
+        amiga.suspend()
+        amiga.loadBootRom(defaults.url(forKey: VC64Keys.bootRom))
+        amiga.loadKickstartRom(defaults.url(forKey: VC64Keys.kickstartRom))
+        amiga.resume()
     }
     
     func saveRomUserDefaults() {
