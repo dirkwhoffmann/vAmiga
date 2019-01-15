@@ -82,14 +82,12 @@
                 <outlet property="keyMatrixScrollView" destination="I3H-16-RH1" id="NNZ-ae-iqB"/>
                 <outlet property="keyOkButton" destination="qf2-f2-Cbn" id="rsO-Ta-9iX"/>
                 <outlet property="prefTabView" destination="baz-eW-A74" id="fgy-dU-alU"/>
-                <outlet property="romBasicPathText" destination="LBs-Al-1wH" id="lSF-pL-uSt"/>
                 <outlet property="romBootButton" destination="nSa-0I-2sF" id="RLi-5d-Zjm"/>
                 <outlet property="romBootCopyright" destination="Rzh-3R-l0P" id="6it-0D-Ojh"/>
                 <outlet property="romBootDescription" destination="Val-uF-mCs" id="odS-8n-7l2"/>
                 <outlet property="romBootDropView" destination="rV9-BQ-AAx" id="P3o-3E-dKl"/>
                 <outlet property="romBootHashText" destination="10b-BC-y6b" id="UCB-x2-jb2"/>
                 <outlet property="romBootPathText" destination="LBs-Al-1wH" id="O4G-XL-2e5"/>
-                <outlet property="romCancelButton" destination="ZhO-d6-muu" id="U1C-ne-iYK"/>
                 <outlet property="romHeaderImage" destination="vi5-CN-RBq" id="gJq-yi-lts"/>
                 <outlet property="romHeaderSubText" destination="reG-f1-L8W" id="B3l-jh-ihi"/>
                 <outlet property="romHeaderText" destination="LwW-aA-bBr" id="onC-hJ-rEA"/>
@@ -102,7 +100,6 @@
                 <outlet property="romLockImage" destination="QlG-Fn-UTg" id="TOl-ns-1kG"/>
                 <outlet property="romLockSubText" destination="m4i-nF-H2q" id="Cht-S3-Gdp"/>
                 <outlet property="romLockText" destination="Wuy-cg-IBP" id="KJg-sx-tEJ"/>
-                <outlet property="romOkButton" destination="sYt-GY-XZQ" id="x48-u0-P2N"/>
                 <outlet property="vidAspectRatioButton" destination="Oht-fP-gHz" id="6t5-JN-jha"/>
                 <outlet property="vidBloomBrightnessSlider" destination="tcf-i4-M9e" id="ftQ-Ru-i1y"/>
                 <outlet property="vidBloomPopup" destination="J7V-We-wO2" id="sKy-bv-Ytf"/>
@@ -212,7 +209,7 @@ Gw
                                                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Rzh-3R-l0P">
                                                         <rect key="frame" x="119" y="48" width="450" height="16"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                        <textFieldCell key="cell" selectable="YES" title="Note that the use of original Roms may constitute copyright infringement!" id="Ixs-Qi-lqf">
+                                                        <textFieldCell key="cell" selectable="YES" title="The use of original Roms may constitute copyright infringement!" id="Ixs-Qi-lqf">
                                                             <font key="font" metaFont="cellTitle"/>
                                                             <color key="textColor" name="systemRedColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -323,7 +320,7 @@ Gw
                                                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ftN-pj-Aiz">
                                                         <rect key="frame" x="119" y="45" width="445" height="16"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                        <textFieldCell key="cell" selectable="YES" title="Note that the use of original Roms may constitute copyright infringement!" id="Wik-by-ltX">
+                                                        <textFieldCell key="cell" selectable="YES" title="The use of original Roms may constitute copyright infringement!" id="Wik-by-ltX">
                                                             <font key="font" metaFont="cellTitle"/>
                                                             <color key="textColor" name="systemRedColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -344,7 +341,7 @@ Gw
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="emuFactorySettingsAction:" target="-2" id="3iB-rY-AaL"/>
+                                                <action selector="romFactorySettingsAction:" target="-2" id="0v9-gc-pYe"/>
                                             </connections>
                                         </button>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LwW-aA-bBr">

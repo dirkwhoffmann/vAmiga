@@ -161,7 +161,9 @@ struct AmigaWrapper { Amiga *amiga; };
 }
 - (BOOL) loadBootRomFromBuffer:(NSData *)data
 {
-    return false; // wrapper->amiga->loadBootRomFromBuffer(0, 0);
+    if (data == NULL) return NO;
+    const uint8_t *bytes = (const uint8_t *)[data bytes];
+    return wrapper->amiga->loadBootRomFromBuffer(bytes, [data length]);
 }
 - (BOOL) loadBootRomFromFile:(NSURL *)url
 {
@@ -185,7 +187,9 @@ struct AmigaWrapper { Amiga *amiga; };
 }
 - (BOOL) loadKickRomFromBuffer:(NSData *)data
 {
-    return false; // wrapper->amiga->loadBootRomFromBuffer(0, 0);
+    if (data == NULL) return NO;
+    const uint8_t *bytes = (const uint8_t *)[data bytes];
+    return wrapper->amiga->loadKickRomFromBuffer(bytes, [data length]);
 }
 - (BOOL) loadKickRomFromFile:(NSURL *)url
 {

@@ -229,8 +229,8 @@ extension VC64Keys {
 
 extension Defaults {
     
-    static let bootRom = URL(fileURLWithPath: "/")
-    static let kickRom = URL(fileURLWithPath: "/")
+    static let bootRom = URL(fileURLWithPath: "")
+    static let kickRom = URL(fileURLWithPath: "")
 }
 
 extension MyController {

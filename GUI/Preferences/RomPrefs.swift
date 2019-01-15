@@ -97,7 +97,7 @@ extension PreferencesController {
             hasBoot     ? romUnknown : romMissing
             
         romBootHashText.stringValue = String(format: "Hash: %llX", bootHash)
-        romBootPathText.stringValue = bootURL.absoluteString
+        romBootPathText.stringValue = bootURL.relativePath
         if let description = knownBootRoms[bootHash] {
             romBootDescription.stringValue = description
             romBootDescription.textColor = bootHash == 0 ? .secondaryLabelColor : .textColor
@@ -118,7 +118,7 @@ extension PreferencesController {
             hasKick     ? romUnknown : romMissing
         
         romKickHashText.stringValue = String(format: "Hash: %llX", kickHash)
-        romKickPathText.stringValue = kickURL.absoluteString
+        romKickPathText.stringValue = kickURL.relativePath
         if let description = knownKickRoms[kickHash] {
             romKickDescription.stringValue = description
             romKickDescription.textColor = kickHash == 0 ? .secondaryLabelColor : .textColor
@@ -144,6 +144,17 @@ extension PreferencesController {
     {
         myController?.kickRomURL = URL(fileURLWithPath: "/")
         amigaProxy?.deleteKickRom()
+        refresh()
+    }
+    
+    @IBAction func romFactorySettingsAction(_ sender: NSButton!)
+    {
+        // Remove Boot Rom
+        amigaProxy?.deleteBootRom()
+        
+        // Revert to the AROS Kickstart replacement
+        amigaProxy?.loadKickRom(fromBuffer: NSDataAsset(name: "aros.rom")?.data)
+        myController?.kickRomURL = URL(fileURLWithPath: "")
         refresh()
     }
 }

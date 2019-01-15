@@ -67,6 +67,9 @@ class MyDocument : NSDocument {
         // Create emulator instance
         amiga = AmigaProxy()
         c64 = C64Proxy()
+        
+        // Install the AROS Kickstart replacement per default
+        amiga.loadKickRom(fromBuffer: NSDataAsset(name: "aros.rom")?.data)
     }
  
     override open func makeWindowControllers() {
