@@ -17,26 +17,24 @@ class PreferencesController : UserDialogController {
     // Rom preferences
     //
     
-    @IBOutlet weak var romHeaderImage: NSImageView!
-    @IBOutlet weak var romHeaderText: NSTextField!
-    @IBOutlet weak var romHeaderSubText: NSTextField!
-    
     @IBOutlet weak var romBootDropView: RomDropView!
-    @IBOutlet weak var romBootHashText: NSTextField!
-    @IBOutlet weak var romBootPathText: NSTextField!
-    @IBOutlet weak var romBootDescription: NSTextField!
-    @IBOutlet weak var romBootCopyright: NSTextField!
-    @IBOutlet weak var romBootButton: NSButton!
+    @IBOutlet weak var romBootTitle: NSTextField!
+    @IBOutlet weak var romBootHash: NSTextField!
+    @IBOutlet weak var romBootPath: NSTextField!
+    @IBOutlet weak var romBootText: NSTextField!
+    @IBOutlet weak var romBootSubText: NSTextField!
+    @IBOutlet weak var romBootDeleteButton: NSButton!
 
     @IBOutlet weak var romKickDropView: RomDropView!
-    @IBOutlet weak var romKickHashText: NSTextField!
-    @IBOutlet weak var romKickPathText: NSTextField!
-    @IBOutlet weak var romKickDescription: NSTextField!
-    @IBOutlet weak var romKickCopyright: NSTextField!
-    @IBOutlet weak var romKickButton: NSButton!
+    @IBOutlet weak var romKickTitle: NSTextField!
+    @IBOutlet weak var romKickHash: NSTextField!
+    @IBOutlet weak var romKickPath: NSTextField!
+    @IBOutlet weak var romKickText: NSTextField!
+    @IBOutlet weak var romKickSubText: NSTextField!
+    @IBOutlet weak var romKickDeleteButton: NSButton!
     
     // Lock
-    @IBOutlet weak var romLockImage: NSImageView!
+    @IBOutlet weak var romLockImage: NSButton!
     @IBOutlet weak var romLockText: NSTextField!
     @IBOutlet weak var romLockSubText: NSTextField!
     

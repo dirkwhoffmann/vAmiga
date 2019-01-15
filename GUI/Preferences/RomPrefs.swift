@@ -11,7 +11,7 @@ import Foundation
 
 let knownBootRoms : [UInt64 : String] = [
     0x0000000000000000:
-    "A Boot Rom is required for emulating an Amiga 1000.",
+    "This Rom contains the Kickstart disk loader.",
     0xA160593CFFCBB233:
     "Amiga 1000 Boot Rom 252179-01",
     0xA98647146962EB76:
@@ -25,7 +25,7 @@ let originalBootRoms : [UInt64] = [
 
 let knownKickRoms : [UInt64 : String] = [
     0x0000000000000000:
-    "A Kickstart Rom is required for emulating an Amiga 500 or 2000.",
+    "This Rom contains the Amiga Operation System.",
     0xE5CB7EE5200C4F0F:
     "Kickstart 1.2",
     0x047FB93FB8E383BC:
@@ -55,6 +55,8 @@ extension PreferencesController {
         
         track()
         
+        // let running      = amiga.isRunning()
+        let running      = proxy?.isRunning() ?? false
         let bootHash     = amiga.bootRomFingerprint()
         let kickHash     = amiga.kickRomFingerprint()
 
@@ -72,59 +74,72 @@ extension PreferencesController {
         let romAros      = NSImage.init(named: "rom_aros")
         let romUnknown   = NSImage.init(named: "rom_unknown")
 
-        // Missing Roms
+        // Lock controls if emulator is running
+        romBootDropView.isEnabled = !running
+        romBootDeleteButton.isEnabled = !running
+        romKickDropView.isEnabled = !running
+        romKickDeleteButton.isEnabled = !running
+        
+        // Check for missing Roms
         let ready = amiga.readyToPowerUp()
-        if (!ready) {
-            romHeaderImage.image = NSImage.init(named: "NSCaution")
+        if (running) {
+            romLockImage.image = NSImage.init(named: "Lock")
+            romLockText.stringValue = "The Rom settings are locked because the emulator is running."
+            romLockSubText.stringValue = "Click to power down and unlock."
+        } else {
+            romLockImage.image = NSImage.init(named: "NSCaution")
             if config.model == A1000 {
-                romHeaderText.stringValue = "The selected Amiga model requires a Boot Rom to power up."
+                romLockText.stringValue = "The selected Amiga model requires a Boot Rom to run."
             } else {
-                romHeaderText.stringValue = "The selected Amiga model requires a Kickstart Rom to run."
+                romLockText.stringValue = "The selected Amiga model requires a Kickstart Rom to run."
             }
+            romLockSubText.stringValue = "Use drag and drop to add a Rom image."
         }
-        romHeaderImage.isHidden   = ready
-        romHeaderText.isHidden    = ready
-        romHeaderSubText.isHidden = ready
+        romLockImage.isHidden = !running && ready
+        romLockText.isHidden = !running && ready
+        romLockSubText.isHidden = !running && ready
         
         // Boot Rom
-        romBootHashText.isHidden  = !hasBoot
-        romBootPathText.isHidden  = !hasBoot
-        romBootButton.isHidden    = !hasBoot
-        romBootCopyright.isHidden = !hasOrigBoot
+        romBootTitle.textColor = hasBoot ? .textColor : .secondaryLabelColor
+        romBootText.textColor = hasBoot ? .textColor : .secondaryLabelColor
+        romBootHash.isHidden = !hasBoot
+        romBootPath.isHidden = !hasBoot
+        romBootDeleteButton.isHidden = !hasBoot
+        romBootSubText.isHidden = true
         
         romBootDropView.image =
             hasOrigBoot ? romOriginal :
             hasBoot     ? romUnknown : romMissing
             
-        romBootHashText.stringValue = String(format: "Hash: %llX", bootHash)
-        romBootPathText.stringValue = bootURL.relativePath
+        romBootHash.stringValue = String(format: "Hash: %llX", bootHash)
+        romBootPath.stringValue = bootURL.relativePath
         if let description = knownBootRoms[bootHash] {
-            romBootDescription.stringValue = description
-            romBootDescription.textColor = bootHash == 0 ? .secondaryLabelColor : .textColor
+            romBootText.stringValue = description
         } else {
-            romBootDescription.stringValue = "An unknown, possibly patched Boot ROM."
-            romBootDescription.textColor = .red
+            romBootText.stringValue = "An unknown, possibly patched Boot ROM."
+            romBootText.textColor = .red
         }
         
         // Kickstart Rom
-        romKickHashText.isHidden  = !hasKick
-        romKickPathText.isHidden  = !hasKick
-        romKickButton.isHidden    = !hasKick
-        romKickCopyright.isHidden = !hasOrigKick
+        romKickTitle.textColor = hasKick ? .textColor : .secondaryLabelColor
+        romKickText.textColor = hasKick ? .textColor : .secondaryLabelColor
+        romKickHash.isHidden = !hasKick
+        romKickPath.isHidden  = !hasKick
+        romKickDeleteButton.isHidden = !hasKick
+        romKickSubText.isHidden = true
         
         romKickDropView.image =
             hasOrigKick ? romOriginal :
             hasAros     ? romAros :
             hasKick     ? romUnknown : romMissing
         
-        romKickHashText.stringValue = String(format: "Hash: %llX", kickHash)
-        romKickPathText.stringValue = kickURL.relativePath
+        romKickHash.stringValue = String(format: "Hash: %llX", kickHash)
+        romKickPath.stringValue = kickURL.relativePath
         if let description = knownKickRoms[kickHash] {
-            romKickDescription.stringValue = description
-            romKickDescription.textColor = kickHash == 0 ? .secondaryLabelColor : .textColor
+            romKickText.stringValue = description
         } else {
-            romKickDescription.stringValue = "An unknown, possibly patched Kickstart ROM."
-            romKickDescription.textColor = .red
+            romKickText.stringValue = "An unknown, possibly patched Kickstart ROM."
+            romKickText.textColor = .red
         }
     }
 
@@ -132,6 +147,13 @@ extension PreferencesController {
     //
     // Action methods
     //
+
+    @IBAction func romUnlockAction(_ sender: Any!)
+    {
+        amigaProxy?.powerOff()
+        proxy?.halt()
+        refresh()
+    }
     
     @IBAction func romDeleteBootAction(_ sender: Any!)
     {
