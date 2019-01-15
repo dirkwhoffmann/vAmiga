@@ -175,7 +175,7 @@
 		508FE05F21EA22CC0043D0E9 /* ExportDiskController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04D21EA22CC0043D0E9 /* ExportDiskController.swift */; };
 		508FE06521EA318D0043D0E9 /* VAFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FE06321EA318D0043D0E9 /* VAFile.cpp */; };
 		509F7F1A21EDDF4F00A530E4 /* BootRom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509F7F1821EDDF4F00A530E4 /* BootRom.cpp */; };
-		509F7F1D21EDEA0200A530E4 /* KickstartRom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509F7F1B21EDEA0200A530E4 /* KickstartRom.cpp */; };
+		509F7F1D21EDEA0200A530E4 /* KickRom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509F7F1B21EDEA0200A530E4 /* KickRom.cpp */; };
 		50B14C0721EB218E002E32A6 /* AmigaObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0521EB218E002E32A6 /* AmigaObject.cpp */; };
 		50B14C0D21EB3708002E32A6 /* HardwareComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0B21EB3708002E32A6 /* HardwareComponent.cpp */; };
 		50B14C1021EB410B002E32A6 /* Amiga.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0E21EB410B002E32A6 /* Amiga.cpp */; };
@@ -493,8 +493,8 @@
 		508FE06421EA318D0043D0E9 /* VAFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VAFile.h; sourceTree = "<group>"; };
 		509F7F1821EDDF4F00A530E4 /* BootRom.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BootRom.cpp; sourceTree = "<group>"; };
 		509F7F1921EDDF4F00A530E4 /* BootRom.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BootRom.h; sourceTree = "<group>"; };
-		509F7F1B21EDEA0200A530E4 /* KickstartRom.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = KickstartRom.cpp; sourceTree = "<group>"; };
-		509F7F1C21EDEA0200A530E4 /* KickstartRom.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KickstartRom.h; sourceTree = "<group>"; };
+		509F7F1B21EDEA0200A530E4 /* KickRom.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = KickRom.cpp; sourceTree = "<group>"; };
+		509F7F1C21EDEA0200A530E4 /* KickRom.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KickRom.h; sourceTree = "<group>"; };
 		50B14C0521EB218E002E32A6 /* AmigaObject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaObject.cpp; sourceTree = "<group>"; };
 		50B14C0621EB218E002E32A6 /* AmigaObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaObject.h; sourceTree = "<group>"; };
 		50B14C0821EB2248002E32A6 /* vastd.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = vastd.h; sourceTree = "<group>"; };
@@ -1056,8 +1056,8 @@
 				508FE06321EA318D0043D0E9 /* VAFile.cpp */,
 				509F7F1921EDDF4F00A530E4 /* BootRom.h */,
 				509F7F1821EDDF4F00A530E4 /* BootRom.cpp */,
-				509F7F1C21EDEA0200A530E4 /* KickstartRom.h */,
-				509F7F1B21EDEA0200A530E4 /* KickstartRom.cpp */,
+				509F7F1C21EDEA0200A530E4 /* KickRom.h */,
+				509F7F1B21EDEA0200A530E4 /* KickRom.cpp */,
 			);
 			path = Files;
 			sourceTree = "<group>";
@@ -1456,7 +1456,7 @@
 				508FDF7C21EA1FBC0043D0E9 /* AnyC64File.cpp in Sources */,
 				508FE01421EA227B0043D0E9 /* WaveformView.swift in Sources */,
 				508FDFA021EA1FBC0043D0E9 /* ReSID.cpp in Sources */,
-				509F7F1D21EDEA0200A530E4 /* KickstartRom.cpp in Sources */,
+				509F7F1D21EDEA0200A530E4 /* KickRom.cpp in Sources */,
 				508FE05C21EA22CC0043D0E9 /* DiskMountController.swift in Sources */,
 				508FDF6321EA1FBC0043D0E9 /* SuperGames.cpp in Sources */,
 				508FDFAB21EA1FBC0043D0E9 /* Drive.cpp in Sources */,

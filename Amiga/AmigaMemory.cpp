@@ -25,7 +25,7 @@ AmigaMemory::_powerOn()
 {
     // Allocate memory
     allocateBootRom();
-    allocateKickstartRom();
+    allocateKickRom();
     allocateChipRam(amiga->config.chipRamSize);
     
     // Set up the memory lookup table
@@ -55,8 +55,8 @@ void
 AmigaMemory::_dump()
 {
     plainmsg("     Boot Rom: %d KB\n", bootRomSize >> 10);
-    plainmsg("Kickstart Rom: %d KB (%s)\n", kickstartRomSize >> 10,
-             kickstartIsWritable ? "unlocked" : "locked");
+    plainmsg("     Kick Rom: %d KB (%s)\n", kickRomSize >> 10,
+             kickIsWritable ? "unlocked" : "locked");
     plainmsg("     Chip Ram: %d KB\n", chipRamSize >> 10);
     plainmsg("     Slow Ram: %d KB\n", slowRamSize >> 10);
     plainmsg("     Fast Ram: %d KB\n", fastRamSize >> 10);
@@ -74,7 +74,7 @@ AmigaMemory::allocateBootRom()
 }
 
 bool
-AmigaMemory::allocateKickstartRom()
+AmigaMemory::allocateKickRom()
 {
     return alloc(KB(256), bootRom, bootRomSize);
 }
@@ -101,7 +101,7 @@ void
 AmigaMemory::dealloc()
 {
     dealloc(bootRom, bootRomSize);
-    dealloc(kickstartRom, kickstartRomSize);
+    dealloc(kickRom, kickRomSize);
     dealloc(chipRam, chipRamSize);
     dealloc(slowRam, slowRamSize);
     dealloc(fastRam, fastRamSize);

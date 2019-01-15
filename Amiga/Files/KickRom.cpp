@@ -8,17 +8,17 @@
 // -----------------------------------------------------------------------------
 
 
-#include "KickstartRom.h"
+#include "KickRom.h"
 
-const uint8_t KickstartRom::magicBytes[] = { 0x11, 0x11, 0x4E, 0xF9, 0x00 };
+const uint8_t KickRom::magicBytes[] = { 0x11, 0x11, 0x4E, 0xF9, 0x00 };
 
-KickstartRom::KickstartRom()
+KickRom::KickRom()
 {
-    setDescription("KickstartRom");
+    setDescription("KickRom");
 }
 
 bool
-KickstartRom::isKickstartRomBuffer(const uint8_t *buffer, size_t length)
+KickRom::isKickRomBuffer(const uint8_t *buffer, size_t length)
 {
     if (length != KB(256) && length != KB(512)) return false;
     
@@ -27,7 +27,7 @@ KickstartRom::isKickstartRomBuffer(const uint8_t *buffer, size_t length)
 }
 
 bool
-KickstartRom::isKickstartRomFile(const char *path)
+KickRom::isKickRomFile(const char *path)
 {
     if (!checkFileSize(path, KB(256), KB(256)) &&
         !checkFileSize(path, KB(512), KB(512))) return false;
@@ -36,10 +36,10 @@ KickstartRom::isKickstartRomFile(const char *path)
     matchingFileHeader(path, magicBytes, sizeof(magicBytes));
 }
 
-KickstartRom *
-KickstartRom::makeWithBuffer(const uint8_t *buffer, size_t length)
+KickRom *
+KickRom::makeWithBuffer(const uint8_t *buffer, size_t length)
 {
-    KickstartRom *rom = new KickstartRom();
+    KickRom *rom = new KickRom();
     
     if (!rom->readFromBuffer(buffer, length)) {
         delete rom;
@@ -49,10 +49,10 @@ KickstartRom::makeWithBuffer(const uint8_t *buffer, size_t length)
     return rom;
 }
 
-KickstartRom *
-KickstartRom::makeWithFile(const char *path)
+KickRom *
+KickRom::makeWithFile(const char *path)
 {
-    KickstartRom *rom = new KickstartRom();
+    KickRom *rom = new KickRom();
     
     if (!rom->readFromFile(path)) {
         delete rom;
@@ -63,10 +63,10 @@ KickstartRom::makeWithFile(const char *path)
 }
 
 bool
-KickstartRom::readFromBuffer(const uint8_t *buffer, size_t length)
+KickRom::readFromBuffer(const uint8_t *buffer, size_t length)
 {
     if (!VAFile::readFromBuffer(buffer, length))
         return false;
     
-    return isKickstartRomBuffer(buffer, length);
+    return isKickRomBuffer(buffer, length);
 }

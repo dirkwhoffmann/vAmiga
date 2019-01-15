@@ -82,14 +82,25 @@
                 <outlet property="keyMatrixScrollView" destination="I3H-16-RH1" id="NNZ-ae-iqB"/>
                 <outlet property="keyOkButton" destination="qf2-f2-Cbn" id="rsO-Ta-9iX"/>
                 <outlet property="prefTabView" destination="baz-eW-A74" id="fgy-dU-alU"/>
-                <outlet property="romBasicButton" destination="nSa-0I-2sF" id="LaM-hr-eDI"/>
-                <outlet property="romBasicDescription" destination="Val-uF-mCs" id="VL7-B6-3sn"/>
-                <outlet property="romBasicHashText" destination="10b-BC-y6b" id="XWk-c0-wYf"/>
                 <outlet property="romBasicImage" destination="rV9-BQ-AAx" id="gjn-vP-yXL"/>
                 <outlet property="romBasicPathText" destination="LBs-Al-1wH" id="lSF-pL-uSt"/>
+                <outlet property="romBootButton" destination="nSa-0I-2sF" id="RLi-5d-Zjm"/>
+                <outlet property="romBootCopyright" destination="Rzh-3R-l0P" id="6it-0D-Ojh"/>
+                <outlet property="romBootDescription" destination="Val-uF-mCs" id="odS-8n-7l2"/>
+                <outlet property="romBootHashText" destination="10b-BC-y6b" id="UCB-x2-jb2"/>
+                <outlet property="romBootPathText" destination="LBs-Al-1wH" id="O4G-XL-2e5"/>
                 <outlet property="romCancelButton" destination="ZhO-d6-muu" id="U1C-ne-iYK"/>
                 <outlet property="romHeaderImage" destination="vi5-CN-RBq" id="gJq-yi-lts"/>
+                <outlet property="romHeaderSubText" destination="reG-f1-L8W" id="B3l-jh-ihi"/>
                 <outlet property="romHeaderText" destination="LwW-aA-bBr" id="onC-hJ-rEA"/>
+                <outlet property="romKickButton" destination="FLm-u4-Mif" id="ci2-2K-3mb"/>
+                <outlet property="romKickCopyright" destination="ftN-pj-Aiz" id="6mT-y6-6p2"/>
+                <outlet property="romKickDescription" destination="HA9-no-ajX" id="ekg-Dg-arO"/>
+                <outlet property="romKickHashText" destination="5xy-Gp-fCG" id="Djh-G6-ZhE"/>
+                <outlet property="romKickPathText" destination="YGi-hW-uzz" id="ZCx-JX-IXS"/>
+                <outlet property="romLockImage" destination="QlG-Fn-UTg" id="TOl-ns-1kG"/>
+                <outlet property="romLockSubText" destination="m4i-nF-H2q" id="Cht-S3-Gdp"/>
+                <outlet property="romLockText" destination="Wuy-cg-IBP" id="KJg-sx-tEJ"/>
                 <outlet property="romOkButton" destination="sYt-GY-XZQ" id="x48-u0-P2N"/>
                 <outlet property="vidAspectRatioButton" destination="Oht-fP-gHz" id="6t5-JN-jha"/>
                 <outlet property="vidBloomBrightnessSlider" destination="tcf-i4-M9e" id="ftQ-Ru-i1y"/>
@@ -140,14 +151,14 @@
                         <font key="font" metaFont="system"/>
                         <tabViewItems>
                             <tabViewItem label="Roms" identifier="Roms" id="VwS-fe-RFZ">
-                                <view key="view" id="4If-78-eR2">
+                                <view key="view" ambiguous="YES" id="4If-78-eR2">
                                     <rect key="frame" x="10" y="33" width="600" height="502"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sYt-GY-XZQ">
                                             <rect key="frame" x="515" y="5" width="82" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                            <buttonCell key="cell" type="push" title="Quit" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="sco-Pk-MAD">
+                                            <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="sco-Pk-MAD">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                                 <string key="keyEquivalent" base64-UTF8="YES">
@@ -173,7 +184,7 @@ Gw
                                             </connections>
                                         </button>
                                         <box fixedFrame="YES" borderType="line" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="f2q-90-M1c">
-                                            <rect key="frame" x="6" y="357" width="588" height="128"/>
+                                            <rect key="frame" x="6" y="290" width="588" height="128"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                             <view key="contentView" ambiguous="YES" id="ovl-ej-Vpb">
                                                 <rect key="frame" x="3" y="3" width="582" height="122"/>
@@ -189,9 +200,18 @@ Gw
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Val-uF-mCs">
-                                                        <rect key="frame" x="119" y="66" width="445" height="24"/>
+                                                        <rect key="frame" x="119" y="61" width="445" height="24"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                        <textFieldCell key="cell" selectable="YES" title="This 8 KB Rom contains Commodore's Basic interpreter." id="cho-Vc-pkJ">
+                                                        <textFieldCell key="cell" selectable="YES" title="This 32 KB Rom contains the Kickstart loader." id="cho-Vc-pkJ">
+                                                            <font key="font" metaFont="cellTitle"/>
+                                                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                    </textField>
+                                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Rzh-3R-l0P">
+                                                        <rect key="frame" x="119" y="48" width="445" height="16"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                        <textFieldCell key="cell" selectable="YES" title="Pay attention to copyright restrictions when using original Roms!" id="Ixs-Qi-lqf">
                                                             <font key="font" metaFont="cellTitle"/>
                                                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -224,21 +244,18 @@ Gw
                                                         </connections>
                                                     </imageView>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nSa-0I-2sF">
-                                                        <rect key="frame" x="542" y="17" width="20" height="20"/>
+                                                        <rect key="frame" x="547" y="17" width="20" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="trashTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" imageScaling="proportionallyDown" inset="2" id="a6v-tc-VAW">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="system"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="romDeleteBasicAction:" target="-2" id="vN7-6j-Z9r"/>
-                                                        </connections>
                                                     </button>
                                                 </subviews>
                                             </view>
                                         </box>
                                         <box fixedFrame="YES" borderType="line" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="CQw-ke-okv">
-                                            <rect key="frame" x="6" y="217" width="588" height="128"/>
+                                            <rect key="frame" x="6" y="150" width="588" height="128"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                             <view key="contentView" ambiguous="YES" id="BRM-DE-2kZ">
                                                 <rect key="frame" x="3" y="3" width="582" height="122"/>
@@ -254,9 +271,9 @@ Gw
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HA9-no-ajX">
-                                                        <rect key="frame" x="119" y="66" width="445" height="24"/>
+                                                        <rect key="frame" x="119" y="68" width="445" height="16"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                        <textFieldCell key="cell" selectable="YES" title="This 8 KB Rom contains Commodore's Basic interpreter." id="xg3-mf-B5g">
+                                                        <textFieldCell key="cell" selectable="YES" title="This 256 KB or 512 KB Rom contains the Operating System." id="xg3-mf-B5g">
                                                             <font key="font" metaFont="cellTitle"/>
                                                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -289,16 +306,22 @@ Gw
                                                         </connections>
                                                     </imageView>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FLm-u4-Mif">
-                                                        <rect key="frame" x="542" y="17" width="20" height="20"/>
+                                                        <rect key="frame" x="547" y="17" width="20" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="trashTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" imageScaling="proportionallyDown" inset="2" id="gBk-S4-AII">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="system"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="romDeleteBasicAction:" target="-2" id="qwz-N8-d1w"/>
-                                                        </connections>
                                                     </button>
+                                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ftN-pj-Aiz">
+                                                        <rect key="frame" x="119" y="45" width="445" height="16"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                        <textFieldCell key="cell" selectable="YES" title="Pay attention to copyright restrictions when using original Roms!" id="Wik-by-ltX">
+                                                            <font key="font" metaFont="cellTitle"/>
+                                                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                    </textField>
                                                 </subviews>
                                             </view>
                                         </box>
@@ -318,23 +341,46 @@ Gw
                                             </connections>
                                         </button>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LwW-aA-bBr">
-                                            <rect key="frame" x="134" y="118" width="388" height="22"/>
+                                            <rect key="frame" x="123" y="463" width="388" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="The emulator cannot run, because no Boot Rom is present." id="bhA-Ua-8yX">
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="The emulated Amiga requires a Kickstart Rom to run. " id="bhA-Ua-8yX">
                                                 <font key="font" metaFont="systemBold"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
                                         <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vi5-CN-RBq">
-                                            <rect key="frame" x="80" y="98" width="48" height="48"/>
+                                            <rect key="frame" x="43" y="445" width="48" height="48"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" image="NSCaution" id="pWz-ud-B4q"/>
                                         </imageView>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="reG-f1-L8W">
-                                            <rect key="frame" x="137" y="105" width="384" height="16"/>
+                                            <rect key="frame" x="125" y="445" width="384" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Use drag and drop to add a Boot Rom image." id="LET-Tn-z3T">
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Use drag and drop to add a Rom image." id="LET-Tn-z3T">
+                                                <font key="font" metaFont="cellTitle"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Wuy-cg-IBP">
+                                            <rect key="frame" x="125" y="109" width="406" height="17"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="The Rom settings are locked because the emulator is running." id="H1S-kZ-DsT">
+                                                <font key="font" metaFont="systemBold"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QlG-Fn-UTg">
+                                            <rect key="frame" x="43" y="85" width="48" height="48"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" image="Lock" id="scg-IT-ndz"/>
+                                        </imageView>
+                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="m4i-nF-H2q">
+                                            <rect key="frame" x="125" y="92" width="417" height="16"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Click to power down and unlock." id="SaY-vp-fsG">
                                                 <font key="font" metaFont="cellTitle"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -344,7 +390,7 @@ Gw
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Hardware" identifier="Hardware" id="vMg-zr-Ex1">
-                                <view key="view" ambiguous="YES" id="yrH-J2-nFc">
+                                <view key="view" id="yrH-J2-nFc">
                                     <rect key="frame" x="10" y="33" width="600" height="502"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>

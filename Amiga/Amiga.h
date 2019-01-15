@@ -17,7 +17,7 @@
 
 // Roms
 #include "BootRom.h"
-#include "KickstartRom.h"
+#include "KickRom.h"
 
 // Sub components
 #include "AmigaMemory.h"
@@ -42,7 +42,7 @@ public:
     BootRom *bootRom = NULL;
     
     // Kickstart Rom (needed for A500 and A2000 emulation)
-    KickstartRom *kickstartRom = NULL;
+    KickRom *kickRom = NULL;
     
     
     //
@@ -307,16 +307,16 @@ public:
     bool bootRomFingerprint() { return bootRom ? bootRom->fingerprint() : 0; }
     
     // Returns true if a Kickstart Rom is present.
-    bool hasKickstartRom() { return kickstartRom != NULL; }
+    bool hasKickRom() { return kickRom != NULL; }
 
     // Deletes the current Kickstart Rom.
-    void deleteKickstartRom();
+    void deleteKickRom();
     
     // Loads a Kickstart Rom from disk.
-    bool loadKickstartRom(const char *path);
+    bool loadKickRom(const char *path);
 
     // Returns a fingerprint for the current Kickstart Rom
-    bool kickstartRomFingerprint() { return kickstartRom ? kickstartRom->fingerprint() : 0; }
+    bool kickRomFingerprint() { return kickRom ? kickRom->fingerprint() : 0; }
 
     
     //

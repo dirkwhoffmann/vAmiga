@@ -21,8 +21,8 @@ public:
     size_t bootRomSize = 0;
     
     // Kickstart Rom and size
-    uint8_t *kickstartRom = NULL;
-    size_t kickstartRomSize = 0;
+    uint8_t *kickRom = NULL;
+    size_t kickRomSize = 0;
     
     // Chip Ram and size
     uint8_t *chipRam = NULL;
@@ -41,7 +41,7 @@ public:
      * A1000 is emulated, it is true on startup to emulate WOM (Write Once
      * Memory).
      */
-    bool kickstartIsWritable = false;
+    bool kickIsWritable = false;
     
     /* We divide the memory into banks of size 64KB.
      * The Amiga has 24 address lines. Hence, the accessible memory is divided
@@ -79,7 +79,7 @@ private:
     //
     
     bool allocateBootRom();
-    bool allocateKickstartRom();
+    bool allocateKickRom();
     bool allocateChipRam(size_t size);
     bool allocateSlowRam(size_t size);
     bool allocateFastRam(size_t size);

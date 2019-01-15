@@ -76,16 +76,16 @@ class BootRomDropView : RomDropView
     }
 }
 
-class KickstartRomDropView : RomDropView
+class KickRomDropView : RomDropView
 {
     override func acceptDragSource(url: URL) -> Bool
     {
-        return amigaProxy?.isKickstartRom(url) ?? false
+        return amigaProxy?.isKickRom(url) ?? false
     }
     
     override func performDragOperation(_ sender: NSDraggingInfo) -> Bool
     {
         guard let url = sender.url else { return false }
-        return amigaProxy?.loadKickstartRom(url) ?? false
+        return amigaProxy?.loadKickRom(url) ?? false
     }
 }

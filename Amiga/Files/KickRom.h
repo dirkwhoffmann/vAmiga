@@ -7,12 +7,12 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _KICKSTARTROM_INC
-#define _KICKSTARTROM_INC
+#ifndef _KICKROM_INC
+#define _KICKROM_INC
 
 #include "VAFile.h"
 
-class KickstartRom : public VAFile {
+class KickRom : public VAFile {
     
 private:
     
@@ -26,30 +26,30 @@ public:
     //
     
     // Returns true iff buffer contains a Kickstart Rom image
-    static bool isKickstartRomBuffer(const uint8_t *buffer, size_t length);
+    static bool isKickRomBuffer(const uint8_t *buffer, size_t length);
     
     // Returns true iff path points to a Kickstart Rom file
-    static bool isKickstartRomFile(const char *path);
+    static bool isKickRomFile(const char *path);
     
     
     //
     // Creating and destructing
     //
     
-    KickstartRom();
+    KickRom();
     
     // Factory methods
-    static KickstartRom *makeWithBuffer(const uint8_t *buffer, size_t length);
-    static KickstartRom *makeWithFile(const char *path);
+    static KickRom *makeWithBuffer(const uint8_t *buffer, size_t length);
+    static KickRom *makeWithFile(const char *path);
     
     
     //
     // Methods from VAFile
     //
     
-    VAFileType type() override { return FILETYPE_KICKSTART_ROM; }
+    VAFileType type() override { return FILETYPE_KICK_ROM; }
     const char *typeAsString() override { return "Kickstart Rom"; }
-    bool hasSameType(const char *path) override { return isKickstartRomFile(path); }
+    bool hasSameType(const char *path) override { return isKickRomFile(path); }
     bool readFromBuffer(const uint8_t *buffer, size_t length) override;
     
 };

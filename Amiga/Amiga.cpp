@@ -417,27 +417,27 @@ Amiga::loadBootRom(const char *path)
 }
 
 void
-Amiga::deleteKickstartRom()
+Amiga::deleteKickRom()
 {
-    if (bootRom) delete bootRom;
-    bootRom = NULL;
+    if (kickRom) delete kickRom;
+    kickRom = NULL;
 }
 
 bool
-Amiga::loadKickstartRom(const char *path)
+Amiga::loadKickRom(const char *path)
 {
     assert(path != NULL);
     
     // Try to load the new Rom
-    KickstartRom *rom = KickstartRom::makeWithFile(path);
+    KickRom *rom = KickRom::makeWithFile(path);
     if (!rom) {
         msg("Failed to read Kickstart Rom from file %s\n", path);
         return false;
     }
     
     // Replace the old Rom by the new one
-    deleteKickstartRom();
-    kickstartRom = rom;
+    deleteKickRom();
+    kickRom = rom;
     return true;
 }
 

@@ -120,12 +120,12 @@ typedef enum
     FILETYPE_SNAPSHOT,
     FILETYPE_ADF,
     FILETYPE_BOOT_ROM,
-    FILETYPE_KICKSTART_ROM
+    FILETYPE_KICK_ROM
     
 } VAFileType;
 
 inline bool isVAFileType(VAFileType model) {
-    return model >= FILETYPE_UKNOWN && model <= FILETYPE_KICKSTART_ROM;
+    return model >= FILETYPE_UKNOWN && model <= FILETYPE_KICK_ROM;
 }
 
 //

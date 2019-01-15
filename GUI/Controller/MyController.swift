@@ -94,7 +94,7 @@ class MyController : NSWindowController, MessageReceiver {
 
     /// Rom file URLs
     var bootRomURL: URL = Defaults.bootRom
-    var kickstartRomURL: URL = Defaults.kickstartRom
+    var kickRomURL: URL = Defaults.kickRom
 
     /// Screenshot resolution (0 = low, 1 = high)
     var screenshotSource = Defaults.screenshotSource

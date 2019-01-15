@@ -28,15 +28,18 @@ class PreferencesController : UserDialogController {
     @IBOutlet weak var romBootCopyright: NSTextField!
     @IBOutlet weak var romBootButton: NSButton!
 
-    @IBOutlet weak var romKickstartDropView: RomDropView!
-    @IBOutlet weak var romKickstartHashText: NSTextField!
-    @IBOutlet weak var romKickstartPathText: NSTextField!
-    @IBOutlet weak var romKickstartDescription: NSTextField!
-    @IBOutlet weak var romKickstartCopyright: NSTextField!
-    @IBOutlet weak var romKickstartButton: NSButton!
+    @IBOutlet weak var romKickDropView: RomDropView!
+    @IBOutlet weak var romKickHashText: NSTextField!
+    @IBOutlet weak var romKickPathText: NSTextField!
+    @IBOutlet weak var romKickDescription: NSTextField!
+    @IBOutlet weak var romKickCopyright: NSTextField!
+    @IBOutlet weak var romKickButton: NSButton!
     
-    @IBOutlet weak var romOkButton: NSButton!
-    @IBOutlet weak var romCancelButton: NSButton!
+    // Lock
+    @IBOutlet weak var romLockImage: NSImageView!
+    @IBOutlet weak var romLockText: NSTextField!
+    @IBOutlet weak var romLockSubText: NSTextField!
+    
 
     //
     // Hardware preferences

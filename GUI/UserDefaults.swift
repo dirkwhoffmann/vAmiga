@@ -217,7 +217,7 @@ extension MyController {
 extension VC64Keys {
     
     static let bootRom           = "VABootRomFileKey"
-    static let kickstartRom      = "VAKickstartRomFileKey"
+    static let kickRom           = "VAKickRomFileKey"
     
     // DEPRECATED
     static let basicRom          = "VC64BasicRomFileKey"
@@ -230,7 +230,7 @@ extension VC64Keys {
 extension Defaults {
     
     static let bootRom = URL(fileURLWithPath: "/")
-    static let kickstartRom = URL(fileURLWithPath: "/")
+    static let kickRom = URL(fileURLWithPath: "/")
 }
 
 extension MyController {
@@ -240,7 +240,7 @@ extension MyController {
         let dictionary : [String:Any] = [
             
             VC64Keys.bootRom: Defaults.bootRom,
-            VC64Keys.kickstartRom: Defaults.kickstartRom,
+            VC64Keys.kickRom: Defaults.kickRom,
             ]
         
         let defaults = UserDefaults.standard
@@ -252,7 +252,7 @@ extension MyController {
         let defaults = UserDefaults.standard
         
         for key in [ VC64Keys.bootRom,
-                     VC64Keys.kickstartRom]
+                     VC64Keys.kickRom]
         {
             defaults.removeObject(forKey: key)
         }
@@ -273,7 +273,7 @@ extension MyController {
         
         amiga.suspend()
         amiga.loadBootRom(defaults.url(forKey: VC64Keys.bootRom))
-        amiga.loadKickstartRom(defaults.url(forKey: VC64Keys.kickstartRom))
+        amiga.loadKickRom(defaults.url(forKey: VC64Keys.kickRom))
         amiga.resume()
     }
     
@@ -282,7 +282,7 @@ extension MyController {
         let defaults = UserDefaults.standard
         
         defaults.set(bootRomURL, forKey: VC64Keys.bootRom)
-        defaults.set(kickstartRomURL, forKey: VC64Keys.kickstartRom)
+        defaults.set(kickRomURL, forKey: VC64Keys.kickRom)
     }
 }
 
