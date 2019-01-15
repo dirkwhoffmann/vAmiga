@@ -43,7 +43,6 @@
 #include <math.h>
 #include <ctype.h> 
 
-#include "Configure.h"
 #include "vastd.h"
 
 //! @brief    Two bit binary value

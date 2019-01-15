@@ -12,7 +12,6 @@
             </connections>
         </customObject>
         <customObject id="9vR-C0-Vqf" customClass="MyAppDelegate" customModule="vAmiga" customModuleProvider="target"/>
-        <customObject id="411" userLabel="Sparkle Updater" customClass="SUUpdater"/>
         <menu title="MainMenu" systemMenu="main" id="29" userLabel="MainMenu">
             <items>
                 <menuItem title="vAmiga" id="56">

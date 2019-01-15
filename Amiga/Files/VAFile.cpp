@@ -36,22 +36,6 @@ VAFile::dealloc()
     eof = -1;
 }
 
-bool
-VAFile::checkBufferHeader(const uint8_t *buffer, size_t length, const uint8_t *header)
-{
-    assert(buffer != NULL);
-    assert(header != NULL);
-    
-    unsigned i;
-    
-    for (i = 0; i < length && header[i] != 0; i++) {
-        if (header[i] != buffer[i])
-            return false;
-    }
-    
-    return header[i] == 0;
-}
-
 void
 VAFile::setPath(const char *str)
 {

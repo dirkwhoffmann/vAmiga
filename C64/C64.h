@@ -22,8 +22,6 @@
 #ifndef _C64_INC
 #define _C64_INC
 
-// Configuration items
-#include "Configure.h"
 
 // Data types and constants
 #include "C64_types.h"

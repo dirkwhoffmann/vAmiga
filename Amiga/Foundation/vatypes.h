@@ -84,8 +84,6 @@ typedef struct
     bool realTimeClock;
     DriveConfiguration df0;
     DriveConfiguration df1;
-    DriveConfiguration df2;
-    DriveConfiguration df3;
 }
 AmigaConfiguration;
 

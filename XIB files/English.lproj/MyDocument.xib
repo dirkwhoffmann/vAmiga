@@ -56,11 +56,10 @@
                 <outlet property="debugger" destination="35" id="Sfw-lz-Vnh"/>
                 <outlet property="decayRate" destination="H4H-4t-pmr" id="GJp-Nq-b9R"/>
                 <outlet property="dezHexSelector" destination="367" id="759"/>
+                <outlet property="df0DMA" destination="xzf-hU-AKK" id="Zmn-Wo-nhv"/>
+                <outlet property="df0Disk" destination="D1i-Ep-fTN" id="ojU-2x-cbO"/>
+                <outlet property="df0LED" destination="iKN-RM-vsV" id="tGw-4n-rGj"/>
                 <outlet property="dflag" destination="188" id="UAV-Er-hPK"/>
-                <outlet property="diskIcon2" destination="D1i-Ep-fTN" id="KXI-nI-XNr"/>
-                <outlet property="driveBusy1" destination="xzf-hU-AKK" id="4YQ-OI-qKf"/>
-                <outlet property="driveDisk1" destination="D1i-Ep-fTN" id="FeM-cm-ydt"/>
-                <outlet property="driveLED1" destination="iKN-RM-vsV" id="DYl-XV-Eas"/>
                 <outlet property="filter1" destination="0Xk-c5-4dD" id="3iB-GJ-Dhl"/>
                 <outlet property="filter2" destination="tlW-U7-68D" id="OzC-gB-NkA"/>
                 <outlet property="filter3" destination="eg3-b5-F1Z" id="hSw-4a-8nU"/>
@@ -69,7 +68,6 @@
                 <outlet property="filterType" destination="kBO-1K-uPe" id="efJ-xr-P6I"/>
                 <outlet property="frequency" destination="wEw-3d-tZe" id="z6X-2V-r52"/>
                 <outlet property="gateBit" destination="nSu-jQ-U43" id="FdF-zb-5ze"/>
-                <outlet property="greenLED1" destination="1208" id="m2j-eC-ad3"/>
                 <outlet property="iflag" destination="189" id="mWe-Ir-7Om"/>
                 <outlet property="memTableView" destination="67" id="515"/>
                 <outlet property="metalScreen" destination="DD4-5B-w9h" id="rGV-rL-MLo"/>
@@ -79,10 +77,8 @@
                 <outlet property="potX" destination="3YT-QQ-S7K" id="1yu-aO-gLC"/>
                 <outlet property="potY" destination="gEF-Sx-fBJ" id="nBd-zm-heN"/>
                 <outlet property="powerLED" destination="1208" id="hey-Hi-zTq"/>
-                <outlet property="progress2" destination="xzf-hU-AKK" id="hSk-HV-url"/>
                 <outlet property="pulseWidth" destination="9TK-r7-7WA" id="nXS-il-RQ5"/>
                 <outlet property="pulseWidthText" destination="JQn-Cc-SSF" id="BpL-T8-5Nv"/>
-                <outlet property="redLED2" destination="iKN-RM-vsV" id="jl7-Pu-DM1"/>
                 <outlet property="releaseRate" destination="NEG-EB-tbc" id="wxu-tJ-Edy"/>
                 <outlet property="ringBit" destination="9lM-DR-BPP" id="sb1-4n-3vQ"/>
                 <outlet property="snapshotSegCtrl" destination="AHD-MB-nXC" id="Cva-Bh-qUl"/>
@@ -222,9 +218,6 @@
                             <behavior key="behavior" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
-                        <connections>
-                            <action selector="drivePowerButtonAction:" target="-1" id="yR5-YT-bLM"/>
-                        </connections>
                     </button>
                 </subviews>
             </view>

@@ -65,24 +65,16 @@
                 <outlet property="emuWarpLoad" destination="jQ0-jt-CGq" id="m2W-9e-r5B"/>
                 <outlet property="hwAmigaModelPopup" destination="ZQk-5s-Q3i" id="KW3-9z-ZQs"/>
                 <outlet property="hwChipRamPopup" destination="Htk-aA-fCu" id="6Mo-Ea-f4z"/>
-                <outlet property="hwCiaTimerBBug" destination="4rD-qd-qGj" id="6Nf-wz-IRb"/>
                 <outlet property="hwDf0Connect" destination="4rD-qd-qGj" id="l2k-Wm-cut"/>
                 <outlet property="hwDf0Type" destination="kgt-j5-t6P" id="I7j-Yw-MrC"/>
                 <outlet property="hwDf1Connect" destination="kmc-nb-gBK" id="ALa-RV-61O"/>
                 <outlet property="hwDf1Type" destination="40w-GY-Enr" id="iU3-YP-Eci"/>
-                <outlet property="hwDf2Connect" destination="Zh1-EV-wJ1" id="XdM-Fn-2dP"/>
-                <outlet property="hwDf2Type" destination="Rgb-eW-8uI" id="ME1-d9-T1O"/>
-                <outlet property="hwDf3Connect" destination="g9I-e5-OlF" id="1Cr-b8-1Bq"/>
-                <outlet property="hwDf3Type" destination="zAq-Lw-d3w" id="a5h-0I-2Lu"/>
                 <outlet property="hwFastRamPopup" destination="BTz-kT-JtT" id="oec-CI-f3J"/>
                 <outlet property="hwLockImage" destination="9Fp-ku-lua" id="ksf-wH-YdK"/>
                 <outlet property="hwLockSubText" destination="M4r-6P-yfY" id="wxV-Tm-80C"/>
                 <outlet property="hwLockText" destination="3ER-DN-63K" id="aH1-Iu-24q"/>
                 <outlet property="hwRealTimeClock" destination="T70-4F-bOm" id="eAd-aV-2Nk"/>
-                <outlet property="hwSidEnginePopup" destination="BTz-kT-JtT" id="tcq-vb-6f3"/>
-                <outlet property="hwSidModelPopup" destination="Htk-aA-fCu" id="5ni-vE-Vtl"/>
                 <outlet property="hwSlowRamPopup" destination="W0y-DM-pGD" id="bNq-71-Or8"/>
-                <outlet property="hwVicModelPopup" destination="ZQk-5s-Q3i" id="GTx-Ou-jHT"/>
                 <outlet property="info" destination="cf0-iO-MNj" id="62M-ws-4Ax"/>
                 <outlet property="keyCancelButton" destination="KU9-uV-hRQ" id="1kK-9n-e1e"/>
                 <outlet property="keyMappingPopup" destination="GNx-5i-6jP" id="hCM-qV-No8"/>
@@ -368,21 +360,21 @@ Gw
                                         <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZQk-5s-Q3i" userLabel="System">
                                             <rect key="frame" x="94" y="416" width="182" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Amiga 500" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="2" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="X5T-vd-adB" id="3A2-Za-Kyn" userLabel="System">
+                                            <popUpButtonCell key="cell" type="push" title="Amiga 500" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="X5T-vd-adB" id="3A2-Za-Kyn" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="menu"/>
                                                 <menu key="menu" id="iEf-S6-IbN">
                                                     <items>
-                                                        <menuItem title="Amiga 500" state="on" tag="2" id="X5T-vd-adB"/>
-                                                        <menuItem title="Amiga 1000" tag="4" id="PRe-f4-iSB">
+                                                        <menuItem title="Amiga 500" state="on" id="X5T-vd-adB"/>
+                                                        <menuItem title="Amiga 1000" tag="1" id="PRe-f4-iSB">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="Amiga 2000" tag="8" id="6cl-4h-IcH"/>
+                                                        <menuItem title="Amiga 2000" tag="2" id="6cl-4h-IcH"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
                                             <connections>
-                                                <action selector="hwVicModelAction:" target="-2" id="J2Q-wN-Xt4"/>
+                                                <action selector="hwAmigaModelAction:" target="-2" id="fFh-ck-w4T"/>
                                             </connections>
                                         </popUpButton>
                                         <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="dZN-gI-fop">
@@ -397,7 +389,7 @@ Gw
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="hwCiaTimerBBugAction:" target="-2" id="muc-sb-otz"/>
+                                                <action selector="hwDf0ConnectAction:" target="-2" id="oEc-ad-KJj"/>
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="B3P-il-3nh">
@@ -435,7 +427,7 @@ DQ
                                         <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="G7A-Sb-Z0Q" userLabel="System">
                                             <rect key="frame" x="83" y="9" width="196" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Restore Factory Settings" bezelStyle="rounded" imagePosition="right" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="aJn-PS-zOK" id="IhM-of-w7V" userLabel="System">
+                                            <popUpButtonCell key="cell" type="push" title="Restore Factory Settings" bezelStyle="rounded" imagePosition="right" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="IhM-of-w7V" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="menu"/>
                                                 <menu key="menu" title="Restore" id="ZYG-w3-ieX">
@@ -443,17 +435,11 @@ DQ
                                                         <menuItem title="Restore Factory Settings" hidden="YES" id="aJn-PS-zOK">
                                                             <attributedString key="attributedTitle"/>
                                                         </menuItem>
-                                                        <menuItem title="C64 (PAL)" id="j4v-dk-X7y">
+                                                        <menuItem title="Amiga 500" id="j4v-dk-X7y">
                                                             <attributedString key="attributedTitle"/>
                                                         </menuItem>
-                                                        <menuItem title="C64 II (PAL)" tag="1" id="wSs-6x-SHf"/>
-                                                        <menuItem title="Early C64 (PAL)" tag="2" id="vpw-uD-wcF"/>
-                                                        <menuItem isSeparatorItem="YES" tag="-1" id="uVj-Av-XDT"/>
-                                                        <menuItem title="C64 (NTSC)" tag="3" id="sOs-Ge-ivr"/>
-                                                        <menuItem title="C64 II (NTSC)" tag="4" id="e14-Do-r9t"/>
-                                                        <menuItem title="Early C64 (NTSC)" tag="5" id="T9f-lJ-FkV">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
+                                                        <menuItem title="Amiga 1000" tag="1" id="wSs-6x-SHf"/>
+                                                        <menuItem title="Amiga 2000" tag="2" id="vpw-uD-wcF"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
@@ -477,31 +463,34 @@ DQ
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BTz-kT-JtT">
                                             <rect key="frame" x="412" y="296" width="182" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="512 KB" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="1" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="gVz-1D-gyU" id="BJt-dQ-yBe">
+                                            <popUpButtonCell key="cell" type="push" title="512 KB" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="gVz-1D-gyU" id="BJt-dQ-yBe">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="menu"/>
                                                 <menu key="menu" title="OtherViews" id="NC9-aE-UnS">
                                                     <items>
-                                                        <menuItem title="512 KB" state="on" tag="1" id="gVz-1D-gyU">
+                                                        <menuItem title="512 KB" state="on" id="gVz-1D-gyU">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="1 MB" id="a3z-VI-DuT">
+                                                        <menuItem title="512 KB" tag="512" id="VFG-2M-Suz">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="2 MB" id="sAT-oC-oWl">
+                                                        <menuItem title="1 MB" tag="1024" id="a3z-VI-DuT">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="4 MB" id="qMN-59-fQp">
+                                                        <menuItem title="2 MB" tag="2048" id="sAT-oC-oWl">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="8 MB" id="VHg-X2-njU">
+                                                        <menuItem title="4 MB" tag="4096" id="qMN-59-fQp">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="8 MB" tag="8192" id="VHg-X2-njU">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
                                             <connections>
-                                                <action selector="hwSidEngineAction:" target="-2" id="yaR-Ed-TdQ"/>
+                                                <action selector="hwFastRamAction:" target="-2" id="6Xu-LZ-Vld"/>
                                             </connections>
                                         </popUpButton>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XmO-Sa-KL5">
@@ -536,7 +525,7 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qQP-Of-69c">
-                                            <rect key="frame" x="7" y="299" width="83" height="19"/>
+                                            <rect key="frame" x="325" y="329" width="83" height="19"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Slow Ram:" id="FIN-La-fd9">
                                                 <font key="font" metaFont="system"/>
@@ -545,24 +534,24 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="W0y-DM-pGD">
-                                            <rect key="frame" x="94" y="295" width="182" height="26"/>
+                                            <rect key="frame" x="412" y="325" width="182" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="None" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="1" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="Pbi-oS-Xza" id="3iV-PP-2YQ">
+                                            <popUpButtonCell key="cell" type="push" title="None" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="Pbi-oS-Xza" id="3iV-PP-2YQ">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="menu"/>
                                                 <menu key="menu" title="OtherViews" id="CGU-7h-pXP">
                                                     <items>
-                                                        <menuItem title="None" state="on" tag="1" id="Pbi-oS-Xza">
+                                                        <menuItem title="None" state="on" id="Pbi-oS-Xza">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="512 KB" state="on" tag="1" id="DLF-fp-fwz">
+                                                        <menuItem title="512 KB" tag="512" id="DLF-fp-fwz">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
                                             <connections>
-                                                <action selector="hwSidModelAction:" target="-2" id="bKE-Dv-aeh"/>
+                                                <action selector="hwSlowRamAction:" target="-2" id="10R-rr-65x"/>
                                             </connections>
                                         </popUpButton>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NWG-hq-HKF">
@@ -577,22 +566,22 @@ DQ
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Htk-aA-fCu">
                                             <rect key="frame" x="94" y="325" width="182" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="256 KB" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="1" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="yhv-8R-wh7" id="kOD-Qi-JqI">
+                                            <popUpButtonCell key="cell" type="push" title="256 KB" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="256" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="yhv-8R-wh7" id="kOD-Qi-JqI">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="menu"/>
                                                 <menu key="menu" title="OtherViews" id="xr9-Ut-4eK">
                                                     <items>
-                                                        <menuItem title="256 KB" state="on" tag="1" id="yhv-8R-wh7">
+                                                        <menuItem title="256 KB" state="on" tag="256" id="yhv-8R-wh7">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="512 KB" state="on" tag="1" id="hh8-LA-HGa">
+                                                        <menuItem title="512 KB" tag="512" id="hh8-LA-HGa">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
                                             <connections>
-                                                <action selector="hwSidModelAction:" target="-2" id="9Om-y6-M4f"/>
+                                                <action selector="hwChipRamAction:" target="-2" id="nDc-aZ-0GL"/>
                                             </connections>
                                         </popUpButton>
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kgt-j5-t6P">
@@ -622,11 +611,11 @@ DQ
                                                 </menu>
                                             </popUpButtonCell>
                                             <connections>
-                                                <action selector="hwCiaModelAction:" target="-2" id="kzh-cf-P5J"/>
+                                                <action selector="hwDf0TypeAction:" target="-2" id="e0n-t2-onB"/>
                                             </connections>
                                         </popUpButton>
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="40w-GY-Enr">
-                                            <rect key="frame" x="94" y="177" width="182" height="26"/>
+                                            <rect key="frame" x="94" y="178" width="182" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="Amiga 1010" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="S9T-RH-Pmc" id="CTA-k7-6cd">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -652,76 +641,24 @@ DQ
                                                 </menu>
                                             </popUpButtonCell>
                                             <connections>
-                                                <action selector="hwCiaModelAction:" target="-2" id="98y-bU-5F9"/>
-                                            </connections>
-                                        </popUpButton>
-                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zAq-Lw-d3w">
-                                            <rect key="frame" x="412" y="177" width="182" height="26"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Amiga 1010" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="bnw-Mb-kuE" id="mxv-8b-8TH">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="menu"/>
-                                                <menu key="menu" title="OtherViews" id="GWT-jL-wGZ">
-                                                    <items>
-                                                        <menuItem title="Amiga 1010" state="on" id="bnw-Mb-kuE">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="Amiga 1010 (2 x faster)" state="on" id="aGK-4n-HCM">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="Amiga 1010 (4 x faster)" state="on" id="3jN-IT-Nmv">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="Amiga 1010 (8 x faster)" state="on" id="CeP-TQ-MW8">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="Amiga 1010 (fastest)" state="on" id="7Ds-Df-0JB">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                    </items>
-                                                </menu>
-                                            </popUpButtonCell>
-                                            <connections>
-                                                <action selector="hwCiaModelAction:" target="-2" id="0dD-tA-Y1B"/>
+                                                <action selector="hwDf1TypeAction:" target="-2" id="Q57-YL-qDe"/>
                                             </connections>
                                         </popUpButton>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kmc-nb-gBK">
-                                            <rect key="frame" x="38" y="182" width="49" height="18"/>
+                                            <rect key="frame" x="38" y="183" width="49" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="DF1:" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="Srn-47-6ea">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="hwCiaTimerBBugAction:" target="-2" id="0Jf-cw-FWI"/>
-                                            </connections>
-                                        </button>
-                                        <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Zh1-EV-wJ1">
-                                            <rect key="frame" x="356" y="211" width="51" height="18"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="check" title="DF2:" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="mK8-Bl-7Yh">
-                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <connections>
-                                                <action selector="hwCiaTimerBBugAction:" target="-2" id="LLW-aI-wTR"/>
-                                            </connections>
-                                        </button>
-                                        <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="g9I-e5-OlF">
-                                            <rect key="frame" x="356" y="181" width="51" height="18"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="check" title="DF3:" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="oFj-tg-opA">
-                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <connections>
-                                                <action selector="hwCiaTimerBBugAction:" target="-2" id="L9q-C3-7oL"/>
+                                                <action selector="hwDf1ConnectAction:" target="-2" id="OCZ-td-YNP"/>
                                             </connections>
                                         </button>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3ER-DN-63K">
-                                            <rect key="frame" x="152" y="100" width="388" height="17"/>
+                                            <rect key="frame" x="152" y="100" width="406" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Click the lock to access all hardware settings." id="XSi-5i-RjD">
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Some settings are locked because the emulator is running." id="XSi-5i-RjD">
                                                 <font key="font" metaFont="systemBold"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -730,7 +667,7 @@ DQ
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="M4r-6P-yfY">
                                             <rect key="frame" x="152" y="82" width="417" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Warning: Clicking the lock will power down the emulator." id="LeG-k5-fcX">
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Click to power down and unlock." id="LeG-k5-fcX">
                                                 <font key="font" metaFont="cellTitle"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -740,48 +677,30 @@ DQ
                                             <rect key="frame" x="96" y="76" width="48" height="48"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" image="Lock" id="iIz-oE-NAI"/>
+                                            <connections>
+                                                <action selector="hwUnlockAction:" target="-2" id="GIz-hH-05m"/>
+                                            </connections>
                                         </imageView>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="T70-4F-bOm">
-                                            <rect key="frame" x="412" y="421" width="168" height="18"/>
+                                            <rect key="frame" x="412" y="420" width="168" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="Real-time clock" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="6v7-Uo-FaI">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="hwCiaTimerBBugAction:" target="-2" id="dgS-1I-UYc"/>
+                                                <action selector="hwRealTimeClocktAction:" target="-2" id="SbQ-bw-vhJ"/>
                                             </connections>
                                         </button>
-                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Rgb-eW-8uI">
-                                            <rect key="frame" x="412" y="208" width="182" height="26"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Amiga 1010" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="Dhw-Jq-Gdy" id="Hkg-nD-Z2H">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="menu"/>
-                                                <menu key="menu" title="OtherViews" id="aWe-D2-ix2">
-                                                    <items>
-                                                        <menuItem title="Amiga 1010" state="on" id="Dhw-Jq-Gdy">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="Amiga 1010 (2 x faster)" state="on" id="Grk-mV-30p">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="Amiga 1010 (4 x faster)" state="on" id="CBf-7P-cVs">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="Amiga 1010 (8 x faster)" state="on" id="ivp-xl-RqQ">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="Amiga 1010 (fastest)" state="on" id="mxs-gZ-Nrq">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                    </items>
-                                                </menu>
-                                            </popUpButtonCell>
-                                            <connections>
-                                                <action selector="hwCiaModelAction:" target="-2" id="MNu-L2-oLm"/>
-                                            </connections>
-                                        </popUpButton>
+                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uR6-a0-3gf">
+                                            <rect key="frame" x="325" y="365" width="114" height="17"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="RAM Extensions" id="C6m-Ym-qwD">
+                                                <font key="font" metaFont="systemBold"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
                                     </subviews>
                                 </view>
                             </tabViewItem>

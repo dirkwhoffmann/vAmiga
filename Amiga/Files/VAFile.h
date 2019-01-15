@@ -39,18 +39,6 @@ protected:
     long eof = -1;
     
     
-protected:
-    
-    /* Checks the header signature of a buffer.
-     *  buffer    Pointer to buffer, must not be NULL
-     *  length    Length of the buffer
-     *  header    Expected byte sequence, terminated by EOF
-     *  Returns   true iff magic bytes match.
-     */
-    static bool checkBufferHeader(const uint8_t *buffer, size_t length,
-                                  const uint8_t *header);
-    
-    
     //
     // Creating and destructing objects
     //

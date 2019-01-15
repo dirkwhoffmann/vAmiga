@@ -68,10 +68,6 @@ Amiga::Amiga()
     config.df0.connected = true;
     config.df1.type      = A1010_ORIG;
     config.df1.connected = false;
-    config.df2.type      = A1010_ORIG;
-    config.df2.connected = false;
-    config.df3.type      = A1010_ORIG;
-    config.df3.connected = false;
 
     // Register sub components
     HardwareComponent *subcomponents[] = {
@@ -113,7 +109,7 @@ Amiga::configureModel(AmigaModel model)
 }
 
 bool
-Amiga::configureChipMemory(unsigned size)
+Amiga::configureChipMemory(long size)
 {
     if (size != 256 && size != 512) {
         warn("Invalid Chip Ram size: %d\n", size);
@@ -125,7 +121,7 @@ Amiga::configureChipMemory(unsigned size)
 }
 
 bool
-Amiga::configureSlowMemory(unsigned size)
+Amiga::configureSlowMemory(long size)
 {
     if ((size % 256) != 0 || size > 512) {
         warn("Invalid Slow Ram size: %d\n", size);
@@ -137,7 +133,7 @@ Amiga::configureSlowMemory(unsigned size)
 }
 
 bool
-Amiga::configureFastMemory(unsigned size)
+Amiga::configureFastMemory(long size)
 {
     if ((size % 64) != 0 || size > 8192) {
         warn("Invalid Fast Ram size: %d\n", size);
@@ -161,8 +157,6 @@ Amiga::configureDrive(unsigned driveNr, bool connected)
     switch (driveNr) {
         case 0: config.df0.connected = connected; return true;
         case 1: config.df1.connected = connected; return true;
-        case 2: config.df2.connected = connected; return true;
-        case 3: config.df3.connected = connected; return true;
     }
     
     warn("Invalid drive number (%d). Ignoring.\n", driveNr);
@@ -179,8 +173,6 @@ Amiga::configureDrive(unsigned driveNr, DriveType type)
     switch (driveNr) {
         case 0: config.df0.type = type; return true;
         case 1: config.df1.type = type; return true;
-        case 2: config.df2.type = type; return true;
-        case 3: config.df3.type = type; return true;
     }
     
     warn("Invalid drive number (%d). Ignoring.\n", driveNr);
@@ -241,10 +233,6 @@ Amiga::_dump()
     plainmsg("               %s\n", driveTypeName(config.df0.type));
     plainmsg("          df1: %s\n", config.df1.connected ? "yes" : "no");
     plainmsg("               %s\n", driveTypeName(config.df1.type));
-    plainmsg("          df2: %s\n", config.df2.connected ? "yes" : "no");
-    plainmsg("               %s\n", driveTypeName(config.df2.type));
-    plainmsg("          df3: %s\n", config.df3.connected ? "yes" : "no");
-    plainmsg("               %s\n", driveTypeName(config.df3.type));
 
     plainmsg("\n");
     plainmsg("    warp mode: %d (%d) (%d)", warp, warpLoad, alwaysWarp);

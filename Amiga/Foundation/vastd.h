@@ -264,47 +264,55 @@ void sprint16b(char *s, uint16_t value);
 
 
 //
-//! @functiongroup Handling file and path names
+// Handling files
 //
 
-/*! @brief    Extracts filename from a path
- *  @details  Returns a newly created string. You need to delete it manually.
+/* Extracts the filename from a path
+ * Returns a newly created string. You need to delete it manually.
  */
 char *extractFilename(const char *path);
 
-/*! @brief    Extracts file suffix from a path
- *  @details  Returns a newly created string. You need to delete it manually.
+/* Extracts file suffix from a path
+ * Returns a newly created string. You need to delete it manually.
  */
 char *extractSuffix(const char *path);
 
-/*! @brief    Extracts filename from a path without its suffix
- *  @details  Returns a newly created string. You need to delete it manually.
+/* Extracts filename from a path without its suffix
+ * Returns a newly created string. You need to delete it manually.
  */
 char *extractFilenameWithoutSuffix(const char *path);
 
-/*! @brief    Check file suffix
- *  @details  The function is used for determining the type of a file.
+/* Check file suffix
+ * The function is used for determining the type of a file.
  */
 bool checkFileSuffix(const char *filename, const char *suffix);
 
-//! @brief    Returns the size of a file in bytes
+// Returns the size of a file in bytes
 long getSizeOfFile(const char *filename);
 
-/*! @brief    Checks the size of a file
- *  @details  The function is used for validating the size of a file.
- *  @param    filename Path and name of the file to investigate
- *  @param    min Expected minimum size (-1 if no lower bound exists)
- *  @param    max Expected maximum size (-1 if no upper bound exists)
+/* Checks the size of a file
+ * The function is used for validating the size of a file.
+ *   - min Expected minimum size (-1 if no lower bound exists)
+ *   - max Expected maximum size (-1 if no upper bound exists)
  */
 bool checkFileSize(const char *filename, long min, long max);
 
-/*! @brief    Checks the magic bytes of a file.
- *  @details  The function is used for determining the type of a file.
- *  @param    filename  Path and name of the file to investigate.
- *  @param    header    Expected byte sequence, terminated by 0x00.
- *  @return   Returns   true iff magic bytes match.
+/* Checks the header signature (magic bytes) of a file.
+ * This function is used for determining the type of a file.
+ *   - path      File name, must not be Null
+ *   - header    Expected byte sequence.
+ *   - length    Length of the expected byte sequence in bytes
  */
-bool checkFileHeader(const char *filename, const uint8_t *header);
+bool matchingFileHeader(const char *path, const uint8_t *header, size_t length);
+
+/* Checks the header signature (magic bytes) of a buffer.
+ * This function is used for determining the type of a file.
+ *   - buffer    Pointer to buffer, must not be NULL
+ *   - header    Expected byte sequence
+ *   - length    Length of the expected byte sequence in bytes
+ */
+bool matchingBufferHeader(const uint8_t *buffer, const uint8_t *header, size_t length);
+
 
 //
 //! @functiongroup Managing time

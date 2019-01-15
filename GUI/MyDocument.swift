@@ -18,7 +18,6 @@ class MyDocument : NSDocument {
      */
     var amiga: AmigaProxy!
 
-    
     /**
      Emulator proxy object. This object is an Objective-C bridge between
      the GUI (written in Swift) an the core emulator (written in C++).
@@ -77,6 +76,7 @@ class MyDocument : NSDocument {
         let nibName = NSNib.Name("MyDocument")
         let controller = MyController.init(windowNibName: nibName)
         controller.c64 = c64
+        controller.amiga = amiga
         self.addWindowController(controller)
     }
     

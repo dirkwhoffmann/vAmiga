@@ -30,8 +30,9 @@ extension PreferencesController {
 
     func refreshRomTab() {
         
-        guard let con = myController else { return }
-        guard let c64 = proxy else { return }
+        guard let controller = myController else { return }
+        guard let amiga = amigaProxy else { return }
+        let config = amiga.config()
         
         track()
         
@@ -39,26 +40,30 @@ extension PreferencesController {
         let romImageLight = NSImage.init(named: "rom_light")
         
         // Gather information about Roms
-        let hasBootRom = false // c64.isBasicRomLoaded()
-        let hasKickstartRom = false // c64.isKernalRomLoaded()
+        let hasBootRom = false // amiga.bootRom != nil
+        let hasKickstartRom = false // amiga.kickstartRom != nil
        
-        let bootURL = con.bootRomURL
-        let kickstartURL = con.kickstartRomURL
+        let bootURL = "Lorem ipsum" // amiga.bootRomURL
+        let kickstartURL = "Lorem ipsum"
         
         let bootHash = UInt64(0) //
         let kickstartHash = UInt64(0) // c64.kernalRomFingerprint()
         
         // Header image and description
-        if c64.isRunnable() {
+        if amiga.readyToPowerUp() {
+            /*
             romHeaderImage.image = NSImage.init(named: "AppIcon")
             romHeaderText.stringValue = "vAmiga is ready to run."
             romHeaderSubText.stringValue = ""
             romOkButton.title = "OK"
+             */
         } else {
+            /*
             romHeaderImage.image = NSImage.init(named: "NSCaution")
             romHeaderText.stringValue = "vAmiga cannot run."
             romHeaderSubText.stringValue = "Use drag and drop to add ROM images."
             romOkButton.title = "Quit"
+             */
         }
         
         // Boot Rom
@@ -66,7 +71,7 @@ extension PreferencesController {
         romBootHashText.isHidden = !hasBootRom
         romBootHashText.stringValue = String(format: "Hash: %llX", bootHash)
         romBootPathText.isHidden = !hasBootRom
-        romBootPathText.stringValue = bootURL.path
+        romBootPathText.stringValue = bootURL
         romBootButton.isHidden = !hasBootRom
         if let description = knownBootRoms[bootHash] {
             romBootDescription.stringValue = description
@@ -81,7 +86,7 @@ extension PreferencesController {
         romKickstartHashText.isHidden = !hasKickstartRom
         romKickstartHashText.stringValue = String(format: "Hash: %llX", kickstartHash)
         romKickstartPathText.isHidden = !hasKickstartRom
-        romKickstartPathText.stringValue = kickstartURL.path
+        romKickstartPathText.stringValue = kickstartURL
         romKickstartButton.isHidden = !hasKickstartRom
         if let description = knownKickstartRoms[kickstartHash] {
             romKickstartDescription.stringValue = description
@@ -90,8 +95,6 @@ extension PreferencesController {
             romKickstartDescription.stringValue = "An unknown, possibly patched Kickstart ROM."
             romKickstartDescription.textColor = .red
         }
-        
-        romOkButton.title = c64.isRunnable() ? "OK" : "Quit"
     }
 
     

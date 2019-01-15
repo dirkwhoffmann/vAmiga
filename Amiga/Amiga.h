@@ -157,9 +157,9 @@ public:
     bool configureModel(AmigaModel model);
     
     // Chooses the amount of memory to emulate.
-    bool configureChipMemory(unsigned size);
-    bool configureSlowMemory(unsigned size);
-    bool configureFastMemory(unsigned size);
+    bool configureChipMemory(long size);
+    bool configureSlowMemory(long size);
+    bool configureFastMemory(long size);
     
     // Chooses if a real-time clock should be emulated.
     bool configureRealTimeClock(bool value);

@@ -85,8 +85,6 @@ class MyController : NSWindowController, MessageReceiver {
     /// Keeps track of the connected disk drives
     var df0 = true
     var df1 = false
-    var df2 = false
-    var df3 = false
 
     /// Selected game pad slot for joystick in port A
     var inputDevice1 = Defaults.inputDevice1
@@ -143,7 +141,7 @@ class MyController : NSWindowController, MessageReceiver {
     @IBOutlet weak var powerLED: NSButton!
     @IBOutlet weak var df0LED: NSButton!
     @IBOutlet weak var df0Disk: NSButton!
-    @IBOutlet weak var df0Busy: NSProgressIndicator!
+    @IBOutlet weak var df0DMA: NSProgressIndicator!
     
     @IBOutlet weak var clockSpeed: NSTextField!
     @IBOutlet weak var clockSpeedBar: NSLevelIndicator!
@@ -620,13 +618,13 @@ extension MyController {
             
             track()
             assert(msg.data == 0) // df0
-            df0Busy.startAnimation(self)
+            df0DMA.startAnimation(self)
 
         case MSG_DRIVE_DMA_OFF:
             
             track()
             assert(msg.data == 0) // df0
-            df0Busy.stopAnimation(self)
+            df0DMA.stopAnimation(self)
 
         case MSG_DRIVE_HEAD_UP,
              MSG_DRIVE_HEAD_DOWN:

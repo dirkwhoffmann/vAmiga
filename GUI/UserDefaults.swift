@@ -769,65 +769,89 @@ extension MyController {
 
 extension VC64Keys {
     
-    //VICII
-    static let vicChip        = "VC64VICChipModelKey"
-    static let grayDotBug     = "VC64VICGrayDotBugKey"
+    // Machine
+    static let amigaModel     = "VAAmigaModelKey"
+    static let realTimeClock  = "VARealTimeClockKey"
     
-    // CIAs
-    static let ciaChip        = "VC64CIAChipModelKey"
-    static let timerBBug      = "VC64CIATimerBBugKey"
-    
-    // SID
-    static let reSID          = "VC64SIDReSIDKey"
-    static let audioChip      = "VC64SIDChipModelKey"
-    static let audioFilter    = "VC64SIDFilterKey"
-    static let samplingMethod = "VC64SIDSamplingMethodKey"
-    
-    // Logic board and RAM
-    static let glueLogic      = "VC64GlueLogicKey"
-    static let initPattern    = "VC64InitPatternKey"
+    // Memory
+    static let chipRam        = "VAChipRamKey"
+    static let slowRam        = "VASlowRamKey"
+    static let fastRam        = "VAFastRamKey"
+
+    // Drives
+    static let df0Connect     = "VADF0ConnectKey"
+    static let df0Type        = "VADF0TypeKey"
+    static let df1Connect     = "VADF1ConnectKey"
+    static let df1Type        = "VADF1TypeKey"
 }
 
 extension Defaults {
- 
-    //VICII
-    static let vicChip        = PAL_8565
-    static let grayDotBug     = true
     
-    // CIAs
-    static let ciaChip        = PAL_8565
-    static let timerBBug      = true
+    struct a500 {
+        
+        static let amigaModel     = A500
+        static let realTimeClock  = false
+        
+        static let chipRam        = 512
+        static let slowRam        = 0
+        static let fastRam        = 0
+
+        static let df0Connect     = true
+        static let df0Type        = A1010_ORIG
+        static let df1Connect     = false
+        static let df1Type        = A1010_ORIG
+    }
     
-    // SID
-    static let reSID          = true
-    static let audioChip      = MOS_8580
-    static let audioFilter    = false
-    static let samplingMethod = 0
+    struct a1000 {
+        
+        static let amigaModel     = A1000
+        static let realTimeClock  = false
+        
+        static let chipRam        = 256
+        static let slowRam        = 0
+        static let fastRam        = 0
+        
+        static let df0Connect     = true
+        static let df0Type        = A1010_ORIG
+        static let df1Connect     = false
+        static let df1Type        = A1010_ORIG
+    }
     
-    // Logic board and RAM
-    static let glueLogic      = GLUE_DISCRETE
-    static let initPattern    = INIT_PATTERN_C64
+    struct a2000 {
+        
+        static let amigaModel     = A1000
+        static let realTimeClock  = true
+        
+        static let chipRam        = 512
+        static let slowRam        = 512
+        static let fastRam        = 0
+        
+        static let df0Connect     = true
+        static let df0Type        = A1010_ORIG
+        static let df1Connect     = true
+        static let df1Type        = A1010_ORIG
+    }
 }
 
 extension MyController {
     
     static func registerHardwareUserDefaults() {
         
-        let dictionary : [String:Any] = [
+        let defaultModel = Defaults.a500.self
         
-            VC64Keys.vicChip: Int(Defaults.vicChip.rawValue),
-            VC64Keys.grayDotBug: Defaults.grayDotBug,
-
-            VC64Keys.ciaChip: Int(Defaults.ciaChip.rawValue),
-            VC64Keys.timerBBug: Defaults.timerBBug,
-
-            VC64Keys.reSID: Defaults.reSID,
-            VC64Keys.audioChip: Int(Defaults.audioChip.rawValue),
-            VC64Keys.audioFilter: false,
-            VC64Keys.samplingMethod: 0,
-
-            VC64Keys.glueLogic: Int(Defaults.glueLogic.rawValue),
-            VC64Keys.initPattern: Int(Defaults.initPattern.rawValue)
+        let dictionary : [String:Any] = [
+            
+            VC64Keys.amigaModel: defaultModel.amigaModel.rawValue,
+            VC64Keys.realTimeClock: defaultModel.realTimeClock,
+            
+            VC64Keys.chipRam: defaultModel.chipRam,
+            VC64Keys.slowRam: defaultModel.slowRam,
+            VC64Keys.fastRam: defaultModel.fastRam,
+            
+            VC64Keys.df0Connect: defaultModel.df0Connect,
+            VC64Keys.df0Type: defaultModel.df0Type.rawValue,
+            VC64Keys.df1Connect: defaultModel.df1Connect,
+            VC64Keys.df1Type: defaultModel.df1Type.rawValue,
         ]
         
         let defaults = UserDefaults.standard
@@ -838,19 +862,17 @@ extension MyController {
         
         let defaults = UserDefaults.standard
         
-        for key in [VC64Keys.vicChip,
-                    VC64Keys.grayDotBug,
+        for key in [VC64Keys.amigaModel,
+                    VC64Keys.realTimeClock,
                     
-                    VC64Keys.ciaChip,
-                    VC64Keys.timerBBug,
-                    
-                    VC64Keys.reSID,
-                    VC64Keys.audioChip,
-                    VC64Keys.audioFilter,
-                    VC64Keys.samplingMethod,
-                    
-                    VC64Keys.glueLogic,
-                    VC64Keys.initPattern
+                    VC64Keys.chipRam,
+                    VC64Keys.slowRam,
+                    VC64Keys.fastRam,
+
+                    VC64Keys.df0Connect,
+                    VC64Keys.df0Type,
+                    VC64Keys.df1Connect,
+                    VC64Keys.df1Type
             ]
         {
             defaults.removeObject(forKey: key)
@@ -863,43 +885,38 @@ extension MyController {
         
         let defaults = UserDefaults.standard
         
-        c64.suspend()
+        amiga.suspend()
         
-        c64.vic.setModel(defaults.integer(forKey: VC64Keys.vicChip))
-        c64.vic.setEmulateGrayDotBug(defaults.bool(forKey: VC64Keys.grayDotBug))
+        amiga.configureModel(defaults.integer(forKey: VC64Keys.amigaModel))
+        amiga.configureRealTimeClock(defaults.bool(forKey: VC64Keys.realTimeClock))
+    
+        amiga.configureChipMemory(defaults.integer(forKey: VC64Keys.chipRam))
+        amiga.configureSlowMemory(defaults.integer(forKey: VC64Keys.slowRam))
+        amiga.configureFastMemory(defaults.integer(forKey: VC64Keys.fastRam))
 
-        c64.cia1.setModel(defaults.integer(forKey: VC64Keys.ciaChip))
-        c64.cia2.setModel(defaults.integer(forKey: VC64Keys.ciaChip))
-        c64.cia1.setEmulateTimerBBug(defaults.bool(forKey: VC64Keys.timerBBug))
-        c64.cia2.setEmulateTimerBBug(defaults.bool(forKey: VC64Keys.timerBBug))
-
-        c64.sid.setReSID(defaults.bool(forKey: VC64Keys.reSID))
-        c64.sid.setModel(defaults.integer(forKey: VC64Keys.audioChip))
-        c64.sid.setAudioFilter(defaults.bool(forKey: VC64Keys.audioFilter))
-        c64.sid.setSamplingMethod(defaults.integer(forKey: VC64Keys.samplingMethod))
+        amiga.configureDrive(0, connected: defaults.bool(forKey: VC64Keys.df0Connect))
+        amiga.configureDrive(0, type: defaults.integer(forKey: VC64Keys.df0Type))
+        amiga.configureDrive(1, connected: defaults.bool(forKey: VC64Keys.df1Connect))
+        amiga.configureDrive(1, type: defaults.integer(forKey: VC64Keys.df1Type))
         
-        c64.vic.setGlueLogic(defaults.integer(forKey: VC64Keys.glueLogic))
-        c64.mem.setRamInitPattern(defaults.integer(forKey: VC64Keys.initPattern))
-        
-        c64.resume()
+        amiga.resume()
     }
 
     func saveHardwareUserDefaults() {
         
         let defaults = UserDefaults.standard
+        let config = amiga.config()
         
-        defaults.set(c64.vic.model(), forKey: VC64Keys.vicChip)
-        defaults.set(c64.vic.emulateGrayDotBug(), forKey: VC64Keys.grayDotBug)
+        defaults.set(config.model, forKey: VC64Keys.amigaModel)
+        defaults.set(config.realTimeClock, forKey: VC64Keys.realTimeClock)
 
-        defaults.set(c64.cia1.model(), forKey: VC64Keys.ciaChip)
-        defaults.set(c64.cia1.emulateTimerBBug(), forKey: VC64Keys.timerBBug)
+        defaults.set(config.chipRamSize, forKey: VC64Keys.chipRam)
+        defaults.set(config.slowRamSize, forKey: VC64Keys.slowRam)
+        defaults.set(config.fastRamSize, forKey: VC64Keys.fastRam)
 
-        defaults.set(c64.sid.reSID(), forKey: VC64Keys.reSID)
-        defaults.set(c64.sid.model(), forKey: VC64Keys.audioChip)
-        defaults.set(c64.sid.audioFilter(), forKey: VC64Keys.audioFilter)
-        defaults.set(c64.sid.samplingMethod(), forKey: VC64Keys.samplingMethod)
-        
-        defaults.set(c64.vic.glueLogic(), forKey: VC64Keys.glueLogic)
-        defaults.set(c64.mem.ramInitPattern(), forKey: VC64Keys.initPattern)
+        defaults.set(config.df0.connected, forKey: VC64Keys.df0Connect)
+        defaults.set(config.df0.type, forKey: VC64Keys.df0Type)
+        defaults.set(config.df1.connected, forKey: VC64Keys.df1Connect)
+        defaults.set(config.df1.type, forKey: VC64Keys.df1Type)
     }
 }
