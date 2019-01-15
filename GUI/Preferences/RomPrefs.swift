@@ -11,26 +11,39 @@ import Foundation
 
 let knownBootRoms : [UInt64 : String] = [
     0x0000000000000000:
-    "This 32 KB Rom contains the Kickstart loader.",
-    0x20765FEA67A8762D:
+    "A Boot Rom is required for emulating an Amiga 1000.",
+    0xA160593CFFCBB233:
     "Amiga 1000 Boot Rom 252179-01",
-    0x20765FEA67A8762E:
+    0xA98647146962EB76:
     "Amiga 1000 Boot Rom 252180-01"
+]
+
+let originalBootRoms : [UInt64] = [
+    0xA160593CFFCBB233,
+    0xA98647146962EB76
 ]
 
 let knownKickRoms : [UInt64 : String] = [
     0x0000000000000000:
-    "This 256 KB or 512 KB Rom contains the Operating System.",
-    0xFB166E49AF709AB8:
+    "A Kickstart Rom is required for emulating an Amiga 500 or 2000.",
+    0xE5CB7EE5200C4F0F:
     "Kickstart 1.2",
-    0xFB166E49AF709AB9:
+    0x047FB93FB8E383BC:
     "Kickstart 1.3",
-    0xFB166E49AF709ABA:
+    0xE3FF65D2C3A9B9E5:
     "Kickstart 1.2 (512 KB)",
-    0xFB166E49AF709ABB:
-    "Kickstart 1.3 (512 KB)"
+    0x08A1122C7DEC695D:
+    "Kickstart 1.3 (512 KB)",
+    0xE74215EB368CD7F1:
+    "AROS Kickstart replacement"
 ]
 
+let originalKickRoms : [UInt64] = [
+    0xE5CB7EE5200C4F0F,
+    0x047FB93FB8E383BC,
+    0xE3FF65D2C3A9B9E5,
+    0x08A1122C7DEC695D,
+]
 
 extension PreferencesController {
 
@@ -42,17 +55,22 @@ extension PreferencesController {
         
         track()
         
-        let hasBoot      = amiga.hasBootRom()
-        let hasKick      = amiga.hasKickRom()
+        let bootHash     = amiga.bootRomFingerprint()
+        let kickHash     = amiga.kickRomFingerprint()
+
+        let hasBoot      = bootHash != 0
+        let hasKick      = kickHash != 0
+        let hasOrigBoot  = originalBootRoms.contains(bootHash)
+        let hasOrigKick  = originalKickRoms.contains(kickHash)
+        let hasAros      = kickHash == 0xE74215EB368CD7F1
         
         let bootURL      = controller.bootRomURL
         let kickURL      = controller.kickRomURL
-        
-        let bootHash     = amiga.bootRomFingerprint()
-        let kickHash     = amiga.kickRomFingerprint()
-        
-        let romPresent   = NSImage.init(named: "rom")
+    
         let romMissing   = NSImage.init(named: "rom_light")
+        let romOriginal  = NSImage.init(named: "rom_original")
+        let romAros      = NSImage.init(named: "rom_aros")
+        let romUnknown   = NSImage.init(named: "rom_unknown")
 
         // Missing Roms
         let ready = amiga.readyToPowerUp()
@@ -64,16 +82,20 @@ extension PreferencesController {
                 romHeaderText.stringValue = "The selected Amiga model requires a Kickstart Rom to run."
             }
         }
-        romHeaderImage.isHidden   = !ready
-        romHeaderText.isHidden    = !ready
-        romHeaderSubText.isHidden = !ready
+        romHeaderImage.isHidden   = ready
+        romHeaderText.isHidden    = ready
+        romHeaderSubText.isHidden = ready
         
         // Boot Rom
         romBootHashText.isHidden  = !hasBoot
         romBootPathText.isHidden  = !hasBoot
         romBootButton.isHidden    = !hasBoot
-        romBootCopyright.isHidden = !hasBoot
-        romBootDropView.image = hasBoot ? romPresent : romMissing
+        romBootCopyright.isHidden = !hasOrigBoot
+        
+        romBootDropView.image =
+            hasOrigBoot ? romOriginal :
+            hasBoot     ? romUnknown : romMissing
+            
         romBootHashText.stringValue = String(format: "Hash: %llX", bootHash)
         romBootPathText.stringValue = bootURL.absoluteString
         if let description = knownBootRoms[bootHash] {
@@ -88,8 +110,13 @@ extension PreferencesController {
         romKickHashText.isHidden  = !hasKick
         romKickPathText.isHidden  = !hasKick
         romKickButton.isHidden    = !hasKick
-        romKickCopyright.isHidden = !hasKick
-        romKickDropView.image = hasKick ? romPresent : romMissing
+        romKickCopyright.isHidden = !hasOrigKick
+        
+        romKickDropView.image =
+            hasOrigKick ? romOriginal :
+            hasAros     ? romAros :
+            hasKick     ? romUnknown : romMissing
+        
         romKickHashText.stringValue = String(format: "Hash: %llX", kickHash)
         romKickPathText.stringValue = kickURL.absoluteString
         if let description = knownKickRoms[kickHash] {

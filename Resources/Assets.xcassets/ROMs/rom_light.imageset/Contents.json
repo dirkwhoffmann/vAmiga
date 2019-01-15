@@ -2,12 +2,12 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "rom_missing_light.pdf",
+      "filename" : "rom_drag-1.pdf",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "rom_missing_light-1.pdf",
+      "filename" : "rom_drag.pdf",
       "appearances" : [
         {
           "appearance" : "luminosity",
@@ -18,7 +18,7 @@
     },
     {
       "idiom" : "universal",
-      "filename" : "rom_missing_dark.pdf",
+      "filename" : "rom_drag_dark.pdf",
       "appearances" : [
         {
           "appearance" : "luminosity",

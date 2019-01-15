@@ -266,7 +266,7 @@ Amiga::resume()
 bool
 Amiga::readyToPowerUp()
 {
-    return true;
+    return (config.model == A1000) ? bootRom != NULL : kickRom != NULL;
 }
 
 void
@@ -399,21 +399,41 @@ Amiga::deleteBootRom()
 }
 
 bool
-Amiga::loadBootRom(const char *path)
+Amiga::loadBootRom(BootRom *rom)
+{
+    deleteBootRom(); // Delete the old Rom (if any)
+    bootRom = rom;
+    return bootRom != NULL;
+}
+
+bool
+Amiga::loadBootRomFromBuffer(const uint8_t *buffer, size_t length)
+{
+    assert(buffer != NULL);
+    
+    BootRom *rom = BootRom::makeWithBuffer(buffer, length);
+    
+    if (!rom) {
+        msg("Failed to read Boot Rom from buffer at %p\n", buffer);
+        return false;
+    }
+    
+    return loadBootRom(rom);
+}
+
+bool
+Amiga::loadBootRomFromFile(const char *path)
 {
     assert(path != NULL);
     
-    // Try to load the new Rom
     BootRom *rom = BootRom::makeWithFile(path);
+    
     if (!rom) {
         msg("Failed to read Boot Rom from file %s\n", path);
         return false;
     }
     
-    // Replace the old Rom by the new one
-    deleteBootRom();
-    bootRom = rom;
-    return true;
+    return loadBootRom(rom);
 }
 
 void
@@ -424,21 +444,41 @@ Amiga::deleteKickRom()
 }
 
 bool
-Amiga::loadKickRom(const char *path)
+Amiga::loadKickRom(KickRom *rom)
 {
-    assert(path != NULL);
+    deleteKickRom(); // Delete the old Rom (if any)
+    kickRom = rom;
+    return kickRom != NULL;
+}
+
+bool
+Amiga::loadKickRomFromBuffer(const uint8_t *buffer, size_t length)
+{
+    assert(buffer != NULL);
     
-    // Try to load the new Rom
-    KickRom *rom = KickRom::makeWithFile(path);
+    KickRom *rom = KickRom::makeWithBuffer(buffer, length);
+    
     if (!rom) {
-        msg("Failed to read Kickstart Rom from file %s\n", path);
+        msg("Failed to read Kick Rom from buffer at %p\n", buffer);
         return false;
     }
     
-    // Replace the old Rom by the new one
-    deleteKickRom();
-    kickRom = rom;
-    return true;
+    return loadKickRom(rom);
+}
+
+bool
+Amiga::loadKickRomFromFile(const char *path)
+{
+    assert(path != NULL);
+    
+    KickRom *rom = KickRom::makeWithFile(path);
+    
+    if (!rom) {
+        msg("Failed to read Kick Rom from file %s\n", path);
+        return false;
+    }
+    
+    return loadKickRom(rom);
 }
 
 

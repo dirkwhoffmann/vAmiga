@@ -82,11 +82,11 @@
                 <outlet property="keyMatrixScrollView" destination="I3H-16-RH1" id="NNZ-ae-iqB"/>
                 <outlet property="keyOkButton" destination="qf2-f2-Cbn" id="rsO-Ta-9iX"/>
                 <outlet property="prefTabView" destination="baz-eW-A74" id="fgy-dU-alU"/>
-                <outlet property="romBasicImage" destination="rV9-BQ-AAx" id="gjn-vP-yXL"/>
                 <outlet property="romBasicPathText" destination="LBs-Al-1wH" id="lSF-pL-uSt"/>
                 <outlet property="romBootButton" destination="nSa-0I-2sF" id="RLi-5d-Zjm"/>
                 <outlet property="romBootCopyright" destination="Rzh-3R-l0P" id="6it-0D-Ojh"/>
                 <outlet property="romBootDescription" destination="Val-uF-mCs" id="odS-8n-7l2"/>
+                <outlet property="romBootDropView" destination="rV9-BQ-AAx" id="P3o-3E-dKl"/>
                 <outlet property="romBootHashText" destination="10b-BC-y6b" id="UCB-x2-jb2"/>
                 <outlet property="romBootPathText" destination="LBs-Al-1wH" id="O4G-XL-2e5"/>
                 <outlet property="romCancelButton" destination="ZhO-d6-muu" id="U1C-ne-iYK"/>
@@ -96,6 +96,7 @@
                 <outlet property="romKickButton" destination="FLm-u4-Mif" id="ci2-2K-3mb"/>
                 <outlet property="romKickCopyright" destination="ftN-pj-Aiz" id="6mT-y6-6p2"/>
                 <outlet property="romKickDescription" destination="HA9-no-ajX" id="ekg-Dg-arO"/>
+                <outlet property="romKickDropView" destination="3co-6U-mJn" id="JdU-Ya-p8L"/>
                 <outlet property="romKickHashText" destination="5xy-Gp-fCG" id="Djh-G6-ZhE"/>
                 <outlet property="romKickPathText" destination="YGi-hW-uzz" id="ZCx-JX-IXS"/>
                 <outlet property="romLockImage" destination="QlG-Fn-UTg" id="TOl-ns-1kG"/>
@@ -193,7 +194,7 @@ Gw
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mc6-g5-kfE">
                                                         <rect key="frame" x="119" y="95" width="311" height="17"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Boot Rom (Amiga 1000)" id="UBW-wf-S9Q">
+                                                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Boot Rom" id="UBW-wf-S9Q">
                                                             <font key="font" metaFont="systemBold"/>
                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -202,18 +203,18 @@ Gw
                                                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Val-uF-mCs">
                                                         <rect key="frame" x="119" y="61" width="445" height="24"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                        <textFieldCell key="cell" selectable="YES" title="This 32 KB Rom contains the Kickstart loader." id="cho-Vc-pkJ">
+                                                        <textFieldCell key="cell" selectable="YES" title="Lorem ipsum dolor sit amet" id="cho-Vc-pkJ">
                                                             <font key="font" metaFont="cellTitle"/>
                                                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Rzh-3R-l0P">
-                                                        <rect key="frame" x="119" y="48" width="445" height="16"/>
+                                                        <rect key="frame" x="119" y="48" width="450" height="16"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                        <textFieldCell key="cell" selectable="YES" title="Pay attention to copyright restrictions when using original Roms!" id="Ixs-Qi-lqf">
+                                                        <textFieldCell key="cell" selectable="YES" title="Note that the use of original Roms may constitute copyright infringement!" id="Ixs-Qi-lqf">
                                                             <font key="font" metaFont="cellTitle"/>
-                                                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="textColor" name="systemRedColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
@@ -235,7 +236,7 @@ Gw
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <imageView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rV9-BQ-AAx" customClass="BasicRomDropView" customModule="vAmiga" customModuleProvider="target">
+                                                    <imageView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rV9-BQ-AAx" customClass="BootRomDropView" customModule="vAmiga" customModuleProvider="target">
                                                         <rect key="frame" x="9" y="7" width="97" height="107"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" image="rom_light" id="sfp-hH-V8i"/>
@@ -250,6 +251,9 @@ Gw
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="system"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="romDeleteBootAction:" target="-2" id="2EH-Ur-JSu"/>
+                                                        </connections>
                                                     </button>
                                                 </subviews>
                                             </view>
@@ -264,7 +268,7 @@ Gw
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4wh-LS-aT9">
                                                         <rect key="frame" x="119" y="95" width="311" height="17"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Kickstart Rom (Amiga 500, Amiga 2000)" id="ga5-ep-ENL">
+                                                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Kickstart Rom" id="ga5-ep-ENL">
                                                             <font key="font" metaFont="systemBold"/>
                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -273,7 +277,7 @@ Gw
                                                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HA9-no-ajX">
                                                         <rect key="frame" x="119" y="68" width="445" height="16"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                        <textFieldCell key="cell" selectable="YES" title="This 256 KB or 512 KB Rom contains the Operating System." id="xg3-mf-B5g">
+                                                        <textFieldCell key="cell" selectable="YES" title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr" id="xg3-mf-B5g">
                                                             <font key="font" metaFont="cellTitle"/>
                                                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -297,7 +301,7 @@ Gw
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <imageView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3co-6U-mJn" customClass="BasicRomDropView" customModule="vAmiga" customModuleProvider="target">
+                                                    <imageView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3co-6U-mJn" customClass="KickRomDropView" customModule="vAmiga" customModuleProvider="target">
                                                         <rect key="frame" x="9" y="7" width="97" height="107"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" image="rom_light" id="dZ3-Nu-hei"/>
@@ -312,13 +316,16 @@ Gw
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="system"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="romDeleteKickAction:" target="-2" id="gxz-TG-M8y"/>
+                                                        </connections>
                                                     </button>
                                                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ftN-pj-Aiz">
                                                         <rect key="frame" x="119" y="45" width="445" height="16"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                        <textFieldCell key="cell" selectable="YES" title="Pay attention to copyright restrictions when using original Roms!" id="Wik-by-ltX">
+                                                        <textFieldCell key="cell" selectable="YES" title="Note that the use of original Roms may constitute copyright infringement!" id="Wik-by-ltX">
                                                             <font key="font" metaFont="cellTitle"/>
-                                                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="textColor" name="systemRedColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
@@ -341,19 +348,14 @@ Gw
                                             </connections>
                                         </button>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LwW-aA-bBr">
-                                            <rect key="frame" x="123" y="463" width="388" height="17"/>
+                                            <rect key="frame" x="123" y="463" width="470" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="The emulated Amiga requires a Kickstart Rom to run. " id="bhA-Ua-8yX">
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr" id="bhA-Ua-8yX">
                                                 <font key="font" metaFont="systemBold"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vi5-CN-RBq">
-                                            <rect key="frame" x="43" y="445" width="48" height="48"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" image="NSCaution" id="pWz-ud-B4q"/>
-                                        </imageView>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="reG-f1-L8W">
                                             <rect key="frame" x="125" y="445" width="384" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -372,11 +374,6 @@ Gw
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QlG-Fn-UTg">
-                                            <rect key="frame" x="43" y="85" width="48" height="48"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" image="Lock" id="scg-IT-ndz"/>
-                                        </imageView>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="m4i-nF-H2q">
                                             <rect key="frame" x="125" y="92" width="417" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -386,6 +383,16 @@ Gw
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
+                                        <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QlG-Fn-UTg">
+                                            <rect key="frame" x="43" y="85" width="48" height="48"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" image="Lock" id="scg-IT-ndz"/>
+                                        </imageView>
+                                        <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vi5-CN-RBq">
+                                            <rect key="frame" x="43" y="439" width="48" height="48"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" image="NSCaution" id="pWz-ud-B4q"/>
+                                        </imageView>
                                     </subviews>
                                 </view>
                             </tabViewItem>

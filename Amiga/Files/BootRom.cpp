@@ -38,7 +38,7 @@ BootRom::isBootRomFile(const char *path)
     
     return
     matchingFileHeader(path, magicBytes1, sizeof(magicBytes1)) ||
-    matchingFileHeader(path, magicBytes1, sizeof(magicBytes2));
+    matchingFileHeader(path, magicBytes2, sizeof(magicBytes2));
 }
 
 BootRom *

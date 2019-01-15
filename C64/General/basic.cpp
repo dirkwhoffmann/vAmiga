@@ -322,6 +322,8 @@ sleepUntil(uint64_t kernelTargetTime, uint64_t kernelEarlyWakeup)
 uint64_t
 fnv_1a(uint8_t *addr, size_t size)
 {
+    printf("addr = %p, size = %lld\n", addr, size);
+    
     uint64_t basis = 0xcbf29ce484222325;
     uint64_t prime = 0x100000001b3;
     uint64_t hash = basis;
@@ -330,5 +332,6 @@ fnv_1a(uint8_t *addr, size_t size)
         hash = (hash ^ (uint64_t)addr[i]) * prime;
     }
     
+    printf("hash = %lld\n", hash);
     return hash;
 }

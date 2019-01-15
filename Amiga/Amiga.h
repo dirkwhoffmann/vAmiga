@@ -300,11 +300,13 @@ public:
     // Deletes the current Boot Rom.
     void deleteBootRom();
     
-    // Loads a Boot Rom from disk.
-    bool loadBootRom(const char *path);
-    
+    // Adds the Boot Rom to the emulator.
+    bool loadBootRom(BootRom *rom);
+    bool loadBootRomFromBuffer(const uint8_t *buffer, size_t length);
+    bool loadBootRomFromFile(const char *path);
+
     // Returns a fingerprint for the current Boot Rom
-    bool bootRomFingerprint() { return bootRom ? bootRom->fingerprint() : 0; }
+    uint64_t bootRomFingerprint() { return bootRom ? bootRom->fingerprint() : 0; }
     
     // Returns true if a Kickstart Rom is present.
     bool hasKickRom() { return kickRom != NULL; }
@@ -312,11 +314,13 @@ public:
     // Deletes the current Kickstart Rom.
     void deleteKickRom();
     
-    // Loads a Kickstart Rom from disk.
-    bool loadKickRom(const char *path);
+    // Adds the Kickstart Rom to the emulator.
+    bool loadKickRom(KickRom *rom);
+    bool loadKickRomFromBuffer(const uint8_t *buffer, size_t length);
+    bool loadKickRomFromFile(const char *path);
 
     // Returns a fingerprint for the current Kickstart Rom
-    bool kickRomFingerprint() { return kickRom ? kickRom->fingerprint() : 0; }
+    uint64_t kickRomFingerprint() { return kickRom ? kickRom->fingerprint() : 0; }
 
     
     //

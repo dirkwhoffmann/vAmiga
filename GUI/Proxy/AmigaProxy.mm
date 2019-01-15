@@ -159,9 +159,13 @@ struct AmigaWrapper { Amiga *amiga; };
 {
     return BootRom::isBootRomFile([[url path] UTF8String]);
 }
-- (BOOL) loadBootRom:(NSURL *)url
+- (BOOL) loadBootRomFromBuffer:(NSData *)data
 {
-    return wrapper->amiga->loadBootRom([[url path] UTF8String]);
+    return false; // wrapper->amiga->loadBootRomFromBuffer(0, 0);
+}
+- (BOOL) loadBootRomFromFile:(NSURL *)url
+{
+    return wrapper->amiga->loadBootRomFromFile([[url path] UTF8String]);
 }
 - (uint64_t) bootRomFingerprint
 {
@@ -179,9 +183,13 @@ struct AmigaWrapper { Amiga *amiga; };
 {
     return KickRom::isKickRomFile([[url path] UTF8String]);
 }
-- (BOOL) loadKickRom:(NSURL *)url
+- (BOOL) loadKickRomFromBuffer:(NSData *)data
 {
-    return wrapper->amiga->loadKickRom([[url path] UTF8String]);
+    return false; // wrapper->amiga->loadBootRomFromBuffer(0, 0);
+}
+- (BOOL) loadKickRomFromFile:(NSURL *)url
+{
+    return wrapper->amiga->loadKickRomFromFile([[url path] UTF8String]);
 }
 - (uint64_t) kickRomFingerprint
 {

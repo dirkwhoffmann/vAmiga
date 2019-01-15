@@ -272,8 +272,8 @@ extension MyController {
         c64.resume()
         
         amiga.suspend()
-        amiga.loadBootRom(defaults.url(forKey: VC64Keys.bootRom))
-        amiga.loadKickRom(defaults.url(forKey: VC64Keys.kickRom))
+        amiga.loadBootRom(fromFile: defaults.url(forKey: VC64Keys.bootRom))
+        amiga.loadKickRom(fromFile: defaults.url(forKey: VC64Keys.kickRom))
         amiga.resume()
     }
     

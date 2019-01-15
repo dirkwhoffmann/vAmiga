@@ -72,7 +72,8 @@ class BootRomDropView : RomDropView
     override func performDragOperation(_ sender: NSDraggingInfo) -> Bool
     {
         guard let url = sender.url else { return false }
-        return amigaProxy?.loadBootRom(url) ?? false
+        myController?.bootRomURL = url
+        return amigaProxy?.loadBootRom(fromFile: url) ?? false
     }
 }
 
@@ -86,6 +87,7 @@ class KickRomDropView : RomDropView
     override func performDragOperation(_ sender: NSDraggingInfo) -> Bool
     {
         guard let url = sender.url else { return false }
-        return amigaProxy?.loadKickRom(url) ?? false
+        myController?.kickRomURL = url
+        return amigaProxy?.loadKickRom(fromFile: url) ?? false
     }
 }
