@@ -16,6 +16,7 @@
 @class MemProxy;
 @class DMAControllerProxy;
 @class DeniseProxy;
+@class PaulaProxy;
 
 
 /* Forward declarations of C++ class wrappers.
@@ -25,6 +26,7 @@ struct AmigaWrapper;
 struct MemWrapper;
 struct DMAControllerWrapper;
 struct DeniseWrapper;
+struct PaulaWrapper;
 
 
 //
@@ -38,12 +40,14 @@ struct DeniseWrapper;
     MemProxy *mem;
     DMAControllerProxy *dma;
     DeniseProxy *denise;
+    PaulaProxy *paula;
 }
 
 @property (readonly) struct AmigaWrapper *wrapper;
 @property (readonly) MemProxy *mem;
 @property (readonly) DMAControllerProxy *dma;
 @property (readonly) DeniseProxy *denise;
+@property (readonly) PaulaProxy *paula;
 
 // Called when quitting the app
 - (void) kill;
@@ -149,5 +153,23 @@ struct DeniseWrapper;
 - (void) dump;
 - (void) initFakePictures:(void *)fake1 fake2:(void *)fake2;
 - (void *) screenBuffer;
+
+@end
+
+
+//
+// Paula Proxy
+//
+
+@interface PaulaProxy : NSObject {
+    
+    struct PaulaWrapper *wrapper;
+}
+
+- (void) dump;
+- (NSInteger) volume;
+- (NSInteger) bufferUnderflows;
+- (NSInteger) bufferOverflows;
+- (double) fillLevel;
 
 @end

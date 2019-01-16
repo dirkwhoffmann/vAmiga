@@ -46,6 +46,7 @@ extension MyController {
                 break
                 
             case "SID":
+                refreshSID()
                 break
                 
             default:

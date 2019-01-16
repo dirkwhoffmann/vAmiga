@@ -14,6 +14,7 @@
 struct MemWrapper { AmigaMemory *mem; };
 struct DMAControllerWrapper { DMAController *dmaController; };
 struct DeniseWrapper { Denise *denise; };
+struct PaulaWrapper { Paula *paula; };
 struct AmigaWrapper { Amiga *amiga; };
 
 
@@ -86,6 +87,45 @@ struct AmigaWrapper { Amiga *amiga; };
 {
     return wrapper->denise->screenBuffer();
 }
+
+@end
+
+
+//
+// Paula proxy
+//
+
+@implementation PaulaProxy
+
+- (instancetype) initWithPaula:(Paula *)paula
+{
+    if (self = [super init]) {
+        wrapper = new PaulaWrapper();
+        wrapper->paula = paula;
+    }
+    return self;
+}
+- (void) dump
+{
+    wrapper->paula->dump();
+}
+- (NSInteger) volume
+{
+    return wrapper->paula->getVolume();
+}
+- (NSInteger) bufferUnderflows
+{
+    return wrapper->paula->bufferUnderflows();
+}
+- (NSInteger) bufferOverflows
+{
+    return wrapper->paula->bufferOverflows();
+}
+- (double) fillLevel
+{
+    return wrapper->paula->fillLevel();
+}
+
 @end
 
 
@@ -99,6 +139,7 @@ struct AmigaWrapper { Amiga *amiga; };
 @synthesize mem;
 @synthesize dma;
 @synthesize denise;
+@synthesize paula;
 
 - (instancetype) init
 {
@@ -115,7 +156,8 @@ struct AmigaWrapper { Amiga *amiga; };
     mem = [[MemProxy alloc] initWithMemory:&amiga->mem];
     dma = [[DMAControllerProxy alloc] initWithDMAController:&amiga->dma];
     denise = [[DeniseProxy alloc] initWithDenise:&amiga->denise];
-    
+    paula = [[PaulaProxy alloc] initWithPaula:&amiga->paula];
+
     return self;
 }
 

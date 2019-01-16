@@ -19,11 +19,11 @@ extension MyController {
         volume.intValue = 0xFF; // Int32(info.volume)
         
         // Audio buffer
-        let fillLevel = Int32(c64.sid.fillLevel() * 100)
+        let fillLevel = Int32(amiga.paula.fillLevel() * 100)
         audioBufferLevel.intValue = fillLevel
         audioBufferLevelText.stringValue = "\(fillLevel) %"
-        bufferUnderflows.intValue = 0 // Int32(amiga.paula.bufferUnderflows())
-        bufferOverflows.intValue = 0 // Int32(amiga.paula.bufferOverflows())
+        bufferUnderflows.intValue = Int32(amiga.paula.bufferUnderflows())
+        bufferOverflows.intValue = Int32(amiga.paula.bufferOverflows())
         
         waveformView.update()
     }

@@ -406,9 +406,9 @@ struct AnyC64FileWrapper;
 
 - (NSInteger) ringbufferSize;
 - (float) ringbufferData:(NSInteger)offset;
-- (double) fillLevel;
-- (NSInteger) bufferUnderflows;
-- (NSInteger) bufferOverflows;
+// - (double) fillLevel;
+// - (NSInteger) bufferUnderflows;
+// - (NSInteger) bufferOverflows;
 
 - (void) readMonoSamples:(float *)target size:(NSInteger)n;
 - (void) readStereoSamples:(float *)target1 buffer2:(float *)target2 size:(NSInteger)n;

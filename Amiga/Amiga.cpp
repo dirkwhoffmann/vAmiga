@@ -75,6 +75,7 @@ Amiga::Amiga()
         &mem,
         &dma,
         &denise,
+        &paula,
         NULL };
     
     registerSubcomponents(subcomponents, sizeof(subcomponents));

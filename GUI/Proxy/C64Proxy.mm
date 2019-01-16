@@ -636,6 +636,7 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 {
     return wrapper->sid->ringbufferData(offset);
 }
+/*
 - (double) fillLevel
 {
     return wrapper->sid->fillLevel();
@@ -648,6 +649,7 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 {
     return wrapper->sid->bufferOverflows;
 }
+*/
 - (void) readMonoSamples:(float *)target size:(NSInteger)n
 {
     wrapper->sid->readMonoSamples(target, n);

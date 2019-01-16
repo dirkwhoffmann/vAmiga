@@ -23,6 +23,7 @@
 #include "AmigaMemory.h"
 #include "DMAController.h"
 #include "Denise.h"
+#include "Paula.h"
 
 
 /* A complete virtual Amiga
@@ -62,9 +63,12 @@ public:
     // The DMA controller (part of Agnus)
     DMAController dma;
 
-    // Denise (custom chip)
+    // Denise (Video)
     Denise denise;
-    
+
+    // Paula (Interrupts, Audio)
+    Paula paula;
+
     
     //
     // Emulator thread
