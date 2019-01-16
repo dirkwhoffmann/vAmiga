@@ -131,7 +131,6 @@ struct DeniseWrapper;
 }
 
 - (void) dump;
-- (void) fakeSomething;
 
 @end
 

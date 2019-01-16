@@ -56,10 +56,7 @@ struct AmigaWrapper { Amiga *amiga; };
 {
     wrapper->dmaController->dump();
 }
-- (void) fakeSomething
-{
-    wrapper->dmaController->fakeSomething();
-}
+
 @end
 
 
@@ -84,10 +81,6 @@ struct AmigaWrapper { Amiga *amiga; };
 - (void) initFakePictures:(void *)fake1 fake2:(void *)fake2
 {
     wrapper->denise->initFakePictures((int *)fake1, (int *)fake2);
-}
-- (void) fakeFrame
-{
-    wrapper->denise->fakeFrame();
 }
 - (void *) screenBuffer
 {

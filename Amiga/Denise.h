@@ -21,6 +21,9 @@ class Denise : public HardwareComponent {
     
 public:
     
+    // Denise has been executed up to this clock cycle.
+    uint64_t clock = 0;
+    
     // Number of PAL rasterlines
     // static const long RASTERLINES = 625;
 
@@ -117,6 +120,7 @@ public:
     }
     
     // Fake some video output
-    void fakeFrame();
+    void executeUntil(uint64_t targetClock); 
+    void endOfFrame();
 };
 #endif

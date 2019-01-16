@@ -22,6 +22,7 @@ Denise::~Denise()
 void
 Denise::_powerOn()
 {
+    clock = 0;
     frame = 0;
     frameBuffer = longFrame;
     pixelBuffer = frameBuffer;
@@ -48,10 +49,24 @@ Denise::_dump()
 }
 
 void
-Denise::fakeFrame()
+Denise::executeUntil(uint64_t targetClock)
 {
-    frame++;
+    clock = targetClock;
+    uint64_t cyclesPerFrame = 28 * 1000000 / 50;
+    uint64_t targetFrame = clock / cyclesPerFrame;
     
+    if (frame != targetFrame) {
+        
+        // Next frame has been reached
+        frame = targetFrame;
+        endOfFrame();
+    }
+}
+
+
+void
+Denise::endOfFrame()
+{
     // Switch the active frame buffer
     frameBuffer = (frameBuffer == longFrame) ? shortFrame : longFrame;
     pixelBuffer = frameBuffer;

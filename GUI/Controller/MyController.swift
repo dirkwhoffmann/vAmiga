@@ -859,7 +859,7 @@ extension MyController {
             targetSelf in targetSelf.alwaysWarpAction(sender)
         }
     
-        c64.setAlwaysWarp(!c64.alwaysWarp())
+        amiga.setAlwaysWarp(!amiga.alwaysWarp())
         refresh()
     }
     

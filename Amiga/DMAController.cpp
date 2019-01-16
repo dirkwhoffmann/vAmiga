@@ -22,8 +22,9 @@ DMAController::~DMAController()
 void
 DMAController::_powerOn()
 {
-    
+    clock = 0;
 }
+
 void
 DMAController::_powerOff()
 {
@@ -46,16 +47,7 @@ DMAController::_dump()
 }
 
 void
-DMAController::fakeSomething()
+DMAController::executeUntil(uint64_t targetClock)
 {
-    xCounter++;
-    if (xCounter > Denise::HPIXELS) {
-        xCounter = 0;
-        yCounter++;
-        
-        if (yCounter > Denise::VPIXELS) {
-            yCounter = 0;
-            amiga->denise.fakeFrame();
-        }
-    }
+    clock = targetClock; 
 }

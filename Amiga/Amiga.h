@@ -51,6 +51,10 @@ public:
     // Hardware components
     //
     
+    /* The Amiga's master clock
+     * This clock runs at 28 MHz and is used to derive all other clock signals.
+     */
+    uint64_t masterClock = 0; 
     
     // The Amiga's virtual memory
     AmigaMemory mem;
@@ -97,13 +101,32 @@ public:
      */
     pthread_t p = NULL;
     
+    
+    //
+    // Emulation speed
+    //
+    
     /* System timer information
      * Used to match the emulation speed with the speed of a real Amiga.
      */
     mach_timebase_info_data_t tb;
     
+    /* Inside restartTimer(), the current time and the master clock cylce
+     * are recorded in these variables. They are used in sychronizeTiming()
+     * to determine how long the thread has to sleep.
+     */
+    uint64_t clockBase = 0;
+    uint64_t timeBase = 0;
+    
+    /* Inside sychronizeTiming(), the current time and master clock cycle
+     * are stored in these variables. They are used in combination with
+     * clockBase and timeBase to determine how long the thread has to sleep.
+     */
+    // 
+     
     /* Wake-up time of the synchronization timer in nanoseconds.
      * This value is recomputed each time the emulator thread is put to sleep.
+     * DEPRECATED
      */
     uint64_t nanoTargetTime = 0;
     
@@ -421,9 +444,12 @@ private:
     
     // Converts kernel time to nanoseconds.
     uint64_t abs_to_nanos(uint64_t abs) { return abs * tb.numer / tb.denom; }
-    
+
     // Converts nanoseconds to kernel time.
     uint64_t nanos_to_abs(uint64_t nanos) { return nanos * tb.denom / tb.numer; }
+
+    // Returns the current time in nanoseconds.
+    uint64_t time_in_nanos() { return abs_to_nanos(mach_absolute_time()); }
 
     /* Returns the delay between two frames in nanoseconds.
      * As long as we only emulate PAL machines, the frame rate is 50 Hz

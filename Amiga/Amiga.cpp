@@ -186,7 +186,8 @@ Amiga::_powerOn()
 {
     msg("Powering on\n");
     
-    // Initialize internal state
+    // Reset the master clock
+    masterClock = 0;
     
     // Start the emulator
     run();
@@ -353,15 +354,60 @@ Amiga::getWarp()
 void
 Amiga::restartTimer()
 {
+    timeBase = time_in_nanos();
+    clockBase = masterClock;
+    
     uint64_t kernelNow = mach_absolute_time();
     uint64_t nanoNow = abs_to_nanos(kernelNow);
     
+    // DEPRECATED
     nanoTargetTime = nanoNow + frameDelay();
 }
 
 void
 Amiga::synchronizeTiming()
 {
+    uint64_t now         = time_in_nanos();
+    uint64_t clockDelta  = masterClock - clockBase;
+    uint64_t elapsedTime = (clockDelta * 1000) / 28 /* 28 MHz master */;
+    uint64_t targetTime  = timeBase + elapsedTime;
+    
+    /*
+    debug("now         = %lld\n", now);
+    debug("clockDelta  = %lld\n", clockDelta);
+    debug("elapsedTime = %lld\n", elapsedTime);
+    debug("targetTime  = %lld\n", targetTime);
+    debug("\n");
+    */
+    
+    // Check if we're running too slow ...
+    if (now > targetTime) {
+        
+        // Check if we're completely out of sync ...
+        if (now - targetTime > 200000000) {
+            
+            warn("The emulator is way too slow (%lld).\n", now - targetTime);
+            restartTimer();
+            return;
+        }
+    }
+    
+    // Check if we're running too fast ...
+    if (now < targetTime) {
+        
+        // Check if we're completely out of sync ...
+        if (targetTime - now > 200000000) {
+            
+            warn("The emulator is way too fast (%lld).\n", targetTime - now);
+            restartTimer();
+            return;
+        }
+    
+        // Good night. See you soon...
+        mach_wait_until(targetTime);
+    }
+    
+#if 0
     const uint64_t earlyWakeup = 1500000; /* 1.5 milliseconds */
     
     // Get current time in nano seconds
@@ -395,6 +441,7 @@ Amiga::synchronizeTiming()
         debug(2, "Jitter exceeds limit (%lld). Restarting timer.\n", jitter);
         restartTimer();
     }
+#endif
 }
 
 
@@ -525,6 +572,14 @@ Amiga::runLoop()
     // THE FOLLOWING CODE IS FOR VISUAL PROTOTYPING ONLY
     while (!stop) {
         
-        dma.fakeSomething();
+        // Emulate the CPU (fake)
+        uint64_t cpuCycles = 16;  // Fake CPU consumes 16 cycles
+        
+        // Advance the master clock
+        masterClock += cpuCycles * 4;
+        
+        dma.executeUntil(masterClock);
+        denise.executeUntil(masterClock);
+        
     }
 }

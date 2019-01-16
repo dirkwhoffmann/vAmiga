@@ -20,6 +20,10 @@ class DMAController : public HardwareComponent {
     
 public:
     
+    // The DMA controller has been executed up to this clock cycle.
+    uint64_t clock = 0;
+    
+    
     // FAKE COUNTERS FOR tHE VISUAL PROTOTYPE
     unsigned xCounter = 0;
     unsigned yCounter = 0;
@@ -51,8 +55,7 @@ private:
     
 public:
     
-    void fakeSomething();
-    
+    void executeUntil(uint64_t targetClock);
 };
 
 
