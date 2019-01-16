@@ -35,19 +35,19 @@ extension MyController {
             switch id {
             case "CPU":
                 refreshCPU()
-                break
+                
             case "MEM":
                 memTableView.refresh()
-                break
+                
             case "CIA":
-                refreshCIA()
                 break
+                
             case "VIC":
-                refreshVIC()
                 break
+                
             case "SID":
-                refreshSID()
                 break
+                
             default:
                 break
             }
@@ -75,11 +75,10 @@ extension MyController {
 
         // Assign formatters
         assignFormatter(fmt3,
-                        [vicDx, vicDy])
+                        [])
         
         assignFormatter(fmt4,
-                        [attackRate, decayRate, sustainRate, releaseRate,
-                         filterResonance, volume])
+                        [volume])
         
         assignFormatter(fmt8,
                         [sp, a, x, y])
@@ -90,21 +89,21 @@ extension MyController {
                          alarmHours, alarmMinutes, alarmSeconds, alarmTenth,
                          ciaImr, ciaIcr])
         assignFormatter(fmt8,
-                        [vicCycle, spriteY, spritePtr, potX, potY])
+                        [])
     
         assignFormatter(fmt9,
-                        [vicRasterline, vicIrqRasterline, spriteX, vicXCounter])
+                        [])
 
         assignFormatter(fmt11,
-                        [filterCutoff])
+                        [])
 
         assignFormatter(fmt12,
-                        [pulseWidth])
+                        [])
 
         assignFormatter(fmt16,
                         [pc, breakAt,
-                         ciaTimerA, ciaLatchA, ciaTimerB, ciaLatchB,
-                         frequency])
+                         ciaTimerA, ciaLatchA, ciaTimerB, ciaLatchB
+                        ])
         
         let columnFormatters = [
             "addr" : fmt16,
@@ -136,14 +135,10 @@ extension MyController {
             // CIA panel
             ciaPRA, ciaPRB, ciaDDRA, ciaDDRB, ciaLatchA, ciaLatchB,
             
-            // SID panel
-            frequency, pulseWidth, attackRate, decayRate, sustainRate, releaseRate,
-            filterCutoff, filterResonance,
+            // Audio panel
             volume,
             
-            // VIC panel
-            vicDx, vicDy, vicIrqRasterline,
-            spriteX, spriteY, spritePtr
+            // Video panel
         ]
   
         for control in controls {

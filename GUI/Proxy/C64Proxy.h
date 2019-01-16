@@ -323,9 +323,9 @@ struct AnyC64FileWrapper;
 - (void) setEmulateGrayDotBug:(BOOL)value;
 - (BOOL) isPAL;
 
-- (void *) screenBuffer;
-- (NSColor *) color:(NSInteger)nr;
-- (UInt32) rgbaColor:(NSInteger)nr palette:(VICPalette)palette;
+// - (void *) screenBuffer;
+// - (NSColor *) color:(NSInteger)nr;
+// - (UInt32) rgbaColor:(NSInteger)nr palette:(VICPalette)palette;
 - (double)brightness;
 - (void)setBrightness:(double)value;
 - (double)contrast;

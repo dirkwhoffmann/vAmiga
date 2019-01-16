@@ -224,75 +224,9 @@ class MyController : NSWindowController, MessageReceiver {
     @IBOutlet weak var ciaImrBinary: NSTextField!
     @IBOutlet weak var ciaIntLineLow: NSButton!
     
-    // Debug panel (VIC)
-    @IBOutlet weak var vicRasterline: NSTextField!
-    @IBOutlet weak var vicCycle: NSTextField!
-    @IBOutlet weak var vicXCounter: NSTextField!
-    @IBOutlet weak var vicBadLine: NSButton!
-    @IBOutlet weak var vicDisplayMode: NSPopUpButton!
-    @IBOutlet weak var vicBorderColor: NSButton!
-    @IBOutlet weak var vicBackgroundColor0: NSButton!
-    @IBOutlet weak var vicBackgroundColor1: NSButton!
-    @IBOutlet weak var vicBackgroundColor2: NSButton!
-    @IBOutlet weak var vicBackgroundColor3: NSButton!
-    @IBOutlet weak var vicScreenGeometry: NSPopUpButton!
-    @IBOutlet weak var vicDx: NSTextField!
-    @IBOutlet weak var vicDXStepper: NSStepper!
-    @IBOutlet weak var vicDy: NSTextField!
-    @IBOutlet weak var vicDYStepper: NSStepper!
-    @IBOutlet weak var vicMemoryBankAddr: NSPopUpButton!
-    @IBOutlet weak var vicScreenMemoryAddr: NSPopUpButton!
-    @IBOutlet weak var vicCharacterMemoryAddr: NSPopUpButton!
-    @IBOutlet weak var vicRasterIrqEnabled: NSButton!
-    @IBOutlet weak var vicIrqRasterline: NSTextField!
-    @IBOutlet weak var vicIrqLine: NSButton!
-    
-    @IBOutlet weak var spriteSelector: NSSegmentedControl!
-    @IBOutlet weak var spriteEnabled: NSButton!
-    @IBOutlet weak var spriteX: NSTextField!
-    @IBOutlet weak var spriteXStepper: NSStepper!
-    @IBOutlet weak var spriteY: NSTextField!
-    @IBOutlet weak var spriteYStepper: NSStepper!
-    @IBOutlet weak var spritePtr: NSTextField!
-    @IBOutlet weak var spritePtrStepper: NSStepper!
-    @IBOutlet weak var spriteIsMulticolor: NSPopUpButton!
-    @IBOutlet weak var spriteColor: NSButton!
-    @IBOutlet weak var spriteExtraColor1: NSButton!
-    @IBOutlet weak var spriteExtraColor2: NSButton!
-    @IBOutlet weak var spriteExpandX: NSButton!
-    @IBOutlet weak var spriteExpandY: NSButton!
-    @IBOutlet weak var spritePriority: NSPopUpButton!
-    @IBOutlet weak var spriteCollidesWithSprite: NSButton!
-    @IBOutlet weak var spriteSpriteIrqEnabled: NSButton!
-    @IBOutlet weak var spriteCollidesWithBackground: NSButton!
-    @IBOutlet weak var spriteBackgroundIrqEnabled: NSButton!
-    
     // Debugger (SID panel)
     @IBOutlet weak var volume: NSTextField!
-    @IBOutlet weak var potX: NSTextField!
-    @IBOutlet weak var potY: NSTextField!
-    
-    @IBOutlet weak var voiceSelector: NSSegmentedControl!
-    @IBOutlet weak var waveform: NSPopUpButton!
-    @IBOutlet weak var frequency: NSTextField!
-    @IBOutlet weak var pulseWidth: NSTextField!
-    @IBOutlet weak var pulseWidthText: NSTextField!
-    @IBOutlet weak var attackRate: NSTextField!
-    @IBOutlet weak var decayRate: NSTextField!
-    @IBOutlet weak var sustainRate: NSTextField!
-    @IBOutlet weak var releaseRate: NSTextField!
-    @IBOutlet weak var gateBit: NSButton!
-    @IBOutlet weak var testBit: NSButton!
-    @IBOutlet weak var syncBit: NSButton!
-    @IBOutlet weak var ringBit: NSButton!
-    
-    @IBOutlet weak var filterType: NSPopUpButton!
-    @IBOutlet weak var filterCutoff: NSTextField!
-    @IBOutlet weak var filterResonance: NSTextField!
-    @IBOutlet weak var filter1: NSButton!
-    @IBOutlet weak var filter2: NSButton!
-    @IBOutlet weak var filter3: NSButton!
-    
+ 
     @IBOutlet weak var waveformView: WaveformView!
     @IBOutlet weak var audioBufferLevel: NSLevelIndicator!
     @IBOutlet weak var audioBufferLevelText: NSTextField!

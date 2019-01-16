@@ -372,6 +372,7 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 {
     return wrapper->vic->getSpriteInfo((unsigned)sprite);
 }
+/*
 - (void *) screenBuffer
 {
     return wrapper->vic->screenBuffer();
@@ -395,6 +396,7 @@ struct AnyC64FileWrapper { AnyC64File *file; };
     assert (0 <= nr && nr < 16);
     return wrapper->vic->getColor((unsigned)nr, palette);
 }
+*/
 - (double)brightness
 {
     return wrapper->vic->getBrightness();
