@@ -21,7 +21,7 @@ class Speedometer {
     
     /// Current emulation speed in MHz
     private var _mhz = 0.0
-    var mhz: Double { get { return _mhz.truncate(digits: 1); } }
+    var mhz: Double { get { return _mhz.truncate(digits: 2); } }
     
     /// Current GPU performance in frames per second
     private var _fps = 0.0

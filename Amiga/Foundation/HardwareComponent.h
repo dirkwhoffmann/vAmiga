@@ -97,21 +97,27 @@ public:
     // Returns true if the component is powered off
     bool isPoweredOff() { return !power; }
 
-    /* Emulates a power on event on the virtual Amiga.
-     * By default, each component powers on its sub components.
+    /* Emulates a power on event on the virtual Amiga by
+     *   1. invoking _powerOn() on this component,
+     *   2. invoking powerOn() on all sub components,
+     *   3. invoking _postPowerOn() on this component.
      */
     void powerOn();
 
     // Defines the subclass specific behaviour of powerOn().
-    virtual void _powerOn() { _reset(); }
+    virtual void _powerOn() { }
+    virtual void _postPowerOn() { }
     
-    /* Emulates a power off event on the virtual Amiga.
-     * By default, each component powers off its sub components.
+    /* Emulates a power on event on the virtual Amiga by
+     *   1. invoking _powerOff() on this component,
+     *   2. invoking powerOff() on all sub components,
+     *   3. invoking _postPowerOff() on this component.
      */
     void powerOff();
-
+    
     // Defines the subclass specific behaviour of powerOff().
-    virtual void _powerOff() { };
+    virtual void _powerOff() { }
+    virtual void _postPowerOff() { }
     
     // Calls powerOn() or powerOff(), depending on the current state.
     void powerOnOrOff() { isPoweredOn() ? powerOff() : powerOn(); }

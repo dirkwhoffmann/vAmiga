@@ -23,6 +23,4 @@ static const double frameRate = 50.0;
 // Number of master clock cycles per frame
 static const double masterCyclesPerFrame = (masterClockFrequency * 1000000.0) / frameRate;
 
-
-
 #endif 

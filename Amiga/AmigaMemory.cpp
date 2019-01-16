@@ -76,7 +76,7 @@ AmigaMemory::allocateBootRom()
 bool
 AmigaMemory::allocateKickRom()
 {
-    return alloc(KB(256), bootRom, bootRomSize);
+    return alloc(KB(256), kickRom, kickRomSize);
 }
 
 bool
@@ -110,14 +110,17 @@ AmigaMemory::dealloc()
 bool
 AmigaMemory::alloc(size_t size, uint8_t *&ptrref, size_t &sizeref)
 {
+    debug("alloc: %X %p %X\n", size, ptrref, sizeref);
+    
     // Do some consistency checking
     assert((ptrref == NULL) == (sizeref == 0));
+    assert(size != 0);
     
     // Delete previously allocated memory
     if (ptrref) delete[] ptrref;
     
     // Try to allocate memory
-    if (!(bootRom = new (std::nothrow) uint8_t[KB(64)])) {
+    if (!(ptrref = new (std::nothrow) uint8_t[KB(size)])) {
         warn("Cannot allocate %X bytes of memory\n", size);
         return false;
     }
@@ -129,6 +132,8 @@ AmigaMemory::alloc(size_t size, uint8_t *&ptrref, size_t &sizeref)
 void
 AmigaMemory::dealloc(uint8_t *&ptrref, size_t &sizeref)
 {
+    debug("dealloc: %p %X\n", ptrref, sizeref);
+    
     // Do some consistency checking
     assert((ptrref == NULL) == (sizeref == 0));
     

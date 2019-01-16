@@ -233,6 +233,7 @@ private:
      *                    | Off     | Running | _powerOn(), create thread
      */
     void _powerOn() override;
+    void _postPowerOn() override;
 
     /* Destroys the emulator thread.
      * In detail, this function affects the emulator state as follows:
@@ -244,7 +245,8 @@ private:
      *                    | Off     | Off     | none
      */
     void _powerOff() override;
-    
+    void _postPowerOff() override;
+
     void _reset() override;
     void _ping() override;
     void _dump() override;

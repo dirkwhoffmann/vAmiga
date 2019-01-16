@@ -501,8 +501,7 @@ extension MyController {
             speedometer.updateWith(cycle: amiga.masterClock() / 4, frame: metalScreen.frames)
             let mhz = speedometer.mhz
             let fps = speedometer.fps
-            clockSpeed.stringValue = String(format:"%.1f MHz %.0f fps", mhz, fps)
-            track("\(mhz)")
+            clockSpeed.stringValue = String(format:"%.2f MHz %.0f fps", mhz, fps)
             clockSpeedBar.doubleValue = 10 * mhz
         
             // Let the cursor disappear in fullscreen mode

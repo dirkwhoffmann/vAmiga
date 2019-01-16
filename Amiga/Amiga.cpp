@@ -184,28 +184,39 @@ Amiga::configureDrive(unsigned driveNr, DriveType type)
 void
 Amiga::_powerOn()
 {
-    msg("Powering on\n");
+    msg("Powering on ...\n");
     
     // Reset the master clock
     masterClock = 0;
-    
-    // Start the emulator
+}
+
+void
+Amiga::_postPowerOn()
+{
+    // Start the emulator AFTER the sub-components get powered on.
     run();
     
-    // Update GUI elements
+    // Notify the GUI
     ping();
+    putMessage(MSG_POWER_ON);
 }
+
 
 void
 Amiga::_powerOff()
 {
-    msg("Powering off\n");
+    msg("Powering off ...\n");
     
-    // Stop the emulator
+    // Stop the emulator BEFORE the sub-components get powered off.
     pause();
-    
-    // Update GUI elements
+}
+
+void
+Amiga::_postPowerOff()
+{
+    // Notify the GUI
     ping();
+    putMessage(warp ? MSG_WARP_ON : MSG_WARP_OFF);
 }
 
 void
@@ -303,7 +314,7 @@ Amiga::pause()
     if (isRunning()) {
         
         // Cancel the emulator thread
-        pthread_cancel(p);
+        stop = true;
         
         // Wait until the thread has terminated
         pthread_join(p, NULL);

@@ -96,6 +96,8 @@ extension PreferencesController {
     
     @IBAction func hwFactorySettingsAction(_ sender: NSPopUpButton!) {
         
+        track("\(sender.selectedTag())")
+        
         switch sender.selectedTag() {
             
         case A500.rawValue:
@@ -143,5 +145,7 @@ extension PreferencesController {
         default:
             track("Cannot restore factory defaults (unknown Amiga model).")
         }
+        
+        refresh()
     }
 }

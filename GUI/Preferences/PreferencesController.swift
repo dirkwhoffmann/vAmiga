@@ -253,9 +253,10 @@ class PreferencesController : UserDialogController {
         
         track()
         
-        hideSheet()
         myController?.loadUserDefaults()
+        refresh()
         
+        hideSheet()
     }
     
     @IBAction override func okAction(_ sender: Any!) {
