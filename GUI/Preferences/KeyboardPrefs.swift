@@ -19,19 +19,10 @@ class KeyViewItem: NSCollectionViewItem {
 }
 
 extension PreferencesController {
-    
-    /*
-    func awakeKeymapPrefsFromNib() {
-     
-        updateImages()
-    }
-    */
-    
+        
     func refreshKeyboardTab() {
     
-        // guard let controller = myController else { return }
         guard let kbController = myController?.keyboardcontroller else { return }
-        guard let c64 = proxy else { return }
         
         keyMappingPopup.selectItem(withTag: kbController.mapKeysByPosition ? 1 : 0)
     
@@ -48,8 +39,6 @@ extension PreferencesController {
             info.stringValue = "In symbolic assignment mode, the Mac keys are assigned to C64 keys according to the symbols they represent."
             keyMatrixScrollView.isHidden = true
         }
-        
-        keyOkButton.title = c64.isRunnable() ? "OK" : "Quit"
     }
     
     func updateImages() {

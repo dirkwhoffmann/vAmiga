@@ -81,8 +81,6 @@ extension PreferencesController {
         vidEyeXSlider.floatValue = metal.eyeX()
         vidEyeYSlider.floatValue = metal.eyeY()
         vidEyeZSlider.floatValue = metal.eyeZ()
-        
-        vidOkButton.title = c64.isRunnable() ? "OK" : "Quit"
     }
     
 

@@ -101,9 +101,7 @@ class PreferencesController : UserDialogController {
     @IBOutlet weak var vidEyeXSlider: NSSlider!
     @IBOutlet weak var vidEyeYSlider: NSSlider!
     @IBOutlet weak var vidEyeZSlider: NSSlider!
-    
-    @IBOutlet weak var vidOkButton: NSButton!
-    @IBOutlet weak var vidCancelButton: NSButton!
+
     
     //
     // Emulator preferences
@@ -127,28 +125,6 @@ class PreferencesController : UserDialogController {
     @IBOutlet weak var emuAutoSnapshots: NSButton!
     @IBOutlet weak var emuSnapshotInterval: NSTextField!
     
-    @IBOutlet weak var emuOkButton: NSButton!
-    @IBOutlet weak var emuCancelButton: NSButton!
-    
-    // Media files
-    @IBOutlet weak var emuD64Popup: NSPopUpButton!
-    @IBOutlet weak var emuPrgPopup: NSPopUpButton!
-    @IBOutlet weak var emuT64Popup: NSPopUpButton!
-    @IBOutlet weak var emuTapPopup: NSPopUpButton!
-    @IBOutlet weak var emuCrtPopup: NSPopUpButton!
-
-    @IBOutlet weak var emuD64AutoTypeButton: NSButton!
-    @IBOutlet weak var emuPrgAutoTypeButton: NSButton!
-    @IBOutlet weak var emuT64AutoTypeButton: NSButton!
-    @IBOutlet weak var emuTapAutoTypeButton: NSButton!
-    @IBOutlet weak var emuCrtAutoTypeButton: NSButton!
-
-    @IBOutlet weak var emuD64AutoTypeText: NSTextField!
-    @IBOutlet weak var emuPrgAutoTypeText: NSTextField!
-    @IBOutlet weak var emuT64AutoTypeText: NSTextField!
-    @IBOutlet weak var emuTapAutoTypeText: NSTextField!
-    @IBOutlet weak var emuCrtAutoTypeText: NSTextField!
-
 
     //
     // Devices preferences
@@ -194,8 +170,6 @@ class PreferencesController : UserDialogController {
     @IBOutlet weak var devMouseModel: NSPopUpButton!
     @IBOutlet weak var devMouseInfo: NSTextField!
 
-    @IBOutlet weak var devOkButton: NSButton!
-    @IBOutlet weak var devCancelButton: NSButton!
     
     //
     // Keymap preferences
@@ -211,10 +185,7 @@ class PreferencesController : UserDialogController {
     
     // Selected C64 key
     var selectedKey: C64Key? = nil
-    
-    @IBOutlet weak var keyOkButton: NSButton!
-    @IBOutlet weak var keyCancelButton: NSButton!
-    
+        
     override func awakeFromNib() {
     
         awakeVideoPrefsFromNib()
@@ -297,11 +268,6 @@ extension PreferencesController : NSTextFieldDelegate {
                 if let _ = formatter?.number(from: view.stringValue) {
                     emuSnapshotIntervalAction(view)
                 }
-                
-            case emuD64AutoTypeText, emuPrgAutoTypeText, emuT64AutoTypeText,
-                 emuTapAutoTypeText, emuCrtAutoTypeText:
-                
-                emuAutoTypeTextAction(view)
                 
             case devAutofireBullets:
                 

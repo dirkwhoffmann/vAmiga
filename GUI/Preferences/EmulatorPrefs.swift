@@ -34,27 +34,6 @@ extension PreferencesController {
         emuAutoSnapshots.state = c64.takeAutoSnapshots() ? .on : .off
         emuSnapshotInterval.integerValue = c64.snapshotInterval()
         emuSnapshotInterval.isEnabled = c64.takeAutoSnapshots()
-        
-        // Media files
-        func refresh(_ s: String, _ p: NSPopUpButton, _ b: NSButton, _ t: NSTextField) {
-            
-            let autoAction = controller.autoMountAction[s]?.rawValue ?? 0
-            let autoType = controller.autoType[s] ?? false
-            let autoTypeText = controller.autoTypeText[s] ?? ""
-            p.selectItem(withTag: autoAction)
-            b.isEnabled = autoAction != 0
-            b.state = autoType ? .on : .off
-            t.isEnabled = autoAction != 0 && autoType
-            t.stringValue = autoTypeText
-        }
-        refresh("D64", emuD64Popup, emuD64AutoTypeButton, emuD64AutoTypeText)
-        refresh("PRG", emuPrgPopup, emuPrgAutoTypeButton, emuPrgAutoTypeText)
-        refresh("T64", emuT64Popup, emuT64AutoTypeButton, emuT64AutoTypeText)
-        refresh("TAP", emuTapPopup, emuTapAutoTypeButton, emuTapAutoTypeText)
-        refresh("CRT", emuCrtPopup, emuCrtAutoTypeButton, emuCrtAutoTypeText)
-
-        // OK button
-        emuOkButton.title = controller.c64.isRunnable() ? "OK" : "Quit"
     }
 
     //
@@ -145,46 +124,6 @@ extension PreferencesController {
         
         myController?.resetEmulatorUserDefaults()
         refresh()
-    }
-    
-    //
-    // Action methods (Media files)
-    //
-    
-    private func mediaFileType(_ tag: Int) -> String? {
-        switch(tag) {
-        case 0: return "D64"
-        case 1: return "PRG"
-        case 2: return "T64"
-        case 3: return "TAP"
-        case 4: return "CRT"
-        default: return nil
-        }
-    }
-    
-    @IBAction func emuAutoMountAction(_ sender: NSPopUpButton!) {
-        
-        if let fileType = mediaFileType(sender.tag) {
-            let action = AutoMountAction(rawValue: sender.selectedTag())
-            myController?.autoMountAction[fileType] = action
-            refresh()
-        }
-    }
-    
-    @IBAction func emuAutoTypeAction(_ sender: NSButton!) {
-        
-        if let fileType = mediaFileType(sender.tag) {
-            myController?.autoType[fileType] = (sender.intValue == 0) ? false : true
-            refresh()
-        }
-    }
-
-    @IBAction func emuAutoTypeTextAction(_ sender: NSTextField!) {
-        
-        if let fileType = mediaFileType(sender.tag) {
-            myController?.autoTypeText[fileType] = sender.stringValue
-            refresh()
-        }
     }
 }
 

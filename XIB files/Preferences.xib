@@ -12,7 +12,6 @@
                 <outlet property="devAutofireCease" destination="mZY-PC-1oR" id="gKU-Sa-Yp9"/>
                 <outlet property="devAutofireCeaseText" destination="9kn-FU-lhA" id="1sf-l6-jMo"/>
                 <outlet property="devAutofireFrequency" destination="gmu-7q-NR3" id="g10-0z-vv6"/>
-                <outlet property="devCancelButton" destination="fJC-gp-0p5" id="3yf-KA-PUZ"/>
                 <outlet property="devDisconnectKeys" destination="THf-5q-IOS" id="Dj3-Ye-q1n"/>
                 <outlet property="devDown1" destination="vbb-wX-rjK" id="Jfr-yc-Gr7"/>
                 <outlet property="devDown1button" destination="3UF-Gs-t5n" id="dye-qx-GuS"/>
@@ -28,7 +27,6 @@
                 <outlet property="devLeft2button" destination="xQv-LS-FDA" id="bBQ-ZL-VUd"/>
                 <outlet property="devMouseInfo" destination="1eF-SX-7l0" id="K25-cx-sNa"/>
                 <outlet property="devMouseModel" destination="TBT-Uq-cep" id="BzN-V4-sCi"/>
-                <outlet property="devOkButton" destination="Qq8-DB-XvV" id="pjm-hI-T0A"/>
                 <outlet property="devRight1" destination="zAr-yb-dkS" id="dKb-4n-nv8"/>
                 <outlet property="devRight1button" destination="7NB-Mh-hbJ" id="TK3-Om-g7C"/>
                 <outlet property="devRight2" destination="4HA-Bt-zso" id="gne-YB-0Ry"/>
@@ -76,11 +74,9 @@
                 <outlet property="hwRealTimeClock" destination="T70-4F-bOm" id="eAd-aV-2Nk"/>
                 <outlet property="hwSlowRamPopup" destination="W0y-DM-pGD" id="bNq-71-Or8"/>
                 <outlet property="info" destination="cf0-iO-MNj" id="62M-ws-4Ax"/>
-                <outlet property="keyCancelButton" destination="KU9-uV-hRQ" id="1kK-9n-e1e"/>
                 <outlet property="keyMappingPopup" destination="GNx-5i-6jP" id="hCM-qV-No8"/>
                 <outlet property="keyMatrixCollectionView" destination="oJh-Cc-rn9" id="mw2-1T-eJS"/>
                 <outlet property="keyMatrixScrollView" destination="I3H-16-RH1" id="NNZ-ae-iqB"/>
-                <outlet property="keyOkButton" destination="qf2-f2-Cbn" id="rsO-Ta-9iX"/>
                 <outlet property="prefTabView" destination="baz-eW-A74" id="fgy-dU-alU"/>
                 <outlet property="romBootDeleteButton" destination="nSa-0I-2sF" id="jwA-S1-Zi6"/>
                 <outlet property="romBootDescription" destination="Val-uF-mCs" id="odS-8n-7l2"/>
@@ -112,7 +108,6 @@
                 <outlet property="vidBlurPopUp" destination="R9Y-ab-IaP" id="e3b-R4-3Y8"/>
                 <outlet property="vidBlurRadiusSlider" destination="64h-x0-mSk" id="hX9-pf-dqa"/>
                 <outlet property="vidBrightnessSlider" destination="L7R-ka-rgx" id="LLq-HJ-wrt"/>
-                <outlet property="vidCancelButton" destination="xIF-7e-LDa" id="yhR-sr-F2I"/>
                 <outlet property="vidContrastSlider" destination="Gix-cX-ARc" id="QGy-se-qE6"/>
                 <outlet property="vidDotMaskBrightnessSlider" destination="7xe-s2-Fir" id="bXd-iZ-Mz4"/>
                 <outlet property="vidDotMaskPopUp" destination="Nrz-LF-GtK" id="KdW-or-4ar"/>
@@ -122,7 +117,6 @@
                 <outlet property="vidMisalignmentPopUp" destination="f3c-4e-uVF" id="DcI-ia-qNS"/>
                 <outlet property="vidMisalignmentXSlider" destination="F6O-Zb-pow" id="oFX-xP-n95"/>
                 <outlet property="vidMisalignmentYSlider" destination="KkN-hN-xfa" id="7Dv-3R-1xx"/>
-                <outlet property="vidOkButton" destination="QaY-Vj-eY6" id="KSd-Ma-zdy"/>
                 <outlet property="vidPalettePopup" destination="kQF-8P-rsa" id="vjk-in-uM2"/>
                 <outlet property="vidSaturationSlider" destination="Kth-Hh-Zmk" id="Kcz-Ie-bo4"/>
                 <outlet property="vidScanlineBrightnessSlider" destination="91k-67-6iN" id="Ny4-2J-Tad"/>
@@ -398,7 +392,7 @@ Gw
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Hardware" identifier="Hardware" id="vMg-zr-Ex1">
-                                <view key="view" ambiguous="YES" id="yrH-J2-nFc">
+                                <view key="view" id="yrH-J2-nFc">
                                     <rect key="frame" x="10" y="33" width="600" height="502"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -414,12 +408,12 @@ Gw
                                         <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZQk-5s-Q3i" userLabel="System">
                                             <rect key="frame" x="94" y="416" width="182" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Amiga 500" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="X5T-vd-adB" id="3A2-Za-Kyn" userLabel="System">
+                                            <popUpButtonCell key="cell" type="push" title="Amiga 500" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="X5T-vd-adB" id="3A2-Za-Kyn" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="menu"/>
                                                 <menu key="menu" id="iEf-S6-IbN">
                                                     <items>
-                                                        <menuItem title="Amiga 500" id="X5T-vd-adB"/>
+                                                        <menuItem title="Amiga 500" state="on" id="X5T-vd-adB"/>
                                                         <menuItem title="Amiga 1000" tag="1" id="PRe-f4-iSB">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
@@ -517,12 +511,12 @@ DQ
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BTz-kT-JtT">
                                             <rect key="frame" x="412" y="296" width="182" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="None" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="gVz-1D-gyU" id="BJt-dQ-yBe">
+                                            <popUpButtonCell key="cell" type="push" title="None" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="gVz-1D-gyU" id="BJt-dQ-yBe">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="menu"/>
                                                 <menu key="menu" title="OtherViews" id="NC9-aE-UnS">
                                                     <items>
-                                                        <menuItem title="None" id="gVz-1D-gyU">
+                                                        <menuItem title="None" state="on" id="gVz-1D-gyU">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                         <menuItem title="512 KB" tag="512" id="VFG-2M-Suz">
@@ -590,12 +584,12 @@ DQ
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="W0y-DM-pGD">
                                             <rect key="frame" x="412" y="325" width="182" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="None" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="Pbi-oS-Xza" id="3iV-PP-2YQ">
+                                            <popUpButtonCell key="cell" type="push" title="None" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="Pbi-oS-Xza" id="3iV-PP-2YQ">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="menu"/>
                                                 <menu key="menu" title="OtherViews" id="CGU-7h-pXP">
                                                     <items>
-                                                        <menuItem title="None" id="Pbi-oS-Xza">
+                                                        <menuItem title="None" state="on" id="Pbi-oS-Xza">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                         <menuItem title="512 KB" tag="512" id="DLF-fp-fwz">
@@ -620,12 +614,12 @@ DQ
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Htk-aA-fCu">
                                             <rect key="frame" x="94" y="325" width="182" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="256 KB" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" tag="256" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="yhv-8R-wh7" id="kOD-Qi-JqI">
+                                            <popUpButtonCell key="cell" type="push" title="256 KB" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="256" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="yhv-8R-wh7" id="kOD-Qi-JqI">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="menu"/>
                                                 <menu key="menu" title="OtherViews" id="xr9-Ut-4eK">
                                                     <items>
-                                                        <menuItem title="256 KB" tag="256" id="yhv-8R-wh7">
+                                                        <menuItem title="256 KB" state="on" tag="256" id="yhv-8R-wh7">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                         <menuItem title="512 KB" tag="512" id="hh8-LA-HGa">
@@ -641,12 +635,12 @@ DQ
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kgt-j5-t6P">
                                             <rect key="frame" x="94" y="208" width="182" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Amiga 1010" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="Bqr-Jc-yKI" id="Edx-wX-YZO">
+                                            <popUpButtonCell key="cell" type="push" title="Amiga 1010" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="Bqr-Jc-yKI" id="Edx-wX-YZO">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="menu"/>
                                                 <menu key="menu" title="OtherViews" id="p4D-Dw-JSk">
                                                     <items>
-                                                        <menuItem title="Amiga 1010" id="Bqr-Jc-yKI">
+                                                        <menuItem title="Amiga 1010" state="on" id="Bqr-Jc-yKI">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                         <menuItem title="Amiga 1010 (2 x faster)" tag="1" id="jgG-vr-Soe">
@@ -671,12 +665,12 @@ DQ
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="40w-GY-Enr">
                                             <rect key="frame" x="94" y="178" width="182" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Amiga 1010" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="S9T-RH-Pmc" id="CTA-k7-6cd">
+                                            <popUpButtonCell key="cell" type="push" title="Amiga 1010" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="S9T-RH-Pmc" id="CTA-k7-6cd">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="menu"/>
                                                 <menu key="menu" title="OtherViews" id="G5n-hQ-5HY">
                                                     <items>
-                                                        <menuItem title="Amiga 1010" id="S9T-RH-Pmc">
+                                                        <menuItem title="Amiga 1010" state="on" id="S9T-RH-Pmc">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                         <menuItem title="Amiga 1010 (2 x faster)" tag="1" id="6UP-CK-Rle">
@@ -1341,7 +1335,7 @@ Gw
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QaY-Vj-eY6">
                                             <rect key="frame" x="515" y="5" width="82" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                            <buttonCell key="cell" type="push" title="Quit" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="4YY-xE-sDr">
+                                            <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="4YY-xE-sDr">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                                 <string key="keyEquivalent" base64-UTF8="YES">
@@ -2440,7 +2434,7 @@ Gw
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qq8-DB-XvV">
                                             <rect key="frame" x="515" y="5" width="82" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                            <buttonCell key="cell" type="push" title="Quit" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="SqU-do-Xg9">
+                                            <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="SqU-do-Xg9">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                                 <string key="keyEquivalent" base64-UTF8="YES">
@@ -2479,7 +2473,7 @@ DQ
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Keyboard" identifier="Keyboard" id="Fw7-cE-DIs">
-                                <view key="view" id="vPT-yd-wGg">
+                                <view key="view" ambiguous="YES" id="vPT-yd-wGg">
                                     <rect key="frame" x="10" y="33" width="600" height="502"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -2488,7 +2482,7 @@ DQ
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" heightSizable="YES"/>
                                             <clipView key="contentView" ambiguous="YES" id="GxJ-gG-I1j">
                                                 <rect key="frame" x="1" y="1" width="456" height="336"/>
-                                                <autoresizingMask key="autoresizingMask"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <collectionView ambiguous="YES" selectable="YES" id="oJh-Cc-rn9">
                                                         <rect key="frame" x="0.0" y="0.0" width="456" height="336"/>
@@ -2533,7 +2527,7 @@ Gw
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qf2-f2-Cbn">
                                             <rect key="frame" x="515" y="5" width="82" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                            <buttonCell key="cell" type="push" title="Quit" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="7Et-Hg-Kjh">
+                                            <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="7Et-Hg-Kjh">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                                 <string key="keyEquivalent" base64-UTF8="YES">
