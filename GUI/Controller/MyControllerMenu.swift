@@ -207,7 +207,7 @@ extension MyController : NSMenuItemValidation {
     @IBAction func saveScreenshotDialog(_ sender: Any!) {
         
         // Halt emulation to freeze the current texture
-        c64.halt()
+        amiga.pause()
         
         // Create save panel
         let savePanel = NSSavePanel()
@@ -236,7 +236,7 @@ extension MyController : NSMenuItemValidation {
                     }
                 }
             }
-            self.c64.run()
+            self.amiga.run()
         })
     }
     

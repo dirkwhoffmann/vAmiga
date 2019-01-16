@@ -73,9 +73,11 @@ class MyDocument : NSDocument {
         
         // Provide Denise with some fake pictures
         let fakeImage1 = NSImage.init(named: "fake1")
-        let data = fakeImage1?.toData()
-        
-        amiga.denise.initFakePictures(data, fake2: data)
+        let data1 = fakeImage1?.toData()
+        let fakeImage2 = NSImage.init(named: "fake2")
+        let data2 = fakeImage2?.toData()
+
+        amiga.denise.initFakePictures(data1, fake2: data2)
     }
  
     override open func makeWindowControllers() {

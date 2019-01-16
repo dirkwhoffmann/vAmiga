@@ -34,6 +34,8 @@ public:
     // IS BASED ON THE TEXTURES USED IN VIRTUALC64.
     static const long HPIXELS = 428;
 
+    static const long BUFSIZE = VPIXELS * HPIXELS * 4;
+    
     // Frame counter (records the number of frames drawn since power on)
     uint64_t frame = 0;
     
@@ -56,7 +58,7 @@ public:
     /* Currently active frame buffer
      * This variable points either to longFrame or shortFrame
      */
-    int *currentScreenBuffer = longFrame;
+    int *frameBuffer = longFrame;
 
     /* Pointer to the beginning of the current rasterline
      * This pointer is used by all rendering methods to write pixels. It always
@@ -102,33 +104,19 @@ public:
      * If Denise is working on the long frame, a pointer to the short frame is
      * returned and vice versa.
      */
-    void *screenBuffer();
-    
+    void *screenBuffer() { return (frameBuffer == longFrame) ? shortFrame : longFrame; }
+   
     // Fills the fake pictures with some data
-    void initFakePictures(const int *fake1, const int *fake2) {
+    void initFakePictures(const void *fake1, const void *fake2) {
+        
         assert(fake1 != NULL);
         assert(fake2 != NULL);
-        memcpy(fakeImage1, fake1, sizeof(fakeImage1) / sizeof(int));
-        memcpy(fakeImage2, fake2, sizeof(fakeImage2) / sizeof(int));
+        
+        memcpy((void *)fakeImage1, fake1, BUFSIZE);
+        memcpy((void *)fakeImage2, fake2, BUFSIZE);
     }
     
     // Fake some video output
-    void fakeFrame()
-    {
-        size_t byteCount = sizeof(fakeImage1) / sizeof(int);
-        
-        frame++;
-        if (frame % 100 == 0) {
-            memcpy(longFrame, fakeImage1, byteCount);
-            memcpy(shortFrame, fakeImage1, byteCount);
-        }
-        if (frame % 200 == 0) {
-            memcpy(longFrame, fakeImage2, byteCount);
-            memcpy(shortFrame, fakeImage2, byteCount);
-        }
-    }
-    
-    
+    void fakeFrame();
 };
-
 #endif

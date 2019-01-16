@@ -528,6 +528,7 @@ extension MyController {
     
             // Start emulator
             c64.run()
+            amiga.powerOn()
             
             // Blend in emulator texture
             if (!metalScreen.drawC64texture) {

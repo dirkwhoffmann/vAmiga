@@ -253,7 +253,8 @@ public class MetalView: MTKView {
     
     func updateTexture() {
         
-        let buf = controller.c64.vic.screenBuffer()
+        // let buf = controller.c64.vic.screenBuffer()
+        let buf = controller.amiga.denise.screenBuffer()
         precondition(buf != nil)
         
         let pixelSize = 4

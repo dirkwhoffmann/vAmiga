@@ -177,17 +177,20 @@ public extension NSImage {
         return newImage;
     }
     
-    func toData() -> UnsafeMutableRawPointer? {
+    func cgImageWH() -> (CGImage, Int, Int)? {
         
-        // let imageRect = NSMakeRect(0, 0, self.size.width, self.size.height);
-        let imageRef = self.cgImage(forProposedRect: nil, context: nil, hints: nil)
+        if let cgi = cgImage(forProposedRect: nil, context: nil, hints: nil) {
+            if (cgi.width != 0 && cgi.height != 0) {
+                return (cgi, cgi.width, cgi.height)
+            }
+        }
+        return nil
+    }
+    
+    func toData(vflip: Bool = false) -> UnsafeMutableRawPointer? {
         
-        // Create a suitable bitmap context for extracting the bits of the image
-        let width = imageRef!.width
-        let height = imageRef!.height
-        
-        if (width == 0 || height == 0) { return nil; }
-        
+        guard let (cgimage, width, height) = cgImageWH() else { return nil }
+    
         // Allocate memory
         guard let data = malloc(height * width * 4) else { return nil; }
         let rawBitmapInfo =
@@ -201,48 +204,32 @@ public extension NSImage {
                                       space: CGColorSpaceCreateDeviceRGB(),
                                       bitmapInfo: rawBitmapInfo)
         
-        bitmapContext?.translateBy(x: 0.0, y: CGFloat(height))
-        bitmapContext?.scaleBy(x: 1.0, y: -1.0)
-        bitmapContext?.draw(imageRef!, in: CGRect.init(x: 0, y: 0, width: width, height: height))
+        // Flip image vertically if requested
+        if (vflip) {
+            bitmapContext?.translateBy(x: 0.0, y: CGFloat(height))
+            bitmapContext?.scaleBy(x: 1.0, y: -1.0)
+        }
         
+        // Call 'draw' to fill the data array
+        let rect = CGRect.init(x: 0, y: 0, width: width, height: height)
+        bitmapContext?.draw(cgimage, in: rect)
         return data
     }
     
     func toTexture(device: MTLDevice) -> MTLTexture? {
  
-        // let imageRect = NSMakeRect(0, 0, self.size.width, self.size.height);
-        let imageRef = self.cgImage(forProposedRect: nil, context: nil, hints: nil)
-        
-        // Create a suitable bitmap context for extracting the bits of the image
-        let width = imageRef!.width
-        let height = imageRef!.height
-    
-        if (width == 0 || height == 0) { return nil; }
-        
-        // Allocate memory
-        guard let data = malloc(height * width * 4) else { return nil; }
-        let rawBitmapInfo =
-            CGImageAlphaInfo.noneSkipLast.rawValue |
-                CGBitmapInfo.byteOrder32Big.rawValue
-        let bitmapContext = CGContext(data: data,
-                                      width: width,
-                                      height: height,
-                                      bitsPerComponent: 8,
-                                      bytesPerRow: 4 * width,
-                                      space: CGColorSpaceCreateDeviceRGB(),
-                                      bitmapInfo: rawBitmapInfo)
+        guard let (_, width, height) = cgImageWH() else { return nil }
+        guard let data = toData(vflip: true) else { return nil }
 
-        bitmapContext?.translateBy(x: 0.0, y: CGFloat(height))
-        bitmapContext?.scaleBy(x: 1.0, y: -1.0)
-        bitmapContext?.draw(imageRef!, in: CGRect.init(x: 0, y: 0, width: width, height: height))
-        // CGContextDrawImage(bitmapContext!, CGRectMake(0, 0, CGFloat(width), CGFloat(height)), imageRef)
-        
+        // Use a texture descriptor to create a texture
         let textureDescriptor = MTLTextureDescriptor.texture2DDescriptor(
             pixelFormat: MTLPixelFormat.rgba8Unorm,
             width: width,
             height: height,
             mipmapped: false)
         let texture = device.makeTexture(descriptor: textureDescriptor)
+        
+        // Copy data
         let region = MTLRegionMake2D(0, 0, width, height)
         texture?.replace(region: region, mipmapLevel: 0, withBytes: data, bytesPerRow: 4 * width)
 

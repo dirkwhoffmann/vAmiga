@@ -23,7 +23,7 @@ extension MyController : NSWindowDelegate {
         // audioEngine.startPlayback()
         
         // Start emulator if it was only paused while in background
-        if pauseInBackground && pauseInBackgroundSavedState { c64.run() }
+        if pauseInBackground && pauseInBackgroundSavedState { amiga.run() }
 
         // Register for mouse move events
         window?.acceptsMouseMovedEvents = true
@@ -36,13 +36,9 @@ extension MyController : NSWindowDelegate {
         
         track()
         
-        // Disable audio
-        // c64.sid.rampDown()
-        // audioEngine.stopPlayback()
-        
         // Stop emulator if it is configured to pause in background
-        pauseInBackgroundSavedState = c64.isRunning()
-        if pauseInBackground { c64.halt() }
+        pauseInBackgroundSavedState = amiga.isRunning()
+        if pauseInBackground { amiga.pause() }
     }
     
     public func windowWillClose(_ notification: Notification) {
@@ -55,9 +51,6 @@ extension MyController : NSWindowDelegate {
         // Stop timer
         timer?.invalidate()
         timer = nil
-        
-        // Stop audio playback
-        // audioEngine.stopPlayback()
         
         // Quit message queue
         let myself = UnsafeRawPointer(Unmanaged.passUnretained(self).toOpaque())

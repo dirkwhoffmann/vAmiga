@@ -72,7 +72,9 @@ Amiga::Amiga()
     // Register sub components
     HardwareComponent *subcomponents[] = {
         
-        // &mem,
+        &mem,
+        &dma,
+        &denise,
         NULL };
     
     registerSubcomponents(subcomponents, sizeof(subcomponents));
@@ -82,7 +84,7 @@ Amiga::Amiga()
     SnapshotItem items[] = {
         
         { &warp,               sizeof(warp),               CLEAR_ON_RESET },
-        { NULL,             0,                       0 }};
+        { NULL,                0,                          0 }};
     
     registerSnapshotItems(items, sizeof(items));
     
@@ -266,12 +268,21 @@ Amiga::resume()
 bool
 Amiga::readyToPowerUp()
 {
+    if (config.model == A1000 && bootRom == NULL) {
+        debug("NOT READY TO RUN (A1000)\n");
+    }
+    if (config.model != A1000 && kickRom == NULL) {
+        debug("NOT READY TO RUN (A500, A2000)\n");
+    }
+
     return (config.model == A1000) ? bootRom != NULL : kickRom != NULL;
 }
 
 void
 Amiga::run()
 {
+    debug("run()\n");
+    
     if (isPaused()) {
         
         // Check for missing Roms
@@ -510,4 +521,10 @@ Amiga::runLoop()
     //
     // TODO: Emulate the Amiga here ...
     //
+    
+    // THE FOLLOWING CODE IS FOR VISUAL PROTOTYPING ONLY
+    while (!stop) {
+        
+        dma.fakeSomething();
+    }
 }

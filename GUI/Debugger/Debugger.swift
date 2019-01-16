@@ -221,6 +221,12 @@ extension MyController {
     @IBAction func stopAndGoAction(_ sender: Any!) {
     
         needsSaving = true
+        if (amiga.isRunning()) {
+            amiga.pause();
+        } else {
+            amiga.run();
+        }
+        
         if c64.isHalted() {
             c64.run()
         } else {

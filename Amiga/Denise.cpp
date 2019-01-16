@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "Denise.h"
+#include "Amiga.h"
 
 Denise::Denise()
 {
@@ -23,8 +23,8 @@ void
 Denise::_powerOn()
 {
     frame = 0;
-    currentScreenBuffer = longFrame;
-    pixelBuffer = longFrame;
+    frameBuffer = longFrame;
+    pixelBuffer = frameBuffer;
 }
 void
 Denise::_powerOff()
@@ -47,16 +47,27 @@ Denise::_dump()
     msg("Frame: %lld\n", frame);
 }
 
-
-// FAKE STUFF
-
-void *
-Denise::screenBuffer()
+void
+Denise::fakeFrame()
 {
     frame++;
-    if ((frame / 10) % 2) {
-        return longFrame;
+    
+    // Switch the active frame buffer
+    frameBuffer = (frameBuffer == longFrame) ? shortFrame : longFrame;
+    pixelBuffer = frameBuffer;
+    
+    // Toggle the fake image from time to time
+    if ((frame / 25) % 2) {
+        memcpy((void *)longFrame, fakeImage1, BUFSIZE);
+        memcpy((void *)shortFrame, fakeImage1, BUFSIZE);
     } else {
-        return shortFrame;
+        memcpy((void *)longFrame, fakeImage2, BUFSIZE);
+        memcpy((void *)shortFrame, fakeImage2, BUFSIZE);
+    }
+    
+    // Count some sheep (zzzzzz) ...
+    if (!amiga->getWarp()) {
+        amiga->synchronizeTiming();
     }
 }
+

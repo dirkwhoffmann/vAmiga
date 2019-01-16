@@ -60,12 +60,19 @@ public:
 
     // Denise (custom chip)
     Denise denise;
-        
-private:
+    
     
     //
     // Emulator thread
     //
+    
+    private:
+    
+    /* A boolean flag for terminating the emulation thread
+     * This flag is periodically queried inside the run loop. When it is set to
+     * true, the thread terminates.
+     */
+    bool stop = false;
     
     // The invocation counter for implementing suspend() / resume()
     unsigned suspendCounter = 0;
@@ -424,6 +431,8 @@ private:
      */
     uint64_t frameDelay() { return uint64_t(1000000000) / 50; }
 
+public:
+    
     /* Puts the emulator thread to sleep.
      * This function makes the emulator thread wait until nanoTargetTime has
      * been reached. It also assigns a new target value to nanoTargetTime.
