@@ -20,7 +20,6 @@ extension PreferencesController {
                 vidUpscalerPopup.menu!.item(withTag: i)?.isEnabled = (kernels[i] != nil)
             }
             myController?.metalScreen.buildDotMasks()
-            updatePalettePreviewImages()
         }
     }
     
@@ -86,34 +85,7 @@ extension PreferencesController {
         vidOkButton.title = c64.isRunnable() ? "OK" : "Quit"
     }
     
-    func updatePalettePreviewImages() {
-        
-        guard let c64 = proxy else { return }
-        
-        // Create image representation in memory
-        let size = CGSize.init(width: 16, height: 1)
-        let cap = Int(size.width) * Int(size.height)
-        let mask = calloc(cap, MemoryLayout<UInt32>.size)!
-        let ptr = mask.bindMemory(to: UInt32.self, capacity: cap)
-        
-        // For all palettes ...
-        for palette : Int in 0 ... 5 {
-            
-            // Create image data
-            for n in 0 ... 15 {
-                let p = VICPalette(rawValue: UInt32(palette))
-                let rgba = c64.vic.rgbaColor(n, palette: p)
-                ptr[n] = rgba
-            }
-            
-            // Create image
-            let image = NSImage.make(data: mask, rect: size)
-            let resizedImage = image?.resizeImageSharp(width: 64, height: 12)
-            vidPalettePopup.item(at: palette)?.image = resizedImage
-        }
-    }
-    
-    
+
     //
     // Action methods (Colors)
     //
@@ -121,28 +93,24 @@ extension PreferencesController {
     @IBAction func vidPaletteAction(_ sender: NSPopUpButton!) {
         
         proxy?.vic.setVideoPalette(sender.selectedTag())
-        updatePalettePreviewImages()
         refresh()
     }
     
     @IBAction func vidBrightnessAction(_ sender: NSSlider!) {
         
         proxy?.vic.setBrightness(sender.doubleValue)
-        updatePalettePreviewImages()
         refresh()
     }
     
     @IBAction func vidContrastAction(_ sender: NSSlider!) {
         
         proxy?.vic.setContrast(sender.doubleValue)
-        updatePalettePreviewImages()
         refresh()
     }
     
     @IBAction func vidSaturationAction(_ sender: NSSlider!) {
         
         proxy?.vic.setSaturation(sender.doubleValue)
-        updatePalettePreviewImages()
         refresh()
     }
     
@@ -369,7 +337,6 @@ extension PreferencesController {
     func vidFactorySettingsAction() {
         
         myController?.resetVideoUserDefaults()
-        updatePalettePreviewImages()
         refresh()
     }
     
@@ -379,7 +346,6 @@ extension PreferencesController {
         
         myController?.resetVideoUserDefaults()
         myController?.metalScreen.shaderOptions = ShaderDefaultsTFT
-        updatePalettePreviewImages()
         refresh()
     }
     
@@ -390,7 +356,6 @@ extension PreferencesController {
         myController?.resetVideoUserDefaults()
         myController?.metalScreen.shaderOptions = ShaderDefaultsCRT
         myController?.metalScreen.buildDotMasks()
-        updatePalettePreviewImages()
         refresh()
     }
 }

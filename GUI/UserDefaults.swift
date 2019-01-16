@@ -818,7 +818,7 @@ extension Defaults {
     
     struct a2000 {
         
-        static let amigaModel     = A1000
+        static let amigaModel     = A2000
         static let realTimeClock  = true
         
         static let chipRam        = 512
