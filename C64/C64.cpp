@@ -694,6 +694,9 @@ C64::synchronizeTiming()
     
     // Sleep and update target timer
     // debug(2, "%p Sleeping for %lld\n", this, kernelTargetTime - mach_absolute_time());
+    // mach_wait_until(kernelTargetTime);
+    
+
     int64_t jitter = sleepUntil(kernelTargetTime, earlyWakeup);
     nanoTargetTime += vic.getFrameDelay();
     
@@ -706,6 +709,7 @@ C64::synchronizeTiming()
         debug(2, "Jitter exceeds limit (%lld). Restarting synchronization timer.\n", jitter);
         restartTimer();
     }
+
 }
 
 void C64::loadFromSnapshotUnsafe(Snapshot *snapshot)

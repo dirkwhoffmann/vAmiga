@@ -134,6 +134,11 @@ struct AmigaWrapper { Amiga *amiga; };
     return releaseBuild(); // see vastd.h
 }
 
+- (uint64_t) masterClock
+{
+    return wrapper->amiga->masterClock;
+}
+
 - (void) powerOn
 {
     return wrapper->amiga->powerOn();

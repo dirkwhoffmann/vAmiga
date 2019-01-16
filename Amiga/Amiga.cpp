@@ -369,7 +369,7 @@ Amiga::synchronizeTiming()
 {
     uint64_t now         = time_in_nanos();
     uint64_t clockDelta  = masterClock - clockBase;
-    uint64_t elapsedTime = (clockDelta * 1000) / 28 /* 28 MHz master */;
+    uint64_t elapsedTime = (clockDelta * 1000) / masterClockFrequency;
     uint64_t targetTime  = timeBase + elapsedTime;
     
     /*
@@ -403,45 +403,16 @@ Amiga::synchronizeTiming()
             return;
         }
     
-        // Good night. See you soon...
+        // See you soon...
         mach_wait_until(targetTime);
+        /*
+        int64_t jitter = sleepUntil(targetTime, 1500000); // 1.5 usec early wakeup
+        if (jitter > 1000000000) { // 1 sec
+            warn("Jitter is too high (%lld).\n", jitter);
+            // restartTimer();
+        }
+        */
     }
-    
-#if 0
-    const uint64_t earlyWakeup = 1500000; /* 1.5 milliseconds */
-    
-    // Get current time in nano seconds
-    uint64_t nanoAbsTime = abs_to_nanos(mach_absolute_time());
-    
-    // Check how long we're supposed to sleep
-    int64_t timediff = (int64_t)nanoTargetTime - (int64_t)nanoAbsTime;
-    if (timediff > 200000000 || timediff < -200000000 /* 0.2 sec */) {
-        
-        // The emulator seems to be out of sync, so we better reset the
-        // synchronization timer
-        
-        debug("Synchronization lost (%lld). Restarting timer.\n", timediff);
-        restartTimer();
-    }
-    
-    // Convert nanoTargetTime into kernel unit
-    int64_t kernelTargetTime = nanos_to_abs(nanoTargetTime);
-    
-    // Sleep and update target timer
-    // debug(2, "%p Sleeping for %lld\n", this, kernelTargetTime - mach_absolute_time());
-    int64_t jitter = sleepUntil(kernelTargetTime, earlyWakeup);
-    nanoTargetTime += frameDelay();
-    
-    // debug(2, "Jitter = %d", jitter);
-    if (jitter > 1000000000 /* 1 sec */) {
-        
-        // The emulator did not keep up with the real time clock. Instead of
-        // running behind for a long time, we reset the synchronization timer
-        
-        debug(2, "Jitter exceeds limit (%lld). Restarting timer.\n", jitter);
-        restartTimer();
-    }
-#endif
 }
 
 

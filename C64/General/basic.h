@@ -263,12 +263,11 @@ uint8_t localTimeHour();
 //! @brief    Put the current thread to sleep for a certain amount of time.
 void sleepMicrosec(unsigned usec);
 
-/*! @brief    Sleeps until kernel timer reaches kernelTargetTime
- *  @param    kernelEarlyWakeup To increase timing precision, the function
- *            wakes up the thread earlier by this amount and waits actively in
- *            a delay loop until the deadline is reached.
- *  @return   Overshoot time (jitter), measured in kernel time. Smaller values
- *            are better, 0 is best.
+/* Sleeps until kernel timer reaches kernelTargetTime
+ * To increase timing precision, the function can wake up the thread earlier
+ * and wait actively in a delay loop until the deadline is reached.
+ * The return value is the overshoot time (jitter), measured in kernel time.
+ * Smaller values are better, 0 is best.
  */
 int64_t sleepUntil(uint64_t kernelTargetTime, uint64_t kernelEarlyWakeup);
 

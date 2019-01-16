@@ -50,6 +50,8 @@ struct DeniseWrapper;
 
 - (BOOL) releaseBuild;
 
+- (uint64_t) masterClock;
+
 - (void) powerOn;
 - (void) powerOff;
 - (void) powerOnOrOff;
@@ -145,7 +147,6 @@ struct DeniseWrapper;
 }
 
 - (void) dump;
-- (void) fakeFrame;
 - (void) initFakePictures:(void *)fake1 fake2:(void *)fake2;
 - (void *) screenBuffer;
 

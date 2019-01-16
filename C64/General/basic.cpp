@@ -302,11 +302,13 @@ sleepUntil(uint64_t kernelTargetTime, uint64_t kernelEarlyWakeup)
     uint64_t now = mach_absolute_time();
     int64_t jitter;
     
-    if (now > kernelTargetTime)
+    if (now > kernelTargetTime) {
+        printf("Too slow\n");
         return 0;
+    }
     
     // Sleep
-    // printf("Sleeping for %d\n", kernelTargetTime - now);
+    // printf("Sleeping for %lld\n", kernelTargetTime - kernelEarlyWakeup);
     mach_wait_until(kernelTargetTime - kernelEarlyWakeup);
     
     // Count some sheep to increase precision
@@ -315,14 +317,15 @@ sleepUntil(uint64_t kernelTargetTime, uint64_t kernelEarlyWakeup)
         jitter = mach_absolute_time() - kernelTargetTime;
         sheep++;
     } while (jitter < 0);
-    
+    // printf("Counted %d sheep (%lld)\n", sheep, jitter);
+
     return jitter;
 }
 
 uint64_t
 fnv_1a(uint8_t *addr, size_t size)
 {
-    printf("addr = %p, size = %lld\n", addr, size);
+    printf("addr = %p, size = %zu\n", addr, size);
     
     uint64_t basis = 0xcbf29ce484222325;
     uint64_t prime = 0x100000001b3;

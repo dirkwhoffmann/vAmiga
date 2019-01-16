@@ -1,11 +1,11 @@
-//
-// This file is part of VirtualC64 - A cycle accurate Commodore 64 emulator
+// -----------------------------------------------------------------------------
+// This file is part of vAmiga
 //
 // Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
 // Licensed under the GNU General Public License v3
 //
 // See https://www.gnu.org for license information
-//
+// -----------------------------------------------------------------------------
 
 import Foundation
 
@@ -498,10 +498,11 @@ extension MyController {
         
         // Do 3 times a second ...
         if (animationCounter % 4) == 0 {
-            speedometer.updateWith(cycle: c64.cpu.cycle(), frame: metalScreen.frames)
-            let mhz = speedometer.mhz(digits: 2)
-            let fps = speedometer.fps(digits: 0)
-            clockSpeed.stringValue = String(format:"%.2f MHz %.0f fps", mhz, fps)
+            speedometer.updateWith(cycle: amiga.masterClock() / 4, frame: metalScreen.frames)
+            let mhz = speedometer.mhz
+            let fps = speedometer.fps
+            clockSpeed.stringValue = String(format:"%.1f MHz %.0f fps", mhz, fps)
+            track("\(mhz)")
             clockSpeedBar.doubleValue = 10 * mhz
         
             // Let the cursor disappear in fullscreen mode

@@ -33,6 +33,7 @@
 
 #include "vaconfig.h"
 #include "vatypes.h"
+#include "va_constants.h"
 
 #if 0
 //! @brief    Two bit binary value

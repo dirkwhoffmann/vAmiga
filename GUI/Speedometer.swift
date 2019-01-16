@@ -1,54 +1,55 @@
-//
-// This file is part of VirtualC64 - A cycle accurate Commodore 64 emulator
+// -----------------------------------------------------------------------------
+// This file is part of vAmiga
 //
 // Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
 // Licensed under the GNU General Public License v3
 //
 // See https://www.gnu.org for license information
-//
+// -----------------------------------------------------------------------------
 
 import Foundation
 
-class Speedometer : NSObject {
+extension Double {
+   
+    func truncate(digits: Int) -> Double {
+        let factor = Double(truncating: pow(10,digits) as NSNumber)
+        return (self * factor).rounded() / factor
+    }
+}
+
+class Speedometer {
     
-    /// Current emulation speed in Mhz
-    private var mhz = 0.0
+    /// Current emulation speed in MHz
+    private var _mhz = 0.0
+    var mhz: Double { get { return _mhz.truncate(digits: 1); } }
     
     /// Current GPU performance in frames per second
-    private var fps = 0.0
+    private var _fps = 0.0
+    var fps: Double { get { return _fps.truncate(digits: 0); } }
     
-    /// Smooth factor
-    private let alpha = 0.6
+    /// Smoothing factor
+    private let alpha = 0.5
 
-    /// Stores when updateWithCurrentCycle was called the last time
+    /// Time of the previous update
     private var latchedTimestamp: Double
     
-    //! Cycle count in previous call to updateWithCurrentCycle
+    /// Value of the master clock in the previous update
     private var latchedCycle: UInt64 = UInt64.max
     
-    //! Previous frame count in previous call to updateWithCurrentCycle
+    /// Frame count in the previous update
     private var latchedFrame: UInt64 = UInt64.max
     
-    override init() {
+    init() {
 
         latchedTimestamp = Date().timeIntervalSince1970
-        super.init()
     }
 
-    func mhz(digits: Int) -> Double {
-        let factor = Double(truncating:pow(10,digits) as NSNumber)
-        return round(factor * mhz) / factor
-    }
-    
-    func fps(digits: Int) -> Double {
-        let factor = Double(truncating:pow(10,digits) as NSNumber)
-        return round(factor * fps) / factor
-    }
-    
-    /// Updates speed, frame and jitter information.
-    /// This function needs to be invoked before reading mhz and fps
-    /// -param cycles Current cycle count (processed cycles since emulator power up).
-    /// -param frame Current frame (processed frames since emulator power up).
+    /* Updates speed, frame and jitter information.
+     * This function needs to be invoked periodically to get meaningful
+     * results.
+     *   - cycles  Elapsed CPU cycles since power up
+     *   - frames  Drawn frames since power up
+     */
     func updateWith(cycle: UInt64, frame: UInt64) {
         
         let timestamp = Date().timeIntervalSince1970
@@ -60,11 +61,11 @@ class Speedometer : NSObject {
         
             // Measure clock frequency in MHz
             let elapsedCycles = Double(cycle - latchedCycle) / 1_000_000
-            mhz = alpha * (elapsedCycles / elapsedTime) + (1 - alpha) * mhz
+            _mhz = alpha * (elapsedCycles / elapsedTime) + (1 - alpha) * _mhz
 
             // Measure frames per second
             let elapsedFrames = Double(frame - latchedFrame)
-            fps = alpha * (elapsedFrames / elapsedTime) + (1 - alpha) * fps
+            _fps = alpha * (elapsedFrames / elapsedTime) + (1 - alpha) * _fps
 
             // Assign zero if values are completely out of range
             // mhz = (mhz >= 0.0 && mhz <= 100.0) ? mhz : 0.0
@@ -75,5 +76,7 @@ class Speedometer : NSObject {
         latchedTimestamp = timestamp
         latchedCycle = cycle
         latchedFrame = frame
+        
+        // return (_mhz.truncate(digits: 2), _fps.truncate(digits: 0))
     }
 }

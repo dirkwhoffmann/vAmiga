@@ -218,6 +218,7 @@
 		5020B17F21EF136100B9E80E /* Denise.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Denise.h; sourceTree = "<group>"; };
 		5064850F21EC7A1700FC4AC3 /* AmigaMemory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaMemory.cpp; sourceTree = "<group>"; };
 		5064851021EC7A1700FC4AC3 /* AmigaMemory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaMemory.h; sourceTree = "<group>"; };
+		5082D83A21EF891200CF7692 /* va_constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = va_constants.h; sourceTree = "<group>"; };
 		508FDE6421EA1FA40043D0E9 /* vAmiga.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = vAmiga.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		508FDE6D21EA1FA50043D0E9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		508FDE7021EA1FA50043D0E9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -1127,6 +1128,7 @@
 			isa = PBXGroup;
 			children = (
 				50B14C0921EB228E002E32A6 /* vaconfig.h */,
+				5082D83A21EF891200CF7692 /* va_constants.h */,
 				50B14C0A21EB2379002E32A6 /* vatypes.h */,
 				50B14C0821EB2248002E32A6 /* vastd.h */,
 				50B14C1121EB4314002E32A6 /* vastd.cpp */,

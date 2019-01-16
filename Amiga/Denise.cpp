@@ -52,8 +52,7 @@ void
 Denise::executeUntil(uint64_t targetClock)
 {
     clock = targetClock;
-    uint64_t cyclesPerFrame = 28 * 1000000 / 50;
-    uint64_t targetFrame = clock / cyclesPerFrame;
+    uint64_t targetFrame = clock / masterCyclesPerFrame;
     
     if (frame != targetFrame) {
         

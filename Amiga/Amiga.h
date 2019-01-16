@@ -34,7 +34,7 @@
  * Paula, you need to invoke a public method on c64->paula.
  */
 class Amiga : public HardwareComponent {
-    
+        
 public:
     
     // Specification of the machine we are going to emulate...

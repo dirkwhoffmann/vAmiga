@@ -169,7 +169,7 @@
                     <levelIndicator verticalHuggingPriority="750" id="212">
                         <rect key="frame" x="721" y="3" width="80" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                        <levelIndicatorCell key="cell" alignment="left" maxValue="20" warningValue="11" criticalValue="15" id="1702">
+                        <levelIndicatorCell key="cell" alignment="left" maxValue="140" warningValue="77" criticalValue="105" id="1702">
                             <font key="font" metaFont="system"/>
                         </levelIndicatorCell>
                     </levelIndicator>
