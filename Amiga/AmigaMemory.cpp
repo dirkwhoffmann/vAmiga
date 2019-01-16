@@ -141,7 +141,7 @@ AmigaMemory::dealloc(uint8_t *&ptrref, size_t &sizeref)
 void
 AmigaMemory::updateMemSrcTable()
 {
-    unsigned chipRamBanks = amiga->config.chipRamSize / 64;
+    long chipRamBanks = amiga->config.chipRamSize / 64;
     assert(chipRamBanks == 4 || chipRamBanks == 8);
     
     // Start from scratch

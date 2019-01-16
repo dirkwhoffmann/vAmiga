@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5020B17D21EF121E00B9E80E /* DMAController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5020B17B21EF121E00B9E80E /* DMAController.cpp */; };
+		5020B18021EF136100B9E80E /* Denise.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5020B17E21EF136100B9E80E /* Denise.cpp */; };
 		5064851121EC7A1700FC4AC3 /* AmigaMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5064850F21EC7A1700FC4AC3 /* AmigaMemory.cpp */; };
 		508FDE6E21EA1FA50043D0E9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 508FDE6D21EA1FA50043D0E9 /* Assets.xcassets */; };
 		508FDE7121EA1FA50043D0E9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 508FDE6F21EA1FA50043D0E9 /* Main.storyboard */; };
@@ -210,6 +212,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5020B17B21EF121E00B9E80E /* DMAController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DMAController.cpp; sourceTree = "<group>"; };
+		5020B17C21EF121E00B9E80E /* DMAController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMAController.h; sourceTree = "<group>"; };
+		5020B17E21EF136100B9E80E /* Denise.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Denise.cpp; sourceTree = "<group>"; };
+		5020B17F21EF136100B9E80E /* Denise.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Denise.h; sourceTree = "<group>"; };
 		5064850F21EC7A1700FC4AC3 /* AmigaMemory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaMemory.cpp; sourceTree = "<group>"; };
 		5064851021EC7A1700FC4AC3 /* AmigaMemory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaMemory.h; sourceTree = "<group>"; };
 		508FDE6421EA1FA40043D0E9 /* vAmiga.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = vAmiga.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1043,6 +1049,10 @@
 				50B14C0E21EB410B002E32A6 /* Amiga.cpp */,
 				5064851021EC7A1700FC4AC3 /* AmigaMemory.h */,
 				5064850F21EC7A1700FC4AC3 /* AmigaMemory.cpp */,
+				5020B17C21EF121E00B9E80E /* DMAController.h */,
+				5020B17B21EF121E00B9E80E /* DMAController.cpp */,
+				5020B17F21EF136100B9E80E /* Denise.h */,
+				5020B17E21EF136100B9E80E /* Denise.cpp */,
 				50B14C0421EB212E002E32A6 /* Foundation */,
 				508FE06621EA31E50043D0E9 /* Files */,
 			);
@@ -1329,6 +1339,7 @@
 				508FDFA421EA1FBC0043D0E9 /* ControlPort.cpp in Sources */,
 				508FDFAD21EA1FBC0043D0E9 /* CIA.cpp in Sources */,
 				508FDFD521EA20510043D0E9 /* Animation.swift in Sources */,
+				5020B17D21EF121E00B9E80E /* DMAController.cpp in Sources */,
 				508FE01A21EA227B0043D0E9 /* Formatter.swift in Sources */,
 				508FDF5F21EA1FBC0043D0E9 /* StarDos.cpp in Sources */,
 				508FE02721EA227B0043D0E9 /* Basics.swift in Sources */,
@@ -1345,6 +1356,7 @@
 				508FE05521EA22CC0043D0E9 /* PreferencesWindow.swift in Sources */,
 				508FE02021EA227B0043D0E9 /* TimeTravelTouchBar.swift in Sources */,
 				508FE01521EA227B0043D0E9 /* GamePad.swift in Sources */,
+				5020B18021EF136100B9E80E /* Denise.cpp in Sources */,
 				50B14C1021EB410B002E32A6 /* Amiga.cpp in Sources */,
 				508FDF6E21EA1FBC0043D0E9 /* Isepic.cpp in Sources */,
 				508FDF8421EA1FBC0043D0E9 /* VC64Object.cpp in Sources */,

@@ -177,6 +177,37 @@ public extension NSImage {
         return newImage;
     }
     
+    func toData() -> UnsafeMutableRawPointer? {
+        
+        // let imageRect = NSMakeRect(0, 0, self.size.width, self.size.height);
+        let imageRef = self.cgImage(forProposedRect: nil, context: nil, hints: nil)
+        
+        // Create a suitable bitmap context for extracting the bits of the image
+        let width = imageRef!.width
+        let height = imageRef!.height
+        
+        if (width == 0 || height == 0) { return nil; }
+        
+        // Allocate memory
+        guard let data = malloc(height * width * 4) else { return nil; }
+        let rawBitmapInfo =
+            CGImageAlphaInfo.noneSkipLast.rawValue |
+                CGBitmapInfo.byteOrder32Big.rawValue
+        let bitmapContext = CGContext(data: data,
+                                      width: width,
+                                      height: height,
+                                      bitsPerComponent: 8,
+                                      bytesPerRow: 4 * width,
+                                      space: CGColorSpaceCreateDeviceRGB(),
+                                      bitmapInfo: rawBitmapInfo)
+        
+        bitmapContext?.translateBy(x: 0.0, y: CGFloat(height))
+        bitmapContext?.scaleBy(x: 1.0, y: -1.0)
+        bitmapContext?.draw(imageRef!, in: CGRect.init(x: 0, y: 0, width: width, height: height))
+        
+        return data
+    }
+    
     func toTexture(device: MTLDevice) -> MTLTexture? {
  
         // let imageRect = NSMakeRect(0, 0, self.size.width, self.size.height);

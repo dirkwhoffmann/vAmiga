@@ -11,8 +11,89 @@
 #import "Amiga.h"
 #import "vAmiga-Swift.h"
 
+struct MemWrapper { AmigaMemory *mem; };
+struct DMAControllerWrapper { DMAController *dmaController; };
+struct DeniseWrapper { Denise *denise; };
 struct AmigaWrapper { Amiga *amiga; };
-// struct AmigaMemoryWrapper { AmigaMemory *mem; };
+
+
+//
+// Memory proxy
+//
+
+@implementation MemProxy
+
+- (instancetype) initWithMemory:(AmigaMemory *)mem
+{
+    if (self = [super init]) {
+        wrapper = new MemWrapper();
+        wrapper->mem = mem;
+    }
+    return self;
+}
+- (void) dump
+{
+    wrapper->mem->dump();
+}
+@end
+
+
+//
+// DMAController proxy
+//
+
+@implementation DMAControllerProxy
+
+- (instancetype) initWithDMAController:(DMAController *)dmaController
+{
+    if (self = [super init]) {
+        wrapper = new DMAControllerWrapper();
+        wrapper->dmaController = dmaController;
+    }
+    return self;
+}
+- (void) dump
+{
+    wrapper->dmaController->dump();
+}
+- (void) fakeSomething
+{
+    wrapper->dmaController->fakeSomething();
+}
+@end
+
+
+//
+// Denise proxy
+//
+
+@implementation DeniseProxy
+
+- (instancetype) initWithDenise:(Denise *)denise
+{
+    if (self = [super init]) {
+        wrapper = new DeniseWrapper();
+        wrapper->denise = denise;
+    }
+    return self;
+}
+- (void) dump
+{
+    wrapper->denise->dump();
+}
+- (void) initFakePictures:(void *)fake1 fake2:(void *)fake2
+{
+    wrapper->denise->initFakePictures((int *)fake1, (int *)fake2);
+}
+- (void) fakeFrame
+{
+    wrapper->denise->fakeFrame();
+}
+- (void *) screenBuffer
+{
+    return wrapper->denise->screenBuffer();
+}
+@end
 
 
 //
@@ -22,7 +103,9 @@ struct AmigaWrapper { Amiga *amiga; };
 @implementation AmigaProxy
 
 @synthesize wrapper;
-// @synthesize mem;
+@synthesize mem;
+@synthesize dma;
+@synthesize denise;
 
 - (instancetype) init
 {
@@ -36,7 +119,9 @@ struct AmigaWrapper { Amiga *amiga; };
     wrapper->amiga = amiga;
     
     // Create sub proxys
-    // mem = [[AmigaMemoryProxy alloc] initWithMemory:&amiga->mem];
+    mem = [[MemProxy alloc] initWithMemory:&amiga->mem];
+    dma = [[DMAControllerProxy alloc] initWithDMAController:&amiga->dma];
+    denise = [[DeniseProxy alloc] initWithDenise:&amiga->denise];
     
     return self;
 }
@@ -233,5 +318,5 @@ struct AmigaWrapper { Amiga *amiga; };
 {
     wrapper->amiga->setWarpLoad(value);
 }
-
 @end
+

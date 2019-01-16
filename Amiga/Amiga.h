@@ -21,6 +21,8 @@
 
 // Sub components
 #include "AmigaMemory.h"
+#include "DMAController.h"
+#include "Denise.h"
 
 
 /* A complete virtual Amiga
@@ -51,10 +53,14 @@ public:
     
     
     // The Amiga's virtual memory
-    // AmigaMemory mem;
-    
-    
-    
+    AmigaMemory mem;
+
+    // The DMA controller (part of Agnus)
+    DMAController dma;
+
+    // Denise (custom chip)
+    Denise denise;
+        
 private:
     
     //

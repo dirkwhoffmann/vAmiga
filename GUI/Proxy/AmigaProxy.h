@@ -13,13 +13,18 @@
 #import "vastd.h"
 
 // Forward declarations
-// @class MyController;
-// @class AmigaMemoryProxy;
+@class MemProxy;
+@class DMAControllerProxy;
+@class DeniseProxy;
 
 
-// Forward declarations of C++ class wrappers.
-// We wrap classes into normal C structs to avoid any reference to C++.
+/* Forward declarations of C++ class wrappers.
+ * We wrap classes into normal C structs to avoid any reference to C++.
+ */
 struct AmigaWrapper;
+struct MemWrapper;
+struct DMAControllerWrapper;
+struct DeniseWrapper;
 
 
 //
@@ -30,11 +35,15 @@ struct AmigaWrapper;
     
     struct AmigaWrapper *wrapper;
     
-    // AmigaMemoryProxy *mem;
+    MemProxy *mem;
+    DMAControllerProxy *dma;
+    DeniseProxy *denise;
 }
 
 @property (readonly) struct AmigaWrapper *wrapper;
-// @property (readonly) AmigaMemoryProxy *mem;
+@property (readonly) MemProxy *mem;
+@property (readonly) DMAControllerProxy *dma;
+@property (readonly) DeniseProxy *denise;
 
 // Called when quitting the app
 - (void) kill;
@@ -94,5 +103,51 @@ struct AmigaWrapper;
 - (void) setWarpLoad:(BOOL)value;
 
 // Handling ROMs
+
+@end
+
+
+//
+// Memory Proxy
+//
+
+@interface MemProxy : NSObject {
+    
+    struct MemWrapper *wrapper;
+}
+
+- (void) dump;
+
+@end
+
+
+//
+// DMAController Proxy
+//
+
+@interface DMAControllerProxy : NSObject {
+    
+    struct DMAControllerWrapper *wrapper;
+}
+
+- (void) dump;
+- (void) fakeSomething;
+
+@end
+
+
+//
+// Denise Proxy
+//
+
+@interface DeniseProxy : NSObject {
+    
+    struct DeniseWrapper *wrapper;
+}
+
+- (void) dump;
+- (void) fakeFrame;
+- (void) initFakePictures:(void *)fake1 fake2:(void *)fake2;
+- (void *) screenBuffer;
 
 @end
