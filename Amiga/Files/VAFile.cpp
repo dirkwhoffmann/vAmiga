@@ -46,14 +46,12 @@ VAFile::setPath(const char *str)
     path = strdup(str);
 }
 
-/*
-const unsigned short *
-VAFile::getUnicodeName()
+void
+VAFile::seek(long offset)
 {
-    translateToUnicode(getName(), unicode, 0xE000, sizeof(unicode) / 2);
-    return unicode;
+    eof = size;
+    fp = (offset < eof) ? offset : -1;
 }
-*/
 
 int
 VAFile::read()

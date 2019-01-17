@@ -79,7 +79,7 @@ public:
     virtual size_t getSize() { return size; }
     
     // Moves the file pointer to the specified offset.
-    virtual void seek(long offset) { fp = (offset < size) ? offset : -1; }
+    virtual void seek(long offset);
     
     /*  Reads a byte.
      *  Returns EOF (-1) if the end of file has been reached.

@@ -57,4 +57,5 @@ public:
     bool readFromBuffer(const uint8_t *buffer, size_t length) override;
     
 };
+
 #endif
