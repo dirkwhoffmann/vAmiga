@@ -206,8 +206,9 @@ struct AmigaFileWrapper;
 @interface ADFFileProxy : AmigaFileProxy {
 }
 
-+ (instancetype)make;
-+ (instancetype)makeWithFile:(NSString *)path;
++ (BOOL)isADFFile:(NSString *)filename;
++ (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)length;
++ (instancetype) makeWithFile:(NSString *)filename;
 
 // - (void)seekTrack:(NSInteger)number;
 // - (void)seekSector:(NSInteger)number;

@@ -1063,12 +1063,12 @@
 				5030891021EFA74600FEAD12 /* Paula.h */,
 				5030890F21EFA74600FEAD12 /* Paula.cpp */,
 				50B14C0421EB212E002E32A6 /* Foundation */,
-				508FE06621EA31E50043D0E9 /* Files */,
+				508FE06621EA31E50043D0E9 /* FileTypes */,
 			);
 			path = Amiga;
 			sourceTree = "<group>";
 		};
-		508FE06621EA31E50043D0E9 /* Files */ = {
+		508FE06621EA31E50043D0E9 /* FileTypes */ = {
 			isa = PBXGroup;
 			children = (
 				508FE06421EA318D0043D0E9 /* AmigaFile.h */,
@@ -1080,7 +1080,7 @@
 				508833ED21F0D21B009890EA /* ADFFile.h */,
 				508833EC21F0D21B009890EA /* ADFFile.cpp */,
 			);
-			path = Files;
+			path = FileTypes;
 			sourceTree = "<group>";
 		};
 		509F7F1421ED13F300A530E4 /* Controller */ = {

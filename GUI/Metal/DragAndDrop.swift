@@ -110,8 +110,8 @@ public extension MetalView {
             
             if let url = NSURL.init(from: pasteBoard) as URL? {
                 do {
-                    try document.createAttachment(from: url)
-                    return document.mountAttachment()
+                    try document.createAmigaAttachment(from: url)
+                    return document.mountAmigaAttachment()
                     
                 } catch {
                     let dragAndDropError = error

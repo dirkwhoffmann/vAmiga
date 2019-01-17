@@ -1,11 +1,11 @@
-//
-// This file is part of VirtualC64 - A cycle accurate Commodore 64 emulator
+// -----------------------------------------------------------------------------
+// This file is part of vAmiga
 //
 // Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
 // Licensed under the GNU General Public License v3
 //
 // See https://www.gnu.org for license information
-//
+// -----------------------------------------------------------------------------
 
 import Foundation
 
@@ -38,33 +38,9 @@ class ExportDiskController : UserDialogController {
         }
     }
     
-    @IBAction func selectD64(_ sender: Any!) {
+    @IBAction func selectADF(_ sender: Any!) {
         track()
-        savePanel.allowedFileTypes = ["d64"]
-        type = D64_FILE
-    }
-
-    @IBAction func selectG64(_ sender: Any!) {
-        track()
-        savePanel.allowedFileTypes = ["g64"]
+        savePanel.allowedFileTypes = ["adf"]
         type = G64_FILE
-    }
-    
-    @IBAction func selectPRG(_ sender: Any!) {
-        track()
-        savePanel.allowedFileTypes = ["prg"]
-        type = PRG_FILE
-    }
-    
-    @IBAction func selectP00(_ sender: Any!) {
-        track()
-        savePanel.allowedFileTypes = ["p00"]
-        type = P00_FILE
-    }
-    
-    @IBAction func selectT64(_ sender: Any!) {
-        track()
-        savePanel.allowedFileTypes = ["t64"]
-        type = T64_FILE
     }
 }

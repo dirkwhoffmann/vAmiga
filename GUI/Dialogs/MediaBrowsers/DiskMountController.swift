@@ -11,7 +11,7 @@ import Foundation
 
 class DiskMountController : UserDialogController {
     
-    var disk: AnyDiskProxy!
+    var disk: ADFFileProxy!
     
     let bytesPerRow = 32
     
@@ -76,7 +76,7 @@ class DiskMountController : UserDialogController {
     
     override func showSheet(completionHandler handler:(() -> Void)? = nil) {
     
-        if let attachment = myDocument?.attachment as? AnyDiskProxy {
+        if let attachment = myDocument?.amigaAttachment as? ADFFileProxy {
             
             disk = attachment
             super.showSheet(completionHandler: handler)

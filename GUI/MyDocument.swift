@@ -38,7 +38,8 @@ class MyDocument : NSDocument {
      snapshots are flashed while T64 archives are converted to a disk and
      inserted into the disk drive.
      */
-    var attachment: AnyC64FileProxy? = nil
+    var attachment: AnyC64FileProxy? = nil // REMOVE ASAP
+    var amigaAttachment: AmigaFileProxy? = nil
     
     /// The list of recently inserted disk URLs.
     var recentlyInsertedDiskURLs: [URL] = []
@@ -176,14 +177,8 @@ class MyDocument : NSDocument {
         
         switch (url.pathExtension.uppercased()) {
             
-        case "D64", "T64", "G64", "PRG", "P00":
+        case "ADF":
             noteNewRecentlyInsertedDiskURL(url)
-
-        case "TAP":
-            noteNewRecentlyInsertedTapeURL(url)
-
-        case "CRT":
-            noteNewRecentlyAtachedCartridgeURL(url)
             
         default:
             break
@@ -196,6 +191,20 @@ class MyDocument : NSDocument {
     //
     
     /// Creates an attachment from a URL
+    func createAmigaAttachment(from url: URL) throws {
+        
+        track("Creating attachment from URL \(url.lastPathComponent).")
+        
+        // Try to create the attachment
+        let fileWrapper = try FileWrapper.init(url: url)
+        let pathExtension = url.pathExtension.uppercased()
+        try createAmigaAttachment(from: fileWrapper, ofType: pathExtension)
+        
+        // Put URL in recently used URL lists
+        noteNewRecentlyUsedURL(url)
+    }
+    
+    // OLD CODE:
     func createAttachment(from url: URL) throws {
     
         track("Creating attachment from URL \(url.lastPathComponent).")
@@ -210,6 +219,51 @@ class MyDocument : NSDocument {
     }
     
     /// Creates an attachment from a file wrapper
+    fileprivate func createAmigaAttachment(from fileWrapper: FileWrapper,
+                                           ofType typeName: String) throws {
+        
+        guard let filename = fileWrapper.filename else {
+            throw NSError(domain: "VirtualC64", code: 0, userInfo: nil)
+        }
+        guard let data = fileWrapper.regularFileContents else {
+            throw NSError(domain: "VirtualC64", code: 0, userInfo: nil)
+        }
+        
+        let buffer = (data as NSData).bytes
+        let length = data.count
+        var openAsUntitled = true
+        
+        track("Read \(length) bytes from file \(filename) [\(typeName)].")
+        
+        switch (typeName) {
+            
+        case "VAM":
+            // Check for outdated snapshot formats
+            /*
+            if SnapshotProxy.isUnsupportedSnapshot(buffer, length: length) {
+                throw NSError.snapshotVersionError(filename: filename)
+            }
+            amigaAttachment = SnapshotProxy.make(withBuffer: buffer, length: length)
+            */
+            openAsUntitled = false
+            
+        case "ADF":
+            amigaAttachment = ADFFileProxy.make(withBuffer: buffer, length: length)
+            
+        default:
+            throw NSError.unsupportedFormatError(filename: filename)
+        }
+        
+        if amigaAttachment == nil {
+            throw NSError.corruptedFileError(filename: filename)
+        }
+        if openAsUntitled {
+            fileURL = nil
+        }
+        amigaAttachment!.setPath(filename)
+    }
+
+    // OLD CODE
     fileprivate func createAttachment(from fileWrapper: FileWrapper,
                                       ofType typeName: String) throws {
         
@@ -261,7 +315,7 @@ class MyDocument : NSDocument {
             
         case "G64":
             attachment = G64FileProxy.make(withBuffer: buffer, length: length)
-            
+
         default:
             throw NSError.unsupportedFormatError(filename: filename)
         }
@@ -280,6 +334,26 @@ class MyDocument : NSDocument {
     // Processing attachments
     //
     
+    @discardableResult
+    func mountAmigaAttachment() -> Bool {
+        
+        // guard let controller = myController else { return false }
+        
+        switch(amigaAttachment) {
+
+        // case _ as SnapshotProxy: c64.flash(attachment); return true
+       
+        case _ as ADFFileProxy:
+            runDiskMountDialog()
+            
+        default:
+            break
+        }
+        
+        return true
+    }
+    
+    // OLD CODE
     @discardableResult
     func mountAttachment() -> Bool {
 
@@ -477,7 +551,7 @@ class MyDocument : NSDocument {
     func export(drive nr: Int, to url: URL, ofType typeName: String) -> Bool {
         
         track("url = \(url) typeName = \(typeName)")
-        precondition(["D64", "T64", "PRG", "P00", "G64"].contains(typeName))
+        precondition(["ADF", "D64", "T64", "PRG", "P00", "G64"].contains(typeName))
         
         let drive = c64.drive(nr)!
         
@@ -497,7 +571,16 @@ class MyDocument : NSDocument {
         case "G64":
             track("Exporting to G64 format")
             archive = G64FileProxy.make(withDisk: drive.disk)
+
+        case "ADF":
             
+            //
+            // TODO: IMPLEMENT THIS
+            //
+            
+            track("Exporting to ADF format. TO BE IMPLEMENTED")
+            // archive = ADFFileProxy.make(withDisk: drive.disk)
+
         case "T64":
             track("Exporting to T64 format")
             archive = T64FileProxy.make(withAnyArchive: d64archive)

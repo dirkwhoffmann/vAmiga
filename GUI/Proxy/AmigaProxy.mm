@@ -196,6 +196,35 @@ struct ADFFileWrapper { ADFFile *adf; };
 
 
 //
+// ADFFile proxy
+//
+
+@implementation ADFFileProxy
+
++ (BOOL)isADFFile:(NSString *)filename
+{
+    return ADFFile::isADFFile([filename UTF8String]);
+}
++ (instancetype) make:(ADFFile *)archive
+{
+    if (archive == NULL) return nil;
+    return [[self alloc] initWithFile:archive];
+}
++ (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)length
+{
+    ADFFile *archive = ADFFile::makeWithBuffer((const uint8_t *)buffer, length);
+    return [self make: archive];
+}
++ (instancetype) makeWithFile:(NSString *)path
+{
+    ADFFile *archive = ADFFile::makeWithFile([path UTF8String]);
+    return [self make: archive];
+}
+
+@end
+
+
+//
 // Amiga
 //
 

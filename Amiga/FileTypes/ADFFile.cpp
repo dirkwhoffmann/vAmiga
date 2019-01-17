@@ -19,14 +19,14 @@ bool
 ADFFile::isADFBuffer(const uint8_t *buffer, size_t length)
 {
     // There are no magic bytes. We can only check the buffer size.
-    return length == 90120;
+    return length == 901120;
 }
 
 bool
 ADFFile::isADFFile(const char *path)
 {
     // There are no magic bytes. We can only check the file size.
-    return checkFileSize(path, 90120, 90120);
+    return checkFileSize(path, 901120, 901120);
 }
 
 ADFFile *
