@@ -121,7 +121,7 @@ Gw
                     <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="btq-Fs-f7s">
                         <rect key="frame" x="483" y="219" width="19" height="27"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <stepperCell key="cell" continuous="YES" alignment="left" maxValue="9999" id="x45-qD-bNP"/>
+                        <stepperCell key="cell" continuous="YES" refusesFirstResponder="YES" alignment="left" maxValue="9999" id="x45-qD-bNP"/>
                         <connections>
                             <action selector="sectorStepperAction:" target="-2" id="u2t-Uw-q9B"/>
                         </connections>
@@ -150,7 +150,7 @@ Gw
                     <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CYH-BP-kHV">
                         <rect key="frame" x="360" y="219" width="19" height="27"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <stepperCell key="cell" continuous="YES" alignment="left" maxValue="9999" id="tpj-ZM-1J7"/>
+                        <stepperCell key="cell" continuous="YES" refusesFirstResponder="YES" alignment="left" maxValue="9999" id="tpj-ZM-1J7"/>
                         <connections>
                             <action selector="trackStepperAction:" target="-2" id="0C8-9p-ae0"/>
                         </connections>
@@ -179,7 +179,7 @@ Gw
                     <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="l0l-Am-DEQ">
                         <rect key="frame" x="239" y="219" width="19" height="27"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <stepperCell key="cell" continuous="YES" alignment="left" maxValue="9999" id="2Fq-RD-36u"/>
+                        <stepperCell key="cell" continuous="YES" refusesFirstResponder="YES" alignment="left" maxValue="9999" id="2Fq-RD-36u"/>
                         <connections>
                             <action selector="headStepperAction:" target="-2" id="Vf3-v7-R0s"/>
                         </connections>
@@ -208,7 +208,7 @@ Gw
                     <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AdY-of-ykf">
                         <rect key="frame" x="123" y="219" width="19" height="27"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <stepperCell key="cell" continuous="YES" alignment="left" maxValue="9999" id="Dug-Or-0KR"/>
+                        <stepperCell key="cell" continuous="YES" refusesFirstResponder="YES" alignment="left" maxValue="9999" id="Dug-Or-0KR"/>
                         <connections>
                             <action selector="cylinderStepperAction:" target="-2" id="xBN-7R-lj8"/>
                         </connections>

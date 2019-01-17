@@ -76,7 +76,7 @@ ADFFile::seekTrack(long nr)
 void
 ADFFile::seekSector(long nr)
 {
-    assert(isTrackNumber(nr));
+    assert(isSectorNumber(nr));
     
     fp = nr * 512;
     eof = (nr + 1) * 512;
