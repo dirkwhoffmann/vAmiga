@@ -11,11 +11,13 @@
 #import "Amiga.h"
 #import "vAmiga-Swift.h"
 
+struct AmigaWrapper { Amiga *amiga; };
 struct MemWrapper { AmigaMemory *mem; };
 struct DMAControllerWrapper { DMAController *dmaController; };
 struct DeniseWrapper { Denise *denise; };
 struct PaulaWrapper { Paula *paula; };
-struct AmigaWrapper { Amiga *amiga; };
+struct AmigaFileWrapper { AmigaFile *file; };
+struct ADFFileWrapper { ADFFile *adf; };
 
 
 //
@@ -124,6 +126,70 @@ struct AmigaWrapper { Amiga *amiga; };
 - (double) fillLevel
 {
     return wrapper->paula->fillLevel();
+}
+
+@end
+
+
+//
+// AmigaFile proxy
+//
+
+@implementation AmigaFileProxy
+
+- (instancetype) initWithFile:(AmigaFile *)file
+{
+    if (file == nil) {
+        return nil;
+    }
+    if (self = [super init]) {
+        wrapper = new AmigaFileWrapper();
+        wrapper->file = file;
+    }
+    return self;
+}
++ (AmigaFileProxy *) makeWithFile:(AmigaFile *)file
+{
+    if (file == nil) {
+        return nil;
+    }
+    return [[self alloc] initWithFile:file];
+}
+
+- (void)setPath:(NSString *)path
+{
+    AmigaFile *file = (AmigaFile *)([self wrapper]->file);
+    file->setPath([path UTF8String]);
+}
+- (AmigaFileWrapper *)wrapper
+{
+    return wrapper;
+}
+- (AmigaFileType)type
+{
+    return wrapper->file->type();
+}
+- (NSInteger) sizeOnDisk
+{
+    return wrapper->file->sizeOnDisk();
+}
+- (void) readFromBuffer:(const void *)buffer length:(NSInteger)length
+{
+    wrapper->file->readFromBuffer((const uint8_t *)buffer, length);
+}
+- (NSInteger) writeToBuffer:(void *)buffer
+{
+    return wrapper->file->writeToBuffer((uint8_t *)buffer);
+}
+
+- (void) dealloc
+{
+    // NSLog(@"AmigaFileProxy::dealloc");
+    
+    if (wrapper) {
+        if (wrapper->file) delete wrapper->file;
+        delete wrapper;
+    }
 }
 
 @end

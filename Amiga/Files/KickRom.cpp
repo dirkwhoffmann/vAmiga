@@ -65,7 +65,7 @@ KickRom::makeWithFile(const char *path)
 bool
 KickRom::readFromBuffer(const uint8_t *buffer, size_t length)
 {
-    if (!VAFile::readFromBuffer(buffer, length))
+    if (!AmigaFile::readFromBuffer(buffer, length))
         return false;
     
     return isKickRomBuffer(buffer, length);

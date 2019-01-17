@@ -7,15 +7,15 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _VAFILE_INC
-#define _VAFILE_INC
+#ifndef _AMIGA_FILE_INC
+#define _AMIGA_FILE_INC
 
 #include "AmigaObject.h"
 
 /* Base class of all file readable types.
  * Provides the basic functionality for reading and writing files.
  */
-class VAFile : public AmigaObject {
+class AmigaFile : public AmigaObject {
     
 protected:
     
@@ -45,8 +45,8 @@ protected:
     
 public:
     
-    VAFile();
-    virtual ~VAFile();
+    AmigaFile();
+    virtual ~AmigaFile();
     
     // Frees the memory allocated by this object.
     virtual void dealloc();
@@ -57,7 +57,7 @@ public:
     //
     
     // Returns the type of this file.
-    virtual VAFileType type() { return FILETYPE_UKNOWN; }
+    virtual AmigaFileType type() { return FILETYPE_UKNOWN; }
     
     // Returns a string representation of the file type, e.g., "ADF".
     virtual const char *typeAsString() { return ""; }

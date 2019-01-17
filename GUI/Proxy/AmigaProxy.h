@@ -17,7 +17,8 @@
 @class DMAControllerProxy;
 @class DeniseProxy;
 @class PaulaProxy;
-
+@class AmigaFileProxy;
+@class ADFFileProxy;
 
 /* Forward declarations of C++ class wrappers.
  * We wrap classes into normal C structs to avoid any reference to C++.
@@ -27,7 +28,7 @@ struct MemWrapper;
 struct DMAControllerWrapper;
 struct DeniseWrapper;
 struct PaulaWrapper;
-
+struct AmigaFileWrapper;
 
 //
 // Amiga proxy
@@ -173,3 +174,43 @@ struct PaulaWrapper;
 - (double) fillLevel;
 
 @end
+
+//
+// F I L E   T Y P E   P R O X Y S
+//
+
+//
+// AmigaFile proxy
+//
+
+@interface AmigaFileProxy : NSObject {
+    
+    struct AmigaFileWrapper *wrapper;
+}
+
+- (struct AmigaFileWrapper *)wrapper;
+
+- (AmigaFileType)type;
+- (void)setPath:(NSString *)path;
+- (NSInteger)sizeOnDisk;
+- (void)readFromBuffer:(const void *)buffer length:(NSInteger)length;
+- (NSInteger)writeToBuffer:(void *)buffer;
+
+@end
+
+
+//
+// ADFFile proxy
+//
+
+@interface ADFFileProxy : AmigaFileProxy {
+}
+
++ (instancetype)make;
++ (instancetype)makeWithFile:(NSString *)path;
+
+// - (void)seekTrack:(NSInteger)number;
+// - (void)seekSector:(NSInteger)number;
+
+@end
+

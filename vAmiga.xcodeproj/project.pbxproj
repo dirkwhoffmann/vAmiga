@@ -177,7 +177,7 @@
 		508FE05D21EA22CC0043D0E9 /* TapeMountController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04B21EA22CC0043D0E9 /* TapeMountController.swift */; };
 		508FE05E21EA22CC0043D0E9 /* CartridgeMountController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04C21EA22CC0043D0E9 /* CartridgeMountController.swift */; };
 		508FE05F21EA22CC0043D0E9 /* ExportDiskController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04D21EA22CC0043D0E9 /* ExportDiskController.swift */; };
-		508FE06521EA318D0043D0E9 /* VAFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FE06321EA318D0043D0E9 /* VAFile.cpp */; };
+		508FE06521EA318D0043D0E9 /* AmigaFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FE06321EA318D0043D0E9 /* AmigaFile.cpp */; };
 		509F7F1A21EDDF4F00A530E4 /* BootRom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509F7F1821EDDF4F00A530E4 /* BootRom.cpp */; };
 		509F7F1D21EDEA0200A530E4 /* KickRom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509F7F1B21EDEA0200A530E4 /* KickRom.cpp */; };
 		50B14C0721EB218E002E32A6 /* AmigaObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0521EB218E002E32A6 /* AmigaObject.cpp */; };
@@ -502,8 +502,8 @@
 		508FE04B21EA22CC0043D0E9 /* TapeMountController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TapeMountController.swift; sourceTree = "<group>"; };
 		508FE04C21EA22CC0043D0E9 /* CartridgeMountController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CartridgeMountController.swift; sourceTree = "<group>"; };
 		508FE04D21EA22CC0043D0E9 /* ExportDiskController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExportDiskController.swift; sourceTree = "<group>"; };
-		508FE06321EA318D0043D0E9 /* VAFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VAFile.cpp; sourceTree = "<group>"; };
-		508FE06421EA318D0043D0E9 /* VAFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VAFile.h; sourceTree = "<group>"; };
+		508FE06321EA318D0043D0E9 /* AmigaFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaFile.cpp; sourceTree = "<group>"; };
+		508FE06421EA318D0043D0E9 /* AmigaFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmigaFile.h; sourceTree = "<group>"; };
 		509F7F1821EDDF4F00A530E4 /* BootRom.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BootRom.cpp; sourceTree = "<group>"; };
 		509F7F1921EDDF4F00A530E4 /* BootRom.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BootRom.h; sourceTree = "<group>"; };
 		509F7F1B21EDEA0200A530E4 /* KickRom.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = KickRom.cpp; sourceTree = "<group>"; };
@@ -1071,8 +1071,8 @@
 		508FE06621EA31E50043D0E9 /* Files */ = {
 			isa = PBXGroup;
 			children = (
-				508FE06421EA318D0043D0E9 /* VAFile.h */,
-				508FE06321EA318D0043D0E9 /* VAFile.cpp */,
+				508FE06421EA318D0043D0E9 /* AmigaFile.h */,
+				508FE06321EA318D0043D0E9 /* AmigaFile.cpp */,
 				509F7F1921EDDF4F00A530E4 /* BootRom.h */,
 				509F7F1821EDDF4F00A530E4 /* BootRom.cpp */,
 				509F7F1C21EDEA0200A530E4 /* KickRom.h */,
@@ -1447,7 +1447,7 @@
 				508FDFDB21EA20510043D0E9 /* Shaders.swift in Sources */,
 				508FE01D21EA227B0043D0E9 /* UserDefaults.swift in Sources */,
 				508FE04E21EA22CC0043D0E9 /* RomPrefs.swift in Sources */,
-				508FE06521EA318D0043D0E9 /* VAFile.cpp in Sources */,
+				508FE06521EA318D0043D0E9 /* AmigaFile.cpp in Sources */,
 				508FE05621EA22CC0043D0E9 /* PreferencesController.swift in Sources */,
 				508FE05321EA22CC0043D0E9 /* VideoPrefs.swift in Sources */,
 				508833EE21F0D21B009890EA /* ADFFile.cpp in Sources */,

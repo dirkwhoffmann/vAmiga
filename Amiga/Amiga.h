@@ -25,6 +25,9 @@
 #include "Denise.h"
 #include "Paula.h"
 
+// File types
+#include "ADFFile.h"
+
 
 /* A complete virtual Amiga
  * This class is the most prominent one of all. To run the emulator, it is

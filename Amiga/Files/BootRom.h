@@ -10,12 +10,12 @@
 #ifndef _BOOTROM_INC
 #define _BOOTROM_INC
 
-#include "VAFile.h"
+#include "AmigaFile.h"
 
 /* Instead of a Kickstart Rom, the Amiga 1000 only has a stripped down Boot
  * Rom. The purpose of this Rom is to load the Kickstart from disk.
  */
- class BootRom : public VAFile {
+ class BootRom : public AmigaFile {
     
 private:
      
@@ -51,7 +51,7 @@ public:
     // Methods from VAFile
     //
     
-    VAFileType type() override { return FILETYPE_BOOT_ROM; }
+    AmigaFileType type() override { return FILETYPE_BOOT_ROM; }
     const char *typeAsString() override { return "Boot Rom"; }
     bool hasSameType(const char *path) override { return isBootRomFile(path); }
     bool readFromBuffer(const uint8_t *buffer, size_t length) override;

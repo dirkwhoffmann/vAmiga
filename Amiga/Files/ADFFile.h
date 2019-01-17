@@ -10,9 +10,9 @@
 #ifndef _ADF_FILE_INC
 #define _ADF_FILE_INC
 
-#include "VAFile.h"
+#include "AmigaFile.h"
 
-class ADFFile : public VAFile {
+class ADFFile : public AmigaFile {
     
 public:
     
@@ -46,7 +46,7 @@ public:
     // Methods from VAFile
     //
     
-    VAFileType type() override { return FILETYPE_ADF; }
+    AmigaFileType type() override { return FILETYPE_ADF; }
     const char *typeAsString() override { return "ADF"; }
     bool hasSameType(const char *path) override { return isADFFile(path); }
     bool readFromBuffer(const uint8_t *buffer, size_t length) override;

@@ -7,13 +7,13 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "VAFile.h"
+#include "AmigaFile.h"
 
-VAFile::VAFile()
+AmigaFile::AmigaFile()
 {
 }
 
-VAFile::~VAFile()
+AmigaFile::~AmigaFile()
 {
     dealloc();
     
@@ -22,7 +22,7 @@ VAFile::~VAFile()
 }
 
 void
-VAFile::dealloc()
+AmigaFile::dealloc()
 {
     if (data == NULL) {
         assert(size == 0);
@@ -37,7 +37,7 @@ VAFile::dealloc()
 }
 
 void
-VAFile::setPath(const char *str)
+AmigaFile::setPath(const char *str)
 {
     assert(str != NULL);
     
@@ -47,14 +47,14 @@ VAFile::setPath(const char *str)
 }
 
 void
-VAFile::seek(long offset)
+AmigaFile::seek(long offset)
 {
     eof = size;
     fp = (offset < eof) ? offset : -1;
 }
 
 int
-VAFile::read()
+AmigaFile::read()
 {
     int result;
     
@@ -91,7 +91,7 @@ VAFile::readHex(size_t num)
 */
 
 void
-VAFile::flash(uint8_t *buffer, size_t offset)
+AmigaFile::flash(uint8_t *buffer, size_t offset)
 {
     int byte;
     assert(buffer != NULL);
@@ -104,7 +104,7 @@ VAFile::flash(uint8_t *buffer, size_t offset)
 }
 
 bool
-VAFile::readFromBuffer(const uint8_t *buffer, size_t length)
+AmigaFile::readFromBuffer(const uint8_t *buffer, size_t length)
 {
     assert (buffer != NULL);
     
@@ -120,7 +120,7 @@ VAFile::readFromBuffer(const uint8_t *buffer, size_t length)
 }
 
 bool
-VAFile::readFromFile(const char *filename)
+AmigaFile::readFromFile(const char *filename)
 {
     assert (filename != NULL);
     
@@ -180,7 +180,7 @@ exit:
 }
 
 size_t
-VAFile::writeToBuffer(uint8_t *buffer)
+AmigaFile::writeToBuffer(uint8_t *buffer)
 {
     assert(data != NULL);
     
@@ -191,7 +191,7 @@ VAFile::writeToBuffer(uint8_t *buffer)
 }
 
 bool
-VAFile::writeToFile(const char *filename)
+AmigaFile::writeToFile(const char *filename)
 {
     bool success = false;
     uint8_t *data = NULL;

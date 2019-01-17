@@ -10,9 +10,9 @@
 #ifndef _KICKROM_INC
 #define _KICKROM_INC
 
-#include "VAFile.h"
+#include "AmigaFile.h"
 
-class KickRom : public VAFile {
+class KickRom : public AmigaFile {
     
 private:
     
@@ -47,7 +47,7 @@ public:
     // Methods from VAFile
     //
     
-    VAFileType type() override { return FILETYPE_KICK_ROM; }
+    AmigaFileType type() override { return FILETYPE_KICK_ROM; }
     const char *typeAsString() override { return "Kickstart Rom"; }
     bool hasSameType(const char *path) override { return isKickRomFile(path); }
     bool readFromBuffer(const uint8_t *buffer, size_t length) override;
