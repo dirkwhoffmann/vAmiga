@@ -398,40 +398,18 @@ class MyDocument : NSDocument {
         // Perform action
         track("Action = \(action)")
         switch action {
-        case .openBrowser: runMountDialog()
         case .insertIntoDrive8: mountAttachmentAsDisk(drive: 1)
         case .insertIntoDrive9: mountAttachmentAsDisk(drive: 2)
         case .flashFirstFile: flashAttachmentIntoMemory()
         case .insertIntoDatasette: mountAttachmentAsTape()
         case .attachToExpansionPort: mountAttachmentAsCartridge()
+        default: break
         }
         
         // Type text
         if text != nil {
             track("Auto typing: \(text!)")
             myController?.keyboardcontroller.type(text! + "\n")
-        }
-    }
-    
-    func runMountDialog() {
-        
-        switch attachment {
-            
-        case _ as CRTFileProxy:
-            runCartridgeMountDialog()
-            
-        case _ as TAPFileProxy:
-            runTapeMountDialog()
-            
-        case _ as T64FileProxy, _ as D64FileProxy,
-             _ as PRGFileProxy, _ as P00FileProxy:
-            runArchiveMountDialog()
-            
-        case _ as G64FileProxy:
-            runDiskMountDialog()
-            
-        default:
-            break
         }
     }
     
@@ -444,18 +422,6 @@ class MyDocument : NSDocument {
     func runDiskMountDialog() {
         let nibName = NSNib.Name("DiskMountDialog")
         let controller = DiskMountController.init(windowNibName: nibName)
-        controller.showSheet()
-    }
-    
-    func runTapeMountDialog() {
-        let nibName = NSNib.Name("TapeMountDialog")
-        let controller = TapeMountController.init(windowNibName: nibName)
-        controller.showSheet()
-    }
-    
-    func runCartridgeMountDialog() {
-        let nibName = NSNib.Name("CartridgeMountDialog")
-        let controller = CartridgeMountController.init(windowNibName: nibName)
         controller.showSheet()
     }
     
