@@ -413,12 +413,6 @@ class MyDocument : NSDocument {
         }
     }
     
-    func runArchiveMountDialog() {
-        let nibName = NSNib.Name("ArchiveMountDialog")
-        let controller = ArchiveMountController.init(windowNibName: nibName)
-        controller.showSheet()
-    }
-    
     func runDiskMountDialog() {
         let nibName = NSNib.Name("DiskMountDialog")
         let controller = DiskMountController.init(windowNibName: nibName)
