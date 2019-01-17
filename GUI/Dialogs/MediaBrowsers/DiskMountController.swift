@@ -20,7 +20,10 @@ class DiskMountController : UserDialogController {
     var _head = 0
     var _track = 0
     var _sector = 0
-        
+    
+    // Preview data
+    var sectorData: [String] = []
+    
     func setCylinder(_ newValue: Int) {
 
         if (newValue >= 0 && newValue <= 79) {
@@ -57,7 +60,7 @@ class DiskMountController : UserDialogController {
         if (newValue >= 0 && newValue <= 1759) {
             
             _sector   = newValue
-            _track    = _sector % 11
+            _track    = _sector / 11
             _cylinder = _track / 2
             _head     = _track % 2
         }
@@ -85,6 +88,7 @@ class DiskMountController : UserDialogController {
     
     override public func awakeFromNib() {
 
+        sectorData = Array(repeating: "", count: 512 / bytesPerRow)
         update()
     }
     
@@ -99,6 +103,7 @@ class DiskMountController : UserDialogController {
         sectorField.integerValue     = _sector
         sectorStepper.integerValue   = _sector
 
+        buildStrings()
         previewTable.reloadData()
     }
     
@@ -180,6 +185,31 @@ extension DiskMountController : NSTableViewDelegate {
 
 extension DiskMountController : NSTableViewDataSource {
     
+    func buildHex(count: Int) -> String {
+        
+        let hexDigits = Array(("0123456789ABCDEF ").utf16)
+        var chars: [unichar] = []
+        chars.reserveCapacity(3 * count)
+        
+        for _ in 1 ... count {
+            
+            let byte = disk.read()
+            chars.append(hexDigits[Int(byte / 16)])
+            chars.append(hexDigits[Int(byte % 16)])
+            chars.append(hexDigits[16])
+        }
+        
+        return String(utf16CodeUnits: chars, count: chars.count)
+    }
+    
+    func buildStrings() {
+        
+        disk.seekSector(_sector)
+        for i in 0 ... ((512 / bytesPerRow) - 1) {
+            sectorData[i] = buildHex(count: bytesPerRow)
+        }
+    }
+    
     func numberOfRows(in tableView: NSTableView) -> Int {
         
         return 8
@@ -190,7 +220,7 @@ extension DiskMountController : NSTableViewDataSource {
         
         if (tableColumn?.identifier)!.rawValue == "data" {
             
-            return "42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42"
+            return sectorData[row]
         }
         
         return "???"

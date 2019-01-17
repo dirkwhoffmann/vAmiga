@@ -193,6 +193,10 @@ struct AmigaFileWrapper;
 - (AmigaFileType)type;
 - (void)setPath:(NSString *)path;
 - (NSInteger)sizeOnDisk;
+
+- (void)seek:(NSInteger)offset;
+- (NSInteger)read;
+
 - (void)readFromBuffer:(const void *)buffer length:(NSInteger)length;
 - (NSInteger)writeToBuffer:(void *)buffer;
 
@@ -206,12 +210,12 @@ struct AmigaFileWrapper;
 @interface ADFFileProxy : AmigaFileProxy {
 }
 
-+ (BOOL)isADFFile:(NSString *)filename;
++ (BOOL)isADFFile:(NSString *)path;
 + (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)length;
-+ (instancetype) makeWithFile:(NSString *)filename;
++ (instancetype) makeWithFile:(NSString *)path;
 
-// - (void)seekTrack:(NSInteger)number;
-// - (void)seekSector:(NSInteger)number;
+- (void)seekTrack:(NSInteger)nr;
+- (void)seekSector:(NSInteger)nr;
 
 @end
 

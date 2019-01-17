@@ -63,3 +63,21 @@ ADFFile::readFromBuffer(const uint8_t *buffer, size_t length)
     
     return isADFBuffer(buffer, length);
 }
+
+void
+ADFFile::seekTrack(long nr)
+{
+    assert(isTrackNumber(nr));
+    
+    fp = nr * (11 * 512);
+    eof = (nr + 1) + (11 * 512);
+}
+
+void
+ADFFile::seekSector(long nr)
+{
+    assert(isTrackNumber(nr));
+    
+    fp = nr * 512;
+    eof = (nr + 1) * 512;
+}

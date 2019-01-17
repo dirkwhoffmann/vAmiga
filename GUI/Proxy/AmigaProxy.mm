@@ -173,6 +173,14 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->file->sizeOnDisk();
 }
+- (void) seek:(NSInteger)offset
+{
+    wrapper->file->seek(offset);
+}
+- (NSInteger)read
+{
+    return wrapper->file->read();
+}
 - (void) readFromBuffer:(const void *)buffer length:(NSInteger)length
 {
     wrapper->file->readFromBuffer((const uint8_t *)buffer, length);
@@ -201,9 +209,9 @@ struct ADFFileWrapper { ADFFile *adf; };
 
 @implementation ADFFileProxy
 
-+ (BOOL)isADFFile:(NSString *)filename
++ (BOOL)isADFFile:(NSString *)path
 {
-    return ADFFile::isADFFile([filename UTF8String]);
+    return ADFFile::isADFFile([path UTF8String]);
 }
 + (instancetype) make:(ADFFile *)archive
 {
@@ -219,6 +227,14 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     ADFFile *archive = ADFFile::makeWithFile([path UTF8String]);
     return [self make: archive];
+}
+- (void)seekTrack:(NSInteger)nr
+{
+    ((ADFFile *)wrapper->file)->seekTrack(nr);
+}
+- (void)seekSector:(NSInteger)nr
+{
+    ((ADFFile *)wrapper->file)->seekSector(nr);
 }
 
 @end

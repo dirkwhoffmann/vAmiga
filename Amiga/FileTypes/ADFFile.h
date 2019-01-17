@@ -12,6 +12,10 @@
 
 #include "AmigaFile.h"
 
+static inline bool isCylinderNumber(long nr) { return nr >= 0 && nr <= 79; }
+static inline bool isTrackNumber(long nr)    { return nr >= 0 && nr <= 159; }
+static inline bool isSectorNumber(long nr)   { return nr >= 0 && nr <= 1759; }
+
 class ADFFile : public AmigaFile {
     
 public:
@@ -43,7 +47,7 @@ public:
     
     
     //
-    // Methods from VAFile
+    // Methods from AmigaFile
     //
     
     AmigaFileType type() override { return FILETYPE_ADF; }
@@ -51,6 +55,22 @@ public:
     bool hasSameType(const char *path) override { return isADFFile(path); }
     bool readFromBuffer(const uint8_t *buffer, size_t length) override;
     
+    
+    //
+    // Seeking tracks and sectors
+    //
+    
+    /* Prepares to read a track.
+     * Use read() to read from the selected track. Returns EOF when the whole
+     * track has been read in.
+     */
+    void seekTrack(long number);
+    
+    /* Prepares to read a sector.
+     * Use read() to read from the selected sector. Returns EOF when the whole
+     * sector has been read in.
+     */
+    void seekSector(long number);
 };
 
 #endif
