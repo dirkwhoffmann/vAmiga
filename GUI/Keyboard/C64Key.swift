@@ -440,7 +440,7 @@ extension C64Key {
             font = NSFont.systemFont(ofSize: 13)
             yoffset = -6
         } else {
-            font = NSFont.init(name: "C64ProMono", size: 9)!
+            font = NSFont.systemFont(ofSize: 13) // NSFont.init(name: "C64ProMono", size: 9)!
             yoffset = -9
         }
         

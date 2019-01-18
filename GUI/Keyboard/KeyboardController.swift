@@ -1,16 +1,29 @@
-//
-// This file is part of VirtualC64 - A cycle accurate Commodore 64 emulator
+// -----------------------------------------------------------------------------
+// This file is part of vAmiga
 //
 // Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
 // Licensed under the GNU General Public License v3
 //
 // See https://www.gnu.org for license information
-//
+// -----------------------------------------------------------------------------
 
 import Foundation
 import Carbon.HIToolbox
 
-//!@ brief Keyboard event handler
+/* The region code of the emulated keyboard
+ * The region code influences the visual appearance of the emulated keyboard by
+ * defining the printed labels on the keycaps. Each key on the Amiga keyboard
+ * is uniquely identifies by it's keycode, but keys with the same code can be
+ * labeled differently in different countries.
+ */
+enum Region : Int, Codable {
+    case generic
+    case us
+    case german
+}
+
+
+// Keyboard event handler
 class KeyboardController: NSObject {
     
     var controller : MyController!

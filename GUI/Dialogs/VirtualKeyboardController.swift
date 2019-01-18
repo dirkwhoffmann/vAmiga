@@ -154,6 +154,8 @@ class VirtualKeyboardController : UserDialogController, NSWindowDelegate
         let tag = (sender as! NSButton).tag
         let key = C64Key(tag)
         
+        track("\(tag)")
+
         func press() {
             if key.nr == 31 {
                 keyboard.pressRestoreKey()
