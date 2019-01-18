@@ -16,10 +16,10 @@ import Carbon.HIToolbox
  * is uniquely identifies by it's keycode, but keys with the same code can be
  * labeled differently in different countries.
  */
-enum Region : Int, Codable {
+enum Country : Int, Codable {
     case generic
     case us
-    case german
+    case germany
 }
 
 

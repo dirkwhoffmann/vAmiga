@@ -1003,7 +1003,6 @@
 				508FE04A21EA22CC0043D0E9 /* DiskMountController.swift */,
 				508FE04421EA22CC0043D0E9 /* DiskInspectorController.swift */,
 				508FE04521EA22CC0043D0E9 /* SnapshotController.swift */,
-				508FE04621EA22CC0043D0E9 /* VirtualKeyboardController.swift */,
 				508FE04D21EA22CC0043D0E9 /* ExportDiskController.swift */,
 			);
 			path = Dialogs;
@@ -1095,6 +1094,7 @@
 			isa = PBXGroup;
 			children = (
 				508FE00021EA227A0043D0E9 /* KeyboardController.swift */,
+				508FE04621EA22CC0043D0E9 /* VirtualKeyboardController.swift */,
 				508FDFFF21EA227A0043D0E9 /* MacKey.swift */,
 				50F5F27121F1B6DF000627D1 /* AmigaKey.swift */,
 				508FE00A21EA227B0043D0E9 /* C64Key.swift */,

@@ -12,10 +12,10 @@ import Foundation
 class VirtualKeyboardController : UserDialogController, NSWindowDelegate
 {
     /// Array holding a reference to the view of each key
-    var keyView = Array(repeating: nil as NSButton?, count: 66)
+    var keyView = Array(repeating: nil as NSButton?, count: 128)
 
-    /// Array holding a reference to the image of each key
-    var keyImage = Array(repeating: nil as NSImage?, count: 66)
+    /// Image cache
+    var keyImage = Array(repeating: nil as NSImage?, count: 128)
 
     /// Indicates if the left Shift key is pressed
     var lshift = false
@@ -43,12 +43,7 @@ class VirtualKeyboardController : UserDialogController, NSWindowDelegate
     func showWindow(withParent controller: MyController) {
         
         track()
-        
-        // parent = controller
-        // parentWindow = parent.window
-        // c64 = parent.mydocument.c64
         autoClose = false
-        
         showWindow(self)
     }
     
@@ -57,17 +52,17 @@ class VirtualKeyboardController : UserDialogController, NSWindowDelegate
         track()
         
         // Setup key references
-        for tag in 0 ... 65 {
+        for tag in 0 ... 127 {
             keyView[tag] = window!.contentView!.viewWithTag(tag) as? NSButton
         }
 
-        updateImages()
+        updateImageCache()
     }
     
     func windowWillClose(_ notification: Notification) {
     
         track()
-        releaseSpecialKeys()
+        // releaseSpecialKeys()
     }
     
     func windowDidBecomeMain(_ notification: Notification) {
@@ -78,65 +73,30 @@ class VirtualKeyboardController : UserDialogController, NSWindowDelegate
     
     override func refresh() {
         
-        if let win = window, win.isVisible, let keyboard = proxy?.keyboard {
+        for keycode in 0 ... 127 {
             
-            var needsUpdate = false;
-            
-            if lshift != keyboard.leftShiftIsPressed() {
-                lshift = keyboard.leftShiftIsPressed()
-                needsUpdate = true
-            }
-            if rshift != keyboard.rightShiftIsPressed() {
-                rshift = keyboard.rightShiftIsPressed()
-                needsUpdate = true
-            }
-            if shiftLock != keyboard.shiftLockIsHoldDown() {
-                shiftLock = keyboard.shiftLockIsHoldDown()
-                needsUpdate = true
-            }
-            if control != keyboard.controlIsPressed() {
-                control = keyboard.controlIsPressed()
-                needsUpdate = true
-            }
-            if commodore != keyboard.commodoreIsPressed() {
-                commodore = keyboard.commodoreIsPressed()
-                needsUpdate = true
-            }
-            if lowercase != !keyboard.inUpperCaseMode() {
-                lowercase = !keyboard.inUpperCaseMode()
-                needsUpdate = true
-            }
-            
-            if needsUpdate {
-                updateImages()
+            if let image = keyImage[keycode] {
+                keyView[keycode]?.image = image
             }
         }
     }
     
-    func updateImages() {
+    func updateImageCache() {
         
-        guard let keyboard = proxy?.keyboard else { return }
-        
-        for nr in 0 ... 65 {
+        for keycode in 0 ... 127 {
+
+            let key = AmigaKey.init(keyCode: keycode)
+            track("\(keycode) n\(key)")
             
-            let shiftLock = keyboard.shiftLockIsHoldDown()
-            
-            let pressed =
-                (nr == 17 && control) ||
-                (nr == 34 && shiftLock) ||
-                (nr == 49 && commodore) ||
-                (nr == 50 && lshift) ||
-                (nr == 61 && rshift)
-            let shift = lshift || rshift || shiftLock
-        
-            keyView[nr]!.image = C64Key(nr).image(pressed: pressed,
-                                                  shift: shift,
-                                                  control: control,
-                                                  commodore: commodore,
-                                                  lowercase: lowercase)
+            if let image = key.image(model: A500, country: .germany) {
+
+                track()
+                keyImage[keycode] = image
+            }
         }
     }
     
+    /*
     func releaseSpecialKeys() {
         
         guard let keyboard = proxy?.keyboard else { return }
@@ -146,9 +106,12 @@ class VirtualKeyboardController : UserDialogController, NSWindowDelegate
         keyboard.releaseKey(atRow: C64Key.shift.row, col: C64Key.shift.col)
         keyboard.releaseKey(atRow: C64Key.rightShift.row, col: C64Key.rightShift.col)
     }
+    */
     
-    @IBAction func pressVirtualC64Key(_ sender: Any!) {
+    @IBAction func pressVirtualC64Key(_ sender: NSButton!) {
         
+    }
+    /*
         guard let keyboard = proxy?.keyboard else { return }
 
         let tag = (sender as! NSButton).tag
@@ -205,6 +168,7 @@ class VirtualKeyboardController : UserDialogController, NSWindowDelegate
             }
         }
     }
+    */
     
     override func mouseDown(with event: NSEvent) {
         
