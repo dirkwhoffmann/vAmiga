@@ -228,7 +228,9 @@ extension AmigaKey {
         AmigaKeycodes.leftAmiga:      ("125x100", "white"),
         AmigaKeycodes.rightAlt:       ("125x100", "white"),
         AmigaKeycodes.rightAmiga:     ("125x100", "white"),
-        AmigaKeycodes.numPadEnter:    ("200x100", "white")
+        AmigaKeycodes.numPadEnter:    ("200x100", "white"),
+        AmigaKeycodes.space:          ("750x100", "white"),
+
     ]
     
     // Special keys (A1000 US)
@@ -252,21 +254,22 @@ extension AmigaKey {
         AmigaKeycodes.leftAmiga:      ("125x100", "dark"),
         AmigaKeycodes.rightAlt:       ("125x100", "dark"),
         AmigaKeycodes.rightAmiga:     ("125x100", "dark"),
-        AmigaKeycodes.numPadEnter:    ("200x100", "dark")
+        AmigaKeycodes.numPadEnter:    ("100x200", "dark"),
+        AmigaKeycodes.space:          ("900x100", "white"),
     ]
     
     // Special keys (A500 US)
     static let specialKeysA500US : [Int : (String,String)] = [
         
-        AmigaKeycodes.enter:          ("225x200", "white"),
-        AmigaKeycodes.leftShift:      ("275x100", "white")
+        AmigaKeycodes.enter:          ("225x200", "dark"),
+        AmigaKeycodes.leftShift:      ("275x100", "dark")
     ]
     
     // Special keys (A500 International)
     static let specialKeysA500Int : [Int : (String,String)] = [
         
-        AmigaKeycodes.enter:          ("150x200", "white"),
-        AmigaKeycodes.leftShift:      ("175x100", "white")
+        AmigaKeycodes.enter:          ("150x200", "dark"),
+        AmigaKeycodes.leftShift:      ("175x100", "dark")
     ]
     
     // Returns an unlabeled background image of the right shape
