@@ -94,8 +94,8 @@ struct AmigaKeycodes {
     
    // Extra keys on international Amigas (ISO style)
    struct iso {
-        static let laceBrace    = 0x2B
-        static let hashtag      = 0x30
+        static let hashtag      = 0x2B
+        static let laceBrace    = 0x30
     }
     
     // Amiga keycodes 0x40 - 0x5F (Codes common to all keyboards)
@@ -289,7 +289,9 @@ extension AmigaKey {
     // Special keys (A1000 commons)
     static let a1000commons : [Int : (String,String)] = [
         
+        AmigaKeycodes.ansi.grave:     ("125x100", "white"),
         AmigaKeycodes.space:          ("750x100", "white"),
+        AmigaKeycodes.tab:            ("175x100", "white"),
         AmigaKeycodes.keypadEnter:    ("200x100", "white"),
         AmigaKeycodes.keypadMinus:    ("100x100", "white"),
         AmigaKeycodes.leftAlt:        ("125x100", "white"),
@@ -315,15 +317,19 @@ extension AmigaKey {
     // Special keys (A500 commons)
     static let a500commons : [Int : (String,String)] = [
         
+        AmigaKeycodes.ansi.grave:     ("150x100", "dark"),
+        AmigaKeycodes.ansi.keypad0:   ("200x100", "white"),
         AmigaKeycodes.space:          ("900x100", "white"),
         AmigaKeycodes.tab:            ("200x100", "dark"),
         AmigaKeycodes.keypadEnter:    ("100x200", "dark"),
         AmigaKeycodes.keypadMinus:    ("100x100", "dark"),
+        AmigaKeycodes.delete:         ("150x100", "dark"),
         AmigaKeycodes.keypadLBracket: ("100x100", "dark"),
-        AmigaKeycodes.keypadLBracket: ("100x100", "dark"),
+        AmigaKeycodes.keypadRBracket: ("100x100", "dark"),
         AmigaKeycodes.keypadSlash:    ("100x100", "dark"),
         AmigaKeycodes.keypadAsterisk: ("100x100", "dark"),
         AmigaKeycodes.keypadPlus:     ("100x100", "dark"),
+        AmigaKeycodes.help:           ("150x100", "dark"),
         AmigaKeycodes.rightShift:     ("250x100", "dark"),
         AmigaKeycodes.control:        ("125x100", "dark"),
         AmigaKeycodes.leftAlt:        ("125x100", "dark"),
