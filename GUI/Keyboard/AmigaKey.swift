@@ -11,7 +11,7 @@ import Foundation
 
 /* List of Amiga key codes that are common to all keyboards
  */
-struct AmigaKeycodes {
+struct AmigaKeycode {
 
     // Amiga keycodes 0x00 - 0x3F (Positional keys)
     
@@ -138,88 +138,136 @@ struct AmigaKeycodes {
     static let leftAmiga        = 0x66
     static let rightAmiga       = 0x67
 }
- 
+
+// Country specific keycaps
+let keycaps : [Int : [Language: String]] = [
+    
+    AmigaKeycode.ansi.grave:        [.us: "~ `"],
+    AmigaKeycode.ansi.digit1:       [.us: "! 1"],
+    AmigaKeycode.ansi.digit2:       [.us: "\u{0022} 2"],
+    AmigaKeycode.ansi.digit3:       [.us: "\u{00A3} 3", .german: "§ 3"],
+    AmigaKeycode.ansi.digit4:       [.us: "$ 4"],
+    AmigaKeycode.ansi.digit5:       [.us: "% 5"],
+    AmigaKeycode.ansi.digit6:       [.us: "^ 6", .german: "& 6", .italian: "& 6"],
+    AmigaKeycode.ansi.digit7:       [.us: "& 7", .german: "/ 7", .italian: "/ 7"],
+    AmigaKeycode.ansi.digit8:       [.us: "* 8", .german: "( 8", .italian: "( 8"],
+    AmigaKeycode.ansi.digit9:       [.us: "( 9", .german: ") 9", .italian: ") 9"],
+    AmigaKeycode.ansi.digit0:       [.us: ") 0", .german: "= 0", .italian: "= 0"],
+    AmigaKeycode.ansi.minus:        [.us: "_ -", .german: "? ß", .italian: "? ´"],
+    AmigaKeycode.ansi.equal:        [.us: "+ =", .german: "` ´", .italian: "^ \u{00EC}"],
+    AmigaKeycode.ansi.backslash:    [.us: "| \\"],
+    
+    AmigaKeycode.ansi.keypad0:      [.us: "0"],
+        
+    AmigaKeycode.ansi.q:            [.us: "Q"],
+    AmigaKeycode.ansi.w:            [.us: "W"],
+    AmigaKeycode.ansi.e:            [.us: "E"],
+    AmigaKeycode.ansi.r:            [.us: "R"],
+    AmigaKeycode.ansi.t:            [.us: "T"],
+    AmigaKeycode.ansi.y:            [.us: "Y", .german: "Z"],
+    AmigaKeycode.ansi.u:            [.us: "U"],
+    AmigaKeycode.ansi.i:            [.us: "I"],
+    AmigaKeycode.ansi.o:            [.us: "O"],
+    AmigaKeycode.ansi.p:            [.us: "P"],
+    AmigaKeycode.ansi.lBracket:     [.us: "[ {", .german: "Ü", .italian: "\u{00E9} \u{00E8}"],
+    AmigaKeycode.ansi.rBracket:     [.us: "] }", .german: "* +", .italian: "* +"],
+
+    AmigaKeycode.ansi.keypad1:      [.us: "1"],
+    AmigaKeycode.ansi.keypad2:      [.us: "2"],
+    AmigaKeycode.ansi.keypad3:      [.us: "3"],
+
+    AmigaKeycode.ansi.a:            [.us: "A"],
+    AmigaKeycode.ansi.s:            [.us: "S"],
+    AmigaKeycode.ansi.d:            [.us: "D"],
+    AmigaKeycode.ansi.f:            [.us: "F"],
+    AmigaKeycode.ansi.g:            [.us: "G"],
+    AmigaKeycode.ansi.h:            [.us: "H"],
+    AmigaKeycode.ansi.j:            [.us: "J"],
+    AmigaKeycode.ansi.k:            [.us: "K"],
+    AmigaKeycode.ansi.l:            [.us: "L"],
+    AmigaKeycode.ansi.semicolon:    [.us: "; :", .german: "Ö", .italian: "@ \u{00F2}"],
+    AmigaKeycode.ansi.quote:        [.us: "# @", .german: "Ä", .italian: "# \u{00E0}"],
+
+    AmigaKeycode.ansi.keypad4:      [.us: "4"],
+    AmigaKeycode.ansi.keypad5:      [.us: "5"],
+    AmigaKeycode.ansi.keypad6:      [.us: "6"],
+
+    AmigaKeycode.ansi.z:            [.us: "Z", .german: "Y"],
+    AmigaKeycode.ansi.x:            [.us: "X"],
+    AmigaKeycode.ansi.c:            [.us: "C"],
+    AmigaKeycode.ansi.v:            [.us: "V"],
+    AmigaKeycode.ansi.b:            [.us: "B"],
+    AmigaKeycode.ansi.n:            [.us: "N"],
+    AmigaKeycode.ansi.m:            [.us: "M"],
+    AmigaKeycode.ansi.comma:        [.us: "< ,", .german: "; ,", .italian: "; ,"],
+    AmigaKeycode.ansi.period:       [.us: "> .", .german: ": .", .italian: ": ."],
+    AmigaKeycode.ansi.slash:        [.us: "? /", .german: "_ -", .italian: "_ -"],
+
+    AmigaKeycode.ansi.keypadPeriod: [.us: "."],
+    AmigaKeycode.ansi.keypad7:      [.us: "7"],
+    AmigaKeycode.ansi.keypad8:      [.us: "8"],
+    AmigaKeycode.ansi.keypad9:      [.us: "9"],
+
+    AmigaKeycode.iso.hashtag:       [.us: "", .german: "^ #", .italian: "§ \u{00F9}"],
+    AmigaKeycode.iso.laceBrace:     [.us: "", .german: "> <", .italian: "> <"],
+
+    AmigaKeycode.space:             [.us: ""],
+    AmigaKeycode.backspace:         [.us: "\u{2190}"],
+    AmigaKeycode.tab:               [.us: "\u{21e4} \u{21e5}"],
+    AmigaKeycode.keypadEnter:       [.us: ""],
+    AmigaKeycode.enter:             [.us: ""],
+    AmigaKeycode.escape:            [.us: "Esc"],
+    AmigaKeycode.delete:            [.us: "Del"],
+    AmigaKeycode.keypadMinus:       [.us: "-"],
+    AmigaKeycode.keypadUp:          [.us: "\u{2191}"],
+    AmigaKeycode.cursorDown:        [.us: "\u{2193}"],
+    AmigaKeycode.cursorRight:       [.us: "\u{2192}"],
+    AmigaKeycode.cursorLeft:        [.us: "\u{2190}"],
+    AmigaKeycode.f1:                [.us: "F1"],
+    AmigaKeycode.f2:                [.us: "F2"],
+    AmigaKeycode.f3:                [.us: "F3"],
+    AmigaKeycode.f4:                [.us: "F4"],
+    AmigaKeycode.f5:                [.us: "F5"],
+    AmigaKeycode.f6:                [.us: "F6"],
+    AmigaKeycode.f7:                [.us: "F7"],
+    AmigaKeycode.f8:                [.us: "F8"],
+    AmigaKeycode.f9:                [.us: "F9"],
+    AmigaKeycode.f10:               [.us: "F10"],
+    AmigaKeycode.keypadLBracket:    [.us: "(", .german: "{ [", .italian: "{ ["],
+    AmigaKeycode.keypadRBracket:    [.us: ")", .german: "} ]", .italian: "{ ["],
+    AmigaKeycode.keypadSlash:       [.us: "/"],
+    AmigaKeycode.keypadAsterisk:    [.us: "*"],
+    AmigaKeycode.keypadPlus:        [.us: "+"],
+    AmigaKeycode.help:              [.us: "Help"],
+
+    AmigaKeycode.leftShift:         [.us: "\u{21e7}"],
+    AmigaKeycode.rightShift:        [.us: "\u{21e7}"],
+    AmigaKeycode.capsLock:          [.us: "Caps Lock"],
+    AmigaKeycode.control:           [.us: "Ctrl"],
+    AmigaKeycode.leftAlt:           [.us: "Alt"],
+    AmigaKeycode.rightAlt:          [.us: "Alt"],
+    AmigaKeycode.leftAmiga:         [.us: ""],
+    AmigaKeycode.rightAmiga:        [.us: ""],
+]
+
 /* This structure represents a physical keys on the Amiga keyboard.
- * The Amiga identified each key with a keycode which is a 7 bit identifier.
- *
- * Note:
- *   - There are multiple physical keyboard layouts:
- *      A1000 US, A1000 Europe, A500/2000 US, A500/2000 Europe
- *   - Some keys carry different labels in different countries.
- *     Hence, two keys with the same keycode can be visually different.
- *
  */
 struct AmigaKey : Codable {
     
     // The unique identifier of this Amiga key
     var keyCode: Int = 0
     
-    // A textual description of this key (country specific)
-    var description: [Country: String] = [:]
+    // The keycap label (country specific)
+    var label: [Language: String] = [:]
     
-    // The characters thar are printed on the key (country specific)
-    var label: [Country: String] = [:]
-    
-    /*
-    init(keyCode: Int, description: [Country: String], label: [Country: String]) {
-        
-        self.keyCode = keyCode
-        self.description = description
-        self.label = label
-    }
-    */
-    
-    init(_ description: [Country: String], _ label: [Country: String]) {
-        
-        self.description = description
-        self.label = label
-    }
-
-    init(_ description: String, _ label: [Country: String]) {
-        
-        self.init([.generic: description], label)
-    }
-    
-    init(_ description: String, _ label: String) {
-        
-        self.init([.generic: description], [.generic: label])
-    }
-    
-    /*
-    init(keyCode: Int, description: String, label: String) {
-        
-        self.init(keyCode: keyCode, description: [.generic: description], label: [.generic: label])
-    }
-    */
-    
+    // Initializers
+    // private init(_ label: [Language: String]) { self.label = label }
+    // private init(_ label: String) { self.init([.us: label]) }
     
     init(keyCode: Int) {
         
-        switch keyCode {
-            
-        case 0x00: self.init("TILDE", "~`")
-        case 0x01: self.init("1", "!1")
-        case 0x02: self.init("2", "\u{0022}2")
-        case 0x03: self.init("3", "\u{00A3}3")
-        case 0x04: self.init("4", "$4")
-        case 0x05: self.init("5", "%5")
-        case 0x06: self.init("6", [.us: "^6", .germany: "&6"])
-        case 0x07: self.init("7", [.us: "&7", .germany: "/7"])
-        case 0x08: self.init("8", [.us: "*8", .germany: "(8"])
-        case 0x09: self.init("9", [.us: "(9", .germany: ")9"])
-        case 0x0A: self.init("0", [.us: ")0", .germany: "=0"])
-        case 0x0B: self.init("",  [.us: "_-", .germany: "?ß"])
-        case 0x0C: self.init("",  [.us: "+=", .germany: "`´"])
-        case 0x0D: self.init("",  "|\\")
-            
-        //
-        // case 0x45: self.init("ESC", "ESC")
-        // case 0x50: self.init("F1", "F1")
-        default:
-            self.init("???", "?")
-        }
-        
         self.keyCode = keyCode
+        label = keycaps[keyCode] ?? [.us: ""]
     }
 }
 
@@ -272,88 +320,89 @@ extension AmigaKey {
     // Special keys (commons)
     static let specialKeys : [Int : (String,String)] = [
         
-        AmigaKeycodes.ansi.keypad0:   ("200x100", "white"),
-        AmigaKeycodes.escape:         ("100x100", "dark"),
-        AmigaKeycodes.f1:             ("125x100", "dark"),
-        AmigaKeycodes.f2:             ("125x100", "dark"),
-        AmigaKeycodes.f3:             ("125x100", "dark"),
-        AmigaKeycodes.f4:             ("125x100", "dark"),
-        AmigaKeycodes.f5:             ("125x100", "dark"),
-        AmigaKeycodes.f6:             ("125x100", "dark"),
-        AmigaKeycodes.f7:             ("125x100", "dark"),
-        AmigaKeycodes.f8:             ("125x100", "dark"),
-        AmigaKeycodes.f9:             ("125x100", "dark"),
-        AmigaKeycodes.f10:            ("125x100", "dark"),
+        AmigaKeycode.ansi.keypad0:   ("200x100", "white"),
+        AmigaKeycode.escape:         ("100x100", "dark"),
+        AmigaKeycode.f1:             ("125x100", "dark"),
+        AmigaKeycode.f2:             ("125x100", "dark"),
+        AmigaKeycode.f3:             ("125x100", "dark"),
+        AmigaKeycode.f4:             ("125x100", "dark"),
+        AmigaKeycode.f5:             ("125x100", "dark"),
+        AmigaKeycode.f6:             ("125x100", "dark"),
+        AmigaKeycode.f7:             ("125x100", "dark"),
+        AmigaKeycode.f8:             ("125x100", "dark"),
+        AmigaKeycode.f9:             ("125x100", "dark"),
+        AmigaKeycode.f10:            ("125x100", "dark"),
     ]
     
     // Special keys (A1000 commons)
     static let a1000commons : [Int : (String,String)] = [
         
-        AmigaKeycodes.ansi.grave:     ("125x100", "white"),
-        AmigaKeycodes.space:          ("750x100", "white"),
-        AmigaKeycodes.tab:            ("175x100", "white"),
-        AmigaKeycodes.keypadEnter:    ("200x100", "white"),
-        AmigaKeycodes.keypadMinus:    ("100x100", "white"),
-        AmigaKeycodes.leftAlt:        ("125x100", "white"),
-        AmigaKeycodes.rightAlt:       ("125x100", "white"),
-        AmigaKeycodes.leftAmiga:      ("125x100", "white"),
-        AmigaKeycodes.rightAmiga:     ("125x100", "white"),
+        AmigaKeycode.ansi.grave:     ("125x100", "white"),
+        AmigaKeycode.space:          ("750x100", "white"),
+        AmigaKeycode.tab:            ("175x100", "white"),
+        AmigaKeycode.keypadEnter:    ("200x100", "white"),
+        AmigaKeycode.keypadMinus:    ("100x100", "white"),
+        AmigaKeycode.leftAlt:        ("125x100", "white"),
+        AmigaKeycode.rightAlt:       ("125x100", "white"),
+        AmigaKeycode.leftAmiga:      ("125x100", "white"),
+        AmigaKeycode.rightAmiga:     ("125x100", "white"),
     ]
     
     // Special keys (A1000 ANSI like)
     static let a1000ansi : [Int : (String,String)] = [
         
-        AmigaKeycodes.enter:          ("200x200", "white"),
-        AmigaKeycodes.leftShift:      ("250x100", "white"),
+        AmigaKeycode.enter:          ("200x200", "white"),
+        AmigaKeycode.leftShift:      ("250x100", "white"),
     ]
     
     // Special keys (A1000 ISO like)
     static let a1000iso : [Int : (String,String)] = [
         
-        AmigaKeycodes.enter:          ("125x200", "white"),
-        AmigaKeycodes.leftShift:      ("155x100", "white"),
+        AmigaKeycode.enter:          ("125x200", "white"),
+        AmigaKeycode.leftShift:      ("155x100", "white"),
     ]
     
     // Special keys (A500 commons)
     static let a500commons : [Int : (String,String)] = [
         
-        AmigaKeycodes.ansi.grave:     ("150x100", "dark"),
-        AmigaKeycodes.ansi.keypad0:   ("200x100", "white"),
-        AmigaKeycodes.space:          ("900x100", "white"),
-        AmigaKeycodes.tab:            ("200x100", "dark"),
-        AmigaKeycodes.keypadEnter:    ("100x200", "dark"),
-        AmigaKeycodes.keypadMinus:    ("100x100", "dark"),
-        AmigaKeycodes.delete:         ("150x100", "dark"),
-        AmigaKeycodes.keypadLBracket: ("100x100", "dark"),
-        AmigaKeycodes.keypadRBracket: ("100x100", "dark"),
-        AmigaKeycodes.keypadSlash:    ("100x100", "dark"),
-        AmigaKeycodes.keypadAsterisk: ("100x100", "dark"),
-        AmigaKeycodes.keypadPlus:     ("100x100", "dark"),
-        AmigaKeycodes.help:           ("150x100", "dark"),
-        AmigaKeycodes.rightShift:     ("250x100", "dark"),
-        AmigaKeycodes.control:        ("125x100", "dark"),
-        AmigaKeycodes.leftAlt:        ("125x100", "dark"),
-        AmigaKeycodes.rightAlt:       ("125x100", "dark"),
-        AmigaKeycodes.leftAmiga:      ("125x100", "dark"),
-        AmigaKeycodes.rightAmiga:     ("125x100", "dark"),
+        AmigaKeycode.ansi.grave:     ("150x100", "dark"),
+        AmigaKeycode.ansi.keypad0:   ("200x100", "white"),
+        AmigaKeycode.space:          ("900x100", "white"),
+        AmigaKeycode.backspace:      ("100x100", "dark"),
+        AmigaKeycode.tab:            ("200x100", "dark"),
+        AmigaKeycode.keypadEnter:    ("100x200", "dark"),
+        AmigaKeycode.keypadMinus:    ("100x100", "dark"),
+        AmigaKeycode.delete:         ("150x100", "dark"),
+        AmigaKeycode.keypadLBracket: ("100x100", "dark"),
+        AmigaKeycode.keypadRBracket: ("100x100", "dark"),
+        AmigaKeycode.keypadSlash:    ("100x100", "dark"),
+        AmigaKeycode.keypadAsterisk: ("100x100", "dark"),
+        AmigaKeycode.keypadPlus:     ("100x100", "dark"),
+        AmigaKeycode.help:           ("150x100", "dark"),
+        AmigaKeycode.rightShift:     ("250x100", "dark"),
+        AmigaKeycode.control:        ("125x100", "dark"),
+        AmigaKeycode.leftAlt:        ("125x100", "dark"),
+        AmigaKeycode.rightAlt:       ("125x100", "dark"),
+        AmigaKeycode.leftAmiga:      ("125x100A", "dark"),
+        AmigaKeycode.rightAmiga:     ("125x100A", "dark"),
     ]
     
     // Special keys (A500 ANSI like)
     static let a500ansi : [Int : (String,String)] = [
         
-        AmigaKeycodes.enter:          ("225x200", "dark"),
-        AmigaKeycodes.leftShift:      ("275x100", "dark")
+        AmigaKeycode.enter:          ("225x200", "dark"),
+        AmigaKeycode.leftShift:      ("275x100", "dark")
     ]
     
     // Special keys (A500 ISO like)
     static let a500iso : [Int : (String,String)] = [
         
-        AmigaKeycodes.enter:          ("150x200", "dark"),
-        AmigaKeycodes.leftShift:      ("175x100", "dark")
+        AmigaKeycode.enter:          ("150x200", "dark"),
+        AmigaKeycode.leftShift:      ("175x100", "dark")
     ]
     
     // Returns an unlabeled background image of the right shape
-    func backgroundImage(model: AmigaModel, country: Country) -> NSImage? {
+    func backgroundImage(model: AmigaModel, country: Language) -> NSImage? {
         
         // Determine physical keyboard layout (ignoring key labels)
         let a1000     = (model == A1000)
@@ -380,39 +429,39 @@ extension AmigaKey {
         } else if let info = AmigaKey.a500iso[keyCode], a500iso {
             return NSImage(named: info.1 + info.0)
         } else {
-            // return NSImage(named: "white100x100")
-            return NSImage(named: "NSCaution")
+            return NSImage(named: "white100x100")
+            // return NSImage(named: "NSCaution")
         }
     }
     
-    func image(model: AmigaModel, country: Country) -> NSImage? {
+    func image(model: AmigaModel, country: Language) -> NSImage? {
         
+        // Key label font sizes
+        let large = CGFloat(15)
+        let small = CGFloat(10)
+        let tiny  = CGFloat(10) // CGFloat(9)
+
         // Get a background image
         guard let image = backgroundImage(model: model, country: country)?.copy() as? NSImage else {
             return nil
         }
 
-        // Get the key label
-        guard let text = label[country] else {
-            return image
+        // Get the keycap label
+        let label = self.label[country] ?? self.label[.us]!
+        let parts = label.split(separator: " ")
+    
+        if parts.count == 1 {
+
+            // Generate a standard label
+            let size = (parts[0].count == 1) ? large : small
+            image.imprint(text: String(parts[0]), x: 8, y: 2, fontSize: size)
         }
-        
-        track("text = \(text)")
-        
-        // Write label
-        switch text.count {
+        if parts.count == 2 {
             
-        case 0:
-            break
-            
-        case 1:
-            image.imprint(text: text, x: 8, y: 2, fontSize: 18)
-            
-        case 2:
-             image.imprint(character: Array(text)[0], x: 6, y: 2, fontSize: 13)
-             image.imprint(character: Array(text)[1], x: 6, y: 8, fontSize: 13)
-        default:
-            break
+            // Generate a stacked label
+            let size = (parts[0].count == 1) ? small : tiny
+            image.imprint(text: String(parts[0]), x: 6, y: 2, fontSize: size)
+            image.imprint(text: String(parts[1]), x: 6, y: 9, fontSize: size)
         }
         
         return image

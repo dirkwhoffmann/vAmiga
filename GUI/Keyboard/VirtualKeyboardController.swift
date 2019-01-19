@@ -88,7 +88,7 @@ class VirtualKeyboardController : UserDialogController, NSWindowDelegate
             let key = AmigaKey.init(keyCode: keycode)
             track("\(keycode) n\(key)")
             
-            if let image = key.image(model: A500, country: .germany) {
+            if let image = key.image(model: A500, country: .italian) {
 
                 track()
                 keyImage[keycode] = image
