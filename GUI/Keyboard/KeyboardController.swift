@@ -27,13 +27,12 @@ enum Language : Int, Codable {
 // Keyboard event handler
 class KeyboardController: NSObject {
     
-    var controller : MyController!
-    
-    /// Determines whether the joystick emulation keys should be uncoupled from
-    // the keyboard.
+    /* Indicates if the joystick emulation keys should also trigger key events.
+     * Set to true to prevent key events.
+     */
     var disconnectJoyKeys = Defaults.disconnectJoyKeys
     
-    /**
+    /** DEPRECATED
      Key mapping mode
      
      The user can choose between a symbolic and a positional key assignment.
@@ -44,15 +43,8 @@ class KeyboardController: NSObject {
     var mapKeysByPosition = Defaults.mapKeysByPosition
     
     /// Used key map if keys are mapped by position
- 
     var keyMap: [MacKey:C64Key] = Defaults.keyMap
     
-    // Delete when Objective-C code is gone
-    func getDisconnectEmulationKeys() -> Bool { return disconnectJoyKeys }
-    func setDisconnectEmulationKeys(_ b: Bool) { disconnectJoyKeys = b }
-    func getMapKeysByPosition() -> Bool { return mapKeysByPosition }
-    func setMapKeysByPosition(_ b: Bool) { mapKeysByPosition = b }
-
     /// Remembers the currently pressed key modifiers
     var leftShift: Bool = false
     var rightShift: Bool = false
@@ -60,7 +52,7 @@ class KeyboardController: NSObject {
     var option: Bool = false
     var command: Bool = false
     
-    /**
+    /** DEPRECATED
      Remembers the currently pressed keys and their assigned C64 key list
 
      This variable is only used when keys are mapped symbolically. It's written
@@ -86,23 +78,24 @@ class KeyboardController: NSObject {
         }
         if control != flags.contains(NSEvent.ModifierFlags.control) {
             keyUp(with: MacKey.control)
-            Swift.print("*** SHIFT inconsistency *** \(control)")
+            Swift.print("*** CTRL inconsistency *** \(control)")
         }
         if option != flags.contains(NSEvent.ModifierFlags.option) {
             keyUp(with: MacKey.option)
-            Swift.print("*** SHIFT inconsistency *** \(option)")
+            Swift.print("*** ALT inconsistency *** \(option)")
         }
-    }
-    
-    init(controller c: MyController) {
-        
-        super.init()
-        self.controller = c
     }
     
     func keyDown(with event: NSEvent) {
         
-        // track()
+        guard let controller = myController else { return }
+        
+        
+        // DELETE
+        let key = MacKey.init(keyCode: 0x32)
+        track("Keycode = \(key.amigaKeyCode)")
+        
+        
         
         // Ignore repeating keys
         if (event.isARepeat) {
@@ -111,7 +104,7 @@ class KeyboardController: NSObject {
         
         // Exit fullscreen mode if escape key is pressed
         if (event.keyCode == MacKey.escape.keyCode && controller.metalScreen.fullscreen) {
-            controller.window!.toggleFullScreen(nil)
+            myController?.window!.toggleFullScreen(nil)
         }
         
         let keyCode = event.keyCode
@@ -124,7 +117,7 @@ class KeyboardController: NSObject {
             return
         }
         
-        // Create and press MacKey
+        // Create a fitting MacKey and press it
         let macKey = MacKey.init(keyCode: keyCode, characters: characters)
         checkConsistency(withEvent: event)
         keyDown(with: macKey)
@@ -135,7 +128,7 @@ class KeyboardController: NSObject {
         let keyCode = event.keyCode
         let characters = event.charactersIgnoringModifiers
 
-        // Create and release macKey
+        // Create a fitting MacKey and release it
         let macKey = MacKey.init(keyCode: keyCode, characters: characters)
         checkConsistency(withEvent: event)
         keyUp(with: macKey)
@@ -187,6 +180,7 @@ class KeyboardController: NSObject {
     
     func keyDown(with macKey: MacKey) {
         
+        guard let controller = myController else { return }
         // track("\(macKey)")
         
         // Check if this key is used for joystick emulation
@@ -194,58 +188,33 @@ class KeyboardController: NSObject {
             return
         }
         
-        if mapKeysByPosition {
-            keyDown(with: macKey, keyMap: keyMap)
-            return
-        }
-
-        // Translate MacKey to a list of C64Keys
-        let c64Keys = translate(macKey: macKey)
-        
-        if c64Keys != [] {
-
-            // Store key combination for later use in keyUp
-            pressedKeys[macKey] = c64Keys
-        
-            // Press all required keys
-            for key in c64Keys {
-                controller.c64.keyboard.pressKey(atRow: key.row, col: key.col)
-            }
-        }
+        keyDown(with: macKey, keyMap: keyMap)
     }
     
     func keyDown(with macKey: MacKey, keyMap: [MacKey:C64Key]) {
         
         if let key = keyMap[macKey] {
-            controller.c64.keyboard.pressKey(atRow: key.row, col: key.col)
+            myController?.c64.keyboard.pressKey(atRow: key.row, col: key.col)
         }
     }
         
     func keyUp(with macKey: MacKey) {
+        
+        guard let controller = myController else { return }
         
         // Check if this key is used for joystick emulation
         if controller.gamePadManager.keyUp(with: macKey) && disconnectJoyKeys {
             return
         }
         
-        if mapKeysByPosition {
-            keyUp(with: macKey, keyMap: keyMap)
-            return
-        }
-        
-        // Lookup keys to be released
-        if let c64Keys = pressedKeys[macKey] {
-            for key in c64Keys {
-                controller.c64.keyboard.releaseKey(atRow: key.row, col: key.col)
-            }
-        }
+        keyUp(with: macKey, keyMap: keyMap)
     }
     
     func keyUp(with macKey: MacKey, keyMap: [MacKey:C64Key]) {
         
         if let key = keyMap[macKey] {
             // track("Releasing row: \(key.row) col: \(key.col)\n")
-            controller.c64.keyboard.releaseKey(atRow: key.row, col: key.col)
+            myController?.c64.keyboard.releaseKey(atRow: key.row, col: key.col)
         }
     }
 
@@ -331,6 +300,7 @@ class KeyboardController: NSObject {
     
     /// Logical key mapping
     /// Keys are mapped based on their meaning or the characters they represent
+    /*
     func translate(macKey: MacKey) -> [C64Key] {
         
         switch (macKey) {
@@ -371,8 +341,11 @@ class KeyboardController: NSObject {
             return C64Key.translate(char: macKey.description)
         }
     }
+    */
     
     func _type(keyList: [C64Key]) {
+        
+        guard let controller = myController else { return }
         
         for key in keyList {
             if (key == .restore) {
@@ -438,9 +411,5 @@ class KeyboardController: NSObject {
     func type(_ string: String?, initialDelay seconds: Double = 0.0) {
         let uSeconds = useconds_t(1000000 * seconds)
         type(string: string, initialDelay: uSeconds)
-    }
-    
-    func typeOnKeyboardAndPressPlay(string: String?) {
-        type(string: string, completion: controller.c64.datasette.pressPlay)
     }
 }

@@ -76,6 +76,7 @@ Amiga::Amiga()
         &dma,
         &denise,
         &paula,
+        &keyboard,
         NULL };
     
     registerSubcomponents(subcomponents, sizeof(subcomponents));

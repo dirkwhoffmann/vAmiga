@@ -24,6 +24,7 @@
 #include "DMAController.h"
 #include "Denise.h"
 #include "Paula.h"
+#include "AmigaKeyboard.h"
 
 // File types
 #include "ADFFile.h"
@@ -69,8 +70,11 @@ public:
     // Denise (Video)
     Denise denise;
 
-    // Paula (Interrupts, Audio)
+    // Paula (Interrupts, Disk Controller, Audio)
     Paula paula;
+
+    // Keyboard
+    AmigaKeyboard keyboard;
 
     
     //

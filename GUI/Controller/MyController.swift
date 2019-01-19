@@ -291,7 +291,7 @@ extension MyController {
         hideMouse = false
         
         // Create keyboard controller
-        keyboardcontroller = KeyboardController(controller: self)
+        keyboardcontroller = KeyboardController()
         if (keyboardcontroller == nil) {
             track("Failed to create keyboard controller")
             return

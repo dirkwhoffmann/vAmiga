@@ -16,6 +16,7 @@ struct MemWrapper { AmigaMemory *mem; };
 struct DMAControllerWrapper { DMAController *dmaController; };
 struct DeniseWrapper { Denise *denise; };
 struct PaulaWrapper { Paula *paula; };
+struct AmigaKeyboardWrapper { AmigaKeyboard *keyboard; };
 struct AmigaFileWrapper { AmigaFile *file; };
 struct ADFFileWrapper { ADFFile *adf; };
 
@@ -126,6 +127,44 @@ struct ADFFileWrapper { ADFFile *adf; };
 - (double) fillLevel
 {
     return wrapper->paula->fillLevel();
+}
+
+@end
+
+
+//
+// Keyboard proxy
+//
+
+@implementation AmigaKeyboardProxy
+
+- (instancetype) initWithKeyboard:(AmigaKeyboard *)keyboard
+{
+    if (self = [super init]) {
+        wrapper = new AmigaKeyboardWrapper();
+        wrapper->keyboard = keyboard;
+    }
+    return self;
+}
+- (void) dump
+{
+    wrapper->keyboard->dump();
+}
+- (BOOL) keyIsPressed:(NSInteger)keycode
+{
+    return wrapper->keyboard->keyIsPressed(keycode);
+}
+- (void) pressKey:(NSInteger)keycode
+{
+    wrapper->keyboard->pressKey(keycode);
+}
+- (void) releaseKey:(NSInteger)keycode
+{
+    wrapper->keyboard->releaseKey(keycode);
+}
+- (void) releaseAllKeys
+{
+    wrapper->keyboard->releaseAllKeys();
 }
 
 @end
@@ -251,6 +290,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 @synthesize dma;
 @synthesize denise;
 @synthesize paula;
+@synthesize keyboard;
 
 - (instancetype) init
 {
@@ -268,6 +308,7 @@ struct ADFFileWrapper { ADFFile *adf; };
     dma = [[DMAControllerProxy alloc] initWithDMAController:&amiga->dma];
     denise = [[DeniseProxy alloc] initWithDenise:&amiga->denise];
     paula = [[PaulaProxy alloc] initWithPaula:&amiga->paula];
+    keyboard = [[AmigaKeyboardProxy alloc] initWithKeyboard:&amiga->keyboard];
 
     return self;
 }

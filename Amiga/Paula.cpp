@@ -13,8 +13,3 @@ Paula::Paula()
 {
     setDescription("Paula");
 }
-
-Paula::~Paula()
-{
-    debug(2, "Destroying Paula[%p]\n", this);
-}

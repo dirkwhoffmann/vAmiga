@@ -25,118 +25,118 @@ struct AmigaKeycode {
      *  [Amiga Hardware Reference, 3rd]
      */
     struct ansi {
-        static let grave        = 0x00
-        static let digit1       = 0x01
-        static let digit2       = 0x02
-        static let digit3       = 0x03
-        static let digit4       = 0x04
-        static let digit5       = 0x05
-        static let digit6       = 0x06
-        static let digit7       = 0x07
-        static let digit8       = 0x08
-        static let digit9       = 0x09
-        static let digit0       = 0x0A
-        static let minus        = 0x0B
-        static let equal        = 0x0C
-        static let backslash    = 0x0D
+        static let grave         = 0x00
+        static let digit1        = 0x01
+        static let digit2        = 0x02
+        static let digit3        = 0x03
+        static let digit4        = 0x04
+        static let digit5        = 0x05
+        static let digit6        = 0x06
+        static let digit7        = 0x07
+        static let digit8        = 0x08
+        static let digit9        = 0x09
+        static let digit0        = 0x0A
+        static let minus         = 0x0B
+        static let equal         = 0x0C
+        static let backslash     = 0x0D
 
-        static let keypad0      = 0x0F
+        static let keypad0       = 0x0F
         
-        static let q            = 0x10
-        static let w            = 0x11
-        static let e            = 0x12
-        static let r            = 0x13
-        static let t            = 0x14
-        static let y            = 0x15
-        static let u            = 0x16
-        static let i            = 0x17
-        static let o            = 0x18
-        static let p            = 0x19
-        static let lBracket     = 0x1A
-        static let rBracket     = 0x1B
+        static let q             = 0x10
+        static let w             = 0x11
+        static let e             = 0x12
+        static let r             = 0x13
+        static let t             = 0x14
+        static let y             = 0x15
+        static let u             = 0x16
+        static let i             = 0x17
+        static let o             = 0x18
+        static let p             = 0x19
+        static let lBracket      = 0x1A
+        static let rBracket      = 0x1B
         
-        static let keypad1      = 0x1D
-        static let keypad2      = 0x1E
-        static let keypad3      = 0x1F
+        static let keypad1       = 0x1D
+        static let keypad2       = 0x1E
+        static let keypad3       = 0x1F
         
-        static let a            = 0x20
-        static let s            = 0x21
-        static let d            = 0x22
-        static let f            = 0x23
-        static let g            = 0x24
-        static let h            = 0x25
-        static let j            = 0x26
-        static let k            = 0x27
-        static let l            = 0x28
-        static let semicolon    = 0x29
-        static let quote        = 0x2A
+        static let a             = 0x20
+        static let s             = 0x21
+        static let d             = 0x22
+        static let f             = 0x23
+        static let g             = 0x24
+        static let h             = 0x25
+        static let j             = 0x26
+        static let k             = 0x27
+        static let l             = 0x28
+        static let semicolon     = 0x29
+        static let quote         = 0x2A
 
-        static let keypad4      = 0x2D
-        static let keypad5      = 0x2E
-        static let keypad6      = 0x2F
+        static let keypad4       = 0x2D
+        static let keypad5       = 0x2E
+        static let keypad6       = 0x2F
         
-        static let z            = 0x31
-        static let x            = 0x32
-        static let c            = 0x33
-        static let v            = 0x34
-        static let b            = 0x35
-        static let n            = 0x36
-        static let m            = 0x37
-        static let comma        = 0x38
-        static let period       = 0x39
-        static let slash        = 0x3A
+        static let z             = 0x31
+        static let x             = 0x32
+        static let c             = 0x33
+        static let v             = 0x34
+        static let b             = 0x35
+        static let n             = 0x36
+        static let m             = 0x37
+        static let comma         = 0x38
+        static let period        = 0x39
+        static let slash         = 0x3A
         
-        static let keypadPeriod = 0x3C
-        static let keypad7      = 0x3D
-        static let keypad8      = 0x3E
-        static let keypad9      = 0x3F
+        static let keypadDecimal = 0x3C
+        static let keypad7       = 0x3D
+        static let keypad8       = 0x3E
+        static let keypad9       = 0x3F
     }
     
    // Extra keys on international Amigas (ISO style)
    struct iso {
-        static let hashtag      = 0x2B
-        static let laceBrace    = 0x30
+        static let hashtag       = 0x2B
+        static let laceBrace     = 0x30
     }
     
     // Amiga keycodes 0x40 - 0x5F (Codes common to all keyboards)
-    static let space            = 0x40
-    static let backspace        = 0x41
-    static let tab              = 0x42
-    static let keypadEnter      = 0x43
-    static let enter            = 0x44
-    static let escape           = 0x45
-    static let delete           = 0x46
-    static let keypadMinus      = 0x4A
-    static let keypadUp         = 0x4C
-    static let cursorDown       = 0x4D
-    static let cursorRight      = 0x4E
-    static let cursorLeft       = 0x4F
-    static let f1               = 0x50
-    static let f2               = 0x51
-    static let f3               = 0x52
-    static let f4               = 0x53
-    static let f5               = 0x54
-    static let f6               = 0x55
-    static let f7               = 0x56
-    static let f8               = 0x57
-    static let f9               = 0x58
-    static let f10              = 0x59
-    static let keypadLBracket   = 0x5A
-    static let keypadRBracket   = 0x5B
-    static let keypadSlash      = 0x5C
-    static let keypadAsterisk   = 0x5D
-    static let keypadPlus       = 0x5E
-    static let help             = 0x5F
+    static let space             = 0x40
+    static let backspace         = 0x41
+    static let tab               = 0x42
+    static let keypadEnter       = 0x43
+    static let enter             = 0x44
+    static let escape            = 0x45
+    static let delete            = 0x46
+    static let keypadMinus       = 0x4A
+    static let cursorUp          = 0x4C
+    static let cursorDown        = 0x4D
+    static let cursorRight       = 0x4E
+    static let cursorLeft        = 0x4F
+    static let f1                = 0x50
+    static let f2                = 0x51
+    static let f3                = 0x52
+    static let f4                = 0x53
+    static let f5                = 0x54
+    static let f6                = 0x55
+    static let f7                = 0x56
+    static let f8                = 0x57
+    static let f9                = 0x58
+    static let f10               = 0x59
+    static let keypadLBracket    = 0x5A
+    static let keypadRBracket    = 0x5B
+    static let keypadDivide      = 0x5C
+    static let keypadMultiply    = 0x5D
+    static let keypadPlus        = 0x5E
+    static let help              = 0x5F
     
     // 0x60 - 0x67 (Key codes for qualifier keys)
-    static let leftShift        = 0x60
-    static let rightShift       = 0x61
-    static let capsLock         = 0x62
-    static let control          = 0x63
-    static let leftAlt          = 0x64
-    static let rightAlt         = 0x65
-    static let leftAmiga        = 0x66
-    static let rightAmiga       = 0x67
+    static let leftShift         = 0x60
+    static let rightShift        = 0x61
+    static let capsLock          = 0x62
+    static let control           = 0x63
+    static let leftAlt           = 0x64
+    static let rightAlt          = 0x65
+    static let leftAmiga         = 0x66
+    static let rightAmiga        = 0x67
 }
 
 // Country specific keycaps
@@ -203,7 +203,7 @@ let keycaps : [Int : [Language: String]] = [
     AmigaKeycode.ansi.period:       [.us: "> .", .german: ": .", .italian: ": ."],
     AmigaKeycode.ansi.slash:        [.us: "? /", .german: "_ -", .italian: "_ -"],
 
-    AmigaKeycode.ansi.keypadPeriod: [.us: "."],
+    AmigaKeycode.ansi.keypadDecimal: [.us: "."],
     AmigaKeycode.ansi.keypad7:      [.us: "7"],
     AmigaKeycode.ansi.keypad8:      [.us: "8"],
     AmigaKeycode.ansi.keypad9:      [.us: "9"],
@@ -219,7 +219,7 @@ let keycaps : [Int : [Language: String]] = [
     AmigaKeycode.escape:            [.us: "Esc"],
     AmigaKeycode.delete:            [.us: "Del"],
     AmigaKeycode.keypadMinus:       [.us: "-"],
-    AmigaKeycode.keypadUp:          [.us: "\u{2191}"],
+    AmigaKeycode.cursorUp:          [.us: "\u{2191}"],
     AmigaKeycode.cursorDown:        [.us: "\u{2193}"],
     AmigaKeycode.cursorRight:       [.us: "\u{2192}"],
     AmigaKeycode.cursorLeft:        [.us: "\u{2190}"],
@@ -235,8 +235,8 @@ let keycaps : [Int : [Language: String]] = [
     AmigaKeycode.f10:               [.us: "F10"],
     AmigaKeycode.keypadLBracket:    [.us: "(", .german: "{ [", .italian: "{ ["],
     AmigaKeycode.keypadRBracket:    [.us: ")", .german: "} ]", .italian: "{ ["],
-    AmigaKeycode.keypadSlash:       [.us: "/"],
-    AmigaKeycode.keypadAsterisk:    [.us: "*"],
+    AmigaKeycode.keypadDivide:      [.us: "/"],
+    AmigaKeycode.keypadMultiply:    [.us: "*"],
     AmigaKeycode.keypadPlus:        [.us: "+"],
     AmigaKeycode.help:              [.us: "Help"],
 
@@ -261,9 +261,6 @@ struct AmigaKey : Codable {
     var label: [Language: String] = [:]
     
     // Initializers
-    // private init(_ label: [Language: String]) { self.label = label }
-    // private init(_ label: String) { self.init([.us: label]) }
-    
     init(keyCode: Int) {
         
         self.keyCode = keyCode
@@ -375,8 +372,8 @@ extension AmigaKey {
         AmigaKeycode.delete:         ("150x100", "dark"),
         AmigaKeycode.keypadLBracket: ("100x100", "dark"),
         AmigaKeycode.keypadRBracket: ("100x100", "dark"),
-        AmigaKeycode.keypadSlash:    ("100x100", "dark"),
-        AmigaKeycode.keypadAsterisk: ("100x100", "dark"),
+        AmigaKeycode.keypadDivide:   ("100x100", "dark"),
+        AmigaKeycode.keypadMultiply: ("100x100", "dark"),
         AmigaKeycode.keypadPlus:     ("100x100", "dark"),
         AmigaKeycode.help:           ("150x100", "dark"),
         AmigaKeycode.rightShift:     ("250x100", "dark"),
@@ -439,7 +436,7 @@ extension AmigaKey {
         // Key label font sizes
         let large = CGFloat(15)
         let small = CGFloat(10)
-        let tiny  = CGFloat(10) // CGFloat(9)
+        let tiny  = CGFloat(9) 
 
         // Get a background image
         guard let image = backgroundImage(model: model, country: country)?.copy() as? NSImage else {

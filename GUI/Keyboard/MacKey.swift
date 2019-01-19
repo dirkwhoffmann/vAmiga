@@ -1,4 +1,4 @@
-// -----------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------
 // This file is part of vAmiga
 //
 // Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
@@ -8,35 +8,148 @@
 // -----------------------------------------------------------------------------
 
 import Foundation
-import Carbon.HIToolbox
+import Carbon.HIToolbox // Mac keycode identifiers
 
-/// The C64Key structure represents a physical keys on the C64 keyboard.
-/// The key is specified by its row and coloumn position in the C64 keyboard matrix.
+// Mapping from Mac key codes to Amiga key codes.
+// Mac keycodes are based on the Apple Extended Keyboard II layout (ISO).
+
+let isomac2amiga : [Int : Int] = [
+    
+    kVK_ISO_Section:         AmigaKeycode.ansi.grave,
+    kVK_ANSI_1:              AmigaKeycode.ansi.digit1,
+    kVK_ANSI_2:              AmigaKeycode.ansi.digit2,
+    kVK_ANSI_3:              AmigaKeycode.ansi.digit3,
+    kVK_ANSI_4:              AmigaKeycode.ansi.digit4,
+    kVK_ANSI_5:              AmigaKeycode.ansi.digit5,
+    kVK_ANSI_6:              AmigaKeycode.ansi.digit6,
+    kVK_ANSI_7:              AmigaKeycode.ansi.digit7,
+    kVK_ANSI_8:              AmigaKeycode.ansi.digit8,
+    kVK_ANSI_9:              AmigaKeycode.ansi.digit9,
+    kVK_ANSI_0:              AmigaKeycode.ansi.digit0,
+    kVK_ANSI_Minus:          AmigaKeycode.ansi.minus,
+    kVK_ANSI_Equal:          AmigaKeycode.ansi.equal,
+    // MISSING ON MAC KEYBOARD AmigaKeycode.ansi.backslash:    [.us: "| \\"],
+    
+    kVK_ANSI_Keypad0:        AmigaKeycode.ansi.keypad0,
+    
+    kVK_ANSI_Q:              AmigaKeycode.ansi.q,
+    kVK_ANSI_W:              AmigaKeycode.ansi.w,
+    kVK_ANSI_E:              AmigaKeycode.ansi.e,
+    kVK_ANSI_R:              AmigaKeycode.ansi.r,
+    kVK_ANSI_T:              AmigaKeycode.ansi.t,
+    kVK_ANSI_Y:              AmigaKeycode.ansi.y,
+    kVK_ANSI_U:              AmigaKeycode.ansi.u,
+    kVK_ANSI_I:              AmigaKeycode.ansi.i,
+    kVK_ANSI_O:              AmigaKeycode.ansi.o,
+    kVK_ANSI_P:              AmigaKeycode.ansi.p,
+    kVK_ANSI_LeftBracket:    AmigaKeycode.ansi.lBracket,
+    kVK_ANSI_RightBracket:   AmigaKeycode.ansi.rBracket,
+    
+    kVK_ANSI_Keypad1:        AmigaKeycode.ansi.keypad1,
+    kVK_ANSI_Keypad2:        AmigaKeycode.ansi.keypad2,
+    kVK_ANSI_Keypad3:        AmigaKeycode.ansi.keypad3,
+    
+    kVK_ANSI_A:              AmigaKeycode.ansi.a,
+    kVK_ANSI_S:              AmigaKeycode.ansi.s,
+    kVK_ANSI_D:              AmigaKeycode.ansi.d,
+    kVK_ANSI_F:              AmigaKeycode.ansi.f,
+    kVK_ANSI_G:              AmigaKeycode.ansi.g,
+    kVK_ANSI_H:              AmigaKeycode.ansi.h,
+    kVK_ANSI_J:              AmigaKeycode.ansi.j,
+    kVK_ANSI_K:              AmigaKeycode.ansi.k,
+    kVK_ANSI_L:              AmigaKeycode.ansi.l,
+    kVK_ANSI_Semicolon:      AmigaKeycode.ansi.semicolon,
+    kVK_ANSI_Quote:          AmigaKeycode.ansi.quote,
+    
+    kVK_ANSI_Keypad4:        AmigaKeycode.ansi.keypad4,
+    kVK_ANSI_Keypad5:        AmigaKeycode.ansi.keypad5,
+    kVK_ANSI_Keypad6:        AmigaKeycode.ansi.keypad6,
+    
+    kVK_ANSI_Z:              AmigaKeycode.ansi.z,
+    kVK_ANSI_X:              AmigaKeycode.ansi.x,
+    kVK_ANSI_C:              AmigaKeycode.ansi.c,
+    kVK_ANSI_V:              AmigaKeycode.ansi.v,
+    kVK_ANSI_B:              AmigaKeycode.ansi.b,
+    kVK_ANSI_N:              AmigaKeycode.ansi.n,
+    kVK_ANSI_M:              AmigaKeycode.ansi.m,
+    kVK_ANSI_Comma:          AmigaKeycode.ansi.comma,
+    kVK_ANSI_Period:         AmigaKeycode.ansi.period,
+    kVK_ANSI_Slash:          AmigaKeycode.ansi.slash,
+    
+    kVK_ANSI_KeypadDecimal:  AmigaKeycode.ansi.keypadDecimal,
+    kVK_ANSI_Keypad7:        AmigaKeycode.ansi.keypad7,
+    kVK_ANSI_Keypad8:        AmigaKeycode.ansi.keypad8,
+    kVK_ANSI_Keypad9:        AmigaKeycode.ansi.keypad9,
+    
+    kVK_ANSI_Backslash:      AmigaKeycode.iso.hashtag,
+    kVK_ANSI_Grave:          AmigaKeycode.iso.laceBrace,
+    
+    kVK_Space:               AmigaKeycode.space,
+    kVK_Delete:              AmigaKeycode.backspace,
+    kVK_Tab:                 AmigaKeycode.tab,
+    kVK_ANSI_KeypadEnter:    AmigaKeycode.keypadEnter,
+    kVK_Return:              AmigaKeycode.enter,
+    kVK_Escape:              AmigaKeycode.escape,
+    kVK_ForwardDelete:       AmigaKeycode.delete,
+    kVK_ANSI_KeypadMinus:    AmigaKeycode.keypadMinus,
+    kVK_UpArrow:             AmigaKeycode.cursorUp,
+    kVK_DownArrow:           AmigaKeycode.cursorDown,
+    kVK_RightArrow:          AmigaKeycode.cursorRight,
+    kVK_LeftArrow:           AmigaKeycode.cursorLeft,
+    kVK_F1:                  AmigaKeycode.f1,
+    kVK_F2:                  AmigaKeycode.f2,
+    kVK_F3:                  AmigaKeycode.f3,
+    kVK_F4:                  AmigaKeycode.f4,
+    kVK_F5:                  AmigaKeycode.f6,
+    kVK_F7:                  AmigaKeycode.f7,
+    kVK_F8:                  AmigaKeycode.f8,
+    kVK_F9:                  AmigaKeycode.f9,
+    kVK_F10:                 AmigaKeycode.f10,
+    kVK_ANSI_KeypadClear:    AmigaKeycode.keypadLBracket,
+    kVK_ANSI_KeypadEquals:   AmigaKeycode.keypadRBracket,
+    kVK_ANSI_KeypadDivide:   AmigaKeycode.keypadDivide,
+    kVK_ANSI_KeypadMultiply: AmigaKeycode.keypadMultiply,
+    kVK_ANSI_KeypadPlus:     AmigaKeycode.keypadPlus,
+    kVK_F12:                 AmigaKeycode.help,
+    
+    kVK_Shift:               AmigaKeycode.leftShift,
+    kVK_RightShift:          AmigaKeycode.rightShift,
+
+    kVK_Control:             AmigaKeycode.control,
+    kVK_Option:              AmigaKeycode.leftAlt,
+    kVK_RightOption:         AmigaKeycode.rightAlt,
+    /// ????? kVK_Command: AmigaKeycode.leftAmiga:         [.us: ""],
+    /// AmigaKeycode.rightAmiga:        [.us: ""],
+]
+
+
+/* This structure represents a physical keys on the Mac keyboard.
+ */
 struct MacKey : Codable {
     
-    /// Unique identifier for a key on the Mac keyboard
-    var keyCode: UInt16 = 0
+    // The unique identifier of this Mac key
+    var keyCode: Int = 0
     
     /// Keycode in hex format as a string
-    var keyCodeStr: String { return String.init(format: "%02X", keyCode) }
+    // var keyCodeStr: String { return String.init(format: "%02X", keyCode) }
     
     /// Textual description of this key
     var description: String?
 
-    init(keyCode: UInt16, characters: String? = nil) {
+    init(keyCode: Int, characters: String? = nil) {
         
         self.keyCode = keyCode
         self.description = characters
     }
     
-    init(keyCode: Int, characters: String? = nil) {
+    init(keyCode: UInt16, characters: String? = nil) {
         
-        self.init(keyCode: UInt16(keyCode), characters: characters)
+        self.init(keyCode: Int(keyCode), characters: characters)
     }
     
     init(with event: NSEvent) {
         
-        keyCode = event.keyCode
+        keyCode = Int(event.keyCode)
         
         let stdSymbols: [Int:String] = [
             kVK_Return: "\u{21a9}",
@@ -62,6 +175,22 @@ struct MacKey : Codable {
         ]
         
         description = stdSymbols[Int(keyCode)] ?? event.charactersIgnoringModifiers
+    }
+    
+    // Returns the Amiga key code for this Mac key
+    var amigaKeyCode: Int {
+       
+        get {
+            // Catch key 0x32 manually, because it has a different physical
+            // position on an ANSI Mac keyboard.
+            if keyCode == 0x32 {
+                if KBGetLayoutType(Int16(LMGetKbdType())) == kKeyboardANSI {
+                    return AmigaKeycode.ansi.grave
+                }
+            }
+            
+            return isomac2amiga[keyCode]!
+        }
     }
 }
 
@@ -166,7 +295,7 @@ extension MacKey {
         static let quote = MacKey.init(keyCode: kVK_ANSI_Quote, characters: "'")
     }
     
-    // Layout dependend keys. Keycodes refer to the keys on a standard ANSI US keyboard
+    // Layout dependend keys. Keycodes refer to the keys on a standard ISO US keyboard
     struct iso {
         static let hat = MacKey.init(keyCode: 0x0A, characters: "")
     }

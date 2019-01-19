@@ -17,6 +17,7 @@
 @class DMAControllerProxy;
 @class DeniseProxy;
 @class PaulaProxy;
+@class AmigaKeyboardProxy;
 @class AmigaFileProxy;
 @class ADFFileProxy;
 
@@ -28,6 +29,7 @@ struct MemWrapper;
 struct DMAControllerWrapper;
 struct DeniseWrapper;
 struct PaulaWrapper;
+struct AmigaKeyboardWrapper;
 struct AmigaFileWrapper;
 
 //
@@ -42,6 +44,7 @@ struct AmigaFileWrapper;
     DMAControllerProxy *dma;
     DeniseProxy *denise;
     PaulaProxy *paula;
+    AmigaKeyboardProxy *keyboard;
 }
 
 @property (readonly) struct AmigaWrapper *wrapper;
@@ -49,6 +52,7 @@ struct AmigaFileWrapper;
 @property (readonly) DMAControllerProxy *dma;
 @property (readonly) DeniseProxy *denise;
 @property (readonly) PaulaProxy *paula;
+@property (readonly) AmigaKeyboardProxy *keyboard;
 
 // Called when quitting the app
 - (void) kill;
@@ -174,6 +178,25 @@ struct AmigaFileWrapper;
 - (double) fillLevel;
 
 @end
+
+
+//
+// Keyboard Proxy
+//
+
+@interface AmigaKeyboardProxy : NSObject {
+    
+    struct AmigaKeyboardWrapper *wrapper;
+}
+
+- (void) dump;
+- (BOOL) keyIsPressed:(NSInteger)keycode;
+- (void) pressKey:(NSInteger)keycode;
+- (void) releaseKey:(NSInteger)keycode;
+- (void) releaseAllKeys;
+
+@end
+
 
 //
 // F I L E   T Y P E   P R O X Y S

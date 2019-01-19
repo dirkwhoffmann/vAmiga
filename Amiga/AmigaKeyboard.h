@@ -7,22 +7,22 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _PAULA_INC
-#define _PAULA_INC
+#ifndef _KEYBOARD_INC
+#define _KEYBOARD_INC
 
 #include "HardwareComponent.h"
-
 
 //
 // THIS CLASS IS A STUB TO MAKE THE VISUAL PROTOTYPE WORK
 //
 
-class Paula : public HardwareComponent {
+class AmigaKeyboard : public HardwareComponent {
     
 public:
+
+    // Indicates if a key is currently held down (array index = raw key code).
+    bool keyDown[128];
     
-    // Paula has been executed up to this clock cycle.
-    uint64_t clock = 0;
     
     //
     // Constructing and destructing
@@ -30,8 +30,7 @@ public:
     
 public:
     
-    Paula();
-    
+    AmigaKeyboard();
     
     //
     // Methods from HardwareComponent
@@ -39,13 +38,13 @@ public:
     
 private:
     
-    /*
-    void _powerOn() override;
-    void _powerOff() override;
-    void _reset() override;
-    void _ping() override;
-    void _dump() override;
-    */
+     void _powerOn() override;
+     /*
+     void _powerOff() override;
+     void _reset() override;
+     void _ping() override;
+     */
+     void _dump() override;
     
     //
     // FAKE METHODS FOR THE VISUAL PROTOTYPE (TEMPORARY)
@@ -53,11 +52,10 @@ private:
     
 public:
     
-    uint32_t getVolume() { return 42; }
-    long bufferUnderflows() { return 42; }
-    long bufferOverflows() { return 42; }
-    double fillLevel() { return .5; }
-
+    bool keyIsPressed(long keycode);
+    void pressKey(long keycode);
+    void releaseKey(long keycode);
+    void releaseAllKeys();
 };
 
 #endif
