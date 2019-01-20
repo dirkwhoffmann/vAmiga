@@ -1,12 +1,13 @@
+// -----------------------------------------------------------------------------
+// This file is part of vAmiga
 //
-//  vastd.cpp
-//  vAmiga
+// Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
+// Licensed under the GNU General Public License v3
 //
-//  Created by Dirk Hoffmann on 13.01.19.
-//  Copyright © 2019 Dirk Hoffmann. All rights reserved.
-//
+// See https://www.gnu.org for license information
+// -----------------------------------------------------------------------------
 
-#include "vastd.h"
+#include "va_std.h"
 
 bool
 matchingFileHeader(const char *path, const uint8_t *header, size_t length)

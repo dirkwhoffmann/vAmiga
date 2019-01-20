@@ -10,7 +10,7 @@
 #ifndef _AMIGAOBJECT_INC
 #define _AMIGAOBJECT_INC
 
-#include "vastd.h"
+#include "va_std.h"
 
 /* Base class for all vAmiga objects.
  * This class stores a textual description of the object and offers various

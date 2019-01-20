@@ -31,8 +31,8 @@
 #include <math.h>
 #include <ctype.h>
 
-#include "vaconfig.h"
-#include "vatypes.h"
+#include "va_config.h"
+#include "va_types.h"
 #include "va_constants.h"
 
 #if 0

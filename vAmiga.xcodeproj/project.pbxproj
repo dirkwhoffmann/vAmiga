@@ -11,6 +11,7 @@
 		5020B17D21EF121E00B9E80E /* DMAController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5020B17B21EF121E00B9E80E /* DMAController.cpp */; };
 		5020B18021EF136100B9E80E /* Denise.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5020B17E21EF136100B9E80E /* Denise.cpp */; };
 		5030891121EFA74600FEAD12 /* Paula.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5030890F21EFA74600FEAD12 /* Paula.cpp */; };
+		505A3A3A21F4996400132020 /* sse_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505A3A3821F4996400132020 /* sse_utils.cpp */; };
 		5064851121EC7A1700FC4AC3 /* AmigaMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5064850F21EC7A1700FC4AC3 /* AmigaMemory.cpp */; };
 		508833EE21F0D21B009890EA /* ADFFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508833EC21F0D21B009890EA /* ADFFile.cpp */; };
 		508FDE6E21EA1FA50043D0E9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 508FDE6D21EA1FA50043D0E9 /* Assets.xcassets */; };
@@ -178,7 +179,7 @@
 		50B14C0721EB218E002E32A6 /* AmigaObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0521EB218E002E32A6 /* AmigaObject.cpp */; };
 		50B14C0D21EB3708002E32A6 /* HardwareComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0B21EB3708002E32A6 /* HardwareComponent.cpp */; };
 		50B14C1021EB410B002E32A6 /* Amiga.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0E21EB410B002E32A6 /* Amiga.cpp */; };
-		50B14C1221EB4314002E32A6 /* vastd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C1121EB4314002E32A6 /* vastd.cpp */; };
+		50B14C1221EB4314002E32A6 /* va_std.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C1121EB4314002E32A6 /* va_std.cpp */; };
 		50B14C1C21EB8445002E32A6 /* 1541_door_closed_2.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 50B14C1421EB8445002E32A6 /* 1541_door_closed_2.aiff */; };
 		50B14C1D21EB8445002E32A6 /* 1541_power_on_0.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 50B14C1521EB8445002E32A6 /* 1541_power_on_0.aiff */; };
 		50B14C1E21EB8445002E32A6 /* 1541_track_change_2.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 50B14C1621EB8445002E32A6 /* 1541_track_change_2.aiff */; };
@@ -218,6 +219,8 @@
 		5020B17F21EF136100B9E80E /* Denise.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Denise.h; sourceTree = "<group>"; };
 		5030890F21EFA74600FEAD12 /* Paula.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Paula.cpp; sourceTree = "<group>"; };
 		5030891021EFA74600FEAD12 /* Paula.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Paula.h; sourceTree = "<group>"; };
+		505A3A3821F4996400132020 /* sse_utils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = sse_utils.cpp; sourceTree = "<group>"; };
+		505A3A3921F4996400132020 /* sse_utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sse_utils.h; sourceTree = "<group>"; };
 		5064850F21EC7A1700FC4AC3 /* AmigaMemory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaMemory.cpp; sourceTree = "<group>"; };
 		5064851021EC7A1700FC4AC3 /* AmigaMemory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaMemory.h; sourceTree = "<group>"; };
 		5082D83A21EF891200CF7692 /* va_constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = va_constants.h; sourceTree = "<group>"; };
@@ -502,14 +505,14 @@
 		509F7F1C21EDEA0200A530E4 /* KickRom.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KickRom.h; sourceTree = "<group>"; };
 		50B14C0521EB218E002E32A6 /* AmigaObject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaObject.cpp; sourceTree = "<group>"; };
 		50B14C0621EB218E002E32A6 /* AmigaObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaObject.h; sourceTree = "<group>"; };
-		50B14C0821EB2248002E32A6 /* vastd.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = vastd.h; sourceTree = "<group>"; };
-		50B14C0921EB228E002E32A6 /* vaconfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = vaconfig.h; sourceTree = "<group>"; };
-		50B14C0A21EB2379002E32A6 /* vatypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = vatypes.h; sourceTree = "<group>"; };
+		50B14C0821EB2248002E32A6 /* va_std.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = va_std.h; sourceTree = "<group>"; };
+		50B14C0921EB228E002E32A6 /* va_config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = va_config.h; sourceTree = "<group>"; };
+		50B14C0A21EB2379002E32A6 /* va_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = va_types.h; sourceTree = "<group>"; };
 		50B14C0B21EB3708002E32A6 /* HardwareComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HardwareComponent.cpp; sourceTree = "<group>"; };
 		50B14C0C21EB3708002E32A6 /* HardwareComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HardwareComponent.h; sourceTree = "<group>"; };
 		50B14C0E21EB410B002E32A6 /* Amiga.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Amiga.cpp; sourceTree = "<group>"; };
 		50B14C0F21EB410B002E32A6 /* Amiga.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Amiga.h; sourceTree = "<group>"; };
-		50B14C1121EB4314002E32A6 /* vastd.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = vastd.cpp; sourceTree = "<group>"; };
+		50B14C1121EB4314002E32A6 /* va_std.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = va_std.cpp; sourceTree = "<group>"; };
 		50B14C1421EB8445002E32A6 /* 1541_door_closed_2.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = 1541_door_closed_2.aiff; sourceTree = "<group>"; };
 		50B14C1521EB8445002E32A6 /* 1541_power_on_0.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = 1541_power_on_0.aiff; sourceTree = "<group>"; };
 		50B14C1621EB8445002E32A6 /* 1541_track_change_2.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = 1541_track_change_2.aiff; sourceTree = "<group>"; };
@@ -1030,6 +1033,12 @@
 		508FE06021EA318D0043D0E9 /* Amiga */ = {
 			isa = PBXGroup;
 			children = (
+				50B14C0621EB218E002E32A6 /* AmigaObject.h */,
+				50B14C0521EB218E002E32A6 /* AmigaObject.cpp */,
+				50B14C0C21EB3708002E32A6 /* HardwareComponent.h */,
+				50B14C0B21EB3708002E32A6 /* HardwareComponent.cpp */,
+				508FDEF821EA1FBC0043D0E9 /* MessageQueue.h */,
+				508FDEF521EA1FBC0043D0E9 /* MessageQueue.cpp */,
 				50B14C0F21EB410B002E32A6 /* Amiga.h */,
 				50B14C0E21EB410B002E32A6 /* Amiga.cpp */,
 				5064851021EC7A1700FC4AC3 /* AmigaMemory.h */,
@@ -1119,17 +1128,13 @@
 		50B14C0421EB212E002E32A6 /* Foundation */ = {
 			isa = PBXGroup;
 			children = (
-				50B14C0921EB228E002E32A6 /* vaconfig.h */,
+				50B14C0921EB228E002E32A6 /* va_config.h */,
 				5082D83A21EF891200CF7692 /* va_constants.h */,
-				50B14C0A21EB2379002E32A6 /* vatypes.h */,
-				50B14C0821EB2248002E32A6 /* vastd.h */,
-				50B14C1121EB4314002E32A6 /* vastd.cpp */,
-				50B14C0621EB218E002E32A6 /* AmigaObject.h */,
-				50B14C0521EB218E002E32A6 /* AmigaObject.cpp */,
-				50B14C0C21EB3708002E32A6 /* HardwareComponent.h */,
-				50B14C0B21EB3708002E32A6 /* HardwareComponent.cpp */,
-				508FDEF821EA1FBC0043D0E9 /* MessageQueue.h */,
-				508FDEF521EA1FBC0043D0E9 /* MessageQueue.cpp */,
+				50B14C0A21EB2379002E32A6 /* va_types.h */,
+				50B14C0821EB2248002E32A6 /* va_std.h */,
+				50B14C1121EB4314002E32A6 /* va_std.cpp */,
+				505A3A3921F4996400132020 /* sse_utils.h */,
+				505A3A3821F4996400132020 /* sse_utils.cpp */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";
@@ -1314,7 +1319,7 @@
 			files = (
 				508FDFD821EA20510043D0E9 /* Shaders.metal in Sources */,
 				508FE02521EA227B0043D0E9 /* MemoryPanel.swift in Sources */,
-				50B14C1221EB4314002E32A6 /* vastd.cpp in Sources */,
+				50B14C1221EB4314002E32A6 /* va_std.cpp in Sources */,
 				508FDF9A21EA1FBC0043D0E9 /* sid.cc in Sources */,
 				508FDF6D21EA1FBC0043D0E9 /* FreezeFrame.cpp in Sources */,
 				508FE01021EA227B0043D0E9 /* Speedometer.swift in Sources */,
@@ -1335,6 +1340,7 @@
 				508FE01A21EA227B0043D0E9 /* Formatter.swift in Sources */,
 				508FDF5F21EA1FBC0043D0E9 /* StarDos.cpp in Sources */,
 				508FE02721EA227B0043D0E9 /* Basics.swift in Sources */,
+				505A3A3A21F4996400132020 /* sse_utils.cpp in Sources */,
 				508FDFAA21EA1FBC0043D0E9 /* DriveMemory.cpp in Sources */,
 				508FDF8021EA1FBC0043D0E9 /* TAPFile.cpp in Sources */,
 				508FDF7B21EA1FBC0043D0E9 /* Snapshot.cpp in Sources */,

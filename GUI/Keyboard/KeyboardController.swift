@@ -136,10 +136,12 @@ class KeyboardController: NSObject {
     
     func flagsChanged(with event: NSEvent) {
         
-        // track("\(event)")
         let mod = event.modifierFlags
         let keyCode = event.keyCode
-        
+
+        track("\(mod)")
+        track("\(keyCode)")
+
         if keyCode == kVK_Shift {
             if !leftShift {
                 leftShift = true

@@ -10,7 +10,7 @@
 #import <Cocoa/Cocoa.h>
 #import <MetalKit/MetalKit.h>
 
-#import "vastd.h"
+#import "va_std.h"
 
 // Forward declarations
 @class MemProxy;

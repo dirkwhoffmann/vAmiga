@@ -22,11 +22,11 @@
 #ifndef _CARTRIDGE_INC
 #define _CARTRIDGE_INC
 
+#include "va_std.h"
 #include "VirtualComponent.h"
 #include "Cartridge_types.h"
 #include "CRTFile.h"
 #include "CartridgeRom.h"
-#include "vastd.h"
 
 class ExpansionPort;
 
