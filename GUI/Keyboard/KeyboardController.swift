@@ -18,6 +18,7 @@ import Carbon.HIToolbox
  */
 enum Language : Int, Codable {
 
+    case generic // Used as a fallback if no matching language is found
     case us
     case german
     case italian

@@ -36,6 +36,8 @@ void
 AmigaKeyboard::pressKey(long keycode)
 {
     assert(keycode < 0x80);
+    
+    debug("Pressing Amiga key %02X\n", keycode);
     keyDown[keycode] = true;
 }
 
@@ -43,14 +45,18 @@ void
 AmigaKeyboard::releaseKey(long keycode)
 {
     assert(keycode < 0x80);
+    
+    debug("Releasing Amiga key %02X\n", keycode);
     keyDown[keycode] = false;
-
 }
 
 void
 AmigaKeyboard::releaseAllKeys()
 {
     for (unsigned i = 0; i < 0x80; i++) {
-        releaseKey(i);
+        
+        debug("Releasing all Amiga keys\n");
+        keyDown[i] = false;
+        // releaseKey(i);
     }
 }
