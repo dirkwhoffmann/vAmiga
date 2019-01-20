@@ -202,7 +202,6 @@ class PreferencesController : UserDialogController {
             case "Video": refreshVideoTab()
             case "Emulator": refreshEmulatorTab()
             case "Devices": refreshDevicesTab()
-            case "Keyboard": refreshKeyboardTab()
             default: break
             }
         }
@@ -214,7 +213,6 @@ class PreferencesController : UserDialogController {
             
             switch id {
             case "Devices": devKeyDown(with: key)
-            case "Keyboard": mapKeyDown(with: key)
             default: break
             }
         }

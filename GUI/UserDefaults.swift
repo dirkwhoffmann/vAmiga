@@ -60,7 +60,6 @@ extension MyController {
         
         registerGeneralUserDefaults()
         registerRomUserDefaults()
-        registerKeyMapUserDefaults()
         registerDevicesUserDefaults()
         registerVideoUserDefaults()
         registerEmulatorUserDefaults()
@@ -75,7 +74,6 @@ extension MyController {
         
         resetGeneralUserDefaults()
         resetRomUserDefaults()
-        resetKeyMapUserDefaults()
         resetDevicesUserDefaults()
         resetVideoUserDefaults()
         resetEmulatorUserDefaults()
@@ -92,7 +90,6 @@ extension MyController {
         
         loadGeneralUserDefaults()
         loadRomUserDefaults()
-        loadKeyMapUserDefaults()
         loadDevicesUserDefaults()
         loadVideoUserDefaults()
         loadEmulatorUserDefaults()
@@ -123,7 +120,6 @@ extension MyController {
         
         saveGeneralUserDefaults()
         saveRomUserDefaults()
-        saveKeyMapUserDefaults()
         saveDevicesUserDefaults()
         saveVideoUserDefaults()
         saveEmulatorUserDefaults()
@@ -179,9 +175,7 @@ extension MyController {
         let defaults = UserDefaults.standard
         
         for key in [ VC64Keys.inputDevice1,
-                     VC64Keys.inputDevice2,
-                     
-                     VC64Keys.mapKeysByPosition]
+                     VC64Keys.inputDevice2 ]
         {
             defaults.removeObject(forKey: key)
         }
@@ -286,61 +280,6 @@ extension MyController {
     }
 }
 
-//
-// User defaults (Keymap)
-//
-
-extension VC64Keys {
-    static let keyMap = "VC64KeyMap"
-    static let mapKeysByPosition = "VC64MapKeysByPosition"
-}
-
-extension Defaults {
-    static let keyMap = KeyboardController.standardKeyMap
-    static let mapKeysByPosition = false
-}
-
-extension MyController {
-    
-    static func registerKeyMapUserDefaults() {
-        
-        let dictionary : [String:Any] = [
-            
-            VC64Keys.mapKeysByPosition: Defaults.mapKeysByPosition
-        ]
-        
-        let defaults = UserDefaults.standard
-        defaults.register(defaults: dictionary)
-        defaults.register(encodableItem: Defaults.keyMap, forKey: VC64Keys.keyMap)
-    }
-    
-    func resetKeyMapUserDefaults() {
-        
-        let defaults = UserDefaults.standard
-        
-        for key in [ VC64Keys.mapKeysByPosition,
-                     VC64Keys.keyMap]
-        {
-            defaults.removeObject(forKey: key)
-        }
-        
-        loadKeyMapUserDefaults()
-    }
-    
-    func loadKeyMapUserDefaults() {
-        
-        let defaults = UserDefaults.standard
-        keyboardcontroller.mapKeysByPosition = defaults.bool(forKey: VC64Keys.mapKeysByPosition)
-        defaults.decode(&keyboardcontroller.keyMap, forKey: VC64Keys.keyMap)
-    }
-    
-    func saveKeyMapUserDefaults() {
-        
-        let defaults = UserDefaults.standard
-        defaults.encode(keyboardcontroller.keyMap, forKey: VC64Keys.keyMap)
-        defaults.set(keyboardcontroller.mapKeysByPosition, forKey: VC64Keys.mapKeysByPosition)
-    }
-}
 
 //
 // User defaults (Devices)

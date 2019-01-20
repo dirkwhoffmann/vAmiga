@@ -160,7 +160,6 @@
 		508FE03821EA22C30043D0E9 /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE03421EA22C30043D0E9 /* Notifications.swift */; };
 		508FE04E21EA22CC0043D0E9 /* RomPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE03B21EA22CC0043D0E9 /* RomPrefs.swift */; };
 		508FE04F21EA22CC0043D0E9 /* EmulatorPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE03C21EA22CC0043D0E9 /* EmulatorPrefs.swift */; };
-		508FE05021EA22CC0043D0E9 /* KeyboardPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE03D21EA22CC0043D0E9 /* KeyboardPrefs.swift */; };
 		508FE05121EA22CC0043D0E9 /* HardwarePrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE03E21EA22CC0043D0E9 /* HardwarePrefs.swift */; };
 		508FE05221EA22CC0043D0E9 /* RomDropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE03F21EA22CC0043D0E9 /* RomDropView.swift */; };
 		508FE05321EA22CC0043D0E9 /* VideoPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04021EA22CC0043D0E9 /* VideoPrefs.swift */; };
@@ -484,7 +483,6 @@
 		508FE03421EA22C30043D0E9 /* Notifications.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 		508FE03B21EA22CC0043D0E9 /* RomPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RomPrefs.swift; sourceTree = "<group>"; };
 		508FE03C21EA22CC0043D0E9 /* EmulatorPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmulatorPrefs.swift; sourceTree = "<group>"; };
-		508FE03D21EA22CC0043D0E9 /* KeyboardPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardPrefs.swift; sourceTree = "<group>"; };
 		508FE03E21EA22CC0043D0E9 /* HardwarePrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HardwarePrefs.swift; sourceTree = "<group>"; };
 		508FE03F21EA22CC0043D0E9 /* RomDropView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RomDropView.swift; sourceTree = "<group>"; };
 		508FE04021EA22CC0043D0E9 /* VideoPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPrefs.swift; sourceTree = "<group>"; };
@@ -1021,7 +1019,6 @@
 				508FE04321EA22CC0043D0E9 /* PreferencesController.swift */,
 				508FE03B21EA22CC0043D0E9 /* RomPrefs.swift */,
 				508FE03C21EA22CC0043D0E9 /* EmulatorPrefs.swift */,
-				508FE03D21EA22CC0043D0E9 /* KeyboardPrefs.swift */,
 				508FE03E21EA22CC0043D0E9 /* HardwarePrefs.swift */,
 				508FE03F21EA22CC0043D0E9 /* RomDropView.swift */,
 				508FE04021EA22CC0043D0E9 /* VideoPrefs.swift */,
@@ -1409,7 +1406,6 @@
 				508FE02421EA227B0043D0E9 /* GamePadManager.swift in Sources */,
 				508FE01321EA227B0043D0E9 /* AudioPanel.swift in Sources */,
 				508FDFA821EA1FBC0043D0E9 /* Disk.cpp in Sources */,
-				508FE05021EA22CC0043D0E9 /* KeyboardPrefs.swift in Sources */,
 				508FDF6921EA1FBC0043D0E9 /* Kcs.cpp in Sources */,
 				508FDF7221EA1FBC0043D0E9 /* Cartridge.cpp in Sources */,
 				508FDFA321EA1FBC0043D0E9 /* IEC.cpp in Sources */,
