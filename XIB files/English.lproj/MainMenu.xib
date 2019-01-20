@@ -464,95 +464,15 @@
                                     <action selector="stickyKeyboardAction:" target="-1" id="LWx-zK-yeK"/>
                                 </connections>
                             </menuItem>
-                            <menuItem isSeparatorItem="YES" id="SGb-qh-sOW"/>
-                            <menuItem title="Press" id="rVt-Hc-gQG" userLabel="Press">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Press" id="Xvx-By-SBS">
-                                    <items>
-                                        <menuItem title="RUNSTOP" hidden="YES" id="306">
-                                            <connections>
-                                                <action selector="runstopAction:" target="-1" id="h99-wl-I6J"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="RESTORE" hidden="YES" id="305" userLabel="RESTORE">
-                                            <connections>
-                                                <action selector="restoreAction:" target="-1" id="XDR-D8-h89"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="RUNSTOP RESTORE" id="VdY-b4-dYs">
-                                            <connections>
-                                                <action selector="runstopRestoreAction:" target="-1" id="OF3-DS-8i4"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="CLR" hidden="YES" id="512">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="clearKeyAction:" target="-1" id="NgL-jP-5vs"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="HOME" hidden="YES" id="515">
-                                            <connections>
-                                                <action selector="homeKeyAction:" target="-1" id="fhb-me-fFL"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="DEL" hidden="YES" id="MPz-Ta-mSQ">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="deleteKeyAction:" target="-1" id="6fc-Gs-5bU"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="INST" hidden="YES" id="518">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="insertKeyAction:" target="-1" id="IEY-Sr-0Wx"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="LEFT ARROW" hidden="YES" id="q9V-Gy-eCL">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="leftarrowKeyAction:" target="-1" id="tYs-2R-d3U"/>
-                                            </connections>
-                                        </menuItem>
-                                    </items>
-                                </menu>
-                            </menuItem>
-                            <menuItem title="Shift Lock" id="eLl-99-KML">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="shiftLockAction:" target="-1" id="oZ1-8S-Ba3"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem isSeparatorItem="YES" id="YmU-rj-Jhy"/>
-                            <menuItem title="Load Directory" keyEquivalent="d" id="328">
-                                <connections>
-                                    <action selector="loadDirectoryAction:" target="-1" id="JuA-2C-Ups"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="List" id="3oz-UI-kft">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="listAction:" target="-1" id="k64-op-GK2"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Load First File" keyEquivalent="l" id="511">
-                                <connections>
-                                    <action selector="loadFirstFileAction:" target="-1" id="cMu-Ip-rBc"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Run" id="rvY-S2-GXz">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="runProgramAction:" target="-1" id="Ds9-wO-9jQ"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Format Disk" id="510">
+                            <menuItem isSeparatorItem="YES" id="9ee-jY-6ug"/>
+                            <menuItem title="Map ⌘ to Amiga keys" id="510">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="formatDiskAction:" target="-1" id="IvR-x1-Puy"/>
                                 </connections>
                             </menuItem>
-                            <menuItem isSeparatorItem="YES" id="QAf-kY-aho"/>
-                            <menuItem title="Clear Keyboard Matrix" id="8aX-Ro-7wg">
+                            <menuItem isSeparatorItem="YES" id="i1a-9I-H6M"/>
+                            <menuItem title="Reset keyboard handler" id="8aX-Ro-7wg">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="clearKeyboardMatrixAction:" target="-1" id="sGi-3e-BCA"/>
@@ -561,8 +481,8 @@
                         </items>
                     </menu>
                 </menuItem>
-                <menuItem title="Drive 8" id="XQm-ka-Db5">
-                    <menu key="submenu" title="Drive 8" id="Mqn-f5-oGB">
+                <menuItem title="Df0" id="XQm-ka-Db5">
+                    <menu key="submenu" title="Df0" id="Mqn-f5-oGB">
                         <items>
                             <menuItem title="New Disk" tag="1" id="e0B-5D-eZ0">
                                 <modifierMask key="keyEquivalentModifierMask"/>
@@ -678,17 +598,17 @@
                                 </menu>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="PlF-BJ-HIT"/>
-                            <menuItem title="Write Protect" tag="1" id="vbD-qh-Fhq">
+                            <menuItem title="Write Protect Disk" tag="1" id="vbD-qh-Fhq">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="writeProtectAction:" target="-1" id="a7T-Ky-RJO"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="UYP-Oc-o9f"/>
-                            <menuItem title="Drive is Connected" tag="1" id="1pD-kc-N8U">
+                            <menuItem title="Make Drag and Drop Target" tag="1" id="F4s-hA-4ng">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="drivePowerAction:" target="-1" id="ZZB-io-gQh"/>
+                                    <action selector="drivePowerAction:" target="-1" id="gWq-lK-zvo"/>
                                 </connections>
                             </menuItem>
                         </items>

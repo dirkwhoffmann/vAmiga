@@ -25,6 +25,10 @@
 #include "Denise.h"
 #include "Paula.h"
 #include "AmigaKeyboard.h"
+#include "DiskController.h"
+#include "AmigaDrive.h"
+#include "AmigaDisk.h"
+
 
 // File types
 #include "ADFFile.h"
