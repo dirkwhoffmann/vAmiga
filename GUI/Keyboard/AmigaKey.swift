@@ -292,7 +292,6 @@ extension NSImage {
         
         let w = size.width
         let h = size.height
-        track("\(w) \(h)")
         
         let textRect = CGRect(x: x, y: -y, width: w - x, height: h - y)
         // let paragraphStyle = NSMutableParagraphStyle()
@@ -402,13 +401,13 @@ extension AmigaKey {
     func backgroundImage(model: AmigaModel, country: Language) -> NSImage? {
         
         // Determine physical keyboard layout (ignoring key labels)
-        let a1000     = (model == A1000)
+        let a1000     = model == A1000
         let a1000ansi = a1000 && country == .us
-        let a1000iso  = a1000 && !a1000ansi
+        let a1000iso  = a1000 && country != .us
 
-        let a500     = !a1000
+        let a500     = model != A1000
         let a500ansi = a500 && country == .us
-        let a500iso  = a500 && !a500ansi
+        let a500iso  = a500 && country != .us
 
         // Crawl through the key descriptions
         if let info = AmigaKey.specialKeys[keyCode] {
@@ -442,7 +441,7 @@ extension AmigaKey {
         guard let image = backgroundImage(model: model, country: country)?.copy() as? NSImage else {
             return nil
         }
-
+        
         // Get the keycap label
         let label = self.label[country] ?? self.label[.generic]!
         let parts = label.split(separator: " ")

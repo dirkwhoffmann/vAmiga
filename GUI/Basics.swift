@@ -133,6 +133,19 @@ extension NSImage {
         glossy!.draw(in: rect, from: NSZeroRect, operation: sourceOver, fraction: 1.0)
         unlockFocus()
     }
+    
+    func darken() {
+      
+        let color = NSColor.init(calibratedWhite: 0.0, alpha: 0.33)
+        let imageRect = NSRect.init(origin: .zero, size: size)
+
+        lockFocus()
+        color.set()
+        imageRect.fill(using: .sourceAtop)
+        unlockFocus()
+        
+        draw(in: imageRect, from: imageRect, operation: .sourceOver, fraction: 0.75)
+    }
 }
 
 

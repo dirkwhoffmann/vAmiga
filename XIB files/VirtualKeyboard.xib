@@ -12,7 +12,7 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <window title="Keyboard" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" titlebarAppearsTransparent="YES" titleVisibility="hidden" id="QvC-M9-y7g">
+        <window title="Keyboard" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" titlebarAppearsTransparent="YES" titleVisibility="hidden" id="QvC-M9-y7g" customClass="VirtualKeyboardWindow" customModule="vAmiga" customModuleProvider="target">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="883" height="267"/>
@@ -29,7 +29,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="6Nw-kx-8Da"/>
+                            <action selector="pressVirtualKey:" target="-2" id="6Nw-kx-8Da"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="69" translatesAutoresizingMaskIntoConstraints="NO" id="dpz-27-k0a">
@@ -40,7 +40,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="6KZ-Ex-kuM"/>
+                            <action selector="pressVirtualKey:" target="-2" id="6KZ-Ex-kuM"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="b5l-uu-GKu">
@@ -51,7 +51,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="KyJ-bd-rS2"/>
+                            <action selector="pressVirtualKey:" target="-2" id="KyJ-bd-rS2"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="80" translatesAutoresizingMaskIntoConstraints="NO" id="zHG-A3-Exo">
@@ -62,7 +62,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="zcw-LD-v1K"/>
+                            <action selector="pressVirtualKey:" target="-2" id="zcw-LD-v1K"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="81" translatesAutoresizingMaskIntoConstraints="NO" id="YY4-Zk-KmY">
@@ -73,7 +73,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="fBt-pr-afo"/>
+                            <action selector="pressVirtualKey:" target="-2" id="fBt-pr-afo"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="82" translatesAutoresizingMaskIntoConstraints="NO" id="l4S-cc-I2r">
@@ -84,7 +84,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="Ena-I7-yfY"/>
+                            <action selector="pressVirtualKey:" target="-2" id="Ena-I7-yfY"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="83" translatesAutoresizingMaskIntoConstraints="NO" id="V6h-Xs-K91">
@@ -95,7 +95,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="Vay-iW-pCh"/>
+                            <action selector="pressVirtualKey:" target="-2" id="Vay-iW-pCh"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="84" translatesAutoresizingMaskIntoConstraints="NO" id="i1b-0K-03y">
@@ -106,7 +106,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="MFi-kK-7YE"/>
+                            <action selector="pressVirtualKey:" target="-2" id="MFi-kK-7YE"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="85" translatesAutoresizingMaskIntoConstraints="NO" id="GEr-e4-qBK">
@@ -117,7 +117,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="Uez-3L-9cR"/>
+                            <action selector="pressVirtualKey:" target="-2" id="Uez-3L-9cR"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="99" translatesAutoresizingMaskIntoConstraints="NO" id="zs6-kl-sbH">
@@ -128,7 +128,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="5zV-Wt-POx"/>
+                            <action selector="pressVirtualKey:" target="-2" id="5zV-Wt-POx"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="102" translatesAutoresizingMaskIntoConstraints="NO" id="ikF-rU-ZQ5">
@@ -139,7 +139,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="rEC-6g-bJM"/>
+                            <action selector="pressVirtualKey:" target="-2" id="rEC-6g-bJM"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="64" translatesAutoresizingMaskIntoConstraints="NO" id="ILV-UT-Yji">
@@ -150,7 +150,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="vTZ-Uy-bL3"/>
+                            <action selector="pressVirtualKey:" target="-2" id="vTZ-Uy-bL3"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="100" translatesAutoresizingMaskIntoConstraints="NO" id="kjo-eg-mX9">
@@ -161,7 +161,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="kcl-yi-PVb"/>
+                            <action selector="pressVirtualKey:" target="-2" id="kcl-yi-PVb"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="103" translatesAutoresizingMaskIntoConstraints="NO" id="5al-RT-xwS">
@@ -172,7 +172,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="BPJ-BN-hbz"/>
+                            <action selector="pressVirtualKey:" target="-2" id="BPJ-BN-hbz"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="101" translatesAutoresizingMaskIntoConstraints="NO" id="Rqr-L4-AlL">
@@ -183,7 +183,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="4QC-YP-YEV"/>
+                            <action selector="pressVirtualKey:" target="-2" id="4QC-YP-YEV"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="86" translatesAutoresizingMaskIntoConstraints="NO" id="q57-eb-06u">
@@ -194,7 +194,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="Bce-9D-BVq"/>
+                            <action selector="pressVirtualKey:" target="-2" id="Bce-9D-BVq"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="87" translatesAutoresizingMaskIntoConstraints="NO" id="GUh-sl-Ux2">
@@ -205,7 +205,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="ZlC-yc-6gB"/>
+                            <action selector="pressVirtualKey:" target="-2" id="ZlC-yc-6gB"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="88" translatesAutoresizingMaskIntoConstraints="NO" id="Ram-DX-b3c">
@@ -216,7 +216,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="xy1-Rx-TKO"/>
+                            <action selector="pressVirtualKey:" target="-2" id="xy1-Rx-TKO"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="89" translatesAutoresizingMaskIntoConstraints="NO" id="27B-0h-slV">
@@ -227,7 +227,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="5N6-AI-rue"/>
+                            <action selector="pressVirtualKey:" target="-2" id="5N6-AI-rue"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="16" translatesAutoresizingMaskIntoConstraints="NO" id="iOC-P0-vTO">
@@ -238,7 +238,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="r4i-xf-2ug"/>
+                            <action selector="pressVirtualKey:" target="-2" id="r4i-xf-2ug"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="HKQ-Gx-drB">
@@ -249,7 +249,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="BtJ-mF-hgD"/>
+                            <action selector="pressVirtualKey:" target="-2" id="BtJ-mF-hgD"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="4" translatesAutoresizingMaskIntoConstraints="NO" id="dyH-eH-m4m">
@@ -260,7 +260,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="E4Y-Uz-Ree"/>
+                            <action selector="pressVirtualKey:" target="-2" id="E4Y-Uz-Ree"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="17" translatesAutoresizingMaskIntoConstraints="NO" id="6x8-QE-Im1">
@@ -271,7 +271,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="Ryj-3U-euE"/>
+                            <action selector="pressVirtualKey:" target="-2" id="Ryj-3U-euE"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="18" translatesAutoresizingMaskIntoConstraints="NO" id="aQw-gl-Hwn">
@@ -282,7 +282,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="7fv-yG-weY"/>
+                            <action selector="pressVirtualKey:" target="-2" id="7fv-yG-weY"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="19" translatesAutoresizingMaskIntoConstraints="NO" id="kIh-nI-gGn">
@@ -293,7 +293,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="FbZ-JV-Za5"/>
+                            <action selector="pressVirtualKey:" target="-2" id="FbZ-JV-Za5"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="20" translatesAutoresizingMaskIntoConstraints="NO" id="c3q-FS-0nZ">
@@ -304,7 +304,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="vqF-He-dF8"/>
+                            <action selector="pressVirtualKey:" target="-2" id="vqF-He-dF8"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="21" translatesAutoresizingMaskIntoConstraints="NO" id="KJv-eW-vz8">
@@ -315,7 +315,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="8yV-bz-fAn"/>
+                            <action selector="pressVirtualKey:" target="-2" id="8yV-bz-fAn"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="22" translatesAutoresizingMaskIntoConstraints="NO" id="m0n-BW-frL">
@@ -326,7 +326,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="6wV-fl-2cd"/>
+                            <action selector="pressVirtualKey:" target="-2" id="6wV-fl-2cd"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="23" translatesAutoresizingMaskIntoConstraints="NO" id="YrI-0b-C0m">
@@ -337,7 +337,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="B5x-6J-qsR"/>
+                            <action selector="pressVirtualKey:" target="-2" id="B5x-6J-qsR"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="24" translatesAutoresizingMaskIntoConstraints="NO" id="FES-8C-aKG">
@@ -348,7 +348,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="Nza-np-z2E"/>
+                            <action selector="pressVirtualKey:" target="-2" id="Nza-np-z2E"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="25" translatesAutoresizingMaskIntoConstraints="NO" id="Qm7-ud-JlD">
@@ -359,7 +359,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="mjB-Zl-ok3"/>
+                            <action selector="pressVirtualKey:" target="-2" id="mjB-Zl-ok3"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="26" translatesAutoresizingMaskIntoConstraints="NO" id="a6K-Vh-MUH">
@@ -370,7 +370,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="CA8-EW-h3f"/>
+                            <action selector="pressVirtualKey:" target="-2" id="CA8-EW-h3f"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="27" translatesAutoresizingMaskIntoConstraints="NO" id="0Np-Ra-a6d">
@@ -381,7 +381,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="zj8-rn-SZW"/>
+                            <action selector="pressVirtualKey:" target="-2" id="zj8-rn-SZW"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="98" translatesAutoresizingMaskIntoConstraints="NO" id="9md-Pk-IBx">
@@ -392,7 +392,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="o2Y-1u-NHM"/>
+                            <action selector="pressVirtualKey:" target="-2" id="o2Y-1u-NHM"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="32" translatesAutoresizingMaskIntoConstraints="NO" id="nOy-sU-2yx">
@@ -403,7 +403,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="FYi-me-PmC"/>
+                            <action selector="pressVirtualKey:" target="-2" id="FYi-me-PmC"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="33" translatesAutoresizingMaskIntoConstraints="NO" id="aI1-7i-TMF">
@@ -414,7 +414,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="7CE-Wp-Y0X"/>
+                            <action selector="pressVirtualKey:" target="-2" id="7CE-Wp-Y0X"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="34" translatesAutoresizingMaskIntoConstraints="NO" id="cff-S7-QCd">
@@ -425,7 +425,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="ggK-so-pmB"/>
+                            <action selector="pressVirtualKey:" target="-2" id="ggK-so-pmB"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="35" translatesAutoresizingMaskIntoConstraints="NO" id="g9G-d9-OMG">
@@ -436,7 +436,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="Rec-pk-VP4"/>
+                            <action selector="pressVirtualKey:" target="-2" id="Rec-pk-VP4"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="36" translatesAutoresizingMaskIntoConstraints="NO" id="ohS-OJ-hW3">
@@ -447,7 +447,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="kiu-GH-IbU"/>
+                            <action selector="pressVirtualKey:" target="-2" id="kiu-GH-IbU"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="37" translatesAutoresizingMaskIntoConstraints="NO" id="zky-qi-U0T">
@@ -458,7 +458,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="3R6-uu-SYT"/>
+                            <action selector="pressVirtualKey:" target="-2" id="3R6-uu-SYT"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="38" translatesAutoresizingMaskIntoConstraints="NO" id="clr-Zw-hKM">
@@ -469,7 +469,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="zZ4-qF-eJD"/>
+                            <action selector="pressVirtualKey:" target="-2" id="zZ4-qF-eJD"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="39" translatesAutoresizingMaskIntoConstraints="NO" id="Lwd-aX-ygA">
@@ -480,7 +480,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="wuW-K5-PJw"/>
+                            <action selector="pressVirtualKey:" target="-2" id="wuW-K5-PJw"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="40" translatesAutoresizingMaskIntoConstraints="NO" id="D73-mP-xZJ">
@@ -491,7 +491,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="dyA-8x-BJ3"/>
+                            <action selector="pressVirtualKey:" target="-2" id="dyA-8x-BJ3"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="41" translatesAutoresizingMaskIntoConstraints="NO" id="36L-mN-lYd">
@@ -502,7 +502,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="4gR-uU-PD8"/>
+                            <action selector="pressVirtualKey:" target="-2" id="4gR-uU-PD8"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="42" translatesAutoresizingMaskIntoConstraints="NO" id="EP4-Hy-g9y">
@@ -513,7 +513,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="kQm-nj-2A7"/>
+                            <action selector="pressVirtualKey:" target="-2" id="kQm-nj-2A7"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="96" translatesAutoresizingMaskIntoConstraints="NO" id="rnt-FT-NfL">
@@ -524,7 +524,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="BpO-hf-mIa"/>
+                            <action selector="pressVirtualKey:" target="-2" id="BpO-hf-mIa"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="97" translatesAutoresizingMaskIntoConstraints="NO" id="OSk-iq-5zP">
@@ -535,7 +535,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="YPQ-pV-4id"/>
+                            <action selector="pressVirtualKey:" target="-2" id="YPQ-pV-4id"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="49" translatesAutoresizingMaskIntoConstraints="NO" id="UsY-v2-2ll">
@@ -546,7 +546,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="bLV-PM-ady"/>
+                            <action selector="pressVirtualKey:" target="-2" id="bLV-PM-ady"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="50" translatesAutoresizingMaskIntoConstraints="NO" id="87g-2G-TFg">
@@ -557,7 +557,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="Tot-s0-rxE"/>
+                            <action selector="pressVirtualKey:" target="-2" id="Tot-s0-rxE"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="51" translatesAutoresizingMaskIntoConstraints="NO" id="Mde-g8-yuc">
@@ -568,7 +568,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="e6m-qB-y7U"/>
+                            <action selector="pressVirtualKey:" target="-2" id="e6m-qB-y7U"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="52" translatesAutoresizingMaskIntoConstraints="NO" id="2vI-AH-Z7v">
@@ -579,7 +579,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="gjR-sY-0Mz"/>
+                            <action selector="pressVirtualKey:" target="-2" id="gjR-sY-0Mz"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="53" translatesAutoresizingMaskIntoConstraints="NO" id="6zu-mv-B5x">
@@ -590,7 +590,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="NOA-iL-2JP"/>
+                            <action selector="pressVirtualKey:" target="-2" id="NOA-iL-2JP"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="54" translatesAutoresizingMaskIntoConstraints="NO" id="xs5-Cr-ago">
@@ -601,7 +601,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="W9n-iE-F7j"/>
+                            <action selector="pressVirtualKey:" target="-2" id="W9n-iE-F7j"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="55" translatesAutoresizingMaskIntoConstraints="NO" id="VBL-N8-WZe">
@@ -612,7 +612,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="ket-69-bwV"/>
+                            <action selector="pressVirtualKey:" target="-2" id="ket-69-bwV"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="56" translatesAutoresizingMaskIntoConstraints="NO" id="Kf7-nJ-VC4">
@@ -623,7 +623,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="IPZ-kv-qU7"/>
+                            <action selector="pressVirtualKey:" target="-2" id="IPZ-kv-qU7"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="57" translatesAutoresizingMaskIntoConstraints="NO" id="u2y-BQ-8z4">
@@ -634,7 +634,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="fUz-eZ-nWb"/>
+                            <action selector="pressVirtualKey:" target="-2" id="fUz-eZ-nWb"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="58" translatesAutoresizingMaskIntoConstraints="NO" id="Ttz-d8-Um4">
@@ -645,7 +645,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="n4G-Er-mQM"/>
+                            <action selector="pressVirtualKey:" target="-2" id="n4G-Er-mQM"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Fhg-zc-Bsj">
@@ -656,7 +656,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="oQU-u8-Ijg"/>
+                            <action selector="pressVirtualKey:" target="-2" id="oQU-u8-Ijg"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="66" translatesAutoresizingMaskIntoConstraints="NO" id="Cge-RS-wPd">
@@ -667,7 +667,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="87X-Kg-kJD"/>
+                            <action selector="pressVirtualKey:" target="-2" id="87X-Kg-kJD"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="68" translatesAutoresizingMaskIntoConstraints="NO" id="MnK-44-KNg">
@@ -678,7 +678,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="ikj-eB-Yfz"/>
+                            <action selector="pressVirtualKey:" target="-2" id="ikj-eB-Yfz"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="43" translatesAutoresizingMaskIntoConstraints="NO" id="Mcn-5Z-C9C">
@@ -689,7 +689,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="Lzy-4U-j1A"/>
+                            <action selector="pressVirtualKey:" target="-2" id="Lzy-4U-j1A"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="79" translatesAutoresizingMaskIntoConstraints="NO" id="s5d-zg-SZz">
@@ -700,7 +700,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="b3l-cb-foV"/>
+                            <action selector="pressVirtualKey:" target="-2" id="b3l-cb-foV"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="77" translatesAutoresizingMaskIntoConstraints="NO" id="vbi-UL-hAw">
@@ -711,7 +711,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="uTP-Fm-SN6"/>
+                            <action selector="pressVirtualKey:" target="-2" id="uTP-Fm-SN6"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="76" translatesAutoresizingMaskIntoConstraints="NO" id="giD-nv-J1o">
@@ -722,7 +722,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="jBx-Ek-Fdd"/>
+                            <action selector="pressVirtualKey:" target="-2" id="jBx-Ek-Fdd"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="78" translatesAutoresizingMaskIntoConstraints="NO" id="5bF-FV-bvg">
@@ -733,7 +733,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="8D4-wD-yr8"/>
+                            <action selector="pressVirtualKey:" target="-2" id="8D4-wD-yr8"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="70" translatesAutoresizingMaskIntoConstraints="NO" id="sJy-9e-euB">
@@ -744,7 +744,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="nEU-v7-RT0"/>
+                            <action selector="pressVirtualKey:" target="-2" id="nEU-v7-RT0"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="95" translatesAutoresizingMaskIntoConstraints="NO" id="vDM-aE-wyt">
@@ -755,7 +755,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="lyc-vb-zrd"/>
+                            <action selector="pressVirtualKey:" target="-2" id="lyc-vb-zrd"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="90" translatesAutoresizingMaskIntoConstraints="NO" id="87f-dV-dCt">
@@ -766,7 +766,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="2zv-g2-PSN"/>
+                            <action selector="pressVirtualKey:" target="-2" id="2zv-g2-PSN"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="91" translatesAutoresizingMaskIntoConstraints="NO" id="Mxj-Sb-4hw">
@@ -777,7 +777,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="D42-Wo-oKY"/>
+                            <action selector="pressVirtualKey:" target="-2" id="D42-Wo-oKY"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="92" translatesAutoresizingMaskIntoConstraints="NO" id="vKu-hD-AqI">
@@ -788,7 +788,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="bx9-sP-v9k"/>
+                            <action selector="pressVirtualKey:" target="-2" id="bx9-sP-v9k"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="93" translatesAutoresizingMaskIntoConstraints="NO" id="61b-3A-50t">
@@ -799,7 +799,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="t2N-iA-5u5"/>
+                            <action selector="pressVirtualKey:" target="-2" id="t2N-iA-5u5"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="61" translatesAutoresizingMaskIntoConstraints="NO" id="TnQ-ph-4bx">
@@ -810,7 +810,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="Hy3-zY-h9N"/>
+                            <action selector="pressVirtualKey:" target="-2" id="Hy3-zY-h9N"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="62" translatesAutoresizingMaskIntoConstraints="NO" id="W2S-zd-bS0">
@@ -821,7 +821,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="lSc-sc-Ycl"/>
+                            <action selector="pressVirtualKey:" target="-2" id="lSc-sc-Ycl"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="63" translatesAutoresizingMaskIntoConstraints="NO" id="Efu-gg-mG6">
@@ -832,7 +832,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="QnX-cm-DHN"/>
+                            <action selector="pressVirtualKey:" target="-2" id="QnX-cm-DHN"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="74" translatesAutoresizingMaskIntoConstraints="NO" id="4BG-fk-CNn">
@@ -843,7 +843,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="bAn-y7-lMH"/>
+                            <action selector="pressVirtualKey:" target="-2" id="bAn-y7-lMH"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="45" translatesAutoresizingMaskIntoConstraints="NO" id="jul-tC-HL0">
@@ -854,7 +854,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="geF-dA-N5R"/>
+                            <action selector="pressVirtualKey:" target="-2" id="geF-dA-N5R"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="46" translatesAutoresizingMaskIntoConstraints="NO" id="qtb-eC-f3q">
@@ -865,7 +865,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="gw4-tc-aYA"/>
+                            <action selector="pressVirtualKey:" target="-2" id="gw4-tc-aYA"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="47" translatesAutoresizingMaskIntoConstraints="NO" id="qZ0-jk-HWb">
@@ -876,7 +876,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="kEI-x1-ksb"/>
+                            <action selector="pressVirtualKey:" target="-2" id="kEI-x1-ksb"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="94" translatesAutoresizingMaskIntoConstraints="NO" id="cJC-fM-RF3">
@@ -887,7 +887,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="zOq-iE-DJu"/>
+                            <action selector="pressVirtualKey:" target="-2" id="zOq-iE-DJu"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="29" translatesAutoresizingMaskIntoConstraints="NO" id="VcO-4h-kgT">
@@ -898,7 +898,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="gB8-Ko-byU"/>
+                            <action selector="pressVirtualKey:" target="-2" id="gB8-Ko-byU"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="30" translatesAutoresizingMaskIntoConstraints="NO" id="Fue-Iz-iGu">
@@ -909,7 +909,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="r54-kT-GrW"/>
+                            <action selector="pressVirtualKey:" target="-2" id="r54-kT-GrW"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="31" translatesAutoresizingMaskIntoConstraints="NO" id="CzH-ah-BlQ">
@@ -920,7 +920,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="cbi-jb-P0K"/>
+                            <action selector="pressVirtualKey:" target="-2" id="cbi-jb-P0K"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="67" translatesAutoresizingMaskIntoConstraints="NO" id="nze-Rh-Icx">
@@ -931,7 +931,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="f23-x7-Z7U"/>
+                            <action selector="pressVirtualKey:" target="-2" id="f23-x7-Z7U"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="15" translatesAutoresizingMaskIntoConstraints="NO" id="GvB-Em-o6C">
@@ -942,7 +942,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="j50-ma-vsu"/>
+                            <action selector="pressVirtualKey:" target="-2" id="j50-ma-vsu"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="60" translatesAutoresizingMaskIntoConstraints="NO" id="CDi-BZ-Eou">
@@ -953,7 +953,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="NmQ-bp-2XP"/>
+                            <action selector="pressVirtualKey:" target="-2" id="NmQ-bp-2XP"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="48" translatesAutoresizingMaskIntoConstraints="NO" id="pze-Uc-Yl0">
@@ -964,7 +964,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="HyT-Uz-V89"/>
+                            <action selector="pressVirtualKey:" target="-2" id="HyT-Uz-V89"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="5" translatesAutoresizingMaskIntoConstraints="NO" id="qzh-Di-WeL">
@@ -975,7 +975,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="yKd-rt-LNc"/>
+                            <action selector="pressVirtualKey:" target="-2" id="yKd-rt-LNc"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="6" translatesAutoresizingMaskIntoConstraints="NO" id="Xz2-d1-VLN">
@@ -986,7 +986,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="7C0-Fd-vOs"/>
+                            <action selector="pressVirtualKey:" target="-2" id="7C0-Fd-vOs"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="7" translatesAutoresizingMaskIntoConstraints="NO" id="Rnz-bK-Gfl">
@@ -997,7 +997,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="lnI-Eo-v9t"/>
+                            <action selector="pressVirtualKey:" target="-2" id="lnI-Eo-v9t"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="8" translatesAutoresizingMaskIntoConstraints="NO" id="GoZ-fB-wBV">
@@ -1008,7 +1008,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="IEm-ZX-V1W"/>
+                            <action selector="pressVirtualKey:" target="-2" id="IEm-ZX-V1W"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="9" translatesAutoresizingMaskIntoConstraints="NO" id="jS0-kx-JmE">
@@ -1019,7 +1019,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="n7E-xu-fda"/>
+                            <action selector="pressVirtualKey:" target="-2" id="n7E-xu-fda"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="10" translatesAutoresizingMaskIntoConstraints="NO" id="JRM-Kn-CB4">
@@ -1030,7 +1030,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="gEu-2K-Y7a"/>
+                            <action selector="pressVirtualKey:" target="-2" id="gEu-2K-Y7a"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="11" translatesAutoresizingMaskIntoConstraints="NO" id="cgB-ia-BuP">
@@ -1041,7 +1041,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="rtf-xG-8in"/>
+                            <action selector="pressVirtualKey:" target="-2" id="rtf-xG-8in"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="12" translatesAutoresizingMaskIntoConstraints="NO" id="5qk-RD-my2">
@@ -1052,7 +1052,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="mMZ-fz-Cgw"/>
+                            <action selector="pressVirtualKey:" target="-2" id="mMZ-fz-Cgw"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="13" translatesAutoresizingMaskIntoConstraints="NO" id="G8m-As-A4T">
@@ -1063,7 +1063,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="lTJ-aC-oGf"/>
+                            <action selector="pressVirtualKey:" target="-2" id="lTJ-aC-oGf"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="65" translatesAutoresizingMaskIntoConstraints="NO" id="PIn-pn-g9U">
@@ -1074,7 +1074,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="pressVirtualC64Key:" target="-2" id="DDu-ir-Vlb"/>
+                            <action selector="pressVirtualKey:" target="-2" id="DDu-ir-Vlb"/>
                         </connections>
                     </button>
                 </subviews>
