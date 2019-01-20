@@ -118,8 +118,8 @@ let isomac2amiga : [Int : Int] = [
     kVK_Control:             AmigaKeycode.control,
     kVK_Option:              AmigaKeycode.leftAlt,
     kVK_RightOption:         AmigaKeycode.rightAlt,
-    /// ????? kVK_Command: AmigaKeycode.leftAmiga:         [.us: ""],
-    /// AmigaKeycode.rightAmiga:        [.us: ""],
+    kVK_Command:             AmigaKeycode.leftAmiga,
+    kVK_RightCommand:        AmigaKeycode.rightAmiga,
 ]
 
 
@@ -216,9 +216,12 @@ extension MacKey {
     static let escape = MacKey.init(keyCode: kVK_Escape, characters: "\u{238b}")
     static let leftShift = MacKey.init(keyCode: kVK_Shift, characters: "\u{21e7}")
     static let rightShift = MacKey.init(keyCode: kVK_RightShift, characters: "\u{21e7}")
-    static let option = MacKey.init(keyCode: kVK_Option, characters: "\u{2325}")
-    static let control = MacKey.init(keyCode: kVK_Control, characters: "\u{2303}")
-    
+    static let leftOption = MacKey.init(keyCode: kVK_Option, characters: "\u{2325}")
+    static let rightOption = MacKey.init(keyCode: kVK_RightOption, characters: "\u{2325}")
+    static let leftControl = MacKey.init(keyCode: kVK_Control, characters: "\u{2303}")
+    static let rightControl = MacKey.init(keyCode: kVK_RightControl, characters: "\u{2303}")
+    static let leftCommand = MacKey.init(keyCode: kVK_Command, characters: "\u{2303}")
+    static let rightCommand = MacKey.init(keyCode: kVK_RightCommand, characters: "\u{2303}")
     static let F1 = MacKey.init(keyCode: kVK_F1, characters: "F1")
     static let F2 = MacKey.init(keyCode: kVK_F2, characters: "F2")
     static let F3 = MacKey.init(keyCode: kVK_F3, characters: "F3")

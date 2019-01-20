@@ -29,6 +29,8 @@ public extension MetalView {
     
     override public func flagsChanged(with event: NSEvent) {
         
+        track()
+        
         // Save modifier flags. They are needed in TouchBar code
         controller.modifierFlags = event.modifierFlags
         controller.keyboardcontroller.flagsChanged(with: event)

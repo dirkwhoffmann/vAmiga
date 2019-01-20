@@ -34,11 +34,10 @@ class KeyboardController: NSObject {
     var disconnectJoyKeys = Defaults.disconnectJoyKeys
     
     // Remembers the currently pressed key modifiers
-    var leftShift: Bool = false
-    var rightShift: Bool = false
-    var control: Bool = false
-    var option: Bool = false
-    var command: Bool = false
+    var leftShift   = false, rightShift   = false
+    var leftControl = false, rightControl = false
+    var leftOption  = false, rightOption  = false
+    var leftCommand = false, rightCommand = false
     
     /** DEPRECATED
      Remembers the currently pressed keys and their assigned C64 key list
@@ -57,33 +56,38 @@ class KeyboardController: NSObject {
      */
     func checkConsistency(withEvent event: NSEvent) {
         
-        let flags = event.modifierFlags
+        let flags   = event.modifierFlags
+        let shift   = leftShift   || rightShift
+        let control = leftControl || rightControl
+        let option  = leftOption  || rightOption
+        let command = leftCommand || rightCommand
         
-        if (leftShift || rightShift) != flags.contains(NSEvent.ModifierFlags.shift) {
+        if shift != flags.contains(NSEvent.ModifierFlags.shift) {
             keyUp(with: MacKey.leftShift)
             keyUp(with: MacKey.rightShift)
-            Swift.print("*** SHIFT inconsistency detected *** \(leftShift) \(rightShift)")
+            track("** SHIFT inconsistency ** \(leftShift) \(rightShift)")
         }
+        
         if control != flags.contains(NSEvent.ModifierFlags.control) {
-            keyUp(with: MacKey.control)
-            Swift.print("*** CTRL inconsistency *** \(control)")
+            keyUp(with: MacKey.leftControl)
+            keyUp(with: MacKey.rightControl)
+            track("** CONTROL inconsistency ** \(leftControl) \(rightControl)")
         }
         if option != flags.contains(NSEvent.ModifierFlags.option) {
-            keyUp(with: MacKey.option)
-            Swift.print("*** ALT inconsistency *** \(option)")
+            keyUp(with: MacKey.leftOption)
+            keyUp(with: MacKey.rightOption)
+            track("*** ALT inconsistency *** \(leftOption) \(rightOption)")
+        }
+        if command != flags.contains(NSEvent.ModifierFlags.command) {
+            keyUp(with: MacKey.leftCommand)
+            keyUp(with: MacKey.rightCommand)
+            track("*** COMMAND inconsistency *** \(leftCommand) \(rightCommand)")
         }
     }
     
     func keyDown(with event: NSEvent) {
         
         guard let controller = myController else { return }
-        
-        
-        // DELETE
-        let key = MacKey.init(keyCode: 0x32)
-        track("Keycode = \(key.amigaKeyCode)")
-        
-        
         
         // Ignore repeating keys
         if (event.isARepeat) {
@@ -130,42 +134,45 @@ class KeyboardController: NSObject {
         track("\(mod)")
         track("\(keyCode)")
 
-        if keyCode == kVK_Shift {
-            if !leftShift {
-                leftShift = true
-                keyDown(with: MacKey.leftShift)
-            } else {
-                leftShift = false
-                keyUp(with: MacKey.leftShift)
-            }
-        }
-        if keyCode == kVK_RightShift {
-            if !rightShift {
-                rightShift = true
-                keyDown(with: MacKey.rightShift)
-            } else {
-                rightShift = false
-                keyUp(with: MacKey.rightShift)
-            }
-        }
-        if mod.contains(.control) && !control {
-            control = true
-            keyDown(with: MacKey.control)
-        }
-        if !mod.contains(.control) && control {
-            control = false
-            keyUp(with: MacKey.control)
-        }
-        if mod.contains(.option) && !option {
-            option = true
-            keyDown(with: MacKey.option)
-        }
-        if !mod.contains(.option) && option {
-            option = false
-            keyUp(with: MacKey.option)
+        switch Int(event.keyCode) {
+            
+        case kVK_Shift:
+            leftShift = event.modifierFlags.contains(.shift)
+            leftShift ? keyDown(with: MacKey.leftShift) : keyUp(with: MacKey.leftShift)
+            
+        case kVK_RightShift:
+            rightShift = event.modifierFlags.contains(.shift)
+            rightShift ? keyDown(with: MacKey.rightShift) : keyUp(with: MacKey.rightShift)
+            
+        case kVK_Control:
+            leftControl = event.modifierFlags.contains(.control)
+            leftControl ? keyDown(with: MacKey.leftControl) : keyUp(with: MacKey.leftControl)
+
+        case kVK_RightControl:
+            rightControl = event.modifierFlags.contains(.control)
+            rightControl ? keyDown(with: MacKey.rightControl) : keyUp(with: MacKey.rightControl)
+
+        case kVK_Option:
+            leftOption = event.modifierFlags.contains(.option)
+            leftOption ? keyDown(with: MacKey.leftOption) : keyUp(with: MacKey.leftOption)
+            
+        case kVK_RightOption:
+            rightOption = event.modifierFlags.contains(.option)
+            rightOption ? keyDown(with: MacKey.rightOption) : keyUp(with: MacKey.rightOption)
+            
+        case kVK_Command:
+            leftCommand = event.modifierFlags.contains(.command)
+            leftCommand ? keyDown(with: MacKey.leftCommand) : keyUp(with: MacKey.leftCommand)
+            
+        case kVK_RightCommand:
+            rightCommand = event.modifierFlags.contains(.command)
+            rightCommand ? keyDown(with: MacKey.rightCommand) : keyUp(with: MacKey.rightCommand)
+            
+        default:
+            break
         }
         
-        command = mod.contains(.command)
+        checkConsistency(withEvent: event)
     }
     
     func keyDown(with macKey: MacKey) {

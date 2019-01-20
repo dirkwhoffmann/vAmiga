@@ -24,8 +24,14 @@ class VirtualKeyboardWindow : NSWindow {
     
     override func flagsChanged(with event: NSEvent) {
         
+        track()
+        
+        // Let the emulator handle the event first
+        myController?.metalScreen.flagsChanged(with: event)
+        
+        // Update images
         let controller = delegate as! VirtualKeyboardController
-        controller.stickyKeys = event.modifierFlags.contains(.shift)
+        controller.refresh()
     }
 }
 
@@ -40,23 +46,6 @@ class VirtualKeyboardController : UserDialogController, NSWindowDelegate
     // Image cache for keys that are currently pressed
     var pressedKeyImage = Array(repeating: nil as NSImage?, count: 128)
 
-    /*  Indicates if we're in "sticky" mode
-     *  In sicky mode, only keyDown events are triggered and the keyUp events
-     *  are delayed until sticky mode is disabled. It is used key combinations
-     *  such as Shift + Amiga + <some other key>
-     */
-    var stickyKeys = false {
-        didSet {
-            if !stickyKeys {
-                amigaProxy?.keyboard.releaseAllKeys()
-                if (autoClose) {
-                    cancelAction(self)
-                }
-            }
-            refresh()
-        }
-    }
-    
     /* Indicates if the window should close when a key is pressed.
      * If the virtual keyboard is opened as a sheet, this variable is set to
      * true. If it is opened as a seperate window, it is set to false.
@@ -129,17 +118,15 @@ class VirtualKeyboardController : UserDialogController, NSWindowDelegate
      
         keyboard.pressKey(amigaKeyCode)
         
-        // Schedule automatic key release if we're not in sticky mode
-        if !stickyKeys {
-            DispatchQueue.global().async {
-                
-                usleep(useconds_t(20000))
-                amigaProxy?.keyboard.releaseAllKeys()
-            }
+        // Schedule automatic key release
+        DispatchQueue.global().async {
             
-            if (autoClose) {
-                cancelAction(self)
-            }
+            usleep(useconds_t(20000))
+            amigaProxy?.keyboard.releaseAllKeys()
+        }
+        
+        if (autoClose) {
+            cancelAction(self)
         }
         
         refresh()

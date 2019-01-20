@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 
 import Foundation
+import Carbon.HIToolbox
 
 class PreferencesWindow : NSWindow {
     
@@ -34,14 +35,26 @@ class PreferencesWindow : NSWindow {
         
         track()
         let controller = delegate as! UserDialogController
-        if event.modifierFlags.contains(.shift) && event.keyCode == 56  {
+        
+        switch Int(event.keyCode) {
+            
+        case kVK_Shift where event.modifierFlags.contains(.shift):
             controller.keyDown(with: MacKey.leftShift)
-        } else if event.modifierFlags.contains(.shift) && event.keyCode == 60  {
+        case kVK_RightShift where event.modifierFlags.contains(.shift):
             controller.keyDown(with: MacKey.rightShift)
-        } else if event.modifierFlags.contains(.control) {
-            controller.keyDown(with: MacKey.control)
-        } else if event.modifierFlags.contains(.option) {
-            controller.keyDown(with: MacKey.option)
+            
+        case kVK_Control where event.modifierFlags.contains(.control):
+            controller.keyDown(with: MacKey.leftControl)
+        case kVK_RightControl where event.modifierFlags.contains(.control):
+            controller.keyDown(with: MacKey.rightControl)
+            
+        case kVK_Option where event.modifierFlags.contains(.option):
+            controller.keyDown(with: MacKey.leftOption)
+        case kVK_RightOption where event.modifierFlags.contains(.option):
+            controller.keyDown(with: MacKey.rightOption)
+
+        default:
+            break
         }
     }
 }
