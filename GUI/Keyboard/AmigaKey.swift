@@ -339,7 +339,7 @@ extension AmigaKey {
         AmigaKeycode.backspace:      ("175x100", "white"),
         AmigaKeycode.tab:            ("175x100", "white"),
         AmigaKeycode.keypadEnter:    ("200x100", "white"),
-        AmigaKeycode.delete:         ("150x100", "dark"),
+        AmigaKeycode.delete:         ("100x100", "dark"),
         AmigaKeycode.rightShift:     ("200x100", "white"),
         AmigaKeycode.leftAlt:        ("125x100", "white"),
         AmigaKeycode.rightAlt:       ("125x100", "white"),

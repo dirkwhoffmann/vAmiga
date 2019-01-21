@@ -134,16 +134,24 @@ extension NSImage {
         unlockFocus()
     }
     
-    func darken() {
-      
-        let color = NSColor.init(calibratedWhite: 0.0, alpha: 0.33)
+    func tint(_ color: NSColor) {
+        
         let imageRect = NSRect.init(origin: .zero, size: size)
-
+        
         lockFocus()
         color.set()
         imageRect.fill(using: .sourceAtop)
-        draw(in: imageRect, from: imageRect, operation: .sourceOver, fraction: 0.75)
         unlockFocus()
+    }
+    
+    func darken() {
+        
+        tint(NSColor.init(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.33))
+    }
+    
+    func red() {
+        
+        tint(NSColor.init(red: 1.0, green: 0.0, blue: 0.0, alpha: 0.5))
     }
 }
 

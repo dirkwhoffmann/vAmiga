@@ -12,6 +12,8 @@ import Foundation
 class VirtualKeyboardWindow : NSWindow {
     
     func respondToEvents() {
+        
+        track()
         DispatchQueue.main.async {
             self.makeFirstResponder(self)
         }
@@ -22,14 +24,26 @@ class VirtualKeyboardWindow : NSWindow {
         respondToEvents()
     }
     
+    override func keyDown(with event: NSEvent) {
+        
+        track()
+        myController?.metalScreen.keyDown(with: event)
+        let controller = delegate as! VirtualKeyboardController
+        controller.refresh()
+    }
+    
+    override func keyUp(with event: NSEvent) {
+        
+        track()
+        myController?.metalScreen.keyUp(with: event)
+        let controller = delegate as! VirtualKeyboardController
+        controller.refresh()
+    }
+    
     override func flagsChanged(with event: NSEvent) {
         
         track()
-        
-        // Let the emulator handle the event first
         myController?.metalScreen.flagsChanged(with: event)
-        
-        // Update images
         let controller = delegate as! VirtualKeyboardController
         controller.refresh()
     }
@@ -132,8 +146,7 @@ class VirtualKeyboardController : UserDialogController, NSWindowDelegate
                 keyImage[keycode] = image
                 // track("\(key)")
                 pressedKeyImage[keycode] = image.copy() as? NSImage
-                // track("darken")
-                pressedKeyImage[keycode]?.darken()
+                pressedKeyImage[keycode]?.red()
             }
         }
     }
@@ -148,10 +161,12 @@ class VirtualKeyboardController : UserDialogController, NSWindowDelegate
         keyboard.pressKey(amigaKeyCode)
         
         // Schedule automatic key release
-        DispatchQueue.global().async {
-            
+        // DispatchQueue.global().async {
+        DispatchQueue.main.async {
+
             usleep(useconds_t(20000))
             amigaProxy?.keyboard.releaseAllKeys()
+            self.refresh()
         }
         
         if (autoClose) {
