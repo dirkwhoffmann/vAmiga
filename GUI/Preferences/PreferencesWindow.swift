@@ -39,17 +39,17 @@ class PreferencesWindow : NSWindow {
         switch Int(event.keyCode) {
             
         case kVK_Shift where event.modifierFlags.contains(.shift):
-            controller.keyDown(with: MacKey.leftShift)
+            controller.keyDown(with: MacKey.shift)
         case kVK_RightShift where event.modifierFlags.contains(.shift):
             controller.keyDown(with: MacKey.rightShift)
             
         case kVK_Control where event.modifierFlags.contains(.control):
-            controller.keyDown(with: MacKey.leftControl)
+            controller.keyDown(with: MacKey.control)
         case kVK_RightControl where event.modifierFlags.contains(.control):
             controller.keyDown(with: MacKey.rightControl)
             
         case kVK_Option where event.modifierFlags.contains(.option):
-            controller.keyDown(with: MacKey.leftOption)
+            controller.keyDown(with: MacKey.option)
         case kVK_RightOption where event.modifierFlags.contains(.option):
             controller.keyDown(with: MacKey.rightOption)
 

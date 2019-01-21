@@ -8,6 +8,7 @@
 //
 
 import Foundation
+import Carbon.HIToolbox
 
 //
 // Convenience extensions to UserDefaults
@@ -311,18 +312,18 @@ extension Defaults {
     static let autofireFrequency = Float(2.5)
     
     static let joyKeyMap1 = [
-        MacKey.curLeft:  JOYSTICK_LEFT.rawValue,
-        MacKey.curRight: JOYSTICK_RIGHT.rawValue,
-        MacKey.curUp:    JOYSTICK_UP.rawValue,
-        MacKey.curDown:  JOYSTICK_DOWN.rawValue,
-        MacKey.space:    JOYSTICK_FIRE.rawValue
+        MacKey.init(with: kVK_LeftArrow):  JOYSTICK_LEFT.rawValue,
+        MacKey.init(with: kVK_RightArrow): JOYSTICK_RIGHT.rawValue,
+        MacKey.init(with: kVK_DownArrow):  JOYSTICK_UP.rawValue,
+        MacKey.init(with: kVK_UpArrow):    JOYSTICK_DOWN.rawValue,
+        MacKey.init(with: kVK_Space):      JOYSTICK_FIRE.rawValue
     ]
     static let joyKeyMap2 = [
-        MacKey.ansi.s:   JOYSTICK_LEFT.rawValue,
-        MacKey.ansi.d:   JOYSTICK_RIGHT.rawValue,
-        MacKey.ansi.e:   JOYSTICK_UP.rawValue,
-        MacKey.ansi.x:   JOYSTICK_DOWN.rawValue,
-        MacKey.ansi.c:   JOYSTICK_FIRE.rawValue
+        MacKey.init(with: kVK_ANSI_S):     JOYSTICK_LEFT.rawValue,
+        MacKey.init(with: kVK_ANSI_D):     JOYSTICK_RIGHT.rawValue,
+        MacKey.init(with: kVK_ANSI_E):     JOYSTICK_UP.rawValue,
+        MacKey.init(with: kVK_ANSI_X):     JOYSTICK_DOWN.rawValue,
+        MacKey.init(with: kVK_ANSI_C):     JOYSTICK_FIRE.rawValue
     ]
 }
     

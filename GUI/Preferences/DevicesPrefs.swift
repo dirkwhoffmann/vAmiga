@@ -68,7 +68,7 @@ extension PreferencesController {
                 macKey = key
                 let myStr = NSString(format: "%02X", macKey!.keyCode) as String
                 macKeyCode = NSAttributedString(string: myStr, attributes: attr)
-                macKeyDesc = macKey?.description?.uppercased() ?? ""
+                macKeyDesc = macKey?.stringValue ?? ""
                 break
             }
         }

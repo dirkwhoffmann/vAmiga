@@ -314,7 +314,7 @@ extension NSImage {
 extension AmigaKey {
     
     // Special keys (commons)
-    static let specialKeys : [Int : (String,String)] = [
+    private static let specialKeys : [Int : (String,String)] = [
         
         AmigaKeycode.ansi.keypad0:   ("200x100", "white"),
         AmigaKeycode.escape:         ("100x100", "dark"),
@@ -331,7 +331,7 @@ extension AmigaKey {
     ]
     
     // Special keys (A1000 commons)
-    static let a1000commons : [Int : (String,String)] = [
+    private static let a1000commons : [Int : (String,String)] = [
         
         AmigaKeycode.ansi.grave:     ("125x100", "white"),
         AmigaKeycode.space:          ("750x100", "white"),
@@ -345,21 +345,21 @@ extension AmigaKey {
     ]
     
     // Special keys (A1000 ANSI like)
-    static let a1000ansi : [Int : (String,String)] = [
+    private static let a1000ansi : [Int : (String,String)] = [
         
         AmigaKeycode.enter:          ("200x200", "white"),
         AmigaKeycode.leftShift:      ("250x100", "white"),
     ]
     
     // Special keys (A1000 ISO like)
-    static let a1000iso : [Int : (String,String)] = [
+    private static let a1000iso : [Int : (String,String)] = [
         
         AmigaKeycode.enter:          ("125x200", "white"),
         AmigaKeycode.leftShift:      ("155x100", "white"),
     ]
     
     // Special keys (A500 commons)
-    static let a500commons : [Int : (String,String)] = [
+    private static let a500commons : [Int : (String,String)] = [
         
         AmigaKeycode.ansi.grave:     ("150x100", "dark"),
         AmigaKeycode.ansi.keypad0:   ("200x100", "white"),
@@ -384,21 +384,21 @@ extension AmigaKey {
     ]
     
     // Special keys (A500 ANSI like)
-    static let a500ansi : [Int : (String,String)] = [
+    private static let a500ansi : [Int : (String,String)] = [
         
         AmigaKeycode.enter:          ("225x200", "dark"),
         AmigaKeycode.leftShift:      ("275x100", "dark")
     ]
     
     // Special keys (A500 ISO like)
-    static let a500iso : [Int : (String,String)] = [
+    private static let a500iso : [Int : (String,String)] = [
         
         AmigaKeycode.enter:          ("150x200", "dark"),
         AmigaKeycode.leftShift:      ("175x100", "dark")
     ]
     
     // Returns an unlabeled background image of the right shape
-    func backgroundImage(model: AmigaModel, country: Language) -> NSImage? {
+    private func backgroundImage(model: AmigaModel, country: Language) -> NSImage? {
         
         // Determine physical keyboard layout (ignoring key labels)
         let a1000     = model == A1000

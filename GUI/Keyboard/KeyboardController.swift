@@ -63,23 +63,23 @@ class KeyboardController: NSObject {
         let command = leftCommand || rightCommand
         
         if shift != flags.contains(NSEvent.ModifierFlags.shift) {
-            keyUp(with: MacKey.leftShift)
+            keyUp(with: MacKey.shift)
             keyUp(with: MacKey.rightShift)
             track("** SHIFT inconsistency ** \(leftShift) \(rightShift)")
         }
         
         if control != flags.contains(NSEvent.ModifierFlags.control) {
-            keyUp(with: MacKey.leftControl)
+            keyUp(with: MacKey.control)
             keyUp(with: MacKey.rightControl)
             track("** CONTROL inconsistency ** \(leftControl) \(rightControl)")
         }
         if option != flags.contains(NSEvent.ModifierFlags.option) {
-            keyUp(with: MacKey.leftOption)
+            keyUp(with: MacKey.option)
             keyUp(with: MacKey.rightOption)
             track("*** ALT inconsistency *** \(leftOption) \(rightOption)")
         }
         if command != flags.contains(NSEvent.ModifierFlags.command) {
-            keyUp(with: MacKey.leftCommand)
+            keyUp(with: MacKey.command)
             keyUp(with: MacKey.rightCommand)
             track("*** COMMAND inconsistency *** \(leftCommand) \(rightCommand)")
         }
@@ -95,35 +95,23 @@ class KeyboardController: NSObject {
         }
         
         // Exit fullscreen mode if escape key is pressed
-        if (event.keyCode == MacKey.escape.keyCode && controller.metalScreen.fullscreen) {
+        if (event.keyCode == kVK_Escape && controller.metalScreen.fullscreen) {
             myController?.window!.toggleFullScreen(nil)
         }
         
-        let keyCode = event.keyCode
-        let flags = event.modifierFlags
-        let characters = event.charactersIgnoringModifiers
-        
         // Ignore keys that are pressed in combination with the command key
-        if (flags.contains(NSEvent.ModifierFlags.command)) {
-            // track("Ignoring the command key")
+        if (event.modifierFlags.contains(NSEvent.ModifierFlags.command)) {
             return
         }
         
-        // Create a fitting MacKey and press it
-        let macKey = MacKey.init(keyCode: keyCode, characters: characters)
         checkConsistency(withEvent: event)
-        keyDown(with: macKey)
+        keyDown(with: MacKey.init(with: event.keyCode))
     }
     
     func keyUp(with event: NSEvent)
     {
-        let keyCode = event.keyCode
-        let characters = event.charactersIgnoringModifiers
-
-        // Create a fitting MacKey and release it
-        let macKey = MacKey.init(keyCode: keyCode, characters: characters)
         checkConsistency(withEvent: event)
-        keyUp(with: macKey)
+        keyUp(with: MacKey.init(with: event.keyCode))
     }
     
     func flagsChanged(with event: NSEvent) {
@@ -138,7 +126,7 @@ class KeyboardController: NSObject {
             
         case kVK_Shift:
             leftShift = event.modifierFlags.contains(.shift)
-            leftShift ? keyDown(with: MacKey.leftShift) : keyUp(with: MacKey.leftShift)
+            leftShift ? keyDown(with: MacKey.shift) : keyUp(with: MacKey.shift)
             
         case kVK_RightShift:
             rightShift = event.modifierFlags.contains(.shift)
@@ -146,7 +134,7 @@ class KeyboardController: NSObject {
             
         case kVK_Control:
             leftControl = event.modifierFlags.contains(.control)
-            leftControl ? keyDown(with: MacKey.leftControl) : keyUp(with: MacKey.leftControl)
+            leftControl ? keyDown(with: MacKey.control) : keyUp(with: MacKey.control)
 
         case kVK_RightControl:
             rightControl = event.modifierFlags.contains(.control)
@@ -154,7 +142,7 @@ class KeyboardController: NSObject {
 
         case kVK_Option:
             leftOption = event.modifierFlags.contains(.option)
-            leftOption ? keyDown(with: MacKey.leftOption) : keyUp(with: MacKey.leftOption)
+            leftOption ? keyDown(with: MacKey.option) : keyUp(with: MacKey.option)
             
         case kVK_RightOption:
             rightOption = event.modifierFlags.contains(.option)
@@ -162,7 +150,7 @@ class KeyboardController: NSObject {
             
         case kVK_Command:
             leftCommand = event.modifierFlags.contains(.command)
-            leftCommand ? keyDown(with: MacKey.leftCommand) : keyUp(with: MacKey.leftCommand)
+            leftCommand ? keyDown(with: MacKey.command) : keyUp(with: MacKey.command)
             
         case kVK_RightCommand:
             rightCommand = event.modifierFlags.contains(.command)
@@ -176,6 +164,9 @@ class KeyboardController: NSObject {
     }
     
     func keyDown(with macKey: MacKey) {
+        
+        let p = macKey.stringValue
+        track("**** \(p)")
         
         guard let controller = myController else { return }
         // track("\(macKey)")
