@@ -113,6 +113,13 @@ Amiga::configureModel(AmigaModel model)
 }
 
 bool
+Amiga::configureLocalization(long value)
+{
+    config.localization = value;
+    return true;
+}
+
+bool
 Amiga::configureChipMemory(long size)
 {
     if (size != 256 && size != 512) {

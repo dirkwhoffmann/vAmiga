@@ -91,9 +91,8 @@ class VirtualKeyboardController : UserDialogController, NSWindowDelegate
         return controller
     }
     
-    func showWindow(withParent controller: MyController) {
+    func showWindow() {
         
-        track()
         autoClose = false
         showWindow(self)
     }
@@ -105,6 +104,11 @@ class VirtualKeyboardController : UserDialogController, NSWindowDelegate
         // Setup key references
         for tag in 0 ... 127 {
             keyView[tag] = window!.contentView!.viewWithTag(tag) as? NSButton
+            /*
+            if let buttonCell = keyView[tag]?.cell as? NSButtonCell {
+                buttonCell.highlightsBy = []
+            }
+            */
         }
 
         updateImageCache()
@@ -146,7 +150,7 @@ class VirtualKeyboardController : UserDialogController, NSWindowDelegate
                 keyImage[keycode] = image
                 // track("\(key)")
                 pressedKeyImage[keycode] = image.copy() as? NSImage
-                pressedKeyImage[keycode]?.red()
+                pressedKeyImage[keycode]?.pressed()
             }
         }
     }
@@ -156,7 +160,6 @@ class VirtualKeyboardController : UserDialogController, NSWindowDelegate
         guard let keyboard = amigaProxy?.keyboard else { return }
         
         let amigaKeyCode = sender.tag
-        track("Pressing Amiga Key \(amigaKeyCode)")
      
         keyboard.pressKey(amigaKeyCode)
         
@@ -165,7 +168,7 @@ class VirtualKeyboardController : UserDialogController, NSWindowDelegate
         DispatchQueue.main.async {
 
             usleep(useconds_t(20000))
-            amigaProxy?.keyboard.releaseAllKeys()
+            amigaProxy?.keyboard.releaseKey(amigaKeyCode)
             self.refresh()
         }
         

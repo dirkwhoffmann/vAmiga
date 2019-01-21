@@ -218,7 +218,8 @@ public:
     
     // Chooses the emulated Amiga model.
     bool configureModel(AmigaModel model);
-    
+    bool configureLocalization(long value);
+
     // Chooses the amount of memory to emulate.
     bool configureChipMemory(long size);
     bool configureSlowMemory(long size);

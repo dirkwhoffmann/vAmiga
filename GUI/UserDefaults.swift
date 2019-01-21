@@ -710,6 +710,7 @@ extension VC64Keys {
     
     // Machine
     static let amigaModel     = "VAAmigaModelKey"
+    static let localization   = "VAKBLocalization"
     static let realTimeClock  = "VARealTimeClockKey"
     
     // Memory
@@ -729,6 +730,7 @@ extension Defaults {
     struct a500 {
         
         static let amigaModel     = A500
+        static let localization   = Language.us
         static let realTimeClock  = false
         
         static let chipRam        = 512
@@ -744,6 +746,7 @@ extension Defaults {
     struct a1000 {
         
         static let amigaModel     = A1000
+        static let localization   = Language.us
         static let realTimeClock  = false
         
         static let chipRam        = 256
@@ -759,6 +762,7 @@ extension Defaults {
     struct a2000 {
         
         static let amigaModel     = A2000
+        static let localization   = Language.us
         static let realTimeClock  = true
         
         static let chipRam        = 512
@@ -781,6 +785,7 @@ extension MyController {
         let dictionary : [String:Any] = [
             
             VC64Keys.amigaModel: defaultModel.amigaModel.rawValue,
+            VC64Keys.localization: defaultModel.localization.rawValue,
             VC64Keys.realTimeClock: defaultModel.realTimeClock,
             
             VC64Keys.chipRam: defaultModel.chipRam,
@@ -802,6 +807,7 @@ extension MyController {
         let defaults = UserDefaults.standard
         
         for key in [VC64Keys.amigaModel,
+                    VC64Keys.localization,
                     VC64Keys.realTimeClock,
                     
                     VC64Keys.chipRam,
@@ -827,6 +833,7 @@ extension MyController {
         amiga.suspend()
         
         amiga.configureModel(defaults.integer(forKey: VC64Keys.amigaModel))
+        amiga.configureLocalization(defaults.integer(forKey: VC64Keys.localization))
         amiga.configureRealTimeClock(defaults.bool(forKey: VC64Keys.realTimeClock))
     
         amiga.configureChipMemory(defaults.integer(forKey: VC64Keys.chipRam))
@@ -847,6 +854,7 @@ extension MyController {
         let config = amiga.config()
         
         defaults.set(config.model, forKey: VC64Keys.amigaModel)
+        defaults.set(config.localization, forKey: VC64Keys.localization)
         defaults.set(config.realTimeClock, forKey: VC64Keys.realTimeClock)
 
         defaults.set(config.chipRamSize, forKey: VC64Keys.chipRam)

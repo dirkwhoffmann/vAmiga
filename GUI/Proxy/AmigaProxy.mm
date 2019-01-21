@@ -399,6 +399,11 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->amiga->configureModel((AmigaModel)model);
 }
+- (BOOL) configureLocalization:(NSInteger)value
+{
+    return wrapper->amiga->configureLocalization(value);
+}
+
 - (BOOL) configureChipMemory:(NSInteger)size
 {
     return wrapper->amiga->configureChipMemory((unsigned)size);

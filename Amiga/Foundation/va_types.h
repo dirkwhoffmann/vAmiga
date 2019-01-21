@@ -78,6 +78,7 @@ DriveConfiguration;
 typedef struct
 {
     AmigaModel model;
+    long localization;
     long chipRamSize; // size in KB
     long slowRamSize; // size in KB
     long fastRamSize; // size in KB

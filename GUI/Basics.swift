@@ -148,7 +148,12 @@ extension NSImage {
         
         tint(NSColor.init(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.33))
     }
-    
+
+    func pressed() {
+        
+        tint(NSColor.init(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.15))
+    }
+
     func red() {
         
         tint(NSColor.init(red: 1.0, green: 0.0, blue: 0.0, alpha: 0.5))
