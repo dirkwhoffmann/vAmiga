@@ -142,9 +142,8 @@ extension NSImage {
         lockFocus()
         color.set()
         imageRect.fill(using: .sourceAtop)
-        unlockFocus()
-        
         draw(in: imageRect, from: imageRect, operation: .sourceOver, fraction: 0.75)
+        unlockFocus()
     }
 }
 

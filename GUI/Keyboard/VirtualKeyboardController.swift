@@ -52,6 +52,24 @@ class VirtualKeyboardController : UserDialogController, NSWindowDelegate
      */
     var autoClose = true
     
+    static func make() -> VirtualKeyboardController? {
+
+        guard let config = myController?.amiga.config() else { return nil }
+
+        var xibName = ""
+        let language = Language.german
+        let ansi = language == .us
+        
+        if config.model == A1000 {
+            xibName = ansi ? "A1000ANSI" : "A1000ISO"
+        } else {
+            xibName = ansi ? "A500ANSI" : "A500ISO"
+        }
+      
+        xibName = "A500ISO"
+        return VirtualKeyboardController.init(windowNibName: xibName)
+    }
+    
     func showWindow(withParent controller: MyController) {
         
         track()
@@ -85,6 +103,8 @@ class VirtualKeyboardController : UserDialogController, NSWindowDelegate
     
     override func refresh() {
         
+        track()
+        
         guard let keyboard = amigaProxy?.keyboard else { return }
         
         for keycode in 0 ... 127 {
@@ -103,7 +123,9 @@ class VirtualKeyboardController : UserDialogController, NSWindowDelegate
             let key = AmigaKey.init(keyCode: keycode)
             if let image = key.image(model: A500, country: .italian) {
                 keyImage[keycode] = image
+                // track("\(key)")
                 pressedKeyImage[keycode] = image.copy() as? NSImage
+                // track("darken")
                 pressedKeyImage[keycode]?.darken()
             }
         }
