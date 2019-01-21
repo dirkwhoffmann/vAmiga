@@ -17,6 +17,8 @@
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="883" height="270"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
+            <value key="minSize" type="size" width="883" height="270"/>
+            <value key="maxSize" type="size" width="883" height="270"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="0.0" width="883" height="270"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -1077,21 +1079,14 @@
                             <action selector="pressVirtualKey:" target="-2" id="DDu-ir-Vlb"/>
                         </connections>
                     </button>
-                    <box fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yOW-HA-b0r">
-                        <rect key="frame" x="824" y="210" width="40" height="51"/>
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kpQ-zw-yge">
+                        <rect key="frame" x="833" y="220" width="24" height="24"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <view key="contentView" id="3g5-xA-bua">
-                            <rect key="frame" x="3" y="3" width="34" height="33"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                            <subviews>
-                                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0Sp-qA-Th9">
-                                    <rect key="frame" x="5" y="5" width="24" height="23"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="logo" id="sLG-gT-gOd"/>
-                                </imageView>
-                            </subviews>
-                        </view>
-                    </box>
+                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="logo" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="eK0-el-A2c">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                    </button>
                 </subviews>
             </view>
             <connections>
