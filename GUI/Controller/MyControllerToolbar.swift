@@ -206,7 +206,7 @@ extension MyController {
     
     @IBAction func keyboardAction(_ sender: Any!) {
          
-        metalScreen.interceptKeyboardEvents()
+        disableCmdShortcuts()
         
         // Open the virtual keyboard as a sheet
         virtualKeyboardSheet = VirtualKeyboardController.make()

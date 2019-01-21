@@ -182,6 +182,9 @@ class VirtualKeyboardController : UserDialogController, NSWindowDelegate
     
     override func mouseDown(with event: NSEvent) {
         
+        // REMOVE
+        myController?.enableCmdShortcuts()
+        
         // Close window if the user clicked inside the unused area
         track()
         if (autoClose) {

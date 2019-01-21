@@ -24,6 +24,98 @@ enum Language : Int, Codable {
     case italian
 }
 
+//
+// CGEvents
+//
+
+func myCGEventCallback(proxy: CGEventTapProxy,
+                       type: CGEventType, event: CGEvent,
+                       refcon: UnsafeMutableRawPointer?) -> Unmanaged<CGEvent>? {
+    
+    track("Catching CGEvent")
+    let keyCode = event.getIntegerValueField(.keyboardEventKeycode)
+    let flags = event.flags
+    
+    let shift = flags.contains(.maskShift)
+    let control = flags.contains(.maskControl)
+    let option = flags.contains(.maskAlternate)
+    let command = flags.contains(.maskCommand)
+    
+    
+    if type == .keyDown {
+        track("INTERCEPTED: keyDown \(keyCode) S: \(shift) C: \(control) O: \(option) Cmd: \(command)")
+    }
+    
+    if type == .keyUp {
+        track("INTERCEPTED keyUp \(keyCode) S: \(shift) C: \(control) O: \(option) Cmd: \(command)")
+    }
+    
+    if type == .flagsChanged {
+        
+        track("INTERCEPTED flagsChanged \(keyCode) S: \(shift) C: \(control) O: \(option) Cmd: \(command)")
+    }
+    
+    event.flags.remove(.maskCommand)
+    
+    return Unmanaged.passRetained(event)
+}
+
+extension MyController {
+    
+    @discardableResult
+    func disableCmdShortcuts() -> Bool {
+        
+        track("Trying to install a CGEvent interceptor...")
+        
+        func acquirePrivileges() {
+            let trusted = kAXTrustedCheckOptionPrompt.takeUnretainedValue()
+            let privOptions = [trusted: true] as CFDictionary
+            let accessEnabled = AXIsProcessTrustedWithOptions(privOptions)
+            
+            if accessEnabled == true {
+                track("Access granted")
+            } else {
+                track("Access DISABLED")
+            }
+        }
+        
+        acquirePrivileges()
+        
+        let eventMask =
+            (1 << CGEventType.keyDown.rawValue) |
+                (1 << CGEventType.keyUp.rawValue) |
+                (1 << CGEventType.flagsChanged.rawValue)
+        
+        eventTap = CGEvent.tapCreate(tap: .cgSessionEventTap,
+                                     place: .headInsertEventTap,
+                                     options: .defaultTap,
+                                     eventsOfInterest: CGEventMask(eventMask),
+                                     callback: myCGEventCallback,
+                                     userInfo: nil)
+        
+        if eventTap == nil {
+            track("Failed to create event tap. Won't be able to catch CGEvents.")
+            return false
+        }
+        
+        track("Success")
+        
+        let runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0)
+        CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, .commonModes)
+        CGEvent.tapEnable(tap: eventTap!, enable: true)
+        
+        return true
+    }
+
+    func enableCmdShortcuts() {
+        
+        track("Stopping CGEvent interception")
+        if eventTap != nil {
+            CGEvent.tapEnable(tap: eventTap!, enable: false)
+            eventTap = nil
+        }
+    }
+}
 
 // Keyboard event handler
 class KeyboardController: NSObject {
