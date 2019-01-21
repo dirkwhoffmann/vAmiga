@@ -70,24 +70,25 @@ class VirtualKeyboardController : UserDialogController, NSWindowDelegate
      */
     var autoClose = true
     
-    static func make(model: AmigaModel, language: Language) -> VirtualKeyboardController? {
+    static func make() -> VirtualKeyboardController? {
 
         guard let config = myController?.amiga.config() else { return nil }
 
+        let language = Language(rawValue: config.localization) ?? .us
+        let ansi = language == .us
+        
         var xibName = ""
         
         if config.model == A1000 {
-            xibName = (language == .us) ? "A1000ANSI" : "A1000ISO"
+            xibName = ansi ? "A1000ANSI" : "A1000ISO"
         } else {
-            xibName = (language == .us) ? "A500ANSI" : "A500ISO"
+            xibName = ansi ? "A500ANSI" : "A500ISO"
         }
       
-        xibName = "A1000ANSI"
         let controller = VirtualKeyboardController.init(windowNibName: xibName)
         
-        controller.model = model
+        controller.model = config.model
         controller.language = language
-        
         return controller
     }
     

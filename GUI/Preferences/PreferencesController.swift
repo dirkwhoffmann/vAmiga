@@ -45,6 +45,7 @@ class PreferencesController : UserDialogController {
     
     // Machine
     @IBOutlet weak var hwAmigaModelPopup: NSPopUpButton!
+    @IBOutlet weak var hwLocalizationPopup: NSPopUpButton!
     @IBOutlet weak var hwRealTimeClock: NSButton!
 
     // Memory

@@ -190,6 +190,8 @@
 		50B14C2621EB905A002E32A6 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 50B14C2521EB9059002E32A6 /* Credits.rtf */; };
 		50B14C2821EB97EC002E32A6 /* AmigaProxy.mm in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C2721EB97EC002E32A6 /* AmigaProxy.mm */; };
 		50BBE08B21F5EB9B0099BBBB /* A1000ANSI.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50BBE08A21F5EB9B0099BBBB /* A1000ANSI.xib */; };
+		50D263CC21F6377700FA167F /* A500ANSI.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50D263CB21F6377600FA167F /* A500ANSI.xib */; };
+		50D263CE21F6378100FA167F /* A1000ISO.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50D263CD21F6378000FA167F /* A1000ISO.xib */; };
 		50F5F27221F1B6DF000627D1 /* AmigaKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F5F27121F1B6DF000627D1 /* AmigaKey.swift */; };
 		50F6EEB821F4F5C60091155D /* AmigaDisk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F6EEB621F4F5C60091155D /* AmigaDisk.cpp */; };
 		50F6EEBB21F4F5FA0091155D /* DiskController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F6EEB921F4F5FA0091155D /* DiskController.cpp */; };
@@ -527,6 +529,8 @@
 		50B14C2721EB97EC002E32A6 /* AmigaProxy.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AmigaProxy.mm; sourceTree = "<group>"; };
 		50B14C2921EB9806002E32A6 /* AmigaProxy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaProxy.h; sourceTree = "<group>"; };
 		50BBE08A21F5EB9B0099BBBB /* A1000ANSI.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = A1000ANSI.xib; path = "XIB files/A1000ANSI.xib"; sourceTree = SOURCE_ROOT; };
+		50D263CB21F6377600FA167F /* A500ANSI.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = A500ANSI.xib; sourceTree = "<group>"; };
+		50D263CD21F6378000FA167F /* A1000ISO.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = A1000ISO.xib; sourceTree = "<group>"; };
 		50F5F27121F1B6DF000627D1 /* AmigaKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmigaKey.swift; sourceTree = "<group>"; };
 		50F6EEB621F4F5C60091155D /* AmigaDisk.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaDisk.cpp; sourceTree = "<group>"; };
 		50F6EEB721F4F5C60091155D /* AmigaDisk.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaDisk.h; sourceTree = "<group>"; };
@@ -944,7 +948,9 @@
 				508FDFBB21EA1FF10043D0E9 /* Preferences.xib */,
 				508FDFBC21EA1FF10043D0E9 /* ExportScreenshotDialog.xib */,
 				508FDFB821EA1FF10043D0E9 /* A500ISO.xib */,
+				50D263CB21F6377600FA167F /* A500ANSI.xib */,
 				50BBE08A21F5EB9B0099BBBB /* A1000ANSI.xib */,
+				50D263CD21F6378000FA167F /* A1000ISO.xib */,
 			);
 			path = "XIB files";
 			sourceTree = "<group>";
@@ -1292,11 +1298,13 @@
 				508FDFC421EA1FF10043D0E9 /* ExportDiskDialog.xib in Resources */,
 				50B14C1F21EB8445002E32A6 /* drive_click.aiff in Resources */,
 				508FE03721EA22C30043D0E9 /* VirtualC64.sdef in Resources */,
+				50D263CC21F6377700FA167F /* A500ANSI.xib in Resources */,
 				50B14C1C21EB8445002E32A6 /* 1541_door_closed_2.aiff in Resources */,
 				508FDFC721EA1FF10043D0E9 /* DiskMountDialog.xib in Resources */,
 				50B14C2321EB8445002E32A6 /* 1541_door_open_1.aiff in Resources */,
 				508FDFBE21EA1FF10043D0E9 /* MyDocument.xib in Resources */,
 				508FDFC521EA1FF10043D0E9 /* A500ISO.xib in Resources */,
+				50D263CE21F6378100FA167F /* A1000ISO.xib in Resources */,
 				50B14C2021EB8445002E32A6 /* 1541_track_change_0.aiff in Resources */,
 				508FDFC021EA1FF10043D0E9 /* SnapshotDialog.xib in Resources */,
 				50B14C1D21EB8445002E32A6 /* 1541_power_on_0.aiff in Resources */,

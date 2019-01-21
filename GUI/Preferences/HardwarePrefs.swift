@@ -20,6 +20,7 @@ extension PreferencesController {
         
         // Machine
         hwAmigaModelPopup.selectItem(withTag: config.model.rawValue)
+        hwLocalizationPopup.selectItem(withTag: config.localization)
         hwRealTimeClock.state = config.realTimeClock ? .on : .off
         
         // Memory
@@ -37,6 +38,12 @@ extension PreferencesController {
     @IBAction func hwAmigaModelAction(_ sender: NSPopUpButton!) {
         
         amigaProxy?.configureModel(sender.selectedTag())
+        refresh()
+    }
+    
+    @IBAction func hwLocalizationAction(_ sender: NSPopUpButton!) {
+        
+        amigaProxy?.configureLocalization(sender.selectedTag())
         refresh()
     }
     
@@ -103,6 +110,7 @@ extension PreferencesController {
         case A500.rawValue:
             
             amigaProxy?.configureModel(Defaults.a500.amigaModel.rawValue)
+            amigaProxy?.configureLocalization(Language.us.rawValue)
             amigaProxy?.configureRealTimeClock(Defaults.a500.realTimeClock)
             
             amigaProxy?.configureChipMemory(Defaults.a500.chipRam)
@@ -117,6 +125,7 @@ extension PreferencesController {
         case A1000.rawValue:
             
             amigaProxy?.configureModel(Defaults.a1000.amigaModel.rawValue)
+            amigaProxy?.configureLocalization(Language.us.rawValue)
             amigaProxy?.configureRealTimeClock(Defaults.a1000.realTimeClock)
             
             amigaProxy?.configureChipMemory(Defaults.a1000.chipRam)
@@ -131,6 +140,7 @@ extension PreferencesController {
         case A2000.rawValue:
             
             amigaProxy?.configureModel(Defaults.a2000.amigaModel.rawValue)
+            amigaProxy?.configureLocalization(Language.us.rawValue)
             amigaProxy?.configureRealTimeClock(Defaults.a2000.realTimeClock)
             
             amigaProxy?.configureChipMemory(Defaults.a2000.chipRam)

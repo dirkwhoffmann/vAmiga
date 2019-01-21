@@ -80,8 +80,8 @@ extension MyController {
         // Connect or disconnect analog mouse
         c64.mouse.connect(inputDevice1 == InputDevice.mouse ? 1 : 0);
         
-        UserDefaults.standard.set(inputDevice1, forKey: VC64Keys.inputDevice1)
-        UserDefaults.standard.set(inputDevice2, forKey: VC64Keys.inputDevice2)
+        UserDefaults.standard.set(inputDevice1, forKey: Keys.inputDevice1)
+        UserDefaults.standard.set(inputDevice2, forKey: Keys.inputDevice2)
         validateJoystickToolbarItems();
     }
     
@@ -101,8 +101,8 @@ extension MyController {
         // Connect or disconnect analog mouse
         c64.mouse.connect(inputDevice2 == InputDevice.mouse ? 2 : 0)
         
-        UserDefaults.standard.set(inputDevice1, forKey: VC64Keys.inputDevice1)
-        UserDefaults.standard.set(inputDevice2, forKey: VC64Keys.inputDevice2)
+        UserDefaults.standard.set(inputDevice1, forKey: Keys.inputDevice1)
+        UserDefaults.standard.set(inputDevice2, forKey: Keys.inputDevice2)
         validateJoystickToolbarItems()
     }
         
@@ -207,7 +207,7 @@ extension MyController {
     @IBAction func keyboardAction(_ sender: Any!) {
         
         // Open the virtual keyboard as a sheet
-        virtualKeyboardSheet = VirtualKeyboardController.make(model: A1000, language: .us)
+        virtualKeyboardSheet = VirtualKeyboardController.make()
         virtualKeyboardSheet?.showSheet()
     }
 

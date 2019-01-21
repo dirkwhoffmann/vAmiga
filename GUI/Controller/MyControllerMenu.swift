@@ -389,7 +389,8 @@ extension MyController : NSMenuItemValidation {
     @IBAction func stickyKeyboardAction(_ sender: Any!) {
         
         // Open the virtual keyboard as a window
-        myAppDelegate.virtualKeyboard = VirtualKeyboardController.make(model: A1000, language: .us)
+        let kb = VirtualKeyboardController.make()
+        myAppDelegate.virtualKeyboard = kb
         myAppDelegate.virtualKeyboard?.showWindow()
     }
     
