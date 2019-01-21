@@ -280,6 +280,7 @@ extension AmigaKey : Hashable {
     }
 }
 
+
 //
 // Image factory
 //
@@ -400,6 +401,8 @@ extension AmigaKey {
     // Returns an unlabeled background image of the right shape
     private func backgroundImage(model: AmigaModel, country: Language) -> NSImage? {
         
+        var (shape, tint) = ("100x100", "white")
+        
         // Determine physical keyboard layout (ignoring key labels)
         let a1000     = model == A1000
         let a1000ansi = a1000 && country == .us
@@ -411,23 +414,25 @@ extension AmigaKey {
 
         // Crawl through the key descriptions
         if let info = AmigaKey.specialKeys[keyCode] {
-            return NSImage(named: info.1 + info.0)
+            (shape, tint) = info
         } else if let info = AmigaKey.a1000commons[keyCode], a1000 {
-            return NSImage(named: info.1 + info.0)
+            (shape, tint) = info
         } else if let info = AmigaKey.a1000ansi[keyCode], a1000ansi {
-            return NSImage(named: info.1 + info.0)
+            (shape, tint) = info
         } else if let info = AmigaKey.a1000iso[keyCode], a1000iso {
-            return NSImage(named: info.1 + info.0)
+            (shape, tint) = info
         } else if let info = AmigaKey.a500commons[keyCode], a500 {
-            return NSImage(named: info.1 + info.0)
+            (shape, tint) = info
         } else if let info = AmigaKey.a500ansi[keyCode], a500ansi {
-            return NSImage(named: info.1 + info.0)
+            (shape, tint) = info
         } else if let info = AmigaKey.a500iso[keyCode], a500iso {
-            return NSImage(named: info.1 + info.0)
-        } else {
-            return NSImage(named: "white100x100")
-            // return NSImage(named: "NSCaution")
+            (shape, tint) = info
         }
+        
+        let image = NSImage(named: "shape" + shape)?.copy() as? NSImage
+        if tint == "dark" { image?.darken() }
+        
+        return image
     }
     
     func image(model: AmigaModel, country: Language) -> NSImage? {
@@ -438,7 +443,7 @@ extension AmigaKey {
         let tiny  = CGFloat(9) 
 
         // Get a background image
-        guard let image = backgroundImage(model: model, country: country)?.copy() as? NSImage else {
+        guard let image = backgroundImage(model: model, country: country) else {
             return nil
         }
         
