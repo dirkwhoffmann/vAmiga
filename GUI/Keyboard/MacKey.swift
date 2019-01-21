@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 import Foundation
-import Carbon.HIToolbox // Mac keycode identifiers
+import Carbon.HIToolbox
 
 /* Mapping from Mac key codes to Amiga key codes.
  * Mac keycodes are based on the Apple Extended Keyboard II layout (ISO).
@@ -28,7 +28,7 @@ let isomac2amiga : [Int : Int] = [
     kVK_ANSI_0:              AmigaKeycode.ansi.digit0,
     kVK_ANSI_Minus:          AmigaKeycode.ansi.minus,
     kVK_ANSI_Equal:          AmigaKeycode.ansi.equal,
-    // MISSING ON MAC KEYBOARD AmigaKeycode.ansi.backslash:    [.generic: "| \\"],
+    // MISSING ON MAC(?!):   AmigaKeycode.ansi.backslash:
     
     kVK_ANSI_Keypad0:        AmigaKeycode.ansi.keypad0,
     
@@ -176,27 +176,52 @@ let mac2string : [Int : String] = [
     kVK_DownArrow:        "\u{2193}", // ↓
 ]
 
-/* This structure represents a physical keys on the Mac keyboard.
+/* This structure represents a physical key of the Mac keyboard.
  */
 struct MacKey : Codable {
     
     // The unique identifier of this Mac key
     var keyCode: Int = 0
     
+    // Modifier flags at the time the key was pressed
+    var carbonFlags: Int = 0
+
     
-    init(with keyCode: Int) {
+    init(keyCode: Int, flags: NSEvent.ModifierFlags = []) {
+    
         self.keyCode = keyCode
+        
+        if flags.contains(.shift)   { carbonFlags |= shiftKey }
+        if flags.contains(.control) { carbonFlags |= controlKey }
+        if flags.contains(.option)  { carbonFlags |= optionKey }
+        if flags.contains(.command) { carbonFlags |= cmdKey }
+    }
+ 
+    init(keyCode: UInt16, flags: NSEvent.ModifierFlags = []) {
+        
+        self.init(keyCode: Int(keyCode), flags: flags)
     }
     
-    init(with keyCode: UInt16) {
-        self.init(with: Int(keyCode))
-    }
-    
-    init(with event: NSEvent) {
-        self.init(with: event.keyCode)
+    init(event: NSEvent) {
+        
+        self.init(keyCode: event.keyCode, flags: event.modifierFlags)
     }
    
-    // Returns the Amiga key code for this Mac key
+    // Returns the modifier flags of this key
+    var modifierFlags: NSEvent.ModifierFlags {
+        get {
+            var cocoaFlags : NSEvent.ModifierFlags = []
+            
+            if (carbonFlags & shiftKey)   != 0 { cocoaFlags.insert(.shift) }
+            if (carbonFlags & controlKey) != 0 { cocoaFlags.insert(.control) }
+            if (carbonFlags & optionKey)  != 0 { cocoaFlags.insert(.option) }
+            if (carbonFlags & cmdKey)     != 0 { cocoaFlags.insert(.command) }
+
+            return cocoaFlags
+        }
+    }
+    
+    // Returns the Amiga key code for this key
     var amigaKeyCode: Int {
        
         get {
@@ -223,7 +248,6 @@ struct MacKey : Codable {
             let dataRef = unsafeBitCast(layoutData, to: CFData.self)
             let keyLayout = UnsafePointer<CoreServices.UCKeyboardLayout>.self
             let keyLayoutPtr = unsafeBitCast(CFDataGetBytePtr(dataRef), to: keyLayout)
-            let modifierKeyState = 0
             let keyTranslateOptions = OptionBits(CoreServices.kUCKeyTranslateNoDeadKeysBit)
             var deadKeyState: UInt32 = 0
             let maxChars = 256
@@ -233,7 +257,7 @@ struct MacKey : Codable {
             let error = CoreServices.UCKeyTranslate(keyLayoutPtr,
                                                     UInt16(keyCode),
                                                     UInt16(CoreServices.kUCKeyActionDisplay),
-                                                    UInt32(modifierKeyState),
+                                                    UInt32(carbonFlags),
                                                     UInt32(LMGetKbdType()),
                                                     keyTranslateOptions,
                                                     &deadKeyState,
@@ -260,14 +284,14 @@ extension MacKey: Hashable {
 
 extension MacKey {
     
-    static let escape = MacKey.init(with: kVK_Escape)
-    static let shift = MacKey.init(with: kVK_Shift)
-    static let rightShift = MacKey.init(with: kVK_RightShift)
-    static let option = MacKey.init(with: kVK_Option)
-    static let rightOption = MacKey.init(with: kVK_RightOption)
-    static let control = MacKey.init(with: kVK_Control)
-    static let rightControl = MacKey.init(with: kVK_RightControl)
-    static let command = MacKey.init(with: kVK_Command)
-    static let rightCommand = MacKey.init(with: kVK_RightCommand)
+    static let escape       = MacKey.init(keyCode: kVK_Escape)
+    static let shift        = MacKey.init(keyCode: kVK_Shift)
+    static let rightShift   = MacKey.init(keyCode: kVK_RightShift)
+    static let option       = MacKey.init(keyCode: kVK_Option)
+    static let rightOption  = MacKey.init(keyCode: kVK_RightOption)
+    static let control      = MacKey.init(keyCode: kVK_Control)
+    static let rightControl = MacKey.init(keyCode: kVK_RightControl)
+    static let command      = MacKey.init(keyCode: kVK_Command)
+    static let rightCommand = MacKey.init(keyCode: kVK_RightCommand)
 }
   

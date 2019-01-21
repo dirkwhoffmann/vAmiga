@@ -105,13 +105,13 @@ class KeyboardController: NSObject {
         }
         
         checkConsistency(withEvent: event)
-        keyDown(with: MacKey.init(with: event.keyCode))
+        keyDown(with: MacKey.init(event: event))
     }
     
     func keyUp(with event: NSEvent)
     {
         checkConsistency(withEvent: event)
-        keyUp(with: MacKey.init(with: event.keyCode))
+        keyUp(with: MacKey.init(event: event))
     }
     
     func flagsChanged(with event: NSEvent) {
