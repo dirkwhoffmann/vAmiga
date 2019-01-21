@@ -207,7 +207,7 @@ extension MyController {
     @IBAction func keyboardAction(_ sender: Any!) {
         
         // Open the virtual keyboard as a sheet
-        virtualKeyboardSheet = VirtualKeyboardController.make()
+        virtualKeyboardSheet = VirtualKeyboardController.make(model: A1000, language: .us)
         virtualKeyboardSheet?.showSheet()
     }
 

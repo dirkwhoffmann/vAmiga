@@ -214,7 +214,7 @@ let keycaps : [Int : [Language: String]] = [
     AmigaKeycode.space:             [.generic: ""],
     AmigaKeycode.backspace:         [.generic: "\u{2190}"],
     AmigaKeycode.tab:               [.generic: "\u{21e4} \u{21e5}"],
-    AmigaKeycode.keypadEnter:       [.generic: ""],
+    AmigaKeycode.keypadEnter:       [.generic: "\u{21b5}"],
     AmigaKeycode.enter:             [.generic: ""],
     AmigaKeycode.escape:            [.generic: "Esc"],
     AmigaKeycode.delete:            [.generic: "Del"],
@@ -336,13 +336,15 @@ extension AmigaKey {
         
         AmigaKeycode.ansi.grave:     ("125x100", "white"),
         AmigaKeycode.space:          ("750x100", "white"),
+        AmigaKeycode.backspace:      ("175x100", "white"),
         AmigaKeycode.tab:            ("175x100", "white"),
         AmigaKeycode.keypadEnter:    ("200x100", "white"),
-        AmigaKeycode.keypadMinus:    ("100x100", "white"),
+        AmigaKeycode.delete:         ("150x100", "dark"),
+        AmigaKeycode.rightShift:     ("200x100", "white"),
         AmigaKeycode.leftAlt:        ("125x100", "white"),
         AmigaKeycode.rightAlt:       ("125x100", "white"),
-        AmigaKeycode.leftAmiga:      ("125x100", "white"),
-        AmigaKeycode.rightAmiga:     ("125x100", "white"),
+        AmigaKeycode.leftAmiga:      ("125x100A", "white"),
+        AmigaKeycode.rightAmiga:     ("125x100A", "white"),
     ]
     
     // Special keys (A1000 ANSI like)
@@ -356,14 +358,13 @@ extension AmigaKey {
     private static let a1000iso : [Int : (String,String)] = [
         
         AmigaKeycode.enter:          ("125x200", "white"),
-        AmigaKeycode.leftShift:      ("155x100", "white"),
+        AmigaKeycode.leftShift:      ("150x100", "white"),
     ]
     
     // Special keys (A500 commons)
     private static let a500commons : [Int : (String,String)] = [
         
         AmigaKeycode.ansi.grave:     ("150x100", "dark"),
-        AmigaKeycode.ansi.keypad0:   ("200x100", "white"),
         AmigaKeycode.space:          ("900x100", "white"),
         AmigaKeycode.backspace:      ("100x100", "dark"),
         AmigaKeycode.tab:            ("200x100", "dark"),
@@ -399,19 +400,19 @@ extension AmigaKey {
     ]
     
     // Returns an unlabeled background image of the right shape
-    private func backgroundImage(model: AmigaModel, country: Language) -> NSImage? {
+    private func backgroundImage(model: AmigaModel, language: Language) -> NSImage? {
         
         var (shape, tint) = ("100x100", "white")
         
         // Determine physical keyboard layout (ignoring key labels)
         let a1000     = model == A1000
-        let a1000ansi = a1000 && country == .us
-        let a1000iso  = a1000 && country != .us
+        let a1000ansi = a1000 && language == .us
+        let a1000iso  = a1000 && language != .us
 
         let a500     = model != A1000
-        let a500ansi = a500 && country == .us
-        let a500iso  = a500 && country != .us
-
+        let a500ansi = a500 && language == .us
+        let a500iso  = a500 && language != .us
+        
         // Crawl through the key descriptions
         if let info = AmigaKey.specialKeys[keyCode] {
             (shape, tint) = info
@@ -430,12 +431,18 @@ extension AmigaKey {
         }
         
         let image = NSImage(named: "shape" + shape)?.copy() as? NSImage
+        
+        // var image = NSImage(named: "shape" + shape)?.copy() as? NSImage
+        if image == nil {
+            track("MISSING \(shape)")
+        }
+        
         if tint == "dark" { image?.darken() }
         
         return image
     }
     
-    func image(model: AmigaModel, country: Language) -> NSImage? {
+    func image(model: AmigaModel, language: Language) -> NSImage? {
         
         // Key label font sizes
         let large = CGFloat(15)
@@ -443,12 +450,12 @@ extension AmigaKey {
         let tiny  = CGFloat(9) 
 
         // Get a background image
-        guard let image = backgroundImage(model: model, country: country) else {
+        guard let image = backgroundImage(model: model, language: language) else {
             return nil
         }
         
         // Get the keycap label
-        let label = self.label[country] ?? self.label[.generic]!
+        let label = self.label[language] ?? self.label[.generic]!
         let parts = label.split(separator: " ")
     
         if parts.count == 1 {

@@ -37,6 +37,10 @@ class VirtualKeyboardWindow : NSWindow {
 
 class VirtualKeyboardController : UserDialogController, NSWindowDelegate
 {
+    // Amiga model and language
+    var model : AmigaModel = A500
+    var language : Language = .us
+    
     // Array holding a reference to the view of each key
     var keyView = Array(repeating: nil as NSButton?, count: 128)
 
@@ -52,22 +56,25 @@ class VirtualKeyboardController : UserDialogController, NSWindowDelegate
      */
     var autoClose = true
     
-    static func make() -> VirtualKeyboardController? {
+    static func make(model: AmigaModel, language: Language) -> VirtualKeyboardController? {
 
         guard let config = myController?.amiga.config() else { return nil }
 
         var xibName = ""
-        let language = Language.german
-        let ansi = language == .us
         
         if config.model == A1000 {
-            xibName = ansi ? "A1000ANSI" : "A1000ISO"
+            xibName = (language == .us) ? "A1000ANSI" : "A1000ISO"
         } else {
-            xibName = ansi ? "A500ANSI" : "A500ISO"
+            xibName = (language == .us) ? "A500ANSI" : "A500ISO"
         }
       
-        xibName = "A500ISO"
-        return VirtualKeyboardController.init(windowNibName: xibName)
+        xibName = "A1000ANSI"
+        let controller = VirtualKeyboardController.init(windowNibName: xibName)
+        
+        controller.model = model
+        controller.language = language
+        
+        return controller
     }
     
     func showWindow(withParent controller: MyController) {
@@ -121,7 +128,7 @@ class VirtualKeyboardController : UserDialogController, NSWindowDelegate
         
         for keycode in 0 ... 127 {
             let key = AmigaKey.init(keyCode: keycode)
-            if let image = key.image(model: A500, country: .italian) {
+            if let image = key.image(model: model, language: language) {
                 keyImage[keycode] = image
                 // track("\(key)")
                 pressedKeyImage[keycode] = image.copy() as? NSImage
