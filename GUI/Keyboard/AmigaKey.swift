@@ -298,7 +298,8 @@ extension NSImage {
         // let paragraphStyle = NSMutableParagraphStyle()
         let attributes : [NSAttributedString.Key : Any] = [
             .font: font,
-            .foregroundColor: NSColor.textColor,
+            .foregroundColor: NSColor.secondaryLabelColor,
+            // .foregroundColor: NSColor.textColor,
             // .paragraphStyle: paragraphStyle,
             ]
         lockFocus()
