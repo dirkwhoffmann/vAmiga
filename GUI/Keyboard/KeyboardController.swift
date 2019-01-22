@@ -24,98 +24,31 @@ enum Language : Int, Codable {
     case italian
 }
 
+
+//
+//
+//
+
+class KeyCapButton : NSButton {
+
+    override func rightMouseDown(with event: NSEvent) {
+        
+        let tag = self.tag
+        track("\(event) \(tag)")
+        
+        if let controller = window?.delegate as? VirtualKeyboardController {
+
+            track("************************************")
+            controller.pressVirtualKey(self)
+        }
+        
+    }
+}
+
 //
 // CGEvents
 //
 
-func myCGEventCallback(proxy: CGEventTapProxy,
-                       type: CGEventType, event: CGEvent,
-                       refcon: UnsafeMutableRawPointer?) -> Unmanaged<CGEvent>? {
-    
-    track("Catching CGEvent")
-    let keyCode = event.getIntegerValueField(.keyboardEventKeycode)
-    let flags = event.flags
-    
-    let shift = flags.contains(.maskShift)
-    let control = flags.contains(.maskControl)
-    let option = flags.contains(.maskAlternate)
-    let command = flags.contains(.maskCommand)
-    
-    
-    if type == .keyDown {
-        track("INTERCEPTED: keyDown \(keyCode) S: \(shift) C: \(control) O: \(option) Cmd: \(command)")
-    }
-    
-    if type == .keyUp {
-        track("INTERCEPTED keyUp \(keyCode) S: \(shift) C: \(control) O: \(option) Cmd: \(command)")
-    }
-    
-    if type == .flagsChanged {
-        
-        track("INTERCEPTED flagsChanged \(keyCode) S: \(shift) C: \(control) O: \(option) Cmd: \(command)")
-    }
-    
-    event.flags.remove(.maskCommand)
-    
-    return Unmanaged.passRetained(event)
-}
-
-extension MyController {
-    
-    @discardableResult
-    func disableCmdShortcuts() -> Bool {
-        
-        track("Trying to install a CGEvent interceptor...")
-        
-        func acquirePrivileges() {
-            let trusted = kAXTrustedCheckOptionPrompt.takeUnretainedValue()
-            let privOptions = [trusted: true] as CFDictionary
-            let accessEnabled = AXIsProcessTrustedWithOptions(privOptions)
-            
-            if accessEnabled == true {
-                track("Access granted")
-            } else {
-                track("Access DISABLED")
-            }
-        }
-        
-        acquirePrivileges()
-        
-        let eventMask =
-            (1 << CGEventType.keyDown.rawValue) |
-                (1 << CGEventType.keyUp.rawValue) |
-                (1 << CGEventType.flagsChanged.rawValue)
-        
-        eventTap = CGEvent.tapCreate(tap: .cgSessionEventTap,
-                                     place: .headInsertEventTap,
-                                     options: .defaultTap,
-                                     eventsOfInterest: CGEventMask(eventMask),
-                                     callback: myCGEventCallback,
-                                     userInfo: nil)
-        
-        if eventTap == nil {
-            track("Failed to create event tap. Won't be able to catch CGEvents.")
-            return false
-        }
-        
-        track("Success")
-        
-        let runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0)
-        CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, .commonModes)
-        CGEvent.tapEnable(tap: eventTap!, enable: true)
-        
-        return true
-    }
-
-    func enableCmdShortcuts() {
-        
-        track("Stopping CGEvent interception")
-        if eventTap != nil {
-            CGEvent.tapEnable(tap: eventTap!, enable: false)
-            eventTap = nil
-        }
-    }
-}
 
 // Keyboard event handler
 class KeyboardController: NSObject {
@@ -352,4 +285,101 @@ class KeyboardController: NSObject {
         let uSeconds = useconds_t(1000000 * seconds)
         type(string: string, initialDelay: uSeconds)
     }
+}
+
+extension KeyboardController {
+    
+    @discardableResult
+    func disableCmdShortcuts() -> Bool {
+        
+        if myController?.eventTap != nil { return true }
+        
+        track("Trying to disable keyboard shortcuts...")
+        
+        /* To disable shortcuts, we are going to filter out the Command flag
+         * from all keyUp and keyDown CGEvents. We do this by installing a
+         * CGEvent callback handler which requires accessability priviledges.
+         * We first check if we have the priviledges and prompt the user if
+         * we don't. In this case, the operation will fail and we won't be
+         * able to disable the shortcuts. In the meantime however, the user
+         * has the ability to grant us access in the system preferences. If
+         * he does this, we'll pass this chechpoint on the next function call.
+         */
+        let trusted = kAXTrustedCheckOptionPrompt.takeUnretainedValue()
+        let privOptions = [trusted: true] as CFDictionary
+        
+        if !AXIsProcessTrustedWithOptions(privOptions) {
+            
+            track("Aborting. Access denied")
+            return false
+        }
+  
+        // Set up an event mask. We want to intercept keyDown and keyUp events
+        let mask = CGEventMask(
+            (1 << CGEventType.keyDown.rawValue) | (1 << CGEventType.keyUp.rawValue))
+        
+        // Try to create an event tap
+        let eventTap = CGEvent.tapCreate(tap: .cgSessionEventTap,
+                                                   place: .headInsertEventTap,
+                                                   options: .defaultTap,
+                                                   eventsOfInterest: mask,
+                                                   callback: cgEventCallback,
+                                                   userInfo: nil)
+        if eventTap == nil {
+            
+            track("Aborting. Failed to create an event tap.")
+            return false
+        }
+        
+        // Add end enable the event tap
+        myController?.eventTap = eventTap
+        let runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0)
+        CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, .commonModes)
+        CGEvent.tapEnable(tap: eventTap!, enable: true)
+        
+        track("Success")
+        return true
+    }
+    
+    func enableCmdShortcuts() {
+        
+        if let eventTap = myController?.eventTap {
+            
+            track("Disabling keyboard shortcuts.")
+            CGEvent.tapEnable(tap: eventTap, enable: false)
+            myController?.eventTap = nil
+        }
+    }
+}
+
+//
+// Capturing CGEvents
+//
+
+/* To establish a direct mapping of the Command keys to the Amiga keys, this
+ * callback is registered. It intercepts keyDown and keyUp events and filters
+ * out the Command key modifier flag. As a result, all keyboard shortcuts are
+ * disabled and all keys that are pressed in combination with the Command key
+ * trigger a standard Cocoa key event.
+ */
+func cgEventCallback(proxy: CGEventTapProxy,
+                     type: CGEventType,
+                     event: CGEvent,
+                     refcon: UnsafeMutableRawPointer?) -> Unmanaged<CGEvent>? {
+    
+    let keyCode = event.getIntegerValueField(.keyboardEventKeycode)
+    
+    if type == .keyDown {
+        
+        track("CGEvent keyDown \(keyCode)")
+        event.flags.remove(.maskCommand)
+    }
+    
+    if type == .keyUp {
+        
+        track("CGEvent keyUp \(keyCode)")
+        event.flags.remove(.maskCommand)
+    }
+ 
+    return Unmanaged.passRetained(event)
 }

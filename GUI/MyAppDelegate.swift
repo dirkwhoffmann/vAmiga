@@ -75,8 +75,8 @@ var proxy: C64Proxy? {
         track()
         
         // Trust me
-        let result = AXIsProcessTrusted()
-        track("AXIsProcessTrusted = \(result)")
+        // let result = AXIsProcessTrusted()
+        // track("AXIsProcessTrusted = \(result)")
         
         // Make touch bar customizable
         if #available(OSX 10.12.2, *) {

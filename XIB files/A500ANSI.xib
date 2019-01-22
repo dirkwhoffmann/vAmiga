@@ -34,7 +34,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="6Nw-kx-8Da"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="69" translatesAutoresizingMaskIntoConstraints="NO" id="dpz-27-k0a">
+                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="69" translatesAutoresizingMaskIntoConstraints="NO" id="dpz-27-k0a" customClass="KeyCapButton" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="20" y="214" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="Wyk-Ri-Syp">

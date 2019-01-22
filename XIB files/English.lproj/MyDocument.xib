@@ -47,6 +47,7 @@
                 <outlet property="ciaToggleB" destination="UMF-9c-ReY" id="UhD-HO-8an"/>
                 <outlet property="clockSpeed" destination="214" id="216"/>
                 <outlet property="clockSpeedBar" destination="212" id="215"/>
+                <outlet property="cmdLock" destination="70n-GV-8LP" id="jTg-GL-AWT"/>
                 <outlet property="controlPort1" destination="L2b-nG-yBo" id="SJX-uU-0lA"/>
                 <outlet property="controlPort2" destination="4MP-rV-xX2" id="6Ux-IE-l65"/>
                 <outlet property="cpuTableView" destination="767" id="945"/>
@@ -157,6 +158,17 @@
                             <behavior key="behavior" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
+                    </button>
+                    <button toolTip="Drive LED" tag="2" id="70n-GV-8LP" userLabel="Cmd Lock">
+                        <rect key="frame" x="572" y="4" width="42" height="17"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="cmdLockTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="kM6-fj-IIO">
+                            <behavior key="behavior" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="mapCmdKeysAction:" target="-2" id="iVB-Kz-avV"/>
+                        </connections>
                     </button>
                 </subviews>
             </view>
@@ -1766,6 +1778,7 @@
         </customView>
     </objects>
     <resources>
+        <image name="cmdLockTemplate" width="228" height="156"/>
         <image name="debugTemplate" width="240" height="241"/>
         <image name="devGamepad1Template" width="24" height="24"/>
         <image name="devGamepad2Template" width="24" height="24"/>
@@ -1777,7 +1790,7 @@
         <image name="joyKeys1Template" width="24" height="24"/>
         <image name="joyKeys2Template" width="24" height="24"/>
         <image name="keyboardTemplate" width="24" height="24"/>
-        <image name="mediaDiskSavedTemplate" width="241" height="241"/>
+        <image name="mediaDiskSavedTemplate" width="217" height="217"/>
         <image name="pauseTemplate" width="240" height="241"/>
         <image name="powerLedOff" width="139.63636779785156" height="50.181819915771484"/>
         <image name="powerTemplate" width="241" height="240"/>

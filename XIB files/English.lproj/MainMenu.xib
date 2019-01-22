@@ -468,7 +468,7 @@
                             <menuItem title="Map ⌘ to Amiga keys" id="510">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="formatDiskAction:" target="-1" id="IvR-x1-Puy"/>
+                                    <action selector="mapCmdKeysAction:" target="-1" id="m4N-sa-PeA"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="i1a-9I-H6M"/>

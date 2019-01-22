@@ -148,7 +148,9 @@ class MyController : NSWindowController, MessageReceiver {
     @IBOutlet weak var df0LED: NSButton!
     @IBOutlet weak var df0Disk: NSButton!
     @IBOutlet weak var df0DMA: NSProgressIndicator!
-    
+
+    @IBOutlet weak var cmdLock: NSButton!
+
     @IBOutlet weak var clockSpeed: NSTextField!
     @IBOutlet weak var clockSpeedBar: NSLevelIndicator!
     @IBOutlet weak var warpIcon: NSButton!
@@ -333,6 +335,9 @@ extension MyController {
         
         // Update toolbar
         validateToolbarItems()
+        
+        // Update status bar
+        refreshStatusBar()
     }
     
     func configureWindow() {

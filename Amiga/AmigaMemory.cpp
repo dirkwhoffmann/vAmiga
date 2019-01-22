@@ -139,6 +139,7 @@ AmigaMemory::dealloc(uint8_t *&ptrref, size_t &sizeref)
     
     if (ptrref) {
         delete[] ptrref;
+        ptrref = NULL;
         sizeref = 0;
     }
 }

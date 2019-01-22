@@ -205,8 +205,6 @@ extension MyController {
     }
     
     @IBAction func keyboardAction(_ sender: Any!) {
-         
-        disableCmdShortcuts()
         
         // Open the virtual keyboard as a sheet
         virtualKeyboardSheet = VirtualKeyboardController.make()

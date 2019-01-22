@@ -7,6 +7,8 @@
 // See https://www.gnu.org for license information
 //
 
+#if false
+
 import Foundation
 
 extension MyController {
@@ -16,3 +18,5 @@ extension MyController {
         c64.expansionport.detachCartridgeAndReset()
     }
 }
+
+#endif

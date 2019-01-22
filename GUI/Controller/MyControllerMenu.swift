@@ -58,8 +58,8 @@ extension MyController : NSMenuItemValidation {
         }
         
         // Keyboard menu
-        if item.action == #selector(MyController.shiftLockAction(_:)) {
-            item.state = c64.keyboard.shiftLockIsHoldDown() ? .on : .off
+        if item.action == #selector(MyController.mapCmdKeysAction(_:)) {
+            item.state = (eventTap != nil) ? .on : .off
             return true
         }
         
@@ -334,37 +334,6 @@ extension MyController : NSMenuItemValidation {
         showStatusBar(!statusBar)
     }
     
-    public func showStatusBar(_ value: Bool) {
-        
-        let items: [NSView : Bool] = [
-            clockSpeed: false,
-            clockSpeedBar: false,
-            warpIcon: false
-        ]
-        
-        if !statusBar && value {
-        
-            for (item,hide) in items {
-                item.isHidden = hide
-            }
-            metalScreen.shrink()
-            window?.setContentBorderThickness(24, for: .minY)
-            adjustWindowSize()
-            statusBar = true
-        }
- 
-        if statusBar && !value {
-            
-            for (item,_) in items {
-                item.isHidden = true
-            }
-            metalScreen.expand()
-            window?.setContentBorderThickness(0, for: .minY)
-            adjustWindowSize()
-            statusBar = false
-        }
-    }
-    
     @IBAction func hideMouseAction(_ sender: Any!) {
         
         undoManager?.registerUndo(withTarget: self) {
@@ -394,47 +363,21 @@ extension MyController : NSMenuItemValidation {
         myAppDelegate.virtualKeyboard?.showWindow()
     }
     
-    // -----------------------------------------------------------------
-    @IBAction func runstopAction(_ sender: Any!) {
-        keyboardcontroller.type(key: C64Key.runStop)
-    }
-    @IBAction func restoreAction(_ sender: Any!) {
-        keyboardcontroller.type(key: C64Key.restore)
-    }
-    @IBAction func runstopRestoreAction(_ sender: Any!) {
-        keyboardcontroller.type(keyList: [C64Key.runStop, C64Key.restore])
-    }
-    @IBAction func commodoreKeyAction(_ sender: Any!) {
-        keyboardcontroller.type(key: C64Key.commodore)
-    }
-    @IBAction func clearKeyAction(_ sender: Any!) {
-        keyboardcontroller.type(keyList: [C64Key.home, C64Key.shift])
-    }
-    @IBAction func homeKeyAction(_ sender: Any!) {
-        keyboardcontroller.type(key: C64Key.home)
-    }
-    @IBAction func insertKeyAction(_ sender: Any!) {
-        keyboardcontroller.type(keyList: [C64Key.delete, C64Key.shift])
-    }
-    @IBAction func deleteKeyAction(_ sender: Any!) {
-        keyboardcontroller.type(key: C64Key.delete)
-    }
-    @IBAction func leftarrowKeyAction(_ sender: Any!) {
-        keyboardcontroller.type(key: C64Key.leftArrow)
-    }
-    @IBAction func shiftLockAction(_ sender: Any!) {
+    @IBAction func mapCmdKeysAction(_ sender: Any!) {
         
-        undoManager?.registerUndo(withTarget: self) {
-            targetSelf in targetSelf.shiftLockAction(sender)
-        }
-        if c64.keyboard.shiftLockIsHoldDown() {
-            c64.keyboard.unlockShift()
+        // Check if Command keys are currently mapped
+        if eventTap != nil {
+            keyboardcontroller.enableCmdShortcuts()
+            assert(eventTap == nil)
         } else {
-            c64.keyboard.lockShift()
+            keyboardcontroller.disableCmdShortcuts()
         }
+        refreshStatusBar()
     }
+    
     @IBAction func clearKeyboardMatrixAction(_ sender: Any!) {
-        c64.keyboard.releaseAll()
+        
+        amiga.keyboard.releaseAllKeys()
     }
 
     // -----------------------------------------------------------------
