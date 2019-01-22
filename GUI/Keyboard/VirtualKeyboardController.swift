@@ -156,28 +156,36 @@ class VirtualKeyboardController : UserDialogController, NSWindowDelegate
         }
     }
     
-    @IBAction func pressVirtualKey(_ sender: NSButton!) {
+    func pressKey(keyCode: Int) {
         
         guard let keyboard = amigaProxy?.keyboard else { return }
-        
-        let amigaKeyCode = sender.tag
-     
-        keyboard.pressKey(amigaKeyCode)
-        
-        // Schedule automatic key release
-        // DispatchQueue.global().async {
-        DispatchQueue.main.async {
 
-            usleep(useconds_t(20000))
-            amigaProxy?.keyboard.releaseKey(amigaKeyCode)
+        keyboard.pressKey(keyCode)
+        refresh()
+        
+        DispatchQueue.main.async {
+            
+            usleep(useconds_t(100000))
+            amigaProxy?.keyboard.releaseAllKeys()
             self.refresh()
         }
         
         if (autoClose) {
             cancelAction(self)
         }
+    }
+    
+    func holdKey(keyCode: Int) {
         
+        guard let keyboard = amigaProxy?.keyboard else { return }
+        
+        keyboard.pressKey(keyCode)
         refresh()
+    }
+        
+    @IBAction func pressVirtualKey(_ sender: NSButton!) {
+        
+        // not used at the moment
     }
     
     override func mouseDown(with event: NSEvent) {
@@ -186,6 +194,27 @@ class VirtualKeyboardController : UserDialogController, NSWindowDelegate
         track()
         if (autoClose) {
             cancelAction(self)
+        }
+    }
+}
+
+/* Subclass of NSButton for the keys in the virtual keyboard.
+ */
+class Keycap : NSButton {
+    
+    override func mouseDown(with event: NSEvent) {
+        
+        if let controller = window?.delegate as? VirtualKeyboardController {
+            
+            controller.pressKey(keyCode: self.tag)
+        }
+    }
+    
+    override func rightMouseDown(with event: NSEvent) {
+    
+        if let controller = window?.delegate as? VirtualKeyboardController {
+            
+            controller.holdKey(keyCode: self.tag)
         }
     }
 }

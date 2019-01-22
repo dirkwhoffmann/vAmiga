@@ -357,7 +357,7 @@ extension AmigaKey {
     // Special keys (A1000 ISO like)
     private static let a1000iso : [Int : (String,String)] = [
         
-        AmigaKeycode.enter:          ("125x200", "white"),
+        AmigaKeycode.enter:          ("200x200", "white"),
         AmigaKeycode.leftShift:      ("150x100", "white"),
     ]
     

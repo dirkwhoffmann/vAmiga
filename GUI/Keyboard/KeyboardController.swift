@@ -24,32 +24,6 @@ enum Language : Int, Codable {
     case italian
 }
 
-
-//
-//
-//
-
-class KeyCapButton : NSButton {
-
-    override func rightMouseDown(with event: NSEvent) {
-        
-        let tag = self.tag
-        track("\(event) \(tag)")
-        
-        if let controller = window?.delegate as? VirtualKeyboardController {
-
-            track("************************************")
-            controller.pressVirtualKey(self)
-        }
-        
-    }
-}
-
-//
-// CGEvents
-//
-
-
 // Keyboard event handler
 class KeyboardController: NSObject {
     

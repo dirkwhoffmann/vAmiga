@@ -853,7 +853,7 @@ extension MyController {
         let defaults = UserDefaults.standard
         let config = amiga.config()
         
-        defaults.set(config.model, forKey: Keys.amigaModel)
+        defaults.set(config.model.rawValue, forKey: Keys.amigaModel)
         defaults.set(config.localization, forKey: Keys.localization)
         defaults.set(config.realTimeClock, forKey: Keys.realTimeClock)
 
