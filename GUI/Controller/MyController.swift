@@ -134,7 +134,7 @@ class MyController : NSWindowController, MessageReceiver {
     //
     
     // Main screen
-    @IBOutlet weak var metalScreen: MetalView!
+    @IBOutlet weak var metal: MetalView!
     @IBOutlet weak var debugger: NSDrawer!
     
     // Bottom bar
@@ -241,7 +241,7 @@ extension MyController {
     // Provides the undo manager
     override open var undoManager: UndoManager? {
         get {
-            return metalScreen.undoManager
+            return metal.undoManager
         }
     }
  
@@ -312,7 +312,7 @@ extension MyController {
         setupDebugger()
         
         // Get metal running
-        metalScreen.setupMetal()
+        metal.setupMetal()
     
         // Load user defaults
         loadUserDefaults()
@@ -437,14 +437,14 @@ extension MyController {
         
         // Do 3 times a second ...
         if (animationCounter % 4) == 0 {
-            speedometer.updateWith(cycle: amiga.masterClock() / 4, frame: metalScreen.frames)
+            speedometer.updateWith(cycle: amiga.masterClock() / 4, frame: metal.frames)
             let mhz = speedometer.mhz
             let fps = speedometer.fps
             clockSpeed.stringValue = String(format:"%.2f MHz %.0f fps", mhz, fps)
             clockSpeedBar.doubleValue = 10 * mhz
         
             // Let the cursor disappear in fullscreen mode
-            if metalScreen.fullscreen &&
+            if metal.fullscreen &&
                 CGEventSource.secondsSinceLastEventType(.combinedSessionState,
                                                         eventType: .mouseMoved) > 1.0 {
                 NSCursor.setHiddenUntilMouseMoves(true)
@@ -470,9 +470,9 @@ extension MyController {
             amiga.powerOn()
             
             // Blend in emulator texture
-            if (!metalScreen.drawC64texture) {
-                metalScreen.blendIn()
-                metalScreen.drawC64texture = true
+            if (!metal.drawC64texture) {
+                metal.blendIn()
+                metal.drawC64texture = true
             }
             
             // Process attachment (if any)
@@ -626,7 +626,7 @@ extension MyController {
         case MSG_PAL,
              MSG_NTSC:
 
-            metalScreen.updateScreenGeometry()
+            metal.updateScreenGeometry()
     
         case MSG_KEYMATRIX,
              MSG_CHARSET:

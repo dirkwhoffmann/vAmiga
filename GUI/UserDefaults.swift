@@ -488,18 +488,18 @@ extension MyController {
         
         c64.suspend()
         
-        metalScreen.upscaler = defaults.integer(forKey: Keys.upscaler)
+        metal.upscaler = defaults.integer(forKey: Keys.upscaler)
         c64.vic.setVideoPalette(defaults.integer(forKey: Keys.palette))
         c64.vic.setBrightness(defaults.double(forKey: Keys.brightness))
         c64.vic.setContrast(defaults.double(forKey: Keys.contrast))
         c64.vic.setSaturation(defaults.double(forKey: Keys.saturation))
 
-        metalScreen.setEyeX(defaults.float(forKey: Keys.eyeX))
-        metalScreen.setEyeY(defaults.float(forKey: Keys.eyeY))
-        metalScreen.setEyeZ(defaults.float(forKey: Keys.eyeZ))
+        metal.setEyeX(defaults.float(forKey: Keys.eyeX))
+        metal.setEyeY(defaults.float(forKey: Keys.eyeY))
+        metal.setEyeZ(defaults.float(forKey: Keys.eyeZ))
         
-        defaults.decode(&metalScreen.shaderOptions, forKey: Keys.shaderOptions)
-        metalScreen.buildDotMasks()
+        defaults.decode(&metal.shaderOptions, forKey: Keys.shaderOptions)
+        metal.buildDotMasks()
  
         c64.resume()
     }
@@ -508,17 +508,17 @@ extension MyController {
         
         let defaults = UserDefaults.standard
         
-        defaults.set(metalScreen.upscaler, forKey: Keys.upscaler)
+        defaults.set(metal.upscaler, forKey: Keys.upscaler)
         defaults.set(c64.vic.videoPalette(), forKey: Keys.palette)
         defaults.set(c64.vic.brightness(), forKey: Keys.brightness)
         defaults.set(c64.vic.contrast(), forKey: Keys.contrast)
         defaults.set(c64.vic.saturation(), forKey: Keys.saturation)
         
-        defaults.set(metalScreen.eyeX(), forKey: Keys.eyeX)
-        defaults.set(metalScreen.eyeY(), forKey: Keys.eyeY)
-        defaults.set(metalScreen.eyeZ(), forKey: Keys.eyeZ)
+        defaults.set(metal.eyeX(), forKey: Keys.eyeX)
+        defaults.set(metal.eyeY(), forKey: Keys.eyeY)
+        defaults.set(metal.eyeZ(), forKey: Keys.eyeZ)
   
-        defaults.encode(metalScreen.shaderOptions, forKey: Keys.shaderOptions)
+        defaults.encode(metal.shaderOptions, forKey: Keys.shaderOptions)
     }
 }
 
@@ -672,7 +672,7 @@ extension MyController {
         screenshotSource = defaults.integer(forKey: Keys.screenshotSource)
         screenshotTargetIntValue = defaults.integer(forKey: Keys.screenshotTarget)
     
-        metalScreen.keepAspectRatio = defaults.bool(forKey: Keys.keepAspectRatio)
+        metal.keepAspectRatio = defaults.bool(forKey: Keys.keepAspectRatio)
         keyboardcontroller.exitOnEsc = defaults.bool(forKey: Keys.exitOnEsc)
         
         closeWithoutAsking = defaults.bool(forKey: Keys.closeWithoutAsking)
@@ -700,7 +700,7 @@ extension MyController {
         defaults.set(screenshotSource, forKey: Keys.screenshotSource)
         defaults.set(screenshotTargetIntValue, forKey: Keys.screenshotTarget)
         
-        defaults.set(metalScreen.keepAspectRatio, forKey: Keys.keepAspectRatio)
+        defaults.set(metal.keepAspectRatio, forKey: Keys.keepAspectRatio)
         defaults.set(keyboardcontroller.exitOnEsc, forKey: Keys.exitOnEsc)
         
         defaults.set(closeWithoutAsking, forKey: Keys.closeWithoutAsking)

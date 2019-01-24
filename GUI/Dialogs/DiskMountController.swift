@@ -155,14 +155,14 @@ class DiskMountController : DialogController {
         
         print("df0Action")
         // myController?.changeDisk(disk, drive: nr)
-        myController?.metalScreen.rotateBack()
+        myController?.metal.rotateBack()
         hideSheet()
     }
     @IBAction func df1Action(_ sender: Any!) {
         
         print("df1Action")
         // myController?.changeDisk(disk, drive: nr)
-        myController?.metalScreen.rotateBack()
+        myController?.metal.rotateBack()
         hideSheet()
     }
 }

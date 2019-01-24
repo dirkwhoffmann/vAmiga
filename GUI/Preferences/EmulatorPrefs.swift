@@ -18,7 +18,7 @@ extension PreferencesController {
         guard
             let c64        = proxy,
             let controller = myController,
-            let metal      = controller.metalScreen
+            let metal      = controller.metal
             else { return }
         
         // VC1541
@@ -68,7 +68,7 @@ extension PreferencesController {
     
     @IBAction func emuAspectRatioAction(_ sender: NSButton!) {
         
-        if let metal = myController?.metalScreen {
+        if let metal = myController?.metal {
             metal.keepAspectRatio = (sender.state == .on)
             refresh()
         }

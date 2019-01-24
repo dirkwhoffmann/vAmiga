@@ -67,13 +67,13 @@ extension MyController : NSWindowDelegate {
         memTableView.c = nil
 
         // Stop metal view
-        metalScreen.cleanup()
+        metal.cleanup()
     }
     
     public func windowWillEnterFullScreen(_ notification: Notification)
     {
         track()
-        metalScreen.fullscreen = true
+        metal.fullscreen = true
         showStatusBar(false)
     }
     
@@ -85,7 +85,7 @@ extension MyController : NSWindowDelegate {
     public func windowWillExitFullScreen(_ notification: Notification)
     {
         track()
-        metalScreen.fullscreen = false
+        metal.fullscreen = false
         showStatusBar(true)
     }
     
@@ -105,7 +105,7 @@ extension MyController : NSWindowDelegate {
     
     public func window(_ window: NSWindow, willUseFullScreenContentSize proposedSize: NSSize) -> NSSize {
 
-        var myRect = metalScreen.bounds
+        var myRect = metal.bounds
         myRect.size = proposedSize
         return proposedSize
     }
@@ -119,7 +119,7 @@ extension MyController : NSWindowDelegate {
         let deltaY = size.height - windowFrame.size.height
         
         // How big would the metal view become?
-        let metalFrame = metalScreen.frame
+        let metalFrame = metal.frame
         let metalX = metalFrame.size.width + deltaX
         let metalY = metalFrame.size.height + deltaY
         

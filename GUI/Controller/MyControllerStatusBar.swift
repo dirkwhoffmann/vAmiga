@@ -35,13 +35,13 @@ extension MyController {
             
             if value {
                 
-                metalScreen.shrink()
+                metal.shrink()
                 window?.setContentBorderThickness(24, for: .minY)
                 adjustWindowSize()
                 
             } else {
                 
-                metalScreen.expand()
+                metal.expand()
                 window?.setContentBorderThickness(0, for: .minY)
                 adjustWindowSize()
             }

@@ -270,7 +270,7 @@ extension MyController : NSMenuItemValidation {
     func saveScreenshot(url: URL) throws {
         
         // Take screenshot
-        let image = metalScreen.screenshot(afterUpscaling: screenshotSource > 0)
+        let image = metal.screenshot(afterUpscaling: screenshotSource > 0)
         
         // Convert to target format
         let data = image?.representation(using: screenshotTarget)

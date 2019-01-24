@@ -175,7 +175,7 @@ extension MyController {
 
             track("Rewind")
             if (c64.restoreLatestAutoSnapshot()) {
-                metalScreen.snapToFront()
+                metal.snapToFront()
             }
         
         case 1: // Take
@@ -187,7 +187,7 @@ extension MyController {
             
             track("Restore")
             if (c64.restoreLatestUserSnapshot()) {
-                metalScreen.snapToFront()
+                metal.snapToFront()
             } else {
                 NSSound.beep()
             }
@@ -222,14 +222,14 @@ extension MyController {
         
         if (c64.restoreLatestAutoSnapshot()) {
             c64.deleteAutoSnapshot(0)
-            metalScreen.snapToFront()
+            metal.snapToFront()
         }
     }
 
     @IBAction func restoreLatestUserSnapshotAction(_ sender: Any!) {
         
         if (c64.restoreLatestUserSnapshot()) {
-            metalScreen.snapToFront()
+            metal.snapToFront()
         }
     }
     
@@ -251,7 +251,7 @@ extension MyController {
 
         // Image view
         let paperSize = printInfo.paperSize
-        let image = metalScreen.screenshot()
+        let image = metal.screenshot()
         let printRect = NSMakeRect(0.0, 0.0, paperSize.width, paperSize.height)
         let imageView = NSImageView.init(frame: printRect)
         imageView.image = image
