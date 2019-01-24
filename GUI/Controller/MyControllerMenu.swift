@@ -365,13 +365,7 @@ extension MyController : NSMenuItemValidation {
     
     @IBAction func mapCmdKeysAction(_ sender: Any!) {
         
-        // Check if Command keys are currently mapped
-        if eventTap != nil {
-            keyboardcontroller.enableCmdShortcuts()
-            assert(eventTap == nil)
-        } else {
-            keyboardcontroller.disableCmdShortcuts()
-        }
+        mapCommandKeys = !mapCommandKeys
         refreshStatusBar()
     }
     

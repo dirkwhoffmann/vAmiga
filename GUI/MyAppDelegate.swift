@@ -9,16 +9,18 @@
 
 import Cocoa
 
-/// The delegate object of this application.
-/// This variable is global and can be accessed from anywhere in the Swift code.
+/* The delegate object of this application.
+ * This variable is global and can be accessed from anywhere in the Swift code.
+ */
 var myAppDelegate: MyAppDelegate {
     get {
         return NSApp.delegate as! MyAppDelegate
     }
 }
 
-/// The document of the currently active emulator instance.
-/// This variable is global and can be accessed from anywhere in the Swift code.
+/* The document of the currently active emulator instance.
+ * This variable is global and can be accessed from anywhere in the Swift code.
+ */
 var myDocument: MyDocument? {
     get {
         if let doc = NSApplication.shared.orderedDocuments.first as? MyDocument {
@@ -30,24 +32,27 @@ var myDocument: MyDocument? {
     }
 }
 
-/// The window controller of the currently active emulator instance.
-/// This variable is global and can be accessed from anywhere in the Swift code.
+/* The window controller of the currently active emulator instance.
+ * This variable is global and can be accessed from anywhere in the Swift code.
+ */
 var myController: MyController? {
     get {
         return myDocument?.windowControllers.first as? MyController
     }
 }
 
-/// The window of the currently active emulator instance.
-/// This variable is global and can be accessed from anywhere in the Swift code.
+/* The window of the currently active emulator instance.
+ * This variable is global and can be accessed from anywhere in the Swift code.
+ */
 var myWindow: NSWindow? {
     get {
         return myController?.window
     }
 }
 
-/// The C64 proxy of the currently active emulator instance.
-/// This variable is global and can be accessed from anywhere in the Swift code.
+/* The Amiga proxy of the currently active emulator instance.
+ * This variable is global and can be accessed from anywhere in the Swift code.
+ */
 var amigaProxy: AmigaProxy? {
     get {
         return myDocument?.amiga
@@ -63,6 +68,110 @@ var proxy: C64Proxy? {
     }
 }
 
+/* An event tap for interception CGEvents
+ * CGEvents are intercepted to establish a direct mapping of the Command keys
+ * to the Amiga keys. To make such a mapping work, we have to disable all
+ * keyboard shortcuts, even the system-wide ones.
+ */
+var eventTap : CFMachPort?
+
+// Use this variable to switch direct mapping of the Command keys on or off
+var mapCommandKeys : Bool {
+    
+    get {
+        return eventTap != nil
+    }
+    
+    set {
+        if newValue == false && eventTap != nil {
+            
+            track("Reenabling keyboard shortcuts...")
+            CGEvent.tapEnable(tap: eventTap!, enable: false)
+            eventTap = nil
+        }
+        
+        if newValue == true && eventTap == nil {
+            
+            track("Trying to disable keyboard shortcuts...")
+            
+            /* To disable keyboard shortcuts, we are going to filter out the
+             * Command flag from all keyUp and keyDown CGEvents by installing
+             * a CGEvent callback. Doing so requires accessability priviledges.
+             * Hence, we first check if we have the priviledges and prompt the
+             * user if we don't. In this case, the operation will fail and we
+             * won't be able to disable shortcuts. In the meantime however, the
+             * user has the ability to grant us access in the system
+             * preferences. If he trust us, we'll pass this chechpoint in the
+             * next function call.
+             */
+            let trusted = kAXTrustedCheckOptionPrompt.takeUnretainedValue()
+            let privOptions = [trusted: true] as CFDictionary
+            
+            if !AXIsProcessTrustedWithOptions(privOptions) {
+                
+                track("Aborting. Access denied")
+                return
+            }
+            
+            // Set up an event mask that matches keyDown and keyUp events
+            let mask = CGEventMask(
+                (1 << CGEventType.keyDown.rawValue) | (1 << CGEventType.keyUp.rawValue))
+            
+            // Try to create the event tap
+            eventTap = CGEvent.tapCreate(tap: .cgSessionEventTap,
+                                         place: .headInsertEventTap,
+                                         options: .defaultTap,
+                                         eventsOfInterest: mask,
+                                         callback: cgEventCallback,
+                                         userInfo: nil)
+            
+            if eventTap == nil {
+                
+                track("Aborting. Failed to create the event tap.")
+                return
+            }
+            
+            // Add the event tap to the run loop and enable it
+            let runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0)
+            CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, .commonModes)
+            CGEvent.tapEnable(tap: eventTap!, enable: true)
+            track("Success")
+        }
+    }
+}
+
+/* To establish a direct mapping of the Command keys to the Amiga keys, this
+ * callback is registered. It intercepts keyDown and keyUp events and filters
+ * out the Command key modifier flag. As a result, all keyboard shortcuts are
+ * disabled and all keys that are pressed in combination with the Command key
+ * will trigger a standard Cocoa key event.
+ */
+func cgEventCallback(proxy: CGEventTapProxy,
+                     type: CGEventType,
+                     event: CGEvent,
+                     refcon: UnsafeMutableRawPointer?) -> Unmanaged<CGEvent>? {
+    
+    let keyCode = event.getIntegerValueField(.keyboardEventKeycode)
+    
+    if type == .keyDown {
+        
+        track("CGEvent keyDown \(keyCode)")
+        event.flags.remove(.maskCommand)
+    }
+    
+    if type == .keyUp {
+        
+        track("CGEvent keyUp \(keyCode)")
+        event.flags.remove(.maskCommand)
+    }
+    
+    return Unmanaged.passRetained(event)
+}
+
+
+//
+// Application delegate
+//
 
 @NSApplicationMain
 @objc public class MyAppDelegate: NSObject, NSApplicationDelegate {

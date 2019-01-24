@@ -67,12 +67,6 @@ class MyController : NSWindowController, MessageReceiver {
     /// Used inside the timer function to fine tune timed events
     var animationCounter = 0
     
-    /* Event tap for interception CGEvents
-     * CGEvents are intercepted if the command keys are directly mapped to the
-     * Amiga keys.
-     */
-    var eventTap : CFMachPort?
-    
     /// Current keyboard modifier flags
     /// These flags tell us if one of the special keysare currently pressed.
     /// The flags are utilized, e.g., to alter behaviour when a key on the
