@@ -15,7 +15,7 @@ extension MyController {
         
         let items: [NSView : Bool] = [
             
-            cmdLock: eventTap != nil,
+            cmdLock: mapCommandKeys,
             
             clockSpeed: true,
             clockSpeedBar: true,

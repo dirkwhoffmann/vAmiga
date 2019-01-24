@@ -77,7 +77,6 @@ extension PreferencesController {
         vidMisalignmentYSlider.isEnabled = shaderOptions.disalignment > 0
 
         // Geometry
-        vidAspectRatioButton.state = metal.keepAspectRatio ? .on : .off
         vidEyeXSlider.floatValue = metal.eyeX()
         vidEyeYSlider.floatValue = metal.eyeY()
         vidEyeZSlider.floatValue = metal.eyeZ()
@@ -294,15 +293,7 @@ extension PreferencesController {
     //
     // Action methods (Geometry)
     //
-    
-    @IBAction func vidAspectRatioAction(_ sender: NSButton!) {
         
-        if let metal = myController?.metalScreen {
-            metal.keepAspectRatio = (sender.state == .on)
-            refresh()
-        }
-    }
-    
     @IBAction func vidEyeXAction(_ sender: NSSlider!) {
         
         if let metal = myController?.metalScreen {

@@ -18,10 +18,6 @@ extension MyController : NSWindowDelegate {
         // Inform the application delegate
         myAppDelegate.windowDidBecomeMain(notification.object as! NSWindow)
         
-        // Enable audio
-        // c64.sid.rampUpFromZero()
-        // audioEngine.startPlayback()
-        
         // Start emulator if it was only paused while in background
         if pauseInBackground && pauseInBackgroundSavedState { amiga.run() }
 
@@ -30,6 +26,9 @@ extension MyController : NSWindowDelegate {
         
         // Make sure the aspect ratio is correct
         adjustWindowSize()
+
+        // Update the status bar
+        myController?.refreshStatusBar()
     }
     
     public func windowDidResignMain(_ notification: Notification) {

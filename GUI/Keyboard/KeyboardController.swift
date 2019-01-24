@@ -25,10 +25,11 @@ enum Layout : Int, Codable {
 // Keyboard event handler
 class KeyboardController: NSObject {
     
-    /* Indicates if the joystick emulation keys should also trigger key events.
-     * Set to true to prevent key events.
-     */
+    // Indicates if the joystick emulation keys should trigger key events.
     var disconnectJoyKeys = Defaults.disconnectJoyKeys
+    
+    // Indicates if the pressing the ESC key should exit fullscreen mode.
+    var exitOnEsc = Defaults.exitOnEsc
     
     // Remembers the currently pressed key modifiers
     var leftShift   = false, rightShift   = false
@@ -87,17 +88,17 @@ class KeyboardController: NSObject {
         guard let controller = myController else { return }
         
         // Ignore repeating keys
-        if (event.isARepeat) {
+        if event.isARepeat {
             return
         }
         
         // Exit fullscreen mode if escape key is pressed
-        if (event.keyCode == kVK_Escape && controller.metalScreen.fullscreen) {
+        if event.keyCode == kVK_Escape && controller.metalScreen.fullscreen && exitOnEsc {
             myController?.window!.toggleFullScreen(nil)
         }
         
         // Ignore keys that are pressed in combination with the command key
-        if (event.modifierFlags.contains(NSEvent.ModifierFlags.command)) {
+        if event.modifierFlags.contains(NSEvent.ModifierFlags.command) {
             return
         }
         

@@ -1,11 +1,11 @@
-//
-// This file is part of VirtualC64 - A cycle accurate Commodore 64 emulator
+// -----------------------------------------------------------------------------
+// This file is part of vAmiga
 //
 // Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
 // Licensed under the GNU General Public License v3
 //
 // See https://www.gnu.org for license information
-//
+// -----------------------------------------------------------------------------
 
 import Foundation
 import Carbon.HIToolbox
@@ -412,7 +412,6 @@ extension Keys {
     static let upscaler        = "VC64UpscalerKey"
 
     // Geometry
-    static let keepAspectRatio = "VC64FullscreenKeepAspectRatioKey"
     static let eyeX            = "VC64EyeX"
     static let eyeY            = "VC64EyeY"
     static let eyeZ            = "VC64EyeZ"
@@ -430,7 +429,6 @@ extension Defaults {
     static let upscaler = 0
     
     // Geometry
-    static let keepAspectRatio = false
     static let eyeX = Float(0.0)
     static let eyeY = Float(0.0)
     static let eyeZ = Float(0.0)
@@ -451,7 +449,6 @@ extension MyController {
             Keys.saturation: Defaults.saturation,
             Keys.upscaler: Defaults.upscaler,
 
-            Keys.keepAspectRatio: Defaults.keepAspectRatio,
             Keys.eyeX: Defaults.eyeX,
             Keys.eyeY: Defaults.eyeY,
             Keys.eyeZ: Defaults.eyeZ,
@@ -472,7 +469,6 @@ extension MyController {
                      Keys.saturation,
                      Keys.upscaler,
                      
-                     Keys.keepAspectRatio,
                      Keys.eyeX,
                      Keys.eyeY,
                      Keys.eyeZ,
@@ -498,7 +494,6 @@ extension MyController {
         c64.vic.setContrast(defaults.double(forKey: Keys.contrast))
         c64.vic.setSaturation(defaults.double(forKey: Keys.saturation))
 
-        metalScreen.keepAspectRatio = defaults.bool(forKey: Keys.keepAspectRatio)
         metalScreen.setEyeX(defaults.float(forKey: Keys.eyeX))
         metalScreen.setEyeY(defaults.float(forKey: Keys.eyeY))
         metalScreen.setEyeZ(defaults.float(forKey: Keys.eyeZ))
@@ -519,7 +514,6 @@ extension MyController {
         defaults.set(c64.vic.contrast(), forKey: Keys.contrast)
         defaults.set(c64.vic.saturation(), forKey: Keys.saturation)
         
-        defaults.set(metalScreen.keepAspectRatio, forKey: Keys.keepAspectRatio)
         defaults.set(metalScreen.eyeX(), forKey: Keys.eyeX)
         defaults.set(metalScreen.eyeY(), forKey: Keys.eyeY)
         defaults.set(metalScreen.eyeZ(), forKey: Keys.eyeZ)
@@ -535,13 +529,17 @@ extension MyController {
 extension Keys {
     
     // Drives
-    static let warpLoad             = "VC64WarpLoadKey"
-    static let driveNoise           = "VC64DriveNoiseKey"
+    static let warpLoad             = "VAWarpLoadKey"
+    static let driveNoise           = "VADriveNoiseKey"
     
     // Screenshots
-    static let screenshotSource     = "VC64ScreenshotSourceKey"
-    static let screenshotTarget     = "VC64ScreenshotTargetKey"
+    static let screenshotSource     = "VAScreenshotSourceKey"
+    static let screenshotTarget     = "VAScreenshotTargetKey"
     
+    // Fullscreen
+    static let keepAspectRatio      = "VAFullscreenKeepAspectRatioKey"
+    static let exitOnEsc            = "VAFullscreenExitOnEscKey"
+
     // User dialogs
     static let closeWithoutAsking   = "VC64CloseWithoutAsking"
     static let ejectWithoutAsking   = "VC64EjectWithoutAsking"
@@ -567,6 +565,10 @@ extension Defaults {
     static let screenshotSource     = 0
     static let screenshotTarget     = NSBitmapImageRep.FileType.png
     
+    // Fullscreen
+    static let keepAspectRatio      = false
+    static let exitOnEsc            = false
+
     // User dialogs
     static let closeWithoutAsking   = false
     static let ejectWithoutAsking   = false
@@ -606,6 +608,9 @@ extension MyController {
             Keys.screenshotSource: Defaults.screenshotSource,
             Keys.screenshotTarget: Int(Defaults.screenshotTarget.rawValue),
 
+            Keys.keepAspectRatio: Defaults.keepAspectRatio,
+            Keys.exitOnEsc: Defaults.exitOnEsc,
+            
             Keys.closeWithoutAsking: Defaults.closeWithoutAsking,
             Keys.ejectWithoutAsking: Defaults.ejectWithoutAsking,
 
@@ -632,6 +637,9 @@ extension MyController {
                     
                     Keys.screenshotSource,
                     Keys.screenshotTarget,
+                    
+                    Keys.keepAspectRatio,
+                    Keys.exitOnEsc,
                     
                     Keys.closeWithoutAsking,
                     Keys.ejectWithoutAsking,
@@ -664,6 +672,9 @@ extension MyController {
         screenshotSource = defaults.integer(forKey: Keys.screenshotSource)
         screenshotTargetIntValue = defaults.integer(forKey: Keys.screenshotTarget)
     
+        metalScreen.keepAspectRatio = defaults.bool(forKey: Keys.keepAspectRatio)
+        keyboardcontroller.exitOnEsc = defaults.bool(forKey: Keys.exitOnEsc)
+        
         closeWithoutAsking = defaults.bool(forKey: Keys.closeWithoutAsking)
         ejectWithoutAsking = defaults.bool(forKey: Keys.ejectWithoutAsking)
 
@@ -688,6 +699,9 @@ extension MyController {
 
         defaults.set(screenshotSource, forKey: Keys.screenshotSource)
         defaults.set(screenshotTargetIntValue, forKey: Keys.screenshotTarget)
+        
+        defaults.set(metalScreen.keepAspectRatio, forKey: Keys.keepAspectRatio)
+        defaults.set(keyboardcontroller.exitOnEsc, forKey: Keys.exitOnEsc)
         
         defaults.set(closeWithoutAsking, forKey: Keys.closeWithoutAsking)
         defaults.set(ejectWithoutAsking, forKey: Keys.ejectWithoutAsking)
@@ -862,8 +876,8 @@ extension MyController {
         defaults.set(config.fastRamSize, forKey: Keys.fastRam)
 
         defaults.set(config.df0.connected, forKey: Keys.df0Connect)
-        defaults.set(config.df0.type, forKey: Keys.df0Type)
+        defaults.set(config.df0.type.rawValue, forKey: Keys.df0Type)
         defaults.set(config.df1.connected, forKey: Keys.df1Connect)
-        defaults.set(config.df1.type, forKey: Keys.df1Type)
+        defaults.set(config.df1.type.rawValue, forKey: Keys.df1Type)
     }
 }

@@ -15,11 +15,19 @@ extension PreferencesController {
         
         track()
         
-        guard let c64 = proxy, let controller = myController else { return }
+        guard
+            let c64        = proxy,
+            let controller = myController,
+            let metal      = controller.metalScreen
+            else { return }
         
         // VC1541
         emuWarpLoad.state = c64.warpLoad() ? .on : .off
         emuDriveSounds.state = c64.drive1.sendSoundMessages() ? .on : .off
+        
+        // Fullscreen
+        emuAspectRatioButton.state = metal.keepAspectRatio ? .on : .off
+        emuExitOnEscButton.state = controller.keyboardcontroller.exitOnEsc ? .on : .off
         
         // Screenshots
         emuScreenshotSourcePopup.selectItem(withTag: controller.screenshotSource)
@@ -53,6 +61,27 @@ extension PreferencesController {
         refresh()
     }
     
+    
+    //
+    // Action methods (Fullscreen)
+    //
+    
+    @IBAction func emuAspectRatioAction(_ sender: NSButton!) {
+        
+        if let metal = myController?.metalScreen {
+            metal.keepAspectRatio = (sender.state == .on)
+            refresh()
+        }
+    }
+
+    @IBAction func emuExitOnEscAction(_ sender: NSButton!) {
+        
+        if let keyboard = myController?.keyboardcontroller {
+            keyboard.exitOnEsc = (sender.state == .on)
+            refresh()
+        }
+    }
+
     
     //
     // Action methods (Screenshots)

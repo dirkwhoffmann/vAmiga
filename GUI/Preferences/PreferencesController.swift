@@ -98,7 +98,6 @@ class PreferencesController : DialogController {
     @IBOutlet weak var vidMisalignmentYSlider: NSSlider!
     
     // Geometry
-    @IBOutlet weak var vidAspectRatioButton: NSButton!
     @IBOutlet weak var vidEyeXSlider: NSSlider!
     @IBOutlet weak var vidEyeYSlider: NSSlider!
     @IBOutlet weak var vidEyeZSlider: NSSlider!
@@ -112,6 +111,10 @@ class PreferencesController : DialogController {
     @IBOutlet weak var emuWarpLoad: NSButton!
     @IBOutlet weak var emuDriveSounds: NSButton!
     
+    // Fullscreen
+    @IBOutlet weak var emuAspectRatioButton: NSButton!
+    @IBOutlet weak var emuExitOnEscButton: NSButton!
+
     // Screenshots
     @IBOutlet weak var emuScreenshotSourcePopup: NSPopUpButton!
     @IBOutlet weak var emuScreenshotTargetPopup: NSPopUpButton!
