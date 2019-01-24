@@ -140,7 +140,7 @@
                         </buttonCell>
                     </button>
                     <button hidden="YES" tag="1" id="D1i-Ep-fTN">
-                        <rect key="frame" x="124" y="2" width="20" height="20"/>
+                        <rect key="frame" x="124" y="4" width="16" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="diskTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="dWc-LE-E52">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -186,7 +186,7 @@
                         </buttonCell>
                     </button>
                     <button hidden="YES" tag="1" id="gkQ-Nr-aDz">
-                        <rect key="frame" x="212" y="2" width="20" height="20"/>
+                        <rect key="frame" x="212" y="4" width="16" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="diskTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="Gux-DH-DEb">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>

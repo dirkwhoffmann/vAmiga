@@ -373,6 +373,18 @@ extension MyController {
         // Convert 'self' to a void pointer
         let myself = UnsafeRawPointer(Unmanaged.passUnretained(self).toOpaque())
         
+        amiga.addListener(myself) { (ptr, type, data) in
+
+            // Convert void pointer back to 'self'
+            let myself = Unmanaged<MyController>.fromOpaque(ptr!).takeUnretainedValue()
+            
+            // Process message in the main thread
+            DispatchQueue.main.async {
+                let mType = MessageType(rawValue: UInt32(type))
+                myself.processMessage(Message(type: mType, data: data))
+            }
+        }
+  
         c64.addListener(myself) { (ptr, type, data) in
             
             // Convert void pointer back to 'self'
