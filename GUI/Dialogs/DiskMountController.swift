@@ -153,15 +153,19 @@ class DiskMountController : DialogController {
     }
     @IBAction func df0Action(_ sender: Any!) {
         
-        print("df0Action")
-        // myController?.changeDisk(disk, drive: nr)
+        track("df0Action")
+        DispatchQueue.main.async {
+            amigaProxy?.df0.insertDisk(self.disk)
+        }
         myController?.metal.rotateBack()
         hideSheet()
     }
     @IBAction func df1Action(_ sender: Any!) {
         
-        print("df1Action")
-        // myController?.changeDisk(disk, drive: nr)
+        track("df1Action")
+        DispatchQueue.main.async {
+            amigaProxy?.df1.insertDisk(self.disk)
+        }
         myController?.metal.rotateBack()
         hideSheet()
     }

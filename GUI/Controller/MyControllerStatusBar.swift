@@ -13,8 +13,17 @@ extension MyController {
     
     public func refreshStatusBar() {
         
+        guard let amiga = amigaProxy else { return }
+        
         let items: [NSView : Bool] = [
             
+            df0LED: true,
+            df0Disk: amiga.df0.hasDisk(),
+            df0DMA: amiga.diskController.doesDMA(0),
+            df1LED: true,
+            df1Disk: amiga.df1.hasDisk(),
+            df1DMA: amiga.diskController.doesDMA(1),
+
             cmdLock: mapCommandKeys,
             
             clockSpeed: true,

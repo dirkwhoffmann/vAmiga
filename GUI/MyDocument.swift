@@ -125,7 +125,7 @@ class MyDocument : NSDocument {
     
     func noteNewRecentlyExportedDiskURL(_ url: URL, drive nr: Int) {
 
-        precondition(nr == 1 || nr == 2)
+        assert(nr == 1 || nr == 2)
         
         if (nr == 1) {
             noteRecentlyUsedURL(url, to: &recentlyExportedDisk1URLs, size: 1)
@@ -136,7 +136,7 @@ class MyDocument : NSDocument {
 
     func getRecentlyExportedDiskURL(_ pos: Int, drive nr: Int) -> URL? {
         
-        precondition(nr == 1 || nr == 2)
+        assert(nr == 1 || nr == 2)
         
         if (nr == 1) {
             return getRecentlyUsedURL(pos, from: recentlyExportedDisk1URLs)
@@ -147,7 +147,7 @@ class MyDocument : NSDocument {
    
     func clearRecentlyExportedDiskURLs(drive nr: Int) {
         
-        precondition(nr == 1 || nr == 2)
+        assert(nr == 1 || nr == 2)
         
         if (nr == 1) {
             recentlyExportedDisk1URLs = []
@@ -510,7 +510,7 @@ class MyDocument : NSDocument {
     func export(drive nr: Int, to url: URL, ofType typeName: String) -> Bool {
         
         track("url = \(url) typeName = \(typeName)")
-        precondition(["ADF", "D64", "T64", "PRG", "P00", "G64"].contains(typeName))
+        assert(["ADF", "D64", "T64", "PRG", "P00", "G64"].contains(typeName))
         
         let drive = c64.drive(nr)!
         

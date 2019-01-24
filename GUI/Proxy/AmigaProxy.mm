@@ -190,6 +190,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->controller->dump();
 }
+- (BOOL) doesDMA:(NSInteger)nr
+{
+    return wrapper->controller->doesDMA((unsigned)nr);
+}
 
 @end
 
@@ -223,6 +227,14 @@ struct ADFFileWrapper { ADFFile *adf; };
 - (BOOL) hasDisk
 {
     return wrapper->drive->hasDisk();
+}
+- (BOOL) hasWriteProtectedDisk
+{
+    return wrapper->drive->hasWriteProtectedDisk();
+}
+- (BOOL) hasUnsavedDisk
+{
+    return wrapper->drive->hasUnsavedDisk();
 }
 - (void) ejectDisk
 {
@@ -359,7 +371,8 @@ struct ADFFileWrapper { ADFFile *adf; };
 @synthesize paula;
 @synthesize keyboard;
 @synthesize diskController;
-@synthesize drive;
+@synthesize df0;
+@synthesize df1;
 
 - (instancetype) init
 {
@@ -378,7 +391,10 @@ struct ADFFileWrapper { ADFFile *adf; };
     denise = [[DeniseProxy alloc] initWithDenise:&amiga->denise];
     paula = [[PaulaProxy alloc] initWithPaula:&amiga->paula];
     keyboard = [[AmigaKeyboardProxy alloc] initWithKeyboard:&amiga->keyboard];
-
+    diskController = [[DiskControllerProxy alloc] initWithDiskController:&amiga->diskController];
+    df0 = [[AmigaDriveProxy alloc] initWithDrive:&amiga->df0];
+    df1 = [[AmigaDriveProxy alloc] initWithDrive:&amiga->df1];
+    
     return self;
 }
 

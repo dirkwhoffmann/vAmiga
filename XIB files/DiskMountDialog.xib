@@ -7,12 +7,11 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="DiskMountController" customModule="vAmiga" customModuleProvider="target">
             <connections>
-                <outlet property="contents" destination="3hQ-0q-ukR" id="Zso-90-dYX"/>
                 <outlet property="cylinderField" destination="b0w-1d-Mez" id="1FP-Na-lrH"/>
                 <outlet property="cylinderStepper" destination="AdY-of-ykf" id="WRo-r4-7Pg"/>
                 <outlet property="headField" destination="pwN-5n-4M6" id="iMh-Kt-utc"/>
                 <outlet property="headStepper" destination="l0l-Am-DEQ" id="Kbw-aL-ANl"/>
-                <outlet property="previewTable" destination="3hQ-0q-ukR" id="Ptn-XG-fTL"/>
+                <outlet property="previewTable" destination="3hQ-0q-ukR" id="llq-mw-083"/>
                 <outlet property="sectorField" destination="Keq-9F-PsI" id="yCR-Pe-lE4"/>
                 <outlet property="sectorStepper" destination="btq-Fs-f7s" id="8Fp-mg-oik"/>
                 <outlet property="trackField" destination="zpl-ky-LkY" id="N0v-ho-MyQ"/>

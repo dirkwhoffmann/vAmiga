@@ -50,7 +50,8 @@ struct AmigaFileWrapper;
     PaulaProxy *paula;
     AmigaKeyboardProxy *keyboard;
     DiskControllerProxy *diskController;
-    AmigaDriveProxy *driveProxy;
+    AmigaDriveProxy *df0;
+    AmigaDriveProxy *df1;
 }
 
 @property (readonly) struct AmigaWrapper *wrapper;
@@ -60,7 +61,9 @@ struct AmigaFileWrapper;
 @property (readonly) PaulaProxy *paula;
 @property (readonly) AmigaKeyboardProxy *keyboard;
 @property (readonly) DiskControllerProxy *diskController;
-@property (readonly) AmigaDriveProxy *drive;
+@property (readonly) AmigaDriveProxy *df0;
+@property (readonly) AmigaDriveProxy *df1;
+
 
 // Called when quitting the app
 - (void) kill;
@@ -217,6 +220,7 @@ struct AmigaFileWrapper;
 }
 
 - (void) dump;
+- (BOOL) doesDMA:(NSInteger)nr;
 
 @end
 
@@ -236,6 +240,8 @@ struct AmigaFileWrapper;
 - (void) setConnected:(BOOL)value;
 
 - (BOOL) hasDisk;
+- (BOOL) hasWriteProtectedDisk;
+- (BOOL) hasUnsavedDisk;
 - (void) ejectDisk;
 - (void) insertDisk:(ADFFileProxy *)file;
 

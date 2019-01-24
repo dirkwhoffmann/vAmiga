@@ -55,9 +55,12 @@
                 <outlet property="debugPanel" destination="42" id="KyW-HY-D2p"/>
                 <outlet property="debugger" destination="35" id="Sfw-lz-Vnh"/>
                 <outlet property="dezHexSelector" destination="367" id="759"/>
-                <outlet property="df0DMA" destination="xzf-hU-AKK" id="Zmn-Wo-nhv"/>
-                <outlet property="df0Disk" destination="D1i-Ep-fTN" id="ojU-2x-cbO"/>
-                <outlet property="df0LED" destination="iKN-RM-vsV" id="tGw-4n-rGj"/>
+                <outlet property="df0DMA" destination="xzf-hU-AKK" id="oNt-cd-Fkh"/>
+                <outlet property="df0Disk" destination="D1i-Ep-fTN" id="ltM-hh-lzG"/>
+                <outlet property="df0LED" destination="iKN-RM-vsV" id="Qa7-gd-iRi"/>
+                <outlet property="df1DMA" destination="X4r-q5-8Lh" id="hGx-A9-Th8"/>
+                <outlet property="df1Disk" destination="gkQ-Nr-aDz" id="vRa-jh-S2U"/>
+                <outlet property="df1LED" destination="K68-Xr-JJH" id="Cif-l6-Km5"/>
                 <outlet property="dflag" destination="188" id="UAV-Er-hPK"/>
                 <outlet property="iflag" destination="189" id="mWe-Ir-7Om"/>
                 <outlet property="memTableView" destination="67" id="515"/>
@@ -125,11 +128,11 @@
                         </connections>
                     </button>
                     <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" id="xzf-hU-AKK">
-                        <rect key="frame" x="145" y="4" width="16" height="16"/>
+                        <rect key="frame" x="150" y="4" width="16" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </progressIndicator>
                     <button toolTip="Drive LED" tag="2" id="iKN-RM-vsV">
-                        <rect key="frame" x="81" y="3" width="32" height="17"/>
+                        <rect key="frame" x="86" y="4" width="32" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="driveLedOff" imagePosition="only" alignment="right" imageScaling="proportionallyDown" id="v9S-no-L5h">
                             <behavior key="behavior" lightByContents="YES"/>
@@ -137,9 +140,9 @@
                         </buttonCell>
                     </button>
                     <button hidden="YES" tag="1" id="D1i-Ep-fTN">
-                        <rect key="frame" x="119" y="2" width="20" height="20"/>
+                        <rect key="frame" x="124" y="2" width="20" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="mediaDiskSavedTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="dWc-LE-E52">
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="diskTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="dWc-LE-E52">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system" size="10"/>
                         </buttonCell>
@@ -170,6 +173,26 @@
                             <action selector="mapCmdKeysAction:" target="-2" id="iVB-Kz-avV"/>
                         </connections>
                     </button>
+                    <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" id="X4r-q5-8Lh">
+                        <rect key="frame" x="238" y="4" width="16" height="16"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    </progressIndicator>
+                    <button toolTip="Drive LED" tag="2" id="K68-Xr-JJH">
+                        <rect key="frame" x="174" y="4" width="32" height="17"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="driveLedOff" imagePosition="only" alignment="right" imageScaling="proportionallyDown" id="Ws2-m0-rhM">
+                            <behavior key="behavior" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                    </button>
+                    <button hidden="YES" tag="1" id="gkQ-Nr-aDz">
+                        <rect key="frame" x="212" y="2" width="20" height="20"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="diskTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="Gux-DH-DEb">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system" size="10"/>
+                        </buttonCell>
+                    </button>
                 </subviews>
             </view>
             <toolbar key="toolbar" implicitIdentifier="562FDE63-25B0-4E4E-80C7-EF6E742B5F6F" displayMode="iconAndLabel" sizeMode="regular" id="1845">
@@ -183,7 +206,7 @@
                         <popUpButton key="view" tag="10" id="L2b-nG-yBo" userLabel="Port 1">
                             <rect key="frame" x="0.0" y="14" width="48" height="23"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES"/>
-                            <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyUpOrDown" inset="2" autoenablesItems="NO" selectedItem="VD3-Wr-Ufe" id="Oxd-8A-P5o" userLabel="PopupButtonCell">
+                            <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" image="devNoneTemplate" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyUpOrDown" inset="2" autoenablesItems="NO" selectedItem="VD3-Wr-Ufe" id="Oxd-8A-P5o" userLabel="PopupButtonCell">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="menu"/>
                                 <menu key="menu" autoenablesItems="NO" id="zHf-yH-YTM">
@@ -213,7 +236,7 @@
                         <popUpButton key="view" tag="11" id="4MP-rV-xX2" userLabel="Port 2">
                             <rect key="frame" x="0.0" y="14" width="48" height="23"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES"/>
-                            <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" selectedItem="xyt-eC-0im" id="skK-6M-sib" userLabel="PopupButtonCell">
+                            <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" image="devNoneTemplate" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" selectedItem="xyt-eC-0im" id="skK-6M-sib" userLabel="PopupButtonCell">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="menu"/>
                                 <menu key="menu" autoenablesItems="NO" id="L3K-on-eyR">
@@ -1784,13 +1807,13 @@
         <image name="devGamepad2Template" width="24" height="24"/>
         <image name="devMouseTemplate" width="24" height="24"/>
         <image name="devNoneTemplate" width="24" height="24"/>
+        <image name="diskTemplate" width="217" height="217"/>
         <image name="driveLedOff" width="139.63636779785156" height="50.181819915771484"/>
         <image name="hourglass1Template" width="241" height="241"/>
         <image name="inspectTemplate" width="241" height="240"/>
         <image name="joyKeys1Template" width="24" height="24"/>
         <image name="joyKeys2Template" width="24" height="24"/>
         <image name="keyboardTemplate" width="24" height="24"/>
-        <image name="mediaDiskSavedTemplate" width="217" height="217"/>
         <image name="pauseTemplate" width="240" height="241"/>
         <image name="powerLedOff" width="139.63636779785156" height="50.181819915771484"/>
         <image name="powerTemplate" width="241" height="240"/>

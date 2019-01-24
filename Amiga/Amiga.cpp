@@ -77,6 +77,9 @@ Amiga::Amiga()
         &denise,
         &paula,
         &keyboard,
+        &diskController,
+        &df0,
+        &df1,
         NULL };
     
     registerSubcomponents(subcomponents, sizeof(subcomponents));
@@ -202,7 +205,7 @@ Amiga::_powerOn()
 void
 Amiga::_postPowerOn()
 {
-    // Start the emulator AFTER the sub-components get powered on.
+    // Start the emulator AFTER the subcomponents get powered on.
     run();
     
     // Notify the GUI
@@ -216,7 +219,7 @@ Amiga::_powerOff()
 {
     msg("Powering off ...\n");
     
-    // Stop the emulator BEFORE the sub-components get powered off.
+    // Stop the emulator BEFORE the subcomponents get powered off.
     pause();
 }
 

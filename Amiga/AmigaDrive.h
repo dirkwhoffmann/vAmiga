@@ -23,6 +23,9 @@ class AmigaDrive : public HardwareComponent {
     
 public:
     
+    // Drive number (0 = df0, 1 = df1)
+    unsigned nr = 0;
+    
     // Indicates if the drive is connected to the Amiga
     bool connected = true;
     
@@ -36,7 +39,9 @@ public:
     
 public:
     
-    AmigaDrive();
+    // AmigaDrive();
+    AmigaDrive(unsigned nr);
+    
     
     //
     // Methods from HardwareComponent
@@ -56,11 +61,13 @@ public:
     bool isConnected() { return connected; }
     void setConnected(bool value) { connected = value; }
 
-    bool hasDisk() { return disk != NULL; }
+    bool hasDisk();
+    bool hasWriteProtectedDisk();
+    bool hasUnsavedDisk();
+    
     void ejectDisk();
     void insertDisk(AmigaDisk *disk);
     void insertDisk(ADFFile *file);
-
 };
 
 #endif

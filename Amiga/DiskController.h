@@ -22,7 +22,8 @@ class DiskController : public HardwareComponent {
 public:
     
     // Fake variable to simulate DMA activity
-    bool dma;
+    bool df0DMA = false;
+    bool df1DMA = false;
 
     
     //
@@ -48,7 +49,7 @@ private:
     
 public:
     
-    bool doesDMA() { return dma; }
+    bool doesDMA(unsigned nr) { return (nr == 0) ? df0DMA : df1DMA; }
 };
 
 #endif

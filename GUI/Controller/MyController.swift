@@ -133,9 +133,13 @@ class MyController : NSWindowController, MessageReceiver {
     
     // Bottom bar
     @IBOutlet weak var powerLED: NSButton!
+
     @IBOutlet weak var df0LED: NSButton!
     @IBOutlet weak var df0Disk: NSButton!
     @IBOutlet weak var df0DMA: NSProgressIndicator!
+    @IBOutlet weak var df1LED: NSButton!
+    @IBOutlet weak var df1Disk: NSButton!
+    @IBOutlet weak var df1DMA: NSProgressIndicator!
 
     @IBOutlet weak var cmdLock: NSButton!
 
@@ -450,6 +454,13 @@ extension MyController {
  
     func processMessage(_ msg: Message) {
 
+        var drive : AmigaDriveProxy? {
+            get {
+                assert(msg.data == 0 || msg.data == 1)
+                return msg.data == 0 ? amigaProxy?.df0 : amigaProxy?.df1
+            }
+        }
+        
         func firstDrive() -> Bool {
             precondition(msg.data == 1 || msg.data == 2)
             return msg.data == 1;
@@ -498,67 +509,38 @@ extension MyController {
         case MSG_RESET:
             track()
             
-        case MSG_DRIVE_CONNECT:
+        case MSG_DRIVE_CONNECT,
+             MSG_DRIVE_DISCONNECT,
+             MSG_DRIVE_DISK_INSERT,
+             MSG_DRIVE_DISK_EJECT,
+             MSG_DRIVE_DISK_UNSAVED,
+             MSG_DRIVE_DISK_SAVED:
             
-            track()
-            assert(msg.data == 0) // df0
-            df0 = true
-            df0LED.isHidden = !df0 // || hideBottomBar
-            
-        case MSG_DRIVE_DISCONNECT:
-            
-            track()
-            assert(msg.data == 0) // df0
-            df0 = false
-            df0LED.isHidden = !df0 // || hideBottomBar
+            refreshStatusBar()
             
         case MSG_DRIVE_LED_ON:
             
-            track()
-            assert(msg.data == 0) // df0
-            df0LED.image = NSImage.init(named: "driveLedOn")
+            assert(msg.data == 0 || msg.data == 1)
+            let item = (msg.data == 0) ? df0LED : df1LED
+            item!.image = NSImage.init(named: "driveLedOn")
             
         case MSG_DRIVE_LED_OFF:
             
-            track()
-            assert(msg.data == 0) // df0
-            df0LED.image = NSImage.init(named: "driveLedOff")
-            
-        case MSG_DRIVE_DISK_INSERT:
-            
-            track()
-            assert(msg.data == 0) // df0
-            df0Disk.isHidden = false // || hideBottomBar
-            
-        case MSG_DRIVE_DISK_EJECT:
-            
-            track()
-            assert(msg.data == 0) // df0
-            df0Disk.isHidden = false // || hideBottomBar
-            
-        case MSG_DRIVE_DISK_SAVED:
-            
-            track()
-            assert(msg.data == 0) // df0
-            df0Disk.image = NSImage.init(named: "mediaDiskSavedTemplate")
-            
-        case MSG_DRIVE_DISK_UNSAVED:
-            
-            track()
-            assert(msg.data == 0) // df0
-            df0Disk.image = NSImage.init(named: "mediaDiskUnsavedTemplate")
-            
+            assert(msg.data == 0 || msg.data == 1)
+            let item = (msg.data == 0) ? df0LED : df1LED
+            item!.image = NSImage.init(named: "driveLedOff")
+        
         case MSG_DRIVE_DMA_ON:
             
-            track()
-            assert(msg.data == 0) // df0
-            df0DMA.startAnimation(self)
+            assert(msg.data == 0 || msg.data == 1)
+            let item = (msg.data == 0) ? df0DMA : df1DMA
+            item!.startAnimation(self)
 
         case MSG_DRIVE_DMA_OFF:
             
-            track()
-            assert(msg.data == 0) // df0
-            df0DMA.stopAnimation(self)
+            assert(msg.data == 0 || msg.data == 1)
+            let item = (msg.data == 0) ? df0DMA : df1DMA
+            item!.stopAnimation(self)
 
         case MSG_DRIVE_HEAD_UP,
              MSG_DRIVE_HEAD_DOWN:

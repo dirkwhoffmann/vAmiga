@@ -9,9 +9,19 @@
 
 #include "Amiga.h"
 
+/*
 AmigaDrive::AmigaDrive()
 {
     setDescription("Drive");
+}
+*/
+
+AmigaDrive::AmigaDrive(unsigned nr)
+{
+    assert(nr == 0 /* df0 */ || nr == 1 /* df1 */);
+    
+    this->nr = nr;
+    setDescription(nr == 0 ? "Df0" : "Df1");
 }
 
 void
@@ -44,12 +54,31 @@ AmigaDrive::_dump()
     msg("Has disk: %s\n", hasDisk() ? "yes" : "no");
 }
 
+bool
+AmigaDrive::hasDisk()
+{
+    return disk != NULL;
+}
+
+bool
+AmigaDrive::hasWriteProtectedDisk()
+{
+    return hasDisk() ? disk->isWriteProtected() : false;
+}
+
+bool
+AmigaDrive::hasUnsavedDisk()
+{
+    return hasDisk() ? disk->isUnsaved() : false;
+}
+
 void
 AmigaDrive::ejectDisk()
 {
     if (disk) {
         delete disk;
         disk = NULL;
+        amiga->putMessage(MSG_DRIVE_DISK_EJECT, nr);
     }
 }
 
@@ -59,6 +88,7 @@ AmigaDrive::insertDisk(AmigaDisk *newDisk)
     if (newDisk) {
         ejectDisk();
         disk = newDisk;
+        amiga->putMessage(MSG_DRIVE_DISK_INSERT, nr);
     }
 }
 

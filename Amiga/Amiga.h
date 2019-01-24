@@ -77,8 +77,17 @@ public:
     // Paula (Interrupts, Disk Controller, Audio)
     Paula paula;
 
+    // Disk controller (move to Paula?!)
+    DiskController diskController;
+    
     // Keyboard
     AmigaKeyboard keyboard;
+
+    // Internal drive
+    AmigaDrive df0 = AmigaDrive(0);
+
+    // First external drive
+    AmigaDrive df1 = AmigaDrive(1);
 
     
     //
