@@ -8,3 +8,37 @@
 // -----------------------------------------------------------------------------
 
 #include "Amiga.h"
+
+DiskController::DiskController()
+{
+    setDescription("DiskController");
+}
+
+void
+DiskController::_powerOn()
+{
+    
+}
+
+void
+DiskController::_powerOff()
+{
+    
+}
+
+void
+DiskController::_reset()
+{
+    
+}
+
+void
+DiskController::_ping()
+{
+    // TODO: DMA
+}
+
+void
+DiskController::_dump()
+{
+}

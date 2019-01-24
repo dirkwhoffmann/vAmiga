@@ -18,6 +18,8 @@
 @class DeniseProxy;
 @class PaulaProxy;
 @class AmigaKeyboardProxy;
+@class DiskControllerProxy;
+@class AmigaDriveProxy;
 @class AmigaFileProxy;
 @class ADFFileProxy;
 
@@ -30,6 +32,8 @@ struct DMAControllerWrapper;
 struct DeniseWrapper;
 struct PaulaWrapper;
 struct AmigaKeyboardWrapper;
+struct DiskControllerWrapper;
+struct AmigaDriveWrapper;
 struct AmigaFileWrapper;
 
 //
@@ -45,6 +49,8 @@ struct AmigaFileWrapper;
     DeniseProxy *denise;
     PaulaProxy *paula;
     AmigaKeyboardProxy *keyboard;
+    DiskControllerProxy *diskController;
+    AmigaDriveProxy *driveProxy;
 }
 
 @property (readonly) struct AmigaWrapper *wrapper;
@@ -53,6 +59,8 @@ struct AmigaFileWrapper;
 @property (readonly) DeniseProxy *denise;
 @property (readonly) PaulaProxy *paula;
 @property (readonly) AmigaKeyboardProxy *keyboard;
+@property (readonly) DiskControllerProxy *diskController;
+@property (readonly) AmigaDriveProxy *drive;
 
 // Called when quitting the app
 - (void) kill;
@@ -195,6 +203,34 @@ struct AmigaFileWrapper;
 - (void) pressKey:(NSInteger)keycode;
 - (void) releaseKey:(NSInteger)keycode;
 - (void) releaseAllKeys;
+
+@end
+
+
+//
+// DiskController Proxy
+//
+
+@interface DiskControllerProxy : NSObject {
+    
+    struct DiskControllerWrapper *wrapper;
+}
+
+- (void) dump;
+
+@end
+
+
+//
+// AmigaDrive Proxy
+//
+
+@interface AmigaDriveProxy : NSObject {
+    
+    struct AmigaDriveWrapper *wrapper;
+}
+
+- (void) dump;
 
 @end
 

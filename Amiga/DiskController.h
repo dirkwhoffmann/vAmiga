@@ -12,4 +12,43 @@
 
 #include "HardwareComponent.h"
 
+
+//
+// THIS CLASS IS A STUB TO MAKE THE VISUAL PROTOTYPE WORK
+//
+
+class DiskController : public HardwareComponent {
+    
+public:
+    
+    // Fake variable to simulate DMA activity
+    bool dma;
+
+    
+    //
+    // Constructing and destructing
+    //
+    
+public:
+    
+    DiskController();
+    
+    //
+    // Methods from HardwareComponent
+    //
+    
+private:
+    
+    void _powerOn() override;
+    void _powerOff() override;
+    void _reset() override;
+    void _ping() override;
+    void _dump() override;
+    
+    
+public:
+    
+    bool doesDMA() { return dma; }
+};
+
 #endif

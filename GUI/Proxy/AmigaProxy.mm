@@ -17,6 +17,8 @@ struct DMAControllerWrapper { DMAController *dmaController; };
 struct DeniseWrapper { Denise *denise; };
 struct PaulaWrapper { Paula *paula; };
 struct AmigaKeyboardWrapper { AmigaKeyboard *keyboard; };
+struct DiskControllerWrapper { DiskController *controller; };
+struct AmigaDriveWrapper { AmigaDrive *drive; };
 struct AmigaFileWrapper { AmigaFile *file; };
 struct ADFFileWrapper { ADFFile *adf; };
 
@@ -165,6 +167,50 @@ struct ADFFileWrapper { ADFFile *adf; };
 - (void) releaseAllKeys
 {
     wrapper->keyboard->releaseAllKeys();
+}
+
+@end
+
+
+//
+// DiskController proxy
+//
+
+@implementation DiskControllerProxy
+
+- (instancetype) initWithDiskController:(DiskController *)controller
+{
+    if (self = [super init]) {
+        wrapper = new DiskControllerWrapper();
+        wrapper->controller = controller;
+    }
+    return self;
+}
+- (void) dump
+{
+    wrapper->controller->dump();
+}
+
+@end
+
+
+//
+// AmigaDrive proxy
+//
+
+@implementation AmigaDriveProxy
+
+- (instancetype) initWithDrive:(AmigaDrive *)drive
+{
+    if (self = [super init]) {
+        wrapper = new AmigaDriveWrapper();
+        wrapper->drive = drive;
+    }
+    return self;
+}
+- (void) dump
+{
+    wrapper->drive->dump();
 }
 
 @end
