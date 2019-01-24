@@ -80,7 +80,7 @@ struct AmigaFileWrapper;
 
 - (AmigaConfiguration) config;
 - (BOOL) configureModel:(NSInteger)model;
-- (BOOL) configureLocalization:(NSInteger)value;
+- (BOOL) configureLayout:(NSInteger)value;
 - (BOOL) configureChipMemory:(NSInteger)size;
 - (BOOL) configureSlowMemory:(NSInteger)size;
 - (BOOL) configureFastMemory:(NSInteger)size;

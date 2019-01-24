@@ -17,7 +17,7 @@ class SnapshotTableCellView: NSTableCellView {
     @IBOutlet weak var delete: NSButton!
 }
 
-class SnapshotDialog : UserDialogController  {
+class SnapshotDialog : DialogController  {
     
     // Outlets
     

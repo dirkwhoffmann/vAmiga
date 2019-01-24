@@ -9,7 +9,36 @@
 
 import Foundation
 
-class UserDialogController : NSWindowController
+class DialogWindow : NSWindow {
+    
+    /* Fetch first responder status
+     * This function is called in awakeFromNib() to ensure that we receive key
+     * key events. In theory, this call should not be needed, but I had issues
+     * in the past with not responding windows.
+     */
+    func respondToEvents() {
+        
+        track()
+        DispatchQueue.main.async {
+            self.makeFirstResponder(self)
+        }
+    }
+    
+    override func awakeFromNib() {
+        
+        track()
+        // respondToEvents()
+    }
+    
+    // Called when the user presses ESC or Cmd+.
+    override func cancelOperation(_ sender: Any?) {
+        
+        let controller = delegate as! DialogController
+        controller.cancelAction(sender)
+    }
+}
+
+class DialogController : NSWindowController
 {
     func showSheet(completionHandler handler:(() -> Void)? = nil) {
         
@@ -25,9 +54,11 @@ class UserDialogController : NSWindowController
         
         refresh()
     }
+        
+    func refresh() {
+        
+    }
     
-    func refresh() { }
-    func keyDown(with key: MacKey) { }
     func cleanup() {
         // Don't delete this function. Calling cleanup in the sheet's completion
         // handler makes sure that ARC doesn't delete the reference too early.
@@ -40,7 +71,7 @@ class UserDialogController : NSWindowController
             myWindow?.endSheet(win, returnCode: .cancel)
         }
     }
- 
+    
     // Default action method for OK
     @IBAction func okAction(_ sender: Any!) {
         

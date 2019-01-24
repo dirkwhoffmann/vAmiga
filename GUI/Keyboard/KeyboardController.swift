@@ -10,15 +10,13 @@
 import Foundation
 import Carbon.HIToolbox
 
-/* The region code of the emulated keyboard
- * The region code influences the visual appearance of the emulated keyboard by
- * defining the printed labels on the keycaps. Each key on the Amiga keyboard
- * is uniquely identifies by it's keycode, but keys with the same code can be
- * labeled differently in different countries.
+/* Layout of the emulated keyboard
+ * The keyboard layout defines the number of keys on the keyboard, the visual
+ * appearance of their key caps and their physical shape.
  */
-enum Language : Int, Codable {
+enum Layout : Int, Codable {
 
-    case generic // Used as a fallback if no matching language is found
+    case generic // Used as a fallback if no matching layout is found
     case us
     case german
     case italian

@@ -710,7 +710,7 @@ extension Keys {
     
     // Machine
     static let amigaModel     = "VAAmigaModelKey"
-    static let localization   = "VAKBLocalization"
+    static let layout         = "VAKeyboardLayoutKey"
     static let realTimeClock  = "VARealTimeClockKey"
     
     // Memory
@@ -730,7 +730,7 @@ extension Defaults {
     struct a500 {
         
         static let amigaModel     = A500
-        static let localization   = Language.us
+        static let layout         = Layout.us
         static let realTimeClock  = false
         
         static let chipRam        = 512
@@ -746,7 +746,7 @@ extension Defaults {
     struct a1000 {
         
         static let amigaModel     = A1000
-        static let localization   = Language.us
+        static let layout         = Layout.us
         static let realTimeClock  = false
         
         static let chipRam        = 256
@@ -762,7 +762,7 @@ extension Defaults {
     struct a2000 {
         
         static let amigaModel     = A2000
-        static let localization   = Language.us
+        static let layout         = Layout.us
         static let realTimeClock  = true
         
         static let chipRam        = 512
@@ -785,7 +785,7 @@ extension MyController {
         let dictionary : [String:Any] = [
             
             Keys.amigaModel: defaultModel.amigaModel.rawValue,
-            Keys.localization: defaultModel.localization.rawValue,
+            Keys.layout: defaultModel.layout.rawValue,
             Keys.realTimeClock: defaultModel.realTimeClock,
             
             Keys.chipRam: defaultModel.chipRam,
@@ -807,7 +807,7 @@ extension MyController {
         let defaults = UserDefaults.standard
         
         for key in [Keys.amigaModel,
-                    Keys.localization,
+                    Keys.layout,
                     Keys.realTimeClock,
                     
                     Keys.chipRam,
@@ -833,7 +833,7 @@ extension MyController {
         amiga.suspend()
         
         amiga.configureModel(defaults.integer(forKey: Keys.amigaModel))
-        amiga.configureLocalization(defaults.integer(forKey: Keys.localization))
+        amiga.configureLayout(defaults.integer(forKey: Keys.layout))
         amiga.configureRealTimeClock(defaults.bool(forKey: Keys.realTimeClock))
     
         amiga.configureChipMemory(defaults.integer(forKey: Keys.chipRam))
@@ -854,7 +854,7 @@ extension MyController {
         let config = amiga.config()
         
         defaults.set(config.model.rawValue, forKey: Keys.amigaModel)
-        defaults.set(config.localization, forKey: Keys.localization)
+        defaults.set(config.layout, forKey: Keys.layout)
         defaults.set(config.realTimeClock, forKey: Keys.realTimeClock)
 
         defaults.set(config.chipRamSize, forKey: Keys.chipRam)

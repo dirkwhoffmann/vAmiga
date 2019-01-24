@@ -9,52 +9,12 @@
 
 import Foundation
 
-class VirtualKeyboardWindow : NSWindow {
-    
-    func respondToEvents() {
-        
-        track()
-        DispatchQueue.main.async {
-            self.makeFirstResponder(self)
-        }
-    }
-    
-    override func awakeFromNib() {
-        
-        respondToEvents()
-    }
-    
-    override func keyDown(with event: NSEvent) {
-        
-        track()
-        myController?.metalScreen.keyDown(with: event)
-        let controller = delegate as! VirtualKeyboardController
-        controller.refresh()
-    }
-    
-    override func keyUp(with event: NSEvent) {
-        
-        track()
-        myController?.metalScreen.keyUp(with: event)
-        let controller = delegate as! VirtualKeyboardController
-        controller.refresh()
-    }
-    
-    override func flagsChanged(with event: NSEvent) {
-        
-        track()
-        myController?.metalScreen.flagsChanged(with: event)
-        let controller = delegate as! VirtualKeyboardController
-        controller.refresh()
-    }
+class VirtualKeyboardWindow : DialogWindow {
+ 
 }
 
-class VirtualKeyboardController : UserDialogController, NSWindowDelegate
+class VirtualKeyboardController : DialogController, NSWindowDelegate
 {
-    // Amiga model and language
-    var model : AmigaModel = A500
-    var language : Language = .us
-    
     // Array holding a reference to the view of each key
     var keyView = Array(repeating: nil as NSButton?, count: 128)
 
@@ -74,8 +34,8 @@ class VirtualKeyboardController : UserDialogController, NSWindowDelegate
 
         guard let config = myController?.amiga.config() else { return nil }
 
-        let language = Language(rawValue: config.localization) ?? .us
-        let ansi = language == .us
+        let layout = Layout(rawValue: config.layout) ?? .us
+        let ansi   = (layout == .us)
         
         var xibName = ""
         
@@ -85,11 +45,7 @@ class VirtualKeyboardController : UserDialogController, NSWindowDelegate
             xibName = ansi ? "A500ANSI" : "A500ISO"
         }
       
-        let controller = VirtualKeyboardController.init(windowNibName: xibName)
-        
-        controller.model = config.model
-        controller.language = language
-        return controller
+        return VirtualKeyboardController.init(windowNibName: xibName)
     }
     
     func showWindow() {
@@ -105,25 +61,18 @@ class VirtualKeyboardController : UserDialogController, NSWindowDelegate
         // Setup key references
         for tag in 0 ... 127 {
             keyView[tag] = window!.contentView!.viewWithTag(tag) as? NSButton
-            /*
-            if let buttonCell = keyView[tag]?.cell as? NSButtonCell {
-                buttonCell.highlightsBy = []
-            }
-            */
         }
 
+        // Compute key cap images
         updateImageCache()
     }
     
     func windowWillClose(_ notification: Notification) {
     
-        track()
-        // releaseSpecialKeys()
     }
     
     func windowDidBecomeMain(_ notification: Notification) {
         
-        track()
         refresh()
     }
     
@@ -145,11 +94,13 @@ class VirtualKeyboardController : UserDialogController, NSWindowDelegate
     
     func updateImageCache() {
         
+        guard let config = amigaProxy?.config() else { return }
+        guard let layout = Layout(rawValue: config.layout) else { return }
+        
         for keycode in 0 ... 127 {
             let key = AmigaKey.init(keyCode: keycode)
-            if let image = key.image(model: model, language: language) {
+            if let image = key.image(model: config.model, layout: layout) {
                 keyImage[keycode] = image
-                // track("\(key)")
                 pressedKeyImage[keycode] = image.copy() as? NSImage
                 pressedKeyImage[keycode]?.pressed()
             }

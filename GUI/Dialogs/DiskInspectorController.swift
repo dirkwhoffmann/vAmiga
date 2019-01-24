@@ -9,7 +9,7 @@
 
 import Foundation
 
-class DiskInspectorController : UserDialogController {
+class DiskInspectorController : DialogController {
     
     let diskImage = NSImage.init(named: "inspect_disk")
     let noDiskImage = NSImage.init(named: "nodisk")

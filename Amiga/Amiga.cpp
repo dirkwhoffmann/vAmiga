@@ -113,9 +113,9 @@ Amiga::configureModel(AmigaModel model)
 }
 
 bool
-Amiga::configureLocalization(long value)
+Amiga::configureLayout(long value)
 {
-    config.localization = value;
+    config.layout = value;
     return true;
 }
 

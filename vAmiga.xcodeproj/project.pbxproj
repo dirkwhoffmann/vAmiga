@@ -169,7 +169,7 @@
 		508FE05721EA22CC0043D0E9 /* DiskInspectorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04421EA22CC0043D0E9 /* DiskInspectorController.swift */; };
 		508FE05821EA22CC0043D0E9 /* SnapshotController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04521EA22CC0043D0E9 /* SnapshotController.swift */; };
 		508FE05921EA22CC0043D0E9 /* VirtualKeyboardController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04621EA22CC0043D0E9 /* VirtualKeyboardController.swift */; };
-		508FE05A21EA22CC0043D0E9 /* UserDialogController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04721EA22CC0043D0E9 /* UserDialogController.swift */; };
+		508FE05A21EA22CC0043D0E9 /* DialogController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04721EA22CC0043D0E9 /* DialogController.swift */; };
 		508FE05C21EA22CC0043D0E9 /* DiskMountController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04A21EA22CC0043D0E9 /* DiskMountController.swift */; };
 		508FE05F21EA22CC0043D0E9 /* ExportDiskController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04D21EA22CC0043D0E9 /* ExportDiskController.swift */; };
 		508FE06521EA318D0043D0E9 /* AmigaFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FE06321EA318D0043D0E9 /* AmigaFile.cpp */; };
@@ -498,7 +498,7 @@
 		508FE04421EA22CC0043D0E9 /* DiskInspectorController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiskInspectorController.swift; sourceTree = "<group>"; };
 		508FE04521EA22CC0043D0E9 /* SnapshotController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnapshotController.swift; sourceTree = "<group>"; };
 		508FE04621EA22CC0043D0E9 /* VirtualKeyboardController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VirtualKeyboardController.swift; sourceTree = "<group>"; };
-		508FE04721EA22CC0043D0E9 /* UserDialogController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDialogController.swift; sourceTree = "<group>"; };
+		508FE04721EA22CC0043D0E9 /* DialogController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DialogController.swift; sourceTree = "<group>"; };
 		508FE04A21EA22CC0043D0E9 /* DiskMountController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiskMountController.swift; sourceTree = "<group>"; };
 		508FE04D21EA22CC0043D0E9 /* ExportDiskController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExportDiskController.swift; sourceTree = "<group>"; };
 		508FE06321EA318D0043D0E9 /* AmigaFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaFile.cpp; sourceTree = "<group>"; };
@@ -1022,7 +1022,7 @@
 		508FE03921EA22CC0043D0E9 /* Dialogs */ = {
 			isa = PBXGroup;
 			children = (
-				508FE04721EA22CC0043D0E9 /* UserDialogController.swift */,
+				508FE04721EA22CC0043D0E9 /* DialogController.swift */,
 				508FE04A21EA22CC0043D0E9 /* DiskMountController.swift */,
 				508FE04421EA22CC0043D0E9 /* DiskInspectorController.swift */,
 				508FE04521EA22CC0043D0E9 /* SnapshotController.swift */,
@@ -1370,7 +1370,7 @@
 				508FDF8021EA1FBC0043D0E9 /* TAPFile.cpp in Sources */,
 				508FDF7B21EA1FBC0043D0E9 /* Snapshot.cpp in Sources */,
 				508FDF8621EA1FBC0043D0E9 /* basic.cpp in Sources */,
-				508FE05A21EA22CC0043D0E9 /* UserDialogController.swift in Sources */,
+				508FE05A21EA22CC0043D0E9 /* DialogController.swift in Sources */,
 				508FDF5D21EA1FBC0043D0E9 /* Ocean.cpp in Sources */,
 				508FDF9E21EA1FBC0043D0E9 /* wave.cc in Sources */,
 				508FDFDA21EA20510043D0E9 /* ImageUtilities.swift in Sources */,

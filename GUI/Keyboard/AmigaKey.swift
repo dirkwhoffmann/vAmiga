@@ -140,7 +140,7 @@ struct AmigaKeycode {
 }
 
 // Country specific keycaps
-let keycaps : [Int : [Language: String]] = [
+let keycaps : [Int : [Layout: String]] = [
     
     AmigaKeycode.ansi.grave:        [.generic: "~ `"],
     AmigaKeycode.ansi.digit1:       [.generic: "! 1"],
@@ -258,7 +258,7 @@ struct AmigaKey : Codable {
     var keyCode: Int = 0
     
     // The keycap label (country specific)
-    var label: [Language: String] = [:]
+    var label: [Layout: String] = [:]
     
     // Initializers
     init(keyCode: Int) {
@@ -401,18 +401,18 @@ extension AmigaKey {
     ]
     
     // Returns an unlabeled background image of the right shape
-    private func backgroundImage(model: AmigaModel, language: Language) -> NSImage? {
+    private func backgroundImage(model: AmigaModel, layout: Layout) -> NSImage? {
         
         var (shape, tint) = ("100x100", "white")
         
         // Determine physical keyboard layout (ignoring key labels)
         let a1000     = model == A1000
-        let a1000ansi = a1000 && language == .us
-        let a1000iso  = a1000 && language != .us
+        let a1000ansi = a1000 && layout == .us
+        let a1000iso  = a1000 && layout != .us
 
         let a500     = model != A1000
-        let a500ansi = a500 && language == .us
-        let a500iso  = a500 && language != .us
+        let a500ansi = a500 && layout == .us
+        let a500iso  = a500 && layout != .us
         
         // Crawl through the key descriptions
         if let info = AmigaKey.specialKeys[keyCode] {
@@ -443,7 +443,7 @@ extension AmigaKey {
         return image
     }
     
-    func image(model: AmigaModel, language: Language) -> NSImage? {
+    func image(model: AmigaModel, layout: Layout) -> NSImage? {
         
         // Key label font sizes
         let large = CGFloat(15)
@@ -451,12 +451,12 @@ extension AmigaKey {
         let tiny  = CGFloat(9) 
 
         // Get a background image
-        guard let image = backgroundImage(model: model, language: language) else {
+        guard let image = backgroundImage(model: model, layout: layout) else {
             return nil
         }
         
         // Get the keycap label
-        let label = self.label[language] ?? self.label[.generic]!
+        let label = self.label[layout] ?? self.label[.generic]!
         let parts = label.split(separator: " ")
     
         if parts.count == 1 {

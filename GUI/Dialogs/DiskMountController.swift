@@ -9,7 +9,7 @@
 
 import Foundation
 
-class DiskMountController : UserDialogController {
+class DiskMountController : DialogController {
     
     var disk: ADFFileProxy!
     

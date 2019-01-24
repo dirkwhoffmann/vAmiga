@@ -23,7 +23,7 @@ extension NSDraggingInfo
 
 class RomDropView : NSImageView
 {
-    @IBOutlet var dialogController: UserDialogController!
+    @IBOutlet var dialogController: DialogController!
 
     func acceptDragSource(url: URL) -> Bool {
         return false

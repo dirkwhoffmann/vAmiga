@@ -9,7 +9,7 @@
 
 import Foundation
 
-class PreferencesController : UserDialogController {
+class PreferencesController : DialogController {
 
     @IBOutlet weak var prefTabView: NSTabView!
     
@@ -45,7 +45,7 @@ class PreferencesController : UserDialogController {
     
     // Machine
     @IBOutlet weak var hwAmigaModelPopup: NSPopUpButton!
-    @IBOutlet weak var hwLocalizationPopup: NSPopUpButton!
+    @IBOutlet weak var hwLayoutPopup: NSPopUpButton!
     @IBOutlet weak var hwRealTimeClock: NSButton!
 
     // Memory
@@ -208,7 +208,7 @@ class PreferencesController : UserDialogController {
         }
     }
     
-    override func keyDown(with key: MacKey) {
+    func keyDown(with key: MacKey) {
         
         if let id = prefTabView.selectedTabViewItem?.identifier as? String {
             
