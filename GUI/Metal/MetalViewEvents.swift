@@ -16,15 +16,8 @@ public extension MetalView {
     // Keyboard events
     //
     
-    /*
-    override public func performKeyEquivalent(with event: NSEvent) -> Bool {
-        return true
-    }
-    */
-    
     override public func keyDown(with event: NSEvent)
     {
-        // track()
         controller.keyboardcontroller.keyDown(with: event)
     }
     
@@ -35,12 +28,9 @@ public extension MetalView {
     
     override public func flagsChanged(with event: NSEvent) {
         
-        track()
-        
-        // Save modifier flags. They are needed in TouchBar code
-        controller.modifierFlags = event.modifierFlags
         controller.keyboardcontroller.flagsChanged(with: event)
     }
+    
     
     //
     // Mouse events

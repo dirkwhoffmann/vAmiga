@@ -52,6 +52,7 @@ class KeyboardController: NSObject {
      suspicous key. Otherwise, we risk to block the C64's keyboard matrix
      for good.
      */
+    /*
     func checkConsistency(withEvent event: NSEvent) {
         
         let flags   = event.modifierFlags
@@ -76,12 +77,8 @@ class KeyboardController: NSObject {
             keyUp(with: MacKey.rightOption)
             track("*** ALT inconsistency *** \(leftOption) \(rightOption)")
         }
-        if command != flags.contains(NSEvent.ModifierFlags.command) {
-            keyUp(with: MacKey.command)
-            keyUp(with: MacKey.rightCommand)
-            track("*** COMMAND inconsistency *** \(leftCommand) \(rightCommand)")
-        }
     }
+    */
     
     func keyDown(with event: NSEvent) {
         
@@ -97,18 +94,16 @@ class KeyboardController: NSObject {
             myController?.window!.toggleFullScreen(nil)
         }
         
-        // Ignore keys that are pressed in combination with the command key
+        // Ignore keys that are pressed in combination with the Command key
         if event.modifierFlags.contains(NSEvent.ModifierFlags.command) {
             return
         }
         
-        checkConsistency(withEvent: event)
         keyDown(with: MacKey.init(event: event))
     }
     
     func keyUp(with event: NSEvent)
     {
-        checkConsistency(withEvent: event)
         keyUp(with: MacKey.init(event: event))
     }
     
@@ -116,9 +111,6 @@ class KeyboardController: NSObject {
         
         let mod = event.modifierFlags
         let keyCode = event.keyCode
-
-        track("\(mod)")
-        track("\(keyCode)")
 
         switch Int(event.keyCode) {
             
@@ -146,28 +138,22 @@ class KeyboardController: NSObject {
             rightOption = event.modifierFlags.contains(.option)
             rightOption ? keyDown(with: MacKey.rightOption) : keyUp(with: MacKey.rightOption)
             
-        case kVK_Command:
+        case kVK_Command where mapCommandKeys:
             leftCommand = event.modifierFlags.contains(.command)
             leftCommand ? keyDown(with: MacKey.command) : keyUp(with: MacKey.command)
             
-        case kVK_RightCommand:
+        case kVK_RightCommand where mapCommandKeys:
             rightCommand = event.modifierFlags.contains(.command)
             rightCommand ? keyDown(with: MacKey.rightCommand) : keyUp(with: MacKey.rightCommand)
             
         default:
             break
         }
-        
-        checkConsistency(withEvent: event)
     }
     
     func keyDown(with macKey: MacKey) {
         
-        let p = macKey.stringValue
-        track("**** \(p)")
-        
         guard let controller = myController else { return }
-        // track("\(macKey)")
         
         // Check if this key is used for joystick emulation
         if controller.gamePadManager.keyDown(with: macKey) && disconnectJoyKeys {

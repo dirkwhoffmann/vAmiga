@@ -151,20 +151,7 @@ func cgEventCallback(proxy: CGEventTapProxy,
                      event: CGEvent,
                      refcon: UnsafeMutableRawPointer?) -> Unmanaged<CGEvent>? {
     
-    let keyCode = event.getIntegerValueField(.keyboardEventKeycode)
-    
-    if type == .keyDown {
-        
-        track("CGEvent keyDown \(keyCode)")
-        event.flags.remove(.maskCommand)
-    }
-    
-    if type == .keyUp {
-        
-        track("CGEvent keyUp \(keyCode)")
-        event.flags.remove(.maskCommand)
-    }
-    
+    event.flags.remove(.maskCommand)
     return Unmanaged.passRetained(event)
 }
 

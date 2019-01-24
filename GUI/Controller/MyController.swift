@@ -66,13 +66,7 @@ class MyController : NSWindowController, MessageReceiver {
     
     /// Used inside the timer function to fine tune timed events
     var animationCounter = 0
-    
-    /// Current keyboard modifier flags
-    /// These flags tell us if one of the special keysare currently pressed.
-    /// The flags are utilized, e.g., to alter behaviour when a key on the
-    /// TouchBar is pressed.
-    var modifierFlags: NSEvent.ModifierFlags = .init(rawValue: 0)
-    
+        
     /// Current mouse coordinate
     var mouseXY = NSPoint(x: 0, y: 0)
     

@@ -12,4 +12,34 @@
 
 #include "HardwareComponent.h"
 
+//
+// THIS CLASS IS A STUB TO MAKE THE VISUAL PROTOTYPE WORK
+//
+
+class AmigaDisk : public HardwareComponent {
+    
+public:
+    
+    bool writeProtected = false;
+    bool unsaved = false;
+    
+    //
+    // Constructing and destructing
+    //
+    
+public:
+    
+    AmigaDisk();
+    
+  
+
+public:
+    
+    bool isWriteProtected() { return writeProtected; }
+    void setWriteProtection(bool value) { writeProtected = value; }
+    
+    bool isUnsaved() { return unsaved; }
+    void setUnsaved(bool value) { unsaved = value; }
+};
+
 #endif
