@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "AmigaDrive.h"
+#include "Amiga.h"
 
 AmigaDrive::AmigaDrive()
 {
@@ -45,13 +45,29 @@ AmigaDrive::_dump()
 }
 
 void
-AmigaDrive::insertDisk(AmigaDisk *disk)
+AmigaDrive::ejectDisk()
 {
-    
+    if (disk) {
+        delete disk;
+        disk = NULL;
+    }
+}
+
+void
+AmigaDrive::insertDisk(AmigaDisk *newDisk)
+{
+    if (newDisk) {
+        ejectDisk();
+        disk = newDisk;
+    }
 }
 
 void
 AmigaDrive::insertDisk(ADFFile *file)
 {
+    // Convert ADF file into a disk
+    // AmigaDisk = new AmigaDisk::makeWithFile(ADFFile *file)
+    AmigaDisk *newDisk = new AmigaDisk();
     
+    insertDisk(newDisk);
 }
