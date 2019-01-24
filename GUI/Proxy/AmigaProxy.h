@@ -232,6 +232,13 @@ struct AmigaFileWrapper;
 
 - (void) dump;
 
+- (BOOL) isConnected;
+- (void) setConnected:(BOOL)value;
+
+- (BOOL) hasDisk;
+- (void) ejectDisk;
+- (void) insertDisk:(ADFFileProxy *)file;
+
 @end
 
 

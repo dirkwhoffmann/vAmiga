@@ -212,6 +212,27 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->drive->dump();
 }
+- (BOOL) isConnected
+{
+    return wrapper->drive->isConnected();
+}
+- (void) setConnected:(BOOL)value
+{
+    wrapper->drive->setConnected(value);
+}
+- (BOOL) hasDisk
+{
+    return wrapper->drive->hasDisk();
+}
+- (void) ejectDisk
+{
+    wrapper->drive->ejectDisk();
+}
+- (void) insertDisk:(ADFFileProxy *)fileProxy
+{
+    AmigaFileWrapper *fileWrapper = [fileProxy wrapper];
+    wrapper->drive->insertDisk((ADFFile *)(fileWrapper->file));
+}
 
 @end
 
@@ -337,6 +358,8 @@ struct ADFFileWrapper { ADFFile *adf; };
 @synthesize denise;
 @synthesize paula;
 @synthesize keyboard;
+@synthesize diskController;
+@synthesize drive;
 
 - (instancetype) init
 {

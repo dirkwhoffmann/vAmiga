@@ -109,9 +109,6 @@ class KeyboardController: NSObject {
     
     func flagsChanged(with event: NSEvent) {
         
-        let mod = event.modifierFlags
-        let keyCode = event.keyCode
-
         switch Int(event.keyCode) {
             
         case kVK_Shift:
