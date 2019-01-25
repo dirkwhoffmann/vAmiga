@@ -15,9 +15,19 @@ public extension AmigaProxy {
     @discardableResult
     func configureDrive(_ driveNr: Int, connected: Bool) -> Bool {
         
+        let target = myController?.dragAndDropDrive
+        
         switch driveNr {
-        case 0: myAppDelegate.df0Menu.isHidden = !connected
-        case 1: myAppDelegate.df1Menu.isHidden = !connected
+        case 0:
+            myAppDelegate.df0Menu.isHidden = !connected
+            if !connected && target == amigaProxy?.df0 {
+                myController?.dragAndDropDrive = nil
+            }
+        case 1:
+            myAppDelegate.df1Menu.isHidden = !connected
+            if !connected && target == amigaProxy?.df1 {
+                myController?.dragAndDropDrive = nil
+            }
         default: fatalError()
         }
         

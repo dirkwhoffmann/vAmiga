@@ -489,13 +489,6 @@
                 <menuItem title="Df0" id="XQm-ka-Db5">
                     <menu key="submenu" title="Df0" id="Mqn-f5-oGB">
                         <items>
-                            <menuItem title="Connect" id="NoG-SA-scF">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="drivePowerAction:" target="-1" id="PWs-c6-Gd6"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem isSeparatorItem="YES" id="Qxs-ZT-CBk"/>
                             <menuItem title="New" id="e0B-5D-eZ0">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
@@ -635,13 +628,6 @@
                 <menuItem title="Df1" id="fYA-pX-q72" userLabel="Df1">
                     <menu key="submenu" title="Df1" id="epS-yb-DD5">
                         <items>
-                            <menuItem title="Connect" tag="1" id="t2f-8C-ghX">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="drivePowerAction:" target="-1" id="WPw-TC-fza"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem isSeparatorItem="YES" id="NtJ-Us-FAT"/>
                             <menuItem title="New" tag="1" id="cyd-up-GGS">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>

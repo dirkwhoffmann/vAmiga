@@ -170,8 +170,15 @@ bool
 Amiga::configureDrive(unsigned driveNr, bool connected)
 {
     switch (driveNr) {
-        case 0: config.df0.connected = connected; return true;
-        case 1: config.df1.connected = connected; return true;
+        case 0:
+            config.df0.connected = connected;
+            df0.setConnected(connected);
+            return true;
+            
+        case 1:
+            config.df1.connected = connected;
+            df1.setConnected(connected);
+            return true;
     }
     
     warn("Invalid drive number (%d). Ignoring.\n", driveNr);

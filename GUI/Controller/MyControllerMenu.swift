@@ -63,61 +63,44 @@ extension MyController : NSMenuItemValidation {
             return true
         }
         
-        // Edit menu
-        if item.action == #selector(MyController.runOrHaltAction(_:)) {
+        switch (item.action) {
+            
+            //
+            // Edit menu
+            //
+            
+        case #selector(MyController.runOrHaltAction(_:)):
             // item.title = amiga.isRunning() ? "Pause" : "Continue"
             return true
-        }
-        if item.action == #selector(MyController.powerOnOrOffAction(_:)) {
+            
+        case #selector(MyController.powerOnOrOffAction(_:)):
             // item.title = amiga.isPoweredOn() ? "Power Off" : "Power On"
             return true
-        }
-
-        
-        // View menu
-        if item.action == #selector(MyController.toggleStatusBarAction(_:)) {
+            
+            //
+            // View menu
+            //
+            
+        case #selector(MyController.toggleStatusBarAction(_:)):
             item.title = statusBar ? "Hide Status Bar" : "Show Status Bar"
             return true
-        }
-        
-        if item.action == #selector(MyController.hideMouseAction(_:)) {
+
+        case #selector(MyController.hideMouseAction(_:)):
             item.title = hideMouse ? "Show Mouse Cursor" : "Hide Mouse Cursor"
             return true
-        }
         
-        // Keyboard menu
-        if item.action == #selector(MyController.mapCmdKeysAction(_:)) {
+            //
+            // Keyboard menu
+            //
+            
+        case #selector(MyController.mapCmdKeysAction(_:)):
             item.state = (eventTap != nil) ? .on : .off
             return true
-        }
-        
-        // Drive menu
-        switch (item.action) {
-
-            /*
-        case #selector(MyController.df0DummyAction(_:)):
-            item.isHidden = true
-             */
-        case #selector(MyController.drivePowerAction(_:)):
-            item.title = dfn.isConnected() ? "Disconnect" : "Connect"
-            return true
-
-        case #selector(MyController.newDiskAction(_:)),
-             #selector(MyController.insertDiskAction(_:)):
             
-            item.isHidden = !dfn.isConnected()
-            return true
+            //
+            // Drive menu
+            //
             
-        case #selector(MyController.insertRecentDiskDummyAction0(_:)):
-            
-            item.isHidden = !amiga.df0.isConnected()
-            return true
-
-        case #selector(MyController.insertRecentDiskDummyAction1(_:)):
-            
-            item.isHidden = !amiga.df1.isConnected()
-            return true
-
         case #selector(MyController.insertRecentDiskAction(_:)):
             
             return validateURLlist(mydocument.recentlyInsertedDiskURLs, image: "disk_small")
@@ -125,82 +108,49 @@ extension MyController : NSMenuItemValidation {
         case  #selector(MyController.ejectDiskAction(_:)),
               #selector(MyController.exportDiskAction(_:)):
             
-            item.isHidden = !dfn.isConnected()
             return dfn.hasDisk()
 
         case #selector(MyController.exportRecentDiskDummyAction0(_:)):
-            
-            item.isHidden = !amiga.df0.isConnected()
             return amiga.df0.hasDisk()
 
         case #selector(MyController.exportRecentDiskDummyAction1(_:)):
-            
-            item.isHidden = !amiga.df1.isConnected()
             return amiga.df1.hasDisk()
             
         case #selector(MyController.exportRecentDiskAction(_:)):
-            
-            item.isHidden = !dfn.isConnected()
             switch item.tag {
             case 0: return validateURLlist(mydocument.recentlyExportedDisk0URLs, image: "disk_small")
             case 1: return validateURLlist(mydocument.recentlyExportedDisk1URLs, image: "disk_small")
-                
             default: fatalError()
             }
             
         case #selector(MyController.writeProtectAction(_:)):
-                
-            item.isHidden = !dfn.isConnected()
             item.state = dfn.hasWriteProtectedDisk() ? .on : .off
             return dfn.hasDisk()
         
         case #selector(MyController.dragAndDropTargetAction(_:)):
-            
-            item.isHidden = !dfn.isConnected()
             item.state = dfn === dragAndDropDrive ? .on : .off
             return true
-
-        default: break
+            
+            //
+            // Debug menu
+            //
+            
+        case #selector(MyController.pauseAction(_:)):
+            return amiga.isRunning()
+            
+        case #selector(MyController.continueAction(_:)),
+             #selector(MyController.stepIntoAction(_:)),
+             #selector(MyController.stepOverAction(_:)),
+             #selector(MyController.stopAndGoAction(_:)):
+            return amiga.isPaused();
+            
+        case #selector(MyController.traceAction(_:)),
+             #selector(MyController.dumpStateAction(_:)):
+            return !amiga.releaseBuild()
+            
+        default:
+            return true
         }
-
-        // Debug menu
-        if item.action == #selector(MyController.pauseAction(_:)) {
-            return c64.isRunning();
-        }
-        if item.action == #selector(MyController.continueAction(_:)) ||
-            item.action == #selector(MyController.stepIntoAction(_:)) ||
-            item.action == #selector(MyController.stepOverAction(_:)) ||
-            item.action == #selector(MyController.stopAndGoAction(_:)) {
-            return c64.isHalted();
-        }
-        if item.action == #selector(MyController.markIRQLinesAction(_:)) {
-            item.state = c64.vic.showIrqLines() ? .on : .off
-        }
-        if item.action == #selector(MyController.markDMALinesAction(_:)) {
-            item.state = c64.vic.showDmaLines() ? .on : .off
-        }
-        if item.action == #selector(MyController.hideSpritesAction(_:)) {
-            item.state = c64.vic.hideSprites() ? .on : .off
-        }
-
-        if item.action == #selector(MyController.traceAction(_:)) {
-            return c64.developmentMode();
-        }
-        if item.action == #selector(MyController.traceIecAction(_:)) {
-            item.state = c64.iec.tracing() ? .on : .off
-        }
-        if item.action == #selector(MyController.traceVC1541CpuAction(_:)) {
-            item.state = c64.drive1.cpu.tracing() ? .on : .off
-        }
-        if item.action == #selector(MyController.traceViaAction(_:)) {
-            item.state = c64.drive1.via1.tracing() ? .on : .off
-        }
-        
-        if item.action == #selector(MyController.dumpStateAction(_:)) {
-            return c64.developmentMode();
-        }
-
-        return true
     }
 
     //
@@ -426,13 +376,6 @@ extension MyController : NSMenuItemValidation {
     //
     // Action methods (Disk menu)
     //
-
-    @IBAction func df0DummyAction(_ sender: NSMenu!) { }
-
-    @IBAction func drivePowerAction(_ sender: NSMenuItem!) {
-        
-        drive(sender).toggleConnected()
-    }
     
     @IBAction func newDiskAction(_ sender: NSMenuItem!) {
         
