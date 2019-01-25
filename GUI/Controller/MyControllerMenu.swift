@@ -103,7 +103,7 @@ extension MyController : NSMenuItemValidation {
             
         case #selector(MyController.insertRecentDiskAction(_:)):
             
-            return validateURLlist(mydocument.recentlyInsertedDiskURLs, image: "disk_small")
+            return validateURLlist(mydocument.recentlyInsertedDiskURLs, image: "diskSmallTemplate")
         
         case  #selector(MyController.ejectDiskAction(_:)),
               #selector(MyController.exportDiskAction(_:)):
@@ -118,8 +118,8 @@ extension MyController : NSMenuItemValidation {
             
         case #selector(MyController.exportRecentDiskAction(_:)):
             switch item.tag {
-            case 0: return validateURLlist(mydocument.recentlyExportedDisk0URLs, image: "disk_small")
-            case 1: return validateURLlist(mydocument.recentlyExportedDisk1URLs, image: "disk_small")
+            case 0: return validateURLlist(mydocument.recentlyExportedDisk0URLs, image: "diskSmallTemplate")
+            case 1: return validateURLlist(mydocument.recentlyExportedDisk1URLs, image: "diskSmallTemplate")
             default: fatalError()
             }
             
@@ -414,18 +414,19 @@ extension MyController : NSMenuItemValidation {
         })
     }
     
-    @IBAction func insertRecentDiskDummyAction0(_ sender: NSMenuItem!) {}
-    @IBAction func insertRecentDiskDummyAction1(_ sender: NSMenuItem!) {}
     @IBAction func insertRecentDiskAction(_ sender: NSMenuItem!) {
         
-        track()
+        let drive = sender.tag / 10
+        let slot  = sender.tag % 10
+        
+        track("\(drive) \(slot)")
         
         // Get URL and insert
-        if let url = mydocument.getRecentlyInsertedDiskURL(Int(sender.title)!) {
+        if let url = mydocument.getRecentlyInsertedDiskURL(slot) {
             do {
                 let adf = try self.mydocument.createADF(from: url)
-                if (mydocument.proceedWithUnexportedDisk(drive: sender.tag)) {
-                    self.drive(sender).insertDisk(adf)
+                if (mydocument.proceedWithUnexportedDisk(drive: drive)) {
+                    self.drive(drive).insertDisk(adf)
                 }
             } catch {
                 NSApp.presentError(error)

@@ -73,7 +73,7 @@ extension MyDocument {
             return true
         }
         
-        let names = drives.map({ "Df" + String($0.nr()) }).joined(separator: ", ")
+        let names = drives.map({ "df" + String($0.nr()) }).joined(separator: ", ")
         let text = "Drive \(names) contains an unexported disk."
 
         return showDiskIsUnexportedAlert(messageText: text) == .alertFirstButtonReturn
