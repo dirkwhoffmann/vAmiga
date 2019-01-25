@@ -366,7 +366,12 @@ class MyDocument : NSDocument {
         // case _ as SnapshotProxy: c64.flash(attachment); return true
        
         case _ as ADFFileProxy:
-            runDiskMountDialog()
+            
+            if let drive = myController?.dragAndDropDrive {
+                drive.insertDisk(amigaAttachment as? ADFFileProxy)
+            } else {
+                runDiskMountDialog()
+            }
             
         default:
             break
