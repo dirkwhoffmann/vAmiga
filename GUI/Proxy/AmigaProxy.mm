@@ -521,7 +521,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->amiga->configureRealTimeClock(value);
 }
-- (BOOL) configureDrive:(NSInteger)driveNr connected:(BOOL)value
+- (BOOL) _configureDrive:(NSInteger)driveNr connected:(BOOL)value
 {
     return wrapper->amiga->configureDrive((unsigned)driveNr, value);
 }

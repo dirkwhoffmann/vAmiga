@@ -86,6 +86,7 @@ extension PreferencesController {
     @IBAction func hwDf1ConnectAction(_ sender: NSButton!) {
         
         amigaProxy?.configureDrive(1, connected: sender.state == .on)
+        myAppDelegate.df1Menu.isHidden = sender.state == .off
         refresh()
     }
     

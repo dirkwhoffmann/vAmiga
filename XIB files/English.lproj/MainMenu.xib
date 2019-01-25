@@ -11,7 +11,12 @@
                 <outlet property="delegate" destination="9vR-C0-Vqf" id="r0s-NL-ZMs"/>
             </connections>
         </customObject>
-        <customObject id="9vR-C0-Vqf" customClass="MyAppDelegate" customModule="vAmiga" customModuleProvider="target"/>
+        <customObject id="9vR-C0-Vqf" customClass="MyAppDelegate" customModule="vAmiga" customModuleProvider="target">
+            <connections>
+                <outlet property="df0Menu" destination="XQm-ka-Db5" id="ZQg-YN-3io"/>
+                <outlet property="df1Menu" destination="fYA-pX-q72" id="GdQ-P8-yMU"/>
+            </connections>
+        </customObject>
         <menu title="MainMenu" systemMenu="main" id="29" userLabel="MainMenu">
             <items>
                 <menuItem title="vAmiga" id="56">

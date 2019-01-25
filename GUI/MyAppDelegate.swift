@@ -163,6 +163,9 @@ func cgEventCallback(proxy: CGEventTapProxy,
 @NSApplicationMain
 @objc public class MyAppDelegate: NSObject, NSApplicationDelegate {
     
+    @IBOutlet weak var df0Menu: NSMenuItem!
+    @IBOutlet weak var df1Menu: NSMenuItem!
+    
     /// Virtual C64 keyboard (opened as a separate window)
     var virtualKeyboard: VirtualKeyboardController? = nil
     

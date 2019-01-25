@@ -12,6 +12,19 @@ import Foundation
 
 public extension AmigaProxy {
     
+    @discardableResult
+    func configureDrive(_ driveNr: Int, connected: Bool) -> Bool {
+        
+        switch driveNr {
+        case 0: myAppDelegate.df0Menu.isHidden = !connected
+        case 1: myAppDelegate.df1Menu.isHidden = !connected
+        default: fatalError()
+        }
+        
+        return _configureDrive(driveNr, connected: connected)
+    }
+
+    
     func image(data: UnsafeMutablePointer<UInt8>?, size: NSSize) -> NSImage {
         
         var bitmap = data

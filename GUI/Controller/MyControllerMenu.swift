@@ -93,7 +93,11 @@ extension MyController : NSMenuItemValidation {
         
         // Drive menu
         switch (item.action) {
-            
+
+            /*
+        case #selector(MyController.df0DummyAction(_:)):
+            item.isHidden = true
+             */
         case #selector(MyController.drivePowerAction(_:)):
             item.title = dfn.isConnected() ? "Disconnect" : "Connect"
             return true
@@ -422,7 +426,9 @@ extension MyController : NSMenuItemValidation {
     //
     // Action methods (Disk menu)
     //
-    
+
+    @IBAction func df0DummyAction(_ sender: NSMenu!) { }
+
     @IBAction func drivePowerAction(_ sender: NSMenuItem!) {
         
         drive(sender).toggleConnected()
