@@ -105,14 +105,14 @@ extension NSImage {
         return img
     }
     
-    func resizeImage(width: CGFloat, height: CGFloat) -> NSImage {
+    func resize(width: CGFloat, height: CGFloat) -> NSImage {
         
         let cutout = NSMakeRect(0, 0, width, height)
         return resizeImage(width: width, height: height,
                            cutout: cutout)
     }
 
-    func resizeImageSharp(width: CGFloat, height: CGFloat) -> NSImage {
+    func resizeSharp(width: CGFloat, height: CGFloat) -> NSImage {
         
         let cutout = NSMakeRect(0, 0, width, height)
         return resizeImage(width: width, height: height,

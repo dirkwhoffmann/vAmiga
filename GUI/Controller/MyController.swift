@@ -76,10 +76,9 @@ class MyController : NSWindowController, MessageReceiver {
     /// Indicates if a status bar is shown
     var statusBar = true
 
-    /// Keeps track of the connected disk drives
-    var df0 = true
-    var df1 = false
-
+    /// Small disk icon to be shown in NSMenuItems
+    var smallDisk = NSImage.init(named: "diskTemplate")!.resize(width: 16.0, height: 16.0)
+    
     // Drive that receives drag and drop inputs
     var dragAndDropDrive : AmigaDriveProxy?
     

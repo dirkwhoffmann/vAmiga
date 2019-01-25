@@ -47,14 +47,14 @@ extension MyController : NSMenuItemValidation {
             }
         }
         
-        func validateURLlist(_ list : [URL], image: String) -> Bool {
+        func validateURLlist(_ list : [URL], image: NSImage) -> Bool {
             
             if let pos = Int(item.title) {
                 
                 if let url = mydocument.getRecentlyUsedURL(pos, from: list) {
                     item.title = url.lastPathComponent
                     item.isHidden = false
-                    item.image = NSImage.init(named: image)
+                    item.image = image
                 } else {
                     item.isHidden = true
                     item.image = nil
@@ -103,7 +103,7 @@ extension MyController : NSMenuItemValidation {
             
         case #selector(MyController.insertRecentDiskAction(_:)):
             
-            return validateURLlist(mydocument.recentlyInsertedDiskURLs, image: "diskSmallTemplate")
+            return validateURLlist(mydocument.recentlyInsertedDiskURLs, image: smallDisk)
         
         case  #selector(MyController.ejectDiskAction(_:)),
               #selector(MyController.exportDiskAction(_:)):
@@ -118,8 +118,8 @@ extension MyController : NSMenuItemValidation {
             
         case #selector(MyController.exportRecentDiskAction(_:)):
             switch item.tag {
-            case 0: return validateURLlist(mydocument.recentlyExportedDisk0URLs, image: "diskSmallTemplate")
-            case 1: return validateURLlist(mydocument.recentlyExportedDisk1URLs, image: "diskSmallTemplate")
+            case 0: return validateURLlist(mydocument.recentlyExportedDisk0URLs, image: smallDisk)
+            case 1: return validateURLlist(mydocument.recentlyExportedDisk1URLs, image: smallDisk)
             default: fatalError()
             }
             
