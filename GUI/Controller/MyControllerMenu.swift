@@ -11,9 +11,9 @@ import Foundation
 
 extension MyController : NSMenuItemValidation {
     
-    func drive(_ item: NSMenuItem!) -> AmigaDriveProxy {
-        
-        switch (item.tag) {
+    func drive(_ nr: Int) -> AmigaDriveProxy {
+
+        switch (nr) {
             
         case 0: return amiga.df0
         case 1: return amiga.df1
@@ -21,22 +21,44 @@ extension MyController : NSMenuItemValidation {
         default: fatalError()
         }
     }
+    
+    func drive(_ item: NSButton!) -> AmigaDriveProxy {
+        
+        return drive(item.tag)
+    }
+    
+    func drive(_ item: NSMenuItem!) -> AmigaDriveProxy {
+        
+        return drive(item.tag)
+    }
  
     open func validateMenuItem(_ item: NSMenuItem) -> Bool {
 
         // track("validateMenuItem")
         
+        var dfn : AmigaDriveProxy {
+            
+            switch (item.tag) {
+                
+            case 0: return amiga.df0
+            case 1: return amiga.df1
+                
+            default: fatalError()
+            }
+        }
+        
         func validateURLlist(_ list : [URL], image: String) -> Bool {
             
-            let pos = (item.tag < 10) ? item.tag : item.tag - 10
-            
-            if let url = mydocument.getRecentlyUsedURL(pos, from: list) {
-                item.title = url.lastPathComponent
-                item.isHidden = false
-                item.image = NSImage.init(named: image)
-            } else {
-                item.isHidden = true
-                item.image = nil
+            if let pos = Int(item.title) {
+                
+                if let url = mydocument.getRecentlyUsedURL(pos, from: list) {
+                    item.title = url.lastPathComponent
+                    item.isHidden = false
+                    item.image = NSImage.init(named: image)
+                } else {
+                    item.isHidden = true
+                    item.image = nil
+                }
             }
             return true
         }
@@ -70,35 +92,71 @@ extension MyController : NSMenuItemValidation {
         }
         
         // Drive menu
-        if item.action == #selector(MyController.insertRecentDiskAction(_:)) {
+        switch (item.action) {
+            
+        case #selector(MyController.drivePowerAction(_:)):
+            item.title = dfn.isConnected() ? "Disconnect" : "Connect"
+            return true
+
+        case #selector(MyController.newDiskAction(_:)),
+             #selector(MyController.insertDiskAction(_:)):
+            
+            item.isHidden = !dfn.isConnected()
+            return true
+            
+        case #selector(MyController.insertRecentDiskDummyAction0(_:)):
+            
+            item.isHidden = !amiga.df0.isConnected()
+            return true
+
+        case #selector(MyController.insertRecentDiskDummyAction1(_:)):
+            
+            item.isHidden = !amiga.df1.isConnected()
+            return true
+
+        case #selector(MyController.insertRecentDiskAction(_:)):
+            
             return validateURLlist(mydocument.recentlyInsertedDiskURLs, image: "disk_small")
-        }
-        if item.action == #selector(MyController.ejectDiskAction(_:)) {
-            return drive(item).hasDisk()
-        }
-        if item.action == #selector(MyController.exportDiskAction(_:)) {
-            return drive(item).hasDisk()
-        }
-        if item.action == #selector(MyController.exportRecentDiskAction(_:)) {
-            if item.tag < 10 {
-                track("\(mydocument.recentlyExportedDisk0URLs)")
-                return validateURLlist(mydocument.recentlyExportedDisk0URLs, image: "disk_small")
-            } else {
-                track("\(mydocument.recentlyExportedDisk1URLs)")
-                return validateURLlist(mydocument.recentlyExportedDisk1URLs, image: "disk_small")
+        
+        case  #selector(MyController.ejectDiskAction(_:)),
+              #selector(MyController.exportDiskAction(_:)):
+            
+            item.isHidden = !dfn.isConnected()
+            return dfn.hasDisk()
+
+        case #selector(MyController.exportRecentDiskDummyAction0(_:)):
+            
+            item.isHidden = !amiga.df0.isConnected()
+            return amiga.df0.hasDisk()
+
+        case #selector(MyController.exportRecentDiskDummyAction1(_:)):
+            
+            item.isHidden = !amiga.df1.isConnected()
+            return amiga.df1.hasDisk()
+            
+        case #selector(MyController.exportRecentDiskAction(_:)):
+            
+            item.isHidden = !dfn.isConnected()
+            switch item.tag {
+            case 0: return validateURLlist(mydocument.recentlyExportedDisk0URLs, image: "disk_small")
+            case 1: return validateURLlist(mydocument.recentlyExportedDisk1URLs, image: "disk_small")
+                
+            default: fatalError()
             }
-        }
-        if item.action == #selector(MyController.writeProtectAction(_:)) {
-            item.state = drive(item).hasWriteProtectedDisk() ? .on : .off
-            return drive(item).hasDisk()
-        }
-        if item.action == #selector(MyController.drivePowerAction(_:)) {
-            item.title = drive(item).isConnected() ? "Disconnect" : "Connect"
+            
+        case #selector(MyController.writeProtectAction(_:)):
+                
+            item.isHidden = !dfn.isConnected()
+            item.state = dfn.hasWriteProtectedDisk() ? .on : .off
+            return dfn.hasDisk()
+        
+        case #selector(MyController.dragAndDropTargetAction(_:)):
+            
+            item.isHidden = !dfn.isConnected()
+            item.state = dfn === dragAndDropDrive ? .on : .off
             return true
-        }
-        if item.action == #selector(MyController.dragAndDropTargetAction(_:)) {
-            item.state = drive(item) === dragAndDropDrive ? .on : .off
-            return true
+
+        default: break
         }
 
         // Debug menu
@@ -142,7 +200,7 @@ extension MyController : NSMenuItemValidation {
     }
 
     //
-    // Action methods (VirtualC64 menu)
+    // Action methods (App menu)
     //
 
     @IBAction func importPrefsAction(_ sender: Any!) {
@@ -151,7 +209,7 @@ extension MyController : NSMenuItemValidation {
         
         let panel = NSOpenPanel()
         panel.prompt = "Import"
-        panel.allowedFileTypes = ["vc64conf"]
+        panel.allowedFileTypes = ["amigacnf"]
         
         panel.beginSheetModal(for: window!, completionHandler: { result in
             if result == .OK {
@@ -168,7 +226,7 @@ extension MyController : NSMenuItemValidation {
         
         let panel = NSSavePanel()
         panel.prompt = "Export"
-        panel.allowedFileTypes = ["vc64conf"]
+        panel.allowedFileTypes = ["amigacnf"]
         
         panel.beginSheetModal(for: window!, completionHandler: { result in
             if result == .OK {
@@ -367,23 +425,7 @@ extension MyController : NSMenuItemValidation {
     
     @IBAction func drivePowerAction(_ sender: NSMenuItem!) {
         
-        let drive = sender.tag == 0 ? amiga.df0! : amiga.df1!
-        drive.toggleConnected()
-    }
-    
-    @IBAction func drivePowerButtonAction(_ sender: Any!) {
-        
-        let sender = sender as! NSButton
-        assert(sender.tag == 1 || sender.tag == 2)
-        drivePowerAction(driveNr: sender.tag)
-    }
-    
-    func drivePowerAction(driveNr: Int) {
-        if (driveNr == 1) {
-            c64.drive1.togglePowerSwitch()
-        } else {
-            c64.drive2.togglePowerSwitch()
-        }
+        drive(sender).toggleConnected()
     }
     
     @IBAction func newDiskAction(_ sender: NSMenuItem!) {
@@ -423,6 +465,8 @@ extension MyController : NSMenuItemValidation {
         })
     }
     
+    @IBAction func insertRecentDiskDummyAction0(_ sender: NSMenuItem!) {}
+    @IBAction func insertRecentDiskDummyAction1(_ sender: NSMenuItem!) {}
     @IBAction func insertRecentDiskAction(_ sender: NSMenuItem!) {
         
         track()
@@ -459,19 +503,21 @@ extension MyController : NSMenuItemValidation {
         let drive = sender.tag == 0 ? amiga.df0! : amiga.df1!
         drive.toggleWriteProtection()
     }
-    
+
+    @IBAction func exportRecentDiskDummyAction0(_ sender: NSMenuItem!) {}
+    @IBAction func exportRecentDiskDummyAction1(_ sender: NSMenuItem!) {}
     @IBAction func exportRecentDiskAction(_ sender: NSMenuItem!) {
         
         track()
-        var tag = sender.tag
         
-        // Extract drive number from tag
-        let nr = (tag < 10) ? 1 : 2
-        tag = (tag < 10) ? tag : tag - 10
-       
+        let nr = sender.tag
+        let slot = Int(sender.title)!
+        
         // Get URL and export
-        if let url = mydocument.getRecentlyExportedDiskURL(tag, drive: nr) {
-            mydocument.export(drive: nr, to: url)
+        if let url = mydocument.getRecentlyExportedDiskURL(slot, drive: nr) {
+            do {
+                mydocument.export(drive: nr, to: url)
+            }
         }
     }
     

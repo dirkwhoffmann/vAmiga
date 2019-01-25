@@ -65,6 +65,9 @@ public:
      */
     uint64_t masterClock = 0; 
     
+    // The event handler
+    EventHandler eventHandler;
+    
     // The Amiga's virtual memory
     AmigaMemory mem;
 

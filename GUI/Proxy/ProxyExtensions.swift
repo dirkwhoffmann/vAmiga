@@ -61,7 +61,6 @@ public extension AmigaDriveProxy {
                 name = hasUnsavedDisk() ? "diskUTemplate" : "diskTemplate"
             }
             
-            track("\(name)")
             return NSImage.init(named: name)!
         }
     }

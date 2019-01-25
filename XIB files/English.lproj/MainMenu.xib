@@ -576,6 +576,9 @@
                                         </menuItem>
                                     </items>
                                 </menu>
+                                <connections>
+                                    <action selector="insertRecentDiskDummyAction0:" target="-1" id="Gtp-cq-JAM"/>
+                                </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="wq6-oh-IIt"/>
                             <menuItem title="Write Protected" id="vbD-qh-Fhq">
@@ -610,6 +613,9 @@
                                         </menuItem>
                                     </items>
                                 </menu>
+                                <connections>
+                                    <action selector="exportRecentDiskDummyAction0:" target="-1" id="EvH-gl-TSv"/>
+                                </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="PlF-BJ-HIT"/>
                             <menuItem title="Drag and Drop Target" id="F4s-hA-4ng">
@@ -640,7 +646,7 @@
                             <menuItem title="Insert ..." tag="1" id="rXL-PO-L1N">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="insertDiskAction:" target="-1" id="IH8-OF-YD0"/>
+                                    <action selector="insertDiskAction:" target="-1" id="3pn-9G-flE"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Insert Recent" id="JUv-7d-Kov">
@@ -716,6 +722,9 @@
                                         </menuItem>
                                     </items>
                                 </menu>
+                                <connections>
+                                    <action selector="insertRecentDiskDummyAction1:" target="-1" id="2oA-m6-A24"/>
+                                </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="s4e-XF-Kpr"/>
                             <menuItem title="Write Protected" tag="1" id="s7Y-nU-Hng">
@@ -750,6 +759,9 @@
                                         </menuItem>
                                     </items>
                                 </menu>
+                                <connections>
+                                    <action selector="exportRecentDiskDummyAction1:" target="-1" id="2SD-QZ-WvH"/>
+                                </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="sTY-kz-ChE"/>
                             <menuItem title="Drag and Drop Target" tag="1" id="iWr-Ke-wpa">

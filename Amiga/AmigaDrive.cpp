@@ -54,6 +54,35 @@ AmigaDrive::_dump()
     msg("Has disk: %s\n", hasDisk() ? "yes" : "no");
 }
 
+void
+AmigaDrive::setConnected(bool value)
+{
+    if (connected != value) {
+        
+        connected = value;
+        amiga->putMessage(connected ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT);
+    }
+}
+
+void
+AmigaDrive::toggleConnected()
+{
+    setConnected(!isConnected());
+}
+
+void
+AmigaDrive::toggleUnsafed()
+{
+    if (disk) {
+        disk->unsaved = !disk->unsaved;
+        if (disk->unsaved) {
+            amiga->putMessage(MSG_DRIVE_DISK_UNSAVED);
+        } else {
+            amiga->putMessage(MSG_DRIVE_DISK_SAVED);
+        }
+    }
+}
+
 bool
 AmigaDrive::hasDisk()
 {
@@ -104,18 +133,24 @@ void
 AmigaDrive::insertDisk(AmigaDisk *newDisk)
 {
     if (newDisk) {
-        ejectDisk();
-        disk = newDisk;
-        amiga->putMessage(MSG_DRIVE_DISK_INSERT, nr);
+        
+        if (isConnected()) {
+            ejectDisk();
+            disk = newDisk;
+            amiga->putMessage(MSG_DRIVE_DISK_INSERT, nr);
+        }
     }
 }
 
 void
 AmigaDrive::insertDisk(ADFFile *file)
 {
-    // Convert ADF file into a disk
-    // AmigaDisk = new AmigaDisk::makeWithFile(ADFFile *file)
-    AmigaDisk *newDisk = new AmigaDisk();
-    
-    insertDisk(newDisk);
+    if (file) {
+        
+        // Convert ADF file into a disk
+        // AmigaDisk = new AmigaDisk::makeWithFile(ADFFile *file)
+        
+        AmigaDisk *newDisk = new AmigaDisk();
+        insertDisk(newDisk);
+    }
 }

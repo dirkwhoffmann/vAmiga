@@ -9,6 +9,11 @@
 
 #include "Amiga.h"
 
+EventHandler::EventHandler()
+{
+    setDescription("EventHandler");
+}
+    
 void
 EventHandler::_powerOn()
 {
@@ -37,7 +42,7 @@ void
 EventHandler::_dump()
 {
     for (unsigned i = 0; i < NUMBER_OF_EVENTS; i++) {
-        if (isPending((Event)i)) {
+        if (true) { // isPending((Event)i)) {
             plainmsg("Event %d: Triggers at cycle %lld [%lld]\n", eventCycle[i], payload[i]);
         }
     }
@@ -79,7 +84,7 @@ EventHandler::isPending(Event event)
 
 
 void
-EventHandler::_processUntil(uint64_t cycle) {
+EventHandler::_executeUntil(uint64_t cycle) {
     
     nextTrigger = UINT64_MAX;
     
@@ -91,9 +96,16 @@ EventHandler::_processUntil(uint64_t cycle) {
             // Event is pending. Check whether it is due.
             if (cycle >= eventCycle[i]) {
                 
+                // Delete event
+                eventCycle[i] = UINT64_MAX;
+                
                 // Process event
                 switch (i) {
                     case EVENT_DEBUG1:
+                        
+                        debug("EVENT_DEBUG1\n");
+                        amiga->df0.toggleUnsafed();
+                        scheduleEvent(EVENT_DEBUG1, amiga->masterClock + 2 * 28 * 1000000);
                         break;
                         
                     case EVENT_DEBUG2:
@@ -102,9 +114,6 @@ EventHandler::_processUntil(uint64_t cycle) {
                     default:
                         assert(false);
                 }
-                
-                // Delete event
-                eventCycle[i] = UINT64_MAX;
                 
             } else {
                 

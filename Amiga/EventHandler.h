@@ -68,10 +68,11 @@ public:
     bool isPending(Event event);
     
     // Processes all events that are due at or prior to cycle.
-    void processUntil(uint64_t cycle) { if (cycle >= nextTrigger) _processUntil(cycle); }
+    void executeUntil(uint64_t cycle) {
+        if (cycle >= nextTrigger) _executeUntil(cycle); }
     
-    // Work horse for processUntil()
-    void _processUntil(uint64_t cycle);
+    // Work horse for executeUntil()
+    void _executeUntil(uint64_t cycle);
 };
 
 #endif

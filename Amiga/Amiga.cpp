@@ -72,6 +72,7 @@ Amiga::Amiga()
     // Register sub components
     HardwareComponent *subcomponents[] = {
         
+        &eventHandler,
         &mem,
         &dma,
         &denise,
@@ -559,6 +560,9 @@ Amiga::runLoop()
     // Prepare to run
     amiga->restartTimer();
     
+    // Schedule a event to fake some disk activity
+    eventHandler.scheduleEvent(EVENT_DEBUG1, 2 * 28 * 1000000);
+    
     //
     // TODO: Emulate the Amiga here ...
     //
@@ -574,6 +578,7 @@ Amiga::runLoop()
         
         dma.executeUntil(masterClock);
         denise.executeUntil(masterClock);
+        eventHandler.executeUntil(masterClock);
         
     }
 }

@@ -63,8 +63,9 @@ public:
     long getNr() { return nr; }
     
     bool isConnected() { return connected; }
-    void setConnected(bool value) { connected = value; }
-    void toggleConnected() { connected = !connected; }
+    void setConnected(bool value);
+    void toggleConnected();
+    void toggleUnsafed(); // FOR DEBUGGING
     
     bool hasDisk();
     bool hasUnsavedDisk();
@@ -74,8 +75,6 @@ public:
     void ejectDisk();
     void insertDisk(AmigaDisk *disk);
     void insertDisk(ADFFile *file);
-
-    
 };
 
 #endif
