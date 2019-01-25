@@ -484,13 +484,20 @@
                 <menuItem title="Df0" id="XQm-ka-Db5">
                     <menu key="submenu" title="Df0" id="Mqn-f5-oGB">
                         <items>
-                            <menuItem title="New Disk" tag="1" id="e0B-5D-eZ0">
+                            <menuItem title="Connect" id="NoG-SA-scF">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="drivePowerAction:" target="-1" id="PWs-c6-Gd6"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="Qxs-ZT-CBk"/>
+                            <menuItem title="New" id="e0B-5D-eZ0">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="newDiskAction:" target="-1" id="XVv-CW-F39"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Insert Disk..." tag="1" id="00r-Lf-ALU">
+                            <menuItem title="Insert ..." id="00r-Lf-ALU">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="insertDiskAction:" target="-1" id="Wrt-4R-3kT"/>
@@ -500,68 +507,68 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Insert Recent" id="fAP-LO-lPG">
                                     <items>
-                                        <menuItem title="Disk 1" id="77C-H2-gj8">
+                                        <menuItem title="0" id="77C-H2-gj8">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="insertRecentDiskAction:" target="-1" id="mLv-YO-79X"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Disk 2" tag="1" id="4to-IP-cbt">
+                                        <menuItem title="1" id="4to-IP-cbt">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="insertRecentDiskAction:" target="-1" id="e2g-9B-CWc"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Disk 3" tag="2" id="Cq6-aX-Ak9">
+                                        <menuItem title="2" id="Cq6-aX-Ak9">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="insertRecentDiskAction:" target="-1" id="E5g-KM-pRC"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Disk 4" tag="3" id="tNY-Cp-NzL">
+                                        <menuItem title="3" id="tNY-Cp-NzL">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="insertRecentDiskAction:" target="-1" id="QMD-x2-rxe"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Disk 5" tag="4" id="3qr-4Y-kwQ">
+                                        <menuItem title="4" id="3qr-4Y-kwQ">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="insertRecentDiskAction:" target="-1" id="bqN-4s-2Bp"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Disk 6" tag="5" id="iQw-SI-Zod">
+                                        <menuItem title="5" id="iQw-SI-Zod">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="insertRecentDiskAction:" target="-1" id="soB-45-2WM"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Disk 7" tag="6" id="ugy-GM-7U8">
+                                        <menuItem title="6" id="ugy-GM-7U8">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="insertRecentDiskAction:" target="-1" id="AHL-TC-aQc"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Disk 8" tag="7" id="PjT-He-fer">
+                                        <menuItem title="7" id="PjT-He-fer">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="insertRecentDiskAction:" target="-1" id="ed8-Xa-fMx"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Disk 9" tag="8" id="Set-qm-8wq">
+                                        <menuItem title="8" id="Set-qm-8wq">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="insertRecentDiskAction:" target="-1" id="G7A-XD-S4l"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Disk 10" tag="9" id="vyJ-Lb-bFO">
+                                        <menuItem title="9" id="vyJ-Lb-bFO">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="insertRecentDiskAction:" target="-1" id="55b-vn-eC3"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" tag="-1" id="sEO-ve-idm"/>
-                                        <menuItem title="Clear Menu" tag="1" id="VT0-0T-ZfH">
+                                        <menuItem title="Clear Menu" id="VT0-0T-ZfH">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="clearRecentlyInsertedDisksAction:" target="-1" id="ovs-A7-S8N"/>
@@ -571,22 +578,29 @@
                                 </menu>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="wq6-oh-IIt"/>
-                            <menuItem title="Eject Disk" tag="1" id="mVY-LA-phJ">
+                            <menuItem title="Write Protected" id="vbD-qh-Fhq">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="writeProtectAction:" target="-1" id="a7T-Ky-RJO"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="mCe-2p-6gR"/>
+                            <menuItem title="Eject" id="mVY-LA-phJ">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="ejectDiskAction:" target="-1" id="6hq-cd-dhx"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="8fO-nY-y8g"/>
-                            <menuItem title="Export Disk..." tag="1" id="inq-yB-iPf" userLabel="Export disk">
+                            <menuItem title="Export ..." id="inq-yB-iPf" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="exportDiskAction:" target="-1" id="rL4-3t-mjC"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Export Disk To" id="Hkb-4l-9Ts">
+                            <menuItem title="Export To" id="Hkb-4l-9Ts">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Export Disk To" id="pDh-nd-HeL">
+                                <menu key="submenu" title="Export To" id="pDh-nd-HeL">
                                     <items>
                                         <menuItem title="Disk" id="qCl-TJ-dqC">
                                             <modifierMask key="keyEquivalentModifierMask"/>
@@ -598,17 +612,10 @@
                                 </menu>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="PlF-BJ-HIT"/>
-                            <menuItem title="Write Protect Disk" tag="1" id="vbD-qh-Fhq">
+                            <menuItem title="Drag and Drop Target" id="F4s-hA-4ng">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="writeProtectAction:" target="-1" id="a7T-Ky-RJO"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem isSeparatorItem="YES" id="UYP-Oc-o9f"/>
-                            <menuItem title="Make Drag and Drop Target" tag="1" id="F4s-hA-4ng">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="drivePowerAction:" target="-1" id="gWq-lK-zvo"/>
+                                    <action selector="dragAndDropTargetAction:" target="-1" id="D27-Fj-l7S"/>
                                 </connections>
                             </menuItem>
                         </items>

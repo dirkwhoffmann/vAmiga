@@ -128,11 +128,11 @@
                         </connections>
                     </button>
                     <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" id="xzf-hU-AKK">
-                        <rect key="frame" x="150" y="4" width="16" height="16"/>
+                        <rect key="frame" x="99" y="4" width="16" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </progressIndicator>
                     <button toolTip="Drive LED" tag="2" id="iKN-RM-vsV">
-                        <rect key="frame" x="86" y="4" width="32" height="17"/>
+                        <rect key="frame" x="43" y="4" width="24" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="driveLedOff" imagePosition="only" alignment="right" imageScaling="proportionallyDown" id="v9S-no-L5h">
                             <behavior key="behavior" lightByContents="YES"/>
@@ -140,7 +140,7 @@
                         </buttonCell>
                     </button>
                     <button hidden="YES" tag="1" id="D1i-Ep-fTN">
-                        <rect key="frame" x="124" y="4" width="16" height="16"/>
+                        <rect key="frame" x="75" y="4" width="16" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="diskTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="dWc-LE-E52">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -155,7 +155,7 @@
                         </connections>
                     </customView>
                     <button toolTip="Connect / Disconnect drive" tag="1" id="1208">
-                        <rect key="frame" x="11" y="4" width="32" height="17"/>
+                        <rect key="frame" x="11" y="4" width="24" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="powerLedOff" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="1709">
                             <behavior key="behavior" lightByContents="YES"/>
@@ -174,11 +174,11 @@
                         </connections>
                     </button>
                     <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" id="X4r-q5-8Lh">
-                        <rect key="frame" x="238" y="4" width="16" height="16"/>
+                        <rect key="frame" x="179" y="4" width="16" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </progressIndicator>
                     <button toolTip="Drive LED" tag="2" id="K68-Xr-JJH">
-                        <rect key="frame" x="174" y="4" width="32" height="17"/>
+                        <rect key="frame" x="123" y="4" width="24" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="driveLedOff" imagePosition="only" alignment="right" imageScaling="proportionallyDown" id="Ws2-m0-rhM">
                             <behavior key="behavior" lightByContents="YES"/>
@@ -186,7 +186,7 @@
                         </buttonCell>
                     </button>
                     <button hidden="YES" tag="1" id="gkQ-Nr-aDz">
-                        <rect key="frame" x="212" y="4" width="16" height="16"/>
+                        <rect key="frame" x="155" y="4" width="16" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="diskTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="Gux-DH-DEb">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1808,14 +1808,14 @@
         <image name="devMouseTemplate" width="24" height="24"/>
         <image name="devNoneTemplate" width="24" height="24"/>
         <image name="diskTemplate" width="217" height="217"/>
-        <image name="driveLedOff" width="139.63636779785156" height="50.181819915771484"/>
+        <image name="driveLedOff" width="100" height="50"/>
         <image name="hourglass1Template" width="241" height="241"/>
         <image name="inspectTemplate" width="241" height="240"/>
         <image name="joyKeys1Template" width="24" height="24"/>
         <image name="joyKeys2Template" width="24" height="24"/>
         <image name="keyboardTemplate" width="24" height="24"/>
         <image name="pauseTemplate" width="240" height="241"/>
-        <image name="powerLedOff" width="139.63636779785156" height="50.181819915771484"/>
+        <image name="powerLedOff" width="100" height="50"/>
         <image name="powerTemplate" width="241" height="240"/>
         <image name="prefEmulatorTemplate" width="241" height="240"/>
         <image name="stepIntoTemplate" width="240" height="241"/>

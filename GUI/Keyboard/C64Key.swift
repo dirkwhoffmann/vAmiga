@@ -36,7 +36,7 @@ struct C64Key : Codable {
     
     init(_ nr: Int) {
         
-        precondition(nr >= 0 && nr <= 65)
+        assert(nr >= 0 && nr <= 65)
         
         let rowcol = [
             // First physical key row
@@ -59,21 +59,21 @@ struct C64Key : Codable {
             (7,4) /* space */
         ]
         
-        precondition(rowcol.count == 66)
+        assert(rowcol.count == 66)
         
         self.nr = nr
         if (nr != 31 /* RESTORE */ && nr != 34 /* SHIFT LOCK */) {
             self.row = rowcol[nr].0
             self.col = rowcol[nr].1
         } else {
-            precondition(rowcol[nr].0 == 9 && rowcol[nr].1 == 9)
+            assert(rowcol[nr].0 == 9 && rowcol[nr].1 == 9)
         }
     }
     
     init(_ rowcol : (Int, Int) ) {
         
-        precondition(rowcol.0 >= 0 && rowcol.0 < 8)
-        precondition(rowcol.1 >= 0 && rowcol.1 < 8)
+        assert(rowcol.0 >= 0 && rowcol.0 < 8)
+        assert(rowcol.1 >= 0 && rowcol.1 < 8)
         
         let nr = [ 15, 47, 63, 64, 16, 32, 48, 62,
                     3, 19, 35,  4, 51, 36, 20, 50,
@@ -85,7 +85,7 @@ struct C64Key : Codable {
                     1,  0, 17,  2, 65, 49, 18, 33
         ]
         
-        precondition(nr.count == 64)
+        assert(nr.count == 64)
         
         self.row = rowcol.0
         self.col = rowcol.1
@@ -464,10 +464,10 @@ extension C64Key {
     /// user dialog for configuring the key mapping.
     func image(keyCode: String, red: Bool = false) -> NSImage {
         
-        precondition(nr != 31 /* RESTORE */);
-        precondition(nr != 34 /* SHIFT LOCK */);
-        precondition(row >= 0 && row < 8)
-        precondition(col >= 0 && col < 8)
+        assert(nr != 31 /* RESTORE */);
+        assert(nr != 34 /* SHIFT LOCK */);
+        assert(row >= 0 && row < 8)
+        assert(col >= 0 && col < 8)
         
         // Get textual description for this key
         let curUD = "CU \u{21c5}"

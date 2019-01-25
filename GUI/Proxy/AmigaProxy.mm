@@ -212,6 +212,10 @@ struct ADFFileWrapper { ADFFile *adf; };
     }
     return self;
 }
+- (NSInteger) nr
+{
+    return wrapper->drive->getNr();
+}
 - (void) dump
 {
     wrapper->drive->dump();
@@ -223,6 +227,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 - (void) setConnected:(BOOL)value
 {
     wrapper->drive->setConnected(value);
+}
+- (void) toggleConnected
+{
+    wrapper->drive->toggleConnected();
 }
 - (BOOL) hasDisk
 {
@@ -244,6 +252,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     AmigaFileWrapper *fileWrapper = [fileProxy wrapper];
     wrapper->drive->insertDisk((ADFFile *)(fileWrapper->file));
+}
+- (void) toggleWriteProtection
+{
+    wrapper->drive->toggleWriteProtection();
 }
 
 @end
@@ -273,7 +285,6 @@ struct ADFFileWrapper { ADFFile *adf; };
     }
     return [[self alloc] initWithFile:file];
 }
-
 - (void)setPath:(NSString *)path
 {
     AmigaFile *file = (AmigaFile *)([self wrapper]->file);
@@ -344,6 +355,11 @@ struct ADFFileWrapper { ADFFile *adf; };
 + (instancetype) makeWithFile:(NSString *)path
 {
     ADFFile *archive = ADFFile::makeWithFile([path UTF8String]);
+    return [self make: archive];
+}
++ (instancetype) make
+{
+    ADFFile *archive = ADFFile::make();
     return [self make: archive];
 }
 - (void)seekTrack:(NSInteger)nr

@@ -217,7 +217,7 @@ extension SnapshotDialog {
             data = c64.autoSnapshotData(index)
         }
         else {
-            precondition(tableView == userTableView)
+            assert(tableView == userTableView)
             data = c64.userSnapshotData(index)
         }
         

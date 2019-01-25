@@ -55,6 +55,15 @@ ADFFile::makeWithFile(const char *path)
     return adf;
 }
 
+ADFFile *
+ADFFile::make()
+{
+    ADFFile *adf = new ADFFile();
+    
+    // TODO: MAKE IT AN EMPTY DISK HERE
+    return adf;
+}
+
 bool
 ADFFile::readFromBuffer(const uint8_t *buffer, size_t length)
 {

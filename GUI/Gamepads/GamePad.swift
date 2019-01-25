@@ -132,7 +132,7 @@ extension GamePad {
     /// Assigns a keyboard emulation key
     func assign(key: MacKey, direction: JoystickDirection) {
         
-        precondition(keyMap != nil)
+        assert(keyMap != nil)
         
         // Avoid double mappings
         for (k, dir) in keyMap! {

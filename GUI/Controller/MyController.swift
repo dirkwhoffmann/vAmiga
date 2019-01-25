@@ -80,6 +80,9 @@ class MyController : NSWindowController, MessageReceiver {
     var df0 = true
     var df1 = false
 
+    // Drive that receives drag and drop inputs
+    var dragAndDropDrive : AmigaDriveProxy?
+    
     /// Selected game pad slot for joystick in port A
     var inputDevice1 = Defaults.inputDevice1
     
@@ -423,7 +426,7 @@ extension MyController {
     
     @objc func timerFunc() {
 
-        precondition(timerLock != nil)
+        assert(timerLock != nil)
         timerLock.lock()
  
         animationCounter += 1
@@ -474,7 +477,7 @@ extension MyController {
         }
         
         func firstDrive() -> Bool {
-            precondition(msg.data == 1 || msg.data == 2)
+            assert(msg.data == 1 || msg.data == 2)
             return msg.data == 1;
         }
 
@@ -526,8 +529,10 @@ extension MyController {
              MSG_DRIVE_DISK_INSERT,
              MSG_DRIVE_DISK_EJECT,
              MSG_DRIVE_DISK_UNSAVED,
-             MSG_DRIVE_DISK_SAVED:
-            
+             MSG_DRIVE_DISK_SAVED,
+             MSG_DRIVE_DISK_PROTECTED,
+             MSG_DRIVE_DISK_UNPROTECTED:
+
             refreshStatusBar()
             
         case MSG_DRIVE_LED_ON:

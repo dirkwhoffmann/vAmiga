@@ -13,6 +13,8 @@
 		5030891121EFA74600FEAD12 /* Paula.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5030890F21EFA74600FEAD12 /* Paula.cpp */; };
 		505A3A3A21F4996400132020 /* sse_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505A3A3821F4996400132020 /* sse_utils.cpp */; };
 		5064851121EC7A1700FC4AC3 /* AmigaMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5064850F21EC7A1700FC4AC3 /* AmigaMemory.cpp */; };
+		5085FE5721FB3BAE009753EF /* EventHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5085FE5521FB3BAE009753EF /* EventHandler.cpp */; };
+		5085FE5921FB6856009753EF /* ProxyExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5085FE5821FB6856009753EF /* ProxyExtensions.swift */; };
 		508833EE21F0D21B009890EA /* ADFFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508833EC21F0D21B009890EA /* ADFFile.cpp */; };
 		508FDE6E21EA1FA50043D0E9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 508FDE6D21EA1FA50043D0E9 /* Assets.xcassets */; };
 		508FDE7121EA1FA50043D0E9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 508FDE6F21EA1FA50043D0E9 /* Main.storyboard */; };
@@ -230,6 +232,9 @@
 		5064850F21EC7A1700FC4AC3 /* AmigaMemory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaMemory.cpp; sourceTree = "<group>"; };
 		5064851021EC7A1700FC4AC3 /* AmigaMemory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaMemory.h; sourceTree = "<group>"; };
 		5082D83A21EF891200CF7692 /* va_constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = va_constants.h; sourceTree = "<group>"; };
+		5085FE5521FB3BAE009753EF /* EventHandler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EventHandler.cpp; sourceTree = "<group>"; };
+		5085FE5621FB3BAE009753EF /* EventHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventHandler.h; sourceTree = "<group>"; };
+		5085FE5821FB6856009753EF /* ProxyExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProxyExtensions.swift; sourceTree = "<group>"; };
 		508833EC21F0D21B009890EA /* ADFFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ADFFile.cpp; sourceTree = "<group>"; };
 		508833ED21F0D21B009890EA /* ADFFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ADFFile.h; sourceTree = "<group>"; };
 		508FDE6421EA1FA40043D0E9 /* vAmiga.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = vAmiga.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1057,6 +1062,8 @@
 				508FDEF521EA1FBC0043D0E9 /* MessageQueue.cpp */,
 				50B14C0F21EB410B002E32A6 /* Amiga.h */,
 				50B14C0E21EB410B002E32A6 /* Amiga.cpp */,
+				5085FE5621FB3BAE009753EF /* EventHandler.h */,
+				5085FE5521FB3BAE009753EF /* EventHandler.cpp */,
 				5064851021EC7A1700FC4AC3 /* AmigaMemory.h */,
 				5064850F21EC7A1700FC4AC3 /* AmigaMemory.cpp */,
 				5020B17C21EF121E00B9E80E /* DMAController.h */,
@@ -1184,6 +1191,7 @@
 				50B14C2721EB97EC002E32A6 /* AmigaProxy.mm */,
 				508FDFEC21EA22780043D0E9 /* C64Proxy.h */,
 				508FE00621EA227A0043D0E9 /* C64Proxy.mm */,
+				5085FE5821FB6856009753EF /* ProxyExtensions.swift */,
 			);
 			path = Proxy;
 			sourceTree = "<group>";
@@ -1445,6 +1453,7 @@
 				508FDF8A21EA1FBC0043D0E9 /* Mouse.cpp in Sources */,
 				508FDF9721EA1FBC0043D0E9 /* envelope.cc in Sources */,
 				508FE02F21EA227B0043D0E9 /* AudioEngine.swift in Sources */,
+				5085FE5921FB6856009753EF /* ProxyExtensions.swift in Sources */,
 				508FDF6B21EA1FBC0043D0E9 /* ActionReplay.cpp in Sources */,
 				508FDF8521EA1FBC0043D0E9 /* VirtualComponent.cpp in Sources */,
 				508FE04F21EA22CC0043D0E9 /* EmulatorPrefs.swift in Sources */,
@@ -1497,6 +1506,7 @@
 				509F7F1D21EDEA0200A530E4 /* KickRom.cpp in Sources */,
 				508FE05C21EA22CC0043D0E9 /* DiskMountController.swift in Sources */,
 				508FDF6321EA1FBC0043D0E9 /* SuperGames.cpp in Sources */,
+				5085FE5721FB3BAE009753EF /* EventHandler.cpp in Sources */,
 				508FDFAB21EA1FBC0043D0E9 /* Drive.cpp in Sources */,
 				508FDF9321EA1FBC0043D0E9 /* VIC_memory.cpp in Sources */,
 			);

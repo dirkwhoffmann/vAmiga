@@ -11,15 +11,21 @@ import Foundation
 
 extension MyController : NSMenuItemValidation {
     
+    func drive(_ item: NSMenuItem!) -> AmigaDriveProxy {
+        
+        switch (item.tag) {
+            
+        case 0: return amiga.df0
+        case 1: return amiga.df1
+            
+        default: fatalError()
+        }
+    }
+ 
     open func validateMenuItem(_ item: NSMenuItem) -> Bool {
 
         // track("validateMenuItem")
         
-        func firstDrive() -> Bool {
-            precondition(item.tag == 1 || item.tag == 2)
-            return item.tag == 1
-        }
-    
         func validateURLlist(_ list : [URL], image: String) -> Bool {
             
             let pos = (item.tag < 10) ? item.tag : item.tag - 10
@@ -68,53 +74,33 @@ extension MyController : NSMenuItemValidation {
             return validateURLlist(mydocument.recentlyInsertedDiskURLs, image: "disk_small")
         }
         if item.action == #selector(MyController.ejectDiskAction(_:)) {
-            return firstDrive() ? c64.drive1.hasDisk() : c64.drive2.hasDisk()
+            return drive(item).hasDisk()
         }
         if item.action == #selector(MyController.exportDiskAction(_:)) {
-            return firstDrive() ? c64.drive1.hasDisk() : c64.drive2.hasDisk()
+            return drive(item).hasDisk()
         }
         if item.action == #selector(MyController.exportRecentDiskAction(_:)) {
             if item.tag < 10 {
+                track("\(mydocument.recentlyExportedDisk0URLs)")
+                return validateURLlist(mydocument.recentlyExportedDisk0URLs, image: "disk_small")
+            } else {
                 track("\(mydocument.recentlyExportedDisk1URLs)")
                 return validateURLlist(mydocument.recentlyExportedDisk1URLs, image: "disk_small")
-            } else {
-                track("\(mydocument.recentlyExportedDisk2URLs)")
-                return validateURLlist(mydocument.recentlyExportedDisk2URLs, image: "disk_small")
             }
         }
         if item.action == #selector(MyController.writeProtectAction(_:)) {
-            let hasDisk = firstDrive() ?
-                c64.drive1.hasDisk() :
-                c64.drive2.hasDisk()
-            let hasWriteProtecteDisk = firstDrive() ?
-                c64.drive1.hasWriteProtectedDisk() :
-                c64.drive2.hasWriteProtectedDisk()
-            item.state = hasWriteProtecteDisk ? .on : .off
-            return hasDisk
+            item.state = drive(item).hasWriteProtectedDisk() ? .on : .off
+            return drive(item).hasDisk()
         }
         if item.action == #selector(MyController.drivePowerAction(_:)) {
-            let poweredOn = firstDrive() ?
-                c64.drive1.isPoweredOn() :
-                c64.drive2.isPoweredOn()
-            item.title = poweredOn ? "Disconnect" : "Connect"
+            item.title = drive(item).isConnected() ? "Disconnect" : "Connect"
+            return true
+        }
+        if item.action == #selector(MyController.dragAndDropTargetAction(_:)) {
+            item.state = drive(item) === dragAndDropDrive ? .on : .off
             return true
         }
 
-        // Tape menu
-        if item.action == #selector(MyController.insertRecentTapeAction(_:)) {
-            return validateURLlist(mydocument.recentlyInsertedTapeURLs, image: "tape_small")
-        }
-        if item.action == #selector(MyController.ejectTapeAction(_:)) {
-            return c64.datasette.hasTape()
-        }
-        if item.action == #selector(MyController.playOrStopAction(_:)) {
-            item.title = c64.datasette.playKey() ? "Press Stop Key" : "Press Play On Tape"
-            return c64.datasette.hasTape()
-        }
-        if item.action == #selector(MyController.rewindAction(_:)) {
-            return c64.datasette.hasTape()
-        }
-        
         // Debug menu
         if item.action == #selector(MyController.pauseAction(_:)) {
             return c64.isRunning();
@@ -374,49 +360,44 @@ extension MyController : NSMenuItemValidation {
         amiga.keyboard.releaseAllKeys()
     }
 
-    // -----------------------------------------------------------------
-    @IBAction func loadDirectoryAction(_ sender: Any!) {
-        keyboardcontroller.type(string: "LOAD \"$\",8", completion: nil)
-    }
-    @IBAction func listAction(_ sender: Any!) {
-        keyboardcontroller.type(string: "LIST", completion: nil)
-    }
-    @IBAction func loadFirstFileAction(_ sender: Any!) {
-        keyboardcontroller.type(string: "LOAD \"*\",8,1", completion: nil)
-    }
-    @IBAction func runProgramAction(_ sender: Any!) {
-        keyboardcontroller.type(string: "RUN", completion: nil)
-    }
-    @IBAction func formatDiskAction(_ sender: Any!) {
-        keyboardcontroller.type(string: "OPEN 1,8,15,\"N:TEST, ID\": CLOSE 1", completion: nil)
-    }
 
- 
     //
     // Action methods (Disk menu)
     //
-
-    func driveNr(fromTagOf menuItem: Any!) -> Int {
-        let tag = (menuItem as! NSMenuItem).tag
-        precondition(tag == 1 || tag == 2)
-        return tag
-    }
-    @IBAction func newDiskAction(_ sender: Any!) {
+    
+    @IBAction func drivePowerAction(_ sender: NSMenuItem!) {
         
-        let tag = (sender as! NSMenuItem).tag
-        let emptyArchive = AnyArchiveProxy.make()
-        
-        mydocument.attachment = D64FileProxy.make(withAnyArchive: emptyArchive)
-        mydocument.mountAttachmentAsDisk(drive: tag)
-        mydocument.clearRecentlyExportedDiskURLs(drive: tag)
+        let drive = sender.tag == 0 ? amiga.df0! : amiga.df1!
+        drive.toggleConnected()
     }
     
-    @IBAction func insertDiskAction(_ sender: Any!) {
+    @IBAction func drivePowerButtonAction(_ sender: Any!) {
         
-        let tag = (sender as! NSMenuItem).tag
+        let sender = sender as! NSButton
+        assert(sender.tag == 1 || sender.tag == 2)
+        drivePowerAction(driveNr: sender.tag)
+    }
+    
+    func drivePowerAction(driveNr: Int) {
+        if (driveNr == 1) {
+            c64.drive1.togglePowerSwitch()
+        } else {
+            c64.drive2.togglePowerSwitch()
+        }
+    }
+    
+    @IBAction func newDiskAction(_ sender: NSMenuItem!) {
+        
+        let emptyArchive =  ADFFileProxy.make()
+        
+        drive(sender).insertDisk(emptyArchive)
+        mydocument.clearRecentlyExportedDiskURLs(drive: sender.tag)
+    }
+    
+    @IBAction func insertDiskAction(_ sender: NSMenuItem!) {
         
         // Ask user to continue if the current disk contains modified data
-        if !proceedWithUnexportedDisk(drive: tag) {
+        if !proceedWithUnexportedDisk(drive: sender.tag) {
             return
         }
         
@@ -432,8 +413,8 @@ extension MyController : NSMenuItemValidation {
             if result == .OK {
                 if let url = openPanel.url {
                     do {
-                        try self.mydocument.createAttachment(from: url)
-                        self.mydocument.mountAttachmentAsDisk(drive: tag)
+                        let adf = try self.mydocument.createADF(from: url)
+                        self.drive(sender).insertDisk(adf)
                     } catch {
                         NSApp.presentError(error)
                     }
@@ -442,21 +423,16 @@ extension MyController : NSMenuItemValidation {
         })
     }
     
-    @IBAction func insertRecentDiskAction(_ sender: Any!) {
+    @IBAction func insertRecentDiskAction(_ sender: NSMenuItem!) {
         
         track()
-        var tag = (sender as! NSMenuItem).tag
-        
-        // Extrace drive number from tag
-        var nr: Int
-        if tag < 10 { nr = 1 } else { nr = 2; tag -= 10 }
         
         // Get URL and insert
-        if let url = mydocument.getRecentlyInsertedDiskURL(tag) {
+        if let url = mydocument.getRecentlyInsertedDiskURL(Int(sender.title)!) {
             do {
-                try mydocument.createAttachment(from: url)
-                if (mydocument.proceedWithUnexportedDisk(drive: nr)) {
-                    mydocument.mountAttachmentAsDisk(drive: nr)
+                let adf = try self.mydocument.createADF(from: url)
+                if (mydocument.proceedWithUnexportedDisk(drive: sender.tag)) {
+                    self.drive(sender).insertDisk(adf)
                 }
             } catch {
                 NSApp.presentError(error)
@@ -464,10 +440,30 @@ extension MyController : NSMenuItemValidation {
         }
     }
     
-    @IBAction func exportRecentDiskAction(_ sender: Any!) {
+    func insertRecentDiskAction(drive: AmigaDriveProxy, slot: Int) {
+        
+        if let url = mydocument.getRecentlyInsertedDiskURL(slot) {
+            do {
+                let adf = try self.mydocument.createADF(from: url)
+                if (mydocument.proceedWithUnexportedDisk(drive: drive)) {
+                    drive.insertDisk(adf)
+                }
+            } catch {
+                NSApp.presentError(error)
+            }
+        }
+    }
+    
+    @IBAction func writeProtectAction(_ sender: NSMenuItem!) {
+        
+        let drive = sender.tag == 0 ? amiga.df0! : amiga.df1!
+        drive.toggleWriteProtection()
+    }
+    
+    @IBAction func exportRecentDiskAction(_ sender: NSMenuItem!) {
         
         track()
-        var tag = (sender as! NSMenuItem).tag
+        var tag = sender.tag
         
         // Extract drive number from tag
         let nr = (tag < 10) ? 1 : 2
@@ -479,146 +475,42 @@ extension MyController : NSMenuItemValidation {
         }
     }
     
-    @IBAction func clearRecentlyInsertedDisksAction(_ sender: Any!) {
+    @IBAction func clearRecentlyInsertedDisksAction(_ sender: NSMenuItem!) {
         mydocument.recentlyInsertedDiskURLs = []
     }
 
-    @IBAction func clearRecentlyExportedDisksAction(_ sender: Any!) {
+    @IBAction func clearRecentlyExportedDisksAction(_ sender: NSMenuItem!) {
 
-        let driveNr = (sender as! NSMenuItem).tag
-        mydocument.clearRecentlyExportedDiskURLs(drive: driveNr)
+        mydocument.clearRecentlyExportedDiskURLs(drive: sender.tag)
     }
 
-    @IBAction func clearRecentlyInsertedTapesAction(_ sender: Any!) {
-        mydocument.recentlyInsertedTapeURLs = []
-    }
-    
-    @IBAction func clearRecentlyAttachedCartridgesAction(_ sender: Any!) {
-        mydocument.recentlyAttachedCartridgeURLs = []
-    }
-    
-    @IBAction func ejectDiskAction(_ sender: Any!) {
+    @IBAction func ejectDiskAction(_ sender: NSMenuItem!) {
         
-        let tag = (sender as! NSMenuItem).tag
+        assert(sender.tag == 0 || sender.tag == 1)
+        let drive = sender.tag == 0 ? amiga.df0 : amiga.df1
         
-        if proceedWithUnexportedDisk(drive: tag) {
-            changeDisk(nil, drive: tag)
-            mydocument.clearRecentlyExportedDiskURLs(drive: tag)
+        if proceedWithUnexportedDisk(drive: sender.tag) {
+            drive?.ejectDisk()
+            mydocument.clearRecentlyExportedDiskURLs(drive: sender.tag)
         }
     }
     
-    @IBAction func exportDiskAction(_ sender: Any!) {
-
-        let nr = (sender as! NSMenuItem).tag
-        precondition(nr == 1 || nr == 2)
+    @IBAction func exportDiskAction(_ sender: NSMenuItem!) {
         
         let nibName = NSNib.Name("ExportDiskDialog")
         let exportPanel = ExportDiskController.init(windowNibName: nibName)
-        exportPanel.showSheet(forDrive: nr)
+        exportPanel.showSheet(forDrive: sender.tag)
     }
-     
-    @IBAction func writeProtectAction(_ sender: Any!) {
+    
+    @IBAction func dragAndDropTargetAction(_ sender: NSMenuItem!) {
         
-        let nr = driveNr(fromTagOf: sender)
-        if (nr == 1) {
-            c64.drive1.disk.toggleWriteProtection()
-        } else {
-            c64.drive2.disk.toggleWriteProtection()
-        }
+        let d = drive(sender)
+        dragAndDropDrive = (dragAndDropDrive == d) ? nil : d
     }
     
-    @IBAction func drivePowerAction(_ sender: Any!) {
-        
-        let sender = sender as! NSMenuItem
-        precondition(sender.tag == 1 || sender.tag == 2)
-        drivePowerAction(driveNr: sender.tag)
-    }
-
-    @IBAction func drivePowerButtonAction(_ sender: Any!) {
-        
-        let sender = sender as! NSButton
-        precondition(sender.tag == 1 || sender.tag == 2)
-        drivePowerAction(driveNr: sender.tag)
-    }
-    
-    func drivePowerAction(driveNr: Int) {
-        if (driveNr == 1) {
-            c64.drive1.togglePowerSwitch()
-        } else {
-            c64.drive2.togglePowerSwitch()
-        }
-    }
-    
-    //
-    // Action methods (Datasette menu)
-    //
-    
-    @IBAction func insertTapeAction(_ sender: Any!) {
-        
-        // Show the OpenPanel
-        let openPanel = NSOpenPanel()
-        openPanel.allowsMultipleSelection = false
-        openPanel.canChooseDirectories = false
-        openPanel.canCreateDirectories = false
-        openPanel.canChooseFiles = true
-        openPanel.prompt = "Insert"
-        openPanel.allowedFileTypes = ["tap"]
-        openPanel.beginSheetModal(for: window!, completionHandler: { result in
-            if result == .OK {
-                if let url = openPanel.url {
-                    do {
-                        try self.mydocument.createAttachment(from: url)
-                        self.mydocument.mountAttachmentAsTape()
-                    } catch {
-                        NSApp.presentError(error)
-                    }
-                }
-            }
-        })
-    }
-    
-    @IBAction func insertRecentTapeAction(_ sender: Any!) {
-        
-        track()
-        let sender = sender as! NSMenuItem
-        let tag = sender.tag
-        
-        if let url = mydocument.getRecentlyInsertedTapeURL(tag) {
-            do {
-                try mydocument.createAttachment(from: url)
-                mydocument.mountAttachmentAsTape()
-            } catch {
-                NSApp.presentError(error)
-            }
-        }
-    }
-    
-    @IBAction func ejectTapeAction(_ sender: Any!) {
-        track()
-        c64.datasette.ejectTape()
-    }
-    
-    @IBAction func playOrStopAction(_ sender: Any!) {
-        track()
-        if c64.datasette.playKey() {
-            c64.datasette.pressStop()
-        } else {
-            c64.datasette.pressPlay()
-        }
-    }
-    
-    @IBAction func rewindAction(_ sender: Any!) {
-        track()
-        c64.datasette.rewind()
-    }
-
-    
-    //
-    // Action methods ()
-    //
 
 
-        
+
     //
     // Action methods (Debug menu)
     //

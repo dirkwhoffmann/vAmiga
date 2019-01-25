@@ -44,10 +44,10 @@ class MyDocument : NSDocument {
     var recentlyInsertedDiskURLs: [URL] = []
 
     /// The list of recently exported disk URLs for drive 1.
-    var recentlyExportedDisk1URLs: [URL] = []
+    var recentlyExportedDisk0URLs: [URL] = []
 
     /// The list of recently exported disk URLs for drive 2.
-    var recentlyExportedDisk2URLs: [URL] = []
+    var recentlyExportedDisk1URLs: [URL] = []
 
     /// The list of recently inserted tape URLs.
     var recentlyInsertedTapeURLs: [URL] = []
@@ -125,34 +125,34 @@ class MyDocument : NSDocument {
     
     func noteNewRecentlyExportedDiskURL(_ url: URL, drive nr: Int) {
 
-        assert(nr == 1 || nr == 2)
-        
-        if (nr == 1) {
-            noteRecentlyUsedURL(url, to: &recentlyExportedDisk1URLs, size: 1)
-        } else {
-            noteRecentlyUsedURL(url, to: &recentlyExportedDisk2URLs, size: 1)
+        switch(nr) {
+            
+        case 0: noteRecentlyUsedURL(url, to: &recentlyExportedDisk0URLs, size: 1)
+        case 1: noteRecentlyUsedURL(url, to: &recentlyExportedDisk1URLs, size: 1)
+            
+        default: fatalError()
         }
     }
 
     func getRecentlyExportedDiskURL(_ pos: Int, drive nr: Int) -> URL? {
         
-        assert(nr == 1 || nr == 2)
-        
-        if (nr == 1) {
-            return getRecentlyUsedURL(pos, from: recentlyExportedDisk1URLs)
-        } else {
-            return getRecentlyUsedURL(pos, from: recentlyExportedDisk2URLs)
+        switch(nr) {
+            
+        case 0: return getRecentlyUsedURL(pos, from: recentlyExportedDisk0URLs)
+        case 1: return getRecentlyUsedURL(pos, from: recentlyExportedDisk1URLs)
+            
+        default: fatalError()
         }
     }
    
     func clearRecentlyExportedDiskURLs(drive nr: Int) {
         
-        assert(nr == 1 || nr == 2)
+        switch(nr) {
         
-        if (nr == 1) {
-            recentlyExportedDisk1URLs = []
-        } else {
-            recentlyExportedDisk2URLs = []
+        case 0: recentlyExportedDisk0URLs = []
+        case 1: recentlyExportedDisk1URLs = []
+        
+        default: fatalError()
         }
     }
     
@@ -188,6 +188,29 @@ class MyDocument : NSDocument {
     //
     // Creating attachments
     //
+    
+    // Creates an ADF file proxy from a URL
+    func createADF(from url: URL) throws -> ADFFileProxy? {
+
+        track("Creating ADF proxy from URL \(url.lastPathComponent).")
+        
+        // Try to create a file wrapper
+        let fileWrapper = try FileWrapper.init(url: url)
+        guard let data = fileWrapper.regularFileContents else {
+            throw NSError(domain: "VirtualC64", code: 0, userInfo: nil)
+        }
+        
+        // Try to create ADF file proxy
+        let buffer = (data as NSData).bytes
+        let length = data.count
+        let proxy = ADFFileProxy.make(withBuffer: buffer, length: length)
+        
+        if proxy != nil {
+            noteNewRecentlyUsedURL(url)
+        }
+        
+        return proxy
+    }
     
     /// Creates an attachment from a URL
     func createAmigaAttachment(from url: URL) throws {

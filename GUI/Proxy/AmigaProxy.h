@@ -236,14 +236,18 @@ struct AmigaFileWrapper;
 
 - (void) dump;
 
+- (NSInteger) nr;
+
 - (BOOL) isConnected;
 - (void) setConnected:(BOOL)value;
+- (void) toggleConnected;
 
 - (BOOL) hasDisk;
 - (BOOL) hasWriteProtectedDisk;
 - (BOOL) hasUnsavedDisk;
 - (void) ejectDisk;
 - (void) insertDisk:(ADFFileProxy *)file;
+- (void) toggleWriteProtection;
 
 @end
 
@@ -286,6 +290,7 @@ struct AmigaFileWrapper;
 + (BOOL)isADFFile:(NSString *)path;
 + (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)length;
 + (instancetype) makeWithFile:(NSString *)path;
++ (instancetype) make;
 
 - (void)seekTrack:(NSInteger)nr;
 - (void)seekSector:(NSInteger)nr;

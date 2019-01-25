@@ -13,4 +13,3 @@ AmigaDisk::AmigaDisk()
 {
     setDescription("Disk");
 }
-

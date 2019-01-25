@@ -66,6 +66,24 @@ AmigaDrive::hasWriteProtectedDisk()
     return hasDisk() ? disk->isWriteProtected() : false;
 }
 
+void
+AmigaDrive::toggleWriteProtection()
+{
+    if (disk) {
+        
+        if (disk->isWriteProtected()) {
+            
+            disk->setWriteProtection(false);
+            amiga->putMessage(MSG_DRIVE_DISK_UNPROTECTED);
+            
+        } else {
+            
+            disk->setWriteProtection(true);
+            amiga->putMessage(MSG_DRIVE_DISK_PROTECTED);
+        }
+    }
+}
+
 bool
 AmigaDrive::hasUnsavedDisk()
 {

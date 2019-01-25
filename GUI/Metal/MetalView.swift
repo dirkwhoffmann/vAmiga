@@ -255,7 +255,7 @@ public class MetalView: MTKView {
         
         // let buf = controller.c64.vic.screenBuffer()
         let buf = controller.amiga.denise.screenBuffer()
-        precondition(buf != nil)
+        assert(buf != nil)
         
         let pixelSize = 4
         let width = Int(NTSC_PIXELS)
@@ -275,8 +275,8 @@ public class MetalView: MTKView {
     /// Returns the compute kernel of the currently selected pixel upscaler
     func currentUpscaler() -> ComputeKernel {
     
-        precondition(upscaler < upscalerGallery.count)
-        precondition(upscalerGallery[0] != nil)
+        assert(upscaler < upscalerGallery.count)
+        assert(upscalerGallery[0] != nil)
         
         return upscalerGallery[upscaler]!
     }
@@ -284,8 +284,8 @@ public class MetalView: MTKView {
     /// Returns the compute kernel of the currently selected bloom filter
     func currentBloomFilter() -> ComputeKernel {
         
-        precondition(shaderOptions.bloom < bloomFilterGallery.count)
-        precondition(bloomFilterGallery[0] != nil)
+        assert(shaderOptions.bloom < bloomFilterGallery.count)
+        assert(bloomFilterGallery[0] != nil)
         
         return bloomFilterGallery[Int(shaderOptions.bloom)]!
     }
@@ -293,8 +293,8 @@ public class MetalView: MTKView {
     /// Returns the compute kernel of the currently selected scanline filter
     func currentScanlineFilter() -> ComputeKernel {
         
-        precondition(shaderOptions.scanlines < scanlineFilterGallery.count)
-        precondition(scanlineFilterGallery[0] != nil)
+        assert(shaderOptions.scanlines < scanlineFilterGallery.count)
+        assert(scanlineFilterGallery[0] != nil)
         
         return scanlineFilterGallery[Int(shaderOptions.scanlines)]!
     }
@@ -302,7 +302,7 @@ public class MetalView: MTKView {
     func startFrame() {
     
         commandBuffer = queue.makeCommandBuffer()
-        precondition(commandBuffer != nil, "Command buffer must not be nil")
+        assert(commandBuffer != nil, "Command buffer must not be nil")
     
         // Set uniforms for the fragment shader
         // fillFragmentShaderUniforms(uniformFragment)

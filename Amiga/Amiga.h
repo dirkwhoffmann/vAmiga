@@ -7,7 +7,6 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-
 #ifndef _AMIGA_INC
 #define _AMIGA_INC
 
@@ -20,6 +19,7 @@
 #include "KickRom.h"
 
 // Sub components
+#include "EventHandler.h"
 #include "AmigaMemory.h"
 #include "DMAController.h"
 #include "Denise.h"

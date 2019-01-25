@@ -16,7 +16,7 @@
 // THIS CLASS IS A STUB TO MAKE THE VISUAL PROTOTYPE WORK
 //
 
-class AmigaDisk : public HardwareComponent {
+class AmigaDisk : public AmigaObject {
     
 public:
     

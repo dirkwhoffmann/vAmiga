@@ -21,13 +21,15 @@ class ADFFile;
 
 class AmigaDrive : public HardwareComponent {
     
-public:
+private:
     
     // Drive number (0 = df0, 1 = df1)
-    unsigned nr = 0;
+    long nr = 0;
     
     // Indicates if the drive is connected to the Amiga
     bool connected = true;
+    
+public:
     
     // The currently inserted disk (if any)
     AmigaDisk *disk = NULL;
@@ -58,16 +60,22 @@ private:
     
 public:
     
+    long getNr() { return nr; }
+    
     bool isConnected() { return connected; }
     void setConnected(bool value) { connected = value; }
-
+    void toggleConnected() { connected = !connected; }
+    
     bool hasDisk();
-    bool hasWriteProtectedDisk();
     bool hasUnsavedDisk();
+    bool hasWriteProtectedDisk();
+    void toggleWriteProtection();
     
     void ejectDisk();
     void insertDisk(AmigaDisk *disk);
     void insertDisk(ADFFile *file);
+
+    
 };
 
 #endif

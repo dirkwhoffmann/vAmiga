@@ -15,18 +15,8 @@ extension MyController {
         
         guard let amiga = amigaProxy else { return }
         
-        func icon(_ drive: AmigaDriveProxy) -> String {
-            let unsafed = drive.hasUnsavedDisk()
-            let protected = drive.hasWriteProtectedDisk()
-            track("Unsafed = \(unsafed) prot = \(protected)")
-            return (unsafed && protected) ? "diskUPTemplate" :
-                (unsafed && !protected) ? "diskUTemplate" :
-                (!unsafed && protected) ? "diskPTemplate" : "diskTemplate"
-        }
-        df0Disk.image = NSImage.init(named: icon(amiga.df0))
-        df1Disk.image = NSImage.init(named: icon(amiga.df1))
-
-        track("df0 disk: \(amiga.df0.hasDisk())")
+        df0Disk.image = amiga.df0.icon
+        df1Disk.image = amiga.df1.icon
         
         let items: [NSView : Bool] = [
             

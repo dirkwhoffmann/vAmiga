@@ -53,7 +53,7 @@ extension PreferencesController {
     
     func updateJoyKeyMap(_ nr: Int, dir: JoystickDirection, button: NSButton, txt: NSTextField) {
         
-        precondition(nr == 0 || nr == 1)
+        assert(nr == 0 || nr == 1)
         
         guard let manager = myController?.gamePadManager else { return }
         guard let keyMap = manager.gamePads[nr]?.keyMap else { return }

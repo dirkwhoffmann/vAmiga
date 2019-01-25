@@ -44,7 +44,8 @@ public:
     
     static ADFFile *makeWithBuffer(const uint8_t *buffer, size_t length);
     static ADFFile *makeWithFile(const char *path);
-    
+    static ADFFile *make();
+
     
     //
     // Methods from AmigaFile

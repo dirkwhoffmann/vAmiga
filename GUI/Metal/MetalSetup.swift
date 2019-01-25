@@ -45,11 +45,11 @@ public extension MetalView {
             
         // Metal device
         device = MTLCreateSystemDefaultDevice()
-        precondition(device != nil, "Metal device must not be nil")
+        assert(device != nil, "Metal device must not be nil")
     
         // Metal layer
         metalLayer = self.layer as? CAMetalLayer
-        precondition(metalLayer != nil, "Metal layer must not be nil")
+        assert(metalLayer != nil, "Metal layer must not be nil")
         
         metalLayer.device = device
         metalLayer.pixelFormat = MTLPixelFormat.bgra8Unorm
@@ -60,11 +60,11 @@ public extension MetalView {
     
         // Command queue
         queue = device?.makeCommandQueue()
-        precondition(queue != nil, "Metal command queue must not be nil")
+        assert(queue != nil, "Metal command queue must not be nil")
     
         // Shader library
         library = device?.makeDefaultLibrary()
-        precondition(library != nil, "Metal library must not be nil")
+        assert(library != nil, "Metal library must not be nil")
     
         // View parameters
         self.sampleCount = 1
@@ -73,7 +73,7 @@ public extension MetalView {
     internal func buildTextures() {
 
         track()
-        precondition(device != nil)
+        assert(device != nil)
 
         let descriptor = MTLTextureDescriptor.texture2DDescriptor(
             pixelFormat: MTLPixelFormat.rgba8Unorm,
@@ -91,16 +91,16 @@ public extension MetalView {
         // Build C64 texture (as provided by the emulator)
         descriptor.usage = [ .shaderRead ]
         emulatorTexture = device?.makeTexture(descriptor: descriptor)
-        precondition(emulatorTexture != nil, "Failed to create emulator texture.")
+        assert(emulatorTexture != nil, "Failed to create emulator texture.")
         
         // Build bloom textures
         descriptor.usage = [ .shaderRead, .shaderWrite, .renderTarget ]
         bloomTextureR = device?.makeTexture(descriptor: descriptor)
         bloomTextureG = device?.makeTexture(descriptor: descriptor)
         bloomTextureB = device?.makeTexture(descriptor: descriptor)
-        precondition(bloomTextureR != nil, "Failed to create bloom texture (R).")
-        precondition(bloomTextureG != nil, "Failed to create bloom texture (G).")
-        precondition(bloomTextureB != nil, "Failed to create bloom texture (B).")
+        assert(bloomTextureR != nil, "Failed to create bloom texture (R).")
+        assert(bloomTextureG != nil, "Failed to create bloom texture (G).")
+        assert(bloomTextureB != nil, "Failed to create bloom texture (B).")
 
         //
         // 2048 x 2048 textures
@@ -112,11 +112,11 @@ public extension MetalView {
         // Build upscaled C64 texture
         descriptor.usage = [ .shaderRead, .shaderWrite, .pixelFormatView, .renderTarget ]
         upscaledTexture = device?.makeTexture(descriptor: descriptor)
-        precondition(upscaledTexture != nil, "Failed to create upscaling texture.")
+        assert(upscaledTexture != nil, "Failed to create upscaling texture.")
         
         // Build scanline texture
         scanlineTexture = device?.makeTexture(descriptor: descriptor)
-        precondition(scanlineTexture != nil, "Failed to create scanline texture.")
+        assert(scanlineTexture != nil, "Failed to create scanline texture.")
     }
     
     internal func buildSamplers() {
@@ -139,8 +139,8 @@ public extension MetalView {
     
     internal func buildKernels() {
         
-        precondition(device != nil)
-        precondition(library != nil)
+        assert(device != nil)
+        assert(library != nil)
         
         // Build upscalers
         upscalerGallery[0] = BypassUpscaler.init(device: device!, library: library)
@@ -383,7 +383,7 @@ public extension MetalView {
         let opt = MTLResourceOptions.cpuCacheModeWriteCombined
         let len = capacity * 4
         positionBuffer = device?.makeBuffer(bytes: pos, length: len, options: opt)
-        precondition(positionBuffer != nil, "positionBuffer must not be nil")
+        assert(positionBuffer != nil, "positionBuffer must not be nil")
     }
  
     func buildDepthBuffer() {
@@ -406,20 +406,20 @@ public extension MetalView {
         descriptor.usage = MTLTextureUsage.renderTarget
         
         depthTexture = device?.makeTexture(descriptor: descriptor)
-        precondition(depthTexture != nil, "Failed to create depth texture")
+        assert(depthTexture != nil, "Failed to create depth texture")
     }
     
     func buildPipeline() {
 
         track()
-        precondition(device != nil)
-        precondition(library != nil)
+        assert(device != nil)
+        assert(library != nil)
         
         // Get vertex and fragment shader from library
         let vertexFunc = library.makeFunction(name: "vertex_main")
         let fragmentFunc = library.makeFunction(name: "fragment_main")
-        precondition(vertexFunc != nil)
-        precondition(fragmentFunc != nil)
+        assert(vertexFunc != nil)
+        assert(fragmentFunc != nil)
 
         // Create depth stencil state
         let stencilDescriptor = MTLDepthStencilDescriptor.init()

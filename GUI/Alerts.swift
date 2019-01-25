@@ -53,70 +53,49 @@ public extension MetalView {
 extension MyDocument {
     
     @discardableResult
-    func showDiskIsUnexportedAlert(drive nr: Int) -> NSApplication.ModalResponse {
+    func showDiskIsUnexportedAlert(messageText: String) -> NSApplication.ModalResponse {
        
         let alert = NSAlert()
         alert.alertStyle = .warning
         alert.icon = NSImage.init(named: "diskette")
-        alert.messageText = "Drive \(nr) contains an unexported disk."
+        alert.messageText = messageText
         alert.informativeText = "Your changes will be lost if you proceed."
         alert.addButton(withTitle: "Proceed")
         alert.addButton(withTitle: "Cancel")
         return alert.runModal()
     }
-    
-    @discardableResult
-    func showDiskIsUnexportedAlert() -> NSApplication.ModalResponse {
+
+    func proceedWithUnexportedDisk(drives: [AmigaDriveProxy]) -> Bool {
         
-        let alert = NSAlert()
-        alert.alertStyle = .warning
-        alert.icon = NSImage.init(named: "diskette")
-        alert.messageText = "Drive 1 and 2 contain unexported disks."
-        alert.informativeText = "Your changes will be lost if you proceed."
-        alert.addButton(withTitle: "Proceed")
-        alert.addButton(withTitle: "Cancel")
-        return alert.runModal()
-    }
-    
-    func proceedWithUnexportedDisk(drive nr: Int) -> Bool {
+        let modified = drives.filter { $0.hasUnsavedDisk() }
         
-        precondition(nr == 1 || nr == 2)
-        
-        let controller = windowForSheet!.windowController! as! MyController
-        if controller.ejectWithoutAsking {
+        if modified.isEmpty || myController!.ejectWithoutAsking {
             return true
         }
         
-        let modified = (nr == 1) ?
-            c64.drive1.hasModifiedDisk() :
-            c64.drive2.hasModifiedDisk()
+        let names = drives.map({ "Df" + String($0.nr()) }).joined(separator: ", ")
+        let text = "Drive \(names) contains an unexported disk."
 
-        if modified {
-            return showDiskIsUnexportedAlert(drive: nr) == .alertFirstButtonReturn
-        } else {
-            return true
+        return showDiskIsUnexportedAlert(messageText: text) == .alertFirstButtonReturn
+    }
+    
+    func proceedWithUnexportedDisk(drive: AmigaDriveProxy) -> Bool {
+        
+        return proceedWithUnexportedDisk(drives: [drive])
+    }
+        
+    func proceedWithUnexportedDisk(drive nr: Int) -> Bool {
+        
+        switch (nr) {
+        case 0: return proceedWithUnexportedDisk(drives: [amiga.df0])
+        case 1: return proceedWithUnexportedDisk(drives: [amiga.df1])
+        default: fatalError()
         }
     }
     
     func proceedWithUnexportedDisk() -> Bool {
     
-        let controller = windowForSheet!.windowController! as! MyController
-        if controller.ejectWithoutAsking {
-            return true
-        }
-        
-        let modified1 = c64.drive1.hasModifiedDisk()
-        let modified2 = c64.drive2.hasModifiedDisk()
-        
-        if modified1 && modified2 {
-            return showDiskIsUnexportedAlert() == .alertFirstButtonReturn
-        } else if modified1 {
-            return showDiskIsUnexportedAlert(drive: 1) == .alertFirstButtonReturn
-        } else if modified2 {
-            return showDiskIsUnexportedAlert(drive: 2) == .alertFirstButtonReturn
-        } else {
-            return true
-        }
+        return proceedWithUnexportedDisk(drives: [amiga.df0, amiga.df1])
     }
     
     func showDiskIsEmptyAlert(format: String) {
