@@ -97,11 +97,16 @@ AmigaSnapshot::AmigaSnapshot(size_t capacity)
 AmigaSnapshot *
 AmigaSnapshot::makeWithBuffer(const uint8_t *buffer, size_t length)
 {
-    AmigaSnapshot *snapshot = new AmigaSnapshot();
+    AmigaSnapshot *snapshot = NULL;
     
-    if (!snapshot->readFromBuffer(buffer, length)) {
-        delete snapshot;
-        return NULL;
+    if (isSnapshot(buffer, length)) {
+        
+        snapshot = new AmigaSnapshot();
+        
+        if (!snapshot->readFromBuffer(buffer, length)) {
+            delete snapshot;
+            return NULL;
+        }
     }
     return snapshot;
 }
@@ -109,11 +114,16 @@ AmigaSnapshot::makeWithBuffer(const uint8_t *buffer, size_t length)
 AmigaSnapshot *
 AmigaSnapshot::makeWithFile(const char *path)
 {
-    AmigaSnapshot *snapshot = new AmigaSnapshot();
+    AmigaSnapshot *snapshot = NULL;
     
-    if (!snapshot->readFromFile(path)) {
-        delete snapshot;
-        return NULL;
+    if (isSnapshotFile(path)) {
+        
+        snapshot = new AmigaSnapshot();
+        
+        if (!snapshot->readFromFile(path)) {
+            delete snapshot;
+            return NULL;
+        }
     }
     return snapshot;
 }

@@ -333,6 +333,58 @@ struct ADFFileWrapper { ADFFile *adf; };
 
 
 //
+// Snapshot proxy
+//
+
+@implementation AmigaSnapshotProxy
+
++ (BOOL) isSupportedSnapshot:(const void *)buffer length:(NSInteger)length
+{
+    return AmigaSnapshot::isSupportedSnapshot((uint8_t *)buffer, length);
+}
++ (BOOL) isUnsupportedSnapshot:(const void *)buffer length:(NSInteger)length
+{
+    return AmigaSnapshot::isUnsupportedSnapshot((uint8_t *)buffer, length);
+}
++ (BOOL) isSupportedSnapshotFile:(NSString *)path
+{
+    return AmigaSnapshot::isSupportedSnapshotFile([path UTF8String]);
+}
++ (BOOL) isUnsupportedSnapshotFile:(NSString *)path
+{
+    return AmigaSnapshot::isUnsupportedSnapshotFile([path UTF8String]);
+}
+
++ (instancetype) make:(AmigaSnapshot *)snapshot
+{
+    if (snapshot == NULL) {
+        return nil;
+    }
+    return [[self alloc] initWithFile:snapshot];
+}
++ (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)length
+{
+    AmigaSnapshot *snapshot = AmigaSnapshot::makeWithBuffer((uint8_t *)buffer, length);
+    return [self make:snapshot];
+}
++ (instancetype) makeWithFile:(NSString *)path
+{
+    AmigaSnapshot *snapshot = AmigaSnapshot::makeWithFile([path UTF8String]);
+    return [self make:snapshot];
+}
++ (instancetype) makeWithAmiga:(AmigaProxy *)proxy
+{
+    Amiga *amiga = [proxy wrapper]->amiga;
+    amiga->suspend();
+    AmigaSnapshot *snapshot = AmigaSnapshot::makeWithAmiga(amiga);
+    amiga->resume();
+    return [self make:snapshot];
+}
+
+@end
+
+
+//
 // ADFFile proxy
 //
 
@@ -632,6 +684,11 @@ struct ADFFileWrapper { ADFFile *adf; };
 - (NSInteger) snapshotInterval
 {
     return wrapper->amiga->getSnapshotInterval();
+}
+- (void) loadFromSnapshot:(AmigaSnapshotProxy *)proxy
+{
+    AmigaSnapshot *snapshot = (AmigaSnapshot *)[proxy wrapper];
+    wrapper->amiga->loadFromSnapshotSafe(snapshot);
 }
 - (void) setSnapshotInterval:(NSInteger)value
 {

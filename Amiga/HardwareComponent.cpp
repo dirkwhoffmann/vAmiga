@@ -129,6 +129,8 @@ HardwareComponent::registerSnapshotItems(SnapshotItem *items, unsigned length) {
     
     unsigned i, numItems = length / sizeof(SnapshotItem);
     
+    debug("Registering %d items\n", numItems);
+    
     // Allocate new array on heap and copy array data
     snapshotItems = new SnapshotItem[numItems];
     std::copy(items, items + numItems, &snapshotItems[0]);
@@ -147,6 +149,7 @@ HardwareComponent::stateSize()
         for (unsigned i = 0; subComponents[i] != NULL; i++)
             result += subComponents[i]->stateSize();
     
+    debug("State size = %d bytes\n", result);
     return result;
 }
 
@@ -174,6 +177,8 @@ HardwareComponent::loadFromBuffer(uint8_t **buffer)
         size  = snapshotItems[i].size;
         
         if (flags == 0) { // Auto detect size
+            
+            debug("Reading back to %p\n", data);
             
             switch (snapshotItems[i].size) {
                 case 1:  *(uint8_t *)data  = read8(buffer); break;

@@ -94,6 +94,8 @@ Amiga::Amiga()
     
     registerSnapshotItems(items, sizeof(items));
     
+    debug("warp = %p\n", &warp);
+    
     // Initialize the mach timer info
     mach_timebase_info(&tb);
 }
