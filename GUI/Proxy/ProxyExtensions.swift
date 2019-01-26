@@ -12,6 +12,31 @@ import Foundation
 
 public extension AmigaProxy {
     
+    func df(_ nr: Int) -> AmigaDriveProxy {
+        
+        switch (nr) {
+            
+        case 0: return df0
+        case 1: return df1
+            
+        default: fatalError()
+        }
+    }
+    
+    func df(_ item: NSButton!) -> AmigaDriveProxy {
+        
+        return df(item.tag)
+    }
+    
+    func df(_ item: NSMenuItem!) -> AmigaDriveProxy {
+        
+        return df(item.tag)
+    }
+    
+    
+    
+    
+    /*
     @discardableResult
     func configureDrive(_ driveNr: Int, connected: Bool) -> Bool {
         
@@ -33,7 +58,7 @@ public extension AmigaProxy {
         
         return _configureDrive(driveNr, connected: connected)
     }
-
+    */
     
     func image(data: UnsafeMutablePointer<UInt8>?, size: NSSize) -> NSImage {
         

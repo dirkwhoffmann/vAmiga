@@ -11,27 +11,6 @@ import Foundation
 
 extension MyController : NSMenuItemValidation {
     
-    func drive(_ nr: Int) -> AmigaDriveProxy {
-
-        switch (nr) {
-            
-        case 0: return amiga.df0
-        case 1: return amiga.df1
-            
-        default: fatalError()
-        }
-    }
-    
-    func drive(_ item: NSButton!) -> AmigaDriveProxy {
-        
-        return drive(item.tag)
-    }
-    
-    func drive(_ item: NSMenuItem!) -> AmigaDriveProxy {
-        
-        return drive(item.tag)
-    }
- 
     open func validateMenuItem(_ item: NSMenuItem) -> Bool {
 
         // track("validateMenuItem")
@@ -381,7 +360,7 @@ extension MyController : NSMenuItemValidation {
         
         let emptyArchive =  ADFFileProxy.make()
         
-        drive(sender).insertDisk(emptyArchive)
+        amiga.df(sender).insertDisk(emptyArchive)
         mydocument.clearRecentlyExportedDiskURLs(drive: sender.tag)
     }
     
@@ -405,7 +384,7 @@ extension MyController : NSMenuItemValidation {
                 if let url = openPanel.url {
                     do {
                         let adf = try self.mydocument.createADF(from: url)
-                        self.drive(sender).insertDisk(adf)
+                        self.amiga.df(sender).insertDisk(adf)
                     } catch {
                         NSApp.presentError(error)
                     }
@@ -426,7 +405,7 @@ extension MyController : NSMenuItemValidation {
             do {
                 let adf = try self.mydocument.createADF(from: url)
                 if (mydocument.proceedWithUnexportedDisk(drive: drive)) {
-                    self.drive(drive).insertDisk(adf)
+                    amiga.df(drive).insertDisk(adf)
                 }
             } catch {
                 NSApp.presentError(error)
@@ -500,8 +479,8 @@ extension MyController : NSMenuItemValidation {
     
     @IBAction func dragAndDropTargetAction(_ sender: NSMenuItem!) {
         
-        let d = drive(sender)
-        dragAndDropDrive = (dragAndDropDrive == d) ? nil : d
+        let drive = amiga.df(sender)
+        dragAndDropDrive = (dragAndDropDrive == drive) ? nil : drive
     }
     
 

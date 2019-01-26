@@ -96,7 +96,7 @@ struct AmigaFileWrapper;
 - (BOOL) configureSlowMemory:(NSInteger)size;
 - (BOOL) configureFastMemory:(NSInteger)size;
 - (BOOL) configureRealTimeClock:(BOOL)value;
-- (BOOL) _configureDrive:(NSInteger)driveNr connected:(BOOL)value;
+- (BOOL) configureDrive:(NSInteger)driveNr connected:(BOOL)value;
 - (BOOL) configureDrive:(NSInteger)driveNr type:(NSInteger)value;
 
 - (BOOL) hasBootRom;

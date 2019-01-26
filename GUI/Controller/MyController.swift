@@ -468,18 +468,15 @@ extension MyController {
  
     func processMessage(_ msg: Message) {
 
+        /*
         var drive : AmigaDriveProxy? {
             get {
                 assert(msg.data == 0 || msg.data == 1)
                 return msg.data == 0 ? amigaProxy?.df0 : amigaProxy?.df1
             }
         }
+        */
         
-        func firstDrive() -> Bool {
-            assert(msg.data == 1 || msg.data == 2)
-            return msg.data == 1;
-        }
-
         switch (msg.type) {
     
         case MSG_READY_TO_POWER_ON:
@@ -521,11 +518,30 @@ extension MyController {
             powerLED.image = NSImage.init(named: "powerLedOff")
             
         case MSG_RESET:
+            
             track()
             
-        case MSG_DRIVE_CONNECT,
-             MSG_DRIVE_DISCONNECT,
-             MSG_DRIVE_DISK_INSERT,
+        case MSG_DRIVE_CONNECT:
+            
+            let name = "Df" + String(msg.data)
+            track("\(name)")
+            NSApp.mainMenu?.item(withTitle: name)?.isHidden = false
+            refreshStatusBar()
+            
+        case  MSG_DRIVE_DISCONNECT:
+            
+            let name = "Df" + String(msg.data)
+            track("\(name)")
+            NSApp.mainMenu?.item(withTitle: name)?.isHidden = true
+            
+            // Delete the drag and drop target drive if it gets disconnected.
+            // Otherwise, the user would get confused.
+            if dragAndDropDrive == amiga.df(msg.data) {
+                dragAndDropDrive = nil
+            }
+            refreshStatusBar()
+            
+        case MSG_DRIVE_DISK_INSERT,
              MSG_DRIVE_DISK_EJECT,
              MSG_DRIVE_DISK_UNSAVED,
              MSG_DRIVE_DISK_SAVED,
