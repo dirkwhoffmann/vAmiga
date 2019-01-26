@@ -45,12 +45,16 @@ AmigaDrive::_reset()
 void
 AmigaDrive::_ping()
 {
+    debug("AmigaDrive::_ping()\n");
+
+    amiga->putMessage(isConnected() ?
+                      MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, nr);
     amiga->putMessage(hasDisk() ?
-                      MSG_DRIVE_DISK_INSERT : MSG_DRIVE_DISK_EJECT);
+                      MSG_DRIVE_DISK_INSERT : MSG_DRIVE_DISK_EJECT, nr);
     amiga->putMessage(hasWriteProtectedDisk() ?
-                      MSG_DRIVE_DISK_PROTECTED : MSG_DRIVE_DISK_UNPROTECTED);
+                      MSG_DRIVE_DISK_PROTECTED : MSG_DRIVE_DISK_UNPROTECTED, nr);
     amiga->putMessage(hasUnsavedDisk() ?
-                      MSG_DRIVE_DISK_UNSAVED : MSG_DRIVE_DISK_SAVED);
+                      MSG_DRIVE_DISK_UNSAVED : MSG_DRIVE_DISK_SAVED, nr);
 }
 
 void
@@ -65,7 +69,7 @@ AmigaDrive::setConnected(bool value)
     if (connected != value) {
         
         connected = value;
-        amiga->putMessage(connected ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT);
+        amiga->putMessage(connected ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, nr);
     }
 }
 

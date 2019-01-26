@@ -29,6 +29,10 @@ extension MyController : NSWindowDelegate {
 
         // Update the status bar
         myController?.refreshStatusBar()
+
+        // Let the emulator tell us it's current state
+        amigaProxy?.ping()
+
     }
     
     public func windowDidResignMain(_ notification: Notification) {

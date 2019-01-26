@@ -521,9 +521,29 @@ extension MyController {
             
             track()
             
-        case MSG_DRIVE_CONNECT,
-             MSG_DRIVE_DISCONNECT,
-             MSG_DRIVE_DISK_INSERT,
+        case MSG_DRIVE_CONNECT:
+            
+            switch (msg.data) {
+                
+            case 0: myAppDelegate.df0Menu.isHidden = false
+            case 1: myAppDelegate.df1Menu.isHidden = false
+            default: fatalError()
+            }
+            
+        case MSG_DRIVE_DISCONNECT:
+            
+            switch (msg.data) {
+            case 0: myAppDelegate.df0Menu.isHidden = true
+            case 1: myAppDelegate.df1Menu.isHidden = true
+            default: fatalError()
+            }
+            
+            // Remove drop target status from the disconnect drive
+            if dragAndDropDrive === amiga.df(msg.data) {
+                dragAndDropDrive = nil
+            }
+            
+        case MSG_DRIVE_DISK_INSERT,
              MSG_DRIVE_DISK_EJECT,
              MSG_DRIVE_DISK_UNSAVED,
              MSG_DRIVE_DISK_SAVED,
