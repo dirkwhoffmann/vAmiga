@@ -30,6 +30,16 @@ AmigaKeyboard::_dump()
     }
 }
 
+void
+AmigaKeyboard::setMapCmdKeys(bool value)
+{
+    if (value != mapCmdKeys) {
+        
+        mapCmdKeys = value;
+        amiga->putMessage(value ? MSG_MAP_CMD_KEYS : MSG_UNMAP_CMD_KEYS);
+    }
+}
+
 bool
 AmigaKeyboard::keyIsPressed(long keycode)
 {
@@ -41,6 +51,11 @@ void
 AmigaKeyboard::pressKey(long keycode)
 {
     assert(keycode < 0x80);
+    
+    // Check if the left or the right Command key (the 'Amiga' key) is pressed
+    if (keycode == 0x66 || keycode == 0x67) {
+        if (!mapCmdKeys) return;
+    }
     
     if (!keyDown[keycode]) {
         debug("Pressing Amiga key %02X\n", keycode);

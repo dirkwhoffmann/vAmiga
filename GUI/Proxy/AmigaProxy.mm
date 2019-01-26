@@ -152,6 +152,14 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->keyboard->dump();
 }
+- (BOOL) cmdKeysAreMapped
+{
+    return wrapper->keyboard->cmdKeysAreMapped();
+}
+- (void) setMapCmdKeys:(BOOL)value
+{
+    wrapper->keyboard->setMapCmdKeys(value);
+}
 - (BOOL) keyIsPressed:(NSInteger)keycode
 {
     return wrapper->keyboard->keyIsPressed(keycode);

@@ -147,6 +147,10 @@ typedef enum
     MSG_RESET,
     MSG_ROM_MISSING,
 
+    // Keyboard
+    MSG_MAP_CMD_KEYS,
+    MSG_UNMAP_CMD_KEYS,
+    
     // Floppy drives
     MSG_DRIVE_CONNECT,
     MSG_DRIVE_DISCONNECT,
