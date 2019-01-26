@@ -11,8 +11,8 @@
 #define _AMIGA_DRIVE_INC
 
 #include "HardwareComponent.h"
+#include "AmigaDisk.h"
 
-class AmigaDisk;
 class ADFFile;
 
 //
@@ -67,8 +67,10 @@ public:
     void toggleConnected();
     void toggleUnsafed(); // FOR DEBUGGING
     
-    bool hasDisk();
-    bool hasUnsavedDisk();
+    bool hasDisk() { return disk != NULL; }
+    bool hasModifiedDisk() { return disk ? disk->isModified() : false; }
+    void setModifiedDisk(bool value) { if (disk) disk->setModified(value); }
+    
     bool hasWriteProtectedDisk();
     void toggleWriteProtection();
     

@@ -98,7 +98,7 @@ public:
     //
     
     AmigaFileType type() { return FILETYPE_SNAPSHOT; }
-    const char *typeAsString() { return "VAM"; }
+    const char *typeAsString() { return "VAMIGA"; }
     bool hasSameType(const char *filename);
     
     

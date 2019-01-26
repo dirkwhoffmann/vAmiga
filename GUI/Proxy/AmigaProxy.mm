@@ -240,9 +240,13 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->drive->hasWriteProtectedDisk();
 }
-- (BOOL) hasUnsavedDisk
+- (BOOL) hasModifiedDisk
 {
-    return wrapper->drive->hasUnsavedDisk();
+    return wrapper->drive->hasModifiedDisk();
+}
+- (void) setModifiedDisk:(BOOL)value
+{
+    wrapper->drive->setModifiedDisk(value);
 }
 - (void) ejectDisk
 {
@@ -687,7 +691,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 - (void) loadFromSnapshot:(AmigaSnapshotProxy *)proxy
 {
-    AmigaSnapshot *snapshot = (AmigaSnapshot *)[proxy wrapper];
+    AmigaSnapshot *snapshot = (AmigaSnapshot *)([proxy wrapper]->file);
     wrapper->amiga->loadFromSnapshotSafe(snapshot);
 }
 - (void) setSnapshotInterval:(NSInteger)value

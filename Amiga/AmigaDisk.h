@@ -21,7 +21,7 @@ class AmigaDisk : public AmigaObject {
 public:
     
     bool writeProtected = false;
-    bool unsaved = false;
+    bool modified = false;
     
     //
     // Constructing and destructing
@@ -38,8 +38,8 @@ public:
     bool isWriteProtected() { return writeProtected; }
     void setWriteProtection(bool value) { writeProtected = value; }
     
-    bool isUnsaved() { return unsaved; }
-    void setUnsaved(bool value) { unsaved = value; }
+    bool isModified() { return modified; }
+    void setModified(bool value) { modified = value; }
 };
 
 #endif

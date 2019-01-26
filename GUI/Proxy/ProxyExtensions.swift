@@ -75,9 +75,9 @@ public extension AmigaDriveProxy {
             var name : String
             
             if (hasWriteProtectedDisk()) {
-                name = hasUnsavedDisk() ? "diskUPTemplate" : "diskPTemplate"
+                name = hasModifiedDisk() ? "diskUPTemplate" : "diskPTemplate"
             } else {
-                name = hasUnsavedDisk() ? "diskUTemplate" : "diskTemplate"
+                name = hasModifiedDisk() ? "diskUTemplate" : "diskTemplate"
             }
             
             return NSImage.init(named: name)!

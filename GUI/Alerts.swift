@@ -67,7 +67,7 @@ extension MyDocument {
 
     func proceedWithUnexportedDisk(drives: [AmigaDriveProxy]) -> Bool {
         
-        let modified = drives.filter { $0.hasUnsavedDisk() }
+        let modified = drives.filter { $0.hasModifiedDisk() }
         
         if modified.isEmpty || myController!.ejectWithoutAsking {
             return true

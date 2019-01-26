@@ -273,7 +273,8 @@ struct AmigaFileWrapper;
 
 - (BOOL) hasDisk;
 - (BOOL) hasWriteProtectedDisk;
-- (BOOL) hasUnsavedDisk;
+- (BOOL) hasModifiedDisk;
+- (void) setModifiedDisk:(BOOL)value; 
 - (void) ejectDisk;
 - (void) insertDisk:(ADFFileProxy *)file;
 - (void) toggleWriteProtection;
@@ -322,7 +323,7 @@ struct AmigaFileWrapper;
 + (BOOL)isUnsupportedSnapshotFile:(NSString *)path;
 + (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)length;
 + (instancetype)makeWithFile:(NSString *)path;
-+ (instancetype)makeWithAmiga:(AmigaProxy *)c64proxy;
++ (instancetype)makeWithAmiga:(AmigaProxy *)amiga;
 
 @end
 

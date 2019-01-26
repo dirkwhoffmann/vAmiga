@@ -11,19 +11,19 @@ import Foundation
 
 class MyDocument : NSDocument {
 
-    /**
+    /*
      Emulator proxy object. This object is an Objective-C bridge between
      the GUI (written in Swift) an the core emulator (written in C++).
      */
     var amiga: AmigaProxy!
 
-    /**
+    /*
      Emulator proxy object. This object is an Objective-C bridge between
      the GUI (written in Swift) an the core emulator (written in C++).
      */
     var c64: C64Proxy!
     
-    /**
+    /*
      An otional media object attached to this document.
      This variable is checked by the GUI, e.g., when the READY_TO_RUN message
      is received. If an attachment is present, e.g., a T64 archive,
@@ -40,22 +40,21 @@ class MyDocument : NSDocument {
     var attachment: AnyC64FileProxy? = nil // REMOVE ASAP
     var amigaAttachment: AmigaFileProxy? = nil
     
-    /// The list of recently inserted disk URLs.
+    // The list of recently inserted disk URLs.
     var recentlyInsertedDiskURLs: [URL] = []
 
-    /// The list of recently exported disk URLs for drive 1.
+    // The list of recently exported disk URLs for drive 1.
     var recentlyExportedDisk0URLs: [URL] = []
 
-    /// The list of recently exported disk URLs for drive 2.
+    // The list of recently exported disk URLs for drive 2.
     var recentlyExportedDisk1URLs: [URL] = []
 
-    /// The list of recently inserted tape URLs.
+    // The list of recently inserted tape URLs.
     var recentlyInsertedTapeURLs: [URL] = []
 
-    /// The list of recently atached cartridge URLs.
+    // The list of recently atached cartridge URLs.
     var recentlyAttachedCartridgeURLs: [URL] = []
 
-    
     override init() {
         
         track()
@@ -245,10 +244,10 @@ class MyDocument : NSDocument {
                                            ofType typeName: String) throws {
         
         guard let filename = fileWrapper.filename else {
-            throw NSError(domain: "VirtualC64", code: 0, userInfo: nil)
+            throw NSError(domain: "vAmiga", code: 0, userInfo: nil)
         }
         guard let data = fileWrapper.regularFileContents else {
-            throw NSError(domain: "VirtualC64", code: 0, userInfo: nil)
+            throw NSError(domain: "vAmiga", code: 0, userInfo: nil)
         }
         
         let buffer = (data as NSData).bytes
@@ -259,14 +258,12 @@ class MyDocument : NSDocument {
         
         switch (typeName) {
             
-        case "VAM":
+        case "VAMIGA":
             // Check for outdated snapshot formats
-            /*
-            if SnapshotProxy.isUnsupportedSnapshot(buffer, length: length) {
+            if AmigaSnapshotProxy.isUnsupportedSnapshot(buffer, length: length) {
                 throw NSError.snapshotVersionError(filename: filename)
             }
-            amigaAttachment = SnapshotProxy.make(withBuffer: buffer, length: length)
-            */
+            amigaAttachment = AmigaSnapshotProxy.make(withBuffer: buffer, length: length)
             openAsUntitled = false
             
         case "ADF":
@@ -363,7 +360,10 @@ class MyDocument : NSDocument {
         
         switch(amigaAttachment) {
 
-        // case _ as SnapshotProxy: c64.flash(attachment); return true
+        case _ as AmigaSnapshotProxy:
+            
+            amiga.load(fromSnapshot: amigaAttachment as? AmigaSnapshotProxy)
+            return true
        
         case _ as ADFFileProxy:
             
@@ -502,7 +502,7 @@ class MyDocument : NSDocument {
     
     override open func read(from url: URL, ofType typeName: String) throws {
         
-        try createAttachment(from: url)
+        try createAmigaAttachment(from: url)
     }
     
     
@@ -514,10 +514,10 @@ class MyDocument : NSDocument {
         
         track("Trying to write \(typeName) file.")
         
-        if typeName == "VC64" {
+        if typeName == "vAmiga" {
             
             // Take snapshot
-            if let snapshot = SnapshotProxy.make(withC64: c64) {
+            if let snapshot = AmigaSnapshotProxy.make(withAmiga: amiga) {
 
                 // Write to data buffer
                 if let data = NSMutableData.init(length: snapshot.sizeOnDisk()) {
@@ -536,6 +536,37 @@ class MyDocument : NSDocument {
     //
     
     func export(drive nr: Int, to url: URL, ofType typeName: String) -> Bool {
+        
+        track("url = \(url) typeName = \(typeName)")
+        assert(["ADF"].contains(typeName))
+        
+        let drive = amiga.df(nr)
+        
+        // TOD: Convert disk to ADF format
+        // guard let adf = ADFFileProxy.make(withDisk: drive.disk) else {
+        guard let adf = ADFFileProxy.make() else {
+            return false
+        }
+        
+        // Serialize data
+        let data = NSMutableData.init(length: adf.sizeOnDisk())!
+        adf.write(toBuffer: data.mutableBytes)
+        
+        // Write to file
+        if !data.write(to: url, atomically: true) {
+            showExportErrorAlert(url: url)
+            return false
+        }
+        
+        // Mark disk as "not modified"
+        drive.setModifiedDisk(false)
+        
+        // Remember export URL
+        noteNewRecentlyExportedDiskURL(url, drive: nr)
+        return true
+    }
+    
+    func exportOld(drive nr: Int, to url: URL, ofType typeName: String) -> Bool {
         
         track("url = \(url) typeName = \(typeName)")
         assert(["ADF", "D64", "T64", "PRG", "P00", "G64"].contains(typeName))

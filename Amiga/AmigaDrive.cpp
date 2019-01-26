@@ -53,7 +53,7 @@ AmigaDrive::_ping()
                       MSG_DRIVE_DISK_INSERT : MSG_DRIVE_DISK_EJECT, nr);
     amiga->putMessage(hasWriteProtectedDisk() ?
                       MSG_DRIVE_DISK_PROTECTED : MSG_DRIVE_DISK_UNPROTECTED, nr);
-    amiga->putMessage(hasUnsavedDisk() ?
+    amiga->putMessage(hasModifiedDisk() ?
                       MSG_DRIVE_DISK_UNSAVED : MSG_DRIVE_DISK_SAVED, nr);
 }
 
@@ -83,19 +83,13 @@ void
 AmigaDrive::toggleUnsafed()
 {
     if (disk) {
-        disk->unsaved = !disk->unsaved;
-        if (disk->unsaved) {
+        disk->modified = !disk->modified;
+        if (disk->modified) {
             amiga->putMessage(MSG_DRIVE_DISK_UNSAVED);
         } else {
             amiga->putMessage(MSG_DRIVE_DISK_SAVED);
         }
     }
-}
-
-bool
-AmigaDrive::hasDisk()
-{
-    return disk != NULL;
 }
 
 bool
@@ -120,12 +114,6 @@ AmigaDrive::toggleWriteProtection()
             amiga->putMessage(MSG_DRIVE_DISK_PROTECTED);
         }
     }
-}
-
-bool
-AmigaDrive::hasUnsavedDisk()
-{
-    return hasDisk() ? disk->isUnsaved() : false;
 }
 
 void

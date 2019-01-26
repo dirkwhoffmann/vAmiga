@@ -216,7 +216,7 @@ HardwareComponent::saveToBuffer(uint8_t **buffer)
 {
     uint8_t *old = *buffer;
     
-    debug(3, "    Saving internal state ...\n");
+    debug(4, "    Saving internal state ...\n");
     
     // Call delegation method
     willSaveToBuffer(buffer);
