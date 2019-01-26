@@ -11,6 +11,7 @@
 #define _AMIGAOBJECT_INC
 
 #include "va_std.h"
+#include <vector>
 
 /* Base class for all vAmiga objects.
  * This class stores a textual description of the object and offers various

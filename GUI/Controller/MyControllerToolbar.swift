@@ -174,19 +174,19 @@ extension MyController {
         case 0: // Rewind
 
             track("Rewind")
-            if (c64.restoreLatestAutoSnapshot()) {
+            if (amiga.restoreLatestAutoSnapshot()) {
                 metal.snapToFront()
             }
         
         case 1: // Take
 
             track("Snap")
-            c64.takeUserSnapshot()
+            amiga.takeUserSnapshot()
             
         case 2: // Restore
             
             track("Restore")
-            if (c64.restoreLatestUserSnapshot()) {
+            if (amiga.restoreLatestUserSnapshot()) {
                 metal.snapToFront()
             } else {
                 NSSound.beep()

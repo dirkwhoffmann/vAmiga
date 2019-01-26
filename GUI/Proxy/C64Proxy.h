@@ -144,8 +144,6 @@ struct AnyC64FileWrapper;
 // Handling snapshots
 - (BOOL) takeAutoSnapshots;
 - (void) setTakeAutoSnapshots:(BOOL)b;
-//- (void) disableAutoSnapshots;
-// - (void) enableAutoSnapshots;
 - (void) suspendAutoSnapshots;
 - (void) resumeAutoSnapshots;
 - (NSInteger) snapshotInterval;

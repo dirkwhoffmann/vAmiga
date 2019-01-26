@@ -79,6 +79,14 @@ Denise::endOfFrame()
         memcpy((void *)shortFrame, fakeImage2, BUFSIZE);
     }
     
+    // Take a snapshot once in a while
+    if (amiga->getTakeAutoSnapshots() && amiga->getSnapshotInterval() > 0) {
+        unsigned fps = 50;
+        if (frame % (fps * amiga->getSnapshotInterval()) == 0) {
+            amiga->takeAutoSnapshot();
+        }
+    }
+    
     // Count some sheep (zzzzzz) ...
     if (!amiga->getWarp()) {
         amiga->synchronizeTiming();

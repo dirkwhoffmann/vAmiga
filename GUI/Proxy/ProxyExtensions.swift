@@ -33,33 +33,6 @@ public extension AmigaProxy {
         return df(item.tag)
     }
     
-    
-    
-    
-    /*
-    @discardableResult
-    func configureDrive(_ driveNr: Int, connected: Bool) -> Bool {
-        
-        let target = myController?.dragAndDropDrive
-        
-        switch driveNr {
-        case 0:
-            myAppDelegate.df0Menu.isHidden = !connected
-            if !connected && target == amigaProxy?.df0 {
-                myController?.dragAndDropDrive = nil
-            }
-        case 1:
-            myAppDelegate.df1Menu.isHidden = !connected
-            if !connected && target == amigaProxy?.df1 {
-                myController?.dragAndDropDrive = nil
-            }
-        default: fatalError()
-        }
-        
-        return _configureDrive(driveNr, connected: connected)
-    }
-    */
-    
     func image(data: UnsafeMutablePointer<UInt8>?, size: NSSize) -> NSImage {
         
         var bitmap = data
@@ -82,7 +55,6 @@ public extension AmigaProxy {
         return image
     }
     
-    /*
     func autoSnapshotImage(_ item: Int) -> NSImage {
         
         let data = autoSnapshotImageData(item)
@@ -94,7 +66,6 @@ public extension AmigaProxy {
         let data = userSnapshotImageData(item)
         return image(data: data, size: userSnapshotImageSize(item))
     }
-    */
 }
 
 public extension AmigaDriveProxy {

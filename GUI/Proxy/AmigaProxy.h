@@ -118,14 +118,39 @@ struct AmigaFileWrapper;
 - (void) removeListener:(const void *)sender;
 - (Message)message;
 
-
-// - (BOOL) warp;
 - (BOOL) alwaysWarp;
 - (void) setAlwaysWarp:(BOOL)value;
 - (BOOL) warpLoad;
 - (void) setWarpLoad:(BOOL)value;
 
-// Handling ROMs
+// Handling snapshots
+- (BOOL) takeAutoSnapshots;
+- (void) setTakeAutoSnapshots:(BOOL)b;
+- (void) suspendAutoSnapshots;
+- (void) resumeAutoSnapshots;
+- (NSInteger) snapshotInterval;
+- (void) setSnapshotInterval:(NSInteger)value;
+
+- (BOOL) restoreAutoSnapshot:(NSInteger)nr;
+- (BOOL) restoreUserSnapshot:(NSInteger)nr;
+- (BOOL) restoreLatestAutoSnapshot;
+- (BOOL) restoreLatestUserSnapshot;
+- (NSInteger) numAutoSnapshots;
+- (NSInteger) numUserSnapshots;
+
+- (NSData *) autoSnapshotData:(NSInteger)nr;
+- (NSData *) userSnapshotData:(NSInteger)nr;
+- (unsigned char *) autoSnapshotImageData:(NSInteger)nr;
+- (unsigned char *) userSnapshotImageData:(NSInteger)nr;
+- (NSSize) autoSnapshotImageSize:(NSInteger)nr;
+- (NSSize) userSnapshotImageSize:(NSInteger)nr;
+- (time_t) autoSnapshotTimestamp:(NSInteger)nr;
+- (time_t) userSnapshotTimestamp:(NSInteger)nr;
+
+- (void) takeUserSnapshot;
+
+- (void) deleteAutoSnapshot:(NSInteger)nr;
+- (void) deleteUserSnapshot:(NSInteger)nr;
 
 @end
 

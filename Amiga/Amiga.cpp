@@ -276,7 +276,7 @@ Amiga::_dump()
 void
 Amiga::suspend()
 {
-    debug(2, "Suspending...\n");
+    debug(2, "Suspending (%d)...\n", suspendCounter);
     
     if (suspendCounter == 0 && !isRunning())
         return;
@@ -288,7 +288,7 @@ Amiga::suspend()
 void
 Amiga::resume()
 {
-    debug(2, "Resuming...\n");
+    debug(2, "Resuming (%d)...\n", suspendCounter);
     
     if (suspendCounter == 0)
         return;
@@ -575,6 +575,7 @@ Amiga::runLoop()
     //
     
     // THE FOLLOWING CODE IS FOR VISUAL PROTOTYPING ONLY
+    stop = false;
     while (!stop) {
         
         // Emulate the CPU (fake)
@@ -587,5 +588,78 @@ Amiga::runLoop()
         denise.executeUntil(masterClock);
         eventHandler.executeUntil(masterClock);
         
+    }
+}
+
+
+void
+Amiga::loadFromSnapshotUnsafe(AmigaSnapshot *snapshot)
+{
+    uint8_t *ptr;
+    
+    if (snapshot && (ptr = snapshot->getData())) {
+        loadFromBuffer(&ptr);
+        keyboard.releaseAllKeys(); // Avoid constantly pressed keys
+        ping();
+    }
+}
+
+void
+Amiga::loadFromSnapshotSafe(AmigaSnapshot *snapshot)
+{
+    debug(2, "Amiga::loadFromSnapshotSafe\n");
+    
+    suspend();
+    loadFromSnapshotUnsafe(snapshot);
+    resume();
+}
+
+bool
+Amiga::restoreSnapshot(vector<AmigaSnapshot *> &storage, unsigned nr)
+{
+    AmigaSnapshot *snapshot = getSnapshot(storage, nr);
+    
+    if (snapshot) {
+        loadFromSnapshotSafe(snapshot);
+        return true;
+    }
+    
+    return false;
+}
+
+size_t
+Amiga::numSnapshots(vector<AmigaSnapshot *> &storage)
+{
+    return storage.size();
+}
+
+AmigaSnapshot *
+Amiga::getSnapshot(vector<AmigaSnapshot *> &storage, unsigned nr)
+{
+    return nr < storage.size() ? storage.at(nr) : NULL;
+    
+}
+
+void
+Amiga::takeSnapshot(vector<AmigaSnapshot *> &storage)
+{
+    // Delete oldest snapshot if capacity limit has been reached
+    if (storage.size() >= MAX_SNAPSHOTS) {
+        deleteSnapshot(storage, MAX_SNAPSHOTS - 1);
+    }
+    
+    AmigaSnapshot *snapshot = AmigaSnapshot::makeWithAmiga(this);
+    storage.insert(storage.begin(), snapshot);
+    putMessage(MSG_SNAPSHOT_TAKEN);
+}
+
+void
+Amiga::deleteSnapshot(vector<AmigaSnapshot *> &storage, unsigned index)
+{
+    AmigaSnapshot *snapshot = getSnapshot(storage, index);
+    
+    if (snapshot) {
+        delete snapshot;
+        storage.erase(storage.begin() + index);
     }
 }

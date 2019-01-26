@@ -14,10 +14,6 @@
 #include "HardwareComponent.h"
 #include "MessageQueue.h"
 
-// Roms
-#include "BootRom.h"
-#include "KickRom.h"
-
 // Sub components
 #include "EventHandler.h"
 #include "AmigaMemory.h"
@@ -29,8 +25,10 @@
 #include "AmigaDrive.h"
 #include "AmigaDisk.h"
 
-
 // File types
+#include "BootRom.h"
+#include "KickRom.h"
+#include "AmigaSnapshot.h"
 #include "ADFFile.h"
 
 
@@ -187,8 +185,6 @@ public:
     // Snapshot storage
     //
     
-#if 0
-    
 private:
     
     // Indicates if snapshots should be taken automatically.
@@ -203,12 +199,11 @@ private:
     static const size_t MAX_SNAPSHOTS = 32;
     
     // Storage for auto-taken snapshots
-    vector<Snapshot *> autoSnapshots;
+    vector<AmigaSnapshot *> autoSnapshots;
     
     // Storage for user-taken snapshots
-    vector<Snapshot *> userSnapshots;
+    vector<AmigaSnapshot *> userSnapshots;
 
-#endif
     
     //
     // Constructing and destructing
@@ -474,19 +469,19 @@ private:
     
     // Converts kernel time to nanoseconds.
     uint64_t abs_to_nanos(uint64_t abs) { return abs * tb.numer / tb.denom; }
-
+    
     // Converts nanoseconds to kernel time.
     uint64_t nanos_to_abs(uint64_t nanos) { return nanos * tb.denom / tb.numer; }
-
+    
     // Returns the current time in nanoseconds.
     uint64_t time_in_nanos() { return abs_to_nanos(mach_absolute_time()); }
-
+    
     /* Returns the delay between two frames in nanoseconds.
      * As long as we only emulate PAL machines, the frame rate is 50 Hz
      * and this function returns a constant.
      */
     uint64_t frameDelay() { return uint64_t(1000000000) / 50; }
-
+    
 public:
     
     /* Puts the emulator thread to sleep.
@@ -494,6 +489,79 @@ public:
      * been reached. It also assigns a new target value to nanoTargetTime.
      */
     void synchronizeTiming();
+    
+    
+    //
+    // Handling snapshots
+    //
+    
+public:
+    
+    // Indicates if the auto-snapshot feature is enabled.
+    bool getTakeAutoSnapshots() { return takeAutoSnapshots; }
+    
+    // Enables or disabled the auto-snapshot feature.
+    void setTakeAutoSnapshots(bool enable) { takeAutoSnapshots = enable; }
+    
+    /* Disables the auto-snapshot feature temporarily.
+     * This method is called when the snaphshot browser opens.
+     */
+    void suspendAutoSnapshots() { autoSnapshotInterval -= (LONG_MAX / 2); }
+    
+    /* Heal a call to suspendAutoSnapshots()
+     * This method is called when the snaphshot browser closes.
+     */
+    void resumeAutoSnapshots() { autoSnapshotInterval += (LONG_MAX / 2); }
+    
+    // Returns the time between two auto-snapshots in seconds.
+    long getSnapshotInterval() { return autoSnapshotInterval; }
+    
+    // Sets the time between two auto-snapshots in seconds.
+    void setSnapshotInterval(long value) { autoSnapshotInterval = value; }
+    
+    /* Loads the current state from a snapshot file
+     * There is an thread-unsafe and thread-safe version of this function. The
+     * first one can be unsed inside the emulator thread or from outside if the
+     * emulator is halted. The second one can be called any time.
+     */
+    void loadFromSnapshotUnsafe(AmigaSnapshot *snapshot);
+    void loadFromSnapshotSafe(AmigaSnapshot *snapshot);
+    
+    // Restores a certain snapshot from the snapshot storage
+    bool restoreSnapshot(vector<AmigaSnapshot *> &storage, unsigned nr);
+    bool restoreAutoSnapshot(unsigned nr) { return restoreSnapshot(autoSnapshots, nr); }
+    bool restoreUserSnapshot(unsigned nr) { return restoreSnapshot(userSnapshots, nr); }
+    
+    // Restores the latest snapshot from the snapshot storage
+    bool restoreLatestAutoSnapshot() { return restoreAutoSnapshot(0); }
+    bool restoreLatestUserSnapshot() { return restoreUserSnapshot(0); }
+    
+    // Returns the number of stored snapshots
+    size_t numSnapshots(vector<AmigaSnapshot *> &storage);
+    size_t numAutoSnapshots() { return numSnapshots(autoSnapshots); }
+    size_t numUserSnapshots() { return numSnapshots(userSnapshots); }
+    
+    // Returns an snapshot from the snapshot storage
+    AmigaSnapshot *getSnapshot(vector<AmigaSnapshot *> &storage, unsigned nr);
+    AmigaSnapshot *autoSnapshot(unsigned nr) { return getSnapshot(autoSnapshots, nr); }
+    AmigaSnapshot *userSnapshot(unsigned nr) { return getSnapshot(userSnapshots, nr); }
+    
+    /* Takes a snapshot and inserts it into the snapshot storage
+     * The new snapshot is inserted at position 0 and all others are moved one
+     * position up. If the buffer is full, the oldest snapshot is deleted. Make
+     * sure to call the 'Safe' version outside the emulator thread.
+     */
+    void takeSnapshot(vector<AmigaSnapshot *> &storage);
+    void takeAutoSnapshot() { takeSnapshot(autoSnapshots); }
+    void takeUserSnapshot() { takeSnapshot(userSnapshots); }
+    void takeAutoSnapshotSafe() { suspend(); takeSnapshot(autoSnapshots); resume(); }
+    void takeUserSnapshotSafe() { suspend(); takeSnapshot(userSnapshots); resume(); }
+    
+    // Deletes a snapshot from the snapshot storage
+    void deleteSnapshot(vector<AmigaSnapshot *> &storage, unsigned nr);
+    void deleteAutoSnapshot(unsigned nr) { deleteSnapshot(autoSnapshots, nr); }
+    void deleteUserSnapshot(unsigned nr) { deleteSnapshot(userSnapshots, nr); }
+    
 };
 
 #endif

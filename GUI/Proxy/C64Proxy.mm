@@ -1546,16 +1546,6 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 {
     wrapper->c64->setTakeAutoSnapshots(b);
 }
-/*
-- (void) disableAutoSnapshots
-{
-    wrapper->c64->disableAutoSnapshots();
-}
-- (void) enableAutoSnapshots
-{
-    wrapper->c64->enableAutoSnapshots();
-}
-*/
 - (void) suspendAutoSnapshots
 {
     wrapper->c64->suspendAutoSnapshots();

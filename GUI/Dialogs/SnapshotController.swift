@@ -1,11 +1,11 @@
-//
-// This file is part of VirtualC64 - A cycle accurate Commodore 64 emulator
+// -----------------------------------------------------------------------------
+// This file is part of vAmiga
 //
 // Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
 // Licensed under the GNU General Public License v3
 //
 // See https://www.gnu.org for license information
-//
+// -----------------------------------------------------------------------------
 
 import Foundation
 
@@ -42,15 +42,19 @@ class SnapshotDialog : DialogController  {
     
     override public func awakeFromNib() {
         
+        track("awakeFromNib")
+        
         if numAutoSnapshots == -1 {
             
             // Disable auto snapshot saving while dialog is open
-            proxy?.suspendAutoSnapshots()
+            amigaProxy?.suspendAutoSnapshots()
             
             // Setup snapshot caches
             reloadAutoSnapshotCache()
             reloadUserSnapshotCache()
         }
+        
+        track("awakeFromNib (exit)")
     }
     
     func timeInfo(timeStamp: TimeInterval) -> String {
@@ -81,63 +85,69 @@ class SnapshotDialog : DialogController  {
     
     func reloadAutoSnapshotCache() {
         
-        if let c64 = proxy {
+        if let amiga = amigaProxy {
             
-            c64.suspend()
-            numAutoSnapshots = c64.numAutoSnapshots()
+            track()
+            
+            amiga.suspend()
+            numAutoSnapshots = amiga.numAutoSnapshots()
             for n in 0..<numAutoSnapshots {
-                let takenAt = TimeInterval(c64.autoSnapshotTimestamp(n))
-                autoSnapshotImage[n] = c64.autoSnapshotImage(n)
+                let takenAt = TimeInterval(amiga.autoSnapshotTimestamp(n))
+                autoSnapshotImage[n] = amiga.autoSnapshotImage(n)
                 autoTimeStamp[n] = timeInfo(timeStamp: takenAt)
                 autoTimeDiff[n] = timeDiffInfo(timeStamp: takenAt)
             }
-            c64.resume()
+            amiga.resume()
             autoTableView.reloadData()
         }
     }
     
     func reloadUserSnapshotCache() {
         
-        if let c64 = proxy {
+        if let amiga = amigaProxy {
+        
+            track()
             
-            c64.suspend()
-            numUserSnapshots = c64.numUserSnapshots()
+            amiga.suspend()
+            numUserSnapshots = amiga.numUserSnapshots()
             for n in 0..<numUserSnapshots {
-                let takenAt = TimeInterval(c64.userSnapshotTimestamp(n))
-                userSnapshotImage[n] = c64.userSnapshotImage(n)
+                let takenAt = TimeInterval(amiga.userSnapshotTimestamp(n))
+                userSnapshotImage[n] = amiga.userSnapshotImage(n)
                 userTimeStamp[n] = timeInfo(timeStamp: takenAt)
                 userTimeDiff[n] = timeDiffInfo(timeStamp: takenAt)
             }
-            c64.resume()
+            amiga.resume()
             userTableView.reloadData()
         }
     }
     
     @IBAction func deleteAction(_ sender: Any!) {
         
+        track()
+        
         let sender = sender as! NSButton
-        proxy?.deleteUserSnapshot(sender.tag)
+        amigaProxy?.deleteUserSnapshot(sender.tag)
         reloadUserSnapshotCache()
     }
     
     @IBAction override func cancelAction(_ sender: Any!) {
         
         track()
-        proxy?.resumeAutoSnapshots()
+        amigaProxy?.resumeAutoSnapshots()
         hideSheet()
     }
     
     @IBAction func autoDoubleClick(_ sender: Any!) {
         
         let sender = sender as! NSTableView
-        proxy?.restoreAutoSnapshot(sender.selectedRow)
+        amigaProxy?.restoreAutoSnapshot(sender.selectedRow)
         cancelAction(self)
     }
     
     @IBAction func userDoubleClick(_ sender: Any!) {
         
         let sender = sender as! NSTableView
-        proxy?.restoreUserSnapshot(sender.selectedRow)
+        amigaProxy?.restoreUserSnapshot(sender.selectedRow)
         cancelAction(self)
     }
 }
@@ -201,7 +211,7 @@ extension SnapshotDialog {
                    to pboard: NSPasteboard) -> Bool {
         
         // Get active emulator instance
-        guard let c64 = proxy else {
+        guard let amiga = amigaProxy else {
             return false
         }
         
@@ -214,17 +224,17 @@ extension SnapshotDialog {
         // Get snapshot data
         var data : Data
         if (tableView == autoTableView) {
-            data = c64.autoSnapshotData(index)
+            data = amiga.autoSnapshotData(index)
         }
         else {
             assert(tableView == userTableView)
-            data = c64.userSnapshotData(index)
+            data = amiga.userSnapshotData(index)
         }
         
         let pboardType = NSPasteboard.PasteboardType.fileContents
         pboard.declareTypes([pboardType], owner: self)
         let fileWrapper = FileWrapper.init(regularFileWithContents: data)
-        fileWrapper.preferredFilename = "Snapshot.VC64"
+        fileWrapper.preferredFilename = "Snapshot.vam"
         pboard.write(fileWrapper)
 
         return true;

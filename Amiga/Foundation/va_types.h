@@ -129,6 +129,7 @@ inline bool isVAFileType(AmigaFileType model) {
     return model >= FILETYPE_UKNOWN && model <= FILETYPE_KICK_ROM;
 }
 
+
 //
 // Notification messages (GUI communication)
 //

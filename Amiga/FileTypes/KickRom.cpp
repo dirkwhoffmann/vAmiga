@@ -7,7 +7,6 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-
 #include "KickRom.h"
 
 const uint8_t KickRom::magicBytes[] = { 0x11, 0x11, 0x4E, 0xF9, 0x00 };
