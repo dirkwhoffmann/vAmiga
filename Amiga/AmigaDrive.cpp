@@ -45,7 +45,12 @@ AmigaDrive::_reset()
 void
 AmigaDrive::_ping()
 {
-    // TODO: hasDisk, writeProtected, unsaved
+    amiga->putMessage(hasDisk() ?
+                      MSG_DRIVE_DISK_INSERT : MSG_DRIVE_DISK_EJECT);
+    amiga->putMessage(hasWriteProtectedDisk() ?
+                      MSG_DRIVE_DISK_PROTECTED : MSG_DRIVE_DISK_UNPROTECTED);
+    amiga->putMessage(hasUnsavedDisk() ?
+                      MSG_DRIVE_DISK_UNSAVED : MSG_DRIVE_DISK_SAVED);
 }
 
 void

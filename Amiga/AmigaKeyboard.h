@@ -20,14 +20,6 @@ class AmigaKeyboard : public HardwareComponent {
     
 private:
 
-    /* Indicates if the Command keys are mapped
-     * On the Amiga keyboard, the two Command keys are the keys labeled with
-     * the Amiga 'A'. By default, the mapping is disabled, because these keys
-     * are mapped to the Command keys of the host keyboard. If we take away
-     * these keys, no keyboard shortcut is working any more.
-     */
-    bool mapCmdKeys = false;
-    
     // Indicates if a key is currently held down (array index = raw key code).
     bool keyDown[128];
     
@@ -53,11 +45,6 @@ private:
      void _ping() override;
      */
      void _dump() override;
-    
-public:
-    
-    bool cmdKeysAreMapped() { return mapCmdKeys; }
-    void setMapCmdKeys(bool value);
     
     //
     // FAKE METHODS FOR THE VISUAL PROTOTYPE (TEMPORARY)

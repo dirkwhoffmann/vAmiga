@@ -203,9 +203,6 @@ struct AmigaFileWrapper;
 
 - (void) dump;
 
-- (BOOL) cmdKeysAreMapped;
-- (void) setMapCmdKeys:(BOOL)value;
-
 - (BOOL) keyIsPressed:(NSInteger)keycode;
 - (void) pressKey:(NSInteger)keycode;
 - (void) releaseKey:(NSInteger)keycode;
