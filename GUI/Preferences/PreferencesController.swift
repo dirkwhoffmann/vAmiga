@@ -24,11 +24,11 @@ class PreferencesController : DialogController {
     
     // Rom info
     @IBOutlet weak var romDropView: RomDropView!
-    @IBOutlet weak var romTitle: NSTextField!
     @IBOutlet weak var romHash: NSTextField!
-    @IBOutlet weak var romPath: NSTextField!
     @IBOutlet weak var romDeleteButton: NSButton!
-    @IBOutlet weak var romCopyright: NSTextField!
+    @IBOutlet weak var romText: NSTextField!
+    @IBOutlet weak var romSubText: NSTextField!
+    @IBOutlet weak var romWarning: NSTextField!
 
     // Lock
     @IBOutlet weak var romLockImage: NSButton!

@@ -66,8 +66,6 @@ extension PreferencesController {
         let kickHash     = amiga.kickRomFingerprint()
         let hash         = config.model == A1000 ? bootHash : kickHash
         
-        // let hasBootRom   = bootHash != 0
-        // let hasKickRom   = kickHash != 0
         let hasRom       = hash != 0
         let hasOrigRom   = originalRoms.contains(hash)
         let hasArosRom   = hash == 0xE74215EB368CD7F1
@@ -77,96 +75,73 @@ extension PreferencesController {
         let kickRomURL   = controller.kickRomURL
         let url          = config.model == A1000 ? bootRomURL : kickRomURL
         
-        
         let romMissing   = NSImage.init(named: "rom_light")
         let romOriginal  = NSImage.init(named: "rom_original")
         let romAros      = NSImage.init(named: "rom_aros")
         let romUnknown   = NSImage.init(named: "rom_unknown")
-
-        var description = ""
-        switch config.model {
-
-        case A1000 where !hasRom:
-            description = "The Amiga 1000 requires a Boot Rom to launch."
-            
-        case A500 where !hasRom, A2000 where !hasRom:
-            description = "The Amiga \(model) requires a Kickstart Rom to run."
-            
-        default:
-            description = knownRoms[hash] ?? "An unknown, possibly patched Boot ROM."
-        }
         
         // Lock controls if emulator is running
         romDropView.isEnabled = !running
         romDeleteButton.isEnabled = !running
         romFactoryButton.isEnabled = !running
         
-        // Warn about missing Rom if applicable
-        // romCautionImage.isHidden = true // runnable
-        // romCautionText.isHidden = true // runnable
-        // romCautionSubText.isHidden = true // runnable
-        /*
-        var txt = ""
-        switch config.model {
-        case A1000: txt = "The Amiga 1000 emulation requires a Boot Rom to launch."
-        case A500:  txt = "The Amiga 500 emulation requires a Kickstart Rom to launch."
-        case A2000: txt = "The Amiga 2000 emulation requires a Kickstart Rom to launch."
-        default: fatalError()
-        }
-        romCautionText.stringValue = txt
-        */
-        if hasRom {
-            
-            romTitle.stringValue = description
-            romTitle.textColor = hasKnownRom ? .textColor : .systemRed
-
-            romPath.isHidden = hasArosRom
-            romPath.stringValue = url.relativePath
-
-            romHash.isHidden = hasKnownRom
-            romHash.stringValue = String(format: "Hash: %llx", hash)
-            // romHash.stringValue = "Hash: " + String(hash, radix: 16, uppercase: false)
-
-            romDeleteButton.isHidden = false
-
-        } else {
-        
-            romTitle.stringValue = description
-            romTitle.textColor = .systemRed
-            
-            romPath.isHidden = false
-            romPath.stringValue = "Use drag and drop to add a Rom image."
-            
-            romHash.isHidden = true
-            romHash.stringValue = ""
-            
-            romDeleteButton.isHidden = true
-        }
-        
+        // Rom icon
         romDropView.image =
             hasArosRom ? romAros :
             hasOrigRom ? romOriginal :
             hasRom     ? romUnknown : romMissing
+
+        // Rom description
+        var text = ""
+        var subText = ""
+        var warnText = ""
         
-        // Show copyright message
+        switch config.model {
+
+        case A1000 where !hasRom:
+            
+            text = "The Amiga 1000 requires a Boot Rom to launch."
+            subText = "Use drag and drop to add a Rom image."
+            
+        case A500 where !hasRom, A2000 where !hasRom:
+
+            text = "The Amiga \(model) requires a Kickstart Rom to run."
+            subText = "Use drag and drop to add a Rom image."
+
+        default:
+            
+            text = knownRoms[hash] ?? "An unknown, possibly patched Rom."
+            subText = hasArosRom ? "Use original Amiga Roms for higher compatibility." : url.relativePath
+        }
+        
+        romText.stringValue = text
+        romText.textColor = hasRom ? .textColor : .systemRed
+        romSubText.stringValue = subText
+            
+        romHash.isHidden = hasKnownRom
+        romHash.stringValue = String(format: "Hash: %llx", hash)
+        
+        romDeleteButton.isHidden = !hasRom
+        
+        // Warning message
         if incompatibleRoms.contains(hash) {
             
-            romCopyright.isHidden = false
-            romCopyright.stringValue = "The selected kickstart is not compatible with an Amiga \(model)."
-            romCopyright.textColor = .systemRed
+            romWarning.isHidden = false
+            romWarning.stringValue = "The selected kickstart is not compatible with an Amiga \(model)."
+            romWarning.textColor = .systemRed
             
         } else if originalRoms.contains(hash) {
             
-            romCopyright.isHidden = false
-            romCopyright.stringValue = "Please obey legal regulations. Original Amiga Roms are copyrighted."
-            romCopyright.textColor = .textColor
+            romWarning.isHidden = false
+            romWarning.stringValue = "Please obey legal regulations. Original Amiga Roms are copyrighted."
+            romWarning.textColor = .textColor
 
         } else {
             
-            romCopyright.isHidden = true
+            romWarning.isHidden = true
         }
         
-        // Warn about locked settings if applicable
+        // Lock symbol and explanation
         romLockImage.isHidden = !running
         romLockText.isHidden = !running
         romLockSubText.isHidden = !running

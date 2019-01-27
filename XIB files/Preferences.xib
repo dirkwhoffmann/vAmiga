@@ -60,13 +60,6 @@
                 <outlet property="hwRealTimeClock" destination="T70-4F-bOm" id="eAd-aV-2Nk"/>
                 <outlet property="hwSlowRamPopup" destination="W0y-DM-pGD" id="bNq-71-Or8"/>
                 <outlet property="prefTabView" destination="baz-eW-A74" id="fgy-dU-alU"/>
-                <outlet property="romBootPath" destination="LBs-Al-1wH" id="eXO-E5-NIa"/>
-                <outlet property="romBootPathText" destination="LBs-Al-1wH" id="O4G-XL-2e5"/>
-                <outlet property="romBootTitle" destination="Mc6-g5-kfE" id="EeD-0B-8HH"/>
-                <outlet property="romCautionImage" destination="85m-5N-OUT" id="ghy-lv-LPC"/>
-                <outlet property="romCautionSubText" destination="Z1R-rK-UhQ" id="aa1-Wb-oxT"/>
-                <outlet property="romCautionText" destination="NDI-8J-3dl" id="SqF-G2-qbz"/>
-                <outlet property="romCopyright" destination="phr-t4-w1Y" id="aHZ-hT-QwP"/>
                 <outlet property="romDeleteButton" destination="nSa-0I-2sF" id="efo-0V-yEG"/>
                 <outlet property="romDropView" destination="rV9-BQ-AAx" id="8rI-bh-fAa"/>
                 <outlet property="romFactoryButton" destination="93j-lC-aCo" id="tSq-ZA-PrQ"/>
@@ -74,8 +67,9 @@
                 <outlet property="romLockImage" destination="ocy-5V-Vt8" id="4ld-NF-sBM"/>
                 <outlet property="romLockSubText" destination="m4i-nF-H2q" id="Cht-S3-Gdp"/>
                 <outlet property="romLockText" destination="Wuy-cg-IBP" id="KJg-sx-tEJ"/>
-                <outlet property="romPath" destination="LBs-Al-1wH" id="cic-Nq-ou7"/>
-                <outlet property="romTitle" destination="Mc6-g5-kfE" id="zbw-XX-Zp6"/>
+                <outlet property="romSubText" destination="LBs-Al-1wH" id="7Pa-6O-tJv"/>
+                <outlet property="romText" destination="Mc6-g5-kfE" id="EUW-Nv-ECK"/>
+                <outlet property="romWarning" destination="phr-t4-w1Y" id="bOF-hP-v7T"/>
                 <outlet property="romfactoryButton" destination="93j-lC-aCo" id="lTd-5f-erA"/>
                 <outlet property="vidBloomBrightnessSlider" destination="tcf-i4-M9e" id="ftQ-Ru-i1y"/>
                 <outlet property="vidBloomPopup" destination="J7V-We-wO2" id="sKy-bv-Ytf"/>
@@ -189,9 +183,9 @@ Gw
                                             </connections>
                                         </button>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Wuy-cg-IBP">
-                                            <rect key="frame" x="63" y="88" width="406" height="17"/>
+                                            <rect key="frame" x="63" y="88" width="530" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="The Rom settings are locked because the emulator is running." id="H1S-kZ-DsT">
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="The Rom settings cannot be changed because the emulator is running." id="H1S-kZ-DsT">
                                                 <font key="font" metaFont="systemBold"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -217,36 +211,10 @@ Gw
                                                 <action selector="romUnlockAction:" target="-2" id="sBB-Uj-QHI"/>
                                             </connections>
                                         </button>
-                                        <textField hidden="YES" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NDI-8J-3dl">
-                                            <rect key="frame" x="71" y="383" width="522" height="20"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Lorem ipsum dolor sit amet, consectetur adipisici elit" id="wvX-R6-rBU">
-                                                <font key="font" metaFont="systemBold"/>
-                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
-                                        <textField hidden="YES" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Z1R-rK-UhQ">
-                                            <rect key="frame" x="71" y="366" width="417" height="16"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Use drag and drop to add a Rom image." id="by6-6V-F0X">
-                                                <font key="font" metaFont="cellTitle"/>
-                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
-                                        <button hidden="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="85m-5N-OUT">
-                                            <rect key="frame" x="17" y="361" width="48" height="48"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSCaution" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="e6Z-IS-EJp">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                        </button>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mc6-g5-kfE">
                                             <rect key="frame" x="7" y="184" width="586" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="Boot Rom" id="UBW-wf-S9Q">
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="Lorem ipsum dolor sit amet" id="UBW-wf-S9Q">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -255,7 +223,7 @@ Gw
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LBs-Al-1wH">
                                             <rect key="frame" x="7" y="164" width="586" height="17"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="/User/JohnDoe/VirtualC64/Kernal.bin" id="7rf-Cu-vls">
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Lorem ipsum dolor sit amet" id="7rf-Cu-vls">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -284,7 +252,7 @@ Gw
                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="phr-t4-w1Y">
                                             <rect key="frame" x="52" y="132" width="496" height="17"/>
                                             <autoresizingMask key="autoresizingMask"/>
-                                            <textFieldCell key="cell" selectable="YES" alignment="center" title="Please obey legal regulations. Original Amiga Roms are copyrighted. " id="1gH-g9-Gsh">
+                                            <textFieldCell key="cell" selectable="YES" alignment="center" title="Lorem ipsum dolor sit amet" id="1gH-g9-Gsh">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="systemRedColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1988,7 +1956,6 @@ DQ
     </objects>
     <resources>
         <image name="Lock" width="120" height="170"/>
-        <image name="NSCaution" width="32" height="32"/>
         <image name="joystick2" width="569.45452880859375" height="654.54547119140625"/>
         <image name="key" width="198" height="187"/>
         <image name="rom_light" width="129" height="157"/>
