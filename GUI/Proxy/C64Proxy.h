@@ -132,6 +132,7 @@ struct AnyC64FileWrapper;
 - (void) setWarpLoad:(BOOL)b;
 
 // Handling snapshots
+/*
 - (BOOL) takeAutoSnapshots;
 - (void) setTakeAutoSnapshots:(BOOL)b;
 - (void) suspendAutoSnapshots;
@@ -159,6 +160,7 @@ struct AnyC64FileWrapper;
 
 - (void) deleteAutoSnapshot:(NSInteger)nr;
 - (void) deleteUserSnapshot:(NSInteger)nr;
+*/
 
 // Handling ROMs
 - (BOOL) isBasicRom:(NSURL *)url;
@@ -694,6 +696,7 @@ struct AnyC64FileWrapper;
 //                               AnyC64File proxy
 // -----------------------------------------------------------------------------
 
+/*
 @interface AnyC64FileProxy : NSObject {
     
     struct AnyC64FileWrapper *wrapper;
@@ -710,29 +713,4 @@ struct AnyC64FileWrapper;
 
 @end
 
-
-// -----------------------------------------------------------------------------
-//                               AnyArchive proxy
-// -----------------------------------------------------------------------------
-
-/*
-@interface AnyArchiveProxy : AnyC64FileProxy {
-}
-
-+ (instancetype)make;
-+ (instancetype)makeWithFile:(NSString *)path;
-
-- (NSInteger)numberOfItems;
-- (void)selectItem:(NSInteger)item;
-- (NSString *)nameOfItem;
-- (NSString *)unicodeNameOfItem;
-- (NSInteger)sizeOfItem;
-- (NSInteger)sizeOfItemInBlocks;
-- (void)seekItem:(NSInteger)offset;
-- (NSString *)typeOfItem;
-- (NSString *)readItemHex:(NSInteger)num;
-- (NSInteger)destinationAddrOfItem;
-
-@end
 */
-

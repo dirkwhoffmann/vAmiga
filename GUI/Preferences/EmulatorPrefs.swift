@@ -17,6 +17,7 @@ extension PreferencesController {
         
         guard
             let c64        = proxy,
+            let amiga      = amigaProxy,
             let controller = myController,
             let metal      = controller.metal
             else { return }
@@ -39,9 +40,9 @@ extension PreferencesController {
         
         // Miscellaneous
         emuPauseInBackground.state = controller.pauseInBackground ? .on : .off
-        emuAutoSnapshots.state = c64.takeAutoSnapshots() ? .on : .off
-        emuSnapshotInterval.integerValue = c64.snapshotInterval()
-        emuSnapshotInterval.isEnabled = c64.takeAutoSnapshots()
+        emuAutoSnapshots.state = amiga.takeAutoSnapshots() ? .on : .off
+        emuSnapshotInterval.integerValue = amiga.snapshotInterval()
+        emuSnapshotInterval.isEnabled = amiga.takeAutoSnapshots()
     }
 
     //
@@ -130,7 +131,7 @@ extension PreferencesController {
     
     @IBAction func emuAutoSnapshotAction(_ sender: NSButton!) {
         
-        proxy?.setTakeAutoSnapshots(sender.state == .on)
+        amigaProxy?.setTakeAutoSnapshots(sender.state == .on)
         refresh()
     }
     
@@ -138,7 +139,7 @@ extension PreferencesController {
         
         track("\(sender.integerValue)")
         if sender.integerValue > 0 {
-            proxy?.setSnapshotInterval(sender.integerValue)
+            amigaProxy?.setSnapshotInterval(sender.integerValue)
         } else {
             track("IGNORING")
         }

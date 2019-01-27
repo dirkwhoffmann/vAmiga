@@ -112,6 +112,7 @@ public extension C64Proxy {
         return image
     }
     
+    /*
     func autoSnapshotImage(_ item: Int) -> NSImage {
         
         let data = autoSnapshotImageData(item)
@@ -123,6 +124,7 @@ public extension C64Proxy {
         let data = userSnapshotImageData(item)
         return image(data: data, size: userSnapshotImageSize(item))
     }
+    */
 }
 
 

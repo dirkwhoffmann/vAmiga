@@ -814,66 +814,6 @@ extension MyController {
     
     
     //
-    // Mounting media files
-    //
-    
-    /*
-    @discardableResult
-    func mount(_ item: AnyC64FileProxy?) -> Bool {
-
-        guard let type = item?.type() else { return false }
-        
-        switch (type) {
-            
-        case T64_FILE, D64_FILE,
-             PRG_FILE, P00_FILE,
-             G64_FILE:
-            // We need to take some special care for items that mount as a disk.
-            // In that case, the light barrier has to be broken several times.
-            // TODO: Use insertDisk for these attachments in future
-            changeDisk(item, drive: 1)
-            return true
-                        
-        default:
-            track("Unknown attachment type \(type).")
-            fatalError()
-        }
-    }
-    */
-    
-    // Emulates changing a disk including the necessary light barrier breaks
-    // If disk is nil, only the ejection is emulated.
-    /*
-    func changeDisk(_ disk: AnyC64FileProxy?, drive nr: Int) {
-        
-        let drive = c64.drive(nr)!
-
-        DispatchQueue.global().async {
-            
-            // For a better user experience, we switch on automatically
-            // when a disk is inserted.
-            if disk != nil {
-                self.c64.drive(nr).powerOn()
-            }
-            
-            // Remove old disk if present
-            if drive.hasDisk() {
-                drive.prepareToEject()
-                usleep(300000)
-                drive.ejectDisk()
-            }
-            
-            // Insert new disk if provided
-            if disk != nil {
-                drive.prepareToInsert()
-                usleep(300000)
-                drive.insertDisk(disk as? AnyArchiveProxy)
-            }
-        }
-    }
-    */
-    
-    //
     // Misc
     //
     

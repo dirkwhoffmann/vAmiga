@@ -258,7 +258,7 @@ extension MyController : NSMenuItemValidation {
     
     @IBAction func takeSnapshot(_ sender: Any!) {
         
-        c64.takeUserSnapshot()
+        amiga.takeUserSnapshot()
     }
     
     //

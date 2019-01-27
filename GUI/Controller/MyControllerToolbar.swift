@@ -220,15 +220,15 @@ extension MyController {
 
     @IBAction func restoreLatestAutoSnapshotAction(_ sender: Any!) {
         
-        if (c64.restoreLatestAutoSnapshot()) {
-            c64.deleteAutoSnapshot(0)
+        if (amiga.restoreLatestAutoSnapshot()) {
+            amiga.deleteAutoSnapshot(0)
             metal.snapToFront()
         }
     }
 
     @IBAction func restoreLatestUserSnapshotAction(_ sender: Any!) {
         
-        if (c64.restoreLatestUserSnapshot()) {
+        if (amiga.restoreLatestUserSnapshot()) {
             metal.snapToFront()
         }
     }

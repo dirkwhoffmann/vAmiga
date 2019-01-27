@@ -664,8 +664,9 @@ extension MyController {
         let defaults = UserDefaults.standard
             
         c64.suspend()
+        amiga.suspend()
         
-        c64.setWarpLoad(defaults.bool(forKey: Keys.warpLoad))
+        amiga.setWarpLoad(defaults.bool(forKey: Keys.warpLoad))
         c64.drive1.setSendSoundMessages(defaults.bool(forKey: Keys.driveNoise))
         c64.drive2.setSendSoundMessages(defaults.bool(forKey: Keys.driveNoise))
     
@@ -679,13 +680,14 @@ extension MyController {
         ejectWithoutAsking = defaults.bool(forKey: Keys.ejectWithoutAsking)
 
         pauseInBackground = defaults.bool(forKey: Keys.pauseInBackground)
-        c64.setTakeAutoSnapshots(defaults.bool(forKey: Keys.autoSnapshots))
-        c64.setSnapshotInterval(defaults.integer(forKey: Keys.autoSnapshotInterval))
+        amiga.setTakeAutoSnapshots(defaults.bool(forKey: Keys.autoSnapshots))
+        amiga.setSnapshotInterval(defaults.integer(forKey: Keys.autoSnapshotInterval))
         
         defaults.decode(&autoMountAction, forKey: Keys.autoMountAction)
         defaults.decode(&autoType, forKey: Keys.autoType)
         defaults.decode(&autoTypeText, forKey: Keys.autoTypeText)
         
+        amiga.reset()
         c64.resume()
     }
     
@@ -707,8 +709,8 @@ extension MyController {
         defaults.set(ejectWithoutAsking, forKey: Keys.ejectWithoutAsking)
         
         defaults.set(pauseInBackground, forKey: Keys.pauseInBackground)
-        defaults.set(c64.takeAutoSnapshots(), forKey: Keys.autoSnapshots)
-        defaults.set(c64.snapshotInterval(), forKey: Keys.autoSnapshotInterval)
+        defaults.set(amiga.takeAutoSnapshots(), forKey: Keys.autoSnapshots)
+        defaults.set(amiga.snapshotInterval(), forKey: Keys.autoSnapshotInterval)
         
         defaults.encode(autoMountAction, forKey: Keys.autoMountAction)
         defaults.encode(autoType, forKey: Keys.autoType)
