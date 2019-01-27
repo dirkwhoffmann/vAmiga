@@ -32,12 +32,6 @@
 @class AnyC64FileProxy;
 @class AnyArchiveProxy;
 @class AnyDiskProxy;
-@class CRTFileProxy;
-@class TAPFileProxy;
-@class SnapshotProxy;
-@class T64FileProxy;
-@class PRGFileProxy;
-@class P00FileProxy;
 @class D64FileProxy;
 @class G64FileProxy;
 
@@ -482,7 +476,6 @@ struct AnyC64FileWrapper;
 
 - (BOOL) cartridgeAttached;
 - (CartridgeType) cartridgeType;
-- (void) attachCartridgeAndReset:(CRTFileProxy *)c;
 - (BOOL) attachGeoRamCartridge:(NSInteger)capacity;
 - (void) attachIsepicCartridge;
 - (void) detachCartridgeAndReset;
@@ -741,111 +734,7 @@ struct AnyC64FileWrapper;
 @end
 
 
-// -----------------------------------------------------------------------------
-//                               Snapshot proxy
-// -----------------------------------------------------------------------------
 
-@interface SnapshotProxy : AnyC64FileProxy {
-}
-
-+ (BOOL)isSupportedSnapshot:(const void *)buffer length:(NSInteger)length;
-+ (BOOL)isUnsupportedSnapshot:(const void *)buffer length:(NSInteger)length;
-+ (BOOL)isSupportedSnapshotFile:(NSString *)path;
-+ (BOOL)isUnsupportedSnapshotFile:(NSString *)path;
-+ (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)length;
-+ (instancetype)makeWithFile:(NSString *)path;
-+ (instancetype)makeWithC64:(C64Proxy *)c64proxy;
-
-@end
-
-
-// -----------------------------------------------------------------------------
-//                               CRTFile proxy
-// -----------------------------------------------------------------------------
-
-/*
-@interface CRTFileProxy : AnyC64FileProxy {
-}
-+ (CartridgeType)typeOfCRTBuffer:(const void *)buffer length:(NSInteger)length;
-+ (NSString *)typeNameOfCRTBuffer:(const void *)buffer length:(NSInteger)length;
-+ (BOOL)isSupportedCRTBuffer:(const void *)buffer length:(NSInteger)length;
-+ (BOOL)isUnsupportedCRTBuffer:(const void *)buffer length:(NSInteger)length;
-+ (BOOL)isCRTFile:(NSString *)path;
-+ (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)length;
-+ (instancetype)makeWithFile:(NSString *)path;
-
-- (CartridgeType)cartridgeType;
-- (NSString *)cartridgeTypeName;
-- (NSInteger)initialExromLine;
-- (NSInteger)initialGameLine;
-- (NSInteger)chipCount;
-- (NSInteger)chipType:(NSInteger)nr;
-- (NSInteger)chipAddr:(NSInteger)nr;
-- (NSInteger)chipSize:(NSInteger)nr;
-
-*/
-
-// -----------------------------------------------------------------------------
-//                               TAPFile proxy
-// -----------------------------------------------------------------------------
-
-/*
-@interface TAPFileProxy : AnyC64FileProxy {
-}
-
-+ (BOOL)isTAPFile:(NSString *)path;
-+ (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)length;
-+ (instancetype)makeWithFile:(NSString *)path;
-
-- (NSInteger)TAPversion;
-
-@end
-*/
-
-
-// -----------------------------------------------------------------------------
-//                               T64File proxy
-// -----------------------------------------------------------------------------
-
-@interface T64FileProxy : AnyArchiveProxy
-{
-}
-+ (BOOL)isT64File:(NSString *)filename;
-+ (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)length;
-+ (instancetype)makeWithFile:(NSString *)filename;
-+ (instancetype)makeWithAnyArchive:(AnyArchiveProxy *)otherArchive;
-
-@end
-
-
-// -----------------------------------------------------------------------------
-//                               PRGFile proxy
-// -----------------------------------------------------------------------------
-
-@interface PRGFileProxy : AnyArchiveProxy
-{
-}
-+ (BOOL)isPRGFile:(NSString *)filename;
-+ (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)length;
-+ (instancetype)makeWithFile:(NSString *)filename;
-+ (instancetype)makeWithAnyArchive:(AnyArchiveProxy *)otherArchive;
-
-@end
-
-
-// -----------------------------------------------------------------------------
-//                               P00File proxy
-// -----------------------------------------------------------------------------
-
-@interface P00FileProxy : AnyArchiveProxy
-{
-}
-+ (BOOL)isP00File:(NSString *)filename;
-+ (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)length;
-+ (instancetype)makeWithFile:(NSString *)filename;
-+ (instancetype)makeWithAnyArchive:(AnyArchiveProxy *)otherArchive;
-
-@end
 
 
 // -----------------------------------------------------------------------------
