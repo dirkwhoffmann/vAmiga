@@ -291,12 +291,9 @@ bool checkFileSuffix(const char *filename, const char *suffix);
 // Returns the size of a file in bytes
 long getSizeOfFile(const char *filename);
 
-/* Checks the size of a file
- * The function is used for validating the size of a file.
- *   - min Expected minimum size (-1 if no lower bound exists)
- *   - max Expected maximum size (-1 if no upper bound exists)
- */
-bool checkFileSize(const char *filename, long min, long max);
+// Checks the size of a file
+bool checkFileSize(const char *filename, long size);
+bool checkFileSizeRange(const char *filename, long min, long max);
 
 /* Checks the header signature (magic bytes) of a file.
  * This function is used for determining the type of a file.

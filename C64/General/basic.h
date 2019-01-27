@@ -224,7 +224,7 @@ long getSizeOfFile(const char *filename);
  *  @param    min Expected minimum size (-1 if no lower bound exists)
  *  @param    max Expected maximum size (-1 if no upper bound exists)
  */
-bool checkFileSize(const char *filename, long min, long max);
+bool checkFileSizeRange(const char *filename, long min, long max);
 
 /*! @brief    Checks the magic bytes of a file.
  *  @details  The function is used for determining the type of a file.

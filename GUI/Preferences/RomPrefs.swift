@@ -9,42 +9,57 @@
 
 import Foundation
 
+struct Rom {
+    
+    static let missing             = 0x0000000000000000 as UInt64
+    
+    // Boot Roms
+    static let boot_252179_01      = 0xa160593cffcbb233 as UInt64
+    static let boot_252180_01      = 0xa98647146962eb76 as UInt64
+    static let boot_a1000_1985     = 0xe923584a55d5c10c as UInt64
+    static let boot_a1000          = 0x55bee0af674e7cfa as UInt64
+
+    // Kickstart Roms
+    static let aros                = 0xe74215eb368cd7f1 as UInt64
+    
+    static let kick12_33_180       = 0xe5cb7ee5200c4f0f as UInt64
+    static let kick12_33_180_o     = 0xe3ff65d2c3a9b9e5 as UInt64
+
+    static let kick13_35_5         = 0x047fb93fb8e383bc as UInt64
+    static let kick13_35_5_b       = 0x42b199abf0febb13 as UInt64
+    static let kick13_35_5_b2      = 0x482fa0f04538677b as UInt64
+    static let kick13_35_5_b3      = 0xc9f1352946125739 as UInt64
+    static let kick13_35_5_h       = 0x36890544db15eb40 as UInt64
+    static let kick13_35_5_o       = 0x08a1122c7dec695d as UInt64
+
+    static let kick204_37_175      = 0x845588ccf58fce86 as UInt64
+}
+
+    
 let knownRoms : [UInt64 : String] = [
-    0x0000000000000000:
-    "",
-    0xE74215EB368CD7F1:
-    "AROS Kickstart replacement",
-    0xA160593CFFCBB233:
-    "Amiga 1000 Boot Rom 252179-01",
-    0xA98647146962EB76:
-    "Amiga 1000 Boot Rom 252180-01",
-    0xE5CB7EE5200C4F0F:
-    "Kickstart 1.2",
-    0x047FB93FB8E383BC:
-    "Kickstart 1.3",
-    0xE3FF65D2C3A9B9E5:
-    "Kickstart 1.2 (512 KB)",
-    0x08A1122C7DEC695D:
-    "Kickstart 1.3 (512 KB)",
-    0x845588CCF58FCE86:
-    "Kickstart 2.0 (512 KB)",
-    0x72126DEF5AF27DCB:
-    "Kickstart 3.0 (512 KB)",
-]
 
-let originalRoms : [UInt64] = [
-    0xA160593CFFCBB233,
-    0xA98647146962EB76,
-    0xE5CB7EE5200C4F0F,
-    0x047FB93FB8E383BC,
-    0xE3FF65D2C3A9B9E5,
-    0x08A1122C7DEC695D,
-    0x845588CCF58FCE86,
-    0x72126DEF5AF27DCB,
-]
+    Rom.missing:             "",
+    
+    // Boot Roms
+    Rom.boot_252179_01:      "Amiga 1000 Boot Rom (252179-01)",
+    Rom.boot_252180_01:      "Amiga 1000 Boot Rom (252180-01)",
+    Rom.boot_a1000_1985:     "Amiga 1000 Boot Rom (1985)",
+    Rom.boot_a1000:          "Amiga 1000 Boot Rom",
 
-let incompatibleRoms : [UInt64] = [
-    0x72126DEF5AF27DCB,
+    // Kickstart Roms
+    Rom.aros:                "Free AROS Kickstart replacement",
+    
+    Rom.kick12_33_180:       "Kickstart 1.2 (revision 33.180)",
+    Rom.kick12_33_180_o:     "Kickstart 1.2 (revision 33.180)",
+    
+    Rom.kick13_35_5:         "Kickstart 1.3 (revision 34.5)",
+    Rom.kick13_35_5_b:       "Kickstart 1.3 (revision 34.5)",
+    Rom.kick13_35_5_b2:      "Kickstart 1.3 (revision 34.5)",
+    Rom.kick13_35_5_b3:      "Kickstart 1.3 (revision 34.5)",
+    Rom.kick13_35_5_h:       "Kickstart 1.3 (revision 34.5)",
+    Rom.kick13_35_5_o:       "Kickstart 1.3 (revision 34.5)",
+    
+    Rom.kick204_37_175:      "Kickstart 2.04 (revision 37.175)",
 ]
 
 extension PreferencesController {
@@ -67,9 +82,9 @@ extension PreferencesController {
         let hash         = config.model == A1000 ? bootHash : kickHash
         
         let hasRom       = hash != 0
-        let hasOrigRom   = originalRoms.contains(hash)
         let hasArosRom   = hash == 0xE74215EB368CD7F1
         let hasKnownRom  = knownRoms[hash] != nil
+        let hasOrigRom   = hasKnownRom && !hasArosRom
 
         let bootRomURL   = controller.bootRomURL
         let kickRomURL   = controller.kickRomURL
@@ -94,7 +109,6 @@ extension PreferencesController {
         // Rom description
         var text = ""
         var subText = ""
-        var warnText = ""
         
         switch config.model {
 
@@ -110,7 +124,7 @@ extension PreferencesController {
 
         default:
             
-            text = knownRoms[hash] ?? "An unknown, possibly patched Rom."
+            text = knownRoms[hash] ?? "An unknown or unsupported Rom."
             subText = hasArosRom ? "Use original Amiga Roms for higher compatibility." : url.relativePath
         }
         
@@ -124,13 +138,7 @@ extension PreferencesController {
         romDeleteButton.isHidden = !hasRom
         
         // Warning message
-        if incompatibleRoms.contains(hash) {
-            
-            romWarning.isHidden = false
-            romWarning.stringValue = "The selected kickstart is not compatible with an Amiga \(model)."
-            romWarning.textColor = .systemRed
-            
-        } else if originalRoms.contains(hash) {
+        if hasOrigRom {
             
             romWarning.isHidden = false
             romWarning.stringValue = "Please obey legal regulations. Original Amiga Roms are copyrighted."

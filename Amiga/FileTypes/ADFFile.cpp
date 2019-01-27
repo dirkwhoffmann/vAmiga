@@ -26,7 +26,7 @@ bool
 ADFFile::isADFFile(const char *path)
 {
     // There are no magic bytes. We can only check the file size.
-    return checkFileSize(path, 901120, 901120);
+    return checkFileSizeRange(path, 901120, 901120);
 }
 
 ADFFile *

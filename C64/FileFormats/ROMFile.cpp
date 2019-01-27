@@ -83,28 +83,28 @@ ROMFile::isRomFile(const char *filename)
 bool
 ROMFile::isBasicRomFile(const char *filename)
 {
-    if (!checkFileSize(filename, 0x2000, 0x2000)) return false;
+    if (!checkFileSizeRange(filename, 0x2000, 0x2000)) return false;
     return checkFileHeader(filename, magicBasicRomBytes);
 }
 
 bool
 ROMFile::isCharRomFile(const char *filename)
 {
-    if (!checkFileSize(filename, 0x1000, 0x1000)) return false;
+    if (!checkFileSizeRange(filename, 0x1000, 0x1000)) return false;
     return checkFileHeader(filename, magicCharRomBytes);
 }
 
 bool
 ROMFile::isKernalRomFile(const char *filename)
 {
-    if (!checkFileSize(filename, 0x2000, 0x2000)) return false;
+    if (!checkFileSizeRange(filename, 0x2000, 0x2000)) return false;
     return checkFileHeader(filename, magicKernalRomBytes);
 }
 
 bool
 ROMFile::isVC1541RomFile(const char *filename)
 {
-    if (!checkFileSize(filename, 0x4000, 0x4000)) return false;
+    if (!checkFileSizeRange(filename, 0x4000, 0x4000)) return false;
     return
     checkFileHeader(filename, magicVC1541RomBytes1) ||
     checkFileHeader(filename, magicVC1541RomBytes2) ||

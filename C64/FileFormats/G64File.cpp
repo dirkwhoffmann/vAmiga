@@ -38,7 +38,7 @@ G64File::isG64File(const char *filename)
     if (!checkFileSuffix(filename, ".G64") && !checkFileSuffix(filename, ".g64"))
         return false;
     
-    if (!checkFileSize(filename, 0x02AC, -1))
+    if (!checkFileSizeRange(filename, 0x02AC, -1))
         return false;
     
     if (!checkFileHeader(filename, magicBytes))

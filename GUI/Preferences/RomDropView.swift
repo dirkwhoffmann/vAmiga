@@ -30,9 +30,9 @@ class RomDropView : NSImageView
         guard let amiga = amigaProxy else { return false }
         
         if amiga.config().model == A1000 {
-            return amiga.isBootRom(url)
+            return amiga.isBootRom(url) && amiga.isPoweredOff()
         } else {
-            return amiga.isKickRom(url)
+            return amiga.isKickRom(url) && amiga.isPoweredOff()
         }
     }
     

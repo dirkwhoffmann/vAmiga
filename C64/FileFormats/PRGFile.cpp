@@ -34,7 +34,7 @@ PRGFile::isPRGFile(const char *filename)
     if (!checkFileSuffix(filename, ".PRG") && !checkFileSuffix(filename, ".prg"))
         return false;
     
-    if (!checkFileSize(filename, 2, -1))
+    if (!checkFileSizeRange(filename, 2, -1))
         return false;
     
     return true;

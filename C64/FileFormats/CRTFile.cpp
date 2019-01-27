@@ -69,7 +69,7 @@ CRTFile::isCRTFile(const char *path)
     if (!checkFileSuffix(path, ".CRT") && !checkFileSuffix(path, ".crt"))
         return false;
     
-    if (!checkFileSize(path, 0x40, -1))
+    if (!checkFileSizeRange(path, 0x40, -1))
         return false;
     
     if (!checkFileHeader(path, magicBytes))

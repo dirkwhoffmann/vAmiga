@@ -36,7 +36,7 @@ P00File::isP00File(const char *filename)
 {
     assert (filename != NULL);
     
-    if (!checkFileSize(filename, 0x1A, -1))
+    if (!checkFileSizeRange(filename, 0x1A, -1))
         return false;
     
     if (!checkFileHeader(filename, magicBytes))

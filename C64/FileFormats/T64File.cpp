@@ -49,7 +49,7 @@ T64File::isT64File(const char *path)
     if (TAPFile::isTAPFile(path)) // Note: TAP files have a very similar header
         return false;
     
-    if (!checkFileSize(path, 0x40, -1))
+    if (!checkFileSizeRange(path, 0x40, -1))
         return false;
     
     if (!checkFileHeader(path, magicBytes))

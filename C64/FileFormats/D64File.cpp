@@ -48,12 +48,12 @@ D64File::isD64File(const char *filename)
     if (!checkFileSuffix(filename, ".D64") && !checkFileSuffix(filename, ".d64"))
         return false;
     
-    fileOK = checkFileSize(filename, D64_683_SECTORS, D64_683_SECTORS)
-    || checkFileSize(filename, D64_683_SECTORS_ECC, D64_683_SECTORS_ECC)
-    || checkFileSize(filename, D64_768_SECTORS, D64_768_SECTORS)
-    || checkFileSize(filename, D64_768_SECTORS_ECC, D64_768_SECTORS_ECC)
-    || checkFileSize(filename, D64_802_SECTORS, D64_802_SECTORS)
-    || checkFileSize(filename, D64_802_SECTORS_ECC, D64_802_SECTORS_ECC);
+    fileOK = checkFileSizeRange(filename, D64_683_SECTORS, D64_683_SECTORS)
+    || checkFileSizeRange(filename, D64_683_SECTORS_ECC, D64_683_SECTORS_ECC)
+    || checkFileSizeRange(filename, D64_768_SECTORS, D64_768_SECTORS)
+    || checkFileSizeRange(filename, D64_768_SECTORS_ECC, D64_768_SECTORS_ECC)
+    || checkFileSizeRange(filename, D64_802_SECTORS, D64_802_SECTORS)
+    || checkFileSizeRange(filename, D64_802_SECTORS_ECC, D64_802_SECTORS_ECC);
     
     // Unfortunaltely, D64 containers do not contain magic bytes,
     // so we can't check anything further here

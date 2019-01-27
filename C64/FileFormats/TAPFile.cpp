@@ -72,7 +72,7 @@ TAPFile::isTAPFile(const char *filename)
         !checkFileSuffix(filename, ".T64") && !checkFileSuffix(filename, ".t64"))
         return false;
     
-    if (!checkFileSize(filename, 0x15, -1))
+    if (!checkFileSizeRange(filename, 0x15, -1))
         return false;
     
     if (!checkFileHeader(filename, magicBytes))

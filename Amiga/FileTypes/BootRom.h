@@ -13,7 +13,8 @@
 #include "AmigaFile.h"
 
 /* Instead of a Kickstart Rom, the Amiga 1000 only has a stripped down Boot
- * Rom. The purpose of this Rom is to load the Kickstart from disk.
+ * Rom which loads the Kickstart from disk.
+ * The Boot Rom is a 64 KB Rom, but only the first 8 KB are used.
  */
  class BootRom : public AmigaFile {
     
@@ -22,7 +23,9 @@ private:
     // Accepted header signatures
     static const uint8_t magicBytes1[];
     static const uint8_t magicBytes2[];
-    
+    static const uint8_t magicBytes3[];
+    static const uint8_t magicBytes4[];
+
 public:
     
     //
