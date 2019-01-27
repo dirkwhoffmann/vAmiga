@@ -107,6 +107,7 @@ extension PreferencesController {
     @IBAction func emuCloseWithoutAskingAction(_ sender: NSButton!) {
         
         myController?.closeWithoutAsking = (sender.state == .on)
+        myController?.needsSaving = amigaProxy?.isRunning() ?? false
         refresh()
     }
     

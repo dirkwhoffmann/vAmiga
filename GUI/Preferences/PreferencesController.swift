@@ -170,10 +170,6 @@ class PreferencesController : DialogController {
     @IBOutlet weak var devAutofireBullets: NSTextField!
     @IBOutlet weak var devAutofireFrequency: NSSlider!
     
-    // Mouse
-    @IBOutlet weak var devMouseModel: NSPopUpButton!
-    @IBOutlet weak var devMouseInfo: NSTextField!
-
     
     //
     // Keymap preferences

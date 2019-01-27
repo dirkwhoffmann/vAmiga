@@ -490,12 +490,16 @@ extension MyController {
         
         case MSG_RUN:
             
+            track()
+            
             needsSaving = true
             disableUserEditing()
             validateToolbarItems()
             refresh()
     
         case MSG_PAUSE:
+            
+            track()
             
             enableUserEditing()
             validateToolbarItems()

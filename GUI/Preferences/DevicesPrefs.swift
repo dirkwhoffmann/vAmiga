@@ -44,11 +44,6 @@ extension PreferencesController {
         devAutofireCeaseText.textColor = devAutofire.state == .on ? .controlTextColor : .disabledControlTextColor
         devAutofireBullets.isEnabled = devAutofire.state == .on
         devAutofireFrequency.isEnabled = devAutofire.state == .on
-        
-        // Mouse
-        let model = c64.mouse.model()
-        devMouseModel.selectItem(withTag: model)
-        devMouseInfo.isHidden = (model == Int(MOUSE1350.rawValue))
     }
     
     func updateJoyKeyMap(_ nr: Int, dir: JoystickDirection, button: NSButton, txt: NSTextField) {
@@ -180,13 +175,6 @@ extension PreferencesController {
         
         proxy?.port1.setAutofireFrequency(value)
         proxy?.port2.setAutofireFrequency(value)
-        
-        refresh()
-    }
-    
-    @IBAction func devMouseModelAction(_ sender: NSPopUpButton!) {
-        
-        proxy?.mouse.setModel(sender.selectedTag())
         
         refresh()
     }
