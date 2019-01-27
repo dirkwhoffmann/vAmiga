@@ -862,8 +862,6 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 }
 - (void) attachCartridgeAndReset:(CRTFileProxy *)c
 {
-    CRTFile *file = (CRTFile *)([c wrapper]->file);
-    wrapper->expansionPort->attachCartridgeAndReset(file);
 }
 - (BOOL) attachGeoRamCartridge:(NSInteger)capacity
 {
@@ -1247,6 +1245,7 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 // Datasette
 //
 
+/*
 @implementation DatasetteProxy
 
 - (instancetype) initWithDatasette:(Datasette *)datasette
@@ -1280,8 +1279,7 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 }
 - (BOOL) insertTape:(TAPFileProxy *)tape
 {
-    TAPFile *file = (TAPFile *)([tape wrapper]->file);
-    return wrapper->datasette->insertTape(file);
+    return false;
 }
 - (void) ejectTape
 {
@@ -1324,7 +1322,7 @@ struct AnyC64FileWrapper { AnyC64File *file; };
     return wrapper->datasette->getPlayKey();
 }
 @end
-
+*/
 
 //
 // Mouse
@@ -1381,7 +1379,7 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 @synthesize wrapper;
 @synthesize mem, cpu, vic, cia1, cia2, sid;
 @synthesize keyboard, port1, port2, iec;
-@synthesize expansionport, drive1, drive2, datasette, mouse;
+@synthesize expansionport, drive1, drive2, mouse;
 
 - (instancetype) init
 {
@@ -1408,7 +1406,6 @@ struct AnyC64FileWrapper { AnyC64File *file; };
     expansionport = [[ExpansionPortProxy alloc] initWithExpansionPort:&c64->expansionport];
 	drive1 = [[DriveProxy alloc] initWithVC1541:&c64->drive1];
     drive2 = [[DriveProxy alloc] initWithVC1541:&c64->drive2];
-    datasette = [[DatasetteProxy alloc] initWithDatasette:&c64->datasette];
     mouse = [[MouseProxy alloc] initWithMouse:&c64->mouse];
 
     return self;
@@ -1846,6 +1843,7 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 // CRT proxy
 //
 
+/*
 @implementation CRTFileProxy
 
 + (CartridgeType) typeOfCRTBuffer:(const void *)buffer length:(NSInteger)length
@@ -1922,12 +1920,13 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 }
 
 @end
-
+*/
 
 //
 // TAP proxy
 //
 
+/*
 @implementation TAPFileProxy
 
 + (BOOL) isTAPFile:(NSString *)path
@@ -1959,6 +1958,7 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 
 @end
 
+*/
 
 //
 // AnyArchive proxy

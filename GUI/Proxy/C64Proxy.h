@@ -27,7 +27,6 @@
 @class DriveProxy;
 @class VIAProxy;
 @class DiskProxy;
-@class DatasetteProxy;
 @class MouseProxy;
 
 @class AnyC64FileProxy;
@@ -58,7 +57,6 @@ struct ExpansionPortWrapper;
 struct DriveWrapper;
 struct ViaWrapper;
 struct DiskWrapper;
-struct DatasetteWrapper;
 struct MouseWrapper;
 struct AnyC64FileWrapper;
 
@@ -84,7 +82,6 @@ struct AnyC64FileWrapper;
     ExpansionPortProxy *expansionport;
     DriveProxy *drive1;
     DriveProxy *drive2;
-    DatasetteProxy *datasette;
     MouseProxy *mouse;
 }
 
@@ -102,7 +99,6 @@ struct AnyC64FileWrapper;
 @property (readonly) ExpansionPortProxy *expansionport;
 @property (readonly) DriveProxy *drive1;
 @property (readonly) DriveProxy *drive2;
-@property (readonly) DatasetteProxy *datasette;
 @property (readonly) MouseProxy *mouse;
 
 - (void) kill;
@@ -648,6 +644,7 @@ struct AnyC64FileWrapper;
 //                               Datasette proxy
 // -----------------------------------------------------------------------------
 
+/*
 @interface DatasetteProxy : NSObject {
     
     struct DatasetteWrapper *wrapper;
@@ -673,7 +670,7 @@ struct AnyC64FileWrapper;
 - (BOOL) playKey;
 
 @end
-
+*/
 
 // -----------------------------------------------------------------------------
 //                                 Mouse proxy
@@ -766,9 +763,9 @@ struct AnyC64FileWrapper;
 //                               CRTFile proxy
 // -----------------------------------------------------------------------------
 
+/*
 @interface CRTFileProxy : AnyC64FileProxy {
 }
-
 + (CartridgeType)typeOfCRTBuffer:(const void *)buffer length:(NSInteger)length;
 + (NSString *)typeNameOfCRTBuffer:(const void *)buffer length:(NSInteger)length;
 + (BOOL)isSupportedCRTBuffer:(const void *)buffer length:(NSInteger)length;
@@ -776,7 +773,7 @@ struct AnyC64FileWrapper;
 + (BOOL)isCRTFile:(NSString *)path;
 + (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)length;
 + (instancetype)makeWithFile:(NSString *)path;
- 
+
 - (CartridgeType)cartridgeType;
 - (NSString *)cartridgeTypeName;
 - (NSInteger)initialExromLine;
@@ -786,13 +783,13 @@ struct AnyC64FileWrapper;
 - (NSInteger)chipAddr:(NSInteger)nr;
 - (NSInteger)chipSize:(NSInteger)nr;
 
-@end
-
+*/
 
 // -----------------------------------------------------------------------------
 //                               TAPFile proxy
 // -----------------------------------------------------------------------------
 
+/*
 @interface TAPFileProxy : AnyC64FileProxy {
 }
 
@@ -803,6 +800,7 @@ struct AnyC64FileWrapper;
 - (NSInteger)TAPversion;
 
 @end
+*/
 
 
 // -----------------------------------------------------------------------------

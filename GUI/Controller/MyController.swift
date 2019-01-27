@@ -824,13 +824,6 @@ extension MyController {
         
         switch (type) {
             
-        case CRT_FILE:
-            c64.expansionport.attachCartridgeAndReset(item as? CRTFileProxy)
-            return true
-            
-        case TAP_FILE:
-            return c64.datasette.insertTape(item as? TAPFileProxy)
-            
         case T64_FILE, D64_FILE,
              PRG_FILE, P00_FILE,
              G64_FILE:
