@@ -53,7 +53,9 @@ public:
     
     AmigaFileType type() override { return FILETYPE_BOOT_ROM; }
     const char *typeAsString() override { return "Boot Rom"; }
-    bool hasSameType(const char *path) override { return isBootRomFile(path); }
+    bool bufferHasSameType(const uint8_t *buffer, size_t length) override {
+        return isBootRomBuffer(buffer, length); }
+    bool fileHasSameType(const char *path) override { return isBootRomFile(path); }
     bool readFromBuffer(const uint8_t *buffer, size_t length) override;
     
 };

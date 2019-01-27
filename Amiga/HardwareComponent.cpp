@@ -149,7 +149,6 @@ HardwareComponent::stateSize()
         for (unsigned i = 0; subComponents[i] != NULL; i++)
             result += subComponents[i]->stateSize();
     
-    debug("State size = %d bytes\n", result);
     return result;
 }
 

@@ -492,7 +492,7 @@ extension MyController {
             }
             
             // Process attachment (if any)
-            mydocument.mountAttachment()
+            mydocument.mountAmigaAttachment()
         
         case MSG_RUN:
             
@@ -530,6 +530,8 @@ extension MyController {
             default: fatalError()
             }
             
+            refreshStatusBar()
+            
         case MSG_DRIVE_DISCONNECT:
             
             switch (msg.data) {
@@ -542,6 +544,8 @@ extension MyController {
             if dragAndDropDrive === amiga.df(msg.data) {
                 dragAndDropDrive = nil
             }
+            
+            refreshStatusBar()
             
         case MSG_DRIVE_DISK_INSERT,
              MSG_DRIVE_DISK_EJECT,

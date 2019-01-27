@@ -21,6 +21,20 @@ AmigaFile::~AmigaFile()
         free(path);
 }
 
+bool
+AmigaFile::alloc(size_t capacity)
+{
+    dealloc();
+    
+    if ((data = new uint8_t[capacity]) == NULL)
+        return false;
+    
+    size = eof = capacity;
+    fp = 0;
+    
+    return true;
+}
+
 void
 AmigaFile::dealloc()
 {
@@ -31,6 +45,7 @@ AmigaFile::dealloc()
     
     delete[] data;
     data = NULL;
+    
     size = 0;
     fp = -1;
     eof = -1;
@@ -108,14 +123,19 @@ AmigaFile::readFromBuffer(const uint8_t *buffer, size_t length)
 {
     assert (buffer != NULL);
     
-    dealloc();
-    if ((data = new uint8_t[length]) == NULL)
+    // Check file type
+    if (!bufferHasSameType(buffer, length)) {
         return false;
+    }
     
+    // Allocate memory
+    if (!alloc(length)) {
+        return false;
+    }
+    
+    // Read from buffer
     memcpy(data, buffer, length);
-    size = length;
-    eof = length;
-    fp = 0;
+ 
     return true;
 }
 
@@ -130,7 +150,7 @@ AmigaFile::readFromFile(const char *filename)
     struct stat fileProperties;
     
     // Check file type
-    if (!hasSameType(filename)) {
+    if (!fileHasSameType(filename)) {
         goto exit;
     }
     
@@ -158,7 +178,7 @@ AmigaFile::readFromFile(const char *filename)
         buffer[i] = (uint8_t)c;
     }
     
-    // Read from buffer (subclass specific behaviour)
+    // Read from buffer
     dealloc();
     if (!readFromBuffer(buffer, (unsigned)fileProperties.st_size)) {
         goto exit;

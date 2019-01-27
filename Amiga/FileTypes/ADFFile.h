@@ -42,9 +42,9 @@ public:
     // Factory methods
     //
     
+    static ADFFile *make();
     static ADFFile *makeWithBuffer(const uint8_t *buffer, size_t length);
     static ADFFile *makeWithFile(const char *path);
-    static ADFFile *make();
 
     
     //
@@ -53,7 +53,9 @@ public:
     
     AmigaFileType type() override { return FILETYPE_ADF; }
     const char *typeAsString() override { return "ADF"; }
-    bool hasSameType(const char *path) override { return isADFFile(path); }
+    bool bufferHasSameType(const uint8_t *buffer, size_t length) override {
+        return isADFBuffer(buffer, length); }
+    bool fileHasSameType(const char *path) override { return isADFFile(path); }
     bool readFromBuffer(const uint8_t *buffer, size_t length) override;
     
     

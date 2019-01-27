@@ -18,11 +18,11 @@ class ExportDiskController : DialogController {
     
     func showSheet(forDrive nr: Int) {
         
-        assert(nr == 1 || nr == 2)
+        assert(nr == 0 || nr == 1)
         
         // Create save panel
         savePanel = NSSavePanel()
-        savePanel.allowedFileTypes = ["d64"]
+        savePanel.allowedFileTypes = ["adf"]
         savePanel.prompt = "Export"
         savePanel.title = "Export"
         savePanel.nameFieldLabel = "Export As:"

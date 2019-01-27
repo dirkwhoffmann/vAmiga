@@ -226,6 +226,7 @@ class MyDocument : NSDocument {
     }
     
     // OLD CODE:
+    /*
     func createAttachment(from url: URL) throws {
     
         track("Creating attachment from URL \(url.lastPathComponent).")
@@ -238,6 +239,7 @@ class MyDocument : NSDocument {
         // Put URL in recently used URL lists
         noteNewRecentlyUsedURL(url)
     }
+    */
     
     /// Creates an attachment from a file wrapper
     fileprivate func createAmigaAttachment(from fileWrapper: FileWrapper,
@@ -283,6 +285,7 @@ class MyDocument : NSDocument {
     }
 
     // OLD CODE
+    /*
     fileprivate func createAttachment(from fileWrapper: FileWrapper,
                                       ofType typeName: String) throws {
         
@@ -347,7 +350,7 @@ class MyDocument : NSDocument {
         }
         attachment!.setPath(filename)
     }
-    
+    */
     
     //
     // Processing attachments
@@ -381,6 +384,7 @@ class MyDocument : NSDocument {
     }
     
     // OLD CODE
+    /*
     @discardableResult
     func mountAttachment() -> Bool {
 
@@ -439,6 +443,7 @@ class MyDocument : NSDocument {
             myController?.keyboardcontroller.type(text! + "\n")
         }
     }
+    */
     
     func runDiskMountDialog() {
         let nibName = NSNib.Name("DiskMountDialog")
@@ -457,40 +462,6 @@ class MyDocument : NSDocument {
                 parent.changeDisk(archive, drive: nr)
                 return true
             }
-        }
-        return false
-    }
-    
-    @discardableResult
-    func mountAttachmentAsTape() -> Bool {
-        
-        if let tape = attachment as? TAPFileProxy {
-            
-            let parent = windowForSheet!.windowController as! MyController
-            return parent.c64.datasette.insertTape(tape)
-        }
-        return false
-    }
-    
-    @discardableResult
-    func flashAttachmentIntoMemory() -> Bool {
-        
-        if let archive = attachment as? AnyArchiveProxy {
-            
-            let parent = windowForSheet!.windowController as! MyController
-            return parent.c64.flash(archive, item: 0)
-        }
-        return false
-    }
-    
-    @discardableResult
-    func mountAttachmentAsCartridge() -> Bool {
-        
-        if let cartridge = attachment as? CRTFileProxy {
-            
-            let parent = windowForSheet!.windowController as! MyController
-            parent.c64.expansionport.attachCartridgeAndReset(cartridge)
-            return true
         }
         return false
     }
@@ -541,13 +512,13 @@ class MyDocument : NSDocument {
         assert(["ADF"].contains(typeName))
         
         let drive = amiga.df(nr)
-        
+
         // TOD: Convert disk to ADF format
         // guard let adf = ADFFileProxy.make(withDisk: drive.disk) else {
         guard let adf = ADFFileProxy.make() else {
             return false
         }
-        
+
         // Serialize data
         let data = NSMutableData.init(length: adf.sizeOnDisk())!
         adf.write(toBuffer: data.mutableBytes)
@@ -557,7 +528,7 @@ class MyDocument : NSDocument {
             showExportErrorAlert(url: url)
             return false
         }
-        
+
         // Mark disk as "not modified"
         drive.setModifiedDisk(false)
         
@@ -566,6 +537,7 @@ class MyDocument : NSDocument {
         return true
     }
     
+    /*
     func exportOld(drive nr: Int, to url: URL, ofType typeName: String) -> Bool {
         
         track("url = \(url) typeName = \(typeName)")
@@ -638,6 +610,7 @@ class MyDocument : NSDocument {
         noteNewRecentlyExportedDiskURL(url, drive: nr)
         return true
     }
+    */
     
     @discardableResult
     func export(drive nr: Int, to url: URL?) -> Bool {

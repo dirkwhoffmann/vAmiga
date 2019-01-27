@@ -178,25 +178,28 @@ func cgEventCallback(proxy: CGEventTapProxy,
             NSApplication.shared.isAutomaticCustomizeTouchBarMenuItemEnabled = true
         }
         
-        // Add observers
+        //
+        // Add observers (for remote controlling the app)
+        //
+        
         let dc = DistributedNotificationCenter.default
-        dc.addObserver(self, selector: #selector(vc64ResetCommand(_:)),
-                       name: Notification.Name("VC64Reset"),
+        dc.addObserver(self, selector: #selector(vamResetCommand(_:)),
+                       name: Notification.Name("VAMReset"),
                        object: nil)
-        dc.addObserver(self, selector: #selector(vc64ConfigureCommand(_:)),
-                       name: Notification.Name("VC64Configure"),
+        dc.addObserver(self, selector: #selector(vamConfigureCommand(_:)),
+                       name: Notification.Name("VAMConfigure"),
                        object: nil)
-        dc.addObserver(self, selector: #selector(vc64MountCommand(_:)),
-                       name: Notification.Name("VC64Mount"),
+        dc.addObserver(self, selector: #selector(vamMountCommand(_:)),
+                       name: Notification.Name("VAMMount"),
                        object: nil)
-        dc.addObserver(self, selector: #selector(vc64TypeTextCommand(_:)),
-                       name: Notification.Name("VC64TypeText"),
+        dc.addObserver(self, selector: #selector(vamTypeTextCommand(_:)),
+                       name: Notification.Name("VAMTypeText"),
                        object: nil)
-        dc.addObserver(self, selector: #selector(vc64TakeScreenshotCommand(_:)),
-                       name: Notification.Name("VC64TakeScreenshot"),
+        dc.addObserver(self, selector: #selector(vamTakeScreenshotCommand(_:)),
+                       name: Notification.Name("VAMTakeScreenshot"),
                        object: nil)
-        dc.addObserver(self, selector: #selector(vc64QuitCommand(_:)),
-                       name: Notification.Name("VC64Quit"),
+        dc.addObserver(self, selector: #selector(vamQuitCommand(_:)),
+                       name: Notification.Name("VAMQuit"),
                        object: nil)
     }
     

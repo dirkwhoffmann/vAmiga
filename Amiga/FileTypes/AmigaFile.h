@@ -48,7 +48,10 @@ public:
     AmigaFile();
     virtual ~AmigaFile();
     
-    // Frees the memory allocated by this object.
+    // Allocates memory for storing the object data.
+    virtual bool alloc(size_t capacity);
+    
+    // Frees the allocated memory.
     virtual void dealloc();
     
     
@@ -101,19 +104,30 @@ public:
     
     // Returns the required buffer size for this file
     size_t sizeOnDisk() { return writeToBuffer(NULL); }
-    
-    /* Returns true iff this file has the same type as the file stored in the
-     * specified file.
+
+    /* Returns true iff this specified buffer is compatible with this object.
+     * This function is used in readFromBuffer().
      */
-    virtual bool hasSameType(const char *filename) { return false; }
+    virtual bool bufferHasSameType(const uint8_t *buffer, size_t length) { return false; }
+
+
+    /* Returns true iff this specified file is compatible with this object.
+     * This function is used in readFromFile().
+     */
+    virtual bool fileHasSameType(const char *path) { return false; }
     
-    /* Reads the file contents from a memory buffer.
+    /* Deserializes this object from a memory buffer.
      *   - buffer   The address of a binary representation in memory.
      *   - length   The size of the binary representation.
+     * This function uses bufferHasSameType() to verify that the buffer
+     * contains a compatible binary representation.
      */
     virtual bool readFromBuffer(const uint8_t *buffer, size_t length);
     
-    /* Reads the file contents from a file.
+    /* Deserializes this object from a file.
+     *   - path     The name of the file containing the binary representation.
+     * This function uses fileHasSameType() to verify that the buffer
+     * contains a compatible binary representation.
      * This function requires no custom implementation. It first reads in the
      * file contents in memory and invokes readFromBuffer afterwards.
      */

@@ -30,6 +30,20 @@ ADFFile::isADFFile(const char *path)
 }
 
 ADFFile *
+ADFFile::make()
+{
+    ADFFile *adf = new ADFFile();
+    
+    if (!adf->alloc(901120)) {
+        delete adf;
+        return NULL;
+    }
+    
+    memset(adf->data, 42, 901120); // TODO: Do a proper initialization here
+    return adf;
+}
+
+ADFFile *
 ADFFile::makeWithBuffer(const uint8_t *buffer, size_t length)
 {
     ADFFile *adf = new ADFFile();
@@ -52,15 +66,6 @@ ADFFile::makeWithFile(const char *path)
         return NULL;
     }
     
-    return adf;
-}
-
-ADFFile *
-ADFFile::make()
-{
-    ADFFile *adf = new ADFFile();
-    
-    // TODO: MAKE IT AN EMPTY DISK HERE
     return adf;
 }
 

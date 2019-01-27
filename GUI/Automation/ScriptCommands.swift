@@ -1,11 +1,11 @@
-//
-// This file is part of VirtualC64 - A cycle accurate Commodore 64 emulator
+// -----------------------------------------------------------------------------
+// This file is part of vAmiga
 //
 // Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
 // Licensed under the GNU General Public License v3
 //
 // See https://www.gnu.org for license information
-//
+// -----------------------------------------------------------------------------
 
 import Foundation
 
@@ -15,55 +15,35 @@ import Foundation
 
 func resetScriptCmd(arguments: [AnyHashable : Any]?) -> Bool {
     
-    proxy?.powerUp()
+    amigaProxy?.reset()
     return true
 }
 
 func configureScriptCmd(arguments: [AnyHashable : Any]?) -> Bool {
     
     // Hardware model
-    if let argument = arguments?["VC64HwModel"] as? String {
-        switch argument {
-        case "C64_PAL": proxy?.setModel(Int(C64_PAL.rawValue))
-        case "C64_II_PAL": proxy?.setModel(Int(C64_II_PAL.rawValue))
-        case "C64_OLD_PAL": proxy?.setModel(Int(C64_OLD_PAL.rawValue))
-        case "C64_NTSC": proxy?.setModel(Int(C64_NTSC.rawValue))
-        case "C64_II_NTSC": proxy?.setModel(Int(C64_II_NTSC.rawValue))
-        case "C64_OLD_NTSC": proxy?.setModel(Int(C64_OLD_NTSC.rawValue))
-        default: return false
-        }
-    }
-    
-    // Auto warp
-    if let argument = arguments?["VC64AutoWarp"] as? String {
-        track();
-        switch argument {
-        case "on": track(); proxy?.setWarpLoad(true)
-        case "off": track(); proxy?.setWarpLoad(false)
-        default: return false
-        }
-    }
-    
-    // Always warp
-    if let argument = arguments?["VC64AlwaysWarp"] as? String {
-        track();
-        switch argument {
-        case "on": track(); proxy?.setAlwaysWarp(true)
-        case "off": track(); proxy?.setAlwaysWarp(false)
-        default: return false
-        }
-    }
+    if let argument = arguments?["VAMModel"] as? String {
         
-    return true
+        switch argument {
+            
+        case "A1000": amigaProxy?.configureModel(A1000.rawValue)
+        case "A500": amigaProxy?.configureModel(A500.rawValue)
+        case "A2000": amigaProxy?.configureModel(A2000.rawValue)
+            
+        default: return false
+        }
+        return true
+    }
+    return false
 }
 
 func mountScriptCmd(arguments: [AnyHashable : Any]?) -> Bool {
     
-    if let argument = arguments?["VC64Path"] as? String {
+    if let argument = arguments?["VAMPath"] as? String {
         let url = URL(fileURLWithPath: argument)
         do {
-            try myDocument?.createAttachment(from: url)
-            myDocument?.mountAttachment(action: .flashFirstFile, text: "RUN\n")
+            try myDocument?.createAmigaAttachment(from: url)
+            myDocument?.mountAmigaAttachment()
         } catch {
             track("Remote control: Unable to mount \(url).")
         }
@@ -82,7 +62,7 @@ func typeTextCmd(arguments: [AnyHashable : Any]?) -> Bool {
 
 func takeScreenshotCmd(arguments: [AnyHashable : Any]?) -> Bool {
     
-    guard let path = arguments?["VC64Path"] as? String else {
+    guard let path = arguments?["VAMPath"] as? String else {
         return false
     }
 

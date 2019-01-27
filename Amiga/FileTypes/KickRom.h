@@ -49,7 +49,9 @@ public:
     
     AmigaFileType type() override { return FILETYPE_KICK_ROM; }
     const char *typeAsString() override { return "Kickstart Rom"; }
-    bool hasSameType(const char *path) override { return isKickRomFile(path); }
+    bool bufferHasSameType(const uint8_t *buffer, size_t length) override {
+        return isKickRomBuffer(buffer, length); }
+    bool fileHasSameType(const char *path) override { return isKickRomFile(path); }
     bool readFromBuffer(const uint8_t *buffer, size_t length) override;
     
 };

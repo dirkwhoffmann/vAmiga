@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
-        <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14313.18"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <customObject id="-2" userLabel="File's Owner" customClass="SnapshotDialog" customModule="VirtualC64" customModuleProvider="target">
+        <customObject id="-2" userLabel="File's Owner" customClass="SnapshotDialog" customModule="vAmiga" customModuleProvider="target">
             <connections>
                 <outlet property="autoTableView" destination="yyw-3s-Q4f" id="eC1-r9-Foq"/>
                 <outlet property="userTableView" destination="xi9-eT-uzq" id="aQH-u5-he7"/>
@@ -18,18 +17,18 @@
         <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="196" y="240" width="592" height="394"/>
+            <rect key="contentRect" x="196" y="240" width="592" height="379"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
-            <value key="minSize" type="size" width="592" height="394"/>
-            <value key="maxSize" type="size" width="592" height="800"/>
+            <value key="minSize" type="size" width="592" height="379"/>
+            <value key="maxSize" type="size" width="592" height="379"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
-                <rect key="frame" x="0.0" y="0.0" width="592" height="394"/>
+                <rect key="frame" x="0.0" y="0.0" width="592" height="379"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="04r-um-8sn">
-                        <rect key="frame" x="304" y="352" width="140" height="17"/>
+                        <rect key="frame" x="304" y="337" width="144" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" alignment="left" title="User-saved snapshots" id="e3V-cG-Mzn">
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" alignment="left" title="User-saved snapshots:" id="e3V-cG-Mzn">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -45,9 +44,9 @@
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MhS-Jy-4aE">
-                        <rect key="frame" x="20" y="352" width="140" height="17"/>
+                        <rect key="frame" x="20" y="337" width="144" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" alignment="left" title="Auto-saved snapshots" id="GzM-KD-puo">
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" alignment="left" title="Auto-saved snapshots:" id="GzM-KD-puo">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -68,14 +67,14 @@ Gw
                         </connections>
                     </button>
                     <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="89" horizontalPageScroll="10" verticalLineScroll="89" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jBd-VU-LVA">
-                        <rect key="frame" x="305" y="59" width="267" height="269"/>
+                        <rect key="frame" x="305" y="59" width="267" height="270"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                         <clipView key="contentView" ambiguous="YES" id="Kje-6X-7gn">
-                            <rect key="frame" x="1" y="1" width="265" height="267"/>
+                            <rect key="frame" x="1" y="1" width="265" height="268"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="87" rowSizeStyle="automatic" viewBased="YES" id="xi9-eT-uzq">
-                                    <rect key="frame" x="0.0" y="0.0" width="265" height="267"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="265" height="268"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -94,7 +93,7 @@ Gw
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <prototypeCellViews>
-                                                <tableCellView id="rSn-Yd-lMw" customClass="SnapshotTableCellView" customModule="VirtualC64" customModuleProvider="target">
+                                                <tableCellView id="rSn-Yd-lMw" customClass="SnapshotTableCellView" customModule="vAmiga" customModuleProvider="target">
                                                     <rect key="frame" x="1" y="1" width="262" height="87"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
@@ -160,24 +159,15 @@ Gw
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                     </scrollView>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QQ7-dp-StS">
-                        <rect key="frame" x="20" y="336" width="218" height="14"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" alignment="left" title="VirtualC64 saves snapshots periodically " id="Lek-MI-ihU">
-                            <font key="font" metaFont="smallSystem"/>
-                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
                     <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="89" horizontalPageScroll="10" verticalLineScroll="89" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xeZ-rL-8Kr">
-                        <rect key="frame" x="20" y="59" width="267" height="269"/>
+                        <rect key="frame" x="20" y="59" width="267" height="270"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                         <clipView key="contentView" ambiguous="YES" id="dye-KO-QBC">
-                            <rect key="frame" x="1" y="1" width="265" height="267"/>
+                            <rect key="frame" x="1" y="1" width="265" height="268"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="87" rowSizeStyle="automatic" viewBased="YES" id="yyw-3s-Q4f">
-                                    <rect key="frame" x="0.0" y="0.0" width="265" height="267"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="265" height="268"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -196,7 +186,7 @@ Gw
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <prototypeCellViews>
-                                                <tableCellView id="5ow-IO-zE9" customClass="SnapshotTableCellView" customModule="VirtualC64" customModuleProvider="target">
+                                                <tableCellView id="5ow-IO-zE9" customClass="SnapshotTableCellView" customModule="vAmiga" customModuleProvider="target">
                                                     <rect key="frame" x="1" y="1" width="262" height="87"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
@@ -259,25 +249,16 @@ Gw
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                     </scrollView>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AQh-7d-CCl">
-                        <rect key="frame" x="304" y="336" width="192" height="14"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" alignment="right" title="Hit ⌘T to save a snapshot manually" id="fus-k7-2r8">
-                            <font key="font" metaFont="smallSystem"/>
-                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
                 </subviews>
             </view>
             <connections>
                 <outlet property="delegate" destination="-2" id="SsX-Vh-39k"/>
             </connections>
-            <point key="canvasLocation" x="-44" y="234"/>
+            <point key="canvasLocation" x="-44" y="226.5"/>
         </window>
     </objects>
     <resources>
-        <image name="NSAdvanced" width="128" height="128"/>
+        <image name="NSAdvanced" width="32" height="32"/>
         <image name="trashTemplate" width="512" height="512"/>
     </resources>
 </document>
