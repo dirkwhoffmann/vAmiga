@@ -1149,11 +1149,13 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 {
     wrapper->drive->prepareToInsert();
 }
+/*
 - (void) insertDisk:(AnyArchiveProxy *)disk
 {
     AnyArchive *archive = (AnyArchive *)([disk wrapper]->file);
     wrapper->drive->insertDisk(archive);
 }
+ */
 - (void) prepareToEject
 {
     wrapper->drive->prepareToEject();
@@ -1704,6 +1706,7 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 }
 
 // Flashing files
+/*
 - (BOOL)flash:(AnyC64FileProxy *)file
 {
     return wrapper->c64->flash([file wrapper]->file);
@@ -1713,6 +1716,7 @@ struct AnyC64FileWrapper { AnyC64File *file; };
     AnyArchive *a = (AnyArchive *)([archive wrapper]->file);
     return wrapper->c64->flash(a, (unsigned)nr);
 }
+*/
 @end
 
 
@@ -1787,7 +1791,7 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 //
 // AnyArchive proxy
 //
-
+/*
 @implementation AnyArchiveProxy
 
 + (instancetype) make:(AnyArchive *)archive
@@ -1857,12 +1861,13 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 
 @end
 
-
+*/
 
 //
 // AnyDisk proxy
 //
 
+/*
 @implementation AnyDiskProxy
 
 + (instancetype) make:(AnyDisk *)disk
@@ -1909,78 +1914,4 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 
 @end
 
-
-//
-// D64 proxy
-//
-
-@implementation D64FileProxy
-
-+ (BOOL)isD64File:(NSString *)filename
-{
-    return D64File::isD64File([filename UTF8String]);
-}
-+ (instancetype) make:(D64File *)archive
-{
-    if (archive == NULL) return nil;
-    return [[self alloc] initWithFile:archive];
-}
-+ (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)length
-{
-    D64File *archive = D64File::makeWithBuffer((const uint8_t *)buffer, length);
-    return [self make: archive];
-}
-+ (instancetype) makeWithFile:(NSString *)path
-{
-    D64File *archive = D64File::makeWithFile([path UTF8String]);
-    return [self make: archive];
-}
-+ (instancetype) makeWithAnyArchive:(AnyArchiveProxy *)otherArchive
-{
-    AnyArchive *other = (AnyArchive *)([otherArchive wrapper]->file);
-    D64File *archive = D64File::makeWithAnyArchive(other);
-    return [self make: archive];
-}
-+ (instancetype) makeWithDisk:(DiskProxy *)disk
-{
-    Disk *d = (Disk *)([disk wrapper]->disk);
-    D64File *archive = D64File::makeWithDisk(d);
-    return [self make: archive];
-}
-
-@end
-
-
-//
-// G64 proxy
-//
-
-@implementation G64FileProxy
-
-+ (BOOL)isG64File:(NSString *)filename
-{
-    return G64File::isG64File([filename UTF8String]);
-}
-+ (instancetype) make:(G64File *)archive
-{
-    if (archive == NULL) return nil;
-    return [[self alloc] initWithFile:archive];
-}
-+ (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)length
-{
-    G64File *archive = G64File::makeWithBuffer((const uint8_t *)buffer, length);
-    return [self make: archive];
-}
-+ (instancetype) makeWithFile:(NSString *)path
-{
-    G64File *archive = G64File::makeWithFile([path UTF8String]);
-    return [self make: archive];
-}
-+ (instancetype) makeWithDisk:(DiskProxy *)diskProxy
-{
-    Disk *disk = [diskProxy wrapper]->disk;
-    G64File *archive = G64File::makeWithDisk(disk);
-    return [self make: archive];
-}
-
-@end
+*/

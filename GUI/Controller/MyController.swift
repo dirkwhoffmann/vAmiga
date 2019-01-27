@@ -817,6 +817,7 @@ extension MyController {
     // Mounting media files
     //
     
+    /*
     @discardableResult
     func mount(_ item: AnyC64FileProxy?) -> Bool {
 
@@ -838,9 +839,11 @@ extension MyController {
             fatalError()
         }
     }
+    */
     
     // Emulates changing a disk including the necessary light barrier breaks
     // If disk is nil, only the ejection is emulated.
+    /*
     func changeDisk(_ disk: AnyC64FileProxy?, drive nr: Int) {
         
         let drive = c64.drive(nr)!
@@ -868,7 +871,7 @@ extension MyController {
             }
         }
     }
-
+    */
     
     //
     // Misc

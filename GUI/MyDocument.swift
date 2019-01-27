@@ -451,6 +451,7 @@ class MyDocument : NSDocument {
         controller.showSheet()
     }
     
+    /*
     @discardableResult
     func mountAttachmentAsDisk(drive nr: Int) -> Bool {
         
@@ -466,7 +467,8 @@ class MyDocument : NSDocument {
         return false
     }
     
- 
+     */
+    
     //
     // Loading
     //

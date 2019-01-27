@@ -182,9 +182,10 @@ struct AnyC64FileWrapper;
 - (BOOL) loadRom:(NSURL *)url;
 
 // Flashing files
+/*
 - (BOOL)flash:(AnyC64FileProxy *)container;
 - (BOOL)flash:(AnyArchiveProxy *)archive item:(NSInteger)nr;
-
+*/
 @end
 
 
@@ -560,7 +561,7 @@ struct AnyC64FileWrapper;
 - (BOOL) hasModifiedDisk;
 - (void) setModifiedDisk:(BOOL)b;
 - (void) prepareToInsert;
-- (void) insertDisk:(AnyArchiveProxy *)disk;
+// - (void) insertDisk:(AnyArchiveProxy *)disk;
 - (void) prepareToEject;
 - (void) ejectDisk;
 - (BOOL) writeProtected;
@@ -714,6 +715,7 @@ struct AnyC64FileWrapper;
 //                               AnyArchive proxy
 // -----------------------------------------------------------------------------
 
+/*
 @interface AnyArchiveProxy : AnyC64FileProxy {
 }
 
@@ -732,56 +734,5 @@ struct AnyC64FileWrapper;
 - (NSInteger)destinationAddrOfItem;
 
 @end
+*/
 
-
-
-
-
-// -----------------------------------------------------------------------------
-//                               AnyDisk proxy
-// -----------------------------------------------------------------------------
-
-@interface AnyDiskProxy : AnyArchiveProxy {
-}
-
-+ (instancetype)make;
-+ (instancetype)makeWithFile:(NSString *)path;
-
-- (NSInteger)numberOfHalftracks;
-- (void)selectHalftrack:(NSInteger)ht;
-- (NSInteger)sizeOfHalftrack;
-- (void)seekHalftrack:(NSInteger)offset;
-- (NSString *)readHalftrackHex:(NSInteger)num;
-
-@end
-
-
-// -----------------------------------------------------------------------------
-//                               D64File proxy
-// -----------------------------------------------------------------------------
-
-@interface D64FileProxy : AnyDiskProxy
-{
-}
-+ (BOOL)isD64File:(NSString *)filename;
-+ (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)length;
-+ (instancetype)makeWithFile:(NSString *)filename;
-+ (instancetype)makeWithAnyArchive:(AnyArchiveProxy *)otherArchive;
-+ (instancetype)makeWithDisk:(DiskProxy *)disk;
-
-@end
-
-
-// -----------------------------------------------------------------------------
-//                               G64File proxy
-// -----------------------------------------------------------------------------
-
-@interface G64FileProxy : AnyDiskProxy
-{
-}
-+ (BOOL)isG64File:(NSString *)filename;
-+ (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)length;
-+ (instancetype) makeWithFile:(NSString *)filename;
-+ (instancetype) makeWithDisk:(DiskProxy *)diskProxy;
-
-@end
