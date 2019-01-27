@@ -131,37 +131,6 @@ struct AnyC64FileWrapper;
 - (BOOL) warpLoad;
 - (void) setWarpLoad:(BOOL)b;
 
-// Handling snapshots
-/*
-- (BOOL) takeAutoSnapshots;
-- (void) setTakeAutoSnapshots:(BOOL)b;
-- (void) suspendAutoSnapshots;
-- (void) resumeAutoSnapshots;
-- (NSInteger) snapshotInterval;
-- (void) setSnapshotInterval:(NSInteger)value;
-
-- (BOOL) restoreAutoSnapshot:(NSInteger)nr;
-- (BOOL) restoreUserSnapshot:(NSInteger)nr;
-- (BOOL) restoreLatestAutoSnapshot;
-- (BOOL) restoreLatestUserSnapshot;
-- (NSInteger) numAutoSnapshots;
-- (NSInteger) numUserSnapshots;
-
-- (NSData *) autoSnapshotData:(NSInteger)nr;
-- (NSData *) userSnapshotData:(NSInteger)nr;
-- (unsigned char *) autoSnapshotImageData:(NSInteger)nr;
-- (unsigned char *) userSnapshotImageData:(NSInteger)nr;
-- (NSSize) autoSnapshotImageSize:(NSInteger)nr;
-- (NSSize) userSnapshotImageSize:(NSInteger)nr;
-- (time_t) autoSnapshotTimestamp:(NSInteger)nr;
-- (time_t) userSnapshotTimestamp:(NSInteger)nr;
-
-- (void) takeUserSnapshot;
-
-- (void) deleteAutoSnapshot:(NSInteger)nr;
-- (void) deleteUserSnapshot:(NSInteger)nr;
-*/
-
 // Handling ROMs
 - (BOOL) isBasicRom:(NSURL *)url;
 - (BOOL) loadBasicRom:(NSURL *)url;
@@ -183,11 +152,6 @@ struct AnyC64FileWrapper;
 - (BOOL) isRom:(NSURL *)url;
 - (BOOL) loadRom:(NSURL *)url;
 
-// Flashing files
-/*
-- (BOOL)flash:(AnyC64FileProxy *)container;
-- (BOOL)flash:(AnyArchiveProxy *)archive item:(NSInteger)nr;
-*/
 @end
 
 
@@ -511,6 +475,7 @@ struct AnyC64FileWrapper;
 //                               IEC bus proxy
 // -----------------------------------------------------------------------------
 
+/*
 @interface IECProxy : NSObject {
     
     struct IecWrapper *wrapper;
@@ -522,7 +487,7 @@ struct AnyC64FileWrapper;
 - (void) setTracing:(BOOL)b;
 
 @end
-
+*/
 
 // -----------------------------------------------------------------------------
 //                                Drive proxy
@@ -533,23 +498,15 @@ struct AnyC64FileWrapper;
     struct DriveWrapper *wrapper;
     
     // Sub proxys
-    CPUProxy *cpu;
-    VIAProxy *via1;
-    VIAProxy *via2;
     DiskProxy *disk;
 }
 
 @property (readonly) struct DriveWrapper *wrapper;
-@property (readonly) CPUProxy *cpu;
-@property (readonly) VIAProxy *via1;
-@property (readonly) VIAProxy *via2;
 @property (readonly) DiskProxy *disk;
 
-- (VIAProxy *) via:(NSInteger)num;
-
-- (void) dump;
-- (BOOL) tracing;
-- (void) setTracing:(BOOL)b;
+//- (void) dump;
+//- (BOOL) tracing;
+//- (void) setTracing:(BOOL)b;
 
 - (BOOL) isPoweredOn;
 - (void) powerOn;
@@ -591,22 +548,6 @@ struct AnyC64FileWrapper;
 
 
 // -----------------------------------------------------------------------------
-//                                VIA proxy
-// -----------------------------------------------------------------------------
-
-@interface VIAProxy : NSObject {
-    
-    struct ViaWrapper *wrapper;
-}
-
-- (void) dump;
-- (BOOL) tracing;
-- (void) setTracing:(BOOL)b;
-
-@end
-
-
-// -----------------------------------------------------------------------------
 //                                Disk proxy
 // -----------------------------------------------------------------------------
 
@@ -636,37 +577,6 @@ struct AnyC64FileWrapper;
 @end
 
 
-// -----------------------------------------------------------------------------
-//                               Datasette proxy
-// -----------------------------------------------------------------------------
-
-/*
-@interface DatasetteProxy : NSObject {
-    
-    struct DatasetteWrapper *wrapper;
-}
-
-- (void) dump;
-
-- (BOOL) hasTape;
-
-- (void) pressPlay;
-- (void) pressStop;
-- (void) rewind;
-- (void) ejectTape;
-- (BOOL) insertTape:(TAPFileProxy *)tape;
-- (NSInteger) getType; 
-- (long) durationInCycles;
-- (int) durationInSeconds;
-- (NSInteger) head;
-- (NSInteger) headInCycles;
-- (int) headInSeconds;
-- (void) setHeadInCycles:(long)value;
-- (BOOL) motor;
-- (BOOL) playKey;
-
-@end
-*/
 
 // -----------------------------------------------------------------------------
 //                                 Mouse proxy
@@ -686,31 +596,3 @@ struct AnyC64FileWrapper;
 - (void) setRightButton:(BOOL)pressed;
 
 @end
-
-
-// -----------------------------------------------------------------------------
-//                        F I L E   T Y P E   P R O X Y S
-// -----------------------------------------------------------------------------
-
-// -----------------------------------------------------------------------------
-//                               AnyC64File proxy
-// -----------------------------------------------------------------------------
-
-/*
-@interface AnyC64FileProxy : NSObject {
-    
-    struct AnyC64FileWrapper *wrapper;
-}
-
-- (struct AnyC64FileWrapper *)wrapper;
-
-- (C64FileType)type;
-- (void)setPath:(NSString *)path;
-- (NSString *)name;
-- (NSInteger)sizeOnDisk;
-- (void)readFromBuffer:(const void *)buffer length:(NSInteger)length;
-- (NSInteger)writeToBuffer:(void *)buffer;
-
-@end
-
-*/

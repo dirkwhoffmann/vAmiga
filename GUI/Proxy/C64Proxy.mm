@@ -20,9 +20,7 @@ struct CiaWrapper { CIA *cia; };
 struct KeyboardWrapper { Keyboard *keyboard; };
 struct ControlPortWrapper { ControlPort *port; };
 struct SidBridgeWrapper { SIDBridge *sid; };
-struct IecWrapper { IEC *iec; };
 struct ExpansionPortWrapper { ExpansionPort *expansionPort; };
-struct ViaWrapper { VIA6522 *via; };
 struct DiskWrapper { Disk *disk; };
 struct DriveWrapper { VC1541 *drive; };
 struct DatasetteWrapper { Datasette *datasette; };
@@ -682,6 +680,7 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 // IEC bus proxy
 //
 
+/*
 @implementation IECProxy
 
 - (instancetype) initWithIEC:(IEC *)iec
@@ -708,6 +707,7 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 
 @end
 
+*/
 
 //
 // Keyboard
@@ -1036,6 +1036,7 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 // VIA proxy
 //
 
+/*
 @implementation VIAProxy
 
 - (instancetype) initWithVIA:(VIA6522 *)via
@@ -1061,7 +1062,7 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 }
 
 @end
-
+*/
 
 //
 // VC1541 proxy
@@ -1069,44 +1070,16 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 
 @implementation DriveProxy
 
-@synthesize wrapper, cpu, via1, via2, disk;
+@synthesize wrapper, disk;
 
 - (instancetype) initWithVC1541:(VC1541 *)drive
 {
     if (self = [super init]) {
         wrapper = new DriveWrapper();
         wrapper->drive = drive;
-        cpu = [[CPUProxy alloc] initWithCPU:&drive->cpu];
-        via1 = [[VIAProxy alloc] initWithVIA:&drive->via1];
-        via2 = [[VIAProxy alloc] initWithVIA:&drive->via2];
         disk = [[DiskProxy alloc] initWithDisk525:&drive->disk];
     }
     return self;
-}
-
-- (VIAProxy *) via:(NSInteger)num {
-	switch (num) {
-		case 1:
-			return [self via1];
-		case 2:
-			return [self via2];
-		default:
-			assert(0);
-			return NULL;
-	}
-}
-
-- (void) dump
-{
-    wrapper->drive->dump();
-}
-- (BOOL) tracing
-{
-    return wrapper->drive->tracingEnabled();
-}
-- (void) setTracing:(BOOL)b
-{
-    b ? wrapper->drive->startTracing() : wrapper->drive->stopTracing();
 }
 
 - (BOOL) isPoweredOn
@@ -1149,13 +1122,6 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 {
     wrapper->drive->prepareToInsert();
 }
-/*
-- (void) insertDisk:(AnyArchiveProxy *)disk
-{
-    AnyArchive *archive = (AnyArchive *)([disk wrapper]->file);
-    wrapper->drive->insertDisk(archive);
-}
- */
 - (void) prepareToEject
 {
     wrapper->drive->prepareToEject();
@@ -1401,7 +1367,6 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 	keyboard = [[KeyboardProxy alloc] initWithKeyboard:&c64->keyboard];
     port1 = [[ControlPortProxy alloc] initWithJoystick:&c64->port1];
     port2 = [[ControlPortProxy alloc] initWithJoystick:&c64->port2];
-    iec = [[IECProxy alloc] initWithIEC:&c64->iec];
     expansionport = [[ExpansionPortProxy alloc] initWithExpansionPort:&c64->expansionport];
 	drive1 = [[DriveProxy alloc] initWithVC1541:&c64->drive1];
     drive2 = [[DriveProxy alloc] initWithVC1541:&c64->drive2];
@@ -1533,105 +1498,6 @@ struct AnyC64FileWrapper { AnyC64File *file; };
     wrapper->c64->setWarpLoad(b);
 }
 
-// Handling snapshots
-/*
-- (BOOL) takeAutoSnapshots
-{
-    return wrapper->c64->getTakeAutoSnapshots();
-}
-- (void) setTakeAutoSnapshots:(BOOL)b
-{
-    wrapper->c64->setTakeAutoSnapshots(b);
-}
-- (void) suspendAutoSnapshots
-{
-    wrapper->c64->suspendAutoSnapshots();
-}
-- (void) resumeAutoSnapshots
-{
-    wrapper->c64->resumeAutoSnapshots();
-}
-- (NSInteger) snapshotInterval
-{
-    return wrapper->c64->getSnapshotInterval();
-}
-- (void) setSnapshotInterval:(NSInteger)value
-{
-    wrapper->c64->setSnapshotInterval(value);
-}
-- (BOOL)restoreAutoSnapshot:(NSInteger)nr
-{
-    return wrapper->c64->restoreAutoSnapshot((unsigned)nr);
-}
-- (BOOL)restoreUserSnapshot:(NSInteger)nr
-{
-    return wrapper->c64->restoreUserSnapshot((unsigned)nr);
-}
-- (BOOL)restoreLatestUserSnapshot
-{
-    return wrapper->c64->restoreLatestUserSnapshot();
-}
-- (BOOL)restoreLatestAutoSnapshot
-{
-    return wrapper->c64->restoreLatestAutoSnapshot();
-}
-- (NSInteger) numAutoSnapshots
-{
-    return wrapper->c64->numAutoSnapshots();
-}
-- (NSInteger) numUserSnapshots
-{
-    return wrapper->c64->numUserSnapshots();
-}
-- (NSData *)autoSnapshotData:(NSInteger)nr {
-    Snapshot *snapshot = wrapper->c64->autoSnapshot((unsigned)nr);
-    return [NSData dataWithBytes: (void *)snapshot->getHeader()
-                          length: snapshot->sizeOnDisk()];
-}
-- (NSData *)userSnapshotData:(NSInteger)nr {
-    Snapshot *snapshot = wrapper->c64->userSnapshot((unsigned)nr);
-    return [NSData dataWithBytes: (void *)snapshot->getHeader()
-                          length: snapshot->sizeOnDisk()];
-}
-- (unsigned char *)autoSnapshotImageData:(NSInteger)nr
-{
-    Snapshot *s = wrapper->c64->autoSnapshot((int)nr);
-    return s ? s->getImageData() : NULL;
-}
-- (unsigned char *)userSnapshotImageData:(NSInteger)nr
-{
-    Snapshot *s = wrapper->c64->userSnapshot((int)nr);
-    return s ? s->getImageData() : NULL;
-}
-- (NSSize) autoSnapshotImageSize:(NSInteger)nr {
-    Snapshot *s = wrapper->c64->autoSnapshot((int)nr);
-    return s ? NSMakeSize(s->getImageWidth(), s->getImageHeight()) : NSMakeSize(0,0);
-}
-- (NSSize) userSnapshotImageSize:(NSInteger)nr {
-    Snapshot *s = wrapper->c64->userSnapshot((int)nr);
-    return s ? NSMakeSize(s->getImageWidth(), s->getImageHeight()) : NSMakeSize(0,0);
-}
-- (time_t)autoSnapshotTimestamp:(NSInteger)nr {
-    Snapshot *s = wrapper->c64->autoSnapshot((int)nr);
-    return s ? s->getTimestamp() : 0;
-}
-- (time_t)userSnapshotTimestamp:(NSInteger)nr {
-    Snapshot *s = wrapper->c64->userSnapshot((int)nr);
-    return s ? s->getTimestamp() : 0;
-}
-- (void)takeUserSnapshot
-{
-    wrapper->c64->takeUserSnapshotSafe();
-}
-- (void)deleteAutoSnapshot:(NSInteger)nr
-{
-    wrapper->c64->deleteAutoSnapshot((unsigned)nr);
-}
-- (void)deleteUserSnapshot:(NSInteger)nr
-{
-    wrapper->c64->deleteUserSnapshot((unsigned)nr);
-}
-*/
 
 // Handling ROMs
 - (BOOL) isBasicRom:(NSURL *)url
