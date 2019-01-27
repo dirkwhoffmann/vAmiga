@@ -14,7 +14,7 @@ public extension MetalView {
  
     //! Returns true iff an animation is in progress
     public func animates() -> Bool {
-
+        
         return
             currentXAngle != targetXAngle ||
             currentYAngle != targetYAngle ||
@@ -192,37 +192,27 @@ public extension MetalView {
     */
     
     public func blendIn() {
-    
-        if (!drawC64texture) {
-            
-            track("Blending in...")
         
-            targetXAngle = 0
-            targetYAngle = 0
-            targetZAngle = 0
-            currentAlpha = 0.0
-            targetAlpha  = 1.0
-            
-            computeAnimationDeltaSteps(animationCycles: 120 /* 2 sec */)
-            drawC64texture = true
-        }
+        track("Blending in...")
+        
+        targetXAngle = 0
+        targetYAngle = 0
+        targetZAngle = 0
+        targetAlpha  = 1.0
+        
+        computeAnimationDeltaSteps(animationCycles: 120 /* 2 sec */)
     }
 
     public func blendOut() {
         
-        if (drawC64texture) {
-            
-            track("Blending out...")
-            
-            targetXAngle = 0
-            targetYAngle = 0
-            targetZAngle = 0
-            currentAlpha = 0.0
-            targetAlpha  = 0.0
-            
-            computeAnimationDeltaSteps(animationCycles: 120 /* 2 sec */)
-            drawC64texture = false
-        }
+        track("Blending out...")
+        
+        targetXAngle = 0
+        targetYAngle = 0
+        targetZAngle = 0
+        targetAlpha  = 0.0
+        
+        computeAnimationDeltaSteps(animationCycles: 15 /* 0.25 sec */)
     }
     
     public func snapToFront() {

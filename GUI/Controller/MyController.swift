@@ -481,18 +481,10 @@ extension MyController {
     
         case MSG_READY_TO_POWER_ON:
     
-            // Start emulator
+            // Launch the emulator
             c64.run()
             amiga.powerOn()
-            
-            // Blend in emulator texture
-            /*
-            if (!metal.drawC64texture) {
-                metal.blendIn()
-                metal.drawC64texture = true
-            }
-            */
-            
+     
             // Process attachment (if any)
             mydocument.mountAmigaAttachment()
         

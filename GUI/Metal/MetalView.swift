@@ -141,7 +141,7 @@ public class MetalView: MTKView {
     var targetEyeZ = Defaults.eyeZ
     var deltaEyeZ = Float(0.0)
     var currentAlpha = Float(0.0)
-    var targetAlpha = Float(0.0)
+    var targetAlpha = Float(1.0)  // Start with an invisible screen
     var deltaAlpha = Float(0.0)
         
     /// Texture cut-out (normalized)
@@ -166,9 +166,6 @@ public class MetalView: MTKView {
     //! If true, the 3D renderer is also used in fullscreen mode
     var keepAspectRatio = Defaults.keepAspectRatio
     
-    //! If false, the C64 screen is not drawn (background texture will be visible)
-    var drawC64texture = false
-        
     required public init(coder: NSCoder) {
     
         super.init(coder: coder)
@@ -396,7 +393,8 @@ public class MetalView: MTKView {
     func drawScene3D() {
     
         let animates = self.animates()
-        let drawBackground = !fullscreen && (animates || !drawC64texture)
+        let renderBackground = !fullscreen && (animates || (currentAlpha < 1.0))
+        let renderForeground = currentAlpha > 0.0
         
         if animates {
             updateAngles()
@@ -406,7 +404,7 @@ public class MetalView: MTKView {
         startFrame()
             
         // Render background
-        if drawBackground {
+        if renderBackground {
             
             // Configure vertex shader
             // commandEncoder.setVertexBuffer(uniformBufferBg, offset: 0, index: 1)
@@ -429,8 +427,8 @@ public class MetalView: MTKView {
                                           instanceCount: 1)
         }
         
-        // Render cube
-        if drawC64texture {
+        // Render emulator texture
+        if renderForeground {
             
             // Configure vertex shader
             commandEncoder.setVertexBytes(&vertexUniforms3D,
