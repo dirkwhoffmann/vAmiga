@@ -16,7 +16,7 @@ struct C64Wrapper { C64 *c64; };
 struct CpuWrapper { CPU *cpu; };
 struct MemoryWrapper { C64Memory *mem; };
 struct VicWrapper { VIC *vic; };
-struct CiaWrapper { CIA *cia; };
+// struct CiaWrapper { CIA *cia; };
 struct KeyboardWrapper { Keyboard *keyboard; };
 struct ControlPortWrapper { ControlPort *port; };
 struct SidBridgeWrapper { SIDBridge *sid; };
@@ -249,6 +249,7 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 // CIA proxy
 //
 
+/*
 @implementation CIAProxy
 
 // Constructing
@@ -301,13 +302,14 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 }
 
 @end
-
+*/
 
 //
 // VIC proxy
 //
 
 // Constructing
+
 @implementation VICProxy
 
 - (instancetype) initWithVIC:(VIC *)vic
@@ -1312,7 +1314,7 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 @implementation C64Proxy
 
 @synthesize wrapper;
-@synthesize mem, cpu, vic, cia1, cia2, sid;
+@synthesize mem, cpu, vic, sid;
 @synthesize keyboard, port1, port2;
 @synthesize drive1, drive2, mouse;
 
@@ -1331,8 +1333,6 @@ struct AnyC64FileWrapper { AnyC64File *file; };
     mem = [[MemoryProxy alloc] initWithMemory:&c64->mem];
     cpu = [[CPUProxy alloc] initWithCPU:&c64->cpu];
     vic = [[VICProxy alloc] initWithVIC:&c64->vic];
-	cia1 = [[CIAProxy alloc] initWithCIA:&c64->cia1];
-	cia2 = [[CIAProxy alloc] initWithCIA:&c64->cia2];
 	sid = [[SIDProxy alloc] initWithSID:&c64->sid];
 	keyboard = [[KeyboardProxy alloc] initWithKeyboard:&c64->keyboard];
     port1 = [[ControlPortProxy alloc] initWithJoystick:&c64->port1];

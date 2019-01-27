@@ -18,7 +18,6 @@
 @class CPUProxy;
 @class MemoryProxy;
 @class VICProxy;
-@class CIAProxy;
 @class SIDProxy;
 @class KeyboardProxy;
 @class ControlPortProxy;
@@ -39,7 +38,6 @@ struct C64Wrapper;
 struct CpuWrapper;
 struct MemoryWrapper;
 struct VicWrapper;
-struct CiaWrapper;
 struct SidBridgeWrapper;
 struct KeyboardWrapper;
 struct ControlPortWrapper;
@@ -61,8 +59,6 @@ struct AnyC64FileWrapper;
     CPUProxy *cpu;
     MemoryProxy *mem;
     VICProxy *vic;
-    CIAProxy *cia1;
-    CIAProxy *cia2;
     SIDProxy *sid;
     KeyboardProxy *keyboard;
     ControlPortProxy *port1;
@@ -76,8 +72,6 @@ struct AnyC64FileWrapper;
 @property (readonly) CPUProxy *cpu;
 @property (readonly) MemoryProxy *mem;
 @property (readonly) VICProxy *vic;
-@property (readonly) CIAProxy *cia1;
-@property (readonly) CIAProxy *cia2;
 @property (readonly) SIDProxy *sid;
 @property (readonly) KeyboardProxy *keyboard;
 @property (readonly) ControlPortProxy *port1;
@@ -227,7 +221,7 @@ struct AnyC64FileWrapper;
 // -----------------------------------------------------------------------------
 //                                 CIA proxy
 // -----------------------------------------------------------------------------
-
+/*
 @interface CIAProxy : NSObject {
     
     struct CiaWrapper *wrapper;
@@ -247,6 +241,7 @@ struct AnyC64FileWrapper;
 
 @end
 
+*/
 
 // -----------------------------------------------------------------------------
 //                                VICII proxy
