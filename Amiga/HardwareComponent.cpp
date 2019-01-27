@@ -38,11 +38,13 @@ HardwareComponent::setAmiga(Amiga *amiga)
 void
 HardwareComponent::powerOn()
 {
+    if (power) return;
+        
     // Power on this component
     debug(2, "Powering on[%p]\n", this);
     power = true;
     _powerOn();
-
+    
     // Power on sub components
     if (subComponents != NULL)
         for (unsigned i = 0; subComponents[i] != NULL; i++)
@@ -55,6 +57,8 @@ HardwareComponent::powerOn()
 void
 HardwareComponent::powerOff()
 {
+    if (!power) return;
+    
     // Power off this component
     debug(2, "Powering off[%p]\n", this);
     power = false;

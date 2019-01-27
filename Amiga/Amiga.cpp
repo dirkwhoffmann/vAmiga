@@ -215,11 +215,10 @@ Amiga::_powerOn()
 void
 Amiga::_postPowerOn()
 {
-    // Start the emulator AFTER the subcomponents get powered on.
+    // Start the emulator *after* the subcomponents got powered on.
     run();
     
     // Notify the GUI
-    ping();
     putMessage(MSG_POWER_ON);
 }
 
@@ -229,16 +228,14 @@ Amiga::_powerOff()
 {
     msg("Powering off ...\n");
     
-    // Stop the emulator BEFORE the subcomponents get powered off.
+    // Stop the emulator *before* the subcomponents got powered off.
     pause();
 }
 
 void
 Amiga::_postPowerOff()
 {
-    // Notify the GUI
-    ping();
-    putMessage(warp ? MSG_WARP_ON : MSG_WARP_OFF);
+    putMessage(MSG_POWER_OFF);
 }
 
 void

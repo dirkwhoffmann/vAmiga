@@ -81,6 +81,8 @@ struct AmigaFileWrapper;
 - (void) dump;
 
 - (BOOL) readyToPowerUp;
+- (BOOL) isPoweredOn;
+- (BOOL) isPoweredOff;
 - (BOOL) isRunning;
 - (BOOL) isPaused;
 - (void) run;

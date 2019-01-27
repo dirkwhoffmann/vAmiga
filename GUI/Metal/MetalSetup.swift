@@ -31,8 +31,9 @@ public extension MetalView {
         buildSamplers()
         buildKernels()
         buildDotMasks()
-        buildVertexBuffer()
         buildPipeline()
+        
+        updateScreenGeometry()
         
         self.reshape(withFrame: self.frame)
         enableMetal = true

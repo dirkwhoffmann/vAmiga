@@ -161,6 +161,9 @@
                             <behavior key="behavior" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
+                        <connections>
+                            <action selector="powerAction:" target="-2" id="GQ4-9n-2Ts"/>
+                        </connections>
                     </button>
                     <button toolTip="Drive LED" tag="2" id="70n-GV-8LP" userLabel="Cmd Lock">
                         <rect key="frame" x="572" y="4" width="42" height="17"/>
@@ -263,12 +266,12 @@
                         </connections>
                     </toolbarItem>
                     <toolbarItem implicitItemIdentifier="NSToolbarSeparatorItem" id="1848"/>
-                    <toolbarItem implicitItemIdentifier="5190E195-C4BB-4179-96BC-374164EFC806" label="Reset" paletteLabel="Reset" tag="30" image="powerTemplate" id="wVB-PW-axj">
+                    <toolbarItem implicitItemIdentifier="5190E195-C4BB-4179-96BC-374164EFC806" label="Power" paletteLabel="Power" tag="30" image="powerTemplate" id="wVB-PW-axj">
                         <nil key="toolTip"/>
                         <size key="minSize" width="38" height="25"/>
                         <size key="maxSize" width="38" height="38"/>
                         <button key="view" verticalHuggingPriority="750" tag="30" id="tu0-4o-Osa">
-                            <rect key="frame" x="0.0" y="14" width="38" height="25"/>
+                            <rect key="frame" x="1" y="14" width="38" height="25"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="powerTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="22E-O0-WFm">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -276,7 +279,7 @@
                             </buttonCell>
                         </button>
                         <connections>
-                            <action selector="resetAction:" target="-2" id="4wq-lt-kbz"/>
+                            <action selector="powerAction:" target="-2" id="eFg-df-Hnh"/>
                         </connections>
                     </toolbarItem>
                     <toolbarItem implicitItemIdentifier="173C7588-F1F5-45F4-9A0F-C42BA4D023EB" label="Keyboard" paletteLabel="Keyboard" image="keyboardTemplate" id="Ckl-d3-vFW">

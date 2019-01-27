@@ -110,8 +110,6 @@ AmigaMemory::dealloc()
 bool
 AmigaMemory::alloc(size_t size, uint8_t *&ptrref, size_t &sizeref)
 {
-    debug("alloc: %X %p %X\n", size, ptrref, sizeref);
-    
     // Do some consistency checking
     assert((ptrref == NULL) == (sizeref == 0));
     assert(size != 0);
@@ -131,9 +129,7 @@ AmigaMemory::alloc(size_t size, uint8_t *&ptrref, size_t &sizeref)
 
 void
 AmigaMemory::dealloc(uint8_t *&ptrref, size_t &sizeref)
-{
-    debug("dealloc: %p %X\n", ptrref, sizeref);
-    
+{    
     // Do some consistency checking
     assert((ptrref == NULL) == (sizeref == 0));
     

@@ -49,11 +49,11 @@ extension MyController : NSMenuItemValidation {
             //
             
         case #selector(MyController.runOrHaltAction(_:)):
-            // item.title = amiga.isRunning() ? "Pause" : "Continue"
+            item.title = amiga.isRunning() ? "Pause" : "Continue"
             return true
             
-        case #selector(MyController.powerOnOrOffAction(_:)):
-            // item.title = amiga.isPoweredOn() ? "Power Off" : "Power On"
+        case #selector(MyController.powerAction(_:)):
+            item.title = amiga.isPoweredOn() ? "Power Off" : "Power On"
             return true
             
             //
@@ -286,14 +286,13 @@ extension MyController : NSMenuItemValidation {
     
     @IBAction func resetAction(_ sender: Any!) {
         
-        // TODO: amiga.reset()
-        c64.powerUp() // REMOVE
+        amiga.reset()
         refresh()
     }
- 
-    @IBAction func powerOnOrOffAction(_ sender: Any!) {
+    
+    @IBAction func powerAction(_ sender: Any!) {
         
-        // TODO: amiga.powerOnOrOff()
+        amiga.powerOnOrOff()
         refresh()
     }
     

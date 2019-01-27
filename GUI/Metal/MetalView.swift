@@ -217,22 +217,11 @@ public class MetalView: MTKView {
     
         var rect: CGRect
         
-        if controller.c64.vic.isPAL() {
-    
-            // PAL border will be 36 pixels wide and 34 pixels heigh
-            rect = CGRect.init(x: CGFloat(PAL_LEFT_BORDER_WIDTH - 36),
-                                      y: CGFloat(PAL_UPPER_BORDER_HEIGHT - 34),
-                                      width: CGFloat(PAL_CANVAS_WIDTH + 2 * 36),
-                                      height: CGFloat(PAL_CANVAS_HEIGHT + 2 * 34))
-            
-        } else {
-    
-            // NTSC border will be 42 pixels wide and 9 pixels heigh
-            rect = CGRect.init(x: CGFloat(NTSC_LEFT_BORDER_WIDTH - 42),
-                                      y: CGFloat(NTSC_UPPER_BORDER_HEIGHT - 9),
-                                      width: CGFloat(NTSC_CANVAS_WIDTH + 2 * 42),
-                                      height: CGFloat(NTSC_CANVAS_HEIGHT + 2 * 9))
-        }
+        // Setup parameters that look good for a PAL texture
+        rect = CGRect.init(x: CGFloat(PAL_LEFT_BORDER_WIDTH - 36),
+                           y: CGFloat(PAL_UPPER_BORDER_HEIGHT - 34),
+                           width: CGFloat(PAL_CANVAS_WIDTH + 2 * 36),
+                           height: CGFloat(PAL_CANVAS_HEIGHT + 2 * 34))
         
         textureRect = CGRect.init(x: rect.minX / C64Texture.orig.width,
                                   y: rect.minY / C64Texture.orig.height,
@@ -379,7 +368,6 @@ public class MetalView: MTKView {
         // neighbor sampler if Gaussian blur is disabled.
         let sampler = shaderOptions.blur > 0 ? samplerLinear : samplerNearest
         commandEncoder.setFragmentSamplerState(sampler, index: 0)
-
     }
     
     func drawScene2D() {

@@ -486,10 +486,12 @@ extension MyController {
             amiga.powerOn()
             
             // Blend in emulator texture
+            /*
             if (!metal.drawC64texture) {
                 metal.blendIn()
                 metal.drawC64texture = true
             }
+            */
             
             // Process attachment (if any)
             mydocument.mountAmigaAttachment()
@@ -510,11 +512,13 @@ extension MyController {
         case MSG_POWER_ON:
             
             track()
+            metal.blendIn()
             powerLED.image = NSImage.init(named: "powerLedOn")
             
         case MSG_POWER_OFF:
             
             track()
+            metal.blendOut()
             powerLED.image = NSImage.init(named: "powerLedOff")
             
         case MSG_RESET:
@@ -637,11 +641,7 @@ extension MyController {
                 warpIcon.image = NSImage.init(named: name)
             }
     
-        case MSG_PAL,
-             MSG_NTSC:
-
-            metal.updateScreenGeometry()
-    
+     
         case MSG_KEYMATRIX,
              MSG_CHARSET:
             
@@ -803,7 +803,7 @@ extension MyController {
 
     
     //
-    // Action methods (main screen)
+    // Action methods (status bar)
     //
     
     @IBAction func alwaysWarpAction(_ sender: Any!) {

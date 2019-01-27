@@ -217,21 +217,18 @@
                             <menuItem title="Reset" id="432">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="continueAction:" target="-1" id="484"/>
+                                    <action selector="resetAction:" target="-1" id="SV8-EZ-6HI"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Power Down" id="434">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="resetAction:" target="-1" id="506"/>
+                                    <action selector="powerAction:" target="-1" id="16h-2c-33h"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Debug" id="414">
                                 <menu key="submenu" title="Debug" id="415">
                                     <items>
-                                        <menuItem isSeparatorItem="YES" id="433">
-                                            <modifierMask key="keyEquivalentModifierMask" command="YES"/>
-                                        </menuItem>
                                         <menuItem title="Step Into" keyEquivalent="I" id="429">
                                             <connections>
                                                 <action selector="stepIntoAction:" target="-1" id="488"/>
@@ -245,25 +242,6 @@
                                         <menuItem isSeparatorItem="YES" id="427">
                                             <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                                         </menuItem>
-                                        <menuItem title="Hide Sprites" id="426">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="hideSpritesAction:" target="-1" id="491"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Show IRQ Rasterlines" id="425">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="markIRQLinesAction:" target="-1" id="496"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Show DMA Rasterlines" id="424">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="markDMALinesAction:" target="-1" id="509"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem isSeparatorItem="YES" id="420"/>
                                         <menuItem title="Trace" id="l45-bY-cgb">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <menu key="submenu" title="Trace" id="F5S-uB-hpC">

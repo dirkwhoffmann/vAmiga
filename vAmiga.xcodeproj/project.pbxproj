@@ -143,7 +143,6 @@
 		508FE01D21EA227B0043D0E9 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFF921EA22790043D0E9 /* UserDefaults.swift */; };
 		508FE01F21EA227B0043D0E9 /* CPUPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFFC21EA22790043D0E9 /* CPUPanel.swift */; };
 		508FE02021EA227B0043D0E9 /* TimeTravelTouchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFFD21EA22790043D0E9 /* TimeTravelTouchBar.swift */; };
-		508FE02121EA227B0043D0E9 /* MyControllerCartridges.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFFE21EA227A0043D0E9 /* MyControllerCartridges.swift */; };
 		508FE02221EA227B0043D0E9 /* MacKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFFF21EA227A0043D0E9 /* MacKey.swift */; };
 		508FE02321EA227B0043D0E9 /* KeyboardController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00021EA227A0043D0E9 /* KeyboardController.swift */; };
 		508FE02421EA227B0043D0E9 /* GamePadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00121EA227A0043D0E9 /* GamePadManager.swift */; };
@@ -475,7 +474,6 @@
 		508FDFFA21EA22790043D0E9 /* VirtualC64-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "VirtualC64-Bridging-Header.h"; sourceTree = "<group>"; };
 		508FDFFC21EA22790043D0E9 /* CPUPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CPUPanel.swift; sourceTree = "<group>"; };
 		508FDFFD21EA22790043D0E9 /* TimeTravelTouchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeTravelTouchBar.swift; sourceTree = "<group>"; };
-		508FDFFE21EA227A0043D0E9 /* MyControllerCartridges.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyControllerCartridges.swift; sourceTree = "<group>"; };
 		508FDFFF21EA227A0043D0E9 /* MacKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MacKey.swift; sourceTree = "<group>"; };
 		508FE00021EA227A0043D0E9 /* KeyboardController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardController.swift; sourceTree = "<group>"; };
 		508FE00121EA227A0043D0E9 /* GamePadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GamePadManager.swift; sourceTree = "<group>"; };
@@ -1104,7 +1102,6 @@
 			isa = PBXGroup;
 			children = (
 				508FDFF421EA22790043D0E9 /* MyController.swift */,
-				508FDFFE21EA227A0043D0E9 /* MyControllerCartridges.swift */,
 				508FDFF521EA22790043D0E9 /* MyControllerMenu.swift */,
 				508FDFED21EA22780043D0E9 /* MyControllerToolbar.swift */,
 				508FE00721EA227A0043D0E9 /* MyControllerTouchBar.swift */,
@@ -1355,7 +1352,6 @@
 				508FDF6D21EA1FBC0043D0E9 /* FreezeFrame.cpp in Sources */,
 				508FE01021EA227B0043D0E9 /* Speedometer.swift in Sources */,
 				508FDF7F21EA1FBC0043D0E9 /* CRTFile.cpp in Sources */,
-				508FE02121EA227B0043D0E9 /* MyControllerCartridges.swift in Sources */,
 				508FDF7721EA1FBC0043D0E9 /* PRGFile.cpp in Sources */,
 				508FE01221EA227B0043D0E9 /* CIAPanel.swift in Sources */,
 				508FDF7D21EA1FBC0043D0E9 /* D64File.cpp in Sources */,

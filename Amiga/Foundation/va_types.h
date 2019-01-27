@@ -191,9 +191,7 @@ typedef enum
     MSG_ALWAYS_WARP_ON,
     MSG_ALWAYS_WARP_OFF,
     
-    // VIC related messages
-    MSG_PAL,
-    MSG_NTSC,
+  
     
     // IEC Bus
     MSG_IEC_BUS_BUSY,

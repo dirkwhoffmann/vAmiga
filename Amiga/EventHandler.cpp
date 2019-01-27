@@ -103,7 +103,6 @@ EventHandler::_executeUntil(uint64_t cycle) {
                 switch (i) {
                     case EVENT_DEBUG1:
                         
-                        debug("EVENT_DEBUG1\n");
                         amiga->df0.toggleUnsafed();
                         scheduleEvent(EVENT_DEBUG1, amiga->masterClock + 2 * 28 * 1000000);
                         break;

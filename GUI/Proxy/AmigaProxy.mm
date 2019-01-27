@@ -519,6 +519,14 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->amiga->readyToPowerUp();
 }
+- (BOOL) isPoweredOn
+{
+    return wrapper->amiga->isPoweredOn();
+}
+- (BOOL) isPoweredOff
+{
+    return wrapper->amiga->isPoweredOff();
+}
 - (BOOL) isRunning
 {
     return wrapper->amiga->isRunning();
