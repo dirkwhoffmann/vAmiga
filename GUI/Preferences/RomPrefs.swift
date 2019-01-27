@@ -9,23 +9,15 @@
 
 import Foundation
 
-let knownBootRoms : [UInt64 : String] = [
+let knownRoms : [UInt64 : String] = [
     0x0000000000000000:
-    "This Rom contains the Kickstart disk loader.",
+    "",
+    0xE74215EB368CD7F1:
+    "AROS Kickstart replacement",
     0xA160593CFFCBB233:
     "Amiga 1000 Boot Rom 252179-01",
     0xA98647146962EB76:
-    "Amiga 1000 Boot Rom 252180-01"
-]
-
-let originalBootRoms : [UInt64] = [
-    0xA160593CFFCBB233,
-    0xA98647146962EB76
-]
-
-let knownKickRoms : [UInt64 : String] = [
-    0x0000000000000000:
-    "This Rom contains the Amiga Operation System.",
+    "Amiga 1000 Boot Rom 252180-01",
     0xE5CB7EE5200C4F0F:
     "Kickstart 1.2",
     0x047FB93FB8E383BC:
@@ -34,15 +26,25 @@ let knownKickRoms : [UInt64 : String] = [
     "Kickstart 1.2 (512 KB)",
     0x08A1122C7DEC695D:
     "Kickstart 1.3 (512 KB)",
-    0xE74215EB368CD7F1:
-    "AROS Kickstart replacement"
+    0x845588CCF58FCE86:
+    "Kickstart 2.0 (512 KB)",
+    0x72126DEF5AF27DCB:
+    "Kickstart 3.0 (512 KB)",
 ]
 
-let originalKickRoms : [UInt64] = [
+let originalRoms : [UInt64] = [
+    0xA160593CFFCBB233,
+    0xA98647146962EB76,
     0xE5CB7EE5200C4F0F,
     0x047FB93FB8E383BC,
     0xE3FF65D2C3A9B9E5,
     0x08A1122C7DEC695D,
+    0x845588CCF58FCE86,
+    0x72126DEF5AF27DCB,
+]
+
+let incompatibleRoms : [UInt64] = [
+    0x72126DEF5AF27DCB,
 ]
 
 extension PreferencesController {
@@ -51,96 +53,123 @@ extension PreferencesController {
         
         guard let controller = myController else { return }
         guard let amiga = amigaProxy else { return }
-        let config = amiga.config()
         
         track()
+        let config = amiga.config()
         
-        // let running      = amiga.isRunning()
-        let running      = proxy?.isRunning() ?? false
+        let model =
+            config.model == A1000 ? "1000" :
+                config.model == A500 ? "500" : "2000"
+        
+        let running      = amiga.isRunning()
         let bootHash     = amiga.bootRomFingerprint()
         let kickHash     = amiga.kickRomFingerprint()
-
-        let hasBoot      = bootHash != 0
-        let hasKick      = kickHash != 0
-        let hasOrigBoot  = originalBootRoms.contains(bootHash)
-        let hasOrigKick  = originalKickRoms.contains(kickHash)
-        let hasAros      = kickHash == 0xE74215EB368CD7F1
+        let hash         = config.model == A1000 ? bootHash : kickHash
         
-        let bootURL      = controller.bootRomURL
-        let kickURL      = controller.kickRomURL
-    
+        // let hasBootRom   = bootHash != 0
+        // let hasKickRom   = kickHash != 0
+        let hasRom       = hash != 0
+        let hasOrigRom   = originalRoms.contains(hash)
+        let hasArosRom   = hash == 0xE74215EB368CD7F1
+        let hasKnownRom  = knownRoms[hash] != nil
+
+        let bootRomURL   = controller.bootRomURL
+        let kickRomURL   = controller.kickRomURL
+        let url          = config.model == A1000 ? bootRomURL : kickRomURL
+        
+        
         let romMissing   = NSImage.init(named: "rom_light")
         let romOriginal  = NSImage.init(named: "rom_original")
         let romAros      = NSImage.init(named: "rom_aros")
         let romUnknown   = NSImage.init(named: "rom_unknown")
 
-        // Lock controls if emulator is running
-        romBootDropView.isEnabled = !running
-        romBootDeleteButton.isEnabled = !running
-        romKickDropView.isEnabled = !running
-        romKickDeleteButton.isEnabled = !running
-        
-        // Check for missing Roms
-        let ready = amiga.readyToPowerUp()
-        if (running) {
-            romLockImage.image = NSImage.init(named: "Lock")
-            romLockText.stringValue = "The Rom settings are locked because the emulator is running."
-            romLockSubText.stringValue = "Click to power down and unlock."
-        } else {
-            romLockImage.image = NSImage.init(named: "NSCaution")
-            if config.model == A1000 {
-                romLockText.stringValue = "The selected Amiga model requires a Boot Rom to run."
-            } else {
-                romLockText.stringValue = "The selected Amiga model requires a Kickstart Rom to run."
-            }
-            romLockSubText.stringValue = "Use drag and drop to add a Rom image."
-        }
-        romLockImage.isHidden = !running && ready
-        romLockText.isHidden = !running && ready
-        romLockSubText.isHidden = !running && ready
-        
-        // Boot Rom
-        romBootTitle.textColor = hasBoot ? .textColor : .secondaryLabelColor
-        romBootText.textColor = hasBoot ? .textColor : .secondaryLabelColor
-        romBootHash.isHidden = !hasBoot
-        romBootPath.isHidden = !hasBoot
-        romBootDeleteButton.isHidden = !hasBoot
-        romBootSubText.isHidden = true
-        
-        romBootDropView.image =
-            hasOrigBoot ? romOriginal :
-            hasBoot     ? romUnknown : romMissing
+        var description = ""
+        switch config.model {
+
+        case A1000 where !hasRom:
+            description = "The Amiga 1000 requires a Boot Rom to launch."
             
-        romBootHash.stringValue = String(format: "Hash: %llX", bootHash)
-        romBootPath.stringValue = bootURL.relativePath
-        if let description = knownBootRoms[bootHash] {
-            romBootText.stringValue = description
-        } else {
-            romBootText.stringValue = "An unknown, possibly patched Boot ROM."
-            romBootText.textColor = .red
+        case A500 where !hasRom, A2000 where !hasRom:
+            description = "The Amiga \(model) requires a Kickstart Rom to run."
+            
+        default:
+            description = knownRoms[hash] ?? "An unknown, possibly patched Boot ROM."
         }
         
-        // Kickstart Rom
-        romKickTitle.textColor = hasKick ? .textColor : .secondaryLabelColor
-        romKickText.textColor = hasKick ? .textColor : .secondaryLabelColor
-        romKickHash.isHidden = !hasKick
-        romKickPath.isHidden  = !hasKick
-        romKickDeleteButton.isHidden = !hasKick
-        romKickSubText.isHidden = true
+        // Lock controls if emulator is running
+        romDropView.isEnabled = !running
+        romDeleteButton.isEnabled = !running
+        romFactoryButton.isEnabled = !running
         
-        romKickDropView.image =
-            hasOrigKick ? romOriginal :
-            hasAros     ? romAros :
-            hasKick     ? romUnknown : romMissing
-        
-        romKickHash.stringValue = String(format: "Hash: %llX", kickHash)
-        romKickPath.stringValue = kickURL.relativePath
-        if let description = knownKickRoms[kickHash] {
-            romKickText.stringValue = description
-        } else {
-            romKickText.stringValue = "An unknown, possibly patched Kickstart ROM."
-            romKickText.textColor = .red
+        // Warn about missing Rom if applicable
+        // romCautionImage.isHidden = true // runnable
+        // romCautionText.isHidden = true // runnable
+        // romCautionSubText.isHidden = true // runnable
+        /*
+        var txt = ""
+        switch config.model {
+        case A1000: txt = "The Amiga 1000 emulation requires a Boot Rom to launch."
+        case A500:  txt = "The Amiga 500 emulation requires a Kickstart Rom to launch."
+        case A2000: txt = "The Amiga 2000 emulation requires a Kickstart Rom to launch."
+        default: fatalError()
         }
+        romCautionText.stringValue = txt
+        */
+        if hasRom {
+            
+            romTitle.stringValue = description
+            romTitle.textColor = hasKnownRom ? .textColor : .systemRed
+
+            romPath.isHidden = hasArosRom
+            romPath.stringValue = url.relativePath
+
+            romHash.isHidden = hasKnownRom
+            romHash.stringValue = String(format: "Hash: %llx", hash)
+            // romHash.stringValue = "Hash: " + String(hash, radix: 16, uppercase: false)
+
+            romDeleteButton.isHidden = false
+
+        } else {
+        
+            romTitle.stringValue = description
+            romTitle.textColor = .systemRed
+            
+            romPath.isHidden = false
+            romPath.stringValue = "Use drag and drop to add a Rom image."
+            
+            romHash.isHidden = true
+            romHash.stringValue = ""
+            
+            romDeleteButton.isHidden = true
+        }
+        
+        romDropView.image =
+            hasArosRom ? romAros :
+            hasOrigRom ? romOriginal :
+            hasRom     ? romUnknown : romMissing
+        
+        // Show copyright message
+        if incompatibleRoms.contains(hash) {
+            
+            romCopyright.isHidden = false
+            romCopyright.stringValue = "The selected kickstart is not compatible with an Amiga \(model)."
+            romCopyright.textColor = .systemRed
+            
+        } else if originalRoms.contains(hash) {
+            
+            romCopyright.isHidden = false
+            romCopyright.stringValue = "Please obey legal regulations. Original Amiga Roms are copyrighted."
+            romCopyright.textColor = .textColor
+
+        } else {
+            
+            romCopyright.isHidden = true
+        }
+        
+        // Warn about locked settings if applicable
+        romLockImage.isHidden = !running
+        romLockText.isHidden = !running
+        romLockSubText.isHidden = !running
     }
 
     
@@ -155,17 +184,19 @@ extension PreferencesController {
         refresh()
     }
     
-    @IBAction func romDeleteBootAction(_ sender: Any!)
+    @IBAction func romDeleteAction(_ sender: Any!)
     {
-        myController?.bootRomURL = URL(fileURLWithPath: "/")
-        amigaProxy?.deleteBootRom()
-        refresh()
-    }
-    
-    @IBAction func romDeleteKickAction(_ sender: Any!)
-    {
-        myController?.kickRomURL = URL(fileURLWithPath: "/")
-        amigaProxy?.deleteKickRom()
+        if amigaProxy?.config().model == A1000 {
+            
+            myController?.bootRomURL = URL(fileURLWithPath: "/")
+            amigaProxy?.deleteBootRom()
+            
+        } else {
+            
+            myController?.kickRomURL = URL(fileURLWithPath: "/")
+            amigaProxy?.deleteKickRom()
+        }
+        
         refresh()
     }
     

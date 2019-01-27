@@ -17,27 +17,25 @@ class PreferencesController : DialogController {
     // Rom preferences
     //
     
-    @IBOutlet weak var romBootDropView: RomDropView!
-    @IBOutlet weak var romBootTitle: NSTextField!
-    @IBOutlet weak var romBootHash: NSTextField!
-    @IBOutlet weak var romBootPath: NSTextField!
-    @IBOutlet weak var romBootText: NSTextField!
-    @IBOutlet weak var romBootSubText: NSTextField!
-    @IBOutlet weak var romBootDeleteButton: NSButton!
-
-    @IBOutlet weak var romKickDropView: RomDropView!
-    @IBOutlet weak var romKickTitle: NSTextField!
-    @IBOutlet weak var romKickHash: NSTextField!
-    @IBOutlet weak var romKickPath: NSTextField!
-    @IBOutlet weak var romKickText: NSTextField!
-    @IBOutlet weak var romKickSubText: NSTextField!
-    @IBOutlet weak var romKickDeleteButton: NSButton!
+    // Warning message
+    @IBOutlet weak var romCautionImage: NSButton!
+    @IBOutlet weak var romCautionText: NSTextField!
+    @IBOutlet weak var romCautionSubText: NSTextField!
     
+    // Rom info
+    @IBOutlet weak var romDropView: RomDropView!
+    @IBOutlet weak var romTitle: NSTextField!
+    @IBOutlet weak var romHash: NSTextField!
+    @IBOutlet weak var romPath: NSTextField!
+    @IBOutlet weak var romDeleteButton: NSButton!
+    @IBOutlet weak var romCopyright: NSTextField!
+
     // Lock
     @IBOutlet weak var romLockImage: NSButton!
     @IBOutlet weak var romLockText: NSTextField!
     @IBOutlet weak var romLockSubText: NSTextField!
-    
+   
+    @IBOutlet weak var romFactoryButton: NSButton!
 
     //
     // Hardware preferences

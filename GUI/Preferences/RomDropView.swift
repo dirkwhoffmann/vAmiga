@@ -26,7 +26,14 @@ class RomDropView : NSImageView
     @IBOutlet var dialogController: DialogController!
 
     func acceptDragSource(url: URL) -> Bool {
-        return false
+        
+        guard let amiga = amigaProxy else { return false }
+        
+        if amiga.config().model == A1000 {
+            return amiga.isBootRom(url)
+        } else {
+            return amiga.isKickRom(url)
+        }
     }
     
     override func awakeFromNib()
@@ -55,39 +62,23 @@ class RomDropView : NSImageView
         return true
     }
     
+    override func performDragOperation(_ sender: NSDraggingInfo) -> Bool
+    {
+        guard let url = sender.url else { return false }
+        guard let controller = myController else { return false }
+        guard let amiga = amigaProxy else { return false }
+        
+        if amiga.config().model == A1000 {
+            controller.bootRomURL = url
+            return amiga.loadBootRom(fromFile: url)
+        } else {
+            controller.kickRomURL = url
+            return amiga.loadKickRom(fromFile: url)
+        }
+    }
+    
     override func concludeDragOperation(_ sender: NSDraggingInfo?)
     {
         dialogController.refresh()
-    }
-}
-
-class BootRomDropView : RomDropView
-{
-    
-    override func acceptDragSource(url: URL) -> Bool
-    {
-        return amigaProxy?.isBootRom(url) ?? false
-    }
-    
-    override func performDragOperation(_ sender: NSDraggingInfo) -> Bool
-    {
-        guard let url = sender.url else { return false }
-        myController?.bootRomURL = url
-        return amigaProxy?.loadBootRom(fromFile: url) ?? false
-    }
-}
-
-class KickRomDropView : RomDropView
-{
-    override func acceptDragSource(url: URL) -> Bool
-    {
-        return amigaProxy?.isKickRom(url) ?? false
-    }
-    
-    override func performDragOperation(_ sender: NSDraggingInfo) -> Bool
-    {
-        guard let url = sender.url else { return false }
-        myController?.kickRomURL = url
-        return amigaProxy?.loadKickRom(fromFile: url) ?? false
     }
 }

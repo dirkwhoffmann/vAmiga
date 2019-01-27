@@ -9,7 +9,16 @@
 
 #include "KickRom.h"
 
-const uint8_t KickRom::magicBytes[] = { 0x11, 0x11, 0x4E, 0xF9, 0x00 };
+// Kickstart 1.2 and 1.3
+const uint8_t KickRom::magicBytes1[] = { 0x11, 0x11, 0x4E, 0xF9, 0x00 };
+
+// Kickstart 2.0
+const uint8_t KickRom::magicBytes2[] = { 0x11, 0x11, 0x14, 0xF9, 0x00 };
+
+// Kickstart 3.0, 3.1 and 4.0
+const uint8_t KickRom::magicBytes3[] = { 0x11, 0x14, 0x4E, 0xF9, 0x00 };
+
+
 
 KickRom::KickRom()
 {
@@ -22,7 +31,9 @@ KickRom::isKickRomBuffer(const uint8_t *buffer, size_t length)
     if (length != KB(256) && length != KB(512)) return false;
     
     return
-    matchingBufferHeader(buffer, magicBytes, sizeof(magicBytes));
+    matchingBufferHeader(buffer, magicBytes1, sizeof(magicBytes1)) ||
+    matchingBufferHeader(buffer, magicBytes2, sizeof(magicBytes2)) ||
+    matchingBufferHeader(buffer, magicBytes3, sizeof(magicBytes3));
 }
 
 bool
@@ -32,7 +43,9 @@ KickRom::isKickRomFile(const char *path)
         !checkFileSize(path, KB(512), KB(512))) return false;
     
     return
-    matchingFileHeader(path, magicBytes, sizeof(magicBytes));
+    matchingFileHeader(path, magicBytes1, sizeof(magicBytes1)) ||
+    matchingFileHeader(path, magicBytes2, sizeof(magicBytes2)) ||
+    matchingFileHeader(path, magicBytes3, sizeof(magicBytes3));
 }
 
 KickRom *
