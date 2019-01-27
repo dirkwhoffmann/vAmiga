@@ -837,6 +837,7 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 // Expansion port proxy
 //
 
+/*
 @implementation ExpansionPortProxy
 
 - (instancetype) initWithExpansionPort:(ExpansionPort *)expansionPort
@@ -945,6 +946,7 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 
 @end
 
+*/
 
 //
 // Disk proxy
@@ -1031,38 +1033,6 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 
 @end
 
-
-//
-// VIA proxy
-//
-
-/*
-@implementation VIAProxy
-
-- (instancetype) initWithVIA:(VIA6522 *)via
-{
-    if (self = [super init]) {
-        wrapper = new ViaWrapper();
-        wrapper->via = via;
-    }
-    return self;
-}
-
-- (void) dump
-{
-    wrapper->via->dump();
-}
-- (BOOL) tracing
-{
-    return wrapper->via->tracingEnabled();
-}
-- (void) setTracing:(BOOL)b
-{
-    b ? wrapper->via->startTracing() : wrapper->via->stopTracing();
-}
-
-@end
-*/
 
 //
 // VC1541 proxy
@@ -1343,8 +1313,8 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 
 @synthesize wrapper;
 @synthesize mem, cpu, vic, cia1, cia2, sid;
-@synthesize keyboard, port1, port2, iec;
-@synthesize expansionport, drive1, drive2, mouse;
+@synthesize keyboard, port1, port2;
+@synthesize drive1, drive2, mouse;
 
 - (instancetype) init
 {
@@ -1367,7 +1337,6 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 	keyboard = [[KeyboardProxy alloc] initWithKeyboard:&c64->keyboard];
     port1 = [[ControlPortProxy alloc] initWithJoystick:&c64->port1];
     port2 = [[ControlPortProxy alloc] initWithJoystick:&c64->port2];
-    expansionport = [[ExpansionPortProxy alloc] initWithExpansionPort:&c64->expansionport];
 	drive1 = [[DriveProxy alloc] initWithVC1541:&c64->drive1];
     drive2 = [[DriveProxy alloc] initWithVC1541:&c64->drive2];
     mouse = [[MouseProxy alloc] initWithMouse:&c64->mouse];

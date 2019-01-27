@@ -22,10 +22,7 @@
 @class SIDProxy;
 @class KeyboardProxy;
 @class ControlPortProxy;
-@class IECProxy;
-@class ExpansionPortProxy;
 @class DriveProxy;
-@class VIAProxy;
 @class DiskProxy;
 @class MouseProxy;
 
@@ -47,9 +44,7 @@ struct SidBridgeWrapper;
 struct KeyboardWrapper;
 struct ControlPortWrapper;
 struct IecWrapper;
-struct ExpansionPortWrapper;
 struct DriveWrapper;
-struct ViaWrapper;
 struct DiskWrapper;
 struct MouseWrapper;
 struct AnyC64FileWrapper;
@@ -72,8 +67,6 @@ struct AnyC64FileWrapper;
     KeyboardProxy *keyboard;
     ControlPortProxy *port1;
     ControlPortProxy *port2;
-    IECProxy *iec;
-    ExpansionPortProxy *expansionport;
     DriveProxy *drive1;
     DriveProxy *drive2;
     MouseProxy *mouse;
@@ -89,8 +82,6 @@ struct AnyC64FileWrapper;
 @property (readonly) KeyboardProxy *keyboard;
 @property (readonly) ControlPortProxy *port1;
 @property (readonly) ControlPortProxy *port2;
-@property (readonly) IECProxy *iec;
-@property (readonly) ExpansionPortProxy *expansionport;
 @property (readonly) DriveProxy *drive1;
 @property (readonly) DriveProxy *drive2;
 @property (readonly) MouseProxy *mouse;
@@ -434,6 +425,7 @@ struct AnyC64FileWrapper;
 //                             Expansion port proxy
 // -----------------------------------------------------------------------------
 
+/*
 @interface ExpansionPortProxy : NSObject {
     
     struct ExpansionPortWrapper *wrapper;
@@ -470,24 +462,8 @@ struct AnyC64FileWrapper;
 
 @end
 
-
-// -----------------------------------------------------------------------------
-//                               IEC bus proxy
-// -----------------------------------------------------------------------------
-
-/*
-@interface IECProxy : NSObject {
-    
-    struct IecWrapper *wrapper;
-}
-
-- (void) dump;
-
-- (BOOL) tracing;
-- (void) setTracing:(BOOL)b;
-
-@end
 */
+
 
 // -----------------------------------------------------------------------------
 //                                Drive proxy
@@ -504,10 +480,6 @@ struct AnyC64FileWrapper;
 @property (readonly) struct DriveWrapper *wrapper;
 @property (readonly) DiskProxy *disk;
 
-//- (void) dump;
-//- (BOOL) tracing;
-//- (void) setTracing:(BOOL)b;
-
 - (BOOL) isPoweredOn;
 - (void) powerOn;
 - (void) powerOff;
@@ -520,7 +492,6 @@ struct AnyC64FileWrapper;
 - (BOOL) hasModifiedDisk;
 - (void) setModifiedDisk:(BOOL)b;
 - (void) prepareToInsert;
-// - (void) insertDisk:(AnyArchiveProxy *)disk;
 - (void) prepareToEject;
 - (void) ejectDisk;
 - (BOOL) writeProtected;
