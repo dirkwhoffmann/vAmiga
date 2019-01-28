@@ -18,18 +18,6 @@
 @class CPUProxy;
 @class MemoryProxy;
 @class VICProxy;
-@class SIDProxy;
-@class KeyboardProxy;
-@class ControlPortProxy;
-@class DriveProxy;
-@class DiskProxy;
-@class MouseProxy;
-
-@class AnyC64FileProxy;
-@class AnyArchiveProxy;
-@class AnyDiskProxy;
-@class D64FileProxy;
-@class G64FileProxy;
 
 // Forward declarations of wrappers for C++ classes.
 // We wrap classes into normal C structs to avoid any reference to C++.
@@ -52,31 +40,16 @@ struct SidBridgeWrapper;
     CPUProxy *cpu;
     MemoryProxy *mem;
     VICProxy *vic;
-    SIDProxy *sid;
-    KeyboardProxy *keyboard;
-    ControlPortProxy *port1;
-    ControlPortProxy *port2;
-    DriveProxy *drive1;
-    DriveProxy *drive2;
-    MouseProxy *mouse;
 }
 
 @property (readonly) struct C64Wrapper *wrapper;
 @property (readonly) CPUProxy *cpu;
 @property (readonly) MemoryProxy *mem;
 @property (readonly) VICProxy *vic;
-@property (readonly) SIDProxy *sid;
-@property (readonly) ControlPortProxy *port1;
-@property (readonly) ControlPortProxy *port2;
-@property (readonly) DriveProxy *drive1;
-@property (readonly) DriveProxy *drive2;
-@property (readonly) MouseProxy *mouse;
 
 - (void) kill;
 
-- (DriveProxy *)drive:(NSInteger)nr;
-
-- (void) ping;
+// - (void) ping;
 - (void) dump;
 - (BOOL) developmentMode;
 
@@ -185,16 +158,6 @@ struct SidBridgeWrapper;
     
     struct MemoryWrapper *wrapper;
 }
-
-- (void) dump;
-
-- (NSInteger) ramInitPattern;
-- (void) setRamInitPattern:(NSInteger)type;
-- (void) eraseWithPattern:(NSInteger)type;
-
-- (void) deleteBasicRom;
-- (void) deleteCharacterRom;
-- (void) deleteKernalRom;
 
 - (MemoryType) peekSource:(uint16_t)addr;
 - (MemoryType) pokeTarget:(uint16_t)addr;

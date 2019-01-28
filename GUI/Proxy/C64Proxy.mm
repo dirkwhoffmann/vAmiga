@@ -169,36 +169,6 @@ struct AnyC64FileWrapper { AnyC64File *file; };
     return self;
 }
 
-// Proxy methods
-- (void) dump
-{
-    wrapper->mem->dump();
-}
-
-- (NSInteger) ramInitPattern
-{
-    return wrapper->mem->getRamInitPattern();
-}
-- (void) setRamInitPattern:(NSInteger)pattern
-{
-    wrapper->mem->setRamInitPattern((RamInitPattern)pattern);
-}
-- (void) eraseWithPattern:(NSInteger)pattern
-{
-    wrapper->mem->eraseWithPattern((RamInitPattern)pattern);
-}
-- (void) deleteBasicRom
-{
-    wrapper->mem->deleteBasicRom();
-}
-- (void) deleteCharacterRom
-{
-    wrapper->mem->deleteCharacterRom();
-}
-- (void) deleteKernalRom
-{
-    wrapper->mem->deleteKernalRom();
-}
 - (MemoryType) peekSource:(uint16_t)addr
 {
     return wrapper->mem->getPeekSource(addr);
@@ -464,9 +434,7 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 @implementation C64Proxy
 
 @synthesize wrapper;
-@synthesize mem, cpu, vic, sid;
-@synthesize port1, port2;
-@synthesize drive1, drive2, mouse;
+@synthesize mem, cpu, vic;
 
 - (instancetype) init
 {
@@ -497,22 +465,12 @@ struct AnyC64FileWrapper { AnyC64File *file; };
     wrapper->c64 = NULL;
 }
 
-- (DriveProxy *) drive:(NSInteger)num {
-    switch (num) {
-        case 1:
-        return [self drive1];
-        case 2:
-        return [self drive2];
-        default:
-        assert(false);
-        return NULL;
-    }
-}
-
+/*
 - (void) ping
 {
     wrapper->c64->ping();
 }
+*/
 - (void) dump
 {
     wrapper->c64->dump();
