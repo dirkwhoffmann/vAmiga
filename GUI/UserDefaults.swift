@@ -652,13 +652,11 @@ extension MyController {
     func loadEmulatorUserDefaults() {
         
         let defaults = UserDefaults.standard
-            
-        c64.suspend()
+        
         amiga.suspend()
         
         amiga.setWarpLoad(defaults.bool(forKey: Keys.warpLoad))
-        c64.drive1.setSendSoundMessages(defaults.bool(forKey: Keys.driveNoise))
-        c64.drive2.setSendSoundMessages(defaults.bool(forKey: Keys.driveNoise))
+        driveNoise = defaults.bool(forKey: Keys.driveNoise)
     
         screenshotSource = defaults.integer(forKey: Keys.screenshotSource)
         screenshotTargetIntValue = defaults.integer(forKey: Keys.screenshotTarget)
@@ -678,7 +676,6 @@ extension MyController {
         defaults.decode(&autoTypeText, forKey: Keys.autoTypeText)
         
         amiga.reset()
-        c64.resume()
     }
     
     func saveEmulatorUserDefaults() {
@@ -686,8 +683,7 @@ extension MyController {
         let defaults = UserDefaults.standard
         
         defaults.set(c64.warpLoad(), forKey: Keys.warpLoad)
-        defaults.set(c64.drive1.sendSoundMessages(), forKey: Keys.driveNoise)
-        defaults.set(c64.drive2.sendSoundMessages(), forKey: Keys.driveNoise)
+        defaults.set(driveNoise, forKey: Keys.driveNoise)
 
         defaults.set(screenshotSource, forKey: Keys.screenshotSource)
         defaults.set(screenshotTargetIntValue, forKey: Keys.screenshotTarget)

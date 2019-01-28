@@ -102,13 +102,18 @@ class MyController : NSWindowController, MessageReceiver {
         set { screenshotTarget = NSBitmapImageRep.FileType(rawValue: UInt(newValue))! }
     }
     
+    /// Indicates if drive sounds should be played
+    var driveNoise = Defaults.driveNoise
+    
     /// Media file default actions
     var autoMountAction : [String: AutoMountAction] = Defaults.autoMountAction
 
     /// Media file auto-type enable / disable
+    // DEPRECATED
     var autoType : [String: Bool] = Defaults.autoType
 
     /// Media file auto-type text
+    // DEPRECATED
     var autoTypeText : [String: String] = Defaults.autoTypeText
     
     /// Indicates if the user should be warned if an unsaved document is closed.

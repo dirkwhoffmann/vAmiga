@@ -16,15 +16,14 @@ extension PreferencesController {
         track()
         
         guard
-            let c64        = proxy,
             let amiga      = amigaProxy,
             let controller = myController,
             let metal      = controller.metal
             else { return }
         
         // VC1541
-        emuWarpLoad.state = c64.warpLoad() ? .on : .off
-        emuDriveSounds.state = c64.drive1.sendSoundMessages() ? .on : .off
+        emuWarpLoad.state = amiga.warpLoad() ? .on : .off
+        emuDriveSounds.state = controller.driveNoise ? .on : .off
         
         // Fullscreen
         emuAspectRatioButton.state = metal.keepAspectRatio ? .on : .off
@@ -57,8 +56,7 @@ extension PreferencesController {
     
     @IBAction func emuDriveSoundsAction(_ sender: NSButton!) {
         
-        proxy?.drive1.setSendSoundMessages(sender.state == .on)
-        proxy?.drive2.setSendSoundMessages(sender.state == .on)
+        myController?.driveNoise = sender.state == .on
         refresh()
     }
     

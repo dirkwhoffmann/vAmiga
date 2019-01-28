@@ -39,13 +39,13 @@ struct CpuWrapper;
 struct MemoryWrapper;
 struct VicWrapper;
 struct SidBridgeWrapper;
-struct KeyboardWrapper;
-struct ControlPortWrapper;
-struct IecWrapper;
-struct DriveWrapper;
-struct DiskWrapper;
-struct MouseWrapper;
-struct AnyC64FileWrapper;
+// struct KeyboardWrapper;
+// struct ControlPortWrapper;
+// struct IecWrapper;
+// struct DriveWrapper;
+// struct DiskWrapper;
+// struct MouseWrapper;
+// struct AnyC64FileWrapper;
 
 
 // -----------------------------------------------------------------------------
@@ -263,9 +263,6 @@ struct AnyC64FileWrapper;
 - (void) setEmulateGrayDotBug:(BOOL)value;
 - (BOOL) isPAL;
 
-// - (void *) screenBuffer;
-// - (NSColor *) color:(NSInteger)nr;
-// - (UInt32) rgbaColor:(NSInteger)nr palette:(VICPalette)palette;
 - (double)brightness;
 - (void)setBrightness:(double)value;
 - (double)contrast;
@@ -277,6 +274,7 @@ struct AnyC64FileWrapper;
 - (SpriteInfo) getSpriteInfo:(NSInteger)sprite;
 - (void) dump;
 
+/*
 - (void) setMemoryBankAddr:(uint16_t)addr;
 - (void) setScreenMemoryAddr:(uint16_t)addr;
 - (void) setCharacterMemoryAddr:(uint16_t)addr;
@@ -316,6 +314,7 @@ struct AnyC64FileWrapper;
 - (void) setShowIrqLines:(BOOL)b;
 - (BOOL) showDmaLines;
 - (void) setShowDmaLines:(BOOL)b;
+*/
 
 @end
 
@@ -346,9 +345,6 @@ struct AnyC64FileWrapper;
 
 - (NSInteger) ringbufferSize;
 - (float) ringbufferData:(NSInteger)offset;
-// - (double) fillLevel;
-// - (NSInteger) bufferUnderflows;
-// - (NSInteger) bufferOverflows;
 
 - (void) readMonoSamples:(float *)target size:(NSInteger)n;
 - (void) readStereoSamples:(float *)target1 buffer2:(float *)target2 size:(NSInteger)n;
@@ -358,112 +354,4 @@ struct AnyC64FileWrapper;
 - (void) rampUpFromZero;
 - (void) rampDown;
 
-@end
-
-
-// -----------------------------------------------------------------------------
-//                             Control port proxy
-// -----------------------------------------------------------------------------
-
-/*
-@interface ControlPortProxy : NSObject {
-    
-    struct ControlPortWrapper *wrapper;
-}
-
-- (void) dump;
-- (BOOL) autofire;
-- (void) setAutofire:(BOOL)value;
-- (NSInteger) autofireBullets;
-- (void) setAutofireBullets:(NSInteger)value;
-- (float) autofireFrequency;
-- (void) setAutofireFrequency:(float)value;
-
-- (void) trigger:(JoystickEvent)event;
-
-@end
-*/
-
-
-
-// -----------------------------------------------------------------------------
-//                                Drive proxy
-// -----------------------------------------------------------------------------
-
-@interface DriveProxy : NSObject {
-    
-    struct DriveWrapper *wrapper;
-    
-    // Sub proxys
-    DiskProxy *disk;
-}
-
-@property (readonly) struct DriveWrapper *wrapper;
-@property (readonly) DiskProxy *disk;
-
-- (BOOL) isPoweredOn;
-- (void) powerOn;
-- (void) powerOff;
-- (void) togglePowerSwitch;
-
-- (void) deleteRom;
-
-- (BOOL) redLED;
-- (BOOL) hasDisk;
-- (BOOL) hasModifiedDisk;
-- (void) setModifiedDisk:(BOOL)b;
-- (void) prepareToInsert;
-- (void) prepareToEject;
-- (void) ejectDisk;
-- (BOOL) writeProtected;
-- (void) setWriteProtection:(BOOL)b;
-- (BOOL) hasWriteProtectedDisk;
-- (BOOL) sendSoundMessages;
-- (void) setSendSoundMessages:(BOOL)b;
-
-- (Halftrack) halftrack;
-- (void) setTrack:(Track)t;
-- (void) setHalftrack:(Halftrack)ht;
-- (uint16_t) sizeOfCurrentHalftrack;
-- (uint16_t) offset;
-- (void) setOffset:(uint16_t)value;
-- (uint8_t) readBitFromHead;
-- (void) writeBitToHead:(uint8_t)value;
-
-- (void) moveHeadUp;
-- (void) moveHeadDown;
-- (BOOL) isRotating;
-- (void) rotateDisk;
-- (void) rotateBack;
-
-@end
-
-
-// -----------------------------------------------------------------------------
-//                                Disk proxy
-// -----------------------------------------------------------------------------
-
-@interface DiskProxy : NSObject {
-    
-    struct DiskWrapper *wrapper;
-}
-
-@property (readonly) struct DiskWrapper *wrapper;
-
-- (void) dump;
-- (BOOL)writeProtected;
-- (void)setWriteProtection:(BOOL)b;
-- (void)toggleWriteProtection;
-- (NSInteger)nonemptyHalftracks;
-- (void)analyzeTrack:(Track)t;
-- (void)analyzeHalftrack:(Halftrack)ht;
-- (NSInteger)numErrors;
-- (NSString *)errorMessage:(NSInteger)nr;
-- (NSInteger)firstErroneousBit:(NSInteger)nr;
-- (NSInteger)lastErroneousBit:(NSInteger)nr;
-- (SectorInfo)sectorInfo:(Sector)s;
-- (const char *)diskNameAsString;
-- (const char *)trackDataAsString;
-- (const char *)sectorHeaderAsString:(Sector)nr;
-- (const char *)sectorDataAsString:(Sector)nr;
 @end
