@@ -490,8 +490,6 @@ extension MyController {
         
         case MSG_RUN:
             
-            track()
-            
             needsSaving = true
             disableUserEditing()
             validateToolbarItems()
@@ -499,21 +497,17 @@ extension MyController {
     
         case MSG_PAUSE:
             
-            track()
-            
             enableUserEditing()
             validateToolbarItems()
             refresh()
     
         case MSG_POWER_ON:
             
-            track()
             metal.blendIn()
             powerLED.image = NSImage.init(named: "powerLedOn")
             
         case MSG_POWER_OFF:
             
-            track()
             metal.blendOut()
             powerLED.image = NSImage.init(named: "powerLedOff")
             
@@ -651,7 +645,7 @@ extension MyController {
 
         case MSG_VC1541_ATTACHED,
              MSG_VC1541_DETACHED:
-            track()
+            break
             
         case MSG_VC1541_ATTACHED_SOUND:
             
@@ -779,18 +773,18 @@ extension MyController {
     //  Game pad events
     //
     
-    /// GamePadManager delegation method
-    /// - Returns: true, iff a joystick event has been triggered on port A or B
+    // GamePadManager delegation method
+    // Returns true, iff a joystick event has been triggered on port A or B
     @discardableResult
     func joystickEvent(slot: Int, events: [JoystickEvent]) -> Bool {
         
         if (slot == inputDevice1) {
-            for event in events { c64.port1.trigger(event) }
+            for event in events { amiga.controlPort1.trigger(event) }
             return true
         }
 
         if (slot == inputDevice2) {
-            for event in events { c64.port2.trigger(event) }
+            for event in events { amiga.controlPort2.trigger(event) }
             return true
         }
         

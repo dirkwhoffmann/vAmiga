@@ -365,6 +365,7 @@ struct AnyC64FileWrapper;
 //                             Control port proxy
 // -----------------------------------------------------------------------------
 
+/*
 @interface ControlPortProxy : NSObject {
     
     struct ControlPortWrapper *wrapper;
@@ -381,50 +382,8 @@ struct AnyC64FileWrapper;
 - (void) trigger:(JoystickEvent)event;
 
 @end
-
-
-// -----------------------------------------------------------------------------
-//                             Expansion port proxy
-// -----------------------------------------------------------------------------
-
-/*
-@interface ExpansionPortProxy : NSObject {
-    
-    struct ExpansionPortWrapper *wrapper;
-}
-
-- (void) dump;
-
-- (BOOL) cartridgeAttached;
-- (CartridgeType) cartridgeType;
-- (BOOL) attachGeoRamCartridge:(NSInteger)capacity;
-- (void) attachIsepicCartridge;
-- (void) detachCartridgeAndReset;
-
-- (NSInteger) numButtons;
-- (NSString *) getButtonTitle:(NSInteger)nr;
-- (void) pressButton:(NSInteger)nr;
-- (void) releaseButton:(NSInteger)nr;
-
-- (BOOL) hasSwitch;
-- (NSInteger) switchPosition;
-- (NSString *) switchDescription:(NSInteger)pos;
-- (BOOL) validSwitchPosition:(NSInteger)pos;
-- (BOOL) switchIsNeutral;
-- (BOOL) switchIsLeft;
-- (BOOL) switchIsRight;
-- (void) setSwitchPosition:(NSInteger)pos;
-
-- (BOOL) hasLed;
-- (BOOL) led;
-- (void) setLed:(BOOL)value;
-
-- (BOOL) hasBattery;
-- (void) setBattery:(BOOL)value;
-
-@end
-
 */
+
 
 
 // -----------------------------------------------------------------------------
@@ -507,25 +466,4 @@ struct AnyC64FileWrapper;
 - (const char *)trackDataAsString;
 - (const char *)sectorHeaderAsString:(Sector)nr;
 - (const char *)sectorDataAsString:(Sector)nr;
-@end
-
-
-
-// -----------------------------------------------------------------------------
-//                                 Mouse proxy
-// -----------------------------------------------------------------------------
-
-@interface MouseProxy : NSObject {
-    
-    struct MouseWrapper *wrapper;
-}
-
-- (NSInteger) model;
-- (void) setModel:(NSInteger)model;
-- (void) connect:(NSInteger)toPort;
-- (void) disconnect;
-- (void) setXY:(NSPoint)pos;
-- (void) setLeftButton:(BOOL)pressed;
-- (void) setRightButton:(BOOL)pressed;
-
 @end

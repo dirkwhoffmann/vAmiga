@@ -65,23 +65,28 @@ public extension MetalView {
     
     override public func mouseDown(with event: NSEvent)
     {
-        controller.c64.mouse.setLeftButton(true)
+        amigaProxy?.controlPort1.setLeftMouseButton(true)
+        amigaProxy?.controlPort2.setLeftMouseButton(true)
     }
     
     override public func mouseUp(with event: NSEvent)
     {
-        controller.c64.mouse.setLeftButton(false)
-    }
-    
-    override public func rightMouseUp(with event: NSEvent)
-    {
-        controller.c64.mouse.setRightButton(false)
+        amigaProxy?.controlPort1.setLeftMouseButton(false)
+        amigaProxy?.controlPort2.setLeftMouseButton(false)
     }
     
     override public func rightMouseDown(with event: NSEvent)
     {
-        controller.c64.mouse.setRightButton(true)
+        amigaProxy?.controlPort1.setRightMouseButton(true)
+        amigaProxy?.controlPort2.setRightMouseButton(true)
     }
+
+    override public func rightMouseUp(with event: NSEvent)
+    {
+        amigaProxy?.controlPort1.setRightMouseButton(false)
+        amigaProxy?.controlPort2.setRightMouseButton(false)
+    }
+    
     
     override public func mouseMoved(with event: NSEvent) {
         
@@ -98,7 +103,8 @@ public extension MetalView {
         let newY = controller.mouseXY.y * scaleY
 
         let newLocation = NSMakePoint(newX, newY)
-        controller.c64.mouse.setXY(newLocation)
+        amigaProxy?.controlPort1.setXY(newLocation)
+        amigaProxy?.controlPort2.setXY(newLocation)
         //track("\(dx) \(dy)\n");
     }
     

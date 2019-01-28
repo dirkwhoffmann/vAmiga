@@ -247,6 +247,8 @@ struct AmigaFileWrapper;
 - (float) autofireFrequency;
 - (void) setAutofireFrequency:(float)value;
 
+- (void) connectMouse:(BOOL)value;
+
 - (void) setXY:(NSPoint)pos;
 - (void) setLeftMouseButton:(BOOL)pressed;
 - (void) setRightMouseButton:(BOOL)pressed;

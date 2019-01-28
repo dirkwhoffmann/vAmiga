@@ -182,6 +182,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->port->setAutofireFrequency(value);
 }
+- (void) connectMouse:(BOOL)value
+{
+    wrapper->port->connectMouse(value);
+}
 - (void) setXY:(NSPoint)pos
 {
     wrapper->port->setXY(pos.x, pos.y);
@@ -528,6 +532,8 @@ struct ADFFileWrapper { ADFFile *adf; };
     dma = [[DMAControllerProxy alloc] initWithDMAController:&amiga->dma];
     denise = [[DeniseProxy alloc] initWithDenise:&amiga->denise];
     paula = [[PaulaProxy alloc] initWithPaula:&amiga->paula];
+    controlPort1 = [[AmigaControlPortProxy alloc] initWithControlPort:&amiga->controlPort1];
+    controlPort2 = [[AmigaControlPortProxy alloc] initWithControlPort:&amiga->controlPort2];
     keyboard = [[AmigaKeyboardProxy alloc] initWithKeyboard:&amiga->keyboard];
     diskController = [[DiskControllerProxy alloc] initWithDiskController:&amiga->diskController];
     df0 = [[AmigaDriveProxy alloc] initWithDrive:&amiga->df0];

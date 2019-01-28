@@ -288,9 +288,6 @@ extension MyController {
 
 extension Keys {
     
-    // Mouse
-    static let mouseModel        = "VC64MouseModelKey"
-
     // Joysticks
     static let disconnectJoyKeys = "VC64DisconnectKeys"
     static let autofire          = "VC64Autofire"
@@ -301,9 +298,6 @@ extension Keys {
 }
 
 extension Defaults {
-    
-    // Mouse
-    static let mouseModel        = MOUSE1350
     
     // Joysticks
     static let disconnectJoyKeys = true
@@ -332,7 +326,6 @@ extension MyController {
     static func registerDevicesUserDefaults() {
         
         let dictionary : [String:Any] = [
-            Keys.mouseModel: Int(Defaults.mouseModel.rawValue),
             Keys.disconnectJoyKeys: Defaults.disconnectJoyKeys,
             Keys.autofire: Defaults.autofire,
             Keys.autofireBullets: Defaults.autofireBullets,
@@ -349,8 +342,7 @@ extension MyController {
         
         let defaults = UserDefaults.standard
         
-        for key in [ Keys.mouseModel,
-                     Keys.disconnectJoyKeys,
+        for key in [ Keys.disconnectJoyKeys,
                      Keys.autofire,
                      Keys.autofireBullets,
                      Keys.autofireFrequency,
@@ -369,31 +361,29 @@ extension MyController {
         
         let defaults = UserDefaults.standard
     
-        c64.suspend()
+        amiga.suspend()
         
-        c64.mouse.setModel(defaults.integer(forKey: Keys.mouseModel))
         keyboardcontroller.disconnectJoyKeys = defaults.bool(forKey: Keys.disconnectJoyKeys)
-        c64.port1.setAutofire(defaults.bool(forKey: Keys.autofire))
-        c64.port2.setAutofire(defaults.bool(forKey: Keys.autofire))
-        c64.port1.setAutofireBullets(defaults.integer(forKey: Keys.autofireBullets))
-        c64.port2.setAutofireBullets(defaults.integer(forKey: Keys.autofireBullets))
-        c64.port1.setAutofireFrequency(defaults.float(forKey: Keys.autofireFrequency))
-        c64.port2.setAutofireFrequency(defaults.float(forKey: Keys.autofireFrequency))
+        amiga.controlPort1.setAutofire(defaults.bool(forKey: Keys.autofire))
+        amiga.controlPort2.setAutofire(defaults.bool(forKey: Keys.autofire))
+        amiga.controlPort1.setAutofireBullets(defaults.integer(forKey: Keys.autofireBullets))
+        amiga.controlPort2.setAutofireBullets(defaults.integer(forKey: Keys.autofireBullets))
+        amiga.controlPort1.setAutofireFrequency(defaults.float(forKey: Keys.autofireFrequency))
+        amiga.controlPort2.setAutofireFrequency(defaults.float(forKey: Keys.autofireFrequency))
         defaults.decode(&gamePadManager.gamePads[0]!.keyMap, forKey: Keys.joyKeyMap1)
         defaults.decode(&gamePadManager.gamePads[1]!.keyMap, forKey: Keys.joyKeyMap2)
  
-        c64.resume()
+        amiga.resume()
     }
     
     func saveDevicesUserDefaults() {
         
         let defaults = UserDefaults.standard
         
-        defaults.set(c64.mouse.model(), forKey: Keys.mouseModel)
         defaults.set(keyboardcontroller.disconnectJoyKeys, forKey: Keys.disconnectJoyKeys)
-        defaults.set(c64.port1.autofire(), forKey: Keys.autofire)
-        defaults.set(c64.port1.autofireBullets(), forKey: Keys.autofireBullets)
-        defaults.set(c64.port1.autofireFrequency(), forKey: Keys.autofireFrequency)
+        defaults.set(amiga.controlPort1.autofire(), forKey: Keys.autofire)
+        defaults.set(amiga.controlPort1.autofireBullets(), forKey: Keys.autofireBullets)
+        defaults.set(amiga.controlPort1.autofireFrequency(), forKey: Keys.autofireFrequency)
         defaults.encode(gamePadManager.gamePads[0]!.keyMap, forKey: Keys.joyKeyMap1)
         defaults.encode(gamePadManager.gamePads[1]!.keyMap, forKey: Keys.joyKeyMap2)
     }

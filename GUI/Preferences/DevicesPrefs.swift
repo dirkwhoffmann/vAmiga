@@ -13,9 +13,13 @@ extension PreferencesController {
     
     func refreshDevicesTab() {
 
-        guard let con = myController else { return }
-        guard let c64 = proxy else { return }
-
+        guard
+            let controller = myController,
+            let amiga      = amigaProxy,
+            let port1      = amiga.controlPort1,
+            let port2      = amiga.controlPort2
+            else { return }
+       
         track()
     
         // Joystick emulation keys
@@ -29,17 +33,17 @@ extension PreferencesController {
         updateJoyKeyMap(1, dir: JOYSTICK_LEFT, button: devLeft2button, txt: devLeft2)
         updateJoyKeyMap(1, dir: JOYSTICK_RIGHT, button: devRight2button, txt: devRight2)
         updateJoyKeyMap(1, dir: JOYSTICK_FIRE, button: devFire2button, txt: devFire2)
-        devDisconnectKeys.state = con.keyboardcontroller.disconnectJoyKeys ? .on : .off
+        devDisconnectKeys.state = controller.keyboardcontroller.disconnectJoyKeys ? .on : .off
         
-        assert(c64.port1.autofire() == c64.port2.autofire())
-        assert(c64.port1.autofireBullets() == c64.port2.autofireBullets())
-        assert(c64.port1.autofireFrequency() == c64.port2.autofireFrequency())
+        assert(port1.autofire() == port2.autofire())
+        assert(port1.autofireBullets() == port2.autofireBullets())
+        assert(port1.autofireFrequency() == port2.autofireFrequency())
         
         // Joystick buttons
-        devAutofire.state = c64.port1.autofire() ? .on : .off
-        devAutofireCease.state = c64.port1.autofireBullets() > 0 ? .on : .off
-        devAutofireBullets.integerValue = Int(c64.port1.autofireBullets().magnitude)
-        devAutofireFrequency.floatValue = c64.port1.autofireFrequency()
+        devAutofire.state = port1.autofire() ? .on : .off
+        devAutofireCease.state = port1.autofireBullets() > 0 ? .on : .off
+        devAutofireBullets.integerValue = Int(port1.autofireBullets().magnitude)
+        devAutofireFrequency.floatValue = port1.autofireFrequency()
         devAutofireCease.isEnabled = devAutofire.state == .on
         devAutofireCeaseText.textColor = devAutofire.state == .on ? .controlTextColor : .disabledControlTextColor
         devAutofireBullets.isEnabled = devAutofire.state == .on
@@ -141,19 +145,19 @@ extension PreferencesController {
     
     @IBAction func devAutofireAction(_ sender: NSButton!) {
         
-        proxy?.port1.setAutofire(sender.state == .on)
-        proxy?.port2.setAutofire(sender.state == .on)
+        amigaProxy?.controlPort1.setAutofire(sender.state == .on)
+        amigaProxy?.controlPort2.setAutofire(sender.state == .on)
         
         refresh()
     }
     
     @IBAction func devAutofireCeaseAction(_ sender: NSButton!) {
         
-        if let bullets = proxy?.port1.autofireBullets().magnitude {
+        if let bullets = amigaProxy?.controlPort1.autofireBullets().magnitude {
         
             let sign = sender.state == .on ? 1 : -1
-            proxy?.port1.setAutofireBullets(Int(bullets) * sign)
-            proxy?.port2.setAutofireBullets(Int(bullets) * sign)
+            amigaProxy?.controlPort1.setAutofireBullets(Int(bullets) * sign)
+            amigaProxy?.controlPort2.setAutofireBullets(Int(bullets) * sign)
             
             refresh()
         }
@@ -163,8 +167,8 @@ extension PreferencesController {
         
         let value = sender.integerValue
         
-        proxy?.port1.setAutofireBullets(value)
-        proxy?.port2.setAutofireBullets(value)
+        amigaProxy?.controlPort1.setAutofireBullets(value)
+        amigaProxy?.controlPort2.setAutofireBullets(value)
         
         refresh()
     }
@@ -173,8 +177,8 @@ extension PreferencesController {
         
         let value = sender.floatValue
         
-        proxy?.port1.setAutofireFrequency(value)
-        proxy?.port2.setAutofireFrequency(value)
+        amigaProxy?.controlPort1.setAutofireFrequency(value)
+        amigaProxy?.controlPort2.setAutofireFrequency(value)
         
         refresh()
     }

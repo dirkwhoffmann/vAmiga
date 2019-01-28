@@ -14,7 +14,7 @@ AmigaControlPort::AmigaControlPort(int portNr)
     assert(portNr == 1 || portNr == 2);
     
     nr = portNr;
-    setDescription("ControlPort");
+    setDescription(nr == 1 ? "ControlPort1" : "ControlPort2");
 }
 
 void
@@ -142,17 +142,23 @@ AmigaControlPort::setAutofireBullets(int value)
 void
 AmigaControlPort::setXY(float x, float y)
 {
-    debug("Moving mouse to (%f,%f)\n", x, y);
+    if (hasMouse) {
+        debug("Moving mouse to (%f,%f)\n", x, y);
+    }
 }
 
 void
 AmigaControlPort::setLeftMouseButton(bool pressed)
 {
-    debug("Pressing left mouse button");
+    if (hasMouse) {
+        debug("Pressing left mouse button");
+    }
 }
 
 void
 AmigaControlPort::setRightMouseButton(bool pressed)
 {
-    debug("Pressing right mouse button");
+    if (hasMouse) {
+        debug("Pressing right mouse button");
+    }
 }

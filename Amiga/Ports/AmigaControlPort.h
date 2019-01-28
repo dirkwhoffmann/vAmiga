@@ -23,6 +23,9 @@ private:
     // Represented control port (1 or 2)
     int nr;
     
+    // true, if a mouse is connected to this port
+    bool hasMouse = false;
+    
     // True, if button is pressed.
     bool button = false;
     
@@ -120,11 +123,14 @@ public:
     // Mouse
     //
  
+    // Connects or disconnects a mouse
+    void connectMouse(bool value) { hasMouse = value; }
+    
     // Returns the potentiometer X value
-    uint8_t potX();
+    // uint8_t potX();
     
     // Returns the potentiometer Y value
-    uint8_t potY();
+    // uint8_t potY();
 
     // Moves the mouse to a new location
     void setXY(float x, float y);

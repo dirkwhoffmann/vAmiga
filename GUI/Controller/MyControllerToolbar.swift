@@ -42,7 +42,7 @@ extension MyController {
         validateJoystickToolbarItems()
     }
     
-    func validateJoystickToolbarItem(_ popup: NSPopUpButton, selectedSlot: Int, port: ControlPortProxy!) {
+    func validateJoystickToolbarItem(_ popup: NSPopUpButton, selectedSlot: Int, port: AmigaControlPortProxy!) {
         
         let menu =  popup.menu
         let item3 = menu?.item(withTag: InputDevice.joystick1)
@@ -60,8 +60,8 @@ extension MyController {
     
     func validateJoystickToolbarItems() {
     
-        validateJoystickToolbarItem(controlPort1, selectedSlot: inputDevice1, port: c64.port1)
-        validateJoystickToolbarItem(controlPort2, selectedSlot: inputDevice2, port: c64.port2)
+        validateJoystickToolbarItem(controlPort1, selectedSlot: inputDevice1, port: amiga.controlPort1)
+        validateJoystickToolbarItem(controlPort2, selectedSlot: inputDevice2, port: amiga.controlPort2)
     }
     
     @IBAction func port1Action(_ sender: NSPopUpButton) {
@@ -77,8 +77,9 @@ extension MyController {
         // Avoid double mappings
         inputDevice2 = (inputDevice1 == inputDevice2) ? InputDevice.none : inputDevice2
         
-        // Connect or disconnect analog mouse
-        c64.mouse.connect(inputDevice1 == InputDevice.mouse ? 1 : 0);
+        // Connect or disconnect mouse
+        amiga.controlPort1.connectMouse(inputDevice1 == InputDevice.mouse);
+        amiga.controlPort2.connectMouse(inputDevice2 == InputDevice.mouse);
         
         UserDefaults.standard.set(inputDevice1, forKey: Keys.inputDevice1)
         UserDefaults.standard.set(inputDevice2, forKey: Keys.inputDevice2)
@@ -98,8 +99,9 @@ extension MyController {
         // Avoid double mappings
         inputDevice1 = (inputDevice1 == inputDevice2) ? InputDevice.none : inputDevice1
         
-        // Connect or disconnect analog mouse
-        c64.mouse.connect(inputDevice2 == InputDevice.mouse ? 2 : 0)
+        // Connect or disconnect mouse
+        amiga.controlPort1.connectMouse(inputDevice1 == InputDevice.mouse);
+        amiga.controlPort2.connectMouse(inputDevice2 == InputDevice.mouse);
         
         UserDefaults.standard.set(inputDevice1, forKey: Keys.inputDevice1)
         UserDefaults.standard.set(inputDevice2, forKey: Keys.inputDevice2)

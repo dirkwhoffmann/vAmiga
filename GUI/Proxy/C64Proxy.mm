@@ -16,13 +16,11 @@ struct C64Wrapper { C64 *c64; };
 struct CpuWrapper { CPU *cpu; };
 struct MemoryWrapper { C64Memory *mem; };
 struct VicWrapper { VIC *vic; };
-struct ControlPortWrapper { ControlPort *port; };
 struct SidBridgeWrapper { SIDBridge *sid; };
 struct ExpansionPortWrapper { ExpansionPort *expansionPort; };
 struct DiskWrapper { Disk *disk; };
 struct DriveWrapper { VC1541 *drive; };
 struct DatasetteWrapper { Datasette *datasette; };
-struct MouseWrapper { Mouse *mouse; };
 struct AnyC64FileWrapper { AnyC64File *file; };
 
 //
@@ -680,6 +678,7 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 // Control port
 //
 
+/*
 @implementation ControlPortProxy
 
 - (instancetype) initWithJoystick:(ControlPort *)port
@@ -726,6 +725,7 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 
 @end
 
+*/
 
 //
 // Expansion port proxy
@@ -1074,6 +1074,7 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 // Mouse
 //
 
+/*
 @implementation MouseProxy
 
 - (instancetype) initWithMouse:(Mouse *)mouse
@@ -1114,6 +1115,7 @@ struct AnyC64FileWrapper { AnyC64File *file; };
     wrapper->mouse->setRightButton(pressed);
 }
 @end
+*/
 
 
 //
@@ -1143,11 +1145,8 @@ struct AnyC64FileWrapper { AnyC64File *file; };
     cpu = [[CPUProxy alloc] initWithCPU:&c64->cpu];
     vic = [[VICProxy alloc] initWithVIC:&c64->vic];
 	sid = [[SIDProxy alloc] initWithSID:&c64->sid];
-    port1 = [[ControlPortProxy alloc] initWithJoystick:&c64->port1];
-    port2 = [[ControlPortProxy alloc] initWithJoystick:&c64->port2];
 	drive1 = [[DriveProxy alloc] initWithVC1541:&c64->drive1];
     drive2 = [[DriveProxy alloc] initWithVC1541:&c64->drive2];
-    mouse = [[MouseProxy alloc] initWithMouse:&c64->mouse];
 
     return self;
 }

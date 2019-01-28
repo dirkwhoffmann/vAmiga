@@ -209,7 +209,7 @@
                         <popUpButton key="view" tag="10" id="L2b-nG-yBo" userLabel="Port 1">
                             <rect key="frame" x="0.0" y="14" width="48" height="23"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES"/>
-                            <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" image="devNoneTemplate" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyUpOrDown" inset="2" autoenablesItems="NO" selectedItem="VD3-Wr-Ufe" id="Oxd-8A-P5o" userLabel="PopupButtonCell">
+                            <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyUpOrDown" inset="2" autoenablesItems="NO" selectedItem="VD3-Wr-Ufe" id="Oxd-8A-P5o" userLabel="PopupButtonCell">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="menu"/>
                                 <menu key="menu" autoenablesItems="NO" id="zHf-yH-YTM">
@@ -655,7 +655,7 @@
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <clipView key="contentView" id="n9s-md-sVQ">
                                                                 <rect key="frame" x="1" y="0.0" width="266" height="408"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 <subviews>
                                                                     <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="1838" id="767" customClass="CpuTableView" customModule="vAmiga" customModuleProvider="target">
                                                                         <rect key="frame" x="0.0" y="0.0" width="266" height="391"/>
@@ -1191,9 +1191,6 @@
                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
-                                                    <connections>
-                                                        <action selector="praAction:" target="-2" id="Jf0-09-tG7"/>
-                                                    </connections>
                                                 </textField>
                                                 <textField verticalHuggingPriority="750" textCompletion="NO" id="98p-Rg-m2I">
                                                     <rect key="frame" x="59" y="62" width="66" height="23"/>
@@ -1203,9 +1200,6 @@
                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
-                                                    <connections>
-                                                        <action selector="ddraAction:" target="-2" id="3dS-Ur-aDF"/>
-                                                    </connections>
                                                 </textField>
                                                 <textField verticalHuggingPriority="750" textCompletion="NO" id="A0E-jZ-cMv">
                                                     <rect key="frame" x="59" y="36" width="66" height="23"/>
@@ -1215,9 +1209,6 @@
                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
-                                                    <connections>
-                                                        <action selector="prbAction:" target="-2" id="dZl-oQ-K1O"/>
-                                                    </connections>
                                                 </textField>
                                                 <textField verticalHuggingPriority="750" textCompletion="NO" id="GqH-U7-BOD">
                                                     <rect key="frame" x="59" y="10" width="66" height="23"/>
@@ -1227,9 +1218,6 @@
                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
-                                                    <connections>
-                                                        <action selector="ddrbAction:" target="-2" id="3Dk-gK-18o"/>
-                                                    </connections>
                                                 </textField>
                                             </subviews>
                                         </view>
@@ -1583,9 +1571,6 @@
                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
-                                                    <connections>
-                                                        <action selector="timerLatchAAction:" target="-2" id="F6q-3n-oOa"/>
-                                                    </connections>
                                                 </textField>
                                                 <textField verticalHuggingPriority="750" id="1sx-fg-Jqi">
                                                     <rect key="frame" x="196" y="103" width="21" height="14"/>
@@ -1613,9 +1598,6 @@
                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
-                                                    <connections>
-                                                        <action selector="timerLatchBAction:" target="-2" id="Km0-G4-ed4"/>
-                                                    </connections>
                                                 </textField>
                                             </subviews>
                                         </view>
