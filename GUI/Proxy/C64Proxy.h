@@ -73,7 +73,6 @@ struct AnyC64FileWrapper;
 @property (readonly) MemoryProxy *mem;
 @property (readonly) VICProxy *vic;
 @property (readonly) SIDProxy *sid;
-@property (readonly) KeyboardProxy *keyboard;
 @property (readonly) ControlPortProxy *port1;
 @property (readonly) ControlPortProxy *port2;
 @property (readonly) DriveProxy *drive1;
@@ -358,38 +357,6 @@ struct AnyC64FileWrapper;
 - (void) rampUp;
 - (void) rampUpFromZero;
 - (void) rampDown;
-
-@end
-
-
-// -----------------------------------------------------------------------------
-//                               Keyboard proxy
-// -----------------------------------------------------------------------------
-
-@interface KeyboardProxy : NSObject {
-    
-    struct KeyboardWrapper *wrapper;
-}
-
-- (void) dump;
-
-- (void) pressKeyAtRow:(NSInteger)row col:(NSInteger)col;
-- (void) pressRestoreKey;
-
-- (void) releaseKeyAtRow:(NSInteger)row col:(NSInteger)col;
-- (void) releaseRestoreKey;
-- (void) releaseAll;
-
-- (BOOL) leftShiftIsPressed;
-- (BOOL) rightShiftIsPressed;
-- (BOOL) controlIsPressed;
-- (BOOL) commodoreIsPressed;
-
-- (BOOL) shiftLockIsHoldDown;
-- (void) lockShift;
-- (void) unlockShift;
-
-- (BOOL) inUpperCaseMode;
 
 @end
 

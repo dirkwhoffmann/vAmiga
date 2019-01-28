@@ -16,8 +16,6 @@ struct C64Wrapper { C64 *c64; };
 struct CpuWrapper { CPU *cpu; };
 struct MemoryWrapper { C64Memory *mem; };
 struct VicWrapper { VIC *vic; };
-// struct CiaWrapper { CIA *cia; };
-struct KeyboardWrapper { Keyboard *keyboard; };
 struct ControlPortWrapper { ControlPort *port; };
 struct SidBridgeWrapper { SIDBridge *sid; };
 struct ExpansionPortWrapper { ExpansionPort *expansionPort; };
@@ -679,112 +677,6 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 
 
 //
-// IEC bus proxy
-//
-
-/*
-@implementation IECProxy
-
-- (instancetype) initWithIEC:(IEC *)iec
-{
-    if (self = [super init]) {
-        wrapper = new IecWrapper();
-        wrapper->iec = iec;
-    }
-    return self;
-}
-
-- (void) dump
-{
-    wrapper->iec->dump();
-}
-- (BOOL) tracing
-{
-    return wrapper->iec->tracingEnabled();
-}
-- (void) setTracing:(BOOL)b
-{
-    b ? wrapper->iec->startTracing() : wrapper->iec->stopTracing();
-}
-
-@end
-
-*/
-
-//
-// Keyboard
-//
-
-@implementation KeyboardProxy
-
-- (instancetype) initWithKeyboard:(Keyboard *)keyboard
-{
-    if (self = [super init]) {
-        wrapper = new KeyboardWrapper();
-        wrapper->keyboard = keyboard;
-    }
-    return self;
-}
-
-- (void) dump
-{
-    wrapper->keyboard->dump();
-}
-- (void) pressKeyAtRow:(NSInteger)row col:(NSInteger)col
-{
-    wrapper->keyboard->pressKey(row, col);
-}
-- (void) pressRestoreKey {
-    wrapper->keyboard->pressRestoreKey();
-}
-- (void) releaseKeyAtRow:(NSInteger)row col:(NSInteger)col
-{
-    wrapper->keyboard->releaseKey(row, col);
-}
-- (void) releaseRestoreKey
-{
-    wrapper->keyboard->releaseRestoreKey();
-}
-- (void) releaseAll
-{
-    wrapper->keyboard->releaseAll();
-}
-- (BOOL) leftShiftIsPressed
-{
-    return wrapper->keyboard->leftShiftIsPressed();
-}
-- (BOOL) rightShiftIsPressed
-{
-    return wrapper->keyboard->rightShiftIsPressed();
-}
-- (BOOL) controlIsPressed
-{
-    return wrapper->keyboard->ctrlIsPressed();
-}
-- (BOOL) commodoreIsPressed
-{
-    return wrapper->keyboard->commodoreIsPressed();
-}
-- (BOOL) shiftLockIsHoldDown
-{
-    return wrapper->keyboard->shiftLockIsHoldDown();
-}
-- (void) lockShift
-{
-    wrapper->keyboard->pressShiftLockKey();
-}
-- (void) unlockShift
-{
-    wrapper->keyboard->releaseShiftLockKey();
-}
-- (BOOL) inUpperCaseMode
-{
-    return wrapper->keyboard->inUpperCaseMode();
-}
-@end
-
-
-//
 // Control port
 //
 
@@ -1179,89 +1071,6 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 
 
 //
-// Datasette
-//
-
-/*
-@implementation DatasetteProxy
-
-- (instancetype) initWithDatasette:(Datasette *)datasette
-{
-    if (self = [super init]) {
-        wrapper = new DatasetteWrapper();
-        wrapper->datasette = datasette;
-    }
-    return self;
-}
-
-- (void) dump
-{
-    wrapper->datasette->dump();
-}
-- (BOOL) hasTape
-{
-    return wrapper->datasette->hasTape();
-}
-- (void) pressPlay
-{
-    wrapper->datasette->pressPlay();
-}
-- (void) pressStop
-{
-    wrapper->datasette->pressStop();
-}
-- (void) rewind
-{
-    wrapper->datasette->rewind();
-}
-- (BOOL) insertTape:(TAPFileProxy *)tape
-{
-    return false;
-}
-- (void) ejectTape
-{
-    wrapper->datasette->ejectTape();
-}
-- (NSInteger) getType
-{
-    return wrapper->datasette->getType();
-}
-- (long) durationInCycles
-{
-    return wrapper->datasette->getDurationInCycles();
-}
-- (int) durationInSeconds
-{
-    return wrapper->datasette->getDurationInSeconds();
-}
-- (NSInteger) head
-{
-    return wrapper->datasette->getHead();
-}
-- (NSInteger) headInCycles
-{
-    return wrapper->datasette->getHeadInCycles();
-}
-- (int) headInSeconds
-{
-    return wrapper->datasette->getHeadInSeconds();
-}
-- (void) setHeadInCycles:(long)value
-{
-    wrapper->datasette->setHeadInCycles(value);
-}
-- (BOOL) motor
-{
-    return wrapper->datasette->getMotor();
-}
-- (BOOL) playKey
-{
-    return wrapper->datasette->getPlayKey();
-}
-@end
-*/
-
-//
 // Mouse
 //
 
@@ -1315,7 +1124,7 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 
 @synthesize wrapper;
 @synthesize mem, cpu, vic, sid;
-@synthesize keyboard, port1, port2;
+@synthesize port1, port2;
 @synthesize drive1, drive2, mouse;
 
 - (instancetype) init
@@ -1334,7 +1143,6 @@ struct AnyC64FileWrapper { AnyC64File *file; };
     cpu = [[CPUProxy alloc] initWithCPU:&c64->cpu];
     vic = [[VICProxy alloc] initWithVIC:&c64->vic];
 	sid = [[SIDProxy alloc] initWithSID:&c64->sid];
-	keyboard = [[KeyboardProxy alloc] initWithKeyboard:&c64->keyboard];
     port1 = [[ControlPortProxy alloc] initWithJoystick:&c64->port1];
     port2 = [[ControlPortProxy alloc] initWithJoystick:&c64->port2];
 	drive1 = [[DriveProxy alloc] initWithVC1541:&c64->drive1];
