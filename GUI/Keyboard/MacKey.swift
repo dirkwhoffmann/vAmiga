@@ -242,30 +242,12 @@ struct MacKey : Codable {
                 return s
             }
             
-            // Return (keyboard dependent) standard representation
-            let source = TISCopyCurrentASCIICapableKeyboardLayoutInputSource().takeUnretainedValue()
-            let layoutData = TISGetInputSourceProperty(source, kTISPropertyUnicodeKeyLayoutData)
-            let dataRef = unsafeBitCast(layoutData, to: CFData.self)
-            let keyLayout = UnsafePointer<CoreServices.UCKeyboardLayout>.self
-            let keyLayoutPtr = unsafeBitCast(CFDataGetBytePtr(dataRef), to: keyLayout)
-            let keyTranslateOptions = OptionBits(CoreServices.kUCKeyTranslateNoDeadKeysBit)
-            var deadKeyState: UInt32 = 0
-            let maxChars = 256
-            var length = 0
-            var chars = [UniChar](repeating: 0, count: maxChars)
+            // Return standard representation (keyboard dependent)
+            if let s = String.init(keyCode: UInt16(keyCode), carbonFlags: carbonFlags) {
+                return s.uppercased()
+            }
             
-            let error = CoreServices.UCKeyTranslate(keyLayoutPtr,
-                                                    UInt16(keyCode),
-                                                    UInt16(CoreServices.kUCKeyActionDisplay),
-                                                    UInt32(carbonFlags),
-                                                    UInt32(LMGetKbdType()),
-                                                    keyTranslateOptions,
-                                                    &deadKeyState,
-                                                    maxChars,
-                                                    &length,
-                                                    &chars)
-
-            return error == noErr ? NSString(characters: &chars, length: length).uppercased : ""
+            return ""
         }
     }
 }
@@ -294,4 +276,3 @@ extension MacKey {
     static let command      = MacKey.init(keyCode: kVK_Command)
     static let rightCommand = MacKey.init(keyCode: kVK_RightCommand)
 }
-  

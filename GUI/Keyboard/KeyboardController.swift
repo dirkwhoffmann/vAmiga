@@ -37,51 +37,32 @@ class KeyboardController: NSObject {
     var leftOption  = false, rightOption  = false
     var leftCommand = false, rightCommand = false
     
-    /** DEPRECATED
-     Remembers the currently pressed keys and their assigned C64 key list
-
-     This variable is only used when keys are mapped symbolically. It's written
-     in keyDown and picked up in keyUp.
-     */
-    var pressedKeys: [MacKey:[C64Key]] = [:]
+    // Mapping from Unicode scalars to keycodes (used for auto-typing)
+    var symKeyMap : [UnicodeScalar : UInt16] = [:]
+    var symKeyMapShifted : [UnicodeScalar : UInt16] = [:]
     
-    /**
-     Checks if the internal values are consistent with the provides flags.
-     
-     There should never be an insonsistency. But if there is, we release the
-     suspicous key. Otherwise, we risk to block the C64's keyboard matrix
-     for good.
-     */
-    /*
-    func checkConsistency(withEvent event: NSEvent) {
+    override init() {
         
-        let flags   = event.modifierFlags
-        let shift   = leftShift   || rightShift
-        let control = leftControl || rightControl
-        let option  = leftOption  || rightOption
-        let command = leftCommand || rightCommand
+        track()
         
-        if shift != flags.contains(NSEvent.ModifierFlags.shift) {
-            keyUp(with: MacKey.shift)
-            keyUp(with: MacKey.rightShift)
-            track("** SHIFT inconsistency ** \(leftShift) \(rightShift)")
-        }
-        
-        if control != flags.contains(NSEvent.ModifierFlags.control) {
-            keyUp(with: MacKey.control)
-            keyUp(with: MacKey.rightControl)
-            track("** CONTROL inconsistency ** \(leftControl) \(rightControl)")
-        }
-        if option != flags.contains(NSEvent.ModifierFlags.option) {
-            keyUp(with: MacKey.option)
-            keyUp(with: MacKey.rightOption)
-            track("*** ALT inconsistency *** \(leftOption) \(rightOption)")
+        // Setup symbolic key maps
+        for keyCode : UInt16 in 0 ... 255 {
+            
+            if let s = String.init(keyCode: keyCode, carbonFlags: 0), s.count == 1 {
+                if let scalar = s.unicodeScalars.first {
+                    symKeyMap[scalar] = keyCode
+                }
+            }
+            if let s = String.init(keyCode: keyCode, carbonFlags: shiftKey), s.count == 1 {
+                if let scalar = s.unicodeScalars.first {
+                    symKeyMapShifted[scalar] = keyCode
+                }
+            }
         }
     }
-    */
     
     func keyDown(with event: NSEvent) {
-        
+
         guard let controller = myController else { return }
         
         // Ignore repeating keys
@@ -172,6 +153,47 @@ class KeyboardController: NSObject {
         myController?.amiga.keyboard.releaseKey(macKey.amigaKeyCode)
     }
     
+    func keyDown(with keyCode: UInt16) {
+        
+        let macKey = MacKey.init(keyCode: keyCode)
+        myController?.amiga.keyboard.pressKey(macKey.amigaKeyCode)
+    }
+    
+    func keyUp(with keyCode: UInt16) {
+        
+        let macKey = MacKey.init(keyCode: keyCode)
+        myController?.amiga.keyboard.releaseKey(macKey.amigaKeyCode)
+    }
+    
+    func autoType(_ string: String) {
+        
+        var shift = false
+        for scalar in string.unicodeScalars {
+            
+            if let keyCode = symKeyMap[scalar] {
+                
+                if shift { keyUp(with: MacKey.shift); shift = false }
+                keyDown(with: keyCode)
+                keyUp(with: keyCode)
+                continue
+            }
+            
+            if let keyCode = symKeyMapShifted[scalar] {
+                
+                if !shift { keyDown(with: MacKey.shift); shift = true }
+                keyDown(with: keyCode)
+                keyUp(with: keyCode)
+                continue
+            }
+        }
+        
+        if shift { keyUp(with: MacKey.shift) }
+    }
+}
+    
+    
+    /*
+    
     func _type(keyList: [C64Key]) {
         
         guard let controller = myController else { return }
@@ -242,3 +264,5 @@ class KeyboardController: NSObject {
         type(string: string, initialDelay: uSeconds)
     }
 }
+
+ */

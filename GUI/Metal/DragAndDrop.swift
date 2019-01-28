@@ -81,7 +81,7 @@ public extension MetalView {
             guard let text = pasteBoard.string(forType: .string) else {
                 return false
             }
-            controller.keyboardcontroller.type(string: text, completion: nil)
+            controller.keyboardcontroller.autoType(text)
             return true
             
         case .fileContents:
