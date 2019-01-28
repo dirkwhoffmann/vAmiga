@@ -14,7 +14,6 @@ public class AudioEngine: NSObject {
 
     var paula: PaulaProxy!
     
-    var sid: SIDProxy! // DEPRECATED
     var audiounit : AUAudioUnit!
     
     var isRunning = false
@@ -24,12 +23,11 @@ public class AudioEngine: NSObject {
         super.init()
     }
     
-    convenience init?(withSID proxy: SIDProxy)
+    convenience init?(withPaula proxy: PaulaProxy)
     {
         track()
     
         self.init()
-        sid = proxy
         paula = amigaProxy!.paula
         
         // Setup component description for AudioUnit

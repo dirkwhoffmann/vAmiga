@@ -285,7 +285,7 @@ extension MyController {
         memTableView.c = self
         
         // Create audio engine
-        audioEngine = AudioEngine.init(withSID: c64.sid)
+        audioEngine = AudioEngine.init(withPaula: amiga.paula)
     }
     
     

@@ -317,14 +317,6 @@ struct AnyC64FileWrapper { AnyC64File *file; };
     return self;
 }
 
-- (NSInteger) model
-{
-    return (NSInteger)wrapper->vic->getModel();
-}
-- (void) setModel:(NSInteger)value
-{
-    wrapper->vic->setModel((VICModel)value);
-}
 - (NSInteger) videoPalette
 {
     return (NSInteger)wrapper->vic->videoPalette();
@@ -333,66 +325,6 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 {
     wrapper->vic->setVideoPalette((VICPalette)value);
 }
-- (NSInteger) glueLogic
-{
-    return (NSInteger)wrapper->vic->getGlueLogic();
-}
-- (void) setGlueLogic:(NSInteger)value
-{
-    wrapper->vic->setGlueLogic((GlueLogic)value);
-}
-- (BOOL) hasGrayDotBug
-{
-    return wrapper->vic->hasGrayDotBug();
-}
-- (BOOL) emulateGrayDotBug
-{
-    return wrapper->vic->emulateGrayDotBug;
-}
-- (void) setEmulateGrayDotBug:(BOOL)value
-{
-    wrapper->vic->emulateGrayDotBug = value;
-}
-- (BOOL) isPAL
-{
-    return wrapper->vic->isPAL();
-}
-- (VICInfo) getInfo {
-    return wrapper->vic->getInfo();
-}
-- (void) dump
-{
-    wrapper->vic->dump();
-}
-- (SpriteInfo) getSpriteInfo:(NSInteger)sprite
-{
-    return wrapper->vic->getSpriteInfo((unsigned)sprite);
-}
-/*
-- (void *) screenBuffer
-{
-    return wrapper->vic->screenBuffer();
-}
-- (NSColor *) color:(NSInteger)nr
-{
-    assert (0 <= nr && nr < 16);
-    
-    uint32_t color = wrapper->vic->getColor((unsigned)nr);
-    uint8_t r = color & 0xFF;
-    uint8_t g = (color >> 8) & 0xFF;
-    uint8_t b = (color >> 16) & 0xFF;
-    
-	return [NSColor colorWithCalibratedRed:(float)r/255.0
-                                     green:(float)g/255.0
-                                      blue:(float)b/255.0
-                                     alpha:1.0];
-}
-- (UInt32) rgbaColor:(NSInteger)nr palette:(VICPalette)palette
-{
-    assert (0 <= nr && nr < 16);
-    return wrapper->vic->getColor((unsigned)nr, palette);
-}
-*/
 - (double)brightness
 {
     return wrapper->vic->getBrightness();
@@ -417,146 +349,6 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 {
     wrapper->vic->setSaturation(value);
 }
-
-
-/*
-- (void) setMemoryBankAddr:(uint16_t)addr
-{
-    wrapper->vic->setMemoryBankAddr(addr);
-}
-- (void) setScreenMemoryAddr:(uint16_t)addr
-{
-    wrapper->vic->setScreenMemoryAddr(addr);
-}
-- (void) setCharacterMemoryAddr:(uint16_t)addr
-{
-    wrapper->vic->setCharacterMemoryAddr(addr);
-}
-- (void) setDisplayMode:(DisplayMode)mode
-{
-    wrapper->vic->setDisplayMode(mode);
-}
-- (void) setScreenGeometry:(ScreenGeometry)mode
-{
-    wrapper->vic->setScreenGeometry(mode);
-}
-- (void) setHorizontalRasterScroll:(uint8_t)offset
-{
-    wrapper->vic->setHorizontalRasterScroll(offset & 0x07);
-}
-- (void) setVerticalRasterScroll:(uint8_t)offset
-{
-    wrapper->vic->setVerticalRasterScroll(offset & 0x07);
-}
-- (void) setSpriteEnabled:(NSInteger)nr value:(BOOL)flag
-{
-    wrapper->vic->setSpriteEnabled(nr, flag);
-}
-- (void) toggleSpriteEnabled:(NSInteger)nr
-{
-    wrapper->vic->toggleSpriteEnabled(nr);
-}
-- (void) setSpriteX:(NSInteger)nr value:(NSInteger)x
-{
-    wrapper->vic->setSpriteX((unsigned)nr, (uint16_t)x);
-}
-- (void) setSpriteY:(NSInteger)nr value:(NSInteger)y
-{
-    wrapper->vic->setSpriteY((unsigned)nr, (uint8_t)y);
-}
-- (void) setSpritePtr:(NSInteger)nr value:(NSInteger)ptr
-{
-    wrapper->vic->setSpritePtr((unsigned)nr, (uint8_t)ptr);
-}
-- (void) setSpriteStretchX:(NSInteger)nr value:(BOOL)flag
-{
-    wrapper->vic->setSpriteStretchX((unsigned)nr, flag);
-}
-- (void) toggleSpriteStretchX:(NSInteger)nr
-{
-    wrapper->vic->spriteToggleStretchXFlag((unsigned)nr);
-}
-- (void) setSpriteStretchY:(NSInteger)nr value:(BOOL)flag
-{
-    return wrapper->vic->setSpriteStretchY((unsigned)nr, flag);
-}
-- (void) toggleSpriteStretchY:(NSInteger)nr
-{
-    wrapper->vic->spriteToggleStretchYFlag((unsigned)nr);
-}
-- (void) setSpriteColor:(NSInteger)nr value:(int)c
-{
-    wrapper->vic->setSpriteColor((unsigned)nr, c);
-}
-- (void) setSpritePriority:(NSInteger)nr value:(BOOL)flag
-{
-    wrapper->vic->setSpritePriority((unsigned)nr, flag);
-}
-- (void) toggleSpritePriority:(NSInteger)nr
-{
-    wrapper->vic->toggleSpritePriority((unsigned)nr);
-}
-- (void) setSpriteMulticolor:(NSInteger)nr value:(BOOL)flag
-{
-    wrapper->vic->setSpriteMulticolor((unsigned)nr, flag);
-}
-- (void) toggleSpriteMulticolor:(NSInteger)nr
-{
-    wrapper->vic->toggleMulticolorFlag((unsigned)nr);
-}
-- (void) setIrqOnSpriteSpriteCollision:(BOOL)value
-{
-    wrapper->vic->setIrqOnSpriteSpriteCollision(value);
-}
-- (void) toggleIrqOnSpriteSpriteCollision
-{
-    wrapper->vic-> toggleIrqOnSpriteSpriteCollision();
-}
-- (void) setIrqOnSpriteBackgroundCollision:(BOOL)value
-{
-    wrapper->vic->setIrqOnSpriteBackgroundCollision(value);
-}
-- (void) toggleIrqOnSpriteBackgroundCollision
-{
-    wrapper->vic->toggleIrqOnSpriteBackgroundCollision();
-}
-- (void) setRasterInterruptLine:(uint16_t)line
-{
-    wrapper->vic->setRasterInterruptLine(line);
-}
-- (void) setRasterInterruptEnabled:(BOOL)b
-{
-    wrapper->vic->setRasterInterruptEnable(b);
-}
-- (void) toggleRasterInterruptFlag
-{
-    wrapper->vic->toggleRasterInterruptFlag();
-}
-- (BOOL) hideSprites
-{
-    return wrapper->vic->hideSprites;
-}
-- (void) setHideSprites:(BOOL)b
-{
-    wrapper->vic->setHideSprites(b);
-}
-- (BOOL) showIrqLines
-{
-    return wrapper->vic->markIRQLines;
-}
-- (void) setShowIrqLines:(BOOL)b
-{
-    wrapper->vic->setShowIrqLines(b);
-}
-- (BOOL) showDmaLines
-{
-    return wrapper->vic->markDMALines;
-}
-- (void) setShowDmaLines:(BOOL)b
-{
-    wrapper->vic->setShowDmaLines(b);
-}
-*/
 @end
 
 
@@ -564,6 +356,7 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 // SID proxy
 //
 
+/*
 @implementation SIDProxy
 
 - (instancetype) initWithSID:(SIDBridge *)sid
@@ -661,6 +454,7 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 }
 
 @end
+ */
 
 
 //
@@ -689,7 +483,6 @@ struct AnyC64FileWrapper { AnyC64File *file; };
     mem = [[MemoryProxy alloc] initWithMemory:&c64->mem];
     cpu = [[CPUProxy alloc] initWithCPU:&c64->cpu];
     vic = [[VICProxy alloc] initWithVIC:&c64->vic];
-	sid = [[SIDProxy alloc] initWithSID:&c64->sid];
 
     return self;
 }
