@@ -16,6 +16,7 @@ struct MemWrapper { AmigaMemory *mem; };
 struct DMAControllerWrapper { DMAController *dmaController; };
 struct DeniseWrapper { Denise *denise; };
 struct PaulaWrapper { Paula *paula; };
+struct AmigaControlPortWrapper { AmigaControlPort *port; };
 struct AmigaKeyboardWrapper { AmigaKeyboard *keyboard; };
 struct DiskControllerWrapper { DiskController *controller; };
 struct AmigaDriveWrapper { AmigaDrive *drive; };
@@ -129,6 +130,57 @@ struct ADFFileWrapper { ADFFile *adf; };
 - (double) fillLevel
 {
     return wrapper->paula->fillLevel();
+}
+
+@end
+
+
+//
+// Control port
+//
+
+@implementation AmigaControlPortProxy
+
+- (instancetype) initWithControlPort:(AmigaControlPort *)port
+{
+    if (self = [super init]) {
+        wrapper = new AmigaControlPortWrapper();
+        wrapper->port = port;
+    }
+    return self;
+}
+
+- (void) dump
+{
+    wrapper->port->dump();
+}
+- (BOOL) autofire
+{
+    return wrapper->port->getAutofire();
+}
+- (void) setAutofire:(BOOL)value
+{
+    return wrapper->port->setAutofire(value);
+}
+- (NSInteger) autofireBullets
+{
+    return (NSInteger)wrapper->port->getAutofireBullets();
+}
+- (void) setAutofireBullets:(NSInteger)value
+{
+    wrapper->port->setAutofireBullets((int)value);
+}
+- (float) autofireFrequency
+{
+    return wrapper->port->getAutofireFrequency();
+}
+- (void) setAutofireFrequency:(float)value
+{
+    wrapper->port->setAutofireFrequency(value);
+}
+- (void) trigger:(JoystickEvent)event
+{
+    wrapper->port->trigger(event);
 }
 
 @end
@@ -441,6 +493,8 @@ struct ADFFileWrapper { ADFFile *adf; };
 @synthesize dma;
 @synthesize denise;
 @synthesize paula;
+@synthesize controlPort1;
+@synthesize controlPort2;
 @synthesize keyboard;
 @synthesize diskController;
 @synthesize df0;

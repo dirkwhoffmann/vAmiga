@@ -17,6 +17,7 @@
 @class DMAControllerProxy;
 @class DeniseProxy;
 @class PaulaProxy;
+@class AmigaControlPortProxy;
 @class AmigaKeyboardProxy;
 @class DiskControllerProxy;
 @class AmigaDriveProxy;
@@ -32,6 +33,7 @@ struct MemWrapper;
 struct DMAControllerWrapper;
 struct DeniseWrapper;
 struct PaulaWrapper;
+struct AmigaControlPortWrapper;
 struct AmigaKeyboardWrapper;
 struct DiskControllerWrapper;
 struct AmigaDriveWrapper;
@@ -49,6 +51,8 @@ struct AmigaFileWrapper;
     DMAControllerProxy *dma;
     DeniseProxy *denise;
     PaulaProxy *paula;
+    AmigaControlPortProxy *controlPort1;
+    AmigaControlPortProxy *controlPort2;
     AmigaKeyboardProxy *keyboard;
     DiskControllerProxy *diskController;
     AmigaDriveProxy *df0;
@@ -60,6 +64,8 @@ struct AmigaFileWrapper;
 @property (readonly) DMAControllerProxy *dma;
 @property (readonly) DeniseProxy *denise;
 @property (readonly) PaulaProxy *paula;
+@property (readonly) AmigaControlPortProxy *controlPort1;
+@property (readonly) AmigaControlPortProxy *controlPort2;
 @property (readonly) AmigaKeyboardProxy *keyboard;
 @property (readonly) DiskControllerProxy *diskController;
 @property (readonly) AmigaDriveProxy *df0;
@@ -218,6 +224,28 @@ struct AmigaFileWrapper;
 - (NSInteger) bufferUnderflows;
 - (NSInteger) bufferOverflows;
 - (double) fillLevel;
+
+@end
+
+
+//
+// ControlPort Proxy
+//
+
+@interface AmigaControlPortProxy : NSObject {
+    
+    struct AmigaControlPortWrapper *wrapper;
+}
+
+- (void) dump;
+- (BOOL) autofire;
+- (void) setAutofire:(BOOL)value;
+- (NSInteger) autofireBullets;
+- (void) setAutofireBullets:(NSInteger)value;
+- (float) autofireFrequency;
+- (void) setAutofireFrequency:(float)value;
+
+- (void) trigger:(JoystickEvent)event;
 
 @end
 

@@ -76,6 +76,7 @@ private:
     void _dump() override;
     void didLoadFromBuffer(uint8_t **buffer) override;
     
+public:
     
     // Returns true if auto-fire mode is enabled.
     bool getAutofire() { return autofire; }
@@ -103,7 +104,7 @@ private:
     void scheduleNextShot();
     
     /* Execution function for this control port
-    /* This method is invoked at the end of each frame. It is needed
+     * This method is invoked at the end of each frame. It is needed
      * needed to implement the autofire functionality, only.
      */
     void execute();
