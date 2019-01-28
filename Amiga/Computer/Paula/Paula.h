@@ -10,8 +10,7 @@
 #ifndef _PAULA_INC
 #define _PAULA_INC
 
-#include "HardwareComponent.h"
-
+#include "AudioUnit.h"
 
 //
 // THIS CLASS IS A STUB TO MAKE THE VISUAL PROTOTYPE WORK

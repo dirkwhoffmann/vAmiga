@@ -225,6 +225,8 @@ struct AmigaFileWrapper;
 - (NSInteger) bufferOverflows;
 - (double) fillLevel;
 
+- (void) setSampleRate:(double)sampleRate;
+
 @end
 
 

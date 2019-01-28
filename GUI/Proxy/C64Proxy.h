@@ -39,13 +39,6 @@ struct CpuWrapper;
 struct MemoryWrapper;
 struct VicWrapper;
 struct SidBridgeWrapper;
-// struct KeyboardWrapper;
-// struct ControlPortWrapper;
-// struct IecWrapper;
-// struct DriveWrapper;
-// struct DiskWrapper;
-// struct MouseWrapper;
-// struct AnyC64FileWrapper;
 
 
 // -----------------------------------------------------------------------------

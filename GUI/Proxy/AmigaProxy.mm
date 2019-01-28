@@ -131,6 +131,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->paula->fillLevel();
 }
+- (void) setSampleRate:(double)sampleRate
+{
+    NSLog(@"setSampleRate: %f\n", sampleRate);
+}
 
 @end
 

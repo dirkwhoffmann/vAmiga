@@ -1,18 +1,20 @@
-//
-// This file is part of VirtualC64 - A cycle accurate Commodore 64 emulator
+// -----------------------------------------------------------------------------
+// This file is part of vAmiga
 //
 // Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
 // Licensed under the GNU General Public License v3
 //
 // See https://www.gnu.org for license information
-//
+// -----------------------------------------------------------------------------
 
 import Foundation
 import AVFoundation
 
 public class AudioEngine: NSObject {
 
-    var sid: SIDProxy!
+    var paula: PaulaProxy!
+    
+    var sid: SIDProxy! // DEPRECATED
     var audiounit : AUAudioUnit!
     
     var isRunning = false
@@ -28,7 +30,8 @@ public class AudioEngine: NSObject {
     
         self.init()
         sid = proxy
-
+        paula = amigaProxy!.paula
+        
         // Setup component description for AudioUnit
         let compDesc = AudioComponentDescription(
             componentType: kAudioUnitType_Output,
@@ -57,8 +60,8 @@ public class AudioEngine: NSObject {
             return
         }
         
-        // Tell SID to use the correct sample rate
-        sid.setSampleRate(UInt32(sampleRate))
+        // Inform Paula about the sample rate
+        paula.setSampleRate(sampleRate)
         
         // Register render callback
         if (stereo) {
