@@ -60,6 +60,30 @@ inline const char *driveTypeName(DriveType type)
     type == A1010_WARP ? "A1010 (warp speed)" : "???";
 }
 
+typedef enum {
+    
+    JOYSTICK_UP,
+    JOYSTICK_DOWN,
+    JOYSTICK_LEFT,
+    JOYSTICK_RIGHT,
+    JOYSTICK_FIRE
+    
+} JoystickDirection;
+
+typedef enum {
+    
+    PULL_UP,
+    PULL_DOWN,
+    PULL_LEFT,
+    PULL_RIGHT,
+    PRESS_FIRE,
+    RELEASE_X,
+    RELEASE_Y,
+    RELEASE_XY,
+    RELEASE_FIRE
+    
+} JoystickEvent;
+
 
 //
 // Amiga configuration

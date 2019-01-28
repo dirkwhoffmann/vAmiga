@@ -21,8 +21,7 @@
 #ifndef CONTROLPORT_TYPES_H
 #define CONTROLPORT_TYPES_H
 
-/*! @brief    Joystick directions
- */
+/*
 typedef enum {
     
     JOYSTICK_UP,
@@ -33,8 +32,6 @@ typedef enum {
     
 } JoystickDirection;
 
-/*! @brief    Joystick events
- */
 typedef enum {
     
     PULL_UP,
@@ -48,5 +45,8 @@ typedef enum {
     RELEASE_FIRE
     
 } JoystickEvent;
+
+ 
+*/
 
 #endif 

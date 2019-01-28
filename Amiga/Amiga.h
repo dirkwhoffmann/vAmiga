@@ -21,6 +21,7 @@
 #include "Denise.h"
 #include "Paula.h"
 #include "AmigaKeyboard.h"
+#include "AmigaControlPort.h"
 #include "DiskController.h"
 #include "AmigaDrive.h"
 #include "AmigaDisk.h"
@@ -80,6 +81,10 @@ public:
 
     // Disk controller (move to Paula?!)
     DiskController diskController;
+    
+    // Control ports
+    AmigaControlPort controlPort1 = AmigaControlPort(1);
+    AmigaControlPort controlPort2 = AmigaControlPort(2);
     
     // Keyboard
     AmigaKeyboard keyboard;

@@ -77,6 +77,8 @@ Amiga::Amiga()
         &dma,
         &denise,
         &paula,
+        &controlPort1,
+        &controlPort2,
         &keyboard,
         &diskController,
         &df0,
