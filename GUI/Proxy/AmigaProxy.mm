@@ -111,29 +111,72 @@ struct ADFFileWrapper { ADFFile *adf; };
     }
     return self;
 }
+
+//
+// Audio unit
+//
+
 - (void) dump
 {
-    wrapper->paula->dump();
+    wrapper->paula->audioUnit.dump();
 }
-- (NSInteger) volume
+/*
+- (SIDInfo) getInfo
 {
-    return wrapper->paula->getVolume();
+    return wrapper->paula->audioUnit.getInfo();
 }
-- (NSInteger) bufferUnderflows
+*/
+- (uint32_t) sampleRate
 {
-    return wrapper->paula->bufferUnderflows();
+    return wrapper->paula->audioUnit.getSampleRate();
 }
-- (NSInteger) bufferOverflows
+- (void) setSampleRate:(double)rate
 {
-    return wrapper->paula->bufferOverflows();
+    wrapper->paula->audioUnit.setSampleRate(rate);
+}
+- (NSInteger) ringbufferSize
+{
+    return wrapper->paula->audioUnit.ringbufferSize();
+}
+- (float) ringbufferData:(NSInteger)offset
+{
+    return wrapper->paula->audioUnit.ringbufferData(offset);
 }
 - (double) fillLevel
 {
-    return wrapper->paula->fillLevel();
+    return wrapper->paula->audioUnit.fillLevel();
 }
-- (void) setSampleRate:(double)sampleRate
+- (NSInteger) bufferUnderflows
 {
-    NSLog(@"setSampleRate: %f\n", sampleRate);
+    return wrapper->paula->audioUnit.bufferUnderflows;
+}
+- (NSInteger) bufferOverflows
+{
+    return wrapper->paula->audioUnit.bufferOverflows;
+}
+- (void) readMonoSamples:(float *)target size:(NSInteger)n
+{
+    wrapper->paula->audioUnit.readMonoSamples(target, n);
+}
+- (void) readStereoSamples:(float *)target1 buffer2:(float *)target2 size:(NSInteger)n
+{
+    wrapper->paula->audioUnit.readStereoSamples(target1, target2, n);
+}
+- (void) readStereoSamplesInterleaved:(float *)target size:(NSInteger)n
+{
+    wrapper->paula->audioUnit.readStereoSamplesInterleaved(target, n);
+}
+- (void) rampUp
+{
+    wrapper->paula->audioUnit.rampUp();
+}
+- (void) rampUpFromZero
+{
+    wrapper->paula->audioUnit.rampUpFromZero();
+}
+- (void) rampDown
+{
+    wrapper->paula->audioUnit.rampDown();
 }
 
 @end

@@ -103,6 +103,7 @@ private:
     // void setClockFrequency(uint32_t frequency);
     void didLoadFromBuffer(uint8_t **buffer) override { clearRingbuffer(); }
     
+public:
     
     void run();
     void pause();
@@ -122,7 +123,7 @@ private:
     
     // Sets the samplerate.
     // TODO: Can we adjust the sample rate on the Mac side?
-    void setSampleRate(uint32_t sr);
+    void setSampleRate(double rate);
     
 
     //

@@ -23,6 +23,10 @@ public:
     // Paula has been executed up to this clock cycle.
     uint64_t clock = 0;
     
+    // Audio unit
+    AudioUnit audioUnit;
+    
+    
     //
     // Constructing and destructing
     //
@@ -52,11 +56,12 @@ private:
     
 public:
     
+    /*
     uint32_t getVolume() { return 42; }
     long bufferUnderflows() { return 42; }
     long bufferOverflows() { return 42; }
     double fillLevel() { return .5; }
-
+     */
 };
 
 #endif

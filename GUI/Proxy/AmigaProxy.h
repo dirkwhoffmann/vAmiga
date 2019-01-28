@@ -220,12 +220,23 @@ struct AmigaFileWrapper;
 }
 
 - (void) dump;
-- (NSInteger) volume;
+
+- (uint32_t) sampleRate;
+- (void) setSampleRate:(double)rate;
+
+- (NSInteger) ringbufferSize;
+- (float) ringbufferData:(NSInteger)offset;
+- (double) fillLevel;
 - (NSInteger) bufferUnderflows;
 - (NSInteger) bufferOverflows;
-- (double) fillLevel;
 
-- (void) setSampleRate:(double)sampleRate;
+- (void) readMonoSamples:(float *)target size:(NSInteger)n;
+- (void) readStereoSamples:(float *)target1 buffer2:(float *)target2 size:(NSInteger)n;
+- (void) readStereoSamplesInterleaved:(float *)target size:(NSInteger)n;
+
+- (void) rampUp;
+- (void) rampUpFromZero;
+- (void) rampDown;
 
 @end
 

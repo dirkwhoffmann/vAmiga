@@ -96,8 +96,6 @@ Amiga::Amiga()
     
     registerSnapshotItems(items, sizeof(items));
     
-    debug("warp = %p\n", &warp);
-    
     // Initialize the mach timer info
     mach_timebase_info(&tb);
 }
@@ -324,6 +322,9 @@ Amiga::run()
             return;
         }
         
+        // Start sub components
+        paula.audioUnit.run();
+        
         // Start the emulator thread
         pthread_create(&p, NULL, threadMain, (void *)this);
     }
@@ -370,12 +371,12 @@ Amiga::getWarp()
         
         if (warp) {
             // Quickly fade out
-            // sid.rampDown();
+            paula.audioUnit.rampDown();
             
         } else {
             // Smoothly fade in
-            // sid.rampUp();
-            // sid.alignWritePtr();
+            paula.audioUnit.rampUp();
+            paula.audioUnit.alignWritePtr();
             restartTimer();
         }
     }
@@ -558,6 +559,7 @@ void
 Amiga::threadDidTerminate()
 {
     debug(2, "Emulator thread terminated\n");
+    paula.audioUnit.pause();
     p = NULL;
     amiga->putMessage(MSG_PAUSE);
 }

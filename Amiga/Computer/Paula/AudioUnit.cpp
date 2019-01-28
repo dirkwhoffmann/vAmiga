@@ -77,7 +77,7 @@ AudioUnit::getSampleRate()
 }
 
 void
-AudioUnit::setSampleRate(uint32_t rate)
+AudioUnit::setSampleRate(double rate)
 {
 }
 
