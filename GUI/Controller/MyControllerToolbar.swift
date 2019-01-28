@@ -108,13 +108,6 @@ extension MyController {
         validateJoystickToolbarItems()
     }
         
-    @IBAction func diskInspectorAction(_ sender: Any!) {
- 
-        let nibName = NSNib.Name("DiskInspector")
-        let controller = DiskInspectorController.init(windowNibName: nibName)
-        controller.showSheet()
-    }
-
     public func debugOpenAction(_ sender: Any!) {
         
         let state = debugger.state
@@ -145,25 +138,6 @@ extension MyController {
         refresh()
     }
     
-    @IBAction func inspectAction(_ sender: NSSegmentedControl) {
-        
-        switch(sender.selectedSegment) {
-            
-        case 0: // Debugger
-            
-            track("Debugger")
-            debugAction(sender)
-            
-        case 1: // Disk Inspector
-
-            track("Disk Inspector")
-            diskInspectorAction(sender)
-            
-        default:
-            assert(false)
-        }
-    }
-
     @IBAction func preferencesAction(_ sender: Any!) {
         
         openPreferences()

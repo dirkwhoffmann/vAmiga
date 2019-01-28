@@ -106,7 +106,6 @@
 		508FDFBF21EA1FF10043D0E9 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 508FDFB121EA1FF10043D0E9 /* MainMenu.xib */; };
 		508FDFC021EA1FF10043D0E9 /* SnapshotDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 508FDFB321EA1FF10043D0E9 /* SnapshotDialog.xib */; };
 		508FDFC121EA1FF10043D0E9 /* KeyViewItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 508FDFB421EA1FF10043D0E9 /* KeyViewItem.xib */; };
-		508FDFC221EA1FF10043D0E9 /* DiskInspector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 508FDFB521EA1FF10043D0E9 /* DiskInspector.xib */; };
 		508FDFC421EA1FF10043D0E9 /* ExportDiskDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 508FDFB721EA1FF10043D0E9 /* ExportDiskDialog.xib */; };
 		508FDFC521EA1FF10043D0E9 /* A500ISO.xib in Resources */ = {isa = PBXBuildFile; fileRef = 508FDFB821EA1FF10043D0E9 /* A500ISO.xib */; };
 		508FDFC721EA1FF10043D0E9 /* DiskMountDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 508FDFBA21EA1FF10043D0E9 /* DiskMountDialog.xib */; };
@@ -166,7 +165,6 @@
 		508FE05421EA22CC0043D0E9 /* DevicesPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04121EA22CC0043D0E9 /* DevicesPrefs.swift */; };
 		508FE05521EA22CC0043D0E9 /* PreferencesWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04221EA22CC0043D0E9 /* PreferencesWindow.swift */; };
 		508FE05621EA22CC0043D0E9 /* PreferencesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04321EA22CC0043D0E9 /* PreferencesController.swift */; };
-		508FE05721EA22CC0043D0E9 /* DiskInspectorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04421EA22CC0043D0E9 /* DiskInspectorController.swift */; };
 		508FE05821EA22CC0043D0E9 /* SnapshotController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04521EA22CC0043D0E9 /* SnapshotController.swift */; };
 		508FE05921EA22CC0043D0E9 /* VirtualKeyboardController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04621EA22CC0043D0E9 /* VirtualKeyboardController.swift */; };
 		508FE05A21EA22CC0043D0E9 /* DialogController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04721EA22CC0043D0E9 /* DialogController.swift */; };
@@ -436,7 +434,6 @@
 		508FDFB221EA1FF10043D0E9 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		508FDFB321EA1FF10043D0E9 /* SnapshotDialog.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SnapshotDialog.xib; sourceTree = "<group>"; };
 		508FDFB421EA1FF10043D0E9 /* KeyViewItem.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KeyViewItem.xib; sourceTree = "<group>"; };
-		508FDFB521EA1FF10043D0E9 /* DiskInspector.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DiskInspector.xib; sourceTree = "<group>"; };
 		508FDFB721EA1FF10043D0E9 /* ExportDiskDialog.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ExportDiskDialog.xib; sourceTree = "<group>"; };
 		508FDFB821EA1FF10043D0E9 /* A500ISO.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = A500ISO.xib; sourceTree = "<group>"; };
 		508FDFBA21EA1FF10043D0E9 /* DiskMountDialog.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DiskMountDialog.xib; sourceTree = "<group>"; };
@@ -498,7 +495,6 @@
 		508FE04121EA22CC0043D0E9 /* DevicesPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DevicesPrefs.swift; sourceTree = "<group>"; };
 		508FE04221EA22CC0043D0E9 /* PreferencesWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesWindow.swift; sourceTree = "<group>"; };
 		508FE04321EA22CC0043D0E9 /* PreferencesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesController.swift; sourceTree = "<group>"; };
-		508FE04421EA22CC0043D0E9 /* DiskInspectorController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiskInspectorController.swift; sourceTree = "<group>"; };
 		508FE04521EA22CC0043D0E9 /* SnapshotController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnapshotController.swift; sourceTree = "<group>"; };
 		508FE04621EA22CC0043D0E9 /* VirtualKeyboardController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VirtualKeyboardController.swift; sourceTree = "<group>"; };
 		508FE04721EA22CC0043D0E9 /* DialogController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DialogController.swift; sourceTree = "<group>"; };
@@ -948,7 +944,6 @@
 				508FDFAF21EA1FF10043D0E9 /* MyDocument.xib */,
 				508FDFB321EA1FF10043D0E9 /* SnapshotDialog.xib */,
 				508FDFB421EA1FF10043D0E9 /* KeyViewItem.xib */,
-				508FDFB521EA1FF10043D0E9 /* DiskInspector.xib */,
 				508FDFB721EA1FF10043D0E9 /* ExportDiskDialog.xib */,
 				508FDFBA21EA1FF10043D0E9 /* DiskMountDialog.xib */,
 				508FDFBB21EA1FF10043D0E9 /* Preferences.xib */,
@@ -1027,7 +1022,6 @@
 			children = (
 				508FE04721EA22CC0043D0E9 /* DialogController.swift */,
 				508FE04A21EA22CC0043D0E9 /* DiskMountController.swift */,
-				508FE04421EA22CC0043D0E9 /* DiskInspectorController.swift */,
 				508FE04521EA22CC0043D0E9 /* SnapshotController.swift */,
 				508FE04D21EA22CC0043D0E9 /* ExportDiskController.swift */,
 			);
@@ -1326,7 +1320,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				508FDFC221EA1FF10043D0E9 /* DiskInspector.xib in Resources */,
 				50BBE08B21F5EB9B0099BBBB /* A1000ANSI.xib in Resources */,
 				508FDFC821EA1FF10043D0E9 /* Preferences.xib in Resources */,
 				508FDFC421EA1FF10043D0E9 /* ExportDiskDialog.xib in Resources */,
@@ -1415,7 +1408,6 @@
 				508FDF6521EA1FBC0043D0E9 /* GeoRam.cpp in Sources */,
 				508FDFA221EA1FBC0043D0E9 /* FastVoice.cpp in Sources */,
 				508FDF6421EA1FBC0043D0E9 /* SimonsBasic.cpp in Sources */,
-				508FE05721EA22CC0043D0E9 /* DiskInspectorController.swift in Sources */,
 				50C2DE4421F756900043FD1B /* MyControllerStatusBar.swift in Sources */,
 				508FDFD921EA20510043D0E9 /* MetalViewEvents.swift in Sources */,
 				508FDF7121EA1FBC0043D0E9 /* Comal80.cpp in Sources */,
