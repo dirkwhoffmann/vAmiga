@@ -238,6 +238,8 @@ struct AmigaFileWrapper;
 }
 
 - (void) dump;
+
+- (void) trigger:(JoystickEvent)event;
 - (BOOL) autofire;
 - (void) setAutofire:(BOOL)value;
 - (NSInteger) autofireBullets;
@@ -245,7 +247,9 @@ struct AmigaFileWrapper;
 - (float) autofireFrequency;
 - (void) setAutofireFrequency:(float)value;
 
-- (void) trigger:(JoystickEvent)event;
+- (void) setXY:(NSPoint)pos;
+- (void) setLeftMouseButton:(BOOL)pressed;
+- (void) setRightMouseButton:(BOOL)pressed;
 
 @end
 

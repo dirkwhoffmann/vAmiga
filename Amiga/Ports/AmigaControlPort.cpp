@@ -138,3 +138,21 @@ AmigaControlPort::setAutofireBullets(int value)
         bulletCounter = (autofireBullets < 0) ? UINT64_MAX : autofireBullets;
     }
 }
+
+void
+AmigaControlPort::setXY(float x, float y)
+{
+    debug("Moving mouse to (%f,%f)\n", x, y);
+}
+
+void
+AmigaControlPort::setLeftMouseButton(bool pressed)
+{
+    debug("Pressing left mouse button");
+}
+
+void
+AmigaControlPort::setRightMouseButton(bool pressed)
+{
+    debug("Pressing right mouse button");
+}

@@ -154,6 +154,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->port->dump();
 }
+- (void) trigger:(JoystickEvent)event
+{
+    wrapper->port->trigger(event);
+}
 - (BOOL) autofire
 {
     return wrapper->port->getAutofire();
@@ -178,9 +182,17 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->port->setAutofireFrequency(value);
 }
-- (void) trigger:(JoystickEvent)event
+- (void) setXY:(NSPoint)pos
 {
-    wrapper->port->trigger(event);
+    wrapper->port->setXY(pos.x, pos.y);
+}
+- (void) setLeftMouseButton:(BOOL)pressed
+{
+    wrapper->port->setLeftMouseButton(pressed);
+}
+- (void) setRightMouseButton:(BOOL)pressed
+{
+    wrapper->port->setRightMouseButton(pressed);
 }
 
 @end

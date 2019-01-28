@@ -78,6 +78,13 @@ private:
     
 public:
     
+    //
+    // Joystick
+    //
+    
+    // Triggers a joystick event
+    void trigger(JoystickEvent event);
+    
     // Returns true if auto-fire mode is enabled.
     bool getAutofire() { return autofire; }
     
@@ -109,14 +116,22 @@ public:
      */
     void execute();
     
-    // Triggers a joystick event
-    void trigger(JoystickEvent event);
-    
-    // Returns the potentiometer X value (analog mouse)
+    //
+    // Mouse
+    //
+ 
+    // Returns the potentiometer X value
     uint8_t potX();
     
-    // Returns the potentiometer Y value (analog mouse)
+    // Returns the potentiometer Y value
     uint8_t potY();
+
+    // Moves the mouse to a new location
+    void setXY(float x, float y);
+    
+    // Presses a mouse button
+    void setLeftMouseButton(bool pressed);
+    void setRightMouseButton(bool pressed);
 };
 
 #endif
