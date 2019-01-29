@@ -84,7 +84,7 @@ class Joystick;
  *            peripheral devices such as joysticks, printers or the keyboard.
  *            The CIA class implements the common functionality of both CIAs.
  */
-class CIA : public VirtualComponent {
+class CIA : public HardwareComponent {
     
     //! @brief    Selected chip model
     CIAModel model;
@@ -256,10 +256,10 @@ public:
 	~CIA();
 	
 	//! @brief    Bring the CIA back to its initial state
-	void reset();
+    void _powerOn() override;
     	
 	//! @brief    Dump internal state
-	void dump();	
+	void _dump() override;
 
 	//! @brief    Dump trace line
 	void dumpTrace();	

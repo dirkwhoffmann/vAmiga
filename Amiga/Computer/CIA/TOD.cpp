@@ -46,16 +46,15 @@ TOD::TOD(CIA *cia)
 }
 
 void
-TOD::reset() 
+TOD::_powerOn()
 {
-    VirtualComponent::reset();
     tod.hours = 1;
     stopped = true;
     hz = 60;
 }
 
 void 
-TOD::dump()
+TOD::_dump()
 {
 	msg("            Time of day : %02X:%02X:%02X:%02X\n",
         tod.hours, tod.minutes, tod.seconds, tod.tenth);

@@ -23,8 +23,8 @@ CIA::CIA()
 	setDescription("CIA");
     
     // Register sub components
-    VirtualComponent *subcomponents[] = { &tod, NULL };
-    registerSubComponents(subcomponents, sizeof(subcomponents));
+    HardwareComponent *subcomponents[] = { &tod, NULL };
+    registerSubcomponents(subcomponents, sizeof(subcomponents));
 
     // Register snapshot items
     SnapshotItem items[] = {
@@ -73,10 +73,8 @@ CIA::~CIA()
 }
 
 void
-CIA::reset()
+CIA::_powerOn()
 {
-    VirtualComponent::reset();
-    
 	CNT = true;
 	INT = 1;
 	
@@ -94,9 +92,7 @@ CIA::setModel(CIAModel m)
         m = MOS_6526;
     }
     
-    suspend();
     model = m;
-    resume();
 }
 
 void
@@ -711,7 +707,7 @@ CIA::dumpTrace()
 }
 
 void
-CIA::dump()
+CIA::_dump()
 {
     CIAInfo info = getInfo();
     
