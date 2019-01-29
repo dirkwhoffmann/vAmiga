@@ -163,7 +163,6 @@ extension PreferencesController {
     @IBAction func romUnlockAction(_ sender: Any!)
     {
         amigaProxy?.powerOff()
-        proxy?.halt()
         refresh()
     }
     

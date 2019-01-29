@@ -37,26 +37,9 @@ struct C64Wrapper;
 
 - (void) kill;
 
-// - (void) ping;
-/*
-- (void) dump;
-- (BOOL) developmentMode;
-*/
-
-// Configuring the emulator
-/*
-- (NSInteger) model;
-- (void) setModel:(NSInteger)value;
-*/
-
-// Accessing the message queue
-/*
-- (Message)message;
-- (void) addListener:(const void *)sender function:(Callback *)func;
-- (void) removeListener:(const void *)sender;
-*/
 
 // Running the emulator
+/*
 - (void) powerUp;
 - (void) run;
 - (void) halt;
@@ -67,6 +50,7 @@ struct C64Wrapper;
 - (BOOL) isHalted;
 - (void) step;
 - (void) stepOver;
+*/
 
 // Managing the execution thread
 /*

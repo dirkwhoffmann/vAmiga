@@ -258,13 +258,6 @@ extension MyController {
     func loadRomUserDefaults() {
         
         let defaults = UserDefaults.standard
-
-        c64.suspend()
-        loadRom(defaults.url(forKey: Keys.basicRom))
-        loadRom(defaults.url(forKey: Keys.charRom))
-        loadRom(defaults.url(forKey: Keys.kernalRom))
-        loadRom(defaults.url(forKey: Keys.vc1541Rom))
-        c64.resume()
         
         amiga.suspend()
         amiga.loadBootRom(fromFile: defaults.url(forKey: Keys.bootRom))

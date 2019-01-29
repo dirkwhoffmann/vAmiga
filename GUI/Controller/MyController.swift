@@ -487,12 +487,12 @@ extension MyController {
         // Load user defaults
         loadUserDefaults()
         
-        // Enable message processing (register callback)
+        // Register listener
         addListener()
 
-        // Power up. If all Roms are in place, the emulator starts running.
+        // Power up. If a Rom is in place, the emulator starts running.
         // Otherwise, it sends a MISSING_ROM message.
-        c64.powerUp()
+        amiga.run()
         
         // Create speed monitor and get the timer tunning
         createTimer()
@@ -592,7 +592,7 @@ extension MyController {
         if (animationCounter % 1) == 0 {
             
             // Refresh debug panel if open
-            if c64.isRunning() {
+            if amiga.isRunning() {
                 let state = debugger.state
                 if state == NSDrawerState.open || state == NSDrawerState.opening {
                     refresh()
@@ -640,7 +640,6 @@ extension MyController {
         case MSG_READY_TO_POWER_ON:
     
             // Launch the emulator
-            c64.run()
             amiga.run()
      
             // Process attachment (if any)

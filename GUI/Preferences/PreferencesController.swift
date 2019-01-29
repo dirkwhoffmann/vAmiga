@@ -232,10 +232,6 @@ class PreferencesController : DialogController {
         
         hideSheet()
         myController?.saveUserDefaults()
-        
-        if proxy == nil || !proxy!.isRunnable() {
-            NSApp.terminate(self)
-        }
     }
 }
 

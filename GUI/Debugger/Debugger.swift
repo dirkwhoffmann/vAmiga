@@ -148,13 +148,13 @@ extension MyController {
         }
         
     // Change image and state of debugger control buttons
-        if !c64.isRunnable() {
+        if !amiga.readyToPowerUp() {
             stopAndGoButton.image = NSImage.init(named: "continueTemplate")
             stopAndGoButton.toolTip = "Run"
             stopAndGoButton.isEnabled = false
             stepIntoButton.isEnabled = false
             stepOverButton.isEnabled = false
-        } else if c64.isHalted() {
+        } else if amiga.isPaused() {
             stopAndGoButton.image = NSImage.init(named: "continueTemplate")
             stopAndGoButton.toolTip = "Run"
             stopAndGoButton.isEnabled = true
@@ -194,14 +194,12 @@ extension MyController {
     @IBAction func stepIntoAction(_ sender: Any!) {
         
        needsSaving = true
-        c64.step()
         refresh()
     }
   
     @IBAction func stepOverAction(_ sender: Any!) {
 
         needsSaving = true
-        c64.stepOver()
         refresh()
     }
     
@@ -218,8 +216,8 @@ extension MyController {
     // DEPRECATED (use pauseContinueAction instead)
     @IBAction func pauseAction(_ sender: Any!) {
         
-        if c64.isRunning() {
-            c64.halt()
+        if amiga.isRunning() {
+            amiga.pause()
             debugger.open()
         }
         refresh()
@@ -229,8 +227,8 @@ extension MyController {
     @IBAction func continueAction(_ sender: Any!) {
         
         needsSaving = true
-        if c64.isHalted() {
-            c64.run()
+        if amiga.isPaused() {
+            amiga.run()
         }
         refresh()
     }

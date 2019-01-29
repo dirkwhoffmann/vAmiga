@@ -31,7 +31,7 @@ extension MyController {
     func validateToolbarItems() {
         
         let button = pauseTbItem.view as! NSButton
-        if c64.isRunning() {
+        if amiga.isRunning() {
             button.image = NSImage.init(named: "pauseTemplate")
             pauseTbItem.label = "Pause"
         } else {

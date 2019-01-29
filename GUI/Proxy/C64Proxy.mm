@@ -135,23 +135,9 @@ struct C64Wrapper { C64 *c64; };
 }
 */
 
-// Accessing the message queue
-/*
-- (Message)message
-{
-    return wrapper->c64->getMessage();
-}
-- (void) addListener:(const void *)sender function:(Callback *)func
-{
-    wrapper->c64->addListener(sender, func);
-}
-- (void) removeListener:(const void *)sender
-{
-    wrapper->c64->removeListener(sender);
-}
-*/
 
 // Running the emulator
+/*
 - (void) powerUp
 {
     wrapper->c64->powerUp();
@@ -191,29 +177,6 @@ struct C64Wrapper { C64 *c64; };
 - (void) stepOver
 {
     wrapper->c64->stepOver();
-}
-
-// Managing the execution thread
-/*
-- (BOOL) warp
-{
-    return wrapper->c64->getWarp();
-}
-- (BOOL) alwaysWarp
-{
-    return wrapper->c64->getAlwaysWarp();
-}
-- (void) setAlwaysWarp:(BOOL)b
-{
-    wrapper->c64->setAlwaysWarp(b);
-}
-- (BOOL) warpLoad
-{
-    return wrapper->c64->getWarpLoad();
-}
-- (void) setWarpLoad:(BOOL)b
-{
-    wrapper->c64->setWarpLoad(b);
 }
 */
 
