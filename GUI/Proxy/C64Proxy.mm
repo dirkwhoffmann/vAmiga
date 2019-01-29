@@ -28,6 +28,7 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 // Memory proxy
 //
 
+/*
 @implementation MemoryProxy
 
 // Constructing
@@ -80,7 +81,7 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 }
 
 @end
-
+*/
 
 //
 // CIA proxy
@@ -305,7 +306,7 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 @implementation C64Proxy
 
 @synthesize wrapper;
-@synthesize mem, vic;
+@synthesize vic;
 
 - (instancetype) init
 {
@@ -319,7 +320,6 @@ struct AnyC64FileWrapper { AnyC64File *file; };
     wrapper->c64 = c64;
 	
     // Create sub proxys
-    mem = [[MemoryProxy alloc] initWithMemory:&c64->mem];
     vic = [[VICProxy alloc] initWithVIC:&c64->vic];
 
     return self;

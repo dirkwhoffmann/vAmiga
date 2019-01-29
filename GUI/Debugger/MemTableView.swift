@@ -69,7 +69,7 @@ class MemTableView : NSTableView {
         case MemoryView.ioView:
             return M_IO
         default:
-            return c?.c64.mem.peekSource(addr) ?? M_RAM
+            return M_RAM
         }
     }
 
@@ -143,15 +143,7 @@ extension MemTableView : NSTableViewDataSource {
             if !shouldDisplay(addr) {
                 break
             }
-            var str = ""
-            let src = source(addr)
-            for i in 0...3 {
-                var byte = Int(c!.c64.mem.spypeek(addr + UInt16(i), source: src))
-                if (byte < 32 || byte > 90) { byte = 46 }
-                let scalar = UnicodeScalar(byte + 0xE000)
-                str.unicodeScalars.append(scalar!)
-            }
-            return str
+            return ""
             
         case "hex3":
             addr += 1
@@ -169,8 +161,7 @@ extension MemTableView : NSTableViewDataSource {
             if !shouldDisplay(addr) {
                 break
             }
-            let src = source(addr)
-            return c?.c64.mem.spypeek(addr, source: src) ?? ""
+            return ""
             
         default:
             break
@@ -220,7 +211,6 @@ extension MemTableView : NSTableViewDelegate {
         }
         if let value = object as? UInt8 {
             track("Poking \(value) to \(addr) (target = \(target))")
-            c?.c64.mem.poke(addr, value: value, target: target)
         }
     }
 }

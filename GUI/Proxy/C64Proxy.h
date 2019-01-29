@@ -15,18 +15,13 @@
 // Forward declarations of proxy classes
 @class MyController;
 @class C64Proxy;
-@class CPUProxy;
-@class MemoryProxy;
 @class VICProxy;
 
 // Forward declarations of wrappers for C++ classes.
 // We wrap classes into normal C structs to avoid any reference to C++.
 
 struct C64Wrapper;
-struct CpuWrapper;
-struct MemoryWrapper;
 struct VicWrapper;
-struct SidBridgeWrapper;
 
 
 // -----------------------------------------------------------------------------
@@ -37,14 +32,10 @@ struct SidBridgeWrapper;
     
     struct C64Wrapper *wrapper;
     
-    CPUProxy *cpu;
-    MemoryProxy *mem;
     VICProxy *vic;
 }
 
 @property (readonly) struct C64Wrapper *wrapper;
-@property (readonly) CPUProxy *cpu;
-@property (readonly) MemoryProxy *mem;
 @property (readonly) VICProxy *vic;
 
 - (void) kill;
@@ -104,57 +95,11 @@ struct SidBridgeWrapper;
 
 @end
 
-
-// -----------------------------------------------------------------------------
-//                                 CPU proxy
-// -----------------------------------------------------------------------------
-
-/*
-@interface CPUProxy : NSObject {
-    
-    struct CpuWrapper *wrapper;
-}
-
-- (CPUInfo) getInfo;
-- (void) dump;
-
-- (BOOL) tracing;
-- (void) setTracing:(BOOL)b;
-
-- (UInt64) cycle;
-- (uint16_t) pc;
-- (void) setPC:(uint16_t)pc;
-- (void) setSP:(uint8_t)sp;
-- (void) setA:(uint8_t)a;
-- (void) setX:(uint8_t)x;
-- (void) setY:(uint8_t)y;
-- (void) setNflag:(BOOL)b;
-- (void) setZflag:(BOOL)b;
-- (void) setCflag:(BOOL)b;
-- (void) setIflag:(BOOL)b;
-- (void) setBflag:(BOOL)b;
-- (void) setDflag:(BOOL)b;
-- (void) setVflag:(BOOL)b;
-
-- (BOOL) breakpoint:(uint16_t)addr;
-- (void) setBreakpoint:(uint16_t)addr;
-- (void) deleteBreakpoint:(uint16_t)addr;
-- (void) toggleBreakpoint:(uint16_t)addr;
-
-- (NSInteger) recordedInstructions;
-- (RecordedInstruction) readRecordedInstruction;
-- (RecordedInstruction) readRecordedInstruction:(NSInteger)previous;
-
-- (DisassembledInstruction) disassemble:(uint16_t)addr hex:(BOOL)h;
-- (DisassembledInstruction) disassembleRecordedInstr:(RecordedInstruction)instr hex:(BOOL)h;
-
-@end
-*/
-
 // -----------------------------------------------------------------------------
 //                                 Memory proxy
 // -----------------------------------------------------------------------------
 
+/*
 @interface MemoryProxy : NSObject {
     
     struct MemoryWrapper *wrapper;
@@ -172,6 +117,7 @@ struct SidBridgeWrapper;
 - (void) pokeIO:(uint16_t)addr value:(uint8_t)value;
 
 @end
+*/
 
 
 // -----------------------------------------------------------------------------
