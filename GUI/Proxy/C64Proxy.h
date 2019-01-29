@@ -95,29 +95,6 @@ struct VicWrapper;
 
 @end
 
-// -----------------------------------------------------------------------------
-//                                 Memory proxy
-// -----------------------------------------------------------------------------
-
-/*
-@interface MemoryProxy : NSObject {
-    
-    struct MemoryWrapper *wrapper;
-}
-
-- (MemoryType) peekSource:(uint16_t)addr;
-- (MemoryType) pokeTarget:(uint16_t)addr;
-
-- (uint8_t) spypeek:(uint16_t)addr source:(MemoryType)source;
-- (uint8_t) spypeek:(uint16_t)addr;
-- (uint8_t) spypeekIO:(uint16_t)addr;
-
-- (void) poke:(uint16_t)addr value:(uint8_t)value target:(MemoryType)target;
-- (void) poke:(uint16_t)addr value:(uint8_t)value;
-- (void) pokeIO:(uint16_t)addr value:(uint8_t)value;
-
-@end
-*/
 
 
 // -----------------------------------------------------------------------------

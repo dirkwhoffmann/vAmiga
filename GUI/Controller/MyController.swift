@@ -82,53 +82,237 @@ class MyController : NSWindowController, MessageReceiver {
     // Drive that receives drag and drop inputs
     var dragAndDropDrive : AmigaDriveProxy?
     
-    /// Selected game pad slot for joystick in port A
+
+
+    //
+    // Preferences items
+    //
+    
+    // General
+    
+    // Selected game pad slot for joystick in port A
     var inputDevice1 = Defaults.inputDevice1
     
-    /// Selected game pad slot for joystick in port B
+    // Selected game pad slot for joystick in port B
     var inputDevice2 = Defaults.inputDevice2
-
-    /// Rom file URLs
+    
+    
+    // Rom preferences
+    
+    // Rom URLs
     var bootRomURL: URL = Defaults.bootRom
     var kickRomURL: URL = Defaults.kickRom
 
-    /// Screenshot resolution (0 = low, 1 = high)
-    var screenshotSource = Defaults.screenshotSource
     
-    /// Screenshot image format
+    // Devices preferences
+    var disconnectJoyKeys : Bool {
+        get { return keyboardcontroller.disconnectJoyKeys }
+        set {
+            keyboardcontroller.disconnectJoyKeys = newValue
+        }
+    }
+    var autofire : Bool {
+        get { return amiga.controlPort1.autofire() }
+        set {
+            amiga.controlPort1.setAutofire(newValue)
+            amiga.controlPort2.setAutofire(newValue)
+        }
+    }
+    var autofireBullets : Int {
+        get { return amiga.controlPort1.autofireBullets() }
+        set {
+            amiga.controlPort1.setAutofireBullets(newValue)
+            amiga.controlPort2.setAutofireBullets(newValue)
+        }
+    }
+    var autofireFrequency : Float {
+        get { return amiga.controlPort1.autofireFrequency() }
+        set {
+            amiga.controlPort1.setAutofireFrequency(newValue)
+            amiga.controlPort2.setAutofireFrequency(newValue)
+        }
+    }
+    var keyMap0 : [MacKey:UInt32]? {
+        get { return gamePadManager.gamePads[0]?.keyMap }
+        set { gamePadManager.gamePads[0]?.keyMap = newValue }
+    }
+    var keyMap1 : [MacKey:UInt32]? {
+        get { return gamePadManager.gamePads[1]?.keyMap }
+        set { gamePadManager.gamePads[1]?.keyMap = newValue }
+    }
+ 
+    // Video preferences
+    
+    var upscaler : Int {
+        get { return metal.upscaler }
+        set { metal.upscaler = newValue }
+    }
+    var palette : Int = 0
+    var brightness : Int = 0
+    var contrast : Float = 0
+    var saturation : Float = 0
+    
+    var eyeX : Float {
+        get { return metal.eyeX() }
+        set { metal.setEyeX(newValue) }
+    }
+    var eyeY : Float {
+        get { return metal.eyeY() }
+        set { metal.setEyeY(newValue) }
+    }
+    var eyeZ : Float {
+        get { return metal.eyeZ() }
+        set { metal.setEyeZ(newValue) }
+    }
+    var blur : Int32 {
+        get { return metal.shaderOptions.blur }
+        set { metal.shaderOptions.blur = newValue }
+    }
+    var blurRadius : Float {
+        get { return metal.shaderOptions.blurRadius }
+        set { metal.shaderOptions.blurRadius = newValue }
+    }
+    var bloom : Int32 {
+        get { return metal.shaderOptions.bloom }
+        set { metal.shaderOptions.bloom = newValue }
+    }
+    var bloomRadiusR : Float {
+        get { return metal.shaderOptions.bloomRadiusR }
+        set { metal.shaderOptions.bloomRadiusR = newValue }
+    }
+    var bloomRadiusG : Float {
+        get { return metal.shaderOptions.bloomRadiusG }
+        set { metal.shaderOptions.bloomRadiusG = newValue }
+    }
+    var bloomRadiusB : Float {
+        get { return metal.shaderOptions.bloomRadiusB }
+        set { metal.shaderOptions.bloomRadiusB = newValue }
+    }
+    var bloomBrightness : Float {
+        get { return metal.shaderOptions.bloomBrightness }
+        set { metal.shaderOptions.bloomBrightness = newValue }
+    }
+    var bloomWeight : Float {
+        get { return metal.shaderOptions.bloomWeight }
+        set { metal.shaderOptions.bloomWeight = newValue }
+    }
+    var dotMask : Int32 {
+        get { return metal.shaderOptions.dotMask }
+        set { metal.shaderOptions.dotMask = newValue }
+    }
+    var dotMaskBrightness : Float {
+        get { return metal.shaderOptions.dotMaskBrightness }
+        set { metal.shaderOptions.dotMaskBrightness = newValue }
+    }
+    var scanlines : Int32 {
+        get { return metal.shaderOptions.scanlines }
+        set { metal.shaderOptions.scanlines = newValue }
+    }
+    var scanlineBrightness : Float {
+        get { return metal.shaderOptions.scanlineBrightness }
+        set { metal.shaderOptions.scanlineBrightness = newValue }
+    }
+    var scanlineWeight : Float {
+        get { return metal.shaderOptions.scanlineWeight }
+        set { metal.shaderOptions.scanlineWeight = newValue }
+    }
+    var disalignment : Int32 {
+        get { return metal.shaderOptions.disalignment }
+        set { metal.shaderOptions.disalignment = newValue }
+    }
+    var disalignmentH : Float {
+        get { return metal.shaderOptions.disalignmentH }
+        set { metal.shaderOptions.disalignmentH = newValue }
+    }
+    var disalignmentV : Float {
+        get { return metal.shaderOptions.disalignmentV }
+        set { metal.shaderOptions.disalignmentV = newValue }
+    }
+    
+    //
+    // Emulator preferences
+    //
+    
+    var warpLoad : Bool {
+        get { return amiga.warpLoad() }
+        set { amiga.setWarpLoad(newValue) }
+    }
+    var driveNoise = Defaults.driveNoise
+    var screenshotSource = Defaults.screenshotSource
     var screenshotTarget = Defaults.screenshotTarget
     var screenshotTargetIntValue : Int {
         get { return Int(screenshotTarget.rawValue) }
         set { screenshotTarget = NSBitmapImageRep.FileType(rawValue: UInt(newValue))! }
     }
-    
-    /// Indicates if drive sounds should be played
-    var driveNoise = Defaults.driveNoise
-    
-    /// Media file default actions
-    var autoMountAction : [String: AutoMountAction] = Defaults.autoMountAction
-
-    /// Media file auto-type enable / disable
-    // DEPRECATED
-    var autoType : [String: Bool] = Defaults.autoType
-
-    /// Media file auto-type text
-    // DEPRECATED
-    var autoTypeText : [String: String] = Defaults.autoTypeText
-    
-    /// Indicates if the user should be warned if an unsaved document is closed.
+    var keepAspectRatio : Bool {
+        get { return metal.keepAspectRatio }
+        set { metal.keepAspectRatio = newValue }
+    }
+    var exitOnEsc : Bool {
+        get { return keyboardcontroller.exitOnEsc }
+        set { keyboardcontroller.exitOnEsc = newValue }
+    }
     var closeWithoutAsking = Defaults.closeWithoutAsking
-
-    /// Indicates if the user should be warned if an unsaved disk is ejected.
     var ejectWithoutAsking = Defaults.ejectWithoutAsking
-
-    /// Indicates if the emulator should pause when it looses focus.
     var pauseInBackground =  Defaults.pauseInBackground
     
     /// Remembers if the emulator was running or paused when it lost focus.
     /// Needed to implement the pauseInBackground feature.
     var pauseInBackgroundSavedState = false
- 
+    
+    var takeAutoSnapshots : Bool {
+        get { return amiga.takeAutoSnapshots() }
+        set { amiga.setTakeAutoSnapshots(newValue) }
+    }
+    var snapshotInterval : Int {
+        get { return amiga.snapshotInterval() }
+        set { amiga.setSnapshotInterval(newValue) }
+    }
+  
+    //
+    // Hardware
+    //
+    var model : Int {
+        get { return amiga.config().model.rawValue }
+        set { amiga.configureModel(newValue); }
+    }
+    var layout : Int {
+        get { return amiga.config().layout }
+        set { amiga.configureLayout(newValue); }
+    }
+    var chipMemory : Int {
+        get { return amiga.config().chipRamSize }
+        set { amiga.configureChipMemory(newValue); }
+    }
+    var slowMemory : Int {
+        get { return amiga.config().slowRamSize }
+        set { amiga.configureChipMemory(newValue); }
+    }
+    var fastMemory : Int {
+        get { return amiga.config().fastRamSize }
+        set { amiga.configureFastMemory(newValue); }
+    }
+    var df0connected : Bool {
+        get { return amiga.config().df0.connected }
+        set { amiga.configureDrive(0, connected: newValue); }
+    }
+    var df0type : Int {
+        get { return amiga.config().df0.type.rawValue }
+        set { amiga.configureDrive(0, type: newValue); }
+    }
+    var df1connected : Bool {
+        get { return amiga.config().df0.connected }
+        set { amiga.configureDrive(0, connected: newValue); }
+    }
+    var df1type : Int {
+        get { return amiga.config().df0.type.rawValue }
+        set { amiga.configureDrive(0, type: newValue); }
+    }
+    var realTimeClock : Bool {
+        get { return amiga.config().realTimeClock }
+        set { amiga.configureRealTimeClock(newValue); }
+    }
+   
     
     //
     // Outlets

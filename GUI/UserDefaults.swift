@@ -476,7 +476,7 @@ extension MyController {
         
         let defaults = UserDefaults.standard
         
-        c64.suspend()
+        amiga.suspend()
         
         metal.upscaler = defaults.integer(forKey: Keys.upscaler)
         c64.vic.setVideoPalette(defaults.integer(forKey: Keys.palette))
@@ -491,7 +491,7 @@ extension MyController {
         defaults.decode(&metal.shaderOptions, forKey: Keys.shaderOptions)
         metal.buildDotMasks()
  
-        c64.resume()
+        amiga.resume()
     }
     
     func saveVideoUserDefaults() {
@@ -671,10 +671,6 @@ extension MyController {
         amiga.setTakeAutoSnapshots(defaults.bool(forKey: Keys.autoSnapshots))
         amiga.setSnapshotInterval(defaults.integer(forKey: Keys.autoSnapshotInterval))
         
-        defaults.decode(&autoMountAction, forKey: Keys.autoMountAction)
-        defaults.decode(&autoType, forKey: Keys.autoType)
-        defaults.decode(&autoTypeText, forKey: Keys.autoTypeText)
-        
         amiga.reset()
     }
     
@@ -697,10 +693,6 @@ extension MyController {
         defaults.set(pauseInBackground, forKey: Keys.pauseInBackground)
         defaults.set(amiga.takeAutoSnapshots(), forKey: Keys.autoSnapshots)
         defaults.set(amiga.snapshotInterval(), forKey: Keys.autoSnapshotInterval)
-        
-        defaults.encode(autoMountAction, forKey: Keys.autoMountAction)
-        defaults.encode(autoType, forKey: Keys.autoType)
-        defaults.encode(autoTypeText, forKey: Keys.autoTypeText)
     }
 }
 
@@ -713,7 +705,6 @@ extension Keys {
     // Machine
     static let amigaModel     = "VAAmigaModelKey"
     static let layout         = "VAKeyboardLayoutKey"
-    static let realTimeClock  = "VARealTimeClockKey"
     
     // Memory
     static let chipRam        = "VAChipRamKey"
@@ -725,6 +716,9 @@ extension Keys {
     static let df0Type        = "VADF0TypeKey"
     static let df1Connect     = "VADF1ConnectKey"
     static let df1Type        = "VADF1TypeKey"
+    
+    // Extensions
+    static let realTimeClock  = "VARealTimeClockKey"
 }
 
 extension Defaults {
@@ -733,7 +727,6 @@ extension Defaults {
         
         static let amigaModel     = A500
         static let layout         = Layout.us
-        static let realTimeClock  = false
         
         static let chipRam        = 512
         static let slowRam        = 0
@@ -743,13 +736,14 @@ extension Defaults {
         static let df0Type        = A1010_ORIG
         static let df1Connect     = false
         static let df1Type        = A1010_ORIG
+
+        static let realTimeClock  = false
     }
     
     struct a1000 {
         
         static let amigaModel     = A1000
         static let layout         = Layout.us
-        static let realTimeClock  = false
         
         static let chipRam        = 256
         static let slowRam        = 0
@@ -759,13 +753,14 @@ extension Defaults {
         static let df0Type        = A1010_ORIG
         static let df1Connect     = false
         static let df1Type        = A1010_ORIG
+
+        static let realTimeClock  = false
     }
     
     struct a2000 {
         
         static let amigaModel     = A2000
         static let layout         = Layout.us
-        static let realTimeClock  = true
         
         static let chipRam        = 512
         static let slowRam        = 512
@@ -775,6 +770,8 @@ extension Defaults {
         static let df0Type        = A1010_ORIG
         static let df1Connect     = true
         static let df1Type        = A1010_ORIG
+
+        static let realTimeClock  = true
     }
 }
 
@@ -788,7 +785,6 @@ extension MyController {
             
             Keys.amigaModel: defaultModel.amigaModel.rawValue,
             Keys.layout: defaultModel.layout.rawValue,
-            Keys.realTimeClock: defaultModel.realTimeClock,
             
             Keys.chipRam: defaultModel.chipRam,
             Keys.slowRam: defaultModel.slowRam,
@@ -798,6 +794,8 @@ extension MyController {
             Keys.df0Type: defaultModel.df0Type.rawValue,
             Keys.df1Connect: defaultModel.df1Connect,
             Keys.df1Type: defaultModel.df1Type.rawValue,
+
+            Keys.realTimeClock: defaultModel.realTimeClock,
         ]
         
         let defaults = UserDefaults.standard
@@ -810,7 +808,6 @@ extension MyController {
         
         for key in [Keys.amigaModel,
                     Keys.layout,
-                    Keys.realTimeClock,
                     
                     Keys.chipRam,
                     Keys.slowRam,
@@ -819,7 +816,9 @@ extension MyController {
                     Keys.df0Connect,
                     Keys.df0Type,
                     Keys.df1Connect,
-                    Keys.df1Type
+                    Keys.df1Type,
+
+                    Keys.realTimeClock,
             ]
         {
             defaults.removeObject(forKey: key)
@@ -836,7 +835,6 @@ extension MyController {
         
         amiga.configureModel(defaults.integer(forKey: Keys.amigaModel))
         amiga.configureLayout(defaults.integer(forKey: Keys.layout))
-        amiga.configureRealTimeClock(defaults.bool(forKey: Keys.realTimeClock))
     
         amiga.configureChipMemory(defaults.integer(forKey: Keys.chipRam))
         amiga.configureSlowMemory(defaults.integer(forKey: Keys.slowRam))
@@ -846,7 +844,9 @@ extension MyController {
         amiga.configureDrive(0, type: defaults.integer(forKey: Keys.df0Type))
         amiga.configureDrive(1, connected: defaults.bool(forKey: Keys.df1Connect))
         amiga.configureDrive(1, type: defaults.integer(forKey: Keys.df1Type))
-        
+
+        amiga.configureRealTimeClock(defaults.bool(forKey: Keys.realTimeClock))
+
         amiga.resume()
     }
 
@@ -857,7 +857,6 @@ extension MyController {
         
         defaults.set(config.model.rawValue, forKey: Keys.amigaModel)
         defaults.set(config.layout, forKey: Keys.layout)
-        defaults.set(config.realTimeClock, forKey: Keys.realTimeClock)
 
         defaults.set(config.chipRamSize, forKey: Keys.chipRam)
         defaults.set(config.slowRamSize, forKey: Keys.slowRam)
@@ -867,5 +866,7 @@ extension MyController {
         defaults.set(config.df0.type.rawValue, forKey: Keys.df0Type)
         defaults.set(config.df1.connected, forKey: Keys.df1Connect)
         defaults.set(config.df1.type.rawValue, forKey: Keys.df1Type)
+
+        defaults.set(config.realTimeClock, forKey: Keys.realTimeClock)
     }
 }
