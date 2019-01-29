@@ -50,9 +50,11 @@ struct C64Wrapper;
 */
 
 // Accessing the message queue
+/*
 - (Message)message;
 - (void) addListener:(const void *)sender function:(Callback *)func;
 - (void) removeListener:(const void *)sender;
+*/
 
 // Running the emulator
 - (void) powerUp;

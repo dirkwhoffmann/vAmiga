@@ -136,6 +136,7 @@ struct C64Wrapper { C64 *c64; };
 */
 
 // Accessing the message queue
+/*
 - (Message)message
 {
     return wrapper->c64->getMessage();
@@ -148,6 +149,7 @@ struct C64Wrapper { C64 *c64; };
 {
     wrapper->c64->removeListener(sender);
 }
+*/
 
 // Running the emulator
 - (void) powerUp

@@ -557,18 +557,6 @@ extension MyController {
             }
         }
   
-        c64.addListener(myself) { (ptr, type, data) in
-            
-            // Convert void pointer back to 'self'
-            let myself = Unmanaged<MyController>.fromOpaque(ptr!).takeUnretainedValue()
-            
-            // Process message in the main thread
-            DispatchQueue.main.async {
-                let mType = MessageType(rawValue: UInt32(type))
-                myself.processMessage(Message(type: mType, data: data))
-            }
-        }
-        
         track("Listener is in place")
     }
     
