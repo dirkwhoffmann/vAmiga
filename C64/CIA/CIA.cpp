@@ -1227,8 +1227,6 @@ CIA1::updatePB()
     if (GET_BIT(PB67TimerMode, 7))
         COPY_BIT(PB67TimerOut, PB, 7);
     
-    // The control port can always bring the port lines low
-    PB &= c64->port1.bitmask();
     
     
     // An edge on PB4 triggers the NeosMouse on port 1

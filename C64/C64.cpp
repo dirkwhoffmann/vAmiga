@@ -84,8 +84,6 @@ C64::C64()
         
         &mem,
         &cia1, &cia2,
-        &port1,
-        &port2,
         NULL };
     
     registerSubComponents(subcomponents, sizeof(subcomponents));

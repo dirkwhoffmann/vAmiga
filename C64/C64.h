@@ -32,7 +32,6 @@
 // Loading and saving
 
 // Sub components
-#include "ControlPort.h"
 #include "Memory.h"
 #include "C64Memory.h"
 #include "TOD.h"
@@ -70,12 +69,6 @@ class C64 : public VirtualComponent {
     
     //! @brief    The C64's second Complex Interface Adapter
     CIA2 cia2;
-    
-    //! @brief    The C64's first control port
-    ControlPort port1 = ControlPort(1);
-    
-    //! @brief    The C64's second control port
-    ControlPort port2 = ControlPort(2);
     
     
     

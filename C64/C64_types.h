@@ -7,7 +7,6 @@
 #include "TOD_types.h"
 #include "CIA_types.h"
 #include "VIC_types.h"
-#include "ControlPort_types.h"
 
 //! @brief    C64 model
 typedef enum {

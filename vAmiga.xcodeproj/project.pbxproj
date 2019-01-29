@@ -28,7 +28,6 @@
 		508FDF8721EA1FBC0043D0E9 /* MessageQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDEF521EA1FBC0043D0E9 /* MessageQueue.cpp */; };
 		508FDF8821EA1FBC0043D0E9 /* TimeDelayed.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDEF721EA1FBC0043D0E9 /* TimeDelayed.cpp */; };
 		508FDF8921EA1FBC0043D0E9 /* C64.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDEFB21EA1FBC0043D0E9 /* C64.cpp */; };
-		508FDFA421EA1FBC0043D0E9 /* ControlPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDF4221EA1FBC0043D0E9 /* ControlPort.cpp */; };
 		508FDFAC21EA1FBC0043D0E9 /* TOD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDF5921EA1FBC0043D0E9 /* TOD.cpp */; };
 		508FDFAD21EA1FBC0043D0E9 /* CIA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDF5C21EA1FBC0043D0E9 /* CIA.cpp */; };
 		508FDFBE21EA1FF10043D0E9 /* MyDocument.xib in Resources */ = {isa = PBXBuildFile; fileRef = 508FDFAF21EA1FF10043D0E9 /* MyDocument.xib */; };
@@ -191,9 +190,6 @@
 		508FDEFB21EA1FBC0043D0E9 /* C64.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = C64.cpp; sourceTree = "<group>"; };
 		508FDF0721EA1FBC0043D0E9 /* C64_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = C64_types.h; sourceTree = "<group>"; };
 		508FDF0A21EA1FBC0043D0E9 /* VIC_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VIC_types.h; sourceTree = "<group>"; };
-		508FDF3F21EA1FBC0043D0E9 /* ControlPort_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ControlPort_types.h; sourceTree = "<group>"; };
-		508FDF4221EA1FBC0043D0E9 /* ControlPort.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ControlPort.cpp; sourceTree = "<group>"; };
-		508FDF4421EA1FBC0043D0E9 /* ControlPort.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ControlPort.h; sourceTree = "<group>"; };
 		508FDF5721EA1FBC0043D0E9 /* CIA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CIA.h; sourceTree = "<group>"; };
 		508FDF5821EA1FBC0043D0E9 /* TOD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TOD.h; sourceTree = "<group>"; };
 		508FDF5921EA1FBC0043D0E9 /* TOD.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TOD.cpp; sourceTree = "<group>"; };
@@ -405,7 +401,6 @@
 				508FDEFB21EA1FBC0043D0E9 /* C64.cpp */,
 				508FDF0721EA1FBC0043D0E9 /* C64_types.h */,
 				508FDF0A21EA1FBC0043D0E9 /* VIC_types.h */,
-				508FDF3E21EA1FBC0043D0E9 /* Computer */,
 				508FDF5621EA1FBC0043D0E9 /* CIA */,
 			);
 			path = C64;
@@ -435,16 +430,6 @@
 				508FDEF921EA1FBC0043D0E9 /* VirtualComponent.h */,
 			);
 			path = General;
-			sourceTree = "<group>";
-		};
-		508FDF3E21EA1FBC0043D0E9 /* Computer */ = {
-			isa = PBXGroup;
-			children = (
-				508FDF3F21EA1FBC0043D0E9 /* ControlPort_types.h */,
-				508FDF4221EA1FBC0043D0E9 /* ControlPort.cpp */,
-				508FDF4421EA1FBC0043D0E9 /* ControlPort.h */,
-			);
-			path = Computer;
 			sourceTree = "<group>";
 		};
 		508FDF5621EA1FBC0043D0E9 /* CIA */ = {
@@ -902,7 +887,6 @@
 				508FE01221EA227B0043D0E9 /* CIAPanel.swift in Sources */,
 				5030891121EFA74600FEAD12 /* Paula.cpp in Sources */,
 				508FE05921EA22CC0043D0E9 /* VirtualKeyboardController.swift in Sources */,
-				508FDFA421EA1FBC0043D0E9 /* ControlPort.cpp in Sources */,
 				508FDFAD21EA1FBC0043D0E9 /* CIA.cpp in Sources */,
 				508FDFD521EA20510043D0E9 /* Animation.swift in Sources */,
 				5020B17D21EF121E00B9E80E /* DMAController.cpp in Sources */,
