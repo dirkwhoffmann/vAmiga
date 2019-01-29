@@ -145,7 +145,6 @@
 		508FE02521EA227B0043D0E9 /* MemoryPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00221EA227A0043D0E9 /* MemoryPanel.swift */; };
 		508FE02621EA227B0043D0E9 /* Debugger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00421EA227A0043D0E9 /* Debugger.swift */; };
 		508FE02721EA227B0043D0E9 /* Basics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00521EA227A0043D0E9 /* Basics.swift */; };
-		508FE02821EA227B0043D0E9 /* C64Proxy.mm in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00621EA227A0043D0E9 /* C64Proxy.mm */; };
 		508FE02921EA227B0043D0E9 /* MyControllerTouchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00721EA227A0043D0E9 /* MyControllerTouchBar.swift */; };
 		508FE02B21EA227B0043D0E9 /* WindowDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00921EA227B0043D0E9 /* WindowDelegate.swift */; };
 		508FE02C21EA227B0043D0E9 /* C64Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00A21EA227B0043D0E9 /* C64Key.swift */; };
@@ -452,7 +451,6 @@
 		508FDFE621EA21780043D0E9 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		508FDFE821EA21C80043D0E9 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		508FDFEB21EA22780043D0E9 /* Speedometer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Speedometer.swift; sourceTree = "<group>"; };
-		508FDFEC21EA22780043D0E9 /* C64Proxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = C64Proxy.h; sourceTree = "<group>"; };
 		508FDFED21EA22780043D0E9 /* MyControllerToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyControllerToolbar.swift; sourceTree = "<group>"; };
 		508FDFEE21EA22780043D0E9 /* CIAPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CIAPanel.swift; sourceTree = "<group>"; };
 		508FDFEF21EA22780043D0E9 /* AudioPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioPanel.swift; sourceTree = "<group>"; };
@@ -473,7 +471,6 @@
 		508FE00221EA227A0043D0E9 /* MemoryPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemoryPanel.swift; sourceTree = "<group>"; };
 		508FE00421EA227A0043D0E9 /* Debugger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Debugger.swift; sourceTree = "<group>"; };
 		508FE00521EA227A0043D0E9 /* Basics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Basics.swift; sourceTree = "<group>"; };
-		508FE00621EA227A0043D0E9 /* C64Proxy.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = C64Proxy.mm; sourceTree = "<group>"; };
 		508FE00721EA227A0043D0E9 /* MyControllerTouchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyControllerTouchBar.swift; sourceTree = "<group>"; };
 		508FE00921EA227B0043D0E9 /* WindowDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WindowDelegate.swift; sourceTree = "<group>"; };
 		508FE00A21EA227B0043D0E9 /* C64Key.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = C64Key.swift; sourceTree = "<group>"; };
@@ -1201,8 +1198,6 @@
 				508FDFFA21EA22790043D0E9 /* VirtualC64-Bridging-Header.h */,
 				50B14C2921EB9806002E32A6 /* AmigaProxy.h */,
 				50B14C2721EB97EC002E32A6 /* AmigaProxy.mm */,
-				508FDFEC21EA22780043D0E9 /* C64Proxy.h */,
-				508FE00621EA227A0043D0E9 /* C64Proxy.mm */,
 				5085FE5821FB6856009753EF /* ProxyExtensions.swift */,
 			);
 			path = Proxy;
@@ -1443,7 +1438,6 @@
 				508FDFD621EA20510043D0E9 /* DragAndDrop.swift in Sources */,
 				508FDF8E21EA1FBC0043D0E9 /* VIC_draw.cpp in Sources */,
 				508FE05F21EA22CC0043D0E9 /* ExportDiskController.swift in Sources */,
-				508FE02821EA227B0043D0E9 /* C64Proxy.mm in Sources */,
 				508FDF8821EA1FBC0043D0E9 /* TimeDelayed.cpp in Sources */,
 				508FE03521EA22C30043D0E9 /* ScriptCommands.swift in Sources */,
 				508FE01821EA227B0043D0E9 /* MyController.swift in Sources */,

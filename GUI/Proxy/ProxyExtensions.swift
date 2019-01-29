@@ -84,35 +84,3 @@ public extension AmigaDriveProxy {
         }
     }
 }
-
-
-// DELETE ASAP:
-/*
-public extension C64Proxy {
-    
-    func image(data: UnsafeMutablePointer<UInt8>?, size: NSSize) -> NSImage {
-        
-        var bitmap = data
-        let width = Int(size.width)
-        let height = Int(size.height)
-        let imageRep = NSBitmapImageRep(bitmapDataPlanes: &bitmap,
-                                        pixelsWide: width,
-                                        pixelsHigh: height,
-                                        bitsPerSample: 8,
-                                        samplesPerPixel: 4,
-                                        hasAlpha: true,
-                                        isPlanar: false,
-                                        colorSpaceName: NSColorSpaceName.calibratedRGB,
-                                        bytesPerRow: 4*width,
-                                        bitsPerPixel: 32)
-        let image = NSImage(size: (imageRep?.size)!)
-        image.addRepresentation(imageRep!)
-        image.makeGlossy()
-        
-        return image
-    }
-    
- 
-}
-*/
-
