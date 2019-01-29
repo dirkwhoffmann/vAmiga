@@ -32,7 +32,6 @@ threadCleanup(void* thisC64)
     
     C64 *c64 = (C64 *)thisC64;
     c64->threadCleanup();
-    c64->sid.halt();
     
     c64->debug(2, "Execution thread terminated\n");
     c64->putMessage(MSG_PAUSE);
@@ -55,12 +54,8 @@ void
     pthread_cleanup_push(threadCleanup, thisC64);
     
     // Prepare to run...
-    c64->cpu.clearErrorState();
-    c64->drive1.cpu.clearErrorState();
-    c64->drive2.cpu.clearErrorState();
-    c64->restartTimer();
     
-    while (likely(success)) {
+    while ((success)) {
         pthread_testcancel();
         success = c64->executeOneFrame();
     }
@@ -88,18 +83,10 @@ C64::C64()
     VirtualComponent *subcomponents[] = {
         
         &mem,
-        &cpu,
-        &processorPort,
         &cia1, &cia2,
         &vic,
-        &sid,
-        &keyboard,
         &port1,
         &port2,
-        &expansionport,
-        &iec,
-        &drive1,
-        &drive2,
         NULL };
     
     registerSubComponents(subcomponents, sizeof(subcomponents));
@@ -122,8 +109,6 @@ C64::C64()
 
     // Set initial hardware configuration
     vic.setModel(PAL_8565);
-    drive1.powerOn();
-    drive2.powerOff();
     
     // Initialize mach timer info
     mach_timebase_info(&timebase);
@@ -151,8 +136,6 @@ C64::reset()
     mem.poke(0x0001, 0x1F);  // IO port, set default memory layout
 
     // Initialize program counter
-    cpu.regPC = mem.resetVector();
-    debug("Setting PC to %04X\n", cpu.regPC);
     
     rasterCycle = 1;
     nanoTargetTime = 0UL;
@@ -204,37 +187,12 @@ C64::resume()
 
 void 
 C64::dump() {
-    msg("C64:\n");
-    msg("----\n\n");
-    msg("              Machine type : %s\n", vic.isPAL() ? "PAL" : "NTSC");
-    msg("         Frames per second : %f\n", vic.getFramesPerSecond());
-    msg("     Rasterlines per frame : %d\n", vic.getRasterlinesPerFrame());
-    msg("     Cycles per rasterline : %d\n", vic.getCyclesPerRasterline());
-    msg("             Current cycle : %llu\n", cpu.cycle);
-    msg("             Current frame : %d\n", frame);
-    msg("        Current rasterline : %d\n", rasterLine);
-    msg("  Current rasterline cycle : %d\n", rasterCycle);
-    msg("              Ultimax mode : %s\n\n", getUltimax() ? "YES" : "NO");
-    msg("warp, warpLoad, alwaysWarp : %d %d %d\n", warp, warpLoad, alwaysWarp);
-    msg("\n");
+  
 }
 
 C64Model
 C64::getModel()
 {
-    // Look for known configurations
-    for (unsigned i = 0; i < sizeof(configurations) / sizeof(C64Configuration); i++) {
-        if (vic.getModel() == configurations[i].vic &&
-            vic.emulateGrayDotBug == configurations[i].grayDotBug &&
-            cia1.getModel() == configurations[i].cia &&
-            cia1.getEmulateTimerBBug() == configurations[i].timerBBug &&
-            sid.getModel() == configurations[i].sid &&
-            // sid.getAudioFilter() == configurations[i].sidFilter &&
-            vic.getGlueLogic() == configurations[i].glue &&
-            mem.getRamInitPattern() == configurations[i].pattern) {
-            return (C64Model)i;
-        }
-    }
     
     // We've got a non-standard configuration
     return C64_CUSTOM; 
@@ -243,21 +201,6 @@ C64::getModel()
 void
 C64::setModel(C64Model m)
 {
-    if (m != C64_CUSTOM) {
-        
-        suspend();
-        vic.setModel(configurations[m].vic);
-        vic.emulateGrayDotBug = configurations[m].grayDotBug;
-        cia1.setModel(configurations[m].cia);
-        cia2.setModel(configurations[m].cia);
-        cia1.setEmulateTimerBBug(configurations[m].timerBBug);
-        cia2.setEmulateTimerBBug(configurations[m].timerBBug);
-        sid.setModel(configurations[m].sid);
-        sid.setAudioFilter(configurations[m].sidFilter);
-        vic.setGlueLogic(configurations[m].glue);
-        mem.setRamInitPattern(configurations[m].pattern);
-        resume();
-    }
 }
 
 void
@@ -384,9 +327,6 @@ C64::run()
             return;
         }
         
-        // Power up sub components
-        sid.run();
-        
         // Start execution thread
         pthread_create(&p, NULL, runThread, (void *)this);
     }
@@ -416,12 +356,7 @@ C64::threadCleanup()
 bool
 C64::isRunnable()
 {
-    return
-    mem.basicRomIsLoaded() &&
-    mem.characterRomIsLoaded() &&
-    mem.kernalRomIsLoaded() &&
-    drive1.mem.romIsLoaded() &&
-    drive2.mem.romIsLoaded();
+    return 0;
 }
 
 bool
@@ -439,37 +374,13 @@ C64::isHalted()
 void
 C64::step()
 {
-    cpu.clearErrorState();
-    drive1.cpu.clearErrorState();
-    drive2.cpu.clearErrorState();
-
-    // Wait until the execution of the next command has begun
-    while (cpu.inFetchPhase()) executeOneCycle();
-
-    // Finish the command
-    while (!cpu.inFetchPhase()) executeOneCycle();
-    
-    // Execute the first microcycle (fetch phase) and stop there
-    executeOneCycle();
+  
 }
 
 void
 C64::stepOver()
 {
-    cpu.clearErrorState();
-    drive1.cpu.clearErrorState();
-    drive2.cpu.clearErrorState();
-    
-    // If the next instruction is a JSR instruction, ...
-    if (mem.spypeek(cpu.getPC()) == 0x20) {
-        // set a soft breakpoint at the next memory location.
-        cpu.setSoftBreakpoint(cpu.getAddressOfNextInstruction());
-        run();
-        return;
-    }
-
-    // Otherwise, stepOver behaves like step
-    step();
+ 
 }
 
 bool
@@ -516,41 +427,7 @@ C64::executeOneCycle()
 bool
 C64::_executeOneCycle()
 {
-    uint8_t result = true;
-    uint64_t cycle = ++cpu.cycle;
-    
-    //  <---------- o2 low phase ----------->|<- o2 high phase ->|
-    //                                       |                   |
-    // ,-- C64 ------------------------------|-------------------|--,
-    // |   ,-----,     ,-----,     ,-----,   |    ,-----,        |  |
-    // |   |     |     |     |     |     |   |    |     |        |  |
-    // '-->| VIC | --> | CIA | --> | CIA | --|--> | CPU | -------|--'
-    //     |     |     |  1  |     |  2  |   |    |     |        |
-    //     '-----'     '-----'     '-----'   |    '-----'        |
-    //                                       v
-    //                                 IEC bus update      IEC bus update
-    //                                                           ^
-    //                                       |    ,--------,     |
-    //                                       |    |        |     |
-    // ,-- Drive ----------------------------|--> | VC1541 | ----|--,
-    // |                                     |    |        |     |  |
-    // |                                     |    '--------'     |  |
-    // '-------------------------------------|-------------------|--'
-    
-    // First clock phase (o2 low)
-    (vic.*vicfunc[rasterCycle])();
-    if (cycle >= cia1.wakeUpCycle) cia1.executeOneCycle(); else cia1.idleCounter++;
-    if (cycle >= cia2.wakeUpCycle) cia2.executeOneCycle(); else cia2.idleCounter++;
-    if (iec.isDirtyC64Side) iec.updateIecLinesC64Side();
-    
-    // Second clock phase (o2 high)
-    result &= cpu.executeOneCycle();
-    if (drive1.isPoweredOn()) result &= drive1.execute(durationOfOneCycle);
-    if (drive2.isPoweredOn()) result &= drive2.execute(durationOfOneCycle);
-    // if (iec.isDirtyDriveSide) iec.updateIecLinesDriveSide();
-    
-    rasterCycle++;
-    return result;
+    return false; 
 }
 
 void
@@ -587,23 +464,15 @@ C64::endFrame()
     cia2.incrementTOD();
     
     // Execute remaining SID cycles
-    sid.executeUntil(cpu.cycle);
     
     // Execute other components
-    iec.execute();
     port1.execute();
     port2.execute();
 
     // Update mouse coordinates
     
     // Take a snapshot once in a while
-    if (takeAutoSnapshots && autoSnapshotInterval > 0) {
-        unsigned fps = (unsigned)vic.getFramesPerSecond();
-        if (frame % (fps * autoSnapshotInterval) == 0) {
-            takeAutoSnapshot();
-        }
-    }
-    
+  
     // Count some sheep (zzzzzz) ...
     if (!getWarp()) {
             synchronizeTiming();
@@ -613,31 +482,8 @@ C64::endFrame()
 bool
 C64::getWarp()
 {
-    bool newValue = (warpLoad && iec.isBusy()) || alwaysWarp;
-    
-    if (newValue != warp) {
-        warp = newValue;
-        
-        /* Warping has the unavoidable drawback that audio playback gets out of
-         * sync. To cope with this issue, we silence SID during warp mode and
-         * fade in smoothly after warping has ended.
-         */
-        
-        if (warp) {
-            // Quickly fade out SID
-            sid.rampDown();
-            
-        } else {
-            // Smoothly fade in SID
-            sid.rampUp();
-            sid.alignWritePtr();
-            restartTimer();
-        }
-        
-        putMessage(warp ? MSG_WARP_ON : MSG_WARP_OFF);
-    }
-    
-    return warp;
+ 
+    return false;
 }
 
 void
@@ -705,165 +551,4 @@ C64::synchronizeTiming()
         restartTimer();
     }
 
-}
-
-void C64::loadFromSnapshotUnsafe(Snapshot *snapshot)
-{    
-    uint8_t *ptr;
-    
-    if (snapshot && (ptr = snapshot->getData())) {
-        loadFromBuffer(&ptr);
-        keyboard.releaseAll(); // Avoid constantly pressed keys
-        ping();
-    }
-}
-
-void
-C64::loadFromSnapshotSafe(Snapshot *snapshot)
-{
-    debug(2, "C64::loadFromSnapshotSafe\n");
-
-    suspend();
-    loadFromSnapshotUnsafe(snapshot);
-    resume();
-}
-
-bool
-C64::restoreSnapshot(vector<Snapshot *> &storage, unsigned nr)
-{
-    Snapshot *snapshot = getSnapshot(storage, nr);
-    
-    if (snapshot) {
-        loadFromSnapshotSafe(snapshot);
-        return true;
-    }
-    
-    return false;
-}
-
-size_t
-C64::numSnapshots(vector<Snapshot *> &storage)
-{
-    return storage.size();
-}
-
-Snapshot *
-C64::getSnapshot(vector<Snapshot *> &storage, unsigned nr)
-{
-    return nr < storage.size() ? storage.at(nr) : NULL;
-    
-}
-
-void
-C64::takeSnapshot(vector<Snapshot *> &storage)
-{
-    // Delete oldest snapshot if capacity limit has been reached
-    if (storage.size() >= MAX_SNAPSHOTS) {
-        deleteSnapshot(storage, MAX_SNAPSHOTS - 1);
-    }
-    
-    Snapshot *snapshot = Snapshot::makeWithC64(this);
-    storage.insert(storage.begin(), snapshot);
-    putMessage(MSG_SNAPSHOT_TAKEN);
-}
-
-void
-C64::deleteSnapshot(vector<Snapshot *> &storage, unsigned index)
-{
-    Snapshot *snapshot = getSnapshot(storage, index);
-    
-    if (snapshot) {
-        delete snapshot;
-        storage.erase(storage.begin() + index);
-    }
-}
-
-bool
-C64::flash(AnyC64File *file)
-{
-    bool result = true;
-    
-    suspend();
-    switch (file->type()) {
-        
-        case BASIC_ROM_FILE:
-        file->flash(mem.rom, 0xA000);
-        break;
-        
-        case CHAR_ROM_FILE:
-        file->flash(mem.rom, 0xD000);
-        break;
-        
-        case KERNAL_ROM_FILE:
-        file->flash(mem.rom, 0xE000);
-        break;
-        
-        case VC1541_ROM_FILE:
-        file->flash(drive1.mem.rom);
-        file->flash(drive2.mem.rom);
-        break;
-        
-        case V64_FILE:
-        loadFromSnapshotUnsafe((Snapshot *)file);
-        break;
-        
-        default:
-        assert(false);
-        result = false;
-    }
-    resume();
-    return result;
-}
-
-bool
-C64::flash(AnyArchive *file, unsigned item)
-{
-    bool result = true;
-    
-    suspend();
-    switch (file->type()) {
-        
-        case D64_FILE:
-        case T64_FILE:
-        case PRG_FILE:
-        case P00_FILE:
-        file->selectItem(item);
-        file->flashItem(mem.ram);
-        break;
-        
-        default:
-        assert(false);
-        result = false;
-    }
-    resume();
-    return result;
-}
-
-bool
-C64::loadRom(const char *filename)
-{
-    bool result;
-    bool wasRunnable = isRunnable();
-    ROMFile *rom = ROMFile::makeWithFile(filename);
-    
-    if (!rom) {
-        warn("Failed to read ROM image file %s\n", filename);
-        return false;
-    }
-    
-    suspend();
-    result = flash(rom);
-    resume();
-    
-    if (result) {
-        debug(2, "Loaded ROM image %s.\n", filename);
-    } else {
-        debug(2, "Failed to flash ROM image %s.\n", filename);
-    }
-    
-    if (!wasRunnable && isRunnable())
-        putMessage(MSG_READY_TO_POWER_ON);
-    
-    delete rom;
-    return result;
 }

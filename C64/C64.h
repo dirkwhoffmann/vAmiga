@@ -30,38 +30,17 @@
 #include "MessageQueue.h"
 
 // Loading and saving
-#include "Snapshot.h"
-#include "T64File.h"
-#include "D64File.h"
-#include "G64File.h"
-#include "PRGFile.h"
-#include "P00File.h"
-#include "ROMFile.h"
-#include "TAPFile.h"
-#include "CRTFile.h"
 
 // Sub components
-#include "ProcessorPort.h"
-#include "ExpansionPort.h"
-#include "IEC.h"
-#include "Keyboard.h"
 #include "ControlPort.h"
 #include "Memory.h"
 #include "C64Memory.h"
-#include "FlashRom.h"
-#include "DriveMemory.h"
 #include "VIC.h"
-#include "SIDBridge.h"
 #include "TOD.h"
 #include "CIA.h"
-#include "CPU.h"
 
 // Cartridges
-#include "Cartridge.h"
-#include "CustomCartridges.h"
 
-// Peripherals
-#include "Drive.h"
 
 
 /*! @class    A complete virtual Commodore 64
@@ -84,11 +63,7 @@ class C64 : public VirtualComponent {
     //! @brief    The C64's virtual memory (ROM, RAM, and color RAM)
     C64Memory mem;
     
-    //! @brief    The C64's virtual CPU
-    CPU cpu = CPU(MOS_6510, &mem);
     
-    //! @brief    The C64's processor port
-    ProcessorPort processorPort;
     
     //! @brief    The C64's Video Interface Controller
     VIC vic;
@@ -99,29 +74,12 @@ class C64 : public VirtualComponent {
     //! @brief    The C64's second Complex Interface Adapter
     CIA2 cia2;
     
-    //! @brief    The C64's Sound Interface Device
-    SIDBridge sid;
-    
-    //! @brief    The C64's virtual keyboard
-    Keyboard keyboard;
-    
     //! @brief    The C64's first control port
     ControlPort port1 = ControlPort(1);
     
     //! @brief    The C64's second control port
     ControlPort port2 = ControlPort(2);
     
-    //! @brief    The C64's expansion port (cartdrige slot)
-    ExpansionPort expansionport;
-    
-    //! @brief    The C64's serial bus connecting the VC1541 floppy drives
-    IEC iec;
-
-    //! @brief    A VC1541 floppy drive (with device number 8)
-    VC1541 drive1 = VC1541(1);
-    
-    //! @brief    A second VC1541 floppy drive (with device number 9)
-    VC1541 drive2 = VC1541(2);
     
     
     
@@ -248,11 +206,6 @@ class C64 : public VirtualComponent {
     //! @brief    Maximum number of stored snapshots
     static const size_t MAX_SNAPSHOTS = 32;
     
-    //! @brief    Storage for auto-taken snapshots
-    vector<Snapshot *> autoSnapshots;
-    
-    //! @brief    Storage for user-taken snapshots
-    vector<Snapshot *> userSnapshots;
     
     
     //
@@ -461,78 +414,7 @@ class C64 : public VirtualComponent {
     //! @functiongroup Handling snapshots
     //
     
-    public:
-
-    //! @brief    Indicates if the auto-snapshot feature is enabled.
-    bool getTakeAutoSnapshots() { return takeAutoSnapshots; }
-
-    //! @brief    Enables or disabled the auto-snapshot feature.
-    void setTakeAutoSnapshots(bool enable) { takeAutoSnapshots = enable; }
-    
-    /*! @brief    Disables the auto-snapshot feature temporarily.
-     *  @details  This method is called when the snaphshot browser opens.
-     */
-    void suspendAutoSnapshots() { autoSnapshotInterval -= (LONG_MAX / 2); }
-    
-    /*! @brief    Heal a call to suspendAutoSnapshots()
-     *  @details  This method is called when the snaphshot browser closes.
-     */
-    void resumeAutoSnapshots() { autoSnapshotInterval += (LONG_MAX / 2); }
-    
-    //! @brief    Returns the time between two auto-snapshots in seconds.
-    long getSnapshotInterval() { return autoSnapshotInterval; }
-    
-    //! @brief    Sets the time between two auto-snapshots in seconds.
-    void setSnapshotInterval(long value) { autoSnapshotInterval = value; }
-    
-    /*! @brief    Loads the current state from a snapshot file
-     *  @note     There is an thread-unsafe and thread-safe version of this
-     *            function. The first one can be unsed inside the emulator
-     *            thread or from outside if the emulator is halted. The second
-     *            one can be called any time.
-     */
-    void loadFromSnapshotUnsafe(Snapshot *snapshot);
-    void loadFromSnapshotSafe(Snapshot *snapshot);
-    
-    //! @brief    Restores a certain snapshot from the snapshot storage
-    bool restoreSnapshot(vector<Snapshot *> &storage, unsigned nr);
-    bool restoreAutoSnapshot(unsigned nr) { return restoreSnapshot(autoSnapshots, nr); }
-    bool restoreUserSnapshot(unsigned nr) { return restoreSnapshot(userSnapshots, nr); }
-
-    //! @brief    Restores the latest snapshot from the snapshot storage
-    bool restoreLatestAutoSnapshot() { return restoreAutoSnapshot(0); }
-    bool restoreLatestUserSnapshot() { return restoreUserSnapshot(0); }
-    
-    //! @brief    Returns the number of stored snapshots
-    size_t numSnapshots(vector<Snapshot *> &storage);
-    size_t numAutoSnapshots() { return numSnapshots(autoSnapshots); }
-    size_t numUserSnapshots() { return numSnapshots(userSnapshots); }
-    
-    //! @brief    Returns an snapshot from the snapshot storage
-    Snapshot *getSnapshot(vector<Snapshot *> &storage, unsigned nr);
-    Snapshot *autoSnapshot(unsigned nr) { return getSnapshot(autoSnapshots, nr); }
-    Snapshot *userSnapshot(unsigned nr) { return getSnapshot(userSnapshots, nr); }
-    
-    /*! @brief    Takes a snapshot and inserts it into the snapshot storage
-     *  @details  The new snapshot is inserted at position 0 and all others are
-     *            moved one position up. If the buffer is full, the oldest
-     *            snapshot is deleted.
-     *  @note     Make sure to call the 'Safe' version outside the emulator
-     *            thread.
-     */
-    void takeSnapshot(vector<Snapshot *> &storage);
-    void takeAutoSnapshot() { takeSnapshot(autoSnapshots); }
-    void takeUserSnapshot() { takeSnapshot(userSnapshots); }
-    void takeAutoSnapshotSafe() { suspend(); takeSnapshot(autoSnapshots); resume(); }
-    void takeUserSnapshotSafe() { suspend(); takeSnapshot(userSnapshots); resume(); }
-    
-    /*! @brief    Deletes a snapshot from the snapshot storage
-     *  @details  All remaining snapshots are moved one position down.
-     */
-    void deleteSnapshot(vector<Snapshot *> &storage, unsigned nr);
-    void deleteAutoSnapshot(unsigned nr) { deleteSnapshot(autoSnapshots, nr); }
-    void deleteUserSnapshot(unsigned nr) { deleteSnapshot(userSnapshots, nr); }
-    
+ 
 
     //
     //! @functiongroup Handling Roms
@@ -545,12 +427,6 @@ class C64 : public VirtualComponent {
     //
     //! @functiongroup Flashing files
     //
-    
-    //! @brief    Flashes a single file into memory
-    bool flash(AnyC64File *file);
-
-    //! @brief    Flashes a single item of an archive into memory
-    bool flash(AnyArchive *file, unsigned item);
     
  
     //

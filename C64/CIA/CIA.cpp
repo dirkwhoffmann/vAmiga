@@ -1097,19 +1097,7 @@ CIA::executeOneCycle()
 void
 CIA::sleep()
 {
-    assert(idleCounter == 0);
-    
-    // Determine maximum possible sleep cycles based on timer counts
-    uint64_t cycle = c64->cpu.cycle;
-    uint64_t sleepA = (counterA > 2) ? (cycle + counterA - 1) : 0;
-    uint64_t sleepB = (counterB > 2) ? (cycle + counterB - 1) : 0;
-    
-    // CIAs with stopped timers can sleep forever
-    if (!(feed & CIACountA0)) sleepA = UINT64_MAX;
-    if (!(feed & CIACountB0)) sleepB = UINT64_MAX;
-    
-    wakeUpCycle = MIN(sleepA, sleepB);
-    // setWakeUpCycle(MIN(sleepA, sleepB));
+  
 }
 
 void
@@ -1161,13 +1149,11 @@ CIA1::dump()
 void 
 CIA1::pullDownInterruptLine()
 {
-    c64->cpu.pullDownIrqLine(CPU::INTSRC_CIA);
 }
 
 void 
 CIA1::releaseInterruptLine()
 {
-    c64->cpu.releaseIrqLine(CPU::INTSRC_CIA);
 }
 
 //                    -------
@@ -1199,14 +1185,7 @@ CIA1::updatePA()
 {
     PA = (portAinternal() & DDRA) | (portAexternal() & ~DDRA);
 
-    // Get lines which are driven actively low by port 2
-    uint8_t rowMask = ~PRB & DDRB & c64->port1.bitmask();
     
-    // Pull lines low that are connected by a pressed key
-    PA &= c64->keyboard.getColumnValues(rowMask);
-    
-    // The control port can always bring the port lines low
-    PA &= c64->port2.bitmask();
     
     // An edge on PA4 triggers the NeosMouse on port 2
 }
@@ -1240,12 +1219,6 @@ CIA1::updatePB()
 {
     PB = (portBinternal() & DDRB) | (portBexternal() & ~DDRB);
  
-    // Get lines which are driven actively low by port 1
-    uint8_t columnMask = ~PRA & DDRA & c64->port2.bitmask();
-    
-    // Pull lines low that are connected by a pressed key
-    PB &= c64->keyboard.getRowValues(columnMask);
-    
     // Check if timer A underflow shows up on PB6
     if (GET_BIT(PB67TimerMode, 6))
         COPY_BIT(PB67TimerOut, PB, 6);
@@ -1299,13 +1272,11 @@ CIA2::dump()
 void 
 CIA2::pullDownInterruptLine()
 {
-    c64->cpu.pullDownNmiLine(CPU::INTSRC_CIA);
 }
 
 void 
 CIA2::releaseInterruptLine()
 {
-    c64->cpu.releaseNmiLine(CPU::INTSRC_CIA);
 }
 
 //                        -------
@@ -1329,8 +1300,6 @@ uint8_t
 CIA2::portAexternal()
 {
     uint8_t result = 0x3F;
-    result |= (c64->iec.clockLine ? 0x40 : 0x00);
-    result |= (c64->iec.dataLine ? 0x80 : 0x00);
     
     return result;
 }
@@ -1343,8 +1312,6 @@ CIA2::updatePA()
     // PA0 (VA14) and PA1 (VA15) determine the memory bank seen by the VIC
     // c64->vic.updateBankAddr();
     
-    // Mark IEC bus as dirty
-    c64->iec.setNeedsUpdateC64Side();
 }
 
 //                        -------

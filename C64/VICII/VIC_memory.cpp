@@ -633,24 +633,7 @@ VIC::poke(uint16_t addr, uint8_t value)
 uint8_t
 VIC::memAccess(uint16_t addr)
 {
-    assert((addr & 0xC000) == 0); // 14 bit address
-    assert((bankAddr & 0x3FFF) == 0); // multiple of 16 KB
-    
-    addrBus = bankAddr | addr;
-    switch (memSrc[addrBus >> 12]) {
-            
-        case M_RAM:
-            return c64->mem.ram[addrBus];
-            
-        case M_CHAR:
-            return c64->mem.rom[0xC000 + addr];
-
-        case M_CRTHI:
-            return c64->expansionport.peek(addrBus | 0xF000);
-            
-        default:
-            return c64->mem.ram[addrBus];
-    }
+    return 0;
 }
 
 /*
@@ -730,43 +713,8 @@ VIC::memAccess(uint16_t addr)
 uint8_t
 VIC::memSpyAccess(uint16_t addr)
 {
-    uint8_t result;
-    
-    assert((addr & 0xC000) == 0);
-    assert((bankAddr & 0x3FFF) == 0);
-    
-    uint16_t addrBus = bankAddr | addr;
-    
-    if (getUltimax()) {
-        
-        switch (addrBus >> 12) {
-            case 0xF:
-            case 0xB:
-            case 0x7:
-            case 0x3:
-                result = c64->expansionport.spypeek(addrBus | 0xF000);
-                break;
-            case 0xE:
-            case 0xD:
-            case 0x9:
-            case 0x8:
-            case 0x0:
-                result = c64->mem.ram[addrBus];
-                break;
-            default:
-                result = c64->mem.ram[addrBus];
-        }
-        
-    } else {
-        
-        if (isCharRomAddr(addr)) {
-            result = c64->mem.rom[0xC000 + addr];
-        } else {
-            result = c64->mem.ram[addrBus];
-        }
-    }
-    
-    return result;
+  
+    return 0;
 }
 
 bool
@@ -809,9 +757,6 @@ VIC::cAccess()
          *  information the lower 4 bits of the opcode after the access to
          *  $d011. Not until then, regular video matrix data is read." [C.B.]
          */
-        dataBusPhi2 = 0xFF;
-        videoMatrix[vmli] = dataBusPhi2;
-        colorLine[vmli] = c64->mem.ram[c64->cpu.regPC] & 0x0F;
     }
 }
 

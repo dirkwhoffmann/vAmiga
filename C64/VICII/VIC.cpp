@@ -124,11 +124,7 @@ VIC::~VIC()
 void
 VIC::setC64(C64 *c64)
 {
-    VirtualComponent::setC64(c64);
-
-    // Assign reference clock to all time delayed variables
-    baLine.setClock(&c64->cpu.cycle);
-    gAccessResult.setClock(&c64->cpu.cycle);
+  
 }
 
 void 
@@ -532,7 +528,6 @@ VIC::updateBA(uint8_t value)
             baLine.clear();
         }
         
-        c64->cpu.setRDY(value == 0);
     }
 }
 

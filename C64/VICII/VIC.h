@@ -1330,7 +1330,7 @@ public:
     dataBusPhi2 = 0xFF; \
     xCounter += 8; \
     for (unsigned i = 0; i < 8; i++) { zBuffer[i] = pixelSource[i] = 0; } \
-    if (unlikely(delay)) { processDelayedActions(); }
+    if ((delay)) { processDelayedActions(); }
 
     #define END_VISIBLE_CYCLE \
     END_CYCLE

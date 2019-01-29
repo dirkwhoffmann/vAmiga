@@ -19,7 +19,7 @@
  */
 
 #include "C64.h"
-
+#define likely(x) (x)
 C64Memory::C64Memory()
 {	
 	setDescription("C64 memory");
@@ -142,29 +142,7 @@ C64Memory::reset()
 void 
 C64Memory::dump()
 {
-	msg("C64 Memory:\n");
-	msg("-----------\n");
-	msg("    Basic ROM: %s loaded\n", basicRomIsLoaded() ? "" : " not");
-	msg("Character ROM: %s loaded\n", characterRomIsLoaded() ? "" : " not");
-    msg("   Kernal ROM: %s loaded\n", kernalRomIsLoaded() ? "" : " not");
-	
-    for (uint16_t addr = 0; addr < 0xFFFF; addr++) {
-        if (c64->cpu.hardBreakpoint(addr))
-			msg("Hard breakpoint at %04X\n", addr);
-        if (c64->cpu.softBreakpoint(addr))
-            msg("Soft breakpoint at %04X\n", addr);
-	}
-	msg("\n");
-    
-    /*
-    for (uint16_t addr = 0x1000; addr < 0xB000; addr += 0x400) {
-        msg("%04X: ", addr);
-        for (unsigned i = 0; i < 30; i++) {
-            msg("%02X ", ram[addr + i]);
-        }
-        msg("\n");
-    }
-    */
+
 }
 
 void
@@ -190,24 +168,7 @@ C64Memory::eraseWithPattern(RamInitPattern pattern)
 void 
 C64Memory::updatePeekPokeLookupTables()
 {
-    // debug("C64Memory::updatePeekPokeLookupTables\n");
-    
-    // Read game line, exrom line, and processor port bits
-    uint8_t game  = c64->expansionport.getGameLine() ? 0x08 : 0x00;
-    uint8_t exrom = c64->expansionport.getExromLine() ? 0x10 : 0x00;
-    uint8_t index = (c64->processorPort.read() & 0x07) | exrom | game;
-
-    // Set ultimax flag
-    c64->setUltimax(exrom && !game);
-
-    // Update table entries
-    for (unsigned bank = 1; bank < 16; bank++) {
-        peekSrc[bank] = pokeTarget[bank] = bankMap[index][bank];
-    }
-    
-    // An attached cartridge may influence the settings. Let's give it a chance
-    // to modify the tables...
-    c64->expansionport.updatePeekPokeLookupTables();
+ 
 }
 
 uint8_t
@@ -224,18 +185,7 @@ C64Memory::peek(uint16_t addr, MemoryType source)
         case M_IO:
         return peekIO(addr);
         
-        case M_CRTLO:
-        case M_CRTHI:
-        return c64->expansionport.peek(addr);
         
-        case M_PP:
-        if (likely(addr >= 0x02)) {
-            return ram[addr];
-        } else if (addr == 0x00) {
-            return c64->processorPort.readDirection();
-        } else {
-            return c64->processorPort.read();
-        }
         
         case M_NONE:
         return c64->vic.getDataBusPhi1();
@@ -249,23 +199,13 @@ C64Memory::peek(uint16_t addr, MemoryType source)
 uint8_t
 C64Memory::peek(uint16_t addr, bool gameLine, bool exromLine)
 {
-    uint8_t game  = gameLine ? 0x08 : 0x00;
-    uint8_t exrom = exromLine ? 0x10 : 0x00;
-    uint8_t index = (c64->processorPort.read() & 0x07) | exrom | game;
-    
-    return peek(addr, bankMap[index][addr >> 12]);
+    return 0;
 }
 
 uint8_t
 C64Memory::peekZP(uint8_t addr)
 {
-    if (likely(addr >= 0x02)) {
-        return ram[addr];
-    } else if (addr == 0x00) {
-        return c64->processorPort.readDirection();
-    } else {
-        return c64->processorPort.read();
-    }
+    return 0;
 }
 
 uint8_t
@@ -291,7 +231,7 @@ C64Memory::peekIO(uint16_t addr)
             
             // Only the lower 5 bits are used for adressing the SID I/O space.
             // As a result, SID's I/O memory repeats every 32 bytes.
-            return c64->sid.peek(addr & 0x001F);
+            return 0;
 
         case 0x8: // Color RAM
         case 0x9: // Color RAM
@@ -312,13 +252,7 @@ C64Memory::peekIO(uint16_t addr)
             
             return c64->cia2.peek(addr & 0x000F);
             
-        case 0xE: // I/O space 1
-            
-            return c64->expansionport.peekIO1(addr);
-            
-        case 0xF: // I/O space 2
-
-            return c64->expansionport.peekIO2(addr);
+     
 	}
     
 	assert(false);
@@ -339,12 +273,6 @@ C64Memory::spypeek(uint16_t addr, MemoryType source)
         case M_IO:
             return spypeekIO(addr);
             
-        case M_CRTLO:
-        case M_CRTHI:
-            return c64->expansionport.spypeek(addr);
-            
-        case M_PP:
-            return peek(addr, M_PP);
       
         case M_NONE:
             return ram[addr];
@@ -374,7 +302,7 @@ C64Memory::spypeekIO(uint16_t addr)
         case 0x6: // SID
         case 0x7: // SID
             
-            return c64->sid.spypeek(addr & 0x001F);
+            return 0; 
             
         case 0xC: // CIA 1
             
@@ -386,14 +314,7 @@ C64Memory::spypeekIO(uint16_t addr)
             
             return c64->cia2.spypeek(addr & 0x000F);
             
-        case 0xE: // I/O space 1
-            
-            return c64->expansionport.spypeekIO1(addr);
-            
-        case 0xF: // I/O space 2
-            
-            return c64->expansionport.spypeekIO2(addr);
-
+     
         default:
             
             return peek(addr);
@@ -414,20 +335,7 @@ C64Memory::poke(uint16_t addr, uint8_t value, MemoryType target)
             pokeIO(addr, value);
             return;
             
-        case M_CRTLO:
-        case M_CRTHI:
-            c64->expansionport.poke(addr, value);
-            return;
-            
-        case M_PP:
-            if (likely(addr >= 0x02)) {
-                ram[addr] = value;
-            } else if (addr == 0x00) {
-                c64->processorPort.writeDirection(value);
-            } else {
-                c64->processorPort.write(value);
-            }
-            return;
+     
             
         case M_NONE:
             return;
@@ -441,23 +349,13 @@ C64Memory::poke(uint16_t addr, uint8_t value, MemoryType target)
 void
 C64Memory::poke(uint16_t addr, uint8_t value, bool gameLine, bool exromLine)
 {
-    uint8_t game  = gameLine ? 0x08 : 0x00;
-    uint8_t exrom = exromLine ? 0x10 : 0x00;
-    uint8_t index = (c64->processorPort.read() & 0x07) | exrom | game;
-    
-    poke(addr, value, bankMap[index][addr >> 12]);
+ 
 }
 
 void
 C64Memory::pokeZP(uint8_t addr, uint8_t value)
 {
-    if (likely(addr >= 0x02)) {
-        ram[addr] = value;
-    } else if (addr == 0x00) {
-        c64->processorPort.writeDirection(value);
-    } else {
-        c64->processorPort.write(value);
-    }
+ 
 }
 
 void
@@ -484,7 +382,6 @@ C64Memory::pokeIO(uint16_t addr, uint8_t value)
             
             // Only the lower 5 bits are used for adressing the SID I/O space.
             // As a result, SID's I/O memory repeats every 32 bytes.
-            c64->sid.poke(addr & 0x001F, value);
             return;
             
         case 0x8: // Color RAM
@@ -502,20 +399,7 @@ C64Memory::pokeIO(uint16_t addr, uint8_t value)
             c64->cia1.poke(addr & 0x000F, value);
             return;
             
-        case 0xD: // CIA 2
-            
-            c64->cia2.poke(addr & 0x000F, value);
-            return;
-            
-        case 0xE: // I/O space 1
-            
-            c64->expansionport.pokeIO1(addr, value);
-            return;
-            
-        case 0xF: // I/O space 2
-            
-            c64->expansionport.pokeIO2(addr, value);
-            return;
+
     }
     
     assert(false);

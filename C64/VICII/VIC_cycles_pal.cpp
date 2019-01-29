@@ -34,42 +34,7 @@
 void
 VIC::processDelayedActions()
 {
-    if (delay & VICUpdateIrqLine) {
-        if (irr & imr) {
-            c64->cpu.pullDownIrqLine(CPU::INTSRC_VIC);
-        } else {
-            c64->cpu.releaseIrqLine(CPU::INTSRC_VIC);
-        }
-    }
-    if (delay & VICUpdateFlipflops) {
-        flipflops.delayed = flipflops.current;
-    }
-    if (delay & VICSetDisplayState) {
-        displayState |= badLine;
-    }
-    if (delay & VICUpdateRegisters) {
-        reg.delayed = reg.current;
-    }
-
-    // Less frequent actions
-    if (delay & (VICLpTransition | VICUpdateBankAddr | VICClrSprSprCollReg | VICClrSprBgCollReg)) {
-        
-        if (delay & VICLpTransition) {
-            checkForLightpenIrq();
-        }
-        if (delay & VICUpdateBankAddr) {
-            updateBankAddr();
-            // bankAddr = (~c64->cia2.getPA() & 0x03) << 14;
-        }
-        if (delay & VICClrSprSprCollReg) {
-            spriteSpriteCollision = 0;
-        }
-        if (delay & VICClrSprBgCollReg) {
-            spriteBackgroundColllision = 0;
-        }
-    }
-    
-    delay = (delay << 1) & VICClearanceMask;
+ 
 }
 
 void
