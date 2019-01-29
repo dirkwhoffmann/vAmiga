@@ -124,9 +124,6 @@ static const uint16_t NTSC_RIGHT_VBLANK = 15;
 //! @brief    Total width of a rasterline (including VBLANK) in NTSC mode
 static const uint16_t NTSC_WIDTH = 520; // 77 + 55 + 320 + 53 + 15
 
-//! @brief    Number of drawn pixels per rasterline in NTSC mode
-static const uint16_t NTSC_PIXELS = 428; // 55 + 320 + 53
-
 //! @brief    Number of viewable pixels per rasterline in NTSC mode
 static const uint16_t NTSC_VISIBLE_PIXELS = 418;
 
@@ -169,58 +166,7 @@ static const unsigned PAL_CYCLES_PER_SECOND = PAL_CLOCK_FREQUENCY;
 static const double PAL_PIXEL_ASPECT_RATIO = 0.9365;
 
 
-// Horizontal screen parameters
 
-//! @brief    Width of left VBLANK area in PAL mode
-static const uint16_t PAL_LEFT_VBLANK = 76;
-
-//! @brief    Width of left border in PAL mode
-static const uint16_t PAL_LEFT_BORDER_WIDTH = 48;
-
-//! @brief    Width of canvas area in PAL mode
-static const uint16_t PAL_CANVAS_WIDTH = 320;
-
-//! @brief    Width of right border in PAL mode
-static const uint16_t PAL_RIGHT_BORDER_WIDTH = 37;
-
-//! @brief    Width of right VBLANK area in PAL mode
-static const uint16_t PAL_RIGHT_VBLANK = 23;
-
-//! @brief    Total width of a rasterline (including VBLANK) in PAL mode
-static const uint16_t PAL_WIDTH = 504; // 76 + 48 + 320 + 37 + 23
-
-//! @brief    Number of drawn pixels per rasterline in PAL mode
-static const uint16_t PAL_PIXELS = 405; // 48 + 320 + 37
-
-//! @brief    Number of viewable pixels per rasterline in PAL mode
-// static const uint16_t PAL_VISIBLE_PIXELS = 403;
-
-
-// Vertical screen parameters
-
-//! @brief    Number of VBLANK lines at top in PAL mode
-static const uint16_t PAL_UPPER_VBLANK = 16;
-
-//! @brief    Heigt of upper boder in PAL mode
-static const uint16_t PAL_UPPER_BORDER_HEIGHT = 35;
-
-//! @brief    Height of canvas area in PAL mode
-static const uint16_t PAL_CANVAS_HEIGHT = 200;
-
-//! @brief    Lower border height in PAL mode
-static const uint16_t PAL_LOWER_BORDER_HEIGHT = 49;
-
-//! @brief    Number of VBLANK lines at bottom in PAL mode
-static const uint16_t PAL_LOWER_VBLANK = 12;
-
-//! @brief    Total height of a frame (including VBLANK) in PAL mode
-static const uint16_t PAL_HEIGHT = 312; // 16 + 35 + 200 + 49 + 12
-
-//! @brief    Number of drawn rasterlines per frame in PAL mode
-static const uint16_t PAL_RASTERLINES = 284; // 35 + 200 + 49
-
-//! @brief    Number of viewable rasterlines per frame in PAL mode
-static const uint16_t PAL_VISIBLE_RASTERLINES = 284; // was 292
 
 
 //
@@ -247,21 +193,9 @@ inline bool isVICChhipModel(VICModel model) {
     (model == NTSC_8562);
 }
 
-//! @brief    Color palette type
-/*! @details  Used to emulate monochrome displays
- */
-typedef enum {
-    COLOR_PALETTE = 0,
-    BLACK_WHITE_PALETTE,
-    PAPER_WHITE_PALETTE,
-    GREEN_PALETTE,
-    AMBER_PALETTE,
-    SEPIA_PALETTE
-} VICPalette;
 
-inline bool isVICPalette(VICPalette model) {
-    return model >= COLOR_PALETTE && model <= SEPIA_PALETTE;
-}
+
+
 
 //! @brief    Glue logic type
 typedef enum {

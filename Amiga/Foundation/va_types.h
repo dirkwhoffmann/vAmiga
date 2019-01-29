@@ -136,6 +136,24 @@ typedef enum
 
 
 //
+// Video
+//
+
+typedef enum {
+    COLOR_PALETTE = 0,
+    BLACK_WHITE_PALETTE,
+    PAPER_WHITE_PALETTE,
+    GREEN_PALETTE,
+    AMBER_PALETTE,
+    SEPIA_PALETTE
+} VICPalette;
+
+inline bool isVICPalette(VICPalette model) {
+    return model >= COLOR_PALETTE && model <= SEPIA_PALETTE;
+}
+
+
+//
 // External files (snapshots, disk images, etc.)
 //
 

@@ -12,7 +12,7 @@ import Foundation
 class ExportDiskController : DialogController {
 
     @IBOutlet weak var button: NSPopUpButton!
-    var type: C64FileType = D64_FILE
+    var type: AmigaFileType = FILETYPE_ADF
     var savePanel: NSSavePanel!
     var selectedURL: URL?
     
@@ -41,6 +41,6 @@ class ExportDiskController : DialogController {
     @IBAction func selectADF(_ sender: Any!) {
         track()
         savePanel.allowedFileTypes = ["adf"]
-        type = G64_FILE
+        type = FILETYPE_ADF
     }
 }

@@ -59,62 +59,20 @@ class MemTableView : NSTableView {
     }
     
     // Returns the memory source for the specified address
-    func source(_ addr: UInt16) -> MemoryType {
-        
-        switch memView {
-        case MemoryView.ramView:
-            return M_RAM
-        case MemoryView.romView:
-            return M_ROM
-        case MemoryView.ioView:
-            return M_IO
-        default:
-            return M_RAM
-        }
-    }
+
 
     // Return true if the specified memory address should be displayed
     func shouldDisplay(_ addr: UInt16) -> Bool {
         
-        let src = source(addr)
-        switch (src) {
-        case M_IO:
-            return addr >= 0xD000 && addr <= 0xDFFF
-        case M_ROM:
-            return (addr >= 0xA000 && addr <= 0xBFFF) || (addr >= 0xD000)
-        default:
-            return true
+        return false
         }
     }
         
     // Return true if the specified memory address should be highlighted
     func shouldHighlight(_ addr: UInt16) -> Bool {
         
-        let src = source(addr)
-        switch highlighting {
-        case MemoryHighlighting.rom:
-            return src == M_ROM || src == M_CRTLO || src == M_CRTHI
-        case MemoryHighlighting.romBasic:
-            return src == M_ROM && addr >= 0xA000 && addr <= 0xBFFF
-        case MemoryHighlighting.romChar:
-            return src == M_ROM && addr >= 0xD000 && addr <= 0xDFFF
-        case MemoryHighlighting.romKernal:
-            return src == M_ROM && addr >= 0xE000 && addr <= 0xFFFF
-        case MemoryHighlighting.crt:
-            return src == M_CRTLO || src == M_CRTHI
-        case MemoryHighlighting.io:
-            return src == M_IO
-        case MemoryHighlighting.ioVic:
-            return src == M_IO && addr >= 0xD000 && addr <= 0xD3FF
-        case MemoryHighlighting.ioSid:
-            return src == M_IO && addr >= 0xD400 && addr <= 0xD7FF
-        case MemoryHighlighting.ioCia:
-            return src == M_IO && addr >= 0xDC00 && addr <= 0xDDFF
-        default:
-            return false
-        }
+        return false
     }
-}
 
 extension MemTableView : NSTableViewDataSource {
     
@@ -124,48 +82,6 @@ extension MemTableView : NSTableViewDataSource {
     }
     
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
-        
-        var addr = UInt16(4 * row)
-        let src = source(addr)
-        
-        switch(tableColumn?.identifier.rawValue) {
-            
-        case "src":
-            return (src == M_RAM || src == M_PP) ? "RAM" :
-                (src == M_ROM) ? "ROM" :
-                (src == M_IO) ? "IO" :
-                (src == M_CRTLO || src == M_CRTHI) ? "CRT" : ""
-            
-        case "addr":
-            return addr
-            
-        case "ascii":
-            if !shouldDisplay(addr) {
-                break
-            }
-            return ""
-            
-        case "hex3":
-            addr += 1
-            fallthrough
-            
-        case "hex2":
-            addr += 1
-            fallthrough
-            
-        case "hex1":
-            addr += 1
-            fallthrough
-            
-        case "hex0":
-            if !shouldDisplay(addr) {
-                break
-            }
-            return ""
-            
-        default:
-            break
-        }
         
         return "";
     }
@@ -195,22 +111,5 @@ extension MemTableView : NSTableViewDelegate {
     
     func tableView(_ tableView: NSTableView, setObjectValue object: Any?, for tableColumn: NSTableColumn?, row: Int) {
         
-        var addr = UInt16(4 * row)
-        switch(tableColumn?.identifier.rawValue) {
-        case "hex0": break
-        case "hex1": addr += 1; break
-        case "hex2": addr += 2; break
-        case "hex3": addr += 3; break
-        default: return
-        }
-        
-        let target = source(addr)
-        if (target == M_CRTLO || target == M_CRTHI) {
-            NSSound.beep()
-            return
-        }
-        if let value = object as? UInt8 {
-            track("Poking \(value) to \(addr) (target = \(target))")
-        }
     }
 }
