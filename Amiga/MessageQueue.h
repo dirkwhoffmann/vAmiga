@@ -13,10 +13,6 @@
 #include "AmigaObject.h"
 #include <map>
 
-// TODO: REMOVE
-#include "VC64Object.h"
-
-
 using namespace std;
 
 class MessageQueue : public AmigaObject {

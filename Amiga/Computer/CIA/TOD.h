@@ -22,7 +22,7 @@
 #ifndef _TOD_INC
 #define _TOD_INC
 
-#include "VirtualComponent.h"
+#include "HardwareComponent.h"
 #include "TOD_types.h"
 
 class CIA;

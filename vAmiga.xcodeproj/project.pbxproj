@@ -21,8 +21,6 @@
 		508FDE7121EA1FA50043D0E9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 508FDE6F21EA1FA50043D0E9 /* Main.storyboard */; };
 		508FDE7D21EA1FA50043D0E9 /* vAmigaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDE7C21EA1FA50043D0E9 /* vAmigaTests.swift */; };
 		508FDE8821EA1FA50043D0E9 /* vAmigaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDE8721EA1FA50043D0E9 /* vAmigaUITests.swift */; };
-		508FDF8421EA1FBC0043D0E9 /* VC64Object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDEF121EA1FBC0043D0E9 /* VC64Object.cpp */; };
-		508FDF8521EA1FBC0043D0E9 /* VirtualComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDEF221EA1FBC0043D0E9 /* VirtualComponent.cpp */; };
 		508FDF8621EA1FBC0043D0E9 /* basic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDEF321EA1FBC0043D0E9 /* basic.cpp */; };
 		508FDF8721EA1FBC0043D0E9 /* MessageQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDEF521EA1FBC0043D0E9 /* MessageQueue.cpp */; };
 		508FDFAC21EA1FBC0043D0E9 /* TOD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDF5921EA1FBC0043D0E9 /* TOD.cpp */; };
@@ -169,14 +167,10 @@
 		508FDE8321EA1FA50043D0E9 /* vAmigaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = vAmigaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		508FDE8721EA1FA50043D0E9 /* vAmigaUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = vAmigaUITests.swift; sourceTree = "<group>"; };
 		508FDE8921EA1FA50043D0E9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		508FDEF021EA1FBC0043D0E9 /* VC64Object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VC64Object.h; sourceTree = "<group>"; };
-		508FDEF121EA1FBC0043D0E9 /* VC64Object.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VC64Object.cpp; sourceTree = "<group>"; };
-		508FDEF221EA1FBC0043D0E9 /* VirtualComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VirtualComponent.cpp; sourceTree = "<group>"; };
 		508FDEF321EA1FBC0043D0E9 /* basic.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = basic.cpp; sourceTree = "<group>"; };
 		508FDEF521EA1FBC0043D0E9 /* MessageQueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MessageQueue.cpp; sourceTree = "<group>"; };
 		508FDEF621EA1FBC0043D0E9 /* basic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = basic.h; sourceTree = "<group>"; };
 		508FDEF821EA1FBC0043D0E9 /* MessageQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageQueue.h; sourceTree = "<group>"; };
-		508FDEF921EA1FBC0043D0E9 /* VirtualComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualComponent.h; sourceTree = "<group>"; };
 		508FDF5721EA1FBC0043D0E9 /* CIA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CIA.h; sourceTree = "<group>"; };
 		508FDF5821EA1FBC0043D0E9 /* TOD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TOD.h; sourceTree = "<group>"; };
 		508FDF5921EA1FBC0043D0E9 /* TOD.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TOD.cpp; sourceTree = "<group>"; };
@@ -329,7 +323,6 @@
 				508FE06021EA318D0043D0E9 /* Amiga */,
 				508FDFDC21EA20600043D0E9 /* GUI */,
 				508FDFAE21EA1FF10043D0E9 /* XIB files */,
-				508FDE9521EA1FBC0043D0E9 /* C64 */,
 				508FDE6621EA1FA40043D0E9 /* Resources */,
 				508FDE7B21EA1FA50043D0E9 /* vAmigaTests */,
 				508FDE8621EA1FA50043D0E9 /* vAmigaUITests */,
@@ -377,25 +370,6 @@
 				508FDE8921EA1FA50043D0E9 /* Info.plist */,
 			);
 			path = vAmigaUITests;
-			sourceTree = "<group>";
-		};
-		508FDE9521EA1FBC0043D0E9 /* C64 */ = {
-			isa = PBXGroup;
-			children = (
-				508FDEEF21EA1FBC0043D0E9 /* General */,
-			);
-			path = C64;
-			sourceTree = "<group>";
-		};
-		508FDEEF21EA1FBC0043D0E9 /* General */ = {
-			isa = PBXGroup;
-			children = (
-				508FDEF021EA1FBC0043D0E9 /* VC64Object.h */,
-				508FDEF121EA1FBC0043D0E9 /* VC64Object.cpp */,
-				508FDEF221EA1FBC0043D0E9 /* VirtualComponent.cpp */,
-				508FDEF921EA1FBC0043D0E9 /* VirtualComponent.h */,
-			);
-			path = General;
 			sourceTree = "<group>";
 		};
 		508FDF5621EA1FBC0043D0E9 /* CIA */ = {
@@ -871,7 +845,6 @@
 				508FE01521EA227B0043D0E9 /* GamePad.swift in Sources */,
 				5020B18021EF136100B9E80E /* Denise.cpp in Sources */,
 				50B14C1021EB410B002E32A6 /* Amiga.cpp in Sources */,
-				508FDF8421EA1FBC0043D0E9 /* VC64Object.cpp in Sources */,
 				50C2DE4421F756900043FD1B /* MyControllerStatusBar.swift in Sources */,
 				508FDFD921EA20510043D0E9 /* MetalViewEvents.swift in Sources */,
 				508FDFAC21EA1FBC0043D0E9 /* TOD.cpp in Sources */,
@@ -901,7 +874,6 @@
 				50B14C0721EB218E002E32A6 /* AmigaObject.cpp in Sources */,
 				508FE02F21EA227B0043D0E9 /* AudioEngine.swift in Sources */,
 				5085FE5921FB6856009753EF /* ProxyExtensions.swift in Sources */,
-				508FDF8521EA1FBC0043D0E9 /* VirtualComponent.cpp in Sources */,
 				508FE04F21EA22CC0043D0E9 /* EmulatorPrefs.swift in Sources */,
 				5064851121EC7A1700FC4AC3 /* AmigaMemory.cpp in Sources */,
 				508FE01B21EA227B0043D0E9 /* MyDocument.swift in Sources */,
