@@ -14,7 +14,6 @@
 #include "Cartridge_types.h"
 #include "Drive_types.h"
 #include "Disk_types.h"
-#include "Mouse_types.h"
 #include "File_types.h"
 
 //! @brief    C64 model

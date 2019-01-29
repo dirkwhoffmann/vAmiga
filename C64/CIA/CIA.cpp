@@ -1197,8 +1197,6 @@ CIA1::portAexternal()
 void
 CIA1::updatePA()
 {
-    uint8_t oldPA = PA;
-    
     PA = (portAinternal() & DDRA) | (portAexternal() & ~DDRA);
 
     // Get lines which are driven actively low by port 2
@@ -1211,10 +1209,6 @@ CIA1::updatePA()
     PA &= c64->port2.bitmask();
     
     // An edge on PA4 triggers the NeosMouse on port 2
-    if (FALLING_EDGE_BIT(oldPA, PA, 4))
-        c64->mouse.fallingStrobe(2 /* Port */);
-    if (RISING_EDGE_BIT(oldPA, PA, 4))
-        c64->mouse.risingStrobe(2 /* Port */);
 }
 
 //                    -------
@@ -1244,8 +1238,6 @@ CIA1::portBexternal()
 void
 CIA1::updatePB()
 {
-    uint8_t oldPB = PB;
-    
     PB = (portBinternal() & DDRB) | (portBexternal() & ~DDRB);
  
     // Get lines which are driven actively low by port 1
@@ -1269,10 +1261,6 @@ CIA1::updatePB()
     c64->vic.setLP(GET_BIT(PB, 4) != 0);
     
     // An edge on PB4 triggers the NeosMouse on port 1
-    if (FALLING_EDGE_BIT(oldPB, PB, 4))
-        c64->mouse.fallingStrobe(1 /* Port */);
-    if (RISING_EDGE_BIT(oldPB, PB, 4))
-        c64->mouse.risingStrobe(1 /* Port */);
 }
 
 

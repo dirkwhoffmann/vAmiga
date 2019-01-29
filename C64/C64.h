@@ -62,8 +62,6 @@
 
 // Peripherals
 #include "Drive.h"
-#include "Datasette.h"
-#include "Mouse.h"
 
 
 /*! @class    A complete virtual Commodore 64
@@ -125,11 +123,6 @@ class C64 : public VirtualComponent {
     //! @brief    A second VC1541 floppy drive (with device number 9)
     VC1541 drive2 = VC1541(2);
     
-    //! @brief    A Commodore 1530 (C2N) Datasette
-    Datasette datasette;
-    
-    //! @brief    An external mouse
-    Mouse mouse;
     
     
     //

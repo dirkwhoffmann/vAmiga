@@ -100,8 +100,6 @@ C64::C64()
         &iec,
         &drive1,
         &drive2,
-        &datasette,
-        &mouse,
         NULL };
     
     registerSubComponents(subcomponents, sizeof(subcomponents));
@@ -550,7 +548,6 @@ C64::_executeOneCycle()
     if (drive1.isPoweredOn()) result &= drive1.execute(durationOfOneCycle);
     if (drive2.isPoweredOn()) result &= drive2.execute(durationOfOneCycle);
     // if (iec.isDirtyDriveSide) iec.updateIecLinesDriveSide();
-    datasette.execute();
     
     rasterCycle++;
     return result;
@@ -594,12 +591,10 @@ C64::endFrame()
     
     // Execute other components
     iec.execute();
-    expansionport.execute();
     port1.execute();
     port2.execute();
 
     // Update mouse coordinates
-    mouse.execute();
     
     // Take a snapshot once in a while
     if (takeAutoSnapshots && autoSnapshotInterval > 0) {

@@ -77,7 +77,7 @@ ProcessorPort::read()
     uint8_t bit3 = (dischargeCycleBit3 > c64->cpu.cycle) ? 0x08 : 0x00;
     uint8_t bit6 = (dischargeCycleBit6 > c64->cpu.cycle) ? 0x40 : 0x00;
     uint8_t bit7 = (dischargeCycleBit7 > c64->cpu.cycle) ? 0x80 : 0x00;
-    uint8_t bit4 = c64->datasette.getPlayKey() ? 0x00 : 0x10;
+    uint8_t bit4 = 0x10;
     uint8_t bits = bit7 | bit6 | bit4 | bit3 | 0x07;
 
     return (port & direction) | (bits & ~direction);
@@ -95,9 +95,6 @@ ProcessorPort::write(uint8_t value)
     port = value;
     
     // Check for datasette motor bit
-    if (direction & 0x20) {
-        c64->datasette.setMotor((value & 0x20) == 0);
-    }
     
     // When writing to the port register, the last VIC byte appears in 0x0001
     c64->mem.ram[0x0001] = c64->vic.getDataBusPhi1();
