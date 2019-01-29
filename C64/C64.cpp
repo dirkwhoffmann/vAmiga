@@ -184,19 +184,6 @@ C64::dump() {
   
 }
 
-C64Model
-C64::getModel()
-{
-    
-    // We've got a non-standard configuration
-    return C64_CUSTOM; 
-}
-
-void
-C64::setModel(C64Model m)
-{
-}
-
 void
 C64::powerUp()
 {    

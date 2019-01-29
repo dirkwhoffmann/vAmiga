@@ -226,22 +226,7 @@ class C64 : public VirtualComponent {
     //! @functiongroup Configuring the emulator
     //
     
-    /*! @brief    Returns the emulated C64 model
-     *  @return   C64_CUSTOM, if the selected sub-components do not match any
-     *            of the supported C64 models.
-     */
-    C64Model getModel();
-    
-    /*! @brief    Sets the currently emulated C64 model
-     *  @param    m is any C64Model other than C64_CUSTOM.
-     *  @note     It it safe to call this function on a running emulator.
-     */
-    void setModel(C64Model m);
-    
-    //! @brief    Updates the VIC function table
-    /*! @details  This function is invoked by VIC::setModel(), only.
-     */
-    void updateVicFunctionTable();
+ 
     
     
     //

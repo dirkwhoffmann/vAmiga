@@ -53,9 +53,9 @@ AudioUnit::executeUntil(uint64_t targetCycle)
 {
     uint64_t missingCycles = targetCycle - cycles;
     
-    if (missingCycles > PAL_CYCLES_PER_SECOND) {
+    if (missingCycles > 1000000 /* some decent number here */) {
         msg("Far too many Audio cycles are missing.\n");
-        missingCycles = PAL_CYCLES_PER_SECOND;
+        missingCycles = 1000000;
     }
     
     execute(missingCycles);

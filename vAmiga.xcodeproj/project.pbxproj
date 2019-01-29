@@ -26,7 +26,6 @@
 		508FDF8521EA1FBC0043D0E9 /* VirtualComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDEF221EA1FBC0043D0E9 /* VirtualComponent.cpp */; };
 		508FDF8621EA1FBC0043D0E9 /* basic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDEF321EA1FBC0043D0E9 /* basic.cpp */; };
 		508FDF8721EA1FBC0043D0E9 /* MessageQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDEF521EA1FBC0043D0E9 /* MessageQueue.cpp */; };
-		508FDF8821EA1FBC0043D0E9 /* TimeDelayed.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDEF721EA1FBC0043D0E9 /* TimeDelayed.cpp */; };
 		508FDF8921EA1FBC0043D0E9 /* C64.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDEFB21EA1FBC0043D0E9 /* C64.cpp */; };
 		508FDFAC21EA1FBC0043D0E9 /* TOD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDF5921EA1FBC0043D0E9 /* TOD.cpp */; };
 		508FDFAD21EA1FBC0043D0E9 /* CIA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDF5C21EA1FBC0043D0E9 /* CIA.cpp */; };
@@ -180,16 +179,13 @@
 		508FDEF121EA1FBC0043D0E9 /* VC64Object.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VC64Object.cpp; sourceTree = "<group>"; };
 		508FDEF221EA1FBC0043D0E9 /* VirtualComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VirtualComponent.cpp; sourceTree = "<group>"; };
 		508FDEF321EA1FBC0043D0E9 /* basic.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = basic.cpp; sourceTree = "<group>"; };
-		508FDEF421EA1FBC0043D0E9 /* TimeDelayed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeDelayed.h; sourceTree = "<group>"; };
 		508FDEF521EA1FBC0043D0E9 /* MessageQueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MessageQueue.cpp; sourceTree = "<group>"; };
 		508FDEF621EA1FBC0043D0E9 /* basic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = basic.h; sourceTree = "<group>"; };
-		508FDEF721EA1FBC0043D0E9 /* TimeDelayed.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TimeDelayed.cpp; sourceTree = "<group>"; };
 		508FDEF821EA1FBC0043D0E9 /* MessageQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageQueue.h; sourceTree = "<group>"; };
 		508FDEF921EA1FBC0043D0E9 /* VirtualComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualComponent.h; sourceTree = "<group>"; };
 		508FDEFA21EA1FBC0043D0E9 /* C64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = C64.h; sourceTree = "<group>"; };
 		508FDEFB21EA1FBC0043D0E9 /* C64.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = C64.cpp; sourceTree = "<group>"; };
 		508FDF0721EA1FBC0043D0E9 /* C64_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = C64_types.h; sourceTree = "<group>"; };
-		508FDF0A21EA1FBC0043D0E9 /* VIC_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VIC_types.h; sourceTree = "<group>"; };
 		508FDF5721EA1FBC0043D0E9 /* CIA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CIA.h; sourceTree = "<group>"; };
 		508FDF5821EA1FBC0043D0E9 /* TOD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TOD.h; sourceTree = "<group>"; };
 		508FDF5921EA1FBC0043D0E9 /* TOD.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TOD.cpp; sourceTree = "<group>"; };
@@ -400,7 +396,6 @@
 				508FDEFA21EA1FBC0043D0E9 /* C64.h */,
 				508FDEFB21EA1FBC0043D0E9 /* C64.cpp */,
 				508FDF0721EA1FBC0043D0E9 /* C64_types.h */,
-				508FDF0A21EA1FBC0043D0E9 /* VIC_types.h */,
 				508FDF5621EA1FBC0043D0E9 /* CIA */,
 			);
 			path = C64;
@@ -424,9 +419,7 @@
 				508FDEF121EA1FBC0043D0E9 /* VC64Object.cpp */,
 				508FDEF221EA1FBC0043D0E9 /* VirtualComponent.cpp */,
 				508FDEF321EA1FBC0043D0E9 /* basic.cpp */,
-				508FDEF421EA1FBC0043D0E9 /* TimeDelayed.h */,
 				508FDEF621EA1FBC0043D0E9 /* basic.h */,
-				508FDEF721EA1FBC0043D0E9 /* TimeDelayed.cpp */,
 				508FDEF921EA1FBC0043D0E9 /* VirtualComponent.h */,
 			);
 			path = General;
@@ -918,7 +911,6 @@
 				508FDF8121EA1FBC0043D0E9 /* C64Memory.cpp in Sources */,
 				508FDFD621EA20510043D0E9 /* DragAndDrop.swift in Sources */,
 				508FE05F21EA22CC0043D0E9 /* ExportDiskController.swift in Sources */,
-				508FDF8821EA1FBC0043D0E9 /* TimeDelayed.cpp in Sources */,
 				508FE03521EA22C30043D0E9 /* ScriptCommands.swift in Sources */,
 				508FE01821EA227B0043D0E9 /* MyController.swift in Sources */,
 				5014DD1521F3625200BC14BA /* AmigaKeyboard.cpp in Sources */,

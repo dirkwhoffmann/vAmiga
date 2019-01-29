@@ -75,7 +75,6 @@ VirtualComponent::ping()
 void
 VirtualComponent::setClockFrequency(uint32_t frequency)
 {
-    assert(frequency == PAL_CLOCK_FREQUENCY || frequency == NTSC_CLOCK_FREQUENCY);
     
     // Call method for all sub components
     if (subComponents != NULL)
