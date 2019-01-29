@@ -23,7 +23,6 @@
 #define _VC64OBJECT_INC
 
 #include "basic.h"
-#include "C64_types.h"
 
 /*! @brief    Common functionality of all VirtualC64 objects.
  *  @details  This class stores a textual description of the object and offers

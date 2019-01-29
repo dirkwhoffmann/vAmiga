@@ -82,7 +82,6 @@ C64::C64()
     // Register sub components
     VirtualComponent *subcomponents[] = {
         
-        &mem,
         &cia1, &cia2,
         NULL };
     
@@ -125,9 +124,6 @@ C64::reset()
     // Reset all sub components
     VirtualComponent::reset();
     
-    // Initialize processor port
-    mem.poke(0x0000, 0x2F);  // Data direction
-    mem.poke(0x0001, 0x1F);  // IO port, set default memory layout
 
     // Initialize program counter
     

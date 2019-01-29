@@ -24,7 +24,6 @@
 
 
 // Data types and constants
-#include "C64_types.h"
 
 // General
 #include "MessageQueue.h"
@@ -32,8 +31,6 @@
 // Loading and saving
 
 // Sub components
-#include "Memory.h"
-#include "C64Memory.h"
 #include "TOD.h"
 #include "CIA.h"
 
@@ -57,10 +54,6 @@ class C64 : public VirtualComponent {
     //
     // Hardware components
     //
-    
-    //! @brief    The C64's virtual memory (ROM, RAM, and color RAM)
-    C64Memory mem;
-    
     
     
     

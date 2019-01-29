@@ -15,7 +15,6 @@
 
 // TODO: REMOVE
 #include "VC64Object.h"
-#include "C64_types.h"
 
 
 using namespace std;
