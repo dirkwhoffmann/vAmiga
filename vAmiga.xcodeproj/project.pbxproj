@@ -18,7 +18,6 @@
 		5085FE5921FB6856009753EF /* ProxyExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5085FE5821FB6856009753EF /* ProxyExtensions.swift */; };
 		508833EE21F0D21B009890EA /* ADFFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508833EC21F0D21B009890EA /* ADFFile.cpp */; };
 		508FDE6E21EA1FA50043D0E9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 508FDE6D21EA1FA50043D0E9 /* Assets.xcassets */; };
-		508FDE7121EA1FA50043D0E9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 508FDE6F21EA1FA50043D0E9 /* Main.storyboard */; };
 		508FDE7D21EA1FA50043D0E9 /* vAmigaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDE7C21EA1FA50043D0E9 /* vAmigaTests.swift */; };
 		508FDE8821EA1FA50043D0E9 /* vAmigaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDE8721EA1FA50043D0E9 /* vAmigaUITests.swift */; };
 		508FDF8621EA1FBC0043D0E9 /* basic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDEF321EA1FBC0043D0E9 /* basic.cpp */; };
@@ -158,7 +157,6 @@
 		508833ED21F0D21B009890EA /* ADFFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ADFFile.h; sourceTree = "<group>"; };
 		508FDE6421EA1FA40043D0E9 /* vAmiga.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = vAmiga.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		508FDE6D21EA1FA50043D0E9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		508FDE7021EA1FA50043D0E9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		508FDE7221EA1FA50043D0E9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		508FDE7321EA1FA50043D0E9 /* vAmiga.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = vAmiga.entitlements; sourceTree = "<group>"; };
 		508FDE7821EA1FA50043D0E9 /* vAmigaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = vAmigaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -347,7 +345,6 @@
 				50B14C2521EB9059002E32A6 /* Credits.rtf */,
 				50B14C1321EB8445002E32A6 /* sounds */,
 				508FDE6D21EA1FA50043D0E9 /* Assets.xcassets */,
-				508FDE6F21EA1FA50043D0E9 /* Main.storyboard */,
 				508FDE7221EA1FA50043D0E9 /* Info.plist */,
 				508FDE7321EA1FA50043D0E9 /* vAmiga.entitlements */,
 			);
@@ -791,7 +788,6 @@
 				508FDFC021EA1FF10043D0E9 /* SnapshotDialog.xib in Resources */,
 				50B14C1D21EB8445002E32A6 /* 1541_power_on_0.aiff in Resources */,
 				508FDE6E21EA1FA50043D0E9 /* Assets.xcassets in Resources */,
-				508FDE7121EA1FA50043D0E9 /* Main.storyboard in Resources */,
 				50B14C2221EB8445002E32A6 /* drive_snatch_uae.aiff in Resources */,
 				50B14C1E21EB8445002E32A6 /* 1541_track_change_2.aiff in Resources */,
 				50B14C2621EB905A002E32A6 /* Credits.rtf in Resources */,
@@ -936,14 +932,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		508FDE6F21EA1FA50043D0E9 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				508FDE7021EA1FA50043D0E9 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		508FDFAF21EA1FF10043D0E9 /* MyDocument.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
