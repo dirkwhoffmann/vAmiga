@@ -292,7 +292,7 @@ extension MyController : NSMenuItemValidation {
     
     @IBAction func powerAction(_ sender: Any!) {
         
-        amiga.powerOnOrOff()
+        amiga.isPoweredOn() ? amiga.powerOff() : amiga.run();
         refresh()
     }
     

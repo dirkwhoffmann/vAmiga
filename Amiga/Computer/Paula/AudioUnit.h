@@ -99,16 +99,14 @@ public:
 private:
     
     void _powerOn() override;
+    void _run() override;
+    void _pause() override;
     void _dump() override;
+    
     // void setClockFrequency(uint32_t frequency);
     void didLoadFromBuffer(uint8_t **buffer) override { clearRingbuffer(); }
     
 public:
-    
-    void run();
-    void pause();
-
-    
     
     //! @brief    Gathers all values that are displayed in the debugger
     // AudioInfo getInfo();

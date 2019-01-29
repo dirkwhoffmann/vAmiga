@@ -37,13 +37,13 @@ AudioUnit::_dump()
 }
 
 void
-AudioUnit::run()
+AudioUnit::_run()
 {
     clearRingbuffer();
 }
 
 void
-AudioUnit::pause()
+AudioUnit::_pause()
 {
     clearRingbuffer();
 }

@@ -488,7 +488,7 @@ extension MyController {
     
             // Launch the emulator
             c64.run()
-            amiga.powerOn()
+            amiga.run()
      
             // Process attachment (if any)
             mydocument.mountAmigaAttachment()

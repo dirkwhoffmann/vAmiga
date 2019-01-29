@@ -81,7 +81,7 @@ struct AmigaFileWrapper;
 
 - (void) powerOn;
 - (void) powerOff;
-- (void) powerOnOrOff;
+// - (void) powerOnOrOff;
 - (void) reset;
 - (void) ping;
 - (void) dump;
@@ -93,7 +93,7 @@ struct AmigaFileWrapper;
 - (BOOL) isPaused;
 - (void) run;
 - (void) pause;
-- (void) runOrPause;
+// - (void) runOrPause;
 
 - (void) suspend;
 - (void) resume;

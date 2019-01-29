@@ -111,24 +111,7 @@ public:
     // The invocation counter for implementing suspend() / resume()
     unsigned suspendCounter = 0;
     
-    /* The emulator thread
-     * Together with variable 'power' (inherited from HardwareComponent), this
-     * variable defines the operational state of the emulator. From four
-     * possible combinations, only three are considered valid:
-     *
-     *     power     | thread     | State
-     *     --------------------------------------
-     *     true      | created    | Running
-     *     true      | NULL       | Paused
-     *     false     | created    | (INVALID)
-     *     false     | NULL       | Off
-     *
-     * According to this table, the semantics of function isPoweredOn() and
-     * isPoweredOff() can be stated as follows:
-     *
-     *    isPoweredOn() == true  <==>  'Running' or 'Paused'
-     *   isPoweredOff() == true  <==>  'Off'
-     */
+    // The emulator thread
     pthread_t p = NULL;
     
     
@@ -251,29 +234,10 @@ public:
 
 private:
 
-    /* Initializes the internal state and starts the emulator thread.
-     * In detail, this function affects the emulator state as follows:
-     *
-     *                    | State   | Next    | Actions taken
-     *     -------------------------------------------------------------------
-     *     powerOn()      | Running | Running | none
-     *                    | Paused  | Paused  | none
-     *                    | Off     | Running | _powerOn(), create thread
-     */
     void _powerOn() override;
-    void _postPowerOn() override;
-
-    /* Destroys the emulator thread.
-     * In detail, this function affects the emulator state as follows:
-     *
-     *                    | State   | Next    | Actions taken
-     *     -------------------------------------------------------------------
-     *     powerOff()     | Running | Off     | destroy thread, _powerOff()
-     *                    | Paused  | Off     | _powerOff()
-     *                    | Off     | Off     | none
-     */
     void _powerOff() override;
-    void _postPowerOff() override;
+    void _run() override;
+    void _pause() override;
 
     void _reset() override;
     void _ping() override;
@@ -293,53 +257,7 @@ public:
      * the emulator.
      */
     bool readyToPowerUp();
-    
-    /* Returns true if the emulator is in 'Running' state
-     * According to the table above, 'Running' means that the component is
-     * powered on and the emulator thread running.
-     */
-    bool isRunning() { return p != NULL; }
-    
-    /* Returns true if the emulator is in 'Paused' state
-     * According to the table above, 'Running' means that the component is
-     * powered on and the emulator thread has not been created yet or it has
-     * been destroyed.
-     */
-    bool isPaused() { return isPoweredOn() && p == NULL; }
-    
-    /* Puts a 'Paused' emulator into 'Running' state.
-     * In detail, this function affects the emulator state as follows:
-     *
-     *                    | State   | Next    | Actions taken
-     *     -------------------------------------------------------------------
-     *     run()          | Running | Running | none
-     *                    | Paused  | Running | create thread
-     *                    | Off     | Off     | none
-     */
-    void run();
-    
-    /* Puts a 'Running' emulator into 'Pause' state.
-     * In detail, this function affects the emulator state as follows:
-     *
-     *                    | State   | Next    | Actions taken
-     *     -------------------------------------------------------------------
-     *     pause()        | Running | Paused  | destroy thread
-     *                    | Paused  | Paused  | none
-     *                    | Off     | Off     | none
-     */
-    void pause();
-    
-    /* Toggles between 'Running' and 'Pause' state.
-     * In detail, this function affects the emulator state as follows:
-     *
-     *                    | State   | Next    | Actions taken
-     *     -------------------------------------------------------------------
-     *     runOrPause()   | Running | Paused  | destroy thread
-     *                    | Paused  | Running | create thread
-     *                    | Off     | Off     | none
-     */
-    void runOrPause() { isRunning() ? pause() : run(); }
-    
+        
     
     /* Pauses the emulation thread temporarily.
      * Because the emulator is running in a separate thread, the GUI has to

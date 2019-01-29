@@ -206,36 +206,48 @@ Amiga::configureDrive(unsigned driveNr, DriveType type)
 void
 Amiga::_powerOn()
 {
-    msg("Powering on ...\n");
+    debug(1, "Power on");
     
-    // Reset the master clock
     masterClock = 0;
-}
-
-void
-Amiga::_postPowerOn()
-{
-    // Start the emulator *after* the subcomponents got powered on.
-    run();
-    
-    // Notify the GUI
     putMessage(MSG_POWER_ON);
 }
-
 
 void
 Amiga::_powerOff()
 {
-    msg("Powering off ...\n");
+    debug(1, "Power off");
     
-    // Stop the emulator *before* the subcomponents got powered off.
-    pause();
+    putMessage(MSG_POWER_OFF);
 }
 
 void
-Amiga::_postPowerOff()
+Amiga::_run()
 {
-    putMessage(MSG_POWER_OFF);
+    debug(1, "Run\n");
+    
+    // Check for missing Roms
+    if (!readyToPowerUp()) {
+        putMessage(MSG_ROM_MISSING);
+        return;
+    }
+    
+    // Start sub components
+    paula.audioUnit.run();
+    
+    // Start the emulator thread
+    pthread_create(&p, NULL, threadMain, (void *)this);
+}
+
+void
+Amiga::_pause()
+{
+     debug(1, "Pause\n");
+    
+    // Cancel the emulator thread
+    stop = true;
+    
+    // Wait until the thread has terminated
+    pthread_join(p, NULL);
 }
 
 void
@@ -307,40 +319,6 @@ Amiga::readyToPowerUp()
     }
 
     return (config.model == A1000) ? bootRom != NULL : kickRom != NULL;
-}
-
-void
-Amiga::run()
-{
-    debug("run()\n");
-    
-    if (isPaused()) {
-        
-        // Check for missing Roms
-        if (!readyToPowerUp()) {
-            putMessage(MSG_ROM_MISSING);
-            return;
-        }
-        
-        // Start sub components
-        paula.audioUnit.run();
-        
-        // Start the emulator thread
-        pthread_create(&p, NULL, threadMain, (void *)this);
-    }
-}
-
-void
-Amiga::pause()
-{
-    if (isRunning()) {
-        
-        // Cancel the emulator thread
-        stop = true;
-        
-        // Wait until the thread has terminated
-        pthread_join(p, NULL);
-    }
 }
 
 void

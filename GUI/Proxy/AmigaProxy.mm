@@ -617,10 +617,12 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->amiga->powerOff();
 }
+/*
 - (void) powerOnOrOff
 {
     return wrapper->amiga->powerOnOrOff();
 }
+*/
 - (void) reset
 {
     return wrapper->amiga->reset();
@@ -662,10 +664,12 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->amiga->pause();
 }
+/*
 - (void) runOrPause
 {
     wrapper->amiga->runOrPause();
 }
+*/
 - (void) suspend
 {
     return wrapper->amiga->suspend();

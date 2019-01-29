@@ -393,7 +393,8 @@ public class MetalView: MTKView {
     func drawScene3D() {
     
         let animates = self.animates()
-        let renderBackground = !fullscreen && (animates || (currentAlpha < 1.0))
+        let paused = controller.amiga.isPaused()
+        let renderBackground = !fullscreen && !paused && (animates || (currentAlpha < 1.0))
         let renderForeground = currentAlpha > 0.0
         
         if animates {
@@ -435,7 +436,7 @@ public class MetalView: MTKView {
                                           length: MemoryLayout<VertexUniforms>.stride,
                                           index: 1)
             // Configure fragment shader
-            fragmentUniforms.alpha = controller.c64.isHalted() ? 0.5 : currentAlpha
+            fragmentUniforms.alpha = paused ? 0.5 : currentAlpha
             commandEncoder.setFragmentTexture(scanlineTexture, index: 0)
             commandEncoder.setFragmentTexture(bloomTextureR, index: 1)
             commandEncoder.setFragmentTexture(bloomTextureG, index: 2)

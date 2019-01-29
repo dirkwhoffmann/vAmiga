@@ -63,9 +63,6 @@ public:
     
 protected:
     
-    // Indicates if the component is powered up or down.
-    bool power = false;
-    
     // Sub components of this component
     HardwareComponent **subComponents = NULL;
     
@@ -74,6 +71,21 @@ protected:
     
     // Snapshot size on disk (in bytes)
     unsigned snapshotSize = 0;
+    
+    /* State model:
+     * The virtual hardware components can be in three different states,
+     * called 'Off', 'Paused', and 'Running'. The current state is determined
+     * by variables 'power' and 'running' according to the following table:
+     *
+     *     power     | running    | State
+     *     --------------------------------------
+     *     false     | false      | Off
+     *     false     | true       | INVALID
+     *     true      | false      | Paused
+     *     true      | true       | Running
+     */
+    bool power = false;
+    bool running = false;
     
 public:
     
@@ -91,39 +103,81 @@ public:
      */
     virtual void setAmiga(Amiga *amiga);
     
-    // Returns true if the component is powered on
+    /* There are several functions for querying and changing state:
+     *
+     *          -----------------------------------------------
+     *         |                    powerOn()                  |
+     *         |                                               V
+     *     ---------   powerOn()   ---------     run()     ---------
+     *    |   Off   |------------>| Paused  |------------>| Running |
+     *    |         |<------------|         |<------------|         |
+     *     ---------   powerOff()  ---------    pause()    ---------
+     *         ^                                               |
+     *         |                   powerOff()                  |
+     *          -----------------------------------------------
+     *
+     *     isPoweredOff()                  isPoweredOn()
+     * |-------------------||----------------------------------------|
+     *                      |-------------------||-------------------|
+     *                            isPaused()          isRunning()
+     */
+    
     bool isPoweredOn() { return power; }
-
-    // Returns true if the component is powered off
     bool isPoweredOff() { return !power; }
-
-    /* Emulates a power on event on the virtual Amiga by
-     *   1. invoking _powerOn() on this component,
-     *   2. invoking powerOn() on all sub components,
-     *   3. invoking _postPowerOn() on this component.
+    bool isPaused() { return power && !running; }
+    bool isRunning() { return running; }
+    
+    /* powerOn() powers the component on.
+     *
+     * current   | next      | action
+     * -------------------------------------------------------------------------
+     * off       | paused    | _powerOn() on each sub component
+     * paused    | paused    | none
+     * running   | running   | none
      */
     void powerOn();
-
-    // Defines the subclass specific behaviour of powerOn().
     virtual void _powerOn() { }
-    virtual void _postPowerOn() { }
     
-    /* Emulates a power on event on the virtual Amiga by
-     *   1. invoking _powerOff() on this component,
-     *   2. invoking powerOff() on all sub components,
-     *   3. invoking _postPowerOff() on this component.
+    /* powerOff() powers the component off.
+     *
+     * current   | next      | action
+     * -------------------------------------------------------------------------
+     * off       | off       | none
+     * paused    | off       | _powerOff() on each sub component
+     * running   | off       | pause(), _powerOff() on each sub component
      */
     void powerOff();
-    
-    // Defines the subclass specific behaviour of powerOff().
     virtual void _powerOff() { }
-    virtual void _postPowerOff() { }
     
+    /* run() puts the component in 'running' state.
+     *
+     * current   | next      | action
+     * -------------------------------------------------------------------------
+     * off       | running   | powerOn(), _run() on each sub component
+     * paused    | running   | _run() on each sub component
+     * running   | running   | none
+     */
+    void run();
+    virtual void _run() { }
+    
+    /* pause() puts the component in 'paused' state.
+     *
+     * current   | next      | action
+     * -------------------------------------------------------------------------
+     * off       | off       | none
+     * paused    | paused    | none
+     * running   | paused    | _pause() on each sub component
+     */
+    virtual void pause();
+    virtual void _pause() { };
+    
+  
+
     // Calls powerOn() or powerOff(), depending on the current state.
-    void powerOnOrOff() { isPoweredOn() ? powerOff() : powerOn(); }
+    // void powerOnOrOff() { isPoweredOn() ? powerOff() : powerOn(); }
     
     // Emulates a cold start of this component.
-    void coldStart() { powerOff(); powerOn(); }
+    // void coldStart() { powerOff(); powerOn(); }
     
     /* Emulates a reset event on the virtual Amiga.
      * By default, each component resets its sub components.

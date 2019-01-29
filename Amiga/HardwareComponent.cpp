@@ -38,39 +38,75 @@ HardwareComponent::setAmiga(Amiga *amiga)
 void
 HardwareComponent::powerOn()
 {
-    if (power) return;
+    if (!power) {
         
-    // Power on this component
-    debug(2, "Powering on[%p]\n", this);
-    power = true;
-    _powerOn();
-    
-    // Power on sub components
-    if (subComponents != NULL)
-        for (unsigned i = 0; subComponents[i] != NULL; i++)
-            subComponents[i]->powerOn();
-    
-    // Finish up
-    _postPowerOn();
+        // Power all sub components on
+        if (subComponents != NULL)
+            for (unsigned i = 0; subComponents[i] != NULL; i++)
+                subComponents[i]->powerOn();
+        
+        // Power on this component
+        debug(2, "Power on\n");
+        power = true;
+        _powerOn();
+    }
 }
 
 void
 HardwareComponent::powerOff()
 {
-    if (!power) return;
-    
-    // Power off this component
-    debug(2, "Powering off[%p]\n", this);
-    power = false;
-    _powerOff();
+    if (power) {
+        
+         // Pause if needed
+        pause();
+        
+        // Power off this component
+        debug(2, "Power off\n");
+        power = false;
+        _powerOff();
 
-    // Power off sub components
-    if (subComponents != NULL)
-        for (unsigned i = 0; subComponents[i] != NULL; i++)
-            subComponents[i]->powerOff();
+        // Power all sub components off
+        if (subComponents != NULL)
+            for (unsigned i = 0; subComponents[i] != NULL; i++)
+                subComponents[i]->powerOff();
+    }
+}
 
-    // Finish up
-    _postPowerOff();
+void
+HardwareComponent::run()
+{
+    if (!running) {
+        
+        // Power on if needed
+        powerOn();
+            
+        // Start all sub components
+        if (subComponents != NULL)
+            for (unsigned i = 0; subComponents[i] != NULL; i++)
+                subComponents[i]->run();
+        
+        // Start this component
+        debug(2, "Run\n");
+        running = true;
+        _run();
+    }
+}
+
+void
+HardwareComponent::pause()
+{
+    if (running) {
+        
+        // Pause this component
+        debug(2, "Pause\n");
+        running = false;
+        _pause();
+
+        // Pause all sub components
+        if (subComponents != NULL)
+            for (unsigned i = 0; subComponents[i] != NULL; i++)
+                subComponents[i]->pause();
+    }
 }
 
 void
