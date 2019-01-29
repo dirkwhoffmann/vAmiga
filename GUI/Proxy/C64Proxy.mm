@@ -13,7 +13,6 @@
 #import "vAmiga-Swift.h"
 
 struct C64Wrapper { C64 *c64; };
-struct CpuWrapper { CPU *cpu; };
 struct MemoryWrapper { C64Memory *mem; };
 struct VicWrapper { VIC *vic; };
 struct SidBridgeWrapper { SIDBridge *sid; };
@@ -23,134 +22,6 @@ struct DriveWrapper { VC1541 *drive; };
 struct DatasetteWrapper { Datasette *datasette; };
 struct AnyC64FileWrapper { AnyC64File *file; };
 
-//
-// CPU proxy
-//
-
-@implementation CPUProxy
-
-// Constructing
-- (instancetype) initWithCPU:(CPU *)cpu
-{
-    if (self = [super init]) {
-        wrapper = new CpuWrapper();
-        wrapper->cpu = cpu;
-    }
-    return self;
-}
-
-// Proxy methods
-- (CPUInfo) getInfo
-{
-    return wrapper->cpu->getInfo();
-}
-- (void) dump
-{
-    wrapper->cpu->dump();
-}
-- (BOOL) tracing
-{
-    return wrapper->cpu->tracingEnabled();
-}
-- (void) setTracing:(BOOL)b
-{
-    b ? wrapper->cpu->startTracing() : wrapper->cpu->stopTracing();
-}
-- (UInt64) cycle
-{
-    return wrapper->cpu->cycle;
-}
-- (uint16_t) pc
-{
-    return wrapper->cpu->getPC();
-}
-- (void) setPC:(uint16_t)addr
-{
-    wrapper->cpu->jumpToAddress(addr);
-}
-- (void) setSP:(uint8_t)sp
-{
-    wrapper->cpu->regSP = sp;
-}
-- (void) setA:(uint8_t)a
-{
-    wrapper->cpu->regA = a;
-}
-- (void) setX:(uint8_t)x
-{
-    wrapper->cpu->regX = x;
-}
-- (void) setY:(uint8_t)y
-{
-    wrapper->cpu->regY = y;
-}
-- (void) setNflag:(BOOL)b
-{
-    wrapper->cpu->setN(b);
-}
-- (void) setZflag:(BOOL)b
-{
-    wrapper->cpu->setZ(b);
-}
-- (void) setCflag:(BOOL)b
-{
-    wrapper->cpu->setC(b);
-}
-- (void) setIflag:(BOOL)b
-{
-    wrapper->cpu->setI(b);
-}
-- (void) setBflag:(BOOL)b
-{
-    wrapper->cpu->setB(b);
-}
-- (void) setDflag:(BOOL)b
-{
-    wrapper->cpu->setD(b);
-}
-- (void) setVflag:(BOOL)b
-{
-    wrapper->cpu->setV(b);
-}
-- (BOOL) breakpoint:(uint16_t)addr
-{
-    return wrapper->cpu->hardBreakpoint(addr);
-}
-- (void) setBreakpoint:(uint16_t)addr
-{
-    wrapper->cpu->setHardBreakpoint(addr);
-}
-- (void) deleteBreakpoint:(uint16_t)addr
-{
-    wrapper->cpu->deleteHardBreakpoint(addr);
-}
-- (void) toggleBreakpoint:(uint16_t)addr
-{
-    wrapper->cpu->toggleHardBreakpoint(addr);
-}
-- (NSInteger) recordedInstructions
-{
-    return wrapper->cpu->recordedInstructions();
-}
-- (RecordedInstruction) readRecordedInstruction
-{
-    return wrapper->cpu->readRecordedInstruction();
-}
-- (RecordedInstruction) readRecordedInstruction:(NSInteger)previous
-{
-    return wrapper->cpu->readRecordedInstruction((unsigned)previous);
-}
-- (DisassembledInstruction) disassemble:(uint16_t)addr hex:(BOOL)h;
-{
-    return wrapper->cpu->disassemble(addr, h);
-}
-- (DisassembledInstruction) disassembleRecordedInstr:(RecordedInstruction)instr
-                                                 hex:(BOOL)h;
-{
-    return wrapper->cpu->disassemble(instr, h);
-}
-
-@end
 
 
 //
@@ -434,7 +305,7 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 @implementation C64Proxy
 
 @synthesize wrapper;
-@synthesize mem, cpu, vic;
+@synthesize mem, vic;
 
 - (instancetype) init
 {
@@ -449,7 +320,6 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 	
     // Create sub proxys
     mem = [[MemoryProxy alloc] initWithMemory:&c64->mem];
-    cpu = [[CPUProxy alloc] initWithCPU:&c64->cpu];
     vic = [[VICProxy alloc] initWithVIC:&c64->vic];
 
     return self;

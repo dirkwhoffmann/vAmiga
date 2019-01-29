@@ -33,8 +33,6 @@ extension MyController {
         
         if let id = debugPanel.selectedTabViewItem?.identifier as? String {
             switch id {
-            case "CPU":
-                refreshCPU()
                 
             case "MEM":
                 memTableView.refresh()
@@ -82,9 +80,6 @@ extension MyController {
                         [volume])
         
         assignFormatter(fmt8,
-                        [sp, a, x, y])
-        
-        assignFormatter(fmt8,
                         [ciaPA, ciaPB,
                          todHours, todMinutes, todSeconds, todTenth,
                          alarmHours, alarmMinutes, alarmSeconds, alarmTenth,
@@ -102,8 +97,7 @@ extension MyController {
                         [])
 
         assignFormatter(fmt16,
-                        [pc, breakAt,
-                         ciaTimerA, ciaLatchA, ciaTimerB, ciaLatchB
+                        [ciaTimerA, ciaLatchA, ciaTimerB, ciaLatchB
                         ])
         
         let columnFormatters = [
@@ -129,9 +123,6 @@ extension MyController {
     func setUserEditing(_ enabled: Bool) {
         
         let controls:[NSControl] = [
-            // CPU panel
-            pc, sp, a, x, y,
-            nflag, zflag, cflag, iflag, bflag, dflag, vflag,
             
             // CIA panel
             ciaPRA, ciaPRB, ciaDDRA, ciaDDRB, ciaLatchA, ciaLatchB,
@@ -247,16 +238,12 @@ extension MyController {
     @IBAction func setDecimalAction(_ sender: Any!) {
   
         hex = false
-        cpuTableView.setHex(false)
-        cpuTraceView.setHex(false)
         refreshFormatters(hex: false)
     }
     
     @IBAction func setHexadecimalAction(_ sender: Any!) {
         
         hex = true
-        cpuTableView.setHex(true)
-        cpuTraceView.setHex(true)
         refreshFormatters(hex: true)
     }
 }

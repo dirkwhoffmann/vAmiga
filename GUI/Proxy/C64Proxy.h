@@ -109,6 +109,7 @@ struct SidBridgeWrapper;
 //                                 CPU proxy
 // -----------------------------------------------------------------------------
 
+/*
 @interface CPUProxy : NSObject {
     
     struct CpuWrapper *wrapper;
@@ -148,7 +149,7 @@ struct SidBridgeWrapper;
 - (DisassembledInstruction) disassembleRecordedInstr:(RecordedInstruction)instr hex:(BOOL)h;
 
 @end
-
+*/
 
 // -----------------------------------------------------------------------------
 //                                 Memory proxy

@@ -125,7 +125,6 @@
 		508FDFE521EA21630043D0E9 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 508FDFE421EA21630043D0E9 /* IOKit.framework */; };
 		508FDFE721EA21780043D0E9 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 508FDFE621EA21780043D0E9 /* CoreAudio.framework */; };
 		508FDFE921EA21C80043D0E9 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 508FDFE821EA21C80043D0E9 /* AppKit.framework */; };
-		508FE00F21EA227B0043D0E9 /* CPUTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFEA21EA22780043D0E9 /* CPUTableView.swift */; };
 		508FE01021EA227B0043D0E9 /* Speedometer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFEB21EA22780043D0E9 /* Speedometer.swift */; };
 		508FE01121EA227B0043D0E9 /* MyControllerToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFED21EA22780043D0E9 /* MyControllerToolbar.swift */; };
 		508FE01221EA227B0043D0E9 /* CIAPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFEE21EA22780043D0E9 /* CIAPanel.swift */; };
@@ -133,14 +132,12 @@
 		508FE01421EA227B0043D0E9 /* WaveformView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFF021EA22780043D0E9 /* WaveformView.swift */; };
 		508FE01521EA227B0043D0E9 /* GamePad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFF121EA22780043D0E9 /* GamePad.swift */; };
 		508FE01621EA227B0043D0E9 /* VICPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFF221EA22790043D0E9 /* VICPanel.swift */; };
-		508FE01721EA227B0043D0E9 /* CpuTraceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFF321EA22790043D0E9 /* CpuTraceView.swift */; };
 		508FE01821EA227B0043D0E9 /* MyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFF421EA22790043D0E9 /* MyController.swift */; };
 		508FE01921EA227B0043D0E9 /* MyControllerMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFF521EA22790043D0E9 /* MyControllerMenu.swift */; };
 		508FE01A21EA227B0043D0E9 /* Formatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFF621EA22790043D0E9 /* Formatter.swift */; };
 		508FE01B21EA227B0043D0E9 /* MyDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFF721EA22790043D0E9 /* MyDocument.swift */; };
 		508FE01C21EA227B0043D0E9 /* MemTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFF821EA22790043D0E9 /* MemTableView.swift */; };
 		508FE01D21EA227B0043D0E9 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFF921EA22790043D0E9 /* UserDefaults.swift */; };
-		508FE01F21EA227B0043D0E9 /* CPUPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFFC21EA22790043D0E9 /* CPUPanel.swift */; };
 		508FE02021EA227B0043D0E9 /* TimeTravelTouchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFFD21EA22790043D0E9 /* TimeTravelTouchBar.swift */; };
 		508FE02221EA227B0043D0E9 /* MacKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFFF21EA227A0043D0E9 /* MacKey.swift */; };
 		508FE02321EA227B0043D0E9 /* KeyboardController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00021EA227A0043D0E9 /* KeyboardController.swift */; };
@@ -454,7 +451,6 @@
 		508FDFE421EA21630043D0E9 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		508FDFE621EA21780043D0E9 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		508FDFE821EA21C80043D0E9 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
-		508FDFEA21EA22780043D0E9 /* CPUTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CPUTableView.swift; sourceTree = "<group>"; };
 		508FDFEB21EA22780043D0E9 /* Speedometer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Speedometer.swift; sourceTree = "<group>"; };
 		508FDFEC21EA22780043D0E9 /* C64Proxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = C64Proxy.h; sourceTree = "<group>"; };
 		508FDFED21EA22780043D0E9 /* MyControllerToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyControllerToolbar.swift; sourceTree = "<group>"; };
@@ -463,7 +459,6 @@
 		508FDFF021EA22780043D0E9 /* WaveformView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WaveformView.swift; sourceTree = "<group>"; };
 		508FDFF121EA22780043D0E9 /* GamePad.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GamePad.swift; sourceTree = "<group>"; };
 		508FDFF221EA22790043D0E9 /* VICPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VICPanel.swift; sourceTree = "<group>"; };
-		508FDFF321EA22790043D0E9 /* CpuTraceView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CpuTraceView.swift; sourceTree = "<group>"; };
 		508FDFF421EA22790043D0E9 /* MyController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyController.swift; sourceTree = "<group>"; };
 		508FDFF521EA22790043D0E9 /* MyControllerMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyControllerMenu.swift; sourceTree = "<group>"; };
 		508FDFF621EA22790043D0E9 /* Formatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Formatter.swift; sourceTree = "<group>"; };
@@ -471,7 +466,6 @@
 		508FDFF821EA22790043D0E9 /* MemTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemTableView.swift; sourceTree = "<group>"; };
 		508FDFF921EA22790043D0E9 /* UserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
 		508FDFFA21EA22790043D0E9 /* VirtualC64-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "VirtualC64-Bridging-Header.h"; sourceTree = "<group>"; };
-		508FDFFC21EA22790043D0E9 /* CPUPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CPUPanel.swift; sourceTree = "<group>"; };
 		508FDFFD21EA22790043D0E9 /* TimeTravelTouchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeTravelTouchBar.swift; sourceTree = "<group>"; };
 		508FDFFF21EA227A0043D0E9 /* MacKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MacKey.swift; sourceTree = "<group>"; };
 		508FE00021EA227A0043D0E9 /* KeyboardController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardController.swift; sourceTree = "<group>"; };
@@ -1105,11 +1099,8 @@
 			children = (
 				508FE00421EA227A0043D0E9 /* Debugger.swift */,
 				508FDFEE21EA22780043D0E9 /* CIAPanel.swift */,
-				508FDFFC21EA22790043D0E9 /* CPUPanel.swift */,
-				508FDFEA21EA22780043D0E9 /* CPUTableView.swift */,
 				508FE00221EA227A0043D0E9 /* MemoryPanel.swift */,
 				508FDFF821EA22790043D0E9 /* MemTableView.swift */,
-				508FDFF321EA22790043D0E9 /* CpuTraceView.swift */,
 				508FDFF621EA22790043D0E9 /* Formatter.swift */,
 				508FDFF021EA22780043D0E9 /* WaveformView.swift */,
 				508FDFEF21EA22780043D0E9 /* AudioPanel.swift */,
@@ -1464,7 +1455,6 @@
 				50B14C2821EB97EC002E32A6 /* AmigaProxy.mm in Sources */,
 				508FDFA921EA1FBC0043D0E9 /* VIA.cpp in Sources */,
 				509F7F1A21EDDF4F00A530E4 /* BootRom.cpp in Sources */,
-				508FE01721EA227B0043D0E9 /* CpuTraceView.swift in Sources */,
 				508FDF7621EA1FBC0043D0E9 /* T64File.cpp in Sources */,
 				508FDF6021EA1FBC0043D0E9 /* Westermann.cpp in Sources */,
 				508FDF6721EA1FBC0043D0E9 /* Expert.cpp in Sources */,
@@ -1519,7 +1509,6 @@
 				508FDF7A21EA1FBC0043D0E9 /* AnyDisk.cpp in Sources */,
 				508FDFD721EA20510043D0E9 /* MetalView.swift in Sources */,
 				508FDF8721EA1FBC0043D0E9 /* MessageQueue.cpp in Sources */,
-				508FE01F21EA227B0043D0E9 /* CPUPanel.swift in Sources */,
 				508FDF9021EA1FBC0043D0E9 /* VIC_colors.cpp in Sources */,
 				508FDF8F21EA1FBC0043D0E9 /* VIC.cpp in Sources */,
 				508FDF6121EA1FBC0043D0E9 /* EasyFlash.cpp in Sources */,
@@ -1527,7 +1516,6 @@
 				508FDF9421EA1FBC0043D0E9 /* VIC_cycles_ntsc.cpp in Sources */,
 				508FDF8B21EA1FBC0043D0E9 /* NeosMouse.cpp in Sources */,
 				508FE02C21EA227B0043D0E9 /* C64Key.swift in Sources */,
-				508FE00F21EA227B0043D0E9 /* CPUTableView.swift in Sources */,
 				508FDFA621EA1FBC0043D0E9 /* Keyboard.cpp in Sources */,
 				508FDFA121EA1FBC0043D0E9 /* FastSID.cpp in Sources */,
 				508FDF7C21EA1FBC0043D0E9 /* AnyC64File.cpp in Sources */,

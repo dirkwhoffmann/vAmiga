@@ -168,23 +168,6 @@ class MyController : NSWindowController, MessageReceiver {
     @IBOutlet weak var stepIntoButton: NSButton!
     @IBOutlet weak var stepOverButton: NSButton!
     
-    // Debug panel (CPU)
-    @IBOutlet weak var cpuTableView: CpuTableView!
-    @IBOutlet weak var cpuTraceView: CpuTraceView!
-    @IBOutlet weak var pc: NSTextField!
-    @IBOutlet weak var sp: NSTextField!
-    @IBOutlet weak var a: NSTextField!
-    @IBOutlet weak var x: NSTextField!
-    @IBOutlet weak var y: NSTextField!
-    @IBOutlet weak var nflag: NSButton!
-    @IBOutlet weak var zflag: NSButton!
-    @IBOutlet weak var cflag: NSButton!
-    @IBOutlet weak var iflag: NSButton!
-    @IBOutlet weak var bflag: NSButton!
-    @IBOutlet weak var dflag: NSButton!
-    @IBOutlet weak var vflag: NSButton!
-    @IBOutlet weak var breakAt: NSTextField!
-    
     // Debug panel (Memory)
     @IBOutlet weak var memTableView: MemTableView!
     
@@ -280,8 +263,6 @@ extension MyController {
 
         track()
         
-        cpuTableView.c = self
-        cpuTraceView.c = self
         memTableView.c = self
         
         // Create audio engine
