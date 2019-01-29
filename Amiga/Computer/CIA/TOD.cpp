@@ -20,7 +20,7 @@
  */
 
 
-#include "C64.h"
+#include "Amiga.h"
 
 TOD::TOD(CIA *cia)
 {

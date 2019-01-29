@@ -17,6 +17,7 @@
 // Sub components
 #include "EventHandler.h"
 #include "AmigaMemory.h"
+#include "CIA.h"
 #include "DMAController.h"
 #include "Denise.h"
 #include "Paula.h"

@@ -19,7 +19,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "C64.h"
+#include "VirtualComponent.h"
 #include <algorithm>
 
 VirtualComponent::~VirtualComponent()
@@ -85,13 +85,11 @@ VirtualComponent::setClockFrequency(uint32_t frequency)
 void
 VirtualComponent::suspend()
 {
-    c64->suspend();
 }
 
 void
 VirtualComponent::resume()
 {
-    c64->resume();
 }
 
 void

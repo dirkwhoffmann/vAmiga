@@ -25,7 +25,6 @@
 		508FDF8521EA1FBC0043D0E9 /* VirtualComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDEF221EA1FBC0043D0E9 /* VirtualComponent.cpp */; };
 		508FDF8621EA1FBC0043D0E9 /* basic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDEF321EA1FBC0043D0E9 /* basic.cpp */; };
 		508FDF8721EA1FBC0043D0E9 /* MessageQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDEF521EA1FBC0043D0E9 /* MessageQueue.cpp */; };
-		508FDF8921EA1FBC0043D0E9 /* C64.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDEFB21EA1FBC0043D0E9 /* C64.cpp */; };
 		508FDFAC21EA1FBC0043D0E9 /* TOD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDF5921EA1FBC0043D0E9 /* TOD.cpp */; };
 		508FDFAD21EA1FBC0043D0E9 /* CIA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDF5C21EA1FBC0043D0E9 /* CIA.cpp */; };
 		508FDFBE21EA1FF10043D0E9 /* MyDocument.xib in Resources */ = {isa = PBXBuildFile; fileRef = 508FDFAF21EA1FF10043D0E9 /* MyDocument.xib */; };
@@ -178,8 +177,6 @@
 		508FDEF621EA1FBC0043D0E9 /* basic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = basic.h; sourceTree = "<group>"; };
 		508FDEF821EA1FBC0043D0E9 /* MessageQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageQueue.h; sourceTree = "<group>"; };
 		508FDEF921EA1FBC0043D0E9 /* VirtualComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualComponent.h; sourceTree = "<group>"; };
-		508FDEFA21EA1FBC0043D0E9 /* C64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = C64.h; sourceTree = "<group>"; };
-		508FDEFB21EA1FBC0043D0E9 /* C64.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = C64.cpp; sourceTree = "<group>"; };
 		508FDF5721EA1FBC0043D0E9 /* CIA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CIA.h; sourceTree = "<group>"; };
 		508FDF5821EA1FBC0043D0E9 /* TOD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TOD.h; sourceTree = "<group>"; };
 		508FDF5921EA1FBC0043D0E9 /* TOD.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TOD.cpp; sourceTree = "<group>"; };
@@ -386,9 +383,6 @@
 			isa = PBXGroup;
 			children = (
 				508FDEEF21EA1FBC0043D0E9 /* General */,
-				508FDEFA21EA1FBC0043D0E9 /* C64.h */,
-				508FDEFB21EA1FBC0043D0E9 /* C64.cpp */,
-				508FDF5621EA1FBC0043D0E9 /* CIA */,
 			);
 			path = C64;
 			sourceTree = "<group>";
@@ -399,8 +393,6 @@
 				508FDEF021EA1FBC0043D0E9 /* VC64Object.h */,
 				508FDEF121EA1FBC0043D0E9 /* VC64Object.cpp */,
 				508FDEF221EA1FBC0043D0E9 /* VirtualComponent.cpp */,
-				508FDEF321EA1FBC0043D0E9 /* basic.cpp */,
-				508FDEF621EA1FBC0043D0E9 /* basic.h */,
 				508FDEF921EA1FBC0043D0E9 /* VirtualComponent.h */,
 			);
 			path = General;
@@ -622,6 +614,7 @@
 				5020B17B21EF121E00B9E80E /* DMAController.cpp */,
 				5020B17F21EF136100B9E80E /* Denise.h */,
 				5020B17E21EF136100B9E80E /* Denise.cpp */,
+				508FDF5621EA1FBC0043D0E9 /* CIA */,
 				50EE993D21FF4D42003BD74B /* Paula */,
 			);
 			path = Computer;
@@ -661,6 +654,8 @@
 				50B14C1121EB4314002E32A6 /* va_std.cpp */,
 				505A3A3921F4996400132020 /* sse_utils.h */,
 				505A3A3821F4996400132020 /* sse_utils.cpp */,
+				508FDEF321EA1FBC0043D0E9 /* basic.cpp */,
+				508FDEF621EA1FBC0043D0E9 /* basic.h */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";
@@ -887,7 +882,6 @@
 				508FE02921EA227B0043D0E9 /* MyControllerTouchBar.swift in Sources */,
 				508FE01121EA227B0043D0E9 /* MyControllerToolbar.swift in Sources */,
 				508FE05821EA22CC0043D0E9 /* SnapshotController.swift in Sources */,
-				508FDF8921EA1FBC0043D0E9 /* C64.cpp in Sources */,
 				508FE05221EA22CC0043D0E9 /* RomDropView.swift in Sources */,
 				508FDFD621EA20510043D0E9 /* DragAndDrop.swift in Sources */,
 				508FE05F21EA22CC0043D0E9 /* ExportDiskController.swift in Sources */,
