@@ -59,14 +59,7 @@ var amigaProxy: AmigaProxy? {
     }
 }
 
-/// DEPRECATED:
-/// The C64 proxy of the currently active emulator instance.
-/// This variable is global and can be accessed from anywhere in the Swift code.
-var proxy: C64Proxy? {
-    get {
-        return myDocument?.c64
-    }
-}
+
 
 /* An event tap for interception CGEvents
  * CGEvents are intercepted to establish a direct mapping of the Command keys

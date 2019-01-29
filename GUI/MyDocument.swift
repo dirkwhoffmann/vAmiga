@@ -21,7 +21,7 @@ class MyDocument : NSDocument {
      Emulator proxy object. This object is an Objective-C bridge between
      the GUI (written in Swift) an the core emulator (written in C++).
      */
-    var c64: C64Proxy!
+    // var c64: C64Proxy!
     
     /*
      An otional media object attached to this document.
@@ -64,7 +64,6 @@ class MyDocument : NSDocument {
         
         // Create emulator instance
         amiga = AmigaProxy()
-        c64 = C64Proxy()
         
         // Install the AROS Kickstart replacement per default
         amiga.loadKickRom(fromBuffer: NSDataAsset(name: "aros.rom")?.data)
@@ -84,7 +83,6 @@ class MyDocument : NSDocument {
         
         let nibName = NSNib.Name("MyDocument")
         let controller = MyController.init(windowNibName: nibName)
-        controller.c64 = c64
         controller.amiga = amiga
         self.addWindowController(controller)
     }
@@ -638,7 +636,6 @@ class MyDocument : NSDocument {
         // Note that all GUI elements have to be inactive when the proxy is set
         // to nil. Hence, the emulator should be shut down as late as possible.
         amiga.kill()
-        c64.kill()
     }
 }
 

@@ -36,7 +36,7 @@ class MyController : NSWindowController, MessageReceiver {
     /// Implements a bridge between the emulator written in C++ and the
     /// GUI written in Swift. Because Swift cannot interact with C++ directly,
     //  the proxy is written in Objective-C.
-    var c64: C64Proxy!
+    // var c64: C64Proxy!
     
     /// Audio Engine
     var audioEngine: AudioEngine!
@@ -885,39 +885,6 @@ extension MyController {
         preferencesController!.showSheet()
     }
     
-    //
-    // Loading Roms
-    //
-    
-    @discardableResult
-    func loadRom(_ url: URL?) -> Bool {
-        
-        if (url == nil) {
-            return false
-        }
-        
-        if c64.loadBasicRom(url!) {
-            // basicRomURL = url!
-            return true
-        }
-        if c64.loadCharRom(url!) {
-            // charRomURL = url!
-            return true
-        }
-        if c64.loadKernalRom(url!) {
-            // kernalRomURL = url!
-            return true
-        }
-        if c64.loadVC1541Rom(url!) {
-            // vc1541RomURL = url!
-            return true
-        }
-        
-        track("ROM file \(url!) not found")
-        return false
-    }
-    
-
     //
     // Keyboard events
     //

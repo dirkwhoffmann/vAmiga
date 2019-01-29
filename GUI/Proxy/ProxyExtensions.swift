@@ -87,7 +87,7 @@ public extension AmigaDriveProxy {
 
 
 // DELETE ASAP:
-
+/*
 public extension C64Proxy {
     
     func image(data: UnsafeMutablePointer<UInt8>?, size: NSSize) -> NSImage {
@@ -112,19 +112,7 @@ public extension C64Proxy {
         return image
     }
     
-    /*
-    func autoSnapshotImage(_ item: Int) -> NSImage {
-        
-        let data = autoSnapshotImageData(item)
-        return image(data: data, size: autoSnapshotImageSize(item))
-    }
-    
-    func userSnapshotImage(_ item: Int) -> NSImage {
-        
-        let data = userSnapshotImageData(item)
-        return image(data: data, size: userSnapshotImageSize(item))
-    }
-    */
+ 
 }
-
+*/
 
