@@ -491,22 +491,12 @@
 		508FE06021EA318D0043D0E9 /* Amiga */ = {
 			isa = PBXGroup;
 			children = (
-				50B14C0621EB218E002E32A6 /* AmigaObject.h */,
-				50B14C0521EB218E002E32A6 /* AmigaObject.cpp */,
-				50B14C0C21EB3708002E32A6 /* HardwareComponent.h */,
-				50B14C0B21EB3708002E32A6 /* HardwareComponent.cpp */,
-				508FDEF821EA1FBC0043D0E9 /* MessageQueue.h */,
-				508FDEF521EA1FBC0043D0E9 /* MessageQueue.cpp */,
 				50B14C0F21EB410B002E32A6 /* Amiga.h */,
 				50B14C0E21EB410B002E32A6 /* Amiga.cpp */,
-				5085FE5621FB3BAE009753EF /* EventHandler.h */,
-				5085FE5521FB3BAE009753EF /* EventHandler.cpp */,
-				5064851021EC7A1700FC4AC3 /* AmigaMemory.h */,
-				5064850F21EC7A1700FC4AC3 /* AmigaMemory.cpp */,
-				50A2953A21FF11F40046BAA0 /* Computer */,
-				50A2953C21FF12C20046BAA0 /* Ports */,
-				50A2953B21FF12170046BAA0 /* Drive */,
 				50B14C0421EB212E002E32A6 /* Foundation */,
+				50A2953A21FF11F40046BAA0 /* Computer */,
+				50A2953C21FF12C20046BAA0 /* Peripherals */,
+				50A2953B21FF12170046BAA0 /* Drive */,
 				508FE06621EA31E50043D0E9 /* FileTypes */,
 			);
 			path = Amiga;
@@ -581,6 +571,12 @@
 		50A2953A21FF11F40046BAA0 /* Computer */ = {
 			isa = PBXGroup;
 			children = (
+				508FDEF821EA1FBC0043D0E9 /* MessageQueue.h */,
+				508FDEF521EA1FBC0043D0E9 /* MessageQueue.cpp */,
+				5085FE5621FB3BAE009753EF /* EventHandler.h */,
+				5085FE5521FB3BAE009753EF /* EventHandler.cpp */,
+				5064851021EC7A1700FC4AC3 /* AmigaMemory.h */,
+				5064850F21EC7A1700FC4AC3 /* AmigaMemory.cpp */,
 				5020B17C21EF121E00B9E80E /* DMAController.h */,
 				5020B17B21EF121E00B9E80E /* DMAController.cpp */,
 				5020B17F21EF136100B9E80E /* Denise.h */,
@@ -604,7 +600,7 @@
 			path = Drive;
 			sourceTree = "<group>";
 		};
-		50A2953C21FF12C20046BAA0 /* Ports */ = {
+		50A2953C21FF12C20046BAA0 /* Peripherals */ = {
 			isa = PBXGroup;
 			children = (
 				5014DD1421F3625200BC14BA /* AmigaKeyboard.h */,
@@ -612,12 +608,16 @@
 				50A2953E21FF12EF0046BAA0 /* AmigaControlPort.h */,
 				50A2953D21FF12EF0046BAA0 /* AmigaControlPort.cpp */,
 			);
-			path = Ports;
+			path = Peripherals;
 			sourceTree = "<group>";
 		};
 		50B14C0421EB212E002E32A6 /* Foundation */ = {
 			isa = PBXGroup;
 			children = (
+				50B14C0621EB218E002E32A6 /* AmigaObject.h */,
+				50B14C0521EB218E002E32A6 /* AmigaObject.cpp */,
+				50B14C0C21EB3708002E32A6 /* HardwareComponent.h */,
+				50B14C0B21EB3708002E32A6 /* HardwareComponent.cpp */,
 				50B14C0921EB228E002E32A6 /* va_config.h */,
 				5082D83A21EF891200CF7692 /* va_constants.h */,
 				50B14C0A21EB2379002E32A6 /* va_types.h */,
