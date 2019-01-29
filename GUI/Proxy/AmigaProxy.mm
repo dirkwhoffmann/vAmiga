@@ -783,7 +783,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->amiga->getMessage();
 }
-
+- (BOOL) warp
+{
+    return wrapper->amiga->getWarp();
+}
 - (BOOL) alwaysWarp
 {
     return wrapper->amiga->getAlwaysWarp();

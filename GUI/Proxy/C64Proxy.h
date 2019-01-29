@@ -38,12 +38,16 @@ struct C64Wrapper;
 - (void) kill;
 
 // - (void) ping;
+/*
 - (void) dump;
 - (BOOL) developmentMode;
+*/
 
 // Configuring the emulator
+/*
 - (NSInteger) model;
 - (void) setModel:(NSInteger)value;
+*/
 
 // Accessing the message queue
 - (Message)message;
@@ -63,11 +67,13 @@ struct C64Wrapper;
 - (void) stepOver;
 
 // Managing the execution thread
+/*
 - (BOOL) warp;
 - (BOOL) alwaysWarp;
 - (void) setAlwaysWarp:(BOOL)b;
 - (BOOL) warpLoad;
 - (void) setWarpLoad:(BOOL)b;
+*/
 
 // Handling ROMs
 - (BOOL) isBasicRom:(NSURL *)url;

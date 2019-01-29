@@ -127,6 +127,7 @@ struct AmigaFileWrapper;
 - (void) removeListener:(const void *)sender;
 - (Message)message;
 
+- (BOOL) warp;
 - (BOOL) alwaysWarp;
 - (void) setAlwaysWarp:(BOOL)value;
 - (BOOL) warpLoad;

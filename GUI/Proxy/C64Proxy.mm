@@ -115,7 +115,6 @@ struct C64Wrapper { C64 *c64; };
 {
     wrapper->c64->ping();
 }
-*/
 - (void) dump
 {
     wrapper->c64->dump();
@@ -134,6 +133,7 @@ struct C64Wrapper { C64 *c64; };
 {
     wrapper->c64->setModel((C64Model)value);
 }
+*/
 
 // Accessing the message queue
 - (Message)message
@@ -192,6 +192,7 @@ struct C64Wrapper { C64 *c64; };
 }
 
 // Managing the execution thread
+/*
 - (BOOL) warp
 {
     return wrapper->c64->getWarp();
@@ -212,6 +213,7 @@ struct C64Wrapper { C64 *c64; };
 {
     wrapper->c64->setWarpLoad(b);
 }
+*/
 
 
 // Handling ROMs

@@ -50,7 +50,7 @@ extension PreferencesController {
     
     @IBAction func emuWarpLoadAction(_ sender: NSButton!) {
         
-        proxy?.setWarpLoad(sender.state == .on)
+        amigaProxy?.setWarpLoad(sender.state == .on)
         refresh()
     }
     

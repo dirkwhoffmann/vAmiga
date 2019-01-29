@@ -790,10 +790,10 @@ extension MyController {
              MSG_ALWAYS_WARP_ON,
              MSG_ALWAYS_WARP_OFF:
 
-            if c64.alwaysWarp() {
+            if amiga.alwaysWarp() {
                 let name = NSImage.Name("hourglass3Template")
                 warpIcon.image = NSImage.init(named: name)
-            } else if (c64.warp()) {
+            } else if (amiga.warp()) {
                 let name = NSImage.Name("hourglass2Template")
                 warpIcon.image = NSImage.init(named: name)
             } else {

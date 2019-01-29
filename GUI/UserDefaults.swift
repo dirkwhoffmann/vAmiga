@@ -71,7 +71,7 @@ extension MyController {
         
         track()
         
-        c64.suspend()
+        amiga.suspend()
         
         resetGeneralUserDefaults()
         resetRomUserDefaults()
@@ -80,14 +80,14 @@ extension MyController {
         resetEmulatorUserDefaults()
         resetHardwareUserDefaults()
         
-        c64.resume()
+        amiga.resume()
     }
     
     func loadUserDefaults() {
         
         track()
         
-        c64.suspend()
+        amiga.suspend()
         
         loadGeneralUserDefaults()
         loadRomUserDefaults()
@@ -96,7 +96,7 @@ extension MyController {
         loadEmulatorUserDefaults()
         loadHardwareUserDefaults()
         
-        c64.resume()
+        amiga.resume()
     }
     
     func loadUserDefaults(url: URL) {
@@ -188,12 +188,12 @@ extension MyController {
         
         let defaults = UserDefaults.standard
         
-        c64.suspend()
+        amiga.suspend()
         
         inputDevice1 = defaults.integer(forKey: Keys.inputDevice1)
         inputDevice2 = defaults.integer(forKey: Keys.inputDevice2)
         
-        c64.resume()
+        amiga.resume()
     }
     
     func saveGeneralUserDefaults() {
@@ -677,7 +677,7 @@ extension MyController {
         
         let defaults = UserDefaults.standard
         
-        defaults.set(c64.warpLoad(), forKey: Keys.warpLoad)
+        defaults.set(warpLoad, forKey: Keys.warpLoad)
         defaults.set(driveNoise, forKey: Keys.driveNoise)
 
         defaults.set(screenshotSource, forKey: Keys.screenshotSource)
