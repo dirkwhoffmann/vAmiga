@@ -84,7 +84,6 @@ C64::C64()
         
         &mem,
         &cia1, &cia2,
-        &vic,
         &port1,
         &port2,
         NULL };
@@ -106,9 +105,6 @@ C64::C64()
         { NULL,             0,                       0 }};
     
     registerSnapshotItems(items, sizeof(items));
-
-    // Set initial hardware configuration
-    vic.setModel(PAL_8565);
     
     // Initialize mach timer info
     mach_timebase_info(&timebase);
@@ -204,110 +200,6 @@ C64::setModel(C64Model m)
 }
 
 void
-C64::updateVicFunctionTable()
-{
-    // Assign model independent execution functions
-    vicfunc[0] = NULL;
-    vicfunc[12] = &VIC::cycle12;
-    vicfunc[13] = &VIC::cycle13;
-    vicfunc[14] = &VIC::cycle14;
-    vicfunc[15] = &VIC::cycle15;
-    vicfunc[16] = &VIC::cycle16;
-    vicfunc[17] = &VIC::cycle17;
-    vicfunc[18] = &VIC::cycle18;
-    
-    for (unsigned cycle = 19; cycle <= 54; cycle++)
-        vicfunc[cycle] = &VIC::cycle19to54;
-
-    vicfunc[56] = &VIC::cycle56;
-    
-    // Assign model specific execution functions
-    switch (vic.getModel()) {
-            
-        case PAL_6569_R1:
-        case PAL_6569_R3:
-        case PAL_8565:
-            
-            vicfunc[1] = &VIC::cycle1pal;
-            vicfunc[2] = &VIC::cycle2pal;
-            vicfunc[3] = &VIC::cycle3pal;
-            vicfunc[4] = &VIC::cycle4pal;
-            vicfunc[5] = &VIC::cycle5pal;
-            vicfunc[6] = &VIC::cycle6pal;
-            vicfunc[7] = &VIC::cycle7pal;
-            vicfunc[8] = &VIC::cycle8pal;
-            vicfunc[9] = &VIC::cycle9pal;
-            vicfunc[10] = &VIC::cycle10pal;
-            vicfunc[11] = &VIC::cycle11pal;
-            vicfunc[55] = &VIC::cycle55pal;
-            vicfunc[57] = &VIC::cycle57pal;
-            vicfunc[58] = &VIC::cycle58pal;
-            vicfunc[59] = &VIC::cycle59pal;
-            vicfunc[60] = &VIC::cycle60pal;
-            vicfunc[61] = &VIC::cycle61pal;
-            vicfunc[62] = &VIC::cycle62pal;
-            vicfunc[63] = &VIC::cycle63pal;
-            vicfunc[64] = NULL;
-            vicfunc[65] = NULL;
-            break;
-            
-        case NTSC_6567_R56A:
-            
-            vicfunc[1] = &VIC::cycle1pal;
-            vicfunc[2] = &VIC::cycle2pal;
-            vicfunc[3] = &VIC::cycle3pal;
-            vicfunc[4] = &VIC::cycle4pal;
-            vicfunc[5] = &VIC::cycle5pal;
-            vicfunc[6] = &VIC::cycle6pal;
-            vicfunc[7] = &VIC::cycle7pal;
-            vicfunc[8] = &VIC::cycle8pal;
-            vicfunc[9] = &VIC::cycle9pal;
-            vicfunc[10] = &VIC::cycle10pal;
-            vicfunc[11] = &VIC::cycle11pal;
-            vicfunc[55] = &VIC::cycle55ntsc;
-            vicfunc[57] = &VIC::cycle57ntsc;
-            vicfunc[58] = &VIC::cycle58ntsc;
-            vicfunc[59] = &VIC::cycle59ntsc;
-            vicfunc[60] = &VIC::cycle60ntsc;
-            vicfunc[61] = &VIC::cycle61ntsc;
-            vicfunc[62] = &VIC::cycle62ntsc;
-            vicfunc[63] = &VIC::cycle63ntsc;
-            vicfunc[64] = &VIC::cycle64ntsc;
-            vicfunc[65] = NULL;
-            break;
-            
-        case NTSC_6567:
-        case NTSC_8562:
-            
-            vicfunc[1] = &VIC::cycle1ntsc;
-            vicfunc[2] = &VIC::cycle2ntsc;
-            vicfunc[3] = &VIC::cycle3ntsc;
-            vicfunc[4] = &VIC::cycle4ntsc;
-            vicfunc[5] = &VIC::cycle5ntsc;
-            vicfunc[6] = &VIC::cycle6ntsc;
-            vicfunc[7] = &VIC::cycle7ntsc;
-            vicfunc[8] = &VIC::cycle8ntsc;
-            vicfunc[9] = &VIC::cycle9ntsc;
-            vicfunc[10] = &VIC::cycle10ntsc;
-            vicfunc[11] = &VIC::cycle11ntsc;
-            vicfunc[55] = &VIC::cycle55ntsc;
-            vicfunc[57] = &VIC::cycle57ntsc;
-            vicfunc[58] = &VIC::cycle58ntsc;
-            vicfunc[59] = &VIC::cycle59ntsc;
-            vicfunc[60] = &VIC::cycle60ntsc;
-            vicfunc[61] = &VIC::cycle61ntsc;
-            vicfunc[62] = &VIC::cycle62ntsc;
-            vicfunc[63] = &VIC::cycle63ntsc;
-            vicfunc[64] = &VIC::cycle64ntsc;
-            vicfunc[65] = &VIC::cycle65ntsc;
-            break;
-            
-        default:
-            assert(false);
-    }
-}
-
-void
 C64::powerUp()
 {    
     suspend();
@@ -386,19 +278,7 @@ C64::stepOver()
 bool
 C64::executeOneLine()
 {
-    if (rasterCycle == 1)
-    beginRasterLine();
-    
-    int lastCycle = vic.getCyclesPerRasterline();
-    for (unsigned i = rasterCycle; i <= lastCycle; i++) {
-        if (!_executeOneCycle()) {
-            if (i == lastCycle)
-            endRasterLine();
-            return false;
-        }
-    }
-    endRasterLine();
-    return true;
+    return false; 
 }
 
 bool
@@ -414,14 +294,7 @@ C64::executeOneFrame()
 bool
 C64::executeOneCycle()
 {
-    bool isFirstCycle = rasterCycle == 1;
-    bool isLastCycle = vic.isLastCycleInRasterline(rasterCycle);
-    
-    if (isFirstCycle) beginRasterLine();
-    bool result = _executeOneCycle();
-    if (isLastCycle) endRasterLine();
-    
-    return result;
+    return false;
 }
 
 bool
@@ -433,50 +306,19 @@ C64::_executeOneCycle()
 void
 C64::beginRasterLine()
 {
-    // First cycle of rasterline
-    if (rasterLine == 0) {
-        vic.beginFrame();
-    }
-    vic.beginRasterline(rasterLine);
+ 
 }
 
 void
 C64::endRasterLine()
 {
-    vic.endRasterline();
-    rasterCycle = 1;
-    rasterLine++;
-    
-    if (rasterLine >= vic.getRasterlinesPerFrame()) {
-        rasterLine = 0;
-        endFrame();
-    }
+ 
 }
 
 void
 C64::endFrame()
 {
-    frame++;
-    vic.endFrame();
-    
-    // Increment time of day clocks every tenth of a second
-    cia1.incrementTOD();
-    cia2.incrementTOD();
-    
-    // Execute remaining SID cycles
-    
-    // Execute other components
-    port1.execute();
-    port2.execute();
-
-    // Update mouse coordinates
-    
-    // Take a snapshot once in a while
   
-    // Count some sheep (zzzzzz) ...
-    if (!getWarp()) {
-            synchronizeTiming();
-    }
 }
 
 bool
@@ -505,10 +347,7 @@ C64::setWarpLoad(bool b)
 void
 C64::restartTimer()
 {
-    uint64_t kernelNow = mach_absolute_time();
-    uint64_t nanoNow = abs_to_nanos(kernelNow);
-    
-    nanoTargetTime = nanoNow + vic.getFrameDelay();
+  
 }
 
 void
@@ -539,7 +378,6 @@ C64::synchronizeTiming()
     
 
     int64_t jitter = sleepUntil(kernelTargetTime, earlyWakeup);
-    nanoTargetTime += vic.getFrameDelay();
     
     // debug(2, "Jitter = %d", jitter);
     if (jitter > 1000000000 /* 1 sec */) {

@@ -35,7 +35,6 @@
 #include "ControlPort.h"
 #include "Memory.h"
 #include "C64Memory.h"
-#include "VIC.h"
 #include "TOD.h"
 #include "CIA.h"
 
@@ -65,8 +64,6 @@ class C64 : public VirtualComponent {
     
     
     
-    //! @brief    The C64's Video Interface Controller
-    VIC vic;
     
     //! @brief    The C64's first Complex Interface Adapter
     CIA1 cia1;

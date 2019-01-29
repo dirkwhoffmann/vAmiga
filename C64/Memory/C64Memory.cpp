@@ -187,8 +187,6 @@ C64Memory::peek(uint16_t addr, MemoryType source)
         
         
         
-        case M_NONE:
-        return c64->vic.getDataBusPhi1();
         
         default:
         assert(0);
@@ -211,51 +209,7 @@ C64Memory::peekZP(uint8_t addr)
 uint8_t
 C64Memory::peekIO(uint16_t addr)
 {
-    assert(addr >= 0xD000 && addr <= 0xDFFF);
-    
-    switch ((addr >> 8) & 0xF) {
-            
-        case 0x0: // VIC
-        case 0x1: // VIC
-        case 0x2: // VIC
-        case 0x3: // VIC
-            
-            // Only the lower 6 bits are used for adressing the VIC I/O space.
-            // As a result, VIC's I/O memory repeats every 64 bytes.
-            return c64->vic.peek(addr & 0x003F);
-
-        case 0x4: // SID
-        case 0x5: // SID
-        case 0x6: // SID
-        case 0x7: // SID
-            
-            // Only the lower 5 bits are used for adressing the SID I/O space.
-            // As a result, SID's I/O memory repeats every 32 bytes.
-            return 0;
-
-        case 0x8: // Color RAM
-        case 0x9: // Color RAM
-        case 0xA: // Color RAM
-        case 0xB: // Color RAM
  
-            return
-            (colorRam[addr - 0xD800] & 0x0F) |
-            (c64->vic.getDataBusPhi1() & 0xF0);
-
-        case 0xC: // CIA 1
- 
-            // Only the lower 4 bits are used for adressing the CIA I/O space.
-            // As a result, CIA's I/O memory repeats every 16 bytes.
-            return c64->cia1.peek(addr & 0x000F);
-	
-        case 0xD: // CIA 2
-            
-            return c64->cia2.peek(addr & 0x000F);
-            
-     
-	}
-    
-	assert(false);
 	return 0;
 }
 
@@ -286,39 +240,8 @@ C64Memory::spypeek(uint16_t addr, MemoryType source)
 uint8_t
 C64Memory::spypeekIO(uint16_t addr)
 {
-    assert(addr >= 0xD000 && addr <= 0xDFFF);
-    
-    switch ((addr >> 8) & 0xF) {
-            
-        case 0x0: // VIC
-        case 0x1: // VIC
-        case 0x2: // VIC
-        case 0x3: // VIC
-            
-            return c64->vic.spypeek(addr & 0x003F);
-            
-        case 0x4: // SID
-        case 0x5: // SID
-        case 0x6: // SID
-        case 0x7: // SID
-            
-            return 0; 
-            
-        case 0xC: // CIA 1
-            
-            // Only the lower 4 bits are used for adressing the CIA I/O space.
-            // As a result, CIA's I/O memory repeats every 16 bytes.
-            return c64->cia1.spypeek(addr & 0x000F);
-            
-        case 0xD: // CIA 2
-            
-            return c64->cia2.spypeek(addr & 0x000F);
-            
-     
-        default:
-            
-            return peek(addr);
-    }
+ 
+    return 0;
 }
 
 void
@@ -361,48 +284,7 @@ C64Memory::pokeZP(uint8_t addr, uint8_t value)
 void
 C64Memory::pokeIO(uint16_t addr, uint8_t value)
 {
-    assert(addr >= 0xD000 && addr <= 0xDFFF);
-    
-    switch ((addr >> 8) & 0xF) {
-            
-        case 0x0: // VIC
-        case 0x1: // VIC
-        case 0x2: // VIC
-        case 0x3: // VIC
-            
-            // Only the lower 6 bits are used for adressing the VIC I/O space.
-            // As a result, VIC's I/O memory repeats every 64 bytes.
-            c64->vic.poke(addr & 0x003F, value);
-            return;
-            
-        case 0x4: // SID
-        case 0x5: // SID
-        case 0x6: // SID
-        case 0x7: // SID
-            
-            // Only the lower 5 bits are used for adressing the SID I/O space.
-            // As a result, SID's I/O memory repeats every 32 bytes.
-            return;
-            
-        case 0x8: // Color RAM
-        case 0x9: // Color RAM
-        case 0xA: // Color RAM
-        case 0xB: // Color RAM
-            
-            colorRam[addr - 0xD800] = (value & 0x0F) | (rand() & 0xF0);
-            return;
-            
-        case 0xC: // CIA 1
-            
-            // Only the lower 4 bits are used for adressing the CIA I/O space.
-            // As a result, CIA's I/O memory repeats every 16 bytes.
-            c64->cia1.poke(addr & 0x000F, value);
-            return;
-            
-
-    }
-    
-    assert(false);
+ 
 }
 
 uint16_t

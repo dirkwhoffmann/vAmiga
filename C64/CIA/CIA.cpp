@@ -1230,8 +1230,6 @@ CIA1::updatePB()
     // The control port can always bring the port lines low
     PB &= c64->port1.bitmask();
     
-    // PB4 is connected to the VIC (LP pin).
-    c64->vic.setLP(GET_BIT(PB, 4) != 0);
     
     // An edge on PB4 triggers the NeosMouse on port 1
 }
@@ -1360,16 +1358,11 @@ CIA2::pokePA(uint8_t value)
     CIA::pokePA(value);
     
     // PA0 (VA14) and PA1 (VA15) determine the memory bank seen by VICII
-    c64->vic.switchBank(0xDD00);
 }
 
 void
 CIA2::pokeDDRA(uint8_t value)
 {
     CIA::pokeDDRA(value);
-    
-    // PA0 (VA14) and PA1 (VA15) determine the memory bank seen by VICII
-    c64->vic.switchBank(0xDD02);
-
 }
 

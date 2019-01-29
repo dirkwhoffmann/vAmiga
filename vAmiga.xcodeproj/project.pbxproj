@@ -28,13 +28,6 @@
 		508FDF8721EA1FBC0043D0E9 /* MessageQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDEF521EA1FBC0043D0E9 /* MessageQueue.cpp */; };
 		508FDF8821EA1FBC0043D0E9 /* TimeDelayed.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDEF721EA1FBC0043D0E9 /* TimeDelayed.cpp */; };
 		508FDF8921EA1FBC0043D0E9 /* C64.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDEFB21EA1FBC0043D0E9 /* C64.cpp */; };
-		508FDF8E21EA1FBC0043D0E9 /* VIC_draw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDF0921EA1FBC0043D0E9 /* VIC_draw.cpp */; };
-		508FDF8F21EA1FBC0043D0E9 /* VIC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDF0B21EA1FBC0043D0E9 /* VIC.cpp */; };
-		508FDF9021EA1FBC0043D0E9 /* VIC_colors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDF0C21EA1FBC0043D0E9 /* VIC_colors.cpp */; };
-		508FDF9121EA1FBC0043D0E9 /* VIC_debug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDF0D21EA1FBC0043D0E9 /* VIC_debug.cpp */; };
-		508FDF9221EA1FBC0043D0E9 /* VIC_cycles_pal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDF0E21EA1FBC0043D0E9 /* VIC_cycles_pal.cpp */; };
-		508FDF9321EA1FBC0043D0E9 /* VIC_memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDF0F21EA1FBC0043D0E9 /* VIC_memory.cpp */; };
-		508FDF9421EA1FBC0043D0E9 /* VIC_cycles_ntsc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDF1121EA1FBC0043D0E9 /* VIC_cycles_ntsc.cpp */; };
 		508FDFA421EA1FBC0043D0E9 /* ControlPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDF4221EA1FBC0043D0E9 /* ControlPort.cpp */; };
 		508FDFAC21EA1FBC0043D0E9 /* TOD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDF5921EA1FBC0043D0E9 /* TOD.cpp */; };
 		508FDFAD21EA1FBC0043D0E9 /* CIA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDF5C21EA1FBC0043D0E9 /* CIA.cpp */; };
@@ -197,15 +190,7 @@
 		508FDEFA21EA1FBC0043D0E9 /* C64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = C64.h; sourceTree = "<group>"; };
 		508FDEFB21EA1FBC0043D0E9 /* C64.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = C64.cpp; sourceTree = "<group>"; };
 		508FDF0721EA1FBC0043D0E9 /* C64_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = C64_types.h; sourceTree = "<group>"; };
-		508FDF0921EA1FBC0043D0E9 /* VIC_draw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VIC_draw.cpp; sourceTree = "<group>"; };
 		508FDF0A21EA1FBC0043D0E9 /* VIC_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VIC_types.h; sourceTree = "<group>"; };
-		508FDF0B21EA1FBC0043D0E9 /* VIC.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VIC.cpp; sourceTree = "<group>"; };
-		508FDF0C21EA1FBC0043D0E9 /* VIC_colors.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VIC_colors.cpp; sourceTree = "<group>"; };
-		508FDF0D21EA1FBC0043D0E9 /* VIC_debug.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VIC_debug.cpp; sourceTree = "<group>"; };
-		508FDF0E21EA1FBC0043D0E9 /* VIC_cycles_pal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VIC_cycles_pal.cpp; sourceTree = "<group>"; };
-		508FDF0F21EA1FBC0043D0E9 /* VIC_memory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VIC_memory.cpp; sourceTree = "<group>"; };
-		508FDF1021EA1FBC0043D0E9 /* VIC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VIC.h; sourceTree = "<group>"; };
-		508FDF1121EA1FBC0043D0E9 /* VIC_cycles_ntsc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VIC_cycles_ntsc.cpp; sourceTree = "<group>"; };
 		508FDF3F21EA1FBC0043D0E9 /* ControlPort_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ControlPort_types.h; sourceTree = "<group>"; };
 		508FDF4221EA1FBC0043D0E9 /* ControlPort.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ControlPort.cpp; sourceTree = "<group>"; };
 		508FDF4421EA1FBC0043D0E9 /* ControlPort.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ControlPort.h; sourceTree = "<group>"; };
@@ -419,7 +404,7 @@
 				508FDEFA21EA1FBC0043D0E9 /* C64.h */,
 				508FDEFB21EA1FBC0043D0E9 /* C64.cpp */,
 				508FDF0721EA1FBC0043D0E9 /* C64_types.h */,
-				508FDF0821EA1FBC0043D0E9 /* VICII */,
+				508FDF0A21EA1FBC0043D0E9 /* VIC_types.h */,
 				508FDF3E21EA1FBC0043D0E9 /* Computer */,
 				508FDF5621EA1FBC0043D0E9 /* CIA */,
 			);
@@ -450,22 +435,6 @@
 				508FDEF921EA1FBC0043D0E9 /* VirtualComponent.h */,
 			);
 			path = General;
-			sourceTree = "<group>";
-		};
-		508FDF0821EA1FBC0043D0E9 /* VICII */ = {
-			isa = PBXGroup;
-			children = (
-				508FDF0921EA1FBC0043D0E9 /* VIC_draw.cpp */,
-				508FDF0A21EA1FBC0043D0E9 /* VIC_types.h */,
-				508FDF0B21EA1FBC0043D0E9 /* VIC.cpp */,
-				508FDF0C21EA1FBC0043D0E9 /* VIC_colors.cpp */,
-				508FDF0D21EA1FBC0043D0E9 /* VIC_debug.cpp */,
-				508FDF0E21EA1FBC0043D0E9 /* VIC_cycles_pal.cpp */,
-				508FDF0F21EA1FBC0043D0E9 /* VIC_memory.cpp */,
-				508FDF1021EA1FBC0043D0E9 /* VIC.h */,
-				508FDF1121EA1FBC0043D0E9 /* VIC_cycles_ntsc.cpp */,
-			);
-			path = VICII;
 			sourceTree = "<group>";
 		};
 		508FDF3E21EA1FBC0043D0E9 /* Computer */ = {
@@ -962,11 +931,8 @@
 				508FE05821EA22CC0043D0E9 /* SnapshotController.swift in Sources */,
 				508FDF8921EA1FBC0043D0E9 /* C64.cpp in Sources */,
 				508FE05221EA22CC0043D0E9 /* RomDropView.swift in Sources */,
-				508FDF9121EA1FBC0043D0E9 /* VIC_debug.cpp in Sources */,
 				508FDF8121EA1FBC0043D0E9 /* C64Memory.cpp in Sources */,
-				508FDF9221EA1FBC0043D0E9 /* VIC_cycles_pal.cpp in Sources */,
 				508FDFD621EA20510043D0E9 /* DragAndDrop.swift in Sources */,
-				508FDF8E21EA1FBC0043D0E9 /* VIC_draw.cpp in Sources */,
 				508FE05F21EA22CC0043D0E9 /* ExportDiskController.swift in Sources */,
 				508FDF8821EA1FBC0043D0E9 /* TimeDelayed.cpp in Sources */,
 				508FE03521EA22C30043D0E9 /* ScriptCommands.swift in Sources */,
@@ -1007,16 +973,12 @@
 				50F5F27221F1B6DF000627D1 /* AmigaKey.swift in Sources */,
 				508FDFD721EA20510043D0E9 /* MetalView.swift in Sources */,
 				508FDF8721EA1FBC0043D0E9 /* MessageQueue.cpp in Sources */,
-				508FDF9021EA1FBC0043D0E9 /* VIC_colors.cpp in Sources */,
-				508FDF8F21EA1FBC0043D0E9 /* VIC.cpp in Sources */,
 				508FDFD421EA20510043D0E9 /* MetalSetup.swift in Sources */,
-				508FDF9421EA1FBC0043D0E9 /* VIC_cycles_ntsc.cpp in Sources */,
 				508FE02C21EA227B0043D0E9 /* C64Key.swift in Sources */,
 				508FE01421EA227B0043D0E9 /* WaveformView.swift in Sources */,
 				509F7F1D21EDEA0200A530E4 /* KickRom.cpp in Sources */,
 				508FE05C21EA22CC0043D0E9 /* DiskMountController.swift in Sources */,
 				5085FE5721FB3BAE009753EF /* EventHandler.cpp in Sources */,
-				508FDF9321EA1FBC0043D0E9 /* VIC_memory.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

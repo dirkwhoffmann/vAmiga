@@ -78,8 +78,7 @@ ControlPort::dump()
 void
 ControlPort::scheduleNextShot()
 {
-    nextAutofireFrame = c64->frame +
-    (int)(c64->vic.getFramesPerSecond() / (2 * autofireFrequency));
+
 }
 
 void
