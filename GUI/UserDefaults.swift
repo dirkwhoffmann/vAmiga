@@ -479,14 +479,13 @@ extension MyController {
         amiga.suspend()
         
         metal.upscaler = defaults.integer(forKey: Keys.upscaler)
-        c64.vic.setVideoPalette(defaults.integer(forKey: Keys.palette))
-        c64.vic.setBrightness(defaults.double(forKey: Keys.brightness))
-        c64.vic.setContrast(defaults.double(forKey: Keys.contrast))
-        c64.vic.setSaturation(defaults.double(forKey: Keys.saturation))
-
-        metal.setEyeX(defaults.float(forKey: Keys.eyeX))
-        metal.setEyeY(defaults.float(forKey: Keys.eyeY))
-        metal.setEyeZ(defaults.float(forKey: Keys.eyeZ))
+        palette = defaults.integer(forKey: Keys.palette)
+        brightness = defaults.float(forKey: Keys.brightness)
+        contrast = defaults.float(forKey: Keys.contrast)
+        saturation = defaults.float(forKey: Keys.saturation)
+        eyeX = defaults.float(forKey: Keys.eyeX)
+        eyeY = defaults.float(forKey: Keys.eyeY)
+        eyeZ = defaults.float(forKey: Keys.eyeZ)
         
         defaults.decode(&metal.shaderOptions, forKey: Keys.shaderOptions)
         metal.buildDotMasks()
@@ -499,14 +498,14 @@ extension MyController {
         let defaults = UserDefaults.standard
         
         defaults.set(metal.upscaler, forKey: Keys.upscaler)
-        defaults.set(c64.vic.videoPalette(), forKey: Keys.palette)
-        defaults.set(c64.vic.brightness(), forKey: Keys.brightness)
-        defaults.set(c64.vic.contrast(), forKey: Keys.contrast)
-        defaults.set(c64.vic.saturation(), forKey: Keys.saturation)
+        defaults.set(palette, forKey: Keys.palette)
+        defaults.set(brightness, forKey: Keys.brightness)
+        defaults.set(contrast, forKey: Keys.contrast)
+        defaults.set(saturation, forKey: Keys.saturation)
         
-        defaults.set(metal.eyeX(), forKey: Keys.eyeX)
-        defaults.set(metal.eyeY(), forKey: Keys.eyeY)
-        defaults.set(metal.eyeZ(), forKey: Keys.eyeZ)
+        defaults.set(eyeX, forKey: Keys.eyeX)
+        defaults.set(eyeY, forKey: Keys.eyeY)
+        defaults.set(eyeZ, forKey: Keys.eyeZ)
   
         defaults.encode(metal.shaderOptions, forKey: Keys.shaderOptions)
     }

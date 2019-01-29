@@ -15,13 +15,13 @@
 // Forward declarations of proxy classes
 @class MyController;
 @class C64Proxy;
-@class VICProxy;
+
 
 // Forward declarations of wrappers for C++ classes.
 // We wrap classes into normal C structs to avoid any reference to C++.
 
 struct C64Wrapper;
-struct VicWrapper;
+
 
 
 // -----------------------------------------------------------------------------
@@ -31,12 +31,9 @@ struct VicWrapper;
 @interface C64Proxy : NSObject {
     
     struct C64Wrapper *wrapper;
-    
-    VICProxy *vic;
 }
 
 @property (readonly) struct C64Wrapper *wrapper;
-@property (readonly) VICProxy *vic;
 
 - (void) kill;
 
@@ -121,25 +118,3 @@ struct VicWrapper;
 @end
 
 */
-
-// -----------------------------------------------------------------------------
-//                                VICII proxy
-// -----------------------------------------------------------------------------
-
-
-@interface VICProxy : NSObject {
-    
-	struct VicWrapper *wrapper;
-}
-
-- (NSInteger) videoPalette;
-- (void) setVideoPalette:(NSInteger)value;
-
-- (double)brightness;
-- (void)setBrightness:(double)value;
-- (double)contrast;
-- (void)setContrast:(double)value;
-- (double)saturation;
-- (void)setSaturation:(double)value;
-
-@end

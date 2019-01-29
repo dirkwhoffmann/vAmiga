@@ -26,18 +26,19 @@ extension PreferencesController {
     func refreshVideoTab() {
         
         // guard let doc = myDocument else { return }
-        guard let con = myController else { return }
-        guard let metal = con.metal else { return }
-        guard let c64 = proxy else { return }
+        guard
+            let controller = myController,
+            let metal = controller.metal
+            else { return }
 
         track()
         
         // Video
         vidUpscalerPopup.selectItem(withTag: metal.upscaler)
-        vidPalettePopup.selectItem(withTag: c64.vic.videoPalette())
-        vidBrightnessSlider.doubleValue = c64.vic.brightness()
-        vidContrastSlider.doubleValue = c64.vic.contrast()
-        vidSaturationSlider.doubleValue = c64.vic.saturation()
+        vidPalettePopup.selectItem(withTag: controller.palette)
+        vidBrightnessSlider.floatValue = controller.brightness
+        vidContrastSlider.floatValue = controller.contrast
+        vidSaturationSlider.floatValue = controller.saturation
         
         // Effects
         let shaderOptions = metal.shaderOptions
@@ -89,25 +90,25 @@ extension PreferencesController {
     
     @IBAction func vidPaletteAction(_ sender: NSPopUpButton!) {
         
-        proxy?.vic.setVideoPalette(sender.selectedTag())
+        myController?.palette = sender.selectedTag()
         refresh()
     }
     
     @IBAction func vidBrightnessAction(_ sender: NSSlider!) {
         
-        proxy?.vic.setBrightness(sender.doubleValue)
+        myController?.brightness = sender.floatValue
         refresh()
     }
     
     @IBAction func vidContrastAction(_ sender: NSSlider!) {
         
-        proxy?.vic.setContrast(sender.doubleValue)
+        myController?.contrast = sender.floatValue
         refresh()
     }
     
     @IBAction func vidSaturationAction(_ sender: NSSlider!) {
         
-        proxy?.vic.setSaturation(sender.doubleValue)
+        myController?.saturation = sender.floatValue
         refresh()
     }
     

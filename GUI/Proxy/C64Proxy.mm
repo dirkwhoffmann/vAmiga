@@ -13,75 +13,10 @@
 #import "vAmiga-Swift.h"
 
 struct C64Wrapper { C64 *c64; };
-struct MemoryWrapper { C64Memory *mem; };
-struct VicWrapper { VIC *vic; };
-struct SidBridgeWrapper { SIDBridge *sid; };
-struct ExpansionPortWrapper { ExpansionPort *expansionPort; };
-struct DiskWrapper { Disk *disk; };
-struct DriveWrapper { VC1541 *drive; };
-struct DatasetteWrapper { Datasette *datasette; };
-struct AnyC64FileWrapper { AnyC64File *file; };
 
 
 
-//
-// Memory proxy
-//
 
-/*
-@implementation MemoryProxy
-
-// Constructing
-- (instancetype) initWithMemory:(C64Memory *)mem
-{
-    if (self = [super init]) {
-        wrapper = new MemoryWrapper();
-        wrapper->mem = mem;
-    }
-    return self;
-}
-
-- (MemoryType) peekSource:(uint16_t)addr
-{
-    return wrapper->mem->getPeekSource(addr);
-}
-- (MemoryType) pokeTarget:(uint16_t)addr
-{
-    return wrapper->mem->getPokeTarget(addr);
-}
-- (uint8_t) spypeek:(uint16_t)addr source:(MemoryType)source
-{
-    return wrapper->mem->spypeek(addr, source);
-}
-- (uint8_t) spypeek:(uint16_t)addr
-{
-    return wrapper->mem->spypeek(addr);
-}
-- (uint8_t) spypeekIO:(uint16_t)addr
-{
-    return wrapper->mem->spypeekIO(addr);
-}
-- (void) poke:(uint16_t)addr value:(uint8_t)value target:(MemoryType)target
-{
-    wrapper->mem->suspend();
-    wrapper->mem->poke(addr, value, target);
-    wrapper->mem->resume();
-}
-- (void) poke:(uint16_t)addr value:(uint8_t)value
-{
-    wrapper->mem->suspend();
-    wrapper->mem->poke(addr, value);
-    wrapper->mem->resume();
-}
-- (void) pokeIO:(uint16_t)addr value:(uint8_t)value
-{
-    wrapper->mem->suspend();
-    wrapper->mem->pokeIO(addr, value);
-    wrapper->mem->resume();
-}
-
-@end
-*/
 
 //
 // CIA proxy
@@ -142,59 +77,6 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 @end
 */
 
-//
-// VIC proxy
-//
-
-// Constructing
-
-@implementation VICProxy
-
-- (instancetype) initWithVIC:(VIC *)vic
-{
-    if (self = [super init]) {
-        wrapper = new VicWrapper();
-        wrapper->vic = vic;
-    }
-    return self;
-}
-
-- (NSInteger) videoPalette
-{
-    return (NSInteger)wrapper->vic->videoPalette();
-}
-- (void) setVideoPalette:(NSInteger)value
-{
-    wrapper->vic->setVideoPalette((VICPalette)value);
-}
-- (double)brightness
-{
-    return wrapper->vic->getBrightness();
-}
-- (void)setBrightness:(double)value
-{
-    wrapper->vic->setBrightness(value);
-}
-- (double)contrast
-{
-    return wrapper->vic->getContrast();
-}
-- (void)setContrast:(double)value
-{
-    wrapper->vic->setContrast(value);
-}
-- (double)saturation
-{
-    return wrapper->vic->getSaturation();
-}
-- (void)setSaturation:(double)value
-{
-    wrapper->vic->setSaturation(value);
-}
-@end
-
-
-
 
 //
 // C64
@@ -203,7 +85,6 @@ struct AnyC64FileWrapper { AnyC64File *file; };
 @implementation C64Proxy
 
 @synthesize wrapper;
-@synthesize vic;
 
 - (instancetype) init
 {
@@ -216,9 +97,6 @@ struct AnyC64FileWrapper { AnyC64File *file; };
     wrapper = new C64Wrapper();
     wrapper->c64 = c64;
 	
-    // Create sub proxys
-    vic = [[VICProxy alloc] initWithVIC:&c64->vic];
-
     return self;
 }
 

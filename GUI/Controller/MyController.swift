@@ -148,7 +148,7 @@ class MyController : NSWindowController, MessageReceiver {
         set { metal.upscaler = newValue }
     }
     var palette : Int = 0
-    var brightness : Int = 0
+    var brightness : Float = 0
     var contrast : Float = 0
     var saturation : Float = 0
     
