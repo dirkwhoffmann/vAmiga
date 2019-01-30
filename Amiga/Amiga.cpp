@@ -261,7 +261,6 @@ void
 Amiga::_ping()
 {
     putMessage(warp ? MSG_WARP_ON : MSG_WARP_OFF);
-    putMessage(alwaysWarp ? MSG_ALWAYS_WARP_ON : MSG_ALWAYS_WARP_OFF);
 }
 
 void
@@ -279,7 +278,7 @@ Amiga::_dump()
     plainmsg("               %s\n", driveTypeName(config.df1.type));
 
     plainmsg("\n");
-    plainmsg("    warp mode: %d (%d) (%d)", warp, warpLoad, alwaysWarp);
+    plainmsg("         warp: %d (%d) (%d)", warp);
     plainmsg("\n");
 }
 

@@ -18,15 +18,12 @@ extension MyController {
         // Icons
         df0Disk.image = amiga.df0.icon
         df1Disk.image = amiga.df1.icon
+        warpIcon.image = hourglassIcon
         
-        if alwaysWarp {
-            warpIcon.image = NSImage.init(named: "hourglass3Template")
-        } else if (amiga.warp()) {
-            warpIcon.image = NSImage.init(named: "hourglass2Template")
-        } else {
-            warpIcon.image = NSImage.init(named: "hourglass1Template")
-        }
-        
+        // Animation
+        amiga.diskController.doesDMA(0) ? df0DMA.startAnimation(self) : df0DMA.stopAnimation(self)
+        amiga.diskController.doesDMA(1) ? df1DMA.startAnimation(self) : df1DMA.stopAnimation(self)
+
         // Visibility
         let items: [NSView : Bool] = [
             

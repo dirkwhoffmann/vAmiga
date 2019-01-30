@@ -50,6 +50,7 @@ private:
 public:
     
     bool doesDMA(unsigned nr) { return (nr == 0) ? df0DMA : df1DMA; }
+    void setDMA(unsigned nr, bool value);
 };
 
 #endif

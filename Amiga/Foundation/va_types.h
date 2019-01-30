@@ -189,6 +189,8 @@ typedef enum
     MSG_PAUSE,
     MSG_RESET,
     MSG_ROM_MISSING,
+    MSG_WARP_ON,
+    MSG_WARP_OFF,
 
     // Keyboard
     MSG_MAP_CMD_KEYS,
@@ -228,12 +230,6 @@ typedef enum
     MSG_CPU_SOFT_BREAKPOINT_REACHED,
     MSG_CPU_HARD_BREAKPOINT_REACHED,
     MSG_CPU_ILLEGAL_INSTRUCTION,
-    MSG_WARP_ON,
-    MSG_WARP_OFF,
-    MSG_ALWAYS_WARP_ON,
-    MSG_ALWAYS_WARP_OFF,
-    
-  
     
     // IEC Bus
     MSG_IEC_BUS_BUSY,

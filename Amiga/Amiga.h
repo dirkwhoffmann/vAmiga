@@ -144,21 +144,7 @@ public:
      */
     uint64_t nanoTargetTime = 0;
     
-    // Indicates that we should always run at max speed.
-    bool alwaysWarp = false;
     
-    // Indicates that we should run at max speed during disk operations.
-    bool warpLoad = true;
-
-    /* Indicates if timing synchronization is currently disabled.
-     * The variable is updated in getWarp() according to the following logical
-     * equation:
-     *
-     *     warp == (alwaysWarp || (warpLoad && <Disk DMA is active>)
-     */
-    bool warp = false;
-    
- 
     //
     // Message queue
     //

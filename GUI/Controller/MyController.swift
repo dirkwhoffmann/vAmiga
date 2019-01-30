@@ -233,16 +233,8 @@ class MyController : NSWindowController, MessageReceiver {
     // Emulator preferences
     //
     
-    var alwaysWarp = false {
-        didSet {
-            amiga.setWarp(alwaysWarp || (driveDMA && warpLoad))
-        }
-    }
-    var warpLoad = Defaults.warpLoad {
-        didSet {
-            amiga.setWarp(alwaysWarp || (driveDMA && warpLoad))
-        }
-    }
+    var alwaysWarp = false { didSet { updateWarp() } }
+    var warpLoad = Defaults.warpLoad { didSet { updateWarp() } }
     var driveNoise = Defaults.driveNoise
     var screenshotSource = Defaults.screenshotSource
     var screenshotTarget = Defaults.screenshotTarget
@@ -320,10 +312,24 @@ class MyController : NSWindowController, MessageReceiver {
     }
    
     
-    // Remebers if drive dma is going on
-    var driveDMA = false {
-        didSet {
-            amiga.setWarp(alwaysWarp || (driveDMA && warpLoad))
+    // Updates the warp status
+    func updateWarp() {
+        let driveDMA = amiga.diskController.doesDMA(0) || amiga.diskController.doesDMA(1)
+        amiga.setWarp(alwaysWarp || (driveDMA && warpLoad))
+    }
+    
+    // Returns the icon of the sand clock in the bottom bar
+    var hourglassIcon : NSImage? {
+        get {
+            if (amiga.warp()) {
+                if alwaysWarp {
+                    return NSImage.init(named: "hourglass3Template")
+                } else {
+                    return NSImage.init(named: "hourglass2Template")
+                }
+            } else {
+                return NSImage.init(named: "hourglass1Template")
+            }
         }
     }
     
@@ -660,6 +666,7 @@ extension MyController {
         
         case MSG_RUN:
             
+            track("Run")
             needsSaving = true
             disableUserEditing()
             validateToolbarItems()
@@ -667,23 +674,31 @@ extension MyController {
     
         case MSG_PAUSE:
             
+            track("Pause")
             enableUserEditing()
             validateToolbarItems()
             refresh()
     
         case MSG_POWER_ON:
             
+            track("Power on")
             metal.blendIn()
             powerLED.image = NSImage.init(named: "powerLedOn")
             
         case MSG_POWER_OFF:
             
+            track("Power on")
             metal.blendOut()
             powerLED.image = NSImage.init(named: "powerLedOff")
             
         case MSG_RESET:
             
-            track()
+            track("Reset")
+            
+        case MSG_WARP_ON,
+             MSG_WARP_OFF:
+            
+            refreshStatusBar()
             
         case MSG_DRIVE_CONNECT:
             
@@ -723,27 +738,21 @@ extension MyController {
         case MSG_DRIVE_LED_ON:
             
             assert(msg.data == 0 || msg.data == 1)
-            let item = (msg.data == 0) ? df0LED : df1LED
-            item!.image = NSImage.init(named: "driveLedOn")
+            let image = NSImage.init(named: "driveLedOn")
+            msg.data == 0 ? (df0LED.image = image) : (df1LED.image = image)
             
         case MSG_DRIVE_LED_OFF:
             
             assert(msg.data == 0 || msg.data == 1)
-            let item = (msg.data == 0) ? df0LED : df1LED
-            item!.image = NSImage.init(named: "driveLedOff")
-        
-        case MSG_DRIVE_DMA_ON:
-            
-            assert(msg.data == 0 || msg.data == 1)
-            let item = (msg.data == 0) ? df0DMA : df1DMA
-            item!.startAnimation(self)
+            let image = NSImage.init(named: "driveLedOff")
+            msg.data == 0 ? (df0LED.image = image) : (df1LED.image = image)
 
-        case MSG_DRIVE_DMA_OFF:
+        case MSG_DRIVE_DMA_ON,
+             MSG_DRIVE_DMA_OFF:
             
-            assert(msg.data == 0 || msg.data == 1)
-            let item = (msg.data == 0) ? df0DMA : df1DMA
-            item!.stopAnimation(self)
-
+            updateWarp()
+            refreshStatusBar()
+            
         case MSG_DRIVE_HEAD_UP,
              MSG_DRIVE_HEAD_DOWN:
             
@@ -785,21 +794,7 @@ extension MyController {
             self.debugOpenAction(self)
             refresh()
             
-        case MSG_WARP_ON,
-             MSG_WARP_OFF,
-             MSG_ALWAYS_WARP_ON,
-             MSG_ALWAYS_WARP_OFF:
-
-            if alwaysWarp {
-                let name = NSImage.Name("hourglass3Template")
-                warpIcon.image = NSImage.init(named: name)
-            } else if (amiga.warp()) {
-                let name = NSImage.Name("hourglass2Template")
-                warpIcon.image = NSImage.init(named: name)
-            } else {
-                let name = NSImage.Name("hourglass1Template")
-                warpIcon.image = NSImage.init(named: name)
-            }
+ 
     
      
         case MSG_KEYMATRIX,

@@ -104,10 +104,12 @@ EventHandler::_executeUntil(uint64_t cycle) {
                     case EVENT_DEBUG1:
                         
                         amiga->df0.toggleUnsafed();
+                        amiga->diskController.setDMA(0, !amiga->diskController.doesDMA(0));
                         scheduleEvent(EVENT_DEBUG1, amiga->masterClock + 2 * 28 * 1000000);
                         break;
                         
                     case EVENT_DEBUG2:
+                        
                         break;
                         
                     default:
