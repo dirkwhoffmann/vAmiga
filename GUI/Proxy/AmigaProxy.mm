@@ -787,6 +787,11 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->amiga->getWarp();
 }
+- (void) setWarp:(BOOL)value
+{
+    wrapper->amiga->setWarp(value);
+}
+/*
 - (BOOL) alwaysWarp
 {
     return wrapper->amiga->getAlwaysWarp();
@@ -803,6 +808,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->amiga->setWarpLoad(value);
 }
+*/
 - (BOOL) takeAutoSnapshots
 {
     return wrapper->amiga->getTakeAutoSnapshots();

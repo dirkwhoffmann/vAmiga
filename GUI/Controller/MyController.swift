@@ -233,9 +233,15 @@ class MyController : NSWindowController, MessageReceiver {
     // Emulator preferences
     //
     
-    var warpLoad : Bool {
-        get { return amiga.warpLoad() }
-        set { amiga.setWarpLoad(newValue) }
+    var alwaysWarp = false {
+        didSet {
+            amiga.setWarp(alwaysWarp || (driveDMA && warpLoad))
+        }
+    }
+    var warpLoad = Defaults.warpLoad {
+        didSet {
+            amiga.setWarp(alwaysWarp || (driveDMA && warpLoad))
+        }
     }
     var driveNoise = Defaults.driveNoise
     var screenshotSource = Defaults.screenshotSource
@@ -313,6 +319,13 @@ class MyController : NSWindowController, MessageReceiver {
         set { amiga.configureRealTimeClock(newValue); }
     }
    
+    
+    // Remebers if drive dma is going on
+    var driveDMA = false {
+        didSet {
+            amiga.setWarp(alwaysWarp || (driveDMA && warpLoad))
+        }
+    }
     
     //
     // Outlets
@@ -777,7 +790,7 @@ extension MyController {
              MSG_ALWAYS_WARP_ON,
              MSG_ALWAYS_WARP_OFF:
 
-            if amiga.alwaysWarp() {
+            if alwaysWarp {
                 let name = NSImage.Name("hourglass3Template")
                 warpIcon.image = NSImage.init(named: name)
             } else if (amiga.warp()) {
@@ -926,7 +939,7 @@ extension MyController {
             targetSelf in targetSelf.alwaysWarpAction(sender)
         }
     
-        amiga.setAlwaysWarp(!amiga.alwaysWarp())
+        alwaysWarp = !alwaysWarp
         refresh()
     }
     

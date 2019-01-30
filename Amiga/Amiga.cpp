@@ -91,7 +91,6 @@ Amiga::Amiga()
     // Register snapshot items
     SnapshotItem items[] = {
         
-        { &warp,               sizeof(warp),               CLEAR_ON_RESET },
         { NULL,                0,                          0 }};
     
     registerSnapshotItems(items, sizeof(items));
@@ -285,6 +284,20 @@ Amiga::_dump()
 }
 
 void
+Amiga::_setWarp(bool value) {
+    
+    if (value) {
+        
+        putMessage(MSG_WARP_ON);
+        
+    } else {
+
+        restartTimer();
+        putMessage(MSG_WARP_OFF);
+    }
+}
+
+void
 Amiga::suspend()
 {
     debug(2, "Suspending (%d)...\n", suspendCounter);
@@ -321,6 +334,7 @@ Amiga::readyToPowerUp()
     return (config.model == A1000) ? bootRom != NULL : kickRom != NULL;
 }
 
+/*
 void
 Amiga::setAlwaysWarp(bool b)
 {
@@ -341,12 +355,7 @@ Amiga::getWarp()
         
         warp = newValue;
         putMessage(warp ? MSG_WARP_ON : MSG_WARP_OFF);
-        
-        /* Warping has the unavoidable drawback that audio playback gets out of
-         * sync. To cope with this issue, we ramp down the volume when entering
-         * warp mode and fade in smoothly when warping ends.
-         */
-        
+                
         if (warp) {
             // Quickly fade out
             paula.audioUnit.rampDown();
@@ -361,6 +370,7 @@ Amiga::getWarp()
     
     return warp;
 }
+*/
 
 void
 Amiga::restartTimer()

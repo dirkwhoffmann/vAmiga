@@ -49,6 +49,11 @@ HardwareComponent::powerOn()
         debug(2, "Power on\n");
         power = true;
         _powerOn();
+        
+        // Watch out for unitialized state variables
+           for (unsigned i = 0; snapshotItems != NULL && snapshotItems[i].data != NULL; i++) {
+               assert(((uint8_t *)snapshotItems[i].data)[0] != 42);
+           }
     }
 }
 
@@ -149,6 +154,23 @@ HardwareComponent::dump()
 }
 
 void
+HardwareComponent::setWarp(bool value)
+{
+    if (warp != value) {
+        
+        warp = value;
+        
+        // Inform all sub components
+        if (subComponents != NULL)
+            for (unsigned i = 0; subComponents[i] != NULL; i++)
+                subComponents[i]->setWarp(value);
+        
+        // Switch warp mode on or off in this component
+        _setWarp(value);
+    }
+}
+
+void
 HardwareComponent::registerSubcomponents(HardwareComponent **components, unsigned length) {
     
     assert(components != NULL);
@@ -175,9 +197,16 @@ HardwareComponent::registerSnapshotItems(SnapshotItem *items, unsigned length) {
     snapshotItems = new SnapshotItem[numItems];
     std::copy(items, items + numItems, &snapshotItems[0]);
     
-    // Determine size of snapshot on disk
-    for (i = snapshotSize = 0; snapshotItems[i].data != NULL; i++)
+    // Initialize all snapshot items with a special bit pattern and determine
+    // snapshot size. The bit pattern is used in powerOn() to detect
+    // uninitialized variables.
+    for (i = snapshotSize = 0; snapshotItems[i].data != NULL; i++) {
         snapshotSize += snapshotItems[i].size;
+        uint8_t *data = (uint8_t *)snapshotItems[i].data;
+        for (size_t j = 0; j < snapshotItems[i].size; j++) {
+            data[j] = 42;
+        }
+    }
 }
 
 size_t

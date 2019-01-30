@@ -128,10 +128,14 @@ struct AmigaFileWrapper;
 - (Message)message;
 
 - (BOOL) warp;
+- (void) setWarp:(BOOL)value;
+
+/*
 - (BOOL) alwaysWarp;
 - (void) setAlwaysWarp:(BOOL)value;
 - (BOOL) warpLoad;
 - (void) setWarpLoad:(BOOL)value;
+*/
 
 // Handling snapshots
 - (BOOL) takeAutoSnapshots;

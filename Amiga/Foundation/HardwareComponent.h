@@ -87,6 +87,9 @@ protected:
     bool power = false;
     bool running = false;
     
+    // Indicates if this component should run in warp mode
+    bool warp = false;
+    
 public:
     
     virtual ~HardwareComponent();
@@ -171,38 +174,33 @@ public:
     virtual void pause();
     virtual void _pause() { };
     
-  
-
-    // Calls powerOn() or powerOff(), depending on the current state.
-    // void powerOnOrOff() { isPoweredOn() ? powerOff() : powerOn(); }
-    
-    // Emulates a cold start of this component.
-    // void coldStart() { powerOff(); powerOn(); }
-    
     /* Emulates a reset event on the virtual Amiga.
      * By default, each component resets its sub components.
      */
-    void reset();
-    
-    // Subclass specific reset behaviour
-    virtual void _reset() { };
-    
+    virtual void reset();
+    virtual void _reset() { }
+  
+
     /* Asks the component to inform the GUI about its current state.
      * The GUI invokes this function when it needs to update all of its visual
      * elements. This happens, e.g., when a snapshot file was loaded.
      */
     void ping();
-    
-    // Subclass specific ping behaviour
-    virtual void _ping() { };
+    virtual void _ping() { }
     
     // Dumps some debug information about the internal state to the console.
     void dump();
+    virtual void _dump() { }
     
-    // Subclass specific dump behaviour
-    virtual void _dump() { };
     
-       
+    // Getter for warp mode
+    bool getWarp() { return warp; }
+    
+    // Switches warp mode on or off
+    void setWarp(bool value);
+    virtual void _setWarp(bool value) { }
+    
+    
     //
     // Registering snapshot items and sub components
     //

@@ -22,7 +22,7 @@ extension PreferencesController {
             else { return }
         
         // VC1541
-        emuWarpLoad.state = amiga.warpLoad() ? .on : .off
+        emuWarpLoad.state = controller.warpLoad ? .on : .off
         emuDriveSounds.state = controller.driveNoise ? .on : .off
         
         // Fullscreen
@@ -50,7 +50,7 @@ extension PreferencesController {
     
     @IBAction func emuWarpLoadAction(_ sender: NSButton!) {
         
-        amigaProxy?.setWarpLoad(sender.state == .on)
+        myController?.warpLoad = sender.state == .on
         refresh()
     }
     

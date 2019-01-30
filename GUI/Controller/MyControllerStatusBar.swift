@@ -15,9 +15,19 @@ extension MyController {
         
         guard let amiga = amigaProxy else { return }
         
+        // Icons
         df0Disk.image = amiga.df0.icon
         df1Disk.image = amiga.df1.icon
         
+        if alwaysWarp {
+            warpIcon.image = NSImage.init(named: "hourglass3Template")
+        } else if (amiga.warp()) {
+            warpIcon.image = NSImage.init(named: "hourglass2Template")
+        } else {
+            warpIcon.image = NSImage.init(named: "hourglass1Template")
+        }
+        
+        // Visibility
         let items: [NSView : Bool] = [
             
             df0LED:  amiga.df0.isConnected(),

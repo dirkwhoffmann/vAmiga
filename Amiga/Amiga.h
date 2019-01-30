@@ -239,11 +239,10 @@ private:
     void _powerOff() override;
     void _run() override;
     void _pause() override;
-
     void _reset() override;
     void _ping() override;
     void _dump() override;
-
+    void _setWarp(bool value) override;
     
     //
     // Controlling the emulation thread
@@ -370,18 +369,18 @@ public:
      * Side effects:
      *   setAlwaysWarp sends a notification message if the value changes.
      */
-    bool getAlwaysWarp() { return alwaysWarp; }
-    void setAlwaysWarp(bool value);
+    // bool getAlwaysWarp() { return alwaysWarp; }
+    // void setAlwaysWarp(bool value);
     
     // Getter and setter for 'warpLoad'
-    bool getWarpLoad() { return warpLoad; }
-    void setWarpLoad(bool value) { warpLoad = value; }
+    // bool getWarpLoad() { return warpLoad; }
+    // void setWarpLoad(bool value) { warpLoad = value; }
 
     /* Updates variable 'warp' and returns the new value.
      * Side effects:
      *   The function sends a notification message if the value changes.
      */
-    bool getWarp();
+    // bool getWarp();
     
     /* Restarts the synchronization timer.
      * This function is invoked at launch time to initialize the timer and

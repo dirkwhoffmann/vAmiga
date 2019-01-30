@@ -42,13 +42,14 @@ public:
     
 private:
     
-    /*
     void _powerOn() override;
+    /*
     void _powerOff() override;
     void _reset() override;
     void _ping() override;
     void _dump() override;
     */
+    void _setWarp(bool value) override;
     
     //
     // FAKE METHODS FOR THE VISUAL PROTOTYPE (TEMPORARY)

@@ -647,7 +647,7 @@ extension MyController {
         
         amiga.suspend()
         
-        amiga.setWarpLoad(defaults.bool(forKey: Keys.warpLoad))
+        warpLoad = defaults.bool(forKey: Keys.warpLoad)
         driveNoise = defaults.bool(forKey: Keys.driveNoise)
     
         screenshotSource = defaults.integer(forKey: Keys.screenshotSource)
