@@ -42,7 +42,7 @@ TOD::TOD(CIA *cia)
         { &frequencyCounter, sizeof(frequencyCounter), CLEAR_ON_RESET },
         { NULL,              0,                        0 }};
     
-    registerSnapshotItems(items, sizeof(items));
+    registerSnapshotItemsOld(items, sizeof(items));
 }
 
 void

@@ -19,7 +19,7 @@ AudioUnit::AudioUnit()
         { &cycles,          sizeof(cycles),         CLEAR_ON_RESET },
         { NULL,             0,                      0 }};
     
-    registerSnapshotItems(items, sizeof(items));
+    registerSnapshotItemsOld(items, sizeof(items));
 }
 
 void

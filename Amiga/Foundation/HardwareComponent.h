@@ -64,10 +64,11 @@ public:
 protected:
     
     // Sub components of this component
-    HardwareComponent **subComponents = NULL;
+    vector<HardwareComponent *> subComponents;
     
     // List of snapshot items of this component
-    SnapshotItem *snapshotItems = NULL;
+    SnapshotItem *snapshotItemsOld = NULL;
+    vector<HardwareComponent> snapshotItems;
     
     // Snapshot size on disk (in bytes)
     unsigned snapshotSize = 0;
@@ -205,21 +206,18 @@ public:
     // Registering snapshot items and sub components
     //
     
-    /* Registers all subcomponents of this component.
-     * Subcomponents are usually registered in the constructor of a component.
-     *   - subComponents  points to the first element of a HardwareComponent* array.
-     *                    The end of the array is marked by a NULL pointer.
-     *   - length         Size of the array in bytes.
+    /* Registers the subcomponents of this component.
+     * This function is called once (in the costructor).
      */
-    void registerSubcomponents(HardwareComponent **subcomponents, unsigned length);
-    
+    void registerSubcomponents(vector<HardwareComponent *> components);
+        
     /* Registers all snapshot items for this component.
      * Snaphshot items are usually registered in the constructor of a component.
      *   - item           points to the first element of a SnapshotItem* array.
      *                    The end of the array is marked by a NULL pointer.
      *   - length         Size of the array in bytes.
      */
-    void registerSnapshotItems(SnapshotItem *items, unsigned length);
+    void registerSnapshotItemsOld(SnapshotItem *items, unsigned length);
     
     
 public:

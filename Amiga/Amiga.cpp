@@ -68,9 +68,9 @@ Amiga::Amiga()
     config.df0.connected = true;
     config.df1.type      = A1010_ORIG;
     config.df1.connected = false;
-
+    
     // Register sub components
-    HardwareComponent *subcomponents[] = {
+    registerSubcomponents(vector<HardwareComponent *> {
         
         &eventHandler,
         &mem,
@@ -83,9 +83,8 @@ Amiga::Amiga()
         &diskController,
         &df0,
         &df1,
-        NULL };
+    });
     
-    registerSubcomponents(subcomponents, sizeof(subcomponents));
     setAmiga(this);
     
     // Register snapshot items
@@ -93,7 +92,7 @@ Amiga::Amiga()
         
         { NULL,                0,                          0 }};
     
-    registerSnapshotItems(items, sizeof(items));
+    registerSnapshotItemsOld(items, sizeof(items));
     
     // Initialize the mach timer info
     mach_timebase_info(&tb);

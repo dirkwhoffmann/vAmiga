@@ -14,19 +14,17 @@ Paula::Paula()
     setDescription("Paula");
     
     // Register sub components
-    HardwareComponent *subcomponents[] = {
+    registerSubcomponents(vector<HardwareComponent *> {
         
-        &audioUnit,
-        NULL };
-    
-    registerSubcomponents(subcomponents, sizeof(subcomponents));
+        &audioUnit
+    });
     
     // Register snapshot items
     SnapshotItem items[] = {
         
         { NULL,                0,                          0 }};
     
-    registerSnapshotItems(items, sizeof(items));
+    registerSnapshotItemsOld(items, sizeof(items));
     
 }
 

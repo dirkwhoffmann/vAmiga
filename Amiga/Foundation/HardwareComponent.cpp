@@ -13,12 +13,9 @@
 HardwareComponent::~HardwareComponent()
 {
     debug(3, "Terminated\n");
-    
-    if (subComponents)
-        delete [] subComponents;
-    
-    if (snapshotItems)
-        delete [] snapshotItems;
+
+    if (snapshotItemsOld)
+        delete [] snapshotItemsOld;
 }
 
 void
@@ -30,9 +27,9 @@ HardwareComponent::setAmiga(Amiga *amiga)
     this->amiga = amiga;
     
     // Set the reference in all sub components
-    if (subComponents != NULL)
-        for (unsigned i = 0; subComponents[i] != NULL; i++)
-            subComponents[i]->setAmiga(amiga);
+    for (HardwareComponent *c : subComponents) {
+        c->setAmiga(amiga);
+    }
 }
 
 void
@@ -41,9 +38,9 @@ HardwareComponent::powerOn()
     if (!power) {
         
         // Power all sub components on
-        if (subComponents != NULL)
-            for (unsigned i = 0; subComponents[i] != NULL; i++)
-                subComponents[i]->powerOn();
+        for (HardwareComponent *c : subComponents) {
+            c->powerOn();
+        }
         
         // Power on this component
         debug(2, "Power on\n");
@@ -51,8 +48,8 @@ HardwareComponent::powerOn()
         _powerOn();
         
         // Watch out for unitialized state variables
-           for (unsigned i = 0; snapshotItems != NULL && snapshotItems[i].data != NULL; i++) {
-               assert(((uint8_t *)snapshotItems[i].data)[0] != 42);
+           for (unsigned i = 0; snapshotItemsOld != NULL && snapshotItemsOld[i].data != NULL; i++) {
+               assert(((uint8_t *)snapshotItemsOld[i].data)[0] != 42);
            }
     }
 }
@@ -71,9 +68,9 @@ HardwareComponent::powerOff()
         _powerOff();
 
         // Power all sub components off
-        if (subComponents != NULL)
-            for (unsigned i = 0; subComponents[i] != NULL; i++)
-                subComponents[i]->powerOff();
+        for (HardwareComponent *c : subComponents) {
+            c->powerOff();
+        }
     }
 }
 
@@ -86,9 +83,9 @@ HardwareComponent::run()
         powerOn();
             
         // Start all sub components
-        if (subComponents != NULL)
-            for (unsigned i = 0; subComponents[i] != NULL; i++)
-                subComponents[i]->run();
+        for (HardwareComponent *c : subComponents) {
+            c->run();
+        }
         
         // Start this component
         debug(2, "Run\n");
@@ -108,9 +105,9 @@ HardwareComponent::pause()
         _pause();
 
         // Pause all sub components
-        if (subComponents != NULL)
-            for (unsigned i = 0; subComponents[i] != NULL; i++)
-                subComponents[i]->pause();
+        for (HardwareComponent *c : subComponents) {
+            c->pause();
+        }
     }
 }
 
@@ -118,15 +115,15 @@ void
 HardwareComponent::reset()
 {
     // Reset all sub components
-    if (subComponents != NULL)
-        for (unsigned i = 0; subComponents[i] != NULL; i++)
-            subComponents[i]->reset();
+    for (HardwareComponent *c : subComponents) {
+        c->reset();
+    }
     
     // Clear snapshot items marked with 'KEEP_ON_RESET'
-    if (snapshotItems != NULL)
-        for (unsigned i = 0; snapshotItems[i].data != NULL; i++)
-            if (snapshotItems[i].flags & CLEAR_ON_RESET)
-                memset(snapshotItems[i].data, 0, snapshotItems[i].size);
+    if (snapshotItemsOld != NULL)
+        for (unsigned i = 0; snapshotItemsOld[i].data != NULL; i++)
+            if (snapshotItemsOld[i].flags & CLEAR_ON_RESET)
+                memset(snapshotItemsOld[i].data, 0, snapshotItemsOld[i].size);
     
     // Reset this component
     debug(2, "Powering down[%p]\n", this);
@@ -137,9 +134,9 @@ void
 HardwareComponent::ping()
 {
     // Ping all sub components
-    if (subComponents != NULL)
-        for (unsigned i = 0; subComponents[i] != NULL; i++)
-            subComponents[i]->ping();
+    for (HardwareComponent *c : subComponents) {
+        c->ping();
+    }
     
     // Ping this component
     debug(2, "Pinging[%p]\n", this);
@@ -161,9 +158,9 @@ HardwareComponent::setWarp(bool value)
         warp = value;
         
         // Inform all sub components
-        if (subComponents != NULL)
-            for (unsigned i = 0; subComponents[i] != NULL; i++)
-                subComponents[i]->setWarp(value);
+        for (HardwareComponent *c : subComponents) {
+            c->setWarp(value);
+        }
         
         // Switch warp mode on or off in this component
         _setWarp(value);
@@ -171,20 +168,13 @@ HardwareComponent::setWarp(bool value)
 }
 
 void
-HardwareComponent::registerSubcomponents(HardwareComponent **components, unsigned length) {
+HardwareComponent::registerSubcomponents(vector<HardwareComponent *> components) {
     
-    assert(components != NULL);
-    assert(length % sizeof(HardwareComponent *) == 0);
-    
-    unsigned numItems = length / sizeof(HardwareComponent *);
-    
-    // Allocate new array on heap and copy array data
-    subComponents = new HardwareComponent*[numItems];
-    std::copy(components, components + numItems, &subComponents[0]);
+    subComponents = components;
 }
 
 void
-HardwareComponent::registerSnapshotItems(SnapshotItem *items, unsigned length) {
+HardwareComponent::registerSnapshotItemsOld(SnapshotItem *items, unsigned length) {
     
     assert(items != NULL);
     assert(length % sizeof(SnapshotItem) == 0);
@@ -194,16 +184,16 @@ HardwareComponent::registerSnapshotItems(SnapshotItem *items, unsigned length) {
     debug("Registering %d items\n", numItems);
     
     // Allocate new array on heap and copy array data
-    snapshotItems = new SnapshotItem[numItems];
-    std::copy(items, items + numItems, &snapshotItems[0]);
+    snapshotItemsOld = new SnapshotItem[numItems];
+    std::copy(items, items + numItems, &snapshotItemsOld[0]);
     
     // Initialize all snapshot items with a special bit pattern and determine
     // snapshot size. The bit pattern is used in powerOn() to detect
     // uninitialized variables.
-    for (i = snapshotSize = 0; snapshotItems[i].data != NULL; i++) {
-        snapshotSize += snapshotItems[i].size;
-        uint8_t *data = (uint8_t *)snapshotItems[i].data;
-        for (size_t j = 0; j < snapshotItems[i].size; j++) {
+    for (i = snapshotSize = 0; snapshotItemsOld[i].data != NULL; i++) {
+        snapshotSize += snapshotItemsOld[i].size;
+        uint8_t *data = (uint8_t *)snapshotItemsOld[i].data;
+        for (size_t j = 0; j < snapshotItemsOld[i].size; j++) {
             data[j] = 42;
         }
     }
@@ -214,10 +204,10 @@ HardwareComponent::stateSize()
 {
     uint32_t result = snapshotSize;
     
-    if (subComponents != NULL)
-        for (unsigned i = 0; subComponents[i] != NULL; i++)
-            result += subComponents[i]->stateSize();
-    
+    for (HardwareComponent *c : subComponents) {
+        result += c->stateSize();
+    }
+
     return result;
 }
 
@@ -232,23 +222,23 @@ HardwareComponent::loadFromBuffer(uint8_t **buffer)
     willLoadFromBuffer(buffer);
     
     // Load internal state of all sub components
-    if (subComponents != NULL)
-        for (unsigned i = 0; subComponents[i] != NULL; i++)
-            subComponents[i]->loadFromBuffer(buffer);
+    for (HardwareComponent *c : subComponents) {
+        c->loadFromBuffer(buffer);
+    }
     
     // Load own internal state
     void *data; size_t size; int flags;
-    for (unsigned i = 0; snapshotItems != NULL && snapshotItems[i].data != NULL; i++) {
+    for (unsigned i = 0; snapshotItemsOld != NULL && snapshotItemsOld[i].data != NULL; i++) {
         
-        data  = snapshotItems[i].data;
-        flags = snapshotItems[i].flags & 0x0F;
-        size  = snapshotItems[i].size;
+        data  = snapshotItemsOld[i].data;
+        flags = snapshotItemsOld[i].flags & 0x0F;
+        size  = snapshotItemsOld[i].size;
         
         if (flags == 0) { // Auto detect size
             
             debug("Reading back to %p\n", data);
             
-            switch (snapshotItems[i].size) {
+            switch (snapshotItemsOld[i].size) {
                 case 1:  *(uint8_t *)data  = read8(buffer); break;
                 case 2:  *(uint16_t *)data = read16(buffer); break;
                 case 4:  *(uint32_t *)data = read32(buffer); break;
@@ -290,22 +280,21 @@ HardwareComponent::saveToBuffer(uint8_t **buffer)
     willSaveToBuffer(buffer);
     
     // Save internal state of all sub components
-    if (subComponents != NULL) {
-        for (unsigned i = 0; subComponents[i] != NULL; i++)
-            subComponents[i]->saveToBuffer(buffer);
+    for (HardwareComponent *c : subComponents) {
+        c->saveToBuffer(buffer);
     }
     
     // Save own internal state
     void *data; size_t size; int flags;
-    for (unsigned i = 0; snapshotItems != NULL && snapshotItems[i].data != NULL; i++) {
+    for (unsigned i = 0; snapshotItemsOld != NULL && snapshotItemsOld[i].data != NULL; i++) {
         
-        data  = snapshotItems[i].data;
-        flags = snapshotItems[i].flags & 0x0F;
-        size  = snapshotItems[i].size;
+        data  = snapshotItemsOld[i].data;
+        flags = snapshotItemsOld[i].flags & 0x0F;
+        size  = snapshotItemsOld[i].size;
         
         if (flags == 0) { // Auto detect size
             
-            switch (snapshotItems[i].size) {
+            switch (snapshotItemsOld[i].size) {
                 case 1:  write8(buffer, *(uint8_t *)data); break;
                 case 2:  write16(buffer, *(uint16_t *)data); break;
                 case 4:  write32(buffer, *(uint32_t *)data); break;

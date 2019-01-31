@@ -23,8 +23,11 @@ CIA::CIA()
 	setDescription("CIA");
     
     // Register sub components
-    HardwareComponent *subcomponents[] = { &tod, NULL };
-    registerSubcomponents(subcomponents, sizeof(subcomponents));
+    registerSubcomponents(vector<HardwareComponent *> {
+        
+        &tod
+    });
+    
 
     // Register snapshot items
     SnapshotItem items[] = {
@@ -62,7 +65,7 @@ CIA::CIA()
         { &idleCounter,      sizeof(idleCounter),      CLEAR_ON_RESET },
         { NULL,              0,                        0 }};
 
-    registerSnapshotItems(items, sizeof(items));
+    registerSnapshotItemsOld(items, sizeof(items));
     
     model = MOS_6526;
     emulateTimerBBug = true;
