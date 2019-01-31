@@ -30,19 +30,17 @@ TOD::TOD(CIA *cia)
     this->cia = cia;
     
     // Register snapshot items
-    SnapshotItem items[] = {
+    registerSnapshotItems(vector<SnapshotItem> {
                 
-        { &tod.value,        sizeof(tod.value),        CLEAR_ON_RESET },
-        { &latch.value,      sizeof(latch.value),      CLEAR_ON_RESET },
-        { &alarm.value,      sizeof(alarm.value),      CLEAR_ON_RESET },
-        { &frozen,           sizeof(frozen),           CLEAR_ON_RESET },
-        { &stopped,          sizeof(stopped),          CLEAR_ON_RESET },
-        { &matching,         sizeof(matching),         CLEAR_ON_RESET },
-        { &hz,               sizeof(hz),               CLEAR_ON_RESET },
-        { &frequencyCounter, sizeof(frequencyCounter), CLEAR_ON_RESET },
-        { NULL,              0,                        0 }};
-    
-    registerSnapshotItemsOld(items, sizeof(items));
+        { &tod.value,        sizeof(tod.value),        0 },
+        { &latch.value,      sizeof(latch.value),      0 },
+        { &alarm.value,      sizeof(alarm.value),      0 },
+        { &frozen,           sizeof(frozen),           0 },
+        { &stopped,          sizeof(stopped),          0 },
+        { &matching,         sizeof(matching),         0 },
+        { &hz,               sizeof(hz),               0 },
+        { &frequencyCounter, sizeof(frequencyCounter), 0 },
+        { NULL,              0,                        0 }});
 }
 
 void

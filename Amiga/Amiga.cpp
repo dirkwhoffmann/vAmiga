@@ -85,14 +85,26 @@ Amiga::Amiga()
         &df1,
     });
     
-    setAmiga(this);
-    
-    // Register snapshot items
-    SnapshotItem items[] = {
+    registerSnapshotItems(vector<SnapshotItem> {
         
-        { NULL,                0,                          0 }};
+        { &config.model, sizeof(config.model), 0 },
+        { &config.layout, sizeof(config.layout), 0 },
+    });
     
-    registerSnapshotItemsOld(items, sizeof(items));
+    /*
+         { }
+         AmigaModel model;
+         long layout;
+         long chipRamSize; // size in KB
+         long slowRamSize; // size in KB
+         long fastRamSize; // size in KB
+         bool realTimeClock;
+         DriveConfiguration df0;
+         DriveConfiguration df1;
+         */
+         
+    // Install a reference to the top-level object in each subcomponent
+    setAmiga(this);
     
     // Initialize the mach timer info
     mach_timebase_info(&tb);

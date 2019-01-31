@@ -14,12 +14,9 @@ AudioUnit::AudioUnit()
     setDescription("AudioUnit");
     
     // Register snapshot items
-    SnapshotItem items[] = {
+    registerSnapshotItems(vector<SnapshotItem> {
         
-        { &cycles,          sizeof(cycles),         CLEAR_ON_RESET },
-        { NULL,             0,                      0 }};
-    
-    registerSnapshotItemsOld(items, sizeof(items));
+        { &cycles,          sizeof(cycles),         0 }});
 }
 
 void

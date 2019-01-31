@@ -47,7 +47,6 @@ DiskController::_dump()
 void
 DiskController::setDMA(unsigned nr, bool value)
 {
-    debug("set DMA %d %d\n", nr, value);
     if (nr == 0) {
         df0DMA = value;
         amiga->putMessage(value ? MSG_DRIVE_DMA_ON : MSG_DRIVE_DMA_OFF, 0);

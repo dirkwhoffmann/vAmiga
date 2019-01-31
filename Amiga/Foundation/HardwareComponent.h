@@ -26,26 +26,33 @@ class HardwareComponent : public AmigaObject {
 protected:
     
     /* Type and behavior of a snapshot item
-     * The reset flags indicate whether the snapshot item should be set to 0
-     * automatically during a reset. The format flags are important when big
-     * chunks of data are specified. They are needed loadBuffer and saveBuffer
-     * to correctly converting little endian to big endian format.
+     * The format flags are important when big chunks of data are specified.
+     * They are needed in functions loadBuffer and saveBuffer to correctly
+     * convert little endian to big endian format.
+     * If the PERSISTANT flag is set, the snapshot won't be zeroed out in
+     * powerOn().
      */
     enum {
-        KEEP_ON_RESET  = 0x00, //! Don't touch item during a reset
-        CLEAR_ON_RESET = 0x10, //! Reset to zero during a reset
+        BYTE_ARRAY       = 0x01, //! Data chunk is an array of bytes
+        WORD_ARRAY       = 0x02, //! Data chunk is an array of words
+        DWORD_ARRAY      = 0x04, //! Data chunk is an array of double words
+        QWORD_ARRAY      = 0x08, //! Data chunk is an array of quad words
         
-        BYTE_ARRAY     = 0x01, //! Data chunk is an array of bytes
-        WORD_ARRAY     = 0x02, //! Data chunk is an array of words
-        DWORD_ARRAY    = 0x04, //! Data chunk is an array of double words
-        QWORD_ARRAY    = 0x08  //! Data chunk is an array of quad words
+        PERSISTANT       = 0x10, //! Don't zero out in powerOn()
+
     };
     
     /* Fingerprint of a snapshot item
      */
     typedef struct {
         
-        void *data;
+        union {
+            void *data;
+            uint8_t *data8;
+            uint16_t *data16;
+            uint32_t *data32;
+            uint64_t *data64;
+        };
         size_t size;
         uint8_t flags;
         
@@ -67,8 +74,7 @@ protected:
     vector<HardwareComponent *> subComponents;
     
     // List of snapshot items of this component
-    SnapshotItem *snapshotItemsOld = NULL;
-    vector<HardwareComponent> snapshotItems;
+    vector<SnapshotItem> snapshotItems;
     
     // Snapshot size on disk (in bytes)
     unsigned snapshotSize = 0;
@@ -207,17 +213,14 @@ public:
     //
     
     /* Registers the subcomponents of this component.
-     * This function is called once (in the costructor).
+     * This function is called once (in the constructor).
      */
     void registerSubcomponents(vector<HardwareComponent *> components);
         
-    /* Registers all snapshot items for this component.
-     * Snaphshot items are usually registered in the constructor of a component.
-     *   - item           points to the first element of a SnapshotItem* array.
-     *                    The end of the array is marked by a NULL pointer.
-     *   - length         Size of the array in bytes.
+    /* Registers the snapshot items of this component.
+     * This function is called once (in the constructor).
      */
-    void registerSnapshotItemsOld(SnapshotItem *items, unsigned length);
+    void registerSnapshotItems(vector<SnapshotItem> items);
     
     
 public:

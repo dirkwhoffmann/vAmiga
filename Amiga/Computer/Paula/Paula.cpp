@@ -20,11 +20,9 @@ Paula::Paula()
     });
     
     // Register snapshot items
-    SnapshotItem items[] = {
-        
-        { NULL,                0,                          0 }};
-    
-    registerSnapshotItemsOld(items, sizeof(items));
+    registerSnapshotItems(vector<SnapshotItem> {
+        { &clock, sizeof(clock), 0 },
+    });
     
 }
 

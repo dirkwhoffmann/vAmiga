@@ -13,9 +13,6 @@
 HardwareComponent::~HardwareComponent()
 {
     debug(3, "Terminated\n");
-
-    if (snapshotItemsOld)
-        delete [] snapshotItemsOld;
 }
 
 void
@@ -47,10 +44,15 @@ HardwareComponent::powerOn()
         power = true;
         _powerOn();
         
-        // Watch out for unitialized state variables
-           for (unsigned i = 0; snapshotItemsOld != NULL && snapshotItemsOld[i].data != NULL; i++) {
-               assert(((uint8_t *)snapshotItemsOld[i].data)[0] != 42);
-           }
+        // Zero out all snapshot items that are not marked as persistent.
+        for (SnapshotItem i : snapshotItems) {
+            if ((i.flags & PERSISTANT) == 0) memset(i.data, 0, i.size);
+        }
+        
+        // Watch out for uninitialzed variables
+        for (SnapshotItem i : snapshotItems) {
+            assert(((uint8_t *)i.data)[0] != 42);
+        }
     }
 }
 
@@ -119,14 +121,8 @@ HardwareComponent::reset()
         c->reset();
     }
     
-    // Clear snapshot items marked with 'KEEP_ON_RESET'
-    if (snapshotItemsOld != NULL)
-        for (unsigned i = 0; snapshotItemsOld[i].data != NULL; i++)
-            if (snapshotItemsOld[i].flags & CLEAR_ON_RESET)
-                memset(snapshotItemsOld[i].data, 0, snapshotItemsOld[i].size);
-    
     // Reset this component
-    debug(2, "Powering down[%p]\n", this);
+    debug(2, "Reset [%p]\n", this);
     _reset();
 }
 
@@ -139,7 +135,7 @@ HardwareComponent::ping()
     }
     
     // Ping this component
-    debug(2, "Pinging[%p]\n", this);
+    debug(2, "Ping [%p]\n", this);
     _ping();
 }
 
@@ -174,28 +170,19 @@ HardwareComponent::registerSubcomponents(vector<HardwareComponent *> components)
 }
 
 void
-HardwareComponent::registerSnapshotItemsOld(SnapshotItem *items, unsigned length) {
+HardwareComponent::registerSnapshotItems(vector<SnapshotItem> items) {
     
-    assert(items != NULL);
-    assert(length % sizeof(SnapshotItem) == 0);
+    snapshotItems = items;
+    snapshotSize = 0;
     
-    unsigned i, numItems = length / sizeof(SnapshotItem);
-    
-    debug("Registering %d items\n", numItems);
-    
-    // Allocate new array on heap and copy array data
-    snapshotItemsOld = new SnapshotItem[numItems];
-    std::copy(items, items + numItems, &snapshotItemsOld[0]);
-    
-    // Initialize all snapshot items with a special bit pattern and determine
-    // snapshot size. The bit pattern is used in powerOn() to detect
-    // uninitialized variables.
-    for (i = snapshotSize = 0; snapshotItemsOld[i].data != NULL; i++) {
-        snapshotSize += snapshotItemsOld[i].size;
-        uint8_t *data = (uint8_t *)snapshotItemsOld[i].data;
-        for (size_t j = 0; j < snapshotItemsOld[i].size; j++) {
-            data[j] = 42;
-        }
+    for (SnapshotItem item : snapshotItems) {
+        
+        // Calculate snapshot size
+        snapshotSize += item.size;
+        
+        // Initialize all snapshot items with a special bit pattern. This lets
+        // us detect unintialized variables in powerOn().
+        for (size_t j = 0; j < item.size; j++) ((uint8_t *)item.data)[j] = 42;
     }
 }
 
@@ -226,42 +213,51 @@ HardwareComponent::loadFromBuffer(uint8_t **buffer)
         c->loadFromBuffer(buffer);
     }
     
-    // Load own internal state
-    void *data; size_t size; int flags;
-    for (unsigned i = 0; snapshotItemsOld != NULL && snapshotItemsOld[i].data != NULL; i++) {
+    // Load internal state of this component
+    for (SnapshotItem i : snapshotItems) {
         
-        data  = snapshotItemsOld[i].data;
-        flags = snapshotItemsOld[i].flags & 0x0F;
-        size  = snapshotItemsOld[i].size;
-        
-        if (flags == 0) { // Auto detect size
+        switch (i.flags & 0x0F) {
+                
+            case 0: // Auto detect
+                
+                switch (i.size) {
+                    case 1:  *i.data8  = read8(buffer);  break;
+                    case 2:  *i.data16 = read16(buffer); break;
+                    case 4:  *i.data32 = read32(buffer); break;
+                    case 8:  *i.data64 = read64(buffer); break;
+                    default: readBlock(buffer, i.data8, i.size);
+                }
+                break;
             
-            debug("Reading back to %p\n", data);
+            case 1: // Byte array
             
-            switch (snapshotItemsOld[i].size) {
-                case 1:  *(uint8_t *)data  = read8(buffer); break;
-                case 2:  *(uint16_t *)data = read16(buffer); break;
-                case 4:  *(uint32_t *)data = read32(buffer); break;
-                case 8:  *(uint64_t *)data = read64(buffer); break;
-                default: readBlock(buffer, (uint8_t *)data, size);
-            }
-            
-        } else { // Format is specified manually
-            
-            switch (flags) {
-                case BYTE_ARRAY: readBlock(buffer, (uint8_t *)data, size); break;
-                case WORD_ARRAY: readBlock16(buffer, (uint16_t *)data, size); break;
-                case DWORD_ARRAY: readBlock32(buffer, (uint32_t *)data, size); break;
-                case QWORD_ARRAY: readBlock64(buffer, (uint64_t *)data, size); break;
-                default: assert(0);
-            }
+                readBlock(buffer, i.data8, i.size);
+                break;
+                
+            case 2: // Word array
+                
+                readBlock16(buffer, i.data16, i.size);
+                break;
+                
+            case 4: // Double word array
+                
+                readBlock32(buffer, i.data32, i.size);
+                break;
+                
+            case 8: // Quad word array
+                
+                readBlock64(buffer, i.data64, i.size);
+                break;
+                
+            default:
+                assert(false);
         }
     }
     
     // Call delegation method
     didLoadFromBuffer(buffer);
     
-    // Verify that the number of read bytes matches the state size
+    // Verify that the number of processed bytes matches the state size
     if (*buffer - old != stateSize()) {
         panic("loadFromBuffer: Snapshot size is wrong. Got %d, expected %d.",
               *buffer - old, stateSize());
@@ -284,33 +280,44 @@ HardwareComponent::saveToBuffer(uint8_t **buffer)
         c->saveToBuffer(buffer);
     }
     
-    // Save own internal state
-    void *data; size_t size; int flags;
-    for (unsigned i = 0; snapshotItemsOld != NULL && snapshotItemsOld[i].data != NULL; i++) {
+    // Save internal state of this component
+    for (SnapshotItem i : snapshotItems) {
         
-        data  = snapshotItemsOld[i].data;
-        flags = snapshotItemsOld[i].flags & 0x0F;
-        size  = snapshotItemsOld[i].size;
-        
-        if (flags == 0) { // Auto detect size
-            
-            switch (snapshotItemsOld[i].size) {
-                case 1:  write8(buffer, *(uint8_t *)data); break;
-                case 2:  write16(buffer, *(uint16_t *)data); break;
-                case 4:  write32(buffer, *(uint32_t *)data); break;
-                case 8:  write64(buffer, *(uint64_t *)data); break;
-                default: writeBlock(buffer, (uint8_t *)data, size);
-            }
-            
-        } else { // Format is specified manually
-            
-            switch (flags) {
-                case BYTE_ARRAY: writeBlock(buffer, (uint8_t *)data, size); break;
-                case WORD_ARRAY: writeBlock16(buffer, (uint16_t *)data, size); break;
-                case DWORD_ARRAY: writeBlock32(buffer, (uint32_t *)data, size); break;
-                case QWORD_ARRAY: writeBlock64(buffer, (uint64_t *)data, size); break;
-                default: assert(0);
-            }
+        switch (i.flags & 0x0F) {
+                
+            case 0: // Auto detect
+                
+                switch (i.size) {
+                    case 1:  write8(buffer, *i.data8); break;
+                    case 2:  write16(buffer, *i.data16); break;
+                    case 4:  write32(buffer, *i.data32); break;
+                    case 8:  write64(buffer, *i.data64); break;
+                    default: writeBlock(buffer, i.data8, i.size);
+                }
+                break;
+                
+            case 1: // Byte array
+                
+                writeBlock(buffer, i.data8, i.size);
+                break;
+                
+            case 2: // Word array
+                
+                writeBlock16(buffer, i.data16, i.size);
+                break;
+                
+            case 4: // Double word array
+                
+                writeBlock32(buffer, i.data32, i.size);
+                break;
+                
+            case 8: // Quad word array
+                
+                writeBlock64(buffer, i.data64, i.size);
+                break;
+                
+            default:
+                assert(false);
         }
     }
     

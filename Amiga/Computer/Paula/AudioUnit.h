@@ -53,16 +53,16 @@ private:
     
     /* Ring buffer read pointer
      */
-    uint32_t readPtr;
+    uint32_t readPtr = 0;
     
     /* Ring buffer write pointer
      */
-    uint32_t writePtr;
+    uint32_t writePtr = 0;
     
     /* Current volume
      * A value of 0 or below silences the audio playback.
      */
-    int32_t volume;
+    int32_t volume = 0;
     
     /* Target volume
      * Whenever an audio sample is written, the volume is increased or
@@ -80,7 +80,7 @@ private:
      * or decreased by the specified amount. The increase or decrease takes
      * place whenever an audio sample is generated.
      */
-    int32_t volumeDelta;
+    int32_t volumeDelta = 0;
   
     
     //

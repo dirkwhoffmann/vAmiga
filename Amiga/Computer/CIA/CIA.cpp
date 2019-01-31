@@ -30,42 +30,39 @@ CIA::CIA()
     
 
     // Register snapshot items
-    SnapshotItem items[] = {
+    registerSnapshotItems(vector<SnapshotItem> {
 
-        { &model,            sizeof(model),            KEEP_ON_RESET },
-        { &emulateTimerBBug, sizeof(emulateTimerBBug), KEEP_ON_RESET },
+        { &model,            sizeof(model),            0 },
+        { &emulateTimerBBug, sizeof(emulateTimerBBug), 0 },
 
-        { &counterA,         sizeof(counterA),         CLEAR_ON_RESET },
-        { &latchA,           sizeof(latchA),           CLEAR_ON_RESET },
-        { &counterB,         sizeof(counterB),         CLEAR_ON_RESET },
-        { &latchB,           sizeof(latchB),           CLEAR_ON_RESET },
-        { &delay,            sizeof(delay),            CLEAR_ON_RESET },
-        { &feed,             sizeof(feed),             CLEAR_ON_RESET },
-        { &CRA,              sizeof(CRA),              CLEAR_ON_RESET },
-        { &CRB,              sizeof(CRB),              CLEAR_ON_RESET },
-        { &icr,              sizeof(icr),              CLEAR_ON_RESET },
-        { &icrAck,           sizeof(icrAck),           CLEAR_ON_RESET },
-        { &imr,              sizeof(imr),              CLEAR_ON_RESET },
-        { &PB67TimerMode,    sizeof(PB67TimerMode),    CLEAR_ON_RESET },
-        { &PB67TimerOut,     sizeof(PB67TimerOut),     CLEAR_ON_RESET },
-        { &PB67Toggle,       sizeof(PB67Toggle),       CLEAR_ON_RESET },
-        { &PRA,              sizeof(PRA),              CLEAR_ON_RESET },
-        { &PRB,              sizeof(PRB),              CLEAR_ON_RESET },
-        { &DDRA,             sizeof(DDRA),             CLEAR_ON_RESET },
-        { &DDRB,             sizeof(DDRB),             CLEAR_ON_RESET },
-        { &PA,               sizeof(PA),               CLEAR_ON_RESET },
-        { &PB,               sizeof(PB),               CLEAR_ON_RESET },
-        { &SDR,              sizeof(SDR),              CLEAR_ON_RESET },
-        { &serClk,           sizeof(serClk),           CLEAR_ON_RESET },
-        { &serCounter,       sizeof(serCounter),       CLEAR_ON_RESET },
-        { &CNT,              sizeof(CNT),              CLEAR_ON_RESET },
-        { &INT,              sizeof(INT),              CLEAR_ON_RESET },
-        { &tiredness,        sizeof(tiredness),        CLEAR_ON_RESET },
-        { &wakeUpCycle,      sizeof(wakeUpCycle),      CLEAR_ON_RESET },
-        { &idleCounter,      sizeof(idleCounter),      CLEAR_ON_RESET },
-        { NULL,              0,                        0 }};
-
-    registerSnapshotItemsOld(items, sizeof(items));
+        { &counterA,         sizeof(counterA),         0 },
+        { &latchA,           sizeof(latchA),           0 },
+        { &counterB,         sizeof(counterB),         0 },
+        { &latchB,           sizeof(latchB),           0 },
+        { &delay,            sizeof(delay),            0 },
+        { &feed,             sizeof(feed),             0 },
+        { &CRA,              sizeof(CRA),              0 },
+        { &CRB,              sizeof(CRB),              0 },
+        { &icr,              sizeof(icr),              0 },
+        { &icrAck,           sizeof(icrAck),           0 },
+        { &imr,              sizeof(imr),              0 },
+        { &PB67TimerMode,    sizeof(PB67TimerMode),    0 },
+        { &PB67TimerOut,     sizeof(PB67TimerOut),     0 },
+        { &PB67Toggle,       sizeof(PB67Toggle),       0 },
+        { &PRA,              sizeof(PRA),              0 },
+        { &PRB,              sizeof(PRB),              0 },
+        { &DDRA,             sizeof(DDRA),             0 },
+        { &DDRB,             sizeof(DDRB),             0 },
+        { &PA,               sizeof(PA),               0 },
+        { &PB,               sizeof(PB),               0 },
+        { &SDR,              sizeof(SDR),              0 },
+        { &serClk,           sizeof(serClk),           0 },
+        { &serCounter,       sizeof(serCounter),       0 },
+        { &CNT,              sizeof(CNT),              0 },
+        { &INT,              sizeof(INT),              0 },
+        { &tiredness,        sizeof(tiredness),        0 },
+        { &wakeUpCycle,      sizeof(wakeUpCycle),      0 },
+        { &idleCounter,      sizeof(idleCounter),      0 }});
     
     model = MOS_6526;
     emulateTimerBBug = true;
