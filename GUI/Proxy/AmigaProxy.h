@@ -181,6 +181,7 @@ struct AmigaFileWrapper;
 }
 
 - (void) dump;
+- (NSInteger) spypeek16:(NSInteger)addr; 
 
 @end
 

@@ -361,6 +361,13 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="bDU-dO-xxe"/>
+                            <menuItem title="Open Inspector" id="jIT-6f-DxM">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="inspectorAction:" target="-1" id="cTd-gU-VFK"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="ztM-kT-EyU"/>
                             <menuItem title="Enter Full Screen" keyEquivalent="f" id="1r4-M9-Ar1">
                                 <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
                                 <connections>

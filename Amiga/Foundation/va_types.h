@@ -10,6 +10,14 @@
 #ifndef _VATYPES_H
 #define _VATYPES_H
 
+// 2 bit binary value
+typedef uint8_t uint2_t;
+inline bool is_uint2_t(uint2_t value) { return value <= 0x03; }
+
+// 24 bit binary value
+typedef uint32_t uint24_t;
+inline bool is_uint24_t(uint24_t value) { return value <= 0xFFFFFF; }
+
 //
 // Amiga hardware
 //
@@ -124,14 +132,14 @@ AmigaConfiguration;
 typedef enum
 {
     MEM_UNMAPPED,
-    MEM_ROM,
-    MEM_WOM,
     MEM_CHIP,
-    MEM_SLOW,
     MEM_FAST,
     MEM_CIA,
+    MEM_SLOW,
     MEM_RTC,
-    MEM_CUSTOM
+    MEM_CUSTOM,
+    MEM_ROM,
+    MEM_WOM,
 } MemorySource;
 
 

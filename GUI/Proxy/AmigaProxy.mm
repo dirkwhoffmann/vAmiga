@@ -42,6 +42,11 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->mem->dump();
 }
+- (NSInteger) spypeek16:(NSInteger)addr
+{
+    return (addr & 0xFFFF);
+}
+
 @end
 
 

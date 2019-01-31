@@ -46,7 +46,7 @@ class MyController : NSWindowController, MessageReceiver {
     
     /// Keyboard controller
     var keyboardcontroller: KeyboardController!
-
+    
     /// Virtual C64 keyboard (opened as a sheet)
     var virtualKeyboardSheet: VirtualKeyboardController? = nil
     
@@ -371,9 +371,6 @@ class MyController : NSWindowController, MessageReceiver {
     @IBOutlet weak var stepIntoButton: NSButton!
     @IBOutlet weak var stepOverButton: NSButton!
     
-    // Debug panel (Memory)
-    @IBOutlet weak var memTableView: MemTableView!
-    
     // Debug panel (CIA)
     @IBOutlet weak var ciaSelector: NSSegmentedControl!
     
@@ -465,9 +462,7 @@ extension MyController {
     override open func awakeFromNib() {
 
         track()
-        
-        memTableView.c = self
-        
+                
         // Create audio engine
         audioEngine = AudioEngine.init(withPaula: amiga.paula)
     }

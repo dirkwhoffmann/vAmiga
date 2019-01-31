@@ -327,6 +327,15 @@ extension MyController : NSMenuItemValidation {
         hideMouse = !hideMouse
     }
     
+    @IBAction func inspectorAction(_ sender: Any!) {
+        
+        if myAppDelegate.inspector == nil {
+            myAppDelegate.inspector = Inspector.make()
+        }
+        myAppDelegate.inspector?.showWindow(self)
+    }
+    
+    
     //
     // Action methods (Keyboard menu)
     //

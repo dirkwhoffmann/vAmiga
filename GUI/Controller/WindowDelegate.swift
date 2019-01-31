@@ -58,11 +58,6 @@ extension MyController : NSWindowDelegate {
         // Quit message queue
         let myself = UnsafeRawPointer(Unmanaged.passUnretained(self).toOpaque())
         amiga.removeListener(myself)
-  
-        // Disconnect emulator
-        memTableView.dataSource = nil
-        memTableView.delegate = nil
-        memTableView.c = nil
 
         // Stop metal view
         metal.cleanup()

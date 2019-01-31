@@ -45,29 +45,7 @@
 
 #include "va_std.h"
 
-//! @brief    Two bit binary value
-typedef uint8_t uint2_t;
 
-//! @brief    Integrity check
-inline bool is_uint2_t(uint2_t value) { return value < 4; }
-
-//! @brief    Three bit binary value
-typedef uint8_t uint3_t;
-
-//! @brief    Integrity check
-inline bool is_uint3_t(uint2_t value) { return value < 8; }
-
-//! @brief    Four bit binary value
-typedef uint8_t uint4_t;
-
-//! @brief    Integrity check
-inline bool is_uint4_t(uint4_t value) { return value < 16; }
-
-//! @brief    Five bit binary value
-typedef uint8_t uint5_t;
-
-//! @brief    Integrity check
-inline bool is_uint5_t(uint5_t value) { return value < 32; }
 
 
 //

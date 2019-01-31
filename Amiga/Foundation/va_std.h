@@ -36,10 +36,8 @@
 #include "va_constants.h"
 
 #if 0
-//! @brief    Two bit binary value
+// Two bit binary value
 typedef uint8_t uint2_t;
-
-//! @brief    Integrity check
 inline bool is_uint2_t(uint2_t value) { return value < 4; }
 
 //! @brief    Three bit binary value

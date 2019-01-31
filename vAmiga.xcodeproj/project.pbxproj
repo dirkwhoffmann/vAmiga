@@ -110,6 +110,8 @@
 		50C2DE4421F756900043FD1B /* MyControllerStatusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */; };
 		50D263CC21F6377700FA167F /* A500ANSI.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50D263CB21F6377600FA167F /* A500ANSI.xib */; };
 		50D263CE21F6378100FA167F /* A1000ISO.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50D263CD21F6378000FA167F /* A1000ISO.xib */; };
+		50DED6AF2202EBA200B8195F /* Inspector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50DED6AE2202EBA200B8195F /* Inspector.xib */; };
+		50DED6B12202EC3100B8195F /* Inspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DED6B02202EC3100B8195F /* Inspector.swift */; };
 		50EE994021FF4D8E003BD74B /* AudioUnit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EE993E21FF4D8E003BD74B /* AudioUnit.cpp */; };
 		50F5F27221F1B6DF000627D1 /* AmigaKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F5F27121F1B6DF000627D1 /* AmigaKey.swift */; };
 		50F6EEB821F4F5C60091155D /* AmigaDisk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F6EEB621F4F5C60091155D /* AmigaDisk.cpp */; };
@@ -273,6 +275,8 @@
 		50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyControllerStatusBar.swift; sourceTree = "<group>"; };
 		50D263CB21F6377600FA167F /* A500ANSI.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = A500ANSI.xib; sourceTree = "<group>"; };
 		50D263CD21F6378000FA167F /* A1000ISO.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = A1000ISO.xib; sourceTree = "<group>"; };
+		50DED6AE2202EBA200B8195F /* Inspector.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Inspector.xib; sourceTree = "<group>"; };
+		50DED6B02202EC3100B8195F /* Inspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Inspector.swift; sourceTree = "<group>"; };
 		50EE993E21FF4D8E003BD74B /* AudioUnit.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AudioUnit.cpp; sourceTree = "<group>"; };
 		50EE993F21FF4D8E003BD74B /* AudioUnit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioUnit.h; sourceTree = "<group>"; };
 		50F5F27121F1B6DF000627D1 /* AmigaKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmigaKey.swift; sourceTree = "<group>"; };
@@ -387,6 +391,7 @@
 			children = (
 				508FDFB121EA1FF10043D0E9 /* MainMenu.xib */,
 				508FDFAF21EA1FF10043D0E9 /* MyDocument.xib */,
+				50DED6AE2202EBA200B8195F /* Inspector.xib */,
 				508FDFB321EA1FF10043D0E9 /* SnapshotDialog.xib */,
 				508FDFB421EA1FF10043D0E9 /* KeyViewItem.xib */,
 				508FDFB721EA1FF10043D0E9 /* ExportDiskDialog.xib */,
@@ -535,10 +540,11 @@
 		509F7F1521ED141F00A530E4 /* Debugger */ = {
 			isa = PBXGroup;
 			children = (
-				508FE00421EA227A0043D0E9 /* Debugger.swift */,
-				508FDFEE21EA22780043D0E9 /* CIAPanel.swift */,
+				50DED6B02202EC3100B8195F /* Inspector.swift */,
 				508FE00221EA227A0043D0E9 /* MemoryPanel.swift */,
 				508FDFF821EA22790043D0E9 /* MemTableView.swift */,
+				508FE00421EA227A0043D0E9 /* Debugger.swift */,
+				508FDFEE21EA22780043D0E9 /* CIAPanel.swift */,
 				508FDFF621EA22790043D0E9 /* Formatter.swift */,
 				508FDFF021EA22780043D0E9 /* WaveformView.swift */,
 				508FDFEF21EA22780043D0E9 /* AudioPanel.swift */,
@@ -775,6 +781,7 @@
 			files = (
 				50BBE08B21F5EB9B0099BBBB /* A1000ANSI.xib in Resources */,
 				508FDFC821EA1FF10043D0E9 /* Preferences.xib in Resources */,
+				50DED6AF2202EBA200B8195F /* Inspector.xib in Resources */,
 				508FDFC421EA1FF10043D0E9 /* ExportDiskDialog.xib in Resources */,
 				50B14C1F21EB8445002E32A6 /* drive_click.aiff in Resources */,
 				50D263CC21F6377700FA167F /* A500ANSI.xib in Resources */,
@@ -861,6 +868,7 @@
 				508FE02621EA227B0043D0E9 /* Debugger.swift in Sources */,
 				508FE02B21EA227B0043D0E9 /* WindowDelegate.swift in Sources */,
 				50B14C2821EB97EC002E32A6 /* AmigaProxy.mm in Sources */,
+				50DED6B12202EC3100B8195F /* Inspector.swift in Sources */,
 				509F7F1A21EDDF4F00A530E4 /* BootRom.cpp in Sources */,
 				508FE05121EA22CC0043D0E9 /* HardwarePrefs.swift in Sources */,
 				508FE03821EA22C30043D0E9 /* Notifications.swift in Sources */,

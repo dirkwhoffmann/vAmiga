@@ -159,7 +159,10 @@ func cgEventCallback(proxy: CGEventTapProxy,
     @IBOutlet weak var df0Menu: NSMenuItem!
     @IBOutlet weak var df1Menu: NSMenuItem!
     
-    /// Virtual C64 keyboard (opened as a separate window)
+    /// Inspector (opened as a separate window)
+    var inspector: Inspector? = nil
+    
+    /// Virtual keyboard (opened as a separate window)
     var virtualKeyboard: VirtualKeyboardController? = nil
     
     public func applicationDidFinishLaunching(_ aNotification: Notification) {
@@ -198,7 +201,8 @@ func cgEventCallback(proxy: CGEventTapProxy,
     
     public func applicationWillTerminate(_ aNotification: Notification) {
 
-        // Close virtual keyboard
+        // Close auxiliary windows
+        inspector?.close()
         virtualKeyboard?.close()
         
         track()

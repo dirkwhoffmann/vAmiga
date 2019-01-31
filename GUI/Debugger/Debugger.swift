@@ -34,9 +34,6 @@ extension MyController {
         if let id = debugPanel.selectedTabViewItem?.identifier as? String {
             switch id {
                 
-            case "MEM":
-                memTableView.refresh()
-                
             case "CIA":
                 break
                 
@@ -100,23 +97,7 @@ extension MyController {
                         [ciaTimerA, ciaLatchA, ciaTimerB, ciaLatchB
                         ])
         
-        let columnFormatters = [
-            "addr" : fmt16,
-            "hex0" : fmt8,
-            "hex1" : fmt8,
-            "hex2" : fmt8,
-            "hex3" : fmt8
-        ]
 
-        for (column,formatter) in columnFormatters {
-            let columnId = NSUserInterfaceItemIdentifier(rawValue: column)
-            if let tableColumn = memTableView.tableColumn(withIdentifier: columnId) {
-                if let cell = tableColumn.dataCell as? NSCell {
-                    cell.formatter = formatter
-                }
-            }
-        }
-        
         refresh()
     }
     
@@ -138,6 +119,7 @@ extension MyController {
         }
     
         // Enable / disable table columns
+        /*
         let columns = ["hex0", "hex1", "hex2", "hex3"]
         
         for column in columns {
@@ -146,6 +128,7 @@ extension MyController {
                 tableColumn.isEditable = enabled
             }
         }
+        */
         
     // Change image and state of debugger control buttons
         if !amiga.readyToPowerUp() {
