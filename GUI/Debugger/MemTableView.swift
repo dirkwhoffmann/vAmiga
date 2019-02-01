@@ -108,7 +108,7 @@ extension MemTableView : NSTableViewDataSource {
             return addr
             
         case "ascii":
-            return "ABCDEFGHABCDEFGH"
+            return memory?.ascii(addr) ?? ""
             
         case "E": addr += 2; fallthrough
         case "C": addr += 2; fallthrough

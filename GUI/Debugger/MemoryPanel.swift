@@ -11,15 +11,18 @@ extension Inspector {
     
     var bank : Int {
         get {
-            return memBankField.integerValue
+            return bankTableView.bank
         }
         set {
             if newValue >= 0 && newValue <= 255 {
                 
                 track("Switching to bank \(newValue)")
+                bankTableView.bank = newValue
                 memBankField.integerValue = newValue
                 memBankStepper.integerValue = newValue
                 memTableView.scrollRowToVisible(0)
+                bankTableView.scrollRowToVisible(newValue)
+                // bankTableView.selectRowIndexes([newValue], byExtendingSelection: false)
                 refreshMemory()
             }
         }

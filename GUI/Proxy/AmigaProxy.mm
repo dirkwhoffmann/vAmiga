@@ -42,9 +42,31 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->mem->dump();
 }
+- (MemorySource) memSrc:(NSInteger)addr
+{
+    return wrapper->mem->getMemSrc((uint32_t)addr);
+}
+- (NSInteger) spypeek8:(NSInteger)addr
+{
+    return wrapper->mem->spypeek8((uint32_t)addr);
+}
 - (NSInteger) spypeek16:(NSInteger)addr
 {
-    return (addr & 0xFFFF);
+    return wrapper->mem->spypeek16((uint32_t)addr);
+}
+- (NSString *) ascii:(NSInteger)addr
+{
+    const char *str = wrapper->mem->ascii((uint32_t)addr);
+    return str ? [NSString stringWithUTF8String:str] : NULL;
+}
+
+- (void) poke8:(NSInteger)addr value:(NSInteger)value
+{
+    wrapper->mem->poke8((uint32_t)addr, value);
+}
+- (void) poke16:(NSInteger)addr value:(NSInteger)value
+{
+    wrapper->mem->poke16((uint32_t)addr, value);
 }
 
 @end

@@ -50,6 +50,9 @@ public:
      */
     MemorySource memSrc[256];
     
+    // Text storage used by ascii()
+    char str[17];
+    
 public:
     
     //
@@ -100,18 +103,29 @@ private:
     
 public: 
     
-    /* Peeks a byte from memory.
+    /* Returns the memory source for a given address.
+     */
+    MemorySource getMemSrc(uint32_t addr);
+    
+    /* Peeks a value from memory.
      */
     uint8_t peek8(uint32_t addr);
-    
+    uint16_t peek16(uint32_t addr);
+
     /* Peeks a byte from memory without causing side effects.
      */
     uint8_t spypeek8(uint32_t addr);
- 
+    uint16_t spypeek16(uint32_t addr);
+
+    /* Returns 16 bytes of memory as an ASCII string.
+     */
+    const char *ascii(uint32_t addr);
+    
     /* Pokes a byte into memory.
      */
     void poke8(uint32_t addr, uint8_t value);
-    
+    void poke16(uint32_t addr, uint16_t value);
+
    
     
 

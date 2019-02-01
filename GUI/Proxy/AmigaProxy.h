@@ -181,7 +181,12 @@ struct AmigaFileWrapper;
 }
 
 - (void) dump;
-- (NSInteger) spypeek16:(NSInteger)addr; 
+- (MemorySource) memSrc:(NSInteger)addr; 
+- (NSInteger) spypeek8:(NSInteger)addr;
+- (NSInteger) spypeek16:(NSInteger)addr;
+- (NSString *) ascii:(NSInteger)addr;
+- (void) poke8:(NSInteger)addr value:(NSInteger)value;
+- (void) poke16:(NSInteger)addr value:(NSInteger)value;
 
 @end
 

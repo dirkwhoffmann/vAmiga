@@ -9,6 +9,7 @@
 
 import Foundation
 
+let fmt8 = MyFormatter.init(radix: 16, min: 0, max: 0xFF)
 let fmt16 = MyFormatter.init(radix: 16, min: 0, max: 0xFFFF)
 let fmt24 = MyFormatter.init(radix: 16, min: 0, max: 0xFFFFFF)
 
@@ -21,12 +22,13 @@ class Inspector : NSWindowController
     @IBOutlet weak var stepOverButton: NSButton!
     
     // Debug panel (Memory)
+    @IBOutlet weak var bankTableView: BankTableView!
     @IBOutlet weak var memTableView: MemTableView!
     @IBOutlet weak var memBankField: NSTextField!
     @IBOutlet weak var memBankStepper: NSStepper!
     @IBOutlet weak var memAreaPopup: NSPopUpButton!
     @IBOutlet weak var memSearchPopup: NSSearchField!
-
+    
     // Debug panel (CIA)
     @IBOutlet weak var ciaSelector: NSSegmentedControl!
     
