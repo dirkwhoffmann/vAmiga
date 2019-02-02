@@ -24,10 +24,24 @@ class Inspector : NSWindowController
     // Debug panel (Memory)
     @IBOutlet weak var bankTableView: BankTableView!
     @IBOutlet weak var memTableView: MemTableView!
-    @IBOutlet weak var memBankField: NSTextField!
-    @IBOutlet weak var memBankStepper: NSStepper!
-    @IBOutlet weak var memAreaPopup: NSPopUpButton!
-    @IBOutlet weak var memSearchPopup: NSSearchField!
+    // @IBOutlet weak var memBankField: NSTextField!
+    // @IBOutlet weak var memBankStepper: NSStepper!
+    // @IBOutlet weak var memAreaPopup: NSPopUpButton!
+    // @IBOutlet weak var memSearchPopup: NSTextField!
+    @IBOutlet weak var memLayoutButton: NSButton!
+    @IBOutlet weak var memLayoutSlider: NSSlider!
+    @IBOutlet weak var memChipRamButton: NSButton!
+    @IBOutlet weak var memChipRamText: NSTextField!
+    @IBOutlet weak var memSlowRamButton: NSButton!
+    @IBOutlet weak var memSlowRamText: NSTextField!
+    @IBOutlet weak var memFastRamButton: NSButton!
+    @IBOutlet weak var memFastRamText: NSTextField!
+    @IBOutlet weak var memIOButton: NSButton!
+    @IBOutlet weak var memRomButton: NSButton!
+
+    var bank = 0
+    var memSrc = MEM_CHIP
+    var selected = -1
     
     // Debug panel (CIA)
     @IBOutlet weak var ciaSelector: NSSegmentedControl!
@@ -87,6 +101,7 @@ class Inspector : NSWindowController
         
         // memSearchPopup.formatter = fmt24
         refresh()
+        refreshMemoryLayout()
     }
     
     // Updates the currently shown panel

@@ -128,6 +128,9 @@ AmigaConfiguration;
 /* Memory source identifiers
  * The identifiers are used in the mem source lookup table to specify the
  * source and target of a peek or poke operation, respectively.
+ * DELETE: The "MIRROR" identifiers are not used internally. They are only used
+ * in the mem source table returned by getMemSrcTable() to provide the GUI
+ * with some more information.
  */
 typedef enum
 {
@@ -138,8 +141,18 @@ typedef enum
     MEM_SLOW,
     MEM_RTC,
     MEM_CUSTOM,
-    MEM_ROM,
-    MEM_WOM,
+    MEM_BOOT,
+    MEM_KICK,
+    
+    /*
+    MEM_CHIP_MIRROR,
+    MEM_CIA_MIRROR,
+    MEM_RTC_MIRROR,
+    MEM_ROM_MIRROR,
+    MEM_BOOT_MIRROR,
+    MEM_KICK_MIRROR
+    */
+    
 } MemorySource;
 
 

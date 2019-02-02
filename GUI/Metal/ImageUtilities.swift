@@ -176,6 +176,11 @@ public extension NSImage {
         return newImage;
     }
     
+    var cgImage: CGImage? {
+        var rect = CGRect.init(origin: .zero, size: self.size)
+        return self.cgImage(forProposedRect: &rect, context: nil, hints: nil)
+    }
+    
     func cgImageWH() -> (CGImage, Int, Int)? {
         
         if let cgi = cgImage(forProposedRect: nil, context: nil, hints: nil) {

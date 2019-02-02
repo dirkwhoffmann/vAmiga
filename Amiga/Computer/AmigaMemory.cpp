@@ -191,7 +191,7 @@ AmigaMemory::updateMemSrcTable()
     
     // Kickstart Rom
     for (unsigned bank = 0; bank < 8; bank++) {
-        memSrc[0xF8 + bank] = MEM_ROM;
+        memSrc[0xF8 + bank] = MEM_KICK;
     }
 }
 
@@ -233,12 +233,10 @@ AmigaMemory::peek8(uint32_t addr)
         case MEM_CUSTOM:
             return 2;
             
-        case MEM_ROM:
+        case MEM_BOOT:
+        case MEM_KICK:
             assert(kickRom != NULL);
             return kickRom[(addr % 0xFFFF) % kickRomSize];
-            
-        case MEM_WOM:
-            return 3;
             
         default:
             assert(false);

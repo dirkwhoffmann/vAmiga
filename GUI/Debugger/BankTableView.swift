@@ -59,15 +59,13 @@ class BankTableView : NSTableView {
     @IBAction func clickAction(_ sender: NSTableView!) {
         
         let row = sender.clickedRow
-        track("Switching to bank \(row)")
-        
-        inspector.bank = row
+        inspector.setBank(row)
     }
 }
 
 extension BankTableView : NSTableViewDataSource {
     
-    func numberOfRows(in tableView: NSTableView) -> Int { return 255; }
+    func numberOfRows(in tableView: NSTableView) -> Int { return 256; }
     
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
         
@@ -96,10 +94,8 @@ extension BankTableView : NSTableViewDataSource {
                 return "Clock"
             case MEM_CUSTOM.rawValue:
                 return "OCS"
-            case MEM_ROM.rawValue:
+            case MEM_KICK.rawValue:
                 return "Kickstart"
-            case MEM_WOM.rawValue:
-                return "WOM"
             default:
                 return "???"
             }
@@ -115,18 +111,11 @@ extension BankTableView : NSTableViewDelegate {
         
         if let cell = cell as? NSTextFieldCell {
             
-            if tableColumn?.identifier.rawValue == "source" {
-                
-                let src = memory?.memSrc(row << 16).rawValue
-                switch (src) {
-                case MEM_UNMAPPED.rawValue:
-                    cell.textColor = .gray
-                default:
-                    cell.textColor = .textColor
-                }
-                
-            } else {
-                
+            let src = memory?.memSrc(row << 16).rawValue
+            switch (src) {
+            case MEM_UNMAPPED.rawValue:
+                cell.textColor = .gray
+            default:
                 cell.textColor = .textColor
             }
         }

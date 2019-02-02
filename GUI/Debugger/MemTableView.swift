@@ -31,6 +31,8 @@ class MemTableView : NSTableView {
         dataSource = self
         target = self
     
+        inspector.setBank(0)
+        
         // Assign formatters
         let columnFormatters = [
             "addr" : fmt24,
@@ -120,7 +122,7 @@ extension MemTableView : NSTableViewDataSource {
         case "0": return memory?.spypeek16(addr) ?? ""
       
         default:
-            return 42
+            fatalError()
         }
     }
 }
@@ -129,22 +131,31 @@ extension MemTableView : NSTableViewDelegate {
     
     func tableView(_ tableView: NSTableView, willDisplayCell cell: Any, for tableColumn: NSTableColumn?, row: Int) {
         
+        var addr = inspector.bank * 65536 + row * 16
         let cell = cell as! NSTextFieldCell
-
-        if (tableColumn?.identifier.rawValue == "src") {
-            // cell.font = NSFont.systemFont(ofSize: 9)
-            cell.textColor = .gray
+        
+        if inspector.memSrc == MEM_UNMAPPED {
+            cell.textColor = NSColor.gray
         } else {
             cell.textColor = NSColor.textColor
         }
         
-        if (tableColumn?.identifier.rawValue == "ascii") {
-            // cell.font = cbmfont
+        switch tableColumn?.identifier.rawValue {
+            
+        case "E": addr += 2; fallthrough
+        case "C": addr += 2; fallthrough
+        case "A": addr += 2; fallthrough
+        case "8": addr += 2; fallthrough
+        case "6": addr += 2; fallthrough
+        case "4": addr += 2; fallthrough
+        case "2": addr += 2; fallthrough
+        case "0":
+            if inspector.selected >> 1 == addr >> 1 {
+                cell.textColor = NSColor.red
+            }
+        default:
+            break
         }
-        
-        if shouldHighlight(UInt16(4 * row)) {
-            cell.textColor = .systemRed
-        } 
     }
     
     func tableView(_ tableView: NSTableView, setObjectValue object: Any?, for tableColumn: NSTableColumn?, row: Int) {

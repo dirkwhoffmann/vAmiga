@@ -42,6 +42,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->mem->dump();
 }
+- (MemorySource *) getMemSrcTable
+{
+    return wrapper->mem->getMemSrcTable();
+}
 - (MemorySource) memSrc:(NSInteger)addr
 {
     return wrapper->mem->getMemSrc((uint32_t)addr);
