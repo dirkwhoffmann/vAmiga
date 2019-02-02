@@ -33,7 +33,6 @@ CIA::CIA()
     registerSnapshotItems(vector<SnapshotItem> {
 
         { &model,            sizeof(model),            0 },
-        { &emulateTimerBBug, sizeof(emulateTimerBBug), 0 },
 
         { &counterA,         sizeof(counterA),         0 },
         { &latchA,           sizeof(latchA),           0 },
@@ -65,7 +64,6 @@ CIA::CIA()
         { &idleCounter,      sizeof(idleCounter),      0 }});
     
     model = MOS_6526;
-    emulateTimerBBug = true;
 }
 
 CIA::~CIA()
@@ -1018,20 +1016,9 @@ CIA::executeOneCycle()
 	if (timerAOutput) { // (9)
 		icr |= 0x01;
 	}
-	
-	// if (timerBOutput && !(delay & CIAReadIcr0)) { // (10)
+
     if (timerBOutput) { // (10)
-        
-        if ((delay & CIAReadIcr0) && emulateTimerBBug) {
-            
-            // The old CIA chips (NMOS technology) exhibit a race condition here
-            // which is known as the "timer B bug". If ICR is currently read,
-            // the read access occurs *after* timer B sets bit 2. Hence, bit 2
-            // won't show up.
-            
-        } else {
-            icr |= 0x02;
-        }
+        icr |= 0x02;
     }
     
     // Check for timer interrupt
