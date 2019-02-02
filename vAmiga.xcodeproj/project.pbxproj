@@ -109,7 +109,6 @@
 		50BBE08B21F5EB9B0099BBBB /* A1000ANSI.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50BBE08A21F5EB9B0099BBBB /* A1000ANSI.xib */; };
 		50C2DE4421F756900043FD1B /* MyControllerStatusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */; };
 		50C50B86220479E000D796DA /* BankTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C50B85220479E000D796DA /* BankTableView.swift */; };
-		50C50B882204B47D00D796DA /* MemLayoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C50B872204B47D00D796DA /* MemLayoutView.swift */; };
 		50D263CC21F6377700FA167F /* A500ANSI.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50D263CB21F6377600FA167F /* A500ANSI.xib */; };
 		50D263CE21F6378100FA167F /* A1000ISO.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50D263CD21F6378000FA167F /* A1000ISO.xib */; };
 		50DED6AF2202EBA200B8195F /* Inspector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50DED6AE2202EBA200B8195F /* Inspector.xib */; };
@@ -276,7 +275,6 @@
 		50BBE08A21F5EB9B0099BBBB /* A1000ANSI.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = A1000ANSI.xib; path = "XIB files/A1000ANSI.xib"; sourceTree = SOURCE_ROOT; };
 		50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyControllerStatusBar.swift; sourceTree = "<group>"; };
 		50C50B85220479E000D796DA /* BankTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankTableView.swift; sourceTree = "<group>"; };
-		50C50B872204B47D00D796DA /* MemLayoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemLayoutView.swift; sourceTree = "<group>"; };
 		50D263CB21F6377600FA167F /* A500ANSI.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = A500ANSI.xib; sourceTree = "<group>"; };
 		50D263CD21F6378000FA167F /* A1000ISO.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = A1000ISO.xib; sourceTree = "<group>"; };
 		50DED6AE2202EBA200B8195F /* Inspector.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Inspector.xib; sourceTree = "<group>"; };
@@ -548,7 +546,6 @@
 				508FE00221EA227A0043D0E9 /* MemoryPanel.swift */,
 				50C50B85220479E000D796DA /* BankTableView.swift */,
 				508FDFF821EA22790043D0E9 /* MemTableView.swift */,
-				50C50B872204B47D00D796DA /* MemLayoutView.swift */,
 				508FE00421EA227A0043D0E9 /* Debugger.swift */,
 				508FDFEE21EA22780043D0E9 /* CIAPanel.swift */,
 				508FDFF621EA22790043D0E9 /* Formatter.swift */,
@@ -895,7 +892,6 @@
 				508FE05621EA22CC0043D0E9 /* PreferencesController.swift in Sources */,
 				508FE05321EA22CC0043D0E9 /* VideoPrefs.swift in Sources */,
 				508833EE21F0D21B009890EA /* ADFFile.cpp in Sources */,
-				50C50B882204B47D00D796DA /* MemLayoutView.swift in Sources */,
 				508FE02321EA227B0043D0E9 /* KeyboardController.swift in Sources */,
 				508FE02221EA227B0043D0E9 /* MacKey.swift in Sources */,
 				50F6EEBE21F4F61F0091155D /* AmigaDrive.cpp in Sources */,

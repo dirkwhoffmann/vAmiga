@@ -30,6 +30,9 @@ AmigaMemory::_powerOn()
     allocateFastRam(amiga->config.fastRamSize);
     allocateSlowRam(amiga->config.slowRamSize);
 
+    // Make Rom writable if an A1000 is emulated
+    kickIsWritable = amiga->config.model == A1000;
+    
     // Set up the memory lookup table
     updateMemSrcTable();
     
@@ -143,58 +146,61 @@ AmigaMemory::dealloc(uint8_t *&ptrref, size_t &sizeref)
 }
 
 void
+AmigaMemory::loadRom(AmigaFile *rom, uint8_t *target, size_t length)
+{
+    if (rom) {
+        
+        assert(target != NULL);
+        memset(target, 0, length);
+        
+        int c;
+        rom->seek(0);
+        for (size_t i = 0; i < length; i++) {
+            if ((c = rom->read()) == EOF) break;
+            *(target++) = c;
+        }
+    }
+}
+
+void
 AmigaMemory::updateMemSrcTable()
 {
-    long chipRamBanks = amiga->config.chipRamSize / 64;
-    assert(chipRamBanks == 4 || chipRamBanks == 8);
+    // Standard layout after booting
+    struct {
+        
+        uint8_t from; uint8_t to; MemorySource src;
+        
+    } layout[6] = {
+        
+        { 0x00, 0x19, MEM_CHIP },
+        { 0xA0, 0xBF, MEM_CIA  },
+        { 0xDC, 0xDE, amiga->config.realTimeClock ? MEM_RTC : MEM_UNMAPPED },
+        { 0xDF, 0xDF, MEM_OCS },
+        { 0xF8, 0xFB, kickIsWritable ? MEM_BOOT : MEM_KICK },
+        { 0xFC, 0xFF, MEM_KICK }
+    };
     
     // Start from scratch
     for (unsigned bank = 0; bank < 256; bank++) {
         memSrc[bank] = MEM_UNMAPPED;
     }
     
-    // TODO: HOW DOES THE MIRRORED CHIP RAM LOOK IF ONLY 256KB are present?
-    // Chip Ram
-    for (unsigned bank = 0; bank < chipRamBanks; bank++) {
-        memSrc[bank] = MEM_CHIP;
-    }
+    // Setup initial configuration
+    for (unsigned i = 0; i < 6; i++)
+        for (unsigned bank = layout[i].from; bank <= layout[i].to; bank++)
+            memSrc[bank] = layout[i].src;
 
-    // Chip Ram (mirrored)
-    for (unsigned bank = 0; bank < chipRamBanks; bank++) {
-        memSrc[0x08 + bank] = MEM_CHIP;
-    }
-
-    // Fast Ram
+    // Install Fast Ram
     long fastRamBanks = amiga->getConfig().fastRamSize / 64;
     for (unsigned bank = 0; bank < fastRamBanks; bank++) {
         memSrc[0x20 + bank] = MEM_FAST;
     }
-
-    // CIA
-    for (unsigned bank = 0; bank < 32; bank++) {
-        memSrc[0xA0 + bank] = MEM_CIA;
-    }
-
-    // Slow Ram
-    long slowRamBanks = amiga->getConfig().slowRamSize / 64;
-    for (unsigned bank = 0; bank < slowRamBanks; bank++) {
-        memSrc[0xC0 + bank] = MEM_SLOW;
-    }
-
-    // Real-time clock
-    if (amiga->getConfig().realTimeClock) {
-        for (unsigned bank = 0; bank < 3; bank++) {
-            memSrc[0xDC + bank] = MEM_RTC;
-        }
-    }
     
-    // Custom chips
-    memSrc[0xDF] = MEM_OCS;
-    
-    // Kickstart Rom
-    for (unsigned bank = 0; bank < 8; bank++) {
-        memSrc[0xF8 + bank] = MEM_KICK;
-    }
+    // Overlay Rom with lower memory area if OVL line is high
+    bool ovl = true; // TODO: get from CIA
+    if (ovl)
+        for (unsigned bank = 0; bank < 8; bank++)
+            memSrc[bank] = memSrc[0xF8 + bank];
 }
 
 MemorySource
@@ -236,9 +242,12 @@ AmigaMemory::peek8(uint32_t addr)
             return 2;
             
         case MEM_BOOT:
+            assert(bootRom != NULL);
+            return bootRom[addr % bootRomSize];
+            
         case MEM_KICK:
             assert(kickRom != NULL);
-            return kickRom[(addr % 0xFFFF) % kickRomSize];
+            return kickRom[addr % kickRomSize];
             
         default:
             assert(false);

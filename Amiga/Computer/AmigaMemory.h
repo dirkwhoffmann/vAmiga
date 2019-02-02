@@ -11,6 +11,8 @@
 #define _AMIGA_MEMORY_INC
 
 #include "HardwareComponent.h"
+#include "BootRom.h"
+#include "KickRom.h"
 
 class AmigaMemory : public HardwareComponent {
     
@@ -97,8 +99,17 @@ private:
 
     // Convenience wrapper around 'new'
     void dealloc(uint8_t *&ptrref, size_t &sizeref);
+
+    // Loads Rom data
+    void loadRom(AmigaFile *rom, uint8_t *target, size_t length);
     
 public:
+
+    // Loads Boot Rom data
+    void loadBootRom(BootRom *rom) { loadRom(rom, bootRom, bootRomSize); }
+
+    // Loads Kick Rom data
+    void loadKickRom(KickRom *rom)  { loadRom(rom, kickRom, kickRomSize); }
     
     // Returns the memory source lookup table.
     MemorySource *getMemSrcTable() { return memSrc; }

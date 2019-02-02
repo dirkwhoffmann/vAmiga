@@ -285,6 +285,9 @@ Amiga::_powerOn()
 {
     debug(1, "Power on");
     
+    mem.loadBootRom(bootRom);
+    mem.loadKickRom(kickRom);
+    
     masterClock = 0;
     putMessage(MSG_POWER_ON);
 }
