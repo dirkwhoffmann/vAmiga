@@ -31,9 +31,7 @@ CIA::CIA()
 
     // Register snapshot items
     registerSnapshotItems(vector<SnapshotItem> {
-
-        { &model,            sizeof(model),            0 },
-
+        
         { &counterA,         sizeof(counterA),         0 },
         { &latchA,           sizeof(latchA),           0 },
         { &counterB,         sizeof(counterB),         0 },
@@ -62,8 +60,6 @@ CIA::CIA()
         { &tiredness,        sizeof(tiredness),        0 },
         { &wakeUpCycle,      sizeof(wakeUpCycle),      0 },
         { &idleCounter,      sizeof(idleCounter),      0 }});
-    
-    model = MOS_6526;
 }
 
 CIA::~CIA()
@@ -78,19 +74,6 @@ CIA::_powerOn()
 	
 	latchA = 0xFFFF;
 	latchB = 0xFFFF;
-}
-
-void
-CIA::setModel(CIAModel m)
-{
-    debug(2, "setModel(%d)\n", m);
-    
-    if (!isCIAModel(m)) {
-        warn("Unknown CIA model (%d). Assuming first generation.\n", m);
-        m = MOS_6526;
-    }
-    
-    model = m;
 }
 
 void
@@ -116,24 +99,8 @@ CIA::triggerFallingEdgeOnFlagPin()
 void
 CIA::triggerTimerIrq()
 {
-    switch (model) {
-            
-        case MOS_6526:
-            delay |= CIASetInt0;
-            delay |= CIASetIcr0;
-            return;
-            
-        case MOS_8521:
-            // Test cases:  (?)
-            // testprogs\interrupts\irqnmi\cia-int-irq-new.prg
-            // testprogs\interrupts\irqnmi\cia-int-nmi-new.prg
-            delay |= (delay & CIAReadIcr0) ? CIASetInt0 : CIASetInt1;
-            delay |= (delay & CIAReadIcr0) ? CIASetIcr0 : CIASetIcr1;
-            return;
-            
-        default:
-            assert(false);
-    }
+    delay |= (delay & CIAReadIcr0) ? CIASetInt0 : CIASetInt1;
+    delay |= (delay & CIAReadIcr0) ? CIASetIcr0 : CIASetIcr1;
 }
 
 void
@@ -229,8 +196,8 @@ CIA::peek(uint16_t addr)
 			
         case 0x0D: // CIA_INTERRUPT_CONTROL
 		
-            // For new CIAs, set upper bit if an IRQ is being triggered
-            if ((delay & CIASetInt1) && (icr & 0x1F) && model == MOS_8521) {
+            // Set upper bit if an IRQ is being triggered
+            if ((delay & CIASetInt1) && (icr & 0x1F)) {
                 icr |= 0x80;
             }
             
@@ -246,14 +213,9 @@ CIA::peek(uint16_t addr)
             delay &= ~(CIASetInt0 | CIASetInt1);
         
             // Schedule the ICR bits to be cleared
-            if (model == MOS_8521) {
-                delay |= CIAClearIcr0; // Uppermost bit
-                delay |= CIAAckIcr0;   // Other bits
-                icrAck = 0xFF;
-            } else {
-                delay |= CIAClearIcr0; // Uppermost bit
-                icr &= 0x80;           // Other bits
-            }
+            delay |= CIAClearIcr0; // Uppermost bit
+            delay |= CIAAckIcr0;   // Other bits
+            icrAck = 0xFF;
 
             // Remember the read access
             delay |= CIAReadIcr0;
@@ -477,25 +439,10 @@ CIA::poke(uint16_t addr, uint8_t value)
 				imr &= ~(value & 0x1F);
 			}
             
-			// Raise an interrupt in the next cycle if conditions match
-			if ((imr & icr & 0x1F) && INT) {
-                if (model == MOS_8521) {
-                    if (!(delay & CIAReadIcr1)) {
-                        delay |= (CIASetInt1 | CIASetIcr1);
-                    }
-                } else {
-                    delay |= (CIASetInt0 | CIASetIcr0);
-                }
-			}
-            
-            // Clear pending interrupt if a write has occurred in the previous cycle
-            // Solution is taken from Hoxs64. It fixes dd0dtest (11)
-            else if (delay & CIAClearIcr2) {
-                if (model == MOS_6526) {
-                     delay &= ~(CIASetInt1 | CIASetIcr1);
-                 }
+            // Raise an interrupt in the next cycle if conditions match
+            if ((imr & icr & 0x1F) && INT && !(delay & CIAReadIcr1)) {
+                delay |= (CIASetInt1 | CIASetIcr1);
             }
-            
 			return;
 			
         case 0x0E: // CIA_CONTROL_REG_A

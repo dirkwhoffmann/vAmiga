@@ -75,9 +75,6 @@ class Joystick;
  */
 class CIA : public HardwareComponent {
     
-    //! @brief    Selected chip model
-    CIAModel model;
-        
 protected:
 
 	//! @brief    Timer A counter
@@ -254,13 +251,7 @@ public:
     //
     // Accessing device properties
     //
-    
-    //! @brief    Returns the currently plugged in chip model.
-    CIAModel getModel() { return model; }
-    
-    //! @brief    Sets the chip model.
-    void setModel(CIAModel m);
-    
+        
     //! @brief    Getter for peripheral port A
     uint8_t getPA() { return PA; }
     uint8_t getDDRA() { return DDRA; }

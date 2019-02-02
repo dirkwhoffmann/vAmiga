@@ -8,16 +8,6 @@
 #ifndef CIA_TYPES_H
 #define CIA_TYPES_H
 
-//! @brief    CIA model
-typedef enum {
-    MOS_6526,
-    MOS_8521
-} CIAModel;
-
-inline bool isCIAModel(CIAModel model) {
-    return (model == MOS_6526) || (model == MOS_8521);
-}
-
 /*! @brief    TOD info
  *  @details  Used by CIA::getInfo() to collect debug information
  */
