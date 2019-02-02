@@ -651,6 +651,10 @@ extension MyController {
         
         switch (msg.type) {
     
+        case MSG_CONFIG:
+            
+            myAppDelegate.inspector?.refresh()
+            
         case MSG_READY_TO_POWER_ON:
     
             // Launch the emulator

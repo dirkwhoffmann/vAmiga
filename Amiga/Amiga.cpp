@@ -120,18 +120,30 @@ bool
 Amiga::configureModel(AmigaModel model)
 {
     if (!isAmigaModel(model)) {
+        
         warn("Invalid Amiga model: %d\n", model);
         warn("       Valid values: %d, %d, %d\n", A500, A1000, A2000);
         return false;
     }
-    config.model = model;
+    
+    if (config.model != model) {
+
+        config.model = model;
+        putMessage(MSG_CONFIG);
+    }
+    
     return true;
 }
 
 bool
-Amiga::configureLayout(long value)
+Amiga::configureLayout(long layout)
 {
-    config.layout = value;
+    if (config.layout != layout) {
+        
+        config.layout = layout;
+        putMessage(MSG_CONFIG);
+    }
+ 
     return true;
 }
 
@@ -139,11 +151,19 @@ bool
 Amiga::configureChipMemory(long size)
 {
     if (size != 256 && size != 512) {
+        
         warn("Invalid Chip Ram size: %d\n", size);
         warn("         Valid values: 256KB, 512KB\n");
         return false;
     }
-    config.chipRamSize = size;
+    
+    if (config.chipRamSize != size) {
+        
+        config.chipRamSize = size;
+        mem.updateMemSrcTable();
+        putMessage(MSG_CONFIG);
+    }
+    
     return true;
 }
 
@@ -151,11 +171,19 @@ bool
 Amiga::configureSlowMemory(long size)
 {
     if ((size % 256) != 0 || size > 512) {
+        
         warn("Invalid Slow Ram size: %d\n", size);
         warn("         Valid values: 0KB, 256KB, 512KB\n");
         return false;
     }
-    config.slowRamSize = size;
+    
+    if (config.slowRamSize != size) {
+        
+        config.slowRamSize = size;
+        mem.updateMemSrcTable();
+        putMessage(MSG_CONFIG);
+    }
+    
     return true;
 }
 
@@ -163,18 +191,32 @@ bool
 Amiga::configureFastMemory(long size)
 {
     if ((size % 64) != 0 || size > 8192) {
+        
         warn("Invalid Fast Ram size: %d\n", size);
         warn("         Valid values: 0KB, 64KB, 128KB, ..., 8192KB (8MB)\n");
         return false;
     }
-    config.fastRamSize = size;
+    
+    if (config.fastRamSize != size) {
+        
+        config.fastRamSize = size;
+        mem.updateMemSrcTable();
+        putMessage(MSG_CONFIG);
+    }
+    
     return true;
 }
 
 bool
 Amiga::configureRealTimeClock(bool value)
 {
-    config.realTimeClock = value;
+    if (config.realTimeClock != value) {
+        
+        config.realTimeClock = value;
+        mem.updateMemSrcTable();
+        putMessage(MSG_CONFIG);
+    }
+    
     return true;
 }
 
@@ -182,14 +224,23 @@ bool
 Amiga::configureDrive(unsigned driveNr, bool connected)
 {
     switch (driveNr) {
+            
         case 0:
-            config.df0.connected = connected;
-            df0.setConnected(connected);
+            if (config.df0.connected != connected) {
+                
+                config.df0.connected = connected;
+                df0.setConnected(connected);
+                putMessage(MSG_CONFIG);
+            }
             return true;
             
         case 1:
-            config.df1.connected = connected;
-            df1.setConnected(connected);
+            if (config.df1.connected != connected) {
+                
+                config.df1.connected = connected;
+                df1.setConnected(connected);
+                putMessage(MSG_CONFIG);
+            }
             return true;
     }
     
@@ -201,12 +252,28 @@ bool
 Amiga::configureDrive(unsigned driveNr, DriveType type)
 {
     if (!isDriveType(type)) {
+        
         warn("Invalid drive type: %d\n", type);
         return false;
     }
+    
     switch (driveNr) {
-        case 0: config.df0.type = type; return true;
-        case 1: config.df1.type = type; return true;
+            
+        case 0:
+            if (config.df0.type != type) {
+                
+                config.df0.type = type;
+                putMessage(MSG_CONFIG);
+            }
+            return true;
+            
+        case 1:
+            if (config.df1.type != type) {
+                
+                config.df1.type = type;
+                putMessage(MSG_CONFIG);
+            }
+            return true;
     }
     
     warn("Invalid drive number (%d). Ignoring.\n", driveNr);

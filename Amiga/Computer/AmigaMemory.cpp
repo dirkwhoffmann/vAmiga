@@ -27,7 +27,9 @@ AmigaMemory::_powerOn()
     allocateBootRom();
     allocateKickRom();
     allocateChipRam(amiga->config.chipRamSize);
-    
+    allocateFastRam(amiga->config.fastRamSize);
+    allocateSlowRam(amiga->config.slowRamSize);
+
     // Set up the memory lookup table
     updateMemSrcTable();
     
@@ -163,9 +165,9 @@ AmigaMemory::updateMemSrcTable()
     }
 
     // Fast Ram
-    long fastRamBanks = amiga->getConfig().fastRamSize >> 16;
+    long fastRamBanks = amiga->getConfig().fastRamSize / 64;
     for (unsigned bank = 0; bank < fastRamBanks; bank++) {
-        memSrc[0x20 + bank] = MEM_CHIP;
+        memSrc[0x20 + bank] = MEM_FAST;
     }
 
     // CIA
@@ -174,7 +176,7 @@ AmigaMemory::updateMemSrcTable()
     }
 
     // Slow Ram
-    long slowRamBanks = amiga->getConfig().slowRamSize >> 16;
+    long slowRamBanks = amiga->getConfig().slowRamSize / 64;
     for (unsigned bank = 0; bank < slowRamBanks; bank++) {
         memSrc[0xC0 + bank] = MEM_SLOW;
     }
@@ -187,7 +189,7 @@ AmigaMemory::updateMemSrcTable()
     }
     
     // Custom chips
-    memSrc[0xDF] = MEM_CUSTOM;
+    memSrc[0xDF] = MEM_OCS;
     
     // Kickstart Rom
     for (unsigned bank = 0; bank < 8; bank++) {
@@ -230,7 +232,7 @@ AmigaMemory::peek8(uint32_t addr)
         case MEM_RTC:
             return 1;
             
-        case MEM_CUSTOM:
+        case MEM_OCS:
             return 2;
             
         case MEM_BOOT:

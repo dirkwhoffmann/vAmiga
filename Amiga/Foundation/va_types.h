@@ -137,10 +137,10 @@ typedef enum
     MEM_UNMAPPED,
     MEM_CHIP,
     MEM_FAST,
-    MEM_CIA,
     MEM_SLOW,
+    MEM_CIA,
     MEM_RTC,
-    MEM_CUSTOM,
+    MEM_OCS,
     MEM_BOOT,
     MEM_KICK,
     
@@ -203,6 +203,7 @@ typedef enum
     MSG_NONE = 0,
     
     // Emulator state
+    MSG_CONFIG,
     MSG_READY_TO_POWER_ON,
     MSG_POWER_ON,
     MSG_POWER_OFF,

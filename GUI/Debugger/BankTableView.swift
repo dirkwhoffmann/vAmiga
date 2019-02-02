@@ -92,7 +92,7 @@ extension BankTableView : NSTableViewDataSource {
                 return "Slow Ram"
             case MEM_RTC.rawValue:
                 return "Clock"
-            case MEM_CUSTOM.rawValue:
+            case MEM_OCS.rawValue:
                 return "OCS"
             case MEM_KICK.rawValue:
                 return "Kickstart"

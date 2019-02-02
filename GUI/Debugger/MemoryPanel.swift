@@ -12,33 +12,38 @@ extension NSColor {
     
     convenience init(r: Int, g: Int, b: Int, a: Int) {
         
-        self.init(red: CGFloat(r) / 0xFF,
+        self.init(red:   CGFloat(r) / 0xFF,
                   green: CGFloat(g) / 0xFF,
-                  blue: CGFloat(b) / 0xFF,
+                  blue:  CGFloat(b) / 0xFF,
                   alpha: CGFloat(a) / 0xFF)
     }
 }
 
 struct MemColors {
 
-    static let unmapped = NSColor.gray // init(r: 0xFF, g: 0xFF, b: 0xFF, a: 0x00)
+    static let unmapped = NSColor.gray
     static let chipRam  = NSColor.init(r: 0x80, g: 0xFF, b: 0x00, a: 0xFF)
     static let fastRam  = NSColor.init(r: 0x00, g: 0xCC, b: 0x00, a: 0xFF)
     static let slowRam  = NSColor.init(r: 0x00, g: 0x99, b: 0x4C, a: 0xFF)
-    static let io       = NSColor.init(r: 0xFF, g: 0xFF, b: 0x00, a: 0xFF)
-    static let rom      = NSColor.init(r: 0xFF, g: 0x00, b: 0x00, a: 0xFF)
+    static let cia      = NSColor.init(r: 0xFF, g: 0x66, b: 0xFF, a: 0xFF)
+    static let rtc      = NSColor.init(r: 0xFF, g: 0x66, b: 0xB2, a: 0xFF)
+    static let ocs      = NSColor.init(r: 0xFF, g: 0xFF, b: 0x66, a: 0xFF)
+    static let rom      = NSColor.init(r: 0x66, g: 0xB2, b: 0xFF, a: 0xFF)
 }
 
 extension Inspector {
     
     func refreshMemory() {
         
+        track("Refreshing memory inspector tab")
+        refreshMemoryLayout()
         memTableView.refresh()
     }
     
     func refreshMemoryLayout() {
         
         guard let config = amigaProxy?.config() else { return }
+        
         let chipRamKB = config.chipRamSize
         let fastRamKB = config.fastRamSize
         let slowRamKB = config.slowRamSize
@@ -48,7 +53,9 @@ extension Inspector {
         memChipRamButton.image = NSImage.init(color: MemColors.chipRam, size: size)
         memFastRamButton.image = NSImage.init(color: MemColors.fastRam, size: size)
         memSlowRamButton.image = NSImage.init(color: MemColors.slowRam, size: size)
-        memIOButton.image = NSImage.init(color: MemColors.io, size: size)
+        memCIAButton.image = NSImage.init(color: MemColors.cia, size: size)
+        memRTCButton.image = NSImage.init(color: MemColors.rtc, size: size)
+        memOCSButton.image = NSImage.init(color: MemColors.ocs, size: size)
         memRomButton.image = NSImage.init(color: MemColors.rom, size: size)
 
         memChipRamText.stringValue = String.init(format: "%d KB", chipRamKB)
@@ -61,6 +68,8 @@ extension Inspector {
     
     var memLayoutImage : NSImage? {
         get {
+            
+            track("Computing layout image")
             
             guard let memory = amigaProxy?.mem else { return nil }
             
@@ -80,10 +89,10 @@ extension Inspector {
                 case MEM_UNMAPPED.rawValue: color = MemColors.unmapped
                 case MEM_CHIP.rawValue:     color = MemColors.chipRam
                 case MEM_FAST.rawValue:     color = MemColors.fastRam
-                case MEM_CIA.rawValue:      color = MemColors.io
+                case MEM_CIA.rawValue:      color = MemColors.cia
                 case MEM_SLOW.rawValue:     color = MemColors.slowRam
-                case MEM_RTC.rawValue:      color = MemColors.io
-                case MEM_CUSTOM.rawValue:   color = MemColors.io
+                case MEM_RTC.rawValue:      color = MemColors.rtc
+                case MEM_OCS.rawValue:      color = MemColors.ocs
                 case MEM_BOOT.rawValue:     color = MemColors.rom
                 case MEM_KICK.rawValue:     color = MemColors.rom
                 default:                    fatalError()
@@ -117,11 +126,10 @@ extension Inspector {
             bank = value
             memSrc = amigaProxy?.mem.memSrc(bank << 16) ?? MEM_UNMAPPED
             track("Switching to bank \(value)")
-            // memBankField.integerValue = value
-            // memBankStepper.integerValue = value
+            memLayoutSlider.integerValue = bank
             memTableView.scrollRowToVisible(0)
-            bankTableView.scrollRowToVisible(value)
-            bankTableView.selectRowIndexes([value], byExtendingSelection: false)
+            memBankTableView.scrollRowToVisible(value)
+            memBankTableView.selectRowIndexes([value], byExtendingSelection: false)
             memTableView.refresh()
         }
     }
@@ -171,7 +179,42 @@ extension Inspector {
     @IBAction func memSliderAction(_ sender: NSSlider!) {
         
         let value = sender.integerValue
-        track("\(value)")
+        setBank(value)
+    }
+ 
+    @IBAction func memChipRamAction(_ sender: NSButton!) {
+        
+        setBank(0x00)
+    }
+    
+    @IBAction func memFastRamAction(_ sender: NSButton!) {
+        
+        setBank(0x20)
+    }
+    
+    @IBAction func memSlowRamAction(_ sender: NSButton!) {
+        
+        setBank(0xC0)
+    }
+
+    @IBAction func memCIAAction(_ sender: NSButton!) {
+        
+        setBank(0xA0)
+    }
+ 
+    @IBAction func memRTCAction(_ sender: NSButton!) {
+        
+        setBank(0xDC)
+    }
+
+    @IBAction func memOCSAction(_ sender: NSButton!) {
+        
+        setBank(0xDF)
+    }
+
+    @IBAction func memKickAction(_ sender: NSButton!) {
+        
+        setBank(0xFC)
     }
     
     @IBAction func memSearchAction(_ sender: NSTextField!) {

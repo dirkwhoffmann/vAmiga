@@ -57,7 +57,7 @@ class MemLayoutView: NSView {
                 color = .green
             case MEM_RTC.rawValue:
                 color = .yellow
-            case MEM_CUSTOM.rawValue:
+            case MEM_OCS.rawValue:
                 color = .orange
             case MEM_BOOT.rawValue:
                 color = .blue

@@ -98,13 +98,13 @@ private:
     // Convenience wrapper around 'new'
     void dealloc(uint8_t *&ptrref, size_t &sizeref);
     
-    // Updates the memory source lookup table.
-    void updateMemSrcTable();
-    
-public: 
+public:
     
     // Returns the memory source lookup table.
     MemorySource *getMemSrcTable() { return memSrc; }
+    
+    // Updates the memory source lookup table.
+    void updateMemSrcTable();
     
     /* Returns the memory source for a given address.
      */
