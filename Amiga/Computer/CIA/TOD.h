@@ -77,21 +77,7 @@ private:
      *  @details  This value is read in checkForInterrupt() for edge detection.
      */
     bool matching;
-    
-    /*! @brief    Indicates if TOD is driven by a 50 Hz or 60 Hz signal
-     *  @details  Valid values are 5 (50 Hz mode) and 6 (60 Hz mode)
-     */
-    uint8_t hz;
-    
-    /*! @brief    Frequency counter
-     *  @details  This counter is driven by the A/C power frequency and
-     *            determines when TOD should increment. This variable is
-     *            incremented in function increment() which is called in
-     *            endFrame(). Hence, frequencyCounter is a 50 Hz signal in PAL
-     *            mode and a 60 Hz signal in NTSC mode.
-     */
-    uint64_t frequencyCounter;
-    
+        
 public:
     
     //
@@ -113,10 +99,7 @@ public:
     //
     //! @functiongroup Configuring the component
     //
-    
-    //! @brief    Sets the frequency of the driving clock.
-    void setHz(uint8_t value) { assert(value == 5 || value == 6); hz = value; }
-
+ 
     //! @brief    Returns the current configuration.
     TODInfo getInfo();
     
@@ -134,7 +117,7 @@ private:
     void defreeze() { frozen = false; }
     
     //! @brief    Stops the time of day clock.
-    void stop() { frequencyCounter = 0; stopped = true; }
+    void stop() { stopped = true; }
     
     //! @brief    Starts the time of day clock.
     void cont() { stopped = false; }
@@ -196,7 +179,6 @@ private:
         alarm.tenth = value & 0x0F; checkForInterrupt(); }
 	
 	/*! @brief    Increments the TOD clock by one tenth of a second.
-     *  @see      C64::endFrame()
      */
 	void increment();
 

@@ -167,26 +167,26 @@ CIA::peek(uint16_t addr)
             result = HI_BYTE(counterB);
 			break;
 			
-        case 0x08: // CIA_TIME_OF_DAY_SEC_FRAC
+        case 0x08: // EVENT_0_7
 			
 			result = tod.getTodTenth();
             tod.defreeze();
 			break;
 		
-        case 0x09: // CIA_TIME_OF_DAY_SECONDS
+        case 0x09: // EVENT_8_15
 			
 			result = tod.getTodSeconds();
 			break;
 			
-        case 0x0A: // CIA_TIME_OF_DAY_MINUTES
+        case 0x0A: // EVENT_16_23
 			
+            tod.freeze();
 			result = tod.getTodMinutes();
 			break;
 			
-        case 0x0B: // CIA_TIME_OF_DAY_HOURS
+        case 0x0B: // UNUSED
 
-            tod.freeze();
-			result = tod.getTodHours();
+            result = 0;
 			break;
 			
         case 0x0C: // CIA_SERIAL_DATA_REGISTER
@@ -276,17 +276,17 @@ CIA::spypeek(uint16_t addr)
             running = delay & CIACountB3;
             return HI_BYTE(counterB - (running ? (uint16_t)idleCounter : 0));
             
-        case 0x08: // CIA_TIME_OF_DAY_SEC_FRAC
+        case 0x08: // CIA_EVENT_0_7
             return tod.getTodTenth();
             
-        case 0x09: // CIA_TIME_OF_DAY_SECONDS
+        case 0x09: // CIA_EVENT_8_15
             return tod.getTodSeconds();
             
-        case 0x0A: // CIA_TIME_OF_DAY_MINUTES
+        case 0x0A: // CIA_EVENT_16_23
             return tod.getTodMinutes();
             
-        case 0x0B: // CIA_TIME_OF_DAY_HOURS
-            return tod.getTodHours();
+        case 0x0B: // UNUSED
+            return 0;
             
         case 0x0C: // CIA_SERIAL_DATA_REGISTER
             return SDR;
@@ -381,7 +381,7 @@ CIA::poke(uint16_t addr, uint8_t value)
 			}
 			return;
 			
-        case 0x08: // CIA_TIME_OF_DAY_SEC_FRAC
+        case 0x08: // CIA_EVENT_0_7
             
 			if (CRB & 0x80) {
 				tod.setAlarmTenth(value);
@@ -391,7 +391,7 @@ CIA::poke(uint16_t addr, uint8_t value)
 			}
 			return;
 			
-        case 0x09: // CIA_TIME_OF_DAY_SECONDS
+        case 0x09: // CIA_EVENT_8_15
             
             if (CRB & 0x80) {
 				tod.setAlarmSeconds(value);
@@ -400,26 +400,18 @@ CIA::poke(uint16_t addr, uint8_t value)
             }
 			return;
 			
-        case 0x0A: // CIA_TIME_OF_DAY_MINUTES
+        case 0x0A: // CIA_EVENT_16_23
             
             if (CRB & 0x80) {
 				tod.setAlarmMinutes(value);
             } else {
 				tod.setTodMinutes(value);
+                tod.stop();
             }
 			return;
 			
-        case 0x0B: // CIA_TIME_OF_DAY_HOURS
-			
-			if (CRB & 0x80) {
-				tod.setAlarmHours(value);
-			} else {
-                // Writing 12 pm into hour register turns to 12 am and vice versa.
-				if ((value & 0x1F) == 0x12)
-					value ^= 0x80;
-				tod.setTodHours(value);
-                tod.stop();
-			}
+        case 0x0B: // UNUSED
+        
 			return;
 			
         case 0x0C: // CIA_DATA_REGISTER
@@ -513,11 +505,6 @@ CIA::poke(uint16_t addr, uint8_t value)
                 delay &= ~(CIASerClk0 | CIASerClk1 | CIASerClk2);
                 feed &= ~CIASerClk0;
             }
-            
-            // 0------- : TOD speed = 60 Hz
-            // 1------- : TOD speed = 50 Hz
-            // TODO: We need to react on a change of this bit
-            tod.setHz((value & 0x80) ? 5 /* 50 Hz */ : 6 /* 60 Hz */);
             
             updatePB(); // Because PB67timerMode and PB6TimerOut may have changed
 			CRA = value;

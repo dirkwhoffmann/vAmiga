@@ -38,8 +38,6 @@ TOD::TOD(CIA *cia)
         { &frozen,           sizeof(frozen),           0 },
         { &stopped,          sizeof(stopped),          0 },
         { &matching,         sizeof(matching),         0 },
-        { &hz,               sizeof(hz),               0 },
-        { &frequencyCounter, sizeof(frequencyCounter), 0 },
         { NULL,              0,                        0 }});
 }
 
@@ -48,18 +46,17 @@ TOD::_powerOn()
 {
     tod.hours = 1;
     stopped = true;
-    hz = 60;
 }
 
 void 
 TOD::_dump()
 {
-	msg("            Time of day : %02X:%02X:%02X:%02X\n",
-        tod.hours, tod.minutes, tod.seconds, tod.tenth);
-	msg("                  Alarm : %02X:%02X:%02X:%02X\n",
-        alarm.hours, alarm.minutes, alarm.seconds, alarm.tenth);
-	msg("                  Latch : %02X:%02X:%02X:%02X\n",
-        latch.hours, latch.minutes, latch.seconds, latch.tenth);
+	msg("                Counter : %02X:%02X:%02X\n",
+        tod.minutes, tod.seconds, tod.tenth);
+	msg("                  Alarm : %02X:%02X:%02X\n",
+        alarm.minutes, alarm.seconds, alarm.tenth);
+	msg("                  Latch : %02X:%02X:%02X\n",
+        latch.minutes, latch.seconds, latch.tenth);
 	msg("                 Frozen : %s\n", frozen ? "yes" : "no");
 	msg("                Stopped : %s\n", stopped ? "yes" : "no");
 	msg("\n");
@@ -77,58 +74,19 @@ TOD::getInfo()
     return info;
 }
 
-
 void
 TOD::increment()
 {
     if (stopped)
         return;
     
-    if (++frequencyCounter % hz != 0)
-        return;
-    
-    // 1/10 seconds
-    if (tod.tenth != 0x09) {
-        tod.tenth = incBCD(tod.tenth);
-    } else {
-        tod.tenth = 0;
-        
-        // Seconds
-        if (tod.seconds != 0x59) {
-            tod.seconds = incBCD(tod.seconds) & 0x7F;
-        } else {
-            tod.seconds = 0;
-            
-            // Minutes
-            if (tod.minutes != 0x59) {
-                tod.minutes = incBCD(tod.minutes) & 0x7F;
-            } else {
-                tod.minutes = 0;
-                
-                // Hours
-                uint8_t pm = tod.hours & 0x80;
-                uint8_t hr = tod.hours & 0x1F;
-                
-                if (hr == 0x11) {
-                    pm ^= 0x80;
-                }
-                if (hr == 0x12) {
-                    hr = 0x01;
-                } else if (hr == 0x09) {
-                    hr = 0x10;
-                } else {
-                    uint8_t hr_lo = hr & 0x0F;
-                    uint8_t hr_hi = hr & 0x10;
-                    hr = hr_hi | ((hr_lo + 1) & 0x0F);
-                }
-                
-                tod.hours = pm | hr;
-            }
+    if (++tod.tenth == 0) {
+        if (++tod.seconds == 0) {
+            ++tod.minutes;
         }
     }
-
-    checkForInterrupt(); 
-    return;
+    
+    checkForInterrupt();
 }
 
 void
