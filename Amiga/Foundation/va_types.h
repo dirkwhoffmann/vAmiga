@@ -57,7 +57,6 @@ typedef union {
         uint8_t tenth;
         uint8_t seconds;
         uint8_t minutes;
-        uint8_t hours;
     };
     uint32_t value;
 } TimeOfDay;

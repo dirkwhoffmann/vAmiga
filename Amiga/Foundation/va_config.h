@@ -18,7 +18,7 @@
 // Disable assertion checking (Uncomment in release build)
 // #define NDEBUG
 
-// Default debug level for all components (Set to 1 in release build)
-#define DEBUG_LEVEL 1
+// Default debug level for all components
+#define DEBUG_LEVEL 3
 
 #endif

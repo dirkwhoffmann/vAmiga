@@ -14,16 +14,9 @@
 
 class CIA;
 
-//! @brief    Increments a BCD number by one.
-inline uint8_t incBCD(uint8_t bcd) {
-    return ((bcd & 0x0F) == 0x09) ? (bcd & 0xF0) + 0x10 : (bcd & 0xF0) + ((bcd + 0x01) & 0x0F);
-}
-
-/*! @brief    Time of day clock (TOD)
- *  @details  Each CIA chip contains a time of day clock, counting hours,
- *            minutes, seconds and tenth of a second. Every TOD clock features
- *            an alarm mechanism. When the alarm time is reached, an interrupt
- *            is initiated.
+/* 24-bit counter
+ * Each CIA chip contains a 24-bit counter with an alarm. When the alarm value
+ * is reached, an interrupt is initiated.
  */
 class TOD : public HardwareComponent {
     
@@ -31,52 +24,49 @@ class TOD : public HardwareComponent {
 
 private:
     
-    //! @brief    Reference to the connected CIA
+    // Reference to the connected CIA
     CIA *cia;
     
-    //! @brief    Time of day clock
+    // The 24 bit counter
 	TimeOfDay tod;
 
-    //! @brief    Time of day clock latch
+    // The counter latch
     TimeOfDay latch;
 
-    //! @brief    Alarm time
+    // Alarm value
 	TimeOfDay alarm;
 	
-	/*! @brief    Indicates if the TOD registers are frozen
-	 *  @details  The CIA chip freezes the registers when the hours-part is read
-     *            and reactivates them, when the 1/10th part is read. Although
-     *            the values stay constant, the internal clock continues to run.
-     *            Purpose: If you start reading with the hours-part, the clock
-     *            won't change until you have read the whole time.
+	/* Indicates if the TOD registers are frozen
+	 * The CIA chip freezes the registers when the counter's high byte (bits
+     * 16 - 23) is read and reactivates them, when the low byte (bits 0 - 7)
+     * is read. Although the values stay constant, the internal clock continues
+     * to run.
      */
 	bool frozen;
 	
-	/*! @brief    Indicates if the TOD clock is halted.
-	 *  @details  The CIA chip stops the TOD clock when the hours-part is
-     *            written and restarts it, when the 1/10th part is written.
-     *            Purpose: The clock will only start running when the time is
-     *            completely set.
+	/* Indicates if the TOD clock is halted.
+     * The CIA chip stops the TOD clock when the counter's high byte (bits
+     * 16 - 23) is written and restarts it, when the low byte (bits 0 - 7) is
+     * written.
      */
 	bool stopped;
 	
-    /*! @brief    Indicates if tod time matches the alarm time
-     *  @details  This value is read in checkForInterrupt() for edge detection.
+    /* Indicates if tod time matches the alarm value
+     * This value is read in checkForInterrupt() for edge detection.
      */
     bool matching;
         
 public:
     
     //
-    //! @functiongroup Creating and destructing
+    // Creating and destructing
     //
     
-	//! @brief    Constructor
 	TOD(CIA *cia);
 	
     
     //
-    //! @functiongroup Methods from HardwareComponent
+    // Methods from HardwareComponent
     //
 
     void _powerOn() override;
@@ -84,94 +74,73 @@ public:
 
     
     //
-    //! @functiongroup Configuring the component
+    // Retrieving debug information
     //
  
-    //! @brief    Returns the current configuration.
+    // Returns the current configuration.
     TODInfo getInfo();
     
 
     //
-    //! @functiongroup Running the component
+    // Running the component
     //
     
 private:
     
-    //! @brief    Freezes the time of day clock.
+    // Freezes the counter.
     void freeze() { if (!frozen) { latch.value = tod.value; frozen = true; } }
     
-    //! @brief    Unfreezes the time of day clock.
+    // Unfreezes the counter.
     void defreeze() { frozen = false; }
     
-    //! @brief    Stops the time of day clock.
+    // Stops the counter.
     void stop() { stopped = true; }
     
-    //! @brief    Starts the time of day clock.
+    // Starts the counter.
     void cont() { stopped = false; }
 
-    //! @brief    Returns the hours digits of the time of day clock.
-    uint8_t getTodHours() { return (frozen ? latch.hours : tod.hours) & 0x9F; }
+    // Returns the counter's high byte (bits 16 - 23).
+    uint8_t getTodMinutes() { return frozen ? latch.minutes : tod.minutes; }
 
-    //! @brief    Returns the minutes digits of the time of day clock.
-    uint8_t getTodMinutes() { return (frozen ? latch.minutes : tod.minutes) & 0x7F; }
+    // Returns the counter's intermediate byte (bits 8 - 15).
+    uint8_t getTodSeconds() { return frozen ? latch.seconds : tod.seconds; }
 
-    //! @brief    Returns the seconds digits of the time of day clock.
-    uint8_t getTodSeconds() { return (frozen ? latch.seconds : tod.seconds) & 0x7F; }
+    // Returns the counter's low byte (bits 0 - 7).
+    uint8_t getTodTenth() { return frozen ? latch.tenth : tod.tenth; }
 
-    //! @brief    Returns the tenth-of-a-second digits of the time of day clock.
-    uint8_t getTodTenth() { return (frozen ? latch.tenth : tod.tenth) & 0x0F; }
+    //! Returns the alarm value's high byte (bits 16 - 23).
+    uint8_t getAlarmMinutes() { return alarm.minutes; }
 
-    //! @brief    Returns the hours digits of the alarm time.
-    uint8_t getAlarmHours() { return alarm.hours & 0x9F; }
+    // Returns the alarm value's intermediate byte (bits 8 - 15).
+    uint8_t getAlarmSeconds() { return alarm.seconds; }
 
-    //! @brief    Returns the minutes digits of the alarm time.
-    uint8_t getAlarmMinutes() { return alarm.minutes & 0x7F; }
-
-    //! @brief    Returns the seconds digits of the alarm time.
-    uint8_t getAlarmSeconds() { return alarm.seconds & 0x7F; }
-
-    //! @brief    Returns the tenth-of-a-second digits of the alarm time.
-    uint8_t getAlarmTenth() { return alarm.tenth & 0x0F; }
-    
-
-	//! @brief    Sets the hours digits of the time of day clock.
-    void setTodHours(uint8_t value) { tod.hours = value & 0x9F; checkForInterrupt(); }
+    // Returns the alarm value's low byte (bits 0 - 7).
+    uint8_t getAlarmTenth() { return alarm.tenth; }
 	
-	//! @brief    Sets the minutes digits of the time of day clock.
-    void setTodMinutes(uint8_t value) {
-        tod.minutes = value & 0x7F; checkForInterrupt(); }
+	// Sets the counter's high byte (bits 16 - 23).
+    void setTodMinutes(uint8_t value) { tod.minutes = value; checkForInterrupt(); }
 	
-	//! @brief    Sets the seconds digits of the time of day clock.
-    void setTodSeconds(uint8_t value) {
-        tod.seconds = value & 0x7F; checkForInterrupt(); }
+	// Sets the counter's intermediate byte (bits 8 - 15).
+    void setTodSeconds(uint8_t value) { tod.seconds = value; checkForInterrupt(); }
 	
-	//! @brief    Sets the tenth-of-a-second digits of the time of day clock.
-	void setTodTenth(uint8_t value) {
-        tod.tenth = value & 0x0F; checkForInterrupt(); }
+	//! Sets the counter's low byte (bits 0 - 7).
+	void setTodTenth(uint8_t value) { tod.tenth = value; checkForInterrupt(); }
 	
-	//! @brief    Sets the hours digits of the alarm time.
-    void setAlarmHours(uint8_t value) {
-        alarm.hours = value & 0x9F; checkForInterrupt(); }
+	// Sets the alarm value's high byte (bits 16 - 23).
+    void setAlarmMinutes(uint8_t value) { alarm.minutes = value; checkForInterrupt(); }
 	
-	//! @brief    Sets the minutes digits of the alarm time.
-    void setAlarmMinutes(uint8_t value) {
-        alarm.minutes = value & 0x7F; checkForInterrupt(); }
+	// Sets the alarm value's intermediate byte (bits 8 - 15).
+    void setAlarmSeconds(uint8_t value) { alarm.seconds = value; checkForInterrupt(); }
 	
-	//! @brief    Sets the seconds digits of the alarm time.
-    void setAlarmSeconds(uint8_t value) {
-        alarm.seconds = value & 0x7F; checkForInterrupt(); }
+	// Sets the alarm value's low byte (bits 0 - 7).
+    void setAlarmTenth(uint8_t value) { alarm.tenth = value; checkForInterrupt(); }
 	
-	//! @brief    Sets the tenth-of-a-second digits of the time of day clock.
-    void setAlarmTenth(uint8_t value) {
-        alarm.tenth = value & 0x0F; checkForInterrupt(); }
-	
-	/*! @brief    Increments the TOD clock by one tenth of a second.
-     */
+	// Increment the counter
 	void increment();
 
-    /*! @brief    Updates variable 'matching'
-     *  @details  If a positive edge occurs, the connected CIA will be requested
-     *            to trigger an interrupt.
+    /* Updates variable 'matching'
+     * If a positive edge occurs, the connected CIA is requested to trigger
+     * an interrupt.
      */
     void checkForInterrupt();
 };

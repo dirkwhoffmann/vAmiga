@@ -34,13 +34,15 @@ HardwareComponent::powerOn()
 {
     if (!power) {
         
+        debug(2, "Powering on\n");
+        
         // Power all sub components on
         for (HardwareComponent *c : subComponents) {
             c->powerOn();
         }
         
         // Power on this component
-        debug(2, "Power on\n");
+        debug(2, "Powered on\n");
         power = true;
         _powerOn();
         
@@ -51,7 +53,10 @@ HardwareComponent::powerOn()
         
         // Watch out for uninitialzed variables
         for (SnapshotItem i : snapshotItems) {
-            assert(((uint8_t *)i.data)[0] != 42);
+            if (((uint8_t *)i.data)[0] == 42) {
+                debug("Uninitialized variable found at address %p\n", i.data);
+                assert(false);
+            }
         }
     }
 }
@@ -182,6 +187,7 @@ HardwareComponent::registerSnapshotItems(vector<SnapshotItem> items) {
         
         // Initialize all snapshot items with a special bit pattern. This lets
         // us detect unintialized variables in powerOn().
+        debug(3, "Registering item at address %p", item.data);
         for (size_t j = 0; j < item.size; j++) ((uint8_t *)item.data)[j] = 42;
     }
 }

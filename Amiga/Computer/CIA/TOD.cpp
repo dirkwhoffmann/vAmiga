@@ -24,14 +24,12 @@ TOD::TOD(CIA *cia)
         { &alarm.value,      sizeof(alarm.value),      0 },
         { &frozen,           sizeof(frozen),           0 },
         { &stopped,          sizeof(stopped),          0 },
-        { &matching,         sizeof(matching),         0 },
-        { NULL,              0,                        0 }});
+        { &matching,         sizeof(matching),         0 }});
 }
 
 void
 TOD::_powerOn()
 {
-    tod.hours = 1;
     stopped = true;
 }
 
