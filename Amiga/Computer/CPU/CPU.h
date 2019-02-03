@@ -49,6 +49,9 @@ private:
     
 public:
     
+    uint64_t executeNextInstruction();
+    
+    
  
     
 };

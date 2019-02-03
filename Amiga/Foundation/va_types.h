@@ -19,6 +19,23 @@ typedef uint32_t uint24_t;
 inline bool is_uint24_t(uint24_t value) { return value <= 0xFFFFFF; }
 
 //
+// Clocks
+//
+
+typedef uint64_t Cycle;    // Cycle in master cycle units
+typedef uint64_t CPUCycle; // Cycle in CPU cycle units
+typedef uint64_t CIACycle; // Cycle in CIA cycle units
+typedef uint64_t DMACycle; // Cycle in DMA cycle units
+
+#define CPU_CYCLE(cycle) ((cycle) << 2)
+#define CIA_CYCLE(cycle) ((cycle) * 40)
+#define DMA_CYCLE(cycle) ((cycle) << 3)
+
+#define AS_CPU_CYCLE(cycle) ((cycle) >> 2)
+#define AS_CIA_CYCLE(cycle) ((cycle) / 40)
+#define AS_DMA_CYCLE(cycle) ((cycle) >> 3)
+
+//
 // General
 //
 

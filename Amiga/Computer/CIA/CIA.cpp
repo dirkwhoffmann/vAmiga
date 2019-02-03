@@ -23,6 +23,7 @@ CIA::CIA()
     // Register snapshot items
     registerSnapshotItems(vector<SnapshotItem> {
         
+        { &currentCIACycle,  sizeof(currentCIACycle),  0 },
         { &counterA,         sizeof(counterA),         0 },
         { &latchA,           sizeof(latchA),           0 },
         { &counterB,         sizeof(counterB),         0 },
@@ -50,7 +51,7 @@ CIA::CIA()
         { &INT,              sizeof(INT),              0 },
         { &tiredness,        sizeof(tiredness),        0 },
         { &wakeUpCycle,      sizeof(wakeUpCycle),      0 },
-        { &idleCounter,      sizeof(idleCounter),      0 }});
+        { &sleepCycle,       sizeof(sleepCycle),       0 }});
 }
 
 CIA::~CIA()
@@ -65,6 +66,8 @@ CIA::_powerOn()
 	
 	latchA = 0xFFFF;
 	latchB = 0xFFFF;
+    
+    sleepCycle = UINT64_MAX;
 }
 
 void
@@ -253,19 +256,19 @@ CIA::spypeek(uint16_t addr)
             
         case 0x04: // CIA_TIMER_A_LOW
             running = delay & CIACountA3;
-            return LO_BYTE(counterA - (running ? (uint16_t)idleCounter : 0));
+            return LO_BYTE(counterA - (running ? (uint16_t)idleCounter() : 0));
             
         case 0x05: // CIA_TIMER_A_HIGH
             running = delay & CIACountA3;
-            return HI_BYTE(counterA - (running ? (uint16_t)idleCounter : 0));
+            return HI_BYTE(counterA - (running ? (uint16_t)idleCounter() : 0));
             
         case 0x06: // CIA_TIMER_B_LOW
             running = delay & CIACountB3;
-            return LO_BYTE(counterB - (running ? (uint16_t)idleCounter : 0));
+            return LO_BYTE(counterB - (running ? (uint16_t)idleCounter() : 0));
             
         case 0x07: // CIA_TIMER_B_HIGH
             running = delay & CIACountB3;
-            return HI_BYTE(counterB - (running ? (uint16_t)idleCounter : 0));
+            return HI_BYTE(counterB - (running ? (uint16_t)idleCounter() : 0));
             
         case 0x08: // CIA_EVENT_0_7
             return tod.getTodTenth();
@@ -690,9 +693,31 @@ CIA::getInfo()
 }
 
 void
+CIA::executeUntil(Cycle targetCycle)
+{
+    CIACycle targetCIACycle = AS_CIA_CYCLE(targetCycle);
+
+    // Check if we need to wake up the CIA
+    if (isSleeping()) {
+        if (targetCIACycle < wakeUpCycle) {
+            currentCIACycle = targetCIACycle;
+            return;
+        } else {
+            wakeUp();
+        }
+    }
+    
+    // The CIA is awake. Let's execute the remaining cycles
+    while (currentCIACycle < targetCIACycle) {
+            executeOneCycle();
+    }
+    assert(currentCIACycle == targetCIACycle);
+}
+
+void
 CIA::executeOneCycle()
 {
-    wakeUp();
+    currentCIACycle++;
     
     uint64_t oldDelay = delay;
     uint64_t oldFeed  = feed;
@@ -1005,29 +1030,43 @@ CIA::executeOneCycle()
 void
 CIA::sleep()
 {
-  
+    // Don't call this method on a sleeping CIA
+    assert(sleepCycle == UINT64_MAX);
+    
+    // Determine maximum possible sleep cycle based on timer counts
+    uint64_t sleepA = (counterA > 2) ? (currentCIACycle + counterA - 1) : 0;
+    uint64_t sleepB = (counterB > 2) ? (currentCIACycle + counterB - 1) : 0;
+    
+    // CIAs with stopped timers can sleep forever
+    if (!(feed & CIACountA0)) sleepA = UINT64_MAX;
+    if (!(feed & CIACountB0)) sleepB = UINT64_MAX;
+    
+    // Take some rest
+    sleepCycle = currentCIACycle;
+    wakeUpCycle = MIN(sleepA, sleepB);
 }
 
 void
 CIA::wakeUp()
 {
-    // uint64_t idleCycles = idleCounter;
+    // Calculate the number of missed cycles
+    CIACycle missedCycles = (int64_t)(currentCIACycle - sleepCycle);
     
     // Make up for missed cycles
-    if (idleCounter) {
+    if (missedCycles > 0) {
         if (feed & CIACountA0) {
-            assert(counterA >= idleCounter);
-            counterA -= idleCounter;
+            assert(counterA >= missedCycles);
+            counterA -= missedCycles;
         }
         if (feed & CIACountB0) {
-            assert(counterB >= idleCounter);
-            counterB -= idleCounter;
+            assert(counterB >= missedCycles);
+            counterB -= missedCycles;
         }
-        idleCounter = 0;
-        // resetIdleCounter();
     }
+    
+    // Stay awake
+    sleepCycle = UINT64_MAX;
     wakeUpCycle = 0;
-    // setWakeUpCycle(0);
 }
 
 

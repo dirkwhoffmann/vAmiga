@@ -55,3 +55,9 @@ CPU::_dump()
 {
     
 }
+
+uint64_t
+CPU::executeNextInstruction()
+{
+    return 7; // Consumed cycles
+}

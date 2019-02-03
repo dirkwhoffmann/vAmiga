@@ -614,58 +614,6 @@ Amiga::loadKickRomFromFile(const char *path)
     return loadKickRom(rom);
 }
 
-
-//
-// The run loop
-//
-
-void
-Amiga::threadWillStart()
-{
-    debug(2, "Emulator thread started\n");
-    amiga->putMessage(MSG_RUN);
-}
-
-void
-Amiga::threadDidTerminate()
-{
-    debug(2, "Emulator thread terminated\n");
-    paula.audioUnit.pause();
-    p = NULL;
-    amiga->putMessage(MSG_PAUSE);
-}
-
-void
-Amiga::runLoop()
-{
-    // Prepare to run
-    amiga->restartTimer();
-    
-    // Schedule a event to fake some disk activity
-    eventHandler.scheduleEvent(EVENT_DEBUG1, 2 * 28 * 1000000);
-    
-    //
-    // TODO: Emulate the Amiga here ...
-    //
-    
-    // THE FOLLOWING CODE IS FOR VISUAL PROTOTYPING ONLY
-    stop = false;
-    while (!stop) {
-        
-        // Emulate the CPU (fake)
-        uint64_t cpuCycles = 16;  // Fake CPU consumes 16 cycles
-        
-        // Advance the master clock
-        masterClock += cpuCycles * 4;
-        
-        dma.executeUntil(masterClock);
-        denise.executeUntil(masterClock);
-        eventHandler.executeUntil(masterClock);
-        
-    }
-}
-
-
 void
 Amiga::loadFromSnapshotUnsafe(AmigaSnapshot *snapshot)
 {
@@ -735,5 +683,59 @@ Amiga::deleteSnapshot(vector<AmigaSnapshot *> &storage, unsigned index)
     if (snapshot) {
         delete snapshot;
         storage.erase(storage.begin() + index);
+    }
+}
+
+
+//
+// The run loop
+//
+
+void
+Amiga::threadWillStart()
+{
+    debug(2, "Emulator thread started\n");
+    amiga->putMessage(MSG_RUN);
+}
+
+void
+Amiga::threadDidTerminate()
+{
+    debug(2, "Emulator thread terminated\n");
+    paula.audioUnit.pause();
+    p = NULL;
+    amiga->putMessage(MSG_PAUSE);
+}
+
+void
+Amiga::runLoop()
+{
+    // Prepare to run
+    amiga->restartTimer();
+    
+    // Schedule a event to fake some disk activity
+    eventHandler.scheduleEvent(EVENT_DEBUG1, 2 * 28 * 1000000);
+    
+    //
+    // TODO: Emulate the Amiga here ...
+    //
+    
+    // THE FOLLOWING CODE IS FOR VISUAL PROTOTYPING ONLY
+    stop = false;
+    while (!stop) {
+        
+        // Emulate the CPU (fake)
+        uint64_t cpuCycles = cpu.executeNextInstruction(); 
+        
+        // Advance the master clock
+        masterClock += cpuCycles * 4;
+        
+        ciaA.executeUntil(masterClock);
+        ciaB.executeUntil(masterClock);
+        dma.executeUntil(masterClock);
+        denise.executeUntil(masterClock);
+        eventHandler.executeUntil(masterClock);
+        
+        
     }
 }

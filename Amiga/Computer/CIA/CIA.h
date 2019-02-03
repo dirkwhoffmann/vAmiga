@@ -74,23 +74,30 @@ class Joystick;
  */
 class CIA : public HardwareComponent {
     
+    friend TOD;
+    
 protected:
 
-	//! @brief    Timer A counter
+    /* Current CIA cycle.
+     * So far, the CIA has been run for this many cycles.
+     */
+    CIACycle currentCIACycle;
+    
+	// Timer A counter
 	uint16_t counterA;
 	
-    //! @brief    Timer B counter
+    // Timer B counter
     uint16_t counterB;
     
 private:
     
-	//! @brief    Timer A latch
+	// Timer A latch
 	uint16_t latchA;
 	
-	//! @brief    Timer B latch
+	// Timer B latch
 	uint16_t latchB;
 	
-	//! @brief    Time of day clock
+	// 24-bit counter
 	TOD tod = TOD(this);
     
 	
@@ -102,25 +109,25 @@ private:
 	// Control
     //
     
-    //! @brief    Performs delay by shifting left at each clock
+    // Performs delay by shifting left at each clock
 	uint64_t delay;
     
-    //! @brief    New bits to feed into dwDelay
+    // New bits to feed into dwDelay
 	uint64_t feed;
     
-    //! @brief    Control register A
+    // Control register A
 	uint8_t CRA;
 
-    //! @brief    Control register B
+    // Control register B
     uint8_t CRB;
     
-    //! @brief    Interrupt control register
+    // Interrupt control register
 	uint8_t icr;
 
-    //! @brief    ICR bits that need to deleted when CIAAckIcr1 hits
+    // ICR bits that need to deleted when CIAAckIcr1 hits
     uint8_t icrAck;
 
-    //! @brief    Interrupt mask register
+    // Interrupt mask register
 	uint8_t imr;
 
 protected:
@@ -211,23 +218,26 @@ private:
 
     
     //
-    // Speeding up emulation (CIA sleep logic)
+    // Speeding up emulation (sleep logic)
     //
     
-    //! @brief    Idle counter
-    /*! @details  When the VIA state does not change during execution, this
-     *            variable is increased by one. If it exceeds a certain
-     *            threshhold, the chip is put into idle state via sleep()
+    /* Idle counter
+     * When the CIA's state does not change during execution, this variable is
+     * increased by one. If it exceeds a certain threshhold, the chip is put
+     * into idle state via sleep().
      */
     uint8_t tiredness;
 
 public:
     
-    //! @brief    Wakeup cycle
-    uint64_t wakeUpCycle;
+    // The wakeup cycle
+    // This variable is set in sleep() and read in executeUntil().
+    CIACycle wakeUpCycle;
     
-    //! @brief    Number of skipped executions
-    uint64_t idleCounter;
+    // The last executed cycle before the chip went idle.
+    // This variable is set in sleep() and read in wakeUp().
+    // A value of 0 indicates that the CIA is awake. 
+    CIACycle sleepCycle;
     
 public:	
 	
@@ -367,37 +377,52 @@ public:
     
     
     //
-    //! @functiongroup Running the device
+    // Running the device
     //
     
 public:
     
-	//! @brief    Executes the CIA for one cycle
-	void executeOneCycle();
+    // Executes the component until the target cycle is reached.
+    void executeUntil(Cycle targetCycle);
     
-	//! @brief    Increments the TOD clock by one tenth of a second
+	// Advances the 24-bit counter by one tick.
 	void incrementTOD();
 
+private:
+    
+    // Executes the CIA for one CIA cycle.
+    void executeOneCycle();
     
     //
-    //! @functiongroup Handling interrupt requests
+    // Handling interrupt requests
     //
     
-    //! @brief    Handles an interrupt request from TOD
+    // Handles an interrupt request from TOD
     void todInterrupt(); 
 
     
     //
-    //! @functiongroup Speeding up emulation
+    // Speeding up emulation
     //
     
 private:
     
     //! @brief    Puts the CIA into idle state.
     void sleep();
-    
+
     //! @brief    Emulates all previously skipped cycles.
     void wakeUp();
+    
+public:
+    
+    // Returns true if the CIA is in idle state.
+    bool isSleeping() { return sleepCycle < UINT64_MAX; }
+    
+    // Returns true if the CIA is awake.
+    bool isAwake() { return sleepCycle == UINT64_MAX; }
+    
+    // Returns the number of currently skipped cycles.
+    CIACycle idleCounter() { return isAwake() ? 0 : currentCIACycle - sleepCycle; }
 };
 
 
