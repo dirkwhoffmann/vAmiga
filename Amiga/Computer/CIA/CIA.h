@@ -11,7 +11,6 @@
 #define _CIA_H
 
 #include "TOD.h"
-#include "CIA_types.h"
 
 // Forward declarations
 class VIC;
@@ -402,67 +401,49 @@ private:
 };
 
 
-/*! @class    The first virtual complex interface adapter (CIA 1)
- *  @details  The CIA 1 chips differs from the CIA 2 chip in several smaller
- *            aspects. For example, the CIA 1 interrupts the CPU via the
- *            IRQ line (maskable interrupts). Furthermore, the keyboard is
- *            connected to the the C64 via the CIA 1 chip.
+/* The Amiga's first virtual Complex Interface Adapter (CIA A)
  */
-class CIA1 : public CIA {
+class CIAA : public CIA {
 	
 public:
 
-    CIA1();
-    ~CIA1();
-    void dump();
+    CIAA();
+    void _dump() override;
     
 private:
     
-    void pullDownInterruptLine();
-    void releaseInterruptLine();
+    void pullDownInterruptLine() override;
+    void releaseInterruptLine() override;
     
-    uint8_t portAinternal();
-    uint8_t portAexternal();
-    void updatePA();
-    uint8_t portBinternal();
-    uint8_t portBexternal();
-    void updatePB();
+    uint8_t portAinternal() override;
+    uint8_t portAexternal() override;
+    void updatePA() override;
+    uint8_t portBinternal() override;
+    uint8_t portBexternal() override;
+    void updatePB() override;
 };
 	
-/*! @brief    The second virtual complex interface adapter (CIA 2)
- *  @details  The CIA 2 chips differs from the CIA 1 chip in several smaller
- *            aspects. For example, the CIA 2 interrupts the CPU via the
- *            NMI line (non maskable interrupts). Furthermore, the CIA 2
- *            controlls the memory bank seen by the video controller. 
+/* The Amiga's first virtual Complex Interface Adapter (CIA B)
  */
-class CIA2 : public CIA {
+class CIAB : public CIA {
 
 public:
 
-    CIA2();
-    ~CIA2();
-    void reset(); 
-    void dump();
+    CIAB();
+    void _reset() override;
+    void _dump() override;
     
 private:
 
-    void pullDownInterruptLine();
-    void releaseInterruptLine();
+    void pullDownInterruptLine() override;
+    void releaseInterruptLine() override;
     
-    uint8_t portAinternal();
-    uint8_t portAexternal();
-    
-public:
-    
-    void updatePA();
-    
-private:
-    
-    uint8_t portBinternal();
-    uint8_t portBexternal();
-    void updatePB();
-    void pokePA(uint8_t value);
-    void pokeDDRA(uint8_t value);
+    uint8_t portAinternal() override;
+    uint8_t portAexternal() override;
+    void updatePA() override;
+    uint8_t portBinternal() override;
+    uint8_t portBexternal() override;
+    void updatePB() override;
 };
 
 #endif

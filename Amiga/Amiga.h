@@ -16,8 +16,9 @@
 
 // Sub components
 #include "EventHandler.h"
-#include "AmigaMemory.h"
+#include "CPU.h"
 #include "CIA.h"
+#include "AmigaMemory.h"
 #include "DMAController.h"
 #include "Denise.h"
 #include "Paula.h"
@@ -68,9 +69,18 @@ public:
     // The event handler
     EventHandler eventHandler;
     
-    // The Amiga's virtual memory
-    AmigaMemory mem;
+    // A Motorola 68000 CPU
+    CPU cpu;
+    
+    // CIA A (odd CIA)
+    CIAA ciaA;
 
+    // CIA B (even CIA)
+    CIAB ciaB;
+
+    // Memory
+    AmigaMemory mem;
+    
     // The DMA controller (part of Agnus)
     DMAController dma;
 

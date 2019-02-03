@@ -19,7 +19,7 @@ typedef uint32_t uint24_t;
 inline bool is_uint24_t(uint24_t value) { return value <= 0xFFFFFF; }
 
 //
-// Amiga hardware
+// General
 //
 
 typedef enum : long
@@ -43,82 +43,64 @@ inline const char *modelName(AmigaModel model)
     model == A2000 ? "Amiga 2000" : "???";
 }
 
-typedef enum : long
-{
-    A1010_ORIG, // Amiga 3,5" drive, emulated with original speed
-    A1010_2X,   // Amiga 3,5" drive, emulated 2x faster
-    A1010_4X,   // Amiga 3,5" drive, emulated 4x faster
-    A1010_8X,   // Amiga 3,5" drive, emulated 8x faster
-    A1010_WARP  // Amiga 3,5" drive, emulated as fast as possible
-}
-DriveType;
-
-inline bool isDriveType(DriveType model)
-{
-    return model >= A1010_ORIG && model <= A1010_WARP;
-}
-
-inline const char *driveTypeName(DriveType type)
-{
-    return
-    type == A1010_ORIG ? "A1010 (original speed)" :
-    type == A1010_2X   ? "A1010 (2x faster)" :
-    type == A1010_4X   ? "A1010 (4x faster)" :
-    type == A1010_8X   ? "A1010 (8x faster)" :
-    type == A1010_WARP ? "A1010 (warp speed)" : "???";
-}
-
-typedef enum {
-    
-    JOYSTICK_UP,
-    JOYSTICK_DOWN,
-    JOYSTICK_LEFT,
-    JOYSTICK_RIGHT,
-    JOYSTICK_FIRE
-    
-} JoystickDirection;
-
-typedef enum {
-    
-    PULL_UP,
-    PULL_DOWN,
-    PULL_LEFT,
-    PULL_RIGHT,
-    PRESS_FIRE,
-    RELEASE_X,
-    RELEASE_Y,
-    RELEASE_XY,
-    RELEASE_FIRE
-    
-} JoystickEvent;
-
 
 //
-// Amiga configuration
+// CPU
 //
 
-/* Amiga configuration
- * This is a full description of the computer we are going to emulate.
- */
-typedef struct
-{
-    DriveType type;
-    bool connected;
-}
-DriveConfiguration;
+//
+// CIA
+//
 
-typedef struct
-{
-    AmigaModel model;
-    long layout;
-    long chipRamSize; // size in KB
-    long slowRamSize; // size in KB
-    long fastRamSize; // size in KB
-    bool realTimeClock;
-    DriveConfiguration df0;
-    DriveConfiguration df1;
-}
-AmigaConfiguration;
+typedef union {
+    struct {
+        uint8_t tenth;
+        uint8_t seconds;
+        uint8_t minutes;
+        uint8_t hours;
+    };
+    uint32_t value;
+} TimeOfDay;
+
+typedef struct {
+    TimeOfDay time;
+    TimeOfDay latch;
+    TimeOfDay alarm;
+} TODInfo;
+
+typedef struct {
+    struct {
+        uint8_t port;
+        uint8_t reg;
+        uint8_t dir;
+    } portA;
+    struct {
+        uint8_t port;
+        uint8_t reg;
+        uint8_t dir;
+    } portB;
+    struct {
+        uint16_t count;
+        uint16_t latch;
+        bool running;
+        bool toggle;
+        bool pbout;
+        bool oneShot;
+    } timerA;
+    struct {
+        uint16_t count;
+        uint16_t latch;
+        bool running;
+        bool toggle;
+        bool pbout;
+        bool oneShot;
+    } timerB;
+    uint8_t icr;
+    uint8_t imr;
+    bool intLine;
+    TODInfo tod;
+    bool todIntEnable;
+} CIAInfo;
 
 
 //
@@ -145,15 +127,73 @@ typedef enum
     MEM_KICK,
     
     /*
-    MEM_CHIP_MIRROR,
-    MEM_CIA_MIRROR,
-    MEM_RTC_MIRROR,
-    MEM_ROM_MIRROR,
-    MEM_BOOT_MIRROR,
-    MEM_KICK_MIRROR
-    */
+     MEM_CHIP_MIRROR,
+     MEM_CIA_MIRROR,
+     MEM_RTC_MIRROR,
+     MEM_ROM_MIRROR,
+     MEM_BOOT_MIRROR,
+     MEM_KICK_MIRROR
+     */
     
 } MemorySource;
+
+
+//
+// Floppy drive
+//
+
+typedef enum : long
+{
+    A1010_ORIG, // Amiga 3,5" drive, emulated with original speed
+    A1010_2X,   // Amiga 3,5" drive, emulated 2x faster
+    A1010_4X,   // Amiga 3,5" drive, emulated 4x faster
+    A1010_8X,   // Amiga 3,5" drive, emulated 8x faster
+    A1010_WARP  // Amiga 3,5" drive, emulated as fast as possible
+}
+DriveType;
+
+inline bool isDriveType(DriveType model)
+{
+    return model >= A1010_ORIG && model <= A1010_WARP;
+}
+
+inline const char *driveTypeName(DriveType type)
+{
+    return
+    type == A1010_ORIG ? "A1010 (original speed)" :
+    type == A1010_2X   ? "A1010 (2x faster)" :
+    type == A1010_4X   ? "A1010 (4x faster)" :
+    type == A1010_8X   ? "A1010 (8x faster)" :
+    type == A1010_WARP ? "A1010 (warp speed)" : "???";
+}
+
+//
+// Game pads
+//
+
+typedef enum {
+    
+    JOYSTICK_UP,
+    JOYSTICK_DOWN,
+    JOYSTICK_LEFT,
+    JOYSTICK_RIGHT,
+    JOYSTICK_FIRE
+    
+} JoystickDirection;
+
+typedef enum {
+    
+    PULL_UP,
+    PULL_DOWN,
+    PULL_LEFT,
+    PULL_RIGHT,
+    PRESS_FIRE,
+    RELEASE_X,
+    RELEASE_Y,
+    RELEASE_XY,
+    RELEASE_FIRE
+    
+} JoystickEvent;
 
 
 //
@@ -306,5 +346,35 @@ typedef struct {
 
 // Callback function signature
 typedef void Callback(const void *, int, long);
+
+
+//
+// Configurations
+//
+
+/* Amiga configuration
+ * This is a full description of the computer we are going to emulate.
+ */
+typedef struct
+{
+    DriveType type;
+    bool connected;
+}
+DriveConfiguration;
+
+typedef struct
+{
+    AmigaModel model;
+    long layout;
+    long chipRamSize; // size in KB
+    long slowRamSize; // size in KB
+    long fastRamSize; // size in KB
+    bool realTimeClock;
+    DriveConfiguration df0;
+    DriveConfiguration df1;
+}
+AmigaConfiguration;
+
+
 
 #endif

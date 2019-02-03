@@ -1,20 +1,11 @@
-/*
- * (C) 2006 - 2018 Dirk W. Hoffmann. All rights reserved.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */
+// -----------------------------------------------------------------------------
+// This file is part of vAmiga
+//
+// Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
+// Licensed under the GNU General Public License v3
+//
+// See https://www.gnu.org for license information
+// -----------------------------------------------------------------------------
 
 #include "Amiga.h"
 
@@ -1041,38 +1032,32 @@ CIA::wakeUp()
 
 
 // -----------------------------------------------------------------------------------------
-// Complex Interface Adapter 1
+// Complex Interface Adapter A
 // -----------------------------------------------------------------------------------------
 
-CIA1::CIA1()
+CIAA::CIAA()
 {
-    setDescription("CIA1");
-	debug(3, "  Creating CIA1 at address %p...\n", this);
-}
-
-CIA1::~CIA1()
-{
-	debug(3, "  Releasing CIA1\n");
+    setDescription("CIAA");
 }
 
 void 
-CIA1::dump()
-{
-	msg("CIA 1:\n");
-	msg("------\n\n");
-	CIA::dump();
-}
-
-void 
-CIA1::pullDownInterruptLine()
+CIAA::_dump()
 {
 }
 
 void 
-CIA1::releaseInterruptLine()
+CIAA::pullDownInterruptLine()
 {
+    debug("Pulling down IRQ line");
 }
 
+void 
+CIAA::releaseInterruptLine()
+{
+    debug("Releasing IRQ line");
+}
+
+// THIS IS OLD (C64). UPDATE WITH AMIGA STUFF
 //                    -------
 //   JOYB0, COL0 <--> | PA0 |
 //   JOYB1, COL1 <--> | PA1 |
@@ -1085,20 +1070,20 @@ CIA1::releaseInterruptLine()
 //                    -------
 
 uint8_t
-CIA1::portAinternal()
+CIAA::portAinternal()
 {
     return PRA;
 }
 
 uint8_t
-CIA1::portAexternal()
+CIAA::portAexternal()
 {
     return 0xFF;
     // return c64->keyboard.getColumnValues(PB);
 }
 
 void
-CIA1::updatePA()
+CIAA::updatePA()
 {
     PA = (portAinternal() & DDRA) | (portAexternal() & ~DDRA);
 
@@ -1107,6 +1092,7 @@ CIA1::updatePA()
     // An edge on PA4 triggers the NeosMouse on port 2
 }
 
+// THIS IS OLD (C64). UPDATE WITH AMIGA STUFF
 //                    -------
 //   JOYA0, ROW0 <--> | PB0 |
 //   JOYA1, ROW1 <--> | PB1 |
@@ -1119,20 +1105,20 @@ CIA1::updatePA()
 //                    -------
 
 uint8_t
-CIA1::portBinternal()
+CIAA::portBinternal()
 {
     return PRB;
 }
 
 uint8_t
-CIA1::portBexternal()
+CIAA::portBexternal()
 {
     return 0xFF;
     // return c64->keyboard.getRowValues(PA);
 }
 
 void
-CIA1::updatePB()
+CIAA::updatePB()
 {
     PB = (portBinternal() & DDRB) | (portBexternal() & ~DDRB);
  
@@ -1151,47 +1137,37 @@ CIA1::updatePB()
 
 
 // -----------------------------------------------------------------------------------------
-// Complex Interface Adapter 2
+// Complex Interface Adapter B
 // -----------------------------------------------------------------------------------------
 
-CIA2::CIA2()
+CIAB::CIAB()
 {
-    setDescription("CIA2");
-	debug(3, "  Creating CIA2 at address %p...\n", this);
-}
-
-CIA2::~CIA2()
-{
-	debug(3, "  Releasing CIA2...\n");
+    setDescription("CIAB");
 }
 
 void
-CIA2::reset()
-{
-    CIA::reset();
-
-    counterA = 0xFFFF;
-    counterB = 0xFFFF;
-}
-
-void 
-CIA2::dump()
-{
-	msg("CIA 2:\n");
-	msg("------\n\n");
-	CIA::dump();
-}
-
-void 
-CIA2::pullDownInterruptLine()
+CIAB::_reset()
 {
 }
 
 void 
-CIA2::releaseInterruptLine()
+CIAB::_dump()
 {
 }
 
+void 
+CIAB::pullDownInterruptLine()
+{
+    debug("Pulling down IRQ line");
+}
+
+void 
+CIAB::releaseInterruptLine()
+{
+    debug("Releasing IRQ line");
+}
+
+// THIS IS OLD (C64). UPDATE WITH AMIGA STUFF
 //                        -------
 //              VA14 <--- | PA0 |
 //              VA15 <--- | PA1 |
@@ -1204,21 +1180,22 @@ CIA2::releaseInterruptLine()
 //                        -------
 
 uint8_t
-CIA2::portAinternal()
+CIAB::portAinternal()
 {
     return PRA;
 }
 
 uint8_t
-CIA2::portAexternal()
+CIAB::portAexternal()
 {
+    // TODO
     uint8_t result = 0x3F;
     
     return result;
 }
 
 void
-CIA2::updatePA()
+CIAB::updatePA()
 {
     PA = (portAinternal() & DDRA) | (portAexternal() & ~DDRA);
     
@@ -1227,6 +1204,7 @@ CIA2::updatePA()
     
 }
 
+// THIS IS OLD (C64). UPDATE WITH AMIGA STUFF
 //                        -------
 // User port (pin C) <--> | PB0 |
 // User port (pin D) <--> | PB1 |
@@ -1239,7 +1217,7 @@ CIA2::updatePA()
 //                        -------
 
 uint8_t
-CIA2::portBinternal()
+CIAB::portBinternal()
 {
     uint8_t result = PRB;
     
@@ -1255,29 +1233,15 @@ CIA2::portBinternal()
 }
 
 uint8_t
-CIA2::portBexternal()
+CIAB::portBexternal()
 {
     // User port is not implemented. All pins are high if nothing is connected.
     return 0xFF;
 }
 
 void
-CIA2::updatePB()
+CIAB::updatePB()
 {
     PB = (portBinternal() & DDRB) | (portBexternal() & ~DDRB);
-}
-
-void
-CIA2::pokePA(uint8_t value)
-{
-    CIA::pokePA(value);
-    
-    // PA0 (VA14) and PA1 (VA15) determine the memory bank seen by VICII
-}
-
-void
-CIA2::pokeDDRA(uint8_t value)
-{
-    CIA::pokeDDRA(value);
 }
 

@@ -73,6 +73,9 @@ Amiga::Amiga()
     registerSubcomponents(vector<HardwareComponent *> {
         
         &eventHandler,
+        &cpu,
+        &ciaA,
+        &ciaB,
         &mem,
         &dma,
         &denise,
