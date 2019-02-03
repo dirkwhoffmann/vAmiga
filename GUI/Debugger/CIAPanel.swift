@@ -15,10 +15,45 @@ extension Inspector {
         get { return ciaSelector.indexOfSelectedItem }
     }
     
-    func refreshCIA() {
+    func refreshCIA(everything: Bool) {
         
         guard let amiga = amigaProxy else { return }
-        let info = selectedCia == 0 ? amiga.ciaA.getInfo() : amiga.ciaB.getInfo()
+        let ciaA = selectedCia == 0
+        let info = ciaA ? amiga.ciaA.getInfo() : amiga.ciaB.getInfo()
+        
+        if everything {
+            
+            // Update port bit labels
+            ciaPA7.title = "PA7: " + (ciaA ? "GAME1" : "/DTR")
+            ciaPA6.title = "PA6: " + (ciaA ? "GAME0" : "/RTS")
+            ciaPA5.title = "PA5: " + (ciaA ? "/RDY"  : "/CD")
+            ciaPA4.title = "PA4: " + (ciaA ? "/TK0"  : "/CTS")
+            ciaPA3.title = "PA3: " + (ciaA ? "/WPRO" : "/DSR")
+            ciaPA2.title = "PA2: " + (ciaA ? "/CHNG" : "SEL")
+            ciaPA1.title = "PA1: " + (ciaA ? "LED"   : "POUT")
+            ciaPA0.title = "PA0: " + (ciaA ? "OVL"   : "BUSY")
+
+            ciaPB7.title = "PB7: " + (ciaA ? "DATA7" : "/MTR")
+            ciaPB6.title = "PB6: " + (ciaA ? "DATA6" : "/SEL3")
+            ciaPB5.title = "PB5: " + (ciaA ? "DATA5" : "/SEL2")
+            ciaPB4.title = "PB4: " + (ciaA ? "DATA4" : "/SEL1")
+            ciaPB3.title = "PB3: " + (ciaA ? "DATA3" : "/SEL0")
+            ciaPB2.title = "PB2: " + (ciaA ? "DATA2" : "/SIDE")
+            ciaPB1.title = "PB1: " + (ciaA ? "DATA1" : "DIR")
+            ciaPB0.title = "PB0: " + (ciaA ? "DATA0" : "/STEP")
+            
+            // Update number formatters
+            let hex = true
+            let fmt8 = MyFormatter.init(radix: (hex ? 16 : 10), min: 0, max: 0xFF)
+            let fmt16 = MyFormatter.init(radix: (hex ? 16 : 10), min: 0, max: 0xFFFF)
+            assignFormatter(fmt8,
+                            [ciaPRA, ciaDDRA, ciaPRB, ciaDDRB,
+                             ciaCntHi, ciaCntMid, ciaCntLo,
+                             ciaAlarmHi, ciaAlarmMid, ciaAlarmLo,
+                             ciaIMR, ciaICR, ciaSDR])
+            assignFormatter(fmt16,
+                            [ciaTA, ciaTAlatch, ciaTB, ciaTBlatch])
+        }
         
         ciaTA.intValue = Int32(info.timerA.count)
         ciaTAlatch.intValue = Int32(info.timerA.latch)
@@ -82,11 +117,15 @@ extension Inspector {
         ciaSDRbinary.intValue = Int32(info.sdr)
         
         let idlePercentage = Int(info.idlePercentage * 100)
-        ciaIdleCycles.integerValue = Int(info.idleCycles)
+        track("Idle since \(info.idleCycles)")
+        ciaIdleCycles.stringValue = "\(info.idleCycles) cycles"
         ciaIdleLevel.integerValue = idlePercentage
         ciaIdleLevelText.stringValue = "\(idlePercentage) %"
+    }
 
-   
+    @IBAction func selectCIAAction(_ sender: Any!) {
+        
+        refreshCIA(everything: true)
     }
 }
 

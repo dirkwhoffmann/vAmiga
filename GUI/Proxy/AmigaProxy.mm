@@ -656,6 +656,9 @@ struct ADFFileWrapper { ADFFile *adf; };
 @implementation AmigaProxy
 
 @synthesize wrapper;
+@synthesize cpu;
+@synthesize ciaA;
+@synthesize ciaB;
 @synthesize mem;
 @synthesize dma;
 @synthesize denise;
@@ -679,6 +682,9 @@ struct ADFFileWrapper { ADFFile *adf; };
     wrapper->amiga = amiga;
     
     // Create sub proxys
+    cpu = [[CPUProxy alloc] initWithCPU:&amiga->cpu];
+    ciaA = [[CIAProxy alloc] initWithCIA:&amiga->ciaA];
+    ciaB = [[CIAProxy alloc] initWithCIA:&amiga->ciaB];
     mem = [[MemProxy alloc] initWithMemory:&amiga->mem];
     dma = [[DMAControllerProxy alloc] initWithDMAController:&amiga->dma];
     denise = [[DeniseProxy alloc] initWithDenise:&amiga->denise];

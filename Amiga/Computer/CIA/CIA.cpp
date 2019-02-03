@@ -23,7 +23,8 @@ CIA::CIA()
     // Register snapshot items
     registerSnapshotItems(vector<SnapshotItem> {
         
-        { &currentCIACycle,  sizeof(currentCIACycle),  0 },
+        { &currentCycle,     sizeof(currentCycle),     0 },
+        { &idleCycles,       sizeof(idleCycles),       0 },
         { &counterA,         sizeof(counterA),         0 },
         { &latchA,           sizeof(latchA),           0 },
         { &counterB,         sizeof(counterB),         0 },
@@ -256,19 +257,19 @@ CIA::spypeek(uint16_t addr)
             
         case 0x04: // CIA_TIMER_A_LOW
             running = delay & CIACountA3;
-            return LO_BYTE(counterA - (running ? (uint16_t)idleCounter() : 0));
+            return LO_BYTE(counterA - (running ? (uint16_t)idle() : 0));
             
         case 0x05: // CIA_TIMER_A_HIGH
             running = delay & CIACountA3;
-            return HI_BYTE(counterA - (running ? (uint16_t)idleCounter() : 0));
+            return HI_BYTE(counterA - (running ? (uint16_t)idle() : 0));
             
         case 0x06: // CIA_TIMER_B_LOW
             running = delay & CIACountB3;
-            return LO_BYTE(counterB - (running ? (uint16_t)idleCounter() : 0));
+            return LO_BYTE(counterB - (running ? (uint16_t)idle() : 0));
             
         case 0x07: // CIA_TIMER_B_HIGH
             running = delay & CIACountB3;
-            return HI_BYTE(counterB - (running ? (uint16_t)idleCounter() : 0));
+            return HI_BYTE(counterB - (running ? (uint16_t)idle() : 0));
             
         case 0x08: // CIA_EVENT_0_7
             return tod.getCounterLo();
@@ -682,6 +683,8 @@ CIA::getInfo()
     info.timerB.pbout = CRB & 0x02;
     info.timerB.oneShot = CRB & 0x08;
 
+    info.sdr = SDR;
+    
     info.icr = icr;
     info.imr = imr;
     info.intLine = INT;
@@ -689,18 +692,22 @@ CIA::getInfo()
     info.cnt = tod.getInfo();
     info.cntIntEnable = icr & 0x04;
     
+    debug("idleCycles = %d\n", idle());
+    info.idleCycles = idle();
+    info.idlePercentage = (double)idleTotal() / (double)currentCycle;
+  
     return info;
 }
 
 void
-CIA::executeUntil(Cycle targetCycle)
+CIA::executeUntil(Cycle targetMasterCycle)
 {
-    CIACycle targetCIACycle = AS_CIA_CYCLE(targetCycle);
+    CIACycle targetCycle = AS_CIA_CYCLE(targetMasterCycle);
 
     // Check if we need to wake up the CIA
     if (isSleeping()) {
-        if (targetCIACycle < wakeUpCycle) {
-            currentCIACycle = targetCIACycle;
+        if (targetCycle < wakeUpCycle) {
+            currentCycle = targetCycle;
             return;
         } else {
             wakeUp();
@@ -708,16 +715,16 @@ CIA::executeUntil(Cycle targetCycle)
     }
     
     // The CIA is awake. Let's execute the remaining cycles
-    while (currentCIACycle < targetCIACycle) {
+    while (currentCycle < targetCycle) {
             executeOneCycle();
     }
-    assert(currentCIACycle == targetCIACycle);
+    assert(currentCycle == targetCycle);
 }
 
 void
 CIA::executeOneCycle()
 {
-    currentCIACycle++;
+    currentCycle++;
     
     uint64_t oldDelay = delay;
     uint64_t oldFeed  = feed;
@@ -1034,15 +1041,15 @@ CIA::sleep()
     assert(sleepCycle == UINT64_MAX);
     
     // Determine maximum possible sleep cycle based on timer counts
-    uint64_t sleepA = (counterA > 2) ? (currentCIACycle + counterA - 1) : 0;
-    uint64_t sleepB = (counterB > 2) ? (currentCIACycle + counterB - 1) : 0;
+    uint64_t sleepA = (counterA > 2) ? (currentCycle + counterA - 1) : 0;
+    uint64_t sleepB = (counterB > 2) ? (currentCycle + counterB - 1) : 0;
     
     // CIAs with stopped timers can sleep forever
     if (!(feed & CIACountA0)) sleepA = UINT64_MAX;
     if (!(feed & CIACountB0)) sleepB = UINT64_MAX;
     
     // Take some rest
-    sleepCycle = currentCIACycle;
+    sleepCycle = currentCycle;
     wakeUpCycle = MIN(sleepA, sleepB);
 }
 
@@ -1050,10 +1057,11 @@ void
 CIA::wakeUp()
 {
     // Calculate the number of missed cycles
-    CIACycle missedCycles = (int64_t)(currentCIACycle - sleepCycle);
+    CIACycle missedCycles = (int64_t)(currentCycle - sleepCycle);
     
     // Make up for missed cycles
     if (missedCycles > 0) {
+        
         if (feed & CIACountA0) {
             assert(counterA >= missedCycles);
             counterA -= missedCycles;
@@ -1062,6 +1070,8 @@ CIA::wakeUp()
             assert(counterB >= missedCycles);
             counterB -= missedCycles;
         }
+        
+        idleCycles += missedCycles;
     }
     
     // Stay awake
@@ -1082,6 +1092,7 @@ CIAA::CIAA()
 void 
 CIAA::_dump()
 {
+    CIA::_dump();
 }
 
 void 
@@ -1192,6 +1203,7 @@ CIAB::_reset()
 void 
 CIAB::_dump()
 {
+    CIA::_dump();
 }
 
 void 

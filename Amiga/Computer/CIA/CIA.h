@@ -81,7 +81,12 @@ protected:
     /* Current CIA cycle.
      * So far, the CIA has been run for this many cycles.
      */
-    CIACycle currentCIACycle;
+    CIACycle currentCycle;
+  
+    /* Total number of skipped cycles.
+     * This value is used by the debugger, only.
+     */
+    CIACycle idleCycles;
     
 	// Timer A counter
 	uint16_t counterA;
@@ -421,8 +426,11 @@ public:
     // Returns true if the CIA is awake.
     bool isAwake() { return sleepCycle == UINT64_MAX; }
     
-    // Returns the number of currently skipped cycles.
-    CIACycle idleCounter() { return isAwake() ? 0 : currentCIACycle - sleepCycle; }
+    // The CIA is idle since this number of cycles.
+    CIACycle idle() { return isAwake() ? 0 : currentCycle - sleepCycle; }
+
+    // Total number of cycles the CIA was idle.
+    CIACycle idleTotal() { return idleCycles; }
 };
 
 

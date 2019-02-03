@@ -33,10 +33,14 @@ struct MemColors {
 
 extension Inspector {
     
-    func refreshMemory() {
+    func refreshMemory(everything: Bool) {
         
         track("Refreshing memory inspector tab")
-        refreshMemoryLayout()
+        
+        if everything {
+            refreshMemoryLayout()
+        }
+        
         memTableView.refresh()
     }
     

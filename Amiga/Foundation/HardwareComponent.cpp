@@ -41,11 +41,6 @@ HardwareComponent::powerOn()
             c->powerOn();
         }
         
-        // Power on this component
-        debug(2, "Powered on\n");
-        power = true;
-        _powerOn();
-        
         // Zero out all snapshot items that are not marked as persistent.
         for (SnapshotItem i : snapshotItems) {
             if ((i.flags & PERSISTANT) == 0) memset(i.data, 0, i.size);
@@ -58,6 +53,10 @@ HardwareComponent::powerOn()
                 assert(false);
             }
         }
+        
+        // Power on this component
+        power = true;
+        _powerOn();
     }
 }
 

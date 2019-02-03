@@ -105,9 +105,6 @@ class Inspector : NSWindowController
     @IBOutlet weak var ciaIdleCycles: NSTextField!
     @IBOutlet weak var ciaIdleLevelText: NSTextField!
     @IBOutlet weak var ciaIdleLevel: NSLevelIndicator!
-
-    // Currently shown memory bank
-    // var bank = 0
     
     // Factory method
     static func make() -> Inspector? {
@@ -119,12 +116,31 @@ class Inspector : NSWindowController
         
         track()
         
+        // Create and assign binary number formatter
+        let bF = MyFormatter.init(radix: 2, min: 0, max: 255)
+        ciaPRAbinary.formatter = bF
+        ciaDDRAbinary.formatter = bF
+        ciaPRBbinary.formatter = bF
+        ciaDDRBbinary.formatter = bF
+        ciaSDRbinary.formatter = bF
+        ciaICRbinary.formatter = bF
+        ciaIMRbinary.formatter = bF
+        
+        // Refresh the currently shown panel
         refresh()
-        refreshMemoryLayout()
+    }
+    
+    // Assigns a number formatter to a control
+    func assignFormatter(_ formatter: Formatter, _ controls: [NSControl]) {
+        for control in controls {
+            control.abortEditing()
+            control.formatter = formatter
+            control.needsDisplay = true
+        }
     }
     
     // Updates the currently shown panel
-    func refresh() {
+    func refresh(everything: Bool = true) {
         
         track()
         if let id = debugPanel.selectedTabViewItem?.label {
@@ -134,11 +150,11 @@ class Inspector : NSWindowController
                 
             case "CIA":
                 track()
-                break
+                refreshCIA(everything: everything)
                 
             case "Memory":
                 track()
-                refreshMemory()
+                refreshMemory(everything: everything)
                 
             default:
                 break

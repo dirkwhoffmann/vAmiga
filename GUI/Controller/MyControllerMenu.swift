@@ -121,7 +121,7 @@ extension MyController : NSMenuItemValidation {
              #selector(MyController.stepIntoAction(_:)),
              #selector(MyController.stepOverAction(_:)),
              #selector(MyController.stopAndGoAction(_:)):
-            return amiga.isPaused();
+            return amiga.isPaused()
             
         case #selector(MyController.traceAction(_:)),
              #selector(MyController.dumpStateAction(_:)):
@@ -503,5 +503,42 @@ extension MyController : NSMenuItemValidation {
     @IBAction func dumpStateAction(_ sender: Any!) {
         // Dummy target to make menu item validatable
     }
-  
+ 
+    @IBAction func dumpAmigaAction(_ sender: Any!) {
+        amiga.dump()
+    }
+    @IBAction func dumpCPUAction(_ sender: Any!) {
+        amiga.cpu.dump()
+    }
+    @IBAction func dumpCIAAAction(_ sender: Any!) {
+        amiga.ciaA.dump()
+    }
+    @IBAction func dumpCIABAction(_ sender: Any!) {
+        amiga.ciaB.dump()
+    }
+    @IBAction func dumpMemoryAction(_ sender: Any!) {
+        amiga.mem.dump()
+    }
+    @IBAction func dumpDf0Action(_ sender: Any!) {
+        amiga.df0.dump()
+    }
+    @IBAction func dumpDf1Action(_ sender: Any!) {
+        amiga.df1.dump()
+    }
+    @IBAction func dumpPaulaAction(_ sender: Any!) {
+        amiga.paula.dump()
+    }
+    @IBAction func dumpDeniseAction(_ sender: Any!) {
+        amiga.denise.dump()
+    }
+    @IBAction func dumpKeyboardAction(_ sender: Any!) {
+        amiga.keyboard.dump()
+    }
+    @IBAction func dumpControlPort1Action(_ sender: Any!) {
+        amiga.controlPort1.dump()
+    }
+    @IBAction func dumpControlPort2Action(_ sender: Any!) {
+        amiga.controlPort2.dump()
+    }
+
 }
