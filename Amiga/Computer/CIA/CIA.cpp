@@ -163,19 +163,19 @@ CIA::peek(uint16_t addr)
 			
         case 0x08: // EVENT_0_7
 			
-			result = tod.getTodTenth();
+			result = tod.getCounterLo();
             tod.defreeze();
 			break;
 		
         case 0x09: // EVENT_8_15
 			
-			result = tod.getTodSeconds();
+			result = tod.getCounterMid();
 			break;
 			
         case 0x0A: // EVENT_16_23
 			
             tod.freeze();
-			result = tod.getTodMinutes();
+			result = tod.getCounterHi();
 			break;
 			
         case 0x0B: // UNUSED
@@ -271,13 +271,13 @@ CIA::spypeek(uint16_t addr)
             return HI_BYTE(counterB - (running ? (uint16_t)idleCounter() : 0));
             
         case 0x08: // CIA_EVENT_0_7
-            return tod.getTodTenth();
+            return tod.getCounterLo();
             
         case 0x09: // CIA_EVENT_8_15
-            return tod.getTodSeconds();
+            return tod.getCounterMid();
             
         case 0x0A: // CIA_EVENT_16_23
-            return tod.getTodMinutes();
+            return tod.getCounterHi();
             
         case 0x0B: // UNUSED
             return 0;
@@ -378,9 +378,9 @@ CIA::poke(uint16_t addr, uint8_t value)
         case 0x08: // CIA_EVENT_0_7
             
 			if (CRB & 0x80) {
-				tod.setAlarmTenth(value);
+				tod.setAlarmLo(value);
 			} else { 
-				tod.setTodTenth(value);
+				tod.setCounterLo(value);
                 tod.cont();
 			}
 			return;
@@ -388,18 +388,18 @@ CIA::poke(uint16_t addr, uint8_t value)
         case 0x09: // CIA_EVENT_8_15
             
             if (CRB & 0x80) {
-				tod.setAlarmSeconds(value);
+				tod.setAlarmMid(value);
             } else {
-				tod.setTodSeconds(value);
+				tod.setCounterMid(value);
             }
 			return;
 			
         case 0x0A: // CIA_EVENT_16_23
             
             if (CRB & 0x80) {
-				tod.setAlarmMinutes(value);
+				tod.setAlarmHi(value);
             } else {
-				tod.setTodMinutes(value);
+				tod.setCounterHi(value);
                 tod.stop();
             }
 			return;
@@ -686,8 +686,8 @@ CIA::getInfo()
     info.imr = imr;
     info.intLine = INT;
     
-    info.tod = tod.getInfo();
-    info.todIntEnable = icr & 0x04;
+    info.cnt = tod.getInfo();
+    info.cntIntEnable = icr & 0x04;
     
     return info;
 }

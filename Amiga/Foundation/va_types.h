@@ -71,18 +71,18 @@ inline const char *modelName(AmigaModel model)
 
 typedef union {
     struct {
-        uint8_t tenth;
-        uint8_t seconds;
-        uint8_t minutes;
+        uint8_t hi;
+        uint8_t mid;
+        uint8_t lo;
     };
     uint32_t value;
-} TimeOfDay;
+} Counter24;
 
 typedef struct {
-    TimeOfDay time;
-    TimeOfDay latch;
-    TimeOfDay alarm;
-} TODInfo;
+    Counter24 value;
+    Counter24 latch;
+    Counter24 alarm;
+} CounterInfo;
 
 typedef struct {
     struct {
@@ -111,11 +111,14 @@ typedef struct {
         bool pbout;
         bool oneShot;
     } timerB;
+    uint8_t sdr;
     uint8_t icr;
     uint8_t imr;
     bool intLine;
-    TODInfo tod;
-    bool todIntEnable;
+    CounterInfo cnt;
+    bool cntIntEnable;
+    uint64_t idleCycles;
+    float idlePercentage; 
 } CIAInfo;
 
 

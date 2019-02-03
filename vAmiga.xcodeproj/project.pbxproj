@@ -551,11 +551,11 @@
 			isa = PBXGroup;
 			children = (
 				50DED6B02202EC3100B8195F /* Inspector.swift */,
+				508FDFEE21EA22780043D0E9 /* CIAPanel.swift */,
 				508FE00221EA227A0043D0E9 /* MemoryPanel.swift */,
 				50C50B85220479E000D796DA /* BankTableView.swift */,
 				508FDFF821EA22790043D0E9 /* MemTableView.swift */,
 				508FE00421EA227A0043D0E9 /* Debugger.swift */,
-				508FDFEE21EA22780043D0E9 /* CIAPanel.swift */,
 				508FDFF621EA22790043D0E9 /* Formatter.swift */,
 				508FDFF021EA22780043D0E9 /* WaveformView.swift */,
 				508FDFEF21EA22780043D0E9 /* AudioPanel.swift */,

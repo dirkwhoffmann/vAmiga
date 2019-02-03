@@ -36,23 +36,20 @@ TOD::_powerOn()
 void 
 TOD::_dump()
 {
-	msg("                Counter : %02X:%02X:%02X\n",
-        tod.minutes, tod.seconds, tod.tenth);
-	msg("                  Alarm : %02X:%02X:%02X\n",
-        alarm.minutes, alarm.seconds, alarm.tenth);
-	msg("                  Latch : %02X:%02X:%02X\n",
-        latch.minutes, latch.seconds, latch.tenth);
-	msg("                 Frozen : %s\n", frozen ? "yes" : "no");
-	msg("                Stopped : %s\n", stopped ? "yes" : "no");
+	msg("           Counter : %02X:%02X:%02X\n", tod.hi, tod.mid, tod.lo);
+	msg("             Alarm : %02X:%02X:%02X\n", alarm.hi, alarm.mid, alarm.lo);
+	msg("             Latch : %02X:%02X:%02X\n", latch.hi, latch.mid, latch.lo);
+	msg("            Frozen : %s\n", frozen ? "yes" : "no");
+	msg("           Stopped : %s\n", stopped ? "yes" : "no");
 	msg("\n");
 }
 
-TODInfo
+CounterInfo
 TOD::getInfo()
 {
-    TODInfo info;
+    CounterInfo info;
     
-    info.time = tod;
+    info.value = tod;
     info.latch = latch;
     info.alarm = alarm;
     
@@ -65,9 +62,9 @@ TOD::increment()
     if (stopped)
         return;
     
-    if (++tod.tenth == 0) {
-        if (++tod.seconds == 0) {
-            ++tod.minutes;
+    if (++tod.lo == 0) {
+        if (++tod.mid == 0) {
+            ++tod.hi;
         }
     }
     

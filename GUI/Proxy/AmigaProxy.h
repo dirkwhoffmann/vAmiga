@@ -68,8 +68,8 @@ struct AmigaFileWrapper;
 
 @property (readonly) struct AmigaWrapper *wrapper;
 @property (readonly) CPUProxy *cpu;
-@property (readonly) MemProxy *ciaA;
-@property (readonly) MemProxy *ciaB;
+@property (readonly) CIAProxy *ciaA;
+@property (readonly) CIAProxy *ciaB;
 @property (readonly) MemProxy *mem;
 @property (readonly) DMAControllerProxy *dma;
 @property (readonly) DeniseProxy *denise;
