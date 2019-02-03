@@ -12,6 +12,8 @@
 #import "vAmiga-Swift.h"
 
 struct AmigaWrapper { Amiga *amiga; };
+struct CPUWrapper { CPU *cpu; };
+struct CIAWrapper { CIA *cia; };
 struct MemWrapper { AmigaMemory *mem; };
 struct DMAControllerWrapper { DMAController *dmaController; };
 struct DeniseWrapper { Denise *denise; };
@@ -22,6 +24,77 @@ struct DiskControllerWrapper { DiskController *controller; };
 struct AmigaDriveWrapper { AmigaDrive *drive; };
 struct AmigaFileWrapper { AmigaFile *file; };
 struct ADFFileWrapper { ADFFile *adf; };
+
+
+//
+// CPU proxy
+//
+
+@implementation CPUProxy
+
+// Constructing
+- (instancetype) initWithCPU:(CPU *)cpu
+{
+    if (self = [super init]) {
+        wrapper = new CPUWrapper();
+        wrapper->cpu = cpu;
+    }
+    return self;
+}
+
+/*
+- (CPUInfo) getInfo
+{
+    return wrapper->cpu->getInfo();
+}
+*/
+- (void) dump
+{
+    wrapper->cpu->dump();
+}
+- (BOOL) tracing
+{
+    return wrapper->cpu->tracingEnabled();
+}
+- (void) setTracing:(BOOL)b
+{
+    b ? wrapper->cpu->startTracing() : wrapper->cpu->stopTracing();
+}
+
+@end
+
+
+//
+// CIA proxy
+//
+
+@implementation CIAProxy
+
+// Constructing
+- (instancetype) initWithCIA:(CIA *)cia
+{
+    if (self = [super init]) {
+        wrapper = new CIAWrapper();
+        wrapper->cia = cia;
+    }
+    return self;
+}
+
+- (CIAInfo) getInfo
+{
+    return wrapper->cia->getInfo();
+}
+- (void) dump
+{
+    wrapper->cia->dump();
+}
+- (void) poke:(uint16_t)addr value:(uint8_t)value {
+    wrapper->cia->amiga->suspend();
+    wrapper->cia->poke(addr, value);
+    wrapper->cia->amiga->resume();
+}
+
+@end
 
 
 //

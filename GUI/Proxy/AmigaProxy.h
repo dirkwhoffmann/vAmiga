@@ -13,6 +13,8 @@
 #import "va_std.h"
 
 // Forward declarations
+@class CPUProxy;
+@class CIAProxy;
 @class MemProxy;
 @class DMAControllerProxy;
 @class DeniseProxy;
@@ -29,6 +31,8 @@
  * We wrap classes into normal C structs to avoid any reference to C++.
  */
 struct AmigaWrapper;
+struct CPUWrapper;
+struct CIAWrapper;
 struct MemWrapper;
 struct DMAControllerWrapper;
 struct DeniseWrapper;
@@ -47,6 +51,9 @@ struct AmigaFileWrapper;
     
     struct AmigaWrapper *wrapper;
     
+    CPUProxy *cpu;
+    CIAProxy *ciaA;
+    CIAProxy *ciaB;
     MemProxy *mem;
     DMAControllerProxy *dma;
     DeniseProxy *denise;
@@ -60,6 +67,9 @@ struct AmigaFileWrapper;
 }
 
 @property (readonly) struct AmigaWrapper *wrapper;
+@property (readonly) CPUProxy *cpu;
+@property (readonly) MemProxy *ciaA;
+@property (readonly) MemProxy *ciaB;
 @property (readonly) MemProxy *mem;
 @property (readonly) DMAControllerProxy *dma;
 @property (readonly) DeniseProxy *denise;
@@ -81,7 +91,6 @@ struct AmigaFileWrapper;
 
 - (void) powerOn;
 - (void) powerOff;
-// - (void) powerOnOrOff;
 - (void) reset;
 - (void) ping;
 - (void) dump;
@@ -167,6 +176,38 @@ struct AmigaFileWrapper;
 
 - (void) deleteAutoSnapshot:(NSInteger)nr;
 - (void) deleteUserSnapshot:(NSInteger)nr;
+
+@end
+
+
+//
+// CPU Proxy
+//
+
+@interface CPUProxy : NSObject {
+    
+    struct CPUWrapper *wrapper;
+}
+
+- (void) dump;
+- (BOOL) tracing;
+- (void) setTracing:(BOOL)b;
+
+@end
+
+
+//
+// CIA Proxy
+//
+
+@interface CIAProxy : NSObject {
+    
+    struct CIAWrapper *wrapper;
+}
+
+- (CIAInfo) getInfo;
+- (void) dump;
+- (void) poke:(uint16_t)addr value:(uint8_t)value;
 
 @end
 
