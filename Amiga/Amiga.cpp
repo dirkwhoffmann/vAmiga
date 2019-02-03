@@ -115,9 +115,23 @@ Amiga::Amiga()
 
 Amiga::~Amiga()
 {
-    debug(1, "Destroying Amiga[%p]\n", this);
+    debug("Destroying Amiga[%p]\n", this);
     powerOff();
+    
+    if (this == activeAmiga) {
+        debug("Stop being the active emulator instance\n");
+        activeAmiga = NULL;
+    }
 }
+
+void
+Amiga::makeActiveInstance()
+{
+    activeAmiga = this;
+    
+    // TODO: Add code to pull and put the context of the Musashi CPU in and out.
+}
+
 
 bool
 Amiga::configureModel(AmigaModel model)
@@ -292,13 +306,16 @@ Amiga::_powerOn()
     mem.loadKickRom(kickRom);
     
     masterClock = 0;
+    
+    m68k_pulse_reset();
+    
     putMessage(MSG_POWER_ON);
 }
 
 void
 Amiga::_powerOff()
 {
-    debug(1, "Power off");
+    debug(1, "Power off\n");
     
     putMessage(MSG_POWER_OFF);
 }

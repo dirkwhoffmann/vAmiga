@@ -258,7 +258,13 @@ AmigaMemory::peek8(uint32_t addr)
 uint16_t
 AmigaMemory::peek16(uint32_t addr)
 {
-    return HI_LO(peek8(addr), peek8(addr + 1));
+    return HI_LO(peek8(addr), peek8(addr+1));
+}
+
+uint32_t
+AmigaMemory::peek32(uint32_t addr)
+{
+    return HI_HI_LO_LO(peek8(addr), peek8(addr+1), peek8(addr+2), peek8(addr+3));
 }
 
 uint8_t
@@ -273,18 +279,11 @@ AmigaMemory::spypeek16(uint32_t addr)
     assert(is_uint24_t(addr));
     return peek16(addr); 
 }
-
-const char *
-AmigaMemory::ascii(uint32_t addr)
+uint32_t
+AmigaMemory::spypeek32(uint32_t addr)
 {
     assert(is_uint24_t(addr));
-    
-    for (unsigned i = 0; i < 16; i++) {
-        uint8_t value = peek8(addr + i);
-        str[i] = isprint(value) ? value : '.';
-    }
-    str[16] = 0;
-    return str;
+    return peek32(addr);
 }
 
 void
@@ -298,4 +297,23 @@ AmigaMemory::poke16(uint32_t addr, uint16_t value)
 {
     assert(is_uint24_t(addr));
     debug("Poking %04X to %06X.", value, addr);
+}
+void
+AmigaMemory::poke32(uint32_t addr, uint32_t value)
+{
+    assert(is_uint24_t(addr));
+    debug("Poking %04X to %06X.", value, addr);
+}
+
+const char *
+AmigaMemory::ascii(uint32_t addr)
+{
+    assert(is_uint24_t(addr));
+    
+    for (unsigned i = 0; i < 16; i++) {
+        uint8_t value = peek8(addr + i);
+        str[i] = isprint(value) ? value : '.';
+    }
+    str[16] = 0;
+    return str;
 }

@@ -34,6 +34,12 @@
 #include "AmigaSnapshot.h"
 #include "ADFFile.h"
 
+// Musashi CPU
+extern "C" {
+#include "m68k.h"
+}
+
+extern Amiga *activeAmiga;
 
 /* A complete virtual Amiga
  * This class is the most prominent one of all. To run the emulator, it is
@@ -199,6 +205,12 @@ public:
     Amiga();
     ~Amiga();
 
+    /* Makes this Amiga the active emulator instance
+     * Calling this function binds the CPU to this emulator instance
+     */
+    void makeActiveInstance(); 
+    
+    
     //
     // Configuring the emulated machine
     //

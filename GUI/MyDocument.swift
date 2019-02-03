@@ -64,6 +64,7 @@ class MyDocument : NSDocument {
         
         // Create emulator instance
         amiga = AmigaProxy()
+        amiga.makeActiveInstance()
         
         // Install the AROS Kickstart replacement per default
         amiga.loadKickRom(fromBuffer: NSDataAsset(name: "aros.rom")?.data)

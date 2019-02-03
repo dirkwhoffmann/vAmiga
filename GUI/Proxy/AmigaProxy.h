@@ -82,7 +82,7 @@ struct AmigaFileWrapper;
 @property (readonly) AmigaDriveProxy *df1;
 
 
-// Called when quitting the app
+- (void) makeActiveInstance;
 - (void) kill;
 
 - (BOOL) releaseBuild;
