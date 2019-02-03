@@ -12,6 +12,7 @@
 
 #include "HardwareComponent.h"
 
+
 //
 // THIS CLASS IS A STUB TO MAKE THE VISUAL PROTOTYPE WORK
 //
