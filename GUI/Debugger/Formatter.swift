@@ -30,7 +30,9 @@ class MyFormatter : Formatter {
                 (maxValue < 1000) ? "%03d" :
                 (maxValue < 10000) ? "%04d" :
                 (maxValue < 100000) ? "%05d" :
-                (maxValue < 1000000) ? "%06d" : "???"
+                (maxValue < 1000000) ? "%06d" :
+                (maxValue < 10000000) ? "%07d" :
+                (maxValue < 100000000) ? "%08d" : "???"
 
         } else {
             
@@ -40,7 +42,9 @@ class MyFormatter : Formatter {
                 (maxValue < 0x1000) ? "%03X" :
                 (maxValue < 0x10000) ? "%04X" :
                 (maxValue < 0x100000) ? "%05X" :
-                (maxValue < 0x1000000) ? "%06X" : "???"
+                (maxValue < 0x1000000) ? "%06X" :
+                (maxValue < 0x10000000) ? "%07X" :
+                (maxValue < 0x100000000) ? "%08X" : "???"
         }
   
         super.init()

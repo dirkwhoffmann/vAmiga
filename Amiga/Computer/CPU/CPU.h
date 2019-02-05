@@ -43,6 +43,10 @@ private:
     void _ping() override;
     void _dump() override;
    
+public:
+    
+    // Collects the data shown in the GUI's debug panel
+    CPUInfo getInfo();
     
     //
     // FAKE METHODS FOR THE VISUAL PROTOTYPE (TEMPORARY)
@@ -51,6 +55,8 @@ private:
 public:
     
     uint64_t executeNextInstruction();
+    
+    void disassemble();
     
     
  

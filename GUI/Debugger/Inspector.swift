@@ -17,9 +17,43 @@ class Inspector : NSWindowController
 {
     // Debug panel (Commons)
     @IBOutlet weak var debugPanel: NSTabView!
-    @IBOutlet weak var stopAndGoButton: NSButton!
-    @IBOutlet weak var stepIntoButton: NSButton!
-    @IBOutlet weak var stepOverButton: NSButton!
+    
+    // Debug panel (CPU)
+
+    @IBOutlet weak var cpuPC: NSTextField!
+    @IBOutlet weak var cpuD0: NSTextField!
+    @IBOutlet weak var cpuD1: NSTextField!
+    @IBOutlet weak var cpuD2: NSTextField!
+    @IBOutlet weak var cpuD3: NSTextField!
+    @IBOutlet weak var cpuD4: NSTextField!
+    @IBOutlet weak var cpuD5: NSTextField!
+    @IBOutlet weak var cpuD6: NSTextField!
+    @IBOutlet weak var cpuD7: NSTextField!
+    @IBOutlet weak var cpuA0: NSTextField!
+    @IBOutlet weak var cpuA1: NSTextField!
+    @IBOutlet weak var cpuA2: NSTextField!
+    @IBOutlet weak var cpuA3: NSTextField!
+    @IBOutlet weak var cpuA4: NSTextField!
+    @IBOutlet weak var cpuA5: NSTextField!
+    @IBOutlet weak var cpuA6: NSTextField!
+    @IBOutlet weak var cpuA7: NSTextField!
+    @IBOutlet weak var cpuSSP: NSTextField!
+
+    @IBOutlet weak var cpuT: NSButton!
+    @IBOutlet weak var cpuS: NSButton!
+    @IBOutlet weak var cpuI2: NSButton!
+    @IBOutlet weak var cpuI1: NSButton!
+    @IBOutlet weak var cpuI0: NSButton!
+    @IBOutlet weak var cpuX: NSButton!
+    @IBOutlet weak var cpuN: NSButton!
+    @IBOutlet weak var cpuZ: NSButton!
+    @IBOutlet weak var cpuV: NSButton!
+    @IBOutlet weak var cpuC: NSButton!
+
+    @IBOutlet weak var cpuStopAndGoButton: NSButton!
+    @IBOutlet weak var cpuStepIntoButton: NSButton!
+    @IBOutlet weak var cupStepOverButton: NSButton!
+
     
     // Debug panel (Memory)
     @IBOutlet weak var memSearchField: NSSearchField!
@@ -147,7 +181,11 @@ class Inspector : NSWindowController
             
             track("\(id)")
             switch id {
-                
+
+            case "CPU":
+                track()
+                refreshCPU(everything: everything)
+
             case "CIA":
                 track()
                 refreshCIA(everything: everything)

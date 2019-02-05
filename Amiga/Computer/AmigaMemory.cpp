@@ -110,6 +110,8 @@ AmigaMemory::dealloc()
     dealloc(chipRam, chipRamSize);
     dealloc(slowRam, slowRamSize);
     dealloc(fastRam, fastRamSize);
+
+    updateMemSrcTable();
 }
 
 bool
@@ -165,27 +167,29 @@ AmigaMemory::loadRom(AmigaFile *rom, uint8_t *target, size_t length)
 void
 AmigaMemory::updateMemSrcTable()
 {
-    // Standard layout after booting
+    MemorySource mem_chip = chipRam ? MEM_CHIP : MEM_UNMAPPED;
+    MemorySource mem_boot = bootRom ? MEM_BOOT : MEM_UNMAPPED;
+    MemorySource mem_kick = kickRom ? MEM_KICK : MEM_UNMAPPED;
+
+    // Start from scratch
+    for (unsigned bank = 0; bank < 256; bank++)
+        memSrc[bank] = MEM_UNMAPPED;
+    
+    // Setup standard layout
     struct {
         
         uint8_t from; uint8_t to; MemorySource src;
         
     } layout[6] = {
         
-        { 0x00, 0x19, MEM_CHIP },
+        { 0x00, 0x19, mem_chip },
         { 0xA0, 0xBF, MEM_CIA  },
         { 0xDC, 0xDE, amiga->config.realTimeClock ? MEM_RTC : MEM_UNMAPPED },
         { 0xDF, 0xDF, MEM_OCS },
-        { 0xF8, 0xFB, kickIsWritable ? MEM_BOOT : MEM_KICK },
-        { 0xFC, 0xFF, MEM_KICK }
+        { 0xF8, 0xFB, kickIsWritable ? mem_boot : mem_kick },
+        { 0xFC, 0xFF, mem_kick }
     };
     
-    // Start from scratch
-    for (unsigned bank = 0; bank < 256; bank++) {
-        memSrc[bank] = MEM_UNMAPPED;
-    }
-    
-    // Setup initial configuration
     for (unsigned i = 0; i < 6; i++)
         for (unsigned bank = layout[i].from; bank <= layout[i].to; bank++)
             memSrc[bank] = layout[i].src;

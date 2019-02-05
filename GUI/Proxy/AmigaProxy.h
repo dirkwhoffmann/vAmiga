@@ -190,8 +190,12 @@ struct AmigaFileWrapper;
 }
 
 - (void) dump;
+- (CPUInfo) getInfo;
+
 - (BOOL) tracing;
 - (void) setTracing:(BOOL)b;
+
+- (void) disassemble;
 
 @end
 
@@ -205,8 +209,8 @@ struct AmigaFileWrapper;
     struct CIAWrapper *wrapper;
 }
 
-- (CIAInfo) getInfo;
 - (void) dump;
+- (CIAInfo) getInfo;
 - (void) poke:(uint16_t)addr value:(uint8_t)value;
 
 @end

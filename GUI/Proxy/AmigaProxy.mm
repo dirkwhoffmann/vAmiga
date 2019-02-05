@@ -52,6 +52,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->cpu->dump();
 }
+- (CPUInfo) getInfo
+{
+    return wrapper->cpu->getInfo();
+}
 - (BOOL) tracing
 {
     return wrapper->cpu->tracingEnabled();
@@ -59,6 +63,11 @@ struct ADFFileWrapper { ADFFile *adf; };
 - (void) setTracing:(BOOL)b
 {
     b ? wrapper->cpu->startTracing() : wrapper->cpu->stopTracing();
+}
+
+- (void) disassemble
+{
+    wrapper->cpu->disassemble(); 
 }
 
 @end

@@ -7,7 +7,6 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-
 extension NSColor {
     
     convenience init(r: Int, g: Int, b: Int, a: Int) {
@@ -65,10 +64,7 @@ extension Inspector {
         memChipRamText.stringValue = String.init(format: "%d KB", chipRamKB)
         memFastRamText.stringValue = String.init(format: "%d KB", fastRamKB)
         memSlowRamText.stringValue = String.init(format: "%d KB", slowRamKB)
-
-        
     }
-    
     
     var memLayoutImage : NSImage? {
         get {

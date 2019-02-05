@@ -114,8 +114,55 @@ CPU::_dump()
     
 }
 
+CPUInfo
+CPU::getInfo()
+{
+    CPUInfo info;
+    
+    info.pc = m68k_get_reg(NULL, M68K_REG_PC);
+    
+    info.d[0] = m68k_get_reg(NULL, M68K_REG_D0);
+    info.d[1] = m68k_get_reg(NULL, M68K_REG_D1);
+    info.d[2] = m68k_get_reg(NULL, M68K_REG_D2);
+    info.d[3] = m68k_get_reg(NULL, M68K_REG_D3);
+    info.d[4] = m68k_get_reg(NULL, M68K_REG_D4);
+    info.d[5] = m68k_get_reg(NULL, M68K_REG_D5);
+    info.d[6] = m68k_get_reg(NULL, M68K_REG_D6);
+    info.d[7] = m68k_get_reg(NULL, M68K_REG_D7);
+
+    info.a[0] = m68k_get_reg(NULL, M68K_REG_A0);
+    info.a[1] = m68k_get_reg(NULL, M68K_REG_A1);
+    info.a[2] = m68k_get_reg(NULL, M68K_REG_A2);
+    info.a[3] = m68k_get_reg(NULL, M68K_REG_A3);
+    info.a[4] = m68k_get_reg(NULL, M68K_REG_A4);
+    info.a[5] = m68k_get_reg(NULL, M68K_REG_A5);
+    info.a[6] = m68k_get_reg(NULL, M68K_REG_A6);
+    info.a[7] = m68k_get_reg(NULL, M68K_REG_A7);
+    
+    info.ssp = m68k_get_reg(NULL, M68K_REG_ISP);
+  
+    return info;
+}
+
 uint64_t
 CPU::executeNextInstruction()
 {
     return 7; // Consumed cycles
 }
+
+void
+CPU::disassemble()
+{
+    char str[256];
+    uint32_t pc = m68k_get_reg(NULL, M68K_REG_PC);
+    
+    for (unsigned i = 0; i < 10; i++) {
+        uint32_t length = m68k_disassemble(str, pc, M68K_CPU_TYPE_68000);
+        for (unsigned j = 0; j < length; j += 2) {
+            plainmsg("%04X ", amiga->mem.spypeek16(pc + j));
+        }
+        pc += length;
+        plainmsg(": %s\n", str);
+    }
+}
+
