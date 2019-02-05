@@ -321,3 +321,22 @@ AmigaMemory::ascii(uint32_t addr)
     str[16] = 0;
     return str;
 }
+
+const char *
+AmigaMemory::hex(uint32_t addr, size_t bytes)
+{
+    assert(is_uint24_t(addr));
+    assert(bytes % 2 == 0);
+    assert(bytes <= 32);
+    
+    char *ptr = str;
+    for (unsigned i = 0; i < bytes / 2; i++) {
+        
+        uint16_t value = peek16(addr + i);
+        sprint16x(ptr, value);
+        ptr += 4;
+        *ptr++ = ' ';
+    }
+    *ptr = 0;
+    return str;
+}

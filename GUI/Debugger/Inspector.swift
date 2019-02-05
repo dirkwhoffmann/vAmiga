@@ -19,7 +19,8 @@ class Inspector : NSWindowController
     @IBOutlet weak var debugPanel: NSTabView!
     
     // Debug panel (CPU)
-
+    @IBOutlet weak var instrTableView: InstrTableView!
+    @IBOutlet weak var traceTableView: TraceTableView!
     @IBOutlet weak var cpuPC: NSTextField!
     @IBOutlet weak var cpuD0: NSTextField!
     @IBOutlet weak var cpuD1: NSTextField!

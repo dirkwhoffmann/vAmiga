@@ -15,71 +15,126 @@ class InstrTableView : NSTableView {
     
     var memory = amigaProxy?.mem
     
+    // Display caches
+    var addrInRow  : [Int:UInt32] = [:]
+    var instrInRow : [Int:String] = [:]
+    var dataInRow  : [Int:String] = [:]
+    var rowForAddr : [UInt32:Int] = [:]
+    var hex = true
+    
     override func awakeFromNib() {
         
         delegate = self
         dataSource = self
         target = self
         
-        action = #selector(clickAction(_:))
+        doubleAction = #selector(doubleClickAction(_:))
+    }
+        
+    @IBAction func doubleClickAction(_ sender: Any!) {
+        
+        let sender = sender as! NSTableView
+        let row = sender.selectedRow
+        
+        if let addr = addrInRow[row] {
+            track("Toggling breakpoint at \(addr)")
+            // amigaProxy?.cpu.toggleBreakpoint(instr.addr)
+            reloadData()
+        }
     }
     
-    func refresh() {
+    func disassemble() {
         
-        track()
+        if let pc = amigaProxy?.cpu.getInfo().pc {
+            disassemble(startAddr: pc)
+        }
+    }
+    
+    func disassemble(startAddr: UInt32) {
+        
+        guard let amiga = amigaProxy else { return }
+        
+        var addr = startAddr
+        var buffer = Array<Int8>(repeating: 0, count: 64)
+        
+        instrInRow = [:]
+        addrInRow = [:]
+        rowForAddr = [:]
+        
+        for i in 0...255 {
+            if (addr <= 0xFFFFFF) {
+          
+                let bytes = amiga.cpu.disassemble(&buffer, pc: Int(addr))
+                instrInRow[i] = String.init(cString: buffer)
+                addrInRow[i]  = addr
+                dataInRow[i]  = amiga.mem.hex(Int(addr), bytes: bytes)
+                rowForAddr[addr] = i
+                
+                addr += UInt32(bytes)
+                
+            } else {
+                
+                instrInRow[i] = nil;
+            }
+        }
+        
         reloadData()
     }
     
-    @IBAction func clickAction(_ sender: NSTableView!) {
+    func refresh() {
+    
+        track()
         
-        let row = sender.clickedRow
-        track("\(row)")
+        if let pc = amigaProxy?.cpu.getInfo().pc {
+                
+            if let row = rowForAddr[pc] {
+                
+                // If the requested address is already displayed, we simply
+                // select the corresponding row.
+                scrollRowToVisible(row)
+                selectRowIndexes([row], byExtendingSelection: false)
+                
+            } else {
+                
+                 // If the requested address is not displayed, we update the
+                // whole view and display it in the first row.
+                disassemble(startAddr: pc)
+                scrollRowToVisible(0)
+                selectRowIndexes([0], byExtendingSelection: false)
+            }
+        }
     }
 }
 
 extension InstrTableView : NSTableViewDataSource {
     
-    func numberOfRows(in tableView: NSTableView) -> Int { return 256; }
+    func numberOfRows(in tableView: NSTableView) -> Int {
+        return 256;
+    }
     
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
         
-        return "???"
-        
-        /*
-        switch tableColumn?.identifier.rawValue {
+        // if var instr = instrInRow[row] {
             
-        case "bank":
-            return row
-            
-        case "source":
-            
-            let src = memory?.memSrc(row << 16).rawValue
-            
-            switch (src) {
+            switch(tableColumn?.identifier.rawValue) {
                 
-            case MEM_UNMAPPED.rawValue:
-                return "Unmapped"
-            case MEM_CHIP.rawValue:
-                return "Chip Ram"
-            case MEM_FAST.rawValue:
-                return "Fast Ram"
-            case MEM_CIA.rawValue:
-                return "CIA"
-            case MEM_SLOW.rawValue:
-                return "Slow Ram"
-            case MEM_RTC.rawValue:
-                return "Clock"
-            case MEM_OCS.rawValue:
-                return "OCS"
-            case MEM_KICK.rawValue:
-                return "Kickstart"
+            case "break":
+                if (false) { // c?.c64.cpu.breakpoint(instr.addr))! {
+                    return "⛔"
+                } else {
+                    return " "
+                }
+            case "addr":
+                return addrInRow[row]
+            case "data":
+                return dataInRow[row]
+            case "instr":
+                return instrInRow[row]
             default:
-                return "???"
+                return "?"
             }
-        default:
-            return "???"
-        }
-         */
+        // }
+        // return ""
     }
 }
 
@@ -87,18 +142,15 @@ extension InstrTableView : NSTableViewDelegate {
     
     func tableView(_ tableView: NSTableView, willDisplayCell cell: Any, for tableColumn: NSTableColumn?, row: Int) {
         
-        /*
-        if let cell = cell as? NSTextFieldCell {
+        let cell = cell as! NSTextFieldCell
+        
+        if  let instr = instrInRow[row] {
             
-            let src = memory?.memSrc(row << 16).rawValue
-            switch (src) {
-            case MEM_UNMAPPED.rawValue:
-                cell.textColor = .gray
-            default:
-                cell.textColor = .textColor
+            if (false) { // }  c?.c64.cpu.breakpoint(instr.addr))! {
+                cell.textColor = NSColor.systemRed
+            } else {
+                cell.textColor = NSColor.textColor
             }
         }
-        */
     }
 }
-

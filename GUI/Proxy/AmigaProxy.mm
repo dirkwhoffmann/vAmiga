@@ -65,7 +65,13 @@ struct ADFFileWrapper { ADFFile *adf; };
     b ? wrapper->cpu->startTracing() : wrapper->cpu->stopTracing();
 }
 
-- (void) disassemble
+- (NSInteger) disassemble:(char *)str pc:(NSInteger)pc
+{
+    assert(str != NULL);
+    return m68k_disassemble(str, (unsigned)pc, M68K_CPU_TYPE_68000);
+}
+
+- (void) disassembleTest
 {
     wrapper->cpu->disassemble(); 
 }
@@ -140,12 +146,6 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->mem->spypeek16((uint32_t)addr);
 }
-- (NSString *) ascii:(NSInteger)addr
-{
-    const char *str = wrapper->mem->ascii((uint32_t)addr);
-    return str ? [NSString stringWithUTF8String:str] : NULL;
-}
-
 - (void) poke8:(NSInteger)addr value:(NSInteger)value
 {
     wrapper->mem->poke8((uint32_t)addr, value);
@@ -153,6 +153,16 @@ struct ADFFileWrapper { ADFFile *adf; };
 - (void) poke16:(NSInteger)addr value:(NSInteger)value
 {
     wrapper->mem->poke16((uint32_t)addr, value);
+}
+- (NSString *) ascii:(NSInteger)addr
+{
+    const char *str = wrapper->mem->ascii((uint32_t)addr);
+    return str ? [NSString stringWithUTF8String:str] : NULL;
+}
+- (NSString *) hex:(NSInteger)addr bytes:(NSInteger)bytes
+{
+    const char *str = wrapper->mem->hex((uint32_t)addr, bytes);
+    return str ? [NSString stringWithUTF8String:str] : NULL;
 }
 
 @end

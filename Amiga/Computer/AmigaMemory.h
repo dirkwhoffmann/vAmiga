@@ -52,8 +52,8 @@ public:
      */
     MemorySource memSrc[256];
     
-    // Text storage used by ascii()
-    char str[17];
+    // Used by functions returning string values.
+    char str[256];
     
 public:
     
@@ -142,7 +142,10 @@ public:
     /* Returns 16 bytes of memory as an ASCII string.
      */
     const char *ascii(uint32_t addr);
-    
+ 
+    /* Returns a certain amount of bytes as a string containing hex words.
+     */
+    const char *hex(uint32_t addr, size_t bytes);
 
 };
 

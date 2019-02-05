@@ -24,6 +24,7 @@
 struct timeval t;
 // long tv_base = ((void)gettimeofday(&t,NULL), t.tv_sec);
 
+/*
 void translateToUnicode(const char *petscii, uint16_t *unichars, uint16_t base, size_t max)
 {
     assert(petscii != NULL);
@@ -48,112 +49,11 @@ strlen16(const uint16_t *unichars)
     
     return count;
 }
-
-uint8_t
-petscii2printable(uint8_t c, uint8_t subst)
-{
-    if (c >= 0x20 /*' '*/ && c <= 0x7E /* ~ */) return c;
-    return subst;
-}
-
-uint8_t
-ascii2pet(uint8_t asciichar)
-{
-    if (asciichar == 0x00)
-        return 0x00;
-    
-    asciichar = toupper(asciichar);
-    
-    if (asciichar >= 0x20 && asciichar <= 0x5D) {
-        return asciichar;
-    } else {
-        return ' ';
-    }
-}
-
-void
-ascii2petStr(char *str)
-{
-    assert(str != NULL);
-    for (; *str != 0; str++) {
-        *str = ascii2pet(*str);
-    }
-}
-
-void
-sprint8d(char *s, uint8_t value)
-{
-    for (int i = 2; i >= 0; i--) {
-        uint8_t digit = value % 10;
-        s[i] = '0' + digit;
-        value /= 10;
-    }
-    s[3] = 0;
-}
-
-void
-sprint8x(char *s, uint8_t value)
-{
-    for (int i = 1; i >= 0; i--) {
-        uint8_t digit = value % 16;
-        s[i] = (digit <= 9) ? ('0' + digit) : ('A' + digit - 10);
-        value /= 16;
-    }
-    s[2] = 0;
-}
-
-void
-sprint8b(char *s, uint8_t value)
-{
-    for (int i = 7; i >= 0; i--) {
-        s[i] = (value & 0x01) ? '1' : '0';
-        value >>= 1;
-    }
-    s[8] = 0;
-}
-
-void
-sprint16d(char *s, uint16_t value)
-{
-    for (int i = 4; i >= 0; i--) {
-        uint8_t digit = value % 10;
-        s[i] = '0' + digit;
-        value /= 10;
-    }
-    s[5] = 0;
-}
-
-void
-sprint16x(char *s, uint16_t value)
-{
-    for (int i = 3; i >= 0; i--) {
-        uint8_t digit = value % 16;
-        s[i] = (digit <= 9) ? ('0' + digit) : ('A' + digit - 10);
-        value /= 16;
-    }
-    s[4] = 0;
-}
-
-void
-sprint16b(char *s, uint16_t value)
-{
-    for (int i = 15; i >= 0; i--) {
-        s[i] = (value & 0x01) ? '1' : '0';
-        value >>= 1;
-    }
-    s[16] = 0;
-}
+*/
 
 
-#if 0
-uint64_t 
-usec()
-{
-	struct timeval t;
-	gettimeofday(&t,NULL);	
-	return (uint64_t)1000000*(uint64_t)(t.tv_sec - tv_base) + (uint64_t)t.tv_usec;
-}
-#endif
+
+
 
 uint8_t 
 localTimeSec()

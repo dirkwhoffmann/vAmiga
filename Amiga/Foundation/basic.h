@@ -127,29 +127,14 @@
  *  @note     A maximum of max characters are translated. 
  *            The unicode array will always be terminated by a NULL character.
  */
-void translateToUnicode(const char *petscii, uint16_t *unichars,
-                        uint16_t base, size_t max);
+// void translateToUnicode(const char *petscii, uint16_t *unichars,
+//                         uint16_t base, size_t max);
 
 //! @brief    Returns the number of characters in a null terminated unichar array
-size_t strlen16(const uint16_t *unichars);
+// size_t strlen16(const uint16_t *unichars);
 
-/*! @brief    Converts a PETSCII character to a printable character.
- *  @details  Replaces all unprintable characters by subst.
- */
-uint8_t petscii2printable(uint8_t c, uint8_t subst);
 
-/*! @brief    Converts an ASCII character to a PETSCII character.
- *  @details  This function translates into the unshifted PET character set.
- *            I.e., lower case characters are converted to uppercase characters.
- *  @result   Returns ' ' for ASCII characters with no PETSCII representation.
- */
-uint8_t ascii2pet(uint8_t asciichar);
-
-//! @brief    Converts an ASCII string into a PETSCII string.
-/*! @details  Applies function ascii2pet to all characters of a string.
- */
-void ascii2petStr(char *str);
-
+#if 0
 //! @brief    Writes an uint8_t value into a string in decimal format
 void sprint8d(char *s, uint8_t value);
 
@@ -167,6 +152,7 @@ void sprint16x(char *s, uint16_t value);
 
 //! @brief    Writes an uint16_t value into a string in binary format
 void sprint16b(char *s, uint16_t value);
+#endif
 
 
 //
@@ -256,4 +242,4 @@ int64_t sleepUntil(uint64_t kernelTargetTime, uint64_t kernelEarlyWakeup);
 //
 
 //! @brief    Computes a fingeprint based on the FNV-1a hash algorithm
-uint64_t fnv_1a(uint8_t *addr, size_t size);
+// uint64_t fnv_1a(uint8_t *addr, size_t size);
