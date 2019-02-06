@@ -42,17 +42,26 @@ extension Inspector {
             ciaPB1.title = "PB1: " + (ciaA ? "DATA1" : "DIR")
             ciaPB0.title = "PB0: " + (ciaA ? "DATA0" : "/STEP")
             
-            // Update number formatters
-            let hex = true
-            let fmt8 = MyFormatter.init(radix: (hex ? 16 : 10), min: 0, max: 0xFF)
-            let fmt16 = MyFormatter.init(radix: (hex ? 16 : 10), min: 0, max: 0xFFFF)
-            assignFormatter(fmt8,
-                            [ciaPRA, ciaDDRA, ciaPRB, ciaDDRB,
-                             ciaCntHi, ciaCntMid, ciaCntLo,
-                             ciaAlarmHi, ciaAlarmMid, ciaAlarmLo,
-                             ciaIMR, ciaICR, ciaSDR])
-            assignFormatter(fmt16,
-                            [ciaTA, ciaTAlatch, ciaTB, ciaTBlatch])
+            for (c,f) in [ ciaPRA: fmt8,
+                           ciaDDRA: fmt8,
+                           ciaPRB: fmt8,
+                           ciaDDRB: fmt8,
+                           ciaCntHi: fmt8,
+                           ciaCntMid: fmt8,
+                           ciaCntLo: fmt8,
+                           ciaAlarmHi: fmt8,
+                           ciaAlarmMid: fmt8,
+                           ciaAlarmLo: fmt8,
+                           ciaIMR: fmt8,
+                           ciaICR: fmt8,
+                           ciaSDR: fmt8,
+                           ciaTA: fmt16,
+                           ciaTAlatch: fmt16,
+                           ciaTB: fmt16,
+                           ciaTBlatch: fmt16 ]
+            {
+                assignFormatter(f, c!)
+            }
         }
         
         ciaTA.intValue = Int32(info.timerA.count)

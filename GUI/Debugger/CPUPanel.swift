@@ -18,33 +18,37 @@ extension Inspector {
         
         if everything {
             
-            let hex = true
+            for (c,f) in [ cpuPC: fmt32,
+                           
+                           cpuD0: fmt32,
+                           cpuD1: fmt32,
+                           cpuD2: fmt32,
+                           cpuD3: fmt32,
+                           cpuD4: fmt32,
+                           cpuD5: fmt32,
+                           cpuD6: fmt32,
+                           cpuD7: fmt32,
+                           
+                           cpuA0: fmt32,
+                           cpuA1: fmt32,
+                           cpuA2: fmt32,
+                           cpuA3: fmt32,
+                           cpuA4: fmt32,
+                           cpuA5: fmt32,
+                           cpuA6: fmt32,
+                           cpuA7: fmt32,
+                           
+                           cpuSSP: fmt32 ]
+            {
+                assignFormatter(f, c!)
+            }
             
-            let fmt24 = MyFormatter.init(radix: (hex ? 16 : 10), min: 0, max: 0xFFFFFF)
-            let fmt32 = MyFormatter.init(radix: (hex ? 16 : 10), min: 0, max: 0xFFFFFFFF)
-
-            // Update TextField formatters
+            /*
             assignFormatter(fmt32, [cpuD0, cpuD1, cpuD2, cpuD3, cpuD4, cpuD5, cpuD6, cpuD7])
             assignFormatter(fmt32, [cpuA0, cpuA1, cpuA2, cpuA3, cpuA4, cpuA5, cpuA6, cpuA7])
             assignFormatter(fmt32, [cpuPC, cpuSSP])
+             */
             
-            // Update TableView formatters
-            let columnFormatters = [
-                "addr" : fmt24,
-                // "hex0" : fmt8,
-                // "hex1" : fmt8,
-                // "hex2" : fmt8,
-                // "hex3" : fmt8
-            ]
-            
-            for (column,formatter) in columnFormatters {
-                let columnId = NSUserInterfaceItemIdentifier(rawValue: column)
-                if let tableColumn = instrTableView.tableColumn(withIdentifier: columnId) {
-                    if let cell = tableColumn.dataCell as? NSCell {
-                        cell.formatter = formatter
-                    }
-                }
-            }
         }
 
         cpuPC.integerValue = Int(info.pc)
@@ -82,7 +86,8 @@ extension Inspector {
         cpuV.state  = (flags & 0b0000000000000010 != 0) ? .on : .off
         cpuC.state  = (flags & 0b0000000000000001 != 0) ? .on : .off
 
-        instrTableView.refresh()
+        instrTableView.refresh(everything: everything)
+        breakTableView.refresh(everything: everything)
         
         amigaProxy?.cpu.disassembleTest()
 

@@ -9,9 +9,10 @@
 
 import Foundation
 
-let fmt8 = MyFormatter.init(radix: 16, min: 0, max: 0xFF)
+let fmt8  = MyFormatter.init(radix: 16, min: 0, max: 0xFF)
 let fmt16 = MyFormatter.init(radix: 16, min: 0, max: 0xFFFF)
 let fmt24 = MyFormatter.init(radix: 16, min: 0, max: 0xFFFFFF)
+let fmt32 = MyFormatter.init(radix: 16, min: 0, max: 0xFFFFFFFF)
 
 class Inspector : NSWindowController
 {
@@ -21,6 +22,7 @@ class Inspector : NSWindowController
     // Debug panel (CPU)
     @IBOutlet weak var instrTableView: InstrTableView!
     @IBOutlet weak var traceTableView: TraceTableView!
+    @IBOutlet weak var breakTableView: BreakTableView!
     @IBOutlet weak var cpuPC: NSTextField!
     @IBOutlet weak var cpuD0: NSTextField!
     @IBOutlet weak var cpuD1: NSTextField!
@@ -162,20 +164,25 @@ class Inspector : NSWindowController
         ciaIMRbinary.formatter = bF
         
         // Refresh the currently shown panel
-        refresh()
+        refresh(everything: true)
     }
     
     // Assigns a number formatter to a control
+    func assignFormatter(_ formatter: Formatter, _ control: NSControl) {
+        control.abortEditing()
+        control.formatter = formatter
+        control.needsDisplay = true
+    }
+    /*
     func assignFormatter(_ formatter: Formatter, _ controls: [NSControl]) {
         for control in controls {
-            control.abortEditing()
-            control.formatter = formatter
-            control.needsDisplay = true
+            assignFormatter(formatter, control)
         }
     }
+    */
     
     // Updates the currently shown panel
-    func refresh(everything: Bool = true) {
+    func refresh(everything: Bool) {
         
         track()
         if let id = debugPanel.selectedTabViewItem?.label {
@@ -205,6 +212,6 @@ class Inspector : NSWindowController
 extension Inspector : NSTabViewDelegate {
     
     func tabView(_ tabView: NSTabView, didSelect tabViewItem: NSTabViewItem?) {
-        refresh()
+        refresh(everything: true)
     }
 }

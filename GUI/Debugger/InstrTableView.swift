@@ -14,6 +14,7 @@ class InstrTableView : NSTableView {
     @IBOutlet weak var inspector: Inspector!
     
     var memory = amigaProxy?.mem
+    var cpu = amigaProxy?.cpu
     
     // Display caches
     var addrInRow  : [Int:UInt32] = [:]
@@ -38,7 +39,7 @@ class InstrTableView : NSTableView {
         
         if let addr = addrInRow[row] {
             track("Toggling breakpoint at \(addr)")
-            // amigaProxy?.cpu.toggleBreakpoint(instr.addr)
+            amigaProxy?.cpu.toggleBreakpoint(at: addr)
             reloadData()
         }
     }
@@ -81,9 +82,26 @@ class InstrTableView : NSTableView {
         reloadData()
     }
     
-    func refresh() {
+    func refresh(everything: Bool) {
     
         track()
+        
+        if (everything) {
+        
+            memory = amigaProxy?.mem
+            cpu = amigaProxy?.cpu
+        
+            for (c,f) in ["addr" : fmt24] {
+                let columnId = NSUserInterfaceItemIdentifier(rawValue: c)
+                if let column = tableColumn(withIdentifier: columnId) {
+                    if let cell = column.dataCell as? NSCell {
+                        cell.formatter = f
+                    }
+                }
+            }
+            
+            reloadData()
+        }
         
         if let pc = amigaProxy?.cpu.getInfo().pc {
                 
@@ -114,27 +132,23 @@ extension InstrTableView : NSTableViewDataSource {
     
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
         
-        // if var instr = instrInRow[row] {
+        switch tableColumn?.identifier.rawValue {
             
-            switch(tableColumn?.identifier.rawValue) {
-                
-            case "break":
-                if (false) { // c?.c64.cpu.breakpoint(instr.addr))! {
-                    return "⛔"
-                } else {
-                    return " "
-                }
-            case "addr":
-                return addrInRow[row]
-            case "data":
-                return dataInRow[row]
-            case "instr":
-                return instrInRow[row]
-            default:
-                return "?"
+        case "break":
+            if cpu!.hasBreakpoint(at: addrInRow[row]!) {
+                return "⛔"
+            } else {
+                return " "
             }
-        // }
-        // return ""
+        case "addr":
+            return addrInRow[row]
+        case "data":
+            return dataInRow[row]
+        case "instr":
+            return instrInRow[row]
+        default:
+            return "?"
+        }
     }
 }
 
@@ -144,9 +158,11 @@ extension InstrTableView : NSTableViewDelegate {
         
         let cell = cell as! NSTextFieldCell
         
-        if  let instr = instrInRow[row] {
+        if let addr = addrInRow[row], let c = cpu {
             
-            if (false) { // }  c?.c64.cpu.breakpoint(instr.addr))! {
+            if c.hasConditionalBreakpoint(at: addr) {
+                cell.textColor = NSColor.systemYellow
+            } else if c.hasBreakpoint(at: addr) {
                 cell.textColor = NSColor.systemRed
             } else {
                 cell.textColor = NSColor.textColor

@@ -17,6 +17,7 @@
 // Sub components
 #include "EventHandler.h"
 #include "CPU.h"
+#include "BreakpointManager.h"
 #include "CIA.h"
 #include "AmigaMemory.h"
 #include "DMAController.h"

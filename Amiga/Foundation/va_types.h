@@ -281,6 +281,9 @@ typedef enum
     MSG_WARP_ON,
     MSG_WARP_OFF,
 
+    // CPU
+    MSG_BREAKPOINT,
+    
     // Keyboard
     MSG_MAP_CMD_KEYS,
     MSG_UNMAP_CMD_KEYS,

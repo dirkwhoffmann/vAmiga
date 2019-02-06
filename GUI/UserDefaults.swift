@@ -342,7 +342,7 @@ extension MyController {
                      
                      Keys.joyKeyMap1,
                      Keys.joyKeyMap2
-                     ]
+            ]
         {
             defaults.removeObject(forKey: key)
         }

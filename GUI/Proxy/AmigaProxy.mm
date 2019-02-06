@@ -64,12 +64,53 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     b ? wrapper->cpu->startTracing() : wrapper->cpu->stopTracing();
 }
-
 - (NSInteger) disassemble:(char *)str pc:(NSInteger)pc
 {
     assert(str != NULL);
     return m68k_disassemble(str, (unsigned)pc, M68K_CPU_TYPE_68000);
 }
+- (BOOL) hasBreakpointAt:(uint32_t)addr
+{
+    return wrapper->cpu->hasBreakpointAt(addr);
+}
+- (BOOL) hasConditionalBreakpointAt:(uint32_t)addr
+{
+    return wrapper->cpu->hasConditionalBreakpointAt(addr);
+}
+- (void) toggleBreakpointAt:(uint32_t)addr
+{
+    return wrapper->cpu->toggleBreakpointAt(addr);
+}
+- (NSInteger) numberOfBreakpoints
+{
+    return wrapper->cpu->numberOfBreakpoints();
+}
+- (BOOL) hasCondition:(NSInteger)nr
+{
+    return wrapper->cpu->hasCondition(nr); 
+}
+- (BOOL) hasSyntaxError:(NSInteger)nr
+{
+    return wrapper->cpu->hasSyntaxError(nr);
+}
+- (uint32_t) breakpointAddr:(NSInteger)nr
+{
+    return wrapper->cpu->getBreakpointAddr(nr);
+}
+- (BOOL) setBreakpointAddr:(NSInteger)nr addr:(uint32_t)addr
+{
+    return wrapper->cpu->setBreakpointAddr(nr, addr);
+}
+- (NSString *) breakpointCondition:(NSInteger)nr
+{
+    const char *str = wrapper->cpu->getBreakpointCondition(nr);
+    return str ? [NSString stringWithUTF8String:str] : NULL;
+}
+- (BOOL) setBreakpointCondition:(NSInteger)nr cond:(NSString *)cond
+{
+    return wrapper->cpu->setBreakpointCondition(nr, [cond UTF8String]);
+}
+
 
 - (void) disassembleTest
 {

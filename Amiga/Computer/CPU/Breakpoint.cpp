@@ -470,10 +470,18 @@ ASTNode::parseATOMIC(std::vector<std::string> tokens, int &i) {
     SYNTAX_ERROR
 }
 
-Breakpoint::Breakpoint(uint32_t addr, bool soft)
+Breakpoint::Breakpoint()
 {
-    this->addr = addr;
-    this->soft = soft;
+    // this->addr = addr;
+}
+
+const char *
+Breakpoint::getCondition()
+{
+    if (ast == NULL)
+        return conditionStr.c_str();
+    
+    return ast->name().c_str();
 }
 
 bool
@@ -481,22 +489,23 @@ Breakpoint::setCondition(const char *description)
 {
     assert(description != NULL);
     
-    // Create a C++ string from the provided C string
-    string str(description);
+    // Remove old condition (if any)
+    removeCondition();
     
-    // Parse textual description
-    condition = ASTNode::parse(str);
+    // Remember the original text
+    conditionStr = string(description);
     
-    // Return true if we got an AST
-    return condition != NULL;
+    // Parse the description
+    return ((ast = ASTNode::parse(conditionStr)));
 }
 
-void
+bool
 Breakpoint::removeCondition()
 {
-    if (condition) {
-        delete condition;
-        condition = NULL;
+    conditionStr = "";
+    if (ast) {
+        delete ast;
+        ast = NULL;
     }
+    return true;
 }
-

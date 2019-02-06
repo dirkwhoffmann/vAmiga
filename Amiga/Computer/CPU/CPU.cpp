@@ -71,6 +71,12 @@ CPU::CPU()
 {
     setDescription("CPU");
     
+    // Register sub components
+    registerSubcomponents(vector<HardwareComponent *> {
+        
+        &bpManager,
+    });
+    
     // Register snapshot items
     /*
     registerSnapshotItems(vector<SnapshotItem> {
@@ -142,6 +148,119 @@ CPU::getInfo()
     info.ssp = m68k_get_reg(NULL, M68K_REG_ISP);
   
     return info;
+}
+
+bool
+CPU::hasBreakpointAt(uint32_t addr)
+{
+    auto it = breakpoints.find(addr);
+    return it != breakpoints.end();
+}
+
+bool
+CPU::hasConditionalBreakpointAt(uint32_t addr)
+{
+    auto it = breakpoints.find(addr);
+    return it != breakpoints.end() && (*it).second.hasCondition();
+}
+
+void
+CPU::addBreakpointAt(uint32_t addr)
+{
+    breakpoints.insert(pair<uint32_t, Breakpoint>(addr, Breakpoint()));
+    amiga->putMessage(MSG_BREAKPOINT);
+}
+
+void
+CPU::deleteBreakpointAt(uint32_t addr)
+{
+    auto it = breakpoints.find(addr);
+    if (it != breakpoints.end()) {
+        breakpoints.erase(it);
+        amiga->putMessage(MSG_BREAKPOINT);
+    }
+}
+
+void
+CPU::toggleBreakpointAt(uint32_t addr)
+{
+    if (hasBreakpointAt(addr)) {
+        deleteBreakpointAt(addr);
+    } else {
+        addBreakpointAt(addr);
+    }
+}
+
+bool
+CPU::hasCondition(long nr)
+{
+    if (nr >= breakpoints.size())
+        return UINT32_MAX;
+    
+    auto it = breakpoints.begin();
+    advance(it, nr);
+    return (*it).second.hasCondition();
+}
+
+bool
+CPU::hasSyntaxError(long nr)
+{
+    if (nr >= breakpoints.size())
+        return UINT32_MAX;
+    
+    auto it = breakpoints.begin();
+    advance(it, nr);
+    return (*it).second.hasSyntaxError();
+}
+
+uint32_t
+CPU::getBreakpointAddr(long nr)
+{
+    if (nr >= breakpoints.size())
+        return UINT32_MAX;
+    
+    auto it = breakpoints.begin();
+    advance(it, nr);
+    return (*it).first;
+}
+
+bool
+CPU::setBreakpointAddr(long nr, uint32_t addr)
+{
+    if (nr >= breakpoints.size())
+        return false;
+    
+    auto it = breakpoints.begin();
+    advance(it, nr);
+    Breakpoint bp = (*it).second;
+    breakpoints.erase(it);
+    breakpoints.insert(pair<uint32_t, Breakpoint>(addr, bp));
+    amiga->putMessage(MSG_BREAKPOINT);
+    return true;
+}
+
+const char *
+CPU::getBreakpointCondition(long nr)
+{
+    if (nr >= breakpoints.size())
+        return NULL;
+    
+    auto it = breakpoints.begin();
+    advance(it, nr);
+    return (*it).second.getCondition();
+}
+
+bool
+CPU::setBreakpointCondition(long nr, const char *cond)
+{
+    if (nr >= breakpoints.size())
+        return false;
+    
+    auto it = breakpoints.begin();
+    advance(it, nr);
+    bool result = (*it).second.setCondition(cond);
+    amiga->putMessage(MSG_BREAKPOINT);
+    return result;
 }
 
 uint64_t

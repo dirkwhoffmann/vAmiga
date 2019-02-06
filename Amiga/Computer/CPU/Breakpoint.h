@@ -11,11 +11,13 @@
 #define _BREAKPOINT_INC
 
 #include "va_std.h"
-#include <vector>
 #include <string>
+#include <vector>
+#include <map>
 
-using std::vector;
 using std::string;
+using std::vector;
+using std::map;
 
 class ASTNode;
 
@@ -23,25 +25,39 @@ class Breakpoint {
   
 private:
     
-    // The breakpoint's address in memory
-    uint32_t addr;
-    
     /* Indicates if this breakpoint is a soft breakpoint
      * In contrast to standard (hard) breakpoints, soft breakpoints are deleted
      * when reached. They are only used internally to implement manual stepping
      * in the CPU debug panel.
      */
-    bool soft;
+    // bool soft;
     
-    /* The breakpoint's condition
-     * This variable points to the root node in the condition's AST. It is
-     * NULL if the breakpoint is unconditional (default).
+    /* The breakpoint's condition as it was entered by the user
      */
-    ASTNode *condition = NULL;
+    string conditionStr = "";
+    
+    /* The breakpoint's condition translated to an AST.
+     * NULL if the breakpoint is unconditional or if the conditionStr is
+     * invalid.
+     */
+    ASTNode *ast = NULL;
     
 public:
     
-    Breakpoint(uint32_t addr, bool soft = false);
+    Breakpoint();
+    
+    //
+    // Managing conditions
+    //
+    
+    // Returns true if this is an coditional breakpoint.
+    bool hasCondition() { return conditionStr != ""; }
+ 
+    // Returns true if the condition contains a syntax error.
+    bool hasSyntaxError() { return conditionStr != "" && ast == NULL; }
+    
+    // Returns a textual description of the breakpoint condition.
+    const char *getCondition();
     
     /* Sets a breakpoint condition
      *
@@ -64,9 +80,8 @@ public:
      */
     bool setCondition(const char *str);
     
-    /* Deletes a breakpoint condition
-     */
-    void removeCondition();
+    // Deletes a breakpoint condition
+    bool removeCondition();
 };
 
 #endif

@@ -651,9 +651,10 @@ extension MyController {
         
         switch (msg.type) {
     
-        case MSG_CONFIG:
+        case MSG_CONFIG,
+             MSG_BREAKPOINT:
             
-            myAppDelegate.inspector?.refresh()
+            myAppDelegate.inspector?.refresh(everything: true)
             
         case MSG_READY_TO_POWER_ON:
     
@@ -698,7 +699,7 @@ extension MyController {
              MSG_WARP_OFF:
             
             refreshStatusBar()
-            
+                        
         case MSG_DRIVE_CONNECT:
             
             switch (msg.data) {
