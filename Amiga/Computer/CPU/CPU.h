@@ -11,7 +11,7 @@
 #define _CPU_INC
 
 #include "HardwareComponent.h"
-
+#include "Breakpoint.h"
 
 //
 // THIS CLASS IS A STUB TO MAKE THE VISUAL PROTOTYPE WORK
