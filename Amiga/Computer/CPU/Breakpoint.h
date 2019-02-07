@@ -40,7 +40,7 @@ public:
     //
     
     // Returns true if this is an coditional breakpoint.
-    bool hasCondition() { return conditionStr != ""; }
+    bool hasCondition() { return ast != NULL; }
  
     // Returns true if the condition contains a syntax error.
     bool hasSyntaxError() { return conditionStr != "" && ast == NULL; }

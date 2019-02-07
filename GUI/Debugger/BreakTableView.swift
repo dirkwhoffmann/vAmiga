@@ -67,7 +67,7 @@ extension BreakTableView : NSTableViewDataSource {
             
         case "cond":
             if let cond = cpu?.breakpointCondition(row) {
-                return cond != "" ? cond : "e.g.: D0 == $42 && (A0) == D1"
+                return cond != "" ? cond : "e.g.: D0 == $FFFF && D1 == (A0).w"
             }
             
         default:

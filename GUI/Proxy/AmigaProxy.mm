@@ -71,50 +71,44 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 - (BOOL) hasBreakpointAt:(uint32_t)addr
 {
-    return wrapper->cpu->hasBreakpointAt(addr);
+    return wrapper->cpu->bpManager.hasBreakpointAt(addr);
 }
 - (BOOL) hasConditionalBreakpointAt:(uint32_t)addr
 {
-    return wrapper->cpu->hasConditionalBreakpointAt(addr);
+    return wrapper->cpu->bpManager.hasConditionalBreakpointAt(addr);
 }
 - (void) toggleBreakpointAt:(uint32_t)addr
 {
-    return wrapper->cpu->toggleBreakpointAt(addr);
+    return wrapper->cpu->bpManager.toggleBreakpointAt(addr);
 }
 - (NSInteger) numberOfBreakpoints
 {
-    return wrapper->cpu->numberOfBreakpoints();
+    return wrapper->cpu->bpManager.numberOfBreakpoints();
 }
 - (BOOL) hasCondition:(NSInteger)nr
 {
-    return wrapper->cpu->hasCondition(nr); 
+    return wrapper->cpu->bpManager.hasCondition(nr);
 }
 - (BOOL) hasSyntaxError:(NSInteger)nr
 {
-    return wrapper->cpu->hasSyntaxError(nr);
+    return wrapper->cpu->bpManager.hasSyntaxError(nr);
 }
 - (uint32_t) breakpointAddr:(NSInteger)nr
 {
-    return wrapper->cpu->getBreakpointAddr(nr);
+    return wrapper->cpu->bpManager.getAddr(nr);
 }
 - (BOOL) setBreakpointAddr:(NSInteger)nr addr:(uint32_t)addr
 {
-    return wrapper->cpu->setBreakpointAddr(nr, addr);
+    return wrapper->cpu->bpManager.setAddr(nr, addr);
 }
 - (NSString *) breakpointCondition:(NSInteger)nr
 {
-    const char *str = wrapper->cpu->getBreakpointCondition(nr);
+    const char *str = wrapper->cpu->bpManager.getCondition(nr);
     return str ? [NSString stringWithUTF8String:str] : NULL;
 }
 - (BOOL) setBreakpointCondition:(NSInteger)nr cond:(NSString *)cond
 {
-    return wrapper->cpu->setBreakpointCondition(nr, [cond UTF8String]);
-}
-
-
-- (void) disassembleTest
-{
-    wrapper->cpu->disassemble(); 
+    return wrapper->cpu->bpManager.setCondition(nr, [cond UTF8String]);
 }
 
 @end

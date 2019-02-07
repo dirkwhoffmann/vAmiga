@@ -60,4 +60,82 @@ BreakpointManager::toggleBreakpointAt(uint32_t addr)
     }
 }
 
+uint32_t
+BreakpointManager::getAddr(long nr)
+{
+    if (nr >= breakpoints.size())
+        return UINT32_MAX;
+    
+    auto it = breakpoints.begin();
+    advance(it, nr);
+    return (*it).first;
+}
 
+bool
+BreakpointManager::setAddr(long nr, uint32_t addr)
+{
+    if (nr >= breakpoints.size())
+        return false;
+    
+    auto it = breakpoints.begin();
+    advance(it, nr);
+    Breakpoint bp = (*it).second;
+    breakpoints.erase(it);
+    breakpoints.insert(pair<uint32_t, Breakpoint>(addr, bp));
+    amiga->putMessage(MSG_BREAKPOINT);
+    return true;
+}
+
+bool
+BreakpointManager::hasCondition(long nr)
+{
+    auto i = breakpoint(nr);
+     if (i != breakpoints.end()) {
+        return (*i).second.hasCondition();
+     }
+    return false; 
+}
+
+bool
+BreakpointManager::hasSyntaxError(long nr)
+{
+    auto i = breakpoint(nr);
+    if (i != breakpoints.end()) {
+        return (*i).second.hasSyntaxError();
+    }
+    return false;
+}
+
+const char *
+BreakpointManager::getCondition(long nr)
+{
+    auto i = breakpoint(nr);
+    if (i != breakpoints.end()) {
+        return (*i).second.getCondition();
+    }
+    return "";
+}
+
+bool
+BreakpointManager::setCondition(long nr, const char *str)
+{
+    auto i = breakpoint(nr);
+    if (i != breakpoints.end()) {
+        (*i).second.setCondition(str);
+        amiga->putMessage(MSG_BREAKPOINT);
+        return true;
+    }
+    return false;
+}
+
+bool
+BreakpointManager::removeCondition(long nr)
+{
+    auto i = breakpoint(nr);
+    if (i != breakpoints.end()) {
+        (*i).second.removeCondition();
+        amiga->putMessage(MSG_BREAKPOINT);
+        return true;
+    }
+    return false;
+}

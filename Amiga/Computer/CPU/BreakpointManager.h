@@ -30,7 +30,7 @@ private:
 public:
     
     // Returns the number of stored breakpoints
-    long breakpointCount() { return breakpoints.size(); }
+    long numberOfBreakpoints() { return breakpoints.size(); }
     
     // Returns an iterator pointing to the nth element.
     map<uint32_t, Breakpoint>::iterator breakpoint(long nr);
@@ -41,33 +41,14 @@ public:
     void deleteBreakpointAt(uint32_t addr);
     void toggleBreakpointAt(uint32_t addr);
     
-    // The following functions call the corresponding function on the
-    // breakpoint at the specified location.
-    bool hasCondition(long nr) {
-        auto i = breakpoint(nr);
-        return i == breakpoints.end() ? false : (*i).second.hasCondition();
-    }
-    
-    bool hasSyntaxError(long nr) {
-        auto i = breakpoint(nr);
-        return i == breakpoints.end() ? false : (*i).second.hasSyntaxError();
-    }
-    
-    const char *getCondition(long nr) {
-        auto i = breakpoint(nr);
-        return i == breakpoints.end() ? "" : (*i).second.getCondition();
-    }
-    
-    bool setCondition(long nr, const char *str) {
-        auto i = breakpoint(nr);
-        return i == breakpoints.end() ? false : (*i).second.setCondition(str);
-    }
-    
-    bool removeCondition(long nr) {
-        auto i = breakpoint(nr);
-        return i == breakpoints.end() ? false : (*i).second.removeCondition();
-    }
-    
+    // Gets or sets a property of a breakpoint in a specific slot
+    uint32_t getAddr(long nr);
+    bool setAddr(long nr, uint32_t addr);
+    bool hasCondition(long nr);
+    bool hasSyntaxError(long nr);
+    const char *getCondition(long nr);
+    bool setCondition(long nr, const char *str);
+    bool removeCondition(long nr);
 };
 
 #endif

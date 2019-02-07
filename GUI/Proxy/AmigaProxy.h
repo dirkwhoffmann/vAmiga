@@ -208,8 +208,6 @@ struct AmigaFileWrapper;
 - (NSString *) breakpointCondition:(NSInteger)nr;
 - (BOOL) setBreakpointCondition:(NSInteger)nr cond:(NSString *)cond;
 
-- (void) disassembleTest;
-
 @end
 
 

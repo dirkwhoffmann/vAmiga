@@ -88,11 +88,5 @@ extension Inspector {
 
         instrTableView.refresh(everything: everything)
         breakTableView.refresh(everything: everything)
-        
-        amigaProxy?.cpu.disassembleTest()
-
-        
     }
-    
-    
 }

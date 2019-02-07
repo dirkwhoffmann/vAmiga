@@ -25,7 +25,7 @@ public:
     
     
     // DEPRECATED
-    map<uint32_t, Breakpoint> breakpoints;
+    //  map<uint32_t, Breakpoint> breakpoints;
     
 public:
     
@@ -60,8 +60,7 @@ public:
     // Managing breakpoints
     //
     
-    long numberOfBreakpoints() { return breakpoints.size(); }
-    
+    /*
     bool hasBreakpointAt(uint32_t addr);
     bool hasConditionalBreakpointAt(uint32_t addr);
     void addBreakpointAt(uint32_t addr);
@@ -74,13 +73,9 @@ public:
     bool setBreakpointAddr(long nr, uint32_t addr);
     const char *getBreakpointCondition(long nr);
     bool setBreakpointCondition(long nr, const char *cond);
-
-    /*
-    - (BOOL) newBreakpointWithCondition:(NSString *)cond;
-    - (BOOL) setBreakpointAddr:(NSInteger)nr addr:(NSInteger)addr;
-    - (BOOL) deleteBreakpoint:(NSInteger)nr;
+     */
     
- */
+  
     
     
     
@@ -91,11 +86,7 @@ public:
 public:
     
     uint64_t executeNextInstruction();
-    
-    void disassemble();
-    
-    
- 
+
     
 };
 
