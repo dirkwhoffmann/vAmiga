@@ -25,27 +25,16 @@ class Breakpoint {
   
 private:
     
-    /* Indicates if this breakpoint is a soft breakpoint
-     * In contrast to standard (hard) breakpoints, soft breakpoints are deleted
-     * when reached. They are only used internally to implement manual stepping
-     * in the CPU debug panel.
-     */
-    // bool soft;
-    
     /* The breakpoint's condition as it was entered by the user
      */
     string conditionStr = "";
     
     /* The breakpoint's condition translated to an AST.
-     * NULL if the breakpoint is unconditional or if the conditionStr is
-     * invalid.
      */
     ASTNode *ast = NULL;
     
 public:
-    
-    Breakpoint();
-    
+        
     //
     // Managing conditions
     //
@@ -69,14 +58,16 @@ public:
      *      <BOOL2> ::= <ATOMIC> | (<BOOL>)
      *
      *     <ATOMIC> ::= <VALUE> <COMP> <VALUE>
-     *       <COMP> ::= '==' | '!=' | '<' | '>'
+     *       <COMP> ::= '==' | '!=' | '<' | '<=' | '>' | '>='
      *
      *      <VALUE> ::= <REGISTER> | <DIRECT> | <INDIRECT>
      *   <REGISTER> ::= ['D0' - 'D7', 'A0' - 'A7']
-     *     <DIRECT> ::= '$'[a-f|A-F|0-9]+ | [0-9]+
-     *   <INDIRECT> ::= '(' <VALUE> ')'
+     *     <DIRECT> ::= <DEC> | <HEX>
+     *        <DEC> ::= [0-9]+
+     *        <HEX> ::= '$'[a-fA-F0-9]+
+     *   <INDIRECT> ::= '(' <VALUE> ').'[bwl]
      *
-     * Returns true if the condition was parsed successfully.
+     * Returns true if the condition has been parsed successfully.
      */
     bool setCondition(const char *str);
     

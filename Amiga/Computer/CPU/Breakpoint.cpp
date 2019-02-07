@@ -12,27 +12,74 @@
 #include <sstream>
 #include <regex>
 
-using reg_itr = std::regex_token_iterator<std::string::iterator>;
+// Token identifiers
+enum Token {
+    TOK_DELIM,
+    TOK_LEFT, TOK_RIGHT,
+    TOK_B, TOK_W, TOK_L,
+    TOK_D0, TOK_D1, TOK_D2, TOK_D3, TOK_D4, TOK_D5, TOK_D6, TOK_D7,
+    TOK_A0, TOK_A1, TOK_A2, TOK_A3, TOK_A4, TOK_A5, TOK_A6, TOK_A7,
+    TOK_DEC, TOK_HEX,
+    TOK_EQ, TOK_UNEQ, TOK_LESSEQ, TOK_LESS, TOK_GREATEREQ, TOK_GREATER,
+    TOK_NOT, TOK_AND, TOK_OR
+};
+
+// Regular expressions for all tokens
+const vector<pair<Token, regex>> regexes
+{
+    { TOK_DELIM,     regex("^(\\s)+") },
+    { TOK_LEFT,      regex("^\\(") },
+    { TOK_RIGHT,     regex("^\\)") },
+    { TOK_B,         regex("^\\.b") },
+    { TOK_W,         regex("^\\.w") },
+    { TOK_L,         regex("^\\.l") },
+    { TOK_D0,        regex("^D0") },
+    { TOK_D1,        regex("^D1") },
+    { TOK_D2,        regex("^D2") },
+    { TOK_D3,        regex("^D3") },
+    { TOK_D4,        regex("^D4") },
+    { TOK_D5,        regex("^D5") },
+    { TOK_D6,        regex("^D6") },
+    { TOK_D7,        regex("^D7") },
+    { TOK_A0,        regex("^A0") },
+    { TOK_A1,        regex("^A1") },
+    { TOK_A2,        regex("^A2") },
+    { TOK_A3,        regex("^A3") },
+    { TOK_A4,        regex("^A4") },
+    { TOK_A5,        regex("^A5") },
+    { TOK_A6,        regex("^A6") },
+    { TOK_A7,        regex("^A7") },
+    { TOK_DEC,       regex("^[0-9]+") },
+    { TOK_HEX,       regex("^[$][0-9a-fA-F]+") },
+    { TOK_EQ,        regex("^==") },
+    { TOK_UNEQ,      regex("^==") },
+    { TOK_LESSEQ,    regex("^<=") },
+    { TOK_LESS,      regex("^<") },
+    { TOK_GREATEREQ, regex("^>=") },
+    { TOK_GREATER,   regex("^>") },
+    { TOK_NOT,       regex("^!") },
+    { TOK_AND,       regex("^&&") },
+    { TOK_OR,        regex("^\\|\\|") },
+};
+
+typedef vector<pair<Token, string>> TokenStream;
 
 // Abstract syntax tree types
 enum ASTNodeType {
     
-    AST_TRUE,
-    AST_BOOL,
-    AST_NOT, AST_AND, AST_OR,
-    AST_EQUAL, AST_UNEQUAL, AST_LESS, AST_GREATER,
-    AST_VALUE,
-    AST_INDIRECT,
     AST_D0, AST_D1, AST_D2, AST_D3, AST_D4, AST_D5, AST_D6, AST_D7,
     AST_A0, AST_A1, AST_A2, AST_A3, AST_A4, AST_A5, AST_A6, AST_A7,
     AST_DEC, AST_HEX,
+    AST_IND_B, AST_IND_W, AST_IND_L,
+    AST_EQ, AST_UNEQ, AST_LESSEQ, AST_LESS, AST_GREATEREQ, AST_GREATER,
+    AST_NOT, AST_AND, AST_OR
 };
 
 class ASTNode {
     
 private:
     
-    ASTNodeType type = AST_TRUE;
+    ASTNodeType type;
     uint32_t value = 0;
     ASTNode *left = NULL;
     ASTNode *right = NULL;
@@ -45,26 +92,32 @@ public:
     
     static ASTNode *parse(string s);
     
+    // Evaluates a breakpoint
     uint32_t eval();
+    
+    /* Returns a textual representation of the breakpoint condition
+     * If an AST is present, the returned string is derived by traversing the
+     * tree. If not AST is present, the user input string is returned.
+     */
     string name();
     
 private:
     
-    static ASTNode *parse(vector<string> tokens);
-    static bool parseToken(string token, vector<string> tokens, int &i);
-    static ASTNode *parseDEC(vector<string> tokens, int &i);
-    static ASTNode *parseHEX(vector<string> tokens, int &i);
-    static ASTNode *parseDIRECT(vector<string> tokens, int &i);
-    static ASTNode *parseREGISTER(vector<string> tokens, int &i);
-    static ASTNode *parseD1(vector<string> tokens, int &i);
-    static ASTNode *parseA0(vector<string> tokens, int &i);
-    static ASTNode *parseA1(vector<string> tokens, int &i);
-    static ASTNode *parseINDIRECT(vector<string> tokens, int &i);
-    static ASTNode *parseVALUE(vector<string> tokens, int &i);
-    static ASTNode *parseBOOL(vector<string> tokens, int &i);
-    static ASTNode *parseBOOL1(vector<string> tokens, int &i);
-    static ASTNode *parseBOOL2(vector<string> tokens, int &i);
-    static ASTNode *parseATOMIC(vector<string> tokens, int &i);
+    static ASTNode *parse(TokenStream tokens);
+    static bool parseToken(TokenStream tokens, Token token, int &i);
+    static ASTNode *parseDEC(TokenStream tokens, int &i);
+    static ASTNode *parseHEX(TokenStream tokens, int &i);
+    static ASTNode *parseDIRECT(TokenStream tokens, int &i);
+    static ASTNode *parseREGISTER(TokenStream tokens, int &i);
+    static ASTNode *parseD1(TokenStream tokens, int &i);
+    static ASTNode *parseA0(TokenStream tokens, int &i);
+    static ASTNode *parseA1(TokenStream tokens, int &i);
+    static ASTNode *parseINDIRECT(TokenStream tokens, int &i);
+    static ASTNode *parseVALUE(TokenStream tokens, int &i);
+    static ASTNode *parseBOOL(TokenStream tokens, int &i);
+    static ASTNode *parseBOOL1(TokenStream tokens, int &i);
+    static ASTNode *parseBOOL2(TokenStream tokens, int &i);
+    static ASTNode *parseATOMIC(TokenStream tokens, int &i);
 };
 
 #define PARSE_PREPARE \
@@ -80,38 +133,52 @@ if (right) delete right; \
 return NULL; \
 }
 
-std::string label(ASTNodeType type) {
-    switch (type) {
-        case AST_TRUE:     return "AST_TRUE";
-        case AST_NOT:      return "AST_NOT";
-        case AST_AND:      return "AST_AND";
-        case AST_OR:       return "AST_OR";
-        case AST_EQUAL:    return "AST_EQUAL";
-        case AST_UNEQUAL:  return "AST_UNEQUAL";
-        case AST_LESS:     return "AST_LESS";
-        case AST_GREATER:  return "AST_GREATER";
-        case AST_INDIRECT: return "AST_INDIRECT";
-        case AST_D0:       return "AST_D0";
-        case AST_D1:       return "AST_D1";
-        case AST_D2:       return "AST_D2";
-        case AST_D3:       return "AST_D3";
-        case AST_D4:       return "AST_D4";
-        case AST_D5:       return "AST_D5";
-        case AST_D6:       return "AST_D6";
-        case AST_D7:       return "AST_D7";
-        case AST_A0:       return "AST_A0";
-        case AST_A1:       return "AST_A1";
-        case AST_A2:       return "AST_A2";
-        case AST_A3:       return "AST_A3";
-        case AST_A4:       return "AST_A4";
-        case AST_A5:       return "AST_A5";
-        case AST_A6:       return "AST_A6";
-        case AST_A7:       return "AST_A7";
-        case AST_DEC:      return "AST_DEC";
-        case AST_HEX:      return "AST_HEX";
-        default:
-            assert(false);
+// A simple greedy tokenizer
+vector<pair<Token, string>> tokenize(string input) {
+    
+    vector<pair<Token, string>> result;
+    std::smatch m;
+    bool hit;
+    
+    do {
+        hit = false;
+        
+        // Iterate through the token list
+        for (auto r = regexes.begin(); r != regexes.end(); ++r) {
+            
+            // Does the current token match the beginning of the input string?
+            if (std::regex_search(input, m, r->second)) {
+                
+                // Only proceed if we have at least one matching character
+                size_t size = m[0].str().size();
+                assert(size != 0);
+                
+                // Collect the token if it is not a delimiter
+                if (r->first != TOK_DELIM) {
+                    result.push_back(make_pair(r->first, input.substr(0, size)));
+                }
+                
+                // Delete the scanned token from the input string
+                input.erase(0, size);
+                hit = true;
+                break;
+            }
+        }
+    } while (hit);
+    
+    /*
+     cout << "Result:\n";
+     for (auto match : result) {
+     cout << match.first << ": " << match.second << endl;
+     }
+     */
+    
+    // Check for syntax error
+    if (input != "") {
+        result.clear();
     }
+    
+    return result;
 }
 
 std::vector<std::string> split(const string& input, const string& regex) {
@@ -144,33 +211,37 @@ uint32_t
 ASTNode::eval() {
     
     switch (type) {
-        case AST_TRUE:     return 1;
-        case AST_NOT:      return !left->eval();
-        case AST_AND:      return left->eval() && right->eval();
-        case AST_OR:       return left->eval() || right->eval();
-        case AST_EQUAL:    return left->eval() == right->eval();
-        case AST_UNEQUAL:  return left->eval() != right->eval();
-        case AST_LESS:     return left->eval() <  right->eval();
-        case AST_GREATER:  return left->eval() >  right->eval();
-        case AST_INDIRECT: return 42;
-        case AST_D0:       return 0;
-        case AST_D1:       return 1;
-        case AST_D2:       return 2;
-        case AST_D3:       return 3;
-        case AST_D4:       return 4;
-        case AST_D5:       return 5;
-        case AST_D6:       return 6;
-        case AST_D7:       return 7;
-        case AST_A0:       return 0;
-        case AST_A1:       return 1;
-        case AST_A2:       return 2;
-        case AST_A3:       return 3;
-        case AST_A4:       return 4;
-        case AST_A5:       return 5;
-        case AST_A6:       return 6;
-        case AST_A7:       return 7;
-        case AST_DEC:      return value;
-        case AST_HEX:      return value;
+        case AST_D0:        return m68k_get_reg(NULL, M68K_REG_D0);
+        case AST_D1:        return m68k_get_reg(NULL, M68K_REG_D1);
+        case AST_D2:        return m68k_get_reg(NULL, M68K_REG_D2);
+        case AST_D3:        return m68k_get_reg(NULL, M68K_REG_D3);
+        case AST_D4:        return m68k_get_reg(NULL, M68K_REG_D4);
+        case AST_D5:        return m68k_get_reg(NULL, M68K_REG_D5);
+        case AST_D6:        return m68k_get_reg(NULL, M68K_REG_D6);
+        case AST_D7:        return m68k_get_reg(NULL, M68K_REG_D7);
+        case AST_A0:        return m68k_get_reg(NULL, M68K_REG_A0);
+        case AST_A1:        return m68k_get_reg(NULL, M68K_REG_A1);
+        case AST_A2:        return m68k_get_reg(NULL, M68K_REG_A2);
+        case AST_A3:        return m68k_get_reg(NULL, M68K_REG_A3);
+        case AST_A4:        return m68k_get_reg(NULL, M68K_REG_A4);
+        case AST_A5:        return m68k_get_reg(NULL, M68K_REG_A5);
+        case AST_A6:        return m68k_get_reg(NULL, M68K_REG_A6);
+        case AST_A7:        return m68k_get_reg(NULL, M68K_REG_A7);
+        case AST_DEC:       return value;
+        case AST_HEX:       return value;
+        case AST_IND_B:     return m68k_read_memory_8(value);
+        case AST_IND_W:     return m68k_read_memory_16(value);
+        case AST_IND_L:     return m68k_read_memory_32(value);
+        case AST_EQ:        return left->eval() == right->eval();
+        case AST_UNEQ:      return left->eval() != right->eval();
+        case AST_LESSEQ:    return left->eval() <= right->eval();
+        case AST_LESS:      return left->eval() <  right->eval();
+        case AST_GREATEREQ: return left->eval() >= right->eval();
+        case AST_GREATER:   return left->eval() >  right->eval();
+        case AST_NOT:       return !left->eval();
+        case AST_AND:       return left->eval() && right->eval();
+        case AST_OR:        return left->eval() || right->eval();
+            
         default:
             assert(false);
     }
@@ -180,44 +251,52 @@ std::string
 ASTNode::name() {
     
     std::stringstream ss;
+    string ll = "";
+    string lr = "";
+    string rl = "";
+    string rr = "";
     
-    bool lpara = (left && (left->type == AST_AND || left->type == AST_OR));
-    bool rpara = (right && (right->type == AST_AND || right->type == AST_OR));
+    if (type == AST_AND || type == AST_OR) {
+        if (left->type == AST_AND || left->type == AST_OR) {
+            ll = "("; lr = ")";
+        }
+        if (right->type == AST_AND || right->type == AST_OR) {
+            rl = "("; rr = ")";
+        }
+    }
     
     switch (type) {
-        case AST_TRUE:     return "true";
-        case AST_NOT:      return "!(" + left->name() +")";
-        case AST_AND:
-            return
-            (lpara ? "(" : "") + left->name() + (lpara ? ")" : "") + " && " +
-            (rpara ? "(" : "") + right->name() + (rpara ? ")" : "");
-        case AST_OR:
-            return
-            (lpara ? "(" : "") + left->name() + (lpara ? ")" : "") + " || " +
-            (rpara ? "(" : "") + right->name() + (rpara ? ")" : "");
-        case AST_EQUAL:    return left->name() + " == " + right->name();
-        case AST_UNEQUAL:  return left->name() + " != " + right->name();
-        case AST_LESS:     return left->name() + " < " + right->name();
-        case AST_GREATER:  return left->name() + " > " + right->name();
-        case AST_INDIRECT: return "(" + left->name() + ")";
-        case AST_D0:       return "D0";
-        case AST_D1:       return "D1";
-        case AST_D2:       return "D2";
-        case AST_D3:       return "D3";
-        case AST_D4:       return "D4";
-        case AST_D5:       return "D5";
-        case AST_D6:       return "D6";
-        case AST_D7:       return "D7";
-        case AST_A0:       return "A0";
-        case AST_A1:       return "A1";
-        case AST_A2:       return "A2";
-        case AST_A3:       return "A3";
-        case AST_A4:       return "A4";
-        case AST_A5:       return "A5";
-        case AST_A6:       return "A6";
-        case AST_A7:       return "A7";
-        case AST_DEC:      ss << value; return ss.str();
-        case AST_HEX:     ss << "$" << std::hex << value; return ss.str();
+        case AST_D0:        return "D0";
+        case AST_D1:        return "D1";
+        case AST_D2:        return "D2";
+        case AST_D3:        return "D3";
+        case AST_D4:        return "D4";
+        case AST_D5:        return "D5";
+        case AST_D6:        return "D6";
+        case AST_D7:        return "D7";
+        case AST_A0:        return "A0";
+        case AST_A1:        return "A1";
+        case AST_A2:        return "A2";
+        case AST_A3:        return "A3";
+        case AST_A4:        return "A4";
+        case AST_A5:        return "A5";
+        case AST_A6:        return "A6";
+        case AST_A7:        return "A7";
+        case AST_DEC:       ss << value; return ss.str();
+        case AST_HEX:       ss << "$" << std::hex << value; return ss.str();
+        case AST_IND_B:     return "(" + left->name() + ").b";
+        case AST_IND_W:     return "(" + left->name() + ").w";
+        case AST_IND_L:     return "(" + left->name() + ").l";
+        case AST_EQ:        return left->name() + " == " + right->name();
+        case AST_UNEQ:      return left->name() + " != " + right->name();
+        case AST_LESSEQ:    return left->name() + " <= " + right->name();
+        case AST_LESS:      return left->name() + " < " + right->name();
+        case AST_GREATEREQ: return left->name() + " >= " + right->name();
+        case AST_GREATER:   return left->name() + " > " + right->name();
+        case AST_NOT:       return "!(" + left->name() + ")";
+        case AST_AND:       return ll + left->name() + lr + " && " + rl + right->name() + rr;
+        case AST_OR:        return ll + left->name() + lr + " || " + rl + right->name() + rr;
+            
         default:
             assert(false);
     }
@@ -226,135 +305,132 @@ ASTNode::name() {
 ASTNode *
 ASTNode::parse(string s) {
     
-    // Split into tokens
-    std::string rex =
-    "(("
-    "==|!=|<|>|!|&&|\\|\\||\\(|\\)|"
-    "D0|D1|D2|D3|D4|D5|D6|D7|A0|A1|A2|A3|A4|A5|A6|A7|"
-    "[\\$]|[a-z|A-Z|0-9]+"
-    "))";
-    std::vector<std::string> splitted = split(s, rex);
+    // Tokenize input
+    vector<pair<Token, string>> tokens = tokenize(s);
     
-    return parse(splitted);
+    // Check for a lexical error
+    if (tokens.size() == 0) {
+        return NULL;
+    }
+    
+    // Parse the token stream
+    return parse(tokens);
 }
 
 ASTNode *
-ASTNode::parse(std::vector<std::string> tokens) {
+ASTNode::parse(TokenStream tokens) {
     
     int i = 0;
     return parseBOOL(tokens, i);
 }
 
 bool
-ASTNode::parseToken(string token, std::vector<std::string> tokens, int &i) {
+ASTNode::parseToken(TokenStream tokens, Token token, int &i) {
     
-    if (i < tokens.size() && tokens[i] == token) {
-        i++;
-        return true;
-    }
+    if (tokens[i].first != token)
+        return false;
     
-    return false;
-}
-
-
-ASTNode *
-ASTNode::parseDEC(std::vector<std::string> tokens, int &i) {
-    
-    // [0-9]+
-    PARSE_PREPARE
-    
-    uint32_t value;
-    std::stringstream ss;
-    ss << tokens[i];
-    ss >> value;
     i++;
-    
-    if (!ss.fail())
-        return new ASTNode(AST_DEC, value);
-    
-    SYNTAX_ERROR
+    return true;
 }
 
 ASTNode *
-ASTNode::parseHEX(std::vector<std::string> tokens, int &i) {
+ASTNode::parseDEC(TokenStream tokens, int &i) {
     
-    // [a-f|A-F|0-9]+
-    PARSE_PREPARE
+    PARSE_PREPARE // [0-9]+
     
-    uint32_t value;
-    std::stringstream ss;
-    ss << std::hex << tokens[i];
-    ss >> value;
-    i++;
-    
-    if (!ss.fail())
-        return new ASTNode(AST_HEX, value);
-    
-    SYNTAX_ERROR
-}
-
-ASTNode *
-ASTNode::parseDIRECT(std::vector<std::string> tokens, int &i) {
-    
-    // <DIRECT> ::= '$'[a-f|A-F|0-9]+ | [0-9]+
-    PARSE_PREPARE
-    
-    if (parseToken("$", tokens, i)) {
-        if ((left = parseHEX(tokens, i)))
-            return left;
+    if (tokens[i].first == TOK_DEC) {
         
-    } else {
-        if ((left = parseDEC(tokens, i)))
-            return left;
+        uint32_t value;
+        std::stringstream ss;
+        ss << tokens[i].second;
+        ss >> value;
+        i++;
+        return new ASTNode(AST_DEC, value);
     }
     
     SYNTAX_ERROR
 }
 
 ASTNode *
-ASTNode::parseREGISTER(std::vector<std::string> tokens, int &i) {
+ASTNode::parseHEX(TokenStream tokens, int &i) {
     
-    // <REGISTER> ::= ['D0' - 'D7', 'A0' - 'A7']
-    if (parseToken("D0", tokens, i)) { return new ASTNode(AST_D0); }
-    if (parseToken("D1", tokens, i)) { return new ASTNode(AST_D1); }
-    if (parseToken("D2", tokens, i)) { return new ASTNode(AST_D2); }
-    if (parseToken("D3", tokens, i)) { return new ASTNode(AST_D3); }
-    if (parseToken("D4", tokens, i)) { return new ASTNode(AST_D4); }
-    if (parseToken("D5", tokens, i)) { return new ASTNode(AST_D5); }
-    if (parseToken("D6", tokens, i)) { return new ASTNode(AST_D6); }
-    if (parseToken("D7", tokens, i)) { return new ASTNode(AST_D7); }
+    PARSE_PREPARE // [a-f|A-F|0-9]+
     
-    if (parseToken("A0", tokens, i)) { return new ASTNode(AST_A0); }
-    if (parseToken("A1", tokens, i)) { return new ASTNode(AST_A1); }
-    if (parseToken("A2", tokens, i)) { return new ASTNode(AST_A2); }
-    if (parseToken("A3", tokens, i)) { return new ASTNode(AST_A3); }
-    if (parseToken("A4", tokens, i)) { return new ASTNode(AST_A4); }
-    if (parseToken("A5", tokens, i)) { return new ASTNode(AST_A5); }
-    if (parseToken("A6", tokens, i)) { return new ASTNode(AST_A6); }
-    if (parseToken("A7", tokens, i)) { return new ASTNode(AST_A7); }
+    if (tokens[i].first == TOK_HEX) {
+        
+        string digits = tokens[i].second.substr(1);
+        uint32_t value;
+        std::stringstream ss;
+        ss << digits;
+        ss >> value;
+        i++;
+        return new ASTNode(AST_DEC, value);
+    }
     
-    return NULL;
+    SYNTAX_ERROR
 }
 
 ASTNode *
-ASTNode::parseINDIRECT(std::vector<std::string> tokens, int &i) {
+ASTNode::parseDIRECT(TokenStream tokens, int &i) {
     
-    // <INDIRECT> ::= '(' <VALUE> ')'
-    PARSE_PREPARE
+    PARSE_PREPARE // <DIRECT> ::= <DEC> | <HEX>
     
-    if (parseToken("(", tokens, i)) {
-        if ((left = parseVALUE(tokens, i))) {
-            if (parseToken(")", tokens, i)) {
-                return new ASTNode(AST_INDIRECT, left);
+    if ((left = parseDEC(tokens, i)))
+        return left;
+    
+    if ((left = parseHEX(tokens, i)))
+        return left;
+    
+    SYNTAX_ERROR
+}
+
+ASTNode *
+ASTNode::parseREGISTER(TokenStream tokens, int &i) {
+    
+    PARSE_PREPARE // <REGISTER> ::= ['D0' - 'D7', 'A0' - 'A7']
+    
+    if (parseToken(tokens, TOK_D0, i)) return new ASTNode(AST_D0);
+    if (parseToken(tokens, TOK_D1, i)) return new ASTNode(AST_D1);
+    if (parseToken(tokens, TOK_D2, i)) return new ASTNode(AST_D2);
+    if (parseToken(tokens, TOK_D3, i)) return new ASTNode(AST_D3);
+    if (parseToken(tokens, TOK_D4, i)) return new ASTNode(AST_D4);
+    if (parseToken(tokens, TOK_D5, i)) return new ASTNode(AST_D5);
+    if (parseToken(tokens, TOK_D6, i)) return new ASTNode(AST_D6);
+    if (parseToken(tokens, TOK_D7, i)) return new ASTNode(AST_D7);
+    if (parseToken(tokens, TOK_A0, i)) return new ASTNode(AST_A0);
+    if (parseToken(tokens, TOK_A1, i)) return new ASTNode(AST_A1);
+    if (parseToken(tokens, TOK_A2, i)) return new ASTNode(AST_A2);
+    if (parseToken(tokens, TOK_A3, i)) return new ASTNode(AST_A3);
+    if (parseToken(tokens, TOK_A4, i)) return new ASTNode(AST_A4);
+    if (parseToken(tokens, TOK_A5, i)) return new ASTNode(AST_A5);
+    if (parseToken(tokens, TOK_A6, i)) return new ASTNode(AST_A6);
+    if (parseToken(tokens, TOK_A7, i)) return new ASTNode(AST_A7);
+    
+    SYNTAX_ERROR
+}
+
+ASTNode *
+ASTNode::parseINDIRECT(TokenStream tokens, int &i) {
+    
+    PARSE_PREPARE // <INDIRECT> ::= '(' <VALUE> ').[bwl]'
+    
+    if (parseToken(tokens, TOK_LEFT, i))
+        if ((left = parseVALUE(tokens, i)))
+            if (parseToken(tokens, TOK_RIGHT, i)) {
+                if (parseToken(tokens, TOK_B, i))
+                    return new ASTNode(AST_IND_B, left);
+                if (parseToken(tokens, TOK_W, i))
+                    return new ASTNode(AST_IND_W, left);
+                if (parseToken(tokens, TOK_L, i))
+                    return new ASTNode(AST_IND_L, left);
             }
-        }
-    }
     
     SYNTAX_ERROR
 }
 
 ASTNode *
-ASTNode::parseVALUE(std::vector<std::string> tokens, int &i) {
+ASTNode::parseVALUE(TokenStream tokens, int &i) {
     
     // <VALUE> ::= <REGISTER> | <DIRECT> | <INDIRECT>
     PARSE_PREPARE
@@ -372,51 +448,39 @@ ASTNode::parseVALUE(std::vector<std::string> tokens, int &i) {
 }
 
 ASTNode *
-ASTNode::parseBOOL(std::vector<std::string> tokens, int &i) {
+ASTNode::parseBOOL(TokenStream tokens, int &i) {
     
-    // <BOOL> ::= <BOOL1> [ '||' <BOOL> ]
-    PARSE_PREPARE
+    PARSE_PREPARE // <BOOL> ::= <BOOL1> [ '||' <BOOL> ]
     
-    // <BOOl1>
     if ((left = parseBOOL1(tokens, i))) {
         
-        // [ '||' <BOOL> ]
-        if (parseToken("||", tokens, i)) {
-            if ((right = parseBOOL(tokens, i))) {
-                return new ASTNode(AST_OR, left, right);
-            }
-        }
-        return left;
+        if (!parseToken(tokens, TOK_OR, i))
+            return left;
+        
+        if ((right = parseBOOL(tokens, i)))
+            return new ASTNode(AST_OR, left, right);
     }
     
     SYNTAX_ERROR
 }
 
 ASTNode *
-ASTNode::parseBOOL1(std::vector<std::string> tokens, int &i) {
+ASTNode::parseBOOL1(TokenStream tokens, int &i) {
     
-    // <BOOL1> ::= '!' <BOOL> | <BOOL2> [ '&&' <BOOL1> ]
-    PARSE_PREPARE
+    PARSE_PREPARE // <BOOL1> ::= '!' <BOOL> | <BOOL2> [ '&&' <BOOL1> ]
     
-    if (parseToken("!", tokens, i)) {
-        
-        // '!' <BOOL>
+    if (parseToken(tokens, TOK_NOT, i)) {
         if ((left = parseBOOL(tokens, i))) {
             return new ASTNode(AST_NOT, left);
         }
         
-    } else {
+    } else if ((left = parseBOOL2(tokens, i))) {
         
-        // <BOOL2>
-        if ((left = parseBOOL2(tokens, i))) {
-            
-            // [ '&&' <BOOL1> ]
-            if (parseToken("&&", tokens, i)) {
-                if ((right = parseBOOL1(tokens, i))) {
-                    return new ASTNode(AST_AND, left, right);
-                }
-            }
+        if (!parseToken(tokens, TOK_AND, i))
             return left;
+        
+        if ((right = parseBOOL1(tokens, i))) {
+            return new ASTNode(AST_AND, left, right);
         }
     }
     
@@ -424,55 +488,44 @@ ASTNode::parseBOOL1(std::vector<std::string> tokens, int &i) {
 }
 
 ASTNode *
-ASTNode::parseBOOL2(std::vector<std::string> tokens, int &i) {
+ASTNode::parseBOOL2(TokenStream tokens, int &i) {
     
-    // <BOOL2> ::= <ATOMIC> | (<BOOL>)
-    PARSE_PREPARE
     
-    // <ATOMIC>
-    if ((left = parseATOMIC(tokens, i))) {
+    PARSE_PREPARE // <BOOL2> ::= <ATOMIC> | (<BOOL>)
+    
+    if ((left = parseATOMIC(tokens, i)))
         return left;
-    }
     
-    // (<BOOL>)
-    if (parseToken("(", tokens, i)) {
-        if ((left = parseBOOL(tokens, i))) {
-            if (parseToken(")", tokens, i)) {
+    if (parseToken(tokens, TOK_LEFT, i))
+        if ((left = parseBOOL(tokens, i)))
+            if (parseToken(tokens, TOK_RIGHT, i))
                 return left;
-            }
-        }
-    }
     
     SYNTAX_ERROR
 }
 
 ASTNode *
-ASTNode::parseATOMIC(std::vector<std::string> tokens, int &i) {
+ASTNode::parseATOMIC(TokenStream tokens, int &i) {
     
-    // <ATOMIC> ::= <VALUE> <COMP> <VALUE>
-    PARSE_PREPARE
+    PARSE_PREPARE // <ATOMIC> ::= <VALUE> <COMP> <VALUE>
     
     if ((left = parseVALUE(tokens, i))) {
         
-        ASTNodeType type = AST_TRUE;
-        if (parseToken("==", tokens, i)) type = AST_EQUAL;
-        else if (parseToken("!=", tokens, i)) type = AST_UNEQUAL;
-        else if (parseToken("<", tokens, i)) type = AST_LESS;
-        else if (parseToken(">", tokens, i)) type = AST_GREATER;
-        
-        if (type != AST_TRUE) {
-            if ((right = parseVALUE(tokens, i))) {
-                return new ASTNode(type, left, right);
-            }
-        }
+        if (parseToken(tokens, TOK_EQ, i) && (right = parseVALUE(tokens, i)))
+            return new ASTNode(AST_EQ, left, right);
+        if (parseToken(tokens, TOK_UNEQ, i) && (right = parseVALUE(tokens, i)))
+            return new ASTNode(AST_UNEQ, left, right);
+        if (parseToken(tokens, TOK_LESSEQ, i) && (right = parseVALUE(tokens, i)))
+            return new ASTNode(AST_LESSEQ, left, right);
+        if (parseToken(tokens, TOK_LESS, i) && (right = parseVALUE(tokens, i)))
+            return new ASTNode(AST_LESS, left, right);
+        if (parseToken(tokens, TOK_GREATEREQ, i) && (right = parseVALUE(tokens, i)))
+            return new ASTNode(AST_GREATEREQ, left, right);
+        if (parseToken(tokens, TOK_GREATER, i) && (right = parseVALUE(tokens, i)))
+            return new ASTNode(AST_GREATER, left, right);
     }
     
     SYNTAX_ERROR
-}
-
-Breakpoint::Breakpoint()
-{
-    // this->addr = addr;
 }
 
 const char *

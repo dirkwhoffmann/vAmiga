@@ -161,7 +161,7 @@ extension InstrTableView : NSTableViewDelegate {
         if let addr = addrInRow[row], let c = cpu {
             
             if c.hasConditionalBreakpoint(at: addr) {
-                cell.textColor = NSColor.systemYellow
+                cell.textColor = NSColor.systemOrange
             } else if c.hasBreakpoint(at: addr) {
                 cell.textColor = NSColor.systemRed
             } else {
