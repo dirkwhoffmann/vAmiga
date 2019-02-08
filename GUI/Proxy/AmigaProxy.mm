@@ -73,17 +73,39 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->cpu->bpManager.hasBreakpointAt(addr);
 }
+- (BOOL) hasDisabledBreakpointAt:(uint32_t)addr
+{
+    return wrapper->cpu->bpManager.hasDisabledBreakpointAt(addr);
+}
 - (BOOL) hasConditionalBreakpointAt:(uint32_t)addr
 {
     return wrapper->cpu->bpManager.hasConditionalBreakpointAt(addr);
 }
+/*
 - (void) toggleBreakpointAt:(uint32_t)addr
 {
     return wrapper->cpu->bpManager.toggleBreakpointAt(addr);
 }
+*/
+- (void) setBreakpointAt:(uint32_t)addr
+{
+    return wrapper->cpu->bpManager.setBreakpointAt(addr);
+}
+- (void) enableOrDisableBreakpointAt:(uint32_t)addr
+{
+    return wrapper->cpu->bpManager.enableOrDisableBreakpointAt(addr); 
+}
 - (NSInteger) numberOfBreakpoints
 {
     return wrapper->cpu->bpManager.numberOfBreakpoints();
+}
+- (void) deleteBreakpoint:(NSInteger)nr
+{
+    return wrapper->cpu->bpManager.deleteBreakpoint(nr);
+}
+- (BOOL) isDisabled:(NSInteger)nr
+{
+    return wrapper->cpu->bpManager.isDisabled(nr);
 }
 - (BOOL) hasCondition:(NSInteger)nr
 {

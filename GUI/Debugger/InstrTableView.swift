@@ -37,14 +37,19 @@ class InstrTableView : NSTableView {
         let sender = sender as! NSTableView
         let row = sender.selectedRow
         
-        if let addr = addrInRow[row] {
-            track("Toggling breakpoint at \(addr)")
-            amigaProxy?.cpu.toggleBreakpoint(at: addr)
-            reloadData()
+        if let addr = addrInRow[row], let cpu = amigaProxy?.cpu {
+            
+            if cpu.hasBreakpoint(at: addr) {
+                // Disable or reenable existing breakpoint
+                cpu.enableOrDisableBreakpoint(at: addr)
+            } else {
+                // Create new breakpoint
+                cpu.setBreakpointAt(addr)
+            }
         }
     }
     
-    func disassemble() {
+    func disassemblePC() {
         
         if let pc = amigaProxy?.cpu.getInfo().pc {
             disassemble(startAddr: pc)
@@ -53,13 +58,25 @@ class InstrTableView : NSTableView {
     
     func disassemble(startAddr: UInt32) {
         
+        addrInRow[0] = startAddr;
+        disassemble()
+        scrollRowToVisible(0)
+        selectRowIndexes([0], byExtendingSelection: false)
+    }
+    
+    func disassemble() {
+    
         guard let amiga = amigaProxy else { return }
+        
+        let startAddr = addrInRow[0] ?? 0
+        track("disassemble: \(startAddr)")
         
         var addr = startAddr
         var buffer = Array<Int8>(repeating: 0, count: 64)
         
         instrInRow = [:]
         addrInRow = [:]
+        dataInRow = [:]
         rowForAddr = [:]
         
         for i in 0...255 {
@@ -72,10 +89,6 @@ class InstrTableView : NSTableView {
                 rowForAddr[addr] = i
                 
                 addr += UInt32(bytes)
-                
-            } else {
-                
-                instrInRow[i] = nil;
             }
         }
         
@@ -114,11 +127,9 @@ class InstrTableView : NSTableView {
                 
             } else {
                 
-                 // If the requested address is not displayed, we update the
+                // If the requested address is not displayed, we update the
                 // whole view and display it in the first row.
                 disassemble(startAddr: pc)
-                scrollRowToVisible(0)
-                selectRowIndexes([0], byExtendingSelection: false)
             }
         }
     }
@@ -131,15 +142,15 @@ extension InstrTableView : NSTableViewDataSource {
     }
     
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
-        
+                
         switch tableColumn?.identifier.rawValue {
             
         case "break":
-            if cpu!.hasBreakpoint(at: addrInRow[row]!) {
+            if let addr = addrInRow[row], cpu!.hasBreakpoint(at: addr) {
                 return "⛔"
-            } else {
-                return " "
             }
+            return " "
+
         case "addr":
             return addrInRow[row]
         case "data":
@@ -159,8 +170,10 @@ extension InstrTableView : NSTableViewDelegate {
         let cell = cell as! NSTextFieldCell
         
         if let addr = addrInRow[row], let c = cpu {
-            
-            if c.hasConditionalBreakpoint(at: addr) {
+
+            if c.hasDisabledBreakpoint(at: addr) {
+                cell.textColor = NSColor.systemGray
+            } else if c.hasConditionalBreakpoint(at: addr) {
                 cell.textColor = NSColor.systemOrange
             } else if c.hasBreakpoint(at: addr) {
                 cell.textColor = NSColor.systemRed

@@ -651,11 +651,13 @@ extension MyController {
         
         switch (msg.type) {
     
-        case MSG_CONFIG,
-             MSG_BREAKPOINT:
+        case MSG_CONFIG:
+             myAppDelegate.inspector?.refresh(everything: true)
             
-            myAppDelegate.inspector?.refresh(everything: true)
-            
+        case MSG_BREAKPOINT:
+            myAppDelegate.inspector?.instrTableView.disassemble()
+            myAppDelegate.inspector?.breakTableView.refresh(everything: true)
+
         case MSG_READY_TO_POWER_ON:
     
             // Launch the emulator

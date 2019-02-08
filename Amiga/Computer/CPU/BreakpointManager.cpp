@@ -27,6 +27,13 @@ BreakpointManager::hasBreakpointAt(uint32_t addr)
 }
 
 bool
+BreakpointManager::hasDisabledBreakpointAt(uint32_t addr)
+{
+    auto it = breakpoints.find(addr);
+    return it != breakpoints.end() && !(*it).second.isEnabled();
+}
+
+bool
 BreakpointManager::hasConditionalBreakpointAt(uint32_t addr)
 {
     auto it = breakpoints.find(addr);
@@ -34,10 +41,20 @@ BreakpointManager::hasConditionalBreakpointAt(uint32_t addr)
 }
 
 void
-BreakpointManager::addBreakpointAt(uint32_t addr)
+BreakpointManager::setBreakpointAt(uint32_t addr)
 {
     breakpoints.insert(pair<uint32_t, Breakpoint>(addr, Breakpoint()));
     amiga->putMessage(MSG_BREAKPOINT);
+}
+
+void
+BreakpointManager::enableOrDisableBreakpointAt(uint32_t addr)
+{
+    auto it = breakpoints.find(addr);
+    if (it != breakpoints.end()) {
+        (*it).second.toggleDisabled();
+        amiga->putMessage(MSG_BREAKPOINT);
+    }
 }
 
 void
@@ -50,6 +67,7 @@ BreakpointManager::deleteBreakpointAt(uint32_t addr)
     }
 }
 
+/*
 void
 BreakpointManager::toggleBreakpointAt(uint32_t addr)
 {
@@ -58,6 +76,19 @@ BreakpointManager::toggleBreakpointAt(uint32_t addr)
     } else {
         addBreakpointAt(addr);
     }
+}
+*/
+
+void
+BreakpointManager::deleteBreakpoint(long nr)
+{
+    if (nr >= breakpoints.size())
+        return;
+    
+    auto it = breakpoints.begin();
+    advance(it, nr);
+    breakpoints.erase(it);
+    amiga->putMessage(MSG_BREAKPOINT);
 }
 
 uint32_t
@@ -84,6 +115,16 @@ BreakpointManager::setAddr(long nr, uint32_t addr)
     breakpoints.insert(pair<uint32_t, Breakpoint>(addr, bp));
     amiga->putMessage(MSG_BREAKPOINT);
     return true;
+}
+
+bool
+BreakpointManager::isDisabled(long nr)
+{
+    auto i = breakpoint(nr);
+    if (i != breakpoints.end()) {
+        return !(*i).second.isEnabled();
+    }
+    return false;
 }
 
 bool

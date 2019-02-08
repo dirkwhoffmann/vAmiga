@@ -197,10 +197,15 @@ struct AmigaFileWrapper;
 - (NSInteger) disassemble:(char *) str pc:(NSInteger)pc;
 
 - (BOOL) hasBreakpointAt:(uint32_t)addr;
+- (BOOL) hasDisabledBreakpointAt:(uint32_t)addr;
 - (BOOL) hasConditionalBreakpointAt:(uint32_t)addr;
-- (void) toggleBreakpointAt:(uint32_t)addr;
+// - (void) toggleBreakpointAt:(uint32_t)addr;
+- (void) setBreakpointAt:(uint32_t)addr;
+- (void) enableOrDisableBreakpointAt:(uint32_t)addr;
 
 - (NSInteger) numberOfBreakpoints;
+- (void) deleteBreakpoint:(NSInteger)nr; 
+- (BOOL) isDisabled:(NSInteger)nr;
 - (BOOL) hasCondition:(NSInteger)nr;
 - (BOOL) hasSyntaxError:(NSInteger)nr;
 - (uint32_t) breakpointAddr:(NSInteger)nr;

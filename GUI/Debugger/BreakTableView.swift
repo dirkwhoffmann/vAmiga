@@ -43,8 +43,22 @@ class BreakTableView : NSTableView {
     
     @IBAction func clickAction(_ sender: NSTableView!) {
         
+        let col = sender.clickedColumn
         let row = sender.clickedRow
-        track("\(row)")
+        
+        if col == 0 {
+
+            // Delete breakpoint
+            track("Deleting breakpoint \(row)")
+            amigaProxy?.cpu.deleteBreakpoint(row)
+
+        } else {
+        
+            // Jump to breakpoint address
+            if let addr = amigaProxy?.cpu.breakpointAddr(row), addr <= 0xFFFFFF {
+                inspector.instrTableView.disassemble(startAddr: addr)
+            }
+        }
     }
 }
 
@@ -60,7 +74,7 @@ extension BreakTableView : NSTableViewDataSource {
         switch tableColumn?.identifier.rawValue {
             
         case "break":
-            return "⛔"
+            return "\u{1F5D1}" // "🗑"
            
         case "addr":
             return cpu?.breakpointAddr(row)
@@ -84,15 +98,18 @@ extension BreakTableView : NSTableViewDelegate {
         
         if let cell = cell as? NSTextFieldCell {
             
+            let disabled = amigaProxy?.cpu.isDisabled(row) ?? false
+            let bpColor : NSColor = disabled ? .systemGray : .textColor
+            
             switch tableColumn?.identifier.rawValue {
                 
             case "addr":
-                cell.textColor = .textColor
+                cell.textColor = bpColor
                 
             case "cond":
                 cell.textColor =
                     cpu!.hasSyntaxError(row) ? NSColor.systemRed :
-                    cpu!.hasCondition(row) ? NSColor.textColor :
+                    cpu!.hasCondition(row) ? bpColor :
                     NSColor.lightGray
                 
             default:

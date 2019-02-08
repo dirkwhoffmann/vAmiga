@@ -36,14 +36,18 @@ public:
     map<uint32_t, Breakpoint>::iterator breakpoint(long nr);
     
     bool hasBreakpointAt(uint32_t addr);
+    bool hasDisabledBreakpointAt(uint32_t addr);
     bool hasConditionalBreakpointAt(uint32_t addr);
-    void addBreakpointAt(uint32_t addr);
+    void setBreakpointAt(uint32_t addr);
+    void enableOrDisableBreakpointAt(uint32_t addr);
     void deleteBreakpointAt(uint32_t addr);
-    void toggleBreakpointAt(uint32_t addr);
+    // void toggleBreakpointAt(uint32_t addr);
     
     // Gets or sets a property of a breakpoint in a specific slot
+    void deleteBreakpoint(long nr);
     uint32_t getAddr(long nr);
     bool setAddr(long nr, uint32_t addr);
+    bool isDisabled(long nr);
     bool hasCondition(long nr);
     bool hasSyntaxError(long nr);
     const char *getCondition(long nr);

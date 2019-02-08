@@ -217,8 +217,7 @@ AmigaMemory::getMemSrc(uint32_t addr)
 uint8_t
 AmigaMemory::peek8(uint32_t addr)
 {
-    assert(is_uint24_t(addr));
-    
+    addr &= 0xFFFFFF;
     switch (memSrc[addr >> 16]) {
             
         case MEM_UNMAPPED:
@@ -262,31 +261,33 @@ AmigaMemory::peek8(uint32_t addr)
 uint16_t
 AmigaMemory::peek16(uint32_t addr)
 {
+    addr &= 0xFFFFFF;
     return HI_LO(peek8(addr), peek8(addr+1));
 }
 
 uint32_t
 AmigaMemory::peek32(uint32_t addr)
 {
+    addr &= 0xFFFFFF;
     return HI_HI_LO_LO(peek8(addr), peek8(addr+1), peek8(addr+2), peek8(addr+3));
 }
 
 uint8_t
 AmigaMemory::spypeek8(uint32_t addr)
 {
-    assert(is_uint24_t(addr));
+    addr &= 0xFFFFFF;
     return peek8(addr);
 }
 uint16_t
 AmigaMemory::spypeek16(uint32_t addr)
 {
-    assert(is_uint24_t(addr));
-    return peek16(addr); 
+    addr &= 0xFFFFFF;
+    return peek16(addr);
 }
 uint32_t
 AmigaMemory::spypeek32(uint32_t addr)
 {
-    assert(is_uint24_t(addr));
+    addr &= 0xFFFFFF;
     return peek32(addr);
 }
 

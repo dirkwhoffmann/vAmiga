@@ -89,4 +89,22 @@ extension Inspector {
         instrTableView.refresh(everything: everything)
         breakTableView.refresh(everything: everything)
     }
+    
+    @IBAction func cpuGotoAction(_ sender: NSSearchField!) {
+        
+        let input = sender.stringValue
+        
+        if (input == "") {
+            instrTableView.disassemblePC()
+            return
+        }
+        
+        if let addr = UInt32(input, radix: 16) {
+            track("Going to addr \(addr)")
+            instrTableView.disassemble(startAddr: addr)
+            return
+        }
+        
+        sender.stringValue = ""
+    }
 }

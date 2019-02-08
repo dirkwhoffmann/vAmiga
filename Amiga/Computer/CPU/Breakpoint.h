@@ -25,6 +25,9 @@ class Breakpoint {
   
 private:
     
+    // Indicates if this breakpoint is enabled
+    bool enabled = true;
+    
     /* The breakpoint's condition as it was entered by the user
      */
     string conditionStr = "";
@@ -34,10 +37,12 @@ private:
     ASTNode *ast = NULL;
     
 public:
-        
-    //
-    // Managing conditions
-    //
+    
+    // Returns true if this breakpoint is enabled.
+    bool isEnabled() { return enabled; }
+    
+    // Enables a disabled breakpoint and vice versa.
+    void toggleDisabled() { enabled = !enabled; }
     
     // Returns true if this is an coditional breakpoint.
     bool hasCondition() { return ast != NULL; }
@@ -73,6 +78,9 @@ public:
     
     // Deletes a breakpoint condition
     bool removeCondition();
+    
+    // Evaluates a breakpoint
+    bool eval();
 };
 
 #endif
