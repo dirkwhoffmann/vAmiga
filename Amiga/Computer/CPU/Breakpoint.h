@@ -38,11 +38,11 @@ private:
     
 public:
     
-    // Returns true if this breakpoint is enabled.
+    // Manage the enable / disable status
     bool isEnabled() { return enabled; }
-    
-    // Enables a disabled breakpoint and vice versa.
-    void toggleDisabled() { enabled = !enabled; }
+    void enable() { enabled = true; }
+    void disable() { enabled = false; }
+    // void toggleDisabled() { enabled = !enabled; }
     
     // Returns true if this is an coditional breakpoint.
     bool hasCondition() { return ast != NULL; }

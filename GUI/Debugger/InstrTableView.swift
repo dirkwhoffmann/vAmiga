@@ -13,8 +13,8 @@ class InstrTableView : NSTableView {
     
     @IBOutlet weak var inspector: Inspector!
     
-    var memory = amigaProxy?.mem
-    var cpu = amigaProxy?.cpu
+    var memory = amigaProxy!.mem!
+    var cpu = amigaProxy!.cpu!
     
     // Display caches
     var addrInRow  : [Int:UInt32] = [:]
@@ -30,20 +30,43 @@ class InstrTableView : NSTableView {
         target = self
         
         doubleAction = #selector(doubleClickAction(_:))
+        action = #selector(clickAction(_:))
     }
+    
+    @IBAction func clickAction(_ sender: NSTableView!) {
         
-    @IBAction func doubleClickAction(_ sender: Any!) {
+        let row = sender.clickedRow
+        let col = sender.clickedColumn
+
+        track("row = \(row) col = \(col)")
         
-        let sender = sender as! NSTableView
-        let row = sender.selectedRow
+        if col == 0, let addr = addrInRow[row] {
+            
+            if !cpu.hasBreakpoint(at: addr) {
+                cpu.setBreakpointAt(addr)
+                return
+            }
+            if cpu.hasDisabledBreakpoint(at: addr) {
+                cpu.enableBreakpoint(at: addr)
+                return
+            }
+            if cpu.hasBreakpoint(at: addr) {
+                cpu.disableBreakpoint(at: addr)
+                return
+            }
+        }
+    }
+    
+    @IBAction func doubleClickAction(_ sender: NSTableView!) {
         
-        if let addr = addrInRow[row], let cpu = amigaProxy?.cpu {
+        let row = sender.clickedRow
+        let col = sender.clickedColumn
+
+        if col > 0, let addr = addrInRow[row] {
             
             if cpu.hasBreakpoint(at: addr) {
-                // Disable or reenable existing breakpoint
-                cpu.enableOrDisableBreakpoint(at: addr)
+                cpu.deleteBreakpoint(at: addr)
             } else {
-                // Create new breakpoint
                 cpu.setBreakpointAt(addr)
             }
         }
@@ -101,8 +124,8 @@ class InstrTableView : NSTableView {
         
         if (everything) {
         
-            memory = amigaProxy?.mem
-            cpu = amigaProxy?.cpu
+            memory = amigaProxy!.mem
+            cpu = amigaProxy!.cpu
         
             for (c,f) in ["addr" : fmt24] {
                 let columnId = NSUserInterfaceItemIdentifier(rawValue: c)
@@ -142,15 +165,16 @@ extension InstrTableView : NSTableViewDataSource {
     }
     
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
-                
+        
+        guard let addr = addrInRow[row] else { return nil }
+        
         switch tableColumn?.identifier.rawValue {
             
-        case "break":
-            if let addr = addrInRow[row], cpu!.hasBreakpoint(at: addr) {
-                return "⛔"
-            }
-            return " "
-
+        case "break" where cpu.hasDisabledBreakpoint(at: addr):
+            return "\u{26AA}" // "⚪"
+        case "break" where cpu.hasBreakpoint(at: addr):
+            return "\u{1F534}" // "🔴"
+            // return "\u{26D4}" // "⛔"
         case "addr":
             return addrInRow[row]
         case "data":
@@ -158,7 +182,7 @@ extension InstrTableView : NSTableViewDataSource {
         case "instr":
             return instrInRow[row]
         default:
-            return "?"
+            return ""
         }
     }
 }
@@ -169,16 +193,19 @@ extension InstrTableView : NSTableViewDelegate {
         
         let cell = cell as! NSTextFieldCell
         
-        if let addr = addrInRow[row], let c = cpu {
+        if let addr = addrInRow[row] {
 
-            if c.hasDisabledBreakpoint(at: addr) {
-                cell.textColor = NSColor.systemGray
-            } else if c.hasConditionalBreakpoint(at: addr) {
+            // let disabled = cpu.hasDisabledBreakpoint(at: addr)
+            // let conditional = cpu.hasConditionalBreakpoint(at: addr)
+
+            if cpu.hasDisabledBreakpoint(at: addr) {
+                cell.textColor = NSColor.disabledControlTextColor
+            } else if cpu.hasConditionalBreakpoint(at: addr) {
                 cell.textColor = NSColor.systemOrange
-            } else if c.hasBreakpoint(at: addr) {
+            } else if cpu.hasBreakpoint(at: addr) {
                 cell.textColor = NSColor.systemRed
             } else {
-                cell.textColor = NSColor.textColor
+                cell.textColor = NSColor.labelColor
             }
         }
     }

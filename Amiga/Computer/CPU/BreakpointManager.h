@@ -39,8 +39,12 @@ public:
     bool hasDisabledBreakpointAt(uint32_t addr);
     bool hasConditionalBreakpointAt(uint32_t addr);
     void setBreakpointAt(uint32_t addr);
-    void enableOrDisableBreakpointAt(uint32_t addr);
     void deleteBreakpointAt(uint32_t addr);
+    void enableBreakpointAt(uint32_t addr);
+    void disableBreakpointAt(uint32_t addr);
+    
+    // void enableOrDisableBreakpointAt(uint32_t addr);
+    // void deleteBreakpointAt(uint32_t addr);
     // void toggleBreakpointAt(uint32_t addr);
     
     // Gets or sets a property of a breakpoint in a specific slot

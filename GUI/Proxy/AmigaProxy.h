@@ -199,9 +199,11 @@ struct AmigaFileWrapper;
 - (BOOL) hasBreakpointAt:(uint32_t)addr;
 - (BOOL) hasDisabledBreakpointAt:(uint32_t)addr;
 - (BOOL) hasConditionalBreakpointAt:(uint32_t)addr;
-// - (void) toggleBreakpointAt:(uint32_t)addr;
 - (void) setBreakpointAt:(uint32_t)addr;
-- (void) enableOrDisableBreakpointAt:(uint32_t)addr;
+- (void) deleteBreakpointAt:(uint32_t)addr;
+- (void) enableBreakpointAt:(uint32_t)addr;
+- (void) disableBreakpointAt:(uint32_t)addr;
+// - (void) enableOrDisableBreakpointAt:(uint32_t)addr;
 
 - (NSInteger) numberOfBreakpoints;
 - (void) deleteBreakpoint:(NSInteger)nr; 

@@ -128,7 +128,7 @@
                         <font key="font" metaFont="system"/>
                         <tabViewItems>
                             <tabViewItem label="CPU" identifier="" id="P8s-x5-kgY">
-                                <view key="view" id="o5e-Su-gZM">
+                                <view key="view" ambiguous="YES" id="o5e-Su-gZM">
                                     <rect key="frame" x="10" y="33" width="824" height="406"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -694,7 +694,7 @@
                                                                                     </textFieldCell>
                                                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                                 </tableColumn>
-                                                                                <tableColumn identifier="addr" width="56" minWidth="56" maxWidth="1000" id="Smj-2g-qye">
+                                                                                <tableColumn identifier="addr" editable="NO" width="56" minWidth="56" maxWidth="1000" id="Smj-2g-qye">
                                                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Addr">
                                                                                         <font key="font" metaFont="smallSystem"/>
                                                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -707,7 +707,7 @@
                                                                                     </textFieldCell>
                                                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                                 </tableColumn>
-                                                                                <tableColumn identifier="data" width="108.5" minWidth="48" maxWidth="1000" id="pQw-Ew-pd2">
+                                                                                <tableColumn identifier="data" editable="NO" width="108.5" minWidth="48" maxWidth="1000" id="pQw-Ew-pd2">
                                                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Data">
                                                                                         <font key="font" metaFont="smallSystem"/>
                                                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -720,7 +720,7 @@
                                                                                     </textFieldCell>
                                                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                                 </tableColumn>
-                                                                                <tableColumn identifier="instr" width="171.5" minWidth="48" maxWidth="1000" id="DUe-oo-gwG">
+                                                                                <tableColumn identifier="instr" editable="NO" width="171.5" minWidth="48" maxWidth="1000" id="DUe-oo-gwG">
                                                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Instruction">
                                                                                         <font key="font" metaFont="smallSystem"/>
                                                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -1630,7 +1630,7 @@
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Memory" identifier="" id="v16-8n-QW9">
-                                <view key="view" ambiguous="YES" id="m1U-mr-1nr">
+                                <view key="view" id="m1U-mr-1nr">
                                     <rect key="frame" x="10" y="33" width="824" height="406"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>

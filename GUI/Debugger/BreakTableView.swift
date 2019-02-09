@@ -13,7 +13,7 @@ class BreakTableView : NSTableView {
     
     @IBOutlet weak var inspector: Inspector!
     
-    var cpu = amigaProxy?.cpu
+    var cpu = amigaProxy!.cpu!
     
     override func awakeFromNib() {
         
@@ -27,7 +27,7 @@ class BreakTableView : NSTableView {
     func refresh(everything: Bool) {
         
         if (everything) {
-            cpu = amigaProxy?.cpu
+            cpu = amigaProxy!.cpu
             for (c,f) in ["addr" : fmt24] {
                 let columnId = NSUserInterfaceItemIdentifier(rawValue: c)
                 if let column = tableColumn(withIdentifier: columnId) {
@@ -43,8 +43,8 @@ class BreakTableView : NSTableView {
     
     @IBAction func clickAction(_ sender: NSTableView!) {
         
-        let col = sender.clickedColumn
         let row = sender.clickedRow
+        let col = sender.clickedColumn
         
         if col == 0 {
 
@@ -66,7 +66,7 @@ extension BreakTableView : NSTableViewDataSource {
     
     func numberOfRows(in tableView: NSTableView) -> Int {
         
-        return cpu?.numberOfBreakpoints() ?? 0
+        return cpu.numberOfBreakpoints()
     }
     
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
@@ -77,11 +77,11 @@ extension BreakTableView : NSTableViewDataSource {
             return "\u{1F5D1}" // "🗑"
            
         case "addr":
-            return cpu?.breakpointAddr(row)
+            return cpu.breakpointAddr(row)
             
         case "cond":
-            if let cond = cpu?.breakpointCondition(row) {
-                return cond != "" ? cond : "e.g.: D0 == $FFFF && D1 == (A0).w"
+            if let cond = cpu.breakpointCondition(row) {
+                return cond == "" ? "e.g.: D0 == $FF && D1 == (A0).w" : cond
             }
             
         default:
@@ -98,19 +98,33 @@ extension BreakTableView : NSTableViewDelegate {
         
         if let cell = cell as? NSTextFieldCell {
             
-            let disabled = amigaProxy?.cpu.isDisabled(row) ?? false
-            let bpColor : NSColor = disabled ? .systemGray : .textColor
+            if cpu.isDisabled(row) {
+                
+            }
+            
+            let disabled = cpu.isDisabled(row)
+            let conditional = cpu.hasCondition(row)
+            let syntaxError = cpu.hasSyntaxError(row)
             
             switch tableColumn?.identifier.rawValue {
                 
+            case "addr" where disabled:
+                cell.textColor = NSColor.secondaryLabelColor
+
             case "addr":
-                cell.textColor = bpColor
-                
+                cell.textColor = NSColor.labelColor
+
+            case "cond" where syntaxError:
+                cell.textColor = NSColor.systemRed
+
+            case "cond" where !conditional:
+                cell.textColor = NSColor.placeholderTextColor
+
+            case "cond" where disabled:
+                cell.textColor = NSColor.secondaryLabelColor
+
             case "cond":
-                cell.textColor =
-                    cpu!.hasSyntaxError(row) ? NSColor.systemRed :
-                    cpu!.hasCondition(row) ? bpColor :
-                    NSColor.lightGray
+                cell.textColor = NSColor.labelColor
                 
             default:
                 break
@@ -124,11 +138,11 @@ extension BreakTableView : NSTableViewDelegate {
             
         case "addr":
             if let value = object as? UInt32 {
-                if cpu?.setBreakpointAddr(row, addr: value) ?? false { return }
+                if cpu.setBreakpointAddr(row, addr: value) { return }
             }
         case "cond":
             if let value = object as? String {
-                if cpu?.setBreakpointCondition(row, cond: value) ?? false { return }
+                if cpu.setBreakpointCondition(row, cond: value) { return }
             }
         default:
             break
