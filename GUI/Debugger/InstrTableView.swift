@@ -13,7 +13,7 @@ class InstrTableView : NSTableView {
     
     @IBOutlet weak var inspector: Inspector!
     
-    var memory = amigaProxy!.mem!
+    var mem = amigaProxy!.mem!
     var cpu = amigaProxy!.cpu!
     
     // Display caches
@@ -72,29 +72,42 @@ class InstrTableView : NSTableView {
         }
     }
     
-    func disassemblePC() {
+    // Jumps to the instruction the program counter is currently pointing to
+    func jumpToPC() {
         
-        if let pc = amigaProxy?.cpu.getInfo().pc {
-            disassemble(startAddr: pc)
+        jumpTo(addr: cpu.getInfo().pc)
+    }
+
+    // Jumps to the specified address
+    func jumpTo(addr: UInt32?) {
+    
+        guard let addr = addr else { return }
+        
+        if let row = rowForAddr[addr] {
+            
+            // If the requested address is already displayed, we simply
+            // select the corresponding row.
+            scrollRowToVisible(row)
+            selectRowIndexes([row], byExtendingSelection: false)
+            
+        } else {
+            
+            // If the requested address is not displayed, we update the
+            // whole view and display it in the first row.
+            update(addr: addr)
         }
     }
     
-    func disassemble(startAddr: UInt32) {
-        
-        addrInRow[0] = startAddr;
-        disassemble()
-        scrollRowToVisible(0)
-        selectRowIndexes([0], byExtendingSelection: false)
+    // Updates the currently displayed instructions
+    func update() {
+        update(addr: addrInRow[0])
     }
     
-    func disassemble() {
-    
-        guard let amiga = amigaProxy else { return }
+    // Updates the displayed instructions, starting at the specified address
+    func update(addr: UInt32?) {
         
-        let startAddr = addrInRow[0] ?? 0
-        track("disassemble: \(startAddr)")
+        guard var addr = addr else { return }
         
-        var addr = startAddr
         var buffer = Array<Int8>(repeating: 0, count: 64)
         
         instrInRow = [:]
@@ -104,11 +117,11 @@ class InstrTableView : NSTableView {
         
         for i in 0...255 {
             if (addr <= 0xFFFFFF) {
-          
-                let bytes = amiga.cpu.disassemble(&buffer, pc: Int(addr))
+                
+                let bytes = cpu.disassemble(&buffer, pc: Int(addr))
                 instrInRow[i] = String.init(cString: buffer)
                 addrInRow[i]  = addr
-                dataInRow[i]  = amiga.mem.hex(Int(addr), bytes: bytes)
+                dataInRow[i]  = mem.hex(Int(addr), bytes: bytes)
                 rowForAddr[addr] = i
                 
                 addr += UInt32(bytes)
@@ -124,7 +137,7 @@ class InstrTableView : NSTableView {
         
         if (everything) {
         
-            memory = amigaProxy!.mem
+            mem = amigaProxy!.mem
             cpu = amigaProxy!.cpu
         
             for (c,f) in ["addr" : fmt24] {
@@ -139,22 +152,7 @@ class InstrTableView : NSTableView {
             reloadData()
         }
         
-        if let pc = amigaProxy?.cpu.getInfo().pc {
-                
-            if let row = rowForAddr[pc] {
-                
-                // If the requested address is already displayed, we simply
-                // select the corresponding row.
-                scrollRowToVisible(row)
-                selectRowIndexes([row], byExtendingSelection: false)
-                
-            } else {
-                
-                // If the requested address is not displayed, we update the
-                // whole view and display it in the first row.
-                disassemble(startAddr: pc)
-            }
-        }
+        jumpToPC()
     }
 }
 
@@ -173,8 +171,8 @@ extension InstrTableView : NSTableViewDataSource {
         case "break" where cpu.hasDisabledBreakpoint(at: addr):
             return "\u{26AA}" // "⚪"
         case "break" where cpu.hasBreakpoint(at: addr):
-            return "\u{1F534}" // "🔴"
-            // return "\u{26D4}" // "⛔"
+            // return "\u{1F534}" // "🔴"
+            return "\u{26D4}" // "⛔"
         case "addr":
             return addrInRow[row]
         case "data":

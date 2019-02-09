@@ -95,13 +95,12 @@ extension Inspector {
         let input = sender.stringValue
         
         if (input == "") {
-            instrTableView.disassemblePC()
+            instrTableView.jumpToPC()
             return
         }
         
         if let addr = UInt32(input, radix: 16) {
-            track("Going to addr \(addr)")
-            instrTableView.disassemble(startAddr: addr)
+            instrTableView.jumpTo(addr: addr)
             return
         }
         

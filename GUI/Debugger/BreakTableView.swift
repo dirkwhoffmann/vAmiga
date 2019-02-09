@@ -56,7 +56,7 @@ class BreakTableView : NSTableView {
         
             // Jump to breakpoint address
             if let addr = amigaProxy?.cpu.breakpointAddr(row), addr <= 0xFFFFFF {
-                inspector.instrTableView.disassemble(startAddr: addr)
+                inspector.instrTableView.jumpTo(addr: addr)
             }
         }
     }

@@ -655,7 +655,7 @@ extension MyController {
              myAppDelegate.inspector?.refresh(everything: true)
             
         case MSG_BREAKPOINT:
-            myAppDelegate.inspector?.instrTableView.disassemble()
+            myAppDelegate.inspector?.instrTableView.reloadData()
             myAppDelegate.inspector?.breakTableView.refresh(everything: true)
 
         case MSG_READY_TO_POWER_ON:
