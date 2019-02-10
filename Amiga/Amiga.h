@@ -51,7 +51,15 @@ extern Amiga *activeAmiga;
  * Paula, you need to invoke a public method on c64->paula.
  */
 class Amiga : public HardwareComponent {
-        
+    
+    /* Indicates if the Amiga should be executed in debug mode.
+     * Debug mode is enabled when the GUI debugger is opend and disabled when
+     * the GUI debugger is closed. In debug mode, several time-consuming tasks
+     * are performed that are usually left out. E.g., the CPU checks for
+     * breakpoints and records the executed instruction in it's trace buffer.
+     */
+    static bool debugMode;
+    
 public:
     
     // Specification of the machine we are going to emulate...
@@ -210,6 +218,15 @@ public:
      * Calling this function binds the CPU to this emulator instance
      */
     void makeActiveInstance(); 
+    
+    // Indicates if debug mode is enabled.
+    bool getDebugMode() { return debugMode; }
+    
+    // Enters debug mode.
+    void enableDebugging();
+    
+    // Leaves debug mode.
+    void disableDebugging();
     
     
     //

@@ -209,6 +209,12 @@ class Inspector : NSWindowController
     }
 }
 
+/*
+extension Inspector : NSWindowDelegate {
+    
+}
+*/
+
 extension Inspector : NSTabViewDelegate {
     
     func tabView(_ tabView: NSTabView, didSelect tabViewItem: NSTabViewItem?) {

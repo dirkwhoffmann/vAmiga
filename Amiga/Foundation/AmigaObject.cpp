@@ -26,6 +26,7 @@ fprintf(stderr, "%s: %s%s", description, prefix, buf); \
 else \
 fprintf(stderr, "%s%s", prefix, buf);
 
+/*
 void
 AmigaObject::trace()
 {
@@ -38,6 +39,7 @@ AmigaObject::trace()
 
 #endif
 }
+*/
 
 void msg(const char *fmt, ...);
 void plainmsg(const char *fmt, ...);

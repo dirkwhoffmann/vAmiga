@@ -53,30 +53,25 @@ private:
    
 public:
     
-    // Collects the data shown in the GUI's debug panel
+    // Returns the current value of the program counter.
+    uint32_t getPC();
+
+    // Collects the data shown in the GUI's debug panel.
     CPUInfo getInfo();
     
+    
     //
-    // Managing breakpoints
+    // Instructions
     //
     
-    /*
-    bool hasBreakpointAt(uint32_t addr);
-    bool hasConditionalBreakpointAt(uint32_t addr);
-    void addBreakpointAt(uint32_t addr);
-    void deleteBreakpointAt(uint32_t addr);
-    void toggleBreakpointAt(uint32_t addr);
-    
-    bool hasCondition(long nr);
-    bool hasSyntaxError(long nr);
-    uint32_t getBreakpointAddr(long nr);
-    bool setBreakpointAddr(long nr, uint32_t addr);
-    const char *getBreakpointCondition(long nr);
-    bool setBreakpointCondition(long nr, const char *cond);
+    /* Returns the length of the instruction at the provided address in bytes.
+     * Note: This function is slow, because it calls the disassembler
+     * internally.
      */
+    uint32_t lengthOfInstruction(uint32_t addr);
     
-  
-    
+    // Returns the length of the currently executed instruction.
+    uint32_t lengthOInstruction() { return lengthOfInstruction(getPC()); }
     
     
     //

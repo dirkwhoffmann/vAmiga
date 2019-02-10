@@ -56,6 +56,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->cpu->getInfo();
 }
+/*
 - (BOOL) tracing
 {
     return wrapper->cpu->tracingEnabled();
@@ -64,6 +65,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     b ? wrapper->cpu->startTracing() : wrapper->cpu->stopTracing();
 }
+*/
 - (NSInteger) disassemble:(char *)str pc:(NSInteger)pc
 {
     assert(str != NULL);
@@ -807,7 +809,18 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->amiga->masterClock;
 }
-
+- (BOOL) debugMode
+{
+    return wrapper->amiga->getDebugMode();
+}
+- (void) enableDebugging
+{
+    wrapper->amiga->enableDebugging();
+}
+- (void) disableDebugging
+{
+    wrapper->amiga->disableDebugging();
+}
 - (void) powerOn
 {
     return wrapper->amiga->powerOn();

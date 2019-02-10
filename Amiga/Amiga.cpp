@@ -10,6 +10,12 @@
 #include "Amiga.h"
 
 //
+// Static class variables
+//
+
+bool Amiga::debugMode = false;
+
+//
 // Emulator thread
 //
 
@@ -132,6 +138,19 @@ Amiga::makeActiveInstance()
     // TODO: Add code to pull and put the context of the Musashi CPU in and out.
 }
 
+void
+Amiga::enableDebugging()
+{
+    debug("Enabling debug mode\n");
+    debugMode = true;
+}
+
+void
+Amiga::disableDebugging()
+{
+    debug("Disabling debug mode\n");
+    debugMode = false;
+}
 
 bool
 Amiga::configureModel(AmigaModel model)

@@ -27,7 +27,7 @@ public:
     unsigned debugLevel = DEBUG_LEVEL;
     
 private:
-    
+        
     /* Each component has the built-in ability to print trace messages.
      * Such messages are used during debugging, e.g., to print something after
      * each processed CPU instruction. To avoid flooding the console, trace
@@ -36,7 +36,7 @@ private:
      * printed. Setting this variable to a negative value has the effect of
      * tracing forever.
      */
-    long traceCounter = 0;
+    // long traceCounter = 0;
     
     /* Textual description of this object
      * Most debug output methods preceed their output with this string.
@@ -62,6 +62,7 @@ public:
     
 public:
     
+    /*
     // Returns if trace mode is enabled.
     bool tracingEnabled() { return traceCounter != 0; }
     
@@ -73,13 +74,14 @@ public:
     
     // Prints a trace message if tracing is enabled
     void trace();
+    */
     
 private:
     
     /* Prints the actual trace message to the console
      * This method is overwritten by sub-classes that support tracing.
      */
-    virtual void _trace() { }
+    // virtual void _trace() { }
     
     //
     // Printing messages to the console

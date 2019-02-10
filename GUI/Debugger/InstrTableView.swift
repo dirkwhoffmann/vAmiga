@@ -169,7 +169,8 @@ extension InstrTableView : NSTableViewDataSource {
         switch tableColumn?.identifier.rawValue {
             
         case "break" where cpu.hasDisabledBreakpoint(at: addr):
-            return "\u{26AA}" // "⚪"
+            // return "\u{26AA}" // "⚪"
+            return "\u{2B55}" // "⭕"
         case "break" where cpu.hasBreakpoint(at: addr):
             // return "\u{1F534}" // "🔴"
             return "\u{26D4}" // "⛔"

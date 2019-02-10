@@ -81,13 +81,16 @@ struct AmigaFileWrapper;
 @property (readonly) AmigaDriveProxy *df0;
 @property (readonly) AmigaDriveProxy *df1;
 
-
 - (void) makeActiveInstance;
 - (void) kill;
 
 - (BOOL) releaseBuild;
 
 - (uint64_t) masterClock;
+
+- (BOOL) debugMode;
+- (void) enableDebugging;
+- (void) disableDebugging;
 
 - (void) powerOn;
 - (void) powerOff;
@@ -192,8 +195,8 @@ struct AmigaFileWrapper;
 - (void) dump;
 - (CPUInfo) getInfo;
 
-- (BOOL) tracing;
-- (void) setTracing:(BOOL)b;
+// - (BOOL) tracing;
+// - (void) setTracing:(BOOL)b;
 - (NSInteger) disassemble:(char *) str pc:(NSInteger)pc;
 
 - (BOOL) hasBreakpointAt:(uint32_t)addr;

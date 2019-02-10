@@ -120,12 +120,18 @@ CPU::_dump()
     
 }
 
+uint32_t
+CPU::getPC()
+{
+    return m68k_get_reg(NULL, M68K_REG_PC);
+}
+
 CPUInfo
 CPU::getInfo()
 {
     CPUInfo info;
     
-    info.pc = m68k_get_reg(NULL, M68K_REG_PC);
+    info.pc = getPC();
     
     info.d[0] = m68k_get_reg(NULL, M68K_REG_D0);
     info.d[1] = m68k_get_reg(NULL, M68K_REG_D1);
@@ -150,23 +156,12 @@ CPU::getInfo()
     return info;
 }
 
-/*
-void
-CPU::disassemble()
+uint32_t
+CPU::lengthOfInstruction(uint32_t addr)
 {
-    char str[256];
-    uint32_t pc = m68k_get_reg(NULL, M68K_REG_PC);
-    
-    for (unsigned i = 0; i < 10; i++) {
-        uint32_t length = m68k_disassemble(str, pc, M68K_CPU_TYPE_68000);
-        for (unsigned j = 0; j < length; j += 2) {
-            plainmsg("%04X ", amiga->mem.spypeek16(pc + j));
-        }
-        pc += length;
-        plainmsg(": %s\n", str);
-    }
+    char tmp[128];
+    return m68k_disassemble(tmp, addr, M68K_CPU_TYPE_68000);
 }
-*/
 
 uint64_t
 CPU::executeNextInstruction()
