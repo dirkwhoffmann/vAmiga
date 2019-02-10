@@ -180,6 +180,7 @@ public:
      */
     virtual void pause();
     virtual void _pause() { };
+
     
     /* Emulates a reset event on the virtual Amiga.
      * By default, each component resets its sub components.

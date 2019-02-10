@@ -56,6 +56,9 @@ public:
     // Returns the current value of the program counter.
     uint32_t getPC();
 
+    // Returns the start address of the following instruction.
+    uint32_t getNextPC() { return getPC() + lengthOInstruction(); }
+
     // Collects the data shown in the GUI's debug panel.
     CPUInfo getInfo();
     

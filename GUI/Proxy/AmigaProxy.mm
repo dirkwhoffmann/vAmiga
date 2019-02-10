@@ -876,12 +876,6 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->amiga->pause();
 }
-/*
-- (void) runOrPause
-{
-    wrapper->amiga->runOrPause();
-}
-*/
 - (void) suspend
 {
     return wrapper->amiga->suspend();
@@ -994,6 +988,18 @@ struct ADFFileWrapper { ADFFile *adf; };
 - (Message)message
 {
     return wrapper->amiga->getMessage();
+}
+- (void) stopAndGo
+{
+    wrapper->amiga->stopAndGo();
+}
+- (void) stepInto
+{
+    wrapper->amiga->stepInto();
+}
+- (void) stepOver
+{
+    wrapper->amiga->stepOver();
 }
 - (BOOL) warp
 {

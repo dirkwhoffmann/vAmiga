@@ -231,12 +231,12 @@
                                     <items>
                                         <menuItem title="Step Into" keyEquivalent="I" id="429">
                                             <connections>
-                                                <action selector="stepIntoAction:" target="-1" id="488"/>
+                                                <action selector="stepIntoAction:" target="-1" id="i9e-j1-AG9"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem title="Step Over" keyEquivalent="O" id="428">
                                             <connections>
-                                                <action selector="stepOverAction:" target="-1" id="502"/>
+                                                <action selector="stepOverAction:" target="-1" id="WJR-b6-K0I"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="427">

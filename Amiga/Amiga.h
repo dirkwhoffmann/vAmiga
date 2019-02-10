@@ -363,12 +363,15 @@ public:
     
 public:
     
+    // Runs or pauses the emulator
+    void stopAndGo() { isRunning() ? pause() : run(); }
+    
     /* Executes a single instruction
      * This function is used for single-stepping through the code inside the
      * debugger. It starts the execution thread and terminates it after the
      * next instruction has been executed.
      */
-    void step();
+    void stepInto();
     
     /* Executes until the instruction following the current one is reached.
      * This function is used for single-stepping through the code inside the

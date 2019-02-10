@@ -166,5 +166,9 @@ CPU::lengthOfInstruction(uint32_t addr)
 uint64_t
 CPU::executeNextInstruction()
 {
-    return 7; // Consumed cycles
+    debug("PC = %X\n", getPC());
+    int cycles = m68k_execute(1);
+    debug("Executed %d CPU cycles. New PC = %X\n", cycles, getPC());
+    
+    return cycles;
 }

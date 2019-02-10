@@ -124,18 +124,6 @@ extension MyController {
         }
     }
     
-    @IBAction func debugAction(_ sender: Any!) {
-        
-        let state = debugger.state
-        if state == NSDrawerState.closed || state == NSDrawerState.closing {
-            debugOpenAction(self)
-        } else {
-            debugCloseAction(self)
-        }
-        
-        refresh()
-    }
-    
     @IBAction func preferencesAction(_ sender: Any!) {
         
         openPreferences()

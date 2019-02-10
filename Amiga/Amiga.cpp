@@ -743,9 +743,10 @@ Amiga::threadDidTerminate()
 }
 
 void
-Amiga::step()
+Amiga::stepInto()
 {
-    assert(!isRunning());
+    if (isRunning())
+        return;
     
     stop = true;
     run();
@@ -754,12 +755,18 @@ Amiga::step()
 void
 Amiga::stepOver()
 {
+    if (isRunning())
+        return;
     
+    cpu.bpManager.setSoftBreakpointAt(cpu.getNextPC());
+    run();
 }
 
 void
 Amiga::runLoop()
 {
+    debug("Amiga::runLoop\n");
+    
     // Prepare to run
     amiga->restartTimer();
     
@@ -795,6 +802,7 @@ Amiga::runLoop()
             }
         }
         
-    
+        stop = true; // DELETE ME
     } while (!stop);
+    stop = false;
 }

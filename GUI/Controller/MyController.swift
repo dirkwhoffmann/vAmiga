@@ -607,9 +607,8 @@ extension MyController {
             
             // Refresh debug panel if open
             if amiga.isRunning() {
-                let state = debugger.state
-                if state == NSDrawerState.open || state == NSDrawerState.opening {
-                    refresh()
+                if myAppDelegate.inspector?.window?.isVisible ?? false {
+                    myAppDelegate.inspector?.refresh(everything: false)
                 }
             }
         }
@@ -672,30 +671,33 @@ extension MyController {
             needsSaving = true
             disableUserEditing()
             validateToolbarItems()
-            refresh()
+            myAppDelegate.inspector?.refresh(everything: true)
     
         case MSG_PAUSE:
             
             track("Pause")
             enableUserEditing()
             validateToolbarItems()
-            refresh()
+            myAppDelegate.inspector?.refresh(everything: true)
     
         case MSG_POWER_ON:
             
             track("Power on")
             metal.blendIn()
             powerLED.image = NSImage.init(named: "powerLedOn")
+            myAppDelegate.inspector?.refresh(everything: true)
             
         case MSG_POWER_OFF:
             
-            track("Power on")
+            track("Power off")
             metal.blendOut()
             powerLED.image = NSImage.init(named: "powerLedOff")
+            myAppDelegate.inspector?.refresh(everything: true)
             
         case MSG_RESET:
             
             track("Reset")
+            myAppDelegate.inspector?.refresh(everything: true)
             
         case MSG_WARP_ON,
              MSG_WARP_OFF:
@@ -794,7 +796,7 @@ extension MyController {
         case MSG_CPU_HARD_BREAKPOINT_REACHED,
              MSG_CPU_ILLEGAL_INSTRUCTION:
             self.debugOpenAction(self)
-            refresh()
+            myAppDelegate.inspector?.refresh(everything: true)
             
  
     
@@ -937,7 +939,6 @@ extension MyController {
         }
     
         alwaysWarp = !alwaysWarp
-        refresh()
     }
     
     

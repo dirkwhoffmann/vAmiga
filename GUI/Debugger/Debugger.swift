@@ -13,9 +13,6 @@ extension MyController {
 
     func setupDebugger() {
         
-        // Start with hexadecimal number format
-        setHexadecimalAction(self)
-        
         // Create and assign binary number formatter
         let bF = MyFormatter.init(radix: 2, min: 0, max: 255)
         ciaPAbinary.formatter = bF
@@ -29,6 +26,7 @@ extension MyController {
     }
     
     // Updates all visible values in the debug panel
+    /*
     func refresh() {
         
         if let id = debugPanel.selectedTabViewItem?.identifier as? String {
@@ -49,6 +47,7 @@ extension MyController {
             }
         }
     }
+    */
     
     func refreshFormatters(hex: Bool) {
 
@@ -98,7 +97,7 @@ extension MyController {
                         ])
         
 
-        refresh()
+        // refresh()
     }
     
     func setUserEditing(_ enabled: Bool) {
@@ -164,75 +163,6 @@ extension MyController {
 extension MyController : NSTabViewDelegate {
 
     func tabView(_ tabView: NSTabView, didSelect tabViewItem: NSTabViewItem?) {
-        refresh()
+        // refresh()
     }
 }
-
-//
-// Panel independent controls
-//
-
-extension MyController {
-    
-    @IBAction func stepIntoAction(_ sender: Any!) {
-        
-       needsSaving = true
-        refresh()
-    }
-  
-    @IBAction func stepOverAction(_ sender: Any!) {
-
-        needsSaving = true
-        refresh()
-    }
-    
-    @IBAction func stopAndGoAction(_ sender: Any!) {
-    
-        if (amiga.isRunning()) {
-            amiga.pause();
-        } else {
-            amiga.run();
-        }
-        refresh()
-    }
-    
-    // DEPRECATED (use pauseContinueAction instead)
-    @IBAction func pauseAction(_ sender: Any!) {
-        
-        if amiga.isRunning() {
-            amiga.pause()
-            debugger.open()
-        }
-        refresh()
-    }
-
-    // DEPRECATED (use pauseContinueAction instead)
-    @IBAction func continueAction(_ sender: Any!) {
-        
-        needsSaving = true
-        if amiga.isPaused() {
-            amiga.run()
-        }
-        refresh()
-    }
-    
-    @IBAction func setDecimalAction(_ sender: Any!) {
-  
-        hex = false
-        refreshFormatters(hex: false)
-    }
-    
-    @IBAction func setHexadecimalAction(_ sender: Any!) {
-        
-        hex = true
-        refreshFormatters(hex: true)
-    }
-}
-
-
-
-
-
-
-
-

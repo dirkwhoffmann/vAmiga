@@ -50,10 +50,8 @@ public:
     void enableBreakpointAt(uint32_t addr);
     void disableBreakpointAt(uint32_t addr);
     
-    // void enableOrDisableBreakpointAt(uint32_t addr);
-    // void deleteBreakpointAt(uint32_t addr);
-    // void toggleBreakpointAt(uint32_t addr);
-    
+    void setSoftBreakpointAt(uint32_t addr) { softStop = addr; }
+
     // Gets or sets a property of a breakpoint in a specific slot
     void deleteBreakpoint(long nr);
     uint32_t getAddr(long nr);

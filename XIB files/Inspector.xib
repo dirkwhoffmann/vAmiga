@@ -761,6 +761,9 @@
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="system"/>
                                                                 </buttonCell>
+                                                                <connections>
+                                                                    <action selector="cpuStepIntoAction:" target="-2" id="E3M-kV-Tpu"/>
+                                                                </connections>
                                                             </button>
                                                             <button toolTip="Step Over" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RyZ-E9-b7L">
                                                                 <rect key="frame" x="71" y="330" width="32" height="32"/>
@@ -769,6 +772,9 @@
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="system"/>
                                                                 </buttonCell>
+                                                                <connections>
+                                                                    <action selector="cpuStepOverAction:" target="-2" id="akI-jp-Fiy"/>
+                                                                </connections>
                                                             </button>
                                                             <button toolTip="Run / Pause" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rfh-1e-vf2">
                                                                 <rect key="frame" x="7" y="330" width="32" height="32"/>
@@ -777,6 +783,9 @@
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="system"/>
                                                                 </buttonCell>
+                                                                <connections>
+                                                                    <action selector="cpuStopAndGoAction:" target="-2" id="60A-zR-dQf"/>
+                                                                </connections>
                                                             </button>
                                                             <searchField wantsLayer="YES" verticalHuggingPriority="750" fixedFrame="YES" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AJb-gm-0L5">
                                                                 <rect key="frame" x="283" y="336" width="96" height="22"/>

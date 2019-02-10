@@ -90,6 +90,21 @@ extension Inspector {
         breakTableView.refresh(everything: everything)
     }
     
+    @IBAction func cpuStopAndGoAction(_ sender: NSButton!) {
+        
+        myController?.stopAndGoAction(sender)
+    }
+    
+    @IBAction func cpuStepIntoAction(_ sender: NSButton!) {
+        
+         myController?.stepIntoAction(sender)
+    }
+    
+    @IBAction func cpuStepOverAction(_ sender: NSButton!) {
+        
+         myController?.stepOverAction(sender)
+    }
+    
     @IBAction func cpuGotoAction(_ sender: NSSearchField!) {
         
         let input = sender.stringValue

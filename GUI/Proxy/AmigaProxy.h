@@ -105,7 +105,6 @@ struct AmigaFileWrapper;
 - (BOOL) isPaused;
 - (void) run;
 - (void) pause;
-// - (void) runOrPause;
 
 - (void) suspend;
 - (void) resume;
@@ -138,6 +137,10 @@ struct AmigaFileWrapper;
 - (void) addListener:(const void *)sender function:(Callback *)func;
 - (void) removeListener:(const void *)sender;
 - (Message)message;
+
+- (void) stopAndGo;
+- (void) stepInto;
+- (void) stepOver;
 
 - (BOOL) warp;
 - (void) setWarp:(BOOL)value;

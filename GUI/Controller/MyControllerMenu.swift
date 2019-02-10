@@ -48,7 +48,7 @@ extension MyController : NSMenuItemValidation {
             // Edit menu
             //
             
-        case #selector(MyController.runOrHaltAction(_:)):
+        case #selector(MyController.stopAndGoAction(_:)):
             item.title = amiga.isRunning() ? "Pause" : "Continue"
             return true
             
@@ -114,11 +114,7 @@ extension MyController : NSMenuItemValidation {
             // Debug menu
             //
             
-        case #selector(MyController.pauseAction(_:)):
-            return amiga.isRunning()
-            
-        case #selector(MyController.continueAction(_:)),
-             #selector(MyController.stepIntoAction(_:)),
+        case #selector(MyController.stepIntoAction(_:)),
              #selector(MyController.stepOverAction(_:)),
              #selector(MyController.stopAndGoAction(_:)):
             return amiga.isPaused()
@@ -277,23 +273,34 @@ extension MyController : NSMenuItemValidation {
         
         keyboardcontroller.autoType(text)
     }
-
-    @IBAction func runOrHaltAction(_ sender: Any!) {
+    
+    @IBAction func stopAndGoAction(_ sender: NSButton!) {
         
-        // amiga.runOrHalt()
-        refresh()
+        track()
+        amigaProxy?.stopAndGo()
+    }
+    
+    @IBAction func stepIntoAction(_ sender: NSButton!) {
+        
+        track()
+        amigaProxy?.stepInto()
+    }
+    
+    @IBAction func stepOverAction(_ sender: NSButton!) {
+        
+        track()
+        amigaProxy?.stepOver()
+        
     }
     
     @IBAction func resetAction(_ sender: Any!) {
         
         amiga.reset()
-        refresh()
     }
     
     @IBAction func powerAction(_ sender: Any!) {
         
         amiga.isPoweredOn() ? amiga.powerOff() : amiga.run();
-        refresh()
     }
     
     
