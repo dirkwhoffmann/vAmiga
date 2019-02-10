@@ -164,11 +164,20 @@ class Inspector : NSWindowController
         ciaIMRbinary.formatter = bF
         
         // Refresh the currently shown panel
+        // refresh(everything: true)
+    }
+    
+    override func showWindow(_ sender: Any?) {
+
+        track()
+        super.showWindow(self)
+        amigaProxy?.enableDebugging()
         refresh(everything: true)
     }
     
     // Assigns a number formatter to a control
     func assignFormatter(_ formatter: Formatter, _ control: NSControl) {
+        
         control.abortEditing()
         control.formatter = formatter
         control.needsDisplay = true
@@ -183,6 +192,8 @@ class Inspector : NSWindowController
     
     // Updates the currently shown panel
     func refresh(everything: Bool) {
+        
+        if window?.isVisible == false { return }
         
         track()
         if let id = debugPanel.selectedTabViewItem?.label {

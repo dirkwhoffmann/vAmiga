@@ -152,7 +152,8 @@ CPU::getInfo()
     info.a[7] = m68k_get_reg(NULL, M68K_REG_A7);
     
     info.ssp = m68k_get_reg(NULL, M68K_REG_ISP);
-  
+    info.flags = m68k_get_reg(NULL, M68K_REG_SR);
+    
     return info;
 }
 
