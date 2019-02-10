@@ -25,7 +25,14 @@ class BreakpointManager : public HardwareComponent {
     
 private:
     
+    // Container storing all breakpoints
     map<uint32_t, Breakpoint> breakpoints;
+
+    /* Soft breakpoint for implementing single-stepping.
+     * In contrast to standard (hard) breakpoints, a soft breakpoint is
+     * deleted when reached.
+     */
+    uint32_t softStop = UINT32_MAX;
     
 public:
     
@@ -57,6 +64,9 @@ public:
     const char *getCondition(long nr);
     bool setCondition(long nr, const char *str);
     bool removeCondition(long nr);
+    
+    // Returns true if the emulator has reached a breakpoint
+    bool shouldStop();
 };
 
 #endif

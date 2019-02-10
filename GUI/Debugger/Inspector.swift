@@ -209,11 +209,14 @@ class Inspector : NSWindowController
     }
 }
 
-/*
 extension Inspector : NSWindowDelegate {
     
+    func windowWillClose(_ notification: Notification) {
+        
+        track("Closing inspector")
+        amigaProxy?.disableDebugging()
+    }
 }
-*/
 
 extension Inspector : NSTabViewDelegate {
     

@@ -566,5 +566,11 @@ Breakpoint::removeCondition()
 bool
 Breakpoint::eval()
 {
-    return enabled && (!ast || ast->eval());
+    if (!enabled)
+        return false;
+    
+    if (!ast)
+        return true;
+    
+    return ast->eval();
 }

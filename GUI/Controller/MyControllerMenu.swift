@@ -332,6 +332,7 @@ extension MyController : NSMenuItemValidation {
         if myAppDelegate.inspector == nil {
             myAppDelegate.inspector = Inspector.make()
         }
+        amigaProxy?.enableDebugging()
         myAppDelegate.inspector?.showWindow(self)
     }
     

@@ -361,7 +361,21 @@ public:
     // Running the emulator
     //
     
-    public:
+public:
+    
+    /* Executes a single instruction
+     * This function is used for single-stepping through the code inside the
+     * debugger. It starts the execution thread and terminates it after the
+     * next instruction has been executed.
+     */
+    void step();
+    
+    /* Executes until the instruction following the current one is reached.
+     * This function is used for single-stepping through the code inside the
+     * debugger. It sets a soft breakpoint to PC+n where n is the length
+     * bytes of the current instruction and starts the execution thread.
+     */
+    void stepOver();
     
     /* The thread enter function.
      * This (private) method is invoked when the emulator thread launches. It

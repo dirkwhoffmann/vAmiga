@@ -352,9 +352,6 @@ Amiga::_run()
         return;
     }
     
-    // Start sub components
-    paula.audioUnit.run();
-    
     // Start the emulator thread
     pthread_create(&p, NULL, threadMain, (void *)this);
 }
@@ -746,6 +743,21 @@ Amiga::threadDidTerminate()
 }
 
 void
+Amiga::step()
+{
+    assert(!isRunning());
+    
+    stop = true;
+    run();
+}
+
+void
+Amiga::stepOver()
+{
+    
+}
+
+void
 Amiga::runLoop()
 {
     // Prepare to run
@@ -759,8 +771,9 @@ Amiga::runLoop()
     //
     
     // THE FOLLOWING CODE IS FOR VISUAL PROTOTYPING ONLY
-    stop = false;
-    while (!stop) {
+    
+    // Execute at least one instruction
+    do {
         
         // Emulate the CPU (fake)
         uint64_t cpuCycles = cpu.executeNextInstruction(); 
@@ -774,6 +787,14 @@ Amiga::runLoop()
         denise.executeUntil(masterClock);
         eventHandler.executeUntil(masterClock);
         
+        if (debugMode) {
+
+            // Check if a breakpoint has been reached
+            if (cpu.bpManager.shouldStop()) {
+                stop = true;
+            }
+        }
         
-    }
+    
+    } while (!stop);
 }
