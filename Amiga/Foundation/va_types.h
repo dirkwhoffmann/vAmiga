@@ -284,7 +284,9 @@ typedef enum
     // CPU
     MSG_BREAKPOINT_CONFIG,
     MSG_BREAKPOINT_REACHED,
-    // MSG_THREAD_TERMINATED,
+    
+    // Memory
+    MSG_MEM_LAYOUT,
     
     // Keyboard
     MSG_MAP_CMD_KEYS,

@@ -197,7 +197,6 @@ Amiga::configureChipMemory(long size)
         
         config.chipRamSize = size;
         mem.updateMemSrcTable();
-        putMessage(MSG_CONFIG);
     }
     
     return true;
@@ -217,7 +216,6 @@ Amiga::configureSlowMemory(long size)
         
         config.slowRamSize = size;
         mem.updateMemSrcTable();
-        putMessage(MSG_CONFIG);
     }
     
     return true;
@@ -237,7 +235,6 @@ Amiga::configureFastMemory(long size)
         
         config.fastRamSize = size;
         mem.updateMemSrcTable();
-        putMessage(MSG_CONFIG);
     }
     
     return true;
@@ -250,7 +247,6 @@ Amiga::configureRealTimeClock(bool value)
         
         config.realTimeClock = value;
         mem.updateMemSrcTable();
-        putMessage(MSG_CONFIG);
     }
     
     return true;

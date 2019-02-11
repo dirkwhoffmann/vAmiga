@@ -650,9 +650,10 @@ extension MyController {
         
         switch (msg.type) {
     
-        case MSG_CONFIG:
+        case MSG_CONFIG,
+             MSG_MEM_LAYOUT:
              myAppDelegate.inspector?.refresh(everything: true)
-            
+
         case MSG_BREAKPOINT_CONFIG:
             myAppDelegate.inspector?.instrTableView.reloadData()
             myAppDelegate.inspector?.breakTableView.refresh(everything: true)

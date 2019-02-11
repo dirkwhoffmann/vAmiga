@@ -167,44 +167,52 @@ AmigaMemory::loadRom(AmigaFile *rom, uint8_t *target, size_t length)
 void
 AmigaMemory::updateMemSrcTable()
 {
-    MemorySource mem_chip = chipRam ? MEM_CHIP : MEM_UNMAPPED;
     MemorySource mem_boot = bootRom ? MEM_BOOT : MEM_UNMAPPED;
     MemorySource mem_kick = kickRom ? MEM_KICK : MEM_UNMAPPED;
-
+    debug("Slow ram size = %d %p\n", slowRamSize, slowRam);
     // Start from scratch
-    for (unsigned bank = 0; bank < 256; bank++)
+    for (unsigned bank = 0x00; bank <= 0xFF; bank++)
         memSrc[bank] = MEM_UNMAPPED;
     
-    // Setup standard layout
-    struct {
-        
-        uint8_t from; uint8_t to; MemorySource src;
-        
-    } layout[6] = {
-        
-        { 0x00, 0x19, mem_chip },
-        { 0xA0, 0xBF, MEM_CIA  },
-        { 0xDC, 0xDE, amiga->config.realTimeClock ? MEM_RTC : MEM_UNMAPPED },
-        { 0xDF, 0xDF, MEM_OCS },
-        { 0xF8, 0xFB, kickIsWritable ? mem_boot : mem_kick },
-        { 0xFC, 0xFF, mem_kick }
-    };
+    // Chip Ram
+    for (unsigned bank = 0x00; bank <= 0x19; bank++)
+        memSrc[bank] = chipRam ? MEM_CHIP : MEM_UNMAPPED;
     
-    for (unsigned i = 0; i < 6; i++)
-        for (unsigned bank = layout[i].from; bank <= layout[i].to; bank++)
-            memSrc[bank] = layout[i].src;
-
     // Install Fast Ram
-    long fastRamBanks = amiga->getConfig().fastRamSize / 64;
-    for (unsigned bank = 0; bank < fastRamBanks; bank++) {
+    for (unsigned bank = 0; bank < amiga->config.fastRamSize / 64; bank++)
         memSrc[0x20 + bank] = MEM_FAST;
-    }
-    
+
+    // CIA range
+    for (unsigned bank = 0xA0; bank <= 0xBF; bank++)
+        memSrc[bank] = MEM_CIA;
+
+    // Slow Ram
+    for (unsigned bank = 0; bank < amiga->config.slowRamSize / 64; bank++)
+        memSrc[0xC0 + bank] = MEM_SLOW;
+
+    // Real-time clock
+    for (unsigned bank = 0xDC; bank <= 0xDE; bank++)
+        memSrc[bank] = amiga->config.realTimeClock ? MEM_RTC : MEM_UNMAPPED;
+
+    // OCS
+    for (unsigned bank = 0xDF; bank <= 0xDF; bank++)
+        memSrc[bank] = MEM_OCS;
+
+    // Boot Rom or Kickstart mirror
+    for (unsigned bank = 0xF8; bank <= 0xFB; bank++)
+        memSrc[bank] = kickIsWritable ? mem_boot : mem_kick;
+
+    // Kickstart
+    for (unsigned bank = 0xFC; bank <= 0xFF; bank++)
+        memSrc[bank] = mem_kick;
+
     // Overlay Rom with lower memory area if OVL line is high
     bool ovl = true; // TODO: get from CIA
     if (ovl)
         for (unsigned bank = 0; bank < 8; bank++)
             memSrc[bank] = memSrc[0xF8 + bank];
+    
+    amiga->putMessage(MSG_MEM_LAYOUT);
 }
 
 MemorySource
