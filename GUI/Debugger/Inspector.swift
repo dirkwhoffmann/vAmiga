@@ -195,22 +195,17 @@ class Inspector : NSWindowController
         
         if window?.isVisible == false { return }
         
-        track()
         if let id = debugPanel.selectedTabViewItem?.label {
             
-            track("\(id)")
             switch id {
 
             case "CPU":
-                track()
                 refreshCPU(everything: everything)
 
             case "CIA":
-                track()
                 refreshCIA(everything: everything)
                 
             case "Memory":
-                track()
                 refreshMemory(everything: everything)
                 
             default:

@@ -354,6 +354,8 @@ Amiga::_run()
     
     // Start the emulator thread
     pthread_create(&p, NULL, threadMain, (void *)this);
+    
+    amiga->putMessage(MSG_RUN);
 }
 
 void
@@ -366,13 +368,16 @@ Amiga::_pause()
     
     // Wait until the thread has terminated
     pthread_join(p, NULL);
+    
+    amiga->putMessage(MSG_PAUSE);
 }
 
 void
 Amiga::_reset()
 {
-    msg("Resetting\n");
+    msg("Reset\n");
     
+    amiga->putMessage(MSG_RESET);
     ping();
 }
 
@@ -730,16 +735,20 @@ void
 Amiga::threadWillStart()
 {
     debug(2, "Emulator thread started\n");
-    amiga->putMessage(MSG_RUN);
 }
 
 void
 Amiga::threadDidTerminate()
 {
     debug(2, "Emulator thread terminated\n");
-    paula.audioUnit.pause();
     p = NULL;
-    amiga->putMessage(MSG_PAUSE);
+    
+    /* Put emulator into pause mode. If we got here by a call to pause(), the
+     * following (reentrant) call to pause() has no effect. If we got here
+     * because a breakpoint was reached, the following call will perform the
+     * state transition.
+     */
+    pause();
 }
 
 void
@@ -799,6 +808,7 @@ Amiga::runLoop()
             // Check if a breakpoint has been reached
             if (cpu.bpManager.shouldStop()) {
                 stop = true;
+                putMessage(MSG_BREAKPOINT_REACHED);
             }
         }
         

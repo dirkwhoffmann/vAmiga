@@ -282,7 +282,9 @@ typedef enum
     MSG_WARP_OFF,
 
     // CPU
-    MSG_BREAKPOINT,
+    MSG_BREAKPOINT_CONFIG,
+    MSG_BREAKPOINT_REACHED,
+    // MSG_THREAD_TERMINATED,
     
     // Keyboard
     MSG_MAP_CMD_KEYS,

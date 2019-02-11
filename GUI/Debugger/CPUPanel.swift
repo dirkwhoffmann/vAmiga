@@ -14,8 +14,6 @@ extension Inspector {
         guard let amiga = amigaProxy else { return }
         let info = amiga.cpu.getInfo()
         
-        track("Refreshing CPU inspector tab")
-        
         if everything {
             
             for (c,f) in [ cpuPC: fmt32,

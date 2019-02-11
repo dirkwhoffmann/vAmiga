@@ -46,7 +46,7 @@ BreakpointManager::setBreakpointAt(uint32_t addr)
     amiga->suspend();
     
     breakpoints.insert(pair<uint32_t, Breakpoint>(addr, Breakpoint()));
-    amiga->putMessage(MSG_BREAKPOINT);
+    amiga->putMessage(MSG_BREAKPOINT_CONFIG);
     
     amiga->resume();
 }
@@ -60,7 +60,7 @@ BreakpointManager::deleteBreakpointAt(uint32_t addr)
     amiga->suspend();
     
     breakpoints.erase(it);
-    amiga->putMessage(MSG_BREAKPOINT);
+    amiga->putMessage(MSG_BREAKPOINT_CONFIG);
     
     amiga->resume();
 }
@@ -74,7 +74,7 @@ BreakpointManager::enableBreakpointAt(uint32_t addr)
     amiga->suspend();
     
     (*it).second.enable();
-    amiga->putMessage(MSG_BREAKPOINT);
+    amiga->putMessage(MSG_BREAKPOINT_CONFIG);
     
     amiga->resume();
 }
@@ -88,7 +88,7 @@ BreakpointManager::disableBreakpointAt(uint32_t addr)
     amiga->suspend();
     
     (*it).second.disable();
-    amiga->putMessage(MSG_BREAKPOINT);
+    amiga->putMessage(MSG_BREAKPOINT_CONFIG);
     
     amiga->resume();
 }
@@ -102,7 +102,7 @@ BreakpointManager::deleteBreakpoint(long nr)
     amiga->suspend();
     
     breakpoints.erase(it);
-    amiga->putMessage(MSG_BREAKPOINT);
+    amiga->putMessage(MSG_BREAKPOINT_CONFIG);
     
     amiga->resume();
 }
@@ -127,7 +127,7 @@ BreakpointManager::setAddr(long nr, uint32_t addr)
     Breakpoint bp = (*it).second;
     breakpoints.erase(it);
     breakpoints.insert(pair<uint32_t, Breakpoint>(addr, bp));
-    amiga->putMessage(MSG_BREAKPOINT);
+    amiga->putMessage(MSG_BREAKPOINT_CONFIG);
     
     amiga->resume();
     
@@ -179,7 +179,7 @@ BreakpointManager::setCondition(long nr, const char *str)
     amiga->suspend();
     
     (*it).second.setCondition(str);
-    amiga->putMessage(MSG_BREAKPOINT);
+    amiga->putMessage(MSG_BREAKPOINT_CONFIG);
     
     amiga->resume();
     
@@ -195,7 +195,7 @@ BreakpointManager::removeCondition(long nr)
     amiga->suspend();
     
     (*it).second.removeCondition();
-    amiga->putMessage(MSG_BREAKPOINT);
+    amiga->putMessage(MSG_BREAKPOINT_CONFIG);
     
     amiga->resume();
     

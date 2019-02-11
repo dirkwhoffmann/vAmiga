@@ -653,7 +653,7 @@ extension MyController {
         case MSG_CONFIG:
              myAppDelegate.inspector?.refresh(everything: true)
             
-        case MSG_BREAKPOINT:
+        case MSG_BREAKPOINT_CONFIG:
             myAppDelegate.inspector?.instrTableView.reloadData()
             myAppDelegate.inspector?.breakTableView.refresh(everything: true)
 
@@ -667,7 +667,7 @@ extension MyController {
         
         case MSG_RUN:
             
-            track("Run")
+            // track("Run")
             needsSaving = true
             disableUserEditing()
             validateToolbarItems()
@@ -675,28 +675,28 @@ extension MyController {
     
         case MSG_PAUSE:
             
-            track("Pause")
+            // track("Pause")
             enableUserEditing()
             validateToolbarItems()
             myAppDelegate.inspector?.refresh(everything: true)
     
         case MSG_POWER_ON:
             
-            track("Power on")
+            // track("Power on")
             metal.blendIn()
             powerLED.image = NSImage.init(named: "powerLedOn")
             myAppDelegate.inspector?.refresh(everything: true)
             
         case MSG_POWER_OFF:
             
-            track("Power off")
+            // track("Power off")
             metal.blendOut()
             powerLED.image = NSImage.init(named: "powerLedOff")
             myAppDelegate.inspector?.refresh(everything: true)
             
         case MSG_RESET:
             
-            track("Reset")
+            // track("Reset")
             myAppDelegate.inspector?.refresh(everything: true)
             
         case MSG_WARP_ON,

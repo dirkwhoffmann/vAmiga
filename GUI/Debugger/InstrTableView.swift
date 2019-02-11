@@ -133,8 +133,6 @@ class InstrTableView : NSTableView {
     
     func refresh(everything: Bool) {
     
-        track()
-        
         if (everything) {
         
             mem = amigaProxy!.mem
