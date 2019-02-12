@@ -326,6 +326,10 @@ Amiga::_powerOn()
     m68k_set_cpu_type(M68K_CPU_TYPE_68000);
     m68k_pulse_reset();
     
+    // For debugging, we start in debug mode and set a breakpoint
+    debugMode = true;
+    cpu.bpManager.setBreakpointAt(0xFC00DE);
+    
     putMessage(MSG_POWER_ON);
 }
 
@@ -808,7 +812,6 @@ Amiga::runLoop()
             }
         }
         
-        stop = true; // DELETE ME
     } while (!stop);
     stop = false;
 }

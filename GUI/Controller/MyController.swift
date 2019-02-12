@@ -654,10 +654,13 @@ extension MyController {
              MSG_MEM_LAYOUT:
              myAppDelegate.inspector?.refresh(everything: true)
 
-        case MSG_BREAKPOINT_CONFIG:
+        case MSG_BREAKPOINT_CONFIG,
+             MSG_BREAKPOINT_REACHED:
+             myAppDelegate.inspector?.refresh(everything: true)
+            /*
             myAppDelegate.inspector?.instrTableView.reloadData()
             myAppDelegate.inspector?.breakTableView.refresh(everything: true)
-
+            */
         case MSG_READY_TO_POWER_ON:
     
             // Launch the emulator

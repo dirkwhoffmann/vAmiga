@@ -95,6 +95,8 @@ class InstrTableView : NSTableView {
             // If the requested address is not displayed, we update the
             // whole view and display it in the first row.
             update(addr: addr)
+            scrollRowToVisible(0)
+            selectRowIndexes([0], byExtendingSelection: false)
         }
     }
     
@@ -146,8 +148,6 @@ class InstrTableView : NSTableView {
                     }
                 }
             }
-            
-            reloadData()
         }
         
         jumpToPC()

@@ -28,7 +28,7 @@ class RomDropView : NSImageView
     func acceptDragSource(url: URL) -> Bool {
         
         guard let amiga = amigaProxy else { return false }
-        
+
         if amiga.config().model == A1000 {
             return amiga.isBootRom(url) && amiga.isPoweredOff()
         } else {

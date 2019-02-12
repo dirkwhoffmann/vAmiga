@@ -38,7 +38,7 @@ struct Rom {
     
 let knownRoms : [UInt64 : String] = [
 
-    Rom.missing:             "",
+    // Rom.missing:             "",
     
     // Boot Roms
     Rom.boot_252179_01:      "Amiga 1000 Boot Rom (252179-01)",
@@ -76,29 +76,34 @@ extension PreferencesController {
             config.model == A1000 ? "1000" :
                 config.model == A500 ? "500" : "2000"
         
-        let running      = amiga.isRunning()
+        let poweredOff   = amiga.isPoweredOff()
         let bootHash     = amiga.bootRomFingerprint()
         let kickHash     = amiga.kickRomFingerprint()
         let hash         = config.model == A1000 ? bootHash : kickHash
-        
-        let hasRom       = hash != 0
-        let hasArosRom   = hash == 0xE74215EB368CD7F1
-        let hasKnownRom  = knownRoms[hash] != nil
-        let hasOrigRom   = hasKnownRom && !hasArosRom
 
-        let bootRomURL   = controller.bootRomURL
-        let kickRomURL   = controller.kickRomURL
-        let url          = config.model == A1000 ? bootRomURL : kickRomURL
+        track("bootHash = \(bootHash)")
+        track("kickHash = \(kickHash)")
+        track("hash = \(hash)")
+
+        let hasRom        = hash != 0
+        let hasArosRom    = hash == 0xE74215EB368CD7F1
+        let hasKnownRom   = knownRoms[hash] != nil
+        let hasUnknownRom = hasRom && !hasKnownRom
+        let hasOrigRom    = hasKnownRom && !hasArosRom
+
+        let bootRomURL    = controller.bootRomURL
+        let kickRomURL    = controller.kickRomURL
+        let url           = config.model == A1000 ? bootRomURL : kickRomURL
         
-        let romMissing   = NSImage.init(named: "rom_light")
-        let romOriginal  = NSImage.init(named: "rom_original")
-        let romAros      = NSImage.init(named: "rom_aros")
-        let romUnknown   = NSImage.init(named: "rom_unknown")
+        let romMissing    = NSImage.init(named: "rom_light")
+        let romOriginal   = NSImage.init(named: "rom_original")
+        let romAros       = NSImage.init(named: "rom_aros")
+        let romUnknown    = NSImage.init(named: "rom_unknown")
         
-        // Lock controls if emulator is running
-        romDropView.isEnabled = !running
-        romDeleteButton.isEnabled = !running
-        romFactoryButton.isEnabled = !running
+        // Lock controls if emulator is powered on
+        romDropView.isEnabled = poweredOff
+        romDeleteButton.isEnabled = poweredOff
+        romFactoryButton.isEnabled = poweredOff
         
         // Rom icon
         romDropView.image =
@@ -132,7 +137,7 @@ extension PreferencesController {
         romText.textColor = hasRom ? .textColor : .systemRed
         romSubText.stringValue = subText
             
-        romHash.isHidden = hasKnownRom
+        romHash.isHidden = !hasUnknownRom
         romHash.stringValue = String(format: "Hash: %llx", hash)
         
         romDeleteButton.isHidden = !hasRom
@@ -150,9 +155,9 @@ extension PreferencesController {
         }
         
         // Lock symbol and explanation
-        romLockImage.isHidden = !running
-        romLockText.isHidden = !running
-        romLockSubText.isHidden = !running
+        romLockImage.isHidden = poweredOff
+        romLockText.isHidden = poweredOff
+        romLockSubText.isHidden = poweredOff
     }
 
     

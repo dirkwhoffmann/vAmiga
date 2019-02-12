@@ -38,8 +38,8 @@ KickRom::isKickRomBuffer(const uint8_t *buffer, size_t length)
 bool
 KickRom::isKickRomFile(const char *path)
 {
-    if (!checkFileSizeRange(path, KB(256), KB(256)) &&
-        !checkFileSizeRange(path, KB(512), KB(512))) return false;
+    if (!checkFileSize(path, KB(256)) &&
+        !checkFileSize(path, KB(512))) return false;
     
     return
     matchingFileHeader(path, magicBytes1, sizeof(magicBytes1)) ||

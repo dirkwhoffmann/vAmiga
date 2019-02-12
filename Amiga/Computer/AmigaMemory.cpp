@@ -59,12 +59,12 @@ AmigaMemory::_ping()
 void
 AmigaMemory::_dump()
 {
-    plainmsg("     Boot Rom: %d KB\n", bootRomSize >> 10);
-    plainmsg("     Kick Rom: %d KB (%s)\n", kickRomSize >> 10,
-             kickIsWritable ? "unlocked" : "locked");
-    plainmsg("     Chip Ram: %d KB\n", chipRamSize >> 10);
-    plainmsg("     Slow Ram: %d KB\n", slowRamSize >> 10);
-    plainmsg("     Fast Ram: %d KB\n", fastRamSize >> 10);
+    plainmsg("     Boot Rom: %d KB at %p\n", bootRomSize >> 10, bootRom);
+    plainmsg("     Kick Rom: %d KB (%s) at %p\n", kickRomSize >> 10,
+             kickIsWritable ? "unlocked" : "locked", kickRom);
+    plainmsg("     Chip Ram: %d KB at %p\n", chipRamSize >> 10, chipRam);
+    plainmsg("     Slow Ram: %d KB at %p\n", slowRamSize >> 10, slowRam);
+    plainmsg("     Fast Ram: %d KB at %p\n", fastRamSize >> 10, fastRam);
 }
 
 bool
@@ -169,7 +169,7 @@ AmigaMemory::updateMemSrcTable()
 {
     MemorySource mem_boot = bootRom ? MEM_BOOT : MEM_UNMAPPED;
     MemorySource mem_kick = kickRom ? MEM_KICK : MEM_UNMAPPED;
-    debug("Slow ram size = %d %p\n", slowRamSize, slowRam);
+
     // Start from scratch
     for (unsigned bank = 0x00; bank <= 0xFF; bank++)
         memSrc[bank] = MEM_UNMAPPED;
