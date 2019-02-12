@@ -29,10 +29,10 @@ private:
     map<uint32_t, Breakpoint> breakpoints;
 
     /* Soft breakpoint for implementing single-stepping.
-     * In contrast to standard (hard) breakpoints, a soft breakpoint is
+     * In contrast to a standard (hard) breakpoint, a soft breakpoint is
      * deleted when reached.
      */
-    uint32_t softStop = UINT32_MAX;
+    uint32_t softStop = UINT32_MAX - 1;
     
 public:
     

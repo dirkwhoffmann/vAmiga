@@ -94,7 +94,6 @@ HardwareComponent::run()
         }
         
         // Start this component
-        debug(2, "Run\n");
         running = true;
         _run();
     }

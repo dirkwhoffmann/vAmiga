@@ -315,7 +315,7 @@ Amiga::configureDrive(unsigned driveNr, DriveType type)
 void
 Amiga::_powerOn()
 {
-    debug(1, "Power on");
+    debug(1, "Power on\n");
     
     mem.loadBootRom(bootRom);
     mem.loadKickRom(kickRom);
@@ -329,6 +329,7 @@ Amiga::_powerOn()
     // For debugging, we start in debug mode and set a breakpoint
     debugMode = true;
     cpu.bpManager.setBreakpointAt(0xFC00DE);
+    cpu.bpManager.setBreakpointAt(0xF80106);
     
     putMessage(MSG_POWER_ON);
 }
@@ -361,7 +362,7 @@ Amiga::_run()
 void
 Amiga::_pause()
 {
-     debug(1, "Pause\n");
+    debug(1, "Pause\n");
     
     // Cancel the emulator thread
     stop = true;
@@ -757,7 +758,7 @@ Amiga::stepInto()
     if (isRunning())
         return;
     
-    stop = true;
+    cpu.bpManager.setSoftBreakpointAt(UINT32_MAX);
     run();
 }
 
@@ -767,6 +768,7 @@ Amiga::stepOver()
     if (isRunning())
         return;
     
+    debug("Setting bp at %X\n", cpu.getNextPC());
     cpu.bpManager.setSoftBreakpointAt(cpu.getNextPC());
     run();
 }
@@ -789,6 +791,7 @@ Amiga::runLoop()
     // THE FOLLOWING CODE IS FOR VISUAL PROTOTYPING ONLY
     
     // Execute at least one instruction
+    stop = false;
     do {
         
         // Emulate the CPU (fake)
@@ -809,9 +812,9 @@ Amiga::runLoop()
             if (cpu.bpManager.shouldStop()) {
                 stop = true;
                 putMessage(MSG_BREAKPOINT_REACHED);
+                debug("MSG_BREAKPOINT_REACHED at %X\n", cpu.getPC());
             }
         }
         
     } while (!stop);
-    stop = false;
 }

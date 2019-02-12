@@ -18,35 +18,26 @@ extension Inspector {
             
             for (c,f) in [ cpuPC: fmt32,
                            
-                           cpuD0: fmt32,
-                           cpuD1: fmt32,
-                           cpuD2: fmt32,
-                           cpuD3: fmt32,
-                           cpuD4: fmt32,
-                           cpuD5: fmt32,
-                           cpuD6: fmt32,
-                           cpuD7: fmt32,
+                           cpuD0: fmt32, cpuD1: fmt32, cpuD2: fmt32, cpuD3: fmt32,
+                           cpuD4: fmt32, cpuD5: fmt32, cpuD6: fmt32, cpuD7: fmt32,
                            
-                           cpuA0: fmt32,
-                           cpuA1: fmt32,
-                           cpuA2: fmt32,
-                           cpuA3: fmt32,
-                           cpuA4: fmt32,
-                           cpuA5: fmt32,
-                           cpuA6: fmt32,
-                           cpuA7: fmt32,
+                           cpuA0: fmt32, cpuA1: fmt32, cpuA2: fmt32, cpuA3: fmt32,
+                           cpuA4: fmt32, cpuA5: fmt32, cpuA6: fmt32, cpuA7: fmt32,
                            
                            cpuSSP: fmt32 ]
             {
                 assignFormatter(f, c!)
             }
             
-            /*
-            assignFormatter(fmt32, [cpuD0, cpuD1, cpuD2, cpuD3, cpuD4, cpuD5, cpuD6, cpuD7])
-            assignFormatter(fmt32, [cpuA0, cpuA1, cpuA2, cpuA3, cpuA4, cpuA5, cpuA6, cpuA7])
-            assignFormatter(fmt32, [cpuPC, cpuSSP])
-             */
-            
+            if amiga.isRunning() {
+                cpuStopAndGoButton.image = NSImage.init(named: "pauseTemplate")
+                cpuStepIntoButton.isEnabled = false
+                cpuStepOverButton.isEnabled = false
+            } else {
+                cpuStopAndGoButton.image = NSImage.init(named: "continueTemplate")
+                cpuStepIntoButton.isEnabled = true
+                cpuStepOverButton.isEnabled = true
+            }
         }
 
         cpuPC.integerValue = Int(info.pc)

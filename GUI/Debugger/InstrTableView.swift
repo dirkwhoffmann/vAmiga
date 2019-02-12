@@ -89,14 +89,15 @@ class InstrTableView : NSTableView {
             // select the corresponding row.
             scrollRowToVisible(row)
             selectRowIndexes([row], byExtendingSelection: false)
+            reloadData()
             
         } else {
             
             // If the requested address is not displayed, we update the
             // whole view and display it in the first row.
-            update(addr: addr)
             scrollRowToVisible(0)
             selectRowIndexes([0], byExtendingSelection: false)
+            update(addr: addr)
         }
     }
     
@@ -167,8 +168,8 @@ extension InstrTableView : NSTableViewDataSource {
         switch tableColumn?.identifier.rawValue {
             
         case "break" where cpu.hasDisabledBreakpoint(at: addr):
-            // return "\u{26AA}" // "⚪"
-            return "\u{2B55}" // "⭕"
+            return "\u{26AA}" // "⚪"
+            // return "\u{2B55}" // "⭕"
         case "break" where cpu.hasBreakpoint(at: addr):
             // return "\u{1F534}" // "🔴"
             return "\u{26D4}" // "⛔"
@@ -192,6 +193,12 @@ extension InstrTableView : NSTableViewDelegate {
         
         if let addr = addrInRow[row] {
 
+            /*
+            if (addr == cpu.getPC()) {
+                cell.textColor = NSColor.disabledControlTextColor
+                cell.backgroundColor = NSColor.selectedContentBackgroundColor
+            }
+            */
             // let disabled = cpu.hasDisabledBreakpoint(at: addr)
             // let conditional = cpu.hasConditionalBreakpoint(at: addr)
 

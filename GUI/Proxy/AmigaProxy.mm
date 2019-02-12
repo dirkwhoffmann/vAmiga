@@ -42,12 +42,6 @@ struct ADFFileWrapper { ADFFile *adf; };
     return self;
 }
 
-/*
-- (CPUInfo) getInfo
-{
-    return wrapper->cpu->getInfo();
-}
-*/
 - (void) dump
 {
     wrapper->cpu->dump();
@@ -55,6 +49,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 - (CPUInfo) getInfo
 {
     return wrapper->cpu->getInfo();
+}
+- (uint32_t) getPC
+{
+    return wrapper->cpu->getPC();
 }
 /*
 - (BOOL) tracing

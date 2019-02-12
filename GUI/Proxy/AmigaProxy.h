@@ -197,9 +197,8 @@ struct AmigaFileWrapper;
 
 - (void) dump;
 - (CPUInfo) getInfo;
+- (uint32_t) getPC;
 
-// - (BOOL) tracing;
-// - (void) setTracing:(BOOL)b;
 - (NSInteger) disassemble:(char *) str pc:(NSInteger)pc;
 
 - (BOOL) hasBreakpointAt:(uint32_t)addr;
@@ -209,7 +208,6 @@ struct AmigaFileWrapper;
 - (void) deleteBreakpointAt:(uint32_t)addr;
 - (void) enableBreakpointAt:(uint32_t)addr;
 - (void) disableBreakpointAt:(uint32_t)addr;
-// - (void) enableOrDisableBreakpointAt:(uint32_t)addr;
 
 - (NSInteger) numberOfBreakpoints;
 - (void) deleteBreakpoint:(NSInteger)nr; 

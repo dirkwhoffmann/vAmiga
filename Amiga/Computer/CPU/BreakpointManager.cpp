@@ -208,8 +208,8 @@ BreakpointManager::shouldStop()
     uint32_t addr = amiga->cpu.getPC();
     
     // Check if a soft breakpoint has been reached
-    if (addr == softStop) {
-        softStop = UINT32_MAX;
+    if (addr == softStop || softStop == UINT32_MAX) {
+        softStop = UINT32_MAX - 1;
         return true;
     }
     
