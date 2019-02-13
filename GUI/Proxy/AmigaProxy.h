@@ -110,6 +110,7 @@ struct AmigaFileWrapper;
 - (void) resume;
 
 - (AmigaConfiguration) config;
+- (AmigaMemConfiguration) memConfig;
 - (BOOL) configureModel:(NSInteger)model;
 - (BOOL) configureLayout:(NSInteger)value;
 - (BOOL) configureChipMemory:(NSInteger)size;
@@ -118,20 +119,6 @@ struct AmigaFileWrapper;
 - (BOOL) configureRealTimeClock:(BOOL)value;
 - (BOOL) configureDrive:(NSInteger)driveNr connected:(BOOL)value;
 - (BOOL) configureDrive:(NSInteger)driveNr type:(NSInteger)value;
-
-- (BOOL) hasBootRom;
-- (void) deleteBootRom;
-- (BOOL) isBootRom:(NSURL *)url;
-- (BOOL) loadBootRomFromBuffer:(NSData *)buffer;
-- (BOOL) loadBootRomFromFile:(NSURL *)url;
-- (uint64_t) bootRomFingerprint;
-
-- (BOOL) hasKickRom;
-- (void) deleteKickRom;
-- (BOOL) isKickRom:(NSURL *)url;
-- (BOOL) loadKickRomFromBuffer:(NSData *)buffer;
-- (BOOL) loadKickRomFromFile:(NSURL *)url;
-- (uint64_t) kickRomFingerprint;
 
 // Message queue
 - (void) addListener:(const void *)sender function:(Callback *)func;
@@ -248,6 +235,21 @@ struct AmigaFileWrapper;
 }
 
 - (void) dump;
+
+- (BOOL) hasBootRom;
+- (void) deleteBootRom;
+- (BOOL) isBootRom:(NSURL *)url;
+- (BOOL) loadBootRomFromBuffer:(NSData *)buffer;
+- (BOOL) loadBootRomFromFile:(NSURL *)url;
+- (uint64_t) bootRomFingerprint;
+
+- (BOOL) hasKickRom;
+- (void) deleteKickRom;
+- (BOOL) isKickRom:(NSURL *)url;
+- (BOOL) loadKickRomFromBuffer:(NSData *)buffer;
+- (BOOL) loadKickRomFromFile:(NSURL *)url;
+- (uint64_t) kickRomFingerprint;
+
 - (MemorySource *) getMemSrcTable; 
 - (MemorySource) memSrc:(NSInteger)addr;
 - (NSInteger) spypeek8:(NSInteger)addr;

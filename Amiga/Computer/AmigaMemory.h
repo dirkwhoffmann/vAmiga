@@ -83,33 +83,85 @@ private:
     // Allocating memory
     //
     
+    /*
     bool allocateBootRom();
     bool allocateKickRom();
     bool allocateChipRam(size_t size);
     bool allocateSlowRam(size_t size);
     bool allocateFastRam(size_t size);
-
+    */
+    
     // Deallocates all previously allocated memory
-    void dealloc();
+    // void dealloc();
     
 private:
     
-    // Convenience wrapper around 'new'
+    /* Allocates 'size' bytes of memory.
+     * As side effects, the memory lookup table is updated and a memory
+     * layout message is sent to the GUI.
+     */
     bool alloc(size_t size, uint8_t *&ptrref, size_t &sizeref);
+    
+ 
+    //
+    // Managing Ram
+    //
+    
+public:
+    
+    bool hasChipRam() { return chipRam != NULL; }
+    bool allocateChipRam(size_t size) { return alloc(size, chipRam, chipRamSize); }
 
-    // Convenience wrapper around 'new'
-    void dealloc(uint8_t *&ptrref, size_t &sizeref);
+    bool hasSlowRam() { return slowRam != NULL; }
+    bool allocateSlowRam(size_t size) { return alloc(size, slowRam, slowRamSize); }
 
+    bool hasFastRam() { return fastRam != NULL; }
+    bool allocateFastRam(size_t size) { return alloc(size, fastRam, fastRamSize); }
+    
+    
+    //
+    // Managing Roms
+    //
+    
+private:
+    
     // Loads Rom data
     void loadRom(AmigaFile *rom, uint8_t *target, size_t length);
     
 public:
 
-    // Loads Boot Rom data
-    void loadBootRom(BootRom *rom) { loadRom(rom, bootRom, bootRomSize); }
+    // Returns true if a Boot Rom is installed
+    bool hasBootRom() { return bootRom != NULL; }
 
-    // Loads Kick Rom data
-    void loadKickRom(KickRom *rom)  { loadRom(rom, kickRom, kickRomSize); }
+    // Returns a fingerprint for the currently installed Boot Rom
+    uint64_t bootRomFingerprint() { return fnv_1a(bootRom, bootRomSize); }
+    
+    // Installs the Boot Rom.
+    bool loadBootRomFromBuffer(const uint8_t *buffer, size_t length);
+    bool loadBootRomFromFile(const char *path);
+    bool loadBootRom(BootRom *rom);
+
+    // Deletes the currently installed Boot Rom.
+    void deleteBootRom() { alloc(0, bootRom, bootRomSize); }
+    
+    // Returns true if a Kickstart Rom is installed
+    bool hasKickRom() { return kickRom != NULL; }
+
+    // Returns a fingerprint for the currently installed Kickstart Rom
+    uint64_t kickRomFingerprint() { return fnv_1a(kickRom, kickRomSize); }
+    
+    // Installs the Kickstart Rom.
+    bool loadKickRomFromBuffer(const uint8_t *buffer, size_t length);
+    bool loadKickRomFromFile(const char *path);
+    bool loadKickRom(KickRom *rom);
+    
+    // Deletes the currently installed Kickstart Rom.
+    void deleteKickRom()  { alloc(0, kickRom, kickRomSize); }
+
+    
+    //
+    // Accessing memory
+    //
     
     // Returns the memory source lookup table.
     MemorySource *getMemSrcTable() { return memSrc; }

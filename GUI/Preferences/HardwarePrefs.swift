@@ -17,6 +17,7 @@ extension PreferencesController {
 
         track()
         let config = amiga.config()
+        let memConfig = amiga.memConfig()
         
         // Machine
         hwAmigaModelPopup.selectItem(withTag: config.model.rawValue)
@@ -24,9 +25,9 @@ extension PreferencesController {
         hwRealTimeClock.state = config.realTimeClock ? .on : .off
         
         // Memory
-        hwChipRamPopup.selectItem(withTag: config.chipRamSize)
-        hwSlowRamPopup.selectItem(withTag: config.slowRamSize)
-        hwFastRamPopup.selectItem(withTag: config.fastRamSize)
+        hwChipRamPopup.selectItem(withTag: memConfig.chipRamSize)
+        hwSlowRamPopup.selectItem(withTag: memConfig.slowRamSize)
+        hwFastRamPopup.selectItem(withTag: memConfig.fastRamSize)
 
         // Drive
         hwDf0Connect.state = config.df0.connected ? .on : .off

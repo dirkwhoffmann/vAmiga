@@ -38,18 +38,19 @@ extension Inspector {
         
         if everything {
             refreshMemoryLayout()
+            memBankTableView.refresh()
         }
         
         memTableView.refresh()
     }
     
     func refreshMemoryLayout() {
-        
-        guard let config = amigaProxy?.config() else { return }
-        
-        let chipRamKB = config.chipRamSize
-        let fastRamKB = config.fastRamSize
-        let slowRamKB = config.slowRamSize
+
+        guard let memConfig = amigaProxy?.memConfig() else { return }
+
+        let chipRamKB = memConfig.chipRamSize
+        let fastRamKB = memConfig.fastRamSize
+        let slowRamKB = memConfig.slowRamSize
         let size = NSSize(width: 16, height: 16)
         
         memLayoutButton.image = memLayoutImage

@@ -400,15 +400,19 @@ typedef struct
 {
     AmigaModel model;
     long layout;
-    long chipRamSize; // size in KB
-    long slowRamSize; // size in KB
-    long fastRamSize; // size in KB
     bool realTimeClock;
     DriveConfiguration df0;
     DriveConfiguration df1;
 }
 AmigaConfiguration;
 
+typedef struct
+{
+    long chipRamSize; // size in KB
+    long slowRamSize; // size in KB
+    long fastRamSize; // size in KB
+}
+AmigaMemConfiguration;
 
 
 #endif

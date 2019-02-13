@@ -117,7 +117,7 @@ sleepUntil(uint64_t kernelTargetTime, uint64_t kernelEarlyWakeup)
 uint64_t
 fnv_1a(uint8_t *addr, size_t size)
 {
-    printf("addr = %p, size = %zu\n", addr, size);
+    if (addr == NULL || size == 0) return 0;
     
     uint64_t basis = 0xcbf29ce484222325;
     uint64_t prime = 0x100000001b3;

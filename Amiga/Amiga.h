@@ -66,10 +66,10 @@ public:
     AmigaConfiguration config;
     
     // Boot Rom (needed for A1000 emulation)
-    BootRom *bootRom = NULL;
+    // BootRom *bootRom = NULL;
     
     // Kickstart Rom (needed for A500 and A2000 emulation)
-    KickRom *kickRom = NULL;
+    // KickRom *kickRom = NULL;
     
     
     //
@@ -237,6 +237,10 @@ public:
     
     // Returns the currently set configuration.
     AmigaConfiguration getConfig() { return config; }
+
+    // Returns the currently set memory configuration.
+    AmigaMemConfiguration getMemConfig();
+
     
     // Chooses the emulated Amiga model.
     bool configureModel(AmigaModel model);
@@ -303,7 +307,7 @@ public:
     //
     // Handling Roms
     //
-
+/*
     // Returns true if a Boot Rom is present.
     bool hasBootRom() { return bootRom != NULL; }
 
@@ -331,7 +335,8 @@ public:
 
     // Returns a fingerprint for the current Kickstart Rom
     uint64_t kickRomFingerprint() { return kickRom ? kickRom->fingerprint() : 0; }
-
+*/
+    
     
     //
     // Accessing the message queue

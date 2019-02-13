@@ -260,8 +260,8 @@ extension MyController {
         let defaults = UserDefaults.standard
         
         amiga.suspend()
-        amiga.loadBootRom(fromFile: defaults.url(forKey: Keys.bootRom))
-        amiga.loadKickRom(fromFile: defaults.url(forKey: Keys.kickRom))
+        amiga.mem.loadBootRom(fromFile: defaults.url(forKey: Keys.bootRom))
+        amiga.mem.loadKickRom(fromFile: defaults.url(forKey: Keys.kickRom))
         amiga.resume()
     }
     
@@ -661,9 +661,7 @@ extension MyController {
 
         pauseInBackground = defaults.bool(forKey: Keys.pauseInBackground)
         amiga.setTakeAutoSnapshots(defaults.bool(forKey: Keys.autoSnapshots))
-        amiga.setSnapshotInterval(defaults.integer(forKey: Keys.autoSnapshotInterval))
-        
-        amiga.reset()
+        amiga.setSnapshotInterval(defaults.integer(forKey: Keys.autoSnapshotInterval))        
     }
     
     func saveEmulatorUserDefaults() {
@@ -846,13 +844,14 @@ extension MyController {
         
         let defaults = UserDefaults.standard
         let config = amiga.config()
-        
+        let memConfig = amiga.memConfig()
+
         defaults.set(config.model.rawValue, forKey: Keys.amigaModel)
         defaults.set(config.layout, forKey: Keys.layout)
 
-        defaults.set(config.chipRamSize, forKey: Keys.chipRam)
-        defaults.set(config.slowRamSize, forKey: Keys.slowRam)
-        defaults.set(config.fastRamSize, forKey: Keys.fastRam)
+        defaults.set(memConfig.chipRamSize, forKey: Keys.chipRam)
+        defaults.set(memConfig.slowRamSize, forKey: Keys.slowRam)
+        defaults.set(memConfig.fastRamSize, forKey: Keys.fastRam)
 
         defaults.set(config.df0.connected, forKey: Keys.df0Connect)
         defaults.set(config.df0.type.rawValue, forKey: Keys.df0Type)

@@ -251,11 +251,12 @@ public:
 	
 	//! @brief    Destructor
 	~CIA();
-	
-	//! @brief    Bring the CIA back to its initial state
+
+    //
+    // Methods from HardwareComponent
+    //
     void _powerOn() override;
-    	
-	//! @brief    Dump internal state
+    void _powerOff() override;
 	void _dump() override;
 
 	//! @brief    Dump trace line

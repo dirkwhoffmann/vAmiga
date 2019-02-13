@@ -195,6 +195,58 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->mem->dump();
 }
+- (BOOL) hasBootRom
+{
+    return wrapper->mem->hasBootRom();
+}
+- (void) deleteBootRom
+{
+    wrapper->mem->deleteBootRom();
+}
+- (BOOL) isBootRom:(NSURL *)url
+{
+    return BootRom::isBootRomFile([[url path] UTF8String]);
+}
+- (BOOL) loadBootRomFromBuffer:(NSData *)data
+{
+    if (data == NULL) return NO;
+    const uint8_t *bytes = (const uint8_t *)[data bytes];
+    return wrapper->mem->loadBootRomFromBuffer(bytes, [data length]);
+}
+- (BOOL) loadBootRomFromFile:(NSURL *)url
+{
+    return wrapper->mem->loadBootRomFromFile([[url path] UTF8String]);
+}
+- (uint64_t) bootRomFingerprint
+{
+    return wrapper->mem->bootRomFingerprint();
+}
+- (BOOL) hasKickRom
+{
+    return wrapper->mem->hasKickRom();
+}
+- (void) deleteKickRom
+{
+    wrapper->mem->deleteKickRom();
+}
+- (BOOL) isKickRom:(NSURL *)url
+{
+    return KickRom::isKickRomFile([[url path] UTF8String]);
+}
+- (BOOL) loadKickRomFromBuffer:(NSData *)data
+{
+    if (data == NULL) return NO;
+    const uint8_t *bytes = (const uint8_t *)[data bytes];
+    return wrapper->mem->loadKickRomFromBuffer(bytes, [data length]);
+}
+- (BOOL) loadKickRomFromFile:(NSURL *)url
+{
+    return wrapper->mem->loadKickRomFromFile([[url path] UTF8String]);
+}
+- (uint64_t) kickRomFingerprint
+{
+    return wrapper->mem->kickRomFingerprint();
+}
 - (MemorySource *) getMemSrcTable
 {
     return wrapper->mem->getMemSrcTable();
@@ -887,6 +939,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->amiga->getConfig();
 }
+- (AmigaMemConfiguration) memConfig
+{
+    return wrapper->amiga->getMemConfig();
+}
 - (BOOL) configureModel:(NSInteger)model
 {
     return wrapper->amiga->configureModel((AmigaModel)model);
@@ -920,61 +976,6 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->amiga->configureDrive((unsigned)driveNr, (DriveType)type);
 }
-
-- (BOOL) hasBootRom
-{
-    return wrapper->amiga->hasBootRom();
-}
-- (void) deleteBootRom
-{
-    wrapper->amiga->deleteBootRom();
-}
-- (BOOL) isBootRom:(NSURL *)url
-{
-    return BootRom::isBootRomFile([[url path] UTF8String]);
-}
-- (BOOL) loadBootRomFromBuffer:(NSData *)data
-{
-    if (data == NULL) return NO;
-    const uint8_t *bytes = (const uint8_t *)[data bytes];
-    return wrapper->amiga->loadBootRomFromBuffer(bytes, [data length]);
-}
-- (BOOL) loadBootRomFromFile:(NSURL *)url
-{
-    return wrapper->amiga->loadBootRomFromFile([[url path] UTF8String]);
-}
-- (uint64_t) bootRomFingerprint
-{
-    return wrapper->amiga->bootRomFingerprint();
-}
-- (BOOL) hasKickRom
-{
-    return wrapper->amiga->hasKickRom();
-}
-- (void) deleteKickRom
-{
-    wrapper->amiga->deleteKickRom();
-}
-- (BOOL) isKickRom:(NSURL *)url
-{
-    return KickRom::isKickRomFile([[url path] UTF8String]);
-}
-- (BOOL) loadKickRomFromBuffer:(NSData *)data
-{
-    if (data == NULL) return NO;
-    const uint8_t *bytes = (const uint8_t *)[data bytes];
-    return wrapper->amiga->loadKickRomFromBuffer(bytes, [data length]);
-}
-- (BOOL) loadKickRomFromFile:(NSURL *)url
-{
-    return wrapper->amiga->loadKickRomFromFile([[url path] UTF8String]);
-}
-- (uint64_t) kickRomFingerprint
-{
-    return wrapper->amiga->kickRomFingerprint();
-}
-
-
 - (void) addListener:(const void *)sender function:(Callback *)func
 {
     wrapper->amiga->addListener(sender, func);

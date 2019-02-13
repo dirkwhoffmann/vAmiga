@@ -19,7 +19,6 @@ CIA::CIA()
         &tod
     });
     
-
     // Register snapshot items
     registerSnapshotItems(vector<SnapshotItem> {
         
@@ -53,6 +52,9 @@ CIA::CIA()
         { &tiredness,        sizeof(tiredness),        0 },
         { &wakeUpCycle,      sizeof(wakeUpCycle),      0 },
         { &sleepCycle,       sizeof(sleepCycle),       0 }});
+    
+    PA = 0xFF;
+    PB = 0xFF;
 }
 
 CIA::~CIA()
@@ -69,6 +71,14 @@ CIA::_powerOn()
 	latchB = 0xFFFF;
     
     sleepCycle = UINT64_MAX;
+    
+    updatePA();
+    updatePB(); 
+}
+
+void
+CIA::_powerOff()
+{
 }
 
 void
@@ -1079,9 +1089,9 @@ CIA::wakeUp()
 }
 
 
-// -----------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Complex Interface Adapter A
-// -----------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 CIAA::CIAA()
 {
@@ -1106,17 +1116,16 @@ CIAA::releaseInterruptLine()
     debug("Releasing IRQ line");
 }
 
-// THIS IS OLD (C64). UPDATE WITH AMIGA STUFF
-//                    -------
-//   JOYB0, COL0 <--> | PA0 |
-//   JOYB1, COL1 <--> | PA1 |
-//   JOYB2, COL2 <--> | PA2 |
-//   JOYB3, COL3 <--> | PA3 |
-//   BTNB,  COL4 <--> | PA4 |
-//          COL5 <--> | PA5 |
-//          COL6 <--> | PA6 |
-//          COL  <--> | PA7 |
-//                    -------
+//              -------
+//     OVL <--> | PA0 |
+//    /LED <--> | PA1 |
+//   /CHNG <--> | PA2 |
+//   /WPRO <--> | PA3 |
+//    /TK0 <--> | PA4 |
+//    /RDY <--> | PA5 |
+//   /FIR0 <--> | PA6 |
+//   /FIR1 <--> | PA7 |
+//              -------
 
 uint8_t
 CIAA::portAinternal()
@@ -1128,29 +1137,30 @@ uint8_t
 CIAA::portAexternal()
 {
     return 0xFF;
-    // return c64->keyboard.getColumnValues(PB);
 }
 
 void
 CIAA::updatePA()
 {
+    uint8_t oldPA = PA;
+    
     PA = (portAinternal() & DDRA) | (portAexternal() & ~DDRA);
 
-    
-    
-    // An edge on PA4 triggers the NeosMouse on port 2
+    // Check Kickstart overlay bit (OVL)
+    if ((oldPA ^ PA) & 0b00000001) {
+        amiga->mem.updateMemSrcTable();
+    }
 }
 
-// THIS IS OLD (C64). UPDATE WITH AMIGA STUFF
 //                    -------
-//   JOYA0, ROW0 <--> | PB0 |
-//   JOYA1, ROW1 <--> | PB1 |
-//   JOYA2, ROW2 <--> | PB2 |
-//   JOYA3, ROW3 <--> | PB3 |
-// BTNA/LP, ROW4 <--> | PB4 | --> LP (VIC)
-//          ROW5 <--> | PB5 |
-//          ROW6 <--> | PB6 |
-//          ROW  <--> | PB7 |
+//  Centronics 0 <--> | PB0 |
+//  Centronics 1 <--> | PB1 |
+//  Centronics 2 <--> | PB2 |
+//  Centronics 3 <--> | PB3 |
+//  Centronics 4 <--> | PB4 |
+//  Centronics 5 <--> | PB5 |
+//  Centronics 6 <--> | PB6 |
+//  Centronics 7 <--> | PB7 |
 //                    -------
 
 uint8_t
@@ -1163,7 +1173,6 @@ uint8_t
 CIAA::portBexternal()
 {
     return 0xFF;
-    // return c64->keyboard.getRowValues(PA);
 }
 
 void
@@ -1178,16 +1187,12 @@ CIAA::updatePB()
     // Check if timer B underflow shows up on PB7
     if (GET_BIT(PB67TimerMode, 7))
         COPY_BIT(PB67TimerOut, PB, 7);
-    
-    
-    
-    // An edge on PB4 triggers the NeosMouse on port 1
 }
 
 
-// -----------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Complex Interface Adapter B
-// -----------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 CIAB::CIAB()
 {

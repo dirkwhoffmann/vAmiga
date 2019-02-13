@@ -66,9 +66,6 @@ Amiga::Amiga()
      * powering on.
      */
     config.model         = A500;
-    config.chipRamSize   = 512;
-    config.slowRamSize   = 0;
-    config.fastRamSize   = 0;
     config.realTimeClock = false;
     config.df0.type      = A1010_ORIG;
     config.df0.connected = true;
@@ -152,6 +149,22 @@ Amiga::disableDebugging()
     debugMode = false;
 }
 
+AmigaMemConfiguration
+Amiga::getMemConfig()
+{
+    AmigaMemConfiguration config;
+
+    assert(mem.chipRamSize % 1024 == 0);
+    assert(mem.slowRamSize % 1024 == 0);
+    assert(mem.fastRamSize % 1024 == 0);
+    
+    config.chipRamSize = mem.chipRamSize / 1024;
+    config.slowRamSize = mem.slowRamSize / 1024;
+    config.fastRamSize = mem.fastRamSize / 1024;
+    
+    return config;
+}
+
 bool
 Amiga::configureModel(AmigaModel model)
 {
@@ -193,12 +206,7 @@ Amiga::configureChipMemory(long size)
         return false;
     }
     
-    if (config.chipRamSize != size) {
-        
-        config.chipRamSize = size;
-        mem.updateMemSrcTable();
-    }
-    
+    mem.allocateChipRam(KB(size));
     return true;
 }
 
@@ -212,12 +220,7 @@ Amiga::configureSlowMemory(long size)
         return false;
     }
     
-    if (config.slowRamSize != size) {
-        
-        config.slowRamSize = size;
-        mem.updateMemSrcTable();
-    }
-    
+    mem.allocateSlowRam(KB(size));
     return true;
 }
 
@@ -231,12 +234,7 @@ Amiga::configureFastMemory(long size)
         return false;
     }
     
-    if (config.fastRamSize != size) {
-        
-        config.fastRamSize = size;
-        mem.updateMemSrcTable();
-    }
-    
+    mem.allocateFastRam(KB(size));
     return true;
 }
 
@@ -317,9 +315,6 @@ Amiga::_powerOn()
 {
     debug(1, "Power on\n");
     
-    mem.loadBootRom(bootRom);
-    mem.loadKickRom(kickRom);
-    
     masterClock = 0;
     
     m68k_init();
@@ -393,9 +388,6 @@ Amiga::_dump()
 {
     plainmsg("Current configuration:\n\n");
     plainmsg("   AmigaModel: %s\n", modelName(config.model));
-    plainmsg("  chipRamSize: %d KB\n", config.chipRamSize);
-    plainmsg("  slowRamSize: %d KB\n", config.slowRamSize);
-    plainmsg("  fastRamSize: %d KB\n", config.fastRamSize);
     plainmsg("realTimeClock: %s\n", config.realTimeClock ? "yes" : "no");
     plainmsg("          df0: %s\n", config.df0.connected ? "yes" : "no");
     plainmsg("               %s\n", driveTypeName(config.df0.type));
@@ -448,14 +440,25 @@ Amiga::resume()
 bool
 Amiga::readyToPowerUp()
 {
-    if (config.model == A1000 && bootRom == NULL) {
-        debug("NOT READY TO RUN (A1000)\n");
+    // Check for Chip Ram
+    if (!mem.hasChipRam()) {
+        msg("NOT READY YET: Chip Ram is missing.\n");
+        return false;
     }
-    if (config.model != A1000 && kickRom == NULL) {
-        debug("NOT READY TO RUN (A500, A2000)\n");
+    
+    // Check for a Boot Rom (A1000 only)
+    if (config.model == A1000 && !mem.hasBootRom()) {
+        msg("NOT READY YET: Boot Rom is missing.\n");
+        return false;
     }
 
-    return (config.model == A1000) ? bootRom != NULL : kickRom != NULL;
+    // Check for a Kickstart Rom (A500, A2000)
+    if (config.model != A1000 && !mem.hasKickRom()) {
+        msg("NOT READY YET: Kickstart Rom is missing.\n");
+        return false;
+    }
+    
+    return true;
 }
 
 /*
@@ -565,21 +568,8 @@ Amiga::synchronizeTiming()
 // Handling Roms
 //
 
-void
-Amiga::deleteBootRom()
-{
-    if (bootRom) delete bootRom;
-    bootRom = NULL;
-}
 
-bool
-Amiga::loadBootRom(BootRom *rom)
-{
-    deleteBootRom(); // Delete the old Rom (if any)
-    bootRom = rom;
-    return bootRom != NULL;
-}
-
+/*
 bool
 Amiga::loadBootRomFromBuffer(const uint8_t *buffer, size_t length)
 {
@@ -609,22 +599,9 @@ Amiga::loadBootRomFromFile(const char *path)
     
     return loadBootRom(rom);
 }
+*/
 
-void
-Amiga::deleteKickRom()
-{
-    if (kickRom) delete kickRom;
-    kickRom = NULL;
-}
-
-bool
-Amiga::loadKickRom(KickRom *rom)
-{
-    deleteKickRom(); // Delete the old Rom (if any)
-    kickRom = rom;
-    return kickRom != NULL;
-}
-
+/*
 bool
 Amiga::loadKickRomFromBuffer(const uint8_t *buffer, size_t length)
 {
@@ -654,6 +631,7 @@ Amiga::loadKickRomFromFile(const char *path)
     
     return loadKickRom(rom);
 }
+*/
 
 void
 Amiga::loadFromSnapshotUnsafe(AmigaSnapshot *snapshot)

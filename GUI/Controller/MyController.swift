@@ -279,15 +279,15 @@ class MyController : NSWindowController, MessageReceiver {
         set { amiga.configureLayout(newValue); }
     }
     var chipMemory : Int {
-        get { return amiga.config().chipRamSize }
+        get { return amiga.memConfig().chipRamSize }
         set { amiga.configureChipMemory(newValue); }
     }
     var slowMemory : Int {
-        get { return amiga.config().slowRamSize }
+        get { return amiga.memConfig().slowRamSize }
         set { amiga.configureChipMemory(newValue); }
     }
     var fastMemory : Int {
-        get { return amiga.config().fastRamSize }
+        get { return amiga.memConfig().fastRamSize }
         set { amiga.configureFastMemory(newValue); }
     }
     var df0connected : Bool {

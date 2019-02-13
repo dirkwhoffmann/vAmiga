@@ -13,23 +13,32 @@
 AmigaMemory::AmigaMemory()
 {
     setDescription("Memory");
+    
+    // Start with 256 KB Chip Ram
+    allocateChipRam(KB(256));
 }
 
 AmigaMemory::~AmigaMemory()
 {
-    dealloc();
+    if (bootRom) delete[] bootRom;
+    if (kickRom) delete[] kickRom;
+    if (chipRam) delete[] chipRam;
+    if (slowRam) delete[] slowRam;
+    if (fastRam) delete[] fastRam;
 }
 
 void
 AmigaMemory::_powerOn()
 {
     // Allocate memory
+    /*
     allocateBootRom();
     allocateKickRom();
     allocateChipRam(amiga->config.chipRamSize);
     allocateFastRam(amiga->config.fastRamSize);
     allocateSlowRam(amiga->config.slowRamSize);
-
+    */
+    
     // Make Rom writable if an A1000 is emulated
     kickIsWritable = amiga->config.model == A1000;
     
@@ -41,7 +50,7 @@ AmigaMemory::_powerOn()
 void
 AmigaMemory::_powerOff()
 {
-    dealloc();
+    
 }
 
 void
@@ -60,13 +69,14 @@ void
 AmigaMemory::_dump()
 {
     plainmsg("     Boot Rom: %d KB at %p\n", bootRomSize >> 10, bootRom);
-    plainmsg("     Kick Rom: %d KB (%s) at %p\n", kickRomSize >> 10,
-             kickIsWritable ? "unlocked" : "locked", kickRom);
+    plainmsg("     Kick Rom: %d KB at %p (%s)\n", kickRomSize >> 10,
+             kickRom, kickIsWritable ? "unlocked" : "locked");
     plainmsg("     Chip Ram: %d KB at %p\n", chipRamSize >> 10, chipRam);
     plainmsg("     Slow Ram: %d KB at %p\n", slowRamSize >> 10, slowRam);
     plainmsg("     Fast Ram: %d KB at %p\n", fastRamSize >> 10, fastRam);
 }
 
+/*
 bool
 AmigaMemory::allocateBootRom()
 {
@@ -101,39 +111,40 @@ AmigaMemory::allocateFastRam(size_t size)
 {
     return alloc(size, fastRam, fastRamSize);
 }
-
-void
-AmigaMemory::dealloc()
-{
-    dealloc(bootRom, bootRomSize);
-    dealloc(kickRom, kickRomSize);
-    dealloc(chipRam, chipRamSize);
-    dealloc(slowRam, slowRamSize);
-    dealloc(fastRam, fastRamSize);
-
-    updateMemSrcTable();
-}
+*/
 
 bool
 AmigaMemory::alloc(size_t size, uint8_t *&ptrref, size_t &sizeref)
 {
     // Do some consistency checking
     assert((ptrref == NULL) == (sizeref == 0));
-    assert(size != 0);
+
+    // Only proceed if memory layout changes
+    if (size == sizeref)
+        return true;
     
-    // Delete previously allocated memory
-    if (ptrref) delete[] ptrref;
-    
-    // Try to allocate memory
-    if (!(ptrref = new (std::nothrow) uint8_t[KB(size)])) {
-        warn("Cannot allocate %X bytes of memory\n", size);
-        return false;
+    // Delete previous allocation
+    if (ptrref) {
+        delete[] ptrref;
+        ptrref = NULL;
+        sizeref = 0;
     }
     
-    sizeref = size;
+    // Allocate memory
+    if (size) {
+        if (!(ptrref = new (std::nothrow) uint8_t[KB(size)])) {
+            warn("Cannot allocate %X bytes of memory\n", size);
+            return false;
+        }
+        sizeref = size;
+    }
+    
+    // Update the memory lookup table
+    updateMemSrcTable();
     return true;
 }
 
+/*
 void
 AmigaMemory::dealloc(uint8_t *&ptrref, size_t &sizeref)
 {    
@@ -146,6 +157,7 @@ AmigaMemory::dealloc(uint8_t *&ptrref, size_t &sizeref)
         sizeref = 0;
     }
 }
+*/
 
 void
 AmigaMemory::loadRom(AmigaFile *rom, uint8_t *target, size_t length)
@@ -164,55 +176,145 @@ AmigaMemory::loadRom(AmigaFile *rom, uint8_t *target, size_t length)
     }
 }
 
+bool
+AmigaMemory::loadBootRomFromBuffer(const uint8_t *buffer, size_t length)
+{
+    assert(buffer != NULL);
+    
+    BootRom *rom = BootRom::makeWithBuffer(buffer, length);
+    
+    if (!rom) {
+        msg("Failed to read Boot Rom from buffer at %p\n", buffer);
+        return false;
+    }
+    
+    return loadBootRom(rom);
+}
+
+bool
+AmigaMemory::loadBootRomFromFile(const char *path)
+{
+    assert(path != NULL);
+    
+    BootRom *rom = BootRom::makeWithFile(path);
+    
+    if (!rom) {
+        msg("Failed to read Boot Rom from file %s\n", path);
+        return false;
+    }
+    
+    return loadBootRom(rom);
+}
+
+bool
+AmigaMemory::loadBootRom(BootRom *rom)
+{
+    assert(rom != NULL);
+    
+    if (!alloc(rom->getSize(), bootRom, bootRomSize))
+        return false;
+
+    loadRom(rom, bootRom, bootRomSize);
+    return true;
+}
+
+bool
+AmigaMemory::loadKickRomFromBuffer(const uint8_t *buffer, size_t length)
+{
+    assert(buffer != NULL);
+    
+    KickRom *rom = KickRom::makeWithBuffer(buffer, length);
+    
+    if (!rom) {
+        msg("Failed to read Kick Rom from buffer at %p\n", buffer);
+        return false;
+    }
+    
+    return loadKickRom(rom);
+}
+
+bool
+AmigaMemory::loadKickRomFromFile(const char *path)
+{
+    assert(path != NULL);
+    
+    KickRom *rom = KickRom::makeWithFile(path);
+    
+    if (!rom) {
+        msg("Failed to read Kick Rom from file %s\n", path);
+        return false;
+    }
+    
+    return loadKickRom(rom);
+}
+
+bool
+AmigaMemory::loadKickRom(KickRom *rom)
+{
+    assert(rom != NULL);
+    
+    if (!alloc(rom->getSize(), kickRom, kickRomSize))
+        return false;
+    
+    loadRom(rom, kickRom, kickRomSize);
+    return true;
+}
+
 void
 AmigaMemory::updateMemSrcTable()
 {
     MemorySource mem_boot = bootRom ? MEM_BOOT : MEM_UNMAPPED;
     MemorySource mem_kick = kickRom ? MEM_KICK : MEM_UNMAPPED;
+    
+    assert(chipRamSize % 0x10000 == 0);
+    assert(slowRamSize % 0x10000 == 0);
+    assert(fastRamSize % 0x10000 == 0);
 
+    bool rtc = amiga ? amiga->config.realTimeClock : false;
+    bool ovl = amiga ? (amiga->ciaA.getPA() & 1) : false;
+    
+    
     // Start from scratch
-    for (unsigned bank = 0x00; bank <= 0xFF; bank++)
-        memSrc[bank] = MEM_UNMAPPED;
+    for (unsigned i = 0x00; i <= 0xFF; i++)
+        memSrc[i] = MEM_UNMAPPED;
     
     // Chip Ram
-    for (unsigned bank = 0x00; bank <= 0x19; bank++)
-        memSrc[bank] = chipRam ? MEM_CHIP : MEM_UNMAPPED;
+    for (unsigned i = 0; i < chipRamSize / 0x10000; i++)
+        memSrc[i] = MEM_CHIP;
     
     // Install Fast Ram
-    for (unsigned bank = 0; bank < amiga->config.fastRamSize / 64; bank++)
-        memSrc[0x20 + bank] = MEM_FAST;
+    for (unsigned i = 0; i < fastRamSize / 0x10000; i++)
+        memSrc[0x20 + i] = MEM_FAST;
 
     // CIA range
-    for (unsigned bank = 0xA0; bank <= 0xBF; bank++)
-        memSrc[bank] = MEM_CIA;
+    for (unsigned i = 0xA0; i <= 0xBF; i++)
+        memSrc[i] = MEM_CIA;
 
     // Slow Ram
-    for (unsigned bank = 0; bank < amiga->config.slowRamSize / 64; bank++)
-        memSrc[0xC0 + bank] = MEM_SLOW;
+    for (unsigned i = 0; i < slowRamSize / 0x10000; i++)
+        memSrc[0xC0 + i] = MEM_SLOW;
 
     // Real-time clock
-    for (unsigned bank = 0xDC; bank <= 0xDE; bank++)
-        memSrc[bank] = amiga->config.realTimeClock ? MEM_RTC : MEM_UNMAPPED;
+    for (unsigned i = 0xDC; rtc && i <= 0xDE; i++)
+        memSrc[i] = MEM_RTC;
 
     // OCS
-    for (unsigned bank = 0xDF; bank <= 0xDF; bank++)
-        memSrc[bank] = MEM_OCS;
+    for (unsigned i = 0xDF; i <= 0xDF; i++)
+        memSrc[i] = MEM_OCS;
 
     // Boot Rom or Kickstart mirror
-    for (unsigned bank = 0xF8; bank <= 0xFB; bank++)
-        memSrc[bank] = kickIsWritable ? mem_boot : mem_kick;
+    for (unsigned i = 0xF8; i <= 0xFB; i++)
+        memSrc[i] = kickIsWritable ? mem_boot : mem_kick;
 
     // Kickstart
-    for (unsigned bank = 0xFC; bank <= 0xFF; bank++)
-        memSrc[bank] = mem_kick;
+    for (unsigned i = 0xFC; i <= 0xFF; i++)
+        memSrc[i] = mem_kick;
 
-    // Overlay Rom with lower memory area if OVL line is high
-    bool ovl = true; // TODO: get from CIA
-    if (ovl)
-        for (unsigned bank = 0; bank < 8; bank++)
-            memSrc[bank] = memSrc[0xF8 + bank];
+    // Overlay Rom with lower memory area if the OVL line is high
+    for (unsigned i = 0; ovl && i < 8 && memSrc[0xF8 + i] != MEM_UNMAPPED; i++)
+        memSrc[i] = memSrc[0xF8 + i];
     
-    amiga->putMessage(MSG_MEM_LAYOUT);
+    if (amiga) amiga->putMessage(MSG_MEM_LAYOUT);
 }
 
 MemorySource

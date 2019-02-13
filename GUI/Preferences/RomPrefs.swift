@@ -77,8 +77,8 @@ extension PreferencesController {
                 config.model == A500 ? "500" : "2000"
         
         let poweredOff   = amiga.isPoweredOff()
-        let bootHash     = amiga.bootRomFingerprint()
-        let kickHash     = amiga.kickRomFingerprint()
+        let bootHash     = amiga.mem.bootRomFingerprint()
+        let kickHash     = amiga.mem.kickRomFingerprint()
         let hash         = config.model == A1000 ? bootHash : kickHash
 
         track("bootHash = \(bootHash)")
@@ -176,12 +176,12 @@ extension PreferencesController {
         if amigaProxy?.config().model == A1000 {
             
             myController?.bootRomURL = URL(fileURLWithPath: "/")
-            amigaProxy?.deleteBootRom()
+            amigaProxy?.mem.deleteBootRom()
             
         } else {
             
             myController?.kickRomURL = URL(fileURLWithPath: "/")
-            amigaProxy?.deleteKickRom()
+            amigaProxy?.mem.deleteKickRom()
         }
         
         refresh()
@@ -190,10 +190,10 @@ extension PreferencesController {
     @IBAction func romFactorySettingsAction(_ sender: NSButton!)
     {
         // Remove Boot Rom
-        amigaProxy?.deleteBootRom()
+        amigaProxy?.mem.deleteBootRom()
         
         // Revert to the AROS Kickstart replacement
-        amigaProxy?.loadKickRom(fromBuffer: NSDataAsset(name: "aros.rom")?.data)
+        amigaProxy?.mem.loadKickRom(fromBuffer: NSDataAsset(name: "aros.rom")?.data)
         myController?.kickRomURL = URL(fileURLWithPath: "")
         refresh()
     }
