@@ -335,18 +335,18 @@ AmigaMemory::peek8(uint32_t addr)
             
         case MEM_CHIP:
             assert(chipRam != NULL);
-            return chipRam[(addr % 0xFFFF) % chipRamSize];
+            return chipRam[addr % chipRamSize];
             
         case MEM_FAST:
             assert(fastRam != NULL);
-            return fastRam[(addr % 0xFFFF) % fastRamSize];
+            return fastRam[addr - 0x200000];
             
         case MEM_CIA:
-            return 42;
+            return peekCIA8(addr);
             
         case MEM_SLOW:
             assert(slowRam != NULL);
-            return slowRam[(addr % 0xFFFF) % slowRamSize];
+            return slowRam[addr - 0xC00000];
             
         case MEM_RTC:
             return 1;
@@ -404,8 +404,47 @@ AmigaMemory::spypeek32(uint32_t addr)
 void
 AmigaMemory::poke8(uint32_t addr, uint8_t value)
 {
-    assert(is_uint24_t(addr));
-    debug("Poking %02X to %06X.", value, addr);
+    addr &= 0xFFFFFF;
+    switch (memSrc[addr >> 16]) {
+            
+        case MEM_CHIP:
+            assert(chipRam != NULL);
+            chipRam[addr % chipRamSize] = value;
+            return;
+            
+        case MEM_FAST:
+            assert(fastRam != NULL);
+            fastRam[addr - 0x200000] = value;
+            return;
+            
+        case MEM_CIA:
+            pokeCIA8(addr, value);
+            return;
+            
+        case MEM_SLOW:
+            assert(slowRam != NULL);
+            slowRam[addr - 0xC00000] = value;
+            return;
+            
+        case MEM_RTC:
+            return;
+            
+        case MEM_OCS:
+            return;
+            
+        case MEM_BOOT:
+            assert(bootRom != NULL);
+            bootRom[addr % bootRomSize] = value;
+            return;
+            
+        case MEM_KICK:
+            assert(kickRom != NULL);
+            kickRom[addr % kickRomSize] = value;
+            return;
+            
+        default:
+            assert(false);
+    }
 }
 void
 AmigaMemory::poke16(uint32_t addr, uint16_t value)
@@ -418,6 +457,91 @@ AmigaMemory::poke32(uint32_t addr, uint32_t value)
 {
     assert(is_uint24_t(addr));
     debug("Poking %04X to %06X.", value, addr);
+}
+
+uint8_t
+AmigaMemory::peekCIA8(uint32_t addr)
+{
+    uint32_t reg = (addr >> 8) & 0b1111;
+    uint32_t sel = (addr >> 12) & 0b11;
+    bool a0 = addr & 1;
+    
+    switch (sel) {
+            
+        case 0b00:
+            return a0 ? amiga->ciaA.peek(reg) : amiga->ciaB.peek(reg);
+            
+        case 0b01:
+            return a0 ? LO_BYTE(amiga->cpu.getIR()) : amiga->ciaB.peek(reg);
+            
+        case 0b10:
+            return a0 ? amiga->ciaA.peek(reg) : HI_BYTE(amiga->cpu.getIR());
+            
+        case 0b11:
+            return a0 ? LO_BYTE(amiga->cpu.getIR()) : HI_BYTE(amiga->cpu.getIR());
+    }
+    assert(false);
+    return 0;
+}
+
+uint16_t
+AmigaMemory::peekCIA16(uint32_t addr)
+{
+    uint32_t reg = (addr >> 8) & 0b1111;
+    uint32_t sel = (addr >> 12) & 0b11;
+    
+    switch (sel) {
+            
+        case 0b00:
+            return HI_LO(amiga->ciaB.peek(reg), amiga->ciaA.peek(reg));
+            
+        case 0b01:
+            return HI_LO(amiga->ciaB.peek(reg), 0xFF);
+            
+        case 0b10:
+            return HI_LO(0xFF, amiga->ciaA.peek(reg));
+            
+        case 0b11:
+            return amiga->cpu.getIR();
+            
+    }
+    assert(false);
+    return 0;
+}
+
+uint32_t
+AmigaMemory::peekCIA32(uint32_t addr)
+{
+    return (peekCIA16(addr) << 16) | peekCIA16(addr + 2);
+}
+
+void
+AmigaMemory::pokeCIA8(uint32_t addr, uint8_t value)
+{
+    uint32_t reg = (addr >> 8) & 0b1111;
+    uint32_t selA = (addr & 0x1000) == 0;
+    uint32_t selB = (addr & 0x2000) == 0;
+
+    if (selA) amiga->ciaA.poke(reg, value);
+    if (selB) amiga->ciaB.poke(reg, value);
+}
+
+void
+AmigaMemory::pokeCIA16(uint32_t addr, uint16_t value)
+{
+    uint32_t reg = (addr >> 8) & 0b1111;
+    uint32_t selA = (addr & 0x1000) == 0;
+    uint32_t selB = (addr & 0x2000) == 0;
+    
+    if (selA) amiga->ciaA.poke(reg, LO_BYTE(value));
+    if (selB) amiga->ciaB.poke(reg, HI_BYTE(value));
+}
+
+void
+AmigaMemory::pokeCIA32(uint32_t addr, uint32_t value)
+{
+    pokeCIA16(addr,     HI_WORD(value));
+    pokeCIA16(addr + 2, LO_WORD(value));
 }
 
 const char *

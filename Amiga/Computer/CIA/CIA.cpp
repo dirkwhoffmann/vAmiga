@@ -127,6 +127,8 @@ CIA::peek(uint16_t addr)
 {
 	uint8_t result;
 
+    debug("Peek %02X\n", addr);
+
     wakeUp();
 
     assert(addr <= 0x000F);
@@ -313,6 +315,8 @@ CIA::spypeek(uint16_t addr)
 void
 CIA::poke(uint16_t addr, uint8_t value)
 {
+    debug("Poke %02X,%02X\n", addr, value);
+
     wakeUp();
     
 	switch(addr) {
@@ -1148,6 +1152,7 @@ CIAA::updatePA()
 
     // Check Kickstart overlay bit (OVL)
     if ((oldPA ^ PA) & 0b00000001) {
+        debug("Overlay bit has changed\n");
         amiga->mem.updateMemSrcTable();
     }
 }

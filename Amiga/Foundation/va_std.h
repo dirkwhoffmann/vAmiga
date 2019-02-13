@@ -76,14 +76,16 @@ inline bool is_uint5_t(uint5_t value) { return value < 32; }
 #define MB(x) ((x) << 20)
 
 //
-//! @functiongroup Handling low level data objects
+// Handling low level data objects
 //
 
-//! @brief    Returns the high byte of a uint16_t value.
+// Returns the low byte or the high byte of a uint16_t value.
+#define LO_BYTE(x) (uint8_t)((x) & 0xFF)
 #define HI_BYTE(x) (uint8_t)((x) >> 8)
 
-//! @brief    Returns the low byte of a uint16_t value.
-#define LO_BYTE(x) (uint8_t)((x) & 0xFF)
+// Returns the low word or the high word of a uint32_t value.
+#define LO_WORD(x) (uint16_t)((x) & 0xFFFF)
+#define HI_WORD(x) (uint16_t)((x) >> 16)
 
 //! @brief    Specifies a larger integer in little endian byte format
 #define LO_HI(x,y) (uint16_t)((y) << 8 | (x))

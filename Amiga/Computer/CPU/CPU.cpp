@@ -126,6 +126,12 @@ CPU::getPC()
     return m68k_get_reg(NULL, M68K_REG_PC);
 }
 
+uint32_t
+CPU::getIR()
+{
+    return m68k_get_reg(NULL, M68K_REG_IR);
+}
+
 CPUInfo
 CPU::getInfo()
 {

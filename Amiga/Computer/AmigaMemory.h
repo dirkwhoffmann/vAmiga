@@ -173,30 +173,39 @@ public:
      */
     MemorySource getMemSrc(uint32_t addr);
     
-    /* Peeks a value from memory.
-     */
+    // Peeks a value from memory.
     uint8_t peek8(uint32_t addr);
     uint16_t peek16(uint32_t addr);
     uint32_t peek32(uint32_t addr);
-
-    /* Peeks a byte from memory without causing side effects.
-     */
+    
+    // Peeks a byte from memory without causing side effects.
     uint8_t spypeek8(uint32_t addr);
     uint16_t spypeek16(uint32_t addr);
     uint32_t spypeek32(uint32_t addr);
     
-    /* Pokes a byte into memory.
-     */
+    // Pokes a byte into memory.
     void poke8(uint32_t addr, uint8_t value);
     void poke16(uint32_t addr, uint16_t value);
     void poke32(uint32_t addr, uint32_t value);
 
-    /* Returns 16 bytes of memory as an ASCII string.
-     */
+private:
+    
+    // Peeks a value from the CIA space.
+    uint8_t peekCIA8(uint32_t addr);
+    uint16_t peekCIA16(uint32_t addr);
+    uint32_t peekCIA32(uint32_t addr);
+ 
+    // Pokes a value into the CIA space.
+    void pokeCIA8(uint32_t addr, uint8_t value);
+    void pokeCIA16(uint32_t addr, uint16_t value);
+    void pokeCIA32(uint32_t addr, uint32_t value);
+    
+public:
+    
+    // Returns 16 bytes of memory as an ASCII string.
     const char *ascii(uint32_t addr);
  
-    /* Returns a certain amount of bytes as a string containing hex words.
-     */
+    // Returns a certain amount of bytes as a string containing hex words.
     const char *hex(uint32_t addr, size_t bytes);
 
 };
