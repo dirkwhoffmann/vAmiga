@@ -53,7 +53,6 @@
 		508FE01021EA227B0043D0E9 /* Speedometer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFEB21EA22780043D0E9 /* Speedometer.swift */; };
 		508FE01121EA227B0043D0E9 /* MyControllerToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFED21EA22780043D0E9 /* MyControllerToolbar.swift */; };
 		508FE01221EA227B0043D0E9 /* CIAPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFEE21EA22780043D0E9 /* CIAPanel.swift */; };
-		508FE01321EA227B0043D0E9 /* AudioPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFEF21EA22780043D0E9 /* AudioPanel.swift */; };
 		508FE01421EA227B0043D0E9 /* WaveformView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFF021EA22780043D0E9 /* WaveformView.swift */; };
 		508FE01521EA227B0043D0E9 /* GamePad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFF121EA22780043D0E9 /* GamePad.swift */; };
 		508FE01621EA227B0043D0E9 /* VICPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFF221EA22790043D0E9 /* VICPanel.swift */; };
@@ -68,7 +67,6 @@
 		508FE02321EA227B0043D0E9 /* KeyboardController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00021EA227A0043D0E9 /* KeyboardController.swift */; };
 		508FE02421EA227B0043D0E9 /* GamePadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00121EA227A0043D0E9 /* GamePadManager.swift */; };
 		508FE02521EA227B0043D0E9 /* MemoryPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00221EA227A0043D0E9 /* MemoryPanel.swift */; };
-		508FE02621EA227B0043D0E9 /* Debugger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00421EA227A0043D0E9 /* Debugger.swift */; };
 		508FE02721EA227B0043D0E9 /* Basics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00521EA227A0043D0E9 /* Basics.swift */; };
 		508FE02921EA227B0043D0E9 /* MyControllerTouchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00721EA227A0043D0E9 /* MyControllerTouchBar.swift */; };
 		508FE02B21EA227B0043D0E9 /* WindowDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00921EA227B0043D0E9 /* WindowDelegate.swift */; };
@@ -129,6 +127,7 @@
 		50DED6AF2202EBA200B8195F /* Inspector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50DED6AE2202EBA200B8195F /* Inspector.xib */; };
 		50DED6B12202EC3100B8195F /* Inspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DED6B02202EC3100B8195F /* Inspector.swift */; };
 		50EE994021FF4D8E003BD74B /* AudioUnit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EE993E21FF4D8E003BD74B /* AudioUnit.cpp */; };
+		50F5A84E2214112F00AD5611 /* PaulaPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F5A84D2214112F00AD5611 /* PaulaPanel.swift */; };
 		50F5F27221F1B6DF000627D1 /* AmigaKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F5F27121F1B6DF000627D1 /* AmigaKey.swift */; };
 		50F6EEB821F4F5C60091155D /* AmigaDisk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F6EEB621F4F5C60091155D /* AmigaDisk.cpp */; };
 		50F6EEBB21F4F5FA0091155D /* DiskController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F6EEB921F4F5FA0091155D /* DiskController.cpp */; };
@@ -222,7 +221,6 @@
 		508FDFEB21EA22780043D0E9 /* Speedometer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Speedometer.swift; sourceTree = "<group>"; };
 		508FDFED21EA22780043D0E9 /* MyControllerToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyControllerToolbar.swift; sourceTree = "<group>"; };
 		508FDFEE21EA22780043D0E9 /* CIAPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CIAPanel.swift; sourceTree = "<group>"; };
-		508FDFEF21EA22780043D0E9 /* AudioPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioPanel.swift; sourceTree = "<group>"; };
 		508FDFF021EA22780043D0E9 /* WaveformView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WaveformView.swift; sourceTree = "<group>"; };
 		508FDFF121EA22780043D0E9 /* GamePad.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GamePad.swift; sourceTree = "<group>"; };
 		508FDFF221EA22790043D0E9 /* VICPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VICPanel.swift; sourceTree = "<group>"; };
@@ -238,7 +236,6 @@
 		508FE00021EA227A0043D0E9 /* KeyboardController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardController.swift; sourceTree = "<group>"; };
 		508FE00121EA227A0043D0E9 /* GamePadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GamePadManager.swift; sourceTree = "<group>"; };
 		508FE00221EA227A0043D0E9 /* MemoryPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemoryPanel.swift; sourceTree = "<group>"; };
-		508FE00421EA227A0043D0E9 /* Debugger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Debugger.swift; sourceTree = "<group>"; };
 		508FE00521EA227A0043D0E9 /* Basics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Basics.swift; sourceTree = "<group>"; };
 		508FE00721EA227A0043D0E9 /* MyControllerTouchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyControllerTouchBar.swift; sourceTree = "<group>"; };
 		508FE00921EA227B0043D0E9 /* WindowDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WindowDelegate.swift; sourceTree = "<group>"; };
@@ -316,6 +313,7 @@
 		50DED6B02202EC3100B8195F /* Inspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Inspector.swift; sourceTree = "<group>"; };
 		50EE993E21FF4D8E003BD74B /* AudioUnit.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AudioUnit.cpp; sourceTree = "<group>"; };
 		50EE993F21FF4D8E003BD74B /* AudioUnit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioUnit.h; sourceTree = "<group>"; };
+		50F5A84D2214112F00AD5611 /* PaulaPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaulaPanel.swift; sourceTree = "<group>"; };
 		50F5F27121F1B6DF000627D1 /* AmigaKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmigaKey.swift; sourceTree = "<group>"; };
 		50F6EEB621F4F5C60091155D /* AmigaDisk.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaDisk.cpp; sourceTree = "<group>"; };
 		50F6EEB721F4F5C60091155D /* AmigaDisk.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaDisk.h; sourceTree = "<group>"; };
@@ -598,11 +596,10 @@
 				504F9657220B2CEE005F8AB7 /* BreakTableView.swift */,
 				50C50B85220479E000D796DA /* BankTableView.swift */,
 				508FDFF821EA22790043D0E9 /* MemTableView.swift */,
-				508FE00421EA227A0043D0E9 /* Debugger.swift */,
 				508FDFF621EA22790043D0E9 /* Formatter.swift */,
 				508FDFF021EA22780043D0E9 /* WaveformView.swift */,
-				508FDFEF21EA22780043D0E9 /* AudioPanel.swift */,
 				508FDFF221EA22790043D0E9 /* VICPanel.swift */,
+				50F5A84D2214112F00AD5611 /* PaulaPanel.swift */,
 			);
 			path = Debugger;
 			sourceTree = "<group>";
@@ -949,7 +946,6 @@
 				508FE01821EA227B0043D0E9 /* MyController.swift in Sources */,
 				5014DD1521F3625200BC14BA /* AmigaKeyboard.cpp in Sources */,
 				50A2953F21FF12EF0046BAA0 /* AmigaControlPort.cpp in Sources */,
-				508FE02621EA227B0043D0E9 /* Debugger.swift in Sources */,
 				508FE02B21EA227B0043D0E9 /* WindowDelegate.swift in Sources */,
 				50B14C2821EB97EC002E32A6 /* AmigaProxy.mm in Sources */,
 				50DED6B12202EC3100B8195F /* Inspector.swift in Sources */,
@@ -958,7 +954,6 @@
 				50D2ADCA220754A100E32AB0 /* m68kops.c in Sources */,
 				508FE03821EA22C30043D0E9 /* Notifications.swift in Sources */,
 				508FE02421EA227B0043D0E9 /* GamePadManager.swift in Sources */,
-				508FE01321EA227B0043D0E9 /* AudioPanel.swift in Sources */,
 				50D2ADC9220754A100E32AB0 /* m68kopac.c in Sources */,
 				50F6EEBB21F4F5FA0091155D /* DiskController.cpp in Sources */,
 				50B14C0721EB218E002E32A6 /* AmigaObject.cpp in Sources */,
@@ -966,6 +961,7 @@
 				508FE02F21EA227B0043D0E9 /* AudioEngine.swift in Sources */,
 				5085FE5921FB6856009753EF /* ProxyExtensions.swift in Sources */,
 				508FE04F21EA22CC0043D0E9 /* EmulatorPrefs.swift in Sources */,
+				50F5A84E2214112F00AD5611 /* PaulaPanel.swift in Sources */,
 				5064851121EC7A1700FC4AC3 /* AmigaMemory.cpp in Sources */,
 				508FE01B21EA227B0043D0E9 /* MyDocument.swift in Sources */,
 				508FDFDB21EA20510043D0E9 /* Shaders.swift in Sources */,

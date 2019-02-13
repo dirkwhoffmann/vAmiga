@@ -57,7 +57,6 @@ class Inspector : NSWindowController
     @IBOutlet weak var cpuStepIntoButton: NSButton!
     @IBOutlet weak var cpuStepOverButton: NSButton!
 
-    
     // Debug panel (Memory)
     @IBOutlet weak var memSearchField: NSSearchField!
     @IBOutlet weak var memBankTableView: BankTableView!
@@ -142,6 +141,15 @@ class Inspector : NSWindowController
     @IBOutlet weak var ciaIdleCycles: NSTextField!
     @IBOutlet weak var ciaIdleLevelText: NSTextField!
     @IBOutlet weak var ciaIdleLevel: NSLevelIndicator!
+    
+    // Debug panel (Audio)
+    @IBOutlet weak var audioVolume: NSTextField!
+    
+    @IBOutlet weak var audioWaveformView: WaveformView!
+    @IBOutlet weak var audioBufferLevel: NSLevelIndicator!
+    @IBOutlet weak var audioBufferLevelText: NSTextField!
+    @IBOutlet weak var audioBufferUnderflows: NSTextField!
+    @IBOutlet weak var audioBufferOverflows: NSTextField!
     
     // Factory method
     static func make() -> Inspector? {

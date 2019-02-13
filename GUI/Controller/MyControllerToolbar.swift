@@ -19,15 +19,7 @@ extension MyController {
         static let joystick1 = 3
         static let joystick2 = 4
     }
-    
-    // NSDrawerState is deprected an not available natively in Swift
-    struct NSDrawerState {
-        static let closed = 0
-        static let opening = 1
-        static let open = 2
-        static let closing = 3
-    }
-    
+        
     func validateToolbarItems() {
         
         let button = pauseTbItem.view as! NSButton
@@ -106,22 +98,6 @@ extension MyController {
         UserDefaults.standard.set(inputDevice1, forKey: Keys.inputDevice1)
         UserDefaults.standard.set(inputDevice2, forKey: Keys.inputDevice2)
         validateJoystickToolbarItems()
-    }
-        
-    public func debugOpenAction(_ sender: Any!) {
-        
-        let state = debugger.state
-        if state == NSDrawerState.closed || state == NSDrawerState.closing {
-            debugger.open()
-        }
-    }
-    
-    public func debugCloseAction(_ sender: Any!) {
-        
-        let state = debugger.state
-        if state == NSDrawerState.open || state == NSDrawerState.opening {
-            debugger.close()
-        }
     }
     
     @IBAction func preferencesAction(_ sender: Any!) {
