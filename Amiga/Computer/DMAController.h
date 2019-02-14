@@ -71,7 +71,7 @@ private:
     
 public:
     
-    void executeUntil(uint64_t targetClock);
+    void executeUntil(Cycle targetClock);
 };
 
 

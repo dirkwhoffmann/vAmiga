@@ -715,7 +715,7 @@ CIA::getInfo()
 void
 CIA::executeUntil(Cycle targetMasterCycle)
 {
-    CIACycle targetCycle = AS_CIA_CYCLE(targetMasterCycle);
+    CIACycle targetCycle = AS_CIA_CYCLES(targetMasterCycle);
 
     // Check if we need to wake up the CIA
     if (isSleeping()) {

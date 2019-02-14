@@ -56,16 +56,16 @@ DMAController::_dump()
 }
 
 void
-DMAController::executeUntil(uint64_t targetClock)
+DMAController::executeUntil(Cycle targetClock)
 {
-    // Deterimine number of master clock cycles to execute
-    uint64_t missingCycles = targetClock - clock;
+    // Determine number of master clock cycles to execute
+    Cycle missingCycles = targetClock - clock;
 
     // Convert to DMA cycles
-    uint64_t missingDMACycles = AS_DMA_CYCLE(missingCycles);
+    DMACycle missingDMACycles = AS_DMA_CYCLES(missingCycles);
 
     // Execute missing cycles
-    for (uint64_t i = 0; i < missingDMACycles; i++) {
+    for (DMACycle i = 0; i < missingDMACycles; i++) {
         
         switch (vhpos) {
             case 0x07:
@@ -88,12 +88,12 @@ DMAController::executeUntil(uint64_t targetClock)
                 
         }
         
-        // Check if the rasterline end has been reached
+        // Check if the current rasterline has been completed
         if (vhpos < 227) vhpos++; else hsyncAction();
     }
     
     // Note the completed cycles
-    clock += DMA_CYCLE(missingDMACycles);
+    clock += DMA_CYCLES(missingDMACycles);
 }
 
 void
@@ -104,7 +104,7 @@ DMAController::hsyncAction()
     // CIA B counts HSYNCs
     amiga->ciaB.incrementTOD();
     
-    // Check if the frame end has been reached
+    // Check if the current frame has been completed
     if (vpos < 312) vpos++; else vsyncAction();
 }
 
