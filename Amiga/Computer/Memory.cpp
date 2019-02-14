@@ -590,9 +590,9 @@ Memory::peekCustomReg(uint32_t addr)
     switch (addr & 0x1FE) {
             
         case 0x01C: // INTENAR
-            return amiga->paula.getINTENA();
+            return amiga->paula.peekINTENA();
         case 0x01E: // INTREQR
-            return amiga->paula.getINTREQ();
+            return amiga->paula.peekINTREQ();
             
         default:
             warn("peekCustom16(%X): MISSING IMPLEMENTATION\n", addr);
@@ -666,11 +666,11 @@ Memory::pokeCustomReg(uint32_t addr, uint16_t value)
     switch (addr & 0x1FE) {
             
         case 0x09A: // INTENA
-            amiga->paula.setINTENA(value);
+            amiga->paula.pokeINTENA(value);
             break;
             
         case  0x09C: // INTREQ
-            amiga->paula.setINTREQ(value);
+            amiga->paula.pokeINTREQ(value);
             break;
             
         default:

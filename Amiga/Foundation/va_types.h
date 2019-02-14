@@ -72,7 +72,8 @@ typedef struct {
     uint32_t ssp;
     uint16_t flags;
 } CPUInfo;
-    
+
+
 //
 // CIA
 //
@@ -163,6 +164,15 @@ typedef enum
      */
     
 } MemorySource;
+
+//
+// Paula
+//
+
+typedef struct {
+    uint16_t intreq;
+    uint16_t intena;
+} PaulaInfo;
 
 
 //

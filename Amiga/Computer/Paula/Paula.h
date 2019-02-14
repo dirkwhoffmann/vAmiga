@@ -57,17 +57,23 @@ private:
     */
     void _setWarp(bool value) override;
     
+public:
+    
+    // Collects the data shown in the GUI's debug panel.
+    PaulaInfo getInfo();
+    
+    
     //
     // Register access
     //
     
 public:
     
-    uint16_t getINTREQ();
-    void setINTREQ(uint16_t value);
+    uint16_t peekINTREQ();
+    void pokeINTREQ(uint16_t value);
  
-    uint16_t getINTENA();
-    void setINTENA(uint16_t value);
+    uint16_t peekINTENA();
+    void pokeINTENA(uint16_t value);
     
     
     //

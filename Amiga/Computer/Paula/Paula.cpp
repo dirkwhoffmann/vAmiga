@@ -52,14 +52,25 @@ Paula::_setWarp(bool value)
     }
 }
 
+PaulaInfo
+Paula::getInfo()
+{
+    PaulaInfo info;
+    
+    info.intreq = intreq;
+    info.intena = intena;
+    
+    return info;
+}
+
 uint16_t
-Paula::getINTREQ()
+Paula::peekINTREQ()
 {
        return intreq;
 }
 
 void
-Paula::setINTREQ(uint16_t value)
+Paula::pokeINTREQ(uint16_t value)
 {
     if (value & 0x8000) {
         intreq |= value;
@@ -69,13 +80,13 @@ Paula::setINTREQ(uint16_t value)
 }
 
 uint16_t
-Paula::getINTENA()
+Paula::peekINTENA()
 {
     return intena;
 }
 
 void
-Paula::setINTENA(uint16_t value)
+Paula::pokeINTENA(uint16_t value)
 {
     if (value & 0x8000) {
         intena |= value;

@@ -352,6 +352,12 @@ struct ADFFileWrapper { ADFFile *adf; };
     return self;
 }
 
+- (PaulaInfo) getInfo
+{
+    return wrapper->paula->getInfo();
+}
+
+
 //
 // Audio unit
 //

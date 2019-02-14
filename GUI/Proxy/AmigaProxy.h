@@ -303,6 +303,7 @@ struct AmigaFileWrapper;
 }
 
 - (void) dump;
+- (PaulaInfo) getInfo;
 
 - (uint32_t) sampleRate;
 - (void) setSampleRate:(double)rate;
