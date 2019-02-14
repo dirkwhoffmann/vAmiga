@@ -142,9 +142,39 @@ class Inspector : NSWindowController
     @IBOutlet weak var ciaIdleLevelText: NSTextField!
     @IBOutlet weak var ciaIdleLevel: NSLevelIndicator!
     
-    // Debug panel (Audio)
-    @IBOutlet weak var audioVolume: NSTextField!
-    
+    // Debug panel (Paula)
+    @IBOutlet weak var paulaIntena: NSTextField!
+    @IBOutlet weak var paulaIntreq: NSTextField!
+    @IBOutlet weak var paulaEna14: NSButton!
+    @IBOutlet weak var paulaEna13: NSButton!
+    @IBOutlet weak var paulaEna12: NSButton!
+    @IBOutlet weak var paulaEna11: NSButton!
+    @IBOutlet weak var paulaEna10: NSButton!
+    @IBOutlet weak var paulaEna9: NSButton!
+    @IBOutlet weak var paulaEna8: NSButton!
+    @IBOutlet weak var paulaEna7: NSButton!
+    @IBOutlet weak var paulaEna6: NSButton!
+    @IBOutlet weak var paulaEna5: NSButton!
+    @IBOutlet weak var paulaEna4: NSButton!
+    @IBOutlet weak var paulaEna3: NSButton!
+    @IBOutlet weak var paulaEna2: NSButton!
+    @IBOutlet weak var paulaEna1: NSButton!
+    @IBOutlet weak var paulaEna0: NSButton!
+    @IBOutlet weak var paulaReq14: NSButton!
+    @IBOutlet weak var paulaReq13: NSButton!
+    @IBOutlet weak var paulaReq12: NSButton!
+    @IBOutlet weak var paulaReq11: NSButton!
+    @IBOutlet weak var paulaReq10: NSButton!
+    @IBOutlet weak var paulaReq9: NSButton!
+    @IBOutlet weak var paulaReq8: NSButton!
+    @IBOutlet weak var paulaReq7: NSButton!
+    @IBOutlet weak var paulaReq6: NSButton!
+    @IBOutlet weak var paulaReq5: NSButton!
+    @IBOutlet weak var paulaReq4: NSButton!
+    @IBOutlet weak var paulaReq3: NSButton!
+    @IBOutlet weak var paulaReq2: NSButton!
+    @IBOutlet weak var paulaReq1: NSButton!
+    @IBOutlet weak var paulaReq0: NSButton!
     @IBOutlet weak var audioWaveformView: WaveformView!
     @IBOutlet weak var audioBufferLevel: NSLevelIndicator!
     @IBOutlet weak var audioBufferLevelText: NSTextField!
@@ -215,7 +245,10 @@ class Inspector : NSWindowController
                 
             case "Memory":
                 refreshMemory(everything: everything)
-                
+
+            case "Paula":
+                refreshPaula(everything: everything)
+
             default:
                 break
             }

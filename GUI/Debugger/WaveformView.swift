@@ -10,8 +10,6 @@
 import Foundation
 
 class WaveformView: NSView {
- 
-    @IBOutlet weak var controller: MyController!
     
     // Remembers the highest amplitude (used for auto scaling)
     var highestAmplitude: Float = 0.001
@@ -47,6 +45,7 @@ class WaveformView: NSView {
         
         super.draw(dirtyRect)
         
+        guard let paula = amigaProxy?.paula else { return }
         let context = NSGraphicsContext.current?.cgContext
         
         NSColor.clear.set()
@@ -58,7 +57,7 @@ class WaveformView: NSView {
         highestAmplitude = 0.001
         
         for x in 0...w {
-            let sample = controller!.amiga.paula.ringbufferData(40 * x)
+            let sample = paula.ringbufferData(40 * x)
             let absvalue = abs(sample)
             highestAmplitude = (absvalue > highestAmplitude) ? absvalue : highestAmplitude
             var scaledSample = absvalue / normalizer * baseline

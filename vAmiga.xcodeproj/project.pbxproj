@@ -55,7 +55,6 @@
 		508FE01221EA227B0043D0E9 /* CIAPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFEE21EA22780043D0E9 /* CIAPanel.swift */; };
 		508FE01421EA227B0043D0E9 /* WaveformView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFF021EA22780043D0E9 /* WaveformView.swift */; };
 		508FE01521EA227B0043D0E9 /* GamePad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFF121EA22780043D0E9 /* GamePad.swift */; };
-		508FE01621EA227B0043D0E9 /* VICPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFF221EA22790043D0E9 /* VICPanel.swift */; };
 		508FE01821EA227B0043D0E9 /* MyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFF421EA22790043D0E9 /* MyController.swift */; };
 		508FE01921EA227B0043D0E9 /* MyControllerMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFF521EA22790043D0E9 /* MyControllerMenu.swift */; };
 		508FE01A21EA227B0043D0E9 /* Formatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFF621EA22790043D0E9 /* Formatter.swift */; };
@@ -223,7 +222,6 @@
 		508FDFEE21EA22780043D0E9 /* CIAPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CIAPanel.swift; sourceTree = "<group>"; };
 		508FDFF021EA22780043D0E9 /* WaveformView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WaveformView.swift; sourceTree = "<group>"; };
 		508FDFF121EA22780043D0E9 /* GamePad.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GamePad.swift; sourceTree = "<group>"; };
-		508FDFF221EA22790043D0E9 /* VICPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VICPanel.swift; sourceTree = "<group>"; };
 		508FDFF421EA22790043D0E9 /* MyController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyController.swift; sourceTree = "<group>"; };
 		508FDFF521EA22790043D0E9 /* MyControllerMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyControllerMenu.swift; sourceTree = "<group>"; };
 		508FDFF621EA22790043D0E9 /* Formatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Formatter.swift; sourceTree = "<group>"; };
@@ -591,6 +589,7 @@
 				509CF4CC22083F9800C500F0 /* CPUPanel.swift */,
 				508FDFEE21EA22780043D0E9 /* CIAPanel.swift */,
 				508FE00221EA227A0043D0E9 /* MemoryPanel.swift */,
+				50F5A84D2214112F00AD5611 /* PaulaPanel.swift */,
 				509CF4CE220847C600C500F0 /* InstrTableView.swift */,
 				509CF4D02208487900C500F0 /* TraceTableView.swift */,
 				504F9657220B2CEE005F8AB7 /* BreakTableView.swift */,
@@ -598,8 +597,6 @@
 				508FDFF821EA22790043D0E9 /* MemTableView.swift */,
 				508FDFF621EA22790043D0E9 /* Formatter.swift */,
 				508FDFF021EA22780043D0E9 /* WaveformView.swift */,
-				508FDFF221EA22790043D0E9 /* VICPanel.swift */,
-				50F5A84D2214112F00AD5611 /* PaulaPanel.swift */,
 			);
 			path = Debugger;
 			sourceTree = "<group>";
@@ -978,7 +975,6 @@
 				50F6EEBE21F4F61F0091155D /* AmigaDrive.cpp in Sources */,
 				50F6EEB821F4F5C60091155D /* AmigaDisk.cpp in Sources */,
 				508FE01921EA227B0043D0E9 /* MyControllerMenu.swift in Sources */,
-				508FE01621EA227B0043D0E9 /* VICPanel.swift in Sources */,
 				508FE01C21EA227B0043D0E9 /* MemTableView.swift in Sources */,
 				508FE05421EA22CC0043D0E9 /* DevicesPrefs.swift in Sources */,
 				50F5F27221F1B6DF000627D1 /* AmigaKey.swift in Sources */,

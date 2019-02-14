@@ -115,6 +115,39 @@
                 <outlet property="memSlowRamButton" destination="3Pe-PG-gN9" id="QDe-WB-0Pz"/>
                 <outlet property="memSlowRamText" destination="hgZ-dV-Oo2" id="XSn-w0-LoA"/>
                 <outlet property="memTableView" destination="WbL-UR-zTx" id="O1q-eC-Zoq"/>
+                <outlet property="paulaEna0" destination="x74-iy-AEc" id="Hm6-Ib-4mv"/>
+                <outlet property="paulaEna1" destination="Djg-WO-eFj" id="sw4-1m-esN"/>
+                <outlet property="paulaEna10" destination="MHB-0V-Htu" id="FA6-Uj-VxT"/>
+                <outlet property="paulaEna11" destination="ASa-gY-n2Z" id="WQE-ps-W6q"/>
+                <outlet property="paulaEna12" destination="J1H-Vy-1r5" id="4lc-pp-bcE"/>
+                <outlet property="paulaEna13" destination="ZnY-pH-jqI" id="KwL-cE-0G9"/>
+                <outlet property="paulaEna14" destination="JTa-qW-Eke" id="4EQ-d6-kAd"/>
+                <outlet property="paulaEna15" destination="JTa-qW-Eke" id="zqR-7D-HGB"/>
+                <outlet property="paulaEna2" destination="tCq-Ec-iWn" id="53y-G0-DEO"/>
+                <outlet property="paulaEna3" destination="7G9-lx-UQU" id="xSO-0S-bfb"/>
+                <outlet property="paulaEna4" destination="Dq3-4y-0Wi" id="u3x-fz-yrU"/>
+                <outlet property="paulaEna5" destination="yC2-xt-DYy" id="XSo-Ja-CI0"/>
+                <outlet property="paulaEna6" destination="whS-zb-3tz" id="Vx5-yd-tma"/>
+                <outlet property="paulaEna7" destination="Wne-bO-9pi" id="NVb-nY-3hz"/>
+                <outlet property="paulaEna8" destination="Ke3-tV-Yte" id="hAq-mC-3he"/>
+                <outlet property="paulaEna9" destination="Yah-Gw-lon" id="DS0-xf-cHl"/>
+                <outlet property="paulaIntena" destination="jci-rK-8t3" id="bJ5-aE-jfS"/>
+                <outlet property="paulaIntreq" destination="f07-lm-ods" id="IPE-n5-zmN"/>
+                <outlet property="paulaReq0" destination="M8M-D2-4G8" id="rJM-Os-9rP"/>
+                <outlet property="paulaReq1" destination="F91-q8-P1m" id="O4o-OE-PWc"/>
+                <outlet property="paulaReq10" destination="Xr8-yV-kOy" id="FqP-Ad-KvT"/>
+                <outlet property="paulaReq11" destination="Pc6-Bl-EAj" id="xyx-fB-RuN"/>
+                <outlet property="paulaReq12" destination="zy8-GY-wLO" id="wBD-g8-TNS"/>
+                <outlet property="paulaReq13" destination="wtW-iN-dmb" id="xEV-BW-whU"/>
+                <outlet property="paulaReq14" destination="PlM-YA-rM0" id="864-nu-c3Z"/>
+                <outlet property="paulaReq2" destination="OXP-le-HxH" id="UcG-OZ-yDq"/>
+                <outlet property="paulaReq3" destination="HD3-R3-9yP" id="7Xh-8t-VaM"/>
+                <outlet property="paulaReq4" destination="oEA-u4-uVE" id="g3N-nH-UR5"/>
+                <outlet property="paulaReq5" destination="OZA-1f-yTa" id="bdL-ll-cM9"/>
+                <outlet property="paulaReq6" destination="e4s-ij-STz" id="Uge-cT-BQR"/>
+                <outlet property="paulaReq7" destination="yBL-47-Jwz" id="EZJ-4z-LRd"/>
+                <outlet property="paulaReq8" destination="Ysn-M6-ZOT" id="fnO-Gi-Lro"/>
+                <outlet property="paulaReq9" destination="BbS-ht-wSo" id="hvB-uH-fe7"/>
                 <outlet property="traceTableView" destination="9F9-Qx-tLH" id="1zf-01-nk7"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="5Nr-At-Pvk"/>
             </connections>
@@ -2760,14 +2793,6 @@
             </connections>
             <point key="canvasLocation" x="333" y="283"/>
         </window>
-        <button id="xSs-s0-kvW">
-            <rect key="frame" x="0.0" y="0.0" width="95" height="18"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-            <buttonCell key="cell" type="check" title="PA7" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" enabled="NO" inset="2" id="fGn-OZ-4hw">
-                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                <font key="font" metaFont="smallSystem"/>
-            </buttonCell>
-        </button>
     </objects>
     <resources>
         <image name="baustelle" width="274" height="240"/>
