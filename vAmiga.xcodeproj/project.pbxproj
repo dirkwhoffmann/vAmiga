@@ -15,7 +15,7 @@
 		504F9656220ACFE0005F8AB7 /* Breakpoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 504F9654220ACFE0005F8AB7 /* Breakpoint.cpp */; };
 		504F9658220B2CEE005F8AB7 /* BreakTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504F9657220B2CEE005F8AB7 /* BreakTableView.swift */; };
 		505A3A3A21F4996400132020 /* sse_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505A3A3821F4996400132020 /* sse_utils.cpp */; };
-		5064851121EC7A1700FC4AC3 /* AmigaMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5064850F21EC7A1700FC4AC3 /* AmigaMemory.cpp */; };
+		5064851121EC7A1700FC4AC3 /* Memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5064850F21EC7A1700FC4AC3 /* Memory.cpp */; };
 		5085FE5721FB3BAE009753EF /* EventHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5085FE5521FB3BAE009753EF /* EventHandler.cpp */; };
 		5085FE5921FB6856009753EF /* ProxyExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5085FE5821FB6856009753EF /* ProxyExtensions.swift */; };
 		508833EE21F0D21B009890EA /* ADFFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508833EC21F0D21B009890EA /* ADFFile.cpp */; };
@@ -167,8 +167,8 @@
 		504F9657220B2CEE005F8AB7 /* BreakTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakTableView.swift; sourceTree = "<group>"; };
 		505A3A3821F4996400132020 /* sse_utils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = sse_utils.cpp; sourceTree = "<group>"; };
 		505A3A3921F4996400132020 /* sse_utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sse_utils.h; sourceTree = "<group>"; };
-		5064850F21EC7A1700FC4AC3 /* AmigaMemory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaMemory.cpp; sourceTree = "<group>"; };
-		5064851021EC7A1700FC4AC3 /* AmigaMemory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaMemory.h; sourceTree = "<group>"; };
+		5064850F21EC7A1700FC4AC3 /* Memory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Memory.cpp; sourceTree = "<group>"; };
+		5064851021EC7A1700FC4AC3 /* Memory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Memory.h; sourceTree = "<group>"; };
 		5082D83A21EF891200CF7692 /* va_constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = va_constants.h; sourceTree = "<group>"; };
 		5085FE5521FB3BAE009753EF /* EventHandler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EventHandler.cpp; sourceTree = "<group>"; };
 		5085FE5621FB3BAE009753EF /* EventHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventHandler.h; sourceTree = "<group>"; };
@@ -632,8 +632,8 @@
 				508FDEF521EA1FBC0043D0E9 /* MessageQueue.cpp */,
 				5085FE5621FB3BAE009753EF /* EventHandler.h */,
 				5085FE5521FB3BAE009753EF /* EventHandler.cpp */,
-				5064851021EC7A1700FC4AC3 /* AmigaMemory.h */,
-				5064850F21EC7A1700FC4AC3 /* AmigaMemory.cpp */,
+				5064851021EC7A1700FC4AC3 /* Memory.h */,
+				5064850F21EC7A1700FC4AC3 /* Memory.cpp */,
 				5020B17C21EF121E00B9E80E /* DMAController.h */,
 				5020B17B21EF121E00B9E80E /* DMAController.cpp */,
 				5020B17F21EF136100B9E80E /* Denise.h */,
@@ -962,7 +962,7 @@
 				5085FE5921FB6856009753EF /* ProxyExtensions.swift in Sources */,
 				508FE04F21EA22CC0043D0E9 /* EmulatorPrefs.swift in Sources */,
 				50F5A84E2214112F00AD5611 /* PaulaPanel.swift in Sources */,
-				5064851121EC7A1700FC4AC3 /* AmigaMemory.cpp in Sources */,
+				5064851121EC7A1700FC4AC3 /* Memory.cpp in Sources */,
 				508FE01B21EA227B0043D0E9 /* MyDocument.swift in Sources */,
 				508FDFDB21EA20510043D0E9 /* Shaders.swift in Sources */,
 				508FE01D21EA227B0043D0E9 /* UserDefaults.swift in Sources */,

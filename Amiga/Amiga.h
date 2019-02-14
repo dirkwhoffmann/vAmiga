@@ -19,7 +19,7 @@
 #include "CPU.h"
 #include "BreakpointManager.h"
 #include "CIA.h"
-#include "AmigaMemory.h"
+#include "Memory.h"
 #include "DMAController.h"
 #include "Denise.h"
 #include "Paula.h"
@@ -94,7 +94,7 @@ public:
     CIAB ciaB;
 
     // Memory
-    AmigaMemory mem;
+    Memory mem;
     
     // The DMA controller (part of Agnus)
     DMAController dma;

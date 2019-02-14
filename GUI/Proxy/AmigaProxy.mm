@@ -14,7 +14,7 @@
 struct AmigaWrapper { Amiga *amiga; };
 struct CPUWrapper { CPU *cpu; };
 struct CIAWrapper { CIA *cia; };
-struct MemWrapper { AmigaMemory *mem; };
+struct MemWrapper { Memory *mem; };
 struct DMAControllerWrapper { DMAController *dmaController; };
 struct DeniseWrapper { Denise *denise; };
 struct PaulaWrapper { Paula *paula; };
@@ -183,7 +183,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 
 @implementation MemProxy
 
-- (instancetype) initWithMemory:(AmigaMemory *)mem
+- (instancetype) initWithMemory:(Memory *)mem
 {
     if (self = [super init]) {
         wrapper = new MemWrapper();

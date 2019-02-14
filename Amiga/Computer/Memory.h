@@ -14,7 +14,7 @@
 #include "BootRom.h"
 #include "KickRom.h"
 
-class AmigaMemory : public HardwareComponent {
+class Memory : public HardwareComponent {
     
 public:
     
@@ -63,8 +63,8 @@ public:
     
 public:
     
-    AmigaMemory();
-    ~AmigaMemory();
+    Memory();
+    ~Memory();
     
     //
     // Methods from HardwareComponent

@@ -10,7 +10,7 @@
 #include "Amiga.h"
 #include <new>
 
-AmigaMemory::AmigaMemory()
+Memory::Memory()
 {
     setDescription("Memory");
     
@@ -18,7 +18,7 @@ AmigaMemory::AmigaMemory()
     allocateChipRam(KB(256));
 }
 
-AmigaMemory::~AmigaMemory()
+Memory::~Memory()
 {
     if (bootRom) delete[] bootRom;
     if (kickRom) delete[] kickRom;
@@ -28,7 +28,7 @@ AmigaMemory::~AmigaMemory()
 }
 
 void
-AmigaMemory::_powerOn()
+Memory::_powerOn()
 {
     // Allocate memory
     /*
@@ -48,25 +48,25 @@ AmigaMemory::_powerOn()
 }
 
 void
-AmigaMemory::_powerOff()
+Memory::_powerOff()
 {
     
 }
 
 void
-AmigaMemory::_reset()
+Memory::_reset()
 {
     
 }
 
 void
-AmigaMemory::_ping()
+Memory::_ping()
 {
     
 }
 
 void
-AmigaMemory::_dump()
+Memory::_dump()
 {
     plainmsg("     Boot Rom: %d KB at %p\n", bootRomSize >> 10, bootRom);
     plainmsg("     Kick Rom: %d KB at %p (%s)\n", kickRomSize >> 10,
@@ -114,7 +114,7 @@ AmigaMemory::allocateFastRam(size_t size)
 */
 
 bool
-AmigaMemory::alloc(size_t size, uint8_t *&ptrref, size_t &sizeref)
+Memory::alloc(size_t size, uint8_t *&ptrref, size_t &sizeref)
 {
     // Do some consistency checking
     assert((ptrref == NULL) == (sizeref == 0));
@@ -160,7 +160,7 @@ AmigaMemory::dealloc(uint8_t *&ptrref, size_t &sizeref)
 */
 
 void
-AmigaMemory::loadRom(AmigaFile *rom, uint8_t *target, size_t length)
+Memory::loadRom(AmigaFile *rom, uint8_t *target, size_t length)
 {
     if (rom) {
         
@@ -177,7 +177,7 @@ AmigaMemory::loadRom(AmigaFile *rom, uint8_t *target, size_t length)
 }
 
 bool
-AmigaMemory::loadBootRomFromBuffer(const uint8_t *buffer, size_t length)
+Memory::loadBootRomFromBuffer(const uint8_t *buffer, size_t length)
 {
     assert(buffer != NULL);
     
@@ -192,7 +192,7 @@ AmigaMemory::loadBootRomFromBuffer(const uint8_t *buffer, size_t length)
 }
 
 bool
-AmigaMemory::loadBootRomFromFile(const char *path)
+Memory::loadBootRomFromFile(const char *path)
 {
     assert(path != NULL);
     
@@ -207,7 +207,7 @@ AmigaMemory::loadBootRomFromFile(const char *path)
 }
 
 bool
-AmigaMemory::loadBootRom(BootRom *rom)
+Memory::loadBootRom(BootRom *rom)
 {
     assert(rom != NULL);
     
@@ -219,7 +219,7 @@ AmigaMemory::loadBootRom(BootRom *rom)
 }
 
 bool
-AmigaMemory::loadKickRomFromBuffer(const uint8_t *buffer, size_t length)
+Memory::loadKickRomFromBuffer(const uint8_t *buffer, size_t length)
 {
     assert(buffer != NULL);
     
@@ -234,7 +234,7 @@ AmigaMemory::loadKickRomFromBuffer(const uint8_t *buffer, size_t length)
 }
 
 bool
-AmigaMemory::loadKickRomFromFile(const char *path)
+Memory::loadKickRomFromFile(const char *path)
 {
     assert(path != NULL);
     
@@ -249,7 +249,7 @@ AmigaMemory::loadKickRomFromFile(const char *path)
 }
 
 bool
-AmigaMemory::loadKickRom(KickRom *rom)
+Memory::loadKickRom(KickRom *rom)
 {
     assert(rom != NULL);
     
@@ -261,7 +261,7 @@ AmigaMemory::loadKickRom(KickRom *rom)
 }
 
 void
-AmigaMemory::updateMemSrcTable()
+Memory::updateMemSrcTable()
 {
     MemorySource mem_boot = bootRom ? MEM_BOOT : MEM_UNMAPPED;
     MemorySource mem_kick = kickRom ? MEM_KICK : MEM_UNMAPPED;
@@ -318,14 +318,14 @@ AmigaMemory::updateMemSrcTable()
 }
 
 MemorySource
-AmigaMemory::getMemSrc(uint32_t addr)
+Memory::getMemSrc(uint32_t addr)
 {
     assert(is_uint24_t(addr));
     return memSrc[addr >> 16];
 }
 
 uint8_t
-AmigaMemory::peek8(uint32_t addr)
+Memory::peek8(uint32_t addr)
 {
     addr &= 0xFFFFFF;
     switch (memSrc[addr >> 16]) {
@@ -369,40 +369,40 @@ AmigaMemory::peek8(uint32_t addr)
 }
 
 uint16_t
-AmigaMemory::peek16(uint32_t addr)
+Memory::peek16(uint32_t addr)
 {
     addr &= 0xFFFFFF;
     return HI_LO(peek8(addr), peek8(addr+1));
 }
 
 uint32_t
-AmigaMemory::peek32(uint32_t addr)
+Memory::peek32(uint32_t addr)
 {
     addr &= 0xFFFFFF;
     return HI_HI_LO_LO(peek8(addr), peek8(addr+1), peek8(addr+2), peek8(addr+3));
 }
 
 uint8_t
-AmigaMemory::spypeek8(uint32_t addr)
+Memory::spypeek8(uint32_t addr)
 {
     addr &= 0xFFFFFF;
     return peek8(addr);
 }
 uint16_t
-AmigaMemory::spypeek16(uint32_t addr)
+Memory::spypeek16(uint32_t addr)
 {
     addr &= 0xFFFFFF;
     return peek16(addr);
 }
 uint32_t
-AmigaMemory::spypeek32(uint32_t addr)
+Memory::spypeek32(uint32_t addr)
 {
     addr &= 0xFFFFFF;
     return peek32(addr);
 }
 
 void
-AmigaMemory::poke8(uint32_t addr, uint8_t value)
+Memory::poke8(uint32_t addr, uint8_t value)
 {
     addr &= 0xFFFFFF;
     switch (memSrc[addr >> 16]) {
@@ -447,13 +447,13 @@ AmigaMemory::poke8(uint32_t addr, uint8_t value)
     }
 }
 void
-AmigaMemory::poke16(uint32_t addr, uint16_t value)
+Memory::poke16(uint32_t addr, uint16_t value)
 {
     assert(is_uint24_t(addr));
     debug("Poking %04X to %06X.", value, addr);
 }
 void
-AmigaMemory::poke32(uint32_t addr, uint32_t value)
+Memory::poke32(uint32_t addr, uint32_t value)
 {
     assert(is_uint24_t(addr));
     debug("Poking %04X to %06X.", value, addr);
@@ -464,7 +464,7 @@ AmigaMemory::poke32(uint32_t addr, uint32_t value)
 //
 
 uint8_t
-AmigaMemory::peekCIA8(uint32_t addr)
+Memory::peekCIA8(uint32_t addr)
 {
     uint32_t reg = (addr >> 8) & 0b1111;
     uint32_t sel = (addr >> 12) & 0b11;
@@ -489,7 +489,7 @@ AmigaMemory::peekCIA8(uint32_t addr)
 }
 
 uint16_t
-AmigaMemory::peekCIA16(uint32_t addr)
+Memory::peekCIA16(uint32_t addr)
 {
     uint32_t reg = (addr >> 8) & 0b1111;
     uint32_t sel = (addr >> 12) & 0b11;
@@ -514,13 +514,13 @@ AmigaMemory::peekCIA16(uint32_t addr)
 }
 
 uint32_t
-AmigaMemory::peekCIA32(uint32_t addr)
+Memory::peekCIA32(uint32_t addr)
 {
     return (peekCIA16(addr) << 16) | peekCIA16(addr + 2);
 }
 
 void
-AmigaMemory::pokeCIA8(uint32_t addr, uint8_t value)
+Memory::pokeCIA8(uint32_t addr, uint8_t value)
 {
     uint32_t reg = (addr >> 8) & 0b1111;
     uint32_t selA = (addr & 0x1000) == 0;
@@ -531,7 +531,7 @@ AmigaMemory::pokeCIA8(uint32_t addr, uint8_t value)
 }
 
 void
-AmigaMemory::pokeCIA16(uint32_t addr, uint16_t value)
+Memory::pokeCIA16(uint32_t addr, uint16_t value)
 {
     uint32_t reg = (addr >> 8) & 0b1111;
     uint32_t selA = (addr & 0x1000) == 0;
@@ -542,7 +542,7 @@ AmigaMemory::pokeCIA16(uint32_t addr, uint16_t value)
 }
 
 void
-AmigaMemory::pokeCIA32(uint32_t addr, uint32_t value)
+Memory::pokeCIA32(uint32_t addr, uint32_t value)
 {
     pokeCIA16(addr,     HI_WORD(value));
     pokeCIA16(addr + 2, LO_WORD(value));
@@ -554,7 +554,7 @@ AmigaMemory::pokeCIA32(uint32_t addr, uint32_t value)
 //
 
 uint8_t
-AmigaMemory::peekCustom8(uint32_t addr)
+Memory::peekCustom8(uint32_t addr)
 {
     if (IS_EVEN(addr)) {
         return HI_BYTE(peekCustomReg(addr));
@@ -564,7 +564,7 @@ AmigaMemory::peekCustom8(uint32_t addr)
 }
 
 uint16_t
-AmigaMemory::peekCustom16(uint32_t addr)
+Memory::peekCustom16(uint32_t addr)
 {
     if (IS_EVEN(addr)) {
         return peekCustomReg(addr);
@@ -576,13 +576,13 @@ AmigaMemory::peekCustom16(uint32_t addr)
 }
 
 uint32_t
-AmigaMemory::peekCustom32(uint32_t addr)
+Memory::peekCustom32(uint32_t addr)
 {
    return HI_W_LO_W(peekCustom16(addr), peekCustom16(addr + 2));
 }
 
 uint16_t
-AmigaMemory::peekCustomReg(uint32_t addr)
+Memory::peekCustomReg(uint32_t addr)
 {
     // This function required that addr is word aligned
     assert(IS_EVEN(addr));
@@ -602,7 +602,7 @@ AmigaMemory::peekCustomReg(uint32_t addr)
 }
 
 uint8_t
-AmigaMemory::spypeekCustom8(uint32_t addr)
+Memory::spypeekCustom8(uint32_t addr)
 {
     if (IS_EVEN(addr)) {
         return HI_BYTE(spypeekCustomReg(addr));
@@ -612,7 +612,7 @@ AmigaMemory::spypeekCustom8(uint32_t addr)
 }
 
 uint16_t
-AmigaMemory::spypeekCustom16(uint32_t addr)
+Memory::spypeekCustom16(uint32_t addr)
 {
     if (IS_EVEN(addr)) {
         return spypeekCustomReg(addr);
@@ -624,25 +624,25 @@ AmigaMemory::spypeekCustom16(uint32_t addr)
 }
 
 uint32_t
-AmigaMemory::spypeekCustom32(uint32_t addr)
+Memory::spypeekCustom32(uint32_t addr)
 {
     return HI_W_LO_W(spypeekCustom16(addr), spypeekCustom16(addr + 2));
 }
 
 uint16_t
-AmigaMemory::spypeekCustomReg(uint32_t addr)
+Memory::spypeekCustomReg(uint32_t addr)
 {
     return 42; 
 }
 
 void
-AmigaMemory::pokeCustom8(uint32_t addr, uint8_t value)
+Memory::pokeCustom8(uint32_t addr, uint8_t value)
 {
     pokeCustom16(addr & 0x1FE, HI_LO(value,value));
 }
 
 void
-AmigaMemory::pokeCustom16(uint32_t addr, uint16_t value)
+Memory::pokeCustom16(uint32_t addr, uint16_t value)
 {
     if (IS_EVEN(addr)) {
         pokeCustomReg(addr, value);
@@ -654,14 +654,14 @@ AmigaMemory::pokeCustom16(uint32_t addr, uint16_t value)
     }
 }
 
-void AmigaMemory::pokeCustom32(uint32_t addr, uint32_t value)
+void Memory::pokeCustom32(uint32_t addr, uint32_t value)
 {
     pokeCustom16((addr & 0x1FE), HI_WORD(value));
     pokeCustom16((addr & 0x1FE) + 2, LO_WORD(value));
 }
 
 void
-AmigaMemory::pokeCustomReg(uint32_t addr, uint16_t value)
+Memory::pokeCustomReg(uint32_t addr, uint16_t value)
 {
     switch (addr & 0x1FE) {
             
@@ -682,7 +682,7 @@ AmigaMemory::pokeCustomReg(uint32_t addr, uint16_t value)
 
 
 const char *
-AmigaMemory::ascii(uint32_t addr)
+Memory::ascii(uint32_t addr)
 {
     assert(is_uint24_t(addr));
     
@@ -695,7 +695,7 @@ AmigaMemory::ascii(uint32_t addr)
 }
 
 const char *
-AmigaMemory::hex(uint32_t addr, size_t bytes)
+Memory::hex(uint32_t addr, size_t bytes)
 {
     assert(is_uint24_t(addr));
     assert(bytes % 2 == 0);
