@@ -21,10 +21,16 @@ class Paula : public HardwareComponent {
 public:
     
     // Paula has been executed up to this clock cycle.
-    uint64_t clock = 0;
+    Cycle clock = 0;
     
     // Audio unit
     AudioUnit audioUnit;
+    
+    // The interrupt request register
+    uint16_t intreq;
+    
+    // The interrupt enable register
+    uint16_t intena;
     
     
     //
@@ -50,6 +56,28 @@ private:
     void _dump() override;
     */
     void _setWarp(bool value) override;
+    
+    //
+    // Register access
+    //
+    
+public:
+    
+    uint16_t getINTREQ();
+    void setINTREQ(uint16_t value);
+ 
+    uint16_t getINTENA();
+    void setINTENA(uint16_t value);
+    
+    
+    //
+    // Interrupts
+    //
+    
+private:
+    
+    // Computes the interrupt level of a pending interrupt.
+    int interruptLevel();
     
     //
     // FAKE METHODS FOR THE VISUAL PROTOTYPE (TEMPORARY)

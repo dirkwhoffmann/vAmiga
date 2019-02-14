@@ -459,6 +459,10 @@ AmigaMemory::poke32(uint32_t addr, uint32_t value)
     debug("Poking %04X to %06X.", value, addr);
 }
 
+//
+// CIAs
+//
+
 uint8_t
 AmigaMemory::peekCIA8(uint32_t addr)
 {
@@ -543,6 +547,139 @@ AmigaMemory::pokeCIA32(uint32_t addr, uint32_t value)
     pokeCIA16(addr,     HI_WORD(value));
     pokeCIA16(addr + 2, LO_WORD(value));
 }
+
+
+//
+// Custom chip set
+//
+
+uint8_t
+AmigaMemory::peekCustom8(uint32_t addr)
+{
+    if (IS_EVEN(addr)) {
+        return HI_BYTE(peekCustomReg(addr));
+    } else {
+        return LO_BYTE(peekCustomReg(addr - 1));
+    }
+}
+
+uint16_t
+AmigaMemory::peekCustom16(uint32_t addr)
+{
+    if (IS_EVEN(addr)) {
+        return peekCustomReg(addr);
+    } else {
+        uint8_t byte1 = LO_BYTE(peekCustomReg(addr - 1));
+        uint8_t byte2 = HI_BYTE(peekCustomReg(addr + 1));
+        return HI_LO(byte1, byte2);
+    }
+}
+
+uint32_t
+AmigaMemory::peekCustom32(uint32_t addr)
+{
+   return HI_W_LO_W(peekCustom16(addr), peekCustom16(addr + 2));
+}
+
+uint16_t
+AmigaMemory::peekCustomReg(uint32_t addr)
+{
+    // This function required that addr is word aligned
+    assert(IS_EVEN(addr));
+    
+    switch (addr & 0x1FE) {
+            
+        case 0x01C: // INTENAR
+            return amiga->paula.getINTENA();
+        case 0x01E: // INTREQR
+            return amiga->paula.getINTREQ();
+            
+        default:
+            warn("peekCustom16(%X): MISSING IMPLEMENTATION\n", addr);
+    }
+    
+    return 42;
+}
+
+uint8_t
+AmigaMemory::spypeekCustom8(uint32_t addr)
+{
+    if (IS_EVEN(addr)) {
+        return HI_BYTE(spypeekCustomReg(addr));
+    } else {
+        return LO_BYTE(spypeekCustomReg(addr - 1));
+    }
+}
+
+uint16_t
+AmigaMemory::spypeekCustom16(uint32_t addr)
+{
+    if (IS_EVEN(addr)) {
+        return spypeekCustomReg(addr);
+    } else {
+        uint8_t byte1 = LO_BYTE(spypeekCustomReg(addr - 1));
+        uint8_t byte2 = HI_BYTE(spypeekCustomReg(addr + 1));
+        return HI_LO(byte1, byte2);
+    }
+}
+
+uint32_t
+AmigaMemory::spypeekCustom32(uint32_t addr)
+{
+    return HI_W_LO_W(spypeekCustom16(addr), spypeekCustom16(addr + 2));
+}
+
+uint16_t
+AmigaMemory::spypeekCustomReg(uint32_t addr)
+{
+    return 42; 
+}
+
+void
+AmigaMemory::pokeCustom8(uint32_t addr, uint8_t value)
+{
+    pokeCustom16(addr & 0x1FE, HI_LO(value,value));
+}
+
+void
+AmigaMemory::pokeCustom16(uint32_t addr, uint16_t value)
+{
+    if (IS_EVEN(addr)) {
+        pokeCustomReg(addr, value);
+    } else {
+        uint8_t hi = HI_BYTE(value);
+        uint8_t lo = LO_BYTE(value);
+        pokeCustomReg(addr - 1, HI_LO(hi,hi));
+        pokeCustomReg(addr + 1, HI_LO(lo,lo));
+    }
+}
+
+void AmigaMemory::pokeCustom32(uint32_t addr, uint32_t value)
+{
+    pokeCustom16((addr & 0x1FE), HI_WORD(value));
+    pokeCustom16((addr & 0x1FE) + 2, LO_WORD(value));
+}
+
+void
+AmigaMemory::pokeCustomReg(uint32_t addr, uint16_t value)
+{
+    switch (addr & 0x1FE) {
+            
+        case 0x09A: // INTENA
+            amiga->paula.setINTENA(value);
+            break;
+            
+        case  0x09C: // INTREQ
+            amiga->paula.setINTREQ(value);
+            break;
+            
+        default:
+            warn("pokeCustom16(%X, %X): MISSING IMPLEMENTATION\n", addr, value);
+    }
+}
+
+
+
 
 const char *
 AmigaMemory::ascii(uint32_t addr)

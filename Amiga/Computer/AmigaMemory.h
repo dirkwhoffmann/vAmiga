@@ -173,32 +173,60 @@ public:
      */
     MemorySource getMemSrc(uint32_t addr);
     
-    // Peeks a value from memory.
+    //
+    // Accessing memory cells
+    //
+    
     uint8_t peek8(uint32_t addr);
     uint16_t peek16(uint32_t addr);
     uint32_t peek32(uint32_t addr);
     
-    // Peeks a byte from memory without causing side effects.
     uint8_t spypeek8(uint32_t addr);
     uint16_t spypeek16(uint32_t addr);
     uint32_t spypeek32(uint32_t addr);
     
-    // Pokes a byte into memory.
     void poke8(uint32_t addr, uint8_t value);
     void poke16(uint32_t addr, uint16_t value);
     void poke32(uint32_t addr, uint32_t value);
 
+    
+    //
+    // CIAs
+    //
+    
 private:
     
-    // Peeks a value from the CIA space.
     uint8_t peekCIA8(uint32_t addr);
     uint16_t peekCIA16(uint32_t addr);
     uint32_t peekCIA32(uint32_t addr);
  
-    // Pokes a value into the CIA space.
+    // TODO: spypeek
+    
     void pokeCIA8(uint32_t addr, uint8_t value);
     void pokeCIA16(uint32_t addr, uint16_t value);
     void pokeCIA32(uint32_t addr, uint32_t value);
+    
+    
+    //
+    // Custom chip set
+    //
+    
+    uint8_t peekCustom8(uint32_t addr);
+    uint16_t peekCustom16(uint32_t addr);
+    uint32_t peekCustom32(uint32_t addr);
+    uint16_t peekCustomReg(uint32_t addr); // addr must be word aligned
+    
+    uint8_t spypeekCustom8(uint32_t addr);
+    uint16_t spypeekCustom16(uint32_t addr);
+    uint32_t spypeekCustom32(uint32_t addr);
+    uint16_t spypeekCustomReg(uint32_t addr); // addr must be word aligned
+
+    void pokeCustom8(uint32_t addr, uint8_t value);
+    void pokeCustom16(uint32_t addr, uint16_t value);
+    void pokeCustom32(uint32_t addr, uint32_t value);
+    void pokeCustomReg(uint32_t addr, uint16_t value); // addr must be word aligned
+
+    
     
 public:
     

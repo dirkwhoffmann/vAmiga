@@ -87,51 +87,59 @@ inline bool is_uint5_t(uint5_t value) { return value < 32; }
 #define LO_WORD(x) (uint16_t)((x) & 0xFFFF)
 #define HI_WORD(x) (uint16_t)((x) >> 16)
 
-//! @brief    Specifies a larger integer in little endian byte format
+// Specifies a larger integer in little endian byte format
 #define LO_HI(x,y) (uint16_t)((y) << 8 | (x))
 #define LO_LO_HI(x,y,z) (uint32_t)((z) << 16 | (y) << 8 | (x))
 #define LO_LO_HI_HI(x,y,z,w) (uint32_t)((w) << 24 | (z) << 16 | (y) << 8 | (x))
+#define LO_W_HI_W(x,y) (uint32_t)((y) << 16 | (x))
 
-//! @brief    Specifies a larger integer in big endian byte format
+// Specifies a larger integer in big endian byte format
 #define HI_LO(x,y) (uint16_t)((x) << 8 | (y))
 #define HI_HI_LO(x,y,z) (uint32_t)((x) << 16 | (y) << 8 | (z))
 #define HI_HI_LO_LO(x,y,z,w) (uint32_t)((x) << 24 | (y) << 16 | (z) << 8 | (w))
+#define HI_W_LO_W(x,y) (uint32_t)((x) << 16 | (y))
 
-//! @brief    Returns a certain byte of a larger integer
+// Returns a certain byte of a larger integer
 #define BYTE0(x) LO_BYTE(x)
 #define BYTE1(x) LO_BYTE((x) >> 8)
 #define BYTE2(x) LO_BYTE((x) >> 16)
 #define BYTE3(x) LO_BYTE((x) >> 24)
 
-//! @brief    Returns a non-zero value if the n-th bit is set in x.
+// Returns a non-zero value if the n-th bit is set in x.
 #define GET_BIT(x,nr) ((x) & (1 << (nr)))
 
-//! @brief    Sets a single bit.
+// Sets a single bit.
 #define SET_BIT(x,nr) ((x) |= (1 << (nr)))
 
-//! @brief    Clears a single bit.
+// Clears a single bit.
 #define CLR_BIT(x,nr) ((x) &= ~(1 << (nr)))
 
-//! @brief    Toggles a single bit.
+// Toggles a single bit.
 #define TOGGLE_BIT(x,nr) ((x) ^= (1 << (nr)))
 
-//! @brief    Sets a single bit to 0 (value == 0) or 1 (value != 0)
+// Sets a single bit to 0 (value == 0) or 1 (value != 0)
 #define WRITE_BIT(x,nr,value) ((value) ? SET_BIT(x, nr) : CLR_BIT(x, nr))
 
-//! @brief    Copies a single bit from x to y.
+// Copies a single bit from x to y.
 #define COPY_BIT(x,y,nr) ((y) = ((y) & ~(1 << (nr)) | ((x) & (1 << (nr)))))
 
-//! @brief    Returns true if value is rising when switching from x to y
+// Returns true if value is rising when switching from x to y
 #define RISING_EDGE(x,y) (!(x) && (y))
 
-//! @brief    Returns true if bit n is rising when switching from x to y
+// Returns true if bit n is rising when switching from x to y
 #define RISING_EDGE_BIT(x,y,n) (!((x) & (1 << (n))) && ((y) & (1 << (n))))
 
-//! @brief    Returns true if value is falling when switching from x to y
+// Returns true if value is falling when switching from x to y
 #define FALLING_EDGE(x,y) ((x) && !(y))
 
-//! @brief    Returns true if bit n is falling when switching from x to y
+// Returns true if bit n is falling when switching from x to y
 #define FALLING_EDGE_BIT(x,y,n) (((x) & (1 << (n))) && !((y) & (1 << (n))))
+
+// Returns true if x is an odd number
+#define IS_ODD(x) ((x) & 1)
+
+// Returns true if x is an even number
+#define IS_EVEN(x) (!IS_ODD(x))
 
 
 //

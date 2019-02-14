@@ -21,7 +21,9 @@ Paula::Paula()
     
     // Register snapshot items
     registerSnapshotItems(vector<SnapshotItem> {
-        { &clock, sizeof(clock), 0 },
+        { &clock,  sizeof(clock),  0 },
+        { &intreq, sizeof(intreq), 0 },
+        { &intena, sizeof(intena), 0 },
     });
     
 }
@@ -48,4 +50,52 @@ Paula::_setWarp(bool value)
         audioUnit.rampUp();
         audioUnit.alignWritePtr();
     }
+}
+
+uint16_t
+Paula::getINTREQ()
+{
+       return intreq;
+}
+
+void
+Paula::setINTREQ(uint16_t value)
+{
+    if (value & 0x8000) {
+        intreq |= value;
+    } else {
+        intreq &= ~value;
+    }
+}
+
+uint16_t
+Paula::getINTENA()
+{
+    return intena;
+}
+
+void
+Paula::setINTENA(uint16_t value)
+{
+    if (value & 0x8000) {
+        intena |= value;
+    } else {
+        intena &= ~value;
+    }
+}
+
+int
+Paula::interruptLevel()
+{
+    
+    uint16_t mask = intreq && intena;
+
+    if (mask & 0b0110000000000000) return 6;
+    if (mask & 0b0001100000000000) return 5;
+    if (mask & 0b0000011110000000) return 4;
+    if (mask & 0b0000000001110000) return 3;
+    if (mask & 0b0000000000001000) return 2;
+    if (mask & 0b0000000000000111) return 1;
+    
+    return 0;
 }
