@@ -23,6 +23,15 @@ public:
     // The DMA controller has been executed up to this clock cycle.
     uint64_t clock = 0;
     
+    //  Horizontal Beam Position Counter
+    uint16_t vhpos = 0;
+
+    //  Vertical Beam Position Counter
+    uint16_t vpos = 0;
+
+
+
+    
     
     // FAKE COUNTERS FOR tHE VISUAL PROTOTYPE
     unsigned xCounter = 0;
@@ -48,6 +57,13 @@ private:
     void _reset() override;
     void _ping() override;
     void _dump() override;
+    
+    // This function is called when the end of a rasterline has been reached.
+    void hsyncAction();
+
+    // This function is called when the end of a frame has been reached.
+    void vsyncAction();
+
     
     //
     // FAKE METHODS FOR THE VISUAL PROTOTYPE

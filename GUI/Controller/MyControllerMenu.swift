@@ -532,6 +532,9 @@ extension MyController : NSMenuItemValidation {
     @IBAction func dumpDf1Action(_ sender: Any!) {
         amiga.df1.dump()
     }
+    @IBAction func dumpAgnusAction(_ sender: Any!) {
+        amiga.dma.dump()
+    }
     @IBAction func dumpPaulaAction(_ sender: Any!) {
         amiga.paula.dump()
     }

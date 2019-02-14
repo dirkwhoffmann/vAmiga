@@ -278,6 +278,12 @@
                                                                         <action selector="dumpCPUAction:" target="-1" id="ghD-b6-v0M"/>
                                                                     </connections>
                                                                 </menuItem>
+                                                                <menuItem title="Memory" id="Ddc-nP-Wtp">
+                                                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    <connections>
+                                                                        <action selector="dumpMemoryAction:" target="-1" id="OqH-nf-khT"/>
+                                                                    </connections>
+                                                                </menuItem>
                                                                 <menuItem title="CIA A" id="445">
                                                                     <modifierMask key="keyEquivalentModifierMask"/>
                                                                     <connections>
@@ -290,10 +296,10 @@
                                                                         <action selector="dumpCIABAction:" target="-1" id="N5S-RO-KR8"/>
                                                                     </connections>
                                                                 </menuItem>
-                                                                <menuItem title="Memory" id="444">
+                                                                <menuItem title="Agnus" id="444">
                                                                     <modifierMask key="keyEquivalentModifierMask"/>
                                                                     <connections>
-                                                                        <action selector="dumpMemoryAction:" target="-1" id="ph2-7N-fij"/>
+                                                                        <action selector="dumpAgnusAction:" target="-1" id="gtw-EH-j5y"/>
                                                                     </connections>
                                                                 </menuItem>
                                                                 <menuItem title="Paula" id="527">
