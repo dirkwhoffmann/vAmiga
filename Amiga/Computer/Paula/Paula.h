@@ -57,6 +57,11 @@ private:
     */
     void _setWarp(bool value) override;
     
+    
+    //
+    // Collecting information
+    //
+    
 public:
     
     // Collects the data shown in the GUI's debug panel.

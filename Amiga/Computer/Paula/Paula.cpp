@@ -74,11 +74,7 @@ Paula::pokeINTREQ(uint16_t value)
 {
     debug("pokeINTREQ(%X)\n", value);
     
-    if (value & 0x8000) {
-        intreq |= value;
-    } else {
-        intreq &= ~value;
-    }
+    if (value & 0x8000) intreq |= (value & 0x7FFF); else intreq &= ~value;
 }
 
 uint16_t
@@ -92,11 +88,7 @@ Paula::pokeINTENA(uint16_t value)
 {
     debug("pokeINTENA(%X)\n", value);
     
-    if (value & 0x8000) {
-        intena |= value;
-    } else {
-        intena &= ~value;
-    }
+    if (value & 0x8000) intena |= (value & 0x7FFF); else intena &= ~value;
 }
 
 int

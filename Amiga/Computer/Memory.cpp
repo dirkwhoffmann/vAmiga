@@ -310,11 +310,11 @@ Memory::updateMemSrcTable()
     for (unsigned i = 0x00; i <= 0xFF; i++)
         memSrc[i] = MEM_UNMAPPED;
     
-    // Chip Ram
-    for (unsigned i = 0; i < chipRamSize / 0x10000; i++)
+    // Chip Ram and Chip Ram mirror
+    for (unsigned i = 0; i < 32; i++)
         memSrc[i] = MEM_CHIP;
     
-    // Install Fast Ram
+    // Fast Ram
     for (unsigned i = 0; i < fastRamSize / 0x10000; i++)
         memSrc[0x20 + i] = MEM_FAST;
 
@@ -675,18 +675,46 @@ Memory::peekCustom16(uint32_t addr)
 {
     assert(IS_EVEN(addr));
     
-    switch (addr & 0x1FE) {
+    switch ((addr >> 1) & 0xFF) {
             
-        case 0x01C: // INTENAR
+        case 0x000 >> 1: // BLTDAT
+            break;
+        case 0x002 >> 1: // DMACONR
+            return amiga->dma.peekDMACON();
+        case 0x004 >> 1: // VPOSR
+            break;
+        case 0x006 >> 1: // VHPOSR
+            break;
+        case 0x008 >> 1: // DSKDATR
+            break;
+        case 0x00A >> 1: // JOY0DAT
+            break;
+        case 0x00C >> 1: // JOY1DAT
+            break;
+        case 0x00E >> 1: // CLXDAT
+            break;
+        case 0x010 >> 1: // ADKCONR
+            break;
+        case 0x012 >> 1: // POT0DAT
+            break;
+        case 0x014 >> 1: // POT1DAT
+            break;
+        case 0x016 >> 1: // POTINP
+            break;
+        case 0x018 >> 1: // SERDATR
+            break;
+        case 0x01A >> 1: // DSKBYTR
+            break;
+        case 0x01C >> 1: // INTENAR
             return amiga->paula.peekINTENA();
-            
-        case 0x01E: // INTREQR
+        case 0x01E >> 1: // INTREQR
             return amiga->paula.peekINTREQ();
-            
-        default:
-            warn("peekCustom16(%X): MISSING IMPLEMENTATION\n", addr);
+
+        default: // Write-only register
+            break; // return 0; // TODO: What do we return here?
     }
     
+    warn("peekCustom16(%X): MISSING IMPLEMENTATION\n", addr);
     return 42;
 }
 
@@ -735,19 +763,84 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
 {
     assert(IS_EVEN(addr));
     
-    switch (addr & 0x1FE) {
+    switch ((addr >> 1) & 0xFF) {
             
-        case 0x09A: // INTENA
-            amiga->paula.pokeINTENA(value);
-            break;
-            
-        case  0x09C: // INTREQ
-            amiga->paula.pokeINTREQ(value);
-            break;
-            
-        default:
-            warn("pokeCustom16(%X, %X): MISSING IMPLEMENTATION\n", addr, value);
+        case 0x096 >> 1: // DMACON
+            amiga->dma.pokeDMACON(value); return;
+        case 0x09A >> 1: // INTENA
+            amiga->paula.pokeINTENA(value); return;
+        case 0x09C >> 1: // INTREQ
+            amiga->paula.pokeINTREQ(value); return;
+        case 0x180 >> 1: // COLOR00
+            amiga->denise.pokeCOLORxx(0, value); return;
+        case 0x182 >> 1: // COLOR01
+            amiga->denise.pokeCOLORxx(1, value); return;
+        case 0x184 >> 1: // COLOR02
+            amiga->denise.pokeCOLORxx(2, value); return;
+        case 0x186 >> 1: // COLOR03
+            amiga->denise.pokeCOLORxx(3, value); return;
+        case 0x188 >> 1: // COLOR04
+            amiga->denise.pokeCOLORxx(4, value); return;
+        case 0x18A >> 1: // COLOR05
+            amiga->denise.pokeCOLORxx(5, value); return;
+        case 0x18C >> 1: // COLOR06
+            amiga->denise.pokeCOLORxx(6, value); return;
+        case 0x18E >> 1: // COLOR07
+            amiga->denise.pokeCOLORxx(7, value); return;
+        case 0x190 >> 1: // COLOR08
+            amiga->denise.pokeCOLORxx(8, value); return;
+        case 0x192 >> 1: // COLOR09
+            amiga->denise.pokeCOLORxx(9, value); return;
+        case 0x194 >> 1: // COLOR10
+            amiga->denise.pokeCOLORxx(10, value); return;
+        case 0x196 >> 1: // COLOR11
+            amiga->denise.pokeCOLORxx(11, value); return;
+        case 0x198 >> 1: // COLOR12
+            amiga->denise.pokeCOLORxx(12, value); return;
+        case 0x19A >> 1: // COLOR13
+            amiga->denise.pokeCOLORxx(13, value); return;
+        case 0x19C >> 1: // COLOR14
+            amiga->denise.pokeCOLORxx(14, value); return;
+        case 0x19E >> 1: // COLOR15
+            amiga->denise.pokeCOLORxx(15, value); return;
+        case 0x1A0 >> 1: // COLOR16
+            amiga->denise.pokeCOLORxx(16, value); return;
+        case 0x1A2 >> 1: // COLOR17
+            amiga->denise.pokeCOLORxx(17, value); return;
+        case 0x1A4 >> 1: // COLOR18
+            amiga->denise.pokeCOLORxx(18, value); return;
+        case 0x1A6 >> 1: // COLOR19
+            amiga->denise.pokeCOLORxx(19, value); return;
+        case 0x1A8 >> 1: // COLOR20
+            amiga->denise.pokeCOLORxx(20, value); return;
+        case 0x1AA >> 1: // COLOR21
+            amiga->denise.pokeCOLORxx(21, value); return;
+        case 0x1AC >> 1: // COLOR22
+            amiga->denise.pokeCOLORxx(22, value); return;
+        case 0x1AE >> 1: // COLOR23
+            amiga->denise.pokeCOLORxx(23, value); return;
+        case 0x1B0 >> 1: // COLOR24
+            amiga->denise.pokeCOLORxx(24, value); return;
+        case 0x1B2 >> 1: // COLOR25
+            amiga->denise.pokeCOLORxx(25, value); return;
+        case 0x1B4 >> 1: // COLOR26
+            amiga->denise.pokeCOLORxx(26, value); return;
+        case 0x1B6 >> 1: // COLOR27
+            amiga->denise.pokeCOLORxx(27, value); return;
+        case 0x1B8 >> 1: // COLOR28
+            amiga->denise.pokeCOLORxx(28, value); return;
+        case 0x1BA >> 1: // COLOR29
+            amiga->denise.pokeCOLORxx(29, value); return;
+        case 0x1BC >> 1: // COLOR30
+            amiga->denise.pokeCOLORxx(30, value); return;
+        case 0x1BE >> 1: // COLOR31
+            amiga->denise.pokeCOLORxx(31, value); return;
     }
+    
+ 
+  
+
+    warn("pokeCustom16(%X, %X): MISSING IMPLEMENTATION\n", addr, value);
 }
 
 void Memory::pokeCustom32(uint32_t addr, uint32_t value)

@@ -166,6 +166,23 @@ typedef enum
 } MemorySource;
 
 //
+// DMA Controller (Agnus)
+//
+
+typedef struct {
+    uint16_t dmacon;
+} DMAInfo;
+
+
+//
+// Denise
+//
+
+typedef struct {
+    uint32_t color[32];
+} DeniseInfo;
+
+//
 // Paula
 //
 

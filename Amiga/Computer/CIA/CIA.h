@@ -264,6 +264,14 @@ public:
 
     
     //
+    // Collecting information
+    //
+    
+    // Collects the data shown in the GUI's debug panel
+    CIAInfo getInfo();
+    
+    
+    //
     // Accessing device properties
     //
         
@@ -274,9 +282,6 @@ public:
     //! @brief    Getter for peripheral port B
     uint8_t getPB() { return PB; }
     uint8_t getDDRB() { return DDRB; }
-
-    //! @brief    Collects the data shown in the GUI's debug panel
-    CIAInfo getInfo();
     
     //! @brief    Simulates a rising edge on the flag pin
     void triggerRisingEdgeOnFlagPin();

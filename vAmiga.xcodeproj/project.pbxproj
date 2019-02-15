@@ -16,6 +16,8 @@
 		504F9658220B2CEE005F8AB7 /* BreakTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504F9657220B2CEE005F8AB7 /* BreakTableView.swift */; };
 		505A3A3A21F4996400132020 /* sse_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505A3A3821F4996400132020 /* sse_utils.cpp */; };
 		5064851121EC7A1700FC4AC3 /* Memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5064850F21EC7A1700FC4AC3 /* Memory.cpp */; };
+		507653CB2216F91E001D26E9 /* AgnusPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507653CA2216F91E001D26E9 /* AgnusPanel.swift */; };
+		507653CD2216F938001D26E9 /* DenisePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507653CC2216F938001D26E9 /* DenisePanel.swift */; };
 		5085FE5721FB3BAE009753EF /* EventHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5085FE5521FB3BAE009753EF /* EventHandler.cpp */; };
 		5085FE5921FB6856009753EF /* ProxyExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5085FE5821FB6856009753EF /* ProxyExtensions.swift */; };
 		508833EE21F0D21B009890EA /* ADFFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508833EC21F0D21B009890EA /* ADFFile.cpp */; };
@@ -168,6 +170,8 @@
 		505A3A3921F4996400132020 /* sse_utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sse_utils.h; sourceTree = "<group>"; };
 		5064850F21EC7A1700FC4AC3 /* Memory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Memory.cpp; sourceTree = "<group>"; };
 		5064851021EC7A1700FC4AC3 /* Memory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Memory.h; sourceTree = "<group>"; };
+		507653CA2216F91E001D26E9 /* AgnusPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgnusPanel.swift; sourceTree = "<group>"; };
+		507653CC2216F938001D26E9 /* DenisePanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DenisePanel.swift; sourceTree = "<group>"; };
 		5082D83A21EF891200CF7692 /* va_constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = va_constants.h; sourceTree = "<group>"; };
 		5085FE5521FB3BAE009753EF /* EventHandler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EventHandler.cpp; sourceTree = "<group>"; };
 		5085FE5621FB3BAE009753EF /* EventHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventHandler.h; sourceTree = "<group>"; };
@@ -589,6 +593,8 @@
 				509CF4CC22083F9800C500F0 /* CPUPanel.swift */,
 				508FDFEE21EA22780043D0E9 /* CIAPanel.swift */,
 				508FE00221EA227A0043D0E9 /* MemoryPanel.swift */,
+				507653CA2216F91E001D26E9 /* AgnusPanel.swift */,
+				507653CC2216F938001D26E9 /* DenisePanel.swift */,
 				50F5A84D2214112F00AD5611 /* PaulaPanel.swift */,
 				509CF4CE220847C600C500F0 /* InstrTableView.swift */,
 				509CF4D02208487900C500F0 /* TraceTableView.swift */,
@@ -965,6 +971,7 @@
 				508FE01D21EA227B0043D0E9 /* UserDefaults.swift in Sources */,
 				509CF4CF220847C600C500F0 /* InstrTableView.swift in Sources */,
 				508FE04E21EA22CC0043D0E9 /* RomPrefs.swift in Sources */,
+				507653CB2216F91E001D26E9 /* AgnusPanel.swift in Sources */,
 				508FE06521EA318D0043D0E9 /* AmigaFile.cpp in Sources */,
 				508FE05621EA22CC0043D0E9 /* PreferencesController.swift in Sources */,
 				50D2ADC7220754A100E32AB0 /* m68kopdm.c in Sources */,
@@ -983,6 +990,7 @@
 				508FDFD421EA20510043D0E9 /* MetalSetup.swift in Sources */,
 				508FE02C21EA227B0043D0E9 /* C64Key.swift in Sources */,
 				508FE01421EA227B0043D0E9 /* WaveformView.swift in Sources */,
+				507653CD2216F938001D26E9 /* DenisePanel.swift in Sources */,
 				50B0DD1E220B5CEF00D6618A /* BreakpointManager.cpp in Sources */,
 				509F7F1D21EDEA0200A530E4 /* KickRom.cpp in Sources */,
 				508FE05C21EA22CC0043D0E9 /* DiskMountController.swift in Sources */,

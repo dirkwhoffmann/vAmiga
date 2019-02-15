@@ -241,8 +241,8 @@ public:
      * A component can override this method to add custom behavior if not all
      * elements can be processed by the default implementation.
      */
-    virtual void  willLoadFromBuffer(uint8_t **buffer) { };
-    virtual void  didLoadFromBuffer(uint8_t **buffer) { };
+    virtual void willLoadFromBuffer(uint8_t **buffer) { };
+    virtual void didLoadFromBuffer(uint8_t **buffer) { };
     
     /* Saves the internal state to a memory buffer.
      */

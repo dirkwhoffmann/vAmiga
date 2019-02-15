@@ -15,9 +15,10 @@ DMAController::DMAController()
     
     registerSnapshotItems(vector<SnapshotItem> {
         
-        { &clock,  sizeof(clock), 0 },
-        { &vhpos,  sizeof(vhpos), 0 },
-        { &vpos,   sizeof(vpos),  0 },
+        { &clock,    sizeof(clock),   0 },
+        { &vhpos,    sizeof(vhpos),   0 },
+        { &vpos,     sizeof(vpos),    0 },
+        { &dmacon,   sizeof(dmacon),  0 },
     });
 }
 
@@ -53,6 +54,31 @@ DMAController::_dump()
     plainmsg("   clock: %lld\n", clock);
     plainmsg("   vhpos: %lld $%llX\n", vhpos, vhpos);
     plainmsg("    vpos: %lld $%llX\n", vpos, vpos);
+}
+
+DMAInfo
+DMAController::getInfo()
+{
+    DMAInfo info;
+    
+    info.dmacon = dmacon;
+    
+    return info;
+}
+
+uint16_t
+DMAController::peekDMACON()
+{
+    return dmacon;
+}
+
+void
+DMAController::pokeDMACON(uint16_t value)
+{
+    debug("pokeDMACON(%X)\n", value);
+    
+    if (value & 0x8000) dmacon |= value; else dmacon &= ~value;
+    dmacon &= 0x07FF;
 }
 
 void

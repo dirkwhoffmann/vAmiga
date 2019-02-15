@@ -303,6 +303,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->dmaController->dump();
 }
+- (DMAInfo) getInfo
+{
+    return wrapper->dmaController->getInfo();
+}
 
 @end
 
@@ -324,6 +328,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 - (void) dump
 {
     wrapper->denise->dump();
+}
+- (DeniseInfo) getInfo
+{
+    return wrapper->denise->getInfo();
 }
 - (void) initFakePictures:(void *)fake1 fake2:(void *)fake2
 {

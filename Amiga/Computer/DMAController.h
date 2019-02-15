@@ -29,6 +29,9 @@ public:
     //  Vertical Beam Position Counter
     uint16_t vpos = 0;
 
+    // The DMA control register
+    uint16_t dmacon = 0;
+    
 
 
     
@@ -57,6 +60,26 @@ private:
     void _reset() override;
     void _ping() override;
     void _dump() override;
+    
+    //
+    // Collecting information
+    //
+    
+public:
+    
+    // Collects the data shown in the GUI's debug panel.
+    DMAInfo getInfo();
+    
+    
+    //
+    // Register access
+    //
+    
+public:
+    
+    uint16_t peekDMACON();
+    void pokeDMACON(uint16_t value);
+    
     
     // This function is called when the end of a rasterline has been reached.
     void hsyncAction();

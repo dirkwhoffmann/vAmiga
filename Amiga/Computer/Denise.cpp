@@ -12,6 +12,12 @@
 Denise::Denise()
 {
     setDescription("Denise");
+    
+    // Register snapshot items
+    registerSnapshotItems(vector<SnapshotItem> {
+        { &colorReg,  sizeof(colorReg),  WORD_ARRAY },
+    });
+    
 }
 
 Denise::~Denise()
@@ -46,6 +52,50 @@ void
 Denise::_dump()
 {
     msg("Frame: %lld\n", frame);
+}
+
+DeniseInfo
+Denise::getInfo()
+{
+    DeniseInfo info;
+
+    for (unsigned i = 0; i < 32; i++) {
+        info.color[i] = colorRGBA[i];
+    }
+
+    return info;
+}
+
+void
+Denise::didLoadFromBuffer(uint8_t **buffer)
+{
+    // Update the RGBA color values by poking into the color registers
+    for (unsigned i = 0; i < 32; i++) pokeCOLORxx(i, colorReg[i]);
+}
+
+void
+Denise::pokeCOLORxx(int xx, uint16_t value)
+{
+    assert(xx < 32);
+
+    // Write into the color register
+    colorReg[xx] = value;
+    
+    // Translate the color into a GPU compatible RGBA format
+    
+    // Extract RGB from: xx xx xx xx R3 R2 R1 R0 G3 G2 G1 G0 B3 B2 B1 B0
+    uint8_t r = (colorReg[xx] >> 8) & 0xF;
+    uint8_t g = (colorReg[xx] >> 4) & 0xF;
+    uint8_t b = colorReg[xx] & 0xF;
+
+    // At this point we can apply arbitrary color adjustments
+    // For now, we do a simple scaling
+    r <<= 4;
+    g <<= 4;
+    b <<= 4;
+
+    // Compose the RGBA quadrupel
+    colorRGBA[xx] = HI_HI_LO_LO(r, g, b, 0xFF);
 }
 
 void

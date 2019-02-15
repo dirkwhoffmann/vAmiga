@@ -22,7 +22,15 @@ class Denise : public HardwareComponent {
 public:
     
     // Denise has been executed up to this clock cycle.
-    uint64_t clock = 0;
+    Cycle clock = 0;
+    
+    // The 32 colors in Amiga format
+    uint16_t colorReg[32];
+    
+    /* The 32 colors in RGBA format
+     * The RGBA values are updated each time a colorReg changes.
+     */
+    uint32_t colorRGBA[32];
     
     // Number of PAL rasterlines
     // static const long RASTERLINES = 625;
@@ -96,7 +104,30 @@ private:
     void _ping() override;
     void _dump() override;
 
+    void didLoadFromBuffer(uint8_t **buffer) override;
+  
+    //
+    // Collecting information
+    //
     
+public:
+    
+    // Collects the data shown in the GUI's debug panel.
+    DeniseInfo getInfo();
+    
+    
+    //
+    // Handling colors
+    //
+    
+public:
+    // Reads a color register
+    uint16_t peekCOLORxx(int xx) { assert(xx < 32); return colorReg[xx]; }
+
+    // Writes a color register
+    void pokeCOLORxx(int xx, uint16_t value);
+
+
     //
     // FAKE METHODS FOR THE VISUAL PROTOTYPE (TEMPORARY)
     //

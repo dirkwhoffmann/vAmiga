@@ -273,6 +273,7 @@ struct AmigaFileWrapper;
 }
 
 - (void) dump;
+- (DMAInfo) getInfo;
 
 @end
 
@@ -287,6 +288,8 @@ struct AmigaFileWrapper;
 }
 
 - (void) dump;
+- (DeniseInfo) getInfo;
+
 - (void) initFakePictures:(void *)fake1 fake2:(void *)fake2;
 - (void *) screenBuffer;
 

@@ -142,6 +142,23 @@ class Inspector : NSWindowController
     @IBOutlet weak var ciaIdleLevelText: NSTextField!
     @IBOutlet weak var ciaIdleLevel: NSLevelIndicator!
     
+    // Debug panel (Agnus)
+    @IBOutlet weak var dmaDMACON: NSTextField!
+    @IBOutlet weak var dmaDMACON10: NSButton!
+    @IBOutlet weak var dmaDMACON9: NSButton!
+    @IBOutlet weak var dmaDMACON8: NSButton!
+    @IBOutlet weak var dmaDMACON7: NSButton!
+    @IBOutlet weak var dmaDMACON6: NSButton!
+    @IBOutlet weak var dmaDMACON5: NSButton!
+    @IBOutlet weak var dmaDMACON4: NSButton!
+    @IBOutlet weak var dmaDMACON3: NSButton!
+    @IBOutlet weak var dmaDMACON2: NSButton!
+    @IBOutlet weak var dmaDMACON1: NSButton!
+    @IBOutlet weak var dmaDMACON0: NSButton!
+
+    // Debug panel (Denise)
+    
+    
     // Debug panel (Paula)
     @IBOutlet weak var paulaIntena: NSTextField!
     @IBOutlet weak var paulaIntreq: NSTextField!
@@ -246,6 +263,12 @@ class Inspector : NSWindowController
             case "Memory":
                 refreshMemory(everything: everything)
 
+            case "Agnus":
+                refreshAgnus(everything: everything)
+
+            case "Denise":
+                refreshDenise(everything: everything)
+                
             case "Paula":
                 refreshPaula(everything: everything)
 
