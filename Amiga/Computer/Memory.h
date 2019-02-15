@@ -18,6 +18,16 @@ class Memory : public HardwareComponent {
     
 public:
     
+    /* Each memory area is represented by three variables:
+     *
+     *   A pointer to the allocates memory.
+     *   A variable storing the memory size in bytes.
+     *
+     * The following invariant holds:
+     *
+     *   pointer == NULL <=> size == 0
+     */
+    
     // Boot Rom (Amiga 1000 only)
     uint8_t *bootRom = NULL;
     size_t bootRomSize = 0;
@@ -200,8 +210,10 @@ private:
     uint16_t peekCIA16(uint32_t addr);
     uint32_t peekCIA32(uint32_t addr);
  
-    // TODO: spypeek
-    
+    uint8_t spypeekCIA8(uint32_t addr);
+    uint16_t spypeekCIA16(uint32_t addr);
+    uint32_t spypeekCIA32(uint32_t addr);
+
     void pokeCIA8(uint32_t addr, uint8_t value);
     void pokeCIA16(uint32_t addr, uint16_t value);
     void pokeCIA32(uint32_t addr, uint32_t value);
@@ -214,17 +226,14 @@ private:
     uint8_t peekCustom8(uint32_t addr);
     uint16_t peekCustom16(uint32_t addr);
     uint32_t peekCustom32(uint32_t addr);
-    uint16_t peekCustomReg(uint32_t addr); // addr must be word aligned
     
     uint8_t spypeekCustom8(uint32_t addr);
     uint16_t spypeekCustom16(uint32_t addr);
     uint32_t spypeekCustom32(uint32_t addr);
-    uint16_t spypeekCustomReg(uint32_t addr); // addr must be word aligned
 
     void pokeCustom8(uint32_t addr, uint8_t value);
     void pokeCustom16(uint32_t addr, uint16_t value);
     void pokeCustom32(uint32_t addr, uint32_t value);
-    void pokeCustomReg(uint32_t addr, uint16_t value); // addr must be word aligned
 
     
     

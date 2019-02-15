@@ -290,6 +290,8 @@ typedef enum
     MSG_ROM_MISSING,
     MSG_WARP_ON,
     MSG_WARP_OFF,
+    MSG_POWER_LED_ON,
+    MSG_POWER_LED_OFF,
 
     // CPU
     MSG_BREAKPOINT_CONFIG,

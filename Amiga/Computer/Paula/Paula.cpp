@@ -72,6 +72,8 @@ Paula::peekINTREQ()
 void
 Paula::pokeINTREQ(uint16_t value)
 {
+    debug("pokeINTREQ(%X)\n", value);
+    
     if (value & 0x8000) {
         intreq |= value;
     } else {
@@ -88,6 +90,8 @@ Paula::peekINTENA()
 void
 Paula::pokeINTENA(uint16_t value)
 {
+    debug("pokeINTENA(%X)\n", value);
+    
     if (value & 0x8000) {
         intena |= value;
     } else {

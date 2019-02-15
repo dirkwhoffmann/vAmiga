@@ -794,5 +794,6 @@ Amiga::runLoop()
             }
         }
         
+        // stop = true;
     } while (!stop);
 }

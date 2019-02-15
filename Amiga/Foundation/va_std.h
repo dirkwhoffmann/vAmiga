@@ -141,6 +141,14 @@ inline bool is_uint5_t(uint5_t value) { return value < 32; }
 // Returns true if x is an even number
 #define IS_EVEN(x) (!IS_ODD(x))
 
+// Reads a uint16_t or uint32_t from memory in big endian format
+#define READ16_BE(x) (ntohs(*(uint16_t *)(x)))
+#define READ32_BE(x) (ntohl(*(uint32_t *)(x)))
+
+// Write a uint16_t or uint32_t into memory in big endian format
+#define WRITE16_BE(x,y) (*(uint16_t *)(x) = htons(y))
+#define WRITE32_BE(x,y) (*(uint32_t *)(x) = htonl(y))
+
 
 //
 // Handling buffers

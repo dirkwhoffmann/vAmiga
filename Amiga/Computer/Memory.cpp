@@ -10,6 +10,70 @@
 #include "Amiga.h"
 #include <new>
 
+/*
+const uint32_t CHIP_RAM_START = 0x000000;
+const uint32_t FAST_RAM_START = 0x200000;
+const uint32_t SLOW_RAM_START = 0xC00000;
+*/
+
+const uint32_t FAST_RAM_START = 0x200000;
+
+const uint32_t SLOW_RAM_MASK = 0x007FFFF;
+const uint32_t BOOT_ROM_MASK = 0x003FFFF;
+const uint32_t KICK_ROM_MASK = 0x003FFFF;
+
+
+#define ASSERT_CHIP_ADDR(x) assert(chipRam != NULL);
+#define ASSERT_FAST_ADDR(x) assert(fastRam != NULL); assert(((x) - FAST_RAM_START) < slowRamSize);
+#define ASSERT_SLOW_ADDR(x) assert(slowRam != NULL); assert(((x) & SLOW_RAM_MASK) < slowRamSize);
+#define ASSERT_BOOT_ADDR(x) assert(bootRom != NULL); assert(((x) & BOOT_ROM_MASK) < bootRomSize);
+#define ASSERT_KICK_ADDR(x) assert(kickRom != NULL); assert(((x) & KICK_ROM_MASK) < kickRomSize);
+#define ASSERT_CIA_ADDR(x)  assert((x) >= 0xA00000 && (x) <= 0xBFFFFF);
+#define ASSERT_RTC_ADDR(x)  assert((x) >= 0xDC0000 && (x) <= 0xDEFFFF);
+#define ASSERT_OCS_ADDR(x)  assert((x) >= 0xDF0000 && (x) <= 0xDFFFFF);
+
+#define READ_CHIP_8(x)         (*(uint8_t *)(chipRam + (x % chipRamSize)))
+#define READ_CHIP_16(x) (ntohs(*(uint16_t *)(chipRam + (x % chipRamSize))))
+#define READ_CHIP_32(x) (ntohl(*(uint32_t *)(chipRam + (x % chipRamSize))))
+
+#define READ_FAST_8(x)         (*(uint8_t *)(fastRam + ((x) - FAST_RAM_START)))
+#define READ_FAST_16(x) (ntohs(*(uint16_t *)(fastRam + ((x) - FAST_RAM_START))))
+#define READ_FAST_32(x) (ntohl(*(uint32_t *)(fastRam + ((x) - FAST_RAM_START))))
+
+#define READ_SLOW_8(x)         (*(uint8_t *)(slowRam + ((x) & SLOW_RAM_MASK)))
+#define READ_SLOW_16(x) (ntohs(*(uint16_t *)(slowRam + ((x) & SLOW_RAM_MASK))))
+#define READ_SLOW_32(x) (ntohl(*(uint32_t *)(slowRam + ((x) & SLOW_RAM_MASK))))
+
+#define READ_BOOT_8(x)         (*(uint8_t *)(bootRom + ((x) & BOOT_ROM_MASK)))
+#define READ_BOOT_16(x) (ntohs(*(uint16_t *)(bootRom + ((x) & BOOT_ROM_MASK))))
+#define READ_BOOT_32(x) (ntohl(*(uint32_t *)(bootRom + ((x) & BOOT_ROM_MASK))))
+
+#define READ_KICK_8(x)         (*(uint8_t *)(kickRom + ((x) & KICK_ROM_MASK)))
+#define READ_KICK_16(x) (ntohs(*(uint16_t *)(kickRom + ((x) & KICK_ROM_MASK))))
+#define READ_KICK_32(x) (ntohl(*(uint32_t *)(kickRom + ((x) & KICK_ROM_MASK))))
+
+
+#define WRITE_CHIP_8(x,y)   (*(uint8_t *)(chipRam + (x % chipRamSize)) = (y))
+#define WRITE_CHIP_16(x,y) (*(uint16_t *)(chipRam + (x % chipRamSize)) = htons(y))
+#define WRITE_CHIP_32(x,y) (*(uint32_t *)(chipRam + (x % chipRamSize)) = htonl(y))
+
+#define WRITE_FAST_8(x,y)   (*(uint8_t *)(fastRam + ((x) - FAST_RAM_START)) = (y))
+#define WRITE_FAST_16(x,y) (*(uint16_t *)(fastRam + ((x) - FAST_RAM_START)) = htons(y))
+#define WRITE_FAST_32(x,y) (*(uint32_t *)(fastRam + ((x) - FAST_RAM_START)) = htonl(y))
+
+#define WRITE_SLOW_8(x,y)   (*(uint8_t *)(slowRam + ((x) & SLOW_RAM_MASK)) = (y))
+#define WRITE_SLOW_16(x,y) (*(uint16_t *)(slowRam + ((x) & SLOW_RAM_MASK)) = htons(y))
+#define WRITE_SLOW_32(x,y) (*(uint32_t *)(slowRam + ((x) & SLOW_RAM_MASK)) = htonl(y))
+
+#define WRITE_BOOT_8(x,y)   (*(uint8_t *)(bootRom + ((x) & BOOT_ROM_MASK)) = (y))
+#define WRITE_BOOT_16(x,y) (*(uint16_t *)(bootRom + ((x) & BOOT_ROM_MASK)) = htons(y))
+#define WRITE_BOOT_32(x,y) (*(uint32_t *)(bootRom + ((x) & BOOT_ROM_MASK)) = htonl(y))
+
+#define WRITE_KICK_8(x,y)   (*(uint8_t *)(kickRom + ((x) & KICK_ROM_MASK)) = (y))
+#define WRITE_KICK_16(x,y) (*(uint16_t *)(kickRom + ((x) & KICK_ROM_MASK)) = htons(y))
+#define WRITE_KICK_32(x,y) (*(uint32_t *)(kickRom + ((x) & KICK_ROM_MASK)) = htonl(y))
+
+
 Memory::Memory()
 {
     setDescription("Memory");
@@ -76,43 +140,6 @@ Memory::_dump()
     plainmsg("     Fast Ram: %d KB at %p\n", fastRamSize >> 10, fastRam);
 }
 
-/*
-bool
-AmigaMemory::allocateBootRom()
-{
-    // Only the Amiga 1000 has a Boot Rom
-    if (amiga->config.model == A1000) {
-        return alloc(KB(64), bootRom, bootRomSize);
-    }
-    dealloc(bootRom, bootRomSize);
-    return true;
-}
-
-bool
-AmigaMemory::allocateKickRom()
-{
-    return alloc(KB(256), kickRom, kickRomSize);
-}
-
-bool
-AmigaMemory::allocateChipRam(size_t size)
-{
-    return alloc(size, chipRam, chipRamSize);
-}
-
-bool
-AmigaMemory::allocateSlowRam(size_t size)
-{
-    return alloc(size, slowRam, slowRamSize);
-}
-
-bool
-AmigaMemory::allocateFastRam(size_t size)
-{
-    return alloc(size, fastRam, fastRamSize);
-}
-*/
-
 bool
 Memory::alloc(size_t size, uint8_t *&ptrref, size_t &sizeref)
 {
@@ -132,10 +159,15 @@ Memory::alloc(size_t size, uint8_t *&ptrref, size_t &sizeref)
     
     // Allocate memory
     if (size) {
-        if (!(ptrref = new (std::nothrow) uint8_t[KB(size)])) {
+        
+        // We allocate three bytes more than we need to handle the case that
+        // a long word access is performed on the last valid memory address.
+        size_t allocSize = KB(size) + 3;
+        if (!(ptrref = new (std::nothrow) uint8_t[allocSize])) {
             warn("Cannot allocate %X bytes of memory\n", size);
             return false;
         }
+        memset(ptrref, 0, allocSize); 
         sizeref = size;
     }
     
@@ -327,43 +359,21 @@ Memory::getMemSrc(uint32_t addr)
 uint8_t
 Memory::peek8(uint32_t addr)
 {
+    // debug("PC: %X peek8(%X)\n", amiga->cpu.getPC(), addr);
+
     addr &= 0xFFFFFF;
     switch (memSrc[addr >> 16]) {
             
-        case MEM_UNMAPPED:
-            return 0;
-            
-        case MEM_CHIP:
-            assert(chipRam != NULL);
-            return chipRam[addr % chipRamSize];
-            
-        case MEM_FAST:
-            assert(fastRam != NULL);
-            return fastRam[addr - 0x200000];
-            
-        case MEM_CIA:
-            return peekCIA8(addr);
-            
-        case MEM_SLOW:
-            assert(slowRam != NULL);
-            return slowRam[addr - 0xC00000];
-            
-        case MEM_RTC:
-            return 1;
-            
-        case MEM_OCS:
-            return 2;
-            
-        case MEM_BOOT:
-            assert(bootRom != NULL);
-            return bootRom[addr % bootRomSize];
-            
-        case MEM_KICK:
-            assert(kickRom != NULL);
-            return kickRom[addr % kickRomSize];
-            
-        default:
-            assert(false);
+        case MEM_UNMAPPED: return 0;
+        case MEM_CHIP:     ASSERT_CHIP_ADDR(addr); return READ_CHIP_8(addr);
+        case MEM_FAST:     ASSERT_FAST_ADDR(addr); return READ_FAST_8(addr);
+        case MEM_CIA:      ASSERT_CIA_ADDR(addr);  return peekCIA8(addr);
+        case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); return READ_SLOW_8(addr);
+        case MEM_RTC:      ASSERT_RTC_ADDR(addr);  return 1;
+        case MEM_OCS:      ASSERT_OCS_ADDR(addr);  return peekCustom8(addr);
+        case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); return READ_BOOT_8(addr);
+        case MEM_KICK:     ASSERT_KICK_ADDR(addr); return READ_KICK_8(addr);
+        default:           assert(false);
     }
     return 0;
 }
@@ -371,92 +381,131 @@ Memory::peek8(uint32_t addr)
 uint16_t
 Memory::peek16(uint32_t addr)
 {
+    // debug("PC: %X peek16(%X)\n", amiga->cpu.getPC(), addr);
+
+    assert(IS_EVEN(addr));
+    
     addr &= 0xFFFFFF;
-    return HI_LO(peek8(addr), peek8(addr+1));
+    switch (memSrc[addr >> 16]) {
+            
+        case MEM_UNMAPPED: return 0;
+        case MEM_CHIP:     ASSERT_CHIP_ADDR(addr); return READ_CHIP_16(addr);
+        case MEM_FAST:     ASSERT_FAST_ADDR(addr); return READ_FAST_16(addr);
+        case MEM_CIA:      ASSERT_CIA_ADDR(addr);  return peekCIA16(addr);
+        case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); return READ_SLOW_16(addr);
+        case MEM_RTC:      ASSERT_RTC_ADDR(addr);  return 0;
+        case MEM_OCS:      ASSERT_OCS_ADDR(addr);  return peekCustom16(addr);
+        case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); return READ_BOOT_16(addr);
+        case MEM_KICK:     ASSERT_KICK_ADDR(addr); return READ_KICK_16(addr);
+        default:           assert(false);
+    }
+    return 0;
 }
 
 uint32_t
 Memory::peek32(uint32_t addr)
 {
-    addr &= 0xFFFFFF;
-    return HI_HI_LO_LO(peek8(addr), peek8(addr+1), peek8(addr+2), peek8(addr+3));
+    // debug("PC: %X peek32(%X)\n", amiga->cpu.getPC(), addr);
+    return HI_W_LO_W(peek16(addr), peek16(addr + 2));
 }
 
 uint8_t
 Memory::spypeek8(uint32_t addr)
 {
     addr &= 0xFFFFFF;
-    return peek8(addr);
+    switch (memSrc[addr >> 16]) {
+            
+        case MEM_UNMAPPED: return 0;
+        case MEM_CHIP:     ASSERT_CHIP_ADDR(addr); return READ_CHIP_8(addr);
+        case MEM_FAST:     ASSERT_FAST_ADDR(addr); return READ_FAST_8(addr);
+        case MEM_CIA:      ASSERT_CIA_ADDR(addr);  return spypeekCIA8(addr);
+        case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); return READ_SLOW_8(addr);
+        case MEM_RTC:      ASSERT_RTC_ADDR(addr);  return 0;
+        case MEM_OCS:      ASSERT_OCS_ADDR(addr);  return spypeekCustom8(addr);
+        case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); return READ_BOOT_8(addr);
+        case MEM_KICK:     ASSERT_KICK_ADDR(addr); return READ_KICK_8(addr);
+        default:           assert(false);
+    }
+    return 0;
 }
+
 uint16_t
 Memory::spypeek16(uint32_t addr)
 {
+    assert(IS_EVEN(addr));
+    
     addr &= 0xFFFFFF;
-    return peek16(addr);
+    switch (memSrc[addr >> 16]) {
+            
+        case MEM_UNMAPPED: return 0;
+        case MEM_CHIP:     ASSERT_CHIP_ADDR(addr); return READ_CHIP_16(addr);
+        case MEM_FAST:     ASSERT_FAST_ADDR(addr); return READ_FAST_16(addr);
+        case MEM_CIA:      ASSERT_CIA_ADDR(addr);  return spypeekCIA16(addr);
+        case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); return READ_SLOW_16(addr);
+        case MEM_RTC:      ASSERT_RTC_ADDR(addr);  return 0;
+        case MEM_OCS:      ASSERT_OCS_ADDR(addr);  return spypeekCustom16(addr);
+        case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); return READ_BOOT_16(addr);
+        case MEM_KICK:     ASSERT_KICK_ADDR(addr); return READ_KICK_16(addr);
+        default:           assert(false);
+    }
+    return 0;
 }
+
 uint32_t
 Memory::spypeek32(uint32_t addr)
 {
-    addr &= 0xFFFFFF;
-    return peek32(addr);
+    return HI_W_LO_W(spypeek16(addr), spypeek16(addr + 2));
 }
 
 void
 Memory::poke8(uint32_t addr, uint8_t value)
 {
+    // debug("PC: %X poke8(%X,%X)\n", amiga->cpu.getPC(), addr, value);
+
     addr &= 0xFFFFFF;
     switch (memSrc[addr >> 16]) {
             
-        case MEM_CHIP:
-            assert(chipRam != NULL);
-            chipRam[addr % chipRamSize] = value;
-            return;
-            
-        case MEM_FAST:
-            assert(fastRam != NULL);
-            fastRam[addr - 0x200000] = value;
-            return;
-            
-        case MEM_CIA:
-            pokeCIA8(addr, value);
-            return;
-            
-        case MEM_SLOW:
-            assert(slowRam != NULL);
-            slowRam[addr - 0xC00000] = value;
-            return;
-            
-        case MEM_RTC:
-            return;
-            
-        case MEM_OCS:
-            return;
-            
-        case MEM_BOOT:
-            assert(bootRom != NULL);
-            bootRom[addr % bootRomSize] = value;
-            return;
-            
-        case MEM_KICK:
-            assert(kickRom != NULL);
-            kickRom[addr % kickRomSize] = value;
-            return;
-            
-        default:
-            assert(false);
+        case MEM_UNMAPPED: return;
+        case MEM_CHIP:     ASSERT_CHIP_ADDR(addr); WRITE_CHIP_8(addr, value); break;
+        case MEM_FAST:     ASSERT_FAST_ADDR(addr); WRITE_FAST_8(addr, value); break;
+        case MEM_CIA:      ASSERT_CIA_ADDR(addr);  pokeCIA8(addr, value); break;
+        case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); WRITE_SLOW_8(addr, value); break;
+        case MEM_RTC:      ASSERT_RTC_ADDR(addr);  break;
+        case MEM_OCS:      ASSERT_OCS_ADDR(addr);  pokeCustom8(addr, value); break;
+        case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); break;
+        case MEM_KICK:     ASSERT_KICK_ADDR(addr); break;
+        default:           assert(false);
     }
 }
+
 void
 Memory::poke16(uint32_t addr, uint16_t value)
 {
-    assert(is_uint24_t(addr));
-    debug("Poking %04X to %06X.", value, addr);
+    // debug("PC: %X poke16(%X,%X)\n", amiga->cpu.getPC(), addr, value);
+
+    addr &= 0xFFFFFF;
+    switch (memSrc[addr >> 16]) {
+            
+        case MEM_UNMAPPED: return;
+        case MEM_CHIP:     ASSERT_CHIP_ADDR(addr); WRITE_CHIP_16(addr, value); break;
+        case MEM_FAST:     ASSERT_FAST_ADDR(addr); WRITE_FAST_16(addr, value); break;
+        case MEM_CIA:      ASSERT_CIA_ADDR(addr);  pokeCIA16(addr, value); break;
+        case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); WRITE_SLOW_16(addr, value); break;
+        case MEM_RTC:      ASSERT_RTC_ADDR(addr);  break;
+        case MEM_OCS:      ASSERT_OCS_ADDR(addr);  pokeCustom16(addr, value); break;
+        case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); break;
+        case MEM_KICK:     ASSERT_KICK_ADDR(addr); break;
+        default:           assert(false);
+    }
 }
+
 void
 Memory::poke32(uint32_t addr, uint32_t value)
 {
-    assert(is_uint24_t(addr));
-    debug("Poking %04X to %06X.", value, addr);
+    // debug("PC: %X poke32(%X,%X)\n", amiga->cpu.getPC(), addr, value);
+
+    poke16(addr,     HI_WORD(value));
+    poke16(addr + 2, HI_WORD(value));
 }
 
 //
@@ -516,7 +565,63 @@ Memory::peekCIA16(uint32_t addr)
 uint32_t
 Memory::peekCIA32(uint32_t addr)
 {
-    return (peekCIA16(addr) << 16) | peekCIA16(addr + 2);
+    return HI_W_LO_W(peekCIA16(addr), peekCIA16(addr + 2));
+}
+
+uint8_t
+Memory::spypeekCIA8(uint32_t addr)
+{
+    uint32_t reg = (addr >> 8) & 0b1111;
+    uint32_t sel = (addr >> 12) & 0b11;
+    bool a0 = addr & 1;
+    
+    switch (sel) {
+            
+        case 0b00:
+            return a0 ? amiga->ciaA.spypeek(reg) : amiga->ciaB.spypeek(reg);
+            
+        case 0b01:
+            return a0 ? LO_BYTE(amiga->cpu.getIR()) : amiga->ciaB.spypeek(reg);
+            
+        case 0b10:
+            return a0 ? amiga->ciaA.spypeek(reg) : HI_BYTE(amiga->cpu.getIR());
+            
+        case 0b11:
+            return a0 ? LO_BYTE(amiga->cpu.getIR()) : HI_BYTE(amiga->cpu.getIR());
+    }
+    assert(false);
+    return 0;
+}
+
+uint16_t
+Memory::spypeekCIA16(uint32_t addr)
+{
+    uint32_t reg = (addr >> 8) & 0b1111;
+    uint32_t sel = (addr >> 12) & 0b11;
+    
+    switch (sel) {
+            
+        case 0b00:
+            return HI_LO(amiga->ciaB.spypeek(reg), amiga->ciaA.spypeek(reg));
+            
+        case 0b01:
+            return HI_LO(amiga->ciaB.spypeek(reg), 0xFF);
+            
+        case 0b10:
+            return HI_LO(0xFF, amiga->ciaA.spypeek(reg));
+            
+        case 0b11:
+            return amiga->cpu.getIR();
+            
+    }
+    assert(false);
+    return 0;
+}
+
+uint32_t
+Memory::spypeekCIA32(uint32_t addr)
+{
+    return HI_W_LO_W(spypeekCIA16(addr), spypeekCIA16(addr + 2));
 }
 
 void
@@ -533,6 +638,8 @@ Memory::pokeCIA8(uint32_t addr, uint8_t value)
 void
 Memory::pokeCIA16(uint32_t addr, uint16_t value)
 {
+    assert(IS_EVEN(addr));
+    
     uint32_t reg = (addr >> 8) & 0b1111;
     uint32_t selA = (addr & 0x1000) == 0;
     uint32_t selB = (addr & 0x2000) == 0;
@@ -557,40 +664,22 @@ uint8_t
 Memory::peekCustom8(uint32_t addr)
 {
     if (IS_EVEN(addr)) {
-        return HI_BYTE(peekCustomReg(addr));
+        return HI_BYTE(peekCustom16(addr));
     } else {
-        return LO_BYTE(peekCustomReg(addr - 1));
+        return LO_BYTE(peekCustom16(addr & 0x1FE));
     }
 }
 
 uint16_t
 Memory::peekCustom16(uint32_t addr)
 {
-    if (IS_EVEN(addr)) {
-        return peekCustomReg(addr);
-    } else {
-        uint8_t byte1 = LO_BYTE(peekCustomReg(addr - 1));
-        uint8_t byte2 = HI_BYTE(peekCustomReg(addr + 1));
-        return HI_LO(byte1, byte2);
-    }
-}
-
-uint32_t
-Memory::peekCustom32(uint32_t addr)
-{
-   return HI_W_LO_W(peekCustom16(addr), peekCustom16(addr + 2));
-}
-
-uint16_t
-Memory::peekCustomReg(uint32_t addr)
-{
-    // This function required that addr is word aligned
     assert(IS_EVEN(addr));
     
     switch (addr & 0x1FE) {
             
         case 0x01C: // INTENAR
             return amiga->paula.peekINTENA();
+            
         case 0x01E: // INTREQR
             return amiga->paula.peekINTREQ();
             
@@ -601,38 +690,38 @@ Memory::peekCustomReg(uint32_t addr)
     return 42;
 }
 
+uint32_t
+Memory::peekCustom32(uint32_t addr)
+{
+    return HI_W_LO_W(peekCustom16(addr), peekCustom16(addr + 2));
+}
+
 uint8_t
 Memory::spypeekCustom8(uint32_t addr)
 {
     if (IS_EVEN(addr)) {
-        return HI_BYTE(spypeekCustomReg(addr));
+        return HI_BYTE(spypeekCustom16(addr));
     } else {
-        return LO_BYTE(spypeekCustomReg(addr - 1));
+        return LO_BYTE(spypeekCustom16(addr & 0x1FE));
     }
 }
 
 uint16_t
 Memory::spypeekCustom16(uint32_t addr)
 {
-    if (IS_EVEN(addr)) {
-        return spypeekCustomReg(addr);
-    } else {
-        uint8_t byte1 = LO_BYTE(spypeekCustomReg(addr - 1));
-        uint8_t byte2 = HI_BYTE(spypeekCustomReg(addr + 1));
-        return HI_LO(byte1, byte2);
+    assert(IS_EVEN(addr));
+    
+    switch (addr & 0x1FE) {
+            
     }
+
+    return peekCustom16(addr);
 }
 
 uint32_t
 Memory::spypeekCustom32(uint32_t addr)
 {
     return HI_W_LO_W(spypeekCustom16(addr), spypeekCustom16(addr + 2));
-}
-
-uint16_t
-Memory::spypeekCustomReg(uint32_t addr)
-{
-    return 42; 
 }
 
 void
@@ -644,25 +733,8 @@ Memory::pokeCustom8(uint32_t addr, uint8_t value)
 void
 Memory::pokeCustom16(uint32_t addr, uint16_t value)
 {
-    if (IS_EVEN(addr)) {
-        pokeCustomReg(addr, value);
-    } else {
-        uint8_t hi = HI_BYTE(value);
-        uint8_t lo = LO_BYTE(value);
-        pokeCustomReg(addr - 1, HI_LO(hi,hi));
-        pokeCustomReg(addr + 1, HI_LO(lo,lo));
-    }
-}
-
-void Memory::pokeCustom32(uint32_t addr, uint32_t value)
-{
-    pokeCustom16((addr & 0x1FE), HI_WORD(value));
-    pokeCustom16((addr & 0x1FE) + 2, LO_WORD(value));
-}
-
-void
-Memory::pokeCustomReg(uint32_t addr, uint16_t value)
-{
+    assert(IS_EVEN(addr));
+    
     switch (addr & 0x1FE) {
             
         case 0x09A: // INTENA
@@ -677,6 +749,13 @@ Memory::pokeCustomReg(uint32_t addr, uint16_t value)
             warn("pokeCustom16(%X, %X): MISSING IMPLEMENTATION\n", addr, value);
     }
 }
+
+void Memory::pokeCustom32(uint32_t addr, uint32_t value)
+{
+    pokeCustom16(addr,     HI_WORD(value));
+    pokeCustom16(addr + 2, LO_WORD(value));
+}
+
 
 
 
@@ -702,7 +781,7 @@ Memory::hex(uint32_t addr, size_t bytes)
     assert(bytes <= 32);
     
     char *ptr = str;
-    for (unsigned i = 0; i < bytes / 2; i++) {
+    for (unsigned i = 0; i < bytes / 2; i += 2) {
         
         uint16_t value = peek16(addr + i);
         sprint16x(ptr, value);

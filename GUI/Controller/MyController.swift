@@ -624,14 +624,12 @@ extension MyController {
             
             // track("Power on")
             metal.blendIn()
-            powerLED.image = NSImage.init(named: "powerLedOn")
             myAppDelegate.inspector?.refresh(everything: true)
             
         case MSG_POWER_OFF:
             
             // track("Power off")
             metal.blendOut()
-            powerLED.image = NSImage.init(named: "powerLedOff")
             myAppDelegate.inspector?.refresh(everything: true)
             
         case MSG_RESET:
@@ -643,7 +641,15 @@ extension MyController {
              MSG_WARP_OFF:
             
             refreshStatusBar()
-                        
+            
+        case MSG_POWER_LED_ON:
+            track("MSG_POWER_LED_ON")
+            powerLED.image = NSImage.init(named: "powerLedOn")
+
+        case MSG_POWER_LED_OFF:
+            track("MSG_POWER_LED_OFF")
+            powerLED.image = NSImage.init(named: "powerLedOff")
+
         case MSG_DRIVE_CONNECT:
             
             switch (msg.data) {
