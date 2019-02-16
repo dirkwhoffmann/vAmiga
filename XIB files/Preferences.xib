@@ -54,7 +54,6 @@
                 <outlet property="hwDf1Type" destination="40w-GY-Enr" id="iU3-YP-Eci"/>
                 <outlet property="hwFastRamPopup" destination="BTz-kT-JtT" id="oec-CI-f3J"/>
                 <outlet property="hwLayoutPopup" destination="EWH-Iz-zuX" id="cWR-LH-Ffq"/>
-                <outlet property="hwLockImage" destination="9Fp-ku-lua" id="ksf-wH-YdK"/>
                 <outlet property="hwLockSubText" destination="M4r-6P-yfY" id="wxV-Tm-80C"/>
                 <outlet property="hwLockText" destination="3ER-DN-63K" id="aH1-Iu-24q"/>
                 <outlet property="hwRealTimeClock" destination="T70-4F-bOm" id="eAd-aV-2Nk"/>
@@ -621,14 +620,6 @@ DQ
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9Fp-ku-lua">
-                                            <rect key="frame" x="93" y="74" width="48" height="48"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" image="Lock" id="iIz-oE-NAI"/>
-                                            <connections>
-                                                <action selector="hwUnlockAction:" target="-2" id="GIz-hH-05m"/>
-                                            </connections>
-                                        </imageView>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="T70-4F-bOm">
                                             <rect key="frame" x="356" y="220" width="168" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
@@ -638,6 +629,17 @@ DQ
                                             </buttonCell>
                                             <connections>
                                                 <action selector="hwRealTimeClocktAction:" target="-2" id="SbQ-bw-vhJ"/>
+                                            </connections>
+                                        </button>
+                                        <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dfg-Qi-jGg">
+                                            <rect key="frame" x="95" y="78" width="48" height="48"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Lock" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="YfE-Co-5eD">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="hwUnlockAction:" target="-2" id="5zq-if-RVf"/>
                                             </connections>
                                         </button>
                                     </subviews>

@@ -18,6 +18,7 @@ extension PreferencesController {
         track()
         let config = amiga.config()
         let memConfig = amiga.memConfig()
+        let poweredOff = amiga.isPoweredOff()
         
         // Machine
         hwAmigaModelPopup.selectItem(withTag: config.model.rawValue)
@@ -34,6 +35,13 @@ extension PreferencesController {
         hwDf0Type.selectItem(withTag: config.df0.type.rawValue)
         hwDf1Connect.state = config.df1.connected ? .on : .off
         hwDf1Type.selectItem(withTag: config.df1.type.rawValue)
+        
+        // Lock controls if emulator is powered on
+        hwAmigaModelPopup.isEnabled = poweredOff
+        hwRealTimeClock.isEnabled = poweredOff
+        hwChipRamPopup.isEnabled = poweredOff
+        hwSlowRamPopup.isEnabled = poweredOff
+        hwFastRamPopup.isEnabled = poweredOff
     }
     
     @IBAction func hwAmigaModelAction(_ sender: NSPopUpButton!) {
@@ -98,6 +106,8 @@ extension PreferencesController {
     }
 
     @IBAction func hwUnlockAction(_ sender: Any!) {
+        
+        track()
         
         amigaProxy?.powerOff()
         refresh()

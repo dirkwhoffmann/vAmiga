@@ -94,15 +94,6 @@ Memory::~Memory()
 void
 Memory::_powerOn()
 {
-    // Allocate memory
-    /*
-    allocateBootRom();
-    allocateKickRom();
-    allocateChipRam(amiga->config.chipRamSize);
-    allocateFastRam(amiga->config.fastRamSize);
-    allocateSlowRam(amiga->config.slowRamSize);
-    */
-    
     // Make Rom writable if an A1000 is emulated
     kickIsWritable = amiga->config.model == A1000;
     

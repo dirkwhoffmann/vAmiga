@@ -323,8 +323,9 @@ Amiga::_powerOn()
     
     // For debugging, we start in debug mode and set a breakpoint
     debugMode = true;
-    cpu.bpManager.setBreakpointAt(0xFC00DE);
-    cpu.bpManager.setBreakpointAt(0xF80106);
+
+    // cpu.bpManager.setBreakpointAt(0xFC00DE);
+    cpu.bpManager.setBreakpointAt(0xFC015E);
     
     putMessage(MSG_POWER_ON);
 }
