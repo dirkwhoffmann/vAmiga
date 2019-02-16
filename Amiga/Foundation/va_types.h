@@ -171,6 +171,13 @@ typedef enum
 
 typedef struct {
     uint16_t dmacon;
+    uint16_t diwstrt;
+    uint16_t diwstop;
+    uint16_t ddfstrt;
+    uint16_t ddfstop;
+    uint32_t bplpt[6];
+    uint16_t bpl1mod;
+    uint16_t bpl2mod;
 } DMAInfo;
 
 
@@ -179,6 +186,10 @@ typedef struct {
 //
 
 typedef struct {
+    uint16_t bplcon0;
+    uint16_t bplcon1;
+    uint16_t bplcon2;
+    uint16_t bpldat[6];
     uint32_t color[32];
 } DeniseInfo;
 

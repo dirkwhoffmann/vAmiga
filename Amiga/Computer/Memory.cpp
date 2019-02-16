@@ -764,13 +764,85 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
     assert(IS_EVEN(addr));
     
     switch ((addr >> 1) & 0xFF) {
-            
+
+        case 0x08E >> 1: // DIWSTRT
+            amiga->dma.pokeDIWSTRT(value); return;
+        case 0x090 >> 1: // DIWSTOP
+            amiga->dma.pokeDIWSTOP(value); return;
+        case 0x092 >> 1: // DDFSTRT
+            amiga->dma.pokeDDFSTRT(value); return;
+        case 0x094 >> 1: // DDFSTOP
+            amiga->dma.pokeDDFSTOP(value); return;
         case 0x096 >> 1: // DMACON
             amiga->dma.pokeDMACON(value); return;
         case 0x09A >> 1: // INTENA
             amiga->paula.pokeINTENA(value); return;
         case 0x09C >> 1: // INTREQ
             amiga->paula.pokeINTREQ(value); return;
+        case 0x09E >> 1: // Unsed
+            return;
+            
+            
+        case 0x0E0 >> 1: // BPL1PTH
+            amiga->dma.pokeBPLxPTH(0, value); return;
+        case 0x0E2 >> 1: // BPL1PTL
+            amiga->dma.pokeBPLxPTL(0, value); return;
+        case 0x0E4 >> 1: // BPL2PTH
+            amiga->dma.pokeBPLxPTH(1, value); return;
+        case 0x0E6 >> 1: // BPL2PTL
+            amiga->dma.pokeBPLxPTL(1, value); return;
+        case 0x0E8 >> 1: // BPL3PTH
+            amiga->dma.pokeBPLxPTH(2, value); return;
+        case 0x0EA >> 1: // BPL3PTL
+            amiga->dma.pokeBPLxPTL(2, value); return;
+        case 0x0EC >> 1: // BPL4PTH
+            amiga->dma.pokeBPLxPTH(3, value); return;
+        case 0x0EE >> 1: // BPL4PTL
+            amiga->dma.pokeBPLxPTL(3, value); return;
+        case 0x0F0 >> 1: // BPL5PTH
+            amiga->dma.pokeBPLxPTH(4, value); return;
+        case 0x0F2 >> 1: // BPL5PTL
+            amiga->dma.pokeBPLxPTL(4, value); return;
+        case 0x0F4 >> 1: // BPL6PTH
+            amiga->dma.pokeBPLxPTH(5, value); return;
+        case 0x0F6 >> 1: // BPL6PTL
+            amiga->dma.pokeBPLxPTL(5, value); return;
+        case 0x0F8 >> 1: // Unused
+        case 0x0FA >> 1: // Unused
+        case 0x0FC >> 1: // Unused
+        case 0x0FE >> 1: // Unused
+            return;
+        case 0x100 >> 1: // BPLCON0
+            amiga->denise.pokeBPLCON0(value); return;
+        case 0x102 >> 1: // BPLCON1
+            amiga->denise.pokeBPLCON1(value); return;
+        case 0x104 >> 1: // BPLCON2
+            amiga->denise.pokeBPLCON2(value); return;
+        case 0x106 >> 1: // Unused
+            return;
+        case 0x108 >> 1: // BPL1MOD
+            amiga->dma.pokeBPL1MOD(value); return;
+        case 0x10A >> 1: // BPL2MOD
+            amiga->dma.pokeBPL2MOD(value); return;
+        case 0x10C >> 1: // Unused
+        case 0x10E >> 1: // Unused
+            return;
+        case 0x110 >> 1: // BPL1DAT
+            amiga->denise.pokeBPLxDAT(0, value); return;
+        case 0x112 >> 1: // BPL2DAT
+            amiga->denise.pokeBPLxDAT(1, value); return;
+        case 0x114 >> 1: // BPL3DAT
+            amiga->denise.pokeBPLxDAT(2, value); return;
+        case 0x116 >> 1: // BPL4DAT
+            amiga->denise.pokeBPLxDAT(3, value); return;
+        case 0x118 >> 1: // BPL5DAT
+            amiga->denise.pokeBPLxDAT(4, value); return;
+        case 0x11A >> 1: // BPL6DAT
+            amiga->denise.pokeBPLxDAT(5, value); return;
+        case 0x11C >> 1: // Unused
+        case 0x11E >> 1: // Unused
+            return;
+            
         case 0x180 >> 1: // COLOR00
             amiga->denise.pokeCOLORxx(0, value); return;
         case 0x182 >> 1: // COLOR01

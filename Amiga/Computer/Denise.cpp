@@ -15,6 +15,11 @@ Denise::Denise()
     
     // Register snapshot items
     registerSnapshotItems(vector<SnapshotItem> {
+        
+        { &bplcon0,   sizeof(bplcon0),   0 },
+        { &bplcon1,   sizeof(bplcon1),   0 },
+        { &bplcon2,   sizeof(bplcon2),   0 },
+        { &bpldat,    sizeof(bpldat),    WORD_ARRAY },
         { &colorReg,  sizeof(colorReg),  WORD_ARRAY },
     });
     
@@ -59,9 +64,15 @@ Denise::getInfo()
 {
     DeniseInfo info;
 
-    for (unsigned i = 0; i < 32; i++) {
+    info.bplcon0 = bplcon0;
+    info.bplcon1 = bplcon1;
+    info.bplcon2 = bplcon2;
+    
+    for (unsigned i = 0; i < 32; i++)
+        info.bpldat[i] = bpldat[i];
+    
+    for (unsigned i = 0; i < 32; i++)
         info.color[i] = colorRGBA[i];
-    }
 
     return info;
 }
@@ -74,10 +85,44 @@ Denise::didLoadFromBuffer(uint8_t **buffer)
 }
 
 void
+Denise::pokeBPLCON0(uint16_t value)
+{
+    debug("pokeBPLCON0(%X)\n", value);
+    
+    bplcon0 = value;
+}
+
+void
+Denise::pokeBPLCON1(uint16_t value)
+{
+    debug("pokeBPLCON1(%X)\n", value);
+    
+    bplcon1 = value;
+}
+
+void
+Denise::pokeBPLCON2(uint16_t value)
+{
+    debug("pokeBPLCON2(%X)\n", value);
+    
+    bplcon2 = value;
+}
+
+void
+Denise::pokeBPLxDAT(int x, uint16_t value)
+{
+    assert(x < 6);
+    debug("pokeBPL%dDAT(%X)\n", x, value);
+    
+    bpldat[x] = value;
+}
+
+void
 Denise::pokeCOLORxx(int xx, uint16_t value)
 {
     assert(xx < 32);
-
+    debug("pokeCOLOR%02d(%X)\n", xx, value);
+    
     // Write into the color register
     colorReg[xx] = value;
     
@@ -94,8 +139,9 @@ Denise::pokeCOLORxx(int xx, uint16_t value)
     g <<= 4;
     b <<= 4;
 
-    // Compose the RGBA quadrupel
+    // Compose the RGBA quadrupels
     colorRGBA[xx] = HI_HI_LO_LO(r, g, b, 0xFF);
+    colorRGBAhb[xx] = HI_HI_LO_LO(r / 2, g / 2, b / 2, 0xFF);
 }
 
 void

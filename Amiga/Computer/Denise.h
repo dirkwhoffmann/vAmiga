@@ -24,13 +24,30 @@ public:
     // Denise has been executed up to this clock cycle.
     Cycle clock = 0;
     
-    // The 32 colors in Amiga format
+    //
+    // Registers
+    //
+    
+    // The three bitplane control registers
+    uint16_t bplcon0 = 0;
+    uint16_t bplcon1 = 0;
+    uint16_t bplcon2 = 0;
+
+    // The 6 bitplane data registers
+    uint16_t bpldat[6]; 
+    
+    // The 32 color registers
     uint16_t colorReg[32];
     
     /* The 32 colors in RGBA format
      * The RGBA values are updated each time a colorReg changes.
      */
     uint32_t colorRGBA[32];
+ 
+    /* The 32 colors in RGBA format (halfbright)
+     * The RGBA values are updated each time a colorReg changes.
+     */
+    uint32_t colorRGBAhb[32];
     
     // Number of PAL rasterlines
     // static const long RASTERLINES = 625;
@@ -115,17 +132,19 @@ public:
     // Collects the data shown in the GUI's debug panel.
     DeniseInfo getInfo();
     
-    
     //
-    // Handling colors
+    // Accessing registers
     //
     
 public:
-    // Reads a color register
+   
+    void pokeBPLCON0(uint16_t value);
+    void pokeBPLCON1(uint16_t value);
+    void pokeBPLCON2(uint16_t value);
+    void pokeBPLxDAT(int x, uint16_t value);
     uint16_t peekCOLORxx(int xx) { assert(xx < 32); return colorReg[xx]; }
-
-    // Writes a color register
     void pokeCOLORxx(int xx, uint16_t value);
+    
 
 
     //

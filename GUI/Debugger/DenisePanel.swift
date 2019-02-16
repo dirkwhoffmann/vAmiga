@@ -13,8 +13,8 @@ extension Inspector {
     
     func refreshDenise(everything: Bool) {
         
-        // guard let denise = amigaProxy?.denise else { return }
-        // let info = denise.getInfo()
+        guard let denise = amigaProxy?.denise else { return }
+        let info = denise.getInfo()
         
         track("Refreshing Denise inspector tab")
         
@@ -23,6 +23,17 @@ extension Inspector {
             
         }
         */
+        
+        deniseBPLCON0.integerValue = Int(info.bplcon0)
+        deniseHIRES.state = (info.bplcon0 & 0b100000000000000 != 0) ? .on : .off
+        deniseHOMOD.state = (info.bplcon0 & 0b000010000000000 != 0) ? .on : .off
+        deniseDBPLF.state = (info.bplcon0 & 0b000001000000000 != 0) ? .on : .off
+        deniseLACE.state  = (info.bplcon0 & 0b000000000000100 != 0) ? .on : .off
+        deniseBPLCON1.integerValue = Int(info.bplcon1)
+        deniseBPLCON2.integerValue = Int(info.bplcon2)
+        
+
+        
 
     }
     

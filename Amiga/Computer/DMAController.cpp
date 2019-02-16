@@ -15,10 +15,17 @@ DMAController::DMAController()
     
     registerSnapshotItems(vector<SnapshotItem> {
         
-        { &clock,    sizeof(clock),   0 },
-        { &vhpos,    sizeof(vhpos),   0 },
-        { &vpos,     sizeof(vpos),    0 },
-        { &dmacon,   sizeof(dmacon),  0 },
+        { &clock,    sizeof(clock),    0 },
+        { &vhpos,    sizeof(vhpos),    0 },
+        { &vpos,     sizeof(vpos),     0 },
+        { &dmacon,   sizeof(dmacon),   0 },
+        { &diwstrt,  sizeof(diwstrt),  0 },
+        { &diwstop,  sizeof(diwstop),  0 },
+        { &ddfstrt,  sizeof(ddfstrt),  0 },
+        { &ddfstop,  sizeof(ddfstop),  0 },
+        { &bplpt,    sizeof(bplpt),    DWORD_ARRAY },
+        { &bpl1mod,  sizeof(bpl1mod),  0 },
+        { &bpl2mod,  sizeof(bpl2mod),  0 },
     });
 }
 
@@ -62,6 +69,16 @@ DMAController::getInfo()
     DMAInfo info;
     
     info.dmacon = dmacon;
+    info.diwstrt = diwstrt;
+    info.diwstop = diwstop;
+    info.ddfstrt = ddfstrt;
+    info.ddfstop = ddfstop;
+    
+    for (unsigned i = 0; i < 6; i++)
+        info.bplpt[i] = bplpt[i];
+    
+    info.bpl1mod = bpl1mod;
+    info.bpl2mod = bpl2mod;
     
     return info;
 }
@@ -79,6 +96,82 @@ DMAController::pokeDMACON(uint16_t value)
     
     if (value & 0x8000) dmacon |= value; else dmacon &= ~value;
     dmacon &= 0x07FF;
+}
+
+void
+DMAController::pokeDIWSTRT(uint16_t value)
+{
+    debug("pokeDIWSTRT(%X)\n", value);
+    
+    // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
+    // V7 V6 V5 V4 V3 V2 V1 V0 H7 H6 H5 H4 H3 H2 H1 H0  and  H8 = 0, H8 = 0
+    
+    diwstrt = value;
+    hstrt = LO_BYTE(value);
+    vstrt = HI_BYTE(value);
+}
+
+void
+DMAController::pokeDIWSTOP(uint16_t value)
+{
+    debug("pokeDIWSTOP(%X)\n", value);
+    
+    // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
+    // V7 V6 V5 V4 V3 V2 V1 V0 H7 H6 H5 H4 H3 H2 H1 H0  and  H8 = 1, V8 = !V7
+    
+    diwstop = value;
+    hstop = LO_BYTE(value) | 0x100;
+    vstop = HI_BYTE(value) | ((value & 0x80) << 1);
+}
+
+void
+DMAController::pokeDDFSTRT(uint16_t value)
+{
+    debug("pokeDDFSTRT(%X)\n", value);
+    
+    ddfstrt = value;
+}
+
+void
+DMAController::pokeDDFSTOP(uint16_t value)
+{
+    debug("pokeDDFSTOP(%X)\n", value);
+    
+    ddfstop = value;
+}
+
+void
+DMAController::pokeBPLxPTL(int x, uint16_t value)
+{
+    assert(x <= 6);
+    debug("pokeBPL%dPTL(%X)\n", x, value);
+    
+    bplpt[x] = (bplpt[x] & 0x70000) | value;
+}
+
+void
+DMAController::pokeBPLxPTH(int x, uint16_t value)
+{
+    assert(x <= 6);
+    debug("pokeBPL%dPTH(%X)\n", x, value);
+
+    bplpt[x] = (bplpt[x] & 0x0FFFF) | ((value << 16) & 0x70000);
+}
+
+void
+DMAController::pokeBPL1MOD(uint16_t value)
+{
+    debug("pokeBPL1MOD(%X)\n", value);
+
+    bpl1mod = value;
+}
+
+void
+DMAController::pokeBPL2MOD(uint16_t value)
+{
+    debug("pokeBPL2MOD(%X)\n", value);
+    
+    bpl2mod = value;
 }
 
 void

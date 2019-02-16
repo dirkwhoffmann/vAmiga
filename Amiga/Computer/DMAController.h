@@ -12,9 +12,6 @@
 
 #include "HardwareComponent.h"
 
-//
-// THIS CLASS IS A STUB TO GET THE VISUAL PROTOTYPE WORKING
-//
 
 class DMAController : public HardwareComponent {
     
@@ -28,10 +25,32 @@ public:
 
     //  Vertical Beam Position Counter
     uint16_t vpos = 0;
-
+    
     // The DMA control register
     uint16_t dmacon = 0;
     
+    // Display Window and Display Data Fetch registers
+    uint16_t diwstrt = 0;
+    uint16_t diwstop = 0;
+    uint16_t ddfstrt = 0;
+    uint16_t ddfstop = 0;
+
+    // The 6 bitplane address pointers
+    uint32_t bplpt[6];
+    
+    // The bitplane modulo registers
+    uint16_t bpl1mod = 0; // odd planes
+    uint16_t bpl2mod = 0; // even planes
+
+    /* Display window coordinates
+     * These values are calculated out of diwstrt and diwsstop and updated
+     * automatically inside pokeDIWSTRT() and pokeDIWSTOP().
+     */
+    uint16_t hstrt = 0;
+    uint16_t hstop = 0;
+    uint16_t vstrt = 0;
+    uint16_t vstop = 0;
+
 
 
     
@@ -72,15 +91,22 @@ public:
     
     
     //
-    // Register access
+    // Accessing registers
     //
     
 public:
     
     uint16_t peekDMACON();
     void pokeDMACON(uint16_t value);
-    
-    
+    void pokeDIWSTRT(uint16_t value);
+    void pokeDIWSTOP(uint16_t value);
+    void pokeDDFSTRT(uint16_t value);
+    void pokeDDFSTOP(uint16_t value);
+    void pokeBPLxPTL(int x, uint16_t value);
+    void pokeBPLxPTH(int x, uint16_t value);
+    void pokeBPL1MOD(uint16_t value);
+    void pokeBPL2MOD(uint16_t value);
+
     // This function is called when the end of a rasterline has been reached.
     void hsyncAction();
 
