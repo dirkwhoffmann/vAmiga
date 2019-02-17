@@ -78,15 +78,14 @@ class CIA : public HardwareComponent {
     
 protected:
 
-    /* Current CIA cycle.
-     * So far, the CIA has been run for this many cycles.
-     */
-    CIACycle currentCycle;
+    // Identification (0 = CIA A, 1 = CIA B)
+    int nr;
+    
+    // The CIA has been executed up to this clock cycle.
+    Cycle clock;
   
-    /* Total number of skipped cycles.
-     * This value is used by the debugger, only.
-     */
-    CIACycle idleCycles;
+    // Total number of skipped cycles (used by the debugger, only).
+    Cycle idleCycles;
     
 	// Timer A counter
 	uint16_t counterA;
@@ -235,27 +234,28 @@ private:
 
 public:
 
+    // Indicates if the CIA is currently idle
+    bool sleeping;
+    
     /* The last executed cycle before the chip went idle.
      * The variable is set in sleep()
      */
-    CIACycle sleepCycle;
+    Cycle sleepCycle;
     
     /* The wake up cycle  executed cycle before the chip went idle.
      * The variable is set in sleep()
      */
-    CIACycle wakeUpCycle;
+    Cycle wakeUpCycle;
         
 public:	
 	
-	//! @brief    Constructor
 	CIA();
-	
-	//! @brief    Destructor
 	~CIA();
 
     //
     // Methods from HardwareComponent
     //
+
     void _powerOn() override;
     void _powerOff() override;
 	void _dump() override;
@@ -395,15 +395,22 @@ public:
 public:
     
     // Executes the component until the target cycle is reached.
-    void executeUntil(Cycle targetCycle);
+    // DEPRECATED
+    // void executeUntil(Cycle targetCycle);
     
 	// Advances the 24-bit counter by one tick.
 	void incrementTOD();
 
-private:
-    
     // Executes the CIA for one CIA cycle.
     void executeOneCycle();
+    
+    // Schedules the next execution event
+    virtual void scheduleNextExecution() = 0;
+    
+    // Schedules the next wakeup event
+    virtual void scheduleWakeUp() = 0;
+    
+private:
     
     //
     // Handling interrupt requests
@@ -419,22 +426,26 @@ private:
     
 private:
     
-    //! @brief    Puts the CIA into idle state.
+    // Puts the CIA into idle state.
     void sleep();
 
-    //! @brief    Emulates all previously skipped cycles.
-    void wakeUp();
-    
 public:
     
+    // Emulates all previously skipped cycles.
+    void wakeUp();
+    void wakeUp(Cycle targetCycle);
+    
     // Returns true if the CIA is in idle state.
-    bool isSleeping() { return sleepCycle < UINT64_MAX; }
+    bool isSleeping() { return sleeping; }
     
     // Returns true if the CIA is awake.
-    bool isAwake() { return sleepCycle == UINT64_MAX; }
+    bool isAwake() { return !sleeping; }
+    
+    // Returns true if the CIA has been executed up to the master clock.
+    bool isUpToDate();
     
     // The CIA is idle since this number of cycles.
-    CIACycle idle() { return isAwake() ? 0 : currentCycle - sleepCycle; }
+    CIACycle idle(); 
 
     // Total number of cycles the CIA was idle.
     CIACycle idleTotal() { return idleCycles; }
@@ -451,6 +462,9 @@ public:
     void _dump() override;
     
 private:
+    
+    void scheduleNextExecution() override;
+    void scheduleWakeUp() override;
     
     void pullDownInterruptLine() override;
     void releaseInterruptLine() override;
@@ -474,6 +488,9 @@ public:
     void _dump() override;
     
 private:
+    
+    void scheduleNextExecution() override;
+    void scheduleWakeUp() override;
 
     void pullDownInterruptLine() override;
     void releaseInterruptLine() override;

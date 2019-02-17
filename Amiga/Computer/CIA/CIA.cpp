@@ -22,7 +22,7 @@ CIA::CIA()
     // Register snapshot items
     registerSnapshotItems(vector<SnapshotItem> {
         
-        { &currentCycle,     sizeof(currentCycle),     0 },
+        { &clock,            sizeof(clock),            0 },
         { &idleCycles,       sizeof(idleCycles),       0 },
         { &counterA,         sizeof(counterA),         0 },
         { &latchA,           sizeof(latchA),           0 },
@@ -50,6 +50,7 @@ CIA::CIA()
         { &CNT,              sizeof(CNT),              0 },
         { &INT,              sizeof(INT),              0 },
         { &tiredness,        sizeof(tiredness),        0 },
+        { &sleeping,         sizeof(sleeping),         0 },
         { &wakeUpCycle,      sizeof(wakeUpCycle),      0 },
         { &sleepCycle,       sizeof(sleepCycle),       0 }});
     
@@ -650,21 +651,28 @@ void
 CIA::_dump()
 {
     CIAInfo info = getInfo();
+
+    msg("            Master Clock : %lld\n", amiga->masterClock);
+    msg("                   Clock : %lld\n", clock);
+    msg("                Sleeping : %s\n", sleeping ? "yes" : "no");
+    msg(" Most recent sleep cycle : %lld\n", sleepCycle);
+    msg("Most recent wakeup cycle : %lld\n", wakeUpCycle);
+
     
-	msg("              Counter A : %04X\n", info.timerA.count);
-    msg("                Latch A : %04X\n", info.timerA.latch);
-    msg("            Data port A : %02X\n", info.portA.reg);
-    msg("  Data port direction A : %02X\n", info.portA.dir);
-	msg("     Control register A : %02X\n", CRA);
+	msg("               Counter A : %04X\n", info.timerA.count);
+    msg("                 Latch A : %04X\n", info.timerA.latch);
+    msg("             Data port A : %02X\n", info.portA.reg);
+    msg("   Data port direction A : %02X\n", info.portA.dir);
+	msg("      Control register A : %02X\n", CRA);
 	msg("\n");
-	msg("              Counter B : %04X\n", info.timerB.count);
-	msg("                Latch B : %04X\n", info.timerB.latch);
-	msg("            Data port B : %02X\n", info.portB.reg);
-	msg("  Data port direction B : %02X\n", info.portB.dir);
-	msg("     Control register B : %02X\n", CRB);
+	msg("               Counter B : %04X\n", info.timerB.count);
+	msg("                 Latch B : %04X\n", info.timerB.latch);
+	msg("             Data port B : %02X\n", info.portB.reg);
+	msg("   Data port direction B : %02X\n", info.portB.dir);
+	msg("      Control register B : %02X\n", CRB);
 	msg("\n");
-	msg("  Interrupt control reg : %02X\n", info.icr);
-	msg("     Interrupt mask reg : %02X\n", info.imr);
+	msg("   Interrupt control reg : %02X\n", info.icr);
+	msg("      Interrupt mask reg : %02X\n", info.imr);
 	msg("\n");	
 	tod.dump();
 }
@@ -705,13 +713,13 @@ CIA::getInfo()
     info.cnt = tod.getInfo();
     info.cntIntEnable = icr & 0x04;
     
-    debug("idleCycles = %d\n", idle());
     info.idleCycles = idle();
-    info.idlePercentage = (double)idleTotal() / (double)currentCycle;
+    info.idlePercentage = (double)idleCycles / (double)clock;
   
     return info;
 }
 
+/*
 void
 CIA::executeUntil(Cycle targetMasterCycle)
 {
@@ -733,11 +741,12 @@ CIA::executeUntil(Cycle targetMasterCycle)
     }
     assert(currentCycle == targetCycle);
 }
+*/
 
 void
 CIA::executeOneCycle()
 {
-    currentCycle++;
+    clock += CIA_CYCLES(1);
     
     uint64_t oldDelay = delay;
     uint64_t oldFeed  = feed;
@@ -1037,13 +1046,15 @@ CIA::executeOneCycle()
 	delay = ((delay << 1) & DelayMask) | feed;
     
     // Go into idle state if possible
-    if (oldDelay == delay && oldFeed == feed) {
-        if (++tiredness > 8) {
-            sleep();
-            tiredness = 0;
-        }
-    } else {
+    if (oldDelay == delay && oldFeed == feed) tiredness++; else tiredness = 0;
+  
+    // Sleep if threshold is reached
+    if (tiredness > 8) {
+        sleep();
         tiredness = 0;
+        scheduleWakeUp();
+    } else {
+        scheduleNextExecution();
     }
 }
 
@@ -1051,50 +1062,74 @@ void
 CIA::sleep()
 {
     // Don't call this method on a sleeping CIA
-    if (sleepCycle != INT64_MAX) {
-        warn("%lld: sleepCycle = %lld wakeUp = %lld\n",
-             amiga->masterClock, sleepCycle, wakeUpCycle);
-    }
-    assert(sleepCycle == INT64_MAX);
+    assert(!sleeping);
     
     // Determine maximum possible sleep cycle based on timer counts
-    uint64_t sleepA = (counterA > 2) ? (currentCycle + counterA - 1) : 0;
-    uint64_t sleepB = (counterB > 2) ? (currentCycle + counterB - 1) : 0;
+    CIACycle sleepA = clock + CIA_CYCLES((counterA > 2) ? (counterA - 1) : 0);
+    CIACycle sleepB = clock + CIA_CYCLES((counterB > 2) ? (counterB - 1) : 0);
     
     // CIAs with stopped timers can sleep forever
     if (!(feed & CIACountA0)) sleepA = INT64_MAX;
     if (!(feed & CIACountB0)) sleepB = INT64_MAX;
     
-    // Take some rest
-    sleepCycle = currentCycle;
-    assert(sleepCycle < INT64_MAX);
+    debug("sleepA = %lld sleepB = %lld\n", sleepA, sleepB);
+    // ZZzzzz
+    sleepCycle = clock;
     wakeUpCycle = MIN(sleepA, sleepB);
+    sleeping = true;
 }
 
 void
 CIA::wakeUp()
 {
+    // Align master clock to CIA raster
+    Cycle targetCycle = CIA_CYCLES(AS_CIA_CYCLES(amiga->masterClock));
+    
+    wakeUp(targetCycle);
+}
+
+void
+CIA::wakeUp(Cycle targetCycle)
+{
+    if (sleeping) return;
+    sleeping = false;
+    
+    assert(clock == sleepCycle);
+    
     // Calculate the number of missed cycles
-    CIACycle missedCycles = (int64_t)(currentCycle - sleepCycle);
+    Cycle missedCycles = targetCycle - sleepCycle;
+    assert(missedCycles % CIA_CYCLES(1) == 0);
     
     // Make up for missed cycles
     if (missedCycles > 0) {
         
         if (feed & CIACountA0) {
-            assert(counterA >= missedCycles);
-            counterA -= missedCycles;
+            assert(counterA >= AS_CIA_CYCLES(missedCycles));
+            counterA -= AS_CIA_CYCLES(missedCycles);
         }
         if (feed & CIACountB0) {
-            assert(counterB >= missedCycles);
-            counterB -= missedCycles;
+            assert(counterB >= AS_CIA_CYCLES(missedCycles));
+            counterB -= AS_CIA_CYCLES(missedCycles);
         }
         
         idleCycles += missedCycles;
+        clock = targetCycle;
     }
     
-    // Stay awake
-    sleepCycle = INT64_MAX;
-    wakeUpCycle = 0;
+    assert(isUpToDate());
+}
+
+bool
+CIA::isUpToDate()
+{
+    assert(clock <= amiga->masterClock);
+    return (amiga->masterClock - clock < CIA_CYCLES(1));
+}
+
+Cycle
+CIA::idle()
+{
+    return isAwake() ? 0 : amiga->masterClock - sleepCycle;
 }
 
 
@@ -1105,12 +1140,25 @@ CIA::wakeUp()
 CIAA::CIAA()
 {
     setDescription("CIAA");
+    nr = 0;
 }
 
 void 
 CIAA::_dump()
 {
     CIA::_dump();
+}
+
+void
+CIAA::scheduleNextExecution()
+{
+    amiga->dma.eventHandler.scheduleEvent(EVENT_CIAA, clock + CIA_CYCLES(1), 0);
+}
+
+void
+CIAA::scheduleWakeUp()
+{
+    amiga->dma.eventHandler.scheduleEvent(EVENT_CIAA, wakeUpCycle, 1);
 }
 
 void 
@@ -1213,6 +1261,7 @@ CIAA::updatePB()
 CIAB::CIAB()
 {
     setDescription("CIAB");
+    nr = 1;
 }
 
 void
@@ -1224,6 +1273,18 @@ void
 CIAB::_dump()
 {
     CIA::_dump();
+}
+
+void
+CIAB::scheduleNextExecution()
+{
+     amiga->dma.eventHandler.scheduleEvent(EVENT_CIAB, clock + CIA_CYCLES(1), 0);
+}
+
+void
+CIAB::scheduleWakeUp()
+{
+      amiga->dma.eventHandler.scheduleEvent(EVENT_CIAB, wakeUpCycle, 1);
 }
 
 void 

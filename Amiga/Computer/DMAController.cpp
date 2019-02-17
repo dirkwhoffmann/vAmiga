@@ -13,6 +13,12 @@ DMAController::DMAController()
 {
     setDescription("DMAController");
     
+    // Register sub components
+    registerSubcomponents(vector<HardwareComponent *> {
+        
+        &eventHandler,
+    });
+    
     registerSnapshotItems(vector<SnapshotItem> {
         
         { &clock,    sizeof(clock),    0 },
@@ -38,6 +44,10 @@ void
 DMAController::_powerOn()
 {
     clock = 0;
+    
+    // Schedule the first two CIA events
+    eventHandler.scheduleEvent(EVENT_CIAA, CIA_CYCLES(1), 0);
+    eventHandler.scheduleEvent(EVENT_CIAB, CIA_CYCLES(1), 0);
 }
 
 void
@@ -177,15 +187,24 @@ DMAController::pokeBPL2MOD(uint16_t value)
 void
 DMAController::executeUntil(Cycle targetClock)
 {
-    // Determine number of master clock cycles to execute
-    Cycle missingCycles = targetClock - clock;
-
-    // Convert to DMA cycles
-    DMACycle missingDMACycles = AS_DMA_CYCLES(missingCycles);
-
-    // Execute missing cycles
-    for (DMACycle i = 0; i < missingDMACycles; i++) {
+    // msg("clock is %lld, Executing until %lld\n", clock, targetClock);
+    while (clock <= targetClock - DMA_CYCLES(1)) {
         
+        clock += DMA_CYCLES(1);
+        
+        // Determine number of master clock cycles to execute
+        // Cycle missingCycles = targetClock - clock;
+        
+        // Convert to DMA cycles
+        // DMACycle missingDMACycles = AS_DMA_CYCLES(missingCycles);
+        
+        // Execute until target clock is reached ...
+        // for (DMACycle i = 0; i < missingDMACycles; i++) {
+        
+        // Process all pending events
+        eventHandler.executeUntil(clock);
+        
+        // Perform DMA
         switch (vhpos) {
             case 0x07:
             case 0x09:
@@ -204,15 +223,11 @@ DMAController::executeUntil(Cycle targetClock)
                 
             default:
                 break;
-                
         }
         
         // Check if the current rasterline has been completed
         if (vhpos < 227) vhpos++; else hsyncAction();
     }
-    
-    // Note the completed cycles
-    clock += DMA_CYCLES(missingDMACycles);
 }
 
 void

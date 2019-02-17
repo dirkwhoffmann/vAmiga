@@ -80,10 +80,7 @@ public:
      * This clock runs at 28 MHz and is used to derive all other clock signals.
      */
     uint64_t masterClock = 0; 
-    
-    // The event handler
-    EventHandler eventHandler;
-    
+        
     // A Motorola 68000 CPU
     CPU cpu;
     

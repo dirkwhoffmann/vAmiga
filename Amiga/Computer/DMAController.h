@@ -11,14 +11,21 @@
 #define _DMA_CONTROLLER_INC
 
 #include "HardwareComponent.h"
+#include "EventHandler.h"
 
 
 class DMAController : public HardwareComponent {
     
 public:
     
+    /* The event handler
+     * This handler is used to schedule events such as executing or waking up
+     * the CIAs.
+     */
+    EventHandler eventHandler;
+    
     // The DMA controller has been executed up to this clock cycle.
-    uint64_t clock = 0;
+    Cycle clock = 0;
     
     //  Horizontal Beam Position Counter
     uint16_t vhpos = 0;

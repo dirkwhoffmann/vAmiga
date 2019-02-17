@@ -43,13 +43,13 @@ EventHandler::_dump()
 {
     for (unsigned i = 0; i < NUMBER_OF_EVENTS; i++) {
         if (true) { // isPending((Event)i)) {
-            plainmsg("Event %d: Triggers at cycle %lld [%lld]\n", eventCycle[i], payload[i]);
+            plainmsg("Event %d: Triggers at cycle %lld [%lld]\n", i, eventCycle[i], payload[i]);
         }
     }
 }
 
 void
-EventHandler::scheduleEvent(Event event, uint64_t cycle)
+EventHandler::scheduleEvent(Event event, Cycle cycle)
 {
     assert(event < NUMBER_OF_EVENTS);
     
@@ -58,13 +58,13 @@ EventHandler::scheduleEvent(Event event, uint64_t cycle)
 }
 
 void
-EventHandler::scheduleEvent(Event event, uint64_t cycle, uint64_t data)
+EventHandler::scheduleEvent(Event event, Cycle cycle, int64_t data)
 {
     assert(event < NUMBER_OF_EVENTS);
     
     eventCycle[event] = cycle;
     payload[event] = data;
-    if (cycle < nextTrigger) nextTrigger = cycle;
+    // if (cycle < nextTrigger) nextTrigger = cycle;
 }
 
 void
@@ -80,35 +80,49 @@ EventHandler::isPending(Event event)
     
     return eventCycle[event] < UINT64_MAX;
 }
-                     
-
 
 void
-EventHandler::_executeUntil(uint64_t cycle) {
+EventHandler::_executeUntil(Cycle cycle) {
     
     nextTrigger = UINT64_MAX;
-    
+        
     // Iterate through all events
     for (unsigned i = 0; i < NUMBER_OF_EVENTS; i++) {
+        
+        Cycle eventcycle = eventCycle[i];
         
         if (cycle < UINT64_MAX) {
             
             // Event is pending. Check whether it is due.
-            if (cycle >= eventCycle[i]) {
-                
-                // Delete event
-                eventCycle[i] = UINT64_MAX;
+            if (cycle >= eventcycle) {
                 
                 // Process event
                 switch (i) {
-                    case EVENT_DEBUG1:
+                    case EVENT_CIAA:
                         
-                        amiga->df0.toggleUnsafed();
-                        amiga->diskController.setDMA(0, !amiga->diskController.doesDMA(0));
-                        scheduleEvent(EVENT_DEBUG1, amiga->masterClock + 2 * 28 * 1000000);
+                        if (payload[i] == 0) { // Execute
+                            amiga->ciaA.executeOneCycle();
+                        } else { // Wakeup
+                            amiga->ciaA.wakeUp();
+                        }
+                        if (!amiga->ciaA.isUpToDate()) {
+                            amiga->ciaA.dump();
+                        }
+                        assert(amiga->ciaA.isUpToDate());
+
                         break;
                         
-                    case EVENT_DEBUG2:
+                    case EVENT_CIAB:
+                        
+                        if (payload[i] == 0) { // Execute
+                            amiga->ciaB.executeOneCycle();
+                        } else { // Wakeup
+                            amiga->ciaB.wakeUp();
+                        }
+                        if (!amiga->ciaB.isUpToDate()) {
+                            amiga->ciaB.dump();
+                        }
+                        assert(amiga->ciaB.isUpToDate());
                         
                         break;
                         

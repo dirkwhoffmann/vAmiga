@@ -14,8 +14,8 @@
 
 typedef enum
 {
-    EVENT_DEBUG1,
-    EVENT_DEBUG2,
+    EVENT_CIAA,
+    EVENT_CIAB,
     NUMBER_OF_EVENTS
 } Event;
 
@@ -28,12 +28,12 @@ public:
      * 64 bit data value. The default trigger cycle is UINT64_MAX which means
      * that the event is not pending.
      */
-    uint64_t eventCycle[NUMBER_OF_EVENTS];
-    uint64_t payload[NUMBER_OF_EVENTS];
+    Cycle eventCycle[NUMBER_OF_EVENTS];
+    int64_t payload[NUMBER_OF_EVENTS];
     
     // This variables indicates when the next event triggers.
     // UINT64_MAX if no event is pending.
-    uint64_t nextTrigger = UINT64_MAX;
+    Cycle nextTrigger = UINT64_MAX;
 
     
     //
@@ -60,19 +60,19 @@ private:
 public:
     
     // Schedules an event. The event will be executed at the specified cycle.
-    void scheduleEvent(Event event, uint64_t cycle);
-    void scheduleEvent(Event event, uint64_t cycle, uint64_t data);
+    void scheduleEvent(Event event, Cycle cycle);
+    void scheduleEvent(Event event, Cycle cycle, int64_t data);
     void cancelEvent(Event event);
     
     // Returns true if the specified event is pending
     bool isPending(Event event);
     
     // Processes all events that are due at or prior to cycle.
-    void executeUntil(uint64_t cycle) {
-        if (cycle >= nextTrigger) _executeUntil(cycle); }
+    void executeUntil(Cycle cycle) {
+        if (cycle >= nextTrigger) _executeUntil(cycle); else debug("Noting pending\n"); }
     
     // Work horse for executeUntil()
-    void _executeUntil(uint64_t cycle);
+    void _executeUntil(Cycle cycle);
 };
 
 #endif

@@ -72,10 +72,8 @@ Amiga::Amiga()
     config.df1.type      = A1010_ORIG;
     config.df1.connected = false;
     
-    // Register sub components
     registerSubcomponents(vector<HardwareComponent *> {
         
-        &eventHandler,
         &cpu,
         &ciaA,
         &ciaB,
@@ -387,11 +385,16 @@ Amiga::_ping()
 void
 Amiga::_dump()
 {
-    plainmsg(" poweredOn: %s\n", isPoweredOn() ? "yes" : "no");
-    plainmsg("poweredOff: %s\n", isPoweredOff() ? "yes" : "no");
-    plainmsg("    paused: %s\n", isPaused() ? "yes" : "no");
-    plainmsg("   running: %s\n", isRunning() ? "yes" : "no");
-
+    plainmsg(" Master clock: %lld\n", masterClock);
+    plainmsg("in CPU cycles: %lld\n", AS_CPU_CYCLES(masterClock));
+    plainmsg("in DMA cycles: %lld\n", AS_DMA_CYCLES(masterClock));
+    plainmsg("in CIA cycles: %lld\n", AS_CIA_CYCLES(masterClock));
+    plainmsg("\n");
+    plainmsg("    poweredOn: %s\n", isPoweredOn() ? "yes" : "no");
+    plainmsg("   poweredOff: %s\n", isPoweredOff() ? "yes" : "no");
+    plainmsg("       paused: %s\n", isPaused() ? "yes" : "no");
+    plainmsg("      running: %s\n", isRunning() ? "yes" : "no");
+    plainmsg("\n");
     plainmsg("Current configuration:\n\n");
     plainmsg("   AmigaModel: %s\n", modelName(config.model));
     plainmsg("realTimeClock: %s\n", config.realTimeClock ? "yes" : "no");
@@ -765,9 +768,6 @@ Amiga::runLoop()
     // Prepare to run
     amiga->restartTimer();
     
-    // Schedule a event to fake some disk activity
-    eventHandler.scheduleEvent(EVENT_DEBUG1, 2 * 28 * 1000000);
-    
     //
     // TODO: Emulate the Amiga here ...
     //
@@ -778,16 +778,14 @@ Amiga::runLoop()
     stop = false;
     do {
         
-        // Emulate the CPU (fake)
+        // Emulate the CPU
         uint64_t cpuCycles = cpu.executeNextInstruction(); 
         
         // Advance the master clock
-        masterClock += cpuCycles * 4;
+        masterClock += CPU_CYCLES(cpuCycles);
         
-        ciaA.executeUntil(masterClock);
-        ciaB.executeUntil(masterClock);
+        // Emulate the DMA controller
         dma.executeUntil(masterClock);
-        eventHandler.executeUntil(masterClock);
         
         if (debugMode) {
 

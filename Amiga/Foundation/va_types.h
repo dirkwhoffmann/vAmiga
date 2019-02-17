@@ -126,7 +126,7 @@ typedef struct {
     bool intLine;
     CounterInfo cnt;
     bool cntIntEnable;
-    uint64_t idleCycles;
+    Cycle idleCycles;
     double idlePercentage;
 } CIAInfo;
 
