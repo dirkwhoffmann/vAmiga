@@ -787,7 +787,6 @@ Amiga::runLoop()
         ciaA.executeUntil(masterClock);
         ciaB.executeUntil(masterClock);
         dma.executeUntil(masterClock);
-        denise.executeUntil(masterClock);
         eventHandler.executeUntil(masterClock);
         
         if (debugMode) {

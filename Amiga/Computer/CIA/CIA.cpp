@@ -70,7 +70,7 @@ CIA::_powerOn()
 	latchA = 0xFFFF;
 	latchB = 0xFFFF;
     
-    sleepCycle = UINT64_MAX;
+    sleepCycle = INT64_MAX;
     
     updatePA();
     updatePB(); 
@@ -127,7 +127,7 @@ CIA::peek(uint16_t addr)
 {
 	uint8_t result;
 
-    debug("Peek %02X\n", addr);
+    // debug("Peek %02X\n", addr);
 
     wakeUp();
 
@@ -315,7 +315,7 @@ CIA::spypeek(uint16_t addr)
 void
 CIA::poke(uint16_t addr, uint8_t value)
 {
-    debug("Poke %02X,%02X\n", addr, value);
+    // debug("Poke %02X,%02X\n", addr, value);
 
     wakeUp();
     
@@ -1051,18 +1051,23 @@ void
 CIA::sleep()
 {
     // Don't call this method on a sleeping CIA
-    assert(sleepCycle == UINT64_MAX);
+    if (sleepCycle != INT64_MAX) {
+        warn("%lld: sleepCycle = %lld wakeUp = %lld\n",
+             amiga->masterClock, sleepCycle, wakeUpCycle);
+    }
+    assert(sleepCycle == INT64_MAX);
     
     // Determine maximum possible sleep cycle based on timer counts
     uint64_t sleepA = (counterA > 2) ? (currentCycle + counterA - 1) : 0;
     uint64_t sleepB = (counterB > 2) ? (currentCycle + counterB - 1) : 0;
     
     // CIAs with stopped timers can sleep forever
-    if (!(feed & CIACountA0)) sleepA = UINT64_MAX;
-    if (!(feed & CIACountB0)) sleepB = UINT64_MAX;
+    if (!(feed & CIACountA0)) sleepA = INT64_MAX;
+    if (!(feed & CIACountB0)) sleepB = INT64_MAX;
     
     // Take some rest
     sleepCycle = currentCycle;
+    assert(sleepCycle < INT64_MAX);
     wakeUpCycle = MIN(sleepA, sleepB);
 }
 
@@ -1088,7 +1093,7 @@ CIA::wakeUp()
     }
     
     // Stay awake
-    sleepCycle = UINT64_MAX;
+    sleepCycle = INT64_MAX;
     wakeUpCycle = 0;
 }
 

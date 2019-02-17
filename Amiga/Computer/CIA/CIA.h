@@ -234,16 +234,17 @@ private:
     uint8_t tiredness;
 
 public:
-    
-    // The wakeup cycle
-    // This variable is set in sleep() and read in executeUntil().
-    CIACycle wakeUpCycle;
-    
-    // The last executed cycle before the chip went idle.
-    // This variable is set in sleep() and read in wakeUp().
-    // A value of 0 indicates that the CIA is awake. 
+
+    /* The last executed cycle before the chip went idle.
+     * The variable is set in sleep()
+     */
     CIACycle sleepCycle;
     
+    /* The wake up cycle  executed cycle before the chip went idle.
+     * The variable is set in sleep()
+     */
+    CIACycle wakeUpCycle;
+        
 public:	
 	
 	//! @brief    Constructor

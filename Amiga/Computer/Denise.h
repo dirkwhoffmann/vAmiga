@@ -24,6 +24,10 @@ public:
     // Denise has been executed up to this clock cycle.
     Cycle clock = 0;
     
+    // Frame counter (records the number of frames drawn since power on)
+    uint64_t frame = 0;
+    
+    
     //
     // Registers
     //
@@ -64,9 +68,7 @@ public:
 
     static const long BUFSIZE = VPIXELS * HPIXELS * 4;
     
-    // Frame counter (records the number of frames drawn since power on)
-    uint64_t frame = 0;
-    
+
     /* Screen buffer for long and short frames
      *
      *   - Long frames consist of the odd rasterlines 1, 3, 5, ..., 625.
@@ -170,7 +172,6 @@ public:
     }
     
     // Fake some video output
-    void executeUntil(uint64_t targetClock); 
     void endOfFrame();
 };
 

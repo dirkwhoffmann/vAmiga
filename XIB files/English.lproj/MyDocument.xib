@@ -10,8 +10,6 @@
                 <outlet property="clockSpeed" destination="214" id="216"/>
                 <outlet property="clockSpeedBar" destination="212" id="215"/>
                 <outlet property="cmdLock" destination="70n-GV-8LP" id="jTg-GL-AWT"/>
-                <outlet property="controlPort1" destination="L2b-nG-yBo" id="SJX-uU-0lA"/>
-                <outlet property="controlPort2" destination="4MP-rV-xX2" id="6Ux-IE-l65"/>
                 <outlet property="df0DMA" destination="xzf-hU-AKK" id="oNt-cd-Fkh"/>
                 <outlet property="df0Disk" destination="D1i-Ep-fTN" id="ltM-hh-lzG"/>
                 <outlet property="df0LED" destination="iKN-RM-vsV" id="Qa7-gd-iRi"/>
@@ -19,9 +17,7 @@
                 <outlet property="df1Disk" destination="gkQ-Nr-aDz" id="vRa-jh-S2U"/>
                 <outlet property="df1LED" destination="K68-Xr-JJH" id="Cif-l6-Km5"/>
                 <outlet property="metal" destination="DD4-5B-w9h" id="rGV-rL-MLo"/>
-                <outlet property="pauseTbItem" destination="dOU-Sh-aV4" id="Nx0-Io-Xiy"/>
                 <outlet property="powerLED" destination="1208" id="hey-Hi-zTq"/>
-                <outlet property="snapshotSegCtrl" destination="AHD-MB-nXC" id="Cva-Bh-qUl"/>
                 <outlet property="toolbar" destination="1845" id="JVx-NQ-tw7"/>
                 <outlet property="warpIcon" destination="1052" id="uvG-el-lRi"/>
                 <outlet property="window" destination="5" id="2164"/>
@@ -279,9 +275,6 @@
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="system"/>
                             </buttonCell>
-                            <connections>
-                                <action selector="pauseAction:" target="-2" id="81i-0J-7u2"/>
-                            </connections>
                         </button>
                         <connections>
                             <action selector="stopAndGoAction:" target="-2" id="nYX-eP-iZh"/>

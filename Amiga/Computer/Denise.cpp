@@ -145,21 +145,6 @@ Denise::pokeCOLORxx(int xx, uint16_t value)
 }
 
 void
-Denise::executeUntil(uint64_t targetClock)
-{
-    clock = targetClock;
-    uint64_t targetFrame = clock / masterCyclesPerFrame;
-    
-    if (frame != targetFrame) {
-        
-        // Next frame has been reached
-        frame = targetFrame;
-        endOfFrame();
-    }
-}
-
-
-void
 Denise::endOfFrame()
 {
     // Switch the active frame buffer
@@ -187,5 +172,7 @@ Denise::endOfFrame()
     if (!amiga->getWarp()) {
         amiga->synchronizeTiming();
     }
+    
+    frame++;
 }
 
