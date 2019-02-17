@@ -173,19 +173,29 @@ public:
     // Accessing memory
     //
     
+public:
+    
     // Returns the memory source lookup table.
     MemorySource *getMemSrcTable() { return memSrc; }
-    
+
+    // Returns the memory source for a given address.
+    MemorySource getMemSrc(uint32_t addr) { return memSrc[(addr >> 16) & 0xFF]; }
+
     // Updates the memory source lookup table.
     void updateMemSrcTable();
     
-    /* Returns the memory source for a given address.
+private:
+    
+    /* Computes the memory source for a given memory bank
+     * This method is used inside updateMemSrcTable()
      */
-    MemorySource getMemSrc(uint32_t addr);
+    // MemorySource computeMemSrc(uint16_t bank);
     
     //
     // Accessing memory cells
     //
+    
+public:
     
     uint8_t peek8(uint32_t addr);
     uint16_t peek16(uint32_t addr);

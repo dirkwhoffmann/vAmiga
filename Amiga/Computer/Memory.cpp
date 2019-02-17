@@ -30,7 +30,7 @@ const uint32_t KICK_ROM_MASK = 0x003FFFF;
 #define ASSERT_KICK_ADDR(x) assert(kickRom != NULL); assert(((x) & KICK_ROM_MASK) < kickRomSize);
 #define ASSERT_CIA_ADDR(x)  assert((x) >= 0xA00000 && (x) <= 0xBFFFFF);
 #define ASSERT_RTC_ADDR(x)  assert((x) >= 0xDC0000 && (x) <= 0xDEFFFF);
-#define ASSERT_OCS_ADDR(x)  assert((x) >= 0xDF0000 && (x) <= 0xDFFFFF);
+#define ASSERT_OCS_ADDR(x)  assert((x) >= 0xC00000 && (x) <= 0xDFFFFF);
 
 #define READ_CHIP_8(x)         (*(uint8_t *)(chipRam + (x % chipRamSize)))
 #define READ_CHIP_16(x) (ntohs(*(uint16_t *)(chipRam + (x % chipRamSize))))
@@ -313,6 +313,10 @@ Memory::updateMemSrcTable()
     for (unsigned i = 0xA0; i <= 0xBF; i++)
         memSrc[i] = MEM_CIA;
 
+    // OCS (some assignments will be overwritten below by slow ram and RTC)
+    for (unsigned i = 0xC0; i <= 0xDF; i++)
+        memSrc[i] = MEM_OCS;
+    
     // Slow Ram
     for (unsigned i = 0; i < slowRamSize / 0x10000; i++)
         memSrc[0xC0 + i] = MEM_SLOW;
@@ -320,10 +324,6 @@ Memory::updateMemSrcTable()
     // Real-time clock
     for (unsigned i = 0xDC; rtc && i <= 0xDE; i++)
         memSrc[i] = MEM_RTC;
-
-    // OCS
-    for (unsigned i = 0xDF; i <= 0xDF; i++)
-        memSrc[i] = MEM_OCS;
 
     // Boot Rom or Kickstart mirror
     for (unsigned i = 0xF8; i <= 0xFB; i++)
@@ -340,12 +340,14 @@ Memory::updateMemSrcTable()
     if (amiga) amiga->putMessage(MSG_MEM_LAYOUT);
 }
 
+/*
 MemorySource
-Memory::getMemSrc(uint32_t addr)
+Memory::computeMemSrc(uint16_t bank)
 {
-    assert(is_uint24_t(addr));
-    return memSrc[addr >> 16];
+
 }
+*/
+
 
 uint8_t
 Memory::peek8(uint32_t addr)
