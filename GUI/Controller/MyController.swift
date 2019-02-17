@@ -544,11 +544,13 @@ extension MyController {
         if (animationCounter % 1) == 0 {
             
             // Refresh debug panel if open
+            /*
             if amiga.isRunning() {
                 if myAppDelegate.inspector?.window?.isVisible ?? false {
                     myAppDelegate.inspector?.refresh(everything: false)
                 }
             }
+            */
         }
         
         // Do 6 times a second ...

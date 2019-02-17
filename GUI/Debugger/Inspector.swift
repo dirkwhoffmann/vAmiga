@@ -220,6 +220,9 @@ class Inspector : NSWindowController
     @IBOutlet weak var audioBufferUnderflows: NSTextField!
     @IBOutlet weak var audioBufferOverflows: NSTextField!
     
+    private var pendingRefreshWorkItem: DispatchWorkItem?
+    
+
     // Factory method
     static func make() -> Inspector? {
         
@@ -250,6 +253,22 @@ class Inspector : NSWindowController
         super.showWindow(self)
         amigaProxy?.enableDebugging()
         refresh(everything: true)
+        
+        // Start refresh loop
+        DispatchQueue.global().async(execute: workItem)
+    }
+    
+    let workItem = DispatchWorkItem {
+    
+        while true {
+            if amigaProxy?.isRunning() == true {
+                track("PERIODIC REFRESH")
+                DispatchQueue.main.async {
+                    myAppDelegate.inspector?.refresh(everything: false)
+                }
+            }
+            usleep(250000)
+        }
     }
     
     // Assigns a number formatter to a control
@@ -306,6 +325,7 @@ extension Inspector : NSWindowDelegate {
     func windowWillClose(_ notification: Notification) {
         
         track("Closing inspector")
+        workItem.cancel()
         amigaProxy?.disableDebugging()
     }
 }
