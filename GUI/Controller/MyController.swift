@@ -357,10 +357,7 @@ class MyController : NSWindowController, MessageReceiver {
     @IBOutlet weak var warpIcon: NSButton!
     
     // Toolbar
-    @IBOutlet weak var controlPort1: NSPopUpButton!
-    @IBOutlet weak var controlPort2: NSPopUpButton!
-    @IBOutlet weak var pauseTbItem: NSToolbarItem!
-    @IBOutlet weak var snapshotSegCtrl: NSSegmentedControl!
+    @IBOutlet weak var toolbar: NSToolbar!
 }
 
 extension MyController {
@@ -429,8 +426,7 @@ extension MyController {
             return
         }
         
-        // Setup toolbar, window, and debugger
-        configureToolbar()
+        // Setup window
         configureWindow()
         
         // Get metal running
@@ -450,7 +446,7 @@ extension MyController {
         createTimer()
         
         // Update toolbar
-        validateToolbarItems()
+        toolbar.validateVisibleItems()
         
         // Update status bar
         refreshStatusBar()
@@ -471,23 +467,6 @@ extension MyController {
         
         // Enable fullscreen mode
         window?.collectionBehavior = .fullScreenPrimary
-    }
-    
-    func configureToolbar() {
-        
-        // Get and resize images
-        let cutout = NSMakeRect(2, 0, 28, 28)
-        
-        var none = NSImage(named: "oxygen_none")
-        none = none?.resizeImage(width: 32, height: 32, cutout: cutout)
-        var keyset = NSImage(named: "oxygen_keys")
-        keyset = keyset?.resizeImage(width: 32, height: 32, cutout: cutout)
-        var mouse = NSImage(named: "devMouseTemplate")
-        mouse = mouse?.resizeImage(width: 32, height: 32, cutout: cutout)
-        var gamepad = NSImage(named: "crystal_gamepad")
-        gamepad = gamepad?.resizeImage(width: 32, height: 32, cutout: cutout)
-        
-        validateJoystickToolbarItems()
     }
     
     func addListener() {
@@ -613,25 +592,27 @@ extension MyController {
             
             // track("Run")
             needsSaving = true
-            validateToolbarItems()
+            toolbar.validateVisibleItems()
             myAppDelegate.inspector?.refresh(everything: true)
     
         case MSG_PAUSE:
             
             // track("Pause")
-            validateToolbarItems()
+            toolbar.validateVisibleItems()
             myAppDelegate.inspector?.refresh(everything: true)
     
         case MSG_POWER_ON:
             
             // track("Power on")
             metal.blendIn()
+            toolbar.validateVisibleItems()
             myAppDelegate.inspector?.refresh(everything: true)
             
         case MSG_POWER_OFF:
             
             // track("Power off")
             metal.blendOut()
+            toolbar.validateVisibleItems()
             myAppDelegate.inspector?.refresh(everything: true)
             
         case MSG_RESET:

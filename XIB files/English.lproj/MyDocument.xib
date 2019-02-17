@@ -22,6 +22,7 @@
                 <outlet property="pauseTbItem" destination="dOU-Sh-aV4" id="Nx0-Io-Xiy"/>
                 <outlet property="powerLED" destination="1208" id="hey-Hi-zTq"/>
                 <outlet property="snapshotSegCtrl" destination="AHD-MB-nXC" id="Cva-Bh-qUl"/>
+                <outlet property="toolbar" destination="1845" id="JVx-NQ-tw7"/>
                 <outlet property="warpIcon" destination="1052" id="uvG-el-lRi"/>
                 <outlet property="window" destination="5" id="2164"/>
             </connections>
@@ -135,7 +136,7 @@
                     </button>
                 </subviews>
             </view>
-            <toolbar key="toolbar" implicitIdentifier="562FDE63-25B0-4E4E-80C7-EF6E742B5F6F" displayMode="iconAndLabel" sizeMode="regular" id="1845">
+            <toolbar key="toolbar" implicitIdentifier="562FDE63-25B0-4E4E-80C7-EF6E742B5F6F" displayMode="iconAndLabel" sizeMode="regular" id="1845" customClass="MyToolbar" customModule="vAmiga" customModuleProvider="target">
                 <allowedToolbarItems>
                     <toolbarItem implicitItemIdentifier="76F6E6FD-7489-4F4E-9848-44C11AB82BB0" label="Inspect" paletteLabel="Inspect" tag="30" image="debugTemplate" id="JO0-l6-OG3" userLabel="Inspect">
                         <nil key="toolTip"/>
@@ -162,7 +163,7 @@
                         <popUpButton key="view" tag="10" id="L2b-nG-yBo" userLabel="Port 1">
                             <rect key="frame" x="0.0" y="14" width="48" height="23"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES"/>
-                            <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyUpOrDown" inset="2" autoenablesItems="NO" selectedItem="VD3-Wr-Ufe" id="Oxd-8A-P5o" userLabel="PopupButtonCell">
+                            <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" image="devNoneTemplate" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyUpOrDown" inset="2" autoenablesItems="NO" selectedItem="VD3-Wr-Ufe" id="Oxd-8A-P5o" userLabel="PopupButtonCell">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="menu"/>
                                 <menu key="menu" autoenablesItems="NO" id="zHf-yH-YTM">
@@ -192,7 +193,7 @@
                         <popUpButton key="view" tag="11" id="4MP-rV-xX2" userLabel="Port 2">
                             <rect key="frame" x="0.0" y="14" width="48" height="23"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES"/>
-                            <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" selectedItem="xyt-eC-0im" id="skK-6M-sib" userLabel="PopupButtonCell">
+                            <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" image="devNoneTemplate" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" selectedItem="xyt-eC-0im" id="skK-6M-sib" userLabel="PopupButtonCell">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="menu"/>
                                 <menu key="menu" autoenablesItems="NO" id="L3K-on-eyR">
@@ -321,6 +322,13 @@
                     <toolbarItem reference="dOU-Sh-aV4"/>
                     <toolbarItem reference="wVB-PW-axj"/>
                 </defaultToolbarItems>
+                <connections>
+                    <outlet property="controlPort1" destination="L2b-nG-yBo" id="LaW-Wo-oKb"/>
+                    <outlet property="controlPort2" destination="4MP-rV-xX2" id="SJk-D4-9MF"/>
+                    <outlet property="controller" destination="-2" id="V0k-GF-uXZ"/>
+                    <outlet property="pauseTbItem" destination="dOU-Sh-aV4" id="Dh5-qN-YsP"/>
+                    <outlet property="snapshotSegCtrl" destination="AHD-MB-nXC" id="Gpg-sH-vaL"/>
+                </connections>
             </toolbar>
             <connections>
                 <outlet property="delegate" destination="-2" id="2165"/>

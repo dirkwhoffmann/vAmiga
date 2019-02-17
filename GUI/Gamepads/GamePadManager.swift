@@ -235,7 +235,7 @@ class GamePadManager: NSObject {
         IOHIDDeviceRegisterInputValueCallback(device, gamePads[slotNr]!.actionCallback, hidContext)
 
         // Inform controller
-        controller.validateJoystickToolbarItems()
+        controller.toolbar.validateVisibleItems()
         
         listDevices()
     }
@@ -274,7 +274,7 @@ class GamePadManager: NSObject {
         */
         
         // Inform controller
-        controller.validateJoystickToolbarItems()
+        controller.toolbar.validateVisibleItems()
         
         listDevices()
     }

@@ -24,7 +24,7 @@ const uint32_t KICK_ROM_MASK = 0x003FFFF;
 
 
 #define ASSERT_CHIP_ADDR(x) assert(chipRam != NULL);
-#define ASSERT_FAST_ADDR(x) assert(fastRam != NULL); assert(((x) - FAST_RAM_START) < slowRamSize);
+#define ASSERT_FAST_ADDR(x) assert(fastRam != NULL); assert(((x) - FAST_RAM_START) < fastRamSize);
 #define ASSERT_SLOW_ADDR(x) assert(slowRam != NULL); assert(((x) & SLOW_RAM_MASK) < slowRamSize);
 #define ASSERT_BOOT_ADDR(x) assert(bootRom != NULL); assert(((x) & BOOT_ROM_MASK) < bootRomSize);
 #define ASSERT_KICK_ADDR(x) assert(kickRom != NULL); assert(((x) & KICK_ROM_MASK) < kickRomSize);
@@ -158,7 +158,7 @@ Memory::alloc(size_t size, uint8_t *&ptrref, size_t &sizeref)
             warn("Cannot allocate %X bytes of memory\n", size);
             return false;
         }
-        memset(ptrref, 0, allocSize); 
+        memset(ptrref, 42, allocSize); // TODO: 42 is just a test value
         sizeref = size;
     }
     

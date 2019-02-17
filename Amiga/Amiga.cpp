@@ -387,13 +387,18 @@ Amiga::_ping()
 void
 Amiga::_dump()
 {
+    plainmsg(" poweredOn: %s\n", isPoweredOn() ? "yes" : "no");
+    plainmsg("poweredOff: %s\n", isPoweredOff() ? "yes" : "no");
+    plainmsg("    paused: %s\n", isPaused() ? "yes" : "no");
+    plainmsg("   running: %s\n", isRunning() ? "yes" : "no");
+
     plainmsg("Current configuration:\n\n");
     plainmsg("   AmigaModel: %s\n", modelName(config.model));
     plainmsg("realTimeClock: %s\n", config.realTimeClock ? "yes" : "no");
-    plainmsg("          df0: %s\n", config.df0.connected ? "yes" : "no");
-    plainmsg("               %s\n", driveTypeName(config.df0.type));
-    plainmsg("          df1: %s\n", config.df1.connected ? "yes" : "no");
-    plainmsg("               %s\n", driveTypeName(config.df1.type));
+    plainmsg("          df0: %s %s\n",
+             config.df0.connected ? "yes" : "no", driveTypeName(config.df0.type));
+    plainmsg("          df1: %s %s\n",
+             config.df1.connected ? "yes" : "no", driveTypeName(config.df1.type));
 
     plainmsg("\n");
     plainmsg("         warp: %d (%d) (%d)", warp);

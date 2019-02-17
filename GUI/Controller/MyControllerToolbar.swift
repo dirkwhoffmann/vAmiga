@@ -9,53 +9,17 @@
 
 import Foundation
 
+struct InputDevice {
+    static let none = -1
+    static let keyset1 = 0
+    static let keyset2 = 1
+    static let mouse = 2
+    static let joystick1 = 3
+    static let joystick2 = 4
+}
+
 extension MyController {
- 
-    struct InputDevice {
-        static let none = -1
-        static let keyset1 = 0
-        static let keyset2 = 1
-        static let mouse = 2
-        static let joystick1 = 3
-        static let joystick2 = 4
-    }
-        
-    func validateToolbarItems() {
-        
-        let button = pauseTbItem.view as! NSButton
-        if amiga.isRunning() {
-            button.image = NSImage.init(named: "pauseTemplate")
-            pauseTbItem.label = "Pause"
-        } else {
-            button.image = NSImage.init(named: "continueTemplate")
-            pauseTbItem.label = "Run"
-        }
-        
-        validateJoystickToolbarItems()
-    }
-    
-    func validateJoystickToolbarItem(_ popup: NSPopUpButton, selectedSlot: Int, port: AmigaControlPortProxy!) {
-        
-        let menu =  popup.menu
-        let item3 = menu?.item(withTag: InputDevice.joystick1)
-        let item4 = menu?.item(withTag: InputDevice.joystick2)
-        
-        // USB joysticks
-        item3?.title = gamePadManager.gamePads[3]?.name ?? "USB Device 1"
-        item4?.title = gamePadManager.gamePads[4]?.name ?? "USB Device 2"
-        item3?.isEnabled = !gamePadManager.slotIsEmpty(InputDevice.joystick1)
-        item4?.isEnabled = !gamePadManager.slotIsEmpty(InputDevice.joystick2)
-        
-        // Mark game pad connected to port
-        popup.selectItem(withTag: selectedSlot)
-    }
-    
-    func validateJoystickToolbarItems() {
-    
-        validateJoystickToolbarItem(controlPort1, selectedSlot: inputDevice1, port: amiga.controlPort1)
-        validateJoystickToolbarItem(controlPort2, selectedSlot: inputDevice2, port: amiga.controlPort2)
-    }
-    
+
     @IBAction func port1Action(_ sender: NSPopUpButton) {
         
         setPort1(sender.selectedTag())
@@ -70,12 +34,13 @@ extension MyController {
         inputDevice2 = (inputDevice1 == inputDevice2) ? InputDevice.none : inputDevice2
         
         // Connect or disconnect mouse
-        amiga.controlPort1.connectMouse(inputDevice1 == InputDevice.mouse);
-        amiga.controlPort2.connectMouse(inputDevice2 == InputDevice.mouse);
+        amiga.controlPort1.connectMouse(inputDevice1 == InputDevice.mouse)
+        amiga.controlPort2.connectMouse(inputDevice2 == InputDevice.mouse)
         
         UserDefaults.standard.set(inputDevice1, forKey: Keys.inputDevice1)
         UserDefaults.standard.set(inputDevice2, forKey: Keys.inputDevice2)
-        validateJoystickToolbarItems();
+        
+        toolbar.validateVisibleItems()
     }
     
     @IBAction func port2Action(_ sender: NSPopUpButton) {
@@ -92,12 +57,13 @@ extension MyController {
         inputDevice1 = (inputDevice1 == inputDevice2) ? InputDevice.none : inputDevice1
         
         // Connect or disconnect mouse
-        amiga.controlPort1.connectMouse(inputDevice1 == InputDevice.mouse);
-        amiga.controlPort2.connectMouse(inputDevice2 == InputDevice.mouse);
+        amiga.controlPort1.connectMouse(inputDevice1 == InputDevice.mouse)
+        amiga.controlPort2.connectMouse(inputDevice2 == InputDevice.mouse)
         
         UserDefaults.standard.set(inputDevice1, forKey: Keys.inputDevice1)
         UserDefaults.standard.set(inputDevice2, forKey: Keys.inputDevice2)
-        validateJoystickToolbarItems()
+        
+        toolbar.validateVisibleItems()
     }
     
     @IBAction func preferencesAction(_ sender: Any!) {
