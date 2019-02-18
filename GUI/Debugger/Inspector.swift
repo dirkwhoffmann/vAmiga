@@ -56,6 +56,10 @@ class Inspector : NSWindowController
     @IBOutlet weak var cpuStopAndGoButton: NSButton!
     @IBOutlet weak var cpuStepIntoButton: NSButton!
     @IBOutlet weak var cpuStepOverButton: NSButton!
+    @IBOutlet weak var cpuTraceStopAndGoButton: NSButton!
+    @IBOutlet weak var cpuTraceStepIntoButton: NSButton!
+    @IBOutlet weak var cpuTraceStepOverButton: NSButton!
+    @IBOutlet weak var cpuTraceClearButton: NSButton!
 
     // Debug panel (Memory)
     @IBOutlet weak var memSearchField: NSSearchField!

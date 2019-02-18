@@ -73,6 +73,20 @@ typedef struct {
     uint16_t flags;
 } CPUInfo;
 
+/* Recorded instruction
+ * This data structure is used inside the trace ringbuffer. In trace mode,
+ * the program counter and the status register are recorded. The instruction
+ * string is computed on-the-fly due to speed reasons.
+ */
+typedef struct {
+    Cycle cycle;
+    uint16_t vhcount; 
+    uint32_t pc;
+    uint32_t sp;
+    char instr[63];
+    char flags[17];
+} RecordedInstruction;
+
 
 //
 // CIA

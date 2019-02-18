@@ -127,6 +127,12 @@ CPU::getPC()
 }
 
 uint32_t
+CPU::getSP()
+{
+    return m68k_get_reg(NULL, M68K_REG_SP);
+}
+
+uint32_t
 CPU::getIR()
 {
     return m68k_get_reg(NULL, M68K_REG_IR);
@@ -168,6 +174,62 @@ CPU::lengthOfInstruction(uint32_t addr)
 {
     char tmp[128];
     return m68k_disassemble(tmp, addr, M68K_CPU_TYPE_68000);
+}
+
+unsigned
+CPU::recordedInstructions()
+{
+    return writePtr >= readPtr ? writePtr - readPtr : traceBufferSize + writePtr - readPtr;
+}
+
+void
+CPU::recordInstruction()
+{
+    RecordedInstruction instr;
+    
+    instr.cycle = amiga->masterClock;
+    instr.pc = getPC();
+    instr.sp = getSP();
+    instr.instr[0] = 0;
+    
+    assert(writePtr < traceBufferSize);
+    traceBuffer[writePtr] = instr;
+    writePtr = (writePtr + 1) % traceBufferSize;
+    if (writePtr == readPtr) {
+        readPtr = (readPtr + 1) % traceBufferSize;
+    }
+}
+
+RecordedInstruction
+CPU::readRecordedInstruction(long offset)
+{
+    assert(offset < recordedInstructions());
+    
+    size_t i = (readPtr + offset) % traceBufferSize;
+    
+    if (traceBuffer[i].instr[0] == 0) {
+        uint16_t sp = traceBuffer[i].sp;
+        m68k_disassemble(traceBuffer[i].instr, traceBuffer[i].pc, M68K_CPU_TYPE_68000);
+        traceBuffer[i].flags[0]  = (sp & 0b1000000000000000) ? '1' : '0';
+        traceBuffer[i].flags[1]  = '-';
+        traceBuffer[i].flags[2]  = (sp & 0b0010000000000000) ? '1' : '0';
+        traceBuffer[i].flags[3]  = '-';
+        traceBuffer[i].flags[4]  = '-';
+        traceBuffer[i].flags[5]  = (sp & 0b0000010000000000) ? '1' : '0';
+        traceBuffer[i].flags[6]  = (sp & 0b0000001000000000) ? '1' : '0';
+        traceBuffer[i].flags[7]  = (sp & 0b0000000100000000) ? '1' : '0';
+        traceBuffer[i].flags[8]  = '-';
+        traceBuffer[i].flags[9]  = '-';
+        traceBuffer[i].flags[10] = '-';
+        traceBuffer[i].flags[11] = (sp & 0b0000000000010000) ? '1' : '0';
+        traceBuffer[i].flags[12] = (sp & 0b0000000000001000) ? '1' : '0';
+        traceBuffer[i].flags[13] = (sp & 0b0000000000000100) ? '1' : '0';
+        traceBuffer[i].flags[14] = (sp & 0b0000000000000010) ? '1' : '0';
+        traceBuffer[i].flags[15] = (sp & 0b0000000000000001) ? '1' : '0';
+        traceBuffer[i].flags[16] = 0;
+    }
+    
+    return traceBuffer[i];
 }
 
 uint64_t

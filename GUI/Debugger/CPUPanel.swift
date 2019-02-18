@@ -11,6 +11,8 @@ extension Inspector {
     
     func refreshCPU(everything: Bool) {
         
+        track()
+        
         guard let amiga = amigaProxy else { return }
         let info = amiga.cpu.getInfo()
         
@@ -33,10 +35,16 @@ extension Inspector {
                 cpuStopAndGoButton.image = NSImage.init(named: "pauseTemplate")
                 cpuStepIntoButton.isEnabled = false
                 cpuStepOverButton.isEnabled = false
+                cpuTraceStopAndGoButton.image = NSImage.init(named: "pauseTemplate")
+                cpuTraceStepIntoButton.isEnabled = false
+                cpuTraceStepOverButton.isEnabled = false
             } else {
                 cpuStopAndGoButton.image = NSImage.init(named: "continueTemplate")
                 cpuStepIntoButton.isEnabled = true
                 cpuStepOverButton.isEnabled = true
+                cpuTraceStopAndGoButton.image = NSImage.init(named: "continueTemplate")
+                cpuTraceStepIntoButton.isEnabled = true
+                cpuTraceStepOverButton.isEnabled = true
             }
         }
 
@@ -76,6 +84,7 @@ extension Inspector {
         cpuC.state  = (flags & 0b0000000000000001 != 0) ? .on : .off
 
         instrTableView.refresh(everything: everything)
+        traceTableView.refresh()
         breakTableView.refresh(everything: everything)
     }
     
@@ -92,6 +101,12 @@ extension Inspector {
     @IBAction func cpuStepOverAction(_ sender: NSButton!) {
         
          myController?.stepOverAction(sender)
+    }
+
+    @IBAction func cpuClearTraceBufferAction(_ sender: NSButton!) {
+        
+        amigaProxy?.cpu.clearTraceBuffer()
+        traceTableView.refresh()
     }
     
     @IBAction func cpuGotoAction(_ sender: NSSearchField!) {

@@ -339,7 +339,10 @@ Amiga::_powerOn()
     // FC0434
     // FC045E
     // FC04A2
-    cpu.bpManager.setBreakpointAt(0xFC04BE); // "Historic moment"
+    // cpu.bpManager.setBreakpointAt(0xFC04BE); // "Historic moment"
+    // cpu.bpManager.setBreakpointAt(0xFC051E);
+    cpu.bpManager.setBreakpointAt(0xFC0B1C);
+    //
     
     
     
@@ -810,6 +813,9 @@ Amiga::runLoop()
         
         if (debugMode) {
 
+            // Record executed instruction in the trace buffer
+            cpu.recordInstruction();
+            
             // Check if a breakpoint has been reached
             if (cpu.bpManager.shouldStop()) {
                 stop = true;

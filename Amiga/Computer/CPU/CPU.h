@@ -20,8 +20,22 @@ class CPU : public HardwareComponent {
     
 public:
     
-    // A breakpoint manager used for debugging
+    //
+    // Debugging tools
+    //
+    
+    // A breakpoint manager for handling forced interruptions
     BreakpointManager bpManager;
+    
+    // A ring buffer recording all recently executed instructions
+    static const size_t traceBufferSize = 256;
+    RecordedInstruction traceBuffer[traceBufferSize];
+    
+    // The trace buffer read pointer
+    unsigned readPtr;
+    
+    // The trace buffer write pointer
+    unsigned writePtr;
     
     
     // DEPRECATED
@@ -56,6 +70,9 @@ public:
     // Returns the current value of the program counter.
     uint32_t getPC();
 
+    // Returns the current value of the status register.
+    uint32_t getSP();
+
     // Returns the current value of the instruction register.
     uint32_t getIR();
 
@@ -67,7 +84,7 @@ public:
     
     
     //
-    // Instructions
+    // Querying instructions
     //
     
     /* Returns the length of the instruction at the provided address in bytes.
@@ -79,10 +96,22 @@ public:
     // Returns the length of the currently executed instruction.
     uint32_t lengthOInstruction() { return lengthOfInstruction(getPC()); }
     
+    //
+    // Tracing the program execution
+    //
     
-    //
-    // FAKE METHODS FOR THE VISUAL PROTOTYPE (TEMPORARY)
-    //
+    // Clears the trace buffer.
+    void clearTraceBuffer() { readPtr = writePtr = 0; }
+    
+    // Returns the number of recorded instructions.
+    unsigned recordedInstructions();
+    
+    // Records an instruction.
+    void recordInstruction();
+    
+    // Reads a recorded instruction from the trace buffer.
+    RecordedInstruction readRecordedInstruction(long offset);
+    
     
 public:
     

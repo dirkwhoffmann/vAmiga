@@ -196,6 +196,11 @@ struct AmigaFileWrapper;
 - (void) enableBreakpointAt:(uint32_t)addr;
 - (void) disableBreakpointAt:(uint32_t)addr;
 
+- (void) clearTraceBuffer;
+- (NSInteger) recordedInstructions;
+- (RecordedInstruction) readRecordedInstruction:(NSInteger)nr;
+
+
 - (NSInteger) numberOfBreakpoints;
 - (void) deleteBreakpoint:(NSInteger)nr; 
 - (BOOL) isDisabled:(NSInteger)nr;

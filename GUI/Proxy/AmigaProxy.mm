@@ -97,12 +97,6 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->cpu->bpManager.disableBreakpointAt(addr);
 }
-/*
-- (void) enableOrDisableBreakpointAt:(uint32_t)addr
-{
-    return wrapper->cpu->bpManager.enableOrDisableBreakpointAt(addr); 
-}
-*/
 - (NSInteger) numberOfBreakpoints
 {
     return wrapper->cpu->bpManager.numberOfBreakpoints();
@@ -140,7 +134,18 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->cpu->bpManager.setCondition(nr, [cond UTF8String]);
 }
-
+- (void) clearTraceBuffer
+{
+    wrapper->cpu->clearTraceBuffer();
+}
+- (NSInteger) recordedInstructions
+{
+    return wrapper->cpu->recordedInstructions();
+}
+- (RecordedInstruction) readRecordedInstruction:(NSInteger)nr
+{
+    return wrapper->cpu->readRecordedInstruction(nr);
+}
 @end
 
 

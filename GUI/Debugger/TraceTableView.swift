@@ -15,19 +15,45 @@ class TraceTableView : NSTableView {
     
     var memory = amigaProxy?.mem
     
+    // Data caches
+    var pc    : [Int:String] = [:]
+    var flags : [Int:String] = [:]
+    var instr : [Int:String] = [:]
+    
     override func awakeFromNib() {
         
-        delegate = self
         dataSource = self
         target = self
-        
-        action = #selector(clickAction(_:))
     }
     
     func refresh() {
         
         track()
+
+        guard let cpu = amigaProxy?.cpu else { return }
+
+        pc = [:]
+        flags = [:]
+        instr = [:]
+        
+        let entries = cpu.recordedInstructions() - 1
+        if entries > 0 {
+            for i in 0...(entries - 1) {
+                
+                var rec = cpu.readRecordedInstruction(i)
+                
+                let pcStr = String(rec.pc, radix: 16, uppercase: true)
+                let flagsStr = String.init(utf8String:&rec.flags.0)!
+                let commandStr = String.init(utf8String:&rec.instr.0)!
+                pc[i] = pcStr
+                flags[i] = flagsStr
+                instr[i] = commandStr
+            }
+            scrollRowToVisible(entries - 1)
+        }
+    
         reloadData()
+        
     }
     
     @IBAction func clickAction(_ sender: NSTableView!) {
@@ -39,66 +65,21 @@ class TraceTableView : NSTableView {
 
 extension TraceTableView : NSTableViewDataSource {
     
-    func numberOfRows(in tableView: NSTableView) -> Int { return 256; }
+    func numberOfRows(in tableView: NSTableView) -> Int { return 254; }
     
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
         
-        return "???"
-        
-        /*
-         switch tableColumn?.identifier.rawValue {
-         
-         case "bank":
-         return row
-         
-         case "source":
-         
-         let src = memory?.memSrc(row << 16).rawValue
-         
-         switch (src) {
-         
-         case MEM_UNMAPPED.rawValue:
-         return "Unmapped"
-         case MEM_CHIP.rawValue:
-         return "Chip Ram"
-         case MEM_FAST.rawValue:
-         return "Fast Ram"
-         case MEM_CIA.rawValue:
-         return "CIA"
-         case MEM_SLOW.rawValue:
-         return "Slow Ram"
-         case MEM_RTC.rawValue:
-         return "Clock"
-         case MEM_OCS.rawValue:
-         return "OCS"
-         case MEM_KICK.rawValue:
-         return "Kickstart"
-         default:
-         return "???"
-         }
-         default:
-         return "???"
-         }
-         */
-    }
-}
-
-extension TraceTableView : NSTableViewDelegate {
-    
-    func tableView(_ tableView: NSTableView, willDisplayCell cell: Any, for tableColumn: NSTableColumn?, row: Int) {
-        
-        /*
-         if let cell = cell as? NSTextFieldCell {
-         
-         let src = memory?.memSrc(row << 16).rawValue
-         switch (src) {
-         case MEM_UNMAPPED.rawValue:
-         cell.textColor = .gray
-         default:
-         cell.textColor = .textColor
-         }
-         }
-         */
+        switch tableColumn?.identifier.rawValue {
+            
+        case "addr":
+            return pc[row]
+        case "flags":
+            return flags[row] ?? ""
+        case "instr":
+            return instr[row] ?? ""
+        default:
+            return "???"
+        }
     }
 }
 
