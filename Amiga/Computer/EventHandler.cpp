@@ -17,9 +17,12 @@ EventHandler::EventHandler()
 void
 EventHandler::_powerOn()
 {
-    memset(eventCycle, 0xFF, sizeof(eventCycle));
-    memset(payload, 0x00, sizeof(payload));
+    for (unsigned i = 0; i < NUMBER_OF_EVENTS; i++) {
+        eventCycle[i] = INT64_MAX;
+        payload[i] = 0;
+    }
 }
+
 void
 EventHandler::_powerOff()
 {
@@ -42,9 +45,8 @@ void
 EventHandler::_dump()
 {
     for (unsigned i = 0; i < NUMBER_OF_EVENTS; i++) {
-        if (true) { // isPending((Event)i)) {
-            plainmsg("Event %d: Triggers at cycle %lld [%lld]\n", i, eventCycle[i], payload[i]);
-        }
+        plainmsg("Event %d: %s (Cycle: %lld Payload: %lld)\n",
+                 isPending((Event)i) ? "pending" : "not pending", eventCycle[i], payload[i]);
     }
 }
 
@@ -64,13 +66,13 @@ EventHandler::scheduleEvent(Event event, Cycle cycle, int64_t data)
     
     eventCycle[event] = cycle;
     payload[event] = data;
-    // if (cycle < nextTrigger) nextTrigger = cycle;
+    if (cycle < nextTrigger) nextTrigger = cycle;
 }
 
 void
 EventHandler::cancelEvent(Event event)
 {
-    eventCycle[event] = UINT64_MAX;
+    eventCycle[event] = -1;
 }
                      
 bool
@@ -78,65 +80,48 @@ EventHandler::isPending(Event event)
 {
     assert(event < NUMBER_OF_EVENTS);
     
-    return eventCycle[event] < UINT64_MAX;
+    return eventCycle[event] != INT64_MAX;
 }
 
 void
 EventHandler::_executeUntil(Cycle cycle) {
     
-    nextTrigger = UINT64_MAX;
-        
     // Iterate through all events
     for (unsigned i = 0; i < NUMBER_OF_EVENTS; i++) {
         
-        Cycle eventcycle = eventCycle[i];
-        
-        if (cycle < UINT64_MAX) {
-            
-            // Event is pending. Check whether it is due.
-            if (cycle >= eventcycle) {
-                
-                // Process event
-                switch (i) {
-                    case EVENT_CIAA:
-                        
-                        if (payload[i] == 0) { // Execute
-                            amiga->ciaA.executeOneCycle();
-                        } else { // Wakeup
-                            amiga->ciaA.wakeUp();
-                        }
-                        if (!amiga->ciaA.isUpToDate()) {
-                            amiga->ciaA.dump();
-                        }
-                        assert(amiga->ciaA.isUpToDate());
-
-                        break;
-                        
-                    case EVENT_CIAB:
-                        
-                        if (payload[i] == 0) { // Execute
-                            amiga->ciaB.executeOneCycle();
-                        } else { // Wakeup
-                            amiga->ciaB.wakeUp();
-                        }
-                        if (!amiga->ciaB.isUpToDate()) {
-                            amiga->ciaB.dump();
-                        }
-                        assert(amiga->ciaB.isUpToDate());
-                        
-                        break;
-                        
-                    default:
-                        assert(false);
-                }
-                
-            } else {
-                
-                // Determine the next trigger cycle
-                if (eventCycle[i] < nextTrigger) {
-                    nextTrigger = eventCycle[i];
-                }
+        // Check if event is due
+        if (cycle >= eventCycle[i]) {
+     
+            // Process it
+            switch (i) {
+                case EVENT_CIAA:
+                    
+                    // Meaning of payload: 0 = Execute, 1 = Wakeup
+                    if (payload[i] == 0) {
+                        amiga->ciaA.executeOneCycle();
+                    } else {
+                        amiga->ciaA.wakeUp();
+                    }
+                    break;
+                    
+                case EVENT_CIAB:
+                    
+                    // Meaning of payload: 0 = Execute, 1 = Wakeup
+                    if (payload[i] == 0) {
+                        amiga->ciaB.executeOneCycle();
+                    } else {
+                        amiga->ciaB.wakeUp();
+                    }
+                    break;
+                    
+                default:
+                    assert(false);
             }
         }
     }
+    
+    // Determine the next trigger cycle
+    nextTrigger = eventCycle[0];
+    for (unsigned i = 1; i < NUMBER_OF_EVENTS; i++)
+        if (eventCycle[i] < nextTrigger) nextTrigger = eventCycle[i];
 }

@@ -323,8 +323,9 @@ Amiga::_powerOn()
     debugMode = true;
 
     // cpu.bpManager.setBreakpointAt(0xFC00DE);
-    cpu.bpManager.setBreakpointAt(0xFC015E);
-    
+    // cpu.bpManager.setBreakpointAt(0xFC015E);
+    cpu.bpManager.setBreakpointAt(0xFC0208);
+
     putMessage(MSG_POWER_ON);
 }
 
@@ -779,11 +780,12 @@ Amiga::runLoop()
     do {
         
         // Emulate the CPU
-        uint64_t cpuCycles = cpu.executeNextInstruction(); 
+        CPUCycle cpuCycles = cpu.executeNextInstruction();
         
-        // Advance the master clock
+        // Advance the masterclock
         masterClock += CPU_CYCLES(cpuCycles);
-        
+        // debug("CPU has executed %lld cycles newClock = %lld\n", CPU_CYCLES(cpuCycles), masterClock);
+
         // Emulate the DMA controller
         dma.executeUntil(masterClock);
         

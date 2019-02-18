@@ -1,13 +1,11 @@
-//
-// This file is part of VirtualC64 - A cycle accurate Commodore 64 emulator
+// -----------------------------------------------------------------------------
+// This file is part of vAmiga
 //
 // Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
 // Licensed under the GNU General Public License v3
 //
 // See https://www.gnu.org for license information
-//
-
-// import Foundation
+// -----------------------------------------------------------------------------
 
 class MyToolbar : NSToolbar {
     
@@ -20,8 +18,6 @@ class MyToolbar : NSToolbar {
     @IBOutlet weak var snapshotSegCtrl: NSSegmentedControl!
     
     override func validateVisibleItems() {
-        
-        track()
         
         guard let amiga = amigaProxy else { return }
         let button = pauseTbItem.view as! NSButton

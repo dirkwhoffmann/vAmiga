@@ -262,7 +262,7 @@ class Inspector : NSWindowController
     
         while true {
             if amigaProxy?.isRunning() == true {
-                track("PERIODIC REFRESH")
+                // track("PERIODIC REFRESH")
                 DispatchQueue.main.async {
                     myAppDelegate.inspector?.refresh(everything: false)
                 }

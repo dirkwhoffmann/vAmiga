@@ -71,10 +71,13 @@ CIA::_powerOn()
 	latchA = 0xFFFF;
 	latchB = 0xFFFF;
     
-    sleepCycle = INT64_MAX;
-    
+    PA = 0xFF;
+    PB = 0xFF;
     updatePA();
-    updatePB(); 
+    updatePB();
+    
+    // The OVL bit influences the memory layout. Hence, we need to update it.
+    amiga->mem.updateMemSrcTable(); 
 }
 
 void
@@ -747,6 +750,8 @@ void
 CIA::executeOneCycle()
 {
     clock += CIA_CYCLES(1);
+    
+    debug("Executing CIA: new clock = %lld\n", clock);
     
     uint64_t oldDelay = delay;
     uint64_t oldFeed  = feed;

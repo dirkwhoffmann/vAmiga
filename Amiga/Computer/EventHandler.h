@@ -25,15 +25,15 @@ class EventHandler : public HardwareComponent {
 public:
     /* Event slots
      * Each event consists of a trigger cycle and a payload in form of a
-     * 64 bit data value. The default trigger cycle is UINT64_MAX which means
+     * 64 bit data value. The default trigger cycle is INT64_MAX which means
      * that the event is not pending.
      */
     Cycle eventCycle[NUMBER_OF_EVENTS];
     int64_t payload[NUMBER_OF_EVENTS];
     
     // This variables indicates when the next event triggers.
-    // UINT64_MAX if no event is pending.
-    Cycle nextTrigger = UINT64_MAX;
+    // INT64_MAX if no event is pending.
+    Cycle nextTrigger = INT64_MAX;
 
     
     //
@@ -68,8 +68,8 @@ public:
     bool isPending(Event event);
     
     // Processes all events that are due at or prior to cycle.
-    void executeUntil(Cycle cycle) {
-        if (cycle >= nextTrigger) _executeUntil(cycle); else debug("Noting pending\n"); }
+    inline void executeUntil(Cycle cycle) {
+        if (cycle >= nextTrigger) _executeUntil(cycle); }
     
     // Work horse for executeUntil()
     void _executeUntil(Cycle cycle);

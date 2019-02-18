@@ -296,6 +296,7 @@ Memory::updateMemSrcTable()
     bool rtc = amiga ? amiga->config.realTimeClock : false;
     bool ovl = amiga ? (amiga->ciaA.getPA() & 1) : false;
     
+    debug("updateMemSrcTable: rtc = %d ovl = %d\n", rtc, ovl);
     
     // Start from scratch
     for (unsigned i = 0x00; i <= 0xFF; i++)
@@ -498,7 +499,7 @@ Memory::poke32(uint32_t addr, uint32_t value)
     // debug("PC: %X poke32(%X,%X)\n", amiga->cpu.getPC(), addr, value);
 
     poke16(addr,     HI_WORD(value));
-    poke16(addr + 2, HI_WORD(value));
+    poke16(addr + 2, LO_WORD(value));
 }
 
 //
