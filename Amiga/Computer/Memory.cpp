@@ -940,7 +940,7 @@ Memory::hex(uint32_t addr, size_t bytes)
     assert(bytes <= 32);
     
     char *ptr = str;
-    for (unsigned i = 0; i < bytes / 2; i += 2) {
+    for (unsigned i = 0; i < bytes; i += 2) {
         
         uint16_t value = peek16(addr + i);
         sprint16x(ptr, value);

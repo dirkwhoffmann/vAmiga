@@ -324,8 +324,27 @@ Amiga::_powerOn()
 
     // cpu.bpManager.setBreakpointAt(0xFC00DE);
     // cpu.bpManager.setBreakpointAt(0xFC015E);
-    cpu.bpManager.setBreakpointAt(0xFC0208);
+    // cpu.bpManager.setBreakpointAt(0xFC0208);
+    // cpu.bpManager.setBreakpointAt(0xFC0222);
+    // cpu.bpManager.setBreakpointAt(0xFC02A8);
+    // cpu.bpManager.setBreakpointAt(0xFC02B0);
+    // cpu.bpManager.setBreakpointAt(0xFC0380);
+    // cpu.bpManager.setBreakpointAt(0xFC039C);
+    // cpu.bpManager.setBreakpointAt(0xFC03C2);
+    // FC1A38
+    // FC1F60
+    // cpu.bpManager.setBreakpointAt(0xFC03C6);
+    // FC03E2
+    // FC041E
+    // FC0434
+    // FC045E
+    // FC04A2
+    cpu.bpManager.setBreakpointAt(0xFC04BE); // "Historic moment"
+    
+    
+    
 
+    
     putMessage(MSG_POWER_ON);
 }
 
