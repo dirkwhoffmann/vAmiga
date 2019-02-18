@@ -179,7 +179,14 @@ CPU::lengthOfInstruction(uint32_t addr)
 unsigned
 CPU::recordedInstructions()
 {
-    return writePtr >= readPtr ? writePtr - readPtr : traceBufferSize + writePtr - readPtr;
+    return (traceBufferCapacity + writePtr - readPtr) % traceBufferCapacity;
+}
+
+ void
+CPU::truncateTraceBuffer(unsigned count)
+{
+    if (count <= recordedInstructions())
+        readPtr = (traceBufferCapacity + writePtr - count) % traceBufferCapacity;
 }
 
 void
@@ -192,11 +199,11 @@ CPU::recordInstruction()
     instr.sp = getSP();
     instr.instr[0] = 0;
     
-    assert(writePtr < traceBufferSize);
+    assert(writePtr < traceBufferCapacity);
     traceBuffer[writePtr] = instr;
-    writePtr = (writePtr + 1) % traceBufferSize;
+    writePtr = (writePtr + 1) % traceBufferCapacity;
     if (writePtr == readPtr) {
-        readPtr = (readPtr + 1) % traceBufferSize;
+        readPtr = (readPtr + 1) % traceBufferCapacity;
     }
 }
 
@@ -205,7 +212,7 @@ CPU::readRecordedInstruction(long offset)
 {
     assert(offset < recordedInstructions());
     
-    size_t i = (readPtr + offset) % traceBufferSize;
+    size_t i = (readPtr + offset) % traceBufferCapacity;
     
     if (traceBuffer[i].instr[0] == 0) {
         uint16_t sp = traceBuffer[i].sp;

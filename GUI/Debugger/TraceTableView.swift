@@ -35,10 +35,20 @@ class TraceTableView : NSTableView {
         pc = [:]
         flags = [:]
         instr = [:]
+
+        amigaProxy?.suspend()
         
-        let entries = cpu.recordedInstructions() - 1
-        if entries > 0 {
-            for i in 0...(entries - 1) {
+        // let cap = cpu.traceBufferCapacity()
+        
+        /* The last element in the trace buffer is the instruction that will be
+         * be executed next. Because we don't want to show this element yet, we
+         * read one element less.
+         */
+        track("\(cpu.recordedInstructions())")
+        let count = cpu.recordedInstructions() - 1
+        
+        if count > 0 {
+            for i in 0...(count - 1) {
                 
                 var rec = cpu.readRecordedInstruction(i)
                 
@@ -49,9 +59,11 @@ class TraceTableView : NSTableView {
                 flags[i] = flagsStr
                 instr[i] = commandStr
             }
-            scrollRowToVisible(entries - 1)
+            scrollRowToVisible(count - 1)
         }
     
+        amigaProxy?.resume()
+        
         reloadData()
         
     }

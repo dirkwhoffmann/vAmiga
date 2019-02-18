@@ -12,10 +12,6 @@
 
 #include "BreakpointManager.h"
 
-//
-// THIS CLASS IS A STUB TO MAKE THE VISUAL PROTOTYPE WORK
-//
-
 class CPU : public HardwareComponent {
     
 public:
@@ -27,15 +23,17 @@ public:
     // A breakpoint manager for handling forced interruptions
     BreakpointManager bpManager;
     
-    // A ring buffer recording all recently executed instructions
-    static const size_t traceBufferSize = 256;
-    RecordedInstruction traceBuffer[traceBufferSize];
+    /* A ring buffer recording all recently executed instructions
+     * The buffer can store up to (traceBufferCapacity - 1) elements.
+     */
+    static const size_t traceBufferCapacity = 256;
+    RecordedInstruction traceBuffer[traceBufferCapacity];
     
     // The trace buffer read pointer
-    unsigned readPtr;
+    int readPtr;
     
     // The trace buffer write pointer
-    unsigned writePtr;
+    int writePtr;
     
     
     // DEPRECATED
@@ -102,6 +100,9 @@ public:
     
     // Clears the trace buffer.
     void clearTraceBuffer() { readPtr = writePtr = 0; }
+    
+    // Deletes some elements. Only the 'count' most recent entries are kept.
+    void truncateTraceBuffer(unsigned count);
     
     // Returns the number of recorded instructions.
     unsigned recordedInstructions();

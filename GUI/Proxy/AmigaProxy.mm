@@ -134,9 +134,9 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->cpu->bpManager.setCondition(nr, [cond UTF8String]);
 }
-- (void) clearTraceBuffer
+- (NSInteger) traceBufferCapacity
 {
-    wrapper->cpu->clearTraceBuffer();
+    return wrapper->cpu->traceBufferCapacity; 
 }
 - (NSInteger) recordedInstructions
 {
@@ -146,6 +146,15 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->cpu->readRecordedInstruction(nr);
 }
+- (void) clearTraceBuffer
+{
+    wrapper->cpu->clearTraceBuffer();
+}
+- (void) truncateTraceBuffer:(NSInteger)count
+{
+    wrapper->cpu->truncateTraceBuffer((unsigned)count);
+}
+
 @end
 
 

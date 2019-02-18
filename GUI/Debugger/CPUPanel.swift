@@ -105,7 +105,11 @@ extension Inspector {
 
     @IBAction func cpuClearTraceBufferAction(_ sender: NSButton!) {
         
-        amigaProxy?.cpu.clearTraceBuffer()
+        /* The trace buffer already contains the next instruction to execute.
+         * Hence, we don't the clear the buffer completely. We reduce it's
+         * size to 1 instead.
+         */
+        amigaProxy?.cpu.truncateTraceBuffer(1)
         traceTableView.refresh()
     }
     
