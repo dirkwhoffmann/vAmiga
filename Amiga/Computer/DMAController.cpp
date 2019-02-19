@@ -29,6 +29,10 @@ DMAController::DMAController()
         { &diwstop,  sizeof(diwstop),  0 },
         { &ddfstrt,  sizeof(ddfstrt),  0 },
         { &ddfstop,  sizeof(ddfstop),  0 },
+        { &copcon,   sizeof(copcon),   0 },
+        { &coplc,    sizeof(coplc),    DWORD_ARRAY },
+        { &copins,   sizeof(copins),   0 },
+        { &coppc,    sizeof(coppc),    0 },
         { &bplpt,    sizeof(bplpt),    DWORD_ARRAY },
         { &bpl1mod,  sizeof(bpl1mod),  0 },
         { &bpl2mod,  sizeof(bpl2mod),  0 },
@@ -150,7 +154,53 @@ DMAController::pokeDDFSTOP(uint16_t value)
     
     ddfstop = value;
 }
+        
+void
+DMAController::pokeCOPCON(uint16_t value)
+{
+    debug("pokeCOPCON(%X)\n", value);
+    copcon = value;
+}
+        
+void
+DMAController::pokeCOPxLCH(int x, uint16_t value)
+{
+    assert(x < 2);
 
+    debug("pokeCOP%dLCH(%X)\n", x, value);
+
+    coplc[x] = (value << 16) | (coplc[x] & 0xFFFE);
+}
+
+void
+DMAController::pokeCOPxLCL(int x, uint16_t value)
+{
+    assert(x < 2);
+    
+    debug("pokeCOP%dLCL(%X)\n", x, value);
+
+    coplc[x] = (coplc[x] & 0xFFFF0000) | (value & 0xFFFE);
+}
+        
+void
+DMAController::pokeCOPJMP(int x)
+{
+    assert(x < 2);
+    
+    debug("pokeCOPJMP%d\n", x);
+    
+    /* "When you write to a Copper strobe address, the Copper reloads its
+     *  program counter from the corresponding location register." [HRM]
+     */
+    coppc = coplc[1];
+}
+
+void
+DMAController::pokeCOPINS(uint16_t value)
+{
+    copins = value;
+}
+            
 void
 DMAController::pokeBPLxPTL(int x, uint16_t value)
 {

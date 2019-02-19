@@ -344,8 +344,9 @@ Amiga::_powerOn()
     // cpu.bpManager.setBreakpointAt(0xFC0B1C);
     // cpu.bpManager.setBreakpointAt(0xFC48DE);
     // cpu.bpManager.setBreakpointAt(0xFC4912);
-    cpu.bpManager.setBreakpointAt(0xFC47D8);
+    //cpu.bpManager.setBreakpointAt(0xFC47D8);
     // FC47D8
+    cpu.bpManager.setBreakpointAt(0xFCACBC);
 
     
     

@@ -42,6 +42,22 @@ public:
     uint16_t ddfstrt = 0;
     uint16_t ddfstop = 0;
 
+    //
+    // Copper registers
+    //
+    
+    // The Copper control register
+    uint16_t copcon = 0;
+    
+    // The Copper location registers
+    uint32_t coplc[2];
+    
+    // The Copper instruction register
+    uint16_t copins = 0;
+    
+    // The Copper program counter
+    uint32_t coppc = 0;
+    
     // The 6 bitplane address pointers
     uint32_t bplpt[6];
     
@@ -113,6 +129,11 @@ public:
     void pokeDIWSTOP(uint16_t value);
     void pokeDDFSTRT(uint16_t value);
     void pokeDDFSTOP(uint16_t value);
+    void pokeCOPCON(uint16_t value);
+    void pokeCOPxLCH(int x, uint16_t value);
+    void pokeCOPxLCL(int x, uint16_t value);
+    void pokeCOPJMP(int x);
+    void pokeCOPINS(uint16_t value); 
     void pokeBPLxPTL(int x, uint16_t value);
     void pokeBPLxPTH(int x, uint16_t value);
     void pokeBPL1MOD(uint16_t value);
