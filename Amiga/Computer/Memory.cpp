@@ -680,7 +680,7 @@ Memory::peekCustom16(uint32_t addr)
         case 0x006 >> 1: // VHPOSR
             break;
         case 0x008 >> 1: // DSKDATR
-            break;
+            return amiga->paula.peekDSKDAT();
         case 0x00A >> 1: // JOY0DAT
             break;
         case 0x00C >> 1: // JOY1DAT
@@ -696,7 +696,7 @@ Memory::peekCustom16(uint32_t addr)
         case 0x016 >> 1: // POTINP
             break;
         case 0x018 >> 1: // SERDATR
-            break;
+            return amiga->paula.peekSERDAT();
         case 0x01A >> 1: // DSKBYTR
             break;
         case 0x01C >> 1: // INTENAR
@@ -709,6 +709,7 @@ Memory::peekCustom16(uint32_t addr)
     }
     
     warn("peekCustom16(%X): MISSING IMPLEMENTATION\n", addr);
+    amiga->pause();
     return 42;
 }
 
@@ -758,6 +759,16 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
     assert(IS_EVEN(addr));
     
     switch ((addr >> 1) & 0xFF) {
+
+        case 0x024 >> 1: // DSKLEN
+            amiga->paula.pokeDSKLEN(value); return;
+        case 0x026 >> 1: // DSKLEN
+            amiga->paula.pokeDSKDAT(value); return;
+            
+        case 0x030 >> 1: // SERDAT
+            amiga->paula.pokeSERDAT(value); return;
+        case 0x032 >> 1: // SERPER
+            amiga->paula.pokeSERPER(value); return;
 
         case 0x08E >> 1: // DIWSTRT
             amiga->dma.pokeDIWSTRT(value); return;
@@ -836,6 +847,38 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x11C >> 1: // Unused
         case 0x11E >> 1: // Unused
             return;
+        case 0x120 >> 1: // SPR0PTH
+            amiga->dma.pokeSPRxPTH(0, value); return;
+        case 0x122 >> 1: // SPR0PTL
+            amiga->dma.pokeSPRxPTL(0, value); return;
+        case 0x124 >> 1: // SPR1PTH
+            amiga->dma.pokeSPRxPTH(1, value); return;
+        case 0x126 >> 1: // SPR1PTL
+            amiga->dma.pokeSPRxPTL(1, value); return;
+        case 0x128 >> 1: // SPR2PTH
+            amiga->dma.pokeSPRxPTH(2, value); return;
+        case 0x12A >> 1: // SPR2PTL
+            amiga->dma.pokeSPRxPTL(2, value); return;
+        case 0x12C >> 1: // SPR3PTH
+            amiga->dma.pokeSPRxPTH(3, value); return;
+        case 0x12E >> 1: // SPR3PTL
+            amiga->dma.pokeSPRxPTL(3, value); return;
+        case 0x130 >> 1: // SPR4PTH
+            amiga->dma.pokeSPRxPTH(4, value); return;
+        case 0x132 >> 1: // SPR4PTL
+            amiga->dma.pokeSPRxPTL(4, value); return;
+        case 0x134 >> 1: // SPR5PTH
+            amiga->dma.pokeSPRxPTH(5, value); return;
+        case 0x136 >> 1: // SPR5PTL
+            amiga->dma.pokeSPRxPTL(5, value); return;
+        case 0x138 >> 1: // SPR6PTH
+            amiga->dma.pokeSPRxPTH(6, value); return;
+        case 0x13A >> 1: // SPR6PTL
+            amiga->dma.pokeSPRxPTL(6, value); return;
+        case 0x13C >> 1: // SPR7PTH
+            amiga->dma.pokeSPRxPTH(7, value); return;
+        case 0x13E >> 1: // SPR7PTL
+            amiga->dma.pokeSPRxPTL(7, value); return;
             
         case 0x180 >> 1: // COLOR00
             amiga->denise.pokeCOLORxx(0, value); return;
@@ -903,10 +946,8 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
             amiga->denise.pokeCOLORxx(31, value); return;
     }
     
- 
-  
-
     warn("pokeCustom16(%X, %X): MISSING IMPLEMENTATION\n", addr, value);
+    amiga->pause();
 }
 
 void Memory::pokeCustom32(uint32_t addr, uint32_t value)

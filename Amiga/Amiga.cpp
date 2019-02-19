@@ -341,9 +341,12 @@ Amiga::_powerOn()
     // FC04A2
     // cpu.bpManager.setBreakpointAt(0xFC04BE); // "Historic moment"
     // cpu.bpManager.setBreakpointAt(0xFC051E);
-    cpu.bpManager.setBreakpointAt(0xFC0B1C);
-    //
-    
+    // cpu.bpManager.setBreakpointAt(0xFC0B1C);
+    // cpu.bpManager.setBreakpointAt(0xFC48DE);
+    // cpu.bpManager.setBreakpointAt(0xFC4912);
+    cpu.bpManager.setBreakpointAt(0xFC47D8);
+    // FC47D8
+
     
     
 

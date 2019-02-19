@@ -27,8 +27,6 @@ class TraceTableView : NSTableView {
     }
     
     func refresh() {
-        
-        track()
 
         guard let cpu = amigaProxy?.cpu else { return }
 
@@ -38,13 +36,10 @@ class TraceTableView : NSTableView {
 
         amigaProxy?.suspend()
         
-        // let cap = cpu.traceBufferCapacity()
-        
         /* The last element in the trace buffer is the instruction that will be
          * be executed next. Because we don't want to show this element yet, we
          * read one element less.
          */
-        track("\(cpu.recordedInstructions())")
         let count = cpu.recordedInstructions() - 1
         
         if count > 0 {

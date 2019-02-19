@@ -11,8 +11,6 @@ extension Inspector {
     
     func refreshCPU(everything: Bool) {
         
-        track()
-        
         guard let amiga = amigaProxy else { return }
         let info = amiga.cpu.getInfo()
         

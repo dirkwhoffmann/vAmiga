@@ -32,6 +32,7 @@ DMAController::DMAController()
         { &bplpt,    sizeof(bplpt),    DWORD_ARRAY },
         { &bpl1mod,  sizeof(bpl1mod),  0 },
         { &bpl2mod,  sizeof(bpl2mod),  0 },
+        { &sprptr,   sizeof(sprptr),   DWORD_ARRAY }
     });
 }
 
@@ -153,7 +154,7 @@ DMAController::pokeDDFSTOP(uint16_t value)
 void
 DMAController::pokeBPLxPTL(int x, uint16_t value)
 {
-    assert(x <= 6);
+    assert(x < 6);
     debug("pokeBPL%dPTL(%X)\n", x, value);
     
     bplpt[x] = (bplpt[x] & 0x70000) | value;
@@ -162,10 +163,24 @@ DMAController::pokeBPLxPTL(int x, uint16_t value)
 void
 DMAController::pokeBPLxPTH(int x, uint16_t value)
 {
-    assert(x <= 6);
+    assert(x < 6);
     debug("pokeBPL%dPTH(%X)\n", x, value);
 
     bplpt[x] = (bplpt[x] & 0x0FFFF) | ((value << 16) & 0x70000);
+}
+
+void
+DMAController::pokeSPRxPTL(int x, uint16_t value)
+{
+    assert(x < 8);
+    sprptr[x] = (sprptr[x] & 0xFFFF0000) | value;
+}
+
+void
+DMAController::pokeSPRxPTH(int x, uint16_t value)
+{
+    assert(x < 8);
+    sprptr[x] = (value << 16) | (sprptr[x] & 0xFFFF);
 }
 
 void

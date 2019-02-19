@@ -49,6 +49,10 @@ public:
     uint16_t bpl1mod = 0; // odd planes
     uint16_t bpl2mod = 0; // even planes
 
+    // Sprite pointer registers
+    uint32_t sprptr[8]; 
+    
+    
     /* Display window coordinates
      * These values are calculated out of diwstrt and diwsstop and updated
      * automatically inside pokeDIWSTRT() and pokeDIWSTOP().
@@ -113,6 +117,8 @@ public:
     void pokeBPLxPTH(int x, uint16_t value);
     void pokeBPL1MOD(uint16_t value);
     void pokeBPL2MOD(uint16_t value);
+    void pokeSPRxPTL(int x, uint16_t value);
+    void pokeSPRxPTH(int x, uint16_t value);
 
     // This function is called when the end of a rasterline has been reached.
     void hsyncAction();

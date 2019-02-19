@@ -31,6 +31,27 @@ public:
     
     // The interrupt enable register
     uint16_t intena;
+
+    //
+    // Disk DMA registers
+    //
+    
+    // Disk DMA block length
+    uint16_t dsklen;
+    
+    // Disk write data (from RAM to disk)
+    uint16_t dskdat;
+    
+    //
+    // Serial port registers
+    //
+    
+    // Serial port data and stop bits write
+    uint16_t serdat;
+    
+    // Serial port period and control
+    uint16_t serper;
+    
     
     
     //
@@ -80,7 +101,18 @@ public:
     uint16_t peekINTENA();
     void pokeINTENA(uint16_t value);
     
+    uint16_t peekDSKLEN() { return dsklen; }
+    void pokeDSKLEN(uint16_t value) { dsklen = value; }
     
+    uint16_t peekDSKDAT() { return dskdat; }
+    void pokeDSKDAT(uint16_t value) { dskdat = value; }
+    
+    uint16_t peekSERDAT() { return serdat; }
+    void pokeSERDAT(uint16_t value) { serdat = value; }
+    
+    uint16_t peekSERPER() { return serper; }
+    void pokeSERPER(uint16_t value) { serper = value; }
+
     //
     // Interrupts
     //

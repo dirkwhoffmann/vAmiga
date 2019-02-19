@@ -93,7 +93,7 @@ CPU::~CPU()
 void
 CPU::_powerOn()
 {
-
+    clearTraceBuffer();
 }
 
 void
