@@ -308,8 +308,11 @@ class Inspector : NSWindowController
             case "Memory":
                 refreshMemory(everything: everything)
 
-            case "Agnus":
+            case "DMA":
                 refreshAgnus(everything: everything)
+
+            case "Copper":
+                refreshCopper(everything: everything)
 
             case "Denise":
                 refreshDenise(everything: everything)
