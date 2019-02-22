@@ -27,11 +27,15 @@ public:
     // The DMA controller has been executed up to this clock cycle.
     Cycle clock = 0;
     
+    // The beam position counter (17 bit)
+    // V8 V7 V6 V5 V4 V3 V2 V1 V0 H8 H7 H6 H5 H4 H3 H2 H1
+    uint32_t beam;
+    
     //  Horizontal Beam Position Counter
-    uint16_t vhpos = 0;
+    // uint16_t vhpos = 0;
 
     //  Vertical Beam Position Counter
-    uint16_t vpos = 0;
+    // uint16_t vpos = 0;
     
     // The DMA control register
     uint16_t dmacon = 0;
@@ -75,11 +79,14 @@ public:
     
     
     //
-    // Copper registers
+    // Copper
     //
     
-    // The Copper control register
-    uint16_t copcon = 0;
+    // Comparison value to determine if Copper should run
+    // uint16_t copperTrigger;
+    
+    // The Copper Danger Bit (CDANG)
+    bool cdang;
     
     // The Copper instruction register
     uint16_t copins = 0;
@@ -146,8 +153,17 @@ public:
     
 public:
     
+    inline uint16_t hpos() { return beam & 0xFF; }
+    inline void sethpos(uint8_t value) { beam = (beam & ~0xFF) | value; }
+    inline void inchpos() { beam += 1; }
+    inline uint16_t vpos() { return beam >> 8; }
+    inline void setvpos(uint16_t value) { beam = (beam & 0xFF) | (value << 8); }
+    inline void incvpos() { beam += 256; }
+
     uint16_t peekDMACON();
     void pokeDMACON(uint16_t value);
+    uint16_t peekVHPOS();
+    uint16_t peekVPOS();
     void pokeDIWSTRT(uint16_t value);
     void pokeDIWSTOP(uint16_t value);
     void pokeDDFSTRT(uint16_t value);

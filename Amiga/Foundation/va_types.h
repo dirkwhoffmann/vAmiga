@@ -180,7 +180,7 @@ typedef enum
 } MemorySource;
 
 //
-// DMA Controller (Agnus)
+// Agnus
 //
 
 typedef struct {
@@ -201,6 +201,12 @@ typedef struct {
     uint32_t sprptr[8];
     
 } DMAInfo;
+
+typedef struct {
+
+    bool cdang;
+    
+} CopperInfo;
 
 
 //
