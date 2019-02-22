@@ -43,14 +43,43 @@ public:
     uint16_t ddfstop = 0;
 
     //
+    // Pointer registers (one for each DMA channel)
+    //
+    
+    /* "The Amiga personal computer system provides a total of 25 DMA channels.
+     *  [...] The RAM address generator contains a set of 25 pointer registers.
+     *  Each of the pointer registers contains an 18-bit address, which points
+     *  to the location in memory of data to be fetched next for the particular
+     *  DMA channel. The pointer registers are loaded with data (an address)
+     *  from data bus by the processor or coprocessor under program control."
+     *  [Patent US 5103499]
+     */
+    
+    // Disk DMA
+    uint32_t dskpt;
+    
+    // Blitter DMA
+    uint32_t bltpt[4];
+
+    // Copper DMA
+    uint32_t coplc[2];
+    
+    // Audio DMA
+    uint32_t audlc[4];
+    
+    // Bitplane DMA
+    uint32_t bplpt[6];
+    
+    // Sprite DMA
+    uint32_t sprptr[8];
+    
+    
+    //
     // Copper registers
     //
     
     // The Copper control register
     uint16_t copcon = 0;
-    
-    // The Copper location registers
-    uint32_t coplc[2];
     
     // The Copper instruction register
     uint16_t copins = 0;
@@ -58,15 +87,9 @@ public:
     // The Copper program counter
     uint32_t coppc = 0;
     
-    // The 6 bitplane address pointers
-    uint32_t bplpt[6];
-    
     // The bitplane modulo registers
     uint16_t bpl1mod = 0; // odd planes
     uint16_t bpl2mod = 0; // even planes
-
-    // Sprite pointer registers
-    uint32_t sprptr[8]; 
     
     
     /* Display window coordinates
@@ -130,17 +153,34 @@ public:
     void pokeDDFSTRT(uint16_t value);
     void pokeDDFSTOP(uint16_t value);
     void pokeCOPCON(uint16_t value);
-    void pokeCOPxLCH(int x, uint16_t value);
-    void pokeCOPxLCL(int x, uint16_t value);
+    
     void pokeCOPJMP(int x);
     void pokeCOPINS(uint16_t value); 
-    void pokeBPLxPTL(int x, uint16_t value);
-    void pokeBPLxPTH(int x, uint16_t value);
+
     void pokeBPL1MOD(uint16_t value);
     void pokeBPL2MOD(uint16_t value);
+    
+    // DMA pointer registers
+    
+    void pokeDSKPTH(uint16_t value);
+    void pokeDSKPTL(uint16_t value);
+
+    void pokeBLTxPTL(int x, uint16_t value);
+    void pokeBLTxPTH(int x, uint16_t value);
+
+    void pokeCOPxLCH(int x, uint16_t value);
+    void pokeCOPxLCL(int x, uint16_t value);
+  
+    void pokeAUDxLCH(int x, uint16_t value);
+    void pokeAUDxLCL(int x, uint16_t value);
+    
+    void pokeBPLxPTL(int x, uint16_t value);
+    void pokeBPLxPTH(int x, uint16_t value);
+ 
     void pokeSPRxPTL(int x, uint16_t value);
     void pokeSPRxPTH(int x, uint16_t value);
 
+    
     // This function is called when the end of a rasterline has been reached.
     void hsyncAction();
 

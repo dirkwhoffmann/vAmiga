@@ -760,6 +760,10 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
     
     switch ((addr >> 1) & 0xFF) {
 
+        case 0x020 >> 1: // DSKPTH
+            amiga->dma.pokeDSKPTH(value); return;
+        case 0x022 >> 1: // DSKPTL
+            amiga->dma.pokeDSKPTL(value); return;
         case 0x024 >> 1: // DSKLEN
             amiga->paula.pokeDSKLEN(value); return;
         case 0x026 >> 1: // DSKDAT
@@ -773,6 +777,24 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
             amiga->paula.pokeSERDAT(value); return;
         case 0x032 >> 1: // SERPER
             amiga->paula.pokeSERPER(value); return;
+            
+        case 0x48 >> 1: // BLTCPTH
+            amiga->dma.pokeBLTxPTH(2, value); return;
+        case 0x4A >> 1: // BLTCPTL
+            amiga->dma.pokeBLTxPTL(2, value); return;
+        case 0x4C >> 1: // BLTBPTH
+            amiga->dma.pokeBLTxPTH(1, value); return;
+        case 0x4E >> 1: // BLTBPTL
+            amiga->dma.pokeBLTxPTH(1, value); return;
+        case 0x50 >> 1: // BLTAPTH
+            amiga->dma.pokeBLTxPTH(0, value); return;
+        case 0x52 >> 1: // BLTAPTL
+            amiga->dma.pokeBLTxPTL(0, value); return;
+        case 0x54 >> 1: // BLTDPTH
+            amiga->dma.pokeBLTxPTH(3, value); return;
+        case 0x56 >> 1: // BLTDPTL
+            amiga->dma.pokeBLTxPTL(3, value); return;
+
         case 0x080 >> 1: // COP1LCH
             amiga->dma.pokeCOPxLCH(0, value); return;
         case 0x082 >> 1: // COP1LCL
@@ -804,7 +826,26 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x09E >> 1: // Unsed
             return;
             
-            
+        case 0x0A0 >> 1: // AUD0LCH
+            amiga->dma.pokeAUDxLCH(0, value); return;
+        case 0x0A2 >> 1: // AUD0LCL
+            amiga->dma.pokeAUDxLCH(0, value); return;
+
+        case 0x0B0 >> 1: // AUD1LCH
+            amiga->dma.pokeAUDxLCH(1, value); return;
+        case 0x0B2 >> 1: // AUD1LCL
+            amiga->dma.pokeAUDxLCH(1, value); return;
+
+        case 0x0C0 >> 1: // AUD2LCH
+            amiga->dma.pokeAUDxLCH(2, value); return;
+        case 0x0C2 >> 1: // AUD2LCL
+            amiga->dma.pokeAUDxLCH(2, value); return;
+
+        case 0x0D0 >> 1: // AUD3LCH
+            amiga->dma.pokeAUDxLCH(3, value); return;
+        case 0x0D2 >> 1: // AUD3LCL
+            amiga->dma.pokeAUDxLCH(3, value); return;
+
         case 0x0E0 >> 1: // BPL1PTH
             amiga->dma.pokeBPLxPTH(0, value); return;
         case 0x0E2 >> 1: // BPL1PTL

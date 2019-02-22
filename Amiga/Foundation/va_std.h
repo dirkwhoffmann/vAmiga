@@ -123,6 +123,19 @@ inline bool is_uint5_t(uint5_t value) { return value < 32; }
 // Copies a single bit from x to y.
 #define COPY_BIT(x,y,nr) ((y) = ((y) & ~(1 << (nr)) | ((x) & (1 << (nr)))))
 
+// Replaces the low byte in a 16-bit value
+#define REPLACE_LO(x,y) (((x) & ~0x00FF) | y)
+
+// Replaces the low byte in a 16-bit value
+#define REPLACE_HI(x,y) (((x) & ~0xFF00) | ((y) << 8))
+
+// Replaces the low word in a 32-bit value
+#define REPLACE_LO_WORD(x,y) (((x) & ~0xFFFF) | y)
+
+// Replaces the high word in a 23-bit value
+#define REPLACE_HI_WORD(x,y) (((x) & ~0xFFFF0000) | ((y) << 16))
+
+
 // Returns true if value is rising when switching from x to y
 #define RISING_EDGE(x,y) (!(x) && (y))
 

@@ -30,13 +30,19 @@ DMAController::DMAController()
         { &ddfstrt,  sizeof(ddfstrt),  0 },
         { &ddfstop,  sizeof(ddfstop),  0 },
         { &copcon,   sizeof(copcon),   0 },
+        
+        // DMA pointer registers
+        { &dskpt,    sizeof(dskpt),    0 },
+        { &bltpt,    sizeof(bltpt),    DWORD_ARRAY },
         { &coplc,    sizeof(coplc),    DWORD_ARRAY },
+        { &audlc,    sizeof(audlc),    DWORD_ARRAY },
+        { &bplpt,    sizeof(bplpt),    DWORD_ARRAY },
+        { &sprptr,   sizeof(sprptr),   DWORD_ARRAY },
+
         { &copins,   sizeof(copins),   0 },
         { &coppc,    sizeof(coppc),    0 },
-        { &bplpt,    sizeof(bplpt),    DWORD_ARRAY },
         { &bpl1mod,  sizeof(bpl1mod),  0 },
         { &bpl2mod,  sizeof(bpl2mod),  0 },
-        { &sprptr,   sizeof(sprptr),   DWORD_ARRAY }
     });
 }
 
@@ -89,12 +95,16 @@ DMAController::getInfo()
     info.ddfstrt = ddfstrt;
     info.ddfstop = ddfstop;
     
-    for (unsigned i = 0; i < 6; i++)
-        info.bplpt[i] = bplpt[i];
-    
     info.bpl1mod = bpl1mod;
     info.bpl2mod = bpl2mod;
     
+    info.dskpt = dskpt;
+    for (unsigned i = 0; i < 4; i++) info.bltpt[i] = bltpt[i];
+    for (unsigned i = 0; i < 2; i++) info.coplc[i] = coplc[i];
+    for (unsigned i = 0; i < 4; i++) info.audlc[i] = audlc[i];
+    for (unsigned i = 0; i < 6; i++) info.bplpt[i] = bplpt[i];
+    for (unsigned i = 0; i < 8; i++) info.sprptr[i] = sprptr[i];
+
     return info;
 }
 
@@ -161,27 +171,7 @@ DMAController::pokeCOPCON(uint16_t value)
     debug("pokeCOPCON(%X)\n", value);
     copcon = value;
 }
-        
-void
-DMAController::pokeCOPxLCH(int x, uint16_t value)
-{
-    assert(x < 2);
 
-    debug("pokeCOP%dLCH(%X)\n", x, value);
-
-    coplc[x] = (value << 16) | (coplc[x] & 0xFFFE);
-}
-
-void
-DMAController::pokeCOPxLCL(int x, uint16_t value)
-{
-    assert(x < 2);
-    
-    debug("pokeCOP%dLCL(%X)\n", x, value);
-
-    coplc[x] = (coplc[x] & 0xFFFF0000) | (value & 0xFFFE);
-}
-        
 void
 DMAController::pokeCOPJMP(int x)
 {
@@ -200,38 +190,6 @@ DMAController::pokeCOPINS(uint16_t value)
 {
     copins = value;
 }
-            
-void
-DMAController::pokeBPLxPTL(int x, uint16_t value)
-{
-    assert(x < 6);
-    debug("pokeBPL%dPTL(%X)\n", x, value);
-    
-    bplpt[x] = (bplpt[x] & 0x70000) | value;
-}
-
-void
-DMAController::pokeBPLxPTH(int x, uint16_t value)
-{
-    assert(x < 6);
-    debug("pokeBPL%dPTH(%X)\n", x, value);
-
-    bplpt[x] = (bplpt[x] & 0x0FFFF) | ((value << 16) & 0x70000);
-}
-
-void
-DMAController::pokeSPRxPTL(int x, uint16_t value)
-{
-    assert(x < 8);
-    sprptr[x] = (sprptr[x] & 0xFFFF0000) | value;
-}
-
-void
-DMAController::pokeSPRxPTH(int x, uint16_t value)
-{
-    assert(x < 8);
-    sprptr[x] = (value << 16) | (sprptr[x] & 0xFFFF);
-}
 
 void
 DMAController::pokeBPL1MOD(uint16_t value)
@@ -248,6 +206,115 @@ DMAController::pokeBPL2MOD(uint16_t value)
     
     bpl2mod = value;
 }
+
+void
+DMAController::pokeDSKPTH(uint16_t value)
+{
+    debug("pokeDSKPTH(%X)\n", value);
+    dskpt = REPLACE_HI_WORD(dskpt, value & 0x7);
+}
+
+void
+DMAController::pokeDSKPTL(uint16_t value)
+{
+    debug("pokeDSKPTL(%X)\n", value);
+    dskpt = REPLACE_LO_WORD(dskpt, value);
+}
+
+void
+DMAController::pokeBLTxPTH(int x, uint16_t value)
+{
+    assert(x < 4);
+    
+    debug("pokeBLT%dPTH(%X)\n", x, value);
+    bltpt[x] = REPLACE_HI_WORD(bltpt[x], value & 0x7);
+}
+
+void
+DMAController::pokeBLTxPTL(int x, uint16_t value)
+{
+    assert(x < 4);
+
+    debug("pokeBLT%dPTL(%X)\n", x, value);
+    bltpt[x] = REPLACE_LO_WORD(bltpt[x], value);
+}
+
+void
+DMAController::pokeCOPxLCH(int x, uint16_t value)
+{
+    assert(x < 2);
+    
+    debug("pokeCOP%dLCH(%X)\n", x, value);
+    coplc[x] = REPLACE_HI_WORD(coplc[x], value);
+}
+
+void
+DMAController::pokeCOPxLCL(int x, uint16_t value)
+{
+    assert(x < 2);
+    
+    debug("pokeCOP%dLCL(%X)\n", x, value);
+    coplc[x] = REPLACE_LO_WORD(coplc[x], value & 0xFFFE);
+}
+
+void
+DMAController::pokeAUDxLCH(int x, uint16_t value)
+{
+    assert(x < 4);
+    
+    debug("pokeAUD%dLCH(%X)\n", x, value);
+    audlc[x] = REPLACE_HI_WORD(audlc[x], value & 0x7);
+}
+
+void
+DMAController::pokeAUDxLCL(int x, uint16_t value)
+{
+    assert(x < 4);
+    
+    debug("pokeAUD%dLCL(%X)\n", x, value);
+    audlc[x] = REPLACE_LO_WORD(audlc[x], value);
+}
+
+void
+DMAController::pokeBPLxPTH(int x, uint16_t value)
+{
+    assert(x < 6);
+    
+    debug("pokeBPL%dPTH(%X)\n", x, value);
+    bplpt[x] = REPLACE_HI_WORD(bplpt[x], value & 0x7);
+}
+
+void
+DMAController::pokeBPLxPTL(int x, uint16_t value)
+{
+    assert(x < 6);
+    
+    debug("pokeBPL%dPTL(%X)\n", x, value);
+    bplpt[x] = REPLACE_LO_WORD(bplpt[x], value);
+}
+
+void
+DMAController::pokeSPRxPTH(int x, uint16_t value)
+{
+    assert(x < 8);
+    
+    debug("pokeSPR%dPTH(%X)\n", x, value);
+    sprptr[x] = REPLACE_HI_WORD(sprptr[x], value & 0x7);
+}
+
+void
+DMAController::pokeSPRxPTL(int x, uint16_t value)
+{
+    assert(x < 8);
+    
+    debug("pokeSPR%dPTL(%X)\n", x, value);
+    sprptr[x] = REPLACE_LO_WORD(sprptr[x], value);
+}
+
+
+
+
+
 
 void
 DMAController::executeUntil(Cycle targetClock)
