@@ -13,7 +13,6 @@ DMAController::DMAController()
 {
     setDescription("DMAController");
     
-    // Register sub components
     registerSubcomponents(vector<HardwareComponent *> {
         
         &eventHandler,

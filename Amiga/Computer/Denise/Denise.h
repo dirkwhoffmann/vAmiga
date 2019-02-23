@@ -11,7 +11,7 @@
 #define _DENISE_INC
 
 #include "HardwareComponent.h"
-
+#include "Colorizer.h"
 
 //
 // THIS CLASS IS A STUB TO GET THE VISUAL PROTOTYPE WORKING
@@ -20,6 +20,9 @@
 class Denise : public HardwareComponent {
     
 public:
+    
+    // Color synthesizer
+    Colorizer colorizer;
     
     // Denise has been executed up to this clock cycle.
     Cycle clock = 0;
@@ -39,19 +42,16 @@ public:
 
     // The 6 bitplane data registers
     uint16_t bpldat[6]; 
-    
-    // The 32 color registers
-    uint16_t colorReg[32];
-    
+        
     /* The 32 colors in RGBA format
      * The RGBA values are updated each time a colorReg changes.
      */
-    uint32_t colorRGBA[32];
+    // uint32_t colorRGBA[32];
  
     /* The 32 colors in RGBA format (halfbright)
      * The RGBA values are updated each time a colorReg changes.
      */
-    uint32_t colorRGBAhb[32];
+    // uint32_t colorRGBAhb[32];
     
     // Number of PAL rasterlines
     // static const long RASTERLINES = 625;
@@ -144,8 +144,8 @@ public:
     void pokeBPLCON1(uint16_t value);
     void pokeBPLCON2(uint16_t value);
     void pokeBPLxDAT(int x, uint16_t value);
-    uint16_t peekCOLORxx(int xx) { assert(xx < 32); return colorReg[xx]; }
-    void pokeCOLORxx(int xx, uint16_t value);
+    // uint16_t peekCOLORxx(int xx) { return colorizer.peekColorReg(xx); }
+    // void pokeCOLORxx(int xx, uint16_t value) { colorizer.pokeColorReg(xx, value); }
     
 
 
