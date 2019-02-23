@@ -772,7 +772,7 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
             // case 0x2A >> 1: // VPOSW
             // case 0x2C >> 1: // VHPOSW
         case 0x02E >> 1: // COPCON
-            amiga->dma.pokeCOPCON(value); return;
+            amiga->dma.copper.pokeCOPCON(value); return;
         case 0x030 >> 1: // SERDAT
             amiga->paula.pokeSERDAT(value); return;
         case 0x032 >> 1: // SERPER
@@ -804,11 +804,11 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x086 >> 1: // COP2LCL
             amiga->dma.pokeCOPxLCL(1, value); return;
         case 0x088 >> 1: // COPJMP1
-            amiga->dma.pokeCOPJMP(0); return;
+            amiga->dma.copper.pokeCOPJMP(0); return;
         case 0x08A >> 1: // COPJMP1
-            amiga->dma.pokeCOPJMP(1); return;
+            amiga->dma.copper.pokeCOPJMP(1); return;
         case 0x08C >> 1: // COPINS
-            amiga->dma.pokeCOPINS(value); return;
+            amiga->dma.copper.pokeCOPINS(value); return;
         case 0x08E >> 1: // DIWSTRT
             amiga->dma.pokeDIWSTRT(value); return;
         case 0x090 >> 1: // DIWSTOP

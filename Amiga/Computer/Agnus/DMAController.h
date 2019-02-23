@@ -12,6 +12,16 @@
 
 #include "HardwareComponent.h"
 #include "EventHandler.h"
+#include "Copper.h"
+
+typedef enum {
+    
+    COPPER_RESET = 0,
+    COPPER_READ_FIRST = 1,
+    COPPER_READ_SECOND = 2,
+    COPPER_TRANSFER = 3
+    
+} CopperState;
 
 
 class DMAController : public HardwareComponent {
@@ -23,6 +33,9 @@ public:
      * the CIAs.
      */
     EventHandler eventHandler;
+    
+    // Copper
+    Copper copper;
     
     // The DMA controller has been executed up to this clock cycle.
     Cycle clock = 0;
@@ -78,22 +91,6 @@ public:
     uint32_t sprptr[8];
     
     
-    //
-    // Copper
-    //
-    
-    // Comparison value to determine if Copper should run
-    // uint16_t copperTrigger;
-    
-    // The Copper Danger Bit (CDANG)
-    bool cdang;
-    
-    // The Copper instruction register
-    uint16_t copins = 0;
-    
-    // The Copper program counter
-    uint32_t coppc = 0;
-    
     // The bitplane modulo registers
     uint16_t bpl1mod = 0; // odd planes
     uint16_t bpl2mod = 0; // even planes
@@ -143,6 +140,8 @@ private:
     
 public:
     
+ 
+    
     // Collects the data shown in the GUI's debug panel.
     DMAInfo getInfo();
     
@@ -168,10 +167,6 @@ public:
     void pokeDIWSTOP(uint16_t value);
     void pokeDDFSTRT(uint16_t value);
     void pokeDDFSTOP(uint16_t value);
-    void pokeCOPCON(uint16_t value);
-    
-    void pokeCOPJMP(int x);
-    void pokeCOPINS(uint16_t value); 
 
     void pokeBPL1MOD(uint16_t value);
     void pokeBPL2MOD(uint16_t value);

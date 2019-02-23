@@ -17,6 +17,7 @@ DMAController::DMAController()
     registerSubcomponents(vector<HardwareComponent *> {
         
         &eventHandler,
+        &copper,
     });
     
     registerSnapshotItems(vector<SnapshotItem> {
@@ -28,7 +29,6 @@ DMAController::DMAController()
         { &diwstop,  sizeof(diwstop),  0 },
         { &ddfstrt,  sizeof(ddfstrt),  0 },
         { &ddfstop,  sizeof(ddfstop),  0 },
-        { &cdang,    sizeof(cdang),    0 },
         
         // DMA pointer registers
         { &dskpt,    sizeof(dskpt),    0 },
@@ -38,8 +38,6 @@ DMAController::DMAController()
         { &bplpt,    sizeof(bplpt),    DWORD_ARRAY },
         { &sprptr,   sizeof(sprptr),   DWORD_ARRAY },
 
-        { &copins,   sizeof(copins),   0 },
-        { &coppc,    sizeof(coppc),    0 },
         { &bpl1mod,  sizeof(bpl1mod),  0 },
         { &bpl2mod,  sizeof(bpl2mod),  0 },
     });
@@ -181,36 +179,7 @@ DMAController::pokeDDFSTOP(uint16_t value)
     ddfstop = value;
 }
         
-void
-DMAController::pokeCOPCON(uint16_t value)
-{
-    debug("pokeCOPCON(%X)\n", value);
-    
-    /* "This is a 1-bit register that when set true, allows the Copper to
-     *  access the blitter hardware. This bit is cleared by power-on reset, so
-     *  that the Copper cannot access the blitter hardware." [HRM]
-     */
-    cdang = (value & 0b10) != 0;
-}
 
-void
-DMAController::pokeCOPJMP(int x)
-{
-    assert(x < 2);
-    
-    debug("pokeCOPJMP%d\n", x);
-    
-    /* "When you write to a Copper strobe address, the Copper reloads its
-     *  program counter from the corresponding location register." [HRM]
-     */
-    coppc = coplc[1];
-}
-
-void
-DMAController::pokeCOPINS(uint16_t value)
-{
-    copins = value;
-}
 
 void
 DMAController::pokeBPL1MOD(uint16_t value)

@@ -10,6 +10,7 @@
 		5014DD1521F3625200BC14BA /* AmigaKeyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5014DD1321F3625200BC14BA /* AmigaKeyboard.cpp */; };
 		5020B17D21EF121E00B9E80E /* DMAController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5020B17B21EF121E00B9E80E /* DMAController.cpp */; };
 		5020B18021EF136100B9E80E /* Denise.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5020B17E21EF136100B9E80E /* Denise.cpp */; };
+		502F7DCE2221706000AEEC65 /* Copper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 502F7DCD2221706000AEEC65 /* Copper.cpp */; };
 		5030891121EFA74600FEAD12 /* Paula.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5030890F21EFA74600FEAD12 /* Paula.cpp */; };
 		50384C8621FC6B66006E7748 /* AmigaSnapshot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50384C8421FC6B66006E7748 /* AmigaSnapshot.cpp */; };
 		5043F6C5221972F90047CC30 /* MyToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5043F6C4221972F90047CC30 /* MyToolbar.swift */; };
@@ -161,6 +162,8 @@
 		5020B17C21EF121E00B9E80E /* DMAController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMAController.h; sourceTree = "<group>"; };
 		5020B17E21EF136100B9E80E /* Denise.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Denise.cpp; sourceTree = "<group>"; };
 		5020B17F21EF136100B9E80E /* Denise.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Denise.h; sourceTree = "<group>"; };
+		502F7DCD2221706000AEEC65 /* Copper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Copper.cpp; sourceTree = "<group>"; };
+		502F7DD1222172CA00AEEC65 /* Copper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Copper.h; sourceTree = "<group>"; };
 		5030890F21EFA74600FEAD12 /* Paula.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Paula.cpp; sourceTree = "<group>"; };
 		5030891021EFA74600FEAD12 /* Paula.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Paula.h; sourceTree = "<group>"; };
 		50384C8421FC6B66006E7748 /* AmigaSnapshot.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaSnapshot.cpp; sourceTree = "<group>"; };
@@ -360,6 +363,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		502F7DCF2221709700AEEC65 /* Denise */ = {
+			isa = PBXGroup;
+			children = (
+				5020B17F21EF136100B9E80E /* Denise.h */,
+				5020B17E21EF136100B9E80E /* Denise.cpp */,
+			);
+			path = Denise;
+			sourceTree = "<group>";
+		};
+		502F7DD0222170AE00AEEC65 /* Agnus */ = {
+			isa = PBXGroup;
+			children = (
+				5020B17C21EF121E00B9E80E /* DMAController.h */,
+				5020B17B21EF121E00B9E80E /* DMAController.cpp */,
+				502F7DD1222172CA00AEEC65 /* Copper.h */,
+				502F7DCD2221706000AEEC65 /* Copper.cpp */,
+			);
+			path = Agnus;
+			sourceTree = "<group>";
+		};
 		508E7F962206CDC600F7D88C /* CPU */ = {
 			isa = PBXGroup;
 			children = (
@@ -643,10 +666,8 @@
 				5085FE5521FB3BAE009753EF /* EventHandler.cpp */,
 				5064851021EC7A1700FC4AC3 /* Memory.h */,
 				5064850F21EC7A1700FC4AC3 /* Memory.cpp */,
-				5020B17C21EF121E00B9E80E /* DMAController.h */,
-				5020B17B21EF121E00B9E80E /* DMAController.cpp */,
-				5020B17F21EF136100B9E80E /* Denise.h */,
-				5020B17E21EF136100B9E80E /* Denise.cpp */,
+				502F7DD0222170AE00AEEC65 /* Agnus */,
+				502F7DCF2221709700AEEC65 /* Denise */,
 				508E7F962206CDC600F7D88C /* CPU */,
 				508FDF5621EA1FBC0043D0E9 /* CIA */,
 				50EE993D21FF4D42003BD74B /* Paula */,
@@ -944,6 +965,7 @@
 				50D2ADBA2207547500E32AB0 /* m68kcpu.c in Sources */,
 				5043F6C5221972F90047CC30 /* MyToolbar.swift in Sources */,
 				50384C8621FC6B66006E7748 /* AmigaSnapshot.cpp in Sources */,
+				502F7DCE2221706000AEEC65 /* Copper.cpp in Sources */,
 				508FE02D21EA227B0043D0E9 /* MyAppDelegate.swift in Sources */,
 				508FE02E21EA227B0043D0E9 /* Alerts.swift in Sources */,
 				508FE02921EA227B0043D0E9 /* MyControllerTouchBar.swift in Sources */,
