@@ -18,8 +18,9 @@ void
 EventHandler::_powerOn()
 {
     for (unsigned i = 0; i < NUMBER_OF_EVENTS; i++) {
-        eventCycle[i] = INT64_MAX;
-        payload[i] = 0;
+        events[i].triggerCycle = INT64_MAX;
+        events[i].type = EVENT_DEFAULT;
+        events[i].data = 0;
     }
 }
 
@@ -45,42 +46,38 @@ void
 EventHandler::_dump()
 {
     for (unsigned i = 0; i < NUMBER_OF_EVENTS; i++) {
-        plainmsg("Event %d: %s (Cycle: %lld Payload: %lld)\n",
-                 isPending((Event)i) ? "pending" : "not pending", eventCycle[i], payload[i]);
+        plainmsg("Event %d: %s (Cycle: %lld Type: %d Data: %lld)\n",
+                 isPending((EventType)i) ? "pending" : "not pending",
+                 events[i].triggerCycle,
+                 events[i].type,
+                 events[i].data);
     }
 }
 
 void
-EventHandler::scheduleEvent(Event event, Cycle cycle)
+EventHandler::scheduleEvent(EventType event, Cycle cycle,
+                            EventSubType type, int64_t data)
 {
     assert(event < NUMBER_OF_EVENTS);
     
-    eventCycle[event] = cycle;
+    events[event].triggerCycle = cycle;
+    events[event].type = type;
+    events[event].data = data;
     if (cycle < nextTrigger) nextTrigger = cycle;
 }
 
 void
-EventHandler::scheduleEvent(Event event, Cycle cycle, int64_t data)
+EventHandler::cancelEvent(EventType event)
 {
-    assert(event < NUMBER_OF_EVENTS);
-    
-    eventCycle[event] = cycle;
-    payload[event] = data;
-    if (cycle < nextTrigger) nextTrigger = cycle;
-}
-
-void
-EventHandler::cancelEvent(Event event)
-{
-    eventCycle[event] = -1;
+    events[event].triggerCycle = INT64_MAX;
 }
                      
 bool
-EventHandler::isPending(Event event)
+EventHandler::isPending(EventType event)
 {
     assert(event < NUMBER_OF_EVENTS);
     
-    return eventCycle[event] != INT64_MAX;
+    return events[event].triggerCycle != INT64_MAX;
 }
 
 void
@@ -90,26 +87,26 @@ EventHandler::_executeUntil(Cycle cycle) {
     for (unsigned i = 0; i < NUMBER_OF_EVENTS; i++) {
         
         // Check if event is due
-        if (cycle >= eventCycle[i]) {
+        if (cycle >= events[i].triggerCycle) {
      
             // Process it
             switch (i) {
                 case EVENT_CIAA:
-                    
-                    // Meaning of payload: 0 = Execute, 1 = Wakeup
-                    if (payload[i] == 0) {
+                
+                    if (events[i].type == EVENT_CIA_EXECUTE) {
                         amiga->ciaA.executeOneCycle();
                     } else {
+                        assert(events[i].type == EVENT_CIA_WAKEUP);
                         amiga->ciaA.wakeUp();
                     }
                     break;
                     
                 case EVENT_CIAB:
                     
-                    // Meaning of payload: 0 = Execute, 1 = Wakeup
-                    if (payload[i] == 0) {
+                    if (events[i].type == EVENT_CIA_EXECUTE) {
                         amiga->ciaB.executeOneCycle();
                     } else {
+                        assert(events[i].type == EVENT_CIA_WAKEUP);
                         amiga->ciaB.wakeUp();
                     }
                     break;
@@ -121,7 +118,8 @@ EventHandler::_executeUntil(Cycle cycle) {
     }
     
     // Determine the next trigger cycle
-    nextTrigger = eventCycle[0];
+    nextTrigger = events[0].triggerCycle;
     for (unsigned i = 1; i < NUMBER_OF_EVENTS; i++)
-        if (eventCycle[i] < nextTrigger) nextTrigger = eventCycle[i];
+        if (events[i].triggerCycle < nextTrigger)
+            nextTrigger = events[i].triggerCycle;
 }

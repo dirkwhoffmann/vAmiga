@@ -16,20 +16,46 @@ typedef enum
 {
     EVENT_CIAA,
     EVENT_CIAB,
+    EVENT_COPPER,
     NUMBER_OF_EVENTS
-} Event;
+} EventType;
 
+typedef enum
+{
+    EVENT_DEFAULT     = 0,
+    
+    EVENT_CIA_EXECUTE = 1,
+    EVENT_CIA_WAKEUP  = 2,
+    
+    EVENT_COPPER_JMP1 = 1,
+    EVENT_COPPER_JMP2 = 2,
+} EventSubType;
+
+
+struct Event {
+    
+    // Indicates when the event is due
+    Cycle triggerCycle;
+    
+    /* Sub event type.
+     * This value is evaluated inside the event handler to determine what
+     * action needs to be taken.
+     */
+    EventSubType type;
+    
+    /* Data (optional)
+     * This value can be used to pass data to the event handler.
+     */
+    int64_t data;
+};
 
 class EventHandler : public HardwareComponent {
     
 public:
-    /* Event slots
-     * Each event consists of a trigger cycle and a payload in form of a
-     * 64 bit data value. The default trigger cycle is INT64_MAX which means
-     * that the event is not pending.
+    /* Event slots.
+     * There is one slot for each event type.
      */
-    Cycle eventCycle[NUMBER_OF_EVENTS];
-    int64_t payload[NUMBER_OF_EVENTS];
+    Event events[NUMBER_OF_EVENTS];
     
     // This variables indicates when the next event triggers.
     // INT64_MAX if no event is pending.
@@ -60,12 +86,12 @@ private:
 public:
     
     // Schedules an event. The event will be executed at the specified cycle.
-    void scheduleEvent(Event event, Cycle cycle);
-    void scheduleEvent(Event event, Cycle cycle, int64_t data);
-    void cancelEvent(Event event);
+    void scheduleEvent(EventType event, Cycle cycle,
+                       EventSubType type = EVENT_DEFAULT, int64_t data = 0);
+    void cancelEvent(EventType event);
     
     // Returns true if the specified event is pending
-    bool isPending(Event event);
+    bool isPending(EventType event);
     
     // Processes all events that are due at or prior to cycle.
     inline void executeUntil(Cycle cycle) {

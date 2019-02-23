@@ -54,8 +54,8 @@ DMAController::_powerOn()
     clock = 0;
     
     // Schedule the first two CIA events
-    eventHandler.scheduleEvent(EVENT_CIAA, CIA_CYCLES(1), 0);
-    eventHandler.scheduleEvent(EVENT_CIAB, CIA_CYCLES(1), 0);
+    eventHandler.scheduleEvent(EVENT_CIAA, CIA_CYCLES(1), EVENT_CIA_EXECUTE);
+    eventHandler.scheduleEvent(EVENT_CIAB, CIA_CYCLES(1), EVENT_CIA_EXECUTE);
 }
 
 void
