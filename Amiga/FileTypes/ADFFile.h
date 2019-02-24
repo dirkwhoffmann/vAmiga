@@ -67,13 +67,22 @@ public:
      * Use read() to read from the selected track. Returns EOF when the whole
      * track has been read in.
      */
-    void seekTrack(long number);
+    void seekTrack(long t);
     
     /* Prepares to read a sector.
      * Use read() to read from the selected sector. Returns EOF when the whole
      * sector has been read in.
      */
-    void seekSector(long number);
+    void seekSector(long s);
+
+    /* Prepares to read a sector.
+     * Use read() to read from the selected track. Returns EOF when the whole
+     * track has been read in.
+     */
+    void seekTrackAndSector(long t, long s) { seekSector(11 * t + s); }
+    
+    // Fills a buffer with the data of a single sector
+    void readSector(uint8_t *target, long t, long s); 
 };
 
 #endif

@@ -11,10 +11,20 @@
 #define _AMIGA_DISK_INC
 
 #include "HardwareComponent.h"
+#include "ADFFile.h"
 
-//
-// THIS CLASS IS A STUB TO MAKE THE VISUAL PROTOTYPE WORK
-//
+// Data type for addressing tracks
+typedef unsigned Track;
+
+// Checks if a given number is a valid track number
+static inline bool isTrackNumber(unsigned nr) { return nr < 160; }
+
+// Data type for addressing sectors inside a track
+typedef unsigned Sector;
+
+// Checks if a given number is a valid sector number
+static inline bool isSectorNumber(unsigned nr) { return nr < 11; }
+
 
 class Disk : public AmigaObject {
     
@@ -26,15 +36,15 @@ public:
     
     /* MFM encoded disk data
      *
-     * Track   Cylinder   Head   Sectors
-     * -------------------------------------
-     * 0      0         0         0 -   10
-     * 1      0         1        11 -   21
-     * 2      1         0        22 -   32
-     * 3      1         1        33 -   43
-     * ...
-     * 158     79         0      1738 - 1748
-     * 159     79         1      1749 - 1759
+     * Cylinder  Track     Head      Sectors
+     * ---------------------------------------
+     * 0         0         0          0 - 10
+     * 0         1         1         11 - 21
+     * 1         2         0         22 - 32
+     * 1         3         1         33 - 43
+     *                ...
+     * 79        158       0       1738 - 1748
+     * 79        159       1       1749 - 1759
      */
     
     static const int numHeads           = 2;
@@ -46,13 +56,13 @@ public:
     /* A single sector consists of
      *    - A sector header build up from 64 MFM bytes.
      *    - 512 bytes of data (1024 MFM bytes).
-     * Hence,
+     *    Hence,
      *    - a sector consists of 64 + 2*512 = 1088 MFM bytes.
      *
      * A single track consists of
      *    - 11 * 1088 = 11.968 MFM bytes.
      *    - A track gap of about 696 MFM bytes (varies with drive speed).
-     * Hence,
+     *    Hence,
      *    - a track usually occupies 11.968 + 696 = 12.664 MFM bytes.
      *    - a cylinder usually occupies 25.328 MFM bytes.
      *    - a disk usually occupies 80 * 2 * 12.664 =  2.026.240 MFM bytes
@@ -64,8 +74,10 @@ public:
     static const long mfmBytesPerCylinder = 25328;
     static const long mfmBytesPerDisk     = 2026240; 
     
+    static const uint64_t MFM_DATA_BIT_MASK8  = 0x55;
+    static const uint64_t MFM_CLOCK_BIT_MASK8 = 0xAA;
+
     // MFM encoded disk data
-    
     union {
         uint8_t raw[mfmBytesPerDisk];
         uint8_t track[160][mfmBytesPerTrack];
@@ -92,6 +104,45 @@ public:
     
     bool isModified() { return modified; }
     void setModified(bool value) { modified = value; }
+    
+    
+    //
+    // Handling MFM encoded data
+    //
+    
+private:
+    
+    // Adds the clock bits to a byte
+    uint8_t addClockBits(uint8_t value, uint8_t previous);
+    
+    
+    //
+    // Encoding and decoding
+    //
+    
+public:
+    
+    // Clears the whole disk
+    void clearDisk();
+
+    // Clears a single track
+    void clearTrack(Track t);
+
+    /* Encodes the whole disk
+     */
+    void encodeDisk(ADFFile *adf);
+     
+    /* Encodes a single track
+     */
+    void encodeTrack(ADFFile *adf, Track t);
+    
+    /* Encodes a single sector
+     */
+    void encodeSector(ADFFile *adf, Track t, Sector s);
+    
+    /* Encodes a certain number of bytes in odd / even format
+     */
+    void encodeOddEven(uint8_t *target, uint8_t *source, size_t count);
 };
 
 #endif

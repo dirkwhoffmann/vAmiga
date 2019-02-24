@@ -22,6 +22,9 @@ Drive::Drive(unsigned nr)
     
     this->nr = nr;
     setDescription(nr == 0 ? "Df0" : "Df1");
+    
+    // REMOVE AFTER TESTING
+    Disk d; 
 }
 
 void
@@ -131,6 +134,8 @@ Drive::insertDisk(Disk *newDisk)
 {
     if (newDisk) {
         
+        debug("Drive::insertDisk(Disk *)\n");
+        
         if (isConnected()) {
             ejectDisk();
             disk = newDisk;
@@ -147,7 +152,10 @@ Drive::insertDisk(ADFFile *file)
         // Convert ADF file into a disk
         // AmigaDisk = new AmigaDisk::makeWithFile(ADFFile *file)
         
+        debug("Drive::insertDisk(ADFFile *)\n");
+        
         Disk *newDisk = new Disk();
+        newDisk->encodeDisk(file); 
         insertDisk(newDisk);
     }
 }

@@ -95,3 +95,16 @@ ADFFile::seekSector(long nr)
     fp = nr * 512;
     eof = (nr + 1) * 512;
 }
+
+void
+ADFFile::readSector(uint8_t *target, long t, long s)
+{
+    assert(target != NULL);
+    assert(isTrackNumber(t));
+    assert(isSectorNumber(s));
+
+    seekTrackAndSector(t, s);
+    for (unsigned i = 0; i < 512; i++)
+        target[i] = read();
+    assert(read() == EOF);
+}
