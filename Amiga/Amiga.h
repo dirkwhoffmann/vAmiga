@@ -27,8 +27,8 @@
 #include "AmigaKeyboard.h"
 #include "AmigaControlPort.h"
 #include "DiskController.h"
-#include "AmigaDrive.h"
-#include "AmigaDisk.h"
+#include "Drive.h"
+#include "Disk.h"
 
 // File types
 #include "BootRom.h"
@@ -114,10 +114,10 @@ public:
     AmigaKeyboard keyboard;
 
     // Internal drive
-    AmigaDrive df0 = AmigaDrive(0);
+    Drive df0 = Drive(0);
 
     // First external drive
-    AmigaDrive df1 = AmigaDrive(1);
+    Drive df1 = Drive(1);
 
     
     //

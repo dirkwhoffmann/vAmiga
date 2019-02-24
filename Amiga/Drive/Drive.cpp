@@ -16,7 +16,7 @@ AmigaDrive::AmigaDrive()
 }
 */
 
-AmigaDrive::AmigaDrive(unsigned nr)
+Drive::Drive(unsigned nr)
 {
     assert(nr == 0 /* df0 */ || nr == 1 /* df1 */);
     
@@ -25,25 +25,25 @@ AmigaDrive::AmigaDrive(unsigned nr)
 }
 
 void
-AmigaDrive::_powerOn()
+Drive::_powerOn()
 {
     
 }
 
 void
-AmigaDrive::_powerOff()
+Drive::_powerOff()
 {
     
 }
 
 void
-AmigaDrive::_reset()
+Drive::_reset()
 {
     
 }
 
 void
-AmigaDrive::_ping()
+Drive::_ping()
 {
     debug("AmigaDrive::_ping()\n");
 
@@ -58,13 +58,13 @@ AmigaDrive::_ping()
 }
 
 void
-AmigaDrive::_dump()
+Drive::_dump()
 {
     msg("Has disk: %s\n", hasDisk() ? "yes" : "no");
 }
 
 void
-AmigaDrive::setConnected(bool value)
+Drive::setConnected(bool value)
 {
     if (connected != value) {
         
@@ -74,13 +74,13 @@ AmigaDrive::setConnected(bool value)
 }
 
 void
-AmigaDrive::toggleConnected()
+Drive::toggleConnected()
 {
     setConnected(!isConnected());
 }
 
 void
-AmigaDrive::toggleUnsafed()
+Drive::toggleUnsafed()
 {
     if (disk) {
         disk->modified = !disk->modified;
@@ -93,13 +93,13 @@ AmigaDrive::toggleUnsafed()
 }
 
 bool
-AmigaDrive::hasWriteProtectedDisk()
+Drive::hasWriteProtectedDisk()
 {
     return hasDisk() ? disk->isWriteProtected() : false;
 }
 
 void
-AmigaDrive::toggleWriteProtection()
+Drive::toggleWriteProtection()
 {
     if (disk) {
         
@@ -117,7 +117,7 @@ AmigaDrive::toggleWriteProtection()
 }
 
 void
-AmigaDrive::ejectDisk()
+Drive::ejectDisk()
 {
     if (disk) {
         delete disk;
@@ -127,7 +127,7 @@ AmigaDrive::ejectDisk()
 }
 
 void
-AmigaDrive::insertDisk(AmigaDisk *newDisk)
+Drive::insertDisk(Disk *newDisk)
 {
     if (newDisk) {
         
@@ -140,14 +140,14 @@ AmigaDrive::insertDisk(AmigaDisk *newDisk)
 }
 
 void
-AmigaDrive::insertDisk(ADFFile *file)
+Drive::insertDisk(ADFFile *file)
 {
     if (file) {
         
         // Convert ADF file into a disk
         // AmigaDisk = new AmigaDisk::makeWithFile(ADFFile *file)
         
-        AmigaDisk *newDisk = new AmigaDisk();
+        Disk *newDisk = new Disk();
         insertDisk(newDisk);
     }
 }

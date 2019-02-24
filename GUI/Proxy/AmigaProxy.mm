@@ -21,7 +21,7 @@ struct PaulaWrapper { Paula *paula; };
 struct AmigaControlPortWrapper { AmigaControlPort *port; };
 struct AmigaKeyboardWrapper { AmigaKeyboard *keyboard; };
 struct DiskControllerWrapper { DiskController *controller; };
-struct AmigaDriveWrapper { AmigaDrive *drive; };
+struct AmigaDriveWrapper { Drive *drive; };
 struct AmigaFileWrapper { AmigaFile *file; };
 struct ADFFileWrapper { ADFFile *adf; };
 
@@ -587,7 +587,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 
 @implementation AmigaDriveProxy
 
-- (instancetype) initWithDrive:(AmigaDrive *)drive
+- (instancetype) initWithDrive:(Drive *)drive
 {
     if (self = [super init]) {
         wrapper = new AmigaDriveWrapper();

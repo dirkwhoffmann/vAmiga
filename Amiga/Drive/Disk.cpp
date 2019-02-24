@@ -9,7 +9,8 @@
 
 #include "Amiga.h"
 
-AmigaDisk::AmigaDisk()
+Disk::Disk()
 {
     setDescription("Disk");
 }
+

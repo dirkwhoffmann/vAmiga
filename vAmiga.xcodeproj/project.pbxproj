@@ -134,9 +134,9 @@
 		50EE994021FF4D8E003BD74B /* AudioUnit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EE993E21FF4D8E003BD74B /* AudioUnit.cpp */; };
 		50F5A84E2214112F00AD5611 /* PaulaPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F5A84D2214112F00AD5611 /* PaulaPanel.swift */; };
 		50F5F27221F1B6DF000627D1 /* AmigaKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F5F27121F1B6DF000627D1 /* AmigaKey.swift */; };
-		50F6EEB821F4F5C60091155D /* AmigaDisk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F6EEB621F4F5C60091155D /* AmigaDisk.cpp */; };
+		50F6EEB821F4F5C60091155D /* Disk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F6EEB621F4F5C60091155D /* Disk.cpp */; };
 		50F6EEBB21F4F5FA0091155D /* DiskController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F6EEB921F4F5FA0091155D /* DiskController.cpp */; };
-		50F6EEBE21F4F61F0091155D /* AmigaDrive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F6EEBC21F4F61F0091155D /* AmigaDrive.cpp */; };
+		50F6EEBE21F4F61F0091155D /* Drive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F6EEBC21F4F61F0091155D /* Drive.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -327,12 +327,12 @@
 		50EE993F21FF4D8E003BD74B /* AudioUnit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioUnit.h; sourceTree = "<group>"; };
 		50F5A84D2214112F00AD5611 /* PaulaPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaulaPanel.swift; sourceTree = "<group>"; };
 		50F5F27121F1B6DF000627D1 /* AmigaKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmigaKey.swift; sourceTree = "<group>"; };
-		50F6EEB621F4F5C60091155D /* AmigaDisk.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaDisk.cpp; sourceTree = "<group>"; };
-		50F6EEB721F4F5C60091155D /* AmigaDisk.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaDisk.h; sourceTree = "<group>"; };
+		50F6EEB621F4F5C60091155D /* Disk.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Disk.cpp; sourceTree = "<group>"; };
+		50F6EEB721F4F5C60091155D /* Disk.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Disk.h; sourceTree = "<group>"; };
 		50F6EEB921F4F5FA0091155D /* DiskController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiskController.cpp; sourceTree = "<group>"; };
 		50F6EEBA21F4F5FA0091155D /* DiskController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskController.h; sourceTree = "<group>"; };
-		50F6EEBC21F4F61F0091155D /* AmigaDrive.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaDrive.cpp; sourceTree = "<group>"; };
-		50F6EEBD21F4F61F0091155D /* AmigaDrive.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaDrive.h; sourceTree = "<group>"; };
+		50F6EEBC21F4F61F0091155D /* Drive.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Drive.cpp; sourceTree = "<group>"; };
+		50F6EEBD21F4F61F0091155D /* Drive.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Drive.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -685,10 +685,10 @@
 			children = (
 				50F6EEBA21F4F5FA0091155D /* DiskController.h */,
 				50F6EEB921F4F5FA0091155D /* DiskController.cpp */,
-				50F6EEBD21F4F61F0091155D /* AmigaDrive.h */,
-				50F6EEBC21F4F61F0091155D /* AmigaDrive.cpp */,
-				50F6EEB721F4F5C60091155D /* AmigaDisk.h */,
-				50F6EEB621F4F5C60091155D /* AmigaDisk.cpp */,
+				50F6EEBD21F4F61F0091155D /* Drive.h */,
+				50F6EEBC21F4F61F0091155D /* Drive.cpp */,
+				50F6EEB721F4F5C60091155D /* Disk.h */,
+				50F6EEB621F4F5C60091155D /* Disk.cpp */,
 			);
 			path = Drive;
 			sourceTree = "<group>";
@@ -1015,8 +1015,8 @@
 				508833EE21F0D21B009890EA /* ADFFile.cpp in Sources */,
 				508FE02321EA227B0043D0E9 /* KeyboardController.swift in Sources */,
 				508FE02221EA227B0043D0E9 /* MacKey.swift in Sources */,
-				50F6EEBE21F4F61F0091155D /* AmigaDrive.cpp in Sources */,
-				50F6EEB821F4F5C60091155D /* AmigaDisk.cpp in Sources */,
+				50F6EEBE21F4F61F0091155D /* Drive.cpp in Sources */,
+				50F6EEB821F4F5C60091155D /* Disk.cpp in Sources */,
 				508FE01921EA227B0043D0E9 /* MyControllerMenu.swift in Sources */,
 				508FE01C21EA227B0043D0E9 /* MemTableView.swift in Sources */,
 				508FE05421EA22CC0043D0E9 /* DevicesPrefs.swift in Sources */,

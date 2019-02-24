@@ -11,7 +11,7 @@
 #define _AMIGA_DRIVE_INC
 
 #include "HardwareComponent.h"
-#include "AmigaDisk.h"
+#include "Disk.h"
 
 class ADFFile;
 
@@ -19,7 +19,7 @@ class ADFFile;
 // THIS CLASS IS A STUB TO MAKE THE VISUAL PROTOTYPE WORK
 //
 
-class AmigaDrive : public HardwareComponent {
+class Drive : public HardwareComponent {
     
 private:
     
@@ -32,7 +32,7 @@ private:
 public:
     
     // The currently inserted disk (if any)
-    AmigaDisk *disk = NULL;
+    Disk *disk = NULL;
     
     
     //
@@ -42,7 +42,7 @@ public:
 public:
     
     // AmigaDrive();
-    AmigaDrive(unsigned nr);
+    Drive(unsigned nr);
     
     
     //
@@ -75,7 +75,7 @@ public:
     void toggleWriteProtection();
     
     void ejectDisk();
-    void insertDisk(AmigaDisk *disk);
+    void insertDisk(Disk *disk);
     void insertDisk(ADFFile *file);
 };
 
