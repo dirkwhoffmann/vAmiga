@@ -91,8 +91,8 @@ private:
     inline void advancePC() { coppc = (coppc + 2) & 0x7FFFE; }
 
     // Runs the comparator circuit.
-    bool runComparator(uint32_t beam, uint32_t compare, uint32_t mask);
-    bool runComparator(uint32_t compare);
+    bool runComparator(uint32_t beam, uint32_t waitpos, uint32_t mask);
+    bool runComparator(uint32_t waitpos);
     bool runComparator();
     
     // Computes the beam position where the Copper needs to wake up.
@@ -117,10 +117,21 @@ private:
     bool isSkipCmd();
     bool isSkipCmd(uint32_t addr);
     
+    uint16_t getRA();
+    uint16_t getRA(uint32_t addr);
 
- 
+    uint16_t getDW();
+    uint16_t getDW(uint32_t addr);
 
+    bool getBFD();
+    bool getBFD(uint32_t addr);
 
+    uint16_t getVPHP();
+    uint16_t getVPHP(uint32_t addr);
+
+    uint16_t getVMHM();
+    uint16_t getVMHM(uint32_t addr);
+    
     
     //
     // Managing events

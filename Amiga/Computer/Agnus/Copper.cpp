@@ -132,30 +132,26 @@ Copper::pokeCOPxLCL(int x, uint16_t value)
 }
 
 bool
-Copper::runComparator(uint32_t beam, uint32_t compare, uint32_t mask)
+Copper::runComparator(uint32_t beam, uint32_t waitpos, uint32_t mask)
 {
     // Only the lowest 16 bits of the beam position are used in the comparison
     // circuit (VP8 is not seen by the Copper).
     beam &= 0xFFFF;
     
-    // Mask values and compare
-    return (beam & mask) >= (compare & mask);
+    // Apply mask and compare values
+    return (beam & mask) >= (waitpos & mask);
 }
 
 bool
-Copper::runComparator(uint32_t compare)
+Copper::runComparator(uint32_t waitpos)
 {
-    // Extract the comparison mask from the second instruction register.
-    // Note: The uppermost bit cannot be masked (there is no VM7).
-    uint32_t mask = (uint32_t)(copins2 & 0x7FFE);
-    
-    return runComparator(amiga->dma.beam, compare, mask);
+    return runComparator(amiga->dma.beam, waitpos, getVMHM());
 }
 
 bool
 Copper::runComparator()
 {
-    return runComparator(copins1 & 0xFFFE);
+    return runComparator(getVPHP());
 }
 
 uint32_t
@@ -164,23 +160,26 @@ Copper::nextTriggerPosition()
     // Get the current beam position
     uint32_t beam = amiga->dma.beam;
 
-    /* We are going to compute the smallest beam position satisfying:
+    /* We are going to compute the smallest beam position satisfying
      *
-     *   1) computed position >= current beam position
-     *   2) the comparator circuit triggers
+     *   1) computed position >= current beam position,
+     *   2) the comparator circuit triggers.
      *
      * We do this by starting with the maximum possible value:
      */
-    uint32_t pos = 0x1FFFF, newPos;
+    uint32_t pos = 0x1FFFF;
     
     /* Now, we iterate through bit from left to right and set the bit to 0.
      * If conditions 1) and 2) still hold, we continue. If not, we have
      * already found the smalles value and return
      */
     for (int i = 16; i >= 0; i--) {
-        newPos = pos & ~(1 << i);
-        if (newPos < beam || !runComparator(newPos)) break;
-        pos = newPos;
+        uint32_t newPos = pos & ~(1 << i);
+        if (newPos >= beam && runComparator(newPos)) {
+            pos = newPos;
+        } else {
+            break;
+        }
     }
     
     return pos;
@@ -220,6 +219,71 @@ Copper::isSkipCmd(uint32_t addr)
 {
     uint32_t instr = amiga->mem.peek32(addr);
     return (HI_WORD(instr) & 1) && (LO_WORD(instr) & 1);
+}
+
+uint16_t
+Copper::getRA()
+{
+    return copins1 & 0x1F;
+}
+
+uint16_t
+Copper::getRA(uint32_t addr)
+{
+    uint32_t instr = amiga->mem.peek32(addr);
+    return HI_WORD(instr) & 0x1F;
+}
+
+uint16_t
+Copper::getDW()
+{
+    return copins1;
+}
+
+uint16_t
+Copper::getDW(uint32_t addr)
+{
+    uint32_t instr = amiga->mem.peek32(addr);
+    return LO_WORD(instr);
+}
+
+bool
+Copper::getBFD()
+{
+    return (copins2 & 0x8000) != 0;
+}
+
+bool
+Copper::getBFD(uint32_t addr)
+{
+    uint32_t instr = amiga->mem.peek32(addr);
+    return (LO_WORD(instr) & 0x8000) != 0;
+}
+
+uint16_t
+Copper::getVPHP()
+{
+    return copins1 & 0xFFFE;
+}
+
+uint16_t
+Copper::getVPHP(uint32_t addr)
+{
+    uint32_t instr = amiga->mem.peek32(addr);
+    return HI_WORD(instr) & 0xFFFE;
+}
+
+uint16_t
+Copper::getVMHM()
+{
+    return copins2 & 0x7FFE;
+}
+
+uint16_t
+Copper::getVMHM(uint32_t addr)
+{
+    uint32_t instr = amiga->mem.peek32(addr);
+    return LO_WORD(instr) & 0x7FFE;
 }
 
 void

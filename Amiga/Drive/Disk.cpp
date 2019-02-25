@@ -140,7 +140,7 @@ Disk::encodeSector(ADFFile *adf, Track t, Sector s)
     p[7] = LO_BYTE(sync);
 
     // Track and sector information
-    uint8_t info[4] = { 0xFF, (uint8_t)t, (uint8_t)s, 1 }; // (uint8_t)(11 - s) };
+    uint8_t info[4] = { 0xFF, (uint8_t)t, (uint8_t)s, (uint8_t)(11 - s) };
     encodeOddEven(&p[8], info, sizeof(info));
     
     // Unused area
