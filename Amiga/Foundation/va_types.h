@@ -195,7 +195,6 @@ typedef struct {
     // DMA pointers
     uint32_t dskpt;
     uint32_t bltpt[4];
-    uint32_t coplc[2];
     uint32_t audlc[4];
     uint32_t bplpt[6];
     uint32_t sprptr[8];
@@ -205,6 +204,9 @@ typedef struct {
 typedef struct {
 
     bool cdang;
+    uint16_t coppc;
+    // uint16_t copinstr1;
+    uint32_t coplc[2];
     
 } CopperInfo;
 

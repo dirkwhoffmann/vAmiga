@@ -1157,17 +1157,17 @@ CIAA::_dump()
 void
 CIAA::scheduleNextExecution()
 {
-    amiga->dma.eventHandler.scheduleEvent(EVENT_CIAA,
+    amiga->dma.eventHandler.scheduleEvent(CIAA_SLOT,
                                           clock + CIA_CYCLES(1),
-                                          EVENT_CIA_EXECUTE);
+                                          CIA_EXECUTE);
 }
 
 void
 CIAA::scheduleWakeUp()
 {
-    amiga->dma.eventHandler.scheduleEvent(EVENT_CIAA,
+    amiga->dma.eventHandler.scheduleEvent(CIAA_SLOT,
                                           wakeUpCycle,
-                                          EVENT_CIA_WAKEUP);
+                                          CIA_WAKEUP);
 }
 
 void 
@@ -1287,17 +1287,17 @@ CIAB::_dump()
 void
 CIAB::scheduleNextExecution()
 {
-     amiga->dma.eventHandler.scheduleEvent(EVENT_CIAB,
+     amiga->dma.eventHandler.scheduleEvent(CIAB_SLOT,
                                            clock + CIA_CYCLES(1),
-                                           EVENT_CIA_EXECUTE);
+                                           CIA_EXECUTE);
 }
 
 void
 CIAB::scheduleWakeUp()
 {
-      amiga->dma.eventHandler.scheduleEvent(EVENT_CIAB,
+      amiga->dma.eventHandler.scheduleEvent(CIAB_SLOT,
                                             wakeUpCycle,
-                                            EVENT_CIA_WAKEUP);
+                                            CIA_WAKEUP);
 }
 
 void 

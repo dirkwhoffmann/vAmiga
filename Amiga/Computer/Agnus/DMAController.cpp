@@ -32,7 +32,6 @@ DMAController::DMAController()
         // DMA pointer registers
         { &dskpt,    sizeof(dskpt),    0 },
         { &bltpt,    sizeof(bltpt),    DWORD_ARRAY },
-        { &coplc,    sizeof(coplc),    DWORD_ARRAY },
         { &audlc,    sizeof(audlc),    DWORD_ARRAY },
         { &bplpt,    sizeof(bplpt),    DWORD_ARRAY },
         { &sprptr,   sizeof(sprptr),   DWORD_ARRAY },
@@ -53,8 +52,8 @@ DMAController::_powerOn()
     clock = 0;
     
     // Schedule the first two CIA events
-    eventHandler.scheduleEvent(EVENT_CIAA, CIA_CYCLES(1), EVENT_CIA_EXECUTE);
-    eventHandler.scheduleEvent(EVENT_CIAB, CIA_CYCLES(1), EVENT_CIA_EXECUTE);
+    eventHandler.scheduleEvent(CIAA_SLOT, CIA_CYCLES(1), CIA_EXECUTE);
+    eventHandler.scheduleEvent(CIAB_SLOT, CIA_CYCLES(1), CIA_EXECUTE);
 }
 
 void
@@ -97,7 +96,6 @@ DMAController::getInfo()
     
     info.dskpt = dskpt;
     for (unsigned i = 0; i < 4; i++) info.bltpt[i] = bltpt[i];
-    for (unsigned i = 0; i < 2; i++) info.coplc[i] = coplc[i];
     for (unsigned i = 0; i < 4; i++) info.audlc[i] = audlc[i];
     for (unsigned i = 0; i < 6; i++) info.bplpt[i] = bplpt[i];
     for (unsigned i = 0; i < 8; i++) info.sprptr[i] = sprptr[i];
@@ -229,24 +227,6 @@ DMAController::pokeBLTxPTL(int x, uint16_t value)
 }
 
 void
-DMAController::pokeCOPxLCH(int x, uint16_t value)
-{
-    assert(x < 2);
-    
-    debug("pokeCOP%dLCH(%X)\n", x, value);
-    coplc[x] = REPLACE_HI_WORD(coplc[x], value);
-}
-
-void
-DMAController::pokeCOPxLCL(int x, uint16_t value)
-{
-    assert(x < 2);
-    
-    debug("pokeCOP%dLCL(%X)\n", x, value);
-    coplc[x] = REPLACE_LO_WORD(coplc[x], value & 0xFFFE);
-}
-
-void
 DMAController::pokeAUDxLCH(int x, uint16_t value)
 {
     assert(x < 4);
@@ -310,8 +290,6 @@ DMAController::executeUntil(Cycle targetClock)
 {
     // msg("clock is %lld, Executing until %lld\n", clock, targetClock);
     while (clock <= targetClock - DMA_CYCLES(1)) {
-        
-        clock += DMA_CYCLES(1);
         
         // Determine number of master clock cycles to execute
         // Cycle missingCycles = targetClock - clock;
@@ -471,8 +449,14 @@ DMAController::executeUntil(Cycle targetClock)
             case 0xBF: case 0xC7: case 0xCF: case 0xD7:
                 break;
             
-            case 0xE0: case 0xE1: case 0xE3:
+            case 0xE0: case 0xE1:
                 // Unusable (?!)
+                break;
+                
+            case 0xE3:
+                
+                // This is the last PAL cycle
+                hsyncAction();
                 break;
                 
             default:
@@ -480,15 +464,18 @@ DMAController::executeUntil(Cycle targetClock)
                 assert(false);
         }
         
-        // Check if the current rasterline has been completed
-        if (hpos() < 227) inchpos(); else hsyncAction();
+        // Advance the internal counters
+        inchpos();
+        clock += DMA_CYCLES(1);
     }
 }
 
 void
 DMAController::hsyncAction()
 {
-    sethpos(0);
+    // We set the new horizonzal position to -1. This ensures that it will
+    // ne zero when the reach the end of function executeUntil()
+    sethpos(-1);
     
     // CIA B counts HSYNCs
     amiga->ciaB.incrementTOD();
@@ -504,4 +491,6 @@ DMAController::vsyncAction()
     
     // CIA A counts VSYNCs
     amiga->ciaA.incrementTOD();
+    
+    copper.vsyncAction(); 
 }

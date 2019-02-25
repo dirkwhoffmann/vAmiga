@@ -796,13 +796,13 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
             amiga->dma.pokeBLTxPTL(3, value); return;
 
         case 0x080 >> 1: // COP1LCH
-            amiga->dma.pokeCOPxLCH(0, value); return;
+            amiga->dma.copper.pokeCOPxLCH(0, value); return;
         case 0x082 >> 1: // COP1LCL
-            amiga->dma.pokeCOPxLCL(0, value); return;
+            amiga->dma.copper.pokeCOPxLCL(0, value); return;
         case 0x084 >> 1: // COP2LCH
-            amiga->dma.pokeCOPxLCH(1, value); return;
+            amiga->dma.copper.pokeCOPxLCH(1, value); return;
         case 0x086 >> 1: // COP2LCL
-            amiga->dma.pokeCOPxLCL(1, value); return;
+            amiga->dma.copper.pokeCOPxLCL(1, value); return;
         case 0x088 >> 1: // COPJMP1
             amiga->dma.copper.pokeCOPJMP(0); return;
         case 0x08A >> 1: // COPJMP1

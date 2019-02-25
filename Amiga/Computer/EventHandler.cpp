@@ -17,10 +17,10 @@ EventHandler::EventHandler()
 void
 EventHandler::_powerOn()
 {
-    for (unsigned i = 0; i < NUMBER_OF_EVENTS; i++) {
-        events[i].triggerCycle = INT64_MAX;
-        events[i].type = EVENT_DEFAULT;
-        events[i].data = 0;
+    for (unsigned i = 0; i < EVENT_SLOTS; i++) {
+        eventSlot[i].triggerCycle = INT64_MAX;
+        eventSlot[i].type = 0;
+        eventSlot[i].data = 0;
     }
 }
 
@@ -45,81 +45,96 @@ EventHandler::_ping()
 void
 EventHandler::_dump()
 {
-    for (unsigned i = 0; i < NUMBER_OF_EVENTS; i++) {
-        plainmsg("Event %d: %s (Cycle: %lld Type: %d Data: %lld)\n",
-                 isPending((EventType)i) ? "pending" : "not pending",
-                 events[i].triggerCycle,
-                 events[i].type,
-                 events[i].data);
+    for (unsigned i = 0; i < EVENT_SLOTS; i++) {
+        plainmsg("Slot %d: %s (Cycle: %lld Type: %d Data: %lld)\n",
+                 isPending((EventSlot)i) ? "pending" : "not pending",
+                 eventSlot[i].triggerCycle,
+                 eventSlot[i].type,
+                 eventSlot[i].data);
     }
 }
 
 void
-EventHandler::scheduleEvent(EventType event, Cycle cycle,
-                            EventSubType type, int64_t data)
+EventHandler::scheduleEvent(EventSlot s, Cycle cycle, int32_t type, int64_t data)
 {
-    assert(event < NUMBER_OF_EVENTS);
+    assert(s < EVENT_SLOTS);
     
-    events[event].triggerCycle = cycle;
-    events[event].type = type;
-    events[event].data = data;
+    eventSlot[s].triggerCycle = cycle;
+    eventSlot[s].type = type;
+    eventSlot[s].data = data;
     if (cycle < nextTrigger) nextTrigger = cycle;
 }
 
 void
-EventHandler::cancelEvent(EventType event)
+EventHandler::cancelEvent(EventSlot s)
 {
-    events[event].triggerCycle = INT64_MAX;
+    eventSlot[s].triggerCycle = INT64_MAX;
 }
                      
-bool
-EventHandler::isPending(EventType event)
-{
-    assert(event < NUMBER_OF_EVENTS);
-    
-    return events[event].triggerCycle != INT64_MAX;
-}
-
 void
 EventHandler::_executeUntil(Cycle cycle) {
     
-    // Iterate through all events
-    for (unsigned i = 0; i < NUMBER_OF_EVENTS; i++) {
+    // Check for a CIA A event
+    if (isDue(CIAA_SLOT, cycle)) {
         
-        // Check if event is due
-        if (cycle >= events[i].triggerCycle) {
-     
-            // Process it
-            switch (i) {
-                case EVENT_CIAA:
+        switch(eventSlot[CIAA_SLOT].type) {
                 
-                    if (events[i].type == EVENT_CIA_EXECUTE) {
-                        amiga->ciaA.executeOneCycle();
-                    } else {
-                        assert(events[i].type == EVENT_CIA_WAKEUP);
-                        amiga->ciaA.wakeUp();
-                    }
-                    break;
-                    
-                case EVENT_CIAB:
-                    
-                    if (events[i].type == EVENT_CIA_EXECUTE) {
-                        amiga->ciaB.executeOneCycle();
-                    } else {
-                        assert(events[i].type == EVENT_CIA_WAKEUP);
-                        amiga->ciaB.wakeUp();
-                    }
-                    break;
-                    
-                default:
-                    assert(false);
-            }
+            case CIA_EXECUTE:
+                amiga->ciaA.executeOneCycle();
+                break;
+                
+            case CIA_WAKEUP:
+                amiga->ciaA.wakeUp();
+                break;
+                
+            default:
+                assert(false);
+        }
+    }
+    
+    // Check for a CIA B event
+    if (isDue(CIAB_SLOT, cycle)) {
+        
+        switch(eventSlot[CIAB_SLOT].type) {
+                
+            case CIA_EXECUTE:
+                amiga->ciaB.executeOneCycle();
+                break;
+                
+            case CIA_WAKEUP:
+                amiga->ciaB.wakeUp();
+                break;
+                
+            default:
+                assert(false);
+        }
+    }
+ 
+    // Check for a Copper event
+    if (isDue(COPPER_SLOT, cycle)) {
+        
+        switch(eventSlot[COPPER_SLOT].type) {
+                
+            case COPPER_JMP1:
+                // debug("Processing COPPER_JMP1\n");
+                cancelEvent(COPPER_SLOT);
+                // DO SOMETHING SMART HERE
+                break;
+                
+            case COPPER_JMP2:
+                // debug("Processing COPPER_JMP2\n");
+                cancelEvent(COPPER_SLOT);
+                // DO SOMETHING SMART HERE
+                break;
+                
+            default:
+                assert(false);
         }
     }
     
     // Determine the next trigger cycle
-    nextTrigger = events[0].triggerCycle;
-    for (unsigned i = 1; i < NUMBER_OF_EVENTS; i++)
-        if (events[i].triggerCycle < nextTrigger)
-            nextTrigger = events[i].triggerCycle;
+    nextTrigger = eventSlot[0].triggerCycle;
+    for (unsigned i = 1; i < EVENT_SLOTS; i++)
+        if (eventSlot[i].triggerCycle < nextTrigger)
+            nextTrigger = eventSlot[i].triggerCycle;
 }

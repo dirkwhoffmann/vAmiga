@@ -14,15 +14,6 @@
 #include "EventHandler.h"
 #include "Copper.h"
 
-typedef enum {
-    
-    COPPER_RESET = 0,
-    COPPER_READ_FIRST = 1,
-    COPPER_READ_SECOND = 2,
-    COPPER_TRANSFER = 3
-    
-} CopperState;
-
 
 class DMAController : public HardwareComponent {
     
@@ -42,7 +33,7 @@ public:
     
     // The beam position counter (17 bit)
     // V8 V7 V6 V5 V4 V3 V2 V1 V0 H8 H7 H6 H5 H4 H3 H2 H1
-    uint32_t beam;
+    int32_t beam;
     
     //  Horizontal Beam Position Counter
     // uint16_t vhpos = 0;
@@ -77,9 +68,6 @@ public:
     
     // Blitter DMA
     uint32_t bltpt[4];
-
-    // Copper DMA
-    uint32_t coplc[2];
     
     // Audio DMA
     uint32_t audlc[4];
@@ -178,9 +166,6 @@ public:
 
     void pokeBLTxPTL(int x, uint16_t value);
     void pokeBLTxPTH(int x, uint16_t value);
-
-    void pokeCOPxLCH(int x, uint16_t value);
-    void pokeCOPxLCL(int x, uint16_t value);
   
     void pokeAUDxLCH(int x, uint16_t value);
     void pokeAUDxLCL(int x, uint16_t value);

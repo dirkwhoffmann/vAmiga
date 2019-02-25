@@ -14,34 +14,46 @@
 
 typedef enum
 {
-    EVENT_CIAA,
-    EVENT_CIAB,
-    EVENT_COPPER,
-    NUMBER_OF_EVENTS
-} EventType;
+    CIAA_SLOT,
+    CIAB_SLOT,
+    COPPER_SLOT,
+    BLITTER_SLOT,
+    EVENT_SLOTS
+    
+} EventSlot;
+
+static inline bool isEventSlot(int32_t s) { return s <= EVENT_SLOTS; }
 
 typedef enum
 {
-    EVENT_DEFAULT     = 0,
+    CIA_EXECUTE = 1,
+    CIA_WAKEUP  = 2,
+    CIA_EVENTS
     
-    EVENT_CIA_EXECUTE = 1,
-    EVENT_CIA_WAKEUP  = 2,
-    
-    EVENT_COPPER_JMP1 = 1,
-    EVENT_COPPER_JMP2 = 2,
-} EventSubType;
+} CiaEvent;
 
+static inline bool isCiaEvent(int32_t e) { return e <= CIA_EVENTS; }
+
+typedef enum
+{
+    COPPER_JMP1 = 1,
+    COPPER_JMP2 = 2,
+    COPPER_EVENTS
+    
+} CopperEvent;
+
+static inline bool isCopperEvent(int32_t e) { return e <= COPPER_EVENTS; }
 
 struct Event {
     
     // Indicates when the event is due
     Cycle triggerCycle;
     
-    /* Sub event type.
-     * This value is evaluated inside the event handler to determine what
-     * action needs to be taken.
+    /* Event type.
+     * This value is evaluated inside the event handler to determine the
+     * action that needs to be taken.
      */
-    EventSubType type;
+    int32_t type;
     
     /* Data (optional)
      * This value can be used to pass data to the event handler.
@@ -53,9 +65,10 @@ class EventHandler : public HardwareComponent {
     
 public:
     /* Event slots.
-     * There is one slot for each event type.
+     * There is one slot for each event owner. In each slot, a single event
+     * can be scheduled at a time
      */
-    Event events[NUMBER_OF_EVENTS];
+    Event eventSlot[EVENT_SLOTS];
     
     // This variables indicates when the next event triggers.
     // INT64_MAX if no event is pending.
@@ -86,13 +99,16 @@ private:
 public:
     
     // Schedules an event. The event will be executed at the specified cycle.
-    void scheduleEvent(EventType event, Cycle cycle,
-                       EventSubType type = EVENT_DEFAULT, int64_t data = 0);
-    void cancelEvent(EventType event);
+    void scheduleEvent(EventSlot s, Cycle cycle, int32_t type, int64_t data = 0);
+    void cancelEvent(EventSlot s);
     
-    // Returns true if the specified event is pending
-    bool isPending(EventType event);
-    
+    // Returns true if the specified event slot contains a scheduled event
+    inline bool isPending(EventSlot s) {
+        assert(isEventSlot(s)); return eventSlot[s].triggerCycle != INT64_MAX; }
+
+    // Returns true if the specified event slot is due at the provided cycle
+    inline bool isDue(EventSlot s, int64_t cycle) { return cycle >= eventSlot[s].triggerCycle; }
+
     // Processes all events that are due at or prior to cycle.
     inline void executeUntil(Cycle cycle) {
         if (cycle >= nextTrigger) _executeUntil(cycle); }
