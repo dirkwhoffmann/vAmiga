@@ -14,9 +14,15 @@ class Copper : public HardwareComponent {
    
     friend class DMAController;
     
-    // Current state of the Copper
+    // Current state of the Copper DEPRECATED
     int32_t state;
     
+    /* Indicates if the next instruction should be skipped.
+     * This flag is usually false. It is set to true by the SKIP instruction
+     * if the skip condition holds.
+     */
+    bool skip = false;
+     
     // Copper DMA pointers
     uint32_t coplc[2];
     
@@ -81,10 +87,18 @@ public:
     
 private:
  
-    // Advances the program counter
+    // Advances the program counter.
     inline void advancePC() { coppc = (coppc + 2) & 0x7FFFE; }
 
-   
+    // Runs the comparator circuit.
+    bool runComparator(uint32_t beam, uint32_t compare, uint32_t mask);
+    bool runComparator(uint32_t compare);
+    bool runComparator();
+    
+    // Computes the beam position where the Copper needs to wake up.
+    // This functions is invoked when a WAIT command is processed.
+    uint32_t nextTriggerPosition(); 
+    
     //
     // Analyzing Copper instructions
     //

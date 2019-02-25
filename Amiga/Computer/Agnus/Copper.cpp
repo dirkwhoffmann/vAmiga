@@ -132,6 +132,61 @@ Copper::pokeCOPxLCL(int x, uint16_t value)
 }
 
 bool
+Copper::runComparator(uint32_t beam, uint32_t compare, uint32_t mask)
+{
+    // Only the lowest 16 bits of the beam position are used in the comparison
+    // circuit (VP8 is not seen by the Copper).
+    beam &= 0xFFFF;
+    
+    // Mask values and compare
+    return (beam & mask) >= (compare & mask);
+}
+
+bool
+Copper::runComparator(uint32_t compare)
+{
+    // Extract the comparison mask from the second instruction register.
+    // Note: The uppermost bit cannot be masked (there is no VM7).
+    uint32_t mask = (uint32_t)(copins2 & 0x7FFE);
+    
+    return runComparator(amiga->dma.beam, compare, mask);
+}
+
+bool
+Copper::runComparator()
+{
+    return runComparator(copins1 & 0xFFFE);
+}
+
+uint32_t
+Copper::nextTriggerPosition()
+{
+    // Get the current beam position
+    uint32_t beam = amiga->dma.beam;
+
+    /* We are going to compute the smallest beam position satisfying:
+     *
+     *   1) computed position >= current beam position
+     *   2) the comparator circuit triggers
+     *
+     * We do this by starting with the maximum possible value:
+     */
+    uint32_t pos = 0x1FFFF, newPos;
+    
+    /* Now, we iterate through bit from left to right and set the bit to 0.
+     * If conditions 1) and 2) still hold, we continue. If not, we have
+     * already found the smalles value and return
+     */
+    for (int i = 16; i >= 0; i--) {
+        newPos = pos & ~(1 << i);
+        if (newPos < beam || !runComparator(newPos)) break;
+        pos = newPos;
+    }
+    
+    return pos;
+}
+
+bool
 Copper::isMoveCmd()
 {
     return !(copins1 & 1);
@@ -256,7 +311,18 @@ Copper::processEvent(int32_t type, int64_t data)
                 else {
                     assert(isSkipCmd());
                     
+                    uint16_t compare = copins1 & 0xFFFE;
+                    uint16_t mask = (copins2 & 0x7FFE);
+                    // bool bfd = copins2 & 0x1000;
                     
+                    // Check if the trigger position has already been passed
+                    uint32_t beam = amiga->dma.beam & 0xFFFF;
+                    
+                    if ((beam & mask) >= (compare & mask)) {
+                        
+                        // Set the skip flag
+                        skip = true;
+                    }
                 }
               
 
