@@ -112,24 +112,12 @@ EventHandler::_executeUntil(Cycle cycle) {
  
     // Check for a Copper event
     if (isDue(COPPER_SLOT, cycle)) {
-        
-        switch(eventSlot[COPPER_SLOT].type) {
-                
-            case COPPER_JMP1:
-                // debug("Processing COPPER_JMP1\n");
-                cancelEvent(COPPER_SLOT);
-                // DO SOMETHING SMART HERE
-                break;
-                
-            case COPPER_JMP2:
-                // debug("Processing COPPER_JMP2\n");
-                cancelEvent(COPPER_SLOT);
-                // DO SOMETHING SMART HERE
-                break;
-                
-            default:
-                assert(false);
-        }
+        amiga->dma.copper.processEvent(eventSlot[COPPER_SLOT].type, eventSlot[COPPER_SLOT].data);
+    }
+ 
+    // Check for a Blitter event
+    if (isDue(BLITTER_SLOT, cycle)) {
+        // amiga->dma.blitter.processEvent(eventSlot[BLITTER_SLOT].type, eventSlot[BLITTER_SLOT].data);
     }
     
     // Determine the next trigger cycle

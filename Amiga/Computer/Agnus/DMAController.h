@@ -185,8 +185,12 @@ public:
 
     
     //
-    // FAKE METHODS FOR THE VISUAL PROTOTYPE
+    // DMA scheduling
     //
+    
+    // Returns true if Copper can do a DMA cycle
+    bool copperCanHaveBus(); 
+    
     
 public:
     

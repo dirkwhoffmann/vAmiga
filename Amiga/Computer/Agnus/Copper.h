@@ -10,21 +10,12 @@
 #ifndef _COPPER_INC
 #define _COPPER_INC
 
-typedef enum {
-    
-    COPPER_RESET = 0,
-    COPPER_READ_FIRST = 1,
-    COPPER_READ_SECOND = 2,
-    COPPER_TRANSFER = 3
-    
-} CopperState;
-
 class Copper : public HardwareComponent {
    
     friend class DMAController;
     
     // Current state of the Copper
-    CopperState state; 
+    int32_t state;
     
     // Copper DMA pointers
     uint32_t coplc[2];
@@ -32,9 +23,10 @@ class Copper : public HardwareComponent {
     // The Copper Danger Bit (CDANG)
     bool cdang;
     
-    // The Copper instruction register
-    uint16_t copins = 0;
-    
+    // The Copper instruction registers
+    uint16_t copins1 = 0;
+    uint16_t copins2 = 0;
+
     // The Copper program counter
     uint32_t coppc = 0;
     
@@ -88,10 +80,50 @@ public:
     //
     
 private:
+ 
+    // Advances the program counter
+    inline void advancePC() { coppc = (coppc + 2) & 0x7FFFE; }
+
+   
+    //
+    // Analyzing Copper instructions
+    //
     
-    // Convenience wrappers for scheduling Copper events
+    /* Each functions comes in two variante. The first variant analyzes the
+     * instruction in the instructions register. The second variant analyzes
+     * the instruction at a certain location in memory.
+     */
+ 
+    bool isMoveCmd();
+    bool isMoveCmd(uint32_t addr);
+    
+    bool isWaitCmd();
+    bool isWaitCmd(uint32_t addr);
+
+    bool isSkipCmd();
+    bool isSkipCmd(uint32_t addr);
+    
+
+ 
+
+
+    
+    //
+    // Managing events
+    //
+    
+    // Schedules a new Copper event
     void scheduleEventRel(Cycle delta, int32_t type, int64_t data = 0);
+
+    // Cancels a scheduled Copper event
     void cancelEvent();
+    
+public:
+    
+    // Processes a Copper event
+    void processEvent(int32_t type, int64_t data);
+
+private:
     
     // Executed after each frame
     void vsyncAction();

@@ -16,6 +16,8 @@
 
 class Memory : public HardwareComponent {
     
+    friend class Copper;
+    
 public:
     
     /* Each memory area is represented by three variables:

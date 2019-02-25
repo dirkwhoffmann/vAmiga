@@ -18,7 +18,8 @@ Copper::Copper()
         { &state,    sizeof(state),    0 },
         { &coplc,    sizeof(coplc),    DWORD_ARRAY },
         { &cdang,    sizeof(cdang),    0 },
-        { &copins,   sizeof(copins),   0 },
+        { &copins1,  sizeof(copins1),  0 },
+        { &copins2,  sizeof(copins2),  0 },
         { &coppc,    sizeof(coppc),    0 },
     });
 }
@@ -38,7 +39,7 @@ Copper::getInfo()
 bool
 Copper::illegalAddress(uint32_t address)
 {
-    address &= 0xFF;
+    address &= 0x1FE;
     return address >= (cdang ? 0x40 : 0x80);
 }
 
@@ -100,7 +101,16 @@ Copper::pokeCOPJMP(int x)
 void
 Copper::pokeCOPINS(uint16_t value)
 {
-    copins = value;
+    /* COPINS is a dummy address that can be used to write the first or
+     * the secons instruction register, depending on the current state.
+     */
+
+    // TODO: The following is almost certainly wrong...
+    if (state == COPPER_MOVE || state == COPPER_WAIT_OR_SKIP) {
+        copins2 = value;
+    } else {
+        copins1 = value;
+    }
 }
 
 void
@@ -121,17 +131,157 @@ Copper::pokeCOPxLCL(int x, uint16_t value)
     coplc[x] = REPLACE_LO_WORD(coplc[x], value & 0xFFFE);
 }
 
+bool
+Copper::isMoveCmd()
+{
+    return !(copins1 & 1);
+}
+
+bool Copper::isMoveCmd(uint32_t addr)
+{
+    uint32_t instr = amiga->mem.peek32(addr);
+    return !(HI_WORD(instr) & 1);
+}
+
+bool Copper::isWaitCmd()
+{
+     return (copins1 & 1) && !(copins2 & 1);
+}
+
+bool Copper::isWaitCmd(uint32_t addr)
+{
+    uint32_t instr = amiga->mem.peek32(addr);
+    return (HI_WORD(instr) & 1) && !(LO_WORD(instr) & 1);
+}
+
+bool
+Copper::isSkipCmd()
+{
+    return (copins1 & 1) && (copins2 & 1);
+}
+
+bool
+Copper::isSkipCmd(uint32_t addr)
+{
+    uint32_t instr = amiga->mem.peek32(addr);
+    return (HI_WORD(instr) & 1) && (LO_WORD(instr) & 1);
+}
+
 void
 Copper::scheduleEventRel(Cycle delta, int32_t type, int64_t data)
 {
     Cycle trigger = amiga->dma.clock + delta;
     amiga->dma.eventHandler.scheduleEvent(COPPER_SLOT, trigger, type, data);
+    
+    state = type;
 }
 
 void
 Copper::cancelEvent()
 {
     amiga->dma.eventHandler.cancelEvent(COPPER_SLOT);
+    state = 0;
+}
+
+void
+Copper::processEvent(int32_t type, int64_t data)
+{
+    switch (type) {
+            
+        case COPPER_REQUEST_DMA:
+            
+            /* In this state, Copper wait for a free DMA cycle.
+             * Once DMA access is granted, it continues with fetching the
+             * first instruction word.
+             */
+            if ( amiga->dma.copperCanHaveBus()) {
+                scheduleEventRel(2, COPPER_FETCH);
+            }
+            
+        case COPPER_FETCH:
+            
+            if (amiga->dma.copperCanHaveBus()) {
+                
+                // Load the first instruction word
+                copins1 = amiga->mem.peek16(coppc);
+                advancePC();
+                
+                // Determine the next state based on the instruction type
+                scheduleEventRel(2, isMoveCmd() ? COPPER_MOVE : COPPER_WAIT_OR_SKIP);
+            }
+            break;
+            
+        case COPPER_MOVE:
+            
+            if (amiga->dma.copperCanHaveBus()) {
+                
+                // Load the second instruction word
+                copins2 = amiga->mem.peek16(coppc);
+                advancePC();
+                
+                // Extract register number from the first instruction word
+                uint16_t reg = (copins1 & 0x1FE);
+                
+                if (illegalAddress(reg)) {
+                    
+                    cancelEvent(); // Stops the Copper
+                    break;
+                }
+                
+                // TODO: Skip instruction if prev command was SKIP
+                if (1) { // if (!skip) {
+                    amiga->mem.pokeCustom16(reg, copins2);
+                }
+                
+                // Schedule next event
+                scheduleEventRel(2, COPPER_FETCH);
+            }
+            break;
+            
+        case COPPER_WAIT_OR_SKIP:
+            
+            if (amiga->dma.copperCanHaveBus()) {
+                
+                // Load the second instruction word
+                copins2 = amiga->mem.peek16(coppc);
+                advancePC();
+                
+                // Is it a WAIT command?
+                if (isWaitCmd()) {
+                    
+                    
+                }
+                
+                // It must be a SKIP command then.
+                else {
+                    assert(isSkipCmd());
+                    
+                    
+                }
+              
+
+            }
+            break;
+            
+        case COPPER_JMP1:
+        
+            // Load COP1LC into the program counter
+            coppc = coplc[0];
+            scheduleEventRel(2, COPPER_REQUEST_DMA);
+            break;
+
+        case COPPER_JMP2:
+            
+            // Load COP2LC into the program counter
+            coppc = coplc[1];
+            scheduleEventRel(2, COPPER_REQUEST_DMA);
+            break;
+
+        default:
+            
+            assert(false);
+            break;
+    }
 }
 
 void

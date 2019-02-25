@@ -14,7 +14,7 @@
 
 typedef enum
 {
-    CIAA_SLOT,
+    CIAA_SLOT = 0,
     CIAB_SLOT,
     COPPER_SLOT,
     BLITTER_SLOT,
@@ -27,7 +27,7 @@ static inline bool isEventSlot(int32_t s) { return s <= EVENT_SLOTS; }
 typedef enum
 {
     CIA_EXECUTE = 1,
-    CIA_WAKEUP  = 2,
+    CIA_WAKEUP,
     CIA_EVENTS
     
 } CiaEvent;
@@ -36,8 +36,15 @@ static inline bool isCiaEvent(int32_t e) { return e <= CIA_EVENTS; }
 
 typedef enum
 {
-    COPPER_JMP1 = 1,
-    COPPER_JMP2 = 2,
+    COPPER_REQUEST_DMA = 1,
+    COPPER_FETCH,
+    COPPER_MOVE,
+    COPPER_WAIT_OR_SKIP,
+    COPPER_WAIT,
+    COPPER_SKIP, 
+    COPPER_JMP1,
+    COPPER_JMP2,
+
     COPPER_EVENTS
     
 } CopperEvent;

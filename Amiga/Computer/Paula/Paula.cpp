@@ -94,8 +94,7 @@ Paula::pokeINTENA(uint16_t value)
 int
 Paula::interruptLevel()
 {
-    
-    uint16_t mask = intreq && intena;
+    uint16_t mask = intreq & intena;
 
     if (mask & 0b0110000000000000) return 6;
     if (mask & 0b0001100000000000) return 5;

@@ -494,3 +494,17 @@ DMAController::vsyncAction()
     
     copper.vsyncAction(); 
 }
+
+bool
+DMAController::copperCanHaveBus()
+{
+    // For now, we only check the DMACON register.
+    // Later, we need to check if the bus is really free and if the current
+    // cylce is even.
+    
+    if (dmacon & 0b1010000000) {
+        // debug("COPPER DMA IS ENABLED !!!!\n"); 
+    }
+        
+    return (dmacon & 0b1010000000) != 0;
+}
