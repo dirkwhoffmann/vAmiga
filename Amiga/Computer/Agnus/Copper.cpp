@@ -245,15 +245,14 @@ Copper::isSkipCmd(uint32_t addr)
 uint16_t
 Copper::getRA()
 {
-    return copins1 & 0x1F;
+    return copins1 & 0xFF;
 }
 
 uint16_t
 Copper::getRA(uint32_t addr)
 {
     uint32_t instr = amiga->mem.spypeek32(addr);
-    debug("getRA: %X %X %X\n", instr, HI_WORD(instr), LO_WORD(instr));
-    return HI_WORD(instr) & 0x1F;
+    return HI_WORD(instr) & 0xFF;
 }
 
 uint16_t
@@ -311,7 +310,6 @@ Copper::getVMHM(uint32_t addr)
 bool
 Copper::isIllegalInstr(uint32_t addr)
 {
-    debug("isMoveCmd(addr) = %d\n", isMoveCmd(addr));
     return isMoveCmd(addr) && illegalAddress(getRA(addr));
 }
 
@@ -325,23 +323,23 @@ Copper::disassemble(uint32_t addr)
         
         uint16_t reg = getRA(addr) >> 1;
         assert(reg <= 0xFF);
-        sprintf(disassembly, "MOVE %s, %04X", customReg[reg], getDW(addr));
+        sprintf(disassembly, "MOVE %s, $%04X", customReg[reg], getDW(addr));
         return disassembly;
     }
     
     const char *mnemonic = isWaitCmd(addr) ? "WAIT" : "SKIP";
-    const char *suffix = getBFD() ? "_BFD" : "";
+    const char *suffix = getBFD(addr) ? "_BFD" : "";
     
     if (getVM(addr) == 0xFF) {
-        sprintf(vpos, "%2X", getVP(addr));
+        sprintf(vpos, "$%02X", getVP(addr));
     } else {
-        sprintf(vpos, "%2X & %2X", getVP(addr), getVM(addr));
+        sprintf(vpos, "$%02X & $%02X", getVP(addr), getVM(addr));
     }
     
     if (getHM(addr) == 0xFF) {
-        sprintf(hpos, "%2X", getHP(addr));
+        sprintf(hpos, "$%02X", getHP(addr));
     } else {
-        sprintf(hpos, "%2X & %2X", getHP(addr), getHM(addr));
+        sprintf(hpos, "$%02X & %02X", getHP(addr), getHM(addr));
     }
     
     sprintf(disassembly, "%s%s (%s,%s)", mnemonic, suffix, vpos, hpos);

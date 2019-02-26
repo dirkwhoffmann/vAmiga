@@ -99,6 +99,30 @@ extension CopperTableView : NSTableViewDataSource {
 
 extension CopperTableView : NSTableViewDelegate {
     
+    func tableView(_ tableView: NSTableView, setObjectValue object: Any?, for tableColumn: NSTableColumn?, row: Int) {
+        
+        var addr = 0
+        
+        switch(tableColumn?.identifier.rawValue) {
+        
+        case "data1":
+            addr = coplc + 4 * row
+            
+        case "data2":
+            addr = coplc + 4 * row + 2
+        
+        default:
+            NSSound.beep()
+            return
+        }
+        
+        if let value = object as? UInt16 {
+            amigaProxy?.suspend()
+            amigaProxy?.mem.poke16(addr, value: Int(value))
+            amigaProxy?.resume()
+        }
+    }
+    
     func tableView(_ tableView: NSTableView, willDisplayCell cell: Any, for tableColumn: NSTableColumn?, row: Int) {
         
         if let cell = cell as? NSTextFieldCell {
