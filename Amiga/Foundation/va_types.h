@@ -203,9 +203,10 @@ typedef struct {
 
 typedef struct {
 
+    bool active;
     bool cdang;
     uint16_t coppc;
-    // uint16_t copinstr1;
+    uint16_t copins[2];
     uint32_t coplc[2];
     
 } CopperInfo;

@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-import Foundation
+// import Foundation
 
 class BankTableView : NSTableView {
     

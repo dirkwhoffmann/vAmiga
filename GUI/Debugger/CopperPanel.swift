@@ -21,4 +21,20 @@ extension Inspector {
         }
         
     }
+ 
+    @IBAction func copCOPLCAction(_ sender: NSTextField!) {
+        
+        track()
+    }
+    
+    @IBAction func copPlusAction(_ sender: NSButton!) {
+        
+        track()
+    }
+
+    @IBAction func copMinusAction(_ sender: NSButton!) {
+        
+        track()
+    }
+
 }

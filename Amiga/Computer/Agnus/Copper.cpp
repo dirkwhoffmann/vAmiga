@@ -29,10 +29,18 @@ Copper::getInfo()
 {
     CopperInfo info;
     
-    info.cdang = cdang;
-    info.coppc = coppc;
-    for (unsigned i = 0; i < 2; i++) info.coplc[i] = coplc[i];
+    /* Note: We call the Copper 'active' if there is a pending message in the
+     * Copper event slot.
+     */
     
+    info.cdang     = cdang;
+    info.active    = amiga->dma.eventHandler.isPending(COPPER_SLOT);
+    info.coppc     = coppc;
+    info.copins[0] = copins1;
+    info.copins[1] = copins2;
+    info.coplc[0]  = coplc[0];
+    info.coplc[1]  = coplc[1];
+
     return info;
 }
 
@@ -132,26 +140,39 @@ Copper::pokeCOPxLCL(int x, uint16_t value)
 }
 
 bool
-Copper::runComparator(uint32_t beam, uint32_t waitpos, uint32_t mask)
+Copper::comparator(uint32_t beam, uint32_t waitpos, uint32_t mask)
 {
-    // Only the lowest 16 bits of the beam position are used in the comparison
-    // circuit (VP8 is not seen by the Copper).
-    beam &= 0xFFFF;
+    // Get comparison bits for vertical position
+    uint8_t vBeam = (beam >> 8) & 0xFF;
+    uint8_t vWaitpos = (waitpos >> 8) & 0xFF;
+    uint8_t vMask = (mask >> 8) & 0x7F;
     
-    // Apply mask and compare values
-    return (beam & mask) >= (waitpos & mask);
+    // Compare vertical positions
+    if ((vBeam & vMask) < (vWaitpos & vMask))
+        return false;
+
+    if ((vBeam & vMask) > (vWaitpos & vMask))
+        return true;
+
+    // Get comparison bits for horizontal position
+    uint8_t hBeam = beam & 0xFE;
+    uint8_t hWaitpos = waitpos & 0xFE;
+    uint8_t hMask = mask & 0xFE;
+    
+    // Compare horizontal positions
+    return (hBeam & hMask) >= (hWaitpos & hMask);
 }
 
 bool
-Copper::runComparator(uint32_t waitpos)
+Copper::comparator(uint32_t waitpos)
 {
-    return runComparator(amiga->dma.beam, waitpos, getVMHM());
+    return comparator(amiga->dma.beam, waitpos, getVMHM());
 }
 
 bool
-Copper::runComparator()
+Copper::comparator()
 {
-    return runComparator(getVPHP());
+    return comparator(getVPHP());
 }
 
 uint32_t
@@ -167,7 +188,7 @@ Copper::nextTriggerPosition()
      *
      * We do this by starting with the maximum possible value:
      */
-    uint32_t pos = 0x1FFFF;
+    uint32_t pos = 0x1FFE2;
     
     /* Now, we iterate through bit from left to right and set the bit to 0.
      * If conditions 1) and 2) still hold, we continue. If not, we have
@@ -175,7 +196,7 @@ Copper::nextTriggerPosition()
      */
     for (int i = 16; i >= 0; i--) {
         uint32_t newPos = pos & ~(1 << i);
-        if (newPos >= beam && runComparator(newPos)) {
+        if (newPos >= beam && comparator(newPos)) {
             pos = newPos;
         } else {
             break;

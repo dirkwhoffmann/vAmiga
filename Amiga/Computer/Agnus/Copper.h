@@ -91,9 +91,9 @@ private:
     inline void advancePC() { coppc = (coppc + 2) & 0x7FFFE; }
 
     // Runs the comparator circuit.
-    bool runComparator(uint32_t beam, uint32_t waitpos, uint32_t mask);
-    bool runComparator(uint32_t waitpos);
-    bool runComparator();
+    bool comparator(uint32_t beam, uint32_t waitpos, uint32_t mask);
+    bool comparator(uint32_t waitpos);
+    bool comparator();
     
     // Computes the beam position where the Copper needs to wake up.
     // This functions is invoked when a WAIT command is processed.
@@ -103,6 +103,25 @@ private:
     // Analyzing Copper instructions
     //
     
+    /*             MOVE              WAIT              SKIP
+     * Bit   copins1 copins2   copins1 copins2   copins1 copins2
+     *  15      x     DW15       VP7     BFD       VP7     BFD
+     *  14      x     DW14       VP6     VM6       VP6     VM6
+     *  13      x     DW13       VP5     VM5       VP5     VM5
+     *  12      x     DW12       VP4     VM4       VP4     VM4
+     *  11      x     DW11       VP3     VM3       VP3     VM3
+     *  10      x     DW10       VP2     VM2       VP2     VM2
+     *   9      x     DW9        VP1     VM1       VP1     VM1
+     *   8     RA8    DW8        VP0     VM0       VP0     VM0
+     *   7     RA7    DW7        HP8     HM8       HP8     HM8
+     *   6     RA6    DW6        HP7     HM7       HP7     HM7
+     *   5     RA5    DW5        HP6     HM6       HP6     HM6
+     *   4     RA4    DW4        HP5     HM5       HP5     HM5
+     *   3     RA3    DW3        HP4     HM4       HP4     HM4
+     *   2     RA2    DW2        HP3     HM3       HP3     HM3
+     *   1     RA1    DW1        HP2     HM2       HP2     HM2
+     *   0      0     DW0         1       0         1       1
+     */
     /* Each functions comes in two variante. The first variant analyzes the
      * instruction in the instructions register. The second variant analyzes
      * the instruction at a certain location in memory.
@@ -128,9 +147,17 @@ private:
 
     uint16_t getVPHP();
     uint16_t getVPHP(uint32_t addr);
-
+    uint16_t getVP() { return HI_BYTE(getVPHP()); }
+    uint16_t getVP(uint32_t addr) { return HI_BYTE(getVPHP(addr)); }
+    uint16_t getHP() { return LO_BYTE(getVPHP()); }
+    uint16_t getHP(uint32_t addr) { return LO_BYTE(getVPHP(addr)); }
+    
     uint16_t getVMHM();
     uint16_t getVMHM(uint32_t addr);
+    uint16_t getVM() { return HI_BYTE(getVMHM()); }
+    uint16_t getVM(uint32_t addr) { return HI_BYTE(getVMHM(addr)); }
+    uint16_t getHM() { return LO_BYTE(getVMHM()); }
+    uint16_t getHM(uint32_t addr) { return LO_BYTE(getVMHM(addr)); }
     
     
     //

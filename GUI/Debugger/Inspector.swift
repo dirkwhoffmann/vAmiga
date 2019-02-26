@@ -175,7 +175,23 @@ class Inspector : NSWindowController
     @IBOutlet weak var dmaBPL1MOD: NSTextField!
     @IBOutlet weak var dmaBPL2MOD: NSTextField!
 
-    
+    // Debug panel (Copper)
+    @IBOutlet weak var copActive: NSButton!
+    @IBOutlet weak var copCOPPC: NSTextField!
+    @IBOutlet weak var copCOPINS1: NSTextField!
+    @IBOutlet weak var copCOPINS2: NSTextField!
+    @IBOutlet weak var copCDANG: NSButton!
+
+    @IBOutlet weak var copCOP1LC: NSTextField!
+    @IBOutlet weak var copPlus1: NSButton!
+    @IBOutlet weak var copMinus1: NSButton!
+    @IBOutlet weak var copList1: CopperTableView!
+
+    @IBOutlet weak var copCOP2LC: NSTextField!
+    @IBOutlet weak var copPlus2: NSButton!
+    @IBOutlet weak var copMinus2: NSButton!
+    @IBOutlet weak var copList2: CopperTableView!
+
     // Debug panel (Denise)
     @IBOutlet weak var deniseBPLCON0: NSTextField!
     @IBOutlet weak var deniseHIRES: NSButton!

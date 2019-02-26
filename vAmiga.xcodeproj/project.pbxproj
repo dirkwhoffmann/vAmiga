@@ -101,6 +101,7 @@
 		509F7F1A21EDDF4F00A530E4 /* BootRom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509F7F1821EDDF4F00A530E4 /* BootRom.cpp */; };
 		509F7F1D21EDEA0200A530E4 /* KickRom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509F7F1B21EDEA0200A530E4 /* KickRom.cpp */; };
 		50A2953F21FF12EF0046BAA0 /* AmigaControlPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A2953D21FF12EF0046BAA0 /* AmigaControlPort.cpp */; };
+		50B0AF93222531C500EE3689 /* CopperTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B0AF92222531C500EE3689 /* CopperTableView.swift */; };
 		50B0DD1E220B5CEF00D6618A /* BreakpointManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B0DD1C220B5CEF00D6618A /* BreakpointManager.cpp */; };
 		50B14C0721EB218E002E32A6 /* AmigaObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0521EB218E002E32A6 /* AmigaObject.cpp */; };
 		50B14C0D21EB3708002E32A6 /* HardwareComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0B21EB3708002E32A6 /* HardwareComponent.cpp */; };
@@ -281,6 +282,7 @@
 		509F7F1C21EDEA0200A530E4 /* KickRom.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KickRom.h; sourceTree = "<group>"; };
 		50A2953D21FF12EF0046BAA0 /* AmigaControlPort.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaControlPort.cpp; sourceTree = "<group>"; };
 		50A2953E21FF12EF0046BAA0 /* AmigaControlPort.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaControlPort.h; sourceTree = "<group>"; };
+		50B0AF92222531C500EE3689 /* CopperTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopperTableView.swift; sourceTree = "<group>"; };
 		50B0DD1C220B5CEF00D6618A /* BreakpointManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BreakpointManager.cpp; sourceTree = "<group>"; };
 		50B0DD1D220B5CEF00D6618A /* BreakpointManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BreakpointManager.h; sourceTree = "<group>"; };
 		50B14C0521EB218E002E32A6 /* AmigaObject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaObject.cpp; sourceTree = "<group>"; };
@@ -637,6 +639,7 @@
 				508FDFF821EA22790043D0E9 /* MemTableView.swift */,
 				508FDFF621EA22790043D0E9 /* Formatter.swift */,
 				508FDFF021EA22780043D0E9 /* WaveformView.swift */,
+				50B0AF92222531C500EE3689 /* CopperTableView.swift */,
 			);
 			path = Debugger;
 			sourceTree = "<group>";
@@ -1030,6 +1033,7 @@
 				50B0DD1E220B5CEF00D6618A /* BreakpointManager.cpp in Sources */,
 				509F7F1D21EDEA0200A530E4 /* KickRom.cpp in Sources */,
 				508FE05C21EA22CC0043D0E9 /* DiskMountController.swift in Sources */,
+				50B0AF93222531C500EE3689 /* CopperTableView.swift in Sources */,
 				5085FE5721FB3BAE009753EF /* EventHandler.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
