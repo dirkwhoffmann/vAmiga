@@ -7,8 +7,6 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-import Foundation
-
 class InstrTableView : NSTableView {
     
     @IBOutlet weak var inspector: Inspector!
@@ -140,7 +138,7 @@ class InstrTableView : NSTableView {
         
             mem = amigaProxy!.mem
             cpu = amigaProxy!.cpu
-        
+            
             for (c,f) in ["addr" : fmt24] {
                 let columnId = NSUserInterfaceItemIdentifier(rawValue: c)
                 if let column = tableColumn(withIdentifier: columnId) {

@@ -321,6 +321,24 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->dmaController->getInfo();
 }
+- (CopperInfo) getCopperInfo
+{
+    return wrapper->dmaController->copper.getInfo();
+}
+- (BOOL) isIllegalInstr:(NSInteger)addr
+{
+    return wrapper->dmaController->copper.isIllegalInstr(addr);
+}
+- (NSString *) disassemble:(NSInteger)addr
+{
+    const char *str = wrapper->dmaController->copper.disassemble(addr);
+    return str ? [NSString stringWithUTF8String:str] : NULL;
+}
+- (NSString *) disassemble:(NSInteger)list instr:(NSInteger)offset
+{
+    const char *str = wrapper->dmaController->copper.disassemble(list, offset);
+    return str ? [NSString stringWithUTF8String:str] : NULL;
+}
 
 @end
 

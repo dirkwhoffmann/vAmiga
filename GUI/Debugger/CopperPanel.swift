@@ -20,6 +20,8 @@ extension Inspector {
             
         }
         
+        copList1.refresh(everything: everything)
+        copList2.refresh(everything: everything)
     }
  
     @IBAction func copCOPLCAction(_ sender: NSTextField!) {
@@ -27,14 +29,4 @@ extension Inspector {
         track()
     }
     
-    @IBAction func copPlusAction(_ sender: NSButton!) {
-        
-        track()
-    }
-
-    @IBAction func copMinusAction(_ sender: NSButton!) {
-        
-        track()
-    }
-
 }

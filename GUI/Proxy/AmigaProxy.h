@@ -280,6 +280,11 @@ struct AmigaFileWrapper;
 
 - (void) dump;
 - (DMAInfo) getInfo;
+- (CopperInfo) getCopperInfo;
+
+- (BOOL) isIllegalInstr:(NSInteger)addr;
+- (NSString *) disassemble:(NSInteger)addr;
+- (NSString *) disassemble:(NSInteger)list instr:(NSInteger)offset;
 
 @end
 

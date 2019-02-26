@@ -35,7 +35,9 @@ class Copper : public HardwareComponent {
 
     // The Copper program counter
     uint32_t coppc = 0;
-    
+   
+    // Storage for disassembled instruction
+    char disassembly[128];
     
     //
     // Constructing and destructing
@@ -159,10 +161,18 @@ private:
     uint16_t getHM() { return LO_BYTE(getVMHM()); }
     uint16_t getHM(uint32_t addr) { return LO_BYTE(getVMHM(addr)); }
     
+public:
+    
+    bool isIllegalInstr(uint32_t addr);
+    char *disassemble(uint32_t addr);
+    char *disassemble(unsigned list, uint32_t offset);
+
     
     //
     // Managing events
     //
+    
+private:
     
     // Schedules a new Copper event
     void scheduleEventRel(Cycle delta, int32_t type, int64_t data = 0);
