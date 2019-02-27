@@ -114,8 +114,97 @@ DMAController::pokeDMACON(uint16_t value)
 {
     debug("pokeDMACON(%X)\n", value);
     
+    bool oldDMAEN = (dmacon & 0x0b1000000000);
+    bool oldBPLEN = (dmacon & 0x0b0100000000) && oldDMAEN;
+    bool oldCOPEN = (dmacon & 0x0b0010000000) && oldDMAEN;
+    bool oldBLTEN = (dmacon & 0x0b0001000000) && oldDMAEN;
+    bool oldSPREN = (dmacon & 0x0b0000100000) && oldDMAEN;
+    bool oldDSKEN = (dmacon & 0x0b0000010000) && oldDMAEN;
+    
     if (value & 0x8000) dmacon |= value; else dmacon &= ~value;
     dmacon &= 0x07FF;
+    
+    bool newDMAEN = (dmacon & 0x0b1000000000);
+    bool newBPLEN = (dmacon & 0x0b0100000000) && newDMAEN;
+    bool newCOPEN = (dmacon & 0x0b0010000000) && newDMAEN;
+    bool newBLTEN = (dmacon & 0x0b0001000000) && newDMAEN;
+    bool newSPREN = (dmacon & 0x0b0000100000) && newDMAEN;
+    bool newDSKEN = (dmacon & 0x0b0000010000) && newDMAEN;
+ 
+    // Bitplane DMA
+    if (oldBPLEN ^ newBPLEN) {
+
+        if (newBPLEN) {
+            
+            // Bitplane DMA on
+            debug("Bitplane DMA switched on");
+
+        } else {
+            
+            // Bitplane DMA off
+            debug("Bitplane DMA switched off");
+        }
+    }
+    
+    // Copper DMA
+    if (oldCOPEN ^ newCOPEN) {
+        
+        if (newCOPEN) {
+            
+            // Copper DMA on
+            debug("Copper DMA switched on");
+            eventHandler.scheduleEvent(COPPER_SLOT, 2, COPPER_FETCH);
+            
+        } else {
+            
+            // Copper DMA off
+            debug("Copper DMA switched off");
+            eventHandler.cancelEvent(COPPER_SLOT);
+        }
+    }
+    
+    // Blitter DMA
+    if (oldBLTEN ^ newBLTEN) {
+        
+        if (newBLTEN) {
+            // Blitter DMA on
+            debug("Blitter DMA switched on");
+            
+        } else {
+            
+            // Blitter DMA off
+            debug("Blitter DMA switched off");
+        }
+    }
+    
+    // Sprite DMA
+    if (oldSPREN ^ newSPREN) {
+        
+        if (newSPREN) {
+            // Sprite DMA on
+            debug("Sprite DMA switched on");
+            
+        } else {
+            
+            // Sprite DMA off
+            debug("Sprite DMA switched off");
+        }
+    }
+    
+    // Disk DMA
+    if (oldDSKEN ^ newDSKEN) {
+        
+        if (newDSKEN) {
+            
+            // Disk DMA on
+            debug("Disk DMA switched on");
+            
+        } else {
+            
+            // Disk DMA off
+            debug("Disk DMA switched off");
+        }
+    }
 }
 
 uint16_t
@@ -454,9 +543,6 @@ DMAController::executeUntil(Cycle targetClock)
                 break;
                 
             case 0xE3:
-                
-                // This is the last PAL cycle
-                hsyncAction();
                 break;
                 
             default:
@@ -467,15 +553,41 @@ DMAController::executeUntil(Cycle targetClock)
         // Advance the internal counters
         inchpos();
         clock += DMA_CYCLES(1);
+
+        // Check if the end of the current line has been reached
+        // TODO: MAKE IT AN EVENT
+        if (hpos() > 0xE2) {
+            hsyncAction();
+        }
     }
+}
+
+DMACycle
+DMAController::beamDiff(uint32_t start, uint32_t end)
+{
+    int32_t vStart = (int32_t)start >> 8;
+    int32_t hStart = (int32_t)start & 0xFF;
+    int32_t vEnd   = (int32_t)end >> 8;
+    int32_t hEnd   = (int32_t)end & 0xFF;
+    
+    // We assume that the function is called with a valid horizontal position
+    assert(hEnd <= 0xE2);
+
+    // Bail out if the end position is unreachable
+    if (vEnd > 312) return INT64_MAX;
+
+    // Compute vertical and horizontal difference
+    int32_t vDiff  = vEnd - vStart;
+    int32_t hDiff  = hEnd - hStart;
+    
+    // In PAL mode, all lines have the same length (227 color clocks)
+    return vDiff * 227 + hDiff;
 }
 
 void
 DMAController::hsyncAction()
 {
-    // We set the new horizonzal position to -1. This ensures that it will
-    // ne zero when the reach the end of function executeUntil()
-    sethpos(-1);
+    sethpos(0);
     
     // CIA B counts HSYNCs
     amiga->ciaB.incrementTOD();

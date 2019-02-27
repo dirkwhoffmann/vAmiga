@@ -708,7 +708,8 @@ Memory::peekCustom16(uint32_t addr)
             break; // return 0; // TODO: What do we return here?
     }
     
-    warn("peekCustom16(%X): MISSING IMPLEMENTATION\n", addr);
+    warn("peekCustom16(%X [%s]): MISSING IMPLEMENTATION\n",
+         addr, customReg[(addr >> 1) & 0xFF]);
     amiga->pause();
     return 42;
 }
@@ -1004,7 +1005,8 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
             amiga->denise.colorizer.pokeColorReg(31, value); return;
     }
     
-    warn("pokeCustom16(%X, %X): MISSING IMPLEMENTATION\n", addr, value);
+    warn("pokeCustom16(%X [%s], %X): MISSING IMPLEMENTATION\n",
+         addr, customReg[(addr >> 1) & 0xFF], value);
     amiga->pause();
 }
 

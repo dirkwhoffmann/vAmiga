@@ -176,6 +176,12 @@ public:
     void pokeSPRxPTL(int x, uint16_t value);
     void pokeSPRxPTH(int x, uint16_t value);
 
+    /* Returns the difference of two beam position in color clocks
+     * Returns UINT32_MAX if the start position is greater than the end position
+     * or if the end position is unreachable.
+     */
+    DMACycle beamDiff(uint32_t start, uint32_t end);
+    DMACycle beamDiff(uint32_t end) { return beamDiff(beam, end); }
     
     // This function is called when the end of a rasterline has been reached.
     void hsyncAction();

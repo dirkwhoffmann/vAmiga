@@ -135,7 +135,6 @@ inline bool is_uint5_t(uint5_t value) { return value < 32; }
 // Replaces the high word in a 23-bit value
 #define REPLACE_HI_WORD(x,y) (((x) & ~0xFFFF0000) | ((y) << 16))
 
-
 // Returns true if value is rising when switching from x to y
 #define RISING_EDGE(x,y) (!(x) && (y))
 

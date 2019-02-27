@@ -358,9 +358,9 @@ Copper::disassemble(unsigned list, uint32_t offset)
 }
 
 void
-Copper::scheduleEventRel(Cycle delta, int32_t type, int64_t data)
+Copper::scheduleEventRel(DMACycle delta, int32_t type, int64_t data)
 {
-    Cycle trigger = amiga->dma.clock + delta;
+    Cycle trigger = amiga->dma.clock + DMA_CYCLES(delta);
     amiga->dma.eventHandler.scheduleEvent(COPPER_SLOT, trigger, type, data);
     
     state = type;
@@ -418,10 +418,9 @@ Copper::processEvent(int32_t type, int64_t data)
                     break;
                 }
                 
-                // TODO: Skip instruction if prev command was SKIP
-                if (1) { // if (!skip) {
-                    amiga->mem.pokeCustom16(reg, copins2);
-                }
+                // Write into the custom register
+                if (!skip) amiga->mem.pokeCustom16(reg, copins2);
+                skip = false;
                 
                 // Schedule next event
                 scheduleEventRel(2, COPPER_FETCH);
@@ -431,7 +430,7 @@ Copper::processEvent(int32_t type, int64_t data)
         case COPPER_WAIT_OR_SKIP:
             
             if (amiga->dma.copperCanHaveBus()) {
-                
+
                 // Load the second instruction word
                 copins2 = amiga->mem.peek16(coppc);
                 advancePC();
@@ -439,25 +438,26 @@ Copper::processEvent(int32_t type, int64_t data)
                 // Is it a WAIT command?
                 if (isWaitCmd()) {
                     
+                    // Clear the skip flag
+                    skip = false;
                     
+                    // Determine where the WAIT command will trigger
+                    uint32_t trigger = nextTriggerPosition();
+                    
+                    // In how many color clock cycles do we get there?
+                    DMACycle delay = amiga->dma.beamDiff(trigger);
+                    
+                    // Schedule a wake up event
+                    scheduleEventRel(delay, COPPER_FETCH);
                 }
                 
                 // It must be a SKIP command then.
                 else {
+                    
+                    // Determine if the next command has to be skipped by
+                    // running the comparator circuit.
                     assert(isSkipCmd());
-                    
-                    uint16_t compare = copins1 & 0xFFFE;
-                    uint16_t mask = (copins2 & 0x7FFE);
-                    // bool bfd = copins2 & 0x1000;
-                    
-                    // Check if the trigger position has already been passed
-                    uint32_t beam = amiga->dma.beam & 0xFFFF;
-                    
-                    if ((beam & mask) >= (compare & mask)) {
-                        
-                        // Set the skip flag
-                        skip = true;
-                    }
+                    skip = comparator();
                 }
               
 
