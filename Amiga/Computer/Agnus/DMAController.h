@@ -206,7 +206,7 @@ public:
     DMACycle beamDiff(uint32_t end) { return beamDiff(beam, end); }
     
     // This function is called when the end of a rasterline has been reached.
-    void hsyncAction();
+    void hsyncHandler();
 
     // This function is called when the end of a frame has been reached.
     void vsyncAction();

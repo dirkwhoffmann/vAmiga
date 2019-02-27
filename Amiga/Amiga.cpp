@@ -348,10 +348,6 @@ Amiga::_powerOn()
     // FC47D8
     cpu.bpManager.setBreakpointAt(0xFCACBC);
 
-    
-    
-
-    
     putMessage(MSG_POWER_ON);
 }
 

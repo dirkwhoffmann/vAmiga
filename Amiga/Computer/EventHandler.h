@@ -12,55 +12,88 @@
 
 #include "HardwareComponent.h"
 
+// Note: The slot order does matter. If two events trigger at the same cycle,
+// the slot with a smaller number is processed first.
 typedef enum
 {
-    CIAA_SLOT = 0,
-    CIAB_SLOT,
-    COPPER_SLOT,
-    BLITTER_SLOT,
-    EVENT_SLOTS
+    CIAA_SLOT = 0,    // CIA A execution
+    CIAB_SLOT,        // CIA B execution
+    BPL_SLOT,         // Bitplane DMA
+    DAS_SLOT,         // Disk, Audio, and Sprite DMA
+    COP_SLOT,         // Copper DMA
+    BLT_SLOT,         // Blitter DMA
+    RAS_SLOT,         // Raster line events
+    EVENT_SLOT_COUNT
     
 } EventSlot;
 
-static inline bool isEventSlot(int32_t s) { return s <= EVENT_SLOTS; }
+static inline bool isEventSlot(int32_t s) { return s <= EVENT_SLOT_COUNT; }
 
 typedef enum
 {
+    EVENT_NONE = 0,
+    
+    // CIA slots
     CIA_EXECUTE = 1,
     CIA_WAKEUP,
-    CIA_EVENTS
+    CIA_EVENT_COUNT,
     
-} CiaEvent;
-
-static inline bool isCiaEvent(int32_t e) { return e <= CIA_EVENTS; }
-
-typedef enum
-{
-    COPPER_REQUEST_DMA = 1,
-    COPPER_FETCH,
-    COPPER_MOVE,
-    COPPER_WAIT_OR_SKIP,
-    COPPER_WAIT,
-    COPPER_SKIP, 
-    COPPER_JMP1,
-    COPPER_JMP2,
-
-    COPPER_EVENTS
+    // Bitplane slot
+    BPL_FETCH_LORES = 1,
+    BPL_FETCH_HIRES,
+    BPL_EVENT_COUNT,
     
-} CopperEvent;
+    // Disk, Audio, and Sprite slot
+    DAS_DISK = 1,
+    DAS_AUDIO,
+    DAS_SPRITE0,
+    DAS_SPRITE1,
+    DAS_SPRITE2,
+    DAS_SPRITE3,
+    DAS_SPRITE4,
+    DAS_SPRITE5,
+    DAS_SPRITE6,
+    DAS_SPRITE7,
+    DAS_EVENT_COUNT,
+    
+    // Copper slot
+    COP_REQUEST_DMA = 1,
+    COP_FETCH,
+    COP_MOVE,
+    COP_WAIT_OR_SKIP,
+    COP_WAIT,
+    COP_SKIP, 
+    COP_JMP1,
+    COP_JMP2,
+    COP_EVENT_COUNT,
+    
+    // Blitter slot
+    BLT_TODO,
+    BLT_EVENT_COUNT,
+    
+    // HSYNC slot
+    RAS_HSYNC = 1,
+    RAS_EVENT_COUNT
+    
+} EventID;
 
-static inline bool isCopperEvent(int32_t e) { return e <= COPPER_EVENTS; }
+static inline bool isCiaEvent(EventID id) { return id <= CIA_EVENT_COUNT; }
+static inline bool isBplEvent(EventID id) { return id <= BPL_EVENT_COUNT; }
+static inline bool isDasEvent(EventID id) { return id <= DAS_EVENT_COUNT; }
+static inline bool isCopEvent(EventID id) { return id <= COP_EVENT_COUNT; }
+static inline bool isBltEvent(EventID id) { return id <= BLT_EVENT_COUNT; }
+static inline bool isRasEvent(EventID id) { return id <= RAS_EVENT_COUNT; }
 
 struct Event {
     
     // Indicates when the event is due
     Cycle triggerCycle;
     
-    /* Event type.
+    /* Event id.
      * This value is evaluated inside the event handler to determine the
      * action that needs to be taken.
      */
-    int32_t type;
+    EventID id;
     
     /* Data (optional)
      * This value can be used to pass data to the event handler.
@@ -75,7 +108,7 @@ public:
      * There is one slot for each event owner. In each slot, a single event
      * can be scheduled at a time
      */
-    Event eventSlot[EVENT_SLOTS];
+    Event eventSlot[EVENT_SLOT_COUNT];
     
     // This variables indicates when the next event triggers.
     // INT64_MAX if no event is pending.
@@ -106,7 +139,12 @@ private:
 public:
     
     // Schedules an event. The event will be executed at the specified cycle.
-    void scheduleEvent(EventSlot s, Cycle cycle, int32_t type, int64_t data = 0);
+    void scheduleEvent(EventSlot s, Cycle cycle, EventID id, int64_t data = 0);
+
+    // Reschedules the event in the specified slot
+    void rescheduleEvent(EventSlot s, Cycle addon);
+
+    // Cancels the event in the specified slot
     void cancelEvent(EventSlot s);
     
     // Returns true if the specified event slot contains a scheduled event
@@ -114,7 +152,7 @@ public:
         assert(isEventSlot(s)); return eventSlot[s].triggerCycle != INT64_MAX; }
 
     // Returns true if the specified event slot is due at the provided cycle
-    inline bool isDue(EventSlot s, int64_t cycle) { return cycle >= eventSlot[s].triggerCycle; }
+    inline bool isDue(EventSlot s, Cycle cycle) { return cycle >= eventSlot[s].triggerCycle; }
 
     // Processes all events that are due at or prior to cycle.
     inline void executeUntil(Cycle cycle) {

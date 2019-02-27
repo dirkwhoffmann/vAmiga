@@ -17,9 +17,9 @@ EventHandler::EventHandler()
 void
 EventHandler::_powerOn()
 {
-    for (unsigned i = 0; i < EVENT_SLOTS; i++) {
+    for (unsigned i = 0; i < EVENT_SLOT_COUNT; i++) {
         eventSlot[i].triggerCycle = INT64_MAX;
-        eventSlot[i].type = 0;
+        eventSlot[i].id = (EventID)0;
         eventSlot[i].data = 0;
     }
 }
@@ -45,29 +45,47 @@ EventHandler::_ping()
 void
 EventHandler::_dump()
 {
-    for (unsigned i = 0; i < EVENT_SLOTS; i++) {
+    plainmsg("Master clock: %lld\n", amiga->masterClock);
+    plainmsg("   DMA clock: %lld\n", amiga->dma.clock);
+    plainmsg("        hpos: %d\n", amiga->dma.hpos());
+    plainmsg("        vpos: %d\n", amiga->dma.vpos());
+    plainmsg("\n");
+    for (unsigned i = 0; i < EVENT_SLOT_COUNT; i++) {
         plainmsg("Slot %d: %s (Cycle: %lld Type: %d Data: %lld)\n",
+                 i,
                  isPending((EventSlot)i) ? "pending" : "not pending",
                  eventSlot[i].triggerCycle,
-                 eventSlot[i].type,
+                 eventSlot[i].id,
                  eventSlot[i].data);
     }
 }
 
 void
-EventHandler::scheduleEvent(EventSlot s, Cycle cycle, int32_t type, int64_t data)
+EventHandler::scheduleEvent(EventSlot s, Cycle cycle, EventID id, int64_t data)
 {
-    assert(s < EVENT_SLOTS);
+    assert(isEventSlot(s));
     
     eventSlot[s].triggerCycle = cycle;
-    eventSlot[s].type = type;
+    eventSlot[s].id = id;
     eventSlot[s].data = data;
+    if (cycle < nextTrigger) nextTrigger = cycle;
+}
+
+void
+EventHandler::rescheduleEvent(EventSlot s, Cycle addon)
+{
+    assert(isEventSlot(s));
+    
+    Cycle cycle = eventSlot[s].triggerCycle + addon;
+    eventSlot[s].triggerCycle = cycle;
     if (cycle < nextTrigger) nextTrigger = cycle;
 }
 
 void
 EventHandler::cancelEvent(EventSlot s)
 {
+    assert(isEventSlot(s));
+    
     eventSlot[s].triggerCycle = INT64_MAX;
 }
                      
@@ -77,7 +95,7 @@ EventHandler::_executeUntil(Cycle cycle) {
     // Check for a CIA A event
     if (isDue(CIAA_SLOT, cycle)) {
         
-        switch(eventSlot[CIAA_SLOT].type) {
+        switch(eventSlot[CIAA_SLOT].id) {
                 
             case CIA_EXECUTE:
                 amiga->ciaA.executeOneCycle();
@@ -95,7 +113,7 @@ EventHandler::_executeUntil(Cycle cycle) {
     // Check for a CIA B event
     if (isDue(CIAB_SLOT, cycle)) {
         
-        switch(eventSlot[CIAB_SLOT].type) {
+        switch(eventSlot[CIAB_SLOT].id) {
                 
             case CIA_EXECUTE:
                 amiga->ciaB.executeOneCycle();
@@ -111,18 +129,24 @@ EventHandler::_executeUntil(Cycle cycle) {
     }
  
     // Check for a Copper event
-    if (isDue(COPPER_SLOT, cycle)) {
-        amiga->dma.copper.processEvent(eventSlot[COPPER_SLOT].type, eventSlot[COPPER_SLOT].data);
+    if (isDue(COP_SLOT, cycle)) {
+        amiga->dma.copper.processEvent(eventSlot[COP_SLOT].id, eventSlot[COP_SLOT].data);
     }
  
     // Check for a Blitter event
-    if (isDue(BLITTER_SLOT, cycle)) {
-        // amiga->dma.blitter.processEvent(eventSlot[BLITTER_SLOT].type, eventSlot[BLITTER_SLOT].data);
+    if (isDue(BLT_SLOT, cycle)) {
+        // amiga->dma.blitter.processEvent(eventSlot[BLT_SLOT].type, eventSlot[BLT_SLOT].data);
+    }
+
+    // Check for a raster event
+    if (isDue(RAS_SLOT, cycle)) {
+        amiga->dma.hsyncHandler();
     }
     
+
     // Determine the next trigger cycle
     nextTrigger = eventSlot[0].triggerCycle;
-    for (unsigned i = 1; i < EVENT_SLOTS; i++)
+    for (unsigned i = 1; i < EVENT_SLOT_COUNT; i++)
         if (eventSlot[i].triggerCycle < nextTrigger)
             nextTrigger = eventSlot[i].triggerCycle;
 }

@@ -175,7 +175,7 @@ public:
 private:
     
     // Schedules a new Copper event
-    void scheduleEventRel(Cycle delta, int32_t type, int64_t data = 0);
+    void scheduleEventRel(Cycle delta, EventID id, int64_t data = 0);
 
     // Cancels a scheduled Copper event
     void cancelEvent();
@@ -183,7 +183,7 @@ private:
 public:
     
     // Processes a Copper event
-    void processEvent(int32_t type, int64_t data);
+    void processEvent(EventID id, int64_t data);
 
 private:
     
