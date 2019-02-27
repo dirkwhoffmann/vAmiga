@@ -164,6 +164,11 @@ inline bool is_uint5_t(uint5_t value) { return value < 32; }
 #define WRITE16_BE(x,y) (*(uint16_t *)(x) = htons(y))
 #define WRITE32_BE(x,y) (*(uint32_t *)(x) = htonl(y))
 
+// Casts a value into the pointer format used by the Original Chip Set (OCS)
+#define OCS_PTR(x) ((x) & 0x7FFFE)
+
+// Increases a pointer given in the OCS format by a certain value
+#define INC_OCS_PTR(x,y) (OCS_PTR((x)+(y)))
 
 //
 // Handling buffers

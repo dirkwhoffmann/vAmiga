@@ -189,6 +189,17 @@ public:
     // This function is called when the end of a frame has been reached.
     void vsyncAction();
 
+    //
+    // Bitplane DMA
+    //
+    
+    // Returns the number of active bitplanes
+    int activeBitplanes(); 
+    
+    /* Adds BPLxMOD to the pointers of the active bitplanes
+     * This method is called whenever the bitplane DMA restarts.
+     */
+    void addBPLxMOD();
     
     //
     // DMA scheduling
