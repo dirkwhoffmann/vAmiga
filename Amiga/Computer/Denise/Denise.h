@@ -42,20 +42,20 @@ public:
 
     // The 6 bitplane data registers
     uint16_t bpldat[6]; 
-        
-    /* The 32 colors in RGBA format
-     * The RGBA values are updated each time a colorReg changes.
-     */
-    // uint32_t colorRGBA[32];
- 
-    /* The 32 colors in RGBA format (halfbright)
-     * The RGBA values are updated each time a colorReg changes.
-     */
-    // uint32_t colorRGBAhb[32];
     
-    // Number of PAL rasterlines
-    // static const long RASTERLINES = 625;
-
+    /* The 6 bitplane parallel-to-serial shift registers
+     * Denise transfers the current values of the bpldat registers into
+     * the shift registers after BPLDAT1 is written to. This is emulated
+     * in function fillShiftRegisters().
+     */
+    uint32_t shiftReg[6];
+    
+    // Scroll values. The variables are set in pokeBPLCON1()
+    int8_t scrollLowEven;
+    int8_t scrollLowOdd;
+    int8_t scrollHiEven;
+    int8_t scrollHiOdd;
+    
     // Number of vertical pixels
     // THIS VALUE IS WRONG. IT'S HERE TO FAKE THE VISUAL PROTOTYPE WORK WHICH
     // IS BASED ON THE TEXTURES USED IN VIRTUALC64.
@@ -147,8 +147,16 @@ public:
     // uint16_t peekCOLORxx(int xx) { return colorizer.peekColorReg(xx); }
     // void pokeCOLORxx(int xx, uint16_t value) { colorizer.pokeColorReg(xx, value); }
     
+    // Returns the number of active bitplanes
+    // inline int activeBitplanes() { return (bplcon0 >> 12) & 0b111; }
 
-
+    
+    //
+    // Handling the shift register
+    //
+    
+    void fillShiftRegisters();
+    
     //
     // FAKE METHODS FOR THE VISUAL PROTOTYPE (TEMPORARY)
     //

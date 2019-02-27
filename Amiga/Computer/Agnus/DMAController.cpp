@@ -21,13 +21,16 @@ DMAController::DMAController()
     
     registerSnapshotItems(vector<SnapshotItem> {
         
-        { &clock,    sizeof(clock),    0 },
-        { &beam,     sizeof(beam),     0 },
-        { &dmacon,   sizeof(dmacon),   0 },
-        { &diwstrt,  sizeof(diwstrt),  0 },
-        { &diwstop,  sizeof(diwstop),  0 },
-        { &ddfstrt,  sizeof(ddfstrt),  0 },
-        { &ddfstop,  sizeof(ddfstop),  0 },
+        { &clock,              sizeof(clock),              0 },
+        { &beam,               sizeof(beam),               0 },
+        { &lores,              sizeof(lores),              0 },
+        { &activeBitplanes,    sizeof(activeBitplanes),    0 },
+        { &busOwner,           sizeof(busOwner),           0 },
+        { &dmacon,             sizeof(dmacon),             0 },
+        { &diwstrt,            sizeof(diwstrt),            0 },
+        { &diwstop,            sizeof(diwstop),            0 },
+        { &ddfstrt,            sizeof(ddfstrt),            0 },
+        { &ddfstop,            sizeof(ddfstop),            0 },
         
         // DMA pointer registers
         { &dskpt,    sizeof(dskpt),    0 },
@@ -114,22 +117,22 @@ DMAController::pokeDMACON(uint16_t value)
 {
     debug("pokeDMACON(%X)\n", value);
     
-    bool oldDMAEN = (dmacon & 0x0b1000000000);
-    bool oldBPLEN = (dmacon & 0x0b0100000000) && oldDMAEN;
-    bool oldCOPEN = (dmacon & 0x0b0010000000) && oldDMAEN;
-    bool oldBLTEN = (dmacon & 0x0b0001000000) && oldDMAEN;
-    bool oldSPREN = (dmacon & 0x0b0000100000) && oldDMAEN;
-    bool oldDSKEN = (dmacon & 0x0b0000010000) && oldDMAEN;
+    bool oldDMAEN = (dmacon & DMAEN);
+    bool oldBPLEN = (dmacon & BPLEN) && oldDMAEN;
+    bool oldCOPEN = (dmacon & COPEN) && oldDMAEN;
+    bool oldBLTEN = (dmacon & BLTEN) && oldDMAEN;
+    bool oldSPREN = (dmacon & SPREN) && oldDMAEN;
+    bool oldDSKEN = (dmacon & DSKEN) && oldDMAEN;
     
     if (value & 0x8000) dmacon |= value; else dmacon &= ~value;
     dmacon &= 0x07FF;
     
-    bool newDMAEN = (dmacon & 0x0b1000000000);
-    bool newBPLEN = (dmacon & 0x0b0100000000) && newDMAEN;
-    bool newCOPEN = (dmacon & 0x0b0010000000) && newDMAEN;
-    bool newBLTEN = (dmacon & 0x0b0001000000) && newDMAEN;
-    bool newSPREN = (dmacon & 0x0b0000100000) && newDMAEN;
-    bool newDSKEN = (dmacon & 0x0b0000010000) && newDMAEN;
+    bool newDMAEN = (dmacon & DMAEN);
+    bool newBPLEN = (dmacon & BPLEN) && newDMAEN;
+    bool newCOPEN = (dmacon & COPEN) && newDMAEN;
+    bool newBLTEN = (dmacon & BLTEN) && newDMAEN;
+    bool newSPREN = (dmacon & SPREN) && newDMAEN;
+    bool newDSKEN = (dmacon & DSKEN) && newDMAEN;
  
     // Bitplane DMA
     if (oldBPLEN ^ newBPLEN) {
@@ -380,6 +383,8 @@ DMAController::executeUntil(Cycle targetClock)
     // msg("clock is %lld, Executing until %lld\n", clock, targetClock);
     while (clock <= targetClock - DMA_CYCLES(1)) {
         
+        busOwner = 0;
+        
         // Determine number of master clock cycles to execute
         // Cycle missingCycles = targetClock - clock;
         
@@ -449,39 +454,78 @@ DMAController::executeUntil(Cycle targetClock)
                 break;
                 
             case 0x29: // S5 or L4
+                
+                if (bplDMA() && lores)
+                    doBplDMA(PLANE4);
                 break;
                 
             case 0x2B: // S5 or L2
+                
+                if (bplDMA() && lores)
+                    doBplDMA(PLANE2);
+                
                 break;
 
             case 0x2D: // S6 or L3
+                
+                if (bplDMA() && lores)
+                    doBplDMA(PLANE3);
+                
                 break;
                 
             case 0x2F: // S6 or L1
+                
+                if (bplDMA() && lores)
+                    doBplDMA1();
+                
                 break;
 
             case 0x31: // S7 or L4
+                
+                if (bplDMA() && lores)
+                    doBplDMA(PLANE4);
                 break;
 
             case 0x33: // S7 or L2
+                
+                if (bplDMA() && lores)
+                    doBplDMA(PLANE2);
                 break;
 
             case 0x37: case 0xDF: // L1
+                
+                if (bplDMA() && lores)
+                    doBplDMA1();
                 break;
   
             case 0xDB: // L2
+                
+                if (bplDMA() && lores)
+                    doBplDMA(PLANE2);
                 break;
                 
             case 0x35: case 0xDD: // L3
+                
+                if (bplDMA() && lores)
+                    doBplDMA(PLANE3);
                 break;
 
             case 0xD9: // L4
+                
+                if (bplDMA() && lores)
+                    doBplDMA(PLANE4);
                 break;
 
             case 0x2E: case 0x36: case 0xDE: // L5
+                
+                if (bplDMA() && lores)
+                    doBplDMA(PLANE5);
                 break;
            
             case 0x2A: case 0x32: case 0xDA: // L6
+                
+                if (bplDMA() && lores)
+                    doBplDMA(PLANE6);
                 break;
 
             case 0x38: case 0x3C: case 0x40: case 0x44: // H4
@@ -494,6 +538,10 @@ DMAController::executeUntil(Cycle targetClock)
             case 0xA8: case 0xAC: case 0xB0: case 0xB4:
             case 0xB8: case 0xBC: case 0xC0: case 0xC4:
             case 0xC8: case 0xCC: case 0xD0: case 0xD4:
+
+                if (bplDMA() && !lores) {
+                    doBplDMA(PLANE4);
+                }
                 break;
    
             case 0x39: case 0x41: case 0x49: case 0x51: // L4 or H3
@@ -501,6 +549,9 @@ DMAController::executeUntil(Cycle targetClock)
             case 0x79: case 0x81: case 0x89: case 0x91:
             case 0x99: case 0xA1: case 0xA9: case 0xB1:
             case 0xB9: case 0xC1: case 0xC9: case 0xD1:
+                
+                if (bplDMA())
+                    lores ? doBplDMA(PLANE4) : doBplDMA(PLANE3);
                 break;
   
             case 0x3A: case 0x42: case 0x4A: case 0x52: // L6 or H2
@@ -508,6 +559,9 @@ DMAController::executeUntil(Cycle targetClock)
             case 0x7A: case 0x82: case 0x8A: case 0x92:
             case 0x9A: case 0xA2: case 0xAA: case 0xB2:
             case 0xBA: case 0xC2: case 0xCA: case 0xD2:
+                
+                if (bplDMA())
+                    lores ? doBplDMA(PLANE6) : doBplDMA(PLANE2);
                 break;
   
             case 0x3B: case 0x43: case 0x4B: case 0x53: // L2 or H1
@@ -515,6 +569,9 @@ DMAController::executeUntil(Cycle targetClock)
             case 0x7B: case 0x83: case 0x8B: case 0x93:
             case 0x9B: case 0xA3: case 0xAB: case 0xB3:
             case 0xBB: case 0xC3: case 0xCB: case 0xD3:
+                
+                if (bplDMA())
+                    lores ? doBplDMA(PLANE2) : doBplDMA1();
                 break;
   
             case 0x3D: case 0x45: case 0x4D: case 0x55: // L3 or H3
@@ -522,6 +579,9 @@ DMAController::executeUntil(Cycle targetClock)
             case 0x7D: case 0x85: case 0x8D: case 0x95:
             case 0x9D: case 0xA5: case 0xAD: case 0xB5:
             case 0xBD: case 0xC5: case 0xCD: case 0xD5:
+                
+                if (bplDMA())
+                    lores ? doBplDMA(PLANE3) : doBplDMA(PLANE4);
                 break;
  
             case 0x3E: case 0x46: case 0x4E: case 0x56: // L5 or H2
@@ -529,6 +589,9 @@ DMAController::executeUntil(Cycle targetClock)
             case 0x7E: case 0x86: case 0x8E: case 0x96:
             case 0x9E: case 0xA6: case 0xAE: case 0xB6:
             case 0xBE: case 0xC6: case 0xCE: case 0xD6:
+                
+                if (bplDMA())
+                    lores ? doBplDMA(PLANE5) : doBplDMA(PLANE2);
                 break;
                 
             case 0x3F: case 0x47: case 0x4F: case 0x57: // L1 or H1
@@ -536,6 +599,9 @@ DMAController::executeUntil(Cycle targetClock)
             case 0x7F: case 0x87: case 0x8F: case 0x97:
             case 0x9F: case 0xA7: case 0xAF: case 0xB7:
             case 0xBF: case 0xC7: case 0xCF: case 0xD7:
+                
+                if (bplDMA())
+                    doBplDMA1();
                 break;
             
             case 0xE0: case 0xE1:
@@ -607,19 +673,13 @@ DMAController::vsyncAction()
     copper.vsyncAction(); 
 }
 
-int
-DMAController::activeBitplanes()
-{
-    return (amiga->denise.bplcon0 >> 12) & 0b111;
-}
-
 void
 DMAController::addBPLxMOD()
 {
     // Add bpl2mod is added to all active even bitplane pointers
     // Add blp1mod is added to all active odd bitplane pointers
     
-    switch (activeBitplanes()) {
+    switch (activeBitplanes) {
         case 6: bplpt[5] = INC_OCS_PTR(bplpt[5], bpl2mod); // fallthrough
         case 5: bplpt[4] = INC_OCS_PTR(bplpt[4], bpl1mod); // fallthrough
         case 4: bplpt[3] = INC_OCS_PTR(bplpt[3], bpl2mod); // fallthrough
@@ -642,4 +702,23 @@ DMAController::copperCanHaveBus()
     }
         
     return (dmacon & 0b1010000000) != 0;
+}
+
+void
+DMAController::doBplDMA1()
+{
+    doBplDMA(0);
+    amiga->denise.fillShiftRegisters();
+}
+
+void
+DMAController::doBplDMA(int plane)
+{
+    assert(0 <= plane && plane <= 5);
+    
+    if (plane < activeBitplanes) {
+        busOwner = BPLEN;
+        amiga->denise.bpldat[plane] = amiga->mem.peekChip16(bplpt[plane]);
+        bplpt[plane] = INC_OCS_PTR(bplpt[plane], 2);
+    }
 }

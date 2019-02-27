@@ -14,6 +14,63 @@
 #include "BootRom.h"
 #include "KickRom.h"
 
+
+const uint32_t FAST_RAM_START = 0x200000;
+
+const uint32_t SLOW_RAM_MASK = 0x007FFFF;
+const uint32_t BOOT_ROM_MASK = 0x003FFFF;
+const uint32_t KICK_ROM_MASK = 0x003FFFF;
+
+#define ASSERT_CHIP_ADDR(x) assert(chipRam != NULL);
+#define ASSERT_FAST_ADDR(x) assert(fastRam != NULL); assert(((x) - FAST_RAM_START) < fastRamSize);
+#define ASSERT_SLOW_ADDR(x) assert(slowRam != NULL); assert(((x) & SLOW_RAM_MASK) < slowRamSize);
+#define ASSERT_BOOT_ADDR(x) assert(bootRom != NULL); assert(((x) & BOOT_ROM_MASK) < bootRomSize);
+#define ASSERT_KICK_ADDR(x) assert(kickRom != NULL); assert(((x) & KICK_ROM_MASK) < kickRomSize);
+#define ASSERT_CIA_ADDR(x)  assert((x) >= 0xA00000 && (x) <= 0xBFFFFF);
+#define ASSERT_RTC_ADDR(x)  assert((x) >= 0xDC0000 && (x) <= 0xDEFFFF);
+#define ASSERT_OCS_ADDR(x)  assert((x) >= 0xC00000 && (x) <= 0xDFFFFF);
+
+#define READ_CHIP_8(x)         (*(uint8_t *)(chipRam + (x % chipRamSize)))
+#define READ_CHIP_16(x) (ntohs(*(uint16_t *)(chipRam + (x % chipRamSize))))
+#define READ_CHIP_32(x) (ntohl(*(uint32_t *)(chipRam + (x % chipRamSize))))
+
+#define READ_FAST_8(x)         (*(uint8_t *)(fastRam + ((x) - FAST_RAM_START)))
+#define READ_FAST_16(x) (ntohs(*(uint16_t *)(fastRam + ((x) - FAST_RAM_START))))
+#define READ_FAST_32(x) (ntohl(*(uint32_t *)(fastRam + ((x) - FAST_RAM_START))))
+
+#define READ_SLOW_8(x)         (*(uint8_t *)(slowRam + ((x) & SLOW_RAM_MASK)))
+#define READ_SLOW_16(x) (ntohs(*(uint16_t *)(slowRam + ((x) & SLOW_RAM_MASK))))
+#define READ_SLOW_32(x) (ntohl(*(uint32_t *)(slowRam + ((x) & SLOW_RAM_MASK))))
+
+#define READ_BOOT_8(x)         (*(uint8_t *)(bootRom + ((x) & BOOT_ROM_MASK)))
+#define READ_BOOT_16(x) (ntohs(*(uint16_t *)(bootRom + ((x) & BOOT_ROM_MASK))))
+#define READ_BOOT_32(x) (ntohl(*(uint32_t *)(bootRom + ((x) & BOOT_ROM_MASK))))
+
+#define READ_KICK_8(x)         (*(uint8_t *)(kickRom + ((x) & KICK_ROM_MASK)))
+#define READ_KICK_16(x) (ntohs(*(uint16_t *)(kickRom + ((x) & KICK_ROM_MASK))))
+#define READ_KICK_32(x) (ntohl(*(uint32_t *)(kickRom + ((x) & KICK_ROM_MASK))))
+
+#define WRITE_CHIP_8(x,y)   (*(uint8_t *)(chipRam + (x % chipRamSize)) = (y))
+#define WRITE_CHIP_16(x,y) (*(uint16_t *)(chipRam + (x % chipRamSize)) = htons(y))
+#define WRITE_CHIP_32(x,y) (*(uint32_t *)(chipRam + (x % chipRamSize)) = htonl(y))
+
+#define WRITE_FAST_8(x,y)   (*(uint8_t *)(fastRam + ((x) - FAST_RAM_START)) = (y))
+#define WRITE_FAST_16(x,y) (*(uint16_t *)(fastRam + ((x) - FAST_RAM_START)) = htons(y))
+#define WRITE_FAST_32(x,y) (*(uint32_t *)(fastRam + ((x) - FAST_RAM_START)) = htonl(y))
+
+#define WRITE_SLOW_8(x,y)   (*(uint8_t *)(slowRam + ((x) & SLOW_RAM_MASK)) = (y))
+#define WRITE_SLOW_16(x,y) (*(uint16_t *)(slowRam + ((x) & SLOW_RAM_MASK)) = htons(y))
+#define WRITE_SLOW_32(x,y) (*(uint32_t *)(slowRam + ((x) & SLOW_RAM_MASK)) = htonl(y))
+
+#define WRITE_BOOT_8(x,y)   (*(uint8_t *)(bootRom + ((x) & BOOT_ROM_MASK)) = (y))
+#define WRITE_BOOT_16(x,y) (*(uint16_t *)(bootRom + ((x) & BOOT_ROM_MASK)) = htons(y))
+#define WRITE_BOOT_32(x,y) (*(uint32_t *)(bootRom + ((x) & BOOT_ROM_MASK)) = htonl(y))
+
+#define WRITE_KICK_8(x,y)   (*(uint8_t *)(kickRom + ((x) & KICK_ROM_MASK)) = (y))
+#define WRITE_KICK_16(x,y) (*(uint16_t *)(kickRom + ((x) & KICK_ROM_MASK)) = htons(y))
+#define WRITE_KICK_32(x,y) (*(uint32_t *)(kickRom + ((x) & KICK_ROM_MASK)) = htonl(y))
+
+
 class Memory : public HardwareComponent {
     
     friend class Copper;
@@ -211,6 +268,22 @@ public:
     void poke16(uint32_t addr, uint16_t value);
     void poke32(uint32_t addr, uint32_t value);
 
+    //
+    // Chip Ram
+    //
+    
+    inline uint8_t peekChip8(uint32_t addr) { ASSERT_CHIP_ADDR(addr); return READ_CHIP_8(addr); }
+    inline uint16_t peekChip16(uint32_t addr) { ASSERT_CHIP_ADDR(addr); return READ_CHIP_16(addr); }
+    inline uint32_t peekChip32(uint32_t addr) { ASSERT_CHIP_ADDR(addr); return READ_CHIP_32(addr); }
+    
+    inline uint8_t spypeekChip8(uint32_t addr) { return peekChip8(addr); }
+    inline uint16_t spypeekChip16(uint32_t addr) { return peekChip16(addr); }
+    inline uint32_t spypeekChip32(uint32_t addr) { return peekChip32(addr); }
+    
+    inline void pokeChip8(uint32_t addr, uint8_t value) { ASSERT_CHIP_ADDR(addr); WRITE_CHIP_8(addr, value); }
+    inline void pokeChip16(uint32_t addr, uint16_t value) { ASSERT_CHIP_ADDR(addr); WRITE_CHIP_16(addr, value); }
+    inline void pokeChip32(uint32_t addr, uint32_t value) { ASSERT_CHIP_ADDR(addr); WRITE_CHIP_32(addr, value); }
+    
     
     //
     // CIAs

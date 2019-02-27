@@ -93,6 +93,16 @@ Denise::pokeBPLCON0(uint16_t value)
     debug("pokeBPLCON0(%X)\n", value);
     
     bplcon0 = value;
+    
+    // The number of active bitplanes is managed by Agnus
+    amiga->dma.activeBitplanes = (value >> 12) & 0b111;
+    
+    // Clear data registers of inactive bitplanes
+    for (int plane = 5; plane >= amiga->dma.activeBitplanes; plane--) {
+        bpldat[plane] = 0;
+    }
+    
+    
 }
 
 void
@@ -100,7 +110,15 @@ Denise::pokeBPLCON1(uint16_t value)
 {
     debug("pokeBPLCON1(%X)\n", value);
     
-    bplcon1 = value;
+    bplcon1 = value & 0xFF;
+    
+    uint16_t ddfstrt = amiga->dma.ddfstrt;
+
+    // Compute scroll values (adapted from WinFellow)
+    scrollLowOdd  = (bplcon1        + (ddfstrt & 0b0100) ? 8 : 0) & 0x0F;
+    scrollHiOdd   = ((scrollLowOdd  + (ddfstrt & 0b0010) ? 4 : 0) & 0x07) << 1;
+    scrollLowEven = ((bplcon1 >> 4) + (ddfstrt & 0b0100) ? 8 : 0) & 0x0F;
+    scrollHiEven  = ((scrollLowEven + (ddfstrt & 0b0010) ? 4 : 0) & 0x07) << 1;
 }
 
 void
@@ -118,6 +136,12 @@ Denise::pokeBPLxDAT(int x, uint16_t value)
     debug("pokeBPL%dDAT(%X)\n", x, value);
     
     bpldat[x] = value;
+}
+
+void
+Denise::fillShiftRegisters()
+{
+    warn("IMPLEMENTATION MISSING");
 }
 
 void

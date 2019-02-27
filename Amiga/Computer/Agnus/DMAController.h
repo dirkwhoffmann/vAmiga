@@ -14,6 +14,22 @@
 #include "EventHandler.h"
 #include "Copper.h"
 
+// Bit plane indices
+#define PLANE1 0
+#define PLANE2 1
+#define PLANE3 2
+#define PLANE4 3
+#define PLANE5 4
+#define PLANE6 5
+
+// Bit masks as they appear in the DMACON register
+#define DMAEN 0b1000000000
+#define BPLEN 0b0100000000
+#define COPEN 0b0010000000
+#define BLTEN 0b0001000000
+#define SPREN 0b0000100000
+#define DSKEN 0b0000010000
+
 
 class DMAController : public HardwareComponent {
     
@@ -35,11 +51,19 @@ public:
     // V8 V7 V6 V5 V4 V3 V2 V1 V0 H8 H7 H6 H5 H4 H3 H2 H1
     int32_t beam;
     
-    //  Horizontal Beam Position Counter
-    // uint16_t vhpos = 0;
-
-    //  Vertical Beam Position Counter
-    // uint16_t vpos = 0;
+    /* Resolution flag
+     * This flag is set in every line when the bitplane DMA starts.
+     */
+    bool lores; 
+    
+    // The number of currently active bitplanes
+    int activeBitplanes = 0;
+    
+    /* The current owner of the but
+     * This variable is updaten every DMA cycle. It remains 0 if no DMA
+     * access takes place.
+     */
+    uint16_t busOwner = 0; 
     
     // The DMA control register
     uint16_t dmacon = 0;
@@ -78,11 +102,9 @@ public:
     // Sprite DMA
     uint32_t sprptr[8];
     
-    
     // The bitplane modulo registers
     uint16_t bpl1mod = 0; // odd planes
     uint16_t bpl2mod = 0; // even planes
-    
     
     /* Display window coordinates
      * These values are calculated out of diwstrt and diwsstop and updated
@@ -190,25 +212,34 @@ public:
     void vsyncAction();
 
     //
-    // Bitplane DMA
+    // DMA
     //
     
+    // Returns true if a certain DMA channel is activated
+    inline bool bplDMA() { return (dmacon & (DMAEN | BPLEN)) == (DMAEN | BPLEN); }
+    inline bool copDMA() { return (dmacon & (DMAEN | COPEN)) == (DMAEN | COPEN); }
+    inline bool bltDMA() { return (dmacon & (DMAEN | BLTEN)) == (DMAEN | BLTEN); }
+    inline bool sprDMA() { return (dmacon & (DMAEN | SPREN)) == (DMAEN | SPREN); }
+    inline bool dskDMA() { return (dmacon & (DMAEN | DSKEN)) == (DMAEN | DSKEN); }
+    
+    // Returns true if Copper is allowed to perform a DMA cycle
+    bool copperCanHaveBus();
+
+    // Performs a bitplane DMA cycle for plane 1
+    void doBplDMA1();
+    
+    // Performs a bitplane DMA cycle for plane 2 to 6
+    void doBplDMA(int plane); 
+ 
     // Returns the number of active bitplanes
-    int activeBitplanes(); 
+    // int activeBitplanes(); 
     
     /* Adds BPLxMOD to the pointers of the active bitplanes
      * This method is called whenever the bitplane DMA restarts.
      */
     void addBPLxMOD();
     
-    //
-    // DMA scheduling
-    //
-    
-    // Returns true if Copper can do a DMA cycle
-    bool copperCanHaveBus(); 
-    
-    
+
 public:
     
     void executeUntil(Cycle targetClock);
