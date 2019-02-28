@@ -466,10 +466,10 @@ DMAController::executeUntil(Cycle targetClock)
 DMACycle
 DMAController::beamDiff(uint32_t start, uint32_t end)
 {
-    int32_t vStart = (int32_t)start >> 8;
-    int32_t hStart = (int32_t)start & 0xFF;
-    int32_t vEnd   = (int32_t)end >> 8;
-    int32_t hEnd   = (int32_t)end & 0xFF;
+    int32_t vStart = (int32_t)VPOS(start);
+    int32_t hStart = (int32_t)HPOS(start);
+    int32_t vEnd   = (int32_t)VPOS(end);
+    int32_t hEnd   = (int32_t)HPOS(end);
     
     // We assume that the function is called with a valid horizontal position
     assert(hEnd <= 0xE2);
@@ -516,9 +516,19 @@ DMAController::vsyncAction()
     // Execute sub components
     copper.vsyncAction(); 
 
+    // Advance counters
     frame++;
     latchedClock = clock + DMA_CYCLES(1);
     setvpos(0);
+    
+    // Schedule next bitplane DMA event
+    if (bplDMA()) {
+        if (amiga->denise.lores()) {
+            eventHandler.scheduleEvent(BPL_SLOT, 27, ddfstrt, BPL_FETCH_LORES, 4);
+        } else {
+            eventHandler.scheduleEvent(BPL_SLOT, 26, ddfstrt, BPL_FETCH_HIRES, 4);
+        }
+    }
 }
 
 void

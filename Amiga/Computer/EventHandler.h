@@ -152,7 +152,10 @@ public:
     void scheduleEvent(EventSlot s, Cycle cycle, EventID id, int64_t data = 0);
 
     // Schedules an event at the specified beam position.
-    void scheduleEvent(EventSlot s, uint16_t vpos, uint16_t hpos, EventID id, int64_t data = 0);
+    void scheduleEvent(EventSlot s, int16_t vpos, int16_t hpos, EventID id, int64_t data = 0);
+
+    // Schedules an event at the specified beam position in the next frame.
+    void scheduleEventInNextFrame(EventSlot s, int16_t vpos, int16_t hpos, EventID id, int64_t data = 0);
 
     // Reschedules the event in the specified slot
     void rescheduleEvent(EventSlot s, Cycle addon);

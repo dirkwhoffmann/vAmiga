@@ -100,19 +100,23 @@ EventHandler::scheduleEvent(EventSlot s, Cycle cycle, EventID id, int64_t data)
 }
 
 void
-EventHandler::scheduleEvent(EventSlot s, uint16_t vpos, uint16_t hpos, EventID id, int64_t data)
+EventHandler::scheduleEvent(EventSlot s, int16_t vpos, int16_t hpos, EventID id, int64_t data)
 {
-    assert(isEventSlot(s));
+    Cycle cycle = amiga->dma.latchedClock;
+    cycle += amiga->dma.beam2cycles(vpos, hpos);
     
-    Cycle cycle = amiga->dma.beam2cycles(vpos, hpos);
-    
-    eventSlot[s].triggerCycle = cycle;
-    eventSlot[s].triggerBeam = BEAM(vpos, hpos); 
-    eventSlot[s].id = id;
-    eventSlot[s].data = data;
-    if (cycle < nextTrigger) nextTrigger = cycle;
-    
-    assert(checkScheduledEvent(s));
+    scheduleEvent(s, cycle, id, data);
+}
+
+void
+EventHandler::scheduleEventInNextFrame(EventSlot s, int16_t vpos, int16_t hpos,
+                                       EventID id, int64_t data)
+{
+    Cycle cycle = amiga->dma.latchedClock;
+    cycle += amiga->dma.cyclesInCurrentFrame();
+    cycle += amiga->dma.beam2cycles(vpos, hpos);
+
+    scheduleEvent(s, cycle, id, data);
 }
 
 void
