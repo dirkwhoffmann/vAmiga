@@ -363,6 +363,14 @@ Copper::scheduleEventRel(DMACycle delta, EventID type, int64_t data)
 }
 
 void
+Copper::rescheduleEventRel(DMACycle delta)
+{
+    Cycle trigger = amiga->dma.clock + DMA_CYCLES(delta);
+    amiga->dma.eventHandler.rescheduleEvent(COP_SLOT, trigger);
+    
+}
+
+void
 Copper::cancelEvent()
 {
     amiga->dma.eventHandler.cancelEvent(COP_SLOT);

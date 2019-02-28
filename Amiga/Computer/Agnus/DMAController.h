@@ -33,6 +33,11 @@
 // Assembles a beam position out of two components
 #define BEAM(y,x) (((y) << 8) | (x))
 
+// Extracts a component out of a beam position
+#define VPOS(x) ((x) >> 8)
+#define HPOS(x) ((x) & 0xFF)
+
+
 class DMAController : public HardwareComponent {
     
 public:
@@ -69,7 +74,7 @@ public:
     
     /* The current beam position (17 bit)
      * Format: V8 V7 V6 V5 V4 V3 V2 V1 V0 H8 H7 H6 H5 H4 H3 H2 H1
-     * Use hpos() and vpos() to extract the values.
+     * Use HPOS and VPOS macros to extract the values.
      */
     int32_t beam = 0;
     
@@ -238,10 +243,7 @@ private:
     
 public:
     
-    inline uint16_t hpos() { return beam & 0xFF; }
     inline void sethpos(uint8_t value) { beam = (beam & ~0xFF) | value; }
-    // inline void inchpos() { beam += 1; }
-    inline uint16_t vpos() { return beam >> 8; }
     inline void setvpos(uint16_t value) { beam = (beam & 0xFF) | (value << 8); }
     inline void incvpos() { beam += 256; }
 

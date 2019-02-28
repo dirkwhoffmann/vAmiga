@@ -89,6 +89,16 @@ struct Event {
     // Indicates when the event is due
     Cycle triggerCycle;
     
+    /* Trigger beam position
+     * This is an optional value that should be removed when the emulator
+     * is stable enough. The variables are only written to if an event is
+     * scheduled to trigger at a specific beam position. When the event
+     * triggers (which is determined solely by the cycle value), the current
+     * beam position is compared with the stored values. If they don't match,
+     * emulation halts with an error message.
+     */
+    int32_t triggerBeam;
+     
     /* Event id.
      * This value is evaluated inside the event handler to determine the
      * action that needs to be taken.
@@ -138,8 +148,11 @@ private:
     
 public:
     
-    // Schedules an event. The event will be executed at the specified cycle.
+    // Schedules an event at the specified cycle.
     void scheduleEvent(EventSlot s, Cycle cycle, EventID id, int64_t data = 0);
+
+    // Schedules an event at the specified beam position.
+    void scheduleEvent(EventSlot s, uint16_t vpos, uint16_t hpos, EventID id, int64_t data = 0);
 
     // Reschedules the event in the specified slot
     void rescheduleEvent(EventSlot s, Cycle addon);
@@ -154,6 +167,11 @@ public:
     // Returns true if the specified event slot is due at the provided cycle
     inline bool isDue(EventSlot s, Cycle cycle) { return cycle >= eventSlot[s].triggerCycle; }
 
+    // Performs some debugging checks. Won't be executed in release build.
+    bool checkScheduledEvent(EventSlot s);
+    bool checkTriggeredEvent(EventSlot s);
+
+    
     // Processes all events that are due at or prior to cycle.
     inline void executeUntil(Cycle cycle) {
         if (cycle >= nextTrigger) _executeUntil(cycle); }

@@ -19,6 +19,7 @@ EventHandler::_powerOn()
 {
     for (unsigned i = 0; i < EVENT_SLOT_COUNT; i++) {
         eventSlot[i].triggerCycle = INT64_MAX;
+        eventSlot[i].triggerBeam = INT32_MAX;
         eventSlot[i].id = (EventID)0;
         eventSlot[i].data = 0;
     }
@@ -45,18 +46,36 @@ EventHandler::_ping()
 void
 EventHandler::_dump()
 {
-    plainmsg("Master clock: %lld\n", amiga->masterClock);
-    plainmsg("   DMA clock: %lld\n", amiga->dma.clock);
-    plainmsg("        hpos: %d\n", amiga->dma.hpos());
-    plainmsg("        vpos: %d\n", amiga->dma.vpos());
+    uint32_t beam = amiga->dma.beam;
+    uint16_t vp = VPOS(beam);
+    uint16_t hp = HPOS(beam);
+    
+    plainmsg(" Master clock: %lld master cycles\n", amiga->masterClock);
+    plainmsg("    DMA clock: %lld master cycles", amiga->dma.clock);
+    plainmsg(" (%lld DMA cycles)\n", AS_DMA_CYCLES(amiga->dma.clock));
+    plainmsg("Beam position: (%d,%d) ($%X,$%X)\n", vp, hp, vp, hp);
     plainmsg("\n");
     for (unsigned i = 0; i < EVENT_SLOT_COUNT; i++) {
-        plainmsg("Slot %d: %s (Cycle: %lld Type: %d Data: %lld)\n",
-                 i,
-                 isPending((EventSlot)i) ? "pending" : "not pending",
-                 eventSlot[i].triggerCycle,
+        
+        plainmsg("Slot %d: ", i);
+        
+        if (!isPending((EventSlot)i)) {
+            plainmsg("no pending event\n");
+            continue;
+        }
+            
+        plainmsg("Event ID: %d  Payload: %lld  Triggers at: %lld",
                  eventSlot[i].id,
-                 eventSlot[i].data);
+                 eventSlot[i].data,
+                 eventSlot[i].triggerCycle);
+        
+        if (eventSlot[i].triggerBeam != INT32_MAX) {
+            plainmsg(" (%d,%d)\n",
+                     VPOS(eventSlot[i].triggerBeam),
+                     HPOS(eventSlot[i].triggerBeam));
+        } else {
+            plainmsg("\n");
+        }
     }
 }
 
@@ -65,10 +84,35 @@ EventHandler::scheduleEvent(EventSlot s, Cycle cycle, EventID id, int64_t data)
 {
     assert(isEventSlot(s));
     
+    /*
+    if (s == COP_SLOT) {
+        debug("Scheduling COPPER event at %lld\n", cycle);
+    }
+    */
+    
     eventSlot[s].triggerCycle = cycle;
+    eventSlot[s].triggerBeam = INT32_MAX;
     eventSlot[s].id = id;
     eventSlot[s].data = data;
     if (cycle < nextTrigger) nextTrigger = cycle;
+    
+    assert(checkScheduledEvent(s));
+}
+
+void
+EventHandler::scheduleEvent(EventSlot s, uint16_t vpos, uint16_t hpos, EventID id, int64_t data)
+{
+    assert(isEventSlot(s));
+    
+    Cycle cycle = amiga->dma.beam2cycles(vpos, hpos);
+    
+    eventSlot[s].triggerCycle = cycle;
+    eventSlot[s].triggerBeam = BEAM(vpos, hpos); 
+    eventSlot[s].id = id;
+    eventSlot[s].data = data;
+    if (cycle < nextTrigger) nextTrigger = cycle;
+    
+    assert(checkScheduledEvent(s));
 }
 
 void
@@ -78,7 +122,10 @@ EventHandler::rescheduleEvent(EventSlot s, Cycle addon)
     
     Cycle cycle = eventSlot[s].triggerCycle + addon;
     eventSlot[s].triggerCycle = cycle;
+    eventSlot[s].triggerBeam = INT32_MAX;
     if (cycle < nextTrigger) nextTrigger = cycle;
+    
+    assert(checkScheduledEvent(s));
 }
 
 void
@@ -88,13 +135,45 @@ EventHandler::cancelEvent(EventSlot s)
     
     eventSlot[s].triggerCycle = INT64_MAX;
 }
-                     
+
+bool
+EventHandler::checkScheduledEvent(EventSlot s)
+{
+    assert(isEventSlot(s));
+    
+    if (eventSlot[s].triggerCycle <= amiga->dma.clock) {
+        fatalError("Scheduled event has a too small trigger cycle.");
+        return false;
+    }
+    
+    return true;
+}
+
+bool
+EventHandler::checkTriggeredEvent(EventSlot s)
+{
+    assert(isEventSlot(s));
+    
+    // Note: This function has to be called at the trigger cycle
+    
+    // Verify that the event triggers at the right beam position
+    uint32_t beam = eventSlot[s].triggerBeam;
+    if (beam != INT32_MAX && beam != amiga->dma.beam) {
+        fatalError("Trigger beam position does not match.");
+        return false;
+    }
+    
+    return true;
+}
+
 void
 EventHandler::_executeUntil(Cycle cycle) {
     
     // Check for a CIA A event
     if (isDue(CIAA_SLOT, cycle)) {
-        
+
+        assert(checkTriggeredEvent(CIAA_SLOT));
+
         switch(eventSlot[CIAA_SLOT].id) {
                 
             case CIA_EXECUTE:
@@ -113,6 +192,8 @@ EventHandler::_executeUntil(Cycle cycle) {
     // Check for a CIA B event
     if (isDue(CIAB_SLOT, cycle)) {
         
+        assert(checkTriggeredEvent(CIAB_SLOT));
+        
         switch(eventSlot[CIAB_SLOT].id) {
                 
             case CIA_EXECUTE:
@@ -130,16 +211,22 @@ EventHandler::_executeUntil(Cycle cycle) {
  
     // Check for a Copper event
     if (isDue(COP_SLOT, cycle)) {
+        
+        // debug("Serving COPPER event at %lld\n", cycle);
+    
+        assert(checkTriggeredEvent(COP_SLOT));
         amiga->dma.copper.processEvent(eventSlot[COP_SLOT].id, eventSlot[COP_SLOT].data);
     }
  
     // Check for a Blitter event
     if (isDue(BLT_SLOT, cycle)) {
+        assert(checkTriggeredEvent(BLT_SLOT));
         // amiga->dma.blitter.processEvent(eventSlot[BLT_SLOT].type, eventSlot[BLT_SLOT].data);
     }
 
     // Check for a raster event
     if (isDue(RAS_SLOT, cycle)) {
+        assert(checkTriggeredEvent(RAS_SLOT));
         amiga->dma.hsyncHandler();
     }
     

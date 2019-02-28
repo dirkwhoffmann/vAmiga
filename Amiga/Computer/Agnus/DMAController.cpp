@@ -80,10 +80,15 @@ DMAController::_ping()
 void
 DMAController::_dump()
 {
-    plainmsg("   clock: %lld\n", clock);
-    plainmsg("    beam: %d $%X\n", beam);
-    plainmsg("    hpos: %d $%X\n", hpos());
-    plainmsg("    vpos: %d $%X\n", vpos());
+    uint16_t vp = VPOS(beam);
+    uint16_t hp = HPOS(beam);
+
+    plainmsg("        frame: %lld\n", frame);
+    plainmsg("        clock: %lld master cycles\n", clock);
+    plainmsg("               %lld DMA cycles\n", AS_DMA_CYCLES(clock));
+    plainmsg("latched clock: %lld master cycles\n", latchedClock);
+    plainmsg("               %lld DMA cycles\n", AS_DMA_CYCLES(latchedClock));
+    plainmsg("beam position: %d $%X (%d,%d) ($%X,$%X)\n", beam, beam, vp, hp, vp, hp);
 }
 
 DMAInfo
@@ -484,7 +489,7 @@ void
 DMAController::hsyncHandler()
 {
     // Verify that the event has been triggered at the correct beam position
-    assert(hpos() == 0xE2);
+    assert(HPOS(beam) == 226 /* 0xE2 */);
     
     // Reset horizontal position
     // Setting it to -1 ensures that it is 0 at the end of executeUntil()
@@ -494,7 +499,7 @@ DMAController::hsyncHandler()
     amiga->ciaB.incrementTOD();
     
     // Check if the current frame has been completed
-    (vpos() < 312) ? incvpos() : vsyncAction();
+    VPOS(beam) < 312 ? incvpos() : vsyncAction();
     
     // Schedule next event
     eventHandler.rescheduleEvent(RAS_SLOT, DMA_CYCLES(0xE3));

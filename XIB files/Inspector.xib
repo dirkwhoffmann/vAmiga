@@ -170,7 +170,6 @@
                 <outlet property="paulaEna12" destination="J1H-Vy-1r5" id="4lc-pp-bcE"/>
                 <outlet property="paulaEna13" destination="ZnY-pH-jqI" id="KwL-cE-0G9"/>
                 <outlet property="paulaEna14" destination="JTa-qW-Eke" id="4EQ-d6-kAd"/>
-                <outlet property="paulaEna15" destination="JTa-qW-Eke" id="zqR-7D-HGB"/>
                 <outlet property="paulaEna2" destination="tCq-Ec-iWn" id="53y-G0-DEO"/>
                 <outlet property="paulaEna3" destination="7G9-lx-UQU" id="xSO-0S-bfb"/>
                 <outlet property="paulaEna4" destination="Dq3-4y-0Wi" id="u3x-fz-yrU"/>
@@ -1735,7 +1734,7 @@
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Memory" identifier="" id="v16-8n-QW9">
-                                <view key="view" ambiguous="YES" id="m1U-mr-1nr">
+                                <view key="view" id="m1U-mr-1nr">
                                     <rect key="frame" x="10" y="33" width="824" height="406"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -2606,9 +2605,6 @@
                                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         </tableColumn>
                                                                     </tableColumns>
-                                                                    <connections>
-                                                                        <outlet property="inspector" destination="-2" id="EMy-fa-IiL"/>
-                                                                    </connections>
                                                                 </tableView>
                                                             </subviews>
                                                             <nil key="backgroundColor"/>
@@ -2743,9 +2739,6 @@
                                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         </tableColumn>
                                                                     </tableColumns>
-                                                                    <connections>
-                                                                        <outlet property="inspector" destination="-2" id="tOz-bZ-vxb"/>
-                                                                    </connections>
                                                                 </tableView>
                                                             </subviews>
                                                             <nil key="backgroundColor"/>
@@ -3353,7 +3346,7 @@
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Paula" identifier="" id="ox5-bZ-2Aj">
-                                <view key="view" id="FXI-VY-h9b">
+                                <view key="view" ambiguous="YES" id="FXI-VY-h9b">
                                     <rect key="frame" x="10" y="33" width="824" height="406"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>

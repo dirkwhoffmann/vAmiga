@@ -200,6 +200,8 @@ public:
     void dump();
     virtual void _dump() { }
     
+    // Signals a fatal error and terminates the emulator
+    void fatalError(const char *description);
     
     // Getter for warp mode
     bool getWarp() { return warp; }
