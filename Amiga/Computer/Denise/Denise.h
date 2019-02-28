@@ -144,6 +144,15 @@ public:
     void pokeBPLCON1(uint16_t value);
     void pokeBPLCON2(uint16_t value);
     void pokeBPLxDAT(int x, uint16_t value);
+    
+    // Returns true if we're running in HIRES mode
+    inline bool hires() { return (bplcon0 & 0x8000); }
+
+    // Returns true if we're running in LORES mode
+    inline bool lores() { return !(bplcon0 & 0x8000); }
+    
+
+    
     // uint16_t peekCOLORxx(int xx) { return colorizer.peekColorReg(xx); }
     // void pokeCOLORxx(int xx, uint16_t value) { colorizer.pokeColorReg(xx, value); }
     

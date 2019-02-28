@@ -316,8 +316,8 @@ Copper::isIllegalInstr(uint32_t addr)
 char *
 Copper::disassemble(uint32_t addr)
 {
-    char vpos[16];
-    char hpos[16];
+    char pos[16];
+    char mask[16];
     
     if (isMoveCmd(addr)) {
         
@@ -330,19 +330,15 @@ Copper::disassemble(uint32_t addr)
     const char *mnemonic = isWaitCmd(addr) ? "WAIT" : "SKIP";
     const char *suffix = getBFD(addr) ? "_BFD" : "";
     
-    if (getVM(addr) == 0xFF) {
-        sprintf(vpos, "$%02X", getVP(addr));
-    } else {
-        sprintf(vpos, "$%02X & $%02X", getVP(addr), getVM(addr));
-    }
+    sprintf(pos, "($%02X,$%02X)", getVP(addr), getHP(addr));
     
-    if (getHM(addr) == 0xFF) {
-        sprintf(hpos, "$%02X", getHP(addr));
+    if (getVM(addr) == 0xFF && getHM(addr) == 0xFF) {
+        sprintf(mask, "");
     } else {
-        sprintf(hpos, "$%02X & %02X", getHP(addr), getHM(addr));
+        sprintf(mask, ", ($%02X,$%02X)", getHM(addr), getVM(addr));
     }
-    
-    sprintf(disassembly, "%s%s (%s,%s)", mnemonic, suffix, vpos, hpos);
+   
+    sprintf(disassembly, "%s%s %s%s", mnemonic, suffix, pos, mask);
     return disassembly;
 }
 

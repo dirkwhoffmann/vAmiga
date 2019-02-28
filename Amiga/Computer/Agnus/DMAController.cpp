@@ -109,6 +109,69 @@ DMAController::getInfo()
     return info;
 }
 
+Cycle
+DMAController::cyclesInCurrentFrame()
+{
+    // TODO: Distinguish between short frames and long frames
+    /*
+    if (shortFrame) {
+        return 312 * cyclesPerLine();
+    } else {
+        return 313 * cyclesPerLine();
+    }
+    */
+    return 313 * cyclesPerLine();
+}
+
+Cycle
+DMAController::beam2cycles(int16_t vpos, int16_t hpos)
+{
+    return DMA_CYCLES(vpos * cyclesPerLine() + hpos); 
+}
+
+int32_t
+DMAController::nextBPLDMABeam(uint32_t currentBeam)
+{
+    // The first DMA cycle happens at (26, ddfstrt) (TODO: CORRECT?)
+    if (currentBeam < BEAM(26, ddfstrt))
+        return BEAM(26, ddfstrt);
+    
+    // The last DMA cycle happens at (312, ddfstop) (TODO: CORRECT?)
+    if (currentBeam > BEAM(312, ddfstop))
+        return -1;
+    
+    int32_t vpos = currentBeam >> 8;
+    int32_t hpos = currentBeam & 0xFF;
+    
+    // If vpos is greater than ddfstop, we pretend to be in the next line
+    if (hpos >= ddfstop) {
+        vpos++;
+        hpos = ddfstrt;
+    }
+    
+    // We're inside the active DMA area now
+    if (amiga->denise.hires())
+        return BEAM(vpos, hpos);
+    else
+        return UP_TO_NEXT_ODD(BEAM(vpos, hpos));
+}
+
+Cycle
+DMAController::nextBpldmaCycle(uint32_t currentBeam)
+{
+    Cycle result = latchedClock;
+    
+    int32_t beam = nextBPLDMABeam(currentBeam);
+    
+    if (beam == -1) { // Jump to next frame
+        result += cyclesInCurrentFrame();
+        beam = BEAM(26, ddfstrt);
+    }
+    
+    result += beam2cycles(beam);
+    return result;
+}
+
 uint16_t
 DMAController::peekDMACON()
 {
@@ -378,8 +441,6 @@ DMAController::pokeSPRxPTL(int x, uint16_t value)
 
 
 
-
-
 void
 DMAController::executeUntil(Cycle targetClock)
 {
@@ -391,10 +452,8 @@ DMAController::executeUntil(Cycle targetClock)
         // Process all pending events
         eventHandler.executeUntil(clock);
         
-        // eventHandler.dump();
-        
         // Advance the internal counters
-        inchpos();
+        beam++; 
         clock += DMA_CYCLES(1);
     }
 }
@@ -446,12 +505,15 @@ DMAController::vsyncAction()
 {
     debug("vsyncAction");
     
-    setvpos(0);
-    
     // CIA A counts VSYNCs
     amiga->ciaA.incrementTOD();
     
+    // Execute sub components
     copper.vsyncAction(); 
+
+    frame++;
+    latchedClock = clock + DMA_CYCLES(1);
+    setvpos(0);
 }
 
 void

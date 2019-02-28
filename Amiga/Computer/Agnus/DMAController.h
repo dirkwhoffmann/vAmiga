@@ -30,50 +30,88 @@
 #define SPREN 0b0000100000
 #define DSKEN 0b0000010000
 
+// Assembles a beam position out of two components
+#define BEAM(y,x) (((y) << 8) | (x))
 
 class DMAController : public HardwareComponent {
     
 public:
     
-    /* The event handler
-     * This handler is used to schedule events such as executing or waking up
-     * the CIAs.
-     */
-    EventHandler eventHandler;
+    //
+    // Sub components
+    //
     
-    // Copper
+    // The Amiga's famous Copper
     Copper copper;
     
-    // The DMA controller has been executed up to this clock cycle.
-    Cycle clock = 0;
+    // The event sheduler. It's the key component of this emulator.
+    EventHandler eventHandler;
     
-    // The beam position counter (17 bit)
-    // V8 V7 V6 V5 V4 V3 V2 V1 V0 H8 H7 H6 H5 H4 H3 H2 H1
-    int32_t beam;
+    
+    //
+    // Internal counters
+    //
+
+    /* The DMA controller has been executed up to this clock cycle.
+     * Measured in master clock units.
+     */
+    Cycle clock = 0;
+
+    /* A simple frame counter.
+     * The value is increased on every VSYNC action.
+     */
+    int64_t frame = 0;
+
+    /* Value of clock at the beginning of the current frame.
+     * The value is latched on every VSYNC action.
+     */
+    Cycle latchedClock = 0;
+    
+    /* The current beam position (17 bit)
+     * Format: V8 V7 V6 V5 V4 V3 V2 V1 V0 H8 H7 H6 H5 H4 H3 H2 H1
+     * Use hpos() and vpos() to extract the values.
+     */
+    int32_t beam = 0;
+    
+
+    //
+    // DMA book keeping
+    //
+    
+    /* The current owner of the bus
+     * This value is updaten in every DMA cycle.
+     */
+    uint16_t busOwner = 0;
+    
+    
+    //
+    // Bitplane book keeping
+    //
     
     /* Resolution flag
      * This flag is set in every line when the bitplane DMA starts.
+     * DEPRECATED. WILL BE REPLACED BY BPLEvent states
      */
     bool lores; 
     
     // The number of currently active bitplanes
     int activeBitplanes = 0;
     
-    /* The current owner of the but
-     * This variable is updaten every DMA cycle. It remains 0 if no DMA
-     * access takes place.
-     */
-    uint16_t busOwner = 0; 
+    
+    //
+    // Registers
+    //
     
     // The DMA control register
     uint16_t dmacon = 0;
     
-    // Display Window and Display Data Fetch registers
+    // The display window and display data fetch registers
     uint16_t diwstrt = 0;
     uint16_t diwstop = 0;
     uint16_t ddfstrt = 0;
     uint16_t ddfstop = 0;
 
+    
     //
     // Pointer registers (one for each DMA channel)
     //
@@ -157,6 +195,44 @@ public:
     
     
     //
+    // Juggling cycles and beam positions
+    //
+    
+    /* Returns the number of CPU cycles per rasterline
+     * The value is valid for PAL machines, only.
+     */
+    Cycle cyclesPerLine() { return 227; /* cycles 0x00 ... 0xE2 */ }
+ 
+    /* Returns the number of CPU cycles that make up the current frame
+     * The value is valid for PAL machines, only.
+     */
+    Cycle cyclesInCurrentFrame();
+    
+    /* Converts a beam position to a CPU cycle
+     * The result is the cycle when we reach that position. It can be smaller,
+     * equal or bigger than he current clock value, depending on the current
+     * beam position.
+     */
+    Cycle beam2cycles(int16_t vpos, int16_t hpos);
+    Cycle beam2cycles(int32_t beam) { return beam2cycles(beam >> 8, beam & 0xFF); }
+
+    /* Computes the beam coordinate where the next bitplane DMA can happen.
+     * The value is dependent on the current values of ddfstrt and ddfstop.
+     * Returns -1 of there won't be any more bitplane DMA in the current frame.
+     */
+    int32_t nextBPLDMABeam(uint32_t currentBeam);
+    
+    /* Computes the CPU cycle when the next bitplane DMA can happen.
+     * Calls nextBPLDMAbeam() to compute the value
+     */
+    Cycle nextBpldmaCycle(uint32_t currentBeam);
+    
+    
+private:
+    
+    
+    
+    //
     // Accessing registers
     //
     
@@ -164,7 +240,7 @@ public:
     
     inline uint16_t hpos() { return beam & 0xFF; }
     inline void sethpos(uint8_t value) { beam = (beam & ~0xFF) | value; }
-    inline void inchpos() { beam += 1; }
+    // inline void inchpos() { beam += 1; }
     inline uint16_t vpos() { return beam >> 8; }
     inline void setvpos(uint16_t value) { beam = (beam & 0xFF) | (value << 8); }
     inline void incvpos() { beam += 256; }

@@ -153,8 +153,11 @@ inline bool is_uint5_t(uint5_t value) { return value < 32; }
 // Returns true if x is an even number
 #define IS_EVEN(x) (!IS_ODD(x))
 
-// Makes a number even by rounding up
-#define MAKE_EVEN(x) ((x) + ((x) & 1))
+// Rounds a number up or down to the next even or odd number
+#define UP_TO_NEXT_EVEN(x) ((x) + ((x) & 1))
+#define DOWN_TO_NEXT_EVEN(x) ((x) & (~1))
+#define UP_TO_NEXT_ODD(x) ((x) | 1)
+#define DOWN_TO_NEXT_ODD(x) ((x) - !((x) & 1))
 
 // Reads a uint16_t or uint32_t from memory in big endian format
 #define READ16_BE(x) (ntohs(*(uint16_t *)(x)))
