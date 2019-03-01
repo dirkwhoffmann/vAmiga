@@ -157,7 +157,7 @@ EventHandler::checkScheduledEvent(EventSlot s)
     switch (s) {
         case CIAA_SLOT:
         case CIAB_SLOT:
-            if (id >= CIA_EVENT_COUNT) {
+            if (!isCiaEvent(id)) {
                 fatalError("Invalid CIA event ID.");
                 return false;
             }
@@ -167,9 +167,9 @@ EventHandler::checkScheduledEvent(EventSlot s)
             }
             break;
             
-        case BPL_SLOT:
-            if (id >= BPL_EVENT_COUNT) {
-                fatalError("Invalid BPL event ID.");
+        case DMA_SLOT:
+            if (!isDmaEvent(id)) {
+                fatalError("Invalid DMA event ID.");
                 return false;
             }
             if (eventSlot[s].id == 0 || eventSlot[s].id >= CIA_EVENT_COUNT) {
@@ -178,30 +178,16 @@ EventHandler::checkScheduledEvent(EventSlot s)
             }
             break;
             
-        case DAS_SLOT:
-            if (id >= DAS_EVENT_COUNT) {
-                fatalError("Invalid DAS event ID.");
-                return false;
-            }
-            break;
-            
         case COP_SLOT:
-            if (id >= COP_EVENT_COUNT) {
+            if (!isCopEvent(id)) {
                 fatalError("Invalid COP event ID.");
                 return false;
             }
             break;
             
         case BLT_SLOT:
-            if (id >= CIA_EVENT_COUNT) {
+            if (!isBltEvent(id)) {
                 fatalError("Invalid BLT event ID.");
-                return false;
-            }
-            break;
-            
-        case RAS_SLOT:
-            if (id >= RAS_EVENT_COUNT) {
-                fatalError("Invalid RAS event ID.");
                 return false;
             }
             break;
@@ -273,9 +259,9 @@ EventHandler::_executeUntil(Cycle cycle) {
     }
  
     // Check for a bitplane event
-    if (isDue(BPL_SLOT, cycle)) {
-        assert(checkTriggeredEvent(BPL_SLOT));
-        amiga->dma.serviceBPLDMAEvent(eventSlot[BPL_SLOT].id, eventSlot[BPL_SLOT].data);
+    if (isDue(DMA_SLOT, cycle)) {
+        assert(checkTriggeredEvent(DMA_SLOT));
+        amiga->dma.serviceDMAEvent(eventSlot[DMA_SLOT].id, eventSlot[DMA_SLOT].data);
     }
     
     // Check for a Copper event

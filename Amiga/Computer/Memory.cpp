@@ -875,6 +875,11 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x13E >> 1: // SPR7PTL
             amiga->dma.pokeSPRxPTL(7, value); return;
             
+        case 0x140 >> 1: // SPR0POS
+            amiga->denise.pokeSPRxPOS(0, value); return;
+        case 0x142 >> 1: // SPR0CTL
+            amiga->denise.pokeSPRxCTL(0, value); return;
+
         case 0x180 >> 1: // COLOR00
             amiga->denise.colorizer.pokeColorReg(0, value); return;
         case 0x182 >> 1: // COLOR01

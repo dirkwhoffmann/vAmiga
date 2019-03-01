@@ -18,8 +18,7 @@ typedef enum
 {
     CIAA_SLOT = 0,    // CIA A execution
     CIAB_SLOT,        // CIA B execution
-    BPL_SLOT,         // Bitplane DMA
-    DAS_SLOT,         // Disk, Audio, and Sprite DMA
+    DMA_SLOT,         // Disk, Audio, Sprite, and Bitplane DMA
     COP_SLOT,         // Copper DMA
     BLT_SLOT,         // Blitter DMA
     RAS_SLOT,         // Raster line events
@@ -38,31 +37,31 @@ typedef enum
     CIA_WAKEUP,
     CIA_EVENT_COUNT,
     
-    // Bitplane slot
-    BPL_FETCH_L1 = 1,
-    BPL_FETCH_L2,
-    BPL_FETCH_L3,
-    BPL_FETCH_L4,
-    BPL_FETCH_L5,
-    BPL_FETCH_L6,
-    BPL_FETCH_H1,
-    BPL_FETCH_H2,
-    BPL_FETCH_H3,
-    BPL_FETCH_H4,
-    BPL_EVENT_COUNT,
-    
-    // Disk, Audio, and Sprite slot
-    DAS_DISK = 1,
-    DAS_AUDIO,
-    DAS_SPRITE0,
-    DAS_SPRITE1,
-    DAS_SPRITE2,
-    DAS_SPRITE3,
-    DAS_SPRITE4,
-    DAS_SPRITE5,
-    DAS_SPRITE6,
-    DAS_SPRITE7,
-    DAS_EVENT_COUNT,
+    // DMA slot
+    DMA_DISK = 1,
+    DMA_AUDIO_0,
+    DMA_AUDIO_1,
+    DMA_AUDIO_2,
+    DMA_AUDIO_3,
+    DMA_SPRITE0,
+    DMA_SPRITE1,
+    DMA_SPRITE2,
+    DMA_SPRITE3,
+    DMA_SPRITE4,
+    DMA_SPRITE5,
+    DMA_SPRITE6,
+    DMA_SPRITE7,
+    DMA_L1,
+    DMA_L2,
+    DMA_L3,
+    DMA_L4,
+    DMA_L5,
+    DMA_L6,
+    DMA_H1,
+    DMA_H2,
+    DMA_H3,
+    DMA_H4,
+    DMA_EVENT_COUNT,
     
     // Copper slot
     COP_REQUEST_DMA = 1,
@@ -86,8 +85,7 @@ typedef enum
 } EventID;
 
 static inline bool isCiaEvent(EventID id) { return id <= CIA_EVENT_COUNT; }
-static inline bool isBplEvent(EventID id) { return id <= BPL_EVENT_COUNT; }
-static inline bool isDasEvent(EventID id) { return id <= DAS_EVENT_COUNT; }
+static inline bool isDmaEvent(EventID id) { return id <= DMA_EVENT_COUNT; }
 static inline bool isCopEvent(EventID id) { return id <= COP_EVENT_COUNT; }
 static inline bool isBltEvent(EventID id) { return id <= BLT_EVENT_COUNT; }
 static inline bool isRasEvent(EventID id) { return id <= RAS_EVENT_COUNT; }

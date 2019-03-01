@@ -24,6 +24,8 @@ Denise::Denise()
         { &bplcon1,   sizeof(bplcon1),   0 },
         { &bplcon2,   sizeof(bplcon2),   0 },
         { &bpldat,    sizeof(bpldat),    WORD_ARRAY },
+        { &sprpos,    sizeof(sprpos),    WORD_ARRAY },
+        { &sprctl,    sizeof(sprctl),    WORD_ARRAY },
     });
     
 }
@@ -136,6 +138,24 @@ Denise::pokeBPLxDAT(int x, uint16_t value)
     debug("pokeBPL%dDAT(%X)\n", x, value);
     
     bpldat[x] = value;
+}
+
+void
+Denise::pokeSPRxPOS(int x, uint16_t value)
+{
+    assert(x < 8);
+    debug("pokeSPR%dPOS(%X)\n", x, value);
+    
+    sprpos[x] = value;
+}
+
+void
+Denise::pokeSPRxCTL(int x, uint16_t value)
+{
+    assert(x < 8);
+    debug("pokeSPR%dCTL(%X)\n", x, value);
+    
+    sprctl[x] = value;
 }
 
 void

@@ -29,6 +29,10 @@
 #define BLTEN 0b0001000000
 #define SPREN 0b0000100000
 #define DSKEN 0b0000010000
+#define AU3EN 0b0000001000
+#define AU2EN 0b0000000100
+#define AU1EN 0b0000000010
+#define AU0EN 0b0000000001
 
 // Assembles a beam position out of two components
 #define BEAM(y,x) (((y) << 8) | (x))
@@ -96,20 +100,21 @@ public:
     // DMA allocation tables
     //
     
-    /* EXPERIMENTAL:
-     * bplaEvent[hpos] = BPLDMA event id, e.g., BPL_FETCH_LO_1, 0 if none
-     * bplaNext[hpos] = hpos where the next dma happens, -1 if none
-     *
-     * Iterate through the allocation table as follows:
-     *
-     * int hpos = 0;
-     * while (bplanext[hpos] != -1) {
-     *    do something with bpladma[hpos];
-     *    hpos = bplanext[hpos];
-     *
+    /* The DMA time slot allocation table for a complete horizontal line.
+     * The array resembles Fig. 6-9 im the HRM and has the following meaning:
+     * If, e.g., Audio DMA for channel 1 and 2 is activated, elements
+     * dmaEvent[7] and dmaEvent[9] equal AUDEN. If no DMA event
+     * takes place at a specific cycle, the array element is 0.
      */
-    EventID bplaEvent[HPOS_MAX + 1];
-    uint8_t bplaNext[HPOS_MAX + 1];
+    EventID dmaEvent[HPOS_MAX + 1];
+    
+    /* Jump table for quickly accessing the DMA time slot allocation table.
+     * For a given horizontal position hpos, nextDmaEvent[hpos] points to the
+     * next horizontal position where a DMA event happens. If no further
+     * DMA access happens, a 0 is stored.
+     */
+    uint8_t nextDmaEvent[HPOS_MAX + 1];
+    
     
     //
     // Bitplane book keeping
@@ -245,8 +250,8 @@ public:
 
     /* Builds the bpla dma allocation table
      */
-    void clearBPLDMAEventTable();
-    void buildBPLDMAEventTable();
+    void clearDMAEventTable();
+    void buildDMAEventTable();
     
     /* Computes the beam coordinate where the next bitplane DMA can happen.
      * The value is dependent on the current values of ddfstrt and ddfstop.
@@ -331,12 +336,16 @@ public:
     inline bool bltDMA() { return (dmacon & (DMAEN | BLTEN)) == (DMAEN | BLTEN); }
     inline bool sprDMA() { return (dmacon & (DMAEN | SPREN)) == (DMAEN | SPREN); }
     inline bool dskDMA() { return (dmacon & (DMAEN | DSKEN)) == (DMAEN | DSKEN); }
-    
+    inline bool au3DMA() { return (dmacon & (DMAEN | AU3EN)) == (DMAEN | AU3EN); }
+    inline bool au2DMA() { return (dmacon & (DMAEN | AU2EN)) == (DMAEN | AU2EN); }
+    inline bool au1DMA() { return (dmacon & (DMAEN | AU1EN)) == (DMAEN | AU1EN); }
+    inline bool au0DMA() { return (dmacon & (DMAEN | AU0EN)) == (DMAEN | AU0EN); }
+
     // Returns true if Copper is allowed to perform a DMA cycle
     bool copperCanHaveBus();
 
-    // Processes a bitplane DMA event
-    void serviceBPLDMAEvent(EventID id, int64_t data);
+    // Processes a regular DMA event (Disk, Audio, Sprites, Bitplanes)
+    void serviceDMAEvent(EventID id, int64_t data);
 
     // Returns the number of active bitplanes
     // int activeBitplanes(); 

@@ -43,6 +43,14 @@ public:
     // The 6 bitplane data registers
     uint16_t bpldat[6]; 
     
+    // Sprite control word 1 (SPRxPOS)
+    uint16_t sprpos[8];
+    
+    // Sprite control word 2 (SPRxCTL)
+    uint16_t sprctl[8];
+
+    
+    
     /* The 6 bitplane parallel-to-serial shift registers
      * Denise transfers the current values of the bpldat registers into
      * the shift registers after BPLDAT1 is written to. This is emulated
@@ -144,6 +152,10 @@ public:
     void pokeBPLCON1(uint16_t value);
     void pokeBPLCON2(uint16_t value);
     void pokeBPLxDAT(int x, uint16_t value);
+
+    void pokeSPRxPOS(int x, uint16_t value);
+    void pokeSPRxCTL(int x, uint16_t value);
+
     
     // Returns true if we're running in HIRES mode
     inline bool hires() { return (bplcon0 & 0x8000); }

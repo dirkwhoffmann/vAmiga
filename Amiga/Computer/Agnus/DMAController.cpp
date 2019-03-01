@@ -99,8 +99,8 @@ DMAController::_dump()
     plainmsg("DMA allocation tables:\n\n");
     plainmsg("Bitplane DMA:\n");
     int hpos = 0;
-    while ((hpos = bplaNext[hpos]) != 0) {
-        plainmsg("%d:%d ", hpos, bplaEvent);
+    while ((hpos = nextDmaEvent[hpos]) != 0) {
+        plainmsg("%d:%d ", hpos, dmaEvent[hpos]);
     }
 }
 
@@ -148,23 +148,68 @@ DMAController::beam2cycles(int16_t vpos, int16_t hpos)
 }
 
 void
-DMAController::clearBPLDMAEventTable()
+DMAController::clearDMAEventTable()
 {
     // Clear the allocation table
-    memset(bplaEvent, 0, sizeof(bplaEvent));
-    memset(bplaNext, 0, sizeof(bplaNext));
+    memset(dmaEvent, 0, sizeof(dmaEvent));
+    memset(nextDmaEvent, 0, sizeof(nextDmaEvent));
 }
 
 void
-DMAController::buildBPLDMAEventTable()
+DMAController::buildDMAEventTable()
 {
     // Start with a clean table
-    clearBPLDMAEventTable();
+    memset(dmaEvent, 0, sizeof(dmaEvent));
 
-    // Return with a clear table if bitplane DMA is disabled
-    if (!bplDMA()) return;
+    // Disk DMA
+    if (dskDMA()) {
+        dmaEvent[0x07] = DMA_DISK;
+        dmaEvent[0x09] = DMA_DISK;
+        dmaEvent[0x0A] = DMA_DISK;
+    }
     
-    // Schedule DMA accesses
+    // Audio DMA
+    if (au0DMA()) dmaEvent[0x0C] = DMA_AUDIO_0;
+    if (au1DMA()) dmaEvent[0x0E] = DMA_AUDIO_1;
+    if (au2DMA()) dmaEvent[0x11] = DMA_AUDIO_2;
+    if (au3DMA()) dmaEvent[0x13] = DMA_AUDIO_3;
+
+    // Sprite DMA (some slots may be overwritten by bitplane DMA cycles)
+    // TODO: Individually switch on / off channels
+    if (sprDMA()) { // && sprite 0 enabled
+        dmaEvent[0x15] = DMA_SPRITE0;
+        dmaEvent[0x17] = DMA_SPRITE0;
+    }
+    if (sprDMA()) { // && sprite 1 enabled
+        dmaEvent[0x19] = DMA_SPRITE1;
+        dmaEvent[0x1B] = DMA_SPRITE1;
+    }
+    if (sprDMA()) { // && sprite 2 enabled
+        dmaEvent[0x1D] = DMA_SPRITE2;
+        dmaEvent[0x1F] = DMA_SPRITE2;
+    }
+    if (sprDMA()) { // && sprite 3 enabled
+        dmaEvent[0x21] = DMA_SPRITE3;
+        dmaEvent[0x23] = DMA_SPRITE3;
+    }
+    if (sprDMA()) { // && sprite 4 enabled
+        dmaEvent[0x25] = DMA_SPRITE4;
+        dmaEvent[0x27] = DMA_SPRITE4;
+    }
+    if (sprDMA()) { // && sprite 5 enabled
+        dmaEvent[0x29] = DMA_SPRITE5;
+        dmaEvent[0x2B] = DMA_SPRITE5;
+    }
+    if (sprDMA()) { // && sprite 6 enabled
+        dmaEvent[0x2D] = DMA_SPRITE6;
+        dmaEvent[0x2F] = DMA_SPRITE6;
+    }
+    if (sprDMA()) { // && sprite 7 enabled
+        dmaEvent[0x31] = DMA_SPRITE7;
+        dmaEvent[0x33] = DMA_SPRITE7;
+    }
+
+    // Bitplane DMA
     if (amiga->denise.hires()) {
     
         switch (activeBitplanes) {
@@ -172,19 +217,19 @@ DMAController::buildBPLDMAEventTable()
             case 5:
             case 4:
                 for (int i = ddfstrt & 0xF8; i < ddfstop; i += 4)
-                    bplaEvent[i] = BPL_FETCH_H4;
+                    dmaEvent[i] = DMA_H4;
                 // fallthrough
             case 3:
                 for (int i = ddfstrt & 0xF8; i < ddfstop; i += 4)
-                    bplaEvent[i+1] = BPL_FETCH_H3;
+                    dmaEvent[i+1] = DMA_H3;
                 // fallthrough
             case 2:
                 for (int i = ddfstrt & 0xF8; i < ddfstop; i += 4)
-                    bplaEvent[i+2] = BPL_FETCH_H2;
+                    dmaEvent[i+2] = DMA_H2;
                 // fallthrough
             case 1:
                 for (int i = ddfstrt & 0xF8; i < ddfstop; i += 4)
-                    bplaEvent[i+3] = BPL_FETCH_H1;
+                    dmaEvent[i+3] = DMA_H1;
         }
         
     } else {
@@ -192,37 +237,35 @@ DMAController::buildBPLDMAEventTable()
         switch (activeBitplanes) {
             case 6:
                 for (int i = ddfstrt & 0xF8; i < ddfstop; i += 8)
-                    bplaEvent[i+1] = BPL_FETCH_L4;
+                    dmaEvent[i+1] = DMA_L4;
                 // fallthrough
             case 5:
                 for (int i = ddfstrt & 0xF8; i < ddfstop; i += 8)
-                    bplaEvent[i+2] = BPL_FETCH_L6;
+                    dmaEvent[i+2] = DMA_L6;
                 // fallthrough
             case 4:
                 for (int i = ddfstrt & 0xF8; i < ddfstop; i += 8)
-                    bplaEvent[i+3] = BPL_FETCH_L2;
+                    dmaEvent[i+3] = DMA_L2;
                 // fallthrough
             case 3:
                 for (int i = ddfstrt & 0xF8; i < ddfstop; i += 8)
-                    bplaEvent[i+5] = BPL_FETCH_L3;
+                    dmaEvent[i+5] = DMA_L3;
                 // fallthrough
             case 2:
                 for (int i = ddfstrt & 0xF8; i < ddfstop; i += 8)
-                    bplaEvent[i+6] = BPL_FETCH_L5;
+                    dmaEvent[i+6] = DMA_L5;
                 // fallthrough
             case 1:
                 for (int i = ddfstrt & 0xF8; i < ddfstop; i += 8)
-                    bplaEvent[i+7] = BPL_FETCH_L1;
+                    dmaEvent[i+7] = DMA_L1;
         }
     }
     
-    // Build jump table
-    int prev = 0;
-    for (int i = ddfstrt & 0xF8; i < ddfstop; i++) {
-        if (bplaEvent[i]) {
-            bplaNext[prev] = i;
-            prev = i;
-        }
+    // Setup jump table
+    EventID id = (EventID)0;
+    for (int i = HPOS_MAX; i >= 0; i--) {
+        dmaEvent[i] = id;
+        if (dmaEvent[i]) id = dmaEvent[i];
     }
 }
 
@@ -623,13 +666,14 @@ DMAController::hsyncHandler()
     if (VPOS(beam) == 26) {
         
         // Create the BPLDMA allocation table
-        buildBPLDMAEventTable();
+        buildDMAEventTable();
         
-        // Schedule first bitplane DMA (if any)
-        if (bplaNext[0]) {
-            eventHandler.scheduleEvent(BPL_SLOT, 26, bplaNext[0], bplaEvent[0]);
-        }
+        // Schedule first DMA event (if any)
+        uint8_t next = nextDmaEvent[0];
+        if (next)
+            eventHandler.scheduleEvent(DMA_SLOT, 26, next, dmaEvent[next]);
     }
+    
     // Schedule next HSYNC event
     eventHandler.rescheduleEvent(RAS_SLOT, DMA_CYCLES(0xE3));
 }
@@ -651,7 +695,7 @@ DMAController::vsyncAction()
     setvpos(0);
     
     // Disable bitplane DMA
-    clearBPLDMAEventTable();
+    clearDMAEventTable();
 }
 
 void
@@ -686,13 +730,13 @@ DMAController::copperCanHaveBus()
 }
 
 void
-DMAController::serviceBPLDMAEvent(EventID id, int64_t data)
+DMAController::serviceDMAEvent(EventID id, int64_t data)
 {
     busOwner = BPLEN;
     
     switch (id) {
-        case BPL_FETCH_H1:
-        case BPL_FETCH_L1:
+        case DMA_H1:
+        case DMA_L1:
             
             DO_DMA(bplpt[PLANE1], amiga->denise.bpldat[PLANE1]);
             
@@ -701,30 +745,30 @@ DMAController::serviceBPLDMAEvent(EventID id, int64_t data)
             amiga->denise.fillShiftRegisters();
             break;
             
-        case BPL_FETCH_H2:
-        case BPL_FETCH_L2:
+        case DMA_H2:
+        case DMA_L2:
             
             DO_DMA(bplpt[PLANE2], amiga->denise.bpldat[PLANE2]);
             break;
             
-        case BPL_FETCH_H3:
-        case BPL_FETCH_L3:
+        case DMA_H3:
+        case DMA_L3:
             
             DO_DMA(bplpt[PLANE3], amiga->denise.bpldat[PLANE3]);
             break;
             
-        case BPL_FETCH_H4:
-        case BPL_FETCH_L4:
+        case DMA_H4:
+        case DMA_L4:
             
             DO_DMA(bplpt[PLANE4], amiga->denise.bpldat[PLANE4]);
             break;
             
-        case BPL_FETCH_L5:
+        case DMA_L5:
             
             DO_DMA(bplpt[PLANE5], amiga->denise.bpldat[PLANE5]);
             break;
             
-        case BPL_FETCH_L6:
+        case DMA_L6:
             
             DO_DMA(bplpt[PLANE6], amiga->denise.bpldat[PLANE6]);
             break;
@@ -732,13 +776,13 @@ DMAController::serviceBPLDMAEvent(EventID id, int64_t data)
         default: assert(false);
     }
     
-    // Schedule next bitplane event
+    // Schedule next event
     uint8_t hpos = HPOS(beam);
-    uint8_t next = bplaNext[hpos];
+    uint8_t next = nextDmaEvent[hpos];
     if (next) {
-        eventHandler.scheduleEvent(BPL_SLOT, next, VPOS(beam), bplaEvent[next]);
+        eventHandler.scheduleEvent(DMA_SLOT, next, VPOS(beam), dmaEvent[next]);
     } else {
-        eventHandler.cancelEvent(BPL_SLOT);
+        eventHandler.cancelEvent(DMA_SLOT);
     }
 }
 
