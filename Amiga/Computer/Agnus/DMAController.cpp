@@ -81,8 +81,8 @@ DMAController::_reset()
 void
 DMAController::_ping()
 {
-    
 }
+
 void
 DMAController::_dump()
 {
@@ -96,12 +96,11 @@ DMAController::_dump()
     plainmsg("               %lld DMA cycles\n", AS_DMA_CYCLES(latchedClock));
     plainmsg("beam position: %d $%X (%d,%d) ($%X,$%X)\n", beam, beam, vp, hp, vp, hp);
     
-    plainmsg("DMA allocation tables:\n\n");
-    plainmsg("Bitplane DMA:\n");
-    int hpos = 0;
-    while ((hpos = nextDmaEvent[hpos]) != 0) {
-        plainmsg("%d:%d ", hpos, dmaEvent[hpos]);
-    }
+    plainmsg("\nDMA time slot allocation:\n\n");
+
+    dumpDMAEventTable(0x00, 0x4F);
+    dumpDMAEventTable(0x50, 0x9F);
+    dumpDMAEventTable(0xA0, 0xE2);
 }
 
 DMAInfo
@@ -145,14 +144,6 @@ Cycle
 DMAController::beam2cycles(int16_t vpos, int16_t hpos)
 {
     return DMA_CYCLES(vpos * cyclesPerLine() + hpos); 
-}
-
-void
-DMAController::clearDMAEventTable()
-{
-    // Clear the allocation table
-    memset(dmaEvent, 0, sizeof(dmaEvent));
-    memset(nextDmaEvent, 0, sizeof(nextDmaEvent));
 }
 
 void
@@ -261,12 +252,67 @@ DMAController::buildDMAEventTable()
         }
     }
     
-    // Setup jump table
+    // Build jump table
     EventID id = (EventID)0;
     for (int i = HPOS_MAX; i >= 0; i--) {
         dmaEvent[i] = id;
         if (dmaEvent[i]) id = dmaEvent[i];
     }
+}
+
+void
+DMAController::clearDMAEventTable()
+{
+    // Clear the allocation table
+    memset(dmaEvent, 0, sizeof(dmaEvent));
+    memset(nextDmaEvent, 0, sizeof(nextDmaEvent));
+}
+
+void
+DMAController::dumpDMAEventTable(int from, int to)
+{
+    char r1[256], r2[256], r3[256], r4[256];
+    int i;
+    for (i = 0; i <= (to - from); i++) {
+        
+        int digit1 = (from + i) / 16;
+        int digit2 = (from + i) % 16;
+        
+        r1[i] = (digit1 < 10) ? digit1 + '0' : (digit1 - 10) + 'A';
+        r2[i] = (digit2 < 10) ? digit2 + '0' : (digit2 - 10) + 'A';
+        
+        switch(dmaEvent[i + from]) {
+            case DMA_DISK:    r3[i] = 'D'; r4[i] = ' '; break;
+            case DMA_AUDIO_0: r3[i] = 'D'; r4[i] = 'D'; break;
+            case DMA_AUDIO_1: r3[i] = 'A'; r4[i] = '1'; break;
+            case DMA_AUDIO_2: r3[i] = 'A'; r4[i] = '2'; break;
+            case DMA_AUDIO_3: r3[i] = 'A'; r4[i] = '3'; break;
+            case DMA_SPRITE0: r3[i] = 'S'; r4[i] = '0'; break;
+            case DMA_SPRITE1: r3[i] = 'S'; r4[i] = '1'; break;
+            case DMA_SPRITE2: r3[i] = 'S'; r4[i] = '2'; break;
+            case DMA_SPRITE3: r3[i] = 'S'; r4[i] = '3'; break;
+            case DMA_SPRITE4: r3[i] = 'S'; r4[i] = '4'; break;
+            case DMA_SPRITE5: r3[i] = 'S'; r4[i] = '5'; break;
+            case DMA_SPRITE6: r3[i] = 'S'; r4[i] = '6'; break;
+            case DMA_SPRITE7: r3[i] = 'S'; r4[i] = '7'; break;
+            case DMA_L1:      r3[i] = 'L'; r4[i] = '1'; break;
+            case DMA_L2:      r3[i] = 'L'; r4[i] = '2'; break;
+            case DMA_L3:      r3[i] = 'L'; r4[i] = '3'; break;
+            case DMA_L4:      r3[i] = 'L'; r4[i] = '4'; break;
+            case DMA_L5:      r3[i] = 'L'; r4[i] = '5'; break;
+            case DMA_L6:      r3[i] = 'L'; r4[i] = '6'; break;
+            case DMA_H1:      r3[i] = 'H'; r4[i] = '1'; break;
+            case DMA_H2:      r3[i] = 'H'; r4[i] = '2'; break;
+            case DMA_H3:      r3[i] = 'H'; r4[i] = '3'; break;
+            case DMA_H4:      r3[i] = 'H'; r4[i] = '4'; break;
+            default:          r3[i] = '.'; r4[i] = ' '; break;
+        }
+    }
+    r1[i] = r2[i] = r3[i] = r4[i] = 0;
+    plainmsg("%s\n", r1);
+    plainmsg("%s\n", r2);
+    plainmsg("%s\n", r3);
+    plainmsg("%s\n", r4);
 }
 
 int32_t
@@ -440,6 +486,9 @@ DMAController::pokeDMACON(uint16_t value)
             debug("Disk DMA switched off");
         }
     }
+    
+    buildDMAEventTable();
+    _dump();
 }
 
 uint16_t

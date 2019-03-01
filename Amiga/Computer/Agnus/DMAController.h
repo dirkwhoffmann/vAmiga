@@ -248,10 +248,14 @@ public:
     Cycle beam2cycles(int16_t vpos, int16_t hpos);
     Cycle beam2cycles(int32_t beam) { return beam2cycles(beam >> 8, beam & 0xFF); }
 
-    /* Builds the bpla dma allocation table
-     */
-    void clearDMAEventTable();
+    // Builds the DMA time slot allocation table for the current line
     void buildDMAEventTable();
+
+    // Removes all events from the DMA time slot allocation table
+    void clearDMAEventTable();
+
+    // Dumps the DMA time slot allocation table to the console for debugging
+    void dumpDMAEventTable(int from, int to);
     
     /* Computes the beam coordinate where the next bitplane DMA can happen.
      * The value is dependent on the current values of ddfstrt and ddfstop.
