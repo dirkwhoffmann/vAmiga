@@ -731,5 +731,14 @@ DMAController::serviceBPLDMAEvent(EventID id, int64_t data)
             
         default: assert(false);
     }
+    
+    // Schedule next bitplane event
+    uint8_t hpos = HPOS(beam);
+    uint8_t next = bplaNext[hpos];
+    if (next) {
+        eventHandler.scheduleEvent(BPL_SLOT, next, VPOS(beam), bplaEvent[next]);
+    } else {
+        eventHandler.cancelEvent(BPL_SLOT);
+    }
 }
 

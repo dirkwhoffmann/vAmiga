@@ -84,11 +84,8 @@ EventHandler::scheduleEvent(EventSlot s, Cycle cycle, EventID id, int64_t data)
 {
     assert(isEventSlot(s));
     
-    /*
-    if (s == COP_SLOT) {
-        debug("Scheduling COPPER event at %lld\n", cycle);
-    }
-    */
+    // if (s == COP_SLOT)
+    // debug("Scheduling event at %lld in slot %d\n", cycle, s);
     
     eventSlot[s].triggerCycle = cycle;
     eventSlot[s].triggerBeam = INT32_MAX;
@@ -150,6 +147,68 @@ EventHandler::checkScheduledEvent(EventSlot s)
         return false;
     }
     
+    EventID id = eventSlot[s].id;
+    
+    if (id == 0) {
+        fatalError("Event ID must not be 0.");
+        return false;
+    }
+    
+    switch (s) {
+        case CIAA_SLOT:
+        case CIAB_SLOT:
+            if (id >= CIA_EVENT_COUNT) {
+                fatalError("Invalid CIA event ID.");
+                return false;
+            }
+            if (eventSlot[s].triggerCycle != INT64_MAX && eventSlot[s].triggerCycle % 40 != 0) {
+                fatalError("Scheduled trigger cycle is not a CIA cycle.");
+                return false;
+            }
+            break;
+            
+        case BPL_SLOT:
+            if (id >= BPL_EVENT_COUNT) {
+                fatalError("Invalid BPL event ID.");
+                return false;
+            }
+            if (eventSlot[s].id == 0 || eventSlot[s].id >= CIA_EVENT_COUNT) {
+                fatalError("Invalid CIA event ID.");
+                return false;
+            }
+            break;
+            
+        case DAS_SLOT:
+            if (id >= DAS_EVENT_COUNT) {
+                fatalError("Invalid DAS event ID.");
+                return false;
+            }
+            break;
+            
+        case COP_SLOT:
+            if (id >= COP_EVENT_COUNT) {
+                fatalError("Invalid COP event ID.");
+                return false;
+            }
+            break;
+            
+        case BLT_SLOT:
+            if (id >= CIA_EVENT_COUNT) {
+                fatalError("Invalid BLT event ID.");
+                return false;
+            }
+            break;
+            
+        case RAS_SLOT:
+            if (id >= RAS_EVENT_COUNT) {
+                fatalError("Invalid RAS event ID.");
+                return false;
+            }
+            break;
+            
+        default:
+            break;
+    }
     return true;
 }
 
