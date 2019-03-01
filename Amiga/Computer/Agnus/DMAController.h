@@ -37,6 +37,9 @@
 #define VPOS(x) ((x) >> 8)
 #define HPOS(x) ((x) & 0xFF)
 
+// Maximum possible VPOS and HPOS
+#define VPOS_MAX 312
+#define HPOS_MAX 226
 
 class DMAController : public HardwareComponent {
     
@@ -88,6 +91,25 @@ public:
      */
     uint16_t busOwner = 0;
     
+    
+    //
+    // DMA allocation tables
+    //
+    
+    /* EXPERIMENTAL:
+     * bplaEvent[hpos] = BPLDMA event id, e.g., BPL_FETCH_LO_1, 0 if none
+     * bplaNext[hpos] = hpos where the next dma happens, -1 if none
+     *
+     * Iterate through the allocation table as follows:
+     *
+     * int hpos = 0;
+     * while (bplanext[hpos] != -1) {
+     *    do something with bpladma[hpos];
+     *    hpos = bplanext[hpos];
+     *
+     */
+    EventID bplaEvent[HPOS_MAX + 1];
+    uint8_t bplaNext[HPOS_MAX + 1];
     
     //
     // Bitplane book keeping
@@ -221,17 +243,27 @@ public:
     Cycle beam2cycles(int16_t vpos, int16_t hpos);
     Cycle beam2cycles(int32_t beam) { return beam2cycles(beam >> 8, beam & 0xFF); }
 
+    /* Builds the bpla dma allocation table
+     */
+    void clearBPLDMAEventTable();
+    void buildBPLDMAEventTable();
+    
     /* Computes the beam coordinate where the next bitplane DMA can happen.
      * The value is dependent on the current values of ddfstrt and ddfstop.
      * Returns -1 of there won't be any more bitplane DMA in the current frame.
      */
-    int32_t nextBPLDMABeam(uint32_t currentBeam);
+    int32_t nextBPLDMABeam(int32_t currentBeam);
     
     /* Computes the CPU cycle when the next bitplane DMA can happen.
-     * Calls nextBPLDMAbeam() to compute the value
+     * The function determines the beam position where the next DMA happens.
+     * Then, it converts it to the corresponding cylce.
      */
-    Cycle nextBpldmaCycle(uint32_t currentBeam);
+    Cycle nextBpldmaCycle(int32_t currentBeam);
     
+    /* Returns the bitplane number for a given beam position.
+     * The beam positon is supposed to be a position where a BPLDMA happens.
+     */
+    // int beam2plane(int32_t beam);
     
 private:
     
@@ -303,12 +335,9 @@ public:
     // Returns true if Copper is allowed to perform a DMA cycle
     bool copperCanHaveBus();
 
-    // Performs a bitplane DMA cycle for plane 1
-    void doBplDMA1();
-    
-    // Performs a bitplane DMA cycle for plane 2 to 6
-    void doBplDMA(int plane); 
- 
+    // Processes a bitplane DMA event
+    void serviceBPLDMAEvent(EventID id, int64_t data);
+
     // Returns the number of active bitplanes
     // int activeBitplanes(); 
     

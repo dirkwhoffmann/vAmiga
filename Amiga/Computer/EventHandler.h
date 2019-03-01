@@ -39,8 +39,16 @@ typedef enum
     CIA_EVENT_COUNT,
     
     // Bitplane slot
-    BPL_FETCH_LORES = 1,
-    BPL_FETCH_HIRES,
+    BPL_FETCH_L1 = 1,
+    BPL_FETCH_L2,
+    BPL_FETCH_L3,
+    BPL_FETCH_L4,
+    BPL_FETCH_L5,
+    BPL_FETCH_L6,
+    BPL_FETCH_H1,
+    BPL_FETCH_H2,
+    BPL_FETCH_H3,
+    BPL_FETCH_H4,
     BPL_EVENT_COUNT,
     
     // Disk, Audio, and Sprite slot

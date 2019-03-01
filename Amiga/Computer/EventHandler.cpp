@@ -213,19 +213,25 @@ EventHandler::_executeUntil(Cycle cycle) {
         }
     }
  
+    // Check for a bitplane event
+    if (isDue(BPL_SLOT, cycle)) {
+        assert(checkTriggeredEvent(BPL_SLOT));
+        amiga->dma.serviceBPLDMAEvent(eventSlot[BPL_SLOT].id, eventSlot[BPL_SLOT].data);
+    }
+    
     // Check for a Copper event
     if (isDue(COP_SLOT, cycle)) {
         
         // debug("Serving COPPER event at %lld\n", cycle);
     
         assert(checkTriggeredEvent(COP_SLOT));
-        amiga->dma.copper.processEvent(eventSlot[COP_SLOT].id, eventSlot[COP_SLOT].data);
+        amiga->dma.copper.serviceEvent(eventSlot[COP_SLOT].id, eventSlot[COP_SLOT].data);
     }
  
     // Check for a Blitter event
     if (isDue(BLT_SLOT, cycle)) {
         assert(checkTriggeredEvent(BLT_SLOT));
-        // amiga->dma.blitter.processEvent(eventSlot[BLT_SLOT].type, eventSlot[BLT_SLOT].data);
+        // amiga->dma.blitter.serviceEvent(eventSlot[BLT_SLOT].id, eventSlot[BLT_SLOT].data);
     }
 
     // Check for a raster event
@@ -234,7 +240,6 @@ EventHandler::_executeUntil(Cycle cycle) {
         amiga->dma.hsyncHandler();
     }
     
-
     // Determine the next trigger cycle
     nextTrigger = eventSlot[0].triggerCycle;
     for (unsigned i = 1; i < EVENT_SLOT_COUNT; i++)

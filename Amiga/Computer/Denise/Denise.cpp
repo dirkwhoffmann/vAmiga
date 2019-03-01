@@ -139,6 +139,12 @@ Denise::pokeBPLxDAT(int x, uint16_t value)
 }
 
 void
+Denise::serviceEvent(EventID id, int64_t data)
+{
+  
+}
+
+void
 Denise::fillShiftRegisters()
 {
     warn("IMPLEMENTATION MISSING");

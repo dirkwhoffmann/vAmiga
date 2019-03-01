@@ -378,7 +378,7 @@ Copper::cancelEvent()
 }
 
 void
-Copper::processEvent(EventID id, int64_t data)
+Copper::serviceEvent(EventID id, int64_t data)
 {
     switch (id) {
             

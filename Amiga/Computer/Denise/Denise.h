@@ -151,7 +151,10 @@ public:
     // Returns true if we're running in LORES mode
     inline bool lores() { return !(bplcon0 & 0x8000); }
     
+    // Processes an event
+    void serviceEvent(EventID id, int64_t data);
 
+    
     
     // uint16_t peekCOLORxx(int xx) { return colorizer.peekColorReg(xx); }
     // void pokeCOLORxx(int xx, uint16_t value) { colorizer.pokeColorReg(xx, value); }

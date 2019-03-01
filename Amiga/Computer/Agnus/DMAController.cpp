@@ -9,6 +9,12 @@
 
 #include "Amiga.h"
 
+// Emulates a Direct Memory Access
+// ptr is a DMA pointer register and dest the destination
+#define DO_DMA(ptr,dest) \
+dest = amiga->mem.peekChip16(ptr); \
+ptr = (ptr + 2) & 0x7FFFE;
+
 DMAController::DMAController()
 {
     setDescription("DMAController");
@@ -89,6 +95,13 @@ DMAController::_dump()
     plainmsg("latched clock: %lld master cycles\n", latchedClock);
     plainmsg("               %lld DMA cycles\n", AS_DMA_CYCLES(latchedClock));
     plainmsg("beam position: %d $%X (%d,%d) ($%X,$%X)\n", beam, beam, vp, hp, vp, hp);
+    
+    plainmsg("DMA allocation tables:\n\n");
+    plainmsg("Bitplane DMA:\n");
+    int hpos = 0;
+    while ((hpos = bplaNext[hpos]) != 0) {
+        plainmsg("%d:%d ", hpos, bplaEvent);
+    }
 }
 
 DMAInfo
@@ -134,8 +147,87 @@ DMAController::beam2cycles(int16_t vpos, int16_t hpos)
     return DMA_CYCLES(vpos * cyclesPerLine() + hpos); 
 }
 
+void
+DMAController::clearBPLDMAEventTable()
+{
+    // Clear the allocation table
+    memset(bplaEvent, 0, sizeof(bplaEvent));
+    memset(bplaNext, 0, sizeof(bplaNext));
+}
+
+void
+DMAController::buildBPLDMAEventTable()
+{
+    // Start with a clean table
+    clearBPLDMAEventTable();
+
+    // Return with a clear table if bitplane DMA is disabled
+    if (!bplDMA()) return;
+    
+    // Schedule DMA accesses
+    if (amiga->denise.hires()) {
+    
+        switch (activeBitplanes) {
+            case 6:
+            case 5:
+            case 4:
+                for (int i = ddfstrt & 0xF8; i < ddfstop; i += 4)
+                    bplaEvent[i] = BPL_FETCH_H4;
+                // fallthrough
+            case 3:
+                for (int i = ddfstrt & 0xF8; i < ddfstop; i += 4)
+                    bplaEvent[i+1] = BPL_FETCH_H3;
+                // fallthrough
+            case 2:
+                for (int i = ddfstrt & 0xF8; i < ddfstop; i += 4)
+                    bplaEvent[i+2] = BPL_FETCH_H2;
+                // fallthrough
+            case 1:
+                for (int i = ddfstrt & 0xF8; i < ddfstop; i += 4)
+                    bplaEvent[i+3] = BPL_FETCH_H1;
+        }
+        
+    } else {
+   
+        switch (activeBitplanes) {
+            case 6:
+                for (int i = ddfstrt & 0xF8; i < ddfstop; i += 8)
+                    bplaEvent[i+1] = BPL_FETCH_L4;
+                // fallthrough
+            case 5:
+                for (int i = ddfstrt & 0xF8; i < ddfstop; i += 8)
+                    bplaEvent[i+2] = BPL_FETCH_L6;
+                // fallthrough
+            case 4:
+                for (int i = ddfstrt & 0xF8; i < ddfstop; i += 8)
+                    bplaEvent[i+3] = BPL_FETCH_L2;
+                // fallthrough
+            case 3:
+                for (int i = ddfstrt & 0xF8; i < ddfstop; i += 8)
+                    bplaEvent[i+5] = BPL_FETCH_L3;
+                // fallthrough
+            case 2:
+                for (int i = ddfstrt & 0xF8; i < ddfstop; i += 8)
+                    bplaEvent[i+6] = BPL_FETCH_L5;
+                // fallthrough
+            case 1:
+                for (int i = ddfstrt & 0xF8; i < ddfstop; i += 8)
+                    bplaEvent[i+7] = BPL_FETCH_L1;
+        }
+    }
+    
+    // Build jump table
+    int prev = 0;
+    for (int i = ddfstrt & 0xF8; i < ddfstop; i++) {
+        if (bplaEvent[i]) {
+            bplaNext[prev] = i;
+            prev = i;
+        }
+    }
+}
+
 int32_t
-DMAController::nextBPLDMABeam(uint32_t currentBeam)
+DMAController::nextBPLDMABeam(int32_t currentBeam)
 {
     // The first DMA cycle happens at (26, ddfstrt) (TODO: CORRECT?)
     if (currentBeam < BEAM(26, ddfstrt))
@@ -162,7 +254,7 @@ DMAController::nextBPLDMABeam(uint32_t currentBeam)
 }
 
 Cycle
-DMAController::nextBpldmaCycle(uint32_t currentBeam)
+DMAController::nextBpldmaCycle(int32_t currentBeam)
 {
     Cycle result = latchedClock;
     
@@ -176,6 +268,32 @@ DMAController::nextBpldmaCycle(uint32_t currentBeam)
     result += beam2cycles(beam);
     return result;
 }
+
+/*
+int
+DMAController::beam2plane(int32_t beam)
+{
+    if (amiga->denise.hires()) {
+        switch (beam % 4) {
+            case 0: return 4;
+            case 1: return 3;
+            case 2: return 2;
+            case 3: return 1;
+        }
+    } else {
+        switch (beam % 8) {
+            case 0: assert(false); return 0;
+            case 1: return 4;
+            case 2: return 6;
+            case 3: return 2;
+            case 4: assert(false); return 0;
+            case 5: return 3;
+            case 6: return 5;
+            case 7: return 1;
+        }
+    }
+}
+*/
 
 uint16_t
 DMAController::peekDMACON()
@@ -501,7 +619,18 @@ DMAController::hsyncHandler()
     // Check if the current frame has been completed
     VPOS(beam) < 312 ? incvpos() : vsyncAction();
     
-    // Schedule next event
+    // Check for line 26 (Bitplane DMA starts here)
+    if (VPOS(beam) == 26) {
+        
+        // Create the BPLDMA allocation table
+        buildBPLDMAEventTable();
+        
+        // Schedule first bitplane DMA (if any)
+        if (bplaNext[0]) {
+            eventHandler.scheduleEvent(BPL_SLOT, 26, bplaNext[0], bplaEvent[0]);
+        }
+    }
+    // Schedule next HSYNC event
     eventHandler.rescheduleEvent(RAS_SLOT, DMA_CYCLES(0xE3));
 }
 
@@ -521,14 +650,8 @@ DMAController::vsyncAction()
     latchedClock = clock + DMA_CYCLES(1);
     setvpos(0);
     
-    // Schedule next bitplane DMA event
-    if (bplDMA()) {
-        if (amiga->denise.lores()) {
-            eventHandler.scheduleEvent(BPL_SLOT, 27, ddfstrt, BPL_FETCH_LORES, 4);
-        } else {
-            eventHandler.scheduleEvent(BPL_SLOT, 26, ddfstrt, BPL_FETCH_HIRES, 4);
-        }
-    }
+    // Disable bitplane DMA
+    clearBPLDMAEventTable();
 }
 
 void
@@ -563,20 +686,50 @@ DMAController::copperCanHaveBus()
 }
 
 void
-DMAController::doBplDMA1()
+DMAController::serviceBPLDMAEvent(EventID id, int64_t data)
 {
-    doBplDMA(0);
-    amiga->denise.fillShiftRegisters();
-}
-
-void
-DMAController::doBplDMA(int plane)
-{
-    assert(0 <= plane && plane <= 5);
+    busOwner = BPLEN;
     
-    if (plane < activeBitplanes) {
-        busOwner = BPLEN;
-        amiga->denise.bpldat[plane] = amiga->mem.peekChip16(bplpt[plane]);
-        bplpt[plane] = INC_OCS_PTR(bplpt[plane], 2);
+    switch (id) {
+        case BPL_FETCH_H1:
+        case BPL_FETCH_L1:
+            
+            DO_DMA(bplpt[PLANE1], amiga->denise.bpldat[PLANE1]);
+            
+            // The bitplane 1 fetch is an important one. Once it is performed,
+            // Denise fills it's shift registers.
+            amiga->denise.fillShiftRegisters();
+            break;
+            
+        case BPL_FETCH_H2:
+        case BPL_FETCH_L2:
+            
+            DO_DMA(bplpt[PLANE2], amiga->denise.bpldat[PLANE2]);
+            break;
+            
+        case BPL_FETCH_H3:
+        case BPL_FETCH_L3:
+            
+            DO_DMA(bplpt[PLANE3], amiga->denise.bpldat[PLANE3]);
+            break;
+            
+        case BPL_FETCH_H4:
+        case BPL_FETCH_L4:
+            
+            DO_DMA(bplpt[PLANE4], amiga->denise.bpldat[PLANE4]);
+            break;
+            
+        case BPL_FETCH_L5:
+            
+            DO_DMA(bplpt[PLANE5], amiga->denise.bpldat[PLANE5]);
+            break;
+            
+        case BPL_FETCH_L6:
+            
+            DO_DMA(bplpt[PLANE6], amiga->denise.bpldat[PLANE6]);
+            break;
+            
+        default: assert(false);
     }
 }
+
