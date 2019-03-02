@@ -369,6 +369,11 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->denise->getInfo();
 }
+- (void) setActivePlanes:(NSInteger)count
+{
+    wrapper->denise->debugSetActivePlanes(count);
+}
+
 - (void) initFakePictures:(void *)fake1 fake2:(void *)fake2
 {
     wrapper->denise->initFakePictures((int *)fake1, (int *)fake2);

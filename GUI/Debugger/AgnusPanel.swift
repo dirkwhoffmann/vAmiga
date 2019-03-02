@@ -64,16 +64,9 @@ extension Inspector {
 
     @IBAction func dmaDMACONButtonAction(_ sender: NSButton!) {
         
-        track()
-        
         let value = (1 << sender.tag) + (sender.state == .on ? 0x8000 : 0);
         amigaProxy?.mem.pokeCustom16(DMACON, value: Int(value))
-
-        track()
-        
         refresh(everything: false)
-        
-        track()
     }
 
     @IBAction func dmaVPosAction(_ sender: NSButton!) {

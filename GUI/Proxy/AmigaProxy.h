@@ -302,6 +302,8 @@ struct AmigaFileWrapper;
 - (void) dump;
 - (DeniseInfo) getInfo;
 
+- (void) setActivePlanes:(NSInteger)count; 
+
 - (void) initFakePictures:(void *)fake1 fake2:(void *)fake2;
 - (void *) screenBuffer;
 

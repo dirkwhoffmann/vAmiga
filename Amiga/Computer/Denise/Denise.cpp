@@ -96,15 +96,16 @@ Denise::pokeBPLCON0(uint16_t value)
     
     bplcon0 = value;
     
-    // The number of active bitplanes is managed by Agnus
+    // Tell Agnus how many bitplanes we have
     amiga->dma.activeBitplanes = (value >> 12) & 0b111;
-    
-    // Clear data registers of inactive bitplanes
+
+    // Update the DMA time slot allocation table
+    amiga->dma.buildDMAEventTable();
+
+    // Clear data registers of all inactive bitplanes
     for (int plane = 5; plane >= amiga->dma.activeBitplanes; plane--) {
         bpldat[plane] = 0;
     }
-    
-    
 }
 
 void
@@ -200,5 +201,18 @@ Denise::endOfFrame()
     }
     
     frame++;
+}
+
+void
+Denise::debugSetActivePlanes(int count)
+{
+    assert(count >= 0 && count <= 6);
+    
+    amiga->suspend();
+    
+    uint16_t value = bplcon0 & 0b1000111111111111;
+    pokeBPLCON0(value | (count << 12));
+    
+    amiga->resume();
 }
 

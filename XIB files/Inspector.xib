@@ -119,6 +119,12 @@
                 <outlet property="deniseBPLCON0" destination="VND-v2-3KF" id="L5w-Uf-3Aq"/>
                 <outlet property="deniseBPLCON1" destination="hit-9r-Ooj" id="sXH-q3-jID"/>
                 <outlet property="deniseBPLCON2" destination="TfL-ah-KBx" id="HSa-9a-r6A"/>
+                <outlet property="deniseBpl1Enable" destination="FcZ-xe-VM2" id="LXA-fc-8sv"/>
+                <outlet property="deniseBpl2Enable" destination="3Fc-xN-ZoH" id="6Q5-hU-3zv"/>
+                <outlet property="deniseBpl3Enable" destination="hCs-Aw-X0a" id="6Rh-n3-7JJ"/>
+                <outlet property="deniseBpl4Enable" destination="iXL-pt-gyK" id="m4D-T2-x0N"/>
+                <outlet property="deniseBpl5Enable" destination="kN2-zn-toP" id="mk2-VV-Vya"/>
+                <outlet property="deniseBpl6Enable" destination="luf-t4-Wnn" id="Zu6-qw-7b0"/>
                 <outlet property="deniseDBPLF" destination="Lfo-2n-rmB" id="AOo-fy-Oj7"/>
                 <outlet property="deniseHIRES" destination="8kP-xR-wIw" id="Eba-oS-X1j"/>
                 <outlet property="deniseHOMOD" destination="1Et-eT-Coi" id="QuR-IP-U6O"/>
@@ -2429,13 +2435,16 @@
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FcZ-xe-VM2">
+                                                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="FcZ-xe-VM2">
                                                         <rect key="frame" x="42" y="221" width="78" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="BPL1PT:" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="EQx-RE-UE7">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="dmaBitplaneButtonAction:" target="-2" id="kcY-qG-490"/>
+                                                        </connections>
                                                     </button>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QHC-Sk-j0A">
                                                         <rect key="frame" x="114" y="193" width="37" height="23"/>
@@ -2446,13 +2455,16 @@
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3Fc-xN-ZoH">
+                                                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="3Fc-xN-ZoH">
                                                         <rect key="frame" x="42" y="195" width="78" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="BPL2PT:" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="1AZ-3f-fdb">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="dmaBitplaneButtonAction:" target="-2" id="vLh-nq-VDF"/>
+                                                        </connections>
                                                     </button>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kRS-PC-CnJ">
                                                         <rect key="frame" x="114" y="167" width="37" height="23"/>
@@ -2463,13 +2475,16 @@
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hCs-Aw-X0a">
+                                                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="hCs-Aw-X0a">
                                                         <rect key="frame" x="42" y="169" width="78" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="BPL3PT:" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="aSD-4d-D5v">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="dmaBitplaneButtonAction:" target="-2" id="ZI0-Ix-oVf"/>
+                                                        </connections>
                                                     </button>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hmq-AS-6PL">
                                                         <rect key="frame" x="114" y="141" width="37" height="23"/>
@@ -2480,13 +2495,16 @@
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iXL-pt-gyK">
+                                                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="4" translatesAutoresizingMaskIntoConstraints="NO" id="iXL-pt-gyK">
                                                         <rect key="frame" x="42" y="143" width="78" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="BPL4PT:" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="oYZ-he-eqK">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="dmaBitplaneButtonAction:" target="-2" id="o9B-EN-Pl6"/>
+                                                        </connections>
                                                     </button>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XAf-er-saV">
                                                         <rect key="frame" x="114" y="115" width="37" height="23"/>
@@ -2497,13 +2515,16 @@
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kN2-zn-toP">
+                                                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="5" translatesAutoresizingMaskIntoConstraints="NO" id="kN2-zn-toP">
                                                         <rect key="frame" x="42" y="117" width="78" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="BPL5PT:" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="O0C-eQ-Uyr">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="dmaBitplaneButtonAction:" target="-2" id="k4V-EK-TjV"/>
+                                                        </connections>
                                                     </button>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1hS-ws-ZoZ">
                                                         <rect key="frame" x="114" y="89" width="37" height="23"/>
@@ -2514,13 +2535,16 @@
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="luf-t4-Wnn">
+                                                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="6" translatesAutoresizingMaskIntoConstraints="NO" id="luf-t4-Wnn">
                                                         <rect key="frame" x="42" y="91" width="78" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="BPL6PT:" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="x6D-gY-Gmn">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="dmaBitplaneButtonAction:" target="-2" id="kK0-0m-uvG"/>
+                                                        </connections>
                                                     </button>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0dT-N8-EM1">
                                                         <rect key="frame" x="45" y="48" width="63" height="16"/>

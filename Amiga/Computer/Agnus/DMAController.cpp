@@ -265,6 +265,8 @@ DMAController::buildDMAEventTable()
         nextDmaEvent[i] = next;
         if (dmaEvent[i]) next = i;
     }
+    
+    _dump();
 }
 
 void
@@ -499,7 +501,6 @@ DMAController::pokeDMACON(uint16_t value)
     }
     
     buildDMAEventTable();
-    _dump();
 }
 
 uint16_t

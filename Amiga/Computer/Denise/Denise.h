@@ -182,6 +182,13 @@ public:
     void fillShiftRegisters();
     
     //
+    // Debugging the component
+    //
+    
+    void debugSetActivePlanes(int count);
+    
+    
+    //
     // FAKE METHODS FOR THE VISUAL PROTOTYPE (TEMPORARY)
     //
     
