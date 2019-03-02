@@ -285,6 +285,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->mem->poke16((uint32_t)addr, value);
 }
+- (void) pokeCustom16:(NSInteger)addr value:(NSInteger)value
+{
+    wrapper->mem->pokeCustom16((uint32_t)addr, value);
+}
 - (NSString *) ascii:(NSInteger)addr
 {
     const char *str = wrapper->mem->ascii((uint32_t)addr);

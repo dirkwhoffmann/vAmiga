@@ -262,6 +262,7 @@ struct AmigaFileWrapper;
 - (NSInteger) spypeek16:(NSInteger)addr;
 - (void) poke8:(NSInteger)addr value:(NSInteger)value;
 - (void) poke16:(NSInteger)addr value:(NSInteger)value;
+- (void) pokeCustom16:(NSInteger)addr value:(NSInteger)value;
 
 - (NSString *) ascii:(NSInteger)addr;
 - (NSString *) hex:(NSInteger)addr bytes:(NSInteger)bytes;

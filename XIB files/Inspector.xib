@@ -123,6 +123,12 @@
                 <outlet property="deniseHIRES" destination="8kP-xR-wIw" id="Eba-oS-X1j"/>
                 <outlet property="deniseHOMOD" destination="1Et-eT-Coi" id="QuR-IP-U6O"/>
                 <outlet property="deniseLACE" destination="srT-Rj-zei" id="yhu-th-aNQ"/>
+                <outlet property="dmaAUD0EN" destination="ffI-4I-nzj" id="IXq-sj-TzF"/>
+                <outlet property="dmaAUD1EN" destination="ytl-8k-QeS" id="hsp-Ey-WYm"/>
+                <outlet property="dmaAUD2EN" destination="WZs-hX-PfJ" id="YgP-jv-rtB"/>
+                <outlet property="dmaAUD3EN" destination="b2l-D9-gly" id="hRU-Al-qAd"/>
+                <outlet property="dmaBLTEN" destination="M6w-EX-fWZ" id="yfO-Ph-0dw"/>
+                <outlet property="dmaBLTPRI" destination="aQh-FH-0CC" id="Dmb-Q0-dmR"/>
                 <outlet property="dmaBPL1MOD" destination="OO3-Pg-1qU" id="PNn-b4-nqf"/>
                 <outlet property="dmaBPL1PT" destination="1NV-Wt-4kv" id="vkw-w8-WLj"/>
                 <outlet property="dmaBPL2MOD" destination="oFD-pl-fS0" id="bsq-Yh-uyW"/>
@@ -131,22 +137,18 @@
                 <outlet property="dmaBPL4PT" destination="hmq-AS-6PL" id="lmE-xK-A3M"/>
                 <outlet property="dmaBPL5PT" destination="XAf-er-saV" id="qI9-aI-ikl"/>
                 <outlet property="dmaBPL6PT" destination="1hS-ws-ZoZ" id="MjV-wQ-tXM"/>
+                <outlet property="dmaBPLEN" destination="GJ1-Vk-7Ws" id="0fQ-jW-XJb"/>
+                <outlet property="dmaCOPEN" destination="I91-sx-8tH" id="5v1-VP-OEa"/>
                 <outlet property="dmaDDFSTOP" destination="8gY-aS-gao" id="jdG-vb-GYq"/>
                 <outlet property="dmaDDFSTRT" destination="ugp-hk-G5c" id="8hP-bQ-Umn"/>
                 <outlet property="dmaDIWSTOP" destination="wmt-YM-jui" id="tpM-rP-R3z"/>
                 <outlet property="dmaDIWSTRT" destination="MRL-hC-kaB" id="BUA-Rb-6fm"/>
                 <outlet property="dmaDMACON" destination="88f-vx-YJF" id="D3n-9I-bKE"/>
-                <outlet property="dmaDMACON0" destination="ffI-4I-nzj" id="IXq-sj-TzF"/>
-                <outlet property="dmaDMACON1" destination="ytl-8k-QeS" id="hsp-Ey-WYm"/>
-                <outlet property="dmaDMACON10" destination="aQh-FH-0CC" id="Dmb-Q0-dmR"/>
-                <outlet property="dmaDMACON2" destination="WZs-hX-PfJ" id="YgP-jv-rtB"/>
-                <outlet property="dmaDMACON3" destination="b2l-D9-gly" id="hRU-Al-qAd"/>
-                <outlet property="dmaDMACON4" destination="fhF-pG-xKL" id="CfU-VF-Yp2"/>
-                <outlet property="dmaDMACON5" destination="NmE-Hp-May" id="8rR-EZ-98c"/>
-                <outlet property="dmaDMACON6" destination="M6w-EX-fWZ" id="yfO-Ph-0dw"/>
-                <outlet property="dmaDMACON7" destination="I91-sx-8tH" id="5v1-VP-OEa"/>
-                <outlet property="dmaDMACON8" destination="GJ1-Vk-7Ws" id="0fQ-jW-XJb"/>
-                <outlet property="dmaDMACON9" destination="5JO-8i-wwh" id="7DS-n3-n8f"/>
+                <outlet property="dmaDMAEN" destination="5JO-8i-wwh" id="7DS-n3-n8f"/>
+                <outlet property="dmaDSKEN" destination="fhF-pG-xKL" id="CfU-VF-Yp2"/>
+                <outlet property="dmaHPOS" destination="6N6-le-3OK" id="E7z-og-vEJ"/>
+                <outlet property="dmaSPREN" destination="NmE-Hp-May" id="8rR-EZ-98c"/>
+                <outlet property="dmaVPOS" destination="L1V-jn-dfd" id="u6h-VD-yq0"/>
                 <outlet property="instrTableView" destination="vBZ-nM-TQD" id="RTC-Wm-6oe"/>
                 <outlet property="memBankTableView" destination="RzZ-Zx-t06" id="RpN-Cq-cet"/>
                 <outlet property="memCIAButton" destination="Uvd-uu-iLP" id="aJe-3t-y71"/>
@@ -1743,7 +1745,7 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                                             <clipView key="contentView" ambiguous="YES" drawsBackground="NO" id="jJo-Pz-BlY">
                                                 <rect key="frame" x="1" y="0.0" width="151" height="263"/>
-                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <autoresizingMask key="autoresizingMask"/>
                                                 <subviews>
                                                     <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="15" headerView="lgi-Sv-OLV" id="RzZ-Zx-t06" customClass="BankTableView" customModule="vAmiga" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="151" height="238"/>
@@ -1804,7 +1806,7 @@
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <clipView key="contentView" ambiguous="YES" drawsBackground="NO" id="858-OJ-L3r">
                                                 <rect key="frame" x="1" y="0.0" width="627" height="263"/>
-                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <autoresizingMask key="autoresizingMask"/>
                                                 <subviews>
                                                     <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="WPj-Ua-UtF" id="WbL-UR-zTx" customClass="MemTableView" customModule="vAmiga" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="627" height="238"/>
@@ -2173,7 +2175,7 @@
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="DMA" identifier="" id="2wr-Zc-eub">
-                                <view key="view" id="7eA-vd-r9Y">
+                                <view key="view" ambiguous="YES" id="7eA-vd-r9Y">
                                     <rect key="frame" x="10" y="33" width="824" height="406"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -2201,78 +2203,108 @@
                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
+                                                        <connections>
+                                                            <action selector="dmaDMACONTextAction:" target="-2" id="ZGa-qw-XJQ"/>
+                                                        </connections>
                                                     </textField>
-                                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aQh-FH-0CC">
+                                                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="10" translatesAutoresizingMaskIntoConstraints="NO" id="aQh-FH-0CC">
                                                         <rect key="frame" x="23" y="241" width="62" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="BLRPRI" bezelStyle="regularSquare" imagePosition="right" alignment="right" controlSize="small" state="on" inset="2" id="q7p-YB-2D3">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="dmaDMACONButtonAction:" target="-2" id="DqF-nG-fs4"/>
+                                                        </connections>
                                                     </button>
-                                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5JO-8i-wwh">
+                                                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="9" translatesAutoresizingMaskIntoConstraints="NO" id="5JO-8i-wwh">
                                                         <rect key="frame" x="21" y="221" width="64" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="DMAEN" bezelStyle="regularSquare" imagePosition="right" alignment="right" controlSize="small" state="on" inset="2" id="8IZ-hC-ayB">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="dmaDMACONButtonAction:" target="-2" id="Fkj-mp-gOk"/>
+                                                        </connections>
                                                     </button>
-                                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="I91-sx-8tH">
+                                                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="7" translatesAutoresizingMaskIntoConstraints="NO" id="I91-sx-8tH">
                                                         <rect key="frame" x="10" y="180" width="75" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="COPEN" bezelStyle="regularSquare" imagePosition="right" alignment="right" controlSize="small" state="on" inset="2" id="3Bi-UI-9ps">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="dmaDMACONButtonAction:" target="-2" id="6g8-gS-2Yh"/>
+                                                        </connections>
                                                     </button>
-                                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="M6w-EX-fWZ">
+                                                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="6" translatesAutoresizingMaskIntoConstraints="NO" id="M6w-EX-fWZ">
                                                         <rect key="frame" x="28" y="160" width="57" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="BLTEN" bezelStyle="regularSquare" imagePosition="right" alignment="right" controlSize="small" state="on" inset="2" id="OJ4-Wm-WJ6">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="dmaDMACONButtonAction:" target="-2" id="876-R2-vP2"/>
+                                                        </connections>
                                                     </button>
-                                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NmE-Hp-May">
+                                                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="5" translatesAutoresizingMaskIntoConstraints="NO" id="NmE-Hp-May">
                                                         <rect key="frame" x="26" y="140" width="59" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="SPREN" bezelStyle="regularSquare" imagePosition="right" alignment="right" controlSize="small" state="on" inset="2" id="03S-nc-Pex">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="dmaDMACONButtonAction:" target="-2" id="1sy-rx-5yR"/>
+                                                        </connections>
                                                     </button>
-                                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fhF-pG-xKL">
+                                                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="4" translatesAutoresizingMaskIntoConstraints="NO" id="fhF-pG-xKL">
                                                         <rect key="frame" x="25" y="120" width="60" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="DKSEN" bezelStyle="regularSquare" imagePosition="right" alignment="right" controlSize="small" state="on" inset="2" id="tMM-Un-bYY">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="dmaDMACONButtonAction:" target="-2" id="xXJ-g5-E2B"/>
+                                                        </connections>
                                                     </button>
-                                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="b2l-D9-gly">
+                                                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="b2l-D9-gly">
                                                         <rect key="frame" x="17" y="100" width="68" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="AUD3EN" bezelStyle="regularSquare" imagePosition="right" alignment="right" controlSize="small" state="on" inset="2" id="Eut-2X-tBl">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="dmaDMACONButtonAction:" target="-2" id="Hao-TU-lj5"/>
+                                                        </connections>
                                                     </button>
-                                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WZs-hX-PfJ">
+                                                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="WZs-hX-PfJ">
                                                         <rect key="frame" x="17" y="80" width="68" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="AUD2EN" bezelStyle="regularSquare" imagePosition="right" alignment="right" controlSize="small" state="on" inset="2" id="Phn-gI-yvD">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="dmaDMACONButtonAction:" target="-2" id="EKz-EU-h0s"/>
+                                                        </connections>
                                                     </button>
-                                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ytl-8k-QeS">
+                                                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="ytl-8k-QeS">
                                                         <rect key="frame" x="19" y="60" width="66" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="AUD1EN" bezelStyle="regularSquare" imagePosition="right" alignment="right" controlSize="small" state="on" inset="2" id="DC1-Ea-o9U">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="dmaDMACONButtonAction:" target="-2" id="JnQ-T6-e28"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ffI-4I-nzj">
                                                         <rect key="frame" x="17" y="40" width="68" height="20"/>
@@ -2281,14 +2313,20 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="dmaDMACONButtonAction:" target="-2" id="q65-O1-qaS"/>
+                                                        </connections>
                                                     </button>
-                                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GJ1-Vk-7Ws">
+                                                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="8" translatesAutoresizingMaskIntoConstraints="NO" id="GJ1-Vk-7Ws">
                                                         <rect key="frame" x="21" y="201" width="64" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="BPLEN" bezelStyle="regularSquare" imagePosition="right" alignment="right" controlSize="small" state="on" inset="2" id="Yhi-8V-RIq">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="dmaDMACONButtonAction:" target="-2" id="M4A-X0-GJT"/>
+                                                        </connections>
                                                     </button>
                                                 </subviews>
                                             </view>
@@ -2376,7 +2414,7 @@
                                             </view>
                                         </box>
                                         <box fixedFrame="YES" title="Bitplanes" translatesAutoresizingMaskIntoConstraints="NO" id="ivR-vZ-bje">
-                                            <rect key="frame" x="348" y="96" width="185" height="280"/>
+                                            <rect key="frame" x="442" y="96" width="185" height="280"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <view key="contentView" id="lrp-ri-fbT">
                                                 <rect key="frame" x="3" y="3" width="179" height="262"/>
@@ -2523,6 +2561,52 @@
                                                 </subviews>
                                             </view>
                                         </box>
+                                        <box fixedFrame="YES" title="Beam position" translatesAutoresizingMaskIntoConstraints="NO" id="ngx-rX-gC1">
+                                            <rect key="frame" x="162" y="117" width="178" height="90"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <view key="contentView" id="llb-WF-4y8">
+                                                <rect key="frame" x="3" y="3" width="172" height="72"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <subviews>
+                                                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6N6-le-3OK">
+                                                        <rect key="frame" x="101" y="42" width="37" height="23"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" enabled="NO" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" title="FFFF" drawsBackground="YES" id="vku-Sz-4Fj">
+                                                            <font key="font" size="12" name="CourierNewPS-BoldMT"/>
+                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                    </textField>
+                                                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="j07-U1-j5l">
+                                                        <rect key="frame" x="32" y="45" width="68" height="16"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Horizontal:" id="UD2-vY-sAx">
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                    </textField>
+                                                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="L1V-jn-dfd">
+                                                        <rect key="frame" x="101" y="14" width="37" height="23"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" enabled="NO" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" title="FFFF" drawsBackground="YES" id="irX-yd-6NL">
+                                                            <font key="font" size="12" name="CourierNewPS-BoldMT"/>
+                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                    </textField>
+                                                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xgq-Zk-jRe">
+                                                        <rect key="frame" x="32" y="17" width="68" height="16"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Vertical:" id="crf-h2-aZC">
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                    </textField>
+                                                </subviews>
+                                            </view>
+                                        </box>
                                     </subviews>
                                 </view>
                             </tabViewItem>
@@ -2543,7 +2627,7 @@
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <clipView key="contentView" ambiguous="YES" drawsBackground="NO" id="Y33-of-tc1">
                                                             <rect key="frame" x="1" y="0.0" width="373" height="238"/>
-                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                            <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" tag="1" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="WEI-qE-eO4" id="7Lt-S1-Mt6" customClass="CopperTableView" customModule="vAmiga" customModuleProvider="target">
                                                                     <rect key="frame" x="0.0" y="0.0" width="373" height="213"/>
@@ -2677,7 +2761,7 @@
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <clipView key="contentView" ambiguous="YES" drawsBackground="NO" id="BjD-tK-SjJ">
                                                             <rect key="frame" x="1" y="0.0" width="379" height="238"/>
-                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                            <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" tag="2" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="UBc-A3-sPb" id="SQq-Tg-gsU" customClass="CopperTableView" customModule="vAmiga" customModuleProvider="target">
                                                                     <rect key="frame" x="0.0" y="0.0" width="379" height="213"/>
@@ -3346,7 +3430,7 @@
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Paula" identifier="" id="ox5-bZ-2Aj">
-                                <view key="view" ambiguous="YES" id="FXI-VY-h9b">
+                                <view key="view" id="FXI-VY-h9b">
                                     <rect key="frame" x="10" y="33" width="824" height="406"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>

@@ -367,7 +367,6 @@ Copper::rescheduleEventRel(DMACycle delta)
 {
     Cycle trigger = amiga->dma.clock + DMA_CYCLES(delta);
     amiga->dma.eventHandler.rescheduleEvent(COP_SLOT, trigger);
-    
 }
 
 void

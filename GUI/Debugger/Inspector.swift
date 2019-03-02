@@ -148,17 +148,20 @@ class Inspector : NSWindowController
     
     // Debug panel (Agnus)
     @IBOutlet weak var dmaDMACON: NSTextField!
-    @IBOutlet weak var dmaDMACON10: NSButton!
-    @IBOutlet weak var dmaDMACON9: NSButton!
-    @IBOutlet weak var dmaDMACON8: NSButton!
-    @IBOutlet weak var dmaDMACON7: NSButton!
-    @IBOutlet weak var dmaDMACON6: NSButton!
-    @IBOutlet weak var dmaDMACON5: NSButton!
-    @IBOutlet weak var dmaDMACON4: NSButton!
-    @IBOutlet weak var dmaDMACON3: NSButton!
-    @IBOutlet weak var dmaDMACON2: NSButton!
-    @IBOutlet weak var dmaDMACON1: NSButton!
-    @IBOutlet weak var dmaDMACON0: NSButton!
+    @IBOutlet weak var dmaBLTPRI: NSButton!
+    @IBOutlet weak var dmaDMAEN: NSButton!
+    @IBOutlet weak var dmaBPLEN: NSButton!
+    @IBOutlet weak var dmaCOPEN: NSButton!
+    @IBOutlet weak var dmaBLTEN: NSButton!
+    @IBOutlet weak var dmaSPREN: NSButton!
+    @IBOutlet weak var dmaDSKEN: NSButton!
+    @IBOutlet weak var dmaAUD3EN: NSButton!
+    @IBOutlet weak var dmaAUD2EN: NSButton!
+    @IBOutlet weak var dmaAUD1EN: NSButton!
+    @IBOutlet weak var dmaAUD0EN: NSButton!
+
+    @IBOutlet weak var dmaVPOS: NSTextField!
+    @IBOutlet weak var dmaHPOS: NSTextField!
 
     @IBOutlet weak var dmaDIWSTRT: NSTextField!
     @IBOutlet weak var dmaDIWSTOP: NSTextField!

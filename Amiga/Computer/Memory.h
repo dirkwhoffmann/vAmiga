@@ -289,7 +289,6 @@ public:
     // CIAs
     //
     
-private:
     
     uint8_t peekCIA8(uint32_t addr);
     uint16_t peekCIA16(uint32_t addr);

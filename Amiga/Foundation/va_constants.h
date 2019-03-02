@@ -23,6 +23,10 @@ static const double frameRate = 50.0;
 // Number of master clock cycles per frame
 static const double masterCyclesPerFrame = (masterClockFrequency * 1000000.0) / frameRate;
 
+// Custom register addresses
+
+#define DMACON 0x96L
+
 
 // Printable names for all custom registers
 static const char *customReg[256] = {
