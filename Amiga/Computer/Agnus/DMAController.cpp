@@ -60,6 +60,9 @@ DMAController::_powerOn()
 {
     clock = 0;
     
+    ddfstrt = 0x38;
+    ddfstop = 0xD0;
+    
     // Schedule the first HSYNC event
     eventHandler.scheduleEvent(RAS_SLOT, DMA_CYCLES(0xE2), RAS_HSYNC);
     
@@ -108,7 +111,7 @@ DMAController::getInfo()
 {
     DMAInfo info;
     
-    info.dmacon = dmacon;
+    info.dmacon  = dmacon;
     info.diwstrt = diwstrt;
     info.diwstop = diwstop;
     info.ddfstrt = ddfstrt;
@@ -117,10 +120,11 @@ DMAController::getInfo()
     info.bpl1mod = bpl1mod;
     info.bpl2mod = bpl2mod;
     
-    info.dskpt = dskpt;
-    for (unsigned i = 0; i < 4; i++) info.bltpt[i] = bltpt[i];
-    for (unsigned i = 0; i < 4; i++) info.audlc[i] = audlc[i];
-    for (unsigned i = 0; i < 6; i++) info.bplpt[i] = bplpt[i];
+    info.dskpt   = dskpt;
+    
+    for (unsigned i = 0; i < 4; i++)  info.bltpt[i] = bltpt[i];
+    for (unsigned i = 0; i < 4; i++)  info.audlc[i] = audlc[i];
+    for (unsigned i = 0; i < 6; i++)  info.bplpt[i] = bplpt[i];
     for (unsigned i = 0; i < 8; i++) info.sprptr[i] = sprptr[i];
 
     return info;
@@ -152,52 +156,55 @@ DMAController::buildDMAEventTable()
     // Start with a clean table
     memset(dmaEvent, 0, sizeof(dmaEvent));
 
+    // Exit if DMA is disabled globally
+    if (!(dmacon & DMAEN)) return;
+    
     // Disk DMA
-    if (dskDMA()) {
+    if (dmacon & DSKEN) {
         dmaEvent[0x07] = DMA_DISK;
         dmaEvent[0x09] = DMA_DISK;
-        dmaEvent[0x0A] = DMA_DISK;
+        dmaEvent[0x0B] = DMA_DISK;
     }
     
     // Audio DMA
-    if (au0DMA()) dmaEvent[0x0C] = DMA_AUDIO_0;
-    if (au1DMA()) dmaEvent[0x0E] = DMA_AUDIO_1;
-    if (au2DMA()) dmaEvent[0x11] = DMA_AUDIO_2;
-    if (au3DMA()) dmaEvent[0x13] = DMA_AUDIO_3;
+    if (dmacon & AU0EN) dmaEvent[0x0D] = DMA_A0;
+    if (dmacon & AU1EN) dmaEvent[0x0F] = DMA_A1;
+    if (dmacon & AU2EN) dmaEvent[0x11] = DMA_A2;
+    if (dmacon & AU3EN) dmaEvent[0x13] = DMA_A3;
 
     // Sprite DMA (some slots may be overwritten by bitplane DMA cycles)
     // TODO: Individually switch on / off channels
-    if (sprDMA()) { // && sprite 0 enabled
-        dmaEvent[0x15] = DMA_SPRITE0;
-        dmaEvent[0x17] = DMA_SPRITE0;
+    if (dmacon & SPREN) { // && sprite 0 enabled
+        dmaEvent[0x15] = DMA_S0;
+        dmaEvent[0x17] = DMA_S0;
     }
-    if (sprDMA()) { // && sprite 1 enabled
-        dmaEvent[0x19] = DMA_SPRITE1;
-        dmaEvent[0x1B] = DMA_SPRITE1;
+    if (dmacon & SPREN) { // && sprite 1 enabled
+        dmaEvent[0x19] = DMA_S1;
+        dmaEvent[0x1B] = DMA_S1;
     }
-    if (sprDMA()) { // && sprite 2 enabled
-        dmaEvent[0x1D] = DMA_SPRITE2;
-        dmaEvent[0x1F] = DMA_SPRITE2;
+    if (dmacon & SPREN) { // && sprite 2 enabled
+        dmaEvent[0x1D] = DMA_S2;
+        dmaEvent[0x1F] = DMA_S2;
     }
-    if (sprDMA()) { // && sprite 3 enabled
-        dmaEvent[0x21] = DMA_SPRITE3;
-        dmaEvent[0x23] = DMA_SPRITE3;
+    if (dmacon & SPREN) { // && sprite 3 enabled
+        dmaEvent[0x21] = DMA_S3;
+        dmaEvent[0x23] = DMA_S3;
     }
-    if (sprDMA()) { // && sprite 4 enabled
-        dmaEvent[0x25] = DMA_SPRITE4;
-        dmaEvent[0x27] = DMA_SPRITE4;
+    if (dmacon & SPREN) { // && sprite 4 enabled
+        dmaEvent[0x25] = DMA_S4;
+        dmaEvent[0x27] = DMA_S4;
     }
-    if (sprDMA()) { // && sprite 5 enabled
-        dmaEvent[0x29] = DMA_SPRITE5;
-        dmaEvent[0x2B] = DMA_SPRITE5;
+    if (dmacon & SPREN) { // && sprite 5 enabled
+        dmaEvent[0x29] = DMA_S5;
+        dmaEvent[0x2B] = DMA_S5;
     }
-    if (sprDMA()) { // && sprite 6 enabled
-        dmaEvent[0x2D] = DMA_SPRITE6;
-        dmaEvent[0x2F] = DMA_SPRITE6;
+    if (dmacon & SPREN) { // && sprite 6 enabled
+        dmaEvent[0x2D] = DMA_S6;
+        dmaEvent[0x2F] = DMA_S6;
     }
-    if (sprDMA()) { // && sprite 7 enabled
-        dmaEvent[0x31] = DMA_SPRITE7;
-        dmaEvent[0x33] = DMA_SPRITE7;
+    if (dmacon & SPREN) { // && sprite 7 enabled
+        dmaEvent[0x31] = DMA_S7;
+        dmaEvent[0x33] = DMA_S7;
     }
 
     // Bitplane DMA
@@ -253,16 +260,18 @@ DMAController::buildDMAEventTable()
     }
     
     // Build jump table
-    EventID id = (EventID)0;
+    uint8_t next = 0;
     for (int i = HPOS_MAX; i >= 0; i--) {
-        dmaEvent[i] = id;
-        if (dmaEvent[i]) id = dmaEvent[i];
+        nextDmaEvent[i] = next;
+        if (dmaEvent[i]) next = i;
     }
 }
 
 void
 DMAController::clearDMAEventTable()
 {
+    debug("CLEARING DMA event table\n");
+    
     // Clear the allocation table
     memset(dmaEvent, 0, sizeof(dmaEvent));
     memset(nextDmaEvent, 0, sizeof(nextDmaEvent));
@@ -273,8 +282,12 @@ DMAController::dumpDMAEventTable(int from, int to)
 {
     char r1[256], r2[256], r3[256], r4[256];
     int i;
+    
+    plainmsg("DMACON: %X\n", dmacon);
+    
     for (i = 0; i <= (to - from); i++) {
         
+        plainmsg(" %d", dmaEvent[i + from]);
         int digit1 = (from + i) / 16;
         int digit2 = (from + i) % 16;
         
@@ -282,30 +295,30 @@ DMAController::dumpDMAEventTable(int from, int to)
         r2[i] = (digit2 < 10) ? digit2 + '0' : (digit2 - 10) + 'A';
         
         switch(dmaEvent[i + from]) {
-            case DMA_DISK:    r3[i] = 'D'; r4[i] = ' '; break;
-            case DMA_AUDIO_0: r3[i] = 'D'; r4[i] = 'D'; break;
-            case DMA_AUDIO_1: r3[i] = 'A'; r4[i] = '1'; break;
-            case DMA_AUDIO_2: r3[i] = 'A'; r4[i] = '2'; break;
-            case DMA_AUDIO_3: r3[i] = 'A'; r4[i] = '3'; break;
-            case DMA_SPRITE0: r3[i] = 'S'; r4[i] = '0'; break;
-            case DMA_SPRITE1: r3[i] = 'S'; r4[i] = '1'; break;
-            case DMA_SPRITE2: r3[i] = 'S'; r4[i] = '2'; break;
-            case DMA_SPRITE3: r3[i] = 'S'; r4[i] = '3'; break;
-            case DMA_SPRITE4: r3[i] = 'S'; r4[i] = '4'; break;
-            case DMA_SPRITE5: r3[i] = 'S'; r4[i] = '5'; break;
-            case DMA_SPRITE6: r3[i] = 'S'; r4[i] = '6'; break;
-            case DMA_SPRITE7: r3[i] = 'S'; r4[i] = '7'; break;
-            case DMA_L1:      r3[i] = 'L'; r4[i] = '1'; break;
-            case DMA_L2:      r3[i] = 'L'; r4[i] = '2'; break;
-            case DMA_L3:      r3[i] = 'L'; r4[i] = '3'; break;
-            case DMA_L4:      r3[i] = 'L'; r4[i] = '4'; break;
-            case DMA_L5:      r3[i] = 'L'; r4[i] = '5'; break;
-            case DMA_L6:      r3[i] = 'L'; r4[i] = '6'; break;
-            case DMA_H1:      r3[i] = 'H'; r4[i] = '1'; break;
-            case DMA_H2:      r3[i] = 'H'; r4[i] = '2'; break;
-            case DMA_H3:      r3[i] = 'H'; r4[i] = '3'; break;
-            case DMA_H4:      r3[i] = 'H'; r4[i] = '4'; break;
-            default:          r3[i] = '.'; r4[i] = ' '; break;
+            case DMA_DISK:  r3[i] = 'D'; r4[i] = ' '; break;
+            case DMA_A0:    r3[i] = 'A'; r4[i] = '0'; break;
+            case DMA_A1:    r3[i] = 'A'; r4[i] = '1'; break;
+            case DMA_A2:    r3[i] = 'A'; r4[i] = '2'; break;
+            case DMA_A3:    r3[i] = 'A'; r4[i] = '3'; break;
+            case DMA_S0:    r3[i] = 'S'; r4[i] = '0'; break;
+            case DMA_S1:    r3[i] = 'S'; r4[i] = '1'; break;
+            case DMA_S2:    r3[i] = 'S'; r4[i] = '2'; break;
+            case DMA_S3:    r3[i] = 'S'; r4[i] = '3'; break;
+            case DMA_S4:    r3[i] = 'S'; r4[i] = '4'; break;
+            case DMA_S5:    r3[i] = 'S'; r4[i] = '5'; break;
+            case DMA_S6:    r3[i] = 'S'; r4[i] = '6'; break;
+            case DMA_S7:    r3[i] = 'S'; r4[i] = '7'; break;
+            case DMA_L1:    r3[i] = 'L'; r4[i] = '1'; break;
+            case DMA_L2:    r3[i] = 'L'; r4[i] = '2'; break;
+            case DMA_L3:    r3[i] = 'L'; r4[i] = '3'; break;
+            case DMA_L4:    r3[i] = 'L'; r4[i] = '4'; break;
+            case DMA_L5:    r3[i] = 'L'; r4[i] = '5'; break;
+            case DMA_L6:    r3[i] = 'L'; r4[i] = '6'; break;
+            case DMA_H1:    r3[i] = 'H'; r4[i] = '1'; break;
+            case DMA_H2:    r3[i] = 'H'; r4[i] = '2'; break;
+            case DMA_H3:    r3[i] = 'H'; r4[i] = '3'; break;
+            case DMA_H4:    r3[i] = 'H'; r4[i] = '4'; break;
+            default:        r3[i] = '.'; r4[i] = ' '; break;
         }
     }
     r1[i] = r2[i] = r3[i] = r4[i] = 0;
@@ -488,7 +501,7 @@ DMAController::pokeDMACON(uint16_t value)
     }
     
     buildDMAEventTable();
-    _dump();
+    _dump(); 
 }
 
 uint16_t
@@ -537,8 +550,8 @@ void
 DMAController::pokeDDFSTRT(uint16_t value)
 {
     debug("pokeDDFSTRT(%X)\n", value);
-    
-    ddfstrt = value;
+
+    ddfstrt = (value < 0x18) ? 0x18 : (value > 0xD7) ? 0xD7 : value;
 }
 
 void
@@ -546,7 +559,7 @@ DMAController::pokeDDFSTOP(uint16_t value)
 {
     debug("pokeDDFSTOP(%X)\n", value);
     
-    ddfstop = value;
+    ddfstop = (value < 0x18) ? 0x18 : (value > 0xD7) ? 0xD7 : value;
 }
         
 
