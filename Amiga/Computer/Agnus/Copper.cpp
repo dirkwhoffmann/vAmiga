@@ -15,7 +15,6 @@ Copper::Copper()
         
     registerSnapshotItems(vector<SnapshotItem> {
         
-        { &state,    sizeof(state),    0 },
         { &coplc,    sizeof(coplc),    DWORD_ARRAY },
         { &cdang,    sizeof(cdang),    0 },
         { &copins1,  sizeof(copins1),  0 },
@@ -114,11 +113,13 @@ Copper::pokeCOPINS(uint16_t value)
      */
 
     // TODO: The following is almost certainly wrong...
-    if (state == COP_MOVE || state == COP_WAIT_OR_SKIP) {
+    /* if (state == COP_MOVE || state == COP_WAIT_OR_SKIP) {
         copins2 = value;
     } else {
         copins1 = value;
     }
+    */
+    copins1 = value;
 }
 
 void
@@ -358,8 +359,6 @@ Copper::scheduleEventRel(DMACycle delta, EventID type, int64_t data)
 {
     Cycle trigger = amiga->dma.clock + DMA_CYCLES(delta);
     amiga->dma.eventHandler.scheduleEvent(COP_SLOT, trigger, type, data);
-    
-    state = type;
 }
 
 void
@@ -373,12 +372,13 @@ void
 Copper::cancelEvent()
 {
     amiga->dma.eventHandler.cancelEvent(COP_SLOT);
-    state = 0;
 }
 
 void
 Copper::serviceEvent(EventID id, int64_t data)
 {
+    debug("Servicing Copper event %d\n", id);
+    
     switch (id) {
             
         case COP_REQUEST_DMA:
@@ -501,5 +501,9 @@ Copper::vsyncAction()
      */
 
     // TODO: What is the exact timing here?
-    scheduleEventRel(4, COP_JMP1);
+    if (amiga->dma.copDMA()) {
+        scheduleEventRel(4, COP_JMP1);
+    } else {
+        cancelEvent();
+    }
 }

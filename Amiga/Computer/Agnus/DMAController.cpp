@@ -283,11 +283,8 @@ DMAController::dumpDMAEventTable(int from, int to)
     char r1[256], r2[256], r3[256], r4[256];
     int i;
     
-    plainmsg("DMACON: %X\n", dmacon);
-    
     for (i = 0; i <= (to - from); i++) {
         
-        plainmsg(" %d", dmaEvent[i + from]);
         int digit1 = (from + i) / 16;
         int digit2 = (from + i) % 16;
         
@@ -447,7 +444,8 @@ DMAController::pokeDMACON(uint16_t value)
             
             // Copper DMA on
             debug("Copper DMA switched on");
-            eventHandler.scheduleEvent(COP_SLOT, 2, COP_FETCH);
+            Cycle trigger = UP_TO_NEXT_EVEN(clock + 1);
+            eventHandler.scheduleEvent(COP_SLOT, trigger, COP_FETCH);
             
         } else {
             
@@ -501,7 +499,7 @@ DMAController::pokeDMACON(uint16_t value)
     }
     
     buildDMAEventTable();
-    _dump(); 
+    _dump();
 }
 
 uint16_t
@@ -731,9 +729,10 @@ DMAController::hsyncHandler()
         buildDMAEventTable();
         
         // Schedule first DMA event (if any)
-        uint8_t next = nextDmaEvent[0];
-        if (next)
-            eventHandler.scheduleEvent(DMA_SLOT, 26, next, dmaEvent[next]);
+        if (nextDmaEvent[0]) {
+            EventID eventID = dmaEvent[nextDmaEvent[0]];
+            eventHandler.scheduleEvent(DMA_SLOT, 26, nextDmaEvent[0], eventID);
+        }
     }
     
     // Schedule next HSYNC event

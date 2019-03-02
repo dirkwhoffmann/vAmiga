@@ -13,10 +13,7 @@
 class Copper : public HardwareComponent {
    
     friend class DMAController;
-    
-    // Current state of the Copper DEPRECATED
-    int32_t state;
-    
+        
     /* Indicates if the next instruction should be skipped.
      * This flag is usually false. It is set to true by the SKIP instruction
      * if the skip condition holds.
