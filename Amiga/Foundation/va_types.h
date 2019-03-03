@@ -213,6 +213,14 @@ typedef struct {
     
 } CopperInfo;
 
+typedef struct {
+    
+    bool active;
+    uint16_t bltcon0;
+    uint16_t bltcon1;
+
+} BlitterInfo;
+
 
 //
 // Denise

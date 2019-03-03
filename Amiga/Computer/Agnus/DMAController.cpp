@@ -23,6 +23,7 @@ DMAController::DMAController()
         
         &eventHandler,
         &copper,
+        &blitter
     });
     
     registerSnapshotItems(vector<SnapshotItem> {

@@ -13,6 +13,7 @@
 #include "HardwareComponent.h"
 #include "EventHandler.h"
 #include "Copper.h"
+#include "Blitter.h"
 
 // Bit plane indices
 #define PLANE1 0
@@ -53,10 +54,13 @@ public:
     // Sub components
     //
     
-    // The Amiga's famous Copper
+    // Every Amiga fan knows what the Copper is.
     Copper copper;
-    
-    // The event sheduler. It's the key component of this emulator.
+
+    // Every Amiga fan knows what the Blitter is.
+    Blitter blitter;
+
+    // The event sheduler, a key component of this emulator
     EventHandler eventHandler;
     
     

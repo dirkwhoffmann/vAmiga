@@ -22,6 +22,7 @@
 #include "Memory.h"
 #include "DMAController.h"
 #include "Copper.h"
+#include "Blitter.h"
 #include "Denise.h"
 #include "Paula.h"
 #include "AmigaKeyboard.h"

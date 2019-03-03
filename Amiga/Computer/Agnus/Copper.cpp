@@ -77,7 +77,7 @@ Copper::_ping()
 void
 Copper::_dump()
 {
-    plainmsg("   cdang: %lld\n", cdang);
+    plainmsg("   cdang: %d\n", cdang);
 }
 
 void

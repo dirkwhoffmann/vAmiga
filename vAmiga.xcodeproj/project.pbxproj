@@ -130,6 +130,7 @@
 		50D2ADC7220754A100E32AB0 /* m68kopdm.c in Sources */ = {isa = PBXBuildFile; fileRef = 50D2ADC1220754A000E32AB0 /* m68kopdm.c */; };
 		50D2ADC9220754A100E32AB0 /* m68kopac.c in Sources */ = {isa = PBXBuildFile; fileRef = 50D2ADC3220754A000E32AB0 /* m68kopac.c */; };
 		50D2ADCA220754A100E32AB0 /* m68kops.c in Sources */ = {isa = PBXBuildFile; fileRef = 50D2ADC4220754A000E32AB0 /* m68kops.c */; };
+		50D375DF222C7C6B0040987C /* Blitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50D375DD222C7C6B0040987C /* Blitter.cpp */; };
 		50DED6AF2202EBA200B8195F /* Inspector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50DED6AE2202EBA200B8195F /* Inspector.xib */; };
 		50DED6B12202EC3100B8195F /* Inspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DED6B02202EC3100B8195F /* Inspector.swift */; };
 		50EE994021FF4D8E003BD74B /* AudioUnit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EE993E21FF4D8E003BD74B /* AudioUnit.cpp */; };
@@ -323,6 +324,8 @@
 		50D2ADC3220754A000E32AB0 /* m68kopac.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = m68kopac.c; sourceTree = "<group>"; };
 		50D2ADC4220754A000E32AB0 /* m68kops.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = m68kops.c; sourceTree = "<group>"; };
 		50D2ADC5220754A100E32AB0 /* m68kops.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = m68kops.h; sourceTree = "<group>"; };
+		50D375DD222C7C6B0040987C /* Blitter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Blitter.cpp; sourceTree = "<group>"; };
+		50D375DE222C7C6B0040987C /* Blitter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Blitter.h; sourceTree = "<group>"; };
 		50DED6AE2202EBA200B8195F /* Inspector.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Inspector.xib; sourceTree = "<group>"; };
 		50DED6B02202EC3100B8195F /* Inspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Inspector.swift; sourceTree = "<group>"; };
 		50EE993E21FF4D8E003BD74B /* AudioUnit.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AudioUnit.cpp; sourceTree = "<group>"; };
@@ -386,6 +389,8 @@
 				5020B17B21EF121E00B9E80E /* DMAController.cpp */,
 				502F7DD1222172CA00AEEC65 /* Copper.h */,
 				502F7DCD2221706000AEEC65 /* Copper.cpp */,
+				50D375DE222C7C6B0040987C /* Blitter.h */,
+				50D375DD222C7C6B0040987C /* Blitter.cpp */,
 			);
 			path = Agnus;
 			sourceTree = "<group>";
@@ -969,6 +974,7 @@
 				50C2DE4421F756900043FD1B /* MyControllerStatusBar.swift in Sources */,
 				509CF4CD22083F9800C500F0 /* CPUPanel.swift in Sources */,
 				508FDFD921EA20510043D0E9 /* MetalViewEvents.swift in Sources */,
+				50D375DF222C7C6B0040987C /* Blitter.cpp in Sources */,
 				508FDFAC21EA1FBC0043D0E9 /* TOD.cpp in Sources */,
 				50B14C0D21EB3708002E32A6 /* HardwareComponent.cpp in Sources */,
 				50D2ADBA2207547500E32AB0 /* m68kcpu.c in Sources */,
