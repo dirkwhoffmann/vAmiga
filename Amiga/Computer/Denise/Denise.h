@@ -49,7 +49,7 @@ public:
     // Sprite control word 2 (SPRxCTL)
     uint16_t sprctl[8];
 
-    
+
     
     /* The 6 bitplane parallel-to-serial shift registers
      * Denise transfers the current values of the bpldat registers into

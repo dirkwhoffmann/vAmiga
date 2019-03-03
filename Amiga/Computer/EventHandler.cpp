@@ -144,6 +144,7 @@ EventHandler::checkScheduledEvent(EventSlot s)
     
     if (eventSlot[s].triggerCycle <= amiga->dma.clock) {
         fatalError("Scheduled event has a too small trigger cycle.");
+        amiga->dma.dump();
         return false;
     }
     

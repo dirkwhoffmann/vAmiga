@@ -880,6 +880,41 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x142 >> 1: // SPR0CTL
             amiga->denise.pokeSPRxCTL(0, value); return;
 
+        case 0x148 >> 1: // SPR1POS
+            amiga->denise.pokeSPRxPOS(1, value); return;
+        case 0x14A >> 1: // SPR1CTL
+            amiga->denise.pokeSPRxCTL(1, value); return;
+
+        case 0x150 >> 1: // SPR2POS
+            amiga->denise.pokeSPRxPOS(2, value); return;
+        case 0x152 >> 1: // SPR2CTL
+            amiga->denise.pokeSPRxCTL(2, value); return;
+
+        case 0x158 >> 1: // SPR3POS
+            amiga->denise.pokeSPRxPOS(3, value); return;
+        case 0x15A >> 1: // SPR3CTL
+            amiga->denise.pokeSPRxCTL(3, value); return;
+
+        case 0x160 >> 1: // SPR4POS
+            amiga->denise.pokeSPRxPOS(4, value); return;
+        case 0x162 >> 1: // SPR4CTL
+            amiga->denise.pokeSPRxCTL(4, value); return;
+
+        case 0x168 >> 1: // SPR5POS
+            amiga->denise.pokeSPRxPOS(5, value); return;
+        case 0x16A >> 1: // SPR5CTL
+            amiga->denise.pokeSPRxCTL(5, value); return;
+
+        case 0x170 >> 1: // SPR6POS
+            amiga->denise.pokeSPRxPOS(6, value); return;
+        case 0x172 >> 1: // SPR6CTL
+            amiga->denise.pokeSPRxCTL(6, value); return;
+
+        case 0x178 >> 1: // SPR7POS
+            amiga->denise.pokeSPRxPOS(7, value); return;
+        case 0x17A >> 1: // SPR7CTL
+            amiga->denise.pokeSPRxCTL(7, value); return;
+
         case 0x180 >> 1: // COLOR00
             amiga->denise.colorizer.pokeColorReg(0, value); return;
         case 0x182 >> 1: // COLOR01

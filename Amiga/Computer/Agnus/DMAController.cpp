@@ -32,6 +32,7 @@ DMAController::DMAController()
         { &lores,              sizeof(lores),              0 },
         { &activeBitplanes,    sizeof(activeBitplanes),    0 },
         { &busOwner,           sizeof(busOwner),           0 },
+        { &sprOnOff,           sizeof(sprOnOff),           0 },
         { &dmacon,             sizeof(dmacon),             0 },
         { &diwstrt,            sizeof(diwstrt),            0 },
         { &diwstop,            sizeof(diwstop),            0 },
@@ -805,6 +806,46 @@ DMAController::serviceDMAEvent(EventID id, int64_t data)
     busOwner = BPLEN;
     
     switch (id) {
+           
+        case DMA_DISK:
+            break;
+            
+        case DMA_A0:
+            break;
+            
+        case DMA_A1:
+            break;
+            
+        case DMA_A2:
+            break;
+            
+        case DMA_A3:
+            break;
+            
+        case DMA_S0:
+            break;
+            
+        case DMA_S1:
+            break;
+            
+        case DMA_S2:
+            break;
+            
+        case DMA_S3:
+            break;
+            
+        case DMA_S4:
+            break;
+            
+        case DMA_S5:
+            break;
+            
+        case DMA_S6:
+            break;
+            
+        case DMA_S7:
+            break;
+            
         case DMA_H1:
         case DMA_L1:
             
@@ -849,8 +890,9 @@ DMAController::serviceDMAEvent(EventID id, int64_t data)
     // Schedule next event
     uint8_t hpos = HPOS(beam);
     uint8_t next = nextDmaEvent[hpos];
+    // debug("id = %d hpos = %d, next = %d\n", id, hpos, next);
     if (next) {
-        eventHandler.scheduleEvent(DMA_SLOT, next, VPOS(beam), dmaEvent[next]);
+        eventHandler.scheduleEvent(DMA_SLOT, VPOS(beam), next, dmaEvent[next]);
     } else {
         eventHandler.cancelEvent(DMA_SLOT);
     }

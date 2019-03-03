@@ -131,6 +131,13 @@ public:
     
     
     //
+    // Sprite book keeping
+    //
+    
+    uint8_t sprOnOff; 
+    
+    
+    //
     // Registers
     //
     
@@ -344,6 +351,10 @@ public:
     inline bool au2DMA() { return (dmacon & (DMAEN | AU2EN)) == (DMAEN | AU2EN); }
     inline bool au1DMA() { return (dmacon & (DMAEN | AU1EN)) == (DMAEN | AU1EN); }
     inline bool au0DMA() { return (dmacon & (DMAEN | AU0EN)) == (DMAEN | AU0EN); }
+
+    inline bool spriteIsOn(int i) { return sprOnOff & (1 << i); }
+    inline void turnSpriteOn(int i) { sprOnOff |= (1 << i); }
+    inline void turnSpriteOff(int i) { sprOnOff &= ~(1 << i); }
 
     // Returns true if Copper is allowed to perform a DMA cycle
     bool copperCanHaveBus();
