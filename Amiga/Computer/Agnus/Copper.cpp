@@ -246,14 +246,14 @@ Copper::isSkipCmd(uint32_t addr)
 uint16_t
 Copper::getRA()
 {
-    return copins1 & 0xFF;
+    return copins1 & 0x1FE;
 }
 
 uint16_t
 Copper::getRA(uint32_t addr)
 {
     uint32_t instr = amiga->mem.spypeek32(addr);
-    return HI_WORD(instr) & 0xFF;
+    return HI_WORD(instr) & 0x1FE;
 }
 
 uint16_t
@@ -324,12 +324,12 @@ Copper::disassemble(uint32_t addr)
         
         uint16_t reg = getRA(addr) >> 1;
         assert(reg <= 0xFF);
-        sprintf(disassembly, "MOVE %s, $%04X", customReg[reg], getDW(addr));
+        sprintf(disassembly, "MOVE $%04X, %s", getDW(addr), customReg[reg]);
         return disassembly;
     }
     
     const char *mnemonic = isWaitCmd(addr) ? "WAIT" : "SKIP";
-    const char *suffix = getBFD(addr) ? "_BFD" : "";
+    const char *suffix = getBFD(addr) ? "*" : "";
     
     sprintf(pos, "($%02X,$%02X)", getVP(addr), getHP(addr));
     

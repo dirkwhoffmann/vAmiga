@@ -455,6 +455,7 @@ DMAController::pokeDMACON(uint16_t value)
             
             // Copper DMA on
             debug("Copper DMA switched on");
+            assert(false); 
             Cycle trigger = UP_TO_NEXT_EVEN(clock + 1);
             eventHandler.scheduleEvent(COP_SLOT, trigger, COP_FETCH);
             
