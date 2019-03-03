@@ -196,7 +196,6 @@ typedef struct {
     
     // DMA pointers
     uint32_t dskpt;
-    uint32_t bltpt[4];
     uint32_t audlc[4];
     uint32_t bplpt[6];
     uint32_t sprptr[8];
@@ -218,6 +217,10 @@ typedef struct {
     bool active;
     uint16_t bltcon0;
     uint16_t bltcon1;
+    uint16_t bltapt;
+    uint16_t bltbpt;
+    uint16_t bltcpt;
+    uint16_t bltdpt;
     uint16_t bltafwm;
     uint16_t bltalwm;
     uint16_t bltsize;

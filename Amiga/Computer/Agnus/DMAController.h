@@ -171,9 +171,6 @@ public:
     // Disk DMA
     uint32_t dskpt;
     
-    // Blitter DMA
-    uint32_t bltpt[4];
-    
     // Audio DMA
     uint32_t audlc[4];
     
@@ -315,9 +312,6 @@ public:
     
     void pokeDSKPTH(uint16_t value);
     void pokeDSKPTL(uint16_t value);
-
-    void pokeBLTxPTL(int x, uint16_t value);
-    void pokeBLTxPTH(int x, uint16_t value);
   
     void pokeAUDxLCH(int x, uint16_t value);
     void pokeAUDxLCL(int x, uint16_t value);

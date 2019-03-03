@@ -18,6 +18,11 @@ Blitter::Blitter()
         { &bltcon0,    sizeof(bltcon0),    0 },
         { &bltcon1,    sizeof(bltcon1),    0 },
 
+        { &bltapt,     sizeof(bltapt),     0 },
+        { &bltbpt,     sizeof(bltbpt),     0 },
+        { &bltcpt,     sizeof(bltcpt),     0 },
+        { &bltdpt,     sizeof(bltdpt),     0 },
+
         { &bltafwm,    sizeof(bltafwm),    0 },
         { &bltalwm,    sizeof(bltalwm),    0 },
 
@@ -46,6 +51,10 @@ Blitter::getInfo()
     info.active  = amiga->dma.eventHandler.isPending(BLT_SLOT);
     info.bltcon0 = bltcon0;
     info.bltcon1 = bltcon1;
+    info.bltapt  = bltapt;
+    info.bltbpt  = bltbpt;
+    info.bltcpt  = bltcpt;
+    info.bltdpt  = bltdpt;
     info.bltafwm = bltafwm;
     info.bltalwm = bltalwm;
     info.bltsize = bltsize;
@@ -89,6 +98,10 @@ Blitter::_dump()
 {
     plainmsg("   bltcon0: %X\n", bltcon0);
     plainmsg("   bltcon1: %X\n", bltcon1);
+    plainmsg("    bltapt: %X\n", bltapt);
+    plainmsg("    bltbpt: %X\n", bltbpt);
+    plainmsg("    bltcpt: %X\n", bltcpt);
+    plainmsg("    bltdpt: %X\n", bltdpt);
     plainmsg("   bltafwm: %X\n", bltafwm);
     plainmsg("   bltalwm: %X\n", bltalwm);
     plainmsg("   bltsize: %X\n", bltsize);
@@ -113,6 +126,62 @@ Blitter::pokeBLTCON1(uint16_t value)
 {
     debug("pokeBLTCON1(%X)\n", value);
     bltcon1 = value;
+}
+
+void
+Blitter::pokeBLTAPTH(uint16_t value)
+{
+    debug("pokeBLTAPTH(%X)\n", value);
+    bltapt = REPLACE_HI_WORD(bltapt, value & 0x7);
+}
+
+void
+Blitter::pokeBLTAPTL(uint16_t value)
+{
+    debug("pokeBLTAPTL(%X)\n", value);
+    bltapt = REPLACE_LO_WORD(bltapt, value);
+}
+
+void
+Blitter::pokeBLTBPTH(uint16_t value)
+{
+    debug("pokeBLTBPTH(%X)\n", value);
+    bltbpt = REPLACE_HI_WORD(bltbpt, value & 0x7);
+}
+
+void
+Blitter::pokeBLTBPTL(uint16_t value)
+{
+    debug("pokeBLTBPTL(%X)\n", value);
+    bltbpt = REPLACE_LO_WORD(bltbpt, value);
+}
+
+void
+Blitter::pokeBLTCPTH(uint16_t value)
+{
+    debug("pokeBLTCPTH(%X)\n", value);
+    bltcpt = REPLACE_HI_WORD(bltcpt, value & 0x7);
+}
+
+void
+Blitter::pokeBLTCPTL(uint16_t value)
+{
+    debug("pokeBLTCPTL(%X)\n", value);
+    bltcpt = REPLACE_LO_WORD(bltcpt, value);
+}
+
+void
+Blitter::pokeBLTDPTH(uint16_t value)
+{
+    debug("pokeBLTDPTH(%X)\n", value);
+    bltdpt = REPLACE_HI_WORD(bltdpt, value & 0x7);
+}
+
+void
+Blitter::pokeBLTDPTL(uint16_t value)
+{
+    debug("pokeBLTDPTL(%X)\n", value);
+    bltdpt = REPLACE_LO_WORD(bltdpt, value);
 }
 
 void

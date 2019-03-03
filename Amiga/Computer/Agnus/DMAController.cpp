@@ -42,7 +42,6 @@ DMAController::DMAController()
         
         // DMA pointer registers
         { &dskpt,    sizeof(dskpt),    0 },
-        { &bltpt,    sizeof(bltpt),    DWORD_ARRAY },
         { &audlc,    sizeof(audlc),    DWORD_ARRAY },
         { &bplpt,    sizeof(bplpt),    DWORD_ARRAY },
         { &sprptr,   sizeof(sprptr),   DWORD_ARRAY },
@@ -124,7 +123,6 @@ DMAController::getInfo()
     info.numBpls = activeBitplanes; 
     
     info.dskpt   = dskpt;
-    for (unsigned i = 0; i < 4; i++)  info.bltpt[i] = bltpt[i];
     for (unsigned i = 0; i < 4; i++)  info.audlc[i] = audlc[i];
     for (unsigned i = 0; i < 6; i++)  info.bplpt[i] = bplpt[i];
     for (unsigned i = 0; i < 8; i++) info.sprptr[i] = sprptr[i];
@@ -602,24 +600,6 @@ DMAController::pokeDSKPTL(uint16_t value)
 {
     debug("pokeDSKPTL(%X)\n", value);
     dskpt = REPLACE_LO_WORD(dskpt, value);
-}
-
-void
-DMAController::pokeBLTxPTH(int x, uint16_t value)
-{
-    assert(x < 4);
-    
-    debug("pokeBLT%dPTH(%X)\n", x, value);
-    bltpt[x] = REPLACE_HI_WORD(bltpt[x], value & 0x7);
-}
-
-void
-DMAController::pokeBLTxPTL(int x, uint16_t value)
-{
-    assert(x < 4);
-
-    debug("pokeBLT%dPTL(%X)\n", x, value);
-    bltpt[x] = REPLACE_LO_WORD(bltpt[x], value);
 }
 
 void

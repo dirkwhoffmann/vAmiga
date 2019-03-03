@@ -18,6 +18,12 @@ class Blitter : public HardwareComponent {
     uint16_t bltcon0;
     uint16_t bltcon1;
     
+    // The Blitter DMA pointers
+    uint16_t bltapt;
+    uint16_t bltbpt;
+    uint16_t bltcpt;
+    uint16_t bltdpt;
+
     // Blitter A first and last word masks
     uint16_t bltafwm;
     uint16_t bltalwm;
@@ -83,6 +89,16 @@ public:
 
     // BLTCON1
     void pokeBLTCON1(uint16_t value);
+
+    // BLTxPTH, BLTxPTL
+    void pokeBLTAPTH(uint16_t value);
+    void pokeBLTAPTL(uint16_t value);
+    void pokeBLTBPTH(uint16_t value);
+    void pokeBLTBPTL(uint16_t value);
+    void pokeBLTCPTH(uint16_t value);
+    void pokeBLTCPTL(uint16_t value);
+    void pokeBLTDPTH(uint16_t value);
+    void pokeBLTDPTL(uint16_t value);
 
     // BLTAFWM, BLTALWM
     void pokeBLTAFWM(uint16_t value);

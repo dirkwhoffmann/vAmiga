@@ -725,21 +725,21 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x46 >> 1: // BLTALWM
             amiga->dma.blitter.pokeBLTALWM(value); return;
         case 0x48 >> 1: // BLTCPTH
-            amiga->dma.pokeBLTxPTH(2, value); return;
+            amiga->dma.blitter.pokeBLTCPTH(value); return;
         case 0x4A >> 1: // BLTCPTL
-            amiga->dma.pokeBLTxPTL(2, value); return;
+            amiga->dma.blitter.pokeBLTCPTL(value); return;
         case 0x4C >> 1: // BLTBPTH
-            amiga->dma.pokeBLTxPTH(1, value); return;
+            amiga->dma.blitter.pokeBLTBPTH(value); return;
         case 0x4E >> 1: // BLTBPTL
-            amiga->dma.pokeBLTxPTH(1, value); return;
+            amiga->dma.blitter.pokeBLTBPTH(value); return;
         case 0x50 >> 1: // BLTAPTH
-            amiga->dma.pokeBLTxPTH(0, value); return;
+            amiga->dma.blitter.pokeBLTAPTH(value); return;
         case 0x52 >> 1: // BLTAPTL
-            amiga->dma.pokeBLTxPTL(0, value); return;
+            amiga->dma.blitter.pokeBLTAPTL(value); return;
         case 0x54 >> 1: // BLTDPTH
-            amiga->dma.pokeBLTxPTH(3, value); return;
+            amiga->dma.blitter.pokeBLTDPTH(value); return;
         case 0x56 >> 1: // BLTDPTL
-            amiga->dma.pokeBLTxPTL(3, value); return;
+            amiga->dma.blitter.pokeBLTDPTL(value); return;
         case 0x58 >> 1: // BLTSIZE
             amiga->dma.blitter.pokeBLTSIZE(value); return;
         case 0x5A >> 1: // unused
