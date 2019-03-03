@@ -20,7 +20,7 @@ class Copper : public HardwareComponent {
      */
     bool skip = false;
      
-    // Copper DMA pointers
+    // The Copper DMA pointers
     uint32_t coplc[2];
     
     // The Copper Danger Bit (CDANG)

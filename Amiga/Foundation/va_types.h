@@ -218,6 +218,17 @@ typedef struct {
     bool active;
     uint16_t bltcon0;
     uint16_t bltcon1;
+    uint16_t bltafwm;
+    uint16_t bltalwm;
+    uint16_t bltsize;
+    uint16_t bltamod;
+    uint16_t bltbmod;
+    uint16_t bltcmod;
+    uint16_t bltdmod;
+    uint16_t bltadat;
+    uint16_t bltbdat;
+    uint16_t bltcdat;
+    uint16_t bltddat;
 
 } BlitterInfo;
 

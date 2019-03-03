@@ -714,7 +714,16 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
             amiga->paula.pokeSERDAT(value); return;
         case 0x032 >> 1: // SERPER
             amiga->paula.pokeSERPER(value); return;
-            
+        /*
+        case 0x40 >> 1: // BLTCON0
+            amiga->dma.blitter.pokeBLTCON0(value); return;
+        case 0x42 >> 1: // BLTCON1
+            amiga->dma.blitter.pokeBLTCON1(value); return;
+        */
+        case 0x44 >> 1: // BLTAFWM
+            amiga->dma.blitter.pokeBLTAFWM(value); return;
+        case 0x46 >> 1: // BLTALWM
+            amiga->dma.blitter.pokeBLTALWM(value); return;
         case 0x48 >> 1: // BLTCPTH
             amiga->dma.pokeBLTxPTH(2, value); return;
         case 0x4A >> 1: // BLTCPTL
@@ -731,7 +740,38 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
             amiga->dma.pokeBLTxPTH(3, value); return;
         case 0x56 >> 1: // BLTDPTL
             amiga->dma.pokeBLTxPTL(3, value); return;
-
+        case 0x58 >> 1: // BLTSIZE
+            amiga->dma.blitter.pokeBLTSIZE(value); return;
+        case 0x5A >> 1: // unused
+        case 0x5C >> 1: // unused
+        case 0x5E >> 1: // unused
+            return; 
+        case 0x60 >> 1: // BLTCMOD
+            amiga->dma.blitter.pokeBLTCMOD(value); return;
+        case 0x62 >> 1: // BLTBMOD
+            amiga->dma.blitter.pokeBLTBMOD(value); return;
+        case 0x64 >> 1: // BLTAMOD
+            amiga->dma.blitter.pokeBLTAMOD(value); return;
+        case 0x66 >> 1: // BLTDMOD
+            amiga->dma.blitter.pokeBLTDMOD(value); return;
+        case 0x68 >> 1: // unused
+        case 0x6A >> 1: // unused
+        case 0x6C >> 1: // unused
+        case 0x6E >> 1: // unused
+            return;
+        case 0x70 >> 1: // BLTCDAT
+            amiga->dma.blitter.pokeBLTCDAT(value); return;
+        case 0x72 >> 1: // BLTBDAT
+            amiga->dma.blitter.pokeBLTBDAT(value); return;
+        case 0x74 >> 1: // BLTADAT
+            amiga->dma.blitter.pokeBLTADAT(value); return;
+        case 0x76 >> 1: // unused
+        case 0x78 >> 1: // unused
+        case 0x7A >> 1: // unused
+        case 0x7C >> 1: // unused
+            return;
+        // case 0x7E >> 1: // DSKSYNC
+        //     amiga->paule.pokeDSKSYNC(value); return;
         case 0x080 >> 1: // COP1LCH
             amiga->dma.copper.pokeCOPxLCH(0, value); return;
         case 0x082 >> 1: // COP1LCL
@@ -760,7 +800,7 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
             amiga->paula.pokeINTENA(value); return;
         case 0x09C >> 1: // INTREQ
             amiga->paula.pokeINTREQ(value); return;
-        case 0x09E >> 1: // Unsed
+        case 0x09E >> 1: // unsed
             return;
             
         case 0x0A0 >> 1: // AUD0LCH
