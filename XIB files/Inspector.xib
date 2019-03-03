@@ -2181,7 +2181,7 @@
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="DMA" identifier="" id="2wr-Zc-eub">
-                                <view key="view" ambiguous="YES" id="7eA-vd-r9Y">
+                                <view key="view" id="7eA-vd-r9Y">
                                     <rect key="frame" x="10" y="33" width="824" height="406"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -2991,7 +2991,7 @@
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Denise" identifier="" id="kn4-b1-ULt">
-                                <view key="view" id="iv0-wC-hpe">
+                                <view key="view" ambiguous="YES" id="iv0-wC-hpe">
                                     <rect key="frame" x="10" y="33" width="824" height="406"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -3002,37 +3002,49 @@
                                                 <rect key="frame" x="3" y="3" width="237" height="362"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8kP-xR-wIw">
+                                                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="15" translatesAutoresizingMaskIntoConstraints="NO" id="8kP-xR-wIw">
                                                         <rect key="frame" x="82" y="293" width="82" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="Hires mode" bezelStyle="regularSquare" imagePosition="left" alignment="right" controlSize="small" state="on" inset="2" id="HRk-HE-3ri">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="deniseBPLCON0ButtonAction:" target="-2" id="EkB-LU-2mc"/>
+                                                        </connections>
                                                     </button>
-                                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1Et-eT-Coi">
+                                                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="11" translatesAutoresizingMaskIntoConstraints="NO" id="1Et-eT-Coi">
                                                         <rect key="frame" x="82" y="273" width="141" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="Hold and modify mode" bezelStyle="regularSquare" imagePosition="left" alignment="right" controlSize="small" state="on" inset="2" id="UD6-jY-hxw">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="deniseBPLCON0ButtonAction:" target="-2" id="zSQ-w7-mei"/>
+                                                        </connections>
                                                     </button>
-                                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="srT-Rj-zei">
+                                                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="srT-Rj-zei">
                                                         <rect key="frame" x="82" y="233" width="101" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="Interlace mode" bezelStyle="regularSquare" imagePosition="left" alignment="right" controlSize="small" state="on" inset="2" id="awb-Ze-qHh">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="deniseBPLCON0ButtonAction:" target="-2" id="azX-hm-AAf"/>
+                                                        </connections>
                                                     </button>
-                                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lfo-2n-rmB">
+                                                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="10" translatesAutoresizingMaskIntoConstraints="NO" id="Lfo-2n-rmB">
                                                         <rect key="frame" x="82" y="253" width="126" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="Dual playfield mode" bezelStyle="regularSquare" imagePosition="left" alignment="right" controlSize="small" state="on" inset="2" id="EDa-5k-pWo">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="deniseBPLCON0ButtonAction:" target="-2" id="0uW-Ow-XHQ"/>
+                                                        </connections>
                                                     </button>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Iv5-bC-e6K">
                                                         <rect key="frame" x="16" y="326" width="63" height="16"/>

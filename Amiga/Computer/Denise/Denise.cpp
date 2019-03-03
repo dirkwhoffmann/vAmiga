@@ -216,3 +216,15 @@ Denise::debugSetActivePlanes(int count)
     amiga->resume();
 }
 
+void
+Denise::debugSetBPLCON0Bit(unsigned bit, bool value)
+{
+    assert(bit <= 15);
+    
+    amiga->suspend();
+    
+    uint16_t mask = 1 << bit;
+    pokeBPLCON0(value ? (bplcon0 | mask) : (bplcon0 & ~mask));
+    
+    amiga->resume();
+}

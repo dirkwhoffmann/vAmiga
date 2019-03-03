@@ -33,13 +33,9 @@ extension Inspector {
         deniseBPLCON2.integerValue = Int(info.bplcon2)
     }
     
-    @IBAction func dmaBitplaneButtonAction(_ sender: NSButton!) {
+    @IBAction func deniseBPLCON0ButtonAction(_ sender: NSButton!) {
         
-        let activePlanes = (sender.state == .on) ? sender.tag : sender.tag - 1
-
-        assert(activePlanes >= 0 && activePlanes <= 6)
-        track("Active planes = \(activePlanes)")
-        amigaProxy?.denise.setActivePlanes(activePlanes)
+        amigaProxy?.denise.setBPLCON0Bit(sender.tag, value: sender.state == .on)
         refresh(everything: false)
     }
 }

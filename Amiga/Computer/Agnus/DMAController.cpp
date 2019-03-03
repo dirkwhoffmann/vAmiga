@@ -156,106 +156,114 @@ DMAController::buildDMAEventTable()
     // Start with a clean table
     memset(dmaEvent, 0, sizeof(dmaEvent));
 
-    // Exit if DMA is disabled globally
-    if (!(dmacon & DMAEN)) return;
-    
-    // Disk DMA
-    if (dmacon & DSKEN) {
-        dmaEvent[0x07] = DMA_DISK;
-        dmaEvent[0x09] = DMA_DISK;
-        dmaEvent[0x0B] = DMA_DISK;
-    }
-    
-    // Audio DMA
-    if (dmacon & AU0EN) dmaEvent[0x0D] = DMA_A0;
-    if (dmacon & AU1EN) dmaEvent[0x0F] = DMA_A1;
-    if (dmacon & AU2EN) dmaEvent[0x11] = DMA_A2;
-    if (dmacon & AU3EN) dmaEvent[0x13] = DMA_A3;
-
-    // Sprite DMA (some slots may be overwritten by bitplane DMA cycles)
-    // TODO: Individually switch on / off channels
-    if (dmacon & SPREN) { // && sprite 0 enabled
-        dmaEvent[0x15] = DMA_S0;
-        dmaEvent[0x17] = DMA_S0;
-    }
-    if (dmacon & SPREN) { // && sprite 1 enabled
-        dmaEvent[0x19] = DMA_S1;
-        dmaEvent[0x1B] = DMA_S1;
-    }
-    if (dmacon & SPREN) { // && sprite 2 enabled
-        dmaEvent[0x1D] = DMA_S2;
-        dmaEvent[0x1F] = DMA_S2;
-    }
-    if (dmacon & SPREN) { // && sprite 3 enabled
-        dmaEvent[0x21] = DMA_S3;
-        dmaEvent[0x23] = DMA_S3;
-    }
-    if (dmacon & SPREN) { // && sprite 4 enabled
-        dmaEvent[0x25] = DMA_S4;
-        dmaEvent[0x27] = DMA_S4;
-    }
-    if (dmacon & SPREN) { // && sprite 5 enabled
-        dmaEvent[0x29] = DMA_S5;
-        dmaEvent[0x2B] = DMA_S5;
-    }
-    if (dmacon & SPREN) { // && sprite 6 enabled
-        dmaEvent[0x2D] = DMA_S6;
-        dmaEvent[0x2F] = DMA_S6;
-    }
-    if (dmacon & SPREN) { // && sprite 7 enabled
-        dmaEvent[0x31] = DMA_S7;
-        dmaEvent[0x33] = DMA_S7;
-    }
-
-    // Bitplane DMA
-    if (amiga->denise.hires()) {
-    
-        switch (activeBitplanes) {
-            case 6:
-            case 5:
-            case 4:
-                for (int i = ddfstrt & 0xF8; i < ddfstop; i += 4)
-                    dmaEvent[i] = DMA_H4;
-                // fallthrough
-            case 3:
-                for (int i = ddfstrt & 0xF8; i < ddfstop; i += 4)
-                    dmaEvent[i+1] = DMA_H3;
-                // fallthrough
-            case 2:
-                for (int i = ddfstrt & 0xF8; i < ddfstop; i += 4)
-                    dmaEvent[i+2] = DMA_H2;
-                // fallthrough
-            case 1:
-                for (int i = ddfstrt & 0xF8; i < ddfstop; i += 4)
-                    dmaEvent[i+3] = DMA_H1;
+    // Check DMA enable bit
+    if (dmacon & DMAEN) {
+        
+        // Disk DMA
+        if (dmacon & DSKEN) {
+            dmaEvent[0x07] = DMA_DISK;
+            dmaEvent[0x09] = DMA_DISK;
+            dmaEvent[0x0B] = DMA_DISK;
         }
         
-    } else {
-   
-        switch (activeBitplanes) {
-            case 6:
-                for (int i = ddfstrt & 0xF8; i < ddfstop; i += 8)
-                    dmaEvent[i+2] = DMA_L6;
-                // fallthrough
-            case 5:
-                for (int i = ddfstrt & 0xF8; i < ddfstop; i += 8)
-                    dmaEvent[i+6] = DMA_L5;
-                // fallthrough
-            case 4:
-                for (int i = ddfstrt & 0xF8; i < ddfstop; i += 8)
-                    dmaEvent[i+1] = DMA_L4;
-                // fallthrough
-            case 3:
-                for (int i = ddfstrt & 0xF8; i < ddfstop; i += 8)
-                    dmaEvent[i+5] = DMA_L3;
-                // fallthrough
-            case 2:
-                for (int i = ddfstrt & 0xF8; i < ddfstop; i += 8)
-                    dmaEvent[i+3] = DMA_L2;
-                // fallthrough
-            case 1:
-                for (int i = ddfstrt & 0xF8; i < ddfstop; i += 8)
-                    dmaEvent[i+7] = DMA_L1;
+        // Audio DMA
+        if (dmacon & AU0EN) dmaEvent[0x0D] = DMA_A0;
+        if (dmacon & AU1EN) dmaEvent[0x0F] = DMA_A1;
+        if (dmacon & AU2EN) dmaEvent[0x11] = DMA_A2;
+        if (dmacon & AU3EN) dmaEvent[0x13] = DMA_A3;
+        
+        // Sprite DMA (some slots may be overwritten by bitplane DMA cycles)
+        // TODO: Individually switch on / off channels
+        if (dmacon & SPREN) { // && sprite 0 enabled
+            dmaEvent[0x15] = DMA_S0;
+            dmaEvent[0x17] = DMA_S0;
+        }
+        if (dmacon & SPREN) { // && sprite 1 enabled
+            dmaEvent[0x19] = DMA_S1;
+            dmaEvent[0x1B] = DMA_S1;
+        }
+        if (dmacon & SPREN) { // && sprite 2 enabled
+            dmaEvent[0x1D] = DMA_S2;
+            dmaEvent[0x1F] = DMA_S2;
+        }
+        if (dmacon & SPREN) { // && sprite 3 enabled
+            dmaEvent[0x21] = DMA_S3;
+            dmaEvent[0x23] = DMA_S3;
+        }
+        if (dmacon & SPREN) { // && sprite 4 enabled
+            dmaEvent[0x25] = DMA_S4;
+            dmaEvent[0x27] = DMA_S4;
+        }
+        if (dmacon & SPREN) { // && sprite 5 enabled
+            dmaEvent[0x29] = DMA_S5;
+            dmaEvent[0x2B] = DMA_S5;
+        }
+        if (dmacon & SPREN) { // && sprite 6 enabled
+            dmaEvent[0x2D] = DMA_S6;
+            dmaEvent[0x2F] = DMA_S6;
+        }
+        if (dmacon & SPREN) { // && sprite 7 enabled
+            dmaEvent[0x31] = DMA_S7;
+            dmaEvent[0x33] = DMA_S7;
+        }
+        
+        // Bitplane DMA
+        if (dmacon & BPLEN) {
+            
+            // Determine start and stop cycle
+            uint8_t start = (ddfstrt < 0x18) ? 0x18 : (ddfstrt > 0xD7) ? 0xD7 : ddfstrt;
+            uint8_t stop  = (ddfstop < 0x18) ? 0x18 : (ddfstop > 0xD7) ? 0xD7 : ddfstop;
+
+            if (amiga->denise.hires()) {
+                
+                switch (activeBitplanes) {
+                    case 6:
+                    case 5:
+                    case 4:
+                        for (int i = start & 0xF8; i < stop; i += 4)
+                            dmaEvent[i] = DMA_H4;
+                        // fallthrough
+                    case 3:
+                        for (int i = start & 0xF8; i < stop; i += 4)
+                            dmaEvent[i+1] = DMA_H3;
+                        // fallthrough
+                    case 2:
+                        for (int i = start & 0xF8; i < stop; i += 4)
+                            dmaEvent[i+2] = DMA_H2;
+                        // fallthrough
+                    case 1:
+                        for (int i = start & 0xF8; i < stop; i += 4)
+                            dmaEvent[i+3] = DMA_H1;
+                }
+                
+            } else {
+                
+                switch (activeBitplanes) {
+                    case 6:
+                        for (int i = start & 0xF8; i < stop; i += 8)
+                            dmaEvent[i+2] = DMA_L6;
+                        // fallthrough
+                    case 5:
+                        for (int i = start & 0xF8; i < stop; i += 8)
+                            dmaEvent[i+6] = DMA_L5;
+                        // fallthrough
+                    case 4:
+                        for (int i = start & 0xF8; i < stop; i += 8)
+                            dmaEvent[i+1] = DMA_L4;
+                        // fallthrough
+                    case 3:
+                        for (int i = start & 0xF8; i < stop; i += 8)
+                            dmaEvent[i+5] = DMA_L3;
+                        // fallthrough
+                    case 2:
+                        for (int i = start & 0xF8; i < stop; i += 8)
+                            dmaEvent[i+3] = DMA_L2;
+                        // fallthrough
+                    case 1:
+                        for (int i = start & 0xF8; i < stop; i += 8)
+                            dmaEvent[i+7] = DMA_L1;
+                }
+            }
         }
     }
     
@@ -550,7 +558,7 @@ DMAController::pokeDDFSTRT(uint16_t value)
 {
     debug("pokeDDFSTRT(%X)\n", value);
 
-    ddfstrt = (value < 0x18) ? 0x18 : (value > 0xD7) ? 0xD7 : value;
+    ddfstrt = value;
 }
 
 void
@@ -558,7 +566,7 @@ DMAController::pokeDDFSTOP(uint16_t value)
 {
     debug("pokeDDFSTOP(%X)\n", value);
     
-    ddfstop = (value < 0x18) ? 0x18 : (value > 0xD7) ? 0xD7 : value;
+    ddfstop = value;
 }
         
 

@@ -186,7 +186,9 @@ public:
     //
     
     void debugSetActivePlanes(int count);
-    
+
+    void debugSetBPLCON0Bit(unsigned bit, bool value);
+
     
     //
     // FAKE METHODS FOR THE VISUAL PROTOTYPE (TEMPORARY)

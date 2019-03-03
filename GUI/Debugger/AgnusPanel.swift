@@ -92,4 +92,13 @@ extension Inspector {
         refresh(everything: false)
     }
     
+    @IBAction func dmaBitplaneButtonAction(_ sender: NSButton!) {
+        
+        let activePlanes = (sender.state == .on) ? sender.tag : sender.tag - 1
+        
+        assert(activePlanes >= 0 && activePlanes <= 6)
+        track("Active planes = \(activePlanes)")
+        amigaProxy?.denise.setActivePlanes(activePlanes)
+        refresh(everything: false)
+    }
 }
