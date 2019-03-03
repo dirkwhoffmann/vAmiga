@@ -204,12 +204,12 @@ class Inspector : NSWindowController
     @IBOutlet weak var deniseBPLCON1: NSTextField!
     @IBOutlet weak var deniseBPLCON2: NSTextField!
 
-    @IBOutlet weak var deniseBpl1Enable: NSButton!
-    @IBOutlet weak var deniseBpl2Enable: NSButton!
-    @IBOutlet weak var deniseBpl3Enable: NSButton!
-    @IBOutlet weak var deniseBpl4Enable: NSButton!
-    @IBOutlet weak var deniseBpl5Enable: NSButton!
-    @IBOutlet weak var deniseBpl6Enable: NSButton!
+    @IBOutlet weak var dmaBpl1Enable: NSButton!
+    @IBOutlet weak var dmaBpl2Enable: NSButton!
+    @IBOutlet weak var dmaBpl3Enable: NSButton!
+    @IBOutlet weak var dmaBpl4Enable: NSButton!
+    @IBOutlet weak var dmaBpl5Enable: NSButton!
+    @IBOutlet weak var dmaBpl6Enable: NSButton!
 
     // Debug panel (Paula)
     @IBOutlet weak var paulaIntena: NSTextField!

@@ -119,9 +119,9 @@ DMAController::getInfo()
     
     info.bpl1mod = bpl1mod;
     info.bpl2mod = bpl2mod;
+    info.numBpls = activeBitplanes; 
     
     info.dskpt   = dskpt;
-    
     for (unsigned i = 0; i < 4; i++)  info.bltpt[i] = bltpt[i];
     for (unsigned i = 0; i < 4; i++)  info.audlc[i] = audlc[i];
     for (unsigned i = 0; i < 6; i++)  info.bplpt[i] = bplpt[i];
@@ -235,15 +235,15 @@ DMAController::buildDMAEventTable()
         switch (activeBitplanes) {
             case 6:
                 for (int i = ddfstrt & 0xF8; i < ddfstop; i += 8)
-                    dmaEvent[i+1] = DMA_L4;
+                    dmaEvent[i+2] = DMA_L6;
                 // fallthrough
             case 5:
                 for (int i = ddfstrt & 0xF8; i < ddfstop; i += 8)
-                    dmaEvent[i+2] = DMA_L6;
+                    dmaEvent[i+6] = DMA_L5;
                 // fallthrough
             case 4:
                 for (int i = ddfstrt & 0xF8; i < ddfstop; i += 8)
-                    dmaEvent[i+3] = DMA_L2;
+                    dmaEvent[i+1] = DMA_L4;
                 // fallthrough
             case 3:
                 for (int i = ddfstrt & 0xF8; i < ddfstop; i += 8)
@@ -251,7 +251,7 @@ DMAController::buildDMAEventTable()
                 // fallthrough
             case 2:
                 for (int i = ddfstrt & 0xF8; i < ddfstop; i += 8)
-                    dmaEvent[i+6] = DMA_L5;
+                    dmaEvent[i+3] = DMA_L2;
                 // fallthrough
             case 1:
                 for (int i = ddfstrt & 0xF8; i < ddfstop; i += 8)
@@ -294,7 +294,7 @@ DMAController::dumpDMAEventTable(int from, int to)
         r2[i] = (digit2 < 10) ? digit2 + '0' : (digit2 - 10) + 'A';
         
         switch(dmaEvent[i + from]) {
-            case DMA_DISK:  r3[i] = 'D'; r4[i] = ' '; break;
+            case DMA_DISK:  r3[i] = 'D'; r4[i] = 'I'; break;
             case DMA_A0:    r3[i] = 'A'; r4[i] = '0'; break;
             case DMA_A1:    r3[i] = 'A'; r4[i] = '1'; break;
             case DMA_A2:    r3[i] = 'A'; r4[i] = '2'; break;
@@ -317,7 +317,7 @@ DMAController::dumpDMAEventTable(int from, int to)
             case DMA_H2:    r3[i] = 'H'; r4[i] = '2'; break;
             case DMA_H3:    r3[i] = 'H'; r4[i] = '3'; break;
             case DMA_H4:    r3[i] = 'H'; r4[i] = '4'; break;
-            default:        r3[i] = '.'; r4[i] = ' '; break;
+            default:        r3[i] = '.'; r4[i] = '.'; break;
         }
     }
     r1[i] = r2[i] = r3[i] = r4[i] = 0;

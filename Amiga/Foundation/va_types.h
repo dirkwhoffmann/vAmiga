@@ -189,8 +189,10 @@ typedef struct {
     uint16_t diwstop;
     uint16_t ddfstrt;
     uint16_t ddfstop;
+    
     uint16_t bpl1mod;
     uint16_t bpl2mod;
+    uint8_t  numBpls;
     
     // DMA pointers
     uint32_t dskpt;

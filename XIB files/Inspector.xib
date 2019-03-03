@@ -119,12 +119,6 @@
                 <outlet property="deniseBPLCON0" destination="VND-v2-3KF" id="L5w-Uf-3Aq"/>
                 <outlet property="deniseBPLCON1" destination="hit-9r-Ooj" id="sXH-q3-jID"/>
                 <outlet property="deniseBPLCON2" destination="TfL-ah-KBx" id="HSa-9a-r6A"/>
-                <outlet property="deniseBpl1Enable" destination="FcZ-xe-VM2" id="LXA-fc-8sv"/>
-                <outlet property="deniseBpl2Enable" destination="3Fc-xN-ZoH" id="6Q5-hU-3zv"/>
-                <outlet property="deniseBpl3Enable" destination="hCs-Aw-X0a" id="6Rh-n3-7JJ"/>
-                <outlet property="deniseBpl4Enable" destination="iXL-pt-gyK" id="m4D-T2-x0N"/>
-                <outlet property="deniseBpl5Enable" destination="kN2-zn-toP" id="mk2-VV-Vya"/>
-                <outlet property="deniseBpl6Enable" destination="luf-t4-Wnn" id="Zu6-qw-7b0"/>
                 <outlet property="deniseDBPLF" destination="Lfo-2n-rmB" id="AOo-fy-Oj7"/>
                 <outlet property="deniseHIRES" destination="8kP-xR-wIw" id="Eba-oS-X1j"/>
                 <outlet property="deniseHOMOD" destination="1Et-eT-Coi" id="QuR-IP-U6O"/>
@@ -144,6 +138,12 @@
                 <outlet property="dmaBPL5PT" destination="XAf-er-saV" id="qI9-aI-ikl"/>
                 <outlet property="dmaBPL6PT" destination="1hS-ws-ZoZ" id="MjV-wQ-tXM"/>
                 <outlet property="dmaBPLEN" destination="GJ1-Vk-7Ws" id="0fQ-jW-XJb"/>
+                <outlet property="dmaBpl1Enable" destination="FcZ-xe-VM2" id="LXA-fc-8sv"/>
+                <outlet property="dmaBpl2Enable" destination="3Fc-xN-ZoH" id="6Q5-hU-3zv"/>
+                <outlet property="dmaBpl3Enable" destination="hCs-Aw-X0a" id="6Rh-n3-7JJ"/>
+                <outlet property="dmaBpl4Enable" destination="iXL-pt-gyK" id="m4D-T2-x0N"/>
+                <outlet property="dmaBpl5Enable" destination="kN2-zn-toP" id="mk2-VV-Vya"/>
+                <outlet property="dmaBpl6Enable" destination="luf-t4-Wnn" id="Zu6-qw-7b0"/>
                 <outlet property="dmaCOPEN" destination="I91-sx-8tH" id="5v1-VP-OEa"/>
                 <outlet property="dmaDDFSTOP" destination="8gY-aS-gao" id="jdG-vb-GYq"/>
                 <outlet property="dmaDDFSTRT" destination="ugp-hk-G5c" id="8hP-bQ-Umn"/>

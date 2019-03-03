@@ -51,6 +51,13 @@ extension Inspector {
 
         dmaBPL1MOD.integerValue = Int(info.bpl1mod)
         dmaBPL2MOD.integerValue = Int(info.bpl2mod)
+        
+        dmaBpl1Enable.state = info.numBpls >= 1 ? .on : .off;
+        dmaBpl2Enable.state = info.numBpls >= 2 ? .on : .off;
+        dmaBpl3Enable.state = info.numBpls >= 3 ? .on : .off;
+        dmaBpl4Enable.state = info.numBpls >= 4 ? .on : .off;
+        dmaBpl5Enable.state = info.numBpls >= 5 ? .on : .off;
+        dmaBpl6Enable.state = info.numBpls >= 6 ? .on : .off;
     }
     
     @IBAction func dmaDMACONTextAction(_ sender: NSTextField!) {
