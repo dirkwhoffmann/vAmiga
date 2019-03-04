@@ -106,6 +106,22 @@ EventHandler::scheduleEvent(EventSlot s, int16_t vpos, int16_t hpos, EventID id,
 }
 
 void
+EventHandler::scheduleNextEvent(EventSlot s, Cycle offset, EventID id, int64_t data)
+{
+    assert(isEventSlot(s));
+    
+    Cycle cycle = eventSlot[s].triggerCycle + offset;
+
+    eventSlot[s].triggerCycle = cycle;
+    eventSlot[s].triggerBeam = INT32_MAX;
+    eventSlot[s].id = id;
+    eventSlot[s].data = data;
+    if (cycle < nextTrigger) nextTrigger = cycle;
+    
+    assert(checkScheduledEvent(s));
+}
+
+void
 EventHandler::scheduleEventInNextFrame(EventSlot s, int16_t vpos, int16_t hpos,
                                        EventID id, int64_t data)
 {

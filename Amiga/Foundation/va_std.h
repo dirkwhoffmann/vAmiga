@@ -171,7 +171,7 @@ inline bool is_uint5_t(uint5_t value) { return value < 32; }
 #define OCS_PTR(x) ((x) & 0x7FFFE)
 
 // Increases a pointer given in the OCS format by a certain value
-#define INC_OCS_PTR(x,y) (OCS_PTR((x)+(y)))
+#define INC_OCS_PTR(x,y) ((x) = OCS_PTR((x)+(y)))
 
 //
 // Handling buffers

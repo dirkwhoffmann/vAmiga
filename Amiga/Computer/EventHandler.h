@@ -75,7 +75,8 @@ typedef enum
     COP_EVENT_COUNT,
     
     // Blitter slot
-    BLT_TODO,
+    BLT_INIT,
+    BLT_EXECUTE,
     BLT_EVENT_COUNT,
     
     // HSYNC slot
@@ -154,11 +155,14 @@ private:
     
 public:
     
-    // Schedules an event at the specified cycle.
+    // Schedules a new event at the specified cycle.
     void scheduleEvent(EventSlot s, Cycle cycle, EventID id, int64_t data = 0);
 
     // Schedules an event at the specified beam position.
     void scheduleEvent(EventSlot s, int16_t vpos, int16_t hpos, EventID id, int64_t data = 0);
+
+    // Schedules a new event relative to the current trigger cycle.
+    void scheduleNextEvent(EventSlot s, Cycle offset, EventID id, int64_t data = 0);
 
     // Schedules an event at the specified beam position in the next frame.
     void scheduleEventInNextFrame(EventSlot s, int16_t vpos, int16_t hpos, EventID id, int64_t data = 0);

@@ -758,12 +758,12 @@ DMAController::addBPLxMOD()
     // Add blp1mod is added to all active odd bitplane pointers
     
     switch (activeBitplanes) {
-        case 6: bplpt[5] = INC_OCS_PTR(bplpt[5], bpl2mod); // fallthrough
-        case 5: bplpt[4] = INC_OCS_PTR(bplpt[4], bpl1mod); // fallthrough
-        case 4: bplpt[3] = INC_OCS_PTR(bplpt[3], bpl2mod); // fallthrough
-        case 3: bplpt[2] = INC_OCS_PTR(bplpt[2], bpl1mod); // fallthrough
-        case 2: bplpt[1] = INC_OCS_PTR(bplpt[1], bpl2mod); // fallthrough
-        case 1: bplpt[0] = INC_OCS_PTR(bplpt[0], bpl1mod);
+        case 6: INC_OCS_PTR(bplpt[5], bpl2mod); // fallthrough
+        case 5: INC_OCS_PTR(bplpt[4], bpl1mod); // fallthrough
+        case 4: INC_OCS_PTR(bplpt[3], bpl2mod); // fallthrough
+        case 3: INC_OCS_PTR(bplpt[2], bpl1mod); // fallthrough
+        case 2: INC_OCS_PTR(bplpt[1], bpl2mod); // fallthrough
+        case 1: INC_OCS_PTR(bplpt[0], bpl1mod);
     }
 }
 

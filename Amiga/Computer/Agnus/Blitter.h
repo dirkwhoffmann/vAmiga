@@ -10,9 +10,14 @@
 #ifndef _BLITTER_INC
 #define _BLITTER_INC
 
+// Micro-instructions
 class Blitter : public HardwareComponent {
     
     friend class DMAController;
+    
+    //
+    // Blitter registers
+    //
     
     // The Blitter Control Register
     uint16_t bltcon0;
@@ -38,9 +43,62 @@ class Blitter : public HardwareComponent {
     uint16_t bltdmod;
 
     // The Blitter data registers
-    uint16_t bltadat;
-    uint16_t bltbdat;
-    uint16_t bltcdat;
+    // uint16_t bltadat; // same as "A new"
+    // uint16_t bltbdat; // same as "B new"
+    // uint16_t bltcdat; // same as "C hold"
+
+    // The Blitter pipeline registers
+    
+    uint16_t anew;
+    uint16_t bnew;
+    uint16_t ahold;
+    uint16_t bhold;
+    uint16_t chold;
+    uint16_t dhold;
+
+    uint32_t ashift;
+    uint32_t bshift;
+
+    // Counter registers
+    uint16_t wcounter;
+    uint16_t hcounter;
+    
+    
+    //
+    // Micro execution unit
+    //
+    
+    /* Although the current implementation is far from being timing-accurate,
+     * I am eager to improve it over time. To keep the implementation flexible,
+     * the blitter is emulated as a micro-programmable device. When a blit
+     * starts, a micro-program is set up that will decide on the action that
+     * are performed in each Blitter cycle. The real blitter in the Amiga does
+     * not work this way and uses a standard pipeline-based design.
+     */
+    
+    // The Blitter micro-instructions
+    static const uint16_t LOOPBACK  = 0b000000000111; // Conditional loop
+    static const uint16_t FETCH_A   = 0b000000001000; // Loads register "A new"
+    static const uint16_t FETCH_B   = 0b000000010000; // Loads register "B new"
+    static const uint16_t FETCH_C   = 0b000000100000; // Loads register "C hold"
+    static const uint16_t HOLD_A    = 0b000001000000; // Loads register "A hold"
+    static const uint16_t HOLD_B    = 0b000010000000; // Loads register "B hold"
+    static const uint16_t HOLD_D    = 0b000100000000; // Loads register "D hold"
+    static const uint16_t WRITE_D   = 0b001000000000; // Writes back "D hold"
+
+    // static const uint16_t BLTNEXT   = 0b010000000000; // Move on to next coordinate
+    // static const uint16_t BLTEND    = 0b100000000000; // Marks the last instruction
+
+    static const uint16_t LOOPBACK2 = 0b000000000010;
+    static const uint16_t LOOPBACK3 = 0b000000000011;
+    static const uint16_t LOOPBACK4 = 0b000000000100;
+
+    
+    // The micro program to execute
+    uint16_t microInstr[32];
+    
+    // The program counter indexing the microInstr array
+    uint16_t bltpc = 0;
 
     
     //
@@ -80,14 +138,34 @@ public:
     
 public:
     
+    inline void setanew(uint16_t value) {
+        
+        // TODO: APPLY MASKS
+
+        anew = value; ashift = ashift << 16 | value;
+    }
+    inline void setbnew(uint16_t value) {
+        bnew = value; bshift = bshift << 16 | value;
+    }
+
     // BLTCON0
-    inline bool blitADMA() { return bltcon0 & (1 << 11); }
-    inline bool blitBDMA() { return bltcon0 & (1 << 10); }
-    inline bool blitCDMA() { return bltcon0 & (1 << 9); }
-    inline bool blitDDMA() { return bltcon0 & (1 << 8); }
+    inline uint16_t bltASH() { return bltcon0 >> 12; }
+    inline bool bltUSEA() { return bltcon0 & (1 << 11); }
+    inline bool bltUSEB() { return bltcon0 & (1 << 10); }
+    inline bool bltUSEC() { return bltcon0 & (1 << 9); }
+    inline bool bltUSED() { return bltcon0 & (1 << 8); }
+    
     void pokeBLTCON0(uint16_t value);
 
     // BLTCON1
+    inline uint16_t bltBSH() { return bltcon1 >> 12; }
+    inline bool bltEFE() { return bltcon1 & (1 << 4); }
+    inline bool bltIFE() { return bltcon1 & (1 << 3); }
+    inline bool bltFE() { return bltEFE() || bltIFE(); }
+    inline bool bltFCI() { return bltcon1 & (1 << 2); }
+    inline bool bltDESC() { return bltcon1 & (1 << 1); }
+    inline bool bltLINE() { return bltcon1 & (1 << 0); }
+
     void pokeBLTCON1(uint16_t value);
 
     // BLTxPTH, BLTxPTL
@@ -118,30 +196,32 @@ public:
     void pokeBLTDMOD(uint16_t value) { bltdmod = value; }
     
     // BLTxDAT
-    void pokeBLTADAT(uint16_t value) { bltadat = value; }
-    void pokeBLTBDAT(uint16_t value) { bltbdat = value; }
-    void pokeBLTCDAT(uint16_t value) { bltcdat = value; }
-
+    void pokeBLTADAT(uint16_t value) { setanew(value); }
+    void pokeBLTBDAT(uint16_t value) { setbnew(value); }
+    void pokeBLTCDAT(uint16_t value) { chold = value; }
     
-    //
-    // Running the device
-    //
+    bool isFirstWord() { return wcounter == 1; }
+    bool isLastWord() { return wcounter == bltsizeW(); }
+
     
 private:
     
   
-    
     //
     // Managing events
     //
  
+    // Schedules a new Blitter event
+    void scheduleNextEvent(Cycle offset, EventID id, int64_t data = 0);
+
     // Cancels the current Blitter event
     void cancelEvent();
     
     // Processes a Blitter event
     void serviceEvent(EventID id, int64_t data);
     
-  
+    // Program the device
+    void buildMicrocode(); 
 };
 
 #endif

@@ -228,10 +228,12 @@ typedef struct {
     uint16_t bltbmod;
     uint16_t bltcmod;
     uint16_t bltdmod;
-    uint16_t bltadat;
-    uint16_t bltbdat;
-    uint16_t bltcdat;
-    uint16_t bltddat;
+    uint16_t anew;
+    uint16_t bnew;
+    uint16_t ahold;
+    uint16_t bhold;
+    uint16_t chold;
+    uint16_t dhold;
 
 } BlitterInfo;
 
