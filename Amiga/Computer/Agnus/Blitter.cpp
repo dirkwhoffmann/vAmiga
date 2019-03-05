@@ -290,7 +290,7 @@ Blitter::cancelEvent()
 */
 
 void
-Blitter::serviceEvent(EventID id, int64_t data)
+Blitter::serviceEvent(EventID id)
 {
     uint16_t instr;
     
@@ -321,9 +321,9 @@ Blitter::serviceEvent(EventID id, int64_t data)
             
         case BLT_EXECUTE:
             
-            // Only proceed if Blitter DMA is disabled
+            // Only proceed if Blitter DMA is enabled
             if (!amiga->dma.bltDMA()) {
-                amiga->dma.eventHandler.reschedule(BLT_SLOT, INT32_MAX);
+                amiga->dma.eventHandler.disable(BLT_SLOT);
                 break;
             }
 
@@ -424,8 +424,9 @@ Blitter::serviceEvent(EventID id, int64_t data)
             
                 // Continue running the Blitter
                 amiga->dma.eventHandler.reschedule(BLT_SLOT, DMA_CYCLES(1));
-                break;
             }
+            
+            break;
             
         default:
             
@@ -437,6 +438,8 @@ Blitter::serviceEvent(EventID id, int64_t data)
 void
 Blitter::loadMicrocode()
 {
+    bltpc = 0;
+
     /* The following code is inspired by Table 6.2 of the HRM:
      *
      *           Active

@@ -321,6 +321,18 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->dmaController->dump();
 }
+- (void) dumpEventHandler
+{
+    wrapper->dmaController->eventHandler.dump();
+}
+- (void) dumpCopper
+{
+    wrapper->dmaController->copper.dump();
+}
+- (void) dumpBlitter
+{
+    wrapper->dmaController->blitter.dump();
+}
 - (DMAInfo) getInfo
 {
     return wrapper->dmaController->getInfo();

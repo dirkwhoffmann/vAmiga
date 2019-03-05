@@ -204,16 +204,17 @@ public:
     bool isFirstWord() { return wcounter == 1; }
     bool isLastWord() { return wcounter == bltsizeW(); }
 
-    
-private:
-    
   
     //
     // Managing events
     //
-     
+    
+public:
+    
     // Processes a Blitter event
-    void serviceEvent(EventID id, int64_t data);
+    void serviceEvent(EventID id);
+    
+private:
     
     // Program the device
     void loadMicrocode(); 

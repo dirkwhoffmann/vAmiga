@@ -280,6 +280,10 @@ struct AmigaFileWrapper;
 }
 
 - (void) dump;
+- (void) dumpEventHandler;
+- (void) dumpCopper;
+- (void) dumpBlitter;
+
 - (DMAInfo) getInfo;
 - (CopperInfo) getCopperInfo;
 

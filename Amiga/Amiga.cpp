@@ -826,7 +826,7 @@ Amiga::runLoop()
     } while (!stop);
     
     debug("Exiting run loop\n");
-    dma.dump(); 
+    dma.eventHandler.dump(); 
 }
 
 void

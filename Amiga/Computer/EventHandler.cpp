@@ -269,7 +269,7 @@ EventHandler::cancel(EventSlot s)
     }
 
     eventSlot[s].id = (EventID)0;
-    eventSlot[s].triggerCycle = INT64_MAX;
+    eventSlot[s].triggerCycle = INT64_MAX;    
 }
 
 bool
@@ -412,7 +412,7 @@ EventHandler::_executeUntil(Cycle cycle) {
     // Check for a Blitter event
     if (isDue(BLT_SLOT, cycle)) {
         assert(checkTriggeredEvent(BLT_SLOT));
-        // amiga->dma.blitter.serviceEvent(eventSlot[BLT_SLOT].id, eventSlot[BLT_SLOT].data);
+        amiga->dma.blitter.serviceEvent(eventSlot[BLT_SLOT].id);
     }
 
     // Check for a raster event
