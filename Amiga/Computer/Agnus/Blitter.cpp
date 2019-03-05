@@ -107,14 +107,33 @@ void
 Blitter::_dump()
 {
     plainmsg("   bltcon0: %X\n", bltcon0);
+    plainmsg("\n");
+    plainmsg("            Shift A: %d\n", bltASH());
+    plainmsg("              Use A: %s\n", bltUSEA() ? "yes" : "no");
+    plainmsg("              Use B: %s\n", bltUSEB() ? "yes" : "no");
+    plainmsg("              Use C: %s\n", bltUSEC() ? "yes" : "no");
+    plainmsg("              Use D: %s\n", bltUSED() ? "yes" : "no");
+    plainmsg("\n");
     plainmsg("   bltcon1: %X\n", bltcon1);
+    plainmsg("\n");
+    plainmsg("            Shift B: %d\n", bltBSH());
+    plainmsg("                EFE: %s\n", bltEFE() ? "yes" : "no");
+    plainmsg("                IFE: %s\n", bltIFE() ? "yes" : "no");
+    plainmsg("                FCI: %s\n", bltFCI() ? "yes" : "no");
+    plainmsg("               DESC: %s\n", bltDESC() ? "yes" : "no");
+    plainmsg("               LINE: %s\n", bltLINE() ? "yes" : "no");
+    plainmsg("\n");
+    plainmsg("   bltsize: %X\n", bltsize);
+    plainmsg("\n");
+    plainmsg("             height: %d\n", bltsizeH());
+    plainmsg("              width: %d\n", bltsizeW());
+    plainmsg("\n");
     plainmsg("    bltapt: %X\n", bltapt);
     plainmsg("    bltbpt: %X\n", bltbpt);
     plainmsg("    bltcpt: %X\n", bltcpt);
     plainmsg("    bltdpt: %X\n", bltdpt);
     plainmsg("   bltafwm: %X\n", bltafwm);
     plainmsg("   bltalwm: %X\n", bltalwm);
-    plainmsg("   bltsize: %X\n", bltsize);
     plainmsg("   bltamod: %X\n", bltamod);
     plainmsg("   bltbmod: %X\n", bltbmod);
     plainmsg("   bltcmod: %X\n", bltcmod);
@@ -125,6 +144,7 @@ Blitter::_dump()
     plainmsg("     bhold: %X\n", bhold);
     plainmsg("     chold: %X\n", chold);
     plainmsg("     dhold: %X\n", dhold);
+    plainmsg("    ashift: %X bshift: %X\n", ashift, bshift);
 }
 
 void
@@ -216,6 +236,21 @@ Blitter::pokeBLTSIZE(uint16_t value)
 {
     debug("pokeBLTSIZE(%X)\n", value);
     bltsize = value;
+    
+    if (bltLINE()) {
+        // TODO
+    } else {
+        
+        // Set width and height counters
+        wcounter = bltsizeW();
+        hcounter = bltsizeH();
+
+        // Load micro instruction code
+        loadMicrocode();
+        
+        // Start the blit
+        amiga->dma.eventHandler.scheduleNextEvent(BLT_SLOT, DMA_CYCLES(1), BLT_EXECUTE);
+    }
 }
 
 void
@@ -267,6 +302,7 @@ Blitter::serviceEvent(EventID id, int64_t data)
     
     switch (id) {
             
+            /*
         case BLT_INIT:
 
             // MOVE THIS FUNCTIONALITY TO pokeBLTSIZE
@@ -285,8 +321,15 @@ Blitter::serviceEvent(EventID id, int64_t data)
                 amiga->dma.eventHandler.scheduleNextEvent(BLT_SLOT, DMA_CYCLES(1), BLT_EXECUTE);
             }
             break;
+            */
             
         case BLT_EXECUTE:
+            
+            // Only proceed if Blitter DMA is disabled
+            if (!amiga->dma.bltDMA()) {
+                amiga->dma.eventHandler.rescheduleEvent(BLT_SLOT, INT32_MAX);
+                break;
+            }
             
             // Execute next Blitter micro instruction
             instr = microInstr[bltpc];
@@ -385,7 +428,7 @@ Blitter::serviceEvent(EventID id, int64_t data)
 }
 
 void
-Blitter::buildMicrocode()
+Blitter::loadMicrocode()
 {
     /* The following code is inspired by Table 6.2 of the HRM:
      *
@@ -453,11 +496,26 @@ Blitter::buildMicrocode()
             memcpy(microInstr, prog, sizeof(prog));
             break;
         }
+   
+        case 0b0000: { // -- -- -- --
+            
+            uint16_t prog[] = {
+                
+                BLTIDLE,
+                BLTIDLE,
+                BLTIDLE,
+                BLTDONE
+            };
+            memcpy(microInstr, prog, sizeof(prog));
+            break;
+        }
             
         default:
             
             fatalError("Unimplemented Blitter configuration\n");
             assert(false);
     }
+    
+    debug("Blitter microcode is loaded\n");
 
 }

@@ -12,6 +12,8 @@
 
 #include "HardwareComponent.h"
 
+#define NEVER INT64_MAX
+
 // Note: The slot order does matter. If two events trigger at the same cycle,
 // the slot with a smaller number is processed first.
 typedef enum
@@ -172,7 +174,11 @@ public:
 
     // Cancels the event in the specified slot
     void cancelEvent(EventSlot s);
-    
+
+    // Returns true if the specified event slot contains an event ID
+    inline bool hasEvent(EventSlot s) {
+        assert(isEventSlot(s)); return eventSlot[s].id != 0; }
+
     // Returns true if the specified event slot contains a scheduled event
     inline bool isPending(EventSlot s) {
         assert(isEventSlot(s)); return eventSlot[s].triggerCycle != INT64_MAX; }

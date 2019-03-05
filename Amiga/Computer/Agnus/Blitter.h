@@ -89,9 +89,10 @@ class Blitter : public HardwareComponent {
     static const uint16_t WRITE_D   = 0b001000000000; // Writes back "D hold"
     static const uint16_t BLTDONE   = 0b010000000000; // Marks the last instruction
 
-    static const uint16_t LOOPBACK2 = 0b000000000010;
-    static const uint16_t LOOPBACK3 = 0b000000000011;
-    static const uint16_t LOOPBACK4 = 0b000000000100;
+    static const uint16_t BLTIDLE   = 0b000000000000; // Does nothing
+    static const uint16_t LOOPBACK2 = 0b000000000010; // Decrements bltpc by 2
+    static const uint16_t LOOPBACK3 = 0b000000000011; // Decrements bltpc by 3
+    static const uint16_t LOOPBACK4 = 0b000000000100; // Decrements bltpc by 4
 
     
     // The micro program to execute
@@ -224,7 +225,7 @@ private:
     void serviceEvent(EventID id, int64_t data);
     
     // Program the device
-    void buildMicrocode(); 
+    void loadMicrocode(); 
 };
 
 #endif

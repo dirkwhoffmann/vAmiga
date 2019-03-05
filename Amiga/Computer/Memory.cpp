@@ -714,12 +714,10 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
             amiga->paula.pokeSERDAT(value); return;
         case 0x032 >> 1: // SERPER
             amiga->paula.pokeSERPER(value); return;
-        /*
         case 0x40 >> 1: // BLTCON0
             amiga->dma.blitter.pokeBLTCON0(value); return;
         case 0x42 >> 1: // BLTCON1
             amiga->dma.blitter.pokeBLTCON1(value); return;
-        */
         case 0x44 >> 1: // BLTAFWM
             amiga->dma.blitter.pokeBLTAFWM(value); return;
         case 0x46 >> 1: // BLTALWM
