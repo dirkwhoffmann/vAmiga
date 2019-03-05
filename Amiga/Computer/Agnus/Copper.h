@@ -175,7 +175,7 @@ private:
     void scheduleEventRel(Cycle delta, EventID id, int64_t data = 0);
 
     // Reschedules an existing Copper event
-    void rescheduleEventRel(Cycle delta);
+    void rescheduleEvent(Cycle delta);
     
     // Cancels a scheduled Copper event
     void cancelEvent();

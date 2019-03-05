@@ -133,11 +133,11 @@ EventHandler::scheduleEventInNextFrame(EventSlot s, int16_t vpos, int16_t hpos,
 }
 
 void
-EventHandler::rescheduleEvent(EventSlot s, Cycle addon)
+EventHandler::rescheduleEvent(EventSlot s, Cycle offset)
 {
     assert(isEventSlot(s));
     
-    Cycle cycle = eventSlot[s].triggerCycle + addon;
+    Cycle cycle = eventSlot[s].triggerCycle + offset;
     eventSlot[s].triggerCycle = cycle;
     eventSlot[s].triggerBeam = INT32_MAX;
     if (cycle < nextTrigger) nextTrigger = cycle;

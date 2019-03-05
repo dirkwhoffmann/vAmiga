@@ -35,6 +35,8 @@ Blitter::Blitter()
 
         { &anew,       sizeof(anew),       0 },
         { &bnew,       sizeof(bnew),       0 },
+        { &aold,       sizeof(aold),       0 },
+        { &bold,       sizeof(bold),       0 },
         { &ahold,      sizeof(ahold),      0 },
         { &bhold,      sizeof(bhold),      0 },
         { &chold,      sizeof(chold),      0 },
@@ -217,9 +219,37 @@ Blitter::pokeBLTSIZE(uint16_t value)
 }
 
 void
-Blitter::scheduleNextEvent(Cycle offset, EventID id, int64_t data)
+Blitter::pokeBLTADAT(uint16_t value)
 {
-    amiga->dma.eventHandler.scheduleNextEvent(BLT_SLOT, offset, id, data);
+    // Apply masks
+    if (isFirstWord()) value &= bltafwm;
+    if (isLastWord()) value &= bltalwm;
+
+    ashift = (ashift << 16) | value;
+}
+    
+void
+Blitter::pokeBLTBDAT(uint16_t value)
+{
+   bshift = (bshift << 16) | value;
+}
+
+void
+Blitter::pokeBLTCDAT(uint16_t value)
+{
+    chold = value;
+}
+
+void
+Blitter::scheduleNextEvent(Cycle delta, EventID id, int64_t data)
+{
+    amiga->dma.eventHandler.scheduleNextEvent(BLT_SLOT, DMA_CYCLES(delta), id, data);
+}
+
+void
+Blitter::rescheduleEvent(Cycle delta)
+{
+    amiga->dma.eventHandler.rescheduleEvent(BLT_SLOT, DMA_CYCLES(delta));
 }
 
 void
@@ -232,13 +262,14 @@ void
 Blitter::serviceEvent(EventID id, int64_t data)
 {
     uint16_t instr;
-    int16_t incPC = 1;
     
     debug("Servicing Blitter event %d\n", id);
     
     switch (id) {
             
         case BLT_INIT:
+
+            // MOVE THIS FUNCTIONALITY TO pokeBLTSIZE
             
             if (bltLINE()) {
                 // TODO
@@ -250,8 +281,8 @@ Blitter::serviceEvent(EventID id, int64_t data)
                 wcounter = bltsizeW();
                 hcounter = bltsizeH();
                 
-                // Schedule code to be executed
-                scheduleNextEvent(1, BLT_EXECUTE);
+                // Schedule code execution
+                amiga->dma.eventHandler.scheduleNextEvent(BLT_SLOT, DMA_CYCLES(1), BLT_EXECUTE);
             }
             break;
             
@@ -268,12 +299,15 @@ Blitter::serviceEvent(EventID id, int64_t data)
             
             if (instr & HOLD_A) {
                 
-                ahold = ashift >> bltASH() & 0xFFFF;
+                
+                // Emulate the barrel shifter on data path A
+                ahold = (ashift >> bltASH()) & 0xFFFF;
             }
 
             if (instr & HOLD_B) {
-                
-                bhold = bshift >> bltBSH() & 0xFFFF;
+
+                // Emulate the barrel shifter on data path B
+                bhold = (bshift >> bltBSH()) & 0xFFFF;
             }
             
             if (instr & HOLD_D) {
@@ -293,49 +327,55 @@ Blitter::serviceEvent(EventID id, int64_t data)
                 // Run the fill logic circuit
                 // TODO
                 
-                // Move to next coordinate or terminate the blit
+                // Move to the next coordinate
                 if (wcounter > 1) {
                     wcounter--;
                 } else {
                     if (hcounter > 1) {
                         wcounter = bltsizeW();
                         hcounter--;
-                    } else {
-                        // We are done
-                        cancelEvent();
-                        break;
                     }
                 }
             }
             
             if (instr & FETCH_A) {
                 
-                setanew(amiga->mem.peek16(bltapt));
+                pokeBLTADAT(amiga->mem.peek16(bltapt));
                 INC_OCS_PTR(bltapt, 2 + (isLastWord() ? bltamod : 0));
             }
             
             if (instr & FETCH_B) {
                 
-                setbnew(amiga->mem.peek16(bltbpt));
+                pokeBLTBDAT(amiga->mem.peek16(bltbpt));
                 INC_OCS_PTR(bltbpt, 2 + (isLastWord() ? bltbmod : 0));
             }
 
             if (instr & FETCH_C) {
                 
-                chold = amiga->mem.peek16(bltcpt);
+                pokeBLTCDAT(amiga->mem.peek16(bltcpt));
                 INC_OCS_PTR(bltcpt, 2 + (isLastWord() ? bltcmod : 0));
             }
             
-            if (instr & LOOPBACK) {
+            if ((instr & LOOPBACK) && (wcounter > 1 || hcounter > 1)) {
+
+                bltpc -= instr & 7;
+            
+            } else {
                 
-                if (wcounter > 1 || hcounter > 1)
-                    incPC = -(instr & 7);
+                bltpc++;
             }
             
-            // Continue running the blitter
-            bltpc += incPC;
-            scheduleNextEvent(1, BLT_EXECUTE);
-            break;
+            if (instr & BLTDONE) {
+                
+                // Terminate the Blitter
+                amiga->dma.eventHandler.cancelEvent(BLT_SLOT);
+                
+            } else {
+            
+                // Continue running the Blitter
+                amiga->dma.eventHandler.rescheduleEvent(BLT_SLOT, DMA_CYCLES(1));
+                break;
+            }
             
         default:
             
@@ -390,7 +430,7 @@ Blitter::buildMicrocode()
                 FETCH_C | HOLD_B,
                 WRITE_D | HOLD_D | LOOPBACK3,
                 
-                WRITE_D
+                WRITE_D | BLTDONE
             };
             memcpy(microInstr, prog, sizeof(prog));
             break;
@@ -408,7 +448,7 @@ Blitter::buildMicrocode()
                 FETCH_B | HOLD_A,
                 FETCH_C | HOLD_B | LOOPBACK2,
                 
-                HOLD_D
+                HOLD_D  | BLTDONE
             };
             memcpy(microInstr, prog, sizeof(prog));
             break;

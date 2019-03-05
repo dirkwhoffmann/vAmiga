@@ -168,7 +168,7 @@ public:
     void scheduleEventInNextFrame(EventSlot s, int16_t vpos, int16_t hpos, EventID id, int64_t data = 0);
 
     // Reschedules the event in the specified slot
-    void rescheduleEvent(EventSlot s, Cycle addon);
+    void rescheduleEvent(EventSlot s, Cycle offset);
 
     // Cancels the event in the specified slot
     void cancelEvent(EventSlot s);

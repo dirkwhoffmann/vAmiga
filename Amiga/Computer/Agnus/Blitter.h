@@ -51,6 +51,8 @@ class Blitter : public HardwareComponent {
     
     uint16_t anew;
     uint16_t bnew;
+    uint16_t aold; // Not used
+    uint16_t bold; // Not used
     uint16_t ahold;
     uint16_t bhold;
     uint16_t chold;
@@ -85,9 +87,7 @@ class Blitter : public HardwareComponent {
     static const uint16_t HOLD_B    = 0b000010000000; // Loads register "B hold"
     static const uint16_t HOLD_D    = 0b000100000000; // Loads register "D hold"
     static const uint16_t WRITE_D   = 0b001000000000; // Writes back "D hold"
-
-    // static const uint16_t BLTNEXT   = 0b010000000000; // Move on to next coordinate
-    // static const uint16_t BLTEND    = 0b100000000000; // Marks the last instruction
+    static const uint16_t BLTDONE   = 0b010000000000; // Marks the last instruction
 
     static const uint16_t LOOPBACK2 = 0b000000000010;
     static const uint16_t LOOPBACK3 = 0b000000000011;
@@ -196,9 +196,9 @@ public:
     void pokeBLTDMOD(uint16_t value) { bltdmod = value; }
     
     // BLTxDAT
-    void pokeBLTADAT(uint16_t value) { setanew(value); }
-    void pokeBLTBDAT(uint16_t value) { setbnew(value); }
-    void pokeBLTCDAT(uint16_t value) { chold = value; }
+    void pokeBLTADAT(uint16_t value);
+    void pokeBLTBDAT(uint16_t value);
+    void pokeBLTCDAT(uint16_t value);
     
     bool isFirstWord() { return wcounter == 1; }
     bool isLastWord() { return wcounter == bltsizeW(); }
@@ -212,7 +212,10 @@ private:
     //
  
     // Schedules a new Blitter event
-    void scheduleNextEvent(Cycle offset, EventID id, int64_t data = 0);
+    void scheduleNextEvent(Cycle delta, EventID id, int64_t data = 0);
+
+    // Reschedules the current Blitter event
+    void rescheduleEvent(Cycle delta);
 
     // Cancels the current Blitter event
     void cancelEvent();
