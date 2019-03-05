@@ -65,11 +65,11 @@ DMAController::_powerOn()
     ddfstop = 0xD0;
     
     // Schedule the first HSYNC event
-    eventHandler.scheduleEvent(RAS_SLOT, DMA_CYCLES(0xE2), RAS_HSYNC);
+    eventHandler.scheduleAbs(RAS_SLOT, DMA_CYCLES(0xE2), RAS_HSYNC);
     
     // Schedule the first two CIA events
-    eventHandler.scheduleEvent(CIAA_SLOT, CIA_CYCLES(1), CIA_EXECUTE);
-    eventHandler.scheduleEvent(CIAB_SLOT, CIA_CYCLES(1), CIA_EXECUTE);
+    eventHandler.scheduleAbs(CIAA_SLOT, CIA_CYCLES(1), CIA_EXECUTE);
+    eventHandler.scheduleAbs(CIAB_SLOT, CIA_CYCLES(1), CIA_EXECUTE);
 }
 
 void
@@ -89,22 +89,16 @@ DMAController::_ping()
 
 void
 DMAController::_dump()
-{
-    uint16_t vp = VPOS(beam);
-    uint16_t hp = HPOS(beam);
-
-    plainmsg("        frame: %lld\n", frame);
-    plainmsg("        clock: %lld master cycles\n", clock);
-    plainmsg("               %lld DMA cycles\n", AS_DMA_CYCLES(clock));
-    plainmsg("latched clock: %lld master cycles\n", latchedClock);
-    plainmsg("               %lld DMA cycles\n", AS_DMA_CYCLES(latchedClock));
-    plainmsg("beam position: %d $%X (%d,%d) ($%X,$%X)\n", beam, beam, vp, hp, vp, hp);
+{    
+    amiga->dumpClock();
     
     plainmsg("\nDMA time slot allocation:\n\n");
 
     dumpDMAEventTable(0x00, 0x4F);
     dumpDMAEventTable(0x50, 0x9F);
     dumpDMAEventTable(0xA0, 0xE2);
+    
+    eventHandler.dump();
 }
 
 DMAInfo
@@ -274,13 +268,13 @@ DMAController::buildDMAEventTable()
         if (dmaEvent[i]) next = i;
     }
     
-    _dump();
+    // _dump();
 }
 
 void
 DMAController::clearDMAEventTable()
 {
-    debug("CLEARING DMA event table\n");
+    // debug("CLEARING DMA event table\n");
     
     // Clear the allocation table
     memset(dmaEvent, 0, sizeof(dmaEvent));
@@ -438,12 +432,12 @@ DMAController::pokeDMACON(uint16_t value)
         if (newBPLEN) {
             
             // Bitplane DMA on
-            debug("Bitplane DMA switched on");
+            debug("Bitplane DMA switched on\n");
 
         } else {
             
             // Bitplane DMA off
-            debug("Bitplane DMA switched off");
+            debug("Bitplane DMA switched off\n");
         }
     }
     
@@ -453,16 +447,16 @@ DMAController::pokeDMACON(uint16_t value)
         if (newCOPEN) {
             
             // Copper DMA on
-            debug("Copper DMA switched on");
+            debug("Copper DMA switched on\n");
             assert(false); 
             Cycle trigger = UP_TO_NEXT_EVEN(clock + 1);
-            eventHandler.scheduleEvent(COP_SLOT, trigger, COP_FETCH);
+            eventHandler.scheduleAbs(COP_SLOT, trigger, COP_FETCH);
             
         } else {
             
             // Copper DMA off
-            debug("Copper DMA switched off");
-            eventHandler.cancelEvent(COP_SLOT);
+            debug("Copper DMA switched off\n");
+            eventHandler.cancel(COP_SLOT);
         }
     }
     
@@ -471,19 +465,14 @@ DMAController::pokeDMACON(uint16_t value)
         
         if (newBLTEN) {
             // Blitter DMA on
-            debug("Blitter DMA switched on");
-            if (amiga->dma.eventHandler.hasEvent(BLT_SLOT)) {
-                amiga->dma.eventHandler.rescheduleEvent(BLT_SLOT, INT32_MAX);
-            } else {
-                debug("Scheduling new Blitter event");
-                Cycle cycle = amiga->dma.clock + DMA_CYCLES(2);
-                amiga->dma.eventHandler.scheduleNextEvent(BLT_SLOT, cycle, BLT_EXECUTE);
-            }
+            debug("Blitter DMA switched on\n");
+            amiga->dma.eventHandler.scheduleRel(BLT_SLOT, DMA_CYCLES(1), BLT_EXECUTE);
+    
         } else {
             
             // Blitter DMA off
-            debug("Blitter DMA switched off");
-            amiga->dma.eventHandler.rescheduleEvent(BLT_SLOT, INT32_MAX);
+            debug("Blitter DMA switched off\n");
+            amiga->dma.eventHandler.disable(BLT_SLOT);
         }
     }
     
@@ -492,12 +481,12 @@ DMAController::pokeDMACON(uint16_t value)
         
         if (newSPREN) {
             // Sprite DMA on
-            debug("Sprite DMA switched on");
+            debug("Sprite DMA switched on\n");
             
         } else {
             
             // Sprite DMA off
-            debug("Sprite DMA switched off");
+            debug("Sprite DMA switched off\n");
         }
     }
     
@@ -507,12 +496,12 @@ DMAController::pokeDMACON(uint16_t value)
         if (newDSKEN) {
             
             // Disk DMA on
-            debug("Disk DMA switched on");
+            debug("Disk DMA switched on\n");
             
         } else {
             
             // Disk DMA off
-            debug("Disk DMA switched off");
+            debug("Disk DMA switched off\n");
         }
     }
     
@@ -730,12 +719,12 @@ DMAController::hsyncHandler()
         // Schedule first DMA event (if any)
         if (nextDmaEvent[0]) {
             EventID eventID = dmaEvent[nextDmaEvent[0]];
-            eventHandler.scheduleEvent(DMA_SLOT, 26, nextDmaEvent[0], eventID);
+            eventHandler.schedulePos(DMA_SLOT, 26, nextDmaEvent[0], eventID);
         }
     }
     
     // Schedule next HSYNC event
-    eventHandler.rescheduleEvent(RAS_SLOT, DMA_CYCLES(0xE3));
+    eventHandler.reschedule(RAS_SLOT, DMA_CYCLES(0xE3));
 }
 
 void
@@ -881,9 +870,9 @@ DMAController::serviceDMAEvent(EventID id, int64_t data)
     uint8_t next = nextDmaEvent[hpos];
     // debug("id = %d hpos = %d, next = %d\n", id, hpos, next);
     if (next) {
-        eventHandler.scheduleEvent(DMA_SLOT, VPOS(beam), next, dmaEvent[next]);
+        eventHandler.schedulePos(DMA_SLOT, VPOS(beam), next, dmaEvent[next]);
     } else {
-        eventHandler.cancelEvent(DMA_SLOT);
+        eventHandler.cancel(DMA_SLOT);
     }
 }
 

@@ -77,7 +77,7 @@ typedef enum
     COP_EVENT_COUNT,
     
     // Blitter slot
-    BLT_INIT,
+    BLT_INIT = 1,
     BLT_EXECUTE,
     BLT_EVENT_COUNT,
     
@@ -134,6 +134,13 @@ public:
     Cycle nextTrigger = INT64_MAX;
 
     
+    /* Trace flags
+     * Setting the n-th bit to 1 will produce debug messages for events in
+     * slot number n.
+     */
+    uint16_t trace = 0;
+    
+    
     //
     // Constructing and destructing
     //
@@ -157,23 +164,39 @@ private:
     
 public:
     
-    // Schedules a new event at the specified cycle.
-    void scheduleEvent(EventSlot s, Cycle cycle, EventID id, int64_t data = 0);
+    /* Schedules a new event with an absolute time stamp
+     * The time stamp unit is "master clock cycles"
+     */
+    void scheduleAbs(EventSlot s, Cycle cycle, EventID id);
+
+    /* Schedules a new event with a relative time stamp
+     * The time stamp is given in master clock cycles and relative to the
+     * current value of the DMA clock.
+     */
+    void scheduleRel(EventSlot s, Cycle cycle, EventID id);
 
     // Schedules an event at the specified beam position.
-    void scheduleEvent(EventSlot s, int16_t vpos, int16_t hpos, EventID id, int64_t data = 0);
+    void schedulePos(EventSlot s, int16_t vpos, int16_t hpos, EventID id);
 
-    // Schedules a new event relative to the current trigger cycle.
-    void scheduleNextEvent(EventSlot s, Cycle offset, EventID id, int64_t data = 0);
+    /* Reschedules the event in the specified slot
+     * The new trigger cycle is computed by adding the specified amout of
+     * cycles to the old trigger cycle.
+     */
+    void reschedule(EventSlot s, Cycle offset);
 
-    // Schedules an event at the specified beam position in the next frame.
-    void scheduleEventInNextFrame(EventSlot s, int16_t vpos, int16_t hpos, EventID id, int64_t data = 0);
+    /* Reschedules the event in the specified slot with a changed event ID
+     */
+    void reschedule(EventSlot s, Cycle offset, EventID id);
 
-    // Reschedules the event in the specified slot
-    void rescheduleEvent(EventSlot s, Cycle offset);
+    
+    /* Disables the event in the specified slot
+     * The event is kept in the slot, but the trigger time is set to infinity.
+     */
+    void disable(EventSlot s);
 
-    // Cancels the event in the specified slot
-    void cancelEvent(EventSlot s);
+    /* Deletes the event in the specified slot
+     */
+    void cancel(EventSlot s);
 
     // Returns true if the specified event slot contains an event ID
     inline bool hasEvent(EventSlot s) {

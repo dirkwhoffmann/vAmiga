@@ -296,8 +296,7 @@
                                                                         <action selector="dumpCIABAction:" target="-1" id="N5S-RO-KR8"/>
                                                                     </connections>
                                                                 </menuItem>
-                                                                <menuItem title="Agnus" id="444">
-                                                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                                                <menuItem title="Agnus" keyEquivalent="e" id="444">
                                                                     <connections>
                                                                         <action selector="dumpAgnusAction:" target="-1" id="gtw-EH-j5y"/>
                                                                     </connections>

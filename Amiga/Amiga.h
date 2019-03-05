@@ -273,6 +273,7 @@ private:
     void _dump() override;
     void _setWarp(bool value) override;
     
+    
     //
     // Controlling the emulation thread
     //
@@ -532,6 +533,13 @@ public:
     void deleteAutoSnapshot(unsigned nr) { deleteSnapshot(autoSnapshots, nr); }
     void deleteUserSnapshot(unsigned nr) { deleteSnapshot(userSnapshots, nr); }
     
+    
+    //
+    // Debugging the emulator
+    //
+    
+    void dumpClock();
+
 };
 
 #endif

@@ -17,6 +17,8 @@ EventHandler::EventHandler()
 void
 EventHandler::_powerOn()
 {
+    trace = (1 << BLT_SLOT);
+    
     for (unsigned i = 0; i < EVENT_SLOT_COUNT; i++) {
         eventSlot[i].triggerCycle = INT64_MAX;
         eventSlot[i].triggerBeam = INT32_MAX;
@@ -46,28 +48,113 @@ EventHandler::_ping()
 void
 EventHandler::_dump()
 {
-    uint32_t beam = amiga->dma.beam;
-    uint16_t vp = VPOS(beam);
-    uint16_t hp = HPOS(beam);
+    const char *slotName;
+    const char *eventName;
     
-    plainmsg(" Master clock: %lld master cycles\n", amiga->masterClock);
-    plainmsg("    DMA clock: %lld master cycles", amiga->dma.clock);
-    plainmsg(" (%lld DMA cycles)\n", AS_DMA_CYCLES(amiga->dma.clock));
-    plainmsg("Beam position: (%d,%d) ($%X,$%X)\n", vp, hp, vp, hp);
-    plainmsg("\n");
+    amiga->dumpClock();
     for (unsigned i = 0; i < EVENT_SLOT_COUNT; i++) {
         
-        plainmsg("Slot %d: ", i);
-        
-        if (!isPending((EventSlot)i)) {
-            plainmsg("no pending event\n");
-            continue;
+        switch ((EventSlot)i) {
+                
+            case CIAA_SLOT:
+            case CIAB_SLOT:
+                
+                slotName = (i == 0) ? "CIA A" : "CIA B";
+                switch (eventSlot[i].id) {
+                    case 0:                eventName = "none           "; break;
+                    case CIA_EXECUTE:      eventName = "CIA_EXECUTE    "; break;
+                    case CIA_WAKEUP:       eventName = "CIA_WAKEUP     "; break;
+                    default:               eventName = "*** INVALID ***"; break;
+                }
+                break;
+                
+            case DMA_SLOT:
+                
+                slotName = "DMA";
+                switch (eventSlot[i].id) {
+                    case 0:                eventName = "none           "; break;
+                    case DMA_DISK:         eventName = "DMA_DISK       "; break;
+                    case DMA_A0:           eventName = "A0             "; break;
+                    case DMA_A1:           eventName = "A1             "; break;
+                    case DMA_A2:           eventName = "A2             "; break;
+                    case DMA_A3:           eventName = "A3             "; break;
+                    case DMA_S0:           eventName = "S0             "; break;
+                    case DMA_S1:           eventName = "S1             "; break;
+                    case DMA_S2:           eventName = "S2             "; break;
+                    case DMA_S3:           eventName = "S3             "; break;
+                    case DMA_S4:           eventName = "S4             "; break;
+                    case DMA_S5:           eventName = "S5             "; break;
+                    case DMA_S6:           eventName = "S6             "; break;
+                    case DMA_S7:           eventName = "S7             "; break;
+                    case DMA_L1:           eventName = "L1             "; break;
+                    case DMA_L2:           eventName = "L2             "; break;
+                    case DMA_L3:           eventName = "L3             "; break;
+                    case DMA_L4:           eventName = "L4             "; break;
+                    case DMA_L5:           eventName = "L5             "; break;
+                    case DMA_L6:           eventName = "L6             "; break;
+                    case DMA_H1:           eventName = "H1             "; break;
+                    case DMA_H2:           eventName = "H2             "; break;
+                    case DMA_H3:           eventName = "H3             "; break;
+                    case DMA_H4:           eventName = "H4             "; break;
+                    default:               eventName = "*** INVALID ***"; break;
+                }
+                break;
+                
+            case COP_SLOT:
+                
+                slotName = "Copper";
+                switch (eventSlot[i].id) {
+                        
+                    case 0:                eventName = "none           "; break;
+                    case COP_REQUEST_DMA:  eventName = "COP_REQUEST_DMA"; break;
+                    case COP_FETCH:        eventName = "COP_FETCH      "; break;
+                    case COP_MOVE:         eventName = "COP_MOVE       "; break;
+                    case COP_WAIT_OR_SKIP: eventName = "WAIT_OR_SKIP   "; break;
+                    case COP_WAIT:         eventName = "COP_WAIT       "; break;
+                    case COP_SKIP:         eventName = "COP_SKIP       "; break;
+                    case COP_JMP1:         eventName = "COP_JMP1       "; break;
+                    case COP_JMP2:         eventName = "COP_JMP2       "; break;
+                    default:               eventName = "*** INVALID ***"; break;
+                }
+                break;
+                
+            case BLT_SLOT:
+                
+                slotName = "Blitter";
+                switch (eventSlot[i].id) {
+                        
+                    case 0:                eventName = "none           "; break;
+                    case BLT_INIT:         eventName = "BLT_INIT       "; break;
+                    case BLT_EXECUTE:      eventName = "BLT_EXECUTE    "; break;
+                    default:               eventName = "*** INVALID ***"; break;
+                }
+                break;
+                
+            case RAS_SLOT:
+                
+                slotName = "Raster";
+                switch (eventSlot[i].id) {
+                        
+                    case 0:                eventName = "none           "; break;
+                    case RAS_HSYNC:        eventName = "RAS_HSYNC      "; break;
+                    default:               eventName = "*** INVALID ***"; break;
+                }
+                break;
+    
+            default: assert(false);
         }
-            
-        plainmsg("Event ID: %d  Payload: %lld  Triggers at: %lld",
-                 eventSlot[i].id,
-                 eventSlot[i].data,
-                 eventSlot[i].triggerCycle);
+        
+        plainmsg("%7s: ", slotName);
+        plainmsg("Event: %s ", eventName);
+        plainmsg("Trigger: ");
+
+        Cycle trigger = eventSlot[i].triggerCycle;
+        if (trigger == INT64_MAX) {
+            plainmsg("disabled");
+        } else {
+            plainmsg("%lld (%lld DMA cycles away)",
+                     trigger, AS_DMA_CYCLES(trigger - amiga->dma.clock));
+        }
         
         if (eventSlot[i].triggerBeam != INT32_MAX) {
             plainmsg(" (%d,%d)\n",
@@ -80,64 +167,72 @@ EventHandler::_dump()
 }
 
 void
-EventHandler::scheduleEvent(EventSlot s, Cycle cycle, EventID id, int64_t data)
+EventHandler::scheduleAbs(EventSlot s, Cycle cycle, EventID id)
 {
     assert(isEventSlot(s));
     
-    // if (s == COP_SLOT)
-    // debug("Scheduling event at %lld in slot %d\n", cycle, s);
-    
-    eventSlot[s].triggerCycle = cycle;
-    eventSlot[s].triggerBeam = INT32_MAX;
-    eventSlot[s].id = id;
-    eventSlot[s].data = data;
-    if (cycle < nextTrigger) nextTrigger = cycle;
-    
-    assert(checkScheduledEvent(s));
-}
-
-void
-EventHandler::scheduleEvent(EventSlot s, int16_t vpos, int16_t hpos, EventID id, int64_t data)
-{
-    Cycle cycle = amiga->dma.latchedClock;
-    cycle += amiga->dma.beam2cycles(vpos, hpos);
-    
-    scheduleEvent(s, cycle, id, data);
-}
-
-void
-EventHandler::scheduleNextEvent(EventSlot s, Cycle offset, EventID id, int64_t data)
-{
-    assert(isEventSlot(s));
-    
-    Cycle cycle = eventSlot[s].triggerCycle + offset;
+    if (trace & (1 << s)) {
+        debug("scheduleAbs(%d, %lld, %d)\n", s, cycle, id);
+    }
 
     eventSlot[s].triggerCycle = cycle;
     eventSlot[s].triggerBeam = INT32_MAX;
     eventSlot[s].id = id;
-    eventSlot[s].data = data;
     if (cycle < nextTrigger) nextTrigger = cycle;
     
     assert(checkScheduledEvent(s));
 }
 
 void
-EventHandler::scheduleEventInNextFrame(EventSlot s, int16_t vpos, int16_t hpos,
-                                       EventID id, int64_t data)
-{
-    Cycle cycle = amiga->dma.latchedClock;
-    cycle += amiga->dma.cyclesInCurrentFrame();
-    cycle += amiga->dma.beam2cycles(vpos, hpos);
-
-    scheduleEvent(s, cycle, id, data);
-}
-
-void
-EventHandler::rescheduleEvent(EventSlot s, Cycle offset)
+EventHandler::scheduleRel(EventSlot s, Cycle cycle, EventID id)
 {
     assert(isEventSlot(s));
     
+    cycle += amiga->dma.clock;
+    
+    if (trace & (1 << s)) {
+        debug("scheduleRel(%d, %lld, %d)\n", s, cycle, id);
+    }
+    
+    eventSlot[s].triggerCycle = cycle;
+    eventSlot[s].triggerBeam = INT32_MAX;
+    eventSlot[s].id = id;
+    if (cycle < nextTrigger) nextTrigger = cycle;
+    
+    assert(checkScheduledEvent(s));
+}
+
+void
+EventHandler::schedulePos(EventSlot s, int16_t vpos, int16_t hpos, EventID id)
+{
+    assert(isEventSlot(s));
+ 
+    if (trace & (1 << s)) {
+        debug("schedulePos(%d, (%d,%d), %d)\n", s, vpos, hpos, id);
+    }
+
+    Cycle cycle = amiga->dma.latchedClock;
+    cycle += amiga->dma.beam2cycles(vpos, hpos);
+    
+    eventSlot[s].triggerCycle = cycle;
+    eventSlot[s].triggerBeam = INT32_MAX;
+    eventSlot[s].id = id;
+    if (cycle < nextTrigger) nextTrigger = cycle;
+    
+    assert(checkScheduledEvent(s));
+}
+
+void
+EventHandler::reschedule(EventSlot s, Cycle offset)
+{
+    assert(isEventSlot(s));
+    
+    if (trace & (1 << s)) {
+        debug("reschedule(%d, %lld)\n", s, offset);
+    }
+
     Cycle cycle = eventSlot[s].triggerCycle + offset;
+    
     eventSlot[s].triggerCycle = cycle;
     eventSlot[s].triggerBeam = INT32_MAX;
     if (cycle < nextTrigger) nextTrigger = cycle;
@@ -146,10 +241,34 @@ EventHandler::rescheduleEvent(EventSlot s, Cycle offset)
 }
 
 void
-EventHandler::cancelEvent(EventSlot s)
+EventHandler::reschedule(EventSlot s, Cycle offset, EventID id)
+{
+    reschedule(s, offset);
+    eventSlot[s].id = id;
+}
+
+void
+EventHandler::disable(EventSlot s)
 {
     assert(isEventSlot(s));
     
+    if (trace & (1 << s)) {
+        debug("disable(%d)\n", s);
+    }
+    
+    eventSlot[s].triggerCycle = INT64_MAX;
+}
+
+void
+EventHandler::cancel(EventSlot s)
+{
+    assert(isEventSlot(s));
+
+    if (trace & (1 << s)) {
+        debug("cancel(%d)\n", s);
+    }
+
+    eventSlot[s].id = (EventID)0;
     eventSlot[s].triggerCycle = INT64_MAX;
 }
 

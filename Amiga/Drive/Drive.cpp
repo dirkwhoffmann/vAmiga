@@ -48,8 +48,6 @@ Drive::_reset()
 void
 Drive::_ping()
 {
-    debug("AmigaDrive::_ping()\n");
-
     amiga->putMessage(isConnected() ?
                       MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, nr);
     amiga->putMessage(hasDisk() ?

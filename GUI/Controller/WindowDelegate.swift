@@ -13,7 +13,7 @@ extension MyController : NSWindowDelegate {
         
     public func windowDidBecomeMain(_ notification: Notification) {
         
-        track()
+        // track()
         
         // Inform the application delegate
         myAppDelegate.windowDidBecomeMain(notification.object as! NSWindow)
@@ -37,7 +37,7 @@ extension MyController : NSWindowDelegate {
     
     public func windowDidResignMain(_ notification: Notification) {
         
-        track()
+        // track()
         
         // Stop emulator if it is configured to pause in background
         pauseInBackgroundSavedState = amiga.isRunning()

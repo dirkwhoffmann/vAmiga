@@ -75,6 +75,7 @@ class Joystick;
 class CIA : public HardwareComponent {
     
     friend TOD;
+    friend Amiga;
     
 protected:
 

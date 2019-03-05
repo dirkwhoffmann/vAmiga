@@ -211,16 +211,7 @@ private:
     //
     // Managing events
     //
- 
-    // Schedules a new Blitter event
-    void scheduleNextEvent(Cycle delta, EventID id, int64_t data = 0);
-
-    // Reschedules the current Blitter event
-    void rescheduleEvent(Cycle delta);
-
-    // Cancels the current Blitter event
-    void cancelEvent();
-    
+     
     // Processes a Blitter event
     void serviceEvent(EventID id, int64_t data);
     

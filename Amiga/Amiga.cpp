@@ -410,11 +410,7 @@ Amiga::_ping()
 void
 Amiga::_dump()
 {
-    plainmsg(" Master clock: %lld\n", masterClock);
-    plainmsg("in CPU cycles: %lld\n", AS_CPU_CYCLES(masterClock));
-    plainmsg("in DMA cycles: %lld\n", AS_DMA_CYCLES(masterClock));
-    plainmsg("in CIA cycles: %lld\n", AS_CIA_CYCLES(masterClock));
-    plainmsg("\n");
+    dumpClock();
     plainmsg("    poweredOn: %s\n", isPoweredOn() ? "yes" : "no");
     plainmsg("   poweredOff: %s\n", isPoweredOff() ? "yes" : "no");
     plainmsg("       paused: %s\n", isPaused() ? "yes" : "no");
@@ -828,4 +824,44 @@ Amiga::runLoop()
         
         // stop = true;
     } while (!stop);
+    
+    debug("Exiting run loop\n");
+    dma.dump(); 
+}
+
+void
+Amiga::dumpClock()
+{
+    uint16_t vp = VPOS(dma.beam);
+    uint16_t hp = HPOS(dma.beam);
+
+    plainmsg("               Master cycles     CPU cycles    DMA cycles    CIA cycles\n");
+    plainmsg(" Master clock: %13lld  %13lld %13lld %13lld\n",
+             masterClock,
+             AS_CPU_CYCLES(masterClock),
+             AS_DMA_CYCLES(masterClock),
+             AS_CIA_CYCLES(masterClock));
+    plainmsg("    DMA clock: %13lld  %13lld %13lld %13lld\n",
+             amiga->dma.clock,
+             AS_CPU_CYCLES(amiga->dma.clock),
+             AS_DMA_CYCLES(amiga->dma.clock),
+             AS_CIA_CYCLES(amiga->dma.clock));
+    plainmsg("  Frame clock: %13lld  %13lld %13lld %13lld\n",
+             amiga->dma.latchedClock,
+             AS_CPU_CYCLES(amiga->dma.latchedClock),
+             AS_DMA_CYCLES(amiga->dma.latchedClock),
+             AS_CIA_CYCLES(amiga->dma.latchedClock));
+    plainmsg("  CIA A clock: %13lld  %13lld %13lld %13lld\n",
+             amiga->ciaA.clock,
+             AS_CPU_CYCLES(amiga->ciaA.clock),
+             AS_DMA_CYCLES(amiga->ciaA.clock),
+             AS_CIA_CYCLES(amiga->ciaA.clock));
+    plainmsg("  CIA B clock: %13lld  %13lld %13lld %13lld\n",
+             amiga->ciaB.clock,
+             AS_CPU_CYCLES(amiga->ciaB.clock),
+             AS_DMA_CYCLES(amiga->ciaB.clock),
+             AS_CIA_CYCLES(amiga->ciaB.clock));
+    plainmsg("  Color clock: (%d,%d) hex: ($%X,$%X) Frame: %lld\n",
+            vp, hp, vp, hp, dma.frame);
+    plainmsg("\n");
 }

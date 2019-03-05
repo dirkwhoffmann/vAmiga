@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "HardwareComponent.h"
-#include <algorithm>
+#include "Amiga.h"
+// #include <algorithm>
 
 HardwareComponent::~HardwareComponent()
 {
@@ -20,8 +20,9 @@ HardwareComponent::setAmiga(Amiga *amiga)
 {
     assert(this->amiga == NULL);
     assert(amiga != NULL);
-    
+
     this->amiga = amiga;
+    this->event = &amiga->dma.eventHandler;
     
     // Set the reference in all sub components
     for (HardwareComponent *c : subComponents) {

@@ -14,7 +14,7 @@
 
 // Forward declarations
 class Amiga;
-
+class EventHandler;
 
 /* Base class for all hardware components
  * This class defines the base functionality of all hardware components.
@@ -67,6 +67,11 @@ public:
      * time.
      */
     Amiga *amiga = NULL;
+    
+    /* Reference to the event handler.
+     * Quick access to amiga->dma.eventHandler
+     */
+    EventHandler *event = NULL;
     
 protected:
     

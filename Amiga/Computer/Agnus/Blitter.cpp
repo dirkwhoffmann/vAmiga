@@ -249,7 +249,7 @@ Blitter::pokeBLTSIZE(uint16_t value)
         loadMicrocode();
         
         // Start the blit
-        amiga->dma.eventHandler.scheduleNextEvent(BLT_SLOT, DMA_CYCLES(1), BLT_EXECUTE);
+        event->scheduleRel(BLT_SLOT, DMA_CYCLES(1), BLT_EXECUTE);
     }
 }
 
@@ -275,16 +275,11 @@ Blitter::pokeBLTCDAT(uint16_t value)
     chold = value;
 }
 
+/*
 void
-Blitter::scheduleNextEvent(Cycle delta, EventID id, int64_t data)
+Blitter::reschedule(Cycle delta)
 {
-    amiga->dma.eventHandler.scheduleNextEvent(BLT_SLOT, DMA_CYCLES(delta), id, data);
-}
-
-void
-Blitter::rescheduleEvent(Cycle delta)
-{
-    amiga->dma.eventHandler.rescheduleEvent(BLT_SLOT, DMA_CYCLES(delta));
+    amiga->dma.eventHandler.reschedule(BLT_SLOT, DMA_CYCLES(delta));
 }
 
 void
@@ -292,6 +287,7 @@ Blitter::cancelEvent()
 {
     amiga->dma.eventHandler.cancelEvent(BLT_SLOT);
 }
+*/
 
 void
 Blitter::serviceEvent(EventID id, int64_t data)
@@ -327,33 +323,39 @@ Blitter::serviceEvent(EventID id, int64_t data)
             
             // Only proceed if Blitter DMA is disabled
             if (!amiga->dma.bltDMA()) {
-                amiga->dma.eventHandler.rescheduleEvent(BLT_SLOT, INT32_MAX);
+                amiga->dma.eventHandler.reschedule(BLT_SLOT, INT32_MAX);
                 break;
             }
-            
+
             // Execute next Blitter micro instruction
             instr = microInstr[bltpc];
+            debug("Executing micro instruction %d (%X)\n", bltpc, instr);
+
             
             if (instr & WRITE_D) {
                 
+                debug("WRITE_D\n");
                 amiga->mem.pokeChip16(bltdpt, dhold);
                 INC_OCS_PTR(bltdpt, 2 + (isLastWord() ? bltdmod : 0));
             }
             
             if (instr & HOLD_A) {
                 
-                
+                debug("HOLD_A\n");
                 // Emulate the barrel shifter on data path A
                 ahold = (ashift >> bltASH()) & 0xFFFF;
             }
 
             if (instr & HOLD_B) {
 
+                debug("HOLD_B\n");
                 // Emulate the barrel shifter on data path B
                 bhold = (bshift >> bltBSH()) & 0xFFFF;
             }
             
             if (instr & HOLD_D) {
+
+                debug("HOLD_D\n");
                 
                 dhold = 0;
 
@@ -383,24 +385,28 @@ Blitter::serviceEvent(EventID id, int64_t data)
             
             if (instr & FETCH_A) {
                 
+                debug("FETCH_A\n");
                 pokeBLTADAT(amiga->mem.peek16(bltapt));
                 INC_OCS_PTR(bltapt, 2 + (isLastWord() ? bltamod : 0));
             }
             
             if (instr & FETCH_B) {
-                
+
+                debug("FETCH_B\n");
                 pokeBLTBDAT(amiga->mem.peek16(bltbpt));
                 INC_OCS_PTR(bltbpt, 2 + (isLastWord() ? bltbmod : 0));
             }
 
             if (instr & FETCH_C) {
                 
+                debug("FETCH_C\n");
                 pokeBLTCDAT(amiga->mem.peek16(bltcpt));
                 INC_OCS_PTR(bltcpt, 2 + (isLastWord() ? bltcmod : 0));
             }
             
             if ((instr & LOOPBACK) && (wcounter > 1 || hcounter > 1)) {
 
+                debug("LOOPBACK\n");
                 bltpc -= instr & 7;
             
             } else {
@@ -410,13 +416,14 @@ Blitter::serviceEvent(EventID id, int64_t data)
             
             if (instr & BLTDONE) {
                 
+                debug("BLTDONE\n");
                 // Terminate the Blitter
-                amiga->dma.eventHandler.cancelEvent(BLT_SLOT);
+                amiga->dma.eventHandler.cancel(BLT_SLOT);
                 
             } else {
             
                 // Continue running the Blitter
-                amiga->dma.eventHandler.rescheduleEvent(BLT_SLOT, DMA_CYCLES(1));
+                amiga->dma.eventHandler.reschedule(BLT_SLOT, DMA_CYCLES(1));
                 break;
             }
             
@@ -516,6 +523,6 @@ Blitter::loadMicrocode()
             assert(false);
     }
     
-    debug("Blitter microcode is loaded\n");
+    debug("Microcode loaded\n");
 
 }
