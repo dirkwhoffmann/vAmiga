@@ -234,6 +234,8 @@ typedef struct {
     uint16_t bhold;
     uint16_t chold;
     uint16_t dhold;
+    bool bbusy; 
+    bool bzero;
 
 } BlitterInfo;
 

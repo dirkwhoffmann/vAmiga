@@ -44,6 +44,10 @@ Blitter::Blitter()
         { &ashift,     sizeof(ashift),     0 },
         { &bshift,     sizeof(bshift),     0 },
 
+        { &hcounter,   sizeof(hcounter),   0 },
+        { &bbusy,      sizeof(bbusy),      0 },
+        { &bzero,      sizeof(bzero),      0 },
+
     });
 }
 
@@ -75,6 +79,8 @@ Blitter::getInfo()
     info.bhold = bhold;
     info.chold = chold;
     info.dhold = dhold;
+    info.bbusy = bbusy;
+    info.bzero = bzero;
 
     return info;
 }
@@ -145,6 +151,7 @@ Blitter::_dump()
     plainmsg("     chold: %X\n", chold);
     plainmsg("     dhold: %X\n", dhold);
     plainmsg("    ashift: %X bshift: %X\n", ashift, bshift);
+    plainmsg("     bbusy: %s bzero: %s\n", bbusy ? "yes" : "no", bzero ? "yes" : "no");
 }
 
 void
@@ -234,8 +241,14 @@ Blitter::pokeBLTALWM(uint16_t value)
 void
 Blitter::pokeBLTSIZE(uint16_t value)
 {
+    debug("***************\n");
     debug("pokeBLTSIZE(%X)\n", value);
+    
     bltsize = value;
+    bzero = true;
+    bbusy = true;
+    
+    _dump();
     
     if (bltLINE()) {
         // TODO
@@ -372,6 +385,9 @@ Blitter::serviceEvent(EventID id)
                 // Run the fill logic circuit
                 // TODO
                 
+                // Update the zero flag
+                if (dhold) bzero = false;
+                
                 // Move to the next coordinate
                 if (wcounter > 1) {
                     wcounter--;
@@ -407,11 +423,16 @@ Blitter::serviceEvent(EventID id)
             if ((instr & LOOPBACK) && (wcounter > 1 || hcounter > 1)) {
 
                 debug("LOOPBACK\n");
+                // Move PC back to the beginning of the main cycle
                 bltpc -= instr & 7;
             
             } else {
                 
+                // Move PC to the beginning of the pipeline flushing code
                 bltpc++;
+                
+                // Clear the Blitter busy flag
+                bbusy = false;
             }
             
             if (instr & BLTDONE) {

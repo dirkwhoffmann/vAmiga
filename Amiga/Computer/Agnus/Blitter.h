@@ -65,6 +65,10 @@ class Blitter : public HardwareComponent {
     uint16_t wcounter;
     uint16_t hcounter;
     
+    // Blitter flags;
+    bool bbusy;
+    bool bzero;
+    
     
     //
     // Micro execution unit
