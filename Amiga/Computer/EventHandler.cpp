@@ -250,8 +250,8 @@ EventHandler::_dumpSecondaryTable()
 void
 EventHandler::_dumpSlot(const char *slotName, const char *eventName, const Event event)
 {
-    plainmsg("Slot: %10s ", slotName);
-    plainmsg("Event: %15s ", eventName);
+    plainmsg("Slot: %-10s ", slotName);
+    plainmsg("Event: %-15s ", eventName);
     plainmsg("Trigger: ");
     
     Cycle trigger = event.triggerCycle;
