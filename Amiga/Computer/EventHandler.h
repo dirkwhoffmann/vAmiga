@@ -14,17 +14,50 @@
 
 #define NEVER INT64_MAX
 
-// Note: The slot order does matter. If two events trigger at the same cycle,
-// the slot with a smaller number is processed first.
+/* Event slots forming the primary event list
+ * Each event slot represents a state machine that runs in parallel to the
+ * ones in the other slots. Keep in mind that the state machines interact
+ * with each other in various ways (e.g., by blocking the DMA bus).
+ * As a result, the slot is of great importance: If two events trigger at the
+ * same cycle, the the slot with a smaller number is served first.
+ * The secondary event slot is very different to the others. Triggering an
+ * event in this slot causes the event handler to crawl through the secondary
+ * event list which is designed similar to the primary list.
+ * The separation into two event lists has been done for speed reasons. The
+ * secondary list contains events that fire infrequently, e.g., the interrupt
+ * events. This keeps the primary list short which has to be crawled through
+ * whenever an event is processed.
+ */
 typedef enum
 {
+    // Primary slot table
+    
     CIAA_SLOT = 0,    // CIA A execution
     CIAB_SLOT,        // CIA B execution
     DMA_SLOT,         // Disk, Audio, Sprite, and Bitplane DMA
     COP_SLOT,         // Copper DMA
     BLT_SLOT,         // Blitter DMA
     RAS_SLOT,         // Raster line events
-    EVENT_SLOT_COUNT
+    SEC_SLOT,         // Secondary events
+    EVENT_SLOT_COUNT,
+    
+    // Secondary slot table
+    
+    HSYNC_SLOT = 0,   // HSYNC event
+    TBE_IRQ_SLOT,     // Source 0 IRQ (Serial port transmit buffer empty)
+    DSKBLK_IRQ_SLOT,  // Source 1 IRQ (Disk block finished)
+    SOFT_IRQ_SLOT,    // Source 2 IRQ (Software-initiated)
+    PORTS_IRQ_SLOT,   // Source 3 IRQ (I/0 ports and timers)
+    COPR_IRQ_SLOT,    // Source 4 IRQ (Copper)
+    VERTB_IRQ_SLOT,   // Source 5 IRQ (Start of vertical blank)
+    BLIT_IRQ_SLOT,    // Source 6 IRQ (Blitter finished)
+    AUD0_IRQ_SLOT,    // Source 7 IRQ (Audio channel 0 block finished)
+    AUD1_IRQ_SLOT,    // Source 8 IRQ (Audio channel 1 block finished)
+    AUD2_IRQ_SLOT,    // Source 9 IRQ (Audio channel 2 block finished)
+    AUD3_IRQ_SLOT,    // Source 10 IRQ (Audio channel 3 block finished)
+    RBF_IRQ_SLOT,     // Source 11 IRQ (Serial port receive buffer full)
+    DSKSYN_IRQ_SLOT,  // Source 12 IRQ (Disk sync register matches disk data)
+    SEC_SLOT_COUNT,
     
 } EventSlot;
 
@@ -33,6 +66,10 @@ static inline bool isEventSlot(int32_t s) { return s <= EVENT_SLOT_COUNT; }
 typedef enum
 {
     EVENT_NONE = 0,
+    
+    //
+    // Events in primary event table
+    //
     
     // CIA slots
     CIA_EXECUTE = 1,
@@ -83,7 +120,25 @@ typedef enum
     
     // HSYNC slot
     RAS_HSYNC = 1,
-    RAS_EVENT_COUNT
+    RAS_EVENT_COUNT,
+    
+    // SEC slot
+    SEC_TRIGGER = 1,
+    SEC_EVENT_COUNT,
+    
+    
+    //
+    // Events in secondary event table
+    //
+    
+    // IRQ slots
+    IRQ_SET = 1,
+    IRQ_CLEAR,
+    IRQ_EVENT_COUNT,
+    
+    // HSYNC slot
+    HSYNC_EOL = 1,
+    HSYNC_EVENT_COUNT
     
 } EventID;
 
@@ -123,15 +178,22 @@ struct Event {
 class EventHandler : public HardwareComponent {
     
 public:
-    /* Event slots.
-     * There is one slot for each event owner. In each slot, a single event
-     * can be scheduled at a time
-     */
+    
+    //
+    // Main events
+    //
+    
+    // The primary event table
     Event eventSlot[EVENT_SLOT_COUNT];
     
-    // This variables indicates when the next event triggers.
-    // INT64_MAX if no event is pending.
-    Cycle nextTrigger = INT64_MAX;
+    // Next trigger cycle for an event in the primary event table
+    Cycle nextTrigger = NEVER;
+
+    // The secondary event table
+    Event secondarySlot[SEC_SLOT_COUNT];
+    
+    // Next trigger cycle for an event in the secondary event table
+    Cycle nextSecTrigger = NEVER;
 
     
     /* Trace flags
@@ -140,7 +202,7 @@ public:
      */
     uint16_t trace = 0;
     
-    
+
     //
     // Constructing and destructing
     //
@@ -156,12 +218,17 @@ public:
     
 private:
     
-     void _powerOn() override;
-     void _powerOff() override;
-     void _reset() override;
-     void _ping() override;
-     void _dump() override;
+    void _powerOn() override;
+    void _powerOff() override;
+    void _reset() override;
+    void _ping() override;
+    void _dump() override;
     
+    // Helper functions
+    void _dumpPrimaryTable();
+    void _dumpSecondaryTable();
+    void _dumpSlot(const char *slotName, const char *eventName, const Event event);
+
 public:
     
     /* Schedules a new event with an absolute time stamp

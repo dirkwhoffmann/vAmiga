@@ -12,10 +12,6 @@
 
 #include "AudioUnit.h"
 
-//
-// THIS CLASS IS A STUB TO MAKE THE VISUAL PROTOTYPE WORK
-//
-
 class Paula : public HardwareComponent {
     
 public:
@@ -113,6 +109,17 @@ public:
     uint16_t peekSERPER() { return serper; }
     void pokeSERPER(uint16_t value) { serper = value; }
 
+    
+    //
+    // Managing events
+    //
+    
+public:
+    
+    // Processes an IRQ event
+    void serviceEvent(EventID id);
+    
+    
     //
     // Interrupts
     //

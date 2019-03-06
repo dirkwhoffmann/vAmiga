@@ -91,6 +91,14 @@ Paula::pokeINTENA(uint16_t value)
     if (value & 0x8000) intena |= (value & 0x7FFF); else intena &= ~value;
 }
 
+void
+Paula::serviceEvent(EventID id)
+{
+    // Check for due interrupts
+    
+    // Schedule next event
+}
+
 int
 Paula::interruptLevel()
 {
