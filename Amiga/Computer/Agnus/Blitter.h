@@ -83,20 +83,21 @@ class Blitter : public HardwareComponent {
      */
     
     // The Blitter micro-instructions
-    static const uint16_t LOOPBACK  = 0b000000000111; // Conditional loop
-    static const uint16_t FETCH_A   = 0b000000001000; // Loads register "A new"
-    static const uint16_t FETCH_B   = 0b000000010000; // Loads register "B new"
-    static const uint16_t FETCH_C   = 0b000000100000; // Loads register "C hold"
-    static const uint16_t HOLD_A    = 0b000001000000; // Loads register "A hold"
-    static const uint16_t HOLD_B    = 0b000010000000; // Loads register "B hold"
-    static const uint16_t HOLD_D    = 0b000100000000; // Loads register "D hold"
-    static const uint16_t WRITE_D   = 0b001000000000; // Writes back "D hold"
-    static const uint16_t BLTDONE   = 0b010000000000; // Marks the last instruction
+    static const uint16_t LOOPBACK  = 0b0000000001111; // Conditional loop
+    static const uint16_t FETCH_A   = 0b0000000010000; // Loads register "A new"
+    static const uint16_t FETCH_B   = 0b0000000100000; // Loads register "B new"
+    static const uint16_t FETCH_C   = 0b0000001000000; // Loads register "C hold"
+    static const uint16_t HOLD_A    = 0b0000010000000; // Loads register "A hold"
+    static const uint16_t HOLD_B    = 0b0000100000000; // Loads register "B hold"
+    static const uint16_t HOLD_D    = 0b0001000000000; // Loads register "D hold"
+    static const uint16_t WRITE_D   = 0b0010000000000; // Writes back "D hold"
+    static const uint16_t BLTDONE   = 0b0100000000000; // Marks the last instruction
 
     static const uint16_t BLTIDLE   = 0b000000000000; // Does nothing
-    static const uint16_t LOOPBACK2 = 0b000000000010; // Decrements bltpc by 2
-    static const uint16_t LOOPBACK3 = 0b000000000011; // Decrements bltpc by 3
-    static const uint16_t LOOPBACK4 = 0b000000000100; // Decrements bltpc by 4
+    static const uint16_t LOOPBACK0 = 0b000000001000; // Signals the end of the main loop
+    static const uint16_t LOOPBACK2 = 0b000000001010; // Executes the main loop again
+    static const uint16_t LOOPBACK3 = 0b000000001011; // Executes the main loop again
+    static const uint16_t LOOPBACK4 = 0b000000001100; // Executes the main loop again
 
     
     // The micro program to execute

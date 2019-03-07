@@ -70,6 +70,10 @@ DMAController::_powerOn()
     // Schedule the first two CIA events
     eventHandler.scheduleAbs(CIAA_SLOT, CIA_CYCLES(1), CIA_EXECUTE);
     eventHandler.scheduleAbs(CIAB_SLOT, CIA_CYCLES(1), CIA_EXECUTE);
+
+    // Prepare the secondary table slot
+    // We do this to be able to use reschedule() on this slot all the time.
+    eventHandler.scheduleAbs(SEC_SLOT, NEVER, SEC_TRIGGER);
 }
 
 void
@@ -724,7 +728,7 @@ DMAController::hsyncHandler()
     }
     
     // Schedule next HSYNC event
-    eventHandler.reschedule(RAS_SLOT, DMA_CYCLES(0xE3));
+    eventHandler.rescheduleRel(RAS_SLOT, DMA_CYCLES(0xE3));
 }
 
 void

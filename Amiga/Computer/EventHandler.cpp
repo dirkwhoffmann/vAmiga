@@ -329,15 +329,13 @@ EventHandler::schedulePos(EventSlot s, int16_t vpos, int16_t hpos, EventID id)
 }
 
 void
-EventHandler::reschedule(EventSlot s, Cycle offset)
+EventHandler::rescheduleAbs(EventSlot s, Cycle cycle)
 {
     assert(isEventSlot(s));
     
     if (trace & (1 << s)) {
-        debug("reschedule(%d, %lld)\n", s, offset);
+        debug("rescheduleAbs(%d, %lld)\n", s, cycle);
     }
-
-    Cycle cycle = eventSlot[s].triggerCycle + offset;
     
     eventSlot[s].triggerCycle = cycle;
     eventSlot[s].triggerBeam = INT32_MAX;
@@ -347,10 +345,21 @@ EventHandler::reschedule(EventSlot s, Cycle offset)
 }
 
 void
-EventHandler::reschedule(EventSlot s, Cycle offset, EventID id)
+EventHandler::rescheduleRel(EventSlot s, Cycle cycle)
 {
-    reschedule(s, offset);
-    eventSlot[s].id = id;
+    assert(isEventSlot(s));
+    
+    cycle += amiga->dma.clock;
+    
+    if (trace & (1 << s)) {
+        debug("scheduleRel(%d, %lld)\n", s, cycle);
+    }
+    
+    eventSlot[s].triggerCycle = cycle;
+    eventSlot[s].triggerBeam = INT32_MAX;
+    if (cycle < nextTrigger) nextTrigger = cycle;
+    
+    assert(checkScheduledEvent(s));
 }
 
 void
@@ -383,7 +392,7 @@ EventHandler::checkScheduledEvent(EventSlot s)
 {
     assert(isEventSlot(s));
     
-    if (eventSlot[s].triggerCycle <= amiga->dma.clock) {
+    if (eventSlot[s].triggerCycle < amiga->dma.clock) {
         fatalError("Scheduled event has a too small trigger cycle.");
         amiga->dma.dump();
         return false;
@@ -527,9 +536,119 @@ EventHandler::_executeUntil(Cycle cycle) {
         amiga->dma.hsyncHandler();
     }
     
+    // Check for a secondary event
+    if (isDue(SEC_SLOT, cycle)) {
+        _executeSecondaryUntil(cycle);
+    }
+
     // Determine the next trigger cycle
     nextTrigger = eventSlot[0].triggerCycle;
     for (unsigned i = 1; i < EVENT_SLOT_COUNT; i++)
         if (eventSlot[i].triggerCycle < nextTrigger)
             nextTrigger = eventSlot[i].triggerCycle;
+}
+
+void
+EventHandler::_executeSecondaryUntil(Cycle cycle) {
+
+    // Check all event slots one by one
+    if (isDue(HSYNC_SLOT, cycle)) {
+        secondarySlot[HSYNC_SLOT].triggerCycle = NEVER;
+    }
+    if (isDue(TBE_IRQ_SLOT, cycle)) {
+        secondarySlot[TBE_IRQ_SLOT].triggerCycle = NEVER;
+    }
+    if (isDue(DSKBLK_IRQ_SLOT, cycle)) {
+        secondarySlot[DSKBLK_IRQ_SLOT].triggerCycle = NEVER;
+    }
+    if (isDue(SOFT_IRQ_SLOT, cycle)) {
+        secondarySlot[SOFT_IRQ_SLOT].triggerCycle = NEVER;
+    }
+    if (isDue(PORTS_IRQ_SLOT, cycle)) {
+        secondarySlot[PORTS_IRQ_SLOT].triggerCycle = NEVER;
+    }
+    if (isDue(COPR_IRQ_SLOT, cycle)) {
+        secondarySlot[COPR_IRQ_SLOT].triggerCycle = NEVER;
+    }
+    if (isDue(VERTB_IRQ_SLOT, cycle)) {
+        secondarySlot[VERTB_IRQ_SLOT].triggerCycle = NEVER;
+    }
+    if (isDue(BLIT_IRQ_SLOT, cycle)) {
+        debug("**** BLITTER IRQ\n");
+        secondarySlot[BLIT_IRQ_SLOT].triggerCycle = NEVER;
+    }
+    if (isDue(AUD0_IRQ_SLOT, cycle)) {
+        secondarySlot[AUD0_IRQ_SLOT].triggerCycle = NEVER;
+    }
+    if (isDue(AUD1_IRQ_SLOT, cycle)) {
+        secondarySlot[AUD1_IRQ_SLOT].triggerCycle = NEVER;
+    }
+    if (isDue(AUD2_IRQ_SLOT, cycle)) {
+        secondarySlot[AUD2_IRQ_SLOT].triggerCycle = NEVER;
+    }
+    if (isDue(AUD3_IRQ_SLOT, cycle)) {
+        secondarySlot[AUD3_IRQ_SLOT].triggerCycle = NEVER;
+    }
+    if (isDue(RBF_IRQ_SLOT, cycle)) {
+        secondarySlot[RBF_IRQ_SLOT].triggerCycle = NEVER;
+    }
+    if (isDue(DSKSYN_IRQ_SLOT, cycle)) {
+        secondarySlot[DSKSYN_IRQ_SLOT].triggerCycle = NEVER;
+    }
+    
+    // Determine the next trigger cycle
+    nextSecTrigger = secondarySlot[0].triggerCycle;
+    for (unsigned i = 1; i < SEC_SLOT_COUNT; i++)
+        if (secondarySlot[i].triggerCycle < nextSecTrigger)
+            nextSecTrigger = secondarySlot[i].triggerCycle;
+
+    // Update the secondary table trigger in the primary table
+    rescheduleAbs(SEC_SLOT, nextSecTrigger);
+}
+
+    
+void
+EventHandler::scheduleSecondaryAbs(EventSlot s, Cycle cycle, EventID id)
+{
+    assert(isSecondarySlot(s));
+    
+    // if (trace & (1 << s))
+    {
+        debug("scheduleSecondaryAbs(%d, %lld, %d)\n", s, cycle, id);
+    }
+    
+    // Schedule event in secondary table
+    secondarySlot[s].triggerCycle = cycle;
+    secondarySlot[s].triggerBeam = INT32_MAX;
+    secondarySlot[s].id = id;
+    if (cycle < nextSecTrigger) nextSecTrigger = cycle;
+    
+    // Update the secondary table trigger in the primary table
+    if (cycle < eventSlot[SEC_SLOT].triggerCycle)
+        rescheduleAbs(SEC_SLOT, cycle);
+}
+
+void
+EventHandler::scheduleSecondaryRel(EventSlot s, Cycle cycle, EventID id)
+{
+    assert(isSecondarySlot(s));
+    
+    cycle += amiga->dma.clock;
+    
+    // if (trace & (1 << s))
+    {
+        debug("scheduleSecondaryRel(%d, %lld, %d)\n", s, cycle, id);
+    }
+    
+    // Schedule event in secondary table
+    secondarySlot[s].triggerCycle = cycle;
+    secondarySlot[s].triggerBeam = INT32_MAX;
+    secondarySlot[s].id = id;
+    if (cycle < nextSecTrigger) nextSecTrigger = cycle;
+    
+    // Update the secondary table trigger in the primary table
+    if (cycle < eventSlot[SEC_SLOT].triggerCycle)
+        rescheduleAbs(SEC_SLOT, cycle);
+    
+    _dump();
 }

@@ -262,7 +262,7 @@ Blitter::pokeBLTSIZE(uint16_t value)
         loadMicrocode();
         
         // Start the blit
-        event->scheduleRel(BLT_SLOT, DMA_CYCLES(1), BLT_EXECUTE);
+        handler->scheduleRel(BLT_SLOT, DMA_CYCLES(1), BLT_EXECUTE);
     }
 }
 
@@ -287,20 +287,6 @@ Blitter::pokeBLTCDAT(uint16_t value)
 {
     chold = value;
 }
-
-/*
-void
-Blitter::reschedule(Cycle delta)
-{
-    amiga->dma.eventHandler.reschedule(BLT_SLOT, DMA_CYCLES(delta));
-}
-
-void
-Blitter::cancelEvent()
-{
-    amiga->dma.eventHandler.cancelEvent(BLT_SLOT);
-}
-*/
 
 void
 Blitter::serviceEvent(EventID id)
@@ -343,7 +329,7 @@ Blitter::serviceEvent(EventID id)
             // Execute next Blitter micro instruction
             instr = microInstr[bltpc];
             debug("Executing micro instruction %d (%X)\n", bltpc, instr);
-
+            bltpc++;
             
             if (instr & WRITE_D) {
                 
@@ -420,31 +406,38 @@ Blitter::serviceEvent(EventID id)
                 INC_OCS_PTR(bltcpt, 2 + (isLastWord() ? bltcmod : 0));
             }
             
-            if ((instr & LOOPBACK) && (wcounter > 1 || hcounter > 1)) {
-
+            if (instr & LOOPBACK) {
+                
                 debug("LOOPBACK\n");
-                // Move PC back to the beginning of the main cycle
-                bltpc -= instr & 7;
+                uint16_t offset = instr & 0b111;
+                
+                if ((hcounter > 1 || wcounter > 1) && offset) {
+
+                    // Move PC back to the beginning of the main cycle
+                    bltpc = bltpc - offset - 1;
             
-            } else {
-                
-                // Move PC to the beginning of the pipeline flushing code
-                bltpc++;
-                
-                // Clear the Blitter busy flag
-                bbusy = false;
+                } else {
+                    
+                    // The remaining code flushes the pipeline.
+                    // The Blitter busy flag is already cleared.
+                    bbusy = false;
+                }
             }
             
             if (instr & BLTDONE) {
                 
                 debug("BLTDONE\n");
+                
+                // Trigger the Blitter interrupt
+                handler->scheduleSecondaryRel(BLIT_IRQ_SLOT, 0, IRQ_SET);
+                
                 // Terminate the Blitter
-                amiga->dma.eventHandler.cancel(BLT_SLOT);
+                handler->cancel(BLT_SLOT);
                 
             } else {
             
                 // Continue running the Blitter
-                amiga->dma.eventHandler.reschedule(BLT_SLOT, DMA_CYCLES(1));
+                amiga->dma.eventHandler.rescheduleRel(BLT_SLOT, DMA_CYCLES(1));
             }
             
             break;

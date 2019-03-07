@@ -62,6 +62,7 @@ typedef enum
 } EventSlot;
 
 static inline bool isEventSlot(int32_t s) { return s <= EVENT_SLOT_COUNT; }
+static inline bool isSecondarySlot(int32_t s) { return s <= SEC_SLOT_COUNT; }
 
 typedef enum
 {
@@ -231,37 +232,44 @@ private:
 
 public:
     
-    /* Schedules a new event with an absolute time stamp
-     * The time stamp unit is "master clock cycles"
+    //
+    // Managing primary events
+    //
+    
+    /* Schedules a new event in the primary event table.
+     * The time stamp is an absolute value measured in master clock cycles.
      */
     void scheduleAbs(EventSlot s, Cycle cycle, EventID id);
 
-    /* Schedules a new event with a relative time stamp
-     * The time stamp is given in master clock cycles and relative to the
-     * current value of the DMA clock.
+    /* Schedules a new event in the primary event table
+     * The time stamp is relative to the current value of the DMA clock and
+     * measured in master clock cycles.
      */
     void scheduleRel(EventSlot s, Cycle cycle, EventID id);
 
-    // Schedules an event at the specified beam position.
+    /* Schedules a new event in the primary event table
+     * The time stamp is given in form of a beam position.
+     */
     void schedulePos(EventSlot s, int16_t vpos, int16_t hpos, EventID id);
 
-    /* Reschedules the event in the specified slot
-     * The new trigger cycle is computed by adding the specified amout of
-     * cycles to the old trigger cycle.
+    /* Reschedules an existing event in the primary event table.
+     * The time stamp is an absolute value measured in master clock cycles.
      */
-    void reschedule(EventSlot s, Cycle offset);
-
-    /* Reschedules the event in the specified slot with a changed event ID
-     */
-    void reschedule(EventSlot s, Cycle offset, EventID id);
-
+    void rescheduleAbs(EventSlot s, Cycle cycle);
     
-    /* Disables the event in the specified slot
-     * The event is kept in the slot, but the trigger time is set to infinity.
+    /* Reschedules an existing event in the primary event table
+     * The time stamp is relative to the current value of the DMA clock and
+     * measured in master clock cycles.
+     */
+    void rescheduleRel(EventSlot s, Cycle cycle);
+
+    /* Disables an event in the primary event table.
+     * Disabling means that the trigger cycle is set to maximum possible value.
      */
     void disable(EventSlot s);
 
-    /* Deletes the event in the specified slot
+    /* Deletes an event in the primary event table.
+     * Deleting means that the event ID is reset to 0.
      */
     void cancel(EventSlot s);
 
@@ -279,14 +287,43 @@ public:
     // Performs some debugging checks. Won't be executed in release build.
     bool checkScheduledEvent(EventSlot s);
     bool checkTriggeredEvent(EventSlot s);
-
     
     // Processes all events that are due at or prior to cycle.
     inline void executeUntil(Cycle cycle) {
         if (cycle >= nextTrigger) _executeUntil(cycle); }
     
-    // Work horse for executeUntil()
+    // Work horses for executeUntil()
     void _executeUntil(Cycle cycle);
+    void _executeSecondaryUntil(Cycle cycle);
+
+    
+    //
+    // Managing secondary events
+    //
+
+    /* Schedules a new event in the secondary event table.
+     * The time stamp is an absolute value measured in master clock cycles.
+     */
+    void scheduleSecondaryAbs(EventSlot s, Cycle cycle, EventID id);
+    
+    /* Schedules a new event in the secondary event table
+     * The time stamp is relative to the current value of the DMA clock and
+     * measured in master clock cycles.
+     */
+    void scheduleSecondaryRel(EventSlot s, Cycle cycle, EventID id);
+    
+    /* Disables an event in the secondary event table.
+     * Disabling means that the trigger cycle is set to maximum possible value.
+     */
+    // void disableSecondary(EventSlot s);
+    
+    /* Deletes an event in the secondary event table.
+     * Deleting means that the event ID is reset to 0.
+     */
+    // void cancelSecondary(EventSlot s);
+
+    
+    
 };
 
 #endif

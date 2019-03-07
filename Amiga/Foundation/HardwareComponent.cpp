@@ -22,7 +22,7 @@ HardwareComponent::setAmiga(Amiga *amiga)
     assert(amiga != NULL);
 
     this->amiga = amiga;
-    this->event = &amiga->dma.eventHandler;
+    this->handler = &amiga->dma.eventHandler;
     
     // Set the reference in all sub components
     for (HardwareComponent *c : subComponents) {

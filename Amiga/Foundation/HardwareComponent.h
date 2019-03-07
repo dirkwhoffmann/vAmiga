@@ -71,7 +71,7 @@ public:
     /* Reference to the event handler.
      * Quick access to amiga->dma.eventHandler
      */
-    EventHandler *event = NULL;
+    EventHandler *handler = NULL;
     
 protected:
     
