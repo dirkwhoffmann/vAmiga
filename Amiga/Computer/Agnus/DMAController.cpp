@@ -419,7 +419,7 @@ DMAController::peekDMACON()
 void
 DMAController::pokeDMACON(uint16_t value)
 {
-    debug("pokeDMACON(%X)\n", value);
+    debug(2, "pokeDMACON(%X)\n", value);
     
     bool oldDMAEN = (dmacon & DMAEN);
     bool oldBPLEN = (dmacon & BPLEN) && oldDMAEN;
@@ -460,7 +460,6 @@ DMAController::pokeDMACON(uint16_t value)
             
             // Copper DMA on
             debug("Copper DMA switched on\n");
-            amiga->cpu.dump();
             
             // Determine trigger cycle for the first Copper event
             // (the next even DMA cycle)
@@ -608,7 +607,7 @@ DMAController::pokeDDFSTOP(uint16_t value)
 void
 DMAController::pokeBPL1MOD(uint16_t value)
 {
-    debug("pokeBPL1MOD(%X)\n", value);
+    debug(2, "pokeBPL1MOD(%X)\n", value);
 
     bpl1mod = value;
 }
@@ -616,7 +615,7 @@ DMAController::pokeBPL1MOD(uint16_t value)
 void
 DMAController::pokeBPL2MOD(uint16_t value)
 {
-    debug("pokeBPL2MOD(%X)\n", value);
+    debug(2, "pokeBPL2MOD(%X)\n", value);
     
     bpl2mod = value;
 }
@@ -624,14 +623,14 @@ DMAController::pokeBPL2MOD(uint16_t value)
 void
 DMAController::pokeDSKPTH(uint16_t value)
 {
-    debug("pokeDSKPTH(%X)\n", value);
+    debug(2, "pokeDSKPTH(%X)\n", value);
     dskpt = REPLACE_HI_WORD(dskpt, value & 0x7);
 }
 
 void
 DMAController::pokeDSKPTL(uint16_t value)
 {
-    debug("pokeDSKPTL(%X)\n", value);
+    debug(2, "pokeDSKPTL(%X)\n", value);
     dskpt = REPLACE_LO_WORD(dskpt, value);
 }
 
@@ -640,7 +639,7 @@ DMAController::pokeAUDxLCH(int x, uint16_t value)
 {
     assert(x < 4);
     
-    debug("pokeAUD%dLCH(%X)\n", x, value);
+    debug(2, "pokeAUD%dLCH(%X)\n", x, value);
     audlc[x] = REPLACE_HI_WORD(audlc[x], value & 0x7);
 }
 
@@ -649,7 +648,7 @@ DMAController::pokeAUDxLCL(int x, uint16_t value)
 {
     assert(x < 4);
     
-    debug("pokeAUD%dLCL(%X)\n", x, value);
+    debug(2, "pokeAUD%dLCL(%X)\n", x, value);
     audlc[x] = REPLACE_LO_WORD(audlc[x], value);
 }
 
@@ -658,7 +657,7 @@ DMAController::pokeBPLxPTH(int x, uint16_t value)
 {
     assert(x < 6);
     
-    debug("pokeBPL%dPTH(%X)\n", x, value);
+    debug(2, "pokeBPL%dPTH(%X)\n", x, value);
     bplpt[x] = REPLACE_HI_WORD(bplpt[x], value & 0x7);
 }
 
@@ -667,7 +666,7 @@ DMAController::pokeBPLxPTL(int x, uint16_t value)
 {
     assert(x < 6);
     
-    debug("pokeBPL%dPTL(%X)\n", x, value);
+    debug(2, "pokeBPL%dPTL(%X)\n", x, value);
     bplpt[x] = REPLACE_LO_WORD(bplpt[x], value);
 }
 
@@ -676,7 +675,7 @@ DMAController::pokeSPRxPTH(int x, uint16_t value)
 {
     assert(x < 8);
     
-    debug("pokeSPR%dPTH(%X)\n", x, value);
+    debug(2, "pokeSPR%dPTH(%X)\n", x, value);
     sprptr[x] = REPLACE_HI_WORD(sprptr[x], value & 0x7);
 }
 
@@ -685,7 +684,7 @@ DMAController::pokeSPRxPTL(int x, uint16_t value)
 {
     assert(x < 8);
     
-    debug("pokeSPR%dPTL(%X)\n", x, value);
+    debug(2, "pokeSPR%dPTL(%X)\n", x, value);
     sprptr[x] = REPLACE_LO_WORD(sprptr[x], value);
 }
 
@@ -770,15 +769,13 @@ DMAController::hsyncHandler()
     
     // Check if line 26 is next (Bitplane DMA starts here)
     if (vpos == 26) {
-        
-        // Create the BPLDMA allocation table
         buildDMAEventTable();
-        
-        // Schedule first DMA event (if any)
-        if (nextDmaEvent[0]) {
-            EventID eventID = dmaEvent[nextDmaEvent[0]];
-            eventHandler.schedulePos(DMA_SLOT, 26, nextDmaEvent[0], eventID);
-        }
+    }
+    
+    // Schedule first DMA event of the new line (if any)
+    if (nextDmaEvent[0]) {
+        EventID eventID = dmaEvent[nextDmaEvent[0]];
+        eventHandler.schedulePos(DMA_SLOT, 26, nextDmaEvent[0], eventID);
     }
     
     // Schedule next HSYNC event
@@ -788,7 +785,7 @@ DMAController::hsyncHandler()
 void
 DMAController::vsyncAction()
 {
-    debug("vsyncAction\n");
+    debug("vsyncAction(%lld)\n", frame);
     
     // CIA A counts VSYNCs
     amiga->ciaA.incrementTOD();

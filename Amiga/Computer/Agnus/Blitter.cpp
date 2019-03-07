@@ -157,98 +157,97 @@ Blitter::_dump()
 void
 Blitter::pokeBLTCON0(uint16_t value)
 {
-    debug("pokeBLTCON0(%X)\n", value);
+    debug(2, "pokeBLTCON0(%X)\n", value);
     bltcon0 = value;
 }
 
 void
 Blitter::pokeBLTCON1(uint16_t value)
 {
-    debug("pokeBLTCON1(%X)\n", value);
+    debug(2, "pokeBLTCON1(%X)\n", value);
     bltcon1 = value;
 }
 
 void
 Blitter::pokeBLTAPTH(uint16_t value)
 {
-    debug("pokeBLTAPTH(%X)\n", value);
+    debug(2, "pokeBLTAPTH(%X)\n", value);
     bltapt = REPLACE_HI_WORD(bltapt, value & 0x7);
 }
 
 void
 Blitter::pokeBLTAPTL(uint16_t value)
 {
-    debug("pokeBLTAPTL(%X)\n", value);
+    debug(2, "pokeBLTAPTL(%X)\n", value);
     bltapt = REPLACE_LO_WORD(bltapt, value);
 }
 
 void
 Blitter::pokeBLTBPTH(uint16_t value)
 {
-    debug("pokeBLTBPTH(%X)\n", value);
+    debug(2, "pokeBLTBPTH(%X)\n", value);
     bltbpt = REPLACE_HI_WORD(bltbpt, value & 0x7);
 }
 
 void
 Blitter::pokeBLTBPTL(uint16_t value)
 {
-    debug("pokeBLTBPTL(%X)\n", value);
+    debug(2, "pokeBLTBPTL(%X)\n", value);
     bltbpt = REPLACE_LO_WORD(bltbpt, value);
 }
 
 void
 Blitter::pokeBLTCPTH(uint16_t value)
 {
-    debug("pokeBLTCPTH(%X)\n", value);
+    debug(2, "pokeBLTCPTH(%X)\n", value);
     bltcpt = REPLACE_HI_WORD(bltcpt, value & 0x7);
 }
 
 void
 Blitter::pokeBLTCPTL(uint16_t value)
 {
-    debug("pokeBLTCPTL(%X)\n", value);
+    debug(2, "pokeBLTCPTL(%X)\n", value);
     bltcpt = REPLACE_LO_WORD(bltcpt, value);
 }
 
 void
 Blitter::pokeBLTDPTH(uint16_t value)
 {
-    debug("pokeBLTDPTH(%X)\n", value);
+    debug(2, "pokeBLTDPTH(%X)\n", value);
     bltdpt = REPLACE_HI_WORD(bltdpt, value & 0x7);
 }
 
 void
 Blitter::pokeBLTDPTL(uint16_t value)
 {
-    debug("pokeBLTDPTL(%X)\n", value);
+    debug(2, "pokeBLTDPTL(%X)\n", value);
     bltdpt = REPLACE_LO_WORD(bltdpt, value);
 }
 
 void
 Blitter::pokeBLTAFWM(uint16_t value)
 {
-    debug("pokeBLTAFWM(%X)\n", value);
+    debug(2, "pokeBLTAFWM(%X)\n", value);
     bltafwm = value;
 }
 
 void
 Blitter::pokeBLTALWM(uint16_t value)
 {
-    debug("pokeBLTALWM(%X)\n", value);
+    debug(2, "pokeBLTALWM(%X)\n", value);
     bltalwm = value;
 }
 
 void
 Blitter::pokeBLTSIZE(uint16_t value)
 {
-    debug("***************\n");
-    debug("pokeBLTSIZE(%X)\n", value);
+    debug("*** pokeBLTSIZE(%X)\n", value);
     
     bltsize = value;
     bzero = true;
     bbusy = true;
     
-    _dump();
+    // _dump();
     
     if (bltLINE()) {
         // TODO
@@ -293,7 +292,7 @@ Blitter::serviceEvent(EventID id)
 {
     uint16_t instr;
     
-    debug("Servicing Blitter event %d\n", id);
+    debug(2, "Servicing Blitter event %d\n", id);
     
     switch (id) {
             
@@ -328,33 +327,33 @@ Blitter::serviceEvent(EventID id)
 
             // Execute next Blitter micro instruction
             instr = microInstr[bltpc];
-            debug("Executing micro instruction %d (%X)\n", bltpc, instr);
+            debug(2, "Executing micro instruction %d (%X)\n", bltpc, instr);
             bltpc++;
             
             if (instr & WRITE_D) {
                 
-                debug("WRITE_D\n");
+                debug(2, "WRITE_D\n");
                 amiga->mem.pokeChip16(bltdpt, dhold);
                 INC_OCS_PTR(bltdpt, 2 + (isLastWord() ? bltdmod : 0));
             }
             
             if (instr & HOLD_A) {
                 
-                debug("HOLD_A\n");
+                debug(2, "HOLD_A\n");
                 // Emulate the barrel shifter on data path A
                 ahold = (ashift >> bltASH()) & 0xFFFF;
             }
 
             if (instr & HOLD_B) {
 
-                debug("HOLD_B\n");
+                debug(2, "HOLD_B\n");
                 // Emulate the barrel shifter on data path B
                 bhold = (bshift >> bltBSH()) & 0xFFFF;
             }
             
             if (instr & HOLD_D) {
 
-                debug("HOLD_D\n");
+                debug(2, "HOLD_D\n");
                 
                 dhold = 0;
 
@@ -387,28 +386,28 @@ Blitter::serviceEvent(EventID id)
             
             if (instr & FETCH_A) {
                 
-                debug("FETCH_A\n");
+                debug(2, "FETCH_A\n");
                 pokeBLTADAT(amiga->mem.peek16(bltapt));
                 INC_OCS_PTR(bltapt, 2 + (isLastWord() ? bltamod : 0));
             }
             
             if (instr & FETCH_B) {
 
-                debug("FETCH_B\n");
+                debug(2, "FETCH_B\n");
                 pokeBLTBDAT(amiga->mem.peek16(bltbpt));
                 INC_OCS_PTR(bltbpt, 2 + (isLastWord() ? bltbmod : 0));
             }
 
             if (instr & FETCH_C) {
                 
-                debug("FETCH_C\n");
+                debug(2, "FETCH_C\n");
                 pokeBLTCDAT(amiga->mem.peek16(bltcpt));
                 INC_OCS_PTR(bltcpt, 2 + (isLastWord() ? bltcmod : 0));
             }
             
             if (instr & LOOPBACK) {
                 
-                debug("LOOPBACK\n");
+                debug(2, "LOOPBACK\n");
                 uint16_t offset = instr & 0b111;
                 
                 if ((hcounter > 1 || wcounter > 1) && offset) {
@@ -426,7 +425,7 @@ Blitter::serviceEvent(EventID id)
             
             if (instr & BLTDONE) {
                 
-                debug("BLTDONE\n");
+                debug(2, "BLTDONE\n");
                 
                 // Trigger the Blitter interrupt
                 handler->scheduleSecondaryRel(BLIT_IRQ_SLOT, 0, IRQ_SET);
@@ -540,6 +539,6 @@ Blitter::loadMicrocode()
             assert(false);
     }
     
-    debug("Microcode loaded\n");
+    debug(2, "Microcode loaded\n");
 
 }

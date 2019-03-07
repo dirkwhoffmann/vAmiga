@@ -168,7 +168,7 @@ Denise::serviceEvent(EventID id, int64_t data)
 void
 Denise::fillShiftRegisters()
 {
-    warn("IMPLEMENTATION MISSING");
+    // warn("fillShiftRegisters: IMPLEMENTATION MISSING (vpos = %d)\n", amiga->dma.vpos);
 }
 
 void

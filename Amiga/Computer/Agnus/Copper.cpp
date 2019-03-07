@@ -83,7 +83,7 @@ Copper::_dump()
 void
 Copper::pokeCOPCON(uint16_t value)
 {
-    debug("pokeCOPCON(%X)\n", value);
+    debug(2, "pokeCOPCON(%X)\n", value);
     
     /* "This is a 1-bit register that when set true, allows the Copper to
      *  access the blitter hardware. This bit is cleared by power-on reset, so
@@ -97,7 +97,7 @@ Copper::pokeCOPJMP(int x)
 {
     assert(x < 2);
     
-    debug("pokeCOPJMP%d\n", x + 1);
+    debug(2, "pokeCOPJMP%d\n", x + 1);
     
     /* "When you write to a Copper strobe address, the Copper reloads its
      *  program counter from the corresponding location register." [HRM]
@@ -127,7 +127,7 @@ Copper::pokeCOPxLCH(int x, uint16_t value)
 {
     assert(x < 2);
     
-    debug("pokeCOP%dLCH(%X)\n", x, value);
+    debug(2, "pokeCOP%dLCH(%X)\n", x, value);
     coplc[x] = REPLACE_HI_WORD(coplc[x], value);
 }
 
@@ -136,7 +136,7 @@ Copper::pokeCOPxLCL(int x, uint16_t value)
 {
     assert(x < 2);
     
-    debug("pokeCOP%dLCL(%X)\n", x, value);
+    debug(2, "pokeCOP%dLCL(%X)\n", x, value);
     coplc[x] = REPLACE_LO_WORD(coplc[x], value & 0xFFFE);
 }
 
@@ -355,7 +355,7 @@ Copper::disassemble(unsigned list, uint32_t offset)
 void
 Copper::serviceEvent(EventID id, int64_t data)
 {
-    debug("(%d,%d): ", amiga->dma.vpos, amiga->dma.hpos);
+    debug(2, "(%d,%d): ", amiga->dma.vpos, amiga->dma.hpos);
     
     switch (id) {
             
@@ -377,7 +377,7 @@ Copper::serviceEvent(EventID id, int64_t data)
                 
                 // Load the first instruction word
                 copins1 = amiga->mem.peek16(coppc);
-                plainmsg("COP_FETCH: coppc = %X copins1 = %X\n", coppc, copins1);
+                debug(2, "COP_FETCH: coppc = %X copins1 = %X\n", coppc, copins1);
                 advancePC();
                 
                 // Determine the next state based on the instruction type
@@ -391,7 +391,7 @@ Copper::serviceEvent(EventID id, int64_t data)
                 
                 // Load the second instruction word
                 copins2 = amiga->mem.peek16(coppc);
-                plainmsg("COP_MOVE: coppc = %X copins2 = %X\n", coppc, copins2);
+                debug(2, "COP_MOVE: coppc = %X copins2 = %X\n", coppc, copins2);
                 advancePC();
                 
                 // Extract register number from the first instruction word
@@ -418,8 +418,8 @@ Copper::serviceEvent(EventID id, int64_t data)
 
                 // Load the second instruction word
                 copins2 = amiga->mem.peek16(coppc);
-                plainmsg("COP_WAIT_OR_SKIP: coppc = %X copins2 = %X\n", coppc, copins2);
-                plainmsg("    VPHP = %X VMHM = %X\n", getVPHP(), getVMHM());
+                debug(2, "COP_WAIT_OR_SKIP: coppc = %X copins2 = %X\n", coppc, copins2);
+                debug(2, "    VPHP = %X VMHM = %X\n", getVPHP(), getVMHM());
                 advancePC();
                 
                 // Is it a WAIT command?
@@ -434,7 +434,7 @@ Copper::serviceEvent(EventID id, int64_t data)
                     // In how many cycles do we get there?
                     Cycle delay = amiga->dma.beamDiff(trigger);
                     
-                    plainmsg("   trigger = (%d,%d) delay = %lld\n",
+                    debug(2, "   trigger = (%d,%d) delay = %lld\n",
                              VPOS(trigger), HPOS(trigger), delay);
                     
                     // Stop the Copper or schedule a wake up event
@@ -443,7 +443,7 @@ Copper::serviceEvent(EventID id, int64_t data)
                     } else {
                         handler->scheduleRel(COP_SLOT, delay, COP_FETCH);
                     }
-                    amiga->dma.eventHandler.dump();
+                    // amiga->dma.eventHandler.dump();
                 }
                 
                 // It must be a SKIP command then.
@@ -463,7 +463,7 @@ Copper::serviceEvent(EventID id, int64_t data)
         
             // Load COP1LC into the program counter
             coppc = coplc[0];
-            plainmsg("COP_JMP1: coppc = %X\n", coppc);
+            debug(2, "COP_JMP1: coppc = %X\n", coppc);
             handler->scheduleRel(COP_SLOT, DMA_CYCLES(2), COP_REQUEST_DMA);
             break;
 
@@ -471,7 +471,7 @@ Copper::serviceEvent(EventID id, int64_t data)
             
             // Load COP2LC into the program counter
             coppc = coplc[1];
-            plainmsg("COP_JMP2: coppc = %X\n", coppc);
+            debug(2, "COP_JMP2: coppc = %X\n", coppc);
             handler->scheduleRel(COP_SLOT, DMA_CYCLES(2), COP_REQUEST_DMA);
             break;
 
@@ -485,8 +485,6 @@ Copper::serviceEvent(EventID id, int64_t data)
 void
 Copper::vsyncAction()
 {
-    // debug("Copper vsync\n");
-    
     /* "At the start of each vertical blanking interval, COP1LC is automatically
      *  used to start the program counter. That is, no matter what the Copper is
      *  doing, when the end of vertical blanking occurs, the Copper is
