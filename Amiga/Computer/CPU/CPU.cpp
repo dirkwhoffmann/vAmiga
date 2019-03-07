@@ -117,7 +117,23 @@ CPU::_ping()
 void
 CPU::_dump()
 {
+    CPUInfo info = getInfo();
     
+    plainmsg("      PC: %8X\n", info.pc);
+    plainmsg(" D0 - D3: ");
+    for (unsigned i = 0; i < 4; i++) plainmsg("%8X ", info.d[i]);
+    plainmsg("\n");
+    plainmsg(" D4 - D7: ");
+    for (unsigned i = 4; i < 8; i++) plainmsg("%8X ", info.d[i]);
+    plainmsg("\n");
+    plainmsg(" A0 - A3: ");
+    for (unsigned i = 0; i < 4; i++) plainmsg("%8X ", info.a[i]);
+    plainmsg("\n");
+    plainmsg(" A4 - A7: ");
+    for (unsigned i = 4; i < 8; i++) plainmsg("%8X ", info.a[i]);
+    plainmsg("\n");
+    plainmsg("     SSP: %X\n", info.ssp);
+    plainmsg("   Flags: %X\n", info.flags);
 }
 
 uint32_t

@@ -706,8 +706,10 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x026 >> 1: // DSKDAT
             amiga->paula.pokeDSKDAT(value); return;
             // case 0x28 >> 1: // REFPTR
-            // case 0x2A >> 1: // VPOSW
-            // case 0x2C >> 1: // VHPOSW
+        case 0x2A >> 1: // VPOSW
+            amiga->dma.pokeVPOS(value); return;
+        case 0x2C >> 1: // VHPOSW
+            amiga->dma.pokeVHPOS(value); return;
         case 0x02E >> 1: // COPCON
             amiga->dma.copper.pokeCOPCON(value); return;
         case 0x030 >> 1: // SERDAT

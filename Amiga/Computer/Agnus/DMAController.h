@@ -298,8 +298,13 @@ public:
 
     uint16_t peekDMACON();
     void pokeDMACON(uint16_t value);
+    
     uint16_t peekVHPOS();
+    void pokeVHPOS(uint16_t value);
+    
     uint16_t peekVPOS();
+    void pokeVPOS(uint16_t value);
+
     void pokeDIWSTRT(uint16_t value);
     void pokeDIWSTOP(uint16_t value);
     void pokeDDFSTRT(uint16_t value);

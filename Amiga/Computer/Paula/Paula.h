@@ -28,6 +28,10 @@ public:
     // The interrupt enable register
     uint16_t intena;
 
+    // The current interrupt level (value on the CPU's IRQ pins)
+    uint16_t irqLevel;
+
+    
     //
     // Disk DMA registers
     //
@@ -116,8 +120,7 @@ public:
     
 public:
     
-    // Processes an IRQ event
-    void serviceEvent(EventID id);
+
     
     
     //
@@ -125,9 +128,26 @@ public:
     //
     
 private:
-    
+
     // Computes the interrupt level of a pending interrupt.
     int interruptLevel();
+
+    // Checks intena and intreq and triggers an interrupt (if pending)
+    void checkInterrupt();
+    
+    // Sets a bit in register INTENA
+    void setBitINTENA(unsigned nr) { intena |= (1 << nr); checkInterrupt(); }
+
+    // Clears a bit in register INTENA
+    void clearBitINTENA(unsigned nr) { intena &= ~(1 << nr); checkInterrupt(); }
+
+    // Sets a bit in register INTREQ
+    void setBitINTREQ(unsigned nr) { intreq |= (1 << nr); checkInterrupt(); }
+
+    // Clears a bit in register INTREQ
+    void clearBitINTREQ(unsigned nr) { intreq &= ~(1 << nr); checkInterrupt(); }
+
+
     
     //
     // FAKE METHODS FOR THE VISUAL PROTOTYPE (TEMPORARY)

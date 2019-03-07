@@ -21,9 +21,10 @@ Paula::Paula()
     
     // Register snapshot items
     registerSnapshotItems(vector<SnapshotItem> {
-        { &clock,  sizeof(clock),  0 },
-        { &intreq, sizeof(intreq), 0 },
-        { &intena, sizeof(intena), 0 },
+        { &clock,    sizeof(clock),    0 },
+        { &intreq,   sizeof(intreq),   0 },
+        { &intena,   sizeof(intena),   0 },
+        { &irqLevel, sizeof(irqLevel), 0 },
     });
     
 }
@@ -91,13 +92,7 @@ Paula::pokeINTENA(uint16_t value)
     if (value & 0x8000) intena |= (value & 0x7FFF); else intena &= ~value;
 }
 
-void
-Paula::serviceEvent(EventID id)
-{
-    // Check for due interrupts
-    
-    // Schedule next event
-}
+
 
 int
 Paula::interruptLevel()
@@ -113,3 +108,18 @@ Paula::interruptLevel()
     
     return 0;
 }
+
+void
+Paula::checkInterrupt()
+{
+    int level = interruptLevel();
+    if (level != irqLevel) {
+
+        debug("*** TRIGGERING INTERRUPT (FIRST TIME, WOOHOO!)\n");
+        irqLevel = level;
+        m68k_set_irq(irqLevel);
+
+        assert(false);
+    }
+}
+

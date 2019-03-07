@@ -405,7 +405,14 @@ DMAController::beam2plane(int32_t beam)
 uint16_t
 DMAController::peekDMACON()
 {
-    return dmacon;
+    uint16_t result = dmacon;
+
+    assert((result & ((1 << 14) | (1 << 13))) == 0);
+    
+    if (blitter.bbusy) result |= (1 << 14);
+    if (blitter.bzero) result |= (1 << 13);
+
+    return result;
 }
 
 void
@@ -452,8 +459,12 @@ DMAController::pokeDMACON(uint16_t value)
             
             // Copper DMA on
             debug("Copper DMA switched on\n");
-            assert(false); 
-            Cycle trigger = UP_TO_NEXT_EVEN(clock + 1);
+            amiga->cpu.dump();
+            
+            // Determine trigger cycle for the first Copper event
+            // (the next even DMA cycle)
+            Cycle trigger = (clock + 15) & ~15;
+            
             eventHandler.scheduleAbs(COP_SLOT, trigger, COP_FETCH);
             
         } else {
@@ -519,6 +530,16 @@ DMAController::peekVHPOS()
     return beam & 0xFFFF;
 }
 
+void
+DMAController::pokeVHPOS(uint16_t value)
+{
+    // Don't know what to do here ...
+    
+    // Caution: If we change the beam position, the value of variable
+    // latchedClock (clock at the beginning of the current frame is
+    // invalidated).
+}
+
 uint16_t
 DMAController::peekVPOS()
 {
@@ -526,6 +547,16 @@ DMAController::peekVPOS()
     // TODO: LF (Long Frame)
     return(beam >> 16) & 1;
 
+}
+
+void
+DMAController::pokeVPOS(uint16_t value)
+{
+    // Don't know what to do here ...
+    
+    // Caution: If we change the beam position, the value of variable
+    // latchedClock (clock at the beginning of the current frame is
+    // invalidated).
 }
 
 void

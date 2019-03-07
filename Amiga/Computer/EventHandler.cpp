@@ -392,7 +392,7 @@ EventHandler::checkScheduledEvent(EventSlot s)
 {
     assert(isEventSlot(s));
     
-    if (eventSlot[s].triggerCycle < amiga->dma.clock) {
+    if (eventSlot[s].triggerCycle < 0) {
         fatalError("Scheduled event has a too small trigger cycle.");
         amiga->dma.dump();
         return false;
@@ -606,7 +606,6 @@ EventHandler::_executeSecondaryUntil(Cycle cycle) {
     rescheduleAbs(SEC_SLOT, nextSecTrigger);
 }
 
-    
 void
 EventHandler::scheduleSecondaryAbs(EventSlot s, Cycle cycle, EventID id)
 {
