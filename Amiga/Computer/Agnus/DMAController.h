@@ -83,11 +83,17 @@ public:
      */
     Cycle latchedClock = 0;
     
+    // The current vertical beam position (0 .. 312)
+    int16_t vpos;
+
+    // The current horizontal beam position (0 .. 226)
+    int16_t hpos;
+    
     /* The current beam position (17 bit)
      * Format: V8 V7 V6 V5 V4 V3 V2 V1 V0 H8 H7 H6 H5 H4 H3 H2 H1
      * Use HPOS and VPOS macros to extract the values.
      */
-    int32_t beam = 0;
+    // int32_t beam = 0;
     
 
     //
@@ -238,6 +244,9 @@ public:
     // Juggling cycles and beam positions
     //
     
+    // Returns the current beam position as a 17 bit value
+    uint32_t getBeam() { return BEAM(vpos, hpos); }
+    
     /* Returns the number of CPU cycles per rasterline
      * The value is valid for PAL machines, only.
      */
@@ -292,10 +301,6 @@ private:
     
 public:
     
-    inline void sethpos(uint8_t value) { beam = (beam & ~0xFF) | value; }
-    inline void setvpos(uint16_t value) { beam = (beam & 0xFF) | (value << 8); }
-    inline void incvpos() { beam += 0x100; }
-
     uint16_t peekDMACON();
     void pokeDMACON(uint16_t value);
     
@@ -327,12 +332,13 @@ public:
     void pokeSPRxPTL(int x, uint16_t value);
     void pokeSPRxPTH(int x, uint16_t value);
 
-    /* Returns the difference of two beam position in color clocks
-     * Returns UINT32_MAX if the start position is greater than the end position
+    /* Returns the difference of two beam position in master cycles
+     * Returns NEVER if the start position is greater than the end position
      * or if the end position is unreachable.
      */
-    DMACycle beamDiff(uint32_t start, uint32_t end);
-    DMACycle beamDiff(uint32_t end) { return beamDiff(beam, end); }
+    Cycle beamDiff(int16_t vStart, int16_t hStart, int16_t vEnd, int16_t hEnd);
+    Cycle beamDiff(int16_t vEnd, int16_t hEnd) { return beamDiff(vpos, hpos, vEnd, hEnd); }
+    Cycle beamDiff(int32_t end) { return beamDiff(VPOS(end), HPOS(end)); }
     
     // This function is called when the end of a rasterline has been reached.
     void hsyncHandler();

@@ -97,12 +97,12 @@ Copper::pokeCOPJMP(int x)
 {
     assert(x < 2);
     
-    debug("pokeCOPJMP%d\n", x);
+    debug("pokeCOPJMP%d\n", x + 1);
     
     /* "When you write to a Copper strobe address, the Copper reloads its
      *  program counter from the corresponding location register." [HRM]
      */
-    // coppc = coplc[1];
+    coppc = coplc[1];
 }
 
 void
@@ -148,7 +148,7 @@ Copper::comparator(uint32_t beam, uint32_t waitpos, uint32_t mask)
     uint8_t vWaitpos = (waitpos >> 8) & 0xFF;
     uint8_t vMask = (mask >> 8) & 0x7F;
     
-    debug(" * vBeam = %X vWaitpos = %X vMask = %X\n", vBeam, vWaitpos, vMask);
+    // debug(" * vBeam = %X vWaitpos = %X vMask = %X\n", vBeam, vWaitpos, vMask);
     // Compare vertical positions
     if ((vBeam & vMask) < (vWaitpos & vMask))
         return false;
@@ -181,7 +181,7 @@ uint32_t
 Copper::nextTriggerPosition()
 {
     // Get the current beam position
-    uint32_t beam = amiga->dma.beam;
+    uint32_t beam = amiga->dma.getBeam();
 
     /* We are going to compute the smallest beam position satisfying
      *
@@ -197,7 +197,6 @@ Copper::nextTriggerPosition()
      */
     for (int i = 16; i >= 0; i--) {
         uint32_t newPos = pos & ~(1 << i);
-        debug("* pos = %X newPos = %X beam = %X comparator() = %d\n", pos, newPos, beam, comparator(newPos));
         if (newPos >= beam && comparator(newPos)) {
             pos = newPos;
         }
@@ -356,7 +355,7 @@ Copper::disassemble(unsigned list, uint32_t offset)
 void
 Copper::serviceEvent(EventID id, int64_t data)
 {
-    debug("(%d,%d): ", VPOS(amiga->dma.beam), HPOS(amiga->dma.beam));
+    debug("(%d,%d): ", amiga->dma.vpos, amiga->dma.hpos);
     
     switch (id) {
             
@@ -379,7 +378,6 @@ Copper::serviceEvent(EventID id, int64_t data)
                 // Load the first instruction word
                 copins1 = amiga->mem.peek16(coppc);
                 plainmsg("COP_FETCH: coppc = %X copins1 = %X\n", coppc, copins1);
-                amiga->dumpClock(); 
                 advancePC();
                 
                 // Determine the next state based on the instruction type
@@ -433,14 +431,18 @@ Copper::serviceEvent(EventID id, int64_t data)
                     // Determine where the WAIT command will trigger
                     uint32_t trigger = nextTriggerPosition();
                     
-                    // In how many color clock cycles do we get there?
-                    DMACycle delay = amiga->dma.beamDiff(trigger);
+                    // In how many cycles do we get there?
+                    Cycle delay = amiga->dma.beamDiff(trigger);
                     
                     plainmsg("   trigger = (%d,%d) delay = %lld\n",
                              VPOS(trigger), HPOS(trigger), delay);
                     
-                    // Schedule a wake up event
-                    handler->scheduleRel(COP_SLOT, DMA_CYCLES(delay), COP_FETCH);
+                    // Stop the Copper or schedule a wake up event
+                    if (delay == NEVER) {
+                        handler->disable(COP_SLOT);
+                    } else {
+                        handler->scheduleRel(COP_SLOT, delay, COP_FETCH);
+                    }
                     amiga->dma.eventHandler.dump();
                 }
                 

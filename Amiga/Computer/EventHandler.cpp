@@ -423,10 +423,6 @@ EventHandler::checkScheduledEvent(EventSlot s)
                 fatalError("Invalid DMA event ID.");
                 return false;
             }
-            if (eventSlot[s].id == 0 || eventSlot[s].id >= CIA_EVENT_COUNT) {
-                fatalError("Invalid CIA event ID.");
-                return false;
-            }
             break;
             
         case COP_SLOT:
@@ -458,7 +454,7 @@ EventHandler::checkTriggeredEvent(EventSlot s)
     
     // Verify that the event triggers at the right beam position
     uint32_t beam = eventSlot[s].triggerBeam;
-    if (beam != INT32_MAX && beam != amiga->dma.beam) {
+    if (beam != INT32_MAX && beam != amiga->dma.getBeam()) {
         fatalError("Trigger beam position does not match.");
         return false;
     }

@@ -833,9 +833,6 @@ Amiga::runLoop()
 void
 Amiga::dumpClock()
 {
-    uint16_t vp = VPOS(dma.beam);
-    uint16_t hp = HPOS(dma.beam);
-
     plainmsg("               Master cycles     CPU cycles    DMA cycles    CIA cycles\n");
     plainmsg(" Master clock: %13lld  %13lld %13lld %13lld\n",
              masterClock,
@@ -862,7 +859,7 @@ Amiga::dumpClock()
              AS_CPU_CYCLES(amiga->ciaB.clock),
              AS_DMA_CYCLES(amiga->ciaB.clock),
              AS_CIA_CYCLES(amiga->ciaB.clock));
-    plainmsg("  Color clock: %X (%d,%d) hex: ($%X,$%X) Frame: %lld\n",
-            dma.beam, vp, hp, vp, hp, dma.frame);
+    plainmsg("  Color clock: (%d,%d) hex: ($%X,$%X) Frame: %lld\n",
+            dma.vpos, dma.hpos, dma.vpos, dma.hpos, dma.frame);
     plainmsg("\n");
 }

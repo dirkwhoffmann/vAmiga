@@ -29,7 +29,8 @@ DMAController::DMAController()
     registerSnapshotItems(vector<SnapshotItem> {
         
         { &clock,              sizeof(clock),              0 },
-        { &beam,               sizeof(beam),               0 },
+        { &vpos,               sizeof(vpos),               0 },
+        { &hpos,               sizeof(hpos),               0 },
         { &lores,              sizeof(lores),              0 },
         { &activeBitplanes,    sizeof(activeBitplanes),    0 },
         { &busOwner,           sizeof(busOwner),           0 },
@@ -527,7 +528,7 @@ uint16_t
 DMAController::peekVHPOS()
 {
     // V7 V6 V5 V4 V3 V2 V1 V0 H8 H7 H6 H5 H4 H3 H2 H1
-    return beam & 0xFFFF;
+    return BEAM(vpos, hpos) & 0xFFFF;
 }
 
 void
@@ -545,7 +546,8 @@ DMAController::peekVPOS()
 {
     // LF -- -- -- -- -- -- -- -- -- -- -- -- -- -- V8
     // TODO: LF (Long Frame)
-    return(beam >> 16) & 1;
+    assert((vpos >> 8) <= 1);
+    return (vpos >> 8);
 
 }
 
@@ -702,11 +704,30 @@ DMAController::executeUntil(Cycle targetClock)
         eventHandler.executeUntil(clock);
         
         // Advance the internal counters
-        beam++; 
+        hpos++;
+        assert(hpos <= HPOS_MAX);
         clock += DMA_CYCLES(1);
     }
 }
 
+Cycle
+DMAController:: beamDiff(int16_t vStart, int16_t hStart, int16_t vEnd, int16_t hEnd)
+{
+    // We assume that the function is called with a valid horizontal position
+    assert(hEnd <= 0xE2);
+    
+    // Bail out if the end position is unreachable
+    if (vEnd > 312) return NEVER;
+    
+    // Compute vertical and horizontal difference
+    int32_t vDiff  = vEnd - vStart;
+    int32_t hDiff  = hEnd - hStart;
+    
+    // In PAL mode, all lines have the same length (227 color clocks)
+    return DMA_CYCLES(vDiff * 227 + hDiff);
+}
+
+/*
 DMACycle
 DMAController::beamDiff(uint32_t start, uint32_t end)
 {
@@ -728,25 +749,27 @@ DMAController::beamDiff(uint32_t start, uint32_t end)
     // In PAL mode, all lines have the same length (227 color clocks)
     return vDiff * 227 + hDiff;
 }
+*/
 
 void
 DMAController::hsyncHandler()
 {
     // Verify that the event has been triggered at the correct beam position
-    assert(HPOS(beam) == 226 /* 0xE2 */);
+    assert(hpos == 226 /* 0xE2 */);
     
     // Reset horizontal position
     // Setting it to -1 ensures that it is 0 at the end of executeUntil()
-    sethpos(-1);
+    hpos = -1;
     
     // CIA B counts HSYNCs
     amiga->ciaB.incrementTOD();
     
     // Check if the current frame has been completed
-    VPOS(beam) < 312 ? incvpos() : vsyncAction();
+    if (++vpos > VPOS_MAX)
+        vsyncAction();
     
-    // Check for line 26 (Bitplane DMA starts here)
-    if (VPOS(beam) == 26) {
+    // Check if line 26 is next (Bitplane DMA starts here)
+    if (vpos == 26) {
         
         // Create the BPLDMA allocation table
         buildDMAEventTable();
@@ -776,7 +799,7 @@ DMAController::vsyncAction()
     // Advance counters
     frame++;
     latchedClock = clock + DMA_CYCLES(1);
-    setvpos(0);
+    vpos = 0;
     
     // Disable bitplane DMA
     clearDMAEventTable();
@@ -901,11 +924,10 @@ DMAController::serviceDMAEvent(EventID id, int64_t data)
     }
     
     // Schedule next event
-    uint8_t hpos = HPOS(beam);
     uint8_t next = nextDmaEvent[hpos];
     // debug("id = %d hpos = %d, next = %d\n", id, hpos, next);
     if (next) {
-        eventHandler.schedulePos(DMA_SLOT, VPOS(beam), next, dmaEvent[next]);
+        eventHandler.schedulePos(DMA_SLOT, vpos, next, dmaEvent[next]);
     } else {
         eventHandler.cancel(DMA_SLOT);
     }
