@@ -143,11 +143,12 @@ Copper::pokeCOPxLCL(int x, uint16_t value)
 bool
 Copper::comparator(uint32_t beam, uint32_t waitpos, uint32_t mask)
 {
-    // Get comparison bits for vertical position
+    // Get comparison bits for the vertical beam position
     uint8_t vBeam = (beam >> 8) & 0xFF;
     uint8_t vWaitpos = (waitpos >> 8) & 0xFF;
     uint8_t vMask = (mask >> 8) & 0x7F;
     
+    debug(" * vBeam = %X vWaitpos = %X vMask = %X\n", vBeam, vWaitpos, vMask);
     // Compare vertical positions
     if ((vBeam & vMask) < (vWaitpos & vMask))
         return false;
@@ -165,9 +166,9 @@ Copper::comparator(uint32_t beam, uint32_t waitpos, uint32_t mask)
 }
 
 bool
-Copper::comparator(uint32_t waitpos)
+Copper::comparator(uint32_t beam)
 {
-    return comparator(amiga->dma.beam, waitpos, getVMHM());
+    return comparator(beam, getVPHP(), getVMHM());
 }
 
 bool
@@ -191,16 +192,14 @@ Copper::nextTriggerPosition()
      */
     uint32_t pos = 0x1FFE2;
     
-    /* Now, we iterate through bit from left to right and set the bit to 0.
-     * If conditions 1) and 2) still hold, we continue. If not, we have
-     * already found the smalles value and return
+    /* Now, we iterate through bit from left to right and set the bit we see
+     * to 0 as long as conditions 1) and 2) hold.
      */
     for (int i = 16; i >= 0; i--) {
         uint32_t newPos = pos & ~(1 << i);
+        debug("* pos = %X newPos = %X beam = %X comparator() = %d\n", pos, newPos, beam, comparator(newPos));
         if (newPos >= beam && comparator(newPos)) {
             pos = newPos;
-        } else {
-            break;
         }
     }
     
@@ -357,13 +356,15 @@ Copper::disassemble(unsigned list, uint32_t offset)
 void
 Copper::serviceEvent(EventID id, int64_t data)
 {
-    debug("Servicing Copper event %d\n", id);
+    debug("(%d,%d): ", VPOS(amiga->dma.beam), HPOS(amiga->dma.beam));
     
     switch (id) {
             
         case COP_REQUEST_DMA:
             
-            /* In this state, Copper wait for a free DMA cycle.
+            plainmsg("COP_REQUEST_DMA\n");
+            
+            /* In this state, Copper waits for a free DMA cycle.
              * Once DMA access is granted, it continues with fetching the
              * first instruction word.
              */
@@ -377,6 +378,8 @@ Copper::serviceEvent(EventID id, int64_t data)
                 
                 // Load the first instruction word
                 copins1 = amiga->mem.peek16(coppc);
+                plainmsg("COP_FETCH: coppc = %X copins1 = %X\n", coppc, copins1);
+                amiga->dumpClock(); 
                 advancePC();
                 
                 // Determine the next state based on the instruction type
@@ -390,6 +393,7 @@ Copper::serviceEvent(EventID id, int64_t data)
                 
                 // Load the second instruction word
                 copins2 = amiga->mem.peek16(coppc);
+                plainmsg("COP_MOVE: coppc = %X copins2 = %X\n", coppc, copins2);
                 advancePC();
                 
                 // Extract register number from the first instruction word
@@ -416,6 +420,8 @@ Copper::serviceEvent(EventID id, int64_t data)
 
                 // Load the second instruction word
                 copins2 = amiga->mem.peek16(coppc);
+                plainmsg("COP_WAIT_OR_SKIP: coppc = %X copins2 = %X\n", coppc, copins2);
+                plainmsg("    VPHP = %X VMHM = %X\n", getVPHP(), getVMHM());
                 advancePC();
                 
                 // Is it a WAIT command?
@@ -430,8 +436,12 @@ Copper::serviceEvent(EventID id, int64_t data)
                     // In how many color clock cycles do we get there?
                     DMACycle delay = amiga->dma.beamDiff(trigger);
                     
+                    plainmsg("   trigger = (%d,%d) delay = %lld\n",
+                             VPOS(trigger), HPOS(trigger), delay);
+                    
                     // Schedule a wake up event
                     handler->scheduleRel(COP_SLOT, DMA_CYCLES(delay), COP_FETCH);
+                    amiga->dma.eventHandler.dump();
                 }
                 
                 // It must be a SKIP command then.
@@ -451,6 +461,7 @@ Copper::serviceEvent(EventID id, int64_t data)
         
             // Load COP1LC into the program counter
             coppc = coplc[0];
+            plainmsg("COP_JMP1: coppc = %X\n", coppc);
             handler->scheduleRel(COP_SLOT, DMA_CYCLES(2), COP_REQUEST_DMA);
             break;
 
@@ -458,6 +469,7 @@ Copper::serviceEvent(EventID id, int64_t data)
             
             // Load COP2LC into the program counter
             coppc = coplc[1];
+            plainmsg("COP_JMP2: coppc = %X\n", coppc);
             handler->scheduleRel(COP_SLOT, DMA_CYCLES(2), COP_REQUEST_DMA);
             break;
 

@@ -294,7 +294,7 @@ public:
     
     inline void sethpos(uint8_t value) { beam = (beam & ~0xFF) | value; }
     inline void setvpos(uint16_t value) { beam = (beam & 0xFF) | (value << 8); }
-    inline void incvpos() { beam += 256; }
+    inline void incvpos() { beam += 0x100; }
 
     uint16_t peekDMACON();
     void pokeDMACON(uint16_t value);

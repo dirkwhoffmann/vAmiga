@@ -182,6 +182,13 @@ private:
     
     // Returns true if the Copper has no access to this custom register
     bool illegalAddress(uint32_t address);
+
+
+    //
+    // Debugging
+    //
+    
+    
 };
 
 #endif 

@@ -862,7 +862,7 @@ Amiga::dumpClock()
              AS_CPU_CYCLES(amiga->ciaB.clock),
              AS_DMA_CYCLES(amiga->ciaB.clock),
              AS_CIA_CYCLES(amiga->ciaB.clock));
-    plainmsg("  Color clock: (%d,%d) hex: ($%X,$%X) Frame: %lld\n",
-            vp, hp, vp, hp, dma.frame);
+    plainmsg("  Color clock: %X (%d,%d) hex: ($%X,$%X) Frame: %lld\n",
+            dma.beam, vp, hp, vp, hp, dma.frame);
     plainmsg("\n");
 }

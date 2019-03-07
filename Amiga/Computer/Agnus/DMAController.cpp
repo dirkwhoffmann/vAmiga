@@ -765,7 +765,7 @@ DMAController::hsyncHandler()
 void
 DMAController::vsyncAction()
 {
-    debug("vsyncAction");
+    debug("vsyncAction\n");
     
     // CIA A counts VSYNCs
     amiga->ciaA.incrementTOD();
