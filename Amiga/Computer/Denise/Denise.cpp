@@ -169,6 +169,7 @@ void
 Denise::fillShiftRegisters()
 {
     // warn("fillShiftRegisters: IMPLEMENTATION MISSING (vpos = %d)\n", amiga->dma.vpos);
+    // warn("blpdat: %X %X %X %X\n", bpldat[0], bpldat[1], bpldat[2], bpldat[3]);
 }
 
 void

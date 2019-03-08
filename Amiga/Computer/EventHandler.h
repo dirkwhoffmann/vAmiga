@@ -119,8 +119,10 @@ typedef enum
     BLT_EXECUTE,
     BLT_EVENT_COUNT,
     
-    // HSYNC slot
+    // Raster slot
     RAS_HSYNC = 1,
+    RAS_DIWSTRT,
+    RAS_DIWDRAW,
     RAS_EVENT_COUNT,
     
     // SEC slot

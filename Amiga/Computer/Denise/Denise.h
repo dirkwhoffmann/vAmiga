@@ -50,6 +50,8 @@ public:
     uint16_t sprctl[8];
 
 
+
+
     
     /* The 6 bitplane parallel-to-serial shift registers
      * Denise transfers the current values of the bpldat registers into
@@ -163,23 +165,29 @@ public:
     // Returns true if we're running in LORES mode
     inline bool lores() { return !(bplcon0 & 0x8000); }
     
-    // Processes an event
+    
+    //
+    // Processing events
+    //
+    
+    // Processes an overdue event
     void serviceEvent(EventID id, int64_t data);
 
-    
-    
-    // uint16_t peekCOLORxx(int xx) { return colorizer.peekColorReg(xx); }
-    // void pokeCOLORxx(int xx, uint16_t value) { colorizer.pokeColorReg(xx, value); }
-    
-    // Returns the number of active bitplanes
-    // inline int activeBitplanes() { return (bplcon0 >> 12) & 0b111; }
 
     
     //
-    // Handling the shift register
+    // Handling DMA
     //
     
     void fillShiftRegisters();
+    
+    
+    //
+    // Synthesizing pixels
+    //
+    
+    
+    
     
     //
     // Debugging the component

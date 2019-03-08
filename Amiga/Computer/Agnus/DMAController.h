@@ -241,7 +241,7 @@ public:
     
     
     //
-    // Juggling cycles and beam positions
+    // Working with cycles and beam positions
     //
     
     // Returns the current beam position as a 17 bit value
@@ -339,13 +339,37 @@ public:
     Cycle beamDiff(int16_t vStart, int16_t hStart, int16_t vEnd, int16_t hEnd);
     Cycle beamDiff(int16_t vEnd, int16_t hEnd) { return beamDiff(vpos, hpos, vEnd, hEnd); }
     Cycle beamDiff(int32_t end) { return beamDiff(VPOS(end), HPOS(end)); }
+
+    /* HSYNC / VSYNC handlers
+     *
+     * These functions are called in the following order and positons:
+     *
+     *                   (0,0) : beginFrame()
+     *                   (0,0) : beginLine()
+     *            (0,HPOS_MAX) : endLine()
+     *                   (1,0) : beginLine()
+     *            (1,HPOS_MAX) : endLine()
+     *                   ...
+     *            (VPOS_MAX,0) : beginLine()
+     *     (VPOS_MAX,HPOS_MAX) : endLine()
+     *     (VPOS_MAX,HPOS_MAX) : endFrame()
+     *
+     * The functions are called in the hsyncHandler().
+     */
+    void beginLine();
+    void endLine();
+    void beginFrame();
+    void endFrame();
     
-    // This function is called when the end of a rasterline has been reached.
+    /* This functions serves the RAS_HSYNC event in the RAS slot.
+     * The RAS_HSYNC event is triggered at the end of each rasterline.
+     */
     void hsyncHandler();
 
     // This function is called when the end of a frame has been reached.
-    void vsyncAction();
+    // void vsyncAction();
 
+    
     //
     // DMA
     //
@@ -368,12 +392,20 @@ public:
     // Returns true if Copper is allowed to perform a DMA cycle
     bool copperCanHaveBus();
 
-    // Processes a regular DMA event (Disk, Audio, Sprites, Bitplanes)
+    
+    //
+    // Handling events
+    //
+    
+    // Processes a high-priority DMA event (Disk, Audio, Sprites, Bitplanes)
     void serviceDMAEvent(EventID id, int64_t data);
 
-    // Returns the number of active bitplanes
-    // int activeBitplanes(); 
-    
+    // Processes a raster event (Pixel drawing, HSYNC)
+    void serviceRASEvent(EventID id);
+
+    // Schedules the next RAS slot event
+    void scheduleNextRASEvent(int16_t vpos, int16_t hpos);
+ 
     /* Adds BPLxMOD to the pointers of the active bitplanes
      * This method is called whenever the bitplane DMA restarts.
      */

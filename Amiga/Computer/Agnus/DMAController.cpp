@@ -65,8 +65,8 @@ DMAController::_powerOn()
     ddfstrt = 0x38;
     ddfstop = 0xD0;
     
-    // Schedule the first HSYNC event
-    eventHandler.scheduleAbs(RAS_SLOT, DMA_CYCLES(0xE2), RAS_HSYNC);
+    // Schedule the first RAS event
+    eventHandler.scheduleAbs(RAS_SLOT, DMA_CYCLES(HPOS_MAX), RAS_HSYNC);
     
     // Schedule the first two CIA events
     eventHandler.scheduleAbs(CIAA_SLOT, CIA_CYCLES(1), CIA_EXECUTE);
@@ -698,10 +698,13 @@ DMAController::executeUntil(Cycle targetClock)
     while (clock <= targetClock - DMA_CYCLES(1)) {
    
         busOwner = 0;
-        
+   
+        // debug("*****\n");
+        // eventHandler.dump();
+
         // Process all pending events
         eventHandler.executeUntil(clock);
-        
+
         // Advance the internal counters
         hpos++;
         assert(hpos <= HPOS_MAX);
@@ -751,55 +754,85 @@ DMAController::beamDiff(uint32_t start, uint32_t end)
 */
 
 void
-DMAController::hsyncHandler()
+DMAController::beginFrame()
 {
-    // Verify that the event has been triggered at the correct beam position
-    assert(hpos == 226 /* 0xE2 */);
+    debug("beginFrame: Frame: %d\n", frame);
+
+    // Remember the clock count at SOF (Start Of Frame)
+    latchedClock = clock;
     
-    // Reset horizontal position
-    // Setting it to -1 ensures that it is 0 at the end of executeUntil()
-    hpos = -1;
+    // Add one because the DMA clock hasn't been advanced yet
+    latchedClock += DMA_CYCLES(1);
+}
+
+void
+DMAController::beginLine()
+{
+    // debug("beginLine: %d Frame: %d\n", vpos, frame);
     
-    // CIA B counts HSYNCs
-    amiga->ciaB.incrementTOD();
-    
-    // Check if the current frame has been completed
-    if (++vpos > VPOS_MAX)
-        vsyncAction();
-    
-    // Check if line 26 is next (Bitplane DMA starts here)
+    // Check if have reached line 26 (where bitplane DMA starts)
     if (vpos == 26) {
         buildDMAEventTable();
     }
     
-    // Schedule first DMA event of the new line (if any)
+    // Schedule the first hi-prio DMA event (if any)
     if (nextDmaEvent[0]) {
         EventID eventID = dmaEvent[nextDmaEvent[0]];
         eventHandler.schedulePos(DMA_SLOT, 26, nextDmaEvent[0], eventID);
     }
-    
-    // Schedule next HSYNC event
-    eventHandler.rescheduleRel(RAS_SLOT, DMA_CYCLES(0xE3));
 }
 
-void
-DMAController::vsyncAction()
+void DMAController::endLine()
 {
-    debug("vsyncAction(%lld)\n", frame);
+    // debug("endLine: %d Frame: %d\n", vpos, frame);
+
+    // Make sure that we are really at the end of the line
+    assert(hpos == 226 /* 0xE2 */);
+
+    // CIA B counts HSYNCs
+    amiga->ciaB.incrementTOD();
+}
+
+void DMAController::endFrame()
+{
+    debug("endFrame: %d Frame: %d\n", vpos, frame);
     
     // CIA A counts VSYNCs
     amiga->ciaA.incrementTOD();
     
     // Execute sub components
-    copper.vsyncAction(); 
+    copper.vsyncAction();
+}
 
-    // Advance counters
-    frame++;
-    latchedClock = clock + DMA_CYCLES(1);
-    vpos = 0;
+void
+DMAController::hsyncHandler()
+{
+    /* Important: When the end of a line is reached, we reset the horizontal
+     * counter. The new value should be 0. To make things work, we have to set
+     * it to -1, because there is an upcoming hpos++ instruction at the end
+     * of executeUntil(). This means that you can not rely on the correct
+     * hpos value in functions beginFrame() and beginLine(). The value will be
+     * -1 and not 0 as expected. Take care of that and fell free to come up
+     * with a nicer solution!
+     */
     
-    // Disable bitplane DMA
-    clearDMAEventTable();
+    // Finish the current line
+    endLine();
+
+    // Check if the current frame is finished
+    if (vpos == VPOS_MAX) {
+        endFrame();
+        frame++;
+        vpos = 0;
+        hpos = -1;
+        beginFrame();
+    } else {
+        vpos++;
+        hpos = -1;
+    }
+    
+    // Start the next line
+    beginLine();
 }
 
 void
@@ -930,3 +963,56 @@ DMAController::serviceDMAEvent(EventID id, int64_t data)
     }
 }
 
+void
+DMAController::serviceRASEvent(EventID id)
+{
+    switch (id) {
+            
+        case RAS_HSYNC:
+            
+            hsyncHandler();
+            break;
+            
+        case RAS_DIWSTRT:
+            
+            break;
+            
+        case RAS_DIWDRAW:
+            
+            break;
+            
+        default:
+            assert(false);
+            break;
+    }
+    
+    // Schedule next event
+    scheduleNextRASEvent(vpos, hpos);
+}
+
+void
+DMAController::scheduleNextRASEvent(int16_t vpos, int16_t hpos)
+{
+    // debug("scheduleNextRASEvent(%d, %d)\n", vpos, hpos);
+    
+    // Check if the vertical position is inside the drawing area
+    if (vpos >= vstrt && vpos <= vstop) {
+        
+        // Check if the next event is the first DIW event in this line
+        if (hpos < hstrt) {
+            eventHandler.schedulePos(RAS_SLOT, vpos, hstrt, RAS_DIWSTRT);
+            return;
+        }
+        
+        // Check if there is another DIW event to come in this line
+        if (hpos < hstop) {
+            eventHandler.schedulePos(RAS_SLOT, vpos, hstrt, RAS_DIWDRAW);
+            return;
+        }
+        
+        // If we come here, all DIW events have been processed
+    }
+    
+    // Schedule a HSYNC event to finish up the current line
+    eventHandler.schedulePos(RAS_SLOT, vpos, HPOS_MAX, RAS_HSYNC);
+}

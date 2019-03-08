@@ -154,6 +154,8 @@ EventHandler::_dumpPrimaryTable()
                         
                     case 0:                eventName = "none"; break;
                     case RAS_HSYNC:        eventName = "RAS_HSYNC"; break;
+                    case RAS_DIWSTRT:      eventName = "RAS_DIWSTRT"; break;
+                    case RAS_DIWDRAW:      eventName = "RAS_DIWDRAW"; break;
                     default:               eventName = "*** INVALID ***"; break;
                 }
                 break;
@@ -529,7 +531,7 @@ EventHandler::_executeUntil(Cycle cycle) {
     // Check for a raster event
     if (isDue(RAS_SLOT, cycle)) {
         assert(checkTriggeredEvent(RAS_SLOT));
-        amiga->dma.hsyncHandler();
+        amiga->dma.serviceRASEvent(eventSlot[RAS_SLOT].id);
     }
     
     // Check for a secondary event
@@ -541,7 +543,7 @@ EventHandler::_executeUntil(Cycle cycle) {
     nextTrigger = eventSlot[0].triggerCycle;
     for (unsigned i = 1; i < EVENT_SLOT_COUNT; i++)
         if (eventSlot[i].triggerCycle < nextTrigger)
-            nextTrigger = eventSlot[i].triggerCycle;
+            nextTrigger = eventSlot[i].triggerCycle;    
 }
 
 void
