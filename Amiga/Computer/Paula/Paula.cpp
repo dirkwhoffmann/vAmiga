@@ -87,7 +87,7 @@ Paula::peekINTENA()
 void
 Paula::pokeINTENA(uint16_t value)
 {
-    debug("pokeINTENA(%X)\n", value);
+    // debug("pokeINTENA(%X)\n", value);
     
     if (value & 0x8000) intena |= (value & 0x7FFF); else intena &= ~value;
 }

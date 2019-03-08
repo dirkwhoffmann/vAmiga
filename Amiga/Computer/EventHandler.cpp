@@ -17,7 +17,7 @@ EventHandler::EventHandler()
 void
 EventHandler::_powerOn()
 {
-    trace = (1 << BLT_SLOT);
+    trace = 0; // (1 << BLT_SLOT);
     
     // Wipe out the primary event table
     for (unsigned i = 0; i < EVENT_SLOT_COUNT; i++) {
@@ -315,8 +315,9 @@ EventHandler::schedulePos(EventSlot s, int16_t vpos, int16_t hpos, EventID id)
 {
     assert(isEventSlot(s));
  
-    if (trace & (1 << s)) {
-        debug("schedulePos(%d, (%d,%d), %d)\n", s, vpos, hpos, id);
+    // if (trace & (1 << s))
+    {
+        // debug("schedulePos(%d, (%d,%d), %d)\n", s, vpos, hpos, id);
     }
 
     Cycle cycle = amiga->dma.latchedClock;
@@ -543,7 +544,7 @@ EventHandler::_executeUntil(Cycle cycle) {
     nextTrigger = eventSlot[0].triggerCycle;
     for (unsigned i = 1; i < EVENT_SLOT_COUNT; i++)
         if (eventSlot[i].triggerCycle < nextTrigger)
-            nextTrigger = eventSlot[i].triggerCycle;    
+            nextTrigger = eventSlot[i].triggerCycle;
 }
 
 void
@@ -609,7 +610,7 @@ EventHandler::scheduleSecondaryAbs(EventSlot s, Cycle cycle, EventID id)
 {
     assert(isSecondarySlot(s));
     
-    // if (trace & (1 << s))
+    if (trace & (1 << s))
     {
         debug("scheduleSecondaryAbs(%d, %lld, %d)\n", s, cycle, id);
     }
@@ -632,7 +633,7 @@ EventHandler::scheduleSecondaryRel(EventSlot s, Cycle cycle, EventID id)
     
     cycle += amiga->dma.clock;
     
-    // if (trace & (1 << s))
+    if (trace & (1 << s))
     {
         debug("scheduleSecondaryRel(%d, %lld, %d)\n", s, cycle, id);
     }
@@ -647,5 +648,5 @@ EventHandler::scheduleSecondaryRel(EventSlot s, Cycle cycle, EventID id)
     if (cycle < eventSlot[SEC_SLOT].triggerCycle)
         rescheduleAbs(SEC_SLOT, cycle);
     
-    _dump();
+    // _dump();
 }

@@ -97,6 +97,11 @@ DMAController::_dump()
 {    
     amiga->dumpClock();
     
+    plainmsg("  hstrt : %d\n", hstrt);
+    plainmsg("  hstop : %d\n", hstop);
+    plainmsg("  vstrt : %d\n", vstrt);
+    plainmsg("  vstop : %d\n", vstop);
+
     plainmsg("\nDMA time slot allocation:\n\n");
 
     dumpDMAEventTable(0x00, 0x4F);
@@ -563,7 +568,7 @@ DMAController::pokeVPOS(uint16_t value)
 void
 DMAController::pokeDIWSTRT(uint16_t value)
 {
-    debug("pokeDIWSTRT(%X)\n", value);
+    debug("*** pokeDIWSTRT(%X)\n", value);
     
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // V7 V6 V5 V4 V3 V2 V1 V0 H7 H6 H5 H4 H3 H2 H1 H0  and  H8 = 0, H8 = 0
@@ -576,7 +581,7 @@ DMAController::pokeDIWSTRT(uint16_t value)
 void
 DMAController::pokeDIWSTOP(uint16_t value)
 {
-    debug("pokeDIWSTOP(%X)\n", value);
+    debug("*** pokeDIWSTOP(%X)\n", value);
     
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // V7 V6 V5 V4 V3 V2 V1 V0 H7 H6 H5 H4 H3 H2 H1 H0  and  H8 = 1, V8 = !V7
@@ -707,6 +712,7 @@ DMAController::executeUntil(Cycle targetClock)
 
         // Advance the internal counters
         hpos++;
+        if (hpos > HPOS_MAX) { dump(); }
         assert(hpos <= HPOS_MAX);
         clock += DMA_CYCLES(1);
     }
@@ -756,7 +762,7 @@ DMAController::beamDiff(uint32_t start, uint32_t end)
 void
 DMAController::beginFrame()
 {
-    debug("beginFrame: Frame: %d\n", frame);
+    debug("Frame %d\n", frame);
 
     // Remember the clock count at SOF (Start Of Frame)
     latchedClock = clock;
@@ -780,6 +786,10 @@ DMAController::beginLine()
         EventID eventID = dmaEvent[nextDmaEvent[0]];
         eventHandler.schedulePos(DMA_SLOT, 26, nextDmaEvent[0], eventID);
     }
+
+    // Schedule the first RAS event
+    scheduleNextRASEvent(vpos, hpos);
+
 }
 
 void DMAController::endLine()
@@ -795,13 +805,14 @@ void DMAController::endLine()
 
 void DMAController::endFrame()
 {
-    debug("endFrame: %d Frame: %d\n", vpos, frame);
+    // debug("endFrame: %d vpos: %d\n", frame, vpos);
     
     // CIA A counts VSYNCs
     amiga->ciaA.incrementTOD();
     
     // Execute sub components
     copper.vsyncAction();
+    amiga->denise.endOfFrame(); 
 }
 
 void
@@ -950,7 +961,9 @@ DMAController::serviceDMAEvent(EventID id, int64_t data)
             DO_DMA(bplpt[PLANE6], amiga->denise.bpldat[PLANE6]);
             break;
             
-        default: assert(false);
+        default:
+            debug("id = %d\n", id);
+            assert(false);
     }
     
     // Schedule next event
@@ -975,10 +988,12 @@ DMAController::serviceRASEvent(EventID id)
             
         case RAS_DIWSTRT:
             
+            // debug("RAS_DIWSTRT: (%d,%d)\n", vpos, hpos);
             break;
             
         case RAS_DIWDRAW:
-            
+
+            // debug("RAS_DIWDRAW: (%d,%d)\n", vpos, hpos);
             break;
             
         default:
@@ -986,32 +1001,37 @@ DMAController::serviceRASEvent(EventID id)
             break;
     }
     
-    // Schedule next event
+    // Schedule next RAS event (HSYNC if no more DIW happen in this line)
     scheduleNextRASEvent(vpos, hpos);
 }
 
 void
 DMAController::scheduleNextRASEvent(int16_t vpos, int16_t hpos)
 {
-    // debug("scheduleNextRASEvent(%d, %d)\n", vpos, hpos);
+ 
+    // WE DON'T USED THE DIW EVENTS FOR NOW ...
+    /*
     
     // Check if the vertical position is inside the drawing area
     if (vpos >= vstrt && vpos <= vstop) {
         
         // Check if the next event is the first DIW event in this line
         if (hpos < hstrt) {
+            // debug("Next RAS event is %d at (%d,%d)\n", RAS_DIWSTRT, vpos, hstrt);
             eventHandler.schedulePos(RAS_SLOT, vpos, hstrt, RAS_DIWSTRT);
             return;
         }
         
         // Check if there is another DIW event to come in this line
         if (hpos < hstop) {
+            // debug("Next RAS event is %d at (%d,%d)\n", RAS_DIWDRAW, vpos, hstrt);
             eventHandler.schedulePos(RAS_SLOT, vpos, hstrt, RAS_DIWDRAW);
             return;
         }
         
         // If we come here, all DIW events have been processed
     }
+    */
     
     // Schedule a HSYNC event to finish up the current line
     eventHandler.schedulePos(RAS_SLOT, vpos, HPOS_MAX, RAS_HSYNC);

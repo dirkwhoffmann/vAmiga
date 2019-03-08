@@ -254,9 +254,9 @@ Blitter::pokeBLTSIZE(uint16_t value)
     } else {
         
         // Set width and height counters
-        wcounter = bltsizeW();
-        hcounter = bltsizeH();
-
+        wcounter = bltsizeW() ? bltsizeW() : 1024;
+        hcounter = bltsizeH() ? bltsizeH() : 64;
+        
         // Load micro instruction code
         loadMicrocode();
         

@@ -361,7 +361,7 @@ Copper::serviceEvent(EventID id, int64_t data)
             
         case COP_REQUEST_DMA:
             
-            plainmsg("COP_REQUEST_DMA\n");
+            // plainmsg("COP_REQUEST_DMA\n");
             
             /* In this state, Copper waits for a free DMA cycle.
              * Once DMA access is granted, it continues with fetching the

@@ -136,7 +136,7 @@ void
 Denise::pokeBPLxDAT(int x, uint16_t value)
 {
     assert(x < 6);
-    debug("pokeBPL%dDAT(%X)\n", x, value);
+    // debug("pokeBPL%dDAT(%X)\n", x + 1, value);
     
     bpldat[x] = value;
 }
@@ -145,7 +145,7 @@ void
 Denise::pokeSPRxPOS(int x, uint16_t value)
 {
     assert(x < 8);
-    debug("pokeSPR%dPOS(%X)\n", x, value);
+    // debug("pokeSPR%dPOS(%X)\n", x, value);
     
     sprpos[x] = value;
 }
@@ -154,7 +154,7 @@ void
 Denise::pokeSPRxCTL(int x, uint16_t value)
 {
     assert(x < 8);
-    debug("pokeSPR%dCTL(%X)\n", x, value);
+    // debug("pokeSPR%dCTL(%X)\n", x, value);
     
     sprctl[x] = value;
 }
@@ -170,16 +170,72 @@ Denise::fillShiftRegisters()
 {
     // warn("fillShiftRegisters: IMPLEMENTATION MISSING (vpos = %d)\n", amiga->dma.vpos);
     // warn("blpdat: %X %X %X %X\n", bpldat[0], bpldat[1], bpldat[2], bpldat[3]);
+
+    shiftReg[0] = bpldat[0];
+    shiftReg[1] = bpldat[1];
+    shiftReg[2] = bpldat[2];
+    shiftReg[3] = bpldat[3];
+    shiftReg[4] = bpldat[4];
+    shiftReg[5] = bpldat[5];
+
+    draw16();
+}
+
+void
+Denise::draw16()
+{
+    int16_t vpos = amiga->dma.vpos;
+    int16_t hpos = amiga->dma.hpos; // - 63;
+    
+    // debug("draw16: (%d, %d)\n", vpos, hpos);
+    
+    uint32_t offset = (vpos * HPIXELS) + (hpos * 4);
+    if (offset + HPIXELS >= VPIXELS * HPIXELS) {
+        // warn("OUT OF RANGE!!!\n");
+        return;
+        
+    }
+    
+    uint8_t index;
+    
+    for (int i = 0; i < 16; i++) {
+        
+        // Read a bit slice
+        index =
+        ((shiftReg[0] & 0x8000) >> 15) |
+        ((shiftReg[1] & 0x8000) >> 14) |
+        ((shiftReg[2] & 0x8000) >> 13) |
+        ((shiftReg[3] & 0x8000) >> 12) |
+        ((shiftReg[4] & 0x8000) >> 11) |
+        ((shiftReg[5] & 0x8000) >> 10);
+        
+        for (unsigned i = 0; i < 6; i++) {
+            shiftReg[i] <<= 1;
+        }
+
+        // index = ((hpos / 2) % 2 == 0) ? 0 : 1;
+        
+        if (index == 0) {
+            pixelBuffer[offset + (2 * i)] = 0;
+            pixelBuffer[offset + (2 * i) + 1] = 0;
+        } else {
+            pixelBuffer[offset + (2 * i)] = 0x000000FF;
+            pixelBuffer[offset + (2 * i) + 1] = 0x000000FF;
+        }
+    }
 }
 
 void
 Denise::endOfFrame()
 {
+    bufferoffset = 0;
+    
     // Switch the active frame buffer
     frameBuffer = (frameBuffer == longFrame) ? shortFrame : longFrame;
     pixelBuffer = frameBuffer;
     
     // Toggle the fake image from time to time
+    /*
     if ((frame / 25) % 2) {
         memcpy((void *)longFrame, fakeImage1, BUFSIZE);
         memcpy((void *)shortFrame, fakeImage1, BUFSIZE);
@@ -187,6 +243,7 @@ Denise::endOfFrame()
         memcpy((void *)longFrame, fakeImage2, BUFSIZE);
         memcpy((void *)shortFrame, fakeImage2, BUFSIZE);
     }
+    */
     
     // Take a snapshot once in a while
     if (amiga->getTakeAutoSnapshots() && amiga->getSnapshotInterval() > 0) {

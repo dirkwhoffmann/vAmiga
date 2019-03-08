@@ -186,7 +186,8 @@ public:
     // Synthesizing pixels
     //
     
-    
+    // Synthesizes 16 pixels from the current shift register data
+    void draw16();
     
     
     //
