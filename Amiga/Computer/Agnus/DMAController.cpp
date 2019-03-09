@@ -760,21 +760,52 @@ DMAController::beamDiff(uint32_t start, uint32_t end)
 */
 
 void
-DMAController::beginFrame()
+DMAController::hsyncHandler()
 {
-    debug("Frame %d\n", frame);
+    // Make sure that we are really at the end of the line
+    assert(hpos == 226 /* 0xE2 */);
 
-    // Remember the clock count at SOF (Start Of Frame)
-    latchedClock = clock;
+    // CIA B counts HSYNCs
+    amiga->ciaB.incrementTOD();
     
-    // Add one because the DMA clock hasn't been advanced yet
-    latchedClock += DMA_CYCLES(1);
-}
+    // Add bit plane pointer modulo values
+    bplpt[0] += bpl1mod;
+    bplpt[1] += bpl2mod;
+    bplpt[2] += bpl1mod;
+    bplpt[3] += bpl2mod;
+    bplpt[4] += bpl1mod;
+    bplpt[5] += bpl2mod;
 
-void
-DMAController::beginLine()
-{
-    // debug("beginLine: %d Frame: %d\n", vpos, frame);
+    // Increment vpos and reset hpos
+    
+    /* Important: When the end of a line is reached, we reset the horizontal
+     * counter. The new value should be 0. To make things work, we have to set
+     * it to -1, because there is an upcoming hpos++ instruction at the end
+     * of executeUntil(). This means that we can not rely on the correct
+     * hpos value in the hsync and vsync handlers(). The value will be
+     * -1 and not 0 as expected. Take care of that and fell free to come up
+     * with a nicer solution!
+     */
+    vpos++;
+    hpos = -1;
+
+    // Check if the current frame is finished
+    if (vpos > VPOS_MAX) {
+        vsyncHandler();
+    }
+    
+    /*
+        endFrame();
+        frame++;
+        vpos = 0;
+        hpos = -1;
+        beginFrame();
+    } else {
+        vpos++;
+        hpos = -1;
+    }
+    */
+    
     
     // Check if have reached line 26 (where bitplane DMA starts)
     if (vpos == 26) {
@@ -786,64 +817,33 @@ DMAController::beginLine()
         EventID eventID = dmaEvent[nextDmaEvent[0]];
         eventHandler.schedulePos(DMA_SLOT, 26, nextDmaEvent[0], eventID);
     }
-
+    
     // Schedule the first RAS event
     scheduleNextRASEvent(vpos, hpos);
-
-}
-
-void DMAController::endLine()
-{
-    // debug("endLine: %d Frame: %d\n", vpos, frame);
-
-    // Make sure that we are really at the end of the line
-    assert(hpos == 226 /* 0xE2 */);
-
-    // CIA B counts HSYNCs
-    amiga->ciaB.incrementTOD();
-}
-
-void DMAController::endFrame()
-{
-    // debug("endFrame: %d vpos: %d\n", frame, vpos);
-    
-    // CIA A counts VSYNCs
-    amiga->ciaA.incrementTOD();
-    
-    // Execute sub components
-    copper.vsyncAction();
-    amiga->denise.endOfFrame(); 
 }
 
 void
-DMAController::hsyncHandler()
+DMAController::vsyncHandler()
 {
-    /* Important: When the end of a line is reached, we reset the horizontal
-     * counter. The new value should be 0. To make things work, we have to set
-     * it to -1, because there is an upcoming hpos++ instruction at the end
-     * of executeUntil(). This means that you can not rely on the correct
-     * hpos value in functions beginFrame() and beginLine(). The value will be
-     * -1 and not 0 as expected. Take care of that and fell free to come up
-     * with a nicer solution!
-     */
+    // Increment frame and reset vpos
+    frame++;
+    vpos = 0;
     
-    // Finish the current line
-    endLine();
+    debug("Frame %d\n", frame);
+    
+    // Remember the clock count at SOF (Start Of Frame)
+    // Add one because the DMA clock hasn't been advanced yet
+    latchedClock = clock + DMA_CYCLES(1);
+    
+    // CIA A counts VSYNCs
+    amiga->ciaA.incrementTOD();
 
-    // Check if the current frame is finished
-    if (vpos == VPOS_MAX) {
-        endFrame();
-        frame++;
-        vpos = 0;
-        hpos = -1;
-        beginFrame();
-    } else {
-        vpos++;
-        hpos = -1;
-    }
+    // Trigger VSYNC interrupt
+    amiga->paula.pokeINTREQ(0x8020);
     
-    // Start the next line
-    beginLine();
+    // Let the sub components do their own VSYNC stuff
+    copper.vsyncAction();
+    amiga->denise.endOfFrame();
 }
 
 void

@@ -47,7 +47,7 @@ typedef enum
     TBE_IRQ_SLOT,     // Source 0 IRQ (Serial port transmit buffer empty)
     DSKBLK_IRQ_SLOT,  // Source 1 IRQ (Disk block finished)
     SOFT_IRQ_SLOT,    // Source 2 IRQ (Software-initiated)
-    PORTS_IRQ_SLOT,   // Source 3 IRQ (I/0 ports and timers)
+    PORTS_IRQ_SLOT,   // Source 3 IRQ (I/O ports and CIA A)
     COPR_IRQ_SLOT,    // Source 4 IRQ (Copper)
     VERTB_IRQ_SLOT,   // Source 5 IRQ (Start of vertical blank)
     BLIT_IRQ_SLOT,    // Source 6 IRQ (Blitter finished)
@@ -57,6 +57,7 @@ typedef enum
     AUD3_IRQ_SLOT,    // Source 10 IRQ (Audio channel 3 block finished)
     RBF_IRQ_SLOT,     // Source 11 IRQ (Serial port receive buffer full)
     DSKSYN_IRQ_SLOT,  // Source 12 IRQ (Disk sync register matches disk data)
+    EXTER_IRQ_SLOT,   // Source 13 IRQ (I/O ports and CIA B)
     SEC_SLOT_COUNT,
     
 } EventSlot;
@@ -285,6 +286,7 @@ public:
 
     // Returns true if the specified event slot is due at the provided cycle
     inline bool isDue(EventSlot s, Cycle cycle) { return cycle >= eventSlot[s].triggerCycle; }
+    inline bool isDueSec(EventSlot s, Cycle cycle) { return cycle >= secondarySlot[s].triggerCycle; }
 
     // Performs some debugging checks. Won't be executed in release build.
     bool checkScheduledEvent(EventSlot s);
@@ -324,8 +326,10 @@ public:
      */
     // void cancelSecondary(EventSlot s);
 
+private:
     
-    
+    // Serves an IRQ_SET or IRQ_CLEAR event
+    void serveIRQEvent(EventSlot slot, int irqBit);
 };
 
 #endif

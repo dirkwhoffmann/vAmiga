@@ -191,7 +191,7 @@ public:
     uint16_t bpl2mod = 0; // even planes
     
     /* Display window coordinates
-     * These values are calculated out of diwstrt and diwsstop and updated
+     * These values are calculated out of diwstrt and diwstop and updated
      * automatically inside pokeDIWSTRT() and pokeDIWSTOP().
      */
     uint16_t hstrt = 0;
@@ -340,34 +340,13 @@ public:
     Cycle beamDiff(int16_t vEnd, int16_t hEnd) { return beamDiff(vpos, hpos, vEnd, hEnd); }
     Cycle beamDiff(int32_t end) { return beamDiff(VPOS(end), HPOS(end)); }
 
-    /* HSYNC / VSYNC handlers
-     *
-     * These functions are called in the following order and positons:
-     *
-     *                   (0,0) : beginFrame()
-     *                   (0,0) : beginLine()
-     *            (0,HPOS_MAX) : endLine()
-     *                   (1,0) : beginLine()
-     *            (1,HPOS_MAX) : endLine()
-     *                   ...
-     *            (VPOS_MAX,0) : beginLine()
-     *     (VPOS_MAX,HPOS_MAX) : endLine()
-     *     (VPOS_MAX,HPOS_MAX) : endFrame()
-     *
-     * The functions are called in the hsyncHandler().
-     */
-    void beginLine();
-    void endLine();
-    void beginFrame();
-    void endFrame();
-    
     /* This functions serves the RAS_HSYNC event in the RAS slot.
      * The RAS_HSYNC event is triggered at the end of each rasterline.
      */
     void hsyncHandler();
 
     // This function is called when the end of a frame has been reached.
-    // void vsyncAction();
+    void vsyncHandler();
 
     
     //

@@ -203,6 +203,7 @@ EventHandler::_dumpSecondaryTable()
             case AUD3_IRQ_SLOT:      slotName = "AUD3_IRQ"; break;
             case RBF_IRQ_SLOT:       slotName = "RBF_IRQ"; break;
             case DSKSYN_IRQ_SLOT:    slotName = "DSKSYN_IRQ"; break;
+            case EXTER_IRQ_SLOT:     slotName = "EXTER_IRQ"; break;
             default:                 slotName = "*** INVALID ***"; break;
         }
         
@@ -231,6 +232,7 @@ EventHandler::_dumpSecondaryTable()
             case AUD3_IRQ_SLOT:
             case RBF_IRQ_SLOT:
             case DSKSYN_IRQ_SLOT:
+            case EXTER_IRQ_SLOT:
                 
                 switch (secondarySlot[i].id) {
                         
@@ -551,50 +553,52 @@ void
 EventHandler::_executeSecondaryUntil(Cycle cycle) {
 
     // Check all event slots one by one
-    if (isDue(HSYNC_SLOT, cycle)) {
+    if (isDueSec(HSYNC_SLOT, cycle)) { // DEPRECATED
         secondarySlot[HSYNC_SLOT].triggerCycle = NEVER;
     }
-    if (isDue(TBE_IRQ_SLOT, cycle)) {
-        secondarySlot[TBE_IRQ_SLOT].triggerCycle = NEVER;
+    if (isDueSec(TBE_IRQ_SLOT, cycle)) {
+        serveIRQEvent(TBE_IRQ_SLOT, 0);
     }
-    if (isDue(DSKBLK_IRQ_SLOT, cycle)) {
-        secondarySlot[DSKBLK_IRQ_SLOT].triggerCycle = NEVER;
+    if (isDueSec(DSKBLK_IRQ_SLOT, cycle)) {
+        serveIRQEvent(DSKBLK_IRQ_SLOT, 1);
     }
-    if (isDue(SOFT_IRQ_SLOT, cycle)) {
-        secondarySlot[SOFT_IRQ_SLOT].triggerCycle = NEVER;
+    if (isDueSec(SOFT_IRQ_SLOT, cycle)) {
+        serveIRQEvent(SOFT_IRQ_SLOT, 2);
     }
-    if (isDue(PORTS_IRQ_SLOT, cycle)) {
-        secondarySlot[PORTS_IRQ_SLOT].triggerCycle = NEVER;
+    if (isDueSec(PORTS_IRQ_SLOT, cycle)) {
+        serveIRQEvent(PORTS_IRQ_SLOT, 3);
     }
-    if (isDue(COPR_IRQ_SLOT, cycle)) {
-        secondarySlot[COPR_IRQ_SLOT].triggerCycle = NEVER;
+    if (isDueSec(COPR_IRQ_SLOT, cycle)) {
+        serveIRQEvent(COPR_IRQ_SLOT, 4);
     }
-    if (isDue(VERTB_IRQ_SLOT, cycle)) {
-        secondarySlot[VERTB_IRQ_SLOT].triggerCycle = NEVER;
+    if (isDueSec(VERTB_IRQ_SLOT, cycle)) {
+        serveIRQEvent(VERTB_IRQ_SLOT, 5);
     }
-    if (isDue(BLIT_IRQ_SLOT, cycle)) {
-        debug("**** BLITTER IRQ\n");
-        secondarySlot[BLIT_IRQ_SLOT].triggerCycle = NEVER;
+    if (isDueSec(BLIT_IRQ_SLOT, cycle)) {
+        serveIRQEvent(BLIT_IRQ_SLOT, 6);
     }
-    if (isDue(AUD0_IRQ_SLOT, cycle)) {
-        secondarySlot[AUD0_IRQ_SLOT].triggerCycle = NEVER;
+    if (isDueSec(AUD0_IRQ_SLOT, cycle)) {
+        serveIRQEvent(AUD0_IRQ_SLOT, 7);
     }
-    if (isDue(AUD1_IRQ_SLOT, cycle)) {
-        secondarySlot[AUD1_IRQ_SLOT].triggerCycle = NEVER;
+    if (isDueSec(AUD1_IRQ_SLOT, cycle)) {
+        serveIRQEvent(AUD1_IRQ_SLOT, 8);
     }
-    if (isDue(AUD2_IRQ_SLOT, cycle)) {
-        secondarySlot[AUD2_IRQ_SLOT].triggerCycle = NEVER;
+    if (isDueSec(AUD2_IRQ_SLOT, cycle)) {
+        serveIRQEvent(AUD2_IRQ_SLOT, 9);
     }
-    if (isDue(AUD3_IRQ_SLOT, cycle)) {
-        secondarySlot[AUD3_IRQ_SLOT].triggerCycle = NEVER;
+    if (isDueSec(AUD3_IRQ_SLOT, cycle)) {
+        serveIRQEvent(AUD3_IRQ_SLOT, 10);
     }
-    if (isDue(RBF_IRQ_SLOT, cycle)) {
-        secondarySlot[RBF_IRQ_SLOT].triggerCycle = NEVER;
+    if (isDueSec(RBF_IRQ_SLOT, cycle)) {
+        serveIRQEvent(RBF_IRQ_SLOT, 11);
     }
-    if (isDue(DSKSYN_IRQ_SLOT, cycle)) {
-        secondarySlot[DSKSYN_IRQ_SLOT].triggerCycle = NEVER;
+    if (isDueSec(DSKSYN_IRQ_SLOT, cycle)) {
+        serveIRQEvent(DSKSYN_IRQ_SLOT, 12);
     }
-    
+    if (isDueSec(EXTER_IRQ_SLOT, cycle)) {
+        serveIRQEvent(EXTER_IRQ_SLOT, 13);
+    }
+
     // Determine the next trigger cycle
     nextSecTrigger = secondarySlot[0].triggerCycle;
     for (unsigned i = 1; i < SEC_SLOT_COUNT; i++)
@@ -647,6 +651,16 @@ EventHandler::scheduleSecondaryRel(EventSlot s, Cycle cycle, EventID id)
     // Update the secondary table trigger in the primary table
     if (cycle < eventSlot[SEC_SLOT].triggerCycle)
         rescheduleAbs(SEC_SLOT, cycle);
-    
-    // _dump();
+}
+
+void
+EventHandler::serveIRQEvent(EventSlot slot, int irqBit)
+{
+    if (secondarySlot[slot].id == IRQ_SET) {
+        amiga->paula.setINTREQ(0x8000 | (1 << irqBit));
+    } else {
+        assert(secondarySlot[slot].id == IRQ_CLEAR);
+        amiga->paula.setINTREQ(1 << irqBit);
+    }
+    secondarySlot[slot].triggerCycle = NEVER;
 }

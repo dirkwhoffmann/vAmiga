@@ -127,6 +127,14 @@ public:
     // Interrupts
     //
     
+public:
+
+    // Changes the value of INTREQ
+    void setINTREQ(uint16_t value);
+
+    // Changes the value of INTENA
+    void setINTENA(uint16_t value);
+
 private:
 
     // Computes the interrupt level of a pending interrupt.
@@ -136,15 +144,19 @@ private:
     void checkInterrupt();
     
     // Sets a bit in register INTENA
+    // DEPRECATED
     void setBitINTENA(unsigned nr) { intena |= (1 << nr); checkInterrupt(); }
 
     // Clears a bit in register INTENA
+    // DEPRECATED
     void clearBitINTENA(unsigned nr) { intena &= ~(1 << nr); checkInterrupt(); }
 
     // Sets a bit in register INTREQ
+    // DEPRECATED
     void setBitINTREQ(unsigned nr) { intreq |= (1 << nr); checkInterrupt(); }
 
     // Clears a bit in register INTREQ
+    // DEPRECATED
     void clearBitINTREQ(unsigned nr) { intreq &= ~(1 << nr); checkInterrupt(); }
 
 

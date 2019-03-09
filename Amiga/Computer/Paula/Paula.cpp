@@ -74,8 +74,7 @@ void
 Paula::pokeINTREQ(uint16_t value)
 {
     debug("pokeINTREQ(%X)\n", value);
-    
-    if (value & 0x8000) intreq |= (value & 0x7FFF); else intreq &= ~value;
+    setINTREQ(value);
 }
 
 uint16_t
@@ -87,24 +86,41 @@ Paula::peekINTENA()
 void
 Paula::pokeINTENA(uint16_t value)
 {
-    // debug("pokeINTENA(%X)\n", value);
-    
-    if (value & 0x8000) intena |= (value & 0x7FFF); else intena &= ~value;
+    debug("pokeINTENA(%X)\n", value);
+    setINTENA(value);
 }
 
+void
+Paula::setINTREQ(uint16_t value)
+{
+    debug("setINTREQ(%X)\n", value);
+    
+    if (value & 0x8000) intreq |= (value & 0x7FFF); else intreq &= ~value;
+    checkInterrupt();
+}
 
+void
+Paula::setINTENA(uint16_t value)
+{
+    debug("setINTENA(%X)\n", value);
+    
+    if (value & 0x8000) intena |= (value & 0x7FFF); else intena &= ~value;
+    checkInterrupt();
+}
 
 int
 Paula::interruptLevel()
 {
     uint16_t mask = intreq & intena;
-
-    if (mask & 0b0110000000000000) return 6;
-    if (mask & 0b0001100000000000) return 5;
-    if (mask & 0b0000011110000000) return 4;
-    if (mask & 0b0000000001110000) return 3;
-    if (mask & 0b0000000000001000) return 2;
-    if (mask & 0b0000000000000111) return 1;
+    
+    if (intena & 0x4000 /* INTEN */) {
+        if (mask & 0b0110000000000000) return 6;
+        if (mask & 0b0001100000000000) return 5;
+        if (mask & 0b0000011110000000) return 4;
+        if (mask & 0b0000000001110000) return 3;
+        if (mask & 0b0000000000001000) return 2;
+        if (mask & 0b0000000000000111) return 1;
+    }
     
     return 0;
 }
@@ -115,11 +131,9 @@ Paula::checkInterrupt()
     int level = interruptLevel();
     if (level != irqLevel) {
 
-        debug("*** TRIGGERING INTERRUPT (FIRST TIME, WOOHOO!)\n");
+        debug("*** TRIGGERING INTERRUPT\n");
         irqLevel = level;
         m68k_set_irq(irqLevel);
-
-        assert(false);
     }
 }
 
