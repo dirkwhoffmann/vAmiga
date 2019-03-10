@@ -814,7 +814,11 @@ Amiga::runLoop()
 
             // Record executed instruction in the trace buffer
             cpu.recordInstruction();
-            
+            /*
+            char diss[128];
+            m68k_disassemble(diss, cpu.getPC(), M68K_CPU_TYPE_68000);
+            printf("%s\n", diss);
+            */
             // Check if a breakpoint has been reached
             if (cpu.bpManager.shouldStop()) {
                 stop = true;

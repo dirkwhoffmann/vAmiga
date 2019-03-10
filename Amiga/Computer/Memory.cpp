@@ -232,7 +232,7 @@ Memory::updateMemSrcTable()
     bool rtc = amiga ? amiga->config.realTimeClock : false;
     bool ovl = amiga ? (amiga->ciaA.getPA() & 1) : false;
     
-    debug("updateMemSrcTable: rtc = %d ovl = %d\n", rtc, ovl);
+    // debug("updateMemSrcTable: rtc = %d ovl = %d\n", rtc, ovl);
     
     // Start from scratch
     for (unsigned i = 0x00; i <= 0xFF; i++)

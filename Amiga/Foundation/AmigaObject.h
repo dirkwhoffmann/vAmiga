@@ -96,9 +96,13 @@ protected:
      *   - warn    Warning message (Does not terminate the program)
      *   - panic   Error message   (Terminates the program)
      *
-     * All messages are prefixed by the string description of the printing
-     * object. To omit the prefix, use plainmsg or plaindebug instead.
+     * All messages are prefixed by the string description printed by function
+     * prefix(). To omit the prefix, use plainmsg or plaindebug instead.
+     * Some Amiga objects overwrite prefix() to provide addition standard
+     * debug information when a message is printed.
      */
+    virtual void prefix();
+
     void msg(const char *fmt, ...);
     void plainmsg(const char *fmt, ...);
     

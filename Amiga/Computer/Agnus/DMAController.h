@@ -215,6 +215,7 @@ public:
     
     DMAController();
     ~DMAController();
+ 
     
     //
     // Methods from HardwareComponent

@@ -65,6 +65,9 @@ DMAController::_powerOn()
     ddfstrt = 0x38;
     ddfstop = 0xD0;
     
+    // Initialize lookup tables
+    buildDMAEventTable();
+    
     // Schedule the first RAS event
     eventHandler.scheduleAbs(RAS_SLOT, DMA_CYCLES(HPOS_MAX), RAS_HSYNC);
     
@@ -794,19 +797,6 @@ DMAController::hsyncHandler()
         vsyncHandler();
     }
     
-    /*
-        endFrame();
-        frame++;
-        vpos = 0;
-        hpos = -1;
-        beginFrame();
-    } else {
-        vpos++;
-        hpos = -1;
-    }
-    */
-    
-    
     // Check if have reached line 26 (where bitplane DMA starts)
     if (vpos == 26) {
         buildDMAEventTable();
@@ -829,7 +819,7 @@ DMAController::vsyncHandler()
     frame++;
     vpos = 0;
     
-    debug("Frame %d\n", frame);
+    debug("[%d]\n", frame);
     
     // Remember the clock count at SOF (Start Of Frame)
     // Add one because the DMA clock hasn't been advanced yet

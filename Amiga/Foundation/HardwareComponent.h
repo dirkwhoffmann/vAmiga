@@ -108,8 +108,19 @@ public:
     
     
     //
+    // Methods from AmigaObject
+    //
+    
+private:
+    
+    void prefix() override;
+    
+    
+    //
     // Initializing the component
     //
+    
+public:
     
     /* Assign top-level C64 object.
      * The provided reference is propagated automatically to all sub components.

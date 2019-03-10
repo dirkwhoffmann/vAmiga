@@ -16,6 +16,16 @@ HardwareComponent::~HardwareComponent()
 }
 
 void
+HardwareComponent::prefix()
+{
+    fprintf(stderr, "[%lld] (%d,%d): ",
+            amiga->dma.frame, amiga->dma.vpos, amiga->dma.hpos); 
+
+    if (getDescription())
+        fprintf(stderr, "%s: ", getDescription());
+}
+
+void
 HardwareComponent::setAmiga(Amiga *amiga)
 {
     assert(this->amiga == NULL);

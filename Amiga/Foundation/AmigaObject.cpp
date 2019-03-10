@@ -17,41 +17,19 @@ va_start(ap, fmt); \
 vsnprintf(buf, sizeof(buf), fmt, ap); \
 va_end(ap);
 
-#define VAPRINTPLAIN(prefix) \
-fprintf(stderr, "%s%s", prefix, buf);
+#define VAPRINTPLAIN(trailer) \
+fprintf(stderr, "%s%s", trailer, buf);
 
-#define VAPRINT(prefix) \
-if (description) \
-fprintf(stderr, "%s: %s%s", description, prefix, buf); \
-else \
-fprintf(stderr, "%s%s", prefix, buf);
+#define VAPRINT(trailer) \
+prefix(); \
+fprintf(stderr, "%s%s", trailer, buf);
 
-/*
 void
-AmigaObject::trace()
+AmigaObject::prefix()
 {
-#ifndef NDEBUG // Generate code in debug build, only.
-
-    if (traceCounter > 0) {
-        traceCounter--;
-        _trace();
-    }
-
-#endif
+    if (description)
+        fprintf(stderr, "%s: ", description);
 }
-*/
-
-void msg(const char *fmt, ...);
-void plainmsg(const char *fmt, ...);
-
-void debug(const char *fmt, ...);
-void debug(int level, const char *fmt, ...);
-void plaindebug(const char *fmt, ...);
-void plaindebug(int level, const char *fmt, ...);
-
-void warn(const char *fmt, ...);
-void panic(const char *fmt, ...);
-
 
 void
 AmigaObject::msg(const char *fmt, ...)

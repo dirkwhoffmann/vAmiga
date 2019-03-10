@@ -1214,13 +1214,13 @@ CIAA::updatePA()
 
     // Power LED bit
     if ((oldPA ^ PA) & 0b00000010) {
-        debug("/LED has changed\n");
+        // debug("/LED has changed\n");
         amiga->putMessage((PA & 0b00000010) ? MSG_POWER_LED_OFF : MSG_POWER_LED_ON);
     }
 
     // Kickstart overlay bit (OVL)
     if ((oldPA ^ PA) & 0b00000001) {
-        debug("OVL has changed\n");
+        // debug("OVL has changed\n");
         amiga->mem.updateMemSrcTable();
     }
 }
