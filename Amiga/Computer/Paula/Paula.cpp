@@ -113,31 +113,29 @@ Paula::interruptLevel()
 {
     uint16_t mask = intreq & intena;
     
-    if (mask & 0b0110000000000000) return 6;
-    if (mask & 0b0001100000000000) return 5;
-    if (mask & 0b0000011110000000) return 4;
-    if (mask & 0b0000000001110000) return 3;
-    if (mask & 0b0000000000001000) return 2;
-    if (mask & 0b0000000000000111) return 1;
-    
+    if (intena & 0x4000) {
+        if (mask & 0b0110000000000000) return 6;
+        if (mask & 0b0001100000000000) return 5;
+        if (mask & 0b0000011110000000) return 4;
+        if (mask & 0b0000000001110000) return 3;
+        if (mask & 0b0000000000001000) return 2;
+        if (mask & 0b0000000000000111) return 1;
+    }
+
     return 0;
 }
 
 void
 Paula::checkInterrupt()
 {
-    if (intena & 0x4000) {
+    int level = interruptLevel();
         
-        int level = interruptLevel();
-        
-        if (level) {
-            debug("*** TRIGGERING LEVEL %d INTERRUPT: mask = %X\n", level, intena & intreq);
-        } else {
-            // debug("*** SETTING IRQ LEVEL TO 0\n");
-        }
-        
-        irqLevel = level;
-        m68k_set_irq(level);
+    if (level) {
+        debug("*** TRIGGERING LEVEL %d INTERRUPT: mask = %X\n", level, intena & intreq);
+    } else {
+        debug("*** SETTING IRQ LEVEL TO 0\n");
     }
+    
+    m68k_set_irq(level);
 }
 

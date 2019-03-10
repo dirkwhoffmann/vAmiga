@@ -18,8 +18,20 @@ HardwareComponent::~HardwareComponent()
 void
 HardwareComponent::prefix()
 {
-    fprintf(stderr, "[%lld] (%d,%d): ",
+    fprintf(stderr, "[%lld] (%3d,%3d) ",
             amiga->dma.frame, amiga->dma.vpos, amiga->dma.hpos); 
+
+    fprintf(stderr, " %06X: ", amiga->cpu.getPC());
+
+    uint16_t dmacon = amiga->dma.dmacon;
+    bool dmaen = dmacon & DMAEN;
+    fprintf(stderr, "%c%c%c%c ",
+            (dmacon & BPLEN) ? (dmaen ? 'P' : 'p') : '-',
+            (dmacon & COPEN) ? (dmaen ? 'C' : 'c') : '-',
+            (dmacon & BLTEN) ? (dmaen ? 'B' : 'b') : '-',
+            (dmacon & DSKEN) ? (dmaen ? 'D' : 'd') : '-');
+
+    fprintf(stderr, "%04X %04X: ", amiga->paula.intena, amiga->paula.intreq);
 
     if (getDescription())
         fprintf(stderr, "%s: ", getDescription());
