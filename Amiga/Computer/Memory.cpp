@@ -445,6 +445,8 @@ Memory::poke32(uint32_t addr, uint32_t value)
 uint8_t
 Memory::peekCIA8(uint32_t addr)
 {
+    debug("peekCIA8(%6X)\n", addr);
+    
     uint32_t reg = (addr >> 8) & 0b1111;
     uint32_t sel = (addr >> 12) & 0b11;
     bool a0 = addr & 1;
@@ -470,6 +472,8 @@ Memory::peekCIA8(uint32_t addr)
 uint16_t
 Memory::peekCIA16(uint32_t addr)
 {
+    debug("peekCIA16(%6X)\n", addr);
+    
     uint32_t reg = (addr >> 8) & 0b1111;
     uint32_t sel = (addr >> 12) & 0b11;
     
@@ -495,6 +499,8 @@ Memory::peekCIA16(uint32_t addr)
 uint32_t
 Memory::peekCIA32(uint32_t addr)
 {
+    debug("peekCIA32(%6X)\n", addr);
+    
     return HI_W_LO_W(peekCIA16(addr), peekCIA16(addr + 2));
 }
 
@@ -557,6 +563,8 @@ Memory::spypeekCIA32(uint32_t addr)
 void
 Memory::pokeCIA8(uint32_t addr, uint8_t value)
 {
+    debug("pokeCIA8(%6X, %X)\n", addr, value);
+    
     uint32_t reg = (addr >> 8) & 0b1111;
     uint32_t selA = (addr & 0x1000) == 0;
     uint32_t selB = (addr & 0x2000) == 0;
@@ -568,6 +576,8 @@ Memory::pokeCIA8(uint32_t addr, uint8_t value)
 void
 Memory::pokeCIA16(uint32_t addr, uint16_t value)
 {
+    debug("pokeCIA16(%6X, %X)\n", addr, value);
+
     assert(IS_EVEN(addr));
     
     uint32_t reg = (addr >> 8) & 0b1111;
@@ -581,6 +591,8 @@ Memory::pokeCIA16(uint32_t addr, uint16_t value)
 void
 Memory::pokeCIA32(uint32_t addr, uint32_t value)
 {
+    debug("pokeCIA32(%6X, %X)\n", addr, value);
+
     pokeCIA16(addr,     HI_WORD(value));
     pokeCIA16(addr + 2, LO_WORD(value));
 }

@@ -751,7 +751,7 @@ CIA::executeOneCycle()
 {
     clock += CIA_CYCLES(1);
     
-    debug("Executing CIA: new clock = %lld\n", clock);
+    // debug("Executing CIA: new clock = %lld\n", clock);
     
     uint64_t oldDelay = delay;
     uint64_t oldFeed  = feed;
@@ -1077,7 +1077,7 @@ CIA::sleep()
     if (!(feed & CIACountA0)) sleepA = INT64_MAX;
     if (!(feed & CIACountB0)) sleepB = INT64_MAX;
     
-    debug("sleepA = %lld sleepB = %lld\n", sleepA, sleepB);
+    // debug("sleepA = %lld sleepB = %lld\n", sleepA, sleepB);
     // ZZzzzz
     sleepCycle = clock;
     wakeUpCycle = MIN(sleepA, sleepB);
@@ -1096,10 +1096,12 @@ CIA::wakeUp()
 void
 CIA::wakeUp(Cycle targetCycle)
 {
-    if (sleeping) return;
+    if (!sleeping) return;
     sleeping = false;
     
     assert(clock == sleepCycle);
+    
+    // debug("wakeup()\n");
     
     // Calculate the number of missed cycles
     Cycle missedCycles = targetCycle - sleepCycle;
@@ -1122,6 +1124,9 @@ CIA::wakeUp(Cycle targetCycle)
     }
     
     assert(isUpToDate());
+    
+    // Schedule next CIA event
+    scheduleNextExecution();
 }
 
 bool
@@ -1174,12 +1179,14 @@ void
 CIAA::pullDownInterruptLine()
 {
     debug("Pulling down IRQ line");
+    assert(false);
 }
 
 void 
 CIAA::releaseInterruptLine()
 {
     debug("Releasing IRQ line");
+    assert(false);
 }
 
 //              -------
