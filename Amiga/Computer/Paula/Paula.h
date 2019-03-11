@@ -22,14 +22,16 @@ public:
     // Audio unit
     AudioUnit audioUnit;
     
+    
+    //
+    // Interrupt registers
+    //
+    
     // The interrupt request register
     uint16_t intreq;
     
     // The interrupt enable register
     uint16_t intena;
-
-    // The current interrupt level (value on the CPU's IRQ pins)
-    uint16_t irqLevel;
 
     
     //
@@ -42,6 +44,7 @@ public:
     // Disk write data (from RAM to disk)
     uint16_t dskdat;
     
+    
     //
     // Serial port registers
     //
@@ -53,6 +56,30 @@ public:
     uint16_t serper;
     
     
+    //
+    // Control port registers
+    //
+    
+    // The pot control register
+    uint16_t potgo;
+    
+    
+    //
+    // Audio registers
+    //
+    
+    // Audio length (AUDxLEN)
+    uint16_t audlen[4];
+
+    // Audio period (AUDxPER)
+    uint16_t audper[4];
+    
+    // Audio volume (AUDxVOL)
+    uint16_t audvol[4];
+    
+    // Audio data (AUDxDAT)
+    uint16_t auddat[4];
+
     
     //
     // Constructing and destructing
@@ -113,6 +140,15 @@ public:
     uint16_t peekSERPER() { return serper; }
     void pokeSERPER(uint16_t value) { serper = value; }
 
+    uint16_t peekPOTGO();
+    void pokePOTGO(uint16_t value);
+
+    void pokeAUDxLEN(int x, uint16_t value);
+    void pokeAUDxPER(int x, uint16_t value);
+    void pokeAUDxVOL(int x, uint16_t value);
+    void pokeAUDxDAT(int x, uint16_t value);
+
+    
     
     //
     // Managing events

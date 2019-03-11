@@ -21,10 +21,25 @@ Paula::Paula()
     
     // Register snapshot items
     registerSnapshotItems(vector<SnapshotItem> {
+        
         { &clock,    sizeof(clock),    0 },
+        
         { &intreq,   sizeof(intreq),   0 },
         { &intena,   sizeof(intena),   0 },
-        { &irqLevel, sizeof(irqLevel), 0 },
+
+        { &dsklen,   sizeof(dsklen),   0 },
+        { &dskdat,   sizeof(dskdat),   0 },
+
+        { &serdat,   sizeof(serdat),   0 },
+        { &serper,   sizeof(serper),   0 },
+
+        { &potgo,    sizeof(potgo),    0 },
+        
+        { &audlen,   sizeof(audlen),   WORD_ARRAY },
+        { &audper,   sizeof(audper),   WORD_ARRAY },
+        { &audvol,   sizeof(audvol),   WORD_ARRAY },
+        { &auddat,   sizeof(auddat),   WORD_ARRAY },
+
     });
     
 }
@@ -106,6 +121,56 @@ Paula::setINTENA(uint16_t value)
     
     if (value & 0x8000) intena |= (value & 0x7FFF); else intena &= ~value;
     checkInterrupt();
+}
+
+uint16_t
+Paula::peekPOTGO()
+{
+    return 0xFFFF;
+}
+
+void
+Paula::pokePOTGO(uint16_t value)
+{
+    debug("pokePOTGO(%X)\n", value);
+
+    potgo = value;
+}
+
+void
+Paula::pokeAUDxLEN(int x, uint16_t value)
+{
+    debug("pokeAUD%dLEN(%X)\n", x, value);
+    assert(x < 4);
+    
+    audlen[x] = value;
+}
+
+void
+Paula::pokeAUDxPER(int x, uint16_t value)
+{
+    debug("pokeAUD%dPER(%X)\n", x, value);
+    assert(x < 4);
+    
+    audper[x] = value;
+}
+
+void
+Paula::pokeAUDxVOL(int x, uint16_t value)
+{
+    debug("pokeAUD%dVOL(%X)\n", x, value);
+    assert(x < 4);
+    
+    audvol[x] = MIN(value, 64);
+}
+
+void
+Paula::pokeAUDxDAT(int x, uint16_t value)
+{
+    debug("pokeAUD%dDAT(%X)\n", x, value);
+    assert(x < 4);
+    
+    auddat[x] = value;
 }
 
 int
