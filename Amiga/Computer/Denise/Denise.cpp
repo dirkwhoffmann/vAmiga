@@ -26,6 +26,8 @@ Denise::Denise()
         { &bpldat,    sizeof(bpldat),    WORD_ARRAY },
         { &sprpos,    sizeof(sprpos),    WORD_ARRAY },
         { &sprctl,    sizeof(sprctl),    WORD_ARRAY },
+        
+        { &joydat,    sizeof(joydat),    WORD_ARRAY },
     });
     
 }
@@ -157,6 +159,15 @@ Denise::pokeSPRxCTL(int x, uint16_t value)
     // debug("pokeSPR%dCTL(%X)\n", x, value);
     
     sprctl[x] = value;
+}
+
+uint16_t
+Denise::peekJOYxDAT(int x)
+{
+    assert(x < 2);
+    debug("peekJOY%dDAT\n", x);
+    
+    return joydat[x];
 }
 
 void

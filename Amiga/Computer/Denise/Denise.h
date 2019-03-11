@@ -49,7 +49,8 @@ public:
     // Sprite control word 2 (SPRxCTL)
     uint16_t sprctl[8];
 
-
+    // Counter for digital (mouse) input (port 1 and 2)
+    uint16_t joydat[2]; 
 
 
     
@@ -157,6 +158,8 @@ public:
 
     void pokeSPRxPOS(int x, uint16_t value);
     void pokeSPRxCTL(int x, uint16_t value);
+
+    uint16_t peekJOYxDAT(int x);
 
     
     // Returns true if we're running in HIRES mode
