@@ -639,7 +639,7 @@ extension MyController {
                 
             case 0: myAppDelegate.df0Menu.isHidden = false
             case 1: myAppDelegate.df1Menu.isHidden = false
-            default: fatalError()
+            default: track("Missing action for df2 and df3\n")
             }
             
             refreshStatusBar()
@@ -649,7 +649,7 @@ extension MyController {
             switch (msg.data) {
             case 0: myAppDelegate.df0Menu.isHidden = true
             case 1: myAppDelegate.df1Menu.isHidden = true
-            default: fatalError()
+            default: track("Missing action for df2 and df3\n")
             }
             
             // Remove drop target status from the disconnect drive

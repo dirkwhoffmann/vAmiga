@@ -87,6 +87,8 @@ Amiga::Amiga()
         &diskController,
         &df0,
         &df1,
+        // &df2,
+        // &df3,
     });
     
     registerSnapshotItems(vector<SnapshotItem> {

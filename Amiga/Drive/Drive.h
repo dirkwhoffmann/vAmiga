@@ -33,7 +33,17 @@ private:
     bool mtr;
     
     // The currently selected disk head
-    bool side;
+    // DEPRECATED
+    // bool side;
+    
+    // A copy of the PRB register of CIA B
+    uint8_t prb;
+    
+    
+    /* The serial shift register
+     * Right now, it is uses only for implementing identification mode.
+     */
+    uint32_t shiftReg;
     
 public:
     
@@ -72,6 +82,22 @@ public:
     void setConnected(bool value);
     void toggleConnected();
     
+    //
+    // Handling the drive status register flags
+    //
+    
+    // Returns true if this drive is currently selected
+    bool isSelected() { return (prb & (0b1000 << nr)) == 0; }
+    
+    uint8_t driveStatusFlags();
+    
+
+    
+    //
+    // Handling disks
+    //
+
+
     bool hasDisk() { return disk != NULL; }
     bool hasModifiedDisk() { return disk ? disk->isModified() : false; }
     void setModifiedDisk(bool value) { if (disk) disk->setModified(value); }

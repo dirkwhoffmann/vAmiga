@@ -1194,12 +1194,12 @@ CIAA::releaseInterruptLine()
 //              -------
 //     OVL <--- | PA0 |  Overlay Rom
 //    /LED <--- | PA1 |  Power LED
-//   /CHNG <--> | PA2 |  Floppy drive disk change signal
-//   /WPRO <--> | PA3 |  Floppy drive write protection enabled
-//    /TK0 <--> | PA4 |  Floppy drive track 0 indicator
-//    /RDY <--> | PA5 |  Floppy drive ready
-//   /FIR0 <--> | PA6 |  Port 0 fire button
-//   /FIR1 <--> | PA7 |  Port 1 fire button
+//   /CHNG ---> | PA2 |  Floppy drive disk change signal
+//   /WPRO ---> | PA3 |  Floppy drive write protection enabled
+//    /TK0 ---> | PA4 |  Floppy drive track 0 indicator
+//    /RDY ---> | PA5 |  Floppy drive ready
+//   /FIR0 ---> | PA6 |  Port 0 fire button
+//   /FIR1 ---> | PA7 |  Port 1 fire button
 //              -------
 
 uint8_t
@@ -1211,7 +1211,14 @@ CIAA::portAinternal()
 uint8_t
 CIAA::portAexternal()
 {
-    return 0xFF;
+    uint8_t result = 0xFF;
+    
+    result &= amiga->df0.driveStatusFlags();
+    result &= amiga->df1.driveStatusFlags();
+    // result &= amiga->df2.driveStatusFlags();
+    // result &= amiga->df3.driveStatusFlags();
+
+    return result;
 }
 
 void
@@ -1398,6 +1405,11 @@ CIAB::updatePB()
         debug("## PB changed: MTR: %d SEL3: %d SEL2: %d SEL1: %d SEL0: %d SIDE: %d DIR: %d STEP: %d\n",
               !!(PB & 0x80), !!(PB & 0x40), !!(PB & 0x20), !! (PB & 0x10),
               !!(PB & 0x08), !!(PB & 0x04), !!(PB & 0x02), !! (PB & 0x01));
+    
+        amiga->df0.PRBdidChange(oldPB, PB);
+        amiga->df1.PRBdidChange(oldPB, PB);
+        // amiga->df2.PRBdidChange(oldPB, PB);
+        // amiga->df3.PRBdidChange(oldPB, PB);
     }
 }
 

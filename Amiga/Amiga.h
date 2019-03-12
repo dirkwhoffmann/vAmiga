@@ -117,8 +117,10 @@ public:
     // Internal drive
     Drive df0 = Drive(0);
 
-    // First external drive
+    // External drives
     Drive df1 = Drive(1);
+    // Drive df2 = Drive(2);
+    // Drive df3 = Drive(3);
 
     
     //
