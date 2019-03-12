@@ -21,10 +21,6 @@ class DiskController : public HardwareComponent {
     
 public:
     
-    // Fake variable to simulate DMA activity
-    bool df0DMA = false;
-    bool df1DMA = false;
-
     
     //
     // Constructing and destructing
@@ -46,11 +42,9 @@ private:
     void _ping() override;
     void _dump() override;
     
-    
 public:
     
-    bool doesDMA(unsigned nr) { return (nr == 0) ? df0DMA : df1DMA; }
-    void setDMA(unsigned nr, bool value);
+    bool doesDMA(unsigned nr) { return false; }
 };
 
 #endif

@@ -141,11 +141,13 @@ CIA::peek(uint16_t addr)
         case 0x00: // CIA_DATA_PORT_A
 
             updatePA();
+            debug("peek(CIA_DATA_PORT_A) = %X\n", PA);
             return PA;
 
         case 0x01: // CIA_DATA_PORT_B
 
             updatePB();
+            debug("peek(CIA_DATA_PORT_B) = %X\n", PB);
             return PB;
 
         case 0x02: // CIA_DATA_DIRECTION_A
@@ -326,14 +328,14 @@ CIA::poke(uint16_t addr, uint8_t value)
 	switch(addr) {
 		
         case 0x00: // CIA_DATA_PORT_A
-            
+
+            debug("poke(CIA_DATA_PORT_A, %X)\n", value);
             pokePA(value);
-            // PRA = value;
-            // updatePA();
             return;
             
         case 0x01: // CIA_DATA_PORT_B
             
+            debug("poke(CIA_DATA_PORT_B, %X)\n", value);
             PRB = value;
             updatePB();
             return;
@@ -1190,14 +1192,14 @@ CIAA::releaseInterruptLine()
 }
 
 //              -------
-//     OVL <--> | PA0 |
-//    /LED <--> | PA1 |
-//   /CHNG <--> | PA2 |
-//   /WPRO <--> | PA3 |
-//    /TK0 <--> | PA4 |
-//    /RDY <--> | PA5 |
-//   /FIR0 <--> | PA6 |
-//   /FIR1 <--> | PA7 |
+//     OVL <--- | PA0 |  Overlay Rom
+//    /LED <--- | PA1 |  Power LED
+//   /CHNG <--> | PA2 |  Floppy drive disk change signal
+//   /WPRO <--> | PA3 |  Floppy drive write protection enabled
+//    /TK0 <--> | PA4 |  Floppy drive track 0 indicator
+//    /RDY <--> | PA5 |  Floppy drive ready
+//   /FIR0 <--> | PA6 |  Port 0 fire button
+//   /FIR1 <--> | PA7 |  Port 1 fire button
 //              -------
 
 uint8_t
@@ -1225,7 +1227,7 @@ CIAA::updatePA()
         amiga->putMessage((PA & 0b00000010) ? MSG_POWER_LED_OFF : MSG_POWER_LED_ON);
     }
 
-    // Kickstart overlay bit (OVL)
+    // Overlay bit (OVL)
     if ((oldPA ^ PA) & 0b00000001) {
         // debug("OVL has changed\n");
         amiga->mem.updateMemSrcTable();
@@ -1311,25 +1313,26 @@ void
 CIAB::pullDownInterruptLine()
 {
     debug("Pulling down IRQ line");
+    amiga->paula.setINTREQ(0x8000 | (1 << 13));
 }
 
 void 
 CIAB::releaseInterruptLine()
 {
     debug("Releasing IRQ line");
+    amiga->paula.setINTREQ(1 << 13);
 }
 
-// THIS IS OLD (C64). UPDATE WITH AMIGA STUFF
-//                        -------
-//              VA14 <--- | PA0 |
-//              VA15 <--- | PA1 |
-// User port (pin M) <--> | PA2 |
-//               ATN <--- | PA3 |
-//               CLK <--- | PA4 |
-//              DATA <--- | PA5 |
-//               CLK ---> | PA6 |
-//              DATA ---> | PA7 |
-//                        -------
+//                            -------
+//  Parallel port:  BUSY ?--? | PA0 |
+//  Parallel Port:  POUT ?--? | PA1 |
+//  Parallel port:   SEL ?--? | PA2 |
+//    Serial port:  _DSR ?--? | PA3 |
+//    Serial port:  _CTS ?--? | PA4 |
+//    Serial port:   _CD ?--? | PA5 |
+//    Serial port:  _RTS ?--? | PA6 |
+//    Serial port:  _DTR ?--? | PA7 |
+//                            -------
 
 uint8_t
 CIAB::portAinternal()
@@ -1340,9 +1343,9 @@ CIAB::portAinternal()
 uint8_t
 CIAB::portAexternal()
 {
-    // TODO
-    uint8_t result = 0x3F;
-    
+    // Parallel and serial port are not implemented.
+    // All pins are high if nothing is connected.
+    uint8_t result = 0xFF;
     return result;
 }
 
@@ -1350,23 +1353,18 @@ void
 CIAB::updatePA()
 {
     PA = (portAinternal() & DDRA) | (portAexternal() & ~DDRA);
-    
-    // PA0 (VA14) and PA1 (VA15) determine the memory bank seen by the VIC
-    // c64->vic.updateBankAddr();
-    
 }
 
-// THIS IS OLD (C64). UPDATE WITH AMIGA STUFF
-//                        -------
-// User port (pin C) <--> | PB0 |
-// User port (pin D) <--> | PB1 |
-// User port (pin E) <--> | PB2 |
-// User port (pin F) <--> | PB3 |
-// User port (pin H) <--> | PB4 |
-// User port (pin J) <--> | PB5 |
-// User port (pin K) <--> | PB6 |
-// User port (pin L) <--> | PB7 |
-//                        -------
+//            -------
+//   _MTR <-- | PB0 |   (Floppy drive motor on)
+//  _SEL3 <-- | PB1 |   (Floppy drive select df3)
+//  _SEL2 <-- | PB2 |   (Floppy drive select df2)
+//  _SEL1 <-- | PB3 |   (Floppy drive select df1)
+//  _SEL0 <-- | PB4 |   (Floppy drive select df0)
+//  _SIDE <-- | PB5 |   (Floppy drive side select)
+//    DIR <-- | PB6 |   (Floppy drive head direction)
+//  _STEP <-- | PB7 |   (Floppy drive step heads)
+//            -------
 
 uint8_t
 CIAB::portBinternal()
@@ -1387,13 +1385,19 @@ CIAB::portBinternal()
 uint8_t
 CIAB::portBexternal()
 {
-    // User port is not implemented. All pins are high if nothing is connected.
     return 0xFF;
 }
 
 void
 CIAB::updatePB()
 {
+    uint8_t oldPB = PB;
     PB = (portBinternal() & DDRB) | (portBexternal() & ~DDRB);
+
+    if (oldPB ^ PB) {
+        debug("## PB changed: MTR: %d SEL3: %d SEL2: %d SEL1: %d SEL0: %d SIDE: %d DIR: %d STEP: %d\n",
+              !!(PB & 0x80), !!(PB & 0x40), !!(PB & 0x20), !! (PB & 0x10),
+              !!(PB & 0x08), !!(PB & 0x04), !!(PB & 0x02), !! (PB & 0x01));
+    }
 }
 

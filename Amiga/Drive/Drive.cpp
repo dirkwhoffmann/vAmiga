@@ -80,19 +80,6 @@ Drive::toggleConnected()
     setConnected(!isConnected());
 }
 
-void
-Drive::toggleUnsafed()
-{
-    if (disk) {
-        disk->modified = !disk->modified;
-        if (disk->modified) {
-            amiga->putMessage(MSG_DRIVE_DISK_UNSAVED);
-        } else {
-            amiga->putMessage(MSG_DRIVE_DISK_SAVED);
-        }
-    }
-}
-
 bool
 Drive::hasWriteProtectedDisk()
 {
@@ -155,5 +142,47 @@ Drive::insertDisk(ADFFile *file)
         Disk *newDisk = new Disk();
         newDisk->encodeDisk(file); 
         insertDisk(newDisk);
+    }
+}
+
+void
+Drive::latchMTR(bool value)
+{
+    debug("Latching MTR bit %d\n", value);
+}
+
+void
+Drive::PRBdidChange(uint8_t oldValue, uint8_t newValue)
+{
+    // _MTR  _SEL3  _SEL2  _SEL1  _SEL0  _SIDE   DIR   STEP
+    bool oldSel = oldValue & (1 << (nr + 3));
+    bool newSel = newValue & (1 << (nr + 3));
+    bool oldStep = oldValue & 1;
+    bool newStep = newValue & 1;
+    
+    // Only proceed if the drive is connected to the Amiga
+    if (!connected) return;
+    
+    // Latch MTR on a falling edge of SELx
+    if (oldSel && !newSel) {
+        latchMTR(!(newValue & 0x80));
+    }
+    
+    // Only proceed if this drive is selected (selx is low)
+    if (newSel) return;
+        
+    
+    // Evaluate the side selection bit
+    side = !(newValue & 0b100);
+        
+    // Move the drive head on a positive edge of the step line
+    if (!oldStep && newStep) {
+        if (newValue & 2) {
+            debug("MOVING DRIVE HEAD OUT (IMPLEMENTATION MISSING)\n");
+            //moveHeadOut();
+        } else {
+            debug("MOVING DRIVE HEAD IN (IMPLEMENTATION MISSING)\n");
+            // moveHeadIn();
+        }
     }
 }

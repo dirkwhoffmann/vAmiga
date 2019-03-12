@@ -35,8 +35,10 @@ DiskController::_reset()
 void
 DiskController::_ping()
 {
+    /*
     amiga->putMessage(doesDMA(0) ? MSG_DRIVE_DMA_ON : MSG_DRIVE_DMA_OFF, 0);
     amiga->putMessage(doesDMA(1) ? MSG_DRIVE_DMA_ON : MSG_DRIVE_DMA_OFF, 1);
+    */
 }
 
 void
@@ -44,14 +46,4 @@ DiskController::_dump()
 {
 }
 
-void
-DiskController::setDMA(unsigned nr, bool value)
-{
-    if (nr == 0) {
-        df0DMA = value;
-        amiga->putMessage(value ? MSG_DRIVE_DMA_ON : MSG_DRIVE_DMA_OFF, 0);
-    } else {
-        df1DMA = value;
-        amiga->putMessage(value ? MSG_DRIVE_DMA_ON : MSG_DRIVE_DMA_OFF, 1);
-    }
-}
+
