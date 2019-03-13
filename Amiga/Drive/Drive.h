@@ -38,6 +38,9 @@ private:
      */
     uint32_t id;
 
+    // Indicates if id should be reset
+    bool resetId;
+    
     // Indicates if the drive is connected to the Amiga
     bool connected = true;
     

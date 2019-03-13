@@ -149,7 +149,7 @@ extension MyController {
     /// Adjusts the windows vertical size programatically
     func adjustWindowSize() {
         
-        track()
+        // track()
         if var frame = window?.frame {
             
             // Compute size correction

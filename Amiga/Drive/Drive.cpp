@@ -22,7 +22,8 @@ Drive::Drive(unsigned nr)
     registerSnapshotItems(vector<SnapshotItem> {
 
         { &id,             sizeof(id),             0 },
-        { &connected,      sizeof(connected),      0 },
+        { &resetId,        sizeof(resetId),        0 },
+        
         { &motor,          sizeof(motor),          0 },
         { &prb,            sizeof(prb),            0 },
         { &head.cylinder,  sizeof(head.cylinder),  0 },
@@ -75,7 +76,7 @@ void
 Drive::setConnected(bool value)
 {
     if (connected != value) {
-        
+
         connected = value;
         amiga->putMessage(connected ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, nr);
     }
@@ -92,13 +93,13 @@ Drive::driveStatusFlags()
 {
     uint8_t result = 0xFF;
     
-    if (isSelected()) {
+    if (connected && isSelected()) {
         
         // PA5: /DSKRDY
         if (motor) {
             if (hasDisk()) { result &= 0b11011111; }
         } else {
-            if (id & 0x8000) { result &= 0b11011111; }
+            if (id & 0x80000000) { result &= 0b11011111; }
         }
         
         // PA4: /DSKTRACK0
@@ -220,16 +221,20 @@ Drive::latchMTR(bool value)
         amiga->putMessage(MSG_DRIVE_LED_OFF, nr);
         
         // Initialize identification mode
-        id = 0xFFFFFFFF;
+        resetId = true;
     }
 }
 
 void
 Drive::PRBdidChange(uint8_t oldValue, uint8_t newValue)
 {
+    debug("PRBdidChange (connected = %d)\n", connected);
+
     // Ignore this function call if the drive is not connected to the Amiga
     if (!connected) return;
 
+    debug("PRBdidChange2\n");
+    
     // -----------------------------------------------------------------
     // | /MTR  | /SEL3 | /SEL2 | /SEL1 | /SEL0 | /SIDE |  DIR  | STEP  |
     // -----------------------------------------------------------------
@@ -248,7 +253,14 @@ Drive::PRBdidChange(uint8_t oldValue, uint8_t newValue)
     
     // Shift the id code bits on a raising edge of SELx (identification mode)
     if (RISING_EDGE(oldSel, newSel)) {
-        id <<= 1;
+        if (resetId) {
+            id = 0xFFFFFFFF;
+            resetId = false;
+            debug("Initializing drive ID code with %X\n", id);
+        } else {
+            debug("Shifting drive ID code\n");
+            id <<= 1;
+        }
     }
     
     // Only proceed if this drive is selected (selx is low)

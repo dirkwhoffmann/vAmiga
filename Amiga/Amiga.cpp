@@ -253,6 +253,8 @@ Amiga::configureRealTimeClock(bool value)
 bool
 Amiga::configureDrive(unsigned driveNr, bool connected)
 {
+    debug("configureDrive: %d connected: %d\n", driveNr, connected);
+    
     switch (driveNr) {
             
         case 0:
@@ -355,7 +357,9 @@ Amiga::_powerOn()
     // cpu.bpManager.setBreakpointAt(0xFCAF16); // BLITTER ???
     // cpu.bpManager.setBreakpointAt(0xFCAF46);
     // cpu.bpManager.setBreakpointAt(0xFC17C0);
-    cpu.bpManager.setBreakpointAt(0xFCAF52);
+    // cpu.bpManager.setBreakpointAt(0xFCAF52);
+    
+    cpu.bpManager.setBreakpointAt(0xFC491C); // Drive identification
     
     putMessage(MSG_POWER_ON);
 }
@@ -371,7 +375,7 @@ Amiga::_powerOff()
 void
 Amiga::_run()
 {
-    debug(1, "Run\n");
+    // debug(1, "Run\n");
     
     // Check for missing Roms
     if (!readyToPowerUp()) {
@@ -388,7 +392,7 @@ Amiga::_run()
 void
 Amiga::_pause()
 {
-    debug(1, "Pause\n");
+    // debug(1, "Pause\n");
     
     // Cancel the emulator thread
     stop = true;
@@ -791,7 +795,7 @@ Amiga::stepOver()
 void
 Amiga::runLoop()
 {
-    debug("Amiga::runLoop\n");
+    // debug("Amiga::runLoop\n");
     
     // Prepare to run
     amiga->restartTimer();
@@ -829,7 +833,7 @@ Amiga::runLoop()
             if (cpu.bpManager.shouldStop()) {
                 stop = true;
                 putMessage(MSG_BREAKPOINT_REACHED);
-                debug("MSG_BREAKPOINT_REACHED at %X\n", cpu.getPC());
+                // debug("MSG_BREAKPOINT_REACHED at %X\n", cpu.getPC());
             }
         }
         

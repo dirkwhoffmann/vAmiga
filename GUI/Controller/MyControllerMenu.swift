@@ -282,7 +282,7 @@ extension MyController : NSMenuItemValidation {
     
     @IBAction func stepIntoAction(_ sender: NSButton!) {
         
-        track()
+        // track()
         amigaProxy?.stepInto()
     }
     

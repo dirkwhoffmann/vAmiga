@@ -1239,6 +1239,12 @@ CIAA::updatePA()
         // debug("OVL has changed\n");
         amiga->mem.updateMemSrcTable();
     }
+    
+    if (oldPA ^ PA) {
+        debug("## PA changed: OVL: %d /LED: %d /CHNG: %d /WPRO: %d /TK0: %d /RDY: %d /FIR0: %d /FIR1: %d\n",
+              !!(PA & 0x80), !!(PA & 0x40), !!(PA & 0x20), !!(PA & 0x10),
+              !!(PA & 0x08), !!(PA & 0x04), !!(PA & 0x02), !!(PA & 0x01));
+    }
 }
 
 //                    -------
@@ -1403,8 +1409,8 @@ CIAB::updatePB()
 
     if (oldPB ^ PB) {
         debug("## PB changed: MTR: %d SEL3: %d SEL2: %d SEL1: %d SEL0: %d SIDE: %d DIR: %d STEP: %d\n",
-              !!(PB & 0x80), !!(PB & 0x40), !!(PB & 0x20), !! (PB & 0x10),
-              !!(PB & 0x08), !!(PB & 0x04), !!(PB & 0x02), !! (PB & 0x01));
+              !!(PB & 0x80), !!(PB & 0x40), !!(PB & 0x20), !!(PB & 0x10),
+              !!(PB & 0x08), !!(PB & 0x04), !!(PB & 0x02), !!(PB & 0x01));
     
         amiga->df0.PRBdidChange(oldPB, PB);
         amiga->df1.PRBdidChange(oldPB, PB);
