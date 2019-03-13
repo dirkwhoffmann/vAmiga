@@ -26,11 +26,35 @@ private:
     // Drive number (0 = df0, 1 = df1, 2 = df2, 3 = df3)
     long nr = 0;
     
+    /* The drive type identification code
+     * Each drive identifies itself by a 32 bit identification code that is
+     * transmitted via the DRVRDY signal in a special identification mode. The
+     * identification mode is activated by switching the drive motor on and
+     * off. The following identification codes are possible:
+     *
+     *   $00000000 : no drive connected
+     *   $55555555 : 5.25" drive
+     *   $FFFFFFFF : 3.5" drive
+     */
+    uint32_t id;
+
     // Indicates if the drive is connected to the Amiga
     bool connected = true;
     
-    // The latched MTR bit (drive motor control bit)
-    bool mtr;
+    /* The latched MTR bit (motor control bit)
+     * Each drive latches the motor signal at the time it is selected (i.e.,
+     * when the SELx line is pulled down to 0). The disk drive motor stays in
+     * this state until the drive is selected agail. This bit also controls the
+     * activity light on the front of the disk drive.
+     */
+    // bool mtr;
+    
+    /* Indicates if the motor is running at full speed
+     * On a real drive, it can take up to one half second (500ms) until the
+     * drive runs at full speed. We don't emulate  accurate timing here and
+     * set the variable to true once the drive motor is switched on.
+     */
+    bool motor;
     
     // The currently selected disk head
     // DEPRECATED
@@ -39,11 +63,11 @@ private:
     // A copy of the PRB register of CIA B
     uint8_t prb;
     
+    // The current drive head location
+    struct {
+        uint8_t cylinder;
+    } head;
     
-    /* The serial shift register
-     * Right now, it is uses only for implementing identification mode.
-     */
-    uint32_t shiftReg;
     
 public:
     
@@ -92,6 +116,16 @@ public:
     uint8_t driveStatusFlags();
     
 
+    //
+    // Handling the drive head
+    //
+    
+    // Moves the drive head inwards
+    void moveIn();
+    
+    // Moves the drive head outwards
+    void moveOut();
+    
     
     //
     // Handling disks

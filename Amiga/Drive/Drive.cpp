@@ -20,11 +20,13 @@ Drive::Drive(unsigned nr)
                    nr == 2 ? "Df2" : "Df3");
     
     registerSnapshotItems(vector<SnapshotItem> {
-        
-        { &connected,   sizeof(connected),   0 },
-        { &mtr,         sizeof(mtr),         0 },
-        { &prb,         sizeof(prb),         0 },
-        { &shiftReg,    sizeof(shiftReg),    0 },
+
+        { &id,             sizeof(id),             0 },
+        { &connected,      sizeof(connected),      0 },
+        { &motor,          sizeof(motor),          0 },
+        { &prb,            sizeof(prb),            0 },
+        { &head.cylinder,  sizeof(head.cylinder),  0 },
+
     });
 
     // REMOVE AFTER TESTING
@@ -34,6 +36,7 @@ Drive::Drive(unsigned nr)
 void
 Drive::_powerOn()
 {
+    id  = 0xFFFFFFFF;
     prb = 0xFF;
 }
 
@@ -92,14 +95,14 @@ Drive::driveStatusFlags()
     if (isSelected()) {
         
         // PA5: /DSKRDY
-        if (mtr) {
+        if (motor) {
             if (hasDisk()) { result &= 0b11011111; }
         } else {
-            if (shiftReg & 0x8000) { result &= 0b11011111; }
+            if (id & 0x8000) { result &= 0b11011111; }
         }
         
         // PA4: /DSKTRACK0
-        // TODO
+        if (head.cylinder == 0) { result &= 0b11101111; }
         
         // PA3: /DSKPROT
         if (hasWriteProtectedDisk()) { result &= 0b11110111; }
@@ -111,6 +114,23 @@ Drive::driveStatusFlags()
     return result;
 }
 
+void
+Drive::moveIn()
+{
+    if (head.cylinder < 79)
+        head.cylinder++;
+    
+    debug("moveOIn: new cyclinder = %d\n", head.cylinder);
+}
+
+void
+Drive::moveOut()
+{
+    if (head.cylinder > 0)
+        head.cylinder--;
+
+    debug("moveOut: new cyclinder = %d\n", head.cylinder);
+}
 
 bool
 Drive::hasWriteProtectedDisk()
@@ -182,15 +202,25 @@ Drive::latchMTR(bool value)
 {
     debug("Latching MTR bit %d\n", value);
  
-    // Only proceed if the value changes
-    if (mtr == value) return;
+    if (value == 0 && !motor) {
+        
+        // Switch motor on
+        motor = true;
+        
+        // Switch drive LED on
+        amiga->putMessage(MSG_DRIVE_LED_ON, nr);
+    }
     
-    mtr = value;
-    
-    // Enter identification mode if motor is switched off
-    if (!mtr) {
-        shiftReg = 0xFFFFFFFF; // 3.5" drive
-        // shiftReg = 0x55555555; // 5.25" drive
+    else if (value != 0 && motor) {
+        
+        // Switch motor off
+        motor = false;
+        
+        // Switch drive LED off
+        amiga->putMessage(MSG_DRIVE_LED_OFF, nr);
+        
+        // Initialize identification mode
+        id = 0xFFFFFFFF;
     }
 }
 
@@ -213,12 +243,12 @@ Drive::PRBdidChange(uint8_t oldValue, uint8_t newValue)
     
     // Latch MTR on a falling edge of SELx
     if (FALLING_EDGE(oldSel, newSel)) {
-        latchMTR(!(newValue & 0x80));
+        latchMTR(newValue & 0x80);
     }
     
-    // Activate the shift reg on a raising edge of SELx (identification mode)
+    // Shift the id code bits on a raising edge of SELx (identification mode)
     if (RISING_EDGE(oldSel, newSel)) {
-        shiftReg <<= 1;
+        id <<= 1;
     }
     
     // Only proceed if this drive is selected (selx is low)
@@ -230,11 +260,9 @@ Drive::PRBdidChange(uint8_t oldValue, uint8_t newValue)
     // Move the drive head on a positive edge of the step line
     if (!oldStep && newStep) {
         if (newValue & 2) {
-            debug("MOVING DRIVE HEAD OUT (IMPLEMENTATION MISSING)\n");
-            //moveHeadOut();
+            moveOut();
         } else {
-            debug("MOVING DRIVE HEAD IN (IMPLEMENTATION MISSING)\n");
-            // moveHeadIn();
+            moveIn();
         }
     }
 }
