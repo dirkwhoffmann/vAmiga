@@ -18,6 +18,7 @@ inline bool is_uint2_t(uint2_t value) { return value <= 0x03; }
 typedef uint32_t uint24_t;
 inline bool is_uint24_t(uint24_t value) { return value <= 0xFFFFFF; }
 
+
 //
 // Clocks
 //
@@ -34,6 +35,14 @@ typedef int64_t DMACycle; // Cycle in DMA cycle units
 #define AS_CPU_CYCLES(cycles) ((cycles) >> 2)
 #define AS_CIA_CYCLES(cycles) ((cycles) / 40)
 #define AS_DMA_CYCLES(cycles) ((cycles) >> 3)
+
+// Describes a beam position inside a specific frame
+typedef struct {
+    int64_t frame;
+    int16_t vpos;
+    int16_t hpos;
+} FramePosition;
+
 
 //
 // General

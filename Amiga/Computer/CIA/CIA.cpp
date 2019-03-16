@@ -131,7 +131,8 @@ CIA::peek(uint16_t addr)
 {
 	uint8_t result;
 
-    // debug("Peek %02X\n", addr);
+    if (nr == 0)
+        debug("Peek %02X\n", addr);
 
     wakeUp();
 
@@ -177,12 +178,14 @@ CIA::peek(uint16_t addr)
         case 0x07: // CIA_TIMER_B_HIGH
 			
             result = HI_BYTE(counterB);
+            debug("peek07: %X\n", result);
 			break;
 			
         case 0x08: // EVENT_0_7
 			
 			result = tod.getCounterLo();
             tod.defreeze();
+            debug("peek08: %X\n", result);
 			break;
 		
         case 0x09: // EVENT_8_15
@@ -321,7 +324,8 @@ CIA::spypeek(uint16_t addr)
 void
 CIA::poke(uint16_t addr, uint8_t value)
 {
-    // debug("Poke %02X,%02X\n", addr, value);
+    if (nr == 0)
+        debug("Poke %02X,%02X\n", addr, value);
 
     wakeUp();
     
@@ -838,8 +842,7 @@ CIA::executeOneCycle()
 	// Decrement counter
 	if (delay & CIACountB3) {
 		counterB--; // (1)
-        // debug("Counter B down to %04X \n", counterB);
-	}
+    } 
 
 	// Check underflow condition
 	bool timerBOutput = (counterB == 0 && (delay & CIACountB2)); // (2)
@@ -1056,7 +1059,7 @@ CIA::executeOneCycle()
     if (oldDelay == delay && oldFeed == feed) tiredness++; else tiredness = 0;
   
     // Sleep if threshold is reached
-    if (tiredness > 8) {
+    if (false) { // } tiredness > 8) {
         sleep();
         tiredness = 0;
         scheduleWakeUp();
@@ -1079,7 +1082,7 @@ CIA::sleep()
     if (!(feed & CIACountA0)) sleepA = INT64_MAX;
     if (!(feed & CIACountB0)) sleepB = INT64_MAX;
     
-    // debug("sleepA = %lld sleepB = %lld\n", sleepA, sleepB);
+    debug(">>>>> sleepA = %lld sleepB = %lld\n", sleepA, sleepB);
     // ZZzzzz
     sleepCycle = clock;
     wakeUpCycle = MIN(sleepA, sleepB);
@@ -1115,10 +1118,12 @@ CIA::wakeUp(Cycle targetCycle)
         if (feed & CIACountA0) {
             assert(counterA >= AS_CIA_CYCLES(missedCycles));
             counterA -= AS_CIA_CYCLES(missedCycles);
+            debug("Making up %d timer A cycles\n", AS_CIA_CYCLES(missedCycles));
         }
         if (feed & CIACountB0) {
             assert(counterB >= AS_CIA_CYCLES(missedCycles));
             counterB -= AS_CIA_CYCLES(missedCycles);
+            debug("Making up %d timer B cycles\n", AS_CIA_CYCLES(missedCycles));
         }
         
         idleCycles += missedCycles;

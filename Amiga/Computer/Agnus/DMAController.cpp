@@ -137,7 +137,7 @@ DMAController::getInfo()
     return info;
 }
 
-Cycle
+DMACycle
 DMAController::cyclesInCurrentFrame()
 {
     // TODO: Distinguish between short frames and long frames
@@ -149,6 +149,32 @@ DMAController::cyclesInCurrentFrame()
     }
     */
     return 313 * cyclesPerLine();
+}
+
+FramePosition
+DMAController::cycle2FramePosition(Cycle cycle)
+{
+    FramePosition result;
+
+    DMACycle dmaCycle    = AS_DMA_CYCLES(cycle);
+    DMACycle frameCycles = cyclesInCurrentFrame();
+    DMACycle lineCycles  = cyclesPerLine();
+    
+    result.frame = dmaCycle / frameCycles;
+    dmaCycle = dmaCycle % frameCycles;
+    result.vpos = dmaCycle / lineCycles;
+    dmaCycle = dmaCycle % lineCycles;
+    result.hpos = dmaCycle;
+
+    return result;
+}
+
+Cycle
+DMAController::framePosition2Cyce(FramePosition framePos)
+{
+    DMACycle result = framePos.frame * cyclesInCurrentFrame() + framePos.vpos * cyclesPerLine() + hpos;
+    return DMA_CYCLES(result);
+    
 }
 
 Cycle

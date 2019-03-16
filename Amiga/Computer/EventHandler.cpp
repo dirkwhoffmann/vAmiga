@@ -22,7 +22,7 @@ EventHandler::_powerOn()
     // Wipe out the primary event table
     for (unsigned i = 0; i < EVENT_SLOT_COUNT; i++) {
         eventSlot[i].triggerCycle = NEVER;
-        eventSlot[i].triggerBeam = INT32_MAX;
+        eventSlot[i].framePos = {0,0,0};
         eventSlot[i].id = (EventID)0;
         eventSlot[i].data = 0;
     }
@@ -30,7 +30,7 @@ EventHandler::_powerOn()
     // Wipe out the secondary event table
     for (unsigned i = 0; i < SEC_SLOT_COUNT; i++) {
         secondarySlot[i].triggerCycle = NEVER;
-        secondarySlot[i].triggerBeam = INT32_MAX;
+        secondarySlot[i].framePos = {0,0,0};
         secondarySlot[i].id = (EventID)0;
         secondarySlot[i].data = 0;
     }
@@ -262,16 +262,14 @@ EventHandler::_dumpSlot(const char *slotName, const char *eventName, const Event
     if (trigger == NEVER) {
         plainmsg("never");
     } else {
-        plainmsg("%lld (%lld DMA cycles away)",
-                 trigger, AS_DMA_CYCLES(trigger - amiga->dma.clock));
-    }
-    
-    if (event.triggerBeam != INT32_MAX) {
-        plainmsg(" (%d,%d)\n",
-                 VPOS(event.triggerBeam),
-                 HPOS(event.triggerBeam));
-    } else {
-        plainmsg("\n");
+        plainmsg("%lld (%lld,%d,%d) ",
+                 trigger,
+                 event.framePos.frame,
+                 event.framePos.vpos,
+                 event.framePos.hpos);
+        plainmsg("(%lld DMA cycles away)\n",
+                 AS_DMA_CYCLES(trigger - amiga->dma.clock));
+
     }
 }
 
@@ -286,7 +284,7 @@ EventHandler::scheduleAbs(EventSlot s, Cycle cycle, EventID id)
     }
 
     eventSlot[s].triggerCycle = cycle;
-    eventSlot[s].triggerBeam = INT32_MAX;
+    eventSlot[s].framePos = amiga->dma.cycle2FramePosition(cycle);
     eventSlot[s].id = id;
     if (cycle < nextTrigger) nextTrigger = cycle;
     
@@ -305,7 +303,7 @@ EventHandler::scheduleRel(EventSlot s, Cycle cycle, EventID id)
     }
     
     eventSlot[s].triggerCycle = cycle;
-    eventSlot[s].triggerBeam = INT32_MAX;
+    eventSlot[s].framePos = amiga->dma.cycle2FramePosition(cycle);
     eventSlot[s].id = id;
     if (cycle < nextTrigger) nextTrigger = cycle;
     
@@ -326,10 +324,12 @@ EventHandler::schedulePos(EventSlot s, int16_t vpos, int16_t hpos, EventID id)
     cycle += amiga->dma.beam2cycles(vpos, hpos);
     
     eventSlot[s].triggerCycle = cycle;
-    eventSlot[s].triggerBeam = INT32_MAX;
+    eventSlot[s].framePos = amiga->dma.cycle2FramePosition(cycle);
     eventSlot[s].id = id;
     if (cycle < nextTrigger) nextTrigger = cycle;
     
+    assert(eventSlot[s].framePos.vpos == vpos);
+    assert(eventSlot[s].framePos.hpos == hpos);
     assert(checkScheduledEvent(s));
 }
 
@@ -343,7 +343,7 @@ EventHandler::rescheduleAbs(EventSlot s, Cycle cycle)
     }
     
     eventSlot[s].triggerCycle = cycle;
-    eventSlot[s].triggerBeam = INT32_MAX;
+    eventSlot[s].framePos = amiga->dma.cycle2FramePosition(cycle);
     if (cycle < nextTrigger) nextTrigger = cycle;
     
     assert(checkScheduledEvent(s));
@@ -361,7 +361,7 @@ EventHandler::rescheduleRel(EventSlot s, Cycle cycle)
     }
     
     eventSlot[s].triggerCycle = cycle;
-    eventSlot[s].triggerBeam = INT32_MAX;
+    eventSlot[s].framePos = amiga->dma.cycle2FramePosition(cycle);
     if (cycle < nextTrigger) nextTrigger = cycle;
     
     assert(checkScheduledEvent(s));
@@ -456,14 +456,24 @@ EventHandler::checkTriggeredEvent(EventSlot s)
     assert(isEventSlot(s));
     
     // Note: This function has to be called at the trigger cycle
-    
-    // Verify that the event triggers at the right beam position
-    uint32_t beam = eventSlot[s].triggerBeam;
-    if (beam != INT32_MAX && beam != amiga->dma.getBeam()) {
-        fatalError("Trigger beam position does not match.");
-        return false;
+    if (amiga->dma.clock != eventSlot[s].triggerCycle) {
+        return true;
     }
     
+    // Verify that the event triggers at the right beam position
+    if (eventSlot[s].framePos.frame != amiga->dma.frame) {
+        fatalError("Trigger frame does not match.");
+        return false;
+    }
+    if (eventSlot[s].framePos.vpos != amiga->dma.vpos) {
+        fatalError("Vertical trigger position does not match.");
+        return false;
+    }
+    if (eventSlot[s].framePos.hpos != amiga->dma.hpos) {
+        fatalError("Horizontal trigger position does not match.");
+        return false;
+    }
+
     return true;
 }
 
@@ -621,7 +631,7 @@ EventHandler::scheduleSecondaryAbs(EventSlot s, Cycle cycle, EventID id)
     
     // Schedule event in secondary table
     secondarySlot[s].triggerCycle = cycle;
-    secondarySlot[s].triggerBeam = INT32_MAX;
+    secondarySlot[s].framePos = amiga->dma.cycle2FramePosition(cycle);
     secondarySlot[s].id = id;
     if (cycle < nextSecTrigger) nextSecTrigger = cycle;
     
@@ -644,7 +654,7 @@ EventHandler::scheduleSecondaryRel(EventSlot s, Cycle cycle, EventID id)
     
     // Schedule event in secondary table
     secondarySlot[s].triggerCycle = cycle;
-    secondarySlot[s].triggerBeam = INT32_MAX;
+    secondarySlot[s].framePos = amiga->dma.cycle2FramePosition(cycle);
     secondarySlot[s].id = id;
     if (cycle < nextSecTrigger) nextSecTrigger = cycle;
     

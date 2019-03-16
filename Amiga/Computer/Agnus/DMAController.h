@@ -248,15 +248,22 @@ public:
     // Returns the current beam position as a 17 bit value
     uint32_t getBeam() { return BEAM(vpos, hpos); }
     
-    /* Returns the number of CPU cycles per rasterline
+    /* Returns the number of DMA cycles per rasterline
      * The value is valid for PAL machines, only.
      */
-    Cycle cyclesPerLine() { return 227; /* cycles 0x00 ... 0xE2 */ }
+    DMACycle cyclesPerLine() { return 227; /* cycles 0x00 ... 0xE2 */ }
  
-    /* Returns the number of CPU cycles that make up the current frame
+    /* Returns the number of DMA cycles that make up the current frame
      * The value is valid for PAL machines, only.
      */
-    Cycle cyclesInCurrentFrame();
+    DMACycle cyclesInCurrentFrame();
+    
+    // Converts a master cycle into a frame position
+    FramePosition cycle2FramePosition(Cycle cycle);
+
+    // Converts a frame position into a master cycle
+    Cycle framePosition2Cyce(FramePosition framePos);
+
     
     /* Converts a beam position to a CPU cycle
      * The result is the cycle when we reach that position. It can be smaller,

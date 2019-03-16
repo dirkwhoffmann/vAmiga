@@ -563,7 +563,7 @@ Memory::spypeekCIA32(uint32_t addr)
 void
 Memory::pokeCIA8(uint32_t addr, uint8_t value)
 {
-    debug("pokeCIA8(%6X, %X)\n", addr, value);
+    // debug("pokeCIA8(%6X, %X)\n", addr, value);
     
     uint32_t reg = (addr >> 8) & 0b1111;
     uint32_t selA = (addr & 0x1000) == 0;

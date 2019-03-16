@@ -157,15 +157,14 @@ struct Event {
     // Indicates when the event is due
     Cycle triggerCycle;
     
-    /* Trigger beam position
+    /* Frame beam position
      * This is an optional value that should be removed when the emulator
-     * is stable enough. The variables are only written to if an event is
-     * scheduled to trigger at a specific beam position. When the event
-     * triggers (which is determined solely by the cycle value), the current
-     * beam position is compared with the stored values. If they don't match,
+     * is stable enough. The variable is set when an event is scheduled and
+     * checked when the event triggers. It helps to ensure that the event
+     * triggers at the correct beam position.If a mismatch is detected, the
      * emulation halts with an error message.
      */
-    int32_t triggerBeam;
+    FramePosition framePos;
      
     /* Event id.
      * This value is evaluated inside the event handler to determine the
