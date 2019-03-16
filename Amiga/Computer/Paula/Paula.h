@@ -129,7 +129,7 @@ public:
     void pokeINTENA(uint16_t value);
     
     uint16_t peekDSKLEN() { return dsklen; }
-    void pokeDSKLEN(uint16_t value) { dsklen = value; }
+    void pokeDSKLEN(uint16_t value);
     
     uint16_t peekDSKDAT() { return dskdat; }
     void pokeDSKDAT(uint16_t value) { dskdat = value; }
@@ -197,6 +197,13 @@ private:
     void clearBitINTREQ(unsigned nr) { intreq &= ~(1 << nr); checkInterrupt(); }
 
 
+    //
+    // Disk DMA
+    //
+    
+public:
+    
+    void doDiskDMA(); 
     
     //
     // FAKE METHODS FOR THE VISUAL PROTOTYPE (TEMPORARY)

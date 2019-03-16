@@ -901,6 +901,7 @@ DMAController::serviceDMAEvent(EventID id, int64_t data)
     switch (id) {
            
         case DMA_DISK:
+            amiga->paula.doDiskDMA();
             break;
             
         case DMA_A0:

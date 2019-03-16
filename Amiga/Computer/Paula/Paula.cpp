@@ -106,6 +106,17 @@ Paula::pokeINTENA(uint16_t value)
 }
 
 void
+Paula::pokeDSKLEN(uint16_t value)
+{
+    debug("pokeDSKLEN(%X)\n", value);
+    debug("     DMA: %s WRITE: %s Len: %d\n",
+          (value & (1 << 15)) ? "yes" : "no",
+          (value & (1 << 14)) ? "yes" : "no", value & 0x3FFF);
+          
+    dsklen = value;
+}
+
+void
 Paula::setINTREQ(uint16_t value)
 {
     debug("setINTREQ(%X)\n", value);
@@ -204,3 +215,30 @@ Paula::checkInterrupt()
     m68k_set_irq(level);
 }
 
+void
+Paula::doDiskDMA()
+{
+    // Only proceed if the DMA enable bit is set in DSKLEN
+    if (dsklen & 0x8000) {
+        
+        // Only proceed if there are still bytes to read
+        if (dsklen & 0x3FFF) {
+            
+            uint8_t data1 = 0; // = floppyRead()
+            uint8_t data2 = 0; // = floppyRead()
+            
+            amiga->mem.pokeChip8(amiga->dma.dskpt, data1);
+            amiga->dma.dskpt = (amiga->dma.dskpt + 1) & 0x7FFFF;
+            amiga->mem.pokeChip8(amiga->dma.dskpt, data2);
+            amiga->dma.dskpt = (amiga->dma.dskpt + 1) & 0x7FFFF;
+
+            debug("Disk DMA: %X %X (%d words remain)\n", data1, data2, dsklen);
+            
+            dsklen--;
+            if ((dsklen & 0x3FFF) == 0) {
+                pokeINTREQ(0x8002);
+                debug("Disk DMA finished. Setting INTREQ bit\n");
+            }
+        }
+    }
+}
