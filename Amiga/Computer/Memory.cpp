@@ -277,15 +277,6 @@ Memory::updateMemSrcTable()
     if (amiga) amiga->putMessage(MSG_MEM_LAYOUT);
 }
 
-/*
-MemorySource
-Memory::computeMemSrc(uint16_t bank)
-{
-
-}
-*/
-
-
 uint8_t
 Memory::peek8(uint32_t addr)
 {
@@ -299,7 +290,7 @@ Memory::peek8(uint32_t addr)
         case MEM_FAST:     ASSERT_FAST_ADDR(addr); return READ_FAST_8(addr);
         case MEM_CIA:      ASSERT_CIA_ADDR(addr);  return peekCIA8(addr);
         case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); return READ_SLOW_8(addr);
-        case MEM_RTC:      ASSERT_RTC_ADDR(addr);  return 1;
+        case MEM_RTC:      ASSERT_RTC_ADDR(addr);  return 0;
         case MEM_OCS:      ASSERT_OCS_ADDR(addr);  return peekCustom8(addr);
         case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); return READ_BOOT_8(addr);
         case MEM_KICK:     ASSERT_KICK_ADDR(addr); return READ_KICK_8(addr);
@@ -445,7 +436,7 @@ Memory::poke32(uint32_t addr, uint32_t value)
 uint8_t
 Memory::peekCIA8(uint32_t addr)
 {
-    debug("peekCIA8(%6X)\n", addr);
+    // debug("peekCIA8(%6X)\n", addr);
     
     uint32_t reg = (addr >> 8) & 0b1111;
     uint32_t sel = (addr >> 12) & 0b11;
@@ -473,6 +464,7 @@ uint16_t
 Memory::peekCIA16(uint32_t addr)
 {
     debug("peekCIA16(%6X)\n", addr);
+    assert(false);
     
     uint32_t reg = (addr >> 8) & 0b1111;
     uint32_t sel = (addr >> 12) & 0b11;
@@ -500,6 +492,7 @@ uint32_t
 Memory::peekCIA32(uint32_t addr)
 {
     debug("peekCIA32(%6X)\n", addr);
+    assert(false);
     
     return HI_W_LO_W(peekCIA16(addr), peekCIA16(addr + 2));
 }
@@ -577,7 +570,8 @@ void
 Memory::pokeCIA16(uint32_t addr, uint16_t value)
 {
     debug("pokeCIA16(%6X, %X)\n", addr, value);
-
+    assert(false);
+    
     assert(IS_EVEN(addr));
     
     uint32_t reg = (addr >> 8) & 0b1111;
@@ -592,7 +586,8 @@ void
 Memory::pokeCIA32(uint32_t addr, uint32_t value)
 {
     debug("pokeCIA32(%6X, %X)\n", addr, value);
-
+    assert(false);
+    
     pokeCIA16(addr,     HI_WORD(value));
     pokeCIA16(addr + 2, LO_WORD(value));
 }
@@ -670,6 +665,7 @@ Memory::peekCustom16(uint32_t addr)
 uint32_t
 Memory::peekCustom32(uint32_t addr)
 {
+    assert(false);
     return HI_W_LO_W(peekCustom16(addr), peekCustom16(addr + 2));
 }
 
@@ -692,7 +688,8 @@ Memory::spypeekCustom16(uint32_t addr)
             
     }
 
-    return peekCustom16(addr);
+    return 42;
+    // return peekCustom16(addr);
 }
 
 uint32_t
@@ -704,6 +701,7 @@ Memory::spypeekCustom32(uint32_t addr)
 void
 Memory::pokeCustom8(uint32_t addr, uint8_t value)
 {
+    assert(false);
     pokeCustom16(addr & 0x1FE, HI_LO(value,value));
 }
 
@@ -1089,6 +1087,7 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
 
 void Memory::pokeCustom32(uint32_t addr, uint32_t value)
 {
+    assert(false);
     pokeCustom16(addr,     HI_WORD(value));
     pokeCustom16(addr + 2, LO_WORD(value));
 }

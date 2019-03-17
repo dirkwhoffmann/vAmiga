@@ -131,9 +131,11 @@ CIA::peek(uint16_t addr)
 {
 	uint8_t result;
 
+    /*
     if (nr == 0)
         debug("Peek %02X\n", addr);
-
+    */
+    
     wakeUp();
 
     assert(addr <= 0x000F);
@@ -142,13 +144,13 @@ CIA::peek(uint16_t addr)
         case 0x00: // CIA_DATA_PORT_A
 
             updatePA();
-            debug("peek(CIA_DATA_PORT_A) = %X\n", PA);
+            // debug("peek(CIA_DATA_PORT_A) = %X\n", PA);
             return PA;
 
         case 0x01: // CIA_DATA_PORT_B
 
             updatePB();
-            debug("peek(CIA_DATA_PORT_B) = %X\n", PB);
+            // debug("peek(CIA_DATA_PORT_B) = %X\n", PB);
             return PB;
 
         case 0x02: // CIA_DATA_DIRECTION_A
@@ -178,14 +180,14 @@ CIA::peek(uint16_t addr)
         case 0x07: // CIA_TIMER_B_HIGH
 			
             result = HI_BYTE(counterB);
-            debug("peek07: %X\n", result);
+            // debug("peek07: %X\n", result);
 			break;
 			
         case 0x08: // EVENT_0_7
 			
 			result = tod.getCounterLo();
             tod.defreeze();
-            debug("peek08: %X\n", result);
+            // debug("peek08: %X\n", result);
 			break;
 		
         case 0x09: // EVENT_8_15
@@ -324,22 +326,24 @@ CIA::spypeek(uint16_t addr)
 void
 CIA::poke(uint16_t addr, uint8_t value)
 {
+    /*
     if (nr == 0)
         debug("Poke %02X,%02X\n", addr, value);
-
+    */
+    
     wakeUp();
     
 	switch(addr) {
 		
         case 0x00: // CIA_DATA_PORT_A
 
-            debug("poke(CIA_DATA_PORT_A, %X)\n", value);
+            // debug("poke(CIA_DATA_PORT_A, %X)\n", value);
             pokePA(value);
             return;
             
         case 0x01: // CIA_DATA_PORT_B
             
-            debug("poke(CIA_DATA_PORT_B, %X)\n", value);
+            // debug("poke(CIA_DATA_PORT_B, %X)\n", value);
             PRB = value;
             updatePB();
             return;
@@ -1245,11 +1249,13 @@ CIAA::updatePA()
         amiga->mem.updateMemSrcTable();
     }
     
+    /*
     if (oldPA ^ PA) {
         debug("## PA changed: OVL: %d /LED: %d /CHNG: %d /WPRO: %d /TK0: %d /RDY: %d /FIR0: %d /FIR1: %d\n",
               !!(PA & 0x80), !!(PA & 0x40), !!(PA & 0x20), !!(PA & 0x10),
               !!(PA & 0x08), !!(PA & 0x04), !!(PA & 0x02), !!(PA & 0x01));
     }
+    */
 }
 
 //                    -------
@@ -1411,7 +1417,8 @@ CIAB::updatePB()
 {
     uint8_t oldPB = PB;
     PB = (portBinternal() & DDRB) | (portBexternal() & ~DDRB);
-
+    
+    /*
     if (oldPB ^ PB) {
         debug("## PB changed: MTR: %d SEL3: %d SEL2: %d SEL1: %d SEL0: %d SIDE: %d DIR: %d STEP: %d\n",
               !!(PB & 0x80), !!(PB & 0x40), !!(PB & 0x20), !!(PB & 0x10),
@@ -1422,5 +1429,6 @@ CIAB::updatePB()
         // amiga->df2.PRBdidChange(oldPB, PB);
         // amiga->df3.PRBdidChange(oldPB, PB);
     }
+    */
 }
 

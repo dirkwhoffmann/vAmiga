@@ -447,6 +447,7 @@ DMAController::peekDMACON()
     if (blitter.bbusy) result |= (1 << 14);
     if (blitter.bzero) result |= (1 << 13);
 
+    debug("peekDMACON: %X\n", result);
     return result;
 }
 
@@ -561,6 +562,9 @@ uint16_t
 DMAController::peekVHPOS()
 {
     // V7 V6 V5 V4 V3 V2 V1 V0 H8 H7 H6 H5 H4 H3 H2 H1
+    
+    debug("peekVHPOS: %X\n", BEAM(vpos, hpos) & 0xFFFF);
+
     return BEAM(vpos, hpos) & 0xFFFF;
 }
 
@@ -580,7 +584,10 @@ DMAController::peekVPOS()
     // LF -- -- -- -- -- -- -- -- -- -- -- -- -- -- V8
     // TODO: LF (Long Frame)
     assert((vpos >> 8) <= 1);
-    return (vpos >> 8);
+    
+    debug("peekVPOS: %X\n", (vpos >> 8) | 0x8000);
+
+    return (vpos >> 8) | ((frame % 2) ? 0x8000 : 0);
 
 }
 

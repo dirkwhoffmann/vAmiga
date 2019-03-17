@@ -131,13 +131,13 @@ public:
     uint16_t peekDSKLEN() { return dsklen; }
     void pokeDSKLEN(uint16_t value);
     
-    uint16_t peekDSKDAT() { return dskdat; }
+    uint16_t peekDSKDAT() { debug("peekDSKDAT: %X\n", dskdat); return dskdat; }
     void pokeDSKDAT(uint16_t value) { dskdat = value; }
     
-    uint16_t peekSERDAT() { return serdat; }
+    uint16_t peekSERDAT() { debug("peekSERDAT: %X\n", serdat); return serdat; }
     void pokeSERDAT(uint16_t value) { serdat = value; }
     
-    uint16_t peekSERPER() { return serper; }
+    uint16_t peekSERPER() { debug("peekSERPER: %X\n", serper); return serper; }
     void pokeSERPER(uint16_t value) { serper = value; }
 
     uint16_t peekPOTGO();

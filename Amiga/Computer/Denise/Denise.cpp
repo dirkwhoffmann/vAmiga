@@ -165,7 +165,7 @@ uint16_t
 Denise::peekJOYxDAT(int x)
 {
     assert(x < 2);
-    debug("peekJOY%dDAT\n", x);
+    debug("peekJOY%dDAT: %X\n", x, joydat[x]);
     
     return joydat[x];
 }

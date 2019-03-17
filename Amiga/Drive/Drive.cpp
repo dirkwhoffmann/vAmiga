@@ -228,12 +228,10 @@ Drive::latchMTR(bool value)
 void
 Drive::PRBdidChange(uint8_t oldValue, uint8_t newValue)
 {
-    debug("PRBdidChange (connected = %d)\n", connected);
+    // debug("PRBdidChange (connected = %d)\n", connected);
 
     // Ignore this function call if the drive is not connected to the Amiga
     if (!connected) return;
-
-    debug("PRBdidChange2\n");
     
     // -----------------------------------------------------------------
     // | /MTR  | /SEL3 | /SEL2 | /SEL1 | /SEL0 | /SIDE |  DIR  | STEP  |

@@ -119,7 +119,7 @@ Paula::pokeDSKLEN(uint16_t value)
 void
 Paula::setINTREQ(uint16_t value)
 {
-    debug("setINTREQ(%X)\n", value);
+    // debug("setINTREQ(%X)\n", value);
     
     if (value & 0x8000) intreq |= (value & 0x7FFF); else intreq &= ~value;
     checkInterrupt();
@@ -128,7 +128,7 @@ Paula::setINTREQ(uint16_t value)
 void
 Paula::setINTENA(uint16_t value)
 {
-    debug("setINTENA(%X)\n", value);
+    // debug("setINTENA(%X)\n", value);
     
     if (value & 0x8000) intena |= (value & 0x7FFF); else intena &= ~value;
     checkInterrupt();
@@ -137,13 +137,14 @@ Paula::setINTENA(uint16_t value)
 uint16_t
 Paula::peekPOTGO()
 {
+    debug("peekPOTFO: %X\n", 0xFFFF);
     return 0xFFFF;
 }
 
 void
 Paula::pokePOTGO(uint16_t value)
 {
-    debug("pokePOTGO(%X)\n", value);
+    // debug("pokePOTGO(%X)\n", value);
 
     potgo = value;
 }
@@ -207,9 +208,9 @@ Paula::checkInterrupt()
     int level = interruptLevel();
         
     if (level) {
-        debug("*** TRIGGERING LEVEL %d INTERRUPT: mask = %X\n", level, intena & intreq);
+        // debug("*** TRIGGERING LEVEL %d INTERRUPT: mask = %X\n", level, intena & intreq);
     } else {
-        debug("*** SETTING IRQ LEVEL TO 0\n");
+        // debug("*** SETTING IRQ LEVEL TO 0\n");
     }
     
     m68k_set_irq(level);
