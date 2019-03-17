@@ -101,6 +101,7 @@ CIA::triggerFallingEdgeOnFlagPin()
     if (imr & 0x10) {
         INT = 0;
         icr |= 0x80;
+        debug("triggerFallingEdgeOnFlagPin()\n");
         pullDownInterruptLine();
     }
 }
@@ -108,6 +109,7 @@ CIA::triggerFallingEdgeOnFlagPin()
 void
 CIA::triggerTimerIrq()
 {
+    debug("triggerTimerIrq()\n");
     delay |= (delay & CIAReadIcr0) ? CIASetInt0 : CIASetInt1;
     delay |= (delay & CIAReadIcr0) ? CIASetIcr0 : CIASetIcr1;
 }
@@ -115,6 +117,7 @@ CIA::triggerTimerIrq()
 void
 CIA::triggerTodIrq()
 {
+    debug("triggerTodIrq()\n");
     delay |= CIASetInt0;
     delay |= CIASetIcr0;
 }
@@ -122,6 +125,7 @@ CIA::triggerTodIrq()
 void
 CIA::triggerSerialIrq()
 {
+    debug("triggerSerialIrq()\n");
     delay |= CIASetInt0;
     delay |= CIASetIcr0;
 }
@@ -326,10 +330,10 @@ CIA::spypeek(uint16_t addr)
 void
 CIA::poke(uint16_t addr, uint8_t value)
 {
-    /*
-    if (nr == 0)
-        debug("Poke %02X,%02X\n", addr, value);
-    */
+    // if (nr == 0)
+    debug("Poke %02X,%02X\n", addr, value);
+    // amiga->pause();
+    
     
     wakeUp();
     
@@ -455,6 +459,7 @@ CIA::poke(uint16_t addr, uint8_t value)
             
             // Raise an interrupt in the next cycle if conditions match
             if ((imr & icr & 0x1F) && INT && !(delay & CIAReadIcr1)) {
+                debug("CIA_INTERRUPT_CONTROL\n");
                 delay |= (CIASetInt1 | CIASetIcr1);
             }
 			return;
@@ -819,6 +824,8 @@ CIA::executeOneCycle()
 	
 	if (timerAOutput) {
         
+        debug("Timer A underflow\n");
+        
         icrAck &= ~0x01;
         
 		// Stop timer in one shot mode
@@ -853,6 +860,8 @@ CIA::executeOneCycle()
 	
 	if (timerBOutput) {
 				
+        debug("Timer B underflow\n");
+
         icrAck &= ~0x02;
         
 		// Stop timer in one shot mode
@@ -1189,14 +1198,14 @@ CIAA::scheduleWakeUp()
 void 
 CIAA::pullDownInterruptLine()
 {
-    debug("Pulling down IRQ line");
+    debug("Pulling down IRQ line\n");
     assert(false);
 }
 
 void 
 CIAA::releaseInterruptLine()
 {
-    debug("Releasing IRQ line");
+    debug("Releasing IRQ line\n");
     assert(false);
 }
 
@@ -1336,14 +1345,14 @@ CIAB::scheduleWakeUp()
 void 
 CIAB::pullDownInterruptLine()
 {
-    debug("Pulling down IRQ line");
+    debug("Pulling down IRQ line\n");
     amiga->paula.setINTREQ(0x8000 | (1 << 13));
 }
 
 void 
 CIAB::releaseInterruptLine()
 {
-    debug("Releasing IRQ line");
+    debug("Releasing IRQ line\n");
     amiga->paula.setINTREQ(1 << 13);
 }
 
@@ -1380,14 +1389,14 @@ CIAB::updatePA()
 }
 
 //            -------
-//   _MTR <-- | PB0 |   (Floppy drive motor on)
-//  _SEL3 <-- | PB1 |   (Floppy drive select df3)
-//  _SEL2 <-- | PB2 |   (Floppy drive select df2)
-//  _SEL1 <-- | PB3 |   (Floppy drive select df1)
-//  _SEL0 <-- | PB4 |   (Floppy drive select df0)
-//  _SIDE <-- | PB5 |   (Floppy drive side select)
-//    DIR <-- | PB6 |   (Floppy drive head direction)
-//  _STEP <-- | PB7 |   (Floppy drive step heads)
+//  /STEP <-- | PB0 |   (Floppy drive step heads)
+//    DIR <-- | PB1 |   (Floppy drive head direction)
+//  /SIDE <-- | PB2 |   (Floppy drive side select)
+//  /SEL0 <-- | PB3 |   (Floppy drive select df0)
+//  /SEL1 <-- | PB4 |   (Floppy drive select df1)
+//  /SEL2 <-- | PB5 |   (Floppy drive select df2)
+//  /SEL3 <-- | PB6 |   (Floppy drive select df3)
+//   _MTR <-- | PB7 |   (Floppy drive motor on)
 //            -------
 
 uint8_t

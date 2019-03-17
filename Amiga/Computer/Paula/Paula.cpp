@@ -108,11 +108,13 @@ Paula::pokeINTENA(uint16_t value)
 void
 Paula::pokeDSKLEN(uint16_t value)
 {
+    /*
     debug("pokeDSKLEN(%X)\n", value);
     debug("     DMA: %s WRITE: %s Len: %d\n",
           (value & (1 << 15)) ? "yes" : "no",
           (value & (1 << 14)) ? "yes" : "no", value & 0x3FFF);
-          
+    */
+    
     dsklen = value;
 }
 
@@ -137,14 +139,14 @@ Paula::setINTENA(uint16_t value)
 uint16_t
 Paula::peekPOTGO()
 {
-    debug("peekPOTFO: %X\n", 0xFFFF);
+    debug(2, "peekPOTFO: %X\n", 0xFFFF);
     return 0xFFFF;
 }
 
 void
 Paula::pokePOTGO(uint16_t value)
 {
-    // debug("pokePOTGO(%X)\n", value);
+    // debug(2, "pokePOTGO(%X)\n", value);
 
     potgo = value;
 }
@@ -152,7 +154,7 @@ Paula::pokePOTGO(uint16_t value)
 void
 Paula::pokeAUDxLEN(int x, uint16_t value)
 {
-    debug("pokeAUD%dLEN(%X)\n", x, value);
+    debug(2, "pokeAUD%dLEN(%X)\n", x, value);
     assert(x < 4);
     
     audlen[x] = value;
@@ -161,7 +163,7 @@ Paula::pokeAUDxLEN(int x, uint16_t value)
 void
 Paula::pokeAUDxPER(int x, uint16_t value)
 {
-    debug("pokeAUD%dPER(%X)\n", x, value);
+    debug(2, "pokeAUD%dPER(%X)\n", x, value);
     assert(x < 4);
     
     audper[x] = value;
@@ -170,7 +172,7 @@ Paula::pokeAUDxPER(int x, uint16_t value)
 void
 Paula::pokeAUDxVOL(int x, uint16_t value)
 {
-    debug("pokeAUD%dVOL(%X)\n", x, value);
+    debug(2, "pokeAUD%dVOL(%X)\n", x, value);
     assert(x < 4);
     
     audvol[x] = MIN(value, 64);
@@ -179,7 +181,7 @@ Paula::pokeAUDxVOL(int x, uint16_t value)
 void
 Paula::pokeAUDxDAT(int x, uint16_t value)
 {
-    debug("pokeAUD%dDAT(%X)\n", x, value);
+    debug(2, "pokeAUD%dDAT(%X)\n", x, value);
     assert(x < 4);
     
     auddat[x] = value;
@@ -208,7 +210,22 @@ Paula::checkInterrupt()
     int level = interruptLevel();
         
     if (level) {
-        // debug("*** TRIGGERING LEVEL %d INTERRUPT: mask = %X\n", level, intena & intreq);
+        uint16_t mask = intena & intreq;
+        debug("*** intena: %X inetrq: %X\n", intena, intreq);
+        if (mask & 0x0001) { debug("*** SERPORT IRQ (level %d)\n", level); }
+        if (mask & 0x0002) { debug("*** DISK DMA IRQ (level %d)\n", level); }
+        if (mask & 0x0004) { debug("*** SW IRQ (level %d)\n", level); }
+        if (mask & 0x0008) { debug("*** CIA A IRQ (level %d)\n", level); }
+        if (mask & 0x0010) { debug("*** COPPER IRQ (level %d)\n", level); }
+        if (mask & 0x0020) { debug("*** VERTB IRQ (level %d)\n", level); }
+        if (mask & 0x0040) { debug("*** BLIT IRQ (level %d)\n", level); }
+        if (mask & 0x0080) { debug("*** AUD0 IRQ (level %d)\n", level); }
+        if (mask & 0x0100) { debug("*** AUD1 IRQ (level %d)\n", level); }
+        if (mask & 0x0200) { debug("*** AUD2 IRQ (level %d)\n", level); }
+        if (mask & 0x0400) { debug("*** AUD3 IRQ (level %d)\n", level); }
+        if (mask & 0x0800) { debug("*** Input buf ser port IRQ (level %d)\n", level); }
+        if (mask & 0x1000) { debug("*** DISK SYNC IRQ (level %d)\n", level); }
+        if (mask & 0x2000) { debug("*** CIA B (level %d)\n", level); }
     } else {
         // debug("*** SETTING IRQ LEVEL TO 0\n");
     }

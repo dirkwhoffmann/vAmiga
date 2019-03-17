@@ -94,7 +94,7 @@ Denise::didLoadFromBuffer(uint8_t **buffer)
 void
 Denise::pokeBPLCON0(uint16_t value)
 {
-    // debug("pokeBPLCON0(%X)\n", value);
+    // debug(2, "pokeBPLCON0(%X)\n", value);
     
     bplcon0 = value;
     
@@ -113,7 +113,7 @@ Denise::pokeBPLCON0(uint16_t value)
 void
 Denise::pokeBPLCON1(uint16_t value)
 {
-    debug("pokeBPLCON1(%X)\n", value);
+    debug(2, "pokeBPLCON1(%X)\n", value);
     
     bplcon1 = value & 0xFF;
     
@@ -129,7 +129,7 @@ Denise::pokeBPLCON1(uint16_t value)
 void
 Denise::pokeBPLCON2(uint16_t value)
 {
-    debug("pokeBPLCON2(%X)\n", value);
+    debug(2, "pokeBPLCON2(%X)\n", value);
     
     bplcon2 = value;
 }
@@ -138,7 +138,7 @@ void
 Denise::pokeBPLxDAT(int x, uint16_t value)
 {
     assert(x < 6);
-    // debug("pokeBPL%dDAT(%X)\n", x + 1, value);
+    // debug(2, "pokeBPL%dDAT(%X)\n", x + 1, value);
     
     bpldat[x] = value;
 }
@@ -147,7 +147,7 @@ void
 Denise::pokeSPRxPOS(int x, uint16_t value)
 {
     assert(x < 8);
-    // debug("pokeSPR%dPOS(%X)\n", x, value);
+    // debug(2, "pokeSPR%dPOS(%X)\n", x, value);
     
     sprpos[x] = value;
 }
@@ -156,7 +156,7 @@ void
 Denise::pokeSPRxCTL(int x, uint16_t value)
 {
     assert(x < 8);
-    // debug("pokeSPR%dCTL(%X)\n", x, value);
+    // debug(2, "pokeSPR%dCTL(%X)\n", x, value);
     
     sprctl[x] = value;
 }
@@ -165,7 +165,7 @@ uint16_t
 Denise::peekJOYxDAT(int x)
 {
     assert(x < 2);
-    debug("peekJOY%dDAT: %X\n", x, joydat[x]);
+    debug(2, "peekJOY%dDAT: %X\n", x, joydat[x]);
     
     return joydat[x];
 }
@@ -198,7 +198,7 @@ Denise::draw16()
     int16_t vpos = amiga->dma.vpos;
     int16_t hpos = amiga->dma.hpos; // - 63;
     
-    // debug("draw16: (%d, %d)\n", vpos, hpos);
+    // debug(2, "draw16: (%d, %d)\n", vpos, hpos);
     
     uint32_t offset = (vpos * HPIXELS) + (hpos * 4);
     if (offset + HPIXELS >= VPIXELS * HPIXELS) {

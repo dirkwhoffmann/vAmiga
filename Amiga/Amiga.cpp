@@ -368,10 +368,13 @@ Amiga::_powerOn()
     // cpu.bpManager.setBreakpointAt(0xfc365c); //
     // cpu.bpManager.setBreakpointAt(0xfc3ba6); // 4 x to reach INTENA(400)
 
-    // cpu.bpManager.setBreakpointAt(0xfe89b0); // Bitplane DMA switched off
+    cpu.bpManager.setBreakpointAt(0xfe89b0); // Bitplane DMA switched off
     // cpu.bpManager.setBreakpointAt(0xfe89c6);
-    cpu.bpManager.setBreakpointAt(0xfe89da);
-    // cpu.bpManager.setBreakpointAt(0xfc06dc);
+    cpu.bpManager.setBreakpointAt(0xfe89da);  // CLOSE TO WHERE WE WANT TO GO
+    
+    
+    // cpu.bpManager.setBreakpointAt(0xFE982A);
+    // cpu.bpManager.setBreakpointAt(0xfc4a36);
 
     // cpu.bpManager.setBreakpointAt(0xfe8d64);
     // cpu.bpManager.setBreakpointAt(0xfc55c8);

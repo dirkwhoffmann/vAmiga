@@ -74,7 +74,17 @@ TOD::increment()
 void
 TOD::checkForInterrupt()
 {
+    // Quote from SAE: "hack: do not trigger alarm interrupt if KS code and both
+    // tod and alarm == 0. This incorrectly triggers on non-cycle exact
+    // modes. Real hardware value written to ciabtod by KS is always
+    // at least 1 or larger due to bus cycle delays when reading old value."
+    // Needs further investigation.
+    if (cia->nr == 1 /* CIA B */ && alarm.value == 0) {
+        return;
+    }
+    
     if (!matching && tod.value == alarm.value) {
+        // debug("§§§§ TOD ALARM %X\n", alarm.value);
         cia->todInterrupt();
     }
     

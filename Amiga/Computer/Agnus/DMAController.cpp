@@ -447,7 +447,7 @@ DMAController::peekDMACON()
     if (blitter.bbusy) result |= (1 << 14);
     if (blitter.bzero) result |= (1 << 13);
 
-    debug("peekDMACON: %X\n", result);
+    debug(2, "peekDMACON: %X\n", result);
     return result;
 }
 
@@ -563,7 +563,7 @@ DMAController::peekVHPOS()
 {
     // V7 V6 V5 V4 V3 V2 V1 V0 H8 H7 H6 H5 H4 H3 H2 H1
     
-    debug("peekVHPOS: %X\n", BEAM(vpos, hpos) & 0xFFFF);
+    debug(2, "peekVHPOS: %X\n", BEAM(vpos, hpos) & 0xFFFF);
 
     return BEAM(vpos, hpos) & 0xFFFF;
 }
@@ -585,7 +585,7 @@ DMAController::peekVPOS()
     // TODO: LF (Long Frame)
     assert((vpos >> 8) <= 1);
     
-    debug("peekVPOS: %X\n", (vpos >> 8) | 0x8000);
+    debug(2, "peekVPOS: %X\n", (vpos >> 8) | 0x8000);
 
     return (vpos >> 8) | ((frame % 2) ? 0x8000 : 0);
 
@@ -617,7 +617,7 @@ DMAController::pokeDIWSTRT(uint16_t value)
 void
 DMAController::pokeDIWSTOP(uint16_t value)
 {
-    debug("*** pokeDIWSTOP(%X)\n", value);
+    debug("pokeDIWSTOP(%X)\n", value);
     
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // V7 V6 V5 V4 V3 V2 V1 V0 H7 H6 H5 H4 H3 H2 H1 H0  and  H8 = 1, V8 = !V7
