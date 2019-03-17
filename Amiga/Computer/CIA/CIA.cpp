@@ -1427,17 +1427,16 @@ CIAB::updatePB()
     uint8_t oldPB = PB;
     PB = (portBinternal() & DDRB) | (portBexternal() & ~DDRB);
     
-    /*
     if (oldPB ^ PB) {
+        /*
         debug("## PB changed: MTR: %d SEL3: %d SEL2: %d SEL1: %d SEL0: %d SIDE: %d DIR: %d STEP: %d\n",
               !!(PB & 0x80), !!(PB & 0x40), !!(PB & 0x20), !!(PB & 0x10),
               !!(PB & 0x08), !!(PB & 0x04), !!(PB & 0x02), !!(PB & 0x01));
-    
+        */
         amiga->df0.PRBdidChange(oldPB, PB);
         amiga->df1.PRBdidChange(oldPB, PB);
         // amiga->df2.PRBdidChange(oldPB, PB);
         // amiga->df3.PRBdidChange(oldPB, PB);
     }
-    */
 }
 
