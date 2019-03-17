@@ -286,13 +286,13 @@ Memory::peek8(uint32_t addr)
     switch (memSrc[addr >> 16]) {
             
         case MEM_UNMAPPED: return 0;
-        case MEM_CHIP:     ASSERT_CHIP_ADDR(addr); return READ_CHIP_8(addr);
-        case MEM_FAST:     ASSERT_FAST_ADDR(addr); return READ_FAST_8(addr);
+        case MEM_CHIP:     ASSERT_CHIP_ADDR(addr); return peekChip8(addr); //  READ_CHIP_8(addr);
+        case MEM_FAST:     ASSERT_FAST_ADDR(addr); assert(false); return READ_FAST_8(addr);
         case MEM_CIA:      ASSERT_CIA_ADDR(addr);  return peekCIA8(addr);
-        case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); return READ_SLOW_8(addr);
-        case MEM_RTC:      ASSERT_RTC_ADDR(addr);  return 0;
+        case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); assert(false); return READ_SLOW_8(addr);
+        case MEM_RTC:      ASSERT_RTC_ADDR(addr);  assert(false); return 0;
         case MEM_OCS:      ASSERT_OCS_ADDR(addr);  return peekCustom8(addr);
-        case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); return READ_BOOT_8(addr);
+        case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); assert(false); return READ_BOOT_8(addr);
         case MEM_KICK:     ASSERT_KICK_ADDR(addr); return READ_KICK_8(addr);
         default:           assert(false);
     }
@@ -302,21 +302,24 @@ Memory::peek8(uint32_t addr)
 uint16_t
 Memory::peek16(uint32_t addr)
 {
-    // debug("PC: %X peek16(%X)\n", amiga->cpu.getPC(), addr);
-
+    /*
+    if (amiga->dma.frame > 15)
+        debug("PC: %X peek16(%X) memSrc = %d\n", amiga->cpu.getPC(), addr, memSrc[(addr & 0xFFFFFF) >> 16]);
+    */
+    
     assert(IS_EVEN(addr));
     
     addr &= 0xFFFFFF;
     switch (memSrc[addr >> 16]) {
             
         case MEM_UNMAPPED: return 0;
-        case MEM_CHIP:     ASSERT_CHIP_ADDR(addr); return READ_CHIP_16(addr);
-        case MEM_FAST:     ASSERT_FAST_ADDR(addr); return READ_FAST_16(addr);
+        case MEM_CHIP:     ASSERT_CHIP_ADDR(addr); return peekChip16(addr); //   READ_CHIP_16(addr);
+        case MEM_FAST:     ASSERT_FAST_ADDR(addr); assert(false); return READ_FAST_16(addr);
         case MEM_CIA:      ASSERT_CIA_ADDR(addr);  return peekCIA16(addr);
-        case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); return READ_SLOW_16(addr);
-        case MEM_RTC:      ASSERT_RTC_ADDR(addr);  return 0;
+        case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); assert(false); return READ_SLOW_16(addr);
+        case MEM_RTC:      ASSERT_RTC_ADDR(addr);  assert(false); return 0;
         case MEM_OCS:      ASSERT_OCS_ADDR(addr);  return peekCustom16(addr);
-        case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); return READ_BOOT_16(addr);
+        case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); assert(false); return READ_BOOT_16(addr);
         case MEM_KICK:     ASSERT_KICK_ADDR(addr); return READ_KICK_16(addr);
         default:           assert(false);
     }
@@ -387,7 +390,11 @@ Memory::poke8(uint32_t addr, uint8_t value)
     switch (memSrc[addr >> 16]) {
             
         case MEM_UNMAPPED: return;
-        case MEM_CHIP:     ASSERT_CHIP_ADDR(addr); WRITE_CHIP_8(addr, value); break;
+        case MEM_CHIP:
+            ASSERT_CHIP_ADDR(addr);
+            WRITE_CHIP_8(addr, value);
+            assert(peekChip8(addr) == value);
+            break;
         case MEM_FAST:     ASSERT_FAST_ADDR(addr); WRITE_FAST_8(addr, value); break;
         case MEM_CIA:      ASSERT_CIA_ADDR(addr);  pokeCIA8(addr, value); break;
         case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); WRITE_SLOW_8(addr, value); break;
@@ -408,7 +415,11 @@ Memory::poke16(uint32_t addr, uint16_t value)
     switch (memSrc[addr >> 16]) {
             
         case MEM_UNMAPPED: return;
-        case MEM_CHIP:     ASSERT_CHIP_ADDR(addr); WRITE_CHIP_16(addr, value); break;
+        case MEM_CHIP:
+            ASSERT_CHIP_ADDR(addr);
+            WRITE_CHIP_16(addr, value);
+            assert(peekChip16(addr) == value);
+            break;
         case MEM_FAST:     ASSERT_FAST_ADDR(addr); WRITE_FAST_16(addr, value); break;
         case MEM_CIA:      ASSERT_CIA_ADDR(addr);  pokeCIA16(addr, value); break;
         case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); WRITE_SLOW_16(addr, value); break;

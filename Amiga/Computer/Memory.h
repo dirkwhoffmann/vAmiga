@@ -272,10 +272,34 @@ public:
     // Chip Ram
     //
     
+    /*
     inline uint8_t peekChip8(uint32_t addr) { ASSERT_CHIP_ADDR(addr); return READ_CHIP_8(addr); }
     inline uint16_t peekChip16(uint32_t addr) { ASSERT_CHIP_ADDR(addr); return READ_CHIP_16(addr); }
     inline uint32_t peekChip32(uint32_t addr) { ASSERT_CHIP_ADDR(addr); return READ_CHIP_32(addr); }
+    */
     
+    inline uint8_t peekChip8(uint32_t addr) {
+        ASSERT_CHIP_ADDR(addr);
+        uint8_t result = READ_CHIP_8(addr);
+        return result;
+    }
+    inline uint16_t peekChip16(uint32_t addr) {
+        ASSERT_CHIP_ADDR(addr);
+        uint16_t result = READ_CHIP_16(addr);
+        addr = addr % chipRamSize;
+        uint16_t verify = (chipRam[addr] << 8) | chipRam[addr + 1];
+        assert(result == verify);
+        return result;
+    }
+    inline uint32_t peekChip32(uint32_t addr) {
+        ASSERT_CHIP_ADDR(addr);
+        uint32_t result = READ_CHIP_32(addr);
+        addr = addr % chipRamSize;
+        uint32_t verify = (chipRam[addr] << 24) | (chipRam[addr + 1] << 16) | (chipRam[addr + 2] << 8) | chipRam[addr + 3];
+        assert(result == verify);
+        return result;
+    }
+
     inline uint8_t spypeekChip8(uint32_t addr) { return peekChip8(addr); }
     inline uint16_t spypeekChip16(uint32_t addr) { return peekChip16(addr); }
     inline uint32_t spypeekChip32(uint32_t addr) { return peekChip32(addr); }
