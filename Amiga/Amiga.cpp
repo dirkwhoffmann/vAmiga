@@ -258,21 +258,13 @@ Amiga::configureDrive(unsigned driveNr, bool connected)
     switch (driveNr) {
             
         case 0:
-            if (config.df0.connected != connected) {
-                
-                config.df0.connected = connected;
-                df0.setConnected(connected);
-                putMessage(MSG_CONFIG);
-            }
+            config.df0.connected = connected;
+            df0.setConnected(connected);
             return true;
             
         case 1:
-            if (config.df1.connected != connected) {
-                
-                config.df1.connected = connected;
-                df1.setConnected(connected);
-                putMessage(MSG_CONFIG);
-            }
+            config.df1.connected = connected;
+            df1.setConnected(connected);
             return true;
     }
     

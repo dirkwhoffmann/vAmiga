@@ -585,7 +585,7 @@ DMAController::peekVPOS()
     // TODO: LF (Long Frame)
     assert((vpos >> 8) <= 1);
     
-    debug(2, "peekVPOS: %X\n", (vpos >> 8) | 0x8000);
+    debug(2, "peekVPOS: %X\n", (vpos >> 8) | ((frame % 2) ? 0x8000 : 0));
 
     return (vpos >> 8) | ((frame % 2) ? 0x8000 : 0);
 

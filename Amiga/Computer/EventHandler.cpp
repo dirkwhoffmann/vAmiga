@@ -565,6 +565,7 @@ EventHandler::_executeSecondaryUntil(Cycle cycle) {
     // Check all event slots one by one
     if (isDueSec(HSYNC_SLOT, cycle)) { // DEPRECATED
         secondarySlot[HSYNC_SLOT].triggerCycle = NEVER;
+        assert(false);
     }
     if (isDueSec(TBE_IRQ_SLOT, cycle)) {
         serveIRQEvent(TBE_IRQ_SLOT, 0);

@@ -134,11 +134,6 @@ uint8_t
 CIA::peek(uint16_t addr)
 {
 	uint8_t result;
-
-    /*
-    if (nr == 0)
-        debug("Peek %02X\n", addr);
-    */
     
     wakeUp();
 
@@ -148,13 +143,13 @@ CIA::peek(uint16_t addr)
         case 0x00: // CIA_DATA_PORT_A
 
             updatePA();
-            // debug("peek(CIA_DATA_PORT_A) = %X\n", PA);
+            debug("Peek %d (hex: %02X) = %d (DDRA = %X)\n", addr, addr, PA, DDRA);
             return PA;
 
         case 0x01: // CIA_DATA_PORT_B
 
             updatePB();
-            // debug("peek(CIA_DATA_PORT_B) = %X\n", PB);
+            debug("Peek %d (hex: %02X) = %d (DDRB = %X)\n", addr, addr, PB, DDRB);
             return PB;
 
         case 0x02: // CIA_DATA_DIRECTION_A
@@ -184,14 +179,12 @@ CIA::peek(uint16_t addr)
         case 0x07: // CIA_TIMER_B_HIGH
 			
             result = HI_BYTE(counterB);
-            // debug("peek07: %X\n", result);
 			break;
 			
         case 0x08: // EVENT_0_7
 			
 			result = tod.getCounterLo();
             tod.defreeze();
-            // debug("peek08: %X\n", result);
 			break;
 		
         case 0x09: // EVENT_8_15
@@ -258,6 +251,8 @@ CIA::peek(uint16_t addr)
 			break;
 	}
 	
+    debug("Peek %d (hex: %02X) = %d\n", addr, addr, result);
+    
 	return result;
 }
 
@@ -331,7 +326,7 @@ void
 CIA::poke(uint16_t addr, uint8_t value)
 {
     // if (nr == 0)
-    debug("Poke %02X,%02X\n", addr, value);
+    debug("Poke(%d) = %d (hex: %02X)\n", addr, value, value);
     // amiga->pause();
     
     
@@ -1258,13 +1253,11 @@ CIAA::updatePA()
         amiga->mem.updateMemSrcTable();
     }
     
-    /*
     if (oldPA ^ PA) {
-        debug("## PA changed: OVL: %d /LED: %d /CHNG: %d /WPRO: %d /TK0: %d /RDY: %d /FIR0: %d /FIR1: %d\n",
+        debug("## PA changed: /FIR1: %d /FIR0: %d /RDY: %d /TK0: %d /WPRO: %d /CHNG: %d /LED: %d OVL: %d\n",
               !!(PA & 0x80), !!(PA & 0x40), !!(PA & 0x20), !!(PA & 0x10),
               !!(PA & 0x08), !!(PA & 0x04), !!(PA & 0x02), !!(PA & 0x01));
     }
-    */
 }
 
 //                    -------
@@ -1357,14 +1350,14 @@ CIAB::releaseInterruptLine()
 }
 
 //                            -------
-//  Parallel port:  BUSY ?--? | PA0 |
-//  Parallel Port:  POUT ?--? | PA1 |
-//  Parallel port:   SEL ?--? | PA2 |
-//    Serial port:  _DSR ?--? | PA3 |
-//    Serial port:  _CTS ?--? | PA4 |
-//    Serial port:   _CD ?--? | PA5 |
-//    Serial port:  _RTS ?--? | PA6 |
-//    Serial port:  _DTR ?--? | PA7 |
+//  Parallel port:  BUSY ---> | PA0 |
+//  Parallel Port:  POUT ---> | PA1 |
+//  Parallel port:   SEL ---> | PA2 |
+//    Serial port:  /DSR ---> | PA3 |
+//    Serial port:  /CTS ---> | PA4 |
+//    Serial port:   /CD ---> | PA5 |
+//    Serial port:  /RTS <--- | PA6 |
+//    Serial port:  /DTR <--- | PA7 |
 //                            -------
 
 uint8_t
@@ -1376,9 +1369,7 @@ CIAB::portAinternal()
 uint8_t
 CIAB::portAexternal()
 {
-    // Parallel and serial port are not implemented.
-    // All pins are high if nothing is connected.
-    uint8_t result = 0xFF;
+    uint8_t result = 4;
     return result;
 }
 

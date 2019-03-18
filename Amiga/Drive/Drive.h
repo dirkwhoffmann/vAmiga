@@ -15,9 +15,11 @@
 
 class ADFFile;
 
-//
-// THIS CLASS IS A STUB TO MAKE THE VISUAL PROTOTYPE WORK
-//
+// Drive identification codes
+#define DRIVE_ID_NONE  0x00000000
+#define DRIVE_ID_35DD  0xFFFFFFFF
+#define DRIVE_ID_35HD  0xAAAAAAAA
+#define DRIVE_ID_525SD 0x55555555
 
 class Drive : public HardwareComponent {
     
@@ -30,18 +32,21 @@ private:
      * Each drive identifies itself by a 32 bit identification code that is
      * transmitted via the DRVRDY signal in a special identification mode. The
      * identification mode is activated by switching the drive motor on and
-     * off. The following identification codes are possible:
-     *
-     *   $00000000 : no drive connected
-     *   $55555555 : 5.25" drive
-     *   $FFFFFFFF : 3.5" drive
+     * off.
      */
-    uint32_t id;
+    uint32_t id = DRIVE_ID_35DD;
 
-    // Indicates if id should be reset
-    bool resetId;
+    // Indicates if the identification mode is active.
+    bool idMode;
     
-    // Indicates if the drive is connected to the Amiga
+    // Indicates the number of the id bit to read if id mode is active.
+    uint8_t idCount;
+    
+    // If set to true, the drive identification mode is started.
+    // DEPRECATED
+    // bool resetId;
+    
+    // Indicates if the drive is connected to the Amiga.
     bool connected = true;
     
     /* The latched MTR bit (motor control bit)
@@ -58,6 +63,15 @@ private:
      * set the variable to true once the drive motor is switched on.
      */
     bool motor;
+    
+    /* Disk change status
+     * This variable controls the /CHNG bit in the CIA A PRA register. Note
+     * that the variable only changes its value under certain circumstances.
+     * If a head movement pulse is sent and no disk is inserted, the variable
+     * is set to false (which is also the reset value). It becomes true when
+     * a disk is ejected.
+     */
+    bool dskchange;
     
     // The currently selected disk head
     // DEPRECATED
@@ -109,6 +123,7 @@ public:
     void setConnected(bool value);
     void toggleConnected();
     
+    
     //
     // Handling the drive status register flags
     //
@@ -120,14 +135,14 @@ public:
     
 
     //
-    // Handling the drive head
+    // Operating the drive
     //
     
-    // Moves the drive head inwards
-    void moveIn();
+    // Turns the drive motor on or off
+    void setMotor(bool value);
     
-    // Moves the drive head outwards
-    void moveOut();
+    // Moves the drive head (0 = inwards, 1 = outwards)
+    void moveHead(int dir);
     
     
     //
@@ -139,6 +154,7 @@ public:
     bool hasModifiedDisk() { return disk ? disk->isModified() : false; }
     void setModifiedDisk(bool value) { if (disk) disk->setModified(value); }
     
+    bool hasWriteEnabledDisk();
     bool hasWriteProtectedDisk();
     void toggleWriteProtection();
     
