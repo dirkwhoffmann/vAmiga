@@ -12,14 +12,31 @@
 
 #include "HardwareComponent.h"
 
-//
-// THIS CLASS IS A STUB TO MAKE THE VISUAL PROTOTYPE WORK
-//
+typedef enum {
+    
+    KB_SEND_SYNC = 0,
+    KB_WAIT_FOR_ACK,
+    KB_POWER_UP_KEY_STREAM,
+    KB_TERMINATE_KEY_STREAM,
+    KB_NORMAL_OPERATION
+    
+} KeyboardState;
 
-class AmigaKeyboard : public HardwareComponent {
+class Keyboard : public HardwareComponent {
     
 private:
 
+    // Current state of the keyboard
+    KeyboardState state;
+    
+    // Acknowledge signal sent from the Amiga side
+    bool handshake;
+    
+    
+    
+    
+    
+    
     // Indicates if a key is currently held down (array index = raw key code).
     bool keyDown[128];
     
@@ -30,7 +47,7 @@ private:
     
 public:
     
-    AmigaKeyboard();
+    Keyboard();
     
     //
     // Methods from HardwareComponent
@@ -51,6 +68,23 @@ private:
     //
     
 public:
+    
+    /* Sends a keycode to the Amiga
+     */
+    void sendKeyCode(uint8_t keyCode); 
+    
+    /* Receives a handshake from the Amiga
+     * This function is called whenever the CIA puts the serial register into
+     * output mode.
+     */
+    void emulateHandshake() { debug("emulateHandshake\n"); handshake = true; }
+    
+    /* The keyboard execution function
+     * This function is called periodically by the hsync handler with a period
+     * of approx. 1 msec.
+     */
+    void execute();
+    
     
     bool keyIsPressed(long keycode);
     void pressKey(long keycode);

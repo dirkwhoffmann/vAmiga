@@ -803,6 +803,9 @@ DMAController::hsyncHandler()
 
     // CIA B counts HSYNCs
     amiga->ciaB.incrementTOD();
+
+    // Check the keyboard about each millisecond
+    if ((vpos & 0b1111) == 0) amiga->keyboard.execute();
     
     // Add bit plane pointer modulo values
     bplpt[0] += bpl1mod;

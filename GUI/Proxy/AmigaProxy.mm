@@ -19,7 +19,7 @@ struct DMAControllerWrapper { DMAController *dmaController; };
 struct DeniseWrapper { Denise *denise; };
 struct PaulaWrapper { Paula *paula; };
 struct AmigaControlPortWrapper { AmigaControlPort *port; };
-struct AmigaKeyboardWrapper { AmigaKeyboard *keyboard; };
+struct KeyboardWrapper { Keyboard *keyboard; };
 struct DiskControllerWrapper { DiskController *controller; };
 struct AmigaDriveWrapper { Drive *drive; };
 struct AmigaFileWrapper { AmigaFile *file; };
@@ -563,12 +563,12 @@ struct ADFFileWrapper { ADFFile *adf; };
 // Keyboard proxy
 //
 
-@implementation AmigaKeyboardProxy
+@implementation KeyboardProxy
 
-- (instancetype) initWithKeyboard:(AmigaKeyboard *)keyboard
+- (instancetype) initWithKeyboard:(Keyboard *)keyboard
 {
     if (self = [super init]) {
-        wrapper = new AmigaKeyboardWrapper();
+        wrapper = new KeyboardWrapper();
         wrapper->keyboard = keyboard;
     }
     return self;
@@ -897,7 +897,7 @@ struct ADFFileWrapper { ADFFile *adf; };
     paula = [[PaulaProxy alloc] initWithPaula:&amiga->paula];
     controlPort1 = [[AmigaControlPortProxy alloc] initWithControlPort:&amiga->controlPort1];
     controlPort2 = [[AmigaControlPortProxy alloc] initWithControlPort:&amiga->controlPort2];
-    keyboard = [[AmigaKeyboardProxy alloc] initWithKeyboard:&amiga->keyboard];
+    keyboard = [[KeyboardProxy alloc] initWithKeyboard:&amiga->keyboard];
     diskController = [[DiskControllerProxy alloc] initWithDiskController:&amiga->diskController];
     df0 = [[AmigaDriveProxy alloc] initWithDrive:&amiga->df0];
     df1 = [[AmigaDriveProxy alloc] initWithDrive:&amiga->df1];

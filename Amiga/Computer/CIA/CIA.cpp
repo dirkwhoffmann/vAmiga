@@ -76,6 +76,9 @@ CIA::_powerOn()
     updatePA();
     updatePB();
     
+    CRA = 0x4; // seen in SAE
+    CRB = 0x4; // seen in SAE
+    
     // The OVL bit influences the memory layout. Hence, we need to update it.
     amiga->mem.updateMemSrcTable(); 
 }
@@ -451,6 +454,8 @@ CIA::poke(uint16_t addr, uint8_t value)
 			} else {
 				imr &= ~(value & 0x1F);
 			}
+            debug("imr = %d (hex: %X) icr = %d (hex: %X) INT = %d\n",
+                  imr, imr, icr, icr, INT);
             
             // Raise an interrupt in the next cycle if conditions match
             if ((imr & icr & 0x1F) && INT && !(delay & CIAReadIcr1)) {
@@ -517,9 +522,14 @@ CIA::poke(uint16_t addr, uint8_t value)
     
             // -0------ : Serial shift register in input mode (read)
             // -1------ : Serial shift register in output mode (write)
+            debug("SERIAL REGISTER: %s\n", (value & 0x40) ? "output" : "input");
+            if (nr == 0 && !(CRA & 0x40) && (value & 0x40)) { // CIA A only
+                amiga->keyboard.emulateHandshake();
+            }
+            
             if ((value ^ CRA) & 0x40)
             {
-                //serial direction changing
+                // Serial direction changing
                 delay &= ~(CIASerLoad0 | CIASerLoad1);
                 feed &= ~CIASerLoad0;
                 serCounter = 0;
@@ -879,6 +889,8 @@ CIA::executeOneCycle()
     // Generate clock signal
     if (timerAOutput && (CRA & 0x40) /* output mode */ ) {
         
+        debug("§§§ SERIAL SHIFT OUTPUT MODE\n");
+        
         if (serCounter) {
             
             // Toggle serial clock signal
@@ -889,6 +901,7 @@ CIA::executeOneCycle()
             // Load shift register
             delay &= ~(CIASerLoad1 | CIASerLoad0);
             feed &= ~CIASerLoad0;
+            debug("§§§ serCounter = 8\n");
             serCounter = 8;
             feed ^= CIASerClk0;
         }
@@ -896,9 +909,11 @@ CIA::executeOneCycle()
     
     // Run shift register with generated clock signal
     if (serCounter) {
+        debug("§§§§§ serCounter\n");
         if ((delay & (CIASerClk2 | CIASerClk1)) == CIASerClk1) {      // Positive edge
             if (serCounter == 1) {
                 delay |= CIASerInt0; // Trigger interrupt
+                debug("§§§§§ SERIAL INT\n");
             }
         }
         else if ((delay & (CIASerClk2 | CIASerClk1)) == CIASerClk2) { // Negative edge
@@ -1194,14 +1209,14 @@ void
 CIAA::pullDownInterruptLine()
 {
     debug("Pulling down IRQ line\n");
-    assert(false);
+    amiga->paula.setINTREQ(0x8000 | (1 << 3));
 }
 
 void 
 CIAA::releaseInterruptLine()
 {
     debug("Releasing IRQ line\n");
-    assert(false);
+    amiga->paula.setINTREQ(1 << 3);
 }
 
 //              -------
@@ -1297,6 +1312,15 @@ CIAA::updatePB()
         COPY_BIT(PB67TimerOut, PB, 7);
 }
 
+void
+CIAA::setKeyCode(uint8_t keyCode)
+{
+    // Put the key code into the serial data register
+    SDR = keyCode;
+    
+    // Trigger a serial data interrupt
+    delay |= CIASerInt0;    
+}
 
 // -----------------------------------------------------------------------------
 // Complex Interface Adapter B

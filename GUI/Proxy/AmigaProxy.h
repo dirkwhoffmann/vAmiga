@@ -20,7 +20,7 @@
 @class DeniseProxy;
 @class PaulaProxy;
 @class AmigaControlPortProxy;
-@class AmigaKeyboardProxy;
+@class KeyboardProxy;
 @class DiskControllerProxy;
 @class AmigaDriveProxy;
 @class AmigaFileProxy;
@@ -38,7 +38,7 @@ struct DMAControllerWrapper;
 struct DeniseWrapper;
 struct PaulaWrapper;
 struct AmigaControlPortWrapper;
-struct AmigaKeyboardWrapper;
+struct KeyboardWrapper;
 struct DiskControllerWrapper;
 struct AmigaDriveWrapper;
 struct AmigaFileWrapper;
@@ -60,7 +60,7 @@ struct AmigaFileWrapper;
     PaulaProxy *paula;
     AmigaControlPortProxy *controlPort1;
     AmigaControlPortProxy *controlPort2;
-    AmigaKeyboardProxy *keyboard;
+    KeyboardProxy *keyboard;
     DiskControllerProxy *diskController;
     AmigaDriveProxy *df0;
     AmigaDriveProxy *df1;
@@ -76,7 +76,7 @@ struct AmigaFileWrapper;
 @property (readonly) PaulaProxy *paula;
 @property (readonly) AmigaControlPortProxy *controlPort1;
 @property (readonly) AmigaControlPortProxy *controlPort2;
-@property (readonly) AmigaKeyboardProxy *keyboard;
+@property (readonly) KeyboardProxy *keyboard;
 @property (readonly) DiskControllerProxy *diskController;
 @property (readonly) AmigaDriveProxy *df0;
 @property (readonly) AmigaDriveProxy *df1;
@@ -379,9 +379,9 @@ struct AmigaFileWrapper;
 // Keyboard Proxy
 //
 
-@interface AmigaKeyboardProxy : NSObject {
+@interface KeyboardProxy : NSObject {
     
-    struct AmigaKeyboardWrapper *wrapper;
+    struct KeyboardWrapper *wrapper;
 }
 
 - (void) dump;

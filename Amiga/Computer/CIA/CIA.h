@@ -94,7 +94,7 @@ protected:
     // Timer B counter
     uint16_t counterB;
     
-private:
+protected:
     
 	// Timer A latch
 	uint16_t latchA;
@@ -176,7 +176,7 @@ protected:
     // Shift register logic
     //
     
-private:
+protected:
     
     //! @brief    Serial data register
     /*! @details  http://unusedino.de/ec64/technical/misc/cia6526/serial.html
@@ -476,6 +476,11 @@ private:
     uint8_t portBinternal() override;
     uint8_t portBexternal() override;
     void updatePB() override;
+    
+public:
+    
+    // Emulates the receiption of a keycode from the keyboard
+    void setKeyCode(uint8_t keyCode);
 };
 	
 /* The Amiga's first virtual Complex Interface Adapter (CIA B)

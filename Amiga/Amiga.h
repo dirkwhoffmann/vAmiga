@@ -25,7 +25,7 @@
 #include "Blitter.h"
 #include "Denise.h"
 #include "Paula.h"
-#include "AmigaKeyboard.h"
+#include "Keyboard.h"
 #include "AmigaControlPort.h"
 #include "DiskController.h"
 #include "Drive.h"
@@ -112,7 +112,7 @@ public:
     AmigaControlPort controlPort2 = AmigaControlPort(2);
     
     // Keyboard
-    AmigaKeyboard keyboard;
+    Keyboard keyboard;
 
     // Internal drive
     Drive df0 = Drive(0);

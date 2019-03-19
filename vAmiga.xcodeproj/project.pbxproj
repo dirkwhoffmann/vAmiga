@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5014DD1521F3625200BC14BA /* AmigaKeyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5014DD1321F3625200BC14BA /* AmigaKeyboard.cpp */; };
+		5014DD1521F3625200BC14BA /* Keyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5014DD1321F3625200BC14BA /* Keyboard.cpp */; };
 		5020B17D21EF121E00B9E80E /* DMAController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5020B17B21EF121E00B9E80E /* DMAController.cpp */; };
 		5020B18021EF136100B9E80E /* Denise.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5020B17E21EF136100B9E80E /* Denise.cpp */; };
 		502F7DCE2221706000AEEC65 /* Copper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 502F7DCD2221706000AEEC65 /* Copper.cpp */; };
@@ -159,8 +159,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		5014DD1321F3625200BC14BA /* AmigaKeyboard.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaKeyboard.cpp; sourceTree = "<group>"; };
-		5014DD1421F3625200BC14BA /* AmigaKeyboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaKeyboard.h; sourceTree = "<group>"; };
+		5014DD1321F3625200BC14BA /* Keyboard.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Keyboard.cpp; sourceTree = "<group>"; };
+		5014DD1421F3625200BC14BA /* Keyboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Keyboard.h; sourceTree = "<group>"; };
 		5020B17B21EF121E00B9E80E /* DMAController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DMAController.cpp; sourceTree = "<group>"; };
 		5020B17C21EF121E00B9E80E /* DMAController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMAController.h; sourceTree = "<group>"; };
 		5020B17E21EF136100B9E80E /* Denise.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Denise.cpp; sourceTree = "<group>"; };
@@ -704,8 +704,8 @@
 		50A2953C21FF12C20046BAA0 /* Peripherals */ = {
 			isa = PBXGroup;
 			children = (
-				5014DD1421F3625200BC14BA /* AmigaKeyboard.h */,
-				5014DD1321F3625200BC14BA /* AmigaKeyboard.cpp */,
+				5014DD1421F3625200BC14BA /* Keyboard.h */,
+				5014DD1321F3625200BC14BA /* Keyboard.cpp */,
 				50A2953E21FF12EF0046BAA0 /* AmigaControlPort.h */,
 				50A2953D21FF12EF0046BAA0 /* AmigaControlPort.cpp */,
 			);
@@ -992,7 +992,7 @@
 				508FE05F21EA22CC0043D0E9 /* ExportDiskController.swift in Sources */,
 				508FE03521EA22C30043D0E9 /* ScriptCommands.swift in Sources */,
 				508FE01821EA227B0043D0E9 /* MyController.swift in Sources */,
-				5014DD1521F3625200BC14BA /* AmigaKeyboard.cpp in Sources */,
+				5014DD1521F3625200BC14BA /* Keyboard.cpp in Sources */,
 				50A2953F21FF12EF0046BAA0 /* AmigaControlPort.cpp in Sources */,
 				508FE02B21EA227B0043D0E9 /* WindowDelegate.swift in Sources */,
 				50B14C2821EB97EC002E32A6 /* AmigaProxy.mm in Sources */,
