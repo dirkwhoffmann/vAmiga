@@ -427,6 +427,9 @@ Blitter::serviceEvent(EventID id)
                 
                 debug(2, "BLTDONE\n");
                 
+                // Clear the Blitter busy flag
+                bbusy = false;
+                
                 // Trigger the Blitter interrupt
                 handler->scheduleSecondaryRel(BLIT_IRQ_SLOT, 0, IRQ_SET);
                 

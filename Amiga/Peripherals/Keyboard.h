@@ -15,7 +15,7 @@
 typedef enum {
     
     KB_SEND_SYNC = 0,
-    KB_WAIT_FOR_ACK,
+    // KB_WAIT_FOR_ACK,
     KB_POWER_UP_KEY_STREAM,
     KB_TERMINATE_KEY_STREAM,
     KB_NORMAL_OPERATION

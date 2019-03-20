@@ -318,60 +318,7 @@ Amiga::_powerOn()
     // For debugging, we start in debug mode and set a breakpoint
     debugMode = true;
 
-    // cpu.bpManager.setBreakpointAt(0xFC014C);
-    // cpu.bpManager.setBreakpointAt(0xFC015E);
-    // cpu.bpManager.setBreakpointAt(0xFC0208);
-    // cpu.bpManager.setBreakpointAt(0xFC0222);
-    // cpu.bpManager.setBreakpointAt(0xFC02A8);
-    // cpu.bpManager.setBreakpointAt(0xFC02B0);
-    // cpu.bpManager.setBreakpointAt(0xFC0380);
-    // cpu.bpManager.setBreakpointAt(0xFC039C);
-    // cpu.bpManager.setBreakpointAt(0xFC03C2);
-    // FC1A38
-    // FC1F60
-    // cpu.bpManager.setBreakpointAt(0xFC03C6);
-    // FC03E2
-    // FC041E
-    // FC0434
-    // FC045E
-    // FC04A2
-    // cpu.bpManager.setBreakpointAt(0xFC04BE); // "Historic moment"
-    // cpu.bpManager.setBreakpointAt(0xFC051E);
-    // cpu.bpManager.setBreakpointAt(0xFC0B1C);
-    // cpu.bpManager.setBreakpointAt(0xFC48DE);
-    // cpu.bpManager.setBreakpointAt(0xFC4912);
-    //cpu.bpManager.setBreakpointAt(0xFC47D8);
-    // FC47D8
-    // cpu.bpManager.setBreakpointAt(0xFCACBC);
-    // cpu.bpManager.setBreakpointAt(0xFCADB6);
-    // cpu.bpManager.setBreakpointAt(0xFCADC2);
-    
-    // cpu.bpManager.setBreakpointAt(0xFCAF16); // BLITTER ???
-    // cpu.bpManager.setBreakpointAt(0xFCAF46);
-    // cpu.bpManager.setBreakpointAt(0xFC17C0);
-    // cpu.bpManager.setBreakpointAt(0xFCAF52); // DIW stuff
-    
-    // cpu.bpManager.setBreakpointAt(0xFE931C); // Strange loop
-    // cpu.bpManager.setBreakpointAt(0xFE92A2); // Poke CIAA:timer B
-
-    // cpu.bpManager.setBreakpointAt(0xFE49B4); // 3 x POTGO to POTGO(F00)
-    // cpu.bpManager.setBreakpointAt(0xfe92e2); // After POTGO,
-    // cpu.bpManager.setBreakpointAt(0xfc39e0); //
-    // cpu.bpManager.setBreakpointAt(0xfc365c); //
-    // cpu.bpManager.setBreakpointAt(0xfc3ba6); // 4 x to reach INTENA(400)
-
-    cpu.bpManager.setBreakpointAt(0xfe89b0); // Bitplane DMA switched off
-    // cpu.bpManager.setBreakpointAt(0xfe89c6);
-    cpu.bpManager.setBreakpointAt(0xfe89da);  // CLOSE TO WHERE WE WANT TO GO
-    
-    
-    
-    // cpu.bpManager.setBreakpointAt(0xFE548E);
-    // cpu.bpManager.setBreakpointAt(0xfc4a36);
-
-    // cpu.bpManager.setBreakpointAt(0xfe8d64);
-    // cpu.bpManager.setBreakpointAt(0xfc55c8);
-    // cpu.bpManager.setBreakpointAt(0xfc570e); // bltsize
+    cpu.bpManager.setBreakpointAt(0xFC570E); // Blitter
     
     putMessage(MSG_POWER_ON);
 }

@@ -447,7 +447,7 @@ DMAController::peekDMACON()
     if (blitter.bbusy) result |= (1 << 14);
     if (blitter.bzero) result |= (1 << 13);
 
-    debug(2, "peekDMACON: %X\n", result);
+    debug(1, "peekDMACON: %X\n", result);
     return result;
 }
 
