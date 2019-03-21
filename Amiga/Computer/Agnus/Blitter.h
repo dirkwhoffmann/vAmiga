@@ -24,10 +24,10 @@ class Blitter : public HardwareComponent {
     uint16_t bltcon1;
     
     // The Blitter DMA pointers
-    uint16_t bltapt;
-    uint16_t bltbpt;
-    uint16_t bltcpt;
-    uint16_t bltdpt;
+    uint32_t bltapt;
+    uint32_t bltbpt;
+    uint32_t bltcpt;
+    uint32_t bltdpt;
 
     // Blitter A first and last word masks
     uint16_t bltafwm;
@@ -51,8 +51,8 @@ class Blitter : public HardwareComponent {
     
     uint16_t anew;
     uint16_t bnew;
-    uint16_t aold; // Not used
-    uint16_t bold; // Not used
+    uint16_t aold;
+    uint16_t bold;
     uint16_t ahold;
     uint16_t bhold;
     uint16_t chold;

@@ -761,7 +761,7 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x4C >> 1: // BLTBPTH
             amiga->dma.blitter.pokeBLTBPTH(value); return;
         case 0x4E >> 1: // BLTBPTL
-            amiga->dma.blitter.pokeBLTBPTH(value); return;
+            amiga->dma.blitter.pokeBLTBPTL(value); return;
         case 0x50 >> 1: // BLTAPTH
             amiga->dma.blitter.pokeBLTAPTH(value); return;
         case 0x52 >> 1: // BLTAPTL
