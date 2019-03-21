@@ -191,8 +191,8 @@ public:
     // BLTSIZE
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // H9 H8 H7 H6 H5 H4 H3 H2 H1 H0 W5 W4 W3 W2 W1 W0
-    inline uint16_t bltsizeH() { return bltsize >> 6; }
-    inline uint16_t bltsizeW() { return bltsize & 0x3F; }
+    inline uint16_t bltsizeH() { return (bltsize >> 6) ? (bltsize >> 6) : 1024; }
+    inline uint16_t bltsizeW() { return (bltsize & 0x3F) ? (bltsize & 0x3F) : 64; }
     void pokeBLTSIZE(uint16_t value);
 
     // BLTxMOD
@@ -206,8 +206,8 @@ public:
     void pokeBLTBDAT(uint16_t value);
     void pokeBLTCDAT(uint16_t value);
     
-    bool isFirstWord() { return wcounter == 1; }
-    bool isLastWord() { return wcounter == bltsizeW(); }
+    bool isFirstWord() { return wcounter == bltsizeW(); }
+    bool isLastWord() { return wcounter == 1; }
 
   
     //
@@ -219,10 +219,40 @@ public:
     // Processes a Blitter event
     void serviceEvent(EventID id);
     
+    
+    //
+    // Cycle-accurate Blitter
+    //
+    
 private:
     
     // Program the device
-    void loadMicrocode(); 
+    void loadMicrocode();
+    
+    
+    //
+    // Fast Blitter
+    //
+    
+public:
+    
+    /* Performs a blit operation via the fast Blitter
+     * Calls either doCopyBlit() or doCopyBlit()
+     */
+    void doFastBlit();
+
+private:
+    
+    // Performs a copy blit operation via the fast Blitter
+    void doCopyBlit();
+
+    // Performs a line blit operation via the fast Blitter
+    void doLineBlit();
+
+
+    
+
+    
 };
 
 #endif

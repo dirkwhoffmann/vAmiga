@@ -516,7 +516,8 @@ DMAController::pokeDMACON(uint16_t value)
         if (newBLTEN) {
             // Blitter DMA on
             debug("Blitter DMA switched on\n");
-            amiga->dma.eventHandler.scheduleRel(BLT_SLOT, DMA_CYCLES(1), BLT_EXECUTE);
+            // amiga->dma.eventHandler.scheduleRel(BLT_SLOT, DMA_CYCLES(1), BLT_EXECUTE);
+            amiga->dma.eventHandler.scheduleRel(BLT_SLOT, DMA_CYCLES(1), BLT_FAST_BLIT);
     
         } else {
             

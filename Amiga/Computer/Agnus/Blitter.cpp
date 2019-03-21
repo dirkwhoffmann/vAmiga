@@ -172,56 +172,56 @@ void
 Blitter::pokeBLTAPTH(uint16_t value)
 {
     debug(2, "pokeBLTAPTH(%X)\n", value);
-    bltapt = REPLACE_HI_WORD(bltapt, value & 0x7);
+    bltapt = REPLACE_HI_WORD(bltapt, value & 0x0007);
 }
 
 void
 Blitter::pokeBLTAPTL(uint16_t value)
 {
     debug(2, "pokeBLTAPTL(%X)\n", value);
-    bltapt = REPLACE_LO_WORD(bltapt, value);
+    bltapt = REPLACE_LO_WORD(bltapt, value & 0xFFFE);
 }
 
 void
 Blitter::pokeBLTBPTH(uint16_t value)
 {
     debug(2, "pokeBLTBPTH(%X)\n", value);
-    bltbpt = REPLACE_HI_WORD(bltbpt, value & 0x7);
+    bltbpt = REPLACE_HI_WORD(bltbpt, value & 0x0007);
 }
 
 void
 Blitter::pokeBLTBPTL(uint16_t value)
 {
     debug(2, "pokeBLTBPTL(%X)\n", value);
-    bltbpt = REPLACE_LO_WORD(bltbpt, value);
+    bltbpt = REPLACE_LO_WORD(bltbpt, value & 0xFFFE);
 }
 
 void
 Blitter::pokeBLTCPTH(uint16_t value)
 {
     debug(2, "pokeBLTCPTH(%X)\n", value);
-    bltcpt = REPLACE_HI_WORD(bltcpt, value & 0x7);
+    bltcpt = REPLACE_HI_WORD(bltcpt, value & 0x0007);
 }
 
 void
 Blitter::pokeBLTCPTL(uint16_t value)
 {
     debug(2, "pokeBLTCPTL(%X)\n", value);
-    bltcpt = REPLACE_LO_WORD(bltcpt, value);
+    bltcpt = REPLACE_LO_WORD(bltcpt, value & 0xFFFE);
 }
 
 void
 Blitter::pokeBLTDPTH(uint16_t value)
 {
     debug(2, "pokeBLTDPTH(%X)\n", value);
-    bltdpt = REPLACE_HI_WORD(bltdpt, value & 0x7);
+    bltdpt = REPLACE_HI_WORD(bltdpt, value & 0x0007);
 }
 
 void
 Blitter::pokeBLTDPTL(uint16_t value)
 {
     debug(2, "pokeBLTDPTL(%X)\n", value);
-    bltdpt = REPLACE_LO_WORD(bltdpt, value);
+    bltdpt = REPLACE_LO_WORD(bltdpt, value & 0xFFFE);
 }
 
 void
@@ -247,15 +247,18 @@ Blitter::pokeBLTSIZE(uint16_t value)
     bzero = true;
     bbusy = true;
     
-    // _dump();
+    // WE ONLY DO FAST BLITS FOR NOW
+    handler->scheduleRel(BLT_SLOT, DMA_CYCLES(1), BLT_FAST_BLIT);
     
+    
+    /*
     if (bltLINE()) {
         // TODO
     } else {
         
         // Set width and height counters
-        wcounter = bltsizeW() ? bltsizeW() : 1024;
-        hcounter = bltsizeH() ? bltsizeH() : 64;
+        wcounter = bltsizeW();
+        hcounter = bltsizeH();
         
         // Load micro instruction code
         loadMicrocode();
@@ -263,6 +266,7 @@ Blitter::pokeBLTSIZE(uint16_t value)
         // Start the blit
         handler->scheduleRel(BLT_SLOT, DMA_CYCLES(1), BLT_EXECUTE);
     }
+    */
 }
 
 void
@@ -442,6 +446,17 @@ Blitter::serviceEvent(EventID id)
                 amiga->dma.eventHandler.rescheduleRel(BLT_SLOT, DMA_CYCLES(1));
             }
             
+            break;
+            
+        case BLT_FAST_BLIT:
+            
+            // Only proceed if Blitter DMA is enabled
+            if (!amiga->dma.bltDMA()) {
+                amiga->dma.eventHandler.disable(BLT_SLOT);
+                break;
+            }
+            
+            doFastBlit();
             break;
             
         default:

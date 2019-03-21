@@ -143,6 +143,7 @@ EventHandler::_dumpPrimaryTable()
                     case 0:                eventName = "none"; break;
                     case BLT_INIT:         eventName = "BLT_INIT"; break;
                     case BLT_EXECUTE:      eventName = "BLT_EXECUTE"; break;
+                    case BLT_FAST_BLIT:    eventName = "BLT_FAST_BLIT"; break;
                     default:               eventName = "*** INVALID ***"; break;
                 }
                 break;

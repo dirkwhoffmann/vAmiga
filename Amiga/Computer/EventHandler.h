@@ -118,6 +118,7 @@ typedef enum
     // Blitter slot
     BLT_INIT = 1,
     BLT_EXECUTE,
+    BLT_FAST_BLIT,
     BLT_EVENT_COUNT,
     
     // Raster slot
