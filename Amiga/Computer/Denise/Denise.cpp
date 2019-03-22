@@ -232,7 +232,6 @@ Denise::draw16()
         // index = ((hpos + i) == vpos) ? 1 : 0;
         
         uint32_t rgba = colorizer.getRGBA(index);
-        rgba = htonl(rgba); 
         pixelBuffer[offset + i] = rgba;
   
         /*

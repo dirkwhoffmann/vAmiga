@@ -84,9 +84,9 @@ Colorizer::computeRGBA(int reg)
     // Check if RGBA value is stored in the color cache
     if (colorCache[col] != 0) {
         
-        r = (colorCache[col] >> 24) & 0xFF;
-        g = (colorCache[col] >> 16) & 0xFF;
-        b = (colorCache[col] >> 8) & 0xFF;
+        r = colorCache[col] & 0xFF;
+        g = (colorCache[col] >> 8) & 0xFF;
+        b = (colorCache[col] >> 16) & 0xFF;
         
     } else {
      
@@ -102,8 +102,8 @@ Colorizer::computeRGBA(int reg)
     }
     
     // Store color values
-    colorRGBA[reg] = HI_HI_LO_LO(r, g, b, 0xFF);
-    colorRGBA[reg + 32] = HI_HI_LO_LO(r / 2, g / 2, b / 2, 0xFF);
+    colorRGBA[reg] = HI_HI_LO_LO(0xFF, b, g, r);
+    colorRGBA[reg + 32] = HI_HI_LO_LO(0xFF, b / 2, g / 2, r / 2);
     colorCache[col] = colorRGBA[reg];
 }
 
