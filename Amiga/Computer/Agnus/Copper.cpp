@@ -391,7 +391,7 @@ Copper::serviceEvent(EventID id, int64_t data)
                 
                 // Load the second instruction word
                 copins2 = amiga->mem.peek16(coppc);
-                debug(1, "COP_MOVE: coppc = %X copins2 = %X\n", coppc, copins2);
+                debug(2, "COP_MOVE: coppc = %X copins2 = %X\n", coppc, copins2);
                 advancePC();
                 
                 // Extract register number from the first instruction word
@@ -418,8 +418,8 @@ Copper::serviceEvent(EventID id, int64_t data)
 
                 // Load the second instruction word
                 copins2 = amiga->mem.peek16(coppc);
-                debug(1, "COP_WAIT_OR_SKIP: coppc = %X copins2 = %X\n", coppc, copins2);
-                debug(1, "    VPHP = %X VMHM = %X\n", getVPHP(), getVMHM());
+                debug(2, "COP_WAIT_OR_SKIP: coppc = %X copins2 = %X\n", coppc, copins2);
+                debug(2, "    VPHP = %X VMHM = %X\n", getVPHP(), getVMHM());
                 advancePC();
                 
                 // Is it a WAIT command?
@@ -434,7 +434,7 @@ Copper::serviceEvent(EventID id, int64_t data)
                     // In how many cycles do we get there?
                     Cycle delay = amiga->dma.beamDiff(trigger);
                     
-                    debug(1, "   trigger = (%d,%d) delay = %lld\n",
+                    debug(2, "   trigger = (%d,%d) delay = %lld\n",
                              VPOS(trigger), HPOS(trigger), delay);
                     
                     // Stop the Copper or schedule a wake up event

@@ -37,10 +37,10 @@ class Blitter : public HardwareComponent {
     uint16_t bltsize;
     
     // The Blitter modulo registers
-    uint16_t bltamod;
-    uint16_t bltbmod;
-    uint16_t bltcmod;
-    uint16_t bltdmod;
+    int16_t bltamod;
+    int16_t bltbmod;
+    int16_t bltcmod;
+    int16_t bltdmod;
 
     // The Blitter data registers
     // uint16_t bltadat; // same as "A new"

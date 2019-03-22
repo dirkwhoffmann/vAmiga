@@ -94,7 +94,7 @@ Denise::didLoadFromBuffer(uint8_t **buffer)
 void
 Denise::pokeBPLCON0(uint16_t value)
 {
-    debug(1, "pokeBPLCON0(%X)\n", value);
+    debug(2, "pokeBPLCON0(%X)\n", value);
     
     bplcon0 = value;
     
