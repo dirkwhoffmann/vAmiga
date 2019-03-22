@@ -231,37 +231,10 @@ Denise::draw16()
         // DEBUGGING
         // index = ((hpos + i) == vpos) ? 1 : 0;
         
-        switch (index) {
-                
-            case 0:
-                // if (amiga->debugDMA) debug("\n");
-                pixelBuffer[offset + i] = 0;
-                // pixelBuffer[offset + (2 * i) + 1] = 0;
-                index++;
-                break;
-                
-            case 1:
-                pixelBuffer[offset + i] = 0x000000FF;
-                // pixelBuffer[offset + (2 * i) + 1] = 0x000000FF;
-                index++;
-                break;
-
-            case 2:
-                pixelBuffer[offset + i] = 0x0000FF00;
-                // pixelBuffer[offset + (2 * i) + 1] = 0x0000FF00;
-                index++;
-                break;
-                
-            case 3:
-                pixelBuffer[offset + i] = 0x00FF0000;
-                // pixelBuffer[offset + (2 * i) + 1] = 0x00FF0000;
-                index = 0;
-                break;
-                
-            default:
-                assert(0);
-        }
-    
+        uint32_t rgba = colorizer.getRGBA(index);
+        rgba = htonl(rgba); 
+        pixelBuffer[offset + i] = rgba;
+  
         /*
         if (index == 0) {
             pixelBuffer[offset + (2 * i)] = 0;
