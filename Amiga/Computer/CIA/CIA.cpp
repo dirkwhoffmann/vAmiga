@@ -146,13 +146,13 @@ CIA::peek(uint16_t addr)
         case 0x00: // CIA_DATA_PORT_A
 
             updatePA();
-            debug("Peek %d (hex: %02X) = %d (DDRA = %X)\n", addr, addr, PA, DDRA);
+            // debug("Peek %d (hex: %02X) = %d (DDRA = %X)\n", addr, addr, PA, DDRA);
             return PA;
 
         case 0x01: // CIA_DATA_PORT_B
 
             updatePB();
-            debug("Peek %d (hex: %02X) = %d (DDRB = %X)\n", addr, addr, PB, DDRB);
+            // debug("Peek %d (hex: %02X) = %d (DDRB = %X)\n", addr, addr, PB, DDRB);
             return PB;
 
         case 0x02: // CIA_DATA_DIRECTION_A
@@ -181,7 +181,7 @@ CIA::peek(uint16_t addr)
 			
         case 0x07: // CIA_TIMER_B_HIGH
 			
-            debug("tb = %d vpos = %d\n", counterB, amiga->dma.vpos);
+            // debug("tb = %d vpos = %d\n", counterB, amiga->dma.vpos);
             result = HI_BYTE(counterB);
 			break;
 			
@@ -255,7 +255,7 @@ CIA::peek(uint16_t addr)
 			break;
 	}
 	
-    debug("Peek %d (hex: %02X) = %d\n", addr, addr, result);
+    // debug("Peek %d (hex: %02X) = %d\n", addr, addr, result);
     
 	return result;
 }
@@ -329,10 +329,7 @@ CIA::spypeek(uint16_t addr)
 void
 CIA::poke(uint16_t addr, uint8_t value)
 {
-    // if (nr == 0)
-    debug("Poke(%d) = %d (hex: %02X)\n", addr, value, value);
-    // amiga->pause();
-    
+    // debug("Poke(%d) = %d (hex: %02X)\n", addr, value, value);
     
     wakeUp();
     
@@ -481,8 +478,7 @@ CIA::poke(uint16_t addr, uint8_t value)
 			} else {
 				imr &= ~(value & 0x1F);
 			}
-            debug("imr = %d (hex: %X) icr = %d (hex: %X) INT = %d\n",
-                  imr, imr, icr, icr, INT);
+            // debug("imr = %d (hex: %X) icr = %d (hex: %X) INT = %d\n", imr, imr, icr, icr, INT);
             
             // Raise an interrupt in the next cycle if conditions match
             if ((imr & icr & 0x1F) && INT && !(delay & CIAReadIcr1)) {
@@ -549,7 +545,6 @@ CIA::poke(uint16_t addr, uint8_t value)
     
             // -0------ : Serial shift register in input mode (read)
             // -1------ : Serial shift register in output mode (write)
-            debug("SERIAL REGISTER: %s\n", (value & 0x40) ? "output" : "input");
             if (nr == 0 && !(CRA & 0x40) && (value & 0x40)) { // CIA A only
                 amiga->keyboard.emulateHandshake();
             }
@@ -936,11 +931,9 @@ CIA::executeOneCycle()
     
     // Run shift register with generated clock signal
     if (serCounter) {
-        debug("§§§§§ serCounter\n");
         if ((delay & (CIASerClk2 | CIASerClk1)) == CIASerClk1) {      // Positive edge
             if (serCounter == 1) {
                 delay |= CIASerInt0; // Trigger interrupt
-                debug("§§§§§ SERIAL INT\n");
             }
         }
         else if ((delay & (CIASerClk2 | CIASerClk1)) == CIASerClk2) { // Negative edge
@@ -1132,7 +1125,7 @@ CIA::sleep()
     if (!(feed & CIACountA0)) sleepA = INT64_MAX;
     if (!(feed & CIACountB0)) sleepB = INT64_MAX;
     
-    debug(">>>>> sleepA = %lld sleepB = %lld\n", sleepA, sleepB);
+    // debug(">>>>> sleepA = %lld sleepB = %lld\n", sleepA, sleepB);
     // ZZzzzz
     sleepCycle = clock;
     wakeUpCycle = MIN(sleepA, sleepB);
@@ -1168,12 +1161,12 @@ CIA::wakeUp(Cycle targetCycle)
         if (feed & CIACountA0) {
             assert(counterA >= AS_CIA_CYCLES(missedCycles));
             counterA -= AS_CIA_CYCLES(missedCycles);
-            debug("Making up %d timer A cycles\n", AS_CIA_CYCLES(missedCycles));
+            // debug("Making up %d timer A cycles\n", AS_CIA_CYCLES(missedCycles));
         }
         if (feed & CIACountB0) {
             assert(counterB >= AS_CIA_CYCLES(missedCycles));
             counterB -= AS_CIA_CYCLES(missedCycles);
-            debug("Making up %d timer B cycles\n", AS_CIA_CYCLES(missedCycles));
+            // debug("Making up %d timer B cycles\n", AS_CIA_CYCLES(missedCycles));
         }
         
         idleCycles += missedCycles;
@@ -1235,14 +1228,14 @@ CIAA::scheduleWakeUp()
 void 
 CIAA::pullDownInterruptLine()
 {
-    debug("Pulling down IRQ line\n");
+    // debug("Pulling down IRQ line\n");
     amiga->paula.setINTREQ(0x8000 | (1 << 3));
 }
 
 void 
 CIAA::releaseInterruptLine()
 {
-    debug("Releasing IRQ line\n");
+    // debug("Releasing IRQ line\n");
     amiga->paula.setINTREQ(1 << 3);
 }
 
@@ -1295,11 +1288,13 @@ CIAA::updatePA()
         amiga->mem.updateMemSrcTable();
     }
     
+    /*
     if (oldPA ^ PA) {
         debug("## PA changed: /FIR1: %d /FIR0: %d /RDY: %d /TK0: %d /WPRO: %d /CHNG: %d /LED: %d OVL: %d\n",
               !!(PA & 0x80), !!(PA & 0x40), !!(PA & 0x20), !!(PA & 0x10),
               !!(PA & 0x08), !!(PA & 0x04), !!(PA & 0x02), !!(PA & 0x01));
     }
+    */
 }
 
 //                    -------
@@ -1342,7 +1337,7 @@ CIAA::updatePB()
 void
 CIAA::setKeyCode(uint8_t keyCode)
 {
-    debug("setKeyCode: %X\n", keyCode);
+    // debug("setKeyCode: %X\n", keyCode);
     
     // Put the key code into the serial data register
     SDR = keyCode;
@@ -1391,14 +1386,14 @@ CIAB::scheduleWakeUp()
 void 
 CIAB::pullDownInterruptLine()
 {
-    debug("Pulling down IRQ line\n");
+    // debug("Pulling down IRQ line\n");
     amiga->paula.setINTREQ(0x8000 | (1 << 13));
 }
 
 void 
 CIAB::releaseInterruptLine()
 {
-    debug("Releasing IRQ line\n");
+    // debug("Releasing IRQ line\n");
     amiga->paula.setINTREQ(1 << 13);
 }
 

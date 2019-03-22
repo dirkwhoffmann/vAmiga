@@ -77,7 +77,7 @@ public:
      * This function is called whenever the CIA puts the serial register into
      * output mode.
      */
-    void emulateHandshake() { debug("emulateHandshake\n"); handshake = true; }
+    void emulateHandshake() { handshake = true; }
     
     /* The keyboard execution function
      * This function is called periodically by the hsync handler with a period

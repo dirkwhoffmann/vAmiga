@@ -97,21 +97,21 @@ Drive::driveStatusFlags()
 {
     uint8_t result = 0xFF;
     
-    debug("connected = %d isSelected = %d\n", connected, isSelected());
+    // debug("connected = %d isSelected = %d\n", connected, isSelected());
     
     if (connected && isSelected()) {
         
         // PA5: /DSKRDY
         if (idMode) {
-            debug("ID mode is on\n");
+            // debug("ID mode is on\n");
             if (id & (1 << idCount)) result &= 0b11011111;
         } else {
-            debug("ID mode is off\n");
+            // debug("ID mode is off\n");
             if (motor && hasDisk()) result &= 0b11011111;
         }
         
         // PA4: /DSKTRACK0
-        debug("Head is at cyclinder %d\n", head.cylinder);
+        // debug("Head is at cyclinder %d\n", head.cylinder);
         if (head.cylinder == 0) { result &= 0b11101111; }
         
         // PA3: /DSKPROT
@@ -134,7 +134,7 @@ Drive::setMotor(bool value)
         motor = true;
         
         // Quit identification mode
-        debug("Quitting identification mode\n");
+        // debug("Quitting identification mode\n");
         idMode = false;
         idCount = 0;
     }
@@ -145,7 +145,7 @@ Drive::setMotor(bool value)
         motor = false;
         
         // Enter identification mode
-        debug("Entering identification mode/n");
+        // debug("Entering identification mode/n");
         idMode = true;
         idCount = 32;
     }
@@ -259,7 +259,7 @@ Drive::insertDisk(ADFFile *file)
 void
 Drive::latchMTR(bool value)
 {
-    debug("Latching MTR bit %d\n", value);
+    // debug("Latching MTR bit %d\n", value);
  
     if (value == 0 && !motor) {
         
