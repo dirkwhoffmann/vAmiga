@@ -103,7 +103,7 @@ Colorizer::computeRGBA(int reg)
     
     // Store color values
     colorRGBA[reg] = HI_HI_LO_LO(0xFF, b, g, r);
-    colorRGBA[reg + 32] = HI_HI_LO_LO(0xFF, b / 2, g / 2, r / 2);
+    colorRGBA[reg + 32] = HI_HI_LO_LO(0xfF, b / 2, g / 2, r / 2);
     colorCache[col] = colorRGBA[reg];
 }
 
