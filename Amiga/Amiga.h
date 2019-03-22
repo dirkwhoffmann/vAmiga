@@ -207,6 +207,15 @@ private:
 
     
     //
+    // Debugging
+    //
+    
+public:
+    
+    bool debugDMA = false; // REMOVE AFTER DEBUGGING
+    
+    
+    //
     // Constructing and destructing
     //
     

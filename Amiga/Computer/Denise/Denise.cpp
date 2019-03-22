@@ -184,10 +184,10 @@ Denise::fillShiftRegisters()
 
     shiftReg[0] = bpldat[0];
     shiftReg[1] = bpldat[1];
-    shiftReg[2] = bpldat[2];
-    shiftReg[3] = bpldat[3];
-    shiftReg[4] = bpldat[4];
-    shiftReg[5] = bpldat[5];
+    shiftReg[2] = 0; // bpldat[2];
+    shiftReg[3] = 0; // bpldat[3];
+    shiftReg[4] = 0; // bpldat[4];
+    shiftReg[5] = 0; // bpldat[5];
 
     draw16();
 }
@@ -196,18 +196,22 @@ void
 Denise::draw16()
 {
     int16_t vpos = amiga->dma.vpos;
-    int16_t hpos = amiga->dma.hpos; // - 63;
+    int16_t hpos = (amiga->dma.hpos - 63) * 2;
     
-    // debug(2, "draw16: (%d, %d)\n", vpos, hpos);
+    // if (amiga->debugDMA) debug("draw16: (%d, %d)\n", vpos, hpos);
     
-    uint32_t offset = (vpos * HPIXELS) + (hpos * 4);
+    if (hpos > 320) return;
+    if (vpos > 250) return;
+    
+    uint32_t offset = (vpos * HPIXELS) + hpos;
     if (offset + HPIXELS >= VPIXELS * HPIXELS) {
         // warn("OUT OF RANGE!!!\n");
         return;
         
     }
     
-    uint8_t index;
+    uint8_t index = 0;
+    // uint8_t ind = 0;
     
     for (int i = 0; i < 16; i++) {
         
@@ -220,12 +224,45 @@ Denise::draw16()
         ((shiftReg[4] & 0x8000) >> 11) |
         ((shiftReg[5] & 0x8000) >> 10);
         
-        for (unsigned i = 0; i < 6; i++) {
-            shiftReg[i] <<= 1;
+        for (unsigned j = 0; j < 6; j++) {
+            shiftReg[j] <<= 1;
         }
-
-        // index = ((hpos / 2) % 2 == 0) ? 0 : 1;
         
+        // DEBUGGING
+        // index = ((hpos + i) == vpos) ? 1 : 0;
+        
+        switch (index) {
+                
+            case 0:
+                // if (amiga->debugDMA) debug("\n");
+                pixelBuffer[offset + i] = 0;
+                // pixelBuffer[offset + (2 * i) + 1] = 0;
+                index++;
+                break;
+                
+            case 1:
+                pixelBuffer[offset + i] = 0x000000FF;
+                // pixelBuffer[offset + (2 * i) + 1] = 0x000000FF;
+                index++;
+                break;
+
+            case 2:
+                pixelBuffer[offset + i] = 0x0000FF00;
+                // pixelBuffer[offset + (2 * i) + 1] = 0x0000FF00;
+                index++;
+                break;
+                
+            case 3:
+                pixelBuffer[offset + i] = 0x00FF0000;
+                // pixelBuffer[offset + (2 * i) + 1] = 0x00FF0000;
+                index = 0;
+                break;
+                
+            default:
+                assert(0);
+        }
+    
+        /*
         if (index == 0) {
             pixelBuffer[offset + (2 * i)] = 0;
             pixelBuffer[offset + (2 * i) + 1] = 0;
@@ -233,6 +270,7 @@ Denise::draw16()
             pixelBuffer[offset + (2 * i)] = 0x000000FF;
             pixelBuffer[offset + (2 * i) + 1] = 0x000000FF;
         }
+        */
     }
 }
 

@@ -243,9 +243,13 @@ DMAController::buildDMAEventTable()
         // Bitplane DMA
         if (dmacon & BPLEN) {
             
-            // Determine start and stop cycle
-            uint8_t start = (ddfstrt < 0x18) ? 0x18 : (ddfstrt > 0xD7) ? 0xD7 : ddfstrt;
-            uint8_t stop  = (ddfstop < 0x18) ? 0x18 : (ddfstop > 0xD7) ? 0xD7 : ddfstop;
+            // Determine start and stop cycle (TODO: CHECK IN WINFELLOW)
+            uint8_t start = ddfstrt;
+            uint8_t stop  = ddfstop + 16 /* ??? LORES ONLY(?!)*/;
+
+            if (start < 0x18) start = 0x18;
+            // if (stop > (0xD7 + 8)) stop = (0xD7 + 8);
+            if (stop > (0xD7)) stop = (0xD7);
 
             if (amiga->denise.hires()) {
                 
@@ -952,8 +956,11 @@ DMAController::serviceDMAEvent(EventID id, int64_t data)
             break;
             
         case DMA_H1:
+            if (amiga->debugDMA) debug("H1\n");
         case DMA_L1:
             
+            if (amiga->debugDMA) debug("DO_DMA H1/L1 (%d,%d): bpldat[%d] = peekChip16(%X) = %X\n", vpos, hpos, PLANE1, bplpt[PLANE1], amiga->mem.peekChip16(bplpt[PLANE1]));
+                  
             DO_DMA(bplpt[PLANE1], amiga->denise.bpldat[PLANE1]);
             
             // The bitplane 1 fetch is an important one. Once it is performed,
@@ -962,30 +969,38 @@ DMAController::serviceDMAEvent(EventID id, int64_t data)
             break;
             
         case DMA_H2:
+            if (amiga->debugDMA) debug("H2\n");
         case DMA_L2:
             
+            if (amiga->debugDMA) debug("DO_DMA H2/L2 (%d,%d): bpldat[%d] = peekChip16(%X) = %X\n", vpos, hpos, PLANE2, bplpt[PLANE2], amiga->mem.peekChip16(bplpt[PLANE2]));
             DO_DMA(bplpt[PLANE2], amiga->denise.bpldat[PLANE2]);
             break;
             
         case DMA_H3:
+            if (amiga->debugDMA) debug("H3\n");
         case DMA_L3:
             
+            if (amiga->debugDMA) debug("DO_DMA H3/L3: bpldat[%d] = peekChip16(%X) = %X\n", PLANE3, bplpt[PLANE3], amiga->mem.peekChip16(bplpt[PLANE3]));
             DO_DMA(bplpt[PLANE3], amiga->denise.bpldat[PLANE3]);
             break;
             
         case DMA_H4:
+            if (amiga->debugDMA) debug("H4\n");
         case DMA_L4:
             
+            if (amiga->debugDMA) debug("DO_DMA H4/L4: bpldat[%d] = peekChip16(%X) = %X\n", PLANE4, bplpt[PLANE4], amiga->mem.peekChip16(bplpt[PLANE4]));
             DO_DMA(bplpt[PLANE4], amiga->denise.bpldat[PLANE4]);
             break;
             
         case DMA_L5:
             
+            if (amiga->debugDMA) debug("DO_DMA L5: bpldat[%d] = peekChip16(%X) = %X\n", PLANE5, bplpt[PLANE5], amiga->mem.peekChip16(bplpt[PLANE5]));
             DO_DMA(bplpt[PLANE5], amiga->denise.bpldat[PLANE5]);
             break;
             
         case DMA_L6:
             
+            if (amiga->debugDMA) debug("DO_DMA L6: bpldat[%d] = peekChip16(%X) = %X\n", PLANE6, bplpt[PLANE6], amiga->mem.peekChip16(bplpt[PLANE6]));
             DO_DMA(bplpt[PLANE6], amiga->denise.bpldat[PLANE6]);
             break;
             

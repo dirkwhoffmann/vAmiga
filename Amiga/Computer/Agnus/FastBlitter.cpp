@@ -171,15 +171,15 @@ Blitter::doLineBlit()
 {
     uint64_t checksum = 0;
     
-    debug("Doing a fast line blit.\n");
-    
     // Adapted from Omega Amiga Emulator
     int octCode = (bltcon1 >> 2) & 7;
     int length =  bltsizeH();
-    int inc1 = bltamod; // 4(dy - dx)
+    int inc1 = (int16_t)bltamod; // 4(dy - dx)
     int D = (int16_t)bltapt;     // start value of 4dy - 2dx
     // uint16_t* chipramW = internal.chipramW;
     
+    debug("Doing a fast line blit (Octant = %d).\n", octCode);
+
     int planeAddr = bltcpt & 0x1FFFFE; //word address
     
     int planeMod  = bltcmod;
@@ -266,11 +266,13 @@ Blitter::doLineBlit()
                 
                 int offset = d+startPixel;
                 addr = (planeAddr - (offset>>3)+(i*planeMod)) & 0x1FFFFE; // >>1;
+                 debug("2: planeAddr = %d offset = %d d = %d planeMod = %d D = %d bltapt = %d inc1 = %d inc2 = %d\n", planeAddr, offset, d, planeMod, D, bltapt, inc1, inc2);
                 
                 //Pixel plot
                 uint16_t pixel = amiga->mem.peek16(addr); // chipramW[addr];
+                debug("2: peek(%d) = %d\n", addr, pixel);
                 pixel = logicFunction(minterm,0x0001 << (offset&15),pattern,pixel);
-                // debug("2: poke(%d), %d\n", addr, pixel);
+                debug("2: poke(%d), %d\n", addr, pixel);
                 amiga->mem.pokeChip16(addr, pixel);
                 checksum += addr + pixel;
                 
@@ -342,9 +344,12 @@ Blitter::doLineBlit()
                 
                 int offset = i+startPixel;
                 addr = (planeAddr - (offset>>3)+(d*planeMod)) & 0x1FFFFE; //>>1;
+                // debug("5: planeAddr = %d offset = %d d = %d planeMod = %d D = %d bltapt = %d inc1 = %d inc2 = %d\n", planeAddr, offset, d, planeMod, D, bltapt, inc1, inc2);
+
                 
                 //Pixel plot
                 uint16_t pixel = amiga->mem.peek16(addr); // chipramW[addr];
+                // debug("5: peek(%d) = %d\n", addr, pixel);
                 pixel = logicFunction(minterm,0x0001 << (offset&15),pattern,pixel);
                 // debug("5: poke(%d), %d\n", addr, pixel);
                 amiga->mem.pokeChip16(addr, pixel);

@@ -318,7 +318,8 @@ Amiga::_powerOn()
     // For debugging, we start in debug mode and set a breakpoint
     debugMode = true;
 
-    cpu.bpManager.setBreakpointAt(0xFC570E); // Blitter
+    // cpu.bpManager.setBreakpointAt(0xFC570E); // Blitter
+    cpu.bpManager.setBreakpointAt(0xFE8A6E); // All Blitter stuff done
     
     putMessage(MSG_POWER_ON);
 }
@@ -793,6 +794,11 @@ Amiga::runLoop()
                 stop = true;
                 putMessage(MSG_BREAKPOINT_REACHED);
                 // debug("MSG_BREAKPOINT_REACHED at %X\n", cpu.getPC());
+            }
+            
+            if (cpu.getPC() == 0xFE8A6E) {
+                debug("SWITCHING ON DMA DEBUGGING\n");
+                debugDMA = true;
             }
         }
         
