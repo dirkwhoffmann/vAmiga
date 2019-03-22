@@ -186,6 +186,8 @@ DMAController::beam2cycles(int16_t vpos, int16_t hpos)
 void
 DMAController::buildDMAEventTable()
 {
+    debug("buildDMAEventTable vpos = %d hpos = %d\n", vpos, hpos);
+    
     // Start with a clean table
     memset(dmaEvent, 0, sizeof(dmaEvent));
 
@@ -458,7 +460,7 @@ DMAController::peekDMACON()
 void
 DMAController::pokeDMACON(uint16_t value)
 {
-    debug(2, "pokeDMACON(%X)\n", value);
+    debug(1, "pokeDMACON(%X)\n", value);
     
     bool oldDMAEN = (dmacon & DMAEN);
     bool oldBPLEN = (dmacon & BPLEN) && oldDMAEN;

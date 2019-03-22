@@ -146,7 +146,7 @@ Copper::comparator(uint32_t beam, uint32_t waitpos, uint32_t mask)
     // Get comparison bits for the vertical beam position
     uint8_t vBeam = (beam >> 8) & 0xFF;
     uint8_t vWaitpos = (waitpos >> 8) & 0xFF;
-    uint8_t vMask = (mask >> 8) & 0x7F;
+    uint8_t vMask = (mask >> 8) | 0x80; // & 0x7F;
     
     // debug(" * vBeam = %X vWaitpos = %X vMask = %X\n", vBeam, vWaitpos, vMask);
     // Compare vertical positions
@@ -391,7 +391,7 @@ Copper::serviceEvent(EventID id, int64_t data)
                 
                 // Load the second instruction word
                 copins2 = amiga->mem.peek16(coppc);
-                debug(2, "COP_MOVE: coppc = %X copins2 = %X\n", coppc, copins2);
+                debug(1, "COP_MOVE: coppc = %X copins2 = %X\n", coppc, copins2);
                 advancePC();
                 
                 // Extract register number from the first instruction word
@@ -418,8 +418,8 @@ Copper::serviceEvent(EventID id, int64_t data)
 
                 // Load the second instruction word
                 copins2 = amiga->mem.peek16(coppc);
-                debug(2, "COP_WAIT_OR_SKIP: coppc = %X copins2 = %X\n", coppc, copins2);
-                debug(2, "    VPHP = %X VMHM = %X\n", getVPHP(), getVMHM());
+                debug(1, "COP_WAIT_OR_SKIP: coppc = %X copins2 = %X\n", coppc, copins2);
+                debug(1, "    VPHP = %X VMHM = %X\n", getVPHP(), getVMHM());
                 advancePC();
                 
                 // Is it a WAIT command?
@@ -434,7 +434,7 @@ Copper::serviceEvent(EventID id, int64_t data)
                     // In how many cycles do we get there?
                     Cycle delay = amiga->dma.beamDiff(trigger);
                     
-                    debug(2, "   trigger = (%d,%d) delay = %lld\n",
+                    debug(1, "   trigger = (%d,%d) delay = %lld\n",
                              VPOS(trigger), HPOS(trigger), delay);
                     
                     // Stop the Copper or schedule a wake up event
