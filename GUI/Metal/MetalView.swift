@@ -237,13 +237,12 @@ public class MetalView: MTKView {
     
     func updateTexture() {
         
-        // let buf = controller.c64.vic.screenBuffer()
         let buf = controller.amiga.denise.screenBuffer()
         assert(buf != nil)
         
         let pixelSize = 4
-        let width = Int(NTSC_PIXELS)
-        let height = Int(PAL_RASTERLINES)
+        let width = Int(HPIXELS)
+        let height = Int(VPIXELS)
         let rowBytes = width * pixelSize
         let imageBytes = rowBytes * height
         let region = MTLRegionMake2D(0,0,width,height)

@@ -67,17 +67,16 @@ public:
     int8_t scrollHiEven;
     int8_t scrollHiOdd;
     
-    // Number of vertical pixels
-    // THIS VALUE IS WRONG. IT'S HERE TO FAKE THE VISUAL PROTOTYPE WORK WHICH
-    // IS BASED ON THE TEXTURES USED IN VIRTUALC64.
-    static const long VPIXELS = 284;
+    /*
+    // Vertical screen buffer size
+    static const long VPIXELS = 288;
     
-    // Number of horizontal pixels
-    // THIS VALUE IS WRONG. IT'S HERE TO FAKE THE VISUAL PROTOTYPE WHICH
-    // IS BASED ON THE TEXTURES USED IN VIRTUALC64.
-    static const long HPIXELS = 428;
+    // Horizontal screen buffer size
+    static const long HPIXELS = 768;
 
+    // Screen buffer size
     static const long BUFSIZE = VPIXELS * HPIXELS * 4;
+    */
     
 
     /* Screen buffer for long and short frames

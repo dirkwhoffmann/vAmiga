@@ -120,6 +120,20 @@ static const char *customReg[256] = {
 };
 
 
+//
+// Screen parameters
+//
+
+// Vertical screen buffer size
+static const long VPIXELS = 288;
+
+// Horizontal screen buffer size
+static const long HPIXELS = 768;
+
+// Screen buffer size
+static const long BUFSIZE = VPIXELS * HPIXELS * 4;
+
+
 
 //
 // DEPRECATED (from VirtualC64)

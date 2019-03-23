@@ -75,6 +75,10 @@ public extension MetalView {
         track()
         assert(device != nil)
 
+        //
+        // 512 x 512 textures
+        //
+        
         let descriptor = MTLTextureDescriptor.texture2DDescriptor(
             pixelFormat: MTLPixelFormat.rgba8Unorm,
             width: 512,
@@ -85,8 +89,10 @@ public extension MetalView {
         bgTexture = self.createBackgroundTexture()
     
         //
-        // 512 x 512 textures
+        // 1024 x 512 textures
         //
+        
+        descriptor.width = 1024;
         
         // Build C64 texture (as provided by the emulator)
         descriptor.usage = [ .shaderRead ]

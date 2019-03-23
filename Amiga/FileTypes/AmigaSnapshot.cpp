@@ -167,11 +167,11 @@ AmigaSnapshot::takeScreenshot(Amiga *amiga)
   
     uint32_t *source = (uint32_t *)amiga->denise.longFrame;
     uint32_t *target = header->screenshot.screen;
-    source += x + y * Denise::HPIXELS;
+    source += x + y * HPIXELS;
     
     for (unsigned i = 0; i < height; i++) {
         memcpy(target, source, width * 4);
-        source += Denise::HPIXELS;
+        source += HPIXELS;
         target += width;
     }
 }
