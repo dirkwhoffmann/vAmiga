@@ -301,6 +301,30 @@ inline const char *driveTypeName(DriveType type)
 }
 
 //
+// Events
+//
+
+typedef struct {
+    
+    const char *slotName;
+    const char *eventName;
+    long eventId;
+    Cycle trigger;
+    
+} EventSlotInfo;
+
+typedef struct {
+
+    Cycle dmaClock;
+    int primaryCount;
+    int secondaryCount;
+    EventSlotInfo primary[7];
+    EventSlotInfo secondary[15];
+
+} EventHandlerInfo;
+
+
+//
 // Game pads
 //
 

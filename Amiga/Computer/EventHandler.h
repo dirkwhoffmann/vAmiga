@@ -233,6 +233,15 @@ private:
     void _dumpSecondaryTable();
     void _dumpSlot(const char *slotName, const char *eventName, const Event event);
 
+    //
+    // Collecting information
+    //
+    
+public:
+    
+    // Collects the data shown in the GUI's debug panel.
+    EventHandlerInfo getInfo();
+    
 public:
     
     //

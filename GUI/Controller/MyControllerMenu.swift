@@ -512,52 +512,86 @@ extension MyController : NSMenuItemValidation {
     }
  
     @IBAction func dumpAmigaAction(_ sender: Any!) {
+        amiga.suspend()
         amiga.dump()
+        amiga.resume()
     }
     @IBAction func dumpEventsAction(_ sender: Any!) {
+        amiga.suspend()
+        track()
         amiga.dma.dumpEventHandler()
+        track()
+        amiga.resume()
+        track()
     }
     @IBAction func dumpCPUAction(_ sender: Any!) {
+        amiga.suspend()
         amiga.cpu.dump()
+        amiga.resume()
     }
     @IBAction func dumpCIAAAction(_ sender: Any!) {
+        amiga.suspend()
         amiga.ciaA.dump()
+        amiga.resume()
     }
     @IBAction func dumpCIABAction(_ sender: Any!) {
+        amiga.suspend()
         amiga.ciaB.dump()
+        amiga.resume()
     }
     @IBAction func dumpMemoryAction(_ sender: Any!) {
+        amiga.suspend()
         amiga.mem.dump()
+        amiga.resume()
     }
     @IBAction func dumpDf0Action(_ sender: Any!) {
+        amiga.suspend()
         amiga.df0.dump()
+        amiga.resume()
     }
     @IBAction func dumpDf1Action(_ sender: Any!) {
+        amiga.suspend()
         amiga.df1.dump()
+        amiga.resume()
     }
     @IBAction func dumpAgnusAction(_ sender: Any!) {
+        amiga.suspend()
         amiga.dma.dump()
+        amiga.resume()
     }
     @IBAction func dumpCopperAction(_ sender: Any!) {
+        amiga.suspend()
         amiga.dma.dumpCopper()
+        amiga.resume()
     }
     @IBAction func dumpBlitterAction(_ sender: Any!) {
+        amiga.suspend()
         amiga.dma.dumpBlitter()
+        amiga.resume()
     }
     @IBAction func dumpPaulaAction(_ sender: Any!) {
+        amiga.suspend()
         amiga.paula.dump()
+        amiga.resume()
     }
     @IBAction func dumpDeniseAction(_ sender: Any!) {
+        amiga.suspend()
         amiga.denise.dump()
+        amiga.resume()
     }
     @IBAction func dumpKeyboardAction(_ sender: Any!) {
+        amiga.suspend()
         amiga.keyboard.dump()
+        amiga.resume()
     }
     @IBAction func dumpControlPort1Action(_ sender: Any!) {
+        amiga.suspend()
         amiga.controlPort1.dump()
+        amiga.resume()
     }
     @IBAction func dumpControlPort2Action(_ sender: Any!) {
+        amiga.suspend()
         amiga.controlPort2.dump()
+        amiga.resume()
     }
-
 }
