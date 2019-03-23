@@ -44,7 +44,17 @@ Denise::_powerOn()
     frame = 0;
     frameBuffer = longFrame;
     pixelBuffer = frameBuffer;
+    
+    // Initialize frame buffers with a recognizable debug pattern
+    for (unsigned line = 0; line < VPIXELS; line++) {
+        for (unsigned i = 0; i < HPIXELS; i++) {
+            longFrame[line * HPIXELS + i] =
+            shortFrame[line * HPIXELS + i] =
+            (line % 2) ? 0x000000FF : 0x0000FFFF;
+        }
+    }
 }
+
 void
 Denise::_powerOff()
 {

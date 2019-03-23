@@ -13,7 +13,7 @@ import MetalKit
 import MetalPerformanceShaders
 
 struct C64Texture {
-    static let orig = NSSize.init(width: 512, height: 512)
+    static let orig = NSSize.init(width: 1024, height: 512)
     static let upscaled = NSSize.init(width: 2048, height: 2048)
 }
 
@@ -226,11 +226,14 @@ public class MetalView: MTKView {
                                   height: rect.height / C64Texture.orig.height)
         
         // Enable this for debugging (will display the whole texture)
-        // textureXStart = 0.0;
-        // textureXEnd = 1.0;
-        // textureYStart = 0.0;
-        // textureYEnd = 1.0;
-    
+        textureRect = CGRect.init(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
+        /*
+        textureXStart = 0.0;
+        textureXEnd = 1.0;
+        textureYStart = 0.0;
+        textureYEnd = 1.0;
+        */
+        
         // Update texture coordinates in vertex buffer
         buildVertexBuffer()
     }

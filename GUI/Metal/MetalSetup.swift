@@ -115,7 +115,7 @@ public extension MetalView {
         descriptor.width = 2048;
         descriptor.height = 2048;
         
-        // Build upscaled C64 texture
+        // Build upscaled emulator texture
         descriptor.usage = [ .shaderRead, .shaderWrite, .pixelFormatView, .renderTarget ]
         upscaledTexture = device?.makeTexture(descriptor: descriptor)
         assert(upscaledTexture != nil, "Failed to create upscaling texture.")
