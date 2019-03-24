@@ -170,11 +170,10 @@ DMAController::cycle2FramePosition(Cycle cycle)
 }
 
 Cycle
-DMAController::framePosition2Cyce(FramePosition framePos)
+DMAController::framePosition2Cycle(FramePosition framePos)
 {
     DMACycle result = framePos.frame * cyclesInCurrentFrame() + framePos.vpos * cyclesPerLine() + hpos;
     return DMA_CYCLES(result);
-    
 }
 
 Cycle
@@ -851,7 +850,7 @@ DMAController::hsyncHandler()
         eventHandler.schedulePos(DMA_SLOT, 26, nextDmaEvent[0], eventID);
     }
     
-    // Schedule the first RAS event
+    // Schedule first RAS event
     scheduleNextRASEvent(vpos, hpos);
 }
 
@@ -1033,12 +1032,14 @@ DMAController::serviceRASEvent(EventID id)
             
         case RAS_DIWSTRT:
             
-            // debug("RAS_DIWSTRT: (%d,%d)\n", vpos, hpos);
+            if (amiga->debugDMA) debug("RAS_DIWSTRT: (%d,%d)\n", vpos, hpos);
+            amiga->denise.draw16();
             break;
             
         case RAS_DIWDRAW:
 
-            // debug("RAS_DIWDRAW: (%d,%d)\n", vpos, hpos);
+            if (amiga->debugDMA) debug("RAS_DIWDRAW: (%d,%d)\n", vpos, hpos);
+            amiga->denise.draw16();
             break;
             
         default:
@@ -1046,37 +1047,36 @@ DMAController::serviceRASEvent(EventID id)
             break;
     }
     
-    // Schedule next RAS event (HSYNC if no more DIW happen in this line)
+    // Schedule next RAS event
     scheduleNextRASEvent(vpos, hpos);
 }
 
 void
 DMAController::scheduleNextRASEvent(int16_t vpos, int16_t hpos)
 {
- 
-    // WE DON'T USED THE DIW EVENTS FOR NOW ...
-    /*
-    
+    // Map hstrt, hstop to DMA cycle values
+    uint16_t hstrtdma = hstrt / 2;
+    uint16_t hstopdma = hstop / 2;
+
     // Check if the vertical position is inside the drawing area
-    if (vpos >= vstrt && vpos <= vstop) {
+    if (vpos > 25 && vpos >= vstrt && vpos <= vstop) {
         
         // Check if the next event is the first DIW event in this line
-        if (hpos < hstrt) {
+        if (hpos < hstrtdma) {
             // debug("Next RAS event is %d at (%d,%d)\n", RAS_DIWSTRT, vpos, hstrt);
-            eventHandler.schedulePos(RAS_SLOT, vpos, hstrt, RAS_DIWSTRT);
+            eventHandler.schedulePos(RAS_SLOT, vpos, hstrtdma, RAS_DIWSTRT);
             return;
         }
         
         // Check if there is another DIW event to come in this line
-        if (hpos < hstop) {
+        if (hpos < hstopdma) {
             // debug("Next RAS event is %d at (%d,%d)\n", RAS_DIWDRAW, vpos, hstrt);
-            eventHandler.schedulePos(RAS_SLOT, vpos, hstrt, RAS_DIWDRAW);
+            eventHandler.schedulePos(RAS_SLOT, vpos, hpos + 8, RAS_DIWDRAW);
             return;
         }
         
         // If we come here, all DIW events have been processed
     }
-    */
     
     // Schedule a HSYNC event to finish up the current line
     eventHandler.schedulePos(RAS_SLOT, vpos, HPOS_MAX, RAS_HSYNC);

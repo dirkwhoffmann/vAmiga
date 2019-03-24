@@ -316,13 +316,13 @@ typedef struct {
 typedef struct {
 
     Cycle dmaClock;
-    int primaryCount;
-    int secondaryCount;
     EventSlotInfo primary[7];
     EventSlotInfo secondary[15];
 
 } EventHandlerInfo;
 
+static const long primarySlotCount = 7;
+static const long secondarySlotCount = 14;
 
 //
 // Game pads

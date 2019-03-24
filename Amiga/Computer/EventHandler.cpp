@@ -62,7 +62,7 @@ EventHandler::_dump()
     amiga->dumpClock();
     
     plainmsg("Primary events:\n");
-    for (unsigned i = 0; i < info.primaryCount; i++) {
+    for (unsigned i = 0; i <primarySlotCount; i++) {
 
         plainmsg("Slot: %-10s ", info.primary[i].slotName);
         plainmsg("Event: %-15s ", info.primary[i].eventName);
@@ -78,7 +78,7 @@ EventHandler::_dump()
     }
     
     plainmsg("Secondary events:\n");
-    for (unsigned i = 0; i < info.secondaryCount; i++) {
+    for (unsigned i = 0; i < secondarySlotCount; i++) {
         
         plainmsg("Slot: %-10s ", info.secondary[i].slotName);
         plainmsg("Event: %-15s ", info.secondary[i].eventName);
@@ -99,14 +99,15 @@ EventHandler::getInfo()
 {
     EventHandlerInfo info;
     
+    assert(primarySlotCount == EVENT_SLOT_COUNT);
+    assert(secondarySlotCount == SEC_SLOT_COUNT);
+
     info.dmaClock = amiga->dma.clock;
-    info.primaryCount = 7;
-    info.secondaryCount = 15;
 
     //
     // Primary events
     //
-    debug("EVENT_SLOT_COUNT = %d SEC_SLOT_COUNT = %d\n", EVENT_SLOT_COUNT, SEC_SLOT_COUNT); 
+    
     for (unsigned i = 0; i < EVENT_SLOT_COUNT; i++) {
         
         info.primary[i].trigger = eventSlot[i].triggerCycle;
@@ -238,7 +239,6 @@ EventHandler::getInfo()
 
         switch ((EventSlot)i) {
                 
-            case HSYNC_SLOT:         info.secondary[i].slotName = "HSYNC"; break;
             case TBE_IRQ_SLOT:       info.secondary[i].slotName = "TBE_IRQ"; break;
             case DSKBLK_IRQ_SLOT:    info.secondary[i].slotName = "DSKBLK_IRQ"; break;
             case SOFT_IRQ_SLOT:      info.secondary[i].slotName = "SOFT_IRQ"; break;
@@ -257,16 +257,6 @@ EventHandler::getInfo()
         }
         
         switch ((EventSlot)i) {
-                
-            case HSYNC_SLOT:
-                
-                switch (secondarySlot[i].id) {
-                        
-                    case 0:          info.secondary[i].eventName = "none"; break;
-                    case HSYNC_EOL:  info.secondary[i].eventName = "HSYNC_EOL"; break;
-                    default:         info.secondary[i].eventName = "*** INVALID ***"; break;
-                }
-                break;
                 
             case TBE_IRQ_SLOT:
             case DSKBLK_IRQ_SLOT:
@@ -298,220 +288,6 @@ EventHandler::getInfo()
     
     return info;
 }
-
-/*
-void
-EventHandler::_dumpPrimaryTable()
-{
-    const char *slotName;
-    const char *eventName;
-    
-    plainmsg("\nPrimary event table:\n");
-    for (unsigned i = 0; i < EVENT_SLOT_COUNT; i++) {
-        
-        switch ((EventSlot)i) {
-                
-            case CIAA_SLOT:
-            case CIAB_SLOT:
-                
-                slotName = (i == 0) ? "CIA A" : "CIA B";
-                switch (eventSlot[i].id) {
-                    case 0:                eventName = "none"; break;
-                    case CIA_EXECUTE:      eventName = "CIA_EXECUTE"; break;
-                    case CIA_WAKEUP:       eventName = "CIA_WAKEUP"; break;
-                    default:               eventName = "*** INVALID ***"; break;
-                }
-                break;
-                
-            case DMA_SLOT:
-                
-                slotName = "DMA";
-                switch (eventSlot[i].id) {
-                    case 0:                eventName = "none"; break;
-                    case DMA_DISK:         eventName = "DMA_DISK"; break;
-                    case DMA_A0:           eventName = "A0"; break;
-                    case DMA_A1:           eventName = "A1"; break;
-                    case DMA_A2:           eventName = "A2"; break;
-                    case DMA_A3:           eventName = "A3"; break;
-                    case DMA_S0:           eventName = "S0"; break;
-                    case DMA_S1:           eventName = "S1"; break;
-                    case DMA_S2:           eventName = "S2"; break;
-                    case DMA_S3:           eventName = "S3"; break;
-                    case DMA_S4:           eventName = "S4"; break;
-                    case DMA_S5:           eventName = "S5"; break;
-                    case DMA_S6:           eventName = "S6"; break;
-                    case DMA_S7:           eventName = "S7"; break;
-                    case DMA_L1:           eventName = "L1"; break;
-                    case DMA_L2:           eventName = "L2"; break;
-                    case DMA_L3:           eventName = "L3"; break;
-                    case DMA_L4:           eventName = "L4"; break;
-                    case DMA_L5:           eventName = "L5"; break;
-                    case DMA_L6:           eventName = "L6"; break;
-                    case DMA_H1:           eventName = "H1"; break;
-                    case DMA_H2:           eventName = "H2"; break;
-                    case DMA_H3:           eventName = "H3"; break;
-                    case DMA_H4:           eventName = "H4"; break;
-                    default:               eventName = "*** INVALID ***"; break;
-                }
-                break;
-                
-            case COP_SLOT:
-                
-                slotName = "Copper";
-                switch (eventSlot[i].id) {
-                        
-                    case 0:                eventName = "none"; break;
-                    case COP_REQUEST_DMA:  eventName = "COP_REQUEST_DMA"; break;
-                    case COP_FETCH:        eventName = "COP_FETCH"; break;
-                    case COP_MOVE:         eventName = "COP_MOVE"; break;
-                    case COP_WAIT_OR_SKIP: eventName = "WAIT_OR_SKIP"; break;
-                    case COP_WAIT:         eventName = "COP_WAIT"; break;
-                    case COP_SKIP:         eventName = "COP_SKIP"; break;
-                    case COP_JMP1:         eventName = "COP_JMP1"; break;
-                    case COP_JMP2:         eventName = "COP_JMP2"; break;
-                    default:               eventName = "*** INVALID ***"; break;
-                }
-                break;
-                
-            case BLT_SLOT:
-                
-                slotName = "Blitter";
-                switch (eventSlot[i].id) {
-                        
-                    case 0:                eventName = "none"; break;
-                    case BLT_INIT:         eventName = "BLT_INIT"; break;
-                    case BLT_EXECUTE:      eventName = "BLT_EXECUTE"; break;
-                    case BLT_FAST_BLIT:    eventName = "BLT_FAST_BLIT"; break;
-                    default:               eventName = "*** INVALID ***"; break;
-                }
-                break;
-            
-            case RAS_SLOT:
-                
-                slotName = "Raster";
-                switch (eventSlot[i].id) {
-                        
-                    case 0:                eventName = "none"; break;
-                    case RAS_HSYNC:        eventName = "RAS_HSYNC"; break;
-                    case RAS_DIWSTRT:      eventName = "RAS_DIWSTRT"; break;
-                    case RAS_DIWDRAW:      eventName = "RAS_DIWDRAW"; break;
-                    default:               eventName = "*** INVALID ***"; break;
-                }
-                break;
-    
-            case SEC_SLOT:
-                
-                slotName = "Secondary";
-                switch (eventSlot[i].id) {
-                        
-                    case 0:                eventName = "none"; break;
-                    case SEC_TRIGGER:      eventName = "SEC_TRIGGER"; break;
-                    default:               eventName = "*** INVALID ***"; break;
-                }
-                break;
-                
-            default: assert(false);
-        }
-        
-        _dumpSlot(slotName, eventName, eventSlot[i]);
-    }
-}
-
-void
-EventHandler::_dumpSecondaryTable()
-{
-    const char *slotName;
-    const char *eventName;
-    
-    plainmsg("\nSecondary event table:\n");
-    for (unsigned i = 0; i < SEC_SLOT_COUNT; i++) {
-        
-        switch ((EventSlot)i) {
-                
-            case HSYNC_SLOT:         slotName = "HSYNC"; break;
-            case TBE_IRQ_SLOT:       slotName = "TBE_IRQ"; break;
-            case DSKBLK_IRQ_SLOT:    slotName = "DSKBLK_IRQ"; break;
-            case SOFT_IRQ_SLOT:      slotName = "SOFT_IRQ"; break;
-            case PORTS_IRQ_SLOT:     slotName = "PORTS_IRQ"; break;
-            case COPR_IRQ_SLOT:      slotName = "COPR_IRQ"; break;
-            case VERTB_IRQ_SLOT:     slotName = "VERTB_IRQ"; break;
-            case BLIT_IRQ_SLOT:      slotName = "BLIT_IRQ"; break;
-            case AUD0_IRQ_SLOT:      slotName = "AUD0_IRQ"; break;
-            case AUD1_IRQ_SLOT:      slotName = "AUD1_IRQ"; break;
-            case AUD2_IRQ_SLOT:      slotName = "AUD2_IRQ"; break;
-            case AUD3_IRQ_SLOT:      slotName = "AUD3_IRQ"; break;
-            case RBF_IRQ_SLOT:       slotName = "RBF_IRQ"; break;
-            case DSKSYN_IRQ_SLOT:    slotName = "DSKSYN_IRQ"; break;
-            case EXTER_IRQ_SLOT:     slotName = "EXTER_IRQ"; break;
-            default:                 slotName = "*** INVALID ***"; break;
-        }
-        
-        switch ((EventSlot)i) {
-                
-            case HSYNC_SLOT:
-                
-                switch (secondarySlot[i].id) {
-                        
-                    case 0:          eventName = "none"; break;
-                    case HSYNC_EOL:  eventName = "HSYNC_EOL"; break;
-                    default:         eventName = "*** INVALID ***"; break;
-                }
-                break;
-                
-            case TBE_IRQ_SLOT:
-            case DSKBLK_IRQ_SLOT:
-            case SOFT_IRQ_SLOT:
-            case PORTS_IRQ_SLOT:
-            case COPR_IRQ_SLOT:
-            case VERTB_IRQ_SLOT:
-            case BLIT_IRQ_SLOT:
-            case AUD0_IRQ_SLOT:
-            case AUD1_IRQ_SLOT:
-            case AUD2_IRQ_SLOT:
-            case AUD3_IRQ_SLOT:
-            case RBF_IRQ_SLOT:
-            case DSKSYN_IRQ_SLOT:
-            case EXTER_IRQ_SLOT:
-                
-                switch (secondarySlot[i].id) {
-                        
-                    case 0:          eventName = "none"; break;
-                    case IRQ_SET:    eventName = "IRQ_SET"; break;
-                    case IRQ_CLEAR:  eventName = "IRQ_CLEAR"; break;
-                    default:         eventName = "*** INVALID ***"; break;
-                }
-                break;
-                
-            default: assert(false);
-        }
-        
-        _dumpSlot(slotName, eventName, secondarySlot[i]);
-
-    }
-}
-
-void
-EventHandler::_dumpSlot(const char *slotName, const char *eventName, const Event event)
-{
-    plainmsg("Slot: %-10s ", slotName);
-    plainmsg("Event: %-15s ", eventName);
-    plainmsg("Trigger: ");
-    
-    Cycle trigger = event.triggerCycle;
-    if (trigger == NEVER) {
-        plainmsg("never");
-    } else {
-        plainmsg("%lld (%lld,%d,%d) ",
-                 trigger,
-                 event.framePos.frame,
-                 event.framePos.vpos,
-                 event.framePos.hpos);
-        plainmsg("(%lld DMA cycles away)\n",
-                 AS_DMA_CYCLES(trigger - amiga->dma.clock));
-
-    }
-}
-*/
 
 void
 EventHandler::scheduleAbs(EventSlot s, Cycle cycle, EventID id)
@@ -567,6 +343,11 @@ EventHandler::schedulePos(EventSlot s, int16_t vpos, int16_t hpos, EventID id)
     eventSlot[s].id = id;
     if (cycle < nextTrigger) nextTrigger = cycle;
     
+    if (eventSlot[s].framePos.vpos != vpos) {
+        dump();
+        debug("schedulePos(%d, (%d,%d), %d)\n", s, vpos, hpos, id);
+        debug("f: %lld v: %d h: %d\n", eventSlot[s].framePos.frame, eventSlot[s].framePos.vpos, eventSlot[s].framePos.hpos);
+    }
     assert(eventSlot[s].framePos.vpos == vpos);
     assert(eventSlot[s].framePos.hpos == hpos);
     assert(checkScheduledEvent(s));
@@ -802,10 +583,6 @@ void
 EventHandler::_executeSecondaryUntil(Cycle cycle) {
 
     // Check all event slots one by one
-    if (isDueSec(HSYNC_SLOT, cycle)) { // DEPRECATED
-        secondarySlot[HSYNC_SLOT].triggerCycle = NEVER;
-        assert(false);
-    }
     if (isDueSec(TBE_IRQ_SLOT, cycle)) {
         serveIRQEvent(TBE_IRQ_SLOT, 0);
     }

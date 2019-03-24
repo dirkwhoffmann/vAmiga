@@ -43,8 +43,8 @@ typedef enum
     
     // Secondary slot table
     
-    HSYNC_SLOT = 0,   // HSYNC event
-    TBE_IRQ_SLOT,     // Source 0 IRQ (Serial port transmit buffer empty)
+    // HSYNC_SLOT = 0,   // HSYNC event
+    TBE_IRQ_SLOT = 0, // Source 0 IRQ (Serial port transmit buffer empty)
     DSKBLK_IRQ_SLOT,  // Source 1 IRQ (Disk block finished)
     SOFT_IRQ_SLOT,    // Source 2 IRQ (Software-initiated)
     PORTS_IRQ_SLOT,   // Source 3 IRQ (I/O ports and CIA A)

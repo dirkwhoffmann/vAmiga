@@ -199,13 +199,15 @@ Denise::fillShiftRegisters()
     shiftReg[4] = 0; // bpldat[4];
     shiftReg[5] = 0; // bpldat[5];
 
-    draw16();
+    // draw16();
 }
 
 void
 Denise::draw16()
 {
-    int16_t vpos = amiga->dma.vpos;
+    assert(amiga->dma.vpos >= 26); // 0 .. 25 is VBLANK area
+    
+    int16_t vpos = amiga->dma.vpos - 26;
     int16_t hpos = (amiga->dma.hpos - 63) * 2;
     
     // if (amiga->debugDMA) debug("draw16: (%d, %d)\n", vpos, hpos);

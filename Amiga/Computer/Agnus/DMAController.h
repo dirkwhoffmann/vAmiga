@@ -262,7 +262,7 @@ public:
     FramePosition cycle2FramePosition(Cycle cycle);
 
     // Converts a frame position into a master cycle
-    Cycle framePosition2Cyce(FramePosition framePos);
+    Cycle framePosition2Cycle(FramePosition framePos);
 
     
     /* Converts a beam position to a CPU cycle
