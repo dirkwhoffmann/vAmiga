@@ -271,11 +271,15 @@ public extension MetalView
     
     func screenshot(afterUpscaling: Bool = true) -> NSImage?
     {
+        return screenshot(texture: upscaledTexture)
+        
+        /*
         if afterUpscaling {
             return screenshot(texture: upscaledTexture)
         } else {
             return screenshot(texture: emulatorTexture)
         }
+        */
     }
     
     func createBackgroundTexture() -> MTLTexture? {

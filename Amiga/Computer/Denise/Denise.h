@@ -207,6 +207,13 @@ public:
     
 public:
     
+    /* Returns true if the long frame / short frame is ready for display
+     * The long frame is ready for display, if Denise is currently working on
+     * on the short frame and vice verse.
+     */
+    bool longFrameIsReady() { return (frameBuffer == shortFrame); }
+    bool shortFrameIsReady() { return (frameBuffer == longFrame); }
+
     /* Returns the currently stabel screen buffer.
      * If Denise is working on the long frame, a pointer to the short frame is
      * returned and vice versa.

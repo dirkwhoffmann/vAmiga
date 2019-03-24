@@ -393,6 +393,14 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->denise->initFakePictures((int *)fake1, (int *)fake2);
 }
+- (BOOL) longFrameIsReady
+{
+    return wrapper->denise->longFrameIsReady();
+}
+- (BOOL) shortFrameIsReady
+{
+    return wrapper->denise->shortFrameIsReady();
+}
 - (void *) screenBuffer
 {
     return wrapper->denise->screenBuffer();

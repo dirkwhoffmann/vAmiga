@@ -93,12 +93,15 @@ public extension MetalView {
         //
         
         descriptor.width = 1024;
+        descriptor.height = 512;
         
-        // Build C64 texture (as provided by the emulator)
+        // Build emulator textures (raw data of long and short frames)
         descriptor.usage = [ .shaderRead ]
-        emulatorTexture = device?.makeTexture(descriptor: descriptor)
-        assert(emulatorTexture != nil, "Failed to create emulator texture.")
-        
+        longFrameTexture = device?.makeTexture(descriptor: descriptor)
+        assert(longFrameTexture != nil, "Failed to create long frame texture.")
+        shortFrameTexture = device?.makeTexture(descriptor: descriptor)
+        assert(shortFrameTexture != nil, "Failed to create short frame texture.")
+
         // Build bloom textures
         descriptor.usage = [ .shaderRead, .shaderWrite, .renderTarget ]
         bloomTextureR = device?.makeTexture(descriptor: descriptor)

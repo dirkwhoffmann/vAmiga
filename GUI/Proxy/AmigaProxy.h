@@ -310,6 +310,8 @@ struct AmigaFileWrapper;
 - (void) setBPLCON0Bit:(NSInteger)bit value:(BOOL)value;
 
 - (void) initFakePictures:(void *)fake1 fake2:(void *)fake2;
+- (BOOL) longFrameIsReady;
+- (BOOL) shortFrameIsReady;
 - (void *) screenBuffer;
 
 @end

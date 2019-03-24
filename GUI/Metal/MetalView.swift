@@ -62,12 +62,18 @@ public class MetalView: MTKView {
     /// Texture to hold the pixel depth information
     var depthTexture: MTLTexture! = nil
     
-    /// Emulator texture as provided by the emulator (512 x 512)
-    /// The C64 screen has size 428 x 284 and covers the upper left part of the
-    /// emulator texture. The emulator texture is updated in function
-    /// updateTexture() which is called periodically in drawRect().
-    var emulatorTexture: MTLTexture! = nil
+    /// Long frame texture (raw data from emulator, 1024 x 512)
+    /// This texture is filled with the screen buffer data from the emulator.
+    /// The texture is updated in function updateLongFrameTexture() which is
+    /// called periodically in drawRect().
+    var longFrameTexture: MTLTexture! = nil
 
+    /// Short frame texture (raw data from emulator, 1024 x 512)
+    /// This texture is filled with the screen buffer data from the emulator.
+    /// The texture is updated in function updateShortFrameTexture() which is
+    /// called periodically in drawRect().
+    var shortFrameTexture: MTLTexture! = nil
+    
     /// Bloom textures to emulate blooming (512 x 512)
     /// To emulate a bloom effect, the C64 texture is first split into it's
     /// R, G, and B parts. Each texture is then run through a Gaussian blur
@@ -249,13 +255,22 @@ public class MetalView: MTKView {
         let rowBytes = width * pixelSize
         let imageBytes = rowBytes * height
         let region = MTLRegionMake2D(0,0,width,height)
-            
-        emulatorTexture.replace(region: region,
-                                mipmapLevel: 0,
-                                slice: 0,
-                                withBytes: buf!,
-                                bytesPerRow: rowBytes,
-                                bytesPerImage: imageBytes)
+        
+        if (controller.amiga.denise.longFrameIsReady()) {
+            longFrameTexture.replace(region: region,
+                                     mipmapLevel: 0,
+                                     slice: 0,
+                                     withBytes: buf!,
+                                     bytesPerRow: rowBytes,
+                                     bytesPerImage: imageBytes)
+        } else {
+            shortFrameTexture.replace(region: region,
+                                     mipmapLevel: 0,
+                                     slice: 0,
+                                     withBytes: buf!,
+                                     bytesPerRow: rowBytes,
+                                     bytesPerImage: imageBytes)
+        }
     }
     
     /// Returns the compute kernel of the currently selected pixel upscaler
@@ -298,6 +313,8 @@ public class MetalView: MTKView {
         fragmentUniforms.scanlineDistance = Int32(layerHeight / 256);
        
         // Compute the bloom textures
+        shaderOptions.bloom = 0;
+        /*
         if shaderOptions.bloom != 0 {
             let bloomFilter = currentBloomFilter()
             bloomFilter.apply(commandBuffer: commandBuffer,
@@ -316,11 +333,12 @@ public class MetalView: MTKView {
             applyGauss(&bloomTextureG, radius: shaderOptions.bloomRadiusG)
             applyGauss(&bloomTextureB, radius: shaderOptions.bloomRadiusB)
         }
+        */
         
         // Upscale the C64 texture
         let upscaler = currentUpscaler()
         upscaler.apply(commandBuffer: commandBuffer,
-                       source: emulatorTexture,
+                       source: longFrameTexture,
                        target: upscaledTexture)
     
         // Blur the upscaled texture
