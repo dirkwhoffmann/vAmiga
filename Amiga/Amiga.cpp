@@ -319,7 +319,7 @@ Amiga::_powerOn()
     debugMode = true;
 
     // cpu.bpManager.setBreakpointAt(0xFC570E); // Blitter
-    cpu.bpManager.setBreakpointAt(0xFE8A6E); // All Blitter stuff done
+    // cpu.bpManager.setBreakpointAt(0xFE8A6E); // All Blitter stuff done
     
     putMessage(MSG_POWER_ON);
 }

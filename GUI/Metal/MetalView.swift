@@ -73,6 +73,10 @@ public class MetalView: MTKView {
     /// The texture is updated in function updateShortFrameTexture() which is
     /// called periodically in drawRect().
     var shortFrameTexture: MTLTexture! = nil
+ 
+    /// Merge texture (1024 x 1024)
+    /// The long frame and short frame textures are merged into this one.
+    var mergeTexture: MTLTexture! = nil
     
     /// Bloom textures to emulate blooming (512 x 512)
     /// To emulate a bloom effect, the C64 texture is first split into it's
@@ -100,6 +104,9 @@ public class MetalView: MTKView {
     /// This texture is used by the fragment shader to emulate a dotmask
     /// effect.
     var dotMaskTexture: MTLTexture! = nil
+    
+    // An instance of the merge filter
+    var mergeFilter : MergeFilter! = nil
     
     // Array holding all available upscalers
     var upscalerGallery = [ComputeKernel?](repeating: nil, count: 3)
@@ -224,12 +231,12 @@ public class MetalView: MTKView {
         rect = CGRect.init(x: CGFloat(0),
                            y: CGFloat(0),
                            width: CGFloat(HPIXELS - 82),
-                           height: CGFloat(VPIXELS - 4))
+                           height: CGFloat((2*VPIXELS) - 4))
         
         textureRect = CGRect.init(x: rect.minX / 1024,
-                                  y: rect.minY / 512,
+                                  y: rect.minY / 1024,
                                   width: rect.width / 1024,
-                                  height: rect.height / 512)
+                                  height: rect.height / 1024)
         
         // Enable this for debugging (will display the whole texture)
         // textureRect = CGRect.init(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
@@ -306,6 +313,10 @@ public class MetalView: MTKView {
         fragmentUniforms.dotMaskWidth = Int32(dotMaskTexture.width)
         fragmentUniforms.scanlineDistance = Int32(layerHeight / 256);
        
+        // Compute the merge texture
+        mergeFilter.apply(commandBuffer: commandBuffer,
+                          textures: [longFrameTexture, shortFrameTexture, mergeTexture])
+        
         // Compute the bloom textures
         shaderOptions.bloom = 0;
         /*
@@ -329,15 +340,11 @@ public class MetalView: MTKView {
         }
         */
         
-        // Combine the long frame and short texture to combined upscaled texture
+        // Compute upscaled texture
         let upscaler = currentUpscaler()
         upscaler.apply(commandBuffer: commandBuffer,
-                       textures: [longFrameTexture, shortFrameTexture, upscaledTexture])
-        /*
-        upscaler.apply(commandBuffer: commandBuffer,
-                       source: longFrameTexture,
+                       source: mergeTexture,
                        target: upscaledTexture)
-        */
         
         // Blur the upscaled texture
         if #available(OSX 10.13, *), shaderOptions.blur > 0 {

@@ -105,20 +105,20 @@ struct FragmentUniforms {
 // Static texture parameters
 // 
 
-struct C64_TEXTURE {
-    static let width = 512
-    static let height = 512
-    static let cutout_x = 428
-    static let cutout_y = 284
+struct MERGE_TEXTURE {
+    static let width = 1024
+    static let height = 1024
+    static let cutout_x = 768
+    static let cutout_y = 2 * 288
 }
 
 struct UPSCALED_TEXTURE {
     static let factor_x = 4
     static let factor_y = 4
-    static let width = C64_TEXTURE.width * UPSCALED_TEXTURE.factor_x
-    static let height = C64_TEXTURE.height * UPSCALED_TEXTURE.factor_y
-    static let cutout_x = C64_TEXTURE.cutout_x * UPSCALED_TEXTURE.factor_x
-    static let cutout_y = C64_TEXTURE.cutout_y * UPSCALED_TEXTURE.factor_y
+    static let width = MERGE_TEXTURE.width * UPSCALED_TEXTURE.factor_x
+    static let height = MERGE_TEXTURE.height * UPSCALED_TEXTURE.factor_y
+    static let cutout_x = MERGE_TEXTURE.cutout_x * UPSCALED_TEXTURE.factor_x
+    static let cutout_y = MERGE_TEXTURE.cutout_y * UPSCALED_TEXTURE.factor_y
 }
 
 
@@ -213,6 +213,18 @@ class BypassFilter : ComputeKernel {
     
     convenience init?(device: MTLDevice, library: MTLLibrary) {
         self.init(name: "bypass", device: device, library: library)
+    }
+}
+
+
+//
+// Texture merger
+//
+
+class MergeFilter : ComputeKernel {
+    
+    convenience init?(device: MTLDevice, library: MTLLibrary) {
+        self.init(name: "merge", device: device, library: library)
     }
 }
 

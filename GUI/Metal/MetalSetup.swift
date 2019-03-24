@@ -85,9 +85,10 @@ public extension MetalView {
             height: 512,
             mipmapped: false)
 
-        // Build background texture (drawn behind the cube)
+        // Background texture (drawn behind the cube)
         bgTexture = self.createBackgroundTexture()
     
+        
         //
         // 1024 x 512 textures
         //
@@ -95,14 +96,26 @@ public extension MetalView {
         descriptor.width = 1024;
         descriptor.height = 512;
         
-        // Build emulator textures (raw data of long and short frames)
+        // Emulator textures (raw data of long and short frames)
         descriptor.usage = [ .shaderRead ]
         longFrameTexture = device?.makeTexture(descriptor: descriptor)
         assert(longFrameTexture != nil, "Failed to create long frame texture.")
         shortFrameTexture = device?.makeTexture(descriptor: descriptor)
         assert(shortFrameTexture != nil, "Failed to create short frame texture.")
 
-        // Build bloom textures
+        //
+        // 1024 x 1024 textures
+        //
+        
+        descriptor.width = 1024;
+        descriptor.height = 1024;
+        
+        // Merged emulator texture (long frame + short frame)
+        descriptor.usage = [ .shaderRead, .shaderWrite, .renderTarget ]
+        mergeTexture = device?.makeTexture(descriptor: descriptor)
+        assert(mergeTexture != nil, "Failed to create merge texture.")
+        
+        // Bloom textures
         descriptor.usage = [ .shaderRead, .shaderWrite, .renderTarget ]
         bloomTextureR = device?.makeTexture(descriptor: descriptor)
         bloomTextureG = device?.makeTexture(descriptor: descriptor)
@@ -112,18 +125,18 @@ public extension MetalView {
         assert(bloomTextureB != nil, "Failed to create bloom texture (B).")
 
         //
-        // 2048 x 2048 textures
+        // 4096 x 4096 textures
         //
         
-        descriptor.width = 2048;
-        descriptor.height = 2048;
+        descriptor.width = 4096;
+        descriptor.height = 4096;
         
-        // Build upscaled emulator texture
+        // Upscaled emulator texture
         descriptor.usage = [ .shaderRead, .shaderWrite, .pixelFormatView, .renderTarget ]
         upscaledTexture = device?.makeTexture(descriptor: descriptor)
         assert(upscaledTexture != nil, "Failed to create upscaling texture.")
         
-        // Build scanline texture
+        // Scanline texture
         scanlineTexture = device?.makeTexture(descriptor: descriptor)
         assert(scanlineTexture != nil, "Failed to create scanline texture.")
     }
@@ -150,6 +163,9 @@ public extension MetalView {
         
         assert(device != nil)
         assert(library != nil)
+        
+        // Build the mergefilter
+        mergeFilter = MergeFilter.init(device: device!, library: library)
         
         // Build upscalers
         upscalerGallery[0] = BypassUpscaler.init(device: device!, library: library)
