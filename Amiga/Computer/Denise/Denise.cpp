@@ -208,13 +208,14 @@ Denise::draw16()
     assert(amiga->dma.vpos >= 26); // 0 .. 25 is VBLANK area
     
     int16_t vpos = amiga->dma.vpos - 26;
-    int16_t hpos = (amiga->dma.hpos - 63) * 2;
+    int16_t hpos = (amiga->dma.hpos - 63) * 4; // 2;
     
     // if (amiga->debugDMA) debug("draw16: (%d, %d)\n", vpos, hpos);
     
-    if (hpos > 320) return;
-    if (vpos > 250) return;
+    // if (hpos > HPIXELS) return;
+    // if (vpos > 250) return;
     
+    // uint32_t offset = (vpos * HPIXELS) + (2 * hpos);
     uint32_t offset = (vpos * HPIXELS) + hpos;
     if (offset + HPIXELS >= VPIXELS * HPIXELS) {
         // warn("OUT OF RANGE!!!\n");
@@ -243,18 +244,10 @@ Denise::draw16()
         // DEBUGGING
         // index = ((hpos + i) == vpos) ? 1 : 0;
         
+        // Draw two pixels in lores mode (no hires mode yet)
         uint32_t rgba = colorizer.getRGBA(index);
-        pixelBuffer[offset + i] = rgba;
-  
-        /*
-        if (index == 0) {
-            pixelBuffer[offset + (2 * i)] = 0;
-            pixelBuffer[offset + (2 * i) + 1] = 0;
-        } else {
-            pixelBuffer[offset + (2 * i)] = 0x000000FF;
-            pixelBuffer[offset + (2 * i) + 1] = 0x000000FF;
-        }
-        */
+        pixelBuffer[offset++] = rgba;
+        pixelBuffer[offset++] = rgba;
     }
 }
 

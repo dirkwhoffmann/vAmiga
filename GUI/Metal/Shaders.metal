@@ -210,6 +210,7 @@ kernel void bypassupscaler(texture2d<half, access::read>  longFrame   [[ texture
 }
 
 // EPX upscaler (Eric's Pixel Expansion)
+/*
 void writePixelBlock(texture2d<half, access::write> outTexture, uint2 gid, half4 value)
 {
     outTexture.write(value, gid + uint2(0,0));
@@ -217,13 +218,14 @@ void writePixelBlock(texture2d<half, access::write> outTexture, uint2 gid, half4
     outTexture.write(value, gid + uint2(1,0));
     outTexture.write(value, gid + uint2(1,1));
 }
+*/
 
 kernel void epxupscaler(texture2d<half, access::read>  in1Texture  [[ texture(0) ]],
                         texture2d<half, access::read>  in2Texture  [[ texture(1) ]],
                         texture2d<half, access::write> outTexture  [[ texture(2) ]],
                         uint2                          gid         [[ thread_position_in_grid ]])
 {
-    if((gid.x % 4 != 0) || (gid.y % 4 != 0))
+    if((gid.x % 2 != 0) || (gid.y % 2 != 0))
         return;
     
     //   A    --\ 1 2
@@ -235,12 +237,12 @@ kernel void epxupscaler(texture2d<half, access::read>  in1Texture  [[ texture(0)
     // IF D==C AND D!=B AND C!=A => 3=C
     // IF B==D AND B!=A AND D!=C => 4=D
 
-    half xx = gid.x / SCALE_FACTOR;
-    half yy = gid.y / SCALE_FACTOR;
+    half xx = gid.x / 2;
+    half yy = gid.y / 4;
     half4 A = in1Texture.read(uint2(xx, yy - 1));
-    half4 C = in1Texture.read(uint2(xx - 1, yy));
-    half4 P = in1Texture.read(uint2(xx, yy));
-    half4 B = in1Texture.read(uint2(xx + 1, yy));
+    half4 C = in2Texture.read(uint2(xx - 1, yy));
+    half4 P = in2Texture.read(uint2(xx, yy));
+    half4 B = in2Texture.read(uint2(xx + 1, yy));
     half4 D = in1Texture.read(uint2(xx, yy + 1));
         
     half4 r1 = (all(C == A) && any(C != D) && any(A != B)) ? A : P;
@@ -248,10 +250,17 @@ kernel void epxupscaler(texture2d<half, access::read>  in1Texture  [[ texture(0)
     half4 r3 = (all(A == B) && any(A != C) && any(B != D)) ? C : P;
     half4 r4 = (all(B == D) && any(B != A) && any(D != C)) ? D : P;
 
+    outTexture.write(r1, gid + uint2(0,0));
+    outTexture.write(r2, gid + uint2(1,0));
+    outTexture.write(r3, gid + uint2(0,1));
+    outTexture.write(r4, gid + uint2(1,1));
+
+    /*
     writePixelBlock(outTexture, gid + uint2(0,0), r1);
     writePixelBlock(outTexture, gid + uint2(2,0), r2);
     writePixelBlock(outTexture, gid + uint2(0,2), r3);
     writePixelBlock(outTexture, gid + uint2(2,2), r4);
+    */
 }
 
 // xBR upscaler (4x)

@@ -221,24 +221,18 @@ public class MetalView: MTKView {
         var rect: CGRect
         
         // Setup parameters that look good for a PAL texture
-        rect = CGRect.init(x: CGFloat(PAL_LEFT_BORDER_WIDTH - 36),
-                           y: CGFloat(PAL_UPPER_BORDER_HEIGHT - 34),
-                           width: CGFloat(PAL_CANVAS_WIDTH + 2 * 36),
-                           height: CGFloat(PAL_CANVAS_HEIGHT + 2 * 34))
+        rect = CGRect.init(x: CGFloat(0),
+                           y: CGFloat(0),
+                           width: CGFloat(HPIXELS - 82),
+                           height: CGFloat(VPIXELS - 4))
         
-        textureRect = CGRect.init(x: rect.minX / C64Texture.orig.width,
-                                  y: rect.minY / C64Texture.orig.height,
-                                  width: rect.width / C64Texture.orig.width,
-                                  height: rect.height / C64Texture.orig.height)
+        textureRect = CGRect.init(x: rect.minX / 1024,
+                                  y: rect.minY / 512,
+                                  width: rect.width / 1024,
+                                  height: rect.height / 512)
         
         // Enable this for debugging (will display the whole texture)
-        textureRect = CGRect.init(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
-        /*
-        textureXStart = 0.0;
-        textureXEnd = 1.0;
-        textureYStart = 0.0;
-        textureYEnd = 1.0;
-        */
+        // textureRect = CGRect.init(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
         
         // Update texture coordinates in vertex buffer
         buildVertexBuffer()

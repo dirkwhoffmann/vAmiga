@@ -861,7 +861,7 @@ DMAController::vsyncHandler()
     frame++;
     vpos = 0;
     
-    debug("[%d]\n", frame);
+    // debug("[%d]\n", frame);
     
     // Remember the clock count at SOF (Start Of Frame)
     // Add one because the DMA clock hasn't been advanced yet
