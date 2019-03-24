@@ -193,12 +193,19 @@ fragment half4 fragment_main(ProjectedVertex vert [[ stage_in ]],
 // Texture upscalers
 //
 
-kernel void bypassupscaler(texture2d<half, access::read>  in1Texture  [[ texture(0) ]],
-                           texture2d<half, access::read>  in2Texture  [[ texture(1) ]],
+kernel void bypassupscaler(texture2d<half, access::read>  longFrame   [[ texture(0) ]],
+                           texture2d<half, access::read>  shortFrame  [[ texture(1) ]],
                            texture2d<half, access::write> outTexture  [[ texture(2) ]],
                            uint2                          gid         [[ thread_position_in_grid ]])
 {
-    half4 result = in1Texture.read(uint2(gid.x / SCALE_FACTOR, gid.y / SCALE_FACTOR));
+    half4 result;
+    
+    if (gid.y % 4 < 2) {
+        result = longFrame.read(uint2(gid.x / 2, gid.y / 4));
+    } else {
+        result = shortFrame.read(uint2(gid.x / 2, gid.y / 4));
+    }
+    
     outTexture.write(result, gid);
 }
 

@@ -610,7 +610,7 @@ DMAController::pokeVPOS(uint16_t value)
 void
 DMAController::pokeDIWSTRT(uint16_t value)
 {
-    debug("*** pokeDIWSTRT(%X)\n", value);
+    debug(2, "pokeDIWSTRT(%X)\n", value);
     
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // V7 V6 V5 V4 V3 V2 V1 V0 H7 H6 H5 H4 H3 H2 H1 H0  and  H8 = 0, H8 = 0
@@ -623,7 +623,7 @@ DMAController::pokeDIWSTRT(uint16_t value)
 void
 DMAController::pokeDIWSTOP(uint16_t value)
 {
-    debug("pokeDIWSTOP(%X)\n", value);
+    debug(2, "pokeDIWSTOP(%X)\n", value);
     
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // V7 V6 V5 V4 V3 V2 V1 V0 H7 H6 H5 H4 H3 H2 H1 H0  and  H8 = 1, V8 = !V7
@@ -636,7 +636,7 @@ DMAController::pokeDIWSTOP(uint16_t value)
 void
 DMAController::pokeDDFSTRT(uint16_t value)
 {
-    debug("pokeDDFSTRT(%X)\n", value);
+    debug(2, "pokeDDFSTRT(%X)\n", value);
 
     ddfstrt = value;
 }
@@ -644,7 +644,7 @@ DMAController::pokeDDFSTRT(uint16_t value)
 void
 DMAController::pokeDDFSTOP(uint16_t value)
 {
-    debug("pokeDDFSTOP(%X)\n", value);
+    debug(2, "pokeDDFSTOP(%X)\n", value);
     
     ddfstop = value;
 }

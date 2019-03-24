@@ -208,7 +208,8 @@ void
 Paula::checkInterrupt()
 {
     int level = interruptLevel();
-        
+    
+    /*
     if (level) {
         uint16_t mask = intena & intreq;
         debug("*** intena: %X inetrq: %X\n", intena, intreq);
@@ -229,6 +230,7 @@ Paula::checkInterrupt()
     } else {
         // debug("*** SETTING IRQ LEVEL TO 0\n");
     }
+    */
     
     m68k_set_irq(level);
 }
