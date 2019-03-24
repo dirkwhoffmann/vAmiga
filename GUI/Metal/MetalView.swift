@@ -335,12 +335,16 @@ public class MetalView: MTKView {
         }
         */
         
-        // Upscale the C64 texture
+        // Combine the long frame and short texture to combined upscaled texture
         let upscaler = currentUpscaler()
+        upscaler.apply(commandBuffer: commandBuffer,
+                       textures: [longFrameTexture, shortFrameTexture, upscaledTexture])
+        /*
         upscaler.apply(commandBuffer: commandBuffer,
                        source: longFrameTexture,
                        target: upscaledTexture)
-    
+        */
+        
         // Blur the upscaled texture
         if #available(OSX 10.13, *), shaderOptions.blur > 0 {
             let gauss = MPSImageGaussianBlur(device: device!,

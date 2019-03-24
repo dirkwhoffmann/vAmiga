@@ -796,10 +796,12 @@ Amiga::runLoop()
                 // debug("MSG_BREAKPOINT_REACHED at %X\n", cpu.getPC());
             }
             
+            /*
             if (cpu.getPC() == 0xFE8A6E) {
                 debug("SWITCHING ON DMA DEBUGGING\n");
                 debugDMA = true;
             }
+            */
         }
         
         // stop = true;

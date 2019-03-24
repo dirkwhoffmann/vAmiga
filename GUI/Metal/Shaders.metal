@@ -193,11 +193,12 @@ fragment half4 fragment_main(ProjectedVertex vert [[ stage_in ]],
 // Texture upscalers
 //
 
-kernel void bypassupscaler(texture2d<half, access::read>  inTexture   [[ texture(0) ]],
-                           texture2d<half, access::write> outTexture  [[ texture(1) ]],
+kernel void bypassupscaler(texture2d<half, access::read>  in1Texture  [[ texture(0) ]],
+                           texture2d<half, access::read>  in2Texture  [[ texture(1) ]],
+                           texture2d<half, access::write> outTexture  [[ texture(2) ]],
                            uint2                          gid         [[ thread_position_in_grid ]])
 {
-    half4 result = inTexture.read(uint2(gid.x / SCALE_FACTOR, gid.y / SCALE_FACTOR));
+    half4 result = in1Texture.read(uint2(gid.x / SCALE_FACTOR, gid.y / SCALE_FACTOR));
     outTexture.write(result, gid);
 }
 
@@ -210,8 +211,9 @@ void writePixelBlock(texture2d<half, access::write> outTexture, uint2 gid, half4
     outTexture.write(value, gid + uint2(1,1));
 }
 
-kernel void epxupscaler(texture2d<half, access::read>  inTexture   [[ texture(0) ]],
-                        texture2d<half, access::write> outTexture  [[ texture(1) ]],
+kernel void epxupscaler(texture2d<half, access::read>  in1Texture  [[ texture(0) ]],
+                        texture2d<half, access::read>  in2Texture  [[ texture(1) ]],
+                        texture2d<half, access::write> outTexture  [[ texture(2) ]],
                         uint2                          gid         [[ thread_position_in_grid ]])
 {
     if((gid.x % 4 != 0) || (gid.y % 4 != 0))
@@ -228,11 +230,11 @@ kernel void epxupscaler(texture2d<half, access::read>  inTexture   [[ texture(0)
 
     half xx = gid.x / SCALE_FACTOR;
     half yy = gid.y / SCALE_FACTOR;
-    half4 A = inTexture.read(uint2(xx, yy - 1));
-    half4 C = inTexture.read(uint2(xx - 1, yy));
-    half4 P = inTexture.read(uint2(xx, yy));
-    half4 B = inTexture.read(uint2(xx + 1, yy));
-    half4 D = inTexture.read(uint2(xx, yy + 1));
+    half4 A = in1Texture.read(uint2(xx, yy - 1));
+    half4 C = in1Texture.read(uint2(xx - 1, yy));
+    half4 P = in1Texture.read(uint2(xx, yy));
+    half4 B = in1Texture.read(uint2(xx + 1, yy));
+    half4 D = in1Texture.read(uint2(xx, yy + 1));
         
     half4 r1 = (all(C == A) && any(C != D) && any(A != B)) ? A : P;
     half4 r2 = (all(A == B) && any(A != C) && any(B != D)) ? B : P;
