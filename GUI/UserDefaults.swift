@@ -213,13 +213,6 @@ extension Keys {
     
     static let bootRom           = "VABootRomFileKey"
     static let kickRom           = "VAKickRomFileKey"
-    
-    // DEPRECATED
-    static let basicRom          = "VC64BasicRomFileKey"
-    static let charRom           = "VC64CharRomFileKey"
-    static let kernalRom         = "VC64KernelRomFileKey"
-    static let vc1541Rom         = "VC64VC1541RomFileKey"
-    
 }
 
 extension Defaults {
@@ -260,8 +253,15 @@ extension MyController {
         let defaults = UserDefaults.standard
         
         amiga.suspend()
-        amiga.mem.loadBootRom(fromFile: defaults.url(forKey: Keys.bootRom))
-        amiga.mem.loadKickRom(fromFile: defaults.url(forKey: Keys.kickRom))
+        
+        if let url = defaults.url(forKey: Keys.bootRom) {
+            bootRomURL = url
+            amiga.mem.loadBootRom(fromFile: bootRomURL)
+        }
+        if let url = defaults.url(forKey: Keys.kickRom) {
+            kickRomURL = url
+            amiga.mem.loadKickRom(fromFile: kickRomURL)
+        }
         amiga.resume()
     }
     

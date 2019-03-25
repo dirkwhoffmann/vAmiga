@@ -67,12 +67,6 @@ public:
     // Specification of the machine we are going to emulate...
     AmigaConfiguration config;
     
-    // Boot Rom (needed for A1000 emulation)
-    // BootRom *bootRom = NULL;
-    
-    // Kickstart Rom (needed for A500 and A2000 emulation)
-    // KickRom *kickRom = NULL;
-    
     
     //
     // Hardware components
@@ -313,41 +307,7 @@ public:
      */
     void suspend();
     void resume();
-  
-
-    //
-    // Handling Roms
-    //
-/*
-    // Returns true if a Boot Rom is present.
-    bool hasBootRom() { return bootRom != NULL; }
-
-    // Deletes the current Boot Rom.
-    void deleteBootRom();
-    
-    // Adds the Boot Rom to the emulator.
-    bool loadBootRom(BootRom *rom);
-    bool loadBootRomFromBuffer(const uint8_t *buffer, size_t length);
-    bool loadBootRomFromFile(const char *path);
-
-    // Returns a fingerprint for the current Boot Rom
-    uint64_t bootRomFingerprint() { return bootRom ? bootRom->fingerprint() : 0; }
-    
-    // Returns true if a Kickstart Rom is present.
-    bool hasKickRom() { return kickRom != NULL; }
-
-    // Deletes the current Kickstart Rom.
-    void deleteKickRom();
-    
-    // Adds the Kickstart Rom to the emulator.
-    bool loadKickRom(KickRom *rom);
-    bool loadKickRomFromBuffer(const uint8_t *buffer, size_t length);
-    bool loadKickRomFromFile(const char *path);
-
-    // Returns a fingerprint for the current Kickstart Rom
-    uint64_t kickRomFingerprint() { return kickRom ? kickRom->fingerprint() : 0; }
-*/
-    
+      
     
     //
     // Accessing the message queue

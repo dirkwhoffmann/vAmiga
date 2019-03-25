@@ -103,21 +103,6 @@ Memory::alloc(size_t size, uint8_t *&ptrref, size_t &sizeref)
     return true;
 }
 
-/*
-void
-AmigaMemory::dealloc(uint8_t *&ptrref, size_t &sizeref)
-{    
-    // Do some consistency checking
-    assert((ptrref == NULL) == (sizeref == 0));
-    
-    if (ptrref) {
-        delete[] ptrref;
-        ptrref = NULL;
-        sizeref = 0;
-    }
-}
-*/
-
 void
 Memory::loadRom(AmigaFile *rom, uint8_t *target, size_t length)
 {

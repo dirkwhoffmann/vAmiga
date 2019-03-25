@@ -152,17 +152,6 @@ private:
     // Allocating memory
     //
     
-    /*
-    bool allocateBootRom();
-    bool allocateKickRom();
-    bool allocateChipRam(size_t size);
-    bool allocateSlowRam(size_t size);
-    bool allocateFastRam(size_t size);
-    */
-    
-    // Deallocates all previously allocated memory
-    // void dealloc();
-    
 private:
     
     /* Allocates 'size' bytes of memory.

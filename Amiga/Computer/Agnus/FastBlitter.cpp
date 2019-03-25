@@ -32,9 +32,10 @@ void
 Blitter::doCopyBlit()
 {
     uint64_t checksum = 0;
-    
+    /*
     plainmsg("%d COPY BLIT (%d,%d) (%s)\n",
         bltcount++, bltsizeH(), bltsizeW(), bltDESC() ? "descending" : "ascending");
+    */
     
     bool useA = bltUSEA();
     bool useB = bltUSEB();
@@ -120,11 +121,13 @@ Blitter::doCopyBlit()
             }
         }
     }
+    /*
     plainmsg("checksum = %lld\n", checksum);
     if (bltcount == 1185) {
         printf("DEBUGGING BLITS FROM NOW ON\n");
         bltdebug = 1;
     }
+    */
 }
 
 uint16_t logicFunction(int minterm,uint16_t wordA, uint16_t wordB, uint16_t wordC) {
@@ -186,9 +189,11 @@ Blitter::doLineBlit()
     int D = (int16_t)bltapt;     // start value of 4dy - 2dx
     // uint16_t* chipramW = internal.chipramW;
     
+    /*
     plainmsg("%d LINE BLIT (%d,%d) (%d)\n",
              bltcount++, bltsizeH(), bltsizeW(), octCode);
-
+    */
+    
     int planeAddr = bltcpt & 0x1FFFFE; //word address
     
     int planeMod  = bltcmod;
@@ -438,5 +443,5 @@ Blitter::doLineBlit()
     // chipset->bltsizv = 0; // all done;
     bltsize = 0;
     
-    plainmsg("checksum = %lld\n", checksum);
+    // plainmsg("checksum = %lld\n", checksum);
 }
