@@ -110,8 +110,14 @@ EventHandler::getInfo()
     
     for (unsigned i = 0; i < EVENT_SLOT_COUNT; i++) {
         
-        info.primary[i].trigger = eventSlot[i].triggerCycle;
+        Cycle trigger = eventSlot[i].triggerCycle;
+        FramePosition pos = amiga->dma.cycle2FramePosition(trigger);
+        
+        info.primary[i].trigger = trigger;
         info.primary[i].eventId = eventSlot[i].id;
+        info.primary[i].frame = pos.frame - amiga->dma.frame;
+        info.primary[i].vpos = pos.vpos;
+        info.primary[i].hpos = pos.hpos;
 
         switch ((EventSlot)i) {
                 
@@ -234,8 +240,14 @@ EventHandler::getInfo()
     
     for (unsigned i = 0; i < SEC_SLOT_COUNT; i++) {
         
-        info.secondary[i].trigger = secondarySlot[i].triggerCycle;
+        Cycle trigger = secondarySlot[i].triggerCycle;
+        FramePosition pos = amiga->dma.cycle2FramePosition(trigger);
+        
+        info.secondary[i].trigger = trigger;
         info.secondary[i].eventId = secondarySlot[i].id;
+        info.secondary[i].frame = pos.frame - amiga->dma.frame;
+        info.secondary[i].vpos = pos.vpos;
+        info.secondary[i].hpos = pos.hpos;
 
         switch ((EventSlot)i) {
                 

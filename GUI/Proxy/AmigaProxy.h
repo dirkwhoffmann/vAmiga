@@ -285,6 +285,7 @@ struct AmigaFileWrapper;
 - (void) dumpBlitter;
 
 - (DMAInfo) getInfo;
+- (EventHandlerInfo) getEventInfo;
 - (CopperInfo) getCopperInfo;
 
 - (BOOL) isIllegalInstr:(NSInteger)addr;

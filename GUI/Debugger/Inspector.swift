@@ -250,6 +250,24 @@ class Inspector : NSWindowController
     @IBOutlet weak var audioBufferUnderflows: NSTextField!
     @IBOutlet weak var audioBufferOverflows: NSTextField!
     
+    // Debug Panel (Events)
+    @IBOutlet weak var evMasterClock: NSTextField!
+    @IBOutlet weak var evInCpuCycles: NSTextField!
+    @IBOutlet weak var evInDmaCycles: NSTextField!
+    @IBOutlet weak var evInCiaCycles: NSTextField!
+
+    @IBOutlet weak var evCpuProgress: NSTextField!
+    @IBOutlet weak var evDmaProgress: NSTextField!
+    @IBOutlet weak var evCiaAProgress: NSTextField!
+    @IBOutlet weak var evCiaBProgress: NSTextField!
+
+    @IBOutlet weak var evFrame: NSTextField!
+    @IBOutlet weak var evVPos: NSTextField!
+    @IBOutlet weak var evHPos: NSTextField!
+
+    @IBOutlet weak var evPrimTableView: EventTableView!
+    @IBOutlet weak var evSecTableView: EventTableView!
+
     private var pendingRefreshWorkItem: DispatchWorkItem?
     
 
@@ -273,8 +291,8 @@ class Inspector : NSWindowController
         ciaICRbinary.formatter = bF
         ciaIMRbinary.formatter = bF
         
-        // Refresh the currently shown panel
-        // refresh(everything: true)
+        // Configure the event tables
+        evPrimTableView.primary = true
     }
     
     override func showWindow(_ sender: Any?) {
@@ -346,6 +364,9 @@ class Inspector : NSWindowController
             case "Paula":
                 refreshPaula(everything: everything)
 
+            case "Events":
+                refreshEvents(everything: everything)
+                
             default:
                 break
             }

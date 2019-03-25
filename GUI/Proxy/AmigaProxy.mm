@@ -337,6 +337,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->dmaController->getInfo();
 }
+- (EventHandlerInfo) getEventInfo
+{
+    return wrapper->dmaController->eventHandler.getInfo();
+}
 - (CopperInfo) getCopperInfo
 {
     return wrapper->dmaController->copper.getInfo();

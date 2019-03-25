@@ -10,6 +10,8 @@
 		5014DD1521F3625200BC14BA /* Keyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5014DD1321F3625200BC14BA /* Keyboard.cpp */; };
 		5020B17D21EF121E00B9E80E /* DMAController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5020B17B21EF121E00B9E80E /* DMAController.cpp */; };
 		5020B18021EF136100B9E80E /* Denise.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5020B17E21EF136100B9E80E /* Denise.cpp */; };
+		502EFD0A2248EC0200F0E118 /* EventPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502EFD092248EC0200F0E118 /* EventPanel.swift */; };
+		502EFD0C2248ECAA00F0E118 /* EventTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502EFD0B2248ECAA00F0E118 /* EventTableView.swift */; };
 		502F7DCE2221706000AEEC65 /* Copper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 502F7DCD2221706000AEEC65 /* Copper.cpp */; };
 		502F7DD42221E52200AEEC65 /* Colorizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 502F7DD22221E52200AEEC65 /* Colorizer.cpp */; };
 		5030891121EFA74600FEAD12 /* Paula.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5030890F21EFA74600FEAD12 /* Paula.cpp */; };
@@ -166,6 +168,8 @@
 		5020B17C21EF121E00B9E80E /* DMAController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMAController.h; sourceTree = "<group>"; };
 		5020B17E21EF136100B9E80E /* Denise.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Denise.cpp; sourceTree = "<group>"; };
 		5020B17F21EF136100B9E80E /* Denise.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Denise.h; sourceTree = "<group>"; };
+		502EFD092248EC0200F0E118 /* EventPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventPanel.swift; sourceTree = "<group>"; };
+		502EFD0B2248ECAA00F0E118 /* EventTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTableView.swift; sourceTree = "<group>"; };
 		502F7DCD2221706000AEEC65 /* Copper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Copper.cpp; sourceTree = "<group>"; };
 		502F7DD1222172CA00AEEC65 /* Copper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Copper.h; sourceTree = "<group>"; };
 		502F7DD22221E52200AEEC65 /* Colorizer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Colorizer.cpp; sourceTree = "<group>"; };
@@ -640,6 +644,7 @@
 				507FD925221CBFCD00B34DA7 /* CopperPanel.swift */,
 				507653CC2216F938001D26E9 /* DenisePanel.swift */,
 				50F5A84D2214112F00AD5611 /* PaulaPanel.swift */,
+				502EFD092248EC0200F0E118 /* EventPanel.swift */,
 				509CF4CE220847C600C500F0 /* InstrTableView.swift */,
 				509CF4D02208487900C500F0 /* TraceTableView.swift */,
 				504F9657220B2CEE005F8AB7 /* BreakTableView.swift */,
@@ -648,6 +653,7 @@
 				508FDFF621EA22790043D0E9 /* Formatter.swift */,
 				508FDFF021EA22780043D0E9 /* WaveformView.swift */,
 				50B0AF92222531C500EE3689 /* CopperTableView.swift */,
+				502EFD0B2248ECAA00F0E118 /* EventTableView.swift */,
 			);
 			path = Debugger;
 			sourceTree = "<group>";
@@ -1013,6 +1019,7 @@
 				5085FE5921FB6856009753EF /* ProxyExtensions.swift in Sources */,
 				508FE04F21EA22CC0043D0E9 /* EmulatorPrefs.swift in Sources */,
 				50F5A84E2214112F00AD5611 /* PaulaPanel.swift in Sources */,
+				502EFD0A2248EC0200F0E118 /* EventPanel.swift in Sources */,
 				5064851121EC7A1700FC4AC3 /* Memory.cpp in Sources */,
 				508FE01B21EA227B0043D0E9 /* MyDocument.swift in Sources */,
 				508FDFDB21EA20510043D0E9 /* Shaders.swift in Sources */,
@@ -1030,6 +1037,7 @@
 				50F6EEBE21F4F61F0091155D /* Drive.cpp in Sources */,
 				50F6EEB821F4F5C60091155D /* Disk.cpp in Sources */,
 				50E1E5D22242B9DA008EF4B0 /* FastBlitter.cpp in Sources */,
+				502EFD0C2248ECAA00F0E118 /* EventTableView.swift in Sources */,
 				508FE01921EA227B0043D0E9 /* MyControllerMenu.swift in Sources */,
 				508FE01C21EA227B0043D0E9 /* MemTableView.swift in Sources */,
 				508FE05421EA22CC0043D0E9 /* DevicesPrefs.swift in Sources */,

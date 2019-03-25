@@ -310,6 +310,9 @@ typedef struct {
     const char *eventName;
     long eventId;
     Cycle trigger;
+    long frame;
+    long vpos;
+    long hpos;
     
 } EventSlotInfo;
 
