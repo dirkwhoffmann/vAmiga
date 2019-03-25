@@ -240,8 +240,10 @@ private:
 public:
     
     // Collects the data shown in the GUI's debug panel.
+    EventSlotInfo getPrimarySlotInfo(int slot);
+    EventSlotInfo getSecondarySlotInfo(int slot);
     EventHandlerInfo getInfo();
-    
+
 public:
     
     //

@@ -38,43 +38,51 @@ extension EventTableView : NSTableViewDataSource {
     }
     
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
-    
-        guard let eventInfo = amiga?.dma.getEventInfo() else { return "" }
         
-        var info : EventSlotInfo
+        let info = primary ?
+            amiga!.dma.getPrimarySlotInfo(row) :
+            amiga!.dma.getSecondarySlotInfo(row)
         
-        switch(row) {
-        case 0:  info = primary ? eventInfo.primary.0 : eventInfo.secondary.0
-        case 1:  info = primary ? eventInfo.primary.1 : eventInfo.secondary.1
-        case 2:  info = primary ? eventInfo.primary.2 : eventInfo.secondary.2
-        case 3:  info = primary ? eventInfo.primary.3 : eventInfo.secondary.3
-        case 4:  info = primary ? eventInfo.primary.4 : eventInfo.secondary.4
-        case 5:  info = primary ? eventInfo.primary.5 : eventInfo.secondary.5
-        case 6:  info = primary ? eventInfo.primary.6 : eventInfo.secondary.6
-        case 7:  info = eventInfo.secondary.7
-        case 8:  info = eventInfo.secondary.8
-        case 9:  info = eventInfo.secondary.9
-        case 10: info = eventInfo.secondary.10
-        case 11: info = eventInfo.secondary.11
-        case 12: info = eventInfo.secondary.12
-        case 13: info = eventInfo.secondary.13
-        case 14: info = eventInfo.secondary.14
-        default: return "???"
-        }
-    
-        let never = (info.trigger == INT64_MAX)
-        let currentFrame = (info.frame == 0)
-        let cycleDiff = (info.trigger - eventInfo.dmaClock) / 2
-   
+        let willTrigger = (info.trigger != INT64_MAX)
+        
         switch tableColumn?.identifier.rawValue {
             
         case "slot":    return String.init(cString: info.slotName)
         case "event":   return String.init(cString: info.eventName)
-        case "trigger": return never ? "never" : String(format: "%lld", info.trigger)
-        case "frame":   return currentFrame ? "current" : String(format: "%lld", info.frame)
-        case "vpos":    return info.vpos
-        case "hpos":    return info.hpos
-        case "remark":  return never ? "" : "due in \(cycleDiff) DMA cycles"
+        case "trigger":
+            if willTrigger {
+                return String(format: "%lld", info.trigger)
+            } else {
+                return "none"
+            }
+        case "frame":
+            if !willTrigger {
+                return ""
+            } else if info.frame == 0 {
+                return "current"
+            } else {
+                return String(format: "%lld", info.frame)
+            }
+        case "vpos":
+            if willTrigger {
+                return info.vpos
+            } else {
+                return ""
+            }
+        case "hpos":
+            if willTrigger {
+                return info.hpos
+            } else {
+                return ""
+            }
+        case "remark":
+            if !willTrigger {
+                return ""
+            } else if info.triggerRel == 0 {
+                return "due immediately"
+            } else {
+                return "due in \(info.triggerRel) DMA cycles"
+            }
         default:        return "???"
         }
     }
@@ -85,10 +93,19 @@ extension EventTableView : NSTableViewDelegate {
     func tableView(_ tableView: NSTableView, willDisplayCell cell: Any, for tableColumn: NSTableColumn?, row: Int) {
         
         if let cell = cell as? NSTextFieldCell {
-            if tableColumn?.identifier.rawValue == "instr" {
-                cell.textColor = .red
-                return
+            
+            if tableColumn?.identifier.rawValue != "slot" {
+                
+                let info = primary ?
+                    amiga!.dma.getPrimarySlotInfo(row) :
+                    amiga!.dma.getSecondarySlotInfo(row)
+                
+                if info.trigger == INT64_MAX {
+                    cell.textColor = .secondaryLabelColor
+                    return
+                }
             }
+            
             cell.textColor = .textColor
         }
     }
