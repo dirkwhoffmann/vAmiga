@@ -81,7 +81,7 @@ extension EventTableView : NSTableViewDataSource {
             } else if info.triggerRel == 0 {
                 return "due immediately"
             } else {
-                return "due in \(info.triggerRel) DMA cycles"
+                return "due in \(info.triggerRel / 8) DMA cycles"
             }
         default:        return "???"
         }

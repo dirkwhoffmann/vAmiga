@@ -45,6 +45,24 @@ typedef struct {
 
 
 //
+// Amiga
+//
+
+typedef struct {
+    Cycle masterClock;
+    // CPUCycle inCPUCycles;
+    // DMACycle inDMACycles;
+    // CIACycle inCIACycles;
+    Cycle dmaClock;
+    Cycle ciaAClock;
+    Cycle ciaBClock;
+    long frame;
+    long vpos;
+    long hpos;
+} AmigaInfo;
+
+
+//
 // General
 //
 

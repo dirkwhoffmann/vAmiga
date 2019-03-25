@@ -98,6 +98,8 @@ struct AmigaFileWrapper;
 - (void) ping;
 - (void) dump;
 
+- (AmigaInfo) getInfo;
+
 - (BOOL) readyToPowerUp;
 - (BOOL) isPoweredOn;
 - (BOOL) isPoweredOff;

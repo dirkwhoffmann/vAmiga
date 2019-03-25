@@ -75,7 +75,7 @@ public:
     /* The Amiga's master clock
      * This clock runs at 28 MHz and is used to derive all other clock signals.
      */
-    uint64_t masterClock = 0; 
+    Cycle masterClock = 0;
         
     // A Motorola 68000 CPU
     CPU cpu;
@@ -277,6 +277,15 @@ private:
     void _ping() override;
     void _dump() override;
     void _setWarp(bool value) override;
+    
+    //
+    // Collecting information
+    //
+    
+public:
+    
+    // Collects the data shown in the GUI's debug panel
+    AmigaInfo getInfo();
     
     
     //

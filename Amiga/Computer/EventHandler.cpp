@@ -248,7 +248,7 @@ EventHandler::getSecondarySlotInfo(int slot)
         case SOFT_IRQ_SLOT:      info.slotName = "Software IRQ"; break;
         case PORTS_IRQ_SLOT:     info.slotName = "CIA A IRQ"; break;
         case COPR_IRQ_SLOT:      info.slotName = "Copper IRQ"; break;
-        case VERTB_IRQ_SLOT:     info.slotName = "Vertical Blank IRQ"; break;
+        case VERTB_IRQ_SLOT:     info.slotName = "VBlank IRQ"; break;
         case BLIT_IRQ_SLOT:      info.slotName = "Blitter IRQ"; break;
         case AUD0_IRQ_SLOT:      info.slotName = "Audio 0 IRQ"; break;
         case AUD1_IRQ_SLOT:      info.slotName = "Audio 1 IRQ"; break;
@@ -280,8 +280,8 @@ EventHandler::getSecondarySlotInfo(int slot)
             switch (secondarySlot[slot].id) {
                     
                 case 0:          info.eventName = "none"; break;
-                case IRQ_SET:    info.eventName = "Set IRQ"; break;
-                case IRQ_CLEAR:  info.eventName = "Clear IRQ"; break;
+                case IRQ_SET:    info.eventName = "IRQ_SET"; break;
+                case IRQ_CLEAR:  info.eventName = "IRQ_CLEAR"; break;
                 default:         info.eventName = "*** INVALID ***"; break;
             }
             break;

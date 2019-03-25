@@ -438,6 +438,25 @@ Amiga::resume()
         run();
 }
 
+AmigaInfo
+Amiga::getInfo()
+{
+    AmigaInfo info;
+    
+    info.masterClock = masterClock;
+    // info.inCPUCycles = AS_CPU_CYCLES(masterClock);
+    // info.inDMACycles = AS_DMA_CYCLES(masterClock);
+    // info.inCIACycles = AS_CIA_CYCLES(masterClock);
+    info.dmaClock = dma.clock;
+    info.ciaAClock = ciaA.clock;
+    info.ciaBClock = ciaB.clock;
+    info.frame = dma.frame;
+    info.vpos = dma.vpos;
+    info.hpos = dma.hpos;
+    
+    return info;
+}
+
 bool
 Amiga::readyToPowerUp()
 {
