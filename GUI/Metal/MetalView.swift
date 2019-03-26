@@ -318,12 +318,10 @@ public class MetalView: MTKView {
                           textures: [longFrameTexture, shortFrameTexture, mergeTexture])
         
         // Compute the bloom textures
-        shaderOptions.bloom = 0;
-        /*
         if shaderOptions.bloom != 0 {
             let bloomFilter = currentBloomFilter()
             bloomFilter.apply(commandBuffer: commandBuffer,
-                              textures: [emulatorTexture, bloomTextureR, bloomTextureG, bloomTextureB],
+                              textures: [mergeTexture, bloomTextureR, bloomTextureG, bloomTextureB],
                               options: shaderOptions)
             
             func applyGauss(_ texture: inout MTLTexture, radius: Float) {
@@ -338,7 +336,6 @@ public class MetalView: MTKView {
             applyGauss(&bloomTextureG, radius: shaderOptions.bloomRadiusG)
             applyGauss(&bloomTextureB, radius: shaderOptions.bloomRadiusB)
         }
-        */
         
         // Compute upscaled texture
         let upscaler = currentUpscaler()
