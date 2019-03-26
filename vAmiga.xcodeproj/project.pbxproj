@@ -184,6 +184,8 @@
 		504F9657220B2CEE005F8AB7 /* BreakTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakTableView.swift; sourceTree = "<group>"; };
 		505A3A3821F4996400132020 /* sse_utils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = sse_utils.cpp; sourceTree = "<group>"; };
 		505A3A3921F4996400132020 /* sse_utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sse_utils.h; sourceTree = "<group>"; };
+		505AD259224A67CD0052A014 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		505AD25A224A67CE0052A014 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MyDocument.xib; sourceTree = "<group>"; };
 		5064850F21EC7A1700FC4AC3 /* Memory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Memory.cpp; sourceTree = "<group>"; };
 		5064851021EC7A1700FC4AC3 /* Memory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Memory.h; sourceTree = "<group>"; };
 		507653CA2216F91E001D26E9 /* AgnusPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgnusPanel.swift; sourceTree = "<group>"; };
@@ -215,8 +217,6 @@
 		508FDF5821EA1FBC0043D0E9 /* TOD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TOD.h; sourceTree = "<group>"; };
 		508FDF5921EA1FBC0043D0E9 /* TOD.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TOD.cpp; sourceTree = "<group>"; };
 		508FDF5C21EA1FBC0043D0E9 /* CIA.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CIA.cpp; sourceTree = "<group>"; };
-		508FDFB021EA1FF10043D0E9 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MyDocument.xib; sourceTree = "<group>"; };
-		508FDFB221EA1FF10043D0E9 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		508FDFB321EA1FF10043D0E9 /* SnapshotDialog.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SnapshotDialog.xib; sourceTree = "<group>"; };
 		508FDFB421EA1FF10043D0E9 /* KeyViewItem.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KeyViewItem.xib; sourceTree = "<group>"; };
 		508FDFB721EA1FF10043D0E9 /* ExportDiskDialog.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ExportDiskDialog.xib; sourceTree = "<group>"; };
@@ -860,7 +860,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1010;
-				LastUpgradeCheck = 1010;
+				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = "Dirk Hoffmann";
 				TargetAttributes = {
 					508FDE6321EA1FA40043D0E9 = {
@@ -884,7 +884,6 @@
 			knownRegions = (
 				en,
 				Base,
-				English,
 			);
 			mainGroup = 508FDE5B21EA1FA40043D0E9;
 			productRefGroup = 508FDE6521EA1FA40043D0E9 /* Products */;
@@ -1092,7 +1091,7 @@
 		508FDFAF21EA1FF10043D0E9 /* MyDocument.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				508FDFB021EA1FF10043D0E9 /* English */,
+				505AD25A224A67CE0052A014 /* en */,
 			);
 			name = MyDocument.xib;
 			sourceTree = "<group>";
@@ -1100,7 +1099,7 @@
 		508FDFB121EA1FF10043D0E9 /* MainMenu.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				508FDFB221EA1FF10043D0E9 /* English */,
+				505AD259224A67CD0052A014 /* en */,
 			);
 			name = MainMenu.xib;
 			sourceTree = "<group>";
@@ -1112,6 +1111,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -1174,6 +1174,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";

@@ -15,17 +15,17 @@ public extension MetalView {
     // Keyboard events
     //
     
-    override public func keyDown(with event: NSEvent)
+    override func keyDown(with event: NSEvent)
     {
         controller.keyboardcontroller.keyDown(with: event)
     }
     
-    override public func keyUp(with event: NSEvent)
+    override func keyUp(with event: NSEvent)
     {
         controller.keyboardcontroller.keyUp(with: event)
     }
     
-    override public func flagsChanged(with event: NSEvent) {
+    override func flagsChanged(with event: NSEvent) {
         
         controller.keyboardcontroller.flagsChanged(with: event)
     }
@@ -63,32 +63,32 @@ public extension MetalView {
     }
     */
     
-    override public func mouseDown(with event: NSEvent)
+    override func mouseDown(with event: NSEvent)
     {
         amigaProxy?.controlPort1.setLeftMouseButton(true)
         amigaProxy?.controlPort2.setLeftMouseButton(true)
     }
     
-    override public func mouseUp(with event: NSEvent)
+    override func mouseUp(with event: NSEvent)
     {
         amigaProxy?.controlPort1.setLeftMouseButton(false)
         amigaProxy?.controlPort2.setLeftMouseButton(false)
     }
     
-    override public func rightMouseDown(with event: NSEvent)
+    override func rightMouseDown(with event: NSEvent)
     {
         amigaProxy?.controlPort1.setRightMouseButton(true)
         amigaProxy?.controlPort2.setRightMouseButton(true)
     }
 
-    override public func rightMouseUp(with event: NSEvent)
+    override func rightMouseUp(with event: NSEvent)
     {
         amigaProxy?.controlPort1.setRightMouseButton(false)
         amigaProxy?.controlPort2.setRightMouseButton(false)
     }
     
     
-    override public func mouseMoved(with event: NSEvent) {
+    override func mouseMoved(with event: NSEvent) {
         
         let dx = event.deltaX
         let dy = -event.deltaY
@@ -108,12 +108,12 @@ public extension MetalView {
         //track("\(dx) \(dy)\n");
     }
     
-    override public func mouseDragged(with event: NSEvent)
+    override func mouseDragged(with event: NSEvent)
     {
         mouseMoved(with: event)
     }
     
-    override public func rightMouseDragged(with event: NSEvent)
+    override func rightMouseDragged(with event: NSEvent)
     {
         mouseMoved(with: event)
     }

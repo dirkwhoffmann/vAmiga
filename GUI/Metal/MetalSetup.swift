@@ -22,7 +22,7 @@ public extension MetalView {
         }
     }
   
-    public func setupMetal() {
+    func setupMetal() {
 
         track()
         

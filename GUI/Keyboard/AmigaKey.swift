@@ -268,17 +268,19 @@ struct AmigaKey : Codable {
     }
 }
 
-extension AmigaKey : Equatable {
+extension AmigaKey : Equatable, Hashable {
     static func ==(lhs: AmigaKey, rhs: AmigaKey) -> Bool {
         return lhs.keyCode == rhs.keyCode
     }
 }
 
+/*
 extension AmigaKey : Hashable {
     var hashValue: Int {
         return keyCode
     }
 }
+*/
 
 
 //

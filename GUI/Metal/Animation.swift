@@ -13,7 +13,7 @@ import simd
 public extension MetalView {
  
     //! Returns true iff an animation is in progress
-    public func animates() -> Bool {
+    func animates() -> Bool {
         
         return
             currentXAngle != targetXAngle ||
@@ -25,43 +25,43 @@ public extension MetalView {
             currentAlpha != targetAlpha
     }
     
-    public func eyeX() -> Float {
+    func eyeX() -> Float {
         
         return currentEyeX
     }
     
-    public func setEyeX(_ newX: Float) {
+    func setEyeX(_ newX: Float) {
         
         currentEyeX = newX
         targetEyeX = newX
         self.buildMatrices3D()
     }
     
-    public func eyeY() -> Float {
+    func eyeY() -> Float {
         
         return currentEyeY
     }
     
-    public func setEyeY(_ newY: Float) {
+    func setEyeY(_ newY: Float) {
     
         currentEyeY = newY
         targetEyeY = newY
         self.buildMatrices3D()
     }
     
-    public func eyeZ() -> Float {
+    func eyeZ() -> Float {
         
         return currentEyeZ
     }
     
-    public func setEyeZ(_ newZ: Float) {
+    func setEyeZ(_ newZ: Float) {
     
         currentEyeZ = newZ
         targetEyeZ = newZ
         self.buildMatrices3D()
     }
     
-    public func updateAngles() {
+    func updateAngles() {
     
         if abs(currentXAngle - targetXAngle) < abs(deltaXAngle) {
             currentXAngle = targetXAngle
@@ -113,7 +113,7 @@ public extension MetalView {
         currentZAngle += (currentZAngle < 0.0) ? 360 : 0
     }
     
-    public func computeAnimationDeltaSteps(animationCycles: Int) {
+    func computeAnimationDeltaSteps(animationCycles: Int) {
     
         let cycles = Float(animationCycles)
         deltaXAngle = (targetXAngle - currentXAngle) / cycles
@@ -125,7 +125,7 @@ public extension MetalView {
         deltaAlpha = (targetAlpha - currentAlpha) / cycles
     }
     
-    public func zoom() {
+    func zoom() {
     
         track("Zooming in...")
     
@@ -137,7 +137,7 @@ public extension MetalView {
         self.computeAnimationDeltaSteps(animationCycles: 120 /* 2 sec */)
     }
     
-    public func rotateBack() {
+    func rotateBack() {
     
         track("Rotating back...")
     
@@ -150,7 +150,7 @@ public extension MetalView {
         targetYAngle -= (targetYAngle >= 360) ? 360 : 0
     }
     
-    public func rotate() {
+    func rotate() {
     
         track("Rotating...")
     
@@ -163,7 +163,7 @@ public extension MetalView {
         targetYAngle += (targetYAngle < 0) ? 360 : 0
     }
     
-    public func scroll() {
+    func scroll() {
         
         track("Scrolling...")
     
@@ -191,7 +191,7 @@ public extension MetalView {
     }
     */
     
-    public func blendIn() {
+    func blendIn() {
         
         track("Blending in...")
         
@@ -203,7 +203,7 @@ public extension MetalView {
         computeAnimationDeltaSteps(animationCycles: 120 /* 2 sec */)
     }
 
-    public func blendOut() {
+    func blendOut() {
         
         track("Blending out...")
         
@@ -215,7 +215,7 @@ public extension MetalView {
         computeAnimationDeltaSteps(animationCycles: 15 /* 0.25 sec */)
     }
     
-    public func snapToFront() {
+    func snapToFront() {
         
         track("Snapping to front...")
         
@@ -228,7 +228,7 @@ public extension MetalView {
     //                                Matrix utilities
     // --------------------------------------------------------------------------------
     
-    public func matrix_from_perspective(fovY: Float,
+    func matrix_from_perspective(fovY: Float,
                                               aspect: Float,
                                               nearZ: Float,
                                               farZ: Float) -> matrix_float4x4 {
@@ -252,9 +252,9 @@ public extension MetalView {
         return m
     }
     
-    public func matrix_from_translation(x: Float,
-                                              y: Float,
-                                              z: Float) -> matrix_float4x4 {
+    func matrix_from_translation(x: Float,
+                                 y: Float,
+                                 z: Float) -> matrix_float4x4 {
     
         var m = matrix_identity_float4x4;
         m.columns.3 = float4(x, y, z, 1.0)
@@ -262,10 +262,10 @@ public extension MetalView {
         return m
     }
     
-    public func matrix_from_rotation(radians: Float,
-                                           x: Float,
-                                           y: Float,
-                                           z: Float) -> matrix_float4x4 {
+    func matrix_from_rotation(radians: Float,
+                              x: Float,
+                              y: Float,
+                              z: Float) -> matrix_float4x4 {
     
         var v = vector_float3(x, y, z)
         v = normalize(v)
