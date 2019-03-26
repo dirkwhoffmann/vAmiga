@@ -125,11 +125,11 @@ public extension MetalView {
         assert(bloomTextureB != nil, "Failed to create bloom texture (B).")
 
         //
-        // 4096 x 4096 textures
+        // 2048 x 2048 textures
         //
         
-        descriptor.width = 4096;
-        descriptor.height = 4096;
+        descriptor.width = 2048;
+        descriptor.height = 2048;
         
         // Upscaled emulator texture
         descriptor.usage = [ .shaderRead, .shaderWrite, .pixelFormatView, .renderTarget ]
