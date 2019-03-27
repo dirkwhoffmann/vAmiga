@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -261,7 +261,7 @@ Gw
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Hardware" identifier="Hardware" id="vMg-zr-Ex1">
-                                <view key="view" ambiguous="YES" id="yrH-J2-nFc">
+                                <view key="view" id="yrH-J2-nFc">
                                     <rect key="frame" x="10" y="33" width="600" height="424"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -646,7 +646,7 @@ DQ
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Video" identifier="Video" id="bAS-eu-ehA">
-                                <view key="view" id="TZi-Ij-edC">
+                                <view key="view" ambiguous="YES" id="TZi-Ij-edC">
                                     <rect key="frame" x="10" y="33" width="600" height="424"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -1085,7 +1085,7 @@ DQ
                                                         <menuItem title="2x (EPX)" tag="1" id="bTs-2C-PeO">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="4x (xBR)" tag="2" id="i8C-Zm-UbZ">
+                                                        <menuItem title="2x (xBR)" tag="2" id="i8C-Zm-UbZ">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                     </items>
@@ -1958,7 +1958,7 @@ DQ
     </objects>
     <resources>
         <image name="Lock" width="120" height="170"/>
-        <image name="joystick2" width="569.45452880859375" height="654.54547119140625"/>
+        <image name="joystick2" width="261" height="300"/>
         <image name="key" width="198" height="187"/>
         <image name="rom_light" width="129" height="157"/>
         <image name="trashTemplate" width="512" height="512"/>
