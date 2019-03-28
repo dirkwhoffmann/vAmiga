@@ -386,9 +386,9 @@ typedef enum {
     GREEN_PALETTE,
     AMBER_PALETTE,
     SEPIA_PALETTE
-} VICPalette;
+} Palette;
 
-inline bool isVICPalette(VICPalette model) {
+inline bool isPalette(Palette model) {
     return model >= COLOR_PALETTE && model <= SEPIA_PALETTE;
 }
 

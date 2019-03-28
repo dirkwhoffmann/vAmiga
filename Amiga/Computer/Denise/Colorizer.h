@@ -39,9 +39,10 @@ private:
     // Color adjustment parameters
     //
     
-    double brightness = 1.0;
-    double saturation = 1.0;
-    double contrast = 1.0;
+    Palette palette = COLOR_PALETTE;
+    double brightness = 50.0;
+    double contrast = 100.0;
+    double saturation = 1.25;
     
     
     //
@@ -56,6 +57,7 @@ public:
     // Configuring the color palette
     //
     
+    void setPalette(Palette p);
     void setBrightness(double value);
     void setSaturation(double value);
     void setContrast(double value);
@@ -82,6 +84,9 @@ private:
     // Computes the RGB value for a color stored in a color register
     void computeRGBA(int reg);
 
+    // Adjusts the RGB value according to the selected color parameters
+    void adjustRGB(uint8_t &r, uint8_t &g, uint8_t &b);
+    
 public:
     
     /* Updates the 64 colors stored in the colorRGBA lookup table
