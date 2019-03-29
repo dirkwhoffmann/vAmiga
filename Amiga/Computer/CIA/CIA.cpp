@@ -1140,6 +1140,10 @@ CIA::wakeUp()
     if (!sleeping) return;
     sleeping = false;
     
+    Cycle targetCycle = CIA_CYCLES(AS_CIA_CYCLES(amiga->dma.clock));
+    wakeUp(targetCycle);
+    
+    /*
     // Align master clock to CIA raster
     Cycle targetCycle = CIA_CYCLES(AS_CIA_CYCLES(amiga->masterClock));
     
@@ -1151,6 +1155,7 @@ CIA::wakeUp()
         wakeUp(targetCycle);
         assert(isUpToDate());
     }
+    */
 }
 
 void
