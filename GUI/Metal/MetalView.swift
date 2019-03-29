@@ -88,6 +88,10 @@ public class MetalView: MTKView {
     var bloomTextureG: MTLTexture! = nil
     var bloomTextureB: MTLTexture! = nil
 
+    /// Lowres enhancement texture (experimental)
+    /// Trying to use in-texture upscaling to enhance lowres mode
+    var lowresEnhancedTexture: MTLTexture! = nil
+    
     /// Upscaled emulator texture (2048 x 2048)
     /// In the first texture processing stage, the emulator texture is bumped up
     /// by a factor of 4. The user can choose between bypass upscaling which
@@ -107,6 +111,9 @@ public class MetalView: MTKView {
     
     // An instance of the merge filter
     var mergeFilter : MergeFilter! = nil
+    
+    // An instance of the lowres enhancer
+    var lowresEnhancer : InPlaceEpxScaler! = nil
     
     // Array holding all available upscalers
     var upscalerGallery = [ComputeKernel?](repeating: nil, count: 3)
@@ -313,6 +320,9 @@ public class MetalView: MTKView {
         mergeFilter.apply(commandBuffer: commandBuffer,
                           textures: [longFrameTexture, shortFrameTexture, mergeTexture])
         
+        // Enhance a lowres texture (experimental)
+        lowresEnhancer.apply(commandBuffer: commandBuffer, source: mergeTexture, target: lowresEnhancedTexture)
+        
         // Compute the bloom textures
         if shaderOptions.bloom != 0 {
             let bloomFilter = currentBloomFilter()
@@ -336,7 +346,7 @@ public class MetalView: MTKView {
         // Compute upscaled texture
         let upscaler = currentUpscaler()
         upscaler.apply(commandBuffer: commandBuffer,
-                       source: mergeTexture,
+                       source: lowresEnhancedTexture, // mergeTexture,
                        target: upscaledTexture)
         
         // Blur the upscaled texture

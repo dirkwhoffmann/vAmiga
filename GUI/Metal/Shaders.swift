@@ -251,6 +251,14 @@ class BypassUpscaler : ComputeKernel {
     }
 }
 
+class InPlaceEpxScaler : ComputeKernel {
+    
+    convenience init?(device: MTLDevice, library: MTLLibrary, cutout: (Int,Int)) {
+        self.init(name: "inPlaceEpx",
+                  device: device, library: library, cutout: cutout)
+    }
+}
+
 class EPXUpscaler : ComputeKernel {
     
     convenience init?(device: MTLDevice, library: MTLLibrary, cutout: (Int,Int)) {

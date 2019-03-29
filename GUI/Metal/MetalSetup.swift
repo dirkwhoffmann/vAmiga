@@ -124,6 +124,11 @@ public extension MetalView {
         assert(bloomTextureG != nil, "Failed to create bloom texture (G).")
         assert(bloomTextureB != nil, "Failed to create bloom texture (B).")
 
+        
+        descriptor.usage = [ .shaderRead, .shaderWrite, .renderTarget ]
+        lowresEnhancedTexture = device?.makeTexture(descriptor: descriptor)
+        assert(lowresEnhancedTexture != nil, "Failed to create lowres enhancement texture.")
+        
         //
         // Upscaled textures
         //
@@ -169,6 +174,9 @@ public extension MetalView {
         
         // Build the mergefilter
         mergeFilter = MergeFilter.init(device: device!, library: library, cutout: mc)
+        
+        // Build the lowres enhancer
+        lowresEnhancer = InPlaceEpxScaler.init(device: device!, library: library, cutout: mc)
         
         // Build upscalers
         upscalerGallery[0] = BypassUpscaler.init(device: device!, library: library, cutout: uc)
