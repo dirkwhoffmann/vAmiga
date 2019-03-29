@@ -393,6 +393,38 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->denise->getInfo();
 }
+- (double) palette
+{
+   return wrapper->denise->colorizer.getPalette();
+}
+- (void) setPalette:(Palette)p
+{
+    wrapper->denise->colorizer.setPalette(p);
+}
+- (double) brightness
+{
+    return wrapper->denise->colorizer.getBrightness();
+}
+- (void) setBrightness:(double)value
+{
+    wrapper->denise->colorizer.setBrightness(value);
+}
+- (double) saturation
+{
+    return wrapper->denise->colorizer.getSaturation();
+}
+- (void) setSaturation:(double)value
+{
+    wrapper->denise->colorizer.setSaturation(value);
+}
+- (double) contrast
+{
+    return wrapper->denise->colorizer.getContrast();
+}
+- (void) setContrast:(double)value
+{
+    wrapper->denise->colorizer.setContrast(value);
+}
 - (void) setActivePlanes:(NSInteger)count
 {
     wrapper->denise->debugSetActivePlanes(count);

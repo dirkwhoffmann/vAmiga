@@ -379,7 +379,7 @@ typedef enum {
 // Video
 //
 
-typedef enum {
+typedef enum : long {
     COLOR_PALETTE = 0,
     BLACK_WHITE_PALETTE,
     PAPER_WHITE_PALETTE,

@@ -57,9 +57,16 @@ public:
     // Configuring the color palette
     //
     
+    Palette getPalette() { return palette; }
     void setPalette(Palette p);
+    
+    double getBrightness() { return brightness; }
     void setBrightness(double value);
+
+    double getSaturation() { return saturation; }
     void setSaturation(double value);
+    
+    double getContrast() { return contrast; }
     void setContrast(double value);
 
     

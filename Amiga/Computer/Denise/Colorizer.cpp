@@ -117,8 +117,8 @@ Colorizer::adjustRGB(uint8_t &r, uint8_t &g, uint8_t &b)
 {
     // Normalize adjustment parameters
     double brightness = this->brightness - 50.0;
-    double contrast = this->contrast / 100.0; // + 0.2;
-    double saturation = this->saturation / 1.25;
+    double contrast = this->contrast / 100.0;
+    double saturation = this->saturation / 50.0;
     
     // Convert RGB to YUV
     double y =  0.299 * r + 0.587 * g + 0.114 * b;

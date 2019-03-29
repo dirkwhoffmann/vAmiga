@@ -311,6 +311,15 @@ struct AmigaFileWrapper;
 - (void) dump;
 - (DeniseInfo) getInfo;
 
+- (double) palette;
+- (void) setPalette:(Palette)p;
+- (double) brightness;
+- (void) setBrightness:(double)value;
+- (double) saturation;
+- (void) setSaturation:(double)value;
+- (double) contrast;
+- (void) setContrast:(double)value;
+
 - (void) setActivePlanes:(NSInteger)count; 
 - (void) setBPLCON0Bit:(NSInteger)bit value:(BOOL)value;
 

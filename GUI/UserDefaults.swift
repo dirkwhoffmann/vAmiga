@@ -473,9 +473,9 @@ extension MyController {
         
         metal.upscaler = defaults.integer(forKey: Keys.upscaler)
         palette = defaults.integer(forKey: Keys.palette)
-        brightness = defaults.float(forKey: Keys.brightness)
-        contrast = defaults.float(forKey: Keys.contrast)
-        saturation = defaults.float(forKey: Keys.saturation)
+        brightness = defaults.double(forKey: Keys.brightness)
+        contrast = defaults.double(forKey: Keys.contrast)
+        saturation = defaults.double(forKey: Keys.saturation)
         eyeX = defaults.float(forKey: Keys.eyeX)
         eyeY = defaults.float(forKey: Keys.eyeY)
         eyeZ = defaults.float(forKey: Keys.eyeZ)

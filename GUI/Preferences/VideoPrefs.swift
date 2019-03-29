@@ -36,9 +36,9 @@ extension PreferencesController {
         // Video
         vidUpscalerPopup.selectItem(withTag: metal.upscaler)
         vidPalettePopup.selectItem(withTag: controller.palette)
-        vidBrightnessSlider.floatValue = controller.brightness
-        vidContrastSlider.floatValue = controller.contrast
-        vidSaturationSlider.floatValue = controller.saturation
+        vidBrightnessSlider.doubleValue = controller.brightness
+        vidContrastSlider.doubleValue = controller.contrast
+        vidSaturationSlider.doubleValue = controller.saturation
         
         // Effects
         let shaderOptions = metal.shaderOptions
@@ -96,19 +96,22 @@ extension PreferencesController {
     
     @IBAction func vidBrightnessAction(_ sender: NSSlider!) {
         
-        myController?.brightness = sender.floatValue
+        track("value = \(sender.doubleValue)")
+        myController?.brightness = sender.doubleValue
         refresh()
     }
     
     @IBAction func vidContrastAction(_ sender: NSSlider!) {
         
-        myController?.contrast = sender.floatValue
+        track("value = \(sender.doubleValue)")
+        myController?.contrast = sender.doubleValue
         refresh()
     }
     
     @IBAction func vidSaturationAction(_ sender: NSSlider!) {
         
-        myController?.saturation = sender.floatValue
+        track("value = \(sender.doubleValue)")
+        myController?.saturation = sender.doubleValue
         refresh()
     }
     

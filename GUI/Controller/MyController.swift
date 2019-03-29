@@ -147,11 +147,22 @@ class MyController : NSWindowController, MessageReceiver {
         get { return metal.upscaler }
         set { metal.upscaler = newValue }
     }
-    var palette : Int = 0
-    var brightness : Float = 0
-    var contrast : Float = 0
-    var saturation : Float = 0
-    
+    var palette : Int {
+        get { return Int(amiga.denise.palette()) }
+        set { amiga.denise.setPalette(Palette(newValue)) }
+    }
+    var brightness : Double {
+        get { return amiga.denise.brightness() }
+        set { amiga.denise.setBrightness(newValue) }
+    }
+    var contrast : Double {
+        get { return amiga.denise.contrast() }
+        set { amiga.denise.setContrast(newValue) }
+    }
+    var saturation : Double {
+        get { return amiga.denise.saturation() }
+        set { amiga.denise.setSaturation(newValue) }
+    }
     var eyeX : Float {
         get { return metal.eyeX() }
         set { metal.setEyeX(newValue) }
