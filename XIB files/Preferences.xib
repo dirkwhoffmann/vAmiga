@@ -1082,10 +1082,19 @@ DQ
                                                         <menuItem title="None" state="on" id="XAs-99-rU5">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="2x (EPX)" tag="1" id="bTs-2C-PeO">
+                                                        <menuItem title="EPX" tag="1" id="aNT-wj-tiO">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="2x (xBR)" tag="2" id="i8C-Zm-UbZ">
+                                                        <menuItem title="xBR" tag="2" id="6Vw-HQ-u88">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="Lores enhancer" tag="3" id="1iy-x7-fIF">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="Lores enhancer + EPX" tag="4" id="bTs-2C-PeO">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="Lores enhancer + xBR" tag="5" id="i8C-Zm-UbZ">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                     </items>

@@ -14,13 +14,17 @@ extension PreferencesController {
     func awakeVideoPrefsFromNib() {
         
         // Check for available upscalers
-        if let kernels = myController?.metal.upscalerGallery {
+        if let enhancers = myController?.metal.enhancerGallery,
+            let upscalers = myController?.metal.upscalerGallery {
             
-            for i in 0 ... kernels.count - 1 {
-                vidUpscalerPopup.menu!.item(withTag: i)?.isEnabled = (kernels[i] != nil)
+            for i in 0 ... upscalers.count - 1 {
+                vidUpscalerPopup.menu!.item(withTag: i)?.isEnabled =
+                    enhancers[i] != nil && upscalers[i] != nil
             }
-            myController?.metal.buildDotMasks()
         }
+        
+        // Create dot mask textures
+        myController?.metal.buildDotMasks()
     }
     
     func refreshVideoTab() {

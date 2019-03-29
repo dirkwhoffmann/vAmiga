@@ -115,8 +115,11 @@ public class MetalView: MTKView {
     // An instance of the lowres enhancer
     var lowresEnhancer : InPlaceEpxScaler! = nil
     
+    // Array holding all available lowres enhancers
+    var enhancerGallery = [ComputeKernel?](repeating: nil, count: 6)
+    
     // Array holding all available upscalers
-    var upscalerGallery = [ComputeKernel?](repeating: nil, count: 3)
+    var upscalerGallery = [ComputeKernel?](repeating: nil, count: 6)
 
     // Array holding all available bloom filters
     var bloomFilterGallery = [ComputeKernel?](repeating: nil, count: 3)
@@ -170,8 +173,12 @@ public class MetalView: MTKView {
     /// Currently selected texture upscaler
     var upscaler = Defaults.upscaler {
         didSet {
+            if upscaler >= enhancerGallery.count || enhancerGallery[upscaler] == nil {
+                track("Sorry, the selected GPU upscaler (first pass) is unavailable.")
+                upscaler = 0
+            }
             if upscaler >= upscalerGallery.count || upscalerGallery[upscaler] == nil {
-                track("Sorry, the selected GPU upscaler is unavailable.")
+                track("Sorry, the selected GPU upscaler (second pass) is unavailable.")
                 upscaler = 0
             }
         }
@@ -276,8 +283,17 @@ public class MetalView: MTKView {
                                      bytesPerImage: imageBytes)
         }
     }
+ 
+    /// Returns the compute kernel of the currently selected upscaler (first pass)
+    func currentEnhancer() -> ComputeKernel {
+        
+        assert(upscaler < enhancerGallery.count)
+        assert(enhancerGallery[0] != nil)
+        
+        return enhancerGallery[upscaler]!
+    }
     
-    /// Returns the compute kernel of the currently selected pixel upscaler
+    /// Returns the compute kernel of the currently selected upscaler (second pass)
     func currentUpscaler() -> ComputeKernel {
     
         assert(upscaler < upscalerGallery.count)
@@ -320,8 +336,11 @@ public class MetalView: MTKView {
         mergeFilter.apply(commandBuffer: commandBuffer,
                           textures: [longFrameTexture, shortFrameTexture, mergeTexture])
         
-        // Enhance a lowres texture (experimental)
-        lowresEnhancer.apply(commandBuffer: commandBuffer, source: mergeTexture, target: lowresEnhancedTexture)
+        // Compute upscaled texture (first pass, in-texture upscaling)
+        let enhancer = currentEnhancer()
+        enhancer.apply(commandBuffer: commandBuffer,
+                       source: mergeTexture,
+                       target: lowresEnhancedTexture)
         
         // Compute the bloom textures
         if shaderOptions.bloom != 0 {
@@ -343,7 +362,7 @@ public class MetalView: MTKView {
             applyGauss(&bloomTextureB, radius: shaderOptions.bloomRadiusB)
         }
         
-        // Compute upscaled texture
+        // Compute upscaled texture (second pass)
         let upscaler = currentUpscaler()
         upscaler.apply(commandBuffer: commandBuffer,
                        source: lowresEnhancedTexture, // mergeTexture,
