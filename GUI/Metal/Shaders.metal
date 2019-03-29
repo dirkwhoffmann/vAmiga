@@ -222,71 +222,13 @@ kernel void bypassupscaler(texture2d<half, access::read>  inTexture   [[ texture
     outTexture.write(result, gid);
 }
 
+//
 // EPX upscaler (Eric's Pixel Expansion)
-void writePixelBlock(texture2d<half, access::write> outTexture, uint2 gid, half4 value)
-{
-    outTexture.write(value, gid + uint2(0,0));
-    outTexture.write(value, gid + uint2(0,1));
-    outTexture.write(value, gid + uint2(1,0));
-    outTexture.write(value, gid + uint2(1,1));
-}
+//
 
-kernel void inPlaceEpx(texture2d<half, access::read>  inTexture   [[ texture(0) ]],
-                       texture2d<half, access::write> outTexture  [[ texture(1) ]],
-                       uint2                          gid         [[ thread_position_in_grid ]])
+void doEPX(texture2d<half, access::write> out, uint2 gid,
+           half4 A, half4 C, half4 P, half4 B, half4 D)
 {
-    if((gid.x % SCALE_FACTOR != 0) || (gid.y % SCALE_FACTOR != 0))
-        return;
-    
-    // E A    --\ 1 2
-    // C P B  --/ 3 4
-    //   D
-    // 1=P; 2=P; 3=P; 4=P;
-    // IF C==A AND C!=D AND A!=B => 1=A
-    // IF A==B AND A!=C AND B!=D => 2=B
-    // IF D==C AND D!=B AND C!=A => 3=C
-    // IF B==D AND B!=A AND D!=C => 4=D
-    
-    half xx = gid.x;
-    half yy = gid.y;
-    half4 E = inTexture.read(uint2(xx - 2, yy + 2));
-    half4 A = inTexture.read(uint2(xx,     yy - 2));
-    half4 C = inTexture.read(uint2(xx - 2, yy    ));
-    half4 P = inTexture.read(uint2(xx,     yy    ));
-    
-    half4 r1, r2, r3, r4;
-    
-    if (!all(E == A && A == C && C == P)) {
-        
-        half4 B = inTexture.read(uint2(xx + 2, yy    ));
-        half4 D = inTexture.read(uint2(xx,     yy + 2));
-        
-        r1 = (all(C == A) && any(C != D) && any(A != B)) ? A : P;
-        r2 = (all(A == B) && any(A != C) && any(B != D)) ? B : P;
-        r3 = (all(A == B) && any(A != C) && any(B != D)) ? C : P;
-        r4 = (all(B == D) && any(B != A) && any(D != C)) ? D : P;
-        
-    } else {
-        
-        r1 = E;
-        r2 = A;
-        r3 = C;
-        r4 = P;
-    }
-    
-    outTexture.write(r1, gid + uint2(0,0));
-    outTexture.write(r2, gid + uint2(1,0));
-    outTexture.write(r3, gid + uint2(0,1));
-    outTexture.write(r4, gid + uint2(1,1));
-}
-
-kernel void epxupscaler(texture2d<half, access::read>  inTexture   [[ texture(0) ]],
-                        texture2d<half, access::write> outTexture  [[ texture(1) ]],
-                        uint2                          gid         [[ thread_position_in_grid ]])
-{
-    if((gid.x % SCALE_FACTOR != 0) || (gid.y % SCALE_FACTOR != 0))
-        return;
-    
     //   A    --\ 1 2
     // C P B  --/ 3 4
     //   D
@@ -296,30 +238,72 @@ kernel void epxupscaler(texture2d<half, access::read>  inTexture   [[ texture(0)
     // IF D==C AND D!=B AND C!=A => 3=C
     // IF B==D AND B!=A AND D!=C => 4=D
     
-    half xx = gid.x / SCALE_FACTOR;
-    half yy = gid.y / SCALE_FACTOR;
-    half4 A = inTexture.read(uint2(xx, yy - 1));
-    half4 C = inTexture.read(uint2(xx - 1, yy));
-    half4 P = inTexture.read(uint2(xx, yy));
-    half4 B = inTexture.read(uint2(xx + 1, yy));
-    half4 D = inTexture.read(uint2(xx, yy + 1));
-    
     half4 r1 = (all(C == A) && any(C != D) && any(A != B)) ? A : P;
     half4 r2 = (all(A == B) && any(A != C) && any(B != D)) ? B : P;
     half4 r3 = (all(A == B) && any(A != C) && any(B != D)) ? C : P;
     half4 r4 = (all(B == D) && any(B != A) && any(D != C)) ? D : P;
     
-    outTexture.write(r1, gid + uint2(0,0));
-    outTexture.write(r2, gid + uint2(1,0));
-    outTexture.write(r3, gid + uint2(0,1));
-    outTexture.write(r4, gid + uint2(1,1));
+    out.write(r1, gid + uint2(0,0));
+    out.write(r2, gid + uint2(1,0));
+    out.write(r3, gid + uint2(0,1));
+    out.write(r4, gid + uint2(1,1));
+}
 
-    /*
-    writePixelBlock(outTexture, gid + uint2(0,0), r1);
-    writePixelBlock(outTexture, gid + uint2(2,0), r2);
-    writePixelBlock(outTexture, gid + uint2(0,2), r3);
-    writePixelBlock(outTexture, gid + uint2(2,2), r4);
-    */
+kernel void inPlaceEpx(texture2d<half, access::read>  in   [[ texture(0) ]],
+                       texture2d<half, access::write> out  [[ texture(1) ]],
+                       uint2                          gid  [[ thread_position_in_grid ]])
+{
+    if((gid.x % SCALE_FACTOR != 0) || (gid.y % SCALE_FACTOR != 0))
+        return;
+    
+    // Check for lores fragment (a == b == c == d)
+    // a b
+    // c d
+    
+    half4 a = in.read(gid + uint2(0,0));
+    half4 b = in.read(gid + uint2(1,0));
+    half4 c = in.read(gid + uint2(0,1));
+    half4 d = in.read(gid + uint2(1,1));
+
+    if (!all(a == b && b == c && c == d)) {
+        
+        //   A
+        // C P B
+        //   D
+        
+        half4 A = in.read(gid + uint2( 0,-2));
+        half4 C = in.read(gid + uint2(-2, 0));
+        half4 P = in.read(gid + uint2( 0, 0));
+        half4 B = in.read(gid + uint2( 2, 0));
+        half4 D = in.read(gid + uint2( 0, 2));
+        
+        doEPX(out, gid, A, C, P, B, D);
+        
+    } else {
+        
+        out.write(a, gid + uint2(0,0));
+        out.write(b, gid + uint2(1,0));
+        out.write(c, gid + uint2(0,1));
+        out.write(d, gid + uint2(1,1));
+    }
+}
+
+kernel void epxupscaler(texture2d<half, access::read>  in   [[ texture(0) ]],
+                        texture2d<half, access::write> out  [[ texture(1) ]],
+                        uint2                          gid  [[ thread_position_in_grid ]])
+{
+    if((gid.x % SCALE_FACTOR != 0) || (gid.y % SCALE_FACTOR != 0))
+        return;
+    
+    uint2 ggid = gid / 2;
+    
+    half4 A = in.read(ggid + uint2( 0,-1));
+    half4 C = in.read(ggid + uint2(-1, 0));
+    half4 P = in.read(ggid + uint2( 0, 0));
+    half4 B = in.read(ggid + uint2( 1, 0));
+    half4 D = in.read(ggid + uint2( 0, 1));
+    
+    doEPX(out, gid, A, C, P, B, D);
 }
 
 
