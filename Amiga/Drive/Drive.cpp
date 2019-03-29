@@ -162,6 +162,7 @@ Drive::moveHead(int dir)
         // Move drive head outwards (towards the lower tracks)
         if (head.cylinder > 0) {
             head.cylinder--;
+            amiga->putMessage(MSG_DRIVE_HEAD_DOWN);
         } else {
             warn("Program is trying to move head beyond track 0.\n");
         }
@@ -172,6 +173,7 @@ Drive::moveHead(int dir)
         // Move drive head inwards (towards the upper tracks)
         if (head.cylinder < 79) {
             head.cylinder++;
+            amiga->putMessage(MSG_DRIVE_HEAD_UP);
         } else {
             warn("Program is trying to move head beyond track 79.\n");
         }

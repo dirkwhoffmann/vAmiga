@@ -469,10 +469,6 @@ typedef enum
     //
     
     // ROM and snapshot handling
-    MSG_BASIC_ROM_LOADED,
-    MSG_CHAR_ROM_LOADED,
-    MSG_KERNAL_ROM_LOADED,
-    MSG_VC1541_ROM_LOADED,
     MSG_SNAPSHOT_TAKEN,
     
     // CPU related messages
@@ -480,10 +476,6 @@ typedef enum
     MSG_CPU_SOFT_BREAKPOINT_REACHED,
     MSG_CPU_HARD_BREAKPOINT_REACHED,
     MSG_CPU_ILLEGAL_INSTRUCTION,
-    
-    // IEC Bus
-    MSG_IEC_BUS_BUSY,
-    MSG_IEC_BUS_IDLE,
     
     // Keyboard
     MSG_KEYMATRIX,
@@ -498,28 +490,13 @@ typedef enum
     MSG_VC1541_DISK_SOUND,
     MSG_VC1541_NO_DISK,
     MSG_VC1541_NO_DISK_SOUND,
-    MSG_VC1541_RED_LED_ON,
-    MSG_VC1541_RED_LED_OFF,
     MSG_VC1541_MOTOR_ON,
     MSG_VC1541_MOTOR_OFF,
-    MSG_VC1541_HEAD_UP,
-    MSG_VC1541_HEAD_UP_SOUND,
-    MSG_VC1541_HEAD_DOWN,
-    MSG_VC1541_HEAD_DOWN_SOUND,
     
     // Peripherals (Disk)
     MSG_DISK_SAVED,
     MSG_DISK_UNSAVED,
     
-    // Peripherals (Datasette)
-    MSG_VC1530_TAPE,
-    MSG_VC1530_NO_TAPE,
-    MSG_VC1530_PROGRESS,
-    
-    // Peripherals (Expansion port)
-    MSG_CARTRIDGE,
-    MSG_NO_CARTRIDGE,
-    MSG_CART_SWITCH
     
 } MessageType;
 

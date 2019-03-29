@@ -701,18 +701,16 @@ extension MyController {
              MSG_DRIVE_HEAD_DOWN:
             
             track()
-            playSound(name: "drive_click", volume: 1.0)
+            if driveNoise {
+                playSound(name: "drive_click", volume: 1.0)
+            }
             
  
             
             
             
         // DEPRECATED MESSAGES BELOW...
-        case MSG_BASIC_ROM_LOADED,
-             MSG_CHAR_ROM_LOADED,
-             MSG_KERNAL_ROM_LOADED,
-             MSG_VC1541_ROM_LOADED:
-            break
+ 
             
         case MSG_ROM_MISSING:
             openPreferences()
@@ -779,40 +777,13 @@ extension MyController {
             // playSound:@"1541_door_open_1" volume:0.2];
             playSound(name: "drive_snatch_uae", volume: 0.1)
             
-        case MSG_VC1541_HEAD_UP_SOUND:
-            
-            // Not sure about the copyright of the following sound:
-            // playSound:@"1541_track_change_0" volume:0.6];
-            // Sound from Commodore 64 (C64) Preservation Project (c64preservation.com):
-            playSound(name: "drive_click", volume: 1.0)
-            
-        case MSG_VC1541_HEAD_DOWN_SOUND:
-            
-            // Not sure about the copyright of the following sound:
-            // playSound:@"1541_track_change_2" volume:1.0];
-            // Sound from Commodore 64 (C64) Preservation Project (c64preservation.com):
-            playSound(name: "drive_click", volume: 1.0)
-            
+   
         case MSG_VC1541_DISK,
              MSG_VC1541_NO_DISK,
              MSG_DISK_SAVED,
              MSG_DISK_UNSAVED,
-             MSG_VC1541_RED_LED_ON,
-             MSG_VC1541_RED_LED_OFF,
-             MSG_VC1541_RED_LED_OFF,
-             MSG_IEC_BUS_BUSY,
-             MSG_IEC_BUS_IDLE,
              MSG_VC1541_MOTOR_ON,
-             MSG_VC1541_MOTOR_OFF,
-             MSG_VC1541_HEAD_UP,
-             MSG_VC1541_HEAD_DOWN,
-             MSG_VC1530_TAPE,
-             MSG_VC1530_NO_TAPE,
-             MSG_VC1530_PROGRESS,
-             MSG_CARTRIDGE,
-             MSG_NO_CARTRIDGE,
-             MSG_NO_CARTRIDGE,
-             MSG_CART_SWITCH:
+             MSG_VC1541_MOTOR_OFF:
             break
     
             
