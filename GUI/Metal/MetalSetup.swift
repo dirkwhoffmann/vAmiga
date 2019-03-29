@@ -76,7 +76,7 @@ public extension MetalView {
         assert(device != nil)
 
         //
-        // 512 x 512 textures
+        // Background texture
         //
         
         let descriptor = MTLTextureDescriptor.texture2DDescriptor(
@@ -90,11 +90,11 @@ public extension MetalView {
     
         
         //
-        // 1024 x 512 textures
+        // Emulator textures (one for short frames, one for long frames)
         //
         
-        descriptor.width = 1024;
-        descriptor.height = 512;
+        descriptor.width  = EMULATOR_TEXTURE.size.0;
+        descriptor.height = EMULATOR_TEXTURE.size.1;
         
         // Emulator textures (raw data of long and short frames)
         descriptor.usage = [ .shaderRead ]
@@ -104,11 +104,11 @@ public extension MetalView {
         assert(shortFrameTexture != nil, "Failed to create short frame texture.")
 
         //
-        // 1024 x 1024 textures
+        // Textures that combine a short and a long frame (not yet upscaled)
         //
         
-        descriptor.width = 1024;
-        descriptor.height = 1024;
+        descriptor.width  = MERGED_TEXTURE.size.0;
+        descriptor.height = MERGED_TEXTURE.size.1;
         
         // Merged emulator texture (long frame + short frame)
         descriptor.usage = [ .shaderRead, .shaderWrite, .renderTarget ]
@@ -125,11 +125,11 @@ public extension MetalView {
         assert(bloomTextureB != nil, "Failed to create bloom texture (B).")
 
         //
-        // 2048 x 2048 textures
+        // Upscaled textures
         //
         
-        descriptor.width = 2048;
-        descriptor.height = 2048;
+        descriptor.width  = UPSCALED_TEXTURE.size.0;
+        descriptor.height = UPSCALED_TEXTURE.size.1;
         
         // Upscaled emulator texture
         descriptor.usage = [ .shaderRead, .shaderWrite, .pixelFormatView, .renderTarget ]
