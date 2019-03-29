@@ -238,7 +238,7 @@ kernel void inPlaceEpx(texture2d<half, access::read>  inTexture   [[ texture(0) 
     if((gid.x % SCALE_FACTOR != 0) || (gid.y % SCALE_FACTOR != 0))
         return;
     
-    //   A    --\ 1 2
+    // E A    --\ 1 2
     // C P B  --/ 3 4
     //   D
     // 1=P; 2=P; 3=P; 4=P;
@@ -247,18 +247,32 @@ kernel void inPlaceEpx(texture2d<half, access::read>  inTexture   [[ texture(0) 
     // IF D==C AND D!=B AND C!=A => 3=C
     // IF B==D AND B!=A AND D!=C => 4=D
     
-    half xx = gid.x; //  / SCALE_FACTOR;
-    half yy = gid.y; //  / SCALE_FACTOR;
-    half4 A = inTexture.read(uint2(xx, yy - 1));
-    half4 C = inTexture.read(uint2(xx - 1, yy));
-    half4 P = inTexture.read(uint2(xx, yy));
-    half4 B = inTexture.read(uint2(xx + 1, yy));
-    half4 D = inTexture.read(uint2(xx, yy + 1));
+    half xx = gid.x;
+    half yy = gid.y;
+    half4 E = inTexture.read(uint2(xx - 2, yy + 2));
+    half4 A = inTexture.read(uint2(xx,     yy - 2));
+    half4 C = inTexture.read(uint2(xx - 2, yy    ));
+    half4 P = inTexture.read(uint2(xx,     yy    ));
     
-    half4 r1 = (all(C == A) && any(C != D) && any(A != B)) ? A : P;
-    half4 r2 = (all(A == B) && any(A != C) && any(B != D)) ? B : P;
-    half4 r3 = (all(A == B) && any(A != C) && any(B != D)) ? C : P;
-    half4 r4 = (all(B == D) && any(B != A) && any(D != C)) ? D : P;
+    half4 r1, r2, r3, r4;
+    
+    if (!all(E == A && A == C && C == P)) {
+        
+        half4 B = inTexture.read(uint2(xx + 2, yy    ));
+        half4 D = inTexture.read(uint2(xx,     yy + 2));
+        
+        r1 = (all(C == A) && any(C != D) && any(A != B)) ? A : P;
+        r2 = (all(A == B) && any(A != C) && any(B != D)) ? B : P;
+        r3 = (all(A == B) && any(A != C) && any(B != D)) ? C : P;
+        r4 = (all(B == D) && any(B != A) && any(D != C)) ? D : P;
+        
+    } else {
+        
+        r1 = E;
+        r2 = A;
+        r3 = C;
+        r4 = P;
+    }
     
     outTexture.write(r1, gid + uint2(0,0));
     outTexture.write(r2, gid + uint2(1,0));

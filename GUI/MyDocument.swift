@@ -68,14 +68,6 @@ class MyDocument : NSDocument {
         
         // Install the AROS Kickstart replacement per default
         amiga.mem.loadKickRom(fromBuffer: NSDataAsset(name: "aros.rom")?.data)
-        
-        // Provide Denise with some fake pictures
-        let fakeImage1 = NSImage.init(named: "fake1")
-        let data1 = fakeImage1?.toData()
-        let fakeImage2 = NSImage.init(named: "fake2")
-        let data2 = fakeImage2?.toData()
-
-        amiga.denise.initFakePictures(data1, fake2: data2)
     }
  
     override open func makeWindowControllers() {

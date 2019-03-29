@@ -433,10 +433,6 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->denise->debugSetBPLCON0Bit(bit, value);
 }
-- (void) initFakePictures:(void *)fake1 fake2:(void *)fake2
-{
-    wrapper->denise->initFakePictures((int *)fake1, (int *)fake2);
-}
 - (BOOL) longFrameIsReady
 {
     return wrapper->denise->longFrameIsReady();

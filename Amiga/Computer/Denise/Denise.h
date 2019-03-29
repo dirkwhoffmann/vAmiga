@@ -91,10 +91,6 @@ public:
     int *longFrame = new int[HPIXELS * VPIXELS];
     int *shortFrame = new int[HPIXELS * VPIXELS];
 
-    // FAKE PICTURES FOR THE VISUAL PROTOTYPE
-    int *fakeImage1 = new int[HPIXELS * VPIXELS];
-    int *fakeImage2 = new int[HPIXELS * VPIXELS];
-
     /* Currently active frame buffer
      * This variable points either to longFrame or shortFrame
      */
@@ -220,16 +216,6 @@ public:
      */
     void *screenBuffer() { return (frameBuffer == longFrame) ? shortFrame : longFrame; }
    
-    // Fills the fake pictures with some data
-    void initFakePictures(const void *fake1, const void *fake2) {
-        
-        assert(fake1 != NULL);
-        assert(fake2 != NULL);
-        
-        memcpy((void *)fakeImage1, fake1, BUFSIZE);
-        memcpy((void *)fakeImage2, fake2, BUFSIZE);
-    }
-    
     // Fake some video output
     void endOfFrame();
 };
