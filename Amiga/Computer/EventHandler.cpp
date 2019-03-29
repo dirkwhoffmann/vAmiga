@@ -64,7 +64,7 @@ EventHandler::_dump()
     plainmsg("Primary events:\n");
     for (unsigned i = 0; i <primarySlotCount; i++) {
 
-        plainmsg("Slot: %-10s ", info.primary[i].slotName);
+        plainmsg("Slot: %-17s ", info.primary[i].slotName);
         plainmsg("Event: %-15s ", info.primary[i].eventName);
         plainmsg("Trigger: ");
     
@@ -80,7 +80,7 @@ EventHandler::_dump()
     plainmsg("Secondary events:\n");
     for (unsigned i = 0; i < secondarySlotCount; i++) {
         
-        plainmsg("Slot: %-10s ", info.secondary[i].slotName);
+        plainmsg("Slot: %-17s ", info.secondary[i].slotName);
         plainmsg("Event: %-15s ", info.secondary[i].eventName);
         plainmsg("Trigger: ");
         
@@ -318,10 +318,12 @@ EventHandler::scheduleAbs(EventSlot s, Cycle cycle, EventID id)
 {
     assert(isEventSlot(s));
     
+    /*
     if (trace & (1 << s)) {
         debug("scheduleAbs(%d, %lld, %d)\n", s, cycle, id);
     }
-
+    */
+    
     eventSlot[s].triggerCycle = cycle;
     eventSlot[s].framePos = amiga->dma.cycle2FramePosition(cycle);
     eventSlot[s].id = id;
@@ -443,7 +445,6 @@ EventHandler::checkScheduledEvent(EventSlot s)
     
     if (eventSlot[s].triggerCycle < 0) {
         fatalError("Scheduled event has a too small trigger cycle.");
-        amiga->dma.dump();
         return false;
     }
     

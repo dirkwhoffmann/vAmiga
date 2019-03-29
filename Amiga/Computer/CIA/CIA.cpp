@@ -641,13 +641,14 @@ CIA::poke(uint16_t addr, uint8_t value)
 void
 CIA::incrementTOD()
 {
-    wakeUp();
+    // wakeUp();
     tod.increment();
 }
 
 void
 CIA::todInterrupt()
 {
+    wakeUp();
     delay |= CIATODInt0;
 }
 
@@ -1102,9 +1103,8 @@ CIA::executeOneCycle()
     if (oldDelay == delay && oldFeed == feed) tiredness++; else tiredness = 0;
   
     // Sleep if threshold is reached
-    if (false) { // } tiredness > 8) {
+    if (tiredness > 8) {
         sleep();
-        tiredness = 0;
         scheduleWakeUp();
     } else {
         scheduleNextExecution();
@@ -1118,38 +1118,47 @@ CIA::sleep()
     assert(!sleeping);
     
     // Determine maximum possible sleep cycle based on timer counts
-    CIACycle sleepA = clock + CIA_CYCLES((counterA > 2) ? (counterA - 1) : 0);
-    CIACycle sleepB = clock + CIA_CYCLES((counterB > 2) ? (counterB - 1) : 0);
+    assert(clock % 40 == 0);
+    Cycle sleepA = clock + CIA_CYCLES((counterA > 2) ? (counterA - 1) : 0);
+    Cycle sleepB = clock + CIA_CYCLES((counterB > 2) ? (counterB - 1) : 0);
     
     // CIAs with stopped timers can sleep forever
     if (!(feed & CIACountA0)) sleepA = INT64_MAX;
     if (!(feed & CIACountB0)) sleepB = INT64_MAX;
     
-    // debug(">>>>> sleepA = %lld sleepB = %lld\n", sleepA, sleepB);
     // ZZzzzz
+    // debug("ZZzzzz: clock = %lld A = %d B = %d sleepA = %lld sleepB = %lld\n", clock, counterA, counterB, sleepA, sleepB);
     sleepCycle = clock;
     wakeUpCycle = MIN(sleepA, sleepB);
     sleeping = true;
+    tiredness = 0;
 }
 
 void
 CIA::wakeUp()
 {
+    if (!sleeping) return;
+    sleeping = false;
+    
     // Align master clock to CIA raster
     Cycle targetCycle = CIA_CYCLES(AS_CIA_CYCLES(amiga->masterClock));
     
-    wakeUp(targetCycle);
+    // Emulate the CIA until 'targetCycle' or, if it is lower, the currently
+    // set wake up cycle.
+    if (wakeUpCycle < targetCycle) {
+        wakeUp(wakeUpCycle);
+    } else {
+        wakeUp(targetCycle);
+        assert(isUpToDate());
+    }
 }
 
 void
 CIA::wakeUp(Cycle targetCycle)
 {
-    if (!sleeping) return;
-    sleeping = false;
-    
     assert(clock == sleepCycle);
     
-    // debug("wakeup()\n");
+    // debug("wakeup(%lld): master = %lld wakeUpCycle = %lld\n", targetCycle, amiga->masterClock, wakeUpCycle);
     
     // Calculate the number of missed cycles
     Cycle missedCycles = targetCycle - sleepCycle;
@@ -1173,9 +1182,7 @@ CIA::wakeUp(Cycle targetCycle)
         clock = targetCycle;
     }
     
-    assert(isUpToDate());
-    
-    // Schedule next CIA event
+    // Schedule the next execution event
     scheduleNextExecution();
 }
 

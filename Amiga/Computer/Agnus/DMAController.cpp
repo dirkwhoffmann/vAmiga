@@ -97,9 +97,7 @@ DMAController::_ping()
 
 void
 DMAController::_dump()
-{    
-    amiga->dumpClock();
-    
+{        
     plainmsg("  hstrt : %d\n", hstrt);
     plainmsg("  hstop : %d\n", hstop);
     plainmsg("  vstrt : %d\n", vstrt);
@@ -311,8 +309,6 @@ DMAController::buildDMAEventTable()
         nextDmaEvent[i] = next;
         if (dmaEvent[i]) next = i;
     }
-    
-    // _dump();
 }
 
 void

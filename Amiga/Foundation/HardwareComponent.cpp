@@ -175,8 +175,8 @@ HardwareComponent::dump()
 void
 HardwareComponent::fatalError(const char *description)
 {
-    plainmsg("\nFATAL ERROR: %s\n\n", description);
     _dump();
+    plainmsg("\nFATAL ERROR: %s\n\n", description);
 }
 
 void
