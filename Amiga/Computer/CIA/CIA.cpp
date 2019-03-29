@@ -112,7 +112,7 @@ CIA::triggerFallingEdgeOnFlagPin()
 void
 CIA::triggerTimerIrq()
 {
-    debug("triggerTimerIrq()\n");
+    // debug("triggerTimerIrq()\n");
     delay |= (delay & CIAReadIcr0) ? CIASetInt0 : CIASetInt1;
     delay |= (delay & CIAReadIcr0) ? CIASetIcr0 : CIASetIcr1;
 }
@@ -888,7 +888,7 @@ CIA::executeOneCycle()
 	
 	if (timerBOutput) {
 				
-        debug("Timer B underflow\n");
+        // debug("Timer B underflow\n");
 
         icrAck &= ~0x02;
         
