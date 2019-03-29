@@ -164,23 +164,26 @@ public extension MetalView {
         assert(device != nil)
         assert(library != nil)
         
+        let mc = MERGED_TEXTURE.cutout
+        let uc = UPSCALED_TEXTURE.cutout
+        
         // Build the mergefilter
-        mergeFilter = MergeFilter.init(device: device!, library: library)
+        mergeFilter = MergeFilter.init(device: device!, library: library, cutout: mc)
         
         // Build upscalers
-        upscalerGallery[0] = BypassUpscaler.init(device: device!, library: library)
-        upscalerGallery[1] = EPXUpscaler.init(device: device!, library: library)
-        upscalerGallery[2] = XBRUpscaler.init(device: device!, library: library)
+        upscalerGallery[0] = BypassUpscaler.init(device: device!, library: library, cutout: uc)
+        upscalerGallery[1] = EPXUpscaler.init(device: device!, library: library, cutout: uc)
+        upscalerGallery[2] = XBRUpscaler.init(device: device!, library: library, cutout: uc)
         
         // Build bloom filters
-        bloomFilterGallery[0] = BypassFilter.init(device: device!, library: library)
-        bloomFilterGallery[1] = SplitFilter.init(device: device!, library: library)
-        bloomFilterGallery[2] = SplitFilter.init(device: device!, library: library)
+        bloomFilterGallery[0] = BypassFilter.init(device: device!, library: library, cutout: uc)
+        bloomFilterGallery[1] = SplitFilter.init(device: device!, library: library, cutout: uc)
+        bloomFilterGallery[2] = SplitFilter.init(device: device!, library: library, cutout: uc)
 
         // Build scanline filters
-        scanlineFilterGallery[0] = BypassFilter.init(device: device!, library: library)
-        scanlineFilterGallery[1] = SimpleScanlines(device: device!, library: library)
-        scanlineFilterGallery[2] = BypassFilter.init(device: device!, library: library)
+        scanlineFilterGallery[0] = BypassFilter.init(device: device!, library: library, cutout: uc)
+        scanlineFilterGallery[1] = SimpleScanlines(device: device!, library: library, cutout: uc)
+        scanlineFilterGallery[2] = BypassFilter.init(device: device!, library: library, cutout: uc)
     }
     
     func buildDotMasks() {
