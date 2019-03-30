@@ -269,7 +269,6 @@ public:
     // Converts a frame position into a master cycle
     Cycle framePosition2Cycle(FramePosition framePos);
 
-    
     /* Converts a beam position to a CPU cycle
      * The result is the cycle when we reach that position. It can be smaller,
      * equal or bigger than he current clock value, depending on the current
