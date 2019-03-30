@@ -8,7 +8,6 @@
 // -----------------------------------------------------------------------------
 
 #include "Amiga.h"
-// #include <algorithm>
 
 HardwareComponent::~HardwareComponent()
 {

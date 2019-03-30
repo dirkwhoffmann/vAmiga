@@ -13,7 +13,11 @@
 #include "va_std.h"
 
 #include <vector>
+#include <map>
+
 using std::vector;
+using std::map;
+using std::pair;
 
 /* Base class for all vAmiga objects.
  * This class contains a textual description of the object and offers various

@@ -12,13 +12,6 @@
 
 #include "HardwareComponent.h"
 #include "Breakpoint.h"
-#include <map>
-
-/*
-#include "va_std.h"
-#include <string>
-#include <vector>
-*/
 
 // This class manages a container that stores all breakpoints.
 class BreakpointManager : public HardwareComponent {

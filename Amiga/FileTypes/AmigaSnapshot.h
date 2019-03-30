@@ -12,7 +12,6 @@
 
 #include "AmigaFile.h"
 
-// Forward declarations
 class Amiga;
 
 // Snapshot header

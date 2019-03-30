@@ -12,25 +12,46 @@
 
 #include "HardwareComponent.h"
 
+// Time stamp used for messages that never trigger
 #define NEVER INT64_MAX
 
-/* Event slots forming the primary event list
- * Each event slot represents a state machine that runs in parallel to the
- * ones in the other slots. Keep in mind that the state machines interact
- * with each other in various ways (e.g., by blocking the DMA bus).
- * As a result, the slot is of great importance: If two events trigger at the
- * same cycle, the the slot with a smaller number is served first.
- * The secondary event slot is very different to the others. Triggering an
- * event in this slot causes the event handler to crawl through the secondary
- * event list which is designed similar to the primary list.
- * The separation into two event lists has been done for speed reasons. The
- * secondary list contains events that fire infrequently, e.g., the interrupt
- * events. This keeps the primary list short which has to be crawled through
- * whenever an event is processed.
+/* About the event handler.
+ * vAmiga is an event triggered emulator. If an action has to be performed at
+ * a specific cycle (e.g., activating the Copper at a specific beam position),
+ * the action is scheduled via the event handler and executed when the trigger
+ * cycle is reached.
+ * The event handler is part of Agnus, because this component is in charge of
+ * synchronize timing between the various components.
+ * Scheduled events are stored in so called event slots. Each slot is either
+ * empty or contains a single event and is bound to a specific component. E.g.,
+ * there is slot for Copper events, a slot for the Blitter events, and a slot
+ * storing rasterline events (pixel drawing, HSYNC action).
+ * From a theoretical point of view, each event slot represents a state machine
+ * running in parallel to the ones in the other slots. Keep in mind that the
+ * state machines do interact with each other in various ways (e.g., by blocking
+ * the DMA bus). As a result, the slot ordering is of great importance: If two
+ * events trigger at the same cycle, the the slot with a smaller number is
+ * served first.
+ * The available event slots are stored in two different tables: The primary
+ * event table and the secondary event table. The primary table contains the
+ * slots for all frequently occurring events (CIA execution, DMA operations,
+ * etc.). The secondary table contains the slots for events that occurr
+ * occasionally (e.g., a serial port interrupt). The separation into two event
+ * tables has been done for speed reasons. It keeps the primary table short
+ * which has to be crawled through whenever an event is processed.
+ * The secondary event table is linked to the primary table via the secondary
+ * event slot (SEC_SLOT). Triggering an event in this slot causes the event
+ * handler to process all pending events in the secondary event list. Hence,
+ * whenever a secondary event is scheduled, a primary event is scheduled in
+ * SEC_SLOT with a trigger cycle matching the smallest trigger cycle of all
+ * secondary events.
  */
+
 typedef enum
 {
+    //
     // Primary slot table
+    //
     
     CIAA_SLOT = 0,    // CIA A execution
     CIAB_SLOT,        // CIA B execution
@@ -39,11 +60,12 @@ typedef enum
     BLT_SLOT,         // Blitter DMA
     RAS_SLOT,         // Raster line events
     SEC_SLOT,         // Secondary events
-    EVENT_SLOT_COUNT,
+    PRIM_SLOT_COUNT,
     
+    //
     // Secondary slot table
+    //
     
-    // HSYNC_SLOT = 0,   // HSYNC event
     TBE_IRQ_SLOT = 0, // Source 0 IRQ (Serial port transmit buffer empty)
     DSKBLK_IRQ_SLOT,  // Source 1 IRQ (Disk block finished)
     SOFT_IRQ_SLOT,    // Source 2 IRQ (Software-initiated)
@@ -62,7 +84,7 @@ typedef enum
     
 } EventSlot;
 
-static inline bool isEventSlot(int32_t s) { return s <= EVENT_SLOT_COUNT; }
+static inline bool isPrimarySlot(int32_t s) { return s <= PRIM_SLOT_COUNT; }
 static inline bool isSecondarySlot(int32_t s) { return s <= SEC_SLOT_COUNT; }
 
 typedef enum
@@ -70,7 +92,7 @@ typedef enum
     EVENT_NONE = 0,
     
     //
-    // Events in primary event table
+    // Events in the primary event table
     //
     
     // CIA slots
@@ -131,7 +153,6 @@ typedef enum
     SEC_TRIGGER = 1,
     SEC_EVENT_COUNT,
     
-    
     //
     // Events in secondary event table
     //
@@ -155,18 +176,14 @@ static inline bool isRasEvent(EventID id) { return id <= RAS_EVENT_COUNT; }
 
 struct Event {
     
-    // Indicates when the event is due
+    // Indicates when the event is due.
     Cycle triggerCycle;
     
-    /* Event id.
-     * This value is evaluated inside the event handler to determine the
-     * action that needs to be taken.
-     */
+    // Identifier of the scheduled event.
     EventID id;
     
-    /* Data (optional)
-     * This value can be used to pass data to the event handler.
-     */
+    // Optional data value
+    // Can be used to pass additional information to the event handler.
     int64_t data;
 };
 
@@ -175,28 +192,21 @@ class EventHandler : public HardwareComponent {
 public:
     
     //
-    // Main events
+    // Event tables
     //
     
     // The primary event table
-    Event eventSlot[EVENT_SLOT_COUNT];
+    Event primSlot[PRIM_SLOT_COUNT];
     
     // Next trigger cycle for an event in the primary event table
-    Cycle nextTrigger = NEVER;
+    Cycle nextPrimTrigger = NEVER;
 
     // The secondary event table
-    Event secondarySlot[SEC_SLOT_COUNT];
+    Event secSlot[SEC_SLOT_COUNT];
     
     // Next trigger cycle for an event in the secondary event table
     Cycle nextSecTrigger = NEVER;
 
-    
-    /* Trace flags
-     * Setting the n-th bit to 1 will produce debug messages for events in
-     * slot number n.
-     */
-    uint16_t trace = 0;
-    
 
     //
     // Constructing and destructing
@@ -280,15 +290,15 @@ public:
 
     // Returns true if the specified event slot contains an event ID
     inline bool hasEvent(EventSlot s) {
-        assert(isEventSlot(s)); return eventSlot[s].id != 0; }
+        assert(isPrimarySlot(s)); return primSlot[s].id != 0; }
 
     // Returns true if the specified event slot contains a scheduled event
     inline bool isPending(EventSlot s) {
-        assert(isEventSlot(s)); return eventSlot[s].triggerCycle != INT64_MAX; }
+        assert(isPrimarySlot(s)); return primSlot[s].triggerCycle != INT64_MAX; }
 
     // Returns true if the specified event slot is due at the provided cycle
-    inline bool isDue(EventSlot s, Cycle cycle) { return cycle >= eventSlot[s].triggerCycle; }
-    inline bool isDueSec(EventSlot s, Cycle cycle) { return cycle >= secondarySlot[s].triggerCycle; }
+    inline bool isDue(EventSlot s, Cycle cycle) { return cycle >= primSlot[s].triggerCycle; }
+    inline bool isDueSec(EventSlot s, Cycle cycle) { return cycle >= secSlot[s].triggerCycle; }
 
     // Performs some debugging checks. Won't be executed in release build.
     bool checkScheduledEvent(EventSlot s);
@@ -296,7 +306,7 @@ public:
     
     // Processes all events that are due at or prior to cycle.
     inline void executeUntil(Cycle cycle) {
-        if (cycle >= nextTrigger) _executeUntil(cycle); }
+        if (cycle >= nextPrimTrigger) _executeUntil(cycle); }
     
     // Work horses for executeUntil()
     void _executeUntil(Cycle cycle);

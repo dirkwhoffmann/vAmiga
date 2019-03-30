@@ -17,20 +17,18 @@ EventHandler::EventHandler()
 void
 EventHandler::_powerOn()
 {
-    trace = 0; // (1 << BLT_SLOT);
-    
     // Wipe out the primary event table
-    for (unsigned i = 0; i < EVENT_SLOT_COUNT; i++) {
-        eventSlot[i].triggerCycle = NEVER;
-        eventSlot[i].id = (EventID)0;
-        eventSlot[i].data = 0;
+    for (unsigned i = 0; i < PRIM_SLOT_COUNT; i++) {
+        primSlot[i].triggerCycle = NEVER;
+        primSlot[i].id = (EventID)0;
+        primSlot[i].data = 0;
     }
 
     // Wipe out the secondary event table
     for (unsigned i = 0; i < SEC_SLOT_COUNT; i++) {
-        secondarySlot[i].triggerCycle = NEVER;
-        secondarySlot[i].id = (EventID)0;
-        secondarySlot[i].data = 0;
+        secSlot[i].triggerCycle = NEVER;
+        secSlot[i].id = (EventID)0;
+        secSlot[i].data = 0;
     }
 }
 
@@ -97,12 +95,12 @@ EventHandler::getPrimarySlotInfo(int slot)
 {
     EventSlotInfo info;
     
-    Cycle trigger = eventSlot[slot].triggerCycle;
+    Cycle trigger = primSlot[slot].triggerCycle;
     FramePosition pos = amiga->dma.cycle2FramePosition(trigger);
     
     info.trigger = trigger;
     info.triggerRel = trigger - amiga->dma.clock;
-    info.eventId = eventSlot[slot].id;
+    info.eventId = primSlot[slot].id;
     info.frame = pos.frame - amiga->dma.frame;
     info.vpos = pos.vpos;
     info.hpos = pos.hpos;
@@ -112,7 +110,7 @@ EventHandler::getPrimarySlotInfo(int slot)
         case CIAA_SLOT:
             
             info.slotName = "CIA A";
-            switch (eventSlot[slot].id) {
+            switch (primSlot[slot].id) {
                 case 0:                info.eventName = "none"; break;
                 case CIA_EXECUTE:      info.eventName = "CIA_EXECUTE"; break;
                 case CIA_WAKEUP:       info.eventName = "CIA_WAKEUP"; break;
@@ -123,7 +121,7 @@ EventHandler::getPrimarySlotInfo(int slot)
         case CIAB_SLOT:
             
             info.slotName = "CIA B";
-            switch (eventSlot[slot].id) {
+            switch (primSlot[slot].id) {
                 case 0:                info.eventName = "none"; break;
                 case CIA_EXECUTE:      info.eventName = "CIA_EXECUTE"; break;
                 case CIA_WAKEUP:       info.eventName = "CIA_WAKEUP"; break;
@@ -134,7 +132,7 @@ EventHandler::getPrimarySlotInfo(int slot)
         case DMA_SLOT:
             
             info.slotName = "DMA";
-            switch (eventSlot[slot].id) {
+            switch (primSlot[slot].id) {
                 case 0:                info.eventName = "none"; break;
                 case DMA_DISK:         info.eventName = "DMA_DISK"; break;
                 case DMA_A0:           info.eventName = "A0"; break;
@@ -166,7 +164,7 @@ EventHandler::getPrimarySlotInfo(int slot)
         case COP_SLOT:
             
             info.slotName = "Copper";
-            switch (eventSlot[slot].id) {
+            switch (primSlot[slot].id) {
                     
                 case 0:                info.eventName = "none"; break;
                 case COP_REQUEST_DMA:  info.eventName = "COP_REQUEST_DMA"; break;
@@ -184,7 +182,7 @@ EventHandler::getPrimarySlotInfo(int slot)
         case BLT_SLOT:
             
             info.slotName = "Blitter";
-            switch (eventSlot[slot].id) {
+            switch (primSlot[slot].id) {
                     
                 case 0:                info.eventName = "none"; break;
                 case BLT_INIT:         info.eventName = "BLT_INIT"; break;
@@ -197,7 +195,7 @@ EventHandler::getPrimarySlotInfo(int slot)
         case RAS_SLOT:
             
             info.slotName = "Raster";
-            switch (eventSlot[slot].id) {
+            switch (primSlot[slot].id) {
                     
                 case 0:                info.eventName = "none"; break;
                 case RAS_HSYNC:        info.eventName = "RAS_HSYNC"; break;
@@ -210,7 +208,7 @@ EventHandler::getPrimarySlotInfo(int slot)
         case SEC_SLOT:
             
             info.slotName = "Secondary";
-            switch (eventSlot[slot].id) {
+            switch (primSlot[slot].id) {
                     
                 case 0:                info.eventName = "none"; break;
                 case SEC_TRIGGER:      info.eventName = "SEC_TRIGGER"; break;
@@ -229,12 +227,12 @@ EventHandler::getSecondarySlotInfo(int slot)
 {
     EventSlotInfo info;
     
-    Cycle trigger = secondarySlot[slot].triggerCycle;
+    Cycle trigger = secSlot[slot].triggerCycle;
     FramePosition pos = amiga->dma.cycle2FramePosition(trigger);
     
     info.trigger = trigger;
     info.triggerRel = trigger - amiga->dma.clock;
-    info.eventId = secondarySlot[slot].id;
+    info.eventId = secSlot[slot].id;
     info.frame = pos.frame - amiga->dma.frame;
     info.vpos = pos.vpos;
     info.hpos = pos.hpos;
@@ -275,7 +273,7 @@ EventHandler::getSecondarySlotInfo(int slot)
         case DSKSYN_IRQ_SLOT:
         case EXTER_IRQ_SLOT:
             
-            switch (secondarySlot[slot].id) {
+            switch (secSlot[slot].id) {
                     
                 case 0:          info.eventName = "none"; break;
                 case IRQ_SET:    info.eventName = "IRQ_SET"; break;
@@ -295,13 +293,13 @@ EventHandler::getInfo()
 {
     EventHandlerInfo info;
     
-    assert(primarySlotCount == EVENT_SLOT_COUNT);
+    assert(primarySlotCount == PRIM_SLOT_COUNT);
     assert(secondarySlotCount == SEC_SLOT_COUNT);
 
     info.dmaClock = amiga->dma.clock;
 
     // Primary events
-    for (unsigned i = 0; i < EVENT_SLOT_COUNT; i++)
+    for (unsigned i = 0; i < PRIM_SLOT_COUNT; i++)
         info.primary[i] = getPrimarySlotInfo(i);
     
     // Secondary events
@@ -314,11 +312,11 @@ EventHandler::getInfo()
 void
 EventHandler::scheduleAbs(EventSlot s, Cycle cycle, EventID id)
 {
-    assert(isEventSlot(s));
+    assert(isPrimarySlot(s));
     
-    eventSlot[s].triggerCycle = cycle;
-    eventSlot[s].id = id;
-    if (cycle < nextTrigger) nextTrigger = cycle;
+    primSlot[s].triggerCycle = cycle;
+    primSlot[s].id = id;
+    if (cycle < nextPrimTrigger) nextPrimTrigger = cycle;
     
     assert(checkScheduledEvent(s));
 }
@@ -326,13 +324,13 @@ EventHandler::scheduleAbs(EventSlot s, Cycle cycle, EventID id)
 void
 EventHandler::scheduleRel(EventSlot s, Cycle cycle, EventID id)
 {
-    assert(isEventSlot(s));
+    assert(isPrimarySlot(s));
     
     cycle += amiga->dma.clock;
     
-    eventSlot[s].triggerCycle = cycle;
-    eventSlot[s].id = id;
-    if (cycle < nextTrigger) nextTrigger = cycle;
+    primSlot[s].triggerCycle = cycle;
+    primSlot[s].id = id;
+    if (cycle < nextPrimTrigger) nextPrimTrigger = cycle;
     
     assert(checkScheduledEvent(s));
 }
@@ -340,15 +338,15 @@ EventHandler::scheduleRel(EventSlot s, Cycle cycle, EventID id)
 void
 EventHandler::schedulePos(EventSlot s, int16_t vpos, int16_t hpos, EventID id)
 {
-    assert(isEventSlot(s));
+    assert(isPrimarySlot(s));
     assert(isVposHpos(vpos, hpos));
     
     Cycle cycle = amiga->dma.latchedClock;
     cycle += amiga->dma.beam2cycles(vpos, hpos);
     
-    eventSlot[s].triggerCycle = cycle;
-    eventSlot[s].id = id;
-    if (cycle < nextTrigger) nextTrigger = cycle;
+    primSlot[s].triggerCycle = cycle;
+    primSlot[s].id = id;
+    if (cycle < nextPrimTrigger) nextPrimTrigger = cycle;
     
     assert(checkScheduledEvent(s));
 }
@@ -356,10 +354,10 @@ EventHandler::schedulePos(EventSlot s, int16_t vpos, int16_t hpos, EventID id)
 void
 EventHandler::rescheduleAbs(EventSlot s, Cycle cycle)
 {
-    assert(isEventSlot(s));
+    assert(isPrimarySlot(s));
     
-    eventSlot[s].triggerCycle = cycle;
-    if (cycle < nextTrigger) nextTrigger = cycle;
+    primSlot[s].triggerCycle = cycle;
+    if (cycle < nextPrimTrigger) nextPrimTrigger = cycle;
     
     assert(checkScheduledEvent(s));
 }
@@ -367,12 +365,12 @@ EventHandler::rescheduleAbs(EventSlot s, Cycle cycle)
 void
 EventHandler::rescheduleRel(EventSlot s, Cycle cycle)
 {
-    assert(isEventSlot(s));
+    assert(isPrimarySlot(s));
     
     cycle += amiga->dma.clock;
     
-    eventSlot[s].triggerCycle = cycle;
-    if (cycle < nextTrigger) nextTrigger = cycle;
+    primSlot[s].triggerCycle = cycle;
+    if (cycle < nextPrimTrigger) nextPrimTrigger = cycle;
     
     assert(checkScheduledEvent(s));
 }
@@ -380,30 +378,30 @@ EventHandler::rescheduleRel(EventSlot s, Cycle cycle)
 void
 EventHandler::disable(EventSlot s)
 {
-    assert(isEventSlot(s));
-    eventSlot[s].triggerCycle = INT64_MAX;
+    assert(isPrimarySlot(s));
+    primSlot[s].triggerCycle = INT64_MAX;
 }
 
 void
 EventHandler::cancel(EventSlot s)
 {
-    assert(isEventSlot(s));
-    eventSlot[s].id = (EventID)0;
-    eventSlot[s].triggerCycle = INT64_MAX;    
+    assert(isPrimarySlot(s));
+    primSlot[s].id = (EventID)0;
+    primSlot[s].triggerCycle = INT64_MAX;    
 }
 
 bool
 EventHandler::checkScheduledEvent(EventSlot s)
 {
-    assert(isEventSlot(s));
+    assert(isPrimarySlot(s));
     
-    if (eventSlot[s].triggerCycle < 0) {
+    if (primSlot[s].triggerCycle < 0) {
         _dump();
         panic("Scheduled event has a too small trigger cycle.");
         return false;
     }
     
-    EventID id = eventSlot[s].id;
+    EventID id = primSlot[s].id;
     
     if (id == 0) {
         _dump();
@@ -419,7 +417,7 @@ EventHandler::checkScheduledEvent(EventSlot s)
                 panic("Invalid CIA event ID.");
                 return false;
             }
-            if (eventSlot[s].triggerCycle != INT64_MAX && eventSlot[s].triggerCycle % 40 != 0) {
+            if (primSlot[s].triggerCycle != INT64_MAX && primSlot[s].triggerCycle % 40 != 0) {
                 _dump();
                 panic("Scheduled trigger cycle is not a CIA cycle.");
                 return false;
@@ -459,10 +457,10 @@ EventHandler::checkScheduledEvent(EventSlot s)
 bool
 EventHandler::checkTriggeredEvent(EventSlot s)
 {
-    assert(isEventSlot(s));
+    assert(isPrimarySlot(s));
     
     // Note: This function has to be called at the trigger cycle
-    if (amiga->dma.clock != eventSlot[s].triggerCycle) {
+    if (amiga->dma.clock != primSlot[s].triggerCycle) {
         return true;
     }
     
@@ -477,7 +475,7 @@ EventHandler::_executeUntil(Cycle cycle) {
 
         assert(checkTriggeredEvent(CIAA_SLOT));
 
-        switch(eventSlot[CIAA_SLOT].id) {
+        switch(primSlot[CIAA_SLOT].id) {
                 
             case CIA_EXECUTE:
                 amiga->ciaA.executeOneCycle();
@@ -497,7 +495,7 @@ EventHandler::_executeUntil(Cycle cycle) {
         
         assert(checkTriggeredEvent(CIAB_SLOT));
         
-        switch(eventSlot[CIAB_SLOT].id) {
+        switch(primSlot[CIAB_SLOT].id) {
                 
             case CIA_EXECUTE:
                 amiga->ciaB.executeOneCycle();
@@ -515,7 +513,7 @@ EventHandler::_executeUntil(Cycle cycle) {
     // Check for a bitplane event
     if (isDue(DMA_SLOT, cycle)) {
         assert(checkTriggeredEvent(DMA_SLOT));
-        amiga->dma.serviceDMAEvent(eventSlot[DMA_SLOT].id, eventSlot[DMA_SLOT].data);
+        amiga->dma.serviceDMAEvent(primSlot[DMA_SLOT].id, primSlot[DMA_SLOT].data);
     }
     
     // Check for a Copper event
@@ -524,19 +522,19 @@ EventHandler::_executeUntil(Cycle cycle) {
         // debug("Serving COPPER event at %lld\n", cycle);
     
         assert(checkTriggeredEvent(COP_SLOT));
-        amiga->dma.copper.serviceEvent(eventSlot[COP_SLOT].id, eventSlot[COP_SLOT].data);
+        amiga->dma.copper.serviceEvent(primSlot[COP_SLOT].id, primSlot[COP_SLOT].data);
     }
  
     // Check for a Blitter event
     if (isDue(BLT_SLOT, cycle)) {
         assert(checkTriggeredEvent(BLT_SLOT));
-        amiga->dma.blitter.serviceEvent(eventSlot[BLT_SLOT].id);
+        amiga->dma.blitter.serviceEvent(primSlot[BLT_SLOT].id);
     }
 
     // Check for a raster event
     if (isDue(RAS_SLOT, cycle)) {
         assert(checkTriggeredEvent(RAS_SLOT));
-        amiga->dma.serviceRASEvent(eventSlot[RAS_SLOT].id);
+        amiga->dma.serviceRASEvent(primSlot[RAS_SLOT].id);
     }
     
     // Check for a secondary event
@@ -545,10 +543,10 @@ EventHandler::_executeUntil(Cycle cycle) {
     }
 
     // Determine the next trigger cycle
-    nextTrigger = eventSlot[0].triggerCycle;
-    for (unsigned i = 1; i < EVENT_SLOT_COUNT; i++)
-        if (eventSlot[i].triggerCycle < nextTrigger)
-            nextTrigger = eventSlot[i].triggerCycle;
+    nextPrimTrigger = primSlot[0].triggerCycle;
+    for (unsigned i = 1; i < PRIM_SLOT_COUNT; i++)
+        if (primSlot[i].triggerCycle < nextPrimTrigger)
+            nextPrimTrigger = primSlot[i].triggerCycle;
 }
 
 void
@@ -599,10 +597,10 @@ EventHandler::_executeSecondaryUntil(Cycle cycle) {
     }
 
     // Determine the next trigger cycle
-    nextSecTrigger = secondarySlot[0].triggerCycle;
+    nextSecTrigger = secSlot[0].triggerCycle;
     for (unsigned i = 1; i < SEC_SLOT_COUNT; i++)
-        if (secondarySlot[i].triggerCycle < nextSecTrigger)
-            nextSecTrigger = secondarySlot[i].triggerCycle;
+        if (secSlot[i].triggerCycle < nextSecTrigger)
+            nextSecTrigger = secSlot[i].triggerCycle;
 
     // Update the secondary table trigger in the primary table
     rescheduleAbs(SEC_SLOT, nextSecTrigger);
@@ -614,12 +612,12 @@ EventHandler::scheduleSecondaryAbs(EventSlot s, Cycle cycle, EventID id)
     assert(isSecondarySlot(s));
     
     // Schedule event in secondary table
-    secondarySlot[s].triggerCycle = cycle;
-    secondarySlot[s].id = id;
+    secSlot[s].triggerCycle = cycle;
+    secSlot[s].id = id;
     if (cycle < nextSecTrigger) nextSecTrigger = cycle;
     
     // Update the secondary table trigger in the primary table
-    if (cycle < eventSlot[SEC_SLOT].triggerCycle)
+    if (cycle < primSlot[SEC_SLOT].triggerCycle)
         rescheduleAbs(SEC_SLOT, cycle);
 }
 
@@ -631,23 +629,23 @@ EventHandler::scheduleSecondaryRel(EventSlot s, Cycle cycle, EventID id)
     cycle += amiga->dma.clock;
     
     // Schedule event in secondary table
-    secondarySlot[s].triggerCycle = cycle;
-    secondarySlot[s].id = id;
+    secSlot[s].triggerCycle = cycle;
+    secSlot[s].id = id;
     if (cycle < nextSecTrigger) nextSecTrigger = cycle;
     
     // Update the secondary table trigger in the primary table
-    if (cycle < eventSlot[SEC_SLOT].triggerCycle)
+    if (cycle < primSlot[SEC_SLOT].triggerCycle)
         rescheduleAbs(SEC_SLOT, cycle);
 }
 
 void
 EventHandler::serveIRQEvent(EventSlot slot, int irqBit)
 {
-    if (secondarySlot[slot].id == IRQ_SET) {
+    if (secSlot[slot].id == IRQ_SET) {
         amiga->paula.setINTREQ(0x8000 | (1 << irqBit));
     } else {
-        assert(secondarySlot[slot].id == IRQ_CLEAR);
+        assert(secSlot[slot].id == IRQ_CLEAR);
         amiga->paula.setINTREQ(1 << irqBit);
     }
-    secondarySlot[slot].triggerCycle = NEVER;
+    secSlot[slot].triggerCycle = NEVER;
 }

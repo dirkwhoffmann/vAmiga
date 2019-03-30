@@ -12,7 +12,6 @@
 
 #include "TOD.h"
 
-// Forward declarations
 class VIC;
 class IEC;
 class Keyboard;

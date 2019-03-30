@@ -12,7 +12,6 @@
 
 #include "AmigaObject.h"
 
-// Forward declarations
 class Amiga;
 class EventHandler;
 

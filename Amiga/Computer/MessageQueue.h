@@ -11,9 +11,6 @@
 #define _MESSAGE_QUEUE_INC
 
 #include "AmigaObject.h"
-#include <map>
-
-using namespace std;
 
 class MessageQueue : public AmigaObject {
     
@@ -22,17 +19,17 @@ private:
     // Maximum number of queued messages
     const static size_t capacity = 64;
     
-    // Message ring buffer
+    // Ring buffer storing all pending messages
     Message queue[capacity];
     
-    // The ring buffers read and write pointers
+    // The ring buffer's read and write pointers
     int r = 0;
     int w = 0;
     
-    // Mutex for streamlining parallel read and write accesses
+    // Mutex for controlling parallel reads and writes
     pthread_mutex_t lock;
     
-    // A list of all registered listeners
+    // List of all registered listeners
     map <const void *, Callback *> listeners;
     
 public:
@@ -44,10 +41,10 @@ public:
     // Registers a listener together with it's callback function.
     void addListener(const void *listener, Callback *func);
     
-    // Removes a listener.
+    // Unregisters a listener.
     void removeListener(const void *listener);
     
-    // Returns the next pending message, or NULL if the queue is empty
+    // Returns the next pending message, or NULL if the queue is empty.
     Message getMessage();
     
     // Writes a message into the queue and propagates it to all listeners.
@@ -55,7 +52,9 @@ public:
     
 private:
     
-    // Propagates a single message to all registered listeners.
+    /* Propagates a single message to all registered listeners.
+     * Called by function putMessage(...)
+     */
     void propagateMessage(Message *msg);
 };
 

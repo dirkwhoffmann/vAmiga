@@ -12,6 +12,8 @@
 #include <sstream>
 #include <regex>
 
+using std::regex;
+
 // Token identifiers
 enum Token {
     TOK_DELIM,
