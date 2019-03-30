@@ -12,14 +12,22 @@ import Foundation
 extension PreferencesController {
     
     func awakeVideoPrefsFromNib() {
-        
+
+        // Check for available enhancers
+        if let enhancers = myController?.metal.enhancerGallery {
+            for i in 0 ... enhancers.count - 1 {
+                if let item = vidEnhancerPopup.menu?.item(withTag: i) {
+                    item.isEnabled = (enhancers[i] != nil)
+                }
+            }
+        }
+
         // Check for available upscalers
-        if let enhancers = myController?.metal.enhancerGallery,
-            let upscalers = myController?.metal.upscalerGallery {
-            
+        if let upscalers = myController?.metal.upscalerGallery {
             for i in 0 ... upscalers.count - 1 {
-                vidUpscalerPopup.menu!.item(withTag: i)?.isEnabled =
-                    enhancers[i] != nil && upscalers[i] != nil
+                if let item = vidUpscalerPopup.menu?.item(withTag: i) {
+                    item.isEnabled = (upscalers[i] != nil)
+                }
             }
         }
         
@@ -38,6 +46,7 @@ extension PreferencesController {
         track()
         
         // Video
+        vidEnhancerPopup.selectItem(withTag: metal.enhancer)
         vidUpscalerPopup.selectItem(withTag: metal.upscaler)
         vidPalettePopup.selectItem(withTag: controller.palette)
         vidBrightnessSlider.doubleValue = controller.brightness
@@ -124,13 +133,16 @@ extension PreferencesController {
     // Action methods (Effects)
     //
     
+    @IBAction func vidEnhancerAction(_ sender: NSPopUpButton!) {
+        
+        myController?.metal.enhancer = sender.selectedTag()
+        refresh()
+    }
+    
     @IBAction func vidUpscalerAction(_ sender: NSPopUpButton!) {
 
-        if let metal = myController?.metal {
-            track("\(sender.selectedTag())")
-            metal.upscaler = sender.selectedTag()
-            refresh()
-        }
+        myController?.metal.upscaler = sender.selectedTag()
+        refresh()
     }
     
     @IBAction func vidBlurAction(_ sender: NSPopUpButton!) {

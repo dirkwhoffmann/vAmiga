@@ -142,7 +142,11 @@ class MyController : NSWindowController, MessageReceiver {
     }
  
     // Video preferences
-    
+ 
+    var enhancer : Int {
+        get { return metal.enhancer }
+        set { metal.enhancer = newValue }
+    }
     var upscaler : Int {
         get { return metal.upscaler }
         set { metal.upscaler = newValue }

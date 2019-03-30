@@ -392,6 +392,7 @@ extension Keys {
     static let brightness      = "VC64BrightnessKey"
     static let contrast        = "VC64ContrastKey"
     static let saturation      = "VC64SaturationKey"
+    static let enhancer        = "VC64EnhancerKey"
     static let upscaler        = "VC64UpscalerKey"
 
     // Geometry
@@ -409,6 +410,7 @@ extension Defaults {
     static let brightness = Double(50.0)
     static let contrast = Double(100.0)
     static let saturation = Double(50.0)
+    static let enhancer = 0
     static let upscaler = 0
     
     // Geometry
@@ -430,6 +432,7 @@ extension MyController {
             Keys.brightness: Defaults.brightness,
             Keys.contrast: Defaults.contrast,
             Keys.saturation: Defaults.saturation,
+            Keys.enhancer: Defaults.enhancer,
             Keys.upscaler: Defaults.upscaler,
 
             Keys.eyeX: Defaults.eyeX,
@@ -450,8 +453,9 @@ extension MyController {
                      Keys.brightness,
                      Keys.contrast,
                      Keys.saturation,
+                     Keys.enhancer,
                      Keys.upscaler,
-                     
+
                      Keys.eyeX,
                      Keys.eyeY,
                      Keys.eyeZ,
@@ -471,6 +475,7 @@ extension MyController {
         
         amiga.suspend()
         
+        metal.enhancer = defaults.integer(forKey: Keys.enhancer)
         metal.upscaler = defaults.integer(forKey: Keys.upscaler)
         palette = defaults.integer(forKey: Keys.palette)
         brightness = defaults.double(forKey: Keys.brightness)
@@ -490,6 +495,7 @@ extension MyController {
         
         let defaults = UserDefaults.standard
         
+        defaults.set(metal.enhancer, forKey: Keys.enhancer)
         defaults.set(metal.upscaler, forKey: Keys.upscaler)
         defaults.set(palette, forKey: Keys.palette)
         defaults.set(brightness, forKey: Keys.brightness)

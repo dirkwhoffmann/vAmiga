@@ -73,6 +73,7 @@ class PreferencesController : DialogController {
     @IBOutlet weak var vidSaturationSlider: NSSlider!
     
     // Effects
+    @IBOutlet weak var vidEnhancerPopup: NSPopUpButton!
     @IBOutlet weak var vidUpscalerPopup: NSPopUpButton!
     @IBOutlet weak var vidBlurPopUp: NSPopUpButton!
     @IBOutlet weak var vidBlurRadiusSlider: NSSlider!

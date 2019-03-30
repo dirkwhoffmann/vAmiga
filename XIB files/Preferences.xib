@@ -82,6 +82,7 @@
                 <outlet property="vidContrastSlider" destination="Gix-cX-ARc" id="QGy-se-qE6"/>
                 <outlet property="vidDotMaskBrightnessSlider" destination="7xe-s2-Fir" id="bXd-iZ-Mz4"/>
                 <outlet property="vidDotMaskPopUp" destination="Nrz-LF-GtK" id="KdW-or-4ar"/>
+                <outlet property="vidEnhancerPopup" destination="GCj-d1-3AP" id="ZAD-rM-C4O"/>
                 <outlet property="vidEyeXSlider" destination="7MT-uZ-RGm" id="j0t-UG-xUS"/>
                 <outlet property="vidEyeYSlider" destination="8Th-7v-D1s" id="oM6-H0-KfD"/>
                 <outlet property="vidEyeZSlider" destination="PbK-qc-ZPZ" id="UZ4-Uh-12D"/>
@@ -93,7 +94,7 @@
                 <outlet property="vidScanlineBrightnessSlider" destination="91k-67-6iN" id="Ny4-2J-Tad"/>
                 <outlet property="vidScanlineWeightSlider" destination="nIa-kK-410" id="Wd7-gc-qEK"/>
                 <outlet property="vidScanlinesPopUp" destination="ICF-4F-jzR" id="gZQ-Hx-W9q"/>
-                <outlet property="vidUpscalerPopup" destination="GCj-d1-3AP" id="z81-Ec-LcK"/>
+                <outlet property="vidUpscalerPopup" destination="fcX-95-l2D" id="ek0-Dk-WGA"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="ou3-wi-R6f"/>
             </connections>
         </customObject>
@@ -1063,45 +1064,45 @@ DQ
                                             </connections>
                                         </button>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rxt-lE-1to">
-                                            <rect key="frame" x="329" y="301" width="63" height="17"/>
+                                            <rect key="frame" x="320" y="299" width="72" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" alignment="right" title="Upscaler:" id="pe2-yQ-pvv">
+                                            <textFieldCell key="cell" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" alignment="right" title="Upscaling:" id="pe2-yQ-pvv">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GCj-d1-3AP">
-                                            <rect key="frame" x="394" y="294" width="200" height="26"/>
+                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mws-0X-cYA">
+                                            <rect key="frame" x="485" y="301" width="18" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="None" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" autoenablesItems="NO" selectedItem="XAs-99-rU5" id="evZ-8u-Sb0">
+                                            <textFieldCell key="cell" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" alignment="center" title="+" id="JPc-tP-3Ns">
+                                                <font key="font" metaFont="system" size="16"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fcX-95-l2D">
+                                            <rect key="frame" x="504" y="294" width="90" height="26"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="None" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" autoenablesItems="NO" selectedItem="iBd-h4-h3i" id="bsS-i8-xO5">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="menu"/>
-                                                <menu key="menu" title="OtherViews" autoenablesItems="NO" id="NyQ-iX-mVv">
+                                                <menu key="menu" title="OtherViews" autoenablesItems="NO" id="czi-so-IXA">
                                                     <items>
-                                                        <menuItem title="None" state="on" id="XAs-99-rU5">
+                                                        <menuItem title="None" state="on" id="iBd-h4-h3i">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="EPX" tag="1" id="aNT-wj-tiO">
+                                                        <menuItem title="EPX" tag="1" id="1xV-Am-S1J">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="xBR" tag="2" id="6Vw-HQ-u88">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="Lores enhancer" tag="3" id="1iy-x7-fIF">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="Lores enhancer + EPX" tag="4" id="bTs-2C-PeO">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="Lores enhancer + xBR" tag="5" id="i8C-Zm-UbZ">
+                                                        <menuItem title="xBR" tag="2" id="dbg-iK-5OI">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
                                             <connections>
-                                                <action selector="vidUpscalerAction:" target="-2" id="CnR-cB-dJi"/>
+                                                <action selector="vidUpscalerAction:" target="-2" id="Nw5-xB-PPe"/>
                                             </connections>
                                         </popUpButton>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uxU-oc-HoB">
@@ -1246,6 +1247,30 @@ DQ
                                             </popUpButtonCell>
                                             <connections>
                                                 <action selector="vidPaletteAction:" target="-2" id="c1X-Qg-CIr"/>
+                                            </connections>
+                                        </popUpButton>
+                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GCj-d1-3AP">
+                                            <rect key="frame" x="394" y="294" width="90" height="26"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="None" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" autoenablesItems="NO" selectedItem="XAs-99-rU5" id="evZ-8u-Sb0">
+                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="menu"/>
+                                                <menu key="menu" title="OtherViews" autoenablesItems="NO" id="NyQ-iX-mVv">
+                                                    <items>
+                                                        <menuItem title="None" state="on" id="XAs-99-rU5">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="EPX" tag="1" id="aNT-wj-tiO">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="xBR" tag="2" id="6Vw-HQ-u88">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <action selector="vidEnhancerAction:" target="-2" id="A5Q-vY-IiN"/>
                                             </connections>
                                         </popUpButton>
                                     </subviews>

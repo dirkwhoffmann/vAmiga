@@ -178,24 +178,15 @@ public extension MetalView {
         // Build the mergefilter
         mergeFilter = MergeFilter.init(device: device!, library: library, cutout: mc)
         
-        // Build low-res enhancers (first-pass upscaling)
+        // Build low-res enhancers (first-pass, in-texture upscaling)
         enhancerGallery[0] = BypassFilter.init(device: device!, library: library, cutout: uc)
-        enhancerGallery[1] = BypassFilter.init(device: device!, library: library, cutout: mc)
-        enhancerGallery[2] = BypassFilter.init(device: device!, library: library, cutout: mc)
-        enhancerGallery[3] = InPlaceXbrScaler.init(device: device!, library: library, cutout: uc)
-        enhancerGallery[4] = InPlaceXbrScaler.init(device: device!, library: library, cutout: mc)
-        enhancerGallery[5] = InPlaceXbrScaler.init(device: device!, library: library, cutout: mc)
-
-        // Build the lowres enhancer
-        // lowresEnhancer = InPlaceEpxScaler.init(device: device!, library: library, cutout: mc)
+        enhancerGallery[1] = InPlaceEpxScaler.init(device: device!, library: library, cutout: uc)
+        enhancerGallery[2] = InPlaceXbrScaler.init(device: device!, library: library, cutout: mc)
         
         // Build upscalers (second-pass upscaling)
         upscalerGallery[0] = BypassUpscaler.init(device: device!, library: library, cutout: uc)
         upscalerGallery[1] = EPXUpscaler.init(device: device!, library: library, cutout: uc)
         upscalerGallery[2] = XBRUpscaler.init(device: device!, library: library, cutout: uc)
-        upscalerGallery[3] = BypassUpscaler.init(device: device!, library: library, cutout: uc)
-        upscalerGallery[4] = EPXUpscaler.init(device: device!, library: library, cutout: uc)
-        upscalerGallery[5] = XBRUpscaler.init(device: device!, library: library, cutout: uc)
         
         // Build bloom filters
         bloomFilterGallery[0] = BypassFilter.init(device: device!, library: library, cutout: uc)

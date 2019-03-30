@@ -118,10 +118,10 @@ public class MetalView: MTKView {
     var lowresEnhancer : InPlaceEpxScaler! = nil
     
     // Array holding all available lowres enhancers
-    var enhancerGallery = [ComputeKernel?](repeating: nil, count: 6)
+    var enhancerGallery = [ComputeKernel?](repeating: nil, count: 3)
     
     // Array holding all available upscalers
-    var upscalerGallery = [ComputeKernel?](repeating: nil, count: 6)
+    var upscalerGallery = [ComputeKernel?](repeating: nil, count: 3)
 
     // Array holding all available bloom filters
     var bloomFilterGallery = [ComputeKernel?](repeating: nil, count: 3)
@@ -171,16 +171,22 @@ public class MetalView: MTKView {
         
     /// Texture cut-out (normalized)
     var textureRect = CGRect.init(x: 0.0, y: 0.0, width: 0.0, height: 0.0)
- 
+    
+    /// Currently selected texture enhancer
+    var enhancer = Defaults.enhancer {
+        didSet {
+            if upscaler >= enhancerGallery.count || enhancerGallery[upscaler] == nil {
+                track("Sorry, the selected texture enhancer is unavailable.")
+                enhancer = 0
+            }
+        }
+    }
+    
     /// Currently selected texture upscaler
     var upscaler = Defaults.upscaler {
         didSet {
-            if upscaler >= enhancerGallery.count || enhancerGallery[upscaler] == nil {
-                track("Sorry, the selected GPU upscaler (first pass) is unavailable.")
-                upscaler = 0
-            }
             if upscaler >= upscalerGallery.count || upscalerGallery[upscaler] == nil {
-                track("Sorry, the selected GPU upscaler (second pass) is unavailable.")
+                track("Sorry, the selected texture upscaler is unavailable.")
                 upscaler = 0
             }
         }
