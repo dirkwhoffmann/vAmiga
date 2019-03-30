@@ -99,8 +99,6 @@ public class MetalView: MTKView {
     /// algorithms such as xBr.
     var upscaledTexture: MTLTexture! = nil
     
-    var upscaledTmp: MTLTexture! = nil // DEBUGGING, REMOVE ASAP
-    
     /// Upscaled texture with scanlines (2048 x 2048)
     /// In the second texture processing stage, a scanline effect is applied to
     /// the upscaled texture.
@@ -376,13 +374,6 @@ public class MetalView: MTKView {
         upscaler.apply(commandBuffer: commandBuffer,
                        source: lowresEnhancedTexture, // mergeTexture,
                        target: upscaledTexture)
-        
-        /*
-        upscalerGallery[0]!.apply(commandBuffer: commandBuffer,
-                                  source: lowresEnhancedTexture, target: upscaledTmp)
-        enhancerGallery[3]!.apply(commandBuffer: commandBuffer,
-                                  source: upscaledTmp, target: upscaledTexture)
-        */
         
         // Blur the upscaled texture
         if #available(OSX 10.13, *), shaderOptions.blur > 0 {

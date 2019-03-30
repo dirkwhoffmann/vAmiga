@@ -141,9 +141,6 @@ public extension MetalView {
         upscaledTexture = device?.makeTexture(descriptor: descriptor)
         assert(upscaledTexture != nil, "Failed to create upscaling texture.")
         
-        upscaledTmp = device?.makeTexture(descriptor: descriptor)
-        assert(upscaledTmp != nil, "Failed to create upscaling test texture.")
-        
         // Scanline texture
         scanlineTexture = device?.makeTexture(descriptor: descriptor)
         assert(scanlineTexture != nil, "Failed to create scanline texture.")
