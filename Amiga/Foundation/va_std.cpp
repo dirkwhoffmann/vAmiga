@@ -272,8 +272,7 @@ fnv_1a(uint8_t *addr, size_t size)
     for (size_t i = 0; i < size; i++) {
         hash = (hash ^ (uint64_t)addr[i]) * prime;
     }
-    
-    printf("hash = %lld\n", hash);
+
     return hash;
 }
 
