@@ -439,7 +439,7 @@ void doXBR(texture2d<half, access::write> out, uint2 gid,
     half d_15_17   = d(m15, m17);
     
     half3 pixel;
-    // const half blend = 0.5;
+    const half blend = 0.5;
     
     // X-
     // --
@@ -449,7 +449,7 @@ void doXBR(texture2d<half, access::write> out, uint2 gid,
     
     if (a1 < b1) {
         pixel = (d_10_9 <= d_10_5) ? m9 : m5;
-        // pixel = mix(pixel, matrix10, blend);
+        pixel = mix(pixel, m10, blend);
     } else {
         pixel = m10;
     }
@@ -463,7 +463,7 @@ void doXBR(texture2d<half, access::write> out, uint2 gid,
     
     if (a2 < b2) {
         pixel = (d_10_5 <= d_10_11) ? m5 : m11;
-        // pixel = mix(pixel, matrix10, blend);
+        pixel = mix(pixel, m10, blend);
     } else {
         pixel = m10;
     }
@@ -477,7 +477,7 @@ void doXBR(texture2d<half, access::write> out, uint2 gid,
     
     if (a3 < b3) {
         pixel = (d_10_9 <= d_10_15) ? m9 : m15;
-        // pixel = mix(pixel, matrix10, blend);
+        pixel = mix(pixel, m10, blend);
     } else {
         pixel = m10;
     }
@@ -490,7 +490,7 @@ void doXBR(texture2d<half, access::write> out, uint2 gid,
     half b4 = (d_9_15 + d_15_20 + d_15_17 +  d_5_11 + (4 * d_10_16));
     if (a4 < b4) {
         pixel = (d_10_11 <= d_10_15) ? m11 : m15;
-        // pixel = mix(pixel, matrix10, blend);
+        pixel = mix(pixel, m10, blend);
     } else {
         pixel = m10;
     }
@@ -502,7 +502,7 @@ kernel void xbrupscaler(texture2d<half, access::read>  in   [[ texture(0) ]],
                         uint2                          gid  [[ thread_position_in_grid ]])
 {
     
-    if (gid.x % SCALE_FACTOR != 0 || gid.y % 2 != 0) return;
+    if (gid.x % SCALE_FACTOR != 0 || gid.y % SCALE_FACTOR != 0) return;
   
     //         -2   -1   +0   +1   +2
     //

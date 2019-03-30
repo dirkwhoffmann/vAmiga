@@ -141,6 +141,9 @@ public extension MetalView {
         upscaledTexture = device?.makeTexture(descriptor: descriptor)
         assert(upscaledTexture != nil, "Failed to create upscaling texture.")
         
+        upscaledTmp = device?.makeTexture(descriptor: descriptor)
+        assert(upscaledTmp != nil, "Failed to create upscaling test texture.")
+        
         // Scanline texture
         scanlineTexture = device?.makeTexture(descriptor: descriptor)
         assert(scanlineTexture != nil, "Failed to create scanline texture.")
@@ -176,10 +179,10 @@ public extension MetalView {
         mergeFilter = MergeFilter.init(device: device!, library: library, cutout: mc)
         
         // Build low-res enhancers (first-pass upscaling)
-        enhancerGallery[0] = BypassFilter.init(device: device!, library: library, cutout: mc)
+        enhancerGallery[0] = BypassFilter.init(device: device!, library: library, cutout: uc)
         enhancerGallery[1] = BypassFilter.init(device: device!, library: library, cutout: mc)
         enhancerGallery[2] = BypassFilter.init(device: device!, library: library, cutout: mc)
-        enhancerGallery[3] = InPlaceXbrScaler.init(device: device!, library: library, cutout: mc)
+        enhancerGallery[3] = InPlaceXbrScaler.init(device: device!, library: library, cutout: uc)
         enhancerGallery[4] = InPlaceXbrScaler.init(device: device!, library: library, cutout: mc)
         enhancerGallery[5] = InPlaceXbrScaler.init(device: device!, library: library, cutout: mc)
 
