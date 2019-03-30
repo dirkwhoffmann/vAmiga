@@ -31,7 +31,6 @@
 		508FDE6E21EA1FA50043D0E9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 508FDE6D21EA1FA50043D0E9 /* Assets.xcassets */; };
 		508FDE7D21EA1FA50043D0E9 /* vAmigaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDE7C21EA1FA50043D0E9 /* vAmigaTests.swift */; };
 		508FDE8821EA1FA50043D0E9 /* vAmigaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDE8721EA1FA50043D0E9 /* vAmigaUITests.swift */; };
-		508FDF8621EA1FBC0043D0E9 /* basic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDEF321EA1FBC0043D0E9 /* basic.cpp */; };
 		508FDF8721EA1FBC0043D0E9 /* MessageQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDEF521EA1FBC0043D0E9 /* MessageQueue.cpp */; };
 		508FDFAC21EA1FBC0043D0E9 /* TOD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDF5921EA1FBC0043D0E9 /* TOD.cpp */; };
 		508FDFAD21EA1FBC0043D0E9 /* CIA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDF5C21EA1FBC0043D0E9 /* CIA.cpp */; };
@@ -209,9 +208,7 @@
 		508FDE8321EA1FA50043D0E9 /* vAmigaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = vAmigaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		508FDE8721EA1FA50043D0E9 /* vAmigaUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = vAmigaUITests.swift; sourceTree = "<group>"; };
 		508FDE8921EA1FA50043D0E9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		508FDEF321EA1FBC0043D0E9 /* basic.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = basic.cpp; sourceTree = "<group>"; };
 		508FDEF521EA1FBC0043D0E9 /* MessageQueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MessageQueue.cpp; sourceTree = "<group>"; };
-		508FDEF621EA1FBC0043D0E9 /* basic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = basic.h; sourceTree = "<group>"; };
 		508FDEF821EA1FBC0043D0E9 /* MessageQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageQueue.h; sourceTree = "<group>"; };
 		508FDF5721EA1FBC0043D0E9 /* CIA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CIA.h; sourceTree = "<group>"; };
 		508FDF5821EA1FBC0043D0E9 /* TOD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TOD.h; sourceTree = "<group>"; };
@@ -724,10 +721,6 @@
 		50B14C0421EB212E002E32A6 /* Foundation */ = {
 			isa = PBXGroup;
 			children = (
-				50B14C0621EB218E002E32A6 /* AmigaObject.h */,
-				50B14C0521EB218E002E32A6 /* AmigaObject.cpp */,
-				50B14C0C21EB3708002E32A6 /* HardwareComponent.h */,
-				50B14C0B21EB3708002E32A6 /* HardwareComponent.cpp */,
 				50B14C0921EB228E002E32A6 /* va_config.h */,
 				5082D83A21EF891200CF7692 /* va_constants.h */,
 				50B14C0A21EB2379002E32A6 /* va_types.h */,
@@ -735,8 +728,10 @@
 				50B14C1121EB4314002E32A6 /* va_std.cpp */,
 				505A3A3921F4996400132020 /* sse_utils.h */,
 				505A3A3821F4996400132020 /* sse_utils.cpp */,
-				508FDEF321EA1FBC0043D0E9 /* basic.cpp */,
-				508FDEF621EA1FBC0043D0E9 /* basic.h */,
+				50B14C0621EB218E002E32A6 /* AmigaObject.h */,
+				50B14C0521EB218E002E32A6 /* AmigaObject.cpp */,
+				50B14C0C21EB3708002E32A6 /* HardwareComponent.h */,
+				50B14C0B21EB3708002E32A6 /* HardwareComponent.cpp */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";
@@ -968,7 +963,6 @@
 				508FE02721EA227B0043D0E9 /* Basics.swift in Sources */,
 				505A3A3A21F4996400132020 /* sse_utils.cpp in Sources */,
 				50C50B86220479E000D796DA /* BankTableView.swift in Sources */,
-				508FDF8621EA1FBC0043D0E9 /* basic.cpp in Sources */,
 				50D2ADC6220754A100E32AB0 /* m68kopnz.c in Sources */,
 				508FE05A21EA22CC0043D0E9 /* DialogController.swift in Sources */,
 				504F9658220B2CEE005F8AB7 /* BreakTableView.swift in Sources */,

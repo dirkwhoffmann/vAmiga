@@ -9,7 +9,6 @@
 
 #include "va_std.h"
 
-
 void
 sprint8d(char *s, uint8_t value)
 {
@@ -227,6 +226,56 @@ bool matchingBufferHeader(const uint8_t *buffer, const uint8_t *header, size_t l
     return true;
 }
 
+void
+sleepMicrosec(unsigned usec)
+{
+    if (usec > 0 && usec < 1000000) {
+        usleep(usec);
+    }
+}
+
+int64_t
+sleepUntil(uint64_t kernelTargetTime, uint64_t kernelEarlyWakeup)
+{
+    uint64_t now = mach_absolute_time();
+    int64_t jitter;
+    
+    if (now > kernelTargetTime) {
+        printf("Too slow\n");
+        return 0;
+    }
+    
+    // Sleep
+    // printf("Sleeping for %lld\n", kernelTargetTime - kernelEarlyWakeup);
+    mach_wait_until(kernelTargetTime - kernelEarlyWakeup);
+    
+    // Count some sheep to increase precision
+    unsigned sheep = 0;
+    do {
+        jitter = mach_absolute_time() - kernelTargetTime;
+        sheep++;
+    } while (jitter < 0);
+    // printf("Counted %d sheep (%lld)\n", sheep, jitter);
+    
+    return jitter;
+}
+
+uint64_t
+fnv_1a(uint8_t *addr, size_t size)
+{
+    if (addr == NULL || size == 0) return 0;
+    
+    uint64_t basis = 0xcbf29ce484222325;
+    uint64_t prime = 0x100000001b3;
+    uint64_t hash = basis;
+    
+    for (size_t i = 0; i < size; i++) {
+        hash = (hash ^ (uint64_t)addr[i]) * prime;
+    }
+    
+    printf("hash = %lld\n", hash);
+    return hash;
+}
 
 
 bool releaseBuild()

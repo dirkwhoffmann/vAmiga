@@ -57,8 +57,6 @@ HardwareComponent::powerOn()
 {
     if (!power) {
         
-        debug(2, "Powering on\n");
-        
         // Power all sub components on
         for (HardwareComponent *c : subComponents) {
             c->powerOn();
@@ -77,7 +75,8 @@ HardwareComponent::powerOn()
             }
         }
         
-        // Power on this component
+        // Power this component on
+        debug(2, "Powering on\n");
         power = true;
         _powerOn();
     }
@@ -92,7 +91,7 @@ HardwareComponent::powerOff()
         pause();
         
         // Power off this component
-        debug(2, "Power off\n");
+        debug(2, "Powering off\n");
         power = false;
         _powerOff();
 
@@ -117,6 +116,7 @@ HardwareComponent::run()
         }
         
         // Start this component
+        debug(2, "Run\n");
         running = true;
         _run();
     }
@@ -168,7 +168,7 @@ HardwareComponent::ping()
 void
 HardwareComponent::dump()
 {
-    plainmsg("<%s>: Object at %p\n\n", getDescription(), this);
+    plainmsg("%s (memory location: %p)\n\n", getDescription(), this);
     _dump();
 }
 
@@ -179,12 +179,12 @@ HardwareComponent::setWarp(bool value)
         
         warp = value;
         
-        // Inform all sub components
+        // Enable or disable warp mode for all sub components
         for (HardwareComponent *c : subComponents) {
             c->setWarp(value);
         }
         
-        // Switch warp mode on or off in this component
+        // Enable or disable warp mode for this component
         _setWarp(value);
     }
 }

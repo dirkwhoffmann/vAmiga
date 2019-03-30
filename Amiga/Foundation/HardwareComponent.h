@@ -204,7 +204,6 @@ public:
     virtual void reset();
     virtual void _reset() { }
   
-
     /* Asks the component to inform the GUI about its current state.
      * The GUI invokes this function when it needs to update all of its visual
      * elements. This happens, e.g., when a snapshot file was loaded.

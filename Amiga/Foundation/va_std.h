@@ -35,48 +35,18 @@
 #include "va_types.h"
 #include "va_constants.h"
 
-#if 0
-// Two bit binary value
-typedef uint8_t uint2_t;
-inline bool is_uint2_t(uint2_t value) { return value < 4; }
-
-//! @brief    Three bit binary value
-typedef uint8_t uint3_t;
-
-//! @brief    Integrity check
-inline bool is_uint3_t(uint2_t value) { return value < 8; }
-
-//! @brief    Four bit binary value
-typedef uint8_t uint4_t;
-
-//! @brief    Integrity check
-inline bool is_uint4_t(uint4_t value) { return value < 16; }
-
-//! @brief    Five bit binary value
-typedef uint8_t uint5_t;
-
-//! @brief    Integrity check
-inline bool is_uint5_t(uint5_t value) { return value < 32; }
-#endif
 
 //
-//! @functiongroup Converting units
+// Converting units
 //
-
-// Macros for converting bytes to kilo bytes or mega bytes and vice versa
-/*
-#define B2KB(x) ((x) >> 10)
-#define B2MB(x) ((x) >> 20)
-#define KB2B(x) ((x) << 10)
-#define MB2B(x) ((x) << 20)
-*/
 
 // Macros for converting kilo bytes and mega bytes to bytes
 #define KB(x) ((x) << 10)
 #define MB(x) ((x) << 20)
 
+
 //
-// Handling low level data objects
+// Accessing bits and bytes
 //
 
 // Returns the low byte or the high byte of a uint16_t value.
@@ -167,11 +137,17 @@ inline bool is_uint5_t(uint5_t value) { return value < 32; }
 #define WRITE16_BE(x,y) (*(uint16_t *)(x) = htons(y))
 #define WRITE32_BE(x,y) (*(uint32_t *)(x) = htonl(y))
 
+
+//
+// Performing Amiga specific bit manipulations
+//
+
 // Casts a value into the pointer format used by the Original Chip Set (OCS)
 #define OCS_PTR(x) ((x) & 0x7FFFE)
 
 // Increases a pointer given in the OCS format by a certain value
 #define INC_OCS_PTR(x,y) ((x) = OCS_PTR((x)+(y)))
+
 
 //
 // Handling buffers
@@ -242,25 +218,25 @@ inline void readBlock64(uint8_t **ptr, uint64_t *values, size_t length) {
 
 
 //
-// Converting low level data objects
+// Generating string representations for numbers
 //
 
-//! @brief    Writes an uint8_t value into a string in decimal format
+// Writes an uint8_t value into a string in decimal format
 void sprint8d(char *s, uint8_t value);
 
-//! @brief    Writes an uint8_t value into a string in hexadecimal format
+// Writes an uint8_t value into a string in hexadecimal format
 void sprint8x(char *s, uint8_t value);
 
-//! @brief    Writes an uint8_t value into a string in binary format
+// Writes an uint8_t value into a string in binary format
 void sprint8b(char *s, uint8_t value);
 
-//! @brief    Writes an uint16_t value into a string in decimal format
+// Writes an uint16_t value into a string in decimal format
 void sprint16d(char *s, uint16_t value);
 
-//! @brief    Writes an uint16_t value into a string in hexadecimal format
+// Writes an uint16_t value into a string in hexadecimal format
 void sprint16x(char *s, uint16_t value);
 
-//! @brief    Writes an uint16_t value into a string in binary format
+// Writes an uint16_t value into a string in binary format
 void sprint16b(char *s, uint16_t value);
 
 
@@ -313,40 +289,41 @@ bool matchingBufferHeader(const uint8_t *buffer, const uint8_t *header, size_t l
 
 
 //
-//! @functiongroup Managing time
+// Managing time
 //
 
 
-/*! @brief    Application launch time in seconds
- *  @details  The value is read by function msec for computing the elapsed
- *            number of microseconds.
+/* Application launch time in seconds
+ * Not used at the moment. Might be needed later for emulating the real-time clock.
  */
 // extern long tv_base;
 
-//! @brief    Return the number of elapsed microseconds since program launch.
-// uint64_t usec();
+/* Return the number of elapsed microseconds since program launch.
+ * Not used at the moment. Might be needed later for emulating the real-time clock.
+ */
+ // uint64_t usec();
 
-//! @brief    Reads the real-time clock (1/10th seconds).
-uint8_t localTimeSecFrac();
+// Reads the real-time clock (1/10th seconds).
+// uint8_t localTimeSecFrac();
 
-//! @brief    Reads the real-time clock (seconds).
-uint8_t localTimeSec();
+// Reads the real-time clock (seconds).
+// uint8_t localTimeSec();
 
-//! @brief    Reads the real-time clock (minutes).
-uint8_t localTimeMin();
+// Reads the real-time clock (minutes).
+// uint8_t localTimeMin();
 
-//! @brief    Reads the real-time clock (hours).
-uint8_t localTimeHour();
+// Reads the real-time clock (hours).
+// int8_t localTimeHour();
 
-//! @brief    Put the current thread to sleep for a certain amount of time.
+// Puts the current thread to sleep for a given amout of micro seconds.
 void sleepMicrosec(unsigned usec);
 
-/*! @brief    Sleeps until kernel timer reaches kernelTargetTime
- *  @param    kernelEarlyWakeup To increase timing precision, the function
- *            wakes up the thread earlier by this amount and waits actively in
- *            a delay loop until the deadline is reached.
- *  @return   Overshoot time (jitter), measured in kernel time. Smaller values
- *            are better, 0 is best.
+/* Sleeps until the kernel timer reaches kernelTargetTime
+ * - kernelEarlyWakeup To increase timing precision, the function
+ *                     wakes up the thread earlier by this amount and waits
+ *                     actively in a delay loop until the deadline is reached.
+ * Returns the overshoot time (jitter), measured in kernel time units. Smaller
+ * values are better, 0 is best.
  */
 int64_t sleepUntil(uint64_t kernelTargetTime, uint64_t kernelEarlyWakeup);
 
@@ -355,7 +332,7 @@ int64_t sleepUntil(uint64_t kernelTargetTime, uint64_t kernelEarlyWakeup);
 // Computing fingerprints
 //
 
-//! @brief    Computes a fingeprint based on the FNV-1a hash algorithm
+// Computes a fingeprint based on the FNV-1a hash algorithm
 uint64_t fnv_1a(uint8_t *addr, size_t size);
 
 
@@ -365,6 +342,5 @@ uint64_t fnv_1a(uint8_t *addr, size_t size);
 
 // Returns true if we're running a release build.
 bool releaseBuild();
-    
-    
+
 #endif
