@@ -46,6 +46,11 @@
 #define VPOS_MAX 312
 #define HPOS_MAX 226
 
+// Verifies a VPOS / HPOS combination
+static inline bool isVposHpos(int16_t vpos, int16_t hpos) {
+    return vpos >= 0 && vpos <= VPOS_MAX && hpos >= 0 && hpos <= HPOS_MAX;
+}
+
 class DMAController : public HardwareComponent {
     
 public:

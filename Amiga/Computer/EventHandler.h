@@ -165,7 +165,7 @@ struct Event {
      * triggers at the correct beam position.If a mismatch is detected, the
      * emulation halts with an error message.
      */
-    FramePosition framePos;
+    // FramePosition framePos;
      
     /* Event id.
      * This value is evaluated inside the event handler to determine the
