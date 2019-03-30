@@ -97,18 +97,6 @@ Amiga::Amiga()
         { &config.layout, sizeof(config.layout), 0 },
     });
     
-    /*
-         { }
-         AmigaModel model;
-         long layout;
-         long chipRamSize; // size in KB
-         long slowRamSize; // size in KB
-         long fastRamSize; // size in KB
-         bool realTimeClock;
-         DriveConfiguration df0;
-         DriveConfiguration df1;
-         */
-         
     // Install a reference to the top-level object in each subcomponent
     setAmiga(this);
     

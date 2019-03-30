@@ -558,8 +558,9 @@ Blitter::loadMicrocode()
         }
             
         default:
-            
-            fatalError("Unimplemented Blitter configuration\n");
+        
+            _dump();
+            panic("Unimplemented Blitter configuration\n");
             assert(false);
     }
     

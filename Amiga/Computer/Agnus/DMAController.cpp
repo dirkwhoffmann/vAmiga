@@ -741,17 +741,16 @@ DMAController::executeUntil(Cycle targetClock)
     while (clock <= targetClock - DMA_CYCLES(1)) {
    
         busOwner = 0;
-   
-        // debug("*****\n");
-        // eventHandler.dump();
 
         // Process all pending events
         eventHandler.executeUntil(clock);
 
         // Advance the internal counters
         hpos++;
-        if (hpos > HPOS_MAX) { dump(); }
+        
+        // Note: If this assertion hits, the HSYNC event hasn't been served!
         assert(hpos <= HPOS_MAX);
+        
         clock += DMA_CYCLES(1);
     }
 }
@@ -760,7 +759,7 @@ Cycle
 DMAController:: beamDiff(int16_t vStart, int16_t hStart, int16_t vEnd, int16_t hEnd)
 {
     // We assume that the function is called with a valid horizontal position
-    assert(hEnd <= 0xE2);
+    assert(hEnd <= HPOS_MAX);
     
     // Bail out if the end position is unreachable
     if (vEnd > 312) return NEVER;

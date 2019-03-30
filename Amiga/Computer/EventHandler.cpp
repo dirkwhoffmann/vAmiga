@@ -398,14 +398,16 @@ EventHandler::checkScheduledEvent(EventSlot s)
     assert(isEventSlot(s));
     
     if (eventSlot[s].triggerCycle < 0) {
-        fatalError("Scheduled event has a too small trigger cycle.");
+        _dump();
+        panic("Scheduled event has a too small trigger cycle.");
         return false;
     }
     
     EventID id = eventSlot[s].id;
     
     if (id == 0) {
-        fatalError("Event ID must not be 0.");
+        _dump();
+        panic("Event ID must not be 0.");
         return false;
     }
     
@@ -413,32 +415,37 @@ EventHandler::checkScheduledEvent(EventSlot s)
         case CIAA_SLOT:
         case CIAB_SLOT:
             if (!isCiaEvent(id)) {
-                fatalError("Invalid CIA event ID.");
+                _dump();
+                panic("Invalid CIA event ID.");
                 return false;
             }
             if (eventSlot[s].triggerCycle != INT64_MAX && eventSlot[s].triggerCycle % 40 != 0) {
-                fatalError("Scheduled trigger cycle is not a CIA cycle.");
+                _dump();
+                panic("Scheduled trigger cycle is not a CIA cycle.");
                 return false;
             }
             break;
             
         case DMA_SLOT:
             if (!isDmaEvent(id)) {
-                fatalError("Invalid DMA event ID.");
+                _dump();
+                panic("Invalid DMA event ID.");
                 return false;
             }
             break;
             
         case COP_SLOT:
             if (!isCopEvent(id)) {
-                fatalError("Invalid COP event ID.");
+                _dump();
+                panic("Invalid COP event ID.");
                 return false;
             }
             break;
             
         case BLT_SLOT:
             if (!isBltEvent(id)) {
-                fatalError("Invalid BLT event ID.");
+                _dump();
+                panic("Invalid BLT event ID.");
                 return false;
             }
             break;

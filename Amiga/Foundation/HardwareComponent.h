@@ -69,7 +69,7 @@ public:
     Amiga *amiga = NULL;
     
     /* Reference to the event handler.
-     * Quick access to amiga->dma.eventHandler
+     * Provides a quick access to amiga->dma.eventHandler
      */
     EventHandler *handler = NULL;
     
@@ -78,10 +78,10 @@ protected:
     // Sub components of this component
     vector<HardwareComponent *> subComponents;
     
-    // List of snapshot items of this component
+    // Snapshot items of this component
     vector<SnapshotItem> snapshotItems;
     
-    // Snapshot size on disk (in bytes)
+    // Snapshot size on disk in bytes
     unsigned snapshotSize = 0;
     
     /* State model:
@@ -122,17 +122,17 @@ private:
     
 public:
     
-    /* Assign top-level C64 object.
+    /* Assigns the top-level Amiga object.
      * The provided reference is propagated automatically to all sub components.
      * This functions is called in the constructor of the Amiga class and never
      * called again afterwards.
      */
-    virtual void setAmiga(Amiga *amiga);
+    void setAmiga(Amiga *amiga);
     
     /* There are several functions for querying and changing state:
      *
      *          -----------------------------------------------
-     *         |                    powerOn()                  |
+     *         |                     run()                     |
      *         |                                               V
      *     ---------   powerOn()   ---------     run()     ---------
      *    |   Off   |------------>| Paused  |------------>| Running |
@@ -215,10 +215,7 @@ public:
     // Dumps some debug information about the internal state to the console.
     void dump();
     virtual void _dump() { }
-    
-    // Signals a fatal error and terminates the emulator
-    void fatalError(const char *description);
-    
+        
     // Getter for warp mode
     bool getWarp() { return warp; }
     

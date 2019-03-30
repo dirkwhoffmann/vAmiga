@@ -16,7 +16,7 @@
 using std::vector;
 
 /* Base class for all vAmiga objects.
- * This class stores a textual description of the object and offers various
+ * This class contains a textual description of the object and offers various
  * functions for printing debug messages and warnings.
  */
 class AmigaObject {
@@ -27,16 +27,6 @@ public:
     unsigned debugLevel = DEBUG_LEVEL;
     
 private:
-        
-    /* Each component has the built-in ability to print trace messages.
-     * Such messages are used during debugging, e.g., to print something after
-     * each processed CPU instruction. To avoid flooding the console, trace
-     * messages are only printed if this counter hasn't reached 0 yet. It is
-     * set in startTracing() and decremented each time a trace message is
-     * printed. Setting this variable to a negative value has the effect of
-     * tracing forever.
-     */
-    // long traceCounter = 0;
     
     /* Textual description of this object
      * Most debug output methods preceed their output with this string.
@@ -60,33 +50,6 @@ public:
     // Debugging the component
     //
     
-public:
-    
-    /*
-    // Returns if trace mode is enabled.
-    bool tracingEnabled() { return traceCounter != 0; }
-    
-    // Starts tracing.
-    void startTracing(int counter = -1) { traceCounter = counter; }
-    
-    // Stops tracing.
-    void stopTracing() { traceCounter = 0; }
-    
-    // Prints a trace message if tracing is enabled
-    void trace();
-    */
-    
-private:
-    
-    /* Prints the actual trace message to the console
-     * This method is overwritten by sub-classes that support tracing.
-     */
-    // virtual void _trace() { }
-    
-    //
-    // Printing messages to the console
-    //
-    
 protected:
     
     /* There a four types of messages:
@@ -96,10 +59,10 @@ protected:
      *   - warn    Warning message (Does not terminate the program)
      *   - panic   Error message   (Terminates the program)
      *
-     * All messages are prefixed by the string description printed by function
-     * prefix(). To omit the prefix, use plainmsg or plaindebug instead.
-     * Some Amiga objects overwrite prefix() to provide addition standard
-     * debug information when a message is printed.
+     * All messages are prefixed by the string description produced by the
+     * prefix() function. To omit the prefix, use plainmsg(...) or
+     * plaindebug(...) instead. Some Amiga objects overwrite prefix() to
+     * provide addition standard debug information when a message is printed.
      */
     virtual void prefix();
 

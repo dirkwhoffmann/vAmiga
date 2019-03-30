@@ -173,13 +173,6 @@ HardwareComponent::dump()
 }
 
 void
-HardwareComponent::fatalError(const char *description)
-{
-    _dump();
-    plainmsg("\nFATAL ERROR: %s\n\n", description);
-}
-
-void
 HardwareComponent::setWarp(bool value)
 {
     if (warp != value) {
