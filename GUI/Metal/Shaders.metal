@@ -265,7 +265,7 @@ kernel void inPlaceEpx(texture2d<half, access::read>  in   [[ texture(0) ]],
     half4 c = in.read(gid + uint2(0,1));
     half4 d = in.read(gid + uint2(1,1));
 
-    if (!all(a == b && b == c && c == d)) {
+    if (all(a == b && b == c && c == d)) {
         
         //   A
         // C P B
@@ -281,12 +281,75 @@ kernel void inPlaceEpx(texture2d<half, access::read>  in   [[ texture(0) ]],
         
     } else {
         
+        // DEBUGGING
+        a = half4(1.0,0.0,0.0,1.0);
+        b = half4(1.0,0.0,0.0,1.0);
+        c = half4(1.0,0.0,0.0,1.0);
+        d = half4(1.0,0.0,0.0,1.0);
+        
         out.write(a, gid + uint2(0,0));
         out.write(b, gid + uint2(1,0));
         out.write(c, gid + uint2(0,1));
         out.write(d, gid + uint2(1,1));
     }
 }
+
+#if 0
+kernel void inPlaceEpx(texture2d<half, access::read>  inTexture   [[ texture(0) ]],
+                       texture2d<half, access::write> outTexture  [[ texture(1) ]],
+                       uint2                          gid         [[ thread_position_in_grid ]])
+{
+    if((gid.x % SCALE_FACTOR != 0) || (gid.y % SCALE_FACTOR != 0))
+        return;
+    
+    // E A    --\ 1 2
+    // C P B  --/ 3 4
+    //   D
+    // 1=P; 2=P; 3=P; 4=P;
+    // IF C==A AND C!=D AND A!=B => 1=A
+    // IF A==B AND A!=C AND B!=D => 2=B
+    // IF D==C AND D!=B AND C!=A => 3=C
+    // IF B==D AND B!=A AND D!=C => 4=D
+    
+    half xx = gid.x;
+    half yy = gid.y;
+    half4 E = inTexture.read(uint2(xx - 2, yy + 2)); // WRONG: must be yy - 2
+    half4 A = inTexture.read(uint2(xx,     yy - 2));
+    half4 C = inTexture.read(uint2(xx - 2, yy    ));
+    half4 P = inTexture.read(uint2(xx,     yy    ));
+    
+    half4 r1, r2, r3, r4;
+    
+    if (!all(E == A && A == C && C == P)) {
+        
+        half4 B = inTexture.read(uint2(xx + 2, yy    ));
+        half4 D = inTexture.read(uint2(xx,     yy + 2));
+        
+        r1 = (all(C == A) && any(C != D) && any(A != B)) ? A : P;
+        r2 = (all(A == B) && any(A != C) && any(B != D)) ? B : P;
+        r3 = (all(A == B) && any(A != C) && any(B != D)) ? C : P;
+        r4 = (all(B == D) && any(B != A) && any(D != C)) ? D : P;
+        
+    } else {
+    
+        r1 = E;
+        r2 = A;
+        r3 = C;
+        r4 = P;
+        
+        // DEBUGGING
+        r1 = half4(1.0,0.0,0.0,1.0);
+        r2 = half4(1.0,0.0,0.0,1.0);
+        r3 = half4(1.0,0.0,0.0,1.0);
+        r3 = half4(1.0,0.0,0.0,1.0);
+    }
+    
+    outTexture.write(r1, gid + uint2(0,0));
+    outTexture.write(r2, gid + uint2(1,0));
+    outTexture.write(r3, gid + uint2(0,1));
+    outTexture.write(r4, gid + uint2(1,1));
+}
+#endif
 
 kernel void epxupscaler(texture2d<half, access::read>  in   [[ texture(0) ]],
                         texture2d<half, access::write> out  [[ texture(1) ]],
@@ -306,8 +369,10 @@ kernel void epxupscaler(texture2d<half, access::read>  in   [[ texture(0) ]],
     doEPX(out, gid, A, C, P, B, D);
 }
 
-
+//
 // xBR upscaler (based on xbr.js by carlos.ascari)
+//
+
 constant half3 yuv_weighted = half3(14.352, 28.176, 5.472);
 
 half4 df(half4 A, half4 B)
@@ -338,9 +403,103 @@ half d(half3 pixelA, half3 pixelB)
     */
 }
 
-kernel void xbrupscaler(texture2d<half, access::read>  inTexture   [[ texture(0) ]],
-                        texture2d<half, access::write> outTexture  [[ texture(1) ]],
-                        uint2                          gid         [[ thread_position_in_grid ]])
+void doXBR(texture2d<half, access::write> out, uint2 gid,
+           half3 m0, half3 m1, half3 m2, half3 m3, half3 m4, half3 m5,
+           half3 m6, half3 m7, half3 m8, half3 m9, half3 m10, half3 m11,
+           half3 m12, half3 m13, half3 m14, half3 m15, half3 m16, half3 m17,
+           half3 m18, half3 m19, half3 m20)
+{
+    half d_10_9    = d(m10, m9);
+    half d_10_5    = d(m10, m5);
+    half d_10_11   = d(m10, m11);
+    half d_10_15   = d(m10, m15);
+    half d_10_14   = d(m10, m14);
+    half d_10_6    = d(m10, m6);
+    half d_4_8     = d(m4,  m8);
+    half d_4_1     = d(m4,  m1);
+    half d_9_5     = d(m9,  m5);
+    half d_9_15    = d(m9,  m15);
+    half d_9_3     = d(m9,  m3);
+    half d_5_11    = d(m5,  m11);
+    half d_5_0     = d(m5,  m0);
+    half d_10_4    = d(m10, m4);
+    half d_10_16   = d(m10, m16);
+    half d_6_12    = d(m6,  m12);
+    half d_6_1     = d(m6,  m1);
+    half d_11_15   = d(m11, m15);
+    half d_11_7    = d(m11, m7);
+    half d_5_2     = d(m5,  m2);
+    half d_14_8    = d(m14, m8);
+    half d_14_19   = d(m14, m19);
+    half d_15_18   = d(m15, m18);
+    half d_9_13    = d(m9,  m13);
+    half d_16_12   = d(m16, m12);
+    half d_16_19   = d(m16, m19);
+    half d_15_20   = d(m15, m20);
+    half d_15_17   = d(m15, m17);
+    
+    half3 pixel;
+    // const half blend = 0.5;
+    
+    // X-
+    // --
+    
+    half a1 = d_10_14 + d_10_6 + d_4_8  + d_4_1 + (4 * d_9_5);
+    half b1 =  d_9_15 +  d_9_3 + d_5_11 + d_5_0 + (4 * d_10_4);
+    
+    if (a1 < b1) {
+        pixel = (d_10_9 <= d_10_5) ? m9 : m5;
+        // pixel = mix(pixel, matrix10, blend);
+    } else {
+        pixel = m10;
+    }
+    out.write(half4(pixel,1.0), gid);
+    
+    // -X
+    // --
+    
+    half a2 = d_10_16 + d_10_4 + d_6_12 + d_6_1 + (4 * d_5_11);
+    half b2 = d_11_15 + d_11_7 +  d_9_5 + d_5_2 + (4 * d_10_6);
+    
+    if (a2 < b2) {
+        pixel = (d_10_5 <= d_10_11) ? m5 : m11;
+        // pixel = mix(pixel, matrix10, blend);
+    } else {
+        pixel = m10;
+    }
+    out.write(half4(pixel, 1.0), gid + uint2(1,0));
+    
+    // --
+    // X-
+    
+    half a3 = d_10_4 + d_10_16 +  d_14_8 + d_14_19 + (4 * d_9_15);
+    half b3 =  d_9_5 +  d_9_13 + d_11_15 + d_15_18 + (4 * d_10_14);
+    
+    if (a3 < b3) {
+        pixel = (d_10_9 <= d_10_15) ? m9 : m15;
+        // pixel = mix(pixel, matrix10, blend);
+    } else {
+        pixel = m10;
+    }
+    out.write(half4(pixel, 1.0), gid + uint2(0,1));
+    
+    // --
+    // -X
+    
+    half a4 = (d_10_6 + d_10_14 + d_16_12 + d_16_19 + (4 * d_11_15));
+    half b4 = (d_9_15 + d_15_20 + d_15_17 +  d_5_11 + (4 * d_10_16));
+    if (a4 < b4) {
+        pixel = (d_10_11 <= d_10_15) ? m11 : m15;
+        // pixel = mix(pixel, matrix10, blend);
+    } else {
+        pixel = m10;
+    }
+    out.write(half4(pixel, 1.0), gid + uint2(1,1));
+}
+    
+kernel void xbrupscaler(texture2d<half, access::read>  in   [[ texture(0) ]],
+                        texture2d<half, access::write> out  [[ texture(1) ]],
+                        uint2                          gid  [[ thread_position_in_grid ]])
 {
     
     if (gid.x % SCALE_FACTOR != 0 || gid.y % 2 != 0) return;
@@ -361,116 +520,105 @@ kernel void xbrupscaler(texture2d<half, access::read>  inTexture   [[ texture(0)
     
     uint2 ggid = gid / SCALE_FACTOR;
     
-    half3 matrix0  = inTexture.read(ggid + uint2(-1,-2)).xyz;
-    half3 matrix1  = inTexture.read(ggid + uint2( 0,-2)).xyz;
-    half3 matrix2  = inTexture.read(ggid + uint2( 1,-2)).xyz;
-    half3 matrix3  = inTexture.read(ggid + uint2(-2,-1)).xyz;
-    half3 matrix4  = inTexture.read(ggid + uint2(-1,-1)).xyz;
-    half3 matrix5  = inTexture.read(ggid + uint2( 0,-1)).xyz;
-    half3 matrix6  = inTexture.read(ggid + uint2( 1,-1)).xyz;
-    half3 matrix7  = inTexture.read(ggid + uint2( 2,-1)).xyz;
-    half3 matrix8  = inTexture.read(ggid + uint2(-2, 0)).xyz;
-    half3 matrix9  = inTexture.read(ggid + uint2(-1, 0)).xyz;
-    half3 matrix10 = inTexture.read(ggid + uint2( 0, 0)).xyz;
-    half3 matrix11 = inTexture.read(ggid + uint2( 1, 0)).xyz;
-    half3 matrix12 = inTexture.read(ggid + uint2( 2, 0)).xyz;
-    half3 matrix13 = inTexture.read(ggid + uint2(-2, 1)).xyz;
-    half3 matrix14 = inTexture.read(ggid + uint2(-1, 1)).xyz;
-    half3 matrix15 = inTexture.read(ggid + uint2( 0, 1)).xyz;
-    half3 matrix16 = inTexture.read(ggid + uint2( 1, 1)).xyz;
-    half3 matrix17 = inTexture.read(ggid + uint2( 2, 1)).xyz;
-    half3 matrix18 = inTexture.read(ggid + uint2(-1, 2)).xyz;
-    half3 matrix19 = inTexture.read(ggid + uint2( 0, 2)).xyz;
-    half3 matrix20 = inTexture.read(ggid + uint2( 1, 2)).xyz;
+    half3 m0  = in.read(ggid + uint2(-1,-2)).xyz;
+    half3 m1  = in.read(ggid + uint2( 0,-2)).xyz;
+    half3 m2  = in.read(ggid + uint2( 1,-2)).xyz;
+    half3 m3  = in.read(ggid + uint2(-2,-1)).xyz;
+    half3 m4  = in.read(ggid + uint2(-1,-1)).xyz;
+    half3 m5  = in.read(ggid + uint2( 0,-1)).xyz;
+    half3 m6  = in.read(ggid + uint2( 1,-1)).xyz;
+    half3 m7  = in.read(ggid + uint2( 2,-1)).xyz;
+    half3 m8  = in.read(ggid + uint2(-2, 0)).xyz;
+    half3 m9  = in.read(ggid + uint2(-1, 0)).xyz;
+    half3 m10 = in.read(ggid + uint2( 0, 0)).xyz;
+    half3 m11 = in.read(ggid + uint2( 1, 0)).xyz;
+    half3 m12 = in.read(ggid + uint2( 2, 0)).xyz;
+    half3 m13 = in.read(ggid + uint2(-2, 1)).xyz;
+    half3 m14 = in.read(ggid + uint2(-1, 1)).xyz;
+    half3 m15 = in.read(ggid + uint2( 0, 1)).xyz;
+    half3 m16 = in.read(ggid + uint2( 1, 1)).xyz;
+    half3 m17 = in.read(ggid + uint2( 2, 1)).xyz;
+    half3 m18 = in.read(ggid + uint2(-1, 2)).xyz;
+    half3 m19 = in.read(ggid + uint2( 0, 2)).xyz;
+    half3 m20 = in.read(ggid + uint2( 1, 2)).xyz;
     
-    half d_10_9    = d(matrix10, matrix9);
-    half d_10_5    = d(matrix10, matrix5);
-    half d_10_11   = d(matrix10, matrix11);
-    half d_10_15   = d(matrix10, matrix15);
-    half d_10_14   = d(matrix10, matrix14);
-    half d_10_6    = d(matrix10, matrix6);
-    half d_4_8     = d(matrix4,  matrix8);
-    half d_4_1     = d(matrix4,  matrix1);
-    half d_9_5     = d(matrix9,  matrix5);
-    half d_9_15    = d(matrix9,  matrix15);
-    half d_9_3     = d(matrix9,  matrix3);
-    half d_5_11    = d(matrix5,  matrix11);
-    half d_5_0     = d(matrix5,  matrix0);
-    half d_10_4    = d(matrix10, matrix4);
-    half d_10_16   = d(matrix10, matrix16);
-    half d_6_12    = d(matrix6,  matrix12);
-    half d_6_1     = d(matrix6,  matrix1);
-    half d_11_15   = d(matrix11, matrix15);
-    half d_11_7    = d(matrix11, matrix7);
-    half d_5_2     = d(matrix5,  matrix2);
-    half d_14_8    = d(matrix14, matrix8);
-    half d_14_19   = d(matrix14, matrix19);
-    half d_15_18   = d(matrix15, matrix18);
-    half d_9_13    = d(matrix9,  matrix13);
-    half d_16_12   = d(matrix16, matrix12);
-    half d_16_19   = d(matrix16, matrix19);
-    half d_15_20   = d(matrix15, matrix20);
-    half d_15_17   = d(matrix15, matrix17);
-    
-    half3 pixel;
-    // const half blend = 0.5;
-    
-    // X-
-    // --
-
-    half a1 = d_10_14 + d_10_6 + d_4_8  + d_4_1 + (4 * d_9_5);
-    half b1 =  d_9_15 +  d_9_3 + d_5_11 + d_5_0 + (4 * d_10_4);
-    
-    if (a1 < b1) {
-        pixel = (d_10_9 <= d_10_5) ? matrix9 : matrix5;
-        // pixel = mix(pixel, matrix10, blend);
-    } else {
-        pixel = matrix10;
-    }
-    outTexture.write(half4(pixel,1.0), gid);
-    
-    // -X
-    // --
-  
-    half a2 = d_10_16 + d_10_4 + d_6_12 + d_6_1 + (4 * d_5_11);
-    half b2 = d_11_15 + d_11_7 +  d_9_5 + d_5_2 + (4 * d_10_6);
-    
-    if (a2 < b2) {
-        pixel = (d_10_5 <= d_10_11) ? matrix5 : matrix11;
-        // pixel = mix(pixel, matrix10, blend);
-    } else {
-        pixel = matrix10;
-    }
-    outTexture.write(half4(pixel, 1.0), gid + uint2(1,0));
-    
-    // --
-    // X-
-    
-    half a3 = d_10_4 + d_10_16 +  d_14_8 + d_14_19 + (4 * d_9_15);
-    half b3 =  d_9_5 +  d_9_13 + d_11_15 + d_15_18 + (4 * d_10_14);
-    
-    if (a3 < b3) {
-        pixel = (d_10_9 <= d_10_15) ? matrix9 : matrix15;
-        // pixel = mix(pixel, matrix10, blend);
-    } else {
-        pixel = matrix10;
-    }
-    outTexture.write(half4(pixel, 1.0), gid + uint2(0,1));
- 
-    // --
-    // -X
-    
-    half a4 = (d_10_6 + d_10_14 + d_16_12 + d_16_19 + (4 * d_11_15));
-    half b4 = (d_9_15 + d_15_20 + d_15_17 +  d_5_11 + (4 * d_10_16));
-    if (a4 < b4) {
-        pixel = (d_10_11 <= d_10_15) ? matrix11 : matrix15;
-        // pixel = mix(pixel, matrix10, blend);
-    } else {
-        pixel = matrix10;
-    }
-    outTexture.write(half4(pixel, 1.0), gid + uint2(1,1));
+    doXBR(out, gid,
+          m0,  m1,  m2,  m3,  m4,  m5,  m6,  m7,  m8,  m9,
+          m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20);
 }
 
+kernel void inPlaceXbr(texture2d<half, access::read>  in   [[ texture(0) ]],
+                       texture2d<half, access::write> out  [[ texture(1) ]],
+                       uint2                          gid  [[ thread_position_in_grid ]])
+{
+    
+    if (gid.x % SCALE_FACTOR != 0 || gid.y % 2 != 0) return;
+    
+    // Check for lores fragment (a == b == c == d)
+    // a b
+    // c d
+    
+    half4 a = in.read(gid + uint2(0,0));
+    half4 b = in.read(gid + uint2(1,0));
+    half4 c = in.read(gid + uint2(0,1));
+    half4 d = in.read(gid + uint2(1,1));
+    
+    if (all(a == b && b == c && c == d)) {
+        
+        //         -2   -1   +0   +1   +2
+        //
+        //            ----------------
+        //  -2        |  0 |  1 |  2 |
+        //       --------------------------
+        //  -1   |  3 |  4 |  5 |  6 |  7 |
+        //       --------------------------
+        //   0   |  8 |  9 | 10 | 11 | 12 |
+        //       --------------------------
+        //  +1   | 13 | 14 | 15 | 16 | 17 |
+        //       --------------------------
+        //  +2        | 18 | 19 | 20 |
+        //            ----------------
+        
+        half3 m0  = in.read(gid + 2 * uint2(-1,-2)).xyz;
+        half3 m1  = in.read(gid + 2 * uint2( 0,-2)).xyz;
+        half3 m2  = in.read(gid + 2 * uint2( 1,-2)).xyz;
+        half3 m3  = in.read(gid + 2 * uint2(-2,-1)).xyz;
+        half3 m4  = in.read(gid + 2 * uint2(-1,-1)).xyz;
+        half3 m5  = in.read(gid + 2 * uint2( 0,-1)).xyz;
+        half3 m6  = in.read(gid + 2 * uint2( 1,-1)).xyz;
+        half3 m7  = in.read(gid + 2 * uint2( 2,-1)).xyz;
+        half3 m8  = in.read(gid + 2 * uint2(-2, 0)).xyz;
+        half3 m9  = in.read(gid + 2 * uint2(-1, 0)).xyz;
+        half3 m10 = in.read(gid + 2 * uint2( 0, 0)).xyz;
+        half3 m11 = in.read(gid + 2 * uint2( 1, 0)).xyz;
+        half3 m12 = in.read(gid + 2 * uint2( 2, 0)).xyz;
+        half3 m13 = in.read(gid + 2 * uint2(-2, 1)).xyz;
+        half3 m14 = in.read(gid + 2 * uint2(-1, 1)).xyz;
+        half3 m15 = in.read(gid + 2 * uint2( 0, 1)).xyz;
+        half3 m16 = in.read(gid + 2 * uint2( 1, 1)).xyz;
+        half3 m17 = in.read(gid + 2 * uint2( 2, 1)).xyz;
+        half3 m18 = in.read(gid + 2 * uint2(-1, 2)).xyz;
+        half3 m19 = in.read(gid + 2 * uint2( 0, 2)).xyz;
+        half3 m20 = in.read(gid + 2 * uint2( 1, 2)).xyz;
+        
+        doXBR(out, gid,
+              m0,  m1,  m2,  m3,  m4,  m5,  m6,  m7,  m8,  m9,
+              m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20);
+    
+    } else {
+        
+        // DEBUGGING
+        a = half4(1.0,0.0,0.0,1.0);
+        b = half4(1.0,0.0,0.0,1.0);
+        c = half4(1.0,0.0,0.0,1.0);
+        d = half4(1.0,0.0,0.0,1.0);
+        
+        out.write(a, gid + uint2(0,0));
+        out.write(b, gid + uint2(1,0));
+        out.write(c, gid + uint2(0,1));
+        out.write(d, gid + uint2(1,1));
+    }
+}
 
 //
 // Scanline filters
