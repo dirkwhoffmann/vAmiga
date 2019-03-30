@@ -295,10 +295,10 @@ public class MetalView: MTKView {
     /// Returns the compute kernel of the currently selected upscaler (first pass)
     func currentEnhancer() -> ComputeKernel {
         
-        assert(upscaler < enhancerGallery.count)
+        assert(enhancer < enhancerGallery.count)
         assert(enhancerGallery[0] != nil)
         
-        return enhancerGallery[upscaler]!
+        return enhancerGallery[enhancer]!
     }
     
     /// Returns the compute kernel of the currently selected upscaler (second pass)
