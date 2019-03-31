@@ -34,7 +34,11 @@ extension EventTableView : NSTableViewDataSource {
     
     func numberOfRows(in tableView: NSTableView) -> Int {
         
-        return primary ? primarySlotCount : secondarySlotCount;
+        if let dma = amiga?.dma {
+            return primary ? dma.primSlotCount() : dma.secSlotCount();
+        } else {
+            return 0;
+        }
     }
     
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {

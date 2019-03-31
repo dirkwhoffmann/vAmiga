@@ -353,7 +353,7 @@ Copper::disassemble(unsigned list, uint32_t offset)
 }
 
 void
-Copper::serviceEvent(EventID id, int64_t data)
+Copper::serviceEvent(EventID id)
 {
     debug(2, "(%d,%d): ", amiga->dma.vpos, amiga->dma.hpos);
     

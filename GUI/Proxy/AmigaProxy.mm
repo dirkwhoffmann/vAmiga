@@ -337,6 +337,14 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->dmaController->getInfo();
 }
+- (NSInteger) primSlotCount
+{
+    return wrapper->dmaController->eventHandler.primSlotCount();
+}
+- (NSInteger) secSlotCount
+{
+    return wrapper->dmaController->eventHandler.secSlotCount();
+}
 - (EventSlotInfo) getPrimarySlotInfo:(NSInteger)slot
 {
     return wrapper->dmaController->eventHandler.getPrimarySlotInfo(slot);

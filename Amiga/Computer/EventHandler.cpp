@@ -12,6 +12,15 @@
 EventHandler::EventHandler()
 {
     setDescription("EventHandler");
+    
+    registerSnapshotItems(vector<SnapshotItem> {
+        
+        { &primSlot,        sizeof(primSlot),        BYTE_ARRAY },
+        { &nextPrimTrigger, sizeof(nextPrimTrigger), 0 },
+        { &secSlot,         sizeof(secSlot),         BYTE_ARRAY },
+        { &nextSecTrigger,  sizeof(nextSecTrigger),  0 },
+        
+    });
 }
     
 void
@@ -58,7 +67,7 @@ EventHandler::_dump()
     amiga->dumpClock();
     
     plainmsg("Primary events:\n");
-    for (unsigned i = 0; i <primarySlotCount; i++) {
+    for (unsigned i = 0; i <PRIM_SLOT_COUNT; i++) {
 
         plainmsg("Slot: %-17s ", info.primary[i].slotName);
         plainmsg("Event: %-15s ", info.primary[i].eventName);
@@ -74,7 +83,7 @@ EventHandler::_dump()
     }
     
     plainmsg("Secondary events:\n");
-    for (unsigned i = 0; i < secondarySlotCount; i++) {
+    for (unsigned i = 0; i < SEC_SLOT_COUNT; i++) {
         
         plainmsg("Slot: %-17s ", info.secondary[i].slotName);
         plainmsg("Event: %-15s ", info.secondary[i].eventName);
@@ -292,9 +301,6 @@ EventHandlerInfo
 EventHandler::getInfo()
 {
     EventHandlerInfo info;
-    
-    assert(primarySlotCount == PRIM_SLOT_COUNT);
-    assert(secondarySlotCount == SEC_SLOT_COUNT);
 
     info.dmaClock = amiga->dma.clock;
 
@@ -307,6 +313,142 @@ EventHandler::getInfo()
         info.secondary[i] = getSecondarySlotInfo(i);
     
     return info;
+}
+
+void
+EventHandler::_executeUntil(Cycle cycle) {
+    
+    // Check for a CIA A event
+    if (isDue(CIAA_SLOT, cycle)) {
+        
+        assert(checkTriggeredEvent(CIAA_SLOT));
+        
+        switch(primSlot[CIAA_SLOT].id) {
+                
+            case CIA_EXECUTE:
+                amiga->ciaA.executeOneCycle();
+                break;
+                
+            case CIA_WAKEUP:
+                amiga->ciaA.wakeUp();
+                break;
+                
+            default:
+                assert(false);
+        }
+    }
+    
+    // Check for a CIA B event
+    if (isDue(CIAB_SLOT, cycle)) {
+        
+        assert(checkTriggeredEvent(CIAB_SLOT));
+        
+        switch(primSlot[CIAB_SLOT].id) {
+                
+            case CIA_EXECUTE:
+                amiga->ciaB.executeOneCycle();
+                break;
+                
+            case CIA_WAKEUP:
+                amiga->ciaB.wakeUp();
+                break;
+                
+            default:
+                assert(false);
+        }
+    }
+    
+    // Check for a bitplane event
+    if (isDue(DMA_SLOT, cycle)) {
+        assert(checkTriggeredEvent(DMA_SLOT));
+        amiga->dma.serviceDMAEvent(primSlot[DMA_SLOT].id);
+    }
+    
+    // Check for a Copper event
+    if (isDue(COP_SLOT, cycle)) {
+        assert(checkTriggeredEvent(COP_SLOT));
+        amiga->dma.copper.serviceEvent(primSlot[COP_SLOT].id);
+    }
+    
+    // Check for a Blitter event
+    if (isDue(BLT_SLOT, cycle)) {
+        assert(checkTriggeredEvent(BLT_SLOT));
+        amiga->dma.blitter.serviceEvent(primSlot[BLT_SLOT].id);
+    }
+    
+    // Check for a raster event
+    if (isDue(RAS_SLOT, cycle)) {
+        assert(checkTriggeredEvent(RAS_SLOT));
+        amiga->dma.serviceRASEvent(primSlot[RAS_SLOT].id);
+    }
+    
+    // Check if a secondary event needs to be processed
+    if (isDue(SEC_SLOT, cycle)) {
+        _executeSecUntil(cycle);
+    }
+    
+    // Determine the next trigger cycle
+    nextPrimTrigger = primSlot[0].triggerCycle;
+    for (unsigned i = 1; i < PRIM_SLOT_COUNT; i++)
+        if (primSlot[i].triggerCycle < nextPrimTrigger)
+            nextPrimTrigger = primSlot[i].triggerCycle;
+}
+
+void
+EventHandler::_executeSecUntil(Cycle cycle) {
+    
+    // Check all secondary event slots one by one
+    if (isDueSec(TBE_IRQ_SLOT, cycle)) {
+        serveIRQEvent(TBE_IRQ_SLOT, 0);
+    }
+    if (isDueSec(DSKBLK_IRQ_SLOT, cycle)) {
+        serveIRQEvent(DSKBLK_IRQ_SLOT, 1);
+    }
+    if (isDueSec(SOFT_IRQ_SLOT, cycle)) {
+        serveIRQEvent(SOFT_IRQ_SLOT, 2);
+    }
+    if (isDueSec(PORTS_IRQ_SLOT, cycle)) {
+        serveIRQEvent(PORTS_IRQ_SLOT, 3);
+    }
+    if (isDueSec(COPR_IRQ_SLOT, cycle)) {
+        serveIRQEvent(COPR_IRQ_SLOT, 4);
+    }
+    if (isDueSec(VERTB_IRQ_SLOT, cycle)) {
+        serveIRQEvent(VERTB_IRQ_SLOT, 5);
+    }
+    if (isDueSec(BLIT_IRQ_SLOT, cycle)) {
+        serveIRQEvent(BLIT_IRQ_SLOT, 6);
+    }
+    if (isDueSec(AUD0_IRQ_SLOT, cycle)) {
+        serveIRQEvent(AUD0_IRQ_SLOT, 7);
+    }
+    if (isDueSec(AUD1_IRQ_SLOT, cycle)) {
+        serveIRQEvent(AUD1_IRQ_SLOT, 8);
+    }
+    if (isDueSec(AUD2_IRQ_SLOT, cycle)) {
+        serveIRQEvent(AUD2_IRQ_SLOT, 9);
+    }
+    if (isDueSec(AUD3_IRQ_SLOT, cycle)) {
+        serveIRQEvent(AUD3_IRQ_SLOT, 10);
+    }
+    if (isDueSec(RBF_IRQ_SLOT, cycle)) {
+        serveIRQEvent(RBF_IRQ_SLOT, 11);
+    }
+    if (isDueSec(DSKSYN_IRQ_SLOT, cycle)) {
+        serveIRQEvent(DSKSYN_IRQ_SLOT, 12);
+    }
+    if (isDueSec(EXTER_IRQ_SLOT, cycle)) {
+        serveIRQEvent(EXTER_IRQ_SLOT, 13);
+    }
+    
+    // Determine the next trigger cycle
+    nextSecTrigger = secSlot[0].triggerCycle;
+    for (unsigned i = 1; i < SEC_SLOT_COUNT; i++)
+        if (secSlot[i].triggerCycle < nextSecTrigger)
+            nextSecTrigger = secSlot[i].triggerCycle;
+    
+    // Update the secondary table trigger in the primary table
+    rescheduleAbs(SEC_SLOT, nextSecTrigger);
 }
 
 void
@@ -341,8 +483,7 @@ EventHandler::schedulePos(EventSlot s, int16_t vpos, int16_t hpos, EventID id)
     assert(isPrimarySlot(s));
     assert(isVposHpos(vpos, hpos));
     
-    Cycle cycle = amiga->dma.latchedClock;
-    cycle += amiga->dma.beam2cycles(vpos, hpos);
+    Cycle cycle = amiga->dma.beamToCyclesAbs(vpos, hpos);
     
     primSlot[s].triggerCycle = cycle;
     primSlot[s].id = id;
@@ -379,7 +520,7 @@ void
 EventHandler::disable(EventSlot s)
 {
     assert(isPrimarySlot(s));
-    primSlot[s].triggerCycle = INT64_MAX;
+    primSlot[s].triggerCycle = NEVER;
 }
 
 void
@@ -387,7 +528,107 @@ EventHandler::cancel(EventSlot s)
 {
     assert(isPrimarySlot(s));
     primSlot[s].id = (EventID)0;
-    primSlot[s].triggerCycle = INT64_MAX;    
+    primSlot[s].triggerCycle = NEVER;
+}
+
+void
+EventHandler::scheduleSecAbs(EventSlot s, Cycle cycle, EventID id)
+{
+    assert(isSecondarySlot(s));
+    
+    // Schedule event in secondary table
+    secSlot[s].triggerCycle = cycle;
+    secSlot[s].id = id;
+    if (cycle < nextSecTrigger) nextSecTrigger = cycle;
+    
+    // Update the secondary table trigger in the primary table
+    if (cycle < primSlot[SEC_SLOT].triggerCycle)
+        rescheduleAbs(SEC_SLOT, cycle);
+}
+
+void
+EventHandler::scheduleSecRel(EventSlot s, Cycle cycle, EventID id)
+{
+    assert(isSecondarySlot(s));
+    
+    cycle += amiga->dma.clock;
+    
+    // Schedule event in secondary table
+    secSlot[s].triggerCycle = cycle;
+    secSlot[s].id = id;
+    if (cycle < nextSecTrigger) nextSecTrigger = cycle;
+    
+    // Update the secondary table trigger in the primary table
+    if (cycle < primSlot[SEC_SLOT].triggerCycle)
+        rescheduleAbs(SEC_SLOT, cycle);
+}
+
+void
+EventHandler::scheduleSecPos(EventSlot s, int16_t vpos, int16_t hpos, EventID id)
+{
+    assert(isSecondarySlot(s));
+    assert(isVposHpos(vpos, hpos));
+    
+    Cycle cycle = amiga->dma.beamToCyclesAbs(vpos, hpos);
+    
+    secSlot[s].triggerCycle = cycle;
+    secSlot[s].id = id;
+    if (cycle < nextSecTrigger) nextSecTrigger = cycle;
+}
+
+void
+EventHandler::rescheduleSecAbs(EventSlot s, Cycle cycle)
+{
+    assert(isSecondarySlot(s));
+    
+    secSlot[s].triggerCycle = cycle;
+    if (cycle < nextSecTrigger) nextSecTrigger = cycle;
+}
+
+void
+EventHandler::rescheduleSecRel(EventSlot s, Cycle cycle)
+{
+    assert(isSecondarySlot(s));
+    
+    cycle += amiga->dma.clock;
+    
+    secSlot[s].triggerCycle = cycle;
+    if (cycle < nextSecTrigger) nextSecTrigger = cycle;
+}
+
+void
+EventHandler::disableSec(EventSlot s)
+{
+    assert(isSecondarySlot(s));
+    secSlot[s].triggerCycle = NEVER;
+}
+
+void
+EventHandler::cancelSec(EventSlot s)
+{
+    assert(isSecondarySlot(s));
+    secSlot[s].id = (EventID)0;
+    secSlot[s].triggerCycle = NEVER;
+}
+
+void
+EventHandler::serveIRQEvent(EventSlot s, int irqBit)
+{
+    switch (secSlot[s].id) {
+            
+        case IRQ_SET:
+            amiga->paula.setINTREQ(0x8000 | (1 << irqBit));
+            break;
+            
+        case IRQ_CLEAR:
+            amiga->paula.setINTREQ(1 << irqBit);
+            break;
+            
+        default:
+            assert(false);
+    }
+    
+    cancelSec(s);
 }
 
 bool
@@ -465,187 +706,4 @@ EventHandler::checkTriggeredEvent(EventSlot s)
     }
     
     return true;
-}
-
-void
-EventHandler::_executeUntil(Cycle cycle) {
-    
-    // Check for a CIA A event
-    if (isDue(CIAA_SLOT, cycle)) {
-
-        assert(checkTriggeredEvent(CIAA_SLOT));
-
-        switch(primSlot[CIAA_SLOT].id) {
-                
-            case CIA_EXECUTE:
-                amiga->ciaA.executeOneCycle();
-                break;
-                
-            case CIA_WAKEUP:
-                amiga->ciaA.wakeUp();
-                break;
-                
-            default:
-                assert(false);
-        }
-    }
-    
-    // Check for a CIA B event
-    if (isDue(CIAB_SLOT, cycle)) {
-        
-        assert(checkTriggeredEvent(CIAB_SLOT));
-        
-        switch(primSlot[CIAB_SLOT].id) {
-                
-            case CIA_EXECUTE:
-                amiga->ciaB.executeOneCycle();
-                break;
-                
-            case CIA_WAKEUP:
-                amiga->ciaB.wakeUp();
-                break;
-                
-            default:
-                assert(false);
-        }
-    }
- 
-    // Check for a bitplane event
-    if (isDue(DMA_SLOT, cycle)) {
-        assert(checkTriggeredEvent(DMA_SLOT));
-        amiga->dma.serviceDMAEvent(primSlot[DMA_SLOT].id, primSlot[DMA_SLOT].data);
-    }
-    
-    // Check for a Copper event
-    if (isDue(COP_SLOT, cycle)) {
-        
-        // debug("Serving COPPER event at %lld\n", cycle);
-    
-        assert(checkTriggeredEvent(COP_SLOT));
-        amiga->dma.copper.serviceEvent(primSlot[COP_SLOT].id, primSlot[COP_SLOT].data);
-    }
- 
-    // Check for a Blitter event
-    if (isDue(BLT_SLOT, cycle)) {
-        assert(checkTriggeredEvent(BLT_SLOT));
-        amiga->dma.blitter.serviceEvent(primSlot[BLT_SLOT].id);
-    }
-
-    // Check for a raster event
-    if (isDue(RAS_SLOT, cycle)) {
-        assert(checkTriggeredEvent(RAS_SLOT));
-        amiga->dma.serviceRASEvent(primSlot[RAS_SLOT].id);
-    }
-    
-    // Check for a secondary event
-    if (isDue(SEC_SLOT, cycle)) {
-        _executeSecondaryUntil(cycle);
-    }
-
-    // Determine the next trigger cycle
-    nextPrimTrigger = primSlot[0].triggerCycle;
-    for (unsigned i = 1; i < PRIM_SLOT_COUNT; i++)
-        if (primSlot[i].triggerCycle < nextPrimTrigger)
-            nextPrimTrigger = primSlot[i].triggerCycle;
-}
-
-void
-EventHandler::_executeSecondaryUntil(Cycle cycle) {
-
-    // Check all event slots one by one
-    if (isDueSec(TBE_IRQ_SLOT, cycle)) {
-        serveIRQEvent(TBE_IRQ_SLOT, 0);
-    }
-    if (isDueSec(DSKBLK_IRQ_SLOT, cycle)) {
-        serveIRQEvent(DSKBLK_IRQ_SLOT, 1);
-    }
-    if (isDueSec(SOFT_IRQ_SLOT, cycle)) {
-        serveIRQEvent(SOFT_IRQ_SLOT, 2);
-    }
-    if (isDueSec(PORTS_IRQ_SLOT, cycle)) {
-        serveIRQEvent(PORTS_IRQ_SLOT, 3);
-    }
-    if (isDueSec(COPR_IRQ_SLOT, cycle)) {
-        serveIRQEvent(COPR_IRQ_SLOT, 4);
-    }
-    if (isDueSec(VERTB_IRQ_SLOT, cycle)) {
-        serveIRQEvent(VERTB_IRQ_SLOT, 5);
-    }
-    if (isDueSec(BLIT_IRQ_SLOT, cycle)) {
-        serveIRQEvent(BLIT_IRQ_SLOT, 6);
-    }
-    if (isDueSec(AUD0_IRQ_SLOT, cycle)) {
-        serveIRQEvent(AUD0_IRQ_SLOT, 7);
-    }
-    if (isDueSec(AUD1_IRQ_SLOT, cycle)) {
-        serveIRQEvent(AUD1_IRQ_SLOT, 8);
-    }
-    if (isDueSec(AUD2_IRQ_SLOT, cycle)) {
-        serveIRQEvent(AUD2_IRQ_SLOT, 9);
-    }
-    if (isDueSec(AUD3_IRQ_SLOT, cycle)) {
-        serveIRQEvent(AUD3_IRQ_SLOT, 10);
-    }
-    if (isDueSec(RBF_IRQ_SLOT, cycle)) {
-        serveIRQEvent(RBF_IRQ_SLOT, 11);
-    }
-    if (isDueSec(DSKSYN_IRQ_SLOT, cycle)) {
-        serveIRQEvent(DSKSYN_IRQ_SLOT, 12);
-    }
-    if (isDueSec(EXTER_IRQ_SLOT, cycle)) {
-        serveIRQEvent(EXTER_IRQ_SLOT, 13);
-    }
-
-    // Determine the next trigger cycle
-    nextSecTrigger = secSlot[0].triggerCycle;
-    for (unsigned i = 1; i < SEC_SLOT_COUNT; i++)
-        if (secSlot[i].triggerCycle < nextSecTrigger)
-            nextSecTrigger = secSlot[i].triggerCycle;
-
-    // Update the secondary table trigger in the primary table
-    rescheduleAbs(SEC_SLOT, nextSecTrigger);
-}
-
-void
-EventHandler::scheduleSecondaryAbs(EventSlot s, Cycle cycle, EventID id)
-{
-    assert(isSecondarySlot(s));
-    
-    // Schedule event in secondary table
-    secSlot[s].triggerCycle = cycle;
-    secSlot[s].id = id;
-    if (cycle < nextSecTrigger) nextSecTrigger = cycle;
-    
-    // Update the secondary table trigger in the primary table
-    if (cycle < primSlot[SEC_SLOT].triggerCycle)
-        rescheduleAbs(SEC_SLOT, cycle);
-}
-
-void
-EventHandler::scheduleSecondaryRel(EventSlot s, Cycle cycle, EventID id)
-{
-    assert(isSecondarySlot(s));
-    
-    cycle += amiga->dma.clock;
-    
-    // Schedule event in secondary table
-    secSlot[s].triggerCycle = cycle;
-    secSlot[s].id = id;
-    if (cycle < nextSecTrigger) nextSecTrigger = cycle;
-    
-    // Update the secondary table trigger in the primary table
-    if (cycle < primSlot[SEC_SLOT].triggerCycle)
-        rescheduleAbs(SEC_SLOT, cycle);
-}
-
-void
-EventHandler::serveIRQEvent(EventSlot slot, int irqBit)
-{
-    if (secSlot[slot].id == IRQ_SET) {
-        amiga->paula.setINTREQ(0x8000 | (1 << irqBit));
-    } else {
-        assert(secSlot[slot].id == IRQ_CLEAR);
-        amiga->paula.setINTREQ(1 << irqBit);
-    }
-    secSlot[slot].triggerCycle = NEVER;
 }

@@ -175,7 +175,13 @@ DMAController::framePosition2Cycle(FramePosition framePos)
 }
 
 Cycle
-DMAController::beam2cycles(int16_t vpos, int16_t hpos)
+DMAController::beamToCyclesAbs(int16_t vpos, int16_t hpos)
+{
+    return latchedClock + beamToCyclesRel(vpos, hpos);
+}
+
+Cycle
+DMAController::beamToCyclesRel(int16_t vpos, int16_t hpos)
 {
     return DMA_CYCLES(vpos * cyclesPerLine() + hpos); 
 }
@@ -408,7 +414,7 @@ DMAController::nextBpldmaCycle(int32_t currentBeam)
         beam = BEAM(26, ddfstrt);
     }
     
-    result += beam2cycles(beam);
+    result += beamToCyclesRel(beam);
     return result;
 }
 
@@ -905,7 +911,7 @@ DMAController::copperCanHaveBus()
 }
 
 void
-DMAController::serviceDMAEvent(EventID id, int64_t data)
+DMAController::serviceDMAEvent(EventID id)
 {
     busOwner = BPLEN;
     

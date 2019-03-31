@@ -269,13 +269,16 @@ public:
     // Converts a frame position into a master cycle
     Cycle framePosition2Cycle(FramePosition framePos);
 
-    /* Converts a beam position to a CPU cycle
-     * The result is the cycle when we reach that position. It can be smaller,
-     * equal or bigger than he current clock value, depending on the current
-     * beam position.
+    /* Converts a beam position to a master clock cycle.
+     * This function returns the cycle of the master clock that corresponds to
+     * the provided beam position. The return value is either an absolute
+     * cycle count (master cycles since power up) or a relative cycle count
+     * (relative to position (0,0) in the current frame).
      */
-    Cycle beam2cycles(int16_t vpos, int16_t hpos);
-    Cycle beam2cycles(int32_t beam) { return beam2cycles(beam >> 8, beam & 0xFF); }
+    Cycle beamToCyclesAbs(int16_t vpos, int16_t hpos);
+    Cycle beamToCyclesRel(int16_t vpos, int16_t hpos);
+    Cycle beamToCyclesAbs(int32_t beam) { return beamToCyclesAbs(beam >> 8, beam & 0xFF); }
+    Cycle beamToCyclesRel(int32_t beam) { return beamToCyclesRel(beam >> 8, beam & 0xFF); }
 
     // Builds the DMA time slot allocation table for the current line
     void buildDMAEventTable();
@@ -389,7 +392,7 @@ public:
     //
     
     // Processes a high-priority DMA event (Disk, Audio, Sprites, Bitplanes)
-    void serviceDMAEvent(EventID id, int64_t data);
+    void serviceDMAEvent(EventID id);
 
     // Processes a raster event (Pixel drawing, HSYNC)
     void serviceRASEvent(EventID id);

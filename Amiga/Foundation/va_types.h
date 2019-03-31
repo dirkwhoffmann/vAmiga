@@ -343,8 +343,6 @@ typedef struct {
 
 } EventHandlerInfo;
 
-static const long primarySlotCount = 7;
-static const long secondarySlotCount = 14;
 
 //
 // Game pads

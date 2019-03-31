@@ -234,114 +234,149 @@ private:
     void _dumpSecondaryTable();
     void _dumpSlot(const char *slotName, const char *eventName, const Event event);
 
+    
     //
     // Collecting information
     //
     
 public:
     
-    // Collects the data shown in the GUI's debug panel.
+    // Collects the information displayed in the GUI's debug panel.
     EventSlotInfo getPrimarySlotInfo(int slot);
     EventSlotInfo getSecondarySlotInfo(int slot);
     EventHandlerInfo getInfo();
 
-public:
+    // Returns the number of event slots in the primary or secondary table.
+    inline long primSlotCount() { return PRIM_SLOT_COUNT; }
+    inline long secSlotCount() { return SEC_SLOT_COUNT; }
     
-    //
-    // Managing primary events
-    //
-    
-    /* Schedules a new event in the primary event table.
-     * The time stamp is an absolute value measured in master clock cycles.
-     */
-    void scheduleAbs(EventSlot s, Cycle cycle, EventID id);
-
-    /* Schedules a new event in the primary event table
-     * The time stamp is relative to the current value of the DMA clock and
-     * measured in master clock cycles.
-     */
-    void scheduleRel(EventSlot s, Cycle cycle, EventID id);
-
-    /* Schedules a new event in the primary event table
-     * The time stamp is given in form of a beam position.
-     */
-    void schedulePos(EventSlot s, int16_t vpos, int16_t hpos, EventID id);
-
-    /* Reschedules an existing event in the primary event table.
-     * The time stamp is an absolute value measured in master clock cycles.
-     */
-    void rescheduleAbs(EventSlot s, Cycle cycle);
-    
-    /* Reschedules an existing event in the primary event table
-     * The time stamp is relative to the current value of the DMA clock and
-     * measured in master clock cycles.
-     */
-    void rescheduleRel(EventSlot s, Cycle cycle);
-
-    /* Disables an event in the primary event table.
-     * Disabling means that the trigger cycle is set to maximum possible value.
-     */
-    void disable(EventSlot s);
-
-    /* Deletes an event in the primary event table.
-     * Deleting means that the event ID is reset to 0.
-     */
-    void cancel(EventSlot s);
-
-    // Returns true if the specified event slot contains an event ID
+    // Checks whether a particular slot in the primary table contains an event.
     inline bool hasEvent(EventSlot s) {
         assert(isPrimarySlot(s)); return primSlot[s].id != 0; }
-
-    // Returns true if the specified event slot contains a scheduled event
-    inline bool isPending(EventSlot s) {
-        assert(isPrimarySlot(s)); return primSlot[s].triggerCycle != INT64_MAX; }
-
-    // Returns true if the specified event slot is due at the provided cycle
-    inline bool isDue(EventSlot s, Cycle cycle) { return cycle >= primSlot[s].triggerCycle; }
-    inline bool isDueSec(EventSlot s, Cycle cycle) { return cycle >= secSlot[s].triggerCycle; }
-
-    // Performs some debugging checks. Won't be executed in release build.
-    bool checkScheduledEvent(EventSlot s);
-    bool checkTriggeredEvent(EventSlot s);
     
-    // Processes all events that are due at or prior to cycle.
+    // Checks whether a particular slot in the secondary table contains an event.
+    inline bool hasEventSec(EventSlot s) {
+        assert(isSecondarySlot(s)); return secSlot[s].id != 0; }
+    
+    // Checks whether a particular slot in the primary table contains a pending event.
+    inline bool isPending(EventSlot s) {
+        assert(isPrimarySlot(s)); return primSlot[s].triggerCycle != NEVER; }
+
+    // Checks whether a particular slot in the secondary table contains a pending event.
+    inline bool isPendingSec(EventSlot s) {
+        assert(isSecondarySlot(s)); return secSlot[s].triggerCycle != NEVER; }
+    
+    // Checks whether a particular slot in the primary table contains a due event.
+    inline bool isDue(EventSlot s, Cycle cycle) {
+        assert(isPrimarySlot(s)); return cycle >= primSlot[s].triggerCycle; }
+
+    // Checks whether a particular slot in the secondary table contains a due event.
+    inline bool isDueSec(EventSlot s, Cycle cycle) {
+        assert(isSecondarySlot(s)); return cycle >= secSlot[s].triggerCycle; }
+    
+
+    //
+    // Processing events
+    //
+
+public:
+    
+    /* Processes all events that are due prior to or at the provided cycle.
+     * This function is called inside the execution function of Agnus.
+     */
     inline void executeUntil(Cycle cycle) {
         if (cycle >= nextPrimTrigger) _executeUntil(cycle); }
     
-    // Work horses for executeUntil()
+private:
+    
+    // Called by executeUntil(...) to process events in the primary table.
     void _executeUntil(Cycle cycle);
-    void _executeSecondaryUntil(Cycle cycle);
 
+    // Called by executeUntil(...) to process events in the secondary table.
+    void _executeSecUntil(Cycle cycle);
+    
     
     //
-    // Managing secondary events
+    // Scheduling events
     //
 
-    /* Schedules a new event in the secondary event table.
-     * The time stamp is an absolute value measured in master clock cycles.
+    /* To schedule an event, an event slot, a trigger cycle, and an event id
+     * needs to be provided. The trigger cycle can be specified in three ways:
+     *
+     *   Absolute (_Abs):
+     *   The time stamp is an absolute value measured in master clock cycles.
+     *
+     *   Relative (_Rel):
+     *   The time stamp is relative to the current DMA clock and measured in
+     *   master clock cycles.
+     *
+     *   Positional (_Pos):
+     *   The time stamp is provided as a beam position in the current frame.
+     *
+     * Events can also be rescheduled, disabled, or canceled:
+     *
+     *   Rescheduling means that the event ID in the selected event slot
+     *   remains unchanged.
+     *
+     *   Disabling means that the trigger cycle is set to NEVER. All other slot
+     *   items are untouched.
+     *
+     *   Canceling means that the slot is emptied by deleting the event ID
+     *   and setting the trigger cycle to NEVER.
      */
-    void scheduleSecondaryAbs(EventSlot s, Cycle cycle, EventID id);
     
-    /* Schedules a new event in the secondary event table
-     * The time stamp is relative to the current value of the DMA clock and
-     * measured in master clock cycles.
-     */
-    void scheduleSecondaryRel(EventSlot s, Cycle cycle, EventID id);
+public:
     
-    /* Disables an event in the secondary event table.
-     * Disabling means that the trigger cycle is set to maximum possible value.
-     */
-    // void disableSecondary(EventSlot s);
+    // Schedules a new event in the primary event table.
+    void scheduleAbs(EventSlot s, Cycle cycle, EventID id);
+    void scheduleRel(EventSlot s, Cycle cycle, EventID id);
+    void schedulePos(EventSlot s, int16_t vpos, int16_t hpos, EventID id);
+
+    // Reschedules an existing event in the primary event table.
+    void rescheduleAbs(EventSlot s, Cycle cycle);
+    void rescheduleRel(EventSlot s, Cycle cycle);
+
+    // Disables an event in the primary event table.
+    void disable(EventSlot s);
+
+    // Deletes an event in the primary event table.
+    void cancel(EventSlot s);
+
     
-    /* Deletes an event in the secondary event table.
-     * Deleting means that the event ID is reset to 0.
-     */
-    // void cancelSecondary(EventSlot s);
+    // Schedules a new event in the secondary event table.
+    void scheduleSecAbs(EventSlot s, Cycle cycle, EventID id);
+    void scheduleSecRel(EventSlot s, Cycle cycle, EventID id);
+    void scheduleSecPos(EventSlot s, int16_t vpos, int16_t hpos, EventID id);
+    
+    // Reschedules an existing event in the secondary event table.
+    void rescheduleSecAbs(EventSlot s, Cycle cycle);
+    void rescheduleSecRel(EventSlot s, Cycle cycle);
+    
+    // Disables an event in the secondary event table.
+    void disableSec(EventSlot s);
+    
+    // Deletes an event in the secondary event table.
+    void cancelSec(EventSlot s);
 
 private:
     
     // Serves an IRQ_SET or IRQ_CLEAR event
     void serveIRQEvent(EventSlot slot, int irqBit);
+    
+    
+    //
+    // Debugging
+    //
+    
+private:
+    
+    /* Performs some debugging checks. Won't be executed in release build.
+     * The provided slot must be a slot in the primary event table.
+     */
+    bool checkScheduledEvent(EventSlot s);
+    bool checkTriggeredEvent(EventSlot s);
+    
+    
 };
 
 #endif

@@ -173,7 +173,7 @@ public:
 public:
     
     // Processes a Copper event
-    void serviceEvent(EventID id, int64_t data);
+    void serviceEvent(EventID id);
 
 private:
     
