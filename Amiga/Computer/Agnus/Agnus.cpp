@@ -9,8 +9,9 @@
 
 #include "Amiga.h"
 
-// Emulates a Direct Memory Access
-// ptr is a DMA pointer register and dest the destination
+/* Emulates a Direct Memory Access.
+ * ptr is a DMA pointer register and dest the destination
+ */
 #define DO_DMA(ptr,dest) \
 dest = amiga->mem.peekChip16(ptr); \
 ptr = (ptr + 2) & 0x7FFFE;
@@ -28,25 +29,29 @@ Agnus::Agnus()
     
     registerSnapshotItems(vector<SnapshotItem> {
         
-        { &clock,              sizeof(clock),              0 },
-        { &vpos,               sizeof(vpos),               0 },
-        { &hpos,               sizeof(hpos),               0 },
-        { &activeBitplanes,    sizeof(activeBitplanes),    0 },
-        { &busOwner,           sizeof(busOwner),           0 },
-        { &dmacon,             sizeof(dmacon),             0 },
-        { &diwstrt,            sizeof(diwstrt),            0 },
-        { &diwstop,            sizeof(diwstop),            0 },
-        { &ddfstrt,            sizeof(ddfstrt),            0 },
-        { &ddfstop,            sizeof(ddfstop),            0 },
-        
-        // DMA pointer registers
-        { &dskpt,    sizeof(dskpt),    0 },
-        { &audlc,    sizeof(audlc),    DWORD_ARRAY },
-        { &bplpt,    sizeof(bplpt),    DWORD_ARRAY },
-        { &sprpt,   sizeof(sprpt),   DWORD_ARRAY },
-
-        { &bpl1mod,  sizeof(bpl1mod),  0 },
-        { &bpl2mod,  sizeof(bpl2mod),  0 },
+        { &clock,           sizeof(clock),           0 },
+        { &frame,           sizeof(frame),           0 },
+        { &latchedClock,    sizeof(latchedClock),    0 },
+        { &vpos,            sizeof(vpos),            0 },
+        { &hstrt,           sizeof(hstrt),           0 },
+        { &hstop,           sizeof(hstop),           0 },
+        { &vstrt,           sizeof(vstrt),           0 },
+        { &vstop,           sizeof(vstop),           0 },
+        { &dmacon,          sizeof(dmacon),          0 },
+        { &dskpt,           sizeof(dskpt),           0 },
+        { &diwstrt,         sizeof(diwstrt),         0 },
+        { &diwstop,         sizeof(diwstop),         0 },
+        { &ddfstrt,         sizeof(ddfstrt),         0 },
+        { &ddfstop,         sizeof(ddfstop),         0 },
+        { &audlc,           sizeof(audlc),           DWORD_ARRAY },
+        { &bplpt,           sizeof(bplpt),           DWORD_ARRAY },
+        { &bpl1mod,         sizeof(bpl1mod),         0 },
+        { &bpl2mod,         sizeof(bpl2mod),         0 },
+        { &sprpt,           sizeof(sprpt),           DWORD_ARRAY },
+        { &busOwner,        sizeof(busOwner),        0 },
+        { &dmaEvent,        sizeof(dmaEvent),        0 },
+        { &nextDmaEvent,    sizeof(nextDmaEvent),    0 },
+        { &activeBitplanes, sizeof(activeBitplanes), 0 }
     });
 }
 
@@ -55,21 +60,19 @@ Agnus::_powerOn()
 {
     clock = 0;
     
-    ddfstrt = 0x38;
-    ddfstop = 0xD0;
-    
     // Initialize lookup tables
-    buildDMAEventTable();
+    // buildDMAEventTable();
+    clearDMAEventTable();
     
     // Schedule the first RAS event
     eventHandler.scheduleAbs(RAS_SLOT, DMA_CYCLES(HPOS_MAX), RAS_HSYNC);
     
-    // Schedule the first two CIA events
+    // Schedule the first CIA A and CIA B events
     eventHandler.scheduleAbs(CIAA_SLOT, CIA_CYCLES(1), CIA_EXECUTE);
     eventHandler.scheduleAbs(CIAB_SLOT, CIA_CYCLES(1), CIA_EXECUTE);
 
-    // Prepare the secondary table slot
-    // We do this to be able to use reschedule() on this slot all the time.
+    // Initialize the SEC_SLOT with a (never triggering) SEC_TRIGGER event.
+    // Doing so let's us use reschedule() on this slot all the time.
     eventHandler.scheduleAbs(SEC_SLOT, NEVER, SEC_TRIGGER);
 }
 
@@ -86,6 +89,7 @@ Agnus::_reset()
 void
 Agnus::_ping()
 {
+    
 }
 
 void
@@ -381,7 +385,7 @@ Agnus::dumpDMAEventTable(int from, int to)
 }
 
 uint16_t
-Agnus::peekDMACON()
+Agnus::peekDMACONR()
 {
     uint16_t result = dmacon;
 
@@ -390,7 +394,7 @@ Agnus::peekDMACON()
     if (blitter.bbusy) result |= (1 << 14);
     if (blitter.bzero) result |= (1 << 13);
 
-    debug(2, "peekDMACON: %X\n", result);
+    debug(2, "peekDMACONR: %X\n", result);
     return result;
 }
 
@@ -521,7 +525,7 @@ Agnus::peekVHPOSR()
 {
     // V7 V6 V5 V4 V3 V2 V1 V0 H8 H7 H6 H5 H4 H3 H2 H1
     
-    debug(2, "peekVHPOS: %X\n", BEAM(vpos, hpos) & 0xFFFF);
+    debug(2, "peekVHPOSR: %X\n", BEAM(vpos, hpos) & 0xFFFF);
 
     return BEAM(vpos, hpos) & 0xFFFF;
 }
@@ -543,7 +547,7 @@ Agnus::peekVPOSR()
     // TODO: LF (Long Frame)
     assert((vpos >> 8) <= 1);
     
-    debug(2, "peekVPOS: %X\n", (vpos >> 8) | ((frame % 2) ? 0x8000 : 0));
+    debug(2, "peekVPOSR: %X\n", (vpos >> 8) | ((frame % 2) ? 0x8000 : 0));
 
     return (vpos >> 8) | ((frame % 2) ? 0x8000 : 0);
 

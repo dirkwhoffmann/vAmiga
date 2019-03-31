@@ -677,7 +677,7 @@ Memory::peekCustom16(uint32_t addr)
             break;
         
         case 0x002 >> 1: // DMACONR
-            return amiga->dma.peekDMACON();
+            return amiga->dma.peekDMACONR();
         case 0x004 >> 1: // VPOSR
             return amiga->dma.peekVPOSR();
         case 0x006 >> 1: // VHPOSR

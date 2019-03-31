@@ -23,14 +23,6 @@
 #define PLANE5 4
 #define PLANE6 5
 
-// Possible bus owners
-#define BUS_COPPER   0b100000
-#define BUS_BLITTER  0b010000
-#define BUS_DISK     0b001000
-#define BUS_AUDIO    0b000100
-#define BUS_SPRITE   0b000010
-#define BUS_BITPLANE 0b000001
-
 // Bit masks as they appear in the DMACON register
 #define DMAEN 0b1000000000
 #define BPLEN 0b0100000000
@@ -289,7 +281,7 @@ public:
 public:
     
     // DMACON
-    uint16_t peekDMACON();
+    uint16_t peekDMACONR();
     void pokeDMACON(uint16_t value);
     
     // Returns true if DMA access of a certain type is currently enabled.
