@@ -23,7 +23,11 @@ private:
 
     /* Soft breakpoint for implementing single-stepping.
      * In contrast to a standard (hard) breakpoint, a soft breakpoint is
-     * deleted when reached.
+     * deleted when reached. The CPU halts if softStop matches the CPU's
+     * program counter (used to implement "step over") or if softStop equals
+     * UINT32_MAX (used to implement "step into"). To disable soft stopping,
+     * simply set softStop to an unreachable memory location such as
+     * UINT32_MAX - 1.
      */
     uint32_t softStop = UINT32_MAX - 1;
     

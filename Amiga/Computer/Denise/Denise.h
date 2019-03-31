@@ -17,14 +17,20 @@ class Denise : public HardwareComponent {
     
 public:
     
+    //
+    // Sub components
+    //
+    
     // A color synthesizer for computing RGBA values
     Colorizer colorizer;
     
+    
+    //
+    // Counters
+    //
+    
     // Denise has been executed up to this clock cycle.
     Cycle clock = 0;
-    
-    // Frame counter (records the number of frames drawn since power on)
-    // uint64_t frame = 0;
     
     
     //

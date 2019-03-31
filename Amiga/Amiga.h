@@ -50,7 +50,7 @@ extern Amiga *activeAmiga;
  * created automatically. The public API gives you control over the emulator's
  * behaviour such as running and pausing the emulation. Please note that most
  * subcomponents have their own public API. E.g., to query information from
- * Paula, you need to invoke a public method on c64->paula.
+ * Paula, you need to invoke a public method on amiga->paula.
  */
 class Amiga : public HardwareComponent {
     

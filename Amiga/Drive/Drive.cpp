@@ -21,10 +21,13 @@ Drive::Drive(unsigned nr)
     
     registerSnapshotItems(vector<SnapshotItem> {
 
-        { &id,             sizeof(id),             0 },
+        // Configuration items
+        { &connected,      sizeof(connected),      PERSISTANT },
+        { &id,             sizeof(id),             PERSISTANT },
+
+        // Internal state items
         { &idMode,         sizeof(idMode),         0 },
         { &idCount,        sizeof(idCount),        0 },
-        
         { &motor,          sizeof(motor),          0 },
         { &dskchange,      sizeof(dskchange),      0 },
         { &prb,            sizeof(prb),            0 },
@@ -39,7 +42,7 @@ Drive::Drive(unsigned nr)
 void
 Drive::_powerOn()
 {
-    id  = 0xFFFFFFFF;
+    
 }
 
 void
@@ -76,8 +79,6 @@ Drive::_dump()
 void
 Drive::setConnected(bool value)
 {
-    value = 1; // REMOVE AFTER DEBUGGING
-    
     if (connected != value) {
 
         connected = value;

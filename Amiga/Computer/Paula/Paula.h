@@ -16,11 +16,20 @@ class Paula : public HardwareComponent {
     
 public:
     
-    // Paula has been executed up to this clock cycle.
-    Cycle clock = 0;
-    
+    //
+    // Sub components
+    //
+
     // Audio unit
     AudioUnit audioUnit;
+
+    
+    //
+    // Counters
+    //
+    
+    // Paula has been executed up to this clock cycle.
+    Cycle clock = 0;
     
     
     //
@@ -97,12 +106,10 @@ public:
 private:
     
     void _powerOn() override;
-    /*
     void _powerOff() override;
     void _reset() override;
     void _ping() override;
     void _dump() override;
-    */
     void _setWarp(bool value) override;
     
     
@@ -117,30 +124,28 @@ public:
     
     
     //
-    // Register access
+    // Accessing registers
     //
     
 public:
     
-    uint16_t peekINTREQ();
+    uint16_t peekINTREQR() { return intreq; }
     void pokeINTREQ(uint16_t value);
  
-    uint16_t peekINTENA();
+    uint16_t peekINTENAR() { return intena; }
     void pokeINTENA(uint16_t value);
     
-    uint16_t peekDSKLEN() { return dsklen; }
     void pokeDSKLEN(uint16_t value);
     
-    uint16_t peekDSKDAT() { debug("peekDSKDAT: %X\n", dskdat); return dskdat; }
+    uint16_t peekDSKDATR() { debug("peekDSKDAT: %X\n", dskdat); return dskdat; }
     void pokeDSKDAT(uint16_t value) { dskdat = value; }
     
-    uint16_t peekSERDAT() { debug("peekSERDAT: %X\n", serdat); return serdat; }
+    uint16_t peekSERDATR() { return serdat; }
     void pokeSERDAT(uint16_t value) { serdat = value; }
     
-    uint16_t peekSERPER() { debug("peekSERPER: %X\n", serper); return serper; }
     void pokeSERPER(uint16_t value) { serper = value; }
 
-    uint16_t peekPOTGO();
+    uint16_t peekPOTGOR() { return 0xFFFF; /* TODO */ }
     void pokePOTGO(uint16_t value);
 
     void pokeAUDxLEN(int x, uint16_t value);
@@ -149,74 +154,41 @@ public:
     void pokeAUDxDAT(int x, uint16_t value);
 
     
-    
     //
     // Managing events
     //
     
 public:
     
-
-    
     
     //
-    // Interrupts
+    // Managing interrupts
     //
     
 public:
 
-    // Changes the value of INTREQ
+    // Changes the value of INTREQ.
     void setINTREQ(uint16_t value);
 
-    // Changes the value of INTENA
+    // Changes the value of INTENA.
     void setINTENA(uint16_t value);
     
-
 private:
 
     // Computes the interrupt level of a pending interrupt.
     int interruptLevel();
 
-    // Checks intena and intreq and triggers an interrupt (if pending)
+    // Checks intena and intreq and triggers an interrupt (if pending).
     void checkInterrupt();
     
-    // Sets a bit in register INTENA
-    // DEPRECATED
-    void setBitINTENA(unsigned nr) { intena |= (1 << nr); checkInterrupt(); }
-
-    // Clears a bit in register INTENA
-    // DEPRECATED
-    void clearBitINTENA(unsigned nr) { intena &= ~(1 << nr); checkInterrupt(); }
-
-    // Sets a bit in register INTREQ
-    // DEPRECATED
-    void setBitINTREQ(unsigned nr) { intreq |= (1 << nr); checkInterrupt(); }
-
-    // Clears a bit in register INTREQ
-    // DEPRECATED
-    void clearBitINTREQ(unsigned nr) { intreq &= ~(1 << nr); checkInterrupt(); }
-
 
     //
-    // Disk DMA
+    // Performing Disk DMA
     //
     
 public:
     
-    void doDiskDMA(); 
-    
-    //
-    // FAKE METHODS FOR THE VISUAL PROTOTYPE (TEMPORARY)
-    //
-    
-public:
-    
-    /*
-    uint32_t getVolume() { return 42; }
-    long bufferUnderflows() { return 42; }
-    long bufferOverflows() { return 42; }
-    double fillLevel() { return .5; }
-     */
+    void doDiskDMA();
 };
 
 #endif

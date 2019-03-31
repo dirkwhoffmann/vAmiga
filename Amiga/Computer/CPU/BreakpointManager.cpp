@@ -1,10 +1,11 @@
+// -----------------------------------------------------------------------------
+// This file is part of vAmiga
 //
-//  BreakpointManager.cpp
-//  vAmiga
+// Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
+// Licensed under the GNU General Public License v3
 //
-//  Created by Dirk Hoffmann on 06.02.19.
-//  Copyright © 2019 Dirk Hoffmann. All rights reserved.
-//
+// See https://www.gnu.org for license information
+// -----------------------------------------------------------------------------
 
 #include "Amiga.h"
 

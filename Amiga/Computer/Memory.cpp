@@ -683,7 +683,7 @@ Memory::peekCustom16(uint32_t addr)
         case 0x006 >> 1: // VHPOSR
             return amiga->dma.peekVHPOSR();
         case 0x008 >> 1: // DSKDATR
-            return amiga->paula.peekDSKDAT();
+            return amiga->paula.peekDSKDATR();
         case 0x00A >> 1: // JOY0DAT
             return amiga->denise.peekJOYxDATR(0);
         case 0x00C >> 1: // JOY1DAT
@@ -699,17 +699,17 @@ Memory::peekCustom16(uint32_t addr)
             break;
             
         case 0x016 >> 1: // POTGOR
-            return amiga->paula.peekPOTGO();
+            return amiga->paula.peekPOTGOR();
         case 0x018 >> 1: // SERDATR
-            return amiga->paula.peekSERDAT();
+            return amiga->paula.peekSERDATR();
             
         case 0x01A >> 1: // DSKBYTR
             break;
             
         case 0x01C >> 1: // INTENAR
-            return amiga->paula.peekINTENA();
+            return amiga->paula.peekINTENAR();
         case 0x01E >> 1: // INTREQR
-            return amiga->paula.peekINTREQ();
+            return amiga->paula.peekINTREQR();
 
         default: // Write-only register
             break; // return 0; // TODO: What do we return here?

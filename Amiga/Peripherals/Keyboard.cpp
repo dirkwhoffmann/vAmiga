@@ -58,23 +58,12 @@ Keyboard::execute()
             sendKeyCode(0xFF);
             state = KB_POWER_UP_KEY_STREAM;
             return;
-           
-        /*
-        case KB_WAIT_FOR_ACK:
-
-            if (handshake) {
-                debug("Got handshake signal from Amiga\n");
-                handshake = false;
-                state = KB_POWER_UP_KEY_STREAM;
-            }
-            return;
-        */
             
         case KB_POWER_UP_KEY_STREAM:
             
             if (handshake) {
                 handshake = false;
-                debug("Sending KB_POWER_UP_KEY_STREAM to Amiga\n");
+                debug(2, "Sending KB_POWER_UP_KEY_STREAM to Amiga\n");
                 sendKeyCode(0xFD);
                 state = KB_TERMINATE_KEY_STREAM;
             }
@@ -84,7 +73,7 @@ Keyboard::execute()
             
             if (handshake) {
                 handshake = false;
-                debug("Sending KB_TERMINATE_KEY_STREAM to Amiga\n");
+                debug(2, "Sending KB_TERMINATE_KEY_STREAM to Amiga\n");
                 sendKeyCode(0xFE);
                 state = KB_NORMAL_OPERATION;
             }

@@ -38,14 +38,34 @@ Paula::Paula()
         { &audlen,   sizeof(audlen),   WORD_ARRAY },
         { &audper,   sizeof(audper),   WORD_ARRAY },
         { &audvol,   sizeof(audvol),   WORD_ARRAY },
-        { &auddat,   sizeof(auddat),   WORD_ARRAY },
-
+        { &auddat,   sizeof(auddat),   WORD_ARRAY }
     });
-    
 }
 
 void
 Paula::_powerOn()
+{
+    
+}
+
+void
+Paula::_powerOff()
+{
+    
+}
+
+void
+Paula::_reset()
+{
+    
+}
+void
+Paula::_ping()
+{
+    
+}
+void
+Paula::_dump()
 {
     
 }
@@ -79,23 +99,11 @@ Paula::getInfo()
     return info;
 }
 
-uint16_t
-Paula::peekINTREQ()
-{
-       return intreq;
-}
-
 void
 Paula::pokeINTREQ(uint16_t value)
 {
     // debug("pokeINTREQ(%X)\n", value);
     setINTREQ(value);
-}
-
-uint16_t
-Paula::peekINTENA()
-{
-    return intena;
 }
 
 void
@@ -136,18 +144,10 @@ Paula::setINTENA(uint16_t value)
     checkInterrupt();
 }
 
-uint16_t
-Paula::peekPOTGO()
-{
-    debug(2, "peekPOTFO: %X\n", 0xFFFF);
-    return 0xFFFF;
-}
-
 void
 Paula::pokePOTGO(uint16_t value)
 {
     // debug(2, "pokePOTGO(%X)\n", value);
-
     potgo = value;
 }
 

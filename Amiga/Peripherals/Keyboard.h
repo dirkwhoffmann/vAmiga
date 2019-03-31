@@ -12,15 +12,14 @@
 
 #include "HardwareComponent.h"
 
-typedef enum {
-    
+typedef enum
+{
     KB_SEND_SYNC = 0,
-    // KB_WAIT_FOR_ACK,
     KB_POWER_UP_KEY_STREAM,
     KB_TERMINATE_KEY_STREAM,
     KB_NORMAL_OPERATION
-    
-} KeyboardState;
+}
+KeyboardState;
 
 class Keyboard : public HardwareComponent {
     
@@ -31,12 +30,7 @@ private:
     
     // Acknowledge signal sent from the Amiga side
     bool handshake;
-    
-    
-    
-    
-    
-    
+        
     // Indicates if a key is currently held down (array index = raw key code).
     bool keyDown[128];
     
@@ -48,6 +42,7 @@ private:
 public:
     
     Keyboard();
+    
     
     //
     // Methods from HardwareComponent

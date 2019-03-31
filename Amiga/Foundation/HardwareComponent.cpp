@@ -66,14 +66,6 @@ HardwareComponent::powerOn()
             if ((i.flags & PERSISTANT) == 0) memset(i.data, 0, i.size);
         }
         
-        // Watch out for uninitialzed variables
-        for (SnapshotItem i : snapshotItems) {
-            if (((uint8_t *)i.data)[0] == 42) {
-                debug("Uninitialized variable found at address %p\n", i.data);
-                assert(false);
-            }
-        }
-        
         // Power this component on
         debug(2, "Powering on\n");
         power = true;
@@ -206,10 +198,6 @@ HardwareComponent::registerSnapshotItems(vector<SnapshotItem> items) {
         
         // Calculate snapshot size
         snapshotSize += item.size;
-        
-        // Initialize all snapshot items with a special bit pattern. This lets
-        // us detect unintialized variables in powerOn().
-        for (size_t j = 0; j < item.size; j++) ((uint8_t *)item.data)[j] = 42;
     }
 }
 
