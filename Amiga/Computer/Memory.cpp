@@ -24,6 +24,12 @@ Memory::Memory()
 
 Memory::~Memory()
 {
+    dealloc();
+}
+
+void
+Memory::dealloc()
+{
     if (bootRom) delete[] bootRom;
     if (kickRom) delete[] kickRom;
     if (chipRam) delete[] chipRam;
@@ -39,7 +45,6 @@ Memory::_powerOn()
     
     // Set up the memory lookup table
     updateMemSrcTable();
-    
 }
 
 void
@@ -105,11 +110,7 @@ Memory::didLoadFromBuffer(uint8_t **buffer)
     assert(fastRamSize < 0xFFFFFF);
     
     // Free previously allocated memory
-    if (bootRom) delete[] bootRom;
-    if (kickRom) delete[] kickRom;
-    if (chipRam) delete[] chipRam;
-    if (slowRam) delete[] slowRam;
-    if (fastRam) delete[] fastRam;
+    dealloc();
 
     // Allocate new memory
     if (bootRomSize) bootRom = new (std::nothrow) uint8_t[KB(bootRomSize) + 3];
@@ -168,15 +169,16 @@ Memory::alloc(size_t size, uint8_t *&ptrref, size_t &sizeref)
         // a long word access is performed on the last valid memory address.
         size_t allocSize = KB(size) + 3;
         if (!(ptrref = new (std::nothrow) uint8_t[allocSize])) {
-            warn("Cannot allocate %X bytes of memory\n", size);
+            warn("Cannot allocate %d KB of memory\n", size);
             return false;
         }
-        memset(ptrref, 42, allocSize); // TODO: 42 is just a test value
+        memset(ptrref, 0, allocSize);
         sizeref = size;
     }
     
     // Update the memory lookup table
     updateMemSrcTable();
+    
     return true;
 }
 
@@ -188,8 +190,9 @@ Memory::loadRom(AmigaFile *rom, uint8_t *target, size_t length)
         assert(target != NULL);
         memset(target, 0, length);
         
-        int c;
         rom->seek(0);
+        
+        int c;
         for (size_t i = 0; i < length; i++) {
             if ((c = rom->read()) == EOF) break;
             *(target++) = c;
@@ -312,7 +315,7 @@ Memory::updateMemSrcTable()
     for (unsigned i = 0xA0; i <= 0xBF; i++)
         memSrc[i] = MEM_CIA;
 
-    // OCS (some assignments will be overwritten below by slow ram and RTC)
+    // OCS (some assignments will be overwritten below by Slow Ram and RTC)
     for (unsigned i = 0xC0; i <= 0xDF; i++)
         memSrc[i] = MEM_OCS;
     
@@ -320,7 +323,7 @@ Memory::updateMemSrcTable()
     for (unsigned i = 0; i < slowRamSize / 0x10000; i++)
         memSrc[0xC0 + i] = MEM_SLOW;
 
-    // Real-time clock
+    // Real-time clock (RTC)
     for (unsigned i = 0xDC; rtc && i <= 0xDE; i++)
         memSrc[i] = MEM_RTC;
 
@@ -348,7 +351,7 @@ Memory::peek8(uint32_t addr)
     switch (memSrc[addr >> 16]) {
             
         case MEM_UNMAPPED: return 0;
-        case MEM_CHIP:     ASSERT_CHIP_ADDR(addr); return peekChip8(addr); //  READ_CHIP_8(addr);
+        case MEM_CHIP:     ASSERT_CHIP_ADDR(addr); return READ_CHIP_8(addr);
         case MEM_FAST:     ASSERT_FAST_ADDR(addr); assert(false); return READ_FAST_8(addr);
         case MEM_CIA:      ASSERT_CIA_ADDR(addr);  return peekCIA8(addr);
         case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); assert(false); return READ_SLOW_8(addr);
@@ -375,7 +378,7 @@ Memory::peek16(uint32_t addr)
     switch (memSrc[addr >> 16]) {
             
         case MEM_UNMAPPED: return 0;
-        case MEM_CHIP:     ASSERT_CHIP_ADDR(addr); return peekChip16(addr); //   READ_CHIP_16(addr);
+        case MEM_CHIP:     ASSERT_CHIP_ADDR(addr); return READ_CHIP_16(addr);
         case MEM_FAST:     ASSERT_FAST_ADDR(addr); assert(false); return READ_FAST_16(addr);
         case MEM_CIA:      ASSERT_CIA_ADDR(addr);  return peekCIA16(addr);
         case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); assert(false); return READ_SLOW_16(addr);
@@ -452,11 +455,7 @@ Memory::poke8(uint32_t addr, uint8_t value)
     switch (memSrc[addr >> 16]) {
             
         case MEM_UNMAPPED: return;
-        case MEM_CHIP:
-            ASSERT_CHIP_ADDR(addr);
-            WRITE_CHIP_8(addr, value);
-            assert(peekChip8(addr) == value);
-            break;
+        case MEM_CHIP:     ASSERT_CHIP_ADDR(addr); WRITE_CHIP_8(addr, value); break;
         case MEM_FAST:     ASSERT_FAST_ADDR(addr); WRITE_FAST_8(addr, value); break;
         case MEM_CIA:      ASSERT_CIA_ADDR(addr);  pokeCIA8(addr, value); break;
         case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); WRITE_SLOW_8(addr, value); break;
@@ -477,11 +476,7 @@ Memory::poke16(uint32_t addr, uint16_t value)
     switch (memSrc[addr >> 16]) {
             
         case MEM_UNMAPPED: return;
-        case MEM_CHIP:
-            ASSERT_CHIP_ADDR(addr);
-            WRITE_CHIP_16(addr, value);
-            assert(peekChip16(addr) == value);
-            break;
+        case MEM_CHIP:     ASSERT_CHIP_ADDR(addr); WRITE_CHIP_16(addr, value); break;
         case MEM_FAST:     ASSERT_FAST_ADDR(addr); WRITE_FAST_16(addr, value); break;
         case MEM_CIA:      ASSERT_CIA_ADDR(addr);  pokeCIA16(addr, value); break;
         case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); WRITE_SLOW_16(addr, value); break;
@@ -502,16 +497,12 @@ Memory::poke32(uint32_t addr, uint32_t value)
     poke16(addr + 2, LO_WORD(value));
 }
 
-//
-// CIAs
-//
-
 uint8_t
 Memory::peekCIA8(uint32_t addr)
 {
     // debug("peekCIA8(%6X)\n", addr);
     
-    uint32_t reg = (addr >> 8) & 0b1111;
+    uint32_t reg = (addr >> 8)  & 0b1111;
     uint32_t sel = (addr >> 12) & 0b11;
     bool a0 = addr & 1;
     
@@ -539,7 +530,7 @@ Memory::peekCIA16(uint32_t addr)
     debug("peekCIA16(%6X)\n", addr);
     assert(false);
     
-    uint32_t reg = (addr >> 8) & 0b1111;
+    uint32_t reg = (addr >> 8)  & 0b1111;
     uint32_t sel = (addr >> 12) & 0b11;
     
     switch (sel) {
@@ -573,7 +564,7 @@ Memory::peekCIA32(uint32_t addr)
 uint8_t
 Memory::spypeekCIA8(uint32_t addr)
 {
-    uint32_t reg = (addr >> 8) & 0b1111;
+    uint32_t reg = (addr >> 8)  & 0b1111;
     uint32_t sel = (addr >> 12) & 0b11;
     bool a0 = addr & 1;
     
@@ -664,11 +655,6 @@ Memory::pokeCIA32(uint32_t addr, uint32_t value)
     pokeCIA16(addr,     HI_WORD(value));
     pokeCIA16(addr + 2, LO_WORD(value));
 }
-
-
-//
-// Custom chip set
-//
 
 uint8_t
 Memory::peekCustom8(uint32_t addr)
@@ -1164,10 +1150,6 @@ void Memory::pokeCustom32(uint32_t addr, uint32_t value)
     pokeCustom16(addr,     HI_WORD(value));
     pokeCustom16(addr + 2, LO_WORD(value));
 }
-
-
-
-
 
 const char *
 Memory::ascii(uint32_t addr)

@@ -154,6 +154,9 @@ public:
     Memory();
     ~Memory();
     
+    // Frees the allocated memory
+    void dealloc();
+    
     
     //
     // Methods from HardwareComponent
@@ -280,38 +283,33 @@ public:
     //
     
     inline uint8_t peekChip8(uint32_t addr) {
-        ASSERT_CHIP_ADDR(addr);
-        uint8_t result = READ_CHIP_8(addr);
-        return result;
+        ASSERT_CHIP_ADDR(addr); return READ_CHIP_8(addr);
     }
     inline uint16_t peekChip16(uint32_t addr) {
-        ASSERT_CHIP_ADDR(addr);
-        uint16_t result = READ_CHIP_16(addr);
-        return result;
+        ASSERT_CHIP_ADDR(addr); return READ_CHIP_16(addr);
     }
     inline uint32_t peekChip32(uint32_t addr) {
-        ASSERT_CHIP_ADDR(addr);
-        uint32_t result = READ_CHIP_32(addr);
-        return result;
+        ASSERT_CHIP_ADDR(addr); return READ_CHIP_32(addr);
     }
 
-    inline uint8_t spypeekChip8(uint32_t addr) { return peekChip8(addr); }
-    inline uint16_t spypeekChip16(uint32_t addr) { return peekChip16(addr); }
-    inline uint32_t spypeekChip32(uint32_t addr) { return peekChip32(addr); }
+    inline uint8_t spypeekChip8(uint32_t addr) {
+        return peekChip8(addr);
+    }
+    inline uint16_t spypeekChip16(uint32_t addr) {
+        return peekChip16(addr);
+    }
+    inline uint32_t spypeekChip32(uint32_t addr) {
+        return peekChip32(addr);
+    }
     
     inline void pokeChip8(uint32_t addr, uint8_t value) {
-        ASSERT_CHIP_ADDR(addr);
-        WRITE_CHIP_8(addr, value);
+        ASSERT_CHIP_ADDR(addr); WRITE_CHIP_8(addr, value);
     }
-    inline void pokeChip16(uint32_t addr, uint16_t value)
-    {
-        ASSERT_CHIP_ADDR(addr);
-        WRITE_CHIP_16(addr, value);
+    inline void pokeChip16(uint32_t addr, uint16_t value) {
+        ASSERT_CHIP_ADDR(addr); WRITE_CHIP_16(addr, value);
     }
-    inline void pokeChip32(uint32_t addr, uint32_t value)
-    {
-        ASSERT_CHIP_ADDR(addr);
-        WRITE_CHIP_32(addr, value);
+    inline void pokeChip32(uint32_t addr, uint32_t value) {
+        ASSERT_CHIP_ADDR(addr); WRITE_CHIP_32(addr, value);
     }
     
     //
