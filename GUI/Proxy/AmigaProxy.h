@@ -16,7 +16,7 @@
 @class CPUProxy;
 @class CIAProxy;
 @class MemProxy;
-@class DMAControllerProxy;
+@class AgnusProxy;
 @class DeniseProxy;
 @class PaulaProxy;
 @class AmigaControlPortProxy;
@@ -34,7 +34,7 @@ struct AmigaWrapper;
 struct CPUWrapper;
 struct CIAWrapper;
 struct MemWrapper;
-struct DMAControllerWrapper;
+struct AgnusWrapper;
 struct DeniseWrapper;
 struct PaulaWrapper;
 struct AmigaControlPortWrapper;
@@ -55,7 +55,7 @@ struct AmigaFileWrapper;
     CIAProxy *ciaA;
     CIAProxy *ciaB;
     MemProxy *mem;
-    DMAControllerProxy *dma;
+    AgnusProxy *dma;
     DeniseProxy *denise;
     PaulaProxy *paula;
     AmigaControlPortProxy *controlPort1;
@@ -71,7 +71,7 @@ struct AmigaFileWrapper;
 @property (readonly) CIAProxy *ciaA;
 @property (readonly) CIAProxy *ciaB;
 @property (readonly) MemProxy *mem;
-@property (readonly) DMAControllerProxy *dma;
+@property (readonly) AgnusProxy *dma;
 @property (readonly) DeniseProxy *denise;
 @property (readonly) PaulaProxy *paula;
 @property (readonly) AmigaControlPortProxy *controlPort1;
@@ -273,12 +273,12 @@ struct AmigaFileWrapper;
 
 
 //
-// DMAController Proxy
+// AgnusProxy Proxy
 //
 
-@interface DMAControllerProxy : NSObject {
+@interface AgnusProxy : NSObject {
     
-    struct DMAControllerWrapper *wrapper;
+    struct AgnusWrapper *wrapper;
 }
 
 - (void) dump;

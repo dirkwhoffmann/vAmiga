@@ -15,9 +15,9 @@
 dest = amiga->mem.peekChip16(ptr); \
 ptr = (ptr + 2) & 0x7FFFE;
 
-DMAController::DMAController()
+Agnus::Agnus()
 {
-    setDescription("DMAController");
+    setDescription("Agnus");
     
     registerSubcomponents(vector<HardwareComponent *> {
         
@@ -52,13 +52,8 @@ DMAController::DMAController()
     });
 }
 
-DMAController::~DMAController()
-{
-    debug(2, "Destroying DMAController[%p]\n", this);
-}
-
 void
-DMAController::_powerOn()
+Agnus::_powerOn()
 {
     clock = 0;
     
@@ -81,22 +76,22 @@ DMAController::_powerOn()
 }
 
 void
-DMAController::_powerOff()
+Agnus::_powerOff()
 {
     
 }
 void
-DMAController::_reset()
+Agnus::_reset()
 {
     
 }
 void
-DMAController::_ping()
+Agnus::_ping()
 {
 }
 
 void
-DMAController::_dump()
+Agnus::_dump()
 {        
     plainmsg("  hstrt : %d\n", hstrt);
     plainmsg("  hstop : %d\n", hstop);
@@ -113,7 +108,7 @@ DMAController::_dump()
 }
 
 DMAInfo
-DMAController::getInfo()
+Agnus::getInfo()
 {
     DMAInfo info;
     
@@ -136,7 +131,7 @@ DMAController::getInfo()
 }
 
 DMACycle
-DMAController::cyclesInCurrentFrame()
+Agnus::cyclesInCurrentFrame()
 {
     // TODO: Distinguish between short frames and long frames
     /*
@@ -150,7 +145,7 @@ DMAController::cyclesInCurrentFrame()
 }
 
 FramePosition
-DMAController::cycle2FramePosition(Cycle cycle)
+Agnus::cycle2FramePosition(Cycle cycle)
 {
     FramePosition result;
 
@@ -168,26 +163,26 @@ DMAController::cycle2FramePosition(Cycle cycle)
 }
 
 Cycle
-DMAController::framePosition2Cycle(FramePosition framePos)
+Agnus::framePosition2Cycle(FramePosition framePos)
 {
     DMACycle result = framePos.frame * cyclesInCurrentFrame() + framePos.vpos * cyclesPerLine() + hpos;
     return DMA_CYCLES(result);
 }
 
 Cycle
-DMAController::beamToCyclesAbs(int16_t vpos, int16_t hpos)
+Agnus::beamToCyclesAbs(int16_t vpos, int16_t hpos)
 {
     return latchedClock + beamToCyclesRel(vpos, hpos);
 }
 
 Cycle
-DMAController::beamToCyclesRel(int16_t vpos, int16_t hpos)
+Agnus::beamToCyclesRel(int16_t vpos, int16_t hpos)
 {
     return DMA_CYCLES(vpos * cyclesPerLine() + hpos); 
 }
 
 void
-DMAController::buildDMAEventTable()
+Agnus::buildDMAEventTable()
 {
     // debug("buildDMAEventTable vpos = %d hpos = %d\n", vpos, hpos);
     
@@ -318,7 +313,7 @@ DMAController::buildDMAEventTable()
 }
 
 void
-DMAController::clearDMAEventTable()
+Agnus::clearDMAEventTable()
 {
     // debug("CLEARING DMA event table\n");
     
@@ -328,7 +323,7 @@ DMAController::clearDMAEventTable()
 }
 
 void
-DMAController::dumpDMAEventTable(int from, int to)
+Agnus::dumpDMAEventTable(int from, int to)
 {
     char r1[256], r2[256], r3[256], r4[256];
     int i;
@@ -376,7 +371,7 @@ DMAController::dumpDMAEventTable(int from, int to)
 }
 
 int32_t
-DMAController::nextBPLDMABeam(int32_t currentBeam)
+Agnus::nextBPLDMABeam(int32_t currentBeam)
 {
     // The first DMA cycle happens at (26, ddfstrt) (TODO: CORRECT?)
     if (currentBeam < BEAM(26, ddfstrt))
@@ -403,7 +398,7 @@ DMAController::nextBPLDMABeam(int32_t currentBeam)
 }
 
 Cycle
-DMAController::nextBpldmaCycle(int32_t currentBeam)
+Agnus::nextBpldmaCycle(int32_t currentBeam)
 {
     Cycle result = latchedClock;
     
@@ -418,34 +413,8 @@ DMAController::nextBpldmaCycle(int32_t currentBeam)
     return result;
 }
 
-/*
-int
-DMAController::beam2plane(int32_t beam)
-{
-    if (amiga->denise.hires()) {
-        switch (beam % 4) {
-            case 0: return 4;
-            case 1: return 3;
-            case 2: return 2;
-            case 3: return 1;
-        }
-    } else {
-        switch (beam % 8) {
-            case 0: assert(false); return 0;
-            case 1: return 4;
-            case 2: return 6;
-            case 3: return 2;
-            case 4: assert(false); return 0;
-            case 5: return 3;
-            case 6: return 5;
-            case 7: return 1;
-        }
-    }
-}
-*/
-
 uint16_t
-DMAController::peekDMACON()
+Agnus::peekDMACON()
 {
     uint16_t result = dmacon;
 
@@ -459,7 +428,7 @@ DMAController::peekDMACON()
 }
 
 void
-DMAController::pokeDMACON(uint16_t value)
+Agnus::pokeDMACON(uint16_t value)
 {
     debug(2, "pokeDMACON(%X)\n", value);
     
@@ -567,7 +536,7 @@ DMAController::pokeDMACON(uint16_t value)
 }
 
 uint16_t
-DMAController::peekVHPOS()
+Agnus::peekVHPOS()
 {
     // V7 V6 V5 V4 V3 V2 V1 V0 H8 H7 H6 H5 H4 H3 H2 H1
     
@@ -577,7 +546,7 @@ DMAController::peekVHPOS()
 }
 
 void
-DMAController::pokeVHPOS(uint16_t value)
+Agnus::pokeVHPOS(uint16_t value)
 {
     // Don't know what to do here ...
     
@@ -587,7 +556,7 @@ DMAController::pokeVHPOS(uint16_t value)
 }
 
 uint16_t
-DMAController::peekVPOS()
+Agnus::peekVPOS()
 {
     // LF -- -- -- -- -- -- -- -- -- -- -- -- -- -- V8
     // TODO: LF (Long Frame)
@@ -600,7 +569,7 @@ DMAController::peekVPOS()
 }
 
 void
-DMAController::pokeVPOS(uint16_t value)
+Agnus::pokeVPOS(uint16_t value)
 {
     // Don't know what to do here ...
     
@@ -610,7 +579,7 @@ DMAController::pokeVPOS(uint16_t value)
 }
 
 void
-DMAController::pokeDIWSTRT(uint16_t value)
+Agnus::pokeDIWSTRT(uint16_t value)
 {
     debug(2, "pokeDIWSTRT(%X)\n", value);
     
@@ -623,7 +592,7 @@ DMAController::pokeDIWSTRT(uint16_t value)
 }
 
 void
-DMAController::pokeDIWSTOP(uint16_t value)
+Agnus::pokeDIWSTOP(uint16_t value)
 {
     debug(2, "pokeDIWSTOP(%X)\n", value);
     
@@ -636,7 +605,7 @@ DMAController::pokeDIWSTOP(uint16_t value)
 }
 
 void
-DMAController::pokeDDFSTRT(uint16_t value)
+Agnus::pokeDDFSTRT(uint16_t value)
 {
     debug(2, "pokeDDFSTRT(%X)\n", value);
 
@@ -644,7 +613,7 @@ DMAController::pokeDDFSTRT(uint16_t value)
 }
 
 void
-DMAController::pokeDDFSTOP(uint16_t value)
+Agnus::pokeDDFSTOP(uint16_t value)
 {
     debug(2, "pokeDDFSTOP(%X)\n", value);
     
@@ -654,7 +623,7 @@ DMAController::pokeDDFSTOP(uint16_t value)
 
 
 void
-DMAController::pokeBPL1MOD(uint16_t value)
+Agnus::pokeBPL1MOD(uint16_t value)
 {
     debug(2, "pokeBPL1MOD(%X)\n", value);
 
@@ -662,7 +631,7 @@ DMAController::pokeBPL1MOD(uint16_t value)
 }
 
 void
-DMAController::pokeBPL2MOD(uint16_t value)
+Agnus::pokeBPL2MOD(uint16_t value)
 {
     debug(2, "pokeBPL2MOD(%X)\n", value);
     
@@ -670,21 +639,21 @@ DMAController::pokeBPL2MOD(uint16_t value)
 }
 
 void
-DMAController::pokeDSKPTH(uint16_t value)
+Agnus::pokeDSKPTH(uint16_t value)
 {
     debug(2, "pokeDSKPTH(%X)\n", value);
     dskpt = REPLACE_HI_WORD(dskpt, value & 0x7);
 }
 
 void
-DMAController::pokeDSKPTL(uint16_t value)
+Agnus::pokeDSKPTL(uint16_t value)
 {
     debug(2, "pokeDSKPTL(%X)\n", value);
     dskpt = REPLACE_LO_WORD(dskpt, value);
 }
 
 void
-DMAController::pokeAUDxLCH(int x, uint16_t value)
+Agnus::pokeAUDxLCH(int x, uint16_t value)
 {
     assert(x < 4);
     
@@ -693,7 +662,7 @@ DMAController::pokeAUDxLCH(int x, uint16_t value)
 }
 
 void
-DMAController::pokeAUDxLCL(int x, uint16_t value)
+Agnus::pokeAUDxLCL(int x, uint16_t value)
 {
     assert(x < 4);
     
@@ -702,7 +671,7 @@ DMAController::pokeAUDxLCL(int x, uint16_t value)
 }
 
 void
-DMAController::pokeBPLxPTH(int x, uint16_t value)
+Agnus::pokeBPLxPTH(int x, uint16_t value)
 {
     assert(x < 6);
     
@@ -711,7 +680,7 @@ DMAController::pokeBPLxPTH(int x, uint16_t value)
 }
 
 void
-DMAController::pokeBPLxPTL(int x, uint16_t value)
+Agnus::pokeBPLxPTL(int x, uint16_t value)
 {
     assert(x < 6);
     
@@ -720,7 +689,7 @@ DMAController::pokeBPLxPTL(int x, uint16_t value)
 }
 
 void
-DMAController::pokeSPRxPTH(int x, uint16_t value)
+Agnus::pokeSPRxPTH(int x, uint16_t value)
 {
     assert(x < 8);
     
@@ -729,7 +698,7 @@ DMAController::pokeSPRxPTH(int x, uint16_t value)
 }
 
 void
-DMAController::pokeSPRxPTL(int x, uint16_t value)
+Agnus::pokeSPRxPTL(int x, uint16_t value)
 {
     assert(x < 8);
     
@@ -741,7 +710,7 @@ DMAController::pokeSPRxPTL(int x, uint16_t value)
 
 
 void
-DMAController::executeUntil(Cycle targetClock)
+Agnus::executeUntil(Cycle targetClock)
 {
     // msg("clock is %lld, Executing until %lld\n", clock, targetClock);
     while (clock <= targetClock - DMA_CYCLES(1)) {
@@ -762,7 +731,7 @@ DMAController::executeUntil(Cycle targetClock)
 }
 
 Cycle
-DMAController:: beamDiff(int16_t vStart, int16_t hStart, int16_t vEnd, int16_t hEnd)
+Agnus:: beamDiff(int16_t vStart, int16_t hStart, int16_t vEnd, int16_t hEnd)
 {
     // We assume that the function is called with a valid horizontal position
     assert(hEnd <= HPOS_MAX);
@@ -778,32 +747,8 @@ DMAController:: beamDiff(int16_t vStart, int16_t hStart, int16_t vEnd, int16_t h
     return DMA_CYCLES(vDiff * 227 + hDiff);
 }
 
-/*
-DMACycle
-DMAController::beamDiff(uint32_t start, uint32_t end)
-{
-    int32_t vStart = (int32_t)VPOS(start);
-    int32_t hStart = (int32_t)HPOS(start);
-    int32_t vEnd   = (int32_t)VPOS(end);
-    int32_t hEnd   = (int32_t)HPOS(end);
-    
-    // We assume that the function is called with a valid horizontal position
-    assert(hEnd <= 0xE2);
-
-    // Bail out if the end position is unreachable
-    if (vEnd > 312) return INT64_MAX;
-
-    // Compute vertical and horizontal difference
-    int32_t vDiff  = vEnd - vStart;
-    int32_t hDiff  = hEnd - hStart;
-    
-    // In PAL mode, all lines have the same length (227 color clocks)
-    return vDiff * 227 + hDiff;
-}
-*/
-
 void
-DMAController::hsyncHandler()
+Agnus::hsyncHandler()
 {
     // Make sure that we are really at the end of the line
     assert(hpos == 226 /* 0xE2 */);
@@ -856,7 +801,7 @@ DMAController::hsyncHandler()
 }
 
 void
-DMAController::vsyncHandler()
+Agnus::vsyncHandler()
 {
     // Increment frame and reset vpos
     frame++;
@@ -880,7 +825,7 @@ DMAController::vsyncHandler()
 }
 
 void
-DMAController::addBPLxMOD()
+Agnus::addBPLxMOD()
 {
     // Add bpl2mod is added to all active even bitplane pointers
     // Add blp1mod is added to all active odd bitplane pointers
@@ -897,7 +842,7 @@ DMAController::addBPLxMOD()
 
 
 bool
-DMAController::copperCanHaveBus()
+Agnus::copperCanHaveBus()
 {
     // For now, we only check the DMACON register.
     // Later, we need to check if the bus is really free and if the current
@@ -911,7 +856,7 @@ DMAController::copperCanHaveBus()
 }
 
 void
-DMAController::serviceDMAEvent(EventID id)
+Agnus::serviceDMAEvent(EventID id)
 {
     busOwner = BPLEN;
     
@@ -1022,7 +967,7 @@ DMAController::serviceDMAEvent(EventID id)
 }
 
 void
-DMAController::serviceRASEvent(EventID id)
+Agnus::serviceRASEvent(EventID id)
 {
     switch (id) {
             
@@ -1053,7 +998,7 @@ DMAController::serviceRASEvent(EventID id)
 }
 
 void
-DMAController::scheduleNextRASEvent(int16_t vpos, int16_t hpos)
+Agnus::scheduleNextRASEvent(int16_t vpos, int16_t hpos)
 {
     // Map hstrt, hstop to DMA cycle values
     uint16_t hstrtdma = hstrt / 2;

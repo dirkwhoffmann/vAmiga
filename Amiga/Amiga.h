@@ -20,7 +20,7 @@
 #include "BreakpointManager.h"
 #include "CIA.h"
 #include "Memory.h"
-#include "DMAController.h"
+#include "Agnus.h"
 #include "Copper.h"
 #include "Blitter.h"
 #include "Denise.h"
@@ -90,7 +90,7 @@ public:
     Memory mem;
     
     // The DMA controller (part of Agnus)
-    DMAController dma;
+    Agnus dma;
 
     // Denise (Video)
     Denise denise;

@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5014DD1521F3625200BC14BA /* Keyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5014DD1321F3625200BC14BA /* Keyboard.cpp */; };
-		5020B17D21EF121E00B9E80E /* DMAController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5020B17B21EF121E00B9E80E /* DMAController.cpp */; };
+		5020B17D21EF121E00B9E80E /* Agnus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5020B17B21EF121E00B9E80E /* Agnus.cpp */; };
 		5020B18021EF136100B9E80E /* Denise.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5020B17E21EF136100B9E80E /* Denise.cpp */; };
 		502EFD0A2248EC0200F0E118 /* EventPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502EFD092248EC0200F0E118 /* EventPanel.swift */; };
 		502EFD0C2248ECAA00F0E118 /* EventTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502EFD0B2248ECAA00F0E118 /* EventTableView.swift */; };
@@ -163,8 +163,8 @@
 /* Begin PBXFileReference section */
 		5014DD1321F3625200BC14BA /* Keyboard.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Keyboard.cpp; sourceTree = "<group>"; };
 		5014DD1421F3625200BC14BA /* Keyboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Keyboard.h; sourceTree = "<group>"; };
-		5020B17B21EF121E00B9E80E /* DMAController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DMAController.cpp; sourceTree = "<group>"; };
-		5020B17C21EF121E00B9E80E /* DMAController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMAController.h; sourceTree = "<group>"; };
+		5020B17B21EF121E00B9E80E /* Agnus.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Agnus.cpp; sourceTree = "<group>"; };
+		5020B17C21EF121E00B9E80E /* Agnus.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Agnus.h; sourceTree = "<group>"; };
 		5020B17E21EF136100B9E80E /* Denise.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Denise.cpp; sourceTree = "<group>"; };
 		5020B17F21EF136100B9E80E /* Denise.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Denise.h; sourceTree = "<group>"; };
 		502EFD092248EC0200F0E118 /* EventPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventPanel.swift; sourceTree = "<group>"; };
@@ -388,8 +388,8 @@
 		502F7DD0222170AE00AEEC65 /* Agnus */ = {
 			isa = PBXGroup;
 			children = (
-				5020B17C21EF121E00B9E80E /* DMAController.h */,
-				5020B17B21EF121E00B9E80E /* DMAController.cpp */,
+				5020B17C21EF121E00B9E80E /* Agnus.h */,
+				5020B17B21EF121E00B9E80E /* Agnus.cpp */,
 				502F7DD1222172CA00AEEC65 /* Copper.h */,
 				502F7DCD2221706000AEEC65 /* Copper.cpp */,
 				50D375DE222C7C6B0040987C /* Blitter.h */,
@@ -957,7 +957,7 @@
 				502F7DD42221E52200AEEC65 /* Colorizer.cpp in Sources */,
 				508FDFAD21EA1FBC0043D0E9 /* CIA.cpp in Sources */,
 				508FDFD521EA20510043D0E9 /* Animation.swift in Sources */,
-				5020B17D21EF121E00B9E80E /* DMAController.cpp in Sources */,
+				5020B17D21EF121E00B9E80E /* Agnus.cpp in Sources */,
 				508FE01A21EA227B0043D0E9 /* Formatter.swift in Sources */,
 				509CF4D12208487900C500F0 /* TraceTableView.swift in Sources */,
 				508FE02721EA227B0043D0E9 /* Basics.swift in Sources */,

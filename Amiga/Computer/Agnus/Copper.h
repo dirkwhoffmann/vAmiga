@@ -12,7 +12,7 @@
 
 class Copper : public HardwareComponent {
    
-    friend class DMAController;
+    friend class Agnus;
         
     /* Indicates if the next instruction should be skipped.
      * This flag is usually false. It is set to true by the SKIP instruction

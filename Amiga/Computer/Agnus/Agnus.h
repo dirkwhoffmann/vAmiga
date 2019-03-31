@@ -51,7 +51,7 @@ static inline bool isVposHpos(int16_t vpos, int16_t hpos) {
     return vpos >= 0 && vpos <= VPOS_MAX && hpos >= 0 && hpos <= HPOS_MAX;
 }
 
-class DMAController : public HardwareComponent {
+class Agnus : public HardwareComponent {
     
 public:
     
@@ -204,13 +204,6 @@ public:
     uint16_t vstrt = 0;
     uint16_t vstop = 0;
 
-
-
-    
-    
-    // FAKE COUNTERS FOR tHE VISUAL PROTOTYPE
-    unsigned xCounter = 0;
-    unsigned yCounter = 0;
     
     //
     // Constructing and destructing
@@ -218,8 +211,7 @@ public:
     
 public:
     
-    DMAController();
-    ~DMAController();
+    Agnus();
  
     
     //

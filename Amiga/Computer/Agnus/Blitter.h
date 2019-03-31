@@ -13,7 +13,7 @@
 // Micro-instructions
 class Blitter : public HardwareComponent {
     
-    friend class DMAController;
+    friend class Agnus;
     
     //
     // Blitter registers

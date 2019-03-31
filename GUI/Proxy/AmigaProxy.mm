@@ -15,7 +15,7 @@ struct AmigaWrapper { Amiga *amiga; };
 struct CPUWrapper { CPU *cpu; };
 struct CIAWrapper { CIA *cia; };
 struct MemWrapper { Memory *mem; };
-struct DMAControllerWrapper { DMAController *dmaController; };
+struct AgnusWrapper { Agnus *agnus; };
 struct DeniseWrapper { Denise *denise; };
 struct PaulaWrapper { Paula *paula; };
 struct AmigaControlPortWrapper { AmigaControlPort *port; };
@@ -304,75 +304,75 @@ struct ADFFileWrapper { ADFFile *adf; };
 
 
 //
-// DMAController proxy
+// Agnus proxy
 //
 
-@implementation DMAControllerProxy
+@implementation AgnusProxy
 
-- (instancetype) initWithDMAController:(DMAController *)dmaController
+- (instancetype) initWithAgnus:(Agnus *)agnus
 {
     if (self = [super init]) {
-        wrapper = new DMAControllerWrapper();
-        wrapper->dmaController = dmaController;
+        wrapper = new AgnusWrapper();
+        wrapper->agnus = agnus;
     }
     return self;
 }
 - (void) dump
 {
-    wrapper->dmaController->dump();
+    wrapper->agnus->dump();
 }
 - (void) dumpEventHandler
 {
-    wrapper->dmaController->eventHandler.dump();
+    wrapper->agnus->eventHandler.dump();
 }
 - (void) dumpCopper
 {
-    wrapper->dmaController->copper.dump();
+    wrapper->agnus->copper.dump();
 }
 - (void) dumpBlitter
 {
-    wrapper->dmaController->blitter.dump();
+    wrapper->agnus->blitter.dump();
 }
 - (DMAInfo) getInfo
 {
-    return wrapper->dmaController->getInfo();
+    return wrapper->agnus->getInfo();
 }
 - (NSInteger) primSlotCount
 {
-    return wrapper->dmaController->eventHandler.primSlotCount();
+    return wrapper->agnus->eventHandler.primSlotCount();
 }
 - (NSInteger) secSlotCount
 {
-    return wrapper->dmaController->eventHandler.secSlotCount();
+    return wrapper->agnus->eventHandler.secSlotCount();
 }
 - (EventSlotInfo) getPrimarySlotInfo:(NSInteger)slot
 {
-    return wrapper->dmaController->eventHandler.getPrimarySlotInfo(slot);
+    return wrapper->agnus->eventHandler.getPrimarySlotInfo(slot);
 }
 - (EventSlotInfo) getSecondarySlotInfo:(NSInteger)slot
 {
-    return wrapper->dmaController->eventHandler.getSecondarySlotInfo(slot);
+    return wrapper->agnus->eventHandler.getSecondarySlotInfo(slot);
 }
 - (EventHandlerInfo) getEventInfo
 {
-    return wrapper->dmaController->eventHandler.getInfo();
+    return wrapper->agnus->eventHandler.getInfo();
 }
 - (CopperInfo) getCopperInfo
 {
-    return wrapper->dmaController->copper.getInfo();
+    return wrapper->agnus->copper.getInfo();
 }
 - (BOOL) isIllegalInstr:(NSInteger)addr
 {
-    return wrapper->dmaController->copper.isIllegalInstr(addr);
+    return wrapper->agnus->copper.isIllegalInstr(addr);
 }
 - (NSString *) disassemble:(NSInteger)addr
 {
-    const char *str = wrapper->dmaController->copper.disassemble(addr);
+    const char *str = wrapper->agnus->copper.disassemble(addr);
     return str ? [NSString stringWithUTF8String:str] : NULL;
 }
 - (NSString *) disassemble:(NSInteger)list instr:(NSInteger)offset
 {
-    const char *str = wrapper->dmaController->copper.disassemble(list, offset);
+    const char *str = wrapper->agnus->copper.disassemble(list, offset);
     return str ? [NSString stringWithUTF8String:str] : NULL;
 }
 
@@ -948,7 +948,7 @@ struct ADFFileWrapper { ADFFile *adf; };
     ciaA = [[CIAProxy alloc] initWithCIA:&amiga->ciaA];
     ciaB = [[CIAProxy alloc] initWithCIA:&amiga->ciaB];
     mem = [[MemProxy alloc] initWithMemory:&amiga->mem];
-    dma = [[DMAControllerProxy alloc] initWithDMAController:&amiga->dma];
+    dma = [[AgnusProxy alloc] initWithAgnus:&amiga->dma];
     denise = [[DeniseProxy alloc] initWithDenise:&amiga->denise];
     paula = [[PaulaProxy alloc] initWithPaula:&amiga->paula];
     controlPort1 = [[AmigaControlPortProxy alloc] initWithControlPort:&amiga->controlPort1];
