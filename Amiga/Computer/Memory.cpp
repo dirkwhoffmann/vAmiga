@@ -14,6 +14,18 @@ Memory::Memory()
 {
     setDescription("Memory");
     
+    registerSnapshotItems(vector<SnapshotItem> {
+        
+        { &bootRomSize,    sizeof(bootRomSize),    0 },
+        { &kickRomSize,    sizeof(kickRomSize),    0 },
+        { &chipRamSize,    sizeof(chipRamSize),    0 },
+        { &slowRamSize,    sizeof(slowRamSize),    0 },
+        { &fastRamSize,    sizeof(fastRamSize),    0 },
+        { &kickIsWritable, sizeof(kickIsWritable), 0 },
+        { &memSrc,         sizeof(memSrc),         0 },
+        
+    });
+    
     // Start with 256 KB Chip Ram
     allocateChipRam(KB(256));
 }
@@ -65,6 +77,65 @@ Memory::_dump()
     plainmsg("     Chip Ram: %d KB at %p\n", chipRamSize >> 10, chipRam);
     plainmsg("     Slow Ram: %d KB at %p\n", slowRamSize >> 10, slowRam);
     plainmsg("     Fast Ram: %d KB at %p\n", fastRamSize >> 10, fastRam);
+}
+
+size_t
+Memory::stateSize()
+{
+    size_t result = HardwareComponent::stateSize();
+    
+    result += bootRomSize;
+    result += kickRomSize;
+    result += chipRamSize;
+    result += slowRamSize;
+    result += fastRamSize;
+    
+    return result;
+}
+
+void
+Memory::didLoadFromBuffer(uint8_t **buffer)
+{
+    // Do some consistency checks
+    // Note: We should do this a little less agressive, e.g., by returning
+    // false. Furthermore, the real maximum size limits should be used.
+    assert(bootRomSize < 0xFFFFFF);
+    assert(kickRomSize < 0xFFFFFF);
+    assert(chipRamSize < 0xFFFFFF);
+    assert(slowRamSize < 0xFFFFFF);
+    assert(fastRamSize < 0xFFFFFF);
+    
+    // Free previously allocated memory
+    if (bootRom) delete[] bootRom;
+    if (kickRom) delete[] kickRom;
+    if (chipRam) delete[] chipRam;
+    if (slowRam) delete[] slowRam;
+    if (fastRam) delete[] fastRam;
+
+    // Allocate new memory
+    if (bootRomSize) bootRom = new (std::nothrow) uint8_t[KB(bootRomSize) + 3];
+    if (kickRomSize) bootRom = new (std::nothrow) uint8_t[KB(kickRomSize) + 3];
+    if (chipRamSize) bootRom = new (std::nothrow) uint8_t[KB(chipRamSize) + 3];
+    if (slowRamSize) bootRom = new (std::nothrow) uint8_t[KB(slowRamSize) + 3];
+    if (fastRamSize) bootRom = new (std::nothrow) uint8_t[KB(fastRamSize) + 3];
+
+    // Load memory contents from buffer
+    readBlock(buffer, bootRom, bootRomSize);
+    readBlock(buffer, kickRom, kickRomSize);
+    readBlock(buffer, chipRam, chipRamSize);
+    readBlock(buffer, slowRam, slowRamSize);
+    readBlock(buffer, fastRam, fastRamSize);
+}
+
+void
+Memory::didSaveToBuffer(uint8_t **buffer)
+{
+    // Save memory contents to buffer
+    writeBlock(buffer, bootRom, bootRomSize);
+    writeBlock(buffer, kickRom, kickRomSize);
+    writeBlock(buffer, chipRam, chipRamSize);
+    writeBlock(buffer, slowRam, slowRamSize);
+    writeBlock(buffer, fastRam, fastRamSize);
 }
 
 bool
@@ -121,6 +192,18 @@ Memory::loadRom(AmigaFile *rom, uint8_t *target, size_t length)
 }
 
 bool
+Memory::loadBootRom(BootRom *rom)
+{
+    assert(rom != NULL);
+    
+    if (!alloc(rom->getSize(), bootRom, bootRomSize))
+        return false;
+    
+    loadRom(rom, bootRom, bootRomSize);
+    return true;
+}
+
+bool
 Memory::loadBootRomFromBuffer(const uint8_t *buffer, size_t length)
 {
     assert(buffer != NULL);
@@ -151,14 +234,14 @@ Memory::loadBootRomFromFile(const char *path)
 }
 
 bool
-Memory::loadBootRom(BootRom *rom)
+Memory::loadKickRom(KickRom *rom)
 {
     assert(rom != NULL);
     
-    if (!alloc(rom->getSize(), bootRom, bootRomSize))
+    if (!alloc(rom->getSize(), kickRom, kickRomSize))
         return false;
-
-    loadRom(rom, bootRom, bootRomSize);
+    
+    loadRom(rom, kickRom, kickRomSize);
     return true;
 }
 
@@ -190,18 +273,6 @@ Memory::loadKickRomFromFile(const char *path)
     }
     
     return loadKickRom(rom);
-}
-
-bool
-Memory::loadKickRom(KickRom *rom)
-{
-    assert(rom != NULL);
-    
-    if (!alloc(rom->getSize(), kickRom, kickRomSize))
-        return false;
-    
-    loadRom(rom, kickRom, kickRomSize);
-    return true;
 }
 
 void

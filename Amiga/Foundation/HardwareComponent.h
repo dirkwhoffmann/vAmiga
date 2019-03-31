@@ -265,8 +265,8 @@ public:
      * A component can override this method to add custom behavior if not all
      * elements can be processed by the default implementation.
      */
-    virtual void  willSaveToBuffer(uint8_t **buffer) { };
-    virtual void  didSaveToBuffer(uint8_t **buffer) { };
+    virtual void willSaveToBuffer(uint8_t **buffer) { };
+    virtual void didSaveToBuffer(uint8_t **buffer) { };
 };
 
 #endif

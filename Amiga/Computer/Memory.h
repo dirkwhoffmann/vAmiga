@@ -14,15 +14,14 @@
 #include "BootRom.h"
 #include "KickRom.h"
 
-
-const uint32_t FAST_RAM_START = 0x200000;
-
+const uint32_t FAST_RAM_STRT = 0x0200000;
 const uint32_t SLOW_RAM_MASK = 0x007FFFF;
 const uint32_t BOOT_ROM_MASK = 0x003FFFF;
 const uint32_t KICK_ROM_MASK = 0x003FFFF;
 
+// Verifies the range of an address
 #define ASSERT_CHIP_ADDR(x) assert(chipRam != NULL);
-#define ASSERT_FAST_ADDR(x) assert(fastRam != NULL); assert(((x) - FAST_RAM_START) < fastRamSize);
+#define ASSERT_FAST_ADDR(x) assert(fastRam != NULL); assert(((x) - FAST_RAM_STRT) < fastRamSize);
 #define ASSERT_SLOW_ADDR(x) assert(slowRam != NULL); assert(((x) & SLOW_RAM_MASK) < slowRamSize);
 #define ASSERT_BOOT_ADDR(x) assert(bootRom != NULL); assert(((x) & BOOT_ROM_MASK) < bootRomSize);
 #define ASSERT_KICK_ADDR(x) assert(kickRom != NULL); assert(((x) & KICK_ROM_MASK) < kickRomSize);
@@ -30,45 +29,65 @@ const uint32_t KICK_ROM_MASK = 0x003FFFF;
 #define ASSERT_RTC_ADDR(x)  assert((x) >= 0xDC0000 && (x) <= 0xDEFFFF);
 #define ASSERT_OCS_ADDR(x)  assert((x) >= 0xC00000 && (x) <= 0xDFFFFF);
 
-#define READ_CHIP_8(x)         (*(uint8_t *)(chipRam + (x % chipRamSize)))
-#define READ_CHIP_16(x) (ntohs(*(uint16_t *)(chipRam + (x % chipRamSize))))
-#define READ_CHIP_32(x) (ntohl(*(uint32_t *)(chipRam + (x % chipRamSize))))
+// Reads a value from memory in big endian format
+#define READ_8(x)  (*(uint8_t *)(x))
+#define READ_16(x) (ntohs(*(uint16_t *)(x)))
+#define READ_32(x) (ntohl(*(uint32_t *)(x)))
 
-#define READ_FAST_8(x)         (*(uint8_t *)(fastRam + ((x) - FAST_RAM_START)))
-#define READ_FAST_16(x) (ntohs(*(uint16_t *)(fastRam + ((x) - FAST_RAM_START))))
-#define READ_FAST_32(x) (ntohl(*(uint32_t *)(fastRam + ((x) - FAST_RAM_START))))
+// Reads a value from Chip RAM in big endian format
+#define READ_CHIP_8(x)  READ_8(chipRam + ((x) % chipRamSize))
+#define READ_CHIP_16(x) READ_16(chipRam + ((x) % chipRamSize))
+#define READ_CHIP_32(x) READ_32(chipRam + ((x) % chipRamSize))
 
-#define READ_SLOW_8(x)         (*(uint8_t *)(slowRam + ((x) & SLOW_RAM_MASK)))
-#define READ_SLOW_16(x) (ntohs(*(uint16_t *)(slowRam + ((x) & SLOW_RAM_MASK))))
-#define READ_SLOW_32(x) (ntohl(*(uint32_t *)(slowRam + ((x) & SLOW_RAM_MASK))))
+// Reads a value from Fast RAM in big endian format
+#define READ_FAST_8(x)  READ_8(fastRam + ((x) - FAST_RAM_STRT))
+#define READ_FAST_16(x) READ_16(fastRam + ((x) - FAST_RAM_STRT))
+#define READ_FAST_32(x) READ_32(fastRam + ((x) - FAST_RAM_STRT))
 
-#define READ_BOOT_8(x)         (*(uint8_t *)(bootRom + ((x) & BOOT_ROM_MASK)))
-#define READ_BOOT_16(x) (ntohs(*(uint16_t *)(bootRom + ((x) & BOOT_ROM_MASK))))
-#define READ_BOOT_32(x) (ntohl(*(uint32_t *)(bootRom + ((x) & BOOT_ROM_MASK))))
+// Reads a value from Slow RAM in big endian format
+#define READ_SLOW_8(x)  READ_8(slowRam + ((x) & SLOW_RAM_MASK))
+#define READ_SLOW_16(x) READ_16(slowRam + ((x) & SLOW_RAM_MASK))
+#define READ_SLOW_32(x) READ_32(slowRam + ((x) & SLOW_RAM_MASK))
 
-#define READ_KICK_8(x)         (*(uint8_t *)(kickRom + ((x) & KICK_ROM_MASK)))
-#define READ_KICK_16(x) (ntohs(*(uint16_t *)(kickRom + ((x) & KICK_ROM_MASK))))
-#define READ_KICK_32(x) (ntohl(*(uint32_t *)(kickRom + ((x) & KICK_ROM_MASK))))
+// Reads a value from Boot ROM in big endian format
+#define READ_BOOT_8(x)  READ_8(bootRom + ((x) & BOOT_ROM_MASK))
+#define READ_BOOT_16(x) READ_16(bootRom + ((x) & BOOT_ROM_MASK))
+#define READ_BOOT_32(x) READ_32(bootRom + ((x) & BOOT_ROM_MASK))
 
-#define WRITE_CHIP_8(x,y)   (*(uint8_t *)(chipRam + (x % chipRamSize)) = (y))
-#define WRITE_CHIP_16(x,y) (*(uint16_t *)(chipRam + (x % chipRamSize)) = htons(y))
-#define WRITE_CHIP_32(x,y) (*(uint32_t *)(chipRam + (x % chipRamSize)) = htonl(y))
+// Reads a value from Kickstart ROM in big endian format
+#define READ_KICK_8(x)  READ_8(kickRom + ((x) & KICK_ROM_MASK))
+#define READ_KICK_16(x) READ_16(kickRom + ((x) & KICK_ROM_MASK))
+#define READ_KICK_32(x) READ_32(kickRom + ((x) & KICK_ROM_MASK))
 
-#define WRITE_FAST_8(x,y)   (*(uint8_t *)(fastRam + ((x) - FAST_RAM_START)) = (y))
-#define WRITE_FAST_16(x,y) (*(uint16_t *)(fastRam + ((x) - FAST_RAM_START)) = htons(y))
-#define WRITE_FAST_32(x,y) (*(uint32_t *)(fastRam + ((x) - FAST_RAM_START)) = htonl(y))
+// Writes a value into memory in big endian format
+#define WRITE_8(x,y)  (*(uint8_t *)(x) = y)
+#define WRITE_16(x,y) (*(uint16_t *)(x) = htons(y))
+#define WRITE_32(x,y) (*(uint32_t *)(x) = htonl(y))
 
-#define WRITE_SLOW_8(x,y)   (*(uint8_t *)(slowRam + ((x) & SLOW_RAM_MASK)) = (y))
-#define WRITE_SLOW_16(x,y) (*(uint16_t *)(slowRam + ((x) & SLOW_RAM_MASK)) = htons(y))
-#define WRITE_SLOW_32(x,y) (*(uint32_t *)(slowRam + ((x) & SLOW_RAM_MASK)) = htonl(y))
+// Writes a value into Chip RAM in big endian format
+#define WRITE_CHIP_8(x,y)  WRITE_8(chipRam  + ((x) % chipRamSize), (y))
+#define WRITE_CHIP_16(x,y) WRITE_16(chipRam + ((x) % chipRamSize), (y))
+#define WRITE_CHIP_32(x,y) WRITE_32(chipRam + ((x) % chipRamSize), (y))
 
-#define WRITE_BOOT_8(x,y)   (*(uint8_t *)(bootRom + ((x) & BOOT_ROM_MASK)) = (y))
-#define WRITE_BOOT_16(x,y) (*(uint16_t *)(bootRom + ((x) & BOOT_ROM_MASK)) = htons(y))
-#define WRITE_BOOT_32(x,y) (*(uint32_t *)(bootRom + ((x) & BOOT_ROM_MASK)) = htonl(y))
+// Writes a value into Fast RAM in big endian format
+#define WRITE_FAST_8(x,y)  WRITE_8(fastRam  + ((x) - FAST_RAM_STRT), (y))
+#define WRITE_FAST_16(x,y) WRITE_16(fastRam + ((x) - FAST_RAM_STRT), (y))
+#define WRITE_FAST_32(x,y) WRITE_32(fastRam + ((x) - FAST_RAM_STRT), (y))
 
-#define WRITE_KICK_8(x,y)   (*(uint8_t *)(kickRom + ((x) & KICK_ROM_MASK)) = (y))
-#define WRITE_KICK_16(x,y) (*(uint16_t *)(kickRom + ((x) & KICK_ROM_MASK)) = htons(y))
-#define WRITE_KICK_32(x,y) (*(uint32_t *)(kickRom + ((x) & KICK_ROM_MASK)) = htonl(y))
+// Writes a value into Slow RAM in big endian format
+#define WRITE_SLOW_8(x,y)  WRITE_8(slowRam  + ((x) & SLOW_RAM_MASK), (y))
+#define WRITE_SLOW_16(x,y) WRITE_16(slowRam + ((x) & SLOW_RAM_MASK), (y))
+#define WRITE_SLOW_32(x,y) WRITE_32(slowRam + ((x) & SLOW_RAM_MASK), (y))
+
+// Writes a value into Boot ROM in big endian format
+#define WRITE_BOOT_8(x,y)  WRITE_8(bootRom  + ((x) & BOOT_ROM_MASK), (y))
+#define WRITE_BOOT_16(x,y) WRITE_16(bootRom + ((x) & BOOT_ROM_MASK), (y))
+#define WRITE_BOOT_32(x,y) WRITE_32(bootRom + ((x) & BOOT_ROM_MASK), (y))
+
+// Writes a value into Kickstart ROM in big endian format
+#define WRITE_KICK_8(x,y)  WRITE_8(kickRom  + ((x) & KICK_ROM_MASK), (y))
+#define WRITE_KICK_16(x,y) WRITE_16(kickRom + ((x) & KICK_ROM_MASK), (y))
+#define WRITE_KICK_32(x,y) WRITE_32(kickRom + ((x) & KICK_ROM_MASK), (y))
 
 
 class Memory : public HardwareComponent {
@@ -87,7 +106,7 @@ public:
      *   pointer == NULL <=> size == 0
      */
     
-    // Boot Rom (Amiga 1000 only)
+    // Boot Rom and size (Amiga 1000 only)
     uint8_t *bootRom = NULL;
     size_t bootRomSize = 0;
     
@@ -109,22 +128,22 @@ public:
     
     /* Indicates if the Kickstart Rom is writable
      * If an A500 or A2000 is emulated, this variable is always false. If an
-     * A1000 is emulated, it is true on startup to emulate WOM (Write Once
+     * A1000 is emulated, it is true on startup to emulate a WOM (Write Once
      * Memory).
      */
     bool kickIsWritable = false;
     
     /* We divide the memory into banks of size 64KB.
      * The Amiga has 24 address lines. Hence, the accessible memory is divided
-     * into 256 different banks. For each bank, this array indicates the
-     * type of memory that is seen by the Amiga.
+     * into 256 different banks. For each bank, this array indicates the type
+     * of memory seen by the Amiga.
+     * See also: updateMemSrcTable()
      */
     MemorySource memSrc[256];
     
-    // Used by functions returning string values.
+    // Buffer for returning string values
     char str[256];
     
-public:
     
     //
     // Constructing and destructing
@@ -134,6 +153,7 @@ public:
     
     Memory();
     ~Memory();
+    
     
     //
     // Methods from HardwareComponent
@@ -146,6 +166,10 @@ private:
     void _reset() override;
     void _ping() override;
     void _dump() override;
+    
+    size_t stateSize() override; 
+    void didLoadFromBuffer(uint8_t **buffer) override;
+    void didSaveToBuffer(uint8_t **buffer) override;
     
     
     //
@@ -162,7 +186,7 @@ private:
     
  
     //
-    // Managing Ram
+    // Managing RAM
     //
     
 public:
@@ -178,26 +202,26 @@ public:
     
     
     //
-    // Managing Roms
+    // Managing ROM
     //
     
 private:
     
-    // Loads Rom data
+    // Loads Rom data from a file.
     void loadRom(AmigaFile *rom, uint8_t *target, size_t length);
     
 public:
 
-    // Returns true if a Boot Rom is installed
+    // Returns true if a Boot Rom is installed.
     bool hasBootRom() { return bootRom != NULL; }
 
     // Returns a fingerprint for the currently installed Boot Rom
     uint64_t bootRomFingerprint() { return fnv_1a(bootRom, bootRomSize); }
     
-    // Installs the Boot Rom.
+    // Installs a Boot Rom.
+    bool loadBootRom(BootRom *rom);
     bool loadBootRomFromBuffer(const uint8_t *buffer, size_t length);
     bool loadBootRomFromFile(const char *path);
-    bool loadBootRom(BootRom *rom);
 
     // Deletes the currently installed Boot Rom.
     void deleteBootRom() { alloc(0, bootRom, bootRomSize); }
@@ -209,16 +233,16 @@ public:
     uint64_t kickRomFingerprint() { return fnv_1a(kickRom, kickRomSize); }
     
     // Installs the Kickstart Rom.
+    bool loadKickRom(KickRom *rom);
     bool loadKickRomFromBuffer(const uint8_t *buffer, size_t length);
     bool loadKickRomFromFile(const char *path);
-    bool loadKickRom(KickRom *rom);
     
     // Deletes the currently installed Kickstart Rom.
-    void deleteKickRom()  { alloc(0, kickRom, kickRomSize); }
+    void deleteKickRom() { alloc(0, kickRom, kickRomSize); }
 
     
     //
-    // Accessing memory
+    // Managing the memory source table
     //
     
 public:
@@ -232,12 +256,6 @@ public:
     // Updates the memory source lookup table.
     void updateMemSrcTable();
     
-private:
-    
-    /* Computes the memory source for a given memory bank
-     * This method is used inside updateMemSrcTable()
-     */
-    // MemorySource computeMemSrc(uint16_t bank);
     
     //
     // Accessing memory cells
@@ -261,12 +279,6 @@ public:
     // Chip Ram
     //
     
-    /*
-    inline uint8_t peekChip8(uint32_t addr) { ASSERT_CHIP_ADDR(addr); return READ_CHIP_8(addr); }
-    inline uint16_t peekChip16(uint32_t addr) { ASSERT_CHIP_ADDR(addr); return READ_CHIP_16(addr); }
-    inline uint32_t peekChip32(uint32_t addr) { ASSERT_CHIP_ADDR(addr); return READ_CHIP_32(addr); }
-    */
-    
     inline uint8_t peekChip8(uint32_t addr) {
         ASSERT_CHIP_ADDR(addr);
         uint8_t result = READ_CHIP_8(addr);
@@ -275,17 +287,11 @@ public:
     inline uint16_t peekChip16(uint32_t addr) {
         ASSERT_CHIP_ADDR(addr);
         uint16_t result = READ_CHIP_16(addr);
-        addr = addr % chipRamSize;
-        uint16_t verify = (chipRam[addr] << 8) | chipRam[addr + 1];
-        assert(result == verify);
         return result;
     }
     inline uint32_t peekChip32(uint32_t addr) {
         ASSERT_CHIP_ADDR(addr);
         uint32_t result = READ_CHIP_32(addr);
-        addr = addr % chipRamSize;
-        uint32_t verify = (chipRam[addr] << 24) | (chipRam[addr + 1] << 16) | (chipRam[addr + 2] << 8) | chipRam[addr + 3];
-        assert(result == verify);
         return result;
     }
 
@@ -293,15 +299,24 @@ public:
     inline uint16_t spypeekChip16(uint32_t addr) { return peekChip16(addr); }
     inline uint32_t spypeekChip32(uint32_t addr) { return peekChip32(addr); }
     
-    inline void pokeChip8(uint32_t addr, uint8_t value) { ASSERT_CHIP_ADDR(addr); WRITE_CHIP_8(addr, value); }
-    inline void pokeChip16(uint32_t addr, uint16_t value) { ASSERT_CHIP_ADDR(addr); WRITE_CHIP_16(addr, value); }
-    inline void pokeChip32(uint32_t addr, uint32_t value) { ASSERT_CHIP_ADDR(addr); WRITE_CHIP_32(addr, value); }
-    
+    inline void pokeChip8(uint32_t addr, uint8_t value) {
+        ASSERT_CHIP_ADDR(addr);
+        WRITE_CHIP_8(addr, value);
+    }
+    inline void pokeChip16(uint32_t addr, uint16_t value)
+    {
+        ASSERT_CHIP_ADDR(addr);
+        WRITE_CHIP_16(addr, value);
+    }
+    inline void pokeChip32(uint32_t addr, uint32_t value)
+    {
+        ASSERT_CHIP_ADDR(addr);
+        WRITE_CHIP_32(addr, value);
+    }
     
     //
-    // CIAs
+    // CIA space
     //
-    
     
     uint8_t peekCIA8(uint32_t addr);
     uint16_t peekCIA16(uint32_t addr);
@@ -315,9 +330,8 @@ public:
     void pokeCIA16(uint32_t addr, uint16_t value);
     void pokeCIA32(uint32_t addr, uint32_t value);
     
-    
     //
-    // Custom chip set
+    // Custom chips (OCS)
     //
     
     uint8_t peekCustom8(uint32_t addr);
@@ -333,6 +347,9 @@ public:
     void pokeCustom32(uint32_t addr, uint32_t value);
 
     
+    //
+    // Debugging
+    //
     
 public:
     

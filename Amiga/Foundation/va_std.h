@@ -202,19 +202,19 @@ inline uint64_t read64(uint8_t **ptr) {
 
 // Reads a memory block from a buffer.
 inline void readBlock(uint8_t **ptr, uint8_t *values, size_t length) {
-    memcpy(values, *ptr, length); *ptr += length; }
+    if (length) { memcpy(values, *ptr, length); *ptr += length; } }
 
 // Reads a word block from a buffer in big endian format.
 inline void readBlock16(uint8_t **ptr, uint16_t *values, size_t length) {
-    for (unsigned i = 0; i < length / sizeof(uint16_t); i++) values[i] = read16(ptr); }
+    if (length) for (size_t i = 0; i < length / sizeof(uint16_t); i++) values[i] = read16(ptr); }
 
 // Reads a double word block from a buffer in big endian format.
 inline void readBlock32(uint8_t **ptr, uint32_t *values, size_t length) {
-    for (unsigned i = 0; i < length / sizeof(uint32_t); i++) values[i] = read32(ptr); }
+    if (length) for (size_t i = 0; i < length / sizeof(uint32_t); i++) values[i] = read32(ptr); }
 
 // Reads a quad word block from a buffer in big endian format.
 inline void readBlock64(uint8_t **ptr, uint64_t *values, size_t length) {
-    for (unsigned i = 0; i < length / sizeof(uint64_t); i++) values[i] = read64(ptr); }
+    if (length) for (size_t i = 0; i < length / sizeof(uint64_t); i++) values[i] = read64(ptr); }
 
 
 //
