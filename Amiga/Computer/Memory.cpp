@@ -15,19 +15,11 @@ Memory::Memory()
     setDescription("Memory");
     
     registerSnapshotItems(vector<SnapshotItem> {
-        
-        { &bootRomSize,    sizeof(bootRomSize),    0 },
-        { &kickRomSize,    sizeof(kickRomSize),    0 },
-        { &chipRamSize,    sizeof(chipRamSize),    0 },
-        { &slowRamSize,    sizeof(slowRamSize),    0 },
-        { &fastRamSize,    sizeof(fastRamSize),    0 },
+
         { &kickIsWritable, sizeof(kickIsWritable), 0 },
         { &memSrc,         sizeof(memSrc),         0 },
         
     });
-    
-    // Start with 256 KB Chip Ram
-    allocateChipRam(KB(256));
 }
 
 Memory::~Memory()
@@ -84,11 +76,11 @@ Memory::stateSize()
 {
     size_t result = HardwareComponent::stateSize();
     
-    result += bootRomSize;
-    result += kickRomSize;
-    result += chipRamSize;
-    result += slowRamSize;
-    result += fastRamSize;
+    result += sizeof(uint32_t) + bootRomSize;
+    result += sizeof(uint32_t) + kickRomSize;
+    result += sizeof(uint32_t) + chipRamSize;
+    result += sizeof(uint32_t) + slowRamSize;
+    result += sizeof(uint32_t) + fastRamSize;
     
     return result;
 }
@@ -96,6 +88,13 @@ Memory::stateSize()
 void
 Memory::didLoadFromBuffer(uint8_t **buffer)
 {
+    // Load memory size information
+    bootRomSize = (size_t)read32(buffer);
+    kickRomSize = (size_t)read32(buffer);
+    chipRamSize = (size_t)read32(buffer);
+    slowRamSize = (size_t)read32(buffer);
+    fastRamSize = (size_t)read32(buffer);
+    
     // Do some consistency checks
     // Note: We should do this a little less agressive, e.g., by returning
     // false. Furthermore, the real maximum size limits should be used.
@@ -130,7 +129,14 @@ Memory::didLoadFromBuffer(uint8_t **buffer)
 void
 Memory::didSaveToBuffer(uint8_t **buffer)
 {
-    // Save memory contents to buffer
+    // Save memory size information
+    write32(buffer, (uint32_t)bootRomSize);
+    write32(buffer, (uint32_t)kickRomSize);
+    write32(buffer, (uint32_t)chipRamSize);
+    write32(buffer, (uint32_t)slowRamSize);
+    write32(buffer, (uint32_t)fastRamSize);
+
+    // Save memory contents
     writeBlock(buffer, bootRom, bootRomSize);
     writeBlock(buffer, kickRom, kickRomSize);
     writeBlock(buffer, chipRam, chipRamSize);

@@ -202,12 +202,13 @@ HardwareComponent::registerSnapshotItems(vector<SnapshotItem> items) {
     
     for (SnapshotItem item : snapshotItems) {
         
+        debug(3, "Registering item at address %p", item.data);
+        
         // Calculate snapshot size
         snapshotSize += item.size;
         
         // Initialize all snapshot items with a special bit pattern. This lets
         // us detect unintialized variables in powerOn().
-        debug(3, "Registering item at address %p", item.data);
         for (size_t j = 0; j < item.size; j++) ((uint8_t *)item.data)[j] = 42;
     }
 }
