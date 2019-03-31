@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _DMA_CONTROLLER_INC
-#define _DMA_CONTROLLER_INC
+#ifndef _AGNUS_INC
+#define _AGNUS_INC
 
 #include "HardwareComponent.h"
 #include "EventHandler.h"
@@ -23,6 +23,14 @@
 #define PLANE5 4
 #define PLANE6 5
 
+// Possible bus owners
+#define BUS_COPPER   0b100000
+#define BUS_BLITTER  0b010000
+#define BUS_DISK     0b001000
+#define BUS_AUDIO    0b000100
+#define BUS_SPRITE   0b000010
+#define BUS_BITPLANE 0b000001
+
 // Bit masks as they appear in the DMACON register
 #define DMAEN 0b1000000000
 #define BPLEN 0b0100000000
@@ -35,16 +43,16 @@
 #define AU1EN 0b0000000010
 #define AU0EN 0b0000000001
 
+// Maximum vertical and horizontal beam positions
+#define VPOS_MAX 312
+#define HPOS_MAX 226
+
 // Assembles a beam position out of two components
 #define BEAM(y,x) (((y) << 8) | (x))
 
-// Extracts a component out of a beam position
+// Extracts the vertical or the horizontal component out of a beam position
 #define VPOS(x) ((x) >> 8)
 #define HPOS(x) ((x) & 0xFF)
-
-// Maximum possible VPOS and HPOS
-#define VPOS_MAX 312
-#define HPOS_MAX 226
 
 // Verifies a VPOS / HPOS combination
 static inline bool isVposHpos(int16_t vpos, int16_t hpos) {
@@ -65,12 +73,12 @@ public:
     // Every Amiga fan knows what the Blitter is.
     Blitter blitter;
 
-    // The event sheduler, a key component of this emulator
+    // The event sheduler, a key component of this emulator.
     EventHandler eventHandler;
     
     
     //
-    // Internal counters
+    // Counters
     //
 
     /* The DMA controller has been executed up to this clock cycle.
@@ -78,78 +86,32 @@ public:
      */
     Cycle clock = 0;
 
-    /* A simple frame counter.
+    /* The frame counter.
      * The value is increased on every VSYNC action.
      */
     int64_t frame = 0;
 
     /* Value of clock at the beginning of the current frame.
-     * The value is latched on every VSYNC action.
+     * The value is latched on every VSYNC action and used for implementing
+     * the beamToCycle conversion functions.
      */
     Cycle latchedClock = 0;
     
-    // The current vertical beam position (0 .. 312)
+    // The current vertical beam position (0 .. VPOS_MAX)
     int16_t vpos;
 
-    // The current horizontal beam position (0 .. 226)
+    // The current horizontal beam position (0 .. HPOS_MAX)
     int16_t hpos;
     
-    /* The current beam position (17 bit)
-     * Format: V8 V7 V6 V5 V4 V3 V2 V1 V0 H8 H7 H6 H5 H4 H3 H2 H1
-     * Use HPOS and VPOS macros to extract the values.
+    /* Display window coordinates
+     * These values are calculated out of diwstrt and diwstop and updated
+     * automatically inside pokeDIWSTRT() and pokeDIWSTOP().
+     * DEPRECATED (?!)
      */
-    // int32_t beam = 0;
-    
-
-    //
-    // DMA book keeping
-    //
-    
-    /* The current owner of the bus
-     * This value is updaten in every DMA cycle.
-     */
-    uint16_t busOwner = 0;
-    
-    
-    //
-    // DMA allocation tables
-    //
-    
-    /* The DMA time slot allocation table for a complete horizontal line.
-     * The array resembles Fig. 6-9 im the HRM and has the following meaning:
-     * If, e.g., Audio DMA for channel 1 and 2 is activated, elements
-     * dmaEvent[7] and dmaEvent[9] equal AUDEN. If no DMA event
-     * takes place at a specific cycle, the array element is 0.
-     */
-    EventID dmaEvent[HPOS_MAX + 1];
-    
-    /* Jump table for quickly accessing the DMA time slot allocation table.
-     * For a given horizontal position hpos, nextDmaEvent[hpos] points to the
-     * next horizontal position where a DMA event happens. If no further
-     * DMA access happens, a 0 is stored.
-     */
-    uint8_t nextDmaEvent[HPOS_MAX + 1];
-    
-    
-    //
-    // Bitplane book keeping
-    //
-    
-    /* Resolution flag
-     * This flag is set in every line when the bitplane DMA starts.
-     * DEPRECATED. WILL BE REPLACED BY BPLEvent states
-     */
-    bool lores; 
-    
-    // The number of currently active bitplanes
-    int activeBitplanes = 0;
-    
-    
-    //
-    // Sprite book keeping
-    //
-    
-    uint8_t sprOnOff; 
+    uint16_t hstrt = 0;
+    uint16_t hstop = 0;
+    uint16_t vstrt = 0;
+    uint16_t vstop = 0;
     
     
     //
@@ -159,52 +121,71 @@ public:
     // The DMA control register
     uint16_t dmacon = 0;
     
-    // The display window and display data fetch registers
-    uint16_t diwstrt = 0;
-    uint16_t diwstop = 0;
-    uint16_t ddfstrt = 0;
-    uint16_t ddfstop = 0;
-
-    
-    //
-    // Pointer registers (one for each DMA channel)
-    //
-    
-    /* "The Amiga personal computer system provides a total of 25 DMA channels.
-     *  [...] The RAM address generator contains a set of 25 pointer registers.
-     *  Each of the pointer registers contains an 18-bit address, which points
-     *  to the location in memory of data to be fetched next for the particular
-     *  DMA channel. The pointer registers are loaded with data (an address)
-     *  from data bus by the processor or coprocessor under program control."
-     *  [Patent US 5103499]
-     */
-    
-    // Disk DMA
+    // The disk DMA pointer
     uint32_t dskpt;
     
-    // Audio DMA
+    // The display window registers
+    uint16_t diwstrt = 0;
+    uint16_t diwstop = 0;
+    
+    // The display data fetch registers
+    uint16_t ddfstrt = 0;
+    uint16_t ddfstop = 0;
+    
+    // The audio DMA pointers
     uint32_t audlc[4];
     
-    // Bitplane DMA
+    // The bitplane DMA pointers
     uint32_t bplpt[6];
     
-    // Sprite DMA
-    uint32_t sprptr[8];
+    // The bitplane modulo registers for odd bitplanes
+    uint16_t bpl1mod = 0;
     
-    // The bitplane modulo registers
-    uint16_t bpl1mod = 0; // odd planes
-    uint16_t bpl2mod = 0; // even planes
+    // The bitplane modulo registers for even bitplanes
+    uint16_t bpl2mod = 0;
     
-    /* Display window coordinates
-     * These values are calculated out of diwstrt and diwstop and updated
-     * automatically inside pokeDIWSTRT() and pokeDIWSTOP().
+    // The sprite DMA pointers
+    uint32_t sprpt[8];
+    
+    
+    //
+    // DMA bookkeeping
+    //
+    
+    // The current owner of the bus, updated in every DMA cycle.
+    // TODO: THIS VARIABLE IS NOT USED YET
+    uint16_t busOwner = 0;
+    
+    
+    //
+    // DMA allocation tables
+    //
+    
+    /* The DMA time slot allocation table for a complete horizontal line.
+     * The array resembles Fig. 6-9 im the HRM (3rd rev.). It's semantics is
+     * as follows:
+     * If, e.g., audio DMA for channel 1 and 2 is activated, elements
+     * dmaEvent[7] and dmaEvent[9] equal AUDEN. If no DMA event takes place at
+     * a specific cycle, the array element is 0.
      */
-    uint16_t hstrt = 0;
-    uint16_t hstop = 0;
-    uint16_t vstrt = 0;
-    uint16_t vstop = 0;
-
+    EventID dmaEvent[HPOS_MAX + 1];
     
+    /* Jump table for quick handling the DMA time slot allocation table.
+     * For a given horizontal position hpos, nextDmaEvent[hpos] points to the
+     * next horizontal position where a DMA event happens. The array element
+     * equals 0, if no further DMA access happens after hpos.
+     */
+    uint8_t nextDmaEvent[HPOS_MAX + 1];
+    
+    
+    //
+    // Bitplane bookkeeping
+    //
+    
+    // The number of currently active bitplanes
+    int activeBitplanes = 0;
+    
+  
     //
     // Constructing and destructing
     //
@@ -226,13 +207,12 @@ private:
     void _ping() override;
     void _dump() override;
     
+    
     //
     // Collecting information
     //
     
 public:
-    
- 
     
     // Collects the data shown in the GUI's debug panel.
     DMAInfo getInfo();
@@ -241,6 +221,8 @@ public:
     //
     // Working with cycles and beam positions
     //
+    
+public:
     
     // Returns the current beam position as a 17 bit value
     uint32_t getBeam() { return BEAM(vpos, hpos); }
@@ -255,11 +237,14 @@ public:
      */
     DMACycle cyclesInCurrentFrame();
     
-    // Converts a master cycle into a frame position
-    FramePosition cycle2FramePosition(Cycle cycle);
-
-    // Converts a frame position into a master cycle
-    Cycle framePosition2Cycle(FramePosition framePos);
+    /* Converts a cycle to a beam position.
+     * This function returns the beam position for a provided master clock
+     * cycle. The cycle is measured in master clock cycles and either an
+     * absolute value (cycles sind power up) or a count relative to the
+     * beginning of the current frame.
+     */
+    void cycleToBeamAbs(Cycle cycle, int64_t &frame, int16_t &vpos, int16_t &hpos);
+    void cycleToBeamRel(Cycle cycle, int64_t &frame, int16_t &vpos, int16_t &hpos);
 
     /* Converts a beam position to a master clock cycle.
      * This function returns the cycle of the master clock that corresponds to
@@ -269,37 +254,32 @@ public:
      */
     Cycle beamToCyclesAbs(int16_t vpos, int16_t hpos);
     Cycle beamToCyclesRel(int16_t vpos, int16_t hpos);
-    Cycle beamToCyclesAbs(int32_t beam) { return beamToCyclesAbs(beam >> 8, beam & 0xFF); }
-    Cycle beamToCyclesRel(int32_t beam) { return beamToCyclesRel(beam >> 8, beam & 0xFF); }
+    Cycle beamToCyclesAbs(int32_t beam) { return beamToCyclesAbs(VPOS(beam), HPOS(beam)); }
+    Cycle beamToCyclesRel(int32_t beam) { return beamToCyclesRel(VPOS(beam), HPOS(beam)); }
 
-    // Builds the DMA time slot allocation table for the current line
+    /* Returns the difference of two beam position in master cycles
+     * Returns NEVER if the start position is greater than the end position
+     * or if the end position is unreachable.
+     */
+    Cycle beamDiff(int16_t vStart, int16_t hStart, int16_t vEnd, int16_t hEnd);
+    Cycle beamDiff(int16_t vEnd, int16_t hEnd) { return beamDiff(vpos, hpos, vEnd, hEnd); }
+    Cycle beamDiff(int32_t end) { return beamDiff(VPOS(end), HPOS(end)); }
+    
+    
+    //
+    // Managing the DMA allocation tables
+    //
+    
+public:
+    
+    // Builds the DMA time slot allocation table for the current line.
     void buildDMAEventTable();
 
-    // Removes all events from the DMA time slot allocation table
+    // Removes all events from the DMA time slot allocation table.
     void clearDMAEventTable();
 
-    // Dumps the DMA time slot allocation table to the console for debugging
+    // Dumps the DMA time slot allocation table to the console for debugging.
     void dumpDMAEventTable(int from, int to);
-    
-    /* Computes the beam coordinate where the next bitplane DMA can happen.
-     * The value is dependent on the current values of ddfstrt and ddfstop.
-     * Returns -1 of there won't be any more bitplane DMA in the current frame.
-     */
-    int32_t nextBPLDMABeam(int32_t currentBeam);
-    
-    /* Computes the CPU cycle when the next bitplane DMA can happen.
-     * The function determines the beam position where the next DMA happens.
-     * Then, it converts it to the corresponding cylce.
-     */
-    Cycle nextBpldmaCycle(int32_t currentBeam);
-    
-    /* Returns the bitplane number for a given beam position.
-     * The beam positon is supposed to be a position where a BPLDMA happens.
-     */
-    // int beam2plane(int32_t beam);
-    
-private:
-    
     
     
     //
@@ -312,6 +292,7 @@ public:
     uint16_t peekDMACON();
     void pokeDMACON(uint16_t value);
     
+    // Returns true if DMA access of a certain type is currently enabled.
     inline bool bplDMA() { return (dmacon & (DMAEN | BPLEN)) == (DMAEN | BPLEN); }
     inline bool copDMA() { return (dmacon & (DMAEN | COPEN)) == (DMAEN | COPEN); }
     inline bool bltDMA() { return (dmacon & (DMAEN | BLTEN)) == (DMAEN | BLTEN); }
@@ -322,66 +303,70 @@ public:
     inline bool au1DMA() { return (dmacon & (DMAEN | AU1EN)) == (DMAEN | AU1EN); }
     inline bool au0DMA() { return (dmacon & (DMAEN | AU0EN)) == (DMAEN | AU0EN); }
     
-    uint16_t peekVHPOS();
-    void pokeVHPOS(uint16_t value);
+    // DSKPTH, DSKPTL
+    void pokeDSKPTH(uint16_t value);
+    void pokeDSKPTL(uint16_t value);
     
-    uint16_t peekVPOS();
+    // VHPOSR, VHPOS, VPOSR, VPOS
+    uint16_t peekVHPOSR();
+    void pokeVHPOS(uint16_t value);
+    uint16_t peekVPOSR();
     void pokeVPOS(uint16_t value);
 
+    // DIWSTRT, DIWSTOP
     void pokeDIWSTRT(uint16_t value);
     void pokeDIWSTOP(uint16_t value);
+    
+    // DDFSTRT, DDFSTOP
     void pokeDDFSTRT(uint16_t value);
     void pokeDDFSTOP(uint16_t value);
 
-    void pokeBPL1MOD(uint16_t value);
-    void pokeBPL2MOD(uint16_t value);
-    
-    // DMA pointer registers
-    
-    void pokeDSKPTH(uint16_t value);
-    void pokeDSKPTL(uint16_t value);
-  
+    // AUDxLCL, AUDxLCL
     void pokeAUDxLCH(int x, uint16_t value);
     void pokeAUDxLCL(int x, uint16_t value);
     
-    void pokeBPLxPTL(int x, uint16_t value);
+    // BPLxPTL, BPLxPTH
     void pokeBPLxPTH(int x, uint16_t value);
- 
-    void pokeSPRxPTL(int x, uint16_t value);
+    void pokeBPLxPTL(int x, uint16_t value);
+    
+    // BPL1MOD, BPL2MOD
+    void pokeBPL1MOD(uint16_t value);
+    void pokeBPL2MOD(uint16_t value);
+    
+    // SPRxPTL, SPRxPTH
     void pokeSPRxPTH(int x, uint16_t value);
+    void pokeSPRxPTL(int x, uint16_t value);
 
-    /* Returns the difference of two beam position in master cycles
-     * Returns NEVER if the start position is greater than the end position
-     * or if the end position is unreachable.
+    /* Adds BPLxMOD to the pointers of the active bitplanes
+     * This method is called whenever the bitplane DMA restarts.
      */
-    Cycle beamDiff(int16_t vStart, int16_t hStart, int16_t vEnd, int16_t hEnd);
-    Cycle beamDiff(int16_t vEnd, int16_t hEnd) { return beamDiff(vpos, hpos, vEnd, hEnd); }
-    Cycle beamDiff(int32_t end) { return beamDiff(VPOS(end), HPOS(end)); }
-
-    /* This functions serves the RAS_HSYNC event in the RAS slot.
-     * The RAS_HSYNC event is triggered at the end of each rasterline.
-     */
-    void hsyncHandler();
-
-    // This function is called when the end of a frame has been reached.
-    void vsyncHandler();
-
+    void addBPLxMOD();
     
+  
     //
-    // DMA
+    // Stuff to cleanup
     //
-    
-    inline bool spriteIsOn(int i) { return sprOnOff & (1 << i); }
-    inline void turnSpriteOn(int i) { sprOnOff |= (1 << i); }
-    inline void turnSpriteOff(int i) { sprOnOff &= ~(1 << i); }
 
+public:
+    
     // Returns true if Copper is allowed to perform a DMA cycle
     bool copperCanHaveBus();
 
     
     //
+    // Running the device
+    //
+    
+public:
+    
+    void executeUntil(Cycle targetClock);
+    
+    
+    //
     // Handling events
     //
+    
+public:
     
     // Processes a high-priority DMA event (Disk, Audio, Sprites, Bitplanes)
     void serviceDMAEvent(EventID id);
@@ -392,15 +377,14 @@ public:
     // Schedules the next RAS slot event
     void scheduleNextRASEvent(int16_t vpos, int16_t hpos);
  
-    /* Adds BPLxMOD to the pointers of the active bitplanes
-     * This method is called whenever the bitplane DMA restarts.
+    /* This functions serves the RAS_HSYNC event in the RAS slot.
+     * The RAS_HSYNC event is triggered at the end of each rasterline.
      */
-    void addBPLxMOD();
+    void hsyncHandler();
     
-
-public:
+    // This function is called when the end of a frame has been reached.
+    void vsyncHandler();
     
-    void executeUntil(Cycle targetClock);
 };
 
 

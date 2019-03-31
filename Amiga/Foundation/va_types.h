@@ -36,31 +36,6 @@ typedef int64_t DMACycle; // Cycle in DMA cycle units
 #define AS_CIA_CYCLES(cycles) ((cycles) / 40)
 #define AS_DMA_CYCLES(cycles) ((cycles) >> 3)
 
-// Describes a beam position inside a specific frame
-typedef struct {
-    int64_t frame;
-    int16_t vpos;
-    int16_t hpos;
-} FramePosition;
-
-
-//
-// Amiga
-//
-
-typedef struct {
-    Cycle masterClock;
-    // CPUCycle inCPUCycles;
-    // DMACycle inDMACycles;
-    // CIACycle inCIACycles;
-    Cycle dmaClock;
-    Cycle ciaAClock;
-    Cycle ciaBClock;
-    long frame;
-    long vpos;
-    long hpos;
-} AmigaInfo;
-
 
 //
 // General
@@ -92,84 +67,38 @@ inline const char *modelName(AmigaModel model)
 // CPU
 //
 
-typedef struct {
-    uint32_t pc;
-    uint32_t d[8];
-    uint32_t a[8];
-    uint32_t ssp;
-    uint16_t flags;
-} CPUInfo;
-
 /* Recorded instruction
  * This data structure is used inside the trace ringbuffer. In trace mode,
  * the program counter and the status register are recorded. The instruction
  * string is computed on-the-fly due to speed reasons.
  */
-typedef struct {
+typedef struct
+{
     Cycle cycle;
     uint16_t vhcount; 
     uint32_t pc;
     uint32_t sp;
     char instr[63];
     char flags[17];
-} RecordedInstruction;
+}
+RecordedInstruction;
 
 
 //
 // CIA
 //
 
-typedef union {
-    struct {
+typedef union
+{
+    struct
+    {
         uint8_t hi;
         uint8_t mid;
         uint8_t lo;
     };
     uint32_t value;
-} Counter24;
-
-typedef struct {
-    Counter24 value;
-    Counter24 latch;
-    Counter24 alarm;
-} CounterInfo;
-
-typedef struct {
-    struct {
-        uint8_t port;
-        uint8_t reg;
-        uint8_t dir;
-    } portA;
-    struct {
-        uint8_t port;
-        uint8_t reg;
-        uint8_t dir;
-    } portB;
-    struct {
-        uint16_t count;
-        uint16_t latch;
-        bool running;
-        bool toggle;
-        bool pbout;
-        bool oneShot;
-    } timerA;
-    struct {
-        uint16_t count;
-        uint16_t latch;
-        bool running;
-        bool toggle;
-        bool pbout;
-        bool oneShot;
-    } timerB;
-    uint8_t sdr;
-    uint8_t icr;
-    uint8_t imr;
-    bool intLine;
-    CounterInfo cnt;
-    bool cntIntEnable;
-    Cycle idleCycles;
-    double idlePercentage;
-} CIAInfo;
+}
+Counter24;
 
 
 //
@@ -179,9 +108,6 @@ typedef struct {
 /* Memory source identifiers
  * The identifiers are used in the mem source lookup table to specify the
  * source and target of a peek or poke operation, respectively.
- * DELETE: The "MIRROR" identifiers are not used internally. They are only used
- * in the mem source table returned by getMemSrcTable() to provide the GUI
- * with some more information.
  */
 typedef enum
 {
@@ -193,100 +119,9 @@ typedef enum
     MEM_RTC,
     MEM_OCS,
     MEM_BOOT,
-    MEM_KICK,
-    
-    /*
-     MEM_CHIP_MIRROR,
-     MEM_CIA_MIRROR,
-     MEM_RTC_MIRROR,
-     MEM_ROM_MIRROR,
-     MEM_BOOT_MIRROR,
-     MEM_KICK_MIRROR
-     */
-    
-} MemorySource;
-
-//
-// Agnus
-//
-
-typedef struct {
-    uint16_t dmacon;
-    uint16_t diwstrt;
-    uint16_t diwstop;
-    uint16_t ddfstrt;
-    uint16_t ddfstop;
-    
-    uint16_t bpl1mod;
-    uint16_t bpl2mod;
-    uint8_t  numBpls;
-    
-    // DMA pointers
-    uint32_t dskpt;
-    uint32_t audlc[4];
-    uint32_t bplpt[6];
-    uint32_t sprptr[8];
-    
-} DMAInfo;
-
-typedef struct {
-
-    bool active;
-    bool cdang;
-    uint32_t coppc;
-    uint32_t coplc[2];
-    uint16_t copins[2];
-    
-} CopperInfo;
-
-typedef struct {
-    
-    bool active;
-    uint16_t bltcon0;
-    uint16_t bltcon1;
-    uint16_t bltapt;
-    uint16_t bltbpt;
-    uint16_t bltcpt;
-    uint16_t bltdpt;
-    uint16_t bltafwm;
-    uint16_t bltalwm;
-    uint16_t bltsize;
-    uint16_t bltamod;
-    uint16_t bltbmod;
-    uint16_t bltcmod;
-    uint16_t bltdmod;
-    uint16_t anew;
-    uint16_t bnew;
-    uint16_t ahold;
-    uint16_t bhold;
-    uint16_t chold;
-    uint16_t dhold;
-    bool bbusy; 
-    bool bzero;
-
-} BlitterInfo;
-
-
-//
-// Denise
-//
-
-typedef struct {
-    uint16_t bplcon0;
-    uint16_t bplcon1;
-    uint16_t bplcon2;
-    uint16_t bpldat[6];
-    uint32_t color[32];
-} DeniseInfo;
-
-//
-// Paula
-//
-
-typedef struct {
-    uint16_t intreq;
-    uint16_t intena;
-} PaulaInfo;
+    MEM_KICK
+}
+MemorySource;
 
 
 //
@@ -318,48 +153,23 @@ inline const char *driveTypeName(DriveType type)
     type == A1010_WARP ? "A1010 (warp speed)" : "???";
 }
 
-//
-// Events
-//
-
-typedef struct {
-    
-    const char *slotName;
-    const char *eventName;
-    long eventId;
-    Cycle trigger;
-    Cycle triggerRel;
-    long frame;
-    long vpos;
-    long hpos;
-    
-} EventSlotInfo;
-
-typedef struct {
-
-    Cycle dmaClock;
-    EventSlotInfo primary[7];
-    EventSlotInfo secondary[15];
-
-} EventHandlerInfo;
-
 
 //
 // Game pads
 //
 
-typedef enum {
-    
+typedef enum
+{
     JOYSTICK_UP,
     JOYSTICK_DOWN,
     JOYSTICK_LEFT,
     JOYSTICK_RIGHT,
     JOYSTICK_FIRE
-    
-} JoystickDirection;
+}
+JoystickDirection;
 
-typedef enum {
-    
+typedef enum
+{
     PULL_UP,
     PULL_DOWN,
     PULL_LEFT,
@@ -369,22 +179,24 @@ typedef enum {
     RELEASE_Y,
     RELEASE_XY,
     RELEASE_FIRE
-    
-} JoystickEvent;
+}
+JoystickEvent;
 
 
 //
 // Video
 //
 
-typedef enum : long {
+typedef enum : long
+{
     COLOR_PALETTE = 0,
     BLACK_WHITE_PALETTE,
     PAPER_WHITE_PALETTE,
     GREEN_PALETTE,
     AMBER_PALETTE,
     SEPIA_PALETTE
-} Palette;
+}
+Palette;
 
 inline bool isPalette(Palette model) {
     return model >= COLOR_PALETTE && model <= SEPIA_PALETTE;
@@ -402,8 +214,8 @@ typedef enum
     FILETYPE_ADF,
     FILETYPE_BOOT_ROM,
     FILETYPE_KICK_ROM
-    
-} AmigaFileType;
+}
+AmigaFileType;
 
 inline bool isVAFileType(AmigaFileType model) {
     return model >= FILETYPE_UKNOWN && model <= FILETYPE_KICK_ROM;
@@ -494,18 +306,19 @@ typedef enum
     // Peripherals (Disk)
     MSG_DISK_SAVED,
     MSG_DISK_UNSAVED,
-    
-    
-} MessageType;
+}
+MessageType;
 
 /* A single message
  * Only a very messages utilize the data file. E.g., the drive related message
  * use it to code the drive number (0 = df0 etc.).
  */
-typedef struct {
+typedef struct
+{
     MessageType type;
     long data;
-} Message;
+}
+Message;
 
 // Callback function signature
 typedef void Callback(const void *, int, long);
@@ -543,5 +356,176 @@ typedef struct
 }
 AmigaMemConfiguration;
 
+
+//
+// Info structures (returned by getInfo() of the specific component)
+//
+
+typedef struct
+{
+    Cycle masterClock;
+    Cycle dmaClock;
+    Cycle ciaAClock;
+    Cycle ciaBClock;
+    long frame;
+    long vpos;
+    long hpos;
+}
+AmigaInfo;
+
+typedef struct
+{
+    uint32_t pc;
+    uint32_t d[8];
+    uint32_t a[8];
+    uint32_t ssp;
+    uint16_t flags;
+}
+CPUInfo;
+
+typedef struct
+{
+    Counter24 value;
+    Counter24 latch;
+    Counter24 alarm;
+}
+CounterInfo;
+
+typedef struct
+{
+    struct {
+        uint8_t port;
+        uint8_t reg;
+        uint8_t dir;
+    } portA;
+    
+    struct {
+        uint8_t port;
+        uint8_t reg;
+        uint8_t dir;
+    } portB;
+    
+    struct {
+        uint16_t count;
+        uint16_t latch;
+        bool running;
+        bool toggle;
+        bool pbout;
+        bool oneShot;
+    } timerA;
+    
+    struct {
+        uint16_t count;
+        uint16_t latch;
+        bool running;
+        bool toggle;
+        bool pbout;
+        bool oneShot;
+    } timerB;
+    
+    uint8_t sdr;
+    uint8_t icr;
+    uint8_t imr;
+    bool intLine;
+    CounterInfo cnt;
+    bool cntIntEnable;
+    Cycle idleCycles;
+    double idlePercentage;
+}
+CIAInfo;
+
+typedef struct
+{
+    uint16_t dmacon;
+    uint16_t diwstrt;
+    uint16_t diwstop;
+    uint16_t ddfstrt;
+    uint16_t ddfstop;
+    
+    uint16_t bpl1mod;
+    uint16_t bpl2mod;
+    uint8_t  numBpls;
+    
+    uint32_t dskpt;
+    uint32_t audlc[4];
+    uint32_t bplpt[6];
+    uint32_t sprptr[8];
+}
+DMAInfo;
+
+typedef struct
+{
+    const char *slotName;
+    const char *eventName;
+    long eventId;
+    Cycle trigger;
+    Cycle triggerRel;
+    long frame;
+    long vpos;
+    long hpos;
+}
+EventSlotInfo;
+
+typedef struct
+{
+    Cycle dmaClock;
+    EventSlotInfo primary[7];
+    EventSlotInfo secondary[15];
+}
+EventHandlerInfo;
+
+typedef struct
+{
+    bool active;
+    bool cdang;
+    uint32_t coppc;
+    uint32_t coplc[2];
+    uint16_t copins[2];
+}
+CopperInfo;
+
+typedef struct
+{
+    bool active;
+    uint16_t bltcon0;
+    uint16_t bltcon1;
+    uint16_t bltapt;
+    uint16_t bltbpt;
+    uint16_t bltcpt;
+    uint16_t bltdpt;
+    uint16_t bltafwm;
+    uint16_t bltalwm;
+    uint16_t bltsize;
+    uint16_t bltamod;
+    uint16_t bltbmod;
+    uint16_t bltcmod;
+    uint16_t bltdmod;
+    uint16_t anew;
+    uint16_t bnew;
+    uint16_t ahold;
+    uint16_t bhold;
+    uint16_t chold;
+    uint16_t dhold;
+    bool bbusy;
+    bool bzero;
+}
+BlitterInfo;
+
+typedef struct
+{
+    uint16_t bplcon0;
+    uint16_t bplcon1;
+    uint16_t bplcon2;
+    uint16_t bpldat[6];
+    uint32_t color[32];
+}
+DeniseInfo;
+
+typedef struct
+{
+    uint16_t intreq;
+    uint16_t intena;
+}
+PaulaInfo;
 
 #endif

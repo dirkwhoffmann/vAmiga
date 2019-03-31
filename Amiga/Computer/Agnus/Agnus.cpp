@@ -31,10 +31,8 @@ Agnus::Agnus()
         { &clock,              sizeof(clock),              0 },
         { &vpos,               sizeof(vpos),               0 },
         { &hpos,               sizeof(hpos),               0 },
-        { &lores,              sizeof(lores),              0 },
         { &activeBitplanes,    sizeof(activeBitplanes),    0 },
         { &busOwner,           sizeof(busOwner),           0 },
-        { &sprOnOff,           sizeof(sprOnOff),           0 },
         { &dmacon,             sizeof(dmacon),             0 },
         { &diwstrt,            sizeof(diwstrt),            0 },
         { &diwstop,            sizeof(diwstop),            0 },
@@ -45,7 +43,7 @@ Agnus::Agnus()
         { &dskpt,    sizeof(dskpt),    0 },
         { &audlc,    sizeof(audlc),    DWORD_ARRAY },
         { &bplpt,    sizeof(bplpt),    DWORD_ARRAY },
-        { &sprptr,   sizeof(sprptr),   DWORD_ARRAY },
+        { &sprpt,   sizeof(sprpt),   DWORD_ARRAY },
 
         { &bpl1mod,  sizeof(bpl1mod),  0 },
         { &bpl2mod,  sizeof(bpl2mod),  0 },
@@ -125,7 +123,7 @@ Agnus::getInfo()
     info.dskpt   = dskpt;
     for (unsigned i = 0; i < 4; i++)  info.audlc[i] = audlc[i];
     for (unsigned i = 0; i < 6; i++)  info.bplpt[i] = bplpt[i];
-    for (unsigned i = 0; i < 8; i++) info.sprptr[i] = sprptr[i];
+    for (unsigned i = 0; i < 8; i++) info.sprptr[i] = sprpt[i];
 
     return info;
 }
@@ -144,29 +142,24 @@ Agnus::cyclesInCurrentFrame()
     return 313 * cyclesPerLine();
 }
 
-FramePosition
-Agnus::cycle2FramePosition(Cycle cycle)
+void
+Agnus::cycleToBeamAbs(Cycle cycle, int64_t &frame, int16_t &vpos, int16_t &hpos)
 {
-    FramePosition result;
-
     DMACycle dmaCycle    = AS_DMA_CYCLES(cycle);
     DMACycle frameCycles = cyclesInCurrentFrame();
     DMACycle lineCycles  = cyclesPerLine();
     
-    result.frame = dmaCycle / frameCycles;
+    frame = dmaCycle / frameCycles;
     dmaCycle = dmaCycle % frameCycles;
-    result.vpos = dmaCycle / lineCycles;
+    vpos = dmaCycle / lineCycles;
     dmaCycle = dmaCycle % lineCycles;
-    result.hpos = dmaCycle;
-
-    return result;
+    hpos = dmaCycle;
 }
 
-Cycle
-Agnus::framePosition2Cycle(FramePosition framePos)
+void
+Agnus::cycleToBeamRel(Cycle cycle, int64_t &frame, int16_t &vpos, int16_t &hpos)
 {
-    DMACycle result = framePos.frame * cyclesInCurrentFrame() + framePos.vpos * cyclesPerLine() + hpos;
-    return DMA_CYCLES(result);
+    return cycleToBeamAbs(cycle + latchedClock, frame, vpos, hpos);
 }
 
 Cycle
@@ -179,6 +172,23 @@ Cycle
 Agnus::beamToCyclesRel(int16_t vpos, int16_t hpos)
 {
     return DMA_CYCLES(vpos * cyclesPerLine() + hpos); 
+}
+
+Cycle
+Agnus::beamDiff(int16_t vStart, int16_t hStart, int16_t vEnd, int16_t hEnd)
+{
+    // We assume that the function is called with a valid horizontal position
+    assert(hEnd <= HPOS_MAX);
+    
+    // Bail out if the end position is unreachable
+    if (vEnd > 312) return NEVER;
+    
+    // Compute vertical and horizontal difference
+    int32_t vDiff  = vEnd - vStart;
+    int32_t hDiff  = hEnd - hStart;
+    
+    // In PAL mode, all lines have the same length (227 color clocks)
+    return DMA_CYCLES(vDiff * 227 + hDiff);
 }
 
 void
@@ -370,49 +380,6 @@ Agnus::dumpDMAEventTable(int from, int to)
     plainmsg("%s\n", r4);
 }
 
-int32_t
-Agnus::nextBPLDMABeam(int32_t currentBeam)
-{
-    // The first DMA cycle happens at (26, ddfstrt) (TODO: CORRECT?)
-    if (currentBeam < BEAM(26, ddfstrt))
-        return BEAM(26, ddfstrt);
-    
-    // The last DMA cycle happens at (312, ddfstop) (TODO: CORRECT?)
-    if (currentBeam > BEAM(312, ddfstop))
-        return -1;
-    
-    int32_t vpos = currentBeam >> 8;
-    int32_t hpos = currentBeam & 0xFF;
-    
-    // If vpos is greater than ddfstop, we pretend to be in the next line
-    if (hpos >= ddfstop) {
-        vpos++;
-        hpos = ddfstrt;
-    }
-    
-    // We're inside the active DMA area now
-    if (amiga->denise.hires())
-        return BEAM(vpos, hpos);
-    else
-        return UP_TO_NEXT_ODD(BEAM(vpos, hpos));
-}
-
-Cycle
-Agnus::nextBpldmaCycle(int32_t currentBeam)
-{
-    Cycle result = latchedClock;
-    
-    int32_t beam = nextBPLDMABeam(currentBeam);
-    
-    if (beam == -1) { // Jump to next frame
-        result += cyclesInCurrentFrame();
-        beam = BEAM(26, ddfstrt);
-    }
-    
-    result += beamToCyclesRel(beam);
-    return result;
-}
-
 uint16_t
 Agnus::peekDMACON()
 {
@@ -535,8 +502,22 @@ Agnus::pokeDMACON(uint16_t value)
     buildDMAEventTable();
 }
 
+void
+Agnus::pokeDSKPTH(uint16_t value)
+{
+    debug(2, "pokeDSKPTH(%X)\n", value);
+    dskpt = REPLACE_HI_WORD(dskpt, value & 0x7);
+}
+
+void
+Agnus::pokeDSKPTL(uint16_t value)
+{
+    debug(2, "pokeDSKPTL(%X)\n", value);
+    dskpt = REPLACE_LO_WORD(dskpt, value);
+}
+
 uint16_t
-Agnus::peekVHPOS()
+Agnus::peekVHPOSR()
 {
     // V7 V6 V5 V4 V3 V2 V1 V0 H8 H7 H6 H5 H4 H3 H2 H1
     
@@ -556,7 +537,7 @@ Agnus::pokeVHPOS(uint16_t value)
 }
 
 uint16_t
-Agnus::peekVPOS()
+Agnus::peekVPOSR()
 {
     // LF -- -- -- -- -- -- -- -- -- -- -- -- -- -- V8
     // TODO: LF (Long Frame)
@@ -619,38 +600,6 @@ Agnus::pokeDDFSTOP(uint16_t value)
     
     ddfstop = value;
 }
-        
-
-
-void
-Agnus::pokeBPL1MOD(uint16_t value)
-{
-    debug(2, "pokeBPL1MOD(%X)\n", value);
-
-    bpl1mod = value;
-}
-
-void
-Agnus::pokeBPL2MOD(uint16_t value)
-{
-    debug(2, "pokeBPL2MOD(%X)\n", value);
-    
-    bpl2mod = value;
-}
-
-void
-Agnus::pokeDSKPTH(uint16_t value)
-{
-    debug(2, "pokeDSKPTH(%X)\n", value);
-    dskpt = REPLACE_HI_WORD(dskpt, value & 0x7);
-}
-
-void
-Agnus::pokeDSKPTL(uint16_t value)
-{
-    debug(2, "pokeDSKPTL(%X)\n", value);
-    dskpt = REPLACE_LO_WORD(dskpt, value);
-}
 
 void
 Agnus::pokeAUDxLCH(int x, uint16_t value)
@@ -689,12 +638,28 @@ Agnus::pokeBPLxPTL(int x, uint16_t value)
 }
 
 void
+Agnus::pokeBPL1MOD(uint16_t value)
+{
+    debug(2, "pokeBPL1MOD(%X)\n", value);
+    
+    bpl1mod = value;
+}
+
+void
+Agnus::pokeBPL2MOD(uint16_t value)
+{
+    debug(2, "pokeBPL2MOD(%X)\n", value);
+    
+    bpl2mod = value;
+}
+
+void
 Agnus::pokeSPRxPTH(int x, uint16_t value)
 {
     assert(x < 8);
     
     debug(2, "pokeSPR%dPTH(%X)\n", x, value);
-    sprptr[x] = REPLACE_HI_WORD(sprptr[x], value & 0x7);
+    sprpt[x] = REPLACE_HI_WORD(sprpt[x], value & 0x7);
 }
 
 void
@@ -703,125 +668,7 @@ Agnus::pokeSPRxPTL(int x, uint16_t value)
     assert(x < 8);
     
     debug(2, "pokeSPR%dPTL(%X)\n", x, value);
-    sprptr[x] = REPLACE_LO_WORD(sprptr[x], value);
-}
-
-
-
-
-void
-Agnus::executeUntil(Cycle targetClock)
-{
-    // msg("clock is %lld, Executing until %lld\n", clock, targetClock);
-    while (clock <= targetClock - DMA_CYCLES(1)) {
-   
-        busOwner = 0;
-
-        // Process all pending events
-        eventHandler.executeUntil(clock);
-
-        // Advance the internal counters
-        hpos++;
-        
-        // Note: If this assertion hits, the HSYNC event hasn't been served!
-        assert(hpos <= HPOS_MAX);
-        
-        clock += DMA_CYCLES(1);
-    }
-}
-
-Cycle
-Agnus:: beamDiff(int16_t vStart, int16_t hStart, int16_t vEnd, int16_t hEnd)
-{
-    // We assume that the function is called with a valid horizontal position
-    assert(hEnd <= HPOS_MAX);
-    
-    // Bail out if the end position is unreachable
-    if (vEnd > 312) return NEVER;
-    
-    // Compute vertical and horizontal difference
-    int32_t vDiff  = vEnd - vStart;
-    int32_t hDiff  = hEnd - hStart;
-    
-    // In PAL mode, all lines have the same length (227 color clocks)
-    return DMA_CYCLES(vDiff * 227 + hDiff);
-}
-
-void
-Agnus::hsyncHandler()
-{
-    // Make sure that we are really at the end of the line
-    assert(hpos == 226 /* 0xE2 */);
-
-    // CIA B counts HSYNCs
-    amiga->ciaB.incrementTOD();
-
-    // Check the keyboard about each millisecond
-    if ((vpos & 0b1111) == 0) amiga->keyboard.execute();
-    
-    // Add bit plane pointer modulo values
-    bplpt[0] += bpl1mod;
-    bplpt[1] += bpl2mod;
-    bplpt[2] += bpl1mod;
-    bplpt[3] += bpl2mod;
-    bplpt[4] += bpl1mod;
-    bplpt[5] += bpl2mod;
-
-    // Increment vpos and reset hpos
-    
-    /* Important: When the end of a line is reached, we reset the horizontal
-     * counter. The new value should be 0. To make things work, we have to set
-     * it to -1, because there is an upcoming hpos++ instruction at the end
-     * of executeUntil(). This means that we can not rely on the correct
-     * hpos value in the hsync and vsync handlers(). The value will be
-     * -1 and not 0 as expected. Take care of that and fell free to come up
-     * with a nicer solution!
-     */
-    vpos++;
-    hpos = -1;
-
-    // Check if the current frame is finished
-    if (vpos > VPOS_MAX) {
-        vsyncHandler();
-    }
-    
-    // Check if have reached line 26 (where bitplane DMA starts)
-    if (vpos == 26) {
-        buildDMAEventTable();
-    }
-    
-    // Schedule the first hi-prio DMA event (if any)
-    if (nextDmaEvent[0]) {
-        EventID eventID = dmaEvent[nextDmaEvent[0]];
-        eventHandler.schedulePos(DMA_SLOT, 26, nextDmaEvent[0], eventID);
-    }
-    
-    // Schedule first RAS event
-    scheduleNextRASEvent(vpos, hpos);
-}
-
-void
-Agnus::vsyncHandler()
-{
-    // Increment frame and reset vpos
-    frame++;
-    vpos = 0;
-    
-    // debug("[%d]\n", frame);
-    
-    // Remember the clock count at SOF (Start Of Frame)
-    // Add one because the DMA clock hasn't been advanced yet
-    latchedClock = clock + DMA_CYCLES(1);
-    
-    // CIA A counts VSYNCs
-    amiga->ciaA.incrementTOD();
-
-    // Trigger VSYNC interrupt
-    amiga->paula.pokeINTREQ(0x8020);
-    
-    // Let the sub components do their own VSYNC stuff
-    copper.vsyncAction();
-    amiga->denise.endOfFrame();
+    sprpt[x] = REPLACE_LO_WORD(sprpt[x], value);
 }
 
 void
@@ -840,7 +687,6 @@ Agnus::addBPLxMOD()
     }
 }
 
-
 bool
 Agnus::copperCanHaveBus()
 {
@@ -853,6 +699,27 @@ Agnus::copperCanHaveBus()
     }
         
     return (dmacon & 0b1010000000) != 0;
+}
+
+void
+Agnus::executeUntil(Cycle targetClock)
+{
+    // msg("clock is %lld, Executing until %lld\n", clock, targetClock);
+    while (clock <= targetClock - DMA_CYCLES(1)) {
+        
+        busOwner = 0;
+        
+        // Process all pending events
+        eventHandler.executeUntil(clock);
+        
+        // Advance the internal counters
+        hpos++;
+        
+        // Note: If this assertion hits, the HSYNC event hasn't been served!
+        assert(hpos <= HPOS_MAX);
+        
+        clock += DMA_CYCLES(1);
+    }
 }
 
 void
@@ -1026,4 +893,81 @@ Agnus::scheduleNextRASEvent(int16_t vpos, int16_t hpos)
     
     // Schedule a HSYNC event to finish up the current line
     eventHandler.schedulePos(RAS_SLOT, vpos, HPOS_MAX, RAS_HSYNC);
+}
+
+void
+Agnus::hsyncHandler()
+{
+    // Make sure that we are really at the end of the line
+    assert(hpos == 226 /* 0xE2 */);
+    
+    // CIA B counts HSYNCs
+    amiga->ciaB.incrementTOD();
+    
+    // Check the keyboard about each millisecond
+    if ((vpos & 0b1111) == 0) amiga->keyboard.execute();
+    
+    // Add bit plane pointer modulo values
+    bplpt[0] += bpl1mod;
+    bplpt[1] += bpl2mod;
+    bplpt[2] += bpl1mod;
+    bplpt[3] += bpl2mod;
+    bplpt[4] += bpl1mod;
+    bplpt[5] += bpl2mod;
+    
+    // Increment vpos and reset hpos
+    
+    /* Important: When the end of a line is reached, we reset the horizontal
+     * counter. The new value should be 0. To make things work, we have to set
+     * it to -1, because there is an upcoming hpos++ instruction at the end
+     * of executeUntil(). This means that we can not rely on the correct
+     * hpos value in the hsync and vsync handlers(). The value will be
+     * -1 and not 0 as expected. Take care of that and fell free to come up
+     * with a nicer solution!
+     */
+    vpos++;
+    hpos = -1;
+    
+    // Check if the current frame is finished
+    if (vpos > VPOS_MAX) {
+        vsyncHandler();
+    }
+    
+    // Check if have reached line 26 (where bitplane DMA starts)
+    if (vpos == 26) {
+        buildDMAEventTable();
+    }
+    
+    // Schedule the first hi-prio DMA event (if any)
+    if (nextDmaEvent[0]) {
+        EventID eventID = dmaEvent[nextDmaEvent[0]];
+        eventHandler.schedulePos(DMA_SLOT, 26, nextDmaEvent[0], eventID);
+    }
+    
+    // Schedule first RAS event
+    scheduleNextRASEvent(vpos, hpos);
+}
+
+void
+Agnus::vsyncHandler()
+{
+    // Increment frame and reset vpos
+    frame++;
+    vpos = 0;
+    
+    // debug("[%d]\n", frame);
+    
+    // Remember the clock count at SOF (Start Of Frame)
+    // Add one because the DMA clock hasn't been advanced yet
+    latchedClock = clock + DMA_CYCLES(1);
+    
+    // CIA A counts VSYNCs
+    amiga->ciaA.incrementTOD();
+    
+    // Trigger VSYNC interrupt
+    amiga->paula.pokeINTREQ(0x8020);
+    
+    // Let the sub components do their own VSYNC stuff
+    copper.vsyncAction();
+    amiga->denise.endOfFrame();
 }

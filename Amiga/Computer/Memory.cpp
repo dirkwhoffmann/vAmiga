@@ -679,9 +679,9 @@ Memory::peekCustom16(uint32_t addr)
         case 0x002 >> 1: // DMACONR
             return amiga->dma.peekDMACON();
         case 0x004 >> 1: // VPOSR
-            return amiga->dma.peekVPOS();
+            return amiga->dma.peekVPOSR();
         case 0x006 >> 1: // VHPOSR
-            return amiga->dma.peekVHPOS();
+            return amiga->dma.peekVHPOSR();
         case 0x008 >> 1: // DSKDATR
             return amiga->paula.peekDSKDAT();
         case 0x00A >> 1: // JOY0DAT

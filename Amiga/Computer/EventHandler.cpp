@@ -104,15 +104,19 @@ EventHandler::getPrimarySlotInfo(int slot)
 {
     EventSlotInfo info;
     
+    int64_t frame;
+    int16_t vpos;
+    int16_t hpos;
     Cycle trigger = primSlot[slot].triggerCycle;
-    FramePosition pos = amiga->dma.cycle2FramePosition(trigger);
+    
+    amiga->dma.cycleToBeamAbs(trigger, frame, vpos, hpos);
     
     info.trigger = trigger;
     info.triggerRel = trigger - amiga->dma.clock;
     info.eventId = primSlot[slot].id;
-    info.frame = pos.frame - amiga->dma.frame;
-    info.vpos = pos.vpos;
-    info.hpos = pos.hpos;
+    info.frame = frame - amiga->dma.frame;
+    info.vpos = vpos;
+    info.hpos = hpos;
     
     switch ((EventSlot)slot) {
             
@@ -235,16 +239,20 @@ EventSlotInfo
 EventHandler::getSecondarySlotInfo(int slot)
 {
     EventSlotInfo info;
-    
+
+    int64_t frame;
+    int16_t vpos;
+    int16_t hpos;
     Cycle trigger = secSlot[slot].triggerCycle;
-    FramePosition pos = amiga->dma.cycle2FramePosition(trigger);
+    
+    amiga->dma.cycleToBeamAbs(trigger, frame, vpos, hpos);
     
     info.trigger = trigger;
     info.triggerRel = trigger - amiga->dma.clock;
     info.eventId = secSlot[slot].id;
-    info.frame = pos.frame - amiga->dma.frame;
-    info.vpos = pos.vpos;
-    info.hpos = pos.hpos;
+    info.frame = frame - amiga->dma.frame;
+    info.vpos = vpos;
+    info.hpos = hpos;
     
     switch ((EventSlot)slot) {
             
