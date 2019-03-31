@@ -20,14 +20,20 @@ Denise::Denise()
     
     registerSnapshotItems(vector<SnapshotItem> {
         
-        { &bplcon0,   sizeof(bplcon0),   0 },
-        { &bplcon1,   sizeof(bplcon1),   0 },
-        { &bplcon2,   sizeof(bplcon2),   0 },
-        { &bpldat,    sizeof(bpldat),    WORD_ARRAY },
-        { &sprpos,    sizeof(sprpos),    WORD_ARRAY },
-        { &sprctl,    sizeof(sprctl),    WORD_ARRAY },
+        { &clock,         sizeof(clock),         0 },
+        { &bplcon0,       sizeof(bplcon0),       0 },
+        { &bplcon1,       sizeof(bplcon1),       0 },
+        { &bplcon2,       sizeof(bplcon2),       0 },
+        { &bpldat,        sizeof(bpldat),        WORD_ARRAY },
+        { &sprpos,        sizeof(sprpos),        WORD_ARRAY },
+        { &sprctl,        sizeof(sprctl),        WORD_ARRAY },
         
-        { &joydat,    sizeof(joydat),    WORD_ARRAY },
+        { &joydat,        sizeof(joydat),        WORD_ARRAY },
+        { &shiftReg,      sizeof(shiftReg),      DWORD_ARRAY },
+        { &scrollLowEven, sizeof(scrollLowEven), 0 },
+        { &scrollLowOdd,  sizeof(scrollLowOdd),  0 },
+        { &scrollHiEven,  sizeof(scrollHiEven),  0 },
+        { &scrollHiOdd,   sizeof(scrollHiOdd),   0 },
     });
     
 }
@@ -41,7 +47,6 @@ void
 Denise::_powerOn()
 {
     clock = 0;
-    frame = 0;
     frameBuffer = longFrame;
     pixelBuffer = frameBuffer;
     
@@ -73,7 +78,7 @@ Denise::_ping()
 void
 Denise::_dump()
 {
-    msg("Frame: %lld\n", frame);
+
 }
 
 DeniseInfo
@@ -97,7 +102,8 @@ Denise::getInfo()
 void
 Denise::didLoadFromBuffer(uint8_t **buffer)
 {
-    // Update the RGBA color values by poking into the color registers
+    // The values in the color registers may have changed. To make the change
+    // visible, we need to recompute the RGBA patterns based on the new values.
     colorizer.updateRGBAs();
 }
 
@@ -172,19 +178,21 @@ Denise::pokeSPRxCTL(int x, uint16_t value)
 }
 
 uint16_t
-Denise::peekJOYxDAT(int x)
+Denise::peekJOYxDATR(int x)
 {
     assert(x < 2);
-    debug(2, "peekJOY%dDAT: %X\n", x, joydat[x]);
+    debug(2, "peekJOY%dDATR: %X\n", x, joydat[x]);
     
     return joydat[x];
 }
 
+/*
 void
 Denise::serviceEvent(EventID id, int64_t data)
 {
   
 }
+*/
 
 void
 Denise::fillShiftRegisters()
@@ -274,7 +282,7 @@ Denise::endOfFrame()
     // Take a snapshot once in a while
     if (amiga->getTakeAutoSnapshots() && amiga->getSnapshotInterval() > 0) {
         unsigned fps = 50;
-        if (frame % (fps * amiga->getSnapshotInterval()) == 0) {
+        if (amiga->dma.frame % (fps * amiga->getSnapshotInterval()) == 0) {
             amiga->takeAutoSnapshot();
         }
     }
@@ -283,8 +291,6 @@ Denise::endOfFrame()
     if (!amiga->getWarp()) {
         amiga->synchronizeTiming();
     }
-    
-    frame++;
 }
 
 void

@@ -43,7 +43,7 @@ AmigaControlPort::_dump()
 void
 AmigaControlPort::scheduleNextShot()
 {
-    nextAutofireFrame = amiga->denise.frame + (int)(50.0 / (2 * autofireFrequency));
+    nextAutofireFrame = amiga->dma.frame + (int)(50.0 / (2 * autofireFrequency));
 }
 
 void
@@ -53,7 +53,7 @@ AmigaControlPort::execute()
         return;
     
     // Wait until it's time to push or release fire
-    if (amiga->denise.frame != nextAutofireFrame)
+    if (amiga->dma.frame != nextAutofireFrame)
         return;
     
     // Are there any bullets left?

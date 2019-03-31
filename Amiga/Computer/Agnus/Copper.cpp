@@ -12,42 +12,16 @@
 Copper::Copper()
 {
     setDescription("Copper");
-        
+    
     registerSnapshotItems(vector<SnapshotItem> {
         
-        { &coplc,    sizeof(coplc),    DWORD_ARRAY },
-        { &cdang,    sizeof(cdang),    0 },
-        { &copins1,  sizeof(copins1),  0 },
-        { &copins2,  sizeof(copins2),  0 },
-        { &coppc,    sizeof(coppc),    0 },
+        { &skip,    sizeof(skip),    0 },
+        { &coplc,   sizeof(coplc),   DWORD_ARRAY },
+        { &cdang,   sizeof(cdang),   0 },
+        { &copins1, sizeof(copins1), 0 },
+        { &copins2, sizeof(copins2), 0 },
+        { &coppc,   sizeof(coppc),   0 },
     });
-}
-
-CopperInfo
-Copper::getInfo()
-{
-    CopperInfo info;
-    
-    /* Note: We call the Copper 'active' if there is a pending message in the
-     * Copper event slot.
-     */
-    
-    info.cdang     = cdang;
-    info.active    = amiga->dma.eventHandler.isPending(COP_SLOT);
-    info.coppc     = coppc;
-    info.copins[0] = copins1;
-    info.copins[1] = copins2;
-    info.coplc[0]  = coplc[0];
-    info.coplc[1]  = coplc[1];
-
-    return info;
-}
-
-bool
-Copper::illegalAddress(uint32_t address)
-{
-    address &= 0x1FE;
-    return address < (cdang ? 0x40 : 0x80);
 }
 
 void
@@ -78,6 +52,26 @@ void
 Copper::_dump()
 {
     plainmsg("   cdang: %d\n", cdang);
+}
+
+CopperInfo
+Copper::getInfo()
+{
+    CopperInfo info;
+    
+    /* Note: We call the Copper 'active' if there is a pending message in the
+     * Copper event slot.
+     */
+    
+    info.cdang     = cdang;
+    info.active    = amiga->dma.eventHandler.isPending(COP_SLOT);
+    info.coppc     = coppc;
+    info.copins[0] = copins1;
+    info.copins[1] = copins2;
+    info.coplc[0]  = coplc[0];
+    info.coplc[1]  = coplc[1];
+
+    return info;
 }
 
 void
@@ -307,49 +301,16 @@ Copper::getVMHM(uint32_t addr)
 }
 
 bool
+Copper::isIllegalAddress(uint32_t addr)
+{
+    addr &= 0x1FE;
+    return addr < (cdang ? 0x40 : 0x80);
+}
+
+bool
 Copper::isIllegalInstr(uint32_t addr)
 {
-    return isMoveCmd(addr) && illegalAddress(getRA(addr));
-}
-
-char *
-Copper::disassemble(uint32_t addr)
-{
-    char pos[16];
-    char mask[16];
-    
-    if (isMoveCmd(addr)) {
-        
-        uint16_t reg = getRA(addr) >> 1;
-        assert(reg <= 0xFF);
-        sprintf(disassembly, "MOVE $%04X, %s", getDW(addr), customReg[reg]);
-        return disassembly;
-    }
-    
-    const char *mnemonic = isWaitCmd(addr) ? "WAIT" : "SKIP";
-    const char *suffix = getBFD(addr) ? "*" : "";
-    
-    sprintf(pos, "($%02X,$%02X)", getVP(addr), getHP(addr));
-    
-    if (getVM(addr) == 0xFF && getHM(addr) == 0xFF) {
-        sprintf(mask, "");
-    } else {
-        sprintf(mask, ", ($%02X,$%02X)", getHM(addr), getVM(addr));
-    }
-   
-    sprintf(disassembly, "%s%s %s%s", mnemonic, suffix, pos, mask);
-    return disassembly;
-}
-
-char *
-Copper::disassemble(unsigned list, uint32_t offset)
-{
-    assert(list == 1 || list == 2);
-    
-    uint32_t addr = (list == 1) ? coplc[0] : coplc[1];
-    addr = (addr + 2 * offset) & 0x7FFFF;
-    
-    return disassemble(addr);
+    return isMoveCmd(addr) && isIllegalAddress(getRA(addr));
 }
 
 void
@@ -397,7 +358,7 @@ Copper::serviceEvent(EventID id)
                 // Extract register number from the first instruction word
                 uint16_t reg = (copins1 & 0x1FE);
                 
-                if (illegalAddress(reg)) {
+                if (isIllegalAddress(reg)) {
                     
                     handler->cancel(COP_SLOT); // Stops the Copper
                     break;
@@ -498,4 +459,44 @@ Copper::vsyncAction()
     } else {
         handler->cancel(COP_SLOT);
     }
+}
+
+char *
+Copper::disassemble(uint32_t addr)
+{
+    char pos[16];
+    char mask[16];
+    
+    if (isMoveCmd(addr)) {
+        
+        uint16_t reg = getRA(addr) >> 1;
+        assert(reg <= 0xFF);
+        sprintf(disassembly, "MOVE $%04X, %s", getDW(addr), customReg[reg]);
+        return disassembly;
+    }
+    
+    const char *mnemonic = isWaitCmd(addr) ? "WAIT" : "SKIP";
+    const char *suffix = getBFD(addr) ? "*" : "";
+    
+    sprintf(pos, "($%02X,$%02X)", getVP(addr), getHP(addr));
+    
+    if (getVM(addr) == 0xFF && getHM(addr) == 0xFF) {
+        sprintf(mask, "");
+    } else {
+        sprintf(mask, ", ($%02X,$%02X)", getHM(addr), getVM(addr));
+    }
+    
+    sprintf(disassembly, "%s%s %s%s", mnemonic, suffix, pos, mask);
+    return disassembly;
+}
+
+char *
+Copper::disassemble(unsigned list, uint32_t offset)
+{
+    assert(list == 1 || list == 2);
+    
+    uint32_t addr = (list == 1) ? coplc[0] : coplc[1];
+    addr = (addr + 2 * offset) & 0x7FFFF;
+    
+    return disassemble(addr);
 }

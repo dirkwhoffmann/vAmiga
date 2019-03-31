@@ -36,6 +36,7 @@ class Copper : public HardwareComponent {
     // Storage for disassembled instruction
     char disassembly[128];
     
+    
     //
     // Constructing and destructing
     //
@@ -43,6 +44,7 @@ class Copper : public HardwareComponent {
 public:
     
     Copper();
+    
     
     //
     // Methods from HardwareComponent
@@ -76,9 +78,9 @@ public:
     void pokeCOPCON(uint16_t value);
     void pokeCOPJMP(int x);
     void pokeCOPINS(uint16_t value);
-    
     void pokeCOPxLCH(int x, uint16_t value);
     void pokeCOPxLCL(int x, uint16_t value);
+    
     
     //
     // Running the device
@@ -94,13 +96,17 @@ private:
     bool comparator(uint32_t waitpos);
     bool comparator();
     
-    // Computes the beam position where the Copper needs to wake up.
-    // This functions is invoked when a WAIT command is processed.
+    /* Computes the beam position where the Copper needs to wake up.
+     * This functions is invoked when a WAIT command is processed.
+     */
     uint32_t nextTriggerPosition(); 
+    
     
     //
     // Analyzing Copper instructions
     //
+    
+private:
     
     /*             MOVE              WAIT              SKIP
      * Bit   copins1 copins2   copins1 copins2   copins1 copins2
@@ -160,15 +166,16 @@ private:
     
 public:
     
-    bool isIllegalInstr(uint32_t addr);
-    char *disassemble(uint32_t addr);
-    char *disassemble(unsigned list, uint32_t offset);
-
+    // Returns true if the Copper has no access to this custom register.
+    bool isIllegalAddress(uint32_t addr);
     
+    // Returns true if the Copper instruction at addr is illegal.
+    bool isIllegalInstr(uint32_t addr);
+    
+ 
     //
     // Managing events
     //
-    
     
 public:
     
@@ -180,15 +187,15 @@ private:
     // Executed after each frame
     void vsyncAction();
     
-    // Returns true if the Copper has no access to this custom register
-    bool illegalAddress(uint32_t address);
-
-
+ 
     //
     // Debugging
     //
     
+public:
     
+    char *disassemble(uint32_t addr);
+    char *disassemble(unsigned list, uint32_t offset);
 };
 
 #endif 

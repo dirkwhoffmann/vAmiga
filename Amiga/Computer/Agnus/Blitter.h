@@ -42,13 +42,7 @@ class Blitter : public HardwareComponent {
     int16_t bltcmod;
     int16_t bltdmod;
 
-    // The Blitter data registers
-    // uint16_t bltadat; // same as "A new"
-    // uint16_t bltbdat; // same as "B new"
-    // uint16_t bltcdat; // same as "C hold"
-
     // The Blitter pipeline registers
-    
     uint16_t anew;
     uint16_t bnew;
     uint16_t aold;
@@ -57,13 +51,12 @@ class Blitter : public HardwareComponent {
     uint16_t bhold;
     uint16_t chold;
     uint16_t dhold;
-
     uint32_t ashift;
     uint32_t bshift;
 
     // Counter registers
-    uint16_t wcounter;
-    uint16_t hcounter;
+    uint16_t xCounter;
+    uint16_t yCounter;
     
     // Blitter flags;
     bool bbusy;
@@ -83,7 +76,7 @@ class Blitter : public HardwareComponent {
      */
     
     // The Blitter micro-instructions
-    static const uint16_t LOOPBACK  = 0b0000000001111; // Conditional loop
+    static const uint16_t LOOPBACK  = 0b0000000001111; // Loops back or flashes the pipeline
     static const uint16_t FETCH_A   = 0b0000000010000; // Loads register "A new"
     static const uint16_t FETCH_B   = 0b0000000100000; // Loads register "B new"
     static const uint16_t FETCH_C   = 0b0000001000000; // Loads register "C hold"
@@ -98,7 +91,6 @@ class Blitter : public HardwareComponent {
     static const uint16_t LOOPBACK2 = 0b000000001010; // Executes the main loop again
     static const uint16_t LOOPBACK3 = 0b000000001011; // Executes the main loop again
     static const uint16_t LOOPBACK4 = 0b000000001100; // Executes the main loop again
-
     
     // The micro program to execute
     uint16_t microInstr[32];
@@ -114,6 +106,7 @@ class Blitter : public HardwareComponent {
 public:
     
     Blitter();
+    
     
     //
     // Methods from HardwareComponent
@@ -144,23 +137,12 @@ public:
     
 public:
     
-    inline void setanew(uint16_t value) {
-        
-        // TODO: APPLY MASKS
-
-        anew = value; ashift = ashift << 16 | value;
-    }
-    inline void setbnew(uint16_t value) {
-        bnew = value; bshift = bshift << 16 | value;
-    }
-
     // BLTCON0
     inline uint16_t bltASH() { return bltcon0 >> 12; }
     inline bool bltUSEA() { return bltcon0 & (1 << 11); }
     inline bool bltUSEB() { return bltcon0 & (1 << 10); }
     inline bool bltUSEC() { return bltcon0 & (1 << 9); }
     inline bool bltUSED() { return bltcon0 & (1 << 8); }
-    
     void pokeBLTCON0(uint16_t value);
 
     // BLTCON1
@@ -171,9 +153,12 @@ public:
     inline bool bltFCI() { return bltcon1 & (1 << 2); }
     inline bool bltDESC() { return bltcon1 & (1 << 1); }
     inline bool bltLINE() { return bltcon1 & (1 << 0); }
-
     void pokeBLTCON1(uint16_t value);
 
+    // BLTAFWM, BLTALWM
+    void pokeBLTAFWM(uint16_t value);
+    void pokeBLTALWM(uint16_t value);
+    
     // BLTxPTH, BLTxPTL
     void pokeBLTAPTH(uint16_t value);
     void pokeBLTAPTL(uint16_t value);
@@ -183,10 +168,6 @@ public:
     void pokeBLTCPTL(uint16_t value);
     void pokeBLTDPTH(uint16_t value);
     void pokeBLTDPTL(uint16_t value);
-
-    // BLTAFWM, BLTALWM
-    void pokeBLTAFWM(uint16_t value);
-    void pokeBLTALWM(uint16_t value);
 
     // BLTSIZE
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
@@ -206,8 +187,8 @@ public:
     void pokeBLTBDAT(uint16_t value);
     void pokeBLTCDAT(uint16_t value);
     
-    bool isFirstWord() { return wcounter == bltsizeW(); }
-    bool isLastWord() { return wcounter == 1; }
+    bool isFirstWord() { return xCounter == bltsizeW(); }
+    bool isLastWord() { return xCounter == 1; }
 
   
     //
@@ -248,11 +229,6 @@ private:
 
     // Performs a line blit operation via the fast Blitter
     void doLineBlit();
-
-
-    
-
-    
 };
 
 #endif

@@ -13,22 +13,18 @@
 #include "HardwareComponent.h"
 #include "Colorizer.h"
 
-//
-// THIS CLASS IS A STUB TO GET THE VISUAL PROTOTYPE WORKING
-//
-
 class Denise : public HardwareComponent {
     
 public:
     
-    // Color synthesizer
+    // A color synthesizer for computing RGBA values
     Colorizer colorizer;
     
     // Denise has been executed up to this clock cycle.
     Cycle clock = 0;
     
     // Frame counter (records the number of frames drawn since power on)
-    uint64_t frame = 0;
+    // uint64_t frame = 0;
     
     
     //
@@ -52,8 +48,6 @@ public:
     // Counter for digital (mouse) input (port 1 and 2)
     uint16_t joydat[2]; 
 
-
-    
     /* The 6 bitplane parallel-to-serial shift registers
      * Denise transfers the current values of the bpldat registers into
      * the shift registers after BPLDAT1 is written to. This is emulated
@@ -67,18 +61,11 @@ public:
     int8_t scrollHiEven;
     int8_t scrollHiOdd;
     
-    /*
-    // Vertical screen buffer size
-    static const long VPIXELS = 288;
     
-    // Horizontal screen buffer size
-    static const long HPIXELS = 768;
-
-    // Screen buffer size
-    static const long BUFSIZE = VPIXELS * HPIXELS * 4;
-    */
+    //
+    // Screen buffers
+    //
     
-
     /* Screen buffer for long and short frames
      *
      *   - Long frames consist of the odd rasterlines 1, 3, 5, ..., 625.
@@ -104,10 +91,10 @@ public:
      */
     int *pixelBuffer = longFrame;
 
-    /* Offset into pixelBuffer
-     */
+    // Offset into the pixelBuffer
     short bufferoffset;
 
+    
     //
     // Constructing and destructing
     //
@@ -131,6 +118,7 @@ private:
 
     void didLoadFromBuffer(uint8_t **buffer) override;
   
+    
     //
     // Collecting information
     //
@@ -146,22 +134,29 @@ public:
     
 public:
    
+    // BPLCON0
     void pokeBPLCON0(uint16_t value);
-    void pokeBPLCON1(uint16_t value);
-    void pokeBPLCON2(uint16_t value);
-    void pokeBPLxDAT(int x, uint16_t value);
-
-    void pokeSPRxPOS(int x, uint16_t value);
-    void pokeSPRxCTL(int x, uint16_t value);
-
-    uint16_t peekJOYxDAT(int x);
-
     
     // Returns true if we're running in HIRES mode
     inline bool hires() { return (bplcon0 & 0x8000); }
-
+    
     // Returns true if we're running in LORES mode
     inline bool lores() { return !(bplcon0 & 0x8000); }
+    
+    // BPLCON0, BPLCON1
+    void pokeBPLCON1(uint16_t value);
+    void pokeBPLCON2(uint16_t value);
+    
+    // BPL1DAT ... BPL6DAT
+    void pokeBPLxDAT(int x, uint16_t value);
+
+    // SPR0POS ... SPR7POS
+    void pokeSPRxPOS(int x, uint16_t value);
+    void pokeSPRxCTL(int x, uint16_t value);
+
+    // JOY0DATR, JOY1DATR
+    uint16_t peekJOYxDATR(int x);
+
     
     
     //
@@ -169,7 +164,7 @@ public:
     //
     
     // Processes an overdue event
-    void serviceEvent(EventID id, int64_t data);
+    // void serviceEvent(EventID id, int64_t data);
 
 
     
@@ -189,16 +184,7 @@ public:
     
     
     //
-    // Debugging the component
-    //
-    
-    void debugSetActivePlanes(int count);
-
-    void debugSetBPLCON0Bit(unsigned bit, bool value);
-
-    
-    //
-    // FAKE METHODS FOR THE VISUAL PROTOTYPE (TEMPORARY)
+    // Accessing the frame buffers
     //
     
 public:
@@ -207,17 +193,28 @@ public:
      * The long frame is ready for display, if Denise is currently working on
      * on the short frame and vice verse.
      */
-    bool longFrameIsReady() { return (frameBuffer == shortFrame); }
-    bool shortFrameIsReady() { return (frameBuffer == longFrame); }
+    inline bool longFrameIsReady() { return (frameBuffer == shortFrame); }
+    inline bool shortFrameIsReady() { return (frameBuffer == longFrame); }
 
     /* Returns the currently stabel screen buffer.
      * If Denise is working on the long frame, a pointer to the short frame is
      * returned and vice versa.
      */
-    void *screenBuffer() { return (frameBuffer == longFrame) ? shortFrame : longFrame; }
+    inline void *screenBuffer() { return (frameBuffer == longFrame) ? shortFrame : longFrame; }
    
     // Fake some video output
     void endOfFrame();
+    
+    
+    //
+    // Debugging the component
+    //
+    
+    // Called by the GUI to manually change the number of active bitplanes
+    void debugSetActivePlanes(int count);
+
+    // Called by the GUI to manually change the contents of BPLCON0
+    void debugSetBPLCON0Bit(unsigned bit, bool value);
 };
 
 #endif

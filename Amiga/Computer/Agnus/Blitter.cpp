@@ -44,7 +44,9 @@ Blitter::Blitter()
         { &ashift,     sizeof(ashift),     0 },
         { &bshift,     sizeof(bshift),     0 },
 
-        { &hcounter,   sizeof(hcounter),   0 },
+        { &xCounter,   sizeof(xCounter),   0 },
+        { &yCounter,   sizeof(yCounter),   0 },
+
         { &bbusy,      sizeof(bbusy),      0 },
         { &bzero,      sizeof(bzero),      0 },
 
@@ -384,12 +386,12 @@ Blitter::serviceEvent(EventID id)
                 if (dhold) bzero = false;
                 
                 // Move to the next coordinate
-                if (wcounter > 1) {
-                    wcounter--;
+                if (xCounter > 1) {
+                    xCounter--;
                 } else {
-                    if (hcounter > 1) {
-                        wcounter = bltsizeW();
-                        hcounter--;
+                    if (yCounter > 1) {
+                        xCounter = bltsizeW();
+                        yCounter--;
                     }
                 }
             }
@@ -420,7 +422,7 @@ Blitter::serviceEvent(EventID id)
                 debug(2, "LOOPBACK\n");
                 uint16_t offset = instr & 0b111;
                 
-                if ((hcounter > 1 || wcounter > 1) && offset) {
+                if ((yCounter > 1 || xCounter > 1) && offset) {
 
                     // Move PC back to the beginning of the main cycle
                     bltpc = bltpc - offset - 1;

@@ -53,9 +53,12 @@ public:
     
     Colorizer();
     
+    
     //
     // Configuring the color palette
     //
+    
+public:
     
     Palette getPalette() { return palette; }
     void setPalette(Palette p);
@@ -74,6 +77,8 @@ public:
     // Accessing colors and color registers
     //
 
+public:
+    
     // Peeks a value from one of the 32 color registers.
     uint16_t peekColorReg(int reg);
 

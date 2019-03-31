@@ -60,11 +60,11 @@ Blitter::doCopyBlit()
     
     if (bltdebug) debug("A = %d B = %d C = %d D = %d amod = %d bmod = %d cmod = %d dmod = %d\n", useA, useB, useC, useD, amod, bmod, cmod, dmod);
     
-    for (hcounter = bltsizeH(); hcounter >= 1; hcounter--) {
+    for (yCounter = bltsizeH(); yCounter >= 1; yCounter--) {
     
-        for (wcounter = bltsizeW(); wcounter >= 1;  wcounter--) {
+        for (xCounter = bltsizeW(); xCounter >= 1;  xCounter--) {
             
-            if (bltdebug) debug("(%d,%d)\n", hcounter, wcounter);
+            if (bltdebug) debug("(%d,%d)\n", yCounter, xCounter);
             
             // Fetch A, B, and C
             if (useA) {
