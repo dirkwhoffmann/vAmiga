@@ -106,6 +106,18 @@ CPU::_powerOff()
 }
 
 void
+CPU::_run()
+{
+ 
+}
+
+void
+CPU::_pause()
+{
+ 
+}
+
+void
 CPU::_reset()
 {
     
@@ -137,6 +149,34 @@ CPU::_dump()
     plainmsg("\n");
     plainmsg("     SSP: %X\n", info.ssp);
     plainmsg("   Flags: %X\n", info.flags);
+}
+
+void
+CPU::recordContext()
+{
+    debug("recordContext: context = %p\n", context);
+    assert(context == NULL);
+
+    // Allocate memory if needed
+    context = new (std::nothrow) uint8_t[m68k_context_size()];
+    
+    // Record context
+    if (context) m68k_get_context(context);
+}
+
+void
+CPU::restoreContext()
+{
+    debug("restoreContext: context = %p\n", context);
+    if (context) {
+    
+        // Restore context
+        m68k_set_context(context);
+
+        // Deallocate memory
+        delete[] context;
+        context = NULL;
+    }
 }
 
 uint32_t

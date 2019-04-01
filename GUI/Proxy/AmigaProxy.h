@@ -81,7 +81,7 @@ struct AmigaFileWrapper;
 @property (readonly) AmigaDriveProxy *df0;
 @property (readonly) AmigaDriveProxy *df1;
 
-- (void) makeActiveInstance;
+// - (void) makeActiveInstance;
 - (void) kill;
 
 - (BOOL) releaseBuild;

@@ -14,10 +14,21 @@
 
 class CPU : public HardwareComponent {
     
+    //
+    // CPU state switching
+    //
+
+    /* CPU context
+     * This variable is usually NULL. When the user switches to another
+     * emulator instance, it is used to store the current context. When the
+     * user switches back, the previously saved state is restored.
+     */
+    uint8_t *context = NULL;
+    
 public:
     
     //
-    // Debugging tools
+    // Debuging tools
     //
     
     // A breakpoint manager for handling forced interruptions
@@ -36,12 +47,6 @@ public:
     int writePtr;
     
     
-    // DEPRECATED
-    //  map<uint32_t, Breakpoint> breakpoints;
-    
-public:
-    
-    
     //
     // Constructing and destructing
     //
@@ -51,6 +56,7 @@ public:
     CPU();
     ~CPU();
     
+    
     //
     // Methods from HardwareComponent
     //
@@ -59,10 +65,33 @@ private:
     
     void _powerOn() override;
     void _powerOff() override;
+    void _run() override;
+    void _pause() override;
     void _reset() override;
     void _ping() override;
     void _dump() override;
    
+    
+    //
+    // Recording and restoring the CPU context
+    //
+    
+public:
+    
+    // Returns true if a CPU context has been saved previously
+    bool hasSavedContext() { return context != NULL; }
+    
+    // Records the current CPU context
+    void recordContext();
+
+    // Restores the current CPU context
+    void restoreContext();
+
+    
+    //
+    // Querying registers
+    //
+    
 public:
     
     // Returns the current value of the program counter.
@@ -94,8 +123,9 @@ public:
     // Returns the length of the currently executed instruction.
     uint32_t lengthOInstruction() { return lengthOfInstruction(getPC()); }
     
+    
     //
-    // Tracing the program execution
+    // Tracing program execution
     //
     
     // Clears the trace buffer.
@@ -114,11 +144,13 @@ public:
     RecordedInstruction readRecordedInstruction(long offset);
     
     
+    //
+    // Running the device
+    //
+    
 public:
     
     uint64_t executeNextInstruction();
-
-    
 };
 
 #endif

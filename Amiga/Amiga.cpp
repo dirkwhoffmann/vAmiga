@@ -118,9 +118,17 @@ Amiga::~Amiga()
 void
 Amiga::makeActiveInstance()
 {
-    activeAmiga = this;
+    // Return immediately if this emulator instance is the active instance
+    if (activeAmiga == this) return;
     
-    // TODO: Add code to pull and put the context of the Musashi CPU in and out.
+    // Pause the currently active emulator instance (if any)
+    if (activeAmiga != NULL) activeAmiga->pause();
+    
+    // Restore the previously recorded CPU state (if any)
+    cpu.restoreContext();
+    
+    // Bind the CPU core to this emulator instance
+    activeAmiga = this;
 }
 
 void
@@ -299,6 +307,9 @@ Amiga::_powerOn()
     
     masterClock = 0;
     
+    // Make this emulator instance the active one
+    makeActiveInstance();
+    
     m68k_init();
     m68k_set_cpu_type(M68K_CPU_TYPE_68000);
     m68k_pulse_reset();
@@ -331,6 +342,9 @@ Amiga::_run()
         return;
     }
     
+    // Make this emulator instance the active one
+    makeActiveInstance();
+    
     // Start the emulator thread
     pthread_create(&p, NULL, threadMain, (void *)this);
     
@@ -347,6 +361,13 @@ Amiga::_pause()
     
     // Wait until the thread has terminated
     pthread_join(p, NULL);
+    
+    // Save the CPU context
+    cpu.recordContext();
+    
+    // Unbind the emulator instance from the CPU
+    assert(activeAmiga != NULL);
+    activeAmiga = NULL;
     
     amiga->putMessage(MSG_PAUSE);
 }

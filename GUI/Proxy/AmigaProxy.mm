@@ -961,10 +961,12 @@ struct ADFFileWrapper { ADFFile *adf; };
     return self;
 }
 
+/*
 - (void) makeActiveInstance
 {
     wrapper->amiga->makeActiveInstance();
 }
+*/
 
 - (void) kill
 {
