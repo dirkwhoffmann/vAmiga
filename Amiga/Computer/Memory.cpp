@@ -113,11 +113,11 @@ Memory::didLoadFromBuffer(uint8_t **buffer)
     dealloc();
 
     // Allocate new memory
-    if (bootRomSize) bootRom = new (std::nothrow) uint8_t[KB(bootRomSize) + 3];
-    if (kickRomSize) kickRom = new (std::nothrow) uint8_t[KB(kickRomSize) + 3];
-    if (chipRamSize) chipRam = new (std::nothrow) uint8_t[KB(chipRamSize) + 3];
-    if (slowRamSize) slowRam = new (std::nothrow) uint8_t[KB(slowRamSize) + 3];
-    if (fastRamSize) fastRam = new (std::nothrow) uint8_t[KB(fastRamSize) + 3];
+    if (bootRomSize) bootRom = new (std::nothrow) uint8_t[bootRomSize + 3];
+    if (kickRomSize) kickRom = new (std::nothrow) uint8_t[kickRomSize + 3];
+    if (chipRamSize) chipRam = new (std::nothrow) uint8_t[chipRamSize + 3];
+    if (slowRamSize) slowRam = new (std::nothrow) uint8_t[slowRamSize + 3];
+    if (fastRamSize) fastRam = new (std::nothrow) uint8_t[fastRamSize + 3];
 
     // Load memory contents from buffer
     readBlock(buffer, bootRom, bootRomSize);
