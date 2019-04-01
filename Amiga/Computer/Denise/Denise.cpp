@@ -115,13 +115,13 @@ Denise::pokeBPLCON0(uint16_t value)
     bplcon0 = value;
     
     // Tell Agnus how many bitplanes we have
-    amiga->dma.activeBitplanes = (value >> 12) & 0b111;
+    amiga->agnus.activeBitplanes = (value >> 12) & 0b111;
 
     // Update the DMA time slot allocation table
-    amiga->dma.buildDMAEventTable();
+    amiga->agnus.buildDMAEventTable();
 
     // Clear data registers of all inactive bitplanes
-    for (int plane = 5; plane >= amiga->dma.activeBitplanes; plane--) {
+    for (int plane = 5; plane >= amiga->agnus.activeBitplanes; plane--) {
         bpldat[plane] = 0;
     }
 }
@@ -133,7 +133,7 @@ Denise::pokeBPLCON1(uint16_t value)
     
     bplcon1 = value & 0xFF;
     
-    uint16_t ddfstrt = amiga->dma.ddfstrt;
+    uint16_t ddfstrt = amiga->agnus.ddfstrt;
 
     // Compute scroll values (adapted from WinFellow)
     scrollLowOdd  = (bplcon1        + (ddfstrt & 0b0100) ? 8 : 0) & 0x0F;
@@ -197,7 +197,7 @@ Denise::serviceEvent(EventID id, int64_t data)
 void
 Denise::fillShiftRegisters()
 {
-    // warn("fillShiftRegisters: IMPLEMENTATION MISSING (vpos = %d)\n", amiga->dma.vpos);
+    // warn("fillShiftRegisters: IMPLEMENTATION MISSING (vpos = %d)\n", amiga->agnus.vpos);
     // warn("blpdat: %X %X %X %X\n", bpldat[0], bpldat[1], bpldat[2], bpldat[3]);
 
     shiftReg[0] = bpldat[0];
@@ -213,10 +213,10 @@ Denise::fillShiftRegisters()
 void
 Denise::draw16()
 {
-    assert(amiga->dma.vpos >= 26); // 0 .. 25 is VBLANK area
+    assert(amiga->agnus.vpos >= 26); // 0 .. 25 is VBLANK area
     
-    int16_t vpos = amiga->dma.vpos - 26;
-    int16_t hpos = (amiga->dma.hpos - 63) * 4; // 2;
+    int16_t vpos = amiga->agnus.vpos - 26;
+    int16_t hpos = (amiga->agnus.hpos - 63) * 4; // 2;
     
     // if (amiga->debugDMA) debug("draw16: (%d, %d)\n", vpos, hpos);
     
@@ -282,8 +282,8 @@ Denise::endOfFrame()
     // Take a snapshot once in a while
     if (amiga->getTakeAutoSnapshots() && amiga->getSnapshotInterval() > 0) {
         unsigned fps = 50;
-        if (amiga->dma.frame % (fps * amiga->getSnapshotInterval()) == 0) {
-            amiga->takeAutoSnapshot();
+        if (amiga->agnus.frame % (fps * amiga->getSnapshotInterval()) == 0) {
+            amiga->runLoopControl |= Amiga::RL_SNAPSHOT;
         }
     }
     

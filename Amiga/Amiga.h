@@ -82,7 +82,7 @@ public:
     Memory mem;
     
     // The DMA controller (part of Agnus)
-    Agnus dma;
+    Agnus agnus;
 
     // Denise (Video)
     Denise denise;
@@ -135,13 +135,31 @@ public:
     // Emulator thread
     //
     
-private:
+public:
+    
+    /* Run loop control
+     * This variable is initialized with 0 at the beginning of the run loop and
+     * checked at the end of each run loop iteration. Most of the time,
+     * the variable remains 0 wich causes the run loop to repeat. By setting
+     * certain flags, run loop behaviour can be altered:
+     *
+     * RL_TERMINATE:   exits the run loop after finishing the current iteration
+     * RL_SNAPSHOT:    takes a snapshot and re-enters the loop
+     */
+    static const uint8_t RL_TERMINATE = 0b0001;
+    static const uint8_t RL_SNAPSHOT  = 0b0010;
+
+    uint8_t runLoopControl;
+    
     
     /* A boolean flag for terminating the emulation thread
      * This flag is periodically queried inside the run loop. When it is set to
      * true, the thread terminates.
+     * DEPRECATED
      */
-    bool stop = false;
+    // bool stop = false;
+    
+private:
     
     // The invocation counter for implementing suspend() / resume()
     unsigned suspendCounter = 0;
@@ -153,6 +171,8 @@ private:
     //
     // Emulation speed
     //
+    
+private:
     
     /* System timer information
      * Used to match the emulation speed with the speed of a real Amiga.

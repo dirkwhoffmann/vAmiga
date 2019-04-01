@@ -18,11 +18,11 @@ void
 HardwareComponent::prefix()
 {
     fprintf(stderr, "[%lld] (%3d,%3d) ",
-            amiga->dma.frame, amiga->dma.vpos, amiga->dma.hpos); 
+            amiga->agnus.frame, amiga->agnus.vpos, amiga->agnus.hpos); 
 
     fprintf(stderr, " %06X: ", amiga->cpu.getPC());
 
-    uint16_t dmacon = amiga->dma.dmacon;
+    uint16_t dmacon = amiga->agnus.dmacon;
     bool dmaen = dmacon & DMAEN;
     fprintf(stderr, "%c%c%c%c ",
             (dmacon & BPLEN) ? (dmaen ? 'P' : 'p') : '-',
@@ -43,7 +43,7 @@ HardwareComponent::setAmiga(Amiga *amiga)
     assert(amiga != NULL);
 
     this->amiga = amiga;
-    this->handler = &amiga->dma.eventHandler;
+    this->handler = &amiga->agnus.eventHandler;
     
     // Set the reference in all sub components
     for (HardwareComponent *c : subComponents) {

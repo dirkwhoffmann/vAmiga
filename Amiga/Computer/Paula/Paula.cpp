@@ -247,10 +247,10 @@ Paula::doDiskDMA()
             uint8_t data1 = 0; // = floppyRead()
             uint8_t data2 = 0; // = floppyRead()
             
-            amiga->mem.pokeChip8(amiga->dma.dskpt, data1);
-            amiga->dma.dskpt = (amiga->dma.dskpt + 1) & 0x7FFFF;
-            amiga->mem.pokeChip8(amiga->dma.dskpt, data2);
-            amiga->dma.dskpt = (amiga->dma.dskpt + 1) & 0x7FFFF;
+            amiga->mem.pokeChip8(amiga->agnus.dskpt, data1);
+            amiga->agnus.dskpt = (amiga->agnus.dskpt + 1) & 0x7FFFF;
+            amiga->mem.pokeChip8(amiga->agnus.dskpt, data2);
+            amiga->agnus.dskpt = (amiga->agnus.dskpt + 1) & 0x7FFFF;
 
             debug("Disk DMA: %X %X (%d words remain)\n", data1, data2, dsklen);
             

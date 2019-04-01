@@ -38,7 +38,7 @@ typedef int64_t DMACycle; // Cycle in DMA cycle units
 
 
 //
-// General
+// Amiga
 //
 
 typedef enum : long

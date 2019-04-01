@@ -167,7 +167,7 @@ Drive::moveHead(int dir)
         } else {
             warn("Program is trying to move head beyond track 0.\n");
         }
-        debug("moveOut: new cyclinder = %d\n", head.cylinder);
+        // debug("moveOut: new cyclinder = %d\n", head.cylinder);
     
     } else {
         
@@ -178,7 +178,7 @@ Drive::moveHead(int dir)
         } else {
             warn("Program is trying to move head beyond track 79.\n");
         }
-        debug("moveIn: new cyclinder = %d\n", head.cylinder);
+        // debug("moveIn: new cyclinder = %d\n", head.cylinder);
     }
 }
 

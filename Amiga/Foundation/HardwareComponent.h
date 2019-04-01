@@ -68,7 +68,7 @@ public:
     Amiga *amiga = NULL;
     
     /* Reference to the event handler.
-     * Provides a quick access to amiga->dma.eventHandler
+     * Provides a quick access to amiga->agnus.eventHandler
      */
     EventHandler *handler = NULL;
     

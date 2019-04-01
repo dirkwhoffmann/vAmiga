@@ -109,12 +109,12 @@ EventHandler::getPrimarySlotInfo(int slot)
     int16_t hpos;
     Cycle trigger = primSlot[slot].triggerCycle;
     
-    amiga->dma.cycleToBeamAbs(trigger, frame, vpos, hpos);
+    amiga->agnus.cycleToBeamAbs(trigger, frame, vpos, hpos);
     
     info.trigger = trigger;
-    info.triggerRel = trigger - amiga->dma.clock;
+    info.triggerRel = trigger - amiga->agnus.clock;
     info.eventId = primSlot[slot].id;
-    info.frame = frame - amiga->dma.frame;
+    info.frame = frame - amiga->agnus.frame;
     info.vpos = vpos;
     info.hpos = hpos;
     
@@ -245,12 +245,12 @@ EventHandler::getSecondarySlotInfo(int slot)
     int16_t hpos;
     Cycle trigger = secSlot[slot].triggerCycle;
     
-    amiga->dma.cycleToBeamAbs(trigger, frame, vpos, hpos);
+    amiga->agnus.cycleToBeamAbs(trigger, frame, vpos, hpos);
     
     info.trigger = trigger;
-    info.triggerRel = trigger - amiga->dma.clock;
+    info.triggerRel = trigger - amiga->agnus.clock;
     info.eventId = secSlot[slot].id;
-    info.frame = frame - amiga->dma.frame;
+    info.frame = frame - amiga->agnus.frame;
     info.vpos = vpos;
     info.hpos = hpos;
     
@@ -310,7 +310,7 @@ EventHandler::getInfo()
 {
     EventHandlerInfo info;
 
-    info.dmaClock = amiga->dma.clock;
+    info.dmaClock = amiga->agnus.clock;
 
     // Primary events
     for (unsigned i = 0; i < PRIM_SLOT_COUNT; i++)
@@ -369,25 +369,25 @@ EventHandler::_executeUntil(Cycle cycle) {
     // Check for a bitplane event
     if (isDue(DMA_SLOT, cycle)) {
         assert(checkTriggeredEvent(DMA_SLOT));
-        amiga->dma.serviceDMAEvent(primSlot[DMA_SLOT].id);
+        amiga->agnus.serviceDMAEvent(primSlot[DMA_SLOT].id);
     }
     
     // Check for a Copper event
     if (isDue(COP_SLOT, cycle)) {
         assert(checkTriggeredEvent(COP_SLOT));
-        amiga->dma.copper.serviceEvent(primSlot[COP_SLOT].id);
+        amiga->agnus.copper.serviceEvent(primSlot[COP_SLOT].id);
     }
     
     // Check for a Blitter event
     if (isDue(BLT_SLOT, cycle)) {
         assert(checkTriggeredEvent(BLT_SLOT));
-        amiga->dma.blitter.serviceEvent(primSlot[BLT_SLOT].id);
+        amiga->agnus.blitter.serviceEvent(primSlot[BLT_SLOT].id);
     }
     
     // Check for a raster event
     if (isDue(RAS_SLOT, cycle)) {
         assert(checkTriggeredEvent(RAS_SLOT));
-        amiga->dma.serviceRASEvent(primSlot[RAS_SLOT].id);
+        amiga->agnus.serviceRASEvent(primSlot[RAS_SLOT].id);
     }
     
     // Check if a secondary event needs to be processed
@@ -476,7 +476,7 @@ EventHandler::scheduleRel(EventSlot s, Cycle cycle, EventID id)
 {
     assert(isPrimarySlot(s));
     
-    cycle += amiga->dma.clock;
+    cycle += amiga->agnus.clock;
     
     primSlot[s].triggerCycle = cycle;
     primSlot[s].id = id;
@@ -491,7 +491,7 @@ EventHandler::schedulePos(EventSlot s, int16_t vpos, int16_t hpos, EventID id)
     assert(isPrimarySlot(s));
     assert(isVposHpos(vpos, hpos));
     
-    Cycle cycle = amiga->dma.beamToCyclesAbs(vpos, hpos);
+    Cycle cycle = amiga->agnus.beamToCyclesAbs(vpos, hpos);
     
     primSlot[s].triggerCycle = cycle;
     primSlot[s].id = id;
@@ -516,7 +516,7 @@ EventHandler::rescheduleRel(EventSlot s, Cycle cycle)
 {
     assert(isPrimarySlot(s));
     
-    cycle += amiga->dma.clock;
+    cycle += amiga->agnus.clock;
     
     primSlot[s].triggerCycle = cycle;
     if (cycle < nextPrimTrigger) nextPrimTrigger = cycle;
@@ -559,7 +559,7 @@ EventHandler::scheduleSecRel(EventSlot s, Cycle cycle, EventID id)
 {
     assert(isSecondarySlot(s));
     
-    cycle += amiga->dma.clock;
+    cycle += amiga->agnus.clock;
     
     // Schedule event in secondary table
     secSlot[s].triggerCycle = cycle;
@@ -577,7 +577,7 @@ EventHandler::scheduleSecPos(EventSlot s, int16_t vpos, int16_t hpos, EventID id
     assert(isSecondarySlot(s));
     assert(isVposHpos(vpos, hpos));
     
-    Cycle cycle = amiga->dma.beamToCyclesAbs(vpos, hpos);
+    Cycle cycle = amiga->agnus.beamToCyclesAbs(vpos, hpos);
     
     secSlot[s].triggerCycle = cycle;
     secSlot[s].id = id;
@@ -598,7 +598,7 @@ EventHandler::rescheduleSecRel(EventSlot s, Cycle cycle)
 {
     assert(isSecondarySlot(s));
     
-    cycle += amiga->dma.clock;
+    cycle += amiga->agnus.clock;
     
     secSlot[s].triggerCycle = cycle;
     if (cycle < nextSecTrigger) nextSecTrigger = cycle;
@@ -709,7 +709,7 @@ EventHandler::checkTriggeredEvent(EventSlot s)
     assert(isPrimarySlot(s));
     
     // Note: This function has to be called at the trigger cycle
-    if (amiga->dma.clock != primSlot[s].triggerCycle) {
+    if (amiga->agnus.clock != primSlot[s].triggerCycle) {
         return true;
     }
     

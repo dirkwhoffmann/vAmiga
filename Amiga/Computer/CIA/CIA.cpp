@@ -181,7 +181,7 @@ CIA::peek(uint16_t addr)
 			
         case 0x07: // CIA_TIMER_B_HIGH
 			
-            // debug("tb = %d vpos = %d\n", counterB, amiga->dma.vpos);
+            // debug("tb = %d vpos = %d\n", counterB, amiga->agnus.vpos);
             result = HI_BYTE(counterB);
 			break;
 			
@@ -1140,7 +1140,7 @@ CIA::wakeUp()
     if (!sleeping) return;
     sleeping = false;
     
-    Cycle targetCycle = CIA_CYCLES(AS_CIA_CYCLES(amiga->dma.clock));
+    Cycle targetCycle = CIA_CYCLES(AS_CIA_CYCLES(amiga->agnus.clock));
     wakeUp(targetCycle);
     
     /*
@@ -1224,7 +1224,7 @@ CIAA::_dump()
 void
 CIAA::scheduleNextExecution()
 {
-    amiga->dma.eventHandler.scheduleAbs(CIAA_SLOT,
+    amiga->agnus.eventHandler.scheduleAbs(CIAA_SLOT,
                                         clock + CIA_CYCLES(1),
                                         CIA_EXECUTE);
 }
@@ -1232,7 +1232,7 @@ CIAA::scheduleNextExecution()
 void
 CIAA::scheduleWakeUp()
 {
-    amiga->dma.eventHandler.scheduleAbs(CIAA_SLOT,
+    amiga->agnus.eventHandler.scheduleAbs(CIAA_SLOT,
                                         wakeUpCycle,
                                         CIA_WAKEUP);
 }
@@ -1382,7 +1382,7 @@ CIAB::_dump()
 void
 CIAB::scheduleNextExecution()
 {
-    amiga->dma.eventHandler.scheduleAbs(CIAB_SLOT,
+    amiga->agnus.eventHandler.scheduleAbs(CIAB_SLOT,
                                         clock + CIA_CYCLES(1),
                                         CIA_EXECUTE);
 }
@@ -1390,7 +1390,7 @@ CIAB::scheduleNextExecution()
 void
 CIAB::scheduleWakeUp()
 {
-    amiga->dma.eventHandler.scheduleAbs(CIAB_SLOT,
+    amiga->agnus.eventHandler.scheduleAbs(CIAB_SLOT,
                                         wakeUpCycle,
                                         CIA_WAKEUP);
 }

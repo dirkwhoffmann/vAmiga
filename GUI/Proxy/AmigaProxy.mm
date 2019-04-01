@@ -948,7 +948,7 @@ struct ADFFileWrapper { ADFFile *adf; };
     ciaA = [[CIAProxy alloc] initWithCIA:&amiga->ciaA];
     ciaB = [[CIAProxy alloc] initWithCIA:&amiga->ciaB];
     mem = [[MemProxy alloc] initWithMemory:&amiga->mem];
-    dma = [[AgnusProxy alloc] initWithAgnus:&amiga->dma];
+    dma = [[AgnusProxy alloc] initWithAgnus:&amiga->agnus];
     denise = [[DeniseProxy alloc] initWithDenise:&amiga->denise];
     paula = [[PaulaProxy alloc] initWithPaula:&amiga->paula];
     controlPort1 = [[AmigaControlPortProxy alloc] initWithControlPort:&amiga->controlPort1];

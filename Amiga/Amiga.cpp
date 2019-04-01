@@ -78,7 +78,7 @@ Amiga::Amiga()
         &ciaA,
         &ciaB,
         &mem,
-        &dma,
+        &agnus,
         &denise,
         &paula,
         &controlPort1,
@@ -358,7 +358,7 @@ Amiga::_pause()
     // debug(1, "Pause\n");
     
     // Cancel the emulator thread
-    stop = true;
+    runLoopControl |= RL_TERMINATE;
     
     // Wait until the thread has terminated
     pthread_join(p, NULL);
@@ -457,12 +457,12 @@ Amiga::getInfo()
     // info.inCPUCycles = AS_CPU_CYCLES(masterClock);
     // info.inDMACycles = AS_DMA_CYCLES(masterClock);
     // info.inCIACycles = AS_CIA_CYCLES(masterClock);
-    info.dmaClock = dma.clock;
+    info.dmaClock = agnus.clock;
     info.ciaAClock = ciaA.clock;
     info.ciaBClock = ciaB.clock;
-    info.frame = dma.frame;
-    info.vpos = dma.vpos;
-    info.hpos = dma.hpos;
+    info.frame = agnus.frame;
+    info.vpos = agnus.vpos;
+    info.hpos = agnus.hpos;
     
     return info;
 }
@@ -714,30 +714,26 @@ Amiga::stepOver()
 void
 Amiga::runLoop()
 {
-    // debug("Amiga::runLoop\n");
-    
     // Prepare to run
     amiga->restartTimer();
     
-    //
-    // TODO: Emulate the Amiga here ...
-    //
+    // If the run loop is re-entered below, we start here
+enter:
     
-    // THE FOLLOWING CODE IS FOR VISUAL PROTOTYPING ONLY
+    // Configure run loop to run continously
+    runLoopControl = 0;
     
-    // Execute at least one instruction
-    stop = false;
+    // Enter the loop and emulate at least one CPU instruction
     do {
         
-        // Emulate the CPU
+        // Emulate CPU instruction
         CPUCycle cpuCycles = cpu.executeNextInstruction();
         
         // Advance the masterclock
         masterClock += CPU_CYCLES(cpuCycles);
-        // debug("CPU has executed %lld cycles newClock = %lld\n", CPU_CYCLES(cpuCycles), masterClock);
 
-        // Emulate the DMA controller
-        dma.executeUntil(masterClock);
+        // Emulate DMA (Agnus is responsible for that)
+        agnus.executeUntil(masterClock);
         
         if (debugMode) {
 
@@ -748,11 +744,11 @@ Amiga::runLoop()
             m68k_disassemble(diss, cpu.getPC(), M68K_CPU_TYPE_68000);
             printf("%s\n", diss);
             */
+            
             // Check if a breakpoint has been reached
             if (cpu.bpManager.shouldStop()) {
-                stop = true;
+                runLoopControl |= RL_TERMINATE;
                 putMessage(MSG_BREAKPOINT_REACHED);
-                // debug("MSG_BREAKPOINT_REACHED at %X\n", cpu.getPC());
             }
             
             /*
@@ -763,11 +759,21 @@ Amiga::runLoop()
             */
         }
         
-        // stop = true;
-    } while (!stop);
+    } while (runLoopControl == 0);
+    
+    // Check if the loop has terminated, because an auto-snapshot was requested.
+    if (runLoopControl & RL_SNAPSHOT) {
+        
+        takeAutoSnapshot();
+        
+        // Re-enter the run loop if the termination flag isn't set.
+        if (!(runLoopControl & RL_TERMINATE)) {
+            goto enter;
+        }
+    }
     
     // debug("Exiting run loop\n");
-    // dma.eventHandler.dump();
+    // agnus.eventHandler.dump();
 }
 
 void
@@ -780,15 +786,15 @@ Amiga::dumpClock()
              AS_DMA_CYCLES(masterClock),
              AS_CIA_CYCLES(masterClock));
     plainmsg("    DMA clock: %13lld  %13lld %13lld %13lld\n",
-             amiga->dma.clock,
-             AS_CPU_CYCLES(amiga->dma.clock),
-             AS_DMA_CYCLES(amiga->dma.clock),
-             AS_CIA_CYCLES(amiga->dma.clock));
+             amiga->agnus.clock,
+             AS_CPU_CYCLES(amiga->agnus.clock),
+             AS_DMA_CYCLES(amiga->agnus.clock),
+             AS_CIA_CYCLES(amiga->agnus.clock));
     plainmsg("  Frame clock: %13lld  %13lld %13lld %13lld\n",
-             amiga->dma.latchedClock,
-             AS_CPU_CYCLES(amiga->dma.latchedClock),
-             AS_DMA_CYCLES(amiga->dma.latchedClock),
-             AS_CIA_CYCLES(amiga->dma.latchedClock));
+             amiga->agnus.latchedClock,
+             AS_CPU_CYCLES(amiga->agnus.latchedClock),
+             AS_DMA_CYCLES(amiga->agnus.latchedClock),
+             AS_CIA_CYCLES(amiga->agnus.latchedClock));
     plainmsg("  CIA A clock: %13lld  %13lld %13lld %13lld\n",
              amiga->ciaA.clock,
              AS_CPU_CYCLES(amiga->ciaA.clock),
@@ -800,6 +806,6 @@ Amiga::dumpClock()
              AS_DMA_CYCLES(amiga->ciaB.clock),
              AS_CIA_CYCLES(amiga->ciaB.clock));
     plainmsg("  Color clock: (%d,%d) hex: ($%X,$%X) Frame: %lld\n",
-            dma.vpos, dma.hpos, dma.vpos, dma.hpos, dma.frame);
+            agnus.vpos, agnus.hpos, agnus.vpos, agnus.hpos, agnus.frame);
     plainmsg("\n");
 }

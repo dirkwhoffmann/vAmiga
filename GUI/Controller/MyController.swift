@@ -704,7 +704,6 @@ extension MyController {
         case MSG_DRIVE_HEAD_UP,
              MSG_DRIVE_HEAD_DOWN:
             
-            track()
             if driveNoise {
                 playSound(name: "drive_click", volume: 1.0)
             }

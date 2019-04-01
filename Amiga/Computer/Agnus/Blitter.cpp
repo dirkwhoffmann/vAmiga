@@ -61,7 +61,7 @@ Blitter::getInfo()
     /* Note: We call the Blitter 'active' if there is a pending message in the
      * Copper event slot.
      */
-    info.active  = amiga->dma.eventHandler.isPending(BLT_SLOT);
+    info.active  = amiga->agnus.eventHandler.isPending(BLT_SLOT);
     info.bltcon0 = bltcon0;
     info.bltcon1 = bltcon1;
     info.bltapt  = bltapt;
@@ -324,7 +324,7 @@ Blitter::serviceEvent(EventID id)
                 hcounter = bltsizeH();
                 
                 // Schedule code execution
-                amiga->dma.eventHandler.scheduleNextEvent(BLT_SLOT, DMA_CYCLES(1), BLT_EXECUTE);
+                amiga->agnus.eventHandler.scheduleNextEvent(BLT_SLOT, DMA_CYCLES(1), BLT_EXECUTE);
             }
             break;
             */
@@ -332,8 +332,8 @@ Blitter::serviceEvent(EventID id)
         case BLT_EXECUTE:
             
             // Only proceed if Blitter DMA is enabled
-            if (!amiga->dma.bltDMA()) {
-                amiga->dma.eventHandler.disable(BLT_SLOT);
+            if (!amiga->agnus.bltDMA()) {
+                amiga->agnus.eventHandler.disable(BLT_SLOT);
                 break;
             }
 
@@ -451,7 +451,7 @@ Blitter::serviceEvent(EventID id)
             } else {
             
                 // Continue running the Blitter
-                amiga->dma.eventHandler.rescheduleRel(BLT_SLOT, DMA_CYCLES(1));
+                amiga->agnus.eventHandler.rescheduleRel(BLT_SLOT, DMA_CYCLES(1));
             }
             
             break;
@@ -459,8 +459,8 @@ Blitter::serviceEvent(EventID id)
         case BLT_FAST_BLIT:
             
             // Only proceed if Blitter DMA is enabled
-            if (!amiga->dma.bltDMA()) {
-                amiga->dma.eventHandler.disable(BLT_SLOT);
+            if (!amiga->agnus.bltDMA()) {
+                amiga->agnus.eventHandler.disable(BLT_SLOT);
                 break;
             }
             
