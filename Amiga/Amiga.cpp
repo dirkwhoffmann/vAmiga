@@ -93,8 +93,9 @@ Amiga::Amiga()
     
     registerSnapshotItems(vector<SnapshotItem> {
         
-        { &config.model, sizeof(config.model), 0 },
-        { &config.layout, sizeof(config.layout), 0 },
+        { &config, sizeof(config), 0 },
+        { &masterClock, sizeof(masterClock), 0 },
+        { &clockBase, sizeof(clockBase), 0 },
     });
     
     // Install a reference to the top-level object in each subcomponent

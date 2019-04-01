@@ -62,21 +62,13 @@ class Amiga : public HardwareComponent {
      */
     static bool debugMode;
     
+    
+    //
+    // Sub components
+    //
+    
 public:
     
-    // Specification of the machine we are going to emulate...
-    AmigaConfiguration config;
-    
-    
-    //
-    // Hardware components
-    //
-    
-    /* The Amiga's master clock
-     * This clock runs at 28 MHz and is used to derive all other clock signals.
-     */
-    Cycle masterClock = 0;
-        
     // A Motorola 68000 CPU
     CPU cpu;
     
@@ -118,10 +110,32 @@ public:
 
     
     //
+    // Current configuration
+    //
+    // Specification of the machine we are going to emulate...
+
+public:
+
+    AmigaConfiguration config;
+    
+    
+    //
+    // Counters
+    //
+    
+public:
+    
+    /* The Amiga's master clock
+     * This clock runs at 28 MHz and is used to derive all other clock signals.
+     */
+    Cycle masterClock;
+    
+    
+    //
     // Emulator thread
     //
     
-    private:
+private:
     
     /* A boolean flag for terminating the emulation thread
      * This flag is periodically queried inside the run loop. When it is set to

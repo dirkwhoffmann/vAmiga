@@ -33,6 +33,7 @@ Agnus::Agnus()
         { &frame,           sizeof(frame),           0 },
         { &latchedClock,    sizeof(latchedClock),    0 },
         { &vpos,            sizeof(vpos),            0 },
+        { &hpos,            sizeof(hpos),            0 },
         { &hstrt,           sizeof(hstrt),           0 },
         { &hstop,           sizeof(hstop),           0 },
         { &vstrt,           sizeof(vstrt),           0 },
@@ -903,6 +904,9 @@ void
 Agnus::hsyncHandler()
 {
     // Make sure that we are really at the end of the line
+    if (hpos != 226) {
+        dump();
+    }
     assert(hpos == 226 /* 0xE2 */);
     
     // CIA B counts HSYNCs

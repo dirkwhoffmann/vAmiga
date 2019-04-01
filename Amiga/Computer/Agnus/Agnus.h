@@ -76,18 +76,18 @@ public:
     /* The DMA controller has been executed up to this clock cycle.
      * Measured in master clock units.
      */
-    Cycle clock = 0;
+    Cycle clock;
 
     /* The frame counter.
      * The value is increased on every VSYNC action.
      */
-    int64_t frame = 0;
+    int64_t frame;
 
     /* Value of clock at the beginning of the current frame.
      * The value is latched on every VSYNC action and used for implementing
      * the beamToCycle conversion functions.
      */
-    Cycle latchedClock = 0;
+    Cycle latchedClock;
     
     // The current vertical beam position (0 .. VPOS_MAX)
     int16_t vpos;
@@ -100,10 +100,10 @@ public:
      * automatically inside pokeDIWSTRT() and pokeDIWSTOP().
      * DEPRECATED (?!)
      */
-    uint16_t hstrt = 0;
-    uint16_t hstop = 0;
-    uint16_t vstrt = 0;
-    uint16_t vstop = 0;
+    uint16_t hstrt;
+    uint16_t hstop;
+    uint16_t vstrt;
+    uint16_t vstop;
     
     
     //
@@ -111,18 +111,18 @@ public:
     //
     
     // The DMA control register
-    uint16_t dmacon = 0;
+    uint16_t dmacon;
     
     // The disk DMA pointer
     uint32_t dskpt;
     
     // The display window registers
-    uint16_t diwstrt = 0;
-    uint16_t diwstop = 0;
+    uint16_t diwstrt;
+    uint16_t diwstop;
     
     // The display data fetch registers
-    uint16_t ddfstrt = 0;
-    uint16_t ddfstop = 0;
+    uint16_t ddfstrt;
+    uint16_t ddfstop;
     
     // The audio DMA pointers
     uint32_t audlc[4];
@@ -131,10 +131,10 @@ public:
     uint32_t bplpt[6];
     
     // The bitplane modulo registers for odd bitplanes
-    uint16_t bpl1mod = 0;
+    uint16_t bpl1mod;
     
     // The bitplane modulo registers for even bitplanes
-    uint16_t bpl2mod = 0;
+    uint16_t bpl2mod;
     
     // The sprite DMA pointers
     uint32_t sprpt[8];
@@ -146,7 +146,7 @@ public:
     
     // The current owner of the bus, updated in every DMA cycle.
     // TODO: THIS VARIABLE IS NOT USED YET
-    uint16_t busOwner = 0;
+    uint16_t busOwner;
     
     
     //
@@ -175,7 +175,7 @@ public:
     //
     
     // The number of currently active bitplanes
-    int activeBitplanes = 0;
+    int activeBitplanes;
     
   
     //

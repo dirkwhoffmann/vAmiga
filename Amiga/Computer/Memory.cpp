@@ -30,11 +30,11 @@ Memory::~Memory()
 void
 Memory::dealloc()
 {
-    if (bootRom) delete[] bootRom;
-    if (kickRom) delete[] kickRom;
-    if (chipRam) delete[] chipRam;
-    if (slowRam) delete[] slowRam;
-    if (fastRam) delete[] fastRam;
+    if (bootRom) { delete[] bootRom; bootRom = NULL; }
+    if (kickRom) { delete[] kickRom; kickRom = NULL; }
+    if (chipRam) { delete[] chipRam; chipRam = NULL; }
+    if (slowRam) { delete[] slowRam; slowRam = NULL; }
+    if (fastRam) { delete[] fastRam; fastRam = NULL; }
 }
 
 void
@@ -114,10 +114,10 @@ Memory::didLoadFromBuffer(uint8_t **buffer)
 
     // Allocate new memory
     if (bootRomSize) bootRom = new (std::nothrow) uint8_t[KB(bootRomSize) + 3];
-    if (kickRomSize) bootRom = new (std::nothrow) uint8_t[KB(kickRomSize) + 3];
-    if (chipRamSize) bootRom = new (std::nothrow) uint8_t[KB(chipRamSize) + 3];
-    if (slowRamSize) bootRom = new (std::nothrow) uint8_t[KB(slowRamSize) + 3];
-    if (fastRamSize) bootRom = new (std::nothrow) uint8_t[KB(fastRamSize) + 3];
+    if (kickRomSize) kickRom = new (std::nothrow) uint8_t[KB(kickRomSize) + 3];
+    if (chipRamSize) chipRam = new (std::nothrow) uint8_t[KB(chipRamSize) + 3];
+    if (slowRamSize) slowRam = new (std::nothrow) uint8_t[KB(slowRamSize) + 3];
+    if (fastRamSize) fastRam = new (std::nothrow) uint8_t[KB(fastRamSize) + 3];
 
     // Load memory contents from buffer
     readBlock(buffer, bootRom, bootRomSize);
