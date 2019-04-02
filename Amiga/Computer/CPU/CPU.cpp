@@ -180,7 +180,7 @@ CPU::didSaveToBuffer(uint8_t **buffer)
 void
 CPU::recordContext()
 {
-    debug("recordContext: context = %p\n", context);
+    // debug("recordContext: context = %p\n", context);
     assert(context == NULL);
 
     // Allocate memory
@@ -193,7 +193,7 @@ CPU::recordContext()
 void
 CPU::restoreContext()
 {
-    debug("restoreContext: context = %p\n", context);
+    // debug("restoreContext: context = %p\n", context);
     if (context) {
     
         // Load the recorded context into the CPU

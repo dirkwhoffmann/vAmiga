@@ -157,21 +157,28 @@ AmigaSnapshot::takeScreenshot(Amiga *amiga)
 {
     AmigaSnapshotHeader *header = (AmigaSnapshotHeader *)data;
     
-    unsigned x = 12;
-    unsigned y = 1;
-    unsigned width = 36 + 320 + 36;
-    unsigned height = 34 + 200 + 34;
+    unsigned x = 5;
+    unsigned y = 2;
+    unsigned width = HPIXELS - 10;
+    unsigned height = 2*VPIXELS - 4;
    
     header->screenshot.width = width;
     header->screenshot.height = height;
   
-    uint32_t *source = (uint32_t *)amiga->denise.longFrame;
+    uint32_t *shortFrame = (uint32_t *)amiga->denise.shortFrame;
+    uint32_t *longFrame = (uint32_t *)amiga->denise.longFrame;
     uint32_t *target = header->screenshot.screen;
-    source += x + y * HPIXELS;
-    
+    shortFrame += x + y * HPIXELS;
+    longFrame += x + y * HPIXELS;
+
     for (unsigned i = 0; i < height; i++) {
-        memcpy(target, source, width * 4);
-        source += HPIXELS;
+        if (i % 2) {
+            memcpy(target, shortFrame, width * 4);
+            shortFrame += HPIXELS;
+        } else {
+            memcpy(target, longFrame, width * 4);
+            longFrame += HPIXELS;
+        }
         target += width;
     }
 }

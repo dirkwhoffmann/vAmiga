@@ -32,7 +32,7 @@ typedef struct {
         uint16_t width, height;
         
         // Raw screen buffer data
-        uint32_t screen[284 * 428];
+        uint32_t screen[(HPIXELS * (2 * VPIXELS))];
         
     } screenshot;
     
