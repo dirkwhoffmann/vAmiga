@@ -37,10 +37,6 @@
 #include "AmigaSnapshot.h"
 #include "ADFFile.h"
 
-// Musashi CPU
-extern "C" {
-#include "m68k.h"
-}
 
 extern Amiga *activeAmiga;
 

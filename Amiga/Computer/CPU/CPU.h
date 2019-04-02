@@ -10,7 +10,13 @@
 #ifndef _CPU_INC
 #define _CPU_INC
 
+#include "HardwareComponent.h"
 #include "BreakpointManager.h"
+
+extern "C" {
+#include "m68k.h"
+#include "m68kcpu.h"
+}
 
 class CPU : public HardwareComponent {
     

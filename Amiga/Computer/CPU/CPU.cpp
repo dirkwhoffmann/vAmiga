@@ -164,31 +164,17 @@ CPU::stateSize()
 void
 CPU::didLoadFromBuffer(uint8_t **buffer)
 {
-    uint8_t *context = new (std::nothrow) uint8_t[m68k_context_size()];
-    
-    if (!context) {
-        panic("Out of memory\n");
-        return;
-    }
-    
+    uint8_t context[sizeof(m68ki_cpu_core)];
     readBlock(buffer, context, m68k_context_size());
     m68k_set_context(context);
-    delete[] context;
 }
 
 void
 CPU::didSaveToBuffer(uint8_t **buffer)
 {
-    uint8_t *context = new (std::nothrow) uint8_t[m68k_context_size()];
-
-    if (!context) {
-        panic("Out of memory\n");
-        return;
-    }
-    
+    uint8_t context[sizeof(m68ki_cpu_core)];
     m68k_get_context(context);
     writeBlock(buffer, context, m68k_context_size());
-    delete[] context;
 }
 
 void
