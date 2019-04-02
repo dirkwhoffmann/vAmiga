@@ -122,8 +122,15 @@ Amiga::makeActiveInstance()
     // Return immediately if this emulator instance is the active instance
     if (activeAmiga == this) return;
     
-    // Pause the currently active emulator instance (if any)
-    if (activeAmiga != NULL) activeAmiga->pause();
+    /* Pause the currently active emulator instance (if any)
+     * Because we're going to use the CPU core, we need to save the active
+     * instance's CPU context. It will be restored when the other instance
+     * becomes the active again (by calling this function).
+     */
+    if (activeAmiga != NULL) {
+        activeAmiga->pause();
+        activeAmiga->cpu.recordContext();
+    }
     
     // Restore the previously recorded CPU state (if any)
     cpu.restoreContext();
@@ -335,40 +342,34 @@ Amiga::_powerOff()
 void
 Amiga::_run()
 {
-    // debug(1, "Run\n");
+    debug(1, "Run\n");
     
-    // Check for missing Roms
+    // Check for missing Roms.
     if (!readyToPowerUp()) {
         putMessage(MSG_ROM_MISSING);
         return;
     }
     
-    // Make this emulator instance the active one
+    // Make this Amiga the active emulator instance.
     makeActiveInstance();
     
-    // Start the emulator thread
+    // Start the emulator thread.
     pthread_create(&p, NULL, threadMain, (void *)this);
     
+    // Inform the GUI.
     amiga->putMessage(MSG_RUN);
 }
 
 void
 Amiga::_pause()
 {
-    // debug(1, "Pause\n");
+    debug(1, "Pause\n");
     
     // Cancel the emulator thread
     runLoopControl |= RL_TERMINATE;
     
     // Wait until the thread has terminated
     pthread_join(p, NULL);
-    
-    // Save the CPU context
-    cpu.recordContext();
-    
-    // Unbind the emulator instance from the CPU
-    assert(activeAmiga != NULL);
-    activeAmiga = NULL;
     
     amiga->putMessage(MSG_PAUSE);
 }
@@ -427,7 +428,7 @@ Amiga::_setWarp(bool value) {
 void
 Amiga::suspend()
 {
-    debug(2, "Suspending (%d)...\n", suspendCounter);
+    debug(1, "Suspending (%d)...\n", suspendCounter);
     
     if (suspendCounter == 0 && !isRunning())
         return;
@@ -439,7 +440,7 @@ Amiga::suspend()
 void
 Amiga::resume()
 {
-    debug(2, "Resuming (%d)...\n", suspendCounter);
+    debug(1, "Resuming (%d)...\n", suspendCounter);
     
     if (suspendCounter == 0)
         return;

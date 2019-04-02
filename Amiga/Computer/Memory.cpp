@@ -143,6 +143,14 @@ Memory::didSaveToBuffer(uint8_t **buffer)
     writeBlock(buffer, chipRam, chipRamSize);
     writeBlock(buffer, slowRam, slowRamSize);
     writeBlock(buffer, fastRam, fastRamSize);
+    
+    /*
+    debug("bootRomSize = %d\n", bootRomSize);
+    debug("kickRomSize = %d\n", kickRomSize);
+    debug("chipRamSize = %d\n", chipRamSize);
+    debug("slowRamSize = %d\n", slowRamSize);
+    debug("fastRamSize = %d\n", fastRamSize);
+    */
 }
 
 bool

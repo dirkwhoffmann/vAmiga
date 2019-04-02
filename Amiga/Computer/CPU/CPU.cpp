@@ -151,16 +151,56 @@ CPU::_dump()
     plainmsg("   Flags: %X\n", info.flags);
 }
 
+size_t
+CPU::stateSize()
+{
+    size_t result = HardwareComponent::stateSize();
+    
+    result += m68k_context_size();
+
+    return result;
+}
+
+void
+CPU::didLoadFromBuffer(uint8_t **buffer)
+{
+    uint8_t *context = new (std::nothrow) uint8_t[m68k_context_size()];
+    
+    if (!context) {
+        panic("Out of memory\n");
+        return;
+    }
+    
+    readBlock(buffer, context, m68k_context_size());
+    m68k_set_context(context);
+    delete[] context;
+}
+
+void
+CPU::didSaveToBuffer(uint8_t **buffer)
+{
+    uint8_t *context = new (std::nothrow) uint8_t[m68k_context_size()];
+
+    if (!context) {
+        panic("Out of memory\n");
+        return;
+    }
+    
+    m68k_get_context(context);
+    writeBlock(buffer, context, m68k_context_size());
+    delete[] context;
+}
+
 void
 CPU::recordContext()
 {
     debug("recordContext: context = %p\n", context);
     assert(context == NULL);
 
-    // Allocate memory if needed
+    // Allocate memory
     context = new (std::nothrow) uint8_t[m68k_context_size()];
     
-    // Record context
+    // Save the current CPU context
     if (context) m68k_get_context(context);
 }
 
@@ -170,10 +210,10 @@ CPU::restoreContext()
     debug("restoreContext: context = %p\n", context);
     if (context) {
     
-        // Restore context
+        // Load the recorded context into the CPU
         m68k_set_context(context);
 
-        // Deallocate memory
+        // Delete the recorded context
         delete[] context;
         context = NULL;
     }

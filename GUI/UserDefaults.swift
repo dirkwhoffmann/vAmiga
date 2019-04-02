@@ -667,7 +667,9 @@ extension MyController {
 
         pauseInBackground = defaults.bool(forKey: Keys.pauseInBackground)
         amiga.setTakeAutoSnapshots(defaults.bool(forKey: Keys.autoSnapshots))
-        amiga.setSnapshotInterval(defaults.integer(forKey: Keys.autoSnapshotInterval))        
+        amiga.setSnapshotInterval(defaults.integer(forKey: Keys.autoSnapshotInterval))
+        
+        amiga.resume()
     }
     
     func saveEmulatorUserDefaults() {

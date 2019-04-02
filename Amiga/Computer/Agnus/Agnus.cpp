@@ -22,9 +22,9 @@ Agnus::Agnus()
     
     registerSubcomponents(vector<HardwareComponent *> {
         
-        &eventHandler,
         &copper,
-        &blitter
+        &blitter,
+        &eventHandler,
     });
     
     registerSnapshotItems(vector<SnapshotItem> {

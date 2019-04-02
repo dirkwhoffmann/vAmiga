@@ -71,6 +71,10 @@ private:
     void _ping() override;
     void _dump() override;
    
+    size_t stateSize() override;
+    void didLoadFromBuffer(uint8_t **buffer) override;
+    void didSaveToBuffer(uint8_t **buffer) override;
+    
     
     //
     // Recording and restoring the CPU context
