@@ -11,13 +11,13 @@ class InstrTableView : NSTableView {
     
     @IBOutlet weak var inspector: Inspector!
     
-    var mem = amigaProxy!.mem!
+    // var mem = amigaProxy!.mem!
     var cpu = amigaProxy?.cpu
     
     // Display caches
     var addrInRow  : [Int:UInt32] = [:]
-    // var instrInRow : [Int:String] = [:]
-    // var dataInRow  : [Int:String] = [:]
+    var instrInRow : [Int:String] = [:]
+    var dataInRow  : [Int:String] = [:]
     var rowForAddr : [UInt32:Int] = [:]
     var hex = true
     
@@ -81,11 +81,8 @@ class InstrTableView : NSTableView {
     
         guard let addr = addr else { return }
         
-        track("jumpTo: \(addr) \(rowForAddr)")
-        
         if let row = rowForAddr[addr] {
             
-            track("*** addr = \(addr)")
             // If the requested address is already displayed, we simply
             // select the corresponding row.
             scrollRowToVisible(row)
@@ -94,8 +91,6 @@ class InstrTableView : NSTableView {
             
         } else {
             
-            track("addr = \(addr)")
-
             // If the requested address is not displayed, we update the
             // whole view and display it in the first row.
             scrollRowToVisible(0)
@@ -114,18 +109,21 @@ class InstrTableView : NSTableView {
         
         guard var addr = addr else { return }
         
+        instrInRow = [:]
         addrInRow = [:]
+        dataInRow = [:]
         rowForAddr = [:]
         
         for i in 0 ..< Int(CPUINFO_INSTR_COUNT) {
-            
             if (addr <= 0xFFFFFF) {
-                
-                let bytes = cpu!.getInstr(i).bytes
-                track("bytes = \(bytes)")
-                addrInRow[i] = addr
-                rowForAddr[addr] = i
-                addr += UInt32(bytes)
+                if var info = cpu?.getInstr(i) {
+                    let bytes = info.bytes
+                    instrInRow[i] = String(cString: &info.instr.0)
+                    addrInRow[i] = addr
+                    dataInRow[i] = String(cString: &info.data.0)
+                    rowForAddr[addr] = i
+                    addr += UInt32(bytes)
+                }
             }
         }
         
@@ -136,7 +134,6 @@ class InstrTableView : NSTableView {
     
         if (everything) {
         
-            mem = amigaProxy!.mem
             cpu = amigaProxy!.cpu
             
             for (c,f) in ["addr" : fmt24] {
@@ -172,23 +169,14 @@ extension InstrTableView : NSTableViewDataSource {
             // return "\u{1F534}" // "🔴"
             return "\u{26D4}" // "⛔"
         case "addr":
-            if var info = cpu?.getInstr(row) {
-                return String(cString: &info.addr.0)
-            }
+            return addrInRow[row]
         case "data":
-            if var info = cpu?.getInstr(row) {
-                return String(cString: &info.data.0)
-            }
+            return dataInRow[row]
         case "instr":
-            if var info = cpu?.getInstr(row) {
-                return String(cString: &info.instr.0)
-            }
-
+            return instrInRow[row]
         default:
-            return "???"
-        }
-    
-        return "??"
+            return ""
+        }    
     }
 }
 

@@ -170,13 +170,14 @@ CPU::_inspect()
      * be executed next. Because we don't want to show this element yet, we
      * don't dissassemble it.
      */
-    for (unsigned i = 0; i < CPUINFO_INSTR_COUNT; i++) {
-        unsigned offset = (writePtr + traceBufferCapacity - 2 - i) % traceBufferCapacity;
+    for (unsigned i = 1; i <= CPUINFO_INSTR_COUNT; i++) {
+        unsigned offset = (writePtr + traceBufferCapacity - 1 - i) % traceBufferCapacity;
         RecordedInstruction instr = traceBuffer[offset];
-        info.traceInstr[i] = disassemble(instr.pc, instr.sp);
+        info.traceInstr[CPUINFO_INSTR_COUNT - i] = disassemble(instr.pc, instr.sp);
     }
     
     // REMOVE ASAP
+    /*
     debug("_inspect()\n");
     for (unsigned i = 0; i < CPUINFO_INSTR_COUNT; i++) {
         debug("%d: %s %s %s\n",
@@ -187,6 +188,7 @@ CPU::_inspect()
         debug("%d: %s %s %s\n",
               i, info.traceInstr[i].addr, info.traceInstr[i].data, info.traceInstr[i].instr);
     }
+    */
 }
 
 void
