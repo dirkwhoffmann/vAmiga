@@ -725,13 +725,10 @@ Amiga::runLoop()
     // Prepare to run
     amiga->restartTimer();
     
-    // If the run loop is re-entered below, we start here
-enter:
-    
     // Configure run loop to run continously
     runLoopControl = 0;
     
-    // Enter the loop and emulate at least one CPU instruction
+    // Enter the loop
     do {
         
         // Emulate CPU instruction
@@ -767,21 +764,24 @@ enter:
             */
         }
         
-    } while (runLoopControl == 0);
+        // Check if special action needs to be taken ...
+        if (runLoopControl) {
     
-    // Check if the loop has terminated, because an auto-snapshot was requested.
-    if (runLoopControl & RL_SNAPSHOT) {
+            // Snapshot flag
+            if (runLoopControl & RL_SNAPSHOT) {
+                takeAutoSnapshot();
+            }
+            
+            // Termination request
+            if (runLoopControl & RL_TERMINATE) {
+                break;
+            }
         
-        takeAutoSnapshot();
-        
-        // Re-enter the run loop if the termination flag isn't set.
-        if (!(runLoopControl & RL_TERMINATE)) {
-            goto enter;
+            // Clear flags and continue
+            runLoopControl = 0;
         }
-    }
-    
-    // debug("Exiting run loop\n");
-    // agnus.eventHandler.dump();
+        
+    } while (1);
 }
 
 void
