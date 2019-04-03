@@ -94,7 +94,7 @@ class Memory : public HardwareComponent {
     
     friend class Copper;
     
-public:
+    public:
     
     /* Each memory area is represented by three variables:
      *
@@ -149,7 +149,7 @@ public:
     // Constructing and destructing
     //
     
-public:
+    public:
     
     Memory();
     ~Memory();
@@ -162,7 +162,7 @@ public:
     // Methods from HardwareComponent
     //
     
-private:
+    private:
     
     void _powerOn() override;
     void _powerOff() override;
@@ -170,7 +170,7 @@ private:
     void _ping() override;
     void _dump() override;
     
-    size_t stateSize() override; 
+    size_t stateSize() override;
     void didLoadFromBuffer(uint8_t **buffer) override;
     void didSaveToBuffer(uint8_t **buffer) override;
     
@@ -179,7 +179,7 @@ private:
     // Allocating memory
     //
     
-private:
+    private:
     
     /* Allocates 'size' bytes of memory.
      * As side effects, the memory lookup table is updated and a memory
@@ -187,19 +187,19 @@ private:
      */
     bool alloc(size_t size, uint8_t *&ptrref, size_t &sizeref);
     
- 
+    
     //
     // Managing RAM
     //
     
-public:
+    public:
     
     bool hasChipRam() { return chipRam != NULL; }
     bool allocateChipRam(size_t size) { return alloc(size, chipRam, chipRamSize); }
-
+    
     bool hasSlowRam() { return slowRam != NULL; }
     bool allocateSlowRam(size_t size) { return alloc(size, slowRam, slowRamSize); }
-
+    
     bool hasFastRam() { return fastRam != NULL; }
     bool allocateFastRam(size_t size) { return alloc(size, fastRam, fastRamSize); }
     
@@ -208,16 +208,16 @@ public:
     // Managing ROM
     //
     
-private:
+    private:
     
     // Loads Rom data from a file.
     void loadRom(AmigaFile *rom, uint8_t *target, size_t length);
     
-public:
-
+    public:
+    
     // Returns true if a Boot Rom is installed.
     bool hasBootRom() { return bootRom != NULL; }
-
+    
     // Returns a fingerprint for the currently installed Boot Rom
     uint64_t bootRomFingerprint() { return fnv_1a(bootRom, bootRomSize); }
     
@@ -225,13 +225,13 @@ public:
     bool loadBootRom(BootRom *rom);
     bool loadBootRomFromBuffer(const uint8_t *buffer, size_t length);
     bool loadBootRomFromFile(const char *path);
-
+    
     // Deletes the currently installed Boot Rom.
     void deleteBootRom() { alloc(0, bootRom, bootRomSize); }
     
     // Returns true if a Kickstart Rom is installed
     bool hasKickRom() { return kickRom != NULL; }
-
+    
     // Returns a fingerprint for the currently installed Kickstart Rom
     uint64_t kickRomFingerprint() { return fnv_1a(kickRom, kickRomSize); }
     
@@ -242,20 +242,20 @@ public:
     
     // Deletes the currently installed Kickstart Rom.
     void deleteKickRom() { alloc(0, kickRom, kickRomSize); }
-
+    
     
     //
     // Managing the memory source table
     //
     
-public:
+    public:
     
     // Returns the memory source lookup table.
     MemorySource *getMemSrcTable() { return memSrc; }
-
+    
     // Returns the memory source for a given address.
     MemorySource getMemSrc(uint32_t addr) { return memSrc[(addr >> 16) & 0xFF]; }
-
+    
     // Updates the memory source lookup table.
     void updateMemSrcTable();
     
@@ -264,7 +264,7 @@ public:
     // Accessing memory cells
     //
     
-public:
+    public:
     
     uint8_t peek8(uint32_t addr);
     uint16_t peek16(uint32_t addr);
@@ -277,7 +277,7 @@ public:
     void poke8(uint32_t addr, uint8_t value);
     void poke16(uint32_t addr, uint16_t value);
     void poke32(uint32_t addr, uint32_t value);
-
+    
     //
     // Chip Ram
     //
@@ -291,7 +291,7 @@ public:
     inline uint32_t peekChip32(uint32_t addr) {
         ASSERT_CHIP_ADDR(addr); return READ_CHIP_32(addr);
     }
-
+    
     inline uint8_t spypeekChip8(uint32_t addr) {
         return peekChip8(addr);
     }
@@ -319,11 +319,11 @@ public:
     uint8_t peekCIA8(uint32_t addr);
     uint16_t peekCIA16(uint32_t addr);
     uint32_t peekCIA32(uint32_t addr);
- 
+    
     uint8_t spypeekCIA8(uint32_t addr);
     uint16_t spypeekCIA16(uint32_t addr);
     uint32_t spypeekCIA32(uint32_t addr);
-
+    
     void pokeCIA8(uint32_t addr, uint8_t value);
     void pokeCIA16(uint32_t addr, uint16_t value);
     void pokeCIA32(uint32_t addr, uint32_t value);
@@ -339,24 +339,23 @@ public:
     uint8_t spypeekCustom8(uint32_t addr);
     uint16_t spypeekCustom16(uint32_t addr);
     uint32_t spypeekCustom32(uint32_t addr);
-
+    
     void pokeCustom8(uint32_t addr, uint8_t value);
     void pokeCustom16(uint32_t addr, uint16_t value);
     void pokeCustom32(uint32_t addr, uint32_t value);
-
+    
     
     //
     // Debugging
     //
     
-public:
+    public:
     
     // Returns 16 bytes of memory as an ASCII string.
     const char *ascii(uint32_t addr);
- 
+    
     // Returns a certain amount of bytes as a string containing hex words.
     const char *hex(uint32_t addr, size_t bytes);
-
 };
 
 #endif

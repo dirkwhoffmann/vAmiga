@@ -20,10 +20,18 @@ extern "C" {
 
 class CPU : public HardwareComponent {
     
+    public:
+    
+    // Information shown in the GUI inspector panel
+    CPUInfo info;
+    
+    
     //
     // CPU state switching
     //
-
+    
+    private:
+    
     /* CPU context
      * This variable is usually NULL. When the user switches to another
      * emulator instance, it is used to store the current context. When the
@@ -31,7 +39,7 @@ class CPU : public HardwareComponent {
      */
     uint8_t *context = NULL;
     
-public:
+    public:
     
     //
     // Debuging tools
@@ -57,7 +65,7 @@ public:
     // Constructing and destructing
     //
     
-public:
+    public:
     
     CPU();
     ~CPU();
@@ -67,7 +75,7 @@ public:
     // Methods from HardwareComponent
     //
     
-private:
+    private:
     
     void _powerOn() override;
     void _powerOff() override;
@@ -75,8 +83,9 @@ private:
     void _pause() override;
     void _reset() override;
     void _ping() override;
+    void _inspect() override; 
     void _dump() override;
-   
+    
     size_t stateSize() override;
     void didLoadFromBuffer(uint8_t **buffer) override;
     void didSaveToBuffer(uint8_t **buffer) override;
@@ -86,36 +95,36 @@ private:
     // Recording and restoring the CPU context
     //
     
-public:
+    public:
     
     // Returns true if a CPU context has been saved previously
     bool hasSavedContext() { return context != NULL; }
     
     // Records the current CPU context
     void recordContext();
-
+    
     // Restores the current CPU context
     void restoreContext();
-
+    
     
     //
     // Querying registers
     //
     
-public:
+    public:
     
     // Returns the current value of the program counter.
     uint32_t getPC();
-
+    
     // Returns the current value of the status register.
     uint32_t getSP();
-
+    
     // Returns the current value of the instruction register.
     uint32_t getIR();
-
+    
     // Returns the start address of the following instruction.
     uint32_t getNextPC() { return getPC() + lengthOInstruction(); }
-
+    
     // Collects the data shown in the GUI's debug panel.
     CPUInfo getInfo();
     
@@ -158,7 +167,7 @@ public:
     // Running the device
     //
     
-public:
+    public:
     
     uint64_t executeNextInstruction();
 };

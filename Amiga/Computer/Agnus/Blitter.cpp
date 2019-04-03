@@ -58,9 +58,6 @@ Blitter::getInfo()
 {
     BlitterInfo info;
     
-    /* Note: We call the Blitter 'active' if there is a pending message in the
-     * Copper event slot.
-     */
     info.active  = amiga->agnus.eventHandler.isPending(BLT_SLOT);
     info.bltcon0 = bltcon0;
     info.bltcon1 = bltcon1;
@@ -109,6 +106,33 @@ void
 Blitter::_ping()
 {
     
+}
+
+void
+Blitter::_inspect()
+{
+    info.active  = amiga->agnus.eventHandler.isPending(BLT_SLOT);
+    info.bltcon0 = bltcon0;
+    info.bltcon1 = bltcon1;
+    info.bltapt  = bltapt;
+    info.bltbpt  = bltbpt;
+    info.bltcpt  = bltcpt;
+    info.bltdpt  = bltdpt;
+    info.bltafwm = bltafwm;
+    info.bltalwm = bltalwm;
+    info.bltsize = bltsize;
+    info.bltamod = bltamod;
+    info.bltbmod = bltbmod;
+    info.bltcmod = bltcmod;
+    info.bltdmod = bltdmod;
+    info.anew = anew;
+    info.bnew = bnew;
+    info.ahold = ahold;
+    info.bhold = bhold;
+    info.chold = chold;
+    info.dhold = dhold;
+    info.bbusy = bbusy;
+    info.bzero = bzero;
 }
 
 void

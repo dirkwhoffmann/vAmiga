@@ -15,6 +15,13 @@ class Blitter : public HardwareComponent {
     
     friend class Agnus;
     
+    public:
+    
+    // Information shown in the GUI inspector panel
+    BlitterInfo info;
+    
+    private:
+    
     //
     // Blitter registers
     //
@@ -28,11 +35,11 @@ class Blitter : public HardwareComponent {
     uint32_t bltbpt;
     uint32_t bltcpt;
     uint32_t bltdpt;
-
+    
     // Blitter A first and last word masks
     uint16_t bltafwm;
     uint16_t bltalwm;
-
+    
     // The Blitter size register
     uint16_t bltsize;
     
@@ -41,7 +48,7 @@ class Blitter : public HardwareComponent {
     int16_t bltbmod;
     int16_t bltcmod;
     int16_t bltdmod;
-
+    
     // The Blitter pipeline registers
     uint16_t anew;
     uint16_t bnew;
@@ -53,7 +60,7 @@ class Blitter : public HardwareComponent {
     uint16_t dhold;
     uint32_t ashift;
     uint32_t bshift;
-
+    
     // Counter registers
     uint16_t xCounter;
     uint16_t yCounter;
@@ -85,7 +92,7 @@ class Blitter : public HardwareComponent {
     static const uint16_t HOLD_D    = 0b0001000000000; // Loads register "D hold"
     static const uint16_t WRITE_D   = 0b0010000000000; // Writes back "D hold"
     static const uint16_t BLTDONE   = 0b0100000000000; // Marks the last instruction
-
+    
     static const uint16_t BLTIDLE   = 0b000000000000; // Does nothing
     static const uint16_t LOOPBACK0 = 0b000000001000; // Signals the end of the main loop
     static const uint16_t LOOPBACK2 = 0b000000001010; // Executes the main loop again
@@ -97,13 +104,13 @@ class Blitter : public HardwareComponent {
     
     // The program counter indexing the microInstr array
     uint16_t bltpc = 0;
-
+    
     
     //
     // Constructing and destructing
     //
     
-public:
+    public:
     
     Blitter();
     
@@ -112,12 +119,13 @@ public:
     // Methods from HardwareComponent
     //
     
-private:
+    private:
     
     void _powerOn() override;
     void _powerOff() override;
     void _reset() override;
     void _ping() override;
+    void _inspect() override; 
     void _dump() override;
     
     
@@ -125,7 +133,7 @@ private:
     // Collecting information
     //
     
-public:
+    public:
     
     // Collects the data shown in the GUI's debug panel.
     BlitterInfo getInfo();
@@ -135,7 +143,7 @@ public:
     // Accessing registers
     //
     
-public:
+    public:
     
     // BLTCON0
     inline uint16_t bltASH() { return bltcon0 >> 12; }
@@ -144,7 +152,7 @@ public:
     inline bool bltUSEC() { return bltcon0 & (1 << 9); }
     inline bool bltUSED() { return bltcon0 & (1 << 8); }
     void pokeBLTCON0(uint16_t value);
-
+    
     // BLTCON1
     inline uint16_t bltBSH() { return bltcon1 >> 12; }
     inline bool bltEFE() { return bltcon1 & (1 << 4); }
@@ -154,7 +162,7 @@ public:
     inline bool bltDESC() { return bltcon1 & (1 << 1); }
     inline bool bltLINE() { return bltcon1 & (1 << 0); }
     void pokeBLTCON1(uint16_t value);
-
+    
     // BLTAFWM, BLTALWM
     void pokeBLTAFWM(uint16_t value);
     void pokeBLTALWM(uint16_t value);
@@ -168,14 +176,14 @@ public:
     void pokeBLTCPTL(uint16_t value);
     void pokeBLTDPTH(uint16_t value);
     void pokeBLTDPTL(uint16_t value);
-
+    
     // BLTSIZE
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // H9 H8 H7 H6 H5 H4 H3 H2 H1 H0 W5 W4 W3 W2 W1 W0
     inline uint16_t bltsizeH() { return (bltsize >> 6) ? (bltsize >> 6) : 1024; }
     inline uint16_t bltsizeW() { return (bltsize & 0x3F) ? (bltsize & 0x3F) : 64; }
     void pokeBLTSIZE(uint16_t value);
-
+    
     // BLTxMOD
     void pokeBLTAMOD(uint16_t value) { bltamod = value; }
     void pokeBLTBMOD(uint16_t value) { bltbmod = value; }
@@ -189,13 +197,13 @@ public:
     
     bool isFirstWord() { return xCounter == bltsizeW(); }
     bool isLastWord() { return xCounter == 1; }
-
-  
+    
+    
     //
     // Managing events
     //
     
-public:
+    public:
     
     // Processes a Blitter event
     void serviceEvent(EventID id);
@@ -205,7 +213,7 @@ public:
     // Cycle-accurate Blitter
     //
     
-private:
+    private:
     
     // Program the device
     void loadMicrocode();
@@ -215,18 +223,18 @@ private:
     // Fast Blitter
     //
     
-public:
+    public:
     
     /* Performs a blit operation via the fast Blitter
      * Calls either doCopyBlit() or doCopyBlit()
      */
     void doFastBlit();
-
-private:
+    
+    private:
     
     // Performs a copy blit operation via the fast Blitter
     void doCopyBlit();
-
+    
     // Performs a line blit operation via the fast Blitter
     void doLineBlit();
 };

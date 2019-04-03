@@ -15,7 +15,11 @@
 
 class Denise : public HardwareComponent {
     
-public:
+    public:
+    
+    // Information shown in the GUI inspector panel
+    DeniseInfo info;
+    
     
     //
     // Sub components
@@ -41,19 +45,19 @@ public:
     uint16_t bplcon0 = 0;
     uint16_t bplcon1 = 0;
     uint16_t bplcon2 = 0;
-
+    
     // The 6 bitplane data registers
-    uint16_t bpldat[6]; 
+    uint16_t bpldat[6];
     
     // Sprite control word 1 (SPRxPOS)
     uint16_t sprpos[8];
     
     // Sprite control word 2 (SPRxCTL)
     uint16_t sprctl[8];
-
+    
     // Counter for digital (mouse) input (port 1 and 2)
-    uint16_t joydat[2]; 
-
+    uint16_t joydat[2];
+    
     /* The 6 bitplane parallel-to-serial shift registers
      * Denise transfers the current values of the bpldat registers into
      * the shift registers after BPLDAT1 is written to. This is emulated
@@ -83,12 +87,12 @@ public:
      */
     int *longFrame = new int[HPIXELS * VPIXELS];
     int *shortFrame = new int[HPIXELS * VPIXELS];
-
+    
     /* Currently active frame buffer
      * This variable points either to longFrame or shortFrame
      */
     int *frameBuffer = longFrame;
-
+    
     /* Pointer to the beginning of the current rasterline
      * This pointer is used by all rendering methods to write pixels. It always
      * points to the beginning of a rasterline, either in longFrame or
@@ -96,16 +100,16 @@ public:
      * at the beginning of each rasterline.
      */
     int *pixelBuffer = longFrame;
-
+    
     // Offset into the pixelBuffer
     short bufferoffset;
-
+    
     
     //
     // Constructing and destructing
     //
     
-public:
+    public:
     
     Denise();
     ~Denise();
@@ -114,22 +118,23 @@ public:
     // Methods from HardwareComponent
     //
     
-private:
+    private:
     
     void _powerOn() override;
     void _powerOff() override;
     void _reset() override;
     void _ping() override;
+    void _inspect() override; 
     void _dump() override;
-
+    
     void didLoadFromBuffer(uint8_t **buffer) override;
-  
+    
     
     //
     // Collecting information
     //
     
-public:
+    public:
     
     // Collects the data shown in the GUI's debug panel.
     DeniseInfo getInfo();
@@ -138,8 +143,8 @@ public:
     // Accessing registers
     //
     
-public:
-   
+    public:
+    
     // BPLCON0
     void pokeBPLCON0(uint16_t value);
     
@@ -155,14 +160,14 @@ public:
     
     // BPL1DAT ... BPL6DAT
     void pokeBPLxDAT(int x, uint16_t value);
-
+    
     // SPR0POS ... SPR7POS
     void pokeSPRxPOS(int x, uint16_t value);
     void pokeSPRxCTL(int x, uint16_t value);
-
+    
     // JOY0DATR, JOY1DATR
     uint16_t peekJOYxDATR(int x);
-
+    
     
     
     //
@@ -171,8 +176,8 @@ public:
     
     // Processes an overdue event
     // void serviceEvent(EventID id, int64_t data);
-
-
+    
+    
     
     //
     // Handling DMA
@@ -193,7 +198,7 @@ public:
     // Accessing the frame buffers
     //
     
-public:
+    public:
     
     /* Returns true if the long frame / short frame is ready for display
      * The long frame is ready for display, if Denise is currently working on
@@ -201,13 +206,13 @@ public:
      */
     inline bool longFrameIsReady() { return (frameBuffer == shortFrame); }
     inline bool shortFrameIsReady() { return (frameBuffer == longFrame); }
-
+    
     /* Returns the currently stabel screen buffer.
      * If Denise is working on the long frame, a pointer to the short frame is
      * returned and vice versa.
      */
     inline void *screenBuffer() { return (frameBuffer == longFrame) ? shortFrame : longFrame; }
-   
+    
     // Fake some video output
     void endOfFrame();
     
@@ -218,7 +223,7 @@ public:
     
     // Called by the GUI to manually change the number of active bitplanes
     void debugSetActivePlanes(int count);
-
+    
     // Called by the GUI to manually change the contents of BPLCON0
     void debugSetBPLCON0Bit(unsigned bit, bool value);
 };

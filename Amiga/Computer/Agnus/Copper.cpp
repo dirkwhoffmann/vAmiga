@@ -49,6 +49,18 @@ Copper::_ping()
 }
 
 void
+Copper::_inspect()
+{
+    info.cdang     = cdang;
+    info.active    = amiga->agnus.eventHandler.isPending(COP_SLOT);
+    info.coppc     = coppc;
+    info.copins[0] = copins1;
+    info.copins[1] = copins2;
+    info.coplc[0]  = coplc[0];
+    info.coplc[1]  = coplc[1];
+}
+
+void
 Copper::_dump()
 {
     plainmsg("   cdang: %d\n", cdang);

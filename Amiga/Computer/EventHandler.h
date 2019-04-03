@@ -47,7 +47,7 @@
  * secondary events.
  */
 
-typedef enum
+enum EventSlot
 {
     //
     // Primary slot table
@@ -81,13 +81,12 @@ typedef enum
     DSKSYN_IRQ_SLOT,  // Source 12 IRQ (Disk sync register matches disk data)
     EXTER_IRQ_SLOT,   // Source 13 IRQ (I/O ports and CIA B)
     SEC_SLOT_COUNT,
-    
-} EventSlot;
+};
 
 static inline bool isPrimarySlot(int32_t s) { return s <= PRIM_SLOT_COUNT; }
 static inline bool isSecondarySlot(int32_t s) { return s <= SEC_SLOT_COUNT; }
 
-typedef enum
+enum EventID
 {
     EVENT_NONE = 0,
     
@@ -132,7 +131,7 @@ typedef enum
     COP_MOVE,
     COP_WAIT_OR_SKIP,
     COP_WAIT,
-    COP_SKIP, 
+    COP_SKIP,
     COP_JMP1,
     COP_JMP2,
     COP_EVENT_COUNT,
@@ -165,8 +164,7 @@ typedef enum
     // HSYNC slot
     HSYNC_EOL = 1,
     HSYNC_EVENT_COUNT
-    
-} EventID;
+};
 
 static inline bool isCiaEvent(EventID id) { return id <= CIA_EVENT_COUNT; }
 static inline bool isDmaEvent(EventID id) { return id <= DMA_EVENT_COUNT; }
@@ -174,8 +172,8 @@ static inline bool isCopEvent(EventID id) { return id <= COP_EVENT_COUNT; }
 static inline bool isBltEvent(EventID id) { return id <= BLT_EVENT_COUNT; }
 static inline bool isRasEvent(EventID id) { return id <= RAS_EVENT_COUNT; }
 
-struct Event {
-    
+struct Event
+{
     // Indicates when the event is due.
     Cycle triggerCycle;
     
@@ -187,32 +185,38 @@ struct Event {
     int64_t data;
 };
 
-class EventHandler : public HardwareComponent {
+class EventHandler : public HardwareComponent
+{
+    public:
     
-public:
+    // Information shown in the GUI inspector panel
+    EventHandlerInfo info;
+    
     
     //
     // Event tables
     //
+    
+    public:
     
     // The primary event table
     Event primSlot[PRIM_SLOT_COUNT];
     
     // Next trigger cycle for an event in the primary event table
     Cycle nextPrimTrigger = NEVER;
-
+    
     // The secondary event table
     Event secSlot[SEC_SLOT_COUNT];
     
     // Next trigger cycle for an event in the secondary event table
     Cycle nextSecTrigger = NEVER;
-
-
+    
+    
     //
     // Constructing and destructing
     //
     
-public:
+    public:
     
     EventHandler();
     
@@ -221,31 +225,32 @@ public:
     // Methods from HardwareComponent
     //
     
-private:
+    private:
     
     void _powerOn() override;
     void _powerOff() override;
     void _reset() override;
     void _ping() override;
+    void _inspect() override; 
     void _dump() override;
     
     // Helper functions
     void _dumpPrimaryTable();
     void _dumpSecondaryTable();
     void _dumpSlot(const char *slotName, const char *eventName, const Event event);
-
+    
     
     //
     // Collecting information
     //
     
-public:
+    public:
     
     // Collects the information displayed in the GUI's debug panel.
     EventSlotInfo getPrimarySlotInfo(int slot);
     EventSlotInfo getSecondarySlotInfo(int slot);
     EventHandlerInfo getInfo();
-
+    
     // Returns the number of event slots in the primary or secondary table.
     inline long primSlotCount() { return PRIM_SLOT_COUNT; }
     inline long secSlotCount() { return SEC_SLOT_COUNT; }
@@ -261,7 +266,7 @@ public:
     // Checks whether a particular slot in the primary table contains a pending event.
     inline bool isPending(EventSlot s) {
         assert(isPrimarySlot(s)); return primSlot[s].triggerCycle != NEVER; }
-
+    
     // Checks whether a particular slot in the secondary table contains a pending event.
     inline bool isPendingSec(EventSlot s) {
         assert(isSecondarySlot(s)); return secSlot[s].triggerCycle != NEVER; }
@@ -269,17 +274,17 @@ public:
     // Checks whether a particular slot in the primary table contains a due event.
     inline bool isDue(EventSlot s, Cycle cycle) {
         assert(isPrimarySlot(s)); return cycle >= primSlot[s].triggerCycle; }
-
+    
     // Checks whether a particular slot in the secondary table contains a due event.
     inline bool isDueSec(EventSlot s, Cycle cycle) {
         assert(isSecondarySlot(s)); return cycle >= secSlot[s].triggerCycle; }
     
-
+    
     //
     // Processing events
     //
-
-public:
+    
+    public:
     
     /* Processes all events that are due prior to or at the provided cycle.
      * This function is called inside the execution function of Agnus.
@@ -287,11 +292,11 @@ public:
     inline void executeUntil(Cycle cycle) {
         if (cycle >= nextPrimTrigger) _executeUntil(cycle); }
     
-private:
+    private:
     
     // Called by executeUntil(...) to process events in the primary table.
     void _executeUntil(Cycle cycle);
-
+    
     // Called by executeUntil(...) to process events in the secondary table.
     void _executeSecUntil(Cycle cycle);
     
@@ -299,7 +304,7 @@ private:
     //
     // Scheduling events
     //
-
+    
     /* To schedule an event, an event slot, a trigger cycle, and an event id
      * needs to be provided. The trigger cycle can be specified in three ways:
      *
@@ -325,23 +330,23 @@ private:
      *   and setting the trigger cycle to NEVER.
      */
     
-public:
+    public:
     
     // Schedules a new event in the primary event table.
     void scheduleAbs(EventSlot s, Cycle cycle, EventID id);
     void scheduleRel(EventSlot s, Cycle cycle, EventID id);
     void schedulePos(EventSlot s, int16_t vpos, int16_t hpos, EventID id);
-
+    
     // Reschedules an existing event in the primary event table.
     void rescheduleAbs(EventSlot s, Cycle cycle);
     void rescheduleRel(EventSlot s, Cycle cycle);
-
+    
     // Disables an event in the primary event table.
     void disable(EventSlot s);
-
+    
     // Deletes an event in the primary event table.
     void cancel(EventSlot s);
-
+    
     
     // Schedules a new event in the secondary event table.
     void scheduleSecAbs(EventSlot s, Cycle cycle, EventID id);
@@ -357,8 +362,8 @@ public:
     
     // Deletes an event in the secondary event table.
     void cancelSec(EventSlot s);
-
-private:
+    
+    private:
     
     // Serves an IRQ_SET or IRQ_CLEAR event
     void serveIRQEvent(EventSlot slot, int irqBit);
@@ -368,14 +373,13 @@ private:
     // Debugging
     //
     
-private:
+    private:
     
     /* Performs some debugging checks. Won't be executed in release build.
      * The provided slot must be a slot in the primary event table.
      */
     bool checkScheduledEvent(EventSlot s);
     bool checkTriggeredEvent(EventSlot s);
-    
     
 };
 

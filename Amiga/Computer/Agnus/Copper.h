@@ -10,10 +10,18 @@
 #ifndef _COPPER_INC
 #define _COPPER_INC
 
-class Copper : public HardwareComponent {
-   
+class Copper : public HardwareComponent
+{
+
     friend class Agnus;
-        
+
+    public:
+    
+    // Information shown in the GUI inspector panel
+    CopperInfo info;
+    
+    private:
+    
     /* Indicates if the next instruction should be skipped.
      * This flag is usually false. It is set to true by the SKIP instruction
      * if the skip condition holds.
@@ -56,6 +64,7 @@ private:
     void _powerOff() override;
     void _reset() override;
     void _ping() override;
+    void _inspect() override; 
     void _dump() override;
     
     

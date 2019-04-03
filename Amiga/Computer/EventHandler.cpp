@@ -60,6 +60,20 @@ EventHandler::_ping()
 }
 
 void
+EventHandler::_inspect()
+{
+    info.dmaClock = amiga->agnus.clock;
+    
+    // Primary events
+    for (unsigned i = 0; i < PRIM_SLOT_COUNT; i++)
+    info.primary[i] = getPrimarySlotInfo(i);
+    
+    // Secondary events
+    for (unsigned i = 0; i < SEC_SLOT_COUNT; i++)
+    info.secondary[i] = getSecondarySlotInfo(i);
+}
+
+void
 EventHandler::_dump()
 {
     EventHandlerInfo info = getInfo();
