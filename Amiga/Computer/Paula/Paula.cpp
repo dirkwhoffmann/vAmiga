@@ -59,11 +59,20 @@ Paula::_reset()
 {
     
 }
+
 void
 Paula::_ping()
 {
     
 }
+
+void
+Paula::_inspect()
+{
+    info.intreq = intreq;
+    info.intena = intena;
+}
+
 void
 Paula::_dump()
 {
@@ -86,17 +95,6 @@ Paula::_setWarp(bool value)
         audioUnit.rampUp();
         audioUnit.alignWritePtr();
     }
-}
-
-PaulaInfo
-Paula::getInfo()
-{
-    PaulaInfo info;
-    
-    info.intreq = intreq;
-    info.intena = intena;
-    
-    return info;
 }
 
 void

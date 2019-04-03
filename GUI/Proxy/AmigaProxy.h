@@ -293,6 +293,7 @@ struct AmigaFileWrapper;
 - (EventSlotInfo) getSecondarySlotInfo:(NSInteger)slot;
 - (EventHandlerInfo) getEventInfo;
 - (CopperInfo) getCopperInfo;
+- (BlitterInfo) getBlitterInfo;
 
 - (BOOL) isIllegalInstr:(NSInteger)addr;
 - (NSString *) disassemble:(NSInteger)addr;

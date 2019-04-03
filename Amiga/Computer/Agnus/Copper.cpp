@@ -66,26 +66,6 @@ Copper::_dump()
     plainmsg("   cdang: %d\n", cdang);
 }
 
-CopperInfo
-Copper::getInfo()
-{
-    CopperInfo info;
-    
-    /* Note: We call the Copper 'active' if there is a pending message in the
-     * Copper event slot.
-     */
-    
-    info.cdang     = cdang;
-    info.active    = amiga->agnus.eventHandler.isPending(COP_SLOT);
-    info.coppc     = coppc;
-    info.copins[0] = copins1;
-    info.copins[1] = copins2;
-    info.coplc[0]  = coplc[0];
-    info.coplc[1]  = coplc[1];
-
-    return info;
-}
-
 void
 Copper::pokeCOPCON(uint16_t value)
 {

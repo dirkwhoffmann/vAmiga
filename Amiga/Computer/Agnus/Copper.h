@@ -67,17 +67,7 @@ private:
     void _inspect() override; 
     void _dump() override;
     
-    
-    //
-    // Collecting information
-    //
-    
-public:
-    
-    // Collects the data shown in the GUI's debug panel.
-    CopperInfo getInfo();
-    
-    
+
     //
     // Accessing registers
     //

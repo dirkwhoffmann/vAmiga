@@ -131,15 +131,6 @@ class Denise : public HardwareComponent {
     
     
     //
-    // Collecting information
-    //
-    
-    public:
-    
-    // Collects the data shown in the GUI's debug panel.
-    DeniseInfo getInfo();
-    
-    //
     // Accessing registers
     //
     

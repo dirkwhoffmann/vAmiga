@@ -461,22 +461,6 @@ Amiga::resume()
         run();
 }
 
-AmigaInfo
-Amiga::getInfo()
-{
-    AmigaInfo info;
-    
-    info.masterClock = masterClock;
-    info.dmaClock = agnus.clock;
-    info.ciaAClock = ciaA.clock;
-    info.ciaBClock = ciaB.clock;
-    info.frame = agnus.frame;
-    info.vpos = agnus.vpos;
-    info.hpos = agnus.hpos;
-    
-    return info;
-}
-
 bool
 Amiga::readyToPowerUp()
 {

@@ -249,7 +249,6 @@ class EventHandler : public HardwareComponent
     // Collects the information displayed in the GUI's debug panel.
     EventSlotInfo getPrimarySlotInfo(int slot);
     EventSlotInfo getSecondarySlotInfo(int slot);
-    EventHandlerInfo getInfo();
     
     // Returns the number of event slots in the primary or secondary table.
     inline long primSlotCount() { return PRIM_SLOT_COUNT; }

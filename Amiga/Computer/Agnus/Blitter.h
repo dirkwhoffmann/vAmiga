@@ -130,16 +130,6 @@ class Blitter : public HardwareComponent {
     
     
     //
-    // Collecting information
-    //
-    
-    public:
-    
-    // Collects the data shown in the GUI's debug panel.
-    BlitterInfo getInfo();
-    
-    
-    //
     // Accessing registers
     //
     

@@ -86,6 +86,45 @@ CIA::_powerOn()
 void
 CIA::_powerOff()
 {
+
+}
+
+void
+CIA::_inspect()
+{
+    info.portA.port = PA;
+    info.portA.reg = PRA;
+    info.portA.dir = DDRA;
+    
+    info.portB.port = PB;
+    info.portB.reg = PRB;
+    info.portB.dir = DDRB;
+    
+    info.timerA.count = LO_HI(spypeek(0x04), spypeek(0x05));
+    info.timerA.latch = latchA;
+    info.timerA.running = (delay & CIACountA3);
+    info.timerA.toggle = CRA & 0x04;
+    info.timerA.pbout = CRA & 0x02;
+    info.timerA.oneShot = CRA & 0x08;
+    
+    info.timerB.count = LO_HI(spypeek(0x06), spypeek(0x07));
+    info.timerB.latch = latchB;
+    info.timerB.running = (delay & CIACountB3);
+    info.timerB.toggle = CRB & 0x04;
+    info.timerB.pbout = CRB & 0x02;
+    info.timerB.oneShot = CRB & 0x08;
+    
+    info.sdr = SDR;
+    
+    info.icr = icr;
+    info.imr = imr;
+    info.intLine = INT;
+    
+    info.cnt = tod.info;
+    info.cntIntEnable = icr & 0x04;
+    
+    info.idleCycles = idle();
+    info.idlePercentage = (double)idleCycles / (double)clock;
 }
 
 void
@@ -696,8 +735,8 @@ CIA::dumpTrace()
 void
 CIA::_dump()
 {
-    CIAInfo info = getInfo();
-
+    _inspect();
+    
     msg("            Master Clock : %lld\n", amiga->masterClock);
     msg("                   Clock : %lld\n", clock);
     msg("                Sleeping : %s\n", sleeping ? "yes" : "no");
@@ -723,47 +762,7 @@ CIA::_dump()
 	tod.dump();
 }
 
-CIAInfo
-CIA::getInfo()
-{
-    CIAInfo info;
-    
-    info.portA.port = PA;
-    info.portA.reg = PRA;
-    info.portA.dir = DDRA;
-    
-    info.portB.port = PB;
-    info.portB.reg = PRB;
-    info.portB.dir = DDRB;
 
-    info.timerA.count = LO_HI(spypeek(0x04), spypeek(0x05));
-    info.timerA.latch = latchA;
-    info.timerA.running = (delay & CIACountA3);
-    info.timerA.toggle = CRA & 0x04;
-    info.timerA.pbout = CRA & 0x02;
-    info.timerA.oneShot = CRA & 0x08;
-    
-    info.timerB.count = LO_HI(spypeek(0x06), spypeek(0x07));
-    info.timerB.latch = latchB;
-    info.timerB.running = (delay & CIACountB3);
-    info.timerB.toggle = CRB & 0x04;
-    info.timerB.pbout = CRB & 0x02;
-    info.timerB.oneShot = CRB & 0x08;
-
-    info.sdr = SDR;
-    
-    info.icr = icr;
-    info.imr = imr;
-    info.intLine = INT;
-    
-    info.cnt = tod.getInfo();
-    info.cntIntEnable = icr & 0x04;
-    
-    info.idleCycles = idle();
-    info.idlePercentage = (double)idleCycles / (double)clock;
-  
-    return info;
-}
 
 /*
 void

@@ -358,7 +358,7 @@ AmigaMemConfiguration;
 
 
 //
-// Info structures (returned by getInfo() of the specific component)
+// Info structures (Filled by calling inspect() )
 //
 
 typedef struct

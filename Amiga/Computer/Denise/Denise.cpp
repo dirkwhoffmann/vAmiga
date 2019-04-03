@@ -96,24 +96,6 @@ Denise::_dump()
 
 }
 
-DeniseInfo
-Denise::getInfo()
-{
-    DeniseInfo info;
-
-    info.bplcon0 = bplcon0;
-    info.bplcon1 = bplcon1;
-    info.bplcon2 = bplcon2;
-    
-    for (unsigned i = 0; i < 32; i++)
-        info.bpldat[i] = bpldat[i];
-    
-    for (unsigned i = 0; i < 32; i++)
-        info.color[i] = colorizer.getRGBA(i);
-
-    return info;
-}
-
 void
 Denise::didLoadFromBuffer(uint8_t **buffer)
 {

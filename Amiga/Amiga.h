@@ -324,16 +324,7 @@ class Amiga : public HardwareComponent {
     void _dump() override;
     void _setWarp(bool value) override;
     
-    //
-    // Collecting information
-    //
-    
-    public:
-    
-    // Collects the data shown in the GUI's debug panel
-    AmigaInfo getInfo();
-    
-    
+ 
     //
     // Controlling the emulation thread
     //

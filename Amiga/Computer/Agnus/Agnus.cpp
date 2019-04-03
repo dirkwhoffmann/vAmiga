@@ -129,29 +129,6 @@ Agnus::_dump()
     eventHandler.dump();
 }
 
-DMAInfo
-Agnus::getInfo()
-{
-    DMAInfo info;
-    
-    info.dmacon  = dmacon;
-    info.diwstrt = diwstrt;
-    info.diwstop = diwstop;
-    info.ddfstrt = ddfstrt;
-    info.ddfstop = ddfstop;
-    
-    info.bpl1mod = bpl1mod;
-    info.bpl2mod = bpl2mod;
-    info.numBpls = activeBitplanes; 
-    
-    info.dskpt   = dskpt;
-    for (unsigned i = 0; i < 4; i++)  info.audlc[i] = audlc[i];
-    for (unsigned i = 0; i < 6; i++)  info.bplpt[i] = bplpt[i];
-    for (unsigned i = 0; i < 8; i++) info.sprptr[i] = sprpt[i];
-
-    return info;
-}
-
 DMACycle
 Agnus::cyclesInCurrentFrame()
 {

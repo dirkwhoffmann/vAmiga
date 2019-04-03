@@ -125,9 +125,6 @@ class CPU : public HardwareComponent {
     // Returns the start address of the following instruction.
     uint32_t getNextPC() { return getPC() + lengthOInstruction(); }
     
-    // Collects the data shown in the GUI's debug panel.
-    CPUInfo getInfo();
-    
     
     //
     // Querying instructions

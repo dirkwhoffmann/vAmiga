@@ -11,14 +11,14 @@
 
 TOD::TOD(CIA *cia)
 {
-	setDescription("TOD");
-	debug(3, "    Creating TOD at address %p...\n", this);
+    setDescription("TOD");
+    debug(3, "    Creating TOD at address %p...\n", this);
     
     this->cia = cia;
     
     // Register snapshot items
     registerSnapshotItems(vector<SnapshotItem> {
-                
+        
         { &tod.value,        sizeof(tod.value),        0 },
         { &latch.value,      sizeof(latch.value),      0 },
         { &alarm.value,      sizeof(alarm.value),      0 },
@@ -33,34 +33,30 @@ TOD::_powerOn()
     stopped = true;
 }
 
-void 
-TOD::_dump()
+void
+TOD::_inspect()
 {
-	msg("           Counter : %02X:%02X:%02X\n", tod.hi, tod.mid, tod.lo);
-	msg("             Alarm : %02X:%02X:%02X\n", alarm.hi, alarm.mid, alarm.lo);
-	msg("             Latch : %02X:%02X:%02X\n", latch.hi, latch.mid, latch.lo);
-	msg("            Frozen : %s\n", frozen ? "yes" : "no");
-	msg("           Stopped : %s\n", stopped ? "yes" : "no");
-	msg("\n");
-}
-
-CounterInfo
-TOD::getInfo()
-{
-    CounterInfo info;
-    
     info.value = tod;
     info.latch = latch;
     info.alarm = alarm;
-    
-    return info;
+}
+
+void 
+TOD::_dump()
+{
+    msg("           Counter : %02X:%02X:%02X\n", tod.hi, tod.mid, tod.lo);
+    msg("             Alarm : %02X:%02X:%02X\n", alarm.hi, alarm.mid, alarm.lo);
+    msg("             Latch : %02X:%02X:%02X\n", latch.hi, latch.mid, latch.lo);
+    msg("            Frozen : %s\n", frozen ? "yes" : "no");
+    msg("           Stopped : %s\n", stopped ? "yes" : "no");
+    msg("\n");
 }
 
 void
 TOD::increment()
 {
     if (stopped)
-        return;
+    return;
     
     if (++tod.lo == 0) {
         if (++tod.mid == 0) {

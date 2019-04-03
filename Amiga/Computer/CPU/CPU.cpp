@@ -159,7 +159,7 @@ CPU::_inspect()
 void
 CPU::_dump()
 {
-    CPUInfo info = getInfo();
+    _inspect();
     
     plainmsg("      PC: %8X\n", info.pc);
     plainmsg(" D0 - D3: ");
@@ -248,37 +248,6 @@ uint32_t
 CPU::getIR()
 {
     return m68k_get_reg(NULL, M68K_REG_IR);
-}
-
-CPUInfo
-CPU::getInfo()
-{
-    CPUInfo info;
-    
-    info.pc = getPC();
-    
-    info.d[0] = m68k_get_reg(NULL, M68K_REG_D0);
-    info.d[1] = m68k_get_reg(NULL, M68K_REG_D1);
-    info.d[2] = m68k_get_reg(NULL, M68K_REG_D2);
-    info.d[3] = m68k_get_reg(NULL, M68K_REG_D3);
-    info.d[4] = m68k_get_reg(NULL, M68K_REG_D4);
-    info.d[5] = m68k_get_reg(NULL, M68K_REG_D5);
-    info.d[6] = m68k_get_reg(NULL, M68K_REG_D6);
-    info.d[7] = m68k_get_reg(NULL, M68K_REG_D7);
-
-    info.a[0] = m68k_get_reg(NULL, M68K_REG_A0);
-    info.a[1] = m68k_get_reg(NULL, M68K_REG_A1);
-    info.a[2] = m68k_get_reg(NULL, M68K_REG_A2);
-    info.a[3] = m68k_get_reg(NULL, M68K_REG_A3);
-    info.a[4] = m68k_get_reg(NULL, M68K_REG_A4);
-    info.a[5] = m68k_get_reg(NULL, M68K_REG_A5);
-    info.a[6] = m68k_get_reg(NULL, M68K_REG_A6);
-    info.a[7] = m68k_get_reg(NULL, M68K_REG_A7);
-    
-    info.ssp = m68k_get_reg(NULL, M68K_REG_ISP);
-    info.flags = m68k_get_reg(NULL, M68K_REG_SR);
-    
-    return info;
 }
 
 uint32_t

@@ -206,16 +206,6 @@ class Agnus : public HardwareComponent
     
     
     //
-    // Collecting information
-    //
-    
-    public:
-    
-    // Collects the data shown in the GUI's debug panel.
-    DMAInfo getInfo();
-    
-    
-    //
     // Working with cycles and beam positions
     //
     
