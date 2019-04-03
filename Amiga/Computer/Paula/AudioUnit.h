@@ -14,7 +14,7 @@
 
 class AudioUnit : public HardwareComponent {
     
-private:
+    private:
     
     // CPU cycle at the last call to executeUntil()
     uint64_t cycles = 0;
@@ -22,7 +22,7 @@ private:
     // Time stamp of the last write pointer alignment
     uint64_t lastAlignment = 0;
     
-public:
+    public:
     
     // Number of buffer underflows since power up
     uint64_t bufferUnderflows;
@@ -30,7 +30,7 @@ public:
     // Number of buffer overflows since power up
     uint64_t bufferOverflows;
     
-private:
+    private:
     
     //
     // Audio ringbuffer
@@ -81,22 +81,22 @@ private:
      * place whenever an audio sample is generated.
      */
     int32_t volumeDelta = 0;
-  
+    
     
     //
     // Constructing and destructing
     //
     
-public:
+    public:
     
     AudioUnit();
-
+    
     
     //
     // Methods from HardwareComponent
     //
     
-private:
+    private:
     
     void _powerOn() override;
     void _run() override;
@@ -106,15 +106,12 @@ private:
     // void setClockFrequency(uint32_t frequency);
     void didLoadFromBuffer(uint8_t **buffer) override { clearRingbuffer(); }
     
-public:
-    
-    //! @brief    Gathers all values that are displayed in the debugger
-    // AudioInfo getInfo();
-    
     
     //
     // Configuring the device
     //
+    
+    public:
     
     // Returns the sample rate.
     uint32_t getSampleRate();
@@ -123,7 +120,7 @@ public:
     // TODO: Can we adjust the sample rate on the Mac side?
     void setSampleRate(double rate);
     
-
+    
     //
     // Volume control
     //
@@ -228,7 +225,7 @@ public:
     const uint32_t samplesAhead = 8 * 735;
     void alignWritePtr() { writePtr = (readPtr  + samplesAhead) % bufferSize; }
     
-public:
+    public:
     
     /* Executes SID until a certain cycle is reached
      */
@@ -237,9 +234,6 @@ public:
     /* Executes SID for a certain number of cycles
      */
     void execute(uint64_t numCycles);
-    
-    
 };
-
 
 #endif

@@ -32,12 +32,12 @@ protected:
      * powerOn().
      */
     enum {
-        BYTE_ARRAY       = 0x01, //! Data chunk is an array of bytes
-        WORD_ARRAY       = 0x02, //! Data chunk is an array of words
-        DWORD_ARRAY      = 0x04, //! Data chunk is an array of double words
-        QWORD_ARRAY      = 0x08, //! Data chunk is an array of quad words
+        BYTE_ARRAY       = 0x01, // Data chunk is an array of bytes
+        WORD_ARRAY       = 0x02, // Data chunk is an array of words
+        DWORD_ARRAY      = 0x04, // Data chunk is an array of double words
+        QWORD_ARRAY      = 0x08, // Data chunk is an array of quad words
         
-        PERSISTANT       = 0x10, //! Don't zero out in powerOn()
+        PERSISTANT       = 0x10, // Don't zero out in powerOn()
 
     };
     
