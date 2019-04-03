@@ -50,6 +50,13 @@ extern Amiga *activeAmiga;
  */
 class Amiga : public HardwareComponent {
     
+    public:
+    
+    // Information shown in the GUI inspector panel
+    AmigaInfo info;
+    
+    private:
+    
     /* Indicates if the Amiga should be executed in debug mode.
      * Debug mode is enabled when the GUI debugger is opend and disabled when
      * the GUI debugger is closed. In debug mode, several time-consuming tasks
@@ -63,29 +70,29 @@ class Amiga : public HardwareComponent {
     // Sub components
     //
     
-public:
+    public:
     
     // A Motorola 68000 CPU
     CPU cpu;
     
     // CIA A (odd CIA)
     CIAA ciaA;
-
+    
     // CIA B (even CIA)
     CIAB ciaB;
-
+    
     // Memory
     Memory mem;
     
     // The DMA controller (part of Agnus)
     Agnus agnus;
-
+    
     // Denise (Video)
     Denise denise;
-
+    
     // Paula (Interrupts, Disk Controller, Audio)
     Paula paula;
-
+    
     // Disk controller (move to Paula?!)
     DiskController diskController;
     
@@ -95,23 +102,23 @@ public:
     
     // Keyboard
     Keyboard keyboard;
-
+    
     // Internal drive
     Drive df0 = Drive(0);
-
+    
     // External drives
     Drive df1 = Drive(1);
     // Drive df2 = Drive(2);
     // Drive df3 = Drive(3);
-
+    
     
     //
     // Current configuration
     //
     // Specification of the machine we are going to emulate...
-
-public:
-
+    
+    public:
+    
     AmigaConfiguration config;
     
     
@@ -119,7 +126,7 @@ public:
     // Counters
     //
     
-public:
+    public:
     
     /* The Amiga's master clock
      * This clock runs at 28 MHz and is used to derive all other clock signals.
@@ -131,7 +138,7 @@ public:
     // Emulator thread
     //
     
-public:
+    public:
     
     /* Run loop control
      * This variable is initialized with 0 at the beginning of the run loop and
@@ -144,7 +151,7 @@ public:
      */
     static const uint8_t RL_TERMINATE = 0b0001;
     static const uint8_t RL_SNAPSHOT  = 0b0010;
-
+    
     uint8_t runLoopControl;
     
     
@@ -155,7 +162,7 @@ public:
      */
     // bool stop = false;
     
-private:
+    private:
     
     // The invocation counter for implementing suspend() / resume()
     unsigned suspendCounter = 0;
@@ -168,7 +175,7 @@ private:
     // Emulation speed
     //
     
-private:
+    private:
     
     /* System timer information
      * Used to match the emulation speed with the speed of a real Amiga.
@@ -186,8 +193,8 @@ private:
      * are stored in these variables. They are used in combination with
      * clockBase and timeBase to determine how long the thread has to sleep.
      */
-    // 
-     
+    //
+    
     /* Wake-up time of the synchronization timer in nanoseconds.
      * This value is recomputed each time the emulator thread is put to sleep.
      * DEPRECATED
@@ -210,7 +217,7 @@ private:
     // Snapshot storage
     //
     
-private:
+    private:
     
     // Indicates if snapshots should be taken automatically.
     bool takeAutoSnapshots = true;
@@ -228,13 +235,13 @@ private:
     
     // Storage for user-taken snapshots
     vector<AmigaSnapshot *> userSnapshots;
-
+    
     
     //
     // Debugging
     //
     
-public:
+    public:
     
     bool debugDMA = false; // REMOVE AFTER DEBUGGING
     
@@ -243,11 +250,11 @@ public:
     // Constructing and destructing
     //
     
-public:
+    public:
     
     Amiga();
     ~Amiga();
-
+    
     /* Makes this Amiga the active emulator instance.
      * Background: Because we only have one CPU core available, we need to
      * share this core among all emulator instances. This means that only one
@@ -259,7 +266,7 @@ public:
      * If another instance is currently active, it is put into pause mode
      * automatically.
      */
-    void makeActiveInstance(); 
+    void makeActiveInstance();
     
     // Indicates if debug mode is enabled.
     bool getDebugMode() { return debugMode; }
@@ -275,19 +282,19 @@ public:
     // Configuring the emulated machine
     //
     
-public:
+    public:
     
     // Returns the currently set configuration.
     AmigaConfiguration getConfig() { return config; }
-
+    
     // Returns the currently set memory configuration.
     AmigaMemConfiguration getMemConfig();
-
+    
     
     // Chooses the emulated Amiga model.
     bool configureModel(AmigaModel model);
     bool configureLayout(long value);
-
+    
     // Chooses the amount of memory to emulate.
     bool configureChipMemory(long size);
     bool configureSlowMemory(long size);
@@ -299,20 +306,21 @@ public:
     // Chooses if a drive is connected or not.
     bool configureDrive(unsigned driveNr, bool connected);
     bool configureDrive(unsigned driveNr, DriveType type);
-
+    
     
     //
     // Methods from HardwareComponent
     //
-
-private:
-
+    
+    private:
+    
     void _powerOn() override;
     void _powerOff() override;
     void _run() override;
     void _pause() override;
     void _reset() override;
     void _ping() override;
+    void _inspect() override;
     void _dump() override;
     void _setWarp(bool value) override;
     
@@ -320,7 +328,7 @@ private:
     // Collecting information
     //
     
-public:
+    public:
     
     // Collects the data shown in the GUI's debug panel
     AmigaInfo getInfo();
@@ -330,7 +338,7 @@ public:
     // Controlling the emulation thread
     //
     
-public:
+    public:
     
     /* Returns true if a call to powerUp() will be successful.
      * An Amiga 500 or Amiga 2000 can be powered up any time (if no original
@@ -339,7 +347,7 @@ public:
      * the emulator.
      */
     bool readyToPowerUp();
-        
+    
     
     /* Pauses the emulation thread temporarily.
      * Because the emulator is running in a separate thread, the GUI has to
@@ -354,13 +362,13 @@ public:
      */
     void suspend();
     void resume();
-      
+    
     
     //
     // Accessing the message queue
     //
     
-public:
+    public:
     
     // Registers a listener callback function.
     void addListener(const void *sender, void(*func)(const void *, int, long) ) {
@@ -384,7 +392,7 @@ public:
     // Running the emulator
     //
     
-public:
+    public:
     
     // Runs or pauses the emulator
     void stopAndGo() { isRunning() ? pause() : run(); }
@@ -408,7 +416,7 @@ public:
      * has to be declared public to make it accessible by the emulator thread.
      */
     void threadWillStart();
-
+    
     /* The thread exit function.
      * This (private) method is invoked when the emulator thread terminates. It
      * has to be declared public to make it accessible by the emulator thread.
@@ -423,14 +431,14 @@ public:
      */
     void runLoop();
     
-  
+    
     
     //
     // Managing emulation speed
     //
-
-public:
-
+    
+    public:
+    
     /* Getter and setter for 'alwaysWarp'
      * Side effects:
      *   setAlwaysWarp sends a notification message if the value changes.
@@ -441,7 +449,7 @@ public:
     // Getter and setter for 'warpLoad'
     // bool getWarpLoad() { return warpLoad; }
     // void setWarpLoad(bool value) { warpLoad = value; }
-
+    
     /* Updates variable 'warp' and returns the new value.
      * Side effects:
      *   The function sends a notification message if the value changes.
@@ -454,7 +462,7 @@ public:
      */
     void restartTimer();
     
-private:
+    private:
     
     // Converts kernel time to nanoseconds.
     uint64_t abs_to_nanos(uint64_t abs) { return abs * tb.numer / tb.denom; }
@@ -471,7 +479,7 @@ private:
      */
     uint64_t frameDelay() { return uint64_t(1000000000) / 50; }
     
-public:
+    public:
     
     /* Puts the emulator thread to sleep.
      * This function makes the emulator thread wait until nanoTargetTime has
@@ -484,7 +492,7 @@ public:
     // Handling snapshots
     //
     
-public:
+    public:
     
     // Indicates if the auto-snapshot feature is enabled.
     bool getTakeAutoSnapshots() { return takeAutoSnapshots; }
@@ -557,7 +565,7 @@ public:
     //
     
     void dumpClock();
-
+    
 };
 
 #endif

@@ -25,12 +25,12 @@ using std::pair;
  */
 class AmigaObject {
     
-public:
+    public:
     
     // Debug level for this component
     unsigned debugLevel = DEBUG_LEVEL;
     
-private:
+    private:
     
     /* Textual description of this object
      * Most debug output methods preceed their output with this string.
@@ -43,7 +43,7 @@ private:
     // Initializing the component
     //
     
-public:
+    public:
     
     // Getter and setter for the textual description.
     const char *getDescription() { return description ? description : ""; }
@@ -54,7 +54,7 @@ public:
     // Debugging the component
     //
     
-protected:
+    protected:
     
     /* There a four types of messages:
      *
@@ -69,7 +69,7 @@ protected:
      * provide addition standard debug information when a message is printed.
      */
     virtual void prefix();
-
+    
     void msg(const char *fmt, ...);
     void plainmsg(const char *fmt, ...);
     
@@ -77,7 +77,7 @@ protected:
     void debug(int level, const char *fmt, ...);
     void plaindebug(const char *fmt, ...);
     void plaindebug(int level, const char *fmt, ...);
-
+    
     void warn(const char *fmt, ...);
     void panic(const char *fmt, ...);
 };

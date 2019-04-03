@@ -390,6 +390,18 @@ Amiga::_ping()
 }
 
 void
+Amiga::_inspect()
+{
+    info.masterClock = masterClock;
+    info.dmaClock = agnus.clock;
+    info.ciaAClock = ciaA.clock;
+    info.ciaBClock = ciaB.clock;
+    info.frame = agnus.frame;
+    info.vpos = agnus.vpos;
+    info.hpos = agnus.hpos;
+}
+
+void
 Amiga::_dump()
 {
     dumpClock();
@@ -455,9 +467,6 @@ Amiga::getInfo()
     AmigaInfo info;
     
     info.masterClock = masterClock;
-    // info.inCPUCycles = AS_CPU_CYCLES(masterClock);
-    // info.inDMACycles = AS_DMA_CYCLES(masterClock);
-    // info.inCIACycles = AS_CIA_CYCLES(masterClock);
     info.dmaClock = agnus.clock;
     info.ciaAClock = ciaA.clock;
     info.ciaBClock = ciaB.clock;

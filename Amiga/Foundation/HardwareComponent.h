@@ -210,6 +210,21 @@ public:
     void ping();
     virtual void _ping() { }
     
+    /* Collects information about the component and it's sub-components.
+     * Many components contains an info variable of a class specific type
+     * (e.g., CPUInfo, MemoryInfo, ...). These variables contain the
+     * information shown in the GUI's inspector window and are updated by
+     * calling this function. The function is called automatically when the
+     * emulator switches to pause state to keep the GUI inspector data up
+     * to date.
+     * Note: Because this function accesses the internal emulator state with
+     * many non-atomic operations, it must not be called on a running emulator.
+     * To query information while the emulator is running, set up a periodic
+     * inspection interval via setInspectionInterval(...).
+     */
+    void inspect();
+    virtual void _inspect() { }
+    
     // Dumps some debug information about the internal state to the console.
     void dump();
     virtual void _dump() { }

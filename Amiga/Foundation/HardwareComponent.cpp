@@ -157,6 +157,18 @@ HardwareComponent::ping()
 }
 
 void
+HardwareComponent::inspect()
+{
+    // Inspect all sub components
+    for (HardwareComponent *c : subComponents) {
+        c->inspect();
+    }
+    
+    // Inspect this component
+    _inspect();
+}
+
+void
 HardwareComponent::dump()
 {
     plainmsg("%s (memory location: %p)\n\n", getDescription(), this);
