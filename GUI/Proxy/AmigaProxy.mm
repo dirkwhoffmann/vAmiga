@@ -50,6 +50,16 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->cpu->info;
 }
+- (DisassembledInstruction) getInstr:(NSInteger)index
+{
+    assert(index < CPUINFO_INSTR_COUNT);
+    return wrapper->cpu->info.instr[index];
+}
+- (DisassembledInstruction) getTraceInstr:(NSInteger)index
+{
+    assert(index < CPUINFO_INSTR_COUNT);
+    return wrapper->cpu->info.traceInstr[index];
+}
 - (uint32_t) getPC
 {
     return wrapper->cpu->getPC();
@@ -138,18 +148,24 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->cpu->traceBufferCapacity; 
 }
+/*
 - (NSInteger) recordedInstructions
 {
     return wrapper->cpu->recordedInstructions();
 }
+*/
+/*
 - (RecordedInstruction) readRecordedInstruction:(NSInteger)nr
 {
     return wrapper->cpu->readRecordedInstruction(nr);
 }
+*/
+/*
 - (void) clearTraceBuffer
 {
     wrapper->cpu->clearTraceBuffer();
 }
+*/
 - (void) truncateTraceBuffer:(NSInteger)count
 {
     wrapper->cpu->truncateTraceBuffer((unsigned)count);

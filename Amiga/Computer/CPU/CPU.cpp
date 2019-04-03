@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 extern "C" {
-    #include "m68k.h"
+#include "m68k.h"
 }
 
 // Reference to the active Amiga instance
@@ -82,15 +82,15 @@ CPU::CPU()
     
     // Register snapshot items
     /*
-    registerSnapshotItems(vector<SnapshotItem> {
-        { &clock, sizeof(clock), 0 },
-    });
-    */
+     registerSnapshotItems(vector<SnapshotItem> {
+     { &clock, sizeof(clock), 0 },
+     });
+     */
 }
 
 CPU::~CPU()
 {
-
+    
 }
 
 void
@@ -108,13 +108,13 @@ CPU::_powerOff()
 void
 CPU::_run()
 {
- 
+    
 }
 
 void
 CPU::_pause()
 {
- 
+    
 }
 
 void
@@ -132,7 +132,10 @@ CPU::_ping()
 void
 CPU::_inspect()
 {
-    info.pc = getPC();
+    uint32_t pc = getPC();
+    
+    // Registers
+    info.pc = pc;
     
     info.d[0] = m68k_get_reg(NULL, M68K_REG_D0);
     info.d[1] = m68k_get_reg(NULL, M68K_REG_D1);
@@ -154,6 +157,36 @@ CPU::_inspect()
     
     info.ssp = m68k_get_reg(NULL, M68K_REG_ISP);
     info.flags = m68k_get_reg(NULL, M68K_REG_SR);
+    
+    // Disassemble the program starting at the program counter
+    for (unsigned i = 0; i < CPUINFO_INSTR_COUNT; i++) {
+        info.instr[i] = disassemble(pc);
+        pc += info.instr[i].bytes;
+    }
+    
+    // Disassemble the most recent entries in the trace buffer
+    
+    /* The last element in the trace buffer is the instruction that will be
+     * be executed next. Because we don't want to show this element yet, we
+     * don't dissassemble it.
+     */
+    for (unsigned i = 0; i < CPUINFO_INSTR_COUNT; i++) {
+        unsigned offset = (writePtr + traceBufferCapacity - 2 - i) % traceBufferCapacity;
+        RecordedInstruction instr = traceBuffer[offset];
+        info.traceInstr[i] = disassemble(instr.pc, instr.sp);
+    }
+    
+    // REMOVE ASAP
+    debug("_inspect()\n");
+    for (unsigned i = 0; i < CPUINFO_INSTR_COUNT; i++) {
+        debug("%d: %s %s %s\n",
+              info.instr[i].addr, info.instr[i].data, info.instr[i].instr);
+    }
+    debug("\n");
+    for (unsigned i = 0; i < CPUINFO_INSTR_COUNT; i++) {
+        debug("%d: %s %s %s\n",
+              info.traceInstr[i].addr, info.traceInstr[i].data, info.traceInstr[i].instr);
+    }
 }
 
 void
@@ -184,7 +217,7 @@ CPU::stateSize()
     size_t result = HardwareComponent::stateSize();
     
     result += m68k_context_size();
-
+    
     return result;
 }
 
@@ -209,7 +242,7 @@ CPU::recordContext()
 {
     // debug("recordContext: context = %p\n", context);
     assert(context == NULL);
-
+    
     // Allocate memory
     context = new (std::nothrow) uint8_t[m68k_context_size()];
     
@@ -222,10 +255,10 @@ CPU::restoreContext()
 {
     // debug("restoreContext: context = %p\n", context);
     if (context) {
-    
+        
         // Load the recorded context into the CPU
         m68k_set_context(context);
-
+        
         // Delete the recorded context
         delete[] context;
         context = NULL;
@@ -257,17 +290,68 @@ CPU::lengthOfInstruction(uint32_t addr)
     return m68k_disassemble(tmp, addr, M68K_CPU_TYPE_68000);
 }
 
+DisassembledInstruction
+CPU::disassemble(uint32_t addr)
+{
+    DisassembledInstruction result;
+    
+    if (addr <= 0xFFFFFF) {
+        
+        result.bytes = m68k_disassemble(result.instr, addr, M68K_CPU_TYPE_68000);
+        amiga->mem.hex(result.data, addr, result.bytes, sizeof(result.data));
+        sprint24x(result.addr, addr);
+        
+    } else {
+        
+        result.bytes = result.instr[0] = result.data[0] = result.addr[0] = 0;
+    }
+
+    // Flags ("" by default)
+    result.flags[0] = 0;
+
+    return result;
+}
+
+DisassembledInstruction
+CPU::disassemble(uint32_t addr, uint16_t sp)
+{
+    DisassembledInstruction result = disassemble(addr);
+    
+    result.flags[0]  = (sp & 0b1000000000000000) ? '1' : '0';
+    result.flags[1]  = '-';
+    result.flags[2]  = (sp & 0b0010000000000000) ? '1' : '0';
+    result.flags[3]  = '-';
+    result.flags[4]  = '-';
+    result.flags[5]  = (sp & 0b0000010000000000) ? '1' : '0';
+    result.flags[6]  = (sp & 0b0000001000000000) ? '1' : '0';
+    result.flags[7]  = (sp & 0b0000000100000000) ? '1' : '0';
+    result.flags[8]  = '-';
+    result.flags[9]  = '-';
+    result.flags[10] = '-';
+    result.flags[11] = (sp & 0b0000000000010000) ? '1' : '0';
+    result.flags[12] = (sp & 0b0000000000001000) ? '1' : '0';
+    result.flags[13] = (sp & 0b0000000000000100) ? '1' : '0';
+    result.flags[14] = (sp & 0b0000000000000010) ? '1' : '0';
+    result.flags[15] = (sp & 0b0000000000000001) ? '1' : '0';
+    result.flags[16] = 0;
+
+    return result;
+}
+
+/*
 unsigned
 CPU::recordedInstructions()
 {
     return (traceBufferCapacity + writePtr - readPtr) % traceBufferCapacity;
 }
+*/
 
- void
+void
 CPU::truncateTraceBuffer(unsigned count)
 {
-    if (count <= recordedInstructions())
-        readPtr = (traceBufferCapacity + writePtr - count) % traceBufferCapacity;
+    for (unsigned i = writePtr; i < writePtr + traceBufferCapacity - count; i++) {
+        traceBuffer[i % traceBufferCapacity].pc = UINT32_MAX; // mark element as unsed
+    }
 }
 
 void
@@ -275,26 +359,28 @@ CPU::recordInstruction()
 {
     RecordedInstruction instr;
     
+    // Setup record
     instr.cycle = amiga->masterClock;
     instr.pc = getPC();
     instr.sp = getSP();
-    instr.instr[0] = 0;
     
+    // Store record
     assert(writePtr < traceBufferCapacity);
     traceBuffer[writePtr] = instr;
+
+    // Advance write pointer
     writePtr = (writePtr + 1) % traceBufferCapacity;
-    if (writePtr == readPtr) {
-        readPtr = (readPtr + 1) % traceBufferCapacity;
-    }
 }
 
+#if 0
 RecordedInstruction
 CPU::readRecordedInstruction(long offset)
 {
-    assert(offset < recordedInstructions());
+    assert(offset < traceBufferCapacity);
     
     size_t i = (readPtr + offset) % traceBufferCapacity;
     
+    /*
     if (traceBuffer[i].instr[0] == 0) {
         uint16_t sp = traceBuffer[i].sp;
         m68k_disassemble(traceBuffer[i].instr, traceBuffer[i].pc, M68K_CPU_TYPE_68000);
@@ -316,9 +402,11 @@ CPU::readRecordedInstruction(long offset)
         traceBuffer[i].flags[15] = (sp & 0b0000000000000001) ? '1' : '0';
         traceBuffer[i].flags[16] = 0;
     }
+    */
     
     return traceBuffer[i];
 }
+#endif
 
 uint64_t
 CPU::executeNextInstruction()

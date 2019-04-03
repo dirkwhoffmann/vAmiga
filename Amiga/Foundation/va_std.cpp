@@ -9,68 +9,33 @@
 
 #include "va_std.h"
 
-void
-sprint8d(char *s, uint8_t value)
+void sprintd(char *s, int digits, uint64_t value)
 {
-    for (int i = 2; i >= 0; i--) {
+    for (int i = digits - 1; i >= 0; i--) {
         uint8_t digit = value % 10;
         s[i] = '0' + digit;
         value /= 10;
     }
-    s[3] = 0;
+    s[digits] = 0;
 }
 
-void
-sprint8x(char *s, uint8_t value)
+void sprintx(char *s, int digits, uint64_t value)
 {
-    for (int i = 1; i >= 0; i--) {
+    for (int i = digits - 1; i >= 0; i--) {
         uint8_t digit = value % 16;
         s[i] = (digit <= 9) ? ('0' + digit) : ('A' + digit - 10);
         value /= 16;
     }
-    s[2] = 0;
+    s[digits] = 0;
 }
 
-void
-sprint8b(char *s, uint8_t value)
+void sprintb(char *s, int digits, uint64_t value)
 {
-    for (int i = 7; i >= 0; i--) {
+    for (int i = digits - 1; i >= 0; i--) {
         s[i] = (value & 0x01) ? '1' : '0';
         value >>= 1;
     }
-    s[8] = 0;
-}
-
-void
-sprint16d(char *s, uint16_t value)
-{
-    for (int i = 4; i >= 0; i--) {
-        uint8_t digit = value % 10;
-        s[i] = '0' + digit;
-        value /= 10;
-    }
-    s[5] = 0;
-}
-
-void
-sprint16x(char *s, uint16_t value)
-{
-    for (int i = 3; i >= 0; i--) {
-        uint8_t digit = value % 16;
-        s[i] = (digit <= 9) ? ('0' + digit) : ('A' + digit - 10);
-        value /= 16;
-    }
-    s[4] = 0;
-}
-
-void
-sprint16b(char *s, uint16_t value)
-{
-    for (int i = 15; i >= 0; i--) {
-        s[i] = (value & 0x01) ? '1' : '0';
-        value >>= 1;
-    }
-    s[16] = 0;
+    s[digits] = 0;
 }
 
 char *

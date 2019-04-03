@@ -1172,21 +1172,30 @@ Memory::ascii(uint32_t addr)
     return str;
 }
 
+void
+Memory::hex(char *buffer, uint32_t addr, size_t bytes, size_t bufferSize)
+{
+    assert(buffer != NULL);
+    assert(is_uint24_t(addr));
+    assert(bytes % 2 == 0);
+    assert(bufferSize != 0);
+    
+    unsigned maxWords = (bufferSize - 1) / 5;
+    unsigned words = MIN(maxWords, bytes / 2);
+
+    for (unsigned i = 0; i < words; i++) {
+        
+        uint16_t value = peek16(addr + 2*i);
+        sprint16x(buffer, value);
+        buffer += 4;
+        *buffer++ = ' ';
+    }
+    *buffer = 0;
+}
+
 const char *
 Memory::hex(uint32_t addr, size_t bytes)
 {
-    assert(is_uint24_t(addr));
-    assert(bytes % 2 == 0);
-    assert(bytes <= 32);
-    
-    char *ptr = str;
-    for (unsigned i = 0; i < bytes; i += 2) {
-        
-        uint16_t value = peek16(addr + i);
-        sprint16x(ptr, value);
-        ptr += 4;
-        *ptr++ = ' ';
-    }
-    *ptr = 0;
+    hex(str, addr, bytes, sizeof(str));
     return str;
 }

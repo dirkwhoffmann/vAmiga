@@ -13,7 +13,8 @@ class TraceTableView : NSTableView {
     
     @IBOutlet weak var inspector: Inspector!
     
-    var memory = amigaProxy?.mem
+    var memory = amigaProxy?.mem // REMOVE
+    var cpu = amigaProxy?.cpu
     
     // Data caches
     var pc    : [Int:String] = [:]
@@ -28,39 +29,36 @@ class TraceTableView : NSTableView {
     
     func refresh() {
 
-        guard let cpu = amigaProxy?.cpu else { return }
+        // guard let cpu = amigaProxy?.cpu else { return }
 
         pc = [:]
         flags = [:]
         instr = [:]
 
+        /*
         amigaProxy?.suspend()
         
-        /* The last element in the trace buffer is the instruction that will be
-         * be executed next. Because we don't want to show this element yet, we
-         * read one element less.
-         */
         let count = cpu.recordedInstructions() - 1
         
         if count > 0 {
             for i in 0...(count - 1) {
                 
-                var rec = cpu.readRecordedInstruction(i)
+                // var rec = cpu.readRecordedInstruction(i)
                 
-                let pcStr = String(rec.pc, radix: 16, uppercase: true)
-                let flagsStr = String.init(utf8String:&rec.flags.0)!
-                let commandStr = String.init(utf8String:&rec.instr.0)!
+                let pcStr = "** 42 **" //  String(rec.pc, radix: 16, uppercase: true)
+                // let flagsStr = String.init(utf8String:&rec.flags.0)!
+                // let commandStr = String.init(utf8String:&rec.instr.0)!
                 pc[i] = pcStr
-                flags[i] = flagsStr
-                instr[i] = commandStr
+                flags[i] = "" // flagsStr
+                instr[i] = "" // commandStr
             }
             scrollRowToVisible(count - 1)
         }
     
         amigaProxy?.resume()
+        */
         
-        reloadData()
-        
+        reloadData()        
     }
     
     @IBAction func clickAction(_ sender: NSTableView!) {
@@ -72,21 +70,25 @@ class TraceTableView : NSTableView {
 
 extension TraceTableView : NSTableViewDataSource {
     
-    func numberOfRows(in tableView: NSTableView) -> Int { return 254; }
+    func numberOfRows(in tableView: NSTableView) -> Int { return Int(CPUINFO_INSTR_COUNT); }
     
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
         
-        switch tableColumn?.identifier.rawValue {
+        if var info = cpu?.getTraceInstr(row) {
             
-        case "addr":
-            return pc[row]
-        case "flags":
-            return flags[row] ?? ""
-        case "instr":
-            return instr[row] ?? ""
-        default:
-            return "???"
+            switch tableColumn?.identifier.rawValue {
+                
+            case "addr":
+                return String(cString: &info.addr.0)
+            case "flags":
+                return String(cString: &info.flags.0)
+            case "instr":
+                return String(cString: &info.instr.0)
+            default:
+                return "???"
+            }
         }
+        return "??"
     }
 }
 

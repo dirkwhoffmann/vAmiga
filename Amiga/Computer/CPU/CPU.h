@@ -48,14 +48,12 @@ class CPU : public HardwareComponent {
     // A breakpoint manager for handling forced interruptions
     BreakpointManager bpManager;
     
-    /* A ring buffer recording all recently executed instructions
-     * The buffer can store up to (traceBufferCapacity - 1) elements.
-     */
+    // A buffer recording all recently executed instructions
     static const size_t traceBufferCapacity = 256;
     RecordedInstruction traceBuffer[traceBufferCapacity];
     
     // The trace buffer read pointer
-    int readPtr;
+    // int readPtr;
     
     // The trace buffer write pointer
     int writePtr;
@@ -141,23 +139,32 @@ class CPU : public HardwareComponent {
     
     
     //
+    // Running the disassembler
+    //
+    
+    // Disassembles the instruction at the specified address
+    DisassembledInstruction disassemble(uint32_t addr);
+    DisassembledInstruction disassemble(uint32_t addr, uint16_t sp);
+    
+    
+    //
     // Tracing program execution
     //
     
-    // Clears the trace buffer.
-    void clearTraceBuffer() { readPtr = writePtr = 0; }
-    
-    // Deletes some elements. Only the 'count' most recent entries are kept.
+    // Removes all elements from the trace buffer except the 'count' most recent ones.
     void truncateTraceBuffer(unsigned count);
     
+    // Clears the trace buffer.
+    void clearTraceBuffer() { truncateTraceBuffer(0); }
+
     // Returns the number of recorded instructions.
-    unsigned recordedInstructions();
+    // unsigned recordedInstructions();
     
     // Records an instruction.
     void recordInstruction();
     
     // Reads a recorded instruction from the trace buffer.
-    RecordedInstruction readRecordedInstruction(long offset);
+    // RecordedInstruction readRecordedInstruction(long offset);
     
     
     //

@@ -187,6 +187,8 @@ struct AmigaFileWrapper;
 
 - (void) dump;
 - (CPUInfo) getInfo;
+- (DisassembledInstruction) getInstr:(NSInteger)index;
+- (DisassembledInstruction) getTraceInstr:(NSInteger)index;
 - (uint32_t) getPC;
 
 - (NSInteger) disassemble:(char *) str pc:(NSInteger)pc;
@@ -200,9 +202,9 @@ struct AmigaFileWrapper;
 - (void) disableBreakpointAt:(uint32_t)addr;
 
 - (NSInteger) traceBufferCapacity;
-- (NSInteger) recordedInstructions;
-- (RecordedInstruction) readRecordedInstruction:(NSInteger)nr;
-- (void) clearTraceBuffer;
+// - (NSInteger) recordedInstructions;
+// - (RecordedInstruction) readRecordedInstruction:(NSInteger)nr;
+// - (void) clearTraceBuffer;
 - (void) truncateTraceBuffer:(NSInteger)count;
 
 - (NSInteger) numberOfBreakpoints;
