@@ -12,12 +12,12 @@ class InstrTableView : NSTableView {
     @IBOutlet weak var inspector: Inspector!
     
     var mem = amigaProxy!.mem!
-    var cpu = amigaProxy!.cpu!
+    var cpu = amigaProxy?.cpu
     
     // Display caches
     var addrInRow  : [Int:UInt32] = [:]
-    var instrInRow : [Int:String] = [:]
-    var dataInRow  : [Int:String] = [:]
+    // var instrInRow : [Int:String] = [:]
+    // var dataInRow  : [Int:String] = [:]
     var rowForAddr : [UInt32:Int] = [:]
     var hex = true
     
@@ -40,16 +40,16 @@ class InstrTableView : NSTableView {
         
         if col == 0, let addr = addrInRow[row] {
             
-            if !cpu.hasBreakpoint(at: addr) {
-                cpu.setBreakpointAt(addr)
+            if !cpu!.hasBreakpoint(at: addr) {
+                cpu?.setBreakpointAt(addr)
                 return
             }
-            if cpu.hasDisabledBreakpoint(at: addr) {
-                cpu.enableBreakpoint(at: addr)
+            if cpu!.hasDisabledBreakpoint(at: addr) {
+                cpu?.enableBreakpoint(at: addr)
                 return
             }
-            if cpu.hasBreakpoint(at: addr) {
-                cpu.disableBreakpoint(at: addr)
+            if cpu!.hasBreakpoint(at: addr) {
+                cpu?.disableBreakpoint(at: addr)
                 return
             }
         }
@@ -62,10 +62,10 @@ class InstrTableView : NSTableView {
 
         if col > 0, let addr = addrInRow[row] {
             
-            if cpu.hasBreakpoint(at: addr) {
-                cpu.deleteBreakpoint(at: addr)
+            if cpu!.hasBreakpoint(at: addr) {
+                cpu!.deleteBreakpoint(at: addr)
             } else {
-                cpu.setBreakpointAt(addr)
+                cpu!.setBreakpointAt(addr)
             }
         }
     }
@@ -73,7 +73,7 @@ class InstrTableView : NSTableView {
     // Jumps to the instruction the program counter is currently pointing to
     func jumpToPC() {
         
-        jumpTo(addr: cpu.getInfo().pc)
+        if let pc = cpu?.getInfo().pc { jumpTo(addr: pc) }
     }
 
     // Jumps to the specified address
@@ -81,8 +81,11 @@ class InstrTableView : NSTableView {
     
         guard let addr = addr else { return }
         
+        track("jumpTo: \(addr) \(rowForAddr)")
+        
         if let row = rowForAddr[addr] {
             
+            track("*** addr = \(addr)")
             // If the requested address is already displayed, we simply
             // select the corresponding row.
             scrollRowToVisible(row)
@@ -91,6 +94,8 @@ class InstrTableView : NSTableView {
             
         } else {
             
+            track("addr = \(addr)")
+
             // If the requested address is not displayed, we update the
             // whole view and display it in the first row.
             scrollRowToVisible(0)
@@ -109,22 +114,17 @@ class InstrTableView : NSTableView {
         
         guard var addr = addr else { return }
         
-        var buffer = Array<Int8>(repeating: 0, count: 64)
-        
-        instrInRow = [:]
         addrInRow = [:]
-        dataInRow = [:]
         rowForAddr = [:]
         
-        for i in 0...255 {
+        for i in 0 ..< Int(CPUINFO_INSTR_COUNT) {
+            
             if (addr <= 0xFFFFFF) {
                 
-                let bytes = cpu.disassemble(&buffer, pc: Int(addr))
-                instrInRow[i] = String.init(cString: buffer)
-                addrInRow[i]  = addr
-                dataInRow[i]  = mem.hex(Int(addr), bytes: bytes)
+                let bytes = cpu!.getInstr(i).bytes
+                track("bytes = \(bytes)")
+                addrInRow[i] = addr
                 rowForAddr[addr] = i
-                
                 addr += UInt32(bytes)
             }
         }
@@ -156,7 +156,7 @@ class InstrTableView : NSTableView {
 extension InstrTableView : NSTableViewDataSource {
     
     func numberOfRows(in tableView: NSTableView) -> Int {
-        return 256;
+        return Int(CPUINFO_INSTR_COUNT);
     }
     
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
@@ -165,21 +165,30 @@ extension InstrTableView : NSTableViewDataSource {
         
         switch tableColumn?.identifier.rawValue {
             
-        case "break" where cpu.hasDisabledBreakpoint(at: addr):
+        case "break" where cpu!.hasDisabledBreakpoint(at: addr):
             return "\u{26AA}" // "⚪"
             // return "\u{2B55}" // "⭕"
-        case "break" where cpu.hasBreakpoint(at: addr):
+        case "break" where cpu!.hasBreakpoint(at: addr):
             // return "\u{1F534}" // "🔴"
             return "\u{26D4}" // "⛔"
         case "addr":
-            return addrInRow[row]
+            if var info = cpu?.getInstr(row) {
+                return String(cString: &info.addr.0)
+            }
         case "data":
-            return dataInRow[row]
+            if var info = cpu?.getInstr(row) {
+                return String(cString: &info.data.0)
+            }
         case "instr":
-            return instrInRow[row]
+            if var info = cpu?.getInstr(row) {
+                return String(cString: &info.instr.0)
+            }
+
         default:
-            return ""
+            return "???"
         }
+    
+        return "??"
     }
 }
 
@@ -191,20 +200,11 @@ extension InstrTableView : NSTableViewDelegate {
         
         if let addr = addrInRow[row] {
 
-            /*
-            if (addr == cpu.getPC()) {
+            if cpu!.hasDisabledBreakpoint(at: addr) {
                 cell.textColor = NSColor.disabledControlTextColor
-                cell.backgroundColor = NSColor.selectedContentBackgroundColor
-            }
-            */
-            // let disabled = cpu.hasDisabledBreakpoint(at: addr)
-            // let conditional = cpu.hasConditionalBreakpoint(at: addr)
-
-            if cpu.hasDisabledBreakpoint(at: addr) {
-                cell.textColor = NSColor.disabledControlTextColor
-            } else if cpu.hasConditionalBreakpoint(at: addr) {
+            } else if cpu!.hasConditionalBreakpoint(at: addr) {
                 cell.textColor = NSColor.systemOrange
-            } else if cpu.hasBreakpoint(at: addr) {
+            } else if cpu!.hasBreakpoint(at: addr) {
                 cell.textColor = NSColor.systemRed
             } else {
                 cell.textColor = NSColor.labelColor

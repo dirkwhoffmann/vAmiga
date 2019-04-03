@@ -605,14 +605,14 @@ extension MyController {
         
         case MSG_RUN:
             
-            // track("Run")
+            track("Run")
             needsSaving = true
             toolbar.validateVisibleItems()
             myAppDelegate.inspector?.refresh(everything: true)
     
         case MSG_PAUSE:
             
-            // track("Pause")
+            track("Pause")
             toolbar.validateVisibleItems()
             myAppDelegate.inspector?.refresh(everything: true)
     

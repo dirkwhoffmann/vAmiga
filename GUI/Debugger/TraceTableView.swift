@@ -13,13 +13,7 @@ class TraceTableView : NSTableView {
     
     @IBOutlet weak var inspector: Inspector!
     
-    var memory = amigaProxy?.mem // REMOVE
     var cpu = amigaProxy?.cpu
-    
-    // Data caches
-    var pc    : [Int:String] = [:]
-    var flags : [Int:String] = [:]
-    var instr : [Int:String] = [:]
     
     override func awakeFromNib() {
         
@@ -28,35 +22,6 @@ class TraceTableView : NSTableView {
     }
     
     func refresh() {
-
-        // guard let cpu = amigaProxy?.cpu else { return }
-
-        pc = [:]
-        flags = [:]
-        instr = [:]
-
-        /*
-        amigaProxy?.suspend()
-        
-        let count = cpu.recordedInstructions() - 1
-        
-        if count > 0 {
-            for i in 0...(count - 1) {
-                
-                // var rec = cpu.readRecordedInstruction(i)
-                
-                let pcStr = "** 42 **" //  String(rec.pc, radix: 16, uppercase: true)
-                // let flagsStr = String.init(utf8String:&rec.flags.0)!
-                // let commandStr = String.init(utf8String:&rec.instr.0)!
-                pc[i] = pcStr
-                flags[i] = "" // flagsStr
-                instr[i] = "" // commandStr
-            }
-            scrollRowToVisible(count - 1)
-        }
-    
-        amigaProxy?.resume()
-        */
         
         reloadData()        
     }
@@ -91,4 +56,3 @@ extension TraceTableView : NSTableViewDataSource {
         return "??"
     }
 }
-

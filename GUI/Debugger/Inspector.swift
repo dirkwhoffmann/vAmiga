@@ -321,6 +321,8 @@ class Inspector : NSWindowController
     // Updates the currently shown panel
     func refresh(everything: Bool) {
         
+        track()
+        
         if window?.isVisible == false { return }
         
         if let id = debugPanel.selectedTabViewItem?.label {

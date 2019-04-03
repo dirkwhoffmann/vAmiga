@@ -180,12 +180,12 @@ CPU::_inspect()
     debug("_inspect()\n");
     for (unsigned i = 0; i < CPUINFO_INSTR_COUNT; i++) {
         debug("%d: %s %s %s\n",
-              info.instr[i].addr, info.instr[i].data, info.instr[i].instr);
+              i, info.instr[i].addr, info.instr[i].data, info.instr[i].instr);
     }
     debug("\n");
     for (unsigned i = 0; i < CPUINFO_INSTR_COUNT; i++) {
         debug("%d: %s %s %s\n",
-              info.traceInstr[i].addr, info.traceInstr[i].data, info.traceInstr[i].instr);
+              i, info.traceInstr[i].addr, info.traceInstr[i].data, info.traceInstr[i].instr);
     }
 }
 

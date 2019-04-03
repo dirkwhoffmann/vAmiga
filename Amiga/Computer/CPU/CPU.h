@@ -56,7 +56,7 @@ class CPU : public HardwareComponent {
     // int readPtr;
     
     // The trace buffer write pointer
-    int writePtr;
+    int writePtr = 0;
     
     
     //
