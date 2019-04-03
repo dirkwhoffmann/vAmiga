@@ -264,30 +264,6 @@ Denise::endOfFrame()
     // Switch the active frame buffer
     frameBuffer = (frameBuffer == longFrame) ? shortFrame : longFrame;
     pixelBuffer = frameBuffer;
-    
-    // Toggle the fake image from time to time
-    /*
-    if ((frame / 25) % 2) {
-        memcpy((void *)longFrame, fakeImage1, BUFSIZE);
-        memcpy((void *)shortFrame, fakeImage1, BUFSIZE);
-    } else {
-        memcpy((void *)longFrame, fakeImage2, BUFSIZE);
-        memcpy((void *)shortFrame, fakeImage2, BUFSIZE);
-    }
-    */
-    
-    // Take a snapshot once in a while
-    if (amiga->getTakeAutoSnapshots() && amiga->getSnapshotInterval() > 0) {
-        unsigned fps = 50;
-        if (amiga->agnus.frame % (fps * amiga->getSnapshotInterval()) == 0) {
-            amiga->runLoopControl |= Amiga::RL_SNAPSHOT;
-        }
-    }
-    
-    // Count some sheep (zzzzzz) ...
-    if (!amiga->getWarp()) {
-        amiga->synchronizeTiming();
-    }
 }
 
 void

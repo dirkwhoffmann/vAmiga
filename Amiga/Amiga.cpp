@@ -14,6 +14,8 @@
 //
 
 bool Amiga::debugMode = false;
+int64_t Amiga::inspectionInterval = INT64_MAX;
+
 
 //
 // Emulator thread
@@ -144,6 +146,7 @@ Amiga::enableDebugging()
 {
     debug("Enabling debug mode\n");
     debugMode = true;
+    setInspectionInterval(10);
 }
 
 void
@@ -151,6 +154,13 @@ Amiga::disableDebugging()
 {
     debug("Disabling debug mode\n");
     debugMode = false;
+    setInspectionInterval(0);
+}
+
+void
+Amiga::setInspectionInterval(int64_t frames)
+{
+    inspectionInterval = frames ? frames : INT64_MAX;
 }
 
 AmigaMemConfiguration

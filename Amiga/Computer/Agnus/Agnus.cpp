@@ -974,4 +974,23 @@ Agnus::vsyncHandler()
     // Let the sub components do their own VSYNC stuff
     copper.vsyncAction();
     amiga->denise.endOfFrame();
+    
+    // Take a snapshot once in a while
+    if (amiga->getTakeAutoSnapshots() && amiga->getSnapshotInterval() > 0) {
+        unsigned fps = 50;
+        if (frame % (fps * amiga->getSnapshotInterval()) == 0) {
+            amiga->runLoopControl |= Amiga::RL_SNAPSHOT;
+        }
+    }
+    
+    // Record the internal state once in a while (for the GUI inspector)
+    if (frame % amiga->inspectionInterval == 0) {
+        amiga->inspect();
+        amiga->putMessage(MSG_INSPECT);
+    }
+    
+    // Count some sheep (zzzzzz) ...
+    if (!amiga->getWarp()) {
+        amiga->synchronizeTiming();
+    }
 }

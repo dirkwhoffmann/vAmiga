@@ -990,6 +990,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->amiga->masterClock;
 }
+- (void) setInspectionInterval:(NSInteger)value
+{
+    wrapper->amiga->setInspectionInterval(value);
+}
 - (BOOL) debugMode
 {
     return wrapper->amiga->getDebugMode();

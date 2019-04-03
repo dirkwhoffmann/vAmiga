@@ -88,6 +88,7 @@ struct AmigaFileWrapper;
 
 - (uint64_t) masterClock;
 
+- (void) setInspectionInterval:(NSInteger)value;
 - (BOOL) debugMode;
 - (void) enableDebugging;
 - (void) disableDebugging;

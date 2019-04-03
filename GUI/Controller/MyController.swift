@@ -630,6 +630,11 @@ extension MyController {
             toolbar.validateVisibleItems()
             myAppDelegate.inspector?.refresh(everything: true)
             
+        case MSG_INSPECT:
+            
+            track("MSG_INSPECT");
+            myAppDelegate.inspector?.refresh(everything: false)
+            
         case MSG_RESET:
             
             // track("Reset")

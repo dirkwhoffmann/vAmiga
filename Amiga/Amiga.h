@@ -55,6 +55,17 @@ class Amiga : public HardwareComponent {
     // Information shown in the GUI inspector panel
     AmigaInfo info;
     
+    /* Inspection interval.
+     * The emulator checks this variable in it's vsync handler and invokes
+     * inspect() periodically with a time interval equal to the number of
+     * frames specified by this variable. Furthermore, a message of type
+     * MSG_INSPECT is send to the GUI which triggers a refresh in the inspector
+     * panel (debugger).
+     * By default, the inspection period is set to INT64_MAX which effectively
+     * disabled this feature.
+     */
+    static int64_t inspectionInterval;
+    
     private:
     
     /* Indicates if the Amiga should be executed in debug mode.
@@ -276,6 +287,14 @@ class Amiga : public HardwareComponent {
     
     // Leaves debug mode.
     void disableDebugging();
+    
+    /* Configures the emulator to call inspect() on a regular basis.
+     * The emulator will invoke inspect() in the vsync handler periodically
+     * after the specified amount of frames has been drawn and informs the
+     * GUI by sending MSG_INSPECT.
+     * Call setInspectionInterval(0) to disable this feature.
+     */
+    void setInspectionInterval(int64_t frames);
     
     
     //

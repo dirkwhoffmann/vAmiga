@@ -238,6 +238,7 @@ typedef enum
     MSG_POWER_OFF,
     MSG_RUN,
     MSG_PAUSE,
+    MSG_INSPECT,
     MSG_RESET,
     MSG_ROM_MISSING,
     MSG_WARP_ON,
@@ -375,11 +376,18 @@ AmigaInfo;
 
 typedef struct
 {
+    // Registers
     uint32_t pc;
     uint32_t d[8];
     uint32_t a[8];
     uint32_t ssp;
     uint16_t flags;
+    
+    // Disassembled instructions starting at pc
+    char instr[32][128];
+    
+    // Disassembled instructions from the trace buffer
+    char traceInstr[32][128];
 }
 CPUInfo;
 
