@@ -147,19 +147,20 @@ Amiga::makeActiveInstance()
 }
 
 void
-Amiga::enableDebugging()
+Amiga::setDebugMode(bool enable)
 {
-    debug("Enabling debug mode\n");
-    debugMode = true;
-    setInspectionInterval(10);
-}
+    if ((debugMode = enable)) {
+        
+        debug("Enabling debug mode\n");
+        setControlFlags(RL_ENABLE_TRACING | RL_ENABLE_BREAKPOINTS);
+        setInspectionInterval(10);
 
-void
-Amiga::disableDebugging()
-{
-    debug("Disabling debug mode\n");
-    debugMode = false;
-    setInspectionInterval(0);
+    } else {
+
+        debug("Disabling debug mode\n");
+        clearControlFlags(RL_ENABLE_TRACING | RL_ENABLE_BREAKPOINTS);
+        setInspectionInterval(0);
+    }
 }
 
 void
@@ -505,18 +506,18 @@ Amiga::readyToPowerUp()
 }
 
 void
-Amiga::setControlFlag(RunLoopControlFlag flag)
+Amiga::setControlFlags(uint32_t flags)
 {
     pthread_mutex_lock(&runloopCtrlLock);
-    SET_BIT(runLoopCtrl, flag);
+    runLoopCtrl |= flags;
     pthread_mutex_unlock(&runloopCtrlLock);
 }
 
 void
-Amiga::clearControlFlag(RunLoopControlFlag flag)
+Amiga::clearControlFlags(uint32_t flags)
 {
     pthread_mutex_lock(&runloopCtrlLock);
-    CLR_BIT(runLoopCtrl, flag);
+    runLoopCtrl &= ~flags;
     pthread_mutex_unlock(&runloopCtrlLock);
 }
 
@@ -758,13 +759,7 @@ Amiga::runLoop()
     amiga->restartTimer();
     
     // Enable or disable debug checks
-    if (debugMode) {
-        setControlFlag(RL_ENABLE_TRACING);
-        setControlFlag(RL_ENABLE_BREAKPOINTS);
-    } else {
-        clearControlFlag(RL_ENABLE_TRACING);
-        clearControlFlag(RL_ENABLE_BREAKPOINTS);
-    }
+    debugMode ? setControlFlags(RL_DEBUG) : clearControlFlags(RL_DEBUG);
     
     // Enter the loop
     do {
@@ -782,24 +777,24 @@ Amiga::runLoop()
         if (runLoopCtrl) {
             
             // Are we requested to take a snapshot?
-            if (GET_BIT(runLoopCtrl, RL_SNAPSHOT)) {
+            if (runLoopCtrl & RL_SNAPSHOT) {
                 takeAutoSnapshot();
-                clearControlFlag(RL_SNAPSHOT);
+                clearControlFlags(RL_SNAPSHOT);
             }
             
             // Are we requested to update the debugger info structs?
-            if (GET_BIT(runLoopCtrl, RL_INSPECT)) {
+            if (runLoopCtrl & RL_INSPECT) {
                 inspect();
-                clearControlFlag(RL_INSPECT);
+                clearControlFlags(RL_INSPECT);
             }
             
             // Are we requested to record the execution?
-            if (GET_BIT(runLoopCtrl, RL_ENABLE_TRACING)) {
+            if (runLoopCtrl & RL_ENABLE_TRACING) {
                 cpu.recordInstruction();
             }
             
             // Are we requestes to check for breakpoints?
-            if (GET_BIT(runLoopCtrl, RL_ENABLE_BREAKPOINTS)) {
+            if (runLoopCtrl & RL_ENABLE_BREAKPOINTS) {
                 if (cpu.bpManager.shouldStop()) {
                     putMessage(MSG_BREAKPOINT_REACHED);
                     break;
@@ -807,8 +802,8 @@ Amiga::runLoop()
             }
             
             // Are we requests to terminate the run loop?
-            if (GET_BIT(runLoopCtrl, RL_STOP)) {
-                clearControlFlag(RL_STOP);
+            if (runLoopCtrl & RL_STOP) {
+                clearControlFlags(RL_STOP);
                 break;
             }
         }

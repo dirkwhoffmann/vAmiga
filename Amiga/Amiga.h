@@ -276,11 +276,10 @@ class Amiga : public HardwareComponent {
     // Indicates if debug mode is enabled.
     bool getDebugMode() { return debugMode; }
     
-    // Enters debug mode.
-    void enableDebugging();
-    
-    // Leaves debug mode.
-    void disableDebugging();
+    // Enabled or disabled debug mode.
+    void setDebugMode(bool enable);
+    void enableDebugging() { setDebugMode(true); }
+    void disableDebugging() { setDebugMode(false); }
     
     /* Configures the emulator to call inspect() on a regular basis.
      * The emulator will invoke inspect() in the vsync handler periodically
@@ -370,13 +369,13 @@ class Amiga : public HardwareComponent {
      * The functions are thread-safe and can be called from inside or outside
      * the emulator thread.
      */
-    void setControlFlag(RunLoopControlFlag flag);
-    void clearControlFlag(RunLoopControlFlag flag);
+    void setControlFlags(uint32_t flags);
+    void clearControlFlags(uint32_t flags);
     
     // Convenience wrappers for controlling the run loop
-    void signalSnapshot() { setControlFlag(RL_SNAPSHOT); }
-    void signalInspect() { setControlFlag(RL_INSPECT); }
-    void signalStop() { setControlFlag(RL_STOP); }
+    void signalSnapshot() { setControlFlags(RL_SNAPSHOT); }
+    void signalInspect() { setControlFlags(RL_INSPECT); }
+    void signalStop() { setControlFlags(RL_STOP); }
 
     
     //

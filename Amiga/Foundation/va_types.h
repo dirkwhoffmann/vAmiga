@@ -64,11 +64,13 @@ inline const char *modelName(AmigaModel model)
 
 enum RunLoopControlFlag
 {
-    RL_SNAPSHOT,
-    RL_INSPECT,
-    RL_ENABLE_TRACING,
-    RL_ENABLE_BREAKPOINTS,
-    RL_STOP
+    RL_SNAPSHOT           = 0b00001,
+    RL_INSPECT            = 0b00010,
+    RL_ENABLE_TRACING     = 0b00100,
+    RL_ENABLE_BREAKPOINTS = 0b01000,
+    RL_STOP               = 0b10000,
+    
+    RL_DEBUG              = 0b01100
 };
 
 
