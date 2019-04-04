@@ -632,7 +632,6 @@ extension MyController {
             
         case MSG_INSPECT:
             
-            track("MSG_INSPECT");
             myAppDelegate.inspector?.refresh(everything: false)
             
         case MSG_RESET:

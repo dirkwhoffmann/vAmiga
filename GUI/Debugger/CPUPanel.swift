@@ -11,8 +11,6 @@ extension Inspector {
     
     func refreshCPU(everything: Bool) {
         
-        track()
-        
         guard let amiga = amigaProxy else { return }
         let info = amiga.cpu.getInfo()
         
@@ -83,13 +81,9 @@ extension Inspector {
         cpuV.state  = (flags & 0b0000000000000010 != 0) ? .on : .off
         cpuC.state  = (flags & 0b0000000000000001 != 0) ? .on : .off
 
-        track()
-        
         instrTableView.refresh(everything: everything)
         traceTableView.refresh()
         breakTableView.refresh(everything: everything)
-        
-        track()
     }
     
     @IBAction func cpuStopAndGoAction(_ sender: NSButton!) {

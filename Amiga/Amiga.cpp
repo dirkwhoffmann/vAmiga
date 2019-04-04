@@ -47,7 +47,7 @@ void
     
     // Enter the run loop
     amiga->runLoop();
-
+    
     // Clean up and exit
     pthread_cleanup_pop(1);
     pthread_exit(NULL);
@@ -105,7 +105,7 @@ Amiga::Amiga()
     
     // Initialize the mach timer info
     mach_timebase_info(&tb);
-
+    
     // Initialize the mutex protecting the runloop control flags
     pthread_mutex_init(&runloopCtrlLock, NULL);
 }
@@ -172,7 +172,7 @@ AmigaMemConfiguration
 Amiga::getMemConfig()
 {
     AmigaMemConfiguration config;
-
+    
     assert(mem.chipRamSize % 1024 == 0);
     assert(mem.slowRamSize % 1024 == 0);
     assert(mem.fastRamSize % 1024 == 0);
@@ -195,7 +195,7 @@ Amiga::configureModel(AmigaModel model)
     }
     
     if (config.model != model) {
-
+        
         config.model = model;
         putMessage(MSG_CONFIG);
     }
@@ -211,7 +211,7 @@ Amiga::configureLayout(long layout)
         config.layout = layout;
         putMessage(MSG_CONFIG);
     }
- 
+    
     return true;
 }
 
@@ -275,16 +275,16 @@ Amiga::configureDrive(unsigned driveNr, bool connected)
     debug("configureDrive: %d connected: %d\n", driveNr, connected);
     
     switch (driveNr) {
-            
+        
         case 0:
-            config.df0.connected = connected;
-            df0.setConnected(connected);
-            return true;
-            
+        config.df0.connected = connected;
+        df0.setConnected(connected);
+        return true;
+        
         case 1:
-            config.df1.connected = connected;
-            df1.setConnected(connected);
-            return true;
+        config.df1.connected = connected;
+        df1.setConnected(connected);
+        return true;
     }
     
     warn("Invalid drive number (%d). Ignoring.\n", driveNr);
@@ -301,22 +301,22 @@ Amiga::configureDrive(unsigned driveNr, DriveType type)
     }
     
     switch (driveNr) {
-            
+        
         case 0:
-            if (config.df0.type != type) {
-                
-                config.df0.type = type;
-                putMessage(MSG_CONFIG);
-            }
-            return true;
+        if (config.df0.type != type) {
             
+            config.df0.type = type;
+            putMessage(MSG_CONFIG);
+        }
+        return true;
+        
         case 1:
-            if (config.df1.type != type) {
-                
-                config.df1.type = type;
-                putMessage(MSG_CONFIG);
-            }
-            return true;
+        if (config.df1.type != type) {
+            
+            config.df1.type = type;
+            putMessage(MSG_CONFIG);
+        }
+        return true;
     }
     
     warn("Invalid drive number (%d). Ignoring.\n", driveNr);
@@ -339,7 +339,7 @@ Amiga::_powerOn()
     
     // For debugging, we start in debug mode and set a breakpoint
     debugMode = true;
-
+    
     cpu.bpManager.setBreakpointAt(0xFC570E); // Blitter
     // cpu.bpManager.setBreakpointAt(0xFE8A6E); // All Blitter stuff done
     
@@ -436,7 +436,7 @@ Amiga::_dump()
              config.df0.connected ? "yes" : "no", driveTypeName(config.df0.type));
     plainmsg("          df1: %s %s\n",
              config.df1.connected ? "yes" : "no", driveTypeName(config.df1.type));
-
+    
     plainmsg("\n");
     plainmsg("         warp: %d (%d) (%d)", warp);
     plainmsg("\n");
@@ -450,7 +450,7 @@ Amiga::_setWarp(bool value) {
         putMessage(MSG_WARP_ON);
         
     } else {
-
+        
         restartTimer();
         putMessage(MSG_WARP_OFF);
     }
@@ -462,7 +462,7 @@ Amiga::suspend()
     debug(1, "Suspending (%d)...\n", suspendCounter);
     
     if (suspendCounter == 0 && !isRunning())
-        return;
+    return;
     
     pause();
     suspendCounter++;
@@ -474,10 +474,10 @@ Amiga::resume()
     debug(1, "Resuming (%d)...\n", suspendCounter);
     
     if (suspendCounter == 0)
-        return;
+    return;
     
     if (--suspendCounter == 0)
-        run();
+    run();
 }
 
 bool
@@ -494,7 +494,7 @@ Amiga::readyToPowerUp()
         msg("NOT READY YET: Boot Rom is missing.\n");
         return false;
     }
-
+    
     // Check for a Kickstart Rom (A500, A2000)
     if (config.model != A1000 && !mem.hasKickRom()) {
         msg("NOT READY YET: Kickstart Rom is missing.\n");
@@ -521,42 +521,42 @@ Amiga::clearControlFlag(RunLoopControlFlag flag)
 }
 
 /*
-void
-Amiga::setAlwaysWarp(bool b)
-{
-    if (alwaysWarp != b) {
-        
-        alwaysWarp = b;
-        putMessage(b ? MSG_ALWAYS_WARP_ON : MSG_ALWAYS_WARP_OFF);
-    }
-}
-
-bool
-Amiga::getWarp()
-{
-    bool driveDMA = false; // TODO
-    bool newValue = alwaysWarp || (warpLoad && driveDMA);
-    
-    if (newValue != warp) {
-        
-        warp = newValue;
-        putMessage(warp ? MSG_WARP_ON : MSG_WARP_OFF);
-                
-        if (warp) {
-            // Quickly fade out
-            paula.audioUnit.rampDown();
-            
-        } else {
-            // Smoothly fade in
-            paula.audioUnit.rampUp();
-            paula.audioUnit.alignWritePtr();
-            restartTimer();
-        }
-    }
-    
-    return warp;
-}
-*/
+ void
+ Amiga::setAlwaysWarp(bool b)
+ {
+ if (alwaysWarp != b) {
+ 
+ alwaysWarp = b;
+ putMessage(b ? MSG_ALWAYS_WARP_ON : MSG_ALWAYS_WARP_OFF);
+ }
+ }
+ 
+ bool
+ Amiga::getWarp()
+ {
+ bool driveDMA = false; // TODO
+ bool newValue = alwaysWarp || (warpLoad && driveDMA);
+ 
+ if (newValue != warp) {
+ 
+ warp = newValue;
+ putMessage(warp ? MSG_WARP_ON : MSG_WARP_OFF);
+ 
+ if (warp) {
+ // Quickly fade out
+ paula.audioUnit.rampDown();
+ 
+ } else {
+ // Smoothly fade in
+ paula.audioUnit.rampUp();
+ paula.audioUnit.alignWritePtr();
+ restartTimer();
+ }
+ }
+ 
+ return warp;
+ }
+ */
 
 void
 Amiga::restartTimer()
@@ -580,12 +580,12 @@ Amiga::synchronizeTiming()
     uint64_t targetTime  = timeBase + elapsedTime;
     
     /*
-    debug("now         = %lld\n", now);
-    debug("clockDelta  = %lld\n", clockDelta);
-    debug("elapsedTime = %lld\n", elapsedTime);
-    debug("targetTime  = %lld\n", targetTime);
-    debug("\n");
-    */
+     debug("now         = %lld\n", now);
+     debug("clockDelta  = %lld\n", clockDelta);
+     debug("elapsedTime = %lld\n", elapsedTime);
+     debug("targetTime  = %lld\n", targetTime);
+     debug("\n");
+     */
     
     // Check if we're running too slow ...
     if (now > targetTime) {
@@ -609,16 +609,16 @@ Amiga::synchronizeTiming()
             restartTimer();
             return;
         }
-    
+        
         // See you soon...
         mach_wait_until(targetTime);
         /*
-        int64_t jitter = sleepUntil(targetTime, 1500000); // 1.5 usec early wakeup
-        if (jitter > 1000000000) { // 1 sec
-            warn("Jitter is too high (%lld).\n", jitter);
-            // restartTimer();
-        }
-        */
+         int64_t jitter = sleepUntil(targetTime, 1500000); // 1.5 usec early wakeup
+         if (jitter > 1000000000) { // 1 sec
+         warn("Jitter is too high (%lld).\n", jitter);
+         // restartTimer();
+         }
+         */
     }
 }
 
@@ -628,7 +628,7 @@ Amiga::snapshotIsDue()
     unsigned fps = 50; // PAL frames per second
     
     if (!getTakeAutoSnapshots() || amiga->getSnapshotInterval() <= 0)
-        return false;
+    return false;
     
     return agnus.frame % (fps * amiga->getSnapshotInterval()) == 0;
 }
@@ -734,7 +734,7 @@ void
 Amiga::stepInto()
 {
     if (isRunning())
-        return;
+    return;
     
     cpu.bpManager.setSoftBreakpointAt(UINT32_MAX);
     run();
@@ -744,7 +744,7 @@ void
 Amiga::stepOver()
 {
     if (isRunning())
-        return;
+    return;
     
     debug("Setting bp at %X\n", cpu.getNextPC());
     cpu.bpManager.setSoftBreakpointAt(cpu.getNextPC());
@@ -757,6 +757,15 @@ Amiga::runLoop()
     // Prepare to run
     amiga->restartTimer();
     
+    // Enable or disable debug checks
+    if (debugMode) {
+        setControlFlag(RL_ENABLE_TRACING);
+        setControlFlag(RL_ENABLE_BREAKPOINTS);
+    } else {
+        clearControlFlag(RL_ENABLE_TRACING);
+        clearControlFlag(RL_ENABLE_BREAKPOINTS);
+    }
+    
     // Enter the loop
     do {
         
@@ -765,56 +774,41 @@ Amiga::runLoop()
         
         // Advance the masterclock
         masterClock += CPU_CYCLES(cpuCycles);
-
+        
         // Emulate DMA (Agnus is responsible for that)
         agnus.executeUntil(masterClock);
         
-        if (debugMode) {
-
-            // Record executed instruction in the trace buffer
-            cpu.recordInstruction();
-            /*
-            char diss[128];
-            m68k_disassemble(diss, cpu.getPC(), M68K_CPU_TYPE_68000);
-            printf("%s\n", diss);
-            */
-            
-            // Check if a breakpoint has been reached
-            if (cpu.bpManager.shouldStop()) {
-                putMessage(MSG_BREAKPOINT_REACHED);
-                break;
-            }
-            
-            /*
-            if (cpu.getPC() == 0xFE8A6E) {
-                debug("SWITCHING ON DMA DEBUGGING\n");
-                debugDMA = true;
-            }
-            */
-        }
-        
         // Check if special action needs to be taken ...
         if (runLoopCtrl) {
-    
-            debug("runLoopCtrl = %X\n", runLoopCtrl);
             
             // Are we requested to take a snapshot?
             if (GET_BIT(runLoopCtrl, RL_SNAPSHOT)) {
                 takeAutoSnapshot();
                 clearControlFlag(RL_SNAPSHOT);
             }
-
+            
             // Are we requested to update the debugger info structs?
             if (GET_BIT(runLoopCtrl, RL_INSPECT)) {
                 inspect();
                 clearControlFlag(RL_INSPECT);
             }
-
+            
+            // Are we requested to record the execution?
+            if (GET_BIT(runLoopCtrl, RL_ENABLE_TRACING)) {
+                cpu.recordInstruction();
+            }
+            
+            // Are we requestes to check for breakpoints?
+            if (GET_BIT(runLoopCtrl, RL_ENABLE_BREAKPOINTS)) {
+                if (cpu.bpManager.shouldStop()) {
+                    putMessage(MSG_BREAKPOINT_REACHED);
+                    break;
+                }
+            }
+            
             // Are we requests to terminate the run loop?
             if (GET_BIT(runLoopCtrl, RL_STOP)) {
-                debug("runLoopCtrl(2) = %X\n", runLoopCtrl);
                 clearControlFlag(RL_STOP);
-                debug("runLoopCtrl(3) = %X\n", runLoopCtrl);
                 break;
             }
         }
@@ -852,6 +846,6 @@ Amiga::dumpClock()
              AS_DMA_CYCLES(amiga->ciaB.clock),
              AS_CIA_CYCLES(amiga->ciaB.clock));
     plainmsg("  Color clock: (%d,%d) hex: ($%X,$%X) Frame: %lld\n",
-            agnus.vpos, agnus.hpos, agnus.vpos, agnus.hpos, agnus.frame);
+             agnus.vpos, agnus.hpos, agnus.vpos, agnus.hpos, agnus.frame);
     plainmsg("\n");
 }
