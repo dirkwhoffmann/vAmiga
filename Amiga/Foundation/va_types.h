@@ -62,6 +62,15 @@ inline const char *modelName(AmigaModel model)
     model == A2000 ? "Amiga 2000" : "???";
 }
 
+enum RunLoopControlFlag
+{
+    RL_SNAPSHOT,
+    RL_INSPECT,
+    RL_ENABLE_TRACING,
+    RL_ENABLE_BREAKPOINTS,
+    RL_STOP
+};
+
 
 //
 // CPU

@@ -105,6 +105,9 @@ Amiga::Amiga()
     
     // Initialize the mach timer info
     mach_timebase_info(&tb);
+
+    // Initialize the mutex protecting the runloop control flags
+    pthread_mutex_init(&runloopCtrlLock, NULL);
 }
 
 Amiga::~Amiga()
@@ -116,6 +119,8 @@ Amiga::~Amiga()
         debug("Stop being the active emulator instance\n");
         activeAmiga = NULL;
     }
+    
+    pthread_mutex_destroy(&runloopCtrlLock);
 }
 
 void
@@ -373,10 +378,10 @@ Amiga::_run()
 void
 Amiga::_pause()
 {
-    debug(1, "Pause\n");
+    debug(1, "Pause (p = %p)\n", p);
     
-    // Cancel the emulator thread
-    runLoopControl |= RL_TERMINATE;
+    // Cancel the emulator thread if it still running
+    if (p) signalStop();
     
     // Wait until the thread has terminated
     pthread_join(p, NULL);
@@ -499,6 +504,22 @@ Amiga::readyToPowerUp()
     return true;
 }
 
+void
+Amiga::setControlFlag(RunLoopControlFlag flag)
+{
+    pthread_mutex_lock(&runloopCtrlLock);
+    SET_BIT(runLoopCtrl, flag);
+    pthread_mutex_unlock(&runloopCtrlLock);
+}
+
+void
+Amiga::clearControlFlag(RunLoopControlFlag flag)
+{
+    pthread_mutex_lock(&runloopCtrlLock);
+    CLR_BIT(runLoopCtrl, flag);
+    pthread_mutex_unlock(&runloopCtrlLock);
+}
+
 /*
 void
 Amiga::setAlwaysWarp(bool b)
@@ -599,6 +620,17 @@ Amiga::synchronizeTiming()
         }
         */
     }
+}
+
+bool
+Amiga::snapshotIsDue()
+{
+    unsigned fps = 50; // PAL frames per second
+    
+    if (!getTakeAutoSnapshots() || amiga->getSnapshotInterval() <= 0)
+        return false;
+    
+    return agnus.frame % (fps * amiga->getSnapshotInterval()) == 0;
 }
 
 void
@@ -725,9 +757,6 @@ Amiga::runLoop()
     // Prepare to run
     amiga->restartTimer();
     
-    // Configure run loop to run continously
-    runLoopControl = 0;
-    
     // Enter the loop
     do {
         
@@ -752,8 +781,8 @@ Amiga::runLoop()
             
             // Check if a breakpoint has been reached
             if (cpu.bpManager.shouldStop()) {
-                runLoopControl |= RL_TERMINATE;
                 putMessage(MSG_BREAKPOINT_REACHED);
+                break;
             }
             
             /*
@@ -765,20 +794,29 @@ Amiga::runLoop()
         }
         
         // Check if special action needs to be taken ...
-        if (runLoopControl) {
+        if (runLoopCtrl) {
     
-            // Snapshot flag
-            if (runLoopControl & RL_SNAPSHOT) {
-                takeAutoSnapshot();
-            }
+            debug("runLoopCtrl = %X\n", runLoopCtrl);
             
-            // Termination request
-            if (runLoopControl & RL_TERMINATE) {
+            // Are we requested to take a snapshot?
+            if (GET_BIT(runLoopCtrl, RL_SNAPSHOT)) {
+                takeAutoSnapshot();
+                clearControlFlag(RL_SNAPSHOT);
+            }
+
+            // Are we requested to update the debugger info structs?
+            if (GET_BIT(runLoopCtrl, RL_INSPECT)) {
+                inspect();
+                clearControlFlag(RL_INSPECT);
+            }
+
+            // Are we requests to terminate the run loop?
+            if (GET_BIT(runLoopCtrl, RL_STOP)) {
+                debug("runLoopCtrl(2) = %X\n", runLoopCtrl);
+                clearControlFlag(RL_STOP);
+                debug("runLoopCtrl(3) = %X\n", runLoopCtrl);
                 break;
             }
-        
-            // Clear flags and continue
-            runLoopControl = 0;
         }
         
     } while (1);

@@ -152,27 +152,21 @@ class Amiga : public HardwareComponent {
     public:
     
     /* Run loop control
-     * This variable is initialized with 0 at the beginning of the run loop and
-     * checked at the end of each run loop iteration. Most of the time,
-     * the variable remains 0 wich causes the run loop to repeat. By setting
-     * certain flags, run loop behaviour can be altered:
-     *
-     * RL_TERMINATE:   exits the run loop after finishing the current iteration
-     * RL_SNAPSHOT:    takes a snapshot and re-enters the loop
+     * This variable is checked at the end of each runloop iteration. Most of
+     * the time, the variable is 0 which causes the runloop to repeat. A value
+     * greater than 0 means that one or more runloop control flags are set.
+     * These flags are flags processed and the loop either repeats or
+     * terminates, depending on the set flags.
      */
-    static const uint8_t RL_TERMINATE = 0b0001;
-    static const uint8_t RL_SNAPSHOT  = 0b0010;
+    uint32_t runLoopCtrl;
     
-    uint8_t runLoopControl;
-    
-    
-    /* A boolean flag for terminating the emulation thread
-     * This flag is periodically queried inside the run loop. When it is set to
-     * true, the thread terminates.
-     * DEPRECATED
+    /* Access control lock for variable runLoopControl
+     * A lock is needed, because the variable is modified both from inside and
+     * outside the emulator thread.
      */
-    // bool stop = false;
-    
+    pthread_mutex_t runloopCtrlLock;
+     
+
     private:
     
     // The invocation counter for implementing suspend() / resume()
@@ -358,7 +352,6 @@ class Amiga : public HardwareComponent {
      */
     bool readyToPowerUp();
     
-    
     /* Pauses the emulation thread temporarily.
      * Because the emulator is running in a separate thread, the GUI has to
      * pause the emulator before changing it's internal state. This is done by
@@ -373,6 +366,18 @@ class Amiga : public HardwareComponent {
     void suspend();
     void resume();
     
+    /* Sets or clears a run loop control flag
+     * The functions are thread-safe and can be called from inside or outside
+     * the emulator thread.
+     */
+    void setControlFlag(RunLoopControlFlag flag);
+    void clearControlFlag(RunLoopControlFlag flag);
+    
+    // Convenience wrappers for controlling the run loop
+    void signalSnapshot() { setControlFlag(RL_SNAPSHOT); }
+    void signalInspect() { setControlFlag(RL_INSPECT); }
+    void signalStop() { setControlFlag(RL_STOP); }
+
     
     //
     // Accessing the message queue
@@ -503,6 +508,9 @@ class Amiga : public HardwareComponent {
     //
     
     public:
+    
+    // Returns true if an auto-snapshot should be taken in the current frame.
+    bool snapshotIsDue();
     
     // Indicates if the auto-snapshot feature is enabled.
     bool getTakeAutoSnapshots() { return takeAutoSnapshots; }
