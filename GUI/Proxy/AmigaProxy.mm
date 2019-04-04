@@ -1052,7 +1052,6 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->amiga->info;
 }
-
 - (BOOL) readyToPowerUp
 {
     return wrapper->amiga->readyToPowerUp();

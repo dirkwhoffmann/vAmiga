@@ -268,8 +268,6 @@ class Inspector : NSWindowController
     @IBOutlet weak var evPrimTableView: EventTableView!
     @IBOutlet weak var evSecTableView: EventTableView!
 
-    private var pendingRefreshWorkItem: DispatchWorkItem?
-    
 
     // Factory method
     static func make() -> Inspector? {

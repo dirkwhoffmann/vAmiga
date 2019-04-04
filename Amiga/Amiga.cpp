@@ -344,6 +344,9 @@ Amiga::_powerOn()
     cpu.bpManager.setBreakpointAt(0xFC570E); // Blitter
     // cpu.bpManager.setBreakpointAt(0xFE8A6E); // All Blitter stuff done
     
+    // Update the recorded debug information
+    inspect();
+    
     putMessage(MSG_POWER_ON);
 }
 
@@ -351,6 +354,9 @@ void
 Amiga::_powerOff()
 {
     debug(1, "Power off\n");
+    
+    // Update the recorded debug information
+    inspect();
     
     putMessage(MSG_POWER_OFF);
 }
@@ -387,9 +393,9 @@ Amiga::_pause()
     // Wait until the thread has terminated
     pthread_join(p, NULL);
     
-    // Make sure that the inspector panel doesn't show an outdated state
+    // Update the recorded debug information
     inspect();
-    
+
     // Inform the GUI
     amiga->putMessage(MSG_PAUSE);
 }
@@ -419,6 +425,9 @@ Amiga::_inspect()
     info.frame = agnus.frame;
     info.vpos = agnus.vpos;
     info.hpos = agnus.hpos;
+    
+    // Inform the GUI that the collected data is up to data
+    putMessage(MSG_INSPECT);
 }
 
 void

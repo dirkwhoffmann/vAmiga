@@ -977,13 +977,7 @@ Agnus::vsyncHandler()
     
     // Prepare to take a snapshot once in a while
     if (amiga->snapshotIsDue()) amiga->signalSnapshot();
-    
-    // Record the internal state once in a while (for the GUI inspector)
-    if (frame % amiga->inspectionInterval == 0) {
-        amiga->inspect();
-        amiga->putMessage(MSG_INSPECT);
-    }
-    
+        
     // Count some sheep (zzzzzz) ...
     if (!amiga->getWarp()) {
         amiga->synchronizeTiming();
