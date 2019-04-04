@@ -605,27 +605,27 @@ extension MyController {
             track("Run")
             needsSaving = true
             toolbar.validateVisibleItems()
-            // myAppDelegate.inspector?.refresh(everything: true)
+            myAppDelegate.inspector?.refresh(everything: true)
     
         case MSG_PAUSE:
             
             track("Pause")
             toolbar.validateVisibleItems()
-            // myAppDelegate.inspector?.refresh(everything: true)
+            myAppDelegate.inspector?.refresh(everything: true)
     
         case MSG_POWER_ON:
             
             // track("Power on")
             metal.blendIn()
             toolbar.validateVisibleItems()
-            // myAppDelegate.inspector?.refresh(everything: true)
+            myAppDelegate.inspector?.refresh(everything: true)
             
         case MSG_POWER_OFF:
             
             // track("Power off")
             metal.blendOut()
             toolbar.validateVisibleItems()
-            // myAppDelegate.inspector?.refresh(everything: true)
+            myAppDelegate.inspector?.refresh(everything: true)
             
         case MSG_INSPECT:
             

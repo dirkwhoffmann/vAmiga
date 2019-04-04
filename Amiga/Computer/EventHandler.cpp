@@ -452,10 +452,11 @@ EventHandler::_executeSecUntil(Cycle cycle) {
     }
     if (isDueSec(INSPECTOR_SLOT, cycle)) {
         amiga->inspect();
-        if (amiga->inspectionInterval == 0) {
-            cancelSec(INSPECTOR_SLOT);
-        } else {
+        amiga->putMessage(MSG_INSPECT);
+        if (amiga->inspectionInterval) {
             rescheduleSecRel(INSPECTOR_SLOT, amiga->inspectionInterval);
+        } else {
+            cancelSec(INSPECTOR_SLOT);
         }
     }
     

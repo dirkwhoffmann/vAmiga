@@ -429,9 +429,6 @@ Amiga::_inspect()
     info.frame = agnus.frame;
     info.vpos = agnus.vpos;
     info.hpos = agnus.hpos;
-    
-    // Inform the GUI that the collected data is up to data
-    putMessage(MSG_INSPECT);
 }
 
 void
