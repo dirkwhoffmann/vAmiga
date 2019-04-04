@@ -153,7 +153,7 @@ Amiga::setDebugMode(bool enable)
         
         debug("Enabling debug mode\n");
         setControlFlags(RL_ENABLE_TRACING | RL_ENABLE_BREAKPOINTS);
-        setInspectionInterval(10);
+        setInspectionInterval(28000000 / 5); // 5 times a second
 
     } else {
 
@@ -164,9 +164,13 @@ Amiga::setDebugMode(bool enable)
 }
 
 void
-Amiga::setInspectionInterval(int64_t frames)
+Amiga::setInspectionInterval(int64_t cycles)
 {
-    inspectionInterval = frames ? frames : INT64_MAX;
+    if ((inspectionInterval = cycles)) {
+        handler->scheduleSecRel(INSPECTOR_SLOT, cycles, INS_COLLECT);
+    } else {
+        handler->cancelSec(INSPECTOR_SLOT);
+    }
 }
 
 AmigaMemConfiguration

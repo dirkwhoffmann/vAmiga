@@ -282,12 +282,10 @@ class Amiga : public HardwareComponent {
     void disableDebugging() { setDebugMode(false); }
     
     /* Configures the emulator to call inspect() on a regular basis.
-     * The emulator will invoke inspect() in the vsync handler periodically
-     * after the specified amount of frames has been drawn and informs the
-     * GUI by sending MSG_INSPECT.
-     * Call setInspectionInterval(0) to disable this feature.
+     * cycles is the time interval between two consecutive calls in master
+     * clock cycles. A value of 0 disables this feature.
      */
-    void setInspectionInterval(int64_t frames);
+    void setInspectionInterval(int64_t cycles);
     
     
     //

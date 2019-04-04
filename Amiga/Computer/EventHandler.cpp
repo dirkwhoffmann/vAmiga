@@ -22,7 +22,7 @@ EventHandler::EventHandler()
         
     });
 }
-    
+
 void
 EventHandler::_powerOn()
 {
@@ -32,7 +32,7 @@ EventHandler::_powerOn()
         primSlot[i].id = (EventID)0;
         primSlot[i].data = 0;
     }
-
+    
     // Wipe out the secondary event table
     for (unsigned i = 0; i < SEC_SLOT_COUNT; i++) {
         secSlot[i].triggerCycle = NEVER;
@@ -82,11 +82,11 @@ EventHandler::_dump()
     
     plainmsg("Primary events:\n");
     for (unsigned i = 0; i <PRIM_SLOT_COUNT; i++) {
-
+        
         plainmsg("Slot: %-17s ", info.primary[i].slotName);
         plainmsg("Event: %-15s ", info.primary[i].eventName);
         plainmsg("Trigger: ");
-    
+        
         Cycle trigger = info.primary[i].trigger;
         if (trigger == NEVER) {
             plainmsg("never\n");
@@ -133,116 +133,116 @@ EventHandler::getPrimarySlotInfo(int slot)
     info.hpos = hpos;
     
     switch ((EventSlot)slot) {
-            
+        
         case CIAA_SLOT:
-            
-            info.slotName = "CIA A";
-            switch (primSlot[slot].id) {
-                case 0:                info.eventName = "none"; break;
-                case CIA_EXECUTE:      info.eventName = "CIA_EXECUTE"; break;
-                case CIA_WAKEUP:       info.eventName = "CIA_WAKEUP"; break;
-                default:               info.eventName = "*** INVALID ***"; break;
-            }
-            break;
-            
+        
+        info.slotName = "CIA A";
+        switch (primSlot[slot].id) {
+            case 0:                info.eventName = "none"; break;
+            case CIA_EXECUTE:      info.eventName = "CIA_EXECUTE"; break;
+            case CIA_WAKEUP:       info.eventName = "CIA_WAKEUP"; break;
+            default:               info.eventName = "*** INVALID ***"; break;
+        }
+        break;
+        
         case CIAB_SLOT:
-            
-            info.slotName = "CIA B";
-            switch (primSlot[slot].id) {
-                case 0:                info.eventName = "none"; break;
-                case CIA_EXECUTE:      info.eventName = "CIA_EXECUTE"; break;
-                case CIA_WAKEUP:       info.eventName = "CIA_WAKEUP"; break;
-                default:               info.eventName = "*** INVALID ***"; break;
-            }
-            break;
-            
+        
+        info.slotName = "CIA B";
+        switch (primSlot[slot].id) {
+            case 0:                info.eventName = "none"; break;
+            case CIA_EXECUTE:      info.eventName = "CIA_EXECUTE"; break;
+            case CIA_WAKEUP:       info.eventName = "CIA_WAKEUP"; break;
+            default:               info.eventName = "*** INVALID ***"; break;
+        }
+        break;
+        
         case DMA_SLOT:
-            
-            info.slotName = "DMA";
-            switch (primSlot[slot].id) {
-                case 0:                info.eventName = "none"; break;
-                case DMA_DISK:         info.eventName = "DMA_DISK"; break;
-                case DMA_A0:           info.eventName = "A0"; break;
-                case DMA_A1:           info.eventName = "A1"; break;
-                case DMA_A2:           info.eventName = "A2"; break;
-                case DMA_A3:           info.eventName = "A3"; break;
-                case DMA_S0:           info.eventName = "S0"; break;
-                case DMA_S1:           info.eventName = "S1"; break;
-                case DMA_S2:           info.eventName = "S2"; break;
-                case DMA_S3:           info.eventName = "S3"; break;
-                case DMA_S4:           info.eventName = "S4"; break;
-                case DMA_S5:           info.eventName = "S5"; break;
-                case DMA_S6:           info.eventName = "S6"; break;
-                case DMA_S7:           info.eventName = "S7"; break;
-                case DMA_L1:           info.eventName = "L1"; break;
-                case DMA_L2:           info.eventName = "L2"; break;
-                case DMA_L3:           info.eventName = "L3"; break;
-                case DMA_L4:           info.eventName = "L4"; break;
-                case DMA_L5:           info.eventName = "L5"; break;
-                case DMA_L6:           info.eventName = "L6"; break;
-                case DMA_H1:           info.eventName = "H1"; break;
-                case DMA_H2:           info.eventName = "H2"; break;
-                case DMA_H3:           info.eventName = "H3"; break;
-                case DMA_H4:           info.eventName = "H4"; break;
-                default:               info.eventName = "*** INVALID ***"; break;
-            }
-            break;
-            
+        
+        info.slotName = "DMA";
+        switch (primSlot[slot].id) {
+            case 0:                info.eventName = "none"; break;
+            case DMA_DISK:         info.eventName = "DMA_DISK"; break;
+            case DMA_A0:           info.eventName = "A0"; break;
+            case DMA_A1:           info.eventName = "A1"; break;
+            case DMA_A2:           info.eventName = "A2"; break;
+            case DMA_A3:           info.eventName = "A3"; break;
+            case DMA_S0:           info.eventName = "S0"; break;
+            case DMA_S1:           info.eventName = "S1"; break;
+            case DMA_S2:           info.eventName = "S2"; break;
+            case DMA_S3:           info.eventName = "S3"; break;
+            case DMA_S4:           info.eventName = "S4"; break;
+            case DMA_S5:           info.eventName = "S5"; break;
+            case DMA_S6:           info.eventName = "S6"; break;
+            case DMA_S7:           info.eventName = "S7"; break;
+            case DMA_L1:           info.eventName = "L1"; break;
+            case DMA_L2:           info.eventName = "L2"; break;
+            case DMA_L3:           info.eventName = "L3"; break;
+            case DMA_L4:           info.eventName = "L4"; break;
+            case DMA_L5:           info.eventName = "L5"; break;
+            case DMA_L6:           info.eventName = "L6"; break;
+            case DMA_H1:           info.eventName = "H1"; break;
+            case DMA_H2:           info.eventName = "H2"; break;
+            case DMA_H3:           info.eventName = "H3"; break;
+            case DMA_H4:           info.eventName = "H4"; break;
+            default:               info.eventName = "*** INVALID ***"; break;
+        }
+        break;
+        
         case COP_SLOT:
+        
+        info.slotName = "Copper";
+        switch (primSlot[slot].id) {
             
-            info.slotName = "Copper";
-            switch (primSlot[slot].id) {
-                    
-                case 0:                info.eventName = "none"; break;
-                case COP_REQUEST_DMA:  info.eventName = "COP_REQUEST_DMA"; break;
-                case COP_FETCH:        info.eventName = "COP_FETCH"; break;
-                case COP_MOVE:         info.eventName = "COP_MOVE"; break;
-                case COP_WAIT_OR_SKIP: info.eventName = "WAIT_OR_SKIP"; break;
-                case COP_WAIT:         info.eventName = "COP_WAIT"; break;
-                case COP_SKIP:         info.eventName = "COP_SKIP"; break;
-                case COP_JMP1:         info.eventName = "COP_JMP1"; break;
-                case COP_JMP2:         info.eventName = "COP_JMP2"; break;
-                default:               info.eventName = "*** INVALID ***"; break;
-            }
-            break;
-            
+            case 0:                info.eventName = "none"; break;
+            case COP_REQUEST_DMA:  info.eventName = "COP_REQUEST_DMA"; break;
+            case COP_FETCH:        info.eventName = "COP_FETCH"; break;
+            case COP_MOVE:         info.eventName = "COP_MOVE"; break;
+            case COP_WAIT_OR_SKIP: info.eventName = "WAIT_OR_SKIP"; break;
+            case COP_WAIT:         info.eventName = "COP_WAIT"; break;
+            case COP_SKIP:         info.eventName = "COP_SKIP"; break;
+            case COP_JMP1:         info.eventName = "COP_JMP1"; break;
+            case COP_JMP2:         info.eventName = "COP_JMP2"; break;
+            default:               info.eventName = "*** INVALID ***"; break;
+        }
+        break;
+        
         case BLT_SLOT:
+        
+        info.slotName = "Blitter";
+        switch (primSlot[slot].id) {
             
-            info.slotName = "Blitter";
-            switch (primSlot[slot].id) {
-                    
-                case 0:                info.eventName = "none"; break;
-                case BLT_INIT:         info.eventName = "BLT_INIT"; break;
-                case BLT_EXECUTE:      info.eventName = "BLT_EXECUTE"; break;
-                case BLT_FAST_BLIT:    info.eventName = "BLT_FAST_BLIT"; break;
-                default:               info.eventName = "*** INVALID ***"; break;
-            }
-            break;
-            
+            case 0:                info.eventName = "none"; break;
+            case BLT_INIT:         info.eventName = "BLT_INIT"; break;
+            case BLT_EXECUTE:      info.eventName = "BLT_EXECUTE"; break;
+            case BLT_FAST_BLIT:    info.eventName = "BLT_FAST_BLIT"; break;
+            default:               info.eventName = "*** INVALID ***"; break;
+        }
+        break;
+        
         case RAS_SLOT:
+        
+        info.slotName = "Raster";
+        switch (primSlot[slot].id) {
             
-            info.slotName = "Raster";
-            switch (primSlot[slot].id) {
-                    
-                case 0:                info.eventName = "none"; break;
-                case RAS_HSYNC:        info.eventName = "RAS_HSYNC"; break;
-                case RAS_DIWSTRT:      info.eventName = "RAS_DIWSTRT"; break;
-                case RAS_DIWDRAW:      info.eventName = "RAS_DIWDRAW"; break;
-                default:               info.eventName = "*** INVALID ***"; break;
-            }
-            break;
-            
+            case 0:                info.eventName = "none"; break;
+            case RAS_HSYNC:        info.eventName = "RAS_HSYNC"; break;
+            case RAS_DIWSTRT:      info.eventName = "RAS_DIWSTRT"; break;
+            case RAS_DIWDRAW:      info.eventName = "RAS_DIWDRAW"; break;
+            default:               info.eventName = "*** INVALID ***"; break;
+        }
+        break;
+        
         case SEC_SLOT:
+        
+        info.slotName = "Secondary";
+        switch (primSlot[slot].id) {
             
-            info.slotName = "Secondary";
-            switch (primSlot[slot].id) {
-                    
-                case 0:                info.eventName = "none"; break;
-                case SEC_TRIGGER:      info.eventName = "SEC_TRIGGER"; break;
-                default:               info.eventName = "*** INVALID ***"; break;
-            }
-            break;
-            
+            case 0:                info.eventName = "none"; break;
+            case SEC_TRIGGER:      info.eventName = "SEC_TRIGGER"; break;
+            default:               info.eventName = "*** INVALID ***"; break;
+        }
+        break;
+        
         default: assert(false);
     }
     
@@ -253,7 +253,7 @@ EventSlotInfo
 EventHandler::getSecondarySlotInfo(int slot)
 {
     EventSlotInfo info;
-
+    
     int64_t frame;
     int16_t vpos;
     int16_t hpos;
@@ -269,7 +269,7 @@ EventHandler::getSecondarySlotInfo(int slot)
     info.hpos = hpos;
     
     switch ((EventSlot)slot) {
-            
+        
         case TBE_IRQ_SLOT:       info.slotName = "Serial Output IRQ"; break;
         case DSKBLK_IRQ_SLOT:    info.slotName = "Disk DMA IRQ"; break;
         case SOFT_IRQ_SLOT:      info.slotName = "Software IRQ"; break;
@@ -284,11 +284,12 @@ EventHandler::getSecondarySlotInfo(int slot)
         case RBF_IRQ_SLOT:       info.slotName = "Serial Input IRQ"; break;
         case DSKSYN_IRQ_SLOT:    info.slotName = "Disk Sync IRQ"; break;
         case EXTER_IRQ_SLOT:     info.slotName = "CIA B IRQ"; break;
+        case INSPECTOR_SLOT:     info.slotName = "Debug info collector"; break;
         default:                 info.slotName = "*** INVALID ***"; break;
     }
     
     switch ((EventSlot)slot) {
-            
+        
         case TBE_IRQ_SLOT:
         case DSKBLK_IRQ_SLOT:
         case SOFT_IRQ_SLOT:
@@ -303,19 +304,24 @@ EventHandler::getSecondarySlotInfo(int slot)
         case RBF_IRQ_SLOT:
         case DSKSYN_IRQ_SLOT:
         case EXTER_IRQ_SLOT:
+        
+        switch (secSlot[slot].id) {
             
-            switch (secSlot[slot].id) {
-                    
-                case 0:          info.eventName = "none"; break;
-                case IRQ_SET:    info.eventName = "IRQ_SET"; break;
-                case IRQ_CLEAR:  info.eventName = "IRQ_CLEAR"; break;
-                default:         info.eventName = "*** INVALID ***"; break;
-            }
-            break;
-            
+            case 0:          info.eventName = "none"; break;
+            case IRQ_SET:    info.eventName = "IRQ_SET"; break;
+            case IRQ_CLEAR:  info.eventName = "IRQ_CLEAR"; break;
+            default:         info.eventName = "*** INVALID ***"; break;
+        }
+        break;
+        
+        case INSPECTOR_SLOT:
+        
+        info.eventName = "INS_COLLECT";
+        break;
+        
         default: assert(false);
     }
-
+    
     return info;
 }
 
@@ -328,17 +334,17 @@ EventHandler::_executeUntil(Cycle cycle) {
         assert(checkTriggeredEvent(CIAA_SLOT));
         
         switch(primSlot[CIAA_SLOT].id) {
-                
+            
             case CIA_EXECUTE:
-                amiga->ciaA.executeOneCycle();
-                break;
-                
+            amiga->ciaA.executeOneCycle();
+            break;
+            
             case CIA_WAKEUP:
-                amiga->ciaA.wakeUp();
-                break;
-                
+            amiga->ciaA.wakeUp();
+            break;
+            
             default:
-                assert(false);
+            assert(false);
         }
     }
     
@@ -348,17 +354,17 @@ EventHandler::_executeUntil(Cycle cycle) {
         assert(checkTriggeredEvent(CIAB_SLOT));
         
         switch(primSlot[CIAB_SLOT].id) {
-                
+            
             case CIA_EXECUTE:
-                amiga->ciaB.executeOneCycle();
-                break;
-                
+            amiga->ciaB.executeOneCycle();
+            break;
+            
             case CIA_WAKEUP:
-                amiga->ciaB.wakeUp();
-                break;
-                
+            amiga->ciaB.wakeUp();
+            break;
+            
             default:
-                assert(false);
+            assert(false);
         }
     }
     
@@ -394,8 +400,8 @@ EventHandler::_executeUntil(Cycle cycle) {
     // Determine the next trigger cycle
     nextPrimTrigger = primSlot[0].triggerCycle;
     for (unsigned i = 1; i < PRIM_SLOT_COUNT; i++)
-        if (primSlot[i].triggerCycle < nextPrimTrigger)
-            nextPrimTrigger = primSlot[i].triggerCycle;
+    if (primSlot[i].triggerCycle < nextPrimTrigger)
+    nextPrimTrigger = primSlot[i].triggerCycle;
 }
 
 void
@@ -444,12 +450,20 @@ EventHandler::_executeSecUntil(Cycle cycle) {
     if (isDueSec(EXTER_IRQ_SLOT, cycle)) {
         serveIRQEvent(EXTER_IRQ_SLOT, 13);
     }
+    if (isDueSec(INSPECTOR_SLOT, cycle)) {
+        amiga->inspect();
+        if (amiga->inspectionInterval == 0) {
+            cancelSec(INSPECTOR_SLOT);
+        } else {
+            rescheduleSecRel(INSPECTOR_SLOT, amiga->inspectionInterval);
+        }
+    }
     
     // Determine the next trigger cycle
     nextSecTrigger = secSlot[0].triggerCycle;
     for (unsigned i = 1; i < SEC_SLOT_COUNT; i++)
-        if (secSlot[i].triggerCycle < nextSecTrigger)
-            nextSecTrigger = secSlot[i].triggerCycle;
+    if (secSlot[i].triggerCycle < nextSecTrigger)
+    nextSecTrigger = secSlot[i].triggerCycle;
     
     // Update the secondary table trigger in the primary table
     rescheduleAbs(SEC_SLOT, nextSecTrigger);
@@ -547,7 +561,7 @@ EventHandler::scheduleSecAbs(EventSlot s, Cycle cycle, EventID id)
     
     // Update the secondary table trigger in the primary table
     if (cycle < primSlot[SEC_SLOT].triggerCycle)
-        rescheduleAbs(SEC_SLOT, cycle);
+    rescheduleAbs(SEC_SLOT, cycle);
 }
 
 void
@@ -564,7 +578,7 @@ EventHandler::scheduleSecRel(EventSlot s, Cycle cycle, EventID id)
     
     // Update the secondary table trigger in the primary table
     if (cycle < primSlot[SEC_SLOT].triggerCycle)
-        rescheduleAbs(SEC_SLOT, cycle);
+    rescheduleAbs(SEC_SLOT, cycle);
 }
 
 void
@@ -619,17 +633,17 @@ void
 EventHandler::serveIRQEvent(EventSlot s, int irqBit)
 {
     switch (secSlot[s].id) {
-            
+        
         case IRQ_SET:
-            amiga->paula.setINTREQ(0x8000 | (1 << irqBit));
-            break;
-            
+        amiga->paula.setINTREQ(0x8000 | (1 << irqBit));
+        break;
+        
         case IRQ_CLEAR:
-            amiga->paula.setINTREQ(1 << irqBit);
-            break;
-            
+        amiga->paula.setINTREQ(1 << irqBit);
+        break;
+        
         default:
-            assert(false);
+        assert(false);
     }
     
     cancelSec(s);
@@ -657,44 +671,44 @@ EventHandler::checkScheduledEvent(EventSlot s)
     switch (s) {
         case CIAA_SLOT:
         case CIAB_SLOT:
-            if (!isCiaEvent(id)) {
-                _dump();
-                panic("Invalid CIA event ID.");
-                return false;
-            }
-            if (primSlot[s].triggerCycle != INT64_MAX && primSlot[s].triggerCycle % 40 != 0) {
-                _dump();
-                panic("Scheduled trigger cycle is not a CIA cycle.");
-                return false;
-            }
-            break;
-            
+        if (!isCiaEvent(id)) {
+            _dump();
+            panic("Invalid CIA event ID.");
+            return false;
+        }
+        if (primSlot[s].triggerCycle != INT64_MAX && primSlot[s].triggerCycle % 40 != 0) {
+            _dump();
+            panic("Scheduled trigger cycle is not a CIA cycle.");
+            return false;
+        }
+        break;
+        
         case DMA_SLOT:
-            if (!isDmaEvent(id)) {
-                _dump();
-                panic("Invalid DMA event ID.");
-                return false;
-            }
-            break;
-            
+        if (!isDmaEvent(id)) {
+            _dump();
+            panic("Invalid DMA event ID.");
+            return false;
+        }
+        break;
+        
         case COP_SLOT:
-            if (!isCopEvent(id)) {
-                _dump();
-                panic("Invalid COP event ID.");
-                return false;
-            }
-            break;
-            
+        if (!isCopEvent(id)) {
+            _dump();
+            panic("Invalid COP event ID.");
+            return false;
+        }
+        break;
+        
         case BLT_SLOT:
-            if (!isBltEvent(id)) {
-                _dump();
-                panic("Invalid BLT event ID.");
-                return false;
-            }
-            break;
-            
+        if (!isBltEvent(id)) {
+            _dump();
+            panic("Invalid BLT event ID.");
+            return false;
+        }
+        break;
+        
         default:
-            break;
+        break;
     }
     return true;
 }

@@ -80,6 +80,7 @@ enum EventSlot
     RBF_IRQ_SLOT,     // Source 11 IRQ (Serial port receive buffer full)
     DSKSYN_IRQ_SLOT,  // Source 12 IRQ (Disk sync register matches disk data)
     EXTER_IRQ_SLOT,   // Source 13 IRQ (I/O ports and CIA B)
+    INSPECTOR_SLOT,   // Calls inspect() on a regular basis
     SEC_SLOT_COUNT,
 };
 
@@ -161,9 +162,8 @@ enum EventID
     IRQ_CLEAR,
     IRQ_EVENT_COUNT,
     
-    // HSYNC slot
-    HSYNC_EOL = 1,
-    HSYNC_EVENT_COUNT
+    // Inspector slot
+    INS_COLLECT
 };
 
 static inline bool isCiaEvent(EventID id) { return id <= CIA_EVENT_COUNT; }
