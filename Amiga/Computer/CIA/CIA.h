@@ -70,7 +70,7 @@ class CIA : public HardwareComponent {
     friend TOD;
     friend Amiga;
     
-    public:
+    private:
     
     // Information shown in the GUI inspector panel
     CIAInfo info;
@@ -262,6 +262,16 @@ class CIA : public HardwareComponent {
     
     // Dump trace line
     void dumpTrace();
+    
+    
+    //
+    // Reading the internal state
+    //
+    
+    public:
+    
+    // Returns the latest internal state recorded by inspect()
+    CIAInfo getInfo();
     
     
     //

@@ -12,15 +12,12 @@
 
 class Copper : public HardwareComponent
 {
-
     friend class Agnus;
 
-    public:
+    private:
     
     // Information shown in the GUI inspector panel
     CopperInfo info;
-    
-    private:
     
     /* Indicates if the next instruction should be skipped.
      * This flag is usually false. It is set to true by the SKIP instruction
@@ -68,6 +65,16 @@ private:
     void _dump() override;
     
 
+    //
+    // Reading the internal state
+    //
+    
+    public:
+    
+    // Returns the latest internal state recorded by inspect()
+    CopperInfo getInfo();
+    
+    
     //
     // Accessing registers
     //

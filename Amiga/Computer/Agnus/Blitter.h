@@ -15,12 +15,11 @@ class Blitter : public HardwareComponent {
     
     friend class Agnus;
     
-    public:
+    private:
     
     // Information shown in the GUI inspector panel
     BlitterInfo info;
     
-    private:
     
     //
     // Blitter registers
@@ -127,6 +126,16 @@ class Blitter : public HardwareComponent {
     void _ping() override;
     void _inspect() override; 
     void _dump() override;
+    
+    
+    //
+    // Reading the internal state
+    //
+    
+    public:
+    
+    // Returns the latest internal state recorded by inspect()
+    BlitterInfo getInfo();
     
     
     //

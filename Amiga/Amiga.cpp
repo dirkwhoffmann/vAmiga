@@ -107,7 +107,7 @@ Amiga::Amiga()
     mach_timebase_info(&tb);
     
     // Initialize the mutex protecting the runloop control flags
-    pthread_mutex_init(&runloopCtrlLock, NULL);
+    pthread_mutex_init(&lock, NULL);
 }
 
 Amiga::~Amiga()
@@ -120,7 +120,7 @@ Amiga::~Amiga()
         activeAmiga = NULL;
     }
     
-    pthread_mutex_destroy(&runloopCtrlLock);
+    pthread_mutex_destroy(&lock);
 }
 
 void
@@ -165,10 +165,20 @@ void
 Amiga::setInspectionTarget(EventID id)
 {
     suspend();
-    
     handler->scheduleSecRel(INSPECTOR_SLOT, 0, id);
-    
     resume();
+}
+
+AmigaInfo
+Amiga::getInfo()
+{
+    AmigaInfo result;
+    
+    pthread_mutex_lock(&lock);
+    result = info;
+    pthread_mutex_unlock(&lock);
+    
+    return result;
 }
 
 AmigaMemConfiguration
@@ -516,17 +526,17 @@ Amiga::readyToPowerUp()
 void
 Amiga::setControlFlags(uint32_t flags)
 {
-    pthread_mutex_lock(&runloopCtrlLock);
+    pthread_mutex_lock(&lock);
     runLoopCtrl |= flags;
-    pthread_mutex_unlock(&runloopCtrlLock);
+    pthread_mutex_unlock(&lock);
 }
 
 void
 Amiga::clearControlFlags(uint32_t flags)
 {
-    pthread_mutex_lock(&runloopCtrlLock);
+    pthread_mutex_lock(&lock);
     runLoopCtrl &= ~flags;
-    pthread_mutex_unlock(&runloopCtrlLock);
+    pthread_mutex_unlock(&lock);
 }
 
 /*

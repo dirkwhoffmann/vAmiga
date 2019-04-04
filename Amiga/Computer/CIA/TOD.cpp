@@ -52,6 +52,18 @@ TOD::_dump()
     msg("\n");
 }
 
+CounterInfo
+TOD::getInfo()
+{
+    CounterInfo result;
+    
+    pthread_mutex_lock(&amiga->lock);
+    result = info;
+    pthread_mutex_unlock(&amiga->lock);
+    
+    return result;
+}
+
 void
 TOD::increment()
 {

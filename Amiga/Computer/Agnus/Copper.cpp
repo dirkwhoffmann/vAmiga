@@ -66,6 +66,18 @@ Copper::_dump()
     plainmsg("   cdang: %d\n", cdang);
 }
 
+CopperInfo
+Copper::getInfo()
+{
+    CopperInfo result;
+    
+    pthread_mutex_lock(&amiga->lock);
+    result = info;
+    pthread_mutex_unlock(&amiga->lock);
+    
+    return result;
+}
+
 void
 Copper::pokeCOPCON(uint16_t value)
 {

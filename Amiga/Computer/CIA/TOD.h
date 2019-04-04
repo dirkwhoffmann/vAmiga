@@ -22,7 +22,7 @@ class TOD : public HardwareComponent {
     
     friend CIA;
     
-    public:
+    private:
     
     // Information shown in the GUI inspector panel
     CounterInfo info;
@@ -77,6 +77,16 @@ class TOD : public HardwareComponent {
     void _powerOn() override;
     void _inspect() override;
     void _dump() override;
+    
+    
+    //
+    // Reading the internal state
+    //
+    
+    public:
+    
+    // Returns the latest internal state recorded by inspect()
+    CounterInfo getInfo();
     
     
     //

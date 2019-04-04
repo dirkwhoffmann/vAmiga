@@ -50,10 +50,18 @@ extern Amiga *activeAmiga;
  */
 class Amiga : public HardwareComponent {
     
-    public:
+    private:
     
     // Information shown in the GUI inspector panel
     AmigaInfo info;
+    
+    public:
+    
+    /* Access lock for shared variables
+     * This lock is used to control the read and write operations for all
+     * variables that are accessed by both the emulator thread and the GUI.
+     */
+    pthread_mutex_t lock;
     
     /* Inspection target
      * To update the GUI periodically, the emulator schedules this event in the
@@ -170,13 +178,6 @@ class Amiga : public HardwareComponent {
      */
     uint32_t runLoopCtrl;
     
-    /* Access control lock for variable runLoopControl
-     * A lock is needed, because the variable is modified both from inside and
-     * outside the emulator thread.
-     */
-    pthread_mutex_t runloopCtrlLock;
-     
-
     private:
     
     // The invocation counter for implementing suspend() / resume()
@@ -344,7 +345,17 @@ class Amiga : public HardwareComponent {
     void _inspect() override;
     void _dump() override;
     void _setWarp(bool value) override;
+
     
+    //
+    // Reading the internal state
+    //
+
+    public:
+
+    // Returns the latest internal state recorded by inspect()
+    AmigaInfo getInfo();
+
  
     //
     // Controlling the emulation thread

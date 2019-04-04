@@ -762,7 +762,17 @@ CIA::_dump()
 	tod.dump();
 }
 
-
+CIAInfo
+CIA::getInfo()
+{
+    CIAInfo result;
+    
+    pthread_mutex_lock(&amiga->lock);
+    result = info;
+    pthread_mutex_unlock(&amiga->lock);
+    
+    return result;
+}
 
 /*
 void

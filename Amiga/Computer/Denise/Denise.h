@@ -15,7 +15,7 @@
 
 class Denise : public HardwareComponent {
     
-    public:
+    private:
     
     // Information shown in the GUI inspector panel
     DeniseInfo info;
@@ -24,6 +24,8 @@ class Denise : public HardwareComponent {
     //
     // Sub components
     //
+    
+    public:
     
     // A color synthesizer for computing RGBA values
     Colorizer colorizer;
@@ -128,6 +130,16 @@ class Denise : public HardwareComponent {
     void _dump() override;
     
     void didLoadFromBuffer(uint8_t **buffer) override;
+    
+    
+    //
+    // Reading the internal state
+    //
+    
+    public:
+    
+    // Returns the latest internal state recorded by inspect()
+    DeniseInfo getInfo();
     
     
     //

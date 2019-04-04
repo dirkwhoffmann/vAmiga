@@ -20,7 +20,7 @@ extern "C" {
 
 class CPU : public HardwareComponent {
     
-    public:
+    private:
     
     // Information shown in the GUI inspector panel
     CPUInfo info;
@@ -87,6 +87,16 @@ class CPU : public HardwareComponent {
     size_t stateSize() override;
     void didLoadFromBuffer(uint8_t **buffer) override;
     void didSaveToBuffer(uint8_t **buffer) override;
+    
+    
+    //
+    // Reading the internal state
+    //
+    
+    public:
+    
+    // Returns the latest internal state recorded by inspect()
+    CPUInfo getInfo();
     
     
     //

@@ -129,6 +129,18 @@ Agnus::_dump()
     eventHandler.dump();
 }
 
+DMAInfo
+Agnus::getInfo()
+{
+    DMAInfo result;
+    
+    pthread_mutex_lock(&amiga->lock);
+    result = info;
+    pthread_mutex_unlock(&amiga->lock);
+    
+    return result;
+}
+
 DMACycle
 Agnus::cyclesInCurrentFrame()
 {

@@ -53,7 +53,7 @@ static inline bool isVposHpos(int16_t vpos, int16_t hpos) {
 
 class Agnus : public HardwareComponent
 {
-    public:
+    private:
     
     // Information shown in the GUI inspector panel
     DMAInfo info;
@@ -62,6 +62,8 @@ class Agnus : public HardwareComponent
     //
     // Sub components
     //
+    
+    public:
     
     // Every Amiga fan knows what the Copper is.
     Copper copper;
@@ -203,6 +205,16 @@ class Agnus : public HardwareComponent
     void _ping() override;
     void _inspect() override; 
     void _dump() override;
+    
+    
+    //
+    // Reading the internal state
+    //
+    
+    public:
+    
+    // Returns the latest internal state recorded by inspect()
+    DMAInfo getInfo();
     
     
     //

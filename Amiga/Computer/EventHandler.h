@@ -62,7 +62,7 @@ struct Event
 
 class EventHandler : public HardwareComponent
 {
-    public:
+    private:
     
     // Information shown in the GUI inspector panel
     EventHandlerInfo info;
@@ -116,12 +116,13 @@ class EventHandler : public HardwareComponent
     
     
     //
-    // Collecting information
+    // Reading the internal state
     //
     
     public:
     
-    // Collects the information displayed in the GUI's debug panel.
+    // Returns the latest internal state recorded by inspect()
+    EventHandlerInfo getInfo();
     EventSlotInfo getPrimarySlotInfo(int slot);
     EventSlotInfo getSecondarySlotInfo(int slot);
     

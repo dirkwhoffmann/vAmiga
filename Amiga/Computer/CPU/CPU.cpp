@@ -213,6 +213,18 @@ CPU::_dump()
     plainmsg("   Flags: %X\n", info.flags);
 }
 
+CPUInfo
+CPU::getInfo()
+{
+    CPUInfo result;
+    
+    pthread_mutex_lock(&amiga->lock);
+    result = info;
+    pthread_mutex_unlock(&amiga->lock);
+    
+    return result;
+}
+
 size_t
 CPU::stateSize()
 {

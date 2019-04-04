@@ -149,6 +149,18 @@ Blitter::_dump()
     plainmsg("     bbusy: %s bzero: %s\n", bbusy ? "yes" : "no", bzero ? "yes" : "no");
 }
 
+BlitterInfo
+Blitter::getInfo()
+{
+    BlitterInfo result;
+    
+    pthread_mutex_lock(&amiga->lock);
+    result = info;
+    pthread_mutex_unlock(&amiga->lock);
+    
+    return result;
+}
+
 void
 Blitter::pokeBLTCON0(uint16_t value)
 {

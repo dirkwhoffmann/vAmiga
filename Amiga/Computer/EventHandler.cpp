@@ -116,6 +116,18 @@ EventHandler::_dump()
     }
 }
 
+EventHandlerInfo
+EventHandler::getInfo()
+{
+    EventHandlerInfo result;
+    
+    pthread_mutex_lock(&amiga->lock);
+    result = info;
+    pthread_mutex_unlock(&amiga->lock);
+    
+    return result;
+}
+
 EventSlotInfo
 EventHandler::getPrimarySlotInfo(int slot)
 {

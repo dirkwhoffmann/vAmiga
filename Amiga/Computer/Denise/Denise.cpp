@@ -96,6 +96,18 @@ Denise::_dump()
 
 }
 
+DeniseInfo
+Denise::getInfo()
+{
+    DeniseInfo result;
+    
+    pthread_mutex_lock(&amiga->lock);
+    result = info;
+    pthread_mutex_unlock(&amiga->lock);
+    
+    return result;
+}
+
 void
 Denise::didLoadFromBuffer(uint8_t **buffer)
 {

@@ -79,6 +79,18 @@ Paula::_dump()
     
 }
 
+PaulaInfo
+Paula::getInfo()
+{
+    PaulaInfo result;
+    
+    pthread_mutex_lock(&amiga->lock);
+    result = info;
+    pthread_mutex_unlock(&amiga->lock);
+    
+    return result;
+}
+
 void
 Paula::_setWarp(bool value)
 {

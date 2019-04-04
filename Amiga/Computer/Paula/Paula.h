@@ -14,7 +14,7 @@
 
 class Paula : public HardwareComponent {
     
-    public:
+    private:
     
     // Information shown in the GUI inspector panel
     PaulaInfo info;
@@ -23,6 +23,8 @@ class Paula : public HardwareComponent {
     //
     // Sub components
     //
+    
+    public:
     
     // Audio unit
     AudioUnit audioUnit;
@@ -116,6 +118,16 @@ class Paula : public HardwareComponent {
     void _inspect() override; 
     void _dump() override;
     void _setWarp(bool value) override;
+    
+    
+    //
+    // Reading the internal state
+    //
+    
+    public:
+    
+    // Returns the latest internal state recorded by inspect()
+    PaulaInfo getInfo();
     
     
     //

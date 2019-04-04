@@ -48,17 +48,17 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 - (CPUInfo) getInfo
 {
-    return wrapper->cpu->info;
+    return wrapper->cpu->getInfo();
 }
 - (DisassembledInstruction) getInstr:(NSInteger)index
 {
     assert(index < CPUINFO_INSTR_COUNT);
-    return wrapper->cpu->info.instr[index];
+    return wrapper->cpu->getInfo().instr[index];
 }
 - (DisassembledInstruction) getTraceInstr:(NSInteger)index
 {
     assert(index < CPUINFO_INSTR_COUNT);
-    return wrapper->cpu->info.traceInstr[index];
+    return wrapper->cpu->getInfo().traceInstr[index];
 }
 - (uint32_t) getPC
 {
@@ -191,7 +191,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 - (CIAInfo) getInfo
 {
-    return wrapper->cia->info;
+    return wrapper->cia->getInfo();
 }
 - (void) dump
 {
@@ -350,7 +350,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 - (DMAInfo) getInfo
 {
-    return wrapper->agnus->info;
+    return wrapper->agnus->getInfo();
 }
 - (NSInteger) primSlotCount
 {
@@ -370,15 +370,15 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 - (EventHandlerInfo) getEventInfo
 {
-    return wrapper->agnus->eventHandler.info;
+    return wrapper->agnus->eventHandler.getInfo();
 }
 - (CopperInfo) getCopperInfo
 {
-    return wrapper->agnus->copper.info;
+    return wrapper->agnus->copper.getInfo();
 }
 - (BlitterInfo) getBlitterInfo
 {
-    return wrapper->agnus->blitter.info;
+    return wrapper->agnus->blitter.getInfo();
 }
 - (BOOL) isIllegalInstr:(NSInteger)addr
 {
@@ -418,7 +418,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 - (DeniseInfo) getInfo
 {
-    return wrapper->denise->info;
+    return wrapper->denise->getInfo();
 }
 - (double) palette
 {
@@ -493,7 +493,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 
 - (PaulaInfo) getInfo
 {
-    return wrapper->paula->info;
+    return wrapper->paula->getInfo();
 }
 
 
@@ -1050,7 +1050,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 - (AmigaInfo) getInfo
 {
-    return wrapper->amiga->info;
+    return wrapper->amiga->getInfo();
 }
 - (BOOL) readyToPowerUp
 {
