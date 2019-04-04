@@ -1010,12 +1010,6 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->amiga->setInspectionTarget(id);
 }
-/*
-- (void) setInspectionInterval:(NSInteger)value
-{
-    wrapper->amiga->setInspectionInterval(value);
-}
-*/
 - (BOOL) debugMode
 {
     return wrapper->amiga->getDebugMode();

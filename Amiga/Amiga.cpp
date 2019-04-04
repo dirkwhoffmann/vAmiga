@@ -153,30 +153,12 @@ Amiga::setDebugMode(bool enable)
         
         debug("Enabling debug mode\n");
         setControlFlags(RL_ENABLE_TRACING | RL_ENABLE_BREAKPOINTS);
-        setInspectionInterval(28000000 / 5); // 5 times a second
 
     } else {
 
         debug("Disabling debug mode\n");
         clearControlFlags(RL_ENABLE_TRACING | RL_ENABLE_BREAKPOINTS);
-        setInspectionInterval(0);
     }
-}
-
-void
-Amiga::setInspectionInterval(int64_t cycles)
-{
-    /*
-    suspend();
-    
-    if ((inspectionInterval = cycles)) {
-        handler->scheduleSecRel(INSPECTOR_SLOT, cycles, INS_COLLECT);
-    } else {
-        handler->cancelSec(INSPECTOR_SLOT);
-    }
-    
-    resume();
-    */
 }
 
 void

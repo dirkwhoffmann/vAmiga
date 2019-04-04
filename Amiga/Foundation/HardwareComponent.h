@@ -219,8 +219,8 @@ public:
      * to date.
      * Note: Because this function accesses the internal emulator state with
      * many non-atomic operations, it must not be called on a running emulator.
-     * To query information while the emulator is running, set up a periodic
-     * inspection interval via setInspectionInterval(...).
+     * To query information while the emulator is running, set up an inspection
+     * target via setInspectionTarget()
      */
     void inspect();
     virtual void _inspect() { }

@@ -291,13 +291,6 @@ class Amiga : public HardwareComponent {
     void enableDebugging() { setDebugMode(true); }
     void disableDebugging() { setDebugMode(false); }
     
-    /* Configures the emulator to call inspect() on a regular basis.
-     * cycles is the time interval between two consecutive calls in master
-     * clock cycles. A value of 0 disables this feature.
-     * DEPRECATED
-     */
-    void setInspectionInterval(int64_t cycles);
-
     /* Sets the inspection target.
      * If the inspection target is different to INS_NONE, the emulator calls
      * inspect() on a certain component periodically and sends MSG_INSPECT to
