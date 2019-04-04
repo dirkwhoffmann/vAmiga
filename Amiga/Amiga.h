@@ -55,6 +55,15 @@ class Amiga : public HardwareComponent {
     // Information shown in the GUI inspector panel
     AmigaInfo info;
     
+    /* Inspection target
+     * To update the GUI periodically, the emulator schedules this event in the
+     * INSPECTOR_SLOT (secondary table) on a periodic basis. If the event is
+     * INS_NONE, no action is taken. If another INS_xxx event is scheduled,
+     * inspect() is called on a certain Amiga component and the GUI is notfied
+     * that updated debug information is available.
+     */
+    static EventID inspectionTarget;
+    
     /* Inspection interval.
      * The emulator checks this variable in it's vsync handler and invokes
      * inspect() periodically with a time interval equal to the number of
@@ -63,6 +72,7 @@ class Amiga : public HardwareComponent {
      * panel (debugger).
      * By default, the inspection period is set to INT64_MAX which effectively
      * disabled this feature.
+     * DEPRECATED
      */
     static int64_t inspectionInterval;
     
@@ -284,9 +294,17 @@ class Amiga : public HardwareComponent {
     /* Configures the emulator to call inspect() on a regular basis.
      * cycles is the time interval between two consecutive calls in master
      * clock cycles. A value of 0 disables this feature.
+     * DEPRECATED
      */
     void setInspectionInterval(int64_t cycles);
-    
+
+    /* Sets the inspection target.
+     * If the inspection target is different to INS_NONE, the emulator calls
+     * inspect() on a certain component periodically and sends MSG_INSPECT to
+     * the GUI.
+     */
+    void setInspectionTarget(EventID id);
+
     
     //
     // Configuring the emulated machine

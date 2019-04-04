@@ -39,6 +39,9 @@ EventHandler::_powerOn()
         secSlot[i].id = (EventID)0;
         secSlot[i].data = 0;
     }
+    
+    // Schedule the first inspection event (retriggers automatically)
+    scheduleSecRel(INSPECTOR_SLOT, 0, INS_NONE);
 }
 
 void
@@ -284,7 +287,7 @@ EventHandler::getSecondarySlotInfo(int slot)
         case RBF_IRQ_SLOT:       info.slotName = "Serial Input IRQ"; break;
         case DSKSYN_IRQ_SLOT:    info.slotName = "Disk Sync IRQ"; break;
         case EXTER_IRQ_SLOT:     info.slotName = "CIA B IRQ"; break;
-        case INSPECTOR_SLOT:     info.slotName = "Debug info collector"; break;
+        case INSPECTOR_SLOT:     info.slotName = "Debugger"; break;
         default:                 info.slotName = "*** INVALID ***"; break;
     }
     
@@ -316,7 +319,20 @@ EventHandler::getSecondarySlotInfo(int slot)
         
         case INSPECTOR_SLOT:
         
-        info.eventName = "INS_COLLECT";
+        switch (secSlot[slot].id) {
+            
+            case 0:          info.eventName = "none"; break;
+            case INS_NONE:   info.eventName = "INS_NONE"; break;
+            case INS_AMIGA:  info.eventName = "INS_AMIGA"; break;
+            case INS_CPU:    info.eventName = "INS_CPU"; break;
+            case INS_MEM:    info.eventName = "INS_MEM"; break;
+            case INS_CIA:    info.eventName = "INS_CIA"; break;
+            case INS_AGNUS:  info.eventName = "INS_AGNUS"; break;
+            case INS_PAULA:  info.eventName = "INS_PAULA"; break;
+            case INS_DENISE: info.eventName = "INS_DENISE"; break;
+            case INS_EVENTS: info.eventName = "INS_EVENTS"; break;
+            default:         info.eventName = "*** INVALID ***"; break;
+        }
         break;
         
         default: assert(false);
@@ -451,13 +467,7 @@ EventHandler::_executeSecUntil(Cycle cycle) {
         serveIRQEvent(EXTER_IRQ_SLOT, 13);
     }
     if (isDueSec(INSPECTOR_SLOT, cycle)) {
-        amiga->inspect();
-        amiga->putMessage(MSG_INSPECT);
-        if (amiga->inspectionInterval) {
-            rescheduleSecRel(INSPECTOR_SLOT, amiga->inspectionInterval);
-        } else {
-            cancelSec(INSPECTOR_SLOT);
-        }
+        serveINSEvent();
     }
     
     // Determine the next trigger cycle
@@ -561,8 +571,7 @@ EventHandler::scheduleSecAbs(EventSlot s, Cycle cycle, EventID id)
     if (cycle < nextSecTrigger) nextSecTrigger = cycle;
     
     // Update the secondary table trigger in the primary table
-    if (cycle < primSlot[SEC_SLOT].triggerCycle)
-    rescheduleAbs(SEC_SLOT, cycle);
+    scheduleAbs(SEC_SLOT, nextSecTrigger, SEC_TRIGGER);
 }
 
 void
@@ -578,8 +587,7 @@ EventHandler::scheduleSecRel(EventSlot s, Cycle cycle, EventID id)
     if (cycle < nextSecTrigger) nextSecTrigger = cycle;
     
     // Update the secondary table trigger in the primary table
-    if (cycle < primSlot[SEC_SLOT].triggerCycle)
-    rescheduleAbs(SEC_SLOT, cycle);
+    scheduleAbs(SEC_SLOT, nextSecTrigger, SEC_TRIGGER);
 }
 
 void
@@ -593,6 +601,9 @@ EventHandler::scheduleSecPos(EventSlot s, int16_t vpos, int16_t hpos, EventID id
     secSlot[s].triggerCycle = cycle;
     secSlot[s].id = id;
     if (cycle < nextSecTrigger) nextSecTrigger = cycle;
+    
+    // Update the secondary table trigger in the primary table
+    scheduleAbs(SEC_SLOT, nextSecTrigger, SEC_TRIGGER);
 }
 
 void
@@ -602,6 +613,9 @@ EventHandler::rescheduleSecAbs(EventSlot s, Cycle cycle)
     
     secSlot[s].triggerCycle = cycle;
     if (cycle < nextSecTrigger) nextSecTrigger = cycle;
+    
+    // Update the secondary table trigger in the primary table
+    scheduleAbs(SEC_SLOT, nextSecTrigger, SEC_TRIGGER);
 }
 
 void
@@ -613,6 +627,9 @@ EventHandler::rescheduleSecRel(EventSlot s, Cycle cycle)
     
     secSlot[s].triggerCycle = cycle;
     if (cycle < nextSecTrigger) nextSecTrigger = cycle;
+    
+    // Update the secondary table trigger in the primary table
+    scheduleAbs(SEC_SLOT, nextSecTrigger, SEC_TRIGGER);
 }
 
 void
@@ -648,6 +665,40 @@ EventHandler::serveIRQEvent(EventSlot s, int irqBit)
     }
     
     cancelSec(s);
+}
+
+void
+EventHandler::serveINSEvent()
+{
+    // Reschedule event
+    rescheduleSecRel(INSPECTOR_SLOT, 28000000 / 5);
+    
+    switch (secSlot[INSPECTOR_SLOT].id) {
+        
+        case INS_NONE:   return;
+        case INS_AMIGA:  amiga->inspect(); break;
+        case INS_CPU:    amiga->cpu.inspect(); break;
+        case INS_MEM:    amiga->mem.inspect(); break;
+        case INS_CIA:    amiga->ciaA.inspect(); amiga->ciaB.inspect(); break;
+        case INS_AGNUS:  amiga->agnus.inspect(); break;
+        case INS_PAULA:  amiga->paula.inspect(); break;
+        case INS_DENISE: amiga->denise.inspect(); break;
+        case INS_EVENTS: amiga->agnus.eventHandler.inspect(); break;
+        default:         assert(false);
+    }
+    
+    // Inform the GUI
+    amiga->putMessage(MSG_INSPECT);
+
+ 
+    
+    /*
+    if (amiga->inspectionInterval) {
+        rescheduleSecRel(INSPECTOR_SLOT, amiga->inspectionInterval);
+    } else {
+        cancelSec(INSPECTOR_SLOT);
+    }
+    */
 }
 
 bool

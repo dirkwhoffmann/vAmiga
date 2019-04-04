@@ -166,6 +166,7 @@ Amiga::setDebugMode(bool enable)
 void
 Amiga::setInspectionInterval(int64_t cycles)
 {
+    /*
     suspend();
     
     if ((inspectionInterval = cycles)) {
@@ -174,7 +175,18 @@ Amiga::setInspectionInterval(int64_t cycles)
         handler->cancelSec(INSPECTOR_SLOT);
     }
     
-    resume(); 
+    resume();
+    */
+}
+
+void
+Amiga::setInspectionTarget(EventID id)
+{
+    suspend();
+    
+    handler->scheduleSecRel(INSPECTOR_SLOT, 0, id);
+    
+    resume();
 }
 
 AmigaMemConfiguration

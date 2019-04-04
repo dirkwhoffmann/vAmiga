@@ -298,6 +298,7 @@ class Inspector : NSWindowController
         track()
         super.showWindow(self)
         amigaProxy?.enableDebugging()
+        amigaProxy?.setInspectionTarget(INS_CPU)
         refresh(everything: true)
     }
     
@@ -364,12 +365,29 @@ extension Inspector : NSWindowDelegate {
         
         track("Closing inspector")
         amigaProxy?.disableDebugging()
+        amigaProxy?.setInspectionTarget(INS_NONE)
     }
 }
 
 extension Inspector : NSTabViewDelegate {
     
     func tabView(_ tabView: NSTabView, didSelect tabViewItem: NSTabViewItem?) {
+        
+        track()
+        
+        switch tabViewItem?.label {
+            
+        case "CPU":    amigaProxy?.setInspectionTarget(INS_CPU)
+        case "CIA":    amigaProxy?.setInspectionTarget(INS_CIA)
+        case "Memory": amigaProxy?.setInspectionTarget(INS_MEM)
+        case "DMA":    amigaProxy?.setInspectionTarget(INS_AGNUS)
+        case "Copper": amigaProxy?.setInspectionTarget(INS_AGNUS)
+        case "Denise": amigaProxy?.setInspectionTarget(INS_DENISE)
+        case "Paula":  amigaProxy?.setInspectionTarget(INS_PAULA)
+        case "Events": amigaProxy?.setInspectionTarget(INS_EVENTS)
+        default:       break
+        }
+        
         refresh(everything: true)
     }
 }

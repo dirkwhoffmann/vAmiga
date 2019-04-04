@@ -74,7 +74,7 @@ Agnus::_powerOn()
 
     // Initialize the SEC_SLOT with a (never triggering) SEC_TRIGGER event.
     // Doing so let's us use reschedule() on this slot all the time.
-    eventHandler.scheduleAbs(SEC_SLOT, NEVER, SEC_TRIGGER);
+    // eventHandler.scheduleAbs(SEC_SLOT, NEVER, SEC_TRIGGER);
 }
 
 void

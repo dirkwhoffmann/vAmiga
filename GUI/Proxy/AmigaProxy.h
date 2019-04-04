@@ -88,6 +88,7 @@ struct AmigaFileWrapper;
 
 - (uint64_t) masterClock;
 
+- (void) setInspectionTarget:(EventID)id;
 - (BOOL) debugMode;
 - (void) enableDebugging;
 - (void) disableDebugging;

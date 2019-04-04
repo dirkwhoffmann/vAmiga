@@ -47,131 +47,6 @@
  * secondary events.
  */
 
-enum EventSlot
-{
-    //
-    // Primary slot table
-    //
-    
-    CIAA_SLOT = 0,    // CIA A execution
-    CIAB_SLOT,        // CIA B execution
-    DMA_SLOT,         // Disk, Audio, Sprite, and Bitplane DMA
-    COP_SLOT,         // Copper DMA
-    BLT_SLOT,         // Blitter DMA
-    RAS_SLOT,         // Raster line events
-    SEC_SLOT,         // Secondary events
-    PRIM_SLOT_COUNT,
-    
-    //
-    // Secondary slot table
-    //
-    
-    TBE_IRQ_SLOT = 0, // Source 0 IRQ (Serial port transmit buffer empty)
-    DSKBLK_IRQ_SLOT,  // Source 1 IRQ (Disk block finished)
-    SOFT_IRQ_SLOT,    // Source 2 IRQ (Software-initiated)
-    PORTS_IRQ_SLOT,   // Source 3 IRQ (I/O ports and CIA A)
-    COPR_IRQ_SLOT,    // Source 4 IRQ (Copper)
-    VERTB_IRQ_SLOT,   // Source 5 IRQ (Start of vertical blank)
-    BLIT_IRQ_SLOT,    // Source 6 IRQ (Blitter finished)
-    AUD0_IRQ_SLOT,    // Source 7 IRQ (Audio channel 0 block finished)
-    AUD1_IRQ_SLOT,    // Source 8 IRQ (Audio channel 1 block finished)
-    AUD2_IRQ_SLOT,    // Source 9 IRQ (Audio channel 2 block finished)
-    AUD3_IRQ_SLOT,    // Source 10 IRQ (Audio channel 3 block finished)
-    RBF_IRQ_SLOT,     // Source 11 IRQ (Serial port receive buffer full)
-    DSKSYN_IRQ_SLOT,  // Source 12 IRQ (Disk sync register matches disk data)
-    EXTER_IRQ_SLOT,   // Source 13 IRQ (I/O ports and CIA B)
-    INSPECTOR_SLOT,   // Calls inspect() on a regular basis
-    SEC_SLOT_COUNT,
-};
-
-static inline bool isPrimarySlot(int32_t s) { return s <= PRIM_SLOT_COUNT; }
-static inline bool isSecondarySlot(int32_t s) { return s <= SEC_SLOT_COUNT; }
-
-enum EventID
-{
-    EVENT_NONE = 0,
-    
-    //
-    // Events in the primary event table
-    //
-    
-    // CIA slots
-    CIA_EXECUTE = 1,
-    CIA_WAKEUP,
-    CIA_EVENT_COUNT,
-    
-    // DMA slot
-    DMA_DISK = 1,
-    DMA_A0,
-    DMA_A1,
-    DMA_A2,
-    DMA_A3,
-    DMA_S0,
-    DMA_S1,
-    DMA_S2,
-    DMA_S3,
-    DMA_S4,
-    DMA_S5,
-    DMA_S6,
-    DMA_S7,
-    DMA_L1,
-    DMA_L2,
-    DMA_L3,
-    DMA_L4,
-    DMA_L5,
-    DMA_L6,
-    DMA_H1,
-    DMA_H2,
-    DMA_H3,
-    DMA_H4,
-    DMA_EVENT_COUNT,
-    
-    // Copper slot
-    COP_REQUEST_DMA = 1,
-    COP_FETCH,
-    COP_MOVE,
-    COP_WAIT_OR_SKIP,
-    COP_WAIT,
-    COP_SKIP,
-    COP_JMP1,
-    COP_JMP2,
-    COP_EVENT_COUNT,
-    
-    // Blitter slot
-    BLT_INIT = 1,
-    BLT_EXECUTE,
-    BLT_FAST_BLIT,
-    BLT_EVENT_COUNT,
-    
-    // Raster slot
-    RAS_HSYNC = 1,
-    RAS_DIWSTRT,
-    RAS_DIWDRAW,
-    RAS_EVENT_COUNT,
-    
-    // SEC slot
-    SEC_TRIGGER = 1,
-    SEC_EVENT_COUNT,
-    
-    //
-    // Events in secondary event table
-    //
-    
-    // IRQ slots
-    IRQ_SET = 1,
-    IRQ_CLEAR,
-    IRQ_EVENT_COUNT,
-    
-    // Inspector slot
-    INS_COLLECT
-};
-
-static inline bool isCiaEvent(EventID id) { return id <= CIA_EVENT_COUNT; }
-static inline bool isDmaEvent(EventID id) { return id <= DMA_EVENT_COUNT; }
-static inline bool isCopEvent(EventID id) { return id <= COP_EVENT_COUNT; }
-static inline bool isBltEvent(EventID id) { return id <= BLT_EVENT_COUNT; }
-static inline bool isRasEvent(EventID id) { return id <= RAS_EVENT_COUNT; }
-
 struct Event
 {
     // Indicates when the event is due.
@@ -366,7 +241,10 @@ class EventHandler : public HardwareComponent
     
     // Serves an IRQ_SET or IRQ_CLEAR event
     void serveIRQEvent(EventSlot slot, int irqBit);
-    
+
+    // Serves an inspection event
+    void serveINSEvent();
+
     
     //
     // Debugging
