@@ -50,15 +50,13 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->cpu->getInfo();
 }
-- (DisassembledInstruction) getInstr:(NSInteger)index
+- (DisassembledInstruction) getInstrInfo:(NSInteger)index
 {
-    assert(index < CPUINFO_INSTR_COUNT);
-    return wrapper->cpu->getInfo().instr[index];
+    return wrapper->cpu->getInstrInfo(index);
 }
-- (DisassembledInstruction) getTraceInstr:(NSInteger)index
+- (DisassembledInstruction) getTracedInstrInfo:(NSInteger)index
 {
-    assert(index < CPUINFO_INSTR_COUNT);
-    return wrapper->cpu->getInfo().traceInstr[index];
+    return wrapper->cpu->getTracedInstrInfo(index);
 }
 - (uint32_t) getPC
 {

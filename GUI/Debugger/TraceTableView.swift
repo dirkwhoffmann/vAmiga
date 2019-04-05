@@ -39,7 +39,7 @@ extension TraceTableView : NSTableViewDataSource {
     
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
         
-        if var info = cpu?.getTraceInstr(row) {
+        if var info = cpu?.getTracedInstrInfo(row) {
             
             switch tableColumn?.identifier.rawValue {
                 

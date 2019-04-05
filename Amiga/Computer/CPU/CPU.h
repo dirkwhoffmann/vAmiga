@@ -97,7 +97,9 @@ class CPU : public HardwareComponent {
     
     // Returns the latest internal state recorded by inspect()
     CPUInfo getInfo();
-    
+    DisassembledInstruction getInstrInfo(long nr);
+    DisassembledInstruction getTracedInstrInfo(long nr);
+
     
     //
     // Recording and restoring the CPU context

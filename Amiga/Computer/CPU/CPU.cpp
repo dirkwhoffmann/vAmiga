@@ -216,6 +216,34 @@ CPU::getInfo()
     return result;
 }
 
+DisassembledInstruction
+CPU::getInstrInfo(long index)
+{
+    assert(index < CPUINFO_INSTR_COUNT);
+    
+    DisassembledInstruction result;
+    
+    pthread_mutex_lock(&lock);
+    result = info.instr[index];
+    pthread_mutex_unlock(&lock);
+    
+    return result;
+}
+
+DisassembledInstruction
+CPU::getTracedInstrInfo(long index)
+{
+    assert(index < CPUINFO_INSTR_COUNT);
+    
+    DisassembledInstruction result;
+    
+    pthread_mutex_lock(&lock);
+    result = info.traceInstr[index];
+    pthread_mutex_unlock(&lock);
+    
+    return result;
+}
+
 size_t
 CPU::stateSize()
 {

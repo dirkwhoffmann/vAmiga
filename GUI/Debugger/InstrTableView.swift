@@ -116,7 +116,7 @@ class InstrTableView : NSTableView {
         
         for i in 0 ..< Int(CPUINFO_INSTR_COUNT) {
             if (addr <= 0xFFFFFF) {
-                if var info = cpu?.getInstr(i) {
+                if var info = cpu?.getInstrInfo(i) {
                     let bytes = info.bytes
                     instrInRow[i] = String(cString: &info.instr.0)
                     addrInRow[i] = addr
@@ -176,7 +176,7 @@ extension InstrTableView : NSTableViewDataSource {
             return instrInRow[row]
         default:
             return ""
-        }    
+        }
     }
 }
 

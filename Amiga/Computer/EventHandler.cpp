@@ -72,13 +72,239 @@ EventHandler::_inspect()
     
     // Primary events
     for (unsigned i = 0; i < PRIM_SLOT_COUNT; i++)
-    info.primary[i] = getPrimarySlotInfo(i);
+    _inspectPrimSlot(i);
     
     // Secondary events
     for (unsigned i = 0; i < SEC_SLOT_COUNT; i++)
-    info.secondary[i] = getSecondarySlotInfo(i);
+    _inspectSecSlot(i);
     
     pthread_mutex_unlock(&lock);
+}
+
+void
+EventHandler::_inspectPrimSlot(uint32_t slot)
+{
+    assert(isPrimarySlot(slot));
+    
+    EventSlotInfo *i = &info.primary[slot];
+    
+    int64_t frame;
+    int16_t vpos;
+    int16_t hpos;
+    Cycle trigger = primSlot[slot].triggerCycle;
+    
+    amiga->agnus.cycleToBeamAbs(trigger, frame, vpos, hpos);
+    
+    i->trigger = trigger;
+    i->triggerRel = trigger - amiga->agnus.clock;
+    i->eventId = primSlot[slot].id;
+    i->frame = frame - amiga->agnus.frame;
+    i->vpos = vpos;
+    i->hpos = hpos;
+    
+    switch ((EventSlot)slot) {
+        
+        case CIAA_SLOT:
+        
+        i->slotName = "CIA A";
+        switch (primSlot[slot].id) {
+            case 0:                i->eventName = "none"; break;
+            case CIA_EXECUTE:      i->eventName = "CIA_EXECUTE"; break;
+            case CIA_WAKEUP:       i->eventName = "CIA_WAKEUP"; break;
+            default:               i->eventName = "*** INVALID ***"; break;
+        }
+        break;
+        
+        case CIAB_SLOT:
+        
+        i->slotName = "CIA B";
+        switch (primSlot[slot].id) {
+            case 0:                i->eventName = "none"; break;
+            case CIA_EXECUTE:      i->eventName = "CIA_EXECUTE"; break;
+            case CIA_WAKEUP:       i->eventName = "CIA_WAKEUP"; break;
+            default:               i->eventName = "*** INVALID ***"; break;
+        }
+        break;
+        
+        case DMA_SLOT:
+        
+        i->slotName = "DMA";
+        switch (primSlot[slot].id) {
+            case 0:                i->eventName = "none"; break;
+            case DMA_DISK:         i->eventName = "DMA_DISK"; break;
+            case DMA_A0:           i->eventName = "DMA_A0"; break;
+            case DMA_A1:           i->eventName = "DMA_A1"; break;
+            case DMA_A2:           i->eventName = "DMA_A2"; break;
+            case DMA_A3:           i->eventName = "DMA_A3"; break;
+            case DMA_S0:           i->eventName = "DMA_S0"; break;
+            case DMA_S1:           i->eventName = "DMA_S1"; break;
+            case DMA_S2:           i->eventName = "DMA_S2"; break;
+            case DMA_S3:           i->eventName = "DMA_S3"; break;
+            case DMA_S4:           i->eventName = "DMA_S4"; break;
+            case DMA_S5:           i->eventName = "DMA_S5"; break;
+            case DMA_S6:           i->eventName = "DMA_S6"; break;
+            case DMA_S7:           i->eventName = "DMA_S7"; break;
+            case DMA_L1:           i->eventName = "DMA_L1"; break;
+            case DMA_L2:           i->eventName = "DMA_L2"; break;
+            case DMA_L3:           i->eventName = "DMA_L3"; break;
+            case DMA_L4:           i->eventName = "DMA_L4"; break;
+            case DMA_L5:           i->eventName = "DMA_L5"; break;
+            case DMA_L6:           i->eventName = "DMA_L6"; break;
+            case DMA_H1:           i->eventName = "DMA_H1"; break;
+            case DMA_H2:           i->eventName = "DMA_H2"; break;
+            case DMA_H3:           i->eventName = "DMA_H3"; break;
+            case DMA_H4:           i->eventName = "DMA_H4"; break;
+            default:               i->eventName = "*** INVALID ***"; break;
+        }
+        break;
+        
+        case COP_SLOT:
+        
+        i->slotName = "Copper";
+        switch (primSlot[slot].id) {
+            
+            case 0:                i->eventName = "none"; break;
+            case COP_REQUEST_DMA:  i->eventName = "COP_REQUEST_DMA"; break;
+            case COP_FETCH:        i->eventName = "COP_FETCH"; break;
+            case COP_MOVE:         i->eventName = "COP_MOVE"; break;
+            case COP_WAIT_OR_SKIP: i->eventName = "WAIT_OR_SKIP"; break;
+            case COP_WAIT:         i->eventName = "COP_WAIT"; break;
+            case COP_SKIP:         i->eventName = "COP_SKIP"; break;
+            case COP_JMP1:         i->eventName = "COP_JMP1"; break;
+            case COP_JMP2:         i->eventName = "COP_JMP2"; break;
+            default:               i->eventName = "*** INVALID ***"; break;
+        }
+        break;
+        
+        case BLT_SLOT:
+        
+        i->slotName = "Blitter";
+        switch (primSlot[slot].id) {
+            
+            case 0:                i->eventName = "none"; break;
+            case BLT_INIT:         i->eventName = "BLT_INIT"; break;
+            case BLT_EXECUTE:      i->eventName = "BLT_EXECUTE"; break;
+            case BLT_FAST_BLIT:    i->eventName = "BLT_FAST_BLIT"; break;
+            default:               i->eventName = "*** INVALID ***"; break;
+        }
+        break;
+        
+        case RAS_SLOT:
+        
+        i->slotName = "Raster";
+        switch (primSlot[slot].id) {
+            
+            case 0:                i->eventName = "none"; break;
+            case RAS_HSYNC:        i->eventName = "RAS_HSYNC"; break;
+            case RAS_DIWSTRT:      i->eventName = "RAS_DIWSTRT"; break;
+            case RAS_DIWDRAW:      i->eventName = "RAS_DIWDRAW"; break;
+            default:               i->eventName = "*** INVALID ***"; break;
+        }
+        break;
+        
+        case SEC_SLOT:
+        
+        i->slotName = "Secondary";
+        switch (primSlot[slot].id) {
+            
+            case 0:                i->eventName = "none"; break;
+            case SEC_TRIGGER:      i->eventName = "SEC_TRIGGER"; break;
+            default:               i->eventName = "*** INVALID ***"; break;
+        }
+        break;
+        
+        default: assert(false);
+    }
+    
+}
+
+void
+EventHandler::_inspectSecSlot(uint32_t slot)
+{
+    assert(isSecondarySlot(slot));
+    
+    EventSlotInfo *i = &info.secondary[slot];
+    
+    int64_t frame;
+    int16_t vpos;
+    int16_t hpos;
+    Cycle trigger = secSlot[slot].triggerCycle;
+    
+    amiga->agnus.cycleToBeamAbs(trigger, frame, vpos, hpos);
+    
+    i->trigger = trigger;
+    i->triggerRel = trigger - amiga->agnus.clock;
+    i->eventId = secSlot[slot].id;
+    i->frame = frame - amiga->agnus.frame;
+    i->vpos = vpos;
+    i->hpos = hpos;
+    
+    switch ((EventSlot)slot) {
+        
+        case TBE_IRQ_SLOT:       i->slotName = "Serial Output IRQ"; break;
+        case DSKBLK_IRQ_SLOT:    i->slotName = "Disk DMA IRQ"; break;
+        case SOFT_IRQ_SLOT:      i->slotName = "Software IRQ"; break;
+        case PORTS_IRQ_SLOT:     i->slotName = "CIA A IRQ"; break;
+        case COPR_IRQ_SLOT:      i->slotName = "Copper IRQ"; break;
+        case VERTB_IRQ_SLOT:     i->slotName = "VBlank IRQ"; break;
+        case BLIT_IRQ_SLOT:      i->slotName = "Blitter IRQ"; break;
+        case AUD0_IRQ_SLOT:      i->slotName = "Audio 0 IRQ"; break;
+        case AUD1_IRQ_SLOT:      i->slotName = "Audio 1 IRQ"; break;
+        case AUD2_IRQ_SLOT:      i->slotName = "Audio 2 IRQ"; break;
+        case AUD3_IRQ_SLOT:      i->slotName = "Audio 3 IRQ"; break;
+        case RBF_IRQ_SLOT:       i->slotName = "Serial Input IRQ"; break;
+        case DSKSYN_IRQ_SLOT:    i->slotName = "Disk Sync IRQ"; break;
+        case EXTER_IRQ_SLOT:     i->slotName = "CIA B IRQ"; break;
+        case INSPECTOR_SLOT:     i->slotName = "Debugger"; break;
+        default:                 i->slotName = "*** INVALID ***"; break;
+    }
+    
+    switch ((EventSlot)slot) {
+        
+        case TBE_IRQ_SLOT:
+        case DSKBLK_IRQ_SLOT:
+        case SOFT_IRQ_SLOT:
+        case PORTS_IRQ_SLOT:
+        case COPR_IRQ_SLOT:
+        case VERTB_IRQ_SLOT:
+        case BLIT_IRQ_SLOT:
+        case AUD0_IRQ_SLOT:
+        case AUD1_IRQ_SLOT:
+        case AUD2_IRQ_SLOT:
+        case AUD3_IRQ_SLOT:
+        case RBF_IRQ_SLOT:
+        case DSKSYN_IRQ_SLOT:
+        case EXTER_IRQ_SLOT:
+        
+        switch (secSlot[slot].id) {
+            
+            case 0:          i->eventName = "none"; break;
+            case IRQ_SET:    i->eventName = "IRQ_SET"; break;
+            case IRQ_CLEAR:  i->eventName = "IRQ_CLEAR"; break;
+            default:         i->eventName = "*** INVALID ***"; break;
+        }
+        break;
+        
+        case INSPECTOR_SLOT:
+        
+        switch (secSlot[slot].id) {
+            
+            case 0:          i->eventName = "none"; break;
+            case INS_NONE:   i->eventName = "INS_NONE"; break;
+            case INS_AMIGA:  i->eventName = "INS_AMIGA"; break;
+            case INS_CPU:    i->eventName = "INS_CPU"; break;
+            case INS_MEM:    i->eventName = "INS_MEM"; break;
+            case INS_CIA:    i->eventName = "INS_CIA"; break;
+            case INS_AGNUS:  i->eventName = "INS_AGNUS"; break;
+            case INS_PAULA:  i->eventName = "INS_PAULA"; break;
+            case INS_DENISE: i->eventName = "INS_DENISE"; break;
+            case INS_EVENTS: i->eventName = "INS_EVENTS"; break;
+            default:         i->eventName = "*** INVALID ***"; break;
+        }
+        break;
+        
+        default: assert(false);
+    }
 }
 
 void
@@ -136,226 +362,29 @@ EventHandler::getInfo()
 EventSlotInfo
 EventHandler::getPrimarySlotInfo(int slot)
 {
-    EventSlotInfo info;
+    assert(isPrimarySlot(slot));
     
-    int64_t frame;
-    int16_t vpos;
-    int16_t hpos;
-    Cycle trigger = primSlot[slot].triggerCycle;
+    EventSlotInfo result;
     
-    amiga->agnus.cycleToBeamAbs(trigger, frame, vpos, hpos);
+    pthread_mutex_lock(&lock);
+    result = info.primary[slot];
+    pthread_mutex_unlock(&lock);
     
-    info.trigger = trigger;
-    info.triggerRel = trigger - amiga->agnus.clock;
-    info.eventId = primSlot[slot].id;
-    info.frame = frame - amiga->agnus.frame;
-    info.vpos = vpos;
-    info.hpos = hpos;
-    
-    switch ((EventSlot)slot) {
-        
-        case CIAA_SLOT:
-        
-        info.slotName = "CIA A";
-        switch (primSlot[slot].id) {
-            case 0:                info.eventName = "none"; break;
-            case CIA_EXECUTE:      info.eventName = "CIA_EXECUTE"; break;
-            case CIA_WAKEUP:       info.eventName = "CIA_WAKEUP"; break;
-            default:               info.eventName = "*** INVALID ***"; break;
-        }
-        break;
-        
-        case CIAB_SLOT:
-        
-        info.slotName = "CIA B";
-        switch (primSlot[slot].id) {
-            case 0:                info.eventName = "none"; break;
-            case CIA_EXECUTE:      info.eventName = "CIA_EXECUTE"; break;
-            case CIA_WAKEUP:       info.eventName = "CIA_WAKEUP"; break;
-            default:               info.eventName = "*** INVALID ***"; break;
-        }
-        break;
-        
-        case DMA_SLOT:
-        
-        info.slotName = "DMA";
-        switch (primSlot[slot].id) {
-            case 0:                info.eventName = "none"; break;
-            case DMA_DISK:         info.eventName = "DMA_DISK"; break;
-            case DMA_A0:           info.eventName = "A0"; break;
-            case DMA_A1:           info.eventName = "A1"; break;
-            case DMA_A2:           info.eventName = "A2"; break;
-            case DMA_A3:           info.eventName = "A3"; break;
-            case DMA_S0:           info.eventName = "S0"; break;
-            case DMA_S1:           info.eventName = "S1"; break;
-            case DMA_S2:           info.eventName = "S2"; break;
-            case DMA_S3:           info.eventName = "S3"; break;
-            case DMA_S4:           info.eventName = "S4"; break;
-            case DMA_S5:           info.eventName = "S5"; break;
-            case DMA_S6:           info.eventName = "S6"; break;
-            case DMA_S7:           info.eventName = "S7"; break;
-            case DMA_L1:           info.eventName = "L1"; break;
-            case DMA_L2:           info.eventName = "L2"; break;
-            case DMA_L3:           info.eventName = "L3"; break;
-            case DMA_L4:           info.eventName = "L4"; break;
-            case DMA_L5:           info.eventName = "L5"; break;
-            case DMA_L6:           info.eventName = "L6"; break;
-            case DMA_H1:           info.eventName = "H1"; break;
-            case DMA_H2:           info.eventName = "H2"; break;
-            case DMA_H3:           info.eventName = "H3"; break;
-            case DMA_H4:           info.eventName = "H4"; break;
-            default:               info.eventName = "*** INVALID ***"; break;
-        }
-        break;
-        
-        case COP_SLOT:
-        
-        info.slotName = "Copper";
-        switch (primSlot[slot].id) {
-            
-            case 0:                info.eventName = "none"; break;
-            case COP_REQUEST_DMA:  info.eventName = "COP_REQUEST_DMA"; break;
-            case COP_FETCH:        info.eventName = "COP_FETCH"; break;
-            case COP_MOVE:         info.eventName = "COP_MOVE"; break;
-            case COP_WAIT_OR_SKIP: info.eventName = "WAIT_OR_SKIP"; break;
-            case COP_WAIT:         info.eventName = "COP_WAIT"; break;
-            case COP_SKIP:         info.eventName = "COP_SKIP"; break;
-            case COP_JMP1:         info.eventName = "COP_JMP1"; break;
-            case COP_JMP2:         info.eventName = "COP_JMP2"; break;
-            default:               info.eventName = "*** INVALID ***"; break;
-        }
-        break;
-        
-        case BLT_SLOT:
-        
-        info.slotName = "Blitter";
-        switch (primSlot[slot].id) {
-            
-            case 0:                info.eventName = "none"; break;
-            case BLT_INIT:         info.eventName = "BLT_INIT"; break;
-            case BLT_EXECUTE:      info.eventName = "BLT_EXECUTE"; break;
-            case BLT_FAST_BLIT:    info.eventName = "BLT_FAST_BLIT"; break;
-            default:               info.eventName = "*** INVALID ***"; break;
-        }
-        break;
-        
-        case RAS_SLOT:
-        
-        info.slotName = "Raster";
-        switch (primSlot[slot].id) {
-            
-            case 0:                info.eventName = "none"; break;
-            case RAS_HSYNC:        info.eventName = "RAS_HSYNC"; break;
-            case RAS_DIWSTRT:      info.eventName = "RAS_DIWSTRT"; break;
-            case RAS_DIWDRAW:      info.eventName = "RAS_DIWDRAW"; break;
-            default:               info.eventName = "*** INVALID ***"; break;
-        }
-        break;
-        
-        case SEC_SLOT:
-        
-        info.slotName = "Secondary";
-        switch (primSlot[slot].id) {
-            
-            case 0:                info.eventName = "none"; break;
-            case SEC_TRIGGER:      info.eventName = "SEC_TRIGGER"; break;
-            default:               info.eventName = "*** INVALID ***"; break;
-        }
-        break;
-        
-        default: assert(false);
-    }
-    
-    return info;
+    return result;
 }
 
 EventSlotInfo
 EventHandler::getSecondarySlotInfo(int slot)
 {
-    EventSlotInfo info;
+    assert(isSecondarySlot(slot));
     
-    int64_t frame;
-    int16_t vpos;
-    int16_t hpos;
-    Cycle trigger = secSlot[slot].triggerCycle;
+    EventSlotInfo result;
     
-    amiga->agnus.cycleToBeamAbs(trigger, frame, vpos, hpos);
+    pthread_mutex_lock(&lock);
+    result = info.secondary[slot];
+    pthread_mutex_unlock(&lock);
     
-    info.trigger = trigger;
-    info.triggerRel = trigger - amiga->agnus.clock;
-    info.eventId = secSlot[slot].id;
-    info.frame = frame - amiga->agnus.frame;
-    info.vpos = vpos;
-    info.hpos = hpos;
-    
-    switch ((EventSlot)slot) {
-        
-        case TBE_IRQ_SLOT:       info.slotName = "Serial Output IRQ"; break;
-        case DSKBLK_IRQ_SLOT:    info.slotName = "Disk DMA IRQ"; break;
-        case SOFT_IRQ_SLOT:      info.slotName = "Software IRQ"; break;
-        case PORTS_IRQ_SLOT:     info.slotName = "CIA A IRQ"; break;
-        case COPR_IRQ_SLOT:      info.slotName = "Copper IRQ"; break;
-        case VERTB_IRQ_SLOT:     info.slotName = "VBlank IRQ"; break;
-        case BLIT_IRQ_SLOT:      info.slotName = "Blitter IRQ"; break;
-        case AUD0_IRQ_SLOT:      info.slotName = "Audio 0 IRQ"; break;
-        case AUD1_IRQ_SLOT:      info.slotName = "Audio 1 IRQ"; break;
-        case AUD2_IRQ_SLOT:      info.slotName = "Audio 2 IRQ"; break;
-        case AUD3_IRQ_SLOT:      info.slotName = "Audio 3 IRQ"; break;
-        case RBF_IRQ_SLOT:       info.slotName = "Serial Input IRQ"; break;
-        case DSKSYN_IRQ_SLOT:    info.slotName = "Disk Sync IRQ"; break;
-        case EXTER_IRQ_SLOT:     info.slotName = "CIA B IRQ"; break;
-        case INSPECTOR_SLOT:     info.slotName = "Debugger"; break;
-        default:                 info.slotName = "*** INVALID ***"; break;
-    }
-    
-    switch ((EventSlot)slot) {
-        
-        case TBE_IRQ_SLOT:
-        case DSKBLK_IRQ_SLOT:
-        case SOFT_IRQ_SLOT:
-        case PORTS_IRQ_SLOT:
-        case COPR_IRQ_SLOT:
-        case VERTB_IRQ_SLOT:
-        case BLIT_IRQ_SLOT:
-        case AUD0_IRQ_SLOT:
-        case AUD1_IRQ_SLOT:
-        case AUD2_IRQ_SLOT:
-        case AUD3_IRQ_SLOT:
-        case RBF_IRQ_SLOT:
-        case DSKSYN_IRQ_SLOT:
-        case EXTER_IRQ_SLOT:
-        
-        switch (secSlot[slot].id) {
-            
-            case 0:          info.eventName = "none"; break;
-            case IRQ_SET:    info.eventName = "IRQ_SET"; break;
-            case IRQ_CLEAR:  info.eventName = "IRQ_CLEAR"; break;
-            default:         info.eventName = "*** INVALID ***"; break;
-        }
-        break;
-        
-        case INSPECTOR_SLOT:
-        
-        switch (secSlot[slot].id) {
-            
-            case 0:          info.eventName = "none"; break;
-            case INS_NONE:   info.eventName = "INS_NONE"; break;
-            case INS_AMIGA:  info.eventName = "INS_AMIGA"; break;
-            case INS_CPU:    info.eventName = "INS_CPU"; break;
-            case INS_MEM:    info.eventName = "INS_MEM"; break;
-            case INS_CIA:    info.eventName = "INS_CIA"; break;
-            case INS_AGNUS:  info.eventName = "INS_AGNUS"; break;
-            case INS_PAULA:  info.eventName = "INS_PAULA"; break;
-            case INS_DENISE: info.eventName = "INS_DENISE"; break;
-            case INS_EVENTS: info.eventName = "INS_EVENTS"; break;
-            default:         info.eventName = "*** INVALID ***"; break;
-        }
-        break;
-        
-        default: assert(false);
-    }
-    
-    return info;
+    return result;
 }
 
 void

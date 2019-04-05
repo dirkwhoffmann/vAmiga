@@ -187,8 +187,8 @@ struct AmigaFileWrapper;
 
 - (void) dump;
 - (CPUInfo) getInfo;
-- (DisassembledInstruction) getInstr:(NSInteger)index;
-- (DisassembledInstruction) getTraceInstr:(NSInteger)index;
+- (DisassembledInstruction) getInstrInfo:(NSInteger)index;
+- (DisassembledInstruction) getTracedInstrInfo:(NSInteger)index;
 - (uint32_t) getPC;
 
 - (NSInteger) disassemble:(char *) str pc:(NSInteger)pc;
