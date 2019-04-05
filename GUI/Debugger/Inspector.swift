@@ -365,7 +365,7 @@ extension Inspector : NSWindowDelegate {
         
         track("Closing inspector")
         amigaProxy?.disableDebugging()
-        amigaProxy?.setInspectionTarget(INS_NONE)
+        amigaProxy?.clearInspectionTarget()
     }
 }
 

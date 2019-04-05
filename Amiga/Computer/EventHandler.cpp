@@ -41,7 +41,7 @@ EventHandler::_powerOn()
     }
     
     // Schedule the first inspection event (retriggers automatically)
-    scheduleSecRel(INSPECTOR_SLOT, 0, INS_NONE);
+    // scheduleSecRel(INSPECTOR_SLOT, 0, INS_NONE);
 }
 
 void
@@ -290,7 +290,7 @@ EventHandler::_inspectSecSlot(uint32_t slot)
         switch (secSlot[slot].id) {
             
             case 0:          i->eventName = "none"; break;
-            case INS_NONE:   i->eventName = "INS_NONE"; break;
+            // case INS_NONE:   i->eventName = "INS_NONE"; break;
             case INS_AMIGA:  i->eventName = "INS_AMIGA"; break;
             case INS_CPU:    i->eventName = "INS_CPU"; break;
             case INS_MEM:    i->eventName = "INS_MEM"; break;
@@ -716,12 +716,9 @@ EventHandler::serveIRQEvent(EventSlot s, int irqBit)
 void
 EventHandler::serveINSEvent()
 {
-    // Reschedule event
-    rescheduleSecRel(INSPECTOR_SLOT, 28000000 / 5);
-    
     switch (secSlot[INSPECTOR_SLOT].id) {
         
-        case INS_NONE:   return;
+        // case INS_NONE:   return;
         case INS_AMIGA:  amiga->inspect(); break;
         case INS_CPU:    amiga->cpu.inspect(); break;
         case INS_MEM:    amiga->mem.inspect(); break;
@@ -733,18 +730,11 @@ EventHandler::serveINSEvent()
         default:         assert(false);
     }
     
+    // Reschedule event
+    rescheduleSecRel(INSPECTOR_SLOT, 28000000 / 5);
+    
     // Inform the GUI
     amiga->putMessage(MSG_INSPECT);
-
- 
-    
-    /*
-    if (amiga->inspectionInterval) {
-        rescheduleSecRel(INSPECTOR_SLOT, amiga->inspectionInterval);
-    } else {
-        cancelSec(INSPECTOR_SLOT);
-    }
-    */
 }
 
 bool

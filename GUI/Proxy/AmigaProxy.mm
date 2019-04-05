@@ -1008,6 +1008,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->amiga->setInspectionTarget(id);
 }
+- (void) clearInspectionTarget
+{
+    wrapper->amiga->clearInspectionTarget();
+}
 - (BOOL) debugMode
 {
     return wrapper->amiga->getDebugMode();

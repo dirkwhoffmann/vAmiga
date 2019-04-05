@@ -164,6 +164,14 @@ Amiga::setInspectionTarget(EventID id)
     resume();
 }
 
+void
+Amiga::clearInspectionTarget()
+{
+    suspend();
+    handler->cancelSec(INSPECTOR_SLOT);
+    resume();
+}
+
 AmigaInfo
 Amiga::getInfo()
 {

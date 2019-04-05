@@ -60,9 +60,8 @@ class Amiga : public HardwareComponent {
     /* Inspection target
      * To update the GUI periodically, the emulator schedules this event in the
      * INSPECTOR_SLOT (secondary table) on a periodic basis. If the event is
-     * INS_NONE, no action is taken. If another INS_xxx event is scheduled,
-     * inspect() is called on a certain Amiga component and the GUI is notfied
-     * that updated debug information is available.
+     * EVENT_NONE, no action is taken. If an INS_xxx event is scheduled,
+     * inspect() is called on a certain Amiga component.
      */
     static EventID inspectionTarget;
     
@@ -287,12 +286,14 @@ class Amiga : public HardwareComponent {
     void disableDebugging() { setDebugMode(false); }
     
     /* Sets the inspection target.
-     * If the inspection target is different to INS_NONE, the emulator calls
-     * inspect() on a certain component periodically and sends MSG_INSPECT to
-     * the GUI.
+     * If an inspection target is set (INS_xxx events), the emulator schedules
+     * periodic calls to inspect().
      */
     void setInspectionTarget(EventID id);
 
+    // Removed the currently set inspection target
+    void clearInspectionTarget();
+    
     
     //
     // Configuring the emulated machine
