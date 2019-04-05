@@ -62,18 +62,6 @@ Amiga::Amiga()
 {
     setDescription("Amiga");
     
-    /* Set up a meaningful initial configuration.
-     * This configuration is unlikely to be used though. Under normal
-     * circumstances, the GUI overwrites it with it's own settings before
-     * powering on.
-     */
-    config.model         = A500;
-    config.realTimeClock = false;
-    config.df0.type      = A1010_ORIG;
-    config.df0.connected = true;
-    config.df1.type      = A1010_ORIG;
-    config.df1.connected = false;
-    
     registerSubcomponents(vector<HardwareComponent *> {
         
         &cpu,
@@ -95,10 +83,9 @@ Amiga::Amiga()
     
     registerSnapshotItems(vector<SnapshotItem> {
         
-        { &model,         sizeof(model),         0 },
-        { &realTimeClock, sizeof(realTimeClock), 0 },
-        
-        { &config,        sizeof(config),        0 },
+        { &model,         sizeof(model),         PERSISTANT },
+        { &realTimeClock, sizeof(realTimeClock), PERSISTANT },
+    
         { &masterClock,   sizeof(masterClock),   0 },
         { &clockBase,     sizeof(clockBase),     0 },
     });
@@ -193,9 +180,11 @@ Amiga::getConfig()
     
     config.model = model;
     config.realTimeClock = realTimeClock;
-    config.layout = config.layout; // TODO MOVE TO KEYBOARD
+    config.layout = keyboard.layout;
+    
     config.df0.connected = df0.isConnected();
     config.df0.type = df0.getType();
+    
     config.df1.connected = df1.isConnected();
     config.df1.type = df1.getType();
 
@@ -240,9 +229,9 @@ Amiga::configureModel(AmigaModel m)
 bool
 Amiga::configureLayout(long layout)
 {
-    if (config.layout != layout) {
+    if (keyboard.layout != layout) {
         
-        config.layout = layout;
+        keyboard.layout = layout;
         putMessage(MSG_CONFIG);
     }
     
@@ -477,6 +466,8 @@ Amiga::_inspect()
 void
 Amiga::_dump()
 {
+    AmigaConfiguration config = getConfig();
+    
     dumpClock();
     plainmsg("    poweredOn: %s\n", isPoweredOn() ? "yes" : "no");
     plainmsg("   poweredOff: %s\n", isPoweredOff() ? "yes" : "no");
@@ -537,6 +528,8 @@ Amiga::resume()
 bool
 Amiga::readyToPowerUp()
 {
+    AmigaConfiguration config = getConfig();
+    
     // Check for Chip Ram
     if (!mem.hasChipRam()) {
         msg("NOT READY YET: Chip Ram is missing.\n");

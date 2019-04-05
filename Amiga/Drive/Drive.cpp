@@ -35,6 +35,9 @@ Drive::Drive(unsigned nr)
 
     });
 
+    // By default, we only connect the internal drive (Df0)
+    connected = (nr == 0);
+    
     // REMOVE AFTER TESTING
     Disk d; 
 }
@@ -42,9 +45,7 @@ Drive::Drive(unsigned nr)
 void
 Drive::_powerOn()
 {
-    // Make sure that drive 0 is always connected
-    if (nr == 0) connected = true;
-    
+ 
 }
 
 void

@@ -41,7 +41,7 @@ void
 Memory::_powerOn()
 {
     // Make Rom writable if an A1000 is emulated
-    kickIsWritable = amiga->config.model == A1000;
+    kickIsWritable = amiga->getConfig().model == A1000;
     
     // Wipe out RAM
     if (chipRam) memset(chipRam, 0, chipRamSize);
@@ -301,6 +301,7 @@ Memory::loadKickRomFromFile(const char *path)
 void
 Memory::updateMemSrcTable()
 {
+    AmigaConfiguration config = amiga->getConfig();
     MemorySource mem_boot = bootRom ? MEM_BOOT : MEM_UNMAPPED;
     MemorySource mem_kick = kickRom ? MEM_KICK : MEM_UNMAPPED;
     
@@ -308,7 +309,7 @@ Memory::updateMemSrcTable()
     assert(slowRamSize % 0x10000 == 0);
     assert(fastRamSize % 0x10000 == 0);
 
-    bool rtc = amiga ? amiga->config.realTimeClock : false;
+    bool rtc = amiga ? config.realTimeClock : false;
     bool ovl = amiga ? (amiga->ciaA.getPA() & 1) : false;
     
     // debug("updateMemSrcTable: rtc = %d ovl = %d\n", rtc, ovl);

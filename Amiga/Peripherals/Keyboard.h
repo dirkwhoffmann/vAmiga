@@ -23,7 +23,12 @@ KeyboardState;
 
 class Keyboard : public HardwareComponent {
     
-private:
+    public:
+    
+    // Keybord layout identifier
+    long layout = 0;
+    
+    private:
 
     // Current state of the keyboard
     KeyboardState state;

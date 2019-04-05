@@ -16,8 +16,9 @@ Keyboard::Keyboard()
     // Register snapshot items
     registerSnapshotItems(vector<SnapshotItem> {
         
-        { &state,      sizeof(state),       0 },
-        { &handshake,  sizeof(handshake),   0 },
+        { &layout,      sizeof(layout),      PERSISTANT },
+        { &state,       sizeof(state),       0 },
+        { &handshake,   sizeof(handshake),   0 },
    
     });
 }

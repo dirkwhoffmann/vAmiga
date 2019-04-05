@@ -136,7 +136,7 @@ class Amiga : public HardwareComponent {
     public:
     
     // DEPRECATED: REPLACE BY getConfig()
-    AmigaConfiguration config;
+    // AmigaConfiguration config;
     
     
     //
