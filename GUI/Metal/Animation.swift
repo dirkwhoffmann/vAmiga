@@ -213,7 +213,7 @@ public extension MetalView {
         targetZAngle = 0
         targetAlpha  = 0.0
         
-        computeAnimationDeltaSteps(animationCycles: 60)
+        computeAnimationDeltaSteps(animationCycles: 40)
         // computeAnimationDeltaSteps(animationCycles: 15 /* 0.25 sec */)
     }
     

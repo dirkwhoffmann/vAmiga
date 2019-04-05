@@ -12,8 +12,8 @@
 
 // Snapshot version number of this release
 #define V_MAJOR 0
-#define V_MINOR 0
-#define V_SUBMINOR 1
+#define V_MINOR 1
+#define V_SUBMINOR 0
 
 // Disable assertion checking (Uncomment in release build)
 // #define NDEBUG
