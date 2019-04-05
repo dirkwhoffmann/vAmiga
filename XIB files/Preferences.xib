@@ -48,7 +48,6 @@
                 <outlet property="emuWarpLoad" destination="jQ0-jt-CGq" id="m2W-9e-r5B"/>
                 <outlet property="hwAmigaModelPopup" destination="ZQk-5s-Q3i" id="KW3-9z-ZQs"/>
                 <outlet property="hwChipRamPopup" destination="Htk-aA-fCu" id="6Mo-Ea-f4z"/>
-                <outlet property="hwDf0Connect" destination="4rD-qd-qGj" id="l2k-Wm-cut"/>
                 <outlet property="hwDf0Type" destination="kgt-j5-t6P" id="I7j-Yw-MrC"/>
                 <outlet property="hwDf1Connect" destination="kmc-nb-gBK" id="ALa-RV-61O"/>
                 <outlet property="hwDf1Type" destination="40w-GY-Enr" id="iU3-YP-Eci"/>
@@ -262,7 +261,7 @@ Gw
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Hardware" identifier="Hardware" id="vMg-zr-Ex1">
-                                <view key="view" id="yrH-J2-nFc">
+                                <view key="view" ambiguous="YES" id="yrH-J2-nFc">
                                     <rect key="frame" x="10" y="33" width="600" height="424"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -328,17 +327,6 @@ Gw
                                             <rect key="frame" x="9" y="277" width="582" height="5"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         </box>
-                                        <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4rD-qd-qGj">
-                                            <rect key="frame" x="356" y="342" width="51" height="18"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="check" title="DF0:" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="G5X-PL-OYX">
-                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <connections>
-                                                <action selector="hwDf0ConnectAction:" target="-2" id="oEc-ad-KJj"/>
-                                            </connections>
-                                        </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="B3P-il-3nh">
                                             <rect key="frame" x="3" y="5" width="81" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -395,7 +383,7 @@ DQ
                                             </connections>
                                         </popUpButton>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="A86-4U-ixl">
-                                            <rect key="frame" x="26" y="163" width="64" height="17"/>
+                                            <rect key="frame" x="26" y="162" width="64" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Fast Ram:" id="Q6e-aH-e7v">
                                                 <font key="font" metaFont="system"/>
@@ -446,7 +434,7 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yol-Vy-vVa">
-                                            <rect key="frame" x="300" y="254" width="114" height="17"/>
+                                            <rect key="frame" x="292" y="376" width="114" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Extensions" id="vnZ-js-fYg">
                                                 <font key="font" metaFont="systemBold"/>
@@ -455,7 +443,7 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Llo-eR-iBg">
-                                            <rect key="frame" x="300" y="386" width="114" height="17"/>
+                                            <rect key="frame" x="292" y="254" width="114" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Floppy drives" id="GEs-oA-mT9">
                                                 <font key="font" metaFont="systemBold"/>
@@ -473,7 +461,7 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qQP-Of-69c">
-                                            <rect key="frame" x="7" y="191" width="83" height="19"/>
+                                            <rect key="frame" x="7" y="189" width="83" height="19"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Slow Ram:" id="FIN-La-fd9">
                                                 <font key="font" metaFont="system"/>
@@ -503,7 +491,7 @@ DQ
                                             </connections>
                                         </popUpButton>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NWG-hq-HKF">
-                                            <rect key="frame" x="7" y="221" width="83" height="19"/>
+                                            <rect key="frame" x="7" y="218" width="83" height="19"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Chip Ram:" id="ehv-gZ-5K7">
                                                 <font key="font" metaFont="system"/>
@@ -533,7 +521,7 @@ DQ
                                             </connections>
                                         </popUpButton>
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kgt-j5-t6P">
-                                            <rect key="frame" x="412" y="338" width="182" height="26"/>
+                                            <rect key="frame" x="412" y="214" width="182" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="Amiga 1010" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="Bqr-Jc-yKI" id="Edx-wX-YZO">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -563,7 +551,7 @@ DQ
                                             </connections>
                                         </popUpButton>
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="40w-GY-Enr">
-                                            <rect key="frame" x="412" y="308" width="182" height="26"/>
+                                            <rect key="frame" x="412" y="184" width="182" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="Amiga 1010" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="S9T-RH-Pmc" id="CTA-k7-6cd">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -593,7 +581,7 @@ DQ
                                             </connections>
                                         </popUpButton>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kmc-nb-gBK">
-                                            <rect key="frame" x="356" y="313" width="49" height="18"/>
+                                            <rect key="frame" x="356" y="189" width="49" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="DF1:" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="Srn-47-6ea">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -622,7 +610,7 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="T70-4F-bOm">
-                                            <rect key="frame" x="356" y="220" width="168" height="18"/>
+                                            <rect key="frame" x="348" y="342" width="168" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="Real-time clock" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="6v7-Uo-FaI">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -643,11 +631,20 @@ DQ
                                                 <action selector="hwUnlockAction:" target="-2" id="5zq-if-RVf"/>
                                             </connections>
                                         </button>
+                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sEr-Dn-1es">
+                                            <rect key="frame" x="322" y="217" width="83" height="19"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="DF0:" id="MhT-54-Cdc">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
                                     </subviews>
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Video" identifier="Video" id="bAS-eu-ehA">
-                                <view key="view" ambiguous="YES" id="TZi-Ij-edC">
+                                <view key="view" id="TZi-Ij-edC">
                                     <rect key="frame" x="10" y="33" width="600" height="424"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>

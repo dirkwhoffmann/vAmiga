@@ -161,6 +161,15 @@ typedef enum : long
 }
 DriveType;
 
+typedef enum : uint32_t
+{
+    DRIVE_ID_NONE  = 0x00000000,
+    DRIVE_ID_35DD  = 0xFFFFFFFF,
+    DRIVE_ID_35HD  = 0xAAAAAAAA,
+    DRIVE_ID_525SD = 0x55555555
+}
+DriveIdCode;
+
 inline bool isDriveType(DriveType model)
 {
     return model >= A1010_ORIG && model <= A1010_WARP;

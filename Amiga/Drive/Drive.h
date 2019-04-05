@@ -15,11 +15,7 @@
 
 class ADFFile;
 
-// Drive identification codes
-#define DRIVE_ID_NONE  0x00000000
-#define DRIVE_ID_35DD  0xFFFFFFFF
-#define DRIVE_ID_35HD  0xAAAAAAAA
-#define DRIVE_ID_525SD 0x55555555
+
 
 class Drive : public HardwareComponent {
     
@@ -31,13 +27,16 @@ private:
     // Indicates if the drive is connected to the Amiga.
     bool connected = true;
 
+    // The type of this drive
+    DriveType type = A1010_ORIG;
+    
     /* The drive type identification code
      * Each drive identifies itself by a 32 bit identification code that is
      * transmitted via the DRVRDY signal in a special identification mode. The
      * identification mode is activated by switching the drive motor on and
      * off.
      */
-    uint32_t id = DRIVE_ID_35DD;
+    DriveIdCode id = DRIVE_ID_35DD;
 
     // Indicates if the identification mode is active.
     bool idMode;
@@ -119,6 +118,9 @@ public:
     void setConnected(bool value);
     void toggleConnected();
     
+    DriveType getType() { return type; }
+    void setType(DriveType t);
+
     
     //
     // Handling the drive status register flags

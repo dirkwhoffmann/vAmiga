@@ -31,7 +31,6 @@ extension PreferencesController {
         hwFastRamPopup.selectItem(withTag: memConfig.fastRamSize)
 
         // Drive
-        hwDf0Connect.state = config.df0.connected ? .on : .off
         hwDf0Type.selectItem(withTag: config.df0.type.rawValue)
         hwDf1Connect.state = config.df1.connected ? .on : .off
         hwDf1Type.selectItem(withTag: config.df1.type.rawValue)

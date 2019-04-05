@@ -195,9 +195,9 @@ Amiga::getConfig()
     config.realTimeClock = realTimeClock;
     config.layout = config.layout; // TODO MOVE TO KEYBOARD
     config.df0.connected = df0.isConnected();
-    config.df0.type = config.df0.type; // TODO MOVE TO DRIVE
+    config.df0.type = df0.getType();
     config.df1.connected = df1.isConnected();
-    config.df1.type = config.df1.type; // TODO MOVE TO DRIVE
+    config.df1.type = df1.getType();
 
     return config;
 }
@@ -310,13 +310,16 @@ Amiga::configureRealTimeClock(bool value)
 bool
 Amiga::configureDrive(unsigned driveNr, bool connected)
 {
-    debug("configureDrive: %d connected: %d\n", driveNr, connected);
+    if (driveNr == 0 && !connected) {
+        warn("It was tried to disconnect the internal drive (Df0).\n");
+        connected = true;
+    }
     
     switch (driveNr) {
         
         case 0:
         
-        df0.setConnected(true); //The internal drive cannot be disconnected
+        df0.setConnected(connected);
         break;
         
         case 1:
@@ -345,17 +348,15 @@ Amiga::configureDrive(unsigned driveNr, DriveType type)
     switch (driveNr) {
         
         case 0:
-        if (config.df0.type != type) {
-            
-            config.df0.type = type;
+        if (df0.getType() != type) {
+            df0.setType(type);
             putMessage(MSG_CONFIG);
         }
         return true;
         
         case 1:
-        if (config.df1.type != type) {
-            
-            config.df1.type = type;
+        if (df1.getType() != type) {
+            df1.setType(type);
             putMessage(MSG_CONFIG);
         }
         return true;

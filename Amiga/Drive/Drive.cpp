@@ -96,6 +96,27 @@ Drive::toggleConnected()
     setConnected(!isConnected());
 }
 
+void
+Drive::setType(DriveType t)
+{
+    switch (t) {
+        
+        case A1010_ORIG:
+        case A1010_2X:
+        case A1010_4X:
+        case A1010_8X:
+        case A1010_WARP:
+        
+        type = t;
+        id = DRIVE_ID_35DD;
+        break;
+        
+        default:
+        
+        assert(false);
+    }
+}
+
 uint8_t
 Drive::driveStatusFlags()
 {
