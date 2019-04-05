@@ -157,28 +157,27 @@ AmigaSnapshot::takeScreenshot(Amiga *amiga)
 {
     AmigaSnapshotHeader *header = (AmigaSnapshotHeader *)data;
     
-    unsigned x = 5;
-    unsigned y = 2;
-    unsigned width = HPIXELS - 10;
-    unsigned height = 2*VPIXELS - 4;
-   
-    header->screenshot.width = width;
-    header->screenshot.height = height;
-  
-    uint32_t *shortFrame = (uint32_t *)amiga->denise.shortFrame;
-    uint32_t *longFrame = (uint32_t *)amiga->denise.longFrame;
+    uint32_t *source = (uint32_t *)amiga->denise.longFrame;
     uint32_t *target = header->screenshot.screen;
-    shortFrame += x + y * HPIXELS;
-    longFrame += x + y * HPIXELS;
 
-    for (unsigned i = 0; i < height; i++) {
-        if (i % 2) {
-            memcpy(target, shortFrame, width * 4);
-            shortFrame += HPIXELS;
-        } else {
-            memcpy(target, longFrame, width * 4);
-            longFrame += HPIXELS;
+    // Texture cutout and scaling factors
+    unsigned dx = 4;
+    unsigned dy = 2;
+    unsigned xStart = 0, xEnd = HPIXELS;
+    unsigned yStart = 0, yEnd = VPIXELS;
+    unsigned width  = (xEnd - xStart) / dx;
+    unsigned height = (yEnd - yStart) / dy;
+
+    source += xStart + yStart * HPIXELS;
+
+    header->screenshot.width  = width;
+    header->screenshot.height = height;
+    
+    for (unsigned y = 0; y < height; y++) {
+        for (unsigned x = 0; x < width; x++) {
+            target[x] = source[x * dx];
         }
+        source += dy * HPIXELS;
         target += width;
     }
 }
