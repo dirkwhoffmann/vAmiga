@@ -365,8 +365,8 @@ typedef enum : long
     IRQ_EVENT_COUNT,
     
     // Inspector slot
-    // INS_NONE = 1,
-    INS_AMIGA = 1,
+    INS_NONE = 1,
+    INS_AMIGA,
     INS_CPU,
     INS_MEM,
     INS_CIA,

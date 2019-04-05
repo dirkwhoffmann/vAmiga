@@ -65,18 +65,6 @@ class Amiga : public HardwareComponent {
      */
     static EventID inspectionTarget;
     
-    /* Inspection interval.
-     * The emulator checks this variable in it's vsync handler and invokes
-     * inspect() periodically with a time interval equal to the number of
-     * frames specified by this variable. Furthermore, a message of type
-     * MSG_INSPECT is send to the GUI which triggers a refresh in the inspector
-     * panel (debugger).
-     * By default, the inspection period is set to INT64_MAX which effectively
-     * disabled this feature.
-     * DEPRECATED
-     */
-    static int64_t inspectionInterval;
-    
     private:
     
     /* Indicates if the Amiga should be executed in debug mode.

@@ -290,7 +290,7 @@ EventHandler::_inspectSecSlot(uint32_t slot)
         switch (secSlot[slot].id) {
             
             case 0:          i->eventName = "none"; break;
-            // case INS_NONE:   i->eventName = "INS_NONE"; break;
+            case INS_NONE:   i->eventName = "INS_NONE"; break;
             case INS_AMIGA:  i->eventName = "INS_AMIGA"; break;
             case INS_CPU:    i->eventName = "INS_CPU"; break;
             case INS_MEM:    i->eventName = "INS_MEM"; break;
@@ -716,9 +716,12 @@ EventHandler::serveIRQEvent(EventSlot s, int irqBit)
 void
 EventHandler::serveINSEvent()
 {
+    // Reschedule event
+    rescheduleSecRel(INSPECTOR_SLOT, 28000000 / 5);
+    
     switch (secSlot[INSPECTOR_SLOT].id) {
         
-        // case INS_NONE:   return;
+        case INS_NONE:   return;
         case INS_AMIGA:  amiga->inspect(); break;
         case INS_CPU:    amiga->cpu.inspect(); break;
         case INS_MEM:    amiga->mem.inspect(); break;
@@ -729,9 +732,6 @@ EventHandler::serveINSEvent()
         case INS_EVENTS: amiga->agnus.eventHandler.inspect(); break;
         default:         assert(false);
     }
-    
-    // Reschedule event
-    rescheduleSecRel(INSPECTOR_SLOT, 28000000 / 5);
     
     // Inform the GUI
     amiga->putMessage(MSG_INSPECT);

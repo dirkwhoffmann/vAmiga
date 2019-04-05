@@ -14,7 +14,7 @@
 //
 
 bool Amiga::debugMode = false;
-int64_t Amiga::inspectionInterval = INT64_MAX;
+EventID Amiga::inspectionTarget = INS_NONE;
 
 
 //
@@ -160,16 +160,15 @@ void
 Amiga::setInspectionTarget(EventID id)
 {
     suspend();
-    handler->scheduleSecRel(INSPECTOR_SLOT, 0, id);
+    inspectionTarget = id;
+    handler->scheduleSecRel(INSPECTOR_SLOT, 0, inspectionTarget);
     resume();
 }
 
 void
 Amiga::clearInspectionTarget()
 {
-    suspend();
-    handler->cancelSec(INSPECTOR_SLOT);
-    resume();
+    setInspectionTarget(INS_NONE);
 }
 
 AmigaInfo
@@ -784,8 +783,9 @@ Amiga::runLoop()
     // Prepare to run
     amiga->restartTimer();
     
-    // Enable or disable debug checks
+    // Enable or disable debugging features
     debugMode ? setControlFlags(RL_DEBUG) : clearControlFlags(RL_DEBUG);
+    handler->scheduleSecRel(INSPECTOR_SLOT, 0, inspectionTarget);
     
     // Enter the loop
     do {
