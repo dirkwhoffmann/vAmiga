@@ -200,8 +200,8 @@ public extension MetalView {
         targetZAngle = 0
         targetAlpha  = 1.0
         
-        // computeAnimationDeltaSteps(animationCycles: 120 /* 2 sec */)
-        computeAnimationDeltaSteps(animationCycles: 1 /* almost immediately */)
+        computeAnimationDeltaSteps(animationCycles: 10)
+        // computeAnimationDeltaSteps(animationCycles: 1 /* almost immediately */)
     }
 
     func blendOut() {
@@ -213,7 +213,8 @@ public extension MetalView {
         targetZAngle = 0
         targetAlpha  = 0.0
         
-        computeAnimationDeltaSteps(animationCycles: 15 /* 0.25 sec */)
+        computeAnimationDeltaSteps(animationCycles: 60)
+        // computeAnimationDeltaSteps(animationCycles: 15 /* 0.25 sec */)
     }
     
     func snapToFront() {

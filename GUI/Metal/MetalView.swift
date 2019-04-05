@@ -458,7 +458,7 @@ public class MetalView: MTKView {
 
         startFrame()
         
-        #if false
+        // #if false
         
         // Render background
         if renderBackground {
@@ -483,7 +483,7 @@ public class MetalView: MTKView {
                                           vertexCount: 6,
                                           instanceCount: 1)
         }
-        #endif
+        // #endif
         
         // Render emulator texture
         if renderForeground {
