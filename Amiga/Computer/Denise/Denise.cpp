@@ -35,7 +35,7 @@ Denise::Denise()
         { &scrollHiEven,  sizeof(scrollHiEven),  0 },
         { &scrollHiOdd,   sizeof(scrollHiOdd),   0 },
 
-        { &pixel,         sizeof(pixel),   0 },
+        { &pixel,         sizeof(pixel),         0 },
 
     });
     
@@ -51,7 +51,6 @@ Denise::_powerOn()
 {
     clock = 0;
     frameBuffer = longFrame;
-    rasterline = frameBuffer;
     
     // Initialize frame buffers with a recognizable debug pattern
     for (unsigned line = 0; line < VPIXELS; line++) {
@@ -235,34 +234,27 @@ Denise::fillShiftRegisters()
     // draw16();
 }
 
+int *
+Denise::pixelAddr(int pixel)
+{
+    assert(pixel < HPIXELS);
+    assert(amiga->agnus.vpos >= 26); // 0 .. 25 is VBLANK area
+
+    int offset = pixel + (amiga->agnus.vpos - 26) * HPIXELS;
+    assert(offset < VPIXELS * HPIXELS);
+    
+    return frameBuffer + offset;
+}
+
 void
 Denise::draw16()
 {
-    assert(amiga->agnus.vpos >= 26); // 0 .. 25 is VBLANK area
-    
-    int16_t vpos = amiga->agnus.vpos - 26;
-    int16_t hpos = (amiga->agnus.hpos - 63) * 4; // 2;
-    
-    // if (amiga->debugDMA) debug("draw16: (%d, %d)\n", vpos, hpos);
-    
-    // if (hpos > HPIXELS) return;
-    // if (vpos > 250) return;
-    
-    // uint32_t offset = (vpos * HPIXELS) + (2 * hpos);
-    uint32_t offset = (vpos * HPIXELS) + hpos;
-    if (offset + HPIXELS >= VPIXELS * HPIXELS) {
-        // warn("OUT OF RANGE!!!\n");
-        return;
-        
-    }
-    
-    uint8_t index = 0;
-    // uint8_t ind = 0;
-    
+    int *ptr = pixelAddr(pixel);
+  
     for (int i = 0; i < 16; i++) {
         
         // Read a bit slice
-        index =
+        uint8_t index =
         ((shiftReg[0] & 0x8000) >> 15) |
         ((shiftReg[1] & 0x8000) >> 14) |
         ((shiftReg[2] & 0x8000) >> 13) |
@@ -274,14 +266,12 @@ Denise::draw16()
             shiftReg[j] <<= 1;
         }
         
-        // DEBUGGING
-        // index = ((hpos + i) == vpos) ? 1 : 0;
-        
         // Draw two pixels in lores mode (no hires mode yet)
         uint32_t rgba = colorizer.getRGBA(index);
-        rasterline[pixel++] = rgba;
-        rasterline[pixel++] = rgba;
+        *ptr++ = rgba;
+        *ptr++ = rgba;
     }
+    pixel += 32;
 }
 
 void
@@ -294,13 +284,13 @@ Denise::endOfLine()
         
         // Fill the rest of the line with the current background color
         int bgcol = colorizer.getRGBA(0);
-        for (; pixel < HPIXELS; pixel++) rasterline[pixel] = bgcol;
+        int *ptr = pixelAddr(pixel);
+        int *end = pixelAddr(HPIXELS - 1);
+        
+        while (ptr < end) *ptr++ = bgcol;
     
         // Reset the horizontal pixel counter
         pixel = 0;
-        
-        // Move on to the next rasterline
-        rasterline += HPIXELS;
     }
 }
 
@@ -309,7 +299,6 @@ Denise::endOfFrame()
 {
     // Switch the active frame buffer
     frameBuffer = (frameBuffer == longFrame) ? shortFrame : longFrame;
-    rasterline = frameBuffer;
 }
 
 void

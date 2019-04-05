@@ -100,8 +100,9 @@ class Denise : public HardwareComponent {
      * points to the beginning of a rasterline, either in longFrame or
      * shortFrame. It is reset at the beginning of each frame and incremented
      * at the beginning of each rasterline.
+     * DEPRECATED
      */
-    int *rasterline = longFrame;
+    // int *rasterline = longFrame;
     
     // The current rasterline has been drawn up to this horizontal position
     short pixel;
@@ -192,6 +193,13 @@ class Denise : public HardwareComponent {
     //
     // Synthesizing pixels
     //
+    
+    private:
+    
+    // Returns the frame buffer address of a certain pixel in the current line
+    int *pixelAddr(int pixel);
+    
+    public:
     
     // Synthesizes 16 pixels from the current shift register data
     void draw16();

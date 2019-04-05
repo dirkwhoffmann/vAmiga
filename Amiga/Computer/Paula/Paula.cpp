@@ -267,12 +267,12 @@ Paula::doDiskDMA()
             amiga->mem.pokeChip8(amiga->agnus.dskpt, data2);
             amiga->agnus.dskpt = (amiga->agnus.dskpt + 1) & 0x7FFFF;
 
-            debug("Disk DMA: %X %X (%d words remain)\n", data1, data2, dsklen);
+            // debug("Disk DMA: %X %X (%d words remain)\n", data1, data2, dsklen);
             
             dsklen--;
             if ((dsklen & 0x3FFF) == 0) {
                 pokeINTREQ(0x8002);
-                debug("Disk DMA finished. Setting INTREQ bit\n");
+                // debug("Disk DMA finished. Setting INTREQ bit\n");
             }
         }
     }
