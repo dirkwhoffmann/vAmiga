@@ -75,13 +75,15 @@ class CIA : public HardwareComponent {
     // Information shown in the GUI inspector panel
     CIAInfo info;
     
+    public:
+    
+    // The CIA has been executed up to this clock cycle.
+    Cycle clock;
+
     protected:
     
     // Identification (0 = CIA A, 1 = CIA B)
     int nr;
-    
-    // The CIA has been executed up to this clock cycle.
-    Cycle clock;
     
     // Total number of skipped cycles (used by the debugger, only).
     Cycle idleCycles;

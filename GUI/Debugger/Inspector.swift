@@ -268,7 +268,8 @@ class Inspector : NSWindowController
     @IBOutlet weak var evPrimTableView: EventTableView!
     @IBOutlet weak var evSecTableView: EventTableView!
 
-
+    var timer: Timer?
+    
     // Factory method
     static func make() -> Inspector? {
         
@@ -300,6 +301,10 @@ class Inspector : NSWindowController
         amigaProxy?.enableDebugging()
         amigaProxy?.setInspectionTarget(INS_CPU)
         refresh(everything: true)
+        
+        timer = Timer.scheduledTimer(withTimeInterval: inspectionInterval, repeats: true) {
+            timer in self.refresh(everything: false)
+        }
     }
     
     // Assigns a number formatter to a control
@@ -319,8 +324,6 @@ class Inspector : NSWindowController
     
     // Updates the currently shown panel
     func refresh(everything: Bool) {
-        
-        track()
         
         if window?.isVisible == false { return }
         
@@ -364,6 +367,7 @@ extension Inspector : NSWindowDelegate {
     func windowWillClose(_ notification: Notification) {
         
         track("Closing inspector")
+        timer?.invalidate()
         amigaProxy?.disableDebugging()
         amigaProxy?.clearInspectionTarget()
     }

@@ -68,7 +68,13 @@ EventHandler::_inspect()
     // Prevent external access to variable 'info'
     pthread_mutex_lock(&lock);
     
+    info.masterClock = amiga->masterClock;
     info.dmaClock = amiga->agnus.clock;
+    info.ciaAClock = amiga->ciaA.clock;
+    info.ciaBClock  = amiga->ciaB.clock;
+    info.frame = amiga->agnus.frame;
+    info.vpos = amiga->agnus.vpos;
+    info.hpos = amiga->agnus.hpos;
     
     // Primary events
     for (unsigned i = 0; i < PRIM_SLOT_COUNT; i++)
@@ -716,12 +722,9 @@ EventHandler::serveIRQEvent(EventSlot s, int irqBit)
 void
 EventHandler::serveINSEvent()
 {
-    // Reschedule event
-    rescheduleSecRel(INSPECTOR_SLOT, 28000000 / 5);
-    
     switch (secSlot[INSPECTOR_SLOT].id) {
         
-        case INS_NONE:   return;
+        case INS_NONE:   break;
         case INS_AMIGA:  amiga->inspect(); break;
         case INS_CPU:    amiga->cpu.inspect(); break;
         case INS_MEM:    amiga->mem.inspect(); break;
@@ -733,8 +736,8 @@ EventHandler::serveINSEvent()
         default:         assert(false);
     }
     
-    // Inform the GUI
-    amiga->putMessage(MSG_INSPECT);
+    // Reschedule event
+    rescheduleSecRel(INSPECTOR_SLOT, (Cycle)(inspectionInterval * 28000000));
 }
 
 bool

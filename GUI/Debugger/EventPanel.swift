@@ -20,7 +20,7 @@ extension Inspector {
             
         }
         
-        if let info = amigaProxy?.getInfo() {
+        if let info = amigaProxy?.dma.getEventInfo() {
             evMasterClock.stringValue = String(format: "%lld",
                                                info.masterClock)
             evInCpuCycles.stringValue = String(format: "%lld",

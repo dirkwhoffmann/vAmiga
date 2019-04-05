@@ -1043,7 +1043,7 @@
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="CIA" identifier="" id="Zr1-zQ-1rt">
-                                <view key="view" ambiguous="YES" id="kdT-8z-eJ6">
+                                <view key="view" id="kdT-8z-eJ6">
                                     <rect key="frame" x="10" y="33" width="824" height="406"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -2194,7 +2194,7 @@
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="DMA" identifier="" id="2wr-Zc-eub">
-                                <view key="view" id="7eA-vd-r9Y">
+                                <view key="view" ambiguous="YES" id="7eA-vd-r9Y">
                                     <rect key="frame" x="10" y="33" width="824" height="406"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -2351,7 +2351,7 @@
                                             </view>
                                         </box>
                                         <box fixedFrame="YES" title="Display DMA" translatesAutoresizingMaskIntoConstraints="NO" id="CwY-Ry-AnY">
-                                            <rect key="frame" x="162" y="230" width="178" height="146"/>
+                                            <rect key="frame" x="171" y="230" width="178" height="146"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <view key="contentView" id="MjP-sj-yDi">
                                                 <rect key="frame" x="3" y="3" width="172" height="128"/>
@@ -2433,7 +2433,7 @@
                                             </view>
                                         </box>
                                         <box fixedFrame="YES" title="Bitplanes" translatesAutoresizingMaskIntoConstraints="NO" id="ivR-vZ-bje">
-                                            <rect key="frame" x="442" y="96" width="185" height="280"/>
+                                            <rect key="frame" x="360" y="96" width="185" height="280"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <view key="contentView" id="lrp-ri-fbT">
                                                 <rect key="frame" x="3" y="3" width="179" height="262"/>
@@ -2599,7 +2599,7 @@
                                             </view>
                                         </box>
                                         <box fixedFrame="YES" title="Beam position" translatesAutoresizingMaskIntoConstraints="NO" id="ngx-rX-gC1">
-                                            <rect key="frame" x="162" y="117" width="178" height="90"/>
+                                            <rect key="frame" x="171" y="125" width="178" height="90"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <view key="contentView" id="llb-WF-4y8">
                                                 <rect key="frame" x="3" y="3" width="172" height="72"/>
@@ -2644,6 +2644,11 @@
                                                 </subviews>
                                             </view>
                                         </box>
+                                        <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EyK-QJ-Vtg">
+                                            <rect key="frame" x="612" y="157" width="144" height="162"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="baustelle" id="0QU-JP-HX7"/>
+                                        </imageView>
                                     </subviews>
                                 </view>
                             </tabViewItem>

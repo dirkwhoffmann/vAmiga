@@ -16,8 +16,6 @@ extension Inspector {
         guard let dma = amigaProxy?.dma else { return }
         let info = dma.getInfo()
         
-        track("Refreshing Agnus inspector tab")
-        
         if everything {
             
         }

@@ -382,6 +382,9 @@ static inline bool isCopEvent(EventID id) { return id <= COP_EVENT_COUNT; }
 static inline bool isBltEvent(EventID id) { return id <= BLT_EVENT_COUNT; }
 static inline bool isRasEvent(EventID id) { return id <= RAS_EVENT_COUNT; }
 
+// Inspection interval in seconds (interval between INS_xxx events)
+static const double inspectionInterval = 0.1;
+
 
 //
 // Notification messages (GUI communication)
@@ -399,7 +402,6 @@ typedef enum
     MSG_POWER_OFF,
     MSG_RUN,
     MSG_PAUSE,
-    MSG_INSPECT,
     MSG_RESET,
     MSG_ROM_MISSING,
     MSG_WARP_ON,
@@ -639,7 +641,14 @@ EventSlotInfo;
 
 typedef struct
 {
+    Cycle masterClock;
     Cycle dmaClock;
+    Cycle ciaAClock;
+    Cycle ciaBClock;
+    long frame;
+    long vpos;
+    long hpos;
+    
     EventSlotInfo primary[7];
     EventSlotInfo secondary[15];
 }
