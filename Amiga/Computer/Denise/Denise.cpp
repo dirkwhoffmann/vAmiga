@@ -34,6 +34,9 @@ Denise::Denise()
         { &scrollLowOdd,  sizeof(scrollLowOdd),  0 },
         { &scrollHiEven,  sizeof(scrollHiEven),  0 },
         { &scrollHiOdd,   sizeof(scrollHiOdd),   0 },
+
+        { &pixel,         sizeof(pixel),   0 },
+
     });
     
 }
@@ -48,7 +51,7 @@ Denise::_powerOn()
 {
     clock = 0;
     frameBuffer = longFrame;
-    pixelBuffer = frameBuffer;
+    rasterline = frameBuffer;
     
     // Initialize frame buffers with a recognizable debug pattern
     for (unsigned line = 0; line < VPIXELS; line++) {
@@ -268,19 +271,37 @@ Denise::draw16()
         
         // Draw two pixels in lores mode (no hires mode yet)
         uint32_t rgba = colorizer.getRGBA(index);
-        pixelBuffer[offset++] = rgba;
-        pixelBuffer[offset++] = rgba;
+        rasterline[pixel++] = rgba;
+        rasterline[pixel++] = rgba;
+    }
+}
+
+void
+Denise::endOfLine()
+{
+    // debug("endOfLine pixel = %d HPIXELS = %d\n", pixel, HPIXELS);
+    
+    // Check for VBLANK area
+    if (amiga->agnus.vpos >= 26) {
+        
+        // Fill the rest of the line with the current background color
+        int bgcol = colorizer.getRGBA(0);
+        for (; pixel < HPIXELS; pixel++) rasterline[pixel] = bgcol;
+    
+        // Reset the horizontal pixel counter
+        pixel = 0;
+        
+        // Move on to the next rasterline
+        rasterline += HPIXELS;
     }
 }
 
 void
 Denise::endOfFrame()
 {
-    bufferoffset = 0;
-    
     // Switch the active frame buffer
     frameBuffer = (frameBuffer == longFrame) ? shortFrame : longFrame;
-    pixelBuffer = frameBuffer;
+    rasterline = frameBuffer;
 }
 
 void

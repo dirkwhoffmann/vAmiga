@@ -200,7 +200,8 @@ public extension MetalView {
         targetZAngle = 0
         targetAlpha  = 1.0
         
-        computeAnimationDeltaSteps(animationCycles: 120 /* 2 sec */)
+        // computeAnimationDeltaSteps(animationCycles: 120 /* 2 sec */)
+        computeAnimationDeltaSteps(animationCycles: 1 /* almost immediately */)
     }
 
     func blendOut() {

@@ -922,6 +922,9 @@ Agnus::hsyncHandler()
     }
     assert(hpos == 226 /* 0xE2 */);
     
+    // Let Denise finish the current rasterline
+    amiga->denise.endOfLine();
+    
     // CIA B counts HSYNCs
     amiga->ciaB.incrementTOD();
     

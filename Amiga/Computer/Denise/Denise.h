@@ -101,10 +101,10 @@ class Denise : public HardwareComponent {
      * shortFrame. It is reset at the beginning of each frame and incremented
      * at the beginning of each rasterline.
      */
-    int *pixelBuffer = longFrame;
+    int *rasterline = longFrame;
     
-    // Offset into the pixelBuffer
-    short bufferoffset;
+    // The current rasterline has been drawn up to this horizontal position
+    short pixel;
     
     
     //
@@ -216,7 +216,10 @@ class Denise : public HardwareComponent {
      */
     inline void *screenBuffer() { return (frameBuffer == longFrame) ? shortFrame : longFrame; }
     
-    // Fake some video output
+    // HSYNC handler
+    void endOfLine();
+
+    // VSYNC handler
     void endOfFrame();
     
     

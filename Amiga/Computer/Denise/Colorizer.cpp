@@ -17,8 +17,12 @@ Colorizer::Colorizer()
         
         { &colorReg,  sizeof(colorReg),  WORD_ARRAY },
     });
-    
-    clearColorCache(); 
+}
+
+void
+Colorizer::_powerOn()
+{
+    clearColorCache();
 }
 
 uint16_t

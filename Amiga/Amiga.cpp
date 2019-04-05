@@ -353,9 +353,9 @@ Amiga::_powerOn()
     m68k_pulse_reset();
     
     // For debugging, we start in debug mode and set a breakpoint
-    debugMode = true;
+    // debugMode = true;
     
-    cpu.bpManager.setBreakpointAt(0xFC570E); // Blitter
+    // cpu.bpManager.setBreakpointAt(0xFC570E); // Blitter
     // cpu.bpManager.setBreakpointAt(0xFE8A6E); // All Blitter stuff done
     
     // Update the recorded debug information
