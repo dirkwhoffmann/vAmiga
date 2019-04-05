@@ -616,6 +616,8 @@ extension MyController {
         case MSG_POWER_ON:
             
             // track("Power on")
+            // metal.updateLongFrameTexture()
+            // metal.updateShortFrameTexture()
             metal.blendIn()
             toolbar.validateVisibleItems()
             myAppDelegate.inspector?.refresh(everything: true)

@@ -66,7 +66,14 @@ Denise::_powerOn()
 void
 Denise::_powerOff()
 {
-    
+    /* REMOVE AFTER DEBUGGING
+    for (unsigned line = 0; line < VPIXELS; line++) {
+        for (unsigned i = 0; i < HPIXELS; i++) {
+            longFrame[line * HPIXELS + i] =
+            shortFrame[line * HPIXELS + i] = 0x000000FF;
+        }
+    }
+    */
 }
 
 void

@@ -447,6 +447,14 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->denise->shortFrameIsReady();
 }
+- (void *) longFrame
+{
+    return wrapper->denise->getLongFrame();
+}
+- (void *) shortFrame
+{
+    return wrapper->denise->getShortFrame();
+}
 - (void *) screenBuffer
 {
     return wrapper->denise->screenBuffer();

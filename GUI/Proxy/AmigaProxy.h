@@ -326,6 +326,8 @@ struct AmigaFileWrapper;
 
 - (BOOL) longFrameIsReady;
 - (BOOL) shortFrameIsReady;
+- (void *) longFrame;
+- (void *) shortFrame;
 - (void *) screenBuffer;
 
 @end

@@ -485,7 +485,7 @@ Amiga::_setWarp(bool value) {
 void
 Amiga::suspend()
 {
-    debug(1, "Suspending (%d)...\n", suspendCounter);
+    debug(2, "Suspending (%d)...\n", suspendCounter);
     
     if (suspendCounter == 0 && !isRunning())
     return;
@@ -497,7 +497,7 @@ Amiga::suspend()
 void
 Amiga::resume()
 {
-    debug(1, "Resuming (%d)...\n", suspendCounter);
+    debug(2, "Resuming (%d)...\n", suspendCounter);
     
     if (suspendCounter == 0)
     return;

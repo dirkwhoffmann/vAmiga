@@ -43,6 +43,11 @@ Memory::_powerOn()
     // Make Rom writable if an A1000 is emulated
     kickIsWritable = amiga->config.model == A1000;
     
+    // Wipe out RAM
+    if (chipRam) memset(chipRam, 0, chipRamSize);
+    if (slowRam) memset(slowRam, 0, slowRamSize);
+    if (fastRam) memset(fastRam, 0, fastRamSize);
+
     // Set up the memory lookup table
     updateMemSrcTable();
 }

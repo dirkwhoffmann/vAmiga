@@ -210,6 +210,12 @@ class Denise : public HardwareComponent {
     inline bool longFrameIsReady() { return (frameBuffer == shortFrame); }
     inline bool shortFrameIsReady() { return (frameBuffer == longFrame); }
     
+    // Returns the long frame screen buffer
+    inline void *getLongFrame() { return longFrame; }
+
+    // Returns the short frame screen buffer
+    inline void *getShortFrame() { return shortFrame; }
+
     /* Returns the currently stabel screen buffer.
      * If Denise is working on the long frame, a pointer to the short frame is
      * returned and vice versa.

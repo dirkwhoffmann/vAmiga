@@ -166,7 +166,6 @@ CIA::triggerTodIrq()
 void
 CIA::triggerSerialIrq()
 {
-    debug("triggerSerialIrq()\n");
     delay |= CIASetInt0;
     delay |= CIASetIcr0;
 }
@@ -520,7 +519,6 @@ CIA::poke(uint16_t addr, uint8_t value)
             
             // Raise an interrupt in the next cycle if conditions match
             if ((imr & icr & 0x1F) && INT && !(delay & CIAReadIcr1)) {
-                debug("CIA_INTERRUPT_CONTROL\n");
                 delay |= (CIASetInt1 | CIASetIcr1);
             }
 			return;

@@ -260,33 +260,33 @@ public class MetalView: MTKView {
         // Update texture coordinates in vertex buffer
         buildVertexBuffer()
     }
+
+    func updateLongFrameTexture() {
+        
+        longFrameTexture.replace(region: MTLRegionMake2D(0, 0, HPIXELS, VPIXELS),
+                                 mipmapLevel: 0,
+                                 slice: 0,
+                                 withBytes: controller.amiga.denise.longFrame()!,
+                                 bytesPerRow: 4 * HPIXELS,
+                                 bytesPerImage: 4 * VPIXELS * HPIXELS)
+    }
+    
+    func updateShortFrameTexture() {
+        
+        shortFrameTexture.replace(region: MTLRegionMake2D(0, 0, HPIXELS, VPIXELS),
+                                  mipmapLevel: 0,
+                                  slice: 0,
+                                  withBytes: controller.amiga.denise.shortFrame()!,
+                                  bytesPerRow: 4 * HPIXELS,
+                                  bytesPerImage: 4 * VPIXELS * HPIXELS)
+    }
     
     func updateTexture() {
         
-        let buf = controller.amiga.denise.screenBuffer()
-        assert(buf != nil)
-        
-        let pixelSize = 4
-        let width = Int(HPIXELS)
-        let height = Int(VPIXELS)
-        let rowBytes = width * pixelSize
-        let imageBytes = rowBytes * height
-        let region = MTLRegionMake2D(0,0,width,height)
-        
         if (controller.amiga.denise.longFrameIsReady()) {
-            longFrameTexture.replace(region: region,
-                                     mipmapLevel: 0,
-                                     slice: 0,
-                                     withBytes: buf!,
-                                     bytesPerRow: rowBytes,
-                                     bytesPerImage: imageBytes)
+            updateLongFrameTexture()
         } else {
-            shortFrameTexture.replace(region: region,
-                                     mipmapLevel: 0,
-                                     slice: 0,
-                                     withBytes: buf!,
-                                     bytesPerRow: rowBytes,
-                                     bytesPerImage: imageBytes)
+            updateShortFrameTexture()
         }
     }
  

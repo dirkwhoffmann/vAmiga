@@ -82,6 +82,7 @@ void
 Colorizer::clearColorCache()
 {
     memset(colorCache, 0, sizeof(colorCache));
+    memset(colorRGBA, 0, sizeof(colorRGBA));
 }
 
 void
