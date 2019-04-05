@@ -52,6 +52,12 @@ class Amiga : public HardwareComponent {
     
     private:
     
+    // The Amiga model we're going to emulate
+    AmigaModel model = A500;
+    
+    // Indicates wether this machine has a real-time clock
+    bool realTimeClock = false;
+    
     // Information shown in the GUI inspector panel
     AmigaInfo info;
     
@@ -129,6 +135,7 @@ class Amiga : public HardwareComponent {
     
     public:
     
+    // DEPRECATED: REPLACE BY getConfig()
     AmigaConfiguration config;
     
     
@@ -290,7 +297,7 @@ class Amiga : public HardwareComponent {
     public:
     
     // Returns the currently set configuration.
-    AmigaConfiguration getConfig() { return config; }
+    AmigaConfiguration getConfig();
     
     // Returns the currently set memory configuration.
     AmigaMemConfiguration getMemConfig();
@@ -338,8 +345,8 @@ class Amiga : public HardwareComponent {
 
     // Returns the latest internal state recorded by inspect()
     AmigaInfo getInfo();
-
  
+    
     //
     // Controlling the emulation thread
     //

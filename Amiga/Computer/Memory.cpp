@@ -178,9 +178,10 @@ Memory::alloc(size_t size, uint8_t *&ptrref, size_t &sizeref)
     // Allocate memory
     if (size) {
         
-        // We allocate three bytes more than we need to handle the case that
-        // a long word access is performed on the last valid memory address.
-        size_t allocSize = KB(size) + 3;
+        // Note: We allocate three bytes more than we need to handle the case
+        // that a long word access is performed on the last memory address.
+        size_t allocSize = size + 3;
+        
         if (!(ptrref = new (std::nothrow) uint8_t[allocSize])) {
             warn("Cannot allocate %d KB of memory\n", size);
             return false;

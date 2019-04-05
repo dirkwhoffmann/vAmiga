@@ -95,9 +95,12 @@ Amiga::Amiga()
     
     registerSnapshotItems(vector<SnapshotItem> {
         
-        { &config, sizeof(config), 0 },
-        { &masterClock, sizeof(masterClock), 0 },
-        { &clockBase, sizeof(clockBase), 0 },
+        { &model,         sizeof(model),         0 },
+        { &realTimeClock, sizeof(realTimeClock), 0 },
+        
+        { &config,        sizeof(config),        0 },
+        { &masterClock,   sizeof(masterClock),   0 },
+        { &clockBase,     sizeof(clockBase),     0 },
     });
     
     // Install a reference to the top-level object in each subcomponent
@@ -183,6 +186,22 @@ Amiga::getInfo()
     return result;
 }
 
+AmigaConfiguration
+Amiga::getConfig()
+{
+    AmigaConfiguration config;
+    
+    config.model = model;
+    config.realTimeClock = realTimeClock;
+    config.layout = config.layout; // TODO MOVE TO KEYBOARD
+    config.df0.connected = df0.isConnected();
+    config.df0.type = config.df0.type; // TODO MOVE TO DRIVE
+    config.df1.connected = df1.isConnected();
+    config.df1.type = config.df1.type; // TODO MOVE TO DRIVE
+
+    return config;
+}
+
 AmigaMemConfiguration
 Amiga::getMemConfig()
 {
@@ -200,18 +219,18 @@ Amiga::getMemConfig()
 }
 
 bool
-Amiga::configureModel(AmigaModel model)
+Amiga::configureModel(AmigaModel m)
 {
-    if (!isAmigaModel(model)) {
+    if (!isAmigaModel(m)) {
         
-        warn("Invalid Amiga model: %d\n", model);
+        warn("Invalid Amiga model: %d\n", m);
         warn("       Valid values: %d, %d, %d\n", A500, A1000, A2000);
         return false;
     }
     
-    if (config.model != model) {
+    if (model != m) {
         
-        config.model = model;
+        model = m;
         putMessage(MSG_CONFIG);
     }
     
@@ -241,6 +260,7 @@ Amiga::configureChipMemory(long size)
     }
     
     mem.allocateChipRam(KB(size));
+    putMessage(MSG_CONFIG);
     return true;
 }
 
@@ -255,6 +275,7 @@ Amiga::configureSlowMemory(long size)
     }
     
     mem.allocateSlowRam(KB(size));
+    putMessage(MSG_CONFIG);
     return true;
 }
 
@@ -269,16 +290,18 @@ Amiga::configureFastMemory(long size)
     }
     
     mem.allocateFastRam(KB(size));
+    putMessage(MSG_CONFIG);
     return true;
 }
 
 bool
 Amiga::configureRealTimeClock(bool value)
 {
-    if (config.realTimeClock != value) {
+    if (realTimeClock != value) {
         
-        config.realTimeClock = value;
+        realTimeClock = value;
         mem.updateMemSrcTable();
+        putMessage(MSG_CONFIG);
     }
     
     return true;
@@ -292,18 +315,22 @@ Amiga::configureDrive(unsigned driveNr, bool connected)
     switch (driveNr) {
         
         case 0:
-        config.df0.connected = connected;
-        df0.setConnected(connected);
-        return true;
+        
+        df0.setConnected(true); //The internal drive cannot be disconnected
+        break;
         
         case 1:
-        config.df1.connected = connected;
         df1.setConnected(connected);
-        return true;
+        break;
+        
+        default:
+        warn("Invalid drive number (%d). Ignoring.\n", driveNr);
+        return false;
+        
     }
     
-    warn("Invalid drive number (%d). Ignoring.\n", driveNr);
-    return false;
+    putMessage(MSG_CONFIG);
+    return true;
 }
 
 bool

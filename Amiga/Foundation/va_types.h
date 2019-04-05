@@ -493,7 +493,7 @@ typedef void Callback(const void *, int, long);
 //
 
 /* Amiga configuration
- * This is a full description of the computer we are going to emulate.
+ * This is a full description of the emulated computer model.
  */
 typedef struct
 {
@@ -505,8 +505,8 @@ DriveConfiguration;
 typedef struct
 {
     AmigaModel model;
-    long layout;
     bool realTimeClock;
+    long layout;
     DriveConfiguration df0;
     DriveConfiguration df1;
 }

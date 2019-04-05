@@ -42,6 +42,8 @@ Drive::Drive(unsigned nr)
 void
 Drive::_powerOn()
 {
+    // Make sure that drive 0 is always connected
+    if (nr == 0) connected = true;
     
 }
 
@@ -79,7 +81,8 @@ Drive::_dump()
 void
 Drive::setConnected(bool value)
 {
-    if (connected != value) {
+    // Note: Only external drives can be disconnected (nr != 0)
+    if (nr != 0 && connected != value) {
 
         connected = value;
         amiga->putMessage(connected ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, nr);
