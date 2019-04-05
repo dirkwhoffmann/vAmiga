@@ -258,7 +258,6 @@ class CIA : public HardwareComponent {
     //
     
     void _powerOn() override;
-    void _powerOff() override;
     void _inspect() override;
     void _dump() override;
     
@@ -459,6 +458,7 @@ class CIAA : public CIA {
     public:
     
     CIAA();
+    void _powerOff() override;
     void _dump() override;
     
     private:

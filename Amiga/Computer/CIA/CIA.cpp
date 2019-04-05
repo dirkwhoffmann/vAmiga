@@ -84,12 +84,6 @@ CIA::_powerOn()
 }
 
 void
-CIA::_powerOff()
-{
-
-}
-
-void
 CIA::_inspect()
 {
     // Prevent external access to variable 'info'
@@ -926,8 +920,6 @@ CIA::executeOneCycle()
     // Generate clock signal
     if (timerAOutput && (CRA & 0x40) /* output mode */ ) {
         
-        debug("§§§ SERIAL SHIFT OUTPUT MODE\n");
-        
         if (serCounter) {
             
             // Toggle serial clock signal
@@ -938,7 +930,6 @@ CIA::executeOneCycle()
             // Load shift register
             delay &= ~(CIASerLoad1 | CIASerLoad0);
             feed &= ~CIASerLoad0;
-            debug("§§§ serCounter = 8\n");
             serCounter = 8;
             feed ^= CIASerClk0;
         }
@@ -1233,6 +1224,12 @@ void
 CIAA::_dump()
 {
     CIA::_dump();
+}
+
+void
+CIAA::_powerOff()
+{
+    amiga->putMessage(MSG_POWER_LED_OFF);
 }
 
 void

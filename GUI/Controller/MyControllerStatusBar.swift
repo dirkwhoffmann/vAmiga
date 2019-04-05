@@ -27,6 +27,8 @@ extension MyController {
         // Visibility
         let items: [NSView : Bool] = [
             
+            powerLED: true,
+            
             df0LED:  amiga.df0.isConnected(),
             df0Disk: amiga.df0.isConnected() && amiga.df0.hasDisk(),
             df0DMA:  amiga.diskController.doesDMA(0),

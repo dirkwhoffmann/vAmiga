@@ -68,6 +68,7 @@ Denise::_powerOff()
 {
     
 }
+
 void
 Denise::_reset()
 {

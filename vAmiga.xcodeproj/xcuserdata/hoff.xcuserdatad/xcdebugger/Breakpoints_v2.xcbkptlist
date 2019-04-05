@@ -47,11 +47,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "GUI/Controller/MyControllerStatusBar.swift"
-            timestampString = "570628398.0427721"
+            timestampString = "576152520.488647"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "31"
-            endingLineNumber = "31"
+            startingLineNumber = "33"
+            endingLineNumber = "33"
             landmarkName = "refreshStatusBar()"
             landmarkType = "7">
          </BreakpointContent>
