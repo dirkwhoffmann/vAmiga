@@ -58,25 +58,6 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->cpu->getTracedInstrInfo(index);
 }
-- (uint32_t) getPC
-{
-    return wrapper->cpu->getPC();
-}
-/*
-- (BOOL) tracing
-{
-    return wrapper->cpu->tracingEnabled();
-}
-- (void) setTracing:(BOOL)b
-{
-    b ? wrapper->cpu->startTracing() : wrapper->cpu->stopTracing();
-}
-*/
-- (NSInteger) disassemble:(char *)str pc:(NSInteger)pc
-{
-    assert(str != NULL);
-    return m68k_disassemble(str, (unsigned)pc, M68K_CPU_TYPE_68000);
-}
 - (BOOL) hasBreakpointAt:(uint32_t)addr
 {
     return wrapper->cpu->bpManager.hasBreakpointAt(addr);
