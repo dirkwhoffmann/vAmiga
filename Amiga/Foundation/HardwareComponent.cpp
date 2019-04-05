@@ -9,8 +9,14 @@
 
 #include "Amiga.h"
 
+HardwareComponent::HardwareComponent()
+{
+    pthread_mutex_init(&lock, NULL);
+}
+
 HardwareComponent::~HardwareComponent()
 {
+    pthread_mutex_destroy(&lock);
     debug(3, "Terminated\n");
 }
 

@@ -79,6 +79,9 @@ Denise::_ping()
 void
 Denise::_inspect()
 {
+    // Prevent external access to variable 'info'
+    pthread_mutex_lock(&lock);
+    
     info.bplcon0 = bplcon0;
     info.bplcon1 = bplcon1;
     info.bplcon2 = bplcon2;
@@ -88,6 +91,8 @@ Denise::_inspect()
     
     for (unsigned i = 0; i < 32; i++)
     info.color[i] = colorizer.getRGBA(i);
+    
+    pthread_mutex_unlock(&lock);
 }
 
 void
@@ -101,9 +106,9 @@ Denise::getInfo()
 {
     DeniseInfo result;
     
-    pthread_mutex_lock(&amiga->lock);
+    pthread_mutex_lock(&lock);
     result = info;
-    pthread_mutex_unlock(&amiga->lock);
+    pthread_mutex_unlock(&lock);
     
     return result;
 }

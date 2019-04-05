@@ -132,6 +132,9 @@ CPU::_ping()
 void
 CPU::_inspect()
 {
+    // Prevent external access to variable 'info'
+    pthread_mutex_lock(&lock);
+    
     uint32_t pc = getPC();
     
     // Registers
@@ -176,19 +179,7 @@ CPU::_inspect()
         info.traceInstr[CPUINFO_INSTR_COUNT - i] = disassemble(instr.pc, instr.sp);
     }
     
-    // REMOVE ASAP
-    /*
-    debug("_inspect()\n");
-    for (unsigned i = 0; i < CPUINFO_INSTR_COUNT; i++) {
-        debug("%d: %s %s %s\n",
-              i, info.instr[i].addr, info.instr[i].data, info.instr[i].instr);
-    }
-    debug("\n");
-    for (unsigned i = 0; i < CPUINFO_INSTR_COUNT; i++) {
-        debug("%d: %s %s %s\n",
-              i, info.traceInstr[i].addr, info.traceInstr[i].data, info.traceInstr[i].instr);
-    }
-    */
+    pthread_mutex_unlock(&lock);
 }
 
 void
@@ -218,9 +209,9 @@ CPU::getInfo()
 {
     CPUInfo result;
     
-    pthread_mutex_lock(&amiga->lock);
+    pthread_mutex_lock(&lock);
     result = info;
-    pthread_mutex_unlock(&amiga->lock);
+    pthread_mutex_unlock(&lock);
     
     return result;
 }

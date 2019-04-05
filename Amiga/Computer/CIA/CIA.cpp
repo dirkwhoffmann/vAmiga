@@ -92,6 +92,9 @@ CIA::_powerOff()
 void
 CIA::_inspect()
 {
+    // Prevent external access to variable 'info'
+    pthread_mutex_lock(&lock);
+    
     info.portA.port = PA;
     info.portA.reg = PRA;
     info.portA.dir = DDRA;
@@ -125,6 +128,8 @@ CIA::_inspect()
     
     info.idleCycles = idle();
     info.idlePercentage = (double)idleCycles / (double)clock;
+    
+    pthread_mutex_unlock(&lock);
 }
 
 void
@@ -767,9 +772,9 @@ CIA::getInfo()
 {
     CIAInfo result;
     
-    pthread_mutex_lock(&amiga->lock);
+    pthread_mutex_lock(&lock);
     result = info;
-    pthread_mutex_unlock(&amiga->lock);
+    pthread_mutex_unlock(&lock);
     
     return result;
 }

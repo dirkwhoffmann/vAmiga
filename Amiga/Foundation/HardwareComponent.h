@@ -22,7 +22,7 @@ class EventHandler;
  */
 class HardwareComponent : public AmigaObject {
     
-protected:
+    protected:
     
     /* Type and behavior of a snapshot item
      * The format flags are important when big chunks of data are specified.
@@ -38,7 +38,7 @@ protected:
         QWORD_ARRAY      = 0x08, // Data chunk is an array of quad words
         
         PERSISTANT       = 0x10, // Don't zero out in powerOn()
-
+        
     };
     
     /* Fingerprint of a snapshot item
@@ -57,7 +57,7 @@ protected:
         
     } SnapshotItem;
     
-public:
+    public:
     
     /* Reference to the Amiga top-level object.
      * Because nearly all hardware components need to interact very closely
@@ -72,7 +72,13 @@ public:
      */
     EventHandler *handler = NULL;
     
-protected:
+    protected:
+    
+    /* Access lock for shared variables
+     * This lock is used to control the read and write operations for all
+     * variables that are accessed by both the emulator thread and the GUI.
+     */
+    pthread_mutex_t lock;
     
     // Sub components of this component
     vector<HardwareComponent *> subComponents;
@@ -101,8 +107,9 @@ protected:
     // Indicates if this component should run in warp mode
     bool warp = false;
     
-public:
+    public:
     
+    HardwareComponent();
     virtual ~HardwareComponent();
     
     
@@ -110,7 +117,7 @@ public:
     // Methods from AmigaObject
     //
     
-private:
+    private:
     
     void prefix() override;
     
@@ -119,7 +126,7 @@ private:
     // Initializing the component
     //
     
-public:
+    public:
     
     /* Assigns the top-level Amiga object.
      * The provided reference is propagated automatically to all sub components.
@@ -195,14 +202,14 @@ public:
      */
     virtual void pause();
     virtual void _pause() { };
-
+    
     
     /* Emulates a reset event on the virtual Amiga.
      * By default, each component resets its sub components.
      */
     virtual void reset();
     virtual void _reset() { }
-  
+    
     /* Asks the component to inform the GUI about its current state.
      * The GUI invokes this function when it needs to update all of its visual
      * elements. This happens, e.g., when a snapshot file was loaded.
@@ -228,7 +235,7 @@ public:
     // Dumps some debug information about the internal state to the console.
     void dump();
     virtual void _dump() { }
-        
+    
     // Getter for warp mode
     bool getWarp() { return warp; }
     
@@ -245,14 +252,14 @@ public:
      * This function is called once (in the constructor).
      */
     void registerSubcomponents(vector<HardwareComponent *> components);
-        
+    
     /* Registers the snapshot items of this component.
      * This function is called once (in the constructor).
      */
     void registerSnapshotItems(vector<SnapshotItem> items);
     
     
-public:
+    public:
     
     //
     // Loading and saving snapshots

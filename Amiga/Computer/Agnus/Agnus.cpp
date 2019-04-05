@@ -96,6 +96,9 @@ Agnus::_ping()
 void
 Agnus::_inspect()
 {
+    // Prevent external access to variable 'info'
+    pthread_mutex_lock(&lock);
+    
     info.dmacon  = dmacon;
     info.diwstrt = diwstrt;
     info.diwstop = diwstop;
@@ -110,6 +113,8 @@ Agnus::_inspect()
     for (unsigned i = 0; i < 4; i++)  info.audlc[i] = audlc[i];
     for (unsigned i = 0; i < 6; i++)  info.bplpt[i] = bplpt[i];
     for (unsigned i = 0; i < 8; i++) info.sprptr[i] = sprpt[i];
+    
+    pthread_mutex_unlock(&lock);
 }
 
 void
@@ -134,9 +139,9 @@ Agnus::getInfo()
 {
     DMAInfo result;
     
-    pthread_mutex_lock(&amiga->lock);
+    pthread_mutex_lock(&lock);
     result = info;
-    pthread_mutex_unlock(&amiga->lock);
+    pthread_mutex_unlock(&lock);
     
     return result;
 }

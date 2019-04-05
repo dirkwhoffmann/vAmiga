@@ -105,9 +105,6 @@ Amiga::Amiga()
     
     // Initialize the mach timer info
     mach_timebase_info(&tb);
-    
-    // Initialize the mutex protecting the runloop control flags
-    pthread_mutex_init(&lock, NULL);
 }
 
 Amiga::~Amiga()
@@ -119,8 +116,6 @@ Amiga::~Amiga()
         debug("Stop being the active emulator instance\n");
         activeAmiga = NULL;
     }
-    
-    pthread_mutex_destroy(&lock);
 }
 
 void
@@ -430,6 +425,9 @@ Amiga::_ping()
 void
 Amiga::_inspect()
 {
+    // Prevent external access to variable 'info'
+    pthread_mutex_lock(&lock);
+    
     info.masterClock = masterClock;
     info.dmaClock = agnus.clock;
     info.ciaAClock = ciaA.clock;
@@ -437,6 +435,8 @@ Amiga::_inspect()
     info.frame = agnus.frame;
     info.vpos = agnus.vpos;
     info.hpos = agnus.hpos;
+    
+    pthread_mutex_unlock(&lock);
 }
 
 void

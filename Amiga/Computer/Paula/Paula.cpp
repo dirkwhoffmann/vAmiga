@@ -69,8 +69,13 @@ Paula::_ping()
 void
 Paula::_inspect()
 {
+    // Prevent external access to variable 'info'
+    pthread_mutex_lock(&lock);
+    
     info.intreq = intreq;
     info.intena = intena;
+    
+    pthread_mutex_unlock(&lock);
 }
 
 void
@@ -84,9 +89,9 @@ Paula::getInfo()
 {
     PaulaInfo result;
     
-    pthread_mutex_lock(&amiga->lock);
+    pthread_mutex_lock(&lock);
     result = info;
-    pthread_mutex_unlock(&amiga->lock);
+    pthread_mutex_unlock(&lock);
     
     return result;
 }

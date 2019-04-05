@@ -56,13 +56,7 @@ class Amiga : public HardwareComponent {
     AmigaInfo info;
     
     public:
-    
-    /* Access lock for shared variables
-     * This lock is used to control the read and write operations for all
-     * variables that are accessed by both the emulator thread and the GUI.
-     */
-    pthread_mutex_t lock;
-    
+        
     /* Inspection target
      * To update the GUI periodically, the emulator schedules this event in the
      * INSPECTOR_SLOT (secondary table) on a periodic basis. If the event is

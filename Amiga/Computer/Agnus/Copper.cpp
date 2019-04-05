@@ -51,6 +51,9 @@ Copper::_ping()
 void
 Copper::_inspect()
 {
+    // Prevent external access to variable 'info'
+    pthread_mutex_lock(&lock);
+    
     info.cdang     = cdang;
     info.active    = amiga->agnus.eventHandler.isPending(COP_SLOT);
     info.coppc     = coppc;
@@ -58,6 +61,8 @@ Copper::_inspect()
     info.copins[1] = copins2;
     info.coplc[0]  = coplc[0];
     info.coplc[1]  = coplc[1];
+    
+    pthread_mutex_unlock(&lock);
 }
 
 void
@@ -71,9 +76,9 @@ Copper::getInfo()
 {
     CopperInfo result;
     
-    pthread_mutex_lock(&amiga->lock);
+    pthread_mutex_lock(&lock);
     result = info;
-    pthread_mutex_unlock(&amiga->lock);
+    pthread_mutex_unlock(&lock);
     
     return result;
 }

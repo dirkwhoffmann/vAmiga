@@ -65,6 +65,9 @@ EventHandler::_ping()
 void
 EventHandler::_inspect()
 {
+    // Prevent external access to variable 'info'
+    pthread_mutex_lock(&lock);
+    
     info.dmaClock = amiga->agnus.clock;
     
     // Primary events
@@ -74,6 +77,8 @@ EventHandler::_inspect()
     // Secondary events
     for (unsigned i = 0; i < SEC_SLOT_COUNT; i++)
     info.secondary[i] = getSecondarySlotInfo(i);
+    
+    pthread_mutex_unlock(&lock);
 }
 
 void
@@ -121,9 +126,9 @@ EventHandler::getInfo()
 {
     EventHandlerInfo result;
     
-    pthread_mutex_lock(&amiga->lock);
+    pthread_mutex_lock(&lock);
     result = info;
-    pthread_mutex_unlock(&amiga->lock);
+    pthread_mutex_unlock(&lock);
     
     return result;
 }

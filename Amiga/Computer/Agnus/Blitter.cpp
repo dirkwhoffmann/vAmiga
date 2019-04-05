@@ -80,6 +80,9 @@ Blitter::_ping()
 void
 Blitter::_inspect()
 {
+    // Prevent external access to variable 'info'
+    pthread_mutex_lock(&lock);
+    
     info.active  = amiga->agnus.eventHandler.isPending(BLT_SLOT);
     info.bltcon0 = bltcon0;
     info.bltcon1 = bltcon1;
@@ -102,6 +105,8 @@ Blitter::_inspect()
     info.dhold = dhold;
     info.bbusy = bbusy;
     info.bzero = bzero;
+    
+    pthread_mutex_unlock(&lock);
 }
 
 void
@@ -154,9 +159,9 @@ Blitter::getInfo()
 {
     BlitterInfo result;
     
-    pthread_mutex_lock(&amiga->lock);
+    pthread_mutex_lock(&lock);
     result = info;
-    pthread_mutex_unlock(&amiga->lock);
+    pthread_mutex_unlock(&lock);
     
     return result;
 }
