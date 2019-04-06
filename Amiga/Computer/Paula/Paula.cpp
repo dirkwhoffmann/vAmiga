@@ -16,7 +16,8 @@ Paula::Paula()
     // Register sub components
     registerSubcomponents(vector<HardwareComponent *> {
         
-        &audioUnit
+        &audioUnit,
+        &diskController
     });
     
     // Register snapshot items
@@ -26,10 +27,6 @@ Paula::Paula()
         
         { &intreq,   sizeof(intreq),   0 },
         { &intena,   sizeof(intena),   0 },
-
-        { &dsklen,   sizeof(dsklen),   0 },
-        { &dskdat,   sizeof(dskdat),   0 },
-        { &dma,      sizeof(dma),      0 },
         
         { &serdat,   sizeof(serdat),   0 },
         { &serper,   sizeof(serper),   0 },
@@ -127,37 +124,6 @@ Paula::pokeINTENA(uint16_t value)
 {
     // debug("pokeINTENA(%X)\n", value);
     setINTENA(value);
-}
-
-void
-Paula::pokeDSKLEN(uint16_t newDskLen)
-{
-    uint16_t oldDsklen = dsklen;
-
-    // Remember the new value
-    dsklen = newDskLen;
-    
-    // Disable DMA if the DMAEN bit (bit 15) has been cleared.
-    if (!(newDskLen & 0x8000)) {
-        dma = DRIVE_DMA_OFF;
-    }
-    
-    // Enable DMA the DMAEN bit (bit 15) has been written twice.
-    else if (oldDsklen & newDskLen & 0x8000) {
-        
-        // Check if the WRITE bit (bit 14) also has been written twice.
-        if (oldDsklen & newDskLen & 0x4000) {
-            
-            debug("dma = DRIVE_DMA_WRITE\n");
-            dma = DRIVE_DMA_WRITE;
-        } else {
-
-            debug("dma = DRIVE_DMA_READ\n");
-            dma = DRIVE_DMA_READ;
-        }
-    }
-        
-
 }
 
 void
@@ -267,32 +233,4 @@ Paula::checkInterrupt()
     */
     
     m68k_set_irq(level);
-}
-
-void
-Paula::doDiskDMA()
-{
-    // Only proceed if the DMA enable bit is set in DSKLEN
-    if (dsklen & 0x8000) {
-        
-        // Only proceed if there are still bytes to read
-        if (dsklen & 0x3FFF) {
-            
-            uint8_t data1 = 0; // = floppyRead()
-            uint8_t data2 = 0; // = floppyRead()
-            
-            amiga->mem.pokeChip8(amiga->agnus.dskpt, data1);
-            amiga->agnus.dskpt = (amiga->agnus.dskpt + 1) & 0x7FFFF;
-            amiga->mem.pokeChip8(amiga->agnus.dskpt, data2);
-            amiga->agnus.dskpt = (amiga->agnus.dskpt + 1) & 0x7FFFF;
-
-            // debug("Disk DMA: %X %X (%d words remain)\n", data1, data2, dsklen);
-            
-            dsklen--;
-            if ((dsklen & 0x3FFF) == 0) {
-                pokeINTREQ(0x8002);
-                // debug("Disk DMA finished. Setting INTREQ bit\n");
-            }
-        }
-    }
 }

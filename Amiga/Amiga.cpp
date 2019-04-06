@@ -74,7 +74,6 @@ Amiga::Amiga()
         &controlPort1,
         &controlPort2,
         &keyboard,
-        &diskController,
         &df0,
         &df1,
         // &df2,

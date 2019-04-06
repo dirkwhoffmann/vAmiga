@@ -677,6 +677,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->controller->dump();
 }
+
 - (BOOL) doesDMA:(NSInteger)nr
 {
     return wrapper->controller->doesDMA((unsigned)nr);
@@ -960,7 +961,7 @@ struct ADFFileWrapper { ADFFile *adf; };
     controlPort1 = [[AmigaControlPortProxy alloc] initWithControlPort:&amiga->controlPort1];
     controlPort2 = [[AmigaControlPortProxy alloc] initWithControlPort:&amiga->controlPort2];
     keyboard = [[KeyboardProxy alloc] initWithKeyboard:&amiga->keyboard];
-    diskController = [[DiskControllerProxy alloc] initWithDiskController:&amiga->diskController];
+    diskController = [[DiskControllerProxy alloc] initWithDiskController:&amiga->paula.diskController];
     df0 = [[AmigaDriveProxy alloc] initWithDrive:&amiga->df0];
     df1 = [[AmigaDriveProxy alloc] initWithDrive:&amiga->df1];
     

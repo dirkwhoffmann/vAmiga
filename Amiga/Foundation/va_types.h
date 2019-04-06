@@ -725,4 +725,10 @@ typedef struct
 }
 PaulaInfo;
 
+typedef struct
+{
+    uint16_t dsklen;
+}
+DiskControllerInfo;
+
 #endif

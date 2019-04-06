@@ -748,7 +748,7 @@ Agnus::serviceDMAEvent(EventID id)
     switch (id) {
            
         case DMA_DISK:
-            amiga->paula.doDiskDMA();
+            amiga->paula.diskController.doDiskDMA();
             break;
             
         case DMA_A0:

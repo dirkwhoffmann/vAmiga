@@ -698,7 +698,7 @@ Memory::peekCustom16(uint32_t addr)
         case 0x006 >> 1: // VHPOSR
             return amiga->agnus.peekVHPOSR();
         case 0x008 >> 1: // DSKDATR
-            return amiga->paula.peekDSKDATR();
+            return amiga->paula.diskController.peekDSKDATR();
         case 0x00A >> 1: // JOY0DAT
             return amiga->denise.peekJOYxDATR(0);
         case 0x00C >> 1: // JOY1DAT
@@ -717,10 +717,8 @@ Memory::peekCustom16(uint32_t addr)
             return amiga->paula.peekPOTGOR();
         case 0x018 >> 1: // SERDATR
             return amiga->paula.peekSERDATR();
-            
         case 0x01A >> 1: // DSKBYTR
-            break;
-            
+            return amiga->paula.diskController.peekDSKBYTR();
         case 0x01C >> 1: // INTENAR
             return amiga->paula.peekINTENAR();
         case 0x01E >> 1: // INTREQR
@@ -791,9 +789,9 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x022 >> 1: // DSKPTL
             amiga->agnus.pokeDSKPTL(value); return;
         case 0x024 >> 1: // DSKLEN
-            amiga->paula.pokeDSKLEN(value); return;
+            amiga->paula.diskController.pokeDSKLEN(value); return;
         case 0x026 >> 1: // DSKDAT
-            amiga->paula.pokeDSKDAT(value); return;
+            amiga->paula.diskController.pokeDSKDAT(value); return;
             // case 0x28 >> 1: // REFPTR
         case 0x2A >> 1: // VPOSW
             amiga->agnus.pokeVPOS(value); return;

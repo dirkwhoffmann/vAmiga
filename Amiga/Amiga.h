@@ -27,7 +27,6 @@
 #include "Paula.h"
 #include "Keyboard.h"
 #include "AmigaControlPort.h"
-#include "DiskController.h"
 #include "Drive.h"
 #include "Disk.h"
 
@@ -108,10 +107,7 @@ class Amiga : public HardwareComponent {
     
     // Paula (Interrupts, Disk Controller, Audio)
     Paula paula;
-    
-    // Disk controller (move to Paula?!)
-    DiskController diskController;
-    
+        
     // Control ports
     AmigaControlPort controlPort1 = AmigaControlPort(1);
     AmigaControlPort controlPort2 = AmigaControlPort(2);

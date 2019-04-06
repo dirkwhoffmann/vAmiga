@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		500C0A562259402D000121CD /* DiskController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 500C0A542259402D000121CD /* DiskController.cpp */; };
 		5014DD1521F3625200BC14BA /* Keyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5014DD1321F3625200BC14BA /* Keyboard.cpp */; };
 		5020B17D21EF121E00B9E80E /* Agnus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5020B17B21EF121E00B9E80E /* Agnus.cpp */; };
 		5020B18021EF136100B9E80E /* Denise.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5020B17E21EF136100B9E80E /* Denise.cpp */; };
@@ -139,7 +140,6 @@
 		50F5A84E2214112F00AD5611 /* PaulaPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F5A84D2214112F00AD5611 /* PaulaPanel.swift */; };
 		50F5F27221F1B6DF000627D1 /* AmigaKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F5F27121F1B6DF000627D1 /* AmigaKey.swift */; };
 		50F6EEB821F4F5C60091155D /* Disk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F6EEB621F4F5C60091155D /* Disk.cpp */; };
-		50F6EEBB21F4F5FA0091155D /* DiskController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F6EEB921F4F5FA0091155D /* DiskController.cpp */; };
 		50F6EEBE21F4F61F0091155D /* Drive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F6EEBC21F4F61F0091155D /* Drive.cpp */; };
 /* End PBXBuildFile section */
 
@@ -161,6 +161,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		500C0A542259402D000121CD /* DiskController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiskController.cpp; sourceTree = "<group>"; };
+		500C0A552259402D000121CD /* DiskController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskController.h; sourceTree = "<group>"; };
 		5014DD1321F3625200BC14BA /* Keyboard.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Keyboard.cpp; sourceTree = "<group>"; };
 		5014DD1421F3625200BC14BA /* Keyboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Keyboard.h; sourceTree = "<group>"; };
 		5020B17B21EF121E00B9E80E /* Agnus.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Agnus.cpp; sourceTree = "<group>"; };
@@ -337,8 +339,6 @@
 		50F5F27121F1B6DF000627D1 /* AmigaKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmigaKey.swift; sourceTree = "<group>"; };
 		50F6EEB621F4F5C60091155D /* Disk.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Disk.cpp; sourceTree = "<group>"; };
 		50F6EEB721F4F5C60091155D /* Disk.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Disk.h; sourceTree = "<group>"; };
-		50F6EEB921F4F5FA0091155D /* DiskController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiskController.cpp; sourceTree = "<group>"; };
-		50F6EEBA21F4F5FA0091155D /* DiskController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskController.h; sourceTree = "<group>"; };
 		50F6EEBC21F4F61F0091155D /* Drive.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Drive.cpp; sourceTree = "<group>"; };
 		50F6EEBD21F4F61F0091155D /* Drive.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Drive.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -697,8 +697,6 @@
 		50A2953B21FF12170046BAA0 /* Drive */ = {
 			isa = PBXGroup;
 			children = (
-				50F6EEBA21F4F5FA0091155D /* DiskController.h */,
-				50F6EEB921F4F5FA0091155D /* DiskController.cpp */,
 				50F6EEBD21F4F61F0091155D /* Drive.h */,
 				50F6EEBC21F4F61F0091155D /* Drive.cpp */,
 				50F6EEB721F4F5C60091155D /* Disk.h */,
@@ -788,6 +786,8 @@
 				5030890F21EFA74600FEAD12 /* Paula.cpp */,
 				50EE993F21FF4D8E003BD74B /* AudioUnit.h */,
 				50EE993E21FF4D8E003BD74B /* AudioUnit.cpp */,
+				500C0A552259402D000121CD /* DiskController.h */,
+				500C0A542259402D000121CD /* DiskController.cpp */,
 			);
 			path = Paula;
 			sourceTree = "<group>";
@@ -1006,7 +1006,6 @@
 				508FE03821EA22C30043D0E9 /* Notifications.swift in Sources */,
 				508FE02421EA227B0043D0E9 /* GamePadManager.swift in Sources */,
 				50D2ADC9220754A100E32AB0 /* m68kopac.c in Sources */,
-				50F6EEBB21F4F5FA0091155D /* DiskController.cpp in Sources */,
 				50B14C0721EB218E002E32A6 /* AmigaObject.cpp in Sources */,
 				508E7F952206CDBD00F7D88C /* CPU.cpp in Sources */,
 				508FE02F21EA227B0043D0E9 /* AudioEngine.swift in Sources */,
@@ -1042,6 +1041,7 @@
 				508FE02C21EA227B0043D0E9 /* C64Key.swift in Sources */,
 				508FE01421EA227B0043D0E9 /* WaveformView.swift in Sources */,
 				507653CD2216F938001D26E9 /* DenisePanel.swift in Sources */,
+				500C0A562259402D000121CD /* DiskController.cpp in Sources */,
 				50B0DD1E220B5CEF00D6618A /* BreakpointManager.cpp in Sources */,
 				509F7F1D21EDEA0200A530E4 /* KickRom.cpp in Sources */,
 				508FE05C21EA22CC0043D0E9 /* DiskMountController.swift in Sources */,

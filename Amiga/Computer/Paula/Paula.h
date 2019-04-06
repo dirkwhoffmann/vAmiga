@@ -11,6 +11,7 @@
 #define _PAULA_INC
 
 #include "AudioUnit.h"
+#include "DiskController.h"
 
 class Paula : public HardwareComponent {
     
@@ -28,6 +29,9 @@ class Paula : public HardwareComponent {
     
     // Audio unit
     AudioUnit audioUnit;
+    
+    // The disk controller
+    DiskController diskController;
     
     
     //
@@ -47,20 +51,6 @@ class Paula : public HardwareComponent {
     
     // The interrupt enable register
     uint16_t intena;
-    
-    
-    //
-    // Disk DMA registers
-    //
-    
-    // Disk DMA block length
-    uint16_t dsklen;
-    
-    // Disk write data (from RAM to disk)
-    uint16_t dskdat;
-    
-    // The current drive DMA status (off, read, or write)
-    DriveDMA dma;
     
     
     //
@@ -145,11 +135,6 @@ class Paula : public HardwareComponent {
     uint16_t peekINTENAR() { return intena; }
     void pokeINTENA(uint16_t value);
     
-    void pokeDSKLEN(uint16_t value);
-    
-    uint16_t peekDSKDATR() { debug("peekDSKDAT: %X\n", dskdat); return dskdat; }
-    void pokeDSKDAT(uint16_t value) { dskdat = value; }
-    
     uint16_t peekSERDATR() { return serdat; }
     void pokeSERDAT(uint16_t value) { serdat = value; }
     
@@ -191,14 +176,6 @@ class Paula : public HardwareComponent {
     // Checks intena and intreq and triggers an interrupt (if pending).
     void checkInterrupt();
     
-    
-    //
-    // Performing Disk DMA
-    //
-    
-    public:
-    
-    void doDiskDMA();
 };
 
 #endif
