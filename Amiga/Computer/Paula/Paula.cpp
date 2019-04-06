@@ -29,7 +29,8 @@ Paula::Paula()
 
         { &dsklen,   sizeof(dsklen),   0 },
         { &dskdat,   sizeof(dskdat),   0 },
-
+        { &dma,      sizeof(dma),      0 },
+        
         { &serdat,   sizeof(serdat),   0 },
         { &serper,   sizeof(serper),   0 },
 
@@ -129,16 +130,34 @@ Paula::pokeINTENA(uint16_t value)
 }
 
 void
-Paula::pokeDSKLEN(uint16_t value)
+Paula::pokeDSKLEN(uint16_t newDskLen)
 {
-    /*
-    debug("pokeDSKLEN(%X)\n", value);
-    debug("     DMA: %s WRITE: %s Len: %d\n",
-          (value & (1 << 15)) ? "yes" : "no",
-          (value & (1 << 14)) ? "yes" : "no", value & 0x3FFF);
-    */
+    uint16_t oldDsklen = dsklen;
+
+    // Remember the new value
+    dsklen = newDskLen;
     
-    dsklen = value;
+    // Disable DMA if the DMAEN bit (bit 15) has been cleared.
+    if (!(newDskLen & 0x8000)) {
+        dma = DRIVE_DMA_OFF;
+    }
+    
+    // Enable DMA the DMAEN bit (bit 15) has been written twice.
+    else if (oldDsklen & newDskLen & 0x8000) {
+        
+        // Check if the WRITE bit (bit 14) also has been written twice.
+        if (oldDsklen & newDskLen & 0x4000) {
+            
+            debug("dma = DRIVE_DMA_WRITE\n");
+            dma = DRIVE_DMA_WRITE;
+        } else {
+
+            debug("dma = DRIVE_DMA_READ\n");
+            dma = DRIVE_DMA_READ;
+        }
+    }
+        
+
 }
 
 void

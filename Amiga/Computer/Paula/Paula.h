@@ -59,6 +59,9 @@ class Paula : public HardwareComponent {
     // Disk write data (from RAM to disk)
     uint16_t dskdat;
     
+    // The current drive DMA status (off, read, or write)
+    DriveDMA dma;
+    
     
     //
     // Serial port registers

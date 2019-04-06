@@ -71,6 +71,9 @@ private:
     // The currently selected disk head
     // DEPRECATED
     // bool side;
+
+    // A copy of the DSKLEN register
+    uint8_t dsklen;
     
     // A copy of the PRB register of CIA B
     uint8_t prb;
@@ -165,10 +168,20 @@ public:
      */
     void latchMTR(bool value);
     
+    
+    //
+    // Register delegation methods
+    //
+    
+    // Write handler for the DSKLEN register
+    void pokeDSKLEN(uint16_t value);
+    
     /* Delegation function for register CIAB::PRB
      * This function is called whenever CIA B's PRB register changes.
      */
     void PRBdidChange(uint8_t oldValue, uint8_t newValue);
+    
+    
 };
 
 #endif

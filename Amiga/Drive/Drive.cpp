@@ -23,6 +23,7 @@ Drive::Drive(unsigned nr)
 
         // Configuration items
         { &connected,      sizeof(connected),      PERSISTANT },
+        { &type,           sizeof(type),           PERSISTANT },
         { &id,             sizeof(id),             PERSISTANT },
 
         // Internal state items
@@ -30,6 +31,7 @@ Drive::Drive(unsigned nr)
         { &idCount,        sizeof(idCount),        0 },
         { &motor,          sizeof(motor),          0 },
         { &dskchange,      sizeof(dskchange),      0 },
+        { &dsklen,         sizeof(dsklen),         0 },
         { &prb,            sizeof(prb),            0 },
         { &head.cylinder,  sizeof(head.cylinder),  0 },
 
@@ -292,6 +294,13 @@ Drive::latchMTR(bool value)
         // Switch drive LED off
         amiga->putMessage(MSG_DRIVE_LED_OFF, nr);
     }
+}
+
+// TODO: MOVE THIS TO PAULA ?!
+void
+Drive::pokeDSKLEN(uint16_t value)
+{
+ 
 }
 
 void
