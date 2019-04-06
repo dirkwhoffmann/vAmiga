@@ -14,16 +14,16 @@
 #include "ADFFile.h"
 
 // Data type for addressing tracks
-typedef unsigned Track;
+typedef int16_t Track;
 
 // Checks if a given number is a valid track number
-static inline bool isTrackNumber(unsigned nr) { return nr < 160; }
+static inline bool isTrackNumber(int16_t nr) { return nr < 160; }
 
 // Data type for addressing sectors inside a track
-typedef unsigned Sector;
+typedef int16_t Sector;
 
 // Checks if a given number is a valid sector number
-static inline bool isSectorNumber(unsigned nr) { return nr < 11; }
+static inline bool isSectorNumber(int16_t nr) { return nr < 11; }
 
 
 class Disk : public AmigaObject {
@@ -84,8 +84,9 @@ public:
         uint8_t cyclinder[80][2][mfmBytesPerTrack];
     } data;
     
-    bool writeProtected = false;
-    bool modified = false;
+    bool writeProtected;
+    bool modified;
+    
     
     //
     // Constructing and destructing
@@ -95,9 +96,16 @@ public:
     
     Disk();
     
+    // Factory method
+    static Disk *makeWithFile(ADFFile *file);
   
 
 public:
+    
+    
+    //
+    // Accessing properties
+    //
     
     bool isWriteProtected() { return writeProtected; }
     void setWriteProtection(bool value) { writeProtected = value; }
@@ -130,15 +138,15 @@ public:
 
     /* Encodes the whole disk
      */
-    void encodeDisk(ADFFile *adf);
+    bool encodeDisk(ADFFile *adf);
      
     /* Encodes a single track
      */
-    void encodeTrack(ADFFile *adf, Track t);
+    bool encodeTrack(ADFFile *adf, Track t);
     
     /* Encodes a single sector
      */
-    void encodeSector(ADFFile *adf, Track t, Sector s);
+    bool encodeSector(ADFFile *adf, Track t, Sector s);
     
     /* Encodes a certain number of bytes in odd / even format
      */

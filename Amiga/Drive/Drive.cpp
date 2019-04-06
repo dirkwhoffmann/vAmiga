@@ -228,7 +228,7 @@ Drive::toggleWriteProtection()
             
             disk->setWriteProtection(false);
             amiga->putMessage(MSG_DRIVE_DISK_UNPROTECTED);
-            
+        
         } else {
             
             disk->setWriteProtection(true);
@@ -241,6 +241,7 @@ void
 Drive::ejectDisk()
 {
     if (disk) {
+        
         // Flag disk change in the CIAA::PA
         dskchange = true;
         
@@ -254,34 +255,20 @@ Drive::ejectDisk()
 }
 
 void
-Drive::insertDisk(Disk *newDisk)
+Drive::insertDisk(Disk *disk)
 {
-    if (newDisk) {
+    if (disk && isConnected()) {
         
-        debug("Drive::insertDisk(Disk *)\n");
-        
-        if (isConnected()) {
-            ejectDisk();
-            disk = newDisk;
-            amiga->putMessage(MSG_DRIVE_DISK_INSERT, nr);
-        }
+        ejectDisk();
+        this->disk = disk;
+        amiga->putMessage(MSG_DRIVE_DISK_INSERT, nr);
     }
 }
 
 void
 Drive::insertDisk(ADFFile *file)
 {
-    if (file) {
-        
-        // Convert ADF file into a disk
-        // AmigaDisk = new AmigaDisk::makeWithFile(ADFFile *file)
-        
-        debug("Drive::insertDisk(ADFFile *)\n");
-        
-        Disk *newDisk = new Disk();
-        newDisk->encodeDisk(file); 
-        insertDisk(newDisk);
-    }
+    insertDisk(Disk::makeWithFile(file));
 }
 
 void
@@ -297,7 +284,6 @@ Drive::latchMTR(bool value)
         // Switch drive LED on
         amiga->putMessage(MSG_DRIVE_LED_ON, nr);
     }
-    
     else if (value != 0 && motor) {
         
         // Switch motor off

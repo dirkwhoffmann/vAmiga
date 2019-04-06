@@ -9,6 +9,7 @@
 
 #include "Amiga.h"
 
+/*
 void printBin(uint64_t value) {
 
     for (int i = 63; i >= 0; i--) {
@@ -16,26 +17,28 @@ void printBin(uint64_t value) {
     }
     printf("  %p\n", (void *)value);
 }
+*/
 
 Disk::Disk()
 {
     setDescription("Disk");
     
-    // Testing
-    /*
-    uint64_t value = 0xFF240406;
-    uint64_t odd = (value >> 1) & MFM_DATA_BIT_MASK64;
-    uint64_t even = value & MFM_DATA_BIT_MASK64;
-    printf("Without clock bits:\n");
-    printBin(value);
-    printBin(odd);
-    printBin(even);
-    odd = addClockBits(odd, 0);
-    even = addClockBits(even, 0);
-    printf("With clock bits added:\n");
-    printBin(odd);
-    printBin(even);
-    */
+    writeProtected = false;
+    modified = false;
+    clearDisk();
+}
+
+Disk *
+Disk::makeWithFile(ADFFile *file)
+{
+    Disk *disk = new Disk();
+    
+    if (!disk->encodeDisk(file)) {
+        delete disk;
+        return NULL;
+    }
+    
+    return disk;
 }
 
 uint8_t
@@ -69,50 +72,60 @@ Disk::clearTrack(Track t)
     memset(data.track[t], 0xAA, mfmBytesPerTrack);
 }
 
-void
+bool
 Disk::encodeDisk(ADFFile *adf)
 {
+    bool result = true;
+    
+    debug("Encoding disk\n");
+    
     for (Track t = 0; t < numTracks; t++) {
-        
-        encodeTrack(adf, t);
+        result &= encodeTrack(adf, t);
     }
     
     // For debugging: Write out to a file
+    /*
     FILE *file = fopen("/tmp/adf.raw","w");
     if (file == NULL) {
         debug("CANNOT WRITE DEBUG FILE\n");
-        return;
+        return false;
     }
     
     for (unsigned i = 0; i < sizeof(data); i++) {
         fputc(data.raw[i], file);
     }
     fclose(file);
+    */
+    
+    return result;
 }
 
-void
+bool
 Disk::encodeTrack(ADFFile *adf, Track t)
 {
     assert(isTrackNumber(t));
     
-    debug("Encoding track %d\n", t);
-
+    debug(2, "Encoding track %d\n", t);
+    
     // Remove previously written data
     clearTrack(t);
     
     // Encode each sector
+    bool result = true;
     for (Sector s = 0; s < 11; s++) {
-        encodeSector(adf, t, s);
+        result &= encodeSector(adf, t, s);
     }
+    
+    return result;
 }
 
-void
+bool
 Disk::encodeSector(ADFFile *adf, Track t, Sector s)
 {
     assert(isTrackNumber(t));
     assert(isSectorNumber(s));
     
-    debug("Encoding sector %d\n", s);
+    debug(2, "Encoding sector %d\n", s);
     
     /* Block header layout:
      *                     Start  Size   Value
@@ -175,6 +188,8 @@ Disk::encodeSector(ADFFile *adf, Track t, Sector s)
     // Add clock bits
     for(unsigned i = 8; i < 1088; i ++)
         p[i] = addClockBits(p[i], p[i-1]);
+    
+    return true;
 }
 
 void
