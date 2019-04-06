@@ -293,15 +293,7 @@ class MyDocument : NSDocument {
         track("Read \(length) bytes from file \(filename).")
         
         switch (typeName) {
-            
-        case "VC64":
-            // Check for outdated snapshot formats
-            if SnapshotProxy.isUnsupportedSnapshot(buffer, length: length) {
-                throw NSError.snapshotVersionError(filename: filename)
-            }
-            attachment = SnapshotProxy.make(withBuffer: buffer, length: length)
-            openAsUntitled = false
-
+    
         case "CRT":
             // Check for unsupported cartridge types
             if CRTFileProxy.isUnsupportedCRTBuffer(buffer, length: length) {

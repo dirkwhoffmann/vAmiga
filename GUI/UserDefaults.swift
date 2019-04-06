@@ -105,7 +105,7 @@ extension MyController {
             
             if let dict = fileContents as? Dictionary<String,Any> {
                 
-                let filteredDict = dict.filter { $0.0.hasPrefix("VC64") }
+                let filteredDict = dict.filter { $0.0.hasPrefix("VAMIGA") }
                 
                 let defaults = UserDefaults.standard
                 defaults.setValuesForKeys(filteredDict)
@@ -132,7 +132,7 @@ extension MyController {
         track()
         
         let dict = UserDefaults.standard.dictionaryRepresentation()
-        let filteredDict = dict.filter { $0.0.hasPrefix("VC64") }
+        let filteredDict = dict.filter { $0.0.hasPrefix("VAMIGA") }
         let nsDict = NSDictionary.init(dictionary: filteredDict)
         nsDict.write(to: url, atomically: true)
     }
@@ -146,8 +146,8 @@ extension MyController {
 struct Keys {
     
     // Control ports
-    static let inputDevice1      = "VC64InputDevice1"
-    static let inputDevice2      = "VC64InputDevice2"
+    static let inputDevice1      = "VAMIGAInputDevice1"
+    static let inputDevice2      = "VAMIGAInputDevice2"
 }
 
 struct Defaults {
@@ -282,12 +282,12 @@ extension MyController {
 extension Keys {
     
     // Joysticks
-    static let disconnectJoyKeys = "VC64DisconnectKeys"
-    static let autofire          = "VC64Autofire"
-    static let autofireBullets   = "VC64AutofireBullets"
-    static let autofireFrequency = "VC64AutofireFrequency"
-    static let joyKeyMap1        = "VC64JoyKeyMap1"
-    static let joyKeyMap2        = "VC64JoyKeyMap2"
+    static let disconnectJoyKeys = "VAMIGADisconnectKeys"
+    static let autofire          = "VAMIGAAutofire"
+    static let autofireBullets   = "VAMIGAAutofireBullets"
+    static let autofireFrequency = "VAMIGAAutofireFrequency"
+    static let joyKeyMap1        = "VAMIGAJoyKeyMap1"
+    static let joyKeyMap2        = "VAMIGAJoyKeyMap2"
 }
 
 extension Defaults {
@@ -388,20 +388,20 @@ extension MyController {
 
 extension Keys {
     
-    static let palette         = "VC64PaletteKey"
-    static let brightness      = "VC64BrightnessKey"
-    static let contrast        = "VC64ContrastKey"
-    static let saturation      = "VC64SaturationKey"
-    static let enhancer        = "VC64EnhancerKey"
-    static let upscaler        = "VC64UpscalerKey"
+    static let palette         = "VAMIGAPaletteKey"
+    static let brightness      = "VAMIGABrightnessKey"
+    static let contrast        = "VAMIGAContrastKey"
+    static let saturation      = "VAMIGASaturationKey"
+    static let enhancer        = "VVAMIGAEnhancerKey"
+    static let upscaler        = "VAMIGAUpscalerKey"
 
     // Geometry
-    static let eyeX            = "VC64EyeX"
-    static let eyeY            = "VC64EyeY"
-    static let eyeZ            = "VC64EyeZ"
+    static let eyeX            = "VAMIGAEyeX"
+    static let eyeY            = "VAMIGAEyeY"
+    static let eyeZ            = "VAMIGAEyeZ"
     
     // GPU options
-    static let shaderOptions   = "VC64ShaderOptionsKey"
+    static let shaderOptions   = "VAMIGAShaderOptionsKey"
 }
 
 extension Defaults {
@@ -517,30 +517,30 @@ extension MyController {
 extension Keys {
     
     // Drives
-    static let warpLoad             = "VAWarpLoadKey"
-    static let driveNoise           = "VADriveNoiseKey"
+    static let warpLoad             = "VAMIGAWarpLoadKey"
+    static let driveNoise           = "VAMIGADriveNoiseKey"
     
     // Screenshots
-    static let screenshotSource     = "VAScreenshotSourceKey"
-    static let screenshotTarget     = "VAScreenshotTargetKey"
+    static let screenshotSource     = "VAMIGAScreenshotSourceKey"
+    static let screenshotTarget     = "VAMIGAScreenshotTargetKey"
     
     // Fullscreen
-    static let keepAspectRatio      = "VAFullscreenKeepAspectRatioKey"
-    static let exitOnEsc            = "VAFullscreenExitOnEscKey"
+    static let keepAspectRatio      = "VAMIGAFullscreenKeepAspectRatioKey"
+    static let exitOnEsc            = "VAMIGAFullscreenExitOnEscKey"
 
     // User dialogs
-    static let closeWithoutAsking   = "VC64CloseWithoutAsking"
-    static let ejectWithoutAsking   = "VC64EjectWithoutAsking"
+    static let closeWithoutAsking   = "VAMIGACloseWithoutAsking"
+    static let ejectWithoutAsking   = "VAMIGAEjectWithoutAsking"
     
     // Miscellaneous
-    static let pauseInBackground    = "VC64PauseInBackground"
-    static let autoSnapshots        = "VC64AutoSnapshots"
-    static let autoSnapshotInterval = "VC64SnapshotInterval"
+    static let pauseInBackground    = "VAMIGAPauseInBackground"
+    static let autoSnapshots        = "VAMIGAAutoSnapshots"
+    static let autoSnapshotInterval = "VAMIGASnapshotInterval"
     
     // Media files
-    static let autoMountAction      = "VC64AutoMountAction"
-    static let autoType             = "VC64AutoType"
-    static let autoTypeText         = "VC64AutoTypeText"
+    static let autoMountAction      = "VAMIGAAutoMountAction"
+    static let autoType             = "VAMIGAAutoType"
+    static let autoTypeText         = "VAMIGAAutoTypeText"
 }
 
 extension Defaults {
