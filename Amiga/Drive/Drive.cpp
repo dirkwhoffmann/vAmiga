@@ -191,11 +191,9 @@ Drive::readHead()
 void
 Drive::rotate()
 {
-    debug("head = %d\n", head.offset);
+    // debug("head = %d\n", head.offset);
     
     if (++head.offset == Disk::mfmBytesPerTrack) {
-        
-        debug("WRAP around\n");
         
         // Start over at the beginning of the current cyclinder
         head.offset = 0;

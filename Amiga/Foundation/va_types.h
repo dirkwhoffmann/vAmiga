@@ -187,9 +187,10 @@ DriveIdCode;
 
 typedef enum
 {
-    DRIVE_DMA_OFF  = 0,
-    DRIVE_DMA_READ,
-    DRIVE_DMA_WRITE
+    DRIVE_DMA_OFF = 0,   // Drive is idle
+    DRIVE_DMA_READ_SYNC, // Drive is waiting for the sync word
+    DRIVE_DMA_READ,      // Drive is reading (via DMA)
+    DRIVE_DMA_WRITE      // Drive is writing (via DMA)
 }
 DriveDMA;
 

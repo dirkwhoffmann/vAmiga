@@ -119,13 +119,25 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
         
         // Check if the WRITE bit (bit 14) also has been written twice.
         if (oldDsklen & newDskLen & 0x4000) {
-            
+    
             debug("dma = DRIVE_DMA_WRITE\n");
             dma = DRIVE_DMA_WRITE;
-        } else {
             
-            debug("dma = DRIVE_DMA_READ\n");
-            dma = DRIVE_DMA_READ;
+        } else {
+        
+            // Check the WORDSYNC bit in the ADKCON register
+            if (GET_BIT(amiga->paula.adkcon, 10)) {
+                
+                // Wait with reading until a sync mark has been found
+                debug("dma = DRIVE_DMA_READ_SYNC\n");
+                dma = DRIVE_DMA_READ_SYNC;
+
+            } else {
+
+                // Start reading immediately
+                debug("dma = DRIVE_DMA_READ\n");
+                dma = DRIVE_DMA_READ;
+            }
         }
     }
 }
@@ -257,30 +269,53 @@ void
 DiskController::doDiskDMA()
 {
     // Only proceed if the DMA enable bit is set in DSKLEN
-    if (dsklen & 0x8000) {
+    if (!(dsklen & 0x8000)) return;
+    
+    // Only proceed if there are still bytes to read
+    if (!(dsklen & 0x3FFF)) return;
+    
+    // Read next word from the FIFO buffer
+    
+    //
+    // TODO
+    //
+    
+    // For debugging, we read directly from disk (df0 only)
+    uint8_t data1 = 0xFF;
+    uint8_t data2 = 0xFF;
+    if (df[0]->isSelected() && df[0]->motor) {
+        df[0]->rotate();
+        data1 = df[0]->readHead();
+        df[0]->rotate();
+        data2 = df[0]->readHead();
+    }
+    uint16_t word = HI_LO(data1, data2);
+    
+    // Perform DMA
+    if (dma == DRIVE_DMA_READ) {
+        amiga->mem.pokeChip16(amiga->agnus.dskpt, word);
+        amiga->agnus.dskpt = (amiga->agnus.dskpt + 2) & 0x7FFFF;
         
-        // Only proceed if there are still bytes to read
-        if (dsklen & 0x3FFF) {
-            
-            // TODO: Read the bytes from the FIFO
-            // At the moment, we only read from Df0
-            uint8_t data1 = 0; // = floppyRead()
-            uint8_t data2 = 0; // = floppyRead()
-            
-            amiga->mem.pokeChip8(amiga->agnus.dskpt, data1);
-            amiga->agnus.dskpt = (amiga->agnus.dskpt + 1) & 0x7FFFF;
-            amiga->mem.pokeChip8(amiga->agnus.dskpt, data2);
-            amiga->agnus.dskpt = (amiga->agnus.dskpt + 1) & 0x7FFFF;
-            
-            // debug("Disk DMA: %X %X (%d words remain)\n", data1, data2, dsklen);
-            
-            dsklen--;
-            if ((dsklen & 0x3FFF) == 0) {
-                amiga->paula.pokeINTREQ(0x8002);
-                // debug("Disk DMA finished. Setting INTREQ bit\n");
-            }
+        dsklen--;
+        if ((dsklen & 0x3FFF) == 0) {
+            amiga->paula.pokeINTREQ(0x8002);
+            dma = DRIVE_DMA_OFF;
+            debug("Disk DMA finished.\n");
         }
     }
+    
+    // Did we reach a SYNC mark?
+    debug("head: %d dsksync = %X word = %X\n", df[0]->head.offset, dsksync, word);
+    if (word == dsksync) {
+
+        // Enable DMA if the controller was waiting for the SYNC mark
+        if (dma == DRIVE_DMA_READ_SYNC) {
+            debug("SYNC mark found. Switching on DMA\n");
+            dma = DRIVE_DMA_READ;
+        }
+    }
+    
+    // debug("Disk DMA: %X %X (%d words remain)\n", data1, data2, dsklen);
 }
 
 bool

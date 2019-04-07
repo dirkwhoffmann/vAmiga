@@ -90,6 +90,14 @@ class Paula : public HardwareComponent {
     
     
     //
+    // Mixed unsage
+    //
+    
+    // The Audio and Disk Control Register (ADKCON)
+    uint16_t adkcon;
+    
+    
+    //
     // Constructing and destructing
     //
     
@@ -129,23 +137,49 @@ class Paula : public HardwareComponent {
     
     public:
     
+    // OCS register 0x010 (r)
+    uint16_t peekADKCONR() { return adkcon; } // TODO: CHECK
+    
+    // OCS register 0x01E (r)
     uint16_t peekINTREQR() { return intreq; }
+    
+    // OCS register 0x09C (w)
     void pokeINTREQ(uint16_t value);
     
+    // OCS register 0x01C (r)
     uint16_t peekINTENAR() { return intena; }
+    
+    // OCS register 0x09A (w)
     void pokeINTENA(uint16_t value);
     
+    // OCS register 0x09E (w)
+    void pokeADKCON(uint16_t value);
+    
+    // OCS register 0x018 (r)
     uint16_t peekSERDATR() { return serdat; }
+    
+    // OCS register 0x030 (w)
     void pokeSERDAT(uint16_t value) { serdat = value; }
     
+    // OCS register 0x032 (w)
     void pokeSERPER(uint16_t value) { serper = value; }
     
+    // OCS register 0x016 (r) (orignally called POTINP)
     uint16_t peekPOTGOR() { return 0xFFFF; /* TODO */ }
+    
+    // OCS register 0x030 (w)
     void pokePOTGO(uint16_t value);
     
+    // OCS registers 0xA4, 0xB4, 0x0C4, 0xD4 (w)
     void pokeAUDxLEN(int x, uint16_t value);
+    
+    // OCS registers 0xA6, 0xB6, 0x0B6, 0xD6 (w)
     void pokeAUDxPER(int x, uint16_t value);
+    
+    // OCS registers 0xA8, 0xB8, 0x0C8, 0xD8 (w)
     void pokeAUDxVOL(int x, uint16_t value);
+    
+    // OCS registers 0xAA, 0xBA, 0x0CA, 0xDA (w)
     void pokeAUDxDAT(int x, uint16_t value);
     
     

@@ -36,7 +36,9 @@ Paula::Paula()
         { &audlen,   sizeof(audlen),   WORD_ARRAY },
         { &audper,   sizeof(audper),   WORD_ARRAY },
         { &audvol,   sizeof(audvol),   WORD_ARRAY },
-        { &auddat,   sizeof(auddat),   WORD_ARRAY }
+        { &auddat,   sizeof(auddat),   WORD_ARRAY },
+
+        { &adkcon,   sizeof(adkcon),   0 },
     });
 }
 
@@ -124,6 +126,13 @@ Paula::pokeINTENA(uint16_t value)
 {
     // debug("pokeINTENA(%X)\n", value);
     setINTENA(value);
+}
+
+void
+Paula::pokeADKCON(uint16_t value)
+{
+    debug("pokeADKCON(%X)\n", value);
+    if (value & 0x8000) adkcon |= (value & 0x7FFF); else adkcon &= ~value;
 }
 
 void

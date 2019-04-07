@@ -58,7 +58,10 @@ class DiskController : public HardwareComponent {
     
     // Disk write data (from RAM to disk)
     uint16_t dskdat;
-    
+
+    // Disk SYNC word
+    uint16_t dsksync;
+
     // A copy of the PRB register of CIA B
     uint8_t prb;
     
@@ -119,12 +122,20 @@ class DiskController : public HardwareComponent {
     
     public:
     
+    // OCR register 0x008 (r)
+    uint16_t peekDSKDATR() { return dskdat; }
+
+    // OCR register 0x024 (w)
     void pokeDSKLEN(uint16_t value);
-    
-    uint16_t peekDSKDATR() { debug("peekDSKDAT: %X\n", dskdat); return dskdat; }
+
+    // OCR register 0x026 (w)
     void pokeDSKDAT(uint16_t value) { dskdat = value; }
     
+    // OCR register 0x01A (r)
     uint16_t peekDSKBYTR();
+    
+    // OCR register 0x07E (w)
+    void pokeDSKSYNC(uint16_t value) { assert(0); dsksync = value; }
     
     // Read handler for the PRA register of CIA A
     uint8_t driveStatusFlags();

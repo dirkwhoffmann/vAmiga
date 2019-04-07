@@ -703,11 +703,11 @@ Memory::peekCustom16(uint32_t addr)
             return amiga->denise.peekJOYxDATR(0);
         case 0x00C >> 1: // JOY1DAT
             return amiga->denise.peekJOYxDATR(1);
-            
+
         case 0x00E >> 1: // CLXDAT
             break;
         case 0x010 >> 1: // ADKCONR
-            break;
+            return amiga->paula.peekADKCONR();
         case 0x012 >> 1: // POT0DAT
             break;
         case 0x014 >> 1: // POT1DAT
@@ -792,77 +792,83 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
             amiga->paula.diskController.pokeDSKLEN(value); return;
         case 0x026 >> 1: // DSKDAT
             amiga->paula.diskController.pokeDSKDAT(value); return;
-            // case 0x28 >> 1: // REFPTR
-        case 0x2A >> 1: // VPOSW
+        //
+        // case 0x28 >> 1: // REFPTR
+        //
+        case 0x02A >> 1: // VPOSW
             amiga->agnus.pokeVPOS(value); return;
-        case 0x2C >> 1: // VHPOSW
+        case 0x02C >> 1: // VHPOSW
             amiga->agnus.pokeVHPOS(value); return;
-        case 0x2E >> 1: // COPCON
+        case 0x02E >> 1: // COPCON
             amiga->agnus.copper.pokeCOPCON(value); return;
-        case 0x30 >> 1: // SERDAT
+        
+        case 0x030 >> 1: // SERDAT
             amiga->paula.pokeSERDAT(value); return;
-        case 0x32 >> 1: // SERPER
+        case 0x032 >> 1: // SERPER
             amiga->paula.pokeSERPER(value); return;
-        case 0x34 >> 1: // POTGO
+        case 0x034 >> 1: // POTGO
             amiga->paula.pokePOTGO(value); return;
 
-
-        case 0x40 >> 1: // BLTCON0
+        case 0x040 >> 1: // BLTCON0
             amiga->agnus.blitter.pokeBLTCON0(value); return;
-        case 0x42 >> 1: // BLTCON1
+        case 0x042 >> 1: // BLTCON1
             amiga->agnus.blitter.pokeBLTCON1(value); return;
-        case 0x44 >> 1: // BLTAFWM
+        case 0x044 >> 1: // BLTAFWM
             amiga->agnus.blitter.pokeBLTAFWM(value); return;
-        case 0x46 >> 1: // BLTALWM
+        case 0x046 >> 1: // BLTALWM
             amiga->agnus.blitter.pokeBLTALWM(value); return;
-        case 0x48 >> 1: // BLTCPTH
+        case 0x048 >> 1: // BLTCPTH
             amiga->agnus.blitter.pokeBLTCPTH(value); return;
-        case 0x4A >> 1: // BLTCPTL
+        case 0x04A >> 1: // BLTCPTL
             amiga->agnus.blitter.pokeBLTCPTL(value); return;
-        case 0x4C >> 1: // BLTBPTH
+        case 0x04C >> 1: // BLTBPTH
             amiga->agnus.blitter.pokeBLTBPTH(value); return;
-        case 0x4E >> 1: // BLTBPTL
+        case 0x04E >> 1: // BLTBPTL
             amiga->agnus.blitter.pokeBLTBPTL(value); return;
-        case 0x50 >> 1: // BLTAPTH
+        
+        case 0x050 >> 1: // BLTAPTH
             amiga->agnus.blitter.pokeBLTAPTH(value); return;
-        case 0x52 >> 1: // BLTAPTL
+        case 0x052 >> 1: // BLTAPTL
             amiga->agnus.blitter.pokeBLTAPTL(value); return;
-        case 0x54 >> 1: // BLTDPTH
+        case 0x054 >> 1: // BLTDPTH
             amiga->agnus.blitter.pokeBLTDPTH(value); return;
-        case 0x56 >> 1: // BLTDPTL
+        case 0x056 >> 1: // BLTDPTL
             amiga->agnus.blitter.pokeBLTDPTL(value); return;
-        case 0x58 >> 1: // BLTSIZE
+        case 0x058 >> 1: // BLTSIZE
             amiga->agnus.blitter.pokeBLTSIZE(value); return;
-        case 0x5A >> 1: // unused
-        case 0x5C >> 1: // unused
-        case 0x5E >> 1: // unused
-            return; 
-        case 0x60 >> 1: // BLTCMOD
+        case 0x05A >> 1: // unused
+        case 0x05C >> 1: // unused
+        case 0x05E >> 1: // unused
+            return;
+        
+        case 0x060 >> 1: // BLTCMOD
             amiga->agnus.blitter.pokeBLTCMOD(value); return;
-        case 0x62 >> 1: // BLTBMOD
+        case 0x062 >> 1: // BLTBMOD
             amiga->agnus.blitter.pokeBLTBMOD(value); return;
-        case 0x64 >> 1: // BLTAMOD
+        case 0x064 >> 1: // BLTAMOD
             amiga->agnus.blitter.pokeBLTAMOD(value); return;
-        case 0x66 >> 1: // BLTDMOD
+        case 0x066 >> 1: // BLTDMOD
             amiga->agnus.blitter.pokeBLTDMOD(value); return;
-        case 0x68 >> 1: // unused
-        case 0x6A >> 1: // unused
-        case 0x6C >> 1: // unused
-        case 0x6E >> 1: // unused
+        case 0x068 >> 1: // unused
+        case 0x06A >> 1: // unused
+        case 0x06C >> 1: // unused
+        case 0x06E >> 1: // unused
             return;
-        case 0x70 >> 1: // BLTCDAT
+        
+        case 0x070 >> 1: // BLTCDAT
             amiga->agnus.blitter.pokeBLTCDAT(value); return;
-        case 0x72 >> 1: // BLTBDAT
+        case 0x072 >> 1: // BLTBDAT
             amiga->agnus.blitter.pokeBLTBDAT(value); return;
-        case 0x74 >> 1: // BLTADAT
+        case 0x074 >> 1: // BLTADAT
             amiga->agnus.blitter.pokeBLTADAT(value); return;
-        case 0x76 >> 1: // unused
-        case 0x78 >> 1: // unused
-        case 0x7A >> 1: // unused
-        case 0x7C >> 1: // unused
+        case 0x076 >> 1: // unused
+        case 0x078 >> 1: // unused
+        case 0x07A >> 1: // unused
+        case 0x07C >> 1: // unused
             return;
-        // case 0x7E >> 1: // DSKSYNC
-        //     amiga->paule.pokeDSKSYNC(value); return;
+        case 0x07E >> 1: // DSKSYNC
+            amiga->paula.diskController.pokeDSKSYNC(value); return;
+        
         case 0x080 >> 1: // COP1LCH
             amiga->agnus.copper.pokeCOPxLCH(0, value); return;
         case 0x082 >> 1: // COP1LCL
@@ -879,6 +885,7 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
             amiga->agnus.copper.pokeCOPINS(value); return;
         case 0x08E >> 1: // DIWSTRT
             amiga->agnus.pokeDIWSTRT(value); return;
+        
         case 0x090 >> 1: // DIWSTOP
             amiga->agnus.pokeDIWSTOP(value); return;
         case 0x092 >> 1: // DDFSTRT
@@ -891,8 +898,8 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
             amiga->paula.pokeINTENA(value); return;
         case 0x09C >> 1: // INTREQ
             amiga->paula.pokeINTREQ(value); return;
-        case 0x09E >> 1: // unsed
-            return;
+        case 0x09E >> 1: // ADKCON
+            amiga->paula.pokeADKCON(value); return;
             
         case 0x0A0 >> 1: // AUD0LCH
             amiga->agnus.pokeAUDxLCH(0, value); return;
@@ -909,6 +916,7 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x0AC >> 1: // Unused
         case 0x0AE >> 1: // Unused
             return;
+        
         case 0x0B0 >> 1: // AUD1LCH
             amiga->agnus.pokeAUDxLCH(1, value); return;
         case 0x0B2 >> 1: // AUD1LCL
@@ -924,6 +932,7 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x0BC >> 1: // Unused
         case 0x0BE >> 1: // Unused
             return;
+        
         case 0x0C0 >> 1: // AUD2LCH
             amiga->agnus.pokeAUDxLCH(2, value); return;
         case 0x0C2 >> 1: // AUD2LCL
@@ -939,6 +948,7 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x0CC >> 1: // Unused
         case 0x0CE >> 1: // Unused
             return;
+        
         case 0x0D0 >> 1: // AUD3LCH
             amiga->agnus.pokeAUDxLCH(3, value); return;
         case 0x0D2 >> 1: // AUD3LCL
@@ -954,6 +964,7 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x0DC >> 1: // Unused
         case 0x0DE >> 1: // Unused
             return;
+        
         case 0x0E0 >> 1: // BPL1PTH
             amiga->agnus.pokeBPLxPTH(0, value); return;
         case 0x0E2 >> 1: // BPL1PTL
@@ -970,6 +981,7 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
             amiga->agnus.pokeBPLxPTH(3, value); return;
         case 0x0EE >> 1: // BPL4PTL
             amiga->agnus.pokeBPLxPTL(3, value); return;
+        
         case 0x0F0 >> 1: // BPL5PTH
             amiga->agnus.pokeBPLxPTH(4, value); return;
         case 0x0F2 >> 1: // BPL5PTL
@@ -983,6 +995,7 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x0FC >> 1: // Unused
         case 0x0FE >> 1: // Unused
             return;
+        
         case 0x100 >> 1: // BPLCON0
             amiga->denise.pokeBPLCON0(value); return;
         case 0x102 >> 1: // BPLCON1
@@ -998,6 +1011,7 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x10C >> 1: // Unused
         case 0x10E >> 1: // Unused
             return;
+        
         case 0x110 >> 1: // BPL1DAT
             amiga->denise.pokeBPLxDAT(0, value); return;
         case 0x112 >> 1: // BPL2DAT
@@ -1013,6 +1027,7 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x11C >> 1: // Unused
         case 0x11E >> 1: // Unused
             return;
+        
         case 0x120 >> 1: // SPR0PTH
             amiga->agnus.pokeSPRxPTH(0, value); return;
         case 0x122 >> 1: // SPR0PTL
@@ -1029,6 +1044,7 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
             amiga->agnus.pokeSPRxPTH(3, value); return;
         case 0x12E >> 1: // SPR3PTL
             amiga->agnus.pokeSPRxPTL(3, value); return;
+        
         case 0x130 >> 1: // SPR4PTH
             amiga->agnus.pokeSPRxPTH(4, value); return;
         case 0x132 >> 1: // SPR4PTL
@@ -1102,6 +1118,7 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
             amiga->denise.colorizer.pokeColorReg(6, value); return;
         case 0x18E >> 1: // COLOR07
             amiga->denise.colorizer.pokeColorReg(7, value); return;
+        
         case 0x190 >> 1: // COLOR08
             amiga->denise.colorizer.pokeColorReg(8, value); return;
         case 0x192 >> 1: // COLOR09
@@ -1118,6 +1135,7 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
             amiga->denise.colorizer.pokeColorReg(14, value); return;
         case 0x19E >> 1: // COLOR15
             amiga->denise.colorizer.pokeColorReg(15, value); return;
+        
         case 0x1A0 >> 1: // COLOR16
             amiga->denise.colorizer.pokeColorReg(16, value); return;
         case 0x1A2 >> 1: // COLOR17
@@ -1134,6 +1152,7 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
             amiga->denise.colorizer.pokeColorReg(22, value); return;
         case 0x1AE >> 1: // COLOR23
             amiga->denise.colorizer.pokeColorReg(23, value); return;
+        
         case 0x1B0 >> 1: // COLOR24
             amiga->denise.colorizer.pokeColorReg(24, value); return;
         case 0x1B2 >> 1: // COLOR25
