@@ -64,6 +64,8 @@ struct AmigaFileWrapper;
     DiskControllerProxy *diskController;
     AmigaDriveProxy *df0;
     AmigaDriveProxy *df1;
+    AmigaDriveProxy *df2;
+    AmigaDriveProxy *df3;
 }
 
 @property (readonly) struct AmigaWrapper *wrapper;
@@ -80,6 +82,8 @@ struct AmigaFileWrapper;
 @property (readonly) DiskControllerProxy *diskController;
 @property (readonly) AmigaDriveProxy *df0;
 @property (readonly) AmigaDriveProxy *df1;
+@property (readonly) AmigaDriveProxy *df2;
+@property (readonly) AmigaDriveProxy *df3;
 
 // - (void) makeActiveInstance;
 - (void) kill;
@@ -422,6 +426,11 @@ struct AmigaFileWrapper;
 }
 
 - (void) dump;
+
+- (BOOL) isConnected:(NSInteger)df;
+- (void) setConnected:(NSInteger)df value:(BOOL)value;
+- (void) toggleConnected:(NSInteger)df;
+
 - (BOOL) doesDMA:(NSInteger)nr;
 
 @end
@@ -439,10 +448,6 @@ struct AmigaFileWrapper;
 - (void) dump;
 
 - (NSInteger) nr;
-
-- (BOOL) isConnected;
-- (void) setConnected:(BOOL)value;
-- (void) toggleConnected;
 
 - (BOOL) hasDisk;
 - (BOOL) hasWriteProtectedDisk;

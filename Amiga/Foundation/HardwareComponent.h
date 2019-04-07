@@ -134,6 +134,7 @@ class HardwareComponent : public AmigaObject {
      * called again afterwards.
      */
     void setAmiga(Amiga *amiga);
+    virtual void _setAmiga() { };
     
     /* There are several functions for querying and changing state:
      *

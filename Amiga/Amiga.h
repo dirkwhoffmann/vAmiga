@@ -115,13 +115,13 @@ class Amiga : public HardwareComponent {
     // Keyboard
     Keyboard keyboard;
     
-    // Internal drive
+    // Internal floppy drive
     Drive df0 = Drive(0);
     
-    // External drives
+    // External floppy drives
     Drive df1 = Drive(1);
-    // Drive df2 = Drive(2);
-    // Drive df3 = Drive(3);
+    Drive df2 = Drive(2);
+    Drive df3 = Drive(3);
     
     
     //

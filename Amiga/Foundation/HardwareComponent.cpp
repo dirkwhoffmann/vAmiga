@@ -55,6 +55,9 @@ HardwareComponent::setAmiga(Amiga *amiga)
     for (HardwareComponent *c : subComponents) {
         c->setAmiga(amiga);
     }
+    
+    // Call the delegation method
+    _setAmiga();
 }
 
 void

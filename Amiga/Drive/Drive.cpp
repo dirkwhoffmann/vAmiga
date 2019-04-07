@@ -65,8 +65,6 @@ Drive::_reset()
 void
 Drive::_ping()
 {
-    amiga->putMessage(isConnected() ?
-                      MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, nr);
     amiga->putMessage(hasDisk() ?
                       MSG_DRIVE_DISK_INSERT : MSG_DRIVE_DISK_EJECT, nr);
     amiga->putMessage(hasWriteProtectedDisk() ?
@@ -79,24 +77,6 @@ void
 Drive::_dump()
 {
     msg("Has disk: %s\n", hasDisk() ? "yes" : "no");
-}
-
-void
-Drive::setConnected(bool value)
-{
-    // Note: Only external drives can be disconnected (nr != 0)
-    if (nr != 0 && connected != value) {
-
-        connected = value;
-        amiga->putMessage(connected ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, nr);
-        amiga->putMessage(MSG_CONFIG);
-    }
-}
-
-void
-Drive::toggleConnected()
-{
-    setConnected(!isConnected());
 }
 
 void
@@ -259,7 +239,7 @@ Drive::ejectDisk()
 void
 Drive::insertDisk(Disk *disk)
 {
-    if (disk && isConnected()) {
+    if (disk) {
         
         ejectDisk();
         this->disk = disk;
@@ -306,11 +286,6 @@ Drive::pokeDSKLEN(uint16_t value)
 void
 Drive::PRBdidChange(uint8_t oldValue, uint8_t newValue)
 {
-    // debug("PRBdidChange (connected = %d)\n", connected);
-
-    // Ignore this function call if the drive is not connected to the Amiga
-    if (!connected) return;
-    
     // -----------------------------------------------------------------
     // | /MTR  | /SEL3 | /SEL2 | /SEL1 | /SEL0 | /SIDE |  DIR  | STEP  |
     // -----------------------------------------------------------------
@@ -335,6 +310,6 @@ Drive::PRBdidChange(uint8_t oldValue, uint8_t newValue)
     // Evaluate the side selection bit
     // side = !(newValue & 0b100);
         
-    // Move the drive head on a negative edge on the step line
+    // Move the drive head if there is a falling edge on the step line
     if (FALLING_EDGE(oldStep, newStep)) moveHead(dir);
 }

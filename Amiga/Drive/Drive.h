@@ -116,11 +116,7 @@ private:
 public:
     
     long getNr() { return nr; }
-    
-    bool isConnected() { return connected; }
-    void setConnected(bool value);
-    void toggleConnected();
-    
+        
     DriveType getType() { return type; }
     void setType(DriveType t);
 
@@ -176,12 +172,8 @@ public:
     // Write handler for the DSKLEN register
     void pokeDSKLEN(uint16_t value);
     
-    /* Delegation function for register CIAB::PRB
-     * This function is called whenever CIA B's PRB register changes.
-     */
+    // Write handler for the PRB register of CIA B
     void PRBdidChange(uint8_t oldValue, uint8_t newValue);
-    
-    
 };
 
 #endif

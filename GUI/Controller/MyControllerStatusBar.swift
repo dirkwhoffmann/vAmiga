@@ -15,6 +15,9 @@ extension MyController {
         
         guard let amiga = amigaProxy else { return }
         
+        let df0IsConnected = amiga.diskController.isConnected(0)
+        let df1IsConnected = amiga.diskController.isConnected(1)
+
         // Icons
         df0Disk.image = amiga.df0.icon
         df1Disk.image = amiga.df1.icon
@@ -29,11 +32,11 @@ extension MyController {
             
             powerLED: true,
             
-            df0LED:  amiga.df0.isConnected(),
-            df0Disk: amiga.df0.isConnected() && amiga.df0.hasDisk(),
+            df0LED:  df0IsConnected,
+            df0Disk: df0IsConnected && amiga.df0.hasDisk(),
             df0DMA:  amiga.diskController.doesDMA(0),
-            df1LED:  amiga.df1.isConnected(),
-            df1Disk: amiga.df1.isConnected() && amiga.df1.hasDisk(),
+            df1LED:  df1IsConnected,
+            df1Disk: df1IsConnected && amiga.df1.hasDisk(),
             df1DMA:  amiga.diskController.doesDMA(1),
 
             cmdLock: mapCommandKeys,

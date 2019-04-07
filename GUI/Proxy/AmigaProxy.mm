@@ -677,7 +677,18 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->controller->dump();
 }
-
+- (BOOL) isConnected:(NSInteger)df
+{
+    return wrapper->controller->isConnected(df);
+}
+- (void) setConnected:(NSInteger)df value:(BOOL)value;
+{
+    wrapper->controller->setConnected(df, value);
+}
+- (void) toggleConnected:(NSInteger)df
+{
+    wrapper->controller->toggleConnected(df);
+}
 - (BOOL) doesDMA:(NSInteger)nr
 {
     return wrapper->controller->doesDMA((unsigned)nr);
@@ -707,18 +718,6 @@ struct ADFFileWrapper { ADFFile *adf; };
 - (void) dump
 {
     wrapper->drive->dump();
-}
-- (BOOL) isConnected
-{
-    return wrapper->drive->isConnected();
-}
-- (void) setConnected:(BOOL)value
-{
-    wrapper->drive->setConnected(value);
-}
-- (void) toggleConnected
-{
-    wrapper->drive->toggleConnected();
 }
 - (BOOL) hasDisk
 {
@@ -938,6 +937,8 @@ struct ADFFileWrapper { ADFFile *adf; };
 @synthesize diskController;
 @synthesize df0;
 @synthesize df1;
+@synthesize df2;
+@synthesize df3;
 
 - (instancetype) init
 {
@@ -964,7 +965,9 @@ struct ADFFileWrapper { ADFFile *adf; };
     diskController = [[DiskControllerProxy alloc] initWithDiskController:&amiga->paula.diskController];
     df0 = [[AmigaDriveProxy alloc] initWithDrive:&amiga->df0];
     df1 = [[AmigaDriveProxy alloc] initWithDrive:&amiga->df1];
-    
+    df2 = [[AmigaDriveProxy alloc] initWithDrive:&amiga->df2];
+    df3 = [[AmigaDriveProxy alloc] initWithDrive:&amiga->df3];
+
     return self;
 }
 

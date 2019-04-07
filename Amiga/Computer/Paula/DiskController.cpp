@@ -24,9 +24,18 @@ DiskController::DiskController()
 }
 
 void
+DiskController::_setAmiga()
+{
+    df[0] = &amiga->df0;
+    df[1] = &amiga->df1;
+    df[2] = &amiga->df2;
+    df[3] = &amiga->df3;
+}
+
+void
 DiskController::_powerOn()
 {
-    
+ 
 }
 
 void
@@ -44,7 +53,9 @@ DiskController::_reset()
 void
 DiskController::_ping()
 {
-    
+    for (int df = 0; df < 4; df++) {
+        amiga->putMessage(connected[df] ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, df);
+    }
 }
 
 void
@@ -71,6 +82,20 @@ DiskController::getInfo()
     pthread_mutex_unlock(&lock);
     
     return result;
+}
+
+void
+DiskController::setConnected(int df, bool value)
+{
+    assert(df < 4);
+    
+    // We don't allow the internal drive (Df0) to be disconnected
+    if (df == 0 && value == false) { return; }
+    
+    // Plug the drive in our out and inform the GUI
+    connected[df] = value;
+    amiga->putMessage(value ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, df);
+    amiga->putMessage(MSG_CONFIG);
 }
 
 void
@@ -128,6 +153,17 @@ DiskController::peekDSKBYTR()
     
     return result;
 }
+
+void
+DiskController::PRBdidChange(uint8_t oldValue, uint8_t newValue)
+{
+    // debug("PRBdidChange: %X -> %X\n", oldValue, newValue);
+    
+    for (unsigned i = 0; i < 4; i++) {
+      if (connected[i]) df[i]->PRBdidChange(oldValue, newValue);
+    }
+}
+
 
 void
 DiskController::doDiskDMA()

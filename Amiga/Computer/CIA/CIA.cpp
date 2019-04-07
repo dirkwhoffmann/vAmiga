@@ -1284,8 +1284,8 @@ CIAA::portAexternal()
     
     result &= amiga->df0.driveStatusFlags();
     result &= amiga->df1.driveStatusFlags();
-    // result &= amiga->df2.driveStatusFlags();
-    // result &= amiga->df3.driveStatusFlags();
+    result &= amiga->df2.driveStatusFlags();
+    result &= amiga->df3.driveStatusFlags();
 
     return result;
 }
@@ -1493,10 +1493,7 @@ CIAB::updatePB()
               !!(PB & 0x80), !!(PB & 0x40), !!(PB & 0x20), !!(PB & 0x10),
               !!(PB & 0x08), !!(PB & 0x04), !!(PB & 0x02), !!(PB & 0x01));
         */
-        amiga->df0.PRBdidChange(oldPB, PB);
-        amiga->df1.PRBdidChange(oldPB, PB);
-        // amiga->df2.PRBdidChange(oldPB, PB);
-        // amiga->df3.PRBdidChange(oldPB, PB);
+        amiga->paula.diskController.PRBdidChange(oldPB, PB);
     }
 }
 

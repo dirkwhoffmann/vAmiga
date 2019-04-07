@@ -76,8 +76,8 @@ Amiga::Amiga()
         &keyboard,
         &df0,
         &df1,
-        // &df2,
-        // &df3,
+        &df2,
+        &df3,
     });
     
     registerSnapshotItems(vector<SnapshotItem> {
@@ -181,11 +181,17 @@ Amiga::getConfig()
     config.realTimeClock = realTimeClock;
     config.layout = keyboard.layout;
     
-    config.df0.connected = df0.isConnected();
+    config.df0.connected = paula.diskController.isConnected(0);
     config.df0.type = df0.getType();
     
-    config.df1.connected = df1.isConnected();
+    config.df1.connected = paula.diskController.isConnected(1);
     config.df1.type = df1.getType();
+
+    config.df2.connected = paula.diskController.isConnected(2);
+    config.df2.type = df2.getType();
+
+    config.df3.connected = paula.diskController.isConnected(3);
+    config.df3.type = df3.getType();
 
     return config;
 }
@@ -296,30 +302,19 @@ Amiga::configureRealTimeClock(bool value)
 }
 
 bool
-Amiga::configureDrive(unsigned driveNr, bool connected)
+Amiga::configureDrive(unsigned df, bool connected)
 {
-    if (driveNr == 0 && !connected) {
-        warn("It was tried to disconnect the internal drive (Df0).\n");
+    if (df >= 4) {
+        warn("Invalid drive number (%d). Ignoring request.\n", df);
+        return false;
+    }
+
+    if (df == 0 && !connected) {
+        warn("Df0 cannot be disconnected. Ignoring request.\n");
         connected = true;
     }
     
-    switch (driveNr) {
-        
-        case 0:
-        
-        df0.setConnected(connected);
-        break;
-        
-        case 1:
-        df1.setConnected(connected);
-        break;
-        
-        default:
-        warn("Invalid drive number (%d). Ignoring.\n", driveNr);
-        return false;
-        
-    }
-    
+    paula.diskController.setConnected(df, connected);
     putMessage(MSG_CONFIG);
     return true;
 }
@@ -345,6 +340,20 @@ Amiga::configureDrive(unsigned driveNr, DriveType type)
         case 1:
         if (df1.getType() != type) {
             df1.setType(type);
+            putMessage(MSG_CONFIG);
+        }
+        return true;
+        
+        case 2:
+        if (df2.getType() != type) {
+            df2.setType(type);
+            putMessage(MSG_CONFIG);
+        }
+        return true;
+        
+        case 3:
+        if (df3.getType() != type) {
+            df3.setType(type);
             putMessage(MSG_CONFIG);
         }
         return true;
@@ -480,7 +489,11 @@ Amiga::_dump()
              config.df0.connected ? "yes" : "no", driveTypeName(config.df0.type));
     plainmsg("          df1: %s %s\n",
              config.df1.connected ? "yes" : "no", driveTypeName(config.df1.type));
-    
+    plainmsg("          df2: %s %s\n",
+             config.df2.connected ? "yes" : "no", driveTypeName(config.df2.type));
+    plainmsg("          df3: %s %s\n",
+             config.df3.connected ? "yes" : "no", driveTypeName(config.df3.type));
+
     plainmsg("\n");
     plainmsg("         warp: %d (%d) (%d)", warp);
     plainmsg("\n");

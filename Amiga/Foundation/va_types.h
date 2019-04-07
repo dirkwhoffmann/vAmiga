@@ -530,6 +530,8 @@ typedef struct
     long layout;
     DriveConfiguration df0;
     DriveConfiguration df1;
+    DriveConfiguration df2;
+    DriveConfiguration df3;
 }
 AmigaConfiguration;
 

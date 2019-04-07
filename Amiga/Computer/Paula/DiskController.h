@@ -12,12 +12,23 @@
 
 #include "HardwareComponent.h"
 
+class Drive;
+
 class DiskController : public HardwareComponent {
     
     private:
     
     // Information shown in the GUI inspector panel
     DiskControllerInfo info;
+    
+    // References to the disk drives (for easy access)
+    Drive *df[4] = { NULL, NULL, NULL, NULL };
+    
+    /* Connection status of all four drives.
+     * Note: The internal drive (Df0) must not be disconnected. Hence,
+     * connected[0] must never be set to false.
+     */
+    bool connected[4] = { true, false, false, false };
     
     
     //
@@ -49,6 +60,7 @@ class DiskController : public HardwareComponent {
     
     private:
     
+    void _setAmiga() override;
     void _powerOn() override;
     void _powerOff() override;
     void _reset() override;
@@ -68,6 +80,22 @@ class DiskController : public HardwareComponent {
     
     
     //
+    // Plugging drives in and out
+    //
+    
+    // Returns true if the specified drive is connected to the Amiga
+    bool isConnected(int drive) { assert(drive < 4); return connected[drive]; }
+    
+    // Connects or disconnects a drive
+    void setConnected(int drive, bool value);
+
+    // Convenience wrappers
+    void connect(int drive) { setConnected(drive, true); }
+    void disconnect(int drive) { setConnected(drive, false); }
+    void toggleConnected(int drive) { setConnected(drive, !isConnected(drive)); }
+    
+    
+    //
     // Accessing registers
     //
     
@@ -79,7 +107,10 @@ class DiskController : public HardwareComponent {
     void pokeDSKDAT(uint16_t value) { dskdat = value; }
     
     uint16_t peekDSKBYTR();
-
+    
+    // Write handler for the PRB register of CIA B
+    void PRBdidChange(uint8_t oldValue, uint8_t newValue);
+    
     
     //
     // Performing DMA

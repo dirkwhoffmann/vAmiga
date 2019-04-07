@@ -18,7 +18,9 @@ public extension AmigaProxy {
             
         case 0: return df0
         case 1: return df1
-            
+        case 2: return df2
+        case 3: return df3
+
         default: fatalError()
         }
     }
