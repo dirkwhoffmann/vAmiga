@@ -200,6 +200,13 @@ DiskController::serveDiskEvent()
 {
     // debug("serveDiskEvent()\n");
     
+    /* To ease debugging, we don't read data from the drive here. I.e.,
+     * we don't fill the FIFO yet. All data transfer will be done by the DMA
+     * handler. Once this works, we enable the FIFO and let the DMA stuff
+     * pick up the data from there.
+     */
+    
+    /*
     // Rotate the disks
     for (unsigned i = 0; i < 4; i++) {
         df[i]->rotate();
@@ -209,9 +216,17 @@ DiskController::serveDiskEvent()
     for (unsigned i = 0; i < 4; i++) {
         if (df[i]->isDataSource()) writeFifo(df[i]->readHead());
     }
+    */
     
     // Schedule next event
     handler->scheduleSecRel(DSK_SLOT, DMA_CYCLES(56), DSK_ROTATE);
+}
+
+void
+DiskController::clearFifo()
+{
+    fifo = 0;
+    fifoCount = 0;
 }
 
 void
@@ -247,6 +262,8 @@ DiskController::doDiskDMA()
         // Only proceed if there are still bytes to read
         if (dsklen & 0x3FFF) {
             
+            // TODO: Read the bytes from the FIFO
+            // At the moment, we only read from Df0
             uint8_t data1 = 0; // = floppyRead()
             uint8_t data2 = 0; // = floppyRead()
             

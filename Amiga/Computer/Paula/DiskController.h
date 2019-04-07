@@ -142,6 +142,9 @@ class DiskController : public HardwareComponent {
     // Serves an event in the disk controller slot.
     void serveDiskEvent();
     
+    // Clears the FIFO buffer.
+    void clearFifo();
+
     // Writes a byte into the FIFO buffer.
     void writeFifo(uint8_t byte);
 

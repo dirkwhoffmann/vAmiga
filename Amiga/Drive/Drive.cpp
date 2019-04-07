@@ -191,7 +191,22 @@ Drive::readHead()
 void
 Drive::rotate()
 {
-    head.offset = (head.offset + 1) % Disk::mfmBytesPerTrack;
+    debug("head = %d\n", head.offset);
+    
+    if (++head.offset == Disk::mfmBytesPerTrack) {
+        
+        debug("WRAP around\n");
+        
+        // Start over at the beginning of the current cyclinder
+        head.offset = 0;
+        
+        /* If this drive is currently selected, we emulate a falling edge on
+         * the flag pin of CIA A. This causes the CIA to trigger the INDEX
+         * interrupt if the corresponding enable bit is set.
+         */
+        if (isSelected()) amiga->ciaA.emulateFallingEdgeOnFlagPin();
+    }
+    assert(head.offset < Disk::mfmBytesPerTrack);
 }
 
 void

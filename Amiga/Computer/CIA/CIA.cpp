@@ -127,23 +127,19 @@ CIA::_inspect()
 }
 
 void
-CIA::triggerRisingEdgeOnFlagPin()
+CIA::emulateRisingEdgeOnFlagPin()
 {
-    // ICR &= ~0x10; // Note: FLAG pin is inverted
 }
 
 void
-CIA::triggerFallingEdgeOnFlagPin()
+CIA::emulateFallingEdgeOnFlagPin()
 {
-    // TODO: CLEAN THIS UP (USE CORRECT TIMING Interrupt0 etc.)
-    icr |= 0x10; // Note: FLAG pin is inverted
-        
-    // Trigger interrupt, if enabled
+    debug("emulateFallingEdgeOnFlagPin()\n");
+    
+     icr |= 0x10; // Note: FLAG pin is inverted
+    
     if (imr & 0x10) {
-        INT = 0;
-        icr |= 0x80;
-        debug("triggerFallingEdgeOnFlagPin()\n");
-        pullDownInterruptLine();
+        triggerFlagPinIrq();
     }
 }
 
@@ -159,6 +155,14 @@ void
 CIA::triggerTodIrq()
 {
     debug("triggerTodIrq()\n");
+    delay |= CIASetInt0;
+    delay |= CIASetIcr0;
+}
+
+void
+CIA::triggerFlagPinIrq()
+{
+    debug("triggerFlagPinIrq()\n");
     delay |= CIASetInt0;
     delay |= CIASetIcr0;
 }

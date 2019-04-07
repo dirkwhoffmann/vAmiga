@@ -81,7 +81,7 @@ private:
     struct {
         uint8_t side;
         uint8_t cylinder;
-        uint8_t offset;
+        uint16_t offset;
     } head;
     
     

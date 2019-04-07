@@ -288,10 +288,10 @@ class CIA : public HardwareComponent {
     uint8_t getDDRB() { return DDRB; }
     
     // Simulates a rising edge on the flag pin
-    void triggerRisingEdgeOnFlagPin();
+    void emulateRisingEdgeOnFlagPin();
     
     // Simulates a falling edge on the flag pin
-    void triggerFallingEdgeOnFlagPin();
+    void emulateFallingEdgeOnFlagPin();
     
     private:
     
@@ -323,19 +323,16 @@ class CIA : public HardwareComponent {
      */
     void reloadTimerB() { counterB = latchB; delay &= ~CIACountB2; }
     
-    /* Triggers a timer interrupt
-     * Invoked inside executeOneCycle() if IRQ conditions are met.
-     */
+    // Triggers a timer interrupt
     void triggerTimerIrq();
     
-    /* Triggers a TOD interrupt
-     * Invoked inside executeOneCycle() if IRQ conditions are met.
-     */
+    // Triggers a TOD interrupt
     void triggerTodIrq();
-    
-    /* Triggers a serial interrupt
-     * Invoked inside executeOneCycle() if IRQ conditions are met.
-     */
+
+    // Triggers a flag pin interrupt
+    void triggerFlagPinIrq();
+
+    // Triggers a serial interrupt
     void triggerSerialIrq();
     
     private:
