@@ -487,6 +487,9 @@ void
 EventHandler::_executeSecUntil(Cycle cycle) {
     
     // Check all secondary event slots one by one
+    if (isDueSec(DSK_SLOT, cycle)) {
+        amiga->paula.diskController.serveDiskEvent(); 
+    }
     if (isDueSec(IRQ_TBE_SLOT, cycle)) {
         serveIRQEvent(IRQ_TBE_SLOT, 0);
     }

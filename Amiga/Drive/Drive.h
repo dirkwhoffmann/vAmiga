@@ -19,6 +19,8 @@ class ADFFile;
 
 class Drive : public HardwareComponent {
     
+    friend class DiskController;
+    
 private:
     
     // Drive number (0 = df0, 1 = df1, 2 = df2, 3 = df3)

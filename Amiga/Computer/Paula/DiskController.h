@@ -80,7 +80,7 @@ class DiskController : public HardwareComponent {
     
     
     //
-    // Plugging drives in and out
+    // Managing the connection status
     //
     
     // Returns true if the specified drive is connected to the Amiga
@@ -113,10 +113,13 @@ class DiskController : public HardwareComponent {
     
     
     //
-    // Performing DMA
+    // Processing events and performing DMA
     //
     
     public:
+    
+    // Serves an event in the disk controller slot
+    void serveDiskEvent();
     
     // Performs a disk DMA cycle.
     void doDiskDMA();

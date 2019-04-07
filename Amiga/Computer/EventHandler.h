@@ -241,7 +241,7 @@ class EventHandler : public HardwareComponent
     void cancelSec(EventSlot s);
     
     private:
-    
+
     // Serves an IRQ_SET or IRQ_CLEAR event
     void serveIRQEvent(EventSlot slot, int irqBit);
 

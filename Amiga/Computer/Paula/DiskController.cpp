@@ -159,11 +159,31 @@ DiskController::PRBdidChange(uint8_t oldValue, uint8_t newValue)
 {
     // debug("PRBdidChange: %X -> %X\n", oldValue, newValue);
     
+    // Pass control over to all four drives
     for (unsigned i = 0; i < 4; i++) {
-      if (connected[i]) df[i]->PRBdidChange(oldValue, newValue);
+        if (connected[i]) df[i]->PRBdidChange(oldValue, newValue);
+    }
+    
+    // Determine the current motor status of all four drives
+    bool motor = df[0]->motor | df[1]->motor | df[2]->motor | df[3]->motor;
+    
+    // Scheduling rotation events if at least one drive is spinning
+    if (!motor) {
+        handler->cancelSec(DSK_SLOT);
+    }
+    else if (!handler->hasEventSec(DSK_SLOT)) {
+        handler->scheduleSecRel(DSK_SLOT, DMA_CYCLES(56), DSK_ROTATE);
     }
 }
 
+void
+DiskController::serveDiskEvent()
+{
+    debug("serveDiskEvent()\n");
+    
+    // Schedule next event
+    handler->scheduleSecRel(DSK_SLOT, DMA_CYCLES(56), DSK_ROTATE);
+}
 
 void
 DiskController::doDiskDMA()
