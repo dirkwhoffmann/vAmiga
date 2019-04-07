@@ -82,7 +82,9 @@ private:
     
     // The current drive head location
     struct {
+        uint8_t side;
         uint8_t cylinder;
+        uint8_t offset;
     } head;
     
     
@@ -128,7 +130,11 @@ public:
     //
     
     // Returns true if this drive is currently selected
-    bool isSelected() { return (prb & (0b1000 << nr)) == 0; }
+    inline bool isSelected() { return (prb & (0b1000 << nr)) == 0; }
+    
+    // Returns true if this drive is pushing data onto the data lines
+    bool isDataSource();
+    
     
     uint8_t driveStatusFlags();
     
@@ -139,6 +145,15 @@ public:
     
     // Turns the drive motor on or off
     void setMotor(bool value);
+    
+    // Selects the active drive head (0 = lower, 1 = upper)
+    void selectSide(int side);
+
+    // Reads the byte at the current drive head position
+    uint8_t readHead();
+    
+    // Emulate a disk rotation (moves head to the next byte)
+    void rotate();
     
     // Moves the drive head (0 = inwards, 1 = outwards)
     void moveHead(int dir);

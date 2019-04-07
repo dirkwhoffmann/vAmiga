@@ -16,9 +16,12 @@ DiskController::DiskController()
     // Register snapshot items
     registerSnapshotItems(vector<SnapshotItem> {
         
-        { &dsklen,   sizeof(dsklen),   0 },
-        { &dskdat,   sizeof(dskdat),   0 },
-        { &dma,      sizeof(dma),      0 },
+        { &dma,        sizeof(dma),        0 },
+        { &fifoCount,  sizeof(fifoCount),  0 },
+        { &fifo,       sizeof(fifo),       0 },
+        { &dsklen,     sizeof(dsklen),     0 },
+        { &dskdat,     sizeof(dskdat),     0 },
+        { &prb,        sizeof(prb),        0 },
         
     });
 }
@@ -159,6 +162,9 @@ DiskController::PRBdidChange(uint8_t oldValue, uint8_t newValue)
 {
     // debug("PRBdidChange: %X -> %X\n", oldValue, newValue);
     
+    // Store a copy of the new PRB value
+    prb = newValue;
+    
     // Pass control over to all four drives
     for (unsigned i = 0; i < 4; i++) {
         if (connected[i]) df[i]->PRBdidChange(oldValue, newValue);
@@ -180,9 +186,43 @@ void
 DiskController::serveDiskEvent()
 {
     debug("serveDiskEvent()\n");
+        
+    // Rotate the disks
+    for (unsigned i = 0; i < 4; i++) {
+        df[i]->rotate();
+    }
+    
+    // Read a byte from the data providing drive
+    for (unsigned i = 0; i < 4; i++) {
+        if (df[i]->isDataSource()) writeFifo(df[i]->readHead());
+    }
     
     // Schedule next event
     handler->scheduleSecRel(DSK_SLOT, DMA_CYCLES(56), DSK_ROTATE);
+}
+
+void
+DiskController::writeFifo(uint8_t byte)
+{
+    assert(fifoCount <= 6);
+    
+    // Remove oldest word if the FIFO is full
+    if (fifoCount == 6) (void)readFifo();
+    
+    // Add the new byte
+    fifo = (fifo << 8) | byte;
+    fifoCount++;
+}
+
+uint16_t
+DiskController::readFifo()
+{
+    // This function assumes that the FIFO contains at least two bytes.
+    assert(fifoCount > 1);
+ 
+    // Remove and return the oldest word.
+    fifoCount -= 2;
+    return (fifo >> (8 * fifoCount)) & 0xFFFF;
 }
 
 void

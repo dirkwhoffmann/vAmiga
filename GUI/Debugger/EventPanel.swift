@@ -14,8 +14,6 @@ extension Inspector {
         // guard let dma = amigaProxy?.dma else { return }
         // let info = dma.getInfo()
         
-        track("Refreshing Event inspector tab")
-        
         if everything {
             
         }

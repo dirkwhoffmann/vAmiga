@@ -33,7 +33,9 @@ Drive::Drive(unsigned nr)
         { &dskchange,      sizeof(dskchange),      0 },
         { &dsklen,         sizeof(dsklen),         0 },
         { &prb,            sizeof(prb),            0 },
+        { &head.side,      sizeof(head.side),      0 },
         { &head.cylinder,  sizeof(head.cylinder),  0 },
+        { &head.offset,    sizeof(head.offset),    0 },
 
     });
 
@@ -100,6 +102,16 @@ Drive::setType(DriveType t)
     }
 }
 
+bool
+Drive::isDataSource()
+{
+    /* I'm not exactly sure abot the conditions to make the drive writes onto
+     * the data lines. I assume that the drive must be selected *and* the motor
+     * needs to be switched on. 
+     */
+    return isSelected() && motor; 
+}
+
 uint8_t
 Drive::driveStatusFlags()
 {
@@ -157,6 +169,29 @@ Drive::setMotor(bool value)
         idMode = true;
         idCount = 32;
     }
+}
+
+void
+Drive::selectSide(int side)
+{
+    assert(side < 2);
+    head.side = side;
+}
+
+uint8_t
+Drive::readHead()
+{
+    if (disk) {
+        return disk->readHead(head.cylinder, head.side, head.offset);
+    } else {
+        return 0xFF;
+    }
+}
+
+void
+Drive::rotate()
+{
+    head.offset = (head.offset + 1) % Disk::mfmBytesPerTrack;
 }
 
 void
@@ -296,6 +331,7 @@ Drive::PRBdidChange(uint8_t oldValue, uint8_t newValue)
     bool newStep = newValue & 1;
     bool dir     = newValue & 2;
     
+    // Store a copy of the new PRB value
     prb = newValue;
     
     // Latch MTR on a falling edge of SELx

@@ -115,6 +115,12 @@ public:
     
     
     //
+    // Reading and writing
+    //
+    
+    uint8_t readHead(uint8_t cylinder, uint8_t side, uint16_t offset);
+    
+    //
     // Handling MFM encoded data
     //
     

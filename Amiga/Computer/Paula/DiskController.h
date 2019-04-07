@@ -30,6 +30,24 @@ class DiskController : public HardwareComponent {
      */
     bool connected[4] = { true, false, false, false };
     
+    // The current drive DMA status (off, read, or write)
+    DriveDMA dma;
+    
+    
+    //
+    // FIFO buffer
+    //
+    
+    // Number of bytes stored in the FIFO buffer
+    uint8_t fifoCount; 
+    
+    /* Data bytes stored in the FIFO buffer
+     * On each DSK_ROTATE event, a byte is read from the selected drive and
+     * put into this buffer. Each Disk DMA operation will read two bytes from
+     * the buffer and store them at the desired location.
+     */
+    uint64_t fifo;
+ 
     
     //
     // Registers
@@ -41,8 +59,8 @@ class DiskController : public HardwareComponent {
     // Disk write data (from RAM to disk)
     uint16_t dskdat;
     
-    // The current drive DMA status (off, read, or write)
-    DriveDMA dma;
+    // A copy of the PRB register of CIA B
+    uint8_t prb;
     
     
     //
@@ -80,19 +98,19 @@ class DiskController : public HardwareComponent {
     
     
     //
-    // Managing the connection status
+    // Managing the connection and selection status
     //
     
     // Returns true if the specified drive is connected to the Amiga
-    bool isConnected(int drive) { assert(drive < 4); return connected[drive]; }
+    bool isConnected(int df) { assert(df < 4); return connected[df]; }
     
     // Connects or disconnects a drive
-    void setConnected(int drive, bool value);
+    void setConnected(int df, bool value);
 
     // Convenience wrappers
-    void connect(int drive) { setConnected(drive, true); }
-    void disconnect(int drive) { setConnected(drive, false); }
-    void toggleConnected(int drive) { setConnected(drive, !isConnected(drive)); }
+    void connect(int df) { setConnected(df, true); }
+    void disconnect(int df) { setConnected(df, false); }
+    void toggleConnected(int df) { setConnected(df, !isConnected(df)); }
     
     
     //
@@ -113,14 +131,20 @@ class DiskController : public HardwareComponent {
     
     
     //
-    // Processing events and performing DMA
+    // Processing events and disk data
     //
     
     public:
     
-    // Serves an event in the disk controller slot
+    // Serves an event in the disk controller slot.
     void serveDiskEvent();
     
+    // Writes a byte into the FIFO buffer.
+    void writeFifo(uint8_t byte);
+
+    // Reads a word from the FIFO buffer.
+    uint16_t readFifo();
+
     // Performs a disk DMA cycle.
     void doDiskDMA();
     
