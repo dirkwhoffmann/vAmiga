@@ -157,6 +157,19 @@ DiskController::peekDSKBYTR()
     return result;
 }
 
+uint8_t
+DiskController::driveStatusFlags()
+{
+    uint8_t result = 0xFF;
+    
+    if (connected[0]) result &= df[0]->driveStatusFlags();
+    if (connected[1]) result &= df[1]->driveStatusFlags();
+    if (connected[2]) result &= df[2]->driveStatusFlags();
+    if (connected[3]) result &= df[3]->driveStatusFlags();
+    
+    return result;
+}
+
 void
 DiskController::PRBdidChange(uint8_t oldValue, uint8_t newValue)
 {
@@ -185,8 +198,8 @@ DiskController::PRBdidChange(uint8_t oldValue, uint8_t newValue)
 void
 DiskController::serveDiskEvent()
 {
-    debug("serveDiskEvent()\n");
-        
+    // debug("serveDiskEvent()\n");
+    
     // Rotate the disks
     for (unsigned i = 0; i < 4; i++) {
         df[i]->rotate();

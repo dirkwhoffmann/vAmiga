@@ -1280,14 +1280,7 @@ CIAA::portAinternal()
 uint8_t
 CIAA::portAexternal()
 {
-    uint8_t result = 0xFF;
-    
-    result &= amiga->df0.driveStatusFlags();
-    result &= amiga->df1.driveStatusFlags();
-    result &= amiga->df2.driveStatusFlags();
-    result &= amiga->df3.driveStatusFlags();
-
-    return result;
+    return amiga->paula.diskController.driveStatusFlags();
 }
 
 void

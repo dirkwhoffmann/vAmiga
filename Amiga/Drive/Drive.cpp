@@ -22,7 +22,6 @@ Drive::Drive(unsigned nr)
     registerSnapshotItems(vector<SnapshotItem> {
 
         // Configuration items
-        { &connected,      sizeof(connected),      PERSISTANT },
         { &type,           sizeof(type),           PERSISTANT },
         { &id,             sizeof(id),             PERSISTANT },
 
@@ -38,12 +37,6 @@ Drive::Drive(unsigned nr)
         { &head.offset,    sizeof(head.offset),    0 },
 
     });
-
-    // By default, we only connect the internal drive (Df0)
-    connected = (nr == 0);
-    
-    // REMOVE AFTER TESTING
-    Disk d; 
 }
 
 void
@@ -117,9 +110,7 @@ Drive::driveStatusFlags()
 {
     uint8_t result = 0xFF;
     
-    // debug("connected = %d isSelected = %d\n", connected, isSelected());
-    
-    if (connected && isSelected()) {
+    if (isSelected()) {
         
         // PA5: /DSKRDY
         if (idMode) {
@@ -137,9 +128,12 @@ Drive::driveStatusFlags()
         // PA3: /DSKPROT
         if (!hasWriteEnabledDisk()) { result &= 0b11110111; }
         
-        // PA2: /DSKCHANGE
-        // TODO
-        result &= 0b11111011;
+        /* PA2: /DSKCHANGE
+         * Disk has been removed from the drive. The signal goes low whenever a
+         * disk is removed. It remains low until a disk is inserted AND a step
+         * pulse is received.
+         */
+        if (!dskchange) result &= 0b11111011;
     }
     
     return result;
@@ -149,6 +143,8 @@ void
 Drive::setMotor(bool value)
 {
     if (!motor && value) {
+        
+        debug("*** Motor on\n");
         
         // Turn motor on
         motor = true;
@@ -161,6 +157,8 @@ Drive::setMotor(bool value)
     
     else if (motor && !value) {
         
+        debug("*** Motor off\n");
+
         // Turn motor off
         motor = false;
         
@@ -175,6 +173,8 @@ void
 Drive::selectSide(int side)
 {
     assert(side < 2);
+    if (head.side != side) debug("*** Select side %d\n", side);
+
     head.side = side;
 }
 
@@ -198,7 +198,7 @@ void
 Drive::moveHead(int dir)
 {
     // Update disk change signal
-    if (hasDisk()) dskchange = false;
+    if (hasDisk()) dskchange = true;
     
     if (dir) {
         
@@ -260,7 +260,7 @@ Drive::ejectDisk()
     if (disk) {
         
         // Flag disk change in the CIAA::PA
-        dskchange = true;
+        dskchange = false;
         
         // Get rid of the disk
         delete disk;

@@ -26,9 +26,6 @@ private:
     // Drive number (0 = df0, 1 = df1, 2 = df2, 3 = df3)
     long nr = 0;
     
-    // Indicates if the drive is connected to the Amiga.
-    bool connected = true;
-
     // The type of this drive
     DriveType type = A1010_ORIG;
     

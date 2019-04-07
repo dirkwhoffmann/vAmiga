@@ -126,6 +126,9 @@ class DiskController : public HardwareComponent {
     
     uint16_t peekDSKBYTR();
     
+    // Read handler for the PRA register of CIA A
+    uint8_t driveStatusFlags();
+        
     // Write handler for the PRB register of CIA B
     void PRBdidChange(uint8_t oldValue, uint8_t newValue);
     
