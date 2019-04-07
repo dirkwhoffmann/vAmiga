@@ -285,20 +285,21 @@ typedef enum : long
     // Secondary slot table
     //
     
-    TBE_IRQ_SLOT = 0, // Source 0 IRQ (Serial port transmit buffer empty)
-    DSKBLK_IRQ_SLOT,  // Source 1 IRQ (Disk block finished)
-    SOFT_IRQ_SLOT,    // Source 2 IRQ (Software-initiated)
-    PORTS_IRQ_SLOT,   // Source 3 IRQ (I/O ports and CIA A)
-    COPR_IRQ_SLOT,    // Source 4 IRQ (Copper)
-    VERTB_IRQ_SLOT,   // Source 5 IRQ (Start of vertical blank)
-    BLIT_IRQ_SLOT,    // Source 6 IRQ (Blitter finished)
-    AUD0_IRQ_SLOT,    // Source 7 IRQ (Audio channel 0 block finished)
-    AUD1_IRQ_SLOT,    // Source 8 IRQ (Audio channel 1 block finished)
-    AUD2_IRQ_SLOT,    // Source 9 IRQ (Audio channel 2 block finished)
-    AUD3_IRQ_SLOT,    // Source 10 IRQ (Audio channel 3 block finished)
-    RBF_IRQ_SLOT,     // Source 11 IRQ (Serial port receive buffer full)
-    DSKSYN_IRQ_SLOT,  // Source 12 IRQ (Disk sync register matches disk data)
-    EXTER_IRQ_SLOT,   // Source 13 IRQ (I/O ports and CIA B)
+    DSK_SLOT = 0,     // Disk controller
+    IRQ_TBE_SLOT,     // Source 0 IRQ (Serial port transmit buffer empty)
+    IRQ_DSKBLK_SLOT,  // Source 1 IRQ (Disk block finished)
+    IRQ_SOFT_SLOT,    // Source 2 IRQ (Software-initiated)
+    IRQ_PORTS_SLOT,   // Source 3 IRQ (I/O ports and CIA A)
+    IRQ_COPR_SLOT,    // Source 4 IRQ (Copper)
+    IRQ_VERTB_SLOT,   // Source 5 IRQ (Start of vertical blank)
+    IRQ_BLIT_SLOT,    // Source 6 IRQ (Blitter finished)
+    IRQ_AUD0_SLOT,    // Source 7 IRQ (Audio channel 0 block finished)
+    IRQ_AUD1_SLOT,    // Source 8 IRQ (Audio channel 1 block finished)
+    IRQ_AUD2_SLOT,    // Source 9 IRQ (Audio channel 2 block finished)
+    IRQ_AUD3_SLOT,    // Source 10 IRQ (Audio channel 3 block finished)
+    IRQ_RBF_SLOT,     // Source 11 IRQ (Serial port receive buffer full)
+    IRQ_DSKSYN_SLOT,  // Source 12 IRQ (Disk sync register matches disk data)
+    IRQ_EXTER_SLOT,   // Source 13 IRQ (I/O ports and CIA B)
     INSPECTOR_SLOT,   // Handles periodic calls to inspect()
     SEC_SLOT_COUNT,
 } EventSlot;
@@ -375,6 +376,9 @@ typedef enum : long
     //
     // Events in secondary event table
     //
+    
+    // Disk controller slot
+    DSK_ROTATE = 1,
     
     // IRQ slots
     IRQ_SET = 1,
@@ -666,8 +670,8 @@ typedef struct
     long vpos;
     long hpos;
     
-    EventSlotInfo primary[7];
-    EventSlotInfo secondary[15];
+    EventSlotInfo primary[PRIM_SLOT_COUNT];
+    EventSlotInfo secondary[SEC_SLOT_COUNT];
 }
 EventHandlerInfo;
 

@@ -247,40 +247,51 @@ EventHandler::_inspectSecSlot(uint32_t slot)
     
     switch ((EventSlot)slot) {
         
-        case TBE_IRQ_SLOT:       i->slotName = "Serial Output IRQ"; break;
-        case DSKBLK_IRQ_SLOT:    i->slotName = "Disk DMA IRQ"; break;
-        case SOFT_IRQ_SLOT:      i->slotName = "Software IRQ"; break;
-        case PORTS_IRQ_SLOT:     i->slotName = "CIA A IRQ"; break;
-        case COPR_IRQ_SLOT:      i->slotName = "Copper IRQ"; break;
-        case VERTB_IRQ_SLOT:     i->slotName = "VBlank IRQ"; break;
-        case BLIT_IRQ_SLOT:      i->slotName = "Blitter IRQ"; break;
-        case AUD0_IRQ_SLOT:      i->slotName = "Audio 0 IRQ"; break;
-        case AUD1_IRQ_SLOT:      i->slotName = "Audio 1 IRQ"; break;
-        case AUD2_IRQ_SLOT:      i->slotName = "Audio 2 IRQ"; break;
-        case AUD3_IRQ_SLOT:      i->slotName = "Audio 3 IRQ"; break;
-        case RBF_IRQ_SLOT:       i->slotName = "Serial Input IRQ"; break;
-        case DSKSYN_IRQ_SLOT:    i->slotName = "Disk Sync IRQ"; break;
-        case EXTER_IRQ_SLOT:     i->slotName = "CIA B IRQ"; break;
+        case DSK_SLOT:           i->slotName = "Disk Controller"; break;
+        case IRQ_TBE_SLOT:       i->slotName = "Serial Output IRQ"; break;
+        case IRQ_DSKBLK_SLOT:    i->slotName = "Disk DMA IRQ"; break;
+        case IRQ_SOFT_SLOT:      i->slotName = "Software IRQ"; break;
+        case IRQ_PORTS_SLOT:     i->slotName = "CIA A IRQ"; break;
+        case IRQ_COPR_SLOT:      i->slotName = "Copper IRQ"; break;
+        case IRQ_VERTB_SLOT:     i->slotName = "VBlank IRQ"; break;
+        case IRQ_BLIT_SLOT:      i->slotName = "Blitter IRQ"; break;
+        case IRQ_AUD0_SLOT:      i->slotName = "Audio 0 IRQ"; break;
+        case IRQ_AUD1_SLOT:      i->slotName = "Audio 1 IRQ"; break;
+        case IRQ_AUD2_SLOT:      i->slotName = "Audio 2 IRQ"; break;
+        case IRQ_AUD3_SLOT:      i->slotName = "Audio 3 IRQ"; break;
+        case IRQ_RBF_SLOT:       i->slotName = "Serial Input IRQ"; break;
+        case IRQ_DSKSYN_SLOT:    i->slotName = "Disk Sync IRQ"; break;
+        case IRQ_EXTER_SLOT:     i->slotName = "CIA B IRQ"; break;
         case INSPECTOR_SLOT:     i->slotName = "Debugger"; break;
         default:                 i->slotName = "*** INVALID ***"; break;
     }
     
     switch ((EventSlot)slot) {
+      
+        case DSK_SLOT:
         
-        case TBE_IRQ_SLOT:
-        case DSKBLK_IRQ_SLOT:
-        case SOFT_IRQ_SLOT:
-        case PORTS_IRQ_SLOT:
-        case COPR_IRQ_SLOT:
-        case VERTB_IRQ_SLOT:
-        case BLIT_IRQ_SLOT:
-        case AUD0_IRQ_SLOT:
-        case AUD1_IRQ_SLOT:
-        case AUD2_IRQ_SLOT:
-        case AUD3_IRQ_SLOT:
-        case RBF_IRQ_SLOT:
-        case DSKSYN_IRQ_SLOT:
-        case EXTER_IRQ_SLOT:
+        switch (secSlot[slot].id) {
+            
+            case 0:          i->eventName = "none"; break;
+            case DSK_ROTATE: i->eventName = "DSK_ROTATE"; break;
+            default:         i->eventName = "*** INVALID ***"; break;
+        }
+        break;
+        
+        case IRQ_TBE_SLOT:
+        case IRQ_DSKBLK_SLOT:
+        case IRQ_SOFT_SLOT:
+        case IRQ_PORTS_SLOT:
+        case IRQ_COPR_SLOT:
+        case IRQ_VERTB_SLOT:
+        case IRQ_BLIT_SLOT:
+        case IRQ_AUD0_SLOT:
+        case IRQ_AUD1_SLOT:
+        case IRQ_AUD2_SLOT:
+        case IRQ_AUD3_SLOT:
+        case IRQ_RBF_SLOT:
+        case IRQ_DSKSYN_SLOT:
+        case IRQ_EXTER_SLOT:
         
         switch (secSlot[slot].id) {
             
@@ -476,47 +487,47 @@ void
 EventHandler::_executeSecUntil(Cycle cycle) {
     
     // Check all secondary event slots one by one
-    if (isDueSec(TBE_IRQ_SLOT, cycle)) {
-        serveIRQEvent(TBE_IRQ_SLOT, 0);
+    if (isDueSec(IRQ_TBE_SLOT, cycle)) {
+        serveIRQEvent(IRQ_TBE_SLOT, 0);
     }
-    if (isDueSec(DSKBLK_IRQ_SLOT, cycle)) {
-        serveIRQEvent(DSKBLK_IRQ_SLOT, 1);
+    if (isDueSec(IRQ_DSKBLK_SLOT, cycle)) {
+        serveIRQEvent(IRQ_DSKBLK_SLOT, 1);
     }
-    if (isDueSec(SOFT_IRQ_SLOT, cycle)) {
-        serveIRQEvent(SOFT_IRQ_SLOT, 2);
+    if (isDueSec(IRQ_SOFT_SLOT, cycle)) {
+        serveIRQEvent(IRQ_SOFT_SLOT, 2);
     }
-    if (isDueSec(PORTS_IRQ_SLOT, cycle)) {
-        serveIRQEvent(PORTS_IRQ_SLOT, 3);
+    if (isDueSec(IRQ_PORTS_SLOT, cycle)) {
+        serveIRQEvent(IRQ_PORTS_SLOT, 3);
     }
-    if (isDueSec(COPR_IRQ_SLOT, cycle)) {
-        serveIRQEvent(COPR_IRQ_SLOT, 4);
+    if (isDueSec(IRQ_COPR_SLOT, cycle)) {
+        serveIRQEvent(IRQ_COPR_SLOT, 4);
     }
-    if (isDueSec(VERTB_IRQ_SLOT, cycle)) {
-        serveIRQEvent(VERTB_IRQ_SLOT, 5);
+    if (isDueSec(IRQ_VERTB_SLOT, cycle)) {
+        serveIRQEvent(IRQ_VERTB_SLOT, 5);
     }
-    if (isDueSec(BLIT_IRQ_SLOT, cycle)) {
-        serveIRQEvent(BLIT_IRQ_SLOT, 6);
+    if (isDueSec(IRQ_BLIT_SLOT, cycle)) {
+        serveIRQEvent(IRQ_BLIT_SLOT, 6);
     }
-    if (isDueSec(AUD0_IRQ_SLOT, cycle)) {
-        serveIRQEvent(AUD0_IRQ_SLOT, 7);
+    if (isDueSec(IRQ_AUD0_SLOT, cycle)) {
+        serveIRQEvent(IRQ_AUD0_SLOT, 7);
     }
-    if (isDueSec(AUD1_IRQ_SLOT, cycle)) {
-        serveIRQEvent(AUD1_IRQ_SLOT, 8);
+    if (isDueSec(IRQ_AUD1_SLOT, cycle)) {
+        serveIRQEvent(IRQ_AUD1_SLOT, 8);
     }
-    if (isDueSec(AUD2_IRQ_SLOT, cycle)) {
-        serveIRQEvent(AUD2_IRQ_SLOT, 9);
+    if (isDueSec(IRQ_AUD2_SLOT, cycle)) {
+        serveIRQEvent(IRQ_AUD2_SLOT, 9);
     }
-    if (isDueSec(AUD3_IRQ_SLOT, cycle)) {
-        serveIRQEvent(AUD3_IRQ_SLOT, 10);
+    if (isDueSec(IRQ_AUD3_SLOT, cycle)) {
+        serveIRQEvent(IRQ_AUD3_SLOT, 10);
     }
-    if (isDueSec(RBF_IRQ_SLOT, cycle)) {
-        serveIRQEvent(RBF_IRQ_SLOT, 11);
+    if (isDueSec(IRQ_RBF_SLOT, cycle)) {
+        serveIRQEvent(IRQ_RBF_SLOT, 11);
     }
-    if (isDueSec(DSKSYN_IRQ_SLOT, cycle)) {
-        serveIRQEvent(DSKSYN_IRQ_SLOT, 12);
+    if (isDueSec(IRQ_DSKSYN_SLOT, cycle)) {
+        serveIRQEvent(IRQ_DSKSYN_SLOT, 12);
     }
-    if (isDueSec(EXTER_IRQ_SLOT, cycle)) {
-        serveIRQEvent(EXTER_IRQ_SLOT, 13);
+    if (isDueSec(IRQ_EXTER_SLOT, cycle)) {
+        serveIRQEvent(IRQ_EXTER_SLOT, 13);
     }
     if (isDueSec(INSPECTOR_SLOT, cycle)) {
         serveINSEvent();
