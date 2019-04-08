@@ -523,15 +523,15 @@ Agnus::pokeDMACON(uint16_t value)
 void
 Agnus::pokeDSKPTH(uint16_t value)
 {
-    debug(2, "pokeDSKPTH(%X)\n", value);
     dskpt = REPLACE_HI_WORD(dskpt, value & 0x7);
+    debug(1, "pokeDSKPTH(%X) newPtr: %X\n", value, dskpt);
 }
 
 void
 Agnus::pokeDSKPTL(uint16_t value)
 {
-    debug(2, "pokeDSKPTL(%X)\n", value);
     dskpt = REPLACE_LO_WORD(dskpt, value);
+    debug(1, "pokeDSKPTL(%X) newPtr: %X\n", value, dskpt);
 }
 
 uint16_t

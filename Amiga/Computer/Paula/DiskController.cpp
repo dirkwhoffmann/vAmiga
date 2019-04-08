@@ -106,11 +106,14 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
 {
     uint16_t oldDsklen = dsklen;
     
+    debug("pokeDSKLEN(%X)\n", newDskLen);
+    
     // Remember the new value
     dsklen = newDskLen;
     
     // Disable DMA if the DMAEN bit (bit 15) has been cleared.
     if (!(newDskLen & 0x8000)) {
+        debug("dma = DRIVE_DMA_OFF\n");
         dma = DRIVE_DMA_OFF;
     }
     
@@ -137,6 +140,9 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
                 // Start reading immediately
                 debug("dma = DRIVE_DMA_READ\n");
                 dma = DRIVE_DMA_READ;
+                
+                // REMOVE ASAP
+                for (int i = 0; i < 6; i++) df[0]->rotate();
             }
         }
     }
@@ -157,7 +163,7 @@ DiskController::peekDSKBYTR()
     uint16_t result = 42; // TODO
     
     // WORDEQUAL
-    // TODO
+     SET_BIT(result, 12); // TODO
     
     // DMAON
     if (amiga->agnus.dskDMA() && dma != DRIVE_DMA_OFF) SET_BIT(result, 14);
@@ -284,16 +290,22 @@ DiskController::doDiskDMA()
     uint8_t data1 = 0xFF;
     uint8_t data2 = 0xFF;
     if (df[0]->isSelected() && df[0]->motor) {
-        df[0]->rotate();
         data1 = df[0]->readHead();
         df[0]->rotate();
         data2 = df[0]->readHead();
+        df[0]->rotate();
     }
     uint16_t word = HI_LO(data1, data2);
     
     // Perform DMA
     if (dma == DRIVE_DMA_READ) {
-        amiga->mem.pokeChip16(amiga->agnus.dskpt, word);
+        // plaindebug("DMA(HI) %d: %X -> %X\n", dsklen & 0x3FFF, HI_BYTE(word), amiga->agnus.dskpt);
+        // plaindebug("DMA(LO) %d: %X -> %X\n", dsklen & 0x3FFF, LO_BYTE(word), amiga->agnus.dskpt + 1);
+        plaindebug("DMA(HI) %d: %X\n", dsklen & 0x3FFF, HI_BYTE(word));
+        plaindebug("DMA(LO) %d: %X\n", dsklen & 0x3FFF, LO_BYTE(word));
+        // amiga->mem.pokeChip16(amiga->agnus.dskpt, word);
+        amiga->mem.pokeChip8(amiga->agnus.dskpt, data1);
+        amiga->mem.pokeChip8(amiga->agnus.dskpt + 1, data2);
         amiga->agnus.dskpt = (amiga->agnus.dskpt + 2) & 0x7FFFF;
         
         dsklen--;
@@ -305,12 +317,18 @@ DiskController::doDiskDMA()
     }
     
     // Did we reach a SYNC mark?
-    debug("head: %d dsksync = %X word = %X\n", df[0]->head.offset, dsksync, word);
+    // debug("head: %d dsksync = %X word = %X\n", df[0]->head.offset, dsksync, word);
+    dsksync = 0x4489; // REMOVE ASAP
     if (word == dsksync) {
 
+        debug("SYNC mark found.\n");
+        
+        // Trigger word SYNC interrupt
+        amiga->paula.pokeINTREQ(0x9000);
+        
         // Enable DMA if the controller was waiting for the SYNC mark
         if (dma == DRIVE_DMA_READ_SYNC) {
-            debug("SYNC mark found. Switching on DMA\n");
+            debug("Finally enabling DMA.\n");
             dma = DRIVE_DMA_READ;
         }
     }

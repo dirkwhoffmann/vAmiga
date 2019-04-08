@@ -129,9 +129,9 @@ Drive::driveStatusFlags()
         if (!hasWriteEnabledDisk()) { result &= 0b11110111; }
         
         /* PA2: /DSKCHANGE
-         * Disk has been removed from the drive. The signal goes low whenever a
-         * disk is removed. It remains low until a disk is inserted AND a step
-         * pulse is received.
+         * "Disk has been removed from the drive. The signal goes low whenever
+         *  a disk is removed. It remains low until a disk is inserted AND a
+         *  step pulse is received." [HRM]
          */
         if (!dskchange) result &= 0b11111011;
     }

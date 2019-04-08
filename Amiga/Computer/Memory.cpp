@@ -506,8 +506,11 @@ Memory::poke16(uint32_t addr, uint16_t value)
 void
 Memory::poke32(uint32_t addr, uint32_t value)
 {
-    // debug("PC: %X poke32(%X,%X)\n", amiga->cpu.getPC(), addr, value);
-
+    /*
+    if ((addr & 0xDF0000) == 0xDF0000)
+        debug("PC: %X poke32(%X,%X)\n", amiga->cpu.getPC(), addr, value);
+    */
+    
     poke16(addr,     HI_WORD(value));
     poke16(addr + 2, LO_WORD(value));
 }

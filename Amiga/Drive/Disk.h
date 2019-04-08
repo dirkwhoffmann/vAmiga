@@ -69,10 +69,10 @@ public:
      */
     
     static const long mfmBytesPerSector   = 1088;
-    static const long mfmBytesInTrackGap  = 696;
-    static const long mfmBytesPerTrack    = 12664;
-    static const long mfmBytesPerCylinder = 25328;
-    static const long mfmBytesPerDisk     = 2026240; 
+    static const long mfmBytesInTrackGap  = 700; // 696;
+    static const long mfmBytesPerTrack    = 12668; // 12664;
+    static const long mfmBytesPerCylinder = 2 * mfmBytesPerTrack;
+    static const long mfmBytesPerDisk     = 80 * mfmBytesPerCylinder;
     
     static const uint64_t MFM_DATA_BIT_MASK8  = 0x55;
     static const uint64_t MFM_CLOCK_BIT_MASK8 = 0xAA;
@@ -80,8 +80,8 @@ public:
     // MFM encoded disk data
     union {
         uint8_t raw[mfmBytesPerDisk];
-        uint8_t track[160][mfmBytesPerTrack];
         uint8_t cyclinder[80][2][mfmBytesPerTrack];
+        uint8_t track[160][mfmBytesPerTrack];
     } data;
     
     bool writeProtected;
