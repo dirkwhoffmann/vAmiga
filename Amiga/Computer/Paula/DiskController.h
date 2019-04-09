@@ -123,19 +123,20 @@ class DiskController : public HardwareComponent {
     public:
     
     // OCR register 0x008 (r)
-    uint16_t peekDSKDATR() { return dskdat; }
+    uint16_t peekDSKDATR() { debug("peekDSKDATR() = %X\n", dskdat); return dskdat; }
 
     // OCR register 0x024 (w)
     void pokeDSKLEN(uint16_t value);
 
     // OCR register 0x026 (w)
-    void pokeDSKDAT(uint16_t value) { dskdat = value; }
+    void pokeDSKDAT(uint16_t value) { debug("pokeDSKDAT(%X)\n", value);
+ dskdat = value; }
     
     // OCR register 0x01A (r)
     uint16_t peekDSKBYTR();
     
     // OCR register 0x07E (w)
-    void pokeDSKSYNC(uint16_t value) { assert(0); dsksync = value; }
+    void pokeDSKSYNC(uint16_t value);
     
     // Read handler for the PRA register of CIA A
     uint8_t driveStatusFlags();

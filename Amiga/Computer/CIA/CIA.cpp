@@ -1488,6 +1488,7 @@ CIAB::updatePB()
               !!(PB & 0x80), !!(PB & 0x40), !!(PB & 0x20), !!(PB & 0x10),
               !!(PB & 0x08), !!(PB & 0x04), !!(PB & 0x02), !!(PB & 0x01));
         */
+        debug("CIAB::updatePB: PB = %X\n", PB); 
         amiga->paula.diskController.PRBdidChange(oldPB, PB);
     }
 }

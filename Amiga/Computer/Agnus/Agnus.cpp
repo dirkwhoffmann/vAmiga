@@ -965,7 +965,7 @@ Agnus::hsyncHandler()
     // Schedule the first hi-prio DMA event (if any)
     if (nextDmaEvent[0]) {
         EventID eventID = dmaEvent[nextDmaEvent[0]];
-        eventHandler.schedulePos(DMA_SLOT, 26, nextDmaEvent[0], eventID);
+        eventHandler.schedulePos(DMA_SLOT, vpos, nextDmaEvent[0], eventID);
     }
     
     // Schedule first RAS event

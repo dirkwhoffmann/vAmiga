@@ -217,7 +217,6 @@ void
 Paula::checkInterrupt()
 {
     int level = interruptLevel();
-    
     /*
     if (level) {
         uint16_t mask = intena & intreq;

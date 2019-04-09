@@ -104,10 +104,10 @@ DiskController::setConnected(int df, bool value)
 void
 DiskController::pokeDSKLEN(uint16_t newDskLen)
 {
-    uint16_t oldDsklen = dsklen;
-    
     debug("pokeDSKLEN(%X)\n", newDskLen);
-    
+
+    uint16_t oldDsklen = dsklen;
+        
     // Remember the new value
     dsklen = newDskLen;
     
@@ -172,7 +172,15 @@ DiskController::peekDSKBYTR()
     // TODO: Make this bit flip in a timing accurate way
     SET_BIT(result, 15);
     
+    debug("peekDSKBYTR() = %X\n", result);
     return result;
+}
+
+void
+DiskController::pokeDSKSYNC(uint16_t value)
+{
+    debug("pokeDSKSYNC(%X)\n", value);
+    dsksync = value;
 }
 
 uint8_t
@@ -301,8 +309,9 @@ DiskController::doDiskDMA()
     if (dma == DRIVE_DMA_READ) {
         // plaindebug("DMA(HI) %d: %X -> %X\n", dsklen & 0x3FFF, HI_BYTE(word), amiga->agnus.dskpt);
         // plaindebug("DMA(LO) %d: %X -> %X\n", dsklen & 0x3FFF, LO_BYTE(word), amiga->agnus.dskpt + 1);
-        plaindebug("DMA(HI) %d: %X\n", dsklen & 0x3FFF, HI_BYTE(word));
-        plaindebug("DMA(LO) %d: %X\n", dsklen & 0x3FFF, LO_BYTE(word));
+        debug("DMA(HI) %d: %X\n", dsklen & 0x3FFF, HI_BYTE(word));
+        debug("DMA(LO) %d: %X\n", dsklen & 0x3FFF, LO_BYTE(word));
+
         // amiga->mem.pokeChip16(amiga->agnus.dskpt, word);
         amiga->mem.pokeChip8(amiga->agnus.dskpt, data1);
         amiga->mem.pokeChip8(amiga->agnus.dskpt + 1, data2);
@@ -313,6 +322,18 @@ DiskController::doDiskDMA()
             amiga->paula.pokeINTREQ(0x8002);
             dma = DRIVE_DMA_OFF;
             debug("Disk DMA finished.\n");
+            
+            for (unsigned i = 0; i < 7358 * 2; i += 8) {
+                plaindebug("%02X %02X %02X %02X %02X %02X %02X %02X\n",
+                           amiga->mem.chipRam[0x6B14 + i],
+                           amiga->mem.chipRam[0x6B14 + i + 1],
+                           amiga->mem.chipRam[0x6B14 + i + 2],
+                           amiga->mem.chipRam[0x6B14 + i + 3],
+                           amiga->mem.chipRam[0x6B14 + i + 4],
+                           amiga->mem.chipRam[0x6B14 + i + 5],
+                           amiga->mem.chipRam[0x6B14 + i + 6],
+                           amiga->mem.chipRam[0x6B14 + i + 7]);
+            }
         }
     }
     

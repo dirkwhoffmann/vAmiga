@@ -383,6 +383,7 @@ Amiga::_powerOn()
     // cpu.bpManager.setBreakpointAt(0xFC570E); // Blitter
     // cpu.bpManager.setBreakpointAt(0xFE8A6E); // All Blitter stuff done
     // cpu.bpManager.setBreakpointAt(0xFEA1D8); // DSKPT
+    cpu.bpManager.setBreakpointAt(0xFEA212); // 
     
     
     // Update the recorded debug information
