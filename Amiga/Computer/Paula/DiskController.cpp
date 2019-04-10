@@ -309,10 +309,11 @@ DiskController::doDiskDMA()
     if (dma == DRIVE_DMA_READ) {
         // plaindebug("DMA(HI) %d: %X -> %X\n", dsklen & 0x3FFF, HI_BYTE(word), amiga->agnus.dskpt);
         // plaindebug("DMA(LO) %d: %X -> %X\n", dsklen & 0x3FFF, LO_BYTE(word), amiga->agnus.dskpt + 1);
-        debug("DMA(HI) %d: %X\n", dsklen & 0x3FFF, HI_BYTE(word));
-        debug("DMA(LO) %d: %X\n", dsklen & 0x3FFF, LO_BYTE(word));
+        // debug("DMA(HI) %d: %X\n", dsklen & 0x3FFF, HI_BYTE(word));
+        // debug("DMA(LO) %d: %X\n", dsklen & 0x3FFF, LO_BYTE(word));
 
         // amiga->mem.pokeChip16(amiga->agnus.dskpt, word);
+        if (amiga->agnus.dskpt >= 0x5C40-3 && amiga->agnus.dskpt <= 0x5C40) debug("Disk DMA to %X\n", amiga->agnus.dskpt);
         amiga->mem.pokeChip8(amiga->agnus.dskpt, data1);
         amiga->mem.pokeChip8(amiga->agnus.dskpt + 1, data2);
         amiga->agnus.dskpt = (amiga->agnus.dskpt + 2) & 0x7FFFF;
@@ -321,8 +322,9 @@ DiskController::doDiskDMA()
         if ((dsklen & 0x3FFF) == 0) {
             amiga->paula.pokeINTREQ(0x8002);
             dma = DRIVE_DMA_OFF;
-            debug("Disk DMA finished.\n");
+            debug("Disk DMA DONE.\n");
             
+            /*
             for (unsigned i = 0; i < 7358 * 2; i += 8) {
                 plaindebug("%02X %02X %02X %02X %02X %02X %02X %02X\n",
                            amiga->mem.chipRam[0x6B14 + i],
@@ -334,6 +336,7 @@ DiskController::doDiskDMA()
                            amiga->mem.chipRam[0x6B14 + i + 6],
                            amiga->mem.chipRam[0x6B14 + i + 7]);
             }
+            */
         }
     }
     

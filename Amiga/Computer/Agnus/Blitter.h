@@ -184,10 +184,10 @@ class Blitter : public HardwareComponent {
     void pokeBLTSIZE(uint16_t value);
     
     // BLTxMOD
-    void pokeBLTAMOD(uint16_t value) { bltamod = value; }
-    void pokeBLTBMOD(uint16_t value) { bltbmod = value; }
-    void pokeBLTCMOD(uint16_t value) { bltcmod = value; }
-    void pokeBLTDMOD(uint16_t value) { bltdmod = value; }
+    void pokeBLTAMOD(uint16_t value);
+    void pokeBLTBMOD(uint16_t value);
+    void pokeBLTCMOD(uint16_t value);
+    void pokeBLTDMOD(uint16_t value);
     
     // BLTxDAT
     void pokeBLTADAT(uint16_t value);

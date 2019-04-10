@@ -88,7 +88,7 @@ Drive::setType(DriveType t)
         type = t;
         id = DRIVE_ID_35DD;
         break;
-        
+
         default:
         
         assert(false);
@@ -357,7 +357,10 @@ Drive::PRBdidChange(uint8_t oldValue, uint8_t newValue)
     if (newSel) return;
         
     // Evaluate the side selection bit
-    // side = !(newValue & 0b100);
+    if (head.side != !(newValue & 0b100)) {
+        debug("Switching to side %d\n", !(newValue & 0b100));
+    }
+    head.side = !(newValue & 0b100);
         
     // Move the drive head if there is a falling edge on the step line
     if (FALLING_EDGE(oldStep, newStep)) moveHead(dir);

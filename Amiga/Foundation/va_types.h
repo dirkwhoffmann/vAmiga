@@ -646,7 +646,7 @@ typedef struct
     uint32_t dskpt;
     uint32_t audlc[4];
     uint32_t bplpt[6];
-    uint32_t sprptr[8];
+    uint32_t sprpt[8];
 }
 DMAInfo;
 

@@ -253,13 +253,13 @@ Blitter::pokeBLTALWM(uint16_t value)
 void
 Blitter::pokeBLTSIZE(uint16_t value)
 {
-    // debug("*** pokeBLTSIZE(%X)\n", value);
+    debug(2, "pokeBLTSIZE(%X)\n", value);
     
     bltsize = value;
     bzero = true;
     bbusy = true;
     
-    // WE ONLY DO FAST BLITS FOR NOW
+    // WE ONLY DO FAST BLITS AT THE MOMENT
     handler->scheduleRel(BLT_SLOT, DMA_CYCLES(1), BLT_FAST_BLIT);
     
     
@@ -282,8 +282,36 @@ Blitter::pokeBLTSIZE(uint16_t value)
 }
 
 void
+Blitter::pokeBLTAMOD(uint16_t value)
+{
+    debug(2, "pokeBLTAMOD(%X)\n", value);
+    bltamod = value;
+}
+void
+Blitter::pokeBLTBMOD(uint16_t value)
+{
+    debug(2, "pokeBLTBMOD(%X)\n", value);
+    bltbmod = value;
+}
+
+void
+Blitter::pokeBLTCMOD(uint16_t value)
+{
+    debug(2, "pokeBLTCMOD(%X)\n", value);
+    bltcmod = value;
+}
+
+void
+Blitter::pokeBLTDMOD(uint16_t value)
+{
+    debug(2, "pokeBLTDMOD(%X)\n", value);
+    bltdmod = value;
+}
+
+void
 Blitter::pokeBLTADAT(uint16_t value)
 {
+    debug(2, "pokeBLTADAT(%X)\n", value);
     anew = value;
     /*
     // Apply masks
@@ -297,6 +325,7 @@ Blitter::pokeBLTADAT(uint16_t value)
 void
 Blitter::pokeBLTBDAT(uint16_t value)
 {
+    debug(2, "pokeBLTBDAT(%X)\n", value);
     bnew = value;
     /*
      bshift = (bshift << 16) | value;
@@ -306,6 +335,7 @@ Blitter::pokeBLTBDAT(uint16_t value)
 void
 Blitter::pokeBLTCDAT(uint16_t value)
 {
+    debug(2, "pokeBLTCDAT(%X)\n", value);
     chold = value;
 }
 
@@ -409,21 +439,24 @@ Blitter::serviceEvent(EventID id)
             if (instr & FETCH_A) {
                 
                 debug(2, "FETCH_A\n");
-                pokeBLTADAT(amiga->mem.peek16(bltapt));
+                // pokeBLTADAT(amiga->mem.peek16(bltapt));
+                anew = amiga->mem.peek16(bltapt);
                 INC_OCS_PTR(bltapt, 2 + (isLastWord() ? bltamod : 0));
             }
             
             if (instr & FETCH_B) {
 
-                debug(2, "FETCH_B\n");
-                pokeBLTBDAT(amiga->mem.peek16(bltbpt));
+                debug(3, "FETCH_B\n");
+                // pokeBLTBDAT(amiga->mem.peek16(bltbpt));
+                bnew = amiga->mem.peek16(bltbpt);
                 INC_OCS_PTR(bltbpt, 2 + (isLastWord() ? bltbmod : 0));
             }
 
             if (instr & FETCH_C) {
                 
-                debug(2, "FETCH_C\n");
-                pokeBLTCDAT(amiga->mem.peek16(bltcpt));
+                debug(3, "FETCH_C\n");
+                // pokeBLTCDAT(amiga->mem.peek16(bltcpt));
+                chold = amiga->mem.peek16(bltcpt);
                 INC_OCS_PTR(bltcpt, 2 + (isLastWord() ? bltcmod : 0));
             }
             

@@ -9,7 +9,6 @@
 
 #include "Amiga.h"
 
-int bltcount = 0; // REMOVE ASAP
 int bltdebug = 0; // REMOVE ASAP
 
 void
@@ -58,28 +57,31 @@ Blitter::doCopyBlit()
         dmod = -dmod;
     }
     
-    if (bltdebug) debug("A = %d B = %d C = %d D = %d amod = %d bmod = %d cmod = %d dmod = %d\n", useA, useB, useC, useD, amod, bmod, cmod, dmod);
+    debug(2, "A = %d B = %d C = %d D = %d amod = %d bmod = %d cmod = %d dmod = %d\n", useA, useB, useC, useD, amod, bmod, cmod, dmod);
     
     for (yCounter = bltsizeH(); yCounter >= 1; yCounter--) {
     
         for (xCounter = bltsizeW(); xCounter >= 1;  xCounter--) {
             
-            if (bltdebug) debug("(%d,%d)\n", yCounter, xCounter);
+            debug(2, "(%d,%d)\n", yCounter, xCounter);
             
             // Fetch A, B, and C
             if (useA) {
-                pokeBLTADAT(amiga->mem.peek16(bltapt));
-                if (bltdebug) debug("A = peek(%d) = %d\n", bltapt, amiga->mem.peek16(bltapt));
+                // pokeBLTADAT(amiga->mem.peek16(bltapt));
+                anew = amiga->mem.peek16(bltapt);
+                debug(2, "A = peek(%X) = %X\n", bltapt, amiga->mem.peek16(bltapt));
                 INC_OCS_PTR(bltapt, incr + (isLastWord() ? amod : 0));
             }
             if (useB) {
-                pokeBLTBDAT(amiga->mem.peek16(bltbpt));
-                if (bltdebug) debug("B = peek(%d) = %d\n", bltbpt, amiga->mem.peek16(bltbpt));
+                // pokeBLTBDAT(amiga->mem.peek16(bltbpt));
+                bnew = amiga->mem.peek16(bltbpt);
+                debug(2, "B = peek(%X) = %X\n", bltbpt, amiga->mem.peek16(bltbpt));
                 INC_OCS_PTR(bltbpt, incr + (isLastWord() ? bmod : 0));
             }
             if (useC) {
-                pokeBLTCDAT(amiga->mem.peek16(bltcpt));
-                if (bltdebug) debug("C = peek(%d) = %d\n", bltcpt, amiga->mem.peek16(bltcpt));
+                // pokeBLTCDAT(amiga->mem.peek16(bltcpt));
+                chold = amiga->mem.peek16(bltcpt);
+                debug(2, "C = peek(%X) = %X\n", bltcpt, amiga->mem.peek16(bltcpt));
                 INC_OCS_PTR(bltcpt, incr + (isLastWord() ? cmod : 0));
             }
             
@@ -87,18 +89,26 @@ Blitter::doCopyBlit()
             uint16_t mask = 0xFFFF;
             if (isFirstWord()) mask &= bltafwm;
             if (isLastWord()) mask &= bltalwm;
+            debug(2, "first = %d last = %d mask = %X\n", isFirstWord(), isLastWord(), mask);
             
             // Run the barrel shifters
-            if (bltdebug) debug("ash = %d bsh = %d\n", bltASH(), bltBSH());
-            uint32_t barrelA = HI_W_LO_W(aold, anew & mask);
-            uint32_t barrelB = HI_W_LO_W(bold, bnew);
+            debug(2, "ash = %d bsh = %d\n", bltASH(), bltBSH());
+            if (bltDESC()) {
+                uint32_t barrelA = HI_W_LO_W(anew & mask, aold);
+                uint32_t barrelB = HI_W_LO_W(bnew,        bold);
+                ahold = (barrelA >> (16 - bltASH())) & 0xFFFF;
+                bhold = (barrelB >> (16 - bltBSH())) & 0xFFFF;
+            } else {
+                uint32_t barrelA = HI_W_LO_W(aold, anew & mask);
+                uint32_t barrelB = HI_W_LO_W(bold,        bnew);
+                ahold = (barrelA >> bltASH()) & 0xFFFF;
+                bhold = (barrelB >> bltBSH()) & 0xFFFF;
+            }
             aold = anew & mask;
             bold = bnew;
-            ahold = (barrelA >> bltASH()) & 0xFFFF;
-            bhold = (barrelB >> bltBSH()) & 0xFFFF;
-            
+
             // Run the minterm generator
-            if (bltdebug) debug("ahold = %d bhold = %d chold = %d bltcon0 = %X (hex)\n", ahold, bhold, chold, bltcon0);
+            debug(2, "ahold = %X bhold = %X chold = %X bltcon0 = %X (hex)\n", ahold, bhold, chold, bltcon0);
             dhold = 0;
             if (bltcon0 & 0b10000000) dhold |=  ahold &  bhold &  chold;
             if (bltcon0 & 0b01000000) dhold |=  ahold &  bhold & ~chold;
@@ -115,19 +125,12 @@ Blitter::doCopyBlit()
             // Write D
             if (useD) {
                 amiga->mem.pokeChip16(bltdpt, dhold);
-                if (bltdebug) debug("D: poke(%d), %d\n", bltdpt, dhold);
+                debug(2, "D: poke(%d), %d\n", bltdpt, dhold);
                 checksum += bltdpt + dhold;
                 INC_OCS_PTR(bltdpt, incr + (isLastWord() ? dmod : 0));
             }
         }
     }
-    /*
-    plainmsg("checksum = %lld\n", checksum);
-    if (bltcount == 1185) {
-        printf("DEBUGGING BLITS FROM NOW ON\n");
-        bltdebug = 1;
-    }
-    */
 }
 
 uint16_t logicFunction(int minterm,uint16_t wordA, uint16_t wordB, uint16_t wordC) {
@@ -188,11 +191,6 @@ Blitter::doLineBlit()
     int inc1 = (int16_t)bltamod; // 4(dy - dx)
     int D = (int16_t)bltapt;     // start value of 4dy - 2dx
     // uint16_t* chipramW = internal.chipramW;
-    
-    /*
-    plainmsg("%d LINE BLIT (%d,%d) (%d)\n",
-             bltcount++, bltsizeH(), bltsizeW(), octCode);
-    */
     
     int planeAddr = bltcpt & 0x1FFFFE; //word address
     

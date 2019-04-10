@@ -110,16 +110,21 @@ Agnus::_inspect()
     info.numBpls = activeBitplanes;
     
     info.dskpt   = dskpt;
-    for (unsigned i = 0; i < 4; i++)  info.audlc[i] = audlc[i];
-    for (unsigned i = 0; i < 6; i++)  info.bplpt[i] = bplpt[i];
-    for (unsigned i = 0; i < 8; i++) info.sprptr[i] = sprpt[i];
+    for (unsigned i = 0; i < 4; i++) info.audlc[i] = audlc[i];
+    for (unsigned i = 0; i < 6; i++) info.bplpt[i] = bplpt[i];
+    for (unsigned i = 0; i < 8; i++) info.sprpt[i] = sprpt[i];
     
     pthread_mutex_unlock(&lock);
 }
 
 void
 Agnus::_dump()
-{        
+{
+    plainmsg("  dskpt = %X\n", dskpt);
+    for (unsigned i = 0; i < 4; i++) plainmsg("audlc[%d] = %X\n", i, audlc[i]);
+    for (unsigned i = 0; i < 6; i++) plainmsg("bplpt[%d] = %X\n", i, bplpt[i]);
+    for (unsigned i = 0; i < 8; i++) plainmsg("bplpt[%d] = %X\n", i, sprpt[i]);
+    
     plainmsg("  hstrt : %d\n", hstrt);
     plainmsg("  hstop : %d\n", hstop);
     plainmsg("  vstrt : %d\n", vstrt);
