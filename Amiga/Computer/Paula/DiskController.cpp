@@ -17,8 +17,9 @@ DiskController::DiskController()
     registerSnapshotItems(vector<SnapshotItem> {
         
         { &state,      sizeof(state),      0 },
-        { &fifoCount,  sizeof(fifoCount),  0 },
+        { &incoming,   sizeof(incoming),   0 },
         { &fifo,       sizeof(fifo),       0 },
+        { &fifoCount,  sizeof(fifoCount),  0 },
         { &dsklen,     sizeof(dsklen),     0 },
         { &dskdat,     sizeof(dskdat),     0 },
         { &prb,        sizeof(prb),        0 },
@@ -186,7 +187,7 @@ DiskController::peekDSKBYTR()
      */
     
     // DATA
-    uint16_t result = 42; // TODO
+    uint16_t result = incoming; 
     
     // WORDEQUAL
      SET_BIT(result, 12); // TODO
@@ -252,16 +253,25 @@ DiskController::serveDiskEvent()
 {
     // debug("serveDiskEvent()\n");
     
-    // Read a byte from the data providing drive
     for (unsigned i = 0; i < 4; i++) {
-        if (df[i]->isDataSource()) writeFifo(df[i]->readHead());
+        
+        if (df[i]->isDataSource()) {
+           
+            // Read byte from the data providing drive.
+            incoming = df[i]->readHead();
+            
+            // Save byte into the FIFO buffer.
+            writeFifo(incoming);
+            
+            // There can only be one data provider.
+            break;
+        }
     }
 
     // Rotate the disks
     for (unsigned i = 0; i < 4; i++) {
         df[i]->rotate();
     }
-    
     
     // Schedule next event
     handler->scheduleSecRel(DSK_SLOT, DMA_CYCLES(55), DSK_ROTATE);

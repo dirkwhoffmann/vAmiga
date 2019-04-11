@@ -35,19 +35,22 @@ private:
     
     
     //
-    // FIFO buffer
+    // Data buffers
     //
     
-    // Number of bytes stored in the FIFO buffer
-    uint8_t fifoCount;
+    // The latest incoming byte (value shows up in DSKBYTER)
+    uint8_t incoming;
     
-    /* Data bytes stored in the FIFO buffer
+    /* The drive controller's FIFO buffer
      * On each DSK_ROTATE event, a byte is read from the selected drive and
      * put into this buffer. Each Disk DMA operation will read two bytes from
      * the buffer and store them at the desired location.
      */
     uint64_t fifo;
-    
+
+    // Number of bytes stored in the FIFO buffer
+    uint8_t fifoCount;
+
     
     //
     // Registers
@@ -182,4 +185,3 @@ public:
 };
 
 #endif
-
