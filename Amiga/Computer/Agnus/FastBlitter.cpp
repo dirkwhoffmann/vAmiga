@@ -91,33 +91,16 @@ Blitter::doCopyBlit()
             if (isLastWord()) mask &= bltalwm;
             debug(2, "first = %d last = %d mask = %X\n", isFirstWord(), isLastWord(), mask);
             
-            // Run the barrel shifters
+            // Run the two barrel shifters
             debug(2, "ash = %d bsh = %d\n", bltASH(), bltBSH());
-            if (bltDESC()) {
-                uint32_t barrelA = HI_W_LO_W(anew & mask, aold);
-                uint32_t barrelB = HI_W_LO_W(bnew,        bold);
-                ahold = (barrelA >> (16 - bltASH())) & 0xFFFF;
-                bhold = (barrelB >> (16 - bltBSH())) & 0xFFFF;
-            } else {
-                uint32_t barrelA = HI_W_LO_W(aold, anew & mask);
-                uint32_t barrelB = HI_W_LO_W(bold,        bnew);
-                ahold = (barrelA >> bltASH()) & 0xFFFF;
-                bhold = (barrelB >> bltBSH()) & 0xFFFF;
-            }
+            doBarrelShifterA();
+            doBarrelShifterB();
             aold = anew & mask;
             bold = bnew;
 
             // Run the minterm generator
             debug(2, "ahold = %X bhold = %X chold = %X bltcon0 = %X (hex)\n", ahold, bhold, chold, bltcon0);
-            dhold = 0;
-            if (bltcon0 & 0b10000000) dhold |=  ahold &  bhold &  chold;
-            if (bltcon0 & 0b01000000) dhold |=  ahold &  bhold & ~chold;
-            if (bltcon0 & 0b00100000) dhold |=  ahold & ~bhold &  chold;
-            if (bltcon0 & 0b00010000) dhold |=  ahold & ~bhold & ~chold;
-            if (bltcon0 & 0b00001000) dhold |= ~ahold &  bhold &  chold;
-            if (bltcon0 & 0b00000100) dhold |= ~ahold &  bhold & ~chold;
-            if (bltcon0 & 0b00000010) dhold |= ~ahold & ~bhold &  chold;
-            if (bltcon0 & 0b00000001) dhold |= ~ahold & ~bhold & ~chold;
+            doMintermLogic();
             
             // Update the zero flag
             if (dhold) bzero = false;

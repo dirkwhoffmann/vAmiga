@@ -345,7 +345,7 @@ DiskController::doDiskDMA()
     dsksync = 0x4489; // REMOVE ASAP
     if (word == dsksync) {
 
-        debug("SYNC mark found.\n");
+        debug(2, "SYNC mark found.\n");
         
         // Trigger word SYNC interrupt
         amiga->paula.pokeINTREQ(0x9000);

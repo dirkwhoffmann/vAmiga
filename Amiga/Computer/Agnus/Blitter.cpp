@@ -407,17 +407,8 @@ Blitter::serviceEvent(EventID id)
 
                 debug(2, "HOLD_D\n");
                 
-                dhold = 0;
-
-                // Run the minterm generator
-                if (bltcon0 & 0b10000000) dhold |=  ahold &  bhold &  chold;
-                if (bltcon0 & 0b01000000) dhold |=  ahold &  bhold & ~chold;
-                if (bltcon0 & 0b00100000) dhold |=  ahold &  bhold &  chold;
-                if (bltcon0 & 0b00010000) dhold |=  ahold & ~bhold & ~chold;
-                if (bltcon0 & 0b00001000) dhold |= ~ahold &  bhold &  chold;
-                if (bltcon0 & 0b00000100) dhold |= ~ahold &  bhold & ~chold;
-                if (bltcon0 & 0b00000010) dhold |= ~ahold & ~bhold &  chold;
-                if (bltcon0 & 0b00000001) dhold |= ~ahold & ~bhold & ~chold;
+                // Run the minterm logic circuit
+                doMintermLogic();
                 
                 // Run the fill logic circuit
                 // TODO
@@ -612,3 +603,66 @@ Blitter::loadMicrocode()
     debug(2, "Microcode loaded\n");
 
 }
+
+void
+Blitter::doBarrelShifterA()
+{
+    uint16_t masked = anew;
+    
+    if (isFirstWord()) masked &= bltafwm;
+    if (isLastWord())  masked &= bltalwm;
+    
+    debug(2, "first = %d last = %d masked = %X\n", isFirstWord(), isLastWord(), masked);
+    
+    if(bltDESC()){
+        ahold = (aold >> (16 - bltASH())) | (masked << bltASH());
+    }else{
+        ahold = (aold << (16 - bltASH())) | (masked >> bltASH());
+    }
+    
+    /*
+    if (bltDESC()) {
+        uint32_t barrelA = HI_W_LO_W(anew & mask, aold);
+        ahold = (barrelA >> (16 - bltASH())) & 0xFFFF;
+    } else {
+        uint32_t barrelA = HI_W_LO_W(aold, anew & mask);
+        ahold = (barrelA >> bltASH()) & 0xFFFF;
+    }
+    */
+}
+
+void
+Blitter::doBarrelShifterB()
+{
+    if(bltDESC()) {
+        bhold = (bold >> (16 - bltBSH())) | (bnew << bltBSH());
+    } else {
+        bhold = (bold << (16 - bltBSH())) | (bnew >> bltBSH());
+    }
+    
+    /*
+    if (bltDESC()) {
+        uint32_t barrelB = HI_W_LO_W(bnew, bold);
+        bhold = (barrelB >> (16 - bltBSH())) & 0xFFFF;
+    } else {
+        uint32_t barrelB = HI_W_LO_W(bold, bnew);
+        bhold = (barrelB >> bltBSH()) & 0xFFFF;
+    }
+    */
+}
+
+void
+Blitter::doMintermLogic()
+{
+    dhold = 0;
+    
+    if (bltcon0 & 0b10000000) dhold |=  ahold &  bhold &  chold;
+    if (bltcon0 & 0b01000000) dhold |=  ahold &  bhold & ~chold;
+    if (bltcon0 & 0b00100000) dhold |=  ahold & ~bhold &  chold;
+    if (bltcon0 & 0b00010000) dhold |=  ahold & ~bhold & ~chold;
+    if (bltcon0 & 0b00001000) dhold |= ~ahold &  bhold &  chold;
+    if (bltcon0 & 0b00000100) dhold |= ~ahold &  bhold & ~chold;
+    if (bltcon0 & 0b00000010) dhold |= ~ahold & ~bhold &  chold;
+    if (bltcon0 & 0b00000001) dhold |= ~ahold & ~bhold & ~chold;
+}
+

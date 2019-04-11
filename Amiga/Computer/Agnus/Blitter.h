@@ -144,15 +144,18 @@ class Blitter : public HardwareComponent {
     
     public:
     
-    // BLTCON0
+    // OCS register 0x040 (w)
+    void pokeBLTCON0(uint16_t value);
+    
     inline uint16_t bltASH() { return bltcon0 >> 12; }
     inline bool bltUSEA() { return bltcon0 & (1 << 11); }
     inline bool bltUSEB() { return bltcon0 & (1 << 10); }
     inline bool bltUSEC() { return bltcon0 & (1 << 9); }
     inline bool bltUSED() { return bltcon0 & (1 << 8); }
-    void pokeBLTCON0(uint16_t value);
     
-    // BLTCON1
+    // OCS register 0x042 (w)
+    void pokeBLTCON1(uint16_t value);
+
     inline uint16_t bltBSH() { return bltcon1 >> 12; }
     inline bool bltEFE() { return bltcon1 & (1 << 4); }
     inline bool bltIFE() { return bltcon1 & (1 << 3); }
@@ -160,13 +163,12 @@ class Blitter : public HardwareComponent {
     inline bool bltFCI() { return bltcon1 & (1 << 2); }
     inline bool bltDESC() { return bltcon1 & (1 << 1); }
     inline bool bltLINE() { return bltcon1 & (1 << 0); }
-    void pokeBLTCON1(uint16_t value);
     
-    // BLTAFWM, BLTALWM
+    // OCS registers 0x044 and 0x046 (w)
     void pokeBLTAFWM(uint16_t value);
     void pokeBLTALWM(uint16_t value);
     
-    // BLTxPTH, BLTxPTL
+    // OCS registers 0x048 and 0x056 (w)
     void pokeBLTAPTH(uint16_t value);
     void pokeBLTAPTL(uint16_t value);
     void pokeBLTBPTH(uint16_t value);
@@ -176,20 +178,20 @@ class Blitter : public HardwareComponent {
     void pokeBLTDPTH(uint16_t value);
     void pokeBLTDPTL(uint16_t value);
     
-    // BLTSIZE
+    // OCS register 0x058 (w)
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // H9 H8 H7 H6 H5 H4 H3 H2 H1 H0 W5 W4 W3 W2 W1 W0
     inline uint16_t bltsizeH() { return (bltsize >> 6) ? (bltsize >> 6) : 1024; }
     inline uint16_t bltsizeW() { return (bltsize & 0x3F) ? (bltsize & 0x3F) : 64; }
     void pokeBLTSIZE(uint16_t value);
     
-    // BLTxMOD
+    // OCS registers 0x060 and 0x066 (w)
     void pokeBLTAMOD(uint16_t value);
     void pokeBLTBMOD(uint16_t value);
     void pokeBLTCMOD(uint16_t value);
     void pokeBLTDMOD(uint16_t value);
     
-    // BLTxDAT
+    // OCS registers 0x070 and 0x074 (w)
     void pokeBLTADAT(uint16_t value);
     void pokeBLTBDAT(uint16_t value);
     void pokeBLTCDAT(uint16_t value);
@@ -216,6 +218,13 @@ class Blitter : public HardwareComponent {
     
     // Program the device
     void loadMicrocode();
+
+    // Emulate the barrel shifter
+    void doBarrelShifterA();
+    void doBarrelShifterB();
+
+    // Emulate the minterm logic circuit
+    void doMintermLogic();
     
     
     //
