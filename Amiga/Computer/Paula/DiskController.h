@@ -157,6 +157,9 @@ class DiskController : public HardwareComponent {
     // Clears the FIFO buffer.
     void clearFifo();
 
+    // Returns true if the FIFO buffer contains at least 2 bytes of data.
+    bool fifoHasData() { return fifoCount >= 2; }
+
     // Writes a byte into the FIFO buffer.
     void writeFifo(uint8_t byte);
 

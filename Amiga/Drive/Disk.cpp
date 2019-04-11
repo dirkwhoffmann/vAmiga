@@ -115,7 +115,7 @@ Disk::encodeTrack(ADFFile *adf, Track t)
 {
     assert(isTrackNumber(t));
     
-    uint8_t *ptr = data.track[t];
+    // uint8_t *ptr = data.track[t];
     
     debug(2, "Encoding track %d\n", t);
                
@@ -127,6 +127,7 @@ Disk::encodeTrack(ADFFile *adf, Track t)
     for (Sector s = 0; s < 11; s++) {
         result &= encodeSector(adf, t, s);
     
+        /*
         if (t == 0) {
             printf("Track %d Sector %d\n", t, s);
             for (int i = 0; i < mfmBytesPerSector; i += 8) {
@@ -136,6 +137,7 @@ Disk::encodeTrack(ADFFile *adf, Track t)
                 ptr += 8;
             }
         }
+        */
     }
     
     // First five bytes of track gap (seen in Omega)
@@ -146,8 +148,9 @@ Disk::encodeTrack(ADFFile *adf, Track t)
     p[3] = 0x55;
     p[4] = 0xAA;
     
+    /*
     if (t == 0) {
-        printf("Track gap\n");
+        debug("Track gap\n");
         // uint8_t *p = &data.track[t][11*mfmBytesPerSector];
         for (int i = 0; i < 700; i+=10) {
             printf("%d: %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X\n", i,
@@ -155,6 +158,7 @@ Disk::encodeTrack(ADFFile *adf, Track t)
             ptr += 10;
         }
     }
+    */
     
     return result;
 }

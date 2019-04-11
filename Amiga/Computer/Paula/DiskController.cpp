@@ -104,7 +104,7 @@ DiskController::setConnected(int df, bool value)
 void
 DiskController::pokeDSKLEN(uint16_t newDskLen)
 {
-    debug("pokeDSKLEN(%X)\n", newDskLen);
+    debug(2, "pokeDSKLEN(%X)\n", newDskLen);
 
     uint16_t oldDsklen = dsklen;
         
@@ -113,7 +113,7 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
     
     // Disable DMA if the DMAEN bit (bit 15) has been cleared.
     if (!(newDskLen & 0x8000)) {
-        debug("dma = DRIVE_DMA_OFF\n");
+        debug(2, "dma = DRIVE_DMA_OFF\n");
         dma = DRIVE_DMA_OFF;
     }
     
@@ -123,7 +123,7 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
         // Check if the WRITE bit (bit 14) also has been written twice.
         if (oldDsklen & newDskLen & 0x4000) {
     
-            debug("dma = DRIVE_DMA_WRITE\n");
+            debug(2, "dma = DRIVE_DMA_WRITE\n");
             dma = DRIVE_DMA_WRITE;
             
         } else {
@@ -132,13 +132,13 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
             if (GET_BIT(amiga->paula.adkcon, 10)) {
                 
                 // Wait with reading until a sync mark has been found
-                debug("dma = DRIVE_DMA_READ_SYNC\n");
+                debug(2, "dma = DRIVE_DMA_READ_SYNC\n");
                 dma = DRIVE_DMA_READ_SYNC;
 
             } else {
 
                 // Start reading immediately
-                debug("dma = DRIVE_DMA_READ\n");
+                debug(2, "dma = DRIVE_DMA_READ\n");
                 dma = DRIVE_DMA_READ;
                 
                 // REMOVE ASAP
@@ -226,26 +226,19 @@ DiskController::serveDiskEvent()
 {
     // debug("serveDiskEvent()\n");
     
-    /* To ease debugging, we don't read data from the drive here. I.e.,
-     * we don't fill the FIFO yet. All data transfer will be done by the DMA
-     * handler. Once this works, we enable the FIFO and let the DMA stuff
-     * pick up the data from there.
-     */
-    
-    /*
+    // Read a byte from the data providing drive
+    for (unsigned i = 0; i < 4; i++) {
+        if (df[i]->isDataSource()) writeFifo(df[i]->readHead());
+    }
+
     // Rotate the disks
     for (unsigned i = 0; i < 4; i++) {
         df[i]->rotate();
     }
     
-    // Read a byte from the data providing drive
-    for (unsigned i = 0; i < 4; i++) {
-        if (df[i]->isDataSource()) writeFifo(df[i]->readHead());
-    }
-    */
     
     // Schedule next event
-    handler->scheduleSecRel(DSK_SLOT, DMA_CYCLES(56), DSK_ROTATE);
+    handler->scheduleSecRel(DSK_SLOT, DMA_CYCLES(55), DSK_ROTATE);
 }
 
 void
@@ -288,13 +281,11 @@ DiskController::doDiskDMA()
     // Only proceed if there are still bytes to read
     if (!(dsklen & 0x3FFF)) return;
     
-    // Read next word from the FIFO buffer
-    
-    //
-    // TODO
-    //
+    // Only proceed if the FIFO buffer contains data
+    if (!fifoHasData()) return;
     
     // For debugging, we read directly from disk (df0 only)
+    /*
     uint8_t data1 = 0xFF;
     uint8_t data2 = 0xFF;
     if (df[0]->isSelected() && df[0]->motor) {
@@ -304,18 +295,22 @@ DiskController::doDiskDMA()
         df[0]->rotate();
     }
     uint16_t word = HI_LO(data1, data2);
+    */
     
-    // Perform DMA
+    // Read the next word from the FIFO buffer
+    uint16_t word = readFifo();
+    
+    // Perform DMA if it is enabled
     if (dma == DRIVE_DMA_READ) {
+        
         // plaindebug("DMA(HI) %d: %X -> %X\n", dsklen & 0x3FFF, HI_BYTE(word), amiga->agnus.dskpt);
         // plaindebug("DMA(LO) %d: %X -> %X\n", dsklen & 0x3FFF, LO_BYTE(word), amiga->agnus.dskpt + 1);
         // debug("DMA(HI) %d: %X\n", dsklen & 0x3FFF, HI_BYTE(word));
         // debug("DMA(LO) %d: %X\n", dsklen & 0x3FFF, LO_BYTE(word));
 
-        // amiga->mem.pokeChip16(amiga->agnus.dskpt, word);
-        if (amiga->agnus.dskpt >= 0x5C40-3 && amiga->agnus.dskpt <= 0x5C40) debug("Disk DMA to %X\n", amiga->agnus.dskpt);
-        amiga->mem.pokeChip8(amiga->agnus.dskpt, data1);
-        amiga->mem.pokeChip8(amiga->agnus.dskpt + 1, data2);
+        amiga->mem.pokeChip16(amiga->agnus.dskpt, word);
+        // amiga->mem.pokeChip8(amiga->agnus.dskpt, data1);
+        // amiga->mem.pokeChip8(amiga->agnus.dskpt + 1, data2);
         amiga->agnus.dskpt = (amiga->agnus.dskpt + 2) & 0x7FFFF;
         
         dsklen--;
