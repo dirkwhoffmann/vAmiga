@@ -16,7 +16,7 @@ DiskController::DiskController()
     // Register snapshot items
     registerSnapshotItems(vector<SnapshotItem> {
         
-        { &dma,        sizeof(dma),        0 },
+        { &state,      sizeof(state),      0 },
         { &fifoCount,  sizeof(fifoCount),  0 },
         { &fifo,       sizeof(fifo),       0 },
         { &dsklen,     sizeof(dsklen),     0 },
@@ -88,6 +88,18 @@ DiskController::getInfo()
 }
 
 void
+DiskController::setState(DriveState state)
+{
+    /*
+    if (this->state == DRIVE_DMA_OFF && state == DRIVE_DMA_READ) {
+        clearFifo();
+    }
+    */
+    
+    this->state = state;
+}
+
+void
 DiskController::setConnected(int df, bool value)
 {
     assert(df < 4);
@@ -99,6 +111,13 @@ DiskController::setConnected(int df, bool value)
     connected[df] = value;
     amiga->putMessage(value ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, df);
     amiga->putMessage(MSG_CONFIG);
+}
+
+uint16_t
+DiskController::peekDSKDATR()
+{
+    debug(2, "peekDSKDATR() = %X\n", dskdat);
+    return dskdat;
 }
 
 void
@@ -114,7 +133,7 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
     // Disable DMA if the DMAEN bit (bit 15) has been cleared.
     if (!(newDskLen & 0x8000)) {
         debug(2, "dma = DRIVE_DMA_OFF\n");
-        dma = DRIVE_DMA_OFF;
+        state = DRIVE_DMA_OFF;
     }
     
     // Enable DMA the DMAEN bit (bit 15) has been written twice.
@@ -124,7 +143,7 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
         if (oldDsklen & newDskLen & 0x4000) {
     
             debug(2, "dma = DRIVE_DMA_WRITE\n");
-            dma = DRIVE_DMA_WRITE;
+            state = DRIVE_DMA_WRITE;
             
         } else {
         
@@ -133,19 +152,26 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
                 
                 // Wait with reading until a sync mark has been found
                 debug(2, "dma = DRIVE_DMA_READ_SYNC\n");
-                dma = DRIVE_DMA_READ_SYNC;
+                state = DRIVE_DMA_SYNC_WAIT;
 
             } else {
 
                 // Start reading immediately
                 debug(2, "dma = DRIVE_DMA_READ\n");
-                dma = DRIVE_DMA_READ;
+                state = DRIVE_DMA_READ;
                 
                 // REMOVE ASAP
                 for (int i = 0; i < 6; i++) df[0]->rotate();
             }
         }
     }
+}
+
+void
+DiskController::pokeDSKDAT(uint16_t value)
+{
+    debug(2, "pokeDSKDAT(%X)\n", value);
+    dskdat = value;
 }
 
 uint16_t
@@ -166,7 +192,7 @@ DiskController::peekDSKBYTR()
      SET_BIT(result, 12); // TODO
     
     // DMAON
-    if (amiga->agnus.dskDMA() && dma != DRIVE_DMA_OFF) SET_BIT(result, 14);
+    if (amiga->agnus.dskDMA() && state != DRIVE_DMA_OFF) SET_BIT(result, 14);
     
     // DSKBYT
     // TODO: Make this bit flip in a timing accurate way
@@ -301,7 +327,7 @@ DiskController::doDiskDMA()
     uint16_t word = readFifo();
     
     // Perform DMA if it is enabled
-    if (dma == DRIVE_DMA_READ) {
+    if (state == DRIVE_DMA_READ) {
         
         // plaindebug("DMA(HI) %d: %X -> %X\n", dsklen & 0x3FFF, HI_BYTE(word), amiga->agnus.dskpt);
         // plaindebug("DMA(LO) %d: %X -> %X\n", dsklen & 0x3FFF, LO_BYTE(word), amiga->agnus.dskpt + 1);
@@ -316,7 +342,7 @@ DiskController::doDiskDMA()
         dsklen--;
         if ((dsklen & 0x3FFF) == 0) {
             amiga->paula.pokeINTREQ(0x8002);
-            dma = DRIVE_DMA_OFF;
+            state = DRIVE_DMA_OFF;
             debug("Disk DMA DONE.\n");
             
             /*
@@ -346,9 +372,9 @@ DiskController::doDiskDMA()
         amiga->paula.pokeINTREQ(0x9000);
         
         // Enable DMA if the controller was waiting for the SYNC mark
-        if (dma == DRIVE_DMA_READ_SYNC) {
+        if (state == DRIVE_DMA_SYNC_WAIT) {
             debug("Finally enabling DMA.\n");
-            dma = DRIVE_DMA_READ;
+            state = DRIVE_DMA_READ;
         }
     }
     

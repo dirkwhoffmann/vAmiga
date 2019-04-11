@@ -201,7 +201,7 @@ class Blitter : public HardwareComponent {
     
     
     //
-    // Managing events
+    // Serving events
     //
     
     public:
@@ -234,17 +234,17 @@ class Blitter : public HardwareComponent {
     public:
     
     /* Performs a blit operation via the fast Blitter
-     * Calls either doCopyBlit() or doCopyBlit()
+     * Calls either doFastCopyBlit() or doFastLineBlit()
      */
     void doFastBlit();
     
     private:
     
     // Performs a copy blit operation via the fast Blitter
-    void doCopyBlit();
+    void doFastCopyBlit();
     
     // Performs a line blit operation via the fast Blitter
-    void doLineBlit();
+    void doFastLineBlit();
 };
 
 #endif

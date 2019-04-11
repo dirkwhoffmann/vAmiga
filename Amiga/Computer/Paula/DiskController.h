@@ -16,7 +16,7 @@ class Drive;
 
 class DiskController : public HardwareComponent {
     
-    private:
+private:
     
     // Information shown in the GUI inspector panel
     DiskControllerInfo info;
@@ -30,8 +30,8 @@ class DiskController : public HardwareComponent {
      */
     bool connected[4] = { true, false, false, false };
     
-    // The current drive DMA status (off, read, or write)
-    DriveDMA dma;
+    // The current drive state (off, read, or write)
+    DriveState state;
     
     
     //
@@ -39,7 +39,7 @@ class DiskController : public HardwareComponent {
     //
     
     // Number of bytes stored in the FIFO buffer
-    uint8_t fifoCount; 
+    uint8_t fifoCount;
     
     /* Data bytes stored in the FIFO buffer
      * On each DSK_ROTATE event, a byte is read from the selected drive and
@@ -47,7 +47,7 @@ class DiskController : public HardwareComponent {
      * the buffer and store them at the desired location.
      */
     uint64_t fifo;
- 
+    
     
     //
     // Registers
@@ -58,10 +58,10 @@ class DiskController : public HardwareComponent {
     
     // Disk write data (from RAM to disk)
     uint16_t dskdat;
-
+    
     // Disk SYNC word
     uint16_t dsksync;
-
+    
     // A copy of the PRB register of CIA B
     uint8_t prb;
     
@@ -70,7 +70,7 @@ class DiskController : public HardwareComponent {
     // Constructing and destructing
     //
     
-    public:
+public:
     
     DiskController();
     
@@ -79,7 +79,7 @@ class DiskController : public HardwareComponent {
     // Methods from HardwareComponent
     //
     
-    private:
+private:
     
     void _setAmiga() override;
     void _powerOn() override;
@@ -91,25 +91,34 @@ class DiskController : public HardwareComponent {
     
     
     //
-    // Reading the internal state
+    // Accesing the internal state
     //
     
-    public:
+public:
     
     // Returns the latest internal state recorded by inspect()
     DiskControllerInfo getInfo();
+    
+    // Returns the current drive state
+    DriveState getState() { return state; }
+    
+private:
+    
+    void setState(DriveState state);
     
     
     //
     // Managing the connection and selection status
     //
-    
+
+public:
+
     // Returns true if the specified drive is connected to the Amiga
     bool isConnected(int df) { assert(df < 4); return connected[df]; }
     
     // Connects or disconnects a drive
     void setConnected(int df, bool value);
-
+    
     // Convenience wrappers
     void connect(int df) { setConnected(df, true); }
     void disconnect(int df) { setConnected(df, false); }
@@ -120,17 +129,16 @@ class DiskController : public HardwareComponent {
     // Accessing registers
     //
     
-    public:
+public:
     
     // OCR register 0x008 (r)
-    uint16_t peekDSKDATR() { debug("peekDSKDATR() = %X\n", dskdat); return dskdat; }
-
+    uint16_t peekDSKDATR();
+    
     // OCR register 0x024 (w)
     void pokeDSKLEN(uint16_t value);
-
+    
     // OCR register 0x026 (w)
-    void pokeDSKDAT(uint16_t value) { debug("pokeDSKDAT(%X)\n", value);
- dskdat = value; }
+    void pokeDSKDAT(uint16_t value);
     
     // OCR register 0x01A (r)
     uint16_t peekDSKBYTR();
@@ -140,7 +148,7 @@ class DiskController : public HardwareComponent {
     
     // Read handler for the PRA register of CIA A
     uint8_t driveStatusFlags();
-        
+    
     // Write handler for the PRB register of CIA B
     void PRBdidChange(uint8_t oldValue, uint8_t newValue);
     
@@ -149,23 +157,23 @@ class DiskController : public HardwareComponent {
     // Processing events and disk data
     //
     
-    public:
+public:
     
     // Serves an event in the disk controller slot.
     void serveDiskEvent();
     
     // Clears the FIFO buffer.
     void clearFifo();
-
+    
     // Returns true if the FIFO buffer contains at least 2 bytes of data.
     bool fifoHasData() { return fifoCount >= 2; }
-
+    
     // Writes a byte into the FIFO buffer.
     void writeFifo(uint8_t byte);
-
+    
     // Reads a word from the FIFO buffer.
     uint16_t readFifo();
-
+    
     // Performs a disk DMA cycle.
     void doDiskDMA();
     

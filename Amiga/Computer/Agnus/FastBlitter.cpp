@@ -15,7 +15,7 @@ void
 Blitter::doFastBlit()
 {
     // Perform a line blit or a copy blit operation
-    bltLINE() ? doLineBlit() : doCopyBlit();
+    bltLINE() ? doFastLineBlit() : doFastCopyBlit();
     
     // Clear the Blitter busy flag
     bbusy = false;
@@ -28,7 +28,7 @@ Blitter::doFastBlit()
 }
 
 void
-Blitter::doCopyBlit()
+Blitter::doFastCopyBlit()
 {
     uint64_t checksum = 0;
     /*
@@ -164,7 +164,7 @@ uint16_t logicFunction(int minterm,uint16_t wordA, uint16_t wordB, uint16_t word
 }
 
 void
-Blitter::doLineBlit()
+Blitter::doFastLineBlit()
 {
     uint64_t checksum = 0;
     
