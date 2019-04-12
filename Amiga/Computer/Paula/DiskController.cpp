@@ -296,12 +296,28 @@ DiskController::serveDiskEvent()
         
         if (df[i]->isDataSource()) {
            
-            // Read byte from the data providing drive.
+            // Read a single byte from the data providing drive.
             incoming = df[i]->readHead();
+            
+            // Remember when the incoming byte has been received.
             incomingCycle = amiga->agnus.clock;
             
-            // Save byte into the FIFO buffer.
+            // Push the incoming byte into the FIFO buffer.
             writeFifo(incoming);
+            
+            // Check if we've reached a SYNC mark.
+            if (compareFifo(dsksync)) {
+                
+                // Trigger a word SYNC interrupt.
+                amiga->paula.pokeINTREQ(0x9000);
+                
+                // Enable DMA if the controller was waiting for that mark.
+                if (state == DRIVE_DMA_SYNC_WAIT) {
+                    debug(2, "DRIVE_DMA_SYNC_WAIT -> DRIVE_DMA_READ\n");
+                    state = DRIVE_DMA_READ;
+                    clearFifo();
+                }
+            }
             
             // There can only be one data provider.
             break;
@@ -354,8 +370,6 @@ DiskController::doDiskDMA()
         // debug("DMA(LO) %d: %X\n", dsklen & 0x3FFF, LO_BYTE(word));
 
         amiga->mem.pokeChip16(amiga->agnus.dskpt, word);
-        // amiga->mem.pokeChip8(amiga->agnus.dskpt, data1);
-        // amiga->mem.pokeChip8(amiga->agnus.dskpt + 1, data2);
         amiga->agnus.dskpt = (amiga->agnus.dskpt + 2) & 0x7FFFF;
         
         dsklen--;
