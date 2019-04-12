@@ -986,6 +986,13 @@ Agnus::vsyncHandler()
     
     // debug("[%d]\n", frame);
     
+    /*
+    if (frame % 50 == 0) {
+        debug("%d instr per second\n", cpuInstrCount);
+        cpuInstrCount = 0;
+    }
+    */
+    
     // Remember the clock count at SOF (Start Of Frame)
     // Add one because the DMA clock hasn't been advanced yet
     latchedClock = clock + DMA_CYCLES(1);

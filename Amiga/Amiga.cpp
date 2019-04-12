@@ -829,6 +829,7 @@ Amiga::runLoop()
         
         // Emulate CPU instruction
         CPUCycle cpuCycles = cpu.executeNextInstruction();
+        cpuInstrCount++;
         
         // Advance the masterclock
         masterClock += CPU_CYCLES(cpuCycles);

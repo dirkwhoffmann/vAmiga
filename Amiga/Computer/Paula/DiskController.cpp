@@ -16,13 +16,14 @@ DiskController::DiskController()
     // Register snapshot items
     registerSnapshotItems(vector<SnapshotItem> {
         
-        { &state,      sizeof(state),      0 },
-        { &incoming,   sizeof(incoming),   0 },
-        { &fifo,       sizeof(fifo),       0 },
-        { &fifoCount,  sizeof(fifoCount),  0 },
-        { &dsklen,     sizeof(dsklen),     0 },
-        { &dskdat,     sizeof(dskdat),     0 },
-        { &prb,        sizeof(prb),        0 },
+        { &state,         sizeof(state),         0 },
+        { &incoming,      sizeof(incoming),      0 },
+        { &incomingCycle, sizeof(incomingCycle), 0 },
+        { &fifo,          sizeof(fifo),          0 },
+        { &fifoCount,     sizeof(fifoCount),     0 },
+        { &dsklen,        sizeof(dsklen),        0 },
+        { &dskdat,        sizeof(dskdat),        0 },
+        { &prb,           sizeof(prb),           0 },
         
     });
 }
@@ -187,26 +188,28 @@ DiskController::peekDSKBYTR()
      */
     
     // DATA
-    uint16_t result = incoming; 
+    uint16_t result = incoming;
     
     // WORDEQUAL
-     SET_BIT(result, 12); // TODO
+    if (compareFifo(dsksync)) SET_BIT(result, 12);
     
     // DMAON
     if (amiga->agnus.dskDMA() && state != DRIVE_DMA_OFF) SET_BIT(result, 14);
     
     // DSKBYT
-    // TODO: Make this bit flip in a timing accurate way
-    SET_BIT(result, 15);
+    assert(amiga->agnus.clock >= incomingCycle);
+    if (amiga->agnus.clock - incomingCycle <= 7) {
+        SET_BIT(result, 15);
+    }
     
-    debug("peekDSKBYTR() = %X\n", result);
+    debug(2, "peekDSKBYTR() = %X\n", result);
     return result;
 }
 
 void
 DiskController::pokeDSKSYNC(uint16_t value)
 {
-    debug("pokeDSKSYNC(%X)\n", value);
+    debug(2, "pokeDSKSYNC(%X)\n", value);
     dsksync = value;
 }
 
@@ -249,6 +252,42 @@ DiskController::PRBdidChange(uint8_t oldValue, uint8_t newValue)
 }
 
 void
+DiskController::clearFifo()
+{
+    fifo = 0;
+    fifoCount = 0;
+}
+
+void
+DiskController::writeFifo(uint8_t byte)
+{
+    assert(fifoCount <= 6);
+    
+    // Remove oldest word if the FIFO is full
+    if (fifoCount == 6) fifoCount -= 2;
+    
+    // Add the new byte
+    fifo = (fifo << 8) | byte;
+    fifoCount++;
+}
+
+uint16_t
+DiskController::readFifo()
+{
+    assert(fifoHasData());
+    
+    // Remove and return the oldest word.
+    fifoCount -= 2;
+    return (fifo >> (8 * fifoCount)) & 0xFFFF;
+}
+
+bool
+DiskController::compareFifo(uint16_t word)
+{
+    return fifoHasData() && ((fifo >> (8 * fifoCount)) & 0xFFFF) == word;
+}
+
+void
 DiskController::serveDiskEvent()
 {
     // debug("serveDiskEvent()\n");
@@ -259,6 +298,7 @@ DiskController::serveDiskEvent()
            
             // Read byte from the data providing drive.
             incoming = df[i]->readHead();
+            incomingCycle = amiga->agnus.clock;
             
             // Save byte into the FIFO buffer.
             writeFifo(incoming);
@@ -274,38 +314,7 @@ DiskController::serveDiskEvent()
     }
     
     // Schedule next event
-    handler->scheduleSecRel(DSK_SLOT, DMA_CYCLES(55), DSK_ROTATE);
-}
-
-void
-DiskController::clearFifo()
-{
-    fifo = 0;
-    fifoCount = 0;
-}
-
-void
-DiskController::writeFifo(uint8_t byte)
-{
-    assert(fifoCount <= 6);
-    
-    // Remove oldest word if the FIFO is full
-    if (fifoCount == 6) (void)readFifo();
-    
-    // Add the new byte
-    fifo = (fifo << 8) | byte;
-    fifoCount++;
-}
-
-uint16_t
-DiskController::readFifo()
-{
-    // This function assumes that the FIFO contains at least two bytes.
-    assert(fifoCount > 1);
- 
-    // Remove and return the oldest word.
-    fifoCount -= 2;
-    return (fifo >> (8 * fifoCount)) & 0xFFFF;
+    handler->scheduleSecRel(DSK_SLOT, DMA_CYCLES(56), DSK_ROTATE);
 }
 
 void

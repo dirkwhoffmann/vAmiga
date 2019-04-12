@@ -18,6 +18,8 @@ extern "C" {
 #include "m68kcpu.h"
 }
 
+extern int64_t cpuInstrCount;
+
 class CPU : public HardwareComponent {
     
     private:

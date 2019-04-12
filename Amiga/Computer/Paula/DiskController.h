@@ -38,8 +38,13 @@ private:
     // Data buffers
     //
     
+private:
+    
     // The latest incoming byte (value shows up in DSKBYTER)
     uint8_t incoming;
+    
+    // Timestamp of the latest write to variable 'incoming'
+    Cycle incomingCycle;
     
     /* The drive controller's FIFO buffer
      * On each DSK_ROTATE event, a byte is read from the selected drive and
@@ -47,10 +52,10 @@ private:
      * the buffer and store them at the desired location.
      */
     uint64_t fifo;
-
+    
     // Number of bytes stored in the FIFO buffer
     uint8_t fifoCount;
-
+    
     
     //
     // Registers
@@ -113,9 +118,9 @@ private:
     //
     // Managing the connection and selection status
     //
-
+    
 public:
-
+    
     // Returns true if the specified drive is connected to the Amiga
     bool isConnected(int df) { assert(df < 4); return connected[df]; }
     
@@ -155,6 +160,28 @@ public:
     // Write handler for the PRB register of CIA B
     void PRBdidChange(uint8_t oldValue, uint8_t newValue);
     
+
+    //
+    // Handling the FIFO buffer
+    //
+    
+private:
+    
+    // Returns true if the FIFO buffer contains at least 2 bytes of data.
+    bool fifoHasData() { return fifoCount >= 2; }
+
+    // Clears the FIFO buffer.
+    void clearFifo();
+    
+    // Writes a byte into the FIFO buffer.
+    void writeFifo(uint8_t byte);
+    
+    // Reads a word from the FIFO buffer.
+    uint16_t readFifo();
+    
+    // Returns true if the next word to read matches the specified value
+    bool compareFifo(uint16_t word);
+
     
     //
     // Processing events and disk data
@@ -164,18 +191,6 @@ public:
     
     // Serves an event in the disk controller slot.
     void serveDiskEvent();
-    
-    // Clears the FIFO buffer.
-    void clearFifo();
-    
-    // Returns true if the FIFO buffer contains at least 2 bytes of data.
-    bool fifoHasData() { return fifoCount >= 2; }
-    
-    // Writes a byte into the FIFO buffer.
-    void writeFifo(uint8_t byte);
-    
-    // Reads a word from the FIFO buffer.
-    uint16_t readFifo();
     
     // Performs a disk DMA cycle.
     void doDiskDMA();

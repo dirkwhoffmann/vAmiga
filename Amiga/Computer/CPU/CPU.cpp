@@ -12,6 +12,8 @@ extern "C" {
 #include "m68k.h"
 }
 
+int64_t cpuInstrCount = 0;
+
 // Reference to the active Amiga instance
 Amiga *activeAmiga = NULL;
 
