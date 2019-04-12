@@ -870,12 +870,28 @@ Agnus::serviceRASEvent(EventID id)
             
             if (amiga->debugDMA) debug("RAS_DIWSTRT: (%d,%d)\n", vpos, hpos);
             amiga->denise.draw16();
-            break;
+            
+            // Schedule next RAS event
+            if (hpos < hstop / 2) {
+                // TODO: Replace by scheduleRel which is faster
+                eventHandler.schedulePos(RAS_SLOT, vpos, hpos + 8, RAS_DIWDRAW);
+            } else {
+                eventHandler.schedulePos(RAS_SLOT, vpos, HPOS_MAX, RAS_HSYNC);
+            }
+            return;
             
         case RAS_DIWDRAW:
 
             if (amiga->debugDMA) debug("RAS_DIWDRAW: (%d,%d)\n", vpos, hpos);
             amiga->denise.draw16();
+            
+            // Schedule next RAS event
+            if (hpos < hstop / 2) {
+                // TODO: Replace by scheduleRel which is faster
+                eventHandler.schedulePos(RAS_SLOT, vpos, hpos + 8, RAS_DIWDRAW);
+            } else {
+                eventHandler.schedulePos(RAS_SLOT, vpos, HPOS_MAX, RAS_HSYNC);
+            }
             break;
             
         default:
@@ -884,9 +900,28 @@ Agnus::serviceRASEvent(EventID id)
     }
     
     // Schedule next RAS event
-    scheduleNextRASEvent(vpos, hpos);
+    // scheduleNextRASEvent(vpos, hpos);
 }
 
+void
+Agnus::scheduleFirstRASEvent(int16_t vpos)
+{
+    // Map hstrt to DMA cycle values
+    uint16_t hstrtdma = hstrt / 2;
+    
+    // Check if the vertical position is inside the drawing area
+    if (vpos > 25 && vpos >= vstrt && vpos <= vstop) {
+        
+        eventHandler.schedulePos(RAS_SLOT, vpos, hstrtdma, RAS_DIWSTRT);
+        return;
+
+    } else {
+        
+        eventHandler.schedulePos(RAS_SLOT, vpos, HPOS_MAX, RAS_HSYNC);
+    }
+}
+
+/*
 void
 Agnus::scheduleNextRASEvent(int16_t vpos, int16_t hpos)
 {
@@ -917,6 +952,7 @@ Agnus::scheduleNextRASEvent(int16_t vpos, int16_t hpos)
     // Schedule a HSYNC event to finish up the current line
     eventHandler.schedulePos(RAS_SLOT, vpos, HPOS_MAX, RAS_HSYNC);
 }
+*/
 
 void
 Agnus::hsyncHandler()
@@ -974,7 +1010,8 @@ Agnus::hsyncHandler()
     }
     
     // Schedule first RAS event
-    scheduleNextRASEvent(vpos, hpos);
+    scheduleFirstRASEvent(vpos);
+    // scheduleNextRASEvent(vpos, hpos);
 }
 
 void

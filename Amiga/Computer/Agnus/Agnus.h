@@ -372,9 +372,12 @@ class Agnus : public HardwareComponent
     
     // Processes a raster event (Pixel drawing, HSYNC)
     void serviceRASEvent(EventID id);
-    
+
+    // Schedules the first RAS slot event
+    void scheduleFirstRASEvent(int16_t vpos);
+
     // Schedules the next RAS slot event
-    void scheduleNextRASEvent(int16_t vpos, int16_t hpos);
+    // void scheduleNextRASEvent(int16_t vpos, int16_t hpos);
     
     /* This functions serves the RAS_HSYNC event in the RAS slot.
      * The RAS_HSYNC event is triggered at the end of each rasterline.
