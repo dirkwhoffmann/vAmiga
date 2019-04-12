@@ -859,6 +859,8 @@ Agnus::serviceDMAEvent(EventID id)
 void
 Agnus::serviceRASEvent(EventID id)
 {
+    uint8_t incr;
+    
     switch (id) {
             
         case RAS_HSYNC:
@@ -869,12 +871,19 @@ Agnus::serviceRASEvent(EventID id)
         case RAS_DIWSTRT:
             
             if (amiga->debugDMA) debug("RAS_DIWSTRT: (%d,%d)\n", vpos, hpos);
-            amiga->denise.draw16();
+            
+            if (amiga->denise.lores()) {
+                amiga->denise.draw32();
+                incr = 8;
+            } else {
+                amiga->denise.draw16();
+                incr = 4;
+            }
             
             // Schedule next RAS event
             if (hpos < hstop / 2) {
                 // TODO: Replace by scheduleRel which is faster
-                eventHandler.schedulePos(RAS_SLOT, vpos, hpos + 8, RAS_DIWDRAW);
+                eventHandler.schedulePos(RAS_SLOT, vpos, hpos + incr, RAS_DIWDRAW);
             } else {
                 eventHandler.schedulePos(RAS_SLOT, vpos, HPOS_MAX, RAS_HSYNC);
             }
@@ -883,12 +892,19 @@ Agnus::serviceRASEvent(EventID id)
         case RAS_DIWDRAW:
 
             if (amiga->debugDMA) debug("RAS_DIWDRAW: (%d,%d)\n", vpos, hpos);
-            amiga->denise.draw16();
+
+            if (amiga->denise.lores()) {
+                amiga->denise.draw32();
+                incr = 8;
+            } else {
+                amiga->denise.draw16();
+                incr = 4;
+            }
             
             // Schedule next RAS event
             if (hpos < hstop / 2) {
                 // TODO: Replace by scheduleRel which is faster
-                eventHandler.schedulePos(RAS_SLOT, vpos, hpos + 8, RAS_DIWDRAW);
+                eventHandler.schedulePos(RAS_SLOT, vpos, hpos + incr, RAS_DIWDRAW);
             } else {
                 eventHandler.schedulePos(RAS_SLOT, vpos, HPOS_MAX, RAS_HSYNC);
             }

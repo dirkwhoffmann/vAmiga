@@ -250,7 +250,7 @@ void
 Denise::draw16()
 {
     int *ptr = pixelAddr(pixel);
-  
+    
     for (int i = 0; i < 16; i++) {
         
         // Read a bit slice
@@ -266,7 +266,34 @@ Denise::draw16()
             shiftReg[j] <<= 1;
         }
         
-        // Draw two pixels in lores mode (no hires mode yet)
+        // Draw a single hires pixel
+        uint32_t rgba = colorizer.getRGBA(index);
+        *ptr++ = rgba;
+    }
+    pixel += 16;
+}
+
+void
+Denise::draw32()
+{
+    int *ptr = pixelAddr(pixel);
+    
+    for (int i = 0; i < 16; i++) {
+        
+        // Read a bit slice
+        uint8_t index =
+        ((shiftReg[0] & 0x8000) >> 15) |
+        ((shiftReg[1] & 0x8000) >> 14) |
+        ((shiftReg[2] & 0x8000) >> 13) |
+        ((shiftReg[3] & 0x8000) >> 12) |
+        ((shiftReg[4] & 0x8000) >> 11) |
+        ((shiftReg[5] & 0x8000) >> 10);
+        
+        for (unsigned j = 0; j < 6; j++) {
+            shiftReg[j] <<= 1;
+        }
+        
+        // Draw two lores pixels
         uint32_t rgba = colorizer.getRGBA(index);
         *ptr++ = rgba;
         *ptr++ = rgba;

@@ -200,9 +200,12 @@ class Denise : public HardwareComponent {
     int *pixelAddr(int pixel);
     
     public:
-    
-    // Synthesizes 16 pixels from the current shift register data
+
+    // Synthesizes 16 hires pixels from the current shift register data
     void draw16();
+
+    // Synthesizes 32 lores pixels from the current shift register data
+    void draw32();
     
     
     //
