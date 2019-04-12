@@ -16,6 +16,9 @@ DiskController::DiskController()
     // Register snapshot items
     registerSnapshotItems(vector<SnapshotItem> {
         
+        { &connected,     sizeof(connected),     BYTE_ARRAY | PERSISTANT },
+        
+        { &selectedDrive, sizeof(selectedDrive), 0 },
         { &state,         sizeof(state),         0 },
         { &incoming,      sizeof(incoming),      0 },
         { &incomingCycle, sizeof(incomingCycle), 0 },
@@ -40,7 +43,7 @@ DiskController::_setAmiga()
 void
 DiskController::_powerOn()
 {
- 
+    selectedDrive = -1;
 }
 
 void
@@ -93,10 +96,10 @@ void
 DiskController::setState(DriveState state)
 {
     /*
-    if (this->state == DRIVE_DMA_OFF && state == DRIVE_DMA_READ) {
-        clearFifo();
-    }
-    */
+     if (this->state == DRIVE_DMA_OFF && state == DRIVE_DMA_READ) {
+     clearFifo();
+     }
+     */
     
     this->state = state;
 }
@@ -126,9 +129,9 @@ void
 DiskController::pokeDSKLEN(uint16_t newDskLen)
 {
     debug(2, "pokeDSKLEN(%X)\n", newDskLen);
-
+    
     uint16_t oldDsklen = dsklen;
-        
+    
     // Remember the new value
     dsklen = newDskLen;
     
@@ -143,21 +146,21 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
         
         // Check if the WRITE bit (bit 14) also has been written twice.
         if (oldDsklen & newDskLen & 0x4000) {
-    
+            
             debug(2, "dma = DRIVE_DMA_WRITE\n");
             state = DRIVE_DMA_WRITE;
             
         } else {
-        
+            
             // Check the WORDSYNC bit in the ADKCON register
             if (GET_BIT(amiga->paula.adkcon, 10)) {
                 
                 // Wait with reading until a sync mark has been found
                 debug(2, "dma = DRIVE_DMA_READ_SYNC\n");
                 state = DRIVE_DMA_SYNC_WAIT;
-
+                
             } else {
-
+                
                 // Start reading immediately
                 debug(2, "dma = DRIVE_DMA_READ\n");
                 state = DRIVE_DMA_READ;
@@ -231,23 +234,32 @@ DiskController::PRBdidChange(uint8_t oldValue, uint8_t newValue)
 {
     // debug("PRBdidChange: %X -> %X\n", oldValue, newValue);
     
-    // Store a copy of the new PRB value
+    // Store a copy of the new PRB value.
     prb = newValue;
     
-    // Pass control over to all four drives
-    for (unsigned i = 0; i < 4; i++) {
-        if (connected[i]) df[i]->PRBdidChange(oldValue, newValue);
-    }
+    // Determine the selected drive.
+    // In theory, multiple drives can be selected. In that case, we give
+    // priority to the drive with the lowest number and ignore all others.
+    selectedDrive =
+    ((prb & 0b0001000) == 0) ? 0 :
+    ((prb & 0b0010000) == 0) ? 1 :
+    ((prb & 0b0100000) == 0) ? 2 :
+    ((prb & 0b1000000) == 0) ? 3 : -1;
     
-    // Determine the current motor status of all four drives
+    // Determine the current motor status of all four drives.
     bool motor = df[0]->motor | df[1]->motor | df[2]->motor | df[3]->motor;
     
-    // Scheduling rotation events if at least one drive is spinning
+    // Schedule rotation events.
     if (!motor) {
         handler->cancelSec(DSK_SLOT);
     }
     else if (!handler->hasEventSec(DSK_SLOT)) {
         handler->scheduleSecRel(DSK_SLOT, DMA_CYCLES(56), DSK_ROTATE);
+    }
+    
+    // Pass control over to all four drives.
+    for (unsigned i = 0; i < 4; i++) {
+        if (connected[i]) df[i]->PRBdidChange(oldValue, newValue);
     }
 }
 
@@ -290,44 +302,39 @@ DiskController::compareFifo(uint16_t word)
 void
 DiskController::serveDiskEvent()
 {
+    assert(selectedDrive >= -1 && selectedDrive <= 3);
+    
     // debug("serveDiskEvent()\n");
     
-    for (unsigned i = 0; i < 4; i++) {
+    // Check if the selected drive provides data.
+    if (selectedDrive >= 0 && df[selectedDrive]->isDataSource()) {
         
-        if (df[i]->isDataSource()) {
-           
-            // Read a single byte from the data providing drive.
-            incoming = df[i]->readHead();
+        // Read a single byte from the data providing drive.
+        incoming = df[selectedDrive]->readHead();
+        
+        // Remember when the incoming byte has been received.
+        incomingCycle = amiga->agnus.clock;
+        
+        // Push the incoming byte into the FIFO buffer.
+        writeFifo(incoming);
+        
+        // Check if we've reached a SYNC mark.
+        if (compareFifo(dsksync)) {
             
-            // Remember when the incoming byte has been received.
-            incomingCycle = amiga->agnus.clock;
+            // Trigger a word SYNC interrupt.
+            amiga->paula.pokeINTREQ(0x9000);
             
-            // Push the incoming byte into the FIFO buffer.
-            writeFifo(incoming);
-            
-            // Check if we've reached a SYNC mark.
-            if (compareFifo(dsksync)) {
-                
-                // Trigger a word SYNC interrupt.
-                amiga->paula.pokeINTREQ(0x9000);
-                
-                // Enable DMA if the controller was waiting for that mark.
-                if (state == DRIVE_DMA_SYNC_WAIT) {
-                    debug(2, "DRIVE_DMA_SYNC_WAIT -> DRIVE_DMA_READ\n");
-                    state = DRIVE_DMA_READ;
-                    clearFifo();
-                }
+            // Enable DMA if the controller was waiting for the SYNC mark.
+            if (state == DRIVE_DMA_SYNC_WAIT) {
+                debug(2, "DRIVE_DMA_SYNC_WAIT -> DRIVE_DMA_READ\n");
+                state = DRIVE_DMA_READ;
+                clearFifo();
             }
-            
-            // There can only be one data provider.
-            break;
         }
     }
-
-    // Rotate the disks
-    for (unsigned i = 0; i < 4; i++) {
-        df[i]->rotate();
-    }
+    
+    // Rotate the disks in all spinning drives
+    for (unsigned i = 0; i < 4; i++) df[i]->rotate();
     
     // Schedule next event
     handler->scheduleSecRel(DSK_SLOT, DMA_CYCLES(56), DSK_ROTATE);
@@ -345,78 +352,27 @@ DiskController::doDiskDMA()
     // Only proceed if the FIFO buffer contains data
     if (!fifoHasData()) return;
     
-    // For debugging, we read directly from disk (df0 only)
-    /*
-    uint8_t data1 = 0xFF;
-    uint8_t data2 = 0xFF;
-    if (df[0]->isSelected() && df[0]->motor) {
-        data1 = df[0]->readHead();
-        df[0]->rotate();
-        data2 = df[0]->readHead();
-        df[0]->rotate();
-    }
-    uint16_t word = HI_LO(data1, data2);
-    */
-    
-    // Read the next word from the FIFO buffer
+    // Read the next word from the buffer
     uint16_t word = readFifo();
     
-    // Perform DMA if it is enabled
+    // Perform DMA if enabled
     if (state == DRIVE_DMA_READ) {
         
-        // plaindebug("DMA(HI) %d: %X -> %X\n", dsklen & 0x3FFF, HI_BYTE(word), amiga->agnus.dskpt);
-        // plaindebug("DMA(LO) %d: %X -> %X\n", dsklen & 0x3FFF, LO_BYTE(word), amiga->agnus.dskpt + 1);
-        // debug("DMA(HI) %d: %X\n", dsklen & 0x3FFF, HI_BYTE(word));
-        // debug("DMA(LO) %d: %X\n", dsklen & 0x3FFF, LO_BYTE(word));
-
         amiga->mem.pokeChip16(amiga->agnus.dskpt, word);
         amiga->agnus.dskpt = (amiga->agnus.dskpt + 2) & 0x7FFFF;
         
         dsklen--;
-        if ((dsklen & 0x3FFF) == 0) {
+        
+        if (!(dsklen & 0x3FFF)) {
             amiga->paula.pokeINTREQ(0x8002);
             state = DRIVE_DMA_OFF;
-            debug("Disk DMA DONE.\n");
-            
-            /*
-            for (unsigned i = 0; i < 7358 * 2; i += 8) {
-                plaindebug("%02X %02X %02X %02X %02X %02X %02X %02X\n",
-                           amiga->mem.chipRam[0x6B14 + i],
-                           amiga->mem.chipRam[0x6B14 + i + 1],
-                           amiga->mem.chipRam[0x6B14 + i + 2],
-                           amiga->mem.chipRam[0x6B14 + i + 3],
-                           amiga->mem.chipRam[0x6B14 + i + 4],
-                           amiga->mem.chipRam[0x6B14 + i + 5],
-                           amiga->mem.chipRam[0x6B14 + i + 6],
-                           amiga->mem.chipRam[0x6B14 + i + 7]);
-            }
-            */
+            debug(2, "Disk DMA DONE.\n");
         }
     }
-    
-    // Did we reach a SYNC mark?
-    // debug("head: %d dsksync = %X word = %X\n", df[0]->head.offset, dsksync, word);
-    dsksync = 0x4489; // REMOVE ASAP
-    if (word == dsksync) {
-
-        debug(2, "SYNC mark found.\n");
-        
-        // Trigger word SYNC interrupt
-        amiga->paula.pokeINTREQ(0x9000);
-        
-        // Enable DMA if the controller was waiting for the SYNC mark
-        if (state == DRIVE_DMA_SYNC_WAIT) {
-            debug("Finally enabling DMA.\n");
-            state = DRIVE_DMA_READ;
-        }
-    }
-    
-    // debug("Disk DMA: %X %X (%d words remain)\n", data1, data2, dsklen);
 }
 
 bool
 DiskController::doesDMA(int nr)
 {
-    // TODO: return dma && isSelected(nr);
-    return false;
+    return state == DRIVE_DMA_READ;
 }

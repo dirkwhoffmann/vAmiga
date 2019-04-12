@@ -21,15 +21,18 @@ private:
     // Information shown in the GUI inspector panel
     DiskControllerInfo info;
     
-    // References to the disk drives (for easy access)
+    // Quick-references to the disk drives
     Drive *df[4] = { NULL, NULL, NULL, NULL };
     
     /* Connection status of all four drives.
-     * Note: The internal drive (Df0) must not be disconnected. Hence,
-     * connected[0] must never be set to false.
+     * Note: connected[0] is always true, because the internal drive cannot be
+     * disconnected.
      */
     bool connected[4] = { true, false, false, false };
     
+    // The currently selected drive (-1 if no drive is selected)
+    int8_t selectedDrive = -1;
+     
     // The current drive state (off, read, or write)
     DriveState state;
     
