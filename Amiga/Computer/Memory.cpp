@@ -812,6 +812,11 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x034 >> 1: // POTGO
             amiga->paula.pokePOTGO(value); return;
 
+        case 0x038 >> 1: // STREQU
+        case 0x03A >> 1: // STRVBL
+        case 0x03C >> 1: // STRHOR
+        case 0x03E >> 1: // STRLONG
+            return; // ignore
         case 0x040 >> 1: // BLTCON0
             amiga->agnus.blitter.pokeBLTCON0(value); return;
         case 0x042 >> 1: // BLTCON1
