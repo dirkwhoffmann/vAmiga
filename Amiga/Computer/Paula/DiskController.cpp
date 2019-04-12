@@ -70,7 +70,18 @@ void
 DiskController::_inspect()
 {
     pthread_mutex_lock(&lock);
+
+    info.selectedDrive = selectedDrive;
+    info.state = state;
+    info.fifoCount = fifoCount;
     info.dsklen = dsklen;
+    info.dskbytr = amiga->mem.spypeekChip16(DSKBYTR);
+    info.dsksync = dsksync;
+    info.prb = prb;
+ 
+    for (unsigned i = 0; i < 6; i++) {
+        info.fifo[i] = (fifo >> (8 * i)) & 0xFF;
+    }
     pthread_mutex_unlock(&lock);
 }
 

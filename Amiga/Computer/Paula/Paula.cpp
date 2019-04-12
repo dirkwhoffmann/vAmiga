@@ -74,6 +74,7 @@ Paula::_inspect()
     
     info.intreq = intreq;
     info.intena = intena;
+    info.adkcon = adkcon;
     
     pthread_mutex_unlock(&lock);
 }

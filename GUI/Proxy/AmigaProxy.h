@@ -348,6 +348,7 @@ struct AmigaFileWrapper;
 
 - (void) dump;
 - (PaulaInfo) getInfo;
+- (DiskControllerInfo) getDiskControllerInfo;
 
 - (uint32_t) sampleRate;
 - (void) setSampleRate:(double)rate;

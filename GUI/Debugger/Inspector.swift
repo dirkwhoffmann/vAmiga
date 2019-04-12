@@ -250,6 +250,35 @@ class Inspector : NSWindowController
     @IBOutlet weak var audioBufferUnderflows: NSTextField!
     @IBOutlet weak var audioBufferOverflows: NSTextField!
     
+    @IBOutlet weak var dskStateText: NSTextField!
+    @IBOutlet weak var dskSelectDf0: NSButton!
+    @IBOutlet weak var dskSelectDf1: NSButton!
+    @IBOutlet weak var dskSelectDf2: NSButton!
+    @IBOutlet weak var dskSelectDf3: NSButton!
+    @IBOutlet weak var dskDsklen: NSTextField!
+    @IBOutlet weak var dskDmaen: NSButton!
+    @IBOutlet weak var dskWrite: NSButton!
+    @IBOutlet weak var dskDskbytr: NSTextField!
+    @IBOutlet weak var dskByteready: NSButton!
+    @IBOutlet weak var dskDmaon: NSButton!
+    @IBOutlet weak var dskDiskwrite: NSButton!
+    @IBOutlet weak var dskWordequal: NSButton!
+    @IBOutlet weak var dskAdkconHi: NSTextField!
+    @IBOutlet weak var dskPrecomp1: NSButton!
+    @IBOutlet weak var dskPrecomp0: NSButton!
+    @IBOutlet weak var dskMfmprec: NSButton!
+    @IBOutlet weak var dskUartbrk: NSButton!
+    @IBOutlet weak var dskWordsync: NSButton!
+    @IBOutlet weak var dskMsbsync: NSButton!
+    @IBOutlet weak var dskFast: NSButton!
+    @IBOutlet weak var dskDsksync: NSTextField!
+    @IBOutlet weak var dskFifo0: NSTextField!
+    @IBOutlet weak var dskFifo1: NSTextField!
+    @IBOutlet weak var dskFifo2: NSTextField!
+    @IBOutlet weak var dskFifo3: NSTextField!
+    @IBOutlet weak var dskFifo4: NSTextField!
+    @IBOutlet weak var dskFifo5: NSTextField!
+
     // Debug Panel (Events)
     @IBOutlet weak var evMasterClock: NSTextField!
     @IBOutlet weak var evInCpuCycles: NSTextField!

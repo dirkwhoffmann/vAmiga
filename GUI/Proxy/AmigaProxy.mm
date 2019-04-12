@@ -477,10 +477,13 @@ struct ADFFileWrapper { ADFFile *adf; };
     }
     return self;
 }
-
 - (PaulaInfo) getInfo
 {
     return wrapper->paula->getInfo();
+}
+- (DiskControllerInfo) getDiskControllerInfo
+{
+    return wrapper->paula->diskController.getInfo();
 }
 
 
