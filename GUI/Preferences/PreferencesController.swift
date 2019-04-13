@@ -112,7 +112,8 @@ class PreferencesController : DialogController {
     // VC1541
     @IBOutlet weak var emuWarpLoad: NSButton!
     @IBOutlet weak var emuDriveSounds: NSButton!
-    
+    @IBOutlet weak var emuDriveSoundsNoPoll: NSButton!
+
     // Fullscreen
     @IBOutlet weak var emuAspectRatioButton: NSButton!
     @IBOutlet weak var emuExitOnEscButton: NSButton!

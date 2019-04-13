@@ -91,6 +91,11 @@ private:
         uint16_t offset;
     } head;
     
+    /* History buffer storing the most recently visited tracks.
+     * The buffer is used to detect the polling head movements that are issued
+     * by track disc device to detect a newly inserted disk.
+     */
+    uint64_t cylinderHistory;
     
 public:
     

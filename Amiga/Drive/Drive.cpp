@@ -22,19 +22,20 @@ Drive::Drive(unsigned nr)
     registerSnapshotItems(vector<SnapshotItem> {
 
         // Configuration items
-        { &type,           sizeof(type),           PERSISTANT },
-        { &id,             sizeof(id),             PERSISTANT },
+        { &type,             sizeof(type),             PERSISTANT },
+        { &id,               sizeof(id),               PERSISTANT },
 
         // Internal state items
-        { &idMode,         sizeof(idMode),         0 },
-        { &idCount,        sizeof(idCount),        0 },
-        { &motor,          sizeof(motor),          0 },
-        { &dskchange,      sizeof(dskchange),      0 },
-        { &dsklen,         sizeof(dsklen),         0 },
-        { &prb,            sizeof(prb),            0 },
-        { &head.side,      sizeof(head.side),      0 },
-        { &head.cylinder,  sizeof(head.cylinder),  0 },
-        { &head.offset,    sizeof(head.offset),    0 },
+        { &idMode,           sizeof(idMode),           0 },
+        { &idCount,          sizeof(idCount),          0 },
+        { &motor,            sizeof(motor),            0 },
+        { &dskchange,        sizeof(dskchange),        0 },
+        { &dsklen,           sizeof(dsklen),           0 },
+        { &prb,              sizeof(prb),              0 },
+        { &head.side,        sizeof(head.side),        0 },
+        { &head.cylinder,    sizeof(head.cylinder),    0 },
+        { &head.offset,      sizeof(head.offset),      0 },
+        { &cylinderHistory,  sizeof(cylinderHistory),  0 },
 
     });
 }
@@ -211,24 +212,23 @@ Drive::moveHead(int dir)
     if (dir) {
         
         // Move drive head outwards (towards the lower tracks)
-        if (head.cylinder > 0) {
-            head.cylinder--;
-            amiga->putMessage(MSG_DRIVE_HEAD_DOWN);
-        } else {
-            warn("Program is trying to move head beyond track 0.\n");
-        }
-        // debug("moveOut: new cyclinder = %d\n", head.cylinder);
+        if (head.cylinder > 0) head.cylinder--;
     
     } else {
         
         // Move drive head inwards (towards the upper tracks)
-        if (head.cylinder < 79) {
-            head.cylinder++;
-            amiga->putMessage(MSG_DRIVE_HEAD_UP);
-        } else {
-            warn("Program is trying to move head beyond track 79.\n");
-        }
-        // debug("moveIn: new cyclinder = %d\n", head.cylinder);
+        if (head.cylinder < 79) head.cylinder++;
+    }
+    
+    /* Inform the GUI
+     * We send a MSG_DRIVE_HEAD_POLL, if a disk change polling signature is
+     * detected. If no pattern is detected, MSG_DRIVE_HEAD is sent.
+     */
+    cylinderHistory = ((cylinderHistory << 8) | head.cylinder) & 0xFFFFFFFF;
+    if (cylinderHistory == 0x00010001 || cylinderHistory == 0x01000100) {
+        amiga->putMessage(MSG_DRIVE_HEAD_POLL);
+    } else {
+        amiga->putMessage(MSG_DRIVE_HEAD);
     }
 }
 

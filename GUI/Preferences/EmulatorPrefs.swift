@@ -24,7 +24,9 @@ extension PreferencesController {
         // VC1541
         emuWarpLoad.state = controller.warpLoad ? .on : .off
         emuDriveSounds.state = controller.driveNoise ? .on : .off
-        
+        emuDriveSoundsNoPoll.state = controller.driveNoiseNoPoll ? .on : .off
+        emuDriveSoundsNoPoll.isEnabled = controller.driveNoise
+
         // Fullscreen
         emuAspectRatioButton.state = metal.keepAspectRatio ? .on : .off
         emuExitOnEscButton.state = controller.keyboardcontroller.exitOnEsc ? .on : .off
@@ -59,7 +61,13 @@ extension PreferencesController {
         myController?.driveNoise = sender.state == .on
         refresh()
     }
-    
+
+    @IBAction func emuDriveSoundsNoPollAction(_ sender: NSButton!) {
+        
+        myController?.driveNoiseNoPoll = sender.state == .on
+        refresh()
+    }
+
     
     //
     // Action methods (Fullscreen)

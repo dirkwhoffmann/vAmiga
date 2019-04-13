@@ -251,6 +251,7 @@ class MyController : NSWindowController, MessageReceiver {
     var alwaysWarp = false { didSet { updateWarp() } }
     var warpLoad = Defaults.warpLoad { didSet { updateWarp() } }
     var driveNoise = Defaults.driveNoise
+    var driveNoiseNoPoll = Defaults.driveNoiseNoPoll
     var screenshotSource = Defaults.screenshotSource
     var screenshotTarget = Defaults.screenshotTarget
     var screenshotTargetIntValue : Int {
@@ -700,15 +701,17 @@ extension MyController {
             updateWarp()
             refreshStatusBar()
             
-        case MSG_DRIVE_HEAD_UP,
-             MSG_DRIVE_HEAD_DOWN:
+        case MSG_DRIVE_HEAD:
             
             if driveNoise {
                 playSound(name: "drive_click", volume: 1.0)
             }
-            
+  
+        case MSG_DRIVE_HEAD_POLL:
  
-            
+            if driveNoise && !driveNoiseNoPoll {
+                playSound(name: "drive_click", volume: 1.0)
+            }
             
             
         // DEPRECATED MESSAGES BELOW...

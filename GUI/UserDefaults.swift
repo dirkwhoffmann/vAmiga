@@ -519,7 +519,8 @@ extension Keys {
     // Drives
     static let warpLoad             = "VAMIGAWarpLoadKey"
     static let driveNoise           = "VAMIGADriveNoiseKey"
-    
+    static let driveNoiseNoPoll     = "VAMIGADriveNoiseNoPollKey"
+
     // Screenshots
     static let screenshotSource     = "VAMIGAScreenshotSourceKey"
     static let screenshotTarget     = "VAMIGAScreenshotTargetKey"
@@ -548,7 +549,8 @@ extension Defaults {
     // Drives
     static let warpLoad             = true
     static let driveNoise           = true
-    
+    static let driveNoiseNoPoll     = true
+
     // Screenshots
     static let screenshotSource     = 0
     static let screenshotTarget     = NSBitmapImageRep.FileType.png
@@ -592,7 +594,8 @@ extension MyController {
             
             Keys.warpLoad: Defaults.warpLoad,
             Keys.driveNoise: Defaults.driveNoise,
-            
+            Keys.driveNoiseNoPoll: Defaults.driveNoiseNoPoll,
+
             Keys.screenshotSource: Defaults.screenshotSource,
             Keys.screenshotTarget: Int(Defaults.screenshotTarget.rawValue),
 
@@ -622,6 +625,7 @@ extension MyController {
         
         for key in [Keys.warpLoad,
                     Keys.driveNoise,
+                    Keys.driveNoiseNoPoll,
                     
                     Keys.screenshotSource,
                     Keys.screenshotTarget,
@@ -655,7 +659,8 @@ extension MyController {
         
         warpLoad = defaults.bool(forKey: Keys.warpLoad)
         driveNoise = defaults.bool(forKey: Keys.driveNoise)
-    
+        driveNoiseNoPoll = defaults.bool(forKey: Keys.driveNoiseNoPoll)
+
         screenshotSource = defaults.integer(forKey: Keys.screenshotSource)
         screenshotTargetIntValue = defaults.integer(forKey: Keys.screenshotTarget)
     
@@ -678,6 +683,7 @@ extension MyController {
         
         defaults.set(warpLoad, forKey: Keys.warpLoad)
         defaults.set(driveNoise, forKey: Keys.driveNoise)
+        defaults.set(driveNoiseNoPoll, forKey: Keys.driveNoiseNoPoll)
 
         defaults.set(screenshotSource, forKey: Keys.screenshotSource)
         defaults.set(screenshotTargetIntValue, forKey: Keys.screenshotTarget)
