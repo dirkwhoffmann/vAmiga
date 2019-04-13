@@ -254,10 +254,10 @@ DiskController::PRBdidChange(uint8_t oldValue, uint8_t newValue)
      * priority to the drive with the lowest number and ignore all others.
      */
     selectedDrive =
-    ((prb & 0b0001000) == 0) ? 0 :
-    ((prb & 0b0010000) == 0) ? 1 :
-    ((prb & 0b0100000) == 0) ? 2 :
-    ((prb & 0b1000000) == 0) ? 3 : -1;
+    ((prb & 0b0001000) == 0 && connected[0]) ? 0 :
+    ((prb & 0b0010000) == 0 && connected[1]) ? 1 :
+    ((prb & 0b0100000) == 0 && connected[2]) ? 2 :
+    ((prb & 0b1000000) == 0 && connected[3]) ? 3 : -1;
     
     // Determine the speedup factor for the selected drive.
     acceleration = (selectedDrive == -1) ? 1 : df[selectedDrive]->getAcceleration();
