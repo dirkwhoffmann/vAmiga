@@ -435,7 +435,7 @@ struct AmigaFileWrapper;
 - (void) setConnected:(NSInteger)df value:(BOOL)value;
 - (void) toggleConnected:(NSInteger)df;
 
-- (BOOL) doesDMA:(NSInteger)nr;
+// - (BOOL) doesDMA:(NSInteger)nr;
 
 @end
 

@@ -26,9 +26,6 @@ extension MyController {
         warpIcon.image = hourglassIcon
         
         // Animation
-        // amiga.diskController.doesDMA(0) ? df0DMA.startAnimation(self) : df0DMA.stopAnimation(self)
-        // amiga.diskController.doesDMA(1) ? df1DMA.startAnimation(self) : df1DMA.stopAnimation(self)
-
         df0spinning ? df0DMA.startAnimation(self) : df0DMA.stopAnimation(self)
         df1spinning ? df1DMA.startAnimation(self) : df1DMA.stopAnimation(self)
         // TODO:

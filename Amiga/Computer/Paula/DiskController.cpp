@@ -425,8 +425,10 @@ DiskController::doDiskDMA()
     }
 }
 
+/*
 bool
 DiskController::doesDMA(int nr)
 {
     return state == DRIVE_DMA_READ;
 }
+*/

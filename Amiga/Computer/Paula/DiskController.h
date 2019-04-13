@@ -211,7 +211,7 @@ public:
     void doDiskDMA();
     
     // Returns true if the specified drive is transferring data via DMA.
-    bool doesDMA(int nr);
+    // bool doesDMA(int nr);
 };
 
 #endif

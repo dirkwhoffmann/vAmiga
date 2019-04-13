@@ -700,10 +700,12 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->controller->toggleConnected(df);
 }
+/*
 - (BOOL) doesDMA:(NSInteger)nr
 {
     return wrapper->controller->doesDMA((unsigned)nr);
 }
+*/
 
 @end
 
