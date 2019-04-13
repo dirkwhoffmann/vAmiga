@@ -32,9 +32,13 @@ extension PreferencesController {
 
         // Drive
         hwDf0Type.selectItem(withTag: config.df0.type.rawValue)
-        hwDf1Connect.state = config.df1.connected ? .on : .off
         hwDf1Type.selectItem(withTag: config.df1.type.rawValue)
-        
+        hwDf2Type.selectItem(withTag: config.df2.type.rawValue)
+        hwDf3Type.selectItem(withTag: config.df3.type.rawValue)
+        hwDf1Connect.state = config.df1.connected ? .on : .off
+        hwDf2Connect.state = config.df2.connected ? .on : .off
+        hwDf3Connect.state = config.df3.connected ? .on : .off
+
         // Lock controls if emulator is powered on
         hwAmigaModelPopup.isEnabled = poweredOff
         hwRealTimeClock.isEnabled = poweredOff
@@ -79,22 +83,30 @@ extension PreferencesController {
         refresh()
     }
 
-    @IBAction func hwDf0ConnectAction(_ sender: NSButton!) {
+    @IBAction func hwDriveConnectAction(_ sender: NSButton!) {
         
-        amigaProxy?.configureDrive(0, connected: sender.state == .on)
+        let driveNr = sender.tag
+        amigaProxy?.configureDrive(driveNr, connected: sender.state == .on)
+        refresh()
+        
+        switch driveNr {
+        case 1: myAppDelegate.df1Menu.isHidden = sender.state == .off
+        // TODO: case 2: (THERE IS NO MENU FOR DF2 YET)
+        // TODO: case 3: (THERE IS NO MENU FOR DF3 YET)
+        default: break
+        }
+    }
+    
+    @IBAction func hwDriveTypeAction(_ sender: NSPopUpButton!) {
+        
+        let driveNr = sender.tag
+        amigaProxy?.configureDrive(driveNr, type: sender.selectedTag())
         refresh()
     }
-
+    
     @IBAction func hwDf0TypeAction(_ sender: NSPopUpButton!) {
         
         amigaProxy?.configureDrive(0, type: sender.selectedTag())
-        refresh()
-    }
-
-    @IBAction func hwDf1ConnectAction(_ sender: NSButton!) {
-        
-        amigaProxy?.configureDrive(1, connected: sender.state == .on)
-        myAppDelegate.df1Menu.isHidden = sender.state == .off
         refresh()
     }
     

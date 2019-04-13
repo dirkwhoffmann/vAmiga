@@ -52,10 +52,13 @@ class PreferencesController : DialogController {
     @IBOutlet weak var hwFastRamPopup: NSPopUpButton!
 
     // Drive
-    @IBOutlet weak var hwDf0Connect: NSButton!
     @IBOutlet weak var hwDf0Type: NSPopUpButton!
     @IBOutlet weak var hwDf1Connect: NSButton!
     @IBOutlet weak var hwDf1Type: NSPopUpButton!
+    @IBOutlet weak var hwDf2Connect: NSButton!
+    @IBOutlet weak var hwDf2Type: NSPopUpButton!
+    @IBOutlet weak var hwDf3Connect: NSButton!
+    @IBOutlet weak var hwDf3Type: NSPopUpButton!
 
     // Lock
     @IBOutlet weak var hwLockImage: NSImageView!
