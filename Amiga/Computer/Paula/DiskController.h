@@ -194,8 +194,11 @@ public:
     
     // Serves an event in the disk controller slot.
     void serveDiskEvent();
-    
-    // Performs a disk DMA cycle.
+
+    // Reads a byte from the selected drive.
+    void readByte();
+
+    // Performs a disk DMA access.
     void doDiskDMA();
     
     // Returns true if the specified drive is transferring data via DMA.

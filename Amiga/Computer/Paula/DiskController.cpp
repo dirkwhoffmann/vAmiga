@@ -245,12 +245,13 @@ DiskController::PRBdidChange(uint8_t oldValue, uint8_t newValue)
 {
     // debug("PRBdidChange: %X -> %X\n", oldValue, newValue);
     
-    // Store a copy of the new PRB value.
+    // Store a copy of the new value for reference.
     prb = newValue;
     
     // Determine the selected drive.
-    // In theory, multiple drives can be selected. In that case, we give
-    // priority to the drive with the lowest number and ignore all others.
+    /* In theory, multiple drives can be selected. In that case, we give
+     * priority to the drive with the lowest number and ignore all others.
+     */
     selectedDrive =
     ((prb & 0b0001000) == 0) ? 0 :
     ((prb & 0b0010000) == 0) ? 1 :
@@ -260,7 +261,7 @@ DiskController::PRBdidChange(uint8_t oldValue, uint8_t newValue)
     // Determine the current motor status of all four drives.
     bool motor = df[0]->motor | df[1]->motor | df[2]->motor | df[3]->motor;
     
-    // Schedule rotation events.
+    // Schedule the first rotation event if at least one drive is spinning.
     if (!motor) {
         handler->cancelSec(DSK_SLOT);
     }
@@ -315,65 +316,78 @@ DiskController::serveDiskEvent()
 {
     assert(selectedDrive >= -1 && selectedDrive <= 3);
     
-    // debug("serveDiskEvent()\n");
+    // Receive next byte from the selected drive.
+    readByte();
     
-    // Check if the selected drive provides data.
-    if (selectedDrive >= 0 && df[selectedDrive]->isDataSource()) {
+    // Schedule next event.
+    handler->scheduleSecRel(DSK_SLOT, DMA_CYCLES(56), DSK_ROTATE);
+}
+
+void
+DiskController::readByte()
+{
+    // Only proceed if a drive is selected.
+    if (selectedDrive >= 0) {
         
-        // Read a single byte from the data providing drive.
-        incoming = df[selectedDrive]->readHead();
+        Drive *dfsel = df[selectedDrive];
         
-        // Remember when the incoming byte has been received.
-        incomingCycle = amiga->agnus.clock;
-        
-        // Push the incoming byte into the FIFO buffer.
-        writeFifo(incoming);
-        
-        // Check if we've reached a SYNC mark.
-        if (compareFifo(dsksync)) {
+        // Only proceed if the selected drive provides data.
+        if (dfsel->isDataSource()) {
             
-            // Trigger a word SYNC interrupt.
-            amiga->paula.pokeINTREQ(0x9000);
+            // Read a single byte from the drive head.
+            incoming = dfsel->readHead();
             
-            // Enable DMA if the controller was waiting for the SYNC mark.
-            if (state == DRIVE_DMA_SYNC_WAIT) {
-                debug(2, "DRIVE_DMA_SYNC_WAIT -> DRIVE_DMA_READ\n");
-                state = DRIVE_DMA_READ;
-                clearFifo();
+            // Remember when the incoming byte has been received.
+            incomingCycle = amiga->agnus.clock;
+            
+            // Push the incoming byte into the FIFO buffer.
+            writeFifo(incoming);
+            
+            // Check if we've reached a SYNC mark.
+            if (compareFifo(dsksync)) {
+                
+                // Trigger a word SYNC interrupt.
+                amiga->paula.pokeINTREQ(0x9000);
+                
+                // Enable DMA if the controller was waiting for the SYNC mark.
+                if (state == DRIVE_DMA_SYNC_WAIT) {
+                    debug(2, "DRIVE_DMA_SYNC_WAIT -> DRIVE_DMA_READ\n");
+                    state = DRIVE_DMA_READ;
+                    clearFifo();
+                }
             }
+            
+            // Rotate the disk.
+            dfsel->rotate();
         }
     }
-    
-    // Rotate the disks in all spinning drives
-    for (unsigned i = 0; i < 4; i++) df[i]->rotate();
-    
-    // Schedule next event
-    handler->scheduleSecRel(DSK_SLOT, DMA_CYCLES(56), DSK_ROTATE);
 }
 
 void
 DiskController::doDiskDMA()
 {
-    // Only proceed if the DMA enable bit is set in DSKLEN
+    // Only proceed if DSKLEN has the DMA enable bit set.
     if (!(dsklen & 0x8000)) return;
     
-    // Only proceed if there are still bytes to read
+    // Only proceed if there are remaining bytes to read.
     if (!(dsklen & 0x3FFF)) return;
     
-    // Only proceed if the FIFO buffer contains data
+    // Only proceed if the FIFO buffer contains at least two bytes (one word).
     if (!fifoHasData()) return;
     
-    // Read the next word from the buffer
-    uint16_t word = readFifo();
-    
-    // Perform DMA if enabled
+    // Perform DMA (if drive is in read mode).
     if (state == DRIVE_DMA_READ) {
         
+        // Read next word from buffer.
+        uint16_t word = readFifo();
+        
+        // Write word into memory.
         amiga->mem.pokeChip16(amiga->agnus.dskpt, word);
         amiga->agnus.dskpt = (amiga->agnus.dskpt + 2) & 0x7FFFF;
         
         dsklen--;
         
+        // Trigger interrupt if the last word has been written.
         if (!(dsklen & 0x3FFF)) {
             amiga->paula.pokeINTREQ(0x8002);
             state = DRIVE_DMA_OFF;

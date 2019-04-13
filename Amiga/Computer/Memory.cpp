@@ -692,8 +692,7 @@ Memory::peekCustom16(uint32_t addr)
     switch ((addr >> 1) & 0xFF) {
             
         case 0x000 >> 1: // BLTDDAT
-            break;
-        
+            return 0xFF;
         case 0x002 >> 1: // DMACONR
             return amiga->agnus.peekDMACONR();
         case 0x004 >> 1: // VPOSR
@@ -728,7 +727,7 @@ Memory::peekCustom16(uint32_t addr)
             return amiga->paula.peekINTREQR();
 
         default: // Write-only register
-            break; // return 0; // TODO: What do we return here?
+            return 0xFF;
     }
     
     warn("peekCustom16(%X [%s]): MISSING IMPLEMENTATION\n",
