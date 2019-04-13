@@ -77,22 +77,17 @@ Drive::_dump()
 void
 Drive::setType(DriveType t)
 {
-    switch (t) {
+    switch ((type = t)) {
         
-        case A1010_ORIG:
-        case A1010_2X:
-        case A1010_4X:
-        case A1010_8X:
-        case A1010_WARP:
+        case A1010_ORIG: id = DRIVE_ID_35DD; acceleration =  1; break;
+        case A1010_2X:   id = DRIVE_ID_35DD; acceleration =  2; break;
+        case A1010_4X:   id = DRIVE_ID_35DD; acceleration =  4; break;
+        case A1010_8X:   id = DRIVE_ID_35DD; acceleration =  8; break;
+        case A1010_WARP: id = DRIVE_ID_35DD; acceleration = -1; break;
         
-        type = t;
-        id = DRIVE_ID_35DD;
-        break;
-
-        default:
-        
-        assert(false);
+        default: assert(false);
     }
+    debug("Setting drive type to %s (speedup: %d)\n", driveTypeName(type), acceleration);
 }
 
 bool

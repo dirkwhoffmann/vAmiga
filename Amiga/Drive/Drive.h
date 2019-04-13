@@ -29,6 +29,13 @@ private:
     // The type of this drive
     DriveType type = A1010_ORIG;
     
+    /* Acceleration factor of this drive
+     * This value equals the number of words that get transfered into memory
+     * during a single disk DMA cycle. This value must be 1 to emulate a real
+     * Amiga. If it set to, e.g., 2, the drive loads twice as fast.
+     */
+    int32_t acceleration = 1;
+    
     /* The drive type identification code
      * Each drive identifies itself by a 32 bit identification code that is
      * transmitted via the DRVRDY signal in a special identification mode. The
@@ -116,10 +123,21 @@ private:
     
 public:
     
+    //
+    // Accessing device properties
+    //
+    
+    // Returns the device number (0 = df0, 1 = df1, 2 = df2, 3 = df3)
     long getNr() { return nr; }
-        
+    
+    // Returns the drive type (drive model)
     DriveType getType() { return type; }
+
+    // Sets the drive type (drive model)
     void setType(DriveType t);
+    
+    // Return the accleration factor of this drive
+    int32_t getAcceleration() { return acceleration; }
 
     
     //

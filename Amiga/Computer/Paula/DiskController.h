@@ -32,7 +32,10 @@ private:
     
     // The currently selected drive (-1 if no drive is selected)
     int8_t selectedDrive = -1;
-     
+    
+    // The number of words transferred during a single DMA cycle.
+    int32_t acceleration = 1;
+    
     // The current drive state (off, read, or write)
     DriveState state;
     

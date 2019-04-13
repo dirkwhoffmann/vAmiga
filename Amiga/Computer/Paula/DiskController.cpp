@@ -19,6 +19,7 @@ DiskController::DiskController()
         { &connected,     sizeof(connected),     BYTE_ARRAY | PERSISTANT },
         
         { &selectedDrive, sizeof(selectedDrive), 0 },
+        { &acceleration,  sizeof(acceleration),  0 },
         { &state,         sizeof(state),         0 },
         { &incoming,      sizeof(incoming),      0 },
         { &incomingCycle, sizeof(incomingCycle), 0 },
@@ -177,7 +178,7 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
                 state = DRIVE_DMA_READ;
                 
                 // REMOVE ASAP
-                for (int i = 0; i < 6; i++) df[0]->rotate();
+                // for (int i = 0; i < 6; i++) df[0]->rotate();
             }
         }
     }
@@ -257,6 +258,9 @@ DiskController::PRBdidChange(uint8_t oldValue, uint8_t newValue)
     ((prb & 0b0010000) == 0) ? 1 :
     ((prb & 0b0100000) == 0) ? 2 :
     ((prb & 0b1000000) == 0) ? 3 : -1;
+    
+    // Determine the speedup factor for the selected drive.
+    acceleration = (selectedDrive == -1) ? 1 : df[selectedDrive]->getAcceleration();
     
     // Determine the current motor status of all four drives.
     bool motor = df[0]->motor | df[1]->motor | df[2]->motor | df[3]->motor;
@@ -378,21 +382,36 @@ DiskController::doDiskDMA()
     // Perform DMA (if drive is in read mode).
     if (state == DRIVE_DMA_READ) {
         
-        // Read next word from buffer.
-        uint16_t word = readFifo();
+        // Determine how many words we are supposed to transfer.
+        uint32_t remaining = acceleration;
         
-        // Write word into memory.
-        amiga->mem.pokeChip16(amiga->agnus.dskpt, word);
-        amiga->agnus.dskpt = (amiga->agnus.dskpt + 2) & 0x7FFFF;
-        
-        dsklen--;
-        
-        // Trigger interrupt if the last word has been written.
-        if (!(dsklen & 0x3FFF)) {
-            amiga->paula.pokeINTREQ(0x8002);
-            state = DRIVE_DMA_OFF;
-            debug(2, "Disk DMA DONE.\n");
-        }
+        do {
+            
+            // Read next word from buffer.
+            uint16_t word = readFifo();
+            
+            // Write word into memory.
+            amiga->mem.pokeChip16(amiga->agnus.dskpt, word);
+            amiga->agnus.dskpt = (amiga->agnus.dskpt + 2) & 0x7FFFF;
+            
+            dsklen--;
+            
+            // Trigger interrupt if the last word has been written.
+            if (!(dsklen & 0x3FFF)) {
+                amiga->paula.pokeINTREQ(0x8002);
+                state = DRIVE_DMA_OFF;
+                debug(2, "Disk DMA DONE.\n");
+                break;
+            }
+            
+            // Read the next word if the loop gets repeated.
+            if (--remaining) {
+                readByte();
+                readByte();
+                assert(fifoHasData());
+            }
+            
+        } while (remaining);
     }
 }
 
