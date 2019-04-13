@@ -140,28 +140,28 @@ Drive::setMotor(bool value)
 {
     if (!motor && value) {
         
-        debug("*** Motor on\n");
-        
         // Turn motor on
         motor = true;
         
         // Quit identification mode
-        // debug("Quitting identification mode\n");
         idMode = false;
         idCount = 0;
+        
+        // Notify GUI
+        amiga->putMessage(MSG_DRIVE_MOTOR_ON, nr);
     }
     
     else if (motor && !value) {
-        
-        debug("*** Motor off\n");
-
+    
         // Turn motor off
         motor = false;
         
         // Enter identification mode
-        // debug("Entering identification mode/n");
         idMode = true;
         idCount = 32;
+        
+        // Notify GUI
+        amiga->putMessage(MSG_DRIVE_MOTOR_OFF, nr);
     }
 }
 

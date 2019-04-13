@@ -680,6 +680,14 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->controller->dump();
 }
+- (BOOL) spinning:(NSInteger)df
+{
+    return wrapper->controller->spinning(df);
+}
+- (BOOL) spinning
+{
+    return wrapper->controller->spinning();
+}
 - (BOOL) isConnected:(NSInteger)df
 {
     return wrapper->controller->isConnected(df);

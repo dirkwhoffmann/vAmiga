@@ -428,6 +428,9 @@ struct AmigaFileWrapper;
 
 - (void) dump;
 
+- (BOOL) spinning:(NSInteger)df;
+- (BOOL) spinning;
+
 - (BOOL) isConnected:(NSInteger)df;
 - (void) setConnected:(NSInteger)df value:(BOOL)value;
 - (void) toggleConnected:(NSInteger)df;

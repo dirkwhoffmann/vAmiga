@@ -17,6 +17,8 @@ extension MyController {
         
         let df0IsConnected = amiga.diskController.isConnected(0)
         let df1IsConnected = amiga.diskController.isConnected(1)
+        let df0spinning = amiga.diskController.spinning(0)
+        let df1spinning = amiga.diskController.spinning(1)
 
         // Icons
         df0Disk.image = amiga.df0.icon
@@ -24,8 +26,14 @@ extension MyController {
         warpIcon.image = hourglassIcon
         
         // Animation
-        amiga.diskController.doesDMA(0) ? df0DMA.startAnimation(self) : df0DMA.stopAnimation(self)
-        amiga.diskController.doesDMA(1) ? df1DMA.startAnimation(self) : df1DMA.stopAnimation(self)
+        // amiga.diskController.doesDMA(0) ? df0DMA.startAnimation(self) : df0DMA.stopAnimation(self)
+        // amiga.diskController.doesDMA(1) ? df1DMA.startAnimation(self) : df1DMA.stopAnimation(self)
+
+        df0spinning ? df0DMA.startAnimation(self) : df0DMA.stopAnimation(self)
+        df1spinning ? df1DMA.startAnimation(self) : df1DMA.stopAnimation(self)
+        // TODO:
+        // df2spinning ? df2DMA.startAnimation(self) : df2DMA.stopAnimation(self)
+        // df3spinning ? df3DMA.startAnimation(self) : df3DMA.stopAnimation(self)
 
         // Visibility
         let items: [NSView : Bool] = [
@@ -34,10 +42,10 @@ extension MyController {
             
             df0LED:  df0IsConnected,
             df0Disk: df0IsConnected && amiga.df0.hasDisk(),
-            df0DMA:  amiga.diskController.doesDMA(0),
+            df0DMA:  df0spinning,
             df1LED:  df1IsConnected,
             df1Disk: df1IsConnected && amiga.df1.hasDisk(),
-            df1DMA:  amiga.diskController.doesDMA(1),
+            df1DMA:  df1spinning,
 
             cmdLock: mapCommandKeys,
             

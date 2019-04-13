@@ -92,6 +92,19 @@ DiskController::_dump()
     
 }
 
+bool
+DiskController::spinning(unsigned driveNr)
+{
+    assert(driveNr < 4);
+    return df[driveNr]->motor;
+}
+
+bool
+DiskController::spinning()
+{
+    return df[0]->motor | df[1]->motor | df[2]->motor | df[3]->motor;
+}
+
 DiskControllerInfo
 DiskController::getInfo()
 {
@@ -262,11 +275,8 @@ DiskController::PRBdidChange(uint8_t oldValue, uint8_t newValue)
     // Determine the speedup factor for the selected drive.
     acceleration = (selectedDrive == -1) ? 1 : df[selectedDrive]->getAcceleration();
     
-    // Determine the current motor status of all four drives.
-    bool motor = df[0]->motor | df[1]->motor | df[2]->motor | df[3]->motor;
-    
     // Schedule the first rotation event if at least one drive is spinning.
-    if (!motor) {
+    if (!spinning()) {
         handler->cancelSec(DSK_SLOT);
     }
     else if (!handler->hasEventSec(DSK_SLOT)) {

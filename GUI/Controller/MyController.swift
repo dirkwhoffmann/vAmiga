@@ -330,8 +330,8 @@ class MyController : NSWindowController, MessageReceiver {
     
     // Updates the warp status
     func updateWarp() {
-        let driveDMA = amiga.diskController.doesDMA(0) || amiga.diskController.doesDMA(1)
-        amiga.setWarp(alwaysWarp || (driveDMA && warpLoad))
+        let loading = amiga.diskController.spinning()
+        amiga.setWarp(alwaysWarp || (loading && warpLoad))
     }
     
     // Returns the icon of the sand clock in the bottom bar
@@ -695,11 +695,19 @@ extension MyController {
             let image = NSImage.init(named: "driveLedOff")
             msg.data == 0 ? (df0LED.image = image) : (df1LED.image = image)
 
+        case MSG_DRIVE_MOTOR_ON,
+             MSG_DRIVE_MOTOR_OFF:
+            
+            updateWarp()
+            refreshStatusBar()
+            
+        /*
         case MSG_DRIVE_DMA_ON,
              MSG_DRIVE_DMA_OFF:
             
             updateWarp()
             refreshStatusBar()
+        */
             
         case MSG_DRIVE_HEAD:
             

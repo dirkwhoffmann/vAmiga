@@ -110,8 +110,14 @@ private:
     
 public:
     
-    // Returns the latest internal state recorded by inspect()
+    // Returns the latest internal state recorded by inspect().
     DiskControllerInfo getInfo();
+
+    // Indicates if the motor of the specified drive is switched on.
+    bool spinning(unsigned driveNr);
+
+    // Indicates if the motor of at least one drive is switched on.
+    bool spinning();
     
     // Returns the current drive state
     DriveState getState() { return state; }
