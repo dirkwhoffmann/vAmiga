@@ -223,11 +223,18 @@ Amiga::configureModel(AmigaModel m)
         return false;
     }
     
-    if (model != m) {
-        
-        model = m;
-        putMessage(MSG_CONFIG);
+    // Only proceed if the configuration changes
+    if (model == m) return true;
+    
+    model = m;
+    
+    // Adjust model specific config items
+    if (model == A2000) {
+        realTimeClock = true;
     }
+    
+    mem.updateMemSrcTable();
+    putMessage(MSG_CONFIG);
     
     return true;
 }

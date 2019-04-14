@@ -41,7 +41,7 @@ extension PreferencesController {
 
         // Lock controls if emulator is powered on
         hwAmigaModelPopup.isEnabled = poweredOff
-        hwRealTimeClock.isEnabled = poweredOff
+        hwRealTimeClock.isEnabled = poweredOff && config.model != A2000
         hwChipRamPopup.isEnabled = poweredOff
         hwSlowRamPopup.isEnabled = poweredOff
         hwFastRamPopup.isEnabled = poweredOff
