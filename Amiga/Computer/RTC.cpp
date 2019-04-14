@@ -63,7 +63,7 @@ RTC::poke(unsigned nr, uint8_t value)
     debug("Writing RTC register %d\n", nr);
     
     reg[nr] = value & 0xFF;
-    registers2time();
+    // registers2time();
 }
 
 void
@@ -110,7 +110,7 @@ RTC::time2registers()
     reg[12] = t->tm_yday / 7;
 
     // Change the hour format if the 24/12 flag is cleared (AM/PM format)
-    if (GET_BIT(reg[15], 3) == 0) {
+    if (GET_BIT(reg[15], 2) == 0) {
         if (t->tm_hour > 12) {
             reg[4] = (t->tm_hour - 12) % 10;
             reg[5] = (t->tm_hour - 12) / 10;

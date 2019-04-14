@@ -323,34 +323,6 @@ Agnus::buildDMAEventTable()
                     dmaEvent[i+6] = l5;
                     dmaEvent[i+7] = l1;
                 }
-            
-                /*
-                switch (activeBitplanes) {
-                    case 6:
-                        for (int i = start; i <= stop; i += 8)
-                            dmaEvent[i+2] = DMA_L6;
-                        // fallthrough
-                    case 5:
-                        for (int i = start; i <= stop; i += 8)
-                            dmaEvent[i+6] = DMA_L5;
-                        // fallthrough
-                    case 4:
-                        for (int i = start; i <= stop; i += 8)
-                            dmaEvent[i+1] = DMA_L4;
-                        // fallthrough
-                    case 3:
-                        for (int i = start; i <= stop; i += 8)
-                            dmaEvent[i+5] = DMA_L3;
-                        // fallthrough
-                    case 2:
-                        for (int i = start; i <= stop; i += 8)
-                            dmaEvent[i+3] = DMA_L2;
-                        // fallthrough
-                    case 1:
-                        for (int i = start; i <= stop; i += 8)
-                            dmaEvent[i+7] = DMA_L1;
-                }
-                */
             }
         }
     }
