@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		500C0A562259402D000121CD /* DiskController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 500C0A542259402D000121CD /* DiskController.cpp */; };
 		5014DD1521F3625200BC14BA /* Keyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5014DD1321F3625200BC14BA /* Keyboard.cpp */; };
+		501B821D2262FFB200042871 /* RTC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501B821B2262FFB200042871 /* RTC.cpp */; };
 		5020B17D21EF121E00B9E80E /* Agnus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5020B17B21EF121E00B9E80E /* Agnus.cpp */; };
 		5020B18021EF136100B9E80E /* Denise.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5020B17E21EF136100B9E80E /* Denise.cpp */; };
 		502EFD0A2248EC0200F0E118 /* EventPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502EFD092248EC0200F0E118 /* EventPanel.swift */; };
@@ -165,6 +166,8 @@
 		500C0A552259402D000121CD /* DiskController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskController.h; sourceTree = "<group>"; };
 		5014DD1321F3625200BC14BA /* Keyboard.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Keyboard.cpp; sourceTree = "<group>"; };
 		5014DD1421F3625200BC14BA /* Keyboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Keyboard.h; sourceTree = "<group>"; };
+		501B821B2262FFB200042871 /* RTC.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RTC.cpp; sourceTree = "<group>"; };
+		501B821C2262FFB200042871 /* RTC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RTC.h; sourceTree = "<group>"; };
 		5020B17B21EF121E00B9E80E /* Agnus.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Agnus.cpp; sourceTree = "<group>"; };
 		5020B17C21EF121E00B9E80E /* Agnus.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Agnus.h; sourceTree = "<group>"; };
 		5020B17E21EF136100B9E80E /* Denise.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Denise.cpp; sourceTree = "<group>"; };
@@ -685,6 +688,8 @@
 				5085FE5521FB3BAE009753EF /* EventHandler.cpp */,
 				5064851021EC7A1700FC4AC3 /* Memory.h */,
 				5064850F21EC7A1700FC4AC3 /* Memory.cpp */,
+				501B821C2262FFB200042871 /* RTC.h */,
+				501B821B2262FFB200042871 /* RTC.cpp */,
 				508E7F962206CDC600F7D88C /* CPU */,
 				508FDF5621EA1FBC0043D0E9 /* CIA */,
 				502F7DD0222170AE00AEEC65 /* Agnus */,
@@ -997,6 +1002,7 @@
 				508FE01821EA227B0043D0E9 /* MyController.swift in Sources */,
 				5014DD1521F3625200BC14BA /* Keyboard.cpp in Sources */,
 				50A2953F21FF12EF0046BAA0 /* AmigaControlPort.cpp in Sources */,
+				501B821D2262FFB200042871 /* RTC.cpp in Sources */,
 				508FE02B21EA227B0043D0E9 /* WindowDelegate.swift in Sources */,
 				50B14C2821EB97EC002E32A6 /* AmigaProxy.mm in Sources */,
 				50DED6B12202EC3100B8195F /* Inspector.swift in Sources */,

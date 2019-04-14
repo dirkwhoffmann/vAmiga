@@ -19,6 +19,7 @@
 #include "CPU.h"
 #include "BreakpointManager.h"
 #include "CIA.h"
+#include "RTC.h"
 #include "Memory.h"
 #include "Agnus.h"
 #include "Copper.h"
@@ -95,6 +96,9 @@ class Amiga : public HardwareComponent {
     
     // CIA B (even CIA)
     CIAB ciaB;
+    
+    // Real-time clock
+    RTC rtc;
     
     // Memory
     Memory mem;

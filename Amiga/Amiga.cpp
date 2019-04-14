@@ -67,6 +67,7 @@ Amiga::Amiga()
         &cpu,
         &ciaA,
         &ciaB,
+        &rtc,
         &mem,
         &agnus,
         &denise,
