@@ -865,6 +865,8 @@ Agnus::serviceRASEvent(EventID id)
             debug(2, "RAS_DIWSTRT (hstart = %d hstop = %d vstart = %d vstop = %d\n",
                   hstrt, hstop, vstrt, vstop);
             
+            amiga->denise.drawLeftBorder();
+            
             if (amiga->denise.lores()) {
                 amiga->denise.draw32();
                 incr = 8;

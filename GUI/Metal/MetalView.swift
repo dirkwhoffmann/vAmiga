@@ -248,14 +248,16 @@ public class MetalView: MTKView {
         // Setup parameters looking good for a PAL texture
         let textureW = CGFloat(EMULATOR_TEXTURE.size.0)
         let textureH = CGFloat(EMULATOR_TEXTURE.size.1)
-        
+        let width    = CGFloat(728) //  CGFloat(HPIXELS)
+        let height   = CGFloat(VPIXELS - 2)
+
         textureRect = CGRect.init(x: CGFloat(0) / textureW,
                                   y: CGFloat(0) / textureH,
-                                  width: CGFloat(HPIXELS - 82) / textureW,
-                                  height: CGFloat(VPIXELS - 4) / textureH)
+                                  width: width / textureW,
+                                  height: height / textureH)
         
         // Enable this for debugging (will display the whole texture)
-        textureRect = CGRect.init(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
+        // textureRect = CGRect.init(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
         
         // Update texture coordinates in vertex buffer
         buildVertexBuffer()

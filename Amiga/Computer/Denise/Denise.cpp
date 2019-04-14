@@ -303,22 +303,43 @@ Denise::draw32()
 }
 
 void
+Denise::drawLeftBorder()
+{
+    if (amiga->agnus.hpos < 0x35) return; // HBLANK area
+    
+    // Assign the horizontal pixel counter
+    // pixel = (amiga->agnus.hpos - (0x35 - 0xF)) * 4;
+    pixel = (amiga->agnus.hpos - 0x35) * 4;
+
+    // Fill the beginning of the line with the current background color
+    int bgcol = colorizer.getRGBA(0);
+    int *ptr  = pixelAddr(0);
+    int *end  = pixelAddr(pixel);
+    
+    while (ptr < end) *ptr++ = bgcol;
+}
+
+void
+Denise::drawRightBorder()
+{
+    // Fill the rest of the line with the current background color
+    int bgcol = colorizer.getRGBA(0);
+    int *ptr  = pixelAddr(pixel);
+    int *end  = pixelAddr(HPIXELS - 1);
+    
+    while (ptr <= end) *ptr++ = bgcol;
+    
+    // Reset the horizontal pixel counter
+    pixel = 0;
+}
+
+void
 Denise::endOfLine()
 {
     // debug("endOfLine pixel = %d HPIXELS = %d\n", pixel, HPIXELS);
     
-    // Check for VBLANK area
     if (amiga->agnus.vpos >= 26) {
-        
-        // Fill the rest of the line with the current background color
-        int bgcol = colorizer.getRGBA(0);
-        int *ptr = pixelAddr(pixel);
-        int *end = pixelAddr(HPIXELS - 1);
-        
-        while (ptr <= end) *ptr++ = bgcol;
-    
-        // Reset the horizontal pixel counter
-        pixel = 0;
+        drawRightBorder();
     }
 }
 

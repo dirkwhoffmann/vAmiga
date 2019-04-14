@@ -207,7 +207,13 @@ class Denise : public HardwareComponent {
     // Synthesizes 32 lores pixels from the current shift register data
     void draw32();
     
-    
+    // Draws the left border.
+    void drawLeftBorder();
+
+    // Draws the right border.
+    void drawRightBorder();
+
+
     //
     // Accessing the frame buffers
     //
