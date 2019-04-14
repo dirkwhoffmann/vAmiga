@@ -276,52 +276,55 @@ Agnus::buildDMAEventTable()
         // Bitplane DMA
         if (dmacon & BPLEN) {
             
-            /*
-            // Determine start cycle
-            uint8_t start = ddfstrt;
-            if (start < 0x18) start = 0x18;
-            
-            // Determine stop cycle
-            uint8_t stop = ddfstop;
-            if (stop > 0xD7) stop = 0xD7;
-            
-            debug("ddfstrt = %X ddfstop = %X\n", ddfstrt, ddfstop);
-            
-            stop += 8; //16;
-            */
-            
             if (amiga->denise.hires()) {
                 
                 // Determine start and stop cycle
                 uint8_t start = MAX(ddfstrt & 0b11111100, 0x18);
-                uint8_t stop  = MIN(ddfstop & 0b11111100, 0xD8) + 4;
-                // debug("ddfstrt = %d, ddfstop = %d, start = %d, stop = %d\n",ddfstrt, ddfstop, start, stop);
+                uint8_t stop  = MIN(ddfstop & 0b11111100, 0xD8);
                 
-                switch (activeBitplanes) {
-                    case 6:
-                    case 5:
-                    case 4:
-                        for (int i = start; i <= stop; i += 8)
-                            dmaEvent[i] = dmaEvent[i+4] = DMA_H4;
-                        // fallthrough
-                    case 3:
-                        for (int i = start; i <= stop; i += 8)
-                            dmaEvent[i+1] = dmaEvent[i+5] = DMA_H3;
-                        // fallthrough
-                    case 2:
-                        for (int i = start; i <= stop; i += 8)
-                            dmaEvent[i+2] = dmaEvent[i+6] = DMA_H2;
-                        // fallthrough
-                    case 1:
-                        for (int i = start; i <= stop; i += 8)
-                            dmaEvent[i+3] = dmaEvent[i+7] = DMA_H1;
+                // Align stop such that (stop - start) is dividable by 8
+                stop += (stop - start) & 0b100;
+                // if ((stop - start) & 0b100) stop += 0b100;
+                
+                // Determine event IDs
+                EventID h4 = (activeBitplanes >= 4) ? DMA_H4 : (EventID)0;
+                EventID h3 = (activeBitplanes >= 3) ? DMA_H3 : (EventID)0;
+                EventID h2 = (activeBitplanes >= 2) ? DMA_H2 : (EventID)0;
+                EventID h1 = (activeBitplanes >= 1) ? DMA_H1 : (EventID)0;
+
+                // Schedule events
+                for (unsigned i = start; i <= stop; i += 8) {
+                    dmaEvent[i]   = dmaEvent[i+4] = h4;
+                    dmaEvent[i+1] = dmaEvent[i+5] = h3;
+                    dmaEvent[i+2] = dmaEvent[i+6] = h2;
+                    dmaEvent[i+3] = dmaEvent[i+7] = h1;
                 }
-                
+ 
             } else {
                 
+                // Determine start and stop cycle
                 uint8_t start = MAX(ddfstrt & 0b11111000, 0x18);
-                uint8_t stop  = MIN(ddfstop & 0b11111000, 0xD8) + 4;
+                uint8_t stop  = MIN(ddfstop & 0b11111000, 0xD8);
                 
+                // Determine event IDs
+                EventID l6 = (activeBitplanes >= 6) ? DMA_L6 : (EventID)0;
+                EventID l5 = (activeBitplanes >= 5) ? DMA_L5 : (EventID)0;
+                EventID l4 = (activeBitplanes >= 4) ? DMA_L4 : (EventID)0;
+                EventID l3 = (activeBitplanes >= 3) ? DMA_L3 : (EventID)0;
+                EventID l2 = (activeBitplanes >= 2) ? DMA_L2 : (EventID)0;
+                EventID l1 = (activeBitplanes >= 1) ? DMA_L1 : (EventID)0;
+                
+                // Schedule events
+                for (unsigned i = start; i <= stop; i += 8) {
+                    dmaEvent[i+1] = l4;
+                    dmaEvent[i+2] = l6;
+                    dmaEvent[i+3] = l2;
+                    dmaEvent[i+5] = l3;
+                    dmaEvent[i+6] = l5;
+                    dmaEvent[i+7] = l1;
+                }
+            
+                /*
                 switch (activeBitplanes) {
                     case 6:
                         for (int i = start; i <= stop; i += 8)
@@ -347,6 +350,7 @@ Agnus::buildDMAEventTable()
                         for (int i = start; i <= stop; i += 8)
                             dmaEvent[i+7] = DMA_L1;
                 }
+                */
             }
         }
     }
