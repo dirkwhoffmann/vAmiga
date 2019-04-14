@@ -276,61 +276,75 @@ Agnus::buildDMAEventTable()
         // Bitplane DMA
         if (dmacon & BPLEN) {
             
-            // Determine start and stop cycle (TODO: CHECK IN WINFELLOW)
+            /*
+            // Determine start cycle
             uint8_t start = ddfstrt;
-            uint8_t stop  = ddfstop + 16 /* ??? LORES ONLY(?!)*/;
-
             if (start < 0x18) start = 0x18;
-            // if (stop > (0xD7 + 8)) stop = (0xD7 + 8);
-            if (stop > (0xD7)) stop = (0xD7);
-
+            
+            // Determine stop cycle
+            uint8_t stop = ddfstop;
+            if (stop > 0xD7) stop = 0xD7;
+            
+            debug("ddfstrt = %X ddfstop = %X\n", ddfstrt, ddfstop);
+            
+            stop += 8; //16;
+            */
+            
             if (amiga->denise.hires()) {
+                
+                // Determine start and stop cycle
+                uint8_t start = MAX(ddfstrt & 0b11111100, 0x18);
+                uint8_t stop  = MIN(ddfstop & 0b11111100, 0xD8) + 4;
+                // debug("ddfstrt = %d, ddfstop = %d, start = %d, stop = %d\n",ddfstrt, ddfstop, start, stop);
                 
                 switch (activeBitplanes) {
                     case 6:
                     case 5:
                     case 4:
-                        for (int i = start & 0xF8; i < stop; i += 4)
-                            dmaEvent[i] = DMA_H4;
+                        for (int i = start; i <= stop; i += 8)
+                            dmaEvent[i] = dmaEvent[i+4] = DMA_H4;
                         // fallthrough
                     case 3:
-                        for (int i = start & 0xF8; i < stop; i += 4)
-                            dmaEvent[i+1] = DMA_H3;
+                        for (int i = start; i <= stop; i += 8)
+                            dmaEvent[i+1] = dmaEvent[i+5] = DMA_H3;
                         // fallthrough
                     case 2:
-                        for (int i = start & 0xF8; i < stop; i += 4)
-                            dmaEvent[i+2] = DMA_H2;
+                        for (int i = start; i <= stop; i += 8)
+                            dmaEvent[i+2] = dmaEvent[i+6] = DMA_H2;
                         // fallthrough
                     case 1:
-                        for (int i = start & 0xF8; i < stop; i += 4)
-                            dmaEvent[i+3] = DMA_H1;
+                        for (int i = start; i <= stop; i += 8)
+                            dmaEvent[i+3] = dmaEvent[i+7] = DMA_H1;
                 }
                 
             } else {
                 
+                uint8_t start = MAX(ddfstrt & 0b11111000, 0x18);
+                uint8_t stop  = MIN(ddfstop & 0b11111000, 0xD8) + 4;
+                
                 switch (activeBitplanes) {
                     case 6:
-                        for (int i = start & 0xF8; i < stop; i += 8)
+                        for (int i = start; i <= stop; i += 8)
                             dmaEvent[i+2] = DMA_L6;
                         // fallthrough
                     case 5:
-                        for (int i = start & 0xF8; i < stop; i += 8)
+                        for (int i = start; i <= stop; i += 8)
                             dmaEvent[i+6] = DMA_L5;
                         // fallthrough
                     case 4:
-                        for (int i = start & 0xF8; i < stop; i += 8)
+                        for (int i = start; i <= stop; i += 8)
                             dmaEvent[i+1] = DMA_L4;
                         // fallthrough
                     case 3:
-                        for (int i = start & 0xF8; i < stop; i += 8)
+                        for (int i = start; i <= stop; i += 8)
                             dmaEvent[i+5] = DMA_L3;
                         // fallthrough
                     case 2:
-                        for (int i = start & 0xF8; i < stop; i += 8)
+                        for (int i = start; i <= stop; i += 8)
                             dmaEvent[i+3] = DMA_L2;
                         // fallthrough
                     case 1:
-                        for (int i = start & 0xF8; i < stop; i += 8)
+                        for (int i = start; i <= stop; i += 8)
                             dmaEvent[i+7] = DMA_L1;
                 }
             }
@@ -588,7 +602,7 @@ Agnus::pokeDIWSTRT(uint16_t value)
     debug(2, "pokeDIWSTRT(%X)\n", value);
     
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
-    // V7 V6 V5 V4 V3 V2 V1 V0 H7 H6 H5 H4 H3 H2 H1 H0  and  H8 = 0, H8 = 0
+    // V7 V6 V5 V4 V3 V2 V1 V0 H7 H6 H5 H4 H3 H2 H1 H0  and  H8 = 0, V8 = 0
     
     diwstrt = value;
     hstrt = LO_BYTE(value);
@@ -605,7 +619,9 @@ Agnus::pokeDIWSTOP(uint16_t value)
     
     diwstop = value;
     hstop = LO_BYTE(value) | 0x100;
-    vstop = HI_BYTE(value) | ((value & 0x80) << 1);
+    vstop = HI_BYTE(value) | ((~value & 0x8000) >> 7);
+    
+    debug(2, "diwstop = %X hstop = %X vstop = %X\n", diwstop, hstop, vstop);
 }
 
 void
@@ -796,7 +812,7 @@ Agnus::serviceDMAEvent(EventID id)
             if (amiga->debugDMA) debug("H1\n");
         case DMA_L1:
             
-            if (amiga->debugDMA) debug("DO_DMA H1/L1 (%d,%d): bpldat[%d] = peekChip16(%X) = %X\n", vpos, hpos, PLANE1, bplpt[PLANE1], amiga->mem.peekChip16(bplpt[PLANE1]));
+            debug(2, "DO_DMA H1/L1 (%d,%d): bpldat[%d] = peekChip16(%X) = %X\n", vpos, hpos, PLANE1, bplpt[PLANE1], amiga->mem.peekChip16(bplpt[PLANE1]));
                   
             DO_DMA(bplpt[PLANE1], amiga->denise.bpldat[PLANE1]);
             
@@ -870,7 +886,8 @@ Agnus::serviceRASEvent(EventID id)
             
         case RAS_DIWSTRT:
             
-            if (amiga->debugDMA) debug("RAS_DIWSTRT: (%d,%d)\n", vpos, hpos);
+            debug(2, "RAS_DIWSTRT (hstart = %d hstop = %d vstart = %d vstop = %d\n",
+                  hstrt, hstop, vstrt, vstop);
             
             if (amiga->denise.lores()) {
                 amiga->denise.draw32();
@@ -891,7 +908,7 @@ Agnus::serviceRASEvent(EventID id)
             
         case RAS_DIWDRAW:
 
-            if (amiga->debugDMA) debug("RAS_DIWDRAW: (%d,%d)\n", vpos, hpos);
+            debug(2, "RAS_DIWDRAW\n");
 
             if (amiga->denise.lores()) {
                 amiga->denise.draw32();
@@ -936,39 +953,6 @@ Agnus::scheduleFirstRASEvent(int16_t vpos)
         eventHandler.schedulePos(RAS_SLOT, vpos, HPOS_MAX, RAS_HSYNC);
     }
 }
-
-/*
-void
-Agnus::scheduleNextRASEvent(int16_t vpos, int16_t hpos)
-{
-    // Map hstrt, hstop to DMA cycle values
-    uint16_t hstrtdma = hstrt / 2;
-    uint16_t hstopdma = hstop / 2;
-
-    // Check if the vertical position is inside the drawing area
-    if (vpos > 25 && vpos >= vstrt && vpos <= vstop) {
-        
-        // Check if the next event is the first DIW event in this line
-        if (hpos < hstrtdma) {
-            // debug("Next RAS event is %d at (%d,%d)\n", RAS_DIWSTRT, vpos, hstrt);
-            eventHandler.schedulePos(RAS_SLOT, vpos, hstrtdma, RAS_DIWSTRT);
-            return;
-        }
-        
-        // Check if there is another DIW event to come in this line
-        if (hpos < hstopdma) {
-            // debug("Next RAS event is %d at (%d,%d)\n", RAS_DIWDRAW, vpos, hstrt);
-            eventHandler.schedulePos(RAS_SLOT, vpos, hpos + 8, RAS_DIWDRAW);
-            return;
-        }
-        
-        // If we come here, all DIW events have been processed
-    }
-    
-    // Schedule a HSYNC event to finish up the current line
-    eventHandler.schedulePos(RAS_SLOT, vpos, HPOS_MAX, RAS_HSYNC);
-}
-*/
 
 void
 Agnus::hsyncHandler()

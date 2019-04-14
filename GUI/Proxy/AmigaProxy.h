@@ -97,6 +97,7 @@ struct AmigaFileWrapper;
 - (BOOL) debugMode;
 - (void) enableDebugging;
 - (void) disableDebugging;
+- (void) setDebugLevel:(NSInteger)value;
 
 - (void) powerOn;
 - (void) powerOff;

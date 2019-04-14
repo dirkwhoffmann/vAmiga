@@ -241,6 +241,7 @@ Denise::pixelAddr(int pixel)
     assert(amiga->agnus.vpos >= 26); // 0 .. 25 is VBLANK area
 
     int offset = pixel + (amiga->agnus.vpos - 26) * HPIXELS;
+    // debug("pixel offset for pixel %d is %d\n", pixel, offset);
     assert(offset < VPIXELS * HPIXELS);
     
     return frameBuffer + offset;
@@ -314,7 +315,7 @@ Denise::endOfLine()
         int *ptr = pixelAddr(pixel);
         int *end = pixelAddr(HPIXELS - 1);
         
-        while (ptr < end) *ptr++ = bgcol;
+        while (ptr <= end) *ptr++ = bgcol;
     
         // Reset the horizontal pixel counter
         pixel = 0;

@@ -255,7 +255,7 @@ public class MetalView: MTKView {
                                   height: CGFloat(VPIXELS - 4) / textureH)
         
         // Enable this for debugging (will display the whole texture)
-        // textureRect = CGRect.init(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
+        textureRect = CGRect.init(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
         
         // Update texture coordinates in vertex buffer
         buildVertexBuffer()
@@ -387,9 +387,9 @@ public class MetalView: MTKView {
         // Emulate scanlines
         let scanlineFilter = currentScanlineFilter()
         scanlineFilter.apply(commandBuffer: commandBuffer,
-                                source: upscaledTexture,
-                                target: scanlineTexture,
-                                options: shaderOptions)
+                             source: upscaledTexture,
+                             target: scanlineTexture,
+                             options: shaderOptions)
         
         // Create render pass descriptor
         let descriptor = MTLRenderPassDescriptor.init()
@@ -565,8 +565,7 @@ public class MetalView: MTKView {
             return
         }
 
-        // Wait until it's save to go ...
-        // let result semaphore.wait (timeout: .distantFuture)
+        // Wait until it's save to go...
         semaphore.wait()
         
         // Refresh size dependent items if needed

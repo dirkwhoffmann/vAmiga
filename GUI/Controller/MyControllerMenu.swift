@@ -119,7 +119,7 @@ extension MyController : NSMenuItemValidation {
              #selector(MyController.stopAndGoAction(_:)):
             return amiga.isPaused()
             
-        case #selector(MyController.traceAction(_:)),
+        case #selector(MyController.debugLevelAction(_:)),
              #selector(MyController.dumpStateAction(_:)):
             return !amiga.releaseBuild()
             
@@ -503,14 +503,18 @@ extension MyController : NSMenuItemValidation {
     // Action methods (Debug menu)
     //
 
-    @IBAction func traceAction(_ sender: Any!) {
+    @IBAction func debugLevelAction(_ sender: Any!) {
         // Dummy target to make menu item validatable
+    }
+    @IBAction func setDebugLevelAction(_ sender: NSMenuItem!) {
+        amiga.suspend()
+        amiga.setDebugLevel(sender.tag)
+        amiga.resume()
     }
     
     @IBAction func dumpStateAction(_ sender: Any!) {
         // Dummy target to make menu item validatable
     }
- 
     @IBAction func dumpAmigaAction(_ sender: Any!) {
         amiga.suspend()
         amiga.dump()

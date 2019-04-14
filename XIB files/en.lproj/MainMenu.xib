@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication"/>
@@ -242,20 +242,32 @@
                                         <menuItem isSeparatorItem="YES" id="427">
                                             <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                                         </menuItem>
-                                        <menuItem title="Trace" id="l45-bY-cgb">
+                                        <menuItem title="Debug Level" id="l45-bY-cgb">
                                             <modifierMask key="keyEquivalentModifierMask"/>
-                                            <menu key="submenu" title="Trace" id="F5S-uB-hpC">
+                                            <menu key="submenu" title="Debug Level" id="F5S-uB-hpC">
                                                 <items>
-                                                    <menuItem title="Trace IEC Bus" id="417">
+                                                    <menuItem title="1" tag="1" id="417">
                                                         <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="setDebugLevelAction:" target="-1" id="IBC-Ir-5mr"/>
+                                                        </connections>
                                                     </menuItem>
-                                                    <menuItem title="Trace VC1541 CPU" id="418">
+                                                    <menuItem title="2" tag="2" id="418">
                                                         <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="setDebugLevelAction:" target="-1" id="J05-xX-Ohk"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="3" tag="3" id="WMO-pG-AUW">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="setDebugLevelAction:" target="-1" id="Itr-aF-ucu"/>
+                                                        </connections>
                                                     </menuItem>
                                                 </items>
                                             </menu>
                                             <connections>
-                                                <action selector="traceAction:" target="-1" id="f63-MU-TyH"/>
+                                                <action selector="debugLevelAction:" target="-1" id="acy-uP-tZW"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem title="Dump State" id="421">
