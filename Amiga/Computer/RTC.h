@@ -64,6 +64,14 @@ private:
     // Accessing registers
     //
     
+public:
+    
+    // Reads one of the 16 RTC registers
+    uint8_t peek(unsigned nr);
+    
+    // Writes one of the 16 RTC registers
+    void poke(unsigned nr, uint8_t value);
+    
 private:
     
     /* Converts the register value to the internally stored time-stamp.
@@ -75,8 +83,6 @@ private:
      * This function has to be called *after* a RTC register is *written*.
      */
     void registers2time();
-    
-  
 };
 
 #endif

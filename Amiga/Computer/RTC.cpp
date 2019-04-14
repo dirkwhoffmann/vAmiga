@@ -16,7 +16,7 @@ RTC::RTC()
     registerSnapshotItems(vector<SnapshotItem> {
         
         { &timeDiff,  sizeof(timeDiff),  0},
-        { &reg,      sizeof(reg),      BYTE_ARRAY },
+        { &reg,       sizeof(reg),       BYTE_ARRAY },
     });
     
 }
@@ -24,7 +24,9 @@ RTC::RTC()
 void
 RTC::_powerOn()
 {
- 
+    reg[13] = 0b001; // Control register D
+    reg[14] = 0b000; // Control register E
+    reg[15] = 0b100; // Control register F
 }
 
 void
@@ -42,6 +44,28 @@ RTC::_dump()
     plainmsg("\n");
 }
 
+uint8_t
+RTC::peek(unsigned nr)
+{
+    assert(nr < 16);
+    
+    debug("Reading RTC register %d\n", nr);
+    
+    time2registers();
+    return reg[nr];
+}
+
+void
+RTC::poke(unsigned nr, uint8_t value)
+{
+    assert(nr < 16);
+    
+    debug("Writing RTC register %d\n", nr);
+    
+    reg[nr] = value & 0xFF;
+    registers2time();
+}
+
 void
 RTC::time2registers()
 {
@@ -52,6 +76,8 @@ RTC::time2registers()
     
     // Convert the time_t value to a tm struct.
     tm *t = localtime(&rtcTime);
+    
+    debug("Time stamp: %s\n", asctime(t));
     
     // Write the registers.
     
@@ -77,8 +103,8 @@ RTC::time2registers()
     reg[5] = t->tm_hour / 10;
     reg[6] = t->tm_mday % 10;
     reg[7] = t->tm_mday / 10;
-    reg[8] = t->tm_mon % 10;
-    reg[9] = t->tm_mon / 10;
+    reg[8] = (t->tm_mon + 1) % 10;
+    reg[9] = (t->tm_mon + 1) / 10;
     reg[10] = t->tm_year % 10;
     reg[11] = t->tm_year / 10;
     reg[12] = t->tm_yday / 7;
@@ -93,7 +119,6 @@ RTC::time2registers()
     }
 }
 
-
 void
 RTC::registers2time()
 {
@@ -103,7 +128,7 @@ RTC::registers2time()
     t.tm_min  = reg[2] + 10 * reg[3];
     t.tm_hour = reg[4] + 10 * reg[5];
     t.tm_mday = reg[6] + 10 * reg[7];
-    t.tm_mon  = reg[8] + 10 * reg[9];
+    t.tm_mon  = reg[8] + 10 * reg[9] - 1;
     t.tm_year = reg[10] + 10 * reg[11];
   
     // Convert the tm struct to a time_t value.

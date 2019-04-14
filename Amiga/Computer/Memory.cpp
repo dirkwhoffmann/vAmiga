@@ -370,7 +370,7 @@ Memory::peek8(uint32_t addr)
         case MEM_FAST:     ASSERT_FAST_ADDR(addr); assert(false); return READ_FAST_8(addr);
         case MEM_CIA:      ASSERT_CIA_ADDR(addr);  return peekCIA8(addr);
         case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); assert(false); return READ_SLOW_8(addr);
-        case MEM_RTC:      ASSERT_RTC_ADDR(addr);  assert(false); return 0;
+        case MEM_RTC:      ASSERT_RTC_ADDR(addr);  return peekRTC8(addr);
         case MEM_OCS:      ASSERT_OCS_ADDR(addr);  return peekCustom8(addr);
         case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); assert(false); return READ_BOOT_8(addr);
         case MEM_KICK:     ASSERT_KICK_ADDR(addr); return READ_KICK_8(addr);
@@ -397,7 +397,7 @@ Memory::peek16(uint32_t addr)
         case MEM_FAST:     ASSERT_FAST_ADDR(addr); assert(false); return READ_FAST_16(addr);
         case MEM_CIA:      ASSERT_CIA_ADDR(addr);  return peekCIA16(addr);
         case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); assert(false); return READ_SLOW_16(addr);
-        case MEM_RTC:      ASSERT_RTC_ADDR(addr);  assert(false); return 0;
+        case MEM_RTC:      ASSERT_RTC_ADDR(addr);  return peekRTC16(addr);
         case MEM_OCS:      ASSERT_OCS_ADDR(addr);  return peekCustom16(addr);
         case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); assert(false); return READ_BOOT_16(addr);
         case MEM_KICK:     ASSERT_KICK_ADDR(addr); return READ_KICK_16(addr);
@@ -424,7 +424,7 @@ Memory::spypeek8(uint32_t addr)
         case MEM_FAST:     ASSERT_FAST_ADDR(addr); return READ_FAST_8(addr);
         case MEM_CIA:      ASSERT_CIA_ADDR(addr);  return spypeekCIA8(addr);
         case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); return READ_SLOW_8(addr);
-        case MEM_RTC:      ASSERT_RTC_ADDR(addr);  return 0;
+        case MEM_RTC:      ASSERT_RTC_ADDR(addr);  return spypeekRTC8(addr);
         case MEM_OCS:      ASSERT_OCS_ADDR(addr);  return spypeekCustom8(addr);
         case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); return READ_BOOT_8(addr);
         case MEM_KICK:     ASSERT_KICK_ADDR(addr); return READ_KICK_8(addr);
@@ -446,7 +446,7 @@ Memory::spypeek16(uint32_t addr)
         case MEM_FAST:     ASSERT_FAST_ADDR(addr); return READ_FAST_16(addr);
         case MEM_CIA:      ASSERT_CIA_ADDR(addr);  return spypeekCIA16(addr);
         case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); return READ_SLOW_16(addr);
-        case MEM_RTC:      ASSERT_RTC_ADDR(addr);  return 0;
+        case MEM_RTC:      ASSERT_RTC_ADDR(addr);  return spypeekRTC8(addr);
         case MEM_OCS:      ASSERT_OCS_ADDR(addr);  return spypeekCustom16(addr);
         case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); return READ_BOOT_16(addr);
         case MEM_KICK:     ASSERT_KICK_ADDR(addr); return READ_KICK_16(addr);
@@ -474,7 +474,7 @@ Memory::poke8(uint32_t addr, uint8_t value)
         case MEM_FAST:     ASSERT_FAST_ADDR(addr); WRITE_FAST_8(addr, value); break;
         case MEM_CIA:      ASSERT_CIA_ADDR(addr);  pokeCIA8(addr, value); break;
         case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); WRITE_SLOW_8(addr, value); break;
-        case MEM_RTC:      ASSERT_RTC_ADDR(addr);  break;
+        case MEM_RTC:      ASSERT_RTC_ADDR(addr);  pokeRTC8(addr, value); break;
         case MEM_OCS:      ASSERT_OCS_ADDR(addr);  pokeCustom8(addr, value); break;
         case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); break;
         case MEM_KICK:     ASSERT_KICK_ADDR(addr); break;
@@ -495,7 +495,7 @@ Memory::poke16(uint32_t addr, uint16_t value)
         case MEM_FAST:     ASSERT_FAST_ADDR(addr); WRITE_FAST_16(addr, value); break;
         case MEM_CIA:      ASSERT_CIA_ADDR(addr);  pokeCIA16(addr, value); break;
         case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); WRITE_SLOW_16(addr, value); break;
-        case MEM_RTC:      ASSERT_RTC_ADDR(addr);  break;
+        case MEM_RTC:      ASSERT_RTC_ADDR(addr);  pokeRTC16(addr, value);;
         case MEM_OCS:      ASSERT_OCS_ADDR(addr);  pokeCustom16(addr, value); break;
         case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); break;
         case MEM_KICK:     ASSERT_KICK_ADDR(addr); break;
@@ -673,6 +673,53 @@ Memory::pokeCIA32(uint32_t addr, uint32_t value)
     pokeCIA16(addr,     HI_WORD(value));
     pokeCIA16(addr + 2, LO_WORD(value));
 }
+
+uint8_t
+Memory::peekRTC8(uint32_t addr)
+{
+    /* Addr: 0000 0001 0010 0011 0100 0101 0110 0111 1000 1001 1010 1011
+     * Reg:   --   -0   --   -0   --   -1   --   -1   --   -2   --   -2
+     */
+    if (IS_EVEN(addr)) return 0;
+    
+    /* Addr: 0001 0011 0101 0111 1001 1011
+     * Reg:   -0   -0   -1   -1   -2   -2
+     */
+    return amiga->rtc.peek((addr >> 2) & 0b1111);
+}
+
+uint16_t
+Memory::peekRTC16(uint32_t addr)
+{
+    return HI_LO(peekRTC8(addr), peekRTC8(addr + 1));
+}
+
+/*
+uint32_t
+Memory::peekRTC32(uint32_t addr)
+{
+    
+}
+*/
+
+void
+Memory::pokeRTC8(uint32_t addr, uint8_t value)
+{
+    
+}
+void
+Memory::pokeRTC16(uint32_t addr, uint16_t value)
+{
+    
+}
+
+/*
+void
+Memory::pokeRTC32(uint32_t addr, uint32_t value)
+{
+    
+}
+*/
 
 uint8_t
 Memory::peekCustom8(uint32_t addr)

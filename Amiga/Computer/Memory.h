@@ -329,6 +329,22 @@ class Memory : public HardwareComponent {
     void pokeCIA32(uint32_t addr, uint32_t value);
     
     //
+    // RTC space
+    //
+    
+    uint8_t peekRTC8(uint32_t addr);
+    uint16_t peekRTC16(uint32_t addr);
+    uint32_t peekRTC32(uint32_t addr);
+    
+    uint8_t spypeekRTC8(uint32_t addr) { return peekRTC8(addr); }
+    uint16_t spypeekRTC16(uint32_t addr) { return peekRTC16(addr); }
+    uint32_t spypeekRTC32(uint32_t addr) { return peekRTC32(addr); }
+    
+    void pokeRTC8(uint32_t addr, uint8_t value);
+    void pokeRTC16(uint32_t addr, uint16_t value);
+    void pokeRTC32(uint32_t addr, uint32_t value);
+    
+    //
     // Custom chips (OCS)
     //
     
