@@ -367,9 +367,9 @@ Memory::peek8(uint32_t addr)
             
         case MEM_UNMAPPED: return 0;
         case MEM_CHIP:     ASSERT_CHIP_ADDR(addr); return READ_CHIP_8(addr);
-        case MEM_FAST:     ASSERT_FAST_ADDR(addr); assert(false); return READ_FAST_8(addr);
+        case MEM_FAST:     ASSERT_FAST_ADDR(addr); return READ_FAST_8(addr);
         case MEM_CIA:      ASSERT_CIA_ADDR(addr);  return peekCIA8(addr);
-        case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); assert(false); return READ_SLOW_8(addr);
+        case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); return READ_SLOW_8(addr);
         case MEM_RTC:      ASSERT_RTC_ADDR(addr);  return peekRTC8(addr);
         case MEM_OCS:      ASSERT_OCS_ADDR(addr);  return peekCustom8(addr);
         case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); assert(false); return READ_BOOT_8(addr);
@@ -394,9 +394,9 @@ Memory::peek16(uint32_t addr)
             
         case MEM_UNMAPPED: return 0;
         case MEM_CHIP:     ASSERT_CHIP_ADDR(addr); return READ_CHIP_16(addr);
-        case MEM_FAST:     ASSERT_FAST_ADDR(addr); assert(false); return READ_FAST_16(addr);
+        case MEM_FAST:     ASSERT_FAST_ADDR(addr); return READ_FAST_16(addr);
         case MEM_CIA:      ASSERT_CIA_ADDR(addr);  return peekCIA16(addr);
-        case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); assert(false); return READ_SLOW_16(addr);
+        case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); return READ_SLOW_16(addr);
         case MEM_RTC:      ASSERT_RTC_ADDR(addr);  return peekRTC16(addr);
         case MEM_OCS:      ASSERT_OCS_ADDR(addr);  return peekCustom16(addr);
         case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); assert(false); return READ_BOOT_16(addr);
@@ -421,7 +421,7 @@ Memory::spypeek8(uint32_t addr)
             
         case MEM_UNMAPPED: return 0;
         case MEM_CHIP:     ASSERT_CHIP_ADDR(addr); return READ_CHIP_8(addr);
-        case MEM_FAST:     ASSERT_FAST_ADDR(addr); return READ_FAST_8(addr);
+        case MEM_FAST:     assert(false); ASSERT_FAST_ADDR(addr); return READ_FAST_8(addr);
         case MEM_CIA:      ASSERT_CIA_ADDR(addr);  return spypeekCIA8(addr);
         case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); return READ_SLOW_8(addr);
         case MEM_RTC:      ASSERT_RTC_ADDR(addr);  return spypeekRTC8(addr);
@@ -443,7 +443,7 @@ Memory::spypeek16(uint32_t addr)
             
         case MEM_UNMAPPED: return 0;
         case MEM_CHIP:     ASSERT_CHIP_ADDR(addr); return READ_CHIP_16(addr);
-        case MEM_FAST:     ASSERT_FAST_ADDR(addr); return READ_FAST_16(addr);
+        case MEM_FAST:     assert(false); ASSERT_FAST_ADDR(addr); return READ_FAST_16(addr);
         case MEM_CIA:      ASSERT_CIA_ADDR(addr);  return spypeekCIA16(addr);
         case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); return READ_SLOW_16(addr);
         case MEM_RTC:      ASSERT_RTC_ADDR(addr);  return spypeekRTC8(addr);
@@ -471,7 +471,7 @@ Memory::poke8(uint32_t addr, uint8_t value)
             
         case MEM_UNMAPPED: return;
         case MEM_CHIP:     ASSERT_CHIP_ADDR(addr); WRITE_CHIP_8(addr, value); break;
-        case MEM_FAST:     ASSERT_FAST_ADDR(addr); WRITE_FAST_8(addr, value); break;
+        case MEM_FAST:     assert(false); ASSERT_FAST_ADDR(addr); WRITE_FAST_8(addr, value); break;
         case MEM_CIA:      ASSERT_CIA_ADDR(addr);  pokeCIA8(addr, value); break;
         case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); WRITE_SLOW_8(addr, value); break;
         case MEM_RTC:      ASSERT_RTC_ADDR(addr);  pokeRTC8(addr, value); break;
@@ -492,7 +492,7 @@ Memory::poke16(uint32_t addr, uint16_t value)
             
         case MEM_UNMAPPED: return;
         case MEM_CHIP:     ASSERT_CHIP_ADDR(addr); WRITE_CHIP_16(addr, value); break;
-        case MEM_FAST:     ASSERT_FAST_ADDR(addr); WRITE_FAST_16(addr, value); break;
+        case MEM_FAST:     assert(false); ASSERT_FAST_ADDR(addr); WRITE_FAST_16(addr, value); break;
         case MEM_CIA:      ASSERT_CIA_ADDR(addr);  pokeCIA16(addr, value); break;
         case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); WRITE_SLOW_16(addr, value); break;
         case MEM_RTC:      ASSERT_RTC_ADDR(addr);  pokeRTC16(addr, value);;

@@ -70,9 +70,15 @@ const uint32_t KICK_ROM_MASK = 0x003FFFF;
 #define WRITE_CHIP_32(x,y) WRITE_32(chipRam + ((x) % chipRamSize), (y))
 
 // Writes a value into Fast RAM in big endian format
-#define WRITE_FAST_8(x,y)  WRITE_8(fastRam  + ((x) - FAST_RAM_STRT), (y))
-#define WRITE_FAST_16(x,y) WRITE_16(fastRam + ((x) - FAST_RAM_STRT), (y))
-#define WRITE_FAST_32(x,y) WRITE_32(fastRam + ((x) - FAST_RAM_STRT), (y))
+#define WRITE_FAST_8(x,y) \
+debug("Writing8 %X to fast ram %X\n", y, x); \
+WRITE_8(fastRam  + ((x) - FAST_RAM_STRT), (y))
+#define WRITE_FAST_16(x,y) \
+debug("Writing16 %X to fast ram %X\n", y, x); \
+WRITE_16(fastRam + ((x) - FAST_RAM_STRT), (y))
+#define WRITE_FAST_32(x,y) \
+debug("Writing32 %X to fast ram %X\n", y, x); \
+WRITE_32(fastRam + ((x) - FAST_RAM_STRT), (y))
 
 // Writes a value into Slow RAM in big endian format
 #define WRITE_SLOW_8(x,y)  WRITE_8(slowRam  + ((x) & SLOW_RAM_MASK), (y))

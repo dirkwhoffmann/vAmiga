@@ -17,25 +17,31 @@ int64_t cpuInstrCount = 0;
 // Reference to the active Amiga instance
 Amiga *activeAmiga = NULL;
 
-extern "C" unsigned int m68k_read_memory_8(unsigned int address)
+extern "C" unsigned int m68k_read_memory_8(unsigned int addr)
 {
     assert(activeAmiga != NULL);
     // printf("m68k_read_memory_8\n");
-    return activeAmiga->mem.peek8(address);
+    if (addr >= 0x200000 && addr <= 0x9FFFFF) assert(false);
+    
+    return activeAmiga->mem.peek8(addr);
 }
 
-extern "C" unsigned int m68k_read_memory_16(unsigned int address)
+extern "C" unsigned int m68k_read_memory_16(unsigned int addr)
 {
     assert(activeAmiga != NULL);
     // printf("m68k_read_memory_16\n");
-    return activeAmiga->mem.peek16(address);
+    if (addr >= 0x200000 && addr <= 0x9FFFFF) assert(false);
+    
+    return activeAmiga->mem.peek16(addr);
 }
 
-extern "C" unsigned int m68k_read_memory_32(unsigned int address)
+extern "C" unsigned int m68k_read_memory_32(unsigned int addr)
 {
     assert(activeAmiga != NULL);
     // printf("m68k_read_memory_32\n");
-    return activeAmiga->mem.peek32(address);
+    if (addr >= 0x200000 && addr <= 0x9FFFFF) assert(false);
+    
+    return activeAmiga->mem.peek32(addr);
 }
 
 extern "C" unsigned int m68k_read_disassembler_16 (unsigned int address)

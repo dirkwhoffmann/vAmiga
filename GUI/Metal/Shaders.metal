@@ -564,7 +564,7 @@ kernel void inPlaceXbr(texture2d<half, access::read>  in   [[ texture(0) ]],
     half4 d = in.read(gid + uint2(1,1));
     
     if (all(a == b && b == c && c == d)) {
-        
+            
         //         -2   -1   +0   +1   +2
         //
         //            ----------------
@@ -608,10 +608,12 @@ kernel void inPlaceXbr(texture2d<half, access::read>  in   [[ texture(0) ]],
     } else {
         
         // DEBUGGING
+        /*
         a = half4(1.0,0.0,0.0,1.0);
         b = half4(1.0,0.0,0.0,1.0);
         c = half4(1.0,0.0,0.0,1.0);
         d = half4(1.0,0.0,0.0,1.0);
+        */
         
         out.write(a, gid + uint2(0,0));
         out.write(b, gid + uint2(1,0));
