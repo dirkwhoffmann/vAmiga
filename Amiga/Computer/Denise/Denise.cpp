@@ -325,9 +325,15 @@ Denise::drawRightBorder()
     // Fill the rest of the line with the current background color
     int bgcol = colorizer.getRGBA(0);
     int *ptr  = pixelAddr(pixel);
-    int *end  = pixelAddr(HPIXELS - 1);
+    int *end  = pixelAddr(HPIXELS - 2);
     
     while (ptr <= end) *ptr++ = bgcol;
+    
+    /* In the last pixel of each line, we store if this line was drawn in lores
+     * or hires mode. This information is used by the uscaling shader to
+     * determine if in-texture scaling should be applied.
+     */
+    *ptr = lores() ? 0x00FFFF00 : 0;
     
     // Reset the horizontal pixel counter
     pixel = 0;

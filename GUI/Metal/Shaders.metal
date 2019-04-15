@@ -551,75 +551,69 @@ kernel void inPlaceXbr(texture2d<half, access::read>  in   [[ texture(0) ]],
                        texture2d<half, access::write> out  [[ texture(1) ]],
                        uint2                          gid  [[ thread_position_in_grid ]])
 {
+    // We only apply in-texture upscaling for lores lines. The emulator encodes
+    // this information in the last pixel.
+    if (in.read(uint2(767, gid.y)).g == 0) {
+        
+        // Lines has been marked as a hires line by the emulator.
+        out.write(in.read(gid), gid);
+        return;
+    }
     
     if (gid.x % SCALE_FACTOR != 0 || gid.y % 2 != 0) return;
     
-    // Check for lores fragment (a == b == c == d)
-    // a b
-    // c d
     
-    half4 a = in.read(gid + uint2(0,0));
-    half4 b = in.read(gid + uint2(1,0));
-    half4 c = in.read(gid + uint2(0,1));
-    half4 d = in.read(gid + uint2(1,1));
+    //         -2   -1   +0   +1   +2
+    //
+    //            ----------------
+    //  -2        |  0 |  1 |  2 |
+    //       --------------------------
+    //  -1   |  3 |  4 |  5 |  6 |  7 |
+    //       --------------------------
+    //   0   |  8 |  9 | 10 | 11 | 12 |
+    //       --------------------------
+    //  +1   | 13 | 14 | 15 | 16 | 17 |
+    //       --------------------------
+    //  +2        | 18 | 19 | 20 |
+    //            ----------------
     
-    if (all(a == b && b == c && c == d)) {
-            
-        //         -2   -1   +0   +1   +2
-        //
-        //            ----------------
-        //  -2        |  0 |  1 |  2 |
-        //       --------------------------
-        //  -1   |  3 |  4 |  5 |  6 |  7 |
-        //       --------------------------
-        //   0   |  8 |  9 | 10 | 11 | 12 |
-        //       --------------------------
-        //  +1   | 13 | 14 | 15 | 16 | 17 |
-        //       --------------------------
-        //  +2        | 18 | 19 | 20 |
-        //            ----------------
-        
-        half3 m0  = in.read(gid + 2 * uint2(-1,-2)).xyz;
-        half3 m1  = in.read(gid + 2 * uint2( 0,-2)).xyz;
-        half3 m2  = in.read(gid + 2 * uint2( 1,-2)).xyz;
-        half3 m3  = in.read(gid + 2 * uint2(-2,-1)).xyz;
-        half3 m4  = in.read(gid + 2 * uint2(-1,-1)).xyz;
-        half3 m5  = in.read(gid + 2 * uint2( 0,-1)).xyz;
-        half3 m6  = in.read(gid + 2 * uint2( 1,-1)).xyz;
-        half3 m7  = in.read(gid + 2 * uint2( 2,-1)).xyz;
-        half3 m8  = in.read(gid + 2 * uint2(-2, 0)).xyz;
-        half3 m9  = in.read(gid + 2 * uint2(-1, 0)).xyz;
-        half3 m10 = in.read(gid + 2 * uint2( 0, 0)).xyz;
-        half3 m11 = in.read(gid + 2 * uint2( 1, 0)).xyz;
-        half3 m12 = in.read(gid + 2 * uint2( 2, 0)).xyz;
-        half3 m13 = in.read(gid + 2 * uint2(-2, 1)).xyz;
-        half3 m14 = in.read(gid + 2 * uint2(-1, 1)).xyz;
-        half3 m15 = in.read(gid + 2 * uint2( 0, 1)).xyz;
-        half3 m16 = in.read(gid + 2 * uint2( 1, 1)).xyz;
-        half3 m17 = in.read(gid + 2 * uint2( 2, 1)).xyz;
-        half3 m18 = in.read(gid + 2 * uint2(-1, 2)).xyz;
-        half3 m19 = in.read(gid + 2 * uint2( 0, 2)).xyz;
-        half3 m20 = in.read(gid + 2 * uint2( 1, 2)).xyz;
-        
-        doXBR(out, gid,
-              m0,  m1,  m2,  m3,  m4,  m5,  m6,  m7,  m8,  m9,
-              m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20);
+    half3 m0  = in.read(gid + 2 * uint2(-1,-2)).xyz;
+    half3 m1  = in.read(gid + 2 * uint2( 0,-2)).xyz;
+    half3 m2  = in.read(gid + 2 * uint2( 1,-2)).xyz;
+    half3 m3  = in.read(gid + 2 * uint2(-2,-1)).xyz;
+    half3 m4  = in.read(gid + 2 * uint2(-1,-1)).xyz;
+    half3 m5  = in.read(gid + 2 * uint2( 0,-1)).xyz;
+    half3 m6  = in.read(gid + 2 * uint2( 1,-1)).xyz;
+    half3 m7  = in.read(gid + 2 * uint2( 2,-1)).xyz;
+    half3 m8  = in.read(gid + 2 * uint2(-2, 0)).xyz;
+    half3 m9  = in.read(gid + 2 * uint2(-1, 0)).xyz;
+    half3 m10 = in.read(gid + 2 * uint2( 0, 0)).xyz;
+    half3 m11 = in.read(gid + 2 * uint2( 1, 0)).xyz;
+    half3 m12 = in.read(gid + 2 * uint2( 2, 0)).xyz;
+    half3 m13 = in.read(gid + 2 * uint2(-2, 1)).xyz;
+    half3 m14 = in.read(gid + 2 * uint2(-1, 1)).xyz;
+    half3 m15 = in.read(gid + 2 * uint2( 0, 1)).xyz;
+    half3 m16 = in.read(gid + 2 * uint2( 1, 1)).xyz;
+    half3 m17 = in.read(gid + 2 * uint2( 2, 1)).xyz;
+    half3 m18 = in.read(gid + 2 * uint2(-1, 2)).xyz;
+    half3 m19 = in.read(gid + 2 * uint2( 0, 2)).xyz;
+    half3 m20 = in.read(gid + 2 * uint2( 1, 2)).xyz;
     
-    } else {
+    doXBR(out, gid,
+          m0,  m1,  m2,  m3,  m4,  m5,  m6,  m7,  m8,  m9,
+          m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20);
         
-        // DEBUGGING
-        /*
-        a = half4(1.0,0.0,0.0,1.0);
-        b = half4(1.0,0.0,0.0,1.0);
-        c = half4(1.0,0.0,0.0,1.0);
-        d = half4(1.0,0.0,0.0,1.0);
-        */
-        
-        out.write(a, gid + uint2(0,0));
-        out.write(b, gid + uint2(1,0));
-        out.write(c, gid + uint2(0,1));
-        out.write(d, gid + uint2(1,1));
-    }
+    // DEBUGGING
+    /*
+    a = half4(1.0,0.0,0.0,1.0);
+    b = half4(1.0,0.0,0.0,1.0);
+    c = half4(1.0,0.0,0.0,1.0);
+    d = half4(1.0,0.0,0.0,1.0);
+    out.write(a, gid + uint2(0,0));
+    out.write(b, gid + uint2(1,0));
+    out.write(c, gid + uint2(0,1));
+    out.write(d, gid + uint2(1,1));
+    */
 }
 
 //
