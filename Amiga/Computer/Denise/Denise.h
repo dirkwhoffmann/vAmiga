@@ -56,7 +56,11 @@ class Denise : public HardwareComponent {
     
     // Sprite control word 2 (SPRxCTL)
     uint16_t sprctl[8];
-    
+
+    // Sprite data registers (SPRxDATA, SPRxDATAB)
+    uint16_t sprdata[8];
+    uint16_t sprdatb[8];
+
     // Counter for digital (mouse) input (port 1 and 2)
     uint16_t joydat[2];
     
@@ -149,30 +153,39 @@ class Denise : public HardwareComponent {
     
     public:
     
-    // BPLCON0
+    // OCS register 0x00A and 0x00C (r)
+    uint16_t peekJOYxDATR(int x);
+    
+    // OCS register 0x036 (w)
+    void pokeJOYTEST(uint16_t value);
+    
+    // OCS register 0x100 (w)
     void pokeBPLCON0(uint16_t value);
-    
-    // Returns true if we're running in HIRES mode
     inline bool hires() { return (bplcon0 & 0x8000); }
-    
-    // Returns true if we're running in LORES mode
     inline bool lores() { return !(bplcon0 & 0x8000); }
     
-    // BPLCON0, BPLCON1
+    // OCS registers 0x102 and 0x104 (w)
     void pokeBPLCON1(uint16_t value);
     void pokeBPLCON2(uint16_t value);
     
-    // BPL1DAT ... BPL6DAT
+    // OCS registers 0x110, ..., 0x11A (w)
     void pokeBPLxDAT(int x, uint16_t value);
     
-    // SPR0POS ... SPR7POS
+    // OCS registers 0x140, 0x148, ..., 0x170, 0x178 (w)
     void pokeSPRxPOS(int x, uint16_t value);
+
+    // OCS registers 0x142, 0x14A, ..., 0x172, 0x17A (w)
     void pokeSPRxCTL(int x, uint16_t value);
+
+    // OCS registers 0x144, 0x14C, ..., 0x174, 0x17C (w)
+    void pokeSPRxDATA(int x, uint16_t value);
     
-    // JOY0DATR, JOY1DATR
-    uint16_t peekJOYxDATR(int x);
+    // OCS registers 0x146, 0x14E, ..., 0x176, 0x17E (w)
+    void pokeSPRxDATB(int x, uint16_t value);
     
     
+    
+
     
     //
     // Processing events

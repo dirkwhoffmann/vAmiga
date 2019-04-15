@@ -62,8 +62,20 @@ RTC::poke(unsigned nr, uint8_t value)
     
     debug("Writing RTC register %d\n", nr);
     
-    reg[nr] = value & 0xFF;
-    // registers2time();
+    switch (nr) {
+        
+        case 13: // Control register D
+        case 14: // Control register E
+        case 15: // Control register F
+        
+            reg[nr] = value & 0xF;
+            return;
+        
+        default: // Time or date register
+        
+            reg[nr] = value & 0xF;
+            registers2time();
+    }
 }
 
 void

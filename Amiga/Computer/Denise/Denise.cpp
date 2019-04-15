@@ -27,9 +27,12 @@ Denise::Denise()
         { &bpldat,        sizeof(bpldat),        WORD_ARRAY },
         { &sprpos,        sizeof(sprpos),        WORD_ARRAY },
         { &sprctl,        sizeof(sprctl),        WORD_ARRAY },
-        
+        { &sprdata,       sizeof(sprdata),       WORD_ARRAY },
+        { &sprdatb,       sizeof(sprdatb),       WORD_ARRAY },
+
         { &joydat,        sizeof(joydat),        WORD_ARRAY },
         { &shiftReg,      sizeof(shiftReg),      DWORD_ARRAY },
+        
         { &scrollLowEven, sizeof(scrollLowEven), 0 },
         { &scrollLowOdd,  sizeof(scrollLowOdd),  0 },
         { &scrollHiEven,  sizeof(scrollHiEven),  0 },
@@ -131,6 +134,25 @@ Denise::didLoadFromBuffer(uint8_t **buffer)
     colorizer.updateRGBAs();
 }
 
+uint16_t
+Denise::peekJOYxDATR(int x)
+{
+    assert(x < 1);
+    return joydat[x];
+}
+
+void
+Denise::pokeJOYTEST(uint16_t value)
+{
+    value     &= 0b1111110011111100;
+    
+    joydat[0] &= 0b0000001100000011;
+    joydat[0] |= value;
+
+    joydat[1] &= 0b0000001100000011;
+    joydat[1] |= value;
+}
+
 void
 Denise::pokeBPLCON0(uint16_t value)
 {
@@ -178,7 +200,7 @@ void
 Denise::pokeBPLxDAT(int x, uint16_t value)
 {
     assert(x < 6);
-    // debug(2, "pokeBPL%dDAT(%X)\n", x + 1, value);
+    debug(2, "pokeBPL%dDATA(%X)\n", x + 1, value);
     
     bpldat[x] = value;
 }
@@ -201,14 +223,25 @@ Denise::pokeSPRxCTL(int x, uint16_t value)
     sprctl[x] = value;
 }
 
-uint16_t
-Denise::peekJOYxDATR(int x)
+void
+Denise::pokeSPRxDATA(int x, uint16_t value)
 {
-    assert(x < 2);
-    debug(2, "peekJOY%dDATR: %X\n", x, joydat[x]);
+    assert(x < 8);
+    debug(2, "pokeSPR%dDATA(%X)\n", x, value);
     
-    return joydat[x];
+    sprdata[x] = value;
 }
+
+void
+Denise::pokeSPRxDATB(int x, uint16_t value)
+{
+    assert(x < 8);
+    debug(2, "pokeSPR%dDATB(%X)\n", x, value);
+    
+    sprdatb[x] = value;
+}
+
+
 
 /*
 void
