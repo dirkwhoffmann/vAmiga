@@ -165,7 +165,7 @@ class Paula : public HardwareComponent {
     void pokeSERPER(uint16_t value) { serper = value; }
     
     // OCS register 0x016 (r) (orignally called POTINP)
-    uint16_t peekPOTGOR() { return 0xFFFF; /* TODO */ }
+    uint16_t peekPOTGOR();
     
     // OCS register 0x030 (w)
     void pokePOTGO(uint16_t value);

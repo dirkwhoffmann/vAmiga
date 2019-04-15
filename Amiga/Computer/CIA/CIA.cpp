@@ -1282,7 +1282,16 @@ CIAA::portAinternal()
 uint8_t
 CIAA::portAexternal()
 {
-    return amiga->paula.diskController.driveStatusFlags();
+    uint8_t result;
+    
+    // Set drive status bits
+    result = amiga->paula.diskController.driveStatusFlags();
+    
+    // Set control port bits
+    result &= amiga->controlPort1.ciapa();
+    result &= amiga->controlPort2.ciapa();
+
+    return result;
 }
 
 void

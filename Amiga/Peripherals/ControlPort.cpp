@@ -26,6 +26,12 @@ ControlPort::_powerOn()
 }
 
 void
+ControlPort::_dump()
+{
+    plainmsg("Button:  %s AxisX: %d AxisY: %d\n", button ? "YES" : "NO", axisX, axisY);
+}
+
+void
 ControlPort::didLoadFromBuffer(uint8_t **buffer)
 {
     // Discard any active joystick movements
@@ -34,10 +40,46 @@ ControlPort::didLoadFromBuffer(uint8_t **buffer)
     axisY = 0;
 }
 
-void
-ControlPort::_dump()
+uint16_t
+ControlPort::potgor()
 {
-    plainmsg("Button:  %s AxisX: %d AxisY: %d\n", button ? "YES" : "NO", axisX, axisY);
+    uint16_t result = 0xFFFF;
+    
+    if (hasMouse) {
+        if (amiga->mouse.rightButton) {
+            CLR_BIT(result, 10);
+        }
+    }
+    
+    return result;
+}
+
+uint16_t
+ControlPort::joydat()
+{
+    uint16_t result = 0;
+    
+    if (hasMouse) {
+        result = HI_LO(amiga->mouse.mouseX & 0xFF, amiga->mouse.mouseY);
+    }
+    
+    return result;
+}
+
+uint8_t
+ControlPort::ciapa()
+{
+    assert(nr == 1 || nr == 2);
+    
+    uint16_t result = 0xFF;
+    
+    if (hasMouse) {
+        if (amiga->mouse.leftButton) {
+            CLR_BIT(result, (nr == 1) ? 6 : 7);
+        }
+    }
+ 
+    return result;
 }
 
 void

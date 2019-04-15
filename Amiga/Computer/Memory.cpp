@@ -760,7 +760,6 @@ Memory::peekCustom16(uint32_t addr)
             return amiga->denise.peekJOY0DATR();
         case 0x00C >> 1: // JOY1DAT
             return amiga->denise.peekJOY1DATR();
-
         case 0x00E >> 1: // CLXDAT
             break;
         case 0x010 >> 1: // ADKCONR
@@ -769,7 +768,6 @@ Memory::peekCustom16(uint32_t addr)
             break;
         case 0x014 >> 1: // POT1DAT
             break;
-            
         case 0x016 >> 1: // POTGOR
             return amiga->paula.peekPOTGOR();
         case 0x018 >> 1: // SERDATR

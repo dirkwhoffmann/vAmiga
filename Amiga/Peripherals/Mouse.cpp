@@ -26,7 +26,6 @@ Mouse::_powerOn()
 void
 Mouse::_dump()
 {
-    plainmsg("       port = %d\n", port);
     plainmsg(" leftButton = %d\n", leftButton);
     plainmsg("rightButton = %d\n", rightButton);
     plainmsg("     mouseX = %lld\n", mouseX);

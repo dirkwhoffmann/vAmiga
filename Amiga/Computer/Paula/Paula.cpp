@@ -154,10 +154,21 @@ Paula::setINTENA(uint16_t value)
     checkInterrupt();
 }
 
+uint16_t
+Paula::peekPOTGOR()
+{
+    uint16_t result = 0xFFFF;
+    
+    result &= amiga->controlPort1.potgor();
+    result &= amiga->controlPort2.potgor();
+    
+    return result;
+}
+
 void
 Paula::pokePOTGO(uint16_t value)
 {
-    // debug(2, "pokePOTGO(%X)\n", value);
+    debug(2, "pokePOTGO(%X)\n", value);
     potgo = value;
 }
 

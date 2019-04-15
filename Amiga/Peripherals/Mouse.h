@@ -15,7 +15,9 @@
 class Mouse : public HardwareComponent {
     
     // The port the mouse is connected to (0 = unconnected)
-    uint8_t port = 0;
+    // uint8_t port = 0;
+    
+    public:
     
     // Mouse button states
     bool leftButton;
@@ -24,6 +26,8 @@ class Mouse : public HardwareComponent {
     // The current mouse position
     int64_t mouseX;
     int64_t mouseY;
+    
+    private:
     
     /* The target mouse position
      * In order to achieve a smooth mouse movement, a new mouse coordinate is
@@ -61,18 +65,12 @@ class Mouse : public HardwareComponent {
     void _powerOn() override;
     void _dump() override;
     
-    public:
-    
-    
+
     //
     // Operating the mouse
     //
-    
-    // Connects the mouse to the specified port.
-    void connectToPort(unsigned nr) { assert(nr <= 2); port = nr; }
-    
-    // Disconnects the mouse.
-    void disconnect() { port = 0; }
+
+    public:
     
     // Emulates a mouse movement event.
     void setXY(int64_t x, int64_t y);
@@ -80,9 +78,6 @@ class Mouse : public HardwareComponent {
     // Emulates a mouse button event.
     void setLeftButton(bool value) { leftButton = value; }
     void setRightButton(bool value) { rightButton = value; }
-    
-    // Returns the mouse position as it appears in the JOYxDAT register.
-    uint8_t joydat() { return HI_LO(mouseY & 0xFF, mouseX & 0xFF); }
     
     // Performs periodic actions for this device.
     void execute();

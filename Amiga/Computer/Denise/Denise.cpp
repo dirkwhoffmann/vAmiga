@@ -137,21 +137,13 @@ Denise::didLoadFromBuffer(uint8_t **buffer)
 uint16_t
 Denise::peekJOY0DATR()
 {
-    if (amiga->controlPort1.mouseIsConnected()) {
-        joydat[0] = amiga->mouse.joydat();
-        debug(2, "JOY0DAT = %X\n", joydat[0]);
-    }
-    return joydat[0];
+    return amiga->controlPort1.joydat();
 }
 
 uint16_t
 Denise::peekJOY1DATR()
 {
-    if (amiga->controlPort2.mouseIsConnected()) {
-        joydat[1] = amiga->mouse.joydat();
-        debug(2, "JOY1DAT = %X\n", joydat[1]);
-    }
-    return joydat[1];
+    return amiga->controlPort2.joydat();
 }
 
 void
