@@ -263,7 +263,7 @@ Gw
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Hardware" identifier="Hardware" id="vMg-zr-Ex1">
-                                <view key="view" id="yrH-J2-nFc">
+                                <view key="view" ambiguous="YES" id="yrH-J2-nFc">
                                     <rect key="frame" x="10" y="33" width="600" height="424"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -400,7 +400,16 @@ DQ
                                                         <menuItem title="None" state="on" id="gVz-1D-gyU">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="512 KB" tag="512" id="VFG-2M-Suz">
+                                                        <menuItem title="64 KB" tag="64" id="VFG-2M-Suz">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="128 KB" tag="128" id="Bcg-Br-RFQ">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="256 KB" tag="256" id="iVQ-ot-Rwu">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="512 KB" tag="512" id="7YL-2D-hML">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                         <menuItem title="1 MB" tag="1024" id="a3z-VI-DuT">
@@ -1345,7 +1354,7 @@ DQ
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Emulator" identifier="Emulator" id="7ox-IX-qy6">
-                                <view key="view" ambiguous="YES" id="2kg-AU-Yx9">
+                                <view key="view" id="2kg-AU-Yx9">
                                     <rect key="frame" x="10" y="33" width="600" height="424"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>

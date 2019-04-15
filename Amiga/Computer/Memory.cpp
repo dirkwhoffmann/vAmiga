@@ -1259,7 +1259,6 @@ Memory::peekAutoConf8(uint32_t addr)
     uint8_t result = peekFastRamDevice(addr) << 4;
     
     // debug("peekAutoConf8(%X) = %X\n", addr, result);
-    // assert(false);
     return result;
 }
 
@@ -1268,22 +1267,21 @@ Memory::peekAutoConf16(uint32_t addr)
 {
     uint16_t result = HI_LO(peekAutoConf8(addr), peekAutoConf8(addr + 1));
     
-    debug("peekAutoConf16(%X) = %d\n", addr, result);
-    // assert(false);
+    // debug("peekAutoConf16(%X) = %d\n", addr, result);
     return result;
 }
 
 void
 Memory::pokeAutoConf8(uint32_t addr, uint8_t value)
 {
-    debug("pokeAutoConf8(%X, %X)\n", addr, value);
+    // debug("pokeAutoConf8(%X, %X)\n", addr, value);
     pokeFastRamDevice(addr, value);
 }
 
 void
 Memory::pokeAutoConf16(uint32_t addr, uint16_t value)
 {
-    debug("pokeAutoConf16(%X, %X)\n", addr, value);
+    // debug("pokeAutoConf16(%X, %X)\n", addr, value);
     pokeFastRamDevice(addr, HI_BYTE(value));
     pokeFastRamDevice(addr + 1, LO_BYTE(value));
 }
@@ -1291,9 +1289,9 @@ Memory::pokeAutoConf16(uint32_t addr, uint16_t value)
 uint8_t
 Memory::peekFastRamDevice(uint32_t addr)
 {
-    debug("    peekFastRamDevice(%X)\n", addr & 0xFFFF);
+    // debug("    peekFastRamDevice(%X)\n", addr & 0xFFFF);
     
-    if (fastRamConf) return 0xF; // Already configured
+    if (fastRamConf || fastRamSize == 0) return 0xF; // Already configured
     
     /* Register pair 00/02 (er_Type)
      *
@@ -1316,7 +1314,18 @@ Memory::peekFastRamDevice(uint32_t addr)
      *              111 = 4 megabytes
      */
     uint8_t erTypeHi = 0b1110; // Zorro II, Free pool, Don't boot
-    uint8_t erTypeLo = 0b0101; // 1 MB
+    uint8_t erTypeLo;
+    switch (fastRamSize) {
+        case KB(64):  erTypeLo = 0b001; break;
+        case KB(128): erTypeLo = 0b010; break;
+        case KB(256): erTypeLo = 0b011; break;
+        case KB(512): erTypeLo = 0b100; break;
+        case MB(1):   erTypeLo = 0b101; break;
+        case MB(2):   erTypeLo = 0b110; break;
+        case MB(4):   erTypeLo = 0b111; break;
+        case MB(8):   erTypeLo = 0b000; break;
+        default: assert(false);
+    }
 
     /* Register pair 08/0A (er_flags) Note: Bits must be returned negated.
      *
@@ -1417,7 +1426,9 @@ Memory::peekFastRamDevice(uint32_t addr)
 void
 Memory::pokeFastRamDevice(uint32_t addr, uint8_t value)
 {
-    debug("pokeFastRamDevice(%X, %X)\n", addr, value);
+    if (fastRamSize == 0) return;
+    
+    // debug("pokeFastRamDevice(%X, %X)\n", addr, value);
     
     switch (addr & 0xFFFF) {
         
