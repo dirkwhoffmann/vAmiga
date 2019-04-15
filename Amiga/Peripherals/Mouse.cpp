@@ -42,7 +42,7 @@ Mouse::_dump()
 void
 Mouse::setXY(int64_t x, int64_t y)
 {
-    debug("setXY(%lld,%lld)\n", x, y);
+    // debug("setXY(%lld,%lld)\n", x, y);
     
     targetX = x / dividerX;
     targetY = y / dividerY;
@@ -51,10 +51,12 @@ Mouse::setXY(int64_t x, int64_t y)
 void
 Mouse::execute()
 {
+    /*
     if (mouseX != targetX || mouseY != targetY) {
         debug("mouse = (%lld,%lld) target = (%lld,%lld)\n",
               mouseX, mouseY, targetX, targetY);
     }
+    */
     
     // Jump directly to target coordinates if they are more than 8 shifts away.
     if (abs(targetX - mouseX) / 8 > shiftX) mouseX = targetX;

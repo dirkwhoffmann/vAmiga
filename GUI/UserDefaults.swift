@@ -190,9 +190,9 @@ extension MyController {
         
         amiga.suspend()
         
-        inputDevice1 = defaults.integer(forKey: Keys.inputDevice1)
-        inputDevice2 = defaults.integer(forKey: Keys.inputDevice2)
-        
+        setPort1(defaults.integer(forKey: Keys.inputDevice1))
+        setPort2(defaults.integer(forKey: Keys.inputDevice2))
+
         amiga.resume()
     }
     

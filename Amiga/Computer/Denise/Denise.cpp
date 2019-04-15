@@ -139,7 +139,7 @@ Denise::peekJOY0DATR()
 {
     if (amiga->controlPort1.mouseIsConnected()) {
         joydat[0] = amiga->mouse.joydat();
-        debug("JOY0DAT = %X\n", joydat[0]);
+        debug(2, "JOY0DAT = %X\n", joydat[0]);
     }
     return joydat[0];
 }
@@ -149,7 +149,7 @@ Denise::peekJOY1DATR()
 {
     if (amiga->controlPort2.mouseIsConnected()) {
         joydat[1] = amiga->mouse.joydat();
-        debug("JOY1DAT = %X\n", joydat[1]);
+        debug(2, "JOY1DAT = %X\n", joydat[1]);
     }
     return joydat[1];
 }
