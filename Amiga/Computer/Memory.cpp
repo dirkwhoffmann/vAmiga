@@ -342,6 +342,10 @@ Memory::updateMemSrcTable()
     for (unsigned i = 0xDC; rtc && i <= 0xDE; i++)
         memSrc[i] = MEM_RTC;
 
+    // Auto-config (Zorro II)
+    for (unsigned i = 0xE8; rtc && i <= 0xEF; i++)
+    memSrc[i] = MEM_AUTOCONF;
+    
     // Boot Rom or Kickstart mirror
     for (unsigned i = 0xF8; i <= 0xFB; i++)
         memSrc[i] = kickIsWritable ? mem_boot : mem_kick;
@@ -372,6 +376,7 @@ Memory::peek8(uint32_t addr)
         case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); return READ_SLOW_8(addr);
         case MEM_RTC:      ASSERT_RTC_ADDR(addr);  return peekRTC8(addr);
         case MEM_OCS:      ASSERT_OCS_ADDR(addr);  return peekCustom8(addr);
+        case MEM_AUTOCONF: ASSERT_AUTO_ADDR(addr); return peekAutoConf8(addr);
         case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); assert(false); return READ_BOOT_8(addr);
         case MEM_KICK:     ASSERT_KICK_ADDR(addr); return READ_KICK_8(addr);
         default:           assert(false);
@@ -399,6 +404,7 @@ Memory::peek16(uint32_t addr)
         case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); return READ_SLOW_16(addr);
         case MEM_RTC:      ASSERT_RTC_ADDR(addr);  return peekRTC16(addr);
         case MEM_OCS:      ASSERT_OCS_ADDR(addr);  return peekCustom16(addr);
+        case MEM_AUTOCONF: ASSERT_AUTO_ADDR(addr); return peekAutoConf16(addr);
         case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); assert(false); return READ_BOOT_16(addr);
         case MEM_KICK:     ASSERT_KICK_ADDR(addr); return READ_KICK_16(addr);
         default:           assert(false);
@@ -426,6 +432,7 @@ Memory::spypeek8(uint32_t addr)
         case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); return READ_SLOW_8(addr);
         case MEM_RTC:      ASSERT_RTC_ADDR(addr);  return spypeekRTC8(addr);
         case MEM_OCS:      ASSERT_OCS_ADDR(addr);  return spypeekCustom8(addr);
+        case MEM_AUTOCONF: ASSERT_AUTO_ADDR(addr); return spypeekAutoConf8(addr);
         case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); return READ_BOOT_8(addr);
         case MEM_KICK:     ASSERT_KICK_ADDR(addr); return READ_KICK_8(addr);
         default:           assert(false);
@@ -448,6 +455,7 @@ Memory::spypeek16(uint32_t addr)
         case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); return READ_SLOW_16(addr);
         case MEM_RTC:      ASSERT_RTC_ADDR(addr);  return spypeekRTC8(addr);
         case MEM_OCS:      ASSERT_OCS_ADDR(addr);  return spypeekCustom16(addr);
+        case MEM_AUTOCONF: ASSERT_AUTO_ADDR(addr); return spypeekAutoConf16(addr);
         case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); return READ_BOOT_16(addr);
         case MEM_KICK:     ASSERT_KICK_ADDR(addr); return READ_KICK_16(addr);
         default:           assert(false);
@@ -476,6 +484,7 @@ Memory::poke8(uint32_t addr, uint8_t value)
         case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); WRITE_SLOW_8(addr, value); break;
         case MEM_RTC:      ASSERT_RTC_ADDR(addr);  pokeRTC8(addr, value); break;
         case MEM_OCS:      ASSERT_OCS_ADDR(addr);  pokeCustom8(addr, value); break;
+        case MEM_AUTOCONF: ASSERT_AUTO_ADDR(addr); pokeAutoConf8(addr, value); break;
         case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); break;
         case MEM_KICK:     ASSERT_KICK_ADDR(addr); break;
         default:           assert(false);
@@ -497,6 +506,7 @@ Memory::poke16(uint32_t addr, uint16_t value)
         case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); WRITE_SLOW_16(addr, value); break;
         case MEM_RTC:      ASSERT_RTC_ADDR(addr);  pokeRTC16(addr, value);;
         case MEM_OCS:      ASSERT_OCS_ADDR(addr);  pokeCustom16(addr, value); break;
+        case MEM_AUTOCONF: ASSERT_AUTO_ADDR(addr); pokeAutoConf16(addr, value); break;
         case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); break;
         case MEM_KICK:     ASSERT_KICK_ADDR(addr); break;
         default:           assert(false);
@@ -1230,11 +1240,42 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
     amiga->pause();
 }
 
-void Memory::pokeCustom32(uint32_t addr, uint32_t value)
+void
+Memory::pokeCustom32(uint32_t addr, uint32_t value)
 {
     assert(false);
     pokeCustom16(addr,     HI_WORD(value));
     pokeCustom16(addr + 2, LO_WORD(value));
+}
+
+uint8_t
+Memory::peekAutoConf8(uint32_t addr)
+{
+    debug("peekAutoConf8(%X, %X)\n", addr);
+    // assert(false);
+    return 42;
+}
+
+uint16_t
+Memory::peekAutoConf16(uint32_t addr)
+{
+    debug("pokeApeekAutoConf16(%X, %X)\n", addr);
+    // assert(false);
+    return 42;
+}
+
+void
+Memory::pokeAutoConf8(uint32_t addr, uint8_t value)
+{
+    debug("pokeAutoConf8(%X, %X)\n", addr, value);
+    // assert(false);
+}
+
+void
+Memory::pokeAutoConf16(uint32_t addr, uint16_t value)
+{
+    debug("pokeAutoConf16(%X, %X)\n", addr, value);
+    // assert(false);
 }
 
 const char *

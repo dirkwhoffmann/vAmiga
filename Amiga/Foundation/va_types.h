@@ -141,6 +141,7 @@ typedef enum
     MEM_CIA,
     MEM_RTC,
     MEM_OCS,
+    MEM_AUTOCONF,
     MEM_BOOT,
     MEM_KICK
 }

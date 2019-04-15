@@ -76,6 +76,7 @@ class Inspector : NSWindowController
     @IBOutlet weak var memCIAButton: NSButton!
     @IBOutlet weak var memRTCButton: NSButton!
     @IBOutlet weak var memOCSButton: NSButton!
+    @IBOutlet weak var memAutoConfButton: NSButton!
     @IBOutlet weak var memRomButton: NSButton!
 
     var bank = 0

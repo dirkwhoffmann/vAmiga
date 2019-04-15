@@ -28,6 +28,7 @@ const uint32_t KICK_ROM_MASK = 0x003FFFF;
 #define ASSERT_CIA_ADDR(x)  assert((x) >= 0xA00000 && (x) <= 0xBFFFFF);
 #define ASSERT_RTC_ADDR(x)  assert((x) >= 0xDC0000 && (x) <= 0xDEFFFF);
 #define ASSERT_OCS_ADDR(x)  assert((x) >= 0xC00000 && (x) <= 0xDFFFFF);
+#define ASSERT_AUTO_ADDR(x) assert((x) >= 0xE80000 && (x) <= 0xEFFFFF);
 
 // Reads a value from memory in big endian format
 #define READ_8(x)  (*(uint8_t *)(x))
@@ -365,6 +366,19 @@ class Memory : public HardwareComponent {
     void pokeCustom8(uint32_t addr, uint8_t value);
     void pokeCustom16(uint32_t addr, uint16_t value);
     void pokeCustom32(uint32_t addr, uint32_t value);
+    
+    //
+    // Auto-config space (Zorro II)
+    //
+    
+    uint8_t peekAutoConf8(uint32_t addr);
+    uint16_t peekAutoConf16(uint32_t addr);
+    
+    uint8_t spypeekAutoConf8(uint32_t addr) { return peekAutoConf8(addr); }
+    uint16_t spypeekAutoConf16(uint32_t addr) { return peekAutoConf16(addr); }
+    
+    void pokeAutoConf8(uint32_t addr, uint8_t value);
+    void pokeAutoConf16(uint32_t addr, uint16_t value);
     
     
     //

@@ -27,6 +27,7 @@ struct MemColors {
     static let cia      = NSColor.init(r: 0xFF, g: 0x66, b: 0xFF, a: 0xFF)
     static let rtc      = NSColor.init(r: 0xFF, g: 0x66, b: 0xB2, a: 0xFF)
     static let ocs      = NSColor.init(r: 0xFF, g: 0xFF, b: 0x66, a: 0xFF)
+    static let autoConf = NSColor.init(r: 0xFF, g: 0x66, b: 0x66, a: 0xFF)
     static let rom      = NSColor.init(r: 0x66, g: 0xB2, b: 0xFF, a: 0xFF)
 }
 
@@ -48,20 +49,20 @@ extension Inspector {
 
         guard let memConfig = amigaProxy?.memConfig() else { return }
 
+        let size = NSSize(width: 16, height: 16)
+        memLayoutButton.image   = memLayoutImage
+        memChipRamButton.image  = NSImage.init(color: MemColors.chipRam, size: size)
+        memFastRamButton.image  = NSImage.init(color: MemColors.fastRam, size: size)
+        memSlowRamButton.image  = NSImage.init(color: MemColors.slowRam, size: size)
+        memCIAButton.image      = NSImage.init(color: MemColors.cia, size: size)
+        memRTCButton.image      = NSImage.init(color: MemColors.rtc, size: size)
+        memOCSButton.image      = NSImage.init(color: MemColors.ocs, size: size)
+        memAutoConfButton.image = NSImage.init(color: MemColors.autoConf, size: size)
+        memRomButton.image      = NSImage.init(color: MemColors.rom, size: size)
+
         let chipRamKB = memConfig.chipRamSize
         let fastRamKB = memConfig.fastRamSize
         let slowRamKB = memConfig.slowRamSize
-        let size = NSSize(width: 16, height: 16)
-        
-        memLayoutButton.image = memLayoutImage
-        memChipRamButton.image = NSImage.init(color: MemColors.chipRam, size: size)
-        memFastRamButton.image = NSImage.init(color: MemColors.fastRam, size: size)
-        memSlowRamButton.image = NSImage.init(color: MemColors.slowRam, size: size)
-        memCIAButton.image = NSImage.init(color: MemColors.cia, size: size)
-        memRTCButton.image = NSImage.init(color: MemColors.rtc, size: size)
-        memOCSButton.image = NSImage.init(color: MemColors.ocs, size: size)
-        memRomButton.image = NSImage.init(color: MemColors.rom, size: size)
-
         memChipRamText.stringValue = String.init(format: "%d KB", chipRamKB)
         memFastRamText.stringValue = String.init(format: "%d KB", fastRamKB)
         memSlowRamText.stringValue = String.init(format: "%d KB", slowRamKB)
@@ -94,6 +95,7 @@ extension Inspector {
                 case MEM_SLOW.rawValue:     color = MemColors.slowRam
                 case MEM_RTC.rawValue:      color = MemColors.rtc
                 case MEM_OCS.rawValue:      color = MemColors.ocs
+                case MEM_AUTOCONF.rawValue: color = MemColors.autoConf
                 case MEM_BOOT.rawValue:     color = MemColors.rom
                 case MEM_KICK.rawValue:     color = MemColors.rom
                 default:                    fatalError()
