@@ -20,6 +20,7 @@
 @class DeniseProxy;
 @class PaulaProxy;
 @class AmigaControlPortProxy;
+@class MouseProxy;
 @class KeyboardProxy;
 @class DiskControllerProxy;
 @class AmigaDriveProxy;
@@ -60,6 +61,7 @@ struct AmigaFileWrapper;
     PaulaProxy *paula;
     AmigaControlPortProxy *controlPort1;
     AmigaControlPortProxy *controlPort2;
+    MouseProxy *mouse;
     KeyboardProxy *keyboard;
     DiskControllerProxy *diskController;
     AmigaDriveProxy *df0;
@@ -78,6 +80,7 @@ struct AmigaFileWrapper;
 @property (readonly) PaulaProxy *paula;
 @property (readonly) AmigaControlPortProxy *controlPort1;
 @property (readonly) AmigaControlPortProxy *controlPort2;
+@property (readonly) MouseProxy *mouse;
 @property (readonly) KeyboardProxy *keyboard;
 @property (readonly) DiskControllerProxy *diskController;
 @property (readonly) AmigaDriveProxy *df0;
@@ -395,6 +398,23 @@ struct AmigaFileWrapper;
 - (void) setXY:(NSPoint)pos;
 - (void) setLeftMouseButton:(BOOL)pressed;
 - (void) setRightMouseButton:(BOOL)pressed;
+
+@end
+
+//
+// Mouse Proxy
+//
+
+@interface MouseProxy : NSObject {
+    
+    struct MouseWrapper *wrapper;
+}
+
+- (void) dump;
+
+- (void) setX:(NSInteger)x Y:(NSInteger)y;
+- (void) setLeftButton:(BOOL)value;
+- (void) setRightButton:(BOOL)value;
 
 @end
 

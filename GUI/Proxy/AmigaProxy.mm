@@ -19,6 +19,7 @@ struct AgnusWrapper { Agnus *agnus; };
 struct DeniseWrapper { Denise *denise; };
 struct PaulaWrapper { Paula *paula; };
 struct AmigaControlPortWrapper { AmigaControlPort *port; };
+struct MouseWrapper { Mouse *mouse; };
 struct KeyboardWrapper { Keyboard *keyboard; };
 struct DiskControllerWrapper { DiskController *controller; };
 struct AmigaDriveWrapper { Drive *drive; };
@@ -625,6 +626,40 @@ struct ADFFileWrapper { ADFFile *adf; };
 
 
 //
+// Mouse proxy
+//
+
+@implementation MouseProxy
+
+- (instancetype) initWithMouse:(Mouse *)mouse
+{
+    if (self = [super init]) {
+        wrapper = new MouseWrapper();
+        wrapper->mouse = mouse;
+    }
+    return self;
+}
+- (void) dump
+{
+    wrapper->mouse->dump();
+}
+- (void) setX:(NSInteger)x Y:(NSInteger)y
+{
+    wrapper->mouse->setXY(x, y);
+}
+- (void) setLeftButton:(BOOL)value
+{
+    wrapper->mouse->setLeftButton(value);
+}
+- (void) setRightButton:(BOOL)value
+{
+    wrapper->mouse->setRightButton(value);
+}
+
+@end
+
+
+//
 // Keyboard proxy
 //
 
@@ -946,6 +981,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 @synthesize paula;
 @synthesize controlPort1;
 @synthesize controlPort2;
+@synthesize mouse;
 @synthesize keyboard;
 @synthesize diskController;
 @synthesize df0;
@@ -974,6 +1010,7 @@ struct ADFFileWrapper { ADFFile *adf; };
     paula = [[PaulaProxy alloc] initWithPaula:&amiga->paula];
     controlPort1 = [[AmigaControlPortProxy alloc] initWithControlPort:&amiga->controlPort1];
     controlPort2 = [[AmigaControlPortProxy alloc] initWithControlPort:&amiga->controlPort2];
+    mouse = [[MouseProxy alloc] initWithMouse:&amiga->mouse];
     keyboard = [[KeyboardProxy alloc] initWithKeyboard:&amiga->keyboard];
     diskController = [[DiskControllerProxy alloc] initWithDiskController:&amiga->paula.diskController];
     df0 = [[AmigaDriveProxy alloc] initWithDrive:&amiga->df0];

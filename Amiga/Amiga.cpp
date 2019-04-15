@@ -74,6 +74,7 @@ Amiga::Amiga()
         &paula,
         &controlPort1,
         &controlPort2,
+        &mouse,
         &keyboard,
         &df0,
         &df1,

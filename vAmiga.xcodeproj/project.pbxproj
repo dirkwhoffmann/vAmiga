@@ -21,6 +21,7 @@
 		5043F6C5221972F90047CC30 /* MyToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5043F6C4221972F90047CC30 /* MyToolbar.swift */; };
 		504F9656220ACFE0005F8AB7 /* Breakpoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 504F9654220ACFE0005F8AB7 /* Breakpoint.cpp */; };
 		504F9658220B2CEE005F8AB7 /* BreakTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504F9657220B2CEE005F8AB7 /* BreakTableView.swift */; };
+		505554AC2264C47600CB07E0 /* Mouse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505554AA2264C47600CB07E0 /* Mouse.cpp */; };
 		505A3A3A21F4996400132020 /* sse_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505A3A3821F4996400132020 /* sse_utils.cpp */; };
 		5064851121EC7A1700FC4AC3 /* Memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5064850F21EC7A1700FC4AC3 /* Memory.cpp */; };
 		507653CB2216F91E001D26E9 /* AgnusPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507653CA2216F91E001D26E9 /* AgnusPanel.swift */; };
@@ -186,6 +187,8 @@
 		504F9654220ACFE0005F8AB7 /* Breakpoint.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Breakpoint.cpp; sourceTree = "<group>"; };
 		504F9655220ACFE0005F8AB7 /* Breakpoint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Breakpoint.h; sourceTree = "<group>"; };
 		504F9657220B2CEE005F8AB7 /* BreakTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakTableView.swift; sourceTree = "<group>"; };
+		505554AA2264C47600CB07E0 /* Mouse.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Mouse.cpp; sourceTree = "<group>"; };
+		505554AB2264C47600CB07E0 /* Mouse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Mouse.h; sourceTree = "<group>"; };
 		505A3A3821F4996400132020 /* sse_utils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = sse_utils.cpp; sourceTree = "<group>"; };
 		505A3A3921F4996400132020 /* sse_utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sse_utils.h; sourceTree = "<group>"; };
 		505AD259224A67CD0052A014 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
@@ -713,10 +716,12 @@
 		50A2953C21FF12C20046BAA0 /* Peripherals */ = {
 			isa = PBXGroup;
 			children = (
-				5014DD1421F3625200BC14BA /* Keyboard.h */,
-				5014DD1321F3625200BC14BA /* Keyboard.cpp */,
 				50A2953E21FF12EF0046BAA0 /* AmigaControlPort.h */,
 				50A2953D21FF12EF0046BAA0 /* AmigaControlPort.cpp */,
+				505554AB2264C47600CB07E0 /* Mouse.h */,
+				505554AA2264C47600CB07E0 /* Mouse.cpp */,
+				5014DD1421F3625200BC14BA /* Keyboard.h */,
+				5014DD1321F3625200BC14BA /* Keyboard.cpp */,
 			);
 			path = Peripherals;
 			sourceTree = "<group>";
@@ -975,6 +980,7 @@
 				508FDFDA21EA20510043D0E9 /* ImageUtilities.swift in Sources */,
 				508FE05521EA22CC0043D0E9 /* PreferencesWindow.swift in Sources */,
 				508FE02021EA227B0043D0E9 /* TimeTravelTouchBar.swift in Sources */,
+				505554AC2264C47600CB07E0 /* Mouse.cpp in Sources */,
 				508FE01521EA227B0043D0E9 /* GamePad.swift in Sources */,
 				5020B18021EF136100B9E80E /* Denise.cpp in Sources */,
 				50B14C1021EB410B002E32A6 /* Amiga.cpp in Sources */,
