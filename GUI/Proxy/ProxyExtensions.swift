@@ -12,7 +12,7 @@ import Foundation
 
 public extension AmigaProxy {
     
-    func df(_ nr: Int) -> AmigaDriveProxy {
+    func df(_ nr: Int) -> DriveProxy {
         
         switch (nr) {
             
@@ -25,12 +25,12 @@ public extension AmigaProxy {
         }
     }
     
-    func df(_ item: NSButton!) -> AmigaDriveProxy {
+    func df(_ item: NSButton!) -> DriveProxy {
         
         return df(item.tag)
     }
     
-    func df(_ item: NSMenuItem!) -> AmigaDriveProxy {
+    func df(_ item: NSMenuItem!) -> DriveProxy {
         
         return df(item.tag)
     }
@@ -70,7 +70,7 @@ public extension AmigaProxy {
     }
 }
 
-public extension AmigaDriveProxy {
+public extension DriveProxy {
     
     var icon : NSImage {
         get {

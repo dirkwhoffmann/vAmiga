@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-AmigaControlPort::AmigaControlPort(int portNr)
+ControlPort::ControlPort(int portNr)
 {
     assert(portNr == 1 || portNr == 2);
     
@@ -18,7 +18,7 @@ AmigaControlPort::AmigaControlPort(int portNr)
 }
 
 void
-AmigaControlPort::_powerOn()
+ControlPort::_powerOn()
 {
     button = false;
     axisX = 0;
@@ -26,7 +26,7 @@ AmigaControlPort::_powerOn()
 }
 
 void
-AmigaControlPort::didLoadFromBuffer(uint8_t **buffer)
+ControlPort::didLoadFromBuffer(uint8_t **buffer)
 {
     // Discard any active joystick movements
     button = false;
@@ -35,19 +35,19 @@ AmigaControlPort::didLoadFromBuffer(uint8_t **buffer)
 }
 
 void
-AmigaControlPort::_dump()
+ControlPort::_dump()
 {
     plainmsg("Button:  %s AxisX: %d AxisY: %d\n", button ? "YES" : "NO", axisX, axisY);
 }
 
 void
-AmigaControlPort::scheduleNextShot()
+ControlPort::scheduleNextShot()
 {
     nextAutofireFrame = amiga->agnus.frame + (int)(50.0 / (2 * autofireFrequency));
 }
 
 void
-AmigaControlPort::execute()
+ControlPort::execute()
 {
     if (!autofire || autofireFrequency <= 0.0)
         return;
@@ -69,7 +69,7 @@ AmigaControlPort::execute()
 }
 
 void
-AmigaControlPort::trigger(JoystickEvent event)
+ControlPort::trigger(JoystickEvent event)
 {
     switch (event) {
             
@@ -123,7 +123,7 @@ AmigaControlPort::trigger(JoystickEvent event)
 }
 
 void
-AmigaControlPort::setAutofire(bool value)
+ControlPort::setAutofire(bool value)
 {
     if (!(autofire = value)) {
         button = false;
@@ -131,7 +131,7 @@ AmigaControlPort::setAutofire(bool value)
 }
 
 void
-AmigaControlPort::setAutofireBullets(int value)
+ControlPort::setAutofireBullets(int value)
 {
     autofireBullets = value;
     if (bulletCounter > 0) {
@@ -140,7 +140,7 @@ AmigaControlPort::setAutofireBullets(int value)
 }
 
 void
-AmigaControlPort::setXY(float x, float y)
+ControlPort::setXY(float x, float y)
 {
     if (hasMouse) {
         debug("Moving mouse to (%f,%f)\n", x, y);
@@ -148,7 +148,7 @@ AmigaControlPort::setXY(float x, float y)
 }
 
 void
-AmigaControlPort::setLeftMouseButton(bool pressed)
+ControlPort::setLeftMouseButton(bool pressed)
 {
     if (hasMouse) {
         debug("Pressing left mouse button");
@@ -156,7 +156,7 @@ AmigaControlPort::setLeftMouseButton(bool pressed)
 }
 
 void
-AmigaControlPort::setRightMouseButton(bool pressed)
+ControlPort::setRightMouseButton(bool pressed)
 {
     if (hasMouse) {
         debug("Pressing right mouse button");

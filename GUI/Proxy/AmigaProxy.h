@@ -19,11 +19,11 @@
 @class AgnusProxy;
 @class DeniseProxy;
 @class PaulaProxy;
-@class AmigaControlPortProxy;
+@class ControlPortProxy;
 @class MouseProxy;
 @class KeyboardProxy;
 @class DiskControllerProxy;
-@class AmigaDriveProxy;
+@class DriveProxy;
 @class AmigaFileProxy;
 @class ADFFileProxy;
 @class AmigaSnapshotProxy;
@@ -59,15 +59,15 @@ struct AmigaFileWrapper;
     AgnusProxy *dma;
     DeniseProxy *denise;
     PaulaProxy *paula;
-    AmigaControlPortProxy *controlPort1;
-    AmigaControlPortProxy *controlPort2;
+    ControlPortProxy *controlPort1;
+    ControlPortProxy *controlPort2;
     MouseProxy *mouse;
     KeyboardProxy *keyboard;
     DiskControllerProxy *diskController;
-    AmigaDriveProxy *df0;
-    AmigaDriveProxy *df1;
-    AmigaDriveProxy *df2;
-    AmigaDriveProxy *df3;
+    DriveProxy *df0;
+    DriveProxy *df1;
+    DriveProxy *df2;
+    DriveProxy *df3;
 }
 
 @property (readonly) struct AmigaWrapper *wrapper;
@@ -78,15 +78,15 @@ struct AmigaFileWrapper;
 @property (readonly) AgnusProxy *dma;
 @property (readonly) DeniseProxy *denise;
 @property (readonly) PaulaProxy *paula;
-@property (readonly) AmigaControlPortProxy *controlPort1;
-@property (readonly) AmigaControlPortProxy *controlPort2;
+@property (readonly) ControlPortProxy *controlPort1;
+@property (readonly) ControlPortProxy *controlPort2;
 @property (readonly) MouseProxy *mouse;
 @property (readonly) KeyboardProxy *keyboard;
 @property (readonly) DiskControllerProxy *diskController;
-@property (readonly) AmigaDriveProxy *df0;
-@property (readonly) AmigaDriveProxy *df1;
-@property (readonly) AmigaDriveProxy *df2;
-@property (readonly) AmigaDriveProxy *df3;
+@property (readonly) DriveProxy *df0;
+@property (readonly) DriveProxy *df1;
+@property (readonly) DriveProxy *df2;
+@property (readonly) DriveProxy *df3;
 
 // - (void) makeActiveInstance;
 - (void) kill;
@@ -378,7 +378,7 @@ struct AmigaFileWrapper;
 // ControlPort Proxy
 //
 
-@interface AmigaControlPortProxy : NSObject {
+@interface ControlPortProxy : NSObject {
     
     struct AmigaControlPortWrapper *wrapper;
 }
@@ -465,7 +465,7 @@ struct AmigaFileWrapper;
 // AmigaDrive Proxy
 //
 
-@interface AmigaDriveProxy : NSObject {
+@interface DriveProxy : NSObject {
     
     struct AmigaDriveWrapper *wrapper;
 }

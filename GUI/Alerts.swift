@@ -65,7 +65,7 @@ extension MyDocument {
         return alert.runModal()
     }
 
-    func proceedWithUnexportedDisk(drives: [AmigaDriveProxy]) -> Bool {
+    func proceedWithUnexportedDisk(drives: [DriveProxy]) -> Bool {
         
         let modified = drives.filter { $0.hasModifiedDisk() }
         
@@ -79,7 +79,7 @@ extension MyDocument {
         return showDiskIsUnexportedAlert(messageText: text) == .alertFirstButtonReturn
     }
     
-    func proceedWithUnexportedDisk(drive: AmigaDriveProxy) -> Bool {
+    func proceedWithUnexportedDisk(drive: DriveProxy) -> Bool {
         
         return proceedWithUnexportedDisk(drives: [drive])
     }

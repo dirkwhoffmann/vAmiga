@@ -18,7 +18,7 @@ struct MemWrapper { Memory *mem; };
 struct AgnusWrapper { Agnus *agnus; };
 struct DeniseWrapper { Denise *denise; };
 struct PaulaWrapper { Paula *paula; };
-struct AmigaControlPortWrapper { AmigaControlPort *port; };
+struct AmigaControlPortWrapper { ControlPort *port; };
 struct MouseWrapper { Mouse *mouse; };
 struct KeyboardWrapper { Keyboard *keyboard; };
 struct DiskControllerWrapper { DiskController *controller; };
@@ -562,9 +562,9 @@ struct ADFFileWrapper { ADFFile *adf; };
 // Control port
 //
 
-@implementation AmigaControlPortProxy
+@implementation ControlPortProxy
 
-- (instancetype) initWithControlPort:(AmigaControlPort *)port
+- (instancetype) initWithControlPort:(ControlPort *)port
 {
     if (self = [super init]) {
         wrapper = new AmigaControlPortWrapper();
@@ -749,7 +749,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 // AmigaDrive proxy
 //
 
-@implementation AmigaDriveProxy
+@implementation DriveProxy
 
 - (instancetype) initWithDrive:(Drive *)drive
 {
@@ -1008,15 +1008,15 @@ struct ADFFileWrapper { ADFFile *adf; };
     dma = [[AgnusProxy alloc] initWithAgnus:&amiga->agnus];
     denise = [[DeniseProxy alloc] initWithDenise:&amiga->denise];
     paula = [[PaulaProxy alloc] initWithPaula:&amiga->paula];
-    controlPort1 = [[AmigaControlPortProxy alloc] initWithControlPort:&amiga->controlPort1];
-    controlPort2 = [[AmigaControlPortProxy alloc] initWithControlPort:&amiga->controlPort2];
+    controlPort1 = [[ControlPortProxy alloc] initWithControlPort:&amiga->controlPort1];
+    controlPort2 = [[ControlPortProxy alloc] initWithControlPort:&amiga->controlPort2];
     mouse = [[MouseProxy alloc] initWithMouse:&amiga->mouse];
     keyboard = [[KeyboardProxy alloc] initWithKeyboard:&amiga->keyboard];
     diskController = [[DiskControllerProxy alloc] initWithDiskController:&amiga->paula.diskController];
-    df0 = [[AmigaDriveProxy alloc] initWithDrive:&amiga->df0];
-    df1 = [[AmigaDriveProxy alloc] initWithDrive:&amiga->df1];
-    df2 = [[AmigaDriveProxy alloc] initWithDrive:&amiga->df2];
-    df3 = [[AmigaDriveProxy alloc] initWithDrive:&amiga->df3];
+    df0 = [[DriveProxy alloc] initWithDrive:&amiga->df0];
+    df1 = [[DriveProxy alloc] initWithDrive:&amiga->df1];
+    df2 = [[DriveProxy alloc] initWithDrive:&amiga->df2];
+    df3 = [[DriveProxy alloc] initWithDrive:&amiga->df3];
 
     return self;
 }

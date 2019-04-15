@@ -16,7 +16,7 @@
 // THIS CLASS IS A STUB TO MAKE THE VISUAL PROTOTYPE WORK
 //
 
-class AmigaControlPort : public HardwareComponent {
+class ControlPort : public HardwareComponent {
 
 private:
     
@@ -61,7 +61,7 @@ private:
     
 public:
     
-    AmigaControlPort(int p);
+    ControlPort(int p);
     
     
     //

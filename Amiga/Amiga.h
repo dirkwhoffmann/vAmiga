@@ -26,7 +26,7 @@
 #include "Blitter.h"
 #include "Denise.h"
 #include "Paula.h"
-#include "AmigaControlPort.h"
+#include "ControlPort.h"
 #include "Mouse.h"
 #include "Keyboard.h"
 #include "Drive.h"
@@ -114,8 +114,8 @@ class Amiga : public HardwareComponent {
     Paula paula;
         
     // Control ports
-    AmigaControlPort controlPort1 = AmigaControlPort(1);
-    AmigaControlPort controlPort2 = AmigaControlPort(2);
+    ControlPort controlPort1 = ControlPort(1);
+    ControlPort controlPort2 = ControlPort(2);
     
     // Mouse
     Mouse mouse;

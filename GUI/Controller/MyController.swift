@@ -80,7 +80,7 @@ class MyController : NSWindowController, MessageReceiver {
     var smallDisk = NSImage.init(named: "diskTemplate")!.resize(width: 16.0, height: 16.0)
     
     // Drive that receives drag and drop inputs
-    var dragAndDropDrive : AmigaDriveProxy?
+    var dragAndDropDrive : DriveProxy?
     
 
 

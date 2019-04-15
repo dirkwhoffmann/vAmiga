@@ -15,7 +15,7 @@ extension MyController : NSMenuItemValidation {
 
         // track("validateMenuItem")
         
-        var dfn : AmigaDriveProxy {
+        var dfn : DriveProxy {
             
             switch (item.tag) {
                 
@@ -428,7 +428,7 @@ extension MyController : NSMenuItemValidation {
         }
     }
     
-    func insertRecentDiskAction(drive: AmigaDriveProxy, slot: Int) {
+    func insertRecentDiskAction(drive: DriveProxy, slot: Int) {
         
         if let url = mydocument.getRecentlyInsertedDiskURL(slot) {
             do {

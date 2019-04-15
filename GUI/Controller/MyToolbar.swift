@@ -35,7 +35,7 @@ class MyToolbar : NSToolbar {
         validateJoystickToolbarItems()
     }
     
-    func validateJoystickToolbarItem(_ popup: NSPopUpButton, selectedSlot: Int, port: AmigaControlPortProxy!) {
+    func validateJoystickToolbarItem(_ popup: NSPopUpButton, selectedSlot: Int, port: ControlPortProxy!) {
         
         let gpm = controller.gamePadManager!
         let menu =  popup.menu
