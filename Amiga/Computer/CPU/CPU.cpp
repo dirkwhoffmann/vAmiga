@@ -21,8 +21,6 @@ extern "C" unsigned int m68k_read_memory_8(unsigned int addr)
 {
     assert(activeAmiga != NULL);
     // printf("m68k_read_memory_8\n");
-    if (addr >= 0x200000 && addr <= 0x9FFFFF) assert(false);
-    
     return activeAmiga->mem.peek8(addr);
 }
 
@@ -30,8 +28,6 @@ extern "C" unsigned int m68k_read_memory_16(unsigned int addr)
 {
     assert(activeAmiga != NULL);
     // printf("m68k_read_memory_16\n");
-    if (addr >= 0x200000 && addr <= 0x9FFFFF) assert(false);
-    
     return activeAmiga->mem.peek16(addr);
 }
 
@@ -39,8 +35,6 @@ extern "C" unsigned int m68k_read_memory_32(unsigned int addr)
 {
     assert(activeAmiga != NULL);
     // printf("m68k_read_memory_32\n");
-    if (addr >= 0x200000 && addr <= 0x9FFFFF) assert(false);
-    
     return activeAmiga->mem.peek32(addr);
 }
 

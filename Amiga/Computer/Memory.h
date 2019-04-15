@@ -71,15 +71,9 @@ const uint32_t KICK_ROM_MASK = 0x003FFFF;
 #define WRITE_CHIP_32(x,y) WRITE_32(chipRam + ((x) % chipRamSize), (y))
 
 // Writes a value into Fast RAM in big endian format
-#define WRITE_FAST_8(x,y) \
-debug("Writing8 %X to fast ram %X\n", y, x); \
-WRITE_8(fastRam  + ((x) - FAST_RAM_STRT), (y))
-#define WRITE_FAST_16(x,y) \
-debug("Writing16 %X to fast ram %X\n", y, x); \
-WRITE_16(fastRam + ((x) - FAST_RAM_STRT), (y))
-#define WRITE_FAST_32(x,y) \
-debug("Writing32 %X to fast ram %X\n", y, x); \
-WRITE_32(fastRam + ((x) - FAST_RAM_STRT), (y))
+#define WRITE_FAST_8(x,y)  WRITE_8(fastRam  + ((x) - FAST_RAM_STRT), (y))
+#define WRITE_FAST_16(x,y) WRITE_16(fastRam + ((x) - FAST_RAM_STRT), (y))
+#define WRITE_FAST_32(x,y) WRITE_32(fastRam + ((x) - FAST_RAM_STRT), (y))
 
 // Writes a value into Slow RAM in big endian format
 #define WRITE_SLOW_8(x,y)  WRITE_8(slowRam  + ((x) & SLOW_RAM_MASK), (y))
@@ -150,6 +144,22 @@ class Memory : public HardwareComponent {
     
     // Buffer for returning string values
     char str[256];
+    
+    
+    //
+    // Fast Ram emulation (Zorro II)
+    // Based on
+    // https://github.com/PR77/A500_ACCEL_RAM_IDE-Rev-1/blob/master/Logic/RAM/A500_RAM.v
+    //
+    
+    // The value returned when peeking into the auto-config space.
+    uint8_t autoConfData;
+    
+    // The current configuration state (0 = unconfigured).
+    uint8_t fastRamConf;
+  
+    // Base address of the Fast Ram (value is provided by Kickstart).
+    uint32_t fastRamBaseAddr;
     
     
     //
@@ -380,7 +390,9 @@ class Memory : public HardwareComponent {
     void pokeAutoConf8(uint32_t addr, uint8_t value);
     void pokeAutoConf16(uint32_t addr, uint16_t value);
     
-    
+    uint8_t peekFastRamDevice(uint32_t addr);
+    void pokeFastRamDevice(uint32_t addr, uint8_t value);
+
     //
     // Debugging
     //
