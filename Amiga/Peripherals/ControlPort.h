@@ -12,10 +12,6 @@
 
 #include "HardwareComponent.h"
 
-//
-// THIS CLASS IS A STUB TO MAKE THE VISUAL PROTOTYPE WORK
-//
-
 class ControlPort : public HardwareComponent {
 
 private:
@@ -71,19 +67,15 @@ public:
 private:
     
     void _powerOn() override;
-    /*
-     void _powerOff() override;
-     void _reset() override;
-     void _ping() override;
-     */
     void _dump() override;
     void didLoadFromBuffer(uint8_t **buffer) override;
     
-public:
     
     //
     // Joystick
     //
+    
+public:
     
     // Triggers a joystick event
     void trigger(JoystickEvent event);
@@ -119,10 +111,16 @@ public:
      */
     void execute();
     
+    
     //
     // Mouse
     //
  
+public:
+    
+    // Returns true if a mouse is connected
+    bool mouseIsConnected() { return hasMouse; }
+    
     // Connects or disconnects a mouse
     void connectMouse(bool value) { hasMouse = value; }
     
@@ -133,11 +131,11 @@ public:
     // uint8_t potY();
 
     // Moves the mouse to a new location
-    void setXY(float x, float y);
+    // void setXY(float x, float y);
     
     // Presses a mouse button
-    void setLeftMouseButton(bool pressed);
-    void setRightMouseButton(bool pressed);
+    // void setLeftMouseButton(bool pressed);
+    // void setRightMouseButton(bool pressed);
 };
 
 #endif

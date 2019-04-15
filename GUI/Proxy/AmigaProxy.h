@@ -395,9 +395,11 @@ struct AmigaFileWrapper;
 
 - (void) connectMouse:(BOOL)value;
 
+/*
 - (void) setXY:(NSPoint)pos;
 - (void) setLeftMouseButton:(BOOL)pressed;
 - (void) setRightMouseButton:(BOOL)pressed;
+*/
 
 @end
 
@@ -412,7 +414,7 @@ struct AmigaFileWrapper;
 
 - (void) dump;
 
-- (void) setX:(NSInteger)x Y:(NSInteger)y;
+- (void) setXY:(NSPoint)pos;
 - (void) setLeftButton:(BOOL)value;
 - (void) setRightButton:(BOOL)value;
 

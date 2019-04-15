@@ -139,6 +139,7 @@ ControlPort::setAutofireBullets(int value)
     }
 }
 
+/*
 void
 ControlPort::setXY(float x, float y)
 {
@@ -162,3 +163,4 @@ ControlPort::setRightMouseButton(bool pressed)
         debug("Pressing right mouse button");
     }
 }
+*/

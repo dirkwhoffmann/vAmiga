@@ -609,6 +609,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->port->connectMouse(value);
 }
+/*
 - (void) setXY:(NSPoint)pos
 {
     wrapper->port->setXY(pos.x, pos.y);
@@ -621,6 +622,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->port->setRightMouseButton(pressed);
 }
+*/
 
 @end
 
@@ -643,9 +645,9 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->mouse->dump();
 }
-- (void) setX:(NSInteger)x Y:(NSInteger)y
+- (void) setXY:(NSPoint)pos
 {
-    wrapper->mouse->setXY(x, y);
+    wrapper->mouse->setXY((int64_t)pos.x, (int64_t)pos.y);
 }
 - (void) setLeftButton:(BOOL)value
 {

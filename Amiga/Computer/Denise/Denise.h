@@ -154,8 +154,9 @@ class Denise : public HardwareComponent {
     public:
     
     // OCS register 0x00A and 0x00C (r)
-    uint16_t peekJOYxDATR(int x);
-    
+    uint16_t peekJOY0DATR();
+    uint16_t peekJOY1DATR();
+
     // OCS register 0x036 (w)
     void pokeJOYTEST(uint16_t value);
     

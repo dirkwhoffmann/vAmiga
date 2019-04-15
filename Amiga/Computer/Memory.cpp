@@ -757,9 +757,9 @@ Memory::peekCustom16(uint32_t addr)
         case 0x008 >> 1: // DSKDATR
             return amiga->paula.diskController.peekDSKDATR();
         case 0x00A >> 1: // JOY0DAT
-            return amiga->denise.peekJOYxDATR(0);
+            return amiga->denise.peekJOY0DATR();
         case 0x00C >> 1: // JOY1DAT
-            return amiga->denise.peekJOYxDATR(1);
+            return amiga->denise.peekJOY1DATR();
 
         case 0x00E >> 1: // CLXDAT
             break;
