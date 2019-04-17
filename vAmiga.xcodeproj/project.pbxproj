@@ -170,7 +170,7 @@
 		501B821B2262FFB200042871 /* RTC.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RTC.cpp; sourceTree = "<group>"; };
 		501B821C2262FFB200042871 /* RTC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RTC.h; sourceTree = "<group>"; };
 		501E715022671FC20070B17D /* DeniseTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DeniseTypes.h; sourceTree = "<group>"; };
-		501E715122677BFF0070B17D /* EventHandler_t.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventHandler_t.h; sourceTree = "<group>"; };
+		501E715122677BFF0070B17D /* EventHandlerTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventHandlerTypes.h; sourceTree = "<group>"; };
 		5020B17B21EF121E00B9E80E /* Agnus.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Agnus.cpp; sourceTree = "<group>"; };
 		5020B17C21EF121E00B9E80E /* Agnus.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Agnus.h; sourceTree = "<group>"; };
 		5020B17E21EF136100B9E80E /* Denise.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Denise.cpp; sourceTree = "<group>"; };
@@ -690,7 +690,7 @@
 			children = (
 				508FDEF821EA1FBC0043D0E9 /* MessageQueue.h */,
 				508FDEF521EA1FBC0043D0E9 /* MessageQueue.cpp */,
-				501E715122677BFF0070B17D /* EventHandler_t.h */,
+				501E715122677BFF0070B17D /* EventHandlerTypes.h */,
 				5085FE5621FB3BAE009753EF /* EventHandler.h */,
 				5085FE5521FB3BAE009753EF /* EventHandler.cpp */,
 				5064851021EC7A1700FC4AC3 /* Memory.h */,

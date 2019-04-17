@@ -10,8 +10,8 @@
 #ifndef _VATYPES_H
 #define _VATYPES_H
 
-#include "EventHandler_t.h"
-#include "Denise_t.h"
+#include "EventHandlerTypes.h"
+#include "DeniseTypes.h"
 
 // 2 bit binary value
 typedef uint8_t uint2_t;
