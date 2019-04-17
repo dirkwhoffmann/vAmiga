@@ -9,9 +9,6 @@
 
 #include "Amiga.h"
 
-// Increments a DMA pointer register by 2
-#define INC_DMAPTR(x) (x) = ((x) + 2) & 0x7FFFE;
-
 /* Emulates a Direct Memory Access. DEPRECATED
  * ptr is a DMA pointer register and dest the destination
  */
@@ -772,83 +769,67 @@ Agnus::serviceDMAEvent(EventID id)
             break;
             
         case DMA_S0_1:
-            amiga->denise.serveSprDma1Event(0, amiga->mem.peekChip16(sprpt[0]));
-            INC_DMAPTR(sprpt[0]);
+            amiga->denise.serveSprDma1Event(0);
             break;
             
         case DMA_S1_1:
-            amiga->denise.serveSprDma1Event(1, amiga->mem.peekChip16(sprpt[1]));
-            INC_DMAPTR(sprpt[1]);
+            amiga->denise.serveSprDma1Event(1);
             break;
             
         case DMA_S2_1:
-            amiga->denise.serveSprDma1Event(2, amiga->mem.peekChip16(sprpt[2]));
-            INC_DMAPTR(sprpt[2]);
+            amiga->denise.serveSprDma1Event(2);
             break;
             
         case DMA_S3_1:
-            amiga->denise.serveSprDma1Event(3, amiga->mem.peekChip16(sprpt[3]));
-            INC_DMAPTR(sprpt[3]);
+            amiga->denise.serveSprDma1Event(3);
             break;
             
         case DMA_S4_1:
-            amiga->denise.serveSprDma1Event(4, amiga->mem.peekChip16(sprpt[4]));
-            INC_DMAPTR(sprpt[4]);
+            amiga->denise.serveSprDma1Event(4);
             break;
             
         case DMA_S5_1:
-            amiga->denise.serveSprDma1Event(5, amiga->mem.peekChip16(sprpt[5]));
-            INC_DMAPTR(sprpt[5]);
+            amiga->denise.serveSprDma1Event(5);
             break;
             
         case DMA_S6_1:
-            amiga->denise.serveSprDma1Event(6, amiga->mem.peekChip16(sprpt[6]));
-            INC_DMAPTR(sprpt[6]);
+            amiga->denise.serveSprDma1Event(6);
             break;
             
         case DMA_S7_1:
-            amiga->denise.serveSprDma1Event(7, amiga->mem.peekChip16(sprpt[7]));
-            INC_DMAPTR(sprpt[7]);
+            amiga->denise.serveSprDma1Event(7);
             break;
             
         case DMA_S0_2:
-            amiga->denise.serveSprDma2Event(0, amiga->mem.peekChip16(sprpt[0]));
-            INC_DMAPTR(sprpt[0]);
+            amiga->denise.serveSprDma2Event(0);
             break;
             
         case DMA_S1_2:
-            amiga->denise.serveSprDma2Event(1, amiga->mem.peekChip16(sprpt[1]));
-            INC_DMAPTR(sprpt[1]);
+            amiga->denise.serveSprDma2Event(1);
             break;
             
         case DMA_S2_2:
-            amiga->denise.serveSprDma2Event(2, amiga->mem.peekChip16(sprpt[2]));
-            INC_DMAPTR(sprpt[2]);
+            amiga->denise.serveSprDma2Event(2);
             break;
             
         case DMA_S3_2:
-            amiga->denise.serveSprDma2Event(3, amiga->mem.peekChip16(sprpt[3]));
-            INC_DMAPTR(sprpt[3]);
+            amiga->denise.serveSprDma2Event(3);
             break;
             
         case DMA_S4_2:
-            amiga->denise.serveSprDma2Event(4, amiga->mem.peekChip16(sprpt[4]));
-            INC_DMAPTR(sprpt[4]);
+            amiga->denise.serveSprDma2Event(4);
             break;
             
         case DMA_S5_2:
-            amiga->denise.serveSprDma2Event(5, amiga->mem.peekChip16(sprpt[5]));
-            INC_DMAPTR(sprpt[5]);
+            amiga->denise.serveSprDma2Event(5);
             break;
             
         case DMA_S6_2:
-            amiga->denise.serveSprDma2Event(6, amiga->mem.peekChip16(sprpt[6]));
-            INC_DMAPTR(sprpt[6]);
+            amiga->denise.serveSprDma2Event(6);
             break;
             
         case DMA_S7_2:
-            amiga->denise.serveSprDma2Event(7, amiga->mem.peekChip16(sprpt[7]));
-            INC_DMAPTR(sprpt[7]);
+            amiga->denise.serveSprDma2Event(7);
             break;
         
         case DMA_H1:

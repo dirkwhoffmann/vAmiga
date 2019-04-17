@@ -35,6 +35,9 @@
 #define AU1EN 0b0000000010
 #define AU0EN 0b0000000001
 
+// Increments a DMA pointer register by 2
+#define INC_DMAPTR(x) (x) = ((x) + 2) & 0x7FFFE;
+
 // Maximum vertical and horizontal beam positions
 #define VPOS_MAX 312
 #define HPOS_MAX 226

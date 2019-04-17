@@ -9,6 +9,9 @@
 
 #include "Amiga.h"
 
+#define SPR_DMA(x) amiga->mem.peekChip16(amiga->agnus.sprpt[x])
+#define INC_SPRDMAPTR(x) INC_DMAPTR(amiga->agnus.sprpt[x])
+
 Denise::Denise()
 {
     setDescription("Denise");
@@ -303,7 +306,7 @@ Denise::armSprite(int x)
 }
 
 void
-Denise::serveSprDma1Event(int x, uint16_t dmaValue)
+Denise::serveSprDma1Event(int x)
 {
     assert(x < 8);
     
@@ -315,23 +318,29 @@ Denise::serveSprDma1Event(int x, uint16_t dmaValue)
 
         case SPR_FETCH_CONFIG:
 
-            pokeSPRxPOS(x, dmaValue);
+            debug(2, "serveSprDma1Event(%d, %X) SPR_FETCH_CONFIG\n", x, SPR_DMA(x));
+            pokeSPRxPOS(x, SPR_DMA(x));
+            INC_SPRDMAPTR(x);
             break;
             
         case SPR_WAIT_VSTART:
             
+            debug(2, "serveSprDma1Event(%d, %X) SPR_WAIT_VSTART\n", x, SPR_DMA(x));
             if (inFirstSprLine(x)) {
-                pokeSPRxDATB(x, dmaValue);
+                pokeSPRxDATB(x, SPR_DMA(x));
+                INC_SPRDMAPTR(x);
             }
             break;
 
         case SPR_FETCH_DATA:
             
+            debug(2, "serveSprDma1Event(%d, %X) SPR_FETCH_DATA\n", x, SPR_DMA(x));
             if (inLastSprLine(x)) {
-                pokeSPRxPOS(x, dmaValue);
+                pokeSPRxPOS(x, SPR_DMA(x));
             } else {
-                pokeSPRxDATB(x, dmaValue);
+                pokeSPRxDATB(x, SPR_DMA(x));
             }
+            INC_SPRDMAPTR(x);
             break;
             
         default:
@@ -340,7 +349,7 @@ Denise::serveSprDma1Event(int x, uint16_t dmaValue)
 }
 
 void
-Denise::serveSprDma2Event(int x, uint16_t dmaValue)
+Denise::serveSprDma2Event(int x)
 {
     assert(x < 8);
 
@@ -348,25 +357,31 @@ Denise::serveSprDma2Event(int x, uint16_t dmaValue)
             
         case SPR_FETCH_CONFIG:
             
-            pokeSPRxCTL(x, dmaValue);
+            debug(2, "serveSprDma2Event(%d, %X) SPR_FETCH_CONFIG\n", x, SPR_DMA(x));
+            pokeSPRxCTL(x, SPR_DMA(x));
+            INC_SPRDMAPTR(x);
             sprDmaState[x] = inFirstSprLine(x) ? SPR_FETCH_DATA : SPR_WAIT_VSTART;
             break;
             
         case SPR_WAIT_VSTART:
             
+            debug(2, "serveSprDma2Event(%d, %X) SPR_WAIT_VSTART\n", x, SPR_DMA(x));
             if (inFirstSprLine(x)) {
-                pokeSPRxDATA(x, dmaValue);
+                pokeSPRxDATA(x, SPR_DMA(x));
+                INC_SPRDMAPTR(x);
                 sprDmaState[x] = inLastSprLine(x) ? SPR_FETCH_CONFIG : SPR_FETCH_DATA;
             }
             break;
             
         case SPR_FETCH_DATA:
             
+            debug(2, "serveSprDma2Event(%d, %X) SPR_FETCH_DATA\n", x, SPR_DMA(x));
             if (inLastSprLine(x)) {
-                pokeSPRxCTL(x, dmaValue);
+                pokeSPRxCTL(x, SPR_DMA(x));
             } else {
-                pokeSPRxDATB(x, dmaValue);
+                pokeSPRxDATB(x, SPR_DMA(x));
             }
+            INC_SPRDMAPTR(x);
             sprDmaState[x] = inFirstSprLine(x) ? SPR_FETCH_DATA : SPR_WAIT_VSTART;
             break;
             
