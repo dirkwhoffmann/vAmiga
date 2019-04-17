@@ -38,7 +38,7 @@ class Denise : public HardwareComponent {
     // Denise has been executed up to this clock cycle.
     Cycle clock = 0;
     
-    
+
     //
     // Registers
     //
@@ -52,9 +52,11 @@ class Denise : public HardwareComponent {
     uint16_t bpldat[6];
     
     // Sprite control word 1 (SPRxPOS)
+    // DEPRECATED. USE vstart, vstop, hstart instead
     uint16_t sprpos[8];
     
     // Sprite control word 2 (SPRxCTL)
+    // DEPRECATED. USE vstart, vstop, hstart instead
     uint16_t sprctl[8];
 
     // Sprite data registers (SPRxDATA, SPRxDATAB)
@@ -76,6 +78,30 @@ class Denise : public HardwareComponent {
     int8_t scrollLowOdd;
     int8_t scrollHiEven;
     int8_t scrollHiOdd;
+    
+    
+    //
+    // Sprites
+    //
+    
+    // Trigger coordinates of all 8 sprites.
+    int16_t hstrt[8];
+    int16_t vstrt[8];
+    int16_t vstop[8];
+    
+    // Comparison results for of all 8 sprites.
+    bool vstrtCmp[8];
+    bool vstopCmp[8];
+
+    // The serial shift registers of all 8 sprites.
+    uint32_t sprShiftReg[8];
+    
+    // The current DMA states aof all 8 sprites.
+    SprDMAState sprDmaState[8];
+    
+    // Attach control bits of all 8 sprites.
+    uint8_t attach;
+
     
     
     //
@@ -185,15 +211,30 @@ class Denise : public HardwareComponent {
     void pokeSPRxDATB(int x, uint16_t value);
     
     
+    //
+    // Handling sprites
+    //
     
+    // Compares the current vpos with the vertical sprite parameters
+    bool inFirstSprLine(int x);
+    bool beforeFirstSprLine(int x);
+    bool afterFirstSprLine(int x);
+    bool inLastSprLine(int x);
+
+    // Copy data from SPRDATA and SPRDATB into the serial shift registers
+    void armSprite(int x);
 
     
     //
-    // Processing events
+    // Serving events
     //
     
-    // Processes an overdue event
-    // void serviceEvent(EventID id, int64_t data);
+    // Processes the first DMA event of a sprite
+    void serveFirstSprDmaEvent(int x, uint16_t value);
+    
+    // Processes the second DMA event of a sprite
+    void serveSecondSprDmaEvent(int x, uint16_t value);
+
     
     
     

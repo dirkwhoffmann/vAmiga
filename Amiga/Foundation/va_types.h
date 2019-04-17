@@ -10,6 +10,8 @@
 #ifndef _VATYPES_H
 #define _VATYPES_H
 
+#include "denise_t.h"
+
 // 2 bit binary value
 typedef uint8_t uint2_t;
 inline bool is_uint2_t(uint2_t value) { return value <= 0x03; }
@@ -717,16 +719,6 @@ typedef struct
     bool bzero;
 }
 BlitterInfo;
-
-typedef struct
-{
-    uint16_t bplcon0;
-    uint16_t bplcon1;
-    uint16_t bplcon2;
-    uint16_t bpldat[6];
-    uint32_t color[32];
-}
-DeniseInfo;
 
 typedef struct
 {

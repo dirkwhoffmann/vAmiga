@@ -21,6 +21,15 @@ Denise::Denise()
     registerSnapshotItems(vector<SnapshotItem> {
         
         { &clock,         sizeof(clock),         0 },
+        { &hstrt,         sizeof(hstrt),         BYTE_ARRAY },
+        { &vstrt,         sizeof(vstrt),         BYTE_ARRAY },
+        { &vstop,         sizeof(vstop),         BYTE_ARRAY },
+        { &vstrtCmp,      sizeof(vstrtCmp),      BYTE_ARRAY },
+        { &vstopCmp,      sizeof(vstopCmp),      BYTE_ARRAY },
+        { &sprShiftReg,   sizeof(sprShiftReg),   WORD_ARRAY },
+        { &sprDmaState,   sizeof(sprDmaState),   DWORD_ARRAY },
+        { &attach,        sizeof(attach),        0 },
+
         { &bplcon0,       sizeof(bplcon0),       0 },
         { &bplcon1,       sizeof(bplcon1),       0 },
         { &bplcon2,       sizeof(bplcon2),       0 },
@@ -214,18 +223,35 @@ void
 Denise::pokeSPRxPOS(int x, uint16_t value)
 {
     assert(x < 8);
-    // debug(2, "pokeSPR%dPOS(%X)\n", x, value);
+    debug(2, "pokeSPR%dPOS(%X)\n", x, value);
+
+    // 15 14 13 12 11 10  9  8  7  6  5  4  3  1  0
+    // E7 E6 E5 E4 E3 E2 E1 E0 H8 H7 H6 H5 H4 H3 H2 (Ex = VSTART, Hx = HSTART)
+
+    hstrt[x] = ((value & 0x00FF) << 2) | (hstrt[x] & 0x0003);
+    vstrt[x] = ((value & 0xFF00) >> 8) | (vstrt[x] & 0x0100);
     
-    sprpos[x] = value;
+    sprpos[x] = value; // DEPRECATED
 }
 
 void
 Denise::pokeSPRxCTL(int x, uint16_t value)
 {
     assert(x < 8);
-    // debug(2, "pokeSPR%dCTL(%X)\n", x, value);
+    debug(2, "pokeSPR%dCTL(%X)\n", x, value);
     
-    sprctl[x] = value;
+    // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
+    // L7 L6 L5 L4 L3 L2 L1 L0 AT  -  -  -  - E8 L8 H0 (Lx = VSTOP)
+
+    hstrt[x] = ((value & 0b001) << 8) | (hstrt[x] & 0x00FF);
+    vstrt[x] = ((value & 0b100) << 6) | (vstrt[x] & 0x00FF);
+    vstop[x] = ((value & 0b010) << 7) | (value >> 8);
+    
+    attach = WRITE_BIT(attach, x, GET_BIT(value, 7));
+    
+    // TODO: AT
+    
+    sprctl[x] = value; // DEPRECATED
 }
 
 void
@@ -246,6 +272,108 @@ Denise::pokeSPRxDATB(int x, uint16_t value)
     sprdatb[x] = value;
 }
 
+bool
+Denise::inFirstSprLine(int x)
+{
+    return amiga->agnus.vpos == vstrt[x] && amiga->agnus.vpos >= 24;
+}
+
+bool
+Denise::beforeFirstSprLine(int x)
+{
+    return amiga->agnus.vpos < vstrt[x];
+}
+
+bool
+Denise::afterFirstSprLine(int x)
+{
+    return amiga->agnus.vpos > vstrt[x];
+}
+
+bool
+Denise::inLastSprLine(int x)
+{
+    return amiga->agnus.vpos == vstrt[x];
+}
+
+void
+Denise::armSprite(int x)
+{
+    sprShiftReg[x] = HI_W_LO_W(sprdatb[x], sprdata[x]);
+}
+
+void
+Denise::serveFirstSprDmaEvent(int x, uint16_t dmaValue)
+{
+    assert(x < 8);
+    
+    // int16_t vpos = amiga->agnus.vpos;
+    // vstrtCmp[x] = vpos == vstrt[x] && vpos >= 24;
+    // vstopCmp[x] = vpos == vstop[x];
+
+    switch(sprDmaState[x]) {
+
+        case SPR_FETCH_CONFIG:
+
+            pokeSPRxPOS(x, dmaValue);
+            break;
+            
+        case SPR_WAIT_VSTART:
+            
+            if (inFirstSprLine(x)) {
+                pokeSPRxDATB(x, dmaValue);
+            }
+            break;
+
+        case SPR_FETCH_DATA:
+            
+            if (inLastSprLine(x)) {
+                pokeSPRxPOS(x, dmaValue);
+            } else {
+                pokeSPRxDATB(x, dmaValue);
+            }
+            break;
+            
+        default:
+            assert(false);
+    }
+}
+
+void
+Denise::serveSecondSprDmaEvent(int x, uint16_t dmaValue)
+{
+    assert(x < 8);
+
+    switch(sprDmaState[x]) {
+            
+        case SPR_FETCH_CONFIG:
+            
+            pokeSPRxCTL(x, dmaValue);
+            sprDmaState[x] = inFirstSprLine(x) ? SPR_FETCH_DATA : SPR_WAIT_VSTART;
+            break;
+            
+        case SPR_WAIT_VSTART:
+            
+            if (inFirstSprLine(x)) {
+                pokeSPRxDATA(x, dmaValue);
+                sprDmaState[x] = inLastSprLine(x) ? SPR_FETCH_CONFIG : SPR_FETCH_DATA;
+            }
+            break;
+            
+        case SPR_FETCH_DATA:
+            
+            if (inLastSprLine(x)) {
+                pokeSPRxCTL(x, dmaValue);
+            } else {
+                pokeSPRxDATB(x, dmaValue);
+            }
+            sprDmaState[x] = inFirstSprLine(x) ? SPR_FETCH_DATA : SPR_WAIT_VSTART;
+            break;
+            
+        default:
+            assert(false);
+    }
+}
 
 
 /*
