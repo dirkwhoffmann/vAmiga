@@ -303,7 +303,7 @@ Denise::armSprite(int x)
 }
 
 void
-Denise::serveFirstSprDmaEvent(int x, uint16_t dmaValue)
+Denise::serveSprDma1Event(int x, uint16_t dmaValue)
 {
     assert(x < 8);
     
@@ -340,7 +340,7 @@ Denise::serveFirstSprDmaEvent(int x, uint16_t dmaValue)
 }
 
 void
-Denise::serveSecondSprDmaEvent(int x, uint16_t dmaValue)
+Denise::serveSprDma2Event(int x, uint16_t dmaValue)
 {
     assert(x < 8);
 

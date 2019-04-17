@@ -9,7 +9,10 @@
 
 #include "Amiga.h"
 
-/* Emulates a Direct Memory Access.
+// Increments a DMA pointer register by 2
+#define INC_DMAPTR(x) (x) = ((x) + 2) & 0x7FFFE;
+
+/* Emulates a Direct Memory Access. DEPRECATED
  * ptr is a DMA pointer register and dest the destination
  */
 #define DO_DMA(ptr,dest) \
@@ -241,36 +244,36 @@ Agnus::buildDMAEventTable()
         // Sprite DMA (some slots may be overwritten by bitplane DMA cycles)
         // TODO: Individually switch on / off channels
         if (dmacon & SPREN) { // && sprite 0 enabled
-            dmaEvent[0x15] = DMA_S0;
-            dmaEvent[0x17] = DMA_S0;
+            dmaEvent[0x15] = DMA_S0_1;
+            dmaEvent[0x17] = DMA_S0_2;
         }
         if (dmacon & SPREN) { // && sprite 1 enabled
-            dmaEvent[0x19] = DMA_S1;
-            dmaEvent[0x1B] = DMA_S1;
+            dmaEvent[0x19] = DMA_S1_1;
+            dmaEvent[0x1B] = DMA_S1_2;
         }
         if (dmacon & SPREN) { // && sprite 2 enabled
-            dmaEvent[0x1D] = DMA_S2;
-            dmaEvent[0x1F] = DMA_S2;
+            dmaEvent[0x1D] = DMA_S2_1;
+            dmaEvent[0x1F] = DMA_S2_2;
         }
         if (dmacon & SPREN) { // && sprite 3 enabled
-            dmaEvent[0x21] = DMA_S3;
-            dmaEvent[0x23] = DMA_S3;
+            dmaEvent[0x21] = DMA_S3_1;
+            dmaEvent[0x23] = DMA_S3_2;
         }
         if (dmacon & SPREN) { // && sprite 4 enabled
-            dmaEvent[0x25] = DMA_S4;
-            dmaEvent[0x27] = DMA_S4;
+            dmaEvent[0x25] = DMA_S4_1;
+            dmaEvent[0x27] = DMA_S4_2;
         }
         if (dmacon & SPREN) { // && sprite 5 enabled
-            dmaEvent[0x29] = DMA_S5;
-            dmaEvent[0x2B] = DMA_S5;
+            dmaEvent[0x29] = DMA_S5_1;
+            dmaEvent[0x2B] = DMA_S5_2;
         }
         if (dmacon & SPREN) { // && sprite 6 enabled
-            dmaEvent[0x2D] = DMA_S6;
-            dmaEvent[0x2F] = DMA_S6;
+            dmaEvent[0x2D] = DMA_S6_1;
+            dmaEvent[0x2F] = DMA_S6_2;
         }
         if (dmacon & SPREN) { // && sprite 7 enabled
-            dmaEvent[0x31] = DMA_S7;
-            dmaEvent[0x33] = DMA_S7;
+            dmaEvent[0x31] = DMA_S7_1;
+            dmaEvent[0x33] = DMA_S7_2;
         }
         
         // Bitplane DMA
@@ -365,14 +368,22 @@ Agnus::dumpDMAEventTable(int from, int to)
             case DMA_A1:    r3[i] = 'A'; r4[i] = '1'; break;
             case DMA_A2:    r3[i] = 'A'; r4[i] = '2'; break;
             case DMA_A3:    r3[i] = 'A'; r4[i] = '3'; break;
-            case DMA_S0:    r3[i] = 'S'; r4[i] = '0'; break;
-            case DMA_S1:    r3[i] = 'S'; r4[i] = '1'; break;
-            case DMA_S2:    r3[i] = 'S'; r4[i] = '2'; break;
-            case DMA_S3:    r3[i] = 'S'; r4[i] = '3'; break;
-            case DMA_S4:    r3[i] = 'S'; r4[i] = '4'; break;
-            case DMA_S5:    r3[i] = 'S'; r4[i] = '5'; break;
-            case DMA_S6:    r3[i] = 'S'; r4[i] = '6'; break;
-            case DMA_S7:    r3[i] = 'S'; r4[i] = '7'; break;
+            case DMA_S0_1:  r3[i] = 's'; r4[i] = '0'; break;
+            case DMA_S1_1:  r3[i] = 's'; r4[i] = '1'; break;
+            case DMA_S2_1:  r3[i] = 's'; r4[i] = '2'; break;
+            case DMA_S3_1:  r3[i] = 's'; r4[i] = '3'; break;
+            case DMA_S4_1:  r3[i] = 's'; r4[i] = '4'; break;
+            case DMA_S5_1:  r3[i] = 's'; r4[i] = '5'; break;
+            case DMA_S6_1:  r3[i] = 's'; r4[i] = '6'; break;
+            case DMA_S7_1:  r3[i] = 's'; r4[i] = '7'; break;
+            case DMA_S0_2:  r3[i] = 'S'; r4[i] = '0'; break;
+            case DMA_S1_2:  r3[i] = 'S'; r4[i] = '1'; break;
+            case DMA_S2_2:  r3[i] = 'S'; r4[i] = '2'; break;
+            case DMA_S3_2:  r3[i] = 'S'; r4[i] = '3'; break;
+            case DMA_S4_2:  r3[i] = 'S'; r4[i] = '4'; break;
+            case DMA_S5_2:  r3[i] = 'S'; r4[i] = '5'; break;
+            case DMA_S6_2:  r3[i] = 'S'; r4[i] = '6'; break;
+            case DMA_S7_2:  r3[i] = 'S'; r4[i] = '7'; break;
             case DMA_L1:    r3[i] = 'L'; r4[i] = '1'; break;
             case DMA_L2:    r3[i] = 'L'; r4[i] = '2'; break;
             case DMA_L3:    r3[i] = 'L'; r4[i] = '3'; break;
@@ -760,30 +771,86 @@ Agnus::serviceDMAEvent(EventID id)
         case DMA_A3:
             break;
             
-        case DMA_S0:
+        case DMA_S0_1:
+            amiga->denise.serveSprDma1Event(0, amiga->mem.peekChip16(sprpt[0]));
+            INC_DMAPTR(sprpt[0]);
             break;
             
-        case DMA_S1:
+        case DMA_S1_1:
+            amiga->denise.serveSprDma1Event(1, amiga->mem.peekChip16(sprpt[1]));
+            INC_DMAPTR(sprpt[1]);
             break;
             
-        case DMA_S2:
+        case DMA_S2_1:
+            amiga->denise.serveSprDma1Event(2, amiga->mem.peekChip16(sprpt[2]));
+            INC_DMAPTR(sprpt[2]);
             break;
             
-        case DMA_S3:
+        case DMA_S3_1:
+            amiga->denise.serveSprDma1Event(3, amiga->mem.peekChip16(sprpt[3]));
+            INC_DMAPTR(sprpt[3]);
             break;
             
-        case DMA_S4:
+        case DMA_S4_1:
+            amiga->denise.serveSprDma1Event(4, amiga->mem.peekChip16(sprpt[4]));
+            INC_DMAPTR(sprpt[4]);
             break;
             
-        case DMA_S5:
+        case DMA_S5_1:
+            amiga->denise.serveSprDma1Event(5, amiga->mem.peekChip16(sprpt[5]));
+            INC_DMAPTR(sprpt[5]);
             break;
             
-        case DMA_S6:
+        case DMA_S6_1:
+            amiga->denise.serveSprDma1Event(6, amiga->mem.peekChip16(sprpt[6]));
+            INC_DMAPTR(sprpt[6]);
             break;
             
-        case DMA_S7:
+        case DMA_S7_1:
+            amiga->denise.serveSprDma1Event(7, amiga->mem.peekChip16(sprpt[7]));
+            INC_DMAPTR(sprpt[7]);
             break;
             
+        case DMA_S0_2:
+            amiga->denise.serveSprDma2Event(0, amiga->mem.peekChip16(sprpt[0]));
+            INC_DMAPTR(sprpt[0]);
+            break;
+            
+        case DMA_S1_2:
+            amiga->denise.serveSprDma2Event(1, amiga->mem.peekChip16(sprpt[1]));
+            INC_DMAPTR(sprpt[1]);
+            break;
+            
+        case DMA_S2_2:
+            amiga->denise.serveSprDma2Event(2, amiga->mem.peekChip16(sprpt[2]));
+            INC_DMAPTR(sprpt[2]);
+            break;
+            
+        case DMA_S3_2:
+            amiga->denise.serveSprDma2Event(3, amiga->mem.peekChip16(sprpt[3]));
+            INC_DMAPTR(sprpt[3]);
+            break;
+            
+        case DMA_S4_2:
+            amiga->denise.serveSprDma2Event(4, amiga->mem.peekChip16(sprpt[4]));
+            INC_DMAPTR(sprpt[4]);
+            break;
+            
+        case DMA_S5_2:
+            amiga->denise.serveSprDma2Event(5, amiga->mem.peekChip16(sprpt[5]));
+            INC_DMAPTR(sprpt[5]);
+            break;
+            
+        case DMA_S6_2:
+            amiga->denise.serveSprDma2Event(6, amiga->mem.peekChip16(sprpt[6]));
+            INC_DMAPTR(sprpt[6]);
+            break;
+            
+        case DMA_S7_2:
+            amiga->denise.serveSprDma2Event(7, amiga->mem.peekChip16(sprpt[7]));
+            INC_DMAPTR(sprpt[7]);
+            break;
+        
         case DMA_H1:
             if (amiga->debugDMA) debug("H1\n");
         case DMA_L1:

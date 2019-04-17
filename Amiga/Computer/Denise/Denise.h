@@ -230,10 +230,10 @@ class Denise : public HardwareComponent {
     //
     
     // Processes the first DMA event of a sprite
-    void serveFirstSprDmaEvent(int x, uint16_t value);
+    void serveSprDma1Event(int x, uint16_t value);
     
     // Processes the second DMA event of a sprite
-    void serveSecondSprDmaEvent(int x, uint16_t value);
+    void serveSprDma2Event(int x, uint16_t value);
 
     
     
