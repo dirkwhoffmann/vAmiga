@@ -212,6 +212,14 @@ class Inspector : NSWindowController
     @IBOutlet weak var dmaBpl5Enable: NSButton!
     @IBOutlet weak var dmaBpl6Enable: NSButton!
 
+    @IBOutlet weak var sprSelector: NSSegmentedControl!
+    @IBOutlet weak var sprVStart: NSTextField!
+    @IBOutlet weak var sprVStop: NSTextField!
+    @IBOutlet weak var sprHStart: NSTextField!
+    @IBOutlet weak var sprTableView: SpriteTableView!
+    @IBOutlet weak var sprAttach: NSButton!
+
+    
     // Debug panel (Paula)
     @IBOutlet weak var paulaIntena: NSTextField!
     @IBOutlet weak var paulaIntreq: NSTextField!

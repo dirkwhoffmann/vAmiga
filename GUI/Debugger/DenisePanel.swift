@@ -38,4 +38,18 @@ extension Inspector {
         amigaProxy?.denise.setBPLCON0Bit(sender.tag, value: sender.state == .on)
         refresh(everything: false)
     }
+    
+    
+    //
+    // Sprite section
+    //
+    
+    private var selectedCia: Int {
+        get { return sprSelector.indexOfSelectedItem }
+    }
+    
+    @IBAction func selectSpriteAction(_ sender: Any!) {
+        
+        refreshDenise(everything: true)
+    }
 }
