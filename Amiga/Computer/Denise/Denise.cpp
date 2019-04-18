@@ -25,10 +25,6 @@ Denise::Denise()
         
         { &clock,         sizeof(clock),         0 },
         { &hstrt,         sizeof(hstrt),         BYTE_ARRAY },
-        { &vstrt,         sizeof(vstrt),         BYTE_ARRAY },
-        { &vstop,         sizeof(vstop),         BYTE_ARRAY },
-        { &vstrtCmp,      sizeof(vstrtCmp),      BYTE_ARRAY },
-        { &vstopCmp,      sizeof(vstopCmp),      BYTE_ARRAY },
         { &sprShiftReg,   sizeof(sprShiftReg),   WORD_ARRAY },
         { &sprDmaState,   sizeof(sprDmaState),   DWORD_ARRAY },
         { &attach,        sizeof(attach),        0 },
@@ -37,8 +33,6 @@ Denise::Denise()
         { &bplcon1,       sizeof(bplcon1),       0 },
         { &bplcon2,       sizeof(bplcon2),       0 },
         { &bpldat,        sizeof(bpldat),        WORD_ARRAY },
-        { &sprpos,        sizeof(sprpos),        WORD_ARRAY },
-        { &sprctl,        sizeof(sprctl),        WORD_ARRAY },
         { &sprdata,       sizeof(sprdata),       WORD_ARRAY },
         { &sprdatb,       sizeof(sprdatb),       WORD_ARRAY },
 
@@ -232,9 +226,6 @@ Denise::pokeSPRxPOS(int x, uint16_t value)
     // E7 E6 E5 E4 E3 E2 E1 E0 H8 H7 H6 H5 H4 H3 H2 (Ex = VSTART, Hx = HSTART)
 
     hstrt[x] = ((value & 0x00FF) << 2) | (hstrt[x] & 0x0003);
-    vstrt[x] = ((value & 0xFF00) >> 8) | (vstrt[x] & 0x0100);
-    
-    sprpos[x] = value; // DEPRECATED
 }
 
 void
@@ -247,14 +238,7 @@ Denise::pokeSPRxCTL(int x, uint16_t value)
     // L7 L6 L5 L4 L3 L2 L1 L0 AT  -  -  -  - E8 L8 H0 (Lx = VSTOP)
 
     hstrt[x] = ((value & 0b001) << 8) | (hstrt[x] & 0x00FF);
-    vstrt[x] = ((value & 0b100) << 6) | (vstrt[x] & 0x00FF);
-    vstop[x] = ((value & 0b010) << 7) | (value >> 8);
-    
     attach = WRITE_BIT(attach, x, GET_BIT(value, 7));
-    
-    // TODO: AT
-    
-    sprctl[x] = value; // DEPRECATED
 }
 
 void
@@ -275,36 +259,13 @@ Denise::pokeSPRxDATB(int x, uint16_t value)
     sprdatb[x] = value;
 }
 
-bool
-Denise::inFirstSprLine(int x)
-{
-    return amiga->agnus.vpos == vstrt[x] && amiga->agnus.vpos >= 24;
-}
-
-bool
-Denise::beforeFirstSprLine(int x)
-{
-    return amiga->agnus.vpos < vstrt[x];
-}
-
-bool
-Denise::afterFirstSprLine(int x)
-{
-    return amiga->agnus.vpos > vstrt[x];
-}
-
-bool
-Denise::inLastSprLine(int x)
-{
-    return amiga->agnus.vpos == vstrt[x];
-}
-
 void
 Denise::armSprite(int x)
 {
     sprShiftReg[x] = HI_W_LO_W(sprdatb[x], sprdata[x]);
 }
 
+/*
 void
 Denise::serveSprDma1Event(int x)
 {
@@ -389,6 +350,7 @@ Denise::serveSprDma2Event(int x)
             assert(false);
     }
 }
+*/
 
 
 /*

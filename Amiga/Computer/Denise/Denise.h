@@ -51,14 +51,6 @@ class Denise : public HardwareComponent {
     // The 6 bitplane data registers
     uint16_t bpldat[6];
     
-    // Sprite control word 1 (SPRxPOS)
-    // DEPRECATED. USE vstart, vstop, hstart instead
-    uint16_t sprpos[8];
-    
-    // Sprite control word 2 (SPRxCTL)
-    // DEPRECATED. USE vstart, vstop, hstart instead
-    uint16_t sprctl[8];
-
     // Sprite data registers (SPRxDATA, SPRxDATAB)
     uint16_t sprdata[8];
     uint16_t sprdatb[8];
@@ -89,13 +81,7 @@ class Denise : public HardwareComponent {
      * knows nothing about them.
      */
     int16_t hstrt[8];
-    int16_t vstrt[8]; // DEPRECATED
-    int16_t vstop[8]; // DEPRECATED
     
-    // Comparison results for of all 8 sprites.
-    bool vstrtCmp[8];
-    bool vstopCmp[8];
-
     // The serial shift registers of all 8 sprites.
     uint32_t sprShiftReg[8];
     
@@ -219,12 +205,6 @@ class Denise : public HardwareComponent {
     // Handling sprites
     //
     
-    // Compares the current vpos with the vertical sprite parameters
-    bool inFirstSprLine(int x);
-    bool beforeFirstSprLine(int x);
-    bool afterFirstSprLine(int x);
-    bool inLastSprLine(int x);
-
     // Copy data from SPRDATA and SPRDATB into the serial shift registers
     void armSprite(int x);
 
@@ -234,10 +214,10 @@ class Denise : public HardwareComponent {
     //
     
     // Processes the first DMA event of a sprite
-    void serveSprDma1Event(int x);
+    // void serveSprDma1Event(int x);
     
     // Processes the second DMA event of a sprite
-    void serveSprDma2Event(int x);
+    // void serveSprDma2Event(int x);
 
     
     
