@@ -10,17 +10,18 @@
 // This include file contains all type definitions related to Denise.
 // It conforms to standard ANSI-C in order to be compatible with Swift.
 
-#ifndef _DENISE_T_INC
-#define _DENISE_T_INC
+#ifndef _AGNUS_T_INC
+#define _AGNUS_T_INC
 
-typedef struct
+typedef enum
 {
-    uint16_t bplcon0;
-    uint16_t bplcon1;
-    uint16_t bplcon2;
-    uint16_t bpldat[6];
-    uint32_t color[32];
+    SPR_DMA_IDLE,
+    SPR_DMA_DATA, 
+    
+    SPR_FETCH_CONFIG, // DEPRECATED
+    SPR_WAIT_VSTART, // DEPRECATED
+    SPR_FETCH_DATA // DEPRECATED
 }
-DeniseInfo;
+SprDMAState;
 
 #endif

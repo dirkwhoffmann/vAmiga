@@ -84,10 +84,13 @@ class Denise : public HardwareComponent {
     // Sprites
     //
     
-    // Trigger coordinates of all 8 sprites.
+    /* Horizontal trigger positions of all 8 sprites.
+     * Note: The vertical trigger positions are stored inside Agnus. Denise
+     * knows nothing about them.
+     */
     int16_t hstrt[8];
-    int16_t vstrt[8];
-    int16_t vstop[8];
+    int16_t vstrt[8]; // DEPRECATED
+    int16_t vstop[8]; // DEPRECATED
     
     // Comparison results for of all 8 sprites.
     bool vstrtCmp[8];
@@ -97,6 +100,7 @@ class Denise : public HardwareComponent {
     uint32_t sprShiftReg[8];
     
     // The current DMA states aof all 8 sprites.
+    // DEPRECATED. IS HELD BY AGNUS
     SprDMAState sprDmaState[8];
     
     // Attach control bits of all 8 sprites.

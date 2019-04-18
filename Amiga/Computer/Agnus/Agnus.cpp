@@ -9,7 +9,8 @@
 
 #include "Amiga.h"
 
-/* Emulates a Direct Memory Access. DEPRECATED
+// DEPRECATED. USE doDMA instead
+/* Emulates a Direct Memory Access.
  * ptr is a DMA pointer register and dest the destination
  */
 #define DO_DMA(ptr,dest) \
@@ -38,6 +39,9 @@ Agnus::Agnus()
         { &hstop,           sizeof(hstop),           0 },
         { &vstrt,           sizeof(vstrt),           0 },
         { &vstop,           sizeof(vstop),           0 },
+        { &sprvstrt,        sizeof(sprvstrt),        WORD_ARRAY },
+        { &sprvstop,        sizeof(sprvstop),        WORD_ARRAY },
+        { &sprDmaState,     sizeof(sprDmaState),     DWORD_ARRAY },
         { &dmacon,          sizeof(dmacon),          0 },
         { &dskpt,           sizeof(dskpt),           0 },
         { &diwstrt,         sizeof(diwstrt),         0 },
@@ -769,67 +773,67 @@ Agnus::serviceDMAEvent(EventID id)
             break;
             
         case DMA_S0_1:
-            amiga->denise.serveSprDma1Event(0);
+            serviceS1Event(0);
             break;
             
         case DMA_S1_1:
-            amiga->denise.serveSprDma1Event(1);
+            serviceS1Event(1);
             break;
             
         case DMA_S2_1:
-            amiga->denise.serveSprDma1Event(2);
+            serviceS1Event(2);
             break;
             
         case DMA_S3_1:
-            amiga->denise.serveSprDma1Event(3);
+            serviceS1Event(3);
             break;
             
         case DMA_S4_1:
-            amiga->denise.serveSprDma1Event(4);
+            serviceS1Event(4);
             break;
             
         case DMA_S5_1:
-            amiga->denise.serveSprDma1Event(5);
+            serviceS1Event(5);
             break;
             
         case DMA_S6_1:
-            amiga->denise.serveSprDma1Event(6);
+            serviceS1Event(6);
             break;
             
         case DMA_S7_1:
-            amiga->denise.serveSprDma1Event(7);
+            serviceS1Event(7);
             break;
             
         case DMA_S0_2:
-            amiga->denise.serveSprDma2Event(0);
+            serviceS2Event(0);
             break;
             
         case DMA_S1_2:
-            amiga->denise.serveSprDma2Event(1);
+            serviceS2Event(1);
             break;
             
         case DMA_S2_2:
-            amiga->denise.serveSprDma2Event(2);
+            serviceS2Event(2);
             break;
             
         case DMA_S3_2:
-            amiga->denise.serveSprDma2Event(3);
+            serviceS2Event(3);
             break;
             
         case DMA_S4_2:
-            amiga->denise.serveSprDma2Event(4);
+            serviceS2Event(4);
             break;
             
         case DMA_S5_2:
-            amiga->denise.serveSprDma2Event(5);
+            serviceS2Event(5);
             break;
             
         case DMA_S6_2:
-            amiga->denise.serveSprDma2Event(6);
+            serviceS2Event(6);
             break;
             
         case DMA_S7_2:
-            amiga->denise.serveSprDma2Event(7);
+            serviceS2Event(7);
             break;
         
         case DMA_H1:
@@ -893,6 +897,64 @@ Agnus::serviceDMAEvent(EventID id)
         eventHandler.schedulePos(DMA_SLOT, vpos, next, dmaEvent[next]);
     } else {
         eventHandler.cancel(DMA_SLOT);
+    }
+}
+
+void
+Agnus::serviceS1Event(int nr)
+{
+    // Activate sprite data DMA if the first sprite line has been reached
+    if (vpos == sprvstrt[nr]) { sprDmaState[nr] = SPR_DMA_DATA; }
+    
+    // Deactivate sprite data DMA if the last sprite line has been reached
+    if (vpos == sprvstop[nr]) {
+        
+        // Deactivate sprite data DMA
+        sprDmaState[nr] = SPR_DMA_IDLE;
+
+        // Read the next control word (POS part)
+        uint16_t pos = amiga->mem.peekChip16(sprpt[nr]);
+        INC_DMAPTR(sprpt[nr]);
+        
+        // Extract components from POS
+        sprvstrt[nr] = ((pos & 0xFF00) >> 8) | (sprvstrt[nr] & 0x0100);
+        amiga->denise.pokeSPRxPOS(nr, pos);
+    }
+    
+    // Read sprite data if data DMA is activated
+    if (sprDmaState[nr] == SPR_DMA_DATA) {
+        
+        // Read DATA
+        amiga->denise.pokeSPRxDATA(nr, amiga->mem.peekChip16(sprpt[nr]));
+        INC_DMAPTR(sprpt[nr]);
+    }
+}
+
+void
+Agnus::serviceS2Event(int nr)
+{
+    // Deactivate sprite data DMA if the last sprite line has been reached
+    if (vpos == sprvstop[nr]) {
+        
+        // Sprite DMA should already be inactive in the second DMA cycle
+        assert(sprDmaState[nr] == SPR_DMA_IDLE);
+        
+        // Read the next control word (CTL part)
+        uint16_t ctl = amiga->mem.peekChip16(sprpt[nr]);
+        INC_DMAPTR(sprpt[nr]);
+        
+        // Extract components from CTL
+        sprvstrt[nr] = ((ctl & 0b100) << 6) | (sprvstrt[nr] & 0x00FF);
+        sprvstop[nr] = ((ctl & 0b010) << 7) | (ctl >> 8);
+        amiga->denise.pokeSPRxCTL(nr, ctl);
+    }
+    
+    // Read sprite data if data DMA is activated
+    if (sprDmaState[nr] == SPR_DMA_DATA) {
+        
+        // Read DATB
+        amiga->denise.pokeSPRxDATB(nr, amiga->mem.peekChip16(sprpt[nr]));
+        INC_DMAPTR(sprpt[nr]);
     }
 }
 
@@ -1024,7 +1086,19 @@ Agnus::hsyncHandler()
         vsyncHandler();
     }
     
-    // Check if have reached line 26 (where bitplane DMA starts)
+    // Check if we have reached line 25 (sprite DMA starts here)
+    if (vpos == 25) {
+        
+        // Reset vertical sprite trigger coordinates
+        for (unsigned i = 0; i < 8; i++) {
+
+            // Setting the end coordinate to the current line forces the sprite
+            // DMA logic to fetch the control words for each sprite.
+            sprvstop[i] = 25;
+        }
+    }
+    
+    // Check if have reached line 26 (bitplane DMA starts here)
     if (vpos == 26) {
         buildDMAEventTable();
     }

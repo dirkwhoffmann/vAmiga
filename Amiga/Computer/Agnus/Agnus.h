@@ -104,16 +104,26 @@ class Agnus : public HardwareComponent
     // The current horizontal beam position (0 .. HPOS_MAX)
     int16_t hpos;
     
-    /* Display window coordinates
+    /* The display window coordinates.
      * These values are calculated out of diwstrt and diwstop and updated
      * automatically inside pokeDIWSTRT() and pokeDIWSTOP().
      * DEPRECATED (?!)
      */
-    uint16_t hstrt;
-    uint16_t hstop;
-    uint16_t vstrt;
-    uint16_t vstop;
+    int16_t hstrt;
+    int16_t hstop;
+    int16_t vstrt;
+    int16_t vstop;
     
+    /* The vertical trigger positions of all 8 sprites.
+     * Note: The horizontal trigger positions are stored inside Denise. Agnus
+     * knows nothing about them.
+     */
+    int16_t sprvstrt[8];
+    int16_t sprvstop[8];
+
+    // The current DMA states of all 8 sprites.
+    SprDMAState sprDmaState[8];
+
     
     //
     // Registers
@@ -275,6 +285,7 @@ class Agnus : public HardwareComponent
     public:
     
     // Builds the DMA time slot allocation table for the current line.
+    // DEPRECATED
     void buildDMAEventTable();
     
     // Removes all events from the DMA time slot allocation table.
@@ -363,17 +374,21 @@ class Agnus : public HardwareComponent
     
     void executeUntil(Cycle targetClock);
     
-    
+        
     //
     // Handling events
     //
     
     public:
     
-    // Processes a high-priority DMA event (Disk, Audio, Sprites, Bitplanes)
+    // Services a high-priority DMA event (Disk, Audio, Sprites, Bitplanes)
     void serviceDMAEvent(EventID id);
     
-    // Processes a raster event (Pixel drawing, HSYNC)
+    // Sub-handlers for sprite DMA events (called by serviceDMAEvent).
+    void serviceS1Event(int nr);
+    void serviceS2Event(int nr);
+
+    // Services a raster event (Pixel drawing, HSYNC)
     void serviceRASEvent(EventID id);
 
     // Schedules the first RAS slot event

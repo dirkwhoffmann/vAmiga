@@ -11,7 +11,9 @@
 #define _VATYPES_H
 
 #include "EventHandlerTypes.h"
+#include "AgnusTypes.h"
 #include "DeniseTypes.h"
+
 
 // 2 bit binary value
 typedef uint8_t uint2_t;
