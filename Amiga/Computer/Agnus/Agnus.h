@@ -291,6 +291,22 @@ class Agnus : public HardwareComponent
     // Removes all events from the DMA time slot allocation table.
     void clearDMAEventTable();
     
+    // Adds or removes the disk DMA events to the DMA event table.
+    void switchDiskDmaOn();
+    void switchDiskDmaOff();
+
+    // Adds or removes the audio DMA events to the DMA event table.
+    void switchAudioDmaOn(int channel);
+    void switchAudioDmaOff(int channel);
+
+    // Adds or removes the sprite DMA events to the DMA event table.
+    void switchSpriteDmaOn();
+    void switchSpriteDmaOff();
+
+    // Adds or removes the audio DMA events to the DMA event table.
+    void switchBitplaneDmaOn();
+    void switchBitplaneDmaOff();
+    
     // Dumps the DMA time slot allocation table to the console for debugging.
     void dumpDMAEventTable(int from, int to);
     

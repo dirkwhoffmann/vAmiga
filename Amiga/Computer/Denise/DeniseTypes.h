@@ -15,11 +15,25 @@
 
 typedef struct
 {
+    uint16_t pos;
+    uint16_t ctl;
+    uint16_t ptr;
+    int16_t hstrt;
+    int16_t vstrt;
+    int16_t vstop;
+    bool attach;
+}
+SpriteInfo;
+
+typedef struct
+{
     uint16_t bplcon0;
     uint16_t bplcon1;
     uint16_t bplcon2;
     uint16_t bpldat[6];
     uint32_t color[32];
+    
+    SpriteInfo sprite[8];
 }
 DeniseInfo;
 

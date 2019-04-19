@@ -66,7 +66,6 @@ Agnus::_powerOn()
     clock = 0;
     
     // Initialize lookup tables
-    // buildDMAEventTable();
     clearDMAEventTable();
     
     // Schedule the first RAS event
@@ -342,11 +341,167 @@ Agnus::buildDMAEventTable()
 void
 Agnus::clearDMAEventTable()
 {
-    // debug("CLEARING DMA event table\n");
-    
-    // Clear the allocation table
+    // Clear the event table
     memset(dmaEvent, 0, sizeof(dmaEvent));
+    
+    // Clear the jump table
     memset(nextDmaEvent, 0, sizeof(nextDmaEvent));
+}
+
+void
+Agnus::switchDiskDmaOn()
+{
+    dmaEvent[0x07] = DMA_DISK;
+    dmaEvent[0x09] = DMA_DISK;
+    dmaEvent[0x0B] = DMA_DISK;
+}
+
+void
+Agnus::switchDiskDmaOff()
+{
+    dmaEvent[0x07] = EVENT_NONE;
+    dmaEvent[0x09] = EVENT_NONE;
+    dmaEvent[0x0B] = EVENT_NONE;
+}
+
+void
+Agnus::switchAudioDmaOn(int channel)
+{
+    switch (channel) {
+        
+        case 0: dmaEvent[0x0D] = DMA_A0; break;
+        case 1: dmaEvent[0x0F] = DMA_A1; break;
+        case 2: dmaEvent[0x11] = DMA_A2; break;
+        case 3: dmaEvent[0x13] = DMA_A3; break;
+        
+        default: assert(false);
+    }
+}
+
+void
+Agnus::switchAudioDmaOff(int channel)
+{
+    switch (channel) {
+        
+        case 0: dmaEvent[0x0D] = EVENT_NONE; break;
+        case 1: dmaEvent[0x0F] = EVENT_NONE; break;
+        case 2: dmaEvent[0x11] = EVENT_NONE; break;
+        case 3: dmaEvent[0x13] = EVENT_NONE; break;
+        
+        default: assert(false);
+    }
+}
+
+void
+Agnus::switchSpriteDmaOn()
+{
+    dmaEvent[0x15] = DMA_S0_1;
+    dmaEvent[0x17] = DMA_S0_2;
+
+    /* Note: Except for sprite 0, sprite DMA and bitplane DMA may overlap.
+     * Bitplane DMA has priority over sprite DMA.
+     */
+    if (dmaEvent[0x19] == EVENT_NONE) dmaEvent[0x19] = DMA_S1_1;
+    if (dmaEvent[0x1B] == EVENT_NONE) dmaEvent[0x1B] = DMA_S1_2;
+    if (dmaEvent[0x1D] == EVENT_NONE) dmaEvent[0x1D] = DMA_S2_1;
+    if (dmaEvent[0x1F] == EVENT_NONE) dmaEvent[0x1F] = DMA_S2_2;
+    if (dmaEvent[0x21] == EVENT_NONE) dmaEvent[0x21] = DMA_S3_1;
+    if (dmaEvent[0x23] == EVENT_NONE) dmaEvent[0x23] = DMA_S3_2;
+    if (dmaEvent[0x25] == EVENT_NONE) dmaEvent[0x25] = DMA_S4_1;
+    if (dmaEvent[0x27] == EVENT_NONE) dmaEvent[0x27] = DMA_S4_2;
+    if (dmaEvent[0x29] == EVENT_NONE) dmaEvent[0x29] = DMA_S5_1;
+    if (dmaEvent[0x2B] == EVENT_NONE) dmaEvent[0x2B] = DMA_S5_2;
+    if (dmaEvent[0x2D] == EVENT_NONE) dmaEvent[0x2D] = DMA_S6_1;
+    if (dmaEvent[0x2F] == EVENT_NONE) dmaEvent[0x2F] = DMA_S6_2;
+    if (dmaEvent[0x31] == EVENT_NONE) dmaEvent[0x31] = DMA_S7_1;
+    if (dmaEvent[0x33] == EVENT_NONE) dmaEvent[0x33] = DMA_S7_2;
+}
+
+void
+Agnus::switchSpriteDmaOff()
+{
+    dmaEvent[0x15] = EVENT_NONE;
+    dmaEvent[0x17] = EVENT_NONE;
+    
+    /* Note: Except for sprite 0, sprite DMA and bitplane DMA may overlap.
+     * Bitplane DMA has priority over sprite DMA.
+     */
+    if (dmaEvent[0x19] == DMA_S1_1) dmaEvent[0x19] = EVENT_NONE;
+    if (dmaEvent[0x1B] == DMA_S1_2) dmaEvent[0x1B] = EVENT_NONE;
+    if (dmaEvent[0x1D] == DMA_S2_1) dmaEvent[0x1D] = EVENT_NONE;
+    if (dmaEvent[0x1F] == DMA_S2_2) dmaEvent[0x1F] = EVENT_NONE;
+    if (dmaEvent[0x21] == DMA_S3_1) dmaEvent[0x21] = EVENT_NONE;
+    if (dmaEvent[0x23] == DMA_S3_2) dmaEvent[0x23] = EVENT_NONE;
+    if (dmaEvent[0x25] == DMA_S4_1) dmaEvent[0x25] = EVENT_NONE;
+    if (dmaEvent[0x27] == DMA_S4_2) dmaEvent[0x27] = EVENT_NONE;
+    if (dmaEvent[0x29] == DMA_S5_1) dmaEvent[0x29] = EVENT_NONE;
+    if (dmaEvent[0x2B] == DMA_S5_2) dmaEvent[0x2B] = EVENT_NONE;
+    if (dmaEvent[0x2D] == DMA_S6_1) dmaEvent[0x2D] = EVENT_NONE;
+    if (dmaEvent[0x2F] == DMA_S6_2) dmaEvent[0x2F] = EVENT_NONE;
+    if (dmaEvent[0x31] == DMA_S7_1) dmaEvent[0x31] = EVENT_NONE;
+    if (dmaEvent[0x33] == DMA_S7_2) dmaEvent[0x33] = EVENT_NONE;
+}
+
+void
+Agnus::switchBitplaneDmaOn()
+{
+    if (amiga->denise.hires()) {
+        
+        // Determine start and stop cycle
+        uint8_t start = MAX(ddfstrt & 0b11111100, 0x18);
+        uint8_t stop  = MIN(ddfstop & 0b11111100, 0xD8);
+        
+        // Align stop such that (stop - start) is dividable by 8
+        stop += (stop - start) & 0b100;
+        
+        // Determine event IDs
+        EventID h4 = (activeBitplanes >= 4) ? DMA_H4 : (EventID)0;
+        EventID h3 = (activeBitplanes >= 3) ? DMA_H3 : (EventID)0;
+        EventID h2 = (activeBitplanes >= 2) ? DMA_H2 : (EventID)0;
+        EventID h1 = (activeBitplanes >= 1) ? DMA_H1 : (EventID)0;
+        
+        // Schedule events
+        for (unsigned i = start; i <= stop; i += 8) {
+            dmaEvent[i]   = dmaEvent[i+4] = h4;
+            dmaEvent[i+1] = dmaEvent[i+5] = h3;
+            dmaEvent[i+2] = dmaEvent[i+6] = h2;
+            dmaEvent[i+3] = dmaEvent[i+7] = h1;
+        }
+        
+    } else {
+        
+        // Determine start and stop cycle
+        uint8_t start = MAX(ddfstrt & 0b11111000, 0x18);
+        uint8_t stop  = MIN(ddfstop & 0b11111000, 0xD8);
+        
+        // Determine event IDs
+        EventID l6 = (activeBitplanes >= 6) ? DMA_L6 : (EventID)0;
+        EventID l5 = (activeBitplanes >= 5) ? DMA_L5 : (EventID)0;
+        EventID l4 = (activeBitplanes >= 4) ? DMA_L4 : (EventID)0;
+        EventID l3 = (activeBitplanes >= 3) ? DMA_L3 : (EventID)0;
+        EventID l2 = (activeBitplanes >= 2) ? DMA_L2 : (EventID)0;
+        EventID l1 = (activeBitplanes >= 1) ? DMA_L1 : (EventID)0;
+        
+        // Schedule events
+        for (unsigned i = start; i <= stop; i += 8) {
+            dmaEvent[i+1] = l4;
+            dmaEvent[i+2] = l6;
+            dmaEvent[i+3] = l2;
+            dmaEvent[i+5] = l3;
+            dmaEvent[i+6] = l5;
+            dmaEvent[i+7] = l1;
+        }
+    }
+}
+
+void
+Agnus::switchBitplaneDmaOff()
+{
+    // Clear the event table
+    memset(dmaEvent + 0x18, 0, sizeof(dmaEvent) - 0x18);
+    
+    // Restore sprite DMA events that were blocked by bitplane DMA
+    if (dmaEvent[0x15] != EVENT_NONE) { switchSpriteDmaOn(); }
 }
 
 void
@@ -840,7 +995,7 @@ Agnus::serviceDMAEvent(EventID id)
             if (amiga->debugDMA) debug("H1\n");
         case DMA_L1:
             
-            debug(2, "DO_DMA H1/L1 (%d,%d): bpldat[%d] = peekChip16(%X) = %X\n", vpos, hpos, PLANE1, bplpt[PLANE1], amiga->mem.peekChip16(bplpt[PLANE1]));
+            // debug(2, "DO_DMA H1/L1 (%d,%d): bpldat[%d] = peekChip16(%X) = %X\n", vpos, hpos, PLANE1, bplpt[PLANE1], amiga->mem.peekChip16(bplpt[PLANE1]));
                   
             DO_DMA(bplpt[PLANE1], amiga->denise.bpldat[PLANE1]);
             
@@ -972,8 +1127,7 @@ Agnus::serviceRASEvent(EventID id)
             
         case RAS_DIWSTRT:
             
-            debug(2, "RAS_DIWSTRT (hstart = %d hstop = %d vstart = %d vstop = %d\n",
-                  hstrt, hstop, vstrt, vstop);
+            // debug(2, "RAS_DIWSTRT (hstart = %d hstop = %d vstart = %d vstop = %d\n", hstrt, hstop, vstrt, vstop);
             
             amiga->denise.drawLeftBorder();
             

@@ -101,6 +101,7 @@ Denise::_inspect()
     // Prevent external access to variable 'info'
     pthread_mutex_lock(&lock);
     
+    // Biplane information
     info.bplcon0 = bplcon0;
     info.bplcon1 = bplcon1;
     info.bplcon2 = bplcon2;
@@ -111,6 +112,26 @@ Denise::_inspect()
     for (unsigned i = 0; i < 32; i++)
     info.color[i] = colorizer.getRGBA(i);
     
+    // Sprite information
+    
+    for (unsigned i = 0; i < 8; i++) {
+
+        /* The sprite info is extracted from the pos and ctl values that are
+         * recorded by the hsync handler at the beginning of rasterline 26.
+         *
+         * pos:  15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0  (Hx = HSTART)
+         *       E7 E6 E5 E4 E3 E2 E1 E0 H8 H7 H6 H5 H4 H3 H2 H1  (Ex = VSTART)
+         * ctl:  L7 L6 L5 L4 L3 L2 L1 L0 AT  -  -  -  - E8 L8 H0  (Lx = VSTOP)
+         */
+        uint16_t pos = info.sprite[i].pos;
+        uint16_t ctl = info.sprite[i].ctl;
+
+        info.sprite[i].hstrt = ((pos & 0x00FF) >> 0) | ((ctl & 0b001) << 8);
+        info.sprite[i].vstrt = ((pos & 0xFF00) >> 8) | ((ctl & 0b100) << 6);
+        info.sprite[i].vstrt = ((ctl & 0xFF00) >> 8) | ((ctl & 0b010) << 7);
+        info.sprite[i].attach = GET_BIT(ctl, 7);
+    }
+
     pthread_mutex_unlock(&lock);
 }
 
@@ -222,10 +243,15 @@ Denise::pokeSPRxPOS(int x, uint16_t value)
     assert(x < 8);
     debug(2, "pokeSPR%dPOS(%X)\n", x, value);
 
-    // 15 14 13 12 11 10  9  8  7  6  5  4  3  1  0
-    // E7 E6 E5 E4 E3 E2 E1 E0 H8 H7 H6 H5 H4 H3 H2 (Ex = VSTART, Hx = HSTART)
+    // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0  (Ex = VSTART)
+    // E7 E6 E5 E4 E3 E2 E1 E0 H8 H7 H6 H5 H4 H3 H2 H1  (Hx = HSTART)
 
     hstrt[x] = ((value & 0x00FF) << 2) | (hstrt[x] & 0x0003);
+    
+    // Update debugger info
+    if (amiga->agnus.vpos == 25) {
+        info.sprite[x].pos = value;
+    }
 }
 
 void
@@ -235,10 +261,16 @@ Denise::pokeSPRxCTL(int x, uint16_t value)
     debug(2, "pokeSPR%dCTL(%X)\n", x, value);
     
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
-    // L7 L6 L5 L4 L3 L2 L1 L0 AT  -  -  -  - E8 L8 H0 (Lx = VSTOP)
+    // L7 L6 L5 L4 L3 L2 L1 L0 AT  -  -  -  - E8 L8 H0  (Lx = VSTOP)
 
     hstrt[x] = ((value & 0b001) << 8) | (hstrt[x] & 0x00FF);
     attach = WRITE_BIT(attach, x, GET_BIT(value, 7));
+    
+    // Update debugger info
+    if (amiga->agnus.vpos == 25) {
+        info.sprite[x].ctl = value;
+        info.sprite[x].ptr = amiga->agnus.sprpt[x];
+    }
 }
 
 void
