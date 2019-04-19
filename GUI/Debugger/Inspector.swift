@@ -216,6 +216,7 @@ class Inspector : NSWindowController
     @IBOutlet weak var sprVStart: NSTextField!
     @IBOutlet weak var sprVStop: NSTextField!
     @IBOutlet weak var sprHStart: NSTextField!
+    @IBOutlet weak var sprPtr: NSTextField!
     @IBOutlet weak var sprTableView: SpriteTableView!
     @IBOutlet weak var sprAttach: NSButton!
 

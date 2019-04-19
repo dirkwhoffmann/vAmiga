@@ -20,6 +20,13 @@ extension Inspector {
         
         if everything {
             
+            for (c,f) in [ deniseBPLCON0: fmt24,
+                           deniseBPLCON1: fmt24,
+                           deniseBPLCON2: fmt24,
+                           sprPtr: fmt24 ]
+            {
+                assignFormatter(f, c!)
+            }
         }
         
         //
@@ -42,6 +49,7 @@ extension Inspector {
         sprHStart.integerValue = Int(sprInfo.hstrt);
         sprVStart.integerValue = Int(sprInfo.vstrt);
         sprVStop.integerValue = Int(sprInfo.vstop);
+        sprPtr.integerValue = Int(sprInfo.ptr);
         sprAttach.state = sprInfo.attach ? .on : .off;
         sprTableView.refresh(everything: everything)
         

@@ -40,6 +40,20 @@ class SpriteTableView : NSTableView {
 
 extension SpriteTableView : NSTableViewDataSource {
     
+    func colorIndex(tableColumn: NSTableColumn?, row: Int) -> Int? {
+       
+        if let id = tableColumn?.identifier.rawValue, let nr = Int(id) {
+
+            let sprInfo = amiga!.denise.getSpriteInfo(inspector.selectedSprite)
+            let addr = Int(sprInfo.ptr) + 4 * row
+            let data = (amiga!.mem.spypeek16(addr) & (0x8000 >> nr)) != 0
+            let datb = (amiga!.mem.spypeek16(addr + 2) & (0x8000 >> nr)) != 0
+            
+            return (data ? 1 : 0) + (datb ? 2 : 0)
+        }
+        return nil
+    }
+    
     func numberOfRows(in tableView: NSTableView) -> Int {
         
         if let sprInfo = amiga?.denise.getSpriteInfo(inspector.selectedSprite) {
@@ -54,52 +68,74 @@ extension SpriteTableView : NSTableViewDataSource {
     
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
         
-        let sprInfo = amiga!.denise.getSpriteInfo(inspector.selectedSprite)
+        return nil
+    }
+}
+
+extension NSColor {
+    convenience init(rgba : UInt32) {
         
-        let addr = Int(sprInfo.ptr) + 4 * row
+        let r = CGFloat(rgba & 0xFF)
+        let g = CGFloat((rgba >> 8) & 0xFF)
+        let b = CGFloat((rgba >> 16) & 0xFF)
         
-        switch tableColumn?.identifier.rawValue {
-            
-        case "addr":
-            return addr
-            
-        case "data":
-            
-            let data = amiga!.mem.spypeek16(addr)
-            let datb = amiga!.mem.spypeek16(addr + 2)
-            
-            var result = [Character](repeating: " ", count: 16)
-
-            for i in 0...15 {
-
-                var col = (data & (1 << i) == 0) ? 0 : 1;
-                col += (datb & (1 << i) == 0) ? 0 : 2;
-
-                switch (col) {
-                case 0: result[i] = "."
-                case 1: result[i] = "1"
-                case 2: result[i] = "2"
-                case 3: result[i] = "3"
-                default:  result[i] = "?"
-                }
-            }
-            
-            return String(result)
-            
-        default:
-            return "???"
-        }
+        self.init(red: r / 255.0, green: g / 255.0, blue: b / 255.0, alpha: 1.0)
     }
 }
 
 extension SpriteTableView : NSTableViewDelegate {
     
+    func tableView(_ tableView: NSTableView, willDisplayCell cell: Any, for tableColumn: NSTableColumn?, row: Int) {
+        
+        let cell = cell as! NSTextFieldCell
+        let info = amiga!.denise.getInfo()
+        
+         if let index = colorIndex(tableColumn: tableColumn, row: row) {
+            
+            var color = NSColor.white
+            
+            switch (inspector.selectedSprite) {
+                
+            case 0,1:
+                switch (index) {
+                case 1: color = NSColor.init(rgba: info.color.17)
+                case 2: color = NSColor.init(rgba: info.color.18)
+                case 3: color = NSColor.init(rgba: info.color.19)
+                default: break
+                }
+                
+            case 2,3:
+                switch (index) {
+                case 1: color = NSColor.init(rgba: info.color.21)
+                case 2: color = NSColor.init(rgba: info.color.22)
+                case 3: color = NSColor.init(rgba: info.color.23)
+                default: break
+                }
+                
+            case 4,5:
+                switch (index) {
+                case 1: color = NSColor.init(rgba: info.color.25)
+                case 2: color = NSColor.init(rgba: info.color.26)
+                case 3: color = NSColor.init(rgba: info.color.27)
+                default: break
+                }
+                
+            default:
+                switch (index) {
+                case 1: color = NSColor.init(rgba: info.color.29)
+                case 2: color = NSColor.init(rgba: info.color.30)
+                case 3: color = NSColor.init(rgba: info.color.31)
+                default: break
+                }
+            }
+            
+            cell.backgroundColor = color
+        }
+    }
+    
     func tableView(_ tableView: NSTableView, setObjectValue object: Any?, for tableColumn: NSTableColumn?, row: Int) {
         
         switch(tableColumn?.identifier.rawValue) {
-            
-        case "data":
-            track()
             
         default:
             NSSound.beep()
