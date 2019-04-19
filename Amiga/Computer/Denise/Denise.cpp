@@ -300,6 +300,7 @@ Denise::pokeSPRxDATA(int x, uint16_t value)
     debug(2, "pokeSPR%dDATA(%X)\n", x, value);
     
     sprdata[x] = value;
+    armSprite(x);
 }
 
 void
@@ -540,7 +541,37 @@ Denise::endOfLine()
     // debug("endOfLine pixel = %d HPIXELS = %d\n", pixel, HPIXELS);
     
     if (amiga->agnus.vpos >= 26) {
+        
+        // Fill the rest of the current line with the background color
         drawRightBorder();
+        
+        // Draw sprites (EXPERIMENTAL, FOR SPRITE 0 ONLY)
+        for (unsigned s = 0; s < 1; s++) {
+            if (sprShiftReg[s] != 0) {
+                
+                int16_t pixel = 2 * hstrt[s];
+                if (pixel >= HPIXELS - 33) { pixel = HPIXELS - 33; }
+                int *ptr = pixelAddr(pixel);
+                
+                int rgba[4];
+                rgba[1] = colorizer.getRGBA(17);
+                rgba[2] = colorizer.getRGBA(18);
+                rgba[3] = colorizer.getRGBA(19);
+                
+                for (int i = 15; i >= 0; i--) {
+                    
+                    int colNr = (sprShiftReg[s] & (0x10000 << i)) ? 1 : 0;
+                    colNr +=    (sprShiftReg[s] & (0x00001 << i)) ? 2 : 0;
+                    
+                    if (colNr) {
+                        *ptr++ = rgba[colNr];
+                        *ptr++ = rgba[colNr];
+                    } else {
+                        ptr += 2;
+                    }
+                }
+            }
+        }
     }
 }
 

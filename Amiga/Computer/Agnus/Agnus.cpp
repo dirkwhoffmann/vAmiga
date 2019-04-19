@@ -1127,7 +1127,7 @@ Agnus::serviceS1Event(int nr)
     if (sprDmaState[nr] == SPR_DMA_DATA) {
         
         // Read DATA
-        amiga->denise.pokeSPRxDATA(nr, amiga->mem.peekChip16(sprpt[nr]));
+        amiga->denise.pokeSPRxDATB(nr, amiga->mem.peekChip16(sprpt[nr]));
         INC_DMAPTR(sprpt[nr]);
     }
 }
@@ -1155,7 +1155,7 @@ Agnus::serviceS2Event(int nr)
     if (sprDmaState[nr] == SPR_DMA_DATA) {
         
         // Read DATB
-        amiga->denise.pokeSPRxDATB(nr, amiga->mem.peekChip16(sprpt[nr]));
+        amiga->denise.pokeSPRxDATA(nr, amiga->mem.peekChip16(sprpt[nr]));
         INC_DMAPTR(sprpt[nr]);
     }
 }
