@@ -21,6 +21,8 @@ Mouse::_powerOn()
     rightButton = false;
     mouseX = 0;
     mouseY = 0;
+    targetX = 0;
+    targetY = 0;
 }
 
 void
@@ -45,6 +47,21 @@ Mouse::setXY(int64_t x, int64_t y)
     
     targetX = x / dividerX;
     targetY = y / dividerY;
+    
+    // debug("targetX = %lld targetY = %lld\n", targetX, targetY);
+}
+
+void
+Mouse::setLeftButton(bool value)
+{
+    debug("leftButton = %d\n", value);
+    leftButton = value;
+}
+
+void
+Mouse::setRightButton(bool value)
+{
+    rightButton = value;
 }
 
 void

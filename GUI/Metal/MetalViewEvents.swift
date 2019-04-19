@@ -86,7 +86,7 @@ public extension MetalView {
     override func mouseMoved(with event: NSEvent) {
         
         let dx = event.deltaX
-        let dy = -event.deltaY
+        let dy = event.deltaY
         
         controller.mouseXY.x += dx
         controller.mouseXY.y += dy

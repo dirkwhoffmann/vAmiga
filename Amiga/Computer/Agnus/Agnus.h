@@ -136,6 +136,7 @@ class Agnus : public HardwareComponent
     uint32_t dskpt;
     
     // The display window registers
+    // TODO: MOVE TO DENISE
     uint16_t diwstrt;
     uint16_t diwstop;
     

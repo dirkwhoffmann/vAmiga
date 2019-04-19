@@ -60,7 +60,7 @@ ControlPort::joydat()
     uint16_t result = 0;
     
     if (hasMouse) {
-        result = HI_LO(amiga->mouse.mouseX & 0xFF, amiga->mouse.mouseY);
+        result = HI_LO(amiga->mouse.mouseY & 0xFF, amiga->mouse.mouseX & 0xFF);
     }
     
     return result;

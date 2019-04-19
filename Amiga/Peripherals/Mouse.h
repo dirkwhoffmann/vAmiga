@@ -39,8 +39,8 @@ class Mouse : public HardwareComponent {
     int64_t targetY;
     
     // Dividers applied to raw coordinates in setXY()
-    int dividerX = 256;
-    int dividerY = 256;
+    int dividerX = 128;
+    int dividerY = 128;
     
     // Mouse movement in pixels per execution step
     int64_t shiftX = 31;
@@ -76,8 +76,8 @@ class Mouse : public HardwareComponent {
     void setXY(int64_t x, int64_t y);
     
     // Emulates a mouse button event.
-    void setLeftButton(bool value) { leftButton = value; }
-    void setRightButton(bool value) { rightButton = value; }
+    void setLeftButton(bool value);
+    void setRightButton(bool value);
     
     // Performs periodic actions for this device.
     void execute();

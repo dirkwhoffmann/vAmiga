@@ -387,7 +387,7 @@ Amiga::_powerOn()
     m68k_pulse_reset();
     
     // For debugging, we start in debug mode and set a breakpoint
-    debugMode = true;
+    // debugMode = true;
     
     // cpu.bpManager.setBreakpointAt(0xFC570E); // Blitter
     // cpu.bpManager.setBreakpointAt(0xFE8A6E); // All Blitter stuff done
@@ -665,7 +665,7 @@ Amiga::synchronizeTiming()
         // Check if we're completely out of sync ...
         if (now - targetTime > 200000000) {
             
-            warn("The emulator is way too slow (%lld).\n", now - targetTime);
+            // warn("The emulator is way too slow (%lld).\n", now - targetTime);
             restartTimer();
             return;
         }

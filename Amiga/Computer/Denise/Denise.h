@@ -80,7 +80,7 @@ class Denise : public HardwareComponent {
      * Note: The vertical trigger positions are stored inside Agnus. Denise
      * knows nothing about them.
      */
-    int16_t hstrt[8];
+    int16_t sprhstrt[8];
     
     // The serial shift registers of all 8 sprites.
     uint32_t sprShiftReg[8];

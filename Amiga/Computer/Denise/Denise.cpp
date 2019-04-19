@@ -24,7 +24,7 @@ Denise::Denise()
     registerSnapshotItems(vector<SnapshotItem> {
         
         { &clock,         sizeof(clock),         0 },
-        { &hstrt,         sizeof(hstrt),         BYTE_ARRAY },
+        { &sprhstrt,      sizeof(sprhstrt),      WORD_ARRAY },
         { &sprShiftReg,   sizeof(sprShiftReg),   WORD_ARRAY },
         { &sprDmaState,   sizeof(sprDmaState),   DWORD_ARRAY },
         { &attach,        sizeof(attach),        0 },
@@ -260,12 +260,11 @@ Denise::pokeSPRxPOS(int x, uint16_t value)
 
     // Note: Denise only picks up the horizontal coordinate. Only Agnus knows
     // about the vertical coordinate.
-    
-    hstrt[x] = ((value & 0xFF) << 1) | (hstrt[x] & 0x01);
+
+    sprhstrt[x] = ((value & 0xFF) << 1) | (sprhstrt[x] & 0x01);
     
     // Update debugger info
     if (amiga->agnus.vpos == 25) {
-        debug(2, "vpos == 25\n");
         info.sprite[x].pos = value;
     }
 }
@@ -282,12 +281,11 @@ Denise::pokeSPRxCTL(int x, uint16_t value)
     // Note: Denise only picks up the horizontal coordinate. Only Agnus knows
     // about the vertical coordinate.
     
-    hstrt[x] = (hstrt[x] & 0x1F7) | (hstrt[x] & 0x01);
+    sprhstrt[x] = (sprhstrt[x] & 0x1FE) | (value & 0x01);
     WRITE_BIT(attach, x, GET_BIT(value, 7));
     
     // Update debugger info
     if (amiga->agnus.vpos == 25) {
-        debug(2, "vpos == 25\n");
         info.sprite[x].ctl = value;
         info.sprite[x].ptr = amiga->agnus.sprpt[x];
     }
@@ -537,7 +535,7 @@ Denise::drawRightBorder()
 
 void
 Denise::endOfLine()
-{
+{    
     // debug("endOfLine pixel = %d HPIXELS = %d\n", pixel, HPIXELS);
     
     if (amiga->agnus.vpos >= 26) {
@@ -549,7 +547,7 @@ Denise::endOfLine()
         for (unsigned s = 0; s < 1; s++) {
             if (sprShiftReg[s] != 0) {
                 
-                int16_t pixel = 2 * hstrt[s];
+                int16_t pixel = 2 * sprhstrt[s] - (0x35 * 4); //  + amiga->agnus.hstrt;
                 if (pixel >= HPIXELS - 33) { pixel = HPIXELS - 33; }
                 int *ptr = pixelAddr(pixel);
                 

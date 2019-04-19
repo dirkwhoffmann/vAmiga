@@ -353,7 +353,7 @@ Drive::PRBdidChange(uint8_t oldValue, uint8_t newValue)
         
     // Evaluate the side selection bit
     if (head.side != !(newValue & 0b100)) {
-        debug("Switching to side %d\n", !(newValue & 0b100));
+        // debug("Switching to side %d\n", !(newValue & 0b100));
     }
     head.side = !(newValue & 0b100);
         
