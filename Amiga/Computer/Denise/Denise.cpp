@@ -153,6 +153,18 @@ Denise::getInfo()
     return result;
 }
 
+SpriteInfo
+Denise::getSprInfo(int nr)
+{
+    SpriteInfo result;
+    
+    pthread_mutex_lock(&lock);
+    result = info.sprite[nr];
+    pthread_mutex_unlock(&lock);
+    
+    return result;
+}
+
 void
 Denise::didLoadFromBuffer(uint8_t **buffer)
 {

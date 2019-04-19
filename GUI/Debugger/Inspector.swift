@@ -306,6 +306,10 @@ class Inspector : NSWindowController
     @IBOutlet weak var evPrimTableView: EventTableView!
     @IBOutlet weak var evSecTableView: EventTableView!
 
+    var selectedSprite: Int {
+        get { return sprSelector.indexOfSelectedItem }
+    }
+    
     var timer: Timer?
     
     // Factory method

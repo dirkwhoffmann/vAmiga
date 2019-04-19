@@ -161,7 +161,7 @@ class Denise : public HardwareComponent {
     
     // Returns the latest internal state recorded by inspect()
     DeniseInfo getInfo();
-    
+    SpriteInfo getSprInfo(int nr);
     
     //
     // Accessing registers

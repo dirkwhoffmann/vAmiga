@@ -400,6 +400,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->denise->getInfo();
 }
+- (SpriteInfo) getSpriteInfo:(NSInteger)nr
+{
+    return wrapper->denise->getSprInfo(nr);
+}
 - (double) palette
 {
    return wrapper->denise->colorizer.getPalette();

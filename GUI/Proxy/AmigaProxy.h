@@ -319,6 +319,7 @@ struct AmigaFileWrapper;
 
 - (void) dump;
 - (DeniseInfo) getInfo;
+- (SpriteInfo) getSpriteInfo:(NSInteger)nr;
 
 - (double) palette;
 - (void) setPalette:(Palette)p;
