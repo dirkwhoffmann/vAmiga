@@ -391,10 +391,10 @@ Memory::peek8(uint32_t addr)
 uint16_t
 Memory::peek16(uint32_t addr)
 {
-    /*
-    if (amiga->agnus.frame > 15)
+    if (!IS_EVEN(addr)) {
         debug("PC: %X peek16(%X) memSrc = %d\n", amiga->cpu.getPC(), addr, memSrc[(addr & 0xFFFFFF) >> 16]);
-    */
+        amiga->dump();
+    }
     
     assert(IS_EVEN(addr));
     
