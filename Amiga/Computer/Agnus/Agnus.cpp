@@ -217,6 +217,7 @@ Agnus::beamDiff(int16_t vStart, int16_t hStart, int16_t vEnd, int16_t hEnd)
     return DMA_CYCLES(vDiff * 227 + hDiff);
 }
 
+/*
 void
 Agnus::buildDMAEventTable()
 {
@@ -337,6 +338,7 @@ Agnus::buildDMAEventTable()
         if (dmaEvent[i]) next = i;
     }
 }
+*/
 
 void
 Agnus::clearDMAEventTable()
@@ -354,6 +356,7 @@ Agnus::switchDiskDmaOn()
     dmaEvent[0x07] = DMA_DISK;
     dmaEvent[0x09] = DMA_DISK;
     dmaEvent[0x0B] = DMA_DISK;
+    updateJumpTable(0x0B);
 }
 
 void
@@ -362,6 +365,7 @@ Agnus::switchDiskDmaOff()
     dmaEvent[0x07] = EVENT_NONE;
     dmaEvent[0x09] = EVENT_NONE;
     dmaEvent[0x0B] = EVENT_NONE;
+    updateJumpTable(0x0B);
 }
 
 void
@@ -376,6 +380,8 @@ Agnus::switchAudioDmaOn(int channel)
         
         default: assert(false);
     }
+    
+    updateJumpTable(0x13);
 }
 
 void
@@ -390,6 +396,8 @@ Agnus::switchAudioDmaOff(int channel)
         
         default: assert(false);
     }
+    
+    updateJumpTable(0x13);
 }
 
 void
@@ -415,6 +423,8 @@ Agnus::switchSpriteDmaOn()
     if (dmaEvent[0x2F] == EVENT_NONE) dmaEvent[0x2F] = DMA_S6_2;
     if (dmaEvent[0x31] == EVENT_NONE) dmaEvent[0x31] = DMA_S7_1;
     if (dmaEvent[0x33] == EVENT_NONE) dmaEvent[0x33] = DMA_S7_2;
+    
+    updateJumpTable(0x33);
 }
 
 void
@@ -440,6 +450,8 @@ Agnus::switchSpriteDmaOff()
     if (dmaEvent[0x2F] == DMA_S6_2) dmaEvent[0x2F] = EVENT_NONE;
     if (dmaEvent[0x31] == DMA_S7_1) dmaEvent[0x31] = EVENT_NONE;
     if (dmaEvent[0x33] == DMA_S7_2) dmaEvent[0x33] = EVENT_NONE;
+    
+    updateJumpTable(0x33);
 }
 
 void
@@ -455,10 +467,10 @@ Agnus::switchBitplaneDmaOn()
         stop += (stop - start) & 0b100;
         
         // Determine event IDs
-        EventID h4 = (activeBitplanes >= 4) ? DMA_H4 : (EventID)0;
-        EventID h3 = (activeBitplanes >= 3) ? DMA_H3 : (EventID)0;
-        EventID h2 = (activeBitplanes >= 2) ? DMA_H2 : (EventID)0;
-        EventID h1 = (activeBitplanes >= 1) ? DMA_H1 : (EventID)0;
+        EventID h4 = (activeBitplanes >= 4) ? DMA_H4 : EVENT_NONE;
+        EventID h3 = (activeBitplanes >= 3) ? DMA_H3 : EVENT_NONE;
+        EventID h2 = (activeBitplanes >= 2) ? DMA_H2 : EVENT_NONE;
+        EventID h1 = (activeBitplanes >= 1) ? DMA_H1 : EVENT_NONE;
         
         // Schedule events
         for (unsigned i = start; i <= stop; i += 8) {
@@ -475,12 +487,12 @@ Agnus::switchBitplaneDmaOn()
         uint8_t stop  = MIN(ddfstop & 0b11111000, 0xD8);
         
         // Determine event IDs
-        EventID l6 = (activeBitplanes >= 6) ? DMA_L6 : (EventID)0;
-        EventID l5 = (activeBitplanes >= 5) ? DMA_L5 : (EventID)0;
-        EventID l4 = (activeBitplanes >= 4) ? DMA_L4 : (EventID)0;
-        EventID l3 = (activeBitplanes >= 3) ? DMA_L3 : (EventID)0;
-        EventID l2 = (activeBitplanes >= 2) ? DMA_L2 : (EventID)0;
-        EventID l1 = (activeBitplanes >= 1) ? DMA_L1 : (EventID)0;
+        EventID l6 = (activeBitplanes >= 6) ? DMA_L6 : EVENT_NONE;
+        EventID l5 = (activeBitplanes >= 5) ? DMA_L5 : EVENT_NONE;
+        EventID l4 = (activeBitplanes >= 4) ? DMA_L4 : EVENT_NONE;
+        EventID l3 = (activeBitplanes >= 3) ? DMA_L3 : EVENT_NONE;
+        EventID l2 = (activeBitplanes >= 2) ? DMA_L2 : EVENT_NONE;
+        EventID l1 = (activeBitplanes >= 1) ? DMA_L1 : EVENT_NONE;
         
         // Schedule events
         for (unsigned i = start; i <= stop; i += 8) {
@@ -492,6 +504,8 @@ Agnus::switchBitplaneDmaOn()
             dmaEvent[i+7] = l1;
         }
     }
+    
+    updateJumpTable();
 }
 
 void
@@ -502,6 +516,35 @@ Agnus::switchBitplaneDmaOff()
     
     // Restore sprite DMA events that were blocked by bitplane DMA
     if (dmaEvent[0x15] != EVENT_NONE) { switchSpriteDmaOn(); }
+    
+    updateJumpTable();
+}
+
+void
+Agnus::updateBitplaneDma()
+{
+    if ((dmacon & DMAEN) && (dmacon & BPLEN)) {
+        
+        // Remove old event IDs
+        switchBitplaneDmaOff();
+        
+        // Add new event IDs
+        switchBitplaneDmaOn();
+    }
+}
+
+void
+Agnus::updateJumpTable(int16_t to)
+{
+    assert(to < HPOS_MAX);
+    assert(dmaEvent[HPOS_MAX] == 0);
+    
+    // Build the jump table
+    uint8_t next = dmaEvent[to+1];
+    for (int i = to; i >= 0; i--) {
+        nextDmaEvent[i] = next;
+        if (dmaEvent[i]) next = i;
+    }
 }
 
 void
@@ -603,11 +646,13 @@ Agnus::pokeDMACON(uint16_t value)
             
             // Bitplane DMA on
             debug("Bitplane DMA switched on\n");
+            switchBitplaneDmaOn();
 
         } else {
             
             // Bitplane DMA off
             debug("Bitplane DMA switched off\n");
+            switchBitplaneDmaOff();
         }
     }
     
@@ -656,11 +701,13 @@ Agnus::pokeDMACON(uint16_t value)
         if (newSPREN) {
             // Sprite DMA on
             debug("Sprite DMA switched on\n");
+            switchSpriteDmaOn();
             
         } else {
             
             // Sprite DMA off
             debug("Sprite DMA switched off\n");
+            switchSpriteDmaOff();
         }
     }
     
@@ -671,15 +718,15 @@ Agnus::pokeDMACON(uint16_t value)
             
             // Disk DMA on
             debug("Disk DMA switched on\n");
+            switchDiskDmaOn();
             
         } else {
             
             // Disk DMA off
             debug("Disk DMA switched off\n");
+            switchDiskDmaOff();
         }
     }
-    
-    buildDMAEventTable();
 }
 
 void
@@ -1254,7 +1301,11 @@ Agnus::hsyncHandler()
     
     // Check if have reached line 26 (bitplane DMA starts here)
     if (vpos == 26) {
-        buildDMAEventTable();
+        if ((dmacon & DMAEN) && (dmacon & BPLEN)) {
+            switchBitplaneDmaOn();
+            // debug("vpos == 26 ddfstrt = %X ddfstop = %X\n", ddfstrt, ddfstop);
+            // dump();
+        }
     }
     
     // Schedule the first hi-prio DMA event (if any)
@@ -1271,6 +1322,10 @@ Agnus::hsyncHandler()
 void
 Agnus::vsyncHandler()
 {
+    // Switch bitplane and sprite DMA off
+    switchBitplaneDmaOff();
+    switchSpriteDmaOff();
+    
     // Increment frame and reset vpos
     frame++;
     vpos = 0;

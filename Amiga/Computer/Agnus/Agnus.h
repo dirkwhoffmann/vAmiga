@@ -286,7 +286,7 @@ class Agnus : public HardwareComponent
     
     // Builds the DMA time slot allocation table for the current line.
     // DEPRECATED
-    void buildDMAEventTable();
+    // void buildDMAEventTable();
     
     // Removes all events from the DMA time slot allocation table.
     void clearDMAEventTable();
@@ -302,14 +302,19 @@ class Agnus : public HardwareComponent
     // Adds or removes the sprite DMA events to the DMA event table.
     void switchSpriteDmaOn();
     void switchSpriteDmaOff();
-
+    
     // Adds or removes the audio DMA events to the DMA event table.
     void switchBitplaneDmaOn();
     void switchBitplaneDmaOff();
+    void updateBitplaneDma();
+    
+    // Updates the DMA time slot allocation's jump table.
+    void updateJumpTable(int16_t to);
+    void updateJumpTable() { updateJumpTable(HPOS_MAX - 1); }
     
     // Dumps the DMA time slot allocation table to the console for debugging.
     void dumpDMAEventTable(int from, int to);
-    
+ 
     
     //
     // Accessing registers

@@ -195,9 +195,9 @@ Denise::pokeBPLCON0(uint16_t value)
     // Tell Agnus how many bitplanes we have
     amiga->agnus.activeBitplanes = (value >> 12) & 0b111;
 
-    // Update the DMA time slot allocation table
-    amiga->agnus.buildDMAEventTable();
-
+    // Update the DMA time slot allocation table (hires / lores may change)
+    amiga->agnus.updateBitplaneDma();
+    
     // Clear data registers of all inactive bitplanes
     for (int plane = 5; plane >= amiga->agnus.activeBitplanes; plane--) {
         bpldat[plane] = 0;
