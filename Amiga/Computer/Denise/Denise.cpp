@@ -126,9 +126,9 @@ Denise::_inspect()
         uint16_t pos = info.sprite[i].pos;
         uint16_t ctl = info.sprite[i].ctl;
 
-        info.sprite[i].hstrt = ((pos & 0x00FF) >> 0) | ((ctl & 0b001) << 8);
+        info.sprite[i].hstrt = ((pos & 0x00FF) << 1) | (ctl & 0b001);
         info.sprite[i].vstrt = ((pos & 0xFF00) >> 8) | ((ctl & 0b100) << 6);
-        info.sprite[i].vstrt = ((ctl & 0xFF00) >> 8) | ((ctl & 0b010) << 7);
+        info.sprite[i].vstop = ((ctl & 0xFF00) >> 8) | ((ctl & 0b010) << 7);
         info.sprite[i].attach = GET_BIT(ctl, 7);
     }
 
@@ -246,10 +246,14 @@ Denise::pokeSPRxPOS(int x, uint16_t value)
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0  (Ex = VSTART)
     // E7 E6 E5 E4 E3 E2 E1 E0 H8 H7 H6 H5 H4 H3 H2 H1  (Hx = HSTART)
 
-    hstrt[x] = ((value & 0x00FF) << 2) | (hstrt[x] & 0x0003);
+    // Note: Denise only picks up the horizontal coordinate. Only Agnus knows
+    // about the vertical coordinate.
+    
+    hstrt[x] = ((value & 0xFF) << 1) | (hstrt[x] & 0x01);
     
     // Update debugger info
     if (amiga->agnus.vpos == 25) {
+        debug(2, "vpos == 25\n");
         info.sprite[x].pos = value;
     }
 }
@@ -263,11 +267,15 @@ Denise::pokeSPRxCTL(int x, uint16_t value)
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // L7 L6 L5 L4 L3 L2 L1 L0 AT  -  -  -  - E8 L8 H0  (Lx = VSTOP)
 
-    hstrt[x] = ((value & 0b001) << 8) | (hstrt[x] & 0x00FF);
-    attach = WRITE_BIT(attach, x, GET_BIT(value, 7));
+    // Note: Denise only picks up the horizontal coordinate. Only Agnus knows
+    // about the vertical coordinate.
+    
+    hstrt[x] = (hstrt[x] & 0x1F7) | (hstrt[x] & 0x01);
+    WRITE_BIT(attach, x, GET_BIT(value, 7));
     
     // Update debugger info
     if (amiga->agnus.vpos == 25) {
+        debug(2, "vpos == 25\n");
         info.sprite[x].ctl = value;
         info.sprite[x].ptr = amiga->agnus.sprpt[x];
     }

@@ -1118,7 +1118,7 @@ Agnus::serviceS1Event(int nr)
         uint16_t pos = amiga->mem.peekChip16(sprpt[nr]);
         INC_DMAPTR(sprpt[nr]);
         
-        // Extract components from POS
+        // Extract vertical trigger coordinate bits from POS
         sprvstrt[nr] = ((pos & 0xFF00) >> 8) | (sprvstrt[nr] & 0x0100);
         amiga->denise.pokeSPRxPOS(nr, pos);
     }
@@ -1145,7 +1145,7 @@ Agnus::serviceS2Event(int nr)
         uint16_t ctl = amiga->mem.peekChip16(sprpt[nr]);
         INC_DMAPTR(sprpt[nr]);
         
-        // Extract components from CTL
+        // Extract vertical trigger coordinate bits from CTL
         sprvstrt[nr] = ((ctl & 0b100) << 6) | (sprvstrt[nr] & 0x00FF);
         sprvstop[nr] = ((ctl & 0b010) << 7) | (ctl >> 8);
         amiga->denise.pokeSPRxCTL(nr, ctl);
@@ -1197,7 +1197,7 @@ Agnus::serviceRASEvent(EventID id)
             
         case RAS_DIWDRAW:
 
-            debug(2, "RAS_DIWDRAW\n");
+            debug(3, "RAS_DIWDRAW\n");
 
             if (amiga->denise.lores()) {
                 amiga->denise.draw32();
@@ -1289,13 +1289,13 @@ Agnus::hsyncHandler()
     
     // Check if we have reached line 25 (sprite DMA starts here)
     if (vpos == 25) {
-        
-        // Reset vertical sprite trigger coordinates
-        for (unsigned i = 0; i < 8; i++) {
-
-            // Setting the end coordinate to the current line forces the sprite
-            // DMA logic to fetch the control words for each sprite.
-            sprvstop[i] = 25;
+        if ((dmacon & DMAEN) && (dmacon & SPREN)) {
+            
+            // Reset vertical sprite trigger coordinates which forces the sprite
+            // logic to read in the control words for all sprites in this line.
+            for (unsigned i = 0; i < 8; i++) { sprvstop[i] = 25; }
+            
+            switchSpriteDmaOn();
         }
     }
     
