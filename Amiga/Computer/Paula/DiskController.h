@@ -39,6 +39,13 @@ private:
     // The current drive state (off, read, or write)
     DriveState state;
     
+    // Set to true if the currently read disk word matches the sync word.
+    // Only used in EASY_DISK mode at the moment.
+    bool syncFlag;
+    
+    // Taken from Omega (only used in EASY_DISK mode)
+    bool floppySync;
+    
     
     //
     // Data buffers
@@ -209,6 +216,7 @@ public:
 
     // Performs a disk DMA access.
     void doDiskDMA();
+    void doSimpleDiskDMA();
     
     // Returns true if the specified drive is transferring data via DMA.
     // bool doesDMA(int nr);

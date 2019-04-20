@@ -21,4 +21,7 @@
 // Default debug level for all components
 #define DEBUG_LEVEL 1
 
+// Enable to use a simplified disk DMA implementation (disables the FIFO)
+#define EASY_DISK
+
 #endif

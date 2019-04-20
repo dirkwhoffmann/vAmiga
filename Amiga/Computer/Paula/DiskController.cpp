@@ -21,6 +21,8 @@ DiskController::DiskController()
         { &selectedDrive, sizeof(selectedDrive), 0 },
         { &acceleration,  sizeof(acceleration),  0 },
         { &state,         sizeof(state),         0 },
+        { &syncFlag,      sizeof(syncFlag),      0 },
+        { &floppySync,    sizeof(floppySync),    0 },
         { &incoming,      sizeof(incoming),      0 },
         { &incomingCycle, sizeof(incomingCycle), 0 },
         { &fifo,          sizeof(fifo),          0 },
@@ -220,8 +222,12 @@ DiskController::peekDSKBYTR()
     uint16_t result = incoming;
     
     // WORDEQUAL
+#ifdef EASY_DISK
     if (compareFifo(dsksync)) SET_BIT(result, 12);
-    
+#else
+    if (syncFlag) SET_BIT(result, 12);
+#endif
+
     // DMAON
     if (amiga->agnus.dskDMA() && state != DRIVE_DMA_OFF) SET_BIT(result, 14);
     
@@ -339,6 +345,15 @@ DiskController::serveDiskEvent()
     handler->scheduleSecRel(DSK_SLOT, DMA_CYCLES(56), DSK_ROTATE);
 }
 
+#ifdef EASY_DISK
+
+void
+DiskController::readByte()
+{
+}
+
+#else
+
 void
 DiskController::readByte()
 {
@@ -348,7 +363,7 @@ DiskController::readByte()
         Drive *dfsel = df[selectedDrive];
         
         // MOST LIKELY WRONG:
-        if (state == DRIVE_DMA_OFF) return;
+        // if (state == DRIVE_DMA_OFF) return;
         
         // Only proceed if the selected drive provides data.
         if (dfsel->isDataSource()) {
@@ -383,6 +398,8 @@ DiskController::readByte()
     }
 }
 
+#endif
+
 void
 DiskController::doDiskDMA()
 {
@@ -402,7 +419,6 @@ DiskController::doDiskDMA()
         uint32_t remaining = acceleration;
         
         do {
-            
             // Read next word from buffer.
             uint16_t word = readFifo();
             
@@ -428,6 +444,67 @@ DiskController::doDiskDMA()
             }
             
         } while (remaining);
+    }
+}
+
+void
+DiskController::doSimpleDiskDMA()
+{
+    // Only proceed if DSKLEN has the DMA enable bit set.
+    if (!(dsklen & 0x8000)) return;
+    
+    // Only proceed if there are remaining bytes to read.
+    if (!(dsklen & 0x3FFF)) return;
+    
+    // Only proceed if a drive is selected.
+    if (selectedDrive < 0) return;
+    
+    assert(selectedDrive < 4);
+    Drive *dfsel = df[selectedDrive];
+    
+    // Perform DMA
+    for(unsigned i = 0; i < acceleration; i++) {
+        
+        uint8_t byte1 = dfsel->readHead();
+        dfsel->rotate();
+        uint8_t byte2 = dfsel->readHead();
+        dfsel->rotate();
+        
+        uint16_t word = (byte1 << 8) | byte2;
+        
+        if(word == dsksync) {
+            
+            debug(2, "SYNC IRQ\n");
+            amiga->paula.pokeINTREQ(0x9000);
+            syncFlag = true;
+            
+            if (floppySync == 0) {
+                
+                debug("SYNC dsklen: %04x, dskpt: %06x | Track %d | Side %d | Index %d\n",
+                      dsklen & 0x3FFF, amiga->agnus.dskpt,
+                      dfsel->head.cylinder, dfsel->head.side, dfsel->head.offset);
+                floppySync = 1;
+                return;
+            }
+        }
+        
+        if(floppySync == 1) {
+            
+            // Write word into memory.
+            amiga->mem.pokeChip16(amiga->agnus.dskpt, word);
+            amiga->agnus.dskpt = (amiga->agnus.dskpt + 2) & 0x7FFFF;
+            
+            dsklen--;
+            
+            if ((dsklen & 0x3FFF) == 0) {
+                
+                amiga->paula.pokeINTREQ(0x8002);
+                state = DRIVE_DMA_OFF;
+                debug(1, "Disk DMA DONE.\n");
+                floppySync = 0;
+                return;
+            }
+        }
     }
 }
 
