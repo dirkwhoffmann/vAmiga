@@ -45,6 +45,7 @@ void
 DiskController::_powerOn()
 {
     selectedDrive = -1;
+    dsksync = 0x4489;
 }
 
 void
@@ -230,14 +231,15 @@ DiskController::peekDSKBYTR()
         SET_BIT(result, 15);
     }
     
-    debug(2, "peekDSKBYTR() = %X\n", result);
+    debug(1, "peekDSKBYTR() = %X\n", result);
     return result;
 }
 
 void
 DiskController::pokeDSKSYNC(uint16_t value)
 {
-    debug(2, "pokeDSKSYNC(%X)\n", value);
+    assert(false);
+    debug(1, "pokeDSKSYNC(%X)\n", value);
     dsksync = value;
 }
 
@@ -345,6 +347,9 @@ DiskController::readByte()
         
         Drive *dfsel = df[selectedDrive];
         
+        // MOST LIKELY WRONG:
+        if (state == DRIVE_DMA_OFF) return;
+        
         // Only proceed if the selected drive provides data.
         if (dfsel->isDataSource()) {
             
@@ -361,11 +366,12 @@ DiskController::readByte()
             if (compareFifo(dsksync)) {
                 
                 // Trigger a word SYNC interrupt.
+                debug(2, "SYNC IRQ\n");
                 amiga->paula.pokeINTREQ(0x9000);
                 
                 // Enable DMA if the controller was waiting for the SYNC mark.
                 if (state == DRIVE_DMA_SYNC_WAIT) {
-                    debug(2, "DRIVE_DMA_SYNC_WAIT -> DRIVE_DMA_READ\n");
+                    debug(1, "DRIVE_DMA_SYNC_WAIT -> DRIVE_DMA_READ\n");
                     state = DRIVE_DMA_READ;
                     clearFifo();
                 }
@@ -410,7 +416,7 @@ DiskController::doDiskDMA()
             if (!(dsklen & 0x3FFF)) {
                 amiga->paula.pokeINTREQ(0x8002);
                 state = DRIVE_DMA_OFF;
-                debug(2, "Disk DMA DONE.\n");
+                debug(1, "Disk DMA DONE.\n");
                 break;
             }
             

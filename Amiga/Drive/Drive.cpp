@@ -141,6 +141,7 @@ Drive::setMotor(bool value)
     if (!motor && value) {
         
         // Turn motor on
+        debug("[%lld] Motor On", amiga->agnus.frame);
         motor = true;
         
         // Quit identification mode
@@ -154,6 +155,7 @@ Drive::setMotor(bool value)
     else if (motor && !value) {
     
         // Turn motor off
+        debug("[%lld] Motor Off", amiga->agnus.frame);
         motor = false;
         
         // Enter identification mode
@@ -213,11 +215,13 @@ Drive::moveHead(int dir)
         
         // Move drive head outwards (towards the lower tracks)
         if (head.cylinder > 0) head.cylinder--;
+        debug("[%lld] Moving down to cylinder %d\n", amiga->agnus.frame, head.cylinder);
     
     } else {
         
         // Move drive head inwards (towards the upper tracks)
         if (head.cylinder < 79) head.cylinder++;
+        debug("[%lld] Moving up to cylinder %d\n", amiga->agnus.frame, head.cylinder);
     }
     
     /* Inform the GUI

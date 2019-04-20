@@ -28,6 +28,7 @@ Denise::Denise()
         { &sprShiftReg,   sizeof(sprShiftReg),   WORD_ARRAY },
         { &sprDmaState,   sizeof(sprDmaState),   DWORD_ARRAY },
         { &attach,        sizeof(attach),        0 },
+        { &armed,         sizeof(armed),         0 },
 
         { &bplcon0,       sizeof(bplcon0),       0 },
         { &bplcon1,       sizeof(bplcon1),       0 },
@@ -313,7 +314,9 @@ Denise::pokeSPRxDATB(int x, uint16_t value)
 void
 Denise::armSprite(int x)
 {
-    sprShiftReg[x] = HI_W_LO_W(sprdatb[x], sprdata[x]);
+    SET_BIT(armed, x);
+
+    // sprShiftReg[x] = HI_W_LO_W(sprdatb[x], sprdata[x]);
 }
 
 /*
@@ -534,42 +537,54 @@ Denise::drawRightBorder()
 }
 
 void
+Denise::drawSprites()
+{
+    int nr = 0;
+    
+    // EXPERIMENTAL
+    while (armed != 0) {
+        
+        if (armed & 0x1) {
+            
+            int16_t pixel = 2 * sprhstrt[nr] - (0x35 * 4);
+            if (pixel >= HPIXELS - 33) { pixel = HPIXELS - 33; }
+            int *ptr = pixelAddr(pixel);
+            
+            int rgba[4];
+            rgba[1] = colorizer.getRGBA(17);
+            rgba[2] = colorizer.getRGBA(18);
+            rgba[3] = colorizer.getRGBA(19);
+            
+            for (int i = 15; i >= 0; i--) {
+                
+                int colNr = !!GET_BIT(sprdata[nr], i) << 1;
+                colNr |=    !!GET_BIT(sprdatb[nr], i);
+                
+                if (colNr) {
+                    *ptr++ = rgba[colNr];
+                    *ptr++ = rgba[colNr];
+                } else {
+                    ptr += 2;
+                }
+            }
+        }
+        armed >>= 1;
+        nr++;
+    }
+}
+
+void
 Denise::endOfLine()
-{    
+{
     // debug("endOfLine pixel = %d HPIXELS = %d\n", pixel, HPIXELS);
     
     if (amiga->agnus.vpos >= 26) {
         
-        // Fill the rest of the current line with the background color
+        // Fill the rest of the current line with the background color.
         drawRightBorder();
         
-        // Draw sprites (EXPERIMENTAL, FOR SPRITE 0 ONLY)
-        for (unsigned s = 0; s < 1; s++) {
-            if (sprShiftReg[s] != 0) {
-                
-                int16_t pixel = 2 * sprhstrt[s] - (0x35 * 4); //  + amiga->agnus.hstrt;
-                if (pixel >= HPIXELS - 33) { pixel = HPIXELS - 33; }
-                int *ptr = pixelAddr(pixel);
-                
-                int rgba[4];
-                rgba[1] = colorizer.getRGBA(17);
-                rgba[2] = colorizer.getRGBA(18);
-                rgba[3] = colorizer.getRGBA(19);
-                
-                for (int i = 15; i >= 0; i--) {
-                    
-                    int colNr = (sprShiftReg[s] & (0x10000 << i)) ? 1 : 0;
-                    colNr +=    (sprShiftReg[s] & (0x00001 << i)) ? 2 : 0;
-                    
-                    if (colNr) {
-                        *ptr++ = rgba[colNr];
-                        *ptr++ = rgba[colNr];
-                    } else {
-                        ptr += 2;
-                    }
-                }
-            }
-        }
+        // Draw sprites if one or more of them is armed.
+        if (armed) drawSprites();
     }
 }
 
@@ -579,6 +594,7 @@ Denise::endOfFrame()
     // Switch the active frame buffer
     frameBuffer = (frameBuffer == longFrame) ? shortFrame : longFrame;
 }
+
 
 void
 Denise::debugSetActivePlanes(int count)

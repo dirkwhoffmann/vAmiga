@@ -1259,7 +1259,7 @@ void
 CIAA::releaseInterruptLine()
 {
     // debug("Releasing IRQ line\n");
-    amiga->paula.setINTREQ(1 << 3);
+    // amiga->paula.setINTREQ(1 << 3);
 }
 
 //              -------
@@ -1411,7 +1411,7 @@ CIAB::scheduleWakeUp()
 void 
 CIAB::pullDownInterruptLine()
 {
-    // debug("Pulling down IRQ line\n");
+    debug("Pulling down IRQ line\n");
     amiga->paula.setINTREQ(0x8000 | (1 << 13));
 }
 
@@ -1419,7 +1419,7 @@ void
 CIAB::releaseInterruptLine()
 {
     // debug("Releasing IRQ line\n");
-    amiga->paula.setINTREQ(1 << 13);
+    // amiga->paula.setINTREQ(1 << 13);
 }
 
 //                            -------

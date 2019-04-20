@@ -92,6 +92,10 @@ class Denise : public HardwareComponent {
     // Attach control bits of all 8 sprites.
     uint8_t attach;
 
+    /* Indicates which sprites are armed in the current rasterline.
+     * An armed sprite is a sprite that will be drawn in this line.
+     */
+    uint8_t armed;
     
     
     //
@@ -252,7 +256,12 @@ class Denise : public HardwareComponent {
     // Draws the right border.
     void drawRightBorder();
 
-
+    /* Draws the sprite pixels.
+     * This method is called at the end of each rasterline
+     */
+    void drawSprites();
+    
+    
     //
     // Accessing the frame buffers
     //

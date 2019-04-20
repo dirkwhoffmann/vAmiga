@@ -948,6 +948,11 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
             amiga->agnus.pokeDDFSTOP(value); return;
         case 0x096 >> 1: // DMACON
             amiga->agnus.pokeDMACON(value); return;
+        
+        case 0x098 >> 1:  // CLXCON
+        warn("pokeCustom16(CLXCON, %X): MISSING IMPLEMENTATION\n", value);
+        return;
+        
         case 0x09A >> 1: // INTENA
             amiga->paula.pokeINTENA(value); return;
         case 0x09C >> 1: // INTREQ
@@ -1235,9 +1240,10 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
             amiga->denise.colorizer.pokeColorReg(31, value); return;
     }
     
-    warn("pokeCustom16(%X [%s], %X): MISSING IMPLEMENTATION\n",
-         addr, customReg[(addr >> 1) & 0xFF], value);
-    amiga->pause();
+    if (addr <= 0x1E) {
+        warn("pokeCustom16(%s,%X): Trying to write into a read-only register.\n",
+             customReg[(addr >> 1) & 0xFF], value);
+    }
 }
 
 void
