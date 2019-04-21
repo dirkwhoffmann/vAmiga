@@ -144,7 +144,11 @@ extension PreferencesController {
             amigaProxy?.configureDrive(0, type:      Defaults.a500.df0Type.rawValue)
             amigaProxy?.configureDrive(1, connected: Defaults.a500.df1Connect)
             amigaProxy?.configureDrive(1, type:      Defaults.a500.df1Type.rawValue)
-            
+            amigaProxy?.configureDrive(2, connected: Defaults.a500.df2Connect)
+            amigaProxy?.configureDrive(2, type:      Defaults.a500.df2Type.rawValue)
+            amigaProxy?.configureDrive(3, connected: Defaults.a500.df3Connect)
+            amigaProxy?.configureDrive(3, type:      Defaults.a500.df3Type.rawValue)
+
         case A1000.rawValue:
             
             amigaProxy?.configureModel(Defaults.a1000.amigaModel.rawValue)
@@ -159,7 +163,11 @@ extension PreferencesController {
             amigaProxy?.configureDrive(0, type:      Defaults.a1000.df0Type.rawValue)
             amigaProxy?.configureDrive(1, connected: Defaults.a1000.df1Connect)
             amigaProxy?.configureDrive(1, type:      Defaults.a1000.df1Type.rawValue)
-            
+            amigaProxy?.configureDrive(2, connected: Defaults.a1000.df2Connect)
+            amigaProxy?.configureDrive(2, type:      Defaults.a1000.df2Type.rawValue)
+            amigaProxy?.configureDrive(3, connected: Defaults.a1000.df3Connect)
+            amigaProxy?.configureDrive(3, type:      Defaults.a1000.df3Type.rawValue)
+
         case A2000.rawValue:
             
             amigaProxy?.configureModel(Defaults.a2000.amigaModel.rawValue)
@@ -174,7 +182,11 @@ extension PreferencesController {
             amigaProxy?.configureDrive(0, type:      Defaults.a2000.df0Type.rawValue)
             amigaProxy?.configureDrive(1, connected: Defaults.a2000.df1Connect)
             amigaProxy?.configureDrive(1, type:      Defaults.a2000.df1Type.rawValue)
-            
+            amigaProxy?.configureDrive(2, connected: Defaults.a2000.df2Connect)
+            amigaProxy?.configureDrive(2, type:      Defaults.a2000.df2Type.rawValue)
+            amigaProxy?.configureDrive(3, connected: Defaults.a2000.df3Connect)
+            amigaProxy?.configureDrive(3, type:      Defaults.a2000.df3Type.rawValue)
+
         default:
             track("Cannot restore factory defaults (unknown Amiga model).")
         }

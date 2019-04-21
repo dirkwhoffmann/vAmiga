@@ -61,6 +61,7 @@ Denise::_powerOn()
 {
     clock = 0;
     frameBuffer = longFrame;
+    pixel = 0;
     
     // Initialize frame buffers with a recognizable debug pattern
     for (unsigned line = 0; line < VPIXELS; line++) {

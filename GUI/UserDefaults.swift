@@ -720,7 +720,11 @@ extension Keys {
     static let df0Type        = "VADF0TypeKey"
     static let df1Connect     = "VADF1ConnectKey"
     static let df1Type        = "VADF1TypeKey"
-    
+    static let df2Connect     = "VADF2ConnectKey"
+    static let df2Type        = "VADF2TypeKey"
+    static let df3Connect     = "VADF3ConnectKey"
+    static let df3Type        = "VADF3TypeKey"
+
     // Extensions
     static let realTimeClock  = "VARealTimeClockKey"
 }
@@ -740,6 +744,10 @@ extension Defaults {
         static let df0Type        = A1010_ORIG
         static let df1Connect     = false
         static let df1Type        = A1010_ORIG
+        static let df2Connect     = false
+        static let df2Type        = A1010_ORIG
+        static let df3Connect     = false
+        static let df3Type        = A1010_ORIG
 
         static let realTimeClock  = false
     }
@@ -757,6 +765,10 @@ extension Defaults {
         static let df0Type        = A1010_ORIG
         static let df1Connect     = false
         static let df1Type        = A1010_ORIG
+        static let df2Connect     = false
+        static let df2Type        = A1010_ORIG
+        static let df3Connect     = false
+        static let df3Type        = A1010_ORIG
 
         static let realTimeClock  = false
     }
@@ -774,6 +786,10 @@ extension Defaults {
         static let df0Type        = A1010_ORIG
         static let df1Connect     = true
         static let df1Type        = A1010_ORIG
+        static let df2Connect     = false
+        static let df2Type        = A1010_ORIG
+        static let df3Connect     = false
+        static let df3Type        = A1010_ORIG
 
         static let realTimeClock  = true
     }
@@ -798,6 +814,10 @@ extension MyController {
             Keys.df0Type: defaultModel.df0Type.rawValue,
             Keys.df1Connect: defaultModel.df1Connect,
             Keys.df1Type: defaultModel.df1Type.rawValue,
+            Keys.df2Connect: defaultModel.df2Connect,
+            Keys.df2Type: defaultModel.df2Type.rawValue,
+            Keys.df3Connect: defaultModel.df3Connect,
+            Keys.df3Type: defaultModel.df3Type.rawValue,
 
             Keys.realTimeClock: defaultModel.realTimeClock,
         ]
@@ -821,6 +841,10 @@ extension MyController {
                     Keys.df0Type,
                     Keys.df1Connect,
                     Keys.df1Type,
+                    Keys.df2Connect,
+                    Keys.df2Type,
+                    Keys.df3Connect,
+                    Keys.df3Type,
 
                     Keys.realTimeClock,
             ]
@@ -848,6 +872,10 @@ extension MyController {
         amiga.configureDrive(0, type: defaults.integer(forKey: Keys.df0Type))
         amiga.configureDrive(1, connected: defaults.bool(forKey: Keys.df1Connect))
         amiga.configureDrive(1, type: defaults.integer(forKey: Keys.df1Type))
+        amiga.configureDrive(2, connected: defaults.bool(forKey: Keys.df2Connect))
+        amiga.configureDrive(2, type: defaults.integer(forKey: Keys.df2Type))
+        amiga.configureDrive(3, connected: defaults.bool(forKey: Keys.df3Connect))
+        amiga.configureDrive(3, type: defaults.integer(forKey: Keys.df3Type))
 
         amiga.configureRealTimeClock(defaults.bool(forKey: Keys.realTimeClock))
 
@@ -871,6 +899,10 @@ extension MyController {
         defaults.set(config.df0.type.rawValue, forKey: Keys.df0Type)
         defaults.set(config.df1.connected, forKey: Keys.df1Connect)
         defaults.set(config.df1.type.rawValue, forKey: Keys.df1Type)
+        defaults.set(config.df2.connected, forKey: Keys.df2Connect)
+        defaults.set(config.df2.type.rawValue, forKey: Keys.df2Type)
+        defaults.set(config.df3.connected, forKey: Keys.df3Connect)
+        defaults.set(config.df3.type.rawValue, forKey: Keys.df3Type)
 
         defaults.set(config.realTimeClock, forKey: Keys.realTimeClock)
     }

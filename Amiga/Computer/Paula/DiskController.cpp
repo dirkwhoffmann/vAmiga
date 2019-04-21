@@ -450,6 +450,8 @@ DiskController::doDiskDMA()
 void
 DiskController::doSimpleDiskDMA()
 {
+    static uint16_t checksum = 0;
+    
     // Only proceed if DSKLEN has the DMA enable bit set.
     if (!(dsklen & 0x8000)) return;
     
@@ -474,15 +476,18 @@ DiskController::doSimpleDiskDMA()
         
         if(word == dsksync) {
             
-            debug(2, "SYNC IRQ\n");
+            // debug(2, "SYNC IRQ\n");
             amiga->paula.pokeINTREQ(0x9000);
             syncFlag = true;
             
             if (floppySync == 0) {
                 
+                // plainmsg("SYNC\n");
+                /*
                 debug("SYNC dsklen: %04x, dskpt: %06x | Track %d | Side %d | Index %d\n",
                       dsklen & 0x3FFF, amiga->agnus.dskpt,
                       dfsel->head.cylinder, dfsel->head.side, dfsel->head.offset);
+                */
                 floppySync = 1;
                 return;
             }
@@ -493,6 +498,7 @@ DiskController::doSimpleDiskDMA()
             // Write word into memory.
             amiga->mem.pokeChip16(amiga->agnus.dskpt, word);
             amiga->agnus.dskpt = (amiga->agnus.dskpt + 2) & 0x7FFFF;
+            checksum ^= word;
             
             dsklen--;
             
@@ -500,7 +506,7 @@ DiskController::doSimpleDiskDMA()
                 
                 amiga->paula.pokeINTREQ(0x8002);
                 state = DRIVE_DMA_OFF;
-                debug(1, "Disk DMA DONE.\n");
+                plainmsg("DISK IRQ: CHECKSUM: %X\n", checksum);
                 floppySync = 0;
                 return;
             }

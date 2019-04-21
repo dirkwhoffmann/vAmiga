@@ -35,34 +35,37 @@ extern "C" unsigned int m68k_read_memory_32(unsigned int addr)
     return activeAmiga->mem.peek32(addr);
 }
 
-extern "C" unsigned int m68k_read_disassembler_16 (unsigned int address)
+extern "C" unsigned int m68k_read_disassembler_16 (unsigned int addr)
 {
     assert(activeAmiga != NULL);
-    return activeAmiga->mem.spypeek16(address);
+    return activeAmiga->mem.spypeek16(addr);
 }
 
-extern "C" unsigned int m68k_read_disassembler_32 (unsigned int address)
+extern "C" unsigned int m68k_read_disassembler_32 (unsigned int addr)
 {
     assert(activeAmiga != NULL);
-    return activeAmiga->mem.spypeek32(address);
+    return activeAmiga->mem.spypeek32(addr);
 }
 
-extern "C" void m68k_write_memory_8(unsigned int address, unsigned int value)
+extern "C" void m68k_write_memory_8(unsigned int addr, unsigned int value)
 {
     assert(activeAmiga != NULL);
-    activeAmiga->mem.poke8(address, value);
+    // if (addr == 0x697E) printf("CPU::poke8(%d), %d\n", addr, value);
+    activeAmiga->mem.poke8(addr, value);
 }
 
-extern "C" void m68k_write_memory_16(unsigned int address, unsigned int value)
+extern "C" void m68k_write_memory_16(unsigned int addr, unsigned int value)
 {
     assert(activeAmiga != NULL);
-    activeAmiga->mem.poke16(address, value);
+    // if (addr == 0x697E) printf("CPU::poke16(%d), %d\n", addr, value);
+    activeAmiga->mem.poke16(addr, value);
 }
 
-extern "C" void m68k_write_memory_32(unsigned int address, unsigned int value)
+extern "C" void m68k_write_memory_32(unsigned int addr, unsigned int value)
 {
     assert(activeAmiga != NULL);
-    activeAmiga->mem.poke32(address, value);
+    // if (addr == 0x697C || addr == 0x697E) printf("CPU::poke32(%X), %X\n", addr, value);
+    activeAmiga->mem.poke32(addr, value);
 }
 
 //

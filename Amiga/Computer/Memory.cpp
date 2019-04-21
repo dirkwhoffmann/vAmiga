@@ -560,7 +560,7 @@ uint16_t
 Memory::peekCIA16(uint32_t addr)
 {
     debug("peekCIA16(%6X)\n", addr);
-    assert(false);
+    // assert(false);
     
     uint32_t reg = (addr >> 8)  & 0b1111;
     uint32_t sel = (addr >> 12) & 0b11;

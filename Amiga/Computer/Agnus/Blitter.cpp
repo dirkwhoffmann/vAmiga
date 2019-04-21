@@ -191,7 +191,7 @@ void
 Blitter::pokeBLTAPTL(uint16_t value)
 {
     debug(2, "pokeBLTAPTL(%X)\n", value);
-    bltapt = REPLACE_LO_WORD(bltapt, value & 0xFFFE);
+    bltapt = REPLACE_LO_WORD(bltapt, value & 0xFFFF);
 }
 
 void
@@ -205,7 +205,7 @@ void
 Blitter::pokeBLTBPTL(uint16_t value)
 {
     debug(2, "pokeBLTBPTL(%X)\n", value);
-    bltbpt = REPLACE_LO_WORD(bltbpt, value & 0xFFFE);
+    bltbpt = REPLACE_LO_WORD(bltbpt, value & 0xFFFF);
 }
 
 void
@@ -219,7 +219,7 @@ void
 Blitter::pokeBLTCPTL(uint16_t value)
 {
     debug(2, "pokeBLTCPTL(%X)\n", value);
-    bltcpt = REPLACE_LO_WORD(bltcpt, value & 0xFFFE);
+    bltcpt = REPLACE_LO_WORD(bltcpt, value & 0xFFFF);
 }
 
 void
@@ -233,7 +233,7 @@ void
 Blitter::pokeBLTDPTL(uint16_t value)
 {
     debug(2, "pokeBLTDPTL(%X)\n", value);
-    bltdpt = REPLACE_LO_WORD(bltdpt, value & 0xFFFE);
+    bltdpt = REPLACE_LO_WORD(bltdpt, value & 0xFFFF);
 }
 
 void

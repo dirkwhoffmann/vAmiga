@@ -104,6 +104,10 @@ class Blitter : public HardwareComponent {
     // The program counter indexing the microInstr array
     uint16_t bltpc = 0;
     
+    // Debugging stuff (REMOVE ASAP)
+    int copycount = 0;
+    int linecount = 0;
+
     
     //
     // Constructing and destructing
