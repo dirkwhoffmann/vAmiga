@@ -30,28 +30,20 @@ Blitter::doFastBlit()
 void
 Blitter::doFastCopyBlit()
 {
-    uint64_t check1 = fnv_1a_init();
-    uint64_t check2 = fnv_1a_init();
+    uint32_t check1 = fnv_1a_init32();
+    uint32_t check2 = fnv_1a_init32();
     
     copycount++;
 
-    bltdebug = false; // (copycount == 1189);
-    /*
-    if (copycount == 958 || copycount == 959) {
-        for (unsigned i = 0; i < 256; i+=16) {
-            for (unsigned j = 0; j < 8; j+=2) {
-                printf("%4X ", amiga->mem.peek16(0xC04A82+i+j));
-            }
-            printf("\n");
-        }
-    }
-    */
-    
-    
+    bltdebug = (copycount == 3);
+
     /*
     plainmsg("%d COPY BLIT (%d,%d) (%s)\n",
         bltcount++, bltsizeH(), bltsizeW(), bltDESC() ? "descending" : "ascending");
     */
+    
+    uint16_t xmax = bltsizeW();
+    uint16_t ymax = bltsizeH();
     
     bool useA = bltUSEA();
     bool useB = bltUSEB();
@@ -64,6 +56,10 @@ Blitter::doFastCopyBlit()
     int32_t bmod = bltbmod;
     int32_t cmod = bltcmod;
     int32_t dmod = bltdmod;
+    
+    printf("BLITTER Blit %d (%d,%d) (%d%d%d%d) %X %X %X %X %s\n",
+    copycount, bltsizeW(), bltsizeH(), useA, useB, useC, useD,
+    bltapt, bltbpt, bltcpt, bltdpt, "");
     
     // Reverse direction is descending mode
     if (bltDESC()) {
@@ -78,40 +74,46 @@ Blitter::doFastCopyBlit()
                            copycount, bltapt, bltamod, bltbpt, bltbmod, bltcpt, bltcmod, bltdpt, bltdmod,
                            bltsizeW(), bltsizeH());
 
-    for (yCounter = bltsizeH(); yCounter >= 1; yCounter--) {
     
-        for (xCounter = bltsizeW(); xCounter >= 1;  xCounter--) {
+    
+
+    for (unsigned y = 0; y < ymax; y++) {
+    
+        // Prepare first and last word masks for data path A
+        uint16_t fwMask = bltafwm;
+        uint16_t lwMask = 0xFFFF;
+        
+        for (unsigned x = 0; x < xmax; x++) {
             
-            debug(2, "(%d,%d)\n", yCounter, xCounter);
-            
-            // Fetch A, B, and C
+            // Set last word mask if this is the last iteration
+            if (x == xmax - 1) lwMask = bltalwm;
+                
+            // Fetch A
             if (useA) {
-                anew = amiga->mem.peek16(bltapt & ~1);
+                anew = amiga->mem.peek16(bltapt);
                 if (bltdebug) plainmsg("    A = peek(%X) = %X\n", bltapt, anew);
-                INC_OCS_PTR(bltapt, incr + (isLastWord() ? amod : 0));
+                INC_OCS_PTR(bltapt, incr);
             }
+            
+            // Fetch B
             if (useB) {
-                bnew = amiga->mem.peek16(bltbpt & ~1);
+                bnew = amiga->mem.peek16(bltbpt);
                 if (bltdebug) plainmsg("    B = peek(%X) = %X\n", bltbpt, bnew);
-                INC_OCS_PTR(bltbpt, incr + (isLastWord() ? bmod : 0));
+                INC_OCS_PTR(bltbpt, incr);
             }
+            
+            // Fetch C
             if (useC) {
-                chold = amiga->mem.peek16(bltcpt & ~1);
+                chold = amiga->mem.peek16(bltcpt);
                 if (bltdebug) plainmsg("    C = peek(%X) = %X\n", bltcpt, chold);
-                INC_OCS_PTR(bltcpt, incr + (isLastWord() ? cmod : 0));
+                INC_OCS_PTR(bltcpt, incr);
             }
-            
-            // Compute AND mask for data path A
-            uint16_t mask = 0xFFFF;
-            if (isFirstWord()) mask &= bltafwm;
-            if (isLastWord()) mask &= bltalwm;
-            if (bltdebug) plainmsg("    first = %d last = %d mask = %X\n", isFirstWord(), isLastWord(), mask);
-            
-            // Run the two barrel shifters
+                        
+            // Run the barrel shifters (INLINE THIS AND SPEED OPTIMIZE THE MASK STUFF)
             if (bltdebug) plainmsg("    ash = %d bsh = %d\n", bltASH(), bltBSH());
             doBarrelShifterA();
             doBarrelShifterB();
-            aold = anew & mask;
+            aold = anew & fwMask & lwMask;
             bold = bnew;
 
             // Run the minterm generator
@@ -123,15 +125,26 @@ Blitter::doFastCopyBlit()
         
             // Write D
             if (useD) {
-                amiga->mem.pokeChip16(bltdpt & ~1, dhold);
-                if (bltdebug) plainmsg("    D: poke(%X), %X\n", bltdpt & ~1, dhold);
-                check1 = fnv_1a_it(check1, dhold);
-                check2 = fnv_1a_it(check2, bltdpt & ~1);
-                INC_OCS_PTR(bltdpt, incr + (isLastWord() ? dmod : 0));
+                amiga->mem.pokeChip16(bltdpt, dhold);
+                if (bltdebug) plainmsg("    D: poke(%X), %X\n", bltdpt, dhold);
+                check1 = fnv_1a_it32(check1, dhold);
+                check2 = fnv_1a_it32(check2, bltdpt);
+                // plainmsg("    check1 = %X check2 = %X\n", check1, check2);
+                INC_OCS_PTR(bltdpt, incr);
             }
+            
+            // Clear first word mask
+            fwMask = 0xFFFF;
         }
+        
+        // Add modulo values
+        if (useA) INC_OCS_PTR(bltapt, amod);
+        if (useB) INC_OCS_PTR(bltbpt, bmod);
+        if (useC) INC_OCS_PTR(bltcpt, cmod);
+        if (useD) INC_OCS_PTR(bltdpt, dmod);
     }
-    printf("Blitter %d: (%d,%d) (%d%d%d%d) %llX %llX\n", copycount, bltsizeW(), bltsizeH(), useA, useB, useC, useD, check1, check2);
+    
+    printf("BLITTER check1: %x check2: %x\n", check1, check2);
 }
 
 uint16_t logicFunction(int minterm,uint16_t wordA, uint16_t wordB, uint16_t wordC) {
@@ -189,7 +202,7 @@ Blitter::doFastLineBlit()
     int16_t bltcmod = (int16_t)this->bltcmod;
     // int16_t bltdmod = (int16_t)this->bltdmod;
 
-    uint64_t check = fnv_1a_init();
+    uint32_t check = fnv_1a_init32();
     linecount++;
 
     bltdebug = false;
@@ -242,8 +255,8 @@ Blitter::doFastLineBlit()
                 // debug("0: pixel = %d\n", pixel);
                 amiga->mem.pokeChip16(addr, pixel);
                 // debug("0: poke(%d), %d\n", addr, pixel);
-                check = fnv_1a_it(check, addr);
-                check = fnv_1a_it(check, pixel);
+                check = fnv_1a_it32(check, addr);
+                check = fnv_1a_it32(check, pixel);
 
                 if(D>0){
                     D = D + inc1;
@@ -267,8 +280,8 @@ Blitter::doFastLineBlit()
                 pixel = logicFunction(minterm,0x8000 >> (offset&15),pattern,pixel);
                 // debug("1: poke(%d), %d\n", addr, pixel);
                 amiga->mem.pokeChip16(addr, pixel);
-                check = fnv_1a_it(check, addr);
-                check = fnv_1a_it(check, pixel);
+                check = fnv_1a_it32(check, addr);
+                check = fnv_1a_it32(check, pixel);
                 
                 if(D>0){
                     D = D + inc1;
@@ -296,8 +309,8 @@ Blitter::doFastLineBlit()
                 pixel = logicFunction(minterm,0x0001 << (offset&15),pattern,pixel);
                 if (bltdebug) printf("2: poke(%d), %d\n", addr, pixel);
                 amiga->mem.pokeChip16(addr, pixel);
-                check = fnv_1a_it(check, addr);
-                check = fnv_1a_it(check, pixel);
+                check = fnv_1a_it32(check, addr);
+                check = fnv_1a_it32(check, pixel);
                 
                 if(D>0){
                     D = D + inc1;
@@ -322,8 +335,8 @@ Blitter::doFastLineBlit()
                 pixel = logicFunction(minterm,0x8000 >> (offset&15),pattern,pixel);
                 // debug("3: poke(%d), %d\n", addr, pixel);
                 amiga->mem.pokeChip16(addr, pixel);
-                check = fnv_1a_it(check, addr);
-                check = fnv_1a_it(check, pixel);
+                check = fnv_1a_it32(check, addr);
+                check = fnv_1a_it32(check, pixel);
                 
                 if(D>0){
                     D = D + inc1;
@@ -347,8 +360,8 @@ Blitter::doFastLineBlit()
                 pixel = logicFunction(minterm,0x8000 >> (offset&15),pattern,pixel);
                 // debug("4: poke(%d), %d\n", addr, pixel);
                 amiga->mem.pokeChip16(addr, pixel);
-                check = fnv_1a_it(check, addr);
-                check = fnv_1a_it(check, pixel);
+                check = fnv_1a_it32(check, addr);
+                check = fnv_1a_it32(check, pixel);
                 
                 if(D>0){
                     D = D + inc1;
@@ -377,8 +390,8 @@ Blitter::doFastLineBlit()
                 pixel = logicFunction(minterm,0x0001 << (offset&15),pattern,pixel);
                 // debug("5: poke(%X), %X\n", addr, pixel);
                 amiga->mem.pokeChip16(addr, pixel);
-                check = fnv_1a_it(check, addr);
-                check = fnv_1a_it(check, pixel);
+                check = fnv_1a_it32(check, addr);
+                check = fnv_1a_it32(check, pixel);
                 
                 if(D>0){
                     D = D + inc1;
@@ -404,8 +417,8 @@ Blitter::doFastLineBlit()
                 // debug("6: poke(%d), %d\n", addr, pixel);
                 if (bltdebug) printf("    pixel = %X\n",pixel);
                 amiga->mem.pokeChip16(addr, pixel);
-                check = fnv_1a_it(check, addr);
-                check = fnv_1a_it(check, pixel);
+                check = fnv_1a_it32(check, addr);
+                check = fnv_1a_it32(check, pixel);
                 
                 if(D>0){
                     D = D + inc1;
@@ -431,8 +444,8 @@ Blitter::doFastLineBlit()
                 pixel = logicFunction(minterm,0x0001 << (offset&15),pattern,pixel);
                 // debug("7: poke(%d), %d\n", addr, pixel);
                 amiga->mem.pokeChip16(addr, pixel);
-                check = fnv_1a_it(check, addr);
-                check = fnv_1a_it(check, pixel);
+                check = fnv_1a_it32(check, addr);
+                check = fnv_1a_it32(check, pixel);
                 
                 if(D>0){
                     D = D + inc1;
@@ -458,5 +471,5 @@ Blitter::doFastLineBlit()
     // chipset->bltsizv = 0; // all done;
     bltsize = 0;
     
-    printf("Lineblitter %d (%d) %llX\n", linecount, octCode, check);
+    printf("Lineblitter %d (%d) %X\n", linecount, octCode, check);
 }

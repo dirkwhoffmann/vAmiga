@@ -230,10 +230,10 @@ fnv_1a(uint8_t *addr, size_t size)
 {
     if (addr == NULL || size == 0) return 0;
     
-    uint64_t hash = fnv_1a_init();
+    uint64_t hash = fnv_1a_init64();
     
     for (size_t i = 0; i < size; i++) {
-        hash = fnv_1a_it(hash, (uint64_t)addr[i]);
+        hash = fnv_1a_it64(hash, (uint64_t)addr[i]);
     }
 
     return hash;
