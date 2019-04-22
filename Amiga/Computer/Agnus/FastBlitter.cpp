@@ -50,8 +50,12 @@ Blitter::doFastCopyBlit()
     bool useC = bltUSEC();
     bool useD = bltUSED();
     
-    // Setup increment and modulo counters
-    int32_t incr = 2;
+    bool descending = bltDESC();
+    
+    // Setup shift, increment and modulo offsets
+    int     incr = 2;
+    int     ash  = bltASH();
+    int     bsh  = bltBSH();
     int32_t amod = bltamod;
     int32_t bmod = bltbmod;
     int32_t cmod = bltcmod;
@@ -64,6 +68,8 @@ Blitter::doFastCopyBlit()
     // Reverse direction is descending mode
     if (bltDESC()) {
         incr = -incr;
+        ash  = 16 - ash;
+        bsh  = 16 - bsh;
         amod = -amod;
         bmod = -bmod;
         cmod = -cmod;
@@ -73,21 +79,17 @@ Blitter::doFastCopyBlit()
     if (bltdebug) plainmsg("blit %d: A-%06x (%d) B-%06x (%d) C-%06x (%d) D-%06x (%d) W-%d H-%d\n",
                            copycount, bltapt, bltamod, bltbpt, bltbmod, bltcpt, bltcmod, bltdpt, bltdmod,
                            bltsizeW(), bltsizeH());
-
     
-    
-
-    for (unsigned y = 0; y < ymax; y++) {
-    
-        // Prepare first and last word masks for data path A
-        uint16_t fwMask = bltafwm;
-        uint16_t lwMask = 0xFFFF;
+    for (int y = 0; y < ymax; y++) {
         
-        for (unsigned x = 0; x < xmax; x++) {
+        // Prepare AND mask for data path A
+        uint16_t mask = bltafwm;
+        
+        for (int x = 0; x < xmax; x++) {
             
             // Set last word mask if this is the last iteration
-            if (x == xmax - 1) lwMask = bltalwm;
-                
+            if (x == xmax - 1) mask &= bltalwm;
+
             // Fetch A
             if (useA) {
                 anew = amiga->mem.peek16(bltapt);
@@ -108,15 +110,20 @@ Blitter::doFastCopyBlit()
                 if (bltdebug) plainmsg("    C = peek(%X) = %X\n", bltcpt, chold);
                 INC_OCS_PTR(bltcpt, incr);
             }
-                        
-            // Run the barrel shifters (INLINE THIS AND SPEED OPTIMIZE THE MASK STUFF)
+            
+            // Run the barrel shifters on data path A and B
             if (bltdebug) plainmsg("    ash = %d bsh = %d\n", bltASH(), bltBSH());
-            doBarrelShifterA();
-            doBarrelShifterB();
-            aold = anew & fwMask & lwMask;
+            if (descending) {
+                ahold = HI_W_LO_W(anew & mask, aold) >> ash;
+                bhold = HI_W_LO_W(bnew, bold) >> bsh;
+            } else {
+                ahold = HI_W_LO_W(aold, anew & mask) >> ash;
+                bhold = HI_W_LO_W(bold, bnew) >> bsh;
+            }
+            aold = anew & mask;
             bold = bnew;
-
-            // Run the minterm generator
+            
+            // Run the minterm logic circuit
             if (bltdebug) plainmsg("    ahold = %X bhold = %X chold = %X bltcon0 = %X (hex)\n", ahold, bhold, chold, bltcon0);
             doMintermLogic();
             
@@ -133,8 +140,8 @@ Blitter::doFastCopyBlit()
                 INC_OCS_PTR(bltdpt, incr);
             }
             
-            // Clear first word mask
-            fwMask = 0xFFFF;
+            // Clear word mask
+            mask = 0xFFFF;
         }
         
         // Add modulo values
