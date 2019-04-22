@@ -156,7 +156,8 @@ class Blitter : public HardwareComponent {
     inline bool bltUSEB() { return bltcon0 & (1 << 10); }
     inline bool bltUSEC() { return bltcon0 & (1 << 9); }
     inline bool bltUSED() { return bltcon0 & (1 << 8); }
-    
+    void setASH(uint16_t ash) { assert(ash <= 0xF); bltcon0 = (bltcon0 & 0x0FFF) | (ash << 12); }
+
     // OCS register 0x042 (w)
     void pokeBLTCON1(uint16_t value);
 
@@ -167,7 +168,8 @@ class Blitter : public HardwareComponent {
     inline bool bltFCI() { return bltcon1 & (1 << 2); }
     inline bool bltDESC() { return bltcon1 & (1 << 1); }
     inline bool bltLINE() { return bltcon1 & (1 << 0); }
-    
+    void setBSH(uint16_t bsh) { assert(bsh <= 0xF); bltcon1 = (bltcon1 & 0x0FFF) | (bsh << 12); }
+
     // OCS registers 0x044 and 0x046 (w)
     void pokeBLTAFWM(uint16_t value);
     void pokeBLTALWM(uint16_t value);
@@ -228,8 +230,8 @@ class Blitter : public HardwareComponent {
     void doBarrelShifterB();
 
     // Emulate the minterm logic circuit
-    uint16_t doMintermLogic();
-    uint16_t doMintermLogicQuick();
+    uint16_t doMintermLogic(uint16_t a, uint16_t b, uint16_t c, uint8_t minterm);
+    uint16_t doMintermLogicQuick(uint16_t a, uint16_t b, uint16_t c, uint8_t minterm);
 
     
     //
@@ -250,6 +252,8 @@ class Blitter : public HardwareComponent {
     
     // Performs a line blit operation via the fast Blitter
     void doFastLineBlit();
+    void doFastLineBlitOmega(); // Adapted from Omega
+
 };
 
 #endif

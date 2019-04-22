@@ -408,7 +408,7 @@ Blitter::serviceEvent(EventID id)
                 debug(2, "HOLD_D\n");
                 
                 // Run the minterm logic circuit
-                doMintermLogic();
+                doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF);
                 
                 // Run the fill logic circuit
                 // TODO
@@ -652,30 +652,26 @@ Blitter::doBarrelShifterB()
 }
 
 uint16_t
-Blitter::doMintermLogic()
+Blitter::doMintermLogic(uint16_t a, uint16_t b, uint16_t c, uint8_t minterm)
 {
     uint16_t result = 0;
     
-    if (bltcon0 & 0b10000000) result |=  ahold &  bhold &  chold;
-    if (bltcon0 & 0b01000000) result |=  ahold &  bhold & ~chold;
-    if (bltcon0 & 0b00100000) result |=  ahold & ~bhold &  chold;
-    if (bltcon0 & 0b00010000) result |=  ahold & ~bhold & ~chold;
-    if (bltcon0 & 0b00001000) result |= ~ahold &  bhold &  chold;
-    if (bltcon0 & 0b00000100) result |= ~ahold &  bhold & ~chold;
-    if (bltcon0 & 0b00000010) result |= ~ahold & ~bhold &  chold;
-    if (bltcon0 & 0b00000001) result |= ~ahold & ~bhold & ~chold;
+    if (minterm & 0b10000000) result |=  a &  b &  c;
+    if (minterm & 0b01000000) result |=  a &  b & ~c;
+    if (minterm & 0b00100000) result |=  a & ~b &  c;
+    if (minterm & 0b00010000) result |=  a & ~b & ~c;
+    if (minterm & 0b00001000) result |= ~a &  b &  c;
+    if (minterm & 0b00000100) result |= ~a &  b & ~c;
+    if (minterm & 0b00000010) result |= ~a & ~b &  c;
+    if (minterm & 0b00000001) result |= ~a & ~b & ~c;
     
     return result;
 }
 
 uint16_t
-Blitter::doMintermLogicQuick()
+Blitter::doMintermLogicQuick(uint16_t a, uint16_t b, uint16_t c, uint8_t minterm)
 {
-    uint16_t a = ahold;
-    uint16_t b = bhold;
-    uint16_t c = chold;
-    
-    switch (bltcon0 & 0xFF) {
+    switch (minterm) {
         case 0: return 0;
         case 1: return (~c & ~b & ~a);
         case 2: return (c & ~b & ~a);

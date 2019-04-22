@@ -145,8 +145,9 @@
 // Casts a value into the pointer format used by the Original Chip Set (OCS)
 #define OCS_PTR(x) ((x) & 0x7FFFE)
 
-// Increases a pointer given in the OCS format by a certain value
+// Increases or decreases a pointer given in the OCS format by a certain value
 #define INC_OCS_PTR(x,y) ((x) = OCS_PTR((x)+(y)))
+#define DEC_OCS_PTR(x,y) ((x) = OCS_PTR((x)-(y)))
 
 
 //

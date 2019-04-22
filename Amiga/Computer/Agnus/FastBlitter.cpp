@@ -15,7 +15,7 @@ void
 Blitter::doFastBlit()
 {
     // Perform a line blit or a copy blit operation
-    bltLINE() ? doFastLineBlit() : doFastCopyBlit();
+    bltLINE() ? doFastLineBlitOmega() : doFastCopyBlit();
     
     // Clear the Blitter busy flag
     bbusy = false;
@@ -92,21 +92,21 @@ Blitter::doFastCopyBlit()
 
             // Fetch A
             if (useA) {
-                anew = amiga->mem.peek16(bltapt);
+                anew = amiga->mem.peek16(bltapt); // TODO: Call peekChip
                 if (bltdebug) plainmsg("    A = peek(%X) = %X\n", bltapt, anew);
                 INC_OCS_PTR(bltapt, incr);
             }
             
             // Fetch B
             if (useB) {
-                bnew = amiga->mem.peek16(bltbpt);
+                bnew = amiga->mem.peek16(bltbpt); // TODO: Call peekChip
                 if (bltdebug) plainmsg("    B = peek(%X) = %X\n", bltbpt, bnew);
                 INC_OCS_PTR(bltbpt, incr);
             }
             
             // Fetch C
             if (useC) {
-                chold = amiga->mem.peek16(bltcpt);
+                chold = amiga->mem.peek16(bltcpt); // TODO: Call peekChip
                 if (bltdebug) plainmsg("    C = peek(%X) = %X\n", bltcpt, chold);
                 INC_OCS_PTR(bltcpt, incr);
             }
@@ -125,8 +125,8 @@ Blitter::doFastCopyBlit()
             
             // Run the minterm logic circuit
             if (bltdebug) plainmsg("    ahold = %X bhold = %X chold = %X bltcon0 = %X (hex)\n", ahold, bhold, chold, bltcon0);
-            dhold = doMintermLogicQuick();
-            assert(dhold == doMintermLogic());
+            dhold = doMintermLogicQuick(ahold, bhold, chold, bltcon0 & 0xFF);
+            assert(dhold == doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF));
             
             // Update the zero flag
             if (dhold) bzero = false;
@@ -202,8 +202,329 @@ uint16_t logicFunction(int minterm,uint16_t wordA, uint16_t wordB, uint16_t word
     return channelD;
 }
 
+#define blitterLineIncreaseX(a_shift, cpt) \
+if (a_shift < 15) a_shift++; \
+else \
+{ \
+a_shift = 0; \
+INC_OCS_PTR(cpt, 2); \
+}
+
+#define blitterLineDecreaseX(a_shift, cpt) \
+{ \
+if (a_shift == 0) \
+{ \
+a_shift = 16; \
+INC_OCS_PTR(cpt, -2); \
+} \
+a_shift--; \
+}
+
+#define blitterLineIncreaseY(cpt, cmod) \
+INC_OCS_PTR(cpt, cmod);
+
+#define blitterLineDecreaseY(cpt, cmod) \
+INC_OCS_PTR(cpt, -cmod);
+
 void
 Blitter::doFastLineBlit()
+{
+    // Adapted from WinFellow
+    
+    uint32_t bltcon = HI_W_LO_W(bltcon0, bltcon1);
+    
+    int height = bltsizeH();
+    // int width  = bltsizeW();
+    
+    uint16_t bltadat_local = 0;
+    uint16_t bltbdat_local = 0;
+    uint16_t bltcdat_local = chold;
+    uint16_t bltddat_local = 0;
+    
+    uint16_t mask = (bnew >> bltBSH()) | (bnew << (16 - bltBSH()));
+    bool a_enabled = bltcon & 0x08000000;
+    bool c_enabled = bltcon & 0x02000000;
+    
+    bool decision_is_signed = (((bltcon >> 6) & 1) == 1);
+    uint32_t decision_variable = bltapt;
+    
+    // Quirk: Set decision increases to 0 if a is disabled, ensures bltapt remains unchanged
+    int16_t decision_inc_signed = a_enabled ? bltbmod : 0;
+    int16_t decision_inc_unsigned = a_enabled ? bltamod : 0;
+    
+    uint32_t bltcpt_local = bltcpt;
+    uint32_t bltdpt_local = bltdpt;
+    uint32_t blit_a_shift_local = bltASH();
+    uint32_t bltzero_local = 0;
+    uint32_t i;
+    
+    uint32_t sulsudaul = (bltcon >> 2) & 0x7;
+    bool x_independent = (sulsudaul & 4);
+    bool x_inc = ((!x_independent) && !(sulsudaul & 2)) || (x_independent && !(sulsudaul & 1));
+    bool y_inc = ((!x_independent) && !(sulsudaul & 1)) || (x_independent && !(sulsudaul & 2));
+    bool single_dot = false;
+    uint8_t minterm = (uint8_t)(bltcon >> 16);
+    
+    for (i = 0; i < height; ++i)
+    {
+        // Read C-data from memory if the C-channel is enabled
+        if (c_enabled) {
+            bltcdat_local = amiga->mem.peekChip16(bltcpt_local);
+        }
+        
+        // Calculate data for the A-channel
+        bltadat_local = (anew & bltafwm) >> blit_a_shift_local;
+        
+        // Check for single dot
+        if (x_independent) {
+            if (bltcon & 0x00000002) {
+                if (single_dot) {
+                    bltadat_local = 0;
+                } else {
+                    single_dot = TRUE;
+                }
+            }
+        }
+        
+        // Calculate data for the B-channel
+        bltbdat_local = (mask & 1) ? 0xFFFF : 0;
+        
+        // Calculate result
+        bltddat_local = doMintermLogicQuick(bltadat_local, bltbdat_local, bltcdat_local, minterm);
+        
+        // Save result to D-channel, same as the C ptr after first pixel.
+        if (c_enabled) { // C-channel must be enabled
+            amiga->mem.pokeChip16(bltdpt_local, bltddat_local);
+        }
+        
+        // Remember zero result status
+        bltzero_local = bltzero_local | bltddat_local;
+        
+        // Rotate mask
+        mask = (mask << 1) | (mask >> 15);
+        
+        // Test movement in the X direction
+        // When the decision variable gets positive,
+        // the line moves one pixel to the right
+        
+        // decrease/increase x
+        if (decision_is_signed) {
+            // Do not yet increase, D has sign
+            // D = D + (2*sdelta = bltbmod)
+            decision_variable += decision_inc_signed;
+        } else {
+            // increase, D reached a positive value
+            // D = D + (2*sdelta - 2*ldelta = bltamod)
+            decision_variable += decision_inc_unsigned;
+            
+            if (!x_independent) {
+                if (x_inc) {
+                    blitterLineIncreaseX(blit_a_shift_local, bltcpt_local);
+                } else {
+                    blitterLineDecreaseX(blit_a_shift_local, bltcpt_local);
+                }
+            } else {
+                if (y_inc) {
+                    blitterLineIncreaseY(bltcpt_local, bltcmod);
+                } else {
+                    blitterLineDecreaseY(bltcpt_local, bltcmod);
+                }
+                single_dot = false;
+            }
+        }
+        decision_is_signed = ((int16_t)decision_variable < 0);
+        
+        if (!x_independent)
+        {
+            // decrease/increase y
+            if (y_inc) {
+                blitterLineIncreaseY(bltcpt_local, bltcmod);
+            } else {
+                blitterLineDecreaseY(bltcpt_local, bltcmod);
+            }
+        }
+        else
+        {
+            if (x_inc) {
+                blitterLineIncreaseX(blit_a_shift_local, bltcpt_local);
+            } else {
+                blitterLineDecreaseX(blit_a_shift_local, bltcpt_local);
+            }
+        }
+        bltdpt_local = bltcpt_local;
+    }
+    bltcon = bltcon & 0x0FFFFFFBF;
+    if (decision_is_signed) bltcon |= 0x00000040;
+    
+    // a_shift_asc = blit_a_shift_local; TODO
+    // a_shift_desc = 16 - a_shift_asc; TODO
+    bnew = bltbdat_local;
+    bltapt = decision_variable;
+    bltcpt = bltcpt_local;
+    bltdpt = bltdpt_local;
+    bzero = bltzero_local;
+    // memoryWriteWord(0x8040, 0x00DFF09C); TODO
+}
+    /*
+     void blitterLineMode(void)
+     {
+     ULO bltadat_local;
+     ULO bltbdat_local;
+     ULO bltcdat_local = blitter.bltcdat;
+     ULO bltddat_local;
+     UWO mask = (UWO) ((blitter.bltbdat_original >> blitter.b_shift_asc) | (blitter.bltbdat_original << (16 - blitter.b_shift_asc)));
+     BOOLE a_enabled = blitter.bltcon & 0x08000000;
+     BOOLE c_enabled = blitter.bltcon & 0x02000000;
+     
+     BOOLE decision_is_signed = (((blitter.bltcon >> 6) & 1) == 1);
+     LON decision_variable = (LON) blitter.bltapt;
+     
+     // Quirk: Set decision increases to 0 if a is disabled, ensures bltapt remains unchanged
+     WOR decision_inc_signed = (a_enabled) ? ((WOR) blitter.bltbmod) : 0;
+     WOR decision_inc_unsigned = (a_enabled) ? ((WOR) blitter.bltamod) : 0;
+     
+     ULO bltcpt_local = blitter.bltcpt;
+     ULO bltdpt_local = blitter.bltdpt;
+     ULO blit_a_shift_local = blitter.a_shift_asc;
+     ULO bltzero_local = 0;
+     ULO i;
+     
+     ULO sulsudaul = (blitter.bltcon >> 2) & 0x7;
+     BOOLE x_independent = (sulsudaul & 4);
+     BOOLE x_inc = ((!x_independent) && !(sulsudaul & 2)) || (x_independent && !(sulsudaul & 1));
+     BOOLE y_inc = ((!x_independent) && !(sulsudaul & 1)) || (x_independent && !(sulsudaul & 2));
+     BOOLE single_dot = FALSE;
+     UBY minterm = (UBY) (blitter.bltcon >> 16);
+     
+     for (i = 0; i < blitter.height; ++i)
+     {
+     // Read C-data from memory if the C-channel is enabled
+     if (c_enabled)
+     {
+     bltcdat_local = chipmemReadWord(bltcpt_local);
+     }
+     
+     // Calculate data for the A-channel
+     bltadat_local = (blitter.bltadat & blitter.bltafwm) >> blit_a_shift_local;
+     
+     // Check for single dot
+     if (x_independent)
+     {
+     if (blitter.bltcon & 0x00000002)
+     {
+     if (single_dot)
+     {
+     bltadat_local = 0;
+     }
+     else
+     {
+     single_dot = TRUE;
+     }
+     }
+     }
+     
+     // Calculate data for the B-channel
+     bltbdat_local = (mask & 1) ? 0xffff : 0;
+     
+     // Calculate result
+     blitterMinterms(bltadat_local, bltbdat_local, bltcdat_local, bltddat_local, minterm);
+     
+     // Save result to D-channel, same as the C ptr after first pixel.
+     if (c_enabled) // C-channel must be enabled
+     {
+     chipmemWriteWord(bltddat_local, bltdpt_local);
+     }
+     
+     // Remember zero result status
+     bltzero_local = bltzero_local | bltddat_local;
+     
+     // Rotate mask
+     mask = (mask << 1) | (mask >> 15);
+     
+     // Test movement in the X direction
+     // When the decision variable gets positive,
+     // the line moves one pixel to the right
+     
+     // decrease/increase x
+     if (decision_is_signed)
+     {
+     // Do not yet increase, D has sign
+     // D = D + (2*sdelta = bltbmod)
+     decision_variable += decision_inc_signed;
+     }
+     else
+     {
+     // increase, D reached a positive value
+     // D = D + (2*sdelta - 2*ldelta = bltamod)
+     decision_variable += decision_inc_unsigned;
+     
+     if (!x_independent)
+     {
+     if (x_inc)
+     {
+     blitterLineIncreaseX(blit_a_shift_local, bltcpt_local);
+     }
+     else
+     {
+     blitterLineDecreaseX(blit_a_shift_local, bltcpt_local);
+     }
+     }
+     else
+     {
+     if (y_inc)
+     {
+     blitterLineIncreaseY(bltcpt_local, blitter.bltcmod);
+     }
+     else
+     {
+     blitterLineDecreaseY(bltcpt_local, blitter.bltcmod);
+     }
+     single_dot = FALSE;
+     }
+     }
+     decision_is_signed = ((WOR)decision_variable < 0);
+     
+     if (!x_independent)
+     {
+     // decrease/increase y
+     if (y_inc)
+     {
+     blitterLineIncreaseY(bltcpt_local, blitter.bltcmod);
+     }
+     else
+     {
+     blitterLineDecreaseY(bltcpt_local, blitter.bltcmod);
+     }
+     }
+     else
+     {
+     if (x_inc)
+     {
+     blitterLineIncreaseX(blit_a_shift_local, bltcpt_local);
+     }
+     else
+     {
+     blitterLineDecreaseX(blit_a_shift_local, bltcpt_local);
+     }
+     }
+     bltdpt_local = bltcpt_local;
+     }
+     blitter.bltcon = blitter.bltcon & 0x0FFFFFFBF;
+     if (decision_is_signed) blitter.bltcon |= 0x00000040;
+     
+     blitter.a_shift_asc = blit_a_shift_local;
+     blitter.a_shift_desc = 16 - blitter.a_shift_asc;
+     blitter.bltbdat = bltbdat_local;
+     blitter.bltapt = decision_variable;
+     blitter.bltcpt = bltcpt_local;
+     blitter.bltdpt = bltdpt_local;
+     blitter.bltzero = bltzero_local;
+     memoryWriteWord(0x8040, 0x00DFF09C);
+     }
+     */
+
+void
+Blitter::doFastLineBlitOmega()
 {
     int16_t bltamod = (int16_t)this->bltamod;
     int16_t bltbmod = (int16_t)this->bltbmod;
