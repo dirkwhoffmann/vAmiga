@@ -15,8 +15,8 @@ void
 Blitter::doFastBlit()
 {
     // Perform a line blit or a copy blit operation
-    bltLINE() ? doFastLineBlitOmega() : doFastCopyBlit();
-    
+    bltLINE() ? doFastLineBlit() : doFastCopyBlit();
+
     // Clear the Blitter busy flag
     bbusy = false;
     
@@ -356,14 +356,12 @@ Blitter::doFastLineBlit()
     bltcon = bltcon & 0x0FFFFFFBF;
     if (decision_is_signed) bltcon |= 0x00000040;
     
-    // a_shift_asc = blit_a_shift_local; TODO
-    // a_shift_desc = 16 - a_shift_asc; TODO
-    bnew = bltbdat_local;
+    setASH(blit_a_shift_local);
+    bnew   = bltbdat_local;
     bltapt = decision_variable;
     bltcpt = bltcpt_local;
     bltdpt = bltdpt_local;
-    bzero = bltzero_local;
-    // memoryWriteWord(0x8040, 0x00DFF09C); TODO
+    bzero  = bltzero_local;
 }
     /*
      void blitterLineMode(void)
