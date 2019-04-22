@@ -82,12 +82,12 @@ Blitter::doFastCopyBlit()
     
     for (int y = 0; y < ymax; y++) {
         
-        // Prepare AND mask for data path A
+        // Apply the "first word mask" in the first iteration
         uint16_t mask = bltafwm;
         
         for (int x = 0; x < xmax; x++) {
             
-            // Set last word mask if this is the last iteration
+            // Apply the "last word mask" in the last iteration
             if (x == xmax - 1) mask &= bltalwm;
 
             // Fetch A
@@ -125,7 +125,8 @@ Blitter::doFastCopyBlit()
             
             // Run the minterm logic circuit
             if (bltdebug) plainmsg("    ahold = %X bhold = %X chold = %X bltcon0 = %X (hex)\n", ahold, bhold, chold, bltcon0);
-            doMintermLogic();
+            dhold = doMintermLogicQuick();
+            assert(dhold == doMintermLogic());
             
             // Update the zero flag
             if (dhold) bzero = false;
@@ -140,7 +141,7 @@ Blitter::doFastCopyBlit()
                 INC_OCS_PTR(bltdpt, incr);
             }
             
-            // Clear word mask
+            // Clear the word mask
             mask = 0xFFFF;
         }
         

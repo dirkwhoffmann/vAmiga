@@ -228,8 +228,9 @@ class Blitter : public HardwareComponent {
     void doBarrelShifterB();
 
     // Emulate the minterm logic circuit
-    void doMintermLogic();
-    
+    uint16_t doMintermLogic();
+    uint16_t doMintermLogicQuick();
+
     
     //
     // Fast Blitter
