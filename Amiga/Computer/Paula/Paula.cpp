@@ -230,7 +230,6 @@ Paula::checkInterrupt()
 {
     int level = interruptLevel();
     
-    if (level && (intena & intreq & 0x0040)) { assert(false); }
     /*
     if (level) {
         uint16_t mask = intena & intreq;

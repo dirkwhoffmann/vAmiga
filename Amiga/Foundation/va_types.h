@@ -567,10 +567,10 @@ typedef struct
     uint16_t bltafwm;
     uint16_t bltalwm;
     uint16_t bltsize;
-    uint16_t bltamod;
-    uint16_t bltbmod;
-    uint16_t bltcmod;
-    uint16_t bltdmod;
+    int16_t bltamod;
+    int16_t bltbmod;
+    int16_t bltcmod;
+    int16_t bltdmod;
     uint16_t anew;
     uint16_t bnew;
     uint16_t ahold;

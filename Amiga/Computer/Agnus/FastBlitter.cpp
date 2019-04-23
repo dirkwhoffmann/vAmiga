@@ -61,9 +61,9 @@ Blitter::doFastCopyBlit()
     int32_t cmod = bltcmod;
     int32_t dmod = bltdmod;
     
-    printf("BLITTER Blit %d (%d,%d) (%d%d%d%d) %X %X %X %X %s\n",
+    printf("BLITTER Blit %d (%d,%d) (%d%d%d%d) %x %x %x %x %s\n",
     copycount, bltsizeW(), bltsizeH(), useA, useB, useC, useD,
-    bltapt, bltbpt, bltcpt, bltdpt, "");
+           bltapt, bltbpt, bltcpt, bltdpt, bltDESC() ? "D" : "");
     
     // Reverse direction is descending mode
     if (bltDESC()) {
@@ -229,6 +229,20 @@ INC_OCS_PTR(cpt, -cmod);
 void
 Blitter::doFastLineBlit()
 {
+    uint32_t check1 = fnv_1a_init32();
+    uint32_t check2 = fnv_1a_init32();
+    
+    linecount++;
+    
+    bool useA = bltUSEA();
+    bool useB = bltUSEB();
+    bool useC = bltUSEC();
+    bool useD = bltUSED();
+    
+    printf("BLITTER Line %d (%d,%d) (%d%d%d%d) %x %x %x %x\n",
+           linecount, bltsizeW(), bltsizeH(), useA, useB, useC, useD,
+           bltapt, bltbpt, bltcpt, bltdpt);
+    
     // Adapted from WinFellow
     
     uint32_t bltcon = HI_W_LO_W(bltcon0, bltcon1);
@@ -295,6 +309,8 @@ Blitter::doFastLineBlit()
         // Save result to D-channel, same as the C ptr after first pixel.
         if (c_enabled) { // C-channel must be enabled
             amiga->mem.pokeChip16(bltdpt_local, bltddat_local);
+            check1 = fnv_1a_it32(check1, bltddat_local);
+            check2 = fnv_1a_it32(check2, bltdpt_local);
         }
         
         // Remember zero result status
@@ -358,10 +374,12 @@ Blitter::doFastLineBlit()
     
     setASH(blit_a_shift_local);
     bnew   = bltbdat_local;
-    bltapt = decision_variable;
-    bltcpt = bltcpt_local;
-    bltdpt = bltdpt_local;
+    bltapt = OCS_PTR(decision_variable);
+    bltcpt = OCS_PTR(bltcpt_local);
+    bltdpt = OCS_PTR(bltdpt_local);
     bzero  = bltzero_local;
+    
+    printf("BLITTER check1: %x check2: %x\n", check1, check2);
 }
     /*
      void blitterLineMode(void)

@@ -285,27 +285,27 @@ void
 Blitter::pokeBLTAMOD(uint16_t value)
 {
     debug(2, "pokeBLTAMOD(%X)\n", value);
-    bltamod = value;
+    bltamod = (int16_t)(value & 0xFFFE);
 }
 void
 Blitter::pokeBLTBMOD(uint16_t value)
 {
     debug(2, "pokeBLTBMOD(%X)\n", value);
-    bltbmod = value;
+    bltbmod = (int16_t)(value & 0xFFFE);
 }
 
 void
 Blitter::pokeBLTCMOD(uint16_t value)
 {
     debug(2, "pokeBLTCMOD(%X)\n", value);
-    bltcmod = value;
+    bltcmod = (int16_t)(value & 0xFFFE);
 }
 
 void
 Blitter::pokeBLTDMOD(uint16_t value)
 {
     debug(2, "pokeBLTDMOD(%X)\n", value);
-    bltdmod = value;
+    bltdmod = (int16_t)(value & 0xFFFE);
 }
 
 void
