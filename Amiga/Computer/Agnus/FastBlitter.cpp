@@ -35,7 +35,7 @@ Blitter::doFastCopyBlit()
     
     copycount++;
 
-    bltdebug = (copycount == 3);
+    bltdebug = 0; // (copycount == 1616);
 
     /*
     plainmsg("%d COPY BLIT (%d,%d) (%s)\n",
@@ -80,6 +80,9 @@ Blitter::doFastCopyBlit()
                            copycount, bltapt, bltamod, bltbpt, bltbmod, bltcpt, bltcmod, bltdpt, bltdmod,
                            bltsizeW(), bltsizeH());
     
+    aold = 0;
+    bold = 0;
+    
     for (int y = 0; y < ymax; y++) {
         
         // Apply the "first word mask" in the first iteration
@@ -110,6 +113,9 @@ Blitter::doFastCopyBlit()
                 if (bltdebug) plainmsg("    C = peek(%X) = %X\n", bltcpt, chold);
                 INC_OCS_PTR(bltcpt, incr);
             }
+            if (bltdebug) plainmsg("    After fetch: A = %x B = %x C = %x\n", anew, bnew, chold);
+            
+            if (bltdebug) plainmsg("    After masking (%x,%x) %x\n", bltafwm, bltalwm, anew & mask);
             
             // Run the barrel shifters on data path A and B
             if (bltdebug) plainmsg("    ash = %d bsh = %d\n", bltASH(), bltBSH());
@@ -122,6 +128,7 @@ Blitter::doFastCopyBlit()
             }
             aold = anew & mask;
             bold = bnew;
+            if (bltdebug) printf("    After shifting (%d,%d) A = %x B = %x\n", ash, bsh, ahold, bhold);
             
             // Run the minterm logic circuit
             if (bltdebug) plainmsg("    ahold = %X bhold = %X chold = %X bltcon0 = %X (hex)\n", ahold, bhold, chold, bltcon0);
@@ -138,6 +145,7 @@ Blitter::doFastCopyBlit()
                 check1 = fnv_1a_it32(check1, dhold);
                 check2 = fnv_1a_it32(check2, bltdpt);
                 // plainmsg("    check1 = %X check2 = %X\n", check1, check2);
+                assert(bltdpt);
                 INC_OCS_PTR(bltdpt, incr);
             }
             

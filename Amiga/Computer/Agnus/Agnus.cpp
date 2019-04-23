@@ -871,7 +871,7 @@ Agnus::pokeBPL1MOD(uint16_t value)
 {
     debug(2, "pokeBPL1MOD(%X)\n", value);
     
-    bpl1mod = value;
+    bpl1mod = value & 0xFFFE;
 }
 
 void
@@ -879,7 +879,7 @@ Agnus::pokeBPL2MOD(uint16_t value)
 {
     debug(2, "pokeBPL2MOD(%X)\n", value);
     
-    bpl2mod = value;
+    bpl2mod = value & 0xFFFE;
 }
 
 void
