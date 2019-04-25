@@ -718,12 +718,16 @@ extension Keys {
     // Drives
     static let df0Connect     = "VADF0ConnectKey"
     static let df0Type        = "VADF0TypeKey"
+    static let df0Speed       = "VADF0SpeedKey"
     static let df1Connect     = "VADF1ConnectKey"
     static let df1Type        = "VADF1TypeKey"
+    static let df1Speed       = "VADF1SpeedKey"
     static let df2Connect     = "VADF2ConnectKey"
     static let df2Type        = "VADF2TypeKey"
+    static let df2Speed       = "VADF2SpeedKey"
     static let df3Connect     = "VADF3ConnectKey"
     static let df3Type        = "VADF3TypeKey"
+    static let df3Speed       = "VADF3SpeedKey"
 
     // Extensions
     static let realTimeClock  = "VARealTimeClockKey"
@@ -741,13 +745,17 @@ extension Defaults {
         static let fastRam        = 0
 
         static let df0Connect     = true
-        static let df0Type        = A1010_ORIG
+        static let df0Type        = DRIVE_35_DD
+        static let df0Speed       = 1
         static let df1Connect     = false
-        static let df1Type        = A1010_ORIG
+        static let df1Type        = DRIVE_35_DD
+        static let df1Speed       = 1
         static let df2Connect     = false
-        static let df2Type        = A1010_ORIG
+        static let df2Type        = DRIVE_35_DD
+        static let df2Speed       = 1
         static let df3Connect     = false
-        static let df3Type        = A1010_ORIG
+        static let df3Type        = DRIVE_35_DD
+        static let df3Speed       = 1
 
         static let realTimeClock  = false
     }
@@ -762,13 +770,17 @@ extension Defaults {
         static let fastRam        = 0
         
         static let df0Connect     = true
-        static let df0Type        = A1010_ORIG
+        static let df0Type        = DRIVE_35_DD
+        static let df0Speed       = 1
         static let df1Connect     = false
-        static let df1Type        = A1010_ORIG
+        static let df1Type        = DRIVE_35_DD
+        static let df1Speed       = 1
         static let df2Connect     = false
-        static let df2Type        = A1010_ORIG
+        static let df2Type        = DRIVE_35_DD
+        static let df2Speed       = 1
         static let df3Connect     = false
-        static let df3Type        = A1010_ORIG
+        static let df3Type        = DRIVE_35_DD
+        static let df3Speed       = 1
 
         static let realTimeClock  = false
     }
@@ -783,13 +795,17 @@ extension Defaults {
         static let fastRam        = 0
         
         static let df0Connect     = true
-        static let df0Type        = A1010_ORIG
+        static let df0Type        = DRIVE_35_DD
+        static let df0Speed       = 1
         static let df1Connect     = true
-        static let df1Type        = A1010_ORIG
+        static let df1Type        = DRIVE_35_DD
+        static let df1Speed       = 1
         static let df2Connect     = false
-        static let df2Type        = A1010_ORIG
+        static let df2Type        = DRIVE_35_DD
+        static let df2Speed       = 1
         static let df3Connect     = false
-        static let df3Type        = A1010_ORIG
+        static let df3Type        = DRIVE_35_DD
+        static let df3Speed       = 1
 
         static let realTimeClock  = true
     }
@@ -812,12 +828,16 @@ extension MyController {
             
             Keys.df0Connect: defaultModel.df0Connect,
             Keys.df0Type: defaultModel.df0Type.rawValue,
+            Keys.df0Speed: defaultModel.df0Speed,
             Keys.df1Connect: defaultModel.df1Connect,
             Keys.df1Type: defaultModel.df1Type.rawValue,
+            Keys.df1Speed: defaultModel.df1Speed,
             Keys.df2Connect: defaultModel.df2Connect,
             Keys.df2Type: defaultModel.df2Type.rawValue,
+            Keys.df2Speed: defaultModel.df2Speed,
             Keys.df3Connect: defaultModel.df3Connect,
             Keys.df3Type: defaultModel.df3Type.rawValue,
+            Keys.df3Speed: defaultModel.df3Speed,
 
             Keys.realTimeClock: defaultModel.realTimeClock,
         ]
@@ -839,12 +859,16 @@ extension MyController {
 
                     Keys.df0Connect,
                     Keys.df0Type,
+                    Keys.df0Speed,
                     Keys.df1Connect,
                     Keys.df1Type,
+                    Keys.df1Speed,
                     Keys.df2Connect,
                     Keys.df2Type,
+                    Keys.df2Speed,
                     Keys.df3Connect,
                     Keys.df3Type,
+                    Keys.df3Speed,
 
                     Keys.realTimeClock,
             ]
@@ -870,12 +894,16 @@ extension MyController {
 
         amiga.configureDrive(0, connected: defaults.bool(forKey: Keys.df0Connect))
         amiga.configureDrive(0, type: defaults.integer(forKey: Keys.df0Type))
+        amiga.configureDrive(0, speed: defaults.integer(forKey: Keys.df0Speed))
         amiga.configureDrive(1, connected: defaults.bool(forKey: Keys.df1Connect))
         amiga.configureDrive(1, type: defaults.integer(forKey: Keys.df1Type))
+        amiga.configureDrive(1, speed: defaults.integer(forKey: Keys.df1Speed))
         amiga.configureDrive(2, connected: defaults.bool(forKey: Keys.df2Connect))
         amiga.configureDrive(2, type: defaults.integer(forKey: Keys.df2Type))
+        amiga.configureDrive(2, speed: defaults.integer(forKey: Keys.df2Speed))
         amiga.configureDrive(3, connected: defaults.bool(forKey: Keys.df3Connect))
         amiga.configureDrive(3, type: defaults.integer(forKey: Keys.df3Type))
+        amiga.configureDrive(3, speed: defaults.integer(forKey: Keys.df3Speed))
 
         amiga.configureRealTimeClock(defaults.bool(forKey: Keys.realTimeClock))
 
@@ -897,12 +925,16 @@ extension MyController {
 
         defaults.set(config.df0.connected, forKey: Keys.df0Connect)
         defaults.set(config.df0.type.rawValue, forKey: Keys.df0Type)
+        defaults.set(config.df0.speed, forKey: Keys.df0Speed)
         defaults.set(config.df1.connected, forKey: Keys.df1Connect)
         defaults.set(config.df1.type.rawValue, forKey: Keys.df1Type)
+        defaults.set(config.df1.speed, forKey: Keys.df1Speed)
         defaults.set(config.df2.connected, forKey: Keys.df2Connect)
         defaults.set(config.df2.type.rawValue, forKey: Keys.df2Type)
+        defaults.set(config.df2.speed, forKey: Keys.df2Speed)
         defaults.set(config.df3.connected, forKey: Keys.df3Connect)
         defaults.set(config.df3.type.rawValue, forKey: Keys.df3Type)
+        defaults.set(config.df3.speed, forKey: Keys.df3Speed)
 
         defaults.set(config.realTimeClock, forKey: Keys.realTimeClock)
     }

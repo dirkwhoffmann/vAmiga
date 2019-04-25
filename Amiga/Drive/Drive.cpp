@@ -78,17 +78,26 @@ Drive::_dump()
 void
 Drive::setType(DriveType t)
 {
-    switch ((type = t)) {
-        
-        case A1010_ORIG: id = DRIVE_ID_35DD; acceleration =  1; break;
-        case A1010_2X:   id = DRIVE_ID_35DD; acceleration =  2; break;
-        case A1010_4X:   id = DRIVE_ID_35DD; acceleration =  4; break;
-        case A1010_8X:   id = DRIVE_ID_35DD; acceleration =  8; break;
-        case A1010_WARP: id = DRIVE_ID_35DD; acceleration = -1; break;
-        
-        default: assert(false);
-    }
-    debug("Setting drive type to %s (speedup: %d)\n", driveTypeName(type), acceleration);
+    assert(isDriveType(t));
+    
+    type = t;
+ 
+    debug("Setting drive type to %s\n", driveTypeName(type));
+}
+
+void
+Drive::setSpeed(uint16_t value)
+{
+    assert(speed == 1 ||
+           speed == 2 ||
+           speed == 4 ||
+           speed == 8 ||
+           speed == UINT16_MAX);
+    
+    speed = value;
+    
+    debug("Setting acceleration factor to %d\n", value);
+
 }
 
 bool
@@ -326,13 +335,6 @@ Drive::latchMTR(bool value)
         // Switch drive LED off
         amiga->putMessage(MSG_DRIVE_LED_OFF, nr);
     }
-}
-
-// TODO: MOVE THIS TO PAULA ?!
-void
-Drive::pokeDSKLEN(uint16_t value)
-{
- 
 }
 
 void

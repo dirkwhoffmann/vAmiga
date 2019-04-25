@@ -159,27 +159,21 @@ MemorySource;
 
 typedef enum : long
 {
-    A1010_ORIG, // Amiga 3,5" drive, emulated with original speed
-    A1010_2X,   // Amiga 3,5" drive, emulated 2x faster
-    A1010_4X,   // Amiga 3,5" drive, emulated 4x faster
-    A1010_8X,   // Amiga 3,5" drive, emulated 8x faster
-    A1010_WARP  // Amiga 3,5" drive, emulated as fast as possible
+    DRIVE_35_DD,
+    DRIVE_525_SD
 }
 DriveType;
 
 inline bool isDriveType(DriveType model)
 {
-    return model >= A1010_ORIG && model <= A1010_WARP;
+    return model >= DRIVE_35_DD && model <= DRIVE_525_SD;
 }
 
 inline const char *driveTypeName(DriveType type)
 {
     return
-    type == A1010_ORIG ? "A1010 (original speed)" :
-    type == A1010_2X   ? "A1010 (2x faster)" :
-    type == A1010_4X   ? "A1010 (4x faster)" :
-    type == A1010_8X   ? "A1010 (8x faster)" :
-    type == A1010_WARP ? "A1010 (warp speed)" : "???";
+    type == DRIVE_35_DD  ? "3.5 DD" :
+    type == DRIVE_525_SD ? "5.25 SD" : "???";
 }
 
 typedef enum : uint32_t
@@ -386,8 +380,9 @@ typedef void Callback(const void *, int, long);
  */
 typedef struct
 {
-    DriveType type;
     bool connected;
+    DriveType type;
+    uint16_t speed;
 }
 DriveConfiguration;
 

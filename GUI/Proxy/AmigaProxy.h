@@ -129,8 +129,9 @@ struct AmigaFileWrapper;
 - (BOOL) configureSlowMemory:(NSInteger)size;
 - (BOOL) configureFastMemory:(NSInteger)size;
 - (BOOL) configureRealTimeClock:(BOOL)value;
-- (BOOL) configureDrive:(NSInteger)driveNr connected:(BOOL)value;
-- (BOOL) configureDrive:(NSInteger)driveNr type:(NSInteger)value;
+- (BOOL) configureDrive:(NSInteger)nr connected:(BOOL)value;
+- (BOOL) configureDrive:(NSInteger)nr type:(NSInteger)value;
+- (BOOL) configureDrive:(NSInteger)nr speed:(NSInteger)value;
 
 // Message queue
 - (void) addListener:(const void *)sender function:(Callback *)func;

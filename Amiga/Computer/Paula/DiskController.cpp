@@ -149,14 +149,15 @@ DiskController::setConnected(int df, bool value)
 uint16_t
 DiskController::peekDSKDATR()
 {
-    debug(2, "peekDSKDATR() = %X\n", dskdat);
+    warn("*** DSKDATR *** CANNOT BE READ BY THE CPU");
+    debug(1, "peekDSKDATR() = %X\n", dskdat);
     return dskdat;
 }
 
 void
 DiskController::pokeDSKLEN(uint16_t newDskLen)
 {
-    debug(2, "pokeDSKLEN(%X)\n", newDskLen);
+    plaindebug(1, "pokeDSKLEN(%X)\n", newDskLen);
     
     uint16_t oldDsklen = dsklen;
     
@@ -203,7 +204,7 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
 void
 DiskController::pokeDSKDAT(uint16_t value)
 {
-    debug(2, "pokeDSKDAT(%X)\n", value);
+    debug(1, "pokeDSKDAT(%X)\n", value);
     dskdat = value;
 }
 
@@ -281,7 +282,7 @@ DiskController::PRBdidChange(uint8_t oldValue, uint8_t newValue)
     ((prb & 0b1000000) == 0 && connected[3]) ? 3 : -1;
     
     // Determine the speedup factor for the selected drive.
-    acceleration = (selectedDrive == -1) ? 1 : df[selectedDrive]->getAcceleration();
+    acceleration = (selectedDrive == -1) ? 1 : df[selectedDrive]->getSpeed();
     
     // Schedule the first rotation event if at least one drive is spinning.
     if (!spinning()) {

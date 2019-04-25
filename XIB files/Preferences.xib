@@ -47,12 +47,16 @@
                 <outlet property="emuWarpLoad" destination="jQ0-jt-CGq" id="m2W-9e-r5B"/>
                 <outlet property="hwAmigaModelPopup" destination="ZQk-5s-Q3i" id="KW3-9z-ZQs"/>
                 <outlet property="hwChipRamPopup" destination="Htk-aA-fCu" id="6Mo-Ea-f4z"/>
+                <outlet property="hwDf0Speed" destination="8ia-It-f3J" id="JTr-In-svZ"/>
                 <outlet property="hwDf0Type" destination="kgt-j5-t6P" id="I7j-Yw-MrC"/>
                 <outlet property="hwDf1Connect" destination="kmc-nb-gBK" id="Zb5-8a-fEf"/>
+                <outlet property="hwDf1Speed" destination="ikV-D6-Fbi" id="YjS-rh-GDt"/>
                 <outlet property="hwDf1Type" destination="40w-GY-Enr" id="iU3-YP-Eci"/>
                 <outlet property="hwDf2Connect" destination="bHS-Ig-FO4" id="ugi-I8-yHa"/>
+                <outlet property="hwDf2Speed" destination="0De-08-YWP" id="0iE-0v-CE0"/>
                 <outlet property="hwDf2Type" destination="Ere-QU-ANT" id="2a9-Rs-kug"/>
                 <outlet property="hwDf3Connect" destination="71G-4V-fGW" id="v7t-o6-10B"/>
+                <outlet property="hwDf3Speed" destination="w3r-vt-KQa" id="qxt-zu-W7D"/>
                 <outlet property="hwDf3Type" destination="bHc-hk-LLX" id="Fan-AS-nyp"/>
                 <outlet property="hwFastRamPopup" destination="BTz-kT-JtT" id="oec-CI-f3J"/>
                 <outlet property="hwLayoutPopup" destination="EWH-Iz-zuX" id="cWR-LH-Ffq"/>
@@ -277,7 +281,7 @@ Gw
                                             </textFieldCell>
                                         </textField>
                                         <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZQk-5s-Q3i" userLabel="System">
-                                            <rect key="frame" x="94" y="362" width="182" height="25"/>
+                                            <rect key="frame" x="94" y="362" width="187" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="Amiga 500" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="X5T-vd-adB" id="3A2-Za-Kyn" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -306,7 +310,7 @@ Gw
                                             </textFieldCell>
                                         </textField>
                                         <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EWH-Iz-zuX" userLabel="System">
-                                            <rect key="frame" x="94" y="303" width="182" height="25"/>
+                                            <rect key="frame" x="94" y="303" width="187" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="US" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="1" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="MlE-xO-Cna" id="G04-yN-GzX" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -510,26 +514,14 @@ DQ
                                             </connections>
                                         </popUpButton>
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kgt-j5-t6P">
-                                            <rect key="frame" x="94" y="237" width="182" height="26"/>
+                                            <rect key="frame" x="94" y="237" width="88" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Amiga 1010" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="Bqr-Jc-yKI" id="Edx-wX-YZO">
+                                            <popUpButtonCell key="cell" type="push" title="3.5 DD" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="Bqr-Jc-yKI" id="Edx-wX-YZO">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="menu"/>
                                                 <menu key="menu" title="OtherViews" id="p4D-Dw-JSk">
                                                     <items>
-                                                        <menuItem title="Amiga 1010" state="on" id="Bqr-Jc-yKI">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="Amiga 1010 (2 x faster)" tag="1" id="jgG-vr-Soe">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="Amiga 1010 (4 x faster)" tag="2" id="Os2-Uz-EHj">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="Amiga 1010 (8 x faster)" tag="3" id="lbn-dm-ssc">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="Amiga 1010 (unlimited)" tag="4" id="jXY-tk-uu0">
+                                                        <menuItem title="3.5 DD" state="on" id="Bqr-Jc-yKI">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                     </items>
@@ -539,27 +531,108 @@ DQ
                                                 <action selector="hwDriveTypeAction:" target="-2" id="V3p-JK-T34"/>
                                             </connections>
                                         </popUpButton>
-                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="40w-GY-Enr">
-                                            <rect key="frame" x="94" y="207" width="182" height="26"/>
+                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8ia-It-f3J">
+                                            <rect key="frame" x="185" y="237" width="96" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Amiga 1010" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="S9T-RH-Pmc" id="CTA-k7-6cd">
+                                            <popUpButtonCell key="cell" type="push" title="Original" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="1" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="MYn-Tp-etv" id="nfK-3o-9eH">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="menu"/>
+                                                <menu key="menu" title="OtherViews" id="4yT-US-Zem">
+                                                    <items>
+                                                        <menuItem title="Original" state="on" tag="1" id="MYn-Tp-etv">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="2 x faster" tag="2" id="5Tm-G8-ER1">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="4 x faster" tag="4" id="FDK-JC-wU0">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="8 x faster" tag="8" id="uDL-Gq-8fJ">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="Unlimited" tag="65535" id="mcB-CH-P4m">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <action selector="hwDriveSpeedAction:" target="-2" id="DBp-1f-nwE"/>
+                                            </connections>
+                                        </popUpButton>
+                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="ikV-D6-Fbi">
+                                            <rect key="frame" x="185" y="207" width="96" height="26"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="Original" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="1" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="Rwp-i6-kSw" id="wjL-f6-YWq">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="menu"/>
+                                                <menu key="menu" title="OtherViews" id="eBB-EM-5zV">
+                                                    <items>
+                                                        <menuItem title="Original" state="on" tag="1" id="Rwp-i6-kSw">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="2 x faster" tag="2" id="6i7-7S-pjf">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="4 x faster" tag="4" id="14z-uV-VfH">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="8 x faster" tag="8" id="CYZ-NK-FdC">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="Unlimited" tag="65535" id="wk7-D0-Ac1">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <action selector="hwDriveSpeedAction:" target="-2" id="nFa-GH-IKu"/>
+                                            </connections>
+                                        </popUpButton>
+                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="0De-08-YWP">
+                                            <rect key="frame" x="185" y="177" width="96" height="26"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="Original" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="1" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="8nm-GG-ka1" id="bTP-0Q-8fd">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="menu"/>
+                                                <menu key="menu" title="OtherViews" id="6mB-tZ-cub">
+                                                    <items>
+                                                        <menuItem title="Original" state="on" tag="1" id="8nm-GG-ka1">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="2 x faster" tag="2" id="h2u-27-AWg">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="4 x faster" tag="4" id="N1b-vj-Yvy">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="8 x faster" tag="8" id="Yfr-qo-XoZ">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="Unlimited" tag="65535" id="wyp-nC-rKS">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <action selector="hwDriveSpeedAction:" target="-2" id="87t-Fx-2aG"/>
+                                            </connections>
+                                        </popUpButton>
+                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="40w-GY-Enr">
+                                            <rect key="frame" x="94" y="207" width="88" height="26"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="3.5 DD" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="S9T-RH-Pmc" id="CTA-k7-6cd">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="menu"/>
                                                 <menu key="menu" title="OtherViews" id="G5n-hQ-5HY">
                                                     <items>
-                                                        <menuItem title="Amiga 1010" state="on" id="S9T-RH-Pmc">
+                                                        <menuItem title="3.5 DD" state="on" id="S9T-RH-Pmc">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="Amiga 1010 (2 x faster)" tag="1" id="6UP-CK-Rle">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="Amiga 1010 (4 x faster)" tag="2" id="lg1-Xq-Rh0">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="Amiga 1010 (8 x faster)" tag="3" id="bnI-4L-EKf">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="Amiga 1010 (unlimited)" tag="4" id="yRP-wf-1Ad">
+                                                        <menuItem title="5.25 SD" tag="1" id="6UP-CK-Rle">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                     </items>
@@ -581,26 +654,17 @@ DQ
                                             </connections>
                                         </button>
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="Ere-QU-ANT">
-                                            <rect key="frame" x="94" y="177" width="182" height="26"/>
+                                            <rect key="frame" x="94" y="177" width="88" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Amiga 1010" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="Pyp-f7-wKz" id="GMx-YX-8gP">
+                                            <popUpButtonCell key="cell" type="push" title="3.5 DD" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="Pyp-f7-wKz" id="GMx-YX-8gP">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="menu"/>
                                                 <menu key="menu" title="OtherViews" id="33h-Ec-irG">
                                                     <items>
-                                                        <menuItem title="Amiga 1010" state="on" id="Pyp-f7-wKz">
+                                                        <menuItem title="3.5 DD" state="on" id="Pyp-f7-wKz">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="Amiga 1010 (2 x faster)" tag="1" id="ddT-tp-00B">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="Amiga 1010 (4 x faster)" tag="2" id="Kfi-NV-V6c">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="Amiga 1010 (8 x faster)" tag="3" id="eCh-Q1-xRu">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="Amiga 1010 (unlimited)" tag="4" id="Rzw-l7-PDD">
+                                                        <menuItem title="5.25 SD" tag="1" id="ddT-tp-00B">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                     </items>
@@ -622,26 +686,17 @@ DQ
                                             </connections>
                                         </button>
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="bHc-hk-LLX">
-                                            <rect key="frame" x="94" y="147" width="182" height="26"/>
+                                            <rect key="frame" x="94" y="147" width="88" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Amiga 1010" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="yTp-fg-6Kz" id="vYh-yL-WOV">
+                                            <popUpButtonCell key="cell" type="push" title="3.5 DD" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="yTp-fg-6Kz" id="vYh-yL-WOV">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="menu"/>
                                                 <menu key="menu" title="OtherViews" id="41D-sQ-Ys1">
                                                     <items>
-                                                        <menuItem title="Amiga 1010" state="on" id="yTp-fg-6Kz">
+                                                        <menuItem title="3.5 DD" state="on" id="yTp-fg-6Kz">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="Amiga 1010 (2 x faster)" tag="1" id="32V-sa-klY">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="Amiga 1010 (4 x faster)" tag="2" id="VkJ-hf-FTw">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="Amiga 1010 (8 x faster)" tag="3" id="dae-es-RcD">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="Amiga 1010 (unlimited)" tag="4" id="vaf-cR-6Cv">
+                                                        <menuItem title="5.25 SD" tag="1" id="32V-sa-klY">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                     </items>
@@ -720,6 +775,36 @@ DQ
                                                 <action selector="hwRealTimeClocktAction:" target="-2" id="SbQ-bw-vhJ"/>
                                             </connections>
                                         </button>
+                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="w3r-vt-KQa">
+                                            <rect key="frame" x="185" y="147" width="96" height="26"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="Original" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="1" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="5p9-bH-Ufe" id="0MK-sp-HBf">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="menu"/>
+                                                <menu key="menu" title="OtherViews" id="Ufe-vv-dWM">
+                                                    <items>
+                                                        <menuItem title="Original" state="on" tag="1" id="5p9-bH-Ufe">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="2 x faster" tag="2" id="ZBx-oY-u7o">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="4 x faster" tag="4" id="e14-IT-XQ9">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="8 x faster" tag="8" id="F5V-9E-r3G">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="Unlimited" tag="65535" id="CAF-uG-VKH">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <action selector="hwDriveSpeedAction:" target="-2" id="Ig5-vC-m80"/>
+                                            </connections>
+                                        </popUpButton>
                                     </subviews>
                                 </view>
                             </tabViewItem>

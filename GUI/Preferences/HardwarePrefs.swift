@@ -31,13 +31,17 @@ extension PreferencesController {
         hwFastRamPopup.selectItem(withTag: memConfig.fastRamSize)
 
         // Drive
+        hwDf1Connect.state = config.df1.connected ? .on : .off
+        hwDf2Connect.state = config.df2.connected ? .on : .off
+        hwDf3Connect.state = config.df3.connected ? .on : .off
         hwDf0Type.selectItem(withTag: config.df0.type.rawValue)
         hwDf1Type.selectItem(withTag: config.df1.type.rawValue)
         hwDf2Type.selectItem(withTag: config.df2.type.rawValue)
         hwDf3Type.selectItem(withTag: config.df3.type.rawValue)
-        hwDf1Connect.state = config.df1.connected ? .on : .off
-        hwDf2Connect.state = config.df2.connected ? .on : .off
-        hwDf3Connect.state = config.df3.connected ? .on : .off
+        hwDf0Speed.selectItem(withTag: Int(config.df0.speed))
+        hwDf1Speed.selectItem(withTag: Int(config.df1.speed))
+        hwDf2Speed.selectItem(withTag: Int(config.df2.speed))
+        hwDf3Speed.selectItem(withTag: Int(config.df3.speed))
 
         // Lock controls if emulator is powered on
         hwAmigaModelPopup.isEnabled = poweredOff
@@ -99,20 +103,17 @@ extension PreferencesController {
     
     @IBAction func hwDriveTypeAction(_ sender: NSPopUpButton!) {
         
-        let driveNr = sender.tag
-        amigaProxy?.configureDrive(driveNr, type: sender.selectedTag())
+        track()
+        
+        let nr = sender.tag
+        amigaProxy?.configureDrive(nr, type: sender.selectedTag())
         refresh()
     }
-    
-    @IBAction func hwDf0TypeAction(_ sender: NSPopUpButton!) {
+ 
+    @IBAction func hwDriveSpeedAction(_ sender: NSPopUpButton!) {
         
-        amigaProxy?.configureDrive(0, type: sender.selectedTag())
-        refresh()
-    }
-    
-    @IBAction func hwDf1TypeAction(_ sender: NSPopUpButton!) {
-        
-        amigaProxy?.configureDrive(1, type: sender.selectedTag())
+        let nr = sender.tag
+        amigaProxy?.configureDrive(nr, speed: sender.selectedTag())
         refresh()
     }
 

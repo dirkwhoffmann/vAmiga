@@ -53,12 +53,16 @@ class PreferencesController : DialogController {
 
     // Drive
     @IBOutlet weak var hwDf0Type: NSPopUpButton!
+    @IBOutlet weak var hwDf0Speed: NSPopUpButton!
     @IBOutlet weak var hwDf1Connect: NSButton!
     @IBOutlet weak var hwDf1Type: NSPopUpButton!
+    @IBOutlet weak var hwDf1Speed: NSPopUpButton!
     @IBOutlet weak var hwDf2Connect: NSButton!
     @IBOutlet weak var hwDf2Type: NSPopUpButton!
+    @IBOutlet weak var hwDf2Speed: NSPopUpButton!
     @IBOutlet weak var hwDf3Connect: NSButton!
     @IBOutlet weak var hwDf3Type: NSPopUpButton!
+    @IBOutlet weak var hwDf3Speed: NSPopUpButton!
 
     // Lock
     @IBOutlet weak var hwLockImage: NSImageView!
@@ -109,7 +113,7 @@ class PreferencesController : DialogController {
     // Emulator preferences
     //
     
-    // VC1541
+    // Drive
     @IBOutlet weak var emuWarpLoad: NSButton!
     @IBOutlet weak var emuDriveSounds: NSButton!
     @IBOutlet weak var emuDriveSoundsNoPoll: NSButton!

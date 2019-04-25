@@ -1179,13 +1179,17 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->amiga->configureRealTimeClock(value);
 }
-- (BOOL) configureDrive:(NSInteger)driveNr connected:(BOOL)value
+- (BOOL) configureDrive:(NSInteger)nr connected:(BOOL)value
 {
-    return wrapper->amiga->configureDrive((unsigned)driveNr, value);
+    return wrapper->amiga->configureDrive((unsigned)nr, value);
 }
-- (BOOL) configureDrive:(NSInteger)driveNr type:(NSInteger)type
+- (BOOL) configureDrive:(NSInteger)nr type:(NSInteger)type
 {
-    return wrapper->amiga->configureDrive((unsigned)driveNr, (DriveType)type);
+    return wrapper->amiga->configureDriveType((unsigned)nr, (DriveType)type);
+}
+- (BOOL) configureDrive:(NSInteger)nr speed:(NSInteger)value
+{
+    return wrapper->amiga->configureDriveSpeed((unsigned)nr, value);
 }
 - (void) addListener:(const void *)sender function:(Callback *)func
 {

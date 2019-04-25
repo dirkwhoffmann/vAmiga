@@ -185,15 +185,19 @@ Amiga::getConfig()
     
     config.df0.connected = paula.diskController.isConnected(0);
     config.df0.type = df0.getType();
+    config.df0.speed = df0.getSpeed();
     
     config.df1.connected = paula.diskController.isConnected(1);
     config.df1.type = df1.getType();
+    config.df1.speed = df1.getSpeed();
 
     config.df2.connected = paula.diskController.isConnected(2);
     config.df2.type = df2.getType();
+    config.df2.speed = df2.getSpeed();
 
     config.df3.connected = paula.diskController.isConnected(3);
     config.df3.type = df3.getType();
+    config.df3.speed = df3.getSpeed();
 
     return config;
 }
@@ -329,47 +333,54 @@ Amiga::configureDrive(unsigned df, bool connected)
 }
 
 bool
-Amiga::configureDrive(unsigned driveNr, DriveType type)
+Amiga::configureDriveType(unsigned df, DriveType type)
 {
+    debug("configureDriveType\n");
+    
+    Drive *drive =
+    (df == 0) ? &df0 :
+    (df == 1) ? &df1 :
+    (df == 2) ? &df2 :
+    (df == 3) ? &df3 : NULL;
+    
+    if (!drive) {
+        warn("Invalid drive number (%d). Ignoring.\n", df);
+        return false;
+    }
+    
     if (!isDriveType(type)) {
-        
         warn("Invalid drive type: %d\n", type);
         return false;
     }
     
-    switch (driveNr) {
-        
-        case 0:
-        if (df0.getType() != type) {
-            df0.setType(type);
-            putMessage(MSG_CONFIG);
-        }
-        return true;
-        
-        case 1:
-        if (df1.getType() != type) {
-            df1.setType(type);
-            putMessage(MSG_CONFIG);
-        }
-        return true;
-        
-        case 2:
-        if (df2.getType() != type) {
-            df2.setType(type);
-            putMessage(MSG_CONFIG);
-        }
-        return true;
-        
-        case 3:
-        if (df3.getType() != type) {
-            df3.setType(type);
-            putMessage(MSG_CONFIG);
-        }
-        return true;
+    if (drive->getType() != type) {
+        drive->setType(type);
+        putMessage(MSG_CONFIG);
     }
     
-    warn("Invalid drive number (%d). Ignoring.\n", driveNr);
-    return false;
+    return true;
+}
+
+bool
+Amiga::configureDriveSpeed(unsigned df, uint16_t value)
+{
+    Drive *drive =
+    (df == 0) ? &df0 :
+    (df == 1) ? &df1 :
+    (df == 2) ? &df2 :
+    (df == 3) ? &df3 : NULL;
+
+    if (!drive) {
+        warn("Invalid drive number (%d). Ignoring.\n", df);
+        return false;
+    }
+    
+    if (drive->getSpeed() != value) {
+        drive->setSpeed(value);
+        putMessage(MSG_CONFIG);
+    }
+    
+    return true;
 }
 
 void
@@ -387,7 +398,7 @@ Amiga::_powerOn()
     m68k_pulse_reset();
     
     // For debugging, we start in debug mode and set a breakpoint
-    // debugMode = true;
+    debugMode = true;
     
     // cpu.bpManager.setBreakpointAt(0xFC570E); // Blitter
     // cpu.bpManager.setBreakpointAt(0xFE8A6E); // All Blitter stuff done
@@ -395,7 +406,7 @@ Amiga::_powerOn()
     // cpu.bpManager.setBreakpointAt(0xFEA212); //
     // cpu.bpManager.setBreakpointAt(0xfeaa22);
     // cpu.bpManager.setBreakpointAt(0xfe85a6);  // After MFM decoding with Blitter
-    
+    // cpu.bpManager.setBreakpointAt(0xFC81F4);
     // Update the recorded debug information
     inspect();
     

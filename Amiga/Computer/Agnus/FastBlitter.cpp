@@ -35,7 +35,7 @@ Blitter::doFastCopyBlit()
     
     copycount++;
 
-    bltdebug = 0; // (copycount == 1616);
+    bltdebug = (copycount == 1631);
 
     /*
     plainmsg("%d COPY BLIT (%d,%d) (%s)\n",
@@ -141,7 +141,7 @@ Blitter::doFastCopyBlit()
             // Write D
             if (useD) {
                 amiga->mem.pokeChip16(bltdpt, dhold);
-                if (bltdebug) plainmsg("    D: poke(%X), %X\n", bltdpt, dhold);
+                if (bltdebug) plainmsg("D: poke(%X), %X\n", bltdpt, dhold);
                 check1 = fnv_1a_it32(check1, dhold);
                 check2 = fnv_1a_it32(check2, bltdpt);
                 // plainmsg("    check1 = %X check2 = %X\n", check1, check2);

@@ -133,17 +133,6 @@ class Amiga : public HardwareComponent {
     
     
     //
-    // Current configuration
-    //
-    // Specification of the machine we are going to emulate...
-    
-    public:
-    
-    // DEPRECATED: REPLACE BY getConfig()
-    // AmigaConfiguration config;
-    
-    
-    //
     // Counters
     //
     
@@ -321,8 +310,9 @@ class Amiga : public HardwareComponent {
     
     // Chooses if a drive is connected or not.
     bool configureDrive(unsigned driveNr, bool connected);
-    bool configureDrive(unsigned driveNr, DriveType type);
-    
+    bool configureDriveType(unsigned driveNr, DriveType type);
+    bool configureDriveSpeed(unsigned driveNr, uint16_t value);
+
     
     //
     // Methods from HardwareComponent
