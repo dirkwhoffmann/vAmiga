@@ -26,8 +26,8 @@ Drive::Drive(unsigned nr)
         { &speed,            sizeof(speed),            PERSISTANT },
 
         // Internal state items
-        { &idMode,           sizeof(idMode),           0 },
         { &idCount,          sizeof(idCount),          0 },
+        { &idBit,            sizeof(idBit),            0 },
         { &motor,            sizeof(motor),            0 },
         { &dskchange,        sizeof(dskchange),        0 },
         { &dsklen,           sizeof(dsklen),           0 },
@@ -136,9 +136,9 @@ Drive::driveStatusFlags()
     if (isSelected()) {
         
         // PA5: /DSKRDY
-        if (idMode) {
+        if (!motor) {
             // debug("ID mode is on\n");
-            if (getDriveId() & (1 << idCount)) result &= 0b11011111;
+            if (idBit) result &= 0b11011111;
         } else {
             // debug("ID mode is off\n");
             if (motor && hasDisk()) result &= 0b11011111;
@@ -167,34 +167,24 @@ Drive::setMotor(bool value)
 {
     if (!motor && value) {
         
-        // Turn motor on
-        // debug("[%lld] Motor On", amiga->agnus.frame);
         printf("Motor on\n");
         
-        motor = true;
-        
-        // Quit identification mode
-        idMode = false;
-        idCount = 0;
-        
-        // Notify GUI
+        amiga->putMessage(MSG_DRIVE_LED_ON, nr);
         amiga->putMessage(MSG_DRIVE_MOTOR_ON, nr);
     }
     
     else if (motor && !value) {
-    
-        // Turn motor off
-        // debug("[%lld] Motor Off", amiga->agnus.frame);
+  
         printf("Motor off\n");
-        motor = false;
         
-        // Enter identification mode
-        idMode = true;
-        idCount = 32;
+        // Reset identification shift register counter
+        idCount = 0;
         
-        // Notify GUI
+        amiga->putMessage(MSG_DRIVE_LED_OFF, nr);
         amiga->putMessage(MSG_DRIVE_MOTOR_OFF, nr);
     }
+    
+    motor = value;
 }
 
 void
@@ -332,6 +322,7 @@ Drive::insertDisk(ADFFile *file)
     insertDisk(Disk::makeWithFile(file));
 }
 
+/*
 void
 Drive::latchMTR(bool value)
 {
@@ -341,19 +332,13 @@ Drive::latchMTR(bool value)
         
         // Switch motor on
         setMotor(true);
-        
-        // Switch drive LED on
-        amiga->putMessage(MSG_DRIVE_LED_ON, nr);
     }
     else if (value != 0 && motor) {
         
         // Switch motor off
        setMotor(false);
-        
-        // Switch drive LED off
-        amiga->putMessage(MSG_DRIVE_LED_OFF, nr);
-    }
 }
+*/
 
 void
 Drive::PRBdidChange(uint8_t oldValue, uint8_t newValue)
@@ -362,30 +347,53 @@ Drive::PRBdidChange(uint8_t oldValue, uint8_t newValue)
     // | /MTR  | /SEL3 | /SEL2 | /SEL1 | /SEL0 | /SIDE |  DIR  | STEP  |
     // -----------------------------------------------------------------
 
-    bool oldSel  = oldValue & (0b1000 << nr);
-    bool newSel  = newValue & (0b1000 << nr);
-    bool oldStep = oldValue & 1;
-    bool newStep = newValue & 1;
-    bool dir     = newValue & 2;
+    bool oldMtr = oldValue & 0x80;
+    bool oldSel = oldValue & (0b1000 << nr);
+    bool oldStep = oldValue & 0x01;
+
+    bool newMtr = newValue & 0x80;
+    bool newSel = newValue & (0b1000 << nr);
+    bool newStep = newValue & 0x01;
+    
+    bool newDir = newValue & 0x02;
     
     // Store a copy of the new PRB value
     prb = newValue;
     
-    // Latch MTR on a falling edge of SELx
-    if (FALLING_EDGE(oldSel, newSel)) latchMTR(newValue & 0x80);
-    
-    // In identification mode, select the next id bit on a raising edge of SELx
-    if (idMode && idCount && RISING_EDGE(oldSel, newSel)) idCount--;
-    
-    // Only proceed if this drive is selected (selx is low)
-    if (newSel) return;
+    //
+    // Drive motor
+    //
+
+    // The motor state can only change on a falling edge on the select line
+    if (FALLING_EDGE(oldSel, newSel)) {
         
+        // Emulate the indentification shift register
+        idCount = (idCount + 1) % 32;
+        idBit = !!GET_BIT(getDriveId(), 31 - idCount);
+        
+        // Drive motor logic from SAE / UAE
+        if (!oldMtr || !newMtr) {
+            switchMotorOn();
+        } else if (oldMtr) {
+            switchMotorOff();
+        }
+        
+        plaindebug("disk.select() sel df%d ($%08X) [$%08x, bit #%02d: %d]\n",
+              nr, getDriveId(), getDriveId() << idCount, 31 - idCount, idBit);
+    }
+    
+    //
+    // Drive head
+    //
+    
+    // Move head if STEP goes high and drive was already selected
+    if (RISING_EDGE(oldStep, newStep) && oldSel) moveHead(newDir);
+    
     // Evaluate the side selection bit
     if (head.side != !(newValue & 0b100)) {
         // debug("Switching to side %d\n", !(newValue & 0b100));
     }
     head.side = !(newValue & 0b100);
         
-    // Move the drive head if there is a falling edge on the step line
-    if (FALLING_EDGE(oldStep, newStep)) moveHead(dir);
+ 
 }

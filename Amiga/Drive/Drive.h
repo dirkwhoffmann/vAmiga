@@ -45,10 +45,14 @@ private:
     // DriveIdCode id = DRIVE_ID_35DD;
 
     // Indicates if the identification mode is active.
-    bool idMode;
+    // bool idMode;
     
-    // Indicates the number of the id bit to read if id mode is active.
+    // Position of the currently transmitted identification bit
     uint8_t idCount;
+
+    // Value of the currently transmitted identification bit
+    bool idBit;
+
     
     /* The latched MTR bit (motor control bit)
      * Each drive latches the motor signal at the time it is selected (i.e.,
@@ -170,6 +174,8 @@ public:
     
     // Turns the drive motor on or off
     void setMotor(bool value);
+    void switchMotorOn() { setMotor(true); }
+    void switchMotorOff() { setMotor(false); }
     
     // Selects the active drive head (0 = lower, 1 = upper)
     void selectSide(int side);
@@ -204,7 +210,7 @@ public:
     /* Latches the MTR bit
      * TODO: Quote from HRM?
      */
-    void latchMTR(bool value);
+    // void latchMTR(bool value);
     
     
     //

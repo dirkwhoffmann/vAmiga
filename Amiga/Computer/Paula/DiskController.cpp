@@ -271,18 +271,17 @@ DiskController::PRBdidChange(uint8_t oldValue, uint8_t newValue)
     // Store a copy of the new value for reference.
     prb = newValue;
     
-    // Determine the selected drive.
-    /* In theory, multiple drives can be selected. In that case, we give
-     * priority to the drive with the lowest number and ignore all others.
-     */
-    selectedDrive =
-    ((prb & 0b0001000) == 0 && connected[0]) ? 0 :
-    ((prb & 0b0010000) == 0 && connected[1]) ? 1 :
-    ((prb & 0b0100000) == 0 && connected[2]) ? 2 :
-    ((prb & 0b1000000) == 0 && connected[3]) ? 3 : -1;
-    
-    // Determine the speedup factor for the selected drive.
-    acceleration = (selectedDrive == -1) ? 1 : df[selectedDrive]->getSpeed();
+    // Inform all four drives and determine the selected one
+    selectedDrive = -1;
+    for (unsigned i = 0; i < 4; i++) {
+        if (connected[i]) {
+            df[i]->PRBdidChange(oldValue, newValue);
+            if (df[i]->isSelected()) {
+                selectedDrive = i;
+                acceleration = df[i]->getSpeed();
+            }
+        }
+    }
     
     // Schedule the first rotation event if at least one drive is spinning.
     if (!spinning()) {
@@ -290,11 +289,6 @@ DiskController::PRBdidChange(uint8_t oldValue, uint8_t newValue)
     }
     else if (!handler->hasEventSec(DSK_SLOT)) {
         handler->scheduleSecRel(DSK_SLOT, DMA_CYCLES(56), DSK_ROTATE);
-    }
-    
-    // Pass control over to all four drives.
-    for (unsigned i = 0; i < 4; i++) {
-        if (connected[i]) df[i]->PRBdidChange(oldValue, newValue);
     }
 }
 
