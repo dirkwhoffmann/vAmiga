@@ -185,13 +185,15 @@ CIA::peek(uint16_t addr)
         case 0x00: // CIA_DATA_PORT_A
 
             updatePA();
-            // debug("Peek %d (hex: %02X) = %d (DDRA = %X)\n", addr, addr, PA, DDRA);
+            plaindebug("%s Peek %d (hex: %02X) = %d (DDRA = %X)\n",
+                       getDescription(), addr, addr, PA, DDRA);
             return PA;
 
         case 0x01: // CIA_DATA_PORT_B
 
             updatePB();
-            // debug("Peek %d (hex: %02X) = %d (DDRB = %X)\n", addr, addr, PB, DDRB);
+            plaindebug("%s Peek %d (hex: %02X) = %d (DDRB = %X)\n",
+                       getDescription(), addr, addr, PB, DDRB);
             return PB;
 
         case 0x02: // CIA_DATA_DIRECTION_A
@@ -376,26 +378,29 @@ CIA::poke(uint16_t addr, uint8_t value)
 		
         case 0x00: // CIA_DATA_PORT_A
 
-            // debug("poke(CIA_DATA_PORT_A, %X)\n", value);
+            plaindebug("%s poke(0, %X)\n", getDescription(), value);
             pokePA(value);
             return;
             
         case 0x01: // CIA_DATA_PORT_B
             
-            // debug("poke(CIA_DATA_PORT_B, %X)\n", value);
+            plaindebug("%s poke(1, %x)\n", getDescription(), value);
             PRB = value;
             updatePB();
             return;
             
         case 0x02: // CIA_DATA_DIRECTION_A
-            
+        
+            plaindebug("%s poke(DDRA, %x)\n", getDescription(), value);
             pokeDDRA(value);
             // DDRA = value;
             // updatePA();
             return;
             
         case 0x03: // CIA_DATA_DIRECTION_B
-            
+        
+            plaindebug("%s poke(DDRB, %x)\n", getDescription(), value);
+
             DDRB = value;
             updatePB();
             return;
@@ -1301,6 +1306,8 @@ CIAA::updatePA()
     
     PA = (portAinternal() & DDRA) | (portAexternal() & ~DDRA);
 
+    // plaindebug("CIAA: Peek(0) = %x (PC = %x DDRA = %x)\n", PA, amiga->cpu.getPC(), DDRA);
+    
     // Power LED bit
     if ((oldPA ^ PA) & 0b00000010) {
         // debug("/LED has changed\n");
@@ -1442,8 +1449,7 @@ CIAB::portAinternal()
 uint8_t
 CIAB::portAexternal()
 {
-    uint8_t result = 4;
-    return result;
+    return 0;
 }
 
 void

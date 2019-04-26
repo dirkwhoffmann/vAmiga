@@ -42,7 +42,7 @@ private:
      * identification mode is activated by switching the drive motor on and
      * off.
      */
-    DriveIdCode id = DRIVE_ID_35DD;
+    // DriveIdCode id = DRIVE_ID_35DD;
 
     // Indicates if the identification mode is active.
     bool idMode;
@@ -109,7 +109,6 @@ public:
     
 public:
     
-    // AmigaDrive();
     Drive(unsigned nr);
     
     
@@ -147,6 +146,9 @@ public:
     // Sets the accleration factor
     void setSpeed(uint16_t value);
 
+    // Returns the drive identification code
+    uint32_t getDriveId();
+    
     
     //
     // Handling the drive status register flags

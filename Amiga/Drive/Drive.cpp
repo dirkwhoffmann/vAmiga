@@ -23,7 +23,7 @@ Drive::Drive(unsigned nr)
 
         // Configuration items
         { &type,             sizeof(type),             PERSISTANT },
-        { &id,               sizeof(id),               PERSISTANT },
+        { &speed,            sizeof(speed),            PERSISTANT },
 
         // Internal state items
         { &idMode,           sizeof(idMode),           0 },
@@ -100,6 +100,24 @@ Drive::setSpeed(uint16_t value)
 
 }
 
+uint32_t
+Drive::getDriveId()
+{
+    // The internal drive always identifies itself as 'not present'
+    if (nr == 0) return DRIVE_ID_NONE;
+
+    switch (type) {
+
+        case DRIVE_35_DD:  return DRIVE_ID_35DD;
+        case DRIVE_525_SD: return DRIVE_ID_525SD;
+        default: assert(false);
+    }
+        
+    // HD drives are not supported, yet.
+    // Note that an HD drive identifies itself as HD only if a HD disk is
+    // inserted. Otherweise, it identifies itself as a DD drive.
+}
+
 bool
 Drive::isDataSource()
 {
@@ -120,7 +138,7 @@ Drive::driveStatusFlags()
         // PA5: /DSKRDY
         if (idMode) {
             // debug("ID mode is on\n");
-            if (id & (1 << idCount)) result &= 0b11011111;
+            if (getDriveId() & (1 << idCount)) result &= 0b11011111;
         } else {
             // debug("ID mode is off\n");
             if (motor && hasDisk()) result &= 0b11011111;
