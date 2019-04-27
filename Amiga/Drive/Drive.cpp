@@ -103,9 +103,6 @@ Drive::setSpeed(uint16_t value)
 uint32_t
 Drive::getDriveId()
 {
-    // The internal drive always identifies itself as 'not present'
-    if (nr == 0) return DRIVE_ID_NONE;
-
     switch (type) {
 
         case DRIVE_35_DD:  return DRIVE_ID_35DD;
@@ -387,7 +384,7 @@ Drive::PRBdidChange(uint8_t oldValue, uint8_t newValue)
     //
     
     // Move head if STEP goes high and drive was already selected
-    if (RISING_EDGE(oldStep, newStep) && oldSel) moveHead(newDir);
+    if (RISING_EDGE(oldStep, newStep) && !oldSel) moveHead(newDir);
     
     // Evaluate the side selection bit
     if (head.side != !(newValue & 0b100)) {
