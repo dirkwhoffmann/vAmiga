@@ -142,17 +142,23 @@ public:
     // Clears a single track
     void clearTrack(Track t);
 
-    /* Encodes the whole disk
-     */
+    // Encodes the whole disk (as SAE / UAE does)
     bool encodeDisk(ADFFile *adf);
-     
+    
+    // Encodes the whole disk (as Omega does)
+    bool encodeDiskOmega(ADFFile *adf);
+    
+    private:
+    
     /* Encodes a single track
      */
     bool encodeTrack(ADFFile *adf, Track t);
+    bool encodeTrackOmega(ADFFile *adf, Track t);
     
     /* Encodes a single sector
      */
     bool encodeSector(ADFFile *adf, Track t, Sector s);
+    bool encodeSectorOmega(ADFFile *adf, Track t, Sector s);
     
     /* Encodes a certain number of bytes in odd / even format
      */
