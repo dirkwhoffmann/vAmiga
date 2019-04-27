@@ -113,6 +113,9 @@ Disk::encodeTrack(ADFFile *adf, Track t)
         result &= encodeSector(adf, t, s);
     }
     
+    // Get the clock bit right at offset position 0
+    if (data.track[t][mfmBytesPerTrack - 1] & 1) data.track[t][0] &= 0x7F;
+    
     // First five bytes of track gap
     /*
     uint8_t *p = data.track[t] + (11 * mfmBytesPerSector);
@@ -123,20 +126,22 @@ Disk::encodeTrack(ADFFile *adf, Track t)
     p[4] = 0xAA;
     */
     
-     if (t == 0) {
+     if (1) {
  
          uint8_t *p = data.track[t] + (0 * mfmBytesPerSector);
          
          uint32_t check = fnv_1a_init32();
-         for (unsigned i = 0; i < 2*2048; i+=2) {
+         for (unsigned i = 0; i < 2*6334; i+=2) {
              check = fnv_1a_it32(check, HI_LO(p[i],p[i+1]));
          }
+         /*
          for (unsigned i = 0, j = 1; i < 2*2048; i += 16, j++) {
              plaindebug("%2d: %X%X %X%X %X%X %X%X %X%X %X%X %X%X %X%X\n", j,
                         p[i], p[i+1], p[i+2], p[i+3], p[i+4], p[i+5], p[i+6], p[i+7],
                         p[i+8], p[i+9], p[i+10], p[i+11], p[i+12], p[i+13], p[i+14], p[i+15]);
          }
-         plaindebug("checksum = %X\n", check);
+        */
+         plaindebug("Track %d checksum = %X\n", t, check);
      }
     
     return result;
@@ -209,8 +214,9 @@ Disk::encodeSector(ADFFile *adf, Track t, Sector s)
     encodeOddEven(&p[56], dcheck, sizeof(bcheck));
     
     // Add clock bits
-    for(unsigned i = 8; i < 1088; i ++)
-    p[i] = addClockBits(p[i], p[i-1]);
+    for(unsigned i = 8; i < 1088; i ++) {
+        p[i] = addClockBits(p[i], p[i-1]);
+    }
     
     return true;
 }
