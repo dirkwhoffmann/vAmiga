@@ -223,6 +223,17 @@ Drive::rotate()
 }
 
 void
+Drive::findSyncMark()
+{
+    for (unsigned i = 0; i < Disk::mfmBytesPerTrack; i++, rotate()) {
+        
+        if (readHead() != 0x44) continue;
+        if (readHead() != 0x89) continue;
+        break;
+    }
+}
+
+void
 Drive::moveHead(int dir)
 {
     // Update disk change signal
@@ -242,6 +253,9 @@ Drive::moveHead(int dir)
         // debug("[%lld] Moving up to cylinder %d\n", amiga->agnus.frame, head.cylinder);
         if (nr == 0) plainmsg("Df%d cylinder %d\n", nr, head.cylinder);
     }
+    
+    head.offset = 0; 
+    // findSyncMark(); // REMOVE ASAP
     
     /* Inform the GUI
      * We send a MSG_DRIVE_HEAD_POLL, if a disk change polling signature is

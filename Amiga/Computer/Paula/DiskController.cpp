@@ -9,6 +9,10 @@
 
 #include "Amiga.h"
 
+// REMOVE ASAP
+uint32_t dcheck = fnv_1a_init32();
+int debugcnt = 0;
+
 DiskController::DiskController()
 {
     setDescription("DiskController");
@@ -161,12 +165,18 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
     
     uint16_t oldDsklen = dsklen;
     
+    // DEBUGGING
+    dcheck = fnv_1a_init32();
+    debugcnt = 3;
+    
+    if (selectedDrive >= 0) df[selectedDrive]->head.offset = 0;
+    
     // Remember the new value
     dsklen = newDskLen;
     
-    // Disable DMA if the DMAEN bit (bit 15) has been cleared.
+    // Disable DMA if the DMAEN bit (15) is zero
     if (!(newDskLen & 0x8000)) {
-        debug(2, "dma = DRIVE_DMA_OFF\n");
+        plaindebug(1, "dma = DRIVE_DMA_OFF\n");
         state = DRIVE_DMA_OFF;
     }
     
@@ -176,7 +186,7 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
         // Check if the WRITE bit (bit 14) also has been written twice.
         if (oldDsklen & newDskLen & 0x4000) {
             
-            debug(2, "dma = DRIVE_DMA_WRITE\n");
+            plaindebug(1, "dma = DRIVE_DMA_WRITE\n");
             state = DRIVE_DMA_WRITE;
             
         } else {
@@ -185,17 +195,14 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
             if (GET_BIT(amiga->paula.adkcon, 10)) {
                 
                 // Wait with reading until a sync mark has been found
-                debug(2, "dma = DRIVE_DMA_READ_SYNC\n");
+                plaindebug(1, "dma = DRIVE_DMA_READ_SYNC\n");
                 state = DRIVE_DMA_SYNC_WAIT;
                 
             } else {
                 
                 // Start reading immediately
-                debug(2, "dma = DRIVE_DMA_READ\n");
+                plaindebug(1, "dma = DRIVE_DMA_READ\n");
                 state = DRIVE_DMA_READ;
-                
-                // REMOVE ASAP
-                // for (int i = 0; i < 6; i++) df[0]->rotate();
             }
         }
     }
@@ -271,15 +278,16 @@ DiskController::PRBdidChange(uint8_t oldValue, uint8_t newValue)
     // Store a copy of the new value for reference.
     prb = newValue;
     
-    // Inform all four drives and determine the selected one
     selectedDrive = -1;
-    for (unsigned i = 0; i < 4; i++) {
-        if (connected[i]) {
-            df[i]->PRBdidChange(oldValue, newValue);
-            if (df[i]->isSelected()) {
-                selectedDrive = i;
-                acceleration = df[i]->getSpeed();
-            }
+    
+    // Iterate over all connected drives
+    for (unsigned i = 0; i < 4; i++) { if (!connected[i]) continue;
+        
+        // Inform the drive and determine the selected one
+        df[i]->PRBdidChange(oldValue, newValue);
+        if (df[i]->isSelected()) {
+            selectedDrive = i;
+            acceleration = df[i]->getSpeed();
         }
     }
     
@@ -445,13 +453,12 @@ DiskController::doDiskDMA()
 void
 DiskController::doSimpleDiskDMA()
 {
-    static uint16_t checksum = 0;
-    
-    // Only proceed if DSKLEN has the DMA enable bit set.
-    if (!(dsklen & 0x8000)) return;
     
     // Only proceed if there are remaining bytes to read.
     if (!(dsklen & 0x3FFF)) return;
+
+    // Only proceed if DMA is enabled.
+    if (state != DRIVE_DMA_READ) return;
     
     // Only proceed if a drive is selected.
     if (selectedDrive < 0) return;
@@ -460,7 +467,7 @@ DiskController::doSimpleDiskDMA()
     Drive *dfsel = df[selectedDrive];
     
     // Perform DMA
-    for(unsigned i = 0; i < acceleration; i++) {
+    for (unsigned i = 0; i < acceleration; i++) {
         
         uint8_t byte1 = dfsel->readHead();
         dfsel->rotate();
@@ -469,31 +476,33 @@ DiskController::doSimpleDiskDMA()
         
         uint16_t word = (byte1 << 8) | byte2;
         
-        if(word == dsksync) {
+        if (word == dsksync) {
             
             // debug(2, "SYNC IRQ\n");
             amiga->paula.pokeINTREQ(0x9000);
             syncFlag = true;
             
+            /*
             if (floppySync == 0) {
                 
                 // plainmsg("SYNC\n");
-                /*
-                debug("SYNC dsklen: %04x, dskpt: %06x | Track %d | Side %d | Index %d\n",
-                      dsklen & 0x3FFF, amiga->agnus.dskpt,
-                      dfsel->head.cylinder, dfsel->head.side, dfsel->head.offset);
-                */
                 floppySync = 1;
                 return;
             }
+            */
         }
         
-        if(floppySync == 1) {
-            
+        // if (floppySync == 1) {
+        if (1) {
+                
             // Write word into memory.
             amiga->mem.pokeChip16(amiga->agnus.dskpt, word);
+            if (debugcnt) {
+                plaindebug("%d: %X -> %X\n", dsklen & 0x7FFF, word, amiga->agnus.dskpt);
+                debugcnt--;
+            }
             amiga->agnus.dskpt = (amiga->agnus.dskpt + 2) & 0x7FFFF;
-            checksum ^= word;
+            dcheck = fnv_1a_it32(dcheck, word);
             
             dsklen--;
             
@@ -501,18 +510,10 @@ DiskController::doSimpleDiskDMA()
                 
                 amiga->paula.pokeINTREQ(0x8002);
                 state = DRIVE_DMA_OFF;
-                plainmsg("DISK IRQ: CHECKSUM: %X\n", checksum);
+                plainmsg("Disk DMA: Checksum = %X\n", dcheck);
                 floppySync = 0;
                 return;
             }
         }
     }
 }
-
-/*
-bool
-DiskController::doesDMA(int nr)
-{
-    return state == DRIVE_DMA_READ;
-}
-*/

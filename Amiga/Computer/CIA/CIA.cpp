@@ -378,20 +378,20 @@ CIA::poke(uint16_t addr, uint8_t value)
 		
         case 0x00: // CIA_DATA_PORT_A
 
-            plaindebug("%s poke(0, %X)\n", getDescription(), value);
+            // plaindebug("%s poke(0, %X)\n", getDescription(), value);
             pokePA(value);
             return;
             
         case 0x01: // CIA_DATA_PORT_B
             
-            plaindebug("%s poke(1, %X)\n", getDescription(), value);
+            if (this == &amiga->ciaB) plaindebug("%s poke(1, %X)\n", getDescription(), value);
             PRB = value;
             updatePB();
             return;
             
         case 0x02: // CIA_DATA_DIRECTION_A
         
-            plaindebug("%s poke(DDRA, %X)\n", getDescription(), value);
+            // plaindebug("%s poke(DDRA, %X)\n", getDescription(), value);
             pokeDDRA(value);
             // DDRA = value;
             // updatePA();
@@ -399,7 +399,7 @@ CIA::poke(uint16_t addr, uint8_t value)
             
         case 0x03: // CIA_DATA_DIRECTION_B
         
-            plaindebug("%s poke(DDRB, %X)\n", getDescription(), value);
+            // plaindebug("%s poke(DDRB, %X)\n", getDescription(), value);
 
             DDRB = value;
             updatePB();

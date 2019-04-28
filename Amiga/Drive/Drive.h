@@ -185,7 +185,10 @@ public:
     
     // Emulate a disk rotation (moves head to the next byte)
     void rotate();
-    
+
+    // Rotates the disk to the next sync mark
+    void findSyncMark();
+
     // Moves the drive head (0 = inwards, 1 = outwards)
     void moveHead(int dir);
     
