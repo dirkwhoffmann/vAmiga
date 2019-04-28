@@ -151,7 +151,7 @@ Disk::encodeTrack(ADFFile *adf, Track t)
                         p[i+8], p[i+9], p[i+10], p[i+11], p[i+12], p[i+13], p[i+14], p[i+15]);
          }
         */
-         plaindebug("Track %d checksum = %X\n", t, check);
+         plaindebug(2, "Track %d checksum = %X\n", t, check);
      }
     
     return result;

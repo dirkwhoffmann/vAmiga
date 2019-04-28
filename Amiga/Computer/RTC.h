@@ -13,13 +13,9 @@
 #include "HardwareComponent.h"
 
 class RTC : public HardwareComponent {
+ 
+    private:
     
-private:
-    
-    //
-    // Counters
-    //
-
     /* The currently stored time
      * The RTC stores the time in form of the time difference relative to the
      * the current time that is provided by the host machine. I.e.:
@@ -31,29 +27,30 @@ private:
      */
     time_t timeDiff;
     
-    
-    //
-    // Registers
-    //
-    
     // The 16 RTC 4-bit registers
     uint8_t reg[16];
- 
-
+    
+    // The last call to function getTime()
+    Cycle lastCall;
+    
+    // The last return value from function getTime()
+    time_t lastValue;
+    
+    
     //
     // Constructing and destructing
     //
     
-public:
+    public:
     
     RTC();
-
+    
     
     //
     // Methods from HardwareComponent
     //
     
-private:
+    private:
     
     void _powerOn() override;
     void _reset() override;
@@ -61,10 +58,21 @@ private:
     
     
     //
-    // Accessing registers
+    // Accessing the stored time
     //
     
-public:
+    // Returns the current value of the real-time clock
+    time_t getTime();
+    
+    // Sets the current value of the real-time clock
+    void setTime(time_t t);
+    
+    
+    //
+    // Accessing register
+    //
+    
+    public:
     
     // Reads one of the 16 RTC registers
     uint8_t peek(unsigned nr);
@@ -72,7 +80,7 @@ public:
     // Writes one of the 16 RTC registers
     void poke(unsigned nr, uint8_t value);
     
-private:
+    private:
     
     /* Converts the register value to the internally stored time-stamp.
      * This function has to be called *before* a RTC register is *read*.

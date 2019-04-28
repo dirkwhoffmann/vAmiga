@@ -244,11 +244,12 @@ Blitter::doFastLineBlit()
     
     linecount++;
     
+    /*
     bool useA = bltUSEA();
     bool useB = bltUSEB();
     bool useC = bltUSEC();
     bool useD = bltUSED();
-    
+    */
     /*
     printf("BLITTER Line %d (%d,%d) (%d%d%d%d) %x %x %x %x\n",
            linecount, bltsizeW(), bltsizeH(), useA, useB, useC, useD,

@@ -512,7 +512,7 @@ DiskController::doSimpleDMARead(Drive *dfsel)
             
             amiga->paula.pokeINTREQ(0x8002);
             state = DRIVE_DMA_OFF;
-            plainmsg("Disk DMA: Checksum = %X\n", dcheck);
+            // plainmsg("Disk DMA: Checksum = %X\n", dcheck);
             floppySync = 0;
             return;
         }

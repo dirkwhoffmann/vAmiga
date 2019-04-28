@@ -17,6 +17,8 @@ RTC::RTC()
         
         { &timeDiff,  sizeof(timeDiff),  0},
         { &reg,       sizeof(reg),       BYTE_ARRAY },
+        { &lastCall,  sizeof(lastCall),  0},
+        { &lastValue, sizeof(lastValue), 0},
     });
     
 }
@@ -44,12 +46,45 @@ RTC::_dump()
     plainmsg("\n");
 }
 
+time_t
+RTC::getTime()
+{
+    Cycle result;
+    
+    long elapsedSec = (amiga->masterClock - lastCall) / 28000000;
+    debug(2, "elapsedSec = %d\n", elapsedSec);
+    
+    /* Under normal circumstances, we compute the current time of the real-time
+     * clock out of the current time of the host machine and variable timeDiff.
+     */
+    if (elapsedSec > 2) result = time(NULL) + timeDiff;
+    
+    /* If the time between two read accesses is short, we compute the current
+     * time based on the elapsed cycle count. This ensures that the real-time
+     * clock behaves properly if the emulator is run in warp mode.
+     * When Kickstarts boots, it tests the real-time clock by peeking the time
+     * two times while waiting for more than 1 sec between the two calls.
+     */
+    else result = lastValue + elapsedSec;
+    
+    lastCall = amiga->masterClock;
+    lastValue = result;
+    
+    return result;
+}
+
+void
+RTC::setTime(time_t t)
+{
+    timeDiff = t - time(NULL);
+}
+
 uint8_t
 RTC::peek(unsigned nr)
 {
     assert(nr < 16);
     
-    debug("Reading RTC register %d\n", nr);
+    debug(2, "Reading RTC register %d\n", nr);
     
     time2registers();
     return reg[nr];
@@ -60,7 +95,7 @@ RTC::poke(unsigned nr, uint8_t value)
 {
     assert(nr < 16);
     
-    debug("Writing RTC register %d\n", nr);
+    debug(2, "Writing RTC register %d\n", nr);
     
     switch (nr) {
         
@@ -81,15 +116,12 @@ RTC::poke(unsigned nr, uint8_t value)
 void
 RTC::time2registers()
 {
-    // struct tm time;
-    
     // Convert the internally stored time diff to an absolute time_t value.
-    time_t rtcTime = time(NULL) + timeDiff;
+    time_t rtcTime = getTime();
     
     // Convert the time_t value to a tm struct.
     tm *t = localtime(&rtcTime);
-    
-    debug("Time stamp: %s\n", asctime(t));
+    debug(2, "Time stamp: %s\n", asctime(t));
     
     // Write the registers.
     
@@ -146,6 +178,6 @@ RTC::registers2time()
     // Convert the tm struct to a time_t value.
     time_t rtcTime = mktime(&t);
     
-    // Convert the absolute time_t value to the internally stored time diff.
-    timeDiff = rtcTime - time(NULL);
+    // Update the real-time clock.
+    setTime(rtcTime);
 }
