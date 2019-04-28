@@ -118,7 +118,12 @@ public:
     // Reading and writing
     //
     
+    // Reads a byte from disk
     uint8_t readHead(uint8_t cylinder, uint8_t side, uint16_t offset);
+
+    // Writes a byte to disk
+    void writeHead(uint8_t value, uint8_t cylinder, uint8_t side, uint16_t offset);
+
     
     //
     // Handling MFM encoded data

@@ -229,6 +229,16 @@ DiskController::peekDSKBYTR()
     // DATA
     uint16_t result = incoming;
     
+    // DSKBYT
+    assert(amiga->agnus.clock >= incomingCycle);
+    if (amiga->agnus.clock - incomingCycle <= 7) SET_BIT(result, 15);
+    
+    // DMAON
+    if (amiga->agnus.dskDMA() && state != DRIVE_DMA_OFF) SET_BIT(result, 14);
+
+    // DSKWRITE
+    if (dsklen & 0x4000) SET_BIT(result, 13);
+    
     // WORDEQUAL
 #ifdef EASY_DISK
     if (compareFifo(dsksync)) SET_BIT(result, 12);
@@ -236,15 +246,6 @@ DiskController::peekDSKBYTR()
     if (syncFlag) SET_BIT(result, 12);
 #endif
 
-    // DMAON
-    if (amiga->agnus.dskDMA() && state != DRIVE_DMA_OFF) SET_BIT(result, 14);
-    
-    // DSKBYT
-    assert(amiga->agnus.clock >= incomingCycle);
-    if (amiga->agnus.clock - incomingCycle <= 7) {
-        SET_BIT(result, 15);
-    }
-    
     debug(1, "peekDSKBYTR() = %X\n", result);
     return result;
 }
@@ -451,14 +452,14 @@ DiskController::doDiskDMA()
 }
 
 void
-DiskController::doSimpleDiskDMA()
+DiskController::doSimpleDMA()
 {
     
     // Only proceed if there are remaining bytes to read.
     if (!(dsklen & 0x3FFF)) return;
 
     // Only proceed if DMA is enabled.
-    if (state != DRIVE_DMA_READ) return;
+    if (state != DRIVE_DMA_READ && state != DRIVE_DMA_WRITE) return;
     
     // Only proceed if a drive is selected.
     if (selectedDrive < 0) return;
@@ -467,8 +468,26 @@ DiskController::doSimpleDiskDMA()
     Drive *dfsel = df[selectedDrive];
     
     // Perform DMA
+    switch (state) {
+
+        case DRIVE_DMA_READ:
+        doSimpleDMARead(dfsel);
+        break;
+
+        case DRIVE_DMA_WRITE:
+        doSimpleDMAWrite(dfsel);
+        break;
+        
+        default: assert(false);
+    }
+}
+
+void
+DiskController::doSimpleDMARead(Drive *dfsel)
+{
     for (unsigned i = 0; i < acceleration; i++) {
         
+        // Read word from disk.
         uint8_t byte1 = dfsel->readHead();
         dfsel->rotate();
         uint8_t byte2 = dfsel->readHead();
@@ -476,44 +495,57 @@ DiskController::doSimpleDiskDMA()
         
         uint16_t word = (byte1 << 8) | byte2;
         
-        if (word == dsksync) {
-            
-            // debug(2, "SYNC IRQ\n");
-            amiga->paula.pokeINTREQ(0x9000);
-            syncFlag = true;
-            
-            /*
-            if (floppySync == 0) {
-                
-                // plainmsg("SYNC\n");
-                floppySync = 1;
-                return;
-            }
-            */
+        // Write word into memory.
+        amiga->mem.pokeChip16(amiga->agnus.dskpt, word);
+        if (debugcnt) {
+            plaindebug("%d: %X -> %X\n", dsklen & 0x7FFF, word, amiga->agnus.dskpt);
+            debugcnt--;
         }
+        amiga->agnus.dskpt = (amiga->agnus.dskpt + 2) & 0x7FFFF;
+        dcheck = fnv_1a_it32(dcheck, word);
         
-        // if (floppySync == 1) {
-        if (1) {
-                
-            // Write word into memory.
-            amiga->mem.pokeChip16(amiga->agnus.dskpt, word);
-            if (debugcnt) {
-                plaindebug("%d: %X -> %X\n", dsklen & 0x7FFF, word, amiga->agnus.dskpt);
-                debugcnt--;
-            }
-            amiga->agnus.dskpt = (amiga->agnus.dskpt + 2) & 0x7FFFF;
-            dcheck = fnv_1a_it32(dcheck, word);
+        dsklen--;
+        
+        if ((dsklen & 0x3FFF) == 0) {
             
-            dsklen--;
-            
-            if ((dsklen & 0x3FFF) == 0) {
-                
-                amiga->paula.pokeINTREQ(0x8002);
-                state = DRIVE_DMA_OFF;
-                plainmsg("Disk DMA: Checksum = %X\n", dcheck);
-                floppySync = 0;
-                return;
-            }
+            amiga->paula.pokeINTREQ(0x8002);
+            state = DRIVE_DMA_OFF;
+            plainmsg("Disk DMA: Checksum = %X\n", dcheck);
+            floppySync = 0;
+            return;
         }
     }
 }
+
+void
+DiskController::doSimpleDMAWrite(Drive *dfsel)
+{
+    // debug("Writing %d words to disk\n", dsklen & 0x3FFF);
+    
+    for (unsigned i = 0; i < acceleration; i++) {
+        
+        // Read word from memory
+        uint16_t word = amiga->mem.peekChip16(amiga->agnus.dskpt);
+        
+        amiga->agnus.dskpt = (amiga->agnus.dskpt + 2) & 0x7FFFF;
+        dcheck = fnv_1a_it32(dcheck, word);
+        plaindebug("%d: %X (%X)\n", dsklen & 0x3FFF, word, dcheck);
+        
+        // Write word to disk
+        dfsel->writeHead(HI_BYTE(word));
+        dfsel->rotate();
+        dfsel->writeHead(LO_BYTE(word));
+        dfsel->rotate();
+
+        dsklen--;
+        
+        if ((dsklen & 0x3FFF) == 0) {
+            
+            amiga->paula.pokeINTREQ(0x8002);
+            state = DRIVE_DMA_OFF;
+            plainmsg("Disk DMA WRITE: Checksum = %X\n", dcheck);
+            return;
+        }
+    }
+}
+

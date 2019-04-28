@@ -204,6 +204,14 @@ Drive::readHead()
 }
 
 void
+Drive::writeHead(uint8_t value)
+{
+    if (disk) {
+        disk->writeHead(value, head.cylinder, head.side, head.offset);
+    }
+}
+
+void
 Drive::rotate()
 {
     // debug("head = %d\n", head.offset);
@@ -389,8 +397,8 @@ Drive::PRBdidChange(uint8_t oldValue, uint8_t newValue)
             switchMotorOff();
         }
         
-        plaindebug("disk.select() sel df%d ($%08X) [$%08x, bit #%02d: %d]\n",
-              nr, getDriveId(), getDriveId() << idCount, 31 - idCount, idBit);
+        // plaindebug("disk.select() sel df%d ($%08X) [$%08x, bit #%02d: %d]\n",
+        //       nr, getDriveId(), getDriveId() << idCount, 31 - idCount, idBit);
     }
     
     //

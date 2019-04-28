@@ -35,7 +35,7 @@ Blitter::doFastCopyBlit()
     
     copycount++;
 
-    bltdebug = (copycount == 1631);
+    bltdebug = false; // (copycount == 1360);
 
     /*
     plainmsg("%d COPY BLIT (%d,%d) (%s)\n",

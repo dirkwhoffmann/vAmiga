@@ -216,8 +216,13 @@ public:
 
     // Performs a disk DMA access.
     void doDiskDMA();
-    void doSimpleDiskDMA();
+    void doSimpleDMA();
     
+private:
+    
+    void doSimpleDMARead(Drive *dfsel);
+    void doSimpleDMAWrite(Drive *dfsel);
+
     // Returns true if the specified drive is transferring data via DMA.
     // bool doesDMA(int nr);
 };

@@ -51,6 +51,16 @@ Disk::readHead(uint8_t cylinder, uint8_t side, uint16_t offset)
     return data.cyclinder[cylinder][side][offset];
 }
 
+void
+Disk::writeHead(uint8_t value, uint8_t cylinder, uint8_t side, uint16_t offset)
+{
+    assert(cylinder < 80);
+    assert(side < 2);
+    assert(offset < mfmBytesPerTrack);
+    
+    data.cyclinder[cylinder][side][offset] = value;
+}
+
 uint8_t
 Disk::addClockBits(uint8_t value, uint8_t previous)
 {

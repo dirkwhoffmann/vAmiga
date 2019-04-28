@@ -180,9 +180,12 @@ public:
     // Selects the active drive head (0 = lower, 1 = upper)
     void selectSide(int side);
 
-    // Reads the byte at the current drive head position
+    // Reads a byte at current drive head position
     uint8_t readHead();
-    
+
+    // Writes a byte at current drive head position
+    void writeHead(uint8_t value);
+
     // Emulate a disk rotation (moves head to the next byte)
     void rotate();
 

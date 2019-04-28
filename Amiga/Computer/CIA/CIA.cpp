@@ -384,7 +384,7 @@ CIA::poke(uint16_t addr, uint8_t value)
             
         case 0x01: // CIA_DATA_PORT_B
             
-            if (this == &amiga->ciaB) plaindebug("%s poke(1, %X)\n", getDescription(), value);
+            // if (this == &amiga->ciaB) plaindebug("%s poke(1, %X)\n", getDescription(), value);
             PRB = value;
             updatePB();
             return;
