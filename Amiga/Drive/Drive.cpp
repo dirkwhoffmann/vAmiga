@@ -164,7 +164,7 @@ Drive::setMotor(bool value)
 {
     if (!motor && value) {
         
-        printf("Motor on\n");
+        // printf("Motor on\n");
         
         amiga->putMessage(MSG_DRIVE_LED_ON, nr);
         amiga->putMessage(MSG_DRIVE_MOTOR_ON, nr);
@@ -172,7 +172,7 @@ Drive::setMotor(bool value)
     
     else if (motor && !value) {
   
-        printf("Motor off\n");
+        // printf("Motor off\n");
         
         // Reset identification shift register counter
         idCount = 0;
@@ -252,14 +252,14 @@ Drive::moveHead(int dir)
         // Move drive head outwards (towards the lower tracks)
         if (head.cylinder > 0) head.cylinder--;
         // debug("[%lld] Moving down to cylinder %d\n", amiga->agnus.frame, head.cylinder);
-        if (nr == 0) plainmsg("Df%d cylinder %d\n", nr, head.cylinder);
+        // if (nr == 0) plainmsg("Df%d cylinder %d\n", nr, head.cylinder);
     
     } else {
         
         // Move drive head inwards (towards the upper tracks)
         if (head.cylinder < 79) head.cylinder++;
         // debug("[%lld] Moving up to cylinder %d\n", amiga->agnus.frame, head.cylinder);
-        if (nr == 0) plainmsg("Df%d cylinder %d\n", nr, head.cylinder);
+        // if (nr == 0) plainmsg("Df%d cylinder %d\n", nr, head.cylinder);
     }
     
     head.offset = 0; 

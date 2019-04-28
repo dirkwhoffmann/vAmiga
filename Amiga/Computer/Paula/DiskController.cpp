@@ -161,7 +161,7 @@ DiskController::peekDSKDATR()
 void
 DiskController::pokeDSKLEN(uint16_t newDskLen)
 {
-    plaindebug(1, "pokeDSKLEN(%X)\n", newDskLen);
+    // plaindebug(1, "pokeDSKLEN(%X)\n", newDskLen);
     
     uint16_t oldDsklen = dsklen;
     
@@ -176,7 +176,7 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
     
     // Disable DMA if the DMAEN bit (15) is zero
     if (!(newDskLen & 0x8000)) {
-        plaindebug(1, "dma = DRIVE_DMA_OFF\n");
+        // plaindebug(1, "dma = DRIVE_DMA_OFF\n");
         state = DRIVE_DMA_OFF;
     }
     
@@ -186,7 +186,7 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
         // Check if the WRITE bit (bit 14) also has been written twice.
         if (oldDsklen & newDskLen & 0x4000) {
             
-            plaindebug(1, "dma = DRIVE_DMA_WRITE\n");
+            // plaindebug(1, "dma = DRIVE_DMA_WRITE\n");
             state = DRIVE_DMA_WRITE;
             
         } else {
@@ -195,13 +195,13 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
             if (GET_BIT(amiga->paula.adkcon, 10)) {
                 
                 // Wait with reading until a sync mark has been found
-                plaindebug(1, "dma = DRIVE_DMA_READ_SYNC\n");
+                // plaindebug(1, "dma = DRIVE_DMA_READ_SYNC\n");
                 state = DRIVE_DMA_SYNC_WAIT;
                 
             } else {
                 
                 // Start reading immediately
-                plaindebug(1, "dma = DRIVE_DMA_READ\n");
+                // plaindebug(1, "dma = DRIVE_DMA_READ\n");
                 state = DRIVE_DMA_READ;
             }
         }
@@ -497,10 +497,12 @@ DiskController::doSimpleDMARead(Drive *dfsel)
         
         // Write word into memory.
         amiga->mem.pokeChip16(amiga->agnus.dskpt, word);
+        /*
         if (debugcnt) {
             plaindebug("%d: %X -> %X\n", dsklen & 0x7FFF, word, amiga->agnus.dskpt);
             debugcnt--;
         }
+        */
         amiga->agnus.dskpt = (amiga->agnus.dskpt + 2) & 0x7FFFF;
         dcheck = fnv_1a_it32(dcheck, word);
         

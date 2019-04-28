@@ -61,9 +61,11 @@ Blitter::doFastCopyBlit()
     int32_t cmod = bltcmod;
     int32_t dmod = bltdmod;
     
+    /*
     printf("BLITTER Blit %d (%d,%d) (%d%d%d%d) %x %x %x %x %s\n",
     copycount, bltsizeW(), bltsizeH(), useA, useB, useC, useD,
            bltapt, bltbpt, bltcpt, bltdpt, bltDESC() ? "D" : "");
+    */
     
     // Reverse direction is descending mode
     if (bltDESC()) {
@@ -160,7 +162,7 @@ Blitter::doFastCopyBlit()
         if (useD) INC_OCS_PTR(bltdpt, dmod);
     }
     
-    printf("BLITTER check1: %x check2: %x\n", check1, check2);
+    // printf("BLITTER check1: %x check2: %x\n", check1, check2);
 }
 
 uint16_t logicFunction(int minterm,uint16_t wordA, uint16_t wordB, uint16_t wordC) {
@@ -247,9 +249,11 @@ Blitter::doFastLineBlit()
     bool useC = bltUSEC();
     bool useD = bltUSED();
     
+    /*
     printf("BLITTER Line %d (%d,%d) (%d%d%d%d) %x %x %x %x\n",
            linecount, bltsizeW(), bltsizeH(), useA, useB, useC, useD,
            bltapt, bltbpt, bltcpt, bltdpt);
+    */
     
     // Adapted from WinFellow
     
@@ -387,7 +391,7 @@ Blitter::doFastLineBlit()
     bltdpt = OCS_PTR(bltdpt_local);
     bzero  = bltzero_local;
     
-    printf("BLITTER check1: %x check2: %x\n", check1, check2);
+    // printf("BLITTER check1: %x check2: %x\n", check1, check2);
 }
     /*
      void blitterLineMode(void)
