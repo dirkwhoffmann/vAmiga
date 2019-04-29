@@ -15,6 +15,7 @@
                 <outlet property="df2Button" destination="rcN-WL-VLh" id="6YD-Xv-5Wt"/>
                 <outlet property="df3Button" destination="ERu-ly-O7X" id="yXR-yR-hc0"/>
                 <outlet property="disclosureButton" destination="hfO-E7-owZ" id="Zix-Oj-iK5"/>
+                <outlet property="diskIcon" destination="Yxi-Ar-LgQ" id="wZB-Vy-nnw"/>
                 <outlet property="headField" destination="pwN-5n-4M6" id="jMb-O7-moN"/>
                 <outlet property="headStepper" destination="l0l-Am-DEQ" id="Kbw-aL-ANl"/>
                 <outlet property="headText" destination="ElG-iD-hXO" id="xan-sm-Kc5"/>

@@ -70,6 +70,7 @@ class DiskMountController : DialogController {
     }
     
     // Outlets
+    @IBOutlet weak var diskIcon: NSImageView!
     @IBOutlet weak var disclosureButton: NSButton!
     @IBOutlet weak var warningText: NSTextField!
     @IBOutlet weak var previewScrollView: NSScrollView!
@@ -110,9 +111,6 @@ class DiskMountController : DialogController {
         // f.size.width = 518
         rect.size.height = 176 + 20
         window!.setFrame(rect, display: true)
-        
-        // shrink()
-        // update()
     }
     
     override func windowDidLoad() {
@@ -120,14 +118,7 @@ class DiskMountController : DialogController {
     }
  
     func setHeight(_ newHeight : CGFloat) {
-  
-        /*
-        let r = window!.frame
-        let x = r.origin.x
-        let y = r.origin.y + (r.size.height - newHeight)
-        let w = r.width
-        let h = newHeight
-        */
+
         var rect = window!.frame
         rect.origin.y += rect.size.height - newHeight
         rect.size.height = newHeight
@@ -144,6 +135,8 @@ class DiskMountController : DialogController {
         
         let size = window!.frame.size
         let hide = size.height < 300
+        
+        diskIcon.image = NSImage.init(named: writeProtect ? "adfdisk_protected" : "adfdisk")
         
         // Update the disclosure button state
         disclosureButton.state = shrinked ? .off : .on
@@ -261,6 +254,7 @@ class DiskMountController : DialogController {
     @IBAction func writeProtectAction(_ sender: NSButton!) {
         
         writeProtect = sender.state == .on
+        update()
     }
 }
 
