@@ -12,6 +12,7 @@ import Foundation
 class DiskMountController : DialogController {
     
     var disk: ADFFileProxy!
+    var writeProtect = false
     
     let bytesPerRow = 32
     
@@ -23,6 +24,8 @@ class DiskMountController : DialogController {
     
     // Preview data
     var sectorData: [String] = []
+    
+    var shrinked: Bool { return window!.frame.size.height < 300 }
     
     func setCylinder(_ newValue: Int) {
 
@@ -67,15 +70,27 @@ class DiskMountController : DialogController {
     }
     
     // Outlets
+    @IBOutlet weak var disclosureButton: NSButton!
+    @IBOutlet weak var warningText: NSTextField!
+    @IBOutlet weak var previewScrollView: NSScrollView!
     @IBOutlet weak var previewTable: NSTableView!
+    @IBOutlet weak var cylinderText: NSTextField!
     @IBOutlet weak var cylinderField: NSTextField!
     @IBOutlet weak var cylinderStepper: NSStepper!
+    @IBOutlet weak var headText: NSTextField!
     @IBOutlet weak var headField: NSTextField!
     @IBOutlet weak var headStepper: NSStepper!
+    @IBOutlet weak var trackText: NSTextField!
     @IBOutlet weak var trackField: NSTextField!
     @IBOutlet weak var trackStepper: NSStepper!
+    @IBOutlet weak var sectorText: NSTextField!
     @IBOutlet weak var sectorField: NSTextField!
     @IBOutlet weak var sectorStepper: NSStepper!
+    @IBOutlet weak var df0Button: NSButton!
+    @IBOutlet weak var df1Button: NSButton!
+    @IBOutlet weak var df2Button: NSButton!
+    @IBOutlet weak var df3Button: NSButton!
+
     
     override func showSheet(completionHandler handler:(() -> Void)? = nil) {
     
@@ -88,12 +103,78 @@ class DiskMountController : DialogController {
     
     override public func awakeFromNib() {
 
+        track()
         sectorData = Array(repeating: "", count: 512 / bytesPerRow)
+
+        var rect = window!.frame
+        // f.size.width = 518
+        rect.size.height = 176 + 20
+        window!.setFrame(rect, display: true)
+        
+        // shrink()
+        // update()
+    }
+    
+    override func windowDidLoad() {
+        
+    }
+ 
+    func setHeight(_ newHeight : CGFloat) {
+  
+        /*
+        let r = window!.frame
+        let x = r.origin.x
+        let y = r.origin.y + (r.size.height - newHeight)
+        let w = r.width
+        let h = newHeight
+        */
+        var rect = window!.frame
+        rect.origin.y += rect.size.height - newHeight
+        rect.size.height = newHeight
+        
+        track("\(rect)")
+        window?.setFrame(rect, display: true)
         update()
     }
     
-    func update() {
+    func shrink() { setHeight(176) }
+    func expand() { setHeight(378) }
     
+    func update() {
+        
+        let size = window!.frame.size
+        let hide = size.height < 300
+        
+        // Update the disclosure button state
+        disclosureButton.state = shrinked ? .off : .on
+        warningText.isHidden = true
+        
+        // Check for connected drives
+        df0Button.isEnabled = amigaProxy?.diskController.isConnected(0) ?? false
+        df1Button.isEnabled = amigaProxy?.diskController.isConnected(1) ?? false
+        df2Button.isEnabled = amigaProxy?.diskController.isConnected(2) ?? false
+        df3Button.isEnabled = amigaProxy?.diskController.isConnected(3) ?? false
+
+        // Hide some elements if window is shrinked
+        let items: [NSView] = [
+            
+            previewScrollView,
+            cylinderText, cylinderField, cylinderStepper,
+            headText, headField, headStepper,
+            trackText, trackField, trackStepper,
+            sectorText, sectorField, sectorStepper
+        ]
+        for item in items { item.isHidden = hide }
+        
+        // Only proceed if window is expanded
+        if (hide) { return }
+    
+        // Compute size of preview table
+        let w = size.width - 40
+        let h = size.height - 224
+        previewScrollView.frame = NSRect.init(x: 20, y: 61, width: w, height: h)
+   
+        // Update all elements
         cylinderField.integerValue   = _cylinder
         cylinderStepper.integerValue = _cylinder
         headField.integerValue       = _head
@@ -151,19 +232,35 @@ class DiskMountController : DialogController {
         setSector(sender.integerValue)
         update()
     }
-    @IBAction func df0Action(_ sender: Any!) {
+    
+    @IBAction func disclosureAction(_ sender: NSButton!) {
         
-        track("df0Action")
-        amigaProxy?.df0.insertDisk(self.disk)
+        shrinked ? expand() : shrink()
+    }
+
+    @IBAction func insertDiskAction(_ sender: NSButton!) {
+        
+        track("insertDiskAction df\(sender.tag)")
+        
+        var df : DriveProxy!
+        
+        switch sender.tag {
+        case 0:  df = amigaProxy!.df0
+        case 1:  df = amigaProxy!.df1
+        case 2:  df = amigaProxy!.df2
+        default: df = amigaProxy!.df3
+        }
+        
+        df.insertDisk(disk)
+        df.setWriteProtection(writeProtect)
+
         myController?.metal.rotateBack()
         hideSheet()
     }
-    @IBAction func df1Action(_ sender: Any!) {
+    
+    @IBAction func writeProtectAction(_ sender: NSButton!) {
         
-        track("df1Action")
-        amigaProxy?.df1.insertDisk(self.disk)
-        myController?.metal.rotateBack()
-        hideSheet()
+        writeProtect = sender.state == .on
     }
 }
 
@@ -181,7 +278,13 @@ extension DiskMountController : NSTableViewDelegate {
         // c.textColor = .red
     }
 }
-
+extension DiskMountController : NSWindowDelegate {
+    
+    func windowDidResize(_ notification: Notification) {
+        
+        update()
+    }
+}
 
 extension DiskMountController : NSTableViewDataSource {
     

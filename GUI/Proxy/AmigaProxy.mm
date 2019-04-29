@@ -741,12 +741,6 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->controller->toggleConnected(df);
 }
-/*
-- (BOOL) doesDMA:(NSInteger)nr
-{
-    return wrapper->controller->doesDMA((unsigned)nr);
-}
-*/
 
 @end
 
@@ -781,6 +775,14 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->drive->hasWriteProtectedDisk();
 }
+- (void) setWriteProtection:(BOOL)value
+{
+    wrapper->drive->setWriteProtection(value);
+}
+- (void) toggleWriteProtection
+{
+    wrapper->drive->toggleWriteProtection();
+}
 - (BOOL) hasModifiedDisk
 {
     return wrapper->drive->hasModifiedDisk();
@@ -797,10 +799,6 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     AmigaFileWrapper *fileWrapper = [fileProxy wrapper];
     wrapper->drive->insertDisk((ADFFile *)(fileWrapper->file));
-}
-- (void) toggleWriteProtection
-{
-    wrapper->drive->toggleWriteProtection();
 }
 
 @end

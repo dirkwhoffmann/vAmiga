@@ -207,6 +207,7 @@ public:
     
     bool hasWriteEnabledDisk();
     bool hasWriteProtectedDisk();
+    void setWriteProtection(bool value); 
     void toggleWriteProtection();
     
     void ejectDisk();

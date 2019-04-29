@@ -480,11 +480,14 @@ struct AmigaFileWrapper;
 
 - (BOOL) hasDisk;
 - (BOOL) hasWriteProtectedDisk;
+- (void) setWriteProtection:(BOOL)value;
+- (void) toggleWriteProtection;
+
 - (BOOL) hasModifiedDisk;
-- (void) setModifiedDisk:(BOOL)value; 
+- (void) setModifiedDisk:(BOOL)value;
+
 - (void) ejectDisk;
 - (void) insertDisk:(ADFFileProxy *)file;
-- (void) toggleWriteProtection;
 
 @end
 

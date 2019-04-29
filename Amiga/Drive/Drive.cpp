@@ -290,21 +290,28 @@ Drive::hasWriteProtectedDisk()
 }
 
 void
-Drive::toggleWriteProtection()
+Drive::setWriteProtection(bool value)
 {
     if (disk) {
         
-        if (disk->isWriteProtected()) {
-            
-            disk->setWriteProtection(false);
-            amiga->putMessage(MSG_DRIVE_DISK_UNPROTECTED);
-        
-        } else {
+        if (value && !disk->isWriteProtected()) {
             
             disk->setWriteProtection(true);
             amiga->putMessage(MSG_DRIVE_DISK_PROTECTED);
         }
+        if (!value && disk->isWriteProtected()) {
+            
+            disk->setWriteProtection(false);
+            amiga->putMessage(MSG_DRIVE_DISK_UNPROTECTED);
+        }
     }
+}
+
+void
+Drive::toggleWriteProtection()
+{
+    if (hasWriteProtectedDisk()) setWriteProtection(false);
+    if (hasWriteEnabledDisk())   setWriteProtection(true);
 }
 
 void
