@@ -168,7 +168,7 @@ ADFFile::writeBootBlock(FileSystemType fs, bool bootable)
     p[0] = 'D';
     p[1] = 'O';
     p[2] = 'S';
-    p[3] = (fs == AMIGA_OFS) ? '0' : '1';
+    p[3] = (fs == AMIGA_OFS) ? 0 : 1;
     
     // Write boot code
     if (bootable) {

@@ -531,7 +531,7 @@ DiskController::doSimpleDMAWrite(Drive *dfsel)
         
         amiga->agnus.dskpt = (amiga->agnus.dskpt + 2) & 0x7FFFF;
         dcheck = fnv_1a_it32(dcheck, word);
-        plaindebug("%d: %X (%X)\n", dsklen & 0x3FFF, word, dcheck);
+        // plaindebug("%d: %X (%X)\n", dsklen & 0x3FFF, word, dcheck);
         
         // Write word to disk
         dfsel->writeHead(HI_BYTE(word));
