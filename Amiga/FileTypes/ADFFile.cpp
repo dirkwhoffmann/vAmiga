@@ -19,14 +19,16 @@ bool
 ADFFile::isADFBuffer(const uint8_t *buffer, size_t length)
 {
     // There are no magic bytes. We can only check the buffer size.
-    return length == 901120;
+    return length == 901120 || length == 450560;
 }
 
 bool
 ADFFile::isADFFile(const char *path)
 {
     // There are no magic bytes. We can only check the file size.
-    return checkFileSizeRange(path, 901120, 901120);
+    return
+    checkFileSizeRange(path, 901120, 901120) ||
+    checkFileSizeRange(path, 450560, 450560);
 }
 
 ADFFile *
@@ -69,6 +71,62 @@ ADFFile::makeWithFile(const char *path)
     return adf;
 }
 
+ADFFile *
+ADFFile::makeUnformatted(DiskType type)
+{
+    size_t size;
+    
+    switch(type) {
+
+        case DISK_35_DD:
+            size = 901120;
+            break;
+            
+        case DISK_525_SD:
+            size = 450560;
+            break;
+    }
+    
+    ADFFile *adf = new ADFFile();
+    
+    if (!adf->alloc(size)) {
+        delete adf;
+        return NULL;
+    }
+    
+    memset(adf->data, 0, size);
+    return adf;
+}
+
+ADFFile *
+ADFFile::makeFormatted(DiskType type, FileSystemType fs)
+{
+    ADFFile *adf = makeUnformatted(type);
+    
+    if (adf) {
+        
+        int rootBlockSector;
+        
+        switch(type) {
+                
+            case DISK_35_DD:
+                rootBlockSector = 880;
+                break;
+                
+            case DISK_525_SD:
+                rootBlockSector = 440;
+                break;
+        }
+        
+        // Format the disk
+        adf->writeBootBlock(fs, false);
+        adf->writeRootBlock(rootBlockSector, "vAmiga");
+        adf->writeBmapBlock(rootBlockSector + 1);
+    }
+    
+    return adf;
+}
+
 bool
 ADFFile::readFromBuffer(const uint8_t *buffer, size_t length)
 {
@@ -76,31 +134,6 @@ ADFFile::readFromBuffer(const uint8_t *buffer, size_t length)
         return false;
     
     return isADFBuffer(buffer, length);
-}
-
-void
-ADFFile::format(FileSystemType fs, bool bootable)
-{
-    assert(data != NULL);
-  
-    int numSectors;
-    int rootBlock;
-    
-    /*
-    switch ( DISK TYPE OF THIS FILE )
-    */
-    
-    // For now, 3.5" DD
-    numSectors = 2 * 880;
-    rootBlock = 880;
-    
-    // Clear all tracks
-    memset(data, 0, 2*80*11*512);
-    
-    // Format the disk
-    writeBootBlock(fs, bootable);
-    writeRootBlock(rootBlock, "vAmiga");
-    writeBmapBlock(rootBlock + 1);
 }
 
 void

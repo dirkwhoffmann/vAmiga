@@ -47,6 +47,8 @@ public:
     static ADFFile *make();
     static ADFFile *makeWithBuffer(const uint8_t *buffer, size_t length);
     static ADFFile *makeWithFile(const char *path);
+    static ADFFile *makeUnformatted(DiskType type);
+    static ADFFile *makeFormatted(DiskType type, FileSystemType fs);
 
     
     //
@@ -66,11 +68,7 @@ public:
     //
     // Formatting
     //
-    
-public:
-    
-    void format(FileSystemType fs, bool bootable);
-    
+ 
 private:
     
     void writeBootBlock(FileSystemType fs, bool bootable);
