@@ -389,7 +389,8 @@ class Amiga : public HardwareComponent {
     public:
     
     // Registers a listener callback function.
-    void addListener(const void *sender, void(*func)(const void *, int, long) ) {
+//     void addListener(const void *sender, void(*func)(const void *, int, long) ) {
+    void addListener(const void *sender, Callback func) {
         queue.addListener(sender, func);
     }
     

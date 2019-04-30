@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-// This include file contains all type definitions related to Denise.
-// It conforms to standard ANSI-C in order to be compatible with Swift.
+// This file must conform to standard ANSI-C to be compatible with Swift.
 
 #ifndef _AGNUS_T_INC
 #define _AGNUS_T_INC

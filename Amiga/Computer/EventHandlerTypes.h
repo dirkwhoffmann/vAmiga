@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-// This include file contains all type definitions related to events.
-// It conforms to standard ANSI-C in order to be compatible with Swift.
+// This file must conform to standard ANSI-C to be compatible with Swift.
 
 #ifndef _EVENT_T_INC
 #define _EVENT_T_INC
