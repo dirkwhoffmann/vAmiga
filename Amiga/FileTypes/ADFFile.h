@@ -12,9 +12,9 @@
 
 #include "AmigaFile.h"
 
-static inline bool isCylinderNumber(long nr) { return nr >= 0 && nr <= 79; }
-static inline bool isTrackNumber(long nr)    { return nr >= 0 && nr <= 159; }
-static inline bool isSectorNumber(long nr)   { return nr >= 0 && nr <= 1759; }
+static inline bool isCylinderNr(long nr) { return nr >= 0 && nr <= 79; }
+static inline bool isTrackNr(long nr)    { return nr >= 0 && nr <= 159; }
+static inline bool isSectorNr(long nr)   { return nr >= 0 && nr <= 1759; }
 
 class ADFFile : public AmigaFile {
     
@@ -42,6 +42,8 @@ public:
     // Factory methods
     //
     
+public:
+    
     static ADFFile *make();
     static ADFFile *makeWithBuffer(const uint8_t *buffer, size_t length);
     static ADFFile *makeWithFile(const char *path);
@@ -50,6 +52,8 @@ public:
     //
     // Methods from AmigaFile
     //
+    
+public:
     
     AmigaFileType type() override { return FILETYPE_ADF; }
     const char *typeAsString() override { return "ADF"; }
@@ -60,8 +64,28 @@ public:
     
     
     //
+    // Formatting
+    //
+    
+public:
+    
+    void format(FileSystemType fs, bool bootable);
+    
+private:
+    
+    void writeBootBlock(FileSystemType fs, bool bootable);
+    void writeRootBlock(uint32_t blockIndex, const char *label);
+    void writeBmapBlock(uint32_t blockIndex);
+    void writeDate(int offset, time_t date);
+
+    uint32_t sectorChecksum(int sector);
+
+    
+    //
     // Seeking tracks and sectors
     //
+    
+public:
     
     /* Prepares to read a track.
      * Use read() to read from the selected track. Returns EOF when the whole
