@@ -73,7 +73,7 @@ private:
     
     void writeBootBlock(FileSystemType fs, bool bootable);
     void writeRootBlock(uint32_t blockIndex, const char *label);
-    void writeBmapBlock(uint32_t blockIndex);
+    void writeBitmapBlock(uint32_t blockIndex, uint32_t numSectors);
     void writeDate(int offset, time_t date);
 
     uint32_t sectorChecksum(int sector);

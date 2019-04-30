@@ -105,15 +105,18 @@ ADFFile::makeFormatted(DiskType type, FileSystemType fs)
     
     if (adf) {
         
+        int numSectors;
         int rootBlockSector;
         
         switch(type) {
                 
             case DISK_35_DD:
+                numSectors = 2 * 880;
                 rootBlockSector = 880;
                 break;
                 
             case DISK_525_SD:
+                numSectors = 2 * 440;
                 rootBlockSector = 440;
                 break;
         }
@@ -121,7 +124,7 @@ ADFFile::makeFormatted(DiskType type, FileSystemType fs)
         // Format the disk
         adf->writeBootBlock(fs, false);
         adf->writeRootBlock(rootBlockSector, "vAmiga");
-        adf->writeBmapBlock(rootBlockSector + 1);
+        adf->writeBitmapBlock(rootBlockSector + 1, numSectors);
     }
     
     return adf;
@@ -223,13 +226,13 @@ ADFFile::writeRootBlock(uint32_t blockNr, const char *label)
 }
 
 void
-ADFFile::writeBmapBlock(uint32_t blockNr)
+ADFFile::writeBitmapBlock(uint32_t blockNr, uint32_t numSectors)
 {
     uint8_t *p = data + blockNr * 512;
     
     // Write allocation table
-    memset(p + 4, 0xFF, (blockNr - 1) / 4);
-    p[114] = 0x3F;
+    memset(p + 4, 0xFF, numSectors / 8);
+    p[4 + (blockNr / 8)] = 0x3F;
     
     // Compute checksum
     uint32_t checksum = sectorChecksum(blockNr);
@@ -288,10 +291,9 @@ ADFFile::sectorChecksum(int sector)
     
     for (unsigned i = 0; i < 512; i += 4, p += 4) {
         checksum += HI_HI_LO_LO(p[0], p[1], p[2], p[3]);
-        checksum *= -1;
     }
     
-    return checksum;
+    return ~checksum + 1;
 }
 
 void
