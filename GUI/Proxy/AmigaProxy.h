@@ -549,6 +549,8 @@ struct AmigaFileWrapper;
 + (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)length;
 + (instancetype) makeWithFile:(NSString *)path;
 + (instancetype) make;
++ (instancetype) makeUnformatted:(DiskType)type;
++ (instancetype) makeFormatted:(DiskType) type fileSystem:(FileSystemType) fs;
 
 - (void)seekTrack:(NSInteger)nr;
 - (void)seekSector:(NSInteger)nr;

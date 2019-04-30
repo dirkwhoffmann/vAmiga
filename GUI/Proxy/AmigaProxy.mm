@@ -957,6 +957,16 @@ struct ADFFileWrapper { ADFFile *adf; };
     ADFFile *archive = ADFFile::make();
     return [self make: archive];
 }
++ (instancetype) makeUnformatted:(DiskType)type
+{
+    ADFFile *archive = ADFFile::makeUnformatted(type);
+    return [self make: archive];
+}
++ (instancetype) makeFormatted:(DiskType) type fileSystem:(FileSystemType) fs
+{
+    ADFFile *archive = ADFFile::makeFormatted(type, fs);
+    return [self make: archive];
+}
 - (void)seekTrack:(NSInteger)nr
 {
     ((ADFFile *)wrapper->file)->seekTrack(nr);

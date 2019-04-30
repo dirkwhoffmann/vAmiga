@@ -371,11 +371,36 @@ extension MyController : NSMenuItemValidation {
     // Action methods (Disk menu)
     //
     
-    @IBAction func newDiskAction(_ sender: NSMenuItem!) {
+    @IBAction func newBlankDiskAction(_ sender: NSMenuItem!) {
         
-        let emptyArchive =  ADFFileProxy.make()
+         track()
         
-        amiga.df(sender).insertDisk(emptyArchive)
+        // TODO: MUST CHECK DRIVE TYPE HERE!!!!
+        let adf = ADFFileProxy.makeUnformatted(DISK_35_DD)
+        
+        amiga.df(sender).insertDisk(adf)
+        mydocument.clearRecentlyExportedDiskURLs(drive: sender.tag)
+    }
+ 
+    @IBAction func newOFSDiskAction(_ sender: NSMenuItem!) {
+        
+        track()
+        
+        // TODO: MUST CHECK DRIVE TYPE HERE!!!!
+        let adf = ADFFileProxy.makeFormatted(DISK_35_DD, fileSystem: AMIGA_OFS)
+        
+        amiga.df(sender).insertDisk(adf)
+        mydocument.clearRecentlyExportedDiskURLs(drive: sender.tag)
+    }
+    
+    @IBAction func newFFSDiskAction(_ sender: NSMenuItem!) {
+        
+        track()
+        
+        // TODO: MUST CHECK DRIVE TYPE HERE!!!!
+        let adf = ADFFileProxy.makeFormatted(DISK_35_DD, fileSystem: AMIGA_FFS)
+        
+        amiga.df(sender).insertDisk(adf)
         mydocument.clearRecentlyExportedDiskURLs(drive: sender.tag)
     }
     
