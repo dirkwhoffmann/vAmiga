@@ -40,6 +40,16 @@ Mouse::_dump()
     plainmsg("     shiftY = %d\n", shiftY);
 }
 
+uint16_t
+Mouse::getXY()
+{
+    // Update mouseX and mouseY
+    execute();
+    
+    // Assemble the result
+    return HI_LO(mouseY & 0xFF, mouseX & 0xFF);
+}
+
 void
 Mouse::setXY(int64_t x, int64_t y)
 {
@@ -47,7 +57,7 @@ Mouse::setXY(int64_t x, int64_t y)
     
     targetX = x / dividerX;
     targetY = y / dividerY;
-    
+
     // debug("targetX = %lld targetY = %lld\n", targetX, targetY);
 }
 
@@ -74,6 +84,7 @@ Mouse::execute()
     }
     */
     
+    /*
     // Jump directly to target coordinates if they are more than 8 shifts away.
     if (abs(targetX - mouseX) / 8 > shiftX) mouseX = targetX;
     if (abs(targetY - mouseY) / 8 > shiftY) mouseY = targetY;
@@ -83,4 +94,7 @@ Mouse::execute()
     else if (targetX > mouseX) mouseX += MIN(targetX - mouseX, shiftX);
     if (targetY < mouseY) mouseY -= MIN(mouseY - targetY, shiftY);
     else if (targetY > mouseY) mouseY += MIN(targetY - mouseY, shiftY);
+    */
+    mouseX = targetX;
+    mouseY = targetY;
 }

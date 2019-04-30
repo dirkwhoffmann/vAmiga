@@ -35,22 +35,6 @@ public extension MetalView {
     // Mouse events
     //
     
-    func scaledMouseCoordinate(with event: NSEvent) -> NSPoint
-    {
-        // Get coordinate relative to view
-        let locationInView = convert(event.locationInWindow, from: nil)
-        
-        // Scale into range 0..1
-        var x = (frame.width == 0) ? 0.0 : (locationInView.x / frame.width)
-        var y = (frame.height == 0) ? 0.0 : (locationInView.y / frame.height)
-
-        // Clamp
-        x = (x < 0.0) ? 0.0 : (x > 1.0) ? 1.0 : x
-        y = (y < 0.0) ? 0.0 : (y > 1.0) ? 1.0 : y
-        
-        return NSMakePoint(x, y)
-    }
-    
     /*
     override public func mouseEntered(with event: NSEvent)
     {
@@ -100,8 +84,6 @@ public extension MetalView {
         let newLocation = NSMakePoint(newX, newY)
         
         amigaProxy?.mouse.setXY(newLocation)
-        // amigaProxy?.controlPort1.setXY(newLocation)
-        // amigaProxy?.controlPort2.setXY(newLocation)
         //track("\(dx) \(dy)\n");
     }
     

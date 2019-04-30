@@ -14,20 +14,17 @@
 
 class Mouse : public HardwareComponent {
     
-    // The port the mouse is connected to (0 = unconnected)
-    // uint8_t port = 0;
-    
-    public:
+public:
     
     // Mouse button states
     bool leftButton;
     bool rightButton;
     
+private:
+    
     // The current mouse position
     int64_t mouseX;
     int64_t mouseY;
-    
-    private:
     
     /* The target mouse position
      * In order to achieve a smooth mouse movement, a new mouse coordinate is
@@ -51,7 +48,7 @@ class Mouse : public HardwareComponent {
     // Constructing and destructing
     //
     
-    public:
+public:
     
     Mouse();
     
@@ -60,17 +57,20 @@ class Mouse : public HardwareComponent {
     // Methods from HardwareComponent
     //
     
-    private:
+private:
     
     void _powerOn() override;
     void _dump() override;
     
-
+    
     //
     // Operating the mouse
     //
-
-    public:
+    
+public:
+    
+    // Returns the mouse coordinates as they appear in the JOYDAT register.
+    uint16_t getXY();
     
     // Emulates a mouse movement event.
     void setXY(int64_t x, int64_t y);

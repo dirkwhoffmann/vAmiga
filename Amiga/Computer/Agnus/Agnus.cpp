@@ -1351,9 +1351,6 @@ Agnus::vsyncHandler()
     // CIA A counts VSYNCs
     amiga->ciaA.incrementTOD();
     
-    // Let the mouse update the internal coordinates.
-    amiga->mouse.execute();
-    
     // Trigger VSYNC interrupt
     amiga->paula.pokeINTREQ(0x8020);
     
