@@ -477,6 +477,7 @@ struct AmigaFileWrapper;
 - (void) dump;
 
 - (NSInteger) nr;
+- (DriveType) type;
 
 - (BOOL) hasDisk;
 - (BOOL) hasWriteProtectedDisk;
@@ -548,8 +549,8 @@ struct AmigaFileWrapper;
 + (BOOL)isADFFile:(NSString *)path;
 + (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)length;
 + (instancetype) makeWithFile:(NSString *)path;
-+ (instancetype) make;
-+ (instancetype) makeUnformatted:(DiskType)type;
++ (instancetype) makeWithDiskType:(DiskType)type;
+// + (instancetype) makeUnformatted:(DiskType)type;
 + (instancetype) makeFormatted:(DiskType) type fileSystem:(FileSystemType) fs;
 
 - (void)seekTrack:(NSInteger)nr;

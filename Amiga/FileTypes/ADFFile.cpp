@@ -19,7 +19,12 @@ bool
 ADFFile::isADFBuffer(const uint8_t *buffer, size_t length)
 {
     // There are no magic bytes. We can only check the buffer size.
-    return length == 901120 || length == 450560;
+    return
+    length == ADFSIZE_35_DD ||
+    length == ADFSIZE_35_DD_PC ||
+    length == ADFSIZE_35_HD ||
+    length == ADFSIZE_35_HD_PC ||
+    length == ADFSIZE_525_SD;
 }
 
 bool
@@ -27,21 +32,42 @@ ADFFile::isADFFile(const char *path)
 {
     // There are no magic bytes. We can only check the file size.
     return
-    checkFileSizeRange(path, 901120, 901120) ||
-    checkFileSizeRange(path, 450560, 450560);
+    checkFileSize(path, ADFSIZE_35_DD) ||
+    checkFileSize(path, ADFSIZE_35_DD_PC) ||
+    checkFileSize(path, ADFSIZE_35_HD) ||
+    checkFileSize(path, ADFSIZE_35_HD_PC) ||
+    checkFileSize(path, ADFSIZE_525_SD);
+}
+
+size_t
+ADFFile::fileSize(DiskType t)
+{
+    assert(isDiskType(t));
+    
+    switch(t) {
+            
+        case DISK_35_DD:    return ADFSIZE_35_DD;
+        case DISK_35_DD_PC: return ADFSIZE_35_DD_PC;
+        case DISK_35_HD:    return ADFSIZE_35_HD;
+        case DISK_35_HD_PC: return ADFSIZE_35_HD_PC;
+        case DISK_525_SD:   return ADFSIZE_525_SD;
+        default:            assert(false); return 0;
+    }
 }
 
 ADFFile *
-ADFFile::make()
+ADFFile::makeWithDiskType(DiskType t)
 {
+    assert(isDiskType(t));
+    
     ADFFile *adf = new ADFFile();
     
-    if (!adf->alloc(901120)) {
+    if (!adf->alloc(fileSize(t))) {
         delete adf;
         return NULL;
     }
     
-    memset(adf->data, 0, 901120);
+    memset(adf->data, 0, t);
     return adf;
 }
 
@@ -71,6 +97,7 @@ ADFFile::makeWithFile(const char *path)
     return adf;
 }
 
+/*
 ADFFile *
 ADFFile::makeUnformatted(DiskType type)
 {
@@ -97,11 +124,12 @@ ADFFile::makeUnformatted(DiskType type)
     memset(adf->data, 0, size);
     return adf;
 }
+*/
 
 ADFFile *
 ADFFile::makeFormatted(DiskType type, FileSystemType fs)
 {
-    ADFFile *adf = makeUnformatted(type);
+    ADFFile *adf = makeWithDiskType(type);
     
     if (adf) {
         
@@ -119,11 +147,13 @@ ADFFile::makeFormatted(DiskType type, FileSystemType fs)
                 numSectors = 2 * 440;
                 rootBlockSector = 440;
                 break;
+                
+            default: return NULL; 
         }
         
         // Format the disk
         adf->writeBootBlock(fs, false);
-        adf->writeRootBlock(rootBlockSector, "vAmiga");
+        adf->writeRootBlock(rootBlockSector, "Empty");
         adf->writeBitmapBlock(rootBlockSector + 1, numSectors);
     }
     
@@ -137,6 +167,12 @@ ADFFile::readFromBuffer(const uint8_t *buffer, size_t length)
         return false;
     
     return isADFBuffer(buffer, length);
+}
+
+void
+ADFFile::formatDisk(FileSystemType fs, bool bootable)
+{
+    
 }
 
 void

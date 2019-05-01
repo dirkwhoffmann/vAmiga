@@ -19,6 +19,9 @@
 typedef enum : long
 {
     DISK_35_DD,
+    DISK_35_DD_PC,
+    DISK_35_HD,
+    DISK_35_HD_PC,
     DISK_525_SD
 }
 DiskType;

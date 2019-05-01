@@ -497,9 +497,9 @@ class MyDocument : NSDocument {
         
         let drive = amiga.df(nr)
 
-        // TOD: Convert disk to ADF format
+        // TODO: Convert disk to ADF format
         // guard let adf = ADFFileProxy.make(withDisk: drive.disk) else {
-        guard let adf = ADFFileProxy.make() else {
+        guard let adf = ADFFileProxy.make(with: DISK_35_DD) else {
             return false
         }
 

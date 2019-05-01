@@ -375,10 +375,18 @@ extension MyController : NSMenuItemValidation {
         
          track()
         
-        // TODO: MUST CHECK DRIVE TYPE HERE!!!!
-        let adf = ADFFileProxy.makeUnformatted(DISK_35_DD)
+        let drive = amiga.df(sender)
+        let model = drive.type()
         
-        amiga.df(sender).insertDisk(adf)
+        var adf : ADFFileProxy
+        
+        switch (model) {
+        case DRIVE_35_DD:  adf = ADFFileProxy.make(with: DISK_35_DD)
+        case DRIVE_525_SD: adf = ADFFileProxy.make(with: DISK_525_SD)
+        default: fatalError()
+        }
+        
+        drive.insertDisk(adf)
         mydocument.clearRecentlyExportedDiskURLs(drive: sender.tag)
     }
  

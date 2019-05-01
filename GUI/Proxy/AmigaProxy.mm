@@ -763,6 +763,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->drive->getNr();
 }
+- (DriveType) type
+{
+    return wrapper->drive->getType();
+}
 - (void) dump
 {
     wrapper->drive->dump();
@@ -952,16 +956,18 @@ struct ADFFileWrapper { ADFFile *adf; };
     ADFFile *archive = ADFFile::makeWithFile([path UTF8String]);
     return [self make: archive];
 }
-+ (instancetype) make
++ (instancetype) makeWithDiskType:(DiskType)type
 {
-    ADFFile *archive = ADFFile::make();
+    ADFFile *archive = ADFFile::makeWithDiskType(type);
     return [self make: archive];
 }
+/*
 + (instancetype) makeUnformatted:(DiskType)type
 {
     ADFFile *archive = ADFFile::makeUnformatted(type);
     return [self make: archive];
 }
+*/
 + (instancetype) makeFormatted:(DiskType) type fileSystem:(FileSystemType) fs
 {
     ADFFile *archive = ADFFile::makeFormatted(type, fs);

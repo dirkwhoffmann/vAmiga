@@ -12,6 +12,12 @@
 
 #include "AmigaFile.h"
 
+#define ADFSIZE_35_DD     901120  //  880 KB
+#define ADFSIZE_35_DD_PC  737280  //  720 KB
+#define ADFSIZE_35_HD    1802240  // 1760 KB
+#define ADFSIZE_35_HD_PC 1474560  // 1440 KB
+#define ADFSIZE_525_SD    368640  //  360 KB
+
 static inline bool isCylinderNr(long nr) { return nr >= 0 && nr <= 79; }
 static inline bool isTrackNr(long nr)    { return nr >= 0 && nr <= 159; }
 static inline bool isSectorNr(long nr)   { return nr >= 0 && nr <= 1759; }
@@ -30,6 +36,9 @@ public:
     // Returns true iff path points to an ADF file.
     static bool isADFFile(const char *path);
     
+    // Returns the ADF file size for a given disk type.
+    static size_t fileSize(DiskType t);
+
     
     //
     // Creating and destructing
@@ -44,11 +53,11 @@ public:
     
 public:
     
-    static ADFFile *make();
+    static ADFFile *makeWithDiskType(DiskType t);
     static ADFFile *makeWithBuffer(const uint8_t *buffer, size_t length);
     static ADFFile *makeWithFile(const char *path);
-    static ADFFile *makeUnformatted(DiskType type);
-    static ADFFile *makeFormatted(DiskType type, FileSystemType fs);
+    // static ADFFile *makeUnformatted(DiskType type); // DEPRECATED
+    static ADFFile *makeFormatted(DiskType type, FileSystemType fs); // DEPRECATED
 
     
     //
@@ -69,6 +78,8 @@ public:
     // Formatting
     //
  
+    void formatDisk(FileSystemType fs, bool bootable);
+    
 private:
     
     void writeBootBlock(FileSystemType fs, bool bootable);
