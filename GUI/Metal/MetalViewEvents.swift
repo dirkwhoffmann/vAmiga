@@ -35,17 +35,30 @@ public extension MetalView {
     // Mouse events
     //
     
-    /*
-    override public func mouseEntered(with event: NSEvent)
-    {
-        NSCursor.hide();
+    override func updateTrackingAreas() {
+
+        track()
+        
+        let options : NSTrackingArea.Options = [ .activeInKeyWindow, .mouseEnteredAndExited ]
+        
+        if trackingArea != nil {
+            removeTrackingArea(trackingArea!)
+        }
+        trackingArea = NSTrackingArea(rect: self.bounds, options: options, owner: self, userInfo: nil)
+        addTrackingArea(trackingArea!)
     }
     
-    override public func mouseExited(with event: NSEvent)
+    override func mouseEntered(with event: NSEvent)
     {
-        NSCursor.unhide()
+        track()
+        // NSCursor.hide()
     }
-    */
+    
+    override func mouseExited(with event: NSEvent)
+    {
+        track()
+        // NSCursor.unhide()
+    }
     
     override func mouseDown(with event: NSEvent)
     {

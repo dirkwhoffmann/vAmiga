@@ -27,6 +27,9 @@ public class MetalView: MTKView {
     // Synchronization semaphore
     var semaphore: DispatchSemaphore!
     
+    // Tracking area for trapping the mouse
+    var trackingArea : NSTrackingArea?
+    
     // Metal objects
     var library: MTLLibrary! = nil
     var queue: MTLCommandQueue! = nil
