@@ -70,9 +70,12 @@ class MyController : NSWindowController, MessageReceiver {
     /// Current mouse coordinate
     var mouseXY = NSPoint(x: 0, y: 0)
     
-    /// Indicates if mouse is currently hidden
+    /// Indicates if mouse is currently hidden DEPRECATED
     var hideMouse = false
-    
+
+    /// Indicates if automatic mouse sharing is enabled
+    var autoMouseSharing = true
+
     /// Indicates if a status bar is shown
     var statusBar = true
 

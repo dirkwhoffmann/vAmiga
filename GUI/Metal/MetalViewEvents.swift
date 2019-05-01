@@ -35,6 +35,20 @@ public extension MetalView {
     // Mouse events
     //
     
+    func retainMouse() {
+        
+        NSCursor.hide()
+        CGAssociateMouseAndMouseCursorPosition(boolean_t(truncating: false))
+        gotMouse = true
+    }
+    
+    func releaseMouse() {
+        
+        NSCursor.unhide()
+        CGAssociateMouseAndMouseCursorPosition(boolean_t(truncating: true))
+        gotMouse = false
+    }
+    
     override func updateTrackingAreas() {
 
         track()
@@ -51,39 +65,75 @@ public extension MetalView {
     override func mouseEntered(with event: NSEvent)
     {
         track()
-        // NSCursor.hide()
+        if controller.autoMouseSharing {
+            
+            // Only retain the mouse if the last shake is some time ago
+            let dt = DispatchTime.now().uptimeNanoseconds - lastShake.uptimeNanoseconds
+            if dt / 1_00_000_000 > 5 {
+                retainMouse()
+            } else {
+                track("Last shake too recent")
+            }
+        }
     }
     
     override func mouseExited(with event: NSEvent)
     {
         track()
-        // NSCursor.unhide()
     }
     
     override func mouseDown(with event: NSEvent)
     {
-        amigaProxy?.mouse.setLeftButton(true)
+        if gotMouse {
+            amigaProxy?.mouse.setLeftButton(true)
+        } else {
+            retainMouse()
+        }
     }
     
     override func mouseUp(with event: NSEvent)
     {
-        amigaProxy?.mouse.setLeftButton(false)
+        if gotMouse {
+            amigaProxy?.mouse.setLeftButton(false)
+        }
     }
     
     override func rightMouseDown(with event: NSEvent)
     {
-        amigaProxy?.mouse.setRightButton(true)
+        if gotMouse {
+            amigaProxy?.mouse.setRightButton(true)
+        }
     }
 
     override func rightMouseUp(with event: NSEvent)
     {
-        amigaProxy?.mouse.setRightButton(false)
+        if gotMouse {
+            amigaProxy?.mouse.setRightButton(false)
+        }
     }
     
     override func mouseMoved(with event: NSEvent) {
         
+        // Only proceed if the Amiga has access to the mouse
+        // if !gotMouse { return }
+        
+        // Determine delta movement steps
         let dx = event.deltaX
         let dy = event.deltaY
+        
+        // Check for a shaking mouse movement if auto sharing is on
+        if controller.autoMouseSharing {
+            
+            dxsum = (0.8 * dxsum) + dx
+            dxabssum = (0.8 * dxabssum) + abs(dx)
+            // track("\(dx) \(dy) \(dxsum) \(dxabssum)")
+     
+            if dxabssum - abs(dxsum) > 100 {
+                track("Mouse shake detected")
+                lastShake = DispatchTime.now()
+                releaseMouse()
+            }
+        }
         
         controller.mouseXY.x += dx
         controller.mouseXY.y += dy
@@ -96,7 +146,9 @@ public extension MetalView {
 
         let newLocation = NSMakePoint(newX, newY)
         
-        amigaProxy?.mouse.setXY(newLocation)
+        if gotMouse {
+            amigaProxy?.mouse.setXY(newLocation)
+        }
         //track("\(dx) \(dy)\n");
     }
     

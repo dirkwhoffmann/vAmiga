@@ -30,6 +30,14 @@ public class MetalView: MTKView {
     // Tracking area for trapping the mouse
     var trackingArea : NSTrackingArea?
     
+    /// Indicates if the Amiga has control over the mouse
+    var gotMouse = false
+
+    // Counters to detect a shaking mouse
+    var dxabssum = CGFloat(0)
+    var dxsum = CGFloat(0)
+    var lastShake = DispatchTime.init(uptimeNanoseconds: 0)
+    
     // Metal objects
     var library: MTLLibrary! = nil
     var queue: MTLCommandQueue! = nil
