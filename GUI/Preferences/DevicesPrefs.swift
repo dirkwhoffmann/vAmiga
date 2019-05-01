@@ -182,14 +182,7 @@ extension PreferencesController {
         
         refresh()
     }
-    
-    @IBAction func devHelpAction(_ sender: Any!) {
         
-        if let url = URL.init(string: "http://www.dirkwhoffmann.de/virtualc64/ROMs.html") {
-            NSWorkspace.shared.open(url)
-        }
-    }
-    
     @IBAction func devFactorySettingsAction(_ sender: Any!) {
         
         myController?.resetDevicesUserDefaults()
