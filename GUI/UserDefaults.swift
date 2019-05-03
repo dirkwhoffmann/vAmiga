@@ -577,6 +577,7 @@ extension Keys {
     static let warpLoad             = "VAMIGAWarpLoadKey"
     static let driveNoise           = "VAMIGADriveNoiseKey"
     static let driveNoiseNoPoll     = "VAMIGADriveNoiseNoPollKey"
+    static let driveBlankDiskFormat = "VAMIGADriveBlankDiskFormatKey"
 
     // Screenshots
     static let screenshotSource     = "VAMIGAScreenshotSourceKey"
@@ -607,7 +608,8 @@ extension Defaults {
     static let warpLoad             = true
     static let driveNoise           = true
     static let driveNoiseNoPoll     = true
-
+    static let driveBlankDiskFormat = FS_OFS
+    
     // Screenshots
     static let screenshotSource     = 0
     static let screenshotTarget     = NSBitmapImageRep.FileType.png
@@ -652,6 +654,7 @@ extension MyController {
             Keys.warpLoad: Defaults.warpLoad,
             Keys.driveNoise: Defaults.driveNoise,
             Keys.driveNoiseNoPoll: Defaults.driveNoiseNoPoll,
+            Keys.driveBlankDiskFormat: Int(Defaults.driveBlankDiskFormat.rawValue),
 
             Keys.screenshotSource: Defaults.screenshotSource,
             Keys.screenshotTarget: Int(Defaults.screenshotTarget.rawValue),
@@ -683,6 +686,7 @@ extension MyController {
         for key in [Keys.warpLoad,
                     Keys.driveNoise,
                     Keys.driveNoiseNoPoll,
+                    Keys.driveBlankDiskFormat,
                     
                     Keys.screenshotSource,
                     Keys.screenshotTarget,
@@ -717,7 +721,8 @@ extension MyController {
         warpLoad = defaults.bool(forKey: Keys.warpLoad)
         driveNoise = defaults.bool(forKey: Keys.driveNoise)
         driveNoiseNoPoll = defaults.bool(forKey: Keys.driveNoiseNoPoll)
-
+        driveBlankDiskFormatIntValue = defaults.integer(forKey: Keys.driveBlankDiskFormat)
+        
         screenshotSource = defaults.integer(forKey: Keys.screenshotSource)
         screenshotTargetIntValue = defaults.integer(forKey: Keys.screenshotTarget)
     
@@ -741,7 +746,8 @@ extension MyController {
         defaults.set(warpLoad, forKey: Keys.warpLoad)
         defaults.set(driveNoise, forKey: Keys.driveNoise)
         defaults.set(driveNoiseNoPoll, forKey: Keys.driveNoiseNoPoll)
-
+        defaults.set(driveBlankDiskFormatIntValue, forKey: Keys.driveBlankDiskFormat)
+        
         defaults.set(screenshotSource, forKey: Keys.screenshotSource)
         defaults.set(screenshotTargetIntValue, forKey: Keys.screenshotTarget)
         

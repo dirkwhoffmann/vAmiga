@@ -395,7 +395,7 @@ extension MyController : NSMenuItemValidation {
         track()
         
         // TODO: MUST CHECK DRIVE TYPE HERE!!!!
-        let adf = ADFFileProxy.makeFormatted(DISK_35_DD, fileSystem: AMIGA_OFS)
+        let adf = ADFFileProxy.makeFormatted(DISK_35_DD, fileSystem: FS_OFS)
         
         amiga.df(sender).insertDisk(adf)
         myAppDelegate.clearRecentlyExportedDiskURLs(drive: sender.tag)
@@ -406,7 +406,7 @@ extension MyController : NSMenuItemValidation {
         track()
         
         // TODO: MUST CHECK DRIVE TYPE HERE!!!!
-        let adf = ADFFileProxy.makeFormatted(DISK_35_DD, fileSystem: AMIGA_FFS)
+        let adf = ADFFileProxy.makeFormatted(DISK_35_DD, fileSystem: FS_FFS)
         
         amiga.df(sender).insertDisk(adf)
         myAppDelegate.clearRecentlyExportedDiskURLs(drive: sender.tag)

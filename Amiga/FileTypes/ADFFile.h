@@ -82,7 +82,7 @@ public:
     
 private:
     
-    void writeBootBlock(FileSystemType fs, bool bootable);
+    void writeBootBlock(FileSystemType fs);
     void writeRootBlock(uint32_t blockIndex, const char *label);
     void writeBitmapBlock(uint32_t blockIndex, uint32_t numSectors);
     void writeDate(int offset, time_t date);

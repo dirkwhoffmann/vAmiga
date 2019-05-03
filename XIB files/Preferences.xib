@@ -43,6 +43,7 @@
                 <outlet property="emuAspectRatioButton" destination="eWd-B5-NFK" id="iTE-2G-M5J"/>
                 <outlet property="emuAutoSnapshots" destination="EUl-ML-vxG" id="ZSQ-Z0-7Yg"/>
                 <outlet property="emuCloseWithoutAskingButton" destination="faD-zw-7fO" id="ZgP-gj-lvt"/>
+                <outlet property="emuDriveBlankDiskFormat" destination="rYl-t6-NsM" id="AKH-NX-k4J"/>
                 <outlet property="emuDriveSounds" destination="ClS-Ae-0ty" id="mib-nq-ZO7"/>
                 <outlet property="emuDriveSoundsNoPoll" destination="LzI-UV-eUd" id="d0J-ca-Lsf"/>
                 <outlet property="emuEjectWithoutAskingButton" destination="AJ6-dV-aBm" id="UUV-EB-6ZM"/>
@@ -1466,7 +1467,7 @@ DQ
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Emulator" identifier="Emulator" id="7ox-IX-qy6">
-                                <view key="view" id="2kg-AU-Yx9">
+                                <view key="view" ambiguous="YES" id="2kg-AU-Yx9">
                                     <rect key="frame" x="10" y="33" width="600" height="424"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -1664,42 +1665,42 @@ DQ
                                             </connections>
                                         </button>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pXA-0W-pbb">
-                                            <rect key="frame" x="13" y="271" width="134" height="18"/>
+                                            <rect key="frame" x="13" y="271" width="143" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" alignment="left" title="Format of new disks: " id="dFV-cb-w9R">
+                                            <textFieldCell key="cell" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" alignment="left" title="Format of blank disks: " id="dFV-cb-w9R">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rYl-t6-NsM">
-                                            <rect key="frame" x="151" y="266" width="137" height="26"/>
+                                            <rect key="frame" x="154" y="266" width="134" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Blank" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" autoenablesItems="NO" selectedItem="bTF-cu-2h8" id="xjq-9k-3c4">
+                                            <popUpButtonCell key="cell" type="push" title="Unformatted" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" autoenablesItems="NO" selectedItem="bTF-cu-2h8" id="xjq-9k-3c4">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="menu"/>
                                                 <menu key="menu" title="OtherViews" autoenablesItems="NO" id="ggW-Tt-2Aj">
                                                     <items>
-                                                        <menuItem title="Blank" state="on" id="bTF-cu-2h8">
+                                                        <menuItem title="Unformatted" state="on" id="bTF-cu-2h8">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                         <menuItem title="OFS" tag="1" id="rJB-0o-SlJ">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="OFS bootable" tag="1" id="2WB-DP-cmv">
+                                                        <menuItem title="OFS bootable" tag="2" id="2WB-DP-cmv">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="FFS" tag="1" id="boy-r2-BN6">
+                                                        <menuItem title="FFS" tag="3" id="boy-r2-BN6">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="FFS bootable" tag="1" id="O51-CM-Nl4">
+                                                        <menuItem title="FFS bootable" tag="4" id="O51-CM-Nl4">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
                                             <connections>
-                                                <action selector="emuScreenshotSourceAction:" target="-2" id="D0U-rz-MFq"/>
+                                                <action selector="emuBlankDiskFormatAction:" target="-2" id="udx-xN-H2z"/>
                                             </connections>
                                         </popUpButton>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LzI-UV-eUd">
@@ -1795,7 +1796,7 @@ DQ
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Devices" identifier="Devices" id="UAr-A6-she">
-                                <view key="view" ambiguous="YES" id="BsV-QO-hSc">
+                                <view key="view" id="BsV-QO-hSc">
                                     <rect key="frame" x="10" y="33" width="600" height="424"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>

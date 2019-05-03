@@ -249,9 +249,15 @@ class MyController : NSWindowController, MessageReceiver {
     //
     
     var alwaysWarp = false { didSet { updateWarp() } }
+    
     var warpLoad = Defaults.warpLoad { didSet { updateWarp() } }
     var driveNoise = Defaults.driveNoise
     var driveNoiseNoPoll = Defaults.driveNoiseNoPoll
+    var driveBlankDiskFormat = Defaults.driveBlankDiskFormat
+    var driveBlankDiskFormatIntValue : Int {
+        get { return Int(driveBlankDiskFormat.rawValue) }
+        set { driveBlankDiskFormat = FileSystemType.init(newValue) }
+    }
     var screenshotSource = Defaults.screenshotSource
     var screenshotTarget = Defaults.screenshotTarget
     var screenshotTargetIntValue : Int {

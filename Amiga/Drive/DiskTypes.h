@@ -45,21 +45,29 @@ inline const char *diskTypeName(DiskType type)
 
 typedef enum : long
 {
-    AMIGA_OFS,
-    AMIGA_FFS
+    FS_NONE,
+    FS_OFS,
+    FS_OFS_BOOTABLE,
+    FS_FFS,
+    FS_FFS_BOOTABLE
 }
 FileSystemType;
 
 inline bool isFileSystemType(FileSystemType type)
 {
-    return type >= AMIGA_OFS && type <= AMIGA_FFS;
+    return type >= FS_NONE && type <= FS_FFS_BOOTABLE;
 }
 
 inline const char *fileSystemTypeName(FileSystemType type)
 {
-    return
-    type == AMIGA_OFS ? "OFS" :
-    type == AMIGA_FFS ? "FFS" : "???";
+    switch (type) {
+        case FS_NONE:         return "None";
+        case FS_OFS:          return "OFS";
+        case FS_OFS_BOOTABLE: return "OFS (bootable)";
+        case FS_FFS:          return "FFS";
+        case FS_FFS_BOOTABLE: return "FFS (bootable)";
+        default:              return "???";
+    }
 }
 
 #endif

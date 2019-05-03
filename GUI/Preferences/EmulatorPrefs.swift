@@ -26,6 +26,7 @@ extension PreferencesController {
         emuDriveSounds.state = controller.driveNoise ? .on : .off
         emuDriveSoundsNoPoll.state = controller.driveNoiseNoPoll ? .on : .off
         emuDriveSoundsNoPoll.isEnabled = controller.driveNoise
+        emuDriveBlankDiskFormat.selectItem(withTag: controller.driveBlankDiskFormatIntValue)
 
         // Fullscreen
         emuAspectRatioButton.state = metal.keepAspectRatio ? .on : .off
@@ -68,6 +69,14 @@ extension PreferencesController {
         refresh()
     }
 
+    @IBAction func emuBlankDiskFormatAction(_ sender: NSPopUpButton!) {
+        
+        track("\(sender.selectedTag())")
+        let tag = sender.selectedTag()
+        myController?.driveBlankDiskFormat = FileSystemType(rawValue: tag)
+        refresh()
+    }
+    
     
     //
     // Action methods (Fullscreen)

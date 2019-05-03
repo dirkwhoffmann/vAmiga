@@ -152,7 +152,7 @@ ADFFile::makeFormatted(DiskType type, FileSystemType fs)
         }
         
         // Format the disk
-        adf->writeBootBlock(fs, false);
+        adf->writeBootBlock(fs);
         adf->writeRootBlock(rootBlockSector, "Empty");
         adf->writeBitmapBlock(rootBlockSector + 1, numSectors);
     }
@@ -176,7 +176,7 @@ ADFFile::formatDisk(FileSystemType fs, bool bootable)
 }
 
 void
-ADFFile::writeBootBlock(FileSystemType fs, bool bootable)
+ADFFile::writeBootBlock(FileSystemType fs)
 {
     assert(data != NULL);
 
@@ -207,16 +207,11 @@ ADFFile::writeBootBlock(FileSystemType fs, bool bootable)
     p[0] = 'D';
     p[1] = 'O';
     p[2] = 'S';
-    p[3] = (fs == AMIGA_OFS) ? 0 : 1;
+    p[3] = (fs == FS_OFS || fs == FS_OFS_BOOTABLE) ? 0 : 1;
     
-    // Write boot code
-    if (bootable) {
-        if (fs == AMIGA_OFS) {
-            memcpy(p + 4, ofs, sizeof(ofs));
-        } else {
-            memcpy(p + 4, ffs, sizeof(ffs));
-        }
-    }
+    // Make disk bootable
+    if (fs == FS_OFS_BOOTABLE) memcpy(p + 4, ofs, sizeof(ofs));
+    if (fs == FS_FFS_BOOTABLE) memcpy(p + 4, ffs, sizeof(ffs));
 }
 
 void

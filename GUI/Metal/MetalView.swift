@@ -138,7 +138,7 @@ public class MetalView: MTKView {
     var mergeFilter : MergeFilter! = nil
     
     // An instance of the lowres enhancer
-    var lowresEnhancer : InPlaceEpxScaler! = nil
+    // var lowresEnhancer : InPlaceEpxScaler! = nil
     
     // Array holding all available lowres enhancers
     var enhancerGallery = [ComputeKernel?](repeating: nil, count: 3)
