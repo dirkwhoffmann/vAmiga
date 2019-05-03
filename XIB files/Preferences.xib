@@ -25,6 +25,11 @@
                 <outlet property="devLeft1button" destination="DYo-fh-MRZ" id="Zk8-cu-HpA"/>
                 <outlet property="devLeft2" destination="c0g-Vp-X6r" id="9l1-XA-avh"/>
                 <outlet property="devLeft2button" destination="xQv-LS-FDA" id="bBQ-ZL-VUd"/>
+                <outlet property="devReleaseMouseByShaking" destination="HME-Qi-t5z" id="ILi-ej-rOR"/>
+                <outlet property="devReleaseMouseWithKeys" destination="JC1-m2-KEn" id="B7S-hl-c0B"/>
+                <outlet property="devRetainMouseByClick" destination="KuV-3T-dNF" id="VAY-JI-1hL"/>
+                <outlet property="devRetainMouseByEntering" destination="s4n-Zm-dKQ" id="VXT-UZ-e0W"/>
+                <outlet property="devRetainMouseWithKeys" destination="2Mg-Ow-7Jy" id="sZc-2m-zJ9"/>
                 <outlet property="devRight1" destination="zAr-yb-dkS" id="dKb-4n-nv8"/>
                 <outlet property="devRight1button" destination="7NB-Mh-hbJ" id="TK3-Om-g7C"/>
                 <outlet property="devRight2" destination="4HA-Bt-zso" id="gne-YB-0Ry"/>
@@ -1882,14 +1887,20 @@ DQ
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="devRetainMouseAction:" target="-2" id="Aek-jW-Aas"/>
+                                            </connections>
                                         </button>
-                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KuV-3T-dNF">
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="KuV-3T-dNF">
                                             <rect key="frame" x="77" y="109" width="209" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="by clicking inside the emulator." bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="OZn-j5-R9t">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="devRetainMouseAction:" target="-2" id="eRR-No-6uN"/>
+                                            </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JC1-m2-KEn">
                                             <rect key="frame" x="376" y="135" width="153" height="18"/>
@@ -1898,22 +1909,31 @@ DQ
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="devReleaseMouseAction:" target="-2" id="9VI-Ye-aXF"/>
+                                            </connections>
                                         </button>
-                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HME-Qi-t5z">
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="HME-Qi-t5z">
                                             <rect key="frame" x="376" y="109" width="159" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="by shaking the mouse." bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="2ZE-Kk-DFZ">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="devReleaseMouseAction:" target="-2" id="Vty-Hs-AQb"/>
+                                            </connections>
                                         </button>
-                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="s4n-Zm-dKQ">
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="s4n-Zm-dKQ">
                                             <rect key="frame" x="77" y="82" width="223" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="by entering the emulator window." bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Qeh-bq-Wxp">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="devRetainMouseAction:" target="-2" id="Xho-FP-lE3"/>
+                                            </connections>
                                         </button>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="THf-5q-IOS">
                                             <rect key="frame" x="26" y="267" width="341" height="18"/>

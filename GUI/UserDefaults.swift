@@ -282,22 +282,24 @@ extension MyController {
 extension Keys {
     
     // Joysticks
-    static let disconnectJoyKeys = "VAMIGADisconnectKeys"
-    static let autofire          = "VAMIGAAutofire"
-    static let autofireBullets   = "VAMIGAAutofireBullets"
-    static let autofireFrequency = "VAMIGAAutofireFrequency"
-    static let joyKeyMap1        = "VAMIGAJoyKeyMap1"
-    static let joyKeyMap2        = "VAMIGAJoyKeyMap2"
+    static let joyKeyMap1            = "VAMIGAJoyKeyMap1"
+    static let joyKeyMap2            = "VAMIGAJoyKeyMap2"
+    static let disconnectJoyKeys     = "VAMIGADisconnectKeys"
+    static let autofire              = "VAMIGAAutofire"
+    static let autofireBullets       = "VAMIGAAutofireBullets"
+    static let autofireFrequency     = "VAMIGAAutofireFrequency"
+    
+    // Mouse
+    static let retainMouseWithKeys   = "VAMIGARetainMouseWithKeys"
+    static let retainMouseByClick    = "VAMIGARetainMouseByClick"
+    static let retainMouseByEntering = "VAMIGARetainMouseByEntering"
+    static let releaseMouseWithKeys  = "VAMIGAReleaseMouseWithKeys"
+    static let releaseMouseByShaking = "VAMIGAReleaseMouseByShaking"
 }
 
 extension Defaults {
     
     // Joysticks
-    static let disconnectJoyKeys = true
-    static let autofire          = false
-    static let autofireBullets   = -3
-    static let autofireFrequency = Float(2.5)
-    
     static let joyKeyMap1 = [
         MacKey.init(keyCode: kVK_LeftArrow):  JOYSTICK_LEFT.rawValue,
         MacKey.init(keyCode: kVK_RightArrow): JOYSTICK_RIGHT.rawValue,
@@ -312,6 +314,18 @@ extension Defaults {
         MacKey.init(keyCode: kVK_ANSI_X):     JOYSTICK_DOWN.rawValue,
         MacKey.init(keyCode: kVK_ANSI_C):     JOYSTICK_FIRE.rawValue
     ]
+    
+    static let disconnectJoyKeys = true
+    static let autofire          = false
+    static let autofireBullets   = -3
+    static let autofireFrequency = Float(2.5)
+    
+    // Mouse
+    static let retainMouseWithKeys   = true
+    static let retainMouseByClick    = true
+    static let retainMouseByEntering = false
+    static let releaseMouseWithKeys  = true
+    static let releaseMouseByShaking = true
 }
     
 extension MyController {
@@ -319,10 +333,19 @@ extension MyController {
     static func registerDevicesUserDefaults() {
         
         let dictionary : [String:Any] = [
-            Keys.disconnectJoyKeys: Defaults.disconnectJoyKeys,
-            Keys.autofire: Defaults.autofire,
-            Keys.autofireBullets: Defaults.autofireBullets,
-            Keys.autofireFrequency: Defaults.autofireFrequency
+
+            // Joysticks
+            Keys.disconnectJoyKeys:     Defaults.disconnectJoyKeys,
+            Keys.autofire:              Defaults.autofire,
+            Keys.autofireBullets:       Defaults.autofireBullets,
+            Keys.autofireFrequency:     Defaults.autofireFrequency,
+            
+            // Mouse
+            Keys.retainMouseWithKeys:   Defaults.retainMouseWithKeys,
+            Keys.retainMouseByClick:    Defaults.retainMouseByClick,
+            Keys.retainMouseByEntering: Defaults.retainMouseByEntering,
+            Keys.releaseMouseWithKeys:  Defaults.releaseMouseWithKeys,
+            Keys.releaseMouseByShaking: Defaults.releaseMouseByShaking
         ]
         
         let defaults = UserDefaults.standard
@@ -335,13 +358,19 @@ extension MyController {
         
         let defaults = UserDefaults.standard
         
-        for key in [ Keys.disconnectJoyKeys,
+        for key in [ Keys.joyKeyMap1,
+                     Keys.joyKeyMap2,
+                     
+                     Keys.disconnectJoyKeys,
                      Keys.autofire,
                      Keys.autofireBullets,
                      Keys.autofireFrequency,
                      
-                     Keys.joyKeyMap1,
-                     Keys.joyKeyMap2
+                     Keys.retainMouseWithKeys,
+                     Keys.retainMouseByClick,
+                     Keys.retainMouseByEntering,
+                     Keys.releaseMouseWithKeys,
+                     Keys.releaseMouseByShaking
             ]
         {
             defaults.removeObject(forKey: key)
@@ -356,6 +385,9 @@ extension MyController {
     
         amiga.suspend()
         
+        // Joysticks
+        defaults.decode(&gamePadManager.gamePads[0]!.keyMap, forKey: Keys.joyKeyMap1)
+        defaults.decode(&gamePadManager.gamePads[1]!.keyMap, forKey: Keys.joyKeyMap2)
         keyboardcontroller.disconnectJoyKeys = defaults.bool(forKey: Keys.disconnectJoyKeys)
         amiga.controlPort1.setAutofire(defaults.bool(forKey: Keys.autofire))
         amiga.controlPort2.setAutofire(defaults.bool(forKey: Keys.autofire))
@@ -363,9 +395,14 @@ extension MyController {
         amiga.controlPort2.setAutofireBullets(defaults.integer(forKey: Keys.autofireBullets))
         amiga.controlPort1.setAutofireFrequency(defaults.float(forKey: Keys.autofireFrequency))
         amiga.controlPort2.setAutofireFrequency(defaults.float(forKey: Keys.autofireFrequency))
-        defaults.decode(&gamePadManager.gamePads[0]!.keyMap, forKey: Keys.joyKeyMap1)
-        defaults.decode(&gamePadManager.gamePads[1]!.keyMap, forKey: Keys.joyKeyMap2)
  
+        // Mouse
+        metal.retainMouseWithKeys   = defaults.bool(forKey: Keys.retainMouseWithKeys)
+        metal.retainMouseByClick    = defaults.bool(forKey: Keys.retainMouseByClick)
+        metal.retainMouseByEntering = defaults.bool(forKey: Keys.retainMouseByEntering)
+        metal.releaseMouseWithKeys  = defaults.bool(forKey: Keys.releaseMouseWithKeys)
+        metal.releaseMouseByShaking = defaults.bool(forKey: Keys.releaseMouseByShaking)
+        
         amiga.resume()
     }
     
@@ -373,12 +410,20 @@ extension MyController {
         
         let defaults = UserDefaults.standard
         
+        // Joysticks
+        defaults.encode(gamePadManager.gamePads[0]!.keyMap, forKey: Keys.joyKeyMap1)
+        defaults.encode(gamePadManager.gamePads[1]!.keyMap, forKey: Keys.joyKeyMap2)
         defaults.set(keyboardcontroller.disconnectJoyKeys, forKey: Keys.disconnectJoyKeys)
         defaults.set(amiga.controlPort1.autofire(), forKey: Keys.autofire)
         defaults.set(amiga.controlPort1.autofireBullets(), forKey: Keys.autofireBullets)
         defaults.set(amiga.controlPort1.autofireFrequency(), forKey: Keys.autofireFrequency)
-        defaults.encode(gamePadManager.gamePads[0]!.keyMap, forKey: Keys.joyKeyMap1)
-        defaults.encode(gamePadManager.gamePads[1]!.keyMap, forKey: Keys.joyKeyMap2)
+        
+        // Mouse
+        defaults.set(metal.retainMouseWithKeys, forKey: Keys.retainMouseWithKeys)
+        defaults.set(metal.retainMouseByClick, forKey: Keys.retainMouseByClick)
+        defaults.set(metal.retainMouseByEntering, forKey: Keys.retainMouseByEntering)
+        defaults.set(metal.releaseMouseWithKeys, forKey: Keys.releaseMouseWithKeys)
+        defaults.set(metal.releaseMouseByShaking, forKey: Keys.releaseMouseByShaking)
     }
 }
 

@@ -65,11 +65,14 @@ public extension MetalView {
     override func mouseEntered(with event: NSEvent)
     {
         track()
-        if controller.autoMouseSharing {
-            
-            // Only retain the mouse if the last shake is some time ago
-            let dt = DispatchTime.now().uptimeNanoseconds - lastShake.uptimeNanoseconds
-            if dt / 1_00_000_000 > 5 {
+        
+        insideTrackingArea = true
+        
+        // Check if we need to retain the mouse
+        if retainMouseByEntering {
+   
+            // Only retain if the user didn't shake the mouse recently
+            if DispatchTime.diffMilliSec(lastShake) > UInt64(500) {
                 retainMouse()
             } else {
                 track("Last shake too recent")
@@ -80,13 +83,20 @@ public extension MetalView {
     override func mouseExited(with event: NSEvent)
     {
         track()
+        
+        insideTrackingArea = false
+        releaseMouse()
     }
     
     override func mouseDown(with event: NSEvent)
     {
         if gotMouse {
             amigaProxy?.mouse.setLeftButton(true)
-        } else {
+            return
+        }
+        
+        // Check if we need to retain the mouse
+        if retainMouseByClick && insideTrackingArea {
             retainMouse()
         }
     }
@@ -114,42 +124,30 @@ public extension MetalView {
     
     override func mouseMoved(with event: NSEvent) {
         
-        // Only proceed if the Amiga has access to the mouse
-        // if !gotMouse { return }
-        
-        // Determine delta movement steps
-        let dx = event.deltaX
-        let dy = event.deltaY
-        
-        // Check for a shaking mouse movement if auto sharing is on
-        if controller.autoMouseSharing {
+        if gotMouse {
             
-            dxsum = (0.8 * dxsum) + dx
-            dxabssum = (0.8 * dxabssum) + abs(dx)
-            // track("\(dx) \(dy) \(dxsum) \(dxabssum)")
-     
-            if dxabssum - abs(dxsum) > 100 {
-                track("Mouse shake detected")
-                lastShake = DispatchTime.now()
+            // Determine delta movement steps
+            let dx = event.deltaX
+            let dy = event.deltaY
+            
+            controller.mouseXY.x += dx
+            controller.mouseXY.y += dy
+            
+            // Make coordinate independent of the actual window size
+            let scaleX = (256.0 * 400.0) / frame.width
+            let scaleY = (256.0 * 300.0) / frame.height
+            let newX = controller.mouseXY.x * scaleX
+            let newY = controller.mouseXY.y * scaleY
+            let newLocation = NSMakePoint(newX, newY)
+            
+            // Report the new location to the Amiga mouse
+            amigaProxy?.mouse.setXY(newLocation)
+            
+            // Check for a shaking mouse movement
+            if releaseMouseByShaking && mouseIsShaking(dx: dx, dy: dy) {
                 releaseMouse()
             }
         }
-        
-        controller.mouseXY.x += dx
-        controller.mouseXY.y += dy
-
-        // Make coordinate independent of window size
-        let scaleX = (256.0 * 400.0) / frame.width
-        let scaleY = (256.0 * 300.0) / frame.height
-        let newX = controller.mouseXY.x * scaleX
-        let newY = controller.mouseXY.y * scaleY
-
-        let newLocation = NSMakePoint(newX, newY)
-        
-        if gotMouse {
-            amigaProxy?.mouse.setXY(newLocation)
-        }
-        //track("\(dx) \(dy)\n");
     }
     
     override func mouseDragged(with event: NSEvent)
@@ -160,5 +158,53 @@ public extension MetalView {
     override func rightMouseDragged(with event: NSEvent)
     {
         mouseMoved(with: event)
+    }
+    
+    func mouseIsShaking(dx: CGFloat, dy: CGFloat) -> Bool {
+        
+        // Accumulate the travelled distance
+        dxsum += abs(dx)
+        
+        // Check for a direction reversal
+        if (dx * dxsign < 0) {
+        
+            let dt = DispatchTime.diffMilliSec(lastTurn)
+            dxsign = -dxsign
+
+            // track("\(dxturns) \(dxsign) \(dx) \(dxabssum) \(dt)")
+
+            // A direction reversal is considered part of a shake, if the
+            // previous reversal happened a short while ago.
+            if dt < 400 {
+      
+                // Eliminate jitter by demanding that the mouse has travelled
+                // a long enough distance.
+                if dxsum > 400 {
+                    
+                    dxturns += 1
+                    dxsum = 0
+                    
+                    // Report a shake if the threshold has been reached.
+                    if dxturns > 3 {
+                        
+                        // track("Mouse shake detected")
+                        lastShake = DispatchTime.now()
+                        dxturns = 0
+                        return true
+                    }
+                }
+                
+            } else {
+                
+                // Time out. The user is definitely not shaking the mouse.
+                // Let's reset the recorded movement histoy.
+                dxturns = 0
+                dxsum = 0
+            }
+            
+            lastTurn = DispatchTime.now()
+        }
+        
+        return false
     }
 }

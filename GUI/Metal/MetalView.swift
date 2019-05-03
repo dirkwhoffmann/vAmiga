@@ -30,12 +30,24 @@ public class MetalView: MTKView {
     // Tracking area for trapping the mouse
     var trackingArea : NSTrackingArea?
     
-    /// Indicates if the Amiga has control over the mouse
+    // Indicates if the mouse is inside the tracking area
+    var insideTrackingArea = false
+    
+    // Indicates if the Amiga has control over the mouse
     var gotMouse = false
 
-    // Counters to detect a shaking mouse
-    var dxabssum = CGFloat(0)
+    // Selected method for retaining and releasing the mouse
+    var retainMouseWithKeys   = true
+    var retainMouseByClick    = true
+    var retainMouseByEntering = false
+    var releaseMouseWithKeys  = true
+    var releaseMouseByShaking = true
+    
+    // Mouse shake detection
+    var dxsign = CGFloat(1)
     var dxsum = CGFloat(0)
+    var dxturns = 0
+    var lastTurn = DispatchTime.init(uptimeNanoseconds: 0)
     var lastShake = DispatchTime.init(uptimeNanoseconds: 0)
     
     // Metal objects

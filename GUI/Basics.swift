@@ -28,7 +28,7 @@ public func track(_ message: String = "",
 
 
 //
-// Strings
+// Manipulating Strings
 //
 
 extension String {
@@ -67,7 +67,7 @@ extension String {
 
 
 //
-// URLs
+// Handling URLs
 //
 
 extension URL {
@@ -109,7 +109,7 @@ extension URL {
 
 
 //
-// Handling images
+// Processing images
 //
 
 extension Data {
@@ -226,4 +226,21 @@ extension NSImage {
     }
 }
 
+
+//
+// Managing time
+//
+
+
+extension DispatchTime {
+
+    static func diffNano(_ t : DispatchTime) -> UInt64 {
+        return DispatchTime.now().uptimeNanoseconds - t.uptimeNanoseconds
+    }
+
+    static func diffMicroSec(_ t : DispatchTime) -> UInt64 { return diffNano(t) / 1_000 }
+    static func diffMilliSec(_ t : DispatchTime) -> UInt64 { return diffNano(t) / 1_000_000 }
+    static func diffSec(_ t : DispatchTime) -> UInt64 { return diffNano(t) / 1_000_000_000 }
+}
+    
 

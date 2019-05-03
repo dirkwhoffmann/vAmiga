@@ -73,9 +73,6 @@ class MyController : NSWindowController, MessageReceiver {
     /// Indicates if mouse is currently hidden DEPRECATED
     var hideMouse = false
 
-    /// Indicates if automatic mouse sharing is enabled
-    var autoMouseSharing = true
-
     /// Indicates if a status bar is shown
     var statusBar = true
 
@@ -570,6 +567,8 @@ extension MyController {
                                                         eventType: .mouseMoved) > 1.0 {
                 NSCursor.setHiddenUntilMouseMoves(true)
             }
+
+            // metal.dxabssum *= 0.5
         }
         
         timerLock.unlock()

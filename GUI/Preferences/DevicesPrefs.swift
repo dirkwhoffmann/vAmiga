@@ -17,7 +17,8 @@ extension PreferencesController {
             let controller = myController,
             let amiga      = amigaProxy,
             let port1      = amiga.controlPort1,
-            let port2      = amiga.controlPort2
+            let port2      = amiga.controlPort2,
+            let metal      = controller.metal
             else { return }
        
         track()
@@ -48,6 +49,13 @@ extension PreferencesController {
         devAutofireCeaseText.textColor = devAutofire.state == .on ? .controlTextColor : .disabledControlTextColor
         devAutofireBullets.isEnabled = devAutofire.state == .on
         devAutofireFrequency.isEnabled = devAutofire.state == .on
+        
+        // Mouse
+        devRetainMouseWithKeys.state = metal.retainMouseWithKeys ? .on : .off
+        devRetainMouseByClick.state = metal.retainMouseByClick ? .on : .off
+        devRetainMouseByEntering.state = metal.retainMouseByEntering ? .on : .off
+        devReleaseMouseWithKeys.state = metal.releaseMouseWithKeys ? .on : .off
+        devReleaseMouseByShaking.state = metal.releaseMouseByShaking ? .on : .off
     }
     
     func updateJoyKeyMap(_ nr: Int, dir: JoystickDirection, button: NSButton, txt: NSTextField) {
@@ -186,6 +194,31 @@ extension PreferencesController {
     @IBAction func devFactorySettingsAction(_ sender: Any!) {
         
         myController?.resetDevicesUserDefaults()
+        refresh()
+    }
+
+    @IBAction func devRetainMouseAction(_ sender: NSButton!) {
+        
+        switch (sender.tag) {
+            
+        case 0: myController?.metal.retainMouseWithKeys   = (sender.state == .on)
+        case 1: myController?.metal.retainMouseByClick    = (sender.state == .on)
+        case 2: myController?.metal.retainMouseByEntering = (sender.state == .on)
+        default: fatalError()
+        }
+        
+        refresh()
+    }
+    
+    @IBAction func devReleaseMouseAction(_ sender: NSButton!) {
+        
+        switch (sender.tag) {
+            
+        case 0: myController?.metal.releaseMouseWithKeys  = (sender.state == .on)
+        case 1: myController?.metal.releaseMouseByShaking = (sender.state == .on)
+        default: fatalError()
+        }
+        
         refresh()
     }
 }
