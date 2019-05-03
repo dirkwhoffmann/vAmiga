@@ -18,6 +18,7 @@
 
 typedef enum : long
 {
+    DISK_UNKNOWN,
     DISK_35_DD,
     DISK_35_DD_PC,
     DISK_35_HD,
@@ -33,9 +34,49 @@ inline bool isDiskType(DiskType model)
 
 inline const char *diskTypeName(DiskType type)
 {
-    return
-    type == DISK_35_DD  ? "3.5 DD" :
-    type == DISK_525_SD ? "5.25 SD" : "???";
+    assert(isDiskType(type));
+    
+    switch (type) {
+        case DISK_35_DD:    return "3.5 DD";
+        case DISK_35_DD_PC: return "3.5 DD";
+        case DISK_35_HD:    return "3.5 DD";
+        case DISK_35_HD_PC: return "3.5 DD";
+        case DISK_525_SD:   return "3.5 DD";
+        default:            return "Unknown";
+    }
+}
+
+inline long numCylinders(DiskType type)
+{
+    assert(isDiskType(type));
+    
+    switch (type) {
+        case DISK_35_DD:    return 80;
+        case DISK_35_DD_PC: return 80;
+        case DISK_35_HD:    return 80;
+        case DISK_35_HD_PC: return 80;
+        case DISK_525_SD:   return 40;
+        default:            return 0;
+    }
+}
+
+inline long numTracks(DiskType type)
+{
+    return 2 * numCylinders(type);
+}
+
+inline long numSectors(DiskType type)
+{
+    assert(isDiskType(type));
+    
+    switch (type) {
+        case DISK_35_DD:    return 11;
+        case DISK_35_DD_PC: return 9;
+        case DISK_35_HD:    return 22;
+        case DISK_35_HD_PC: return 18;
+        case DISK_525_SD:   return 11;
+        default:            return 0;
+    }
 }
 
 

@@ -968,10 +968,16 @@ struct ADFFileWrapper { ADFFile *adf; };
     return [self make: archive];
 }
 */
+/*
 + (instancetype) makeFormatted:(DiskType) type fileSystem:(FileSystemType) fs
 {
     ADFFile *archive = ADFFile::makeFormatted(type, fs);
     return [self make: archive];
+}
+*/
+- (void)formatDisk:(FileSystemType)fs
+{
+    ((ADFFile *)wrapper->file)->formatDisk(fs);
 }
 - (void)seekTrack:(NSInteger)nr
 {

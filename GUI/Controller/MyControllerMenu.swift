@@ -371,7 +371,7 @@ extension MyController : NSMenuItemValidation {
     // Action methods (Disk menu)
     //
     
-    @IBAction func newBlankDiskAction(_ sender: NSMenuItem!) {
+    @IBAction func newDiskAction(_ sender: NSMenuItem!) {
         
          track()
         
@@ -380,16 +380,23 @@ extension MyController : NSMenuItemValidation {
         
         var adf : ADFFileProxy
         
+        // Create a blank disk
         switch (model) {
         case DRIVE_35_DD:  adf = ADFFileProxy.make(with: DISK_35_DD)
         case DRIVE_525_SD: adf = ADFFileProxy.make(with: DISK_525_SD)
         default: fatalError()
         }
         
+        // Write file system
+        adf.formatDisk(driveBlankDiskFormat)
+        
+        // Insert disk into drive
         drive.insertDisk(adf)
+        
         myAppDelegate.clearRecentlyExportedDiskURLs(drive: sender.tag)
     }
  
+    /*
     @IBAction func newOFSDiskAction(_ sender: NSMenuItem!) {
         
         track()
@@ -411,6 +418,7 @@ extension MyController : NSMenuItemValidation {
         amiga.df(sender).insertDisk(adf)
         myAppDelegate.clearRecentlyExportedDiskURLs(drive: sender.tag)
     }
+    */
     
     @IBAction func insertDiskAction(_ sender: NSMenuItem!) {
         

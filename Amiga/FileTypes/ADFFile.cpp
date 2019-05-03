@@ -99,34 +99,6 @@ ADFFile::makeWithFile(const char *path)
 
 /*
 ADFFile *
-ADFFile::makeUnformatted(DiskType type)
-{
-    size_t size;
-    
-    switch(type) {
-
-        case DISK_35_DD:
-            size = 901120;
-            break;
-            
-        case DISK_525_SD:
-            size = 450560;
-            break;
-    }
-    
-    ADFFile *adf = new ADFFile();
-    
-    if (!adf->alloc(size)) {
-        delete adf;
-        return NULL;
-    }
-    
-    memset(adf->data, 0, size);
-    return adf;
-}
-*/
-
-ADFFile *
 ADFFile::makeFormatted(DiskType type, FileSystemType fs)
 {
     ADFFile *adf = makeWithDiskType(type);
@@ -159,6 +131,7 @@ ADFFile::makeFormatted(DiskType type, FileSystemType fs)
     
     return adf;
 }
+*/
 
 bool
 ADFFile::readFromBuffer(const uint8_t *buffer, size_t length)
@@ -169,17 +142,47 @@ ADFFile::readFromBuffer(const uint8_t *buffer, size_t length)
     return isADFBuffer(buffer, length);
 }
 
-void
-ADFFile::formatDisk(FileSystemType fs, bool bootable)
+DiskType
+ADFFile::getType()
 {
+    switch(size) {
+        
+        case ADFSIZE_35_DD:    return DISK_35_DD;
+        case ADFSIZE_35_DD_PC: return DISK_35_DD_PC;
+        case ADFSIZE_35_HD:    return DISK_35_HD;
+        case ADFSIZE_35_HD_PC: return DISK_35_HD_PC;
+        case ADFSIZE_525_SD:   return DISK_525_SD;
+        default:               return DISK_UNKNOWN;
+    }
+}
+
+void
+ADFFile::formatDisk(FileSystemType fs)
+{
+    assert(isFileSystemType(fs));
     
+    if (fs != FS_NONE) {
+ 
+        // Determine the number of sectors and the root block location
+        int sectorCount = numSectors(getType()) * numTracks(getType());
+        int rootBlockSector = sectorCount / 2;
+        
+        debug("Formatting a %d sector disk...\n", sectorCount);
+        debug("Sector %d is the root block.\n", rootBlockSector);
+        
+        // Write the boot block, the root block, and the bitmap block
+        writeBootBlock(fs);
+        writeRootBlock(rootBlockSector, "Empty");
+        writeBitmapBlock(rootBlockSector + 1, sectorCount);
+    }
 }
 
 void
 ADFFile::writeBootBlock(FileSystemType fs)
 {
     assert(data != NULL);
-
+    assert(fs != FS_NONE);
+    
     uint8_t ofs[] = {
         
         0xc0, 0x20, 0x0f, 0x19, 0x00, 0x00, 0x03, 0x70, 0x43, 0xfa, 0x00, 0x18,

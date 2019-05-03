@@ -453,35 +453,16 @@
                 <menuItem title="Df0" id="XQm-ka-Db5">
                     <menu key="submenu" title="Df0" id="Mqn-f5-oGB">
                         <items>
-                            <menuItem title="New Disk" id="lkN-6Y-aJe">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="New Disk" id="NbO-V8-mRC">
-                                    <items>
-                                        <menuItem title="Blank" id="4Sy-uB-94o">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="newBlankDiskAction:" target="-1" id="Vyg-qe-sQT"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Formatted (OFS)" id="XL2-yd-Yov">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="newOFSDiskAction:" target="-1" id="Ykg-KL-kaH"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Formatted (FFS)" id="3y3-0R-InL">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="newFFSDiskAction:" target="-1" id="Pl2-m3-x9D"/>
-                                            </connections>
-                                        </menuItem>
-                                    </items>
-                                </menu>
-                            </menuItem>
-                            <menuItem title="Insert ..." id="00r-Lf-ALU">
+                            <menuItem title="New" id="00r-Lf-ALU">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="insertDiskAction:" target="-1" id="Wrt-4R-3kT"/>
+                                    <action selector="newDiskAction:" target="-1" id="csx-lP-2mG"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Insert ..." id="le3-dz-mCC">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="insertDiskAction:" target="-1" id="qhe-PC-Bq0"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Insert Recent" id="vhE-ve-l0K">
@@ -608,35 +589,16 @@
                 <menuItem title="Df1" id="fYA-pX-q72" userLabel="Df1">
                     <menu key="submenu" title="Df1" id="epS-yb-DD5">
                         <items>
-                            <menuItem title="New Disk" id="ZFW-iu-jJT">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="New Disk" id="1DF-uq-xA7">
-                                    <items>
-                                        <menuItem title="Blank" tag="1" id="nt3-sf-jxl">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="newBlankDiskAction:" target="-1" id="Kcl-HC-N5A"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Formatted (OFS)" tag="1" id="HaN-kh-o5t">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="newOFSDiskAction:" target="-1" id="Cs2-Ji-kf1"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Formatted (FFS)" tag="1" id="0T0-e3-Ujt">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="newFFSDiskAction:" target="-1" id="akn-Ad-vvd"/>
-                                            </connections>
-                                        </menuItem>
-                                    </items>
-                                </menu>
-                            </menuItem>
-                            <menuItem title="Insert ..." tag="1" id="rXL-PO-L1N">
+                            <menuItem title="New" tag="1" id="rXL-PO-L1N">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="insertDiskAction:" target="-1" id="3pn-9G-flE"/>
+                                    <action selector="newDiskAction:" target="-1" id="pbg-ot-FbZ"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Insert ..." tag="1" id="ZBw-6F-9jk">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="insertDiskAction:" target="-1" id="3Xy-MS-NBP"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Insert Recent" id="JUv-7d-Kov">
