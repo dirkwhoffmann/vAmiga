@@ -70,6 +70,14 @@ class MyDocument : NSDocument {
         amiga.mem.loadKickRom(fromBuffer: NSDataAsset(name: "aros.rom")?.data)
     }
  
+    deinit {
+        
+        track()
+        
+        // Shut down the emulator
+        amiga.kill()
+    }
+    
     override open func makeWindowControllers() {
         
         track()
@@ -79,12 +87,6 @@ class MyDocument : NSDocument {
         controller.amiga = amiga
         self.addWindowController(controller)
     }
-    
-    //
-    // Delegation methods
-    //
-    
-
     
     
     //
@@ -605,22 +607,4 @@ class MyDocument : NSDocument {
             return false
         }
     }
-    
-    
-    //
-    // Shutting down
-    //
-    
-    open override func removeWindowController(_ windowController: NSWindowController) {
-        
-        track()
-
-        super.removeWindowController(windowController)
-        
-        // Trash the emulator.
-        // Note that all GUI elements have to be inactive when the proxy is set
-        // to nil. Hence, the emulator should be shut down as late as possible.
-        amiga.kill()
-    }
 }
-
