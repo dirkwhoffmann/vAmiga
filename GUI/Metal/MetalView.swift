@@ -37,9 +37,11 @@ public class MetalView: MTKView {
     var gotMouse = false
 
     // Selected method for retaining and releasing the mouse
+    var retainMouseKeyComb    = 0
     var retainMouseWithKeys   = true
     var retainMouseByClick    = true
     var retainMouseByEntering = false
+    var releaseMouseKeyComb   = 0
     var releaseMouseWithKeys  = true
     var releaseMouseByShaking = true
     

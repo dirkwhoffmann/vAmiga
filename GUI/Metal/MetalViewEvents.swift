@@ -37,6 +37,7 @@ public extension MetalView {
     
     func retainMouse() {
         
+        track("retainMouse")
         NSCursor.hide()
         CGAssociateMouseAndMouseCursorPosition(boolean_t(truncating: false))
         gotMouse = true
@@ -44,6 +45,7 @@ public extension MetalView {
     
     func releaseMouse() {
         
+        track("releaseMouse")
         NSCursor.unhide()
         CGAssociateMouseAndMouseCursorPosition(boolean_t(truncating: true))
         gotMouse = false
@@ -158,6 +160,38 @@ public extension MetalView {
     override func rightMouseDragged(with event: NSEvent)
     {
         mouseMoved(with: event)
+    }
+    
+    func checkForMouseKeys(with event: NSEvent) {
+        
+        if !gotMouse && retainMouseWithKeys {
+            
+            switch (retainMouseKeyComb) {
+              
+            case 0 where event.modifierFlags.contains([.option, .command]),
+                 1 where event.modifierFlags.contains([.option, .control]):
+                
+                track()
+                retainMouse()
+                
+            default: break
+            }
+        }
+        
+        else if gotMouse && releaseMouseWithKeys {
+            
+            track()
+            switch (releaseMouseKeyComb) {
+                
+            case 0 where event.modifierFlags.contains([.option, .command]),
+                 1 where event.modifierFlags.contains([.option, .control]):
+                
+                track()
+                releaseMouse()
+                
+            default: break
+            }
+        }
     }
     
     func mouseIsShaking(dx: CGFloat, dy: CGFloat) -> Bool {

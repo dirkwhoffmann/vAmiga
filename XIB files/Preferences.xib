@@ -26,9 +26,11 @@
                 <outlet property="devLeft2" destination="c0g-Vp-X6r" id="9l1-XA-avh"/>
                 <outlet property="devLeft2button" destination="xQv-LS-FDA" id="bBQ-ZL-VUd"/>
                 <outlet property="devReleaseMouseByShaking" destination="HME-Qi-t5z" id="ILi-ej-rOR"/>
+                <outlet property="devReleaseMouseKeyComb" destination="dnS-il-6DA" id="8yK-Ks-Q1Y"/>
                 <outlet property="devReleaseMouseWithKeys" destination="JC1-m2-KEn" id="B7S-hl-c0B"/>
                 <outlet property="devRetainMouseByClick" destination="KuV-3T-dNF" id="VAY-JI-1hL"/>
                 <outlet property="devRetainMouseByEntering" destination="s4n-Zm-dKQ" id="VXT-UZ-e0W"/>
+                <outlet property="devRetainMouseKeyComb" destination="bf8-eI-AxZ" id="63b-Nt-X35"/>
                 <outlet property="devRetainMouseWithKeys" destination="2Mg-Ow-7Jy" id="sZc-2m-zJ9"/>
                 <outlet property="devRight1" destination="zAr-yb-dkS" id="dKb-4n-nv8"/>
                 <outlet property="devRight1button" destination="7NB-Mh-hbJ" id="TK3-Om-g7C"/>
@@ -1881,9 +1883,9 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2Mg-Ow-7Jy">
-                                            <rect key="frame" x="77" y="135" width="153" height="18"/>
+                                            <rect key="frame" x="77" y="135" width="92" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="check" title="by pressing Alt+Cmd." bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="ikk-iu-imJ">
+                                            <buttonCell key="cell" type="check" title="by pressing" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="ikk-iu-imJ">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
@@ -1903,9 +1905,9 @@ DQ
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JC1-m2-KEn">
-                                            <rect key="frame" x="376" y="135" width="153" height="18"/>
+                                            <rect key="frame" x="376" y="135" width="92" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="check" title="by pressing Alt+Cmd." bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="kVA-zh-hPa">
+                                            <buttonCell key="cell" type="check" title="by pressing" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="kVA-zh-hPa">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
@@ -2272,6 +2274,48 @@ DQ
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
+                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bf8-eI-AxZ">
+                                            <rect key="frame" x="175" y="133" width="72" height="19"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="roundRect" title="Alt+Cmd" bezelStyle="roundedRect" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" selectedItem="W8i-Yb-Mfm" id="eM1-ka-MP4">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system" size="11"/>
+                                                <menu key="menu" id="Jw8-BO-lxf">
+                                                    <items>
+                                                        <menuItem title="Alt+Cmd" state="on" id="W8i-Yb-Mfm">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="Alt+Ctrl" tag="1" id="NHX-cW-4XR">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <action selector="devRetainMouseKeyCombAction:" target="-2" id="SlL-Mf-cZ6"/>
+                                            </connections>
+                                        </popUpButton>
+                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dnS-il-6DA">
+                                            <rect key="frame" x="474" y="133" width="72" height="19"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="roundRect" title="Alt+Cmd" bezelStyle="roundedRect" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" selectedItem="jye-Zz-SvR" id="isf-J8-EbN">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system" size="11"/>
+                                                <menu key="menu" id="cHX-JR-BUF">
+                                                    <items>
+                                                        <menuItem title="Alt+Cmd" state="on" id="jye-Zz-SvR">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="Alt+Ctrl" tag="1" id="JoK-sk-avb">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <action selector="devReleaseMouseKeyCombAction:" target="-2" id="0X5-gf-zA9"/>
+                                            </connections>
+                                        </popUpButton>
                                     </subviews>
                                 </view>
                             </tabViewItem>

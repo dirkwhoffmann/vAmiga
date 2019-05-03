@@ -69,7 +69,7 @@ class KeyboardController: NSObject {
         if event.isARepeat {
             return
         }
-        
+
         // Exit fullscreen mode if escape key is pressed
         if event.keyCode == kVK_Escape && controller.metal.fullscreen && exitOnEsc {
             myController?.window!.toggleFullScreen(nil)
@@ -90,6 +90,10 @@ class KeyboardController: NSObject {
     
     func flagsChanged(with event: NSEvent) {
         
+        // Check for a mouse controlling key combination
+        myController?.metal.checkForMouseKeys(with: event)
+        
+        // Determine the pressed or released key
         switch Int(event.keyCode) {
             
         case kVK_Shift:

@@ -21,8 +21,6 @@ extension PreferencesController {
             let metal      = controller.metal
             else { return }
        
-        track()
-    
         // Joystick emulation keys
         updateJoyKeyMap(0, dir: JOYSTICK_UP, button: devUp1button, txt: devUp1)
         updateJoyKeyMap(0, dir: JOYSTICK_DOWN, button: devDown1button, txt: devDown1)
@@ -51,9 +49,13 @@ extension PreferencesController {
         devAutofireFrequency.isEnabled = devAutofire.state == .on
         
         // Mouse
+        devRetainMouseKeyComb.selectItem(withTag: metal.retainMouseKeyComb)
+        devRetainMouseKeyComb.isEnabled = metal.retainMouseWithKeys
         devRetainMouseWithKeys.state = metal.retainMouseWithKeys ? .on : .off
         devRetainMouseByClick.state = metal.retainMouseByClick ? .on : .off
         devRetainMouseByEntering.state = metal.retainMouseByEntering ? .on : .off
+        devReleaseMouseKeyComb.selectItem(withTag: metal.releaseMouseKeyComb)
+        devReleaseMouseKeyComb.isEnabled = metal.releaseMouseWithKeys
         devReleaseMouseWithKeys.state = metal.releaseMouseWithKeys ? .on : .off
         devReleaseMouseByShaking.state = metal.releaseMouseByShaking ? .on : .off
     }
@@ -197,6 +199,12 @@ extension PreferencesController {
         refresh()
     }
 
+    @IBAction func devRetainMouseKeyCombAction(_ sender: NSPopUpButton!) {
+        
+        myController?.metal.retainMouseKeyComb = sender.selectedTag()
+        refresh()
+    }
+    
     @IBAction func devRetainMouseAction(_ sender: NSButton!) {
         
         switch (sender.tag) {
@@ -207,6 +215,12 @@ extension PreferencesController {
         default: fatalError()
         }
         
+        refresh()
+    }
+    
+    @IBAction func devReleaseMouseKeyCombAction(_ sender: NSPopUpButton!) {
+        
+        myController?.metal.releaseMouseKeyComb = sender.selectedTag()
         refresh()
     }
     

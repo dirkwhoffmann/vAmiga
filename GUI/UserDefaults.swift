@@ -290,9 +290,11 @@ extension Keys {
     static let autofireFrequency     = "VAMIGAAutofireFrequency"
     
     // Mouse
+    static let retainMouseKeyComb    = "VAMIGARetainMouseKeyComb"
     static let retainMouseWithKeys   = "VAMIGARetainMouseWithKeys"
     static let retainMouseByClick    = "VAMIGARetainMouseByClick"
     static let retainMouseByEntering = "VAMIGARetainMouseByEntering"
+    static let releaseMouseKeyComb   = "VAMIGAReleaseMouseKeyComb"
     static let releaseMouseWithKeys  = "VAMIGAReleaseMouseWithKeys"
     static let releaseMouseByShaking = "VAMIGAReleaseMouseByShaking"
 }
@@ -321,9 +323,11 @@ extension Defaults {
     static let autofireFrequency = Float(2.5)
     
     // Mouse
+    static let retainMouseKeyComb    = 0
     static let retainMouseWithKeys   = true
     static let retainMouseByClick    = true
     static let retainMouseByEntering = false
+    static let releaseMouseKeyComb   = 0
     static let releaseMouseWithKeys  = true
     static let releaseMouseByShaking = true
 }
@@ -341,9 +345,11 @@ extension MyController {
             Keys.autofireFrequency:     Defaults.autofireFrequency,
             
             // Mouse
+            Keys.retainMouseKeyComb:    Defaults.retainMouseKeyComb,
             Keys.retainMouseWithKeys:   Defaults.retainMouseWithKeys,
             Keys.retainMouseByClick:    Defaults.retainMouseByClick,
             Keys.retainMouseByEntering: Defaults.retainMouseByEntering,
+            Keys.releaseMouseKeyComb:   Defaults.releaseMouseKeyComb,
             Keys.releaseMouseWithKeys:  Defaults.releaseMouseWithKeys,
             Keys.releaseMouseByShaking: Defaults.releaseMouseByShaking
         ]
@@ -366,9 +372,11 @@ extension MyController {
                      Keys.autofireBullets,
                      Keys.autofireFrequency,
                      
+                     Keys.retainMouseKeyComb,
                      Keys.retainMouseWithKeys,
                      Keys.retainMouseByClick,
                      Keys.retainMouseByEntering,
+                     Keys.releaseMouseKeyComb,
                      Keys.releaseMouseWithKeys,
                      Keys.releaseMouseByShaking
             ]
@@ -397,9 +405,11 @@ extension MyController {
         amiga.controlPort2.setAutofireFrequency(defaults.float(forKey: Keys.autofireFrequency))
  
         // Mouse
+        metal.retainMouseKeyComb    = defaults.integer(forKey: Keys.retainMouseKeyComb)
         metal.retainMouseWithKeys   = defaults.bool(forKey: Keys.retainMouseWithKeys)
         metal.retainMouseByClick    = defaults.bool(forKey: Keys.retainMouseByClick)
         metal.retainMouseByEntering = defaults.bool(forKey: Keys.retainMouseByEntering)
+        metal.releaseMouseKeyComb    = defaults.integer(forKey: Keys.releaseMouseKeyComb)
         metal.releaseMouseWithKeys  = defaults.bool(forKey: Keys.releaseMouseWithKeys)
         metal.releaseMouseByShaking = defaults.bool(forKey: Keys.releaseMouseByShaking)
         
@@ -419,9 +429,11 @@ extension MyController {
         defaults.set(amiga.controlPort1.autofireFrequency(), forKey: Keys.autofireFrequency)
         
         // Mouse
+        defaults.set(metal.retainMouseKeyComb, forKey: Keys.retainMouseKeyComb)
         defaults.set(metal.retainMouseWithKeys, forKey: Keys.retainMouseWithKeys)
         defaults.set(metal.retainMouseByClick, forKey: Keys.retainMouseByClick)
         defaults.set(metal.retainMouseByEntering, forKey: Keys.retainMouseByEntering)
+        defaults.set(metal.releaseMouseKeyComb, forKey: Keys.releaseMouseKeyComb)
         defaults.set(metal.releaseMouseWithKeys, forKey: Keys.releaseMouseWithKeys)
         defaults.set(metal.releaseMouseByShaking, forKey: Keys.releaseMouseByShaking)
     }
