@@ -164,6 +164,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		500770C1227C9FF3003A5F76 /* DriveTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DriveTypes.h; sourceTree = "<group>"; };
 		500C0A542259402D000121CD /* DiskController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiskController.cpp; sourceTree = "<group>"; };
 		500C0A552259402D000121CD /* DiskController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskController.h; sourceTree = "<group>"; };
 		5014DD1321F3625200BC14BA /* Keyboard.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Keyboard.cpp; sourceTree = "<group>"; };
@@ -717,6 +718,7 @@
 		50A2953B21FF12170046BAA0 /* Drive */ = {
 			isa = PBXGroup;
 			children = (
+				500770C1227C9FF3003A5F76 /* DriveTypes.h */,
 				50F6EEBD21F4F61F0091155D /* Drive.h */,
 				50F6EEBC21F4F61F0091155D /* Drive.cpp */,
 				50D52442227878E900F8959D /* DiskTypes.h */,

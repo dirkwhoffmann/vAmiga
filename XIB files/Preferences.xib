@@ -275,7 +275,7 @@ Gw
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Hardware" identifier="Hardware" id="vMg-zr-Ex1">
-                                <view key="view" id="yrH-J2-nFc">
+                                <view key="view" ambiguous="YES" id="yrH-J2-nFc">
                                     <rect key="frame" x="10" y="33" width="600" height="424"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -1467,7 +1467,7 @@ DQ
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Emulator" identifier="Emulator" id="7ox-IX-qy6">
-                                <view key="view" ambiguous="YES" id="2kg-AU-Yx9">
+                                <view key="view" id="2kg-AU-Yx9">
                                     <rect key="frame" x="10" y="33" width="600" height="424"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
