@@ -30,7 +30,7 @@ extension MyController : NSMenuItemValidation {
             
             if let pos = Int(item.title) {
                 
-                if let url = mydocument.getRecentlyUsedURL(pos, from: list) {
+                if let url = myAppDelegate.getRecentlyUsedURL(pos, from: list) {
                     item.title = url.lastPathComponent
                     item.isHidden = false
                     item.image = image
@@ -82,7 +82,7 @@ extension MyController : NSMenuItemValidation {
             
         case #selector(MyController.insertRecentDiskAction(_:)):
             
-            return validateURLlist(mydocument.recentlyInsertedDiskURLs, image: smallDisk)
+            return validateURLlist(myAppDelegate.recentlyInsertedDiskURLs, image: smallDisk)
         
         case  #selector(MyController.ejectDiskAction(_:)),
               #selector(MyController.exportDiskAction(_:)):
@@ -97,8 +97,8 @@ extension MyController : NSMenuItemValidation {
             
         case #selector(MyController.exportRecentDiskAction(_:)):
             switch item.tag {
-            case 0: return validateURLlist(mydocument.recentlyExportedDisk0URLs, image: smallDisk)
-            case 1: return validateURLlist(mydocument.recentlyExportedDisk1URLs, image: smallDisk)
+            case 0: return validateURLlist(myAppDelegate.recentlyExportedDisk0URLs, image: smallDisk)
+            case 1: return validateURLlist(myAppDelegate.recentlyExportedDisk1URLs, image: smallDisk)
             default: fatalError()
             }
             
@@ -387,7 +387,7 @@ extension MyController : NSMenuItemValidation {
         }
         
         drive.insertDisk(adf)
-        mydocument.clearRecentlyExportedDiskURLs(drive: sender.tag)
+        myAppDelegate.clearRecentlyExportedDiskURLs(drive: sender.tag)
     }
  
     @IBAction func newOFSDiskAction(_ sender: NSMenuItem!) {
@@ -398,7 +398,7 @@ extension MyController : NSMenuItemValidation {
         let adf = ADFFileProxy.makeFormatted(DISK_35_DD, fileSystem: AMIGA_OFS)
         
         amiga.df(sender).insertDisk(adf)
-        mydocument.clearRecentlyExportedDiskURLs(drive: sender.tag)
+        myAppDelegate.clearRecentlyExportedDiskURLs(drive: sender.tag)
     }
     
     @IBAction func newFFSDiskAction(_ sender: NSMenuItem!) {
@@ -409,7 +409,7 @@ extension MyController : NSMenuItemValidation {
         let adf = ADFFileProxy.makeFormatted(DISK_35_DD, fileSystem: AMIGA_FFS)
         
         amiga.df(sender).insertDisk(adf)
-        mydocument.clearRecentlyExportedDiskURLs(drive: sender.tag)
+        myAppDelegate.clearRecentlyExportedDiskURLs(drive: sender.tag)
     }
     
     @IBAction func insertDiskAction(_ sender: NSMenuItem!) {
@@ -431,7 +431,7 @@ extension MyController : NSMenuItemValidation {
             if result == .OK {
                 if let url = openPanel.url {
                     do {
-                        let adf = try self.mydocument.createADF(from: url)
+                        let adf = try self.mydocument?.createADF(from: url)
                         self.amiga.df(sender).insertDisk(adf)
                     } catch {
                         NSApp.presentError(error)
@@ -449,10 +449,10 @@ extension MyController : NSMenuItemValidation {
         track("\(drive) \(slot)")
         
         // Get URL and insert
-        if let url = mydocument.getRecentlyInsertedDiskURL(slot) {
+        if let url = myAppDelegate.getRecentlyInsertedDiskURL(slot) {
             do {
-                let adf = try self.mydocument.createADF(from: url)
-                if (mydocument.proceedWithUnexportedDisk(drive: drive)) {
+                let adf = try self.mydocument?.createADF(from: url)
+                if (proceedWithUnexportedDisk(drive: drive)) {
                     amiga.df(drive).insertDisk(adf)
                 }
             } catch {
@@ -463,10 +463,10 @@ extension MyController : NSMenuItemValidation {
     
     func insertRecentDiskAction(drive: DriveProxy, slot: Int) {
         
-        if let url = mydocument.getRecentlyInsertedDiskURL(slot) {
+        if let url = myAppDelegate.getRecentlyInsertedDiskURL(slot) {
             do {
-                let adf = try self.mydocument.createADF(from: url)
-                if (mydocument.proceedWithUnexportedDisk(drive: drive)) {
+                let adf = try self.mydocument?.createADF(from: url)
+                if proceedWithUnexportedDisk(drive: drive) {
                     drive.insertDisk(adf)
                 }
             } catch {
@@ -491,20 +491,21 @@ extension MyController : NSMenuItemValidation {
         let slot = Int(sender.title)!
         
         // Get URL and export
-        if let url = mydocument.getRecentlyExportedDiskURL(slot, drive: nr) {
+        if let url = myAppDelegate.getRecentlyExportedDiskURL(slot, drive: nr) {
             do {
-                mydocument.export(drive: nr, to: url)
+                mydocument?.export(drive: nr, to: url)
             }
         }
     }
     
     @IBAction func clearRecentlyInsertedDisksAction(_ sender: NSMenuItem!) {
-        mydocument.recentlyInsertedDiskURLs = []
+      
+        myAppDelegate.recentlyInsertedDiskURLs = []
     }
 
     @IBAction func clearRecentlyExportedDisksAction(_ sender: NSMenuItem!) {
 
-        mydocument.clearRecentlyExportedDiskURLs(drive: sender.tag)
+        myAppDelegate.clearRecentlyExportedDiskURLs(drive: sender.tag)
     }
 
     @IBAction func ejectDiskAction(_ sender: NSMenuItem!) {
@@ -514,7 +515,7 @@ extension MyController : NSMenuItemValidation {
         
         if proceedWithUnexportedDisk(drive: sender.tag) {
             drive?.ejectDisk()
-            mydocument.clearRecentlyExportedDiskURLs(drive: sender.tag)
+            myAppDelegate.clearRecentlyExportedDiskURLs(drive: sender.tag)
         }
     }
     

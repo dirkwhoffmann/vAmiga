@@ -159,11 +159,27 @@ func cgEventCallback(proxy: CGEventTapProxy,
     @IBOutlet weak var df0Menu: NSMenuItem!
     @IBOutlet weak var df1Menu: NSMenuItem!
     
-    /// Inspector (opened as a separate window)
+    // Inspector (opened as a separate window)
     var inspector: Inspector? = nil
     
-    /// Virtual keyboard (opened as a separate window)
+    // Virtual keyboard (opened as a separate window)
     var virtualKeyboard: VirtualKeyboardController? = nil
+    
+    // The list of recently inserted disk URLs.
+    var recentlyInsertedDiskURLs: [URL] = []
+    
+    // The list of recently exported disk URLs for drive 1.
+    var recentlyExportedDisk0URLs: [URL] = []
+    
+    // The list of recently exported disk URLs for drive 2.
+    var recentlyExportedDisk1URLs: [URL] = []
+    
+    // The list of recently inserted tape URLs.
+    var recentlyInsertedTapeURLs: [URL] = []
+    
+    // The list of recently atached cartridge URLs.
+    var recentlyAttachedCartridgeURLs: [URL] = []
+    
     
     public func applicationDidFinishLaunching(_ aNotification: Notification) {
         
@@ -207,9 +223,99 @@ func cgEventCallback(proxy: CGEventTapProxy,
         
         track()
     }
+    
+    //
+    // Handling the lists of recently used URLs
+    //
+    
+    func noteRecentlyUsedURL(_ url: URL, to list: inout [URL], size: Int) {
+        if !list.contains(url) {
+            if list.count == size {
+                list.remove(at: size - 1)
+            }
+            list.insert(url, at: 0)
+        }
+    }
+    
+    func getRecentlyUsedURL(_ pos: Int, from list: [URL]) -> URL? {
+        return (pos < list.count) ? list[pos] : nil
+    }
+    
+    func noteNewRecentlyInsertedDiskURL(_ url: URL) {
+        noteRecentlyUsedURL(url, to: &recentlyInsertedDiskURLs, size: 10)
+    }
+    
+    func getRecentlyInsertedDiskURL(_ pos: Int) -> URL? {
+        return getRecentlyUsedURL(pos, from: recentlyInsertedDiskURLs)
+    }
+    
+    func noteNewRecentlyExportedDiskURL(_ url: URL, drive nr: Int) {
+        
+        switch(nr) {
+            
+        case 0: noteRecentlyUsedURL(url, to: &recentlyExportedDisk0URLs, size: 1)
+        case 1: noteRecentlyUsedURL(url, to: &recentlyExportedDisk1URLs, size: 1)
+            
+        default: fatalError()
+        }
+    }
+    
+    func getRecentlyExportedDiskURL(_ pos: Int, drive nr: Int) -> URL? {
+        
+        switch(nr) {
+            
+        case 0: return getRecentlyUsedURL(pos, from: recentlyExportedDisk0URLs)
+        case 1: return getRecentlyUsedURL(pos, from: recentlyExportedDisk1URLs)
+            
+        default: fatalError()
+        }
+    }
+    
+    func clearRecentlyExportedDiskURLs(drive nr: Int) {
+        
+        switch(nr) {
+            
+        case 0: recentlyExportedDisk0URLs = []
+        case 1: recentlyExportedDisk1URLs = []
+            
+        default: fatalError()
+        }
+    }
+    
+    func noteNewRecentlyInsertedTapeURL(_ url: URL) {
+        noteRecentlyUsedURL(url, to: &recentlyInsertedTapeURLs, size: 10)
+    }
+    
+    func getRecentlyInsertedTapeURL(_ pos: Int) -> URL? {
+        return getRecentlyUsedURL(pos, from: recentlyInsertedTapeURLs)
+    }
+    
+    func noteNewRecentlyAtachedCartridgeURL(_ url: URL) {
+        noteRecentlyUsedURL(url, to: &recentlyAttachedCartridgeURLs, size: 10)
+    }
+    
+    func getRecentlyAtachedCartridgeURL(_ pos: Int) -> URL? {
+        return getRecentlyUsedURL(pos, from: recentlyAttachedCartridgeURLs)
+    }
+    
+    func noteNewRecentlyUsedURL(_ url: URL) {
+        
+        switch (url.pathExtension.uppercased()) {
+            
+        case "ADF":
+            noteNewRecentlyInsertedDiskURL(url)
+            
+        default:
+            break
+        }
+    }
 }
 
-/// Personal delegation methods
+
+//
+// Personal delegation methods
+//
+
 extension MyAppDelegate {
     
     func windowDidBecomeMain(_ window: NSWindow) {

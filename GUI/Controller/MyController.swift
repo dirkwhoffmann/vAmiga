@@ -389,9 +389,9 @@ extension MyController {
     }
  
     // Provides the document casted to the correct type
-    var mydocument: MyDocument {
+    var mydocument: MyDocument? {
         get {
-            return document as! MyDocument
+            return document as? MyDocument
         }
     }
     
@@ -602,7 +602,7 @@ extension MyController {
             amiga.run()
      
             // Process attachment (if any)
-            mydocument.mountAmigaAttachment()
+            mydocument?.mountAmigaAttachment()
         
         case MSG_RUN:
             
