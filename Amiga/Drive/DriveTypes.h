@@ -15,6 +15,9 @@
 typedef enum : long
 {
     DRIVE_35_DD,
+    DRIVE_35_DD_PC,
+    DRIVE_35_HD,
+    DRIVE_35_HD_PC,
     DRIVE_525_SD
 }
 DriveType;
@@ -26,19 +29,17 @@ inline bool isDriveType(DriveType model)
 
 inline const char *driveTypeName(DriveType type)
 {
-    return
-    type == DRIVE_35_DD  ? "3.5 DD" :
-    type == DRIVE_525_SD ? "5.25 SD" : "???";
+    assert(isDriveType(type));
+    
+    switch (type) {
+        case DRIVE_35_DD:    return "Drive 3.5\" DD";
+        case DRIVE_35_DD_PC: return "Drive 3.5\" DD (PC)";
+        case DRIVE_35_HD:    return "Drive 3.5\" HD";
+        case DRIVE_35_HD_PC: return "Drive 3.5\" HD (PC)";
+        case DRIVE_525_SD:   return "Drive 5.25\" SD";
+        default:             return "???";
+    }
 }
-
-typedef enum : uint32_t
-{
-    DRIVE_ID_NONE  = 0x00000000,
-    DRIVE_ID_35DD  = 0xFFFFFFFF,
-    DRIVE_ID_35HD  = 0xAAAAAAAA,
-    DRIVE_ID_525SD = 0x55555555
-}
-DriveIdCode;
 
 typedef enum
 {
@@ -48,6 +49,5 @@ typedef enum
     DRIVE_DMA_WRITE      // Drive is writing (via DMA)
 }
 DriveState;
-
 
 #endif

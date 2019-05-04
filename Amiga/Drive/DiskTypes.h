@@ -37,12 +37,13 @@ inline const char *diskTypeName(DiskType type)
     assert(isDiskType(type));
     
     switch (type) {
-        case DISK_35_DD:    return "3.5 DD";
-        case DISK_35_DD_PC: return "3.5 DD";
-        case DISK_35_HD:    return "3.5 DD";
-        case DISK_35_HD_PC: return "3.5 DD";
-        case DISK_525_SD:   return "3.5 DD";
-        default:            return "Unknown";
+        case DISK_UNKNOWN:  return "Unknown";
+        case DISK_35_DD:    return "3.5\" DD";
+        case DISK_35_DD_PC: return "3.5\" DD (PC)";
+        case DISK_35_HD:    return "3.5\" HD";
+        case DISK_35_HD_PC: return "3.5\" HD (PC)";
+        case DISK_525_SD:   return "5.25\" SD";
+        default:            return "???";
     }
 }
 

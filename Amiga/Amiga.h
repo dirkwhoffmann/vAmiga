@@ -131,6 +131,9 @@ class Amiga : public HardwareComponent {
     Drive df2 = Drive(2);
     Drive df3 = Drive(3);
     
+    // Shortcuts to all four drives
+    Drive *df[4] = { &df0, &df1, &df2, &df3 };
+    
     
     //
     // Counters

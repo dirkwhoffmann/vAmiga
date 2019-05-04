@@ -315,36 +315,28 @@ Amiga::configureRealTimeClock(bool value)
 }
 
 bool
-Amiga::configureDrive(unsigned df, bool connected)
+Amiga::configureDrive(unsigned driveNr, bool connected)
 {
-    if (df >= 4) {
+    if (driveNr >= 4) {
         warn("Invalid drive number (%d). Ignoring request.\n", df);
         return false;
     }
 
-    if (df == 0 && !connected) {
+    if (driveNr == 0 && !connected) {
         warn("Df0 cannot be disconnected. Ignoring request.\n");
         connected = true;
     }
     
-    paula.diskController.setConnected(df, connected);
+    paula.diskController.setConnected(driveNr, connected);
     putMessage(MSG_CONFIG);
     return true;
 }
 
 bool
-Amiga::configureDriveType(unsigned df, DriveType type)
+Amiga::configureDriveType(unsigned driveNr, DriveType type)
 {
-    debug("configureDriveType\n");
-    
-    Drive *drive =
-    (df == 0) ? &df0 :
-    (df == 1) ? &df1 :
-    (df == 2) ? &df2 :
-    (df == 3) ? &df3 : NULL;
-    
-    if (!drive) {
-        warn("Invalid drive number (%d). Ignoring.\n", df);
+    if (driveNr >= 4) {
+        warn("Invalid drive number (%d). Ignoring.\n", driveNr);
         return false;
     }
     
@@ -353,8 +345,14 @@ Amiga::configureDriveType(unsigned df, DriveType type)
         return false;
     }
     
-    if (drive->getType() != type) {
-        drive->setType(type);
+    if (type != DRIVE_35_DD) {
+        warn("Unsupported drive type (%s). Reverting to %s\n",
+             driveTypeName(type), driveTypeName(DRIVE_35_DD));
+        type = DRIVE_35_DD;
+    }
+    
+    if (df[driveNr]->getType() != type) {
+        df[driveNr]->setType(type);
         putMessage(MSG_CONFIG);
     }
     
@@ -362,21 +360,15 @@ Amiga::configureDriveType(unsigned df, DriveType type)
 }
 
 bool
-Amiga::configureDriveSpeed(unsigned df, uint16_t value)
+Amiga::configureDriveSpeed(unsigned driveNr, uint16_t value)
 {
-    Drive *drive =
-    (df == 0) ? &df0 :
-    (df == 1) ? &df1 :
-    (df == 2) ? &df2 :
-    (df == 3) ? &df3 : NULL;
-
-    if (!drive) {
-        warn("Invalid drive number (%d). Ignoring.\n", df);
+    if (driveNr >= 4) {
+        warn("Invalid drive number (%d). Ignoring.\n", driveNr);
         return false;
     }
     
-    if (drive->getSpeed() != value) {
-        drive->setSpeed(value);
+    if (df[driveNr]->getSpeed() != value) {
+        df[driveNr]->setSpeed(value);
         putMessage(MSG_CONFIG);
     }
     

@@ -532,7 +532,7 @@ DQ
                                                         <menuItem title="3.5&quot; DD" state="on" id="Bqr-Jc-yKI">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="5.25&quot; SD" tag="1" id="FHh-Ux-eka">
+                                                        <menuItem title="5.25&quot; SD" tag="1" hidden="YES" id="FHh-Ux-eka">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                     </items>
@@ -643,7 +643,7 @@ DQ
                                                         <menuItem title="3.5&quot; DD" state="on" id="S9T-RH-Pmc">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="5.25&quot; SD" tag="1" id="6UP-CK-Rle">
+                                                        <menuItem title="5.25&quot; SD" tag="1" hidden="YES" id="6UP-CK-Rle">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                     </items>
@@ -675,7 +675,7 @@ DQ
                                                         <menuItem title="3.5&quot; DD" state="on" id="Pyp-f7-wKz">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="5.25&quot; SD" tag="1" id="ddT-tp-00B">
+                                                        <menuItem title="5.25&quot; SD" tag="1" hidden="YES" id="ddT-tp-00B">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                     </items>
@@ -707,7 +707,7 @@ DQ
                                                         <menuItem title="3.5&quot; DD" state="on" id="yTp-fg-6Kz">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="5.25&quot; SD" tag="1" id="32V-sa-klY">
+                                                        <menuItem title="5.25&quot; SD" tag="1" hidden="YES" id="32V-sa-klY">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                     </items>

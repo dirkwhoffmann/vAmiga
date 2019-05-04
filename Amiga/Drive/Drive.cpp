@@ -103,16 +103,18 @@ Drive::setSpeed(uint16_t value)
 uint32_t
 Drive::getDriveId()
 {
-    switch (type) {
-
-        case DRIVE_35_DD:  return DRIVE_ID_35DD;
-        case DRIVE_525_SD: return DRIVE_ID_525SD;
-        default: assert(false);
-    }
-        
-    // HD drives are not supported, yet.
-    // Note that an HD drive identifies itself as HD only if a HD disk is
-    // inserted. Otherweise, it identifies itself as a DD drive.
+    /* Floopy drives identify themselve with the following codes:
+     *
+     *   3.5" DD :  0xFFFFFFFF
+     *   3.5" HD :  0xAAAAAAAA  if an HD disk is inserted
+     *              0xFFFFFFFF  if no disk or a DD disk is inserted
+     *   5.25"SD :  0x55555555
+     *
+     * An unconnected drive corresponds to ID 0x00000000.
+     */
+    
+    assert(type == DRIVE_35_DD);
+    return 0xFFFFFFFF;
 }
 
 bool
