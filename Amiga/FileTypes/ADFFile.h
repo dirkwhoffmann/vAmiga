@@ -18,9 +18,11 @@
 #define ADFSIZE_35_HD_PC 1474560  // 1440 KB
 #define ADFSIZE_525_SD    368640  //  360 KB
 
+/*
 static inline bool isCylinderNr(long nr) { return nr >= 0 && nr <= 79; }
 static inline bool isTrackNr(long nr)    { return nr >= 0 && nr <= 159; }
 static inline bool isSectorNr(long nr)   { return nr >= 0 && nr <= 1759; }
+*/
 
 class ADFFile : public AmigaFile {
     
@@ -81,7 +83,7 @@ public:
     // Returns the disk type (3.5"DD, 3.5"DD (PC), 5.25"SD, etc.)
     DiskType getDiskType();
 
-    // Returns the number of sectors, tracks, and cyclinders of this disk.
+    // Cylinder, track, and sector counts
     long getNumSectorsPerTrack();
     long getNumSectors() {
         assert(size % 512 == 0);
@@ -95,9 +97,16 @@ public:
         assert(getNumTracks() % 2 == 0);
         return getNumTracks() / 2;
     }
+
+    // Returns the location of the root and bitmap block.
+    long rootBlockNr();
+    long bitmapBlockNr() { return rootBlockNr() + 1; }
+
+    // Consistency checking
+    bool isCylinderNr(long nr) { return nr >= 0 && nr < getNumCyclinders(); }
+    bool isTrackNr(long nr)    { return nr >= 0 && nr < getNumTracks(); }
+    bool isSectorNr(long nr)   { return nr >= 0 && nr < getNumSectors(); }
     
-    
-    // Determines the number
     
     //
     // Formatting
@@ -108,9 +117,9 @@ public:
 private:
     
     void writeBootBlock(FileSystemType fs);
-    void writeRootBlock(uint32_t blockIndex, const char *label);
-    void writeBitmapBlock(uint32_t blockIndex, uint32_t numSectors);
-    void writeDate(int offset, time_t date);
+    void writeRootBlock(const char *label);
+    void writeBitmapBlock();
+    void writeDate(uint8_t *dst, time_t date);
 
     uint32_t sectorChecksum(int sector);
 

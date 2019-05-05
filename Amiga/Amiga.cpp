@@ -106,6 +106,10 @@ Amiga::Amiga()
     adf->writeToFile("/tmp/vADF35DD_OFS.adf");
     adf->formatDisk(FS_FFS);
     adf->writeToFile("/tmp/vADF35DD_FFS.adf");
+    adf->formatDisk(FS_OFS_BOOTABLE);
+    adf->writeToFile("/tmp/vADF35DD_OFSb.adf");
+    adf->formatDisk(FS_FFS_BOOTABLE);
+    adf->writeToFile("/tmp/vADF35DD_FFSb.adf");
     delete adf;
     
     adf = ADFFile::makeWithDiskType(DISK_35_HD);
@@ -113,6 +117,10 @@ Amiga::Amiga()
     adf->writeToFile("/tmp/vADF35HD_OFS.adf");
     adf->formatDisk(FS_FFS);
     adf->writeToFile("/tmp/vADF35HD_FFS.adf");
+    adf->formatDisk(FS_OFS_BOOTABLE);
+    adf->writeToFile("/tmp/vADF35HD_OFSb.adf");
+    adf->formatDisk(FS_FFS_BOOTABLE);
+    adf->writeToFile("/tmp/vADF35HD_FFSb.adf");
     delete adf;
 
 }

@@ -67,7 +67,7 @@ ADFFile::makeWithDiskType(DiskType t)
         return NULL;
     }
     
-    memset(adf->data, 0, t);
+    memset(adf->data, 0, adf->size);
     return adf;
 }
 
@@ -96,42 +96,6 @@ ADFFile::makeWithFile(const char *path)
     
     return adf;
 }
-
-/*
-ADFFile *
-ADFFile::makeFormatted(DiskType type, FileSystemType fs)
-{
-    ADFFile *adf = makeWithDiskType(type);
-    
-    if (adf) {
-        
-        int numSectors;
-        int rootBlockSector;
-        
-        switch(type) {
-                
-            case DISK_35_DD:
-                numSectors = 2 * 880;
-                rootBlockSector = 880;
-                break;
-                
-            case DISK_525_SD:
-                numSectors = 2 * 440;
-                rootBlockSector = 440;
-                break;
-                
-            default: return NULL; 
-        }
-        
-        // Format the disk
-        adf->writeBootBlock(fs);
-        adf->writeRootBlock(rootBlockSector, "Empty");
-        adf->writeBitmapBlock(rootBlockSector + 1, numSectors);
-    }
-    
-    return adf;
-}
-*/
 
 bool
 ADFFile::readFromBuffer(const uint8_t *buffer, size_t length)
@@ -175,15 +139,28 @@ ADFFile::getNumSectorsPerTrack()
     }
 }
 
+long
+ADFFile::rootBlockNr()
+{
+    DiskType type = getDiskType();
+    
+    if (type == DISK_35_DD) return 880;
+    if (type == DISK_35_HD) return 1760;
+
+    // Don't call this method with an incompatible disk type
+    assert(0);
+    return 0;
+}
+
 bool
 ADFFile::formatDisk(FileSystemType fs)
 {
     assert(isFileSystemType(fs));
     
-    // Only proceed if a file system is given.
+    // Only proceed if a file system is given
     if (fs == FS_NONE) return false;
     
-    // Check if the disk is compatible with the provided file system.
+    // Check if the disk is compatible with the provided file system
     DiskType type = getDiskType();
     if (type != DISK_35_DD && type != DISK_35_HD) {
         warn("Cannot format a disk of type %s with file system %s.\n",
@@ -191,17 +168,17 @@ ADFFile::formatDisk(FileSystemType fs)
         return false;
     }
     
-    // Format the disk.
-    int sectorCount = getNumSectors();
-    int rootBlockSector = sectorCount / 2;
+    // Format the disk
+    debug("Formatting a %d sector disk...\n", getNumSectors());
+    debug("Sector %d is the root block.\n", rootBlockNr());
     
-    debug("Formatting a %d sector disk...\n", sectorCount);
-    debug("Sector %d is the root block.\n", rootBlockSector);
+    // Wipe out all existing data
+    memset(data, 0, size);
     
-    // Write the boot block, the root block, and the bitmap block.
+    // Write the boot block, the root block, and the bitmap block
     writeBootBlock(fs);
-    writeRootBlock(rootBlockSector, "Empty");
-    writeBitmapBlock(rootBlockSector + 1, sectorCount);
+    writeRootBlock("Empty");
+    writeBitmapBlock();
     return true;
 }
 
@@ -246,9 +223,9 @@ ADFFile::writeBootBlock(FileSystemType fs)
 }
 
 void
-ADFFile::writeRootBlock(uint32_t blockNr, const char *label)
+ADFFile::writeRootBlock(const char *label)
 {
-    uint8_t *p = data + blockNr * 512;
+    uint8_t *p = data + rootBlockNr() * 512;
     
     // Type
     p[3] = 0x02;
@@ -262,13 +239,14 @@ ADFFile::writeRootBlock(uint32_t blockNr, const char *label)
     p[312] = p[313] = p[314] = p[315] = 0xFF;
     
     // BM pages (indicates the blocks containing the bitmap)
-    p[318] = HI_BYTE(blockNr + 1);
-    p[319] = LO_BYTE(blockNr + 1);
+    p[318] = HI_BYTE(bitmapBlockNr());
+    p[319] = LO_BYTE(bitmapBlockNr());
     
-    // Last altered date and time / Creation date and time
-    writeDate(420, time(NULL));
-    memcpy(p + 472, p + 420, 12);
-    memcpy(p + 472, p + 420, 12);
+    // Last recent change of the root directory of this volume
+    writeDate(p + 420, time(NULL));
+    
+    // Date and time when this volume was formatted
+    writeDate(p + 484, time(NULL));
     
     // Volume name as a BCPL string (first byte is string length)
     size_t len = strlen(label);
@@ -280,7 +258,7 @@ ADFFile::writeRootBlock(uint32_t blockNr, const char *label)
     p[511] = 0x01;
     
     // Compute checksum
-    uint32_t checksum = sectorChecksum(blockNr);
+    uint32_t checksum = sectorChecksum(rootBlockNr());
     p[20] = BYTE3(checksum);
     p[21] = BYTE2(checksum);
     p[22] = BYTE1(checksum);
@@ -288,16 +266,18 @@ ADFFile::writeRootBlock(uint32_t blockNr, const char *label)
 }
 
 void
-ADFFile::writeBitmapBlock(uint32_t blockNr, uint32_t numSectors)
+ADFFile::writeBitmapBlock()
 {
-    uint8_t *p = data + blockNr * 512;
+    uint8_t *p = data + bitmapBlockNr() * 512;
     
     // Write allocation table
-    memset(p + 4, 0xFF, numSectors / 8);
-    p[4 + (blockNr / 8)] = 0x3F;
+    memset(p + 4, 0xFF, getNumSectors() / 8);
+    
+    // Mark the root block and the bitmap block as used
+    p[4 + (rootBlockNr() / 8)] = 0x3F;
     
     // Compute checksum
-    uint32_t checksum = sectorChecksum(blockNr);
+    uint32_t checksum = sectorChecksum(bitmapBlockNr());
     p[0] = BYTE3(checksum);
     p[1] = BYTE2(checksum);
     p[2] = BYTE1(checksum);
@@ -305,7 +285,7 @@ ADFFile::writeBitmapBlock(uint32_t blockNr, uint32_t numSectors)
 }
 
 void
-ADFFile::writeDate(int offset, time_t date)
+ADFFile::writeDate(uint8_t *dst, time_t date)
 {
     /* Format used by the Amiga:
      *
@@ -324,23 +304,21 @@ ADFFile::writeDate(int offset, time_t date)
     uint32_t mins  = (date % secPerDay) / 60;
     uint32_t ticks = (date % secPerDay % 60) * 5 / 6;
     
-    // Store values
-    uint8_t *p = data + offset;
+    // Store value
+    dst[0x0] = BYTE3(days);
+    dst[0x1] = BYTE2(days);
+    dst[0x2] = BYTE1(days);
+    dst[0x3] = BYTE0(days);
     
-    p[0x0] = BYTE3(days);
-    p[0x1] = BYTE2(days);
-    p[0x2] = BYTE1(days);
-    p[0x3] = BYTE0(days);
+    dst[0x4] = BYTE3(mins);
+    dst[0x5] = BYTE2(mins);
+    dst[0x6] = BYTE1(mins);
+    dst[0x7] = BYTE0(mins);
     
-    p[0x4] = BYTE3(mins);
-    p[0x5] = BYTE2(mins);
-    p[0x6] = BYTE1(mins);
-    p[0x7] = BYTE0(mins);
-    
-    p[0x8] = BYTE3(ticks);
-    p[0x9] = BYTE2(ticks);
-    p[0xA] = BYTE1(ticks);
-    p[0xB] = BYTE0(ticks);
+    dst[0x8] = BYTE3(ticks);
+    dst[0x9] = BYTE2(ticks);
+    dst[0xA] = BYTE1(ticks);
+    dst[0xB] = BYTE0(ticks);
 }
 
 uint32_t
