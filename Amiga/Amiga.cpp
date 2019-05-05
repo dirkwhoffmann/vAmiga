@@ -96,6 +96,25 @@ Amiga::Amiga()
     
     // Initialize the mach timer info
     mach_timebase_info(&tb);
+    
+    
+    // REMOVE ASAP
+    ADFFile *adf;
+    
+    adf = ADFFile::makeWithDiskType(DISK_35_DD);
+    adf->formatDisk(FS_OFS);
+    adf->writeToFile("/tmp/vADF35DD_OFS.adf");
+    adf->formatDisk(FS_FFS);
+    adf->writeToFile("/tmp/vADF35DD_FFS.adf");
+    delete adf;
+    
+    adf = ADFFile::makeWithDiskType(DISK_35_HD);
+    adf->formatDisk(FS_OFS);
+    adf->writeToFile("/tmp/vADF35HD_OFS.adf");
+    adf->formatDisk(FS_FFS);
+    adf->writeToFile("/tmp/vADF35HD_FFS.adf");
+    delete adf;
+
 }
 
 Amiga::~Amiga()

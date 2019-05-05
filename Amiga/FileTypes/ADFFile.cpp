@@ -143,7 +143,7 @@ ADFFile::readFromBuffer(const uint8_t *buffer, size_t length)
 }
 
 DiskType
-ADFFile::getType()
+ADFFile::getDiskType()
 {
     switch(size) {
         
@@ -156,25 +156,84 @@ ADFFile::getType()
     }
 }
 
-void
+long
+ADFFile::getNumSectors()
+{
+    assert(size % 512 == 0);
+    return size / 512;
+}
+
+long
+ADFFile::getNumSectorsPerTrack()
+{
+    DiskType type = getDiskType();
+    
+    switch (type) {
+        
+        case DISK_35_DD:
+        case DISK_35_HD:
+        return 11;
+        
+        case DISK_35_DD_PC:
+        case DISK_35_HD_PC:
+        case DISK_525_SD:
+        return 9;
+        
+        default: break;
+    }
+    
+    // Determine the number of sectors by a dividability check.
+    // Return -1 on error (neither 11 (Amiga) or 9 (PC) is a divider).
+    return (size % 11 == 0) ? 11 : (size % 9 == 0) ? 9 : -1;
+}
+
+long
+ADFFile::getNumTracks()
+{
+    long sectorCount = getNumSectorsPerTrack();
+    if (sectorCount == -1) return -1;
+  
+    assert(size % (512 * sectorCount) == 0);
+    return size / (512 * sectorCount);
+}
+
+long
+ADFFile::getNumCyclinders()
+{
+    long trackCount = getNumTracks();
+    if (trackCount == -1) return -1;
+    
+    return (trackCount % 2) ? -1 : trackCount / 2;
+}
+
+bool
 ADFFile::formatDisk(FileSystemType fs)
 {
     assert(isFileSystemType(fs));
     
-    if (fs != FS_NONE) {
- 
-        // Determine the number of sectors and the root block location
-        int sectorCount = numSectors(getType()) * numTracks(getType());
-        int rootBlockSector = sectorCount / 2;
-        
-        debug("Formatting a %d sector disk...\n", sectorCount);
-        debug("Sector %d is the root block.\n", rootBlockSector);
-        
-        // Write the boot block, the root block, and the bitmap block
-        writeBootBlock(fs);
-        writeRootBlock(rootBlockSector, "Empty");
-        writeBitmapBlock(rootBlockSector + 1, sectorCount);
+    // Only proceed if a file system is given.
+    if (fs == FS_NONE) return false;
+    
+    // Check if the disk is compatible with the provided file system.
+    DiskType type = getDiskType();
+    if (type != DISK_35_DD && type != DISK_35_HD) {
+        warn("Cannot format a disk of type %s with file system %s.\n",
+             diskTypeName(type), fileSystemTypeName(fs));
+        return false;
     }
+    
+    // Format the disk.
+    int sectorCount = getNumSectors();
+    int rootBlockSector = sectorCount / 2;
+    
+    debug("Formatting a %d sector disk...\n", sectorCount);
+    debug("Sector %d is the root block.\n", rootBlockSector);
+    
+    // Write the boot block, the root block, and the bitmap block.
+    writeBootBlock(fs);
+    writeRootBlock(rootBlockSector, "Empty");
+    writeBitmapBlock(rootBlockSector + 1, sectorCount);
+    return true;
 }
 
 void

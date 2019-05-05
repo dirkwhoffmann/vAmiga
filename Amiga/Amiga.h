@@ -298,7 +298,6 @@ class Amiga : public HardwareComponent {
     // Returns the currently set memory configuration.
     AmigaMemConfiguration getMemConfig();
     
-    
     // Chooses the emulated Amiga model.
     bool configureModel(AmigaModel model);
     bool configureLayout(long value);
