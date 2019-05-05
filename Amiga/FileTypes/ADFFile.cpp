@@ -152,15 +152,9 @@ ADFFile::getDiskType()
         case ADFSIZE_35_HD:    return DISK_35_HD;
         case ADFSIZE_35_HD_PC: return DISK_35_HD_PC;
         case ADFSIZE_525_SD:   return DISK_525_SD;
-        default:               return DISK_UNKNOWN;
     }
-}
-
-long
-ADFFile::getNumSectors()
-{
-    assert(size % 512 == 0);
-    return size / 512;
+    assert(0);
+    return (DiskType)0;
 }
 
 long
@@ -178,32 +172,7 @@ ADFFile::getNumSectorsPerTrack()
         case DISK_35_HD_PC:
         case DISK_525_SD:
         return 9;
-        
-        default: break;
     }
-    
-    // Determine the number of sectors by a dividability check.
-    // Return -1 on error (neither 11 (Amiga) or 9 (PC) is a divider).
-    return (size % 11 == 0) ? 11 : (size % 9 == 0) ? 9 : -1;
-}
-
-long
-ADFFile::getNumTracks()
-{
-    long sectorCount = getNumSectorsPerTrack();
-    if (sectorCount == -1) return -1;
-  
-    assert(size % (512 * sectorCount) == 0);
-    return size / (512 * sectorCount);
-}
-
-long
-ADFFile::getNumCyclinders()
-{
-    long trackCount = getNumTracks();
-    if (trackCount == -1) return -1;
-    
-    return (trackCount % 2) ? -1 : trackCount / 2;
 }
 
 bool

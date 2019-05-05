@@ -18,7 +18,6 @@
 
 typedef enum : long
 {
-    DISK_UNKNOWN,
     DISK_35_DD,
     DISK_35_DD_PC,
     DISK_35_HD,
@@ -37,7 +36,6 @@ inline const char *diskTypeName(DiskType type)
     assert(isDiskType(type));
     
     switch (type) {
-        case DISK_UNKNOWN:  return "Unknown";
         case DISK_35_DD:    return "3.5\" DD";
         case DISK_35_DD_PC: return "3.5\" DD (PC)";
         case DISK_35_HD:    return "3.5\" HD";

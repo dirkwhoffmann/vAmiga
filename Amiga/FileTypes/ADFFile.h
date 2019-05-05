@@ -78,19 +78,23 @@ public:
     // Properties
     //
     
-    /* Returns the disk type (3.5"DD, 3.5"DD (PC), 5.25"SD, etc.)
-     * Because ADF files contain no header information, the disk type is
-     * determined solely by the file size. Returns DISK_UNKNOWN if the file
-     * size does not match any of the known disk formats.
-     */
+    // Returns the disk type (3.5"DD, 3.5"DD (PC), 5.25"SD, etc.)
     DiskType getDiskType();
 
-    // Returns the number of cyclinders, tracks, or sectors stored in this file.
-    // Returns -1 if the number cannot be determined.
-    long getNumSectors();
+    // Returns the number of sectors, tracks, and cyclinders of this disk.
     long getNumSectorsPerTrack();
-    long getNumTracks();
-    long getNumCyclinders();
+    long getNumSectors() {
+        assert(size % 512 == 0);
+        return size / 512;
+    }
+    long getNumTracks() {
+        assert(size % (512 * getNumSectorsPerTrack()) == 0);
+        return size / (512 * getNumSectorsPerTrack());
+    }
+    long getNumCyclinders() {
+        assert(getNumTracks() % 2 == 0);
+        return getNumTracks() / 2;
+    }
     
     
     // Determines the number
