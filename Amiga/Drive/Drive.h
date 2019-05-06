@@ -33,6 +33,8 @@ private:
      * This value equals the number of words that get transfered into memory
      * during a single disk DMA cycle. This value must be 1 to emulate a real
      * Amiga. If it set to, e.g., 2, the drive loads twice as fast.
+     * A negative value indicates a turbo drive for which the exect value of
+     * the acceleration factor has no meaning.
      */
     uint16_t speed = 1;
     
@@ -135,22 +137,25 @@ public:
     // Accessing device properties
     //
     
-    // Returns the device number (0 = df0, 1 = df1, 2 = df2, 3 = df3)
+    // Returns the device number (0 = df0, 1 = df1, 2 = df2, 3 = df3).
     long getNr() { return nr; }
     
-    // Returns the drive type
+    // Returns the drive type.
     DriveType getType() { return type; }
 
-    // Sets the drive type
+    // Sets the drive type.
     void setType(DriveType t);
     
-    // Return the accleration factor
+    // Returns the accleration factor.
     uint16_t getSpeed() { return speed; }
 
-    // Sets the accleration factor
+    // Sets the accleration factor.
     void setSpeed(uint16_t value);
 
-    // Returns the drive identification code
+    // Indicates whether this drive is a turbo drive.
+    bool isTurboDrive() { return speed > 128; }
+
+    // Returns the drive identification code.
     uint32_t getDriveId();
     
     

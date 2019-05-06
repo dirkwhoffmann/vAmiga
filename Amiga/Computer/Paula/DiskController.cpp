@@ -163,13 +163,14 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
 {
     // plaindebug(1, "pokeDSKLEN(%X)\n", newDskLen);
     
+    Drive *sd = (selectedDrive >= 0) ? df[selectedDrive] : NULL;
     uint16_t oldDsklen = dsklen;
-    
+
     // DEBUGGING
     dcheck = fnv_1a_init32();
     debugcnt = 3;
     
-    if (selectedDrive >= 0) df[selectedDrive]->head.offset = 0;
+    if (sd) sd->head.offset = 0;
     
     // Remember the new value
     dsklen = newDskLen;
@@ -206,6 +207,9 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
             }
         }
     }
+    
+    // If the selected drive is a turbo drive, perform DMA immediately
+    if (sd && sd->isTurboDrive()) performTurboDMA(sd);
 }
 
 void
@@ -302,6 +306,18 @@ DiskController::PRBdidChange(uint8_t oldValue, uint8_t newValue)
 }
 
 void
+DiskController::serveDiskEvent()
+{
+    assert(selectedDrive >= -1 && selectedDrive <= 3);
+    
+    // Receive next byte from the selected drive.
+    readByte();
+    
+    // Schedule next event.
+    handler->scheduleSecRel(DSK_SLOT, DMA_CYCLES(56), DSK_ROTATE);
+}
+
+void
 DiskController::clearFifo()
 {
     fifo = 0;
@@ -335,18 +351,6 @@ bool
 DiskController::compareFifo(uint16_t word)
 {
     return fifoHasData() && ((fifo >> (8 * fifoCount)) & 0xFFFF) == word;
-}
-
-void
-DiskController::serveDiskEvent()
-{
-    assert(selectedDrive >= -1 && selectedDrive <= 3);
-    
-    // Receive next byte from the selected drive.
-    readByte();
-    
-    // Schedule next event.
-    handler->scheduleSecRel(DSK_SLOT, DMA_CYCLES(56), DSK_ROTATE);
 }
 
 #ifdef EASY_DISK
@@ -454,7 +458,6 @@ DiskController::doDiskDMA()
 void
 DiskController::doSimpleDMA()
 {
-    
     // Only proceed if there are remaining bytes to read.
     if (!(dsklen & 0x3FFF)) return;
 
@@ -549,5 +552,86 @@ DiskController::doSimpleDMAWrite(Drive *dfsel)
             return;
         }
     }
+}
+
+void
+DiskController::performTurboDMA(Drive *d)
+{
+    // Only proceed if there are remaining bytes to read.
+    if (!(dsklen & 0x3FFF)) return;
+    
+    // Perform action depending on DMA state
+    switch (state) {
+            
+        case DRIVE_DMA_READ:
+            
+            performTurboRead(d, dsklen & 0x3FFF);
+            break;
+            
+        case DRIVE_DMA_WRITE:
+            
+            performTurboWrite(d, dsklen & 0x3FFF);
+            break;
+            
+        default:
+            return;
+    }
+    
+    // Trigger disk interrupt
+    amiga->paula.pokeINTREQ(0x8002);
+    state = DRIVE_DMA_OFF;
+}
+
+void
+DiskController::performTurboRead(Drive *d, uint32_t numWords)
+{
+    plaindebug(1, "Turbo-reading %d words from disk.\n", numWords);
+
+    uint32_t checksum = fnv_1a_init32();
+    
+    for (unsigned i = 0; i < numWords; i++) {
+        
+        // Read word from disk.
+        uint8_t byte1 = d->readHead();
+        d->rotate();
+        uint8_t byte2 = d->readHead();
+        d->rotate();
+        uint16_t word = HI_LO(byte1, byte2);
+        
+        // Write word into memory.
+        amiga->mem.pokeChip16(amiga->agnus.dskpt, word);
+        amiga->agnus.dskpt = (amiga->agnus.dskpt + 2) & 0x7FFFF;
+        
+        // Compute checksum (for debugging only)
+        checksum = fnv_1a_it32(checksum, word);
+    }
+        
+    plaindebug(2, "Turbo read %s: checksum = %X\n", d->getDescription(), checksum);
+}
+
+void
+DiskController::performTurboWrite(Drive *d, uint32_t numWords)
+{
+    plaindebug(1, "Turbo-writing %d words to disk.\n", numWords);
+
+    uint32_t checksum = fnv_1a_init32();
+    
+    for (unsigned i = 0; i < numWords; i++) {
+        
+        // Read word from memory
+        uint16_t word = amiga->mem.peekChip16(amiga->agnus.dskpt);
+        amiga->agnus.dskpt = (amiga->agnus.dskpt + 2) & 0x7FFFF;
+        
+        // Compute checksum (for debugging only)
+        dcheck = fnv_1a_it32(dcheck, word);
+        
+        // Write word to disk
+        d->writeHead(HI_BYTE(word));
+        d->rotate();
+        d->writeHead(LO_BYTE(word));
+        d->rotate();
+    }
+    
+    plaindebug(2, "Turbo write %s: checksum = %X\n", d->getDescription(), checksum);
 }
 

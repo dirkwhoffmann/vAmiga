@@ -179,9 +179,19 @@ public:
     // Write handler for the PRB register of CIA B
     void PRBdidChange(uint8_t oldValue, uint8_t newValue);
     
-
+    
     //
-    // Handling the FIFO buffer
+    // Processing events
+    //
+    
+public:
+    
+    // Serves an event in the disk controller slot.
+    void serveDiskEvent();
+    
+    
+    //
+    // Working with the FIFO buffer
     //
     
 private:
@@ -203,28 +213,29 @@ private:
 
     
     //
-    // Processing events and disk data
+    // Performing DMA
     //
-    
+
 public:
     
-    // Serves an event in the disk controller slot.
-    void serveDiskEvent();
-
-    // Reads a byte from the selected drive.
-    void readByte();
-
     // Performs a disk DMA access.
     void doDiskDMA();
     void doSimpleDMA();
-    
+
 private:
-    
+
+    void readByte();
     void doSimpleDMARead(Drive *dfsel);
     void doSimpleDMAWrite(Drive *dfsel);
 
-    // Returns true if the specified drive is transferring data via DMA.
-    // bool doesDMA(int nr);
+    /* Emulates a DMA access with a turbo drive.
+     * If a turbo drive is attached, this function is called directly when
+     * DSKLEN is written to.
+     */
+    void performTurboDMA(Drive *d);
+    
+    void performTurboRead(Drive *d, uint32_t numWords);
+    void performTurboWrite(Drive *d, uint32_t numWords);
 };
 
 #endif

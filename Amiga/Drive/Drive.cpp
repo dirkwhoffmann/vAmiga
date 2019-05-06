@@ -88,11 +88,11 @@ Drive::setType(DriveType t)
 void
 Drive::setSpeed(uint16_t value)
 {
-    assert(speed == 1 ||
+    assert(speed == 0 ||
+           speed == 1 ||
            speed == 2 ||
            speed == 4 ||
-           speed == 8 ||
-           speed == UINT16_MAX);
+           speed == 8 );
     
     speed = value;
     

@@ -362,6 +362,8 @@ Amiga::configureDriveType(unsigned driveNr, DriveType type)
 bool
 Amiga::configureDriveSpeed(unsigned driveNr, uint16_t value)
 {
+    debug("configureDriveSpeed %d %d\n", driveNr, value);
+    
     if (driveNr >= 4) {
         warn("Invalid drive number (%d). Ignoring.\n", driveNr);
         return false;
