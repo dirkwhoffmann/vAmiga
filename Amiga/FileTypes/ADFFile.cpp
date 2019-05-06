@@ -142,9 +142,7 @@ ADFFile::getDiskType()
 long
 ADFFile::getNumSectorsPerTrack()
 {
-    DiskType type = getDiskType();
-    
-    switch (type) {
+    switch (getDiskType()) {
         
         case DISK_35_DD:
         case DISK_35_HD:

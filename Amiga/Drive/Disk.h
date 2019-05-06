@@ -34,32 +34,27 @@ public:
     // Constants
     //
     
-    /* MFM encoded disk data
+    /*
+     * MFM encoded disk data of a standard 3.5"DD disk
      *
-     * Cylinder  Track     Head      Sectors
-     * ---------------------------------------
-     * 0         0         0          0 - 10
-     * 0         1         1         11 - 21
-     * 1         2         0         22 - 32
-     * 1         3         1         33 - 43
-     *                ...
-     * 79        158       0       1738 - 1748
-     * 79        159       1       1749 - 1759
-     */
-    
-    static const int numHeads           = 2;
-    static const int numCylinders       = 80;
-    static const int numSectorsPerTrack = 11;
-    static const int numTracks          = numHeads * numCylinders;
-    static const int numSectors         = numSectorsPerTrack * numTracks;
-   
-    /* A single sector consists of
+     *    Cylinder  Track     Head      Sectors
+     *    ---------------------------------------
+     *    0         0         0          0 - 10
+     *    0         1         1         11 - 21
+     *    1         2         0         22 - 32
+     *    1         3         1         33 - 43
+     *                   ...
+     *    79        158       0       1738 - 1748
+     *    79        159       1       1749 - 1759
+     *
+     *
+     * A single sector consists of
      *    - A sector header build up from 64 MFM bytes.
      *    - 512 bytes of data (1024 MFM bytes).
      *    Hence,
      *    - a sector consists of 64 + 2*512 = 1088 MFM bytes.
      *
-     * A single track consists of
+     * A single track of a 3.5"DD disk consists
      *    - 11 * 1088 = 11.968 MFM bytes.
      *    - A track gap of about 696 MFM bytes (varies with drive speed).
      *    Hence,
@@ -68,23 +63,26 @@ public:
      *    - a disk usually occupies 80 * 2 * 12.664 =  2.026.240 MFM bytes
      */
     
-    static const long mfmBytesPerSector   = 1088;
-    static const long mfmBytesInTrackGap  = 700; // 696;
-    static const long mfmBytesPerTrack    = 12668; // 12664;
-    static const long mfmBytesPerCylinder = 2 * mfmBytesPerTrack;
-    static const long mfmBytesPerDisk     = 80 * mfmBytesPerCylinder;
+    static const long sectorSize      = 1088;
+    static const long trackGapSize    = 700; // 696;
+    static const long maxTrackSize    = 12668; // 12664;
+    static const long maxCylinderSize = 2 * maxTrackSize;
+    static const long maxDiskSize     = 80 * maxCylinderSize;
     
-    static const uint64_t MFM_DATA_BIT_MASK8  = 0x55;
-    static const uint64_t MFM_CLOCK_BIT_MASK8 = 0xAA;
+    // static const uint64_t MFM_DATA_BIT_MASK8  = 0x55;
+    // static const uint64_t MFM_CLOCK_BIT_MASK8 = 0xAA;
 
     // The type of this disk
     DiskType type = DISK_35_DD;
     
+    // Length of a single track in bytes
+    uint16_t trackLen = maxTrackSize;
+    
     // MFM encoded disk data
     union {
-        uint8_t raw[mfmBytesPerDisk];
-        uint8_t cyclinder[80][2][mfmBytesPerTrack];
-        uint8_t track[160][mfmBytesPerTrack];
+        uint8_t raw[maxDiskSize];
+        uint8_t cyclinder[80][2][maxTrackSize];
+        uint8_t track[160][maxTrackSize];
     } data;
     
     bool writeProtected;
@@ -97,14 +95,13 @@ public:
     
 public:
     
-    Disk();
+    Disk(DiskType type);
     
     // Factory method
     static Disk *makeWithFile(ADFFile *file);
   
 
 public:
-    
     
     //
     // Accessing properties
@@ -117,6 +114,22 @@ public:
     
     bool isModified() { return modified; }
     void setModified(bool value) { modified = value; }
+    
+    
+    //
+    // Computed properties
+    //
+    
+    // Cylinder, track, and sector counts
+    long getNumCyclinders();
+    long getNumTracks() { return 2 * getNumCyclinders(); }
+    long getNumSectorsPerTrack();
+    long getNumSectors() { return getNumTracks() * getNumSectorsPerTrack(); }
+    
+    // Consistency checking
+    bool isValidCylinder(long nr) { return nr >= 0 && nr < getNumCyclinders(); }
+    bool isTrackNr(long nr) { return nr >= 0 && nr < getNumTracks(); }
+    bool isSectorNr(long nr) { return nr >= 0 && nr < getNumSectorsPerTrack(); }
     
     
     //
@@ -158,7 +171,7 @@ public:
 private:
     
     // Work horses
-    bool encodeTrack(ADFFile *adf, Track t);
+    bool encodeTrack(ADFFile *adf, Track t, long smax);
     bool encodeSector(ADFFile *adf, Track t, Sector s);
     void encodeOddEven(uint8_t *target, uint8_t *source, size_t count);
     
@@ -175,7 +188,7 @@ public:
 private:
     
     // Work horses
-    size_t decodeTrack(uint8_t *dst, Track t);
+    size_t decodeTrack(uint8_t *dst, Track t, long smax);
     void decodeSector(uint8_t *dst, uint8_t *src);
     void decodeOddEven(uint8_t *dst, uint8_t *src, size_t count);
 };

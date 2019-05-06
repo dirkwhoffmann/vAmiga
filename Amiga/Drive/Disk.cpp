@@ -9,20 +9,11 @@
 
 #include "Amiga.h"
 
-/*
-void printBin(uint64_t value) {
-
-    for (int i = 63; i >= 0; i--) {
-        printf("%d", (value & ((uint64_t)1 << i)) != 0);
-    }
-    printf("  %p\n", (void *)value);
-}
-*/
-
-Disk::Disk()
+Disk::Disk(DiskType type)
 {
     setDescription("Disk");
     
+    this->type = type;
     writeProtected = false;
     modified = false;
     clearDisk();
@@ -31,7 +22,7 @@ Disk::Disk()
 Disk *
 Disk::makeWithFile(ADFFile *file)
 {
-    Disk *disk = new Disk();
+    Disk *disk = new Disk(file->getDiskType());
     
     if (!disk->encodeDisk(file)) {
         delete disk;
@@ -41,12 +32,44 @@ Disk::makeWithFile(ADFFile *file)
     return disk;
 }
 
+long
+Disk::getNumCyclinders()
+{
+    switch (getType()) {
+        
+        case DISK_35_DD:
+        case DISK_35_DD_PC:
+        case DISK_35_HD:
+        case DISK_35_HD_PC:
+        return 80;
+        
+        case DISK_525_SD:
+        return 40;
+    }
+}
+
+long
+Disk::getNumSectorsPerTrack()
+{
+    switch (getType()) {
+        
+        case DISK_35_DD:
+        case DISK_35_HD:
+        return 11;
+        
+        case DISK_35_DD_PC:
+        case DISK_35_HD_PC:
+        case DISK_525_SD:
+        return 9;
+    }
+}
+
 uint8_t
 Disk::readHead(uint8_t cylinder, uint8_t side, uint16_t offset)
 {
-    assert(cylinder < 80);
+    assert(cylinder < getNumCyclinders());
     assert(side < 2);
-    assert(offset < mfmBytesPerTrack);
+    assert(offset < trackLen);
 
     return data.cyclinder[cylinder][side][offset];
 }
@@ -54,9 +77,9 @@ Disk::readHead(uint8_t cylinder, uint8_t side, uint16_t offset)
 void
 Disk::writeHead(uint8_t value, uint8_t cylinder, uint8_t side, uint16_t offset)
 {
-    assert(cylinder < 80);
+    assert(cylinder < getNumCyclinders());
     assert(side < 2);
-    assert(offset < mfmBytesPerTrack);
+    assert(offset < trackLen);
     
     data.cyclinder[cylinder][side][offset] = value;
 }
@@ -82,32 +105,38 @@ Disk::addClockBits(uint8_t value, uint8_t previous)
 void
 Disk::clearDisk()
 {
-    memset(data.raw, 0xAA, mfmBytesPerDisk);
+    assert(sizeof(data) == sizeof(data.raw));
+    memset(data.raw, 0xAA, sizeof(data));
 }
 
 void
 Disk::clearTrack(Track t)
 {
     assert(isTrackNumber(t));
-    memset(data.track[t], 0xAA, mfmBytesPerTrack);
+    memset(data.track[t], 0xAA, maxTrackSize);
 }
 
 bool
 Disk::encodeDisk(ADFFile *adf)
 {
+    assert(adf != NULL);
+    assert(adf->getDiskType() == getType());
+    
     bool result = true;
+    long tmax = getNumTracks();
+    long smax = getNumSectorsPerTrack();
     
-    debug("Encoding disk...\n");
+    debug("Encoding disk (%d tracks, %d sectors each)...\n", tmax, smax);
     
-    for (Track t = 0; t < numTracks; t++) {
-        result &= encodeTrack(adf, t);
+    for (Track t = 0; t < tmax; t++) {
+        result &= encodeTrack(adf, t, smax);
     }
 
     return result;
 }
 
 bool
-Disk::encodeTrack(ADFFile *adf, Track t)
+Disk::encodeTrack(ADFFile *adf, Track t, long smax)
 {
     assert(isTrackNumber(t));
  
@@ -119,12 +148,12 @@ Disk::encodeTrack(ADFFile *adf, Track t)
     clearTrack(t);
     
     // Encode each sector
-    for (Sector s = 0; s < 11; s++) {
+    for (Sector s = 0; s < smax; s++) {
         result &= encodeSector(adf, t, s);
     }
     
     // Get the clock bit right at offset position 0
-    if (data.track[t][mfmBytesPerTrack - 1] & 1) data.track[t][0] &= 0x7F;
+    if (data.track[t][trackLen - 1] & 1) data.track[t][0] &= 0x7F;
     
     // First five bytes of track gap
     /*
@@ -138,7 +167,7 @@ Disk::encodeTrack(ADFFile *adf, Track t)
     
      if (1) {
  
-         uint8_t *p = data.track[t] + (0 * mfmBytesPerSector);
+         uint8_t *p = data.track[t] + (0 * sectorSize);
          
          uint32_t check = fnv_1a_init32();
          for (unsigned i = 0; i < 2*6334; i+=2) {
@@ -175,7 +204,7 @@ Disk::encodeSector(ADFFile *adf, Track t, Sector s)
      * Data checksum       56      8     Odd/Even encoded
      */
     
-    uint8_t *p = data.track[t] + (s * mfmBytesPerSector) + mfmBytesInTrackGap;
+    uint8_t *p = data.track[t] + (s * sectorSize) + trackGapSize;
     
     // Bytes before SYNC
     p[0] = (p[-1] & 1) ? 0x2A : 0xAA;
@@ -247,34 +276,36 @@ bool
 Disk::decodeDisk(uint8_t *dst)
 {
     bool result = true;
+    long tmax = getNumTracks();
+    long smax = getNumSectorsPerTrack();
     
-    debug("Decoding disk...\n");
+    debug("Decoding disk (%d tracks, %d sectors each)...\n", tmax, smax);
     
-    for (Track t = 0; t < numTracks; t++) {
-        result &= decodeTrack(dst, t);
-        dst += numSectorsPerTrack * 512;
+    for (Track t = 0; t < tmax; t++) {
+        result &= decodeTrack(dst, t, smax);
+        dst += smax * 512;
     }
     
     return result;
 }
 
 size_t
-Disk::decodeTrack(uint8_t *dst, Track t)
+Disk::decodeTrack(uint8_t *dst, Track t, long smax)
 {
     assert(isTrackNumber(t));
     
     uint8_t *oldDst = dst;
     
-    debug(1, "Decoding track %d (%p)\n", t, dst);
+    debug(1, "Decoding track %d\n", t);
     
     // Create a local (double) copy of the track to easy analysis
-    uint8_t local[2 * mfmBytesPerTrack];
-    memcpy(local, data.track[t], mfmBytesPerTrack);
-    memcpy(local + mfmBytesPerTrack, data.track[t], mfmBytesPerTrack);
+    uint8_t local[2 * trackLen];
+    memcpy(local, data.track[t], trackLen);
+    memcpy(local + trackLen, data.track[t], trackLen);
     
     // Seek all sync marks
-    int sectorStart[11], index = 0, nr = 0;
-    while (index < mfmBytesPerTrack + mfmBytesPerSector && nr < 11) {
+    int sectorStart[smax], index = 0, nr = 0;
+    while (index < trackLen + sectorSize && nr < smax) {
 
         if (local[index++] != 0x44) continue;
         if (local[index++] != 0x89) continue;
@@ -285,13 +316,13 @@ Disk::decodeTrack(uint8_t *dst, Track t)
         debug("   Sector %d starts at index %d\n", nr-1, sectorStart[nr-1]);
     }
     
-    if (nr != 11) {
-        warn("Track %d: Found %d sectors, expected %d. Aborting.\n", t, nr, 11);
+    if (nr != smax) {
+        warn("Track %d: Found %d sectors, expected %d. Aborting.\n", t, nr, smax);
         return false;
     }
     
-    // Encode each sector
-    for (Sector s = 0; s < 11; s++) {
+    // Encode all sectors
+    for (Sector s = 0; s < smax; s++) {
         decodeSector(dst, local + sectorStart[s]);
         dst += 512;
     }

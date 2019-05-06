@@ -144,7 +144,7 @@ public:
      * Use read() to read from the selected track. Returns EOF when the whole
      * track has been read in.
      */
-    void seekTrackAndSector(long t, long s) { seekSector(11 * t + s); }
+    void seekTrackAndSector(long t, long s) { seekSector(getNumSectorsPerTrack() * t + s); }
     
     // Fills a buffer with the data of a single sector
     void readSector(uint8_t *target, long t, long s); 

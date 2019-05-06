@@ -218,7 +218,7 @@ Drive::rotate()
 {
     // debug("head = %d\n", head.offset);
     
-    if (++head.offset == Disk::mfmBytesPerTrack) {
+    if (++head.offset == disk->trackLen) {
         
         // Start over at the beginning of the current cyclinder
         head.offset = 0;
@@ -229,13 +229,13 @@ Drive::rotate()
          */
         if (isSelected()) amiga->ciaA.emulateFallingEdgeOnFlagPin();
     }
-    assert(head.offset < Disk::mfmBytesPerTrack);
+    assert(head.offset < disk->trackLen);
 }
 
 void
 Drive::findSyncMark()
 {
-    for (unsigned i = 0; i < Disk::mfmBytesPerTrack; i++, rotate()) {
+    for (unsigned i = 0; i < disk->trackLen; i++, rotate()) {
         
         if (readHead() != 0x44) continue;
         if (readHead() != 0x89) continue;

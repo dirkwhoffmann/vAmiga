@@ -122,6 +122,17 @@ Amiga::Amiga()
     adf->formatDisk(FS_FFS_BOOTABLE);
     adf->writeToFile("/tmp/vADF35HD_FFSb.adf");
     delete adf;
+    
+    debug("Creating PC disk\n");
+    adf = ADFFile::makeWithDiskType(DISK_35_DD_PC);
+    adf->writeToFile("/tmp/PCdisk.adf");
+    debug("Creating MFM encoded disk\n");
+    Disk *disk = Disk::makeWithFile(adf);
+    delete adf;
+    debug("Creating MFM encoded disk\n");
+    adf = ADFFile::makeWithDisk(disk);
+    debug("Writing MFM encoded disk\n");
+    adf->writeToFile("/tmp/PCdisk2.adf");
 
 }
 
