@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 
-#include "ADFFile.h"
+#include "Amiga.h"
 
 ADFFile::ADFFile()
 {
@@ -92,6 +92,24 @@ ADFFile::makeWithFile(const char *path)
     if (!adf->readFromFile(path)) {
         delete adf;
         return NULL;
+    }
+    
+    return adf;
+}
+
+ADFFile *
+ADFFile::makeWithDisk(Disk *disk)
+{
+    assert(disk != NULL);
+    
+    ADFFile *adf = makeWithDiskType(disk->getType());
+    
+    if (adf) {
+        printf("data = %p size = %zu\n", adf->data, adf->size);
+        if (!disk->decodeDisk(adf->data)) {
+            delete adf;
+            return NULL;
+        }
     }
     
     return adf;

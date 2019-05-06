@@ -341,6 +341,12 @@ Drive::insertDisk(Disk *disk)
         ejectDisk();
         this->disk = disk;
         amiga->putMessage(MSG_DRIVE_DISK_INSERT, nr);
+        
+        // REMOVE ASAP
+        debug("Decoding (for debugging)...\n");
+        ADFFile *adf = ADFFile::makeWithDisk(disk);
+        debug("adf = %p\n", adf);
+        adf->writeToFile("/tmp/decoded.adf");
     }
 }
 

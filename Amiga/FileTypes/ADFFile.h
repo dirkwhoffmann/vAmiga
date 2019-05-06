@@ -18,11 +18,7 @@
 #define ADFSIZE_35_HD_PC 1474560  // 1440 KB
 #define ADFSIZE_525_SD    368640  //  360 KB
 
-/*
-static inline bool isCylinderNr(long nr) { return nr >= 0 && nr <= 79; }
-static inline bool isTrackNr(long nr)    { return nr >= 0 && nr <= 159; }
-static inline bool isSectorNr(long nr)   { return nr >= 0 && nr <= 1759; }
-*/
+class Disk;
 
 class ADFFile : public AmigaFile {
     
@@ -32,13 +28,13 @@ public:
     // Class methods
     //
     
-    // Returns true iff buffer contains an ADF file.
+    // Returns true iff the provided buffer contains an ADF file.
     static bool isADFBuffer(const uint8_t *buffer, size_t length);
     
-    // Returns true iff path points to an ADF file.
+    // Returns true iff if the provided path points to an ADF file.
     static bool isADFFile(const char *path);
     
-    // Returns the ADF file size for a given disk type.
+    // Returns the size of an ADF file of a given disk type in bytes.
     static size_t fileSize(DiskType t);
 
     
@@ -58,6 +54,8 @@ public:
     static ADFFile *makeWithDiskType(DiskType t);
     static ADFFile *makeWithBuffer(const uint8_t *buffer, size_t length);
     static ADFFile *makeWithFile(const char *path);
+    static ADFFile *makeWithDisk(Disk *disk);
+    
     // static ADFFile *makeUnformatted(DiskType type); // DEPRECATED
     // static ADFFile *makeFormatted(DiskType type, FileSystemType fs); // DEPRECATED
 

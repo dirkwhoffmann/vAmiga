@@ -97,7 +97,7 @@ Disk::encodeDisk(ADFFile *adf)
 {
     bool result = true;
     
-    debug("Encoding disk (SAE/UAE compatibility mode)\n");
+    debug("Encoding disk...\n");
     
     for (Track t = 0; t < numTracks; t++) {
         result &= encodeTrack(adf, t);
@@ -113,7 +113,7 @@ Disk::encodeTrack(ADFFile *adf, Track t)
  
     bool result = true;
     
-    debug(2, "Encoding track %d (SAE/UAE compatibility mode)\n", t);
+    debug(2, "Encoding track %d\n", t);
     
     // Remove previously written data
     clearTrack(t);
@@ -163,7 +163,7 @@ Disk::encodeSector(ADFFile *adf, Track t, Sector s)
     assert(isTrackNumber(t));
     assert(isSectorNumber(s));
     
-    debug(2, "Encoding sector %d (SAE/UAE compatibility mode)\n", s);
+    debug(2, "Encoding sector %d\n", s);
     
     /* Block header layout:
      *                     Start  Size   Value
@@ -231,160 +231,6 @@ Disk::encodeSector(ADFFile *adf, Track t, Sector s)
     return true;
 }
 
-bool
-Disk::encodeDiskOmega(ADFFile *adf)
-{
-    bool result = true;
-    
-    debug("Encoding disk\n");
-    
-    for (Track t = 0; t < numTracks; t++) {
-        result &= encodeTrackOmega(adf, t);
-    }
-    
-    // For debugging: Write out to a file
-    /*
-    FILE *file = fopen("/tmp/adf.raw","w");
-    if (file == NULL) {
-        debug("CANNOT WRITE DEBUG FILE\n");
-        return false;
-    }
-    
-    for (unsigned i = 0; i < sizeof(data); i++) {
-        fputc(data.raw[i], file);
-    }
-    fclose(file);
-    */
-    
-    return result;
-}
-
-bool
-Disk::encodeTrackOmega(ADFFile *adf, Track t)
-{
-    assert(isTrackNumber(t));
-    
-    // uint8_t *ptr = data.track[t];
-    
-    debug(2, "Encoding track %d\n", t);
-               
-    // Remove previously written data
-    clearTrack(t);
-    
-    // Encode each sector
-    bool result = true;
-    for (Sector s = 0; s < 11; s++) {
-        result &= encodeSectorOmega(adf, t, s);
-    
-        /*
-        if (t == 0) {
-            printf("Track %d Sector %d\n", t, s);
-            for (int i = 0; i < mfmBytesPerSector; i += 8) {
-                // uint8_t *p = &data.track[t][s*mfmBytesPerSector + i];
-                printf("%02X %02X %02X %02X %02X %02X %02X %02X\n",
-                        ptr[0], ptr[1], ptr[2], ptr[3], ptr[4], ptr[5], ptr[6], ptr[7]);
-                ptr += 8;
-            }
-        }
-        */
-    }
-    
-    // First five bytes of track gap (seen in Omega)
-    uint8_t *p = data.track[t] + (11 * mfmBytesPerSector);
-    p[0] = addClockBits(0, p[-1]);
-    p[1] = 0xA8;
-    p[2] = 0x55;
-    p[3] = 0x55;
-    p[4] = 0xAA;
-    
-    /*
-    if (t == 0) {
-        debug("Track gap\n");
-        // uint8_t *p = &data.track[t][11*mfmBytesPerSector];
-        for (int i = 0; i < 700; i+=10) {
-            printf("%d: %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X\n", i,
-                   ptr[0], ptr[1], ptr[2], ptr[3], ptr[4], ptr[5], ptr[6], ptr[7], ptr[8], ptr[9]);
-            ptr += 10;
-        }
-    }
-    */
-    
-    return result;
-}
-
-bool
-Disk::encodeSectorOmega(ADFFile *adf, Track t, Sector s)
-{
-    assert(isTrackNumber(t));
-    assert(isSectorNumber(s));
-    
-    debug(2, "Encoding sector %d\n", s);
-    
-    /* Block header layout:
-     *                     Start  Size   Value
-     * Bytes before SYNC   00      4     0xAA 0xAA 0xAA 0xAA
-     * SYNC mark           04      4     0x44 0x89 0x44 0x89
-     * Track & sector info 08      8     Odd/Even encoded
-     * Unused area         16     32     0xAA
-     * Block checksum      48      8     Odd/Even encoded
-     * Data checksum       56      8     Odd/Even encoded
-     */
-
-    uint8_t *p = data.track[t] + (s * mfmBytesPerSector);
-    
-    // Bytes before SYNC
-    p[0] = 0xAA;
-    p[1] = 0xAA;
-    p[2] = 0xAA;
-    p[3] = 0xAA;
-
-    // SYNC mark
-    uint16_t sync = 0x4489;
-    p[4] = HI_BYTE(sync);
-    p[5] = LO_BYTE(sync);
-    p[6] = HI_BYTE(sync);
-    p[7] = LO_BYTE(sync);
-
-    // Track and sector information
-    uint8_t info[4] = { 0xFF, (uint8_t)t, (uint8_t)s, (uint8_t)(11 - s) };
-    encodeOddEven(&p[8], info, sizeof(info));
-    
-    // Unused area
-    for (unsigned i = 16; i < 48; i++)
-        p[i] = 0xAA;
-    
-    // Data
-    uint8_t bytes[512];
-    adf->readSector(bytes, t, s);
-    encodeOddEven(&p[64], bytes, sizeof(bytes));
-    
-    // Block checksum
-    uint8_t bcheck[4] = { 0, 0, 0, 0 };
-    for(unsigned i = 8; i < 48; i += 4) {
-        bcheck[0] ^= p[i];
-        bcheck[1] ^= p[i+1];
-        bcheck[2] ^= p[i+2];
-        bcheck[3] ^= p[i+3];
-    }
-    encodeOddEven(&p[48], bcheck, sizeof(bcheck));
-    
-    // Data checksum
-    uint8_t dcheck[4] = { 0, 0, 0, 0 };
-    for(unsigned i = 64; i < 1088; i += 4) {
-        dcheck[0] ^= p[i];
-        dcheck[1] ^= p[i+1];
-        dcheck[2] ^= p[i+2];
-        dcheck[3] ^= p[i+3];
-    }
-    encodeOddEven(&p[56], dcheck, sizeof(bcheck));
-    
-    // Add clock bits
-    for(unsigned i = 8; i < 1088; i ++)
-        p[i] = addClockBits(p[i], p[i-1]);
-    
-    return true;
-}
-
 void
 Disk::encodeOddEven(uint8_t *target, uint8_t *source, size_t count)
 {
@@ -395,4 +241,86 @@ Disk::encodeOddEven(uint8_t *target, uint8_t *source, size_t count)
     // Encode even bits
     for(size_t i = 0; i < count; i++)
         target[i + count] = source[i] & 0x55;
+}
+
+bool
+Disk::decodeDisk(uint8_t *dst)
+{
+    bool result = true;
+    
+    debug("Decoding disk...\n");
+    
+    for (Track t = 0; t < numTracks; t++) {
+        result &= decodeTrack(dst, t);
+        dst += numSectorsPerTrack * 512;
+    }
+    
+    return result;
+}
+
+size_t
+Disk::decodeTrack(uint8_t *dst, Track t)
+{
+    assert(isTrackNumber(t));
+    
+    uint8_t *oldDst = dst;
+    
+    debug(1, "Decoding track %d (%p)\n", t, dst);
+    
+    // Create a local (double) copy of the track to easy analysis
+    uint8_t local[2 * mfmBytesPerTrack];
+    memcpy(local, data.track[t], mfmBytesPerTrack);
+    memcpy(local + mfmBytesPerTrack, data.track[t], mfmBytesPerTrack);
+    
+    // Seek all sync marks
+    int sectorStart[11], index = 0, nr = 0;
+    while (index < mfmBytesPerTrack + mfmBytesPerSector && nr < 11) {
+
+        if (local[index++] != 0x44) continue;
+        if (local[index++] != 0x89) continue;
+        if (local[index++] != 0x44) continue;
+        if (local[index++] != 0x89) continue;
+        
+        sectorStart[nr++] = index;
+        debug("   Sector %d starts at index %d\n", nr-1, sectorStart[nr-1]);
+    }
+    
+    if (nr != 11) {
+        warn("Track %d: Found %d sectors, expected %d. Aborting.\n", t, nr, 11);
+        return false;
+    }
+    
+    // Encode each sector
+    for (Sector s = 0; s < 11; s++) {
+        decodeSector(dst, local + sectorStart[s]);
+        dst += 512;
+    }
+    
+    debug("Decoded %d bytes\n", dst - oldDst);
+    return true;
+}
+
+void
+Disk::decodeSector(uint8_t *dst, uint8_t *src)
+{
+    assert(dst != NULL);
+    assert(src != NULL);
+
+    // Skip sector header
+    src += 56;
+    
+    // Decode sector data
+    decodeOddEven(dst, src, 512);
+}
+
+void
+Disk::decodeOddEven(uint8_t *dst, uint8_t *src, size_t count)
+{
+    // Decode odd bits
+    for(size_t i = 0; i < count; i++)
+        dst[i] = (src[i] & 0x55) << 1;
+    
+    // Decode even bits
+    for(size_t i = 0; i < count; i++)
+        dst[i] |= src[i + count] & 0x55;
 }

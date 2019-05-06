@@ -77,6 +77,9 @@ public:
     static const uint64_t MFM_DATA_BIT_MASK8  = 0x55;
     static const uint64_t MFM_CLOCK_BIT_MASK8 = 0xAA;
 
+    // The type of this disk
+    DiskType type = DISK_35_DD;
+    
     // MFM encoded disk data
     union {
         uint8_t raw[mfmBytesPerDisk];
@@ -107,6 +110,8 @@ public:
     // Accessing properties
     //
     
+    DiskType getType() { return type; }
+    
     bool isWriteProtected() { return writeProtected; }
     void setWriteProtection(bool value) { writeProtected = value; }
     
@@ -136,7 +141,7 @@ private:
     
     
     //
-    // Encoding and decoding
+    // MFM Encoding
     //
     
 public:
@@ -147,27 +152,32 @@ public:
     // Clears a single track
     void clearTrack(Track t);
 
-    // Encodes the whole disk (as SAE / UAE does)
+    // Encodes the whole disk
     bool encodeDisk(ADFFile *adf);
     
-    // Encodes the whole disk (as Omega does)
-    bool encodeDiskOmega(ADFFile *adf);
+private:
     
-    private:
-    
-    /* Encodes a single track
-     */
+    // Work horses
     bool encodeTrack(ADFFile *adf, Track t);
-    bool encodeTrackOmega(ADFFile *adf, Track t);
-    
-    /* Encodes a single sector
-     */
     bool encodeSector(ADFFile *adf, Track t, Sector s);
-    bool encodeSectorOmega(ADFFile *adf, Track t, Sector s);
-    
-    /* Encodes a certain number of bytes in odd / even format
-     */
     void encodeOddEven(uint8_t *target, uint8_t *source, size_t count);
+    
+    
+    //
+    // MFM Decoding
+    //
+    
+public:
+    
+    // Decodes the whole disk
+    bool decodeDisk(uint8_t *dst);
+    
+private:
+    
+    // Work horses
+    size_t decodeTrack(uint8_t *dst, Track t);
+    void decodeSector(uint8_t *dst, uint8_t *src);
+    void decodeOddEven(uint8_t *dst, uint8_t *src, size_t count);
 };
 
 #endif
