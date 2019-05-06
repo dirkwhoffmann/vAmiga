@@ -396,10 +396,10 @@ class MyDocument : NSDocument {
         assert(["ADF"].contains(typeName))
         
         let drive = amiga.df(nr)
-
-        // TODO: Convert disk to ADF format
-        // guard let adf = ADFFileProxy.make(withDisk: drive.disk) else {
-        guard let adf = ADFFileProxy.make(with: DISK_35_DD) else {
+        
+        // Convert disk to ADF format
+        guard let adf = ADFFileProxy.make(withDrive: drive) else {
+            track("ADF conversion failed")
             return false
         }
 

@@ -96,44 +96,6 @@ Amiga::Amiga()
     
     // Initialize the mach timer info
     mach_timebase_info(&tb);
-    
-    
-    // REMOVE ASAP
-    ADFFile *adf;
-    
-    adf = ADFFile::makeWithDiskType(DISK_35_DD);
-    adf->formatDisk(FS_OFS);
-    adf->writeToFile("/tmp/vADF35DD_OFS.adf");
-    adf->formatDisk(FS_FFS);
-    adf->writeToFile("/tmp/vADF35DD_FFS.adf");
-    adf->formatDisk(FS_OFS_BOOTABLE);
-    adf->writeToFile("/tmp/vADF35DD_OFSb.adf");
-    adf->formatDisk(FS_FFS_BOOTABLE);
-    adf->writeToFile("/tmp/vADF35DD_FFSb.adf");
-    delete adf;
-    
-    adf = ADFFile::makeWithDiskType(DISK_35_HD);
-    adf->formatDisk(FS_OFS);
-    adf->writeToFile("/tmp/vADF35HD_OFS.adf");
-    adf->formatDisk(FS_FFS);
-    adf->writeToFile("/tmp/vADF35HD_FFS.adf");
-    adf->formatDisk(FS_OFS_BOOTABLE);
-    adf->writeToFile("/tmp/vADF35HD_OFSb.adf");
-    adf->formatDisk(FS_FFS_BOOTABLE);
-    adf->writeToFile("/tmp/vADF35HD_FFSb.adf");
-    delete adf;
-    
-    debug("Creating PC disk\n");
-    adf = ADFFile::makeWithDiskType(DISK_35_DD_PC);
-    adf->writeToFile("/tmp/PCdisk.adf");
-    debug("Creating MFM encoded disk\n");
-    Disk *disk = Disk::makeWithFile(adf);
-    delete adf;
-    debug("Creating MFM encoded disk\n");
-    adf = ADFFile::makeWithDisk(disk);
-    debug("Writing MFM encoded disk\n");
-    adf->writeToFile("/tmp/PCdisk2.adf");
-
 }
 
 Amiga::~Amiga()

@@ -751,6 +751,8 @@ struct ADFFileWrapper { ADFFile *adf; };
 
 @implementation DriveProxy
 
+@synthesize wrapper;
+
 - (instancetype) initWithDrive:(Drive *)drive
 {
     if (self = [super init]) {
@@ -804,6 +806,12 @@ struct ADFFileWrapper { ADFFile *adf; };
     AmigaFileWrapper *fileWrapper = [fileProxy wrapper];
     wrapper->drive->insertDisk((ADFFile *)(fileWrapper->file));
 }
+
+- (ADFFileProxy *)convertDisk
+{
+    return NULL;
+}
+
 
 @end
 
@@ -961,6 +969,13 @@ struct ADFFileWrapper { ADFFile *adf; };
     ADFFile *archive = ADFFile::makeWithDiskType(type);
     return [self make: archive];
 }
++ (instancetype) makeWithDrive:(DriveProxy *)drive
+{
+    Drive *d = [drive wrapper]->drive;
+    ADFFile *archive = ADFFile::makeWithDisk(d->disk);
+    return archive ? [self make: archive] : nil;
+}
+
 /*
 + (instancetype) makeUnformatted:(DiskType)type
 {

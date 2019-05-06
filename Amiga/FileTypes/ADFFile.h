@@ -55,10 +55,7 @@ public:
     static ADFFile *makeWithBuffer(const uint8_t *buffer, size_t length);
     static ADFFile *makeWithFile(const char *path);
     static ADFFile *makeWithDisk(Disk *disk);
-    
-    // static ADFFile *makeUnformatted(DiskType type); // DEPRECATED
-    // static ADFFile *makeFormatted(DiskType type, FileSystemType fs); // DEPRECATED
-
+  
     
     //
     // Methods from AmigaFile
@@ -83,18 +80,9 @@ public:
 
     // Cylinder, track, and sector counts
     long getNumSectorsPerTrack();
-    long getNumSectors() {
-        assert(size % 512 == 0);
-        return size / 512;
-    }
-    long getNumTracks() {
-        assert(size % (512 * getNumSectorsPerTrack()) == 0);
-        return size / (512 * getNumSectorsPerTrack());
-    }
-    long getNumCyclinders() {
-        assert(getNumTracks() % 2 == 0);
-        return getNumTracks() / 2;
-    }
+    long getNumSectors() { return size / 512; }
+    long getNumTracks() { return size / (512 * getNumSectorsPerTrack()); }
+    long getNumCyclinders() { return getNumTracks() / 2; }
 
     // Returns the location of the root and bitmap block.
     long rootBlockNr();

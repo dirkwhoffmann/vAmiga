@@ -105,7 +105,6 @@ ADFFile::makeWithDisk(Disk *disk)
     ADFFile *adf = makeWithDiskType(disk->getType());
     
     if (adf) {
-        printf("data = %p size = %zu\n", adf->data, adf->size);
         if (!disk->decodeDisk(adf->data)) {
             delete adf;
             return NULL;

@@ -341,12 +341,6 @@ Drive::insertDisk(Disk *disk)
         ejectDisk();
         this->disk = disk;
         amiga->putMessage(MSG_DRIVE_DISK_INSERT, nr);
-        
-        // REMOVE ASAP
-        debug("Decoding (for debugging)...\n");
-        ADFFile *adf = ADFFile::makeWithDisk(disk);
-        debug("adf = %p\n", adf);
-        adf->writeToFile("/tmp/decoded.adf");
     }
 }
 
@@ -355,24 +349,6 @@ Drive::insertDisk(ADFFile *file)
 {
     insertDisk(Disk::makeWithFile(file));
 }
-
-/*
-void
-Drive::latchMTR(bool value)
-{
-    // debug("Latching MTR bit %d\n", value);
- 
-    if (value == 0 && !motor) {
-        
-        // Switch motor on
-        setMotor(true);
-    }
-    else if (value != 0 && motor) {
-        
-        // Switch motor off
-       setMotor(false);
-}
-*/
 
 void
 Drive::PRBdidChange(uint8_t oldValue, uint8_t newValue)

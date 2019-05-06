@@ -474,6 +474,8 @@ struct AmigaFileWrapper;
     struct AmigaDriveWrapper *wrapper;
 }
 
+@property (readonly) struct AmigaDriveWrapper *wrapper;
+
 - (void) dump;
 
 - (NSInteger) nr;
@@ -489,6 +491,8 @@ struct AmigaFileWrapper;
 
 - (void) ejectDisk;
 - (void) insertDisk:(ADFFileProxy *)file;
+
+- (ADFFileProxy *)convertDisk;
 
 @end
 
@@ -550,8 +554,7 @@ struct AmigaFileWrapper;
 + (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)length;
 + (instancetype) makeWithFile:(NSString *)path;
 + (instancetype) makeWithDiskType:(DiskType)type;
-// + (instancetype) makeUnformatted:(DiskType)type;
-// + (instancetype) makeFormatted:(DiskType) type fileSystem:(FileSystemType) fs;
++ (instancetype) makeWithDrive:(DriveProxy *)drive;
 
 - (void)formatDisk:(FileSystemType)fs;
 - (void)seekTrack:(NSInteger)nr;

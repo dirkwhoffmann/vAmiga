@@ -293,10 +293,8 @@ size_t
 Disk::decodeTrack(uint8_t *dst, Track t, long smax)
 {
     assert(isTrackNumber(t));
-    
-    uint8_t *oldDst = dst;
-    
-    debug(1, "Decoding track %d\n", t);
+        
+    debug(2, "Decoding track %d\n", t);
     
     // Create a local (double) copy of the track to easy analysis
     uint8_t local[2 * trackLen];
@@ -313,7 +311,7 @@ Disk::decodeTrack(uint8_t *dst, Track t, long smax)
         if (local[index++] != 0x89) continue;
         
         sectorStart[nr++] = index;
-        debug("   Sector %d starts at index %d\n", nr-1, sectorStart[nr-1]);
+        // debug("   Sector %d starts at index %d\n", nr-1, sectorStart[nr-1]);
     }
     
     if (nr != smax) {
@@ -327,7 +325,6 @@ Disk::decodeTrack(uint8_t *dst, Track t, long smax)
         dst += 512;
     }
     
-    debug("Decoded %d bytes\n", dst - oldDst);
     return true;
 }
 
