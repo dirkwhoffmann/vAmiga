@@ -89,13 +89,18 @@ extension MyDocument {
         switch (nr) {
         case 0: return proceedWithUnexportedDisk(drives: [amiga.df0])
         case 1: return proceedWithUnexportedDisk(drives: [amiga.df1])
+        case 2: return proceedWithUnexportedDisk(drives: [amiga.df2])
+        case 3: return proceedWithUnexportedDisk(drives: [amiga.df3])
         default: fatalError()
         }
     }
     
     func proceedWithUnexportedDisk() -> Bool {
     
-        return proceedWithUnexportedDisk(drives: [amiga.df0, amiga.df1])
+        return proceedWithUnexportedDisk(drives: [ amiga.df0,
+                                                   amiga.df1,
+                                                   amiga.df2,
+                                                   amiga.df3 ])
     }
     
     func showDiskIsEmptyAlert(format: String) {

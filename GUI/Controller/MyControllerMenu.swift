@@ -18,10 +18,10 @@ extension MyController : NSMenuItemValidation {
         var dfn : DriveProxy {
             
             switch (item.tag) {
-                
             case 0: return amiga.df0
             case 1: return amiga.df1
-                
+            case 2: return amiga.df2
+            case 3: return amiga.df3
             default: fatalError()
             }
         }
@@ -94,11 +94,19 @@ extension MyController : NSMenuItemValidation {
 
         case #selector(MyController.exportRecentDiskDummyAction1(_:)):
             return amiga.df1.hasDisk()
-            
+
+        case #selector(MyController.exportRecentDiskDummyAction2(_:)):
+            return amiga.df2.hasDisk()
+
+        case #selector(MyController.exportRecentDiskDummyAction3(_:)):
+            return amiga.df3.hasDisk()
+
         case #selector(MyController.exportRecentDiskAction(_:)):
             switch item.tag {
             case 0: return validateURLlist(myAppDelegate.recentlyExportedDisk0URLs, image: smallDisk)
             case 1: return validateURLlist(myAppDelegate.recentlyExportedDisk1URLs, image: smallDisk)
+            case 2: return validateURLlist(myAppDelegate.recentlyExportedDisk2URLs, image: smallDisk)
+            case 3: return validateURLlist(myAppDelegate.recentlyExportedDisk3URLs, image: smallDisk)
             default: fatalError()
             }
             
@@ -491,6 +499,8 @@ extension MyController : NSMenuItemValidation {
 
     @IBAction func exportRecentDiskDummyAction0(_ sender: NSMenuItem!) {}
     @IBAction func exportRecentDiskDummyAction1(_ sender: NSMenuItem!) {}
+    @IBAction func exportRecentDiskDummyAction2(_ sender: NSMenuItem!) {}
+    @IBAction func exportRecentDiskDummyAction3(_ sender: NSMenuItem!) {}
     @IBAction func exportRecentDiskAction(_ sender: NSMenuItem!) {
         
         track()
@@ -518,11 +528,8 @@ extension MyController : NSMenuItemValidation {
 
     @IBAction func ejectDiskAction(_ sender: NSMenuItem!) {
         
-        assert(sender.tag == 0 || sender.tag == 1)
-        let drive = sender.tag == 0 ? amiga.df0 : amiga.df1
-        
         if proceedWithUnexportedDisk(drive: sender.tag) {
-            drive?.ejectDisk()
+            amiga.df(sender.tag).ejectDisk()
             myAppDelegate.clearRecentlyExportedDiskURLs(drive: sender.tag)
         }
     }

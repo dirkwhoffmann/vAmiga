@@ -88,7 +88,8 @@ struct AmigaFileWrapper;
 @property (readonly) DriveProxy *df2;
 @property (readonly) DriveProxy *df3;
 
-// - (void) makeActiveInstance;
+// - (DriveProxy *)df:(NSInteger)n;
+
 - (void) kill;
 
 - (BOOL) releaseBuild;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -16,6 +16,12 @@
                 <outlet property="df1DMA" destination="X4r-q5-8Lh" id="hGx-A9-Th8"/>
                 <outlet property="df1Disk" destination="gkQ-Nr-aDz" id="vRa-jh-S2U"/>
                 <outlet property="df1LED" destination="K68-Xr-JJH" id="Cif-l6-Km5"/>
+                <outlet property="df2DMA" destination="Lc0-yC-JdI" id="e2q-Wa-C7Y"/>
+                <outlet property="df2Disk" destination="BLY-CO-Zam" id="nXb-Q0-GPM"/>
+                <outlet property="df2LED" destination="Pjc-SJ-rsn" id="TXZ-da-aer"/>
+                <outlet property="df3DMA" destination="Qp9-H4-2Q7" id="OfX-DH-845"/>
+                <outlet property="df3Disk" destination="Cg3-r8-KR5" id="66V-MN-kd5"/>
+                <outlet property="df3LED" destination="wnl-Bi-Ego" id="1Bn-5L-EfU"/>
                 <outlet property="metal" destination="DD4-5B-w9h" id="rGV-rL-MLo"/>
                 <outlet property="powerLED" destination="1208" id="hey-Hi-zTq"/>
                 <outlet property="toolbar" destination="1845" id="JVx-NQ-tw7"/>
@@ -126,6 +132,46 @@
                         <rect key="frame" x="155" y="4" width="16" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="diskTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="Gux-DH-DEb">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system" size="10"/>
+                        </buttonCell>
+                    </button>
+                    <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" id="Lc0-yC-JdI">
+                        <rect key="frame" x="259" y="4" width="16" height="16"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    </progressIndicator>
+                    <button toolTip="Drive LED" tag="2" id="Pjc-SJ-rsn">
+                        <rect key="frame" x="203" y="4" width="24" height="16"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="driveLedOff" imagePosition="only" alignment="right" imageScaling="proportionallyDown" id="zmo-Ej-rmg">
+                            <behavior key="behavior" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                    </button>
+                    <button hidden="YES" tag="1" id="BLY-CO-Zam">
+                        <rect key="frame" x="235" y="4" width="16" height="16"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="diskTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="V6v-tW-Pyx">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system" size="10"/>
+                        </buttonCell>
+                    </button>
+                    <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" id="Qp9-H4-2Q7">
+                        <rect key="frame" x="339" y="4" width="16" height="16"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    </progressIndicator>
+                    <button toolTip="Drive LED" tag="2" id="wnl-Bi-Ego">
+                        <rect key="frame" x="283" y="4" width="24" height="16"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="driveLedOff" imagePosition="only" alignment="right" imageScaling="proportionallyDown" id="bNe-ek-PzN">
+                            <behavior key="behavior" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                    </button>
+                    <button hidden="YES" tag="1" id="Cg3-r8-KR5">
+                        <rect key="frame" x="315" y="4" width="16" height="16"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="diskTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="WyV-Pn-TKr">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system" size="10"/>
                         </buttonCell>

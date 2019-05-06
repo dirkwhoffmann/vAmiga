@@ -366,11 +366,17 @@ class MyController : NSWindowController, MessageReceiver {
     @IBOutlet weak var powerLED: NSButton!
 
     @IBOutlet weak var df0LED: NSButton!
-    @IBOutlet weak var df0Disk: NSButton!
-    @IBOutlet weak var df0DMA: NSProgressIndicator!
     @IBOutlet weak var df1LED: NSButton!
+    @IBOutlet weak var df2LED: NSButton!
+    @IBOutlet weak var df3LED: NSButton!
+    @IBOutlet weak var df0Disk: NSButton!
     @IBOutlet weak var df1Disk: NSButton!
+    @IBOutlet weak var df2Disk: NSButton!
+    @IBOutlet weak var df3Disk: NSButton!
+    @IBOutlet weak var df0DMA: NSProgressIndicator!
     @IBOutlet weak var df1DMA: NSProgressIndicator!
+    @IBOutlet weak var df2DMA: NSProgressIndicator!
+    @IBOutlet weak var df3DMA: NSProgressIndicator!
 
     @IBOutlet weak var cmdLock: NSButton!
 
@@ -662,7 +668,9 @@ extension MyController {
                 
             case 0: myAppDelegate.df0Menu.isHidden = false
             case 1: myAppDelegate.df1Menu.isHidden = false
-            default: track("Missing action for df2 and df3\n")
+            case 2: myAppDelegate.df2Menu.isHidden = false
+            case 3: myAppDelegate.df3Menu.isHidden = false
+            default: fatalError()
             }
             
             refreshStatusBar()
@@ -672,7 +680,9 @@ extension MyController {
             switch (msg.data) {
             case 0: myAppDelegate.df0Menu.isHidden = true
             case 1: myAppDelegate.df1Menu.isHidden = true
-            default: track("Missing action for df2 and df3\n")
+            case 2: myAppDelegate.df2Menu.isHidden = true
+            case 3: myAppDelegate.df3Menu.isHidden = true
+            default: fatalError()
             }
             
             // Remove drop target status from the disconnect drive
@@ -693,16 +703,26 @@ extension MyController {
             
         case MSG_DRIVE_LED_ON:
             
-            assert(msg.data == 0 || msg.data == 1)
             let image = NSImage.init(named: "driveLedOn")
-            msg.data == 0 ? (df0LED.image = image) : (df1LED.image = image)
+            switch (msg.data) {
+            case 0: df0LED.image = image
+            case 1: df1LED.image = image
+            case 2: df2LED.image = image
+            case 3: df3LED.image = image
+            default: fatalError()
+            }
             
         case MSG_DRIVE_LED_OFF:
             
-            assert(msg.data == 0 || msg.data == 1)
             let image = NSImage.init(named: "driveLedOff")
-            msg.data == 0 ? (df0LED.image = image) : (df1LED.image = image)
-
+            switch (msg.data) {
+            case 0: df0LED.image = image
+            case 1: df1LED.image = image
+            case 2: df2LED.image = image
+            case 3: df3LED.image = image
+            default: fatalError()
+            }
+            
         case MSG_DRIVE_MOTOR_ON,
              MSG_DRIVE_MOTOR_OFF:
             

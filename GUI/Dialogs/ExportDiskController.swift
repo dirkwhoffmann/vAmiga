@@ -18,7 +18,7 @@ class ExportDiskController : DialogController {
     
     func showSheet(forDrive nr: Int) {
         
-        assert(nr == 0 || nr == 1)
+        assert(nr >= 0 && nr <= 3)
         
         // Create save panel
         savePanel = NSSavePanel()

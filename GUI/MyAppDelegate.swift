@@ -158,7 +158,9 @@ func cgEventCallback(proxy: CGEventTapProxy,
     
     @IBOutlet weak var df0Menu: NSMenuItem!
     @IBOutlet weak var df1Menu: NSMenuItem!
-    
+    @IBOutlet weak var df2Menu: NSMenuItem!
+    @IBOutlet weak var df3Menu: NSMenuItem!
+
     // Inspector (opened as a separate window)
     var inspector: Inspector? = nil
     
@@ -168,18 +170,11 @@ func cgEventCallback(proxy: CGEventTapProxy,
     // The list of recently inserted disk URLs.
     var recentlyInsertedDiskURLs: [URL] = []
     
-    // The list of recently exported disk URLs for drive 1.
+    // The list of recently exported disk URLs.
     var recentlyExportedDisk0URLs: [URL] = []
-    
-    // The list of recently exported disk URLs for drive 2.
     var recentlyExportedDisk1URLs: [URL] = []
-    
-    // The list of recently inserted tape URLs.
-    var recentlyInsertedTapeURLs: [URL] = []
-    
-    // The list of recently atached cartridge URLs.
-    var recentlyAttachedCartridgeURLs: [URL] = []
-    
+    var recentlyExportedDisk2URLs: [URL] = []
+    var recentlyExportedDisk3URLs: [URL] = []
     
     public func applicationDidFinishLaunching(_ aNotification: Notification) {
         
@@ -277,25 +272,10 @@ func cgEventCallback(proxy: CGEventTapProxy,
             
         case 0: recentlyExportedDisk0URLs = []
         case 1: recentlyExportedDisk1URLs = []
-            
+        case 2: recentlyExportedDisk2URLs = []
+        case 3: recentlyExportedDisk3URLs = []
         default: fatalError()
         }
-    }
-    
-    func noteNewRecentlyInsertedTapeURL(_ url: URL) {
-        noteRecentlyUsedURL(url, to: &recentlyInsertedTapeURLs, size: 10)
-    }
-    
-    func getRecentlyInsertedTapeURL(_ pos: Int) -> URL? {
-        return getRecentlyUsedURL(pos, from: recentlyInsertedTapeURLs)
-    }
-    
-    func noteNewRecentlyAtachedCartridgeURL(_ url: URL) {
-        noteRecentlyUsedURL(url, to: &recentlyAttachedCartridgeURLs, size: 10)
-    }
-    
-    func getRecentlyAtachedCartridgeURL(_ pos: Int) -> URL? {
-        return getRecentlyUsedURL(pos, from: recentlyAttachedCartridgeURLs)
     }
     
     func noteNewRecentlyUsedURL(_ url: URL) {
