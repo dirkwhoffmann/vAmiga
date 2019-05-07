@@ -166,27 +166,29 @@ public:
     // Operating the drive
     //
     
-    // Turns the drive motor on or off
+    // Turns the drive motor on or off.
     void setMotor(bool value);
     void switchMotorOn() { setMotor(true); }
     void switchMotorOff() { setMotor(false); }
     
-    // Selects the active drive head (0 = lower, 1 = upper)
+    // Selects the active drive head (0 = lower, 1 = upper).
     void selectSide(int side);
 
-    // Reads a byte at current drive head position and rotates the disk
+    // Reads a value from the drive head and rotates the disk.
     uint8_t readHead();
-
-    // Writes a byte at current drive head position and rotates the disk
+    uint16_t readHead16();
+    
+    // Writes a value to the drive head and rotates the disk.
     void writeHead(uint8_t value);
+    void writeHead16(uint16_t value);
 
-    // Emulate a disk rotation (moves head to the next byte)
+    // Emulate a disk rotation (moves head to the next byte).
     void rotate();
 
-    // Rotates the disk to the next sync mark
+    // Rotates the disk to the next sync mark.
     void findSyncMark();
 
-    // Moves the drive head (0 = inwards, 1 = outwards)
+    // Moves the drive head (0 = inwards, 1 = outwards).
     void moveHead(int dir);
     
     

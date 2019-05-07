@@ -549,9 +549,7 @@ DiskController::performSimpleDMARead(Drive *drive)
     for (unsigned i = 0; i < acceleration; i++) {
         
         // Read word from disk.
-        uint8_t byte1 = drive->readHead();
-        uint8_t byte2 = drive->readHead();
-        uint16_t word = HI_LO(byte1, byte2);
+        uint16_t word = drive->readHead16();
         
         // Write word into memory.
         amiga->mem.pokeChip16(amiga->agnus.dskpt, word);
@@ -573,7 +571,7 @@ DiskController::performSimpleDMARead(Drive *drive)
 }
 
 void
-DiskController::performSimpleDMAWrite(Drive *dfsel)
+DiskController::performSimpleDMAWrite(Drive *drive)
 {
     // debug("Writing %d words to disk\n", dsklen & 0x3FFF);
     
@@ -581,14 +579,13 @@ DiskController::performSimpleDMAWrite(Drive *dfsel)
         
         // Read word from memory
         uint16_t word = amiga->mem.peekChip16(amiga->agnus.dskpt);
-        plainmsg("%X -> %X (%d)\n", word, amiga->agnus.dskpt, dfsel->head.offset);
+        plainmsg("%X -> %X (%d)\n", word, amiga->agnus.dskpt, drive->head.offset);
         amiga->agnus.dskpt = (amiga->agnus.dskpt + 2) & 0x7FFFF;
         checksum = fnv_1a_it32(checksum, word);
         // plaindebug("%d: %X (%X)\n", dsklen & 0x3FFF, word, dcheck);
         
         // Write word to disk
-        dfsel->writeHead(HI_BYTE(word));
-        dfsel->writeHead(LO_BYTE(word));
+        drive->writeHead16(word);
         
         if ((--dsklen & 0x3FFF) == 0) {
             
@@ -636,9 +633,7 @@ DiskController::performTurboRead(Drive *drive)
     for (unsigned i = 0; i < (dsklen & 0x3FFF); i++) {
         
         // Read word from disk.
-        uint8_t byte1 = drive->readHead();
-        uint8_t byte2 = drive->readHead();
-        uint16_t word = HI_LO(byte1, byte2);
+        uint16_t word = drive->readHead16();
         
         // Write word into memory.
         amiga->mem.pokeChip16(amiga->agnus.dskpt, word);
@@ -667,8 +662,7 @@ DiskController::performTurboWrite(Drive *drive)
         checksum = fnv_1a_it32(checksum, word);
         
         // Write word to disk
-        drive->writeHead(HI_BYTE(word));
-        drive->writeHead(LO_BYTE(word));
+        drive->writeHead16(word);
     }
     
     plaindebug(2, "Turbo write %s: checksum = %X\n", drive->getDescription(), checksum);

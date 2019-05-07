@@ -208,6 +208,15 @@ Drive::readHead()
     return result;
 }
 
+uint16_t
+Drive::readHead16()
+{
+    uint8_t byte1 = readHead();
+    uint8_t byte2 = readHead();
+    
+    return HI_LO(byte1, byte2);
+}
+
 void
 Drive::writeHead(uint8_t value)
 {
@@ -215,6 +224,13 @@ Drive::writeHead(uint8_t value)
         disk->writeByte(value, head.cylinder, head.side, head.offset);
         rotate();
     }
+}
+
+void
+Drive::writeHead16(uint16_t value)
+{
+    writeHead(HI_BYTE(value));
+    writeHead(LO_BYTE(value));
 }
 
 void
@@ -239,7 +255,7 @@ Drive::rotate()
 void
 Drive::findSyncMark()
 {
-    for (unsigned i = 0; i < disk->trackLen; i++, rotate()) {
+    for (unsigned i = 0; i < disk->trackLen; i++) {
         
         if (readHead() != 0x44) continue;
         if (readHead() != 0x89) continue;
