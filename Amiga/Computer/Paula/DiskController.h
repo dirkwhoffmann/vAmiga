@@ -77,9 +77,6 @@ private:
     // Disk DMA block length
     uint16_t dsklen;
     
-    // Disk write data (from RAM to disk)
-    uint16_t dskdat;
-    
     // Disk SYNC word
     uint16_t dsksync;
     

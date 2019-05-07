@@ -28,7 +28,6 @@ DiskController::DiskController()
         { &fifo,          sizeof(fifo),          0 },
         { &fifoCount,     sizeof(fifoCount),     0 },
         { &dsklen,        sizeof(dsklen),        0 },
-        { &dskdat,        sizeof(dskdat),        0 },
         { &prb,           sizeof(prb),           0 },
         
     });
@@ -149,9 +148,8 @@ DiskController::setConnected(int df, bool value)
 uint16_t
 DiskController::peekDSKDATR()
 {
-    warn("*** DSKDATR *** CANNOT BE READ BY THE CPU");
-    debug(1, "peekDSKDATR() = %X\n", dskdat);
-    return dskdat;
+    // DSKDAT is a strobe register that cannot be accessed by the CPU
+    return 0;
 }
 
 void
@@ -210,8 +208,7 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
 void
 DiskController::pokeDSKDAT(uint16_t value)
 {
-    debug(1, "pokeDSKDAT(%X)\n", value);
-    dskdat = value;
+    // DSKDAT is a strobe register that cannot be accessed by the CPU.
 }
 
 uint16_t
