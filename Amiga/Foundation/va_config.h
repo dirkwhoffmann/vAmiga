@@ -22,6 +22,6 @@
 #define DEBUG_LEVEL 1
 
 // Enable to use a simplified disk DMA implementation (disables the FIFO)
-#define EASY_DISK
+// #define EASY_DISK
 
 #endif

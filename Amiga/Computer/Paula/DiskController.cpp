@@ -375,7 +375,7 @@ DiskController::readByte()
     
     // Only proceed if the selected drive provides data.
     // if (d->isDataSource()) {
-    if (state == DRIVE_DMA_READ || DRIVE_DMA_SYNC_WAIT) {
+    if (state == DRIVE_DMA_READ || state == DRIVE_DMA_SYNC_WAIT) {
         
         // Read a single byte from the drive head.
         incoming = d->readHead();
@@ -427,62 +427,26 @@ DiskController::performDMA()
     // debug("performDMA()\n");
     
     // Only proceed if the FIFO buffer contains at least one data word.
-    if (!fifoHasData()) return;
+    // if (!fifoHasData()) return;
     
     // Perform DMA
     switch (state) {
         
         case DRIVE_DMA_READ:
-        performRead(drive);
+        if (!fifoHasData()) return;
+        performDMARead(drive);
         break;
         
         case DRIVE_DMA_WRITE:
-        performWrite(drive);
+        performDMAWrite(drive);
         break;
         
         default: assert(false);
     }
 }
 
-    /*
-    // Perform DMA (if drive is in read mode).
-    if (state == DRIVE_DMA_READ) {
-        
-        // Determine how many words we are supposed to transfer.
-        uint32_t remaining = acceleration;
-        
-        do {
-            // Read next word from buffer.
-            uint16_t word = readFifo();
-            
-            // Write word into memory.
-            amiga->mem.pokeChip16(amiga->agnus.dskpt, word);
-            amiga->agnus.dskpt = (amiga->agnus.dskpt + 2) & 0x7FFFF;
-            
-            dsklen--;
-            
-            // Trigger interrupt if the last word has been written.
-            if (!(dsklen & 0x3FFF)) {
-                amiga->paula.pokeINTREQ(0x8002);
-                state = DRIVE_DMA_OFF;
-                debug(1, "Disk DMA DONE.\n");
-                break;
-            }
-            
-            // Read the next word if the loop gets repeated.
-            if (--remaining) {
-                readByte();
-                readByte();
-                assert(fifoHasData());
-            }
-            
-        } while (remaining);
-    }
-}
-    */
-
 void
-DiskController::performRead(Drive *d)
+DiskController::performDMARead(Drive *d)
 {
     // Determine how many words we are supposed to transfer.
     uint32_t remaining = acceleration;
@@ -502,7 +466,7 @@ DiskController::performRead(Drive *d)
             
             amiga->paula.pokeINTREQ(0x8002);
             state = DRIVE_DMA_OFF;
-            // plainmsg("Disk DMA: Checksum = %X\n", checksum);
+            plainmsg("performRead: Checksum = %X\n", checksum);
             floppySync = 0;
             return;
         }
@@ -518,7 +482,7 @@ DiskController::performRead(Drive *d)
 }
 
 void
-DiskController::performWrite(Drive *d)
+DiskController::performDMAWrite(Drive *d)
 {
     // Determine how many words we are supposed to transfer.
     uint32_t remaining = acceleration;
@@ -526,7 +490,6 @@ DiskController::performWrite(Drive *d)
     do {
         // Read next word from memory.
         uint16_t word = amiga->mem.peekChip16(amiga->agnus.dskpt);
-        
         amiga->agnus.dskpt = (amiga->agnus.dskpt + 2) & 0x7FFFF;
         checksum = fnv_1a_it32(checksum, word);
         // plaindebug("%d: %X (%X)\n", dsklen & 0x3FFF, word, dcheck);
@@ -542,7 +505,7 @@ DiskController::performWrite(Drive *d)
             
             amiga->paula.pokeINTREQ(0x8002);
             state = DRIVE_DMA_OFF;
-            plainmsg("Disk DMA WRITE: Checksum = %X\n", checksum);
+            plainmsg("* performWrite: Checksum = %X\n", checksum);
             floppySync = 0;
             return;
         }
@@ -557,7 +520,7 @@ DiskController::performWrite(Drive *d)
 }
 
 void
-DiskController::doSimpleDMA()
+DiskController::performSimpleDMA()
 {
     Drive *drive = getSelectedDrive();
     
@@ -574,11 +537,11 @@ DiskController::doSimpleDMA()
     switch (state) {
 
         case DRIVE_DMA_READ:
-        doSimpleDMARead(drive);
+        performSimpleDMARead(drive);
         break;
 
         case DRIVE_DMA_WRITE:
-        doSimpleDMAWrite(drive);
+        performSimpleDMAWrite(drive);
         break;
         
         default: assert(false);
@@ -586,7 +549,7 @@ DiskController::doSimpleDMA()
 }
 
 void
-DiskController::doSimpleDMARead(Drive *dfsel)
+DiskController::performSimpleDMARead(Drive *dfsel)
 {
     for (unsigned i = 0; i < acceleration; i++) {
         
@@ -610,7 +573,7 @@ DiskController::doSimpleDMARead(Drive *dfsel)
             
             amiga->paula.pokeINTREQ(0x8002);
             state = DRIVE_DMA_OFF;
-            // plainmsg("Disk DMA: Checksum = %X\n", checksum);
+            plainmsg("doSimpleDMARead: Checksum = %X\n", checksum);
             floppySync = 0;
             return;
         }
@@ -618,7 +581,7 @@ DiskController::doSimpleDMARead(Drive *dfsel)
 }
 
 void
-DiskController::doSimpleDMAWrite(Drive *dfsel)
+DiskController::performSimpleDMAWrite(Drive *dfsel)
 {
     // debug("Writing %d words to disk\n", dsklen & 0x3FFF);
     
@@ -626,7 +589,7 @@ DiskController::doSimpleDMAWrite(Drive *dfsel)
         
         // Read word from memory
         uint16_t word = amiga->mem.peekChip16(amiga->agnus.dskpt);
-        
+        plainmsg("%X -> %X (%d)\n", word, amiga->agnus.dskpt, dfsel->head.offset);
         amiga->agnus.dskpt = (amiga->agnus.dskpt + 2) & 0x7FFFF;
         checksum = fnv_1a_it32(checksum, word);
         // plaindebug("%d: %X (%X)\n", dsklen & 0x3FFF, word, dcheck);
@@ -643,7 +606,7 @@ DiskController::doSimpleDMAWrite(Drive *dfsel)
             
             amiga->paula.pokeINTREQ(0x8002);
             state = DRIVE_DMA_OFF;
-            plainmsg("Disk DMA WRITE: Checksum = %X\n", checksum);
+            plainmsg("* doSimpleDMAWrite: Checksum = %X\n", checksum);
             return;
         }
     }
@@ -711,6 +674,7 @@ DiskController::performTurboWrite(Drive *d, uint32_t numWords)
         
         // Read word from memory
         uint16_t word = amiga->mem.peekChip16(amiga->agnus.dskpt);
+        // plainmsg("%X -> %X (%d)\n", word, amiga->agnus.dskpt, d->head.offset);
         amiga->agnus.dskpt = (amiga->agnus.dskpt + 2) & 0x7FFFF;
         
         // Compute checksum (for debugging only)

@@ -225,30 +225,27 @@ private:
 
 public:
     
-    // Performs a disk DMA access.
+    /* Emulates a disk DMA operaton.
+     * This DMA emulation is the most accurate one. The bytes from or to the
+     * disk are stored in a FIFO buffer and memory transfer is performed
+     * in the dedicated drive DMA slots in each rasterline.
+     */
     void performDMA();
-    
-    private:
-    
-    void performRead(Drive *d);
-    void performWrite(Drive *d);
-    
-    public:
-    
-    
-    
-    // Simple DMA mode (DEPRECATED, replaced by turbo DMA)
-    void doSimpleDMA();
-
-private:
-
+    void performDMARead(Drive *d);
+    void performDMAWrite(Drive *d);
+ 
     void readByte();
-    void doSimpleDMARead(Drive *dfsel);
-    void doSimpleDMAWrite(Drive *dfsel);
 
-    /* Emulates a DMA access with a turbo drive.
-     * If a turbo drive is attached, this function is called directly when
-     * DSKLEN is written to.
+    /* Emulates a (simplified) disk DMA operaton.
+     * The simplified DMA transfer does not emulate a FIFO buffer.
+     */
+    void performSimpleDMA();
+    void performSimpleDMARead(Drive *dfsel);
+    void performSimpleDMAWrite(Drive *dfsel);
+
+    /* Emulates a turbo-drive DMA access.
+     * If a turbo drive is attached, these function are used. They are called
+     * immediately when DSKLEN is written to.
      */
     void performTurboDMA(Drive *d);
     void performTurboRead(Drive *d, uint32_t numWords);

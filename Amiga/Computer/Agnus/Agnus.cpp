@@ -961,7 +961,7 @@ Agnus::serviceDMAEvent(EventID id)
         case DMA_DISK:
         
         #ifdef EASY_DISK
-            amiga->paula.diskController.doSimpleDMA();
+            amiga->paula.diskController.performSimpleDMA();
         #else
             amiga->paula.diskController.performDMA();
         #endif
