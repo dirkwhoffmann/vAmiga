@@ -12,31 +12,41 @@
 
 #include "HardwareComponent.h"
 
-typedef enum
-{
-    KB_SEND_SYNC = 0,
-    KB_POWER_UP_KEY_STREAM,
-    KB_TERMINATE_KEY_STREAM,
-    KB_NORMAL_OPERATION
-}
-KeyboardState;
-
 class Keyboard : public HardwareComponent {
+    
+    typedef enum
+    {
+        KB_SEND_SYNC,
+        KB_POWER_UP_KEY_STREAM,
+        KB_TERMINATE_KEY_STREAM,
+        KB_NORMAL_OPERATION
+    }
+    KeyboardState;
     
     public:
     
-    // Keybord layout identifier
+    // The keybord layout identifier
     long layout = 0;
     
     private:
 
-    // Current state of the keyboard
+    // The current state of the keyboard
     KeyboardState state;
     
-    // Acknowledge signal sent from the Amiga side
+    // The acknowledge signal sent from the Amiga side
     bool handshake;
-        
+    
+    // Size of the keycode type-ahead buffer
+    static const size_t bufferSize = 10;
+    
+    // The keycode type-ahead buffer
+    uint8_t typeAheadBuffer[bufferSize];
+    
+    // Next free position in the type ahead buffer
+    uint8_t bufferIndex;
+    
     // Indicates if a key is currently held down (array index = raw key code).
+    // DEPRECATED
     bool keyDown[128];
     
     
@@ -56,22 +66,18 @@ public:
 private:
     
      void _powerOn() override;
-     /*
-     void _powerOff() override;
      void _reset() override;
-     void _ping() override;
-     */
      void _dump() override;
     
+    
     //
-    // FAKE METHODS FOR THE VISUAL PROTOTYPE (TEMPORARY)
+    // Talking to the Amiga
     //
     
 public:
     
-    /* Sends a keycode to the Amiga
-     */
-    void sendKeyCode(uint8_t keyCode); 
+    // Sends a keycode to the Amiga
+    void sendKeyCode(uint8_t keyCode);
     
     /* Receives a handshake from the Amiga
      * This function is called whenever the CIA puts the serial register into
@@ -90,6 +96,20 @@ public:
     void pressKey(long keycode);
     void releaseKey(long keycode);
     void releaseAllKeys();
+    
+    
+    //
+    // Working with the type-ahead buffer
+    //
+    
+    // Indicates if a keycode is present
+    bool bufferHasData() { return bufferIndex != 0; }
+
+    // Reads a keycode from the type-ahead buffer
+    uint8_t readFromBuffer();
+    
+    // Writes a keycode into the type-ahead buffer
+    void writeToBuffer(uint8_t keycode);
 };
 
 #endif

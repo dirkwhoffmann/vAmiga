@@ -16,10 +16,13 @@ Keyboard::Keyboard()
     // Register snapshot items
     registerSnapshotItems(vector<SnapshotItem> {
         
-        { &layout,      sizeof(layout),      PERSISTANT },
-        { &state,       sizeof(state),       0 },
-        { &handshake,   sizeof(handshake),   0 },
-   
+        { &layout,          sizeof(layout),          PERSISTANT },
+        
+        { &state,           sizeof(state),           0 },
+        { &handshake,       sizeof(handshake),       0 },
+        { &handshake,       sizeof(handshake),       0 },
+        { &typeAheadBuffer, sizeof(typeAheadBuffer), BYTE_ARRAY },
+        { &bufferIndex,     sizeof(bufferIndex),     0 },
     });
 }
 
@@ -30,13 +33,19 @@ Keyboard::_powerOn()
 }
 
 void
+Keyboard::_reset()
+{
+    
+}
+
+void
 Keyboard::_dump()
 {
-    for (unsigned i = 0; i < 128; i++) {
-        if (keyIsPressed(i)) {
-            msg("Key %02X is pressed.\n");
-        }
+    plainmsg("Type ahead buffer: ");
+    for (unsigned i = 0; i < bufferIndex; i++) {
+        plainmsg("%02X ", typeAheadBuffer[i]);
     }
+    plainmsg("\n");
 }
 
 void
@@ -52,41 +61,46 @@ Keyboard::sendKeyCode(uint8_t keyCode)
 void
 Keyboard::execute()
 {
+    // REMOVE ASAP
+    // handshake = true;
+    
     switch (state) {
             
         case KB_SEND_SYNC:
             
-            sendKeyCode(0xFF);
-            state = KB_POWER_UP_KEY_STREAM;
-            return;
+            if (handshake) {
+                sendKeyCode(0xFF);
+                state = KB_POWER_UP_KEY_STREAM;
+            }
+            break;
             
         case KB_POWER_UP_KEY_STREAM:
             
             if (handshake) {
-                handshake = false;
-                debug(2, "Sending KB_POWER_UP_KEY_STREAM to Amiga\n");
+                debug(2, "Sending KB_POWER_UP_KEY_STREAM\n");
                 sendKeyCode(0xFD);
                 state = KB_TERMINATE_KEY_STREAM;
+                handshake = false;
             }
-            return;
+            break;
             
         case KB_TERMINATE_KEY_STREAM:
             
             if (handshake) {
-                handshake = false;
-                debug(2, "Sending KB_TERMINATE_KEY_STREAM to Amiga\n");
+                debug(2, "Sending KB_TERMINATE_KEY_STREAM\n");
                 sendKeyCode(0xFE);
                 state = KB_NORMAL_OPERATION;
+                handshake = false;
             }
-            return;
+            break;
             
         case KB_NORMAL_OPERATION:
             
-            if (handshake) {
+            if (handshake && bufferHasData()) {
+                sendKeyCode(readFromBuffer());
                 handshake = false;
-                // TODO
             }
-            return;
+            break;
             
         default:
             assert(false);
@@ -109,6 +123,9 @@ Keyboard::pressKey(long keycode)
         debug("Pressing Amiga key %02X\n", keycode);
     }
     keyDown[keycode] = true;
+
+    writeToBuffer(keycode);
+    dump();
 }
 
 void
@@ -120,6 +137,9 @@ Keyboard::releaseKey(long keycode)
         debug("Releasing Amiga key %02X\n", keycode);
     }
     keyDown[keycode] = false;
+    
+    writeToBuffer(keycode | 0x80);
+    dump();
 }
 
 void
@@ -127,5 +147,29 @@ Keyboard::releaseAllKeys()
 {
     for (unsigned i = 0; i < 0x80; i++) {
         releaseKey(i);
+    }
+}
+
+uint8_t
+Keyboard::readFromBuffer()
+{
+    assert(bufferHasData());
+    
+    uint8_t result = typeAheadBuffer[0];
+    
+    bufferIndex--;
+    for (unsigned i = 0; i < bufferIndex; i++) {
+        typeAheadBuffer[i] = typeAheadBuffer[i+1];
+    }
+    
+    return result;
+}
+
+void
+Keyboard::writeToBuffer(uint8_t keycode)
+{
+    if (bufferIndex < bufferSize) {
+        typeAheadBuffer[bufferIndex] = keycode;
+        bufferIndex++;
     }
 }
