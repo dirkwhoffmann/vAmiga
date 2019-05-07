@@ -13,18 +13,6 @@
 #include "HardwareComponent.h"
 #include "ADFFile.h"
 
-// Data type for addressing tracks
-typedef int16_t Track;
-
-// Checks if a given number is a valid track number
-static inline bool isTrackNumber(int16_t nr) { return nr < 160; }
-
-// Data type for addressing sectors inside a track
-typedef int16_t Sector;
-
-// Checks if a given number is a valid sector number
-static inline bool isSectorNumber(int16_t nr) { return nr < 11; }
-
 
 class Disk : public AmigaObject {
     
@@ -88,6 +76,16 @@ public:
     bool writeProtected;
     bool modified;
     
+    //
+    // Class functions
+    //
+    
+    static long numSides(DiskType type);
+    static long numCylinders(DiskType type);
+    static long numTracks(DiskType type);
+    static long numSectors(DiskType type);
+    static long numSectorsTotal(DiskType type);
+
     
     //
     // Constructing and destructing
@@ -104,7 +102,7 @@ public:
 public:
     
     //
-    // Accessing properties
+    // Getter and Setter
     //
     
     DiskType getType() { return type; }
@@ -121,15 +119,15 @@ public:
     //
     
     // Cylinder, track, and sector counts
-    long getNumCyclinders();
-    long getNumTracks() { return 2 * getNumCyclinders(); }
-    long getNumSectorsPerTrack();
-    long getNumSectors() { return getNumTracks() * getNumSectorsPerTrack(); }
+    long numCyclinders() { return numCylinders(type); }
+    long numTracks() { return numTracks(type); }
+    long numSectors() { return numSectors(type); }
+    long numSectorsTotal() { return numSectorsTotal(type); }
     
     // Consistency checking
-    bool isValidCylinder(long nr) { return nr >= 0 && nr < getNumCyclinders(); }
-    bool isTrackNr(long nr) { return nr >= 0 && nr < getNumTracks(); }
-    bool isSectorNr(long nr) { return nr >= 0 && nr < getNumSectorsPerTrack(); }
+    bool isValidCylinder(long nr) { return nr >= 0 && nr < numCyclinders(); }
+    bool isValidTrack(long nr) { return nr >= 0 && nr < numTracks(); }
+    bool isValidSector(long nr) { return nr >= 0 && nr < numSectors(); }
     
     
     //

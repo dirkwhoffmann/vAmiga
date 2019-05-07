@@ -19,6 +19,54 @@ Disk::Disk(DiskType type)
     clearDisk();
 }
 
+long
+Disk::numSides(DiskType type)
+{
+    return 2;
+}
+
+long
+Disk::numCylinders(DiskType type)
+{
+    assert(isDiskType(type));
+    
+    switch (type) {
+        case DISK_35_DD:    return 80;
+        case DISK_35_DD_PC: return 80;
+        case DISK_35_HD:    return 80;
+        case DISK_35_HD_PC: return 80;
+        case DISK_525_SD:   return 40;
+        default:            return 0;
+    }
+}
+
+long
+Disk::numTracks(DiskType type)
+{
+    return numSides(type) * numCylinders(type);
+}
+
+long
+Disk::numSectors(DiskType type)
+{
+    assert(isDiskType(type));
+    
+    switch (type) {
+        case DISK_35_DD:    return 11;
+        case DISK_35_DD_PC: return 9;
+        case DISK_35_HD:    return 22;
+        case DISK_35_HD_PC: return 18;
+        case DISK_525_SD:   return 9;
+        default:            return 0;
+    }
+}
+
+long
+Disk::numSectorsTotal(DiskType type)
+{
+    return numTracks(type) * numSectors(type);
+}
+
 Disk *
 Disk::makeWithFile(ADFFile *file)
 {
@@ -32,42 +80,10 @@ Disk::makeWithFile(ADFFile *file)
     return disk;
 }
 
-long
-Disk::getNumCyclinders()
-{
-    switch (getType()) {
-        
-        case DISK_35_DD:
-        case DISK_35_DD_PC:
-        case DISK_35_HD:
-        case DISK_35_HD_PC:
-        return 80;
-        
-        case DISK_525_SD:
-        return 40;
-    }
-}
-
-long
-Disk::getNumSectorsPerTrack()
-{
-    switch (getType()) {
-        
-        case DISK_35_DD:
-        case DISK_35_HD:
-        return 11;
-        
-        case DISK_35_DD_PC:
-        case DISK_35_HD_PC:
-        case DISK_525_SD:
-        return 9;
-    }
-}
-
 uint8_t
 Disk::readHead(uint8_t cylinder, uint8_t side, uint16_t offset)
 {
-    assert(cylinder < getNumCyclinders());
+    assert(cylinder < numCyclinders());
     assert(side < 2);
     assert(offset < trackLen);
 
@@ -77,7 +93,7 @@ Disk::readHead(uint8_t cylinder, uint8_t side, uint16_t offset)
 void
 Disk::writeHead(uint8_t value, uint8_t cylinder, uint8_t side, uint16_t offset)
 {
-    assert(cylinder < getNumCyclinders());
+    assert(cylinder < numCyclinders());
     assert(side < 2);
     assert(offset < trackLen);
     
@@ -112,7 +128,7 @@ Disk::clearDisk()
 void
 Disk::clearTrack(Track t)
 {
-    assert(isTrackNumber(t));
+    assert(isValidTrack(t));
     memset(data.track[t], 0xAA, maxTrackSize);
 }
 
@@ -123,8 +139,8 @@ Disk::encodeDisk(ADFFile *adf)
     assert(adf->getDiskType() == getType());
     
     bool result = true;
-    long tmax = getNumTracks();
-    long smax = getNumSectorsPerTrack();
+    long tmax = numTracks();
+    long smax = numSectors();
     
     debug("Encoding disk (%d tracks, %d sectors each)...\n", tmax, smax);
     
@@ -138,7 +154,7 @@ Disk::encodeDisk(ADFFile *adf)
 bool
 Disk::encodeTrack(ADFFile *adf, Track t, long smax)
 {
-    assert(isTrackNumber(t));
+    assert(isValidTrack(t));
  
     bool result = true;
     
@@ -189,8 +205,8 @@ Disk::encodeTrack(ADFFile *adf, Track t, long smax)
 bool
 Disk::encodeSector(ADFFile *adf, Track t, Sector s)
 {
-    assert(isTrackNumber(t));
-    assert(isSectorNumber(s));
+    assert(isValidTrack(t));
+    assert(isValidSector(s));
     
     debug(2, "Encoding sector %d\n", s);
     
@@ -276,8 +292,8 @@ bool
 Disk::decodeDisk(uint8_t *dst)
 {
     bool result = true;
-    long tmax = getNumTracks();
-    long smax = getNumSectorsPerTrack();
+    long tmax = numTracks();
+    long smax = numSectors();
     
     debug("Decoding disk (%d tracks, %d sectors each)...\n", tmax, smax);
     
@@ -292,7 +308,7 @@ Disk::decodeDisk(uint8_t *dst)
 size_t
 Disk::decodeTrack(uint8_t *dst, Track t, long smax)
 {
-    assert(isTrackNumber(t));
+    assert(isValidTrack(t));
         
     debug(2, "Decoding track %d\n", t);
     

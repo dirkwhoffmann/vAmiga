@@ -13,7 +13,17 @@
 #define _DISK_T_INC
 
 //
-// Disk type (format and density)
+// Type aliases
+//
+
+typedef int16_t Side;
+typedef int16_t Cylinder;
+typedef int16_t Track;
+typedef int16_t Sector;
+
+
+//
+// Enumeration types
 //
 
 typedef enum : long
@@ -44,44 +54,6 @@ inline const char *diskTypeName(DiskType type)
         default:            return "???";
     }
 }
-
-inline long numCylinders(DiskType type)
-{
-    assert(isDiskType(type));
-    
-    switch (type) {
-        case DISK_35_DD:    return 80;
-        case DISK_35_DD_PC: return 80;
-        case DISK_35_HD:    return 80;
-        case DISK_35_HD_PC: return 80;
-        case DISK_525_SD:   return 40;
-        default:            return 0;
-    }
-}
-
-inline long numTracks(DiskType type)
-{
-    return 2 * numCylinders(type);
-}
-
-inline long numSectors(DiskType type)
-{
-    assert(isDiskType(type));
-    
-    switch (type) {
-        case DISK_35_DD:    return 11;
-        case DISK_35_DD_PC: return 9;
-        case DISK_35_HD:    return 22;
-        case DISK_35_HD_PC: return 18;
-        case DISK_525_SD:   return 11;
-        default:            return 0;
-    }
-}
-
-
-//
-// File system type (Original File System or Fast File System)
-//
 
 typedef enum : long
 {
