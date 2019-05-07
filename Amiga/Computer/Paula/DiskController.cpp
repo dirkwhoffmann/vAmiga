@@ -402,9 +402,6 @@ DiskController::readByte()
          }
          }
          */
-        
-        // Rotate the disk.
-        d->rotate();
     }
 }
 
@@ -496,9 +493,7 @@ DiskController::performDMAWrite(Drive *d)
         
         // Write word to disk (TODO: WRITE INTO FIFO)
         d->writeHead(HI_BYTE(word));
-        d->rotate();
         d->writeHead(LO_BYTE(word));
-        d->rotate();
         
         // Finish up if this was the last word to transfer.
         if ((--dsklen & 0x3FFF) == 0) {
@@ -549,17 +544,14 @@ DiskController::performSimpleDMA()
 }
 
 void
-DiskController::performSimpleDMARead(Drive *dfsel)
+DiskController::performSimpleDMARead(Drive *drive)
 {
     for (unsigned i = 0; i < acceleration; i++) {
         
         // Read word from disk.
-        uint8_t byte1 = dfsel->readHead();
-        dfsel->rotate();
-        uint8_t byte2 = dfsel->readHead();
-        dfsel->rotate();
-        
-        uint16_t word = (byte1 << 8) | byte2;
+        uint8_t byte1 = drive->readHead();
+        uint8_t byte2 = drive->readHead();
+        uint16_t word = HI_LO(byte1, byte2);
         
         // Write word into memory.
         amiga->mem.pokeChip16(amiga->agnus.dskpt, word);
@@ -596,13 +588,9 @@ DiskController::performSimpleDMAWrite(Drive *dfsel)
         
         // Write word to disk
         dfsel->writeHead(HI_BYTE(word));
-        dfsel->rotate();
         dfsel->writeHead(LO_BYTE(word));
-        dfsel->rotate();
-
-        dsklen--;
         
-        if ((dsklen & 0x3FFF) == 0) {
+        if ((--dsklen & 0x3FFF) == 0) {
             
             amiga->paula.pokeINTREQ(0x8002);
             state = DRIVE_DMA_OFF;
@@ -649,9 +637,7 @@ DiskController::performTurboRead(Drive *drive)
         
         // Read word from disk.
         uint8_t byte1 = drive->readHead();
-        drive->rotate();
         uint8_t byte2 = drive->readHead();
-        drive->rotate();
         uint16_t word = HI_LO(byte1, byte2);
         
         // Write word into memory.
@@ -682,9 +668,7 @@ DiskController::performTurboWrite(Drive *drive)
         
         // Write word to disk
         drive->writeHead(HI_BYTE(word));
-        drive->rotate();
         drive->writeHead(LO_BYTE(word));
-        drive->rotate();
     }
     
     plaindebug(2, "Turbo write %s: checksum = %X\n", drive->getDescription(), checksum);

@@ -198,18 +198,22 @@ Drive::selectSide(int side)
 uint8_t
 Drive::readHead()
 {
+    uint8_t result = 0xFF;
+    
     if (disk) {
-        return disk->readHead(head.cylinder, head.side, head.offset);
-    } else {
-        return 0xFF;
+        result = disk->readByte(head.cylinder, head.side, head.offset);
+        rotate();
     }
+    
+    return result;
 }
 
 void
 Drive::writeHead(uint8_t value)
 {
     if (disk) {
-        disk->writeHead(value, head.cylinder, head.side, head.offset);
+        disk->writeByte(value, head.cylinder, head.side, head.offset);
+        rotate();
     }
 }
 

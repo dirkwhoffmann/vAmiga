@@ -81,7 +81,7 @@ Disk::makeWithFile(ADFFile *file)
 }
 
 uint8_t
-Disk::readHead(Cylinder cylinder, Side side, uint16_t offset)
+Disk::readByte(Cylinder cylinder, Side side, uint16_t offset)
 {
     assert(isValidCylinderNr(cylinder));
     assert(isValidSideNr(side));
@@ -91,7 +91,7 @@ Disk::readHead(Cylinder cylinder, Side side, uint16_t offset)
 }
 
 void
-Disk::writeHead(uint8_t value, Cylinder cylinder, Side side, uint16_t offset)
+Disk::writeByte(uint8_t value, Cylinder cylinder, Side side, uint16_t offset)
 {
     assert(isValidCylinderNr(cylinder));
     assert(isValidSideNr(side));

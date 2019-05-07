@@ -137,10 +137,10 @@ public:
     //
     
     // Reads a byte from disk
-    uint8_t readHead(Cylinder cylinder, Side side, uint16_t offset);
+    uint8_t readByte(Cylinder cylinder, Side side, uint16_t offset);
 
     // Writes a byte to disk
-    void writeHead(uint8_t value, Cylinder cylinder, Side side, uint16_t offset);
+    void writeByte(uint8_t value, Cylinder cylinder, Side side, uint16_t offset);
 
     
     //
