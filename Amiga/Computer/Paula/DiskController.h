@@ -31,7 +31,7 @@ private:
     bool connected[4] = { true, false, false, false };
     
     // The currently selected drive (-1 if no drive is selected)
-    int8_t selectedDrive = -1;
+    int8_t selected = -1;
     
     // The number of words transferred during a single DMA cycle.
     int32_t acceleration = 1;
@@ -155,6 +155,9 @@ public:
     void disconnect(int df) { setConnected(df, false); }
     void toggleConnected(int df) { setConnected(df, !isConnected(df)); }
     
+    // Returns the currently selected drive or NULL if no drive is selected.
+    Drive *getSelectedDrive();
+
     
     //
     // Accessing registers

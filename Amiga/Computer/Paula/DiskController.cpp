@@ -18,7 +18,7 @@ DiskController::DiskController()
         
         { &connected,     sizeof(connected),     BYTE_ARRAY | PERSISTANT },
         
-        { &selectedDrive, sizeof(selectedDrive), 0 },
+        { &selected, sizeof(selected), 0 },
         { &acceleration,  sizeof(acceleration),  0 },
         { &state,         sizeof(state),         0 },
         { &syncFlag,      sizeof(syncFlag),      0 },
@@ -45,7 +45,7 @@ DiskController::_setAmiga()
 void
 DiskController::_powerOn()
 {
-    selectedDrive = -1;
+    selected = -1;
     dsksync = 0x4489;
 }
 
@@ -74,7 +74,7 @@ DiskController::_inspect()
 {
     pthread_mutex_lock(&lock);
 
-    info.selectedDrive = selectedDrive;
+    info.selectedDrive = selected;
     info.state = state;
     info.fifoCount = fifoCount;
     info.dsklen = dsklen;
@@ -145,6 +145,13 @@ DiskController::setConnected(int df, bool value)
     amiga->putMessage(MSG_CONFIG);
 }
 
+Drive *
+DiskController::getSelectedDrive()
+{
+    assert(selected < 4);
+    return selected < 0 ? NULL : df[selected];
+}
+
 uint16_t
 DiskController::peekDSKDATR()
 {
@@ -157,13 +164,13 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
 {
     // plaindebug(1, "pokeDSKLEN(%X)\n", newDskLen);
     
-    Drive *sd = (selectedDrive >= 0) ? df[selectedDrive] : NULL;
+    Drive *drive = getSelectedDrive(); 
     uint16_t oldDsklen = dsklen;
 
     // Initialize checksum (for debugging only)
     checksum = fnv_1a_init32();
     
-    if (sd) sd->head.offset = 0;
+    if (drive) drive->head.offset = 0;
     
     // Remember the new value
     dsklen = newDskLen;
@@ -197,12 +204,13 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
                 // Start reading immediately
                 // plaindebug(1, "dma = DRIVE_DMA_READ\n");
                 state = DRIVE_DMA_READ;
+                clearFifo();
             }
         }
     }
     
     // If the selected drive is a turbo drive, perform DMA immediately
-    if (sd && sd->isTurboDrive()) performTurboDMA(sd);
+    if (drive && drive->isTurboDrive()) performTurboDMA(drive);
 }
 
 void
@@ -275,7 +283,7 @@ DiskController::PRBdidChange(uint8_t oldValue, uint8_t newValue)
     // Store a copy of the new value for reference.
     prb = newValue;
     
-    selectedDrive = -1;
+    selected = -1;
     
     // Iterate over all connected drives
     for (unsigned i = 0; i < 4; i++) { if (!connected[i]) continue;
@@ -283,7 +291,7 @@ DiskController::PRBdidChange(uint8_t oldValue, uint8_t newValue)
         // Inform the drive and determine the selected one
         df[i]->PRBdidChange(oldValue, newValue);
         if (df[i]->isSelected()) {
-            selectedDrive = i;
+            selected = i;
             acceleration = df[i]->getSpeed();
         }
     }
@@ -300,7 +308,7 @@ DiskController::PRBdidChange(uint8_t oldValue, uint8_t newValue)
 void
 DiskController::serveDiskEvent()
 {
-    assert(selectedDrive >= -1 && selectedDrive <= 3);
+    assert(selected >= -1 && selected <= 3);
     
     // Receive next byte from the selected drive.
     readByte();
@@ -357,50 +365,46 @@ DiskController::readByte()
 void
 DiskController::readByte()
 {
+    Drive *d = getSelectedDrive();
+
+    // Only proceed if a drive is selected.
+    if (d == NULL) return;
+        
     // Only proceed if there are remaining bytes to read.
     if ((dsklen & 0x3FFF) == 0) return;
     
-    // Only proceed if a drive is selected.
-    if (selectedDrive >= 0) {
+    // Only proceed if the selected drive provides data.
+    // if (d->isDataSource()) {
+    if (state == DRIVE_DMA_READ || DRIVE_DMA_SYNC_WAIT) {
         
-        Drive *d = df[selectedDrive];
+        // Read a single byte from the drive head.
+        incoming = d->readHead();
         
-        // MOST LIKELY WRONG:
-        // if (state == DRIVE_DMA_OFF) return;
+        // Remember when the incoming byte has been received.
+        incomingCycle = amiga->agnus.clock;
         
-        // Only proceed if the selected drive provides data.
-        // if (d->isDataSource()) {
-        if (state == DRIVE_DMA_READ || DRIVE_DMA_SYNC_WAIT) {
-            
-            // Read a single byte from the drive head.
-            incoming = d->readHead();
-            
-            // Remember when the incoming byte has been received.
-            incomingCycle = amiga->agnus.clock;
-            
-            // Push the incoming byte into the FIFO buffer.
-            writeFifo(incoming);
-            
-            // Check if we've reached a SYNC mark.
-            /*
-            if (compareFifo(dsksync)) {
-                
-                // Trigger a word SYNC interrupt.
-                debug(2, "SYNC IRQ\n");
-                amiga->paula.pokeINTREQ(0x9000);
-                
-                // Enable DMA if the controller was waiting for the SYNC mark.
-                if (state == DRIVE_DMA_SYNC_WAIT) {
-                    debug(1, "DRIVE_DMA_SYNC_WAIT -> DRIVE_DMA_READ\n");
-                    state = DRIVE_DMA_READ;
-                    clearFifo();
-                }
-            }
-            */
-            
-            // Rotate the disk.
-            d->rotate();
-        }
+        // Push the incoming byte into the FIFO buffer.
+        writeFifo(incoming);
+        
+        // Check if we've reached a SYNC mark.
+        /*
+         if (compareFifo(dsksync)) {
+         
+         // Trigger a word SYNC interrupt.
+         debug(2, "SYNC IRQ\n");
+         amiga->paula.pokeINTREQ(0x9000);
+         
+         // Enable DMA if the controller was waiting for the SYNC mark.
+         if (state == DRIVE_DMA_SYNC_WAIT) {
+         debug(1, "DRIVE_DMA_SYNC_WAIT -> DRIVE_DMA_READ\n");
+         state = DRIVE_DMA_READ;
+         clearFifo();
+         }
+         }
+         */
+        
+        // Rotate the disk.
+        d->rotate();
     }
 }
 
@@ -409,19 +413,18 @@ DiskController::readByte()
 void
 DiskController::performDMA()
 {
+    Drive *drive = getSelectedDrive();
+    
+    // Only proceed if a drive is selected.
+    if (drive == NULL) return;
+    
     // Only proceed if there are remaining bytes to read.
     if (!(dsklen & 0x3FFF)) return;
     
     // Only proceed if DMA is enabled.
     if (state != DRIVE_DMA_READ && state != DRIVE_DMA_WRITE) return;
     
-    debug("performDMA()\n");
-    
-    // Only proceed if a drive is selected.
-    if (selectedDrive < 0) return;
-    
-    assert(selectedDrive < 4);
-    Drive *dfsel = df[selectedDrive];
+    // debug("performDMA()\n");
     
     // Only proceed if the FIFO buffer contains at least one data word.
     if (!fifoHasData()) return;
@@ -430,11 +433,11 @@ DiskController::performDMA()
     switch (state) {
         
         case DRIVE_DMA_READ:
-        doSimpleDMARead(dfsel);
+        performRead(drive);
         break;
         
         case DRIVE_DMA_WRITE:
-        doSimpleDMAWrite(dfsel);
+        performWrite(drive);
         break;
         
         default: assert(false);
@@ -556,27 +559,26 @@ DiskController::performWrite(Drive *d)
 void
 DiskController::doSimpleDMA()
 {
+    Drive *drive = getSelectedDrive();
+    
+    // Only proceed if a drive is selected.
+    if (drive == NULL) return;
+    
     // Only proceed if there are remaining bytes to read.
     if (!(dsklen & 0x3FFF)) return;
 
     // Only proceed if DMA is enabled.
     if (state != DRIVE_DMA_READ && state != DRIVE_DMA_WRITE) return;
     
-    // Only proceed if a drive is selected.
-    if (selectedDrive < 0) return;
-    
-    assert(selectedDrive < 4);
-    Drive *dfsel = df[selectedDrive];
-    
     // Perform DMA
     switch (state) {
 
         case DRIVE_DMA_READ:
-        doSimpleDMARead(dfsel);
+        doSimpleDMARead(drive);
         break;
 
         case DRIVE_DMA_WRITE:
-        doSimpleDMAWrite(dfsel);
+        doSimpleDMAWrite(drive);
         break;
         
         default: assert(false);

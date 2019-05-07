@@ -199,6 +199,7 @@ Amiga::getConfig()
     config.df3.type = df3.getType();
     config.df3.speed = df3.getSpeed();
 
+    debug(" Speed %d %d %d %d \n", config.df0.speed, config.df1.speed, config.df2.speed, config.df3.speed);
     return config;
 }
 
@@ -373,7 +374,7 @@ Amiga::configureDriveSpeed(unsigned driveNr, uint16_t value)
         df[driveNr]->setSpeed(value);
         putMessage(MSG_CONFIG);
     }
-    
+
     return true;
 }
 
