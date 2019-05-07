@@ -424,10 +424,10 @@ Denise::fillShiftRegisters()
 
     shiftReg[0] = bpldat[0];
     shiftReg[1] = bpldat[1];
-    shiftReg[2] = 0; // bpldat[2];
-    shiftReg[3] = 0; // bpldat[3];
-    shiftReg[4] = 0; // bpldat[4];
-    shiftReg[5] = 0; // bpldat[5];
+    shiftReg[2] = bpldat[2];
+    shiftReg[3] = bpldat[3];
+    shiftReg[4] = bpldat[4];
+    shiftReg[5] = bpldat[5];
 
     // draw16();
 }
