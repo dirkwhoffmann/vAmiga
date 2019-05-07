@@ -86,6 +86,13 @@ private:
     // A copy of the PRB register of CIA B
     uint8_t prb;
     
+    //
+    // Debugging
+    //
+    
+    // For debugging, an FNV-32 checksum is computed for each DMA operation.
+    uint32_t checksum = fnv_1a_init32();
+    
     
     //
     // Constructing and destructing
@@ -219,7 +226,18 @@ private:
 public:
     
     // Performs a disk DMA access.
-    void doDiskDMA();
+    void performDMA();
+    
+    private:
+    
+    void performRead(Drive *d);
+    void performWrite(Drive *d);
+    
+    public:
+    
+    
+    
+    // Simple DMA mode (DEPRECATED, replaced by turbo DMA)
     void doSimpleDMA();
 
 private:
@@ -233,7 +251,6 @@ private:
      * DSKLEN is written to.
      */
     void performTurboDMA(Drive *d);
-    
     void performTurboRead(Drive *d, uint32_t numWords);
     void performTurboWrite(Drive *d, uint32_t numWords);
 };

@@ -15,8 +15,6 @@
 
 class ADFFile;
 
-
-
 class Drive : public HardwareComponent {
     
     friend class DiskController;
@@ -38,17 +36,6 @@ private:
      */
     uint16_t speed = 1;
     
-    /* The drive type identification code
-     * Each drive identifies itself by a 32 bit identification code that is
-     * transmitted via the DRVRDY signal in a special identification mode. The
-     * identification mode is activated by switching the drive motor on and
-     * off.
-     */
-    // DriveIdCode id = DRIVE_ID_35DD;
-
-    // Indicates if the identification mode is active.
-    // bool idMode;
-    
     // Position of the currently transmitted identification bit
     uint8_t idCount;
 
@@ -59,7 +46,7 @@ private:
     /* The latched MTR bit (motor control bit)
      * Each drive latches the motor signal at the time it is selected (i.e.,
      * when the SELx line is pulled down to 0). The disk drive motor stays in
-     * this state until the drive is selected agail. This bit also controls the
+     * this state until the drive is selected again. This bit also controls the
      * activity light on the front of the disk drive.
      */
     // bool mtr;
@@ -80,10 +67,6 @@ private:
      */
     bool dskchange;
     
-    // The currently selected disk head
-    // DEPRECATED
-    // bool side;
-
     // A copy of the DSKLEN register
     uint8_t dsklen;
     
@@ -105,7 +88,7 @@ private:
     
 public:
     
-    // The currently inserted disk (if any)
+    // The currently inserted disk (NULL if the drive is empty)
     Disk *disk = NULL;
     
     
@@ -134,7 +117,7 @@ private:
 public:
     
     //
-    // Accessing device properties
+    // Getter and setter
     //
     
     // Returns the device number (0 = df0, 1 = df1, 2 = df2, 3 = df3).
@@ -155,7 +138,13 @@ public:
     // Indicates whether this drive is a turbo drive.
     bool isTurboDrive() { return speed > 128; }
 
-    // Returns the drive identification code.
+    /* Returns the drive identification code.
+     * Each drive identifies itself by a 32 bit identification code that is
+     * transmitted via the DRVRDY signal in a special identification mode. The
+     * identification mode is activated by switching the drive motor on and
+     * off.
+     */
+    
     uint32_t getDriveId();
     
     
@@ -205,7 +194,6 @@ public:
     // Handling disks
     //
 
-
     bool hasDisk() { return disk != NULL; }
     bool hasModifiedDisk() { return disk ? disk->isModified() : false; }
     void setModifiedDisk(bool value) { if (disk) disk->setModified(value); }
@@ -219,14 +207,9 @@ public:
     void insertDisk(Disk *disk);
     void insertDisk(ADFFile *file);
     
-    /* Latches the MTR bit
-     * TODO: Quote from HRM?
-     */
-    // void latchMTR(bool value);
-    
     
     //
-    // Register delegation methods
+    // Delegation methods
     //
     
     // Write handler for the PRB register of CIA B

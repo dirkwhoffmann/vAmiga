@@ -340,15 +340,15 @@ uint32_t
 ADFFile::sectorChecksum(int sector)
 {
     assert(isSectorNr(sector));
-    
+
+    uint32_t result = 0;
+
     uint8_t *p = data + sector * 512;
-    uint32_t checksum = 0;
-    
     for (unsigned i = 0; i < 512; i += 4, p += 4) {
-        checksum += HI_HI_LO_LO(p[0], p[1], p[2], p[3]);
+        result += HI_HI_LO_LO(p[0], p[1], p[2], p[3]);
     }
     
-    return ~checksum + 1;
+    return ~result + 1;
 }
 
 void
