@@ -33,11 +33,18 @@ class Keyboard : public HardwareComponent {
     // The current state of the keyboard
     KeyboardState state;
     
-    // The acknowledge signal sent from the Amiga side
+    /* The acknowledge signal sent from the Amiga side.
+     * When a keycode has been sent to the Amiga, the keyboard waits for a
+     * handshake signal before transmitting any more keycodes. The handshake
+     * is transmitted via the SP line of CIA A.
+     */
     bool handshake;
     
-    // Size of the keycode type-ahead buffer
-    static const size_t bufferSize = 10;
+    /* Size of the keycode type-ahead buffer
+     * The original keyboard has as type-ahead buffer of size 10. We allow
+     * a slightly bigger number.
+     */
+    static const size_t bufferSize = 16;
     
     // The keycode type-ahead buffer
     uint8_t typeAheadBuffer[bufferSize];
@@ -45,8 +52,7 @@ class Keyboard : public HardwareComponent {
     // Next free position in the type ahead buffer
     uint8_t bufferIndex;
     
-    // Indicates if a key is currently held down (array index = raw key code).
-    // DEPRECATED
+    // Remebers the keys that are currently held down
     bool keyDown[128];
     
     
@@ -68,6 +74,18 @@ private:
      void _powerOn() override;
      void _reset() override;
      void _dump() override;
+  
+    
+    //
+    // Pressing and releasing keys
+    //
+    
+public:
+
+    bool keyIsPressed(long keycode);
+    void pressKey(long keycode);
+    void releaseKey(long keycode);
+    void releaseAllKeys();
     
     
     //
@@ -92,23 +110,17 @@ public:
     void execute();
     
     
-    bool keyIsPressed(long keycode);
-    void pressKey(long keycode);
-    void releaseKey(long keycode);
-    void releaseAllKeys();
-    
-    
     //
-    // Working with the type-ahead buffer
+    // Managing the type-ahead buffer
     //
     
-    // Indicates if a keycode is present
+    // Returns true if the buffer contains at least one keycode.
     bool bufferHasData() { return bufferIndex != 0; }
 
-    // Reads a keycode from the type-ahead buffer
+    // Reads a keycode from the type-ahead buffer.
     uint8_t readFromBuffer();
     
-    // Writes a keycode into the type-ahead buffer
+    // Writes a keycode into the type-ahead buffer.
     void writeToBuffer(uint8_t keycode);
 };
 

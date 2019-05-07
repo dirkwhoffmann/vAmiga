@@ -120,12 +120,12 @@ Keyboard::pressKey(long keycode)
     assert(keycode < 0x80);
         
     if (!keyDown[keycode]) {
+        
         debug("Pressing Amiga key %02X\n", keycode);
+        
+        keyDown[keycode] = true;
+        writeToBuffer(keycode);
     }
-    keyDown[keycode] = true;
-
-    writeToBuffer(keycode);
-    dump();
 }
 
 void
@@ -134,12 +134,12 @@ Keyboard::releaseKey(long keycode)
     assert(keycode < 0x80);
 
     if (keyDown[keycode]) {
+        
         debug("Releasing Amiga key %02X\n", keycode);
+        
+        keyDown[keycode] = false;
+        writeToBuffer(keycode | 0x80);
     }
-    keyDown[keycode] = false;
-    
-    writeToBuffer(keycode | 0x80);
-    dump();
 }
 
 void

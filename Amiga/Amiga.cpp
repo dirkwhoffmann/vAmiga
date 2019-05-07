@@ -717,7 +717,6 @@ Amiga::loadFromSnapshotUnsafe(AmigaSnapshot *snapshot)
     
     if (snapshot && (ptr = snapshot->getData())) {
         loadFromBuffer(&ptr);
-        keyboard.releaseAllKeys(); // Avoid constantly pressed keys
         ping();
     }
 }
