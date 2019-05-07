@@ -119,15 +119,17 @@ public:
     //
     
     // Cylinder, track, and sector counts
+    long numSides() { return numSides(type); }
     long numCyclinders() { return numCylinders(type); }
     long numTracks() { return numTracks(type); }
     long numSectors() { return numSectors(type); }
     long numSectorsTotal() { return numSectorsTotal(type); }
     
     // Consistency checking
-    bool isValidCylinder(long nr) { return nr >= 0 && nr < numCyclinders(); }
-    bool isValidTrack(long nr) { return nr >= 0 && nr < numTracks(); }
-    bool isValidSector(long nr) { return nr >= 0 && nr < numSectors(); }
+    bool isValidSideNr(Side s) { return s >= 0 && s < numSides(); }
+    bool isValidCylinderNr(Cylinder c) { return c >= 0 && c < numCyclinders(); }
+    bool isValidTrack(Track t) { return t >= 0 && t < numTracks(); }
+    bool isValidSector(Sector s) { return s >= 0 && s < numSectors(); }
     
     
     //
@@ -135,10 +137,10 @@ public:
     //
     
     // Reads a byte from disk
-    uint8_t readHead(uint8_t cylinder, uint8_t side, uint16_t offset);
+    uint8_t readHead(Cylinder cylinder, Side side, uint16_t offset);
 
     // Writes a byte to disk
-    void writeHead(uint8_t value, uint8_t cylinder, uint8_t side, uint16_t offset);
+    void writeHead(uint8_t value, Cylinder cylinder, Side side, uint16_t offset);
 
     
     //
