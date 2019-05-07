@@ -231,8 +231,8 @@ public:
      * in the dedicated drive DMA slots in each rasterline.
      */
     void performDMA();
-    void performDMARead(Drive *d);
-    void performDMAWrite(Drive *d);
+    void performDMARead(Drive *drive);
+    void performDMAWrite(Drive *drive);
  
     void readByte();
 
@@ -240,16 +240,16 @@ public:
      * The simplified DMA transfer does not emulate a FIFO buffer.
      */
     void performSimpleDMA();
-    void performSimpleDMARead(Drive *dfsel);
-    void performSimpleDMAWrite(Drive *dfsel);
+    void performSimpleDMARead(Drive *drive);
+    void performSimpleDMAWrite(Drive *drive);
 
     /* Emulates a turbo-drive DMA access.
      * If a turbo drive is attached, these function are used. They are called
      * immediately when DSKLEN is written to.
      */
     void performTurboDMA(Drive *d);
-    void performTurboRead(Drive *d, uint32_t numWords);
-    void performTurboWrite(Drive *d, uint32_t numWords);
+    void performTurboRead(Drive *drive);
+    void performTurboWrite(Drive *drive);
 };
 
 #endif

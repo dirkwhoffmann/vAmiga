@@ -613,22 +613,22 @@ DiskController::performSimpleDMAWrite(Drive *dfsel)
 }
 
 void
-DiskController::performTurboDMA(Drive *d)
+DiskController::performTurboDMA(Drive *drive)
 {
     // Only proceed if there are remaining bytes to read.
-    if (!(dsklen & 0x3FFF)) return;
+    if ((dsklen & 0x3FFF) == 0) return;
     
     // Perform action depending on DMA state
     switch (state) {
             
         case DRIVE_DMA_READ:
             
-            performTurboRead(d, dsklen & 0x3FFF);
+            performTurboRead(drive);
             break;
             
         case DRIVE_DMA_WRITE:
             
-            performTurboWrite(d, dsklen & 0x3FFF);
+            performTurboWrite(drive);
             break;
             
         default:
@@ -641,17 +641,17 @@ DiskController::performTurboDMA(Drive *d)
 }
 
 void
-DiskController::performTurboRead(Drive *d, uint32_t numWords)
+DiskController::performTurboRead(Drive *drive)
 {
-    plaindebug(1, "Turbo-reading %d words from disk.\n", numWords);
+    plaindebug(1, "Turbo-reading %d words from disk.\n", dsklen & 0x3FFF);
     
-    for (unsigned i = 0; i < numWords; i++) {
+    for (unsigned i = 0; i < (dsklen & 0x3FFF); i++) {
         
         // Read word from disk.
-        uint8_t byte1 = d->readHead();
-        d->rotate();
-        uint8_t byte2 = d->readHead();
-        d->rotate();
+        uint8_t byte1 = drive->readHead();
+        drive->rotate();
+        uint8_t byte2 = drive->readHead();
+        drive->rotate();
         uint16_t word = HI_LO(byte1, byte2);
         
         // Write word into memory.
@@ -662,15 +662,15 @@ DiskController::performTurboRead(Drive *d, uint32_t numWords)
         checksum = fnv_1a_it32(checksum, word);
     }
         
-    plaindebug(2, "Turbo read %s: checksum = %X\n", d->getDescription(), checksum);
+    plaindebug(2, "Turbo read %s: checksum = %X\n", drive->getDescription(), checksum);
 }
 
 void
-DiskController::performTurboWrite(Drive *d, uint32_t numWords)
+DiskController::performTurboWrite(Drive *drive)
 {
-    plaindebug(1, "Turbo-writing %d words to disk.\n", numWords);
+    plaindebug(1, "Turbo-writing %d words to disk.\n", dsklen & 0x3FFF);
     
-    for (unsigned i = 0; i < numWords; i++) {
+    for (unsigned i = 0; i < (dsklen & 0x3FFF); i++) {
         
         // Read word from memory
         uint16_t word = amiga->mem.peekChip16(amiga->agnus.dskpt);
@@ -681,12 +681,12 @@ DiskController::performTurboWrite(Drive *d, uint32_t numWords)
         checksum = fnv_1a_it32(checksum, word);
         
         // Write word to disk
-        d->writeHead(HI_BYTE(word));
-        d->rotate();
-        d->writeHead(LO_BYTE(word));
-        d->rotate();
+        drive->writeHead(HI_BYTE(word));
+        drive->rotate();
+        drive->writeHead(LO_BYTE(word));
+        drive->rotate();
     }
     
-    plaindebug(2, "Turbo write %s: checksum = %X\n", d->getDescription(), checksum);
+    plaindebug(2, "Turbo write %s: checksum = %X\n", drive->getDescription(), checksum);
 }
 
