@@ -552,11 +552,17 @@ struct AmigaFileWrapper;
 }
 
 + (BOOL)isADFFile:(NSString *)path;
-+ (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)length;
-+ (instancetype) makeWithFile:(NSString *)path;
-+ (instancetype) makeWithDiskType:(DiskType)type;
-+ (instancetype) makeWithDrive:(DriveProxy *)drive;
++ (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)length;
++ (instancetype)makeWithFile:(NSString *)path;
++ (instancetype)makeWithDiskType:(DiskType)type;
++ (instancetype)makeWithDrive:(DriveProxy *)drive;
 
+- (DiskType)diskType;
+- (NSInteger)numCylinders;
+- (NSInteger)numHeads;
+- (NSInteger)numTracks;
+- (NSInteger)numSectors;
+- (NSInteger)numSectorsPerTrack;
 - (void)formatDisk:(FileSystemType)fs;
 - (void)seekTrack:(NSInteger)nr;
 - (void)seekSector:(NSInteger)nr;

@@ -29,41 +29,49 @@ class DiskMountController : DialogController {
     
     func setCylinder(_ newValue: Int) {
 
-        if (newValue >= 0 && newValue <= 79) {
+        if (newValue >= 0 && newValue < disk.numCylinders()) {
+            
+            let spt = disk.numSectorsPerTrack()
             
             _cylinder = newValue
             _track    = _cylinder * 2 + _head
-            _sector   = (_track * 11) + (_sector % 11)
+            _sector   = (_track * spt) + (_sector % spt)
         }
     }
     
     func setHead(_ newValue: Int) {
         
-        if (newValue >= 0 && newValue <= 1) {
+        if (newValue >= 0 && newValue < disk.numHeads()) {
+            
+            let spt = disk.numSectorsPerTrack()
             
             _head     = newValue
             _track    = _cylinder * 2 + _head
-            _sector   = (_track * 11) + (_sector % 11)
+            _sector   = (_track * spt) + (_sector % spt)
         }
     }
     
     func setTrack(_ newValue: Int) {
         
-        if (newValue >= 0 && newValue <= 159) {
+        if (newValue >= 0 && newValue < disk.numTracks()) {
+            
+            let spt = disk.numSectorsPerTrack()
             
             _track    = newValue
             _cylinder = _track / 2
             _head     = _track % 2
-            _sector   = (_track * 11) + (_sector % 11)
+            _sector   = (_track * spt) + (_sector % spt)
         }
     }
 
     func setSector(_ newValue: Int) {
         
-        if (newValue >= 0 && newValue <= 1759) {
+        if (newValue >= 0 && newValue < disk.numSectors()) {
+            
+            let spt = disk.numSectorsPerTrack()
             
             _sector   = newValue
-            _track    = _sector / 11
+            _track    = _sector / spt
             _cylinder = _track / 2
             _head     = _track % 2
         }
@@ -72,6 +80,7 @@ class DiskMountController : DialogController {
     // Outlets
     @IBOutlet weak var diskIcon: NSImageView!
     @IBOutlet weak var disclosureButton: NSButton!
+    @IBOutlet weak var infoText: NSTextField!
     @IBOutlet weak var warningText: NSTextField!
     @IBOutlet weak var previewScrollView: NSScrollView!
     @IBOutlet weak var previewTable: NSTableView!
@@ -136,17 +145,34 @@ class DiskMountController : DialogController {
         let size = window!.frame.size
         let hide = size.height < 300
         
+        // Update disk icon
         diskIcon.image = NSImage.init(named: writeProtect ? "adfdisk_protected" : "adfdisk")
         
+        // Update text fields
+        let typeName = [
+            DISK_35_DD.rawValue :   "3.5\"DD Amiga",
+            DISK_35_DD_PC.rawValue: "3.5\"DD PC",
+            DISK_35_HD.rawValue:    "3.5\"HD Amiga",
+            DISK_35_HD_PC.rawValue: "3.5\"HD PC",
+            DISK_525_SD.rawValue:   "5.25\"SD PC"
+        ]
+        let str = typeName[disk.diskType().rawValue]!
+        infoText.stringValue = "A byte-accurate image of \(str) diskette."
+        let compatible = disk.diskType() == DISK_35_DD
+            
         // Update the disclosure button state
         disclosureButton.state = shrinked ? .off : .on
-        warningText.isHidden = true
+        warningText.isHidden = compatible
         
-        // Check for connected drives
-        df0Button.isEnabled = amigaProxy?.diskController.isConnected(0) ?? false
-        df1Button.isEnabled = amigaProxy?.diskController.isConnected(1) ?? false
-        df2Button.isEnabled = amigaProxy?.diskController.isConnected(2) ?? false
-        df3Button.isEnabled = amigaProxy?.diskController.isConnected(3) ?? false
+        // Check for available drives
+        let connected0 = amigaProxy?.diskController.isConnected(0) ?? false
+        let connected1 = amigaProxy?.diskController.isConnected(1) ?? false
+        let connected2 = amigaProxy?.diskController.isConnected(2) ?? false
+        let connected3 = amigaProxy?.diskController.isConnected(3) ?? false
+        df0Button.isEnabled = compatible && connected0
+        df1Button.isEnabled = compatible && connected1
+        df2Button.isEnabled = compatible && connected2
+        df3Button.isEnabled = compatible && connected3
 
         // Hide some elements if window is shrinked
         let items: [NSView] = [

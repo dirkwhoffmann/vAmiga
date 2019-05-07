@@ -49,7 +49,7 @@ public:
     // Methods from VAFile
     //
     
-    AmigaFileType type() override { return FILETYPE_KICK_ROM; }
+    AmigaFileType fileType() override { return FILETYPE_KICK_ROM; }
     const char *typeAsString() override { return "Kickstart Rom"; }
     bool bufferHasSameType(const uint8_t *buffer, size_t length) override {
         return isKickRomBuffer(buffer, length); }

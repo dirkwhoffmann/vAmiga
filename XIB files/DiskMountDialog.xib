@@ -19,6 +19,7 @@
                 <outlet property="headField" destination="pwN-5n-4M6" id="jMb-O7-moN"/>
                 <outlet property="headStepper" destination="l0l-Am-DEQ" id="Kbw-aL-ANl"/>
                 <outlet property="headText" destination="ElG-iD-hXO" id="xan-sm-Kc5"/>
+                <outlet property="infoText" destination="JMf-QF-9dD" id="uaR-lO-RE7"/>
                 <outlet property="previewScrollView" destination="2Kv-eb-LiJ" id="NEB-cp-vNY"/>
                 <outlet property="previewTable" destination="3hQ-0q-ukR" id="llq-mw-083"/>
                 <outlet property="sectorField" destination="Keq-9F-PsI" id="Ub0-3i-axn"/>
@@ -27,7 +28,6 @@
                 <outlet property="trackField" destination="zpl-ky-LkY" id="N0v-ho-MyQ"/>
                 <outlet property="trackStepper" destination="CYH-BP-kHV" id="izM-d1-KYt"/>
                 <outlet property="trackText" destination="KM8-Fa-oNO" id="d6D-C9-7GV"/>
-                <outlet property="warnMessageText" destination="nyT-rh-hux" id="2mR-9a-DMd"/>
                 <outlet property="warningText" destination="nyT-rh-hux" id="g8y-1l-ogq"/>
                 <outlet property="window" destination="WVX-DH-I0u" id="CxT-wS-1TR"/>
             </connections>
@@ -325,9 +325,9 @@ Gw
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nyT-rh-hux">
-                        <rect key="frame" x="127" y="289" width="371" height="14"/>
+                        <rect key="frame" x="127" y="295" width="371" height="14"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="This image is too large to fit in a single-density drive." id="0rY-31-tK2">
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="This disk format is not yet supported by the emulator." id="0rY-31-tK2">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="systemRedColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>

@@ -96,7 +96,7 @@ public:
     // Methods from AmigaFile
     //
     
-    AmigaFileType type() override { return FILETYPE_SNAPSHOT; }
+    AmigaFileType fileType() override { return FILETYPE_SNAPSHOT; }
     const char *typeAsString() override { return "VAMIGA"; }
     bool bufferHasSameType(const uint8_t *buffer, size_t length) override;
     bool fileHasSameType(const char *filename) override;

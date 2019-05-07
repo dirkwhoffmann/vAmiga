@@ -851,7 +851,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 - (AmigaFileType)type
 {
-    return wrapper->file->type();
+    return wrapper->file->fileType();
 }
 - (NSInteger) sizeOnDisk
 {
@@ -975,21 +975,30 @@ struct ADFFileWrapper { ADFFile *adf; };
     ADFFile *archive = ADFFile::makeWithDisk(d->disk);
     return archive ? [self make: archive] : nil;
 }
-
-/*
-+ (instancetype) makeUnformatted:(DiskType)type
+- (DiskType)diskType
 {
-    ADFFile *archive = ADFFile::makeUnformatted(type);
-    return [self make: archive];
+    return ((ADFFile *)wrapper->file)->getDiskType();
 }
-*/
-/*
-+ (instancetype) makeFormatted:(DiskType) type fileSystem:(FileSystemType) fs
+- (NSInteger)numCylinders
 {
-    ADFFile *archive = ADFFile::makeFormatted(type, fs);
-    return [self make: archive];
+    return ((ADFFile *)wrapper->file)->getNumCyclinders();
 }
-*/
+- (NSInteger)numHeads
+{
+    return 2;
+}
+- (NSInteger)numTracks
+{
+    return ((ADFFile *)wrapper->file)->getNumTracks();
+}
+- (NSInteger)numSectors
+{
+    return ((ADFFile *)wrapper->file)->getNumSectors();
+}
+- (NSInteger)numSectorsPerTrack
+{
+    return ((ADFFile *)wrapper->file)->getNumSectorsPerTrack();
+}
 - (void)formatDisk:(FileSystemType)fs
 {
     ((ADFFile *)wrapper->file)->formatDisk(fs);

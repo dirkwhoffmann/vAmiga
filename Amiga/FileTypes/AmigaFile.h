@@ -60,7 +60,7 @@ public:
     //
     
     // Returns the type of this file.
-    virtual AmigaFileType type() { return FILETYPE_UKNOWN; }
+    virtual AmigaFileType fileType() { return FILETYPE_UKNOWN; }
     
     // Returns a string representation of the file type, e.g., "ADF".
     virtual const char *typeAsString() { return ""; }

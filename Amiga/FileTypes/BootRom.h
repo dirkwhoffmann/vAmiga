@@ -54,7 +54,7 @@ public:
     // Methods from VAFile
     //
     
-    AmigaFileType type() override { return FILETYPE_BOOT_ROM; }
+    AmigaFileType fileType() override { return FILETYPE_BOOT_ROM; }
     const char *typeAsString() override { return "Boot Rom"; }
     bool bufferHasSameType(const uint8_t *buffer, size_t length) override {
         return isBootRomBuffer(buffer, length); }
