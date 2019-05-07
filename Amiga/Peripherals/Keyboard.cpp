@@ -61,8 +61,12 @@ Keyboard::sendKeyCode(uint8_t keyCode)
 void
 Keyboard::execute()
 {
-    // REMOVE ASAP
-    // handshake = true;
+    // Experimental: Ignore the handshake
+    // Emulating the handshake signal leads to weired delay effects which may
+    // be caused by missing time-out checks performed by the real Amiga
+    // keyboard. Ignoring the handshake signal results in a keyboard that
+    // works pretty well, so we stick to this solution for now.
+    handshake = true;
     
     switch (state) {
             
@@ -96,7 +100,7 @@ Keyboard::execute()
             
         case KB_NORMAL_OPERATION:
             
-            if (handshake && bufferHasData()) {
+            if (handshake && !bufferIsEmpty()) {
                 sendKeyCode(readFromBuffer());
                 handshake = false;
             }
@@ -119,7 +123,7 @@ Keyboard::pressKey(long keycode)
 {
     assert(keycode < 0x80);
         
-    if (!keyDown[keycode]) {
+    if (!keyDown[keycode] && !bufferIsFull()) {
         
         debug("Pressing Amiga key %02X\n", keycode);
         
@@ -133,7 +137,7 @@ Keyboard::releaseKey(long keycode)
 {
     assert(keycode < 0x80);
 
-    if (keyDown[keycode]) {
+    if (keyDown[keycode] && !bufferIsFull()) {
         
         debug("Releasing Amiga key %02X\n", keycode);
         
@@ -153,7 +157,7 @@ Keyboard::releaseAllKeys()
 uint8_t
 Keyboard::readFromBuffer()
 {
-    assert(bufferHasData());
+    assert(!bufferIsEmpty());
     
     uint8_t result = typeAheadBuffer[0];
     
@@ -168,8 +172,8 @@ Keyboard::readFromBuffer()
 void
 Keyboard::writeToBuffer(uint8_t keycode)
 {
-    if (bufferIndex < bufferSize) {
-        typeAheadBuffer[bufferIndex] = keycode;
-        bufferIndex++;
-    }
+    assert(!bufferIsFull());
+    
+    typeAheadBuffer[bufferIndex] = keycode;
+    bufferIndex++;
 }

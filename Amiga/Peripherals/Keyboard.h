@@ -41,10 +41,9 @@ class Keyboard : public HardwareComponent {
     bool handshake;
     
     /* Size of the keycode type-ahead buffer
-     * The original keyboard has as type-ahead buffer of size 10. We allow
-     * a slightly bigger number.
+     * The original keyboard stores 10 keycodes in it's buffer.
      */
-    static const size_t bufferSize = 16;
+    static const size_t bufferSize = 10;
     
     // The keycode type-ahead buffer
     uint8_t typeAheadBuffer[bufferSize];
@@ -114,8 +113,8 @@ public:
     // Managing the type-ahead buffer
     //
     
-    // Returns true if the buffer contains at least one keycode.
-    bool bufferHasData() { return bufferIndex != 0; }
+    bool bufferIsEmpty() { return bufferIndex == 0; }
+    bool bufferIsFull() { return bufferIndex == bufferSize; }
 
     // Reads a keycode from the type-ahead buffer.
     uint8_t readFromBuffer();
