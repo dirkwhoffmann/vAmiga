@@ -174,65 +174,6 @@ class MyDocument : NSDocument {
         amigaAttachment!.setPath(filename)
     }
 
-    // OLD CODE
-    /*
-    fileprivate func createAttachment(from fileWrapper: FileWrapper,
-                                      ofType typeName: String) throws {
-        
-        guard let filename = fileWrapper.filename else {
-            throw NSError(domain: "VirtualC64", code: 0, userInfo: nil)
-        }
-        guard let data = fileWrapper.regularFileContents else {
-            throw NSError(domain: "VirtualC64", code: 0, userInfo: nil)
-        }
-        
-        let buffer = (data as NSData).bytes
-        let length = data.count
-        var openAsUntitled = true
-        
-        track("Read \(length) bytes from file \(filename).")
-        
-        switch (typeName) {
-    
-        case "CRT":
-            // Check for unsupported cartridge types
-            if CRTFileProxy.isUnsupportedCRTBuffer(buffer, length: length) {
-                let type = CRTFileProxy.typeName(ofCRTBuffer: buffer, length: length)!
-                throw NSError.unsupportedCartridgeError(filename: filename, type: type)
-            }
-            attachment = CRTFileProxy.make(withBuffer: buffer, length: length)
-            
-        case "TAP":
-            attachment = TAPFileProxy.make(withBuffer: buffer, length: length)
-            
-        case "T64":
-            attachment = T64FileProxy.make(withBuffer: buffer, length: length)
-            
-        case "PRG":
-            attachment = PRGFileProxy.make(withBuffer: buffer, length: length)
-            
-        case "D64":
-            attachment = D64FileProxy.make(withBuffer: buffer, length: length)
-            
-        case "P00":
-            attachment = P00FileProxy.make(withBuffer: buffer, length: length)
-            
-        case "G64":
-            attachment = G64FileProxy.make(withBuffer: buffer, length: length)
-
-        default:
-            throw NSError.unsupportedFormatError(filename: filename)
-        }
-        
-        if attachment == nil {
-            throw NSError.corruptedFileError(filename: filename)
-        }
-        if openAsUntitled {
-            fileURL = nil
-        }
-        attachment!.setPath(filename)
-    }
-    */
     
     //
     // Processing attachments
@@ -264,68 +205,6 @@ class MyDocument : NSDocument {
         
         return true
     }
-    
-    // OLD CODE
-    /*
-    @discardableResult
-    func mountAttachment() -> Bool {
-
-        guard let controller = myController else { return false }
-        
-        // Determine action to perform and text to type
-        var action = AutoMountAction.openBrowser
-        var autoTypeText: String?
-
-        func getAction(_ type: String) {
-            action = controller.autoMountAction[type] ?? action
-            if action != .openBrowser && (controller.autoType[type] ?? false) {
-                autoTypeText = controller.autoTypeText[type]
-            }
-        }
-
-        switch(attachment) {
-        case _ as SnapshotProxy: c64.flash(attachment); return true
-        case _ as D64FileProxy, _ as G64FileProxy: getAction("D64")
-        case _ as PRGFileProxy, _ as P00FileProxy: getAction("PRG")
-        case _ as T64FileProxy: getAction("T64")
-        case _ as TAPFileProxy: getAction("TAP")
-        case _ as CRTFileProxy: getAction("CRT")
-        default: return false
-        }
-    
-        // Check if the emulator has just been startet. In that case, we have
-        // to wait until the Kernal boot routine has been executed. Otherwise,
-        // the C64 would ignore everything we are doing here.
-        let delay = (c64.cpu.cycle() < 3000000) ? 2.0 : 0.0
-
-        // Execute asynchronously ...
-        DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: {
-            self.mountAttachment(action: action, text: autoTypeText)
-        })
-        
-        return true
-    }
-    
-    func mountAttachment(action: AutoMountAction, text: String?) {
-        
-        // Perform action
-        track("Action = \(action)")
-        switch action {
-        case .insertIntoDrive8: mountAttachmentAsDisk(drive: 1)
-        case .insertIntoDrive9: mountAttachmentAsDisk(drive: 2)
-        case .flashFirstFile: flashAttachmentIntoMemory()
-        case .insertIntoDatasette: mountAttachmentAsTape()
-        case .attachToExpansionPort: mountAttachmentAsCartridge()
-        default: break
-        }
-        
-        // Type text
-        if text != nil {
-            track("Auto typing: \(text!)")
-            myController?.keyboardcontroller.type(text! + "\n")
-        }
-    }
-    */
     
     func runDiskMountDialog() {
         let nibName = NSNib.Name("DiskMountDialog")
@@ -420,82 +299,7 @@ class MyDocument : NSDocument {
         myAppDelegate.noteNewRecentlyExportedDiskURL(url, drive: nr)
         return true
     }
-    
-    /*
-    func exportOld(drive nr: Int, to url: URL, ofType typeName: String) -> Bool {
         
-        track("url = \(url) typeName = \(typeName)")
-        assert(["ADF", "D64", "T64", "PRG", "P00", "G64"].contains(typeName))
-        
-        let drive = c64.drive(nr)!
-        
-        // Convert disk to a D64 archive
-        // guard let d64archive = D64Proxy.make(withDrive: drive) else {
-        guard let d64archive = D64FileProxy.make(withDisk: drive.disk) else {
-            return false
-        }
-        
-        // Convert the D64 archive into the target format
-        var archive: AnyArchiveProxy?
-        switch typeName.uppercased() {
-        case "D64":
-            track("Exporting to D64 format")
-            archive = d64archive
-        
-        case "G64":
-            track("Exporting to G64 format")
-            archive = G64FileProxy.make(withDisk: drive.disk)
-
-        case "ADF":
-            
-            //
-            // TODO: IMPLEMENT THIS
-            //
-            
-            track("Exporting to ADF format. TO BE IMPLEMENTED")
-            // archive = ADFFileProxy.make(withDisk: drive.disk)
-
-        case "T64":
-            track("Exporting to T64 format")
-            archive = T64FileProxy.make(withAnyArchive: d64archive)
-            
-        case "PRG":
-            track("Exporting to PRG format")
-            if d64archive.numberOfItems() > 1  {
-                showDiskHasMultipleFilesAlert(format: "PRG")
-            }
-            archive = PRGFileProxy.make(withAnyArchive: d64archive)
-            
-        case "P00":
-            track("Exporting to P00 format")
-            if d64archive.numberOfItems() > 1  {
-                showDiskHasMultipleFilesAlert(format: "P00")
-            }
-            archive = P00FileProxy.make(withAnyArchive: d64archive)
-            
-        default:
-            fatalError()
-        }
-        
-        // Serialize archive
-        let data = NSMutableData.init(length: archive!.sizeOnDisk())!
-        archive!.write(toBuffer: data.mutableBytes)
-        
-        // Write to file
-        if !data.write(to: url, atomically: true) {
-            showExportErrorAlert(url: url)
-            return false
-        }
-        
-        // Mark disk as "not modified"
-        drive.setModifiedDisk(false)
-        
-        // Remember export URL
-        noteNewRecentlyExportedDiskURL(url, drive: nr)
-        return true
-    }
-    */
-    
     @discardableResult
     func export(drive nr: Int, to url: URL?) -> Bool {
         

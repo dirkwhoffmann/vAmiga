@@ -300,7 +300,8 @@ class Amiga : public HardwareComponent {
     
     // Changes the configuration
     bool configure(ConfigOption option, long value);
-    
+    bool configureDrive(unsigned drive, ConfigOption option, long value);
+
     // Configures the Amiga model to emulate (DEPRECATED)
     bool configureModel(AmigaModel model);
     bool configureLayout(long value);

@@ -626,23 +626,6 @@ extension Defaults {
     static let pauseInBackground    = false
     static let autoSnapshots        = true
     static let autoSnapshotInterval = 3
-    
-    // Media files
-    static let autoMountAction      = [ "D64": AutoMountAction.openBrowser,
-                                        "PRG": AutoMountAction.openBrowser,
-                                        "T64": AutoMountAction.openBrowser,
-                                        "TAP": AutoMountAction.openBrowser,
-                                        "CRT": AutoMountAction.openBrowser,]
-    static let autoType             = [ "D64": true,
-                                        "PRG": true,
-                                        "T64": true,
-                                        "TAP": true,
-                                        "CRT": false]
-    static let autoTypeText         = [ "D64": "LOAD \"*\",8,1:",
-                                        "PRG": "RUN",
-                                        "T64": "RUN",
-                                        "TAP": "LOAD",
-                                        "CRT": ""]
 }
 
 extension MyController {
@@ -672,11 +655,7 @@ extension MyController {
         
         let defaults = UserDefaults.standard
         
-        defaults.register(defaults: dictionary)
-        
-        defaults.register(encodableItem: Defaults.autoMountAction, forKey: Keys.autoMountAction)
-        defaults.register(encodableItem: Defaults.autoType, forKey: Keys.autoType)
-        defaults.register(encodableItem: Defaults.autoTypeText, forKey: Keys.autoTypeText)
+        defaults.register(defaults: dictionary)        
     }
 
     func resetEmulatorUserDefaults() {

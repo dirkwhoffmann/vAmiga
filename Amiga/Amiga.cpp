@@ -225,7 +225,6 @@ Amiga::configure(ConfigOption option, long value)
 {
     AmigaConfiguration current = getConfig();
     
-    // Check consistency
     switch (option) {
 
         case VA_AMIGA_MODEL:
@@ -235,8 +234,21 @@ Amiga::configure(ConfigOption option, long value)
                 warn("       Valid values: %d, %d, %d\n", A500, A1000, A2000);
                 return false;
             }
+            
+            if (current.model == value) return true;
+            model = (AmigaModel)value;
+            
+            // Apply model specific config changes
+            if (model == A2000) realTimeClock = true;
+            mem.updateMemSrcTable();
             break;
         
+        case VA_KB_LAYOUT:
+            
+            if (current.layout == value) return true;
+            keyboard.layout = value;
+            break;
+            
         case VA_CHIP_RAM:
             
             if (value != 256 && value != 512) {
@@ -244,6 +256,8 @@ Amiga::configure(ConfigOption option, long value)
                 warn("         Valid values: 256KB, 512KB\n");
                 return false;
             }
+            
+            mem.allocateChipRam(KB(value));
             break;
     
         case VA_SLOW_RAM:
@@ -253,6 +267,8 @@ Amiga::configure(ConfigOption option, long value)
                 warn("         Valid values: 0KB, 256KB, 512KB\n");
                 return false;
             }
+            
+            mem.allocateSlowRam(KB(value));
             break;
         
         case VA_FAST_RAM:
@@ -262,150 +278,10 @@ Amiga::configure(ConfigOption option, long value)
                 warn("         Valid values: 0KB, 64KB, 128KB, ..., 8192KB (8MB)\n");
                 return false;
             }
-            break;
-  
-        case VA_DF0_CONNECT:
             
-            if (value == false) {
-                warn("Df0 cannot be disconnected. Ignoring.\n");
-                return false;
-            }
-            break;
-            
-        case VA_DF0_TYPE:
-        case VA_DF1_TYPE:
-        case VA_DF2_TYPE:
-        case VA_DF3_TYPE:
-            
-            if (!isDriveType(value)) {
-                warn("Invalid drive type: %d\n", value);
-                return false;
-            }
-            
-            if (value != DRIVE_35_DD) {
-                warn("Unsupported drive type: %s\n", driveTypeName((DriveType)value));
-                return false;
-            }
-            break;
-            
-        case VA_DF0_SPEED:
-        case VA_DF1_SPEED:
-        case VA_DF2_SPEED:
-        case VA_DF3_SPEED:
-
-            if (value <= 0) {
-                warn("Invalid drive speed: %d\n", value);
-                return false;
-            }
-            break;
-            
-        default:
-            break;
-    }
-    
-    // Change configuration
-    switch (option) {
-            
-        case VA_AMIGA_MODEL:
-
-            if (current.model == value) return true;
-            model = (AmigaModel)value;
-            
-            // Apply model specific config changes
-            if (model == A2000) realTimeClock = true;
-            mem.updateMemSrcTable();
-            break;
-
-        case VA_KB_LAYOUT:
-            
-            if (current.layout == value) return true;
-            keyboard.layout = value;
-            break;
-            
-        case VA_CHIP_RAM:
-            
-            mem.allocateChipRam(KB(value));
-            break;
-            
-        case VA_SLOW_RAM:
-
-            mem.allocateSlowRam(KB(value));
-            break;
-            
-        case VA_FAST_RAM:
-
             mem.allocateFastRam(KB(value));
             break;
-            
-        case VA_DF0_CONNECT:
-            return true;
-
-        case VA_DF1_CONNECT:
-
-            if (current.df1.connected == value) return true;
-            paula.diskController.setConnected(1, value);
-            break;
-
-        case VA_DF2_CONNECT:
-
-            if (current.df2.connected == value) return true;
-            paula.diskController.setConnected(2, value);
-            break;
-
-        case VA_DF3_CONNECT:
-
-            if (current.df3.connected == value) return true;
-            paula.diskController.setConnected(3, value);
-            break;
-            
-        case VA_DF0_TYPE:
-            
-            if (current.df0.type == value) return true;
-            df0.setType((DriveType)value);
-            break;
-            
-        case VA_DF1_TYPE:
-            
-            if (current.df1.type == value) return true;
-            df1.setType((DriveType)value);
-            break;
-            
-        case VA_DF2_TYPE:
-            
-            if (current.df2.type == value) return true;
-            df2.setType((DriveType)value);
-            break;
-            
-        case VA_DF3_TYPE:
-            
-            if (current.df3.type == value) return true;
-            df3.setType((DriveType)value);
-            break;
-            
-        case VA_DF0_SPEED:
-            
-            if (current.df0.speed == value) return true;
-            df0.setSpeed(value);
-            break;
-
-        case VA_DF1_SPEED:
-            
-            if (current.df1.speed == value) return true;
-            df1.setSpeed(value);
-            break;
-
-        case VA_DF2_SPEED:
-            
-            if (current.df2.speed == value) return true;
-            df2.setSpeed(value);
-            break;
-
-        case VA_DF3_SPEED:
-            
-            if (current.df3.speed == value) return true;
-            df0.setSpeed(value);
-            break;
-
+  
         case VA_RT_CLOCK:
             
             if (current.realTimeClock == value) return true;
@@ -413,7 +289,7 @@ Amiga::configure(ConfigOption option, long value)
             mem.updateMemSrcTable();
             break;
             
-        case VA_EXAXT_BLITTER:
+        case VA_EXACT_BLITTER:
             
             if (current.exactBlitter == value) return true;
             agnus.blitter.setExactEmulation(value);
@@ -432,195 +308,131 @@ Amiga::configure(ConfigOption option, long value)
     return true;
 }
 
+bool
+Amiga::configureDrive(unsigned drive, ConfigOption option, long value)
+{
+    if (drive >= 4) {
+        warn("Invalid drive number: %d\n");
+        return false;
+    }
+    
+    DriveConfiguration current =
+    drive == 0 ? getConfig().df0 :
+    drive == 1 ? getConfig().df1 :
+    drive == 2 ? getConfig().df2 : getConfig().df3;
+    
+    switch (option) {
+            
+        case VA_DRIVE_CONNECT:
+            
+            if (drive == 0 && value == false) {
+                warn("Df0 cannot be disconnected. Ignoring.\n");
+                return false;
+            }
+
+            if (current.connected == value) return true;
+            paula.diskController.setConnected(drive, value);
+            break;
+            
+        case VA_DRIVE_TYPE:
+            
+            if (!isDriveType(value)) {
+                warn("Invalid drive type: %d\n", value);
+                return false;
+            }
+            
+            if (value != DRIVE_35_DD) {
+                warn("Unsupported drive type: %s\n", driveTypeName((DriveType)value));
+                return false;
+            }
+            
+            if (current.type == value) return true;
+            df[drive]->setType((DriveType)value);
+            break;
+            
+        case VA_DRIVE_SPEED:
+            
+            if (value <= 0) {
+                warn("Invalid drive speed: %d\n", value);
+                return false;
+            }
+            
+            if (current.speed == value) return true;
+            df[drive]->setSpeed(value);
+            break;
+            
+        default: assert(false);
+    }
+    
+    putMessage(MSG_CONFIG);
+    return true;
+}
+
 
 bool
 Amiga::configureModel(AmigaModel m)
 {
     return configure(VA_AMIGA_MODEL, m);
-    /*
-    if (!isAmigaModel(m)) {
-        
-        warn("Invalid Amiga model: %d\n", m);
-        warn("       Valid values: %d, %d, %d\n", A500, A1000, A2000);
-        return false;
-    }
-    
-    // Only proceed if the configuration changes
-    if (model == m) return true;
-    
-    model = m;
-    
-    // Adjust model specific config items
-    if (model == A2000) {
-        realTimeClock = true;
-    }
-    
-    mem.updateMemSrcTable();
-    putMessage(MSG_CONFIG);
-    
-    return true;
-    */
 }
 
 bool
 Amiga::configureLayout(long layout)
 {
     return configure(VA_KB_LAYOUT, layout);
-    /*
-    if (keyboard.layout != layout) {
-        
-        keyboard.layout = layout;
-        putMessage(MSG_CONFIG);
-    }
-    
-    return true;
-    */
 }
 
 bool
 Amiga::configureChipMemory(long size)
 {
     return configure(VA_CHIP_RAM, size);
-    /*
-    if (size != 256 && size != 512) {
-        
-        warn("Invalid Chip Ram size: %d\n", size);
-        warn("         Valid values: 256KB, 512KB\n");
-        return false;
-    }
-    
-    mem.allocateChipRam(KB(size));
-    putMessage(MSG_CONFIG);
-    return true;
-    */
 }
 
 bool
 Amiga::configureSlowMemory(long size)
 {
     return configure(VA_SLOW_RAM, size);
-    
-    /*
-    if ((size % 256) != 0 || size > 512) {
-        
-        warn("Invalid Slow Ram size: %d\n", size);
-        warn("         Valid values: 0KB, 256KB, 512KB\n");
-        return false;
-    }
-    
-    mem.allocateSlowRam(KB(size));
-    putMessage(MSG_CONFIG);
-    return true;
-    */
 }
 
 bool
 Amiga::configureFastMemory(long size)
 {
     return configure(VA_FAST_RAM, size);
-    /*
-    if ((size % 64) != 0 || size > 8192) {
-        
-        warn("Invalid Fast Ram size: %d\n", size);
-        warn("         Valid values: 0KB, 64KB, 128KB, ..., 8192KB (8MB)\n");
-        return false;
-    }
-    
-    mem.allocateFastRam(KB(size));
-    putMessage(MSG_CONFIG);
-    return true;
-    */
 }
 
 void
 Amiga::configureRealTimeClock(bool value)
 {
     configure(VA_RT_CLOCK, value);
-    /*
-    if (realTimeClock != value) {
-        
-        realTimeClock = value;
-        mem.updateMemSrcTable();
-        putMessage(MSG_CONFIG);
-    }
-    */
 }
 
 bool
 Amiga::configureDrive(unsigned driveNr, bool connected)
 {
-    if (driveNr >= 4) {
-        warn("Invalid drive number (%d). Ignoring request.\n", df);
-        return false;
-    }
-
-    if (driveNr == 0 && !connected) {
-        warn("Df0 cannot be disconnected. Ignoring request.\n");
-        connected = true;
-    }
-    
-    paula.diskController.setConnected(driveNr, connected);
-    putMessage(MSG_CONFIG);
-    return true;
+    return configureDrive(driveNr, VA_DRIVE_CONNECT, connected);
 }
 
 bool
 Amiga::configureDriveType(unsigned driveNr, DriveType type)
 {
-    if (driveNr >= 4) {
-        warn("Invalid drive number (%d). Ignoring.\n", driveNr);
-        return false;
-    }
-    
-    if (!isDriveType(type)) {
-        warn("Invalid drive type: %d\n", type);
-        return false;
-    }
-    
-    if (type != DRIVE_35_DD) {
-        warn("Unsupported drive type (%s). Reverting to %s\n",
-             driveTypeName(type), driveTypeName(DRIVE_35_DD));
-        type = DRIVE_35_DD;
-    }
-    
-    if (df[driveNr]->getType() != type) {
-        df[driveNr]->setType(type);
-        putMessage(MSG_CONFIG);
-    }
-    
-    return true;
+    return configureDrive(driveNr, VA_DRIVE_TYPE, type);
 }
 
 bool
 Amiga::configureDriveSpeed(unsigned driveNr, uint16_t value)
 {
-    debug("configureDriveSpeed %d %d\n", driveNr, value);
-    
-    if (driveNr >= 4) {
-        warn("Invalid drive number (%d). Ignoring.\n", driveNr);
-        return false;
-    }
-    
-    if (df[driveNr]->getSpeed() != value) {
-        df[driveNr]->setSpeed(value);
-        putMessage(MSG_CONFIG);
-    }
-
-    return true;
+    return configureDrive(driveNr, VA_DRIVE_SPEED, value);
 }
 
 void
 Amiga::configureExactBlitter(bool value)
 {
-    debug("configureExactBlitter: %d\n", value);
-    agnus.blitter.setExactEmulation(value);
+    configure(VA_EXACT_BLITTER, value);
 }
 
 void
 Amiga::configureFifoBuffering(bool value)
 {
-    debug("configureFifoBuffering: %d\n", value);
-    paula.diskController.setFifoBuffering(value);
+    configure(VA_FIFO_BUFFERING, value);
 }
 
 void

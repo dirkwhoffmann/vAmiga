@@ -64,6 +64,15 @@ typedef enum : long
     VA_CHIP_RAM,
     VA_SLOW_RAM,
     VA_FAST_RAM,
+    VA_DRIVE_CONNECT,
+    VA_DRIVE_TYPE,
+    VA_DRIVE_SPEED,
+    VA_RT_CLOCK,
+    VA_EXACT_BLITTER,
+    VA_FIFO_BUFFERING,
+
+    // DEPRECATED
+    /*
     VA_DF0_CONNECT,
     VA_DF0_TYPE,
     VA_DF0_SPEED,
@@ -75,10 +84,8 @@ typedef enum : long
     VA_DF2_SPEED,
     VA_DF3_CONNECT,
     VA_DF3_TYPE,
-    VA_DF3_SPEED,
-    VA_RT_CLOCK,
-    VA_EXAXT_BLITTER,
-    VA_FIFO_BUFFERING
+    VA_DF3_SPEED
+    */
 }
 ConfigOption;
 
