@@ -10,6 +10,7 @@
 #ifndef _VATYPES_H
 #define _VATYPES_H
 
+#include "AmigaTypes.h"
 #include "MessageQueueTypes.h"
 #include "EventHandlerTypes.h"
 #include "AgnusTypes.h"
@@ -25,61 +26,6 @@ inline bool is_uint2_t(uint2_t value) { return value <= 0x03; }
 // 24 bit binary value
 typedef uint32_t uint24_t;
 inline bool is_uint24_t(uint24_t value) { return value <= 0xFFFFFF; }
-
-
-//
-// Clocks
-//
-
-typedef int64_t Cycle;    // Cycle in master cycle units
-typedef int64_t CPUCycle; // Cycle in CPU cycle units
-typedef int64_t CIACycle; // Cycle in CIA cycle units
-typedef int64_t DMACycle; // Cycle in DMA cycle units
-
-#define CPU_CYCLES(cycles) ((cycles) << 2)
-#define CIA_CYCLES(cycles) ((cycles) * 40)
-#define DMA_CYCLES(cycles) ((cycles) << 3)
-
-#define AS_CPU_CYCLES(cycles) ((cycles) >> 2)
-#define AS_CIA_CYCLES(cycles) ((cycles) / 40)
-#define AS_DMA_CYCLES(cycles) ((cycles) >> 3)
-
-
-//
-// Amiga
-//
-
-typedef enum : long
-{
-    A500,
-    A1000,
-    A2000
-}
-AmigaModel;
-
-inline bool isAmigaModel(AmigaModel model)
-{
-    return model >= A500 && model <= A2000;
-}
-
-inline const char *modelName(AmigaModel model)
-{
-    return
-    model == A500 ? "Amiga 500" :
-    model == A1000 ? "Amiga 1000" :
-    model == A2000 ? "Amiga 2000" : "???";
-}
-
-enum RunLoopControlFlag
-{
-    RL_SNAPSHOT           = 0b00001,
-    RL_INSPECT            = 0b00010,
-    RL_ENABLE_TRACING     = 0b00100,
-    RL_ENABLE_BREAKPOINTS = 0b01000,
-    RL_STOP               = 0b10000,
-    
-    RL_DEBUG              = 0b01100
-};
 
 
 //
@@ -228,53 +174,11 @@ inline bool isVAFileType(AmigaFileType model) {
 // Configurations
 //
 
-/* Amiga configuration
- * This is a full description of the emulated computer model.
- */
-typedef struct
-{
-    bool connected;
-    DriveType type;
-    uint16_t speed;
-}
-DriveConfiguration;
-
-typedef struct
-{
-    AmigaModel model;
-    bool realTimeClock;
-    long layout;
-    DriveConfiguration df0;
-    DriveConfiguration df1;
-    DriveConfiguration df2;
-    DriveConfiguration df3;
-}
-AmigaConfiguration;
-
-typedef struct
-{
-    long chipRamSize; // size in KB
-    long slowRamSize; // size in KB
-    long fastRamSize; // size in KB
-}
-AmigaMemConfiguration;
-
 
 //
 // Info structures (Filled by calling inspect() )
 //
 
-typedef struct
-{
-    Cycle masterClock;
-    Cycle dmaClock;
-    Cycle ciaAClock;
-    Cycle ciaBClock;
-    long frame;
-    long vpos;
-    long hpos;
-}
-AmigaInfo;
 
 #define CPUINFO_INSTR_COUNT 32
 

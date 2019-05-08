@@ -17,8 +17,9 @@ DiskController::DiskController()
     registerSnapshotItems(vector<SnapshotItem> {
         
         { &connected,     sizeof(connected),     BYTE_ARRAY | PERSISTANT },
-        
-        { &selected, sizeof(selected), 0 },
+        { &emulateFifo,   sizeof(emulateFifo),   PERSISTANT },
+
+        { &selected,      sizeof(selected),      0 },
         { &acceleration,  sizeof(acceleration),  0 },
         { &state,         sizeof(state),         0 },
         { &syncFlag,      sizeof(syncFlag),      0 },
@@ -28,7 +29,8 @@ DiskController::DiskController()
         { &fifoCount,     sizeof(fifoCount),     0 },
         { &dsklen,        sizeof(dsklen),        0 },
         { &prb,           sizeof(prb),           0 },
-        
+        { &checksum,      sizeof(checksum),      0 },
+
     });
 }
 

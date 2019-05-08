@@ -16,19 +16,29 @@ class Drive;
 
 class DiskController : public HardwareComponent {
     
-private:
-    
-    // Information shown in the GUI inspector panel
-    DiskControllerInfo info;
-    
-    // Quick-references to the disk drives
-    Drive *df[4] = { NULL, NULL, NULL, NULL };
+    //
+    // Configuration items
+    //
     
     /* Connection status of all four drives.
      * Note: connected[0] is always true, because the internal drive cannot be
      * disconnected.
      */
     bool connected[4] = { true, false, false, false };
+    
+    // Indicates if a FIFO buffer should be emulated.
+    bool emulateFifo = true;
+    
+    
+    //
+    // Bookkeeping
+    //
+    
+    // Information shown in the GUI inspector panel
+    DiskControllerInfo info;
+    
+    // Quick-references to the disk drives
+    Drive *df[4] = { NULL, NULL, NULL, NULL };
     
     // The currently selected drive (-1 if no drive is selected)
     int8_t selected = -1;
@@ -47,8 +57,6 @@ private:
     //
     // Data buffers
     //
-    
-private:
     
     // The latest incoming byte (value shows up in DSKBYTER)
     uint8_t incoming;
@@ -79,6 +87,7 @@ private:
     
     // A copy of the PRB register of CIA B
     uint8_t prb;
+    
     
     //
     // Debugging
@@ -136,21 +145,22 @@ private:
     
     
     //
-    // Managing the connection and selection status
+    // Getter and setter
     //
     
 public:
     
-    // Returns true if the specified drive is connected to the Amiga
+    // Connection status
     bool isConnected(int df) { assert(df < 4); return connected[df]; }
-    
-    // Connects or disconnects a drive
     void setConnected(int df, bool value);
     
-    // Convenience wrappers
     void connect(int df) { setConnected(df, true); }
     void disconnect(int df) { setConnected(df, false); }
     void toggleConnected(int df) { setConnected(df, !isConnected(df)); }
+    
+    // FIFO emulation
+    bool getEmulateFifo() { return emulateFifo; }
+    void setEmulateFifo(bool value) { emulateFifo = value; }
     
     // Returns the currently selected drive or NULL if no drive is selected.
     Drive *getSelectedDrive();
@@ -244,7 +254,8 @@ public:
     // Write a word into memory and increases the disk DMA pointer.
     void dmaWrite(uint16_t word);
 
-    /* vAmiga supports three disk modes at the moment.
+    
+    /* The emulator supports three disk DMA modes at the moment:
      *
      *     1. Standard DMA mode    (most accurate)
      *     2. Simplified DMA mode

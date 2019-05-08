@@ -182,6 +182,7 @@ Amiga::getConfig()
     config.model = model;
     config.realTimeClock = realTimeClock;
     config.layout = keyboard.layout;
+    config.fifoBuffering = paula.diskController.getEmulateFifo();
     
     config.df0.connected = paula.diskController.isConnected(0);
     config.df0.type = df0.getType();
