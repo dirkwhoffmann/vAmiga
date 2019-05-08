@@ -20,6 +20,13 @@ class Blitter : public HardwareComponent {
     // Information shown in the GUI inspector panel
     BlitterInfo info;
     
+    //
+    // Configuration items
+    //
+    
+    // Indicates if the Blitter should be emulated cycle-accurately.
+    bool exact = false;
+    
     
     //
     // Blitter registers
@@ -140,6 +147,14 @@ class Blitter : public HardwareComponent {
     
     // Returns the latest internal state recorded by inspect()
     BlitterInfo getInfo();
+    
+
+    //
+    // Accessing properties
+    //
+
+    bool getExactEmulation() { return exact; }
+    void setExactEmulation(bool value) { exact = value; }
     
     
     //

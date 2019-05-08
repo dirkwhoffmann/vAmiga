@@ -14,41 +14,43 @@ Blitter::Blitter()
     setDescription("Blitter");
     
     registerSnapshotItems(vector<SnapshotItem> {
-        
-        { &bltcon0,    sizeof(bltcon0),    0 },
-        { &bltcon1,    sizeof(bltcon1),    0 },
 
-        { &bltapt,     sizeof(bltapt),     0 },
-        { &bltbpt,     sizeof(bltbpt),     0 },
-        { &bltcpt,     sizeof(bltcpt),     0 },
-        { &bltdpt,     sizeof(bltdpt),     0 },
+        { &exact, sizeof(exact), PERSISTANT },
 
-        { &bltafwm,    sizeof(bltafwm),    0 },
-        { &bltalwm,    sizeof(bltalwm),    0 },
+        { &bltcon0,       sizeof(bltcon0),       0 },
+        { &bltcon1,       sizeof(bltcon1),       0 },
 
-        { &bltsize,    sizeof(bltsize),    0 },
+        { &bltapt,        sizeof(bltapt),        0 },
+        { &bltbpt,        sizeof(bltbpt),        0 },
+        { &bltcpt,        sizeof(bltcpt),        0 },
+        { &bltdpt,        sizeof(bltdpt),        0 },
 
-        { &bltamod,    sizeof(bltamod),    0 },
-        { &bltbmod,    sizeof(bltbmod),    0 },
-        { &bltcmod,    sizeof(bltcmod),    0 },
-        { &bltdmod,    sizeof(bltdmod),    0 },
+        { &bltafwm,       sizeof(bltafwm),       0 },
+        { &bltalwm,       sizeof(bltalwm),       0 },
 
-        { &anew,       sizeof(anew),       0 },
-        { &bnew,       sizeof(bnew),       0 },
-        { &aold,       sizeof(aold),       0 },
-        { &bold,       sizeof(bold),       0 },
-        { &ahold,      sizeof(ahold),      0 },
-        { &bhold,      sizeof(bhold),      0 },
-        { &chold,      sizeof(chold),      0 },
-        { &dhold,      sizeof(dhold),      0 },
-        { &ashift,     sizeof(ashift),     0 },
-        { &bshift,     sizeof(bshift),     0 },
+        { &bltsize,       sizeof(bltsize),       0 },
 
-        { &xCounter,   sizeof(xCounter),   0 },
-        { &yCounter,   sizeof(yCounter),   0 },
+        { &bltamod,       sizeof(bltamod),       0 },
+        { &bltbmod,       sizeof(bltbmod),       0 },
+        { &bltcmod,       sizeof(bltcmod),       0 },
+        { &bltdmod,       sizeof(bltdmod),       0 },
 
-        { &bbusy,      sizeof(bbusy),      0 },
-        { &bzero,      sizeof(bzero),      0 },
+        { &anew,          sizeof(anew),          0 },
+        { &bnew,          sizeof(bnew),          0 },
+        { &aold,          sizeof(aold),          0 },
+        { &bold,          sizeof(bold),          0 },
+        { &ahold,         sizeof(ahold),         0 },
+        { &bhold,         sizeof(bhold),         0 },
+        { &chold,         sizeof(chold),         0 },
+        { &dhold,         sizeof(dhold),         0 },
+        { &ashift,        sizeof(ashift),        0 },
+        { &bshift,        sizeof(bshift),        0 },
+
+        { &xCounter,      sizeof(xCounter),      0 },
+        { &yCounter,      sizeof(yCounter),      0 },
+
+        { &bbusy,         sizeof(bbusy),         0 },
+        { &bzero,         sizeof(bzero),         0 },
 
     });
 }

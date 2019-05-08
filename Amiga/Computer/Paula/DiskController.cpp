@@ -17,7 +17,7 @@ DiskController::DiskController()
     registerSnapshotItems(vector<SnapshotItem> {
         
         { &connected,     sizeof(connected),     BYTE_ARRAY | PERSISTANT },
-        { &emulateFifo,   sizeof(emulateFifo),   PERSISTANT },
+        { &fifoBuffering,   sizeof(fifoBuffering),   PERSISTANT },
 
         { &selected,      sizeof(selected),      0 },
         { &acceleration,  sizeof(acceleration),  0 },
@@ -314,13 +314,14 @@ DiskController::PRBdidChange(uint8_t oldValue, uint8_t newValue)
 void
 DiskController::serveDiskEvent()
 {
-    assert(selected >= -1 && selected <= 3);
+    if (fifoBuffering) {
+        
+        // Receive next byte from the selected drive.
+        executeFifo();
     
-    // Receive next byte from the selected drive.
-    executeFifo();
-    
-    // Schedule next event.
-    handler->scheduleSecRel(DSK_SLOT, DMA_CYCLES(56), DSK_ROTATE);
+        // Schedule next event.
+        handler->scheduleSecRel(DSK_SLOT, DMA_CYCLES(56), DSK_ROTATE);
+    }
 }
 
 void
@@ -369,16 +370,6 @@ DiskController::compareFifo(uint16_t word)
 {
     return fifoHasWord() && ((fifo >> (8 * fifoCount)) & 0xFFFF) == word;
 }
-
-
-#ifdef EASY_DISK
-
-void
-DiskController::executeFifo()
-{
-}
-
-#else
 
 void
 DiskController::executeFifo()
@@ -438,8 +429,6 @@ DiskController::executeFifo()
     }
 }
 
-#endif
-
 void
 DiskController::flushFifo(Drive *drive)
 {
@@ -480,11 +469,6 @@ DiskController::performDMA()
     
     // Only proceed if DMA is enabled.
     if (state != DRIVE_DMA_READ && state != DRIVE_DMA_WRITE) return;
-    
-    // debug("performDMA()\n");
-    
-    // Only proceed if the FIFO buffer contains at least one data word.
-    // if (!fifoHasData()) return;
     
     // Perform DMA
     switch (state) {

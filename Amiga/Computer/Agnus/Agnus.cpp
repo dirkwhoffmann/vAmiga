@@ -957,15 +957,13 @@ Agnus::serviceDMAEvent(EventID id)
     busOwner = BPLEN;
     
     switch (id) {
-           
+            
         case DMA_DISK:
-        
-        #ifdef EASY_DISK
-            amiga->paula.diskController.performSimpleDMA();
-        #else
-            amiga->paula.diskController.performDMA();
-        #endif
-        break;
+            if (amiga->paula.diskController.getFifoBuffering())
+                amiga->paula.diskController.performDMA();
+            else
+                amiga->paula.diskController.performSimpleDMA();
+            break;
         
         case DMA_A0:
             break;

@@ -298,22 +298,26 @@ class Amiga : public HardwareComponent {
     // Returns the currently set memory configuration.
     AmigaMemConfiguration getMemConfig();
     
-    // Chooses the emulated Amiga model.
+    // Configures the Amiga model to emulate.
     bool configureModel(AmigaModel model);
     bool configureLayout(long value);
     
-    // Chooses the amount of memory to emulate.
+    // Configures the attached memory.
     bool configureChipMemory(long size);
     bool configureSlowMemory(long size);
     bool configureFastMemory(long size);
     
-    // Chooses if a real-time clock should be emulated.
-    bool configureRealTimeClock(bool value);
+    // Configures the real-time clock.
+    void configureRealTimeClock(bool value);
     
-    // Chooses if a drive is connected or not.
+    // Configures the attached drives.
     bool configureDrive(unsigned driveNr, bool connected);
     bool configureDriveType(unsigned driveNr, DriveType type);
     bool configureDriveSpeed(unsigned driveNr, uint16_t value);
+
+    // Configures the compatibility settings.
+    void configureExactBlitter(bool value);
+    void configureFifoBuffering(bool value);
 
     
     //

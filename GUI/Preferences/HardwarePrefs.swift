@@ -43,6 +43,10 @@ extension PreferencesController {
         hwDf2Speed.selectItem(withTag: Int(config.df2.speed))
         hwDf3Speed.selectItem(withTag: Int(config.df3.speed))
 
+        // Compatibility
+        hwExactBlitter.state = config.exactBlitter ? .on : .off
+        hwFifoBuffering.state = config.fifoBuffering ? .on : .off
+
         // Lock controls if emulator is powered on
         hwAmigaModelPopup.isEnabled = poweredOff
         hwRealTimeClock.isEnabled = poweredOff && config.model != A2000
@@ -117,6 +121,19 @@ extension PreferencesController {
         refresh()
     }
 
+    @IBAction func hwExactBlitterAction(_ sender: NSButton!) {
+        
+        amigaProxy?.configureExactBlitter(sender.state == .on)
+        refresh()
+    }
+
+    @IBAction func hwFifoBufferingAction(_ sender: NSButton!) {
+        
+        amigaProxy?.configureFifoBuffering(sender.state == .on)
+        refresh()
+    }
+
+    
     @IBAction func hwUnlockAction(_ sender: Any!) {
         
         track()
@@ -150,6 +167,9 @@ extension PreferencesController {
             amigaProxy?.configureDrive(3, connected: Defaults.a500.df3Connect)
             amigaProxy?.configureDrive(3, type:      Defaults.a500.df3Type.rawValue)
 
+            amigaProxy?.configureExactBlitter(Defaults.a500.exactBlitter)
+            amigaProxy?.configureFifoBuffering(Defaults.a500.fifoBuffering)
+
         case A1000.rawValue:
             
             amigaProxy?.configureModel(Defaults.a1000.amigaModel.rawValue)
@@ -169,10 +189,12 @@ extension PreferencesController {
             amigaProxy?.configureDrive(3, connected: Defaults.a1000.df3Connect)
             amigaProxy?.configureDrive(3, type:      Defaults.a1000.df3Type.rawValue)
 
+            amigaProxy?.configureExactBlitter(Defaults.a1000.exactBlitter)
+            amigaProxy?.configureFifoBuffering(Defaults.a1000.fifoBuffering)
+
         case A2000.rawValue:
             
             amigaProxy?.configureModel(Defaults.a2000.amigaModel.rawValue)
-            amigaProxy?.configureLayout(Layout.us.rawValue)
             amigaProxy?.configureRealTimeClock(Defaults.a2000.realTimeClock)
             
             amigaProxy?.configureChipMemory(Defaults.a2000.chipRam)
@@ -187,6 +209,9 @@ extension PreferencesController {
             amigaProxy?.configureDrive(2, type:      Defaults.a2000.df2Type.rawValue)
             amigaProxy?.configureDrive(3, connected: Defaults.a2000.df3Connect)
             amigaProxy?.configureDrive(3, type:      Defaults.a2000.df3Type.rawValue)
+
+            amigaProxy?.configureExactBlitter(Defaults.a2000.exactBlitter)
+            amigaProxy?.configureFifoBuffering(Defaults.a2000.fifoBuffering)
 
         default:
             track("Cannot restore factory defaults (unknown Amiga model).")

@@ -91,7 +91,7 @@ typedef struct
     DriveConfiguration df1;
     DriveConfiguration df2;
     DriveConfiguration df3;
-    // bool accurateBlitter;
+    bool exactBlitter;
     bool fifoBuffering;
 }
 AmigaConfiguration;

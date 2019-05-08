@@ -182,7 +182,8 @@ Amiga::getConfig()
     config.model = model;
     config.realTimeClock = realTimeClock;
     config.layout = keyboard.layout;
-    config.fifoBuffering = paula.diskController.getEmulateFifo();
+    config.exactBlitter = agnus.blitter.getExactEmulation(); 
+    config.fifoBuffering = paula.diskController.getFifoBuffering();
     
     config.df0.connected = paula.diskController.isConnected(0);
     config.df0.type = df0.getType();
@@ -200,7 +201,6 @@ Amiga::getConfig()
     config.df3.type = df3.getType();
     config.df3.speed = df3.getSpeed();
 
-    debug(" Speed %d %d %d %d \n", config.df0.speed, config.df1.speed, config.df2.speed, config.df3.speed);
     return config;
 }
 
@@ -303,7 +303,7 @@ Amiga::configureFastMemory(long size)
     return true;
 }
 
-bool
+void
 Amiga::configureRealTimeClock(bool value)
 {
     if (realTimeClock != value) {
@@ -312,8 +312,6 @@ Amiga::configureRealTimeClock(bool value)
         mem.updateMemSrcTable();
         putMessage(MSG_CONFIG);
     }
-    
-    return true;
 }
 
 bool
@@ -377,6 +375,20 @@ Amiga::configureDriveSpeed(unsigned driveNr, uint16_t value)
     }
 
     return true;
+}
+
+void
+Amiga::configureExactBlitter(bool value)
+{
+    debug("configureExactBlitter: %d\n", value);
+    agnus.blitter.setExactEmulation(value);
+}
+
+void
+Amiga::configureFifoBuffering(bool value)
+{
+    debug("configureFifoBuffering: %d\n", value);
+    paula.diskController.setFifoBuffering(value);
 }
 
 void

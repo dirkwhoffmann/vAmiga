@@ -27,7 +27,7 @@ class DiskController : public HardwareComponent {
     bool connected[4] = { true, false, false, false };
     
     // Indicates if a FIFO buffer should be emulated.
-    bool emulateFifo = true;
+    bool fifoBuffering = true;
     
     
     //
@@ -159,8 +159,8 @@ public:
     void toggleConnected(int df) { setConnected(df, !isConnected(df)); }
     
     // FIFO emulation
-    bool getEmulateFifo() { return emulateFifo; }
-    void setEmulateFifo(bool value) { emulateFifo = value; }
+    bool getFifoBuffering() { return fifoBuffering; }
+    void setFifoBuffering(bool value) { fifoBuffering = value; }
     
     // Returns the currently selected drive or NULL if no drive is selected.
     Drive *getSelectedDrive();

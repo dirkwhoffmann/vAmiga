@@ -64,8 +64,12 @@ class PreferencesController : DialogController {
     @IBOutlet weak var hwDf3Type: NSPopUpButton!
     @IBOutlet weak var hwDf3Speed: NSPopUpButton!
 
+    // Compatibility
+    @IBOutlet weak var hwExactBlitter: NSButton!
+    @IBOutlet weak var hwFifoBuffering: NSButton!
+
     // Lock
-    @IBOutlet weak var hwLockImage: NSImageView!
+    // @IBOutlet weak var hwLockImage: NSImageView!
     @IBOutlet weak var hwLockText: NSTextField!
     @IBOutlet weak var hwLockSubText: NSTextField!
     

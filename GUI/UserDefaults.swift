@@ -770,107 +770,120 @@ extension MyController {
 extension Keys {
     
     // Machine
-    static let amigaModel     = "VAAmigaModelKey"
-    static let layout         = "VAKeyboardLayoutKey"
+    static let amigaModel         = "VAAmigaModelKey"
+    static let layout             = "VAKeyboardLayoutKey"
     
     // Memory
-    static let chipRam        = "VAChipRamKey"
-    static let slowRam        = "VASlowRamKey"
-    static let fastRam        = "VAFastRamKey"
+    static let chipRam            = "VAChipRamKey"
+    static let slowRam            = "VASlowRamKey"
+    static let fastRam            = "VAFastRamKey"
 
     // Drives
-    static let df0Connect     = "VADF0ConnectKey"
-    static let df0Type        = "VADF0TypeKey"
-    static let df0Speed       = "VADF0SpeedKey"
-    static let df1Connect     = "VADF1ConnectKey"
-    static let df1Type        = "VADF1TypeKey"
-    static let df1Speed       = "VADF1SpeedKey"
-    static let df2Connect     = "VADF2ConnectKey"
-    static let df2Type        = "VADF2TypeKey"
-    static let df2Speed       = "VADF2SpeedKey"
-    static let df3Connect     = "VADF3ConnectKey"
-    static let df3Type        = "VADF3TypeKey"
-    static let df3Speed       = "VADF3SpeedKey"
+    static let df0Connect         = "VADF0ConnectKey"
+    static let df0Type            = "VADF0TypeKey"
+    static let df0Speed           = "VADF0SpeedKey"
+    static let df1Connect         = "VADF1ConnectKey"
+    static let df1Type            = "VADF1TypeKey"
+    static let df1Speed           = "VADF1SpeedKey"
+    static let df2Connect         = "VADF2ConnectKey"
+    static let df2Type            = "VADF2TypeKey"
+    static let df2Speed           = "VADF2SpeedKey"
+    static let df3Connect         = "VADF3ConnectKey"
+    static let df3Type            = "VADF3TypeKey"
+    static let df3Speed           = "VADF3SpeedKey"
 
     // Extensions
-    static let realTimeClock  = "VARealTimeClockKey"
+    static let realTimeClock      = "VARealTimeClockKey"
+    
+    // Compatibility
+    static let fifoBuffering      = "VAFifoBufferingKey"
+    static let exactBlitter  = "VAAccurateBlitterKey"
 }
 
 extension Defaults {
     
     struct a500 {
         
-        static let amigaModel     = A500
-        static let layout         = Layout.us
+        static let amigaModel        = A500
+        static let layout            = Layout.us
         
-        static let chipRam        = 512
-        static let slowRam        = 0
-        static let fastRam        = 0
+        static let chipRam           = 512
+        static let slowRam           = 0
+        static let fastRam           = 0
 
-        static let df0Connect     = true
-        static let df0Type        = DRIVE_35_DD
-        static let df0Speed       = 1
-        static let df1Connect     = false
-        static let df1Type        = DRIVE_35_DD
-        static let df1Speed       = 1
-        static let df2Connect     = false
-        static let df2Type        = DRIVE_35_DD
-        static let df2Speed       = 1
-        static let df3Connect     = false
-        static let df3Type        = DRIVE_35_DD
-        static let df3Speed       = 1
+        static let df0Connect        = true
+        static let df0Type           = DRIVE_35_DD
+        static let df0Speed          = 1
+        static let df1Connect        = false
+        static let df1Type           = DRIVE_35_DD
+        static let df1Speed          = 1
+        static let df2Connect        = false
+        static let df2Type           = DRIVE_35_DD
+        static let df2Speed          = 1
+        static let df3Connect        = false
+        static let df3Type           = DRIVE_35_DD
+        static let df3Speed          = 1
 
-        static let realTimeClock  = false
+        static let realTimeClock     = false
+        
+        static let exactBlitter      = false
+        static let fifoBuffering     = true
     }
     
     struct a1000 {
         
-        static let amigaModel     = A1000
-        static let layout         = Layout.us
+        static let amigaModel        = A1000
+        static let layout            = Layout.us
         
-        static let chipRam        = 256
-        static let slowRam        = 0
-        static let fastRam        = 0
+        static let chipRam           = 256
+        static let slowRam           = 0
+        static let fastRam           = 0
         
-        static let df0Connect     = true
-        static let df0Type        = DRIVE_35_DD
-        static let df0Speed       = 1
-        static let df1Connect     = false
-        static let df1Type        = DRIVE_35_DD
-        static let df1Speed       = 1
-        static let df2Connect     = false
-        static let df2Type        = DRIVE_35_DD
-        static let df2Speed       = 1
-        static let df3Connect     = false
-        static let df3Type        = DRIVE_35_DD
-        static let df3Speed       = 1
+        static let df0Connect        = true
+        static let df0Type           = DRIVE_35_DD
+        static let df0Speed          = 1
+        static let df1Connect        = false
+        static let df1Type           = DRIVE_35_DD
+        static let df1Speed          = 1
+        static let df2Connect        = false
+        static let df2Type           = DRIVE_35_DD
+        static let df2Speed          = 1
+        static let df3Connect        = false
+        static let df3Type           = DRIVE_35_DD
+        static let df3Speed          = 1
 
-        static let realTimeClock  = false
+        static let realTimeClock     = false
+        
+        static let exactBlitter      = false
+        static let fifoBuffering     = true
     }
     
     struct a2000 {
         
-        static let amigaModel     = A2000
-        static let layout         = Layout.us
+        static let amigaModel        = A2000
+        static let layout            = Layout.us
         
-        static let chipRam        = 512
-        static let slowRam        = 512
-        static let fastRam        = 0
+        static let chipRam           = 512
+        static let slowRam           = 512
+        static let fastRam           = 0
         
-        static let df0Connect     = true
-        static let df0Type        = DRIVE_35_DD
-        static let df0Speed       = 1
-        static let df1Connect     = true
-        static let df1Type        = DRIVE_35_DD
-        static let df1Speed       = 1
-        static let df2Connect     = false
-        static let df2Type        = DRIVE_35_DD
-        static let df2Speed       = 1
-        static let df3Connect     = false
-        static let df3Type        = DRIVE_35_DD
-        static let df3Speed       = 1
+        static let df0Connect        = true
+        static let df0Type           = DRIVE_35_DD
+        static let df0Speed          = 1
+        static let df1Connect        = true
+        static let df1Type           = DRIVE_35_DD
+        static let df1Speed          = 1
+        static let df2Connect        = false
+        static let df2Type           = DRIVE_35_DD
+        static let df2Speed          = 1
+        static let df3Connect        = false
+        static let df3Type           = DRIVE_35_DD
+        static let df3Speed          = 1
 
-        static let realTimeClock  = true
+        static let realTimeClock     = true
+        
+        static let exactBlitter      = false
+        static let fifoBuffering     = true
     }
 }
 
@@ -903,6 +916,9 @@ extension MyController {
             Keys.df3Speed: defaultModel.df3Speed,
 
             Keys.realTimeClock: defaultModel.realTimeClock,
+            
+            Keys.fifoBuffering: defaultModel.fifoBuffering,
+            Keys.exactBlitter: defaultModel.exactBlitter,
         ]
         
         let defaults = UserDefaults.standard
@@ -934,6 +950,9 @@ extension MyController {
                     Keys.df3Speed,
 
                     Keys.realTimeClock,
+                    
+                    Keys.exactBlitter,
+                    Keys.fifoBuffering
             ]
         {
             defaults.removeObject(forKey: key)
@@ -969,6 +988,9 @@ extension MyController {
         amiga.configureDrive(3, speed: defaults.integer(forKey: Keys.df3Speed))
 
         amiga.configureRealTimeClock(defaults.bool(forKey: Keys.realTimeClock))
+        
+        amiga.configureExactBlitter(defaults.bool(forKey: Keys.exactBlitter))
+        amiga.configureFifoBuffering(defaults.bool(forKey: Keys.fifoBuffering))
 
         amiga.resume()
     }
@@ -1000,5 +1022,8 @@ extension MyController {
         defaults.set(config.df3.speed, forKey: Keys.df3Speed)
 
         defaults.set(config.realTimeClock, forKey: Keys.realTimeClock)
+        
+        defaults.set(config.exactBlitter, forKey: Keys.exactBlitter)
+        defaults.set(config.fifoBuffering, forKey: Keys.fifoBuffering)
     }
 }

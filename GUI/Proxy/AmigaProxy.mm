@@ -1225,9 +1225,9 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->amiga->configureFastMemory((unsigned)size);
 }
-- (BOOL) configureRealTimeClock:(BOOL)value
+- (void) configureRealTimeClock:(BOOL)value
 {
-    return wrapper->amiga->configureRealTimeClock(value);
+    wrapper->amiga->configureRealTimeClock(value);
 }
 - (BOOL) configureDrive:(NSInteger)nr connected:(BOOL)value
 {
@@ -1240,6 +1240,14 @@ struct ADFFileWrapper { ADFFile *adf; };
 - (BOOL) configureDrive:(NSInteger)nr speed:(NSInteger)value
 {
     return wrapper->amiga->configureDriveSpeed((unsigned)nr, value);
+}
+- (void) configureExactBlitter:(BOOL)value
+{
+    wrapper->amiga->configureExactBlitter(value);
+}
+- (void) configureFifoBuffering:(BOOL)value
+{
+    wrapper->amiga->configureFifoBuffering(value);
 }
 - (void) addListener:(const void *)sender function:(Callback *)func
 {
