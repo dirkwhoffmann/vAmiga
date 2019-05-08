@@ -44,7 +44,7 @@ typedef enum : long
 }
 AmigaModel;
 
-inline bool isAmigaModel(AmigaModel model)
+inline bool isAmigaModel(long model)
 {
     return model >= A500 && model <= A2000;
 }
@@ -55,6 +55,36 @@ inline const char *modelName(AmigaModel model)
     model == A500 ? "Amiga 500" :
     model == A1000 ? "Amiga 1000" :
     model == A2000 ? "Amiga 2000" : "???";
+}
+
+typedef enum : long
+{
+    VA_AMIGA_MODEL,
+    VA_KB_LAYOUT,
+    VA_CHIP_RAM,
+    VA_SLOW_RAM,
+    VA_FAST_RAM,
+    VA_DF0_CONNECT,
+    VA_DF0_TYPE,
+    VA_DF0_SPEED,
+    VA_DF1_CONNECT,
+    VA_DF1_TYPE,
+    VA_DF1_SPEED,
+    VA_DF2_CONNECT,
+    VA_DF2_TYPE,
+    VA_DF2_SPEED,
+    VA_DF3_CONNECT,
+    VA_DF3_TYPE,
+    VA_DF3_SPEED,
+    VA_RT_CLOCK,
+    VA_EXAXT_BLITTER,
+    VA_FIFO_BUFFERING
+}
+ConfigOption;
+
+inline bool isConfigOption(long value)
+{
+    return value >= VA_AMIGA_MODEL && value <= VA_FIFO_BUFFERING;
 }
 
 typedef enum

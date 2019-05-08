@@ -22,7 +22,7 @@ typedef enum : long
 }
 DriveType;
 
-inline bool isDriveType(DriveType model)
+inline bool isDriveType(long model)
 {
     return model >= DRIVE_35_DD && model <= DRIVE_525_SD;
 }

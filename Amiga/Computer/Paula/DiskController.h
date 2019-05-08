@@ -237,10 +237,7 @@ private:
      * is written to the drive head.
      */
     void executeFifo();
-    
-    // Finished up writing by emptying the FIFO buffer.
-    void flushFifo(Drive *drive);
-     
+         
     
     //
     // Performing DMA

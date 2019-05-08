@@ -221,8 +221,223 @@ Amiga::getMemConfig()
 }
 
 bool
+Amiga::configure(ConfigOption option, long value)
+{
+    AmigaConfiguration current = getConfig();
+    
+    // Check consistency
+    switch (option) {
+
+        case VA_AMIGA_MODEL:
+            
+            if (!isAmigaModel(value)) {
+                warn("Invalid Amiga model: %d\n", value);
+                warn("       Valid values: %d, %d, %d\n", A500, A1000, A2000);
+                return false;
+            }
+            break;
+        
+        case VA_CHIP_RAM:
+            
+            if (value != 256 && value != 512) {
+                warn("Invalid Chip Ram size: %d\n", value);
+                warn("         Valid values: 256KB, 512KB\n");
+                return false;
+            }
+            break;
+    
+        case VA_SLOW_RAM:
+            
+            if ((value % 256) != 0 || value > 512) {
+                warn("Invalid Slow Ram size: %d\n", value);
+                warn("         Valid values: 0KB, 256KB, 512KB\n");
+                return false;
+            }
+            break;
+        
+        case VA_FAST_RAM:
+            
+            if ((value % 64) != 0 || value > 8192) {
+                warn("Invalid Fast Ram size: %d\n", value);
+                warn("         Valid values: 0KB, 64KB, 128KB, ..., 8192KB (8MB)\n");
+                return false;
+            }
+            break;
+  
+        case VA_DF0_CONNECT:
+            
+            if (value == false) {
+                warn("Df0 cannot be disconnected. Ignoring.\n");
+                return false;
+            }
+            break;
+            
+        case VA_DF0_TYPE:
+        case VA_DF1_TYPE:
+        case VA_DF2_TYPE:
+        case VA_DF3_TYPE:
+            
+            if (!isDriveType(value)) {
+                warn("Invalid drive type: %d\n", value);
+                return false;
+            }
+            
+            if (value != DRIVE_35_DD) {
+                warn("Unsupported drive type: %s\n", driveTypeName((DriveType)value));
+                return false;
+            }
+            break;
+            
+        case VA_DF0_SPEED:
+        case VA_DF1_SPEED:
+        case VA_DF2_SPEED:
+        case VA_DF3_SPEED:
+
+            if (value <= 0) {
+                warn("Invalid drive speed: %d\n", value);
+                return false;
+            }
+            break;
+            
+        default:
+            break;
+    }
+    
+    // Change configuration
+    switch (option) {
+            
+        case VA_AMIGA_MODEL:
+
+            if (current.model == value) return true;
+            model = (AmigaModel)value;
+            
+            // Apply model specific config changes
+            if (model == A2000) realTimeClock = true;
+            mem.updateMemSrcTable();
+            break;
+
+        case VA_KB_LAYOUT:
+            
+            if (current.layout == value) return true;
+            keyboard.layout = value;
+            break;
+            
+        case VA_CHIP_RAM:
+            
+            mem.allocateChipRam(KB(value));
+            break;
+            
+        case VA_SLOW_RAM:
+
+            mem.allocateSlowRam(KB(value));
+            break;
+            
+        case VA_FAST_RAM:
+
+            mem.allocateFastRam(KB(value));
+            break;
+            
+        case VA_DF0_CONNECT:
+            return true;
+
+        case VA_DF1_CONNECT:
+
+            if (current.df1.connected == value) return true;
+            paula.diskController.setConnected(1, value);
+            break;
+
+        case VA_DF2_CONNECT:
+
+            if (current.df2.connected == value) return true;
+            paula.diskController.setConnected(2, value);
+            break;
+
+        case VA_DF3_CONNECT:
+
+            if (current.df3.connected == value) return true;
+            paula.diskController.setConnected(3, value);
+            break;
+            
+        case VA_DF0_TYPE:
+            
+            if (current.df0.type == value) return true;
+            df0.setType((DriveType)value);
+            break;
+            
+        case VA_DF1_TYPE:
+            
+            if (current.df1.type == value) return true;
+            df1.setType((DriveType)value);
+            break;
+            
+        case VA_DF2_TYPE:
+            
+            if (current.df2.type == value) return true;
+            df2.setType((DriveType)value);
+            break;
+            
+        case VA_DF3_TYPE:
+            
+            if (current.df3.type == value) return true;
+            df3.setType((DriveType)value);
+            break;
+            
+        case VA_DF0_SPEED:
+            
+            if (current.df0.speed == value) return true;
+            df0.setSpeed(value);
+            break;
+
+        case VA_DF1_SPEED:
+            
+            if (current.df1.speed == value) return true;
+            df1.setSpeed(value);
+            break;
+
+        case VA_DF2_SPEED:
+            
+            if (current.df2.speed == value) return true;
+            df2.setSpeed(value);
+            break;
+
+        case VA_DF3_SPEED:
+            
+            if (current.df3.speed == value) return true;
+            df0.setSpeed(value);
+            break;
+
+        case VA_RT_CLOCK:
+            
+            if (current.realTimeClock == value) return true;
+            realTimeClock = value;
+            mem.updateMemSrcTable();
+            break;
+            
+        case VA_EXAXT_BLITTER:
+            
+            if (current.exactBlitter == value) return true;
+            agnus.blitter.setExactEmulation(value);
+            break;
+            
+        case VA_FIFO_BUFFERING:
+
+            if (current.fifoBuffering == value) return true;
+            paula.diskController.setFifoBuffering(value);
+            break;
+
+        default: assert(false);
+    }
+    
+    putMessage(MSG_CONFIG);
+    return true;
+}
+
+
+bool
 Amiga::configureModel(AmigaModel m)
 {
+    return configure(VA_AMIGA_MODEL, m);
+    /*
     if (!isAmigaModel(m)) {
         
         warn("Invalid Amiga model: %d\n", m);
@@ -244,11 +459,14 @@ Amiga::configureModel(AmigaModel m)
     putMessage(MSG_CONFIG);
     
     return true;
+    */
 }
 
 bool
 Amiga::configureLayout(long layout)
 {
+    return configure(VA_KB_LAYOUT, layout);
+    /*
     if (keyboard.layout != layout) {
         
         keyboard.layout = layout;
@@ -256,11 +474,14 @@ Amiga::configureLayout(long layout)
     }
     
     return true;
+    */
 }
 
 bool
 Amiga::configureChipMemory(long size)
 {
+    return configure(VA_CHIP_RAM, size);
+    /*
     if (size != 256 && size != 512) {
         
         warn("Invalid Chip Ram size: %d\n", size);
@@ -271,11 +492,15 @@ Amiga::configureChipMemory(long size)
     mem.allocateChipRam(KB(size));
     putMessage(MSG_CONFIG);
     return true;
+    */
 }
 
 bool
 Amiga::configureSlowMemory(long size)
 {
+    return configure(VA_SLOW_RAM, size);
+    
+    /*
     if ((size % 256) != 0 || size > 512) {
         
         warn("Invalid Slow Ram size: %d\n", size);
@@ -286,11 +511,14 @@ Amiga::configureSlowMemory(long size)
     mem.allocateSlowRam(KB(size));
     putMessage(MSG_CONFIG);
     return true;
+    */
 }
 
 bool
 Amiga::configureFastMemory(long size)
 {
+    return configure(VA_FAST_RAM, size);
+    /*
     if ((size % 64) != 0 || size > 8192) {
         
         warn("Invalid Fast Ram size: %d\n", size);
@@ -301,17 +529,21 @@ Amiga::configureFastMemory(long size)
     mem.allocateFastRam(KB(size));
     putMessage(MSG_CONFIG);
     return true;
+    */
 }
 
 void
 Amiga::configureRealTimeClock(bool value)
 {
+    configure(VA_RT_CLOCK, value);
+    /*
     if (realTimeClock != value) {
         
         realTimeClock = value;
         mem.updateMemSrcTable();
         putMessage(MSG_CONFIG);
     }
+    */
 }
 
 bool

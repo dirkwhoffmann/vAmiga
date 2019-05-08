@@ -211,8 +211,8 @@ extension MyController {
 
 extension Keys {
     
-    static let bootRom           = "VABootRomFileKey"
-    static let kickRom           = "VAKickRomFileKey"
+    static let bootRom           = "VAMIGABootRomFileKey"
+    static let kickRom           = "VAMIGAKickRomFileKey"
 }
 
 extension Defaults {
@@ -770,34 +770,34 @@ extension MyController {
 extension Keys {
     
     // Machine
-    static let amigaModel         = "VAAmigaModelKey"
-    static let layout             = "VAKeyboardLayoutKey"
+    static let amigaModel         = "VAMIGAAmigaModelKey"
+    static let layout             = "VAMIGAKeyboardLayoutKey"
     
     // Memory
-    static let chipRam            = "VAChipRamKey"
-    static let slowRam            = "VASlowRamKey"
-    static let fastRam            = "VAFastRamKey"
+    static let chipRam            = "VAMIGAChipRamKey"
+    static let slowRam            = "VAMIGASlowRamKey"
+    static let fastRam            = "VAMIGAFastRamKey"
 
     // Drives
-    static let df0Connect         = "VADF0ConnectKey"
-    static let df0Type            = "VADF0TypeKey"
-    static let df0Speed           = "VADF0SpeedKey"
-    static let df1Connect         = "VADF1ConnectKey"
-    static let df1Type            = "VADF1TypeKey"
-    static let df1Speed           = "VADF1SpeedKey"
-    static let df2Connect         = "VADF2ConnectKey"
-    static let df2Type            = "VADF2TypeKey"
-    static let df2Speed           = "VADF2SpeedKey"
-    static let df3Connect         = "VADF3ConnectKey"
-    static let df3Type            = "VADF3TypeKey"
-    static let df3Speed           = "VADF3SpeedKey"
+    static let df0Connect         = "VAMIGADF0ConnectKey"
+    static let df0Type            = "VAMIGADF0TypeKey"
+    static let df0Speed           = "VAMIGADF0SpeedKey"
+    static let df1Connect         = "VAMIGADF1ConnectKey"
+    static let df1Type            = "VAMIGADF1TypeKey"
+    static let df1Speed           = "VAMIGADF1SpeedKey"
+    static let df2Connect         = "VAMIGADF2ConnectKey"
+    static let df2Type            = "VAMIGADF2TypeKey"
+    static let df2Speed           = "VAMIGADF2SpeedKey"
+    static let df3Connect         = "VAMIGADF3ConnectKey"
+    static let df3Type            = "VAMIGADF3TypeKey"
+    static let df3Speed           = "VAMIGADF3SpeedKey"
 
     // Extensions
-    static let realTimeClock      = "VARealTimeClockKey"
+    static let realTimeClock      = "VAMIGARealTimeClockKey"
     
     // Compatibility
-    static let fifoBuffering      = "VAFifoBufferingKey"
-    static let exactBlitter  = "VAAccurateBlitterKey"
+    static let exactBlitter       = "VAMIGAAccurateBlitterKey"
+    static let fifoBuffering      = "VAMIGAFifoBufferingKey"
 }
 
 extension Defaults {

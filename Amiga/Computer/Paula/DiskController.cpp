@@ -429,15 +429,6 @@ DiskController::executeFifo()
     }
 }
 
-void
-DiskController::flushFifo(Drive *drive)
-{
-    while (!fifoIsEmpty()) {
-        drive->writeHead(readFifo());
-    }
-    state = DRIVE_DMA_OFF;
-}
-
 uint16_t
 DiskController::dmaRead()
 {
