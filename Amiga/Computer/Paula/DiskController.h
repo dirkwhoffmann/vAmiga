@@ -238,28 +238,49 @@ private:
 
 public:
     
-    /* Emulates a disk DMA operaton.
-     * This DMA emulation is the most accurate one. The bytes from or to the
-     * disk are stored in a FIFO buffer and memory transfer is performed
-     * in the dedicated drive DMA slots in each rasterline.
+    // Reads a word from memory and increases the disk DMA pointer.
+    uint16_t dmaRead();
+
+    // Write a word into memory and increases the disk DMA pointer.
+    void dmaWrite(uint16_t word);
+
+    /* vAmiga supports three disk modes at the moment.
+     *
+     *     1. Standard DMA mode    (most accurate)
+     *     2. Simplified DMA mode
+     *     3. Turbo DMA mode       (least accurate)
+     *
+     * In standard DMA mode, performDMA() is invoked three times per rasterline,
+     * in each of the three DMA slots. Communication with the drive is decoupled
+     * by a FIFO buffer. Hence, data is never read from or written to the drive
+     * directly. Data is read from or written to the FIFO only. Data transfer
+     * between the FIFO and the drive takes place in serveDiskEvent() which
+     * is periodically invoked by the event handler.
+     *
+     * In simplified DMA mode, performDMA() is invoked three times per
+     * rasterline, similar to standard mode. However, the FIFO stage is skipped.
+     * Data is read from or written to the drive immediately when the DMA
+     * transfer take place.
+     *
+     * Turbo DMA mode is used if the drive has been configured as a turbo-drive.
+     * For those drives, data transfer is performed immediately at the time the
+     * DSKLEN register is written to. This mode is the less compatible one.
+     * It does not use the disk DMA slots, nor does it use a FIFO buffer.
      */
+     
+    // 1. Standard DMA mode
     void performDMA();
     void performDMARead(Drive *drive);
     void performDMAWrite(Drive *drive);
  
     void readByte(); // DEPRECATED, replaced by executeFifo()
 
-    /* Emulates a (simplified) disk DMA operaton.
-     * The simplified DMA transfer does not emulate a FIFO buffer.
-     */
+    // 2. Simple DMA mode
     void performSimpleDMA();
     void performSimpleDMARead(Drive *drive);
     void performSimpleDMAWrite(Drive *drive);
 
-    /* Emulates a turbo-drive DMA access.
-     * If a turbo drive is attached, these function are used. They are called
-     * immediately when DSKLEN is written to.
-     */
+    // 3. Turbo DMA mode
     void performTurboDMA(Drive *d);
     void performTurboRead(Drive *drive);
     void performTurboWrite(Drive *drive);

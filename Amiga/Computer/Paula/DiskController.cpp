@@ -503,6 +503,24 @@ DiskController::readByte()
 
 #endif
 
+uint16_t
+DiskController::dmaRead()
+{
+    uint32_t addr = amiga->agnus.dskpt;
+    
+    INC_DMAPTR(amiga->agnus.dskpt);
+    return amiga->mem.peekChip16(addr);
+}
+
+void
+DiskController::dmaWrite(uint16_t word)
+{
+    uint32_t addr = amiga->agnus.dskpt;
+    
+    INC_DMAPTR(amiga->agnus.dskpt);
+    amiga->mem.pokeChip16(addr, word);
+}
+
 void
 DiskController::performDMA()
 {
@@ -551,9 +569,9 @@ DiskController::performDMARead(Drive *drive)
         uint16_t word = readFifo16();
         
         // Write word into memory.
-        amiga->mem.pokeChip16(amiga->agnus.dskpt, word);
-        
-        amiga->agnus.dskpt = (amiga->agnus.dskpt + 2) & 0x7FFFF;
+        dmaWrite(word);
+
+        // Compute checksum (for debugging).
         checksum = fnv_1a_it32(checksum, word);
         
         // Finish up if this was the last word to transfer.
@@ -565,7 +583,7 @@ DiskController::performDMARead(Drive *drive)
             return;
         }
         
-        // Fill the FIFO with the next word if the loop repeats.
+         // If the loop repeats, let it look like the event handler had been executed.
         if (--remaining) {
             executeFifo();
             executeFifo();
@@ -586,8 +604,7 @@ DiskController::performDMAWrite(Drive *drive)
     
     do {
         // Read next word from memory.
-        uint16_t word = amiga->mem.peekChip16(amiga->agnus.dskpt);
-        amiga->agnus.dskpt = (amiga->agnus.dskpt + 2) & 0x7FFFF;
+        uint16_t word = dmaRead();
         checksum = fnv_1a_it32(checksum, word);
         // plaindebug("%d: %X (%X)\n", dsklen & 0x3FFF, word, dcheck);
         
@@ -613,10 +630,11 @@ DiskController::performDMAWrite(Drive *drive)
             return;
         }
         
-        // TODO: Write another word if the loop repeats.
+        // If the loop repeats, let it look like the event handler had been executed.
         if (--remaining) {
             executeFifo();
             executeFifo();
+            assert(fifoCanStoreWord());
         }
         
     } while (remaining);
@@ -660,14 +678,12 @@ DiskController::performSimpleDMARead(Drive *drive)
         uint16_t word = drive->readHead16();
         
         // Write word into memory.
-        amiga->mem.pokeChip16(amiga->agnus.dskpt, word);
-  
-        amiga->agnus.dskpt = (amiga->agnus.dskpt + 2) & 0x7FFFF;
+        dmaWrite(word);
+
+        // Compute checksum (for debugging).
         checksum = fnv_1a_it32(checksum, word);
         
-        dsklen--;
-        
-        if ((dsklen & 0x3FFF) == 0) {
+        if ((--dsklen & 0x3FFF) == 0) {
             
             amiga->paula.pokeINTREQ(0x8002);
             state = DRIVE_DMA_OFF;
@@ -685,11 +701,10 @@ DiskController::performSimpleDMAWrite(Drive *drive)
     for (unsigned i = 0; i < acceleration; i++) {
         
         // Read word from memory
-        uint16_t word = amiga->mem.peekChip16(amiga->agnus.dskpt);
-        plainmsg("%X -> %X (%d)\n", word, amiga->agnus.dskpt, drive->head.offset);
-        amiga->agnus.dskpt = (amiga->agnus.dskpt + 2) & 0x7FFFF;
+        uint16_t word = dmaRead();
+        
+        // Compute checksum (for debugging)
         checksum = fnv_1a_it32(checksum, word);
-        // plaindebug("%d: %X (%X)\n", dsklen & 0x3FFF, word, dcheck);
         
         // Write word to disk
         drive->writeHead16(word);
@@ -743,10 +758,9 @@ DiskController::performTurboRead(Drive *drive)
         uint16_t word = drive->readHead16();
         
         // Write word into memory.
-        amiga->mem.pokeChip16(amiga->agnus.dskpt, word);
-        amiga->agnus.dskpt = (amiga->agnus.dskpt + 2) & 0x7FFFF;
+        dmaWrite(word);
         
-        // Compute checksum (for debugging only)
+        // Compute checksum (for debugging)
         checksum = fnv_1a_it32(checksum, word);
     }
         
@@ -761,11 +775,9 @@ DiskController::performTurboWrite(Drive *drive)
     for (unsigned i = 0; i < (dsklen & 0x3FFF); i++) {
         
         // Read word from memory
-        uint16_t word = amiga->mem.peekChip16(amiga->agnus.dskpt);
-        // plainmsg("%X -> %X (%d)\n", word, amiga->agnus.dskpt, d->head.offset);
-        amiga->agnus.dskpt = (amiga->agnus.dskpt + 2) & 0x7FFFF;
+        uint16_t word = dmaRead();
         
-        // Compute checksum (for debugging only)
+        // Compute checksum (for debugging)
         checksum = fnv_1a_it32(checksum, word);
         
         // Write word to disk
