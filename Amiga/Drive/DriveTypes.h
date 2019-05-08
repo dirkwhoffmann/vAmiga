@@ -43,10 +43,13 @@ inline const char *driveTypeName(DriveType type)
 
 typedef enum
 {
-    DRIVE_DMA_OFF = 0,   // Drive is idle
-    DRIVE_DMA_SYNC_WAIT, // Drive is waiting for the sync word
-    DRIVE_DMA_READ,      // Drive is reading (via DMA)
-    DRIVE_DMA_WRITE      // Drive is writing (via DMA)
+    DRIVE_DMA_OFF,     // Drive is idle
+    
+    DRIVE_DMA_WAIT,    // Drive is waiting for the sync word
+    DRIVE_DMA_READ,    // Drive is reading
+    
+    DRIVE_DMA_WRITE,   // Drive is writing
+    DRIVE_DMA_FLUSH,   // Drive is finishing up the write process
 }
 DriveState;
 

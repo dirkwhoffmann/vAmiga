@@ -77,7 +77,7 @@ extension Inspector {
         switch (dskInfo.state) {
         case DRIVE_DMA_OFF:
             dskStateText.stringValue = "Idle"
-        case DRIVE_DMA_SYNC_WAIT:
+        case DRIVE_DMA_WAIT:
             dskStateText.stringValue = "Waiting for sync signal"
         case DRIVE_DMA_READ:
             dskStateText.stringValue = "Reading"

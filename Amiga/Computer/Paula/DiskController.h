@@ -40,11 +40,8 @@ private:
     DriveState state;
     
     // Set to true if the currently read disk word matches the sync word.
-    // Only used in EASY_DISK mode at the moment.
-    bool syncFlag;
-    
-    // Taken from Omega (only used in EASY_DISK mode)
-    bool floppySync;
+    // NOT USED AT THE MOMENT
+    bool syncFlag = false;
     
     
     //
@@ -203,21 +200,37 @@ public:
     
 private:
     
-    // Returns true if the FIFO buffer contains at least 2 bytes of data.
-    bool fifoHasData() { return fifoCount >= 2; }
+    // Informs about the current FIFO fill state
+    bool fifoIsEmpty() { return fifoCount == 0; }
+    bool fifoIsFull() { return fifoCount == 6; }
+    bool fifoHasWord() { return fifoCount >= 2; }
+    bool fifoCanStoreWord() { return fifoCount <= 4; }
 
     // Clears the FIFO buffer.
     void clearFifo();
     
-    // Writes a byte into the FIFO buffer.
+    // Reads or writes a byte from or to the FIFO
+    uint8_t readFifo();
     void writeFifo(uint8_t byte);
-    
-    // Reads a word from the FIFO buffer.
-    uint16_t readFifo();
+
+    // Reads a word from the FIFO buffer. DEPRECATED
+    uint16_t readFifo16();
     
     // Returns true if the next word to read matches the specified value
     bool compareFifo(uint16_t word);
 
+    /* Emulates a data transfert between the selected drive and the FIFO buffer.
+     * This function is executed periodically in serveDiskEvent().
+     * The exact operation is dependent of the current DMA state. If DMA is
+     * off, no action is taken. If a read mode is active, the FIFO is filled
+     * with data from the drive. If a write mode is active, data from the FIFO
+     * is written to the drive head.
+     */
+    void executeFifo();
+    
+    // Finished up writing by emptying the FIFO buffer.
+    void flushFifo(Drive *drive);
+     
     
     //
     // Performing DMA
@@ -234,7 +247,7 @@ public:
     void performDMARead(Drive *drive);
     void performDMAWrite(Drive *drive);
  
-    void readByte();
+    void readByte(); // DEPRECATED, replaced by executeFifo()
 
     /* Emulates a (simplified) disk DMA operaton.
      * The simplified DMA transfer does not emulate a FIFO buffer.

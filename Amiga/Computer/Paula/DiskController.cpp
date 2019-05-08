@@ -22,7 +22,6 @@ DiskController::DiskController()
         { &acceleration,  sizeof(acceleration),  0 },
         { &state,         sizeof(state),         0 },
         { &syncFlag,      sizeof(syncFlag),      0 },
-        { &floppySync,    sizeof(floppySync),    0 },
         { &incoming,      sizeof(incoming),      0 },
         { &incomingCycle, sizeof(incomingCycle), 0 },
         { &fifo,          sizeof(fifo),          0 },
@@ -179,6 +178,7 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
     if (!(newDskLen & 0x8000)) {
         // plaindebug(1, "dma = DRIVE_DMA_OFF\n");
         state = DRIVE_DMA_OFF;
+        clearFifo();
     }
     
     // Enable DMA the DMAEN bit (bit 15) has been written twice.
@@ -189,6 +189,7 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
             
             // plaindebug(1, "dma = DRIVE_DMA_WRITE\n");
             state = DRIVE_DMA_WRITE;
+            clearFifo();
             
         } else {
             
@@ -197,7 +198,8 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
                 
                 // Wait with reading until a sync mark has been found
                 // plaindebug(1, "dma = DRIVE_DMA_READ_SYNC\n");
-                state = DRIVE_DMA_SYNC_WAIT;
+                state = DRIVE_DMA_WAIT;
+                clearFifo();
                 
             } else {
                 
@@ -298,9 +300,11 @@ DiskController::PRBdidChange(uint8_t oldValue, uint8_t newValue)
     
     // Schedule the first rotation event if at least one drive is spinning.
     if (!spinning()) {
+        // debug("Cancelling DSK_SLOT events\n");
         handler->cancelSec(DSK_SLOT);
     }
     else if (!handler->hasEventSec(DSK_SLOT)) {
+        // debug("Activating DSK_SLOT events\n");
         handler->scheduleSecRel(DSK_SLOT, DMA_CYCLES(56), DSK_ROTATE);
     }
 }
@@ -311,7 +315,8 @@ DiskController::serveDiskEvent()
     assert(selected >= -1 && selected <= 3);
     
     // Receive next byte from the selected drive.
-    readByte();
+    // readByte();
+    executeFifo();
     
     // Schedule next event.
     handler->scheduleSecRel(DSK_SLOT, DMA_CYCLES(56), DSK_ROTATE);
@@ -322,6 +327,17 @@ DiskController::clearFifo()
 {
     fifo = 0;
     fifoCount = 0;
+}
+
+uint8_t
+DiskController::readFifo()
+{
+    // Don't call this function on an empty buffer.
+    assert(fifoCount > 0);
+    
+    // Remove and return the oldest byte.
+    fifoCount--;
+    return (fifo >> (8 * fifoCount)) & 0xFF;
 }
 
 void
@@ -338,9 +354,9 @@ DiskController::writeFifo(uint8_t byte)
 }
 
 uint16_t
-DiskController::readFifo()
+DiskController::readFifo16()
 {
-    assert(fifoHasData());
+    assert(fifoHasWord());
     
     // Remove and return the oldest word.
     fifoCount -= 2;
@@ -350,8 +366,88 @@ DiskController::readFifo()
 bool
 DiskController::compareFifo(uint16_t word)
 {
-    return fifoHasData() && ((fifo >> (8 * fifoCount)) & 0xFFFF) == word;
+    return fifoHasWord() && ((fifo >> (8 * fifoCount)) & 0xFFFF) == word;
 }
+
+
+#ifdef EASY_DISK
+
+void
+DiskController::executeFifo()
+{
+}
+
+#else
+
+void
+DiskController::executeFifo()
+{
+    // Only proceed if a drive is selected.
+    Drive *drive = getSelectedDrive();
+    if (drive == NULL) return;
+    
+    switch (state) {
+            
+        case DRIVE_DMA_OFF:
+            break;
+            
+        case DRIVE_DMA_WAIT:
+        case DRIVE_DMA_READ:
+            
+            // Read a byte from the drive and store a time stamp
+            incoming = drive->readHead();
+            incomingCycle = amiga->agnus.clock;
+            
+            // Write byte into the FIFO buffer.
+            writeFifo(incoming);
+            
+            // Check if we've reached a SYNC mark.
+            if (compareFifo(dsksync)) {
+                
+                // Trigger a word SYNC interrupt.
+                debug(2, "SYNC IRQ\n");
+                amiga->paula.pokeINTREQ(0x9000);
+                
+                // Enable DMA if the controller was waiting for it.
+                if (state == DRIVE_DMA_WAIT) {
+                    debug(1, "DRIVE_DMA_SYNC_WAIT -> DRIVE_DMA_READ\n");
+                    state = DRIVE_DMA_READ;
+                    clearFifo();
+                }
+            }
+            break;
+            
+        case DRIVE_DMA_WRITE:
+        case DRIVE_DMA_FLUSH:
+            
+            if (fifoIsEmpty()) {
+                
+                // Switch off DMA is the last byte has been flushed out.
+                if (state == DRIVE_DMA_FLUSH) state = DRIVE_DMA_OFF;
+                
+            } else {
+                
+                // Read the outgoing byte from the FIFO buffer.
+                uint8_t outgoing = readFifo();
+                
+                // Write byte to disk.
+                drive->writeHead(outgoing);
+            }
+            break;
+    }
+}
+
+#endif
+
+void
+DiskController::flushFifo(Drive *drive)
+{
+    while (!fifoIsEmpty()) {
+        drive->writeHead(readFifo());
+    }
+    state = DRIVE_DMA_OFF;
+}
+
 
 #ifdef EASY_DISK
 
@@ -375,7 +471,7 @@ DiskController::readByte()
     
     // Only proceed if the selected drive provides data.
     // if (d->isDataSource()) {
-    if (state == DRIVE_DMA_READ || state == DRIVE_DMA_SYNC_WAIT) {
+    if (state == DRIVE_DMA_READ || state == DRIVE_DMA_WAIT) {
         
         // Read a single byte from the drive head.
         incoming = d->readHead();
@@ -430,7 +526,6 @@ DiskController::performDMA()
     switch (state) {
         
         case DRIVE_DMA_READ:
-        if (!fifoHasData()) return;
         performDMARead(drive);
         break;
         
@@ -443,14 +538,17 @@ DiskController::performDMA()
 }
 
 void
-DiskController::performDMARead(Drive *d)
+DiskController::performDMARead(Drive *drive)
 {
+    // Only proceed if the FIFO contains enough data.
+    if (!fifoHasWord()) return;
+
     // Determine how many words we are supposed to transfer.
     uint32_t remaining = acceleration;
     
     do {
-        // Read next word from the FIFO queue.
-        uint16_t word = readFifo();
+        // Read next word from the FIFO buffer.
+        uint16_t word = readFifo16();
         
         // Write word into memory.
         amiga->mem.pokeChip16(amiga->agnus.dskpt, word);
@@ -464,23 +562,25 @@ DiskController::performDMARead(Drive *d)
             amiga->paula.pokeINTREQ(0x8002);
             state = DRIVE_DMA_OFF;
             plainmsg("performRead: Checksum = %X\n", checksum);
-            floppySync = 0;
             return;
         }
         
         // Fill the FIFO with the next word if the loop repeats.
         if (--remaining) {
-            readByte();
-            readByte();
-            assert(fifoHasData());
+            executeFifo();
+            executeFifo();
+            assert(fifoHasWord());
         }
         
     } while (remaining);
 }
 
 void
-DiskController::performDMAWrite(Drive *d)
+DiskController::performDMAWrite(Drive *drive)
 {
+    // Only proceed if the FIFO has enough free space.
+    if (!fifoCanStoreWord()) return;
+    
     // Determine how many words we are supposed to transfer.
     uint32_t remaining = acceleration;
     
@@ -491,24 +591,32 @@ DiskController::performDMAWrite(Drive *d)
         checksum = fnv_1a_it32(checksum, word);
         // plaindebug("%d: %X (%X)\n", dsklen & 0x3FFF, word, dcheck);
         
-        // Write word to disk (TODO: WRITE INTO FIFO)
-        d->writeHead(HI_BYTE(word));
-        d->writeHead(LO_BYTE(word));
+        // Write word into FIFO buffer.
+        assert(fifoCount <= 4);
+        writeFifo(HI_BYTE(word));
+        writeFifo(LO_BYTE(word));
         
         // Finish up if this was the last word to transfer.
         if ((--dsklen & 0x3FFF) == 0) {
             
             amiga->paula.pokeINTREQ(0x8002);
-            state = DRIVE_DMA_OFF;
-            plainmsg("* performWrite: Checksum = %X\n", checksum);
-            floppySync = 0;
+
+            // The timing-accurate approach would be to empty the current
+            // FIFO contents by the event handler.
+            // state = DRIVE_DMA_FLUSH;
+            
+            // Not sure if the timing-accurate approach works properly...
+            // Hence, we cheat and simply empty the FIFO here.
+            flushFifo(drive);
+            
+            plainmsg("performWrite: Checksum = %X\n", checksum);
             return;
         }
         
         // TODO: Write another word if the loop repeats.
         if (--remaining) {
-            // writeByte();
-            // writeByte();
+            executeFifo();
+            executeFifo();
         }
         
     } while (remaining);
@@ -564,7 +672,6 @@ DiskController::performSimpleDMARead(Drive *drive)
             amiga->paula.pokeINTREQ(0x8002);
             state = DRIVE_DMA_OFF;
             plainmsg("doSimpleDMARead: Checksum = %X\n", checksum);
-            floppySync = 0;
             return;
         }
     }
@@ -591,7 +698,7 @@ DiskController::performSimpleDMAWrite(Drive *drive)
             
             amiga->paula.pokeINTREQ(0x8002);
             state = DRIVE_DMA_OFF;
-            plainmsg("* doSimpleDMAWrite: Checksum = %X\n", checksum);
+            plainmsg("doSimpleDMAWrite: Checksum = %X\n", checksum);
             return;
         }
     }
