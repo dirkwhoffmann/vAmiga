@@ -250,31 +250,29 @@ public:
      *     2. Simplified DMA mode
      *     3. Turbo DMA mode       (least accurate)
      *
-     * In standard DMA mode, performDMA() is invoked three times per rasterline,
-     * in each of the three DMA slots. Communication with the drive is decoupled
-     * by a FIFO buffer. Hence, data is never read from or written to the drive
-     * directly. Data is read from or written to the FIFO only. Data transfer
-     * between the FIFO and the drive takes place in serveDiskEvent() which
-     * is periodically invoked by the event handler.
+     * In standard DMA mode, performDMA() is invoked three times per raster
+     * line, in each of the three DMA slots. Communication with the drive is
+     * decoupled by a FIFO buffer. Data is never read directly from or written
+     * to the drive. It is always exchanged via the FIFO. Data transfer
+     * between the FIFO and the drive takes place in serveDiskEvent(), which is
+     * called periodically by the event handler.
      *
-     * In simplified DMA mode, performDMA() is invoked three times per
-     * rasterline, similar to standard mode. However, the FIFO stage is skipped.
-     * Data is read from or written to the drive immediately when the DMA
-     * transfer take place.
+     * In simplified DMA mode, performDMA() is called three times per raster
+     * line, just like in standard mode. The FIFO phase is skipped. I.e., data
+     * is read from or written to the drive immediately when a DMA transfer
+     * takes place.
      *
-     * Turbo DMA mode is used if the drive has been configured as a turbo-drive.
-     * For those drives, data transfer is performed immediately at the time the
-     * DSKLEN register is written to. This mode is the less compatible one.
-     * It does not use the disk DMA slots, nor does it use a FIFO buffer.
+     * Turbo DMA mode is applied when the drive is configured as a turbo drive.
+     * With these drives, data is transferred immediately when the DSKLEN
+     * register is written. This mode is the least compatible. Neither does it
+     * uses the rasterline DMA slots, nor does it use a FIFO buffer.
      */
-     
+  
     // 1. Standard DMA mode
     void performDMA();
     void performDMARead(Drive *drive);
     void performDMAWrite(Drive *drive);
  
-    void readByte(); // DEPRECATED, replaced by executeFifo()
-
     // 2. Simple DMA mode
     void performSimpleDMA();
     void performSimpleDMARead(Drive *drive);

@@ -315,7 +315,6 @@ DiskController::serveDiskEvent()
     assert(selected >= -1 && selected <= 3);
     
     // Receive next byte from the selected drive.
-    // readByte();
     executeFifo();
     
     // Schedule next event.
@@ -448,61 +447,6 @@ DiskController::flushFifo(Drive *drive)
     state = DRIVE_DMA_OFF;
 }
 
-
-#ifdef EASY_DISK
-
-void
-DiskController::readByte()
-{
-}
-
-#else
-
-void
-DiskController::readByte()
-{
-    Drive *d = getSelectedDrive();
-
-    // Only proceed if a drive is selected.
-    if (d == NULL) return;
-        
-    // Only proceed if there are remaining bytes to read.
-    if ((dsklen & 0x3FFF) == 0) return;
-    
-    // Only proceed if the selected drive provides data.
-    // if (d->isDataSource()) {
-    if (state == DRIVE_DMA_READ || state == DRIVE_DMA_WAIT) {
-        
-        // Read a single byte from the drive head.
-        incoming = d->readHead();
-        
-        // Remember when the incoming byte has been received.
-        incomingCycle = amiga->agnus.clock;
-        
-        // Push the incoming byte into the FIFO buffer.
-        writeFifo(incoming);
-        
-        // Check if we've reached a SYNC mark.
-        /*
-         if (compareFifo(dsksync)) {
-         
-         // Trigger a word SYNC interrupt.
-         debug(2, "SYNC IRQ\n");
-         amiga->paula.pokeINTREQ(0x9000);
-         
-         // Enable DMA if the controller was waiting for the SYNC mark.
-         if (state == DRIVE_DMA_SYNC_WAIT) {
-         debug(1, "DRIVE_DMA_SYNC_WAIT -> DRIVE_DMA_READ\n");
-         state = DRIVE_DMA_READ;
-         clearFifo();
-         }
-         }
-         */
-    }
-}
-
-#endif
-
 uint16_t
 DiskController::dmaRead()
 {
@@ -583,7 +527,7 @@ DiskController::performDMARead(Drive *drive)
             return;
         }
         
-         // If the loop repeats, let it look like the event handler had been executed.
+        // If the loop repeats, do what the event handler would do in between.
         if (--remaining) {
             executeFifo();
             executeFifo();
@@ -618,19 +562,28 @@ DiskController::performDMAWrite(Drive *drive)
             
             amiga->paula.pokeINTREQ(0x8002);
 
-            // The timing-accurate approach would be to empty the current
-            // FIFO contents by the event handler.
+            /* The timing-accurate approach: Set state to DRIVE_DMA_FLUSH.
+             * The event handler recognises this state and switched to
+             * DRIVE_DMA_OFF once the FIFO has been emptied.
+             */
+            
             // state = DRIVE_DMA_FLUSH;
             
-            // Not sure if the timing-accurate approach works properly...
-            // Hence, we cheat and simply empty the FIFO here.
-            flushFifo(drive);
+            /* I'm unsure of the timing-accurate approach works properly,
+             * because the disk IRQ would be triggered before the last byte
+             * has been written.
+             * Hence, we play safe here and flush the FIFO immediately.
+             */
+            while (!fifoIsEmpty()) {
+                drive->writeHead(readFifo());
+            }
+            state = DRIVE_DMA_OFF;
             
             plainmsg("performWrite: Checksum = %X\n", checksum);
             return;
         }
         
-        // If the loop repeats, let it look like the event handler had been executed.
+        // If the loop repeats, do what the event handler would do in between.
         if (--remaining) {
             executeFifo();
             executeFifo();
