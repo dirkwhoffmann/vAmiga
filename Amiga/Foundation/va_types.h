@@ -15,6 +15,7 @@
 #include "EventHandlerTypes.h"
 #include "AgnusTypes.h"
 #include "DeniseTypes.h"
+#include "PaulaTypes.h"
 #include "DriveTypes.h"
 #include "DiskTypes.h"
 
@@ -333,27 +334,5 @@ typedef struct
     bool bzero;
 }
 BlitterInfo;
-
-typedef struct
-{
-    uint16_t intreq;
-    uint16_t intena;
-    uint16_t adkcon;
-}
-PaulaInfo;
-
-typedef struct
-{
-    int8_t selectedDrive;
-    DriveState state;
-    int32_t fifo[6];
-    uint8_t fifoCount;
-    
-    uint16_t dsklen;
-    uint16_t dskbytr;
-    uint16_t dsksync;
-    uint8_t prb;
-}
-DiskControllerInfo;
 
 #endif

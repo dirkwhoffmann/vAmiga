@@ -628,6 +628,11 @@ Agnus::pokeDMACON(uint16_t value)
     bool oldBLTEN = (dmacon & BLTEN) && oldDMAEN;
     bool oldSPREN = (dmacon & SPREN) && oldDMAEN;
     bool oldDSKEN = (dmacon & DSKEN) && oldDMAEN;
+    bool oldAU0EN = (dmacon & AU0EN) && oldDMAEN;
+    bool oldAU1EN = (dmacon & AU1EN) && oldDMAEN;
+    bool oldAU2EN = (dmacon & AU2EN) && oldDMAEN;
+    bool oldAU3EN = (dmacon & AU3EN) && oldDMAEN;
+
     
     if (value & 0x8000) dmacon |= value; else dmacon &= ~value;
     dmacon &= 0x07FF;
@@ -638,7 +643,11 @@ Agnus::pokeDMACON(uint16_t value)
     bool newBLTEN = (dmacon & BLTEN) && newDMAEN;
     bool newSPREN = (dmacon & SPREN) && newDMAEN;
     bool newDSKEN = (dmacon & DSKEN) && newDMAEN;
- 
+    bool newAU0EN = (dmacon & AU0EN) && newDMAEN;
+    bool newAU1EN = (dmacon & AU1EN) && newDMAEN;
+    bool newAU2EN = (dmacon & AU2EN) && newDMAEN;
+    bool newAU3EN = (dmacon & AU3EN) && newDMAEN;
+
     // Bitplane DMA
     if (oldBPLEN ^ newBPLEN) {
 
@@ -725,6 +734,71 @@ Agnus::pokeDMACON(uint16_t value)
             // Disk DMA off
             debug("Disk DMA switched off\n");
             switchDiskDmaOff();
+        }
+    }
+    
+    // Audio DMA
+    if (oldAU0EN ^ newAU0EN) {
+        
+        if (newAU0EN) {
+            
+            debug("Audio 0 DMA switched on\n");
+            switchAudioDmaOn(0);
+            _paula->audioUnit.enableDMA(0);
+            
+        } else {
+            
+            debug("Audio 0 DMA switched off\n");
+            switchAudioDmaOff(0);
+            _paula->audioUnit.disableDMA(0);
+        }
+    }
+    
+    if (oldAU1EN ^ newAU1EN) {
+        
+        if (newAU1EN) {
+            
+            debug("Audio 1 DMA switched on\n");
+            switchAudioDmaOn(1);
+            _paula->audioUnit.enableDMA(1);
+            
+        } else {
+            
+            debug("Audio 1 DMA switched off\n");
+            switchAudioDmaOff(1);
+            _paula->audioUnit.disableDMA(1);
+        }
+    }
+    
+    if (oldAU2EN ^ newAU2EN) {
+        
+        if (newAU2EN) {
+            
+            debug("Audio 2 DMA switched on\n");
+            switchAudioDmaOn(2);
+            _paula->audioUnit.enableDMA(2);
+            
+        } else {
+            
+            debug("Audio 2 DMA switched off\n");
+            switchAudioDmaOff(2);
+            _paula->audioUnit.disableDMA(2);
+        }
+    }
+    
+    if (oldAU3EN ^ newAU3EN) {
+        
+        if (newAU3EN) {
+            
+            debug("Audio 3 DMA switched on\n");
+            switchAudioDmaOn(3);
+            _paula->audioUnit.enableDMA(3);
+            
+        } else {
+            
+            debug("Audio 3 DMA switched off\n");
+            switchAudioDmaOff(3);
+            _paula->audioUnit.disableDMA(3);
         }
     }
 }
@@ -836,7 +910,9 @@ Agnus::pokeAUDxLCH(int x, uint16_t value)
     assert(x < 4);
     
     debug(2, "pokeAUD%dLCH(%X)\n", x, value);
-    audlc[x] = REPLACE_HI_WORD(audlc[x], value & 0x7);
+    // audlc[x] = REPLACE_HI_WORD(audlc[x], value & 0x7);
+    _paula->audioUnit.audlcLatch[x] =
+    REPLACE_HI_WORD(_paula->audioUnit.audlcLatch[x], value & 0x7);
 }
 
 void
@@ -845,7 +921,9 @@ Agnus::pokeAUDxLCL(int x, uint16_t value)
     assert(x < 4);
     
     debug(2, "pokeAUD%dLCL(%X)\n", x, value);
-    audlc[x] = REPLACE_LO_WORD(audlc[x], value);
+    // audlc[x] = REPLACE_LO_WORD(audlc[x], value);
+    _paula->audioUnit.audlcLatch[x] =
+    REPLACE_LO_WORD(_paula->audioUnit.audlcLatch[x], value);
 }
 
 void
@@ -1257,6 +1335,9 @@ Agnus::hsyncHandler()
     
     // Let Denise finish the current rasterline
     _denise->endOfLine();
+    
+    // Compute some sound samples
+    _paula->audioUnit.hsyncHandler();
     
     // CIA B counts HSYNCs
     _ciaB->incrementTOD();

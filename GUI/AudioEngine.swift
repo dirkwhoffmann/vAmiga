@@ -50,6 +50,9 @@ public class AudioEngine: NSObject {
         let sampleRate = hardwareFormat.sampleRate
         let stereo = (channels > 1)
         
+        track("sampleRate = \(sampleRate)")
+        track("channels = \(channels)")
+
         // Make input bus compatible with output bus
         let renderFormat = AVAudioFormat(standardFormatWithSampleRate: sampleRate,
                                          channels: (stereo ? 2 : 1))

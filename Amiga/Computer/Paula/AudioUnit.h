@@ -88,15 +88,42 @@ class AudioUnit : public HardwareComponent {
     
     // Audio length (AUDxLEN)
     uint16_t audlen[4];
+    uint16_t audlenInternal[4];
     
     // Audio period (AUDxPER)
     uint16_t audper[4];
+    int32_t audperInternal[4];
     
     // Audio volume (AUDxVOL)
     uint16_t audvol[4];
-    
+    uint16_t audvolInternal[4];
+
     // Audio data (AUDxDAT)
     uint16_t auddat[4];
+    uint16_t auddatInternal[4];
+
+public:
+    
+    uint32_t audlcLatch[4];
+    
+    
+    //
+    // State machine
+    //
+
+private:
+    
+    bool dmaEnabled[4];
+    
+    // Current state of all four state machines
+    uint8_t currentState[4];
+    
+    
+    //
+    // Sample generation
+    //
+    
+    double dmaCycleCounter = 0;
     
     
     //
@@ -243,13 +270,23 @@ class AudioUnit : public HardwareComponent {
     
     public:
     
-    /* Executes SID until a certain cycle is reached
+    // Starts or ends audio DMA (called inside pokeDMACON)
+    void enableDMA(int channel);
+    void disableDMA(int channel);
+
+    /* Executes the audio unit until a certain cycle is reached (NEEDED?)
      */
-    void executeUntil(uint64_t targetCycle);
+    void executeUntil(int64_t targetCycle);
     
-    /* Executes SID for a certain number of cycles
+    /* Executes the audio unit for a certain number of DMA cycles.
      */
-    void execute(uint64_t numCycles);
+    void execute(int64_t numCycles);
+    
+    // Executed at the end of each rasterline
+    void hsyncHandler();
+    
+    // Executes the state machine for a certain number of DMA cycles
+    void executeStateMachine(int channel, DMACycle cycles);
     
     
     //
