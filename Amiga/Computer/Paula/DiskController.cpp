@@ -35,12 +35,12 @@ DiskController::DiskController()
 }
 
 void
-DiskController::_setAmiga()
+DiskController::_initialize()
 {
-    df[0] = &amiga->df0;
-    df[1] = &amiga->df1;
-    df[2] = &amiga->df2;
-    df[3] = &amiga->df3;
+    df[0] = &_amiga->df0;
+    df[1] = &_amiga->df1;
+    df[2] = &_amiga->df2;
+    df[3] = &_amiga->df3;
 }
 
 void
@@ -66,7 +66,7 @@ void
 DiskController::_ping()
 {
     for (int df = 0; df < 4; df++) {
-        amiga->putMessage(connected[df] ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, df);
+        _amiga->putMessage(connected[df] ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, df);
     }
 }
 
@@ -79,7 +79,7 @@ DiskController::_inspect()
     info.state = state;
     info.fifoCount = fifoCount;
     info.dsklen = dsklen;
-    info.dskbytr = amiga->mem.spypeekChip16(DSKBYTR);
+    info.dskbytr = _mem->spypeekChip16(DSKBYTR);
     info.dsksync = dsksync;
     info.prb = prb;
  
@@ -142,8 +142,8 @@ DiskController::setConnected(int df, bool value)
     
     // Plug the drive in our out and inform the GUI
     connected[df] = value;
-    amiga->putMessage(value ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, df);
-    amiga->putMessage(MSG_CONFIG);
+    _amiga->putMessage(value ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, df);
+    _amiga->putMessage(MSG_CONFIG);
 }
 
 Drive *
@@ -196,7 +196,7 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
         } else {
             
             // Check the WORDSYNC bit in the ADKCON register
-            if (GET_BIT(amiga->paula.adkcon, 10)) {
+            if (GET_BIT(_paula->adkcon, 10)) {
                 
                 // Wait with reading until a sync mark has been found
                 // plaindebug(1, "dma = DRIVE_DMA_READ_SYNC\n");
@@ -238,11 +238,11 @@ DiskController::peekDSKBYTR()
     uint16_t result = incoming;
     
     // DSKBYT
-    assert(amiga->agnus.clock >= incomingCycle);
-    if (amiga->agnus.clock - incomingCycle <= 7) SET_BIT(result, 15);
+    assert(_agnus->clock >= incomingCycle);
+    if (_agnus->clock - incomingCycle <= 7) SET_BIT(result, 15);
     
     // DMAON
-    if (amiga->agnus.dskDMA() && state != DRIVE_DMA_OFF) SET_BIT(result, 14);
+    if (_agnus->dskDMA() && state != DRIVE_DMA_OFF) SET_BIT(result, 14);
 
     // DSKWRITE
     if (dsklen & 0x4000) SET_BIT(result, 13);
@@ -303,11 +303,11 @@ DiskController::PRBdidChange(uint8_t oldValue, uint8_t newValue)
     // Schedule the first rotation event if at least one drive is spinning.
     if (!spinning()) {
         // debug("Cancelling DSK_SLOT events\n");
-        handler->cancelSec(DSK_SLOT);
+        _handler->cancelSec(DSK_SLOT);
     }
-    else if (!handler->hasEventSec(DSK_SLOT)) {
+    else if (!_handler->hasEventSec(DSK_SLOT)) {
         // debug("Activating DSK_SLOT events\n");
-        handler->scheduleSecRel(DSK_SLOT, DMA_CYCLES(56), DSK_ROTATE);
+        _handler->scheduleSecRel(DSK_SLOT, DMA_CYCLES(56), DSK_ROTATE);
     }
 }
 
@@ -320,7 +320,7 @@ DiskController::serveDiskEvent()
         executeFifo();
     
         // Schedule next event.
-        handler->scheduleSecRel(DSK_SLOT, DMA_CYCLES(56), DSK_ROTATE);
+        _handler->scheduleSecRel(DSK_SLOT, DMA_CYCLES(56), DSK_ROTATE);
     }
 }
 
@@ -388,7 +388,7 @@ DiskController::executeFifo()
             
             // Read a byte from the drive and store a time stamp
             incoming = drive->readHead();
-            incomingCycle = amiga->agnus.clock;
+            incomingCycle = _agnus->clock;
             
             // Write byte into the FIFO buffer.
             writeFifo(incoming);
@@ -398,7 +398,7 @@ DiskController::executeFifo()
                 
                 // Trigger a word SYNC interrupt.
                 debug(2, "SYNC IRQ\n");
-                amiga->paula.pokeINTREQ(0x9000);
+                _paula->pokeINTREQ(0x9000);
                 
                 // Enable DMA if the controller was waiting for it.
                 if (state == DRIVE_DMA_WAIT) {
@@ -432,19 +432,19 @@ DiskController::executeFifo()
 uint16_t
 DiskController::dmaRead()
 {
-    uint32_t addr = amiga->agnus.dskpt;
+    uint32_t addr = _agnus->dskpt;
     
-    INC_DMAPTR(amiga->agnus.dskpt);
-    return amiga->mem.peekChip16(addr);
+    INC_DMAPTR(_agnus->dskpt);
+    return _mem->peekChip16(addr);
 }
 
 void
 DiskController::dmaWrite(uint16_t word)
 {
-    uint32_t addr = amiga->agnus.dskpt;
+    uint32_t addr = _agnus->dskpt;
     
-    INC_DMAPTR(amiga->agnus.dskpt);
-    amiga->mem.pokeChip16(addr, word);
+    INC_DMAPTR(_agnus->dskpt);
+    _mem->pokeChip16(addr, word);
 }
 
 void
@@ -498,7 +498,7 @@ DiskController::performDMARead(Drive *drive)
         // Finish up if this was the last word to transfer.
         if ((--dsklen & 0x3FFF) == 0) {
             
-            amiga->paula.pokeINTREQ(0x8002);
+            _paula->pokeINTREQ(0x8002);
             state = DRIVE_DMA_OFF;
             plainmsg("performRead: Checksum = %X\n", checksum);
             return;
@@ -537,7 +537,7 @@ DiskController::performDMAWrite(Drive *drive)
         // Finish up if this was the last word to transfer.
         if ((--dsklen & 0x3FFF) == 0) {
             
-            amiga->paula.pokeINTREQ(0x8002);
+            _paula->pokeINTREQ(0x8002);
 
             /* The timing-accurate approach: Set state to DRIVE_DMA_FLUSH.
              * The event handler recognises this state and switched to
@@ -615,7 +615,7 @@ DiskController::performSimpleDMARead(Drive *drive)
         
         if ((--dsklen & 0x3FFF) == 0) {
             
-            amiga->paula.pokeINTREQ(0x8002);
+            _paula->pokeINTREQ(0x8002);
             state = DRIVE_DMA_OFF;
             plainmsg("doSimpleDMARead: Checksum = %X\n", checksum);
             return;
@@ -641,7 +641,7 @@ DiskController::performSimpleDMAWrite(Drive *drive)
         
         if ((--dsklen & 0x3FFF) == 0) {
             
-            amiga->paula.pokeINTREQ(0x8002);
+            _paula->pokeINTREQ(0x8002);
             state = DRIVE_DMA_OFF;
             plainmsg("doSimpleDMAWrite: Checksum = %X\n", checksum);
             return;
@@ -673,7 +673,7 @@ DiskController::performTurboDMA(Drive *drive)
     }
     
     // Trigger disk interrupt
-    amiga->paula.pokeINTREQ(0x8002);
+    _paula->pokeINTREQ(0x8002);
     state = DRIVE_DMA_OFF;
 }
 

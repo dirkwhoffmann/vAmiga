@@ -68,13 +68,13 @@ EventHandler::_inspect()
     // Prevent external access to variable 'info'
     pthread_mutex_lock(&lock);
     
-    info.masterClock = amiga->masterClock;
-    info.dmaClock = amiga->agnus.clock;
-    info.ciaAClock = amiga->ciaA.clock;
-    info.ciaBClock  = amiga->ciaB.clock;
-    info.frame = amiga->agnus.frame;
-    info.vpos = amiga->agnus.vpos;
-    info.hpos = amiga->agnus.hpos;
+    info.masterClock = _amiga->masterClock;
+    info.dmaClock = _agnus->clock;
+    info.ciaAClock = _ciaA->clock;
+    info.ciaBClock  = _ciaB->clock;
+    info.frame = _agnus->frame;
+    info.vpos = _agnus->vpos;
+    info.hpos = _agnus->hpos;
     
     // Primary events
     for (unsigned i = 0; i < PRIM_SLOT_COUNT; i++)
@@ -99,12 +99,12 @@ EventHandler::_inspectPrimSlot(uint32_t slot)
     int16_t hpos;
     Cycle trigger = primSlot[slot].triggerCycle;
     
-    amiga->agnus.cycleToBeamAbs(trigger, frame, vpos, hpos);
+    _agnus->cycleToBeamAbs(trigger, frame, vpos, hpos);
     
     i->trigger = trigger;
-    i->triggerRel = trigger - amiga->agnus.clock;
+    i->triggerRel = trigger - _agnus->clock;
     i->eventId = primSlot[slot].id;
-    i->frame = frame - amiga->agnus.frame;
+    i->frame = frame - _agnus->frame;
     i->vpos = vpos;
     i->hpos = hpos;
     
@@ -244,12 +244,12 @@ EventHandler::_inspectSecSlot(uint32_t slot)
     int16_t hpos;
     Cycle trigger = secSlot[slot].triggerCycle;
     
-    amiga->agnus.cycleToBeamAbs(trigger, frame, vpos, hpos);
+    _agnus->cycleToBeamAbs(trigger, frame, vpos, hpos);
     
     i->trigger = trigger;
-    i->triggerRel = trigger - amiga->agnus.clock;
+    i->triggerRel = trigger - _agnus->clock;
     i->eventId = secSlot[slot].id;
-    i->frame = frame - amiga->agnus.frame;
+    i->frame = frame - _agnus->frame;
     i->vpos = vpos;
     i->hpos = hpos;
     
@@ -337,7 +337,7 @@ EventHandler::_dump()
 {
     _inspect();
     
-    amiga->dumpClock();
+    _amiga->dumpClock();
     
     plainmsg("Primary events:\n");
     for (unsigned i = 0; i <PRIM_SLOT_COUNT; i++) {
@@ -423,11 +423,11 @@ EventHandler::_executeUntil(Cycle cycle) {
         switch(primSlot[CIAA_SLOT].id) {
             
             case CIA_EXECUTE:
-            amiga->ciaA.executeOneCycle();
+            _ciaA->executeOneCycle();
             break;
             
             case CIA_WAKEUP:
-            amiga->ciaA.wakeUp();
+            _ciaA->wakeUp();
             break;
             
             default:
@@ -443,11 +443,11 @@ EventHandler::_executeUntil(Cycle cycle) {
         switch(primSlot[CIAB_SLOT].id) {
             
             case CIA_EXECUTE:
-            amiga->ciaB.executeOneCycle();
+            _ciaB->executeOneCycle();
             break;
             
             case CIA_WAKEUP:
-            amiga->ciaB.wakeUp();
+            _ciaB->wakeUp();
             break;
             
             default:
@@ -458,25 +458,25 @@ EventHandler::_executeUntil(Cycle cycle) {
     // Check for a bitplane event
     if (isDue(DMA_SLOT, cycle)) {
         assert(checkTriggeredEvent(DMA_SLOT));
-        amiga->agnus.serviceDMAEvent(primSlot[DMA_SLOT].id);
+        _agnus->serviceDMAEvent(primSlot[DMA_SLOT].id);
     }
     
     // Check for a Copper event
     if (isDue(COP_SLOT, cycle)) {
         assert(checkTriggeredEvent(COP_SLOT));
-        amiga->agnus.copper.serviceEvent(primSlot[COP_SLOT].id);
+        _agnus->copper.serviceEvent(primSlot[COP_SLOT].id);
     }
     
     // Check for a Blitter event
     if (isDue(BLT_SLOT, cycle)) {
         assert(checkTriggeredEvent(BLT_SLOT));
-        amiga->agnus.blitter.serviceEvent(primSlot[BLT_SLOT].id);
+        _agnus->blitter.serviceEvent(primSlot[BLT_SLOT].id);
     }
     
     // Check for a raster event
     if (isDue(RAS_SLOT, cycle)) {
         assert(checkTriggeredEvent(RAS_SLOT));
-        amiga->agnus.serviceRASEvent(primSlot[RAS_SLOT].id);
+        _agnus->serviceRASEvent(primSlot[RAS_SLOT].id);
     }
     
     // Check if a secondary event needs to be processed
@@ -496,7 +496,7 @@ EventHandler::_executeSecUntil(Cycle cycle) {
     
     // Check all secondary event slots one by one
     if (isDueSec(DSK_SLOT, cycle)) {
-        amiga->paula.diskController.serveDiskEvent(); 
+        _paula->diskController.serveDiskEvent();
     }
     if (isDueSec(IRQ_TBE_SLOT, cycle)) {
         serveIRQEvent(IRQ_TBE_SLOT, 0);
@@ -571,7 +571,7 @@ EventHandler::scheduleRel(EventSlot s, Cycle cycle, EventID id)
 {
     assert(isPrimarySlot(s));
     
-    cycle += amiga->agnus.clock;
+    cycle += _agnus->clock;
     
     primSlot[s].triggerCycle = cycle;
     primSlot[s].id = id;
@@ -586,7 +586,7 @@ EventHandler::schedulePos(EventSlot s, int16_t vpos, int16_t hpos, EventID id)
     assert(isPrimarySlot(s));
     assert(isVposHpos(vpos, hpos));
     
-    Cycle cycle = amiga->agnus.beamToCyclesAbs(vpos, hpos);
+    Cycle cycle = _agnus->beamToCyclesAbs(vpos, hpos);
     
     primSlot[s].triggerCycle = cycle;
     primSlot[s].id = id;
@@ -611,7 +611,7 @@ EventHandler::rescheduleRel(EventSlot s, Cycle cycle)
 {
     assert(isPrimarySlot(s));
     
-    cycle += amiga->agnus.clock;
+    cycle += _agnus->clock;
     
     primSlot[s].triggerCycle = cycle;
     if (cycle < nextPrimTrigger) nextPrimTrigger = cycle;
@@ -653,7 +653,7 @@ EventHandler::scheduleSecRel(EventSlot s, Cycle cycle, EventID id)
 {
     assert(isSecondarySlot(s));
     
-    cycle += amiga->agnus.clock;
+    cycle += _agnus->clock;
     
     // Schedule event in secondary table
     secSlot[s].triggerCycle = cycle;
@@ -670,7 +670,7 @@ EventHandler::scheduleSecPos(EventSlot s, int16_t vpos, int16_t hpos, EventID id
     assert(isSecondarySlot(s));
     assert(isVposHpos(vpos, hpos));
     
-    Cycle cycle = amiga->agnus.beamToCyclesAbs(vpos, hpos);
+    Cycle cycle = _agnus->beamToCyclesAbs(vpos, hpos);
     
     secSlot[s].triggerCycle = cycle;
     secSlot[s].id = id;
@@ -697,7 +697,7 @@ EventHandler::rescheduleSecRel(EventSlot s, Cycle cycle)
 {
     assert(isSecondarySlot(s));
     
-    cycle += amiga->agnus.clock;
+    cycle += _agnus->clock;
     
     secSlot[s].triggerCycle = cycle;
     if (cycle < nextSecTrigger) nextSecTrigger = cycle;
@@ -727,11 +727,11 @@ EventHandler::serveIRQEvent(EventSlot s, int irqBit)
     switch (secSlot[s].id) {
         
         case IRQ_SET:
-        amiga->paula.setINTREQ(0x8000 | (1 << irqBit));
+        _paula->setINTREQ(0x8000 | (1 << irqBit));
         break;
         
         case IRQ_CLEAR:
-        amiga->paula.setINTREQ(1 << irqBit);
+        _paula->setINTREQ(1 << irqBit);
         break;
         
         default:
@@ -747,14 +747,14 @@ EventHandler::serveINSEvent()
     switch (secSlot[INSPECTOR_SLOT].id) {
         
         case INS_NONE:   break;
-        case INS_AMIGA:  amiga->inspect(); break;
-        case INS_CPU:    amiga->cpu.inspect(); break;
-        case INS_MEM:    amiga->mem.inspect(); break;
-        case INS_CIA:    amiga->ciaA.inspect(); amiga->ciaB.inspect(); break;
-        case INS_AGNUS:  amiga->agnus.inspect(); break;
-        case INS_PAULA:  amiga->paula.inspect(); break;
-        case INS_DENISE: amiga->denise.inspect(); break;
-        case INS_EVENTS: amiga->agnus.eventHandler.inspect(); break;
+        case INS_AMIGA:  _amiga->inspect(); break;
+        case INS_CPU:    _cpu->inspect(); break;
+        case INS_MEM:    _mem->inspect(); break;
+        case INS_CIA:    _ciaA->inspect(); _ciaB->inspect(); break;
+        case INS_AGNUS:  _agnus->inspect(); break;
+        case INS_PAULA:  _paula->inspect(); break;
+        case INS_DENISE: _denise->inspect(); break;
+        case INS_EVENTS: _agnus->eventHandler.inspect(); break;
         default:         assert(false);
     }
     
@@ -832,7 +832,7 @@ EventHandler::checkTriggeredEvent(EventSlot s)
     assert(isPrimarySlot(s));
     
     // Note: This function has to be called at the trigger cycle
-    if (amiga->agnus.clock != primSlot[s].triggerCycle) {
+    if (_agnus->clock != primSlot[s].triggerCycle) {
         return true;
     }
     

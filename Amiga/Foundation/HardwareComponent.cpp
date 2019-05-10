@@ -24,11 +24,11 @@ void
 HardwareComponent::prefix()
 {
     fprintf(stderr, "[%lld] (%3d,%3d) ",
-            amiga->agnus.frame, amiga->agnus.vpos, amiga->agnus.hpos); 
+            _agnus->frame, _agnus->vpos, _agnus->hpos);
 
-    fprintf(stderr, " %06X: ", amiga->cpu.getPC());
+    fprintf(stderr, " %06X: ", _cpu->getPC());
 
-    uint16_t dmacon = amiga->agnus.dmacon;
+    uint16_t dmacon = _agnus->dmacon;
     bool dmaen = dmacon & DMAEN;
     fprintf(stderr, "%c%c%c%c ",
             (dmacon & BPLEN) ? (dmaen ? 'P' : 'p') : '-',
@@ -36,28 +36,37 @@ HardwareComponent::prefix()
             (dmacon & BLTEN) ? (dmaen ? 'B' : 'b') : '-',
             (dmacon & DSKEN) ? (dmaen ? 'D' : 'd') : '-');
 
-    fprintf(stderr, "%04X %04X: ", amiga->paula.intena, amiga->paula.intreq);
+    fprintf(stderr, "%04X %04X: ", _paula->intena, _paula->intreq);
 
     if (getDescription())
         fprintf(stderr, "%s: ", getDescription());
 }
 
 void
-HardwareComponent::setAmiga(Amiga *amiga)
+HardwareComponent::initialize(Amiga *amiga)
 {
-    assert(this->amiga == NULL);
+    assert(this->_amiga == NULL);
     assert(amiga != NULL);
 
-    this->amiga = amiga;
-    this->handler = &amiga->agnus.eventHandler;
-    
-    // Set the reference in all sub components
+    this->_amiga   = amiga;
+    this->_handler = &amiga->agnus.eventHandler;
+    this->_mem     = &amiga->mem;
+    this->_cpu     = &amiga->cpu;
+    this->_ciaA    = &amiga->ciaA;
+    this->_ciaB    = &amiga->ciaB;
+    this->_agnus   = &amiga->agnus;
+    this->_denise  = &amiga->denise;
+    this->_paula   = &amiga->paula;
+    this->_port1   = &amiga->controlPort1;
+    this->_port2   = &amiga->controlPort2;
+
+    // Initialize all subcomponents
     for (HardwareComponent *c : subComponents) {
-        c->setAmiga(amiga);
+        c->initialize(amiga);
     }
     
     // Call the delegation method
-    _setAmiga();
+    _initialize();
 }
 
 void
@@ -65,7 +74,7 @@ HardwareComponent::powerOn()
 {
     if (!power) {
         
-        // Power all sub components on
+        // Power all subcomponents on
         for (HardwareComponent *c : subComponents) {
             c->powerOn();
         }
@@ -95,7 +104,7 @@ HardwareComponent::powerOff()
         power = false;
         _powerOff();
 
-        // Power all sub components off
+        // Power all subcomponents off
         for (HardwareComponent *c : subComponents) {
             c->powerOff();
         }
@@ -110,7 +119,7 @@ HardwareComponent::run()
         // Power on if needed
         powerOn();
             
-        // Start all sub components
+        // Start all subcomponents
         for (HardwareComponent *c : subComponents) {
             c->run();
         }
@@ -132,7 +141,7 @@ HardwareComponent::pause()
         running = false;
         _pause();
 
-        // Pause all sub components
+        // Pause all subcomponents
         for (HardwareComponent *c : subComponents) {
             c->pause();
         }
@@ -142,7 +151,7 @@ HardwareComponent::pause()
 void
 HardwareComponent::reset()
 {
-    // Reset all sub components
+    // Reset all subcomponents
     for (HardwareComponent *c : subComponents) {
         c->reset();
     }
@@ -155,7 +164,7 @@ HardwareComponent::reset()
 void
 HardwareComponent::ping()
 {
-    // Ping all sub components
+    // Ping all subcomponents
     for (HardwareComponent *c : subComponents) {
         c->ping();
     }
@@ -168,7 +177,7 @@ HardwareComponent::ping()
 void
 HardwareComponent::inspect()
 {
-    // Inspect all sub components
+    // Inspect all subcomponents
     for (HardwareComponent *c : subComponents) {
         c->inspect();
     }
@@ -191,7 +200,7 @@ HardwareComponent::setWarp(bool value)
         
         warp = value;
         
-        // Enable or disable warp mode for all sub components
+        // Enable or disable warp mode for all subcomponents
         for (HardwareComponent *c : subComponents) {
             c->setWarp(value);
         }
@@ -244,7 +253,7 @@ HardwareComponent::loadFromBuffer(uint8_t **buffer)
     // Call delegation method
     willLoadFromBuffer(buffer);
     
-    // Load internal state of all sub components
+    // Load internal state of all subcomponents
     for (HardwareComponent *c : subComponents) {
         c->loadFromBuffer(buffer);
     }
@@ -311,7 +320,7 @@ HardwareComponent::saveToBuffer(uint8_t **buffer)
     // Call delegation method
     willSaveToBuffer(buffer);
     
-    // Save internal state of all sub components
+    // Save internal state of all subcomponents
     for (HardwareComponent *c : subComponents) {
         c->saveToBuffer(buffer);
     }

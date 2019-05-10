@@ -91,8 +91,8 @@ Amiga::Amiga()
         { &clockBase,     sizeof(clockBase),     0 },
     });
     
-    // Install a reference to the top-level object in each subcomponent
-    setAmiga(this);
+    // Initialize the quick-lookup references in each subcomponent
+    initialize(this);
     
     // Initialize the mach timer info
     mach_timebase_info(&tb);
@@ -152,7 +152,7 @@ Amiga::setInspectionTarget(EventID id)
 {
     suspend();
     inspectionTarget = id;
-    handler->scheduleSecRel(INSPECTOR_SLOT, 0, inspectionTarget);
+    _handler->scheduleSecRel(INSPECTOR_SLOT, 0, inspectionTarget);
     resume();
 }
 
@@ -494,7 +494,7 @@ Amiga::_run()
     pthread_create(&p, NULL, threadMain, (void *)this);
     
     // Inform the GUI.
-    amiga->putMessage(MSG_RUN);
+    _amiga->putMessage(MSG_RUN);
 }
 
 void
@@ -512,7 +512,7 @@ Amiga::_pause()
     inspect();
 
     // Inform the GUI
-    amiga->putMessage(MSG_PAUSE);
+    _amiga->putMessage(MSG_PAUSE);
 }
 
 void
@@ -520,7 +520,7 @@ Amiga::_reset()
 {
     msg("Reset\n");
     
-    amiga->putMessage(MSG_RESET);
+    _amiga->putMessage(MSG_RESET);
     ping();
 }
 
@@ -762,10 +762,10 @@ Amiga::snapshotIsDue()
 {
     unsigned fps = 50; // PAL frames per second
     
-    if (!getTakeAutoSnapshots() || amiga->getSnapshotInterval() <= 0)
+    if (!getTakeAutoSnapshots() || _amiga->getSnapshotInterval() <= 0)
     return false;
     
-    return agnus.frame % (fps * amiga->getSnapshotInterval()) == 0;
+    return agnus.frame % (fps * _amiga->getSnapshotInterval()) == 0;
 }
 
 void
@@ -889,11 +889,11 @@ void
 Amiga::runLoop()
 {
     // Prepare to run
-    amiga->restartTimer();
+    _amiga->restartTimer();
     
     // Enable or disable debugging features
     debugMode ? setControlFlags(RL_DEBUG) : clearControlFlags(RL_DEBUG);
-    handler->scheduleSecRel(INSPECTOR_SLOT, 0, inspectionTarget);
+    _handler->scheduleSecRel(INSPECTOR_SLOT, 0, inspectionTarget);
     
     // Enter the loop
     do {
@@ -956,25 +956,25 @@ Amiga::dumpClock()
              AS_DMA_CYCLES(masterClock),
              AS_CIA_CYCLES(masterClock));
     plainmsg("    DMA clock: %13lld  %13lld %13lld %13lld\n",
-             amiga->agnus.clock,
-             AS_CPU_CYCLES(amiga->agnus.clock),
-             AS_DMA_CYCLES(amiga->agnus.clock),
-             AS_CIA_CYCLES(amiga->agnus.clock));
+             _agnus->clock,
+             AS_CPU_CYCLES(_agnus->clock),
+             AS_DMA_CYCLES(_agnus->clock),
+             AS_CIA_CYCLES(_agnus->clock));
     plainmsg("  Frame clock: %13lld  %13lld %13lld %13lld\n",
-             amiga->agnus.latchedClock,
-             AS_CPU_CYCLES(amiga->agnus.latchedClock),
-             AS_DMA_CYCLES(amiga->agnus.latchedClock),
-             AS_CIA_CYCLES(amiga->agnus.latchedClock));
+             _agnus->latchedClock,
+             AS_CPU_CYCLES(_agnus->latchedClock),
+             AS_DMA_CYCLES(_agnus->latchedClock),
+             AS_CIA_CYCLES(_agnus->latchedClock));
     plainmsg("  CIA A clock: %13lld  %13lld %13lld %13lld\n",
-             amiga->ciaA.clock,
-             AS_CPU_CYCLES(amiga->ciaA.clock),
-             AS_DMA_CYCLES(amiga->ciaA.clock),
-             AS_CIA_CYCLES(amiga->ciaA.clock));
+             _ciaA->clock,
+             AS_CPU_CYCLES(_ciaA->clock),
+             AS_DMA_CYCLES(_ciaA->clock),
+             AS_CIA_CYCLES(_ciaA->clock));
     plainmsg("  CIA B clock: %13lld  %13lld %13lld %13lld\n",
-             amiga->ciaB.clock,
-             AS_CPU_CYCLES(amiga->ciaB.clock),
-             AS_DMA_CYCLES(amiga->ciaB.clock),
-             AS_CIA_CYCLES(amiga->ciaB.clock));
+             _ciaB->clock,
+             AS_CPU_CYCLES(_ciaB->clock),
+             AS_DMA_CYCLES(_ciaB->clock),
+             AS_CIA_CYCLES(_ciaB->clock));
     plainmsg("  Color clock: (%d,%d) hex: ($%X,$%X) Frame: %lld\n",
              agnus.vpos, agnus.hpos, agnus.vpos, agnus.hpos, agnus.frame);
     plainmsg("\n");

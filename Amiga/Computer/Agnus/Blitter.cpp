@@ -85,7 +85,7 @@ Blitter::_inspect()
     // Prevent external access to variable 'info'
     pthread_mutex_lock(&lock);
     
-    info.active  = amiga->agnus.eventHandler.isPending(BLT_SLOT);
+    info.active  = _handler->isPending(BLT_SLOT);
     info.bltcon0 = bltcon0;
     info.bltcon1 = bltcon1;
     info.bltapt  = bltapt;
@@ -262,7 +262,7 @@ Blitter::pokeBLTSIZE(uint16_t value)
     bbusy = true;
     
     // WE ONLY DO FAST BLITS AT THE MOMENT
-    handler->scheduleRel(BLT_SLOT, DMA_CYCLES(1), BLT_FAST_BLIT);
+    _handler->scheduleRel(BLT_SLOT, DMA_CYCLES(1), BLT_FAST_BLIT);
     
     
     /*
@@ -374,8 +374,8 @@ Blitter::serviceEvent(EventID id)
         case BLT_EXECUTE:
             
             // Only proceed if Blitter DMA is enabled
-            if (!amiga->agnus.bltDMA()) {
-                amiga->agnus.eventHandler.disable(BLT_SLOT);
+            if (!_agnus->bltDMA()) {
+                _agnus->eventHandler.disable(BLT_SLOT);
                 break;
             }
 
@@ -387,7 +387,7 @@ Blitter::serviceEvent(EventID id)
             if (instr & WRITE_D) {
                 
                 debug(2, "WRITE_D\n");
-                amiga->mem.pokeChip16(bltdpt, dhold);
+                _mem->pokeChip16(bltdpt, dhold);
                 INC_OCS_PTR(bltdpt, 2 + (isLastWord() ? bltdmod : 0));
             }
             
@@ -433,7 +433,7 @@ Blitter::serviceEvent(EventID id)
                 
                 debug(2, "FETCH_A\n");
                 // pokeBLTADAT(amiga->mem.peek16(bltapt));
-                anew = amiga->mem.peek16(bltapt);
+                anew = _mem->peek16(bltapt);
                 INC_OCS_PTR(bltapt, 2 + (isLastWord() ? bltamod : 0));
             }
             
@@ -441,7 +441,7 @@ Blitter::serviceEvent(EventID id)
 
                 debug(3, "FETCH_B\n");
                 // pokeBLTBDAT(amiga->mem.peek16(bltbpt));
-                bnew = amiga->mem.peek16(bltbpt);
+                bnew = _mem->peek16(bltbpt);
                 INC_OCS_PTR(bltbpt, 2 + (isLastWord() ? bltbmod : 0));
             }
 
@@ -449,7 +449,7 @@ Blitter::serviceEvent(EventID id)
                 
                 debug(3, "FETCH_C\n");
                 // pokeBLTCDAT(amiga->mem.peek16(bltcpt));
-                chold = amiga->mem.peek16(bltcpt);
+                chold = _mem->peek16(bltcpt);
                 INC_OCS_PTR(bltcpt, 2 + (isLastWord() ? bltcmod : 0));
             }
             
@@ -479,15 +479,15 @@ Blitter::serviceEvent(EventID id)
                 bbusy = false;
                 
                 // Trigger the Blitter interrupt
-                handler->scheduleSecRel(IRQ_BLIT_SLOT, 0, IRQ_SET);
+                _handler->scheduleSecRel(IRQ_BLIT_SLOT, 0, IRQ_SET);
                 
                 // Terminate the Blitter
-                handler->cancel(BLT_SLOT);
+                _handler->cancel(BLT_SLOT);
                 
             } else {
             
                 // Continue running the Blitter
-                amiga->agnus.eventHandler.rescheduleRel(BLT_SLOT, DMA_CYCLES(1));
+                _agnus->eventHandler.rescheduleRel(BLT_SLOT, DMA_CYCLES(1));
             }
             
             break;
@@ -495,8 +495,8 @@ Blitter::serviceEvent(EventID id)
         case BLT_FAST_BLIT:
             
             // Only proceed if Blitter DMA is enabled
-            if (!amiga->agnus.bltDMA()) {
-                amiga->agnus.eventHandler.disable(BLT_SLOT);
+            if (!_agnus->bltDMA()) {
+                _agnus->eventHandler.disable(BLT_SLOT);
                 break;
             }
             

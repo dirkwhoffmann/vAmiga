@@ -112,7 +112,7 @@ public:
     
 private:
     
-    void _setAmiga() override;
+    void _initialize() override;
     void _powerOn() override;
     void _powerOff() override;
     void _reset() override;

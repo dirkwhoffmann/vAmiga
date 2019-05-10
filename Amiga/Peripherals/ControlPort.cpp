@@ -46,7 +46,7 @@ ControlPort::potgor()
     uint16_t result = 0xFFFF;
     
     if (hasMouse) {
-        if (amiga->mouse.rightButton) {
+        if (_amiga->mouse.rightButton) {
             CLR_BIT(result, 10);
         }
     }
@@ -57,7 +57,7 @@ ControlPort::potgor()
 uint16_t
 ControlPort::joydat()
 {
-    return hasMouse ? amiga->mouse.getXY() : 0;
+    return hasMouse ? _amiga->mouse.getXY() : 0;
 }
 
 uint8_t
@@ -68,7 +68,7 @@ ControlPort::ciapa()
     uint16_t result = 0xFF;
     
     if (hasMouse) {
-        if (amiga->mouse.leftButton) {
+        if (_amiga->mouse.leftButton) {
             CLR_BIT(result, (nr == 1) ? 6 : 7);
         }
     }
@@ -79,7 +79,7 @@ ControlPort::ciapa()
 void
 ControlPort::scheduleNextShot()
 {
-    nextAutofireFrame = amiga->agnus.frame + (int)(50.0 / (2 * autofireFrequency));
+    nextAutofireFrame = _agnus->frame + (int)(50.0 / (2 * autofireFrequency));
 }
 
 void
@@ -89,7 +89,7 @@ ControlPort::execute()
         return;
     
     // Wait until it's time to push or release fire
-    if (amiga->agnus.frame != nextAutofireFrame)
+    if (_agnus->frame != nextAutofireFrame)
         return;
     
     // Are there any bullets left?

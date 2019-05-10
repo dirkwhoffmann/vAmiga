@@ -13,7 +13,7 @@ CIA::CIA()
 {
 	setDescription("CIA");
     
-    // Register sub components
+    // Register subcomponents
     registerSubcomponents(vector<HardwareComponent *> {
         
         &tod
@@ -80,7 +80,7 @@ CIA::_powerOn()
     CRB = 0x4; // seen in SAE
     
     // The OVL bit influences the memory layout. Hence, we need to update it.
-    amiga->mem.updateMemSrcTable(); 
+    _mem->updateMemSrcTable();
 }
 
 void
@@ -589,7 +589,7 @@ CIA::poke(uint16_t addr, uint8_t value)
             // -0------ : Serial shift register in input mode (read)
             // -1------ : Serial shift register in output mode (write)
             if (nr == 0 && !(CRA & 0x40) && (value & 0x40)) { // CIA A only
-                amiga->keyboard.emulateHandshake();
+                _amiga->keyboard.emulateHandshake();
             }
             
             if ((value ^ CRA) & 0x40)
@@ -741,7 +741,7 @@ CIA::_dump()
 {
     _inspect();
     
-    msg("            Master Clock : %lld\n", amiga->masterClock);
+    msg("            Master Clock : %lld\n", _amiga->masterClock);
     msg("                   Clock : %lld\n", clock);
     msg("                Sleeping : %s\n", sleeping ? "yes" : "no");
     msg(" Most recent sleep cycle : %lld\n", sleepCycle);
@@ -1150,7 +1150,7 @@ CIA::wakeUp()
     if (!sleeping) return;
     sleeping = false;
     
-    Cycle targetCycle = CIA_CYCLES(AS_CIA_CYCLES(amiga->agnus.clock));
+    Cycle targetCycle = CIA_CYCLES(AS_CIA_CYCLES(_agnus->clock));
     wakeUp(targetCycle);
     
     /*
@@ -1204,14 +1204,14 @@ CIA::wakeUp(Cycle targetCycle)
 bool
 CIA::isUpToDate()
 {
-    assert(clock <= amiga->masterClock);
-    return (amiga->masterClock - clock < CIA_CYCLES(1));
+    assert(clock <= _amiga->masterClock);
+    return (_amiga->masterClock - clock < CIA_CYCLES(1));
 }
 
 Cycle
 CIA::idle()
 {
-    return isAwake() ? 0 : amiga->masterClock - sleepCycle;
+    return isAwake() ? 0 : _amiga->masterClock - sleepCycle;
 }
 
 
@@ -1234,30 +1234,30 @@ CIAA::_dump()
 void
 CIAA::_powerOff()
 {
-    amiga->putMessage(MSG_POWER_LED_OFF);
+    _amiga->putMessage(MSG_POWER_LED_OFF);
 }
 
 void
 CIAA::scheduleNextExecution()
 {
-    amiga->agnus.eventHandler.scheduleAbs(CIAA_SLOT,
-                                        clock + CIA_CYCLES(1),
-                                        CIA_EXECUTE);
+    _handler->scheduleAbs(CIAA_SLOT,
+                          clock + CIA_CYCLES(1),
+                          CIA_EXECUTE);
 }
 
 void
 CIAA::scheduleWakeUp()
 {
-    amiga->agnus.eventHandler.scheduleAbs(CIAA_SLOT,
-                                        wakeUpCycle,
-                                        CIA_WAKEUP);
+    _handler->scheduleAbs(CIAA_SLOT,
+                          wakeUpCycle,
+                          CIA_WAKEUP);
 }
 
 void 
 CIAA::pullDownInterruptLine()
 {
     // debug("Pulling down IRQ line\n");
-    amiga->paula.setINTREQ(0x8000 | (1 << 3));
+    _paula->setINTREQ(0x8000 | (1 << 3));
 }
 
 void 
@@ -1290,11 +1290,11 @@ CIAA::portAexternal()
     uint8_t result;
     
     // Set drive status bits
-    result = amiga->paula.diskController.driveStatusFlags();
+    result = _paula->diskController.driveStatusFlags();
     
     // Set control port bits
-    result &= amiga->controlPort1.ciapa();
-    result &= amiga->controlPort2.ciapa();
+    result &= _port1->ciapa();
+    result &= _port2->ciapa();
 
     return result;
 }
@@ -1311,13 +1311,13 @@ CIAA::updatePA()
     // Power LED bit
     if ((oldPA ^ PA) & 0b00000010) {
         // debug("/LED has changed\n");
-        amiga->putMessage((PA & 0b00000010) ? MSG_POWER_LED_OFF : MSG_POWER_LED_ON);
+        _amiga->putMessage((PA & 0b00000010) ? MSG_POWER_LED_OFF : MSG_POWER_LED_ON);
     }
 
     // Overlay bit (OVL)
     if ((oldPA ^ PA) & 0b00000001) {
         // debug("OVL has changed\n");
-        amiga->mem.updateMemSrcTable();
+        _mem->updateMemSrcTable();
     }
     
     /*
@@ -1402,24 +1402,24 @@ CIAB::_dump()
 void
 CIAB::scheduleNextExecution()
 {
-    amiga->agnus.eventHandler.scheduleAbs(CIAB_SLOT,
-                                        clock + CIA_CYCLES(1),
-                                        CIA_EXECUTE);
+    _handler->scheduleAbs(CIAB_SLOT,
+                          clock + CIA_CYCLES(1),
+                          CIA_EXECUTE);
 }
 
 void
 CIAB::scheduleWakeUp()
 {
-    amiga->agnus.eventHandler.scheduleAbs(CIAB_SLOT,
-                                        wakeUpCycle,
-                                        CIA_WAKEUP);
+    _handler->scheduleAbs(CIAB_SLOT,
+                          wakeUpCycle,
+                          CIA_WAKEUP);
 }
 
 void 
 CIAB::pullDownInterruptLine()
 {
     debug("Pulling down IRQ line\n");
-    amiga->paula.setINTREQ(0x8000 | (1 << 13));
+    _paula->setINTREQ(0x8000 | (1 << 13));
 }
 
 void 
@@ -1503,7 +1503,7 @@ CIAB::updatePB()
               !!(PB & 0x80), !!(PB & 0x40), !!(PB & 0x20), !!(PB & 0x10),
               !!(PB & 0x08), !!(PB & 0x04), !!(PB & 0x02), !!(PB & 0x01));
         */
-        amiga->paula.diskController.PRBdidChange(oldPB, PB);
+        _paula->diskController.PRBdidChange(oldPB, PB);
     }
 }
 

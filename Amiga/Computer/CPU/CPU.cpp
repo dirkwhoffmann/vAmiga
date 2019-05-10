@@ -85,7 +85,7 @@ CPU::CPU()
 {
     setDescription("CPU");
     
-    // Register sub components
+    // Register subcomponents
     registerSubcomponents(vector<HardwareComponent *> {
         
         &bpManager,
@@ -342,7 +342,7 @@ CPU::disassemble(uint32_t addr)
     if (addr <= 0xFFFFFF) {
         
         result.bytes = m68k_disassemble(result.instr, addr, M68K_CPU_TYPE_68000);
-        amiga->mem.hex(result.data, addr, result.bytes, sizeof(result.data));
+        _mem->hex(result.data, addr, result.bytes, sizeof(result.data));
         sprint24x(result.addr, addr);
         
     } else {
@@ -404,7 +404,7 @@ CPU::recordInstruction()
     RecordedInstruction instr;
     
     // Setup record
-    instr.cycle = amiga->masterClock;
+    instr.cycle = _amiga->masterClock;
     instr.pc = getPC();
     instr.sp = getSP();
     

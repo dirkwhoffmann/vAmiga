@@ -178,13 +178,13 @@ Denise::didLoadFromBuffer(uint8_t **buffer)
 uint16_t
 Denise::peekJOY0DATR()
 {
-    return amiga->controlPort1.joydat();
+    return _port1->joydat();
 }
 
 uint16_t
 Denise::peekJOY1DATR()
 {
-    return amiga->controlPort2.joydat();
+    return _port2->joydat();
 }
 
 void
@@ -207,13 +207,13 @@ Denise::pokeBPLCON0(uint16_t value)
     bplcon0 = value;
     
     // Tell Agnus how many bitplanes we have
-    amiga->agnus.activeBitplanes = (value >> 12) & 0b111;
+    _agnus->activeBitplanes = (value >> 12) & 0b111;
 
     // Update the DMA time slot allocation table (hires / lores may change)
-    amiga->agnus.updateBitplaneDma();
+    _agnus->updateBitplaneDma();
     
     // Clear data registers of all inactive bitplanes
-    for (int plane = 5; plane >= amiga->agnus.activeBitplanes; plane--) {
+    for (int plane = 5; plane >= _agnus->activeBitplanes; plane--) {
         bpldat[plane] = 0;
     }
 }
@@ -225,7 +225,7 @@ Denise::pokeBPLCON1(uint16_t value)
     
     bplcon1 = value & 0xFF;
     
-    uint16_t ddfstrt = amiga->agnus.ddfstrt;
+    uint16_t ddfstrt = _agnus->ddfstrt;
 
     // Compute scroll values (adapted from WinFellow)
     scrollLowOdd  = (bplcon1        + (ddfstrt & 0b0100) ? 8 : 0) & 0x0F;
@@ -266,7 +266,7 @@ Denise::pokeSPRxPOS(int x, uint16_t value)
     sprhstrt[x] = ((value & 0xFF) << 1) | (sprhstrt[x] & 0x01);
     
     // Update debugger info
-    if (amiga->agnus.vpos == 25) {
+    if (_agnus->vpos == 25) {
         info.sprite[x].pos = value;
     }
 }
@@ -287,9 +287,9 @@ Denise::pokeSPRxCTL(int x, uint16_t value)
     WRITE_BIT(attach, x, GET_BIT(value, 7));
     
     // Update debugger info
-    if (amiga->agnus.vpos == 25) {
+    if (_agnus->vpos == 25) {
         info.sprite[x].ctl = value;
-        info.sprite[x].ptr = amiga->agnus.sprpt[x];
+        info.sprite[x].ptr = _agnus->sprpt[x];
     }
 }
 
@@ -436,9 +436,9 @@ int *
 Denise::pixelAddr(int pixel)
 {
     assert(pixel < HPIXELS);
-    assert(amiga->agnus.vpos >= 26); // 0 .. 25 is VBLANK area
+    assert(_agnus->vpos >= 26); // 0 .. 25 is VBLANK area
 
-    int offset = pixel + (amiga->agnus.vpos - 26) * HPIXELS;
+    int offset = pixel + (_agnus->vpos - 26) * HPIXELS;
     // debug("pixel offset for pixel %d is %d\n", pixel, offset);
     assert(offset < VPIXELS * HPIXELS);
     
@@ -503,11 +503,11 @@ Denise::draw32()
 void
 Denise::drawLeftBorder()
 {
-    if (amiga->agnus.hpos < 0x35) return; // HBLANK area
+    if (_agnus->hpos < 0x35) return; // HBLANK area
     
     // Assign the horizontal pixel counter
     // pixel = (amiga->agnus.hpos - (0x35 - 0xF)) * 4;
-    pixel = (amiga->agnus.hpos - 0x35) * 4;
+    pixel = (_agnus->hpos - 0x35) * 4;
 
     // Fill the beginning of the line with the current background color
     int bgcol = colorizer.getRGBA(0);
@@ -579,7 +579,7 @@ Denise::endOfLine()
 {
     // debug("endOfLine pixel = %d HPIXELS = %d\n", pixel, HPIXELS);
     
-    if (amiga->agnus.vpos >= 26) {
+    if (_agnus->vpos >= 26) {
         
         // Fill the rest of the current line with the background color.
         drawRightBorder();
@@ -602,12 +602,12 @@ Denise::debugSetActivePlanes(int count)
 {
     assert(count >= 0 && count <= 6);
     
-    amiga->suspend();
+    _amiga->suspend();
     
     uint16_t value = bplcon0 & 0b1000111111111111;
     pokeBPLCON0(value | (count << 12));
     
-    amiga->resume();
+    _amiga->resume();
 }
 
 void
@@ -615,10 +615,10 @@ Denise::debugSetBPLCON0Bit(unsigned bit, bool value)
 {
     assert(bit <= 15);
     
-    amiga->suspend();
+    _amiga->suspend();
     
     uint16_t mask = 1 << bit;
     pokeBPLCON0(value ? (bplcon0 | mask) : (bplcon0 & ~mask));
     
-    amiga->resume();
+    _amiga->resume();
 }

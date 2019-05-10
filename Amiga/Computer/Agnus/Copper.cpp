@@ -55,7 +55,7 @@ Copper::_inspect()
     pthread_mutex_lock(&lock);
     
     info.cdang     = cdang;
-    info.active    = amiga->agnus.eventHandler.isPending(COP_SLOT);
+    info.active    = _agnus->eventHandler.isPending(COP_SLOT);
     info.coppc     = coppc;
     info.copins[0] = copins1;
     info.copins[1] = copins2;
@@ -184,7 +184,7 @@ uint32_t
 Copper::nextTriggerPosition()
 {
     // Get the current beam position
-    uint32_t beam = amiga->agnus.getBeam();
+    uint32_t beam = _agnus->getBeam();
 
     /* We are going to compute the smallest beam position satisfying
      *
@@ -216,7 +216,7 @@ Copper::isMoveCmd()
 
 bool Copper::isMoveCmd(uint32_t addr)
 {
-    uint32_t instr = amiga->mem.spypeek32(addr);
+    uint32_t instr = _mem->spypeek32(addr);
     return !(HI_WORD(instr) & 1);
 }
 
@@ -227,7 +227,7 @@ bool Copper::isWaitCmd()
 
 bool Copper::isWaitCmd(uint32_t addr)
 {
-    uint32_t instr = amiga->mem.spypeek32(addr);
+    uint32_t instr = _mem->spypeek32(addr);
     return (HI_WORD(instr) & 1) && !(LO_WORD(instr) & 1);
 }
 
@@ -240,7 +240,7 @@ Copper::isSkipCmd()
 bool
 Copper::isSkipCmd(uint32_t addr)
 {
-    uint32_t instr = amiga->mem.spypeek32(addr);
+    uint32_t instr = _mem->spypeek32(addr);
     return (HI_WORD(instr) & 1) && (LO_WORD(instr) & 1);
 }
 
@@ -253,7 +253,7 @@ Copper::getRA()
 uint16_t
 Copper::getRA(uint32_t addr)
 {
-    uint32_t instr = amiga->mem.spypeek32(addr);
+    uint32_t instr = _mem->spypeek32(addr);
     return HI_WORD(instr) & 0x1FE;
 }
 
@@ -266,7 +266,7 @@ Copper::getDW()
 uint16_t
 Copper::getDW(uint32_t addr)
 {
-    uint32_t instr = amiga->mem.spypeek32(addr);
+    uint32_t instr = _mem->spypeek32(addr);
     return LO_WORD(instr);
 }
 
@@ -279,7 +279,7 @@ Copper::getBFD()
 bool
 Copper::getBFD(uint32_t addr)
 {
-    uint32_t instr = amiga->mem.spypeek32(addr);
+    uint32_t instr = _mem->spypeek32(addr);
     return (LO_WORD(instr) & 0x8000) != 0;
 }
 
@@ -292,7 +292,7 @@ Copper::getVPHP()
 uint16_t
 Copper::getVPHP(uint32_t addr)
 {
-    uint32_t instr = amiga->mem.spypeek32(addr);
+    uint32_t instr = _mem->spypeek32(addr);
     return HI_WORD(instr) & 0xFFFE;
 }
 
@@ -305,7 +305,7 @@ Copper::getVMHM()
 uint16_t
 Copper::getVMHM(uint32_t addr)
 {
-    uint32_t instr = amiga->mem.spypeek32(addr);
+    uint32_t instr = _mem->spypeek32(addr);
     return (LO_WORD(instr) & 0x7FFE) | 0x8001;
 }
 
@@ -325,7 +325,7 @@ Copper::isIllegalInstr(uint32_t addr)
 void
 Copper::serviceEvent(EventID id)
 {
-    debug(2, "(%d,%d): ", amiga->agnus.vpos, amiga->agnus.hpos);
+    debug(2, "(%d,%d): ", _agnus->vpos, _agnus->hpos);
     
     switch (id) {
             
@@ -337,30 +337,30 @@ Copper::serviceEvent(EventID id)
              * Once DMA access is granted, it continues with fetching the
              * first instruction word.
              */
-            if ( amiga->agnus.copperCanHaveBus()) {
-                handler->scheduleRel(COP_SLOT, DMA_CYCLES(2), COP_FETCH);
+            if (_agnus->copperCanHaveBus()) {
+                _handler->scheduleRel(COP_SLOT, DMA_CYCLES(2), COP_FETCH);
             }
             
         case COP_FETCH:
             
-            if (amiga->agnus.copperCanHaveBus()) {
+            if (_agnus->copperCanHaveBus()) {
                 
                 // Load the first instruction word
-                copins1 = amiga->mem.peek16(coppc);
+                copins1 = _mem->peek16(coppc);
                 debug(2, "COP_FETCH: coppc = %X copins1 = %X\n", coppc, copins1);
                 advancePC();
                 
                 // Determine the next state based on the instruction type
-                handler->scheduleRel(COP_SLOT, DMA_CYCLES(2), isMoveCmd() ? COP_MOVE : COP_WAIT_OR_SKIP);
+                _handler->scheduleRel(COP_SLOT, DMA_CYCLES(2), isMoveCmd() ? COP_MOVE : COP_WAIT_OR_SKIP);
             }
             break;
             
         case COP_MOVE:
             
-            if (amiga->agnus.copperCanHaveBus()) {
+            if (_agnus->copperCanHaveBus()) {
                 
                 // Load the second instruction word
-                copins2 = amiga->mem.peek16(coppc);
+                copins2 = _mem->peek16(coppc);
                 debug(2, "COP_MOVE: coppc = %X copins2 = %X\n", coppc, copins2);
                 advancePC();
                 
@@ -369,25 +369,25 @@ Copper::serviceEvent(EventID id)
                 
                 if (isIllegalAddress(reg)) {
                     
-                    handler->cancel(COP_SLOT); // Stops the Copper
+                    _handler->cancel(COP_SLOT); // Stops the Copper
                     break;
                 }
                 
                 // Write into the custom register
-                if (!skip) amiga->mem.pokeCustom16(reg, copins2);
+                if (!skip) _mem->pokeCustom16(reg, copins2);
                 skip = false;
                 
                 // Schedule next event
-                handler->scheduleRel(COP_SLOT, DMA_CYCLES(2), COP_FETCH);
+                _handler->scheduleRel(COP_SLOT, DMA_CYCLES(2), COP_FETCH);
             }
             break;
             
         case COP_WAIT_OR_SKIP:
             
-            if (amiga->agnus.copperCanHaveBus()) {
+            if (_agnus->copperCanHaveBus()) {
 
                 // Load the second instruction word
-                copins2 = amiga->mem.peek16(coppc);
+                copins2 = _mem->peek16(coppc);
                 debug(2, "COP_WAIT_OR_SKIP: coppc = %X copins2 = %X\n", coppc, copins2);
                 debug(2, "    VPHP = %X VMHM = %X\n", getVPHP(), getVMHM());
                 advancePC();
@@ -402,16 +402,16 @@ Copper::serviceEvent(EventID id)
                     uint32_t trigger = nextTriggerPosition();
                     
                     // In how many cycles do we get there?
-                    Cycle delay = amiga->agnus.beamDiff(trigger);
+                    Cycle delay = _agnus->beamDiff(trigger);
                     
                     debug(2, "   trigger = (%d,%d) delay = %lld\n",
                              VPOS(trigger), HPOS(trigger), delay);
                     
                     // Stop the Copper or schedule a wake up event
                     if (delay == NEVER) {
-                        handler->disable(COP_SLOT);
+                        _handler->disable(COP_SLOT);
                     } else {
-                        handler->scheduleRel(COP_SLOT, delay, COP_FETCH);
+                        _handler->scheduleRel(COP_SLOT, delay, COP_FETCH);
                     }
                     // amiga->agnus.eventHandler.dump();
                 }
@@ -434,7 +434,7 @@ Copper::serviceEvent(EventID id)
             // Load COP1LC into the program counter
             coppc = coplc[0];
             debug(2, "COP_JMP1: coppc = %X\n", coppc);
-            handler->scheduleRel(COP_SLOT, DMA_CYCLES(2), COP_REQUEST_DMA);
+            _handler->scheduleRel(COP_SLOT, DMA_CYCLES(2), COP_REQUEST_DMA);
             break;
 
         case COP_JMP2:
@@ -442,7 +442,7 @@ Copper::serviceEvent(EventID id)
             // Load COP2LC into the program counter
             coppc = coplc[1];
             debug(2, "COP_JMP2: coppc = %X\n", coppc);
-            handler->scheduleRel(COP_SLOT, DMA_CYCLES(2), COP_REQUEST_DMA);
+            _handler->scheduleRel(COP_SLOT, DMA_CYCLES(2), COP_REQUEST_DMA);
             break;
 
         default:
@@ -463,10 +463,10 @@ Copper::vsyncAction()
      */
 
     // TODO: What is the exact timing here?
-    if (amiga->agnus.copDMA()) {
-        handler->scheduleRel(COP_SLOT, DMA_CYCLES(4), COP_JMP1);
+    if (_agnus->copDMA()) {
+        _handler->scheduleRel(COP_SLOT, DMA_CYCLES(4), COP_JMP1);
     } else {
-        handler->cancel(COP_SLOT);
+        _handler->cancel(COP_SLOT);
     }
 }
 

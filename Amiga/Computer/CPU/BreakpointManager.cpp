@@ -44,12 +44,12 @@ BreakpointManager::hasConditionalBreakpointAt(uint32_t addr)
 void
 BreakpointManager::setBreakpointAt(uint32_t addr)
 {
-    amiga->suspend();
+    _amiga->suspend();
     
     breakpoints.insert(pair<uint32_t, Breakpoint>(addr, Breakpoint()));
-    amiga->putMessage(MSG_BREAKPOINT_CONFIG);
+    _amiga->putMessage(MSG_BREAKPOINT_CONFIG);
     
-    amiga->resume();
+    _amiga->resume();
 }
 
 void
@@ -58,12 +58,12 @@ BreakpointManager::deleteBreakpointAt(uint32_t addr)
     auto it = breakpoints.find(addr);
     if (it == breakpoints.end()) return;
     
-    amiga->suspend();
+    _amiga->suspend();
     
     breakpoints.erase(it);
-    amiga->putMessage(MSG_BREAKPOINT_CONFIG);
+    _amiga->putMessage(MSG_BREAKPOINT_CONFIG);
     
-    amiga->resume();
+    _amiga->resume();
 }
 
 void
@@ -72,12 +72,12 @@ BreakpointManager::enableBreakpointAt(uint32_t addr)
     auto it = breakpoints.find(addr);
     if (it == breakpoints.end()) return;
     
-    amiga->suspend();
+    _amiga->suspend();
     
     (*it).second.enable();
-    amiga->putMessage(MSG_BREAKPOINT_CONFIG);
+    _amiga->putMessage(MSG_BREAKPOINT_CONFIG);
     
-    amiga->resume();
+    _amiga->resume();
 }
 
 void
@@ -86,12 +86,12 @@ BreakpointManager::disableBreakpointAt(uint32_t addr)
     auto it = breakpoints.find(addr);
     if (it == breakpoints.end()) return;
     
-    amiga->suspend();
+    _amiga->suspend();
     
     (*it).second.disable();
-    amiga->putMessage(MSG_BREAKPOINT_CONFIG);
+    _amiga->putMessage(MSG_BREAKPOINT_CONFIG);
     
-    amiga->resume();
+    _amiga->resume();
 }
 
 void
@@ -100,12 +100,12 @@ BreakpointManager::deleteBreakpoint(long nr)
     auto it = breakpoint(nr);
     if (it == breakpoints.end()) return;
     
-    amiga->suspend();
+    _amiga->suspend();
     
     breakpoints.erase(it);
-    amiga->putMessage(MSG_BREAKPOINT_CONFIG);
+    _amiga->putMessage(MSG_BREAKPOINT_CONFIG);
     
-    amiga->resume();
+    _amiga->resume();
 }
 
 uint32_t
@@ -123,14 +123,14 @@ BreakpointManager::setAddr(long nr, uint32_t addr)
     auto it = breakpoint(nr);
     if (it == breakpoints.end()) return false;
     
-    amiga->suspend();
+    _amiga->suspend();
     
     Breakpoint bp = (*it).second;
     breakpoints.erase(it);
     breakpoints.insert(pair<uint32_t, Breakpoint>(addr, bp));
-    amiga->putMessage(MSG_BREAKPOINT_CONFIG);
+    _amiga->putMessage(MSG_BREAKPOINT_CONFIG);
     
-    amiga->resume();
+    _amiga->resume();
     
     return true;
 }
@@ -177,12 +177,12 @@ BreakpointManager::setCondition(long nr, const char *str)
     auto it = breakpoint(nr);
     if (it == breakpoints.end()) return false;
     
-    amiga->suspend();
+    _amiga->suspend();
     
     (*it).second.setCondition(str);
-    amiga->putMessage(MSG_BREAKPOINT_CONFIG);
+    _amiga->putMessage(MSG_BREAKPOINT_CONFIG);
     
-    amiga->resume();
+    _amiga->resume();
     
     return true;
 }
@@ -193,12 +193,12 @@ BreakpointManager::removeCondition(long nr)
     auto it = breakpoint(nr);
     if (it == breakpoints.end()) return false;
     
-    amiga->suspend();
+    _amiga->suspend();
     
     (*it).second.removeCondition();
-    amiga->putMessage(MSG_BREAKPOINT_CONFIG);
+    _amiga->putMessage(MSG_BREAKPOINT_CONFIG);
     
-    amiga->resume();
+    _amiga->resume();
     
     return true;
 }
@@ -206,7 +206,7 @@ BreakpointManager::removeCondition(long nr)
 bool
 BreakpointManager::shouldStop()
 {
-    uint32_t addr = amiga->cpu.getPC();
+    uint32_t addr = _cpu->getPC();
     
     // Check if a soft breakpoint has been reached
     if (addr == softStop || softStop == UINT32_MAX) {

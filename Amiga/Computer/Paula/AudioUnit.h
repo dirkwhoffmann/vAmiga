@@ -82,6 +82,22 @@ class AudioUnit : public HardwareComponent {
      */
     int32_t volumeDelta = 0;
     
+    //
+    // Registers
+    //
+    
+    // Audio length (AUDxLEN)
+    uint16_t audlen[4];
+    
+    // Audio period (AUDxPER)
+    uint16_t audper[4];
+    
+    // Audio volume (AUDxVOL)
+    uint16_t audvol[4];
+    
+    // Audio data (AUDxDAT)
+    uint16_t auddat[4];
+    
     
     //
     // Constructing and destructing
@@ -234,6 +250,26 @@ class AudioUnit : public HardwareComponent {
     /* Executes SID for a certain number of cycles
      */
     void execute(uint64_t numCycles);
+    
+    
+    //
+    // Accessing registers
+    //
+    
+public:
+    
+    // OCS registers 0xA4, 0xB4, 0x0C4, 0xD4 (w)
+    void pokeAUDxLEN(int x, uint16_t value);
+    
+    // OCS registers 0xA6, 0xB6, 0x0B6, 0xD6 (w)
+    void pokeAUDxPER(int x, uint16_t value);
+    
+    // OCS registers 0xA8, 0xB8, 0x0C8, 0xD8 (w)
+    void pokeAUDxVOL(int x, uint16_t value);
+    
+    // OCS registers 0xAA, 0xBA, 0x0CA, 0xDA (w)
+    void pokeAUDxDAT(int x, uint16_t value);
+    
 };
 
 #endif

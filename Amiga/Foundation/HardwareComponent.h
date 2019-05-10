@@ -12,8 +12,20 @@
 
 #include "AmigaObject.h"
 
+//
+// Forward declarations
+//
+
 class Amiga;
 class EventHandler;
+class Memory;
+class CPU;
+class CIAA;
+class CIAB;
+class Agnus;
+class Denise;
+class Paula;
+class ControlPort;
 
 /* Base class for all hardware components
  * This class defines the base functionality of all hardware components.
@@ -22,7 +34,7 @@ class EventHandler;
  */
 class HardwareComponent : public AmigaObject {
     
-    protected:
+protected:
     
     /* Type and behavior of a snapshot item
      * The format flags are important when big chunks of data are specified.
@@ -57,22 +69,25 @@ class HardwareComponent : public AmigaObject {
         
     } SnapshotItem;
     
-    public:
+public:
     
-    /* Reference to the Amiga top-level object.
-     * Because nearly all hardware components need to interact very closely
-     * with each other, we keep a reference to the top-level object in each
-     * component. Hence, each component can access every other component every
-     * time.
+    /* Quick-references to the the Amiga's most important hardware components.
+     * The references are setup in the constructor in the Amiga class and will
+     * never change. They provide a quick-access to every other component.
      */
-    Amiga *amiga = NULL;
+    Amiga        *_amiga   = NULL;
+    EventHandler *_handler = NULL;
+    Memory       *_mem     = NULL;
+    CPU          *_cpu     = NULL;
+    CIAA         *_ciaA    = NULL;
+    CIAB         *_ciaB    = NULL;
+    Agnus        *_agnus   = NULL;
+    Denise       *_denise  = NULL;
+    Paula        *_paula   = NULL;
+    ControlPort  *_port1   = NULL; 
+    ControlPort  *_port2   = NULL;
     
-    /* Reference to the event handler.
-     * Provides a quick access to amiga->agnus.eventHandler
-     */
-    EventHandler *handler = NULL;
-    
-    protected:
+protected:
     
     /* Access lock for shared variables
      * This lock is used to control the read and write operations for all
@@ -107,7 +122,7 @@ class HardwareComponent : public AmigaObject {
     // Indicates if this component should run in warp mode
     bool warp = false;
     
-    public:
+public:
     
     HardwareComponent();
     virtual ~HardwareComponent();
@@ -117,7 +132,7 @@ class HardwareComponent : public AmigaObject {
     // Methods from AmigaObject
     //
     
-    private:
+private:
     
     void prefix() override;
     
@@ -126,15 +141,18 @@ class HardwareComponent : public AmigaObject {
     // Initializing the component
     //
     
-    public:
+public:
     
-    /* Assigns the top-level Amiga object.
-     * The provided reference is propagated automatically to all sub components.
-     * This functions is called in the constructor of the Amiga class and never
-     * called again afterwards.
+    /* Initializes the component and it's sub-component.
+     * This function is called exactly once, in the constructor of the Amiga
+     * class. It's main purpose is to initialize the quick-reference pointers
+     * contained in class HardwareComponent. Some components implement the
+     * delegation method _initialize() to finalize their initialization, e.g.,
+     * by setting up referecens that do not exist at the time they are
+     * constructed.
      */
-    void setAmiga(Amiga *amiga);
-    virtual void _setAmiga() { };
+    void initialize(Amiga *amiga);
+    virtual void _initialize() { };
     
     /* There are several functions for querying and changing state:
      *
@@ -164,7 +182,7 @@ class HardwareComponent : public AmigaObject {
      *
      * current   | next      | action
      * -------------------------------------------------------------------------
-     * off       | paused    | _powerOn() on each sub component
+     * off       | paused    | _powerOn() on each subcomponent
      * paused    | paused    | none
      * running   | running   | none
      */
@@ -176,8 +194,8 @@ class HardwareComponent : public AmigaObject {
      * current   | next      | action
      * -------------------------------------------------------------------------
      * off       | off       | none
-     * paused    | off       | _powerOff() on each sub component
-     * running   | off       | pause(), _powerOff() on each sub component
+     * paused    | off       | _powerOff() on each subcomponent
+     * running   | off       | pause(), _powerOff() on each subcomponent
      */
     void powerOff();
     virtual void _powerOff() { }
@@ -186,8 +204,8 @@ class HardwareComponent : public AmigaObject {
      *
      * current   | next      | action
      * -------------------------------------------------------------------------
-     * off       | running   | powerOn(), _run() on each sub component
-     * paused    | running   | _run() on each sub component
+     * off       | running   | powerOn(), _run() on each subcomponent
+     * paused    | running   | _run() on each subcomponent
      * running   | running   | none
      */
     void run();
@@ -199,14 +217,14 @@ class HardwareComponent : public AmigaObject {
      * -------------------------------------------------------------------------
      * off       | off       | none
      * paused    | paused    | none
-     * running   | paused    | _pause() on each sub component
+     * running   | paused    | _pause() on each subcomponent
      */
     virtual void pause();
     virtual void _pause() { };
     
     
     /* Emulates a reset event on the virtual Amiga.
-     * By default, each component resets its sub components.
+     * By default, each component resets its subcomponents.
      */
     virtual void reset();
     virtual void _reset() { }
@@ -246,7 +264,7 @@ class HardwareComponent : public AmigaObject {
     
     
     //
-    // Registering snapshot items and sub components
+    // Registering snapshot items and subcomponents
     //
     
     /* Registers the subcomponents of this component.
@@ -260,7 +278,7 @@ class HardwareComponent : public AmigaObject {
     void registerSnapshotItems(vector<SnapshotItem> items);
     
     
-    public:
+public:
     
     //
     // Loading and saving snapshots

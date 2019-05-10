@@ -16,7 +16,13 @@ AudioUnit::AudioUnit()
     // Register snapshot items
     registerSnapshotItems(vector<SnapshotItem> {
         
-        { &cycles,          sizeof(cycles),         0 }});
+        { &cycles,   sizeof(cycles),   0 },
+        
+        { &audlen,   sizeof(audlen),   WORD_ARRAY },
+        { &audper,   sizeof(audper),   WORD_ARRAY },
+        { &audvol,   sizeof(audvol),   WORD_ARRAY },
+        { &auddat,   sizeof(auddat),   WORD_ARRAY }
+    });
 }
 
 void
@@ -244,3 +250,40 @@ AudioUnit::handleBufferOverflow()
     // Reset the write pointer
     alignWritePtr();
 }
+
+void
+AudioUnit::pokeAUDxLEN(int x, uint16_t value)
+{
+    debug(2, "pokeAUD%dLEN(%X)\n", x, value);
+    assert(x < 4);
+    
+    audlen[x] = value;
+}
+
+void
+AudioUnit::pokeAUDxPER(int x, uint16_t value)
+{
+    debug(2, "pokeAUD%dPER(%X)\n", x, value);
+    assert(x < 4);
+    
+    audper[x] = value;
+}
+
+void
+AudioUnit::pokeAUDxVOL(int x, uint16_t value)
+{
+    debug(2, "pokeAUD%dVOL(%X)\n", x, value);
+    assert(x < 4);
+    
+    audvol[x] = MIN(value, 64);
+}
+
+void
+AudioUnit::pokeAUDxDAT(int x, uint16_t value)
+{
+    debug(2, "pokeAUD%dDAT(%X)\n", x, value);
+    assert(x < 4);
+    
+    auddat[x] = value;
+}
+

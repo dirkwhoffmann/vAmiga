@@ -14,7 +14,7 @@
  * ptr is a DMA pointer register and dest the destination
  */
 #define DO_DMA(ptr,dest) \
-dest = amiga->mem.peekChip16(ptr); \
+dest = _mem->peekChip16(ptr); \
 ptr = (ptr + 2) & 0x7FFFE;
 
 Agnus::Agnus()
@@ -457,7 +457,7 @@ Agnus::switchSpriteDmaOff()
 void
 Agnus::switchBitplaneDmaOn()
 {
-    if (amiga->denise.hires()) {
+    if (_denise->hires()) {
         
         // Determine start and stop cycle
         uint8_t start = MAX(ddfstrt & 0b11111100, 0x18);
@@ -685,13 +685,13 @@ Agnus::pokeDMACON(uint16_t value)
             // Blitter DMA on
             debug("Blitter DMA switched on\n");
             // amiga->agnus.eventHandler.scheduleRel(BLT_SLOT, DMA_CYCLES(1), BLT_EXECUTE);
-            amiga->agnus.eventHandler.scheduleRel(BLT_SLOT, DMA_CYCLES(1), BLT_FAST_BLIT);
+            _handler->scheduleRel(BLT_SLOT, DMA_CYCLES(1), BLT_FAST_BLIT);
     
         } else {
             
             // Blitter DMA off
             debug("Blitter DMA switched off\n");
-            amiga->agnus.eventHandler.disable(BLT_SLOT);
+            _handler->disable(BLT_SLOT);
         }
     }
     
@@ -959,10 +959,10 @@ Agnus::serviceDMAEvent(EventID id)
     switch (id) {
             
         case DMA_DISK:
-            if (amiga->paula.diskController.getFifoBuffering())
-                amiga->paula.diskController.performDMA();
+            if (_paula->diskController.getFifoBuffering())
+                _paula->diskController.performDMA();
             else
-                amiga->paula.diskController.performSimpleDMA();
+                _paula->diskController.performSimpleDMA();
             break;
         
         case DMA_A0:
@@ -1042,52 +1042,52 @@ Agnus::serviceDMAEvent(EventID id)
             break;
         
         case DMA_H1:
-            if (amiga->debugDMA) debug("H1\n");
+            if (_amiga->debugDMA) debug("H1\n");
         case DMA_L1:
             
             // debug(2, "DO_DMA H1/L1 (%d,%d): bpldat[%d] = peekChip16(%X) = %X\n", vpos, hpos, PLANE1, bplpt[PLANE1], amiga->mem.peekChip16(bplpt[PLANE1]));
                   
-            DO_DMA(bplpt[PLANE1], amiga->denise.bpldat[PLANE1]);
+            DO_DMA(bplpt[PLANE1], _denise->bpldat[PLANE1]);
             
             // The bitplane 1 fetch is an important one. Once it is performed,
             // Denise fills it's shift registers.
-            amiga->denise.fillShiftRegisters();
+            _denise->fillShiftRegisters();
             break;
             
         case DMA_H2:
-            if (amiga->debugDMA) debug("H2\n");
+            if (_amiga->debugDMA) debug("H2\n");
         case DMA_L2:
             
-            if (amiga->debugDMA) debug("DO_DMA H2/L2 (%d,%d): bpldat[%d] = peekChip16(%X) = %X\n", vpos, hpos, PLANE2, bplpt[PLANE2], amiga->mem.peekChip16(bplpt[PLANE2]));
-            DO_DMA(bplpt[PLANE2], amiga->denise.bpldat[PLANE2]);
+            if (_amiga->debugDMA) debug("DO_DMA H2/L2 (%d,%d): bpldat[%d] = peekChip16(%X) = %X\n", vpos, hpos, PLANE2, bplpt[PLANE2], _mem->peekChip16(bplpt[PLANE2]));
+            DO_DMA(bplpt[PLANE2], _denise->bpldat[PLANE2]);
             break;
             
         case DMA_H3:
-            if (amiga->debugDMA) debug("H3\n");
+            if (_amiga->debugDMA) debug("H3\n");
         case DMA_L3:
             
-            if (amiga->debugDMA) debug("DO_DMA H3/L3: bpldat[%d] = peekChip16(%X) = %X\n", PLANE3, bplpt[PLANE3], amiga->mem.peekChip16(bplpt[PLANE3]));
-            DO_DMA(bplpt[PLANE3], amiga->denise.bpldat[PLANE3]);
+            if (_amiga->debugDMA) debug("DO_DMA H3/L3: bpldat[%d] = peekChip16(%X) = %X\n", PLANE3, bplpt[PLANE3], _mem->peekChip16(bplpt[PLANE3]));
+            DO_DMA(bplpt[PLANE3], _denise->bpldat[PLANE3]);
             break;
             
         case DMA_H4:
-            if (amiga->debugDMA) debug("H4\n");
+            if (_amiga->debugDMA) debug("H4\n");
         case DMA_L4:
             
-            if (amiga->debugDMA) debug("DO_DMA H4/L4: bpldat[%d] = peekChip16(%X) = %X\n", PLANE4, bplpt[PLANE4], amiga->mem.peekChip16(bplpt[PLANE4]));
-            DO_DMA(bplpt[PLANE4], amiga->denise.bpldat[PLANE4]);
+            if (_amiga->debugDMA) debug("DO_DMA H4/L4: bpldat[%d] = peekChip16(%X) = %X\n", PLANE4, bplpt[PLANE4], _mem->peekChip16(bplpt[PLANE4]));
+            DO_DMA(bplpt[PLANE4], _denise->bpldat[PLANE4]);
             break;
             
         case DMA_L5:
             
-            if (amiga->debugDMA) debug("DO_DMA L5: bpldat[%d] = peekChip16(%X) = %X\n", PLANE5, bplpt[PLANE5], amiga->mem.peekChip16(bplpt[PLANE5]));
-            DO_DMA(bplpt[PLANE5], amiga->denise.bpldat[PLANE5]);
+            if (_amiga->debugDMA) debug("DO_DMA L5: bpldat[%d] = peekChip16(%X) = %X\n", PLANE5, bplpt[PLANE5], _mem->peekChip16(bplpt[PLANE5]));
+            DO_DMA(bplpt[PLANE5], _denise->bpldat[PLANE5]);
             break;
             
         case DMA_L6:
             
-            if (amiga->debugDMA) debug("DO_DMA L6: bpldat[%d] = peekChip16(%X) = %X\n", PLANE6, bplpt[PLANE6], amiga->mem.peekChip16(bplpt[PLANE6]));
-            DO_DMA(bplpt[PLANE6], amiga->denise.bpldat[PLANE6]);
+            if (_amiga->debugDMA) debug("DO_DMA L6: bpldat[%d] = peekChip16(%X) = %X\n", PLANE6, bplpt[PLANE6], _mem->peekChip16(bplpt[PLANE6]));
+            DO_DMA(bplpt[PLANE6], _denise->bpldat[PLANE6]);
             break;
             
         default:
@@ -1118,19 +1118,19 @@ Agnus::serviceS1Event(int nr)
         sprDmaState[nr] = SPR_DMA_IDLE;
 
         // Read the next control word (POS part)
-        uint16_t pos = amiga->mem.peekChip16(sprpt[nr]);
+        uint16_t pos = _mem->peekChip16(sprpt[nr]);
         INC_DMAPTR(sprpt[nr]);
         
         // Extract vertical trigger coordinate bits from POS
         sprvstrt[nr] = ((pos & 0xFF00) >> 8) | (sprvstrt[nr] & 0x0100);
-        amiga->denise.pokeSPRxPOS(nr, pos);
+        _denise->pokeSPRxPOS(nr, pos);
     }
     
     // Read sprite data if data DMA is activated
     if (sprDmaState[nr] == SPR_DMA_DATA) {
         
         // Read DATA
-        amiga->denise.pokeSPRxDATB(nr, amiga->mem.peekChip16(sprpt[nr]));
+        _denise->pokeSPRxDATB(nr, _mem->peekChip16(sprpt[nr]));
         INC_DMAPTR(sprpt[nr]);
     }
 }
@@ -1145,20 +1145,20 @@ Agnus::serviceS2Event(int nr)
         assert(sprDmaState[nr] == SPR_DMA_IDLE);
         
         // Read the next control word (CTL part)
-        uint16_t ctl = amiga->mem.peekChip16(sprpt[nr]);
+        uint16_t ctl = _mem->peekChip16(sprpt[nr]);
         INC_DMAPTR(sprpt[nr]);
         
         // Extract vertical trigger coordinate bits from CTL
         sprvstrt[nr] = ((ctl & 0b100) << 6) | (sprvstrt[nr] & 0x00FF);
         sprvstop[nr] = ((ctl & 0b010) << 7) | (ctl >> 8);
-        amiga->denise.pokeSPRxCTL(nr, ctl);
+        _denise->pokeSPRxCTL(nr, ctl);
     }
     
     // Read sprite data if data DMA is activated
     if (sprDmaState[nr] == SPR_DMA_DATA) {
         
         // Read DATB
-        amiga->denise.pokeSPRxDATA(nr, amiga->mem.peekChip16(sprpt[nr]));
+        _denise->pokeSPRxDATA(nr, _mem->peekChip16(sprpt[nr]));
         INC_DMAPTR(sprpt[nr]);
     }
 }
@@ -1179,13 +1179,13 @@ Agnus::serviceRASEvent(EventID id)
             
             // debug(2, "RAS_DIWSTRT (hstart = %d hstop = %d vstart = %d vstop = %d\n", hstrt, hstop, vstrt, vstop);
             
-            amiga->denise.drawLeftBorder();
+            _denise->drawLeftBorder();
             
-            if (amiga->denise.lores()) {
-                amiga->denise.draw32();
+            if (_denise->lores()) {
+                _denise->draw32();
                 incr = 8;
             } else {
-                amiga->denise.draw16();
+                _denise->draw16();
                 incr = 4;
             }
             
@@ -1202,11 +1202,11 @@ Agnus::serviceRASEvent(EventID id)
 
             debug(3, "RAS_DIWDRAW\n");
 
-            if (amiga->denise.lores()) {
-                amiga->denise.draw32();
+            if (_denise->lores()) {
+                _denise->draw32();
                 incr = 8;
             } else {
-                amiga->denise.draw16();
+                _denise->draw16();
                 incr = 4;
             }
             
@@ -1256,13 +1256,13 @@ Agnus::hsyncHandler()
     assert(hpos == 226 /* 0xE2 */);
     
     // Let Denise finish the current rasterline
-    amiga->denise.endOfLine();
+    _denise->endOfLine();
     
     // CIA B counts HSYNCs
-    amiga->ciaB.incrementTOD();
+    _ciaB->incrementTOD();
     
     // Check the keyboard about each millisecond
-    if ((vpos & 0b1111) == 0) amiga->keyboard.execute();
+    if ((vpos & 0b1111) == 0) _amiga->keyboard.execute();
     
     // Add bit plane pointer modulo values
     bplpt[0] += bpl1mod;
@@ -1347,20 +1347,20 @@ Agnus::vsyncHandler()
     latchedClock = clock + DMA_CYCLES(1);
     
     // CIA A counts VSYNCs
-    amiga->ciaA.incrementTOD();
+    _ciaA->incrementTOD();
     
     // Trigger VSYNC interrupt
-    amiga->paula.pokeINTREQ(0x8020);
+    _paula->pokeINTREQ(0x8020);
     
-    // Let the sub components do their own VSYNC stuff
+    // Let the subcomponents do their own VSYNC stuff
     copper.vsyncAction();
-    amiga->denise.endOfFrame();
+    _denise->endOfFrame();
     
     // Prepare to take a snapshot once in a while
-    if (amiga->snapshotIsDue()) amiga->signalSnapshot();
+    if (_amiga->snapshotIsDue()) _amiga->signalSnapshot();
         
     // Count some sheep (zzzzzz) ...
-    if (!amiga->getWarp()) {
-        amiga->synchronizeTiming();
+    if (!_amiga->getWarp()) {
+        _amiga->synchronizeTiming();
     }
 }

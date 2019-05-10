@@ -55,7 +55,7 @@ Keyboard::sendKeyCode(uint8_t keyCode)
     keyCode  = ~((keyCode << 1) | (keyCode >> 7)) & 0xFF;
     
     // Send it off to CIA A
-    amiga->ciaA.setKeyCode(keyCode);
+    _ciaA->setKeyCode(keyCode);
 }
 
 void

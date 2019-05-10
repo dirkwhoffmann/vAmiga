@@ -13,7 +13,7 @@ Paula::Paula()
 {
     setDescription("Paula");
     
-    // Register sub components
+    // Register subcomponents
     registerSubcomponents(vector<HardwareComponent *> {
         
         &audioUnit,
@@ -32,12 +32,7 @@ Paula::Paula()
         { &serper,   sizeof(serper),   0 },
 
         { &potgo,    sizeof(potgo),    0 },
-        
-        { &audlen,   sizeof(audlen),   WORD_ARRAY },
-        { &audper,   sizeof(audper),   WORD_ARRAY },
-        { &audvol,   sizeof(audvol),   WORD_ARRAY },
-        { &auddat,   sizeof(auddat),   WORD_ARRAY },
-
+    
         { &adkcon,   sizeof(adkcon),   0 },
     });
 }
@@ -159,8 +154,8 @@ Paula::peekPOTGOR()
 {
     uint16_t result = 0xFFFF;
     
-    result &= amiga->controlPort1.potgor();
-    result &= amiga->controlPort2.potgor();
+    result &= _port1->potgor();
+    result &= _port2->potgor();
     
     return result;
 }
@@ -170,42 +165,6 @@ Paula::pokePOTGO(uint16_t value)
 {
     debug(2, "pokePOTGO(%X)\n", value);
     potgo = value;
-}
-
-void
-Paula::pokeAUDxLEN(int x, uint16_t value)
-{
-    debug(2, "pokeAUD%dLEN(%X)\n", x, value);
-    assert(x < 4);
-    
-    audlen[x] = value;
-}
-
-void
-Paula::pokeAUDxPER(int x, uint16_t value)
-{
-    debug(2, "pokeAUD%dPER(%X)\n", x, value);
-    assert(x < 4);
-    
-    audper[x] = value;
-}
-
-void
-Paula::pokeAUDxVOL(int x, uint16_t value)
-{
-    debug(2, "pokeAUD%dVOL(%X)\n", x, value);
-    assert(x < 4);
-    
-    audvol[x] = MIN(value, 64);
-}
-
-void
-Paula::pokeAUDxDAT(int x, uint16_t value)
-{
-    debug(2, "pokeAUD%dDAT(%X)\n", x, value);
-    assert(x < 4);
-    
-    auddat[x] = value;
 }
 
 int

@@ -71,28 +71,6 @@ class Paula : public HardwareComponent {
     // The pot control register
     uint16_t potgo;
     
-    
-    //
-    // Audio registers
-    //
-    
-    // Audio length (AUDxLEN)
-    uint16_t audlen[4];
-    
-    // Audio period (AUDxPER)
-    uint16_t audper[4];
-    
-    // Audio volume (AUDxVOL)
-    uint16_t audvol[4];
-    
-    // Audio data (AUDxDAT)
-    uint16_t auddat[4];
-    
-    
-    //
-    // Mixed unsage
-    //
-    
     // The Audio and Disk Control Register (ADKCON)
     uint16_t adkcon;
     
@@ -169,18 +147,6 @@ class Paula : public HardwareComponent {
     
     // OCS register 0x030 (w)
     void pokePOTGO(uint16_t value);
-    
-    // OCS registers 0xA4, 0xB4, 0x0C4, 0xD4 (w)
-    void pokeAUDxLEN(int x, uint16_t value);
-    
-    // OCS registers 0xA6, 0xB6, 0x0B6, 0xD6 (w)
-    void pokeAUDxPER(int x, uint16_t value);
-    
-    // OCS registers 0xA8, 0xB8, 0x0C8, 0xD8 (w)
-    void pokeAUDxVOL(int x, uint16_t value);
-    
-    // OCS registers 0xAA, 0xBA, 0x0CA, 0xDA (w)
-    void pokeAUDxDAT(int x, uint16_t value);
     
     
     //

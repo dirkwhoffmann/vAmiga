@@ -21,10 +21,10 @@ Blitter::doFastBlit()
     bbusy = false;
     
     // Trigger the Blitter interrupt
-    handler->scheduleSecRel(IRQ_BLIT_SLOT, 0, IRQ_SET);
+    _handler->scheduleSecRel(IRQ_BLIT_SLOT, 0, IRQ_SET);
     
     // Terminate the Blitter
-    handler->cancel(BLT_SLOT);
+    _handler->cancel(BLT_SLOT);
 }
 
 void
@@ -97,21 +97,21 @@ Blitter::doFastCopyBlit()
 
             // Fetch A
             if (useA) {
-                anew = amiga->mem.peek16(bltapt); // TODO: Call peekChip
+                anew = _mem->peek16(bltapt); // TODO: Call peekChip
                 if (bltdebug) plainmsg("    A = peek(%X) = %X\n", bltapt, anew);
                 INC_OCS_PTR(bltapt, incr);
             }
             
             // Fetch B
             if (useB) {
-                bnew = amiga->mem.peek16(bltbpt); // TODO: Call peekChip
+                bnew = _mem->peek16(bltbpt); // TODO: Call peekChip
                 if (bltdebug) plainmsg("    B = peek(%X) = %X\n", bltbpt, bnew);
                 INC_OCS_PTR(bltbpt, incr);
             }
             
             // Fetch C
             if (useC) {
-                chold = amiga->mem.peek16(bltcpt); // TODO: Call peekChip
+                chold = _mem->peek16(bltcpt); // TODO: Call peekChip
                 if (bltdebug) plainmsg("    C = peek(%X) = %X\n", bltcpt, chold);
                 INC_OCS_PTR(bltcpt, incr);
             }
@@ -142,7 +142,7 @@ Blitter::doFastCopyBlit()
         
             // Write D
             if (useD) {
-                amiga->mem.pokeChip16(bltdpt, dhold);
+                _mem->pokeChip16(bltdpt, dhold);
                 if (bltdebug) plainmsg("D: poke(%X), %X\n", bltdpt, dhold);
                 check1 = fnv_1a_it32(check1, dhold);
                 check2 = fnv_1a_it32(check2, bltdpt);
@@ -296,7 +296,7 @@ Blitter::doFastLineBlit()
     {
         // Read C-data from memory if the C-channel is enabled
         if (c_enabled) {
-            bltcdat_local = amiga->mem.peekChip16(bltcpt_local);
+            bltcdat_local = _mem->peekChip16(bltcpt_local);
         }
         
         // Calculate data for the A-channel
@@ -321,7 +321,7 @@ Blitter::doFastLineBlit()
         
         // Save result to D-channel, same as the C ptr after first pixel.
         if (c_enabled) { // C-channel must be enabled
-            amiga->mem.pokeChip16(bltdpt_local, bltddat_local);
+            _mem->pokeChip16(bltdpt_local, bltddat_local);
             check1 = fnv_1a_it32(check1, bltddat_local);
             check2 = fnv_1a_it32(check2, bltdpt_local);
         }
@@ -607,11 +607,11 @@ Blitter::doFastLineBlitOmega()
                 addr = (planeAddr +(offset>>3)+(i*planeMod)) & 0x1FFFFE; //  >> 1;
                 
                 //Pixel plot
-                uint16_t pixel = amiga->mem.peek16(addr); // chipramW[addr];
+                uint16_t pixel = _mem->peek16(addr); // chipramW[addr];
                 // debug("0: peek(%d) = %d\n", addr, pixel);
                 pixel = logicFunction(minterm,0x8000 >> (offset&15),pattern,pixel);
                 // debug("0: pixel = %d\n", pixel);
-                amiga->mem.pokeChip16(addr, pixel);
+                _mem->pokeChip16(addr, pixel);
                 // debug("0: poke(%d), %d\n", addr, pixel);
                 check = fnv_1a_it32(check, addr);
                 check = fnv_1a_it32(check, pixel);
@@ -634,10 +634,10 @@ Blitter::doFastLineBlitOmega()
                 addr =(planeAddr +(offset>>3)-(i*planeMod)) & 0x1FFFFE; // >> 1;
                 
                 //Pixel plot
-                uint16_t pixel = amiga->mem.peek16(addr); // chipramW[addr];
+                uint16_t pixel = _mem->peek16(addr); // chipramW[addr];
                 pixel = logicFunction(minterm,0x8000 >> (offset&15),pattern,pixel);
                 // debug("1: poke(%d), %d\n", addr, pixel);
-                amiga->mem.pokeChip16(addr, pixel);
+                _mem->pokeChip16(addr, pixel);
                 check = fnv_1a_it32(check, addr);
                 check = fnv_1a_it32(check, pixel);
                 
@@ -662,11 +662,11 @@ Blitter::doFastLineBlitOmega()
                 if (bltdebug) printf("2: planeAddr = %d offset = %d d = %d planeMod = %d D = %d bltapt = %d inc1 = %d inc2 = %d\n", planeAddr, offset, d, planeMod, D, bltapt, inc1, inc2);
                 
                 //Pixel plot
-                uint16_t pixel = amiga->mem.peek16(addr); // chipramW[addr];
+                uint16_t pixel = _mem->peek16(addr); // chipramW[addr];
                 if (bltdebug) printf("2: peek(%d) = %d\n", addr, pixel);
                 pixel = logicFunction(minterm,0x0001 << (offset&15),pattern,pixel);
                 if (bltdebug) printf("2: poke(%d), %d\n", addr, pixel);
-                amiga->mem.pokeChip16(addr, pixel);
+                _mem->pokeChip16(addr, pixel);
                 check = fnv_1a_it32(check, addr);
                 check = fnv_1a_it32(check, pixel);
                 
@@ -689,10 +689,10 @@ Blitter::doFastLineBlitOmega()
                 addr =(planeAddr +(offset>>3)-(i*planeMod)) & 0x1FFFFE; //>>1;
                 
                 //Pixel plot
-                uint16_t pixel = amiga->mem.peek16(addr); // chipramW[addr];
+                uint16_t pixel = _mem->peek16(addr); // chipramW[addr];
                 pixel = logicFunction(minterm,0x8000 >> (offset&15),pattern,pixel);
                 // debug("3: poke(%d), %d\n", addr, pixel);
-                amiga->mem.pokeChip16(addr, pixel);
+                _mem->pokeChip16(addr, pixel);
                 check = fnv_1a_it32(check, addr);
                 check = fnv_1a_it32(check, pixel);
                 
@@ -714,10 +714,10 @@ Blitter::doFastLineBlitOmega()
                 addr =(planeAddr +(offset>>3)+(d*planeMod)) & 0x1FFFFE; // >>1;
                 
                 //Pixel plot
-                uint16_t pixel = amiga->mem.peek16(addr); // chipramW[addr];
+                uint16_t pixel = _mem->peek16(addr); // chipramW[addr];
                 pixel = logicFunction(minterm,0x8000 >> (offset&15),pattern,pixel);
                 // debug("4: poke(%d), %d\n", addr, pixel);
-                amiga->mem.pokeChip16(addr, pixel);
+                _mem->pokeChip16(addr, pixel);
                 check = fnv_1a_it32(check, addr);
                 check = fnv_1a_it32(check, pixel);
                 
@@ -743,11 +743,11 @@ Blitter::doFastLineBlitOmega()
 
                 
                 //Pixel plot
-                uint16_t pixel = amiga->mem.peek16(addr); // chipramW[addr];
+                uint16_t pixel = _mem->peek16(addr); // chipramW[addr];
                 // debug("5: peek(%X) = %X\n", addr, pixel);
                 pixel = logicFunction(minterm,0x0001 << (offset&15),pattern,pixel);
                 // debug("5: poke(%X), %X\n", addr, pixel);
-                amiga->mem.pokeChip16(addr, pixel);
+                _mem->pokeChip16(addr, pixel);
                 check = fnv_1a_it32(check, addr);
                 check = fnv_1a_it32(check, pixel);
                 
@@ -769,12 +769,12 @@ Blitter::doFastLineBlitOmega()
                 addr =(planeAddr +(offset>>3)-(d*planeMod)) & 0x1FFFFE; // >>1;
                 
                 //Pixel plot
-                uint16_t pixel = amiga->mem.peek16(addr); // chipramW[addr];
+                uint16_t pixel = _mem->peek16(addr); // chipramW[addr];
                 if (bltdebug) printf("    planeAddr = %X offset = %X planeMod = %X pixel = %X\n",planeAddr,offset,planeMod, pixel);
                 pixel = logicFunction(minterm,0x8000 >> (offset&15),pattern,pixel);
                 // debug("6: poke(%d), %d\n", addr, pixel);
                 if (bltdebug) printf("    pixel = %X\n",pixel);
-                amiga->mem.pokeChip16(addr, pixel);
+                _mem->pokeChip16(addr, pixel);
                 check = fnv_1a_it32(check, addr);
                 check = fnv_1a_it32(check, pixel);
                 
@@ -798,10 +798,10 @@ Blitter::doFastLineBlitOmega()
                 addr = (planeAddr - (offset>>3)-(d*planeMod)) & 0x1FFFFE; // >>1;
                 
                 //Pixel plot
-                uint16_t pixel = amiga->mem.peek16(addr); // chipramW[addr];
+                uint16_t pixel = _mem->peek16(addr); // chipramW[addr];
                 pixel = logicFunction(minterm,0x0001 << (offset&15),pattern,pixel);
                 // debug("7: poke(%d), %d\n", addr, pixel);
-                amiga->mem.pokeChip16(addr, pixel);
+                _mem->pokeChip16(addr, pixel);
                 check = fnv_1a_it32(check, addr);
                 check = fnv_1a_it32(check, pixel);
                 
