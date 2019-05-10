@@ -63,7 +63,7 @@ void
 AudioUnit::enableDMA(int channel)
 {
     currentState[channel] = 0;
-    // dmaEnabled[channel] = true;
+    dmaEnabled[channel] = true;
 }
 
 void
@@ -116,7 +116,7 @@ AudioUnit::hsyncHandler()
             
             if (dmaEnabled[i]) {
                 executeStateMachine(i, missing);
-                sample += (int8_t)(auddatInternal[i]);
+                sample += (int8_t)(auddatInternal[i]) * audvol[i];
             }
         }
         
@@ -139,6 +139,8 @@ AudioUnit::executeStateMachine(int channel, DMACycle cycles)
             
         case 0:
             
+            debug("state = %d\n", currentState[channel]);
+            
             audlenInternal[channel] = audlen[channel];
             _agnus->audlc[channel] = audlcLatch[channel];
             audperInternal[channel] = 0;
@@ -147,7 +149,9 @@ AudioUnit::executeStateMachine(int channel, DMACycle cycles)
             
         case 1:
             
-            if (audlenInternal[channel] != 1) audlenInternal[channel]--;
+            debug("state = %d\n", currentState[channel]);
+
+            if (audlenInternal[channel] > 1) audlenInternal[channel]--;
             
             // Trigger Audio interrupt
             _paula->pokeINTREQ(0x8000 | (0x80 << channel));
@@ -190,7 +194,7 @@ AudioUnit::executeStateMachine(int channel, DMACycle cycles)
                 INC_DMAPTR(_agnus->audlc[channel]);
                 
                 // Decrease the length counter
-                if (audlenInternal[channel] != 1) {
+                if (audlenInternal[channel] > 1) {
                     audlenInternal[channel]--;
                 } else {
                     audlenInternal[channel] = audlen[channel];
@@ -208,6 +212,8 @@ AudioUnit::executeStateMachine(int channel, DMACycle cycles)
             
         case 5:
             
+            debug("state = %d\n", currentState[channel]);
+
             audvolInternal[channel] = audvol[channel];
             audperInternal[channel] = 0;
             
@@ -215,7 +221,7 @@ AudioUnit::executeStateMachine(int channel, DMACycle cycles)
             auddat[channel] = _mem->peekChip16(_agnus->audlc[channel]);
             INC_DMAPTR(_agnus->audlc[channel]);
             
-            if (audlenInternal[channel] != 1) {
+            if (audlenInternal[channel] > 1) {
                 audlenInternal[channel]--;
             } else {
                 audlenInternal[channel] = audlen[channel];
@@ -451,4 +457,3 @@ AudioUnit::pokeAUDxDAT(int x, uint16_t value)
     
     auddat[x] = value;
 }
-

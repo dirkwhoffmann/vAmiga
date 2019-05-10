@@ -49,8 +49,9 @@ class AudioUnit : public HardwareComponent {
      * All sound samples produced by reSID are scaled by this value before they
      * are written into the ringBuffer.
      */
-    static constexpr float scale = 0.000005f;
-    
+    // static constexpr float scale = 0.000005f;
+    static constexpr float scale = 0.0000025f;
+
     /* Ring buffer read pointer
      */
     uint32_t readPtr = 0;

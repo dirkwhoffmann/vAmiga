@@ -962,7 +962,7 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x0A0 >> 1: // AUD0LCH
             _agnus->pokeAUDxLCH(0, value); return;
         case 0x0A2 >> 1: // AUD0LCL
-            _agnus->pokeAUDxLCH(0, value); return;
+            _agnus->pokeAUDxLCL(0, value); return;
         case 0x0A4 >> 1: // AUD0LEN
             _paula->audioUnit.pokeAUDxLEN(0, value); return;
         case 0x0A6 >> 1: // AUD0PER
@@ -977,7 +977,7 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x0B0 >> 1: // AUD1LCH
             _agnus->pokeAUDxLCH(1, value); return;
         case 0x0B2 >> 1: // AUD1LCL
-            _agnus->pokeAUDxLCH(1, value); return;
+            _agnus->pokeAUDxLCL(1, value); return;
         case 0x0B4 >> 1: // AUD1LEN
             _paula->audioUnit.pokeAUDxLEN(1, value); return;
         case 0x0B6 >> 1: // AUD1PER
@@ -992,7 +992,7 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x0C0 >> 1: // AUD2LCH
             _agnus->pokeAUDxLCH(2, value); return;
         case 0x0C2 >> 1: // AUD2LCL
-            _agnus->pokeAUDxLCH(2, value); return;
+            _agnus->pokeAUDxLCL(2, value); return;
         case 0x0C4 >> 1: // AUD2LEN
             _paula->audioUnit.pokeAUDxLEN(2, value); return;
         case 0x0C6 >> 1: // AUD2PER
@@ -1007,7 +1007,7 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x0D0 >> 1: // AUD3LCH
             _agnus->pokeAUDxLCH(3, value); return;
         case 0x0D2 >> 1: // AUD3LCL
-            _agnus->pokeAUDxLCH(3, value); return;
+            _agnus->pokeAUDxLCL(3, value); return;
         case 0x0D4 >> 1: // AUD3LEN
             _paula->audioUnit.pokeAUDxLEN(3, value); return;
         case 0x0D6 >> 1: // AUD3PER

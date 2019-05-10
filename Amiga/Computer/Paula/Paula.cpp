@@ -127,7 +127,7 @@ Paula::pokeINTENA(uint16_t value)
 void
 Paula::pokeADKCON(uint16_t value)
 {
-    plaindebug("pokeADKCON(%X)\n", value);
+    plaindebug(2, "pokeADKCON(%X)\n", value);
     if (value & 0x8000) adkcon |= (value & 0x7FFF); else adkcon &= ~value;
 }
 
