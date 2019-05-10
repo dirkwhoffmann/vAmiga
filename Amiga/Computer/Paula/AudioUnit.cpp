@@ -73,29 +73,6 @@ AudioUnit::disableDMA(int channel)
     dmaEnabled[channel] = false;
 }
 
-
-void
-AudioUnit::executeUntil(int64_t targetCycle)
-{
-    uint64_t missingCycles = targetCycle - cycles;
-    
-    if (missingCycles > 1000000 /* some decent number here */) {
-        msg("Far too many Audio cycles are missing.\n");
-        missingCycles = 1000000;
-    }
-    
-    execute(missingCycles);
-    cycles = targetCycle;
-}
-
-void
-AudioUnit::execute(int64_t numCycles)
-{
-    // debug("Execute audio for %lld cycles (%d samples in buffer)\n", numCycles, samplesInBuffer());
-    if (numCycles == 0)
-        return;
-}
-
 void
 AudioUnit::hsyncHandler()
 {
@@ -281,7 +258,6 @@ AudioUnit::readData()
             volume -= MIN(volumeDelta, volume - targetVolume);
         }
     }
-    // float divider = 75000.0f; // useReSID ? 100000.0f : 150000.0f;
     float divider = 40000.0f;
     value = (volume <= 0) ? 0.0f : value * (float)volume / divider;
     
@@ -348,8 +324,6 @@ AudioUnit::readStereoSamplesInterleaved(float *target, size_t n)
 void
 AudioUnit::writeData(short *data, size_t count)
 {
-    // debug("  read: %d write: %d Writing %d (%d)\n", readPtr, writePtr, count, bufferCapacity());
-    
     // Check for buffer overflow
     if (bufferCapacity() < count) {
         handleBufferOverflow();
@@ -399,7 +373,7 @@ AudioUnit::handleBufferOverflow()
     // (1) The consumer runs slightly slower than the producer.
     // (2) The consumer is halted or not startet yet.
     
-    debug(1, "SID RINGBUFFER OVERFLOW (r: %ld w: %ld)\n", readPtr, writePtr);
+    debug(2, "SID RINGBUFFER OVERFLOW (r: %ld w: %ld)\n", readPtr, writePtr);
     
     // Determine the elapsed seconds since the last pointer adjustment.
     uint64_t now = mach_absolute_time();

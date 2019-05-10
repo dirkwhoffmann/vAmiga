@@ -37,7 +37,7 @@ class AudioUnit : public HardwareComponent {
     //
     
     // Number of sound samples stored in ringbuffer
-    static constexpr size_t bufferSize = 12288;
+    static constexpr size_t bufferSize = 16384;
     
     /* The audio sample ringbuffer.
      * This ringbuffer serves as the data interface between the emulation code
@@ -116,14 +116,10 @@ private:
     
     bool dmaEnabled[4];
     
-    // Current state of all four state machines
+    // Current state of all four state machines.
     uint8_t currentState[4];
     
-    
-    //
-    // Sample generation
-    //
-    
+    // Used by the hsync handler to compute the number of samples to generate.
     double dmaCycleCounter = 0;
     
     
@@ -241,22 +237,18 @@ private:
     // Signals to ignore the next underflow or overflow condition.
     void ignoreNextUnderOrOverflow() { lastAlignment = mach_absolute_time(); }
     
-    // Moves read pointer one position forward
+    // Moves the read pointer forward
     void advanceReadPtr() { readPtr = (readPtr + 1) % bufferSize; }
-    
-    // Moves read pointer forward or backward
     void advanceReadPtr(int steps) { readPtr = (readPtr + bufferSize + steps) % bufferSize; }
     
-    // Moves the write pointer one position forward.
+    // Moves the write pointer forward.
     void advanceWritePtr() { writePtr = (writePtr + 1) % bufferSize; }
-    
-    // Moves the write pointer forward or backward.
     void advanceWritePtr(int steps) { writePtr = (writePtr + bufferSize + steps) % bufferSize; }
     
-    // Returns number of stored samples in ringbuffer.
+    // Returns number of stored samples in the ringbuffer.
     unsigned samplesInBuffer() { return (writePtr + bufferSize - readPtr) % bufferSize; }
     
-    // Returns remaining storage capacity of ringbuffer.
+    // Returns the remaining storage capacity of the ringbuffer.
     unsigned bufferCapacity() { return (readPtr + bufferSize - writePtr) % bufferSize; }
     
     // Returns the fill level as a percentage value.
@@ -274,14 +266,6 @@ private:
     // Starts or ends audio DMA (called inside pokeDMACON)
     void enableDMA(int channel);
     void disableDMA(int channel);
-
-    /* Executes the audio unit until a certain cycle is reached (NEEDED?)
-     */
-    void executeUntil(int64_t targetCycle);
-    
-    /* Executes the audio unit for a certain number of DMA cycles.
-     */
-    void execute(int64_t numCycles);
     
     // Executed at the end of each rasterline
     void hsyncHandler();
