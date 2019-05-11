@@ -20,6 +20,7 @@ struct DeniseWrapper { Denise *denise; };
 struct PaulaWrapper { Paula *paula; };
 struct AmigaControlPortWrapper { ControlPort *port; };
 struct MouseWrapper { Mouse *mouse; };
+struct JoystickWrapper { Joystick *joystick; };
 struct KeyboardWrapper { Keyboard *keyboard; };
 struct DiskControllerWrapper { DiskController *controller; };
 struct AmigaDriveWrapper { Drive *drive; };
@@ -609,6 +610,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->port->setAutofireFrequency(value);
 }
+- (void) connectDevice:(ControlPortDevice)value
+{
+    wrapper->port->connectDevice(value);
+}
 - (void) connectMouse:(BOOL)value
 {
     wrapper->port->connectDevice(value ? CPD_MOUSE : CPD_NONE);
@@ -646,6 +651,56 @@ struct ADFFileWrapper { ADFFile *adf; };
 - (void) setRightButton:(BOOL)value
 {
     wrapper->mouse->setRightButton(value);
+}
+
+@end
+
+
+//
+// Joystick proxy
+//
+
+@implementation JoystickProxy
+
+- (instancetype) initWithJoystick:(Joystick *)joystick
+{
+    if (self = [super init]) {
+        wrapper = new JoystickWrapper();
+        wrapper->joystick = joystick;
+    }
+    return self;
+}
+- (void) dump
+{
+    wrapper->joystick->dump();
+}
+- (void) trigger:(JoystickEvent)event
+{
+    wrapper->joystick->trigger(event);
+}
+- (BOOL) autofire
+{
+    return wrapper->joystick->getAutofire();
+}
+- (void) setAutofire:(BOOL)value
+{
+    return wrapper->joystick->setAutofire(value);
+}
+- (NSInteger) autofireBullets
+{
+    return (NSInteger)wrapper->joystick->getAutofireBullets();
+}
+- (void) setAutofireBullets:(NSInteger)value
+{
+    wrapper->joystick->setAutofireBullets((int)value);
+}
+- (float) autofireFrequency
+{
+    return wrapper->joystick->getAutofireFrequency();
+}
+- (void) setAutofireFrequency:(float)value
+{
+    wrapper->joystick->setAutofireFrequency(value);
 }
 
 @end
@@ -1018,6 +1073,8 @@ struct ADFFileWrapper { ADFFile *adf; };
 @synthesize controlPort1;
 @synthesize controlPort2;
 @synthesize mouse;
+@synthesize joystick1;
+@synthesize joystick2;
 @synthesize keyboard;
 @synthesize diskController;
 @synthesize df0;

@@ -21,6 +21,7 @@
 @class PaulaProxy;
 @class ControlPortProxy;
 @class MouseProxy;
+@class JoystickProxy;
 @class KeyboardProxy;
 @class DiskControllerProxy;
 @class DriveProxy;
@@ -62,6 +63,8 @@ struct AmigaFileWrapper;
     ControlPortProxy *controlPort1;
     ControlPortProxy *controlPort2;
     MouseProxy *mouse;
+    JoystickProxy *joystick1;
+    JoystickProxy *joystick2;
     KeyboardProxy *keyboard;
     DiskControllerProxy *diskController;
     DriveProxy *df0;
@@ -81,6 +84,8 @@ struct AmigaFileWrapper;
 @property (readonly) ControlPortProxy *controlPort1;
 @property (readonly) ControlPortProxy *controlPort2;
 @property (readonly) MouseProxy *mouse;
+@property (readonly) JoystickProxy *joystick1;
+@property (readonly) JoystickProxy *joystick2;
 @property (readonly) KeyboardProxy *keyboard;
 @property (readonly) DiskControllerProxy *diskController;
 @property (readonly) DriveProxy *df0;
@@ -147,13 +152,6 @@ struct AmigaFileWrapper;
 
 - (BOOL) warp;
 - (void) setWarp:(BOOL)value;
-
-/*
-- (BOOL) alwaysWarp;
-- (void) setAlwaysWarp:(BOOL)value;
-- (BOOL) warpLoad;
-- (void) setWarpLoad:(BOOL)value;
-*/
 
 // Handling snapshots
 - (BOOL) takeAutoSnapshots;
@@ -398,15 +396,11 @@ struct AmigaFileWrapper;
 - (float) autofireFrequency;
 - (void) setAutofireFrequency:(float)value;
 
+- (void) connectDevice:(ControlPortDevice)value;
 - (void) connectMouse:(BOOL)value;
 
-/*
-- (void) setXY:(NSPoint)pos;
-- (void) setLeftMouseButton:(BOOL)pressed;
-- (void) setRightMouseButton:(BOOL)pressed;
-*/
-
 @end
+
 
 //
 // Mouse Proxy
@@ -422,6 +416,28 @@ struct AmigaFileWrapper;
 - (void) setXY:(NSPoint)pos;
 - (void) setLeftButton:(BOOL)value;
 - (void) setRightButton:(BOOL)value;
+
+@end
+
+
+//
+// Joystick Proxy
+//
+
+@interface JoystickProxy : NSObject {
+    
+    struct JoystickWrapper *wrapper;
+}
+
+- (void) dump;
+
+- (void) trigger:(JoystickEvent)event;
+- (BOOL) autofire;
+- (void) setAutofire:(BOOL)value;
+- (NSInteger) autofireBullets;
+- (void) setAutofireBullets:(NSInteger)value;
+- (float) autofireFrequency;
+- (void) setAutofireFrequency:(float)value;
 
 @end
 
