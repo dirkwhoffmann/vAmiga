@@ -18,6 +18,8 @@
 // Type aliases
 //
 
+typedef int64_t Frame;
+
 typedef int64_t Cycle;    // Cycle in master cycle units
 typedef int64_t CPUCycle; // Cycle in CPU cycle units
 typedef int64_t CIACycle; // Cycle in CIA cycle units

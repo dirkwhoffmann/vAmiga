@@ -16,6 +16,7 @@
 #include "AgnusTypes.h"
 #include "DeniseTypes.h"
 #include "PaulaTypes.h"
+#include "ControlPortTypes.h"
 #include "DriveTypes.h"
 #include "DiskTypes.h"
 

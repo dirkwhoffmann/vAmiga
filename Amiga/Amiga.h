@@ -28,6 +28,7 @@
 #include "Paula.h"
 #include "ControlPort.h"
 #include "Mouse.h"
+#include "Joystick.h"
 #include "Keyboard.h"
 #include "Drive.h"
 #include "Disk.h"
