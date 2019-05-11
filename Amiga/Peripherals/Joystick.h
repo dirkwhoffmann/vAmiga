@@ -52,8 +52,21 @@ public:
     
     
     //
+    // Methods from HardwareComponent
+    //
+    
+private:
+    
+    void _powerOn() override;
+    void _dump() override;
+    void didLoadFromBuffer(uint8_t **buffer) override;
+    
+    
+    //
     // Accessing properties
     //
+    
+public:
     
     // Auto-fire
     bool getAutofire() { return autofire; }

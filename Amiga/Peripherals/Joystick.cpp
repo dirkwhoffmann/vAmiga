@@ -18,6 +18,29 @@ Joystick::Joystick(int nr)
 }
 
 void
+Joystick::_powerOn()
+{
+    button = false;
+    axisX = 0;
+    axisY = 0;
+}
+
+void
+Joystick::_dump()
+{
+    plainmsg("Button:  %s AxisX: %d AxisY: %d\n", button ? "YES" : "NO", axisX, axisY);
+}
+
+void
+Joystick::didLoadFromBuffer(uint8_t **buffer)
+{
+    // Discard any active joystick movements
+    button = false;
+    axisX = 0;
+    axisY = 0;
+}
+
+void
 Joystick::setAutofire(bool value)
 {
     autofire = value;

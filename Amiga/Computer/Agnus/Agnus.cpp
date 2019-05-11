@@ -1436,7 +1436,9 @@ Agnus::vsyncHandler()
     // Let the subcomponents do their own VSYNC stuff
     copper.vsyncAction();
     _denise->endOfFrame();
-    
+    _amiga->joystick1.execute();
+    _amiga->joystick2.execute();
+
     // Prepare to take a snapshot once in a while
     if (_amiga->snapshotIsDue()) _amiga->signalSnapshot();
         
