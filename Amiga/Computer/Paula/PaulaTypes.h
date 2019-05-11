@@ -12,6 +12,17 @@
 #ifndef _PAULA_T_INC
 #define _PAULA_T_INC
 
+//
+// Enumerations
+//
+
+typedef enum : long
+{
+    FILT_NONE,
+    FILT_BUTTERWORTH
+}
+FilterType;
+
 
 //
 // Structures
@@ -38,7 +49,5 @@ typedef struct
     uint8_t prb;
 }
 DiskControllerInfo;
-
-
 
 #endif

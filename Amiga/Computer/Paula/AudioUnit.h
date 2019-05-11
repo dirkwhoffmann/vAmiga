@@ -10,11 +10,25 @@
 #ifndef _AUDIO_UNIT_INC
 #define _AUDIO_UNIT_INC
 
-#include "HardwareComponent.h"
+#include "AudioFilter.h"
 
 class AudioUnit : public HardwareComponent {
     
-    private:
+    //
+    // Sub components
+    //
+    
+public:
+    
+    // Audio filter
+    AudioFilter filter;
+    
+    
+    //
+    // Properties
+    //
+    
+private:
     
     // CPU cycle at the last call to executeUntil()
     uint64_t cycles = 0;
@@ -22,7 +36,7 @@ class AudioUnit : public HardwareComponent {
     // Time stamp of the last write pointer alignment
     uint64_t lastAlignment = 0;
     
-    public:
+public:
     
     // Number of buffer underflows since power up
     uint64_t bufferUnderflows;
@@ -30,7 +44,7 @@ class AudioUnit : public HardwareComponent {
     // Number of buffer overflows since power up
     uint64_t bufferOverflows;
     
-    private:
+private:
     
     //
     // Audio ringbuffer
@@ -51,7 +65,7 @@ class AudioUnit : public HardwareComponent {
      */
     // static constexpr float scale = 0.000005f;
     static constexpr float scale = 0.0000025f;
-
+    
     /* Ring buffer read pointer
      */
     uint32_t readPtr = 0;
@@ -98,11 +112,11 @@ class AudioUnit : public HardwareComponent {
     // Audio volume (AUDxVOL)
     uint16_t audvol[4];
     uint16_t audvolInternal[4];
-
+    
     // Audio data (AUDxDAT)
     uint16_t auddat[4];
     uint16_t auddatInternal[4];
-
+    
 public:
     
     uint32_t audlcLatch[4];
@@ -111,7 +125,7 @@ public:
     //
     // State machine
     //
-
+    
 private:
     
     bool dmaEnabled[4];
@@ -127,7 +141,7 @@ private:
     // Constructing and destructing
     //
     
-    public:
+public:
     
     AudioUnit();
     
@@ -136,7 +150,7 @@ private:
     // Methods from HardwareComponent
     //
     
-    private:
+private:
     
     void _powerOn() override;
     void _run() override;
@@ -151,7 +165,7 @@ private:
     // Configuring the device
     //
     
-    public:
+public:
     
     // Returns the sample rate.
     uint32_t getSampleRate();
@@ -261,7 +275,7 @@ private:
     const uint32_t samplesAhead = 8 * 735;
     void alignWritePtr() { writePtr = (readPtr  + samplesAhead) % bufferSize; }
     
-    public:
+public:
     
     // Starts or ends audio DMA (called inside pokeDMACON)
     void enableDMA(int channel);

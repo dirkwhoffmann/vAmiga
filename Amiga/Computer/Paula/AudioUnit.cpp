@@ -13,6 +13,12 @@ AudioUnit::AudioUnit()
 {
     setDescription("AudioUnit");
     
+    // Register subcomponents
+    registerSubcomponents(vector<HardwareComponent *> {
+        
+        &filter
+    });
+    
     // Register snapshot items
     registerSnapshotItems(vector<SnapshotItem> {
         
@@ -331,7 +337,7 @@ AudioUnit::writeData(short *data, size_t count)
     
     // Convert sound samples to floating point values and write into ringbuffer
     for (unsigned i = 0; i < count; i++) {
-        ringBuffer[writePtr] = float(data[i]) * scale;
+        ringBuffer[writePtr] = filter.apply(float(data[i]) * scale);
         advanceWritePtr();
     }
 }
