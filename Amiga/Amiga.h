@@ -121,6 +121,10 @@ class Amiga : public HardwareComponent {
     // Mouse
     Mouse mouse;
     
+    // Joysticks
+    Joystick joystick1 = Joystick(1);
+    Joystick joystick2 = Joystick(2);
+    
     // Keyboard
     Keyboard keyboard;
     

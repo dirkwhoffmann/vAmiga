@@ -611,22 +611,8 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 - (void) connectMouse:(BOOL)value
 {
-    wrapper->port->connectMouse(value);
+    wrapper->port->connectDevice(value ? CPD_MOUSE : CPD_NONE);
 }
-/*
-- (void) setXY:(NSPoint)pos
-{
-    wrapper->port->setXY(pos.x, pos.y);
-}
-- (void) setLeftMouseButton:(BOOL)pressed
-{
-    wrapper->port->setLeftMouseButton(pressed);
-}
-- (void) setRightMouseButton:(BOOL)pressed
-{
-    wrapper->port->setRightMouseButton(pressed);
-}
-*/
 
 @end
 

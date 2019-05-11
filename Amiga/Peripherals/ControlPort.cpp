@@ -9,11 +9,11 @@
 
 #include "Amiga.h"
 
-ControlPort::ControlPort(int portNr)
+ControlPort::ControlPort(int nr)
 {
-    assert(portNr == 1 || portNr == 2);
+    assert(nr == 1 || nr == 2);
     
-    nr = portNr;
+    this->nr = nr;
     setDescription(nr == 1 ? "ControlPort1" : "ControlPort2");
 }
 
@@ -43,37 +43,43 @@ ControlPort::didLoadFromBuffer(uint8_t **buffer)
 uint16_t
 ControlPort::potgor()
 {
-    uint16_t result = 0xFFFF;
-    
-    if (hasMouse) {
-        if (_amiga->mouse.rightButton) {
-            CLR_BIT(result, 10);
-        }
+    switch (device) {
+            
+        case CPD_MOUSE:
+            return _amiga->mouse.rightButton ? 0xF7FF : 0xFFFF;
+            
+        default:
+            return 0xFFFF;
     }
-    
-    return result;
 }
 
 uint16_t
 ControlPort::joydat()
 {
-    return hasMouse ? _amiga->mouse.getXY() : 0;
+    switch (device) {
+            
+        case CPD_MOUSE:
+            return _amiga->mouse.getXY();
+            
+        default:
+            return 0;
+    }
 }
 
 uint8_t
 ControlPort::ciapa()
 {
-    assert(nr == 1 || nr == 2);
-    
-    uint16_t result = 0xFF;
-    
-    if (hasMouse) {
-        if (_amiga->mouse.leftButton) {
-            CLR_BIT(result, (nr == 1) ? 6 : 7);
-        }
+    switch (device) {
+            
+        case CPD_MOUSE:
+            if (_amiga->mouse.leftButton) {
+                return (nr == 1) ? 0xBF : 0x7F;
+            } else {
+                return 0xFF;
+            }
+        default:
+            return 0xFF;
     }
- 
-    return result;
 }
 
 void
@@ -175,28 +181,9 @@ ControlPort::setAutofireBullets(int value)
     }
 }
 
-/*
 void
-ControlPort::setXY(float x, float y)
+ControlPort::connectDevice(ControlPortDevice device)
 {
-    if (hasMouse) {
-        debug("Moving mouse to (%f,%f)\n", x, y);
-    }
+    assert(isControlPortDevice(device));
+    this->device = device;
 }
-
-void
-ControlPort::setLeftMouseButton(bool pressed)
-{
-    if (hasMouse) {
-        debug("Pressing left mouse button");
-    }
-}
-
-void
-ControlPort::setRightMouseButton(bool pressed)
-{
-    if (hasMouse) {
-        debug("Pressing right mouse button");
-    }
-}
-*/

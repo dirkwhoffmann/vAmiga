@@ -19,8 +19,9 @@ private:
     // Represented control port (1 or 2)
     int nr;
     
-    // true, if a mouse is connected to this port
-    bool hasMouse = false;
+    // Connected device
+    // bool hasMouse = false;
+    ControlPortDevice device = CPD_NONE;
     
     // True, if button is pressed.
     bool button = false;
@@ -57,7 +58,7 @@ private:
     
 public:
     
-    ControlPort(int p);
+    ControlPort(int nr);
     
     
     //
@@ -135,11 +136,14 @@ public:
 public:
     
     // Returns true if a mouse is connected
-    bool mouseIsConnected() { return hasMouse; }
+    // bool mouseIsConnected() { return hasMouse; }
     
     // Connects or disconnects a mouse
-    void connectMouse(bool value) { hasMouse = value; }
-    
+    // void connectMouse(bool value) { hasMouse = value; }
+
+    // Connects or disconnects a device
+    void connectDevice(ControlPortDevice device);
+
     // Returns the potentiometer X value
     // uint8_t potX();
     

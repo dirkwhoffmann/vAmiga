@@ -24,4 +24,8 @@ typedef enum : long
 }
 ControlPortDevice;
 
+inline bool isControlPortDevice(long value) {
+    return value >= CPD_NONE && value <= CPD_JOYSTICK;
+}
+
 #endif

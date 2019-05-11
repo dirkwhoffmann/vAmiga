@@ -14,6 +14,9 @@
 
 class Joystick : public HardwareComponent {
     
+    // The control port this joystick is connected to (1 or 2)
+    int nr;
+    
     // Button state
     bool button = false;
     
@@ -45,7 +48,7 @@ class Joystick : public HardwareComponent {
     
 public:
     
-    Joystick();
+    Joystick(int nr);
     
     
     //
@@ -63,6 +66,27 @@ public:
     // Autofire frequency
     float getAutofireFrequency() { return autofireFrequency; }
     void setAutofireFrequency(float value) { autofireFrequency = value; }
+
+private:
+    
+    // Updates variable nextAutofireFrame
+    void scheduleNextShot();
+
+    
+    //
+    // Using the device
+    //
+    
+public:
+    
+    // Triggers a joystick event
+    void trigger(JoystickEvent event);
+    
+    /* Execution function for this control port
+     * This method needs to be invoked at the end of each frame to make the
+     * auto-fire mechanism work.
+     */
+    void execute();
 };
 
 #endif
