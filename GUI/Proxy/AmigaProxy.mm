@@ -582,34 +582,6 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->port->dump();
 }
-- (void) trigger:(JoystickEvent)event
-{
-    wrapper->port->trigger(event);
-}
-- (BOOL) autofire
-{
-    return wrapper->port->getAutofire();
-}
-- (void) setAutofire:(BOOL)value
-{
-    return wrapper->port->setAutofire(value);
-}
-- (NSInteger) autofireBullets
-{
-    return (NSInteger)wrapper->port->getAutofireBullets();
-}
-- (void) setAutofireBullets:(NSInteger)value
-{
-    wrapper->port->setAutofireBullets((int)value);
-}
-- (float) autofireFrequency
-{
-    return wrapper->port->getAutofireFrequency();
-}
-- (void) setAutofireFrequency:(float)value
-{
-    wrapper->port->setAutofireFrequency(value);
-}
 - (void) connectDevice:(ControlPortDevice)value
 {
     wrapper->port->connectDevice(value);
@@ -1104,6 +1076,8 @@ struct ADFFileWrapper { ADFFile *adf; };
     controlPort1 = [[ControlPortProxy alloc] initWithControlPort:&amiga->controlPort1];
     controlPort2 = [[ControlPortProxy alloc] initWithControlPort:&amiga->controlPort2];
     mouse = [[MouseProxy alloc] initWithMouse:&amiga->mouse];
+    joystick1 = [[JoystickProxy alloc] initWithJoystick:&amiga->joystick1];
+    joystick2 = [[JoystickProxy alloc] initWithJoystick:&amiga->joystick2];
     keyboard = [[KeyboardProxy alloc] initWithKeyboard:&amiga->keyboard];
     diskController = [[DiskControllerProxy alloc] initWithDiskController:&amiga->paula.diskController];
     df0 = [[DriveProxy alloc] initWithDrive:&amiga->df0];

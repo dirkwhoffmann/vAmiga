@@ -112,24 +112,24 @@ class MyController : NSWindowController, MessageReceiver {
         }
     }
     var autofire : Bool {
-        get { return amiga.controlPort1.autofire() }
+        get { return amiga.joystick1.autofire() }
         set {
-            amiga.controlPort1.setAutofire(newValue)
-            amiga.controlPort2.setAutofire(newValue)
+            amiga.joystick1.setAutofire(newValue)
+            amiga.joystick2.setAutofire(newValue)
         }
     }
     var autofireBullets : Int {
-        get { return amiga.controlPort1.autofireBullets() }
+        get { return amiga.joystick1.autofireBullets() }
         set {
-            amiga.controlPort1.setAutofireBullets(newValue)
-            amiga.controlPort2.setAutofireBullets(newValue)
+            amiga.joystick1.setAutofireBullets(newValue)
+            amiga.joystick2.setAutofireBullets(newValue)
         }
     }
     var autofireFrequency : Float {
-        get { return amiga.controlPort1.autofireFrequency() }
+        get { return amiga.joystick1.autofireFrequency() }
         set {
-            amiga.controlPort1.setAutofireFrequency(newValue)
-            amiga.controlPort2.setAutofireFrequency(newValue)
+            amiga.joystick1.setAutofireFrequency(newValue)
+            amiga.joystick2.setAutofireFrequency(newValue)
         }
     }
     var keyMap0 : [MacKey:UInt32]? {
@@ -866,12 +866,12 @@ extension MyController {
     func joystickEvent(slot: Int, events: [JoystickEvent]) -> Bool {
         
         if (slot == inputDevice1) {
-            for event in events { amiga.controlPort1.trigger(event) }
+            for event in events { amiga.joystick1.trigger(event) }
             return true
         }
 
         if (slot == inputDevice2) {
-            for event in events { amiga.controlPort2.trigger(event) }
+            for event in events { amiga.joystick2.trigger(event) }
             return true
         }
         

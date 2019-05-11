@@ -388,14 +388,6 @@ struct AmigaFileWrapper;
 
 - (void) dump;
 
-- (void) trigger:(JoystickEvent)event;
-- (BOOL) autofire;
-- (void) setAutofire:(BOOL)value;
-- (NSInteger) autofireBullets;
-- (void) setAutofireBullets:(NSInteger)value;
-- (float) autofireFrequency;
-- (void) setAutofireFrequency:(float)value;
-
 - (void) connectDevice:(ControlPortDevice)value;
 - (void) connectMouse:(BOOL)value;
 
