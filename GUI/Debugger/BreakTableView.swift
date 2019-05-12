@@ -100,10 +100,7 @@ extension BreakTableView : NSTableViewDelegate {
         
         if let cell = cell as? NSTextFieldCell {
             
-            if cpu.isDisabled(row) {
-                
-            }
-            
+            let active = tableView.editedRow == row
             let disabled = cpu.isDisabled(row)
             let conditional = cpu.hasCondition(row)
             let syntaxError = cpu.hasSyntaxError(row)
@@ -116,13 +113,13 @@ extension BreakTableView : NSTableViewDelegate {
             case "addr":
                 cell.textColor = NSColor.labelColor
 
-            case "cond" where syntaxError:
+            case "cond" where syntaxError && !active:
                 cell.textColor = NSColor.systemRed
 
-            case "cond" where !conditional:
+            case "cond" where !conditional && !active:
                 cell.textColor = NSColor.placeholderTextColor
 
-            case "cond" where disabled:
+            case "cond" where disabled && !active:
                 cell.textColor = NSColor.secondaryLabelColor
 
             case "cond":
