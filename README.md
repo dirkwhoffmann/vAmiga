@@ -5,7 +5,7 @@
 
 ### Achieved milestones:
 
-- Milestone 1: Show the hand & disk intro screen.
+- Milestone 1: Show the hand & disk logo.
   
   <img src="http://www.dirkwhoffmann.de/vAMIGA/pics/milestone1a.png" width="150">
 
@@ -15,11 +15,11 @@
    
 ### Next milestones:
 
-- Milestone 3: Rescue the princess.
+- Milestone 3: Rescue the princess in Defender of the Crown.
   
    <img src="http://www.dirkwhoffmann.de/vAMIGA/pics/milestone3.png" width="150">    
    
-- Milestone 4: Make Paccer work.
+- Milestone 4: Fix Paccer.
   
    <img src="http://www.dirkwhoffmann.de/vAMIGA/pics/milestone4.png" width="150">    
    
