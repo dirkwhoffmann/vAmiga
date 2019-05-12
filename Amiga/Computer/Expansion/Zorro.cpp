@@ -1,0 +1,53 @@
+// -----------------------------------------------------------------------------
+// This file is part of vAmiga
+//
+// Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
+// Licensed under the GNU General Public License v3
+//
+// See https://www.gnu.org for license information
+// -----------------------------------------------------------------------------
+
+#include "Amiga.h"
+
+Zorro::Zorro()
+{
+    setDescription("Zorro");
+    
+    // Register snapshot items
+    /*
+    registerSnapshotItems(vector<SnapshotItem> {
+        
+        { &clock,    sizeof(clock),    0 },
+    });
+    */
+}
+
+void
+Zorro::_powerOn()
+{
+    
+}
+
+void
+Zorro::_powerOff()
+{
+    
+}
+
+void
+Zorro::_reset()
+{
+    
+}
+
+void
+Zorro::_ping()
+{
+    
+}
+
+void
+Zorro::_dump()
+{
+    
+}

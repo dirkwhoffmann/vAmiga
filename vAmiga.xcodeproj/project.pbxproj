@@ -100,6 +100,7 @@
 		508FE05C21EA22CC0043D0E9 /* DiskMountController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04A21EA22CC0043D0E9 /* DiskMountController.swift */; };
 		508FE05F21EA22CC0043D0E9 /* ExportDiskController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04D21EA22CC0043D0E9 /* ExportDiskController.swift */; };
 		508FE06521EA318D0043D0E9 /* AmigaFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FE06321EA318D0043D0E9 /* AmigaFile.cpp */; };
+		50950ED822881B7A0073F755 /* Zorro.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50950ED622881B7A0073F755 /* Zorro.cpp */; };
 		509CF4CD22083F9800C500F0 /* CPUPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509CF4CC22083F9800C500F0 /* CPUPanel.swift */; };
 		509CF4CF220847C600C500F0 /* InstrTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509CF4CE220847C600C500F0 /* InstrTableView.swift */; };
 		509CF4D12208487900C500F0 /* TraceTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509CF4D02208487900C500F0 /* TraceTableView.swift */; };
@@ -292,6 +293,8 @@
 		508FE04D21EA22CC0043D0E9 /* ExportDiskController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExportDiskController.swift; sourceTree = "<group>"; };
 		508FE06321EA318D0043D0E9 /* AmigaFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaFile.cpp; sourceTree = "<group>"; };
 		508FE06421EA318D0043D0E9 /* AmigaFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmigaFile.h; sourceTree = "<group>"; };
+		50950ED622881B7A0073F755 /* Zorro.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Zorro.cpp; sourceTree = "<group>"; };
+		50950ED722881B7A0073F755 /* Zorro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Zorro.h; sourceTree = "<group>"; };
 		509CF4CC22083F9800C500F0 /* CPUPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPUPanel.swift; sourceTree = "<group>"; };
 		509CF4CE220847C600C500F0 /* InstrTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstrTableView.swift; sourceTree = "<group>"; };
 		509CF4D02208487900C500F0 /* TraceTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceTableView.swift; sourceTree = "<group>"; };
@@ -642,6 +645,15 @@
 			path = FileTypes;
 			sourceTree = "<group>";
 		};
+		50950ED522881B3C0073F755 /* Expansion */ = {
+			isa = PBXGroup;
+			children = (
+				50950ED722881B7A0073F755 /* Zorro.h */,
+				50950ED622881B7A0073F755 /* Zorro.cpp */,
+			);
+			path = Expansion;
+			sourceTree = "<group>";
+		};
 		509F7F1421ED13F300A530E4 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
@@ -721,6 +733,7 @@
 				502F7DD0222170AE00AEEC65 /* Agnus */,
 				502F7DCF2221709700AEEC65 /* Denise */,
 				50EE993D21FF4D42003BD74B /* Paula */,
+				50950ED522881B3C0073F755 /* Expansion */,
 			);
 			path = Computer;
 			sourceTree = "<group>";
@@ -1055,6 +1068,7 @@
 				508E7F952206CDBD00F7D88C /* CPU.cpp in Sources */,
 				508FE02F21EA227B0043D0E9 /* AudioEngine.swift in Sources */,
 				5085FE5921FB6856009753EF /* ProxyExtensions.swift in Sources */,
+				50950ED822881B7A0073F755 /* Zorro.cpp in Sources */,
 				508FE04F21EA22CC0043D0E9 /* EmulatorPrefs.swift in Sources */,
 				50F5A84E2214112F00AD5611 /* PaulaPanel.swift in Sources */,
 				502EFD0A2248EC0200F0E118 /* EventPanel.swift in Sources */,

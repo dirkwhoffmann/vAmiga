@@ -26,6 +26,7 @@
 #include "Blitter.h"
 #include "Denise.h"
 #include "Paula.h"
+#include "Zorro.h"
 #include "ControlPort.h"
 #include "Mouse.h"
 #include "Joystick.h"
