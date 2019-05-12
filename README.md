@@ -15,11 +15,11 @@
    
 ### Next milestones:
 
-- Milestone 2: Rescue the princess.
+- Milestone 3: Rescue the princess.
   
    <img src="http://www.dirkwhoffmann.de/vAMIGA/pics/milestone3.png" width="150" height="150">    
    
-- Milestone 3: Make Paccer work.
+- Milestone 4: Make Paccer work.
   
    <img src="http://www.dirkwhoffmann.de/vAMIGA/pics/milestone4.png" width="150" height="150">    
    
