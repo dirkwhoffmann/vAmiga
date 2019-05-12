@@ -72,6 +72,7 @@ Amiga::Amiga()
         &agnus,
         &denise,
         &paula,
+        &zorro,
         &controlPort1,
         &controlPort2,
         &mouse,

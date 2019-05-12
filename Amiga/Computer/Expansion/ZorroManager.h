@@ -7,11 +7,11 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _ZORRO_INC
-#define _ZORRO_INC
+#ifndef _ZORRO_MANAGER_INC
+#define _ZORRO_MANAGER_INC
 
 // Manager for plugged in Zorro II devices
-class Zorro : public HardwareComponent {
+class ZorroManager : public HardwareComponent {
     
     //
     // Constructing and destructing
@@ -19,7 +19,7 @@ class Zorro : public HardwareComponent {
     
 public:
     
-    Zorro();
+    ZorroManager();
     
     
     //

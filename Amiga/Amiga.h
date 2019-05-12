@@ -26,7 +26,7 @@
 #include "Blitter.h"
 #include "Denise.h"
 #include "Paula.h"
-#include "Zorro.h"
+#include "ZorroManager.h"
 #include "ControlPort.h"
 #include "Mouse.h"
 #include "Joystick.h"
@@ -114,7 +114,10 @@ class Amiga : public HardwareComponent {
     
     // Paula (Interrupts, Disk Controller, Audio)
     Paula paula;
-        
+    
+    // Zorro II device manager
+    ZorroManager zorro;
+    
     // Control ports
     ControlPort controlPort1 = ControlPort(1);
     ControlPort controlPort2 = ControlPort(2);

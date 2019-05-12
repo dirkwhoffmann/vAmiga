@@ -9,9 +9,9 @@
 
 #include "Amiga.h"
 
-Zorro::Zorro()
+ZorroManager::ZorroManager()
 {
-    setDescription("Zorro");
+    setDescription("ZorroManager");
     
     // Register snapshot items
     /*
@@ -23,31 +23,31 @@ Zorro::Zorro()
 }
 
 void
-Zorro::_powerOn()
+ZorroManager::_powerOn()
 {
     
 }
 
 void
-Zorro::_powerOff()
+ZorroManager::_powerOff()
 {
     
 }
 
 void
-Zorro::_reset()
+ZorroManager::_reset()
 {
     
 }
 
 void
-Zorro::_ping()
+ZorroManager::_ping()
 {
     
 }
 
 void
-Zorro::_dump()
+ZorroManager::_dump()
 {
     
 }
