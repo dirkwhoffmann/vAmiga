@@ -64,7 +64,6 @@ Mouse::setXY(int64_t x, int64_t y)
 void
 Mouse::setLeftButton(bool value)
 {
-    debug("leftButton = %d\n", value);
     leftButton = value;
 }
 

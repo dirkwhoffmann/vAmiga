@@ -25,6 +25,7 @@ class CIAB;
 class Agnus;
 class Denise;
 class Paula;
+class ZorroManager;
 class ControlPort;
 
 /* Base class for all hardware components
@@ -84,7 +85,8 @@ public:
     Agnus        *_agnus   = NULL;
     Denise       *_denise  = NULL;
     Paula        *_paula   = NULL;
-    ControlPort  *_port1   = NULL; 
+    ZorroManager *_zorro   = NULL;
+    ControlPort  *_port1   = NULL;
     ControlPort  *_port2   = NULL;
     
 protected:

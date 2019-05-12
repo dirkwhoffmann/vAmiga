@@ -57,6 +57,7 @@ HardwareComponent::initialize(Amiga *amiga)
     this->_agnus   = &amiga->agnus;
     this->_denise  = &amiga->denise;
     this->_paula   = &amiga->paula;
+    this->_zorro   = &amiga->zorro;
     this->_port1   = &amiga->controlPort1;
     this->_port2   = &amiga->controlPort2;
 

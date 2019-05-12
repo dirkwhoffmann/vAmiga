@@ -10,8 +10,24 @@
 #ifndef _ZORRO_MANAGER_INC
 #define _ZORRO_MANAGER_INC
 
+/* Additional information:
+ *
+ *   Fast Ram emulation (Zorro II) is based on:
+ *   github.com/PR77/A500_ACCEL_RAM_IDE-Rev-1/blob/master/Logic/RAM/A500_RAM.v
+ */
+
 // Manager for plugged in Zorro II devices
 class ZorroManager : public HardwareComponent {
+    
+    // The value returned when peeking into the auto-config space.
+    uint8_t autoConfData;
+    
+    // The current configuration state (0 = unconfigured).
+    uint8_t fastRamConf;
+    
+    // Base address of the Fast Ram (value is provided by Kickstart).
+    uint32_t fastRamBaseAddr;
+    
     
     //
     // Constructing and destructing
@@ -40,6 +56,14 @@ public:
     //
     // Getter and setter
     //
+    
+    
+    //
+    // Emulating Fast Ram
+    //
+    
+    uint8_t peekFastRamDevice(uint32_t addr);
+    void pokeFastRamDevice(uint32_t addr, uint8_t value);
 };
 
 #endif

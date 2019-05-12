@@ -147,22 +147,6 @@ class Memory : public HardwareComponent {
     
     
     //
-    // Fast Ram emulation (Zorro II)
-    // Based on
-    // https://github.com/PR77/A500_ACCEL_RAM_IDE-Rev-1/blob/master/Logic/RAM/A500_RAM.v
-    //
-    
-    // The value returned when peeking into the auto-config space.
-    uint8_t autoConfData;
-    
-    // The current configuration state (0 = unconfigured).
-    uint8_t fastRamConf;
-  
-    // Base address of the Fast Ram (value is provided by Kickstart).
-    uint32_t fastRamBaseAddr;
-    
-    
-    //
     // Constructing and destructing
     //
     
@@ -389,9 +373,6 @@ class Memory : public HardwareComponent {
     
     void pokeAutoConf8(uint32_t addr, uint8_t value);
     void pokeAutoConf16(uint32_t addr, uint16_t value);
-    
-    uint8_t peekFastRamDevice(uint32_t addr);
-    void pokeFastRamDevice(uint32_t addr, uint8_t value);
 
     //
     // Debugging

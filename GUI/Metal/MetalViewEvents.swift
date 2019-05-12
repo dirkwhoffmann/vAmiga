@@ -37,7 +37,7 @@ public extension MetalView {
     
     func retainMouse() {
         
-        track("retainMouse")
+        // track("retainMouse")
         NSCursor.hide()
         CGAssociateMouseAndMouseCursorPosition(boolean_t(truncating: false))
         gotMouse = true
@@ -45,7 +45,7 @@ public extension MetalView {
     
     func releaseMouse() {
         
-        track("releaseMouse")
+        // track("releaseMouse")
         NSCursor.unhide()
         CGAssociateMouseAndMouseCursorPosition(boolean_t(truncating: true))
         gotMouse = false
@@ -53,7 +53,7 @@ public extension MetalView {
     
     override func updateTrackingAreas() {
 
-        track()
+        // track()
         
         let options : NSTrackingArea.Options = [ .activeInKeyWindow, .mouseEnteredAndExited ]
         
@@ -66,7 +66,7 @@ public extension MetalView {
     
     override func mouseEntered(with event: NSEvent)
     {
-        track()
+        // track()
         
         insideTrackingArea = true
         
@@ -84,7 +84,7 @@ public extension MetalView {
     
     override func mouseExited(with event: NSEvent)
     {
-        track()
+        // track()
         
         insideTrackingArea = false
         releaseMouse()
