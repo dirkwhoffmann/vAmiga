@@ -7,14 +7,23 @@
 
 - Milestone 1: Emulate an Amiga that can show the hand & disk intro screen 
   
-  <img src="http://www.dirkwhoffmann.de/vAMIGA/pics/milestone1.png" width="150" height="150">
-    
-### Next milestones:
+  <img src="http://www.dirkwhoffmann.de/vAMIGA/pics/milestone1a.png">
 
 - Milestone 2: Make vAmiga load the Workbench
   
-   <img src="http://www.dirkwhoffmann.de/vAMIGA/pics/milestone2.png" width="150" height="150">
+   <img src="http://www.dirkwhoffmann.de/vAMIGA/pics/milestone2a.png">    
+   
+### Next milestones:
 
+- Milestone 2: Rescue the princess
+  
+   <img src="http://www.dirkwhoffmann.de/vAMIGA/pics/milestone3.png">    
+   
+- Milestone 3: Make Paccer work
+  
+   <img src="http://www.dirkwhoffmann.de/vAMIGA/pics/milestone4.png">    
+   
+   
 ### Where to go from here?
 
 Checkout the Wiki section for more details.
