@@ -21,8 +21,8 @@ class Blitter : public HardwareComponent {
     BlitterInfo info;
     
     // The fill pattern lookup tables
-    uint8_t fillData[2][2][256];       // [inclusive/exclusive][carry in][data]
-    uint8_t nextCarry[2][256];         // [carry in][data]
+    uint8_t fillPattern[2][2][256];     // [inclusive/exclusive][carry in][data]
+    uint8_t nextCarryIn[2][256];        // [carry in][data]
     
     
     //

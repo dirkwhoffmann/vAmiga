@@ -56,26 +56,24 @@ Blitter::Blitter()
     // Initialize fill pattern lookup tables
     
     // Inclusive fill
-    for (unsigned fc = 0; fc < 2; fc++) {
+    for (unsigned carryIn = 0; carryIn < 2; carryIn++) {
         
-        for (unsigned i = 0; i < 256; i++) {
+        for (unsigned byte = 0; byte < 256; byte++) {
             
-            uint8_t fc_tmp = fc;
-            uint8_t inclPattern = i;
-            uint8_t exclPattern = i;
+            uint8_t carry = carryIn;
+            uint8_t inclPattern = byte;
+            uint8_t exclPattern = byte;
             
-            for (int bit = 0; bit < 16; bit++) {
+            for (int bit = 0; bit < 8; bit++) {
                 
-                // Apply OR (inclusive fill) or XOR (exclusive fill) operation
-                inclPattern |= fc_tmp << bit;
-                exclPattern ^= fc_tmp << bit;
+                inclPattern |= carry << bit; // inclusive fill
+                exclPattern ^= carry << bit; // exclusive fill
                 
-                if (i & (1 << bit)) fc_tmp = !fc_tmp;
+                if (byte & (1 << bit)) carry = !carry;
             }
-            fillData[0][fc][i] = inclPattern;
-            fillData[1][fc][i] = exclPattern;
-
-            nextCarry[fc][i] = fc_tmp;
+            fillPattern[0][carryIn][byte] = inclPattern;
+            fillPattern[1][carryIn][byte] = exclPattern;
+            nextCarryIn[carryIn][byte] = carry;
         }
     }
 }
@@ -968,10 +966,10 @@ Blitter::doFill(uint16_t &data, bool &carry)
     uint8_t exclusive = !!bltconEFE();
     
     // Remember: A fill operation is carried out from right to left
-    uint8_t resultLo = fillData[exclusive][carry][dataLo];
-    carry = nextCarry[carry][dataLo];
-    uint8_t resultHi = fillData[exclusive][carry][dataHi];
-    carry = nextCarry[carry][dataHi];
+    uint8_t resultLo = fillPattern[exclusive][carry][dataLo];
+    carry = nextCarryIn[carry][dataLo];
+    uint8_t resultHi = fillPattern[exclusive][carry][dataHi];
+    carry = nextCarryIn[carry][dataHi];
     
     data = HI_LO(resultHi, resultLo);
 }
