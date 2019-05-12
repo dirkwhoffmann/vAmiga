@@ -20,6 +20,11 @@ class Blitter : public HardwareComponent {
     // Information shown in the GUI inspector panel
     BlitterInfo info;
     
+    // The fill pattern lookup tables [inclusive/exclusive][carry in][data]
+    uint8_t fillData[2][2][256];
+    uint8_t nextCarry[2][2][256];
+    
+    
     //
     // Configuration items
     //
@@ -166,24 +171,24 @@ class Blitter : public HardwareComponent {
     // OCS register 0x040 (w)
     void pokeBLTCON0(uint16_t value);
     
-    inline uint16_t bltASH() { return bltcon0 >> 12; }
-    inline bool bltUSEA() { return bltcon0 & (1 << 11); }
-    inline bool bltUSEB() { return bltcon0 & (1 << 10); }
-    inline bool bltUSEC() { return bltcon0 & (1 << 9); }
-    inline bool bltUSED() { return bltcon0 & (1 << 8); }
-    void setASH(uint16_t ash) { assert(ash <= 0xF); bltcon0 = (bltcon0 & 0x0FFF) | (ash << 12); }
+    inline uint16_t bltconASH() { return bltcon0 >> 12; }
+    inline bool bltconUSEA()    { return bltcon0 & (1 << 11); }
+    inline bool bltconUSEB()    { return bltcon0 & (1 << 10); }
+    inline bool bltconUSEC()    { return bltcon0 & (1 << 9); }
+    inline bool bltconUSED()    { return bltcon0 & (1 << 8); }
+    void setBltconASH(uint16_t ash) { assert(ash <= 0xF); bltcon0 = (bltcon0 & 0x0FFF) | (ash << 12); }
 
     // OCS register 0x042 (w)
     void pokeBLTCON1(uint16_t value);
 
-    inline uint16_t bltBSH() { return bltcon1 >> 12; }
-    inline bool bltEFE() { return bltcon1 & (1 << 4); }
-    inline bool bltIFE() { return bltcon1 & (1 << 3); }
-    inline bool bltFE() { return bltEFE() || bltIFE(); }
-    inline bool bltFCI() { return bltcon1 & (1 << 2); }
-    inline bool bltDESC() { return bltcon1 & (1 << 1); }
-    inline bool bltLINE() { return bltcon1 & (1 << 0); }
-    void setBSH(uint16_t bsh) { assert(bsh <= 0xF); bltcon1 = (bltcon1 & 0x0FFF) | (bsh << 12); }
+    inline uint16_t bltconBSH() { return bltcon1 >> 12; }
+    inline bool bltconEFE()     { return bltcon1 & (1 << 4); }
+    inline bool bltconIFE()     { return bltcon1 & (1 << 3); }
+    inline bool bltconFE()      { return bltconEFE() || bltconIFE(); }
+    inline bool bltconFCI()     { return bltcon1 & (1 << 2); }
+    inline bool bltconDESC()    { return bltcon1 & (1 << 1); }
+    inline bool bltconLINE()    { return bltcon1 & (1 << 0); }
+    void setBltcon1BSH(uint16_t bsh) { assert(bsh <= 0xF); bltcon1 = (bltcon1 & 0x0FFF) | (bsh << 12); }
 
     // OCS registers 0x044 and 0x046 (w)
     void pokeBLTAFWM(uint16_t value);
@@ -248,6 +253,9 @@ class Blitter : public HardwareComponent {
     uint16_t doMintermLogic(uint16_t a, uint16_t b, uint16_t c, uint8_t minterm);
     uint16_t doMintermLogicQuick(uint16_t a, uint16_t b, uint16_t c, uint8_t minterm);
 
+    // Emulate the fill logic circuit
+    void doFill(uint16_t &data, bool &carry);
+
     
     //
     // Fast Blitter
@@ -267,8 +275,6 @@ class Blitter : public HardwareComponent {
     
     // Performs a line blit operation via the fast Blitter
     void doFastLineBlit();
-    void doFastLineBlitOmega(); // Adapted from Omega
-
 };
 
 #endif

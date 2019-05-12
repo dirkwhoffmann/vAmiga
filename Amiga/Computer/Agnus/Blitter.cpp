@@ -51,8 +51,34 @@ Blitter::Blitter()
 
         { &bbusy,         sizeof(bbusy),         0 },
         { &bzero,         sizeof(bzero),         0 },
-
     });
+    
+    // Initialize fill pattern lookup tables
+    
+    // Inclusive fill
+    for (unsigned fc = 0; fc < 2; fc++) {
+        
+        for (unsigned i = 0; i < 256; i++) {
+            
+            uint8_t fc_tmp = fc;
+            uint8_t inclPattern = i;
+            uint8_t exclPattern = i;
+            
+            for (int bit = 0; bit < 16; bit++) {
+                
+                // Apply OR (inclusive fill) or XOR (exclusive fill) operation
+                inclPattern |= fc_tmp << bit;
+                exclPattern ^= fc_tmp << bit;
+                
+                if (i & (1 << bit)) fc_tmp = !fc_tmp;
+            }
+            fillData[0][fc][i] = inclPattern;
+            fillData[1][fc][i] = inclPattern;
+
+            nextCarry[0][fc][i] = fc_tmp;
+            nextCarry[1][fc][i] = fc_tmp;
+        }
+    }
 }
 
 void
@@ -116,20 +142,20 @@ Blitter::_dump()
 {
     plainmsg("   bltcon0: %X\n", bltcon0);
     plainmsg("\n");
-    plainmsg("            Shift A: %d\n", bltASH());
-    plainmsg("              Use A: %s\n", bltUSEA() ? "yes" : "no");
-    plainmsg("              Use B: %s\n", bltUSEB() ? "yes" : "no");
-    plainmsg("              Use C: %s\n", bltUSEC() ? "yes" : "no");
-    plainmsg("              Use D: %s\n", bltUSED() ? "yes" : "no");
+    plainmsg("            Shift A: %d\n", bltconASH());
+    plainmsg("              Use A: %s\n", bltconUSEA() ? "yes" : "no");
+    plainmsg("              Use B: %s\n", bltconUSEB() ? "yes" : "no");
+    plainmsg("              Use C: %s\n", bltconUSEC() ? "yes" : "no");
+    plainmsg("              Use D: %s\n", bltconUSED() ? "yes" : "no");
     plainmsg("\n");
     plainmsg("   bltcon1: %X\n", bltcon1);
     plainmsg("\n");
-    plainmsg("            Shift B: %d\n", bltBSH());
-    plainmsg("                EFE: %s\n", bltEFE() ? "yes" : "no");
-    plainmsg("                IFE: %s\n", bltIFE() ? "yes" : "no");
-    plainmsg("                FCI: %s\n", bltFCI() ? "yes" : "no");
-    plainmsg("               DESC: %s\n", bltDESC() ? "yes" : "no");
-    plainmsg("               LINE: %s\n", bltLINE() ? "yes" : "no");
+    plainmsg("            Shift B: %d\n", bltconBSH());
+    plainmsg("                EFE: %s\n", bltconEFE() ? "yes" : "no");
+    plainmsg("                IFE: %s\n", bltconIFE() ? "yes" : "no");
+    plainmsg("                FCI: %s\n", bltconFCI() ? "yes" : "no");
+    plainmsg("               DESC: %s\n", bltconDESC() ? "yes" : "no");
+    plainmsg("               LINE: %s\n", bltconLINE() ? "yes" : "no");
     plainmsg("\n");
     plainmsg("   bltsize: %X\n", bltsize);
     plainmsg("\n");
@@ -395,14 +421,14 @@ Blitter::serviceEvent(EventID id)
                 
                 debug(2, "HOLD_A\n");
                 // Emulate the barrel shifter on data path A
-                ahold = (ashift >> bltASH()) & 0xFFFF;
+                ahold = (ashift >> bltconASH()) & 0xFFFF;
             }
 
             if (instr & HOLD_B) {
 
                 debug(2, "HOLD_B\n");
                 // Emulate the barrel shifter on data path B
-                bhold = (bshift >> bltBSH()) & 0xFFFF;
+                bhold = (bshift >> bltconBSH()) & 0xFFFF;
             }
             
             if (instr & HOLD_D) {
@@ -537,10 +563,10 @@ Blitter::loadMicrocode()
      *    0                -- -- -- --
      */
     
-    uint8_t A = !!bltUSEA();
-    uint8_t B = !!bltUSEB();
-    uint8_t C = !!bltUSEC();
-    uint8_t D = !!bltUSED();
+    uint8_t A = !!bltconUSEA();
+    uint8_t B = !!bltconUSEB();
+    uint8_t C = !!bltconUSEC();
+    uint8_t D = !!bltconUSED();
     
     switch ((A << 3) | (B << 2) | (C << 1) | D) {
             
@@ -616,10 +642,10 @@ Blitter::doBarrelShifterA()
     
     debug(2, "first = %d last = %d masked = %X\n", isFirstWord(), isLastWord(), masked);
     
-    if(bltDESC()){
-        ahold = (aold >> (16 - bltASH())) | (masked << bltASH());
+    if(bltconDESC()){
+        ahold = (aold >> (16 - bltconASH())) | (masked << bltconASH());
     }else{
-        ahold = (aold << (16 - bltASH())) | (masked >> bltASH());
+        ahold = (aold << (16 - bltconASH())) | (masked >> bltconASH());
     }
     
     /*
@@ -636,10 +662,10 @@ Blitter::doBarrelShifterA()
 void
 Blitter::doBarrelShifterB()
 {
-    if(bltDESC()) {
-        bhold = (bold >> (16 - bltBSH())) | (bnew << bltBSH());
+    if(bltconDESC()) {
+        bhold = (bold >> (16 - bltconBSH())) | (bnew << bltconBSH());
     } else {
-        bhold = (bold << (16 - bltBSH())) | (bnew >> bltBSH());
+        bhold = (bold << (16 - bltconBSH())) | (bnew >> bltconBSH());
     }
     
     /*
@@ -933,3 +959,20 @@ Blitter::doMintermLogicQuick(uint16_t a, uint16_t b, uint16_t c, uint8_t minterm
     }
 }
 
+void
+Blitter::doFill(uint16_t &data, bool &carry)
+{
+    assert(carry == 0 || carry == 1);
+    
+    uint8_t dataHi = HI_BYTE(data);
+    uint8_t dataLo = LO_BYTE(data);
+    uint8_t exclusive = !!bltconEFE();
+    
+    // Remember: A fill operation is carried out from right to left
+    uint8_t resultLo = fillData[exclusive][carry][dataLo];
+    carry = nextCarry[exclusive][carry][dataLo];
+    uint8_t resultHi = fillData[exclusive][carry][dataHi];
+    carry = nextCarry[exclusive][carry][dataHi];
+    
+    data = HI_LO(resultHi, resultLo);
+}

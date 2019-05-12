@@ -15,7 +15,7 @@ void
 Blitter::doFastBlit()
 {
     // Perform a line blit or a copy blit operation
-    bltLINE() ? doFastLineBlit() : doFastCopyBlit();
+    bltconLINE() ? doFastLineBlit() : doFastCopyBlit();
 
     // Clear the Blitter busy flag
     bbusy = false;
@@ -30,32 +30,31 @@ Blitter::doFastBlit()
 void
 Blitter::doFastCopyBlit()
 {
-    uint32_t check1 = fnv_1a_init32();
-    uint32_t check2 = fnv_1a_init32();
+    plaindebug(2, "%d COPY BLIT (%d,%d) (%s)\n",
+               copycount++, bltsizeH(), bltsizeW(), bltconDESC() ? "descending" : "ascending");
+    bltdebug = false; // (copycount == 1360);
     
     copycount++;
-
-    bltdebug = false; // (copycount == 1360);
-
-    /*
-    plainmsg("%d COPY BLIT (%d,%d) (%s)\n",
-        bltcount++, bltsizeH(), bltsizeW(), bltDESC() ? "descending" : "ascending");
-    */
+  
+    uint32_t check1 = fnv_1a_init32();
+    uint32_t check2 = fnv_1a_init32();
     
     uint16_t xmax = bltsizeW();
     uint16_t ymax = bltsizeH();
     
-    bool useA = bltUSEA();
-    bool useB = bltUSEB();
-    bool useC = bltUSEC();
-    bool useD = bltUSED();
+    bool useA = bltconUSEA();
+    bool useB = bltconUSEB();
+    bool useC = bltconUSEC();
+    bool useD = bltconUSED();
     
-    bool descending = bltDESC();
+    bool descending = bltconDESC();
+    
+    bool fillCarry;
     
     // Setup shift, increment and modulo offsets
     int     incr = 2;
-    int     ash  = bltASH();
-    int     bsh  = bltBSH();
+    int     ash  = bltconASH();
+    int     bsh  = bltconBSH();
     int32_t amod = bltamod;
     int32_t bmod = bltbmod;
     int32_t cmod = bltcmod;
@@ -68,7 +67,7 @@ Blitter::doFastCopyBlit()
     */
     
     // Reverse direction is descending mode
-    if (bltDESC()) {
+    if (bltconDESC()) {
         incr = -incr;
         ash  = 16 - ash;
         bsh  = 16 - bsh;
@@ -86,6 +85,9 @@ Blitter::doFastCopyBlit()
     bold = 0;
     
     for (int y = 0; y < ymax; y++) {
+        
+        // Reset the fill carry bit
+        fillCarry = !!bltconFCI();
         
         // Apply the "first word mask" in the first iteration
         uint16_t mask = bltafwm;
@@ -120,7 +122,7 @@ Blitter::doFastCopyBlit()
             if (bltdebug) plainmsg("    After masking (%x,%x) %x\n", bltafwm, bltalwm, anew & mask);
             
             // Run the barrel shifters on data path A and B
-            if (bltdebug) plainmsg("    ash = %d bsh = %d\n", bltASH(), bltBSH());
+            if (bltdebug) plainmsg("    ash = %d bsh = %d\n", bltconASH(), bltconBSH());
             if (descending) {
                 ahold = HI_W_LO_W(anew & mask, aold) >> ash;
                 bhold = HI_W_LO_W(bnew, bold) >> bsh;
@@ -136,6 +138,9 @@ Blitter::doFastCopyBlit()
             if (bltdebug) plainmsg("    ahold = %X bhold = %X chold = %X bltcon0 = %X (hex)\n", ahold, bhold, chold, bltcon0);
             dhold = doMintermLogicQuick(ahold, bhold, chold, bltcon0 & 0xFF);
             assert(dhold == doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF));
+            
+            // Run the fill logic circuit
+            if (bltconFE()) doFill(dhold, fillCarry);
             
             // Update the zero flag
             if (dhold) bzero = false;
@@ -268,7 +273,7 @@ Blitter::doFastLineBlit()
     uint16_t bltcdat_local = chold;
     uint16_t bltddat_local = 0;
     
-    uint16_t mask = (bnew >> bltBSH()) | (bnew << (16 - bltBSH()));
+    uint16_t mask = (bnew >> bltconBSH()) | (bnew << (16 - bltconBSH()));
     bool a_enabled = bltcon & 0x08000000;
     bool c_enabled = bltcon & 0x02000000;
     
@@ -281,7 +286,7 @@ Blitter::doFastLineBlit()
     
     uint32_t bltcpt_local = bltcpt;
     uint32_t bltdpt_local = bltdpt;
-    uint32_t blit_a_shift_local = bltASH();
+    uint32_t blit_a_shift_local = bltconASH();
     uint32_t bltzero_local = 0;
     uint32_t i;
     
@@ -385,7 +390,7 @@ Blitter::doFastLineBlit()
     bltcon = bltcon & 0x0FFFFFFBF;
     if (decision_is_signed) bltcon |= 0x00000040;
     
-    setASH(blit_a_shift_local);
+    setBltconASH(blit_a_shift_local);
     bnew   = bltbdat_local;
     bltapt = OCS_PTR(decision_variable);
     bltcpt = OCS_PTR(bltcpt_local);
@@ -551,283 +556,3 @@ Blitter::doFastLineBlit()
      memoryWriteWord(0x8040, 0x00DFF09C);
      }
      */
-
-void
-Blitter::doFastLineBlitOmega()
-{
-    int16_t bltamod = (int16_t)this->bltamod;
-    int16_t bltbmod = (int16_t)this->bltbmod;
-    int16_t bltcmod = (int16_t)this->bltcmod;
-    // int16_t bltdmod = (int16_t)this->bltdmod;
-
-    uint32_t check = fnv_1a_init32();
-    linecount++;
-
-    bltdebug = false;
-    
-    // Adapted from Omega Amiga Emulator
-    int octCode = (bltcon1 >> 2) & 7;
-    int length =  bltsizeH();
-    int inc1 = bltamod; // 4(dy - dx)
-    int D = (int16_t)bltapt;     // start value of 4dy - 2dx
-    // uint16_t* chipramW = internal.chipramW;
-    
-    int planeAddr = bltcpt & 0x1FFFFE; //word address
-    
-    int planeMod = bltcmod;
-    int inc2 = bltbmod;
-    int d=0;
-    
-    int startPixel = bltcon0 >> 12;
-    
-    int oneDot = (bltcon1 >> 1) & 1;    // I don't support one dot mode yet
-    
-    if(oneDot==1){
-        printf("No Single pixel per H-line mode yet\n");
-    }
-    
-    int minterm = bltcon0 & 255; //0xCA = normal 0x4A = XOR
-    
-    int patternShift = bltcon1 >>12;
-    uint16_t pattern = bnew; //  bltbdat;
-    
-    pattern = (pattern >> patternShift) | (pattern << (16 - patternShift));
-    
-    int addr=0;//running address
-    
-    if (bltdebug) printf("[%d] Octant %d: dx - %d dy - %d @ 0x%06x\n",linecount,octCode,length,inc2/4,bltcpt);
-    
-    switch(octCode){
-            
-        case 0:
-            
-            for(int i=0;i<length;++i){
-                
-                int offset = d+startPixel;
-                addr = (planeAddr +(offset>>3)+(i*planeMod)) & 0x1FFFFE; //  >> 1;
-                
-                //Pixel plot
-                uint16_t pixel = _mem->peek16(addr); // chipramW[addr];
-                // debug("0: peek(%d) = %d\n", addr, pixel);
-                pixel = logicFunction(minterm,0x8000 >> (offset&15),pattern,pixel);
-                // debug("0: pixel = %d\n", pixel);
-                _mem->pokeChip16(addr, pixel);
-                // debug("0: poke(%d), %d\n", addr, pixel);
-                check = fnv_1a_it32(check, addr);
-                check = fnv_1a_it32(check, pixel);
-
-                if(D>0){
-                    D = D + inc1;
-                    d = d + 1;
-                    
-                }else{
-                    D = D + inc2;
-                }
-                
-            }
-            break;
-            
-        case 1:
-            for(int i=0;i<length;++i){
-                
-                int offset = d+startPixel;
-                addr =(planeAddr +(offset>>3)-(i*planeMod)) & 0x1FFFFE; // >> 1;
-                
-                //Pixel plot
-                uint16_t pixel = _mem->peek16(addr); // chipramW[addr];
-                pixel = logicFunction(minterm,0x8000 >> (offset&15),pattern,pixel);
-                // debug("1: poke(%d), %d\n", addr, pixel);
-                _mem->pokeChip16(addr, pixel);
-                check = fnv_1a_it32(check, addr);
-                check = fnv_1a_it32(check, pixel);
-                
-                if(D>0){
-                    D = D + inc1;
-                    d = d + 1;
-                    
-                }else{
-                    D = D + inc2;
-                }
-                
-            }
-            break;
-            
-        case 2:
-            startPixel = 15 - startPixel;
-            planeAddr +=1;
-            for(int i=0;i<length;++i){
-                
-                int offset = d+startPixel;
-                addr = (planeAddr - (offset>>3)+(i*planeMod)) & 0x1FFFFE; // >>1;
-                if (bltdebug) printf("2: planeAddr = %d offset = %d d = %d planeMod = %d D = %d bltapt = %d inc1 = %d inc2 = %d\n", planeAddr, offset, d, planeMod, D, bltapt, inc1, inc2);
-                
-                //Pixel plot
-                uint16_t pixel = _mem->peek16(addr); // chipramW[addr];
-                if (bltdebug) printf("2: peek(%d) = %d\n", addr, pixel);
-                pixel = logicFunction(minterm,0x0001 << (offset&15),pattern,pixel);
-                if (bltdebug) printf("2: poke(%d), %d\n", addr, pixel);
-                _mem->pokeChip16(addr, pixel);
-                check = fnv_1a_it32(check, addr);
-                check = fnv_1a_it32(check, pixel);
-                
-                if(D>0){
-                    D = D + inc1;
-                    d = d + 1;
-                    
-                }else{
-                    D = D + inc2;
-                }
-                
-            }
-            break;
-            
-        case 3:
-            
-            for(int i=0;i<length;++i){
-                
-                int offset =d+startPixel;
-                addr =(planeAddr +(offset>>3)-(i*planeMod)) & 0x1FFFFE; //>>1;
-                
-                //Pixel plot
-                uint16_t pixel = _mem->peek16(addr); // chipramW[addr];
-                pixel = logicFunction(minterm,0x8000 >> (offset&15),pattern,pixel);
-                // debug("3: poke(%d), %d\n", addr, pixel);
-                _mem->pokeChip16(addr, pixel);
-                check = fnv_1a_it32(check, addr);
-                check = fnv_1a_it32(check, pixel);
-                
-                if(D>0){
-                    D = D + inc1;
-                    d = d - 1;
-                    
-                }else{
-                    D = D + inc2;
-                }
-                
-            }
-            break;
-            
-        case 4:
-            for(int i=0;i<length;++i){
-                
-                int offset = i+startPixel;
-                addr =(planeAddr +(offset>>3)+(d*planeMod)) & 0x1FFFFE; // >>1;
-                
-                //Pixel plot
-                uint16_t pixel = _mem->peek16(addr); // chipramW[addr];
-                pixel = logicFunction(minterm,0x8000 >> (offset&15),pattern,pixel);
-                // debug("4: poke(%d), %d\n", addr, pixel);
-                _mem->pokeChip16(addr, pixel);
-                check = fnv_1a_it32(check, addr);
-                check = fnv_1a_it32(check, pixel);
-                
-                if(D>0){
-                    D = D + inc1;
-                    d = d + 1;
-                    
-                }else{
-                    D = D + inc2;
-                }
-                
-            }
-            break;
-            
-        case 5:
-            startPixel = 15 - startPixel;
-            planeAddr +=1;
-            for(int i=0;i<length;++i){
-                
-                int offset = i+startPixel;
-                addr = (planeAddr - (offset>>3)+(d*planeMod)) & 0x1FFFFE; //>>1;
-                // debug("5: planeAddr = %d offset = %d d = %d planeMod = %d D = %d bltapt = %d inc1 = %d inc2 = %d\n", planeAddr, offset, d, planeMod, D, bltapt, inc1, inc2);
-
-                
-                //Pixel plot
-                uint16_t pixel = _mem->peek16(addr); // chipramW[addr];
-                // debug("5: peek(%X) = %X\n", addr, pixel);
-                pixel = logicFunction(minterm,0x0001 << (offset&15),pattern,pixel);
-                // debug("5: poke(%X), %X\n", addr, pixel);
-                _mem->pokeChip16(addr, pixel);
-                check = fnv_1a_it32(check, addr);
-                check = fnv_1a_it32(check, pixel);
-                
-                if(D>0){
-                    D = D + inc1;
-                    d = d + 1;
-                    
-                }else{
-                    D = D + inc2;
-                }
-                
-            }
-            break;
-            
-        case 6:
-            for(int i=0;i<length;++i){
-                
-                int offset = i+startPixel;
-                addr =(planeAddr +(offset>>3)-(d*planeMod)) & 0x1FFFFE; // >>1;
-                
-                //Pixel plot
-                uint16_t pixel = _mem->peek16(addr); // chipramW[addr];
-                if (bltdebug) printf("    planeAddr = %X offset = %X planeMod = %X pixel = %X\n",planeAddr,offset,planeMod, pixel);
-                pixel = logicFunction(minterm,0x8000 >> (offset&15),pattern,pixel);
-                // debug("6: poke(%d), %d\n", addr, pixel);
-                if (bltdebug) printf("    pixel = %X\n",pixel);
-                _mem->pokeChip16(addr, pixel);
-                check = fnv_1a_it32(check, addr);
-                check = fnv_1a_it32(check, pixel);
-                
-                if(D>0){
-                    D = D + inc1;
-                    d = d + 1;
-                    
-                }else{
-                    D = D + inc2;
-                }
-                
-            }
-            break;
-            
-        case 7:
-            startPixel = 15 - startPixel;
-            planeAddr +=1;
-            for(int i=0;i<length;++i){
-                
-                int offset = i+startPixel;
-                addr = (planeAddr - (offset>>3)-(d*planeMod)) & 0x1FFFFE; // >>1;
-                
-                //Pixel plot
-                uint16_t pixel = _mem->peek16(addr); // chipramW[addr];
-                pixel = logicFunction(minterm,0x0001 << (offset&15),pattern,pixel);
-                // debug("7: poke(%d), %d\n", addr, pixel);
-                _mem->pokeChip16(addr, pixel);
-                check = fnv_1a_it32(check, addr);
-                check = fnv_1a_it32(check, pixel);
-                
-                if(D>0){
-                    D = D + inc1;
-                    d = d + 1;
-                    
-                }else{
-                    D = D + inc2;
-                }
-                
-            }
-            break;
-            
-        default:
-            break;
-            
-    }
-    
-    
-    // chipset->bltcpt =addr;  // update cpt with the last known address... nothing should rely on this...
-    bltcpt = addr;
-    
-    // chipset->bltsizh = 0; // all done;
-    // chipset->bltsizv = 0; // all done;
-    bltsize = 0;
-    
-    printf("Lineblitter %d (%d) %X\n", linecount, octCode, check);
-}
