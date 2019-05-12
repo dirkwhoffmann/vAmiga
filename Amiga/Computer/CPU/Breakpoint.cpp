@@ -96,11 +96,11 @@ public:
     // Evaluates a breakpoint
     uint32_t eval();
     
-    /* Returns a textual representation of the breakpoint condition
-     * If an AST is present, the returned string is derived by traversing the
-     * tree. If no AST is present, the user input string is returned.
+    /* Writes a textual representation of the breakpoint condition to a file.
+     * If an AST is present, the result is derived by traversing the tree.
+     * If no AST is present, the user input string is handed back.
      */
-    // string name();
+    void name(FILE *str);
     
 private:
     
@@ -242,6 +242,114 @@ ASTNode::eval() {
         case AST_NOT:       return !left->eval();
         case AST_AND:       return left->eval() && right->eval();
         case AST_OR:        return left->eval() || right->eval();
+            
+        default:
+            assert(false);
+    }
+}
+
+
+void
+ASTNode::name(FILE *str) {
+    
+    const char *ll = "";
+    const char *lr = "";
+    const char *rl = "";
+    const char *rr = "";
+    const char *op = "";
+    
+    if (type == AST_AND || type == AST_OR) {
+        if (left->type == AST_AND || left->type == AST_OR) {
+            ll = "("; lr = ")";
+        }
+        if (right->type == AST_AND || right->type == AST_OR) {
+            rl = "("; rr = ")";
+        }
+    }
+
+    switch (type) {
+            
+        case AST_IND_B:     op = ".b"; break;
+        case AST_IND_W:     op = ".w"; break;
+        case AST_IND_L:     op = ".l"; break;
+        case AST_EQ:        op = "=="; break;
+        case AST_UNEQ:      op = "!="; break;
+        case AST_LESSEQ:    op = "<="; break;
+        case AST_LESS:      op = "<";  break;
+        case AST_GREATEREQ: op = ">="; break;
+        case AST_GREATER:   op = ">";  break;
+        case AST_NOT:       op = "!" ; break;
+        case AST_AND:       op = "&&"; break;
+        case AST_OR:        op = "||"; break;
+        default: break;
+    }
+   
+    switch (type) {
+            
+        case AST_D0:        fprintf(str, "D0"); break;
+        case AST_D1:        fprintf(str, "D1"); break;
+        case AST_D2:        fprintf(str, "D2"); break;
+        case AST_D3:        fprintf(str, "D3"); break;
+        case AST_D4:        fprintf(str, "D4"); break;
+        case AST_D5:        fprintf(str, "D5"); break;
+        case AST_D6:        fprintf(str, "D6"); break;
+        case AST_D7:        fprintf(str, "D7"); break;
+        case AST_A0:        fprintf(str, "A0"); break;
+        case AST_A1:        fprintf(str, "A1"); break;
+        case AST_A2:        fprintf(str, "A2"); break;
+        case AST_A3:        fprintf(str, "A3"); break;
+        case AST_A4:        fprintf(str, "A4"); break;
+        case AST_A5:        fprintf(str, "A5"); break;
+        case AST_A6:        fprintf(str, "A6"); break;
+        case AST_A7:        fprintf(str, "A7"); break;
+            
+        case AST_DEC:
+            
+            fprintf(str, "%d", value);
+            break;
+            
+        case AST_HEX:
+            
+            fprintf(str, "$%X", value);
+            break;
+      
+        case AST_IND_B:
+        case AST_IND_W:
+        case AST_IND_L:
+            
+            fprintf(str, "(");
+            left->name(str);
+            fprintf(str, ")%s", op);
+            break;
+            
+        case AST_EQ:
+        case AST_UNEQ:
+        case AST_LESSEQ:
+        case AST_LESS:
+        case AST_GREATEREQ:
+        case AST_GREATER:
+            
+            left->name(str);
+            fprintf(str, " %s ", op);
+            right->name(str);
+            break;
+            
+        case AST_NOT:
+            
+            fprintf(str, "%s(", op);
+            left->name(str);
+            fprintf(str, ")");
+            break;
+            
+        case AST_AND:
+        case AST_OR:
+            
+            fprintf(str, "%s", ll);
+            left->name(str);
+            fprintf(str, "%s %s %s", lr, op, rl);
+            right->name(str);
+            fprintf(str, "%s", rr);
+            break;
             
         default:
             assert(false);
@@ -538,10 +646,21 @@ ASTNode::parseATOMIC(TokenStream tokens, int &i) {
 const char *
 Breakpoint::getCondition()
 {
-    if (ast == NULL)
-        return conditionStr.c_str();
+    // Return the user input string if no AST is present.
+    if (ast == NULL) return conditionStr.c_str();
     
-    return name();
+    // Free previously allocates memory.
+    if (strPtr) free(strPtr);
+    
+    // Open a memory stream for storing the result string.
+    str = open_memstream(&strPtr, &strSize);
+    
+    // Generate the result string
+    ast->name(str);
+    
+    // Close the stream and return
+    fclose(str);
+    return strPtr;
 }
 
 bool
@@ -569,98 +688,6 @@ Breakpoint::removeCondition()
         ast = NULL;
     }
     return true;
-}
-
-const char *
-Breakpoint::name()
-{
-    if (!ast) return "(none)";
-    
-    if (strPtr) {
-        free(strPtr);
-        strSize = 0;
-    }
-    
-    str = open_memstream(&strPtr, &strSize);
-    name(ast);
-    fclose(str);
-    return strPtr;
-}
-
-void
-Breakpoint::name(ASTNode *node)
-{
-    const char *ll = "";
-    const char *lr = "";
-    const char *rl = "";
-    const char *rr = "";
-    
-    if (node->type == AST_AND || node->type == AST_OR) {
-        if (node->left->type == AST_AND || node->left->type == AST_OR) {
-            ll = "("; lr = ")";
-        }
-        if (node->right->type == AST_AND || node->right->type == AST_OR) {
-            rl = "("; rr = ")";
-        }
-    }
-    
-    switch (node->type) {
-        case AST_D0:        fprintf(str, "D0"); break;
-        case AST_D1:        fprintf(str, "D1"); break;
-        case AST_D2:        fprintf(str, "D2"); break;
-        case AST_D3:        fprintf(str, "D3"); break;
-        case AST_D4:        fprintf(str, "D4"); break;
-        case AST_D5:        fprintf(str, "D5"); break;
-        case AST_D6:        fprintf(str, "D6"); break;
-        case AST_D7:        fprintf(str, "D7"); break;
-        case AST_A0:        fprintf(str, "A0"); break;
-        case AST_A1:        fprintf(str, "A1"); break;
-        case AST_A2:        fprintf(str, "A2"); break;
-        case AST_A3:        fprintf(str, "A3"); break;
-        case AST_A4:        fprintf(str, "A4"); break;
-        case AST_A5:        fprintf(str, "A5"); break;
-        case AST_A6:        fprintf(str, "A6"); break;
-        case AST_A7:        fprintf(str, "A7"); break;
-        case AST_DEC:       fprintf(str, "%d", node->value); break;
-        case AST_HEX:       fprintf(str, "$%X", node->value); break;
-        case AST_IND_B:
-            fprintf(str, "("); name(ast->left); fprintf(str, ").b"); break;
-        case AST_IND_W:
-            fprintf(str, "("); name(ast->left); fprintf(str, ").w"); break;
-        case AST_IND_L:
-            fprintf(str, "("); name(ast->left); fprintf(str, ").l"); break;
-        case AST_EQ:
-            name(ast->left); fprintf(str, " == "); name(ast->right); break;
-        case AST_UNEQ:
-            name(ast->left); fprintf(str, " != "); name(ast->right); break;
-        case AST_LESSEQ:
-            name(ast->left); fprintf(str, " <= "); name(ast->right); break;
-        case AST_LESS:
-            name(ast->left); fprintf(str, " < "); name(ast->right); break;
-        case AST_GREATEREQ:
-            name(ast->left); fprintf(str, " >= "); name(ast->right); break;
-        case AST_GREATER:
-            name(ast->left); fprintf(str, " > "); name(ast->right); break;
-            
-            
-        case AST_NOT:
-            fprintf(str, "!("); name(ast->left); fprintf(str, ")"); break;
-            
-        case AST_AND:
-            fprintf(str, "%s", ll); name(ast->left); fprintf(str, "%s", lr);
-            fprintf(str, " && ");
-            fprintf(str, "%s", rl); name(ast->right); fprintf(str, "%s", rr);
-            break;
-            
-        case AST_OR:
-            fprintf(str, "%s", ll); name(ast->left); fprintf(str, "%s", lr);
-            fprintf(str, " || ");
-            fprintf(str, "%s", rl); name(ast->right); fprintf(str, "%s", rr);
-            break;
-            
-        default:
-            assert(false);
-    }
 }
 
 bool

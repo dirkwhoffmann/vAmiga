@@ -89,11 +89,7 @@ public:
     
     // Deletes a breakpoint condition
     bool removeCondition();
-    
-    // Experimental
-    const char *name();
-    void name(ASTNode *node);
-    
+        
     // Evaluates a breakpoint
     bool eval();
 };
