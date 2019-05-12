@@ -73,10 +73,9 @@ Blitter::Blitter()
                 if (i & (1 << bit)) fc_tmp = !fc_tmp;
             }
             fillData[0][fc][i] = inclPattern;
-            fillData[1][fc][i] = inclPattern;
+            fillData[1][fc][i] = exclPattern;
 
-            nextCarry[0][fc][i] = fc_tmp;
-            nextCarry[1][fc][i] = fc_tmp;
+            nextCarry[fc][i] = fc_tmp;
         }
     }
 }
@@ -970,9 +969,9 @@ Blitter::doFill(uint16_t &data, bool &carry)
     
     // Remember: A fill operation is carried out from right to left
     uint8_t resultLo = fillData[exclusive][carry][dataLo];
-    carry = nextCarry[exclusive][carry][dataLo];
+    carry = nextCarry[carry][dataLo];
     uint8_t resultHi = fillData[exclusive][carry][dataHi];
-    carry = nextCarry[exclusive][carry][dataHi];
+    carry = nextCarry[carry][dataHi];
     
     data = HI_LO(resultHi, resultLo);
 }

@@ -20,9 +20,9 @@ class Blitter : public HardwareComponent {
     // Information shown in the GUI inspector panel
     BlitterInfo info;
     
-    // The fill pattern lookup tables [inclusive/exclusive][carry in][data]
-    uint8_t fillData[2][2][256];
-    uint8_t nextCarry[2][2][256];
+    // The fill pattern lookup tables
+    uint8_t fillData[2][2][256];       // [inclusive/exclusive][carry in][data]
+    uint8_t nextCarry[2][256];         // [carry in][data]
     
     
     //
