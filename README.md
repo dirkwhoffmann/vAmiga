@@ -15,11 +15,11 @@
    
 ### Next milestones:
 
-- Milestone 3: Rescue the princess in Defender of the Crown.
+- Milestone 3: Rescue the princess in Defender of the Crown (😎).
   
    <img src="http://www.dirkwhoffmann.de/vAMIGA/pics/milestone3.png" width="150">    
    
-- Milestone 4: Fix Paccer.
+- Milestone 4: Fix Paccer (which I wrote exactly 30 years ago 😲).
   
    <img src="http://www.dirkwhoffmann.de/vAMIGA/pics/milestone4.png" width="150">    
    
