@@ -100,7 +100,7 @@ class Paula : public HardwareComponent {
     
     
     //
-    // Reading the internal state
+    // Accessing properties
     //
     
     public:

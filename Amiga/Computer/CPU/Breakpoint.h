@@ -23,7 +23,12 @@ class ASTNode;
 
 class Breakpoint {
   
+    friend class BreakpointManager;
+    
 private:
+    
+    // The memory address of this breakpoint
+    uint32_t addr = UINT32_MAX;
     
     // Indicates if this breakpoint is enabled
     bool enabled = true;
@@ -40,9 +45,9 @@ public:
     
     // Manage the enable / disable status
     bool isEnabled() { return enabled; }
+    bool isDisabled() { return !enabled; }
     void enable() { enabled = true; }
     void disable() { enabled = false; }
-    // void toggleDisabled() { enabled = !enabled; }
     
     // Returns true if this is an coditional breakpoint.
     bool hasCondition() { return ast != NULL; }

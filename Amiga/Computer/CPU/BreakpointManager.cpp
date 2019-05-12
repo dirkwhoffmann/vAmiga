@@ -9,6 +9,38 @@
 
 #include "Amiga.h"
 
+BreakpointManager::BreakpointManager()
+{
+    setDescription("BreakpointManager");
+    
+    memset(breakpoints, 0, sizeof(breakpoints));
+    numBreakpoints = 0;
+}
+
+Breakpoint *
+BreakpointManager::breakpointWithNr(long nr)
+{
+    if (nr < numBreakpoints) {
+        assert(breakpoints[nr] != NULL);
+        return breakpoints[nr];
+    }
+    
+    return NULL;
+}
+
+Breakpoint *
+BreakpointManager::breakpointAtAddr(uint32_t addr)
+{
+    for (int i = 0; i < numBreakpoints; i++) {
+        assert(breakpoints[i] != NULL);
+        if (breakpoints[i]->addr == addr) return breakpoints[i];
+    }
+    
+    return NULL;
+}
+
+
+/*
 map<uint32_t, Breakpoint>::iterator
 BreakpointManager::breakpoint(long nr)
 {
@@ -19,90 +51,114 @@ BreakpointManager::breakpoint(long nr)
         return breakpoints.end();
     }
 }
+*/
 
 bool
 BreakpointManager::hasBreakpointAt(uint32_t addr)
 {
-    auto it = breakpoints.find(addr);
-    return it != breakpoints.end();
+    Breakpoint *bp = breakpointAtAddr(addr);
+    
+    return bp != NULL;
 }
 
 bool
 BreakpointManager::hasDisabledBreakpointAt(uint32_t addr)
 {
-    auto it = breakpoints.find(addr);
-    return it != breakpoints.end() && !(*it).second.isEnabled();
+    Breakpoint *bp = breakpointAtAddr(addr);
+    
+    return bp != NULL && bp->isDisabled();
 }
 
 bool
 BreakpointManager::hasConditionalBreakpointAt(uint32_t addr)
 {
-    auto it = breakpoints.find(addr);
-    return it != breakpoints.end() && (*it).second.hasCondition();
+    Breakpoint *bp = breakpointAtAddr(addr);
+    
+    return bp != NULL && bp->hasCondition();
 }
 
 void
 BreakpointManager::setBreakpointAt(uint32_t addr)
 {
-    _amiga->suspend();
+    debug("setBreakpointAt %X %d %d\n", addr, hasBreakpointAt(addr), numBreakpoints);
     
-    breakpoints.insert(pair<uint32_t, Breakpoint>(addr, Breakpoint()));
-    _amiga->putMessage(MSG_BREAKPOINT_CONFIG);
-    
-    _amiga->resume();
-}
-
-void
-BreakpointManager::deleteBreakpointAt(uint32_t addr)
-{
-    auto it = breakpoints.find(addr);
-    if (it == breakpoints.end()) return;
-    
-    _amiga->suspend();
-    
-    breakpoints.erase(it);
-    _amiga->putMessage(MSG_BREAKPOINT_CONFIG);
-    
-    _amiga->resume();
-}
-
-void
-BreakpointManager::enableBreakpointAt(uint32_t addr)
-{
-    auto it = breakpoints.find(addr);
-    if (it == breakpoints.end()) return;
-    
-    _amiga->suspend();
-    
-    (*it).second.enable();
-    _amiga->putMessage(MSG_BREAKPOINT_CONFIG);
-    
-    _amiga->resume();
-}
-
-void
-BreakpointManager::disableBreakpointAt(uint32_t addr)
-{
-    auto it = breakpoints.find(addr);
-    if (it == breakpoints.end()) return;
-    
-    _amiga->suspend();
-    
-    (*it).second.disable();
-    _amiga->putMessage(MSG_BREAKPOINT_CONFIG);
-    
-    _amiga->resume();
+    if (!hasBreakpointAt(addr) && numBreakpoints + 1 < maxBreakpoints) {
+        
+        _amiga->suspend();
+        
+        assert(breakpoints[numBreakpoints] == NULL);
+        breakpoints[numBreakpoints] = new Breakpoint();
+        breakpoints[numBreakpoints++]->addr = addr;
+        
+        _amiga->putMessage(MSG_BREAKPOINT_CONFIG);
+        
+        _amiga->resume();
+    }
 }
 
 void
 BreakpointManager::deleteBreakpoint(long nr)
 {
-    auto it = breakpoint(nr);
-    if (it == breakpoints.end()) return;
+    if (nr < numBreakpoints) {
+        
+        assert(breakpoints[nr] != NULL);
+        deleteBreakpointAt(breakpoints[nr]->addr);
+    }
+}
+
+void
+BreakpointManager::deleteBreakpointAt(uint32_t addr)
+{
+    _amiga->suspend();
+    
+    for (int i = 0; i < numBreakpoints; i++) {
+        
+        assert(breakpoints[i] != NULL);
+        
+        if (breakpoints[i]->addr == addr) {
+            
+            delete breakpoints[i];
+
+            for (int j = i; j + 1 < numBreakpoints; j++)
+                breakpoints[j] = breakpoints[j + 1];
+            
+            numBreakpoints--;
+            breakpoints[numBreakpoints] = NULL;
+        }
+    }
+    _amiga->putMessage(MSG_BREAKPOINT_CONFIG);
+    
+    _amiga->resume();
+}
+
+void
+BreakpointManager::deleteAllBreakpoints()
+{
+    for (int i = 0; i < numBreakpoints; i++) {
+        assert(breakpoints[i] != NULL);
+        delete breakpoints[i];
+        breakpoints[i] = NULL;
+    }
+    
+    numBreakpoints = 0;
+}
+
+bool
+BreakpointManager::isDisabled(long nr)
+{
+    Breakpoint *bp = breakpointWithNr(nr);
+    return bp && bp->isDisabled();
+}
+
+void
+BreakpointManager::setEnableAt(uint32_t addr, bool value)
+{
+    Breakpoint *bp = breakpointAtAddr(addr);
+    if (!bp) return;
     
     _amiga->suspend();
     
-    breakpoints.erase(it);
+    value ? bp->enable() : bp->disable();
     _amiga->putMessage(MSG_BREAKPOINT_CONFIG);
     
     _amiga->resume();
@@ -111,75 +167,56 @@ BreakpointManager::deleteBreakpoint(long nr)
 uint32_t
 BreakpointManager::getAddr(long nr)
 {
-    auto it = breakpoint(nr);
-    if (it == breakpoints.end()) return UINT32_MAX;
-    
-    return (*it).first;
+    Breakpoint *bp = breakpointWithNr(nr);
+    return bp ? bp->addr : UINT32_MAX;
 }
 
 bool
 BreakpointManager::setAddr(long nr, uint32_t addr)
 {
-    auto it = breakpoint(nr);
-    if (it == breakpoints.end()) return false;
+    Breakpoint *bp = breakpointWithNr(nr);
+    if (!bp) return false;
     
     _amiga->suspend();
     
-    Breakpoint bp = (*it).second;
-    breakpoints.erase(it);
-    breakpoints.insert(pair<uint32_t, Breakpoint>(addr, bp));
+    bp->addr = addr;
     _amiga->putMessage(MSG_BREAKPOINT_CONFIG);
     
     _amiga->resume();
     
     return true;
-}
-
-bool
-BreakpointManager::isDisabled(long nr)
-{
-    auto it = breakpoint(nr);
-    if (it == breakpoints.end()) return false;
-    
-    return !(*it).second.isEnabled();
 }
 
 bool
 BreakpointManager::hasCondition(long nr)
 {
-    auto it = breakpoint(nr);
-    if (it == breakpoints.end()) return false;
-    
-    return (*it).second.hasCondition();
+    Breakpoint *bp = breakpointWithNr(nr);
+    return bp && bp->hasCondition();
 }
 
 bool
 BreakpointManager::hasSyntaxError(long nr)
 {
-    auto it = breakpoint(nr);
-    if (it == breakpoints.end()) return false;
-  
-    return (*it).second.hasSyntaxError();
+    Breakpoint *bp = breakpointWithNr(nr);
+    return bp && bp->hasSyntaxError();
 }
 
 const char *
 BreakpointManager::getCondition(long nr)
 {
-    auto it = breakpoint(nr);
-    if (it == breakpoints.end()) return "";
-    
-    return (*it).second.getCondition();
+    Breakpoint *bp = breakpointWithNr(nr);
+    return bp ? bp->getCondition() : "";
 }
 
 bool
 BreakpointManager::setCondition(long nr, const char *str)
 {
-    auto it = breakpoint(nr);
-    if (it == breakpoints.end()) return false;
+    Breakpoint *bp = breakpointWithNr(nr);
+    if (!bp) return false;
     
     _amiga->suspend();
     
-    (*it).second.setCondition(str);
+    bp->setCondition(str);
     _amiga->putMessage(MSG_BREAKPOINT_CONFIG);
     
     _amiga->resume();
@@ -188,16 +225,16 @@ BreakpointManager::setCondition(long nr, const char *str)
 }
 
 bool
-BreakpointManager::removeCondition(long nr)
+BreakpointManager::deleteCondition(long nr)
 {
-    auto it = breakpoint(nr);
-    if (it == breakpoints.end()) return false;
+    Breakpoint *bp = breakpointWithNr(nr);
+    if (!bp) return false;
     
     _amiga->suspend();
     
-    (*it).second.removeCondition();
+    bp->removeCondition();
     _amiga->putMessage(MSG_BREAKPOINT_CONFIG);
-    
+
     _amiga->resume();
     
     return true;
@@ -208,17 +245,15 @@ BreakpointManager::shouldStop()
 {
     uint32_t addr = _cpu->getPC();
     
-    // Check if a soft breakpoint has been reached
+    // Check if a soft breakpoint has been reached.
     if (addr == softStop || softStop == UINT32_MAX) {
+        
+        // Soft breakpoints are deleted when reached.
         softStop = UINT32_MAX - 1;
         return true;
     }
     
-    // Check if a hard breakpoint has been reached
-    auto it = breakpoints.find(addr);
-    if (it != breakpoints.end()) {
-        return (*it).second.eval();
-    }
-    
-    return false;
+    // Check if a hard breakpoint has been reached.
+    Breakpoint *bp = breakpointAtAddr(addr);
+    return bp ? bp->eval() : false;
 }
