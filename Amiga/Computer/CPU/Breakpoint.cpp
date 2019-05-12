@@ -653,7 +653,8 @@ Breakpoint::getCondition()
     if (strPtr) free(strPtr);
     
     // Open a memory stream for storing the result string.
-    str = open_memstream(&strPtr, &strSize);
+    size_t strSize;
+    FILE *str = open_memstream(&strPtr, &strSize);
     
     // Generate the result string
     ast->name(str);

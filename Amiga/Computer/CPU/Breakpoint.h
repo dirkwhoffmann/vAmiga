@@ -33,18 +33,13 @@ private:
     // Indicates if this breakpoint is enabled
     bool enabled = true;
     
-    /* The breakpoint's condition as it was entered by the user
-     */
+    // The breakpoint's condition as it was entered by the user
     string conditionStr = "";
     
-    /* Buffer for generation the condition string
-     */
+    // Buffer for generation the condition string
     char *strPtr = NULL;
-    size_t strSize = 0;
-    FILE *str = NULL;
     
-    /* The breakpoint's condition translated to an AST.
-     */
+    // The breakpoint's condition translated to an AST.
     ASTNode *ast = NULL;
     
 public:
