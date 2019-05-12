@@ -219,6 +219,8 @@ BreakpointManager::setCondition(long nr, const char *str)
     bp->setCondition(str);
     _amiga->putMessage(MSG_BREAKPOINT_CONFIG);
     
+    debug("setCondition: %s\n", bp->conditionStr.c_str());
+
     _amiga->resume();
     
     return true;

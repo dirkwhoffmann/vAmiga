@@ -37,6 +37,12 @@ private:
      */
     string conditionStr = "";
     
+    /* Buffer for generation the condition string
+     */
+    char *strPtr = NULL;
+    size_t strSize = 0;
+    FILE *str = NULL;
+    
     /* The breakpoint's condition translated to an AST.
      */
     ASTNode *ast = NULL;
@@ -83,6 +89,10 @@ public:
     
     // Deletes a breakpoint condition
     bool removeCondition();
+    
+    // Experimental
+    const char *name();
+    void name(ASTNode *node);
     
     // Evaluates a breakpoint
     bool eval();

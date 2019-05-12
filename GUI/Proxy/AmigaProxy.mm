@@ -119,6 +119,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 - (NSString *) breakpointCondition:(NSInteger)nr
 {
     const char *str = wrapper->cpu->bpManager.getCondition(nr);
+    NSLog(@"breakpointCondition '%s'\n", str);
     return str ? [NSString stringWithUTF8String:str] : NULL;
 }
 - (BOOL) setBreakpointCondition:(NSInteger)nr cond:(NSString *)cond
