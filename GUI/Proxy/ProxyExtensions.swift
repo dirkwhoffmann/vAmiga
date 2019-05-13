@@ -72,16 +72,15 @@ public extension AmigaProxy {
 public extension DriveProxy {
     
     var icon: NSImage {
-        get {
-            var name: String
-            
-            if hasWriteProtectedDisk() {
-                name = hasModifiedDisk() ? "diskUPTemplate" : "diskPTemplate"
-            } else {
-                name = hasModifiedDisk() ? "diskUTemplate" : "diskTemplate"
-            }
-            
-            return NSImage.init(named: name)!
+
+        var name: String
+
+        if hasWriteProtectedDisk() {
+            name = hasModifiedDisk() ? "diskUPTemplate" : "diskPTemplate"
+        } else {
+            name = hasModifiedDisk() ? "diskUTemplate" : "diskTemplate"
         }
+
+        return NSImage.init(named: name)!
     }
 }

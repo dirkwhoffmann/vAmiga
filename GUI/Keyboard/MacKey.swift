@@ -13,7 +13,7 @@ import Carbon.HIToolbox
 /* Mapping from Mac key codes to Amiga key codes.
  * Mac keycodes are based on the Apple Extended Keyboard II layout (ISO).
  */
-let isomac2amiga : [Int : Int] = [
+let isomac2amiga: [Int: Int] = [
     
     kVK_ISO_Section:         AmigaKeycode.Ansi.grave,
     kVK_ANSI_1:              AmigaKeycode.Ansi.digit1,
@@ -125,7 +125,7 @@ let isomac2amiga : [Int : Int] = [
 /* Mapping from Mac key codes to textual representations.
  * The mapping only covers keys with an empty standard representation.
  */
-let mac2string : [Int : String] = [
+let mac2string: [Int: String] = [
     
     kVK_ANSI_Keypad0:     "\u{2327}", // ⌧
     kVK_ANSI_KeypadEnter: "\u{2305}", // ⌅
@@ -186,14 +186,13 @@ struct MacKey : Codable {
     // Modifier flags at the time the key was pressed
     var carbonFlags: Int = 0
 
-    
     init(keyCode: Int, flags: NSEvent.ModifierFlags = []) {
     
         self.keyCode = keyCode
         
-        if flags.contains(.shift)   { carbonFlags |= shiftKey }
+        if flags.contains(.shift) { carbonFlags |= shiftKey }
         if flags.contains(.control) { carbonFlags |= controlKey }
-        if flags.contains(.option)  { carbonFlags |= optionKey }
+        if flags.contains(.option) { carbonFlags |= optionKey }
         if flags.contains(.command) { carbonFlags |= cmdKey }
     }
  
@@ -209,51 +208,47 @@ struct MacKey : Codable {
    
     // Returns the modifier flags of this key
     var modifierFlags: NSEvent.ModifierFlags {
-        get {
-            var cocoaFlags : NSEvent.ModifierFlags = []
-            
-            if (carbonFlags & shiftKey)   != 0 { cocoaFlags.insert(.shift) }
-            if (carbonFlags & controlKey) != 0 { cocoaFlags.insert(.control) }
-            if (carbonFlags & optionKey)  != 0 { cocoaFlags.insert(.option) }
-            if (carbonFlags & cmdKey)     != 0 { cocoaFlags.insert(.command) }
 
-            return cocoaFlags
-        }
+        var cocoaFlags: NSEvent.ModifierFlags = []
+
+        if (carbonFlags & shiftKey)   != 0 { cocoaFlags.insert(.shift) }
+        if (carbonFlags & controlKey) != 0 { cocoaFlags.insert(.control) }
+        if (carbonFlags & optionKey)  != 0 { cocoaFlags.insert(.option) }
+        if (carbonFlags & cmdKey)     != 0 { cocoaFlags.insert(.command) }
+
+        return cocoaFlags
     }
     
     // Returns the Amiga key code for this key
     var amigaKeyCode: Int {
-       
-        get {
-            // Catch key 0x32 manually, because it has a different physical
-            // position on an ANSI Mac keyboard.
-            if keyCode == 0x32, KBGetLayoutType(Int16(LMGetKbdType())) == kKeyboardANSI {
-                return AmigaKeycode.Ansi.grave
-            }
-            return isomac2amiga[keyCode]!
+
+        // Catch key 0x32 manually, because it has a different physical
+        // position on an ANSI Mac keyboard.
+        if keyCode == 0x32, KBGetLayoutType(Int16(LMGetKbdType())) == kKeyboardANSI {
+            return AmigaKeycode.Ansi.grave
         }
+        return isomac2amiga[keyCode]!
     }
     
     // Returns a string representation for this key
     var stringValue : String {
-        get {
-            // Check if this key has a custom representation
-            if let s = mac2string[keyCode] {
-                return s
-            }
-            
-            // Return standard representation (keyboard dependent)
-            if let s = String.init(keyCode: UInt16(keyCode), carbonFlags: carbonFlags) {
-                return s.uppercased()
-            }
-            
-            return ""
+
+        // Check if this key has a custom representation
+        if let s = mac2string[keyCode] {
+            return s
         }
+
+        // Return standard representation (keyboard dependent)
+        if let s = String.init(keyCode: UInt16(keyCode), carbonFlags: carbonFlags) {
+            return s.uppercased()
+        }
+
+        return ""
     }
 }
 
 extension MacKey: Equatable, Hashable {
-    static func ==(lhs: MacKey, rhs: MacKey) -> Bool {
+    static func == (lhs: MacKey, rhs: MacKey) -> Bool {
         return lhs.keyCode == rhs.keyCode
     }
 }
