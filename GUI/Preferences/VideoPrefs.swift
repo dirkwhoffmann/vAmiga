@@ -95,7 +95,6 @@ extension PreferencesController {
         vidEyeYSlider.floatValue = metal.eyeY()
         vidEyeZSlider.floatValue = metal.eyeZ()
     }
-    
 
     //
     // Action methods (Colors)
@@ -127,7 +126,6 @@ extension PreferencesController {
         myController?.saturation = sender.doubleValue
         refresh()
     }
-    
     
     //
     // Action methods (Effects)
@@ -275,8 +273,8 @@ extension PreferencesController {
         }
     }
     
-    @IBAction func vidScanlineWeightAction(_ sender: NSSlider!)
-    {
+    @IBAction func vidScanlineWeightAction(_ sender: NSSlider!) {
+        
         if let metal = myController?.metal {
             track("\(sender.floatValue)")
             metal.shaderOptions.scanlineWeight = sender.floatValue
@@ -301,8 +299,8 @@ extension PreferencesController {
         }
     }
     
-    @IBAction func vidDisalignmentVAction(_ sender: NSSlider!)
-    {
+    @IBAction func vidDisalignmentVAction(_ sender: NSSlider!) {
+
         if let metal = myController?.metal {
             track("\(sender.floatValue)")
             metal.shaderOptions.disalignmentV = sender.floatValue
@@ -349,8 +347,8 @@ extension PreferencesController {
         refresh()
     }
     
-    @IBAction func vidFactorySettingsActionTFT(_ sender: Any!)
-    {
+    @IBAction func vidFactorySettingsActionTFT(_ sender: Any!) {
+
         track()
         
         myController?.resetVideoUserDefaults()
@@ -358,8 +356,8 @@ extension PreferencesController {
         refresh()
     }
     
-    @IBAction func vidFactorySettingsActionCRT(_ sender: Any!)
-    {
+    @IBAction func vidFactorySettingsActionCRT(_ sender: Any!) {
+
         track()
         
         myController?.resetVideoUserDefaults()

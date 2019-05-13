@@ -71,20 +71,18 @@ extension PreferencesController {
         var macKey: MacKey?
         var macKeyCode: NSAttributedString = NSAttributedString.init()
         var macKeyDesc: String = ""
-        for (key, direction) in keyMap {
-            if direction == dir.rawValue {
-                let attr = [NSAttributedString.Key.foregroundColor: NSColor.black]
-                macKey = key
-                let myStr = NSString(format: "%02X", macKey!.keyCode) as String
-                macKeyCode = NSAttributedString(string: myStr, attributes: attr)
-                macKeyDesc = macKey?.stringValue ?? ""
-                break
-            }
+        for (key, direction) in keyMap where direction == dir.rawValue {
+            let attr = [NSAttributedString.Key.foregroundColor: NSColor.black]
+            macKey = key
+            let myStr = NSString(format: "%02X", macKey!.keyCode) as String
+            macKeyCode = NSAttributedString(string: myStr, attributes: attr)
+            macKeyDesc = macKey?.stringValue ?? ""
+            break
         }
         
         // Update text and button image
         let recordKey = (nr == 0) ? devRecordKey1 : devRecordKey2
-        if (recordKey == dir) {
+        if recordKey == dir {
             button.title = ""
             button.image = NSImage(named: "key_red")
             button.imageScaling = .scaleAxesIndependently
@@ -207,7 +205,7 @@ extension PreferencesController {
     
     @IBAction func devRetainMouseAction(_ sender: NSButton!) {
         
-        switch (sender.tag) {
+        switch sender.tag {
             
         case 0: myController?.metal.retainMouseWithKeys   = (sender.state == .on)
         case 1: myController?.metal.retainMouseByClick    = (sender.state == .on)
@@ -226,7 +224,7 @@ extension PreferencesController {
     
     @IBAction func devReleaseMouseAction(_ sender: NSButton!) {
         
-        switch (sender.tag) {
+        switch sender.tag {
             
         case 0: myController?.metal.releaseMouseWithKeys  = (sender.state == .on)
         case 1: myController?.metal.releaseMouseByShaking = (sender.state == .on)

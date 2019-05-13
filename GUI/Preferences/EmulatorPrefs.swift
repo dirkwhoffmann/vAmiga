@@ -76,8 +76,7 @@ extension PreferencesController {
         myController?.driveBlankDiskFormat = FileSystemType(rawValue: tag)
         refresh()
     }
-    
-    
+
     //
     // Action methods (Fullscreen)
     //
@@ -98,7 +97,6 @@ extension PreferencesController {
         }
     }
 
-    
     //
     // Action methods (Screenshots)
     //
@@ -114,8 +112,7 @@ extension PreferencesController {
         myController?.screenshotTargetIntValue = sender.selectedTag()
         refresh()
     }
-    
-    
+
     //
     // Action methods (User Dialogs)
     //
@@ -132,8 +129,7 @@ extension PreferencesController {
         myController?.ejectWithoutAsking = (sender.state == .on)
         refresh()
     }
-    
-    
+
     //
     // Action methods (Miscellaneous)
     //
@@ -160,7 +156,6 @@ extension PreferencesController {
         }
         refresh()
     }
-    
     
     //
     // Action methods (Misc)
