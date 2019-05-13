@@ -4,3 +4,4 @@ disabled_rules: # rule identifiers to exclude from running
   - function_body_length
   - identifier_name
   - line_length
+  - file_length
