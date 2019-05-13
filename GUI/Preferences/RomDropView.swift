@@ -29,7 +29,7 @@ class RomDropView: NSImageView {
         
         guard let amiga = amigaProxy else { return false }
 
-        if amiga.config().model == A1000 {
+        if amiga.config().model == AMIGA_1000 {
             return amiga.mem.isBootRom(url) && amiga.isPoweredOff()
         } else {
             return amiga.mem.isKickRom(url) && amiga.isPoweredOff()
@@ -68,7 +68,7 @@ class RomDropView: NSImageView {
         guard let controller = myController else { return false }
         guard let amiga = amigaProxy else { return false }
         
-        if amiga.config().model == A1000 {
+        if amiga.config().model == AMIGA_1000 {
             controller.bootRomURL = url
             return amiga.mem.loadBootRom(fromFile: url)
         } else {

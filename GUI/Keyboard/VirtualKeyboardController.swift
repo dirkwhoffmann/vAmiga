@@ -39,7 +39,7 @@ class VirtualKeyboardController : DialogController, NSWindowDelegate
         
         var xibName = ""
         
-        if config.model == A1000 {
+        if config.model == AMIGA_1000 {
             xibName = ansi ? "A1000ANSI" : "A1000ISO"
         } else {
             xibName = ansi ? "A500ANSI" : "A500ISO"

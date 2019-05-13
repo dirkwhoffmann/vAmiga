@@ -781,9 +781,9 @@ extension Keys {
 
 extension Defaults {
     
-    struct a500 {
+    struct A500 {
         
-        static let amigaModel        = A500
+        static let amigaModel        = AMIGA_500
         static let layout            = Layout.us
         
         static let chipRam           = 512
@@ -809,9 +809,9 @@ extension Defaults {
         static let fifoBuffering     = true
     }
     
-    struct a1000 {
+    struct A1000 {
         
-        static let amigaModel        = A1000
+        static let amigaModel        = AMIGA_1000
         static let layout            = Layout.us
         
         static let chipRam           = 256
@@ -837,9 +837,9 @@ extension Defaults {
         static let fifoBuffering     = true
     }
     
-    struct a2000 {
+    struct A2000 {
         
-        static let amigaModel        = A2000
+        static let amigaModel        = AMIGA_2000
         static let layout            = Layout.us
         
         static let chipRam           = 512
@@ -870,9 +870,9 @@ extension MyController {
     
     static func registerHardwareUserDefaults() {
         
-        let defaultModel = Defaults.a500.self
+        let defaultModel = Defaults.A500.self
         
-        let dictionary : [String:Any] = [
+        let dictionary: [String: Any] = [
             
             Keys.amigaModel: defaultModel.amigaModel.rawValue,
             Keys.layout: defaultModel.layout.rawValue,
@@ -897,7 +897,7 @@ extension MyController {
             Keys.realTimeClock: defaultModel.realTimeClock,
             
             Keys.fifoBuffering: defaultModel.fifoBuffering,
-            Keys.exactBlitter: defaultModel.exactBlitter,
+            Keys.exactBlitter: defaultModel.exactBlitter
         ]
         
         let defaults = UserDefaults.standard

@@ -72,13 +72,13 @@ extension PreferencesController {
         let config = amiga.config()
         
         let model =
-            config.model == A1000 ? "1000" :
-                config.model == A500 ? "500" : "2000"
+            config.model == AMIGA_1000 ? "1000" :
+                config.model == AMIGA_500 ? "500" : "2000"
         
         let poweredOff   = amiga.isPoweredOff()
         let bootHash     = amiga.mem.bootRomFingerprint()
         let kickHash     = amiga.mem.kickRomFingerprint()
-        let hash         = config.model == A1000 ? bootHash : kickHash
+        let hash         = config.model == AMIGA_1000 ? bootHash : kickHash
 
         track("bootHash = \(bootHash)")
         track("kickHash = \(kickHash)")
@@ -92,7 +92,7 @@ extension PreferencesController {
 
         let bootRomURL    = controller.bootRomURL
         let kickRomURL    = controller.kickRomURL
-        let url           = config.model == A1000 ? bootRomURL : kickRomURL
+        let url           = config.model == AMIGA_1000 ? bootRomURL : kickRomURL
         
         let romMissing    = NSImage.init(named: "rom_light")
         let romOriginal   = NSImage.init(named: "rom_original")
@@ -116,12 +116,12 @@ extension PreferencesController {
         
         switch config.model {
 
-        case A1000 where !hasRom:
+        case AMIGA_1000 where !hasRom:
             
             text = "The Amiga 1000 requires a Boot Rom to launch."
             subText = "Use drag and drop to add a Rom image."
             
-        case A500 where !hasRom, A2000 where !hasRom:
+        case AMIGA_500 where !hasRom, AMIGA_2000 where !hasRom:
 
             text = "The Amiga \(model) requires a Kickstart Rom to run."
             subText = "Use drag and drop to add a Rom image."
@@ -171,7 +171,7 @@ extension PreferencesController {
     
     @IBAction func romDeleteAction(_ sender: Any!) {
         
-        if amigaProxy?.config().model == A1000 {
+        if amigaProxy?.config().model == AMIGA_1000 {
             
             myController?.bootRomURL = URL(fileURLWithPath: "/")
             amigaProxy?.mem.deleteBootRom()

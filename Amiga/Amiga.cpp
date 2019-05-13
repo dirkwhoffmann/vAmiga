@@ -232,7 +232,7 @@ Amiga::configure(ConfigOption option, long value)
             
             if (!isAmigaModel(value)) {
                 warn("Invalid Amiga model: %d\n", value);
-                warn("       Valid values: %d, %d, %d\n", A500, A1000, A2000);
+                warn("       Valid values: %d, %d, %d\n", AMIGA_500, AMIGA_1000, AMIGA_2000);
                 return false;
             }
             
@@ -240,7 +240,7 @@ Amiga::configure(ConfigOption option, long value)
             model = (AmigaModel)value;
             
             // Apply model specific config changes
-            if (model == A2000) realTimeClock = true;
+            if (model == AMIGA_2000) realTimeClock = true;
             mem.updateMemSrcTable();
             break;
         
@@ -626,13 +626,13 @@ Amiga::readyToPowerUp()
     }
     
     // Check for a Boot Rom (A1000 only)
-    if (config.model == A1000 && !mem.hasBootRom()) {
+    if (config.model == AMIGA_1000 && !mem.hasBootRom()) {
         msg("NOT READY YET: Boot Rom is missing.\n");
         return false;
     }
     
     // Check for a Kickstart Rom (A500, A2000)
-    if (config.model != A1000 && !mem.hasKickRom()) {
+    if (config.model != AMIGA_1000 && !mem.hasKickRom()) {
         msg("NOT READY YET: Kickstart Rom is missing.\n");
         return false;
     }

@@ -26,9 +26,9 @@ func configureScriptCmd(arguments: [AnyHashable : Any]?) -> Bool {
         
         switch argument {
             
-        case "A1000": amigaProxy?.configureModel(A1000.rawValue)
-        case "A500": amigaProxy?.configureModel(A500.rawValue)
-        case "A2000": amigaProxy?.configureModel(A2000.rawValue)
+        case "A1000": amigaProxy?.configureModel(AMIGA_1000.rawValue)
+        case "A500": amigaProxy?.configureModel(AMIGA_500.rawValue)
+        case "A2000": amigaProxy?.configureModel(AMIGA_2000.rawValue)
             
         default: return false
         }

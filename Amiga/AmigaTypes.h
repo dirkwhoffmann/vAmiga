@@ -40,23 +40,23 @@ typedef int64_t DMACycle; // Cycle in DMA cycle units
 
 typedef enum : long
 {
-    A500,
-    A1000,
-    A2000
+    AMIGA_500,
+    AMIGA_1000,
+    AMIGA_2000
 }
 AmigaModel;
 
 inline bool isAmigaModel(long model)
 {
-    return model >= A500 && model <= A2000;
+    return model >= AMIGA_500 && model <= AMIGA_2000;
 }
 
 inline const char *modelName(AmigaModel model)
 {
     return
-    model == A500 ? "Amiga 500" :
-    model == A1000 ? "Amiga 1000" :
-    model == A2000 ? "Amiga 2000" : "???";
+    model == AMIGA_500 ? "Amiga 500" :
+    model == AMIGA_1000 ? "Amiga 1000" :
+    model == AMIGA_2000 ? "Amiga 2000" : "???";
 }
 
 typedef enum : long

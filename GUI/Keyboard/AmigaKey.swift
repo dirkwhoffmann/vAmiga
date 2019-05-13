@@ -408,11 +408,11 @@ extension AmigaKey {
         var (shape, tint) = ("100x100", "white")
         
         // Determine physical keyboard layout (ignoring key labels)
-        let a1000     = model == A1000
+        let a1000     = model == AMIGA_1000
         let a1000ansi = a1000 && layout == .us
         let a1000iso  = a1000 && layout != .us
 
-        let a500     = model != A1000
+        let a500     = model != AMIGA_1000
         let a500ansi = a500 && layout == .us
         let a500iso  = a500 && layout != .us
         

@@ -41,7 +41,7 @@ void
 Memory::_powerOn()
 {
     // Make Rom writable if an A1000 is emulated
-    kickIsWritable = _amiga->getConfig().model == A1000;
+    kickIsWritable = _amiga->getConfig().model == AMIGA_1000;
     
     // Wipe out RAM
     if (chipRam) memset(chipRam, 0, chipRamSize);

@@ -49,7 +49,7 @@ extension PreferencesController {
 
         // Lock controls if emulator is powered on
         hwAmigaModelPopup.isEnabled = poweredOff
-        hwRealTimeClock.isEnabled = poweredOff && config.model != A2000
+        hwRealTimeClock.isEnabled = poweredOff && config.model != AMIGA_2000
         hwChipRamPopup.isEnabled = poweredOff
         hwSlowRamPopup.isEnabled = poweredOff
         hwFastRamPopup.isEnabled = poweredOff
@@ -147,82 +147,82 @@ extension PreferencesController {
         
         switch sender.selectedTag() {
             
-        case A500.rawValue:
+        case AMIGA_500.rawValue:
             
-            amigaProxy?.configureModel(Defaults.a500.amigaModel.rawValue)
+            amigaProxy?.configureModel(Defaults.A500.amigaModel.rawValue)
             amigaProxy?.configureLayout(Layout.us.rawValue)
-            amigaProxy?.configureRealTimeClock(Defaults.a500.realTimeClock)
+            amigaProxy?.configureRealTimeClock(Defaults.A500.realTimeClock)
             
-            amigaProxy?.configureChipMemory(Defaults.a500.chipRam)
-            amigaProxy?.configureSlowMemory(Defaults.a500.slowRam)
-            amigaProxy?.configureFastMemory(Defaults.a500.fastRam)
+            amigaProxy?.configureChipMemory(Defaults.A500.chipRam)
+            amigaProxy?.configureSlowMemory(Defaults.A500.slowRam)
+            amigaProxy?.configureFastMemory(Defaults.A500.fastRam)
             
-            amigaProxy?.configureDrive(0, connected: Defaults.a500.df0Connect)
-            amigaProxy?.configureDrive(0, type:      Defaults.a500.df0Type.rawValue)
-            amigaProxy?.configureDrive(0, speed:     Defaults.a500.df0Speed)
-            amigaProxy?.configureDrive(1, connected: Defaults.a500.df1Connect)
-            amigaProxy?.configureDrive(1, type:      Defaults.a500.df1Type.rawValue)
-            amigaProxy?.configureDrive(1, speed:     Defaults.a500.df1Speed)
-            amigaProxy?.configureDrive(2, connected: Defaults.a500.df2Connect)
-            amigaProxy?.configureDrive(2, type:      Defaults.a500.df2Type.rawValue)
-            amigaProxy?.configureDrive(2, speed:     Defaults.a500.df2Speed)
-            amigaProxy?.configureDrive(3, connected: Defaults.a500.df3Connect)
-            amigaProxy?.configureDrive(3, type:      Defaults.a500.df3Type.rawValue)
-            amigaProxy?.configureDrive(3, speed:     Defaults.a500.df3Speed)
+            amigaProxy?.configureDrive(0, connected: Defaults.A500.df0Connect)
+            amigaProxy?.configureDrive(0, type:      Defaults.A500.df0Type.rawValue)
+            amigaProxy?.configureDrive(0, speed:     Defaults.A500.df0Speed)
+            amigaProxy?.configureDrive(1, connected: Defaults.A500.df1Connect)
+            amigaProxy?.configureDrive(1, type:      Defaults.A500.df1Type.rawValue)
+            amigaProxy?.configureDrive(1, speed:     Defaults.A500.df1Speed)
+            amigaProxy?.configureDrive(2, connected: Defaults.A500.df2Connect)
+            amigaProxy?.configureDrive(2, type:      Defaults.A500.df2Type.rawValue)
+            amigaProxy?.configureDrive(2, speed:     Defaults.A500.df2Speed)
+            amigaProxy?.configureDrive(3, connected: Defaults.A500.df3Connect)
+            amigaProxy?.configureDrive(3, type:      Defaults.A500.df3Type.rawValue)
+            amigaProxy?.configureDrive(3, speed:     Defaults.A500.df3Speed)
 
-            amigaProxy?.configureExactBlitter(Defaults.a500.exactBlitter)
-            amigaProxy?.configureFifoBuffering(Defaults.a500.fifoBuffering)
+            amigaProxy?.configureExactBlitter(Defaults.A500.exactBlitter)
+            amigaProxy?.configureFifoBuffering(Defaults.A500.fifoBuffering)
 
-        case A1000.rawValue:
+        case AMIGA_1000.rawValue:
             
-            amigaProxy?.configureModel(Defaults.a1000.amigaModel.rawValue)
+            amigaProxy?.configureModel(Defaults.A1000.amigaModel.rawValue)
             amigaProxy?.configureLayout(Layout.us.rawValue)
-            amigaProxy?.configureRealTimeClock(Defaults.a1000.realTimeClock)
+            amigaProxy?.configureRealTimeClock(Defaults.A1000.realTimeClock)
             
-            amigaProxy?.configureChipMemory(Defaults.a1000.chipRam)
-            amigaProxy?.configureSlowMemory(Defaults.a1000.slowRam)
-            amigaProxy?.configureFastMemory(Defaults.a1000.fastRam)
+            amigaProxy?.configureChipMemory(Defaults.A1000.chipRam)
+            amigaProxy?.configureSlowMemory(Defaults.A1000.slowRam)
+            amigaProxy?.configureFastMemory(Defaults.A1000.fastRam)
             
-            amigaProxy?.configureDrive(0, connected: Defaults.a1000.df0Connect)
-            amigaProxy?.configureDrive(0, type:      Defaults.a1000.df0Type.rawValue)
-            amigaProxy?.configureDrive(0, speed:     Defaults.a1000.df0Speed)
-            amigaProxy?.configureDrive(1, connected: Defaults.a1000.df1Connect)
-            amigaProxy?.configureDrive(1, type:      Defaults.a1000.df1Type.rawValue)
-            amigaProxy?.configureDrive(1, speed:     Defaults.a1000.df1Speed)
-            amigaProxy?.configureDrive(2, connected: Defaults.a1000.df2Connect)
-            amigaProxy?.configureDrive(2, type:      Defaults.a1000.df2Type.rawValue)
-            amigaProxy?.configureDrive(2, speed:     Defaults.a1000.df2Speed)
-            amigaProxy?.configureDrive(3, connected: Defaults.a1000.df3Connect)
-            amigaProxy?.configureDrive(3, type:      Defaults.a1000.df3Type.rawValue)
-            amigaProxy?.configureDrive(3, speed:     Defaults.a1000.df3Speed)
+            amigaProxy?.configureDrive(0, connected: Defaults.A1000.df0Connect)
+            amigaProxy?.configureDrive(0, type:      Defaults.A1000.df0Type.rawValue)
+            amigaProxy?.configureDrive(0, speed:     Defaults.A1000.df0Speed)
+            amigaProxy?.configureDrive(1, connected: Defaults.A1000.df1Connect)
+            amigaProxy?.configureDrive(1, type:      Defaults.A1000.df1Type.rawValue)
+            amigaProxy?.configureDrive(1, speed:     Defaults.A1000.df1Speed)
+            amigaProxy?.configureDrive(2, connected: Defaults.A1000.df2Connect)
+            amigaProxy?.configureDrive(2, type:      Defaults.A1000.df2Type.rawValue)
+            amigaProxy?.configureDrive(2, speed:     Defaults.A1000.df2Speed)
+            amigaProxy?.configureDrive(3, connected: Defaults.A1000.df3Connect)
+            amigaProxy?.configureDrive(3, type:      Defaults.A1000.df3Type.rawValue)
+            amigaProxy?.configureDrive(3, speed:     Defaults.A1000.df3Speed)
 
-            amigaProxy?.configureExactBlitter(Defaults.a1000.exactBlitter)
-            amigaProxy?.configureFifoBuffering(Defaults.a1000.fifoBuffering)
+            amigaProxy?.configureExactBlitter(Defaults.A1000.exactBlitter)
+            amigaProxy?.configureFifoBuffering(Defaults.A1000.fifoBuffering)
 
-        case A2000.rawValue:
+        case AMIGA_2000.rawValue:
             
-            amigaProxy?.configureModel(Defaults.a2000.amigaModel.rawValue)
-            amigaProxy?.configureRealTimeClock(Defaults.a2000.realTimeClock)
+            amigaProxy?.configureModel(Defaults.A2000.amigaModel.rawValue)
+            amigaProxy?.configureRealTimeClock(Defaults.A2000.realTimeClock)
             
-            amigaProxy?.configureChipMemory(Defaults.a2000.chipRam)
-            amigaProxy?.configureSlowMemory(Defaults.a2000.slowRam)
-            amigaProxy?.configureFastMemory(Defaults.a2000.fastRam)
+            amigaProxy?.configureChipMemory(Defaults.A2000.chipRam)
+            amigaProxy?.configureSlowMemory(Defaults.A2000.slowRam)
+            amigaProxy?.configureFastMemory(Defaults.A2000.fastRam)
             
-            amigaProxy?.configureDrive(0, connected: Defaults.a2000.df0Connect)
-            amigaProxy?.configureDrive(0, type:      Defaults.a2000.df0Type.rawValue)
-            amigaProxy?.configureDrive(0, speed:     Defaults.a2000.df0Speed)
-            amigaProxy?.configureDrive(1, connected: Defaults.a2000.df1Connect)
-            amigaProxy?.configureDrive(1, type:      Defaults.a2000.df1Type.rawValue)
-            amigaProxy?.configureDrive(1, speed:     Defaults.a2000.df1Speed)
-            amigaProxy?.configureDrive(2, connected: Defaults.a2000.df2Connect)
-            amigaProxy?.configureDrive(2, type:      Defaults.a2000.df2Type.rawValue)
-            amigaProxy?.configureDrive(2, speed:     Defaults.a2000.df2Speed)
-            amigaProxy?.configureDrive(3, connected: Defaults.a2000.df3Connect)
-            amigaProxy?.configureDrive(3, type:      Defaults.a2000.df3Type.rawValue)
-            amigaProxy?.configureDrive(3, speed:     Defaults.a2000.df3Speed)
+            amigaProxy?.configureDrive(0, connected: Defaults.A2000.df0Connect)
+            amigaProxy?.configureDrive(0, type:      Defaults.A2000.df0Type.rawValue)
+            amigaProxy?.configureDrive(0, speed:     Defaults.A2000.df0Speed)
+            amigaProxy?.configureDrive(1, connected: Defaults.A2000.df1Connect)
+            amigaProxy?.configureDrive(1, type:      Defaults.A2000.df1Type.rawValue)
+            amigaProxy?.configureDrive(1, speed:     Defaults.A2000.df1Speed)
+            amigaProxy?.configureDrive(2, connected: Defaults.A2000.df2Connect)
+            amigaProxy?.configureDrive(2, type:      Defaults.A2000.df2Type.rawValue)
+            amigaProxy?.configureDrive(2, speed:     Defaults.A2000.df2Speed)
+            amigaProxy?.configureDrive(3, connected: Defaults.A2000.df3Connect)
+            amigaProxy?.configureDrive(3, type:      Defaults.A2000.df3Type.rawValue)
+            amigaProxy?.configureDrive(3, speed:     Defaults.A2000.df3Speed)
 
-            amigaProxy?.configureExactBlitter(Defaults.a2000.exactBlitter)
-            amigaProxy?.configureFifoBuffering(Defaults.a2000.fifoBuffering)
+            amigaProxy?.configureExactBlitter(Defaults.A2000.exactBlitter)
+            amigaProxy?.configureFifoBuffering(Defaults.A2000.fifoBuffering)
 
         default:
             track("Cannot restore factory defaults (unknown Amiga model).")
