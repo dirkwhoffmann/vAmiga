@@ -1079,7 +1079,7 @@
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="CIA" identifier="" id="Zr1-zQ-1rt">
-                                <view key="view" ambiguous="YES" id="kdT-8z-eJ6">
+                                <view key="view" id="kdT-8z-eJ6">
                                     <rect key="frame" x="10" y="33" width="824" height="406"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -3535,7 +3535,7 @@
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Paula" identifier="" id="ox5-bZ-2Aj">
-                                <view key="view" id="FXI-VY-h9b">
+                                <view key="view" ambiguous="YES" id="FXI-VY-h9b">
                                     <rect key="frame" x="10" y="33" width="824" height="406"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>

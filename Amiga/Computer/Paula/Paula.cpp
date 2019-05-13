@@ -40,7 +40,7 @@ Paula::Paula()
 void
 Paula::_powerOn()
 {
-    
+
 }
 
 void

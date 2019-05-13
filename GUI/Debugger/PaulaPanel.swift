@@ -15,7 +15,7 @@ extension Inspector {
         let info = paula.getInfo()
         let dskInfo = paula.getDiskControllerInfo()
         
-        track("Refreshing Paula inspector tab")
+        // track("Refreshing Paula inspector tab")
         
         if everything {
 
@@ -142,6 +142,7 @@ extension Inspector {
         audioBufferLevelText.stringValue = "\(fillLevel) %"
         audioBufferUnderflows.intValue = Int32(paula.bufferUnderflows())
         audioBufferOverflows.intValue = Int32(paula.bufferOverflows())
+        track("\(paula.bufferOverflows())")
         audioWaveformView.update()
     }
     

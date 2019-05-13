@@ -169,7 +169,7 @@ class Amiga : public HardwareComponent {
      * These flags are flags processed and the loop either repeats or
      * terminates, depending on the set flags.
      */
-    uint32_t runLoopCtrl;
+    uint32_t runLoopCtrl = 0;
     
     private:
     

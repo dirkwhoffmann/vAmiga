@@ -31,8 +31,11 @@ class AudioFilter : public HardwareComponent {
 public:
     
     AudioFilter();
-    
-    
+
+    // Removes all samples in the sample pipeline
+    void clear();
+
+
     //
     // Configuring the device
     //

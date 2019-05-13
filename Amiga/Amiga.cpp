@@ -442,6 +442,7 @@ Amiga::_powerOn()
     debug(1, "Power on\n");
     
     masterClock = 0;
+    runLoopCtrl = 0;
     
     // Make this emulator instance the active one
     makeActiveInstance();
@@ -889,6 +890,8 @@ Amiga::stepOver()
 void
 Amiga::runLoop()
 {
+    debug("runLoop()\n");
+
     // Prepare to run
     _amiga->restartTimer();
     
@@ -933,6 +936,7 @@ Amiga::runLoop()
             if (runLoopCtrl & RL_ENABLE_BREAKPOINTS) {
                 if (cpu.bpManager.shouldStop()) {
                     putMessage(MSG_BREAKPOINT_REACHED);
+                    debug("BREAKPOINT_REACHED\n");
                     break;
                 }
             }
@@ -940,6 +944,7 @@ Amiga::runLoop()
             // Are we requests to terminate the run loop?
             if (runLoopCtrl & RL_STOP) {
                 clearControlFlags(RL_STOP);
+                debug("RL_STOP\n");
                 break;
             }
         }

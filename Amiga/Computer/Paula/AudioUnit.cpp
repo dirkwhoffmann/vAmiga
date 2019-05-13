@@ -16,7 +16,8 @@ AudioUnit::AudioUnit()
     // Register subcomponents
     registerSubcomponents(vector<HardwareComponent *> {
         
-        &filter
+        &filterL,
+        &filterR
     });
     
     // Register snapshot items
@@ -43,7 +44,10 @@ void
 AudioUnit::_powerOn()
 {
     clearRingbuffer();
-  
+
+    bufferUnderflows = 0;
+    bufferOverflows = 0;
+
     volume = 100000;
     targetVolume = 100000;
 }
@@ -118,7 +122,7 @@ AudioUnit::hsyncHandler()
             // Channel 3 (left)
             if (GET_BIT(dmaEnabled, 3)) {
                 executeStateMachine(3, missing);
-                right += (int8_t)(auddatInternal[3]) * audvol[3];
+                left += (int8_t)(auddatInternal[3]) * audvol[3];
             }
         }
 
@@ -258,39 +262,18 @@ AudioUnit::clearRingbuffer()
 {
     debug(4,"Clearing ringbuffer\n");
     
-    // Reset ringbuffer contents
+    // Wipe out the ringbuffers
     for (unsigned i = 0; i < bufferSize; i++) {
-        ringBuffer[i] = 0.0f;
+        ringBufferL[i] = ringBufferR[i] = 0.0;
     }
-    
+
+    // Wipe out the filter buffers
+    filterL.clear();
+    filterR.clear();
+
     // Put the write pointer ahead of the read pointer
     alignWritePtr();
 }
-
-/*
-float
-AudioUnit::readData()
-{
-    // Read sound sample
-    float value = ringBuffer[readPtr];
-    
-    // Adjust volume
-    if (volume != targetVolume) {
-        if (volume < targetVolume) {
-            volume += MIN(volumeDelta, targetVolume - volume);
-        } else {
-            volume -= MIN(volumeDelta, volume - targetVolume);
-        }
-    }
-    float divider = 40000.0f;
-    value = (volume <= 0) ? 0.0f : value * (float)volume / divider;
-    
-    // Advance read pointer
-    advanceReadPtr();
-    
-    return value;
-}
-*/
 
 void
 AudioUnit::readMonoSample(float *mono)
@@ -305,8 +288,8 @@ void
 AudioUnit::readStereoSample(float *left, float *right)
 {
     // Read sound samples
-    float l = ringBuffer[readPtr];
-    float r = l; // TODO
+    float l = ringBufferL[readPtr];
+    float r = ringBufferR[readPtr];
 
     // Modify volume
     if (volume != targetVolume) {
@@ -339,7 +322,9 @@ AudioUnit::readStereoSample(float *left, float *right)
 float
 AudioUnit::ringbufferData(size_t offset)
 {
-    return ringBuffer[(readPtr + offset) % bufferSize];
+    return
+    ringBufferL[(readPtr + offset) % bufferSize] +
+    ringBufferR[(readPtr + offset) % bufferSize];
 }
 
 void
@@ -389,12 +374,9 @@ AudioUnit::writeData(short left, short right)
     if (bufferCapacity() == 0)
         handleBufferOverflow();
 
-    // REMOVE ASAP
-    left += right;
-    
     // Convert sound samples to floating point values and write into ringbuffer
-    ringBuffer[writePtr] = filter.apply(float(left) * scale);
-    // TODO: right channel
+    ringBufferL[writePtr] = float(left) * scale; // filterL.apply(float(left) * scale);
+    ringBufferR[writePtr] = float(right) * scale; // filterR.apply(float(right) * scale);
 
     advanceWritePtr();
 }
@@ -415,7 +397,7 @@ AudioUnit::handleBufferUnderflow()
     lastAlignment = now;
     
     // Adjust the sample rate, if condition (1) holds.
-    if (elapsedTime > 10.0) {
+    if (elapsedTime > 3.0) {
         
         bufferUnderflows++;
         
@@ -444,7 +426,7 @@ AudioUnit::handleBufferOverflow()
     lastAlignment = now;
     
     // Adjust the sample rate, if condition (1) holds.
-    if (elapsedTime > 10.0) {
+    if (elapsedTime > 3.0) {
         
         bufferOverflows++;
         

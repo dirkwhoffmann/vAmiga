@@ -21,8 +21,9 @@ class AudioUnit : public HardwareComponent {
 public:
     
     // Audio filter
-    AudioFilter filter;
-    
+    AudioFilter filterL;
+    AudioFilter filterR;
+
     
     //
     // Properties
@@ -57,8 +58,9 @@ private:
      * This ringbuffer serves as the data interface between the emulation code
      * and the audio API (CoreAudio on Mac OS X).
      */
-    float ringBuffer[bufferSize];
-    
+    float ringBufferL[bufferSize];
+    float ringBufferR[bufferSize];
+
     /* Scaling value for sound samples
      * All sound samples produced by reSID are scaled by this value before they
      * are written into the ringBuffer.
