@@ -9,12 +9,12 @@
 
 import Foundation
 
-class VirtualKeyboardWindow : DialogWindow {
+class VirtualKeyboardWindow: DialogWindow {
  
 }
 
-class VirtualKeyboardController : DialogController, NSWindowDelegate
-{
+class VirtualKeyboardController: DialogController, NSWindowDelegate {
+
     // Array holding a reference to the view of each key
     var keyView = Array(repeating: nil as NSButton?, count: 128)
 
@@ -121,7 +121,7 @@ class VirtualKeyboardController : DialogController, NSWindowDelegate
             self.refresh()
         }
         
-        if (autoClose) {
+        if autoClose {
             cancelAction(self)
         }
     }
@@ -143,7 +143,7 @@ class VirtualKeyboardController : DialogController, NSWindowDelegate
                 
         // Close window if the user clicked inside the unused area
         track()
-        if (autoClose) {
+        if autoClose {
             cancelAction(self)
         }
     }
@@ -151,7 +151,7 @@ class VirtualKeyboardController : DialogController, NSWindowDelegate
 
 /* Subclass of NSButton for the keys in the virtual keyboard.
  */
-class Keycap : NSButton {
+class Keycap: NSButton {
     
     override func mouseDown(with event: NSEvent) {
         

@@ -9,7 +9,7 @@
 
 import Foundation
 
-class DiskMountController : DialogController {
+class DiskMountController: DialogController {
     
     var disk: ADFFileProxy!
     var writeProtect = false

@@ -13,13 +13,13 @@ import Foundation
 // Commands
 //
 
-func resetScriptCmd(arguments: [AnyHashable : Any]?) -> Bool {
+func resetScriptCmd(arguments: [AnyHashable: Any]?) -> Bool {
     
     amigaProxy?.reset()
     return true
 }
 
-func configureScriptCmd(arguments: [AnyHashable : Any]?) -> Bool {
+func configureScriptCmd(arguments: [AnyHashable: Any]?) -> Bool {
     
     // Hardware model
     if let argument = arguments?["VAMModel"] as? String {
@@ -37,7 +37,7 @@ func configureScriptCmd(arguments: [AnyHashable : Any]?) -> Bool {
     return false
 }
 
-func mountScriptCmd(arguments: [AnyHashable : Any]?) -> Bool {
+func mountScriptCmd(arguments: [AnyHashable: Any]?) -> Bool {
     
     if let argument = arguments?["VAMPath"] as? String {
         let url = URL(fileURLWithPath: argument)
@@ -51,7 +51,7 @@ func mountScriptCmd(arguments: [AnyHashable : Any]?) -> Bool {
     return false
 }
 
-func typeTextCmd(arguments: [AnyHashable : Any]?) -> Bool {
+func typeTextCmd(arguments: [AnyHashable: Any]?) -> Bool {
     
     if let text = arguments?[""] as? String {
         myController?.keyboardcontroller.autoType(text)
@@ -60,7 +60,7 @@ func typeTextCmd(arguments: [AnyHashable : Any]?) -> Bool {
     return false
 }
 
-func takeScreenshotCmd(arguments: [AnyHashable : Any]?) -> Bool {
+func takeScreenshotCmd(arguments: [AnyHashable: Any]?) -> Bool {
     
     guard let path = arguments?["VAMPath"] as? String else {
         return false
@@ -75,7 +75,7 @@ func takeScreenshotCmd(arguments: [AnyHashable : Any]?) -> Bool {
     }
 }
 
-func quitScriptCmd(arguments: [AnyHashable : Any]?) {
+func quitScriptCmd(arguments: [AnyHashable: Any]?) {
     
     myDocument?.updateChangeCount(.changeCleared)
     NSApplication.shared.terminate(nil)

@@ -14,7 +14,7 @@ import Carbon.HIToolbox
  * The keyboard layout defines the number of keys on the keyboard, the visual
  * appearance of their key caps and their physical shape.
  */
-enum Layout : Int, Codable {
+enum Layout: Int, Codable {
 
     case generic // Used as a fallback if no matching layout is found
     case us
@@ -38,15 +38,15 @@ class KeyboardController: NSObject {
     var leftCommand = false, rightCommand = false
     
     // Mapping from Unicode scalars to keycodes (used for auto-typing)
-    var symKeyMap : [UnicodeScalar : UInt16] = [:]
-    var symKeyMapShifted : [UnicodeScalar : UInt16] = [:]
+    var symKeyMap: [UnicodeScalar: UInt16] = [:]
+    var symKeyMapShifted: [UnicodeScalar: UInt16] = [:]
     
     override init() {
         
         track()
         
         // Setup symbolic key maps
-        for keyCode : UInt16 in 0 ... 255 {
+        for keyCode: UInt16 in 0 ... 255 {
             
             if let s = String.init(keyCode: keyCode, carbonFlags: 0), s.count == 1 {
                 if let scalar = s.unicodeScalars.first {
@@ -83,8 +83,8 @@ class KeyboardController: NSObject {
         keyDown(with: MacKey.init(event: event))
     }
     
-    func keyUp(with event: NSEvent)
-    {
+    func keyUp(with event: NSEvent) {
+        
         keyUp(with: MacKey.init(event: event))
     }
     

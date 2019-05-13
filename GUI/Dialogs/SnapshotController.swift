@@ -17,7 +17,7 @@ class SnapshotTableCellView: NSTableCellView {
     @IBOutlet weak var delete: NSButton!
 }
 
-class SnapshotDialog : DialogController  {
+class SnapshotDialog: DialogController {
     
     // Outlets
     
@@ -28,17 +28,17 @@ class SnapshotDialog : DialogController  {
     
     // Auto-saved snapshot cache
     var numAutoSnapshots = -1
-    var autoSnapshotImage: [Int:NSImage] = [:]
-    var autoTimeStamp: [Int:String] = [:]
-    var autoTimeDiff: [Int:String] = [:]
-    var autoSlotForRow: [Int:Int] = [:]
+    var autoSnapshotImage: [Int: NSImage] = [:]
+    var autoTimeStamp: [Int: String] = [:]
+    var autoTimeDiff: [Int: String] = [:]
+    var autoSlotForRow: [Int: Int] = [:]
     
     // User-saved snapshot cache
     var numUserSnapshots = -1
-    var userSnapshotImage: [Int:NSImage] = [:]
-    var userTimeStamp: [Int:String] = [:]
-    var userTimeDiff: [Int:String] = [:]
-    var userSlotForRow: [Int:Int] = [:]
+    var userSnapshotImage: [Int: NSImage] = [:]
+    var userTimeStamp: [Int: String] = [:]
+    var userTimeDiff: [Int: String] = [:]
+    var userSlotForRow: [Int: Int] = [:]
     
     override public func awakeFromNib() {
         
@@ -69,8 +69,8 @@ class SnapshotDialog : DialogController  {
     func timeDiffInfo(timeStamp: TimeInterval) -> String {
         
         var diff = Int(round(now.timeIntervalSince1970 - Double(timeStamp)))
-        let min = diff / 60;
-        let hrs = diff / 3600;
+        let min = diff / 60
+        let hrs = diff / 3600
         if (diff) < 60 {
             let s = (diff == 1) ? "" : "s"
             return "\(diff) second\(s) ago"
@@ -153,18 +153,12 @@ class SnapshotDialog : DialogController  {
 // NSTableViewDataSource, NSTableViewDelegate
 //
 
-extension SnapshotDialog : NSTableViewDataSource, NSTableViewDelegate {
+extension SnapshotDialog: NSTableViewDataSource, NSTableViewDelegate {
     
     func numberOfRows(in tableView: NSTableView) -> Int {
 
-        if (tableView == autoTableView) {
-            return numAutoSnapshots
-        }
-            
-        else if (tableView == userTableView) {
-            return numUserSnapshots
-        }
-        
+        if tableView == autoTableView { return numAutoSnapshots }
+        if tableView == userTableView { return numUserSnapshots }
         fatalError()
     }
     
@@ -186,7 +180,7 @@ extension SnapshotDialog : NSTableViewDataSource, NSTableViewDelegate {
             return result
         }
         
-        else if tableView == userTableView {
+        if tableView == userTableView {
             
             result.preview.image = userSnapshotImage[row]
             result.text.stringValue = userTimeStamp[row]!

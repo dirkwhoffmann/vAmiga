@@ -9,7 +9,7 @@
 
 import Foundation
 
-class DialogWindow : NSWindow {
+class DialogWindow: NSWindow {
     
     /* Fetch first responder status
      * This function is called in awakeFromNib() to ensure that we receive key

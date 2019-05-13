@@ -18,14 +18,13 @@ public func track(_ message: String = "",
                   path: String = #file, function: String = #function, line: Int = #line ) {
     
     if let file = URL.init(string: path)?.deletingPathExtension().lastPathComponent {
-        if (message == "") {
+        if message == "" {
             print("\(file).\(line)::\(function)")
         } else {
             print("\(file).\(line)::\(function): \(message)")
         }
     }
 }
-
 
 //
 // Manipulating Strings
@@ -40,7 +39,7 @@ extension String {
         let dataRef = unsafeBitCast(layoutData, to: CFData.self)
         let keyLayout = UnsafePointer<CoreServices.UCKeyboardLayout>.self
         let keyLayoutPtr = unsafeBitCast(CFDataGetBytePtr(dataRef), to: keyLayout)
-        let modifierKeyState = (carbonFlags >> 8) & 0xFF;
+        let modifierKeyState = (carbonFlags >> 8) & 0xFF
         let keyTranslateOptions = OptionBits(CoreServices.kUCKeyTranslateNoDeadKeysBit)
         var deadKeyState: UInt32 = 0
         let maxChars = 1
@@ -64,7 +63,6 @@ extension String {
         }
     }
 }
-
 
 //
 // Handling URLs
@@ -107,7 +105,6 @@ extension URL {
     }
 }
 
-
 //
 // Processing images
 //
@@ -130,13 +127,13 @@ extension NSImage {
                      cutout: NSRect,
                      interpolation: NSImageInterpolation = .high) -> NSImage {
         
-        let img = NSImage(size: CGSize(width:width, height:height))
+        let img = NSImage(size: CGSize(width: width, height: height))
         
         img.lockFocus()
         let ctx = NSGraphicsContext.current
         ctx?.imageInterpolation = interpolation // NSImageInterpolation.none // .high
         self.draw(in: cutout,
-                  from: NSMakeRect(0, 0, size.width, size.height),
+                  from: NSRect.init(x: 0, y: 0, width: size.width, height: size.height),
                   operation: .copy,
                   fraction: 1)
         img.unlockFocus()
@@ -146,14 +143,14 @@ extension NSImage {
     
     func resize(width: CGFloat, height: CGFloat) -> NSImage {
         
-        let cutout = NSMakeRect(0, 0, width, height)
+        let cutout = NSRect.init(x: 0, y: 0, width: width, height: height)
         return resizeImage(width: width, height: height,
                            cutout: cutout)
     }
 
     func resizeSharp(width: CGFloat, height: CGFloat) -> NSImage {
         
-        let cutout = NSMakeRect(0, 0, width, height)
+        let cutout = NSRect.init(x: 0, y: 0, width: width, height: height)
         return resizeImage(width: width, height: height,
                            cutout: cutout,
                            interpolation: .none)
@@ -161,7 +158,7 @@ extension NSImage {
     
     func roundCorners(withRadius radius: CGFloat) -> NSImage {
         
-        let rect = NSRect(origin: NSPoint.zero, size: size)
+        let rect = NSRect.init(origin: NSPoint.zero, size: size)
         if
             let cgImage = self.cgImage,
             let context = CGContext(data: nil,
@@ -194,8 +191,8 @@ extension NSImage {
         
         lockFocus()
         let sourceOver = NSCompositingOperation.sourceOver
-        draw(in: rect, from: NSZeroRect, operation: sourceOver, fraction: 1.0)
-        glossy!.draw(in: rect, from: NSZeroRect, operation: sourceOver, fraction: 1.0)
+        draw(in: rect, from: NSRect.zero, operation: sourceOver, fraction: 1.0)
+        glossy!.draw(in: rect, from: NSRect.zero, operation: sourceOver, fraction: 1.0)
         unlockFocus()
     }
     
@@ -226,21 +223,17 @@ extension NSImage {
     }
 }
 
-
 //
 // Managing time
 //
 
-
 extension DispatchTime {
 
-    static func diffNano(_ t : DispatchTime) -> UInt64 {
+    static func diffNano(_ t: DispatchTime) -> UInt64 {
         return DispatchTime.now().uptimeNanoseconds - t.uptimeNanoseconds
     }
 
-    static func diffMicroSec(_ t : DispatchTime) -> UInt64 { return diffNano(t) / 1_000 }
-    static func diffMilliSec(_ t : DispatchTime) -> UInt64 { return diffNano(t) / 1_000_000 }
-    static func diffSec(_ t : DispatchTime) -> UInt64 { return diffNano(t) / 1_000_000_000 }
+    static func diffMicroSec(_ t: DispatchTime) -> UInt64 { return diffNano(t) / 1_000 }
+    static func diffMilliSec(_ t: DispatchTime) -> UInt64 { return diffNano(t) / 1_000_000 }
+    static func diffSec(_ t: DispatchTime) -> UInt64 { return diffNano(t) / 1_000_000_000 }
 }
-    
-

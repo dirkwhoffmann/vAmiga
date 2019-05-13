@@ -14,17 +14,17 @@ public class AudioEngine: NSObject {
 
     var paula: PaulaProxy!
     
-    var audiounit : AUAudioUnit!
+    var audiounit: AUAudioUnit!
     
     var isRunning = false
     
-    override init()
-    {
+    override init() {
+
         super.init()
     }
     
-    convenience init?(withPaula proxy: PaulaProxy)
-    {
+    convenience init?(withPaula proxy: PaulaProxy) {
+
         track()
     
         self.init()
@@ -65,7 +65,7 @@ public class AudioEngine: NSObject {
         paula.setSampleRate(sampleRate)
         
         // Register render callback
-        if (stereo) {
+        if stereo {
             audiounit.outputProvider = { ( // AURenderPullInputBlock
                 actionFlags,
                 timestamp,
@@ -96,19 +96,19 @@ public class AudioEngine: NSObject {
         }
      }
     
-    private func renderMono(inputDataList : UnsafeMutablePointer<AudioBufferList>,
-                            frameCount : UInt32)
-    {
+    private func renderMono(inputDataList: UnsafeMutablePointer<AudioBufferList>,
+                            frameCount: UInt32) {
+
         let bufferList = UnsafeMutableAudioBufferListPointer(inputDataList)
         assert(bufferList.count == 1)
         
         let ptr = bufferList[0].mData!.assumingMemoryBound(to: Float.self)
         paula.readMonoSamples(ptr, size: Int(frameCount))
     }
-  
-    private func renderStereo(inputDataList : UnsafeMutablePointer<AudioBufferList>,
-                            frameCount : UInt32)
-    {
+
+    private func renderStereo(inputDataList: UnsafeMutablePointer<AudioBufferList>,
+                              frameCount: UInt32) {
+
         let bufferList = UnsafeMutableAudioBufferListPointer(inputDataList)
         assert(bufferList.count > 1)
         

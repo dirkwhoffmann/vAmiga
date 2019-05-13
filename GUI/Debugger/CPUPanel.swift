@@ -26,7 +26,7 @@ extension Inspector {
 
                              cpuSSP: fmt32 ]
 
-             for (c,f) in elements { assignFormatter(f, c!) }
+             for (c, f) in elements { assignFormatter(f, c!) }
             
             if amiga.isRunning() {
                 cpuStopAndGoButton.image = NSImage.init(named: "pauseTemplate")

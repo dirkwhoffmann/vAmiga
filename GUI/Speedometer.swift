@@ -12,7 +12,7 @@ import Foundation
 extension Double {
    
     func truncate(digits: Int) -> Double {
-        let factor = Double(truncating: pow(10,digits) as NSNumber)
+        let factor = Double(truncating: pow(10, digits) as NSNumber)
         return (self * factor).rounded() / factor
     }
 }
@@ -21,11 +21,11 @@ class Speedometer {
     
     /// Current emulation speed in MHz
     private var _mhz = 0.0
-    var mhz: Double { get { return _mhz.truncate(digits: 2); } }
+    var mhz: Double { return _mhz.truncate(digits: 2); }
     
     /// Current GPU performance in frames per second
     private var _fps = 0.0
-    var fps: Double { get { return _fps.truncate(digits: 0); } }
+    var fps: Double { return _fps.truncate(digits: 0); }
     
     /// Smoothing factor
     private let alpha = 0.5
