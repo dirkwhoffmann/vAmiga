@@ -3,3 +3,4 @@ disabled_rules: # rule identifiers to exclude from running
   - trailing_whitespace
   - function_body_length
   - identifier_name
+  - line_length
