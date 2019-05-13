@@ -33,7 +33,7 @@
 		508833EE21F0D21B009890EA /* ADFFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508833EC21F0D21B009890EA /* ADFFile.cpp */; };
 		508E7F952206CDBD00F7D88C /* CPU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508E7F932206CDBD00F7D88C /* CPU.cpp */; };
 		508FDE6E21EA1FA50043D0E9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 508FDE6D21EA1FA50043D0E9 /* Assets.xcassets */; };
-		508FDE8821EA1FA50043D0E9 /* VVAmigaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDE8721EA1FA50043D0E9 /* VVAmigaUITests.swift */; };
+		508FDE8821EA1FA50043D0E9 /* VAmigaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDE8721EA1FA50043D0E9 /* VAmigaUITests.swift */; };
 		508FDF8721EA1FBC0043D0E9 /* MessageQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDEF521EA1FBC0043D0E9 /* MessageQueue.cpp */; };
 		508FDFAC21EA1FBC0043D0E9 /* TOD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDF5921EA1FBC0043D0E9 /* TOD.cpp */; };
 		508FDFAD21EA1FBC0043D0E9 /* CIA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDF5C21EA1FBC0043D0E9 /* CIA.cpp */; };
@@ -221,7 +221,7 @@
 		508FDE7821EA1FA50043D0E9 /* vAmigaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = vAmigaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		508FDE7E21EA1FA50043D0E9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		508FDE8321EA1FA50043D0E9 /* vAmigaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = vAmigaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		508FDE8721EA1FA50043D0E9 /* VVAmigaUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VVAmigaUITests.swift; sourceTree = "<group>"; };
+		508FDE8721EA1FA50043D0E9 /* VAmigaUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VAmigaUITests.swift; sourceTree = "<group>"; };
 		508FDE8921EA1FA50043D0E9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		508FDEF521EA1FBC0043D0E9 /* MessageQueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MessageQueue.cpp; sourceTree = "<group>"; };
 		508FDEF821EA1FBC0043D0E9 /* MessageQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageQueue.h; sourceTree = "<group>"; };
@@ -486,7 +486,7 @@
 		508FDE8621EA1FA50043D0E9 /* vAmigaUITests */ = {
 			isa = PBXGroup;
 			children = (
-				508FDE8721EA1FA50043D0E9 /* VVAmigaUITests.swift */,
+				508FDE8721EA1FA50043D0E9 /* VAmigaUITests.swift */,
 				508FDE8921EA1FA50043D0E9 /* Info.plist */,
 			);
 			path = vAmigaUITests;
@@ -1140,7 +1140,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				508FDE8821EA1FA50043D0E9 /* VVAmigaUITests.swift in Sources */,
+				508FDE8821EA1FA50043D0E9 /* VAmigaUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
