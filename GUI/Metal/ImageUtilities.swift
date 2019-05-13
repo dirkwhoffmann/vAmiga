@@ -161,8 +161,8 @@ public extension NSImage {
         t.scaleX(by: 1.0, yBy: -1.0)
         t.concat()
         
-        let inRect = NSMakeRect(0, 0, size.width, size.height)
-        let fromRect = NSMakeRect(0, 0, self.size.width, self.size.height)
+        let inRect = NSRect.init(x: 0, y: 0, width: size.width, height: size.height)
+        let fromRect = NSRect.init(x: 0, y: 0, width: self.size.width, height: self.size.height)
         let operation = NSCompositingOperation.copy
         self.draw(in: inRect, from: fromRect, operation: operation, fraction: 1.0)
         
@@ -326,7 +326,7 @@ public extension MetalView {
         // Create image
         var wallpaper: NSImage?
         if cgImage != nil {
-            wallpaper = NSImage.init(cgImage: cgImage!, size: NSZeroSize)
+            wallpaper = NSImage.init(cgImage: cgImage!, size: NSSize.zero)
             wallpaper = wallpaper?.expand(toSize: NSSize(width: 1024, height: 512))
         } else {
             // Fall back to an opaque gray background

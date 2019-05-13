@@ -135,7 +135,7 @@ public extension MetalView {
             let scaleY = (256.0 * 300.0) / frame.height
             let newX = controller.mouseXY.x * scaleX
             let newY = controller.mouseXY.y * scaleY
-            let newLocation = NSMakePoint(newX, newY)
+            let newLocation = NSPoint.init(x: newX, y: newY)
             
             // Report the new location to the Amiga mouse
             amigaProxy?.mouse.setXY(newLocation)
