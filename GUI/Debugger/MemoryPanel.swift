@@ -11,9 +11,9 @@ extension NSColor {
     
     convenience init(r: Int, g: Int, b: Int, a: Int) {
         
-        self.init(red:   CGFloat(r) / 0xFF,
+        self.init(red: CGFloat(r) / 0xFF,
                   green: CGFloat(g) / 0xFF,
-                  blue:  CGFloat(b) / 0xFF,
+                  blue: CGFloat(b) / 0xFF,
                   alpha: CGFloat(a) / 0xFF)
     }
 }
@@ -21,14 +21,14 @@ extension NSColor {
 struct MemColors {
 
     static let unmapped = NSColor.gray
-    static let chipRam  = NSColor.init(r: 0x80, g: 0xFF, b: 0x00, a: 0xFF)
-    static let fastRam  = NSColor.init(r: 0x00, g: 0xCC, b: 0x00, a: 0xFF)
-    static let slowRam  = NSColor.init(r: 0x00, g: 0x99, b: 0x4C, a: 0xFF)
-    static let cia      = NSColor.init(r: 0xFF, g: 0x66, b: 0xFF, a: 0xFF)
-    static let rtc      = NSColor.init(r: 0xFF, g: 0x66, b: 0xB2, a: 0xFF)
-    static let ocs      = NSColor.init(r: 0xFF, g: 0xFF, b: 0x66, a: 0xFF)
+    static let chipRam = NSColor.init(r: 0x80, g: 0xFF, b: 0x00, a: 0xFF)
+    static let fastRam = NSColor.init(r: 0x00, g: 0xCC, b: 0x00, a: 0xFF)
+    static let slowRam = NSColor.init(r: 0x00, g: 0x99, b: 0x4C, a: 0xFF)
+    static let cia = NSColor.init(r: 0xFF, g: 0x66, b: 0xFF, a: 0xFF)
+    static let rtc = NSColor.init(r: 0xFF, g: 0x66, b: 0xB2, a: 0xFF)
+    static let ocs = NSColor.init(r: 0xFF, g: 0xFF, b: 0x66, a: 0xFF)
     static let autoConf = NSColor.init(r: 0xFF, g: 0x66, b: 0x66, a: 0xFF)
-    static let rom      = NSColor.init(r: 0x66, g: 0xB2, b: 0xFF, a: 0xFF)
+    static let rom = NSColor.init(r: 0x66, g: 0xB2, b: 0xFF, a: 0xFF)
 }
 
 extension Inspector {
@@ -68,58 +68,56 @@ extension Inspector {
         memSlowRamText.stringValue = String.init(format: "%d KB", slowRamKB)
     }
     
-    var memLayoutImage : NSImage? {
-        get {
-            
-            track("Computing layout image")
-            
-            guard let memory = amigaProxy?.mem else { return nil }
-            
-            // Create image representation in memory
-            let size = CGSize.init(width: 256, height: 16)
-            let cap = Int(size.width) * Int(size.height)
-            let mask = calloc(cap, MemoryLayout<UInt32>.size)!
-            let ptr = mask.bindMemory(to: UInt32.self, capacity: cap)
-            
-            // Create image data
-            for x in 0...255 {
-                
-                let src = memory.memSrc(x << 16).rawValue
-                var color : NSColor
-                
-                switch (src) {
-                case MEM_UNMAPPED.rawValue: color = MemColors.unmapped
-                case MEM_CHIP.rawValue:     color = MemColors.chipRam
-                case MEM_FAST.rawValue:     color = MemColors.fastRam
-                case MEM_CIA.rawValue:      color = MemColors.cia
-                case MEM_SLOW.rawValue:     color = MemColors.slowRam
-                case MEM_RTC.rawValue:      color = MemColors.rtc
-                case MEM_OCS.rawValue:      color = MemColors.ocs
-                case MEM_AUTOCONF.rawValue: color = MemColors.autoConf
-                case MEM_BOOT.rawValue:     color = MemColors.rom
-                case MEM_KICK.rawValue:     color = MemColors.rom
-                default:                    fatalError()
-                }
-                let ciColor: CIColor = CIColor(color: color)!
-                
-                for y in 0...15 {
-                    let c = 2
-                    let r = Int(ciColor.red * CGFloat(255 - y*c))
-                    let g = Int(ciColor.green * CGFloat(255 - y*c))
-                    let b = Int(ciColor.blue * CGFloat(255 - y*c))
-                    let a = Int(ciColor.alpha)
-                    
-                    ptr[x + 256*y] = UInt32(r | g << 8 | b << 16 | a << 24)
-                }
+    var memLayoutImage: NSImage? {
+
+        track("Computing layout image")
+
+        guard let memory = amigaProxy?.mem else { return nil }
+
+        // Create image representation in memory
+        let size = CGSize.init(width: 256, height: 16)
+        let cap = Int(size.width) * Int(size.height)
+        let mask = calloc(cap, MemoryLayout<UInt32>.size)!
+        let ptr = mask.bindMemory(to: UInt32.self, capacity: cap)
+
+        // Create image data
+        for x in 0...255 {
+
+            let src = memory.memSrc(x << 16).rawValue
+            var color: NSColor
+
+            switch (src) {
+            case MEM_UNMAPPED.rawValue: color = MemColors.unmapped
+            case MEM_CHIP.rawValue:     color = MemColors.chipRam
+            case MEM_FAST.rawValue:     color = MemColors.fastRam
+            case MEM_CIA.rawValue:      color = MemColors.cia
+            case MEM_SLOW.rawValue:     color = MemColors.slowRam
+            case MEM_RTC.rawValue:      color = MemColors.rtc
+            case MEM_OCS.rawValue:      color = MemColors.ocs
+            case MEM_AUTOCONF.rawValue: color = MemColors.autoConf
+            case MEM_BOOT.rawValue:     color = MemColors.rom
+            case MEM_KICK.rawValue:     color = MemColors.rom
+            default:                    fatalError()
             }
-            
-            // Create image
-            let image = NSImage.make(data: mask, rect: size)
-            let resizedImage = image?.resizeSharp(width: 512, height: 16)
-            // resizedImage?.makeGlossy()
-            // return resizedImage?.roundCorners(withRadius: 4)
-            return resizedImage
+            let ciColor: CIColor = CIColor(color: color)!
+
+            for y in 0...15 {
+                let c = 2
+                let r = Int(ciColor.red * CGFloat(255 - y*c))
+                let g = Int(ciColor.green * CGFloat(255 - y*c))
+                let b = Int(ciColor.blue * CGFloat(255 - y*c))
+                let a = Int(ciColor.alpha)
+
+                ptr[x + 256*y] = UInt32(r | g << 8 | b << 16 | a << 24)
+            }
         }
+
+        // Create image
+        let image = NSImage.make(data: mask, rect: size)
+        let resizedImage = image?.resizeSharp(width: 512, height: 16)
+        // resizedImage?.makeGlossy()
+        // return resizedImage?.roundCorners(withRadius: 4)
+        return resizedImage
     }
     
     func setBank(_ value: Int) {

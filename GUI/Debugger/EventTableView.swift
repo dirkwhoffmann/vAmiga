@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-class EventTableView : NSTableView {
+class EventTableView: NSTableView {
     
     var amiga = amigaProxy
     var primary = false
@@ -21,7 +21,7 @@ class EventTableView : NSTableView {
     
     func refresh(everything: Bool) {
         
-        if (everything) {
+        if everything {
             
             amiga = amigaProxy
         }
@@ -30,14 +30,14 @@ class EventTableView : NSTableView {
     }
 }
 
-extension EventTableView : NSTableViewDataSource {
+extension EventTableView: NSTableViewDataSource {
     
     func numberOfRows(in tableView: NSTableView) -> Int {
         
         if let dma = amiga?.dma {
-            return primary ? dma.primSlotCount() : dma.secSlotCount();
+            return primary ? dma.primSlotCount() : dma.secSlotCount()
         } else {
-            return 0;
+            return 0
         }
     }
     
@@ -92,7 +92,7 @@ extension EventTableView : NSTableViewDataSource {
     }
 }
 
-extension EventTableView : NSTableViewDelegate {
+extension EventTableView: NSTableViewDelegate {
     
     func tableView(_ tableView: NSTableView, willDisplayCell cell: Any, for tableColumn: NSTableColumn?, row: Int) {
         
