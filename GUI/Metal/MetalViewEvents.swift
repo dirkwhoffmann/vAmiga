@@ -15,13 +15,13 @@ public extension MetalView {
     // Keyboard events
     //
     
-    override func keyDown(with event: NSEvent)
-    {
+    override func keyDown(with event: NSEvent) {
+
         controller.keyboardcontroller.keyDown(with: event)
     }
     
-    override func keyUp(with event: NSEvent)
-    {
+    override func keyUp(with event: NSEvent) {
+
         controller.keyboardcontroller.keyUp(with: event)
     }
     
@@ -29,7 +29,6 @@ public extension MetalView {
         
         controller.keyboardcontroller.flagsChanged(with: event)
     }
-    
     
     //
     // Mouse events

@@ -9,15 +9,13 @@
 
 import Foundation
 
-extension MyController : NSMenuItemValidation {
+extension MyController: NSMenuItemValidation {
     
     open func validateMenuItem(_ item: NSMenuItem) -> Bool {
 
-        // track("validateMenuItem")
-        
-        var dfn : DriveProxy {
+        var dfn: DriveProxy {
             
-            switch (item.tag) {
+            switch item.tag {
             case 0: return amiga.df0
             case 1: return amiga.df1
             case 2: return amiga.df2
@@ -26,7 +24,7 @@ extension MyController : NSMenuItemValidation {
             }
         }
         
-        func validateURLlist(_ list : [URL], image: NSImage) -> Bool {
+        func validateURLlist(_ list: [URL], image: NSImage) -> Bool {
             
             if let pos = Int(item.title) {
                 
@@ -42,7 +40,7 @@ extension MyController : NSMenuItemValidation {
             return true
         }
         
-        switch (item.action) {
+        switch item.action {
             
             //
             // Edit menu
@@ -308,18 +306,17 @@ extension MyController : NSMenuItemValidation {
     
     @IBAction func powerAction(_ sender: Any!) {
         
-        amiga.isPoweredOn() ? amiga.powerOff() : amiga.run();
+        amiga.isPoweredOn() ? amiga.powerOff() : amiga.run()
     }
-    
-    
+
     //
     // Action methods (View menu)
     //
 
     @IBAction func toggleStatusBarAction(_ sender: Any!) {
         
-        undoManager?.registerUndo(withTarget: self) {
-            targetSelf in targetSelf.toggleStatusBarAction(sender)
+        undoManager?.registerUndo(withTarget: self) { targetSelf in
+            targetSelf.toggleStatusBarAction(sender)
         }
         
         showStatusBar(!statusBar)
@@ -327,11 +324,11 @@ extension MyController : NSMenuItemValidation {
     
     @IBAction func hideMouseAction(_ sender: Any!) {
         
-        undoManager?.registerUndo(withTarget: self) {
-            targetSelf in targetSelf.hideMouseAction(sender)
+        undoManager?.registerUndo(withTarget: self) { targetSelf in
+            targetSelf.hideMouseAction(sender)
         }
         
-        if (hideMouse) {
+        if hideMouse {
             NSCursor.unhide()
             CGAssociateMouseAndMouseCursorPosition(boolean_t(truncating: true))
         } else {
@@ -349,8 +346,7 @@ extension MyController : NSMenuItemValidation {
         }
         myAppDelegate.inspector?.showWindow(self)
     }
-    
-    
+
     //
     // Action methods (Keyboard menu)
     //
@@ -374,7 +370,6 @@ extension MyController : NSMenuItemValidation {
         amiga.keyboard.releaseAllKeys()
     }
 
-
     //
     // Action methods (Disk menu)
     //
@@ -386,10 +381,10 @@ extension MyController : NSMenuItemValidation {
         let drive = amiga.df(sender)
         let model = drive.type()
         
-        var adf : ADFFileProxy
+        var adf: ADFFileProxy
         
         // Create a blank disk
-        switch (model) {
+        switch model {
         case DRIVE_35_DD:  adf = ADFFileProxy.make(with: DISK_35_DD)
         case DRIVE_525_SD: adf = ADFFileProxy.make(with: DISK_525_SD)
         default: fatalError()
@@ -403,31 +398,7 @@ extension MyController : NSMenuItemValidation {
         
         myAppDelegate.clearRecentlyExportedDiskURLs(drive: sender.tag)
     }
- 
-    /*
-    @IBAction func newOFSDiskAction(_ sender: NSMenuItem!) {
-        
-        track()
-        
-        // TODO: MUST CHECK DRIVE TYPE HERE!!!!
-        let adf = ADFFileProxy.makeFormatted(DISK_35_DD, fileSystem: FS_OFS)
-        
-        amiga.df(sender).insertDisk(adf)
-        myAppDelegate.clearRecentlyExportedDiskURLs(drive: sender.tag)
-    }
-    
-    @IBAction func newFFSDiskAction(_ sender: NSMenuItem!) {
-        
-        track()
-        
-        // TODO: MUST CHECK DRIVE TYPE HERE!!!!
-        let adf = ADFFileProxy.makeFormatted(DISK_35_DD, fileSystem: FS_FFS)
-        
-        amiga.df(sender).insertDisk(adf)
-        myAppDelegate.clearRecentlyExportedDiskURLs(drive: sender.tag)
-    }
-    */
-    
+
     @IBAction func insertDiskAction(_ sender: NSMenuItem!) {
         
         // Ask user to continue if the current disk contains modified data
@@ -468,7 +439,7 @@ extension MyController : NSMenuItemValidation {
         if let url = myAppDelegate.getRecentlyInsertedDiskURL(slot) {
             do {
                 let adf = try self.mydocument?.createADF(from: url)
-                if (proceedWithUnexportedDisk(drive: drive)) {
+                if proceedWithUnexportedDisk(drive: drive) {
                     amiga.df(drive).insertDisk(adf)
                 }
             } catch {
@@ -546,7 +517,6 @@ extension MyController : NSMenuItemValidation {
         let drive = amiga.df(sender)
         dragAndDropDrive = (dragAndDropDrive == drive) ? nil : drive
     }
-    
     
     //
     // Action methods (Debug menu)
