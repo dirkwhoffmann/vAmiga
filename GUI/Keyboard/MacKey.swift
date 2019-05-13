@@ -121,7 +121,7 @@ let isomac2amiga: [Int: Int] = [
     kVK_Option:              AmigaKeycode.leftAlt,
     kVK_RightOption:         AmigaKeycode.rightAlt,
     kVK_Command:             AmigaKeycode.leftAmiga,
-    kVK_RightCommand:        AmigaKeycode.rightAmiga,
+    kVK_RightCommand:        AmigaKeycode.rightAmiga
 ]
 
 /* Mapping from Mac key codes to textual representations.
@@ -166,16 +166,16 @@ let mac2string: [Int: String] = [
     kVK_F18:              "F18",
     kVK_F19:              "F19",
     kVK_F20:              "F20",
-    kVK_Help:             "?\u{20DD}",// ?⃝
-    kVK_Home:             "\u{2196}", // ↖
-    kVK_PageUp:           "\u{21DE}", // ⇞
-    kVK_PageDown:         "\u{21DF}", // ⇟
-    kVK_ForwardDelete:    "\u{2326}", // ⌦
-    kVK_End:              "\u{2198}", // ↘
-    kVK_LeftArrow:        "\u{2190}", // ←
-    kVK_RightArrow:       "\u{2192}", // →
-    kVK_UpArrow:          "\u{2191}", // ↑
-    kVK_DownArrow:        "\u{2193}", // ↓
+    kVK_Help:             "?\u{20DD}", // ?⃝
+    kVK_Home:             "\u{2196}",  // ↖
+    kVK_PageUp:           "\u{21DE}",  // ⇞
+    kVK_PageDown:         "\u{21DF}",  // ⇟
+    kVK_ForwardDelete:    "\u{2326}",  // ⌦
+    kVK_End:              "\u{2198}",  // ↘
+    kVK_LeftArrow:        "\u{2190}",  // ←
+    kVK_RightArrow:       "\u{2192}",  // →
+    kVK_UpArrow:          "\u{2191}",  // ↑
+    kVK_DownArrow:        "\u{2193}"   // ↓
 ]
 
 /* This structure represents a physical key of the Mac keyboard.
