@@ -120,7 +120,7 @@ extension MyController: NSWindowDelegate {
         let newMetalX  = metalY * (804.0 / 621.0)
         let dx = newMetalX - metalX
         
-        return NSMakeSize(size.width + dx, size.height)
+        return NSSize.init(width: size.width + dx, height: size.height)
     }
 
     // Fixes a NSRect to match our desired aspect ration
@@ -129,7 +129,7 @@ extension MyController: NSWindowDelegate {
         let newSize = fixSize(window: window, size: rect.size)
         let newOriginX = (rect.width - newSize.width) / 2.0
         
-        return NSMakeRect(newOriginX, 0, newSize.width, newSize.height)
+        return NSRect.init(x: newOriginX, y: 0, width: newSize.width, height: newSize.height)
     }
     
     public func windowWillResize(_ sender: NSWindow, to frameSize: NSSize) -> NSSize {

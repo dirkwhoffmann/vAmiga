@@ -9,7 +9,7 @@
 
 import Foundation
 
-class MyDocument : NSDocument {
+class MyDocument: NSDocument {
 
     /*
      Emulator proxy object. This object is an Objective-C bridge between
@@ -37,7 +37,7 @@ class MyDocument : NSDocument {
      snapshots are flashed while T64 archives are converted to a disk and
      inserted into the disk drive.
      */
-    var amigaAttachment: AmigaFileProxy? = nil
+    var amigaAttachment: AmigaFileProxy?
     
     override init() {
         
@@ -72,7 +72,6 @@ class MyDocument : NSDocument {
         controller.amiga = amiga
         self.addWindowController(controller)
     }
-    
 
     //
     // Creating attachments
@@ -148,7 +147,7 @@ class MyDocument : NSDocument {
         
         track("Read \(length) bytes from file \(filename) [\(typeName)].")
         
-        switch (typeName) {
+        switch typeName {
             
         case "VAMIGA":
             // Check for outdated snapshot formats
@@ -174,7 +173,6 @@ class MyDocument : NSDocument {
         amigaAttachment!.setPath(filename)
     }
 
-    
     //
     // Processing attachments
     //
@@ -184,7 +182,7 @@ class MyDocument : NSDocument {
         
         // guard let controller = myController else { return false }
         
-        switch(amigaAttachment) {
+        switch amigaAttachment {
 
         case _ as AmigaSnapshotProxy:
             
@@ -211,25 +209,7 @@ class MyDocument : NSDocument {
         let controller = DiskMountController.init(windowNibName: nibName)
         controller.showSheet()
     }
-    
-    /*
-    @discardableResult
-    func mountAttachmentAsDisk(drive nr: Int) -> Bool {
-        
-        if let archive = attachment as? AnyArchiveProxy {
-            
-            if proceedWithUnexportedDisk(drive: nr) {
-                
-                let parent = windowForSheet!.windowController as! MyController
-                parent.changeDisk(archive, drive: nr)
-                return true
-            }
-        }
-        return false
-    }
-    
-     */
-    
+
     //
     // Loading
     //
@@ -238,8 +218,7 @@ class MyDocument : NSDocument {
         
         try createAmigaAttachment(from: url)
     }
-    
-    
+
     //
     // Saving
     //
@@ -263,7 +242,6 @@ class MyDocument : NSDocument {
         
         throw NSError(domain: NSOSStatusErrorDomain, code: unimpErr, userInfo: nil)
     }
-    
     
     //
     // Exporting disks

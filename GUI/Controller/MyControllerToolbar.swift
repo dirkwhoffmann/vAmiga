@@ -154,9 +154,9 @@ extension MyController {
         printInfo.bottomMargin = 32.0
 
         // Image view
-        let paperSize = printInfo.paperSize
+        let paper = printInfo.paperSize
         let image = metal.screenshot()
-        let printRect = NSMakeRect(0.0, 0.0, paperSize.width, paperSize.height)
+        let printRect = NSRect.init(x: 0, y: 0, width: paper.width, height: paper.height)
         let imageView = NSImageView.init(frame: printRect)
         imageView.image = image
         imageView.imageScaling = .scaleAxesIndependently
