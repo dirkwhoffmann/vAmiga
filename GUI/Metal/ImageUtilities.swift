@@ -36,9 +36,9 @@ public extension CGImage {
     
     static func dataProvider(data: UnsafeMutableRawPointer, size: CGSize) -> CGDataProvider? {
         
-        let dealloc : CGDataProviderReleaseDataCallback = {
+        let dealloc: CGDataProviderReleaseDataCallback = {
             
-            (info: UnsafeMutableRawPointer?, data: UnsafeRawPointer, size: Int) -> () in
+            (info: UnsafeMutableRawPointer?, data: UnsafeRawPointer, size: Int) -> Void in
             
             // Core Foundation objects are memory managed, aren't they?
             return
@@ -184,7 +184,7 @@ public extension NSImage {
     func cgImageWH() -> (CGImage, Int, Int)? {
         
         if let cgi = cgImage(forProposedRect: nil, context: nil, hints: nil) {
-            if (cgi.width != 0 && cgi.height != 0) {
+            if cgi.width != 0 && cgi.height != 0 {
                 return (cgi, cgi.width, cgi.height)
             }
         }
