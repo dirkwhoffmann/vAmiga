@@ -114,7 +114,7 @@ extension Inspector {
         
         let input = sender.stringValue
         
-        if (input == "") {
+        if input == "" {
             instrTableView.jumpToPC()
             return
         }

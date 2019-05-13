@@ -11,9 +11,7 @@ import Foundation
 
 extension Inspector {
     
-    private var selectedCia: Int {
-        get { return ciaSelector.indexOfSelectedItem }
-    }
+    private var selectedCia: Int { return ciaSelector.indexOfSelectedItem }
     
     func refreshCIA(everything: Bool) {
         

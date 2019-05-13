@@ -38,7 +38,7 @@ class DialogWindow : NSWindow {
     }
 }
 
-class DialogController : NSWindowController {
+class DialogController: NSWindowController {
     
     func showSheet(completionHandler handler:(() -> Void)? = nil) {
         
@@ -86,4 +86,3 @@ class DialogController : NSWindowController {
         hideSheet()
     }
 }
-

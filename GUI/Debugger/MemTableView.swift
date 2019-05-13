@@ -42,7 +42,7 @@ class MemTableView: NSTableView {
             "8": fmt16,
             "A": fmt16,
             "C": fmt16,
-            "E": fmt16,
+            "E": fmt16
         ]
         
         for (column, formatter) in columnFormatters {

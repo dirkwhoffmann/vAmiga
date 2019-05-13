@@ -9,7 +9,7 @@
 
 import Foundation
 
-class ExportDiskController : DialogController {
+class ExportDiskController: DialogController {
 
     @IBOutlet weak var button: NSPopUpButton!
     var type: AmigaFileType = FILETYPE_ADF

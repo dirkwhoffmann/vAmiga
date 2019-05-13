@@ -29,7 +29,7 @@ class DiskMountController : DialogController {
     
     func setCylinder(_ newValue: Int) {
 
-        if (newValue >= 0 && newValue < disk.numCylinders()) {
+        if newValue >= 0 && newValue < disk.numCylinders() {
             
             let spt = disk.numSectorsPerTrack()
             
@@ -41,7 +41,7 @@ class DiskMountController : DialogController {
     
     func setHead(_ newValue: Int) {
         
-        if (newValue >= 0 && newValue < disk.numHeads()) {
+        if newValue >= 0 && newValue < disk.numHeads() {
             
             let spt = disk.numSectorsPerTrack()
             
@@ -53,7 +53,7 @@ class DiskMountController : DialogController {
     
     func setTrack(_ newValue: Int) {
         
-        if (newValue >= 0 && newValue < disk.numTracks()) {
+        if newValue >= 0 && newValue < disk.numTracks() {
             
             let spt = disk.numSectorsPerTrack()
             
@@ -66,7 +66,7 @@ class DiskMountController : DialogController {
 
     func setSector(_ newValue: Int) {
         
-        if (newValue >= 0 && newValue < disk.numSectors()) {
+        if newValue >= 0 && newValue < disk.numSectors() {
             
             let spt = disk.numSectorsPerTrack()
             
@@ -101,7 +101,6 @@ class DiskMountController : DialogController {
     @IBOutlet weak var df2Button: NSButton!
     @IBOutlet weak var df3Button: NSButton!
 
-    
     override func showSheet(completionHandler handler:(() -> Void)? = nil) {
     
         if let attachment = myDocument?.amigaAttachment as? ADFFileProxy {
@@ -126,7 +125,7 @@ class DiskMountController : DialogController {
         
     }
  
-    func setHeight(_ newHeight : CGFloat) {
+    func setHeight(_ newHeight: CGFloat) {
 
         var rect = window!.frame
         rect.origin.y += rect.size.height - newHeight
@@ -150,11 +149,11 @@ class DiskMountController : DialogController {
         
         // Update text fields
         let typeName = [
-            DISK_35_DD.rawValue :   "3.5\"DD Amiga",
+            DISK_35_DD.rawValue: "3.5\"DD Amiga",
             DISK_35_DD_PC.rawValue: "3.5\"DD PC",
-            DISK_35_HD.rawValue:    "3.5\"HD Amiga",
+            DISK_35_HD.rawValue: "3.5\"HD Amiga",
             DISK_35_HD_PC.rawValue: "3.5\"HD PC",
-            DISK_525_SD.rawValue:   "5.25\"SD PC"
+            DISK_525_SD.rawValue: "5.25\"SD PC"
         ]
         let str = typeName[disk.diskType().rawValue]!
         infoText.stringValue = "A byte-accurate image of \(str) diskette."
@@ -186,7 +185,7 @@ class DiskMountController : DialogController {
         for item in items { item.isHidden = hide }
         
         // Only proceed if window is expanded
-        if (hide) { return }
+        if hide { return }
     
         // Compute size of preview table
         let w = size.width - 40
@@ -261,12 +260,12 @@ class DiskMountController : DialogController {
         
         track("insertDiskAction df\(sender.tag)")
         
-        var df : DriveProxy!
+        var df: DriveProxy!
         
         switch sender.tag {
-        case 0:  df = amigaProxy!.df0
-        case 1:  df = amigaProxy!.df1
-        case 2:  df = amigaProxy!.df2
+        case 0: df = amigaProxy!.df0
+        case 1: df = amigaProxy!.df1
+        case 2: df = amigaProxy!.df2
         default: df = amigaProxy!.df3
         }
         
@@ -288,7 +287,7 @@ class DiskMountController : DialogController {
 // NSTableView delegate and data source
 //
 
-extension DiskMountController : NSTableViewDelegate {
+extension DiskMountController: NSTableViewDelegate {
     
     func tableView(_ tableView: NSTableView,
                    willDisplayCell cell: Any, for tableColumn: NSTableColumn?, row: Int) {
@@ -298,7 +297,7 @@ extension DiskMountController : NSTableViewDelegate {
         // c.textColor = .red
     }
 }
-extension DiskMountController : NSWindowDelegate {
+extension DiskMountController: NSWindowDelegate {
     
     func windowDidResize(_ notification: Notification) {
         
@@ -306,7 +305,7 @@ extension DiskMountController : NSWindowDelegate {
     }
 }
 
-extension DiskMountController : NSTableViewDataSource {
+extension DiskMountController: NSTableViewDataSource {
     
     func buildHex(count: Int) -> String {
         
@@ -349,4 +348,3 @@ extension DiskMountController : NSTableViewDataSource {
         return "???"
     }
 }
-
