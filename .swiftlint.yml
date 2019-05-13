@@ -8,3 +8,4 @@ disabled_rules: # rule identifiers to exclude from running
   - type_body_length
   - cyclomatic_complexity
   - large_tuple
+  - todo
