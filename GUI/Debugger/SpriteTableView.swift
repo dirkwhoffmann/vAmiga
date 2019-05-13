@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-class SpriteTableView : NSTableView {
+class SpriteTableView: NSTableView {
     
     @IBOutlet weak var inspector: Inspector!
     
@@ -22,9 +22,9 @@ class SpriteTableView : NSTableView {
     
     func refresh(everything: Bool) {
 
-        if (everything) {
+        if everything {
            
-            for (c,f) in ["addr" : fmt24] {
+            for (c,f) in ["addr": fmt24] {
                 let columnId = NSUserInterfaceItemIdentifier(rawValue: c)
                 if let column = tableColumn(withIdentifier: columnId) {
                     if let cell = column.dataCell as? NSCell {
@@ -38,7 +38,7 @@ class SpriteTableView : NSTableView {
     }
 }
 
-extension SpriteTableView : NSTableViewDataSource {
+extension SpriteTableView: NSTableViewDataSource {
     
     func colorIndex(tableColumn: NSTableColumn?, row: Int) -> Int? {
        
@@ -59,7 +59,7 @@ extension SpriteTableView : NSTableViewDataSource {
         if let sprInfo = amiga?.denise.getSpriteInfo(inspector.selectedSprite) {
             
             let sprLines = sprInfo.vstop - sprInfo.vstrt
-            if (sprLines >= 0 && sprLines < 128) {
+            if sprLines >= 0 && sprLines < 128 {
                 return Int(sprLines)
             }
         }
@@ -73,7 +73,7 @@ extension SpriteTableView : NSTableViewDataSource {
 }
 
 extension NSColor {
-    convenience init(rgba : UInt32) {
+    convenience init(rgba: UInt32) {
         
         let r = CGFloat(rgba & 0xFF)
         let g = CGFloat((rgba >> 8) & 0xFF)
@@ -83,7 +83,7 @@ extension NSColor {
     }
 }
 
-extension SpriteTableView : NSTableViewDelegate {
+extension SpriteTableView: NSTableViewDelegate {
     
     func tableView(_ tableView: NSTableView, willDisplayCell cell: Any, for tableColumn: NSTableColumn?, row: Int) {
         
@@ -94,7 +94,7 @@ extension SpriteTableView : NSTableViewDelegate {
             
             var color = NSColor.white
             
-            switch (inspector.selectedSprite) {
+            switch inspector.selectedSprite {
                 
             case 0, 1:
                 switch index {
@@ -135,7 +135,7 @@ extension SpriteTableView : NSTableViewDelegate {
     
     func tableView(_ tableView: NSTableView, setObjectValue object: Any?, for tableColumn: NSTableColumn?, row: Int) {
         
-        switch(tableColumn?.identifier.rawValue) {
+        switch tableColumn?.identifier.rawValue {
             
         default:
             NSSound.beep()

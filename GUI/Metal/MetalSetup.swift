@@ -92,8 +92,8 @@ public extension MetalView {
         // Emulator textures (one for short frames, one for long frames)
         //
         
-        descriptor.width = EmulatorTexture.size.0;
-        descriptor.height = EmulatorTexture.size.1;
+        descriptor.width = EmulatorTexture.size.0
+        descriptor.height = EmulatorTexture.size.1
         
         // Emulator textures (raw data of long and short frames)
         descriptor.usage = [ .shaderRead ]
@@ -298,9 +298,9 @@ public extension MetalView {
                                              farZ: 100.0)
     
         if animates() {
-            let xAngle: Float = -(currentXAngle / 180.0) * .pi;
-            let yAngle: Float = (currentYAngle / 180.0) * .pi;
-            let zAngle: Float = (currentZAngle / 180.0) * .pi;
+            let xAngle: Float = -(currentXAngle / 180.0) * .pi
+            let yAngle: Float = (currentYAngle / 180.0) * .pi
+            let zAngle: Float = (currentZAngle / 180.0) * .pi
     
             model = model *
                 matrix_from_rotation(radians: xAngle, x: 0.5, y: 0.0, z: 0.0) *

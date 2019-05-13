@@ -86,7 +86,7 @@ extension MyDocument {
         
     func proceedWithUnexportedDisk(drive nr: Int) -> Bool {
         
-        switch (nr) {
+        switch nr {
         case 0: return proceedWithUnexportedDisk(drives: [amiga.df0])
         case 1: return proceedWithUnexportedDisk(drives: [amiga.df1])
         case 2: return proceedWithUnexportedDisk(drives: [amiga.df2])

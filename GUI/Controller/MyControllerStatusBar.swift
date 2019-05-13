@@ -38,28 +38,28 @@ extension MyController {
         df3spinning ? df3DMA.startAnimation(self) : df3DMA.stopAnimation(self)
 
         // Visibility
-        let items: [NSView : Bool] = [
+        let items: [NSView: Bool] = [
             
             powerLED: true,
             
-            df0LED:  df0IsConnected,
-            df1LED:  df1IsConnected,
-            df2LED:  df2IsConnected,
-            df3LED:  df3IsConnected,
+            df0LED: df0IsConnected,
+            df1LED: df1IsConnected,
+            df2LED: df2IsConnected,
+            df3LED: df3IsConnected,
             df0Disk: df0IsConnected && amiga.df0.hasDisk(),
             df1Disk: df1IsConnected && amiga.df1.hasDisk(),
             df2Disk: df2IsConnected && amiga.df2.hasDisk(),
             df3Disk: df3IsConnected && amiga.df3.hasDisk(),
-            df0DMA:  df0spinning,
-            df1DMA:  df1spinning,
-            df2DMA:  df2spinning,
-            df3DMA:  df3spinning,
+            df0DMA: df0spinning,
+            df1DMA: df1spinning,
+            df2DMA: df2spinning,
+            df3DMA: df3spinning,
 
             cmdLock: mapCommandKeys,
             
             clockSpeed: true,
             clockSpeedBar: true,
-            warpIcon: true,
+            warpIcon: true
         ]
         
         for (item, visible) in items {
