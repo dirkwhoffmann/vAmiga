@@ -14,8 +14,8 @@ let fmt16 = MyFormatter.init(radix: 16, min: 0, max: 0xFFFF)
 let fmt24 = MyFormatter.init(radix: 16, min: 0, max: 0xFFFFFF)
 let fmt32 = MyFormatter.init(radix: 16, min: 0, max: 0xFFFFFFFF)
 
-class Inspector : NSWindowController
-{
+class Inspector: NSWindowController {
+
     // Debug panel (Commons)
     @IBOutlet weak var debugPanel: NSTabView!
     
@@ -220,7 +220,6 @@ class Inspector : NSWindowController
     @IBOutlet weak var sprTableView: SpriteTableView!
     @IBOutlet weak var sprAttach: NSButton!
 
-    
     // Debug panel (Paula)
     @IBOutlet weak var paulaIntena: NSTextField!
     @IBOutlet weak var paulaIntreq: NSTextField!
@@ -307,9 +306,7 @@ class Inspector : NSWindowController
     @IBOutlet weak var evPrimTableView: EventTableView!
     @IBOutlet weak var evSecTableView: EventTableView!
 
-    var selectedSprite: Int {
-        get { return sprSelector.indexOfSelectedItem }
-    }
+    var selectedSprite: Int { return sprSelector.indexOfSelectedItem }
     
     var timer: Timer?
     
@@ -345,8 +342,7 @@ class Inspector : NSWindowController
         amigaProxy?.setInspectionTarget(INS_CPU)
         refresh(everything: true)
         
-        timer = Timer.scheduledTimer(withTimeInterval: inspectionInterval, repeats: true) {
-            timer in
+        timer = Timer.scheduledTimer(withTimeInterval: inspectionInterval, repeats: true) { _ in
             if amigaProxy?.isRunning() == true {
                 self.refresh(everything: false)
             }
@@ -408,7 +404,7 @@ class Inspector : NSWindowController
     }
 }
 
-extension Inspector : NSWindowDelegate {
+extension Inspector: NSWindowDelegate {
     
     func windowWillClose(_ notification: Notification) {
         
@@ -419,7 +415,7 @@ extension Inspector : NSWindowDelegate {
     }
 }
 
-extension Inspector : NSTabViewDelegate {
+extension Inspector: NSTabViewDelegate {
     
     func tabView(_ tabView: NSTabView, didSelect tabViewItem: NSTabViewItem?) {
         

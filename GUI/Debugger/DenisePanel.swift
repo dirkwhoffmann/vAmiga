@@ -19,14 +19,13 @@ extension Inspector {
         let sprInfo = denise.getSpriteInfo(selectedSprite)
         
         if everything {
-            
-            for (c,f) in [ deniseBPLCON0: fmt24,
-                           deniseBPLCON1: fmt24,
-                           deniseBPLCON2: fmt24,
-                           sprPtr: fmt24 ]
-            {
-                assignFormatter(f, c!)
-            }
+
+            let elements = [ deniseBPLCON0: fmt24,
+                             deniseBPLCON1: fmt24,
+                             deniseBPLCON2: fmt24,
+                             sprPtr: fmt24
+            ]
+            for (c, f) in elements { assignFormatter(f, c!) }
         }
         
         //
@@ -40,19 +39,17 @@ extension Inspector {
         deniseLACE.state  = (info.bplcon0 & 0b0000000000000100 != 0) ? .on : .off
         deniseBPLCON1.integerValue = Int(info.bplcon1)
         deniseBPLCON2.integerValue = Int(info.bplcon2)
-        
-        
+
         //
         // Sprite section
         //
         
-        sprHStart.integerValue = Int(sprInfo.hstrt);
-        sprVStart.integerValue = Int(sprInfo.vstrt);
-        sprVStop.integerValue = Int(sprInfo.vstop);
-        sprPtr.integerValue = Int(sprInfo.ptr);
-        sprAttach.state = sprInfo.attach ? .on : .off;
+        sprHStart.integerValue = Int(sprInfo.hstrt)
+        sprVStart.integerValue = Int(sprInfo.vstrt)
+        sprVStop.integerValue = Int(sprInfo.vstop)
+        sprPtr.integerValue = Int(sprInfo.ptr)
+        sprAttach.state = sprInfo.attach ? .on : .off
         sprTableView.refresh(everything: everything)
-        
     }
     
     @IBAction func deniseBPLCON0ButtonAction(_ sender: NSButton!) {

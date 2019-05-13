@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-class InstrTableView : NSTableView {
+class InstrTableView: NSTableView {
     
     @IBOutlet weak var inspector: Inspector!
     
@@ -15,10 +15,10 @@ class InstrTableView : NSTableView {
     var cpu = amigaProxy?.cpu
     
     // Display caches
-    var addrInRow  : [Int:UInt32] = [:]
-    var instrInRow : [Int:String] = [:]
-    var dataInRow  : [Int:String] = [:]
-    var rowForAddr : [UInt32:Int] = [:]
+    var addrInRow: [Int:UInt32] = [:]
+    var instrInRow: [Int:String] = [:]
+    var dataInRow: [Int:String] = [:]
+    var rowForAddr: [UInt32:Int] = [:]
     var hex = true
     
     override func awakeFromNib() {
@@ -115,7 +115,7 @@ class InstrTableView : NSTableView {
         rowForAddr = [:]
         
         for i in 0 ..< Int(CPUINFO_INSTR_COUNT) {
-            if (addr <= 0xFFFFFF) {
+            if addr <= 0xFFFFFF {
                 if var info = cpu?.getInstrInfo(i) {
                     let bytes = info.bytes
                     instrInRow[i] = String(cString: &info.instr.0)
@@ -132,11 +132,11 @@ class InstrTableView : NSTableView {
     
     func refresh(everything: Bool) {
     
-        if (everything) {
+        if everything {
         
             cpu = amigaProxy!.cpu
             
-            for (c,f) in ["addr" : fmt24] {
+            for (c, f) in ["addr": fmt24] {
                 let columnId = NSUserInterfaceItemIdentifier(rawValue: c)
                 if let column = tableColumn(withIdentifier: columnId) {
                     if let cell = column.dataCell as? NSCell {
@@ -150,10 +150,10 @@ class InstrTableView : NSTableView {
     }
 }
 
-extension InstrTableView : NSTableViewDataSource {
+extension InstrTableView: NSTableViewDataSource {
     
     func numberOfRows(in tableView: NSTableView) -> Int {
-        return Int(CPUINFO_INSTR_COUNT);
+        return Int(CPUINFO_INSTR_COUNT)
     }
     
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
@@ -180,7 +180,7 @@ extension InstrTableView : NSTableViewDataSource {
     }
 }
 
-extension InstrTableView : NSTableViewDelegate {
+extension InstrTableView: NSTableViewDelegate {
     
     func tableView(_ tableView: NSTableView, willDisplayCell cell: Any, for tableColumn: NSTableColumn?, row: Int) {
         

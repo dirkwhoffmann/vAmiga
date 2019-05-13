@@ -9,7 +9,7 @@
 
 import Foundation
 
-enum AutoMountAction : Int, Codable {
+enum AutoMountAction: Int, Codable {
     
     case openBrowser = 0
     case flashFirstFile = 1
@@ -23,7 +23,7 @@ protocol MessageReceiver {
     func processMessage(_ msg: Message)
 }
 
-class MyController : NSWindowController, MessageReceiver {
+class MyController: NSWindowController, MessageReceiver {
 
     /// Proxy
     /// Implements a bridge between the emulator written in C++ and the
@@ -31,13 +31,6 @@ class MyController : NSWindowController, MessageReceiver {
     //  the proxy is written in Objective-C.
     var amiga: AmigaProxy!
 
-    
-    /// Proxy object.
-    /// Implements a bridge between the emulator written in C++ and the
-    /// GUI written in Swift. Because Swift cannot interact with C++ directly,
-    //  the proxy is written in Objective-C.
-    // var c64: C64Proxy!
-    
     /// Audio Engine
     var audioEngine: AudioEngine!
     
@@ -48,7 +41,7 @@ class MyController : NSWindowController, MessageReceiver {
     var keyboardcontroller: KeyboardController!
     
     /// Virtual C64 keyboard (opened as a sheet)
-    var virtualKeyboardSheet: VirtualKeyboardController? = nil
+    var virtualKeyboardSheet: VirtualKeyboardController?
     
     /// Preferences controller
     var preferencesController: PreferencesController?
@@ -80,9 +73,7 @@ class MyController : NSWindowController, MessageReceiver {
     var smallDisk = NSImage.init(named: "diskTemplate")!.resize(width: 16.0, height: 16.0)
     
     // Drive that receives drag and drop inputs
-    var dragAndDropDrive : DriveProxy?
-    
-
+    var dragAndDropDrive: DriveProxy?
 
     //
     // Preferences items
@@ -95,151 +86,149 @@ class MyController : NSWindowController, MessageReceiver {
     
     // Selected game pad slot for joystick in port B
     var inputDevice2 = Defaults.inputDevice2
-    
-    
+
     // Rom preferences
     
     // Rom URLs
     var bootRomURL: URL = Defaults.bootRom
     var kickRomURL: URL = Defaults.kickRom
 
-    
     // Devices preferences
-    var disconnectJoyKeys : Bool {
+    var disconnectJoyKeys: Bool {
         get { return keyboardcontroller.disconnectJoyKeys }
         set {
             keyboardcontroller.disconnectJoyKeys = newValue
         }
     }
-    var autofire : Bool {
+    var autofire: Bool {
         get { return amiga.joystick1.autofire() }
         set {
             amiga.joystick1.setAutofire(newValue)
             amiga.joystick2.setAutofire(newValue)
         }
     }
-    var autofireBullets : Int {
+    var autofireBullets: Int {
         get { return amiga.joystick1.autofireBullets() }
         set {
             amiga.joystick1.setAutofireBullets(newValue)
             amiga.joystick2.setAutofireBullets(newValue)
         }
     }
-    var autofireFrequency : Float {
+    var autofireFrequency: Float {
         get { return amiga.joystick1.autofireFrequency() }
         set {
             amiga.joystick1.setAutofireFrequency(newValue)
             amiga.joystick2.setAutofireFrequency(newValue)
         }
     }
-    var keyMap0 : [MacKey:UInt32]? {
+    var keyMap0: [MacKey: UInt32]? {
         get { return gamePadManager.gamePads[0]?.keyMap }
         set { gamePadManager.gamePads[0]?.keyMap = newValue }
     }
-    var keyMap1 : [MacKey:UInt32]? {
+    var keyMap1: [MacKey: UInt32]? {
         get { return gamePadManager.gamePads[1]?.keyMap }
         set { gamePadManager.gamePads[1]?.keyMap = newValue }
     }
  
     // Video preferences
  
-    var enhancer : Int {
+    var enhancer: Int {
         get { return metal.enhancer }
         set { metal.enhancer = newValue }
     }
-    var upscaler : Int {
+    var upscaler: Int {
         get { return metal.upscaler }
         set { metal.upscaler = newValue }
     }
-    var palette : Int {
+    var palette: Int {
         get { return Int(amiga.denise.palette()) }
         set { amiga.denise.setPalette(Palette(newValue)) }
     }
-    var brightness : Double {
+    var brightness: Double {
         get { return amiga.denise.brightness() }
         set { amiga.denise.setBrightness(newValue) }
     }
-    var contrast : Double {
+    var contrast: Double {
         get { return amiga.denise.contrast() }
         set { amiga.denise.setContrast(newValue) }
     }
-    var saturation : Double {
+    var saturation: Double {
         get { return amiga.denise.saturation() }
         set { amiga.denise.setSaturation(newValue) }
     }
-    var eyeX : Float {
+    var eyeX: Float {
         get { return metal.eyeX() }
         set { metal.setEyeX(newValue) }
     }
-    var eyeY : Float {
+    var eyeY: Float {
         get { return metal.eyeY() }
         set { metal.setEyeY(newValue) }
     }
-    var eyeZ : Float {
+    var eyeZ: Float {
         get { return metal.eyeZ() }
         set { metal.setEyeZ(newValue) }
     }
-    var blur : Int32 {
+    var blur: Int32 {
         get { return metal.shaderOptions.blur }
         set { metal.shaderOptions.blur = newValue }
     }
-    var blurRadius : Float {
+    var blurRadius: Float {
         get { return metal.shaderOptions.blurRadius }
         set { metal.shaderOptions.blurRadius = newValue }
     }
-    var bloom : Int32 {
+    var bloom: Int32 {
         get { return metal.shaderOptions.bloom }
         set { metal.shaderOptions.bloom = newValue }
     }
-    var bloomRadiusR : Float {
+    var bloomRadiusR: Float {
         get { return metal.shaderOptions.bloomRadiusR }
         set { metal.shaderOptions.bloomRadiusR = newValue }
     }
-    var bloomRadiusG : Float {
+    var bloomRadiusG: Float {
         get { return metal.shaderOptions.bloomRadiusG }
         set { metal.shaderOptions.bloomRadiusG = newValue }
     }
-    var bloomRadiusB : Float {
+    var bloomRadiusB: Float {
         get { return metal.shaderOptions.bloomRadiusB }
         set { metal.shaderOptions.bloomRadiusB = newValue }
     }
-    var bloomBrightness : Float {
+    var bloomBrightness: Float {
         get { return metal.shaderOptions.bloomBrightness }
         set { metal.shaderOptions.bloomBrightness = newValue }
     }
-    var bloomWeight : Float {
+    var bloomWeight: Float {
         get { return metal.shaderOptions.bloomWeight }
         set { metal.shaderOptions.bloomWeight = newValue }
     }
-    var dotMask : Int32 {
+    var dotMask: Int32 {
         get { return metal.shaderOptions.dotMask }
         set { metal.shaderOptions.dotMask = newValue }
     }
-    var dotMaskBrightness : Float {
+    var dotMaskBrightness: Float {
         get { return metal.shaderOptions.dotMaskBrightness }
         set { metal.shaderOptions.dotMaskBrightness = newValue }
     }
-    var scanlines : Int32 {
+    var scanlines: Int32 {
         get { return metal.shaderOptions.scanlines }
         set { metal.shaderOptions.scanlines = newValue }
     }
-    var scanlineBrightness : Float {
+    var scanlineBrightness: Float {
         get { return metal.shaderOptions.scanlineBrightness }
         set { metal.shaderOptions.scanlineBrightness = newValue }
     }
-    var scanlineWeight : Float {
+    var scanlineWeight: Float {
         get { return metal.shaderOptions.scanlineWeight }
         set { metal.shaderOptions.scanlineWeight = newValue }
     }
-    var disalignment : Int32 {
+    var disalignment: Int32 {
         get { return metal.shaderOptions.disalignment }
         set { metal.shaderOptions.disalignment = newValue }
     }
-    var disalignmentH : Float {
+    var disalignmentH: Float {
         get { return metal.shaderOptions.disalignmentH }
         set { metal.shaderOptions.disalignmentH = newValue }
     }
-    var disalignmentV : Float {
+    var disalignmentV: Float {
         get { return metal.shaderOptions.disalignmentV }
         set { metal.shaderOptions.disalignmentV = newValue }
     }
@@ -260,31 +249,31 @@ class MyController : NSWindowController, MessageReceiver {
     }
     var screenshotSource = Defaults.screenshotSource
     var screenshotTarget = Defaults.screenshotTarget
-    var screenshotTargetIntValue : Int {
+    var screenshotTargetIntValue: Int {
         get { return Int(screenshotTarget.rawValue) }
         set { screenshotTarget = NSBitmapImageRep.FileType(rawValue: UInt(newValue))! }
     }
-    var keepAspectRatio : Bool {
+    var keepAspectRatio: Bool {
         get { return metal.keepAspectRatio }
         set { metal.keepAspectRatio = newValue }
     }
-    var exitOnEsc : Bool {
+    var exitOnEsc: Bool {
         get { return keyboardcontroller.exitOnEsc }
         set { keyboardcontroller.exitOnEsc = newValue }
     }
     var closeWithoutAsking = Defaults.closeWithoutAsking
     var ejectWithoutAsking = Defaults.ejectWithoutAsking
-    var pauseInBackground =  Defaults.pauseInBackground
+    var pauseInBackground = Defaults.pauseInBackground
     
     /// Remembers if the emulator was running or paused when it lost focus.
     /// Needed to implement the pauseInBackground feature.
     var pauseInBackgroundSavedState = false
     
-    var takeAutoSnapshots : Bool {
+    var takeAutoSnapshots: Bool {
         get { return amiga.takeAutoSnapshots() }
         set { amiga.setTakeAutoSnapshots(newValue) }
     }
-    var snapshotInterval : Int {
+    var snapshotInterval: Int {
         get { return amiga.snapshotInterval() }
         set { amiga.setSnapshotInterval(newValue) }
     }
@@ -292,48 +281,47 @@ class MyController : NSWindowController, MessageReceiver {
     //
     // Hardware
     //
-    var model : Int {
+    var model: Int {
         get { return amiga.config().model.rawValue }
         set { amiga.configureModel(newValue); }
     }
-    var layout : Int {
+    var layout: Int {
         get { return amiga.config().layout }
         set { amiga.configureLayout(newValue); }
     }
-    var chipMemory : Int {
+    var chipMemory: Int {
         get { return amiga.memConfig().chipRamSize }
         set { amiga.configureChipMemory(newValue); }
     }
-    var slowMemory : Int {
+    var slowMemory: Int {
         get { return amiga.memConfig().slowRamSize }
         set { amiga.configureChipMemory(newValue); }
     }
-    var fastMemory : Int {
+    var fastMemory: Int {
         get { return amiga.memConfig().fastRamSize }
         set { amiga.configureFastMemory(newValue); }
     }
-    var df0connected : Bool {
+    var df0connected: Bool {
         get { return amiga.config().df0.connected }
         set { amiga.configureDrive(0, connected: newValue); }
     }
-    var df0type : Int {
+    var df0type: Int {
         get { return amiga.config().df0.type.rawValue }
         set { amiga.configureDrive(0, type: newValue); }
     }
-    var df1connected : Bool {
+    var df1connected: Bool {
         get { return amiga.config().df0.connected }
         set { amiga.configureDrive(0, connected: newValue); }
     }
-    var df1type : Int {
+    var df1type: Int {
         get { return amiga.config().df0.type.rawValue }
         set { amiga.configureDrive(0, type: newValue); }
     }
-    var realTimeClock : Bool {
+    var realTimeClock: Bool {
         get { return amiga.config().realTimeClock }
         set { amiga.configureRealTimeClock(newValue); }
     }
-   
-    
+
     // Updates the warp status
     func updateWarp() {
         let loading = amiga.diskController.spinning()
@@ -342,16 +330,14 @@ class MyController : NSWindowController, MessageReceiver {
     
     // Returns the icon of the sand clock in the bottom bar
     var hourglassIcon : NSImage? {
-        get {
-            if (amiga.warp()) {
-                if alwaysWarp {
-                    return NSImage.init(named: "hourglass3Template")
-                } else {
-                    return NSImage.init(named: "hourglass2Template")
-                }
+        if amiga.warp() {
+            if alwaysWarp {
+                return NSImage.init(named: "hourglass3Template")
             } else {
-                return NSImage.init(named: "hourglass1Template")
+                return NSImage.init(named: "hourglass2Template")
             }
+        } else {
+            return NSImage.init(named: "hourglass1Template")
         }
     }
     
@@ -392,16 +378,12 @@ extension MyController {
 
     // Provides the undo manager
     override open var undoManager: UndoManager? {
-        get {
-            return metal.undoManager
-        }
+        return metal.undoManager
     }
  
     // Provides the document casted to the correct type
     var mydocument: MyDocument? {
-        get {
-            return document as? MyDocument
-        }
+        return document as? MyDocument
     }
     
     /// Indicates if the emulator needs saving
@@ -410,15 +392,14 @@ extension MyController {
             return document?.changeCount != 0
         }
         set {
-            if (newValue && !closeWithoutAsking) {
+            if newValue && !closeWithoutAsking {
                 document?.updateChangeCount(.changeDone)
             } else {
                 document?.updateChangeCount(.changeCleared)
             }
         }
     }
-    
-    
+
     //
     // Initialization
     //
@@ -430,26 +411,25 @@ extension MyController {
         // Create audio engine
         audioEngine = AudioEngine.init(withPaula: amiga.paula)
     }
-    
-    
+
     override open func windowDidLoad() {
  
         track()
         
         // Reset mouse coordinates
-        mouseXY = NSZeroPoint
+        mouseXY = NSPoint.zero
         hideMouse = false
         
         // Create keyboard controller
         keyboardcontroller = KeyboardController()
-        if (keyboardcontroller == nil) {
+        if keyboardcontroller == nil {
             track("Failed to create keyboard controller")
             return
         }
 
         // Create game pad manager
         gamePadManager = GamePadManager(controller: self)
-        if (gamePadManager == nil) {
+        if gamePadManager == nil {
             track("Failed to create game pad manager")
             return
         }
@@ -534,8 +514,7 @@ extension MyController {
         
         track("GUI timer is up and running")
     }
- 
-    
+
     //
     // Timer and message processing
     //
@@ -570,7 +549,7 @@ extension MyController {
             speedometer.updateWith(cycle: amiga.masterClock() / 4, frame: metal.frames)
             let mhz = speedometer.mhz
             let fps = speedometer.fps
-            clockSpeed.stringValue = String(format:"%.2f MHz %.0f fps", mhz, fps)
+            clockSpeed.stringValue = String(format: "%.2f MHz %.0f fps", mhz, fps)
             clockSpeedBar.doubleValue = 10 * mhz
         
             // Let the cursor disappear in fullscreen mode
@@ -588,16 +567,7 @@ extension MyController {
  
     func processMessage(_ msg: Message) {
 
-        /*
-        var drive : AmigaDriveProxy? {
-            get {
-                assert(msg.data == 0 || msg.data == 1)
-                return msg.data == 0 ? amigaProxy?.df0 : amigaProxy?.df1
-            }
-        }
-        */
-        
-        switch (msg.type) {
+        switch msg.type {
     
         case MSG_CONFIG,
              MSG_MEM_LAYOUT:
@@ -880,14 +850,13 @@ extension MyController {
     
     @IBAction func alwaysWarpAction(_ sender: Any!) {
         
-        undoManager?.registerUndo(withTarget: self) {
-            targetSelf in targetSelf.alwaysWarpAction(sender)
+        undoManager?.registerUndo(withTarget: self) { targetSelf in
+            targetSelf.alwaysWarpAction(sender)
         }
     
         alwaysWarp = !alwaysWarp
     }
-    
-    
+
     //
     // Misc
     //

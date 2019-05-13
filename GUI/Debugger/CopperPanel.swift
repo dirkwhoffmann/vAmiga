@@ -17,16 +17,14 @@ extension Inspector {
         track("Refreshing Copper inspector tab")
         
         if everything {
-            
-            for (c,f) in [ copCOPPC:   fmt24,
-                           copCOPINS1: fmt16,
-                           copCOPINS2: fmt16,
-                           copCOP1LC:  fmt24,
-                           copCOP2LC:  fmt24,
-                           ]
-            {
-                assignFormatter(f, c!)
-            }
+
+            let elements = [ copCOPPC: fmt24,
+                             copCOPINS1: fmt16,
+                             copCOPINS2: fmt16,
+                             copCOP1LC: fmt24,
+                             copCOP2LC: fmt24
+            ]
+            for (c, f) in elements { assignFormatter(f, c!) }
         }
         
         copActive.state = info.active ? .on : .off

@@ -13,23 +13,19 @@ import Cocoa
  * This variable is global and can be accessed from anywhere in the Swift code.
  */
 var myAppDelegate: MyAppDelegate {
-    get {
-        let delegate = NSApp.delegate as? MyAppDelegate
-        return delegate!
-    }
+    let delegate = NSApp.delegate as? MyAppDelegate
+    return delegate!
 }
 
 /* The document of the currently active emulator instance.
  * This variable is global and can be accessed from anywhere in the Swift code.
  */
 var myDocument: MyDocument? {
-    get {
-        if let doc = NSApplication.shared.orderedDocuments.first as? MyDocument {
-            return doc
-        } else {
-            track("No document object found. Returning nil.")
-            return nil
-        }
+    if let doc = NSApplication.shared.orderedDocuments.first as? MyDocument {
+        return doc
+    } else {
+        track("No document object found. Returning nil.")
+        return nil
     }
 }
 
@@ -37,40 +33,32 @@ var myDocument: MyDocument? {
  * This variable is global and can be accessed from anywhere in the Swift code.
  */
 var myController: MyController? {
-    get {
-        return myDocument?.windowControllers.first as? MyController
-    }
+    return myDocument?.windowControllers.first as? MyController
 }
 
 /* The window of the currently active emulator instance.
  * This variable is global and can be accessed from anywhere in the Swift code.
  */
 var myWindow: NSWindow? {
-    get {
-        return myController?.window
-    }
+    return myController?.window
 }
 
 /* The Amiga proxy of the currently active emulator instance.
  * This variable is global and can be accessed from anywhere in the Swift code.
  */
 var amigaProxy: AmigaProxy? {
-    get {
-        return myDocument?.amiga
-    }
+    return myDocument?.amiga
 }
-
-
 
 /* An event tap for interception CGEvents
  * CGEvents are intercepted to establish a direct mapping of the Command keys
  * to the Amiga keys. To make such a mapping work, we have to disable all
  * keyboard shortcuts, even the system-wide ones.
  */
-var eventTap : CFMachPort?
+var eventTap: CFMachPort?
 
 // Use this variable to switch direct mapping of the Command keys on or off
-var mapCommandKeys : Bool {
+var mapCommandKeys: Bool {
     
     get {
         return eventTap != nil
@@ -149,7 +137,6 @@ func cgEventCallback(proxy: CGEventTapProxy,
     return Unmanaged.passRetained(event)
 }
 
-
 //
 // Application delegate
 //
@@ -163,10 +150,10 @@ func cgEventCallback(proxy: CGEventTapProxy,
     @IBOutlet weak var df3Menu: NSMenuItem!
 
     // Inspector (opened as a separate window)
-    var inspector: Inspector? = nil
+    var inspector: Inspector?
     
     // Virtual keyboard (opened as a separate window)
-    var virtualKeyboard: VirtualKeyboardController? = nil
+    var virtualKeyboard: VirtualKeyboardController?
     
     // The list of recently inserted disk URLs.
     var recentlyInsertedDiskURLs: [URL] = []
@@ -247,7 +234,7 @@ func cgEventCallback(proxy: CGEventTapProxy,
     
     func noteNewRecentlyExportedDiskURL(_ url: URL, drive nr: Int) {
         
-        switch(nr) {
+        switch nr {
             
         case 0: noteRecentlyUsedURL(url, to: &recentlyExportedDisk0URLs, size: 1)
         case 1: noteRecentlyUsedURL(url, to: &recentlyExportedDisk1URLs, size: 1)
@@ -258,7 +245,7 @@ func cgEventCallback(proxy: CGEventTapProxy,
     
     func getRecentlyExportedDiskURL(_ pos: Int, drive nr: Int) -> URL? {
         
-        switch(nr) {
+        switch nr {
             
         case 0: return getRecentlyUsedURL(pos, from: recentlyExportedDisk0URLs)
         case 1: return getRecentlyUsedURL(pos, from: recentlyExportedDisk1URLs)
@@ -269,7 +256,7 @@ func cgEventCallback(proxy: CGEventTapProxy,
     
     func clearRecentlyExportedDiskURLs(drive nr: Int) {
         
-        switch(nr) {
+        switch nr {
             
         case 0: recentlyExportedDisk0URLs = []
         case 1: recentlyExportedDisk1URLs = []
@@ -281,7 +268,7 @@ func cgEventCallback(proxy: CGEventTapProxy,
     
     func noteNewRecentlyUsedURL(_ url: URL) {
         
-        switch (url.pathExtension.uppercased()) {
+        switch url.pathExtension.uppercased() {
             
         case "ADF":
             noteNewRecentlyInsertedDiskURL(url)
@@ -291,7 +278,6 @@ func cgEventCallback(proxy: CGEventTapProxy,
         }
     }
 }
-
 
 //
 // Personal delegation methods

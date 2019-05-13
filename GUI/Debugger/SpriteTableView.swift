@@ -24,7 +24,7 @@ class SpriteTableView: NSTableView {
 
         if everything {
            
-            for (c,f) in ["addr": fmt24] {
+            for (c, f) in ["addr": fmt24] {
                 let columnId = NSUserInterfaceItemIdentifier(rawValue: c)
                 if let column = tableColumn(withIdentifier: columnId) {
                     if let cell = column.dataCell as? NSCell {
