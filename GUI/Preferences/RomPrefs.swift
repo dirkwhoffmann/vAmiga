@@ -35,11 +35,8 @@ struct Rom {
     static let kick204_37_175      = 0x845588ccf58fce86 as UInt64
 }
 
-    
-let knownRoms : [UInt64 : String] = [
+let knownRoms: [UInt64: String] = [
 
-    // Rom.missing:             "",
-    
     // Boot Roms
     Rom.boot_252179_01:      "Amiga 1000 Boot Rom (252179-01)",
     Rom.boot_252180_01:      "Amiga 1000 Boot Rom (252180-01)",
@@ -160,19 +157,18 @@ extension PreferencesController {
         romLockSubText.isHidden = poweredOff
     }
 
-    
     //
     // Action methods
     //
 
-    @IBAction func romUnlockAction(_ sender: Any!)
-    {
+    @IBAction func romUnlockAction(_ sender: Any!) {
+        
         amigaProxy?.powerOff()
         refresh()
     }
     
-    @IBAction func romDeleteAction(_ sender: Any!)
-    {
+    @IBAction func romDeleteAction(_ sender: Any!) {
+        
         if amigaProxy?.config().model == A1000 {
             
             myController?.bootRomURL = URL(fileURLWithPath: "/")
@@ -187,8 +183,8 @@ extension PreferencesController {
         refresh()
     }
     
-    @IBAction func romFactorySettingsAction(_ sender: NSButton!)
-    {
+    @IBAction func romFactorySettingsAction(_ sender: NSButton!) {
+        
         // Remove Boot Rom
         amigaProxy?.mem.deleteBootRom()
         
