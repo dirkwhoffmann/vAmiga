@@ -9,7 +9,7 @@
 
 import Foundation
 
-class TraceTableView : NSTableView {
+class TraceTableView: NSTableView {
     
     @IBOutlet weak var inspector: Inspector!
     
@@ -33,7 +33,7 @@ class TraceTableView : NSTableView {
     }
 }
 
-extension TraceTableView : NSTableViewDataSource {
+extension TraceTableView: NSTableViewDataSource {
     
     func numberOfRows(in tableView: NSTableView) -> Int { return Int(CPUINFO_INSTR_COUNT); }
     

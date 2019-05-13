@@ -9,7 +9,7 @@
 
 import Foundation
 
-class BreakTableView : NSTableView {
+class BreakTableView: NSTableView {
     
     @IBOutlet weak var inspector: Inspector!
     
@@ -26,9 +26,9 @@ class BreakTableView : NSTableView {
     
     func refresh(everything: Bool) {
         
-        if (everything) {
+        if everything {
             cpu = amigaProxy!.cpu
-            for (c,f) in ["addr" : fmt24] {
+            for (c, f) in ["addr": fmt24] {
                 let columnId = NSUserInterfaceItemIdentifier(rawValue: c)
                 if let column = tableColumn(withIdentifier: columnId) {
                     if let cell = column.dataCell as? NSCell {
@@ -62,7 +62,7 @@ class BreakTableView : NSTableView {
     }
 }
 
-extension BreakTableView : NSTableViewDataSource {
+extension BreakTableView: NSTableViewDataSource {
     
     func numberOfRows(in tableView: NSTableView) -> Int {
         
@@ -94,7 +94,7 @@ extension BreakTableView : NSTableViewDataSource {
     }
 }
 
-extension BreakTableView : NSTableViewDelegate {
+extension BreakTableView: NSTableViewDelegate {
     
     func tableView(_ tableView: NSTableView, willDisplayCell cell: Any, for tableColumn: NSTableColumn?, row: Int) {
         

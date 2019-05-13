@@ -243,7 +243,7 @@ class MyController: NSWindowController, MessageReceiver {
     var driveNoise = Defaults.driveNoise
     var driveNoiseNoPoll = Defaults.driveNoiseNoPoll
     var driveBlankDiskFormat = Defaults.driveBlankDiskFormat
-    var driveBlankDiskFormatIntValue : Int {
+    var driveBlankDiskFormatIntValue: Int {
         get { return Int(driveBlankDiskFormat.rawValue) }
         set { driveBlankDiskFormat = FileSystemType.init(newValue) }
     }
@@ -329,7 +329,7 @@ class MyController: NSWindowController, MessageReceiver {
     }
     
     // Returns the icon of the sand clock in the bottom bar
-    var hourglassIcon : NSImage? {
+    var hourglassIcon: NSImage? {
         if amiga.warp() {
             if alwaysWarp {
                 return NSImage.init(named: "hourglass3Template")

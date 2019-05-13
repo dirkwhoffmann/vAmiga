@@ -15,10 +15,10 @@ class InstrTableView: NSTableView {
     var cpu = amigaProxy?.cpu
     
     // Display caches
-    var addrInRow: [Int:UInt32] = [:]
-    var instrInRow: [Int:String] = [:]
-    var dataInRow: [Int:String] = [:]
-    var rowForAddr: [UInt32:Int] = [:]
+    var addrInRow: [Int: UInt32] = [:]
+    var instrInRow: [Int: String] = [:]
+    var dataInRow: [Int: String] = [:]
+    var rowForAddr: [UInt32: Int] = [:]
     var hex = true
     
     override func awakeFromNib() {
@@ -114,16 +114,16 @@ class InstrTableView: NSTableView {
         dataInRow = [:]
         rowForAddr = [:]
         
-        for i in 0 ..< Int(CPUINFO_INSTR_COUNT) {
-            if addr <= 0xFFFFFF {
-                if var info = cpu?.getInstrInfo(i) {
-                    let bytes = info.bytes
-                    instrInRow[i] = String(cString: &info.instr.0)
-                    addrInRow[i] = addr
-                    dataInRow[i] = String(cString: &info.data.0)
-                    rowForAddr[addr] = i
-                    addr += UInt32(bytes)
-                }
+        for i in 0 ..< Int(CPUINFO_INSTR_COUNT) where addr <= 0xFFFFFF {
+
+            if var info = cpu?.getInstrInfo(i) {
+
+                let bytes = info.bytes
+                instrInRow[i] = String(cString: &info.instr.0)
+                addrInRow[i] = addr
+                dataInRow[i] = String(cString: &info.data.0)
+                rowForAddr[addr] = i
+                addr += UInt32(bytes)
             }
         }
         
