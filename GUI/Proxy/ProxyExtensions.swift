@@ -7,14 +7,13 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-
 import Foundation
 
 public extension AmigaProxy {
     
     func df(_ nr: Int) -> DriveProxy {
         
-        switch (nr) {
+        switch nr {
             
         case 0: return df0
         case 1: return df1
@@ -72,11 +71,11 @@ public extension AmigaProxy {
 
 public extension DriveProxy {
     
-    var icon : NSImage {
+    var icon: NSImage {
         get {
-            var name : String
+            var name: String
             
-            if (hasWriteProtectedDisk()) {
+            if hasWriteProtectedDisk() {
                 name = hasModifiedDisk() ? "diskUPTemplate" : "diskPTemplate"
             } else {
                 name = hasModifiedDisk() ? "diskUTemplate" : "diskTemplate"

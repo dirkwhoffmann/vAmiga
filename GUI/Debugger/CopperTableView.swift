@@ -23,11 +23,11 @@ class CopperTableView : NSTableView {
     
     func refresh(everything: Bool) {
         
-        if (everything) {
+        if everything {
             
             amiga = amigaProxy
             
-            for (c,f) in ["addr" : fmt24, "data1" : fmt16, "data2" : fmt16 ] {
+            for (c,f) in ["addr": fmt24, "data1": fmt16, "data2": fmt16 ] {
                 let columnId = NSUserInterfaceItemIdentifier(rawValue: c)
                 if let column = tableColumn(withIdentifier: columnId) {
                     if let cell = column.dataCell as? NSCell {
@@ -52,7 +52,7 @@ class CopperTableView : NSTableView {
     
     @IBAction func copMinusAction(_ sender: NSButton!) {
         
-        if (numRows > 0) {
+        if numRows > 0 {
             numRows -= 1
         } else {
             NSSound.beep()
@@ -61,11 +61,11 @@ class CopperTableView : NSTableView {
     }
 }
 
-extension CopperTableView : NSTableViewDataSource {
+extension CopperTableView: NSTableViewDataSource {
     
-    var coplc : Int {
+    var coplc: Int {
         get {
-            assert(tag == 1 || tag == 2);
+            assert(tag == 1 || tag == 2)
             let info = amiga!.dma.getCopperInfo()
             return (tag == 1) ? Int(info.coplc.0) : Int(info.coplc.1)
         }
@@ -97,13 +97,13 @@ extension CopperTableView : NSTableViewDataSource {
     }
 }
 
-extension CopperTableView : NSTableViewDelegate {
+extension CopperTableView: NSTableViewDelegate {
     
     func tableView(_ tableView: NSTableView, setObjectValue object: Any?, for tableColumn: NSTableColumn?, row: Int) {
         
         var addr = 0
         
-        switch(tableColumn?.identifier.rawValue) {
+        switch tableColumn?.identifier.rawValue {
         
         case "data1":
             addr = coplc + 4 * row
