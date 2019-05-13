@@ -104,7 +104,7 @@ AudioUnit::hsyncHandler()
         }
         
         // if (dmaEnabled[0]) printf("%d ", sample);
-        writeData(&sample, 1);
+        writeData(sample, sample);
         executed += missing;
     }
     
@@ -250,6 +250,7 @@ AudioUnit::clearRingbuffer()
     alignWritePtr();
 }
 
+/*
 float
 AudioUnit::readData()
 {
@@ -272,6 +273,51 @@ AudioUnit::readData()
     
     return value;
 }
+*/
+
+void
+AudioUnit::readMonoSample(float *mono)
+{
+    float left, right;
+
+    readStereoSample(&left, &right);
+    *mono = left + right;
+}
+
+void
+AudioUnit::readStereoSample(float *left, float *right)
+{
+    // Read sound samples
+    float l = ringBuffer[readPtr];
+    float r = l; // TODO
+
+    // Modify volume
+    if (volume != targetVolume) {
+        if (volume < targetVolume) {
+            volume += MIN(volumeDelta, targetVolume - volume);
+        } else {
+            volume -= MIN(volumeDelta, volume - targetVolume);
+        }
+    }
+
+    // Apply volume
+    float divider = 40000.0f;
+    if (volume > 0) {
+        l *= (float)volume / divider;
+        r *= (float)volume / divider;
+    } else {
+        l = 0.0;
+        r = 0.0;
+    }
+
+    // Advance read pointer
+    advanceReadPtr();
+
+    // Write result
+    *left = l;
+    *right = r;
+}
+
 
 float
 AudioUnit::ringbufferData(size_t offset)
@@ -282,15 +328,14 @@ AudioUnit::ringbufferData(size_t offset)
 void
 AudioUnit::readMonoSamples(float *target, size_t n)
 {
-    // Check for buffer underflow
+    // Check for a buffer underflow
     if (samplesInBuffer() < n) {
         handleBufferUnderflow();
     }
     
-    // Read samples
+    // Read sound samples
     for (size_t i = 0; i < n; i++) {
-        float value = readData();
-        target[i] = value;
+        readMonoSample(target + i);
     }
 }
 
@@ -299,47 +344,39 @@ AudioUnit::readStereoSamples(float *target1, float *target2, size_t n)
 {
     // debug("read: %d write: %d Reading %d\n", readPtr, writePtr, n);
     
-    // Check for buffer underflow
-    if (samplesInBuffer() < n) {
+    // Check for a buffer underflow
+    if (samplesInBuffer() < n)
         handleBufferUnderflow();
-    }
     
-    // Read samples
-    for (unsigned i = 0; i < n; i++) {
-        float value = readData();
-        target1[i] = target2[i] = value;
-    }
+    // Read sound samples
+    for (unsigned i = 0; i < n; i++)
+        readStereoSample(target1 + i, target2 + i);
 }
 
 void
 AudioUnit::readStereoSamplesInterleaved(float *target, size_t n)
 {
-    // Check for buffer underflow
-    if (samplesInBuffer() < n) {
+    // Check for a buffer underflow
+    if (samplesInBuffer() < n)
         handleBufferUnderflow();
-    }
     
-    // Read samples
-    for (unsigned i = 0; i < n; i++) {
-        float value = readData();
-        target[i*2] = value;
-        target[i*2+1] = value;
-    }
+    // Read sound samples
+    for (unsigned i = 0; i < n; i++)
+        readStereoSample(target + 2*i, target + 2*i + 1);
 }
 
 void
-AudioUnit::writeData(short *data, size_t count)
+AudioUnit::writeData(short left, short right)
 {
     // Check for buffer overflow
-    if (bufferCapacity() < count) {
+    if (bufferCapacity() == 0)
         handleBufferOverflow();
-    }
     
     // Convert sound samples to floating point values and write into ringbuffer
-    for (unsigned i = 0; i < count; i++) {
-        ringBuffer[writePtr] = filter.apply(float(data[i]) * scale);
-        advanceWritePtr();
-    }
+    ringBuffer[writePtr] = filter.apply(float(left) * scale);
+    // TODO: right channel
+
+    advanceWritePtr();
 }
 
 void

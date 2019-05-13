@@ -212,8 +212,17 @@ public:
     void clearRingbuffer();
     
     // Reads a single audio sample from the ringbuffer
-    float readData();
-    
+    // DEPRECATED
+    // float readData();
+
+    // Reads sound samples from the sample buffers
+    void readMonoSample(float *mono);
+    void readStereoSample(float *left, float *right);
+
+
+    // Read a mono or two stereo samples from the ringbuffer
+
+
     // Reads a single audio sample without moving the read pointer
     float ringbufferData(size_t offset);
     
@@ -232,9 +241,9 @@ public:
      */
     void readStereoSamplesInterleaved(float *target, size_t n);
     
-    /* Writes a certain number of audio samples into ringbuffer
+    /* Writes a stereo sample into the ringbuffer
      */
-    void writeData(short *data, size_t count);
+    void writeData(short left, short right);
     
     /* Handles a buffer underflow condition.
      * A buffer underflow occurs when the computer's audio device needs sound

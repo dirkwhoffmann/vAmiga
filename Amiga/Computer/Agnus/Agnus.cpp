@@ -908,9 +908,8 @@ void
 Agnus::pokeAUDxLCH(int x, uint16_t value)
 {
     assert(x < 4);
-    
-    debug(1, "pokeAUD%dLCH(%X)\n", x, value);
-    // audlc[x] = REPLACE_HI_WORD(audlc[x], value & 0x7);
+    debug(2, "pokeAUD%dLCH(%X)\n", x, value);
+
     _paula->audioUnit.audlcLatch[x] =
     REPLACE_HI_WORD(_paula->audioUnit.audlcLatch[x], value & 0x7);
 }
@@ -919,9 +918,8 @@ void
 Agnus::pokeAUDxLCL(int x, uint16_t value)
 {
     assert(x < 4);
-    
-    debug(1, "pokeAUD%dLCL(%X)\n", x, value);
-    // audlc[x] = REPLACE_LO_WORD(audlc[x], value);
+    debug(2, "pokeAUD%dLCL(%X)\n", x, value);
+
     _paula->audioUnit.audlcLatch[x] =
     REPLACE_LO_WORD(_paula->audioUnit.audlcLatch[x], value);
 }
