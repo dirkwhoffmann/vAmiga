@@ -1,2 +1,3 @@
 disabled_rules: # rule identifiers to exclude from running
   - ignores_empty_lines
+  - trailing_whitespace
