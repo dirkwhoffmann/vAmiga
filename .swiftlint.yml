@@ -5,3 +5,4 @@ disabled_rules: # rule identifiers to exclude from running
   - identifier_name
   - line_length
   - file_length
+  - cyclomatic_complexity
