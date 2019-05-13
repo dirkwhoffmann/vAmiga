@@ -87,7 +87,7 @@ extension SpriteTableView : NSTableViewDelegate {
     
     func tableView(_ tableView: NSTableView, willDisplayCell cell: Any, for tableColumn: NSTableColumn?, row: Int) {
         
-        let cell = cell as! NSTextFieldCell
+        let cell = cell as? NSTextFieldCell
         let info = amiga!.denise.getInfo()
         
          if let index = colorIndex(tableColumn: tableColumn, row: row) {
@@ -96,24 +96,24 @@ extension SpriteTableView : NSTableViewDelegate {
             
             switch (inspector.selectedSprite) {
                 
-            case 0,1:
-                switch (index) {
+            case 0, 1:
+                switch index {
                 case 1: color = NSColor.init(rgba: info.color.17)
                 case 2: color = NSColor.init(rgba: info.color.18)
                 case 3: color = NSColor.init(rgba: info.color.19)
                 default: break
                 }
                 
-            case 2,3:
-                switch (index) {
+            case 2, 3:
+                switch index {
                 case 1: color = NSColor.init(rgba: info.color.21)
                 case 2: color = NSColor.init(rgba: info.color.22)
                 case 3: color = NSColor.init(rgba: info.color.23)
                 default: break
                 }
                 
-            case 4,5:
-                switch (index) {
+            case 4, 5:
+                switch index {
                 case 1: color = NSColor.init(rgba: info.color.25)
                 case 2: color = NSColor.init(rgba: info.color.26)
                 case 3: color = NSColor.init(rgba: info.color.27)
@@ -121,7 +121,7 @@ extension SpriteTableView : NSTableViewDelegate {
                 }
                 
             default:
-                switch (index) {
+                switch index {
                 case 1: color = NSColor.init(rgba: info.color.29)
                 case 2: color = NSColor.init(rgba: info.color.30)
                 case 3: color = NSColor.init(rgba: info.color.31)
@@ -129,7 +129,7 @@ extension SpriteTableView : NSTableViewDelegate {
                 }
             }
             
-            cell.backgroundColor = color
+            cell?.backgroundColor = color
         }
     }
     

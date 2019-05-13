@@ -121,11 +121,10 @@ class SnapshotDialog : DialogController  {
         }
     }
     
-    @IBAction func deleteAction(_ sender: Any!) {
+    @IBAction func deleteAction(_ sender: NSButton!) {
         
         track()
-        
-        let sender = sender as! NSButton
+
         amigaProxy?.deleteUserSnapshot(sender.tag)
         reloadUserSnapshotCache()
     }
@@ -137,16 +136,14 @@ class SnapshotDialog : DialogController  {
         hideSheet()
     }
     
-    @IBAction func autoDoubleClick(_ sender: Any!) {
-        
-        let sender = sender as! NSTableView
+    @IBAction func autoDoubleClick(_ sender: NSTableView!) {
+
         amigaProxy?.restoreAutoSnapshot(sender.selectedRow)
         cancelAction(self)
     }
     
-    @IBAction func userDoubleClick(_ sender: Any!) {
-        
-        let sender = sender as! NSTableView
+    @IBAction func userDoubleClick(_ sender: NSTableView!) {
+
         amigaProxy?.restoreUserSnapshot(sender.selectedRow)
         cancelAction(self)
     }
@@ -168,35 +165,38 @@ extension SnapshotDialog : NSTableViewDataSource, NSTableViewDelegate {
             return numUserSnapshots
         }
         
-        fatalError();
+        fatalError()
     }
     
-    func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView?{
+    func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
         
         let id = NSUserInterfaceItemIdentifier(rawValue: "defaultRow")
-        let result = tableView.makeView(withIdentifier: id, owner: self) as! SnapshotTableCellView
+        let view = tableView.makeView(withIdentifier: id, owner: self)
+
+        guard let result = view as? SnapshotTableCellView else { return nil }
+        // let result = tableView.makeView(withIdentifier: id, owner: self) as! SnapshotTableCellView
         
-        if (tableView == autoTableView) {
+        if tableView == autoTableView {
             
             result.preview.image = autoSnapshotImage[row]
             result.text.stringValue = autoTimeStamp[row]!
             result.subText.stringValue = autoTimeDiff[row]!
             result.delete.isHidden = true
             result.delete.tag = row
-            return result;
+            return result
         }
         
-        else if (tableView == userTableView) {
+        else if tableView == userTableView {
             
             result.preview.image = userSnapshotImage[row]
             result.text.stringValue = userTimeStamp[row]!
             result.subText.stringValue = userTimeDiff[row]!
             result.delete.isHidden = false
             result.delete.tag = row
-            return result;
+            return result
         }
     
-        fatalError();
+        fatalError()
     }
 }
 
@@ -222,11 +222,10 @@ extension SnapshotDialog {
         }
         
         // Get snapshot data
-        var data : Data
-        if (tableView == autoTableView) {
+        var data: Data
+        if tableView == autoTableView {
             data = amiga.autoSnapshotData(index)
-        }
-        else {
+        } else {
             assert(tableView == userTableView)
             data = amiga.userSnapshotData(index)
         }
@@ -237,7 +236,6 @@ extension SnapshotDialog {
         fileWrapper.preferredFilename = "Snapshot.vam"
         pboard.write(fileWrapper)
 
-        return true;
+        return true
     }
 }
-

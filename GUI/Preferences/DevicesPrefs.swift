@@ -138,7 +138,7 @@ extension PreferencesController {
             devRecordKey1 = nil
             devRecordKey2 = JoystickDirection(rawValue: (tag - 10))
         } else {
-            assert(false);
+            assert(false)
         }
         
         refresh()

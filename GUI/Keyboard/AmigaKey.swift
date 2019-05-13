@@ -24,7 +24,7 @@ struct AmigaKeycode {
      *  left shift, and $2B, cut out from the return key."
      *  [Amiga Hardware Reference, 3rd]
      */
-    struct ansi {
+    struct Ansi {
         static let grave         = 0x00
         static let digit1        = 0x01
         static let digit2        = 0x02
@@ -93,7 +93,7 @@ struct AmigaKeycode {
     }
     
    // Extra keys on international Amigas (ISO style)
-   struct iso {
+   struct Iso {
         static let hashtag       = 0x2B
         static let laceBrace     = 0x30
     }
@@ -142,74 +142,74 @@ struct AmigaKeycode {
 // Country specific keycaps
 let keycaps : [Int : [Layout: String]] = [
     
-    AmigaKeycode.ansi.grave:        [.generic: "~ `"],
-    AmigaKeycode.ansi.digit1:       [.generic: "! 1"],
-    AmigaKeycode.ansi.digit2:       [.generic: "\u{0022} 2"],
-    AmigaKeycode.ansi.digit3:       [.generic: "\u{00A3} 3", .german: "§ 3"],
-    AmigaKeycode.ansi.digit4:       [.generic: "$ 4"],
-    AmigaKeycode.ansi.digit5:       [.generic: "% 5"],
-    AmigaKeycode.ansi.digit6:       [.generic: "^ 6", .german: "& 6", .italian: "& 6"],
-    AmigaKeycode.ansi.digit7:       [.generic: "& 7", .german: "/ 7", .italian: "/ 7"],
-    AmigaKeycode.ansi.digit8:       [.generic: "* 8", .german: "( 8", .italian: "( 8"],
-    AmigaKeycode.ansi.digit9:       [.generic: "( 9", .german: ") 9", .italian: ") 9"],
-    AmigaKeycode.ansi.digit0:       [.generic: ") 0", .german: "= 0", .italian: "= 0"],
-    AmigaKeycode.ansi.minus:        [.generic: "_ -", .german: "? ß", .italian: "? ´"],
-    AmigaKeycode.ansi.equal:        [.generic: "+ =", .german: "` ´", .italian: "^ \u{00EC}"],
-    AmigaKeycode.ansi.backslash:    [.generic: "| \\"],
+    AmigaKeycode.Ansi.grave:        [.generic: "~ `"],
+    AmigaKeycode.Ansi.digit1:       [.generic: "! 1"],
+    AmigaKeycode.Ansi.digit2:       [.generic: "\u{0022} 2"],
+    AmigaKeycode.Ansi.digit3:       [.generic: "\u{00A3} 3", .german: "§ 3"],
+    AmigaKeycode.Ansi.digit4:       [.generic: "$ 4"],
+    AmigaKeycode.Ansi.digit5:       [.generic: "% 5"],
+    AmigaKeycode.Ansi.digit6:       [.generic: "^ 6", .german: "& 6", .italian: "& 6"],
+    AmigaKeycode.Ansi.digit7:       [.generic: "& 7", .german: "/ 7", .italian: "/ 7"],
+    AmigaKeycode.Ansi.digit8:       [.generic: "* 8", .german: "( 8", .italian: "( 8"],
+    AmigaKeycode.Ansi.digit9:       [.generic: "( 9", .german: ") 9", .italian: ") 9"],
+    AmigaKeycode.Ansi.digit0:       [.generic: ") 0", .german: "= 0", .italian: "= 0"],
+    AmigaKeycode.Ansi.minus:        [.generic: "_ -", .german: "? ß", .italian: "? ´"],
+    AmigaKeycode.Ansi.equal:        [.generic: "+ =", .german: "` ´", .italian: "^ \u{00EC}"],
+    AmigaKeycode.Ansi.backslash:    [.generic: "| \\"],
     
-    AmigaKeycode.ansi.keypad0:      [.generic: "0"],
+    AmigaKeycode.Ansi.keypad0:      [.generic: "0"],
         
-    AmigaKeycode.ansi.q:            [.generic: "Q"],
-    AmigaKeycode.ansi.w:            [.generic: "W"],
-    AmigaKeycode.ansi.e:            [.generic: "E"],
-    AmigaKeycode.ansi.r:            [.generic: "R"],
-    AmigaKeycode.ansi.t:            [.generic: "T"],
-    AmigaKeycode.ansi.y:            [.generic: "Y", .german: "Z"],
-    AmigaKeycode.ansi.u:            [.generic: "U"],
-    AmigaKeycode.ansi.i:            [.generic: "I"],
-    AmigaKeycode.ansi.o:            [.generic: "O"],
-    AmigaKeycode.ansi.p:            [.generic: "P"],
-    AmigaKeycode.ansi.lBracket:     [.generic: "[ {", .german: "Ü", .italian: "\u{00E9} \u{00E8}"],
-    AmigaKeycode.ansi.rBracket:     [.generic: "] }", .german: "* +", .italian: "* +"],
+    AmigaKeycode.Ansi.q:            [.generic: "Q"],
+    AmigaKeycode.Ansi.w:            [.generic: "W"],
+    AmigaKeycode.Ansi.e:            [.generic: "E"],
+    AmigaKeycode.Ansi.r:            [.generic: "R"],
+    AmigaKeycode.Ansi.t:            [.generic: "T"],
+    AmigaKeycode.Ansi.y:            [.generic: "Y", .german: "Z"],
+    AmigaKeycode.Ansi.u:            [.generic: "U"],
+    AmigaKeycode.Ansi.i:            [.generic: "I"],
+    AmigaKeycode.Ansi.o:            [.generic: "O"],
+    AmigaKeycode.Ansi.p:            [.generic: "P"],
+    AmigaKeycode.Ansi.lBracket:     [.generic: "[ {", .german: "Ü", .italian: "\u{00E9} \u{00E8}"],
+    AmigaKeycode.Ansi.rBracket:     [.generic: "] }", .german: "* +", .italian: "* +"],
 
-    AmigaKeycode.ansi.keypad1:      [.generic: "1"],
-    AmigaKeycode.ansi.keypad2:      [.generic: "2"],
-    AmigaKeycode.ansi.keypad3:      [.generic: "3"],
+    AmigaKeycode.Ansi.keypad1:      [.generic: "1"],
+    AmigaKeycode.Ansi.keypad2:      [.generic: "2"],
+    AmigaKeycode.Ansi.keypad3:      [.generic: "3"],
 
-    AmigaKeycode.ansi.a:            [.generic: "A"],
-    AmigaKeycode.ansi.s:            [.generic: "S"],
-    AmigaKeycode.ansi.d:            [.generic: "D"],
-    AmigaKeycode.ansi.f:            [.generic: "F"],
-    AmigaKeycode.ansi.g:            [.generic: "G"],
-    AmigaKeycode.ansi.h:            [.generic: "H"],
-    AmigaKeycode.ansi.j:            [.generic: "J"],
-    AmigaKeycode.ansi.k:            [.generic: "K"],
-    AmigaKeycode.ansi.l:            [.generic: "L"],
-    AmigaKeycode.ansi.semicolon:    [.generic: "; :", .german: "Ö", .italian: "@ \u{00F2}"],
-    AmigaKeycode.ansi.quote:        [.generic: "# @", .german: "Ä", .italian: "# \u{00E0}"],
+    AmigaKeycode.Ansi.a:            [.generic: "A"],
+    AmigaKeycode.Ansi.s:            [.generic: "S"],
+    AmigaKeycode.Ansi.d:            [.generic: "D"],
+    AmigaKeycode.Ansi.f:            [.generic: "F"],
+    AmigaKeycode.Ansi.g:            [.generic: "G"],
+    AmigaKeycode.Ansi.h:            [.generic: "H"],
+    AmigaKeycode.Ansi.j:            [.generic: "J"],
+    AmigaKeycode.Ansi.k:            [.generic: "K"],
+    AmigaKeycode.Ansi.l:            [.generic: "L"],
+    AmigaKeycode.Ansi.semicolon:    [.generic: "; :", .german: "Ö", .italian: "@ \u{00F2}"],
+    AmigaKeycode.Ansi.quote:        [.generic: "# @", .german: "Ä", .italian: "# \u{00E0}"],
 
-    AmigaKeycode.ansi.keypad4:      [.generic: "4"],
-    AmigaKeycode.ansi.keypad5:      [.generic: "5"],
-    AmigaKeycode.ansi.keypad6:      [.generic: "6"],
+    AmigaKeycode.Ansi.keypad4:      [.generic: "4"],
+    AmigaKeycode.Ansi.keypad5:      [.generic: "5"],
+    AmigaKeycode.Ansi.keypad6:      [.generic: "6"],
 
-    AmigaKeycode.ansi.z:            [.generic: "Z", .german: "Y"],
-    AmigaKeycode.ansi.x:            [.generic: "X"],
-    AmigaKeycode.ansi.c:            [.generic: "C"],
-    AmigaKeycode.ansi.v:            [.generic: "V"],
-    AmigaKeycode.ansi.b:            [.generic: "B"],
-    AmigaKeycode.ansi.n:            [.generic: "N"],
-    AmigaKeycode.ansi.m:            [.generic: "M"],
-    AmigaKeycode.ansi.comma:        [.generic: "< ,", .german: "; ,", .italian: "; ,"],
-    AmigaKeycode.ansi.period:       [.generic: "> .", .german: ": .", .italian: ": ."],
-    AmigaKeycode.ansi.slash:        [.generic: "? /", .german: "_ -", .italian: "_ -"],
+    AmigaKeycode.Ansi.z:            [.generic: "Z", .german: "Y"],
+    AmigaKeycode.Ansi.x:            [.generic: "X"],
+    AmigaKeycode.Ansi.c:            [.generic: "C"],
+    AmigaKeycode.Ansi.v:            [.generic: "V"],
+    AmigaKeycode.Ansi.b:            [.generic: "B"],
+    AmigaKeycode.Ansi.n:            [.generic: "N"],
+    AmigaKeycode.Ansi.m:            [.generic: "M"],
+    AmigaKeycode.Ansi.comma:        [.generic: "< ,", .german: "; ,", .italian: "; ,"],
+    AmigaKeycode.Ansi.period:       [.generic: "> .", .german: ": .", .italian: ": ."],
+    AmigaKeycode.Ansi.slash:        [.generic: "? /", .german: "_ -", .italian: "_ -"],
 
-    AmigaKeycode.ansi.keypadDecimal: [.generic: "."],
-    AmigaKeycode.ansi.keypad7:      [.generic: "7"],
-    AmigaKeycode.ansi.keypad8:      [.generic: "8"],
-    AmigaKeycode.ansi.keypad9:      [.generic: "9"],
+    AmigaKeycode.Ansi.keypadDecimal: [.generic: "."],
+    AmigaKeycode.Ansi.keypad7:      [.generic: "7"],
+    AmigaKeycode.Ansi.keypad8:      [.generic: "8"],
+    AmigaKeycode.Ansi.keypad9:      [.generic: "9"],
 
-    AmigaKeycode.iso.hashtag:       [.generic: "", .german: "^ #", .italian: "§ \u{00F9}"],
-    AmigaKeycode.iso.laceBrace:     [.generic: "", .german: "> <", .italian: "> <"],
+    AmigaKeycode.Iso.hashtag:       [.generic: "", .german: "^ #", .italian: "§ \u{00F9}"],
+    AmigaKeycode.Iso.laceBrace:     [.generic: "", .german: "> <", .italian: "> <"],
 
     AmigaKeycode.space:             [.generic: ""],
     AmigaKeycode.backspace:         [.generic: "\u{2190}"],
@@ -320,7 +320,7 @@ extension AmigaKey {
     // Special keys (commons)
     private static let specialKeys : [Int : (String,String)] = [
         
-        AmigaKeycode.ansi.keypad0:   ("200x100", "white"),
+        AmigaKeycode.Ansi.keypad0:   ("200x100", "white"),
         AmigaKeycode.escape:         ("100x100", "dark"),
         AmigaKeycode.f1:             ("125x100", "dark"),
         AmigaKeycode.f2:             ("125x100", "dark"),
@@ -337,7 +337,7 @@ extension AmigaKey {
     // Special keys (A1000 commons)
     private static let a1000commons : [Int : (String,String)] = [
         
-        AmigaKeycode.ansi.grave:     ("125x100", "white"),
+        AmigaKeycode.Ansi.grave:     ("125x100", "white"),
         AmigaKeycode.space:          ("750x100", "white"),
         AmigaKeycode.backspace:      ("175x100", "white"),
         AmigaKeycode.tab:            ("175x100", "white"),
@@ -367,7 +367,7 @@ extension AmigaKey {
     // Special keys (A500 commons)
     private static let a500commons : [Int : (String,String)] = [
         
-        AmigaKeycode.ansi.grave:     ("150x100", "dark"),
+        AmigaKeycode.Ansi.grave:     ("150x100", "dark"),
         AmigaKeycode.space:          ("900x100", "white"),
         AmigaKeycode.backspace:      ("100x100", "dark"),
         AmigaKeycode.tab:            ("200x100", "dark"),

@@ -96,13 +96,13 @@ extension PreferencesController {
         let driveNr = sender.tag
         amigaProxy?.configureDrive(driveNr, connected: sender.state == .on)
         refresh()
-        
+
+        /*
         switch driveNr {
         case 1: myAppDelegate.df1Menu.isHidden = sender.state == .off
-        // TODO: case 2: (THERE IS NO MENU FOR DF2 YET)
-        // TODO: case 3: (THERE IS NO MENU FOR DF3 YET)
         default: break
         }
+        */
     }
     
     @IBAction func hwDriveTypeAction(_ sender: NSPopUpButton!) {
@@ -132,7 +132,6 @@ extension PreferencesController {
         amigaProxy?.configureFifoBuffering(sender.state == .on)
         refresh()
     }
-
     
     @IBAction func hwUnlockAction(_ sender: Any!) {
         

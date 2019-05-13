@@ -664,7 +664,7 @@ extension MyController {
 
         case MSG_DRIVE_CONNECT:
             
-            switch (msg.data) {
+            switch msg.data {
                 
             case 0: myAppDelegate.df0Menu.isHidden = false
             case 1: myAppDelegate.df1Menu.isHidden = false
@@ -677,7 +677,7 @@ extension MyController {
             
         case MSG_DRIVE_DISCONNECT:
             
-            switch (msg.data) {
+            switch msg.data {
             case 0: myAppDelegate.df0Menu.isHidden = true
             case 1: myAppDelegate.df1Menu.isHidden = true
             case 2: myAppDelegate.df2Menu.isHidden = true
@@ -704,7 +704,7 @@ extension MyController {
         case MSG_DRIVE_LED_ON:
             
             let image = NSImage.init(named: "driveLedOn")
-            switch (msg.data) {
+            switch msg.data {
             case 0: df0LED.image = image
             case 1: df1LED.image = image
             case 2: df2LED.image = image
@@ -715,7 +715,7 @@ extension MyController {
         case MSG_DRIVE_LED_OFF:
             
             let image = NSImage.init(named: "driveLedOff")
-            switch (msg.data) {
+            switch msg.data {
             case 0: df0LED.image = image
             case 1: df1LED.image = image
             case 2: df2LED.image = image
@@ -748,10 +748,8 @@ extension MyController {
             if driveNoise && !driveNoiseNoPoll {
                 playSound(name: "drive_click", volume: 1.0)
             }
-            
-            
+
         // DEPRECATED MESSAGES BELOW...
- 
             
         case MSG_ROM_MISSING:
             openPreferences()
@@ -775,10 +773,7 @@ extension MyController {
         case MSG_CPU_HARD_BREAKPOINT_REACHED,
              MSG_CPU_ILLEGAL_INSTRUCTION:
             myAppDelegate.inspector?.refresh(everything: true)
-            
- 
-    
-     
+
         case MSG_KEYMATRIX,
              MSG_CHARSET:
             
@@ -817,8 +812,7 @@ extension MyController {
             
             // playSound:@"1541_door_open_1" volume:0.2];
             playSound(name: "drive_snatch_uae", volume: 0.1)
-            
-   
+
         case MSG_VC1541_DISK,
              MSG_VC1541_NO_DISK,
              MSG_DISK_SAVED,
@@ -826,8 +820,7 @@ extension MyController {
              MSG_VC1541_MOTOR_ON,
              MSG_VC1541_MOTOR_OFF:
             break
-    
-            
+
         default:
             
             track("Unknown message: \(msg)")
@@ -854,8 +847,7 @@ extension MyController {
 
     // Keyboard events are handled by the emulator window.
     // If they are handled here, some keys such as 'TAB' don't trigger an event.
- 
-    
+
     //
     //  Game pad events
     //
@@ -865,12 +857,12 @@ extension MyController {
     @discardableResult
     func joystickEvent(slot: Int, events: [JoystickEvent]) -> Bool {
         
-        if (slot == inputDevice1) {
+        if slot == inputDevice1 {
             for event in events { amiga.joystick1.trigger(event) }
             return true
         }
 
-        if (slot == inputDevice2) {
+        if slot == inputDevice2 {
             for event in events { amiga.joystick2.trigger(event) }
             return true
         }
@@ -878,7 +870,6 @@ extension MyController {
         return false
     }    
 
-    
     //
     // Action methods (status bar)
     //

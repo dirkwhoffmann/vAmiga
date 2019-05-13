@@ -58,7 +58,7 @@ let knownRoms: [UInt64: String] = [
     Rom.kick13_35_5_h:       "Kickstart 1.3 (revision 34.5)",
     Rom.kick13_35_5_o:       "Kickstart 1.3 (revision 34.5)",
     
-    Rom.kick204_37_175:      "Kickstart 2.04 (revision 37.175)",
+    Rom.kick204_37_175:      "Kickstart 2.04 (revision 37.175)"
 ]
 
 extension PreferencesController {
