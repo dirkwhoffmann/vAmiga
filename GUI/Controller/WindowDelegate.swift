@@ -9,20 +9,20 @@
 
 import Foundation
 
-extension MyController : NSWindowDelegate {
+extension MyController: NSWindowDelegate {
         
     public func windowDidBecomeMain(_ notification: Notification) {
         
-        // track()
+        guard let window = notification.object as? NSWindow else { return }
         
         // Inform the application delegate
-        myAppDelegate.windowDidBecomeMain(notification.object as! NSWindow)
+        myAppDelegate.windowDidBecomeMain(window)
         
         // Start emulator if it was only paused while in background
         if pauseInBackground && pauseInBackgroundSavedState { amiga.run() }
 
         // Register for mouse move events
-        window?.acceptsMouseMovedEvents = true
+        window.acceptsMouseMovedEvents = true
         
         // Make sure the aspect ratio is correct
         adjustWindowSize()
@@ -63,28 +63,28 @@ extension MyController : NSWindowDelegate {
         metal.cleanup()
     }
     
-    public func windowWillEnterFullScreen(_ notification: Notification)
-    {
+    public func windowWillEnterFullScreen(_ notification: Notification) {
+
         track()
         metal.fullscreen = true
         showStatusBar(false)
     }
     
-    public func  windowDidEnterFullScreen(_ notification: Notification)
-    {
+    public func  windowDidEnterFullScreen(_ notification: Notification) {
+
         track()
     }
     
-    public func windowWillExitFullScreen(_ notification: Notification)
-    {
+    public func windowWillExitFullScreen(_ notification: Notification) {
+
         track()
         metal.fullscreen = false
         showStatusBar(true)
     }
     
-    public func windowDidExitFullScreen(_ notification: Notification)
-    {
-        track()
+    public func windowDidExitFullScreen(_ notification: Notification) {
+
+        // track()
     }
     
     public func window(_ window: NSWindow, willUseFullScreenPresentationOptions proposedOptions: NSApplication.PresentationOptions = []) -> NSApplication.PresentationOptions {
@@ -157,8 +157,8 @@ extension MyController {
             let correction = newsize.height - frame.size.height
             
             // Adjust frame
-            frame.origin.y -= correction;
-            frame.size = newsize;
+            frame.origin.y -= correction
+            frame.size = newsize
             
             window!.setFrame(frame, display: true)
         }

@@ -12,7 +12,6 @@ import Metal
 import MetalKit
 import MetalPerformanceShaders
 
-
 //
 // Additional uniforms needed by the vertex shader
 //
@@ -22,12 +21,11 @@ struct VertexUniforms {
     var mvp: simd_float4x4
 }
 
-
 //
 // Uniforms passed to all compute shaders and the fragment shader
 //
 
-struct ShaderOptions : Codable {
+struct ShaderOptions: Codable {
     
     var blur: Int32
     var blurRadius: Float
@@ -87,7 +85,6 @@ var ShaderDefaultsCRT = ShaderOptions(blur: 1,
                                       disalignmentH: 0.001,
                                       disalignmentV: 0.001)
 
-
 //
 // Additional uniforms needed by the fragment shader
 //
@@ -106,39 +103,38 @@ struct FragmentUniforms {
 // 
 
 // Parameters of a short / long frame texture delivered by the emulator
-struct EMULATOR_TEXTURE {
+struct EmulatorTexture {
     // static let size = (Int(1024), Int(512))
     static let size = (Int(768), Int(288))
 }
 
 // Parameters of a textures that combines a short and a long frame
-struct MERGED_TEXTURE {
+struct MergedTexture {
     // static let size = (Int(1024), Int(1024))
     static let size = (Int(768), Int(2 * 288))
     static let cutout = (Int(768), Int(2 * 288))
 }
 
 // Parameters of a (merged) texture that got upscaled
-struct UPSCALED_TEXTURE {
+struct UpscaledTexture {
     // static let size = (Int(2048), Int(2048))
     static let size = (Int(2 * 768), Int(2 * 2 * 288))
     static let cutout = (Int(2 * 768), Int(2 * 2 * 288))
 }
 
-
 //
 // Base class for all compute kernels
 //
 
-class ComputeKernel : NSObject {
+class ComputeKernel: NSObject {
 
-    var device : MTLDevice!
-    var kernel : MTLComputePipelineState!
+    var device: MTLDevice!
+    var kernel: MTLComputePipelineState!
 
     // Texture cutout (defines the rectangle the compute kernel is applied to)
     var cutout = (256, 256)
     
-    convenience init?(name: String, device: MTLDevice, library: MTLLibrary, cutout : (Int,Int)) {
+    convenience init?(name: String, device: MTLDevice, library: MTLLibrary, cutout: (Int,Int)) {
         
         self.init()
         
@@ -194,7 +190,7 @@ class ComputeKernel : NSObject {
         if var _options = options {
             encoder.setBytes(&_options,
                              length: MemoryLayout<ShaderOptions>.stride,
-                             index: 0);
+                             index: 0)
         }
         
         // Determine thread group size and number of groups
@@ -202,8 +198,8 @@ class ComputeKernel : NSObject {
         let groupH = kernel.maxTotalThreadsPerThreadgroup / groupW
         let threadsPerGroup = MTLSizeMake(groupW, groupH, 1)
         
-        let countW = (cutout.0) / groupW;
-        let countH = (cutout.1) / groupH;
+        let countW = (cutout.0) / groupW
+        let countH = (cutout.1) / groupH
         let threadgroupCount = MTLSizeMake(countW, countH, 1)
         
         // Finally, we're ready to dispatch
@@ -217,7 +213,7 @@ class ComputeKernel : NSObject {
 // Bypass filter
 //
 
-class BypassFilter : ComputeKernel {
+class BypassFilter: ComputeKernel {
     
     convenience init?(device: MTLDevice, library: MTLLibrary, cutout: (Int,Int)) {
         self.init(name: "bypass",
@@ -225,12 +221,11 @@ class BypassFilter : ComputeKernel {
     }
 }
 
-
 //
 // Texture merger
 //
 
-class MergeFilter : ComputeKernel {
+class MergeFilter: ComputeKernel {
     
     convenience init?(device: MTLDevice, library: MTLLibrary, cutout: (Int,Int)) {
         self.init(name: "merge",
@@ -238,12 +233,11 @@ class MergeFilter : ComputeKernel {
     }
 }
 
-
 //
 // Upscalers
 //
 
-class BypassUpscaler : ComputeKernel {
+class BypassUpscaler: ComputeKernel {
     
     convenience init?(device: MTLDevice, library: MTLLibrary, cutout: (Int,Int)) {
         self.init(name: "bypassupscaler",
@@ -251,7 +245,7 @@ class BypassUpscaler : ComputeKernel {
     }
 }
 
-class InPlaceEpxScaler : ComputeKernel {
+class InPlaceEpxScaler: ComputeKernel {
     
     convenience init?(device: MTLDevice, library: MTLLibrary, cutout: (Int,Int)) {
         self.init(name: "inPlaceEpx",
@@ -259,14 +253,14 @@ class InPlaceEpxScaler : ComputeKernel {
     }
 }
 
-class InPlaceXbrScaler : ComputeKernel {
+class InPlaceXbrScaler: ComputeKernel {
     
     convenience init?(device: MTLDevice, library: MTLLibrary, cutout: (Int,Int)) {
         self.init(name: "inPlaceXbr",
                   device: device, library: library, cutout: cutout)
     }
 }
-class EPXUpscaler : ComputeKernel {
+class EPXUpscaler: ComputeKernel {
     
     convenience init?(device: MTLDevice, library: MTLLibrary, cutout: (Int,Int)) {
         self.init(name: "epxupscaler",
@@ -274,7 +268,7 @@ class EPXUpscaler : ComputeKernel {
     }
 }
 
-class XBRUpscaler : ComputeKernel {
+class XBRUpscaler: ComputeKernel {
     
     convenience init?(device: MTLDevice, library: MTLLibrary, cutout: (Int,Int)) {
         self.init(name: "xbrupscaler",
@@ -282,12 +276,11 @@ class XBRUpscaler : ComputeKernel {
     }
 }
 
-
 //
 // Split filter
 //
 
-class SplitFilter : ComputeKernel {
+class SplitFilter: ComputeKernel {
 
     convenience init?(device: MTLDevice, library: MTLLibrary, cutout: (Int,Int)) {
         self.init(name: "split",
@@ -295,12 +288,11 @@ class SplitFilter : ComputeKernel {
     }
 }
 
-    
 //
 // Scanline filter
 //
 
-class SimpleScanlines : ComputeKernel {
+class SimpleScanlines: ComputeKernel {
     
     convenience init?(device: MTLDevice, library: MTLLibrary, cutout: (Int,Int)) {
         self.init(name: "scanlines",

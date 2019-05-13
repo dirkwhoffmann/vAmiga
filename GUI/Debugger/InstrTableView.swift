@@ -184,18 +184,18 @@ extension InstrTableView : NSTableViewDelegate {
     
     func tableView(_ tableView: NSTableView, willDisplayCell cell: Any, for tableColumn: NSTableColumn?, row: Int) {
         
-        let cell = cell as! NSTextFieldCell
+        let cell = cell as? NSTextFieldCell
         
         if let addr = addrInRow[row] {
 
             if cpu!.hasDisabledBreakpoint(at: addr) {
-                cell.textColor = NSColor.disabledControlTextColor
+                cell?.textColor = NSColor.disabledControlTextColor
             } else if cpu!.hasConditionalBreakpoint(at: addr) {
-                cell.textColor = NSColor.systemOrange
+                cell?.textColor = NSColor.systemOrange
             } else if cpu!.hasBreakpoint(at: addr) {
-                cell.textColor = NSColor.systemRed
+                cell?.textColor = NSColor.systemRed
             } else {
-                cell.textColor = NSColor.labelColor
+                cell?.textColor = NSColor.labelColor
             }
         }
     }

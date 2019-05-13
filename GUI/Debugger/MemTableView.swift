@@ -127,17 +127,17 @@ extension MemTableView : NSTableViewDataSource {
     }
 }
 
-extension MemTableView : NSTableViewDelegate {
+extension MemTableView: NSTableViewDelegate {
     
     func tableView(_ tableView: NSTableView, willDisplayCell cell: Any, for tableColumn: NSTableColumn?, row: Int) {
         
         var addr = inspector.bank * 65536 + row * 16
-        let cell = cell as! NSTextFieldCell
+        let cell = cell as? NSTextFieldCell
         
         if inspector.memSrc == MEM_UNMAPPED {
-            cell.textColor = NSColor.gray
+            cell?.textColor = NSColor.gray
         } else {
-            cell.textColor = NSColor.textColor
+            cell?.textColor = NSColor.textColor
         }
         
         switch tableColumn?.identifier.rawValue {
@@ -151,7 +151,7 @@ extension MemTableView : NSTableViewDelegate {
         case "2": addr += 2; fallthrough
         case "0":
             if inspector.selected >> 1 == addr >> 1 {
-                cell.textColor = NSColor.red
+                cell?.textColor = NSColor.red
             }
         default:
             break

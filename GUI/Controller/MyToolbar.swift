@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-class MyToolbar : NSToolbar {
+class MyToolbar: NSToolbar {
     
     @IBOutlet weak var controller: MyController!
     
@@ -20,15 +20,15 @@ class MyToolbar : NSToolbar {
     override func validateVisibleItems() {
         
         guard let amiga = amigaProxy else { return }
-        let button = pauseTbItem.view as! NSButton
+        let button = pauseTbItem.view as? NSButton
         
-        button.isEnabled = amiga.isPoweredOn()
+        button?.isEnabled = amiga.isPoweredOn()
 
         if amiga.isRunning() {
-            button.image = NSImage.init(named: "pauseTemplate")
+            button?.image = NSImage.init(named: "pauseTemplate")
             pauseTbItem.label = "Pause"
         } else {
-            button.image = NSImage.init(named: "continueTemplate")
+            button?.image = NSImage.init(named: "continueTemplate")
             pauseTbItem.label = "Run"
         }
         

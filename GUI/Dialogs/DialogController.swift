@@ -33,13 +33,13 @@ class DialogWindow : NSWindow {
     // Called when the user presses ESC or Cmd+.
     override func cancelOperation(_ sender: Any?) {
         
-        let controller = delegate as! DialogController
-        controller.cancelAction(sender)
+        let controller = delegate as? DialogController
+        controller?.cancelAction(sender)
     }
 }
 
-class DialogController : NSWindowController
-{
+class DialogController : NSWindowController {
+    
     func showSheet(completionHandler handler:(() -> Void)? = nil) {
         
         track()

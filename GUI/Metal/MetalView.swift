@@ -271,8 +271,8 @@ public class MetalView: MTKView {
     public func updateScreenGeometry() {
     
         // Setup parameters looking good for a PAL texture
-        let textureW = CGFloat(EMULATOR_TEXTURE.size.0)
-        let textureH = CGFloat(EMULATOR_TEXTURE.size.1)
+        let textureW = CGFloat(EmulatorTexture.size.0)
+        let textureH = CGFloat(EmulatorTexture.size.1)
         let width    = CGFloat(728) //  CGFloat(HPIXELS)
         let height   = CGFloat(VPIXELS - 2)
 

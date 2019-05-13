@@ -9,7 +9,7 @@
 
 import Foundation
 
-class PreferencesController : DialogController {
+class PreferencesController: DialogController {
 
     @IBOutlet weak var prefTabView: NSTabView!
     
@@ -89,7 +89,7 @@ class PreferencesController : DialogController {
     @IBOutlet weak var vidBlurPopUp: NSPopUpButton!
     @IBOutlet weak var vidBlurRadiusSlider: NSSlider!
     
-    @IBOutlet weak var vidBloomPopup:NSPopUpButton!
+    @IBOutlet weak var vidBloomPopup: NSPopUpButton!
     @IBOutlet weak var vidBloomRadiusRSlider: NSSlider!
     @IBOutlet weak var vidBloomRadiusGSlider: NSSlider!
     @IBOutlet weak var vidBloomRadiusBSlider: NSSlider!
@@ -112,7 +112,6 @@ class PreferencesController : DialogController {
     @IBOutlet weak var vidEyeYSlider: NSSlider!
     @IBOutlet weak var vidEyeZSlider: NSSlider!
 
-    
     //
     // Emulator preferences
     //
@@ -140,7 +139,6 @@ class PreferencesController : DialogController {
     @IBOutlet weak var emuPauseInBackground: NSButton!
     @IBOutlet weak var emuAutoSnapshots: NSButton!
     @IBOutlet weak var emuSnapshotInterval: NSTextField!
-    
 
     //
     // Devices preferences
@@ -183,15 +181,13 @@ class PreferencesController : DialogController {
     @IBOutlet weak var devReleaseMouseWithKeys: NSButton!
     @IBOutlet weak var devReleaseMouseByShaking: NSButton!
 
-    
     // Joystick buttons
     @IBOutlet weak var devAutofire: NSButton!
     @IBOutlet weak var devAutofireCease: NSButton!
     @IBOutlet weak var devAutofireCeaseText: NSTextField!
     @IBOutlet weak var devAutofireBullets: NSTextField!
     @IBOutlet weak var devAutofireFrequency: NSSlider!
-    
-    
+
     //
     // Keymap preferences
     //
@@ -205,7 +201,7 @@ class PreferencesController : DialogController {
     var keyImage = Array(repeating: Array(repeating: nil as NSImage?, count: 8), count: 8)
     
     // Selected C64 key
-    var selectedKey: C64Key? = nil
+    var selectedKey: C64Key?
         
     override func awakeFromNib() {
     
@@ -258,7 +254,7 @@ class PreferencesController : DialogController {
     }
 }
 
-extension PreferencesController : NSTabViewDelegate {
+extension PreferencesController: NSTabViewDelegate {
 
     func tabView(_ tabView: NSTabView, didSelect tabViewItem: NSTabViewItem?) {
 
@@ -266,7 +262,7 @@ extension PreferencesController : NSTabViewDelegate {
     }
 }
 
-extension PreferencesController : NSTextFieldDelegate {
+extension PreferencesController: NSTextFieldDelegate {
     
     func controlTextDidChange(_ obj: Notification) {
         
@@ -280,13 +276,13 @@ extension PreferencesController : NSTextFieldDelegate {
                 
             case emuSnapshotInterval:
                 
-                if let _ = formatter?.number(from: view.stringValue) {
+                if formatter?.number(from: view.stringValue) != nil {
                     emuSnapshotIntervalAction(view)
                 }
                 
             case devAutofireBullets:
                 
-                if let _ = formatter?.number(from: view.stringValue) {
+                if formatter?.number(from: view.stringValue) != nil {
                     devAutofireBulletsAction(view)
                 }
                 

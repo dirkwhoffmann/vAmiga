@@ -777,11 +777,15 @@ extension MyController {
         case MSG_KEYMATRIX,
              MSG_CHARSET:
             
-            let appDelegate = NSApp.delegate as! MyAppDelegate
-            if appDelegate.virtualKeyboard != nil {
-                appDelegate.virtualKeyboard?.refresh()
+            let appDelegate = NSApp.delegate as? MyAppDelegate
+            appDelegate?.virtualKeyboard?.refresh()
+
+            /*
+            if appDelegate?.virtualKeyboard != nil {
+                appDelegate?.virtualKeyboard?.refresh()
             }
-            
+            */
+
             // virtualKeyboard?.refresh()
             virtualKeyboardSheet?.refresh()
 

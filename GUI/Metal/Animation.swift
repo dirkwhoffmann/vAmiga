@@ -231,9 +231,9 @@ public extension MetalView {
     // --------------------------------------------------------------------------------
     
     func matrix_from_perspective(fovY: Float,
-                                              aspect: Float,
-                                              nearZ: Float,
-                                              farZ: Float) -> matrix_float4x4 {
+                                 aspect: Float,
+                                 nearZ: Float,
+                                 farZ: Float) -> matrix_float4x4 {
         
         // Variant 1: Keeps correct aspect ratio independent of window size
         let yscale = 1.0 / tanf(fovY * 0.5) // 1 / tan == cot
@@ -258,7 +258,7 @@ public extension MetalView {
                                  y: Float,
                                  z: Float) -> matrix_float4x4 {
     
-        var m = matrix_identity_float4x4;
+        var m = matrix_identity_float4x4
         m.columns.3 = float4(x, y, z, 1.0)
     
         return m

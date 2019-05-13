@@ -14,7 +14,8 @@ import Cocoa
  */
 var myAppDelegate: MyAppDelegate {
     get {
-        return NSApp.delegate as! MyAppDelegate
+        let delegate = NSApp.delegate as? MyAppDelegate
+        return delegate!
     }
 }
 

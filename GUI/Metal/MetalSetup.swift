@@ -93,8 +93,8 @@ public extension MetalView {
         // Emulator textures (one for short frames, one for long frames)
         //
         
-        descriptor.width  = EMULATOR_TEXTURE.size.0;
-        descriptor.height = EMULATOR_TEXTURE.size.1;
+        descriptor.width  = EmulatorTexture.size.0;
+        descriptor.height = EmulatorTexture.size.1;
         
         // Emulator textures (raw data of long and short frames)
         descriptor.usage = [ .shaderRead ]
@@ -107,8 +107,8 @@ public extension MetalView {
         // Textures that combine a short and a long frame (not yet upscaled)
         //
         
-        descriptor.width  = MERGED_TEXTURE.size.0;
-        descriptor.height = MERGED_TEXTURE.size.1;
+        descriptor.width  = MergedTexture.size.0;
+        descriptor.height = MergedTexture.size.1;
         
         // Merged emulator texture (long frame + short frame)
         descriptor.usage = [ .shaderRead, .shaderWrite, .renderTarget ]
@@ -133,8 +133,8 @@ public extension MetalView {
         // Upscaled textures
         //
         
-        descriptor.width  = UPSCALED_TEXTURE.size.0;
-        descriptor.height = UPSCALED_TEXTURE.size.1;
+        descriptor.width  = UpscaledTexture.size.0;
+        descriptor.height = UpscaledTexture.size.1;
         
         // Upscaled emulator texture
         descriptor.usage = [ .shaderRead, .shaderWrite, .pixelFormatView, .renderTarget ]
@@ -169,8 +169,8 @@ public extension MetalView {
         assert(device != nil)
         assert(library != nil)
         
-        let mc = MERGED_TEXTURE.cutout
-        let uc = UPSCALED_TEXTURE.cutout
+        let mc = MergedTexture.cutout
+        let uc = UpscaledTexture.cutout
         
         // Build the mergefilter
         mergeFilter = MergeFilter.init(device: device!, library: library, cutout: mc)
