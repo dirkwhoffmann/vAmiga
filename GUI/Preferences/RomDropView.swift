@@ -9,8 +9,8 @@
 
 import Foundation
 
-extension NSDraggingInfo
-{
+extension NSDraggingInfo {
+    
     var url: URL? {
         let pasteBoard = draggingPasteboard
         let types = [NSPasteboard.PasteboardType.compatibleFileURL]
@@ -21,8 +21,8 @@ extension NSDraggingInfo
     }
 }
 
-class RomDropView : NSImageView
-{
+class RomDropView: NSImageView {
+    
     @IBOutlet var dialogController: DialogController!
 
     func acceptDragSource(url: URL) -> Bool {

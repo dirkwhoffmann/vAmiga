@@ -172,4 +172,3 @@ extension PreferencesController {
         refresh()
     }
 }
-

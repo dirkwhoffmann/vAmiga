@@ -39,10 +39,10 @@ private:
 public:
     
     // Number of buffer underflows since power up
-    uint64_t bufferUnderflows;
+    int64_t bufferUnderflows;
     
     // Number of buffer overflows since power up
-    uint64_t bufferOverflows;
+    int64_t bufferOverflows;
     
 private:
     

@@ -10,7 +10,7 @@
 import Foundation
 import Carbon.HIToolbox
 
-class PreferencesWindow : NSWindow {
+class PreferencesWindow: NSWindow {
     
     func respondToEvents() {
         DispatchQueue.main.async {
@@ -30,9 +30,9 @@ class PreferencesWindow : NSWindow {
         let controller = delegate as! PreferencesController
         controller.keyDown(with: MacKey.init(event: event))
     }
-    
+
     override func flagsChanged(with event: NSEvent) {
-        
+
         track()
         let controller = delegate as! PreferencesController
         
