@@ -103,7 +103,7 @@ extension MyController {
         
         if let fileContents = NSDictionary(contentsOf: url) {
             
-            if let dict = fileContents as? Dictionary<String,Any> {
+            if let dict = fileContents as? [String: Any] {
                 
                 let filteredDict = dict.filter { $0.0.hasPrefix("VAMIGA") }
                 
@@ -161,10 +161,10 @@ extension MyController {
 
     static func registerGeneralUserDefaults() {
         
-        let dictionary : [String:Any] = [
+        let dictionary: [String: Any] = [
             
             Keys.inputDevice1: Defaults.inputDevice1,
-            Keys.inputDevice2: Defaults.inputDevice2,
+            Keys.inputDevice2: Defaults.inputDevice2
         ]
         
         let defaults = UserDefaults.standard
@@ -174,12 +174,11 @@ extension MyController {
     func resetGeneralUserDefaults() {
         
         let defaults = UserDefaults.standard
-        
-        for key in [ Keys.inputDevice1,
+
+        let keys = [ Keys.inputDevice1,
                      Keys.inputDevice2 ]
-        {
-            defaults.removeObject(forKey: key)
-        }
+
+         for key in keys { defaults.removeObject(forKey: key) }
         
         loadGeneralUserDefaults()
     }
@@ -225,10 +224,10 @@ extension MyController {
     
     static func registerRomUserDefaults() {
         
-        let dictionary : [String:Any] = [
+        let dictionary: [String: Any] = [
             
             Keys.bootRom: Defaults.bootRom,
-            Keys.kickRom: Defaults.kickRom,
+            Keys.kickRom: Defaults.kickRom
             ]
         
         let defaults = UserDefaults.standard
@@ -238,12 +237,11 @@ extension MyController {
     func resetRomUserDefaults() {
         
         let defaults = UserDefaults.standard
-        
-        for key in [ Keys.bootRom,
-                     Keys.kickRom]
-        {
-            defaults.removeObject(forKey: key)
-        }
+
+        let keys = [ Keys.bootRom,
+                     Keys.kickRom ]
+
+        for key in keys { defaults.removeObject(forKey: key) }
         
         loadRomUserDefaults()
     }
@@ -274,7 +272,6 @@ extension MyController {
     }
 }
 
-
 //
 // User defaults (Devices)
 //
@@ -303,18 +300,18 @@ extension Defaults {
     
     // Joysticks
     static let joyKeyMap1 = [
-        MacKey.init(keyCode: kVK_LeftArrow):  JOYSTICK_LEFT.rawValue,
+        MacKey.init(keyCode: kVK_LeftArrow): JOYSTICK_LEFT.rawValue,
         MacKey.init(keyCode: kVK_RightArrow): JOYSTICK_RIGHT.rawValue,
-        MacKey.init(keyCode: kVK_DownArrow):  JOYSTICK_UP.rawValue,
-        MacKey.init(keyCode: kVK_UpArrow):    JOYSTICK_DOWN.rawValue,
-        MacKey.init(keyCode: kVK_Space):      JOYSTICK_FIRE.rawValue
+        MacKey.init(keyCode: kVK_DownArrow): JOYSTICK_UP.rawValue,
+        MacKey.init(keyCode: kVK_UpArrow): JOYSTICK_DOWN.rawValue,
+        MacKey.init(keyCode: kVK_Space): JOYSTICK_FIRE.rawValue
     ]
     static let joyKeyMap2 = [
-        MacKey.init(keyCode: kVK_ANSI_S):     JOYSTICK_LEFT.rawValue,
-        MacKey.init(keyCode: kVK_ANSI_D):     JOYSTICK_RIGHT.rawValue,
-        MacKey.init(keyCode: kVK_ANSI_E):     JOYSTICK_UP.rawValue,
-        MacKey.init(keyCode: kVK_ANSI_X):     JOYSTICK_DOWN.rawValue,
-        MacKey.init(keyCode: kVK_ANSI_C):     JOYSTICK_FIRE.rawValue
+        MacKey.init(keyCode: kVK_ANSI_S): JOYSTICK_LEFT.rawValue,
+        MacKey.init(keyCode: kVK_ANSI_D): JOYSTICK_RIGHT.rawValue,
+        MacKey.init(keyCode: kVK_ANSI_E): JOYSTICK_UP.rawValue,
+        MacKey.init(keyCode: kVK_ANSI_X): JOYSTICK_DOWN.rawValue,
+        MacKey.init(keyCode: kVK_ANSI_C): JOYSTICK_FIRE.rawValue
     ]
     
     static let disconnectJoyKeys = true
@@ -336,21 +333,21 @@ extension MyController {
     
     static func registerDevicesUserDefaults() {
         
-        let dictionary : [String:Any] = [
+        let dictionary: [String: Any] = [
 
             // Joysticks
-            Keys.disconnectJoyKeys:     Defaults.disconnectJoyKeys,
-            Keys.autofire:              Defaults.autofire,
-            Keys.autofireBullets:       Defaults.autofireBullets,
-            Keys.autofireFrequency:     Defaults.autofireFrequency,
+            Keys.disconnectJoyKeys: Defaults.disconnectJoyKeys,
+            Keys.autofire: Defaults.autofire,
+            Keys.autofireBullets: Defaults.autofireBullets,
+            Keys.autofireFrequency: Defaults.autofireFrequency,
             
             // Mouse
-            Keys.retainMouseKeyComb:    Defaults.retainMouseKeyComb,
-            Keys.retainMouseWithKeys:   Defaults.retainMouseWithKeys,
-            Keys.retainMouseByClick:    Defaults.retainMouseByClick,
+            Keys.retainMouseKeyComb: Defaults.retainMouseKeyComb,
+            Keys.retainMouseWithKeys: Defaults.retainMouseWithKeys,
+            Keys.retainMouseByClick: Defaults.retainMouseByClick,
             Keys.retainMouseByEntering: Defaults.retainMouseByEntering,
-            Keys.releaseMouseKeyComb:   Defaults.releaseMouseKeyComb,
-            Keys.releaseMouseWithKeys:  Defaults.releaseMouseWithKeys,
+            Keys.releaseMouseKeyComb: Defaults.releaseMouseKeyComb,
+            Keys.releaseMouseWithKeys: Defaults.releaseMouseWithKeys,
             Keys.releaseMouseByShaking: Defaults.releaseMouseByShaking
         ]
         
@@ -363,8 +360,8 @@ extension MyController {
     func resetDevicesUserDefaults() {
         
         let defaults = UserDefaults.standard
-        
-        for key in [ Keys.joyKeyMap1,
+
+        let keys = [ Keys.joyKeyMap1,
                      Keys.joyKeyMap2,
                      
                      Keys.disconnectJoyKeys,
@@ -378,11 +375,9 @@ extension MyController {
                      Keys.retainMouseByEntering,
                      Keys.releaseMouseKeyComb,
                      Keys.releaseMouseWithKeys,
-                     Keys.releaseMouseByShaking
-            ]
-        {
-            defaults.removeObject(forKey: key)
-        }
+                     Keys.releaseMouseByShaking ]
+
+        for key in keys { defaults.removeObject(forKey: key) }
         
         loadDevicesUserDefaults()
     }
@@ -483,7 +478,7 @@ extension MyController {
     
     static func registerVideoUserDefaults() {
         
-        let dictionary : [String:Any] = [
+        let dictionary: [String: Any] = [
             
             Keys.palette: Int(Defaults.palette.rawValue),
             Keys.brightness: Defaults.brightness,
@@ -494,7 +489,7 @@ extension MyController {
 
             Keys.eyeX: Defaults.eyeX,
             Keys.eyeY: Defaults.eyeY,
-            Keys.eyeZ: Defaults.eyeZ,
+            Keys.eyeZ: Defaults.eyeZ
             ]
         
         let defaults = UserDefaults.standard
@@ -505,8 +500,8 @@ extension MyController {
     func resetVideoUserDefaults() {
         
         let defaults = UserDefaults.standard
-        
-        for key in [ Keys.palette,
+
+        let keys = [ Keys.palette,
                      Keys.brightness,
                      Keys.contrast,
                      Keys.saturation,
@@ -517,11 +512,9 @@ extension MyController {
                      Keys.eyeY,
                      Keys.eyeZ,
                      
-                     Keys.shaderOptions
-            ]
-        {
-            defaults.removeObject(forKey: key)
-        }
+                     Keys.shaderOptions ]
+
+        for key in keys { defaults.removeObject(forKey: key) }
         
         loadVideoUserDefaults()
     }
@@ -632,7 +625,7 @@ extension MyController {
     
     static func registerEmulatorUserDefaults() {
         
-        let dictionary : [String:Any] = [
+        let dictionary: [String: Any] = [
             
             Keys.warpLoad: Defaults.warpLoad,
             Keys.driveNoise: Defaults.driveNoise,
@@ -661,8 +654,8 @@ extension MyController {
     func resetEmulatorUserDefaults() {
         
         let defaults = UserDefaults.standard
-        
-        for key in [Keys.warpLoad,
+
+        let keys = [Keys.warpLoad,
                     Keys.driveNoise,
                     Keys.driveNoiseNoPoll,
                     Keys.driveBlankDiskFormat,
@@ -682,11 +675,9 @@ extension MyController {
                     
                     Keys.autoMountAction,
                     Keys.autoType,
-                    Keys.autoTypeText
-                    ]
-        {
-            defaults.removeObject(forKey: key)
-        }
+                    Keys.autoTypeText ]
+
+        for key in keys { defaults.removeObject(forKey: key) }
         
         loadEmulatorUserDefaults()
     }
@@ -907,8 +898,8 @@ extension MyController {
     func resetHardwareUserDefaults() {
         
         let defaults = UserDefaults.standard
-        
-        for key in [Keys.amigaModel,
+
+        let keys = [Keys.amigaModel,
                     Keys.layout,
                     
                     Keys.chipRam,
@@ -931,11 +922,9 @@ extension MyController {
                     Keys.realTimeClock,
                     
                     Keys.exactBlitter,
-                    Keys.fifoBuffering
-            ]
-        {
-            defaults.removeObject(forKey: key)
-        }
+                    Keys.fifoBuffering ]
+
+        for key in keys { defaults.removeObject(forKey: key) }
         
         loadHardwareUserDefaults()
     }
