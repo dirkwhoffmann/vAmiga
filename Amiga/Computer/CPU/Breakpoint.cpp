@@ -356,64 +356,6 @@ ASTNode::name(FILE *str) {
     }
 }
 
-/*
-std::string
-ASTNode::name() {
-    
-    std::cout << "ASTNODE " << type << std::endl;
-    std::stringstream ss;
-    string ll = "";
-    string lr = "";
-    string rl = "";
-    string rr = "";
-    
-    if (type == AST_AND || type == AST_OR) {
-        if (left->type == AST_AND || left->type == AST_OR) {
-            ll = "("; lr = ")";
-        }
-        if (right->type == AST_AND || right->type == AST_OR) {
-            rl = "("; rr = ")";
-        }
-    }
-    
-    switch (type) {
-        case AST_D0:        return "D0";
-        case AST_D1:        return "D1";
-        case AST_D2:        return "D2";
-        case AST_D3:        return "D3";
-        case AST_D4:        return "D4";
-        case AST_D5:        return "D5";
-        case AST_D6:        return "D6";
-        case AST_D7:        return "D7";
-        case AST_A0:        return "A0";
-        case AST_A1:        return "A1";
-        case AST_A2:        return "A2";
-        case AST_A3:        return "A3";
-        case AST_A4:        return "A4";
-        case AST_A5:        return "A5";
-        case AST_A6:        return "A6";
-        case AST_A7:        return "A7";
-        case AST_DEC:       ss << value; return ss.str();
-        case AST_HEX:       ss << "$" << std::hex << value; return ss.str();
-        case AST_IND_B:     return "(" + left->name() + ").b";
-        case AST_IND_W:     return "(" + left->name() + ").w";
-        case AST_IND_L:     return "(" + left->name() + ").l";
-        case AST_EQ:        return left->name() + " == " + right->name();
-        case AST_UNEQ:      return left->name() + " != " + right->name();
-        case AST_LESSEQ:    return left->name() + " <= " + right->name();
-        case AST_LESS:      return left->name() + " < " + right->name();
-        case AST_GREATEREQ: return left->name() + " >= " + right->name();
-        case AST_GREATER:   return left->name() + " > " + right->name();
-        case AST_NOT:       return "!(" + left->name() + ")";
-        case AST_AND:       return ll + left->name() + lr + " && " + rl + right->name() + rr;
-        case AST_OR:        return ll + left->name() + lr + " || " + rl + right->name() + rr;
-            
-        default:
-            assert(false);
-    }
-}
-*/
-
 ASTNode *
 ASTNode::parse(string s) {
     
@@ -646,22 +588,7 @@ ASTNode::parseATOMIC(TokenStream tokens, int &i) {
 const char *
 Breakpoint::getCondition()
 {
-    // Return the user input string if no AST is present.
-    if (ast == NULL) return conditionStr.c_str();
-    
-    // Free previously allocates memory.
-    if (strPtr) free(strPtr);
-    
-    // Open a memory stream for storing the result string.
-    size_t strSize;
-    FILE *str = open_memstream(&strPtr, &strSize);
-    
-    // Generate the result string
-    ast->name(str);
-    
-    // Close the stream and return
-    fclose(str);
-    return strPtr;
+    return conditionStr ? conditionStr : "";
 }
 
 bool
@@ -672,23 +599,38 @@ Breakpoint::setCondition(const char *description)
     // Remove old condition (if any)
     removeCondition();
     
-    // Remember the original text
-    conditionStr = string(description);
-    std::cout << "cond str " << conditionStr << std::endl;
-    
     // Parse the description
-    return ((ast = ASTNode::parse(conditionStr)));
+    ast = ASTNode::parse(string(description));
+    
+    // Store a textual description
+    if (ast) {
+        
+        // Convert the AST to a textual description via a memory stream.
+        size_t strSize;
+        FILE *str = open_memstream(&conditionStr, &strSize);
+        ast->name(str);
+        fclose(str);
+        return true;
+
+    } else {
+        
+        // If no AST is present (syntax error), we keep the user input.
+        conditionStr = strdup(description);
+        return false;
+    }
 }
 
-bool
+void
 Breakpoint::removeCondition()
 {
-    conditionStr = "";
+    if (conditionStr) {
+        delete conditionStr;
+        conditionStr = NULL;
+    }
     if (ast) {
         delete ast;
         ast = NULL;
     }
-    return true;
 }
 
 bool

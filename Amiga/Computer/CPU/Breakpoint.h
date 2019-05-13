@@ -33,18 +33,15 @@ private:
     // Indicates if this breakpoint is enabled
     bool enabled = true;
     
-    // The breakpoint's condition as it was entered by the user
-    string conditionStr = "";
-    
-    // Buffer for generation the condition string
-    char *strPtr = NULL;
-    
-    // The breakpoint's condition translated to an AST.
+    // The breakpoint condition translated to an AST
     ASTNode *ast = NULL;
     
+    // The breakpoint condition translated to a string
+    char *conditionStr = NULL;
+
 public:
     
-    // Manage the enable / disable status
+    // Manages the enable / disable status
     bool isEnabled() { return enabled; }
     bool isDisabled() { return !enabled; }
     void enable() { enabled = true; }
@@ -54,7 +51,7 @@ public:
     bool hasCondition() { return ast != NULL; }
  
     // Returns true if the condition contains a syntax error.
-    bool hasSyntaxError() { return conditionStr != "" && ast == NULL; }
+    bool hasSyntaxError() { return conditionStr != NULL && ast == NULL; }
     
     // Returns a textual description of the breakpoint condition.
     const char *getCondition();
@@ -83,7 +80,7 @@ public:
     bool setCondition(const char *str);
     
     // Deletes a breakpoint condition
-    bool removeCondition();
+    void removeCondition();
         
     // Evaluates a breakpoint
     bool eval();
