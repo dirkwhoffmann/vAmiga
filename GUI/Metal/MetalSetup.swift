@@ -14,7 +14,7 @@ public extension MetalView {
 
     func checkForMetal() {
         
-        guard let _ = MTLCreateSystemDefaultDevice() else {
+        if MTLCreateSystemDefaultDevice() == nil {
             
             showNoMetalSupportAlert()
             NSApp.terminate(self)
@@ -87,13 +87,12 @@ public extension MetalView {
 
         // Background texture (drawn behind the cube)
         bgTexture = self.createBackgroundTexture()
-    
-        
+
         //
         // Emulator textures (one for short frames, one for long frames)
         //
         
-        descriptor.width  = EmulatorTexture.size.0;
+        descriptor.width = EmulatorTexture.size.0;
         descriptor.height = EmulatorTexture.size.1;
         
         // Emulator textures (raw data of long and short frames)
@@ -107,8 +106,8 @@ public extension MetalView {
         // Textures that combine a short and a long frame (not yet upscaled)
         //
         
-        descriptor.width  = MergedTexture.size.0;
-        descriptor.height = MergedTexture.size.1;
+        descriptor.width = MergedTexture.size.0
+        descriptor.height = MergedTexture.size.1
         
         // Merged emulator texture (long frame + short frame)
         descriptor.usage = [ .shaderRead, .shaderWrite, .renderTarget ]
@@ -124,7 +123,6 @@ public extension MetalView {
         assert(bloomTextureG != nil, "Failed to create bloom texture (G).")
         assert(bloomTextureB != nil, "Failed to create bloom texture (B).")
 
-        
         descriptor.usage = [ .shaderRead, .shaderWrite, .renderTarget ]
         lowresEnhancedTexture = device?.makeTexture(descriptor: descriptor)
         assert(lowresEnhancedTexture != nil, "Failed to create lowres enhancement texture.")
@@ -133,8 +131,8 @@ public extension MetalView {
         // Upscaled textures
         //
         
-        descriptor.width  = UpscaledTexture.size.0;
-        descriptor.height = UpscaledTexture.size.1;
+        descriptor.width  = UpscaledTexture.size.0
+        descriptor.height = UpscaledTexture.size.1
         
         // Upscaled emulator texture
         descriptor.usage = [ .shaderRead, .shaderWrite, .pixelFormatView, .renderTarget ]
@@ -203,11 +201,11 @@ public extension MetalView {
         let base = UInt8((1 - shaderOptions.dotMaskBrightness) * 85)
         let none = UInt8(30 + (1 - shaderOptions.dotMaskBrightness) * 55)
         
-        let R = UInt32.init(r: max,  g: base, b: base)
-        let G = UInt32.init(r: base, g: max,  b: base)
+        let R = UInt32.init(r: max, g: base, b: base)
+        let G = UInt32.init(r: base, g: max, b: base)
         let B = UInt32.init(r: base, g: base, b: max)
-        let M = UInt32.init(r: max,  g: base, b: max)
-        let W = UInt32.init(r: max,  g: max,  b: max)
+        let M = UInt32.init(r: max, g: base, b: max)
+        let W = UInt32.init(r: max, g: max, b: max)
         let N = UInt32.init(r: none, g: none, b: none)
 
         let maskSize = [
@@ -215,7 +213,7 @@ public extension MetalView {
             CGSize.init(width: 3, height: 1),
             CGSize.init(width: 4, height: 1),
             CGSize.init(width: 3, height: 9),
-            CGSize.init(width: 4, height: 8),
+            CGSize.init(width: 4, height: 8)
             ]
         
         let maskData = [
@@ -301,8 +299,8 @@ public extension MetalView {
     
         if animates() {
             let xAngle: Float = -(currentXAngle / 180.0) * .pi;
-            let yAngle: Float =  (currentYAngle / 180.0) * .pi;
-            let zAngle: Float =  (currentZAngle / 180.0) * .pi;
+            let yAngle: Float = (currentYAngle / 180.0) * .pi;
+            let zAngle: Float = (currentZAngle / 180.0) * .pi;
     
             model = model *
                 matrix_from_rotation(radians: xAngle, x: 0.5, y: 0.0, z: 0.0) *
@@ -410,13 +408,13 @@ public extension MetalView {
         setVertex(41, float3(+dx, +dy, +dz), lowerRight)
     
         // 2D drawing quad
-        setVertex(42, float3(-1,  1,  0), lowerLeft)
-        setVertex(43, float3(-1, -1,  0), upperLeft)
-        setVertex(44, float3( 1, -1,  0), upperRight)
+        setVertex(42, float3(-1, 1, 0), lowerLeft)
+        setVertex(43, float3(-1, -1, 0), upperLeft)
+        setVertex(44, float3( 1, -1, 0), upperRight)
     
-        setVertex(45, float3(-1,  1,  0), lowerLeft)
-        setVertex(46, float3( 1,  1,  0), lowerRight)
-        setVertex(47, float3( 1, -1,  0), upperRight)
+        setVertex(45, float3(-1, 1, 0), lowerLeft)
+        setVertex(46, float3( 1, 1, 0), lowerRight)
+        setVertex(47, float3( 1, -1, 0), upperRight)
     
         let opt = MTLResourceOptions.cpuCacheModeWriteCombined
         let len = capacity * 4

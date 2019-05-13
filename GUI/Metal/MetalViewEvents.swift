@@ -55,7 +55,7 @@ public extension MetalView {
 
         // track()
         
-        let options : NSTrackingArea.Options = [ .activeInKeyWindow, .mouseEnteredAndExited ]
+        let options: NSTrackingArea.Options = [ .activeInKeyWindow, .mouseEnteredAndExited ]
         
         if trackingArea != nil {
             removeTrackingArea(trackingArea!)
@@ -64,9 +64,7 @@ public extension MetalView {
         addTrackingArea(trackingArea!)
     }
     
-    override func mouseEntered(with event: NSEvent)
-    {
-        // track()
+    override func mouseEntered(with event: NSEvent) {
         
         insideTrackingArea = true
         
@@ -82,16 +80,14 @@ public extension MetalView {
         }
     }
     
-    override func mouseExited(with event: NSEvent)
-    {
-        // track()
+    override func mouseExited(with event: NSEvent) {
         
         insideTrackingArea = false
         releaseMouse()
     }
     
-    override func mouseDown(with event: NSEvent)
-    {
+    override func mouseDown(with event: NSEvent) {
+
         if gotMouse {
             amigaProxy?.mouse.setLeftButton(true)
             return
@@ -103,22 +99,22 @@ public extension MetalView {
         }
     }
     
-    override func mouseUp(with event: NSEvent)
-    {
+    override func mouseUp(with event: NSEvent) {
+
         if gotMouse {
             amigaProxy?.mouse.setLeftButton(false)
         }
     }
     
-    override func rightMouseDown(with event: NSEvent)
-    {
+    override func rightMouseDown(with event: NSEvent) {
+
         if gotMouse {
             amigaProxy?.mouse.setRightButton(true)
         }
     }
 
-    override func rightMouseUp(with event: NSEvent)
-    {
+    override func rightMouseUp(with event: NSEvent) {
+
         if gotMouse {
             amigaProxy?.mouse.setRightButton(false)
         }
@@ -152,13 +148,13 @@ public extension MetalView {
         }
     }
     
-    override func mouseDragged(with event: NSEvent)
-    {
+    override func mouseDragged(with event: NSEvent) {
+
         mouseMoved(with: event)
     }
     
-    override func rightMouseDragged(with event: NSEvent)
-    {
+    override func rightMouseDragged(with event: NSEvent) {
+
         mouseMoved(with: event)
     }
     
@@ -166,7 +162,7 @@ public extension MetalView {
         
         if !gotMouse && retainMouseWithKeys {
             
-            switch (retainMouseKeyComb) {
+            switch retainMouseKeyComb {
               
             case 0 where event.modifierFlags.contains([.option, .command]),
                  1 where event.modifierFlags.contains([.option, .control]):
@@ -176,12 +172,11 @@ public extension MetalView {
                 
             default: break
             }
-        }
-        
-        else if gotMouse && releaseMouseWithKeys {
+
+        } else if gotMouse && releaseMouseWithKeys {
             
             track()
-            switch (releaseMouseKeyComb) {
+            switch releaseMouseKeyComb {
                 
             case 0 where event.modifierFlags.contains([.option, .command]),
                  1 where event.modifierFlags.contains([.option, .control]):
@@ -200,7 +195,7 @@ public extension MetalView {
         dxsum += abs(dx)
         
         // Check for a direction reversal
-        if (dx * dxsign < 0) {
+        if dx * dxsign < 0 {
         
             let dt = DispatchTime.diffMilliSec(lastTurn)
             dxsign = -dxsign

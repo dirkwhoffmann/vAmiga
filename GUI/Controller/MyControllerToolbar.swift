@@ -73,12 +73,12 @@ extension MyController {
     
     @IBAction func snapshotAction(_ sender: NSSegmentedControl) {
         
-        switch(sender.selectedSegment) {
+        switch sender.selectedSegment {
         
         case 0: // Rewind
 
             track("Rewind")
-            if (amiga.restoreLatestAutoSnapshot()) {
+            if amiga.restoreLatestAutoSnapshot() {
                 metal.snapToFront()
             }
         
@@ -90,7 +90,7 @@ extension MyController {
         case 2: // Restore
             
             track("Restore")
-            if (amiga.restoreLatestUserSnapshot()) {
+            if amiga.restoreLatestUserSnapshot() {
                 metal.snapToFront()
             } else {
                 NSSound.beep()
@@ -124,7 +124,7 @@ extension MyController {
 
     @IBAction func restoreLatestAutoSnapshotAction(_ sender: Any!) {
         
-        if (amiga.restoreLatestAutoSnapshot()) {
+        if amiga.restoreLatestAutoSnapshot() {
             amiga.deleteAutoSnapshot(0)
             metal.snapToFront()
         }
@@ -132,7 +132,7 @@ extension MyController {
 
     @IBAction func restoreLatestUserSnapshotAction(_ sender: Any!) {
         
-        if (amiga.restoreLatestUserSnapshot()) {
+        if amiga.restoreLatestUserSnapshot() {
             metal.snapToFront()
         }
     }

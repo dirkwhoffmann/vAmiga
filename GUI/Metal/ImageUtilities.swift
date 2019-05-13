@@ -105,8 +105,6 @@ public extension CGImage {
     }
 }
 
-
-
 //
 // Extensions to MTLTexture
 //
@@ -114,7 +112,6 @@ public extension CGImage {
 extension MTLTexture {
     
 }
-
 
 //
 // Extensions to NSImage
@@ -151,8 +148,7 @@ public extension NSImage {
         let size = NSSize(width: cgImage.width, height: cgImage.height)
         return NSImage(cgImage: cgImage, size: size)
     }
-    
-    
+
     func expand(toSize size: NSSize) -> NSImage? {
  
         let newImage = NSImage.init(size: size)
@@ -165,15 +161,15 @@ public extension NSImage {
         t.scaleX(by: 1.0, yBy: -1.0)
         t.concat()
         
-        let inRect = NSMakeRect(0,0,size.width,size.height)
-        let fromRect = NSMakeRect(0,0,self.size.width, self.size.height)
+        let inRect = NSMakeRect(0, 0, size.width, size.height)
+        let fromRect = NSMakeRect(0, 0, self.size.width, self.size.height)
         let operation = NSCompositingOperation.copy
         self.draw(in: inRect, from: fromRect, operation: operation, fraction: 1.0)
         
         newImage.unlockFocus()
         NSGraphicsContext.restoreGraphicsState()
         
-        return newImage;
+        return newImage
     }
     
     var cgImage: CGImage? {
@@ -209,7 +205,7 @@ public extension NSImage {
                                       bitmapInfo: rawBitmapInfo)
         
         // Flip image vertically if requested
-        if (vflip) {
+        if vflip {
             bitmapContext?.translateBy(x: 0.0, y: CGFloat(height))
             bitmapContext?.scaleBy(x: 1.0, y: -1.0)
         }
@@ -237,26 +233,23 @@ public extension NSImage {
         let region = MTLRegionMake2D(0, 0, width, height)
         texture?.replace(region: region, mipmapLevel: 0, withBytes: data, bytesPerRow: 4 * width)
 
-        free(data);
-        return texture;
+        free(data)
+        return texture
     }
 }
-
 
 //
 // Extensions to MetalView
 //
 
-
-public extension MetalView
-{
+public extension MetalView {
 
     //
     // Image handling
     //
 
-    func screenshot(texture: MTLTexture) -> NSImage?
-    {
+    func screenshot(texture: MTLTexture) -> NSImage? {
+
         // Use the blitter to copy the texture data back from the GPU
         let queue = texture.device.makeCommandQueue()!
         let commandBuffer = queue.makeCommandBuffer()!
@@ -269,8 +262,8 @@ public extension MetalView
         return NSImage.make(texture: texture, rect: textureRect)
     }
     
-    func screenshot(afterUpscaling: Bool = true) -> NSImage?
-    {
+    func screenshot(afterUpscaling: Bool = true) -> NSImage? {
+        
         if afterUpscaling {
             return screenshot(texture: upscaledTexture)
         } else {

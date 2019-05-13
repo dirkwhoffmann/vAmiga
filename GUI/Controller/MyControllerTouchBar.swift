@@ -18,7 +18,7 @@ extension NSTouchBarItem.Identifier {
 }
 
 @available(OSX 10.12.2, *)
-extension MyController : NSTouchBarDelegate {
+extension MyController: NSTouchBarDelegate {
     
     override open func makeTouchBar() -> NSTouchBar? {
  
@@ -86,4 +86,3 @@ extension MyController : NSTouchBarDelegate {
         }
     }
 }
-
