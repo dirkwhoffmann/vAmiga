@@ -34,7 +34,7 @@ AudioUnit::AudioUnit()
         { &auddatInternal,  sizeof(auddatInternal),  WORD_ARRAY },
         { &audlcLatch,      sizeof(audlcLatch),      WORD_ARRAY },
 
-        { &dmaEnabled,      sizeof(dmaEnabled),      WORD_ARRAY },
+        { &dmaEnabled,      sizeof(dmaEnabled),      0 },
         { &currentState,    sizeof(currentState),    WORD_ARRAY },
     });
 }
@@ -69,14 +69,14 @@ void
 AudioUnit::enableDMA(int channel)
 {
     currentState[channel] = 0;
-    dmaEnabled[channel] = true;
+    SET_BIT(dmaEnabled, channel);
 }
 
 void
 AudioUnit::disableDMA(int channel)
 {
     currentState[channel] = 0;
-    dmaEnabled[channel] = false;
+    CLR_BIT(dmaEnabled, channel);
 }
 
 void
@@ -84,32 +84,49 @@ AudioUnit::hsyncHandler()
 {
     double dmaCyclesPerSample = 50 * (HPOS_MAX + 1) * (VPOS_MAX + 1) / 44100.0;
     int executed = 0;
-    short sample;
-    
+
     while (dmaCycleCounter < (HPOS_MAX + 1)) {
-        
-        sample = 0;
+
         dmaCycleCounter += dmaCyclesPerSample;
-        
         int toExecute = (int)dmaCycleCounter;
         int missing = toExecute - executed;
-        
-        // debug("Executing state machine: %d %d cycles %f %f\n", toExecute, missing, dmaCycleCounter);
-        for (unsigned i = 0; i < 4; i++) {
-            
-            if (dmaEnabled[i]) {
-                executeStateMachine(i, missing);
-                sample += (int8_t)(auddatInternal[i]) * audvol[i];
+
+         // Generate sound sample for the left and the right channel
+        short left = 0;
+        short right = 0;
+
+        if (dmaEnabled) {
+
+            // Channel 0 (left)
+            if (GET_BIT(dmaEnabled, 0)) {
+                executeStateMachine(0, missing);
+                left += (int8_t)(auddatInternal[0]) * audvol[0];
+            }
+
+            // Channel 1 (right)
+            if (GET_BIT(dmaEnabled, 1)) {
+                executeStateMachine(1, missing);
+                right += (int8_t)(auddatInternal[1]) * audvol[1];
+            }
+
+            // Channel 2 (right)
+            if (GET_BIT(dmaEnabled, 2)) {
+                executeStateMachine(2, missing);
+                right += (int8_t)(auddatInternal[2]) * audvol[2];
+            }
+
+            // Channel 3 (left)
+            if (GET_BIT(dmaEnabled, 3)) {
+                executeStateMachine(3, missing);
+                right += (int8_t)(auddatInternal[3]) * audvol[3];
             }
         }
-        
-        // if (dmaEnabled[0]) printf("%d ", sample);
-        writeData(sample, sample);
+
+        writeData(left, right);
         executed += missing;
     }
     
     dmaCycleCounter -= executed;
-    // debug("dmaCycleCounter = %f\n", dmaCycleCounter);
 }
 
 void
@@ -371,6 +388,9 @@ AudioUnit::writeData(short left, short right)
     // Check for buffer overflow
     if (bufferCapacity() == 0)
         handleBufferOverflow();
+
+    // REMOVE ASAP
+    left += right;
     
     // Convert sound samples to floating point values and write into ringbuffer
     ringBuffer[writePtr] = filter.apply(float(left) * scale);

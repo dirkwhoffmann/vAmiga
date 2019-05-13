@@ -128,8 +128,10 @@ public:
     
 private:
     
-    bool dmaEnabled[4];
-    
+    // bool dmaEnabled[4];
+    // Indicates the enabled sound DMA channels (Bit n = channel n)
+    uint8_t dmaEnabled;
+
     // Current state of all four state machines.
     uint8_t currentState[4];
     
