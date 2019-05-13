@@ -7,6 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+// swiftlint:disable colon
+
 import Foundation
 import Carbon.HIToolbox
 
@@ -178,7 +180,7 @@ let mac2string: [Int: String] = [
 
 /* This structure represents a physical key of the Mac keyboard.
  */
-struct MacKey : Codable {
+struct MacKey: Codable {
     
     // The unique identifier of this Mac key
     var keyCode: Int = 0
@@ -231,7 +233,7 @@ struct MacKey : Codable {
     }
     
     // Returns a string representation for this key
-    var stringValue : String {
+    var stringValue: String {
 
         // Check if this key has a custom representation
         if let s = mac2string[keyCode] {
@@ -252,14 +254,6 @@ extension MacKey: Equatable, Hashable {
         return lhs.keyCode == rhs.keyCode
     }
 }
-
-/*
-extension MacKey: Hashable {
-    var hashValue: Int {
-        return Int(self.keyCode)
-    }
-}
-*/
 
 extension MacKey {
     

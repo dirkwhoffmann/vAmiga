@@ -123,10 +123,8 @@ class GamePadManager: NSObject {
      */
     func lookupGamePad(_ gamePad: GamePad) -> Int {
         
-        for (slotNr, device) in gamePads {
-            if device === gamePad {
-                return slotNr
-            }
+        for (slotNr, device) in gamePads where device === gamePad {
+            return slotNr
         }
         return -1
     }
@@ -136,10 +134,8 @@ class GamePadManager: NSObject {
      */
     func lookupGamePad(locationID: Int) -> Int {
         
-        for (slotNr, device) in gamePads {
-            if device.locationID == locationID {
-                return slotNr
-            }
+        for (slotNr, device) in gamePads where device.locationID == locationID {
+            return slotNr
         }
         return -1
     }
@@ -256,11 +252,9 @@ class GamePadManager: NSObject {
         // let locationID = String(describing: IOHIDDeviceGetProperty(device, locationIDKey))
         
         // Search for a matching locationID and remove device
-        for (slotNr, device) in gamePads {
-            if device.locationID == locationID {
-                gamePads[slotNr] = nil
-                track("Clearing slot \(slotNr)")
-            }
+        for (slotNr, device) in gamePads where device.locationID == locationID {
+            gamePads[slotNr] = nil
+            track("Clearing slot \(slotNr)")
         }
         
         // Closing the HID device always fails.
