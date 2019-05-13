@@ -9,7 +9,6 @@
 
 import Foundation
 
-
 struct MemoryHighlighting {
     static let none = 0
     static let paula = 1
@@ -17,7 +16,7 @@ struct MemoryHighlighting {
     static let agnus = 3
 }
 
-class MemTableView : NSTableView {
+class MemTableView: NSTableView {
     
     var highlighting = MemoryHighlighting.none
     var memory = amigaProxy?.mem
@@ -35,15 +34,15 @@ class MemTableView : NSTableView {
         
         // Assign formatters
         let columnFormatters = [
-            "addr" : fmt24,
-            "0" : fmt16,
-            "2" : fmt16,
-            "4" : fmt16,
-            "6" : fmt16,
-            "8" : fmt16,
-            "A" : fmt16,
-            "C" : fmt16,
-            "E" : fmt16,
+            "addr": fmt24,
+            "0": fmt16,
+            "2": fmt16,
+            "4": fmt16,
+            "6": fmt16,
+            "8": fmt16,
+            "A": fmt16,
+            "C": fmt16,
+            "E": fmt16,
         ]
         
         for (column, formatter) in columnFormatters {
@@ -64,14 +63,13 @@ class MemTableView : NSTableView {
         reloadData()
     }
     
-    func setHighlighting(_ value : Int) {
+    func setHighlighting(_ value: Int) {
         
         highlighting = value
         refresh()
     }
     
     // Returns the memory source for the specified address
-
 
     // Return true if the specified memory address should be displayed
     func shouldDisplay(_ addr: UInt16) -> Bool {
@@ -86,19 +84,15 @@ class MemTableView : NSTableView {
     }
 }
 
-extension MemTableView : NSTableViewDataSource {
+extension MemTableView: NSTableViewDataSource {
     
     func numberOfRows(in tableView: NSTableView) -> Int {
         
-        return 65536 / 16;
+        return 65536 / 16
     }
     
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
-        
-        // guard let mem = amigaProxy?.mem else { return "" }
-        
-        // track("\(row) \(tableColumn?.identifier.rawValue)")
-        
+
         var addr = inspector.bank * 65536 + row * 16
      
         switch tableColumn?.identifier.rawValue {

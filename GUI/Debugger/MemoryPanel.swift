@@ -86,7 +86,7 @@ extension Inspector {
             let src = memory.memSrc(x << 16).rawValue
             var color: NSColor
 
-            switch (src) {
+            switch src {
             case MEM_UNMAPPED.rawValue: color = MemColors.unmapped
             case MEM_CHIP.rawValue:     color = MemColors.chipRam
             case MEM_FAST.rawValue:     color = MemColors.fastRam

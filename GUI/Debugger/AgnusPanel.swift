@@ -50,17 +50,17 @@ extension Inspector {
         dmaBPL1MOD.integerValue = Int(info.bpl1mod)
         dmaBPL2MOD.integerValue = Int(info.bpl2mod)
         
-        dmaBpl1Enable.state = info.numBpls >= 1 ? .on : .off;
-        dmaBpl2Enable.state = info.numBpls >= 2 ? .on : .off;
-        dmaBpl3Enable.state = info.numBpls >= 3 ? .on : .off;
-        dmaBpl4Enable.state = info.numBpls >= 4 ? .on : .off;
-        dmaBpl5Enable.state = info.numBpls >= 5 ? .on : .off;
-        dmaBpl6Enable.state = info.numBpls >= 6 ? .on : .off;
+        dmaBpl1Enable.state = info.numBpls >= 1 ? .on : .off
+        dmaBpl2Enable.state = info.numBpls >= 2 ? .on : .off
+        dmaBpl3Enable.state = info.numBpls >= 3 ? .on : .off
+        dmaBpl4Enable.state = info.numBpls >= 4 ? .on : .off
+        dmaBpl5Enable.state = info.numBpls >= 5 ? .on : .off
+        dmaBpl6Enable.state = info.numBpls >= 6 ? .on : .off
     }
     
     @IBAction func dmaDMACONTextAction(_ sender: NSTextField!) {
         
-        let value = sender.integerValue & 0xFFFF;
+        let value = sender.integerValue & 0xFFFF
         
         track("New value: \(value)")
         amigaProxy?.mem.pokeCustom16(DMACON, value: value)
@@ -69,14 +69,14 @@ extension Inspector {
 
     @IBAction func dmaDMACONButtonAction(_ sender: NSButton!) {
         
-        let value = (1 << sender.tag) + (sender.state == .on ? 0x8000 : 0);
+        let value = (1 << sender.tag) + (sender.state == .on ? 0x8000 : 0)
         amigaProxy?.mem.pokeCustom16(DMACON, value: Int(value))
         refresh(everything: false)
     }
 
     @IBAction func dmaVPosAction(_ sender: NSButton!) {
         
-        let value = sender.integerValue;
+        let value = sender.integerValue
         track("New value: \(value)")
         track("Setter not implemented yet")
         refresh(everything: false)
@@ -84,7 +84,7 @@ extension Inspector {
 
     @IBAction func dmaHPosAction(_ sender: NSButton!) {
         
-        let value = sender.integerValue;
+        let value = sender.integerValue
         track("New value: \(value)")
         track("Setter not implemented yet")
         refresh(everything: false)

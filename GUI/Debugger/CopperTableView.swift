@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-class CopperTableView : NSTableView {
+class CopperTableView: NSTableView {
     
     // @IBOutlet weak var inspector: Inspector!
     
@@ -27,7 +27,7 @@ class CopperTableView : NSTableView {
             
             amiga = amigaProxy
             
-            for (c,f) in ["addr": fmt24, "data1": fmt16, "data2": fmt16 ] {
+            for (c, f) in ["addr": fmt24, "data1": fmt16, "data2": fmt16] {
                 let columnId = NSUserInterfaceItemIdentifier(rawValue: c)
                 if let column = tableColumn(withIdentifier: columnId) {
                     if let cell = column.dataCell as? NSCell {
@@ -42,7 +42,7 @@ class CopperTableView : NSTableView {
     
     @IBAction func copPlusAction(_ sender: NSButton!) {
         
-        if (numRows < 128) {
+        if numRows < 128 {
             numRows += 1
         } else {
             NSSound.beep()
@@ -64,11 +64,9 @@ class CopperTableView : NSTableView {
 extension CopperTableView: NSTableViewDataSource {
     
     var coplc: Int {
-        get {
-            assert(tag == 1 || tag == 2)
-            let info = amiga!.dma.getCopperInfo()
-            return (tag == 1) ? Int(info.coplc.0) : Int(info.coplc.1)
-        }
+        assert(tag == 1 || tag == 2)
+        let info = amiga!.dma.getCopperInfo()
+        return (tag == 1) ? Int(info.coplc.0) : Int(info.coplc.1)
     }
     
     func numberOfRows(in tableView: NSTableView) -> Int { return numRows; }

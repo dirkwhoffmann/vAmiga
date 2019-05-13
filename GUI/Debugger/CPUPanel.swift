@@ -15,19 +15,18 @@ extension Inspector {
         let info = amiga.cpu.getInfo()
         
         if everything {
-            
-            for (c,f) in [ cpuPC: fmt32,
-                           
-                           cpuD0: fmt32, cpuD1: fmt32, cpuD2: fmt32, cpuD3: fmt32,
-                           cpuD4: fmt32, cpuD5: fmt32, cpuD6: fmt32, cpuD7: fmt32,
-                           
-                           cpuA0: fmt32, cpuA1: fmt32, cpuA2: fmt32, cpuA3: fmt32,
-                           cpuA4: fmt32, cpuA5: fmt32, cpuA6: fmt32, cpuA7: fmt32,
-                           
-                           cpuSSP: fmt32 ]
-            {
-                assignFormatter(f, c!)
-            }
+
+            let elements = [ cpuPC: fmt32,
+
+                             cpuD0: fmt32, cpuD1: fmt32, cpuD2: fmt32, cpuD3: fmt32,
+                             cpuD4: fmt32, cpuD5: fmt32, cpuD6: fmt32, cpuD7: fmt32,
+
+                             cpuA0: fmt32, cpuA1: fmt32, cpuA2: fmt32, cpuA3: fmt32,
+                             cpuA4: fmt32, cpuA5: fmt32, cpuA6: fmt32, cpuA7: fmt32,
+
+                             cpuSSP: fmt32 ]
+
+             for (c,f) in elements { assignFormatter(f, c!) }
             
             if amiga.isRunning() {
                 cpuStopAndGoButton.image = NSImage.init(named: "pauseTemplate")

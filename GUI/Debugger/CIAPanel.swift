@@ -41,27 +41,26 @@ extension Inspector {
             ciaPB2.title = "PB2: " + (ciaA ? "DATA2" : "/SIDE")
             ciaPB1.title = "PB1: " + (ciaA ? "DATA1" : "DIR")
             ciaPB0.title = "PB0: " + (ciaA ? "DATA0" : "/STEP")
-            
-            for (c,f) in [ ciaPRA: fmt8,
-                           ciaDDRA: fmt8,
-                           ciaPRB: fmt8,
-                           ciaDDRB: fmt8,
-                           ciaCntHi: fmt8,
-                           ciaCntMid: fmt8,
-                           ciaCntLo: fmt8,
-                           ciaAlarmHi: fmt8,
-                           ciaAlarmMid: fmt8,
-                           ciaAlarmLo: fmt8,
-                           ciaIMR: fmt8,
-                           ciaICR: fmt8,
-                           ciaSDR: fmt8,
-                           ciaTA: fmt16,
-                           ciaTAlatch: fmt16,
-                           ciaTB: fmt16,
-                           ciaTBlatch: fmt16 ]
-            {
-                assignFormatter(f, c!)
-            }
+
+            let elements = [ ciaPRA: fmt8,
+                             ciaDDRA: fmt8,
+                             ciaPRB: fmt8,
+                             ciaDDRB: fmt8,
+                             ciaCntHi: fmt8,
+                             ciaCntMid: fmt8,
+                             ciaCntLo: fmt8,
+                             ciaAlarmHi: fmt8,
+                             ciaAlarmMid: fmt8,
+                             ciaAlarmLo: fmt8,
+                             ciaIMR: fmt8,
+                             ciaICR: fmt8,
+                             ciaSDR: fmt8,
+                             ciaTA: fmt16,
+                             ciaTAlatch: fmt16,
+                             ciaTB: fmt16,
+                             ciaTBlatch: fmt16 ]
+
+            for (c, f) in elements { assignFormatter(f, c!) }
         }
         
         ciaTA.intValue = Int32(info.timerA.count)
@@ -137,4 +136,3 @@ extension Inspector {
         refreshCIA(everything: true)
     }
 }
-

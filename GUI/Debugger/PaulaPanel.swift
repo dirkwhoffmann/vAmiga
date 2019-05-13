@@ -18,24 +18,15 @@ extension Inspector {
         track("Refreshing Paula inspector tab")
         
         if everything {
-         
-            for (c,f) in [ paulaIntena: fmt16,
-                           paulaIntreq: fmt16,
-                    
-                           dskDsklen:   fmt16,
-                           dskDskbytr:  fmt16,
-                           dskAdkconHi: fmt8,
-                           dskDsksync:  fmt16,
-                           // dskFifo0:    fmt8,
-                           // dskFifo1:    fmt8,
-                           // dskFifo2:    fmt8,
-                           // dskFifo3:    fmt8,
-                           // dskFifo4:    fmt8,
-                           // dskFifo5:    fmt8,
-                ]
-            {
-                assignFormatter(f, c!)
-            }
+
+            let elements = [ paulaIntena: fmt16,
+                             paulaIntreq: fmt16,
+                             dskDsklen: fmt16,
+                             dskDskbytr: fmt16,
+                             dskAdkconHi: fmt8,
+                             dskDsksync: fmt16 ]
+
+            for (c, f) in elements { assignFormatter(f, c!) }
         }
         
         // Interrupt controller
@@ -74,7 +65,7 @@ extension Inspector {
         paulaReq0.state  = (info.intreq & 0b0000000000000001 != 0) ? .on : .off
         
         // Disk controller
-        switch (dskInfo.state) {
+        switch dskInfo.state {
         case DRIVE_DMA_OFF:
             dskStateText.stringValue = "Idle"
         case DRIVE_DMA_WAIT:
@@ -113,7 +104,7 @@ extension Inspector {
 
         dskDsksync.integerValue = Int(dskInfo.dsksync)
        
-        switch (dskInfo.fifoCount) {
+        switch dskInfo.fifoCount {
         case 0: dskFifo0.stringValue = ""; fallthrough
         case 1: dskFifo1.stringValue = ""; fallthrough
         case 2: dskFifo2.stringValue = ""; fallthrough
@@ -123,13 +114,13 @@ extension Inspector {
         default: break
         }
 
-        switch (dskInfo.fifoCount) {
-        case 6: dskFifo5.stringValue = String(format:"%02X", dskInfo.fifo.5); fallthrough
-        case 5: dskFifo4.stringValue = String(format:"%02X", dskInfo.fifo.4); fallthrough
-        case 4: dskFifo3.stringValue = String(format:"%02X", dskInfo.fifo.3); fallthrough
-        case 3: dskFifo2.stringValue = String(format:"%02X", dskInfo.fifo.2); fallthrough
-        case 2: dskFifo1.stringValue = String(format:"%02X", dskInfo.fifo.1); fallthrough
-        case 1: dskFifo0.stringValue = String(format:"%02X", dskInfo.fifo.0); fallthrough
+        switch dskInfo.fifoCount {
+        case 6: dskFifo5.stringValue = String(format: "%02X", dskInfo.fifo.5); fallthrough
+        case 5: dskFifo4.stringValue = String(format: "%02X", dskInfo.fifo.4); fallthrough
+        case 4: dskFifo3.stringValue = String(format: "%02X", dskInfo.fifo.3); fallthrough
+        case 3: dskFifo2.stringValue = String(format: "%02X", dskInfo.fifo.2); fallthrough
+        case 2: dskFifo1.stringValue = String(format: "%02X", dskInfo.fifo.1); fallthrough
+        case 1: dskFifo0.stringValue = String(format: "%02X", dskInfo.fifo.0); fallthrough
         default: break
         }
         

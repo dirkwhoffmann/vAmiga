@@ -9,7 +9,7 @@
 
 // import Foundation
 
-class BankTableView : NSTableView {
+class BankTableView: NSTableView {
     
     @IBOutlet weak var inspector: Inspector!
 
@@ -38,7 +38,7 @@ class BankTableView : NSTableView {
     }
 }
 
-extension BankTableView : NSTableViewDataSource {
+extension BankTableView: NSTableViewDataSource {
     
     func numberOfRows(in tableView: NSTableView) -> Int { return 256; }
     
@@ -53,7 +53,7 @@ extension BankTableView : NSTableViewDataSource {
             
             let src = memory?.memSrc(row << 16).rawValue
             
-            switch (src) {
+            switch src {
                 
             case MEM_UNMAPPED.rawValue:
                 return "Unmapped"
@@ -80,14 +80,14 @@ extension BankTableView : NSTableViewDataSource {
     }
 }
 
-extension BankTableView : NSTableViewDelegate {
+extension BankTableView: NSTableViewDelegate {
     
     func tableView(_ tableView: NSTableView, willDisplayCell cell: Any, for tableColumn: NSTableColumn?, row: Int) {
         
         if let cell = cell as? NSTextFieldCell {
             
             let src = memory?.memSrc(row << 16).rawValue
-            switch (src) {
+            switch src {
             case MEM_UNMAPPED.rawValue:
                 cell.textColor = .gray
             default:
@@ -96,4 +96,3 @@ extension BankTableView : NSTableViewDelegate {
         }
     }
 }
-
