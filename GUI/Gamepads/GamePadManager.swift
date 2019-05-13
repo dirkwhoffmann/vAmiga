@@ -27,10 +27,10 @@ class GamePadManager: NSObject {
     //! @brief   References to all registered game pads
     /*! @details Each device ist referenced by a slot number
      */
-    var gamePads: [Int:GamePad] = [:]
+    var gamePads: [Int: GamePad] = [:]
 
-    override init()
-    {
+    override init() {
+
         hidManager = IOHIDManagerCreate(kCFAllocatorDefault, IOOptionBits(kIOHIDOptionsTypeNone))
         super.init()
     }
@@ -63,13 +63,13 @@ class GamePadManager: NSObject {
         ]
         
         // Declare bridging closures (needed to bridge between Swift methods and C callbacks)
-        let matchingCallback : IOHIDDeviceCallback = { inContext, inResult, inSender, device in
-            let this : GamePadManager = unsafeBitCast(inContext, to: GamePadManager.self)
+        let matchingCallback: IOHIDDeviceCallback = { inContext, inResult, inSender, device in
+            let this: GamePadManager = unsafeBitCast(inContext, to: GamePadManager.self)
             this.hidDeviceAdded(context: inContext, result: inResult, sender: inSender, device: device)
         }
         
-        let removalCallback : IOHIDDeviceCallback = { inContext, inResult, inSender, device in
-            let this : GamePadManager = unsafeBitCast(inContext, to: GamePadManager.self)
+        let removalCallback: IOHIDDeviceCallback = { inContext, inResult, inSender, device in
+            let this: GamePadManager = unsafeBitCast(inContext, to: GamePadManager.self)
             this.hidDeviceRemoved(context: inContext, result: inResult, sender: inSender, device: device)
         }
         
@@ -84,13 +84,13 @@ class GamePadManager: NSObject {
     
     deinit {
         track()
-        IOHIDManagerClose(hidManager, IOOptionBits(kIOHIDOptionsTypeNone));
+        IOHIDManagerClose(hidManager, IOOptionBits(kIOHIDOptionsTypeNone))
     }
     
     //! @brief   Removes all registered devices
     func shutDown() {
         
-        gamePads = [:];
+        gamePads = [:]
 
     }
     
@@ -124,7 +124,7 @@ class GamePadManager: NSObject {
     func lookupGamePad(_ gamePad: GamePad) -> Int {
         
         for (slotNr, device) in gamePads {
-            if (device === gamePad) {
+            if device === gamePad {
                 return slotNr
             }
         }
@@ -137,7 +137,7 @@ class GamePadManager: NSObject {
     func lookupGamePad(locationID: Int) -> Int {
         
         for (slotNr, device) in gamePads {
-            if (device.locationID == locationID) {
+            if device.locationID == locationID {
                 return slotNr
             }
         }
@@ -185,9 +185,9 @@ class GamePadManager: NSObject {
     //! @brief   Device matching callback
     /*! @details Method is invoked when a matching HID device is plugged in
      */
-    func hidDeviceAdded(context: Optional<UnsafeMutableRawPointer>,
+    func hidDeviceAdded(context: UnsafeMutableRawPointer?,
                         result: IOReturn,
-                        sender: Optional<UnsafeMutableRawPointer>,
+                        sender: UnsafeMutableRawPointer?,
                         device: IOHIDDevice) {
     
         track()
@@ -225,7 +225,7 @@ class GamePadManager: NSObject {
         // Open HID device
         let optionBits = kIOHIDOptionsTypeNone // kIOHIDOptionsTypeSeizeDevice
         let status = IOHIDDeviceOpen(device, IOOptionBits(optionBits))
-        if (status != kIOReturnSuccess) {
+        if status != kIOReturnSuccess {
             track("WARNING: Cannot open HID device")
             return
         }
@@ -240,9 +240,9 @@ class GamePadManager: NSObject {
         listDevices()
     }
     
-    func hidDeviceRemoved(context: Optional<UnsafeMutableRawPointer>,
+    func hidDeviceRemoved(context: UnsafeMutableRawPointer?,
                           result: IOReturn,
-                          sender: Optional<UnsafeMutableRawPointer>,
+                          sender: UnsafeMutableRawPointer?,
                           device: IOHIDDevice) {
         
         track()
@@ -257,7 +257,7 @@ class GamePadManager: NSObject {
         
         // Search for a matching locationID and remove device
         for (slotNr, device) in gamePads {
-            if (device.locationID == locationID) {
+            if device.locationID == locationID {
                 gamePads[slotNr] = nil
                 track("Clearing slot \(slotNr)")
             }
@@ -296,7 +296,7 @@ class GamePadManager: NSObject {
         
         for (slotNr, dev) in gamePads {
             
-            print("Game pad slot \(slotNr): ", terminator:"")
+            print("Game pad slot \(slotNr): ", terminator: "")
             if let name = dev.name {
                 print("\(name) (\(dev.vendorID), \(dev.productID), \(dev.locationID))")
             } else {
@@ -305,8 +305,8 @@ class GamePadManager: NSObject {
         }
     }
     
-    func restoreFactorySettings()
-    {
+    func restoreFactorySettings() {
+
         track()
     
         gamePads[0]!.keyMap = Defaults.joyKeyMap1
