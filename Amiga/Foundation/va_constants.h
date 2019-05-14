@@ -16,6 +16,9 @@ static const double masterClockFrequency = 28.37516;
 // Clock rate of the Motorola 68000 CPU (7.09379 MHz)
 static const double cpuClockFrequency = masterClockFrequency / 4.0;
 
+// Clock rate of the DMA bus (3.546895 MHz)
+static const double dmaClockFrequency = masterClockFrequency / 8.0;
+
 // Frame rate (PAL)
 // IS THIS 100% CORRECT? E.G., THE C64 DIFFERS SLIGHTLHY FROM 50
 static const double frameRate = 50.0;

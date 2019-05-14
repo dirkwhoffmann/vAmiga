@@ -86,16 +86,24 @@ AudioUnit::disableDMA(int channel)
 void
 AudioUnit::hsyncHandler()
 {
-    double dmaCyclesPerSample = 50 * (HPOS_MAX + 1) * (VPOS_MAX + 1) / 44100.0;
-    int executed = 0;
+    double dmaCyclesPerSample = dmaClockFrequency * 1000.0 / 44.1;
+    double dmaCyclesPerLine = dmaClockFrequency * 1000000.0 / (313.0 * 50.0);
 
-    while (dmaCycleCounter < (HPOS_MAX + 1)) {
+    // int executed = 0;
 
-        dmaCycleCounter += dmaCyclesPerSample;
-        int toExecute = (int)dmaCycleCounter;
-        int missing = toExecute - executed;
+    // double target = dmaCycleCounter + dmaCyclesPerLine;
+    // Cycle targetInt = (Cycle)target;
 
-         // Generate sound sample for the left and the right channel
+    dmaCycleCounter += dmaCyclesPerLine;
+    dmaCycleCounterInt += dmaCyclesPerLine;
+
+    while (dmaCycleCounter > 0) {
+
+        dmaCycleCounter -= dmaCyclesPerSample;
+        Cycle toExecute = (Cycle)(dmaCycleCounterInt - dmaCycleCounter);
+        dmaCycleCounterInt -= toExecute;
+
+        // Generate sound sample for the left and the right channel
         short left = 0;
         short right = 0;
 
@@ -103,34 +111,35 @@ AudioUnit::hsyncHandler()
 
             // Channel 0 (left)
             if (GET_BIT(dmaEnabled, 0)) {
-                executeStateMachine(0, missing);
+                executeStateMachine(0, toExecute);
                 left += (int8_t)(auddatInternal[0]) * audvol[0];
             }
 
             // Channel 1 (right)
             if (GET_BIT(dmaEnabled, 1)) {
-                executeStateMachine(1, missing);
+                executeStateMachine(1, toExecute);
                 right += (int8_t)(auddatInternal[1]) * audvol[1];
             }
 
             // Channel 2 (right)
             if (GET_BIT(dmaEnabled, 2)) {
-                executeStateMachine(2, missing);
+                executeStateMachine(2, toExecute);
                 right += (int8_t)(auddatInternal[2]) * audvol[2];
             }
 
             // Channel 3 (left)
             if (GET_BIT(dmaEnabled, 3)) {
-                executeStateMachine(3, missing);
+                executeStateMachine(3, toExecute);
                 left += (int8_t)(auddatInternal[3]) * audvol[3];
             }
         }
 
         writeData(left, right);
-        executed += missing;
+        // executed += missing;
     }
     
-    dmaCycleCounter -= executed;
+    // dmaCycleCounter -= executed;
+    // debug("%f %f\n", dmaCycleCounterInt, dmaCycleCounter); 
 }
 
 void
@@ -397,7 +406,7 @@ AudioUnit::handleBufferUnderflow()
     lastAlignment = now;
     
     // Adjust the sample rate, if condition (1) holds.
-    if (elapsedTime > 3.0) {
+    if (elapsedTime > 10.0) {
         
         bufferUnderflows++;
         
@@ -426,7 +435,7 @@ AudioUnit::handleBufferOverflow()
     lastAlignment = now;
     
     // Adjust the sample rate, if condition (1) holds.
-    if (elapsedTime > 3.0) {
+    if (elapsedTime > 10.0) {
         
         bufferOverflows++;
         

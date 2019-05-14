@@ -139,7 +139,7 @@ private:
     
     // Used by the hsync handler to compute the number of samples to generate.
     double dmaCycleCounter = 0;
-    
+    double dmaCycleCounterInt = 0;
     
     //
     // Constructing and destructing
