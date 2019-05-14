@@ -20,9 +20,6 @@ AudioFilter::AudioFilter()
     });
 
     a1 = a2 = b0 = b1 = b2 = 0.0;
-
-    // TODO: REMOVE THIS FROM THE CONSTRUCTOR
-    setSampleRate(44.1);
 }
 
 void
@@ -38,19 +35,19 @@ AudioFilter::setFilterType(FilterType type)
 }
 
 void
-AudioFilter::setSampleRate(float sampleRate)
+AudioFilter::setSampleRate(double sampleRate)
 {
-    // debug("Setting sample rate to %f kHz\n", sampleRate);
+    debug("Setting sample rate to %f Hz\n", sampleRate);
     
     // Compute butterworth filter coefficients based on
     // https://stackoverflow.com/questions/
     //  20924868/calculate-coefficients-of-2nd-order-butterworth-low-pass-filter
     
-    // Cutoff frequency
-    const double f_cutoff = 4.5;
+    // Cutoff frequency in Hz
+    const double f_cutoff = 4500;
 
     // Frequency ratio
-    const double ff = f_cutoff / (double)sampleRate;
+    const double ff = f_cutoff / sampleRate;
     
     // Compute coefficients
     const double ita = 1.0/ tan(M_PI*ff);

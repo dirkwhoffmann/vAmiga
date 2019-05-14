@@ -31,14 +31,14 @@ public:
     
 private:
 
+    // The component has been executed up to this clock cycle.
+    Cycle clock = 0;
+
     // The sample rate in Hz
     double sampleRate;
 
-    // CPU cycle at the last call to executeUntil()
-    // uint64_t cycles = 0;
-    
     // Time stamp of the last write pointer alignment
-    uint64_t lastAlignment = 0;
+    Cycle lastAlignment = 0;
     
 public:
     
@@ -140,7 +140,7 @@ private:
     // Current state of all four state machines.
     uint8_t currentState[4];
     
-    // Used by the hsync handler to compute the number of samples to generate.
+    // Used in executeUntil() to compute the number of samples to generate.
     double dmaCycleCounter1 = 0;
     double dmaCycleCounter2 = 0;
     
@@ -289,15 +289,20 @@ public:
      */
     const uint32_t samplesAhead = 8 * 735;
     void alignWritePtr() { writePtr = (readPtr  + samplesAhead) % bufferSize; }
-    
+
+
+    //
+    // Running the device
+    //
+
 public:
-    
+
     // Starts or ends audio DMA (called inside pokeDMACON)
     void enableDMA(int channel);
     void disableDMA(int channel);
     
-    // Executed at the end of each rasterline
-    void hsyncHandler();
+    // Executes the device until the given master clock cycle has been reached.
+    void executeUntil(Cycle targetClock);
     
     // Executes the state machine for a certain number of DMA cycles
     void executeStateMachine(int channel, DMACycle cycles);

@@ -835,8 +835,8 @@
 				5030890F21EFA74600FEAD12 /* Paula.cpp */,
 				50EE993F21FF4D8E003BD74B /* AudioUnit.h */,
 				50EE993E21FF4D8E003BD74B /* AudioUnit.cpp */,
-				505A214F22869FF10016EA21 /* AudioFilter.h */,
 				505A214E22869FF10016EA21 /* AudioFilter.cpp */,
+				505A214F22869FF10016EA21 /* AudioFilter.h */,
 				500C0A552259402D000121CD /* DiskController.h */,
 				500C0A542259402D000121CD /* DiskController.cpp */,
 			);

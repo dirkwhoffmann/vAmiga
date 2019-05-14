@@ -47,7 +47,7 @@ public:
     void setFilterType(FilterType type);
 
     // Sample rate
-    void setSampleRate(float sampleRate);
+    void setSampleRate(double sampleRate);
 
     
     //

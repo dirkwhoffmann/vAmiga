@@ -23,7 +23,7 @@ AudioUnit::AudioUnit()
     // Register snapshot items
     registerSnapshotItems(vector<SnapshotItem> {
         
-        // { &cycles,          sizeof(cycles),          0 },
+        { &clock,           sizeof(clock),           0 },
         
         { &audlen,          sizeof(audlen),          WORD_ARRAY },
         { &audlenInternal,  sizeof(audlenInternal),  WORD_ARRAY },
@@ -84,24 +84,25 @@ AudioUnit::disableDMA(int channel)
 }
 
 void
-AudioUnit::hsyncHandler()
+AudioUnit::executeUntil(Cycle targetClock)
 {
     double dmaCyclesPerSample = MHz(dmaClockFrequency) / sampleRate;
-    double dmaCyclesPerLine = MHz(dmaClockFrequency) / (313.0 * 50.0);
 
-    dmaCycleCounter1 += dmaCyclesPerLine;
-    dmaCycleCounter2 += dmaCyclesPerLine;
+    dmaCycleCounter1 += AS_DMA_CYCLES(targetClock - clock);
+    dmaCycleCounter2 += AS_DMA_CYCLES(targetClock - clock);
+    clock = targetClock;
 
     while (dmaCycleCounter1 > 0) {
 
+        short left = 0;
+        short right = 0;
+
+        // Compute number of DMA cycles in the next sampling interval
         dmaCycleCounter1 -= dmaCyclesPerSample;
         Cycle toExecute = (Cycle)(dmaCycleCounter2 - dmaCycleCounter1);
         dmaCycleCounter2 -= toExecute;
 
-        // Generate sound samples
-        short left = 0;
-        short right = 0;
-
+        // Execute the state machines for all four channels
         if (dmaEnabled) {
 
             // Channel 0 (left)
@@ -257,7 +258,10 @@ void
 AudioUnit::setSampleRate(double hz)
 {
     debug("Setting sample rate to %f\n", hz);
+
     sampleRate = hz;
+    filterL.setSampleRate(hz);
+    filterR.setSampleRate(hz);
 }
 
 void
