@@ -10,7 +10,7 @@
 #ifndef VA_CONSTANTS_H
 #define VA_CONSTANTS_H
 
-// Clock rate of the master clock (PAL)
+// Clock rate of the master clock in MHz (PAL Amiga)
 static const double masterClockFrequency = 28.37516;
 
 // Clock rate of the Motorola 68000 CPU (7.09379 MHz)

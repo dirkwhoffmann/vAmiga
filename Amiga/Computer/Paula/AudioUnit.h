@@ -30,9 +30,12 @@ public:
     //
     
 private:
-    
+
+    // The sample rate in Hz
+    double sampleRate;
+
     // CPU cycle at the last call to executeUntil()
-    uint64_t cycles = 0;
+    // uint64_t cycles = 0;
     
     // Time stamp of the last write pointer alignment
     uint64_t lastAlignment = 0;
@@ -138,8 +141,8 @@ private:
     uint8_t currentState[4];
     
     // Used by the hsync handler to compute the number of samples to generate.
-    double dmaCycleCounter = 0;
-    double dmaCycleCounterInt = 0;
+    double dmaCycleCounter1 = 0;
+    double dmaCycleCounter2 = 0;
     
     //
     // Constructing and destructing
@@ -171,12 +174,11 @@ private:
     
 public:
     
-    // Returns the sample rate.
-    uint32_t getSampleRate();
+    // Returns the current sample rate in Hz.
+    double getSampleRate();
     
-    // Sets the samplerate.
-    // TODO: Can we adjust the sample rate on the Mac side?
-    void setSampleRate(double rate);
+    // Sets the sample rate in Hz.
+    void setSampleRate(double hz);
     
     
     //

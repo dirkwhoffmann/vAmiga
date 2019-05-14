@@ -23,7 +23,7 @@ AudioUnit::AudioUnit()
     // Register snapshot items
     registerSnapshotItems(vector<SnapshotItem> {
         
-        { &cycles,          sizeof(cycles),          0 },
+        // { &cycles,          sizeof(cycles),          0 },
         
         { &audlen,          sizeof(audlen),          WORD_ARRAY },
         { &audlenInternal,  sizeof(audlenInternal),  WORD_ARRAY },
@@ -86,24 +86,19 @@ AudioUnit::disableDMA(int channel)
 void
 AudioUnit::hsyncHandler()
 {
-    double dmaCyclesPerSample = dmaClockFrequency * 1000.0 / 44.1;
-    double dmaCyclesPerLine = dmaClockFrequency * 1000000.0 / (313.0 * 50.0);
+    double dmaCyclesPerSample = MHz(dmaClockFrequency) / sampleRate;
+    double dmaCyclesPerLine = MHz(dmaClockFrequency) / (313.0 * 50.0);
 
-    // int executed = 0;
+    dmaCycleCounter1 += dmaCyclesPerLine;
+    dmaCycleCounter2 += dmaCyclesPerLine;
 
-    // double target = dmaCycleCounter + dmaCyclesPerLine;
-    // Cycle targetInt = (Cycle)target;
+    while (dmaCycleCounter1 > 0) {
 
-    dmaCycleCounter += dmaCyclesPerLine;
-    dmaCycleCounterInt += dmaCyclesPerLine;
+        dmaCycleCounter1 -= dmaCyclesPerSample;
+        Cycle toExecute = (Cycle)(dmaCycleCounter2 - dmaCycleCounter1);
+        dmaCycleCounter2 -= toExecute;
 
-    while (dmaCycleCounter > 0) {
-
-        dmaCycleCounter -= dmaCyclesPerSample;
-        Cycle toExecute = (Cycle)(dmaCycleCounterInt - dmaCycleCounter);
-        dmaCycleCounterInt -= toExecute;
-
-        // Generate sound sample for the left and the right channel
+        // Generate sound samples
         short left = 0;
         short right = 0;
 
@@ -134,12 +129,9 @@ AudioUnit::hsyncHandler()
             }
         }
 
+        // Write sound samples into buffers
         writeData(left, right);
-        // executed += missing;
     }
-    
-    // dmaCycleCounter -= executed;
-    // debug("%f %f\n", dmaCycleCounterInt, dmaCycleCounter); 
 }
 
 void
@@ -255,15 +247,17 @@ AudioUnit::executeStateMachine(int channel, DMACycle cycles)
     }
 }
 
-uint32_t
+double
 AudioUnit::getSampleRate()
 {
-    return 44100;
+    return sampleRate;
 }
 
 void
-AudioUnit::setSampleRate(double rate)
+AudioUnit::setSampleRate(double hz)
 {
+    debug("Setting sample rate to %f\n", hz);
+    sampleRate = hz;
 }
 
 void

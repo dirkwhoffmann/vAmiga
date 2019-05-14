@@ -45,6 +45,11 @@
 #define MB(x) ((x) << 20)
 
 
+// Macros for converting kilo Hertz and mega Hertz to Hertz
+#define KHz(x) ((x) * 1000)
+#define MHz(x) ((x) * 1000000)
+
+
 //
 // Accessing bits and bytes
 //
