@@ -202,13 +202,22 @@ AudioUnit::readStereoSample(float *left, float *right)
     *right = r;
 }
 
+float
+AudioUnit::ringbufferDataL(size_t offset)
+{
+    return ringBufferL[(readPtr + offset) % bufferSize];
+}
+
+float
+AudioUnit::ringbufferDataR(size_t offset)
+{
+    return ringBufferR[(readPtr + offset) % bufferSize];
+}
 
 float
 AudioUnit::ringbufferData(size_t offset)
 {
-    return
-    ringBufferL[(readPtr + offset) % bufferSize] +
-    ringBufferR[(readPtr + offset) % bufferSize];
+    return ringbufferDataL(offset) + ringbufferDataR(offset);
 }
 
 void
@@ -228,8 +237,6 @@ AudioUnit::readMonoSamples(float *target, size_t n)
 void
 AudioUnit::readStereoSamples(float *target1, float *target2, size_t n)
 {
-    // debug("read: %d write: %d Reading %d\n", readPtr, writePtr, n);
-    
     // Check for a buffer underflow
     if (samplesInBuffer() < n)
         handleBufferUnderflow();

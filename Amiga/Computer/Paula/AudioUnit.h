@@ -198,6 +198,8 @@ public:
     void readStereoSample(float *left, float *right);
 
     // Reads a single audio sample without moving the read pointer
+    float ringbufferDataL(size_t offset);
+    float ringbufferDataR(size_t offset);
     float ringbufferData(size_t offset);
     
     /* Reads a certain amount of samples from ringbuffer
