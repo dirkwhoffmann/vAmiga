@@ -31,6 +31,7 @@ StateMachine::StateMachine()
 void
 StateMachine::setNr(uint8_t nr)
 {
+    assert(nr < 4);
     this->nr = nr;
 
     switch (nr) {
@@ -47,8 +48,6 @@ StateMachine::setNr(uint8_t nr)
 void
 StateMachine::execute(DMACycle cycles)
 {
-    return;
-    
     switch(state) {
 
         case 0b000:

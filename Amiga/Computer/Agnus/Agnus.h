@@ -146,7 +146,8 @@ class Agnus : public HardwareComponent
     
     // The audio DMA pointers
     uint32_t audlc[4];
-    
+    uint32_t audlcold[4];
+
     // The bitplane DMA pointers
     uint32_t bplpt[6];
     

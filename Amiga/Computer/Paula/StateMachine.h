@@ -16,7 +16,7 @@ class StateMachine : public HardwareComponent {
 
     friend class AudioUnit;
     
-private:
+public:
 
     // The audio channel controlled by this state machine
     int8_t nr;

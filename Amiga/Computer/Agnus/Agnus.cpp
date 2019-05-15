@@ -49,6 +49,7 @@ Agnus::Agnus()
         { &ddfstrt,         sizeof(ddfstrt),         0 },
         { &ddfstop,         sizeof(ddfstop),         0 },
         { &audlc,           sizeof(audlc),           DWORD_ARRAY },
+        { &audlcold,           sizeof(audlcold),           DWORD_ARRAY },
         { &bplpt,           sizeof(bplpt),           DWORD_ARRAY },
         { &bpl1mod,         sizeof(bpl1mod),         0 },
         { &bpl2mod,         sizeof(bpl2mod),         0 },
@@ -912,6 +913,8 @@ Agnus::pokeAUDxLCH(int x, uint16_t value)
 
     _paula->audioUnit.audlcLatch[x] =
     REPLACE_HI_WORD(_paula->audioUnit.audlcLatch[x], value & 0x7);
+    _paula->audioUnit.channel[x].audlcLatch =
+    REPLACE_HI_WORD(_paula->audioUnit.channel[x].audlcLatch, value & 0x7);
 }
 
 void
@@ -922,6 +925,8 @@ Agnus::pokeAUDxLCL(int x, uint16_t value)
 
     _paula->audioUnit.audlcLatch[x] =
     REPLACE_LO_WORD(_paula->audioUnit.audlcLatch[x], value);
+    _paula->audioUnit.channel[x].audlcLatch =
+    REPLACE_LO_WORD(_paula->audioUnit.channel[x].audlcLatch, value);
 }
 
 void
