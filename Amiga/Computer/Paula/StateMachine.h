@@ -69,9 +69,13 @@ public:
     // Move the machine to a specific state
     void setState(uint8_t state) { this->state = state; }
 
-    // Executes the state machine for a certain number of DMA cycles
-    void execute(DMACycle cycles);
+    /* Executes the state machine for a certain number of DMA cycles.
+     * The return value is the current audio sample of this channel.
+     */
+    int16_t execute(DMACycle cycles);
 
+    // Returns the current sample from this audio channel
+    // int16_t getSample() { return (int8_t)auddatInternal * audvol; }
 };
 
 

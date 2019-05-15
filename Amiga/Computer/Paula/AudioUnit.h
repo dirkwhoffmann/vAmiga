@@ -158,7 +158,7 @@ public:
     
     
     //
-    // Volume control
+    // Controlling the volume
     //
     
     /* Sets the current volume
@@ -192,18 +192,10 @@ public:
     
     // Clears the ringbuffer and resets the read and write pointer
     void clearRingbuffer();
-    
-    // Reads a single audio sample from the ringbuffer
-    // DEPRECATED
-    // float readData();
 
     // Reads sound samples from the sample buffers
     void readMonoSample(float *mono);
     void readStereoSample(float *left, float *right);
-
-
-    // Read a mono or two stereo samples from the ringbuffer
-
 
     // Reads a single audio sample without moving the read pointer
     float ringbufferData(size_t offset);

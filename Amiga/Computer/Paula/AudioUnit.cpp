@@ -101,26 +101,22 @@ AudioUnit::executeUntil(Cycle targetClock)
 
             // Channel 0 (left)
             if (GET_BIT(dmaEnabled, 0)) {
-                channel[0].execute(toExecute);
-                left += (int8_t)(channel[0].auddatInternal) * channel[0].audvol;
+                left += channel[0].execute(toExecute);
             }
 
             // Channel 1 (right)
             if (GET_BIT(dmaEnabled, 1)) {
-                channel[1].execute(toExecute);
-                right += (int8_t)(channel[1].auddatInternal) * channel[1].audvol;
+                right += channel[1].execute(toExecute);
             }
 
             // Channel 2 (right)
             if (GET_BIT(dmaEnabled, 2)) {
-                channel[2].execute(toExecute);
-                right += (int8_t)(channel[2].auddatInternal) * channel[2].audvol;
+                right += channel[2].execute(toExecute);
             }
 
             // Channel 3 (left)
             if (GET_BIT(dmaEnabled, 3)) {
-                channel[3].execute(toExecute);
-                left += (int8_t)(channel[3].auddatInternal) * channel[3].audvol;
+                left += channel[3].execute(toExecute);
             }
         }
 
@@ -351,8 +347,9 @@ AudioUnit::pokeAUDxVOL(int x, uint16_t value)
     debug(2, "pokeAUD%dVOL(%X)\n", x, value);
     assert(x < 4);
     
-    // Behaviour: 1. Only the lowest 7 bits are evaluated.
-    //            2. All values greater than 64 are treated as 64 (max volume).
+    /* Behaviour: 1. Only the lowest 7 bits are evaluated.
+     *            2. All values greater than 64 are treated as 64 (max volume).
+     */
     channel[x].audvol = MIN(value & 0x7F, 64);
 }
 

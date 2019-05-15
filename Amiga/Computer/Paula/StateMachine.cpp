@@ -45,7 +45,7 @@ StateMachine::setNr(uint8_t nr)
     }
 }
 
-void
+int16_t
 StateMachine::execute(DMACycle cycles)
 {
     switch(state) {
@@ -66,7 +66,6 @@ StateMachine::execute(DMACycle cycles)
             _paula->pokeINTREQ(0x8000 | (0x80 << nr));
 
             state = 0b101;
-
             break;
 
         case 0b010:
@@ -147,4 +146,6 @@ StateMachine::execute(DMACycle cycles)
             break;
 
     }
+
+    return (int8_t)auddatInternal * audvol;
 }
