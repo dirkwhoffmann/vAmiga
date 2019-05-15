@@ -336,7 +336,7 @@ AudioUnit::pokeAUDxLEN(int x, uint16_t value)
     debug(2, "pokeAUD%dLEN(%X)\n", x, value);
     assert(x < 4);
 
-    channel[x].audlen = value;
+    channel[x].audlenLatch = value;
 }
 
 void
@@ -345,7 +345,7 @@ AudioUnit::pokeAUDxPER(int x, uint16_t value)
     debug(2, "pokeAUD%dPER(%X)\n", x, value);
     assert(x < 4);
 
-    channel[x].audper = value;
+    channel[x].audperLatch = value;
 }
 
 void
@@ -357,7 +357,7 @@ AudioUnit::pokeAUDxVOL(int x, uint16_t value)
     /* Behaviour: 1. Only the lowest 7 bits are evaluated.
      *            2. All values greater than 64 are treated as 64 (max volume).
      */
-    channel[x].audvol = MIN(value & 0x7F, 64);
+    channel[x].audvolLatch = MIN(value & 0x7F, 64);
 }
 
 void
@@ -366,5 +366,5 @@ AudioUnit::pokeAUDxDAT(int x, uint16_t value)
     debug(2, "pokeAUD%dDAT(%X)\n", x, value);
     assert(x < 4);
 
-    channel[x].auddat = value;
+    channel[x].auddatLatch = value;
 }

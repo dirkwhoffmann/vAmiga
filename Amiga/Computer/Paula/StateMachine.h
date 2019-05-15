@@ -25,19 +25,19 @@ public:
     int8_t state;
 
     // Audio length (AUDxLEN)
-    uint16_t audlen;
+    uint16_t audlenLatch;
     uint16_t audlenInternal;
 
     // Audio period (AUDxPER)
-    uint16_t audper;
+    uint16_t audperLatch;
     int32_t audperInternal;
 
     // Audio volume (AUDxVOL)
-    uint16_t audvol;
+    uint16_t audvolLatch;
     uint16_t audvolInternal;
 
     // Audio data (AUDxDAT)
-    uint16_t auddat;
+    uint16_t auddatLatch;
     uint16_t auddatInternal;
 
     uint32_t audlcLatch;
@@ -56,15 +56,10 @@ public:
 
 
     //
-    // Configuring the device
+    // Running the device
     //
 
 public:
-
-
-    //
-    // Running the device
-    //
 
     // Move the machine to a specific state
     void setState(uint8_t state) { this->state = state; }
@@ -73,9 +68,6 @@ public:
      * The return value is the current audio sample of this channel.
      */
     int16_t execute(DMACycle cycles);
-
-    // Returns the current sample from this audio channel
-    // int16_t getSample() { return (int8_t)auddatInternal * audvol; }
 };
 
 

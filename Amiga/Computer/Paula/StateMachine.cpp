@@ -16,13 +16,13 @@ StateMachine::StateMachine()
 
         { &state,           sizeof(state),           0 },
 
-        { &audlen,          sizeof(audlen),          0 },
+        { &audlenLatch,          sizeof(audlenLatch),          0 },
         { &audlenInternal,  sizeof(audlenInternal),  0 },
-        { &audper,          sizeof(audper),          0 },
+        { &audperLatch,          sizeof(audperLatch),          0 },
         { &audperInternal,  sizeof(audperInternal),  0 },
-        { &audvol,          sizeof(audvol),          0 },
+        { &audvolLatch,          sizeof(audvolLatch),          0 },
         { &audvolInternal,  sizeof(audvolInternal),  0 },
-        { &auddat,          sizeof(auddat),          0 },
+        { &auddatLatch,          sizeof(auddatLatch),          0 },
         { &auddatInternal,  sizeof(auddatInternal),  0 },
         { &audlcLatch,      sizeof(audlcLatch),      0 },
     });
@@ -52,7 +52,7 @@ StateMachine::execute(DMACycle cycles)
 
         case 0b000:
 
-            audlenInternal = audlen;
+            audlenInternal = audlenLatch;
             _agnus->audlc[nr] = audlcLatch;
             audperInternal = 0;
             state = 0b001;
@@ -74,11 +74,11 @@ StateMachine::execute(DMACycle cycles)
 
             if (audperInternal < 0) {
 
-                audperInternal += audper;
-                audvolInternal = audvol;
+                audperInternal += audperLatch;
+                audvolInternal = audvolLatch;
 
                 // Put out the high byte
-                auddatInternal = HI_BYTE(auddat);
+                auddatInternal = HI_BYTE(auddatLatch);
 
                 // Switch forth to state 3
                 state = 0b011;
@@ -91,21 +91,21 @@ StateMachine::execute(DMACycle cycles)
 
             if (audperInternal < 0) {
 
-                audperInternal += audper;
-                audvolInternal = audvol;
+                audperInternal += audperLatch;
+                audvolInternal = audvolLatch;
 
                 // Put out the low byte
-                auddatInternal = LO_BYTE(auddat);
+                auddatInternal = LO_BYTE(auddatLatch);
 
                 // Read the next two samples from memory
-                auddat = _mem->peekChip16(_agnus->audlc[nr]);
+                auddatLatch = _mem->peekChip16(_agnus->audlc[nr]);
                 INC_DMAPTR(_agnus->audlc[nr]);
 
                 // Decrease the length counter
                 if (audlenInternal > 1) {
                     audlenInternal--;
                 } else {
-                    audlenInternal = audlen;
+                    audlenInternal = audlenLatch;
                     _agnus->audlc[nr] = audlcLatch;
 
                     // Trigger Audio interrupt
@@ -120,17 +120,17 @@ StateMachine::execute(DMACycle cycles)
 
         case 0b101:
 
-            audvolInternal = audvol;
+            audvolInternal = audvolLatch;
             audperInternal = 0;
 
             // Read the next two samples from memory
-            auddat = _mem->peekChip16(_agnus->audlc[nr]);
+            auddatLatch = _mem->peekChip16(_agnus->audlc[nr]);
             INC_DMAPTR(_agnus->audlc[nr]);
 
             if (audlenInternal > 1) {
                 audlenInternal--;
             } else {
-                audlenInternal = audlen;
+                audlenInternal = audlenLatch;
                 _agnus->audlc[nr] = audlcLatch;
 
                 // Trigger Audio interrupt
@@ -147,5 +147,5 @@ StateMachine::execute(DMACycle cycles)
 
     }
 
-    return (int8_t)auddatInternal * audvol;
+    return (int8_t)auddatInternal * audvolLatch;
 }
