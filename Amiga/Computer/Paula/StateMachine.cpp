@@ -14,17 +14,17 @@ StateMachine::StateMachine()
     // Register snapshot items
     registerSnapshotItems(vector<SnapshotItem> {
 
-        { &state,           sizeof(state),           0 },
+        { &state,        sizeof(state),        0 },
 
-        { &audlenLatch,          sizeof(audlenLatch),          0 },
-        { &audlenInternal,  sizeof(audlenInternal),  0 },
-        { &audperLatch,          sizeof(audperLatch),          0 },
-        { &audperInternal,  sizeof(audperInternal),  0 },
-        { &audvolLatch,          sizeof(audvolLatch),          0 },
-        { &audvolInternal,  sizeof(audvolInternal),  0 },
-        { &auddatLatch,          sizeof(auddatLatch),          0 },
-        { &auddatInternal,  sizeof(auddatInternal),  0 },
-        { &audlcLatch,      sizeof(audlcLatch),      0 },
+        { &audlenLatch,  sizeof(audlenLatch),  0 },
+        { &audlen,       sizeof(audlen),       0 },
+        { &audperLatch,  sizeof(audperLatch),  0 },
+        { &audper,       sizeof(audper),       0 },
+        { &audvolLatch,  sizeof(audvolLatch),  0 },
+        { &audvol,       sizeof(audvol),       0 },
+        { &auddatLatch,  sizeof(auddatLatch),  0 },
+        { &auddat,       sizeof(auddat),       0 },
+        { &audlcLatch,   sizeof(audlcLatch),   0 },
     });
 }
 
@@ -52,15 +52,15 @@ StateMachine::execute(DMACycle cycles)
 
         case 0b000:
 
-            audlenInternal = audlenLatch;
+            audlen = audlenLatch;
             _agnus->audlc[nr] = audlcLatch;
-            audperInternal = 0;
+            audper = 0;
             state = 0b001;
             break;
 
         case 0b001:
 
-            if (audlenInternal > 1) audlenInternal--;
+            if (audlen > 1) audlen--;
 
             // Trigger Audio interrupt
             _paula->pokeINTREQ(0x8000 | (0x80 << nr));
@@ -70,15 +70,15 @@ StateMachine::execute(DMACycle cycles)
 
         case 0b010:
 
-            audperInternal -= cycles;
+            audper -= cycles;
 
-            if (audperInternal < 0) {
+            if (audper < 0) {
 
-                audperInternal += audperLatch;
-                audvolInternal = audvolLatch;
+                audper += audperLatch;
+                audvol = audvolLatch;
 
                 // Put out the high byte
-                auddatInternal = HI_BYTE(auddatLatch);
+                auddat = HI_BYTE(auddatLatch);
 
                 // Switch forth to state 3
                 state = 0b011;
@@ -87,25 +87,25 @@ StateMachine::execute(DMACycle cycles)
 
         case 0b011:
 
-            audperInternal -= cycles;
+            audper -= cycles;
 
-            if (audperInternal < 0) {
+            if (audper < 0) {
 
-                audperInternal += audperLatch;
-                audvolInternal = audvolLatch;
+                audper += audperLatch;
+                audvol = audvolLatch;
 
                 // Put out the low byte
-                auddatInternal = LO_BYTE(auddatLatch);
+                auddat = LO_BYTE(auddatLatch);
 
                 // Read the next two samples from memory
                 auddatLatch = _mem->peekChip16(_agnus->audlc[nr]);
                 INC_DMAPTR(_agnus->audlc[nr]);
 
                 // Decrease the length counter
-                if (audlenInternal > 1) {
-                    audlenInternal--;
+                if (audlen > 1) {
+                    audlen--;
                 } else {
-                    audlenInternal = audlenLatch;
+                    audlen = audlenLatch;
                     _agnus->audlc[nr] = audlcLatch;
 
                     // Trigger Audio interrupt
@@ -120,17 +120,17 @@ StateMachine::execute(DMACycle cycles)
 
         case 0b101:
 
-            audvolInternal = audvolLatch;
-            audperInternal = 0;
+            audvol = audvolLatch;
+            audper = 0;
 
             // Read the next two samples from memory
             auddatLatch = _mem->peekChip16(_agnus->audlc[nr]);
             INC_DMAPTR(_agnus->audlc[nr]);
 
-            if (audlenInternal > 1) {
-                audlenInternal--;
+            if (audlen > 1) {
+                audlen--;
             } else {
-                audlenInternal = audlenLatch;
+                audlen = audlenLatch;
                 _agnus->audlc[nr] = audlcLatch;
 
                 // Trigger Audio interrupt
@@ -147,5 +147,5 @@ StateMachine::execute(DMACycle cycles)
 
     }
 
-    return (int8_t)auddatInternal * audvolLatch;
+    return (int8_t)auddat * audvolLatch;
 }

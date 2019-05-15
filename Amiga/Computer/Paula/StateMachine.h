@@ -26,20 +26,21 @@ public:
 
     // Audio length (AUDxLEN)
     uint16_t audlenLatch;
-    uint16_t audlenInternal;
+    uint16_t audlen;
 
     // Audio period (AUDxPER)
     uint16_t audperLatch;
-    int32_t audperInternal;
+    int32_t audper;
 
     // Audio volume (AUDxVOL)
     uint16_t audvolLatch;
-    uint16_t audvolInternal;
+    uint16_t audvol;
 
     // Audio data (AUDxDAT)
     uint16_t auddatLatch;
-    uint16_t auddatInternal;
+    uint16_t auddat;
 
+    // Audio location (AUDxLC)
     uint32_t audlcLatch;
 
 
