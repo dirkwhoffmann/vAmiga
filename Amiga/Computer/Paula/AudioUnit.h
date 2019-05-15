@@ -24,14 +24,6 @@ public:
     // State machines
     StateMachine channel[4];
 
-    /*= {
-        StateMachine(0),
-        StateMachine(1),
-        StateMachine(2),
-        StateMachine(3)
-    };
-     */
-
     // Audio filters
     AudioFilter filterL;
     AudioFilter filterR;
@@ -114,30 +106,6 @@ private:
      */
     int32_t volumeDelta = 0;
     
-    //
-    // Registers
-    //
-    
-    // Audio length (AUDxLEN)
-    uint16_t audlen[4];
-    uint16_t audlenInternal[4];
-    
-    // Audio period (AUDxPER)
-    uint16_t audper[4];
-    int32_t audperInternal[4];
-    
-    // Audio volume (AUDxVOL)
-    uint16_t audvol[4];
-    uint16_t audvolInternal[4];
-    
-    // Audio data (AUDxDAT)
-    uint16_t auddat[4];
-    uint16_t auddatInternal[4];
-    
-public:
-    
-    uint32_t audlcLatch[4];
-    
     
     //
     // State machine
@@ -148,9 +116,6 @@ private:
     // Indicates the enabled sound DMA channels (Bit n = channel n)
     uint8_t dmaEnabled;
 
-    // Current state of all four state machines.
-    uint8_t currentState[4];
-    
     // Used in executeUntil() to compute the number of samples to generate.
     double dmaCycleCounter1 = 0;
     double dmaCycleCounter2 = 0;
@@ -314,17 +279,14 @@ public:
     
     // Executes the device until the given master clock cycle has been reached.
     void executeUntil(Cycle targetClock);
-    
-    // Executes the state machine for a certain number of DMA cycles
-    void executeStateMachine(int channel, DMACycle cycles);
-    
+
     
     //
     // Accessing registers
     //
     
 public:
-    
+
     // OCS registers 0xA4, 0xB4, 0x0C4, 0xD4 (w)
     void pokeAUDxLEN(int x, uint16_t value);
     

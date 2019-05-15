@@ -28,19 +28,7 @@ AudioUnit::AudioUnit()
     registerSnapshotItems(vector<SnapshotItem> {
         
         { &clock,           sizeof(clock),           0 },
-        
-        { &audlen,          sizeof(audlen),          WORD_ARRAY },
-        { &audlenInternal,  sizeof(audlenInternal),  WORD_ARRAY },
-        { &audper,          sizeof(audper),          WORD_ARRAY },
-        { &audperInternal,  sizeof(audperInternal),  WORD_ARRAY },
-        { &audvol,          sizeof(audvol),          WORD_ARRAY },
-        { &audvolInternal,  sizeof(audvolInternal),  WORD_ARRAY },
-        { &auddat,          sizeof(auddat),          WORD_ARRAY },
-        { &auddatInternal,  sizeof(auddatInternal),  WORD_ARRAY },
-        { &audlcLatch,      sizeof(audlcLatch),      WORD_ARRAY },
-
         { &dmaEnabled,      sizeof(dmaEnabled),      0 },
-        { &currentState,    sizeof(currentState),    WORD_ARRAY },
     });
 
     for (unsigned i = 0; i < 4; i++) channel[i].setNr(i);
@@ -78,8 +66,6 @@ AudioUnit::_pause()
 void
 AudioUnit::enableDMA(int nr)
 {
-    
-    currentState[nr] = 0;
     channel[nr].setState(0b000);
     SET_BIT(dmaEnabled, nr);
 }
@@ -87,7 +73,6 @@ AudioUnit::enableDMA(int nr)
 void
 AudioUnit::disableDMA(int nr)
 {
-    currentState[nr] = 0;
     channel[nr].setState(0b000);
     CLR_BIT(dmaEnabled, nr);
 }
@@ -117,172 +102,30 @@ AudioUnit::executeUntil(Cycle targetClock)
             // Channel 0 (left)
             if (GET_BIT(dmaEnabled, 0)) {
                 channel[0].execute(toExecute);
-                executeStateMachine(0, toExecute);
                 left += (int8_t)(channel[0].auddatInternal) * channel[0].audvol;
-                // left += (int8_t)(auddatInternal[0]) * audvol[0];
             }
 
             // Channel 1 (right)
             if (GET_BIT(dmaEnabled, 1)) {
                 channel[1].execute(toExecute);
-                executeStateMachine(1, toExecute);
                 right += (int8_t)(channel[1].auddatInternal) * channel[1].audvol;
-                // right += (int8_t)(auddatInternal[1]) * audvol[1];
             }
 
             // Channel 2 (right)
             if (GET_BIT(dmaEnabled, 2)) {
                 channel[2].execute(toExecute);
-                executeStateMachine(2, toExecute);
                 right += (int8_t)(channel[2].auddatInternal) * channel[2].audvol;
-                // right += (int8_t)(auddatInternal[2]) * audvol[2];
             }
 
             // Channel 3 (left)
             if (GET_BIT(dmaEnabled, 3)) {
                 channel[3].execute(toExecute);
-                executeStateMachine(3, toExecute);
                 left += (int8_t)(channel[3].auddatInternal) * channel[3].audvol;
-                // left += (int8_t)(auddatInternal[3]) * audvol[3];
             }
         }
 
-        assert(channel[0].state == currentState[0]);
-        assert(channel[1].state == currentState[1]);
-        assert(channel[2].state == currentState[2]);
-        assert(channel[3].state == currentState[3]);
-        assert(channel[0].audvol == audvol[0]);
-        assert(channel[1].audvol == audvol[1]);
-        assert(channel[2].audvol == audvol[2]);
-        assert(channel[3].audvol == audvol[3]);
-        assert(channel[0].audlen == audlen[0]);
-        assert(channel[1].audlen == audlen[1]);
-        assert(channel[2].audlen == audlen[2]);
-        assert(channel[3].audlen == audlen[3]);
-        assert(channel[0].audper == audper[0]);
-        assert(channel[1].audper == audper[1]);
-        assert(channel[2].audper == audper[2]);
-        assert(channel[3].audper == audper[3]);
-        assert(channel[0].auddat == auddat[0]);
-        assert(channel[1].auddat == auddat[1]);
-        assert(channel[2].auddat == auddat[2]);
-        assert(channel[3].auddat == auddat[3]);
-
         // Write sound samples into buffers
         writeData(left, right);
-    }
-}
-
-void
-AudioUnit::executeStateMachine(int channel, DMACycle cycles)
-{
-    // if (dmaEnabled[channel]) return;
-    // debug("State machine channel %d: current state = %d\n", channel, currentState[channel]);
-    
-    switch(currentState[channel]) {
-            
-        case 0:
-            
-            debug("state = %d\n", currentState[channel]);
-            
-            audlenInternal[channel] = audlen[channel];
-            _agnus->audlcold[channel] = audlcLatch[channel];
-            audperInternal[channel] = 0;
-            currentState[channel] = 1;
-            break;
-            
-        case 1:
-            
-            debug("state = %d\n", currentState[channel]);
-
-            if (audlenInternal[channel] > 1) audlenInternal[channel]--;
-            
-            // Trigger Audio interrupt
-            _paula->pokeINTREQ(0x8000 | (0x80 << channel));
-            
-            currentState[channel] = 5;
-            
-            break;
-            
-        case 2:
-            
-            audperInternal[channel] -= cycles;
-
-            if (audperInternal[channel] < 0) {
-                
-                audperInternal[channel] += audper[channel];
-                audvolInternal[channel] = audvol[channel];
-                
-                // Put out the high byte
-                auddatInternal[channel] = HI_BYTE(auddat[channel]);
-                
-                // Switch forth to state 3
-                currentState[channel] = 3;
-            }
-            break;
-            
-        case 3:
-            
-            audperInternal[channel] -= cycles;
-            
-            if (audperInternal[channel] < 0) {
-                
-                audperInternal[channel] += audper[channel];
-                audvolInternal[channel] = audvol[channel];
-                
-                // Put out the low byte
-                auddatInternal[channel] = LO_BYTE(auddat[channel]);
-
-                // Read the next two samples from memory
-                auddat[channel] = _mem->peekChip16(_agnus->audlcold[channel]);
-                INC_DMAPTR(_agnus->audlcold[channel]);
-                
-                // Decrease the length counter
-                if (audlenInternal[channel] > 1) {
-                    audlenInternal[channel]--;
-                } else {
-                    audlenInternal[channel] = audlen[channel];
-                    _agnus->audlcold[channel] = audlcLatch[channel];
-                    
-                    // Trigger Audio interrupt
-                    _paula->pokeINTREQ(0x8000 | (0x80 << channel));
-                }
-                    
-                // Switch back to state 2
-                currentState[channel] = 2;
-                
-            }
-            break;
-            
-        case 5:
-            
-            debug("state = %d\n", currentState[channel]);
-
-            audvolInternal[channel] = audvol[channel];
-            audperInternal[channel] = 0;
-            
-            // Read the next two samples from memory
-            auddat[channel] = _mem->peekChip16(_agnus->audlcold[channel]);
-            INC_DMAPTR(_agnus->audlcold[channel]);
-            
-            if (audlenInternal[channel] > 1) {
-                audlenInternal[channel]--;
-            } else {
-                audlenInternal[channel] = audlen[channel];
-                _agnus->audlcold[channel] = audlcLatch[channel];
-                
-                // Trigger Audio interrupt
-                _paula->pokeINTREQ(0x8000 | (0x80 << channel));
-            }
-            
-            // Transition to state 2
-            currentState[channel] = 2;
-            break;
-
-        default:
-            assert(false);
-            break;
-            
     }
 }
 
@@ -491,7 +334,6 @@ AudioUnit::pokeAUDxLEN(int x, uint16_t value)
     assert(x < 4);
 
     channel[x].audlen = value;
-    audlen[x] = value;
 }
 
 void
@@ -501,7 +343,6 @@ AudioUnit::pokeAUDxPER(int x, uint16_t value)
     assert(x < 4);
 
     channel[x].audper = value;
-    audper[x] = value;
 }
 
 void
@@ -513,7 +354,6 @@ AudioUnit::pokeAUDxVOL(int x, uint16_t value)
     // Behaviour: 1. Only the lowest 7 bits are evaluated.
     //            2. All values greater than 64 are treated as 64 (max volume).
     channel[x].audvol = MIN(value & 0x7F, 64);
-    audvol[x] = MIN(value & 0x7F, 64);
 }
 
 void
@@ -522,6 +362,5 @@ AudioUnit::pokeAUDxDAT(int x, uint16_t value)
     debug(2, "pokeAUD%dDAT(%X)\n", x, value);
     assert(x < 4);
 
-    channel[x].auddat = value; 
-    auddat[x] = value;
+    channel[x].auddat = value;
 }
