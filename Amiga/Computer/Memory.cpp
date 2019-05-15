@@ -1255,7 +1255,7 @@ Memory::peekAutoConf8(uint32_t addr)
 {
     uint8_t result = _zorro->peekFastRamDevice(addr) << 4;
     
-    debug("peekAutoConf8(%X) = %X\n", addr, result);
+    // debug("peekAutoConf8(%X) = %X\n", addr, result);
     return result;
 }
 
@@ -1264,21 +1264,21 @@ Memory::peekAutoConf16(uint32_t addr)
 {
     uint16_t result = HI_LO(peekAutoConf8(addr), peekAutoConf8(addr + 1));
     
-    debug("peekAutoConf16(%X) = %d\n", addr, result);
+    // debug("peekAutoConf16(%X) = %d\n", addr, result);
     return result;
 }
 
 void
 Memory::pokeAutoConf8(uint32_t addr, uint8_t value)
 {
-    debug("pokeAutoConf8(%X, %X)\n", addr, value);
+    // debug("pokeAutoConf8(%X, %X)\n", addr, value);
     _zorro->pokeFastRamDevice(addr, value);
 }
 
 void
 Memory::pokeAutoConf16(uint32_t addr, uint16_t value)
 {
-    debug("pokeAutoConf16(%X, %X)\n", addr, value);
+    // debug("pokeAutoConf16(%X, %X)\n", addr, value);
     _zorro->pokeFastRamDevice(addr, HI_BYTE(value));
     _zorro->pokeFastRamDevice(addr + 1, LO_BYTE(value));
 }

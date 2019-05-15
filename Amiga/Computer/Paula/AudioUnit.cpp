@@ -15,11 +15,15 @@ AudioUnit::AudioUnit()
     
     // Register subcomponents
     registerSubcomponents(vector<HardwareComponent *> {
-        
+
+        &channel[0],
+        &channel[1],
+        &channel[2],
+        &channel[3],
         &filterL,
         &filterR
     });
-    
+
     // Register snapshot items
     registerSnapshotItems(vector<SnapshotItem> {
         
@@ -38,6 +42,8 @@ AudioUnit::AudioUnit()
         { &dmaEnabled,      sizeof(dmaEnabled),      0 },
         { &currentState,    sizeof(currentState),    WORD_ARRAY },
     });
+
+    for (unsigned i = 0; i < 4; i++) channel[i].setNr(i);
 }
 
 void
@@ -70,17 +76,20 @@ AudioUnit::_pause()
 }
 
 void
-AudioUnit::enableDMA(int channel)
+AudioUnit::enableDMA(int nr)
 {
-    currentState[channel] = 0;
-    SET_BIT(dmaEnabled, channel);
+    
+    currentState[nr] = 0;
+    channel[nr].setState(0b000);
+    SET_BIT(dmaEnabled, nr);
 }
 
 void
-AudioUnit::disableDMA(int channel)
+AudioUnit::disableDMA(int nr)
 {
-    currentState[channel] = 0;
-    CLR_BIT(dmaEnabled, channel);
+    currentState[nr] = 0;
+    channel[nr].setState(0b000);
+    CLR_BIT(dmaEnabled, nr);
 }
 
 void
@@ -107,24 +116,28 @@ AudioUnit::executeUntil(Cycle targetClock)
 
             // Channel 0 (left)
             if (GET_BIT(dmaEnabled, 0)) {
+                channel[0].execute(toExecute);
                 executeStateMachine(0, toExecute);
                 left += (int8_t)(auddatInternal[0]) * audvol[0];
             }
 
             // Channel 1 (right)
             if (GET_BIT(dmaEnabled, 1)) {
+                channel[1].execute(toExecute);
                 executeStateMachine(1, toExecute);
                 right += (int8_t)(auddatInternal[1]) * audvol[1];
             }
 
             // Channel 2 (right)
             if (GET_BIT(dmaEnabled, 2)) {
+                channel[2].execute(toExecute);
                 executeStateMachine(2, toExecute);
                 right += (int8_t)(auddatInternal[2]) * audvol[2];
             }
 
             // Channel 3 (left)
             if (GET_BIT(dmaEnabled, 3)) {
+                channel[3].execute(toExecute);
                 executeStateMachine(3, toExecute);
                 left += (int8_t)(auddatInternal[3]) * audvol[3];
             }
@@ -451,7 +464,8 @@ AudioUnit::pokeAUDxLEN(int x, uint16_t value)
 {
     debug(2, "pokeAUD%dLEN(%X)\n", x, value);
     assert(x < 4);
-    
+
+    channel[x].audlen = value;
     audlen[x] = value;
 }
 
@@ -460,7 +474,8 @@ AudioUnit::pokeAUDxPER(int x, uint16_t value)
 {
     debug(2, "pokeAUD%dPER(%X)\n", x, value);
     assert(x < 4);
-    
+
+    channel[x].audper = value;
     audper[x] = value;
 }
 
@@ -472,6 +487,7 @@ AudioUnit::pokeAUDxVOL(int x, uint16_t value)
     
     // Behaviour: 1. Only the lowest 7 bits are evaluated.
     //            2. All values greater than 64 are treated as 64 (max volume).
+    channel[x].audvol = MIN(value & 0x7F, 64);
     audvol[x] = MIN(value & 0x7F, 64);
 }
 
@@ -480,6 +496,7 @@ AudioUnit::pokeAUDxDAT(int x, uint16_t value)
 {
     debug(2, "pokeAUD%dDAT(%X)\n", x, value);
     assert(x < 4);
-    
+
+    channel[x].auddat = value; 
     auddat[x] = value;
 }

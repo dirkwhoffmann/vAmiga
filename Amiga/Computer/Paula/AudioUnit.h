@@ -10,6 +10,7 @@
 #ifndef _AUDIO_UNIT_INC
 #define _AUDIO_UNIT_INC
 
+#include "StateMachine.h"
 #include "AudioFilter.h"
 
 class AudioUnit : public HardwareComponent {
@@ -19,8 +20,19 @@ class AudioUnit : public HardwareComponent {
     //
     
 public:
-    
-    // Audio filter
+
+    // State machines
+    StateMachine channel[4];
+
+    /*= {
+        StateMachine(0),
+        StateMachine(1),
+        StateMachine(2),
+        StateMachine(3)
+    };
+     */
+
+    // Audio filters
     AudioFilter filterL;
     AudioFilter filterR;
 
@@ -132,8 +144,7 @@ public:
     //
     
 private:
-    
-    // bool dmaEnabled[4];
+
     // Indicates the enabled sound DMA channels (Bit n = channel n)
     uint8_t dmaEnabled;
 
@@ -297,9 +308,9 @@ public:
 
 public:
 
-    // Starts or ends audio DMA (called inside pokeDMACON)
-    void enableDMA(int channel);
-    void disableDMA(int channel);
+    // Starts or ends DMA for a certain audio channel (called by pokeDMACON)
+    void enableDMA(int nr);
+    void disableDMA(int nr);
     
     // Executes the device until the given master clock cycle has been reached.
     void executeUntil(Cycle targetClock);
