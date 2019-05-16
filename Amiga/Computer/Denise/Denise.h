@@ -185,9 +185,13 @@ class Denise : public HardwareComponent {
     
     // OCS register 0x100 (w)
     void pokeBPLCON0(uint16_t value);
-    inline bool hires() { return (bplcon0 & 0x8000); }
-    inline bool lores() { return !(bplcon0 & 0x8000); }
-    
+    bool hires() { return GET_BIT(bplcon0, 15); }
+    bool lores() { return !GET_BIT(bplcon0, 15); }
+    uint8_t bplconBPU() { return (bplcon0 >> 12) & 0b111; }
+    bool bplconHOMOD() { return GET_BIT(bplcon0, 11); }
+    bool bplconDBPLF() { return GET_BIT(bplcon0, 10); }
+    bool bplconLACE() { return GET_BIT(bplcon0, 2); }
+
     // OCS registers 0x102 and 0x104 (w)
     void pokeBPLCON1(uint16_t value);
     void pokeBPLCON2(uint16_t value);

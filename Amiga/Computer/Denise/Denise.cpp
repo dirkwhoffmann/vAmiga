@@ -207,7 +207,7 @@ Denise::pokeBPLCON0(uint16_t value)
     bplcon0 = value;
     
     // Tell Agnus how many bitplanes we have
-    _agnus->activeBitplanes = (value >> 12) & 0b111;
+    _agnus->activeBitplanes = bplconBPU();  // (value >> 12) & 0b111;
 
     // Update the DMA time slot allocation table (hires / lores may change)
     _agnus->updateBitplaneDma();

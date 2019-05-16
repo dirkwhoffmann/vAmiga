@@ -49,7 +49,7 @@ Agnus::Agnus()
         { &ddfstrt,         sizeof(ddfstrt),         0 },
         { &ddfstop,         sizeof(ddfstop),         0 },
         { &audlc,           sizeof(audlc),           DWORD_ARRAY },
-        { &audlcold,           sizeof(audlcold),           DWORD_ARRAY },
+        { &audlcold,        sizeof(audlcold),        DWORD_ARRAY },
         { &bplpt,           sizeof(bplpt),           DWORD_ARRAY },
         { &bpl1mod,         sizeof(bpl1mod),         0 },
         { &bpl2mod,         sizeof(bpl2mod),         0 },
