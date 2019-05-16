@@ -160,7 +160,7 @@ Agnus::cyclesInCurrentFrame()
 {
     // TODO: Distinguish between short frames and long frames
     /*
-    if (shortFrame) {
+    if (screenBuffer2) {
         return 312 * cyclesPerLine();
     } else {
         return 313 * cyclesPerLine();

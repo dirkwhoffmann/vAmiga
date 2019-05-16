@@ -102,31 +102,34 @@ class Denise : public HardwareComponent {
     // Screen buffers
     //
     
-    /* Screen buffer for long and short frames
-     *
-     *   - Long frames consist of the odd rasterlines 1, 3, 5, ..., 625.
-     *   - Short frames consist of the even rasterlines 2, 4, 6, ..., 624.
-     *
-     * Paula writes the graphics output into this buffer. At a later stage,
-     * both buffers are converted into textures. After that, the GPU merges
-     * them into the final image and draws it on the screen.
+    /* First screen buffer
+     * Denise writes its output into this buffer. The contents of the array is
+     * later copied into to texture RAM of your graphic card by the drawRect
+     * method in the GPU related code.
      */
-    int *longFrame = new int[HPIXELS * VPIXELS];
-    int *shortFrame = new int[HPIXELS * VPIXELS];
+    int *screenBuffer1 = new int[HPIXELS * VPIXELS];
+
+    /* Second screen buffer
+     * The VIC chip uses double buffering. Once a frame is drawn, Denise writes
+     * the next frame to the second buffer.
+     */
+    int *screenBuffer2 = new int [HPIXELS * VPIXELS];
+    // int *screenBuffer1 = new int[HPIXELS * VPIXELS];
+    // int *screenBuffer2 = new int[HPIXELS * VPIXELS];
     
     /* Currently active frame buffer
-     * This variable points either to longFrame or shortFrame
+     * This variable points either to screenBuffer1 or screenBuffer2
      */
-    int *frameBuffer = longFrame;
+    int *frameBuffer = screenBuffer1;
     
     /* Pointer to the beginning of the current rasterline
      * This pointer is used by all rendering methods to write pixels. It always
-     * points to the beginning of a rasterline, either in longFrame or
-     * shortFrame. It is reset at the beginning of each frame and incremented
+     * points to the beginning of a rasterline, either in screenBuffer1 or
+     * screenBuffer2. It is reset at the beginning of each frame and incremented
      * at the beginning of each rasterline.
      * DEPRECATED
      */
-    // int *rasterline = longFrame;
+    // int *rasterline = screenBuffer1;
     
     // The current rasterline has been drawn up to this horizontal position
     short pixel;
@@ -268,24 +271,19 @@ class Denise : public HardwareComponent {
     
     public:
     
-    /* Returns true if the long frame / short frame is ready for display
-     * The long frame is ready for display, if Denise is currently working on
-     * on the short frame and vice verse.
+    /* Returns true if a certain screen buffer is ready for display
      */
-    inline bool longFrameIsReady() { return (frameBuffer == shortFrame); }
-    inline bool shortFrameIsReady() { return (frameBuffer == longFrame); }
+    inline bool buffer1IsReady() { return (frameBuffer == screenBuffer2); }
+    inline bool buffer2IsReady() { return (frameBuffer == screenBuffer1); }
     
-    // Returns the long frame screen buffer
-    inline void *getLongFrame() { return longFrame; }
+    // Returns the first screen buffer
+    inline void *buffer1() { return screenBuffer1; }
 
-    // Returns the short frame screen buffer
-    inline void *getShortFrame() { return shortFrame; }
+    // Returns the second screen buffer
+    inline void *buffer2() { return screenBuffer2; }
 
-    /* Returns the currently stabel screen buffer.
-     * If Denise is working on the long frame, a pointer to the short frame is
-     * returned and vice versa.
-     */
-    inline void *screenBuffer() { return (frameBuffer == longFrame) ? shortFrame : longFrame; }
+    // Returns the currently stabel screen buffer.
+    inline void *screenBuffer() { return (frameBuffer == screenBuffer1) ? screenBuffer2 : screenBuffer1; }
     
     // HSYNC handler
     void endOfLine();

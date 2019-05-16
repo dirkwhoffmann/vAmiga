@@ -445,21 +445,21 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->denise->debugSetBPLCON0Bit(bit, value);
 }
-- (BOOL) longFrameIsReady
+- (BOOL) buffer1IsReady
 {
-    return wrapper->denise->longFrameIsReady();
+    return wrapper->denise->buffer1IsReady();
 }
-- (BOOL) shortFrameIsReady
+- (BOOL) buffer2IsReady
 {
-    return wrapper->denise->shortFrameIsReady();
+    return wrapper->denise->buffer2IsReady();
 }
-- (void *) longFrame
+- (void *) screenBuffer1
 {
-    return wrapper->denise->getLongFrame();
+    return wrapper->denise->buffer1();
 }
-- (void *) shortFrame
+- (void *) screenBuffer2
 {
-    return wrapper->denise->getShortFrame();
+    return wrapper->denise->buffer2();
 }
 - (void *) screenBuffer
 {

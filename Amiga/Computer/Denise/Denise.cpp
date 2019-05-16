@@ -60,14 +60,14 @@ void
 Denise::_powerOn()
 {
     clock = 0;
-    frameBuffer = longFrame;
+    frameBuffer = screenBuffer1;
     pixel = 0;
     
     // Initialize frame buffers with a recognizable debug pattern
     for (unsigned line = 0; line < VPIXELS; line++) {
         for (unsigned i = 0; i < HPIXELS; i++) {
-            longFrame[line * HPIXELS + i] =
-            shortFrame[line * HPIXELS + i] =
+            screenBuffer1[line * HPIXELS + i] =
+            screenBuffer2[line * HPIXELS + i] =
             (line % 2) ? 0x000000FF : 0x0000FFFF;
         }
     }
@@ -79,8 +79,8 @@ Denise::_powerOff()
     /* REMOVE AFTER DEBUGGING
     for (unsigned line = 0; line < VPIXELS; line++) {
         for (unsigned i = 0; i < HPIXELS; i++) {
-            longFrame[line * HPIXELS + i] =
-            shortFrame[line * HPIXELS + i] = 0x000000FF;
+            screenBuffer1[line * HPIXELS + i] =
+            screenBuffer2[line * HPIXELS + i] = 0x000000FF;
         }
     }
     */
@@ -593,7 +593,7 @@ void
 Denise::endOfFrame()
 {
     // Switch the active frame buffer
-    frameBuffer = (frameBuffer == longFrame) ? shortFrame : longFrame;
+    frameBuffer = (frameBuffer == screenBuffer1) ? screenBuffer2 : screenBuffer1;
 }
 
 

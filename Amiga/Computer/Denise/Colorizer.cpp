@@ -17,6 +17,8 @@ Colorizer::Colorizer()
         
         { &colorReg,  sizeof(colorReg),  WORD_ARRAY },
     });
+
+    clearColorCache();
 }
 
 void
