@@ -26,7 +26,7 @@ struct VertexUniforms {
 //
 
 struct ShaderOptions: Codable {
-    
+
     var blur: Int32
     var blurRadius: Float
     
@@ -163,13 +163,13 @@ class ComputeKernel: NSObject {
     }
     
     func apply(commandBuffer: MTLCommandBuffer, source: MTLTexture, target: MTLTexture,
-               options: ShaderOptions? = nil) {
+               options: UnsafeRawPointer? = nil) {
         
         apply(commandBuffer: commandBuffer, textures: [source, target], options: options)
     }
 
     func apply(commandBuffer: MTLCommandBuffer, textures: [MTLTexture],
-               options: ShaderOptions? = nil) {
+               options: UnsafeRawPointer? = nil) {
         
         if let encoder = commandBuffer.makeComputeCommandEncoder() {
             
@@ -180,14 +180,14 @@ class ComputeKernel: NSObject {
         }
     }
 
-    func apply(encoder: MTLComputeCommandEncoder, options: ShaderOptions? = nil) {
+    func apply(encoder: MTLComputeCommandEncoder, options: UnsafeRawPointer? = nil) {
         
         // Bind pipeline
         encoder.setComputePipelineState(kernel)
         
         // Pass in shader options
-        if var _options = options {
-            encoder.setBytes(&_options,
+        if options != nil {
+            encoder.setBytes(options!,
                              length: MemoryLayout<ShaderOptions>.stride,
                              index: 0)
         }

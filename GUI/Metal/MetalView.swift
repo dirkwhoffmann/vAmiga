@@ -284,6 +284,7 @@ public class MetalView: MTKView {
         buildVertexBuffer()
     }
 
+    /*
     func updateLongFrameTexture() {
 
         let bytes = controller.amiga.denise.screenBuffer1().data!
@@ -307,13 +308,39 @@ public class MetalView: MTKView {
                                   bytesPerRow: 4 * HPIXELS,
                                   bytesPerImage: 4 * VPIXELS * HPIXELS)
     }
-    
+    */
+
+    func updateLongFrameTexture(bytes: UnsafeMutablePointer<Int32>) {
+
+        longFrameTexture.replace(region: MTLRegionMake2D(0, 0, HPIXELS, VPIXELS),
+                                 mipmapLevel: 0,
+                                 slice: 0,
+                                 withBytes: bytes,
+                                 bytesPerRow: 4 * HPIXELS,
+                                 bytesPerImage: 4 * VPIXELS * HPIXELS)
+    }
+
+    func updateShortFrameTexture(bytes: UnsafeMutablePointer<Int32>) {
+
+        shortFrameTexture.replace(region: MTLRegionMake2D(0, 0, HPIXELS, VPIXELS),
+                                  mipmapLevel: 0,
+                                  slice: 0,
+                                  withBytes: bytes,
+                                  bytesPerRow: 4 * HPIXELS,
+                                  bytesPerImage: 4 * VPIXELS * HPIXELS)
+    }
+
     func updateTexture() {
 
-        if controller.amiga.denise.buffer1IsReady() {
-            updateLongFrameTexture()
+        let screenBuffer = controller.amiga.denise.screenBuffer()
+
+        if screenBuffer.interlace { track("INTERLACED") }
+        if !screenBuffer.longFrame { track("SHORT FRAME") }
+
+        if screenBuffer.longFrame {
+            updateLongFrameTexture(bytes: screenBuffer.data)
         } else {
-            updateShortFrameTexture()
+            updateShortFrameTexture(bytes: screenBuffer.data)
         }
     }
  
@@ -366,9 +393,14 @@ public class MetalView: MTKView {
         fragmentUniforms.scanlineDistance = Int32(layerHeight / 256)
        
         // Compute the merge texture
-        mergeFilter.apply(commandBuffer: commandBuffer,
-                          textures: [longFrameTexture, shortFrameTexture, mergeTexture])
-        
+        if controller.amiga.denise.interlaceMode() {
+            mergeFilter.apply(commandBuffer: commandBuffer,
+                              textures: [longFrameTexture, shortFrameTexture, mergeTexture])
+        } else {
+            mergeFilter.apply(commandBuffer: commandBuffer,
+                              textures: [longFrameTexture, longFrameTexture, mergeTexture])
+        }
+
         // Compute upscaled texture (first pass, in-texture upscaling)
         let enhancer = currentEnhancer()
         enhancer.apply(commandBuffer: commandBuffer,
@@ -380,7 +412,7 @@ public class MetalView: MTKView {
             let bloomFilter = currentBloomFilter()
             bloomFilter.apply(commandBuffer: commandBuffer,
                               textures: [mergeTexture, bloomTextureR, bloomTextureG, bloomTextureB],
-                              options: shaderOptions)
+                              options: &shaderOptions)
             
             func applyGauss(_ texture: inout MTLTexture, radius: Float) {
                 
@@ -416,7 +448,7 @@ public class MetalView: MTKView {
         scanlineFilter.apply(commandBuffer: commandBuffer,
                              source: upscaledTexture,
                              target: scanlineTexture,
-                             options: shaderOptions)
+                             options: &shaderOptions)
         
         // Create render pass descriptor
         let descriptor = MTLRenderPassDescriptor.init()
