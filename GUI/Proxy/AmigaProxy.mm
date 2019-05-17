@@ -445,27 +445,14 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->denise->debugSetBPLCON0Bit(bit, value);
 }
-- (BOOL) buffer1IsReady
+- (ScreenBuffer) stableLongFrame
 {
-    return wrapper->denise->buffer1IsReady();
+    return wrapper->denise->getStableLongFrame();
 }
-- (BOOL) buffer2IsReady
+- (ScreenBuffer) stableShortFrame
 {
-    return wrapper->denise->buffer2IsReady();
+    return wrapper->denise->getStableShortFrame();
 }
-- (ScreenBuffer) screenBuffer1
-{
-    return wrapper->denise->buffer1();
-}
-- (ScreenBuffer) screenBuffer2
-{
-    return wrapper->denise->buffer2();
-}
-- (ScreenBuffer) screenBuffer
-{
-    return wrapper->denise->screenBuffer();
-}
-
 - (BOOL) interlaceMode
 {
     return wrapper->denise->_agnus->frameInfo.interlaced;

@@ -221,8 +221,11 @@ public class MetalView: MTKView {
     // If true, no GPU drawing is performed (for performance profiling olny)
     var enableMetal = false
 
-    // Indicates if the current frame is a long frame or a short frame
+    // Indicates if the current frame is a long frame or a short frame (DEPRECATED)
     var longFrame = false
+
+    // Indicates the type of the frame that is read next
+    var requestLongFrame = true
 
     // Is set to true when fullscreen mode is entered (usually enables the 2D renderer)
     var fullscreen = false
@@ -332,13 +335,22 @@ public class MetalView: MTKView {
 
     func updateTexture() {
 
-        let screenBuffer = controller.amiga.denise.screenBuffer()
+        if requestLongFrame {
 
-        // if screenBuffer.interlace { track("INTERLACED") } else { track("NORMAL") }
-        // if !screenBuffer.longFrame { track("SHORT FRAME") } else { track("LONG FRAME") }
+            let buffer = controller.amiga.denise.stableLongFrame()
+            updateTexture(bytes: buffer.data, longFrame: true)
 
-        longFrame = screenBuffer.longFrame
-        updateTexture(bytes: screenBuffer.data, longFrame: longFrame)
+            // If interlace mode is on, the next frame will be a short frame
+            if controller.amiga.denise.interlaceMode() { requestLongFrame = false }
+
+        } else {
+
+            let buffer = controller.amiga.denise.stableShortFrame()
+            updateTexture(bytes: buffer.data, longFrame: false)
+
+            // The next frame will be a long frame
+            requestLongFrame = true
+        }
     }
  
     /// Returns the compute kernel of the currently selected upscaler (first pass)
@@ -390,10 +402,11 @@ public class MetalView: MTKView {
 
         // Set uniforms for the merge shader
          if controller.amiga.denise.interlaceMode() {
+
             let weight = shaderOptions.flicker > 0 ? (1.0 - shaderOptions.flickerWeight) : Float(1.0)
             mergeUniforms.interlace = 1
-            mergeUniforms.longFrameScale = longFrame ? 1.0 : weight
-            mergeUniforms.shortFrameScale = longFrame ? weight : 1.0
+            mergeUniforms.longFrameScale = requestLongFrame ? 1.0 : weight
+            mergeUniforms.shortFrameScale = requestLongFrame ? weight : 1.0
          } else {
             mergeUniforms.longFrameScale = 1.0
             mergeUniforms.shortFrameScale = 1.0

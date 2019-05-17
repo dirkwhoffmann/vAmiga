@@ -335,11 +335,8 @@ struct AmigaFileWrapper;
 - (void) setActivePlanes:(NSInteger)count; 
 - (void) setBPLCON0Bit:(NSInteger)bit value:(BOOL)value;
 
-- (BOOL) buffer1IsReady;
-- (BOOL) buffer2IsReady;
-- (ScreenBuffer) screenBuffer1;
-- (ScreenBuffer) screenBuffer2;
-- (ScreenBuffer) screenBuffer;
+- (ScreenBuffer) stableLongFrame;
+- (ScreenBuffer) stableShortFrame;
 
 - (BOOL) interlaceMode;
 - (BOOL) isLongFrame;

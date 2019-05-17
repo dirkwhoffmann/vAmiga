@@ -101,36 +101,31 @@ class Denise : public HardwareComponent {
     //
     // Screen buffers
     //
-    
-    /* First screen buffer
-     * Denise writes its output into this buffer. The contents of the array is
-     * later copied into to texture RAM of your graphic card by the drawRect
-     * method in the GPU related code.
-     */
-    ScreenBuffer screenBuffer1;
-    // int *screenBuffer1 = new int[HPIXELS * VPIXELS];
 
-    /* Second screen buffer
-     * The VIC chip uses double buffering. Once a frame is drawn, Denise writes
-     * the next frame to the second buffer.
+    /* Denise keeps four screen buffers, two for storing long frames and
+     * another two for storing short frames. The short frame buffers are only
+     * used in interlace mode. At each point in time, one of the two buffers
+     * is the "working buffer" and the other one the "stable buffer". Denise
+     * writes to the working buffers, only. The GPU reads from the stable
+     * buffers, only. Once a frame has been completed, the working buffer
+     * and the stable buffer is switched.
      */
-    ScreenBuffer screenBuffer2;
-    // int *screenBuffer2 = new int [HPIXELS * VPIXELS];
+    ScreenBuffer longFrame1;
+    ScreenBuffer longFrame2;
+    ScreenBuffer shortFrame1;
+    ScreenBuffer shortFrame2;
 
-    /* Currently active frame buffer
-     * This variable points either to screenBuffer1 or screenBuffer2
-     */
-    ScreenBuffer *frameBuffer = &screenBuffer1;
-    
-    /* Pointer to the beginning of the current rasterline
-     * This pointer is used by all rendering methods to write pixels. It always
-     * points to the beginning of a rasterline, either in screenBuffer1 or
-     * screenBuffer2. It is reset at the beginning of each frame and incremented
-     * at the beginning of each rasterline.
-     * DEPRECATED
-     */
-    // int *rasterline = screenBuffer1;
-    
+    // Pointers to the working buffers
+    ScreenBuffer *workingLongFrame = &longFrame1;
+    ScreenBuffer *workingShortFrame = &shortFrame1;
+
+    // Pointers to the stable buffers
+    ScreenBuffer *stableLongFrame = &longFrame2;
+    ScreenBuffer *stableShortFrame = &shortFrame2;
+
+    // Pointer to the screen buffer Denise is currently working on
+    ScreenBuffer *frameBuffer = &longFrame1;
+
     // The current rasterline has been drawn up to this horizontal position
     short pixel;
     
@@ -275,21 +270,15 @@ class Denise : public HardwareComponent {
     
     public:
     
-    /* Returns true if a certain screen buffer is ready for display
-     */
-    bool buffer1IsReady() { return (frameBuffer == &screenBuffer2); }
-    bool buffer2IsReady() { return (frameBuffer == &screenBuffer1); }
-    
-    // Returns the first screen buffer
-    ScreenBuffer buffer1() { return screenBuffer1; }
+    // Returns one of the two stable buffers
+    ScreenBuffer getStableLongFrame() { return *stableLongFrame; }
+    ScreenBuffer getStableShortFrame() { return *stableShortFrame; }
 
-    // Returns the second screen buffer
-    ScreenBuffer buffer2() { return screenBuffer2; }
+    // Returns one of the working buffers
+    ScreenBuffer getWorkingLongFrame() { return *workingLongFrame; }
+    ScreenBuffer getWorkingShortFrame() { return *workingShortFrame; }
 
-    // Returns the currently stabel screen buffer.
-    ScreenBuffer screenBuffer() {
-        return (frameBuffer == &screenBuffer1) ? screenBuffer2 : screenBuffer1; }
-    
+
     // HSYNC handler
     void endOfLine();
 

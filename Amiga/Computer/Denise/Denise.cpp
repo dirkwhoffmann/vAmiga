@@ -49,8 +49,10 @@ Denise::Denise()
 
     });
 
-    screenBuffer1.data = new int[HPIXELS * VPIXELS];
-    screenBuffer2.data = new int[HPIXELS * VPIXELS];
+    longFrame1.data = new int[HPIXELS * VPIXELS];
+    longFrame2.data = new int[HPIXELS * VPIXELS];
+    shortFrame1.data = new int[HPIXELS * VPIXELS];
+    shortFrame2.data = new int[HPIXELS * VPIXELS];
 }
 
 Denise::~Denise()
@@ -62,14 +64,20 @@ void
 Denise::_powerOn()
 {
     clock = 0;
-    frameBuffer = &screenBuffer1;
+    workingLongFrame = &longFrame1;
+    workingShortFrame = &shortFrame1;
+    stableLongFrame = &longFrame2;
+    stableShortFrame = &shortFrame2;
+    frameBuffer = &longFrame1;
     pixel = 0;
     
     // Initialize frame buffers with a recognizable debug pattern
     for (unsigned line = 0; line < VPIXELS; line++) {
         for (unsigned i = 0; i < HPIXELS; i++) {
-            screenBuffer1.data[line * HPIXELS + i] =
-            screenBuffer2.data[line * HPIXELS + i] =
+            longFrame1.data[line * HPIXELS + i] =
+            longFrame2.data[line * HPIXELS + i] =
+            shortFrame1.data[line * HPIXELS + i] =
+            shortFrame2.data[line * HPIXELS + i] =
             (line % 2) ? 0x000000FF : 0x0000FFFF;
         }
     }
@@ -594,8 +602,28 @@ Denise::endOfLine()
 void
 Denise::prepareForNextFrame(bool longFrame, bool interlace)
 {
-    // Switch the active frame buffer
-    frameBuffer = (frameBuffer == &screenBuffer1) ? &screenBuffer2 : &screenBuffer1;
+    assert(workingLongFrame == &longFrame1 || workingLongFrame == &longFrame2);
+    assert(workingShortFrame == &shortFrame1 || workingShortFrame == &shortFrame2);
+    assert(stableLongFrame == &longFrame1 || stableLongFrame == &longFrame2);
+    assert(stableShortFrame == &shortFrame1 || stableShortFrame == &shortFrame2);
+    assert(workingLongFrame != stableLongFrame);
+    assert(workingShortFrame != stableShortFrame);
+    assert(frameBuffer == workingLongFrame || frameBuffer == workingShortFrame);
+    
+    if (frameBuffer == &longFrame1 || frameBuffer == &longFrame2) {
+
+        workingLongFrame = stableLongFrame;
+        stableLongFrame = frameBuffer;
+        frameBuffer = interlace ? workingShortFrame : workingLongFrame;
+
+    } else {
+
+        assert(frameBuffer == &shortFrame1 || frameBuffer == &shortFrame2);
+        workingShortFrame = stableShortFrame;
+        stableShortFrame = frameBuffer;
+        frameBuffer = workingLongFrame;
+
+    }
 
     // debug("long = %d interlace = %d\n", frameBuffer->longFrame, frameBuffer->interlace);
     frameBuffer->longFrame = longFrame;
