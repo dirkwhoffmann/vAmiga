@@ -180,17 +180,9 @@ class MyController: NSWindowController, MessageReceiver {
         get { return metal.shaderOptions.bloom }
         set { metal.shaderOptions.bloom = newValue }
     }
-    var bloomRadiusR: Float {
-        get { return metal.shaderOptions.bloomRadiusR }
-        set { metal.shaderOptions.bloomRadiusR = newValue }
-    }
-    var bloomRadiusG: Float {
-        get { return metal.shaderOptions.bloomRadiusG }
-        set { metal.shaderOptions.bloomRadiusG = newValue }
-    }
-    var bloomRadiusB: Float {
-        get { return metal.shaderOptions.bloomRadiusB }
-        set { metal.shaderOptions.bloomRadiusB = newValue }
+    var bloomRadius: Float {
+        get { return metal.shaderOptions.bloomRadius }
+        set { metal.shaderOptions.bloomRadius = newValue }
     }
     var bloomBrightness: Float {
         get { return metal.shaderOptions.bloomBrightness }

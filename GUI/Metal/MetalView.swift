@@ -151,7 +151,7 @@ public class MetalView: MTKView {
     var upscalerGallery = [ComputeKernel?](repeating: nil, count: 3)
 
     // Array holding all available bloom filters
-    var bloomFilterGallery = [ComputeKernel?](repeating: nil, count: 3)
+    var bloomFilterGallery = [ComputeKernel?](repeating: nil, count: 2)
 
     // Array holding all available scanline filters
     var scanlineFilterGallery = [ComputeKernel?](repeating: nil, count: 3)
@@ -424,9 +424,9 @@ public class MetalView: MTKView {
                                  inPlaceTexture: &texture, fallbackCopyAllocator: nil)
                 }
             }
-            applyGauss(&bloomTextureR, radius: shaderOptions.bloomRadiusR)
-            applyGauss(&bloomTextureG, radius: shaderOptions.bloomRadiusG)
-            applyGauss(&bloomTextureB, radius: shaderOptions.bloomRadiusB)
+            applyGauss(&bloomTextureR, radius: shaderOptions.bloomRadius)
+            applyGauss(&bloomTextureG, radius: shaderOptions.bloomRadius)
+            applyGauss(&bloomTextureB, radius: shaderOptions.bloomRadius)
         }
         
         // Compute upscaled texture (second pass)
