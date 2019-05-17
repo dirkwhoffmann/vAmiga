@@ -12,6 +12,13 @@
 #ifndef _AGNUS_T_INC
 #define _AGNUS_T_INC
 
+typedef struct
+{
+    int16_t y;
+    int16_t x;
+}
+Beam;
+
 typedef enum
 {
     SPR_DMA_IDLE,

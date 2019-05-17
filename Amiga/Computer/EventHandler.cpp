@@ -93,21 +93,25 @@ EventHandler::_inspectPrimSlot(uint32_t slot)
     assert(isPrimarySlot(slot));
     
     EventSlotInfo *i = &info.primary[slot];
-    
-    int64_t frame;
-    int16_t vpos;
-    int16_t hpos;
     Cycle trigger = primSlot[slot].triggerCycle;
-    
-    _agnus->cycleToBeamAbs(trigger, frame, vpos, hpos);
-    
+
+    i->eventId = primSlot[slot].id;
     i->trigger = trigger;
     i->triggerRel = trigger - _agnus->clock;
-    i->eventId = primSlot[slot].id;
-    i->frame = frame - _agnus->frame;
-    i->vpos = vpos;
-    i->hpos = hpos;
-    
+    i->currentFrame = _agnus->belongsToCurrentFrame(trigger);
+
+    if (trigger != NEVER) {
+
+        Beam beam = _agnus->cycleToBeam(trigger);
+        i->vpos = beam.y;
+        i->hpos = beam.x;
+
+    } else {
+
+        i->vpos = 0;
+        i->hpos = 0;
+    }
+
     switch ((EventSlot)slot) {
         
         case CIAA_SLOT:
@@ -238,21 +242,25 @@ EventHandler::_inspectSecSlot(uint32_t slot)
     assert(isSecondarySlot(slot));
     
     EventSlotInfo *i = &info.secondary[slot];
-    
-    int64_t frame;
-    int16_t vpos;
-    int16_t hpos;
     Cycle trigger = secSlot[slot].triggerCycle;
-    
-    _agnus->cycleToBeamAbs(trigger, frame, vpos, hpos);
-    
+
+    i->eventId = primSlot[slot].id;
     i->trigger = trigger;
     i->triggerRel = trigger - _agnus->clock;
-    i->eventId = secSlot[slot].id;
-    i->frame = frame - _agnus->frame;
-    i->vpos = vpos;
-    i->hpos = hpos;
-    
+    i->currentFrame = _agnus->belongsToCurrentFrame(trigger);
+
+    if (trigger != NEVER) {
+
+        Beam beam = _agnus->cycleToBeam(trigger);
+        i->vpos = beam.y;
+        i->hpos = beam.x;
+
+    } else {
+
+        i->vpos = 0;
+        i->hpos = 0;
+    }
+
     switch ((EventSlot)slot) {
         
         case DSK_SLOT:           i->slotName = "Disk Controller"; break;

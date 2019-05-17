@@ -62,10 +62,10 @@ extension EventTableView: NSTableViewDataSource {
         case "frame":
             if !willTrigger {
                 return ""
-            } else if info.frame == 0 {
+            } else if info.currentFrame {
                 return "current"
             } else {
-                return String(format: "%lld", info.frame)
+                return "upcoming"
             }
         case "vpos":
             if willTrigger {

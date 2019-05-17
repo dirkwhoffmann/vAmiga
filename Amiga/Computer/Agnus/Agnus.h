@@ -95,6 +95,7 @@ class Agnus : public HardwareComponent
     /* Value of clock at the beginning of the current frame.
      * The value is latched on every VSYNC action and used for implementing
      * the beamToCycle conversion functions.
+     * DEPRECATED
      */
     Cycle latchedClock;
     
@@ -237,34 +238,74 @@ class Agnus : public HardwareComponent
     //
     
     public:
-    
+
+    /* Returns the number of master cycles in the current frame.
+     * The result depends on the number of lines that are drawn. This values
+     * varies between long and short frames.
+     */
+    Cycle cyclesInCurrentFrame();
+
+    /* Indicates if the provided master cycle belongs to a specific frame.
+     */
+    bool belongsToCurrentFrame(Cycle cycle);
+
+    /* Returns the master cycle belonging to beam position (0,0)
+     * The first function treats (0,0) as the upper left position of the
+     * current frame. The second function referes to the next frame.
+     */
+    Cycle startOfCurrentFrame();
+    Cycle startOfNextFrame();
+
+    /* Translates a beam position to a master cycle or vice versa.
+     *
+     * Function 'beamToCycle' assumes that 'beam' is a position inside the
+     * current frame.
+     *
+     * Function 'cycleToBeam' requires that 'cycle' belongs to the current
+     * frame.
+     */
+    Cycle beamToCycle(Beam beam);
+    Beam cycleToBeam(Cycle cycle);
+
+
+
+
+    //
+    // OLD
+    //
+
     // Returns the current beam position as a 17 bit value
+    // DEPRECATED
     uint32_t getBeam() { return BEAM(vpos, hpos); }
     
     /* Returns the number of DMA cycles per rasterline
      * The value is valid for PAL machines, only.
+     * DEPRECATED
      */
-    DMACycle cyclesPerLine() { return 227; /* cycles 0x00 ... 0xE2 */ }
+    DMACycle DMACyclesPerLine() { return 227; /* cycles 0x00 ... 0xE2 */ }
     
     /* Returns the number of DMA cycles that make up the current frame
      * The value is valid for PAL machines, only.
+     * DEPRECATED
      */
-    DMACycle cyclesInCurrentFrame();
+    DMACycle DMACyclesInCurrentFrame();
     
     /* Converts a cycle to a beam position.
      * This function returns the beam position for a provided master clock
      * cycle. The cycle is measured in master clock cycles and either an
      * absolute value (cycles sind power up) or a count relative to the
      * beginning of the current frame.
+     * DEPRECATED
      */
-    void cycleToBeamAbs(Cycle cycle, int64_t &frame, int16_t &vpos, int16_t &hpos);
-    void cycleToBeamRel(Cycle cycle, int64_t &frame, int16_t &vpos, int16_t &hpos);
+    // void cycleToBeamAbs(Cycle cycle, int64_t &frame, int16_t &vpos, int16_t &hpos);
+    // void cycleToBeamRel(Cycle cycle, int64_t &frame, int16_t &vpos, int16_t &hpos);
     
     /* Converts a beam position to a master clock cycle.
      * This function returns the cycle of the master clock that corresponds to
      * the provided beam position. The return value is either an absolute
      * cycle count (master cycles since power up) or a relative cycle count
      * (relative to position (0,0) in the current frame).
+     * DEPRECATED
      */
     Cycle beamToCyclesAbs(int16_t vpos, int16_t hpos);
     Cycle beamToCyclesRel(int16_t vpos, int16_t hpos);
@@ -274,6 +315,7 @@ class Agnus : public HardwareComponent
     /* Returns the difference of two beam position in master cycles
      * Returns NEVER if the start position is greater than the end position
      * or if the end position is unreachable.
+     * DEPRECATED
      */
     Cycle beamDiff(int16_t vStart, int16_t hStart, int16_t vEnd, int16_t hEnd);
     Cycle beamDiff(int16_t vEnd, int16_t hEnd) { return beamDiff(vpos, hpos, vEnd, hEnd); }

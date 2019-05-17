@@ -155,8 +155,56 @@ Agnus::getInfo()
     return result;
 }
 
-DMACycle
+Cycle
 Agnus::cyclesInCurrentFrame()
+{
+    // TODO: Distinguish between long and short frames
+    return DMA_CYCLES(313 * DMACyclesPerLine());
+}
+
+bool
+Agnus::belongsToCurrentFrame(Cycle cycle)
+{
+    Cycle diff = cycle - startOfCurrentFrame();
+    return diff >= 0 && diff < cyclesInCurrentFrame();
+}
+
+Cycle
+Agnus::startOfCurrentFrame()
+{
+    return clock - DMA_CYCLES(vpos * DMACyclesPerLine() + hpos);
+}
+
+Cycle
+Agnus::startOfNextFrame()
+{
+    return startOfCurrentFrame() + cyclesInCurrentFrame();
+}
+
+Cycle
+Agnus::beamToCycle(Beam beam)
+{
+    return startOfCurrentFrame() + DMA_CYCLES(beam.y * DMACyclesPerLine() + beam.x);
+}
+
+Beam
+Agnus::cycleToBeam(Cycle cycle)
+{
+    Beam result;
+
+    Cycle diff = AS_DMA_CYCLES(cycle - startOfCurrentFrame());
+    assert(diff >= 0);
+
+    result.y = diff / DMACyclesPerLine();
+    result.x = diff % DMACyclesPerLine();
+    return result;
+}
+
+
+
+
+DMACycle
+Agnus::DMACyclesInCurrentFrame()
 {
     // TODO: Distinguish between short frames and long frames
     /*
@@ -166,15 +214,16 @@ Agnus::cyclesInCurrentFrame()
         return 313 * cyclesPerLine();
     }
     */
-    return 313 * cyclesPerLine();
+    return 313 * DMACyclesPerLine();
 }
 
+/*
 void
 Agnus::cycleToBeamAbs(Cycle cycle, int64_t &frame, int16_t &vpos, int16_t &hpos)
 {
     DMACycle dmaCycle    = AS_DMA_CYCLES(cycle);
-    DMACycle frameCycles = cyclesInCurrentFrame();
-    DMACycle lineCycles  = cyclesPerLine();
+    DMACycle frameCycles = DMACyclesInCurrentFrame();
+    DMACycle lineCycles  = DMACyclesPerLine();
     
     frame = dmaCycle / frameCycles;
     dmaCycle = dmaCycle % frameCycles;
@@ -188,6 +237,7 @@ Agnus::cycleToBeamRel(Cycle cycle, int64_t &frame, int16_t &vpos, int16_t &hpos)
 {
     return cycleToBeamAbs(cycle + latchedClock, frame, vpos, hpos);
 }
+*/
 
 Cycle
 Agnus::beamToCyclesAbs(int16_t vpos, int16_t hpos)
@@ -198,7 +248,7 @@ Agnus::beamToCyclesAbs(int16_t vpos, int16_t hpos)
 Cycle
 Agnus::beamToCyclesRel(int16_t vpos, int16_t hpos)
 {
-    return DMA_CYCLES(vpos * cyclesPerLine() + hpos); 
+    return DMA_CYCLES(vpos * DMACyclesPerLine() + hpos); 
 }
 
 Cycle

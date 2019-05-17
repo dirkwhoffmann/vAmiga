@@ -278,9 +278,13 @@ typedef struct
     long eventId;
     Cycle trigger;
     Cycle triggerRel;
-    long frame;
+
+    // The trigger cycle translated to a beam position.
     long vpos;
     long hpos;
+
+    // Indicates if (vpos, hpos) is a position inside the current frame.
+    bool currentFrame;
 }
 EventSlotInfo;
 
