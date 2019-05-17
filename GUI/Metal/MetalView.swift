@@ -413,6 +413,7 @@ public class MetalView: MTKView {
             mergeUniforms.shortFrameScale = flickerToggle ? weight : 1.0
             flickerToggle = !flickerToggle
          } else {
+            mergeUniforms.interlace = 0
             mergeUniforms.longFrameScale = 1.0
             mergeUniforms.shortFrameScale = 1.0
         }
