@@ -97,7 +97,7 @@ class Agnus : public HardwareComponent
      * the beamToCycle conversion functions.
      * DEPRECATED
      */
-    Cycle latchedClock;
+    // Cycle latchedClock;
     
     // The current vertical beam position (0 .. VPOS_MAX)
     int16_t vpos;
@@ -289,20 +289,6 @@ class Agnus : public HardwareComponent
      * DEPRECATED
      */
     DMACycle DMACyclesInCurrentFrame();
-
-    /* Converts a beam position to a master clock cycle.
-     * This function returns the cycle of the master clock that corresponds to
-     * the provided beam position. The return value is either an absolute
-     * cycle count (master cycles since power up) or a relative cycle count
-     * (relative to position (0,0) in the current frame).
-     * DEPRECATED
-     */
-/*
-    Cycle beamToCyclesAbs(int16_t vpos, int16_t hpos);
-    Cycle beamToCyclesRel(int16_t vpos, int16_t hpos);
-    Cycle beamToCyclesAbs(int32_t beam) { return beamToCyclesAbs(VPOS(beam), HPOS(beam)); }
-    Cycle beamToCyclesRel(int32_t beam) { return beamToCyclesRel(VPOS(beam), HPOS(beam)); }
-*/
 
     /* Returns the difference of two beam position in master cycles
      * Returns NEVER if the start position is greater than the end position

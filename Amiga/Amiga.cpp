@@ -966,11 +966,13 @@ Amiga::dumpClock()
              AS_CPU_CYCLES(_agnus->clock),
              AS_DMA_CYCLES(_agnus->clock),
              AS_CIA_CYCLES(_agnus->clock));
+    /*
     plainmsg("  Frame clock: %13lld  %13lld %13lld %13lld\n",
              _agnus->latchedClock,
              AS_CPU_CYCLES(_agnus->latchedClock),
              AS_DMA_CYCLES(_agnus->latchedClock),
              AS_CIA_CYCLES(_agnus->latchedClock));
+    */
     plainmsg("  CIA A clock: %13lld  %13lld %13lld %13lld\n",
              _ciaA->clock,
              AS_CPU_CYCLES(_ciaA->clock),

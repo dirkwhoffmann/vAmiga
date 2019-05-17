@@ -32,7 +32,7 @@ Agnus::Agnus()
         
         { &clock,           sizeof(clock),           0 },
         { &frame,           sizeof(frame),           0 },
-        { &latchedClock,    sizeof(latchedClock),    0 },
+        // { &latchedClock,    sizeof(latchedClock),    0 },
         { &vpos,            sizeof(vpos),            0 },
         { &hpos,            sizeof(hpos),            0 },
         { &hstrt,           sizeof(hstrt),           0 },
@@ -216,20 +216,6 @@ Agnus::DMACyclesInCurrentFrame()
     */
     return 313 * DMACyclesPerLine();
 }
-
-/*
-Cycle
-Agnus::beamToCyclesAbs(int16_t vpos, int16_t hpos)
-{
-    return latchedClock + beamToCyclesRel(vpos, hpos);
-}
-
-Cycle
-Agnus::beamToCyclesRel(int16_t vpos, int16_t hpos)
-{
-    return DMA_CYCLES(vpos * DMACyclesPerLine() + hpos); 
-}
-*/
 
 Cycle
 Agnus::beamDiff(int16_t vStart, int16_t hStart, int16_t vEnd, int16_t hEnd)
@@ -862,10 +848,6 @@ void
 Agnus::pokeVHPOS(uint16_t value)
 {
     // Don't know what to do here ...
-    
-    // Caution: If we change the beam position, the value of variable
-    // latchedClock (clock at the beginning of the current frame is
-    // invalidated).
 }
 
 uint16_t
@@ -885,10 +867,6 @@ void
 Agnus::pokeVPOS(uint16_t value)
 {
     // Don't know what to do here ...
-    
-    // Caution: If we change the beam position, the value of variable
-    // latchedClock (clock at the beginning of the current frame is
-    // invalidated).
 }
 
 void
@@ -1455,7 +1433,7 @@ Agnus::vsyncHandler()
     
     // Remember the clock count at SOF (Start Of Frame)
     // Add one because the DMA clock hasn't been advanced yet
-    latchedClock = clock + DMA_CYCLES(1);
+    // latchedClock = clock + DMA_CYCLES(1);
     
     // CIA A counts VSYNCs
     _ciaA->incrementTOD();
