@@ -609,7 +609,9 @@ Denise::prepareForNextFrame(bool longFrame, bool interlace)
     assert(workingLongFrame != stableLongFrame);
     assert(workingShortFrame != stableShortFrame);
     assert(frameBuffer == workingLongFrame || frameBuffer == workingShortFrame);
-    
+
+    // pthread_mutex_lock(&lock);
+
     if (frameBuffer == &longFrame1 || frameBuffer == &longFrame2) {
 
         workingLongFrame = stableLongFrame;
@@ -628,6 +630,8 @@ Denise::prepareForNextFrame(bool longFrame, bool interlace)
     // debug("long = %d interlace = %d\n", frameBuffer->longFrame, frameBuffer->interlace);
     frameBuffer->longFrame = longFrame;
     frameBuffer->interlace = interlace;
+
+    // pthread_mutex_unlock(&lock);
 }
 
 

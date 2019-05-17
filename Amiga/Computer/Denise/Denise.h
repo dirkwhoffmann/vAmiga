@@ -271,8 +271,18 @@ class Denise : public HardwareComponent {
     public:
     
     // Returns one of the two stable buffers
-    ScreenBuffer getStableLongFrame() { return *stableLongFrame; }
-    ScreenBuffer getStableShortFrame() { return *stableShortFrame; }
+    ScreenBuffer getStableLongFrame() {
+        // pthread_mutex_lock(&lock);
+        ScreenBuffer result = *stableLongFrame;
+        // pthread_mutex_unlock(&lock);
+        return result;
+    }
+    ScreenBuffer getStableShortFrame() {
+        // pthread_mutex_lock(&lock);
+        ScreenBuffer result = *stableShortFrame;
+        // pthread_mutex_unlock(&lock);
+        return result;
+    }
 
     // Returns one of the working buffers
     ScreenBuffer getWorkingLongFrame() { return *workingLongFrame; }

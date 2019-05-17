@@ -43,8 +43,6 @@ extension PreferencesController {
             let metal = controller.metal
             else { return }
 
-        track()
-        
         // Video
         vidEnhancerPopUp.selectItem(withTag: metal.enhancer)
         vidUpscalerPopUp.selectItem(withTag: metal.upscaler)
@@ -208,7 +206,6 @@ extension PreferencesController {
     @IBAction func vidFlickerWeightAction(_ sender: NSSlider!) {
 
         if let metal = myController?.metal {
-            track("\(sender.floatValue)")
             metal.shaderOptions.flickerWeight = sender.floatValue
             refresh()
         }
@@ -217,7 +214,6 @@ extension PreferencesController {
     @IBAction func vidDotMaskAction(_ sender: NSPopUpButton!) {
         
         if let metal = myController?.metal {
-            track("\(sender.selectedTag())")
             metal.shaderOptions.dotMask = Int32(sender.selectedTag())
             metal.buildDotMasks()
             refresh()

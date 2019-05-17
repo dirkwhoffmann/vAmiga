@@ -222,7 +222,9 @@ public class MetalView: MTKView {
     var enableMetal = false
 
     // Indicates if the current frame is a long frame or a short frame (DEPRECATED)
-    var longFrame = false
+    // var longFrame = false
+
+    var flickerToggle = false
 
     // Indicates the type of the frame that is read next
     var requestLongFrame = true
@@ -338,6 +340,7 @@ public class MetalView: MTKView {
         if requestLongFrame {
 
             let buffer = controller.amiga.denise.stableLongFrame()
+            // track("Long frame \(buffer)")
             updateTexture(bytes: buffer.data, longFrame: true)
 
             // If interlace mode is on, the next frame will be a short frame
@@ -346,6 +349,7 @@ public class MetalView: MTKView {
         } else {
 
             let buffer = controller.amiga.denise.stableShortFrame()
+            // track("Short frame \(buffer)")
             updateTexture(bytes: buffer.data, longFrame: false)
 
             // The next frame will be a long frame
@@ -405,8 +409,9 @@ public class MetalView: MTKView {
 
             let weight = shaderOptions.flicker > 0 ? (1.0 - shaderOptions.flickerWeight) : Float(1.0)
             mergeUniforms.interlace = 1
-            mergeUniforms.longFrameScale = requestLongFrame ? 1.0 : weight
-            mergeUniforms.shortFrameScale = requestLongFrame ? weight : 1.0
+            mergeUniforms.longFrameScale = flickerToggle ? 1.0 : weight
+            mergeUniforms.shortFrameScale = flickerToggle ? weight : 1.0
+            flickerToggle = !flickerToggle
          } else {
             mergeUniforms.longFrameScale = 1.0
             mergeUniforms.shortFrameScale = 1.0
@@ -431,7 +436,7 @@ public class MetalView: MTKView {
                               options: &shaderOptions)
             
             func applyGauss(_ texture: inout MTLTexture, radius: Float) {
-                
+
                 if #available(OSX 10.13, *) {
                     let gauss = MPSImageGaussianBlur(device: device!, sigma: radius)
                     gauss.encode(commandBuffer: commandBuffer,
