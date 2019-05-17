@@ -390,9 +390,10 @@ public class MetalView: MTKView {
 
         // Set uniforms for the merge shader
          if controller.amiga.denise.interlaceMode() {
+            let weight = shaderOptions.flicker > 0 ? (1.0 - shaderOptions.flickerWeight) : Float(1.0)
             mergeUniforms.interlace = 1
-            mergeUniforms.longFrameScale = longFrame ? 1.0 : 0.5
-            mergeUniforms.shortFrameScale = longFrame ? 0.5 : 1.0
+            mergeUniforms.longFrameScale = longFrame ? 1.0 : weight
+            mergeUniforms.shortFrameScale = longFrame ? weight : 1.0
          } else {
             mergeUniforms.longFrameScale = 1.0
             mergeUniforms.shortFrameScale = 1.0
