@@ -32,7 +32,6 @@ Agnus::Agnus()
         
         { &clock,           sizeof(clock),           0 },
         { &frame,           sizeof(frame),           0 },
-        // { &latchedClock,    sizeof(latchedClock),    0 },
         { &vpos,            sizeof(vpos),            0 },
         { &hpos,            sizeof(hpos),            0 },
         { &hstrt,           sizeof(hstrt),           0 },
@@ -1421,20 +1420,7 @@ Agnus::vsyncHandler()
     // Increment frame and reset vpos
     frame++;
     vpos = 0;
-    
-    // debug("[%d]\n", frame);
-    
-    /*
-    if (frame % 50 == 0) {
-        debug("%d instr per second\n", cpuInstrCount);
-        cpuInstrCount = 0;
-    }
-    */
-    
-    // Remember the clock count at SOF (Start Of Frame)
-    // Add one because the DMA clock hasn't been advanced yet
-    // latchedClock = clock + DMA_CYCLES(1);
-    
+
     // CIA A counts VSYNCs
     _ciaA->incrementTOD();
     

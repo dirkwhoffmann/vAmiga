@@ -91,14 +91,7 @@ class Agnus : public HardwareComponent
      * The value is increased on every VSYNC action.
      */
     int64_t frame;
-    
-    /* Value of clock at the beginning of the current frame.
-     * The value is latched on every VSYNC action and used for implementing
-     * the beamToCycle conversion functions.
-     * DEPRECATED
-     */
-    // Cycle latchedClock;
-    
+        
     // The current vertical beam position (0 .. VPOS_MAX)
     int16_t vpos;
     
