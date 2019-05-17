@@ -218,13 +218,16 @@ public class MetalView: MTKView {
         }
     }
     
-    //! If true, no GPU drawing is performed (for performance profiling olny)
+    // If true, no GPU drawing is performed (for performance profiling olny)
     var enableMetal = false
-    
-    //! Is set to true when fullscreen mode is entered (usually enables the 2D renderer)
+
+    // Indicates if the current frame is a long frame or a short frame
+    var longFrame = false
+
+    // Is set to true when fullscreen mode is entered (usually enables the 2D renderer)
     var fullscreen = false
     
-    //! If true, the 3D renderer is also used in fullscreen mode
+    // If true, the 3D renderer is also used in fullscreen mode
     var keepAspectRatio = Defaults.keepAspectRatio
     
     required public init(coder: NSCoder) {
@@ -288,32 +291,6 @@ public class MetalView: MTKView {
         buildVertexBuffer()
     }
 
-    /*
-    func updateLongFrameTexture() {
-
-        let bytes = controller.amiga.denise.screenBuffer1().data!
-
-        longFrameTexture.replace(region: MTLRegionMake2D(0, 0, HPIXELS, VPIXELS),
-                                 mipmapLevel: 0,
-                                 slice: 0,
-                                 withBytes: bytes,
-                                 bytesPerRow: 4 * HPIXELS,
-                                 bytesPerImage: 4 * VPIXELS * HPIXELS)
-    }
-    
-    func updateShortFrameTexture() {
-
-        let bytes = controller.amiga.denise.screenBuffer2().data!
-
-        shortFrameTexture.replace(region: MTLRegionMake2D(0, 0, HPIXELS, VPIXELS),
-                                  mipmapLevel: 0,
-                                  slice: 0,
-                                  withBytes: bytes,
-                                  bytesPerRow: 4 * HPIXELS,
-                                  bytesPerImage: 4 * VPIXELS * HPIXELS)
-    }
-    */
-
     func updateLongFrameTexture(bytes: UnsafeMutablePointer<Int32>) {
 
         longFrameTexture.replace(region: MTLRegionMake2D(0, 0, HPIXELS, VPIXELS),
@@ -334,18 +311,34 @@ public class MetalView: MTKView {
                                   bytesPerImage: 4 * VPIXELS * HPIXELS)
     }
 
+    func updateTexture(bytes: UnsafeMutablePointer<Int32>, longFrame: Bool) {
+
+        if longFrame {
+            longFrameTexture.replace(region: MTLRegionMake2D(0, 0, HPIXELS, VPIXELS),
+                                     mipmapLevel: 0,
+                                     slice: 0,
+                                     withBytes: bytes,
+                                     bytesPerRow: 4 * HPIXELS,
+                                     bytesPerImage: 4 * VPIXELS * HPIXELS)
+        } else {
+            shortFrameTexture.replace(region: MTLRegionMake2D(0, 0, HPIXELS, VPIXELS),
+                                      mipmapLevel: 0,
+                                      slice: 0,
+                                      withBytes: bytes,
+                                      bytesPerRow: 4 * HPIXELS,
+                                      bytesPerImage: 4 * VPIXELS * HPIXELS)
+        }
+    }
+
     func updateTexture() {
 
         let screenBuffer = controller.amiga.denise.screenBuffer()
 
-        if screenBuffer.interlace { track("INTERLACED") }
-        if !screenBuffer.longFrame { track("SHORT FRAME") }
+        // if screenBuffer.interlace { track("INTERLACED") } else { track("NORMAL") }
+        // if !screenBuffer.longFrame { track("SHORT FRAME") } else { track("LONG FRAME") }
 
-        if screenBuffer.longFrame {
-            updateLongFrameTexture(bytes: screenBuffer.data)
-        } else {
-            updateShortFrameTexture(bytes: screenBuffer.data)
-        }
+        longFrame = screenBuffer.longFrame
+        updateTexture(bytes: screenBuffer.data, longFrame: longFrame)
     }
  
     /// Returns the compute kernel of the currently selected upscaler (first pass)
@@ -398,10 +391,9 @@ public class MetalView: MTKView {
         // Set uniforms for the merge shader
          if controller.amiga.denise.interlaceMode() {
             mergeUniforms.interlace = 1
-            mergeUniforms.longFrameScale = 1.0
-            mergeUniforms.shortFrameScale = 1.0
+            mergeUniforms.longFrameScale = longFrame ? 1.0 : 0.5
+            mergeUniforms.shortFrameScale = longFrame ? 0.5 : 1.0
          } else {
-            mergeUniforms.interlace = 0
             mergeUniforms.longFrameScale = 1.0
             mergeUniforms.shortFrameScale = 1.0
         }

@@ -211,9 +211,9 @@ kernel void merge(texture2d<half, access::read>  longFrame   [[ texture(0) ]],
     half4 result;
     
     if (!uniforms.interlace || gid.y % 2 == 0) {
-        result = longFrame.read(uint2(gid.x, gid.y / 2));
+        result = longFrame.read(uint2(gid.x, gid.y / 2)) * uniforms.longFrameScale;
     } else {
-        result = shortFrame.read(uint2(gid.x, gid.y / 2));
+        result = shortFrame.read(uint2(gid.x, gid.y / 2)) * uniforms.shortFrameScale;
     }
     
     outTexture.write(result, gid);

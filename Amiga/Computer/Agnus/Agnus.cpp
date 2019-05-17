@@ -1378,8 +1378,7 @@ Agnus::hsyncHandler()
     hpos = -1;
     
     // Check if the current frame is finished
-    assert(frameInfo.numLines - 1 == VPOS_MAX);
-    if (vpos > VPOS_MAX) {
+    if (vpos >= frameInfo.numLines) {
         vsyncHandler();
     }
     

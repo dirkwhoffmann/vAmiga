@@ -597,6 +597,7 @@ Denise::prepareForNextFrame(bool longFrame, bool interlace)
     // Switch the active frame buffer
     frameBuffer = (frameBuffer == &screenBuffer1) ? &screenBuffer2 : &screenBuffer1;
 
+    // debug("long = %d interlace = %d\n", frameBuffer->longFrame, frameBuffer->interlace);
     frameBuffer->longFrame = longFrame;
     frameBuffer->interlace = interlace;
 }
