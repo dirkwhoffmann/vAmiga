@@ -218,27 +218,6 @@ Agnus::DMACyclesInCurrentFrame()
 }
 
 /*
-void
-Agnus::cycleToBeamAbs(Cycle cycle, int64_t &frame, int16_t &vpos, int16_t &hpos)
-{
-    DMACycle dmaCycle    = AS_DMA_CYCLES(cycle);
-    DMACycle frameCycles = DMACyclesInCurrentFrame();
-    DMACycle lineCycles  = DMACyclesPerLine();
-    
-    frame = dmaCycle / frameCycles;
-    dmaCycle = dmaCycle % frameCycles;
-    vpos = dmaCycle / lineCycles;
-    dmaCycle = dmaCycle % lineCycles;
-    hpos = dmaCycle;
-}
-
-void
-Agnus::cycleToBeamRel(Cycle cycle, int64_t &frame, int16_t &vpos, int16_t &hpos)
-{
-    return cycleToBeamAbs(cycle + latchedClock, frame, vpos, hpos);
-}
-*/
-
 Cycle
 Agnus::beamToCyclesAbs(int16_t vpos, int16_t hpos)
 {
@@ -250,6 +229,7 @@ Agnus::beamToCyclesRel(int16_t vpos, int16_t hpos)
 {
     return DMA_CYCLES(vpos * DMACyclesPerLine() + hpos); 
 }
+*/
 
 Cycle
 Agnus::beamDiff(int16_t vStart, int16_t hStart, int16_t vEnd, int16_t hEnd)

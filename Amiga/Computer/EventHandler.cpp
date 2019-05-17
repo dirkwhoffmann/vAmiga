@@ -593,9 +593,12 @@ EventHandler::schedulePos(EventSlot s, int16_t vpos, int16_t hpos, EventID id)
 {
     assert(isPrimarySlot(s));
     assert(isVposHpos(vpos, hpos));
-    
-    Cycle cycle = _agnus->beamToCyclesAbs(vpos, hpos);
-    
+
+    Beam beam;
+    beam.y = vpos;
+    beam.x = hpos;
+    Cycle cycle = _agnus->beamToCycle(beam);
+
     primSlot[s].triggerCycle = cycle;
     primSlot[s].id = id;
     if (cycle < nextPrimTrigger) nextPrimTrigger = cycle;
@@ -677,9 +680,12 @@ EventHandler::scheduleSecPos(EventSlot s, int16_t vpos, int16_t hpos, EventID id
 {
     assert(isSecondarySlot(s));
     assert(isVposHpos(vpos, hpos));
-    
-    Cycle cycle = _agnus->beamToCyclesAbs(vpos, hpos);
-    
+
+    Beam beam;
+    beam.y = vpos;
+    beam.x = hpos;
+    Cycle cycle = _agnus->beamToCycle(beam);
+
     secSlot[s].triggerCycle = cycle;
     secSlot[s].id = id;
     if (cycle < nextSecTrigger) nextSecTrigger = cycle;
