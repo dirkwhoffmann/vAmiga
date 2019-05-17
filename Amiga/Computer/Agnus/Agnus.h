@@ -89,15 +89,33 @@ class Agnus : public HardwareComponent
     
     /* The frame counter.
      * The value is increased on every VSYNC action.
+     * DEPRECATED: will be replaced by frame.nr
      */
-    int64_t frame;
+    Frame frame;
         
     // The current vertical beam position (0 .. VPOS_MAX)
     int16_t vpos;
     
     // The current horizontal beam position (0 .. HPOS_MAX)
     int16_t hpos;
-    
+
+    // Information about the currently drawn frame
+    struct {
+
+        // Frame count (will eventually replace variable 'frame')
+        Frame nr;
+
+        // Indicates if this frame is drawn in interlace mode
+        bool interlaced;
+
+        // The number of rasterlines in the current frame
+        int16_t numLines;
+
+    } frameInfo;
+
+    // The long frame flipflop
+    bool lof;
+
     /* The display window coordinates.
      * These values are calculated out of diwstrt and diwstop and updated
      * automatically inside pokeDIWSTRT() and pokeDIWSTOP().

@@ -34,6 +34,10 @@ Agnus::Agnus()
         { &frame,           sizeof(frame),           0 },
         { &vpos,            sizeof(vpos),            0 },
         { &hpos,            sizeof(hpos),            0 },
+        { &frameInfo.nr,          sizeof(frameInfo.nr),            0 },
+        { &frameInfo.interlaced,  sizeof(frameInfo.interlaced),    0 },
+        { &frameInfo.numLines,    sizeof(frameInfo.numLines),      0 },
+        { &lof,             sizeof(lof),             0 },
         { &hstrt,           sizeof(hstrt),           0 },
         { &hstop,           sizeof(hstop),           0 },
         { &vstrt,           sizeof(vstrt),           0 },
@@ -1416,9 +1420,24 @@ Agnus::vsyncHandler()
     // Switch bitplane and sprite DMA off
     switchBitplaneDmaOff();
     switchSpriteDmaOff();
-    
+
+    // Advance to the next frame
+    frameInfo.nr++;
+
+    // Check if we the next frame is drawn in interlace mode
+    frameInfo.interlaced = _denise->bplconLACE();
+
+    // If yes, toggle the the long frame flipflop
+    if (frameInfo.interlaced) lof = !lof;
+
+    // Determine if the next frame is a long or a short frame
+    frameInfo.numLines = lof ? 313 : 312;
+
     // Increment frame and reset vpos
-    frame++;
+    frame++; // DEPRECATED
+    assert(frame == frameInfo.nr);
+
+    // Reset vertical position counter
     vpos = 0;
 
     // CIA A counts VSYNCs
