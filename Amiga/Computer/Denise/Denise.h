@@ -277,24 +277,27 @@ class Denise : public HardwareComponent {
     
     /* Returns true if a certain screen buffer is ready for display
      */
-    inline bool buffer1IsReady() { return (frameBuffer == &screenBuffer2); }
-    inline bool buffer2IsReady() { return (frameBuffer == &screenBuffer1); }
+    bool buffer1IsReady() { return (frameBuffer == &screenBuffer2); }
+    bool buffer2IsReady() { return (frameBuffer == &screenBuffer1); }
     
     // Returns the first screen buffer
-    inline void *buffer1() { return screenBuffer1.data; }
+    ScreenBuffer buffer1() { return screenBuffer1; }
 
     // Returns the second screen buffer
-    inline void *buffer2() { return screenBuffer2.data; }
+    ScreenBuffer buffer2() { return screenBuffer2; }
 
     // Returns the currently stabel screen buffer.
-    inline void *screenBuffer() {
-        return (frameBuffer == &screenBuffer1) ? screenBuffer2.data : screenBuffer1.data; }
+    ScreenBuffer screenBuffer() {
+        return (frameBuffer == &screenBuffer1) ? screenBuffer2 : screenBuffer1; }
     
     // HSYNC handler
     void endOfLine();
 
-    // VSYNC handler
-    void endOfFrame();
+    /* Makes Denise ready for the next frame
+     * longFrame indicates whether the next frame is a long frame.
+     * interlace indicates whether the next frame is drawn in interlace mode.
+     */
+    void prepareForNextFrame(bool longFrame, bool interlace);
     
     
     //

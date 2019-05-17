@@ -453,15 +453,15 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->denise->buffer2IsReady();
 }
-- (void *) screenBuffer1
+- (ScreenBuffer) screenBuffer1
 {
     return wrapper->denise->buffer1();
 }
-- (void *) screenBuffer2
+- (ScreenBuffer) screenBuffer2
 {
     return wrapper->denise->buffer2();
 }
-- (void *) screenBuffer
+- (ScreenBuffer) screenBuffer
 {
     return wrapper->denise->screenBuffer();
 }

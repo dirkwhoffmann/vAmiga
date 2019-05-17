@@ -592,10 +592,13 @@ Denise::endOfLine()
 }
 
 void
-Denise::endOfFrame()
+Denise::prepareForNextFrame(bool longFrame, bool interlace)
 {
     // Switch the active frame buffer
     frameBuffer = (frameBuffer == &screenBuffer1) ? &screenBuffer2 : &screenBuffer1;
+
+    frameBuffer->longFrame = longFrame;
+    frameBuffer->interlace = interlace;
 }
 
 

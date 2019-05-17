@@ -1449,7 +1449,7 @@ Agnus::vsyncHandler()
     
     // Let the subcomponents do their own VSYNC stuff
     copper.vsyncAction();
-    _denise->endOfFrame();
+    _denise->prepareForNextFrame(isLongFrame(), frameInfo.interlaced);
     _amiga->joystick1.execute();
     _amiga->joystick2.execute();
 

@@ -337,9 +337,9 @@ struct AmigaFileWrapper;
 
 - (BOOL) buffer1IsReady;
 - (BOOL) buffer2IsReady;
-- (void *) screenBuffer1;
-- (void *) screenBuffer2;
-- (void *) screenBuffer;
+- (ScreenBuffer) screenBuffer1;
+- (ScreenBuffer) screenBuffer2;
+- (ScreenBuffer) screenBuffer;
 
 - (BOOL) interlaceMode;
 - (BOOL) isLongFrame;

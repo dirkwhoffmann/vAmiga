@@ -285,21 +285,25 @@ public class MetalView: MTKView {
     }
 
     func updateLongFrameTexture() {
-        
+
+        let bytes = controller.amiga.denise.screenBuffer1().data!
+
         longFrameTexture.replace(region: MTLRegionMake2D(0, 0, HPIXELS, VPIXELS),
                                  mipmapLevel: 0,
                                  slice: 0,
-                                 withBytes: controller.amiga.denise.screenBuffer1()!,
+                                 withBytes: bytes,
                                  bytesPerRow: 4 * HPIXELS,
                                  bytesPerImage: 4 * VPIXELS * HPIXELS)
     }
     
     func updateShortFrameTexture() {
-        
+
+        let bytes = controller.amiga.denise.screenBuffer2().data!
+
         shortFrameTexture.replace(region: MTLRegionMake2D(0, 0, HPIXELS, VPIXELS),
                                   mipmapLevel: 0,
                                   slice: 0,
-                                  withBytes: controller.amiga.denise.screenBuffer2()!,
+                                  withBytes: bytes,
                                   bytesPerRow: 4 * HPIXELS,
                                   bytesPerImage: 4 * VPIXELS * HPIXELS)
     }
