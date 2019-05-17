@@ -67,8 +67,12 @@ Agnus::Agnus()
 void
 Agnus::_powerOn()
 {
-    clock = 0;
-    
+    // clock = 0;
+
+    // Start with a long frame
+    lof = 1;
+    frameInfo.numLines = 313;
+
     // Initialize lookup tables
     clearDMAEventTable();
     
@@ -78,10 +82,6 @@ Agnus::_powerOn()
     // Schedule the first CIA A and CIA B events
     eventHandler.scheduleAbs(CIAA_SLOT, CIA_CYCLES(1), CIA_EXECUTE);
     eventHandler.scheduleAbs(CIAB_SLOT, CIA_CYCLES(1), CIA_EXECUTE);
-
-    // Initialize the SEC_SLOT with a (never triggering) SEC_TRIGGER event.
-    // Doing so let's us use reschedule() on this slot all the time.
-    // eventHandler.scheduleAbs(SEC_SLOT, NEVER, SEC_TRIGGER);
 }
 
 void
@@ -1353,7 +1353,7 @@ Agnus::hsyncHandler()
     // CIA B counts HSYNCs
     _ciaB->incrementTOD();
     
-    // Check the keyboard about each millisecond
+    // Check the keyboard once in a while
     if ((vpos & 0b1111) == 0) _amiga->keyboard.execute();
     
     // Add bit plane pointer modulo values
@@ -1378,6 +1378,7 @@ Agnus::hsyncHandler()
     hpos = -1;
     
     // Check if the current frame is finished
+    assert(frameInfo.numLines - 1 == VPOS_MAX);
     if (vpos > VPOS_MAX) {
         vsyncHandler();
     }

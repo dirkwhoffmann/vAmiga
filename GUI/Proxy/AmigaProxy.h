@@ -341,6 +341,10 @@ struct AmigaFileWrapper;
 - (void *) screenBuffer2;
 - (void *) screenBuffer;
 
+- (BOOL) interlaceMode;
+- (BOOL) isLongFrame;
+- (BOOL) isShortFrame;
+
 @end
 
 

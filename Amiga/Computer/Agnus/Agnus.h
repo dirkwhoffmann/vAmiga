@@ -243,12 +243,16 @@ class Agnus : public HardwareComponent
     // Returns the latest internal state recorded by inspect()
     DMAInfo getInfo();
     
-    
+
     //
-    // Working with cycles and beam positions
+    // Examining the current frame
     //
-    
-    public:
+
+public:
+
+    // Indicates if the current frame is a long or a short frame
+    bool isLongFrame() { return frameInfo.numLines == 313; }
+    bool isShortFrame() { return frameInfo.numLines == 312; }
 
     /* Returns the number of master cycles in the current frame.
      * The result depends on the number of lines that are drawn. This values
@@ -266,6 +270,14 @@ class Agnus : public HardwareComponent
      */
     Cycle startOfCurrentFrame();
     Cycle startOfNextFrame();
+
+
+    //
+    // Converting cycles and beam positions
+    //
+
+public:
+
 
     /* Translates a beam position to a master cycle or vice versa.
      *
