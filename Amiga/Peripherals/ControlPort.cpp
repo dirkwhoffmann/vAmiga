@@ -23,7 +23,7 @@ ControlPort::potgor()
     switch (device) {
             
         case CPD_MOUSE:
-            return _amiga->mouse.rightButton ? 0xF7FF : 0xFFFF;
+            return _amiga->mouse.rightButton ? 0xFBFF : 0xFFFF;
             
         default:
             return 0xFFFF;
