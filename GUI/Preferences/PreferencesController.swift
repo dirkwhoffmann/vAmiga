@@ -78,22 +78,25 @@ class PreferencesController: DialogController {
     //
     
     // Palette
-    @IBOutlet weak var vidPalettePopup: NSPopUpButton!
+    @IBOutlet weak var vidPalettePopUp: NSPopUpButton!
     @IBOutlet weak var vidBrightnessSlider: NSSlider!
     @IBOutlet weak var vidContrastSlider: NSSlider!
     @IBOutlet weak var vidSaturationSlider: NSSlider!
     
     // Effects
-    @IBOutlet weak var vidEnhancerPopup: NSPopUpButton!
-    @IBOutlet weak var vidUpscalerPopup: NSPopUpButton!
+    @IBOutlet weak var vidEnhancerPopUp: NSPopUpButton!
+    @IBOutlet weak var vidUpscalerPopUp: NSPopUpButton!
     @IBOutlet weak var vidBlurPopUp: NSPopUpButton!
     @IBOutlet weak var vidBlurRadiusSlider: NSSlider!
     
-    @IBOutlet weak var vidBloomPopup: NSPopUpButton!
+    @IBOutlet weak var vidBloomPopUp: NSPopUpButton!
     @IBOutlet weak var vidBloomRadiusSlider: NSSlider!
     @IBOutlet weak var vidBloomBrightnessSlider: NSSlider!
     @IBOutlet weak var vidBloomWeightSlider: NSSlider!
-    
+
+    @IBOutlet weak var vidFlickerPopUp: NSPopUpButton!
+    @IBOutlet weak var vidFlickerWeightSlider: NSSlider!
+
     @IBOutlet weak var vidDotMaskPopUp: NSPopUpButton!
     @IBOutlet weak var vidDotMaskBrightnessSlider: NSSlider!
     

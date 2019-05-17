@@ -16,7 +16,7 @@ extension PreferencesController {
         // Check for available enhancers
         if let enhancers = myController?.metal.enhancerGallery {
             for i in 0 ... enhancers.count - 1 {
-                if let item = vidEnhancerPopup.menu?.item(withTag: i) {
+                if let item = vidEnhancerPopUp.menu?.item(withTag: i) {
                     item.isEnabled = (enhancers[i] != nil)
                 }
             }
@@ -25,7 +25,7 @@ extension PreferencesController {
         // Check for available upscalers
         if let upscalers = myController?.metal.upscalerGallery {
             for i in 0 ... upscalers.count - 1 {
-                if let item = vidUpscalerPopup.menu?.item(withTag: i) {
+                if let item = vidUpscalerPopUp.menu?.item(withTag: i) {
                     item.isEnabled = (upscalers[i] != nil)
                 }
             }
@@ -46,9 +46,9 @@ extension PreferencesController {
         track()
         
         // Video
-        vidEnhancerPopup.selectItem(withTag: metal.enhancer)
-        vidUpscalerPopup.selectItem(withTag: metal.upscaler)
-        vidPalettePopup.selectItem(withTag: controller.palette)
+        vidEnhancerPopUp.selectItem(withTag: metal.enhancer)
+        vidUpscalerPopUp.selectItem(withTag: metal.upscaler)
+        vidPalettePopUp.selectItem(withTag: controller.palette)
         vidBrightnessSlider.doubleValue = controller.brightness
         vidContrastSlider.doubleValue = controller.contrast
         vidSaturationSlider.doubleValue = controller.saturation
@@ -59,14 +59,18 @@ extension PreferencesController {
         vidBlurRadiusSlider.floatValue = shaderOptions.blurRadius
         vidBlurRadiusSlider.isEnabled = shaderOptions.blur > 0
         
-        vidBloomPopup.selectItem(withTag: Int(shaderOptions.bloom))
+        vidBloomPopUp.selectItem(withTag: Int(shaderOptions.bloom))
         vidBloomRadiusSlider.floatValue = shaderOptions.bloomRadius
         vidBloomRadiusSlider.isEnabled = shaderOptions.bloom > 0
         vidBloomBrightnessSlider.floatValue = shaderOptions.bloomBrightness
         vidBloomBrightnessSlider.isEnabled = shaderOptions.bloom > 0
         vidBloomWeightSlider.floatValue = shaderOptions.bloomWeight
         vidBloomWeightSlider.isEnabled = shaderOptions.bloom > 0
-        
+
+        vidFlickerPopUp.selectItem(withTag: Int(shaderOptions.flicker))
+        vidFlickerWeightSlider.floatValue = shaderOptions.flickerWeight
+        vidFlickerWeightSlider.isEnabled = shaderOptions.flicker > 0
+
         vidDotMaskPopUp.selectItem(withTag: Int(shaderOptions.dotMask))
         for i in 0 ... 4 {
             vidDotMaskPopUp.item(at: i)?.image = metal.dotmaskImages[i]
@@ -188,6 +192,24 @@ extension PreferencesController {
         if let metal = myController?.metal {
             track("\(sender.floatValue)")
             metal.shaderOptions.bloomWeight = sender.floatValue
+            refresh()
+        }
+    }
+
+    @IBAction func vidFlickerAction(_ sender: NSPopUpButton!) {
+
+        if let metal = myController?.metal {
+            track("\(sender.selectedTag())")
+            metal.shaderOptions.flicker = Int32(sender.selectedTag())
+            refresh()
+        }
+    }
+
+    @IBAction func vidFlickerWeightAction(_ sender: NSSlider!) {
+
+        if let metal = myController?.metal {
+            track("\(sender.floatValue)")
+            metal.shaderOptions.flickerWeight = sender.floatValue
             refresh()
         }
     }

@@ -86,7 +86,7 @@
                 <outlet property="romText" destination="Mc6-g5-kfE" id="EUW-Nv-ECK"/>
                 <outlet property="romWarning" destination="phr-t4-w1Y" id="bOF-hP-v7T"/>
                 <outlet property="vidBloomBrightnessSlider" destination="tcf-i4-M9e" id="ftQ-Ru-i1y"/>
-                <outlet property="vidBloomPopup" destination="J7V-We-wO2" id="sKy-bv-Ytf"/>
+                <outlet property="vidBloomPopUp" destination="J7V-We-wO2" id="l4m-6V-PL6"/>
                 <outlet property="vidBloomRadiusSlider" destination="VJ1-QU-G8y" id="bWi-3y-HjZ"/>
                 <outlet property="vidBloomWeightSlider" destination="V7J-CX-bpc" id="Xjv-6r-PjI"/>
                 <outlet property="vidBlurPopUp" destination="R9Y-ab-IaP" id="e3b-R4-3Y8"/>
@@ -95,19 +95,21 @@
                 <outlet property="vidContrastSlider" destination="Gix-cX-ARc" id="QGy-se-qE6"/>
                 <outlet property="vidDotMaskBrightnessSlider" destination="7xe-s2-Fir" id="bXd-iZ-Mz4"/>
                 <outlet property="vidDotMaskPopUp" destination="Nrz-LF-GtK" id="KdW-or-4ar"/>
-                <outlet property="vidEnhancerPopup" destination="GCj-d1-3AP" id="ZAD-rM-C4O"/>
+                <outlet property="vidEnhancerPopUp" destination="GCj-d1-3AP" id="wQG-HX-ORy"/>
                 <outlet property="vidEyeXSlider" destination="7MT-uZ-RGm" id="j0t-UG-xUS"/>
                 <outlet property="vidEyeYSlider" destination="8Th-7v-D1s" id="oM6-H0-KfD"/>
                 <outlet property="vidEyeZSlider" destination="PbK-qc-ZPZ" id="UZ4-Uh-12D"/>
+                <outlet property="vidFlickerPopUp" destination="Gvz-O6-AXD" id="RBZ-nJ-Lgi"/>
+                <outlet property="vidFlickerWeightSlider" destination="o9J-vh-j0n" id="jtr-Hw-Mup"/>
                 <outlet property="vidMisalignmentPopUp" destination="f3c-4e-uVF" id="DcI-ia-qNS"/>
                 <outlet property="vidMisalignmentXSlider" destination="F6O-Zb-pow" id="oFX-xP-n95"/>
                 <outlet property="vidMisalignmentYSlider" destination="KkN-hN-xfa" id="7Dv-3R-1xx"/>
-                <outlet property="vidPalettePopup" destination="kQF-8P-rsa" id="vjk-in-uM2"/>
+                <outlet property="vidPalettePopUp" destination="kQF-8P-rsa" id="GKR-Yp-cSv"/>
                 <outlet property="vidSaturationSlider" destination="Kth-Hh-Zmk" id="Kcz-Ie-bo4"/>
                 <outlet property="vidScanlineBrightnessSlider" destination="91k-67-6iN" id="Ny4-2J-Tad"/>
                 <outlet property="vidScanlineWeightSlider" destination="nIa-kK-410" id="Wd7-gc-qEK"/>
                 <outlet property="vidScanlinesPopUp" destination="ICF-4F-jzR" id="gZQ-Hx-W9q"/>
-                <outlet property="vidUpscalerPopup" destination="fcX-95-l2D" id="ek0-Dk-WGA"/>
+                <outlet property="vidUpscalerPopUp" destination="fcX-95-l2D" id="mtz-Th-brj"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="ou3-wi-R6f"/>
             </connections>
         </customObject>
@@ -1141,25 +1143,22 @@ DQ
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gvz-O6-AXD">
                                             <rect key="frame" x="87" y="93" width="200" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="In interlace mode" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="mixed" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" autoenablesItems="NO" selectedItem="7t2-H7-Csl" id="JyI-GC-1wJ">
+                                            <popUpButtonCell key="cell" type="push" title="Never" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" autoenablesItems="NO" selectedItem="7t2-H7-Csl" id="JyI-GC-1wJ">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="menu"/>
                                                 <menu key="menu" title="OtherViews" autoenablesItems="NO" id="ryd-Ow-ri5">
                                                     <items>
-                                                        <menuItem title="In interlace mode" state="mixed" id="7t2-H7-Csl">
+                                                        <menuItem title="Never" state="on" id="7t2-H7-Csl">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="in interlace mode" tag="1" id="6xu-wt-zeJ">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="always" tag="2" id="wEL-oe-mQA">
+                                                        <menuItem title="In Interlace Mode" tag="1" id="6xu-wt-zeJ">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
                                             <connections>
-                                                <action selector="vidBloomAction:" target="-2" id="kKU-uM-qvg"/>
+                                                <action selector="vidFlickerAction:" target="-2" id="ddA-0c-wQy"/>
                                             </connections>
                                         </popUpButton>
                                         <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VJ1-QU-G8y">
@@ -1485,9 +1484,9 @@ DQ
                                         <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="o9J-vh-j0n">
                                             <rect key="frame" x="167" y="72" width="120" height="15"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" minValue="1" maxValue="3" doubleValue="1" tickMarkPosition="above" sliderType="linear" id="Yov-Hg-sww"/>
+                                            <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="1" doubleValue="1" tickMarkPosition="above" sliderType="linear" id="Yov-Hg-sww"/>
                                             <connections>
-                                                <action selector="vidBloomWeightAction:" target="-2" id="bos-jT-ZEh"/>
+                                                <action selector="vidFlickerWeightAction:" target="-2" id="le2-90-W8Z"/>
                                             </connections>
                                         </slider>
                                     </subviews>

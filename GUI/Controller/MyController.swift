@@ -192,6 +192,14 @@ class MyController: NSWindowController, MessageReceiver {
         get { return metal.shaderOptions.bloomWeight }
         set { metal.shaderOptions.bloomWeight = newValue }
     }
+    var flicker: Int32 {
+        get { return metal.shaderOptions.flicker }
+        set { metal.shaderOptions.flicker = newValue }
+    }
+    var flickerWeight: Float {
+        get { return metal.shaderOptions.flickerWeight }
+        set { metal.shaderOptions.flickerWeight = newValue }
+    }
     var dotMask: Int32 {
         get { return metal.shaderOptions.dotMask }
         set { metal.shaderOptions.dotMask = newValue }

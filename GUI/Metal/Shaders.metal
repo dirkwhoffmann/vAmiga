@@ -47,6 +47,9 @@ struct ShaderOptions {
     float bloomBrightness;
     float bloomWeight;
 
+    uint flicker;
+    float flickerWeight;
+
     uint dotMask;
     float dotMaskBrightness;
 

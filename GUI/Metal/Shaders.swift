@@ -34,7 +34,10 @@ struct ShaderOptions: Codable {
     var bloomRadius: Float
     var bloomBrightness: Float
     var bloomWeight: Float
-    
+
+    var flicker: Int32
+    var flickerWeight: Float
+
     var dotMask: Int32
     var dotMaskBrightness: Float
     
@@ -54,6 +57,8 @@ var ShaderDefaultsTFT = ShaderOptions(blur: 1,
                                       bloomRadius: 1.0,
                                       bloomBrightness: 0.4,
                                       bloomWeight: 1.21,
+                                      flicker: 1,
+                                      flickerWeight: 0.5,
                                       dotMask: 0,
                                       dotMaskBrightness: 0.7,
                                       scanlines: 0,
@@ -70,6 +75,8 @@ var ShaderDefaultsCRT = ShaderOptions(blur: 1,
                                       bloomRadius: 1.0,
                                       bloomBrightness: 0.4,
                                       bloomWeight: 1.21,
+                                      flicker: 1,
+                                      flickerWeight: 0.5,
                                       dotMask: 1,
                                       dotMaskBrightness: 0.5,
                                       scanlines: 2,
