@@ -860,9 +860,9 @@ Agnus::peekVPOSR()
     // TODO: LF (Long Frame)
     assert((vpos >> 8) <= 1);
     
-    debug(2, "peekVPOSR: %X\n", (vpos >> 8) | ((frame % 2) ? 0x8000 : 0));
+    // debug(2, "peekVPOSR: %X\n", (vpos >> 8) | (isLongFrame() ? 0x8000 : 0));
 
-    return (vpos >> 8) | ((frame % 2) ? 0x8000 : 0);
+    return (vpos >> 8) | (isLongFrame() ? 0x8000 : 0);
 
 }
 
