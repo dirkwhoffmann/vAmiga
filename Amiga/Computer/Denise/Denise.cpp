@@ -48,7 +48,9 @@ Denise::Denise()
         { &pixel,         sizeof(pixel),         0 },
 
     });
-    
+
+    screenBuffer1.data = new int[HPIXELS * VPIXELS];
+    screenBuffer2.data = new int[HPIXELS * VPIXELS];
 }
 
 Denise::~Denise()
@@ -60,14 +62,14 @@ void
 Denise::_powerOn()
 {
     clock = 0;
-    frameBuffer = screenBuffer1;
+    frameBuffer = &screenBuffer1;
     pixel = 0;
     
     // Initialize frame buffers with a recognizable debug pattern
     for (unsigned line = 0; line < VPIXELS; line++) {
         for (unsigned i = 0; i < HPIXELS; i++) {
-            screenBuffer1[line * HPIXELS + i] =
-            screenBuffer2[line * HPIXELS + i] =
+            screenBuffer1.data[line * HPIXELS + i] =
+            screenBuffer2.data[line * HPIXELS + i] =
             (line % 2) ? 0x000000FF : 0x0000FFFF;
         }
     }
@@ -442,7 +444,7 @@ Denise::pixelAddr(int pixel)
     // debug("pixel offset for pixel %d is %d\n", pixel, offset);
     assert(offset < VPIXELS * HPIXELS);
     
-    return frameBuffer + offset;
+    return frameBuffer->data + offset;
 }
 
 void
@@ -593,7 +595,7 @@ void
 Denise::endOfFrame()
 {
     // Switch the active frame buffer
-    frameBuffer = (frameBuffer == screenBuffer1) ? screenBuffer2 : screenBuffer1;
+    frameBuffer = (frameBuffer == &screenBuffer1) ? &screenBuffer2 : &screenBuffer1;
 }
 
 

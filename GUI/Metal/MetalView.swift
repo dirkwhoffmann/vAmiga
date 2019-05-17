@@ -305,7 +305,7 @@ public class MetalView: MTKView {
     }
     
     func updateTexture() {
-        
+
         if controller.amiga.denise.buffer1IsReady() {
             updateLongFrameTexture()
         } else {

@@ -14,6 +14,14 @@
 
 typedef struct
 {
+    int32_t *data;
+    bool longFrame;
+    bool interlace;
+}
+ScreenBuffer;
+
+typedef struct
+{
     uint16_t pos;
     uint16_t ctl;
     uint16_t ptr;

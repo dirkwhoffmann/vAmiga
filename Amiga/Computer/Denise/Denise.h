@@ -107,20 +107,20 @@ class Denise : public HardwareComponent {
      * later copied into to texture RAM of your graphic card by the drawRect
      * method in the GPU related code.
      */
-    int *screenBuffer1 = new int[HPIXELS * VPIXELS];
+    ScreenBuffer screenBuffer1;
+    // int *screenBuffer1 = new int[HPIXELS * VPIXELS];
 
     /* Second screen buffer
      * The VIC chip uses double buffering. Once a frame is drawn, Denise writes
      * the next frame to the second buffer.
      */
-    int *screenBuffer2 = new int [HPIXELS * VPIXELS];
-    // int *screenBuffer1 = new int[HPIXELS * VPIXELS];
-    // int *screenBuffer2 = new int[HPIXELS * VPIXELS];
-    
+    ScreenBuffer screenBuffer2;
+    // int *screenBuffer2 = new int [HPIXELS * VPIXELS];
+
     /* Currently active frame buffer
      * This variable points either to screenBuffer1 or screenBuffer2
      */
-    int *frameBuffer = screenBuffer1;
+    ScreenBuffer *frameBuffer = &screenBuffer1;
     
     /* Pointer to the beginning of the current rasterline
      * This pointer is used by all rendering methods to write pixels. It always
@@ -277,17 +277,18 @@ class Denise : public HardwareComponent {
     
     /* Returns true if a certain screen buffer is ready for display
      */
-    inline bool buffer1IsReady() { return (frameBuffer == screenBuffer2); }
-    inline bool buffer2IsReady() { return (frameBuffer == screenBuffer1); }
+    inline bool buffer1IsReady() { return (frameBuffer == &screenBuffer2); }
+    inline bool buffer2IsReady() { return (frameBuffer == &screenBuffer1); }
     
     // Returns the first screen buffer
-    inline void *buffer1() { return screenBuffer1; }
+    inline void *buffer1() { return screenBuffer1.data; }
 
     // Returns the second screen buffer
-    inline void *buffer2() { return screenBuffer2; }
+    inline void *buffer2() { return screenBuffer2.data; }
 
     // Returns the currently stabel screen buffer.
-    inline void *screenBuffer() { return (frameBuffer == screenBuffer1) ? screenBuffer2 : screenBuffer1; }
+    inline void *screenBuffer() {
+        return (frameBuffer == &screenBuffer1) ? screenBuffer2.data : screenBuffer1.data; }
     
     // HSYNC handler
     void endOfLine();
