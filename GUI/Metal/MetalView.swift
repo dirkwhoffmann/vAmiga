@@ -78,7 +78,11 @@ public class MetalView: MTKView {
                                             dotMaskWidth: 0,
                                             dotMaskHeight: 0,
                                             scanlineDistance: 0)
-    
+
+    var mergeUniforms = MergeUniforms(interlace: 0,
+                                      longFrameScale: 1.0,
+                                      shortFrameScale: 1.0)
+
     // Textures
     
     /// Background image behind the cube
@@ -386,20 +390,26 @@ public class MetalView: MTKView {
         assert(commandBuffer != nil, "Command buffer must not be nil")
     
         // Set uniforms for the fragment shader
-        // fillFragmentShaderUniforms(uniformFragment)
         fragmentUniforms.alpha = 1.0
         fragmentUniforms.dotMaskHeight = Int32(dotMaskTexture.height)
         fragmentUniforms.dotMaskWidth = Int32(dotMaskTexture.width)
         fragmentUniforms.scanlineDistance = Int32(layerHeight / 256)
-       
-        // Compute the merge texture
-        if controller.amiga.denise.interlaceMode() {
-            mergeFilter.apply(commandBuffer: commandBuffer,
-                              textures: [longFrameTexture, shortFrameTexture, mergeTexture])
-        } else {
-            mergeFilter.apply(commandBuffer: commandBuffer,
-                              textures: [longFrameTexture, longFrameTexture, mergeTexture])
+
+        // Set uniforms for the merge shader
+         if controller.amiga.denise.interlaceMode() {
+            mergeUniforms.interlace = 1
+            mergeUniforms.longFrameScale = 1.0
+            mergeUniforms.shortFrameScale = 1.0
+         } else {
+            mergeUniforms.interlace = 0
+            mergeUniforms.longFrameScale = 1.0
+            mergeUniforms.shortFrameScale = 1.0
         }
+
+        // Compute the merge texture
+        mergeFilter.apply(commandBuffer: commandBuffer,
+                          textures: [longFrameTexture, shortFrameTexture, mergeTexture],
+                          options: &mergeUniforms)
 
         // Compute upscaled texture (first pass, in-texture upscaling)
         let enhancer = currentEnhancer()

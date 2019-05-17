@@ -86,6 +86,17 @@ var ShaderDefaultsCRT = ShaderOptions(blur: 1,
                                       disalignmentV: 0.001)
 
 //
+// Uniforms passed to the merge shader
+//
+
+struct MergeUniforms {
+
+    var interlace: Int32
+    var longFrameScale: Float
+    var shortFrameScale: Float
+}
+
+//
 // Additional uniforms needed by the fragment shader
 //
 

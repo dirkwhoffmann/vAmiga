@@ -61,6 +61,16 @@ struct ShaderOptions {
     float disalignmentV;
 };
 
+//
+// Merge shader data types
+//
+
+struct MergeUniforms {
+
+    uint interlace;
+    float longFrameScale;
+    float shortFrameScale;
+};
 
 //
 // Fragment shader data types
@@ -73,7 +83,6 @@ struct FragmentUniforms {
     uint dotMaskHeight;
     uint scanlineDistance;
 };
-
 
 //
 // Vertex shader
@@ -196,11 +205,12 @@ fragment half4 fragment_main(ProjectedVertex vert [[ stage_in ]],
 kernel void merge(texture2d<half, access::read>  longFrame   [[ texture(0) ]],
                   texture2d<half, access::read>  shortFrame  [[ texture(1) ]],
                   texture2d<half, access::write> outTexture  [[ texture(2) ]],
+                  constant MergeUniforms         &uniforms   [[ buffer(0) ]],
                   uint2                          gid         [[ thread_position_in_grid ]])
 {
     half4 result;
     
-    if (gid.y % 2 == 0) {
+    if (!uniforms.interlace || gid.y % 2 == 0) {
         result = longFrame.read(uint2(gid.x, gid.y / 2));
     } else {
         result = shortFrame.read(uint2(gid.x, gid.y / 2));
