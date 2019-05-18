@@ -515,9 +515,6 @@ Denise::draw32()
 void
 Denise::draw32HAM()
 {
-    static uint32_t r;
-    static uint32_t g;
-    static uint32_t b;
     uint16_t colReg;
 
     int *ptr = pixelAddr(pixel);
@@ -541,28 +538,29 @@ Denise::draw32HAM()
 
             case 0b00: // Get color from register
 
+                assert(index < 16);
                 colReg = colorizer.peekColorReg(index);
-                r  = (colReg >> 8) & 0b1111;
-                g  = (colReg >> 4) & 0b1111;
-                b  = (colReg >> 0) & 0b1111;
+                r = (colReg >> 8) & 0b1111;
+                g = (colReg >> 4) & 0b1111;
+                b = (colReg >> 0) & 0b1111;
                 break;
 
             case 0b01: // Modify blue
 
                 b = (index & 0b1111);
-                r = g = b = 0;
+                // r = 0; g = 0; b = 15;
                 break;
 
             case 0b10: // Modify red
 
                 r = (index & 0b1111);
-                r = g = b = 0;
+                // r = 15; g = 0; b = 0;
                 break;
 
             case 0b11: // Modify green
 
                 g = (index & 0b1111);
-                r = g = b = 0;
+                // r = 0; g = 0; b = 0;
                 break;
 
             default:
@@ -570,6 +568,9 @@ Denise::draw32HAM()
                 assert(false);
         }
 
+        assert(r < 16);
+        assert(g < 16);
+        assert(b < 16);
         uint32_t rgba = HI_HI_LO_LO(0xFF, b << 4, g << 4, r << 4);
         *ptr++ = rgba;
         *ptr++ = rgba;

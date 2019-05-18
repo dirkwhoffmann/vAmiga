@@ -70,8 +70,12 @@ class Denise : public HardwareComponent {
     int8_t scrollLowOdd;
     int8_t scrollHiEven;
     int8_t scrollHiOdd;
-    
-    
+
+    // EXPERIMENTAL (HAM MODE)
+    uint32_t r = 0;
+    uint32_t g = 0;
+    uint32_t b = 0;
+
     //
     // Sprites
     //

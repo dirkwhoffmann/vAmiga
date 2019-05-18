@@ -1278,7 +1278,7 @@ Agnus::serviceRASEvent(EventID id)
             }
             
             // Schedule next RAS event
-            if (hpos < hstop / 2) {
+            if (hpos < hstop / 2 && hpos + incr < HPOS_MAX) {
                 // TODO: Replace by scheduleRel which is faster
                 eventHandler.schedulePos(RAS_SLOT, vpos, hpos + incr, RAS_DIWDRAW);
             } else {
@@ -1299,7 +1299,7 @@ Agnus::serviceRASEvent(EventID id)
             }
             
             // Schedule next RAS event
-            if (hpos < hstop / 2) {
+            if (hpos < hstop / 2 && hpos + incr < HPOS_MAX) {
                 // TODO: Replace by scheduleRel which is faster
                 eventHandler.schedulePos(RAS_SLOT, vpos, hpos + incr, RAS_DIWDRAW);
             } else {
