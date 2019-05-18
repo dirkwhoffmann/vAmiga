@@ -182,7 +182,7 @@ Denise::didLoadFromBuffer(uint8_t **buffer)
 {
     // The values in the color registers may have changed. To make the change
     // visible, we need to recompute the RGBA patterns based on the new values.
-    colorizer.updateRGBAs();
+    colorizer.updateColorTable();
 }
 
 uint16_t
@@ -515,7 +515,7 @@ Denise::draw32()
 void
 Denise::draw32HAM()
 {
-    uint16_t colReg;
+    // uint16_t colReg;
 
     int *ptr = pixelAddr(pixel);
 
@@ -534,6 +534,11 @@ Denise::draw32HAM()
             shiftReg[j] <<= 1;
         }
 
+        // Draw two lores pixels
+        uint32_t rgba = colorizer.computeHAM(index);
+        *ptr++ = rgba;
+        *ptr++ = rgba;
+/*
         switch (index >> 4) {
 
             case 0b00: // Get color from register
@@ -574,6 +579,7 @@ Denise::draw32HAM()
         uint32_t rgba = HI_HI_LO_LO(0xFF, b << 4, g << 4, r << 4);
         *ptr++ = rgba;
         *ptr++ = rgba;
+ */
     }
     pixel += 32;
 }

@@ -14,7 +14,7 @@
 
 class Colorizer : public HardwareComponent {
     
-    private:
+private:
     
     // The 32 Amiga color registers
     uint16_t colorReg[32];
@@ -34,7 +34,11 @@ class Colorizer : public HardwareComponent {
      * the color cache is cleared.
      */
     uint32_t colorCache[4096];
-    
+
+    // Old rgb value needed to compute a color in HAM mode
+    uint16_t oldRGB;
+
+
     //
     // Color adjustment parameters
     //
@@ -43,31 +47,31 @@ class Colorizer : public HardwareComponent {
     double brightness = 50.0;
     double contrast = 100.0;
     double saturation = 1.25;
-    
-    
+
+
     //
     // Constructing and destructing
     //
     
-    public:
+public:
     
     Colorizer();
-    
-    
+
+
     //
     // Methods from HardwareComponent
     //
     
-    private:
+private:
     
     void _powerOn() override;
-    
-    
+
+
     //
     // Configuring the color palette
     //
     
-    public:
+public:
     
     Palette getPalette() { return palette; }
     void setPalette(Palette p);
@@ -80,41 +84,79 @@ class Colorizer : public HardwareComponent {
     
     double getContrast() { return contrast; }
     void setContrast(double value);
-    
-    
+
+
     //
-    // Accessing colors and color registers
+    // Accessing color registers
     //
-    
-    public:
-    
+
+public:
+
     // Peeks a value from one of the 32 color registers.
     uint16_t peekColorReg(int reg);
-    
+
     // Pokes a value into one of the 32 color registers.
     void pokeColorReg(int reg, uint16_t value);
-    
-    // Reads a color value in RGBA format
-    inline uint32_t getRGBA(int nr) { assert(nr < 64); return colorRGBA[nr]; }
-    
-    private:
-    
+
+
+    //
+    // Managing the color cache
+    //
+
+private:
+
     // Clears the color cache
     void clearColorCache();
-    
-    // Computes the RGB value for a color stored in a color register
-    void computeRGBA(int reg);
-    
-    // Adjusts the RGB value according to the selected color parameters
+
+    // Adjusts the RGBA value according to the selected color parameters
     void adjustRGB(uint8_t &r, uint8_t &g, uint8_t &b);
-    
-    public:
-    
-    /* Updates the 64 colors stored in the colorRGBA lookup table
-     * This functions is to be called whenever a color adjustment parameter
-     * changes or a snapshot is restored.
+
+public:
+
+    /* Computes the RGBA value for a color given in 12-bit Amiga RGB format.
+     * If the requested color is already stored in the color cache, the cached
+     * value is returned. Otherwise, the color is computed and written into
+     * the cache before it is returned to the caller.
      */
-    void updateRGBAs();
+    uint32_t computeRGBA(uint8_t r, uint8_t g, uint8_t b);
+
+
+    //
+    // Managing the color lookup table
+    //
+
+public:
+
+    // Returns a RGBA value from the quick-lookup table.
+    uint32_t getRGBA(int nr) { assert(nr < 64); return colorRGBA[nr]; }
+
+    // Updates the complete color lookup table.
+    void updateColorTable();
+
+private:
+
+    // Updates the lookup table for a certain color register.
+    void updateColorTable(int nr);
+
+
+    //
+    // Working in HAM mode
+    //
+
+public:
+    
+    /* Resets the stored RGB value to the background color
+     * This function needs to be called at the beginning of each rasterline.
+     */
+    void prepareForHAM() { oldRGB = colorReg[0]; }
+
+    /* Computes the RGBA value for a color given in the Amiga's HAM format.
+     * If the requested color is already stored in the color cache, the cached
+     * value is returned. Otherwise, the color is computed and written into
+     * the cache before it is returned to the caller.
+     */
+    uint32_t computeHAM(uint8_t index);
+
 };
 
 #endif
