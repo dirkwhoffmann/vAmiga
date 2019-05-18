@@ -45,6 +45,8 @@ Denise::Denise()
         { &scrollHiEven,  sizeof(scrollHiEven),  0 },
         { &scrollHiOdd,   sizeof(scrollHiOdd),   0 },
 
+        { &ham,           sizeof(ham),           0 },
+
         { &pixel,         sizeof(pixel),         0 },
 
     });
@@ -215,17 +217,29 @@ Denise::pokeBPLCON0(uint16_t value)
     debug(2, "pokeBPLCON0(%X)\n", value);
     
     bplcon0 = value;
-    
-    // Tell Agnus how many bitplanes we have
-    _agnus->activeBitplanes = bplconBPU();  // (value >> 12) & 0b111;
 
-    // Update the DMA time slot allocation table (hires / lores may change)
+    // Determine the number of bitplanes
+    uint8_t bpu = bplconBPU();
+
+    // Let Agnus know
+    _agnus->activeBitplanes = bpu;
+
+    // Update the DMA time slot allocation table (hires / lores may change).
     _agnus->updateBitplaneDma();
     
-    // Clear data registers of all inactive bitplanes
-    for (int plane = 5; plane >= _agnus->activeBitplanes; plane--) {
-        bpldat[plane] = 0;
-    }
+    // Clear data registers of all inactive bitplanes.
+    for (int plane = 5; plane >= bpu; plane--) bpldat[plane] = 0;
+
+    /* "Bit 11 of register BPLCON0 selects hold-and-modify mode. The following
+     *  bits in BPLCONO must be set for hold-and-modify mode to be active:
+     *
+     *      - Bit HOMOD, bit 11, is 1.
+     *      - Bit DBLPF, bit 10, is 0 (single-playfield mode specified).
+     *      - Bit HIRES, bit 15, is 0 (low-resolution mode specified).
+     *      - Bits BPU2, BPU1, and BPUO - bits 14, 13, and 12, are 101 or 110
+     *        (five or six bit-planes active)." [HRM]
+     */
+    ham = (bplcon0 & 0x8C00) == 0x0800 && (bpu == 5 || bpu == 6);
 }
 
 void
@@ -460,7 +474,7 @@ Denise::draw()
 {
     if (lores()) {
 
-        ham() ? draw32HAM() : draw32();
+        ham ? draw32HAM() : draw32();
         return 32;
 
     } else {

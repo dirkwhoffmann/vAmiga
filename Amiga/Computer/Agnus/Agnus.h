@@ -208,7 +208,7 @@ class Agnus : public HardwareComponent
     //
     
     // The number of currently active bitplanes
-    int activeBitplanes;
+    uint8_t activeBitplanes;
     
     
     //

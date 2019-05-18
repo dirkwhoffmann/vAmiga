@@ -71,10 +71,9 @@ public:
     int8_t scrollHiEven;
     int8_t scrollHiOdd;
 
-    // EXPERIMENTAL (HAM MODE)
-    uint32_t r = 0;
-    uint32_t g = 0;
-    uint32_t b = 0;
+    // Indicates if we're running in HAM mode (updated in pokeBPLCON0)
+    bool ham;
+
 
     //
     // Sprites
@@ -190,8 +189,6 @@ public:
     bool bplconHOMOD() { return GET_BIT(bplcon0, 11); }
     bool bplconDBPLF() { return GET_BIT(bplcon0, 10); }
     bool bplconLACE() { return GET_BIT(bplcon0, 2); }
-    bool ham() { return (bplcon0 & 0x8C00) == 0x0800; /* wrong, see HRM */ }
-    // TODO: Use variable bool ham and update this variable in pokeBPLCON0
 
     // OCS registers 0x102 and 0x104 (w)
     void pokeBPLCON1(uint16_t value);
