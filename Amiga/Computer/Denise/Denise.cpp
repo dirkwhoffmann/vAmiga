@@ -485,6 +485,8 @@ Denise::draw16()
 void
 Denise::draw32()
 {
+    if (ham()) { draw32HAM(); return; }
+    
     int *ptr = pixelAddr(pixel);
     
     for (int i = 0; i < 16; i++) {
@@ -504,6 +506,71 @@ Denise::draw32()
         
         // Draw two lores pixels
         uint32_t rgba = colorizer.getRGBA(index);
+        *ptr++ = rgba;
+        *ptr++ = rgba;
+    }
+    pixel += 32;
+}
+
+void
+Denise::draw32HAM()
+{
+    static uint32_t r;
+    static uint32_t g;
+    static uint32_t b;
+    uint16_t colReg;
+
+    int *ptr = pixelAddr(pixel);
+
+    for (int i = 0; i < 16; i++) {
+
+        // Read a bit slice
+        uint8_t index =
+        ((shiftReg[0] & 0x8000) >> 15) |
+        ((shiftReg[1] & 0x8000) >> 14) |
+        ((shiftReg[2] & 0x8000) >> 13) |
+        ((shiftReg[3] & 0x8000) >> 12) |
+        ((shiftReg[4] & 0x8000) >> 11) |
+        ((shiftReg[5] & 0x8000) >> 10);
+
+        for (unsigned j = 0; j < 6; j++) {
+            shiftReg[j] <<= 1;
+        }
+
+        switch (index >> 4) {
+
+            case 0b00: // Get color from register
+
+                colReg = colorizer.peekColorReg(index);
+                r  = (colReg >> 8) & 0b1111;
+                g  = (colReg >> 4) & 0b1111;
+                b  = (colReg >> 0) & 0b1111;
+                break;
+
+            case 0b01: // Modify blue
+
+                b = (index & 0b1111);
+                r = g = b = 0;
+                break;
+
+            case 0b10: // Modify red
+
+                r = (index & 0b1111);
+                r = g = b = 0;
+                break;
+
+            case 0b11: // Modify green
+
+                g = (index & 0b1111);
+                r = g = b = 0;
+                break;
+
+            default:
+
+                assert(false);
+        }
+
+        uint32_t rgba = HI_HI_LO_LO(0xFF, b << 4, g << 4, r << 4);
         *ptr++ = rgba;
         *ptr++ = rgba;
     }

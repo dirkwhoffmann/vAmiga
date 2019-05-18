@@ -762,13 +762,13 @@ Agnus::pokeDMACON(uint16_t value)
         
         if (newAU0EN) {
             
-            debug("Audio 0 DMA switched on\n");
+            // debug("Audio 0 DMA switched on\n");
             switchAudioDmaOn(0);
             _paula->audioUnit.enableDMA(0);
             
         } else {
             
-            debug("Audio 0 DMA switched off\n");
+            // debug("Audio 0 DMA switched off\n");
             switchAudioDmaOff(0);
             _paula->audioUnit.disableDMA(0);
         }
@@ -778,13 +778,13 @@ Agnus::pokeDMACON(uint16_t value)
         
         if (newAU1EN) {
             
-            debug("Audio 1 DMA switched on\n");
+            // debug("Audio 1 DMA switched on\n");
             switchAudioDmaOn(1);
             _paula->audioUnit.enableDMA(1);
             
         } else {
             
-            debug("Audio 1 DMA switched off\n");
+            // debug("Audio 1 DMA switched off\n");
             switchAudioDmaOff(1);
             _paula->audioUnit.disableDMA(1);
         }
@@ -794,13 +794,13 @@ Agnus::pokeDMACON(uint16_t value)
         
         if (newAU2EN) {
             
-            debug("Audio 2 DMA switched on\n");
+            // debug("Audio 2 DMA switched on\n");
             switchAudioDmaOn(2);
             _paula->audioUnit.enableDMA(2);
             
         } else {
             
-            debug("Audio 2 DMA switched off\n");
+            // debug("Audio 2 DMA switched off\n");
             switchAudioDmaOff(2);
             _paula->audioUnit.disableDMA(2);
         }
@@ -810,13 +810,13 @@ Agnus::pokeDMACON(uint16_t value)
         
         if (newAU3EN) {
             
-            debug("Audio 3 DMA switched on\n");
+            // debug("Audio 3 DMA switched on\n");
             switchAudioDmaOn(3);
             _paula->audioUnit.enableDMA(3);
             
         } else {
             
-            debug("Audio 3 DMA switched off\n");
+            // debug("Audio 3 DMA switched off\n");
             switchAudioDmaOff(3);
             _paula->audioUnit.disableDMA(3);
         }

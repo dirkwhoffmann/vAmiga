@@ -186,6 +186,8 @@ class Denise : public HardwareComponent {
     bool bplconHOMOD() { return GET_BIT(bplcon0, 11); }
     bool bplconDBPLF() { return GET_BIT(bplcon0, 10); }
     bool bplconLACE() { return GET_BIT(bplcon0, 2); }
+    bool ham() { return (bplcon0 & 0x8C00) == 0x0800; /* wrong, see HRM */ }
+    // TODO: Use variable bool ham and update this variable in pokeBPLCON0
 
     // OCS registers 0x102 and 0x104 (w)
     void pokeBPLCON1(uint16_t value);
@@ -251,7 +253,10 @@ class Denise : public HardwareComponent {
 
     // Synthesizes 32 lores pixels from the current shift register data
     void draw32();
-    
+
+    // Synthesizes 32 lores pixels in HAM mode
+    void draw32HAM();
+
     // Draws the left border.
     void drawLeftBorder();
 
