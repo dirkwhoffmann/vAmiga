@@ -15,7 +15,7 @@
 
 class Denise : public HardwareComponent {
     
-    private:
+private:
     
     // Information shown in the GUI inspector panel
     DeniseInfo info;
@@ -25,7 +25,7 @@ class Denise : public HardwareComponent {
     // Sub components
     //
     
-    public:
+public:
     
     // A color synthesizer for computing RGBA values
     Colorizer colorizer;
@@ -138,7 +138,7 @@ class Denise : public HardwareComponent {
     // Constructing and destructing
     //
     
-    public:
+public:
     
     Denise();
     ~Denise();
@@ -147,13 +147,13 @@ class Denise : public HardwareComponent {
     // Methods from HardwareComponent
     //
     
-    private:
+private:
     
     void _powerOn() override;
     void _powerOff() override;
     void _reset() override;
     void _ping() override;
-    void _inspect() override; 
+    void _inspect() override;
     void _dump() override;
     
     void didLoadFromBuffer(uint8_t **buffer) override;
@@ -163,7 +163,7 @@ class Denise : public HardwareComponent {
     // Reading the internal state
     //
     
-    public:
+public:
     
     // Returns the latest internal state recorded by inspect()
     DeniseInfo getInfo();
@@ -173,7 +173,7 @@ class Denise : public HardwareComponent {
     // Accessing registers
     //
     
-    public:
+public:
     
     // OCS register 0x00A and 0x00C (r)
     uint16_t peekJOY0DATR();
@@ -245,12 +245,17 @@ class Denise : public HardwareComponent {
     // Synthesizing pixels
     //
     
-    private:
+private:
     
     // Returns the frame buffer address of a certain pixel in the current line
     int *pixelAddr(int pixel);
     
-    public:
+public:
+
+    // Synthesizes pixels. Returns the number of drawn pixels
+    int draw();
+
+private:
 
     // Synthesizes 16 hires pixels from the current shift register data
     void draw16();
@@ -261,6 +266,8 @@ class Denise : public HardwareComponent {
     // Synthesizes 32 lores pixels in HAM mode
     void draw32HAM();
 
+public:
+    
     // Draws the left border.
     void drawLeftBorder();
 
@@ -277,7 +284,7 @@ class Denise : public HardwareComponent {
     // Accessing the frame buffers
     //
     
-    public:
+public:
     
     // Returns one of the two stable buffers
     ScreenBuffer getStableLongFrame() {

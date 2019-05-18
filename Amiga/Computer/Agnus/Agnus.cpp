@@ -1268,7 +1268,8 @@ Agnus::serviceRASEvent(EventID id)
             // debug(2, "RAS_DIWSTRT (hstart = %d hstop = %d vstart = %d vstop = %d\n", hstrt, hstop, vstrt, vstop);
             
             _denise->drawLeftBorder();
-            
+
+            /*
             if (_denise->lores()) {
                 _denise->draw32();
                 incr = 8;
@@ -1276,7 +1277,9 @@ Agnus::serviceRASEvent(EventID id)
                 _denise->draw16();
                 incr = 4;
             }
-            
+            */
+            incr = _denise->draw() / 4;
+
             // Schedule next RAS event
             if (hpos < hstop / 2 && hpos + incr < HPOS_MAX) {
                 // TODO: Replace by scheduleRel which is faster
@@ -1290,6 +1293,7 @@ Agnus::serviceRASEvent(EventID id)
 
             debug(3, "RAS_DIWDRAW\n");
 
+            /*
             if (_denise->lores()) {
                 _denise->draw32();
                 incr = 8;
@@ -1297,6 +1301,8 @@ Agnus::serviceRASEvent(EventID id)
                 _denise->draw16();
                 incr = 4;
             }
+            */
+            incr = _denise->draw() / 4;
             
             // Schedule next RAS event
             if (hpos < hstop / 2 && hpos + incr < HPOS_MAX) {

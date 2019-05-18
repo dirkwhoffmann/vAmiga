@@ -35,8 +35,8 @@ private:
      */
     uint32_t colorCache[4096];
 
-    // Old rgb value needed to compute a color in HAM mode
-    uint16_t oldRGB;
+    // The most recently computed HAM pixel in Amiga RGB format
+    uint16_t hamRGB;
 
 
     //
@@ -118,6 +118,7 @@ public:
      * value is returned. Otherwise, the color is computed and written into
      * the cache before it is returned to the caller.
      */
+    uint32_t computeRGBA(uint16_t rgb);
     uint32_t computeRGBA(uint8_t r, uint8_t g, uint8_t b);
 
 
@@ -148,7 +149,7 @@ public:
     /* Resets the stored RGB value to the background color
      * This function needs to be called at the beginning of each rasterline.
      */
-    void prepareForHAM() { oldRGB = colorReg[0]; }
+    void prepareForHAM() { hamRGB = colorReg[0]; }
 
     /* Computes the RGBA value for a color given in the Amiga's HAM format.
      * If the requested color is already stored in the color cache, the cached

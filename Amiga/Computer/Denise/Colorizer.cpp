@@ -167,26 +167,31 @@ Colorizer::adjustRGB(uint8_t &r, uint8_t &g, uint8_t &b)
 }
 
 uint32_t
-Colorizer::computeRGBA(uint8_t r, uint8_t g, uint8_t b)
+Colorizer::computeRGBA(uint16_t rgb)
 {
-    uint16_t col = (r << 8) | (g << 4) | b;
-    assert(col < 4096);
+    assert(rgb < 4096);
 
     // Compute color if it is not cached yet
-    if (colorCache[col] == 0) {
+    if (colorCache[rgb] == 0) {
 
-        uint8_t rr = r << 4;
-        uint8_t gg = g << 4;
-        uint8_t bb = b << 4;
+        uint8_t r = (rgb >> 4) & 0xF0;
+        uint8_t g = (rgb >> 0) & 0xF0;
+        uint8_t b = (rgb << 4) & 0xF0;
 
         // Convert the Amiga value to an RGBA value
-        adjustRGB(rr, gg, bb);
+        adjustRGB(r, g, b);
 
         // Write value into cache
-        colorCache[col] = HI_HI_LO_LO(0xFF, bb, gg, rr);
+        colorCache[rgb] = HI_HI_LO_LO(0xFF, b, g, r);
     }
 
-    return colorCache[col];
+    return colorCache[rgb];
+}
+
+uint32_t
+Colorizer::computeRGBA(uint8_t r, uint8_t g, uint8_t b)
+{
+    return computeRGBA((r << 8) | (g << 4) | b);
 }
 
 void
@@ -227,34 +232,31 @@ Colorizer::computeHAM(uint8_t index)
 
         case 0b00: // Get color from register
 
-            oldRGB = colorReg[index];
+            hamRGB = colorReg[index];
 
             break;
 
         case 0b01: // Modify blue
 
-            oldRGB &= 0xFF0;
-            oldRGB |= (index & 0b1111);
+            hamRGB &= 0xFF0;
+            hamRGB |= (index & 0b1111);
             break;
 
         case 0b10: // Modify red
 
-            oldRGB &= 0x0FF;
-            oldRGB |= (index & 0b1111) << 8;
+            hamRGB &= 0x0FF;
+            hamRGB |= (index & 0b1111) << 8;
             break;
 
         case 0b11: // Modify green
 
-            oldRGB &= 0xF0F;
-            oldRGB |= (index & 0b1111) << 4;
+            hamRGB &= 0xF0F;
+            hamRGB |= (index & 0b1111) << 4;
             break;
 
         default:
             assert(false);
     }
 
-    uint8_t r = (oldRGB >> 8) & 0b1111;
-    uint8_t g = (oldRGB >> 4) & 0b1111;
-    uint8_t b = (oldRGB >> 0) & 0b1111;
-    return computeRGBA(r, g, b);
+    return computeRGBA(hamRGB);
 }
