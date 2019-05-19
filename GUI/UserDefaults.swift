@@ -302,8 +302,8 @@ extension Defaults {
     static let joyKeyMap1 = [
         MacKey.init(keyCode: kVK_LeftArrow): JOYSTICK_LEFT.rawValue,
         MacKey.init(keyCode: kVK_RightArrow): JOYSTICK_RIGHT.rawValue,
-        MacKey.init(keyCode: kVK_DownArrow): JOYSTICK_UP.rawValue,
-        MacKey.init(keyCode: kVK_UpArrow): JOYSTICK_DOWN.rawValue,
+        MacKey.init(keyCode: kVK_UpArrow): JOYSTICK_UP.rawValue,
+        MacKey.init(keyCode: kVK_DownArrow): JOYSTICK_DOWN.rawValue,
         MacKey.init(keyCode: kVK_Space): JOYSTICK_FIRE.rawValue
     ]
     static let joyKeyMap2 = [

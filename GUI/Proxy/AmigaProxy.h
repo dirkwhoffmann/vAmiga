@@ -392,7 +392,8 @@ struct AmigaFileWrapper;
 - (void) dump;
 
 - (void) connectDevice:(ControlPortDevice)value;
-- (void) connectMouse:(BOOL)value;
+
+// - (void) connectMouse:(BOOL)value;
 
 @end
 

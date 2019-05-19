@@ -33,13 +33,19 @@ ControlPort::potgor()
 uint16_t
 ControlPort::joydat()
 {
+    assert(nr == 1 || nr == 2);
+    assert(isControlPortDevice(device));
+
     switch (device) {
-            
+
+        case CPD_NONE:
+            return 0;
+
         case CPD_MOUSE:
             return _amiga->mouse.getXY();
-            
-        default:
-            return 0;
+
+        case CPD_JOYSTICK:
+            return nr == 1 ? _amiga->joystick1.joydat() : _amiga->joystick2.joydat();
     }
 }
 
@@ -47,21 +53,29 @@ uint8_t
 ControlPort::ciapa()
 {
     switch (device) {
-            
+
+        case CPD_NONE:
+
+            return 0xFF;
+
         case CPD_MOUSE:
+
             if (_amiga->mouse.leftButton) {
                 return (nr == 1) ? 0xBF : 0x7F;
             } else {
                 return 0xFF;
             }
-        default:
-            return 0xFF;
+
+        case CPD_JOYSTICK:
+
+            return nr == 1 ? _amiga->joystick1.ciapa() : _amiga->joystick2.ciapa();
     }
 }
 
 void
 ControlPort::connectDevice(ControlPortDevice device)
 {
-    assert(isControlPortDevice(device));
-    this->device = device;
+    if (isControlPortDevice(device)) {
+        this->device = device;
+    }
 }

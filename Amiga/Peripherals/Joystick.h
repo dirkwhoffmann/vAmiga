@@ -91,10 +91,16 @@ private:
     //
     
 public:
+
+    // Callback handler for function ControlPort::joydat()
+    uint16_t joydat();
+
+    // Callback handler for function ControlPort::ciapa()
+    uint8_t ciapa();
     
     // Triggers a joystick event
     void trigger(JoystickEvent event);
-    
+
     /* Execution function for this control port
      * This method needs to be invoked at the end of each frame to make the
      * auto-fire mechanism work.

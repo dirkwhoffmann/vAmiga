@@ -595,10 +595,12 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->port->connectDevice(value);
 }
+/*
 - (void) connectMouse:(BOOL)value
 {
     wrapper->port->connectDevice(value ? CPD_MOUSE : CPD_NONE);
 }
+*/
 
 @end
 

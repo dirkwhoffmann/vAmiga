@@ -66,9 +66,43 @@ Joystick::scheduleNextShot()
     nextAutofireFrame = _agnus->frame + (int)(50.0 / (2 * autofireFrequency));
 }
 
+uint16_t
+Joystick::joydat()
+{
+    // debug("joydat\n");
+    
+    uint16_t result = 0;
+
+    /* 15 14 13 12 11 10 09 08 07 06 05 04 03 02 01 00
+     * Y7 Y6 Y5 Y4 Y3 Y2 Y1 Y0 X7 X6 X5 X4 X3 X2 X1 X0
+     *
+     *      Left: Y1 = 1
+     *     Right: X1 = 1
+     *        Up: Y0 xor Y1 = 1
+     *      Down: X0 xor X1 = 1
+     */
+
+    if (axisX == -1) result |= 0x0300;
+    else if (axisX == 1) result |= 0x0003;
+
+    if (axisY == -1) result ^= 0x0100;
+    else if (axisY == 1) result ^= 0x0001;
+
+    return result;
+}
+
+uint8_t
+Joystick::ciapa()
+{
+    // debug("ciapa\n");
+    return button ? (nr == 1 ? 0xBF : 0x7F) : 0xFF;
+}
+
 void
 Joystick::trigger(JoystickEvent event)
 {
+    // debug("trigger: %d\n", event);
+     
     switch (event) {
             
         case PULL_UP:    axisY = -1; break;

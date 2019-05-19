@@ -20,6 +20,17 @@ struct InputDevice {
 
 extension MyController {
 
+    func connectPort(port: Int, device: Int) {
+
+        assert(port == 1 || port == 2)
+
+        let cpd: ControlPortDevice =
+        device == InputDevice.none ? CPD_NONE :
+        device == InputDevice.mouse ? CPD_MOUSE : CPD_JOYSTICK
+
+        port == 1 ? amiga.controlPort1.connect(cpd) : amiga.controlPort2.connect(cpd)
+    }
+
     @IBAction func port1Action(_ sender: NSPopUpButton) {
         
         setPort1(sender.selectedTag())
@@ -32,11 +43,14 @@ extension MyController {
         
         // Avoid double mappings
         inputDevice2 = (inputDevice1 == inputDevice2) ? InputDevice.none : inputDevice2
-        
-        // Connect or disconnect mouse
+
+        /*
         amiga.controlPort1.connectMouse(inputDevice1 == InputDevice.mouse)
         amiga.controlPort2.connectMouse(inputDevice2 == InputDevice.mouse)
-        
+        */
+        connectPort(port: 1, device: inputDevice1)
+        connectPort(port: 2, device: inputDevice2)
+
         UserDefaults.standard.set(inputDevice1, forKey: Keys.inputDevice1)
         UserDefaults.standard.set(inputDevice2, forKey: Keys.inputDevice2)
         
@@ -55,11 +69,14 @@ extension MyController {
         
         // Avoid double mappings
         inputDevice1 = (inputDevice1 == inputDevice2) ? InputDevice.none : inputDevice1
-        
-        // Connect or disconnect mouse
+
+        /*
         amiga.controlPort1.connectMouse(inputDevice1 == InputDevice.mouse)
         amiga.controlPort2.connectMouse(inputDevice2 == InputDevice.mouse)
-        
+        */
+        connectPort(port: 1, device: inputDevice1)
+        connectPort(port: 2, device: inputDevice2)
+
         UserDefaults.standard.set(inputDevice1, forKey: Keys.inputDevice1)
         UserDefaults.standard.set(inputDevice2, forKey: Keys.inputDevice2)
         
