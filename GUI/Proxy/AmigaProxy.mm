@@ -401,6 +401,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->denise->getInfo();
 }
+- (void) inspect
+{
+    wrapper->denise->inspect();
+}
 - (SpriteInfo) getSpriteInfo:(NSInteger)nr
 {
     return wrapper->denise->getSprInfo(nr);
@@ -441,13 +445,21 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->denise->colorizer.setContrast(value);
 }
-- (void) setActivePlanes:(NSInteger)count
+- (void) setBPU:(NSInteger)count
 {
-    wrapper->denise->debugSetActivePlanes(count);
+    wrapper->denise->debugSetBPU(count);
 }
-- (void) setBPLCON0Bit:(NSInteger)bit value:(BOOL)value
+- (void) setBPLCONx:(NSInteger)x value:(NSInteger)value
 {
-    wrapper->denise->debugSetBPLCON0Bit(bit, value);
+    wrapper->denise->debugSetBPLCONx(x, (uint16_t)value);
+}
+- (void) setBPLCONx:(NSInteger)x bit:(NSInteger)bit value:(BOOL)value
+{
+    wrapper->denise->debugSetBPLCONxBit(x, bit, value);
+}
+- (void) setBPLCONx:(NSInteger)x nibble:(NSInteger)nibble value:(NSInteger)value
+{
+    wrapper->denise->debugSetBPLCONxNibble(x, nibble, (uint8_t)value);
 }
 - (ScreenBuffer) stableLongFrame
 {
@@ -1102,19 +1114,6 @@ struct ADFFileWrapper { ADFFile *adf; };
 
     return self;
 }
-
-/*
-- (DriveProxy *)df:(NSInteger)n
-{
-    switch (n) {
-        case 0: return df0;
-        case 1: return df1;
-        case 2: return df2;
-        case 3: return df3;
-        default: return nil;
-    }
-}
-*/
 
 - (void) kill
 {

@@ -317,10 +317,13 @@ public:
     //
     
     // Called by the GUI to manually change the number of active bitplanes
-    void debugSetActivePlanes(int count);
+    void debugSetBPU(int count);
     
-    // Called by the GUI to manually change the contents of BPLCON0
-    void debugSetBPLCON0Bit(unsigned bit, bool value);
+    // Called by the GUI to manually change the contents of BPLCONx
+    void debugSetBPLCONx(unsigned x, uint16_t value);
+    void debugSetBPLCONxBit(unsigned x, unsigned bit, bool value);
+    void debugSetBPLCONxNibble(unsigned x, unsigned nibble, uint8_t value);
+
 };
 
 #endif

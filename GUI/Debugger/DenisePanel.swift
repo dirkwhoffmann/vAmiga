@@ -11,10 +11,14 @@ import Foundation
 
 extension Inspector {
         
-    func refreshDenise(everything: Bool) {
+    func refreshDenise(everything: Bool, inspect: Bool = false) {
         
         guard let denise = amigaProxy?.denise else { return }
-        
+
+        // If requested, force an inspection before calling getInfo()
+        if inspect { denise.inspect() }
+
+        // Read the latest inspection record
         let info = denise.getInfo()
         let sprInfo = denise.getSpriteInfo(selectedSprite)
         
@@ -40,6 +44,7 @@ extension Inspector {
         deniseBPLCON0.integerValue = Int(info.bplcon0)
         deniseHIRES.state = (info.bplcon0 & 0b1000000000000000 != 0) ? .on : .off
         deniseBPU.integerValue = Int(info.bpu)
+        deniseBPUStepper.integerValue = Int(info.bpu)
         deniseHOMOD.state = (info.bplcon0 & 0b0000100000000000 != 0) ? .on : .off
         deniseDBPLF.state = (info.bplcon0 & 0b0000010000000000 != 0) ? .on : .off
         deniseLACE.state = (info.bplcon0 & 0b0000000000000100 != 0) ? .on : .off
@@ -131,25 +136,74 @@ extension Inspector {
         deniseCol30.color = NSColor.init(amigaRGB: info.colorReg.30)
         deniseCol31.color = NSColor.init(amigaRGB: info.colorReg.31)
     }
-    
+
+    @IBAction func deniseBPLCON0Action(_ sender: NSTextField!) {
+
+        amigaProxy?.denise.setBPLCONx(0, value: sender!.integerValue)
+        refreshDenise(everything: false, inspect: true)
+    }
+
     @IBAction func deniseBPLCON0ButtonAction(_ sender: NSButton!) {
-        
-        amigaProxy?.denise.setBPLCON0Bit(sender.tag, value: sender.state == .on)
-        refresh(everything: false)
+
+        let value = sender.state == .on
+        amigaProxy?.denise.setBPLCONx(0, bit: sender.tag, value: value)
+        refreshDenise(everything: false, inspect: true)
+    }
+
+    @IBAction func deniseBPUAction(_ sender: NSTextField!) {
+
+        amigaProxy?.denise.setBPU(sender.integerValue)
+        refreshDenise(everything: false, inspect: true)
+    }
+
+    @IBAction func deniseBPUStepperAction(_ sender: NSStepper!) {
+
+        amigaProxy?.denise.setBPU(sender.integerValue)
+        refreshDenise(everything: false, inspect: true)
+    }
+
+    @IBAction func deniseBPLCON1Action(_ sender: NSTextField!) {
+
+        amigaProxy?.denise.setBPLCONx(1, value: sender!.integerValue)
+        refreshDenise(everything: false, inspect: true)
+    }
+
+    @IBAction func deniseBPLCON2NibbleAction(_ sender: NSTextField!) {
+
+        track("\(sender.tag) \(sender.integerValue)")
+        amigaProxy?.denise.setBPLCONx(1, nibble: sender.tag, value: sender.integerValue)
+        refreshDenise(everything: false, inspect: true)
+    }
+
+    @IBAction func deniseBPLCON1StepperAction(_ sender: NSStepper!) {
+
+        // track("\(sender.tag) \(sender.integerValue)")
+        amigaProxy?.denise.setBPLCONx(1, nibble: sender.tag, value: sender.integerValue)
+        refreshDenise(everything: false, inspect: true)
+    }
+
+    @IBAction func deniseBPLCON2Action(_ sender: NSTextField!) {
+
+        amigaProxy?.denise.setBPLCONx(2, value: sender!.integerValue)
+        refreshDenise(everything: false, inspect: true)
+    }
+
+    @IBAction func deniseBPLCON2ButtonAction(_ sender: NSButton!) {
+
+        let value = sender.state == .on
+        amigaProxy?.denise.setBPLCONx(2, bit: sender.tag, value: value)
+        refreshDenise(everything: false, inspect: true)
     }
 
     @IBAction func deniseColorAction(_ sender: NSColorWell!) {
 
         let color = sender.color.amigaRGB()
-
-        // track("\(sender.tag) \(color)")
-
         amigaProxy?.denise.pokeColorReg(sender.tag, value: color)
-        refreshDenise(everything: false)
+        refreshDenise(everything: false, inspect: true)
     }
 
     @IBAction func selectSpriteAction(_ sender: Any!) {
         
-        refreshDenise(everything: true)
+        refreshDenise(everything: false, inspect: true)
     }
 }

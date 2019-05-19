@@ -322,6 +322,7 @@ struct AmigaFileWrapper;
 - (void) dump;
 - (DeniseInfo) getInfo;
 - (SpriteInfo) getSpriteInfo:(NSInteger)nr;
+- (void) inspect;
 
 - (void) pokeColorReg:(NSInteger)reg value:(UInt16)value;
 
@@ -334,8 +335,10 @@ struct AmigaFileWrapper;
 - (double) contrast;
 - (void) setContrast:(double)value;
 
-- (void) setActivePlanes:(NSInteger)count; 
-- (void) setBPLCON0Bit:(NSInteger)bit value:(BOOL)value;
+- (void) setBPU:(NSInteger)count;
+- (void) setBPLCONx:(NSInteger)x value:(NSInteger)value;
+- (void) setBPLCONx:(NSInteger)x bit:(NSInteger)bit value:(BOOL)value;
+- (void) setBPLCONx:(NSInteger)x nibble:(NSInteger)nibble value:(NSInteger)value;
 
 - (ScreenBuffer) stableLongFrame;
 - (ScreenBuffer) stableShortFrame;

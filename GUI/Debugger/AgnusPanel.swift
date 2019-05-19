@@ -96,7 +96,7 @@ extension Inspector {
         
         assert(activePlanes >= 0 && activePlanes <= 6)
         track("Active planes = \(activePlanes)")
-        amigaProxy?.denise.setActivePlanes(activePlanes)
+        amigaProxy?.denise.setBPU(activePlanes)
         refresh(everything: false)
     }
 }
