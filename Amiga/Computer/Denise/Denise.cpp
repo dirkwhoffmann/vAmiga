@@ -37,7 +37,7 @@ Denise::Denise()
         { &sprdata,       sizeof(sprdata),       WORD_ARRAY },
         { &sprdatb,       sizeof(sprdatb),       WORD_ARRAY },
 
-        { &joydat,        sizeof(joydat),        WORD_ARRAY },
+        // { &joydat,        sizeof(joydat),        WORD_ARRAY },
         { &shiftReg,      sizeof(shiftReg),      DWORD_ARRAY },
         
         { &scrollLowEven, sizeof(scrollLowEven), 0 },
@@ -119,7 +119,19 @@ Denise::_inspect()
     info.bplcon0 = bplcon0;
     info.bplcon1 = bplcon1;
     info.bplcon2 = bplcon2;
-    
+    info.bpu = (bplcon0 >> 12) & 0b111;
+
+    info.diwstrt = _agnus->diwstrt;
+    info.diwstop = _agnus->diwstop;
+    info.hstrt = _agnus->hstrt;
+    info.hstop = _agnus->hstop;
+    info.vstrt = _agnus->vstrt;
+    info.vstop = _agnus->vstop;
+
+    info.joydat[0] = peekJOY0DATR();
+    info.joydat[1] = peekJOY1DATR();
+    info.clxdat = 0;
+
     for (unsigned i = 0; i < 6; i++) {
         info.bpldat[i] = bpldat[i];
     }
@@ -204,6 +216,7 @@ Denise::peekJOY1DATR()
 void
 Denise::pokeJOYTEST(uint16_t value)
 {
+    /*
     value     &= 0b1111110011111100;
     
     joydat[0] &= 0b0000001100000011;
@@ -211,6 +224,7 @@ Denise::pokeJOYTEST(uint16_t value)
 
     joydat[1] &= 0b0000001100000011;
     joydat[1] |= value;
+    */
 }
 
 void

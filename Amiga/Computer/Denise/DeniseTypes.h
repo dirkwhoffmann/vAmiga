@@ -37,7 +37,19 @@ typedef struct
     uint16_t bplcon0;
     uint16_t bplcon1;
     uint16_t bplcon2;
+    int16_t bpu;
     uint16_t bpldat[6];
+
+    uint16_t diwstrt;
+    uint16_t diwstop;
+    int16_t hstrt;
+    int16_t hstop;
+    int16_t vstrt;
+    int16_t vstop;
+
+    uint16_t joydat[2];
+    uint16_t clxdat;
+
     uint16_t colorReg[32];
     uint32_t color[32];
     

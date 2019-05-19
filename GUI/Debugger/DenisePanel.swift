@@ -20,9 +20,14 @@ extension Inspector {
         
         if everything {
 
-            let elements = [ deniseBPLCON0: fmt24,
-                             deniseBPLCON1: fmt24,
-                             deniseBPLCON2: fmt24,
+            let elements = [ deniseBPLCON0: fmt16,
+                             deniseBPLCON1: fmt16,
+                             deniseBPLCON2: fmt16,
+                             deniseDIWSTRT: fmt16,
+                             deniseDIWSTOP: fmt16,
+                             deniseJOY0DAT: fmt16,
+                             deniseJOY1DAT: fmt16,
+                             deniseCLXDAT: fmt16,
                              sprPtr: fmt24
             ]
             for (c, f) in elements { assignFormatter(f, c!) }
@@ -34,11 +39,60 @@ extension Inspector {
         
         deniseBPLCON0.integerValue = Int(info.bplcon0)
         deniseHIRES.state = (info.bplcon0 & 0b1000000000000000 != 0) ? .on : .off
+        deniseBPU.integerValue = Int(info.bpu)
         deniseHOMOD.state = (info.bplcon0 & 0b0000100000000000 != 0) ? .on : .off
         deniseDBPLF.state = (info.bplcon0 & 0b0000010000000000 != 0) ? .on : .off
-        deniseLACE.state  = (info.bplcon0 & 0b0000000000000100 != 0) ? .on : .off
+        deniseLACE.state = (info.bplcon0 & 0b0000000000000100 != 0) ? .on : .off
+
+        let p1H = (info.bplcon1 & 0b00001111)
+        let p2H = (info.bplcon1 & 0b11110000) >> 4
+
         deniseBPLCON1.integerValue = Int(info.bplcon1)
+        deniseP1H.integerValue = Int(p1H)
+        deniseP1HStepper.integerValue = Int(p1H)
+        deniseP2H.integerValue = Int(p2H)
+        deniseP2HStepper.integerValue = Int(p2H)
+
         deniseBPLCON2.integerValue = Int(info.bplcon2)
+        denisePF2PRI.state = (info.bplcon2 & 0b1000000 != 0) ? .on : .off
+        denisePF2P2.state = (info.bplcon2 & 0b0100000 != 0) ? .on : .off
+        denisePF2P1.state = (info.bplcon2 & 0b0010000 != 0) ? .on : .off
+        denisePF2P0.state = (info.bplcon2 & 0b0001000 != 0) ? .on : .off
+        denisePF1P2.state = (info.bplcon2 & 0b0000100 != 0) ? .on : .off
+        denisePF1P1.state = (info.bplcon2 & 0b0000010 != 0) ? .on : .off
+        denisePF1P0.state = (info.bplcon2 & 0b0000001 != 0) ? .on : .off
+
+        //
+        // Display window section
+        //
+
+        let hstrt = info.hstrt
+        let vstrt = info.vstrt
+        let hstop = info.hstop
+        let vstop = info.vstop
+        deniseDIWSTRT.integerValue = Int(info.diwstrt)
+        deniseDIWSTRTText.stringValue = "(\(hstrt),\(vstrt))"
+        deniseDIWSTOP.integerValue = Int(info.diwstop)
+        deniseDIWSTOPText.stringValue = "(\(hstop),\(vstop))"
+
+        //
+        // Auxiliary register section
+        //
+
+        deniseJOY0DAT.integerValue = Int(info.joydat.0)
+        deniseJOY1DAT.integerValue = Int(info.joydat.1)
+        deniseCLXDAT.integerValue = Int(info.clxdat)
+
+        //
+        // Sprite section
+        //
+
+        sprHStart.integerValue = Int(sprInfo.hstrt)
+        sprVStart.integerValue = Int(sprInfo.vstrt)
+        sprVStop.integerValue = Int(sprInfo.vstop)
+        sprPtr.integerValue = Int(sprInfo.ptr)
+        sprAttach.state = sprInfo.attach ? .on : .off
+        sprTableView.refresh(everything: everything)
 
         //
         // Color section
@@ -76,17 +130,6 @@ extension Inspector {
         deniseCol29.color = NSColor.init(amigaRGB: info.colorReg.29)
         deniseCol30.color = NSColor.init(amigaRGB: info.colorReg.30)
         deniseCol31.color = NSColor.init(amigaRGB: info.colorReg.31)
-
-        //
-        // Sprite section
-        //
-        
-        sprHStart.integerValue = Int(sprInfo.hstrt)
-        sprVStart.integerValue = Int(sprInfo.vstrt)
-        sprVStop.integerValue = Int(sprInfo.vstop)
-        sprPtr.integerValue = Int(sprInfo.ptr)
-        sprAttach.state = sprInfo.attach ? .on : .off
-        sprTableView.refresh(everything: everything)
     }
     
     @IBAction func deniseBPLCON0ButtonAction(_ sender: NSButton!) {

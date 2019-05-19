@@ -56,7 +56,7 @@ public:
     uint16_t sprdatb[8];
 
     // Counter for digital (mouse) input (port 1 and 2)
-    uint16_t joydat[2];
+    // uint16_t joydat[2];
     
     /* The 6 bitplane parallel-to-serial shift registers
      * Denise transfers the current values of the bpldat registers into

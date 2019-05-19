@@ -119,6 +119,9 @@
                 <outlet property="deniseBPLCON0" destination="VND-v2-3KF" id="L5w-Uf-3Aq"/>
                 <outlet property="deniseBPLCON1" destination="hit-9r-Ooj" id="sXH-q3-jID"/>
                 <outlet property="deniseBPLCON2" destination="TfL-ah-KBx" id="HSa-9a-r6A"/>
+                <outlet property="deniseBPU" destination="LG9-77-I31" id="AJt-mv-MBE"/>
+                <outlet property="deniseBPUStepper" destination="rsA-d7-qDR" id="OAK-06-44q"/>
+                <outlet property="deniseCLXDAT" destination="Qmu-32-7FP" id="t2O-62-TEC"/>
                 <outlet property="deniseCol0" destination="qkw-HN-dLL" id="lOT-eO-YOP"/>
                 <outlet property="deniseCol1" destination="hsn-xg-ZHy" id="DkW-IB-7Kg"/>
                 <outlet property="deniseCol10" destination="qb0-9u-5Oa" id="SU1-LR-F3f"/>
@@ -152,9 +155,26 @@
                 <outlet property="deniseCol8" destination="LO4-7f-fNk" id="2qp-Da-wnL"/>
                 <outlet property="deniseCol9" destination="RuT-38-xCh" id="ynj-fJ-sh2"/>
                 <outlet property="deniseDBPLF" destination="Lfo-2n-rmB" id="AOo-fy-Oj7"/>
+                <outlet property="deniseDIWSTOP" destination="6iH-YP-TfQ" id="oRb-3a-0Lb"/>
+                <outlet property="deniseDIWSTOPText" destination="nio-hv-JCn" id="oLQ-Go-Tvt"/>
+                <outlet property="deniseDIWSTRT" destination="c1t-8u-dVP" id="dG7-27-YFU"/>
+                <outlet property="deniseDIWSTRTText" destination="cnZ-Yc-KUR" id="6Dx-6v-a8h"/>
                 <outlet property="deniseHIRES" destination="8kP-xR-wIw" id="Eba-oS-X1j"/>
                 <outlet property="deniseHOMOD" destination="1Et-eT-Coi" id="QuR-IP-U6O"/>
+                <outlet property="deniseJOY0DAT" destination="LcJ-Ev-3Ee" id="xlB-Bk-Naa"/>
+                <outlet property="deniseJOY1DAT" destination="O4L-VB-iSy" id="fts-4Z-ZZA"/>
                 <outlet property="deniseLACE" destination="srT-Rj-zei" id="yhu-th-aNQ"/>
+                <outlet property="deniseP1H" destination="XrG-AZ-LwR" id="6BB-cn-5qg"/>
+                <outlet property="deniseP1HStepper" destination="HK1-Hu-AqC" id="qZF-mV-h98"/>
+                <outlet property="deniseP2H" destination="nvj-wP-2Yt" id="Oxm-f7-J5D"/>
+                <outlet property="deniseP2HStepper" destination="UwH-Mi-c6K" id="Sth-pw-Vdb"/>
+                <outlet property="denisePF1P0" destination="Tio-uO-wJc" id="s2G-NV-jBw"/>
+                <outlet property="denisePF1P1" destination="XFR-Tn-LT0" id="iPa-N4-1h9"/>
+                <outlet property="denisePF1P2" destination="V8M-Zk-QqD" id="36c-iq-SlN"/>
+                <outlet property="denisePF2P0" destination="pfV-Jg-LYr" id="aQ3-8s-itk"/>
+                <outlet property="denisePF2P1" destination="ywA-dO-l7t" id="4BS-HS-O1J"/>
+                <outlet property="denisePF2P2" destination="Zl0-8X-Ozz" id="nuY-H5-NNV"/>
+                <outlet property="denisePF2PRI" destination="gpm-Lf-tEg" id="wOC-BT-xof"/>
                 <outlet property="dmaAUD0EN" destination="ffI-4I-nzj" id="IXq-sj-TzF"/>
                 <outlet property="dmaAUD1EN" destination="ytl-8k-QeS" id="hsp-Ey-WYm"/>
                 <outlet property="dmaAUD2EN" destination="WZs-hX-PfJ" id="YgP-jv-rtB"/>
@@ -3458,7 +3478,7 @@
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="15" translatesAutoresizingMaskIntoConstraints="NO" id="gpm-Lf-tEg">
-                                                        <rect key="frame" x="222" y="135" width="82" height="20"/>
+                                                        <rect key="frame" x="417" y="134" width="82" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="PF2PRI" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="M6D-k1-0mN">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -3469,7 +3489,7 @@
                                                         </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="11" translatesAutoresizingMaskIntoConstraints="NO" id="Zl0-8X-Ozz">
-                                                        <rect key="frame" x="222" y="115" width="82" height="20"/>
+                                                        <rect key="frame" x="417" y="114" width="82" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="PF2P2" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="V5J-mF-mvX">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -3480,7 +3500,7 @@
                                                         </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="pfV-Jg-LYr">
-                                                        <rect key="frame" x="222" y="75" width="82" height="20"/>
+                                                        <rect key="frame" x="417" y="74" width="82" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="PF2P0" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="8gr-5K-Agb">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -3491,7 +3511,7 @@
                                                         </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="10" translatesAutoresizingMaskIntoConstraints="NO" id="ywA-dO-l7t">
-                                                        <rect key="frame" x="222" y="95" width="82" height="20"/>
+                                                        <rect key="frame" x="417" y="94" width="82" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="PF2P1" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="yNe-SC-Gje">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -3502,7 +3522,7 @@
                                                         </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="11" translatesAutoresizingMaskIntoConstraints="NO" id="V8M-Zk-QqD">
-                                                        <rect key="frame" x="222" y="55" width="82" height="20"/>
+                                                        <rect key="frame" x="417" y="54" width="82" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="PF1P2" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="ExA-SL-Q5W">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -3513,7 +3533,7 @@
                                                         </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="Tio-uO-wJc">
-                                                        <rect key="frame" x="222" y="15" width="82" height="20"/>
+                                                        <rect key="frame" x="417" y="14" width="82" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="PF1P0" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="LcT-ej-YIz">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -3524,7 +3544,7 @@
                                                         </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="10" translatesAutoresizingMaskIntoConstraints="NO" id="XFR-Tn-LT0">
-                                                        <rect key="frame" x="222" y="35" width="82" height="20"/>
+                                                        <rect key="frame" x="417" y="34" width="82" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="PF1P1" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="MVa-MS-Gz1">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -3553,7 +3573,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hit-9r-Ooj">
-                                                        <rect key="frame" x="394" y="164" width="37" height="23"/>
+                                                        <rect key="frame" x="248" y="164" width="37" height="23"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" enabled="NO" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" title="FFFF" drawsBackground="YES" id="bLb-st-j5s">
                                                             <font key="font" size="12" name="CourierNewPS-BoldMT"/>
@@ -3562,7 +3582,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XrG-AZ-LwR">
-                                                        <rect key="frame" x="394" y="131" width="23" height="23"/>
+                                                        <rect key="frame" x="248" y="131" width="23" height="23"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" enabled="NO" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" title="FF" drawsBackground="YES" id="TpQ-7e-JiA">
                                                             <font key="font" size="12" name="CourierNewPS-BoldMT"/>
@@ -3580,7 +3600,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2HM-aG-VJJ">
-                                                        <rect key="frame" x="330" y="167" width="63" height="16"/>
+                                                        <rect key="frame" x="184" y="167" width="63" height="16"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="BPLCON1:" id="0Ua-vk-Fcy">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -3589,7 +3609,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TfL-ah-KBx">
-                                                        <rect key="frame" x="241" y="166" width="37" height="23"/>
+                                                        <rect key="frame" x="436" y="165" width="37" height="23"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" enabled="NO" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" title="FFFF" drawsBackground="YES" id="vB5-uZ-SOg">
                                                             <font key="font" size="12" name="CourierNewPS-BoldMT"/>
@@ -3598,7 +3618,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HK1-Hu-AqC">
-                                                        <rect key="frame" x="375" y="129" width="19" height="27"/>
+                                                        <rect key="frame" x="229" y="129" width="19" height="27"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <stepperCell key="cell" continuous="YES" alignment="left" maxValue="100" id="OQv-Wd-iFv"/>
                                                     </stepper>
@@ -3646,8 +3666,17 @@
                                                             <action selector="deniseBPLCON0ButtonAction:" target="-2" id="0uW-Ow-XHQ"/>
                                                         </connections>
                                                     </button>
+                                                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IPo-Nb-9eX">
+                                                        <rect key="frame" x="107" y="105" width="101" height="16"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Bitplanes in use" id="5yF-U0-73L">
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                    </textField>
                                                     <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UwH-Mi-c6K">
-                                                        <rect key="frame" x="375" y="97" width="19" height="27"/>
+                                                        <rect key="frame" x="229" y="97" width="19" height="27"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <stepperCell key="cell" continuous="YES" alignment="left" maxValue="100" id="9Jg-i4-m5m"/>
                                                     </stepper>
@@ -3657,7 +3686,7 @@
                                                         <stepperCell key="cell" continuous="YES" alignment="left" maxValue="100" id="X70-AY-GbB"/>
                                                     </stepper>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pLk-HL-7Yt">
-                                                        <rect key="frame" x="176" y="166" width="63" height="18"/>
+                                                        <rect key="frame" x="371" y="165" width="63" height="18"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="BPLCON2:" id="Lqa-3a-YvC">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -3666,16 +3695,16 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gxu-gL-7ce">
-                                                        <rect key="frame" x="423" y="133" width="55" height="16"/>
+                                                        <rect key="frame" x="277" y="133" width="91" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="PF1 delay" id="2Sv-9X-qER">
+                                                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Playfield 1 delay" id="2Sv-9X-qER">
                                                             <font key="font" metaFont="smallSystem"/>
                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nvj-wP-2Yt">
-                                                        <rect key="frame" x="394" y="99" width="23" height="23"/>
+                                                        <rect key="frame" x="248" y="99" width="23" height="23"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" enabled="NO" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" title="FF" drawsBackground="YES" id="XAL-Hs-aGh">
                                                             <font key="font" size="12" name="CourierNewPS-BoldMT"/>
@@ -3684,18 +3713,9 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="F9U-OO-XLh">
-                                                        <rect key="frame" x="423" y="102" width="67" height="15"/>
+                                                        <rect key="frame" x="277" y="102" width="91" height="15"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="PF2 delay" id="geF-Pl-JHP">
-                                                            <font key="font" metaFont="smallSystem"/>
-                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                        </textFieldCell>
-                                                    </textField>
-                                                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IPo-Nb-9eX">
-                                                        <rect key="frame" x="107" y="105" width="101" height="16"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Bitplanes in use" id="5yF-U0-73L">
+                                                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Playfield 2 delay" id="geF-Pl-JHP">
                                                             <font key="font" metaFont="smallSystem"/>
                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>

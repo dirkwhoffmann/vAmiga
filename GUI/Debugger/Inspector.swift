@@ -168,7 +168,14 @@ class Inspector: NSWindowController {
     @IBOutlet weak var dmaDIWSTOP: NSTextField!
     @IBOutlet weak var dmaDDFSTRT: NSTextField!
     @IBOutlet weak var dmaDDFSTOP: NSTextField!
- 
+
+    @IBOutlet weak var dmaBpl1Enable: NSButton!
+    @IBOutlet weak var dmaBpl2Enable: NSButton!
+    @IBOutlet weak var dmaBpl3Enable: NSButton!
+    @IBOutlet weak var dmaBpl4Enable: NSButton!
+    @IBOutlet weak var dmaBpl5Enable: NSButton!
+    @IBOutlet weak var dmaBpl6Enable: NSButton!
+
     @IBOutlet weak var dmaBPL1PT: NSTextField!
     @IBOutlet weak var dmaBPL2PT: NSTextField!
     @IBOutlet weak var dmaBPL3PT: NSTextField!
@@ -199,26 +206,35 @@ class Inspector: NSWindowController {
     // Debug panel (Denise)
     @IBOutlet weak var deniseBPLCON0: NSTextField!
     @IBOutlet weak var deniseHIRES: NSButton!
+    @IBOutlet weak var deniseBPU: NSTextField!
+    @IBOutlet weak var deniseBPUStepper: NSStepper!
     @IBOutlet weak var deniseHOMOD: NSButton!
     @IBOutlet weak var deniseDBPLF: NSButton!
     @IBOutlet weak var deniseLACE: NSButton!
+
     @IBOutlet weak var deniseBPLCON1: NSTextField!
+    @IBOutlet weak var deniseP1H: NSTextField!
+    @IBOutlet weak var deniseP1HStepper: NSStepper!
+    @IBOutlet weak var deniseP2H: NSTextField!
+    @IBOutlet weak var deniseP2HStepper: NSStepper!
+
     @IBOutlet weak var deniseBPLCON2: NSTextField!
+    @IBOutlet weak var denisePF2PRI: NSButton!
+    @IBOutlet weak var denisePF2P2: NSButton!
+    @IBOutlet weak var denisePF2P1: NSButton!
+    @IBOutlet weak var denisePF2P0: NSButton!
+    @IBOutlet weak var denisePF1P2: NSButton!
+    @IBOutlet weak var denisePF1P1: NSButton!
+    @IBOutlet weak var denisePF1P0: NSButton!
 
-    @IBOutlet weak var dmaBpl1Enable: NSButton!
-    @IBOutlet weak var dmaBpl2Enable: NSButton!
-    @IBOutlet weak var dmaBpl3Enable: NSButton!
-    @IBOutlet weak var dmaBpl4Enable: NSButton!
-    @IBOutlet weak var dmaBpl5Enable: NSButton!
-    @IBOutlet weak var dmaBpl6Enable: NSButton!
+    @IBOutlet weak var deniseDIWSTRT: NSTextField!
+    @IBOutlet weak var deniseDIWSTRTText: NSTextField!
+    @IBOutlet weak var deniseDIWSTOP: NSTextField!
+    @IBOutlet weak var deniseDIWSTOPText: NSTextField!
 
-    @IBOutlet weak var sprSelector: NSSegmentedControl!
-    @IBOutlet weak var sprVStart: NSTextField!
-    @IBOutlet weak var sprVStop: NSTextField!
-    @IBOutlet weak var sprHStart: NSTextField!
-    @IBOutlet weak var sprPtr: NSTextField!
-    @IBOutlet weak var sprTableView: SpriteTableView!
-    @IBOutlet weak var sprAttach: NSButton!
+    @IBOutlet weak var deniseJOY0DAT: NSTextField!
+    @IBOutlet weak var deniseJOY1DAT: NSTextField!
+    @IBOutlet weak var deniseCLXDAT: NSTextField!
 
     @IBOutlet weak var deniseCol0: NSColorWell!
     @IBOutlet weak var deniseCol1: NSColorWell!
@@ -252,6 +268,14 @@ class Inspector: NSWindowController {
     @IBOutlet weak var deniseCol29: NSColorWell!
     @IBOutlet weak var deniseCol30: NSColorWell!
     @IBOutlet weak var deniseCol31: NSColorWell!
+
+    @IBOutlet weak var sprSelector: NSSegmentedControl!
+    @IBOutlet weak var sprVStart: NSTextField!
+    @IBOutlet weak var sprVStop: NSTextField!
+    @IBOutlet weak var sprHStart: NSTextField!
+    @IBOutlet weak var sprPtr: NSTextField!
+    @IBOutlet weak var sprTableView: SpriteTableView!
+    @IBOutlet weak var sprAttach: NSButton!
 
     // Debug panel (Paula)
     @IBOutlet weak var paulaIntena: NSTextField!
