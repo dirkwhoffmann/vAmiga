@@ -72,17 +72,6 @@ extension SpriteTableView: NSTableViewDataSource {
     }
 }
 
-extension NSColor {
-    convenience init(rgba: UInt32) {
-        
-        let r = CGFloat(rgba & 0xFF)
-        let g = CGFloat((rgba >> 8) & 0xFF)
-        let b = CGFloat((rgba >> 16) & 0xFF)
-        
-        self.init(red: r / 255.0, green: g / 255.0, blue: b / 255.0, alpha: 1.0)
-    }
-}
-
 extension SpriteTableView: NSTableViewDelegate {
     
     func tableView(_ tableView: NSTableView, willDisplayCell cell: Any, for tableColumn: NSTableColumn?, row: Int) {

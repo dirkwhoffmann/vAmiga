@@ -119,6 +119,38 @@
                 <outlet property="deniseBPLCON0" destination="VND-v2-3KF" id="L5w-Uf-3Aq"/>
                 <outlet property="deniseBPLCON1" destination="hit-9r-Ooj" id="sXH-q3-jID"/>
                 <outlet property="deniseBPLCON2" destination="TfL-ah-KBx" id="HSa-9a-r6A"/>
+                <outlet property="deniseCol0" destination="2cc-t8-rzW" id="1h4-yp-1ka"/>
+                <outlet property="deniseCol1" destination="ldL-Vy-tTg" id="QlI-wf-3yZ"/>
+                <outlet property="deniseCol10" destination="qb0-9u-5Oa" id="SU1-LR-F3f"/>
+                <outlet property="deniseCol11" destination="dvL-Rq-qaR" id="tzt-NN-rFp"/>
+                <outlet property="deniseCol12" destination="lFU-PF-72k" id="yzB-80-fLS"/>
+                <outlet property="deniseCol13" destination="oAq-6N-sXW" id="HAg-V2-VRD"/>
+                <outlet property="deniseCol14" destination="xBN-Dc-z9Y" id="ezM-eJ-UlX"/>
+                <outlet property="deniseCol15" destination="gRn-TH-TB4" id="ty9-ci-LpI"/>
+                <outlet property="deniseCol16" destination="e2C-Te-nDK" id="Noj-o7-5aP"/>
+                <outlet property="deniseCol17" destination="wzF-sZ-bYa" id="BdM-Bj-Cmm"/>
+                <outlet property="deniseCol18" destination="3yQ-Av-kOr" id="eaf-rl-MaI"/>
+                <outlet property="deniseCol19" destination="vAx-YI-f0T" id="dIj-fH-HDK"/>
+                <outlet property="deniseCol2" destination="3II-LB-ffP" id="PWF-pJ-Gct"/>
+                <outlet property="deniseCol20" destination="obG-gs-Xjc" id="eAY-O2-bjv"/>
+                <outlet property="deniseCol21" destination="S4l-k8-mHa" id="Gtu-RJ-gl5"/>
+                <outlet property="deniseCol22" destination="8e9-6s-LaF" id="D1V-12-tBY"/>
+                <outlet property="deniseCol23" destination="q64-R5-AFP" id="bf7-ia-xRt"/>
+                <outlet property="deniseCol24" destination="IuT-RH-BCG" id="z6d-BT-KfV"/>
+                <outlet property="deniseCol25" destination="Z6c-ey-vN7" id="cuM-k5-DoZ"/>
+                <outlet property="deniseCol26" destination="H5R-DC-MZU" id="fmJ-T0-w6y"/>
+                <outlet property="deniseCol27" destination="15C-7W-ndz" id="DoG-EY-gBa"/>
+                <outlet property="deniseCol28" destination="lTJ-vG-yKc" id="yrj-Ad-B53"/>
+                <outlet property="deniseCol29" destination="JSf-7S-ExY" id="YLX-le-4eX"/>
+                <outlet property="deniseCol3" destination="MBo-87-LK8" id="tnc-9j-48c"/>
+                <outlet property="deniseCol30" destination="u7O-zr-z3B" id="ca0-qn-2ZK"/>
+                <outlet property="deniseCol31" destination="Ghu-ev-ztB" id="6RW-ay-oSA"/>
+                <outlet property="deniseCol4" destination="Nrt-b6-qVT" id="lOd-zx-H61"/>
+                <outlet property="deniseCol5" destination="oDl-pT-G4n" id="ESL-B3-NND"/>
+                <outlet property="deniseCol6" destination="jEQ-wy-7is" id="Tmu-z6-dQq"/>
+                <outlet property="deniseCol7" destination="HCM-Y9-J1N" id="e16-VT-otJ"/>
+                <outlet property="deniseCol8" destination="LO4-7f-fNk" id="2qp-Da-wnL"/>
+                <outlet property="deniseCol9" destination="RuT-38-xCh" id="ynj-fJ-sh2"/>
                 <outlet property="deniseDBPLF" destination="Lfo-2n-rmB" id="AOo-fy-Oj7"/>
                 <outlet property="deniseHIRES" destination="8kP-xR-wIw" id="Eba-oS-X1j"/>
                 <outlet property="deniseHOMOD" destination="1Et-eT-Coi" id="QuR-IP-U6O"/>
@@ -3070,14 +3102,14 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <box fixedFrame="YES" title="Display mode" translatesAutoresizingMaskIntoConstraints="NO" id="OB1-6N-I3M">
-                                            <rect key="frame" x="217" y="10" width="243" height="380"/>
+                                            <rect key="frame" x="217" y="114" width="243" height="276"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <view key="contentView" id="FFv-Xk-Li2">
-                                                <rect key="frame" x="3" y="3" width="237" height="362"/>
+                                                <rect key="frame" x="3" y="3" width="237" height="258"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="15" translatesAutoresizingMaskIntoConstraints="NO" id="8kP-xR-wIw">
-                                                        <rect key="frame" x="82" y="293" width="82" height="20"/>
+                                                        <rect key="frame" x="82" y="189" width="82" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="Hires mode" bezelStyle="regularSquare" imagePosition="left" alignment="right" controlSize="small" state="on" inset="2" id="HRk-HE-3ri">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -3088,7 +3120,7 @@
                                                         </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="11" translatesAutoresizingMaskIntoConstraints="NO" id="1Et-eT-Coi">
-                                                        <rect key="frame" x="82" y="273" width="141" height="20"/>
+                                                        <rect key="frame" x="82" y="169" width="141" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="Hold and modify mode" bezelStyle="regularSquare" imagePosition="left" alignment="right" controlSize="small" state="on" inset="2" id="UD6-jY-hxw">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -3099,7 +3131,7 @@
                                                         </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="srT-Rj-zei">
-                                                        <rect key="frame" x="82" y="233" width="101" height="20"/>
+                                                        <rect key="frame" x="82" y="129" width="101" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="Interlace mode" bezelStyle="regularSquare" imagePosition="left" alignment="right" controlSize="small" state="on" inset="2" id="awb-Ze-qHh">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -3110,7 +3142,7 @@
                                                         </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="10" translatesAutoresizingMaskIntoConstraints="NO" id="Lfo-2n-rmB">
-                                                        <rect key="frame" x="82" y="253" width="126" height="20"/>
+                                                        <rect key="frame" x="82" y="149" width="126" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="Dual playfield mode" bezelStyle="regularSquare" imagePosition="left" alignment="right" controlSize="small" state="on" inset="2" id="EDa-5k-pWo">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -3121,7 +3153,7 @@
                                                         </connections>
                                                     </button>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Iv5-bC-e6K">
-                                                        <rect key="frame" x="16" y="326" width="63" height="16"/>
+                                                        <rect key="frame" x="16" y="222" width="63" height="16"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="BPLCON0:" id="iXc-Rn-fpq">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -3130,7 +3162,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VND-v2-3KF">
-                                                        <rect key="frame" x="85" y="324" width="37" height="23"/>
+                                                        <rect key="frame" x="85" y="220" width="37" height="23"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" enabled="NO" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" title="FFFF" drawsBackground="YES" id="xwu-HB-Q99">
                                                             <font key="font" size="12" name="CourierNewPS-BoldMT"/>
@@ -3139,7 +3171,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hit-9r-Ooj">
-                                                        <rect key="frame" x="85" y="205" width="37" height="23"/>
+                                                        <rect key="frame" x="85" y="101" width="37" height="23"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" enabled="NO" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" title="FFFF" drawsBackground="YES" id="bLb-st-j5s">
                                                             <font key="font" size="12" name="CourierNewPS-BoldMT"/>
@@ -3148,7 +3180,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2HM-aG-VJJ">
-                                                        <rect key="frame" x="16" y="207" width="63" height="16"/>
+                                                        <rect key="frame" x="16" y="103" width="63" height="16"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="BPLCON1:" id="0Ua-vk-Fcy">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -3157,7 +3189,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TfL-ah-KBx">
-                                                        <rect key="frame" x="85" y="174" width="37" height="23"/>
+                                                        <rect key="frame" x="85" y="70" width="37" height="23"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" enabled="NO" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" title="FFFF" drawsBackground="YES" id="vB5-uZ-SOg">
                                                             <font key="font" size="12" name="CourierNewPS-BoldMT"/>
@@ -3166,7 +3198,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pLk-HL-7Yt">
-                                                        <rect key="frame" x="16" y="176" width="63" height="16"/>
+                                                        <rect key="frame" x="16" y="72" width="63" height="16"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="BPLCON2:" id="Lqa-3a-YvC">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -3527,10 +3559,294 @@
                                             </view>
                                         </box>
                                         <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="izQ-gb-WfZ">
-                                            <rect key="frame" x="31" y="129" width="144" height="162"/>
+                                            <rect key="frame" x="31" y="241" width="144" height="162"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="baustelle" id="yp2-SY-VdE"/>
                                         </imageView>
+                                        <box fixedFrame="YES" title="Colors" translatesAutoresizingMaskIntoConstraints="NO" id="Ze1-gj-DvQ">
+                                            <rect key="frame" x="6" y="10" width="519" height="100"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <view key="contentView" id="Zcl-re-axa">
+                                                <rect key="frame" x="3" y="3" width="513" height="82"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <subviews>
+                                                    <colorWell fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2cc-t8-rzW">
+                                                        <rect key="frame" x="65" y="43" width="23" height="23"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <connections>
+                                                            <action selector="deniseColorAction:" target="-2" id="W2H-fB-49R"/>
+                                                        </connections>
+                                                    </colorWell>
+                                                    <colorWell fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="ldL-Vy-tTg">
+                                                        <rect key="frame" x="92" y="43" width="23" height="23"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <connections>
+                                                            <action selector="deniseColorAction:" target="-2" id="oVY-eB-NSt"/>
+                                                        </connections>
+                                                    </colorWell>
+                                                    <colorWell fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="3II-LB-ffP">
+                                                        <rect key="frame" x="119" y="43" width="23" height="23"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <connections>
+                                                            <action selector="deniseColorAction:" target="-2" id="YpF-vt-Cc0"/>
+                                                        </connections>
+                                                    </colorWell>
+                                                    <colorWell fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="MBo-87-LK8">
+                                                        <rect key="frame" x="146" y="43" width="23" height="23"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <connections>
+                                                            <action selector="deniseColorAction:" target="-2" id="Dxs-NI-6Kl"/>
+                                                        </connections>
+                                                    </colorWell>
+                                                    <colorWell fixedFrame="YES" tag="4" translatesAutoresizingMaskIntoConstraints="NO" id="Nrt-b6-qVT">
+                                                        <rect key="frame" x="173" y="43" width="23" height="23"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <connections>
+                                                            <action selector="deniseColorAction:" target="-2" id="6IP-b8-zSU"/>
+                                                        </connections>
+                                                    </colorWell>
+                                                    <colorWell fixedFrame="YES" tag="5" translatesAutoresizingMaskIntoConstraints="NO" id="oDl-pT-G4n">
+                                                        <rect key="frame" x="200" y="43" width="23" height="23"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <connections>
+                                                            <action selector="deniseColorAction:" target="-2" id="cbZ-f8-RVT"/>
+                                                        </connections>
+                                                    </colorWell>
+                                                    <colorWell fixedFrame="YES" tag="6" translatesAutoresizingMaskIntoConstraints="NO" id="jEQ-wy-7is">
+                                                        <rect key="frame" x="227" y="43" width="23" height="23"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <connections>
+                                                            <action selector="deniseColorAction:" target="-2" id="88r-W8-E04"/>
+                                                        </connections>
+                                                    </colorWell>
+                                                    <colorWell fixedFrame="YES" tag="7" translatesAutoresizingMaskIntoConstraints="NO" id="HCM-Y9-J1N">
+                                                        <rect key="frame" x="254" y="43" width="23" height="23"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <connections>
+                                                            <action selector="deniseColorAction:" target="-2" id="jIT-lf-Icd"/>
+                                                        </connections>
+                                                    </colorWell>
+                                                    <colorWell fixedFrame="YES" tag="8" translatesAutoresizingMaskIntoConstraints="NO" id="LO4-7f-fNk">
+                                                        <rect key="frame" x="281" y="43" width="23" height="23"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <connections>
+                                                            <action selector="deniseColorAction:" target="-2" id="zWN-If-0Zo"/>
+                                                        </connections>
+                                                    </colorWell>
+                                                    <colorWell fixedFrame="YES" tag="9" translatesAutoresizingMaskIntoConstraints="NO" id="RuT-38-xCh">
+                                                        <rect key="frame" x="308" y="43" width="23" height="23"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <connections>
+                                                            <action selector="deniseColorAction:" target="-2" id="ewn-1e-7a8"/>
+                                                        </connections>
+                                                    </colorWell>
+                                                    <colorWell fixedFrame="YES" tag="10" translatesAutoresizingMaskIntoConstraints="NO" id="qb0-9u-5Oa">
+                                                        <rect key="frame" x="335" y="43" width="23" height="23"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <connections>
+                                                            <action selector="deniseColorAction:" target="-2" id="Krm-Nc-azZ"/>
+                                                        </connections>
+                                                    </colorWell>
+                                                    <colorWell fixedFrame="YES" tag="11" translatesAutoresizingMaskIntoConstraints="NO" id="dvL-Rq-qaR">
+                                                        <rect key="frame" x="362" y="43" width="23" height="23"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <connections>
+                                                            <action selector="deniseColorAction:" target="-2" id="n6R-AE-BpR"/>
+                                                        </connections>
+                                                    </colorWell>
+                                                    <colorWell fixedFrame="YES" tag="12" translatesAutoresizingMaskIntoConstraints="NO" id="lFU-PF-72k">
+                                                        <rect key="frame" x="389" y="43" width="23" height="23"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <connections>
+                                                            <action selector="deniseColorAction:" target="-2" id="eER-fb-2TF"/>
+                                                        </connections>
+                                                    </colorWell>
+                                                    <colorWell fixedFrame="YES" tag="13" translatesAutoresizingMaskIntoConstraints="NO" id="oAq-6N-sXW">
+                                                        <rect key="frame" x="416" y="43" width="23" height="23"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <connections>
+                                                            <action selector="deniseColorAction:" target="-2" id="6Gh-xt-XHR"/>
+                                                        </connections>
+                                                    </colorWell>
+                                                    <colorWell fixedFrame="YES" tag="14" translatesAutoresizingMaskIntoConstraints="NO" id="xBN-Dc-z9Y">
+                                                        <rect key="frame" x="443" y="43" width="23" height="23"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <connections>
+                                                            <action selector="deniseColorAction:" target="-2" id="CFL-W3-N38"/>
+                                                        </connections>
+                                                    </colorWell>
+                                                    <colorWell fixedFrame="YES" tag="15" translatesAutoresizingMaskIntoConstraints="NO" id="gRn-TH-TB4">
+                                                        <rect key="frame" x="470" y="43" width="23" height="23"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <connections>
+                                                            <action selector="deniseColorAction:" target="-2" id="O3q-7G-FUQ"/>
+                                                        </connections>
+                                                    </colorWell>
+                                                    <colorWell fixedFrame="YES" tag="16" translatesAutoresizingMaskIntoConstraints="NO" id="e2C-Te-nDK">
+                                                        <rect key="frame" x="65" y="16" width="23" height="23"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <connections>
+                                                            <action selector="deniseColorAction:" target="-2" id="xdr-FL-BJL"/>
+                                                        </connections>
+                                                    </colorWell>
+                                                    <colorWell fixedFrame="YES" tag="17" translatesAutoresizingMaskIntoConstraints="NO" id="wzF-sZ-bYa">
+                                                        <rect key="frame" x="92" y="16" width="23" height="23"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <connections>
+                                                            <action selector="deniseColorAction:" target="-2" id="yR3-c2-9Dr"/>
+                                                        </connections>
+                                                    </colorWell>
+                                                    <colorWell fixedFrame="YES" tag="18" translatesAutoresizingMaskIntoConstraints="NO" id="3yQ-Av-kOr">
+                                                        <rect key="frame" x="119" y="16" width="23" height="23"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <connections>
+                                                            <action selector="deniseColorAction:" target="-2" id="N2i-i9-Nv8"/>
+                                                        </connections>
+                                                    </colorWell>
+                                                    <colorWell fixedFrame="YES" tag="19" translatesAutoresizingMaskIntoConstraints="NO" id="vAx-YI-f0T">
+                                                        <rect key="frame" x="146" y="16" width="23" height="23"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <connections>
+                                                            <action selector="deniseColorAction:" target="-2" id="xfI-9C-78K"/>
+                                                        </connections>
+                                                    </colorWell>
+                                                    <colorWell fixedFrame="YES" tag="20" translatesAutoresizingMaskIntoConstraints="NO" id="obG-gs-Xjc">
+                                                        <rect key="frame" x="173" y="16" width="23" height="23"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <connections>
+                                                            <action selector="deniseColorAction:" target="-2" id="zCE-g6-MIg"/>
+                                                        </connections>
+                                                    </colorWell>
+                                                    <colorWell fixedFrame="YES" tag="21" translatesAutoresizingMaskIntoConstraints="NO" id="S4l-k8-mHa">
+                                                        <rect key="frame" x="200" y="16" width="23" height="23"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <connections>
+                                                            <action selector="deniseColorAction:" target="-2" id="pIX-AR-07J"/>
+                                                        </connections>
+                                                    </colorWell>
+                                                    <colorWell fixedFrame="YES" tag="22" translatesAutoresizingMaskIntoConstraints="NO" id="8e9-6s-LaF">
+                                                        <rect key="frame" x="227" y="16" width="23" height="23"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <connections>
+                                                            <action selector="deniseColorAction:" target="-2" id="xit-Zx-Vzz"/>
+                                                        </connections>
+                                                    </colorWell>
+                                                    <colorWell fixedFrame="YES" tag="23" translatesAutoresizingMaskIntoConstraints="NO" id="q64-R5-AFP">
+                                                        <rect key="frame" x="254" y="16" width="23" height="23"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <connections>
+                                                            <action selector="deniseColorAction:" target="-2" id="85N-nV-yyr"/>
+                                                        </connections>
+                                                    </colorWell>
+                                                    <colorWell fixedFrame="YES" tag="24" translatesAutoresizingMaskIntoConstraints="NO" id="IuT-RH-BCG">
+                                                        <rect key="frame" x="281" y="16" width="23" height="23"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <connections>
+                                                            <action selector="deniseColorAction:" target="-2" id="xVg-Kl-WmX"/>
+                                                        </connections>
+                                                    </colorWell>
+                                                    <colorWell fixedFrame="YES" tag="25" translatesAutoresizingMaskIntoConstraints="NO" id="Z6c-ey-vN7">
+                                                        <rect key="frame" x="308" y="16" width="23" height="23"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <connections>
+                                                            <action selector="deniseColorAction:" target="-2" id="bNu-Fb-dgZ"/>
+                                                        </connections>
+                                                    </colorWell>
+                                                    <colorWell fixedFrame="YES" tag="26" translatesAutoresizingMaskIntoConstraints="NO" id="H5R-DC-MZU">
+                                                        <rect key="frame" x="335" y="16" width="23" height="23"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <connections>
+                                                            <action selector="deniseColorAction:" target="-2" id="Zr4-nj-zyI"/>
+                                                        </connections>
+                                                    </colorWell>
+                                                    <colorWell fixedFrame="YES" tag="27" translatesAutoresizingMaskIntoConstraints="NO" id="15C-7W-ndz">
+                                                        <rect key="frame" x="362" y="16" width="23" height="23"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <connections>
+                                                            <action selector="deniseColorAction:" target="-2" id="WqU-Tq-QMT"/>
+                                                        </connections>
+                                                    </colorWell>
+                                                    <colorWell fixedFrame="YES" tag="28" translatesAutoresizingMaskIntoConstraints="NO" id="lTJ-vG-yKc">
+                                                        <rect key="frame" x="389" y="16" width="23" height="23"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <connections>
+                                                            <action selector="deniseColorAction:" target="-2" id="GPQ-TP-aBl"/>
+                                                        </connections>
+                                                    </colorWell>
+                                                    <colorWell fixedFrame="YES" tag="29" translatesAutoresizingMaskIntoConstraints="NO" id="JSf-7S-ExY">
+                                                        <rect key="frame" x="416" y="16" width="23" height="23"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <connections>
+                                                            <action selector="deniseColorAction:" target="-2" id="sQP-zI-sFY"/>
+                                                        </connections>
+                                                    </colorWell>
+                                                    <colorWell fixedFrame="YES" tag="30" translatesAutoresizingMaskIntoConstraints="NO" id="u7O-zr-z3B">
+                                                        <rect key="frame" x="443" y="16" width="23" height="23"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <connections>
+                                                            <action selector="deniseColorAction:" target="-2" id="MEH-YQ-x20"/>
+                                                        </connections>
+                                                    </colorWell>
+                                                    <colorWell fixedFrame="YES" tag="31" translatesAutoresizingMaskIntoConstraints="NO" id="Ghu-ev-ztB">
+                                                        <rect key="frame" x="470" y="16" width="23" height="23"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <connections>
+                                                            <action selector="deniseColorAction:" target="-2" id="SP4-3h-a2S"/>
+                                                        </connections>
+                                                    </colorWell>
+                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qup-S8-dZd">
+                                                        <rect key="frame" x="15" y="21" width="44" height="14"/>
+                                                        <autoresizingMask key="autoresizingMask"/>
+                                                        <textFieldCell key="cell" lineBreakMode="clipping" title="16 - 31:" id="0RQ-Or-vvb">
+                                                            <font key="font" metaFont="system" size="11"/>
+                                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                    </textField>
+                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="P7X-Xz-7xe">
+                                                        <rect key="frame" x="21" y="47" width="38" height="14"/>
+                                                        <autoresizingMask key="autoresizingMask"/>
+                                                        <textFieldCell key="cell" lineBreakMode="clipping" title="0 - 15:" id="sKN-kG-9fg">
+                                                            <font key="font" metaFont="system" size="11"/>
+                                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                    </textField>
+                                                </subviews>
+                                            </view>
+                                        </box>
                                     </subviews>
                                 </view>
                             </tabViewItem>

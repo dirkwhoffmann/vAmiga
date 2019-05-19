@@ -831,6 +831,8 @@ Memory::pokeCustom8(uint32_t addr, uint8_t value)
 void
 Memory::pokeCustom16(uint32_t addr, uint16_t value)
 {
+    // if (addr >= 0x180 && addr <= 0x1BE) debug("Poke Color reg %X\n", addr);
+    
     assert(IS_EVEN(addr));
     
     switch ((addr >> 1) & 0xFF) {

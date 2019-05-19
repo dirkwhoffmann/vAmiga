@@ -220,6 +220,39 @@ class Inspector: NSWindowController {
     @IBOutlet weak var sprTableView: SpriteTableView!
     @IBOutlet weak var sprAttach: NSButton!
 
+    @IBOutlet weak var deniseCol0: NSColorWell!
+    @IBOutlet weak var deniseCol1: NSColorWell!
+    @IBOutlet weak var deniseCol2: NSColorWell!
+    @IBOutlet weak var deniseCol3: NSColorWell!
+    @IBOutlet weak var deniseCol4: NSColorWell!
+    @IBOutlet weak var deniseCol5: NSColorWell!
+    @IBOutlet weak var deniseCol6: NSColorWell!
+    @IBOutlet weak var deniseCol7: NSColorWell!
+    @IBOutlet weak var deniseCol8: NSColorWell!
+    @IBOutlet weak var deniseCol9: NSColorWell!
+    @IBOutlet weak var deniseCol10: NSColorWell!
+    @IBOutlet weak var deniseCol11: NSColorWell!
+    @IBOutlet weak var deniseCol12: NSColorWell!
+    @IBOutlet weak var deniseCol13: NSColorWell!
+    @IBOutlet weak var deniseCol14: NSColorWell!
+    @IBOutlet weak var deniseCol15: NSColorWell!
+    @IBOutlet weak var deniseCol16: NSColorWell!
+    @IBOutlet weak var deniseCol17: NSColorWell!
+    @IBOutlet weak var deniseCol18: NSColorWell!
+    @IBOutlet weak var deniseCol19: NSColorWell!
+    @IBOutlet weak var deniseCol20: NSColorWell!
+    @IBOutlet weak var deniseCol21: NSColorWell!
+    @IBOutlet weak var deniseCol22: NSColorWell!
+    @IBOutlet weak var deniseCol23: NSColorWell!
+    @IBOutlet weak var deniseCol24: NSColorWell!
+    @IBOutlet weak var deniseCol25: NSColorWell!
+    @IBOutlet weak var deniseCol26: NSColorWell!
+    @IBOutlet weak var deniseCol27: NSColorWell!
+    @IBOutlet weak var deniseCol28: NSColorWell!
+    @IBOutlet weak var deniseCol29: NSColorWell!
+    @IBOutlet weak var deniseCol30: NSColorWell!
+    @IBOutlet weak var deniseCol31: NSColorWell!
+
     // Debug panel (Paula)
     @IBOutlet weak var paulaIntena: NSTextField!
     @IBOutlet weak var paulaIntreq: NSTextField!

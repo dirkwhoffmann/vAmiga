@@ -38,6 +38,7 @@ typedef struct
     uint16_t bplcon1;
     uint16_t bplcon2;
     uint16_t bpldat[6];
+    uint16_t colorReg[32];
     uint32_t color[32];
     
     SpriteInfo sprite[8];

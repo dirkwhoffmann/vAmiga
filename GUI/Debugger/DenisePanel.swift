@@ -41,6 +41,43 @@ extension Inspector {
         deniseBPLCON2.integerValue = Int(info.bplcon2)
 
         //
+        // Color section
+        //
+
+        deniseCol0.color = NSColor.init(amigaRGB: info.colorReg.0)
+        deniseCol1.color = NSColor.init(amigaRGB: info.colorReg.1)
+        deniseCol2.color = NSColor.init(amigaRGB: info.colorReg.2)
+        deniseCol3.color = NSColor.init(amigaRGB: info.colorReg.3)
+        deniseCol4.color = NSColor.init(amigaRGB: info.colorReg.4)
+        deniseCol5.color = NSColor.init(amigaRGB: info.colorReg.5)
+        deniseCol6.color = NSColor.init(amigaRGB: info.colorReg.6)
+        deniseCol7.color = NSColor.init(amigaRGB: info.colorReg.7)
+        deniseCol8.color = NSColor.init(amigaRGB: info.colorReg.8)
+        deniseCol9.color = NSColor.init(amigaRGB: info.colorReg.9)
+        deniseCol10.color = NSColor.init(amigaRGB: info.colorReg.10)
+        deniseCol11.color = NSColor.init(amigaRGB: info.colorReg.11)
+        deniseCol12.color = NSColor.init(amigaRGB: info.colorReg.12)
+        deniseCol13.color = NSColor.init(amigaRGB: info.colorReg.13)
+        deniseCol14.color = NSColor.init(amigaRGB: info.colorReg.14)
+        deniseCol15.color = NSColor.init(amigaRGB: info.colorReg.15)
+        deniseCol16.color = NSColor.init(amigaRGB: info.colorReg.16)
+        deniseCol17.color = NSColor.init(amigaRGB: info.colorReg.17)
+        deniseCol18.color = NSColor.init(amigaRGB: info.colorReg.18)
+        deniseCol19.color = NSColor.init(amigaRGB: info.colorReg.19)
+        deniseCol20.color = NSColor.init(amigaRGB: info.colorReg.20)
+        deniseCol21.color = NSColor.init(amigaRGB: info.colorReg.21)
+        deniseCol22.color = NSColor.init(amigaRGB: info.colorReg.22)
+        deniseCol23.color = NSColor.init(amigaRGB: info.colorReg.23)
+        deniseCol24.color = NSColor.init(amigaRGB: info.colorReg.24)
+        deniseCol25.color = NSColor.init(amigaRGB: info.colorReg.25)
+        deniseCol26.color = NSColor.init(amigaRGB: info.colorReg.26)
+        deniseCol27.color = NSColor.init(amigaRGB: info.colorReg.27)
+        deniseCol28.color = NSColor.init(amigaRGB: info.colorReg.28)
+        deniseCol29.color = NSColor.init(amigaRGB: info.colorReg.29)
+        deniseCol30.color = NSColor.init(amigaRGB: info.colorReg.30)
+        deniseCol31.color = NSColor.init(amigaRGB: info.colorReg.31)
+
+        //
         // Sprite section
         //
         
@@ -57,7 +94,17 @@ extension Inspector {
         amigaProxy?.denise.setBPLCON0Bit(sender.tag, value: sender.state == .on)
         refresh(everything: false)
     }
-    
+
+    @IBAction func deniseColorAction(_ sender: NSColorWell!) {
+
+        let color = sender.color.amigaRGB()
+
+        // track("\(sender.tag) \(color)")
+
+        amigaProxy?.denise.pokeColorReg(sender.tag, value: color)
+        refreshDenise(everything: false)
+    }
+
     @IBAction func selectSpriteAction(_ sender: Any!) {
         
         refreshDenise(everything: true)
