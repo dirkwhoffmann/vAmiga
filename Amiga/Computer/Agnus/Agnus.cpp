@@ -58,6 +58,7 @@ Agnus::Agnus()
         { &bpl2mod,         sizeof(bpl2mod),         0 },
         { &sprpt,           sizeof(sprpt),           DWORD_ARRAY },
         { &busOwner,        sizeof(busOwner),        0 },
+        { &displayDMA,      sizeof(displayDMA),      0 },
         { &dmaEvent,        sizeof(dmaEvent),        0 },
         { &nextDmaEvent,    sizeof(nextDmaEvent),    0 },
         { &activeBitplanes, sizeof(activeBitplanes), 0 }
@@ -540,17 +541,47 @@ Agnus::switchBitplaneDmaOff()
     updateJumpTable();
 }
 
+bool
+Agnus::isBitplaneDmaLine()
+{
+    return
+    vpos >= 26
+    && vpos >= vstrt
+    && vpos <= vstop
+    && (dmacon & (DMAEN | BPLEN)) == (DMAEN | BPLEN);
+}
+
 void
 Agnus::updateBitplaneDma()
 {
-    if ((dmacon & DMAEN) && (dmacon & BPLEN)) {
-        
-        // Remove old event IDs
-        switchBitplaneDmaOff();
-        
-        // Add new event IDs
-        switchBitplaneDmaOn();
+    bool newDisplayDma = isBitplaneDmaLine();
+
+    // This function update the DMA table only if the DMA state has changed.
+    if (displayDMA ^ newDisplayDma) {
+
+        if (newDisplayDma) {
+            switchBitplaneDmaOn();
+        } else {
+            switchBitplaneDmaOff();
+        }
+
+        displayDMA = newDisplayDma;
     }
+}
+
+void
+Agnus::forceUpdateBitplaneDma()
+{
+    bool newDisplayDma = isBitplaneDmaLine();
+
+    // This function always updates the DMA tables.
+    if (newDisplayDma) {
+        switchBitplaneDmaOn();
+    } else {
+        switchBitplaneDmaOff();
+    }
+
+    displayDMA = newDisplayDma;
 }
 
 void
@@ -675,14 +706,16 @@ Agnus::pokeDMACON(uint16_t value)
             
             // Bitplane DMA on
             debug("Bitplane DMA switched on\n");
-            switchBitplaneDmaOn();
+            // switchBitplaneDmaOn();
 
         } else {
             
             // Bitplane DMA off
             debug("Bitplane DMA switched off\n");
-            switchBitplaneDmaOff();
+            // switchBitplaneDmaOff();
         }
+
+        updateBitplaneDma();
     }
     
     // Copper DMA
@@ -1403,14 +1436,16 @@ Agnus::hsyncHandler()
     }
     
     // Check if have reached line 26 (bitplane DMA starts here)
+    /*
     if (vpos == 26) {
         if ((dmacon & DMAEN) && (dmacon & BPLEN)) {
             switchBitplaneDmaOn();
-            // debug("vpos == 26 ddfstrt = %X ddfstop = %X\n", ddfstrt, ddfstop);
-            // dump();
         }
     }
-    
+    */
+    // Switch bitplane DMA on or off
+    updateBitplaneDma();
+
     // Schedule the first hi-prio DMA event (if any)
     if (nextDmaEvent[0]) {
         EventID eventID = dmaEvent[nextDmaEvent[0]];

@@ -180,7 +180,11 @@ class Agnus : public HardwareComponent
     // The current owner of the bus, updated in every DMA cycle.
     // TODO: THIS VARIABLE IS NOT USED YET
     uint16_t busOwner;
-    
+
+    /* Indicates if displayDMA is currently enabled.
+     * This variable is updated id updateDisplayDMA().
+     */
+    bool displayDMA;
     
     //
     // DMA allocation tables
@@ -328,11 +332,7 @@ public:
     //
     
     public:
-    
-    // Builds the DMA time slot allocation table for the current line.
-    // DEPRECATED
-    // void buildDMAEventTable();
-    
+
     // Removes all events from the DMA time slot allocation table.
     void clearDMAEventTable();
     
@@ -348,10 +348,13 @@ public:
     void switchSpriteDmaOn();
     void switchSpriteDmaOff();
     
-    // Adds or removes the audio DMA events to the DMA event table.
+    // Adds or removes the bitplane DMA events to the DMA event table.
     void switchBitplaneDmaOn();
     void switchBitplaneDmaOff();
+
+    bool isBitplaneDmaLine();
     void updateBitplaneDma();
+    void forceUpdateBitplaneDma();
     
     // Updates the DMA time slot allocation's jump table.
     void updateJumpTable(int16_t to);
