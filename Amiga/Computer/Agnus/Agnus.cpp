@@ -258,129 +258,6 @@ Agnus::beamDiff(int16_t vStart, int16_t hStart, int16_t vEnd, int16_t hEnd)
     return DMA_CYCLES(vDiff * 227 + hDiff);
 }
 
-/*
-void
-Agnus::buildDMAEventTable()
-{
-    // debug("buildDMAEventTable vpos = %d hpos = %d\n", vpos, hpos);
-    
-    // Start with a clean table
-    memset(dmaEvent, 0, sizeof(dmaEvent));
-
-    // Check DMA enable bit
-    if (dmacon & DMAEN) {
-        
-        // Disk DMA
-        if (dmacon & DSKEN) {
-            dmaEvent[0x07] = DMA_DISK;
-            dmaEvent[0x09] = DMA_DISK;
-            dmaEvent[0x0B] = DMA_DISK;
-        }
-        
-        // Audio DMA
-        if (dmacon & AU0EN) dmaEvent[0x0D] = DMA_A0;
-        if (dmacon & AU1EN) dmaEvent[0x0F] = DMA_A1;
-        if (dmacon & AU2EN) dmaEvent[0x11] = DMA_A2;
-        if (dmacon & AU3EN) dmaEvent[0x13] = DMA_A3;
-        
-        // Sprite DMA (some slots may be overwritten by bitplane DMA cycles)
-        // TODO: Individually switch on / off channels
-        if (dmacon & SPREN) { // && sprite 0 enabled
-            dmaEvent[0x15] = DMA_S0_1;
-            dmaEvent[0x17] = DMA_S0_2;
-        }
-        if (dmacon & SPREN) { // && sprite 1 enabled
-            dmaEvent[0x19] = DMA_S1_1;
-            dmaEvent[0x1B] = DMA_S1_2;
-        }
-        if (dmacon & SPREN) { // && sprite 2 enabled
-            dmaEvent[0x1D] = DMA_S2_1;
-            dmaEvent[0x1F] = DMA_S2_2;
-        }
-        if (dmacon & SPREN) { // && sprite 3 enabled
-            dmaEvent[0x21] = DMA_S3_1;
-            dmaEvent[0x23] = DMA_S3_2;
-        }
-        if (dmacon & SPREN) { // && sprite 4 enabled
-            dmaEvent[0x25] = DMA_S4_1;
-            dmaEvent[0x27] = DMA_S4_2;
-        }
-        if (dmacon & SPREN) { // && sprite 5 enabled
-            dmaEvent[0x29] = DMA_S5_1;
-            dmaEvent[0x2B] = DMA_S5_2;
-        }
-        if (dmacon & SPREN) { // && sprite 6 enabled
-            dmaEvent[0x2D] = DMA_S6_1;
-            dmaEvent[0x2F] = DMA_S6_2;
-        }
-        if (dmacon & SPREN) { // && sprite 7 enabled
-            dmaEvent[0x31] = DMA_S7_1;
-            dmaEvent[0x33] = DMA_S7_2;
-        }
-        
-        // Bitplane DMA
-        if (dmacon & BPLEN) {
-            
-            if (amiga->denise.hires()) {
-                
-                // Determine start and stop cycle
-                uint8_t start = MAX(ddfstrt & 0b11111100, 0x18);
-                uint8_t stop  = MIN(ddfstop & 0b11111100, 0xD8);
-                
-                // Align stop such that (stop - start) is dividable by 8
-                stop += (stop - start) & 0b100;
-                // if ((stop - start) & 0b100) stop += 0b100;
-                
-                // Determine event IDs
-                EventID h4 = (activeBitplanes >= 4) ? DMA_H4 : (EventID)0;
-                EventID h3 = (activeBitplanes >= 3) ? DMA_H3 : (EventID)0;
-                EventID h2 = (activeBitplanes >= 2) ? DMA_H2 : (EventID)0;
-                EventID h1 = (activeBitplanes >= 1) ? DMA_H1 : (EventID)0;
-
-                // Schedule events
-                for (unsigned i = start; i <= stop; i += 8) {
-                    dmaEvent[i]   = dmaEvent[i+4] = h4;
-                    dmaEvent[i+1] = dmaEvent[i+5] = h3;
-                    dmaEvent[i+2] = dmaEvent[i+6] = h2;
-                    dmaEvent[i+3] = dmaEvent[i+7] = h1;
-                }
- 
-            } else {
-                
-                // Determine start and stop cycle
-                uint8_t start = MAX(ddfstrt & 0b11111000, 0x18);
-                uint8_t stop  = MIN(ddfstop & 0b11111000, 0xD8);
-                
-                // Determine event IDs
-                EventID l6 = (activeBitplanes >= 6) ? DMA_L6 : (EventID)0;
-                EventID l5 = (activeBitplanes >= 5) ? DMA_L5 : (EventID)0;
-                EventID l4 = (activeBitplanes >= 4) ? DMA_L4 : (EventID)0;
-                EventID l3 = (activeBitplanes >= 3) ? DMA_L3 : (EventID)0;
-                EventID l2 = (activeBitplanes >= 2) ? DMA_L2 : (EventID)0;
-                EventID l1 = (activeBitplanes >= 1) ? DMA_L1 : (EventID)0;
-                
-                // Schedule events
-                for (unsigned i = start; i <= stop; i += 8) {
-                    dmaEvent[i+1] = l4;
-                    dmaEvent[i+2] = l6;
-                    dmaEvent[i+3] = l2;
-                    dmaEvent[i+5] = l3;
-                    dmaEvent[i+6] = l5;
-                    dmaEvent[i+7] = l1;
-                }
-            }
-        }
-    }
-    
-    // Build jump table
-    uint8_t next = 0;
-    for (int i = HPOS_MAX; i >= 0; i--) {
-        nextDmaEvent[i] = next;
-        if (dmaEvent[i]) next = i;
-    }
-}
-*/
-
 void
 Agnus::clearDMAEventTable()
 {
@@ -545,7 +422,15 @@ Agnus::switchBitplaneDmaOn()
             dmaEvent[i+7] = l1;
         }
     }
-    
+
+    // Because bitplane DMA and sprite DMA overlap, some sprite events might
+    // have been overwritten with EVENT_NONE by the code above. These events
+    // need to be restored.
+    if (dmaEvent[0x15] != EVENT_NONE) {
+        assert(dmaEvent[0x15] == DMA_S0_1);
+        switchSpriteDmaOn();
+    }
+
     updateJumpTable();
 }
 
@@ -555,9 +440,13 @@ Agnus::switchBitplaneDmaOff()
     // Clear the event table
     memset(dmaEvent + 0x18, 0, sizeof(dmaEvent) - 0x18);
     
-    // Restore sprite DMA events that were blocked by bitplane DMA
-    if (dmaEvent[0x15] != EVENT_NONE) { switchSpriteDmaOn(); }
-    
+    // Because bitplane DMA and sprite DMA overlap, the previous operation
+    // might have wiped out sprite events. These events need to be restored.
+    if (dmaEvent[0x15] != EVENT_NONE) {
+        assert(dmaEvent[0x15] == DMA_S0_1);
+        switchSpriteDmaOn();
+    }
+
     updateJumpTable();
 }
 
