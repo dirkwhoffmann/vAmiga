@@ -149,15 +149,18 @@ Copper::comparator(uint32_t beam, uint32_t waitpos, uint32_t mask)
     // Get comparison bits for the vertical beam position
     uint8_t vBeam = (beam >> 8) & 0xFF;
     uint8_t vWaitpos = (waitpos >> 8) & 0xFF;
-    uint8_t vMask = (mask >> 8) | 0x80; // & 0x7F;
+    uint8_t vMask = (mask >> 8) | 0x80;
     
     // debug(" * vBeam = %X vWaitpos = %X vMask = %X\n", vBeam, vWaitpos, vMask);
     // Compare vertical positions
-    if ((vBeam & vMask) < (vWaitpos & vMask))
+    if ((vBeam & vMask) < (vWaitpos & vMask)) {
+        // debug("beam %d waitpos %d mask 0x%x FALSE\n", beam, waitpos, mask);
         return false;
-
-    if ((vBeam & vMask) > (vWaitpos & vMask))
+    }
+    if ((vBeam & vMask) > (vWaitpos & vMask)) {
+        // debug("beam %d waitpos %d mask 0x%x TRUE\n", beam, waitpos, mask);
         return true;
+    }
 
     // Get comparison bits for horizontal position
     uint8_t hBeam = beam & 0xFE;
@@ -186,9 +189,19 @@ Copper::nextTriggerPosition()
     // Get the current beam position
     uint32_t beam = _agnus->getBeam();
 
+    // EXPERIMENTAL CODE
+    uint16_t x = HPOS(beam);
+    uint16_t y = VPOS(beam);
+    x += 2;
+    if (x > HPOS_MAX) {
+        x -= HPOS_MAX;
+        y++;
+    }
+    beam = BEAM(y, x);
+
     /* We are going to compute the smallest beam position satisfying
      *
-     *   1) computed position >= current beam position,
+     *   1) computed position >= current beam position + 2,
      *   2) the comparator circuit triggers.
      *
      * We do this by starting with the maximum possible value:
@@ -204,7 +217,8 @@ Copper::nextTriggerPosition()
             pos = newPos;
         }
     }
-    
+
+    // debug("nextTriggerPosition returns %d (0x%x)\n", pos, pos);
     return pos;
 }
 

@@ -603,6 +603,23 @@ Denise::drawLeftBorder()
 void
 Denise::drawRightBorder()
 {
+    // DEBUGGING
+    /*
+    if (_agnus->isBitplaneDmaLine()) {
+
+        int *ptr  = pixelAddr(0);
+        for (unsigned i = 0; i < 100; i++) {
+            *ptr++ = 0x00FFFF00;
+        }
+    }
+    if (_agnus->vpos == 255) {
+        int *ptr  = pixelAddr(0);
+        for (unsigned i = 0; i < 100; i++) {
+            *ptr++ = 0x00333300;
+        }
+    }
+    */
+
     // Fill the rest of the line with the current background color
     int bgcol = colorizer.getRGBA(0);
     int *ptr  = pixelAddr(pixel);
