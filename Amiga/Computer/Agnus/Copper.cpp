@@ -187,17 +187,13 @@ uint32_t
 Copper::nextTriggerPosition()
 {
     // Get the current beam position
-    uint32_t beam = _agnus->getBeam();
+    Beam b = _agnus->beamPosition();
 
-    // EXPERIMENTAL CODE
-    uint16_t x = HPOS(beam);
-    uint16_t y = VPOS(beam);
-    x += 2;
-    if (x > HPOS_MAX) {
-        x -= HPOS_MAX;
-        y++;
-    }
-    beam = BEAM(y, x);
+    // Advance two cycles to get to the first possible trigger position
+    b = _agnus->addToBeam(b, 2);
+
+    // Translate position to a binary 17-bit representation
+    uint32_t beam = (b.y << 8) + b.x;
 
     /* We are going to compute the smallest beam position satisfying
      *
@@ -218,7 +214,6 @@ Copper::nextTriggerPosition()
         }
     }
 
-    // debug("nextTriggerPosition returns %d (0x%x)\n", pos, pos);
     return pos;
 }
 

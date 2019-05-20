@@ -277,24 +277,28 @@ public:
 
 
     //
-    // Converting cycles and beam positions
+    // Working with beam positions
     //
 
 public:
 
+    // Returns the current beam position
+    Beam beamPosition();
 
-    /* Translates a beam position to a master cycle or vice versa.
-     *
-     * Function 'beamToCycle' assumes that 'beam' is a position inside the
-     * current frame.
-     *
-     * Function 'cycleToBeam' requires that 'cycle' belongs to the current
-     * frame.
+    /* Translates a beam position to a master cycle.
+     * 'beam' is a position inside the current frame.
      */
     Cycle beamToCycle(Beam beam);
+
+    /* Translates a master cycle to a beam position.
+     * 'cycle' must belong to the current frame for the function to work.
+     */
     Beam cycleToBeam(Cycle cycle);
 
-
+    /* Advances a beam position by a given number of cycles.
+     * Note: Only the horizontal component is wrapped over.
+     */
+    Beam addToBeam(Beam beam, Cycle cycles);
 
 
     //
