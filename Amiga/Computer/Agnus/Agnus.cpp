@@ -611,7 +611,7 @@ Agnus::updateJumpTable(int16_t to)
     assert(dmaEvent[HPOS_MAX] == 0);
     
     // Build the jump table
-    uint8_t next = dmaEvent[to+1];
+    uint8_t next = nextDmaEvent[to];
     for (int i = to; i >= 0; i--) {
         nextDmaEvent[i] = next;
         if (dmaEvent[i]) next = i;
