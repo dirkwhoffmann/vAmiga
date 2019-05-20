@@ -24,7 +24,7 @@ typedef struct
 {
     uint16_t pos;
     uint16_t ctl;
-    uint16_t ptr;
+    uint32_t ptr;
     int16_t hstrt;
     int16_t vstrt;
     int16_t vstop;
