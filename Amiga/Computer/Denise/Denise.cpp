@@ -623,7 +623,7 @@ Denise::drawRightBorder()
 void
 Denise::drawSprites()
 {
-    int nr = 0;
+    int nr = 0, col = 17;
     
     // EXPERIMENTAL
     while (armed != 0) {
@@ -635,9 +635,9 @@ Denise::drawSprites()
             int *ptr = pixelAddr(pixel);
             
             int rgba[4];
-            rgba[1] = colorizer.getRGBA(17);
-            rgba[2] = colorizer.getRGBA(18);
-            rgba[3] = colorizer.getRGBA(19);
+            rgba[1] = colorizer.getRGBA(col);
+            rgba[2] = colorizer.getRGBA(col + 1);
+            rgba[3] = colorizer.getRGBA(col + 2);
             
             for (int i = 15; i >= 0; i--) {
                 
@@ -653,6 +653,7 @@ Denise::drawSprites()
             }
         }
         armed >>= 1;
+        col += (nr & 1) << 2;
         nr++;
     }
 }

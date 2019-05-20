@@ -128,8 +128,11 @@ public:
 
 public:
 
-    // Returns a RGBA value from the quick-lookup table.
-    uint32_t getRGBA(int nr) { assert(nr < 64); return colorRGBA[nr]; }
+    // Returns the RGBA value for a certain color register.
+    uint32_t getRGBA(int nr) { return colorRGBA[nr]; }
+
+    // Returns the RGBA value for a certain sprite color.
+    uint32_t getSpriteRGBA(int s, int nr) { return colorRGBA[16 + nr + 2 * (s & 6)]; }
 
     // Updates the complete color lookup table.
     void updateColorTable();
