@@ -824,7 +824,10 @@ Memory::spypeekCustom32(uint32_t addr)
 void
 Memory::pokeCustom8(uint32_t addr, uint8_t value)
 {
-    assert(false);
+    /* "Custom register byte write bug = normally byte write to custom register
+     *  writes same value to upper and lower byte."
+     *     [http://eab.abime.net/showthread.php?p=1156399]
+     */
     pokeCustom16(addr & 0x1FE, HI_LO(value,value));
 }
 
