@@ -525,8 +525,9 @@ Denise::draw16()
         *ptr++ = rgba;
     }
 
-    // REMOVE ASAP
-    // *pixelAddr(pixel) = 0xFFFF0000;
+#ifdef DEBUG_STRIPES
+    *pixelAddr(pixel) = 0x000000FF;
+#endif
 
     pixel += 16;
 }
@@ -558,8 +559,9 @@ Denise::draw32()
         *ptr++ = rgba;
     }
 
-    // REMOVE ASAP
-    // *pixelAddr(pixel) = 0xFFFF0000;
+#ifdef DEBUG_STRIPES
+    *pixelAddr(pixel) = 0x000000FF;
+#endif
 
     pixel += 32;
 }
@@ -590,6 +592,10 @@ Denise::draw32HAM()
         *ptr++ = rgba;
         *ptr++ = rgba;
     }
+
+#ifdef DEBUG_STRIPES
+    *pixelAddr(pixel) = 0x000000FF;
+#endif
 
     pixel += 32;
 }
@@ -639,23 +645,32 @@ Denise::drawBorder()
     int *ptr = pixelAddr(0);
     int rgba = colorizer.getRGBA(0);
 
+    int rgbaHBorderL = rgba;
+    int rgbaHBorderR = rgba;
+    int rgbaVBorder  = rgba;
+
+#ifdef DEBUG_STRIPES
+    rgbaHBorderL = 0x00000044;
+    rgbaHBorderR = 0x00000088;
+    rgbaVBorder  = 0x000000CC;
+#endif
+
     int hblank = 4 * 0x35;
 
     // Draw left border
     // debug("hstrt = %d hstop = %d\n", _agnus->hstrt, _agnus->hstop);
     for (int i = 0; i < (2 * _agnus->hstrt) - hblank; i++) {
-        assert(i < HPIXELS);
-        if (i >= 0) ptr[i] = rgba; // 0x0000FF00;
+        if (i >= 0) ptr[i] = rgbaHBorderL;
     }
 
     // Draw right border
     for (int i = (2 * _agnus->hstop) - hblank; i < HPIXELS; i++) {
-        if (i >= 0) ptr[i] = rgba; // 0x00008800;
+        if (i >= 0) ptr[i] = rgbaHBorderR;
     }
 
     if (!inDisplayWindow) {
         for (int i = 0; i < HPIXELS; i++) {
-            ptr[i] = rgba; // 0x00000066;
+            ptr[i] = rgbaVBorder;
         }
     }
 }

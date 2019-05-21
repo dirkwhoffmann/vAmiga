@@ -21,4 +21,7 @@
 // Default debug level for all components
 #define DEBUG_LEVEL 1
 
+// Enable to draw debug marks
+#define DEBUG_STRIPES
+
 #endif
