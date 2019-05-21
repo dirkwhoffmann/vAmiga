@@ -1199,7 +1199,8 @@ void
 Agnus::serviceRASEvent(EventID id)
 {
     uint8_t incr;
-    
+    int hblank = 4 * 0x35;
+
     switch (id) {
             
         case RAS_HSYNC:
@@ -1208,20 +1209,12 @@ Agnus::serviceRASEvent(EventID id)
             break;
             
         case RAS_DIWSTRT:
-            
+
             // debug(2, "RAS_DIWSTRT (hstart = %d hstop = %d vstart = %d vstop = %d\n", hstrt, hstop, vstrt, vstop);
             
-            _denise->drawLeftBorder();
+            // _denise->drawLeftBorder();
+            _denise->pixel = (hpos * 4) - hblank + 2;
 
-            /*
-            if (_denise->lores()) {
-                _denise->draw32();
-                incr = 8;
-            } else {
-                _denise->draw16();
-                incr = 4;
-            }
-            */
             incr = _denise->draw() / 4;
 
             // Schedule next RAS event
@@ -1237,15 +1230,6 @@ Agnus::serviceRASEvent(EventID id)
 
             debug(3, "RAS_DIWDRAW\n");
 
-            /*
-            if (_denise->lores()) {
-                _denise->draw32();
-                incr = 8;
-            } else {
-                _denise->draw16();
-                incr = 4;
-            }
-            */
             incr = _denise->draw() / 4;
             
             // Schedule next RAS event
@@ -1255,15 +1239,12 @@ Agnus::serviceRASEvent(EventID id)
             } else {
                 eventHandler.schedulePos(RAS_SLOT, vpos, HPOS_MAX, RAS_HSYNC);
             }
-            break;
+            return;
             
         default:
             assert(false);
             break;
     }
-    
-    // Schedule next RAS event
-    // scheduleNextRASEvent(vpos, hpos);
 }
 
 void
@@ -1294,7 +1275,7 @@ Agnus::hsyncHandler()
     assert(hpos == 226 /* 0xE2 */);
     
     // Let Denise finish the current rasterline
-    _denise->endOfLine();
+    _denise->endOfLine(vpos);
     
     // Compute some sound samples
     // _paula->audioUnit.hsyncHandler();
@@ -1326,12 +1307,15 @@ Agnus::hsyncHandler()
      */
     vpos++;
     hpos = -1;
-    
+
+    // Determine if the new line is inside the display window
+    _denise->inDisplayWindow = (vpos >= vstrt) && (vpos < vstop);
+
     // Check if the current frame is finished
     if (vpos >= frameInfo.numLines) {
         vsyncHandler();
     }
-    
+
     // Check if we have reached line 25 (sprite DMA starts here)
     if (vpos == 25) {
         if ((dmacon & DMAEN) && (dmacon & SPREN)) {
@@ -1343,15 +1327,7 @@ Agnus::hsyncHandler()
             switchSpriteDmaOn();
         }
     }
-    
-    // Check if have reached line 26 (bitplane DMA starts here)
-    /*
-    if (vpos == 26) {
-        if ((dmacon & DMAEN) && (dmacon & BPLEN)) {
-            switchBitplaneDmaOn();
-        }
-    }
-    */
+
     // Switch bitplane DMA on or off
     updateBitplaneDma();
 

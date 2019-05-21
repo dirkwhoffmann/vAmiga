@@ -290,7 +290,7 @@ public class MetalView: MTKView {
                                   height: height / textureH)
         
         // Enable this for debugging (will display the whole texture)
-        // textureRect = CGRect.init(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
+        textureRect = CGRect.init(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
         
         // Update texture coordinates in vertex buffer
         buildVertexBuffer()

@@ -131,7 +131,10 @@ public:
 
     // The current rasterline has been drawn up to this horizontal position
     short pixel;
-    
+
+    // Indicates if the current rasterline is inside the display window
+    bool inDisplayWindow;
+
     
     //
     // Constructing and destructing
@@ -264,17 +267,22 @@ private:
     void draw32HAM();
 
 public:
-    
-    // Draws the left border.
-    void drawLeftBorder();
-
-    // Draws the right border.
-    void drawRightBorder();
 
     /* Draws the sprite pixels.
-     * This method is called at the end of each rasterline
+     * This method is called at the end of each rasterline.
      */
     void drawSprites();
+
+    // Draws the left border. DEPRECATED
+    void drawLeftBorder();
+
+    // Draws the right border. DEPRECATED
+    void drawRightBorder();
+
+    /* Draws the left and the right border.
+     * This method is called at the end of each rasterline.
+     */
+    void drawBorder();
     
     
     //
@@ -302,8 +310,12 @@ public:
     ScreenBuffer getWorkingShortFrame() { return *workingShortFrame; }
 
 
-    // HSYNC handler
-    void endOfLine();
+    // Called by Agnus at the beginning of each rasterline
+    void beginOfLine(int vpos);
+
+    // Called by Agnus at the end of a rasterline
+    void endOfLine(int vpos);
+
 
     /* Makes Denise ready for the next frame
      * longFrame indicates whether the next frame is a long frame.

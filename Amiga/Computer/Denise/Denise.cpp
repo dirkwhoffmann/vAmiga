@@ -23,31 +23,32 @@ Denise::Denise()
     
     registerSnapshotItems(vector<SnapshotItem> {
         
-        { &clock,         sizeof(clock),         0 },
-        { &sprhstrt,      sizeof(sprhstrt),      WORD_ARRAY },
-        { &sprShiftReg,   sizeof(sprShiftReg),   WORD_ARRAY },
-        { &sprDmaState,   sizeof(sprDmaState),   DWORD_ARRAY },
-        { &attach,        sizeof(attach),        0 },
-        { &armed,         sizeof(armed),         0 },
+        { &clock,           sizeof(clock),           0 },
+        { &sprhstrt,        sizeof(sprhstrt),        WORD_ARRAY },
+        { &sprShiftReg,     sizeof(sprShiftReg),     WORD_ARRAY },
+        { &sprDmaState,     sizeof(sprDmaState),     DWORD_ARRAY },
+        { &attach,          sizeof(attach),          0 },
+        { &armed,           sizeof(armed),           0 },
 
-        { &bplcon0,       sizeof(bplcon0),       0 },
-        { &bplcon1,       sizeof(bplcon1),       0 },
-        { &bplcon2,       sizeof(bplcon2),       0 },
-        { &bpldat,        sizeof(bpldat),        WORD_ARRAY },
-        { &sprdata,       sizeof(sprdata),       WORD_ARRAY },
-        { &sprdatb,       sizeof(sprdatb),       WORD_ARRAY },
+        { &bplcon0,         sizeof(bplcon0),         0 },
+        { &bplcon1,         sizeof(bplcon1),         0 },
+        { &bplcon2,         sizeof(bplcon2),         0 },
+        { &bpldat,          sizeof(bpldat),          WORD_ARRAY },
+        { &sprdata,         sizeof(sprdata),         WORD_ARRAY },
+        { &sprdatb,         sizeof(sprdatb),         WORD_ARRAY },
 
         // { &joydat,        sizeof(joydat),        WORD_ARRAY },
-        { &shiftReg,      sizeof(shiftReg),      DWORD_ARRAY },
+        { &shiftReg,        sizeof(shiftReg),        DWORD_ARRAY },
         
-        { &scrollLowEven, sizeof(scrollLowEven), 0 },
-        { &scrollLowOdd,  sizeof(scrollLowOdd),  0 },
-        { &scrollHiEven,  sizeof(scrollHiEven),  0 },
-        { &scrollHiOdd,   sizeof(scrollHiOdd),   0 },
+        { &scrollLowEven,   sizeof(scrollLowEven),   0 },
+        { &scrollLowOdd,    sizeof(scrollLowOdd),    0 },
+        { &scrollHiEven,    sizeof(scrollHiEven),    0 },
+        { &scrollHiOdd,     sizeof(scrollHiOdd),     0 },
 
-        { &ham,           sizeof(ham),           0 },
+        { &ham,             sizeof(ham),             0 },
 
-        { &pixel,         sizeof(pixel),         0 },
+        { &pixel,           sizeof(pixel),           0 },
+        { &inDisplayWindow, sizeof(inDisplayWindow), 0 },
 
     });
 
@@ -468,8 +469,6 @@ Denise::fillShiftRegisters()
     shiftReg[3] = bpldat[3];
     shiftReg[4] = bpldat[4];
     shiftReg[5] = bpldat[5];
-
-    // draw16();
 }
 
 int *
@@ -519,11 +518,16 @@ Denise::draw16()
         for (unsigned j = 0; j < 6; j++) {
             shiftReg[j] <<= 1;
         }
-        
+
         // Draw a single hires pixel
-        uint32_t rgba = colorizer.getRGBA(index);
+        uint32_t rgba = colorizer.getRGBA(index * inDisplayWindow);
+
         *ptr++ = rgba;
     }
+
+    // REMOVE ASAP
+    // *pixelAddr(pixel) = 0xFFFF0000;
+
     pixel += 16;
 }
 
@@ -531,7 +535,7 @@ void
 Denise::draw32()
 {
     int *ptr = pixelAddr(pixel);
-    
+
     for (int i = 0; i < 16; i++) {
         
         // Read a bit slice
@@ -548,10 +552,15 @@ Denise::draw32()
         }
         
         // Draw two lores pixels
-        uint32_t rgba = colorizer.getRGBA(index);
+        uint32_t rgba = colorizer.getRGBA(index * inDisplayWindow);
+
         *ptr++ = rgba;
         *ptr++ = rgba;
     }
+
+    // REMOVE ASAP
+    // *pixelAddr(pixel) = 0xFFFF0000;
+
     pixel += 32;
 }
 
@@ -576,11 +585,52 @@ Denise::draw32HAM()
         }
 
         // Draw two lores pixels
-        uint32_t rgba = colorizer.computeHAM(index);
+        uint32_t rgba = colorizer.computeHAM(index * inDisplayWindow);
+
         *ptr++ = rgba;
         *ptr++ = rgba;
     }
+
     pixel += 32;
+}
+
+void
+Denise::drawSprites()
+{
+    int nr = 0, col = 17;
+
+    // EXPERIMENTAL
+    while (armed != 0) {
+
+        if (armed & 0x1) {
+
+            int hblank = 4 * 0x35;
+            int16_t pixel = 2 * sprhstrt[nr] - hblank + 2;
+            if (pixel >= HPIXELS - 33) { pixel = HPIXELS - 33; } // ????
+            int *ptr = pixelAddr(pixel);
+
+            int rgba[4];
+            rgba[1] = colorizer.getRGBA(col);
+            rgba[2] = colorizer.getRGBA(col + 1);
+            rgba[3] = colorizer.getRGBA(col + 2);
+
+            for (int i = 15; i >= 0; i--) {
+
+                int colNr = !!GET_BIT(sprdata[nr], i) << 1;
+                colNr |=    !!GET_BIT(sprdatb[nr], i);
+
+                if (colNr) {
+                    *ptr++ = rgba[colNr];
+                    *ptr++ = rgba[colNr];
+                } else {
+                    ptr += 2;
+                }
+            }
+        }
+        armed >>= 1;
+        col += (nr & 1) << 2;
+        nr++;
+    }
 }
 
 void
@@ -621,7 +671,8 @@ Denise::drawRightBorder()
     */
 
     // Fill the rest of the line with the current background color
-    int bgcol = colorizer.getRGBA(0);
+    // int bgcol = colorizer.getRGBA(0);
+    int bgcol = 0x00FFFF00;
     int *ptr  = pixelAddr(pixel);
     int *end  = pixelAddr(HPIXELS - 2);
     
@@ -638,55 +689,55 @@ Denise::drawRightBorder()
 }
 
 void
-Denise::drawSprites()
+Denise::drawBorder()
 {
-    int nr = 0, col = 17;
-    
-    // EXPERIMENTAL
-    while (armed != 0) {
-        
-        if (armed & 0x1) {
-            
-            int16_t pixel = 2 * sprhstrt[nr] - (0x35 * 4);
-            if (pixel >= HPIXELS - 33) { pixel = HPIXELS - 33; }
-            int *ptr = pixelAddr(pixel);
-            
-            int rgba[4];
-            rgba[1] = colorizer.getRGBA(col);
-            rgba[2] = colorizer.getRGBA(col + 1);
-            rgba[3] = colorizer.getRGBA(col + 2);
-            
-            for (int i = 15; i >= 0; i--) {
-                
-                int colNr = !!GET_BIT(sprdata[nr], i) << 1;
-                colNr |=    !!GET_BIT(sprdatb[nr], i);
-                
-                if (colNr) {
-                    *ptr++ = rgba[colNr];
-                    *ptr++ = rgba[colNr];
-                } else {
-                    ptr += 2;
-                }
-            }
+    int *ptr = pixelAddr(0);
+    int rgba = colorizer.getRGBA(0);
+
+    int hblank = 4 * 0x35;
+
+    // Draw left border
+    // debug("hstrt = %d hstop = %d\n", _agnus->hstrt, _agnus->hstop);
+    for (int i = 0; i < (2 * _agnus->hstrt) - hblank; i++) {
+        assert(i < HPIXELS);
+        if (i >= 0) ptr[i] = rgba; // 0x0000FF00;
+    }
+
+    // Draw right border
+    for (int i = (2 * _agnus->hstop) - hblank; i < HPIXELS; i++) {
+        if (i >= 0) ptr[i] = rgba; // 0x00008800;
+    }
+
+    if (!inDisplayWindow) {
+        for (int i = 0; i < HPIXELS; i++) {
+            ptr[i] = rgba; // 0x00000066;
         }
-        armed >>= 1;
-        col += (nr & 1) << 2;
-        nr++;
     }
 }
 
 void
-Denise::endOfLine()
+Denise::beginOfLine(int vpos)
+{
+}
+
+void
+Denise::endOfLine(int vpos)
 {
     // debug("endOfLine pixel = %d HPIXELS = %d\n", pixel, HPIXELS);
 
-    if (_agnus->vpos >= 26) {
+    if (vpos >= 26) {
         
         // Fill the rest of the current line with the background color.
-        drawRightBorder();
-        
+        // drawRightBorder();
+
         // Draw sprites if one or more of them is armed.
         if (armed) drawSprites();
+
+        // Draw border
+        drawBorder();
+
+        // Reset the horizontal pixel counter
+        pixel = 0;
     }
 
     // Initialize the HAM color storage with the background color.
