@@ -456,7 +456,8 @@ Agnus::isBitplaneDmaLine()
     return
     vpos >= 26
     && vpos >= vstrt
-    && vpos <= vstop
+    && vpos < vstop
+    && vpos < frameInfo.numLines - 1
     && (dmacon & (DMAEN | BPLEN)) == (DMAEN | BPLEN);
 }
 
@@ -580,7 +581,7 @@ Agnus::peekDMACONR()
 void
 Agnus::pokeDMACON(uint16_t value)
 {
-    debug(2, "pokeDMACON(%X)\n", value);
+    debug(1, "pokeDMACON(%X)\n", value);
     
     bool oldDMAEN = (dmacon & DMAEN);
     bool oldBPLEN = (dmacon & BPLEN) && oldDMAEN;
@@ -624,7 +625,7 @@ Agnus::pokeDMACON(uint16_t value)
             // switchBitplaneDmaOff();
         }
 
-        updateBitplaneDma();
+        // updateBitplaneDma();
     }
     
     // Copper DMA
@@ -1303,13 +1304,20 @@ Agnus::hsyncHandler()
     vpos++;
     hpos = -1;
 
-    // Determine if the new line is inside the display window
-    _denise->inDisplayWindow = (vpos >= vstrt) && (vpos < vstop);
-
     // Check if the current frame is finished
     if (vpos >= frameInfo.numLines) {
         vsyncHandler();
     }
+
+    if (vpos == frameInfo.numLines - 1) {
+        switchSpriteDmaOff();
+    }
+
+    // Switch bitplane DMA on or off
+    updateBitplaneDma();
+
+    // Determine if the new line is inside the display window
+    _denise->inDisplayWindow = (vpos >= vstrt) && (vpos < vstop);
 
     // Check if we have reached line 25 (sprite DMA starts here)
     if (vpos == 25) {
@@ -1322,9 +1330,6 @@ Agnus::hsyncHandler()
             switchSpriteDmaOn();
         }
     }
-
-    // Switch bitplane DMA on or off
-    updateBitplaneDma();
 
     // Schedule the first hi-prio DMA event (if any)
     if (nextDmaEvent[0]) {
@@ -1340,9 +1345,7 @@ Agnus::hsyncHandler()
 void
 Agnus::vsyncHandler()
 {
-    // Switch bitplane and sprite DMA off
-    switchBitplaneDmaOff();
-    switchSpriteDmaOff();
+    // debug("vstrt = %d vstop = %d hstrt = %d hstop = %d\n", vstrt, vstop, hstrt, hstop);
 
     // Advance to the next frame
     frameInfo.nr++;
