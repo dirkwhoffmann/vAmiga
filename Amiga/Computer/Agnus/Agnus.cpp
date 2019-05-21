@@ -1210,9 +1210,6 @@ Agnus::serviceRASEvent(EventID id)
             
         case RAS_DIWSTRT:
 
-            // debug(2, "RAS_DIWSTRT (hstart = %d hstop = %d vstart = %d vstop = %d\n", hstrt, hstop, vstrt, vstop);
-            
-            // _denise->drawLeftBorder();
             _denise->pixel = (hpos * 4) - hblank + 2;
 
             incr = _denise->draw() / 4;
@@ -1227,8 +1224,6 @@ Agnus::serviceRASEvent(EventID id)
             return;
             
         case RAS_DIWDRAW:
-
-            debug(3, "RAS_DIWDRAW\n");
 
             incr = _denise->draw() / 4;
             

@@ -634,61 +634,6 @@ Denise::drawSprites()
 }
 
 void
-Denise::drawLeftBorder()
-{
-    if (_agnus->hpos < 0x35) return; // HBLANK area
-    
-    // Assign the horizontal pixel counter
-    // pixel = (amiga->agnus.hpos - (0x35 - 0xF)) * 4;
-    pixel = (_agnus->hpos - 0x35) * 4;
-
-    // Fill the beginning of the line with the current background color
-    int bgcol = colorizer.getRGBA(0);
-    int *ptr  = pixelAddr(0);
-    int *end  = pixelAddr(pixel);
-    
-    while (ptr < end) *ptr++ = bgcol;
-}
-
-void
-Denise::drawRightBorder()
-{
-    // DEBUGGING
-    /*
-    if (_agnus->isBitplaneDmaLine()) {
-
-        int *ptr  = pixelAddr(0);
-        for (unsigned i = 0; i < 100; i++) {
-            *ptr++ = 0x00FFFF00;
-        }
-    }
-    if (_agnus->vpos == 255) {
-        int *ptr  = pixelAddr(0);
-        for (unsigned i = 0; i < 100; i++) {
-            *ptr++ = 0x00333300;
-        }
-    }
-    */
-
-    // Fill the rest of the line with the current background color
-    // int bgcol = colorizer.getRGBA(0);
-    int bgcol = 0x00FFFF00;
-    int *ptr  = pixelAddr(pixel);
-    int *end  = pixelAddr(HPIXELS - 2);
-    
-    while (ptr <= end) *ptr++ = bgcol;
-    
-    /* In the last pixel of each line, we store if this line was drawn in lores
-     * or hires mode. This information is used by the uscaling shader to
-     * determine if in-texture scaling should be applied.
-     */
-    *ptr = lores() ? 0x00FFFF00 : 0;
-    
-    // Reset the horizontal pixel counter
-    pixel = 0;
-}
-
-void
 Denise::drawBorder()
 {
     int *ptr = pixelAddr(0);

@@ -273,12 +273,6 @@ public:
      */
     void drawSprites();
 
-    // Draws the left border. DEPRECATED
-    void drawLeftBorder();
-
-    // Draws the right border. DEPRECATED
-    void drawRightBorder();
-
     /* Draws the left and the right border.
      * This method is called at the end of each rasterline.
      */
