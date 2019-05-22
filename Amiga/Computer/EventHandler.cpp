@@ -27,6 +27,7 @@ void
 EventHandler::_initialize()
 {
     agnus = &_amiga->agnus;
+    denise = &_amiga->denise; 
 }
 
 void
@@ -773,7 +774,7 @@ EventHandler::serveINSEvent()
         case INS_CIA:    _ciaA->inspect(); _ciaB->inspect(); break;
         case INS_AGNUS:  agnus->inspect(); break;
         case INS_PAULA:  _paula->inspect(); break;
-        case INS_DENISE: _denise->inspect(); break;
+        case INS_DENISE: denise->inspect(); break;
         case INS_EVENTS: agnus->eventHandler.inspect(); break;
         default:         assert(false);
     }

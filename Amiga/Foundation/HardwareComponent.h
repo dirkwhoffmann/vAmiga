@@ -82,7 +82,6 @@ public:
     CPU          *_cpu     = NULL;
     CIAA         *_ciaA    = NULL;
     CIAB         *_ciaB    = NULL;
-    Denise       *_denise  = NULL;
     Paula        *_paula   = NULL;
     ZorroManager *_zorro   = NULL;
     ControlPort  *_port1   = NULL;

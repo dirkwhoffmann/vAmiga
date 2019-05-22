@@ -56,8 +56,9 @@ static inline bool isVposHpos(int16_t vpos, int16_t hpos) {
 
 class Agnus : public HardwareComponent
 {
-    private:
-    
+    // Quick-access references
+    class Denise *denise;
+
     // Information shown in the GUI inspector panel
     DMAInfo info;
     
@@ -227,7 +228,8 @@ class Agnus : public HardwareComponent
     //
     
     private:
-    
+
+    void _initialize() override; 
     void _powerOn() override;
     void _powerOff() override;
     void _reset() override;

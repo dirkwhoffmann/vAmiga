@@ -54,7 +54,6 @@ HardwareComponent::initialize(Amiga *amiga)
     this->_cpu     = &amiga->cpu;
     this->_ciaA    = &amiga->ciaA;
     this->_ciaB    = &amiga->ciaB;
-    this->_denise  = &amiga->denise;
     this->_paula   = &amiga->paula;
     this->_zorro   = &amiga->zorro;
     this->_port1   = &amiga->controlPort1;

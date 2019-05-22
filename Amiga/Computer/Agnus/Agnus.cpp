@@ -66,6 +66,12 @@ Agnus::Agnus()
 }
 
 void
+Agnus::_initialize()
+{
+    denise = &_amiga->denise;
+}
+
+void
 Agnus::_powerOn()
 {
     // clock = 0;
@@ -377,7 +383,7 @@ Agnus::switchBitplaneDmaOn()
 {
     bitplaneDMA = true;
 
-    if (_denise->hires()) {
+    if (denise->hires()) {
         
         // Determine start and stop cycle
         uint8_t start = ddfstrt; // MAX(ddfstrt & 0b11111100, 0x18);
@@ -1095,11 +1101,11 @@ Agnus::serviceDMAEvent(EventID id)
             
             // debug(2, "DO_DMA H1/L1 (%d,%d): bpldat[%d] = peekChip16(%X) = %X\n", vpos, hpos, PLANE1, bplpt[PLANE1], amiga->mem.peekChip16(bplpt[PLANE1]));
                   
-            DO_DMA(bplpt[PLANE1], _denise->bpldat[PLANE1]);
+            DO_DMA(bplpt[PLANE1], denise->bpldat[PLANE1]);
             
             // The bitplane 1 fetch is an important one. Once it is performed,
             // Denise fills it's shift registers.
-            _denise->fillShiftRegisters();
+            denise->fillShiftRegisters();
             break;
             
         case DMA_H2:
@@ -1107,7 +1113,7 @@ Agnus::serviceDMAEvent(EventID id)
         case DMA_L2:
             
             if (_amiga->debugDMA) debug("DO_DMA H2/L2 (%d,%d): bpldat[%d] = peekChip16(%X) = %X\n", vpos, hpos, PLANE2, bplpt[PLANE2], _mem->peekChip16(bplpt[PLANE2]));
-            DO_DMA(bplpt[PLANE2], _denise->bpldat[PLANE2]);
+            DO_DMA(bplpt[PLANE2], denise->bpldat[PLANE2]);
             break;
             
         case DMA_H3:
@@ -1115,7 +1121,7 @@ Agnus::serviceDMAEvent(EventID id)
         case DMA_L3:
             
             if (_amiga->debugDMA) debug("DO_DMA H3/L3: bpldat[%d] = peekChip16(%X) = %X\n", PLANE3, bplpt[PLANE3], _mem->peekChip16(bplpt[PLANE3]));
-            DO_DMA(bplpt[PLANE3], _denise->bpldat[PLANE3]);
+            DO_DMA(bplpt[PLANE3], denise->bpldat[PLANE3]);
             break;
             
         case DMA_H4:
@@ -1123,19 +1129,19 @@ Agnus::serviceDMAEvent(EventID id)
         case DMA_L4:
             
             if (_amiga->debugDMA) debug("DO_DMA H4/L4: bpldat[%d] = peekChip16(%X) = %X\n", PLANE4, bplpt[PLANE4], _mem->peekChip16(bplpt[PLANE4]));
-            DO_DMA(bplpt[PLANE4], _denise->bpldat[PLANE4]);
+            DO_DMA(bplpt[PLANE4], denise->bpldat[PLANE4]);
             break;
             
         case DMA_L5:
             
             if (_amiga->debugDMA) debug("DO_DMA L5: bpldat[%d] = peekChip16(%X) = %X\n", PLANE5, bplpt[PLANE5], _mem->peekChip16(bplpt[PLANE5]));
-            DO_DMA(bplpt[PLANE5], _denise->bpldat[PLANE5]);
+            DO_DMA(bplpt[PLANE5], denise->bpldat[PLANE5]);
             break;
             
         case DMA_L6:
             
             if (_amiga->debugDMA) debug("DO_DMA L6: bpldat[%d] = peekChip16(%X) = %X\n", PLANE6, bplpt[PLANE6], _mem->peekChip16(bplpt[PLANE6]));
-            DO_DMA(bplpt[PLANE6], _denise->bpldat[PLANE6]);
+            DO_DMA(bplpt[PLANE6], denise->bpldat[PLANE6]);
             break;
             
         default:
@@ -1171,14 +1177,14 @@ Agnus::serviceS1Event(int nr)
         
         // Extract vertical trigger coordinate bits from POS
         sprvstrt[nr] = ((pos & 0xFF00) >> 8) | (sprvstrt[nr] & 0x0100);
-        _denise->pokeSPRxPOS(nr, pos);
+        denise->pokeSPRxPOS(nr, pos);
     }
     
     // Read sprite data if data DMA is activated
     if (sprDmaState[nr] == SPR_DMA_DATA) {
         
         // Read DATA
-        _denise->pokeSPRxDATB(nr, _mem->peekChip16(sprpt[nr]));
+        denise->pokeSPRxDATB(nr, _mem->peekChip16(sprpt[nr]));
         INC_DMAPTR(sprpt[nr]);
     }
 }
@@ -1199,14 +1205,14 @@ Agnus::serviceS2Event(int nr)
         // Extract vertical trigger coordinate bits from CTL
         sprvstrt[nr] = ((ctl & 0b100) << 6) | (sprvstrt[nr] & 0x00FF);
         sprvstop[nr] = ((ctl & 0b010) << 7) | (ctl >> 8);
-        _denise->pokeSPRxCTL(nr, ctl);
+        denise->pokeSPRxCTL(nr, ctl);
     }
     
     // Read sprite data if data DMA is activated
     if (sprDmaState[nr] == SPR_DMA_DATA) {
         
         // Read DATB
-        _denise->pokeSPRxDATA(nr, _mem->peekChip16(sprpt[nr]));
+        denise->pokeSPRxDATA(nr, _mem->peekChip16(sprpt[nr]));
         INC_DMAPTR(sprpt[nr]);
     }
 }
@@ -1226,9 +1232,9 @@ Agnus::serviceRASEvent(EventID id)
             
         case RAS_DIWSTRT:
 
-            _denise->pixel = (hpos * 4) - hblank + 2;
+            denise->pixel = (hpos * 4) - hblank + 2;
 
-            incr = _denise->draw() / 4;
+            incr = denise->draw() / 4;
 
             // Schedule next RAS event
             if (hpos < hstop / 2 && hpos + incr < HPOS_MAX) {
@@ -1241,7 +1247,7 @@ Agnus::serviceRASEvent(EventID id)
             
         case RAS_DIWDRAW:
 
-            incr = _denise->draw() / 4;
+            incr = denise->draw() / 4;
             
             // Schedule next RAS event
             if (hpos < hstop / 2 && hpos + incr < HPOS_MAX) {
@@ -1286,7 +1292,7 @@ Agnus::hsyncHandler()
     assert(hpos == 226 /* 0xE2 */);
     
     // Let Denise finish the current rasterline
-    _denise->endOfLine(vpos);
+    denise->endOfLine(vpos);
     
     // Compute some sound samples
     // _paula->audioUnit.hsyncHandler();
@@ -1332,7 +1338,7 @@ Agnus::hsyncHandler()
     updateBitplaneDma();
 
     // Determine if the new line is inside the display window
-    _denise->inDisplayWindow = (vpos >= vstrt) && (vpos < vstop);
+    denise->inDisplayWindow = (vpos >= vstrt) && (vpos < vstop);
 
     // Check if we have reached line 25 (sprite DMA starts here)
     if (vpos == 25) {
@@ -1366,7 +1372,7 @@ Agnus::vsyncHandler()
     frameInfo.nr++;
 
     // Check if we the next frame is drawn in interlace mode
-    frameInfo.interlaced = _denise->bplconLACE();
+    frameInfo.interlaced = denise->bplconLACE();
 
     // If yes, toggle the the long frame flipflop
     if (frameInfo.interlaced) lof = !lof;
@@ -1389,7 +1395,7 @@ Agnus::vsyncHandler()
     
     // Let the subcomponents do their own VSYNC stuff
     copper.vsyncAction();
-    _denise->prepareForNextFrame(isLongFrame(), frameInfo.interlaced);
+    denise->prepareForNextFrame(isLongFrame(), frameInfo.interlaced);
     _amiga->joystick1.execute();
     _amiga->joystick2.execute();
 

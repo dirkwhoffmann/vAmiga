@@ -98,7 +98,8 @@ class Memory : public HardwareComponent {
     // Quick-access references
     class Agnus *agnus;
     class Copper *copper;
-    
+    class Denise *denise;
+
     public:
     
     /* Each memory area is represented by three variables:
