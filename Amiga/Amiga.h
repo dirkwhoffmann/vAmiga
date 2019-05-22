@@ -53,6 +53,9 @@ extern Amiga *activeAmiga;
  */
 class Amiga : public HardwareComponent {
 
+    // Quick-access references
+    class EventHandler *handler;
+
     // The Amiga model we're going to emulate
     AmigaModel model = AMIGA_500;
     
@@ -336,7 +339,8 @@ class Amiga : public HardwareComponent {
     //
     
     private:
-    
+
+    void _initialize() override;
     void _powerOn() override;
     void _powerOff() override;
     void _run() override;

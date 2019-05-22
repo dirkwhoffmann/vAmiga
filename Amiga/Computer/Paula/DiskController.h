@@ -18,7 +18,9 @@ class DiskController : public HardwareComponent {
 
     // Quick-access references
     class Agnus *agnus;
+    class EventHandler *handler;
 
+    
     //
     // Configuration items
     //

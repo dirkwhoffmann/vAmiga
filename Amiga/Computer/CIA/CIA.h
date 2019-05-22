@@ -66,22 +66,25 @@ class Joystick;
 
 // Virtual complex interface adapter (CIA)
 class CIA : public HardwareComponent {
-    
+
     friend TOD;
     friend Amiga;
 
+protected:
+
     // Quick-access references
     class Agnus *agnus;
+    class EventHandler *handler;
 
     // Information shown in the GUI inspector panel
     CIAInfo info;
     
-    public:
+public:
     
     // The CIA has been executed up to this clock cycle.
     Cycle clock;
 
-    protected:
+protected:
     
     // Identification (0 = CIA A, 1 = CIA B)
     int nr;
@@ -95,7 +98,7 @@ class CIA : public HardwareComponent {
     // Timer B counter
     uint16_t counterB;
     
-    protected:
+protected:
     
     // Timer A latch
     uint16_t latchA;
@@ -136,7 +139,7 @@ class CIA : public HardwareComponent {
     // Interrupt mask register
     uint8_t imr;
     
-    protected:
+protected:
     
     // Bit mask for PB outputs: 0 = port register, 1 = timer
     uint8_t PB67TimerMode;
@@ -152,7 +155,7 @@ class CIA : public HardwareComponent {
     // Port registers
     //
     
-    protected:
+protected:
     
     // Peripheral data register A
     uint8_t PRA;
@@ -177,7 +180,7 @@ class CIA : public HardwareComponent {
     // Shift register logic
     //
     
-    protected:
+protected:
     
     /* Serial data register
      * http://unusedino.de/ec64/technical/misc/cia6526/serial.html
@@ -234,7 +237,7 @@ class CIA : public HardwareComponent {
      */
     uint8_t tiredness;
     
-    public:
+public:
     
     // Indicates if the CIA is currently idle
     bool sleeping;
@@ -249,7 +252,7 @@ class CIA : public HardwareComponent {
      */
     Cycle wakeUpCycle;
     
-    public:
+public:
     
     CIA();
     ~CIA();
@@ -271,7 +274,7 @@ class CIA : public HardwareComponent {
     // Reading the internal state
     //
     
-    public:
+public:
     
     // Returns the latest internal state recorded by inspect()
     CIAInfo getInfo();
@@ -295,7 +298,7 @@ class CIA : public HardwareComponent {
     // Simulates a falling edge on the flag pin
     void emulateFallingEdgeOnFlagPin();
     
-    private:
+private:
     
     //
     // Interrupt control
@@ -337,7 +340,7 @@ class CIA : public HardwareComponent {
     // Triggers a serial interrupt
     void triggerSerialIrq();
     
-    private:
+private:
     
     //
     // Port registers
@@ -349,12 +352,12 @@ class CIA : public HardwareComponent {
     // Values driving port A from outside the chip
     virtual uint8_t portAexternal() = 0;
     
-    public:
+public:
     
     // Computes the values which we currently see at port A
     virtual void updatePA() = 0;
     
-    private:
+private:
     
     // Values driving port B from inside the chip
     virtual uint8_t portBinternal() = 0;
@@ -365,7 +368,7 @@ class CIA : public HardwareComponent {
     // Computes the values which we currently see at port B
     virtual void updatePB() = 0;
     
-    protected:
+protected:
     
     // Action method for poking the PA register
     virtual void pokePA(uint8_t value) { PRA = value; updatePA(); }
@@ -378,7 +381,7 @@ class CIA : public HardwareComponent {
     // Accessing the I/O address space
     //
     
-    public:
+public:
     
     // Peeks a value from a CIA register.
     uint8_t peek(uint16_t addr);
@@ -394,7 +397,7 @@ class CIA : public HardwareComponent {
     // Running the device
     //
     
-    public:
+public:
     
     // Advances the 24-bit counter by one tick.
     void incrementTOD();
@@ -408,7 +411,7 @@ class CIA : public HardwareComponent {
     // Schedules the next wakeup event
     virtual void scheduleWakeUp() = 0;
     
-    private:
+private:
     
     //
     // Handling interrupt requests
@@ -422,12 +425,12 @@ class CIA : public HardwareComponent {
     // Speeding up emulation
     //
     
-    private:
+private:
     
     // Puts the CIA into idle state.
     void sleep();
     
-    public:
+public:
     
     // Emulates all previously skipped cycles.
     void wakeUp();
@@ -454,13 +457,13 @@ class CIA : public HardwareComponent {
  */
 class CIAA : public CIA {
     
-    public:
+public:
     
     CIAA();
     void _powerOff() override;
     void _dump() override;
     
-    private:
+private:
     
     void scheduleNextExecution() override;
     void scheduleWakeUp() override;
@@ -475,7 +478,7 @@ class CIAA : public CIA {
     uint8_t portBexternal() override;
     void updatePB() override;
     
-    public:
+public:
     
     // Emulates the receiption of a keycode from the keyboard
     void setKeyCode(uint8_t keyCode);
@@ -485,13 +488,13 @@ class CIAA : public CIA {
  */
 class CIAB : public CIA {
     
-    public:
+public:
     
     CIAB();
     void _reset() override;
     void _dump() override;
     
-    private:
+private:
     
     void scheduleNextExecution() override;
     void scheduleWakeUp() override;

@@ -17,6 +17,7 @@ class Blitter : public HardwareComponent {
 
     // Quick-access references
     class Agnus *agnus;
+    class EventHandler *handler; 
 
     private:
     

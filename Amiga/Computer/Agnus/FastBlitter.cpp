@@ -21,10 +21,10 @@ Blitter::doFastBlit()
     bbusy = false;
     
     // Trigger the Blitter interrupt
-    _handler->scheduleSecRel(IRQ_BLIT_SLOT, 0, IRQ_SET);
+    handler->scheduleSecRel(IRQ_BLIT_SLOT, 0, IRQ_SET);
     
     // Terminate the Blitter
-    _handler->cancel(BLT_SLOT);
+    handler->cancel(BLT_SLOT);
 }
 
 void

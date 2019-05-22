@@ -77,7 +77,6 @@ public:
      * never change. They provide a quick-access to every other component.
      */
     Amiga        *_amiga   = NULL;
-    EventHandler *_handler = NULL;
     Memory       *_mem     = NULL;
     CIAA         *_ciaA    = NULL;
     CIAB         *_ciaB    = NULL;

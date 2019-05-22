@@ -28,6 +28,7 @@ void
 Copper::_initialize()
 {
     agnus = &_amiga->agnus;
+    handler = &_amiga->agnus.eventHandler; 
 }
 
 void
@@ -353,7 +354,7 @@ Copper::serviceEvent(EventID id)
              * first instruction word.
              */
             if (agnus->copperCanHaveBus()) {
-                _handler->scheduleRel(COP_SLOT, DMA_CYCLES(2), COP_FETCH);
+                handler->scheduleRel(COP_SLOT, DMA_CYCLES(2), COP_FETCH);
             }
             
         case COP_FETCH:
@@ -366,7 +367,7 @@ Copper::serviceEvent(EventID id)
                 advancePC();
                 
                 // Determine the next state based on the instruction type
-                _handler->scheduleRel(COP_SLOT, DMA_CYCLES(2), isMoveCmd() ? COP_MOVE : COP_WAIT_OR_SKIP);
+                handler->scheduleRel(COP_SLOT, DMA_CYCLES(2), isMoveCmd() ? COP_MOVE : COP_WAIT_OR_SKIP);
             }
             break;
             
@@ -384,7 +385,7 @@ Copper::serviceEvent(EventID id)
                 
                 if (isIllegalAddress(reg)) {
                     
-                    _handler->cancel(COP_SLOT); // Stops the Copper
+                    handler->cancel(COP_SLOT); // Stops the Copper
                     break;
                 }
                 
@@ -393,7 +394,7 @@ Copper::serviceEvent(EventID id)
                 skip = false;
                 
                 // Schedule next event
-                _handler->scheduleRel(COP_SLOT, DMA_CYCLES(2), COP_FETCH);
+                handler->scheduleRel(COP_SLOT, DMA_CYCLES(2), COP_FETCH);
             }
             break;
             
@@ -424,9 +425,9 @@ Copper::serviceEvent(EventID id)
                     
                     // Stop the Copper or schedule a wake up event
                     if (delay == NEVER) {
-                        _handler->disable(COP_SLOT);
+                        handler->disable(COP_SLOT);
                     } else {
-                        _handler->scheduleRel(COP_SLOT, delay, COP_FETCH);
+                        handler->scheduleRel(COP_SLOT, delay, COP_FETCH);
                     }
                     // amiga->agnus.eventHandler.dump();
                 }
@@ -449,7 +450,7 @@ Copper::serviceEvent(EventID id)
             // Load COP1LC into the program counter
             coppc = coplc[0];
             debug(2, "COP_JMP1: coppc = %X\n", coppc);
-            _handler->scheduleRel(COP_SLOT, DMA_CYCLES(2), COP_REQUEST_DMA);
+            handler->scheduleRel(COP_SLOT, DMA_CYCLES(2), COP_REQUEST_DMA);
             break;
 
         case COP_JMP2:
@@ -457,7 +458,7 @@ Copper::serviceEvent(EventID id)
             // Load COP2LC into the program counter
             coppc = coplc[1];
             debug(2, "COP_JMP2: coppc = %X\n", coppc);
-            _handler->scheduleRel(COP_SLOT, DMA_CYCLES(2), COP_REQUEST_DMA);
+            handler->scheduleRel(COP_SLOT, DMA_CYCLES(2), COP_REQUEST_DMA);
             break;
 
         default:
@@ -479,9 +480,9 @@ Copper::vsyncAction()
 
     // TODO: What is the exact timing here?
     if (agnus->copDMA()) {
-        _handler->scheduleRel(COP_SLOT, DMA_CYCLES(4), COP_JMP1);
+        handler->scheduleRel(COP_SLOT, DMA_CYCLES(4), COP_JMP1);
     } else {
-        _handler->cancel(COP_SLOT);
+        handler->cancel(COP_SLOT);
     }
 }
 

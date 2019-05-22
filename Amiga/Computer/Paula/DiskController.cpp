@@ -38,7 +38,8 @@ void
 DiskController::_initialize()
 {
     agnus = &_amiga->agnus;
-
+    handler = &_amiga->agnus.eventHandler;
+    
     df[0] = &_amiga->df0;
     df[1] = &_amiga->df1;
     df[2] = &_amiga->df2;
@@ -305,11 +306,11 @@ DiskController::PRBdidChange(uint8_t oldValue, uint8_t newValue)
     // Schedule the first rotation event if at least one drive is spinning.
     if (!spinning()) {
         // debug("Cancelling DSK_SLOT events\n");
-        _handler->cancelSec(DSK_SLOT);
+        handler->cancelSec(DSK_SLOT);
     }
-    else if (!_handler->hasEventSec(DSK_SLOT)) {
+    else if (!handler->hasEventSec(DSK_SLOT)) {
         // debug("Activating DSK_SLOT events\n");
-        _handler->scheduleSecRel(DSK_SLOT, DMA_CYCLES(56), DSK_ROTATE);
+        handler->scheduleSecRel(DSK_SLOT, DMA_CYCLES(56), DSK_ROTATE);
     }
 }
 
@@ -322,7 +323,7 @@ DiskController::serveDiskEvent()
         executeFifo();
     
         // Schedule next event.
-        _handler->scheduleSecRel(DSK_SLOT, DMA_CYCLES(56), DSK_ROTATE);
+        handler->scheduleSecRel(DSK_SLOT, DMA_CYCLES(56), DSK_ROTATE);
     }
 }
 

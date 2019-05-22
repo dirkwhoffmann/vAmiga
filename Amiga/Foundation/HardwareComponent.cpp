@@ -49,7 +49,6 @@ HardwareComponent::initialize(Amiga *amiga)
     assert(amiga != NULL);
 
     this->_amiga   = amiga;
-    this->_handler = &amiga->agnus.eventHandler;
     this->_mem     = &amiga->mem;
     this->_ciaA    = &amiga->ciaA;
     this->_ciaB    = &amiga->ciaB;

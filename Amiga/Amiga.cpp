@@ -94,7 +94,7 @@ Amiga::Amiga()
         { &clockBase,     sizeof(clockBase),     0 },
     });
     
-    // Initialize the quick-lookup references in each subcomponent
+    // Initialize all components
     initialize(this);
     
     // Initialize the mach timer info
@@ -155,7 +155,7 @@ Amiga::setInspectionTarget(EventID id)
 {
     suspend();
     inspectionTarget = id;
-    _handler->scheduleSecRel(INSPECTOR_SLOT, 0, inspectionTarget);
+    handler->scheduleSecRel(INSPECTOR_SLOT, 0, inspectionTarget);
     resume();
 }
 
@@ -436,6 +436,12 @@ void
 Amiga::configureFifoBuffering(bool value)
 {
     configure(VA_FIFO_BUFFERING, value);
+}
+
+void
+Amiga::_initialize()
+{
+    handler = &agnus.eventHandler; 
 }
 
 void
@@ -899,7 +905,7 @@ Amiga::runLoop()
     
     // Enable or disable debugging features
     debugMode ? setControlFlags(RL_DEBUG) : clearControlFlags(RL_DEBUG);
-    _handler->scheduleSecRel(INSPECTOR_SLOT, 0, inspectionTarget);
+    handler->scheduleSecRel(INSPECTOR_SLOT, 0, inspectionTarget);
     
     // Enter the loop
     do {
