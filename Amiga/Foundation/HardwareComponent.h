@@ -83,8 +83,6 @@ public:
     CIAB         *_ciaB    = NULL;
     Paula        *_paula   = NULL;
     ZorroManager *_zorro   = NULL;
-    ControlPort  *_port1   = NULL;
-    ControlPort  *_port2   = NULL;
     
 protected:
     

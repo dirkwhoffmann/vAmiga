@@ -211,13 +211,13 @@ Denise::didLoadFromBuffer(uint8_t **buffer)
 uint16_t
 Denise::peekJOY0DATR()
 {
-    return _port1->joydat();
+    return _amiga->controlPort1.joydat();
 }
 
 uint16_t
 Denise::peekJOY1DATR()
 {
-    return _port2->joydat();
+    return _amiga->controlPort2.joydat();
 }
 
 void

@@ -55,8 +55,6 @@ HardwareComponent::initialize(Amiga *amiga)
     this->_ciaB    = &amiga->ciaB;
     this->_paula   = &amiga->paula;
     this->_zorro   = &amiga->zorro;
-    this->_port1   = &amiga->controlPort1;
-    this->_port2   = &amiga->controlPort2;
 
     // Initialize all subcomponents
     for (HardwareComponent *c : subComponents) {

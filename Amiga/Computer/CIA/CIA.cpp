@@ -1299,8 +1299,8 @@ CIAA::portAexternal()
     result = _paula->diskController.driveStatusFlags();
     
     // Set control port bits
-    result &= _port1->ciapa();
-    result &= _port2->ciapa();
+    result &= _amiga->controlPort1.ciapa();
+    result &= _amiga->controlPort2.ciapa();
 
     return result;
 }
