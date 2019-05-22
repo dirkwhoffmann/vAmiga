@@ -13,3 +13,45 @@ DmaDebugger::DmaDebugger()
 {
     setDescription("DmaDebugger");
 }
+
+bool
+DmaDebugger::isVisualized(BusOwner owner)
+{
+    return true;
+}
+
+void
+DmaDebugger::setVisualized(BusOwner owner, bool value)
+{
+
+}
+
+uint32_t
+DmaDebugger::getColor(BusOwner owner)
+{
+    return 0;
+}
+
+void
+DmaDebugger::setColor(BusOwner owner, uint32_t color)
+{
+
+}
+
+float
+DmaDebugger::getOpacity()
+{
+    return 1.0;
+}
+
+void
+DmaDebugger::setOpacity(float value)
+{
+
+}
+
+void
+DmaDebugger::overlayDmaUsage()
+{
+
+}

@@ -57,7 +57,6 @@ Agnus::Agnus()
         { &bpl1mod,         sizeof(bpl1mod),         0 },
         { &bpl2mod,         sizeof(bpl2mod),         0 },
         { &sprpt,           sizeof(sprpt),           DWORD_ARRAY },
-        { &busOwner,        sizeof(busOwner),        0 },
         { &bitplaneDMA,     sizeof(bitplaneDMA),     0 },
         { &dmaEvent,        sizeof(dmaEvent),        0 },
         { &nextDmaEvent,    sizeof(nextDmaEvent),    0 },
@@ -991,9 +990,7 @@ Agnus::executeUntil(Cycle targetClock)
 {
     // msg("clock is %lld, Executing until %lld\n", clock, targetClock);
     while (clock <= targetClock - DMA_CYCLES(1)) {
-        
-        busOwner = 0;
-        
+
         // Process all pending events
         events.executeUntil(clock);
         
@@ -1010,11 +1007,12 @@ Agnus::executeUntil(Cycle targetClock)
 void
 Agnus::serviceDMAEvent(EventID id)
 {
-    busOwner = BPLEN;
-    
     switch (id) {
             
         case DMA_DISK:
+
+            busOwner[hpos] = BUS_DISK;
+
             if (paula->diskController.getFifoBuffering())
                 paula->diskController.performDMA();
             else
@@ -1022,87 +1020,104 @@ Agnus::serviceDMAEvent(EventID id)
             break;
         
         case DMA_A0:
+            busOwner[hpos] = BUS_AUDIO;
             break;
             
         case DMA_A1:
+            busOwner[hpos] = BUS_AUDIO;
             break;
             
         case DMA_A2:
+            busOwner[hpos] = BUS_AUDIO;
             break;
             
         case DMA_A3:
+            busOwner[hpos] = BUS_AUDIO;
             break;
             
         case DMA_S0_1:
+            busOwner[hpos] = BUS_SPRITE;
             serviceS1Event(0);
             break;
             
         case DMA_S1_1:
+            busOwner[hpos] = BUS_SPRITE;
             serviceS1Event(1);
             break;
             
         case DMA_S2_1:
+            busOwner[hpos] = BUS_SPRITE;
             serviceS1Event(2);
             break;
             
         case DMA_S3_1:
+            busOwner[hpos] = BUS_SPRITE;
             serviceS1Event(3);
             break;
             
         case DMA_S4_1:
+            busOwner[hpos] = BUS_SPRITE;
             serviceS1Event(4);
             break;
             
         case DMA_S5_1:
+            busOwner[hpos] = BUS_SPRITE;
             serviceS1Event(5);
             break;
             
         case DMA_S6_1:
+            busOwner[hpos] = BUS_SPRITE;
             serviceS1Event(6);
             break;
             
         case DMA_S7_1:
+            busOwner[hpos] = BUS_SPRITE;
             serviceS1Event(7);
             break;
             
         case DMA_S0_2:
+            busOwner[hpos] = BUS_SPRITE;
             serviceS2Event(0);
             break;
             
         case DMA_S1_2:
+            busOwner[hpos] = BUS_SPRITE;
             serviceS2Event(1);
             break;
             
         case DMA_S2_2:
+            busOwner[hpos] = BUS_SPRITE;
             serviceS2Event(2);
             break;
             
         case DMA_S3_2:
+            busOwner[hpos] = BUS_SPRITE;
             serviceS2Event(3);
             break;
             
         case DMA_S4_2:
+            busOwner[hpos] = BUS_SPRITE;
             serviceS2Event(4);
             break;
             
         case DMA_S5_2:
+            busOwner[hpos] = BUS_SPRITE;
             serviceS2Event(5);
             break;
             
         case DMA_S6_2:
+            busOwner[hpos] = BUS_SPRITE;
             serviceS2Event(6);
             break;
             
         case DMA_S7_2:
+            busOwner[hpos] = BUS_SPRITE;
             serviceS2Event(7);
             break;
         
         case DMA_H1:
-            if (amiga->debugDMA) debug("H1\n");
         case DMA_L1:
-            
-            // debug(2, "DO_DMA H1/L1 (%d,%d): bpldat[%d] = peekChip16(%X) = %X\n", vpos, hpos, PLANE1, bplpt[PLANE1], amiga->mem.peekChip16(bplpt[PLANE1]));
-                  
+            busOwner[hpos] = BUS_BITPLANE;
             DO_DMA(bplpt[PLANE1], denise->bpldat[PLANE1]);
             
             // The bitplane 1 fetch is an important one. Once it is performed,
@@ -1111,38 +1126,30 @@ Agnus::serviceDMAEvent(EventID id)
             break;
             
         case DMA_H2:
-            if (amiga->debugDMA) debug("H2\n");
         case DMA_L2:
-            
-            if (amiga->debugDMA) debug("DO_DMA H2/L2 (%d,%d): bpldat[%d] = peekChip16(%X) = %X\n", vpos, hpos, PLANE2, bplpt[PLANE2], mem->peekChip16(bplpt[PLANE2]));
+            busOwner[hpos] = BUS_BITPLANE;
             DO_DMA(bplpt[PLANE2], denise->bpldat[PLANE2]);
             break;
             
         case DMA_H3:
-            if (amiga->debugDMA) debug("H3\n");
         case DMA_L3:
-            
-            if (amiga->debugDMA) debug("DO_DMA H3/L3: bpldat[%d] = peekChip16(%X) = %X\n", PLANE3, bplpt[PLANE3], mem->peekChip16(bplpt[PLANE3]));
+            busOwner[hpos] = BUS_BITPLANE;
             DO_DMA(bplpt[PLANE3], denise->bpldat[PLANE3]);
             break;
             
         case DMA_H4:
-            if (amiga->debugDMA) debug("H4\n");
         case DMA_L4:
-            
-            if (amiga->debugDMA) debug("DO_DMA H4/L4: bpldat[%d] = peekChip16(%X) = %X\n", PLANE4, bplpt[PLANE4], mem->peekChip16(bplpt[PLANE4]));
+            busOwner[hpos] = BUS_BITPLANE;
             DO_DMA(bplpt[PLANE4], denise->bpldat[PLANE4]);
             break;
             
         case DMA_L5:
-            
-            if (amiga->debugDMA) debug("DO_DMA L5: bpldat[%d] = peekChip16(%X) = %X\n", PLANE5, bplpt[PLANE5], mem->peekChip16(bplpt[PLANE5]));
+            busOwner[hpos] = BUS_BITPLANE;
             DO_DMA(bplpt[PLANE5], denise->bpldat[PLANE5]);
             break;
             
         case DMA_L6:
-            
-            if (amiga->debugDMA) debug("DO_DMA L6: bpldat[%d] = peekChip16(%X) = %X\n", PLANE6, bplpt[PLANE6], mem->peekChip16(bplpt[PLANE6]));
+            busOwner[hpos] = BUS_BITPLANE;
             DO_DMA(bplpt[PLANE6], denise->bpldat[PLANE6]);
             break;
             

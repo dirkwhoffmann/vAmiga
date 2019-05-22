@@ -19,6 +19,20 @@ typedef struct
 }
 Beam;
 
+typedef enum : int8_t
+{
+    BUS_NONE,
+    BUS_CPU,
+    BUS_DISK,
+    BUS_AUDIO,
+    BUS_SPRITE,
+    BUS_BITPLANE,
+    BUS_BLITTER,
+    BUS_COPPER,
+    BUS_USAGE_COUNT
+}
+BusOwner;
+
 typedef enum
 {
     SPR_DMA_IDLE,

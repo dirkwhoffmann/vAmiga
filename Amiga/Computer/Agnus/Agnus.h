@@ -42,6 +42,9 @@
 #define VPOS_MAX 312
 #define HPOS_MAX 226
 
+// Number of DMA cycles per rasterline
+#define HPOS_COUNT 227
+
 // Assembles a beam position out of two components
 #define BEAM(y,x) (((y) << 8) | (x))
 
@@ -179,10 +182,12 @@ class Agnus : public HardwareComponent
     //
     // DMA bookkeeping
     //
-    
-    // The current owner of the bus, updated in every DMA cycle.
-    // TODO: THIS VARIABLE IS NOT USED YET
-    uint16_t busOwner;
+
+    // Recorded DMA usage for all cycles in the current rasterline
+    BusOwner busOwner[HPOS_COUNT];
+
+    // Recorded DMA values for all cycles in the current rasterline
+    uint16_t busValue[HPOS_COUNT];
 
     // Indicates if bitplane DMA is enabled in the current rasterline.
     bool bitplaneDMA;

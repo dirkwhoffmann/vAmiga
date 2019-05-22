@@ -16,6 +16,9 @@ class DmaDebugger : public HardwareComponent {
 
 private:
 
+    // Indicates if DMA debugging is turned on or off
+    bool enabled = false;
+
 
     //
     // Constructing and destructing
@@ -30,11 +33,11 @@ public:
     // Methods from HardwareComponent
     //
 
+    /*
 private:
 
-    /*
     void _powerOn() override;
-
+     */
 
     //
     // Configuring the device
@@ -43,16 +46,16 @@ private:
 public:
 
     // Turns DMA debugging on or off
-    bool isEnabled();
-    void setEnabled(bool value);
+    bool isEnabled() { return enabled; }
+    void setEnabled(bool value) { enabled = value; }
 
     // Enables or disables the visual effects for a certain DMA source
-    bool isVisualized(DmaSource source);
-    void setVisualized(DmaSource source, bool value);
+    bool isVisualized(BusOwner owner);
+    void setVisualized(BusOwner owner, bool value);
 
     // Gets or sets a debug color
-    uint32_t getColor(DmaSource source);
-    void setColor(DmaSource source, uint32_t color);
+    uint32_t getColor(BusOwner owner);
+    void setColor(BusOwner owner, uint32_t color);
 
     // Gets or sets the opacity of the superimposed visual effect
     float getOpacity();
@@ -60,12 +63,11 @@ public:
 
 
     //
-    // Managing the color cache
+    // Running the debugger
     //
 
     // Superimposes the debug output onto the current rasterline
-    void overlayDmaUsage(int *buffer);
-    */
+    void overlayDmaUsage();
 };
 
 #endif
