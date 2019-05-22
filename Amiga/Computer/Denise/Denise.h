@@ -12,6 +12,7 @@
 
 #include "HardwareComponent.h"
 #include "Colorizer.h"
+#include "DmaDebugger.h"
 
 class Denise : public HardwareComponent {
 
@@ -35,7 +36,10 @@ public:
     // A color synthesizer for computing RGBA values
     Colorizer colorizer;
     
-    
+    // A graphics engine for visualizing DMA accesses
+    DmaDebugger dmaDebugger;
+
+
     //
     // Counters
     //

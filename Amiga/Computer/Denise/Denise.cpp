@@ -19,6 +19,7 @@ Denise::Denise()
     registerSubcomponents(vector<HardwareComponent *> {
         
         &colorizer,
+        &dmaDebugger
     });
     
     registerSnapshotItems(vector<SnapshotItem> {
