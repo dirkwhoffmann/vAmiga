@@ -243,7 +243,7 @@ BreakpointManager::deleteCondition(long nr)
 bool
 BreakpointManager::shouldStop()
 {
-    uint32_t addr = _cpu->getPC();
+    uint32_t addr = _amiga->cpu.getPC();
     
     // Check if a soft breakpoint has been reached.
     if (addr == softStop || softStop == UINT32_MAX) {

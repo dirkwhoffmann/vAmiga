@@ -40,6 +40,9 @@ Memory::dealloc()
 void
 Memory::_initialize()
 {
+    cpu = &_amiga->cpu;
+    ciaA = &_amiga->ciaA;
+    ciaB = &_amiga->ciaB;
     agnus = &_amiga->agnus;
     copper = &_amiga->agnus.copper;
     denise = &_amiga->denise;
@@ -318,7 +321,7 @@ Memory::updateMemSrcTable()
     assert(fastRamSize % 0x10000 == 0);
 
     bool rtc = _amiga ? config.realTimeClock : false;
-    bool ovl = _amiga ? (_ciaA->getPA() & 1) : false;
+    bool ovl = _amiga ? (ciaA->getPA() & 1) : false;
     
     // debug("updateMemSrcTable: rtc = %d ovl = %d\n", rtc, ovl);
     
@@ -396,7 +399,7 @@ uint16_t
 Memory::peek16(uint32_t addr)
 {
     if (!IS_EVEN(addr)) {
-        debug("PC: %X peek16(%X) memSrc = %d\n", _cpu->getPC(), addr, memSrc[(addr & 0xFFFFFF) >> 16]);
+        debug("PC: %X peek16(%X) memSrc = %d\n", cpu->getPC(), addr, memSrc[(addr & 0xFFFFFF) >> 16]);
         _amiga->dump();
     }
     
@@ -545,16 +548,16 @@ Memory::peekCIA8(uint32_t addr)
     switch (sel) {
             
         case 0b00:
-            return a0 ? _ciaA->peek(reg) : _ciaB->peek(reg);
+            return a0 ? ciaA->peek(reg) : ciaB->peek(reg);
             
         case 0b01:
-            return a0 ? LO_BYTE(_cpu->getIR()) : _ciaB->peek(reg);
+            return a0 ? LO_BYTE(cpu->getIR()) : ciaB->peek(reg);
             
         case 0b10:
-            return a0 ? _ciaA->peek(reg) : HI_BYTE(_cpu->getIR());
+            return a0 ? ciaA->peek(reg) : HI_BYTE(cpu->getIR());
             
         case 0b11:
-            return a0 ? LO_BYTE(_cpu->getIR()) : HI_BYTE(_cpu->getIR());
+            return a0 ? LO_BYTE(cpu->getIR()) : HI_BYTE(cpu->getIR());
     }
     assert(false);
     return 0;
@@ -572,16 +575,16 @@ Memory::peekCIA16(uint32_t addr)
     switch (sel) {
             
         case 0b00:
-            return HI_LO(_ciaB->peek(reg), _ciaA->peek(reg));
+            return HI_LO(ciaB->peek(reg), ciaA->peek(reg));
             
         case 0b01:
-            return HI_LO(_ciaB->peek(reg), 0xFF);
+            return HI_LO(ciaB->peek(reg), 0xFF);
             
         case 0b10:
-            return HI_LO(0xFF, _ciaA->peek(reg));
+            return HI_LO(0xFF, ciaA->peek(reg));
             
         case 0b11:
-            return _cpu->getIR();
+            return cpu->getIR();
             
     }
     assert(false);
@@ -610,13 +613,13 @@ Memory::spypeekCIA8(uint32_t addr)
             return a0 ? _ciaA->spypeek(reg) : _ciaB->spypeek(reg);
             
         case 0b01:
-            return a0 ? LO_BYTE(_cpu->getIR()) : _ciaB->spypeek(reg);
+            return a0 ? LO_BYTE(cpu->getIR()) : _ciaB->spypeek(reg);
             
         case 0b10:
-            return a0 ? _ciaA->spypeek(reg) : HI_BYTE(_cpu->getIR());
+            return a0 ? _ciaA->spypeek(reg) : HI_BYTE(cpu->getIR());
             
         case 0b11:
-            return a0 ? LO_BYTE(_cpu->getIR()) : HI_BYTE(_cpu->getIR());
+            return a0 ? LO_BYTE(cpu->getIR()) : HI_BYTE(cpu->getIR());
     }
     assert(false);
     return 0;
@@ -631,16 +634,16 @@ Memory::spypeekCIA16(uint32_t addr)
     switch (sel) {
             
         case 0b00:
-            return HI_LO(_ciaB->spypeek(reg), _ciaA->spypeek(reg));
+            return HI_LO(ciaB->spypeek(reg), ciaA->spypeek(reg));
             
         case 0b01:
-            return HI_LO(_ciaB->spypeek(reg), 0xFF);
+            return HI_LO(ciaB->spypeek(reg), 0xFF);
             
         case 0b10:
-            return HI_LO(0xFF, _ciaA->spypeek(reg));
+            return HI_LO(0xFF, ciaA->spypeek(reg));
             
         case 0b11:
-            return _cpu->getIR();
+            return cpu->getIR();
             
     }
     assert(false);
@@ -662,8 +665,8 @@ Memory::pokeCIA8(uint32_t addr, uint8_t value)
     uint32_t selA = (addr & 0x1000) == 0;
     uint32_t selB = (addr & 0x2000) == 0;
 
-    if (selA) _ciaA->poke(reg, value);
-    if (selB) _ciaB->poke(reg, value);
+    if (selA) ciaA->poke(reg, value);
+    if (selB) ciaB->poke(reg, value);
 }
 
 void
@@ -678,8 +681,8 @@ Memory::pokeCIA16(uint32_t addr, uint16_t value)
     uint32_t selA = (addr & 0x1000) == 0;
     uint32_t selB = (addr & 0x2000) == 0;
     
-    if (selA) _ciaA->poke(reg, LO_BYTE(value));
-    if (selB) _ciaB->poke(reg, HI_BYTE(value));
+    if (selA) ciaA->poke(reg, LO_BYTE(value));
+    if (selB) ciaB->poke(reg, HI_BYTE(value));
 }
 
 void

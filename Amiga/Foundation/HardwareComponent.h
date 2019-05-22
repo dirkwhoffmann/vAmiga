@@ -79,7 +79,6 @@ public:
     Amiga        *_amiga   = NULL;
     EventHandler *_handler = NULL;
     Memory       *_mem     = NULL;
-    CPU          *_cpu     = NULL;
     CIAA         *_ciaA    = NULL;
     CIAB         *_ciaB    = NULL;
     Paula        *_paula   = NULL;

@@ -769,7 +769,7 @@ EventHandler::serveINSEvent()
         
         case INS_NONE:   break;
         case INS_AMIGA:  _amiga->inspect(); break;
-        case INS_CPU:    _cpu->inspect(); break;
+        case INS_CPU:    _amiga->cpu.inspect(); break;
         case INS_MEM:    _mem->inspect(); break;
         case INS_CIA:    _ciaA->inspect(); _ciaB->inspect(); break;
         case INS_AGNUS:  agnus->inspect(); break;

@@ -96,6 +96,9 @@ class Memory : public HardwareComponent {
     friend class Copper;
 
     // Quick-access references
+    class CPU *cpu;
+    class CIAA *ciaA;
+    class CIAB *ciaB;
     class Agnus *agnus;
     class Copper *copper;
     class Denise *denise;

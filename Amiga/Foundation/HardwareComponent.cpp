@@ -26,7 +26,7 @@ HardwareComponent::prefix()
     fprintf(stderr, "[%lld] (%3d,%3d) ",
             _amiga->agnus.frame, _amiga->agnus.vpos, _amiga->agnus.hpos);
 
-    fprintf(stderr, " %06X: ", _cpu->getPC());
+    fprintf(stderr, " %06X: ", _amiga->cpu.getPC());
 
     uint16_t dmacon = _amiga->agnus.dmacon;
     bool dmaen = dmacon & DMAEN;
@@ -51,7 +51,6 @@ HardwareComponent::initialize(Amiga *amiga)
     this->_amiga   = amiga;
     this->_handler = &amiga->agnus.eventHandler;
     this->_mem     = &amiga->mem;
-    this->_cpu     = &amiga->cpu;
     this->_ciaA    = &amiga->ciaA;
     this->_ciaB    = &amiga->ciaB;
     this->_paula   = &amiga->paula;
