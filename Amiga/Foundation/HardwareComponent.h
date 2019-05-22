@@ -78,8 +78,6 @@ public:
      */
     Amiga        *_amiga   = NULL;
     Memory       *_mem     = NULL;
-    CIAA         *_ciaA    = NULL;
-    CIAB         *_ciaB    = NULL;
     ZorroManager *_zorro   = NULL;
     
 protected:

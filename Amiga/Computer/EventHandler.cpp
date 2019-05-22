@@ -26,9 +26,11 @@ EventHandler::EventHandler()
 void
 EventHandler::_initialize()
 {
-    agnus = &_amiga->agnus;
+    ciaA   = &_amiga->ciaA;
+    ciaB   = &_amiga->ciaB;
+    agnus  = &_amiga->agnus;
     denise = &_amiga->denise;
-    paula = &_amiga->paula; 
+    paula  = &_amiga->paula;
 }
 
 void
@@ -78,8 +80,8 @@ EventHandler::_inspect()
     
     info.masterClock = _amiga->masterClock;
     info.dmaClock = agnus->clock;
-    info.ciaAClock = _ciaA->clock;
-    info.ciaBClock  = _ciaB->clock;
+    info.ciaAClock = ciaA->clock;
+    info.ciaBClock  = ciaB->clock;
     info.frame = agnus->frame;
     info.vpos = agnus->vpos;
     info.hpos = agnus->hpos;
@@ -439,11 +441,11 @@ EventHandler::_executeUntil(Cycle cycle) {
         switch(primSlot[CIAA_SLOT].id) {
             
             case CIA_EXECUTE:
-            _ciaA->executeOneCycle();
+            ciaA->executeOneCycle();
             break;
             
             case CIA_WAKEUP:
-            _ciaA->wakeUp();
+            ciaA->wakeUp();
             break;
             
             default:
@@ -459,11 +461,11 @@ EventHandler::_executeUntil(Cycle cycle) {
         switch(primSlot[CIAB_SLOT].id) {
             
             case CIA_EXECUTE:
-            _ciaB->executeOneCycle();
+            ciaB->executeOneCycle();
             break;
             
             case CIA_WAKEUP:
-            _ciaB->wakeUp();
+            ciaB->wakeUp();
             break;
             
             default:
@@ -772,7 +774,7 @@ EventHandler::serveINSEvent()
         case INS_AMIGA:  _amiga->inspect(); break;
         case INS_CPU:    _amiga->cpu.inspect(); break;
         case INS_MEM:    _mem->inspect(); break;
-        case INS_CIA:    _ciaA->inspect(); _ciaB->inspect(); break;
+        case INS_CIA:    ciaA->inspect(); ciaB->inspect(); break;
         case INS_AGNUS:  agnus->inspect(); break;
         case INS_PAULA:  paula->inspect(); break;
         case INS_DENISE: denise->inspect(); break;

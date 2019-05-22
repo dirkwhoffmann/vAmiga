@@ -63,6 +63,8 @@ struct Event
 class EventHandler : public HardwareComponent
 {
     // Quick-access references
+    class CIAA *ciaA;
+    class CIAB *ciaB;
     class Agnus *agnus;
     class Denise *denise;
     class Paula *paula; 

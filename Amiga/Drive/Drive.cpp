@@ -247,7 +247,7 @@ Drive::rotate()
          * the flag pin of CIA A. This causes the CIA to trigger the INDEX
          * interrupt if the corresponding enable bit is set.
          */
-        if (isSelected()) _ciaA->emulateFallingEdgeOnFlagPin();
+        if (isSelected()) _amiga->ciaA.emulateFallingEdgeOnFlagPin();
     }
     assert(head.offset < disk->trackLen);
 }

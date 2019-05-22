@@ -1299,7 +1299,7 @@ Agnus::hsyncHandler()
     paula->audioUnit.executeUntil(clock);
     
     // CIA B counts HSYNCs
-    _ciaB->incrementTOD();
+    _amiga->ciaB.incrementTOD();
     
     // Check the keyboard once in a while
     if ((vpos & 0b1111) == 0) _amiga->keyboard.execute();
@@ -1388,7 +1388,7 @@ Agnus::vsyncHandler()
     vpos = 0;
 
     // CIA A counts VSYNCs
-    _ciaA->incrementTOD();
+    _amiga->ciaA.incrementTOD();
     
     // Trigger VSYNC interrupt
     paula->pokeINTREQ(0x8020);

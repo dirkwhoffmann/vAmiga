@@ -50,8 +50,6 @@ HardwareComponent::initialize(Amiga *amiga)
 
     this->_amiga   = amiga;
     this->_mem     = &amiga->mem;
-    this->_ciaA    = &amiga->ciaA;
-    this->_ciaB    = &amiga->ciaB;
     this->_zorro   = &amiga->zorro;
 
     // Initialize all subcomponents

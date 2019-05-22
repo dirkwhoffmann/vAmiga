@@ -611,13 +611,13 @@ Memory::spypeekCIA8(uint32_t addr)
     switch (sel) {
             
         case 0b00:
-            return a0 ? _ciaA->spypeek(reg) : _ciaB->spypeek(reg);
+            return a0 ? ciaA->spypeek(reg) : ciaB->spypeek(reg);
             
         case 0b01:
-            return a0 ? LO_BYTE(cpu->getIR()) : _ciaB->spypeek(reg);
+            return a0 ? LO_BYTE(cpu->getIR()) : ciaB->spypeek(reg);
             
         case 0b10:
-            return a0 ? _ciaA->spypeek(reg) : HI_BYTE(cpu->getIR());
+            return a0 ? ciaA->spypeek(reg) : HI_BYTE(cpu->getIR());
             
         case 0b11:
             return a0 ? LO_BYTE(cpu->getIR()) : HI_BYTE(cpu->getIR());
