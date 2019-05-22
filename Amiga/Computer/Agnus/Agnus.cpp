@@ -375,6 +375,8 @@ Agnus::switchSpriteDmaOff()
 void
 Agnus::switchBitplaneDmaOn()
 {
+    displayDMA = true;
+
     if (_denise->hires()) {
         
         // Determine start and stop cycle
@@ -437,6 +439,8 @@ Agnus::switchBitplaneDmaOn()
 void
 Agnus::switchBitplaneDmaOff()
 {
+    displayDMA = false;
+
     // Clear the event table
     memset(dmaEvent + 0x18, 0, sizeof(dmaEvent) - 0x18);
     
@@ -468,30 +472,15 @@ Agnus::updateBitplaneDma()
 
     // This function update the DMA table only if the DMA state has changed.
     if (displayDMA ^ newDisplayDma) {
-
-        if (newDisplayDma) {
-            switchBitplaneDmaOn();
-        } else {
-            switchBitplaneDmaOff();
-        }
-
-        displayDMA = newDisplayDma;
+        newDisplayDma ? switchBitplaneDmaOn() : switchBitplaneDmaOff();
     }
 }
 
 void
 Agnus::forceUpdateBitplaneDma()
 {
-    bool newDisplayDma = isBitplaneDmaLine();
-
     // This function always updates the DMA tables.
-    if (newDisplayDma) {
-        switchBitplaneDmaOn();
-    } else {
-        switchBitplaneDmaOff();
-    }
-
-    displayDMA = newDisplayDma;
+    isBitplaneDmaLine() ? switchBitplaneDmaOn() : switchBitplaneDmaOff();
 }
 
 void

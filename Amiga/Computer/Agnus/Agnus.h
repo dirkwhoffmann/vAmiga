@@ -181,9 +181,7 @@ class Agnus : public HardwareComponent
     // TODO: THIS VARIABLE IS NOT USED YET
     uint16_t busOwner;
 
-    /* Indicates if displayDMA is currently enabled.
-     * This variable is updated id updateDisplayDMA().
-     */
+    // Indicates if bitplane DMA is enabled in the current rasterline.
     bool displayDMA;
     
     //
