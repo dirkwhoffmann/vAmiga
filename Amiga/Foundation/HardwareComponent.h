@@ -72,13 +72,9 @@ protected:
     
 public:
     
-    /* Quick-references to the the Amiga's most important hardware components.
-     * The references are setup in the constructor in the Amiga class and will
-     * never change. They provide a quick-access to every other component.
-     */
-    Amiga        *_amiga   = NULL;
-    ZorroManager *_zorro   = NULL;
-    
+    // Reference to the Amiga top-level object
+    Amiga *_amiga = NULL;
+
 protected:
     
     /* Access lock for shared variables

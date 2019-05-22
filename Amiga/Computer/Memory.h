@@ -103,6 +103,7 @@ class Memory : public HardwareComponent {
     class Copper *copper;
     class Denise *denise;
     class Paula *paula;
+    class ZorroManager *zorro; 
     
     public:
     

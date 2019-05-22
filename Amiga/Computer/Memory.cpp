@@ -47,6 +47,7 @@ Memory::_initialize()
     copper = &_amiga->agnus.copper;
     denise = &_amiga->denise;
     paula = &_amiga->paula;
+    zorro = &_amiga->zorro;
 }
 
 void
@@ -1270,7 +1271,7 @@ Memory::pokeCustom32(uint32_t addr, uint32_t value)
 uint8_t
 Memory::peekAutoConf8(uint32_t addr)
 {
-    uint8_t result = _zorro->peekFastRamDevice(addr) << 4;
+    uint8_t result = zorro->peekFastRamDevice(addr) << 4;
     
     // debug("peekAutoConf8(%X) = %X\n", addr, result);
     return result;
@@ -1289,15 +1290,15 @@ void
 Memory::pokeAutoConf8(uint32_t addr, uint8_t value)
 {
     // debug("pokeAutoConf8(%X, %X)\n", addr, value);
-    _zorro->pokeFastRamDevice(addr, value);
+    zorro->pokeFastRamDevice(addr, value);
 }
 
 void
 Memory::pokeAutoConf16(uint32_t addr, uint16_t value)
 {
     // debug("pokeAutoConf16(%X, %X)\n", addr, value);
-    _zorro->pokeFastRamDevice(addr, HI_BYTE(value));
-    _zorro->pokeFastRamDevice(addr + 1, LO_BYTE(value));
+    zorro->pokeFastRamDevice(addr, HI_BYTE(value));
+    zorro->pokeFastRamDevice(addr + 1, LO_BYTE(value));
 }
 
 const char *
