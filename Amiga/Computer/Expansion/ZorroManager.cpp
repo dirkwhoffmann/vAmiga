@@ -26,7 +26,7 @@ ZorroManager::ZorroManager()
 void
 ZorroManager::_initialize()
 {
-    mem = &_amiga->mem;
+    mem = &amiga->mem;
 }
 
 void

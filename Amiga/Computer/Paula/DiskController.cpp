@@ -37,15 +37,15 @@ DiskController::DiskController()
 void
 DiskController::_initialize()
 {
-    mem = &_amiga->mem;
-    agnus = &_amiga->agnus;
-    handler = &_amiga->agnus.eventHandler;
-    paula  = &_amiga->paula;
+    mem = &amiga->mem;
+    agnus = &amiga->agnus;
+    handler = &amiga->agnus.eventHandler;
+    paula  = &amiga->paula;
     
-    df[0] = &_amiga->df0;
-    df[1] = &_amiga->df1;
-    df[2] = &_amiga->df2;
-    df[3] = &_amiga->df3;
+    df[0] = &amiga->df0;
+    df[1] = &amiga->df1;
+    df[2] = &amiga->df2;
+    df[3] = &amiga->df3;
 }
 
 void
@@ -71,7 +71,7 @@ void
 DiskController::_ping()
 {
     for (int df = 0; df < 4; df++) {
-        _amiga->putMessage(connected[df] ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, df);
+        amiga->putMessage(connected[df] ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, df);
     }
 }
 
@@ -147,8 +147,8 @@ DiskController::setConnected(int df, bool value)
     
     // Plug the drive in our out and inform the GUI
     connected[df] = value;
-    _amiga->putMessage(value ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, df);
-    _amiga->putMessage(MSG_CONFIG);
+    amiga->putMessage(value ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, df);
+    amiga->putMessage(MSG_CONFIG);
 }
 
 Drive *

@@ -154,8 +154,8 @@ Paula::peekPOTGOR()
 {
     uint16_t result = 0xFFFF;
     
-    result &= _amiga->controlPort1.potgor();
-    result &= _amiga->controlPort2.potgor();
+    result &= amiga->controlPort1.potgor();
+    result &= amiga->controlPort2.potgor();
     
     return result;
 }

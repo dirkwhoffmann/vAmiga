@@ -66,7 +66,7 @@ Denise::~Denise()
 void
 Denise::_initialize()
 {
-    agnus = &_amiga->agnus;
+    agnus = &amiga->agnus;
 }
 
 void
@@ -211,13 +211,13 @@ Denise::didLoadFromBuffer(uint8_t **buffer)
 uint16_t
 Denise::peekJOY0DATR()
 {
-    return _amiga->controlPort1.joydat();
+    return amiga->controlPort1.joydat();
 }
 
 uint16_t
 Denise::peekJOY1DATR()
 {
-    return _amiga->controlPort2.joydat();
+    return amiga->controlPort2.joydat();
 }
 
 void
@@ -769,12 +769,12 @@ Denise::debugSetBPU(int count)
     if (count < 0) count = 0;
     if (count > 6) count = 6;
 
-    _amiga->suspend();
+    amiga->suspend();
     
     uint16_t value = bplcon0 & 0b1000111111111111;
     pokeBPLCON0(value | (count << 12));
     
-    _amiga->resume();
+    amiga->resume();
 }
 
 void
@@ -782,7 +782,7 @@ Denise::debugSetBPLCONx(unsigned x, uint16_t value)
 {
     assert(x <= 2);
 
-    _amiga->suspend();
+    amiga->suspend();
 
     switch (x) {
         case 0:
@@ -796,7 +796,7 @@ Denise::debugSetBPLCONx(unsigned x, uint16_t value)
             break;
     }
 
-    _amiga->resume();
+    amiga->resume();
 }
 
 void
@@ -807,7 +807,7 @@ Denise::debugSetBPLCONxBit(unsigned x, unsigned bit, bool value)
 
     uint16_t mask = 1 << bit;
 
-    _amiga->suspend();
+    amiga->suspend();
 
     switch (x) {
         case 0:
@@ -821,7 +821,7 @@ Denise::debugSetBPLCONxBit(unsigned x, unsigned bit, bool value)
             break;
     }
     
-    _amiga->resume();
+    amiga->resume();
 }
 
 void
@@ -833,7 +833,7 @@ Denise::debugSetBPLCONxNibble(unsigned x, unsigned nibble, uint8_t value)
     uint16_t mask = 0b1111 << (4 * nibble);
     uint16_t bits = (value & 0b1111) << (4 * nibble);
 
-    _amiga->suspend();
+    amiga->suspend();
 
     switch (x) {
         case 0:
@@ -847,5 +847,5 @@ Denise::debugSetBPLCONxNibble(unsigned x, unsigned nibble, uint8_t value)
             break;
     }
 
-    _amiga->resume();
+    amiga->resume();
 }

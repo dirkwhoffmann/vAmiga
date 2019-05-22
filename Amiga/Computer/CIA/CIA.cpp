@@ -65,9 +65,9 @@ CIA::~CIA()
 void
 CIA::_initialize()
 {
-    agnus = &_amiga->agnus;
-    handler = &_amiga->agnus.eventHandler;
-    paula = &_amiga->paula; 
+    agnus = &amiga->agnus;
+    handler = &amiga->agnus.eventHandler;
+    paula = &amiga->paula; 
 }
 
 void
@@ -88,7 +88,7 @@ CIA::_powerOn()
     CRB = 0x4; // seen in SAE
     
     // The OVL bit influences the memory layout. Hence, we need to update it.
-    _amiga->mem.updateMemSrcTable();
+    amiga->mem.updateMemSrcTable();
 }
 
 void
@@ -597,7 +597,7 @@ CIA::poke(uint16_t addr, uint8_t value)
             // -0------ : Serial shift register in input mode (read)
             // -1------ : Serial shift register in output mode (write)
             if (nr == 0 && !(CRA & 0x40) && (value & 0x40)) { // CIA A only
-                _amiga->keyboard.emulateHandshake();
+                amiga->keyboard.emulateHandshake();
             }
             
             if ((value ^ CRA) & 0x40)
@@ -749,7 +749,7 @@ CIA::_dump()
 {
     _inspect();
     
-    msg("            Master Clock : %lld\n", _amiga->masterClock);
+    msg("            Master Clock : %lld\n", amiga->masterClock);
     msg("                   Clock : %lld\n", clock);
     msg("                Sleeping : %s\n", sleeping ? "yes" : "no");
     msg(" Most recent sleep cycle : %lld\n", sleepCycle);
@@ -1212,14 +1212,14 @@ CIA::wakeUp(Cycle targetCycle)
 bool
 CIA::isUpToDate()
 {
-    assert(clock <= _amiga->masterClock);
-    return (_amiga->masterClock - clock < CIA_CYCLES(1));
+    assert(clock <= amiga->masterClock);
+    return (amiga->masterClock - clock < CIA_CYCLES(1));
 }
 
 Cycle
 CIA::idle()
 {
-    return isAwake() ? 0 : _amiga->masterClock - sleepCycle;
+    return isAwake() ? 0 : amiga->masterClock - sleepCycle;
 }
 
 
@@ -1242,7 +1242,7 @@ CIAA::_dump()
 void
 CIAA::_powerOff()
 {
-    _amiga->putMessage(MSG_POWER_LED_OFF);
+    amiga->putMessage(MSG_POWER_LED_OFF);
 }
 
 void
@@ -1301,8 +1301,8 @@ CIAA::portAexternal()
     result = paula->diskController.driveStatusFlags();
     
     // Set control port bits
-    result &= _amiga->controlPort1.ciapa();
-    result &= _amiga->controlPort2.ciapa();
+    result &= amiga->controlPort1.ciapa();
+    result &= amiga->controlPort2.ciapa();
 
     return result;
 }
@@ -1319,13 +1319,13 @@ CIAA::updatePA()
     // Power LED bit
     if ((oldPA ^ PA) & 0b00000010) {
         // debug("/LED has changed\n");
-        _amiga->putMessage((PA & 0b00000010) ? MSG_POWER_LED_OFF : MSG_POWER_LED_ON);
+        amiga->putMessage((PA & 0b00000010) ? MSG_POWER_LED_OFF : MSG_POWER_LED_ON);
     }
 
     // Overlay bit (OVL)
     if ((oldPA ^ PA) & 0b00000001) {
         // debug("OVL has changed\n");
-        _amiga->mem.updateMemSrcTable();
+        amiga->mem.updateMemSrcTable();
     }
     
     /*

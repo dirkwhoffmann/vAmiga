@@ -61,11 +61,11 @@ Drive::_reset()
 void
 Drive::_ping()
 {
-    _amiga->putMessage(hasDisk() ?
+    amiga->putMessage(hasDisk() ?
                        MSG_DRIVE_DISK_INSERT : MSG_DRIVE_DISK_EJECT, nr);
-    _amiga->putMessage(hasWriteProtectedDisk() ?
+    amiga->putMessage(hasWriteProtectedDisk() ?
                        MSG_DRIVE_DISK_PROTECTED : MSG_DRIVE_DISK_UNPROTECTED, nr);
-    _amiga->putMessage(hasModifiedDisk() ?
+    amiga->putMessage(hasModifiedDisk() ?
                        MSG_DRIVE_DISK_UNSAVED : MSG_DRIVE_DISK_SAVED, nr);
 }
 
@@ -168,8 +168,8 @@ Drive::setMotor(bool value)
         
         // printf("Motor on\n");
         
-        _amiga->putMessage(MSG_DRIVE_LED_ON, nr);
-        _amiga->putMessage(MSG_DRIVE_MOTOR_ON, nr);
+        amiga->putMessage(MSG_DRIVE_LED_ON, nr);
+        amiga->putMessage(MSG_DRIVE_MOTOR_ON, nr);
     }
     
     else if (motor && !value) {
@@ -179,8 +179,8 @@ Drive::setMotor(bool value)
         // Reset identification shift register counter
         idCount = 0;
         
-        _amiga->putMessage(MSG_DRIVE_LED_OFF, nr);
-        _amiga->putMessage(MSG_DRIVE_MOTOR_OFF, nr);
+        amiga->putMessage(MSG_DRIVE_LED_OFF, nr);
+        amiga->putMessage(MSG_DRIVE_MOTOR_OFF, nr);
     }
     
     motor = value;
@@ -247,7 +247,7 @@ Drive::rotate()
          * the flag pin of CIA A. This causes the CIA to trigger the INDEX
          * interrupt if the corresponding enable bit is set.
          */
-        if (isSelected()) _amiga->ciaA.emulateFallingEdgeOnFlagPin();
+        if (isSelected()) amiga->ciaA.emulateFallingEdgeOnFlagPin();
     }
     assert(head.offset < disk->trackLen);
 }
@@ -293,9 +293,9 @@ Drive::moveHead(int dir)
      */
     cylinderHistory = ((cylinderHistory << 8) | head.cylinder) & 0xFFFFFFFF;
     if (cylinderHistory == 0x00010001 || cylinderHistory == 0x01000100) {
-        _amiga->putMessage(MSG_DRIVE_HEAD_POLL);
+        amiga->putMessage(MSG_DRIVE_HEAD_POLL);
     } else {
-        _amiga->putMessage(MSG_DRIVE_HEAD);
+        amiga->putMessage(MSG_DRIVE_HEAD);
     }
 }
 
@@ -319,12 +319,12 @@ Drive::setWriteProtection(bool value)
         if (value && !disk->isWriteProtected()) {
             
             disk->setWriteProtection(true);
-            _amiga->putMessage(MSG_DRIVE_DISK_PROTECTED);
+            amiga->putMessage(MSG_DRIVE_DISK_PROTECTED);
         }
         if (!value && disk->isWriteProtected()) {
             
             disk->setWriteProtection(false);
-            _amiga->putMessage(MSG_DRIVE_DISK_UNPROTECTED);
+            amiga->putMessage(MSG_DRIVE_DISK_UNPROTECTED);
         }
     }
 }
@@ -349,7 +349,7 @@ Drive::ejectDisk()
         disk = NULL;
         
         // Notify the GUI
-        _amiga->putMessage(MSG_DRIVE_DISK_EJECT, nr);
+        amiga->putMessage(MSG_DRIVE_DISK_EJECT, nr);
     }
 }
 
@@ -360,7 +360,7 @@ Drive::insertDisk(Disk *disk)
         
         ejectDisk();
         this->disk = disk;
-        _amiga->putMessage(MSG_DRIVE_DISK_INSERT, nr);
+        amiga->putMessage(MSG_DRIVE_DISK_INSERT, nr);
     }
 }
 

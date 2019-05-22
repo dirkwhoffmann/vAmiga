@@ -504,7 +504,7 @@ Amiga::_run()
     pthread_create(&p, NULL, threadMain, (void *)this);
     
     // Inform the GUI.
-    _amiga->putMessage(MSG_RUN);
+    amiga->putMessage(MSG_RUN);
 }
 
 void
@@ -522,7 +522,7 @@ Amiga::_pause()
     inspect();
 
     // Inform the GUI
-    _amiga->putMessage(MSG_PAUSE);
+    amiga->putMessage(MSG_PAUSE);
 }
 
 void
@@ -530,7 +530,7 @@ Amiga::_reset()
 {
     msg("Reset\n");
     
-    _amiga->putMessage(MSG_RESET);
+    amiga->putMessage(MSG_RESET);
     ping();
 }
 
@@ -772,10 +772,10 @@ Amiga::snapshotIsDue()
 {
     unsigned fps = 50; // PAL frames per second
     
-    if (!getTakeAutoSnapshots() || _amiga->getSnapshotInterval() <= 0)
+    if (!getTakeAutoSnapshots() || amiga->getSnapshotInterval() <= 0)
     return false;
     
-    return agnus.frame % (fps * _amiga->getSnapshotInterval()) == 0;
+    return agnus.frame % (fps * amiga->getSnapshotInterval()) == 0;
 }
 
 void
@@ -901,7 +901,7 @@ Amiga::runLoop()
     debug("runLoop()\n");
 
     // Prepare to run
-    _amiga->restartTimer();
+    amiga->restartTimer();
     
     // Enable or disable debugging features
     debugMode ? setControlFlags(RL_DEBUG) : clearControlFlags(RL_DEBUG);

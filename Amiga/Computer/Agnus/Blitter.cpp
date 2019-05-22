@@ -81,9 +81,9 @@ Blitter::Blitter()
 void
 Blitter::_initialize()
 {
-    mem = &_amiga->mem;
-    agnus = &_amiga->agnus;
-    handler = &_amiga->agnus.eventHandler;
+    mem = &amiga->mem;
+    agnus = &amiga->agnus;
+    handler = &amiga->agnus.eventHandler;
 }
 
 void

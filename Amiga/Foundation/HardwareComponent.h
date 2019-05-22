@@ -73,7 +73,7 @@ protected:
 public:
     
     // Reference to the Amiga top-level object
-    Amiga *_amiga = NULL;
+    Amiga *amiga = NULL;
 
 protected:
     

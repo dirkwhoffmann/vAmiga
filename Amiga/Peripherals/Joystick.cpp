@@ -20,7 +20,7 @@ Joystick::Joystick(int nr)
 void
 Joystick::_initialize()
 {
-    agnus = &_amiga->agnus; 
+    agnus = &amiga->agnus; 
 }
 
 void

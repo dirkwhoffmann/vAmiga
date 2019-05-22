@@ -179,9 +179,9 @@ struct ADFFileWrapper { ADFFile *adf; };
     wrapper->cia->dump();
 }
 - (void) poke:(uint16_t)addr value:(uint8_t)value {
-    wrapper->cia->_amiga->suspend();
+    wrapper->cia->amiga->suspend();
     wrapper->cia->poke(addr, value);
-    wrapper->cia->_amiga->resume();
+    wrapper->cia->amiga->resume();
 }
 
 @end

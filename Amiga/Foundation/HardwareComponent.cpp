@@ -24,11 +24,11 @@ void
 HardwareComponent::prefix()
 {
     fprintf(stderr, "[%lld] (%3d,%3d) ",
-            _amiga->agnus.frame, _amiga->agnus.vpos, _amiga->agnus.hpos);
+            amiga->agnus.frame, amiga->agnus.vpos, amiga->agnus.hpos);
 
-    fprintf(stderr, " %06X: ", _amiga->cpu.getPC());
+    fprintf(stderr, " %06X: ", amiga->cpu.getPC());
 
-    uint16_t dmacon = _amiga->agnus.dmacon;
+    uint16_t dmacon = amiga->agnus.dmacon;
     bool dmaen = dmacon & DMAEN;
     fprintf(stderr, "%c%c%c%c ",
             (dmacon & BPLEN) ? (dmaen ? 'P' : 'p') : '-',
@@ -36,7 +36,7 @@ HardwareComponent::prefix()
             (dmacon & BLTEN) ? (dmaen ? 'B' : 'b') : '-',
             (dmacon & DSKEN) ? (dmaen ? 'D' : 'd') : '-');
 
-    fprintf(stderr, "%04X %04X: ", _amiga->paula.intena, _amiga->paula.intreq);
+    fprintf(stderr, "%04X %04X: ", amiga->paula.intena, amiga->paula.intreq);
 
     if (getDescription())
         fprintf(stderr, "%s: ", getDescription());
@@ -45,10 +45,10 @@ HardwareComponent::prefix()
 void
 HardwareComponent::initialize(Amiga *amiga)
 {
-    assert(this->_amiga == NULL);
+    assert(this->amiga == NULL);
     assert(amiga != NULL);
 
-    this->_amiga = amiga;
+    this->amiga = amiga;
 
     // Initialize all subcomponents
     for (HardwareComponent *c : subComponents) {

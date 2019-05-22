@@ -26,12 +26,12 @@ EventHandler::EventHandler()
 void
 EventHandler::_initialize()
 {
-    ciaA   = &_amiga->ciaA;
-    ciaB   = &_amiga->ciaB;
-    mem    = &_amiga->mem;
-    agnus  = &_amiga->agnus;
-    denise = &_amiga->denise;
-    paula  = &_amiga->paula;
+    ciaA   = &amiga->ciaA;
+    ciaB   = &amiga->ciaB;
+    mem    = &amiga->mem;
+    agnus  = &amiga->agnus;
+    denise = &amiga->denise;
+    paula  = &amiga->paula;
 }
 
 void
@@ -79,7 +79,7 @@ EventHandler::_inspect()
     // Prevent external access to variable 'info'
     pthread_mutex_lock(&lock);
     
-    info.masterClock = _amiga->masterClock;
+    info.masterClock = amiga->masterClock;
     info.dmaClock = agnus->clock;
     info.ciaAClock = ciaA->clock;
     info.ciaBClock  = ciaB->clock;
@@ -356,7 +356,7 @@ EventHandler::_dump()
 {
     _inspect();
     
-    _amiga->dumpClock();
+    amiga->dumpClock();
     
     plainmsg("Primary events:\n");
     for (unsigned i = 0; i <PRIM_SLOT_COUNT; i++) {
@@ -772,8 +772,8 @@ EventHandler::serveINSEvent()
     switch (secSlot[INSPECTOR_SLOT].id) {
         
         case INS_NONE:   break;
-        case INS_AMIGA:  _amiga->inspect(); break;
-        case INS_CPU:    _amiga->cpu.inspect(); break;
+        case INS_AMIGA:  amiga->inspect(); break;
+        case INS_CPU:    amiga->cpu.inspect(); break;
         case INS_MEM:    mem->inspect(); break;
         case INS_CIA:    ciaA->inspect(); ciaB->inspect(); break;
         case INS_AGNUS:  agnus->inspect(); break;

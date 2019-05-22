@@ -23,7 +23,7 @@ ControlPort::potgor()
     switch (device) {
             
         case CPD_MOUSE:
-            return _amiga->mouse.rightButton ? 0xFBFF : 0xFFFF;
+            return amiga->mouse.rightButton ? 0xFBFF : 0xFFFF;
             
         default:
             return 0xFFFF;
@@ -42,10 +42,10 @@ ControlPort::joydat()
             return 0;
 
         case CPD_MOUSE:
-            return _amiga->mouse.getXY();
+            return amiga->mouse.getXY();
 
         case CPD_JOYSTICK:
-            return nr == 1 ? _amiga->joystick1.joydat() : _amiga->joystick2.joydat();
+            return nr == 1 ? amiga->joystick1.joydat() : amiga->joystick2.joydat();
     }
 }
 
@@ -60,7 +60,7 @@ ControlPort::ciapa()
 
         case CPD_MOUSE:
 
-            if (_amiga->mouse.leftButton) {
+            if (amiga->mouse.leftButton) {
                 return (nr == 1) ? 0xBF : 0x7F;
             } else {
                 return 0xFF;
@@ -68,7 +68,7 @@ ControlPort::ciapa()
 
         case CPD_JOYSTICK:
 
-            return nr == 1 ? _amiga->joystick1.ciapa() : _amiga->joystick2.ciapa();
+            return nr == 1 ? amiga->joystick1.ciapa() : amiga->joystick2.ciapa();
     }
 }
 

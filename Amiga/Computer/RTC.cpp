@@ -51,7 +51,7 @@ RTC::getTime()
 {
     Cycle result;
     
-    long elapsedSec = (_amiga->masterClock - lastCall) / 28000000;
+    long elapsedSec = (amiga->masterClock - lastCall) / 28000000;
     debug(2, "elapsedSec = %d\n", elapsedSec);
     
     /* Under normal circumstances, we compute the current time of the real-time
@@ -67,7 +67,7 @@ RTC::getTime()
      */
     else result = lastValue + elapsedSec;
     
-    lastCall = _amiga->masterClock;
+    lastCall = amiga->masterClock;
     lastValue = result;
     
     return result;

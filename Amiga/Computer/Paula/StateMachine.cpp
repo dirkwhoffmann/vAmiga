@@ -48,8 +48,8 @@ StateMachine::setNr(uint8_t nr)
 void
 StateMachine::_initialize() {
 
-    agnus = &_amiga->agnus;
-    paula = &_amiga->paula;
+    agnus = &amiga->agnus;
+    paula = &amiga->paula;
 }
 
 int16_t
@@ -105,7 +105,7 @@ StateMachine::execute(DMACycle cycles)
                 auddat = LO_BYTE(auddatLatch);
 
                 // Read the next two samples from memory
-                auddatLatch = _amiga->mem.peekChip16(agnus->audlc[nr]);
+                auddatLatch = amiga->mem.peekChip16(agnus->audlc[nr]);
                 INC_DMAPTR(agnus->audlc[nr]);
 
                 // Decrease the length counter
@@ -131,7 +131,7 @@ StateMachine::execute(DMACycle cycles)
             audper = 0;
 
             // Read the next two samples from memory
-            auddatLatch = _amiga->mem.peekChip16(agnus->audlc[nr]);
+            auddatLatch = amiga->mem.peekChip16(agnus->audlc[nr]);
             INC_DMAPTR(agnus->audlc[nr]);
 
             if (audlen > 1) {

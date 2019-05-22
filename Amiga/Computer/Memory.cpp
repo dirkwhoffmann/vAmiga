@@ -40,21 +40,21 @@ Memory::dealloc()
 void
 Memory::_initialize()
 {
-    cpu = &_amiga->cpu;
-    ciaA = &_amiga->ciaA;
-    ciaB = &_amiga->ciaB;
-    agnus = &_amiga->agnus;
-    copper = &_amiga->agnus.copper;
-    denise = &_amiga->denise;
-    paula = &_amiga->paula;
-    zorro = &_amiga->zorro;
+    cpu = &amiga->cpu;
+    ciaA = &amiga->ciaA;
+    ciaB = &amiga->ciaB;
+    agnus = &amiga->agnus;
+    copper = &amiga->agnus.copper;
+    denise = &amiga->denise;
+    paula = &amiga->paula;
+    zorro = &amiga->zorro;
 }
 
 void
 Memory::_powerOn()
 {
     // Make Rom writable if an A1000 is emulated
-    kickIsWritable = _amiga->getConfig().model == AMIGA_1000;
+    kickIsWritable = amiga->getConfig().model == AMIGA_1000;
     
     // Wipe out RAM
     if (chipRam) memset(chipRam, 0, chipRamSize);
@@ -314,7 +314,7 @@ Memory::loadKickRomFromFile(const char *path)
 void
 Memory::updateMemSrcTable()
 {
-    AmigaConfiguration config = _amiga->getConfig();
+    AmigaConfiguration config = amiga->getConfig();
     MemorySource mem_boot = bootRom ? MEM_BOOT : MEM_UNMAPPED;
     MemorySource mem_kick = kickRom ? MEM_KICK : MEM_UNMAPPED;
     
@@ -322,8 +322,8 @@ Memory::updateMemSrcTable()
     assert(slowRamSize % 0x10000 == 0);
     assert(fastRamSize % 0x10000 == 0);
 
-    bool rtc = _amiga ? config.realTimeClock : false;
-    bool ovl = _amiga ? (ciaA->getPA() & 1) : false;
+    bool rtc = amiga ? config.realTimeClock : false;
+    bool ovl = amiga ? (ciaA->getPA() & 1) : false;
     
     // debug("updateMemSrcTable: rtc = %d ovl = %d\n", rtc, ovl);
     
@@ -371,7 +371,7 @@ Memory::updateMemSrcTable()
     for (unsigned i = 0; ovl && i < 8 && memSrc[0xF8 + i] != MEM_UNMAPPED; i++)
         memSrc[i] = memSrc[0xF8 + i];
     
-    if (_amiga) _amiga->putMessage(MSG_MEM_LAYOUT);
+    if (amiga) amiga->putMessage(MSG_MEM_LAYOUT);
 }
 
 uint8_t
@@ -402,7 +402,7 @@ Memory::peek16(uint32_t addr)
 {
     if (!IS_EVEN(addr)) {
         debug("PC: %X peek16(%X) memSrc = %d\n", cpu->getPC(), addr, memSrc[(addr & 0xFFFFFF) >> 16]);
-        _amiga->dump();
+        amiga->dump();
     }
     
     assert(IS_EVEN(addr));
@@ -708,7 +708,7 @@ Memory::peekRTC8(uint32_t addr)
     /* Addr: 0001 0011 0101 0111 1001 1011
      * Reg:   -0   -0   -1   -1   -2   -2
      */
-    return _amiga->rtc.peek((addr >> 2) & 0b1111);
+    return amiga->rtc.peek((addr >> 2) & 0b1111);
 }
 
 uint16_t
@@ -728,7 +728,7 @@ Memory::pokeRTC8(uint32_t addr, uint8_t value)
     /* Addr: 0001 0011 0101 0111 1001 1011
      * Reg:   -0   -0   -1   -1   -2   -2
      */
-    _amiga->rtc.poke((addr >> 2) & 0b1111, value);
+    amiga->rtc.poke((addr >> 2) & 0b1111, value);
 }
 
 void
@@ -794,7 +794,7 @@ Memory::peekCustom16(uint32_t addr)
     
     warn("peekCustom16(%X [%s]): MISSING IMPLEMENTATION\n",
          addr, customReg[(addr >> 1) & 0xFF]);
-    _amiga->pause();
+    amiga->pause();
     return 42;
 }
 

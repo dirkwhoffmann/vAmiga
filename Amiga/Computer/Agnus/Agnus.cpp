@@ -68,9 +68,9 @@ Agnus::Agnus()
 void
 Agnus::_initialize()
 {
-    mem    = &_amiga->mem;
-    denise = &_amiga->denise;
-    paula  = &_amiga->paula;
+    mem    = &amiga->mem;
+    denise = &amiga->denise;
+    paula  = &amiga->paula;
 }
 
 void
@@ -1098,7 +1098,7 @@ Agnus::serviceDMAEvent(EventID id)
             break;
         
         case DMA_H1:
-            if (_amiga->debugDMA) debug("H1\n");
+            if (amiga->debugDMA) debug("H1\n");
         case DMA_L1:
             
             // debug(2, "DO_DMA H1/L1 (%d,%d): bpldat[%d] = peekChip16(%X) = %X\n", vpos, hpos, PLANE1, bplpt[PLANE1], amiga->mem.peekChip16(bplpt[PLANE1]));
@@ -1111,38 +1111,38 @@ Agnus::serviceDMAEvent(EventID id)
             break;
             
         case DMA_H2:
-            if (_amiga->debugDMA) debug("H2\n");
+            if (amiga->debugDMA) debug("H2\n");
         case DMA_L2:
             
-            if (_amiga->debugDMA) debug("DO_DMA H2/L2 (%d,%d): bpldat[%d] = peekChip16(%X) = %X\n", vpos, hpos, PLANE2, bplpt[PLANE2], mem->peekChip16(bplpt[PLANE2]));
+            if (amiga->debugDMA) debug("DO_DMA H2/L2 (%d,%d): bpldat[%d] = peekChip16(%X) = %X\n", vpos, hpos, PLANE2, bplpt[PLANE2], mem->peekChip16(bplpt[PLANE2]));
             DO_DMA(bplpt[PLANE2], denise->bpldat[PLANE2]);
             break;
             
         case DMA_H3:
-            if (_amiga->debugDMA) debug("H3\n");
+            if (amiga->debugDMA) debug("H3\n");
         case DMA_L3:
             
-            if (_amiga->debugDMA) debug("DO_DMA H3/L3: bpldat[%d] = peekChip16(%X) = %X\n", PLANE3, bplpt[PLANE3], mem->peekChip16(bplpt[PLANE3]));
+            if (amiga->debugDMA) debug("DO_DMA H3/L3: bpldat[%d] = peekChip16(%X) = %X\n", PLANE3, bplpt[PLANE3], mem->peekChip16(bplpt[PLANE3]));
             DO_DMA(bplpt[PLANE3], denise->bpldat[PLANE3]);
             break;
             
         case DMA_H4:
-            if (_amiga->debugDMA) debug("H4\n");
+            if (amiga->debugDMA) debug("H4\n");
         case DMA_L4:
             
-            if (_amiga->debugDMA) debug("DO_DMA H4/L4: bpldat[%d] = peekChip16(%X) = %X\n", PLANE4, bplpt[PLANE4], mem->peekChip16(bplpt[PLANE4]));
+            if (amiga->debugDMA) debug("DO_DMA H4/L4: bpldat[%d] = peekChip16(%X) = %X\n", PLANE4, bplpt[PLANE4], mem->peekChip16(bplpt[PLANE4]));
             DO_DMA(bplpt[PLANE4], denise->bpldat[PLANE4]);
             break;
             
         case DMA_L5:
             
-            if (_amiga->debugDMA) debug("DO_DMA L5: bpldat[%d] = peekChip16(%X) = %X\n", PLANE5, bplpt[PLANE5], mem->peekChip16(bplpt[PLANE5]));
+            if (amiga->debugDMA) debug("DO_DMA L5: bpldat[%d] = peekChip16(%X) = %X\n", PLANE5, bplpt[PLANE5], mem->peekChip16(bplpt[PLANE5]));
             DO_DMA(bplpt[PLANE5], denise->bpldat[PLANE5]);
             break;
             
         case DMA_L6:
             
-            if (_amiga->debugDMA) debug("DO_DMA L6: bpldat[%d] = peekChip16(%X) = %X\n", PLANE6, bplpt[PLANE6], mem->peekChip16(bplpt[PLANE6]));
+            if (amiga->debugDMA) debug("DO_DMA L6: bpldat[%d] = peekChip16(%X) = %X\n", PLANE6, bplpt[PLANE6], mem->peekChip16(bplpt[PLANE6]));
             DO_DMA(bplpt[PLANE6], denise->bpldat[PLANE6]);
             break;
             
@@ -1300,10 +1300,10 @@ Agnus::hsyncHandler()
     paula->audioUnit.executeUntil(clock);
     
     // CIA B counts HSYNCs
-    _amiga->ciaB.incrementTOD();
+    amiga->ciaB.incrementTOD();
     
     // Check the keyboard once in a while
-    if ((vpos & 0b1111) == 0) _amiga->keyboard.execute();
+    if ((vpos & 0b1111) == 0) amiga->keyboard.execute();
     
     // Add bit plane pointer modulo values
     bplpt[0] += bpl1mod;
@@ -1389,7 +1389,7 @@ Agnus::vsyncHandler()
     vpos = 0;
 
     // CIA A counts VSYNCs
-    _amiga->ciaA.incrementTOD();
+    amiga->ciaA.incrementTOD();
     
     // Trigger VSYNC interrupt
     paula->pokeINTREQ(0x8020);
@@ -1397,14 +1397,14 @@ Agnus::vsyncHandler()
     // Let the subcomponents do their own VSYNC stuff
     copper.vsyncAction();
     denise->prepareForNextFrame(isLongFrame(), frameInfo.interlaced);
-    _amiga->joystick1.execute();
-    _amiga->joystick2.execute();
+    amiga->joystick1.execute();
+    amiga->joystick2.execute();
 
     // Prepare to take a snapshot once in a while
-    if (_amiga->snapshotIsDue()) _amiga->signalSnapshot();
+    if (amiga->snapshotIsDue()) amiga->signalSnapshot();
         
     // Count some sheep (zzzzzz) ...
-    if (!_amiga->getWarp()) {
-        _amiga->synchronizeTiming();
+    if (!amiga->getWarp()) {
+        amiga->synchronizeTiming();
     }
 }
