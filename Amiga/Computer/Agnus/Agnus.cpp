@@ -581,7 +581,7 @@ Agnus::peekDMACONR()
 void
 Agnus::pokeDMACON(uint16_t value)
 {
-    debug(1, "pokeDMACON(%X)\n", value);
+    debug(DMA_DEBUG, "pokeDMACON(%X)\n", value);
     
     bool oldDMAEN = (dmacon & DMAEN);
     bool oldBPLEN = (dmacon & BPLEN) && oldDMAEN;
@@ -615,13 +615,13 @@ Agnus::pokeDMACON(uint16_t value)
         if (newBPLEN) {
             
             // Bitplane DMA on
-            debug("Bitplane DMA switched on\n");
+            debug(DMA_DEBUG, "Bitplane DMA switched on\n");
             // switchBitplaneDmaOn();
 
         } else {
             
             // Bitplane DMA off
-            debug("Bitplane DMA switched off\n");
+            debug(DMA_DEBUG, "Bitplane DMA switched off\n");
             // switchBitplaneDmaOff();
         }
 
@@ -634,7 +634,7 @@ Agnus::pokeDMACON(uint16_t value)
         if (newCOPEN) {
             
             // Copper DMA on
-            debug("Copper DMA switched on\n");
+            debug(DMA_DEBUG, "Copper DMA switched on\n");
             
             // Determine trigger cycle for the first Copper event
             // (the next even DMA cycle)
@@ -645,7 +645,7 @@ Agnus::pokeDMACON(uint16_t value)
         } else {
             
             // Copper DMA off
-            debug("Copper DMA switched off\n");
+            debug(DMA_DEBUG, "Copper DMA switched off\n");
             eventHandler.cancel(COP_SLOT);
         }
     }
@@ -655,14 +655,14 @@ Agnus::pokeDMACON(uint16_t value)
         
         if (newBLTEN) {
             // Blitter DMA on
-            debug("Blitter DMA switched on\n");
+            debug(DMA_DEBUG, "Blitter DMA switched on\n");
             // amiga->agnus.eventHandler.scheduleRel(BLT_SLOT, DMA_CYCLES(1), BLT_EXECUTE);
             _handler->scheduleRel(BLT_SLOT, DMA_CYCLES(1), BLT_FAST_BLIT);
     
         } else {
             
             // Blitter DMA off
-            debug("Blitter DMA switched off\n");
+            debug(DMA_DEBUG, "Blitter DMA switched off\n");
             _handler->disable(BLT_SLOT);
         }
     }
@@ -672,13 +672,13 @@ Agnus::pokeDMACON(uint16_t value)
         
         if (newSPREN) {
             // Sprite DMA on
-            debug("Sprite DMA switched on\n");
+            debug(DMA_DEBUG, "Sprite DMA switched on\n");
             switchSpriteDmaOn();
             
         } else {
             
             // Sprite DMA off
-            debug("Sprite DMA switched off\n");
+            debug(DMA_DEBUG, "Sprite DMA switched off\n");
             switchSpriteDmaOff();
         }
     }
@@ -689,13 +689,13 @@ Agnus::pokeDMACON(uint16_t value)
         if (newDSKEN) {
             
             // Disk DMA on
-            debug("Disk DMA switched on\n");
+            debug(DMA_DEBUG, "Disk DMA switched on\n");
             switchDiskDmaOn();
             
         } else {
             
             // Disk DMA off
-            debug("Disk DMA switched off\n");
+            debug(DMA_DEBUG, "Disk DMA switched off\n");
             switchDiskDmaOff();
         }
     }
@@ -770,42 +770,44 @@ void
 Agnus::pokeDSKPTH(uint16_t value)
 {
     dskpt = REPLACE_HI_WORD(dskpt, value & 0x7);
-    debug(2, "pokeDSKPTH(%X) newPtr: %X\n", value, dskpt);
+    debug(DSK_DEBUG, "pokeDSKPTH(%X) newPtr: %X\n", value, dskpt);
 }
 
 void
 Agnus::pokeDSKPTL(uint16_t value)
 {
     dskpt = REPLACE_LO_WORD(dskpt, value);
-    debug(2, "pokeDSKPTL(%X) newPtr: %X\n", value, dskpt);
+    debug(DSK_DEBUG, "pokeDSKPTL(%X) newPtr: %X\n", value, dskpt);
 }
 
 uint16_t
 Agnus::peekVHPOSR()
 {
+    // 15 14 13 12 11 10 09 08 07 06 05 04 03 02 01 00
     // V7 V6 V5 V4 V3 V2 V1 V0 H8 H7 H6 H5 H4 H3 H2 H1
-    
-    debug(2, "peekVHPOSR: %X\n", BEAM(vpos, hpos) & 0xFFFF);
+    uint16_t result = BEAM(vpos, hpos) & 0xFFFF;
 
-    return BEAM(vpos, hpos) & 0xFFFF;
+    debug(BPL_DEBUG, "peekVHPOSR() = %X\n", result);
+    return result;
 }
 
 void
 Agnus::pokeVHPOS(uint16_t value)
 {
+    debug(BPL_DEBUG, "pokeVHPOS(%X)\n", value);
     // Don't know what to do here ...
 }
 
 uint16_t
 Agnus::peekVPOSR()
 {
+    // 15 14 13 12 11 10 09 08 07 06 05 04 03 02 01 00
     // LF -- -- -- -- -- -- -- -- -- -- -- -- -- -- V8
-    // TODO: LF (Long Frame)
-    assert((vpos >> 8) <= 1);
-    
-    // debug(2, "peekVPOSR: %X\n", (vpos >> 8) | (isLongFrame() ? 0x8000 : 0));
+    uint16_t result = (vpos >> 8) | (isLongFrame() ? 0x8000 : 0);
+    assert((result & 0x7FFE) == 0);
 
-    return (vpos >> 8) | (isLongFrame() ? 0x8000 : 0);
+    debug(BPL_DEBUG, "peekVPOSR() = %X\n", result);
+    return result;
 
 }
 
@@ -818,7 +820,7 @@ Agnus::pokeVPOS(uint16_t value)
 void
 Agnus::pokeDIWSTRT(uint16_t value)
 {
-    debug(2, "pokeDIWSTRT(%X)\n", value);
+    debug(BPL_DEBUG, "pokeDIWSTRT(%X)\n", value);
 
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // V7 V6 V5 V4 V3 V2 V1 V0 H7 H6 H5 H4 H3 H2 H1 H0  and  H8 = 0, V8 = 0
@@ -833,7 +835,7 @@ Agnus::pokeDIWSTRT(uint16_t value)
 void
 Agnus::pokeDIWSTOP(uint16_t value)
 {
-    debug(2, "pokeDIWSTOP(%X)\n", value);
+    debug(BPL_DEBUG, "pokeDIWSTOP(%X)\n", value);
     
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // V7 V6 V5 V4 V3 V2 V1 V0 H7 H6 H5 H4 H3 H2 H1 H0  and  H8 = 1, V8 = !V7
@@ -848,7 +850,7 @@ Agnus::pokeDIWSTOP(uint16_t value)
 void
 Agnus::pokeDDFSTRT(uint16_t value)
 {
-    debug(2, "pokeDDFSTRT(%X)\n", value);
+    debug(BPL_DEBUG, "pokeDDFSTRT(%X)\n", value);
 
     ddfstrt = value;
 }
@@ -856,7 +858,7 @@ Agnus::pokeDDFSTRT(uint16_t value)
 void
 Agnus::pokeDDFSTOP(uint16_t value)
 {
-    debug(2, "pokeDDFSTOP(%X)\n", value);
+    debug(BPL_DEBUG, "pokeDDFSTOP(%X)\n", value);
     
     ddfstop = value;
 }
@@ -864,8 +866,8 @@ Agnus::pokeDDFSTOP(uint16_t value)
 void
 Agnus::pokeAUDxLCH(int x, uint16_t value)
 {
+    debug(AUD_DEBUG, "pokeAUD%dLCH(%X)\n", x, value);
     assert(x < 4);
-    debug(2, "pokeAUD%dLCH(%X)\n", x, value);
 
     _paula->audioUnit.channel[x].audlcLatch =
     REPLACE_HI_WORD(_paula->audioUnit.channel[x].audlcLatch, value & 0x7);
@@ -874,8 +876,8 @@ Agnus::pokeAUDxLCH(int x, uint16_t value)
 void
 Agnus::pokeAUDxLCL(int x, uint16_t value)
 {
+    debug(AUD_DEBUG, "pokeAUD%dLCL(%X)\n", x, value);
     assert(x < 4);
-    debug(2, "pokeAUD%dLCL(%X)\n", x, value);
 
     _paula->audioUnit.channel[x].audlcLatch =
     REPLACE_LO_WORD(_paula->audioUnit.channel[x].audlcLatch, value);
@@ -884,25 +886,25 @@ Agnus::pokeAUDxLCL(int x, uint16_t value)
 void
 Agnus::pokeBPLxPTH(int x, uint16_t value)
 {
+    debug(BPL_DEBUG, "pokeBPL%dPTH(%X)\n", x, value);
     assert(x < 6);
     
-    debug(2, "pokeBPL%dPTH(%X)\n", x, value);
     bplpt[x] = REPLACE_HI_WORD(bplpt[x], value & 0x7);
 }
 
 void
 Agnus::pokeBPLxPTL(int x, uint16_t value)
 {
+    debug(BPL_DEBUG, "pokeBPL%dPTL(%X)\n", x, value);
     assert(x < 6);
     
-    debug(2, "pokeBPL%dPTL(%X)\n", x, value);
     bplpt[x] = REPLACE_LO_WORD(bplpt[x], value);
 }
 
 void
 Agnus::pokeBPL1MOD(uint16_t value)
 {
-    debug(2, "pokeBPL1MOD(%X)\n", value);
+    debug(BPL_DEBUG, "pokeBPL1MOD(%X)\n", value);
     
     bpl1mod = value & 0xFFFE;
 }
@@ -910,7 +912,7 @@ Agnus::pokeBPL1MOD(uint16_t value)
 void
 Agnus::pokeBPL2MOD(uint16_t value)
 {
-    debug(2, "pokeBPL2MOD(%X)\n", value);
+    debug(BPL_DEBUG, "pokeBPL2MOD(%X)\n", value);
     
     bpl2mod = value & 0xFFFE;
 }
@@ -918,18 +920,18 @@ Agnus::pokeBPL2MOD(uint16_t value)
 void
 Agnus::pokeSPRxPTH(int x, uint16_t value)
 {
+    debug(SPR_DEBUG, "pokeSPR%dPTH(%X)\n", x, value);
     assert(x < 8);
     
-    debug(2, "pokeSPR%dPTH(%X)\n", x, value);
     sprpt[x] = REPLACE_HI_WORD(sprpt[x], value & 0x7);
 }
 
 void
 Agnus::pokeSPRxPTL(int x, uint16_t value)
 {
+    debug(SPR_DEBUG, "pokeSPR%dPTL(%X)\n", x, value);
     assert(x < 8);
     
-    debug(2, "pokeSPR%dPTL(%X)\n", x, value);
     sprpt[x] = REPLACE_LO_WORD(sprpt[x], value);
 }
 

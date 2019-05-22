@@ -333,7 +333,7 @@ AudioUnit::handleBufferOverflow()
 void
 AudioUnit::pokeAUDxLEN(int x, uint16_t value)
 {
-    debug(2, "pokeAUD%dLEN(%X)\n", x, value);
+    debug(AUD_DEBUG, "pokeAUD%dLEN(%X)\n", x, value);
     assert(x < 4);
 
     channel[x].audlenLatch = value;
@@ -342,7 +342,7 @@ AudioUnit::pokeAUDxLEN(int x, uint16_t value)
 void
 AudioUnit::pokeAUDxPER(int x, uint16_t value)
 {
-    debug(2, "pokeAUD%dPER(%X)\n", x, value);
+    debug(AUD_DEBUG, "pokeAUD%dPER(%X)\n", x, value);
     assert(x < 4);
 
     channel[x].audperLatch = value;
@@ -351,7 +351,7 @@ AudioUnit::pokeAUDxPER(int x, uint16_t value)
 void
 AudioUnit::pokeAUDxVOL(int x, uint16_t value)
 {
-    debug(2, "pokeAUD%dVOL(%X)\n", x, value);
+    debug(AUD_DEBUG, "pokeAUD%dVOL(%X)\n", x, value);
     assert(x < 4);
     
     /* Behaviour: 1. Only the lowest 7 bits are evaluated.
@@ -363,7 +363,7 @@ AudioUnit::pokeAUDxVOL(int x, uint16_t value)
 void
 AudioUnit::pokeAUDxDAT(int x, uint16_t value)
 {
-    debug(2, "pokeAUD%dDAT(%X)\n", x, value);
+    debug(AUD_DEBUG, "pokeAUD%dDAT(%X)\n", x, value);
     assert(x < 4);
 
     channel[x].auddatLatch = value;

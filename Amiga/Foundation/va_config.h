@@ -10,18 +10,54 @@
 #ifndef VACONFIG_H
 #define VACONFIG_H
 
+//
+// Release options (Uncomment these options for a release build!)
+//
+
+// Disables assertion checking
+// #define NDEBUG
+
+
+//
+// Constants
+//
+
 // Snapshot version number of this release
 #define V_MAJOR 0
 #define V_MINOR 1
 #define V_SUBMINOR 0
 
-// Disable assertion checking (Uncomment in release build)
-// #define NDEBUG
 
-// Default debug level for all components
+//
+// Debug settings
+//
+
+// Default debug level (used for statements with no custom level)
 #define DEBUG_LEVEL 1
 
-// Enable to draw debug marks
-// #define DEBUG_STRIPES
+// Set to 1 to debug DMA relevant registers
+#define DMA_DEBUG 2
+
+// Set to 1 to debug bitplane relevant registers
+#define BPL_DEBUG 2
+
+// Set to 1 to debug sprite relevant registers
+#define SPR_DEBUG 2
+
+// Set to 1 to debug disk relevant registers
+#define DSK_DEBUG 2
+
+// Set to 1 to debug audio relevant registers
+#define AUD_DEBUG 2
+
+// Enable to draw the display window border in debug colors
+// #define BORDER_DEBUG
+
+// Enable to highlight the first pixel in a 16-bit lores or hires pixel chunk
+// #define PIXEL_DEBUG
+
+// Enable to colorize certain rasterlines
+// #define LINE_DEBUG
+
 
 #endif

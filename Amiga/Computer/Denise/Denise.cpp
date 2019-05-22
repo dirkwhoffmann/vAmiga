@@ -231,7 +231,7 @@ Denise::pokeJOYTEST(uint16_t value)
 void
 Denise::pokeBPLCON0(uint16_t value)
 {
-    debug(2, "pokeBPLCON0(%X)\n", value);
+    debug(BPL_DEBUG, "pokeBPLCON0(%X)\n", value);
     
     bplcon0 = value;
 
@@ -262,7 +262,7 @@ Denise::pokeBPLCON0(uint16_t value)
 void
 Denise::pokeBPLCON1(uint16_t value)
 {
-    debug(2, "pokeBPLCON1(%X)\n", value);
+    debug(BPL_DEBUG, "pokeBPLCON1(%X)\n", value);
     
     bplcon1 = value & 0xFF;
     
@@ -278,7 +278,7 @@ Denise::pokeBPLCON1(uint16_t value)
 void
 Denise::pokeBPLCON2(uint16_t value)
 {
-    debug(2, "pokeBPLCON2(%X)\n", value);
+    debug(BPL_DEBUG, "pokeBPLCON2(%X)\n", value);
     
     bplcon2 = value;
 }
@@ -287,7 +287,7 @@ void
 Denise::pokeBPLxDAT(int x, uint16_t value)
 {
     assert(x < 6);
-    debug(2, "pokeBPL%dDATA(%X)\n", x + 1, value);
+    debug(BPL_DEBUG, "pokeBPL%dDATA(%X)\n", x + 1, value);
     
     bpldat[x] = value;
 }
@@ -296,7 +296,7 @@ void
 Denise::pokeSPRxPOS(int x, uint16_t value)
 {
     assert(x < 8);
-    debug(2, "pokeSPR%dPOS(%X)\n", x, value);
+    debug(SPR_DEBUG, "pokeSPR%dPOS(%X)\n", x, value);
 
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0  (Ex = VSTART)
     // E7 E6 E5 E4 E3 E2 E1 E0 H8 H7 H6 H5 H4 H3 H2 H1  (Hx = HSTART)
@@ -316,7 +316,7 @@ void
 Denise::pokeSPRxCTL(int x, uint16_t value)
 {
     assert(x < 8);
-    debug(2, "pokeSPR%dCTL(%X)\n", x, value);
+    debug(SPR_DEBUG, "pokeSPR%dCTL(%X)\n", x, value);
     
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // L7 L6 L5 L4 L3 L2 L1 L0 AT  -  -  -  - E8 L8 H0  (Lx = VSTOP)
@@ -338,7 +338,7 @@ void
 Denise::pokeSPRxDATA(int x, uint16_t value)
 {
     assert(x < 8);
-    debug(2, "pokeSPR%dDATA(%X)\n", x, value);
+    debug(SPR_DEBUG, "pokeSPR%dDATA(%X)\n", x, value);
     
     sprdata[x] = value;
     armSprite(x);
@@ -348,7 +348,7 @@ void
 Denise::pokeSPRxDATB(int x, uint16_t value)
 {
     assert(x < 8);
-    debug(2, "pokeSPR%dDATB(%X)\n", x, value);
+    debug(SPR_DEBUG, "pokeSPR%dDATB(%X)\n", x, value);
     
     sprdatb[x] = value;
 }
@@ -525,7 +525,7 @@ Denise::draw16()
         *ptr++ = rgba;
     }
 
-#ifdef DEBUG_STRIPES
+#ifdef PIXEL_DEBUG
     *pixelAddr(pixel) = 0x000000FF;
 #endif
 
@@ -559,7 +559,7 @@ Denise::draw32()
         *ptr++ = rgba;
     }
 
-#ifdef DEBUG_STRIPES
+#ifdef PIXEL_DEBUG
     *pixelAddr(pixel) = 0x000000FF;
 #endif
 
@@ -593,7 +593,7 @@ Denise::draw32HAM()
         *ptr++ = rgba;
     }
 
-#ifdef DEBUG_STRIPES
+#ifdef PIXEL_DEBUG
     *pixelAddr(pixel) = 0x000000FF;
 #endif
 
@@ -642,19 +642,18 @@ Denise::drawSprites()
 void
 Denise::drawBorder()
 {
-    int *ptr = pixelAddr(0);
+#ifndef BORDER_DEBUG
     int rgba = colorizer.getRGBA(0);
-
     int rgbaHBorderL = rgba;
     int rgbaHBorderR = rgba;
     int rgbaVBorder  = rgba;
-
-#ifdef DEBUG_STRIPES
-    rgbaHBorderL = 0x00000044;
-    rgbaHBorderR = 0x00000088;
-    rgbaVBorder  = 0x000000CC;
+#else
+    int rgbaHBorderL = 0x00000044;
+    int rgbaHBorderR = 0x00000088;
+    int rgbaVBorder  = 0x000000CC;
 #endif
 
+    int *ptr = pixelAddr(0);
     int hblank = 4 * 0x35;
 
     // Draw left border
@@ -673,6 +672,10 @@ Denise::drawBorder()
             ptr[i] = rgbaVBorder;
         }
     }
+
+#ifdef LINE_DEBUG
+    
+#endif
 }
 
 void

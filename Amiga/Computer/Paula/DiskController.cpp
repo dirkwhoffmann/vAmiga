@@ -163,7 +163,7 @@ DiskController::peekDSKDATR()
 void
 DiskController::pokeDSKLEN(uint16_t newDskLen)
 {
-    // plaindebug(1, "pokeDSKLEN(%X)\n", newDskLen);
+    debug(DSK_DEBUG, "pokeDSKLEN(%X)\n", newDskLen);
     
     Drive *drive = getSelectedDrive(); 
     uint16_t oldDsklen = dsklen;
@@ -262,7 +262,7 @@ void
 DiskController::pokeDSKSYNC(uint16_t value)
 {
     assert(false);
-    debug(1, "pokeDSKSYNC(%X)\n", value);
+    debug(DSK_DEBUG, "pokeDSKSYNC(%X)\n", value);
     dsksync = value;
 }
 
