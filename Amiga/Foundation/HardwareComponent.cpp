@@ -36,7 +36,7 @@ HardwareComponent::prefix()
             (dmacon & BLTEN) ? (dmaen ? 'B' : 'b') : '-',
             (dmacon & DSKEN) ? (dmaen ? 'D' : 'd') : '-');
 
-    fprintf(stderr, "%04X %04X: ", _paula->intena, _paula->intreq);
+    fprintf(stderr, "%04X %04X: ", _amiga->paula.intena, _amiga->paula.intreq);
 
     if (getDescription())
         fprintf(stderr, "%s: ", getDescription());
@@ -52,7 +52,6 @@ HardwareComponent::initialize(Amiga *amiga)
     this->_mem     = &amiga->mem;
     this->_ciaA    = &amiga->ciaA;
     this->_ciaB    = &amiga->ciaB;
-    this->_paula   = &amiga->paula;
     this->_zorro   = &amiga->zorro;
 
     // Initialize all subcomponents

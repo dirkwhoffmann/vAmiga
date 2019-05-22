@@ -65,6 +65,7 @@ class EventHandler : public HardwareComponent
     // Quick-access references
     class Agnus *agnus;
     class Denise *denise;
+    class Paula *paula; 
     
     // Information shown in the GUI inspector panel
     EventHandlerInfo info;

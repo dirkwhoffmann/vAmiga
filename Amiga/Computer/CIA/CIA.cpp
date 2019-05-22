@@ -67,6 +67,7 @@ CIA::_initialize()
 {
     agnus = &_amiga->agnus;
     handler = &_amiga->agnus.eventHandler;
+    paula = &_amiga->paula; 
 }
 
 void
@@ -1264,7 +1265,7 @@ void
 CIAA::pullDownInterruptLine()
 {
     // debug("Pulling down IRQ line\n");
-    _paula->setINTREQ(0x8000 | (1 << 3));
+    paula->setINTREQ(0x8000 | (1 << 3));
 }
 
 void 
@@ -1297,7 +1298,7 @@ CIAA::portAexternal()
     uint8_t result;
     
     // Set drive status bits
-    result = _paula->diskController.driveStatusFlags();
+    result = paula->diskController.driveStatusFlags();
     
     // Set control port bits
     result &= _amiga->controlPort1.ciapa();
@@ -1426,7 +1427,7 @@ void
 CIAB::pullDownInterruptLine()
 {
     debug("Pulling down IRQ line\n");
-    _paula->setINTREQ(0x8000 | (1 << 13));
+    paula->setINTREQ(0x8000 | (1 << 13));
 }
 
 void 
@@ -1510,7 +1511,7 @@ CIAB::updatePB()
               !!(PB & 0x80), !!(PB & 0x40), !!(PB & 0x20), !!(PB & 0x10),
               !!(PB & 0x08), !!(PB & 0x04), !!(PB & 0x02), !!(PB & 0x01));
         */
-        _paula->diskController.PRBdidChange(oldPB, PB);
+        paula->diskController.PRBdidChange(oldPB, PB);
     }
 }
 

@@ -27,7 +27,8 @@ void
 EventHandler::_initialize()
 {
     agnus = &_amiga->agnus;
-    denise = &_amiga->denise; 
+    denise = &_amiga->denise;
+    paula = &_amiga->paula; 
 }
 
 void
@@ -511,7 +512,7 @@ EventHandler::_executeSecUntil(Cycle cycle) {
     
     // Check all secondary event slots one by one
     if (isDueSec(DSK_SLOT, cycle)) {
-        _paula->diskController.serveDiskEvent();
+        paula->diskController.serveDiskEvent();
     }
     if (isDueSec(IRQ_TBE_SLOT, cycle)) {
         serveIRQEvent(IRQ_TBE_SLOT, 0);
@@ -748,11 +749,11 @@ EventHandler::serveIRQEvent(EventSlot s, int irqBit)
     switch (secSlot[s].id) {
         
         case IRQ_SET:
-        _paula->setINTREQ(0x8000 | (1 << irqBit));
+        paula->setINTREQ(0x8000 | (1 << irqBit));
         break;
         
         case IRQ_CLEAR:
-        _paula->setINTREQ(1 << irqBit);
+        paula->setINTREQ(1 << irqBit);
         break;
         
         default:
@@ -773,7 +774,7 @@ EventHandler::serveINSEvent()
         case INS_MEM:    _mem->inspect(); break;
         case INS_CIA:    _ciaA->inspect(); _ciaB->inspect(); break;
         case INS_AGNUS:  agnus->inspect(); break;
-        case INS_PAULA:  _paula->inspect(); break;
+        case INS_PAULA:  paula->inspect(); break;
         case INS_DENISE: denise->inspect(); break;
         case INS_EVENTS: agnus->eventHandler.inspect(); break;
         default:         assert(false);

@@ -75,6 +75,7 @@ protected:
     // Quick-access references
     class Agnus *agnus;
     class EventHandler *handler;
+    class Paula *paula; 
 
     // Information shown in the GUI inspector panel
     CIAInfo info;

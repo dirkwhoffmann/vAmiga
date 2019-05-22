@@ -46,6 +46,7 @@ Memory::_initialize()
     agnus = &_amiga->agnus;
     copper = &_amiga->agnus.copper;
     denise = &_amiga->denise;
+    paula = &_amiga->paula;
 }
 
 void
@@ -762,7 +763,7 @@ Memory::peekCustom16(uint32_t addr)
         case 0x006 >> 1: // VHPOSR
             return agnus->peekVHPOSR();
         case 0x008 >> 1: // DSKDATR
-            return _paula->diskController.peekDSKDATR();
+            return paula->diskController.peekDSKDATR();
         case 0x00A >> 1: // JOY0DAT
             return denise->peekJOY0DATR();
         case 0x00C >> 1: // JOY1DAT
@@ -770,21 +771,21 @@ Memory::peekCustom16(uint32_t addr)
         case 0x00E >> 1: // CLXDAT
             break;
         case 0x010 >> 1: // ADKCONR
-            return _paula->peekADKCONR();
+            return paula->peekADKCONR();
         case 0x012 >> 1: // POT0DAT
             break;
         case 0x014 >> 1: // POT1DAT
             break;
         case 0x016 >> 1: // POTGOR
-            return _paula->peekPOTGOR();
+            return paula->peekPOTGOR();
         case 0x018 >> 1: // SERDATR
-            return _paula->peekSERDATR();
+            return paula->peekSERDATR();
         case 0x01A >> 1: // DSKBYTR
-            return _paula->diskController.peekDSKBYTR();
+            return paula->diskController.peekDSKBYTR();
         case 0x01C >> 1: // INTENAR
-            return _paula->peekINTENAR();
+            return paula->peekINTENAR();
         case 0x01E >> 1: // INTREQR
-            return _paula->peekINTREQR();
+            return paula->peekINTREQR();
 
         default: // Write-only register
             return 0xFF;
@@ -856,9 +857,9 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x022 >> 1: // DSKPTL
             agnus->pokeDSKPTL(value); return;
         case 0x024 >> 1: // DSKLEN
-            _paula->diskController.pokeDSKLEN(value); return;
+            paula->diskController.pokeDSKLEN(value); return;
         case 0x026 >> 1: // DSKDAT
-            _paula->diskController.pokeDSKDAT(value); return;
+            paula->diskController.pokeDSKDAT(value); return;
         case 0x28 >> 1: // REFPTR
             return;
         case 0x02A >> 1: // VPOSW
@@ -868,11 +869,11 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x02E >> 1: // COPCON
             copper->pokeCOPCON(value); return;
         case 0x030 >> 1: // SERDAT
-            _paula->pokeSERDAT(value); return;
+            paula->pokeSERDAT(value); return;
         case 0x032 >> 1: // SERPER
-            _paula->pokeSERPER(value); return;
+            paula->pokeSERPER(value); return;
         case 0x034 >> 1: // POTGO
-            _paula->pokePOTGO(value); return;
+            paula->pokePOTGO(value); return;
         case 0x036 >> 1: // JOYTEST
             denise->pokeJOYTEST(value); return;
         case 0x038 >> 1: // STREQU
@@ -935,7 +936,7 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x07C >> 1: // unused
             return;
         case 0x07E >> 1: // DSKSYNC
-            _paula->diskController.pokeDSKSYNC(value); return;
+            paula->diskController.pokeDSKSYNC(value); return;
         case 0x080 >> 1: // COP1LCH
             copper->pokeCOPxLCH(0, value); return;
         case 0x082 >> 1: // COP1LCL
@@ -966,23 +967,23 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         return;
         
         case 0x09A >> 1: // INTENA
-            _paula->pokeINTENA(value); return;
+            paula->pokeINTENA(value); return;
         case 0x09C >> 1: // INTREQ
-            _paula->pokeINTREQ(value); return;
+            paula->pokeINTREQ(value); return;
         case 0x09E >> 1: // ADKCON
-            _paula->pokeADKCON(value); return;
+            paula->pokeADKCON(value); return;
         case 0x0A0 >> 1: // AUD0LCH
             agnus->pokeAUDxLCH(0, value); return;
         case 0x0A2 >> 1: // AUD0LCL
             agnus->pokeAUDxLCL(0, value); return;
         case 0x0A4 >> 1: // AUD0LEN
-            _paula->audioUnit.pokeAUDxLEN(0, value); return;
+            paula->audioUnit.pokeAUDxLEN(0, value); return;
         case 0x0A6 >> 1: // AUD0PER
-            _paula->audioUnit.pokeAUDxPER(0, value); return;
+            paula->audioUnit.pokeAUDxPER(0, value); return;
         case 0x0A8 >> 1: // AUD0VOL
-            _paula->audioUnit.pokeAUDxVOL(0, value); return;
+            paula->audioUnit.pokeAUDxVOL(0, value); return;
         case 0x0AA >> 1: // AUD0DAT
-            _paula->audioUnit.pokeAUDxDAT(0, value); return;
+            paula->audioUnit.pokeAUDxDAT(0, value); return;
         case 0x0AC >> 1: // Unused
         case 0x0AE >> 1: // Unused
             return;
@@ -991,13 +992,13 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x0B2 >> 1: // AUD1LCL
             agnus->pokeAUDxLCL(1, value); return;
         case 0x0B4 >> 1: // AUD1LEN
-            _paula->audioUnit.pokeAUDxLEN(1, value); return;
+            paula->audioUnit.pokeAUDxLEN(1, value); return;
         case 0x0B6 >> 1: // AUD1PER
-            _paula->audioUnit.pokeAUDxPER(1, value); return;
+            paula->audioUnit.pokeAUDxPER(1, value); return;
         case 0x0B8 >> 1: // AUD1VOL
-            _paula->audioUnit.pokeAUDxVOL(1, value); return;
+            paula->audioUnit.pokeAUDxVOL(1, value); return;
         case 0x0BA >> 1: // AUD1DAT
-            _paula->audioUnit.pokeAUDxDAT(1, value); return;
+            paula->audioUnit.pokeAUDxDAT(1, value); return;
         case 0x0BC >> 1: // Unused
         case 0x0BE >> 1: // Unused
             return;
@@ -1006,13 +1007,13 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x0C2 >> 1: // AUD2LCL
             agnus->pokeAUDxLCL(2, value); return;
         case 0x0C4 >> 1: // AUD2LEN
-            _paula->audioUnit.pokeAUDxLEN(2, value); return;
+            paula->audioUnit.pokeAUDxLEN(2, value); return;
         case 0x0C6 >> 1: // AUD2PER
-            _paula->audioUnit.pokeAUDxPER(2, value); return;
+            paula->audioUnit.pokeAUDxPER(2, value); return;
         case 0x0C8 >> 1: // AUD2VOL
-            _paula->audioUnit.pokeAUDxVOL(2, value); return;
+            paula->audioUnit.pokeAUDxVOL(2, value); return;
         case 0x0CA >> 1: // AUD2DAT
-            _paula->audioUnit.pokeAUDxDAT(2, value); return;
+            paula->audioUnit.pokeAUDxDAT(2, value); return;
         case 0x0CC >> 1: // Unused
         case 0x0CE >> 1: // Unused
             return;
@@ -1021,13 +1022,13 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x0D2 >> 1: // AUD3LCL
             agnus->pokeAUDxLCL(3, value); return;
         case 0x0D4 >> 1: // AUD3LEN
-            _paula->audioUnit.pokeAUDxLEN(3, value); return;
+            paula->audioUnit.pokeAUDxLEN(3, value); return;
         case 0x0D6 >> 1: // AUD3PER
-            _paula->audioUnit.pokeAUDxPER(3, value); return;
+            paula->audioUnit.pokeAUDxPER(3, value); return;
         case 0x0D8 >> 1: // AUD3VOL
-            _paula->audioUnit.pokeAUDxVOL(3, value); return;
+            paula->audioUnit.pokeAUDxVOL(3, value); return;
         case 0x0DA >> 1: // AUD3DAT
-            _paula->audioUnit.pokeAUDxDAT(3, value); return;
+            paula->audioUnit.pokeAUDxDAT(3, value); return;
         case 0x0DC >> 1: // Unused
         case 0x0DE >> 1: // Unused
             return;

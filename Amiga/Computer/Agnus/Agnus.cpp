@@ -69,6 +69,7 @@ void
 Agnus::_initialize()
 {
     denise = &_amiga->denise;
+    paula = &_amiga->paula;
 }
 
 void
@@ -702,13 +703,13 @@ Agnus::pokeDMACON(uint16_t value)
             
             // debug("Audio 0 DMA switched on\n");
             switchAudioDmaOn(0);
-            _paula->audioUnit.enableDMA(0);
+            paula->audioUnit.enableDMA(0);
             
         } else {
             
             // debug("Audio 0 DMA switched off\n");
             switchAudioDmaOff(0);
-            _paula->audioUnit.disableDMA(0);
+            paula->audioUnit.disableDMA(0);
         }
     }
     
@@ -718,13 +719,13 @@ Agnus::pokeDMACON(uint16_t value)
             
             // debug("Audio 1 DMA switched on\n");
             switchAudioDmaOn(1);
-            _paula->audioUnit.enableDMA(1);
+            paula->audioUnit.enableDMA(1);
             
         } else {
             
             // debug("Audio 1 DMA switched off\n");
             switchAudioDmaOff(1);
-            _paula->audioUnit.disableDMA(1);
+            paula->audioUnit.disableDMA(1);
         }
     }
     
@@ -734,13 +735,13 @@ Agnus::pokeDMACON(uint16_t value)
             
             // debug("Audio 2 DMA switched on\n");
             switchAudioDmaOn(2);
-            _paula->audioUnit.enableDMA(2);
+            paula->audioUnit.enableDMA(2);
             
         } else {
             
             // debug("Audio 2 DMA switched off\n");
             switchAudioDmaOff(2);
-            _paula->audioUnit.disableDMA(2);
+            paula->audioUnit.disableDMA(2);
         }
     }
     
@@ -750,13 +751,13 @@ Agnus::pokeDMACON(uint16_t value)
             
             // debug("Audio 3 DMA switched on\n");
             switchAudioDmaOn(3);
-            _paula->audioUnit.enableDMA(3);
+            paula->audioUnit.enableDMA(3);
             
         } else {
             
             // debug("Audio 3 DMA switched off\n");
             switchAudioDmaOff(3);
-            _paula->audioUnit.disableDMA(3);
+            paula->audioUnit.disableDMA(3);
         }
     }
 }
@@ -888,8 +889,8 @@ Agnus::pokeAUDxLCH(int x, uint16_t value)
     debug(AUD_DEBUG, "pokeAUD%dLCH(%X)\n", x, value);
     assert(x < 4);
 
-    _paula->audioUnit.channel[x].audlcLatch =
-    REPLACE_HI_WORD(_paula->audioUnit.channel[x].audlcLatch, value & 0x7);
+    paula->audioUnit.channel[x].audlcLatch =
+    REPLACE_HI_WORD(paula->audioUnit.channel[x].audlcLatch, value & 0x7);
 }
 
 void
@@ -898,8 +899,8 @@ Agnus::pokeAUDxLCL(int x, uint16_t value)
     debug(AUD_DEBUG, "pokeAUD%dLCL(%X)\n", x, value);
     assert(x < 4);
 
-    _paula->audioUnit.channel[x].audlcLatch =
-    REPLACE_LO_WORD(_paula->audioUnit.channel[x].audlcLatch, value);
+    paula->audioUnit.channel[x].audlcLatch =
+    REPLACE_LO_WORD(paula->audioUnit.channel[x].audlcLatch, value);
 }
 
 void
@@ -1013,10 +1014,10 @@ Agnus::serviceDMAEvent(EventID id)
     switch (id) {
             
         case DMA_DISK:
-            if (_paula->diskController.getFifoBuffering())
-                _paula->diskController.performDMA();
+            if (paula->diskController.getFifoBuffering())
+                paula->diskController.performDMA();
             else
-                _paula->diskController.performSimpleDMA();
+                paula->diskController.performSimpleDMA();
             break;
         
         case DMA_A0:
@@ -1295,8 +1296,7 @@ Agnus::hsyncHandler()
     denise->endOfLine(vpos);
     
     // Compute some sound samples
-    // _paula->audioUnit.hsyncHandler();
-    _paula->audioUnit.executeUntil(clock);
+    paula->audioUnit.executeUntil(clock);
     
     // CIA B counts HSYNCs
     _ciaB->incrementTOD();
@@ -1391,7 +1391,7 @@ Agnus::vsyncHandler()
     _ciaA->incrementTOD();
     
     // Trigger VSYNC interrupt
-    _paula->pokeINTREQ(0x8020);
+    paula->pokeINTREQ(0x8020);
     
     // Let the subcomponents do their own VSYNC stuff
     copper.vsyncAction();

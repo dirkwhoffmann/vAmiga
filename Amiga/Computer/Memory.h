@@ -102,7 +102,8 @@ class Memory : public HardwareComponent {
     class Agnus *agnus;
     class Copper *copper;
     class Denise *denise;
-
+    class Paula *paula;
+    
     public:
     
     /* Each memory area is represented by three variables:

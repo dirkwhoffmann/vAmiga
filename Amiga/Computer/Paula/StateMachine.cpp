@@ -49,6 +49,7 @@ void
 StateMachine::_initialize() {
 
     agnus = &_amiga->agnus;
+    paula = &_amiga->paula;
 }
 
 int16_t
@@ -69,7 +70,7 @@ StateMachine::execute(DMACycle cycles)
             if (audlen > 1) audlen--;
 
             // Trigger Audio interrupt
-            _paula->pokeINTREQ(0x8000 | (0x80 << nr));
+            paula->pokeINTREQ(0x8000 | (0x80 << nr));
 
             state = 0b101;
             break;
@@ -115,7 +116,7 @@ StateMachine::execute(DMACycle cycles)
                     agnus->audlc[nr] = audlcLatch;
 
                     // Trigger Audio interrupt
-                    _paula->pokeINTREQ(0x8000 | (0x80 << nr));
+                    paula->pokeINTREQ(0x8000 | (0x80 << nr));
                 }
 
                 // Switch back to state 2
@@ -140,7 +141,7 @@ StateMachine::execute(DMACycle cycles)
                 agnus->audlc[nr] = audlcLatch;
 
                 // Trigger Audio interrupt
-                _paula->pokeINTREQ(0x8000 | (0x80 << nr));
+                paula->pokeINTREQ(0x8000 | (0x80 << nr));
             }
 
             // Transition to state 2

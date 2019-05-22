@@ -39,6 +39,7 @@ DiskController::_initialize()
 {
     agnus = &_amiga->agnus;
     handler = &_amiga->agnus.eventHandler;
+    paula = &_amiga->paula;
     
     df[0] = &_amiga->df0;
     df[1] = &_amiga->df1;
@@ -199,7 +200,7 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
         } else {
             
             // Check the WORDSYNC bit in the ADKCON register
-            if (GET_BIT(_paula->adkcon, 10)) {
+            if (GET_BIT(paula->adkcon, 10)) {
                 
                 // Wait with reading until a sync mark has been found
                 // plaindebug(1, "dma = DRIVE_DMA_READ_SYNC\n");
@@ -401,7 +402,7 @@ DiskController::executeFifo()
                 
                 // Trigger a word SYNC interrupt.
                 debug(2, "SYNC IRQ\n");
-                _paula->pokeINTREQ(0x9000);
+                paula->pokeINTREQ(0x9000);
                 
                 // Enable DMA if the controller was waiting for it.
                 if (state == DRIVE_DMA_WAIT) {
@@ -501,7 +502,7 @@ DiskController::performDMARead(Drive *drive)
         // Finish up if this was the last word to transfer.
         if ((--dsklen & 0x3FFF) == 0) {
             
-            _paula->pokeINTREQ(0x8002);
+            paula->pokeINTREQ(0x8002);
             state = DRIVE_DMA_OFF;
             plainmsg("performRead: Checksum = %X\n", checksum);
             return;
@@ -540,7 +541,7 @@ DiskController::performDMAWrite(Drive *drive)
         // Finish up if this was the last word to transfer.
         if ((--dsklen & 0x3FFF) == 0) {
             
-            _paula->pokeINTREQ(0x8002);
+            paula->pokeINTREQ(0x8002);
 
             /* The timing-accurate approach: Set state to DRIVE_DMA_FLUSH.
              * The event handler recognises this state and switched to
@@ -618,7 +619,7 @@ DiskController::performSimpleDMARead(Drive *drive)
         
         if ((--dsklen & 0x3FFF) == 0) {
             
-            _paula->pokeINTREQ(0x8002);
+            paula->pokeINTREQ(0x8002);
             state = DRIVE_DMA_OFF;
             plainmsg("doSimpleDMARead: Checksum = %X\n", checksum);
             return;
@@ -644,7 +645,7 @@ DiskController::performSimpleDMAWrite(Drive *drive)
         
         if ((--dsklen & 0x3FFF) == 0) {
             
-            _paula->pokeINTREQ(0x8002);
+            paula->pokeINTREQ(0x8002);
             state = DRIVE_DMA_OFF;
             plainmsg("doSimpleDMAWrite: Checksum = %X\n", checksum);
             return;
@@ -676,7 +677,7 @@ DiskController::performTurboDMA(Drive *drive)
     }
     
     // Trigger disk interrupt
-    _paula->pokeINTREQ(0x8002);
+    paula->pokeINTREQ(0x8002);
     state = DRIVE_DMA_OFF;
 }
 

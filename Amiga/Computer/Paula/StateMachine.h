@@ -18,6 +18,7 @@ class StateMachine : public HardwareComponent {
 
     // Quick-access references
     class Agnus *agnus;
+    class Paula *paula; 
 
 public:
 

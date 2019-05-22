@@ -58,6 +58,7 @@ class Agnus : public HardwareComponent
 {
     // Quick-access references
     class Denise *denise;
+    class Paula *paula;
 
     // Information shown in the GUI inspector panel
     DMAInfo info;

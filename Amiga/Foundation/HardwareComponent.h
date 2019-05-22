@@ -80,7 +80,6 @@ public:
     Memory       *_mem     = NULL;
     CIAA         *_ciaA    = NULL;
     CIAB         *_ciaB    = NULL;
-    Paula        *_paula   = NULL;
     ZorroManager *_zorro   = NULL;
     
 protected:
