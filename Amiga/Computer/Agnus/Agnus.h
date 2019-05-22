@@ -182,7 +182,7 @@ class Agnus : public HardwareComponent
     uint16_t busOwner;
 
     // Indicates if bitplane DMA is enabled in the current rasterline.
-    bool displayDMA;
+    bool bitplaneDMA;
     
     //
     // DMA allocation tables

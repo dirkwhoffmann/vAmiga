@@ -58,7 +58,7 @@ Agnus::Agnus()
         { &bpl2mod,         sizeof(bpl2mod),         0 },
         { &sprpt,           sizeof(sprpt),           DWORD_ARRAY },
         { &busOwner,        sizeof(busOwner),        0 },
-        { &displayDMA,      sizeof(displayDMA),      0 },
+        { &bitplaneDMA,     sizeof(bitplaneDMA),     0 },
         { &dmaEvent,        sizeof(dmaEvent),        0 },
         { &nextDmaEvent,    sizeof(nextDmaEvent),    0 },
         { &activeBitplanes, sizeof(activeBitplanes), 0 }
@@ -375,7 +375,7 @@ Agnus::switchSpriteDmaOff()
 void
 Agnus::switchBitplaneDmaOn()
 {
-    displayDMA = true;
+    bitplaneDMA = true;
 
     if (_denise->hires()) {
         
@@ -439,7 +439,7 @@ Agnus::switchBitplaneDmaOn()
 void
 Agnus::switchBitplaneDmaOff()
 {
-    displayDMA = false;
+    bitplaneDMA = false;
 
     // Clear the event table
     memset(dmaEvent + 0x18, 0, sizeof(dmaEvent) - 0x18);
@@ -471,7 +471,7 @@ Agnus::updateBitplaneDma()
     bool newDisplayDma = isBitplaneDmaLine();
 
     // This function update the DMA table only if the DMA state has changed.
-    if (displayDMA ^ newDisplayDma) {
+    if (bitplaneDMA ^ newDisplayDma) {
         newDisplayDma ? switchBitplaneDmaOn() : switchBitplaneDmaOff();
     }
 }
