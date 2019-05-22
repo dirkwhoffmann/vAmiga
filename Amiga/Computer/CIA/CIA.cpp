@@ -66,8 +66,8 @@ void
 CIA::_initialize()
 {
     agnus = &amiga->agnus;
-    handler = &amiga->agnus.eventHandler;
-    paula = &amiga->paula; 
+    events = &amiga->agnus.events;
+    paula = &amiga->paula;
 }
 
 void
@@ -1248,17 +1248,17 @@ CIAA::_powerOff()
 void
 CIAA::scheduleNextExecution()
 {
-    handler->scheduleAbs(CIAA_SLOT,
-                         clock + CIA_CYCLES(1),
-                         CIA_EXECUTE);
+    events->scheduleAbs(CIAA_SLOT,
+                        clock + CIA_CYCLES(1),
+                        CIA_EXECUTE);
 }
 
 void
 CIAA::scheduleWakeUp()
 {
-    handler->scheduleAbs(CIAA_SLOT,
-                         wakeUpCycle,
-                         CIA_WAKEUP);
+    events->scheduleAbs(CIAA_SLOT,
+                        wakeUpCycle,
+                        CIA_WAKEUP);
 }
 
 void 
@@ -1410,17 +1410,17 @@ CIAB::_dump()
 void
 CIAB::scheduleNextExecution()
 {
-    handler->scheduleAbs(CIAB_SLOT,
-                         clock + CIA_CYCLES(1),
-                         CIA_EXECUTE);
+    events->scheduleAbs(CIAB_SLOT,
+                        clock + CIA_CYCLES(1),
+                        CIA_EXECUTE);
 }
 
 void
 CIAB::scheduleWakeUp()
 {
-    handler->scheduleAbs(CIAB_SLOT,
-                         wakeUpCycle,
-                         CIA_WAKEUP);
+    events->scheduleAbs(CIAB_SLOT,
+                        wakeUpCycle,
+                        CIA_WAKEUP);
 }
 
 void 

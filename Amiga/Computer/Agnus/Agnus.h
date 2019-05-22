@@ -78,7 +78,7 @@ class Agnus : public HardwareComponent
     Blitter blitter;
     
     // The event sheduler, a key component of this emulator.
-    EventHandler eventHandler;
+    EventHandler events;
     
     
     //

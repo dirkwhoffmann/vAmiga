@@ -155,7 +155,7 @@ Amiga::setInspectionTarget(EventID id)
 {
     suspend();
     inspectionTarget = id;
-    handler->scheduleSecRel(INSPECTOR_SLOT, 0, inspectionTarget);
+    events->scheduleSecRel(INSPECTOR_SLOT, 0, inspectionTarget);
     resume();
 }
 
@@ -441,7 +441,7 @@ Amiga::configureFifoBuffering(bool value)
 void
 Amiga::_initialize()
 {
-    handler = &agnus.eventHandler; 
+    events = &agnus.events; 
 }
 
 void
@@ -905,7 +905,7 @@ Amiga::runLoop()
     
     // Enable or disable debugging features
     debugMode ? setControlFlags(RL_DEBUG) : clearControlFlags(RL_DEBUG);
-    handler->scheduleSecRel(INSPECTOR_SLOT, 0, inspectionTarget);
+    events->scheduleSecRel(INSPECTOR_SLOT, 0, inspectionTarget);
     
     // Enter the loop
     do {

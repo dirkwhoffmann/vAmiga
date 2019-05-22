@@ -779,7 +779,7 @@ EventHandler::serveINSEvent()
         case INS_AGNUS:  agnus->inspect(); break;
         case INS_PAULA:  paula->inspect(); break;
         case INS_DENISE: denise->inspect(); break;
-        case INS_EVENTS: agnus->eventHandler.inspect(); break;
+        case INS_EVENTS: agnus->events.inspect(); break;
         default:         assert(false);
     }
     

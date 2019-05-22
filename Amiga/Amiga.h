@@ -54,7 +54,7 @@ extern Amiga *activeAmiga;
 class Amiga : public HardwareComponent {
 
     // Quick-access references
-    class EventHandler *handler;
+    class EventHandler *events;
 
     // The Amiga model we're going to emulate
     AmigaModel model = AMIGA_500;

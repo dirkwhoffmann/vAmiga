@@ -83,7 +83,7 @@ Blitter::_initialize()
 {
     mem = &amiga->mem;
     agnus = &amiga->agnus;
-    handler = &amiga->agnus.eventHandler;
+    events = &amiga->agnus.events;
 }
 
 void
@@ -116,7 +116,7 @@ Blitter::_inspect()
     // Prevent external access to variable 'info'
     pthread_mutex_lock(&lock);
     
-    info.active  = handler->isPending(BLT_SLOT);
+    info.active  = events->isPending(BLT_SLOT);
     info.bltcon0 = bltcon0;
     info.bltcon1 = bltcon1;
     info.bltapt  = bltapt;
@@ -293,7 +293,7 @@ Blitter::pokeBLTSIZE(uint16_t value)
     bbusy = true;
     
     // WE ONLY DO FAST BLITS AT THE MOMENT
-    handler->scheduleRel(BLT_SLOT, DMA_CYCLES(1), BLT_FAST_BLIT);
+    events->scheduleRel(BLT_SLOT, DMA_CYCLES(1), BLT_FAST_BLIT);
     
     
     /*
@@ -309,7 +309,7 @@ Blitter::pokeBLTSIZE(uint16_t value)
         loadMicrocode();
         
         // Start the blit
-        handler->scheduleRel(BLT_SLOT, DMA_CYCLES(1), BLT_EXECUTE);
+        events->scheduleRel(BLT_SLOT, DMA_CYCLES(1), BLT_EXECUTE);
     }
     */
 }
@@ -406,7 +406,7 @@ Blitter::serviceEvent(EventID id)
             
             // Only proceed if Blitter DMA is enabled
             if (!agnus->bltDMA()) {
-                agnus->eventHandler.disable(BLT_SLOT);
+                agnus->events.disable(BLT_SLOT);
                 break;
             }
 
@@ -510,15 +510,15 @@ Blitter::serviceEvent(EventID id)
                 bbusy = false;
                 
                 // Trigger the Blitter interrupt
-                handler->scheduleSecRel(IRQ_BLIT_SLOT, 0, IRQ_SET);
+                events->scheduleSecRel(IRQ_BLIT_SLOT, 0, IRQ_SET);
                 
                 // Terminate the Blitter
-                handler->cancel(BLT_SLOT);
+                events->cancel(BLT_SLOT);
                 
             } else {
             
                 // Continue running the Blitter
-                agnus->eventHandler.rescheduleRel(BLT_SLOT, DMA_CYCLES(1));
+                agnus->events.rescheduleRel(BLT_SLOT, DMA_CYCLES(1));
             }
             
             break;
@@ -527,7 +527,7 @@ Blitter::serviceEvent(EventID id)
             
             // Only proceed if Blitter DMA is enabled
             if (!agnus->bltDMA()) {
-                agnus->eventHandler.disable(BLT_SLOT);
+                agnus->events.disable(BLT_SLOT);
                 break;
             }
             

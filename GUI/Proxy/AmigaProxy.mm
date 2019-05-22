@@ -319,7 +319,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 - (void) dumpEventHandler
 {
-    wrapper->agnus->eventHandler.dump();
+    wrapper->agnus->events.dump();
 }
 - (void) dumpCopper
 {
@@ -335,23 +335,23 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 - (NSInteger) primSlotCount
 {
-    return wrapper->agnus->eventHandler.primSlotCount();
+    return wrapper->agnus->events.primSlotCount();
 }
 - (NSInteger) secSlotCount
 {
-    return wrapper->agnus->eventHandler.secSlotCount();
+    return wrapper->agnus->events.secSlotCount();
 }
 - (EventSlotInfo) getPrimarySlotInfo:(NSInteger)slot
 {
-    return wrapper->agnus->eventHandler.getPrimarySlotInfo(slot);
+    return wrapper->agnus->events.getPrimarySlotInfo(slot);
 }
 - (EventSlotInfo) getSecondarySlotInfo:(NSInteger)slot
 {
-    return wrapper->agnus->eventHandler.getSecondarySlotInfo(slot);
+    return wrapper->agnus->events.getSecondarySlotInfo(slot);
 }
 - (EventHandlerInfo) getEventInfo
 {
-    return wrapper->agnus->eventHandler.getInfo();
+    return wrapper->agnus->events.getInfo();
 }
 - (CopperInfo) getCopperInfo
 {

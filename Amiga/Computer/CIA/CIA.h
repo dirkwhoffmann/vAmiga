@@ -74,7 +74,7 @@ protected:
 
     // Quick-access references
     class Agnus *agnus;
-    class EventHandler *handler;
+    class EventHandler *events;
     class Paula *paula; 
 
     // Information shown in the GUI inspector panel

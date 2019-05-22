@@ -25,7 +25,7 @@ Agnus::Agnus()
         
         &copper,
         &blitter,
-        &eventHandler,
+        &events,
     });
     
     registerSnapshotItems(vector<SnapshotItem> {
@@ -86,11 +86,11 @@ Agnus::_powerOn()
     clearDMAEventTable();
     
     // Schedule the first RAS event
-    eventHandler.scheduleAbs(RAS_SLOT, DMA_CYCLES(HPOS_MAX), RAS_HSYNC);
+    events.scheduleAbs(RAS_SLOT, DMA_CYCLES(HPOS_MAX), RAS_HSYNC);
     
     // Schedule the first CIA A and CIA B events
-    eventHandler.scheduleAbs(CIAA_SLOT, CIA_CYCLES(1), CIA_EXECUTE);
-    eventHandler.scheduleAbs(CIAB_SLOT, CIA_CYCLES(1), CIA_EXECUTE);
+    events.scheduleAbs(CIAA_SLOT, CIA_CYCLES(1), CIA_EXECUTE);
+    events.scheduleAbs(CIAB_SLOT, CIA_CYCLES(1), CIA_EXECUTE);
 }
 
 void
@@ -152,7 +152,7 @@ Agnus::_dump()
     dumpDMAEventTable(0x50, 0x9F);
     dumpDMAEventTable(0xA0, 0xE2);
     
-    eventHandler.dump();
+    events.dump();
 }
 
 DMAInfo
@@ -637,13 +637,13 @@ Agnus::pokeDMACON(uint16_t value)
             // (the next even DMA cycle)
             Cycle trigger = (clock + 15) & ~15;
             
-            eventHandler.scheduleAbs(COP_SLOT, trigger, COP_FETCH);
+            events.scheduleAbs(COP_SLOT, trigger, COP_FETCH);
             
         } else {
             
             // Copper DMA off
             debug(DMA_DEBUG, "Copper DMA switched off\n");
-            eventHandler.cancel(COP_SLOT);
+            events.cancel(COP_SLOT);
         }
     }
     
@@ -654,13 +654,13 @@ Agnus::pokeDMACON(uint16_t value)
             // Blitter DMA on
             debug(DMA_DEBUG, "Blitter DMA switched on\n");
             // amiga->agnus.eventHandler.scheduleRel(BLT_SLOT, DMA_CYCLES(1), BLT_EXECUTE);
-            eventHandler.scheduleRel(BLT_SLOT, DMA_CYCLES(1), BLT_FAST_BLIT);
+            events.scheduleRel(BLT_SLOT, DMA_CYCLES(1), BLT_FAST_BLIT);
     
         } else {
             
             // Blitter DMA off
             debug(DMA_DEBUG, "Blitter DMA switched off\n");
-            eventHandler.disable(BLT_SLOT);
+            events.disable(BLT_SLOT);
         }
     }
     
@@ -995,7 +995,7 @@ Agnus::executeUntil(Cycle targetClock)
         busOwner = 0;
         
         // Process all pending events
-        eventHandler.executeUntil(clock);
+        events.executeUntil(clock);
         
         // Advance the internal counters
         hpos++;
@@ -1155,9 +1155,9 @@ Agnus::serviceDMAEvent(EventID id)
     uint8_t next = nextDmaEvent[hpos];
     // debug("id = %d hpos = %d, next = %d\n", id, hpos, next);
     if (next) {
-        eventHandler.schedulePos(DMA_SLOT, vpos, next, dmaEvent[next]);
+        events.schedulePos(DMA_SLOT, vpos, next, dmaEvent[next]);
     } else {
-        eventHandler.cancel(DMA_SLOT);
+        events.cancel(DMA_SLOT);
     }
 }
 
@@ -1241,9 +1241,9 @@ Agnus::serviceRASEvent(EventID id)
             // Schedule next RAS event
             if (hpos < hstop / 2 && hpos + incr < HPOS_MAX) {
                 // TODO: Replace by scheduleRel which is faster
-                eventHandler.schedulePos(RAS_SLOT, vpos, hpos + incr, RAS_DIWDRAW);
+                events.schedulePos(RAS_SLOT, vpos, hpos + incr, RAS_DIWDRAW);
             } else {
-                eventHandler.schedulePos(RAS_SLOT, vpos, HPOS_MAX, RAS_HSYNC);
+                events.schedulePos(RAS_SLOT, vpos, HPOS_MAX, RAS_HSYNC);
             }
             return;
             
@@ -1254,9 +1254,9 @@ Agnus::serviceRASEvent(EventID id)
             // Schedule next RAS event
             if (hpos < hstop / 2 && hpos + incr < HPOS_MAX) {
                 // TODO: Replace by scheduleRel which is faster
-                eventHandler.schedulePos(RAS_SLOT, vpos, hpos + incr, RAS_DIWDRAW);
+                events.schedulePos(RAS_SLOT, vpos, hpos + incr, RAS_DIWDRAW);
             } else {
-                eventHandler.schedulePos(RAS_SLOT, vpos, HPOS_MAX, RAS_HSYNC);
+                events.schedulePos(RAS_SLOT, vpos, HPOS_MAX, RAS_HSYNC);
             }
             return;
             
@@ -1275,12 +1275,12 @@ Agnus::scheduleFirstRASEvent(int16_t vpos)
     // Check if the vertical position is inside the drawing area
     if (vpos > 25 && vpos >= vstrt && vpos <= vstop) {
         
-        eventHandler.schedulePos(RAS_SLOT, vpos, hstrtdma, RAS_DIWSTRT);
+        events.schedulePos(RAS_SLOT, vpos, hstrtdma, RAS_DIWSTRT);
         return;
 
     } else {
         
-        eventHandler.schedulePos(RAS_SLOT, vpos, HPOS_MAX, RAS_HSYNC);
+        events.schedulePos(RAS_SLOT, vpos, HPOS_MAX, RAS_HSYNC);
     }
 }
 
@@ -1356,7 +1356,7 @@ Agnus::hsyncHandler()
     // Schedule the first hi-prio DMA event (if any)
     if (nextDmaEvent[0]) {
         EventID eventID = dmaEvent[nextDmaEvent[0]];
-        eventHandler.schedulePos(DMA_SLOT, vpos, nextDmaEvent[0], eventID);
+        events.schedulePos(DMA_SLOT, vpos, nextDmaEvent[0], eventID);
     }
     
     // Schedule first RAS event
