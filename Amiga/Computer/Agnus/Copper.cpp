@@ -27,6 +27,7 @@ Copper::Copper()
 void
 Copper::_initialize()
 {
+    mem = &_amiga->mem;
     agnus = &_amiga->agnus;
     handler = &_amiga->agnus.eventHandler; 
 }
@@ -232,7 +233,7 @@ Copper::isMoveCmd()
 
 bool Copper::isMoveCmd(uint32_t addr)
 {
-    uint32_t instr = _mem->spypeek32(addr);
+    uint32_t instr = mem->spypeek32(addr);
     return !(HI_WORD(instr) & 1);
 }
 
@@ -243,7 +244,7 @@ bool Copper::isWaitCmd()
 
 bool Copper::isWaitCmd(uint32_t addr)
 {
-    uint32_t instr = _mem->spypeek32(addr);
+    uint32_t instr = mem->spypeek32(addr);
     return (HI_WORD(instr) & 1) && !(LO_WORD(instr) & 1);
 }
 
@@ -256,7 +257,7 @@ Copper::isSkipCmd()
 bool
 Copper::isSkipCmd(uint32_t addr)
 {
-    uint32_t instr = _mem->spypeek32(addr);
+    uint32_t instr = mem->spypeek32(addr);
     return (HI_WORD(instr) & 1) && (LO_WORD(instr) & 1);
 }
 
@@ -269,7 +270,7 @@ Copper::getRA()
 uint16_t
 Copper::getRA(uint32_t addr)
 {
-    uint32_t instr = _mem->spypeek32(addr);
+    uint32_t instr = mem->spypeek32(addr);
     return HI_WORD(instr) & 0x1FE;
 }
 
@@ -282,7 +283,7 @@ Copper::getDW()
 uint16_t
 Copper::getDW(uint32_t addr)
 {
-    uint32_t instr = _mem->spypeek32(addr);
+    uint32_t instr = mem->spypeek32(addr);
     return LO_WORD(instr);
 }
 
@@ -295,7 +296,7 @@ Copper::getBFD()
 bool
 Copper::getBFD(uint32_t addr)
 {
-    uint32_t instr = _mem->spypeek32(addr);
+    uint32_t instr = mem->spypeek32(addr);
     return (LO_WORD(instr) & 0x8000) != 0;
 }
 
@@ -308,7 +309,7 @@ Copper::getVPHP()
 uint16_t
 Copper::getVPHP(uint32_t addr)
 {
-    uint32_t instr = _mem->spypeek32(addr);
+    uint32_t instr = mem->spypeek32(addr);
     return HI_WORD(instr) & 0xFFFE;
 }
 
@@ -321,7 +322,7 @@ Copper::getVMHM()
 uint16_t
 Copper::getVMHM(uint32_t addr)
 {
-    uint32_t instr = _mem->spypeek32(addr);
+    uint32_t instr = mem->spypeek32(addr);
     return (LO_WORD(instr) & 0x7FFE) | 0x8001;
 }
 
@@ -362,7 +363,7 @@ Copper::serviceEvent(EventID id)
             if (agnus->copperCanHaveBus()) {
                 
                 // Load the first instruction word
-                copins1 = _mem->peek16(coppc);
+                copins1 = mem->peek16(coppc);
                 debug(2, "COP_FETCH: coppc = %X copins1 = %X\n", coppc, copins1);
                 advancePC();
                 
@@ -376,7 +377,7 @@ Copper::serviceEvent(EventID id)
             if (agnus->copperCanHaveBus()) {
                 
                 // Load the second instruction word
-                copins2 = _mem->peek16(coppc);
+                copins2 = mem->peek16(coppc);
                 debug(2, "COP_MOVE: coppc = %X copins2 = %X\n", coppc, copins2);
                 advancePC();
                 
@@ -390,7 +391,7 @@ Copper::serviceEvent(EventID id)
                 }
                 
                 // Write into the custom register
-                if (!skip) _mem->pokeCustom16(reg, copins2);
+                if (!skip) mem->pokeCustom16(reg, copins2);
                 skip = false;
                 
                 // Schedule next event
@@ -403,7 +404,7 @@ Copper::serviceEvent(EventID id)
             if (agnus->copperCanHaveBus()) {
 
                 // Load the second instruction word
-                copins2 = _mem->peek16(coppc);
+                copins2 = mem->peek16(coppc);
                 debug(2, "COP_WAIT_OR_SKIP: coppc = %X copins2 = %X\n", coppc, copins2);
                 debug(2, "    VPHP = %X VMHM = %X\n", getVPHP(), getVMHM());
                 advancePC();

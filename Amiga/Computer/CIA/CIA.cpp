@@ -88,7 +88,7 @@ CIA::_powerOn()
     CRB = 0x4; // seen in SAE
     
     // The OVL bit influences the memory layout. Hence, we need to update it.
-    _mem->updateMemSrcTable();
+    _amiga->mem.updateMemSrcTable();
 }
 
 void
@@ -1325,7 +1325,7 @@ CIAA::updatePA()
     // Overlay bit (OVL)
     if ((oldPA ^ PA) & 0b00000001) {
         // debug("OVL has changed\n");
-        _mem->updateMemSrcTable();
+        _amiga->mem.updateMemSrcTable();
     }
     
     /*

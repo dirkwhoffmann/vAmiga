@@ -65,6 +65,7 @@ class EventHandler : public HardwareComponent
     // Quick-access references
     class CIAA *ciaA;
     class CIAB *ciaB;
+    class Memory *mem;
     class Agnus *agnus;
     class Denise *denise;
     class Paula *paula; 

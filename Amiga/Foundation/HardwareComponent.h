@@ -77,7 +77,6 @@ public:
      * never change. They provide a quick-access to every other component.
      */
     Amiga        *_amiga   = NULL;
-    Memory       *_mem     = NULL;
     ZorroManager *_zorro   = NULL;
     
 protected:

@@ -14,7 +14,7 @@
  * ptr is a DMA pointer register and dest the destination
  */
 #define DO_DMA(ptr,dest) \
-dest = _mem->peekChip16(ptr); \
+dest = mem->peekChip16(ptr); \
 ptr = (ptr + 2) & 0x7FFFE;
 
 Agnus::Agnus()
@@ -68,8 +68,9 @@ Agnus::Agnus()
 void
 Agnus::_initialize()
 {
+    mem    = &_amiga->mem;
     denise = &_amiga->denise;
-    paula = &_amiga->paula;
+    paula  = &_amiga->paula;
 }
 
 void
@@ -1113,7 +1114,7 @@ Agnus::serviceDMAEvent(EventID id)
             if (_amiga->debugDMA) debug("H2\n");
         case DMA_L2:
             
-            if (_amiga->debugDMA) debug("DO_DMA H2/L2 (%d,%d): bpldat[%d] = peekChip16(%X) = %X\n", vpos, hpos, PLANE2, bplpt[PLANE2], _mem->peekChip16(bplpt[PLANE2]));
+            if (_amiga->debugDMA) debug("DO_DMA H2/L2 (%d,%d): bpldat[%d] = peekChip16(%X) = %X\n", vpos, hpos, PLANE2, bplpt[PLANE2], mem->peekChip16(bplpt[PLANE2]));
             DO_DMA(bplpt[PLANE2], denise->bpldat[PLANE2]);
             break;
             
@@ -1121,7 +1122,7 @@ Agnus::serviceDMAEvent(EventID id)
             if (_amiga->debugDMA) debug("H3\n");
         case DMA_L3:
             
-            if (_amiga->debugDMA) debug("DO_DMA H3/L3: bpldat[%d] = peekChip16(%X) = %X\n", PLANE3, bplpt[PLANE3], _mem->peekChip16(bplpt[PLANE3]));
+            if (_amiga->debugDMA) debug("DO_DMA H3/L3: bpldat[%d] = peekChip16(%X) = %X\n", PLANE3, bplpt[PLANE3], mem->peekChip16(bplpt[PLANE3]));
             DO_DMA(bplpt[PLANE3], denise->bpldat[PLANE3]);
             break;
             
@@ -1129,19 +1130,19 @@ Agnus::serviceDMAEvent(EventID id)
             if (_amiga->debugDMA) debug("H4\n");
         case DMA_L4:
             
-            if (_amiga->debugDMA) debug("DO_DMA H4/L4: bpldat[%d] = peekChip16(%X) = %X\n", PLANE4, bplpt[PLANE4], _mem->peekChip16(bplpt[PLANE4]));
+            if (_amiga->debugDMA) debug("DO_DMA H4/L4: bpldat[%d] = peekChip16(%X) = %X\n", PLANE4, bplpt[PLANE4], mem->peekChip16(bplpt[PLANE4]));
             DO_DMA(bplpt[PLANE4], denise->bpldat[PLANE4]);
             break;
             
         case DMA_L5:
             
-            if (_amiga->debugDMA) debug("DO_DMA L5: bpldat[%d] = peekChip16(%X) = %X\n", PLANE5, bplpt[PLANE5], _mem->peekChip16(bplpt[PLANE5]));
+            if (_amiga->debugDMA) debug("DO_DMA L5: bpldat[%d] = peekChip16(%X) = %X\n", PLANE5, bplpt[PLANE5], mem->peekChip16(bplpt[PLANE5]));
             DO_DMA(bplpt[PLANE5], denise->bpldat[PLANE5]);
             break;
             
         case DMA_L6:
             
-            if (_amiga->debugDMA) debug("DO_DMA L6: bpldat[%d] = peekChip16(%X) = %X\n", PLANE6, bplpt[PLANE6], _mem->peekChip16(bplpt[PLANE6]));
+            if (_amiga->debugDMA) debug("DO_DMA L6: bpldat[%d] = peekChip16(%X) = %X\n", PLANE6, bplpt[PLANE6], mem->peekChip16(bplpt[PLANE6]));
             DO_DMA(bplpt[PLANE6], denise->bpldat[PLANE6]);
             break;
             
@@ -1173,7 +1174,7 @@ Agnus::serviceS1Event(int nr)
         sprDmaState[nr] = SPR_DMA_IDLE;
 
         // Read the next control word (POS part)
-        uint16_t pos = _mem->peekChip16(sprpt[nr]);
+        uint16_t pos = mem->peekChip16(sprpt[nr]);
         INC_DMAPTR(sprpt[nr]);
         
         // Extract vertical trigger coordinate bits from POS
@@ -1185,7 +1186,7 @@ Agnus::serviceS1Event(int nr)
     if (sprDmaState[nr] == SPR_DMA_DATA) {
         
         // Read DATA
-        denise->pokeSPRxDATB(nr, _mem->peekChip16(sprpt[nr]));
+        denise->pokeSPRxDATB(nr, mem->peekChip16(sprpt[nr]));
         INC_DMAPTR(sprpt[nr]);
     }
 }
@@ -1200,7 +1201,7 @@ Agnus::serviceS2Event(int nr)
         assert(sprDmaState[nr] == SPR_DMA_IDLE);
         
         // Read the next control word (CTL part)
-        uint16_t ctl = _mem->peekChip16(sprpt[nr]);
+        uint16_t ctl = mem->peekChip16(sprpt[nr]);
         INC_DMAPTR(sprpt[nr]);
         
         // Extract vertical trigger coordinate bits from CTL
@@ -1213,7 +1214,7 @@ Agnus::serviceS2Event(int nr)
     if (sprDmaState[nr] == SPR_DMA_DATA) {
         
         // Read DATB
-        denise->pokeSPRxDATA(nr, _mem->peekChip16(sprpt[nr]));
+        denise->pokeSPRxDATA(nr, mem->peekChip16(sprpt[nr]));
         INC_DMAPTR(sprpt[nr]);
     }
 }

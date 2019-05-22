@@ -24,6 +24,12 @@ ZorroManager::ZorroManager()
 }
 
 void
+ZorroManager::_initialize()
+{
+    mem = &_amiga->mem;
+}
+
+void
 ZorroManager::_powerOn()
 {
     
@@ -58,7 +64,7 @@ ZorroManager::peekFastRamDevice(uint32_t addr)
 {
     debug("    peekFastRamDevice(%X)\n", addr & 0xFFFF);
     
-    if (fastRamConf || _mem->fastRamSize == 0) return 0xF; // Already configured
+    if (fastRamConf || mem->fastRamSize == 0) return 0xF; // Already configured
     
     /* Register pair 00/02 (er_Type)
      *
@@ -83,7 +89,7 @@ ZorroManager::peekFastRamDevice(uint32_t addr)
     uint8_t erTypeHi = 0b1110; // Zorro II, Free pool, Don't boot
     uint8_t erTypeLo;
     
-    switch (_mem->fastRamSize) {
+    switch (mem->fastRamSize) {
         case KB(64):  erTypeLo = 0b001; break;
         case KB(128): erTypeLo = 0b010; break;
         case KB(256): erTypeLo = 0b011; break;
@@ -194,7 +200,7 @@ ZorroManager::peekFastRamDevice(uint32_t addr)
 void
 ZorroManager::pokeFastRamDevice(uint32_t addr, uint8_t value)
 {
-    if (_mem->fastRamSize == 0) return;
+    if (mem->fastRamSize == 0) return;
     
     debug("    pokeFastRamDevice(%X, %X)\n", addr, value);
     

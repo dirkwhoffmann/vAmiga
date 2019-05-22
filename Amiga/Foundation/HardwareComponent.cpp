@@ -49,7 +49,6 @@ HardwareComponent::initialize(Amiga *amiga)
     assert(amiga != NULL);
 
     this->_amiga   = amiga;
-    this->_mem     = &amiga->mem;
     this->_zorro   = &amiga->zorro;
 
     // Initialize all subcomponents

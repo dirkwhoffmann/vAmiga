@@ -57,6 +57,7 @@ static inline bool isVposHpos(int16_t vpos, int16_t hpos) {
 class Agnus : public HardwareComponent
 {
     // Quick-access references
+    class Memory *mem;
     class Denise *denise;
     class Paula *paula;
 

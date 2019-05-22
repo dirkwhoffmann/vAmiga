@@ -28,6 +28,7 @@ EventHandler::_initialize()
 {
     ciaA   = &_amiga->ciaA;
     ciaB   = &_amiga->ciaB;
+    mem    = &_amiga->mem;
     agnus  = &_amiga->agnus;
     denise = &_amiga->denise;
     paula  = &_amiga->paula;
@@ -773,7 +774,7 @@ EventHandler::serveINSEvent()
         case INS_NONE:   break;
         case INS_AMIGA:  _amiga->inspect(); break;
         case INS_CPU:    _amiga->cpu.inspect(); break;
-        case INS_MEM:    _mem->inspect(); break;
+        case INS_MEM:    mem->inspect(); break;
         case INS_CIA:    ciaA->inspect(); ciaB->inspect(); break;
         case INS_AGNUS:  agnus->inspect(); break;
         case INS_PAULA:  paula->inspect(); break;

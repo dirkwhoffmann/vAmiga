@@ -81,6 +81,7 @@ Blitter::Blitter()
 void
 Blitter::_initialize()
 {
+    mem = &_amiga->mem;
     agnus = &_amiga->agnus;
     handler = &_amiga->agnus.eventHandler;
 }
@@ -417,7 +418,7 @@ Blitter::serviceEvent(EventID id)
             if (instr & WRITE_D) {
                 
                 debug(2, "WRITE_D\n");
-                _mem->pokeChip16(bltdpt, dhold);
+                mem->pokeChip16(bltdpt, dhold);
                 INC_OCS_PTR(bltdpt, 2 + (isLastWord() ? bltdmod : 0));
             }
             
@@ -463,7 +464,7 @@ Blitter::serviceEvent(EventID id)
                 
                 debug(2, "FETCH_A\n");
                 // pokeBLTADAT(amiga->mem.peek16(bltapt));
-                anew = _mem->peek16(bltapt);
+                anew = mem->peek16(bltapt);
                 INC_OCS_PTR(bltapt, 2 + (isLastWord() ? bltamod : 0));
             }
             
@@ -471,7 +472,7 @@ Blitter::serviceEvent(EventID id)
 
                 debug(3, "FETCH_B\n");
                 // pokeBLTBDAT(amiga->mem.peek16(bltbpt));
-                bnew = _mem->peek16(bltbpt);
+                bnew = mem->peek16(bltbpt);
                 INC_OCS_PTR(bltbpt, 2 + (isLastWord() ? bltbmod : 0));
             }
 
@@ -479,7 +480,7 @@ Blitter::serviceEvent(EventID id)
                 
                 debug(3, "FETCH_C\n");
                 // pokeBLTCDAT(amiga->mem.peek16(bltcpt));
-                chold = _mem->peek16(bltcpt);
+                chold = mem->peek16(bltcpt);
                 INC_OCS_PTR(bltcpt, 2 + (isLastWord() ? bltcmod : 0));
             }
             

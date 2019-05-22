@@ -105,7 +105,7 @@ StateMachine::execute(DMACycle cycles)
                 auddat = LO_BYTE(auddatLatch);
 
                 // Read the next two samples from memory
-                auddatLatch = _mem->peekChip16(agnus->audlc[nr]);
+                auddatLatch = _amiga->mem.peekChip16(agnus->audlc[nr]);
                 INC_DMAPTR(agnus->audlc[nr]);
 
                 // Decrease the length counter
@@ -131,7 +131,7 @@ StateMachine::execute(DMACycle cycles)
             audper = 0;
 
             // Read the next two samples from memory
-            auddatLatch = _mem->peekChip16(agnus->audlc[nr]);
+            auddatLatch = _amiga->mem.peekChip16(agnus->audlc[nr]);
             INC_DMAPTR(agnus->audlc[nr]);
 
             if (audlen > 1) {

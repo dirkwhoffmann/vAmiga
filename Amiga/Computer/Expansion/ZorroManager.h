@@ -18,7 +18,10 @@
 
 // Manager for plugged in Zorro II devices
 class ZorroManager : public HardwareComponent {
-    
+
+    // Quick-access references
+    class Memory *mem;
+
     // The value returned when peeking into the auto-config space.
     uint8_t autoConfData;
     
@@ -43,7 +46,8 @@ public:
     //
     
 private:
-    
+
+    void _initialize() override;
     void _powerOn() override;
     void _powerOff() override;
     void _reset() override;

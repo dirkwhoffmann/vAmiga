@@ -16,6 +16,7 @@ class Blitter : public HardwareComponent {
     friend class Agnus;
 
     // Quick-access references
+    class Memory *mem; 
     class Agnus *agnus;
     class EventHandler *handler; 
 

@@ -37,9 +37,10 @@ DiskController::DiskController()
 void
 DiskController::_initialize()
 {
+    mem = &_amiga->mem;
     agnus = &_amiga->agnus;
     handler = &_amiga->agnus.eventHandler;
-    paula = &_amiga->paula;
+    paula  = &_amiga->paula;
     
     df[0] = &_amiga->df0;
     df[1] = &_amiga->df1;
@@ -83,7 +84,7 @@ DiskController::_inspect()
     info.state = state;
     info.fifoCount = fifoCount;
     info.dsklen = dsklen;
-    info.dskbytr = _mem->spypeekChip16(DSKBYTR);
+    info.dskbytr = mem->spypeekChip16(DSKBYTR);
     info.dsksync = dsksync;
     info.prb = prb;
  
@@ -439,7 +440,7 @@ DiskController::dmaRead()
     uint32_t addr = agnus->dskpt;
     
     INC_DMAPTR(agnus->dskpt);
-    return _mem->peekChip16(addr);
+    return mem->peekChip16(addr);
 }
 
 void
@@ -448,7 +449,7 @@ DiskController::dmaWrite(uint16_t word)
     uint32_t addr = agnus->dskpt;
     
     INC_DMAPTR(agnus->dskpt);
-    _mem->pokeChip16(addr, word);
+    mem->pokeChip16(addr, word);
 }
 
 void

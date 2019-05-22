@@ -342,7 +342,7 @@ CPU::disassemble(uint32_t addr)
     if (addr <= 0xFFFFFF) {
         
         result.bytes = m68k_disassemble(result.instr, addr, M68K_CPU_TYPE_68000);
-        _mem->hex(result.data, addr, result.bytes, sizeof(result.data));
+        _amiga->mem.hex(result.data, addr, result.bytes, sizeof(result.data));
         sprint24x(result.addr, addr);
         
     } else {
