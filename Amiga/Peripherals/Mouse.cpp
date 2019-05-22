@@ -64,14 +64,14 @@ Mouse::setXY(int64_t x, int64_t y)
 void
 Mouse::setLeftButton(bool value)
 {
-    debug("setLeftButton(%d)\n", value);
+    debug(CPT_DEBUG, "setLeftButton(%d)\n", value);
     leftButton = value;
 }
 
 void
 Mouse::setRightButton(bool value)
 {
-    debug("setRightButton(%d)\n", value);
+    debug(CPT_DEBUG, "setRightButton(%d)\n", value);
     rightButton = value;
 }
 

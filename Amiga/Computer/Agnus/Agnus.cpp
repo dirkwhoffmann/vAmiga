@@ -378,8 +378,8 @@ Agnus::switchBitplaneDmaOn()
     if (_denise->hires()) {
         
         // Determine start and stop cycle
-        uint8_t start = MAX(ddfstrt & 0b11111100, 0x18);
-        uint8_t stop  = MIN(ddfstop & 0b11111100, 0xD8);
+        uint8_t start = ddfstrt; // MAX(ddfstrt & 0b11111100, 0x18);
+        uint8_t stop  = ddfstop; // MIN(ddfstop & 0b11111100, 0xD8);
         
         // Align stop such that (stop - start) is dividable by 8
         stop += (stop - start) & 0b100;
@@ -401,8 +401,8 @@ Agnus::switchBitplaneDmaOn()
     } else {
         
         // Determine start and stop cycle
-        uint8_t start = MAX(ddfstrt & 0b11111000, 0x18);
-        uint8_t stop  = MIN(ddfstop & 0b11111000, 0xD8);
+        uint8_t start = ddfstrt; // MAX(ddfstrt & 0b11111000, 0x18);
+        uint8_t stop  = ddfstop; // MIN(ddfstop & 0b11111000, 0xD8);
         
         // Determine event IDs
         EventID l6 = (activeBitplanes >= 6) ? DMA_L6 : EVENT_NONE;
@@ -839,7 +839,7 @@ Agnus::pokeDIWSTOP(uint16_t value)
     
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // V7 V6 V5 V4 V3 V2 V1 V0 H7 H6 H5 H4 H3 H2 H1 H0  and  H8 = 1, V8 = !V7
-    
+
     diwstop = value;
     hstop = LO_BYTE(value) | 0x100;
     vstop = HI_BYTE(value) | ((~value & 0x8000) >> 7);
@@ -852,15 +852,39 @@ Agnus::pokeDDFSTRT(uint16_t value)
 {
     debug(BPL_DEBUG, "pokeDDFSTRT(%X)\n", value);
 
-    ddfstrt = value;
+    // Fit to raster and cap minimum value at 0x18
+    uint16_t oldValue = ddfstop;
+    uint16_t newValue = MAX(value & 0xFC, 0x18);
+
+    if (newValue != value) {
+        warn("Strange value detected in pokeDDFSTRT(%X)\n", value);
+    }
+
+    if (newValue != oldValue) {
+        debug(BPL_DEBUG, "DDFSTRT changed from %d to %d\n", oldValue, newValue);
+    }
+
+    ddfstrt = newValue;
 }
 
 void
 Agnus::pokeDDFSTOP(uint16_t value)
 {
     debug(BPL_DEBUG, "pokeDDFSTOP(%X)\n", value);
-    
-    ddfstop = value;
+
+    // Fit to raster and cap maximum value at 0xD8
+    uint16_t oldValue = ddfstop;
+    uint16_t newValue = MIN(value & 0xFC, 0xD8);
+
+    if (newValue != value) {
+        warn("Strange value detected in pokeDDFSTOP(%X)\n", value);
+    }
+
+    if (newValue != oldValue) {
+        debug(BPL_DEBUG, "DDFSTOP changed from %d to %d\n", oldValue, newValue);
+    }
+
+    ddfstop = newValue;
 }
 
 void
