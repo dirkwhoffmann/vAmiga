@@ -24,11 +24,11 @@ void
 HardwareComponent::prefix()
 {
     fprintf(stderr, "[%lld] (%3d,%3d) ",
-            _agnus->frame, _agnus->vpos, _agnus->hpos);
+            _amiga->agnus.frame, _amiga->agnus.vpos, _amiga->agnus.hpos);
 
     fprintf(stderr, " %06X: ", _cpu->getPC());
 
-    uint16_t dmacon = _agnus->dmacon;
+    uint16_t dmacon = _amiga->agnus.dmacon;
     bool dmaen = dmacon & DMAEN;
     fprintf(stderr, "%c%c%c%c ",
             (dmacon & BPLEN) ? (dmaen ? 'P' : 'p') : '-',
@@ -54,7 +54,6 @@ HardwareComponent::initialize(Amiga *amiga)
     this->_cpu     = &amiga->cpu;
     this->_ciaA    = &amiga->ciaA;
     this->_ciaB    = &amiga->ciaB;
-    this->_agnus   = &amiga->agnus;
     this->_denise  = &amiga->denise;
     this->_paula   = &amiga->paula;
     this->_zorro   = &amiga->zorro;

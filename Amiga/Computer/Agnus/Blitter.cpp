@@ -79,6 +79,12 @@ Blitter::Blitter()
 }
 
 void
+Blitter::_initialize()
+{
+    agnus = &_amiga->agnus;
+}
+
+void
 Blitter::_powerOn()
 {
     
@@ -397,8 +403,8 @@ Blitter::serviceEvent(EventID id)
         case BLT_EXECUTE:
             
             // Only proceed if Blitter DMA is enabled
-            if (!_agnus->bltDMA()) {
-                _agnus->eventHandler.disable(BLT_SLOT);
+            if (!agnus->bltDMA()) {
+                agnus->eventHandler.disable(BLT_SLOT);
                 break;
             }
 
@@ -510,7 +516,7 @@ Blitter::serviceEvent(EventID id)
             } else {
             
                 // Continue running the Blitter
-                _agnus->eventHandler.rescheduleRel(BLT_SLOT, DMA_CYCLES(1));
+                agnus->eventHandler.rescheduleRel(BLT_SLOT, DMA_CYCLES(1));
             }
             
             break;
@@ -518,8 +524,8 @@ Blitter::serviceEvent(EventID id)
         case BLT_FAST_BLIT:
             
             // Only proceed if Blitter DMA is enabled
-            if (!_agnus->bltDMA()) {
-                _agnus->eventHandler.disable(BLT_SLOT);
+            if (!agnus->bltDMA()) {
+                agnus->eventHandler.disable(BLT_SLOT);
                 break;
             }
             

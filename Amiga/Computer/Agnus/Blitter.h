@@ -14,7 +14,10 @@
 class Blitter : public HardwareComponent {
     
     friend class Agnus;
-    
+
+    // Quick-access references
+    class Agnus *agnus;
+
     private:
     
     // Information shown in the GUI inspector panel
@@ -135,7 +138,8 @@ class Blitter : public HardwareComponent {
     //
     
     private:
-    
+
+    void _initialize() override;
     void _powerOn() override;
     void _powerOff() override;
     void _reset() override;

@@ -69,9 +69,10 @@ class CIA : public HardwareComponent {
     
     friend TOD;
     friend Amiga;
-    
-    private:
-    
+
+    // Quick-access references
+    class Agnus *agnus;
+
     // Information shown in the GUI inspector panel
     CIAInfo info;
     
@@ -256,7 +257,8 @@ class CIA : public HardwareComponent {
     //
     // Methods from HardwareComponent
     //
-    
+
+    void _initialize() override;
     void _powerOn() override;
     void _inspect() override;
     void _dump() override;

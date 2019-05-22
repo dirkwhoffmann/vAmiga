@@ -14,7 +14,12 @@
 #include "Colorizer.h"
 
 class Denise : public HardwareComponent {
-    
+
+public:
+
+    // Quick-access references
+    class Agnus *agnus;
+
 private:
     
     // Information shown in the GUI inspector panel
@@ -150,7 +155,8 @@ public:
     //
     
 private:
-    
+
+    void _initialize() override;
     void _powerOn() override;
     void _powerOff() override;
     void _reset() override;

@@ -964,20 +964,20 @@ Amiga::dumpClock()
              AS_DMA_CYCLES(masterClock),
              AS_CIA_CYCLES(masterClock));
     plainmsg("    DMA clock: %13lld  %13lld %13lld %13lld\n",
-             _agnus->clock,
-             AS_CPU_CYCLES(_agnus->clock),
-             AS_DMA_CYCLES(_agnus->clock),
-             AS_CIA_CYCLES(_agnus->clock));
+             agnus.clock,
+             AS_CPU_CYCLES(agnus.clock),
+             AS_DMA_CYCLES(agnus.clock),
+             AS_CIA_CYCLES(agnus.clock));
     plainmsg("  CIA A clock: %13lld  %13lld %13lld %13lld\n",
-             _ciaA->clock,
-             AS_CPU_CYCLES(_ciaA->clock),
-             AS_DMA_CYCLES(_ciaA->clock),
-             AS_CIA_CYCLES(_ciaA->clock));
+             ciaA.clock,
+             AS_CPU_CYCLES(ciaA.clock),
+             AS_DMA_CYCLES(ciaA.clock),
+             AS_CIA_CYCLES(ciaA.clock));
     plainmsg("  CIA B clock: %13lld  %13lld %13lld %13lld\n",
-             _ciaB->clock,
-             AS_CPU_CYCLES(_ciaB->clock),
-             AS_DMA_CYCLES(_ciaB->clock),
-             AS_CIA_CYCLES(_ciaB->clock));
+             ciaB.clock,
+             AS_CPU_CYCLES(ciaB.clock),
+             AS_DMA_CYCLES(ciaB.clock),
+             AS_CIA_CYCLES(ciaB.clock));
     plainmsg("  Color clock: (%d,%d) hex: ($%X,$%X) Frame: %lld\n",
              agnus.vpos, agnus.hpos, agnus.vpos, agnus.hpos, agnus.frame);
     plainmsg("\n");

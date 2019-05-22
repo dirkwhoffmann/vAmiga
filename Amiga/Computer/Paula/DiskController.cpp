@@ -37,6 +37,8 @@ DiskController::DiskController()
 void
 DiskController::_initialize()
 {
+    agnus = &_amiga->agnus;
+
     df[0] = &_amiga->df0;
     df[1] = &_amiga->df1;
     df[2] = &_amiga->df2;
@@ -238,11 +240,11 @@ DiskController::peekDSKBYTR()
     uint16_t result = incoming;
     
     // DSKBYT
-    assert(_agnus->clock >= incomingCycle);
-    if (_agnus->clock - incomingCycle <= 7) SET_BIT(result, 15);
+    assert(agnus->clock >= incomingCycle);
+    if (agnus->clock - incomingCycle <= 7) SET_BIT(result, 15);
     
     // DMAON
-    if (_agnus->dskDMA() && state != DRIVE_DMA_OFF) SET_BIT(result, 14);
+    if (agnus->dskDMA() && state != DRIVE_DMA_OFF) SET_BIT(result, 14);
 
     // DSKWRITE
     if (dsklen & 0x4000) SET_BIT(result, 13);
@@ -388,7 +390,7 @@ DiskController::executeFifo()
             
             // Read a byte from the drive and store a time stamp
             incoming = drive->readHead();
-            incomingCycle = _agnus->clock;
+            incomingCycle = agnus->clock;
             
             // Write byte into the FIFO buffer.
             writeFifo(incoming);
@@ -432,18 +434,18 @@ DiskController::executeFifo()
 uint16_t
 DiskController::dmaRead()
 {
-    uint32_t addr = _agnus->dskpt;
+    uint32_t addr = agnus->dskpt;
     
-    INC_DMAPTR(_agnus->dskpt);
+    INC_DMAPTR(agnus->dskpt);
     return _mem->peekChip16(addr);
 }
 
 void
 DiskController::dmaWrite(uint16_t word)
 {
-    uint32_t addr = _agnus->dskpt;
+    uint32_t addr = agnus->dskpt;
     
-    INC_DMAPTR(_agnus->dskpt);
+    INC_DMAPTR(agnus->dskpt);
     _mem->pokeChip16(addr, word);
 }
 

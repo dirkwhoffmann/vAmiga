@@ -471,15 +471,15 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 - (BOOL) interlaceMode
 {
-    return wrapper->denise->_agnus->frameInfo.interlaced;
+    return wrapper->denise->agnus->frameInfo.interlaced;
 }
 - (BOOL) isLongFrame
 {
-    return wrapper->denise->_agnus->isLongFrame();
+    return wrapper->denise->agnus->isLongFrame();
 }
 - (BOOL) isShortFrame
 {
-    return wrapper->denise->_agnus->isShortFrame();
+    return wrapper->denise->agnus->isShortFrame();
 }
 
 

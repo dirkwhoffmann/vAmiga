@@ -15,7 +15,10 @@
 class StateMachine : public HardwareComponent {
 
     friend class AudioUnit;
-    
+
+    // Quick-access references
+    class Agnus *agnus;
+
 public:
 
     // The audio channel controlled by this state machine
@@ -54,6 +57,15 @@ public:
 
     // Sets the channel number (for debugging output only)
     void setNr(uint8_t nr);
+
+
+    //
+    // Methods from HardwareComponent
+    //
+
+private:
+
+    void _initialize() override;
 
 
     //

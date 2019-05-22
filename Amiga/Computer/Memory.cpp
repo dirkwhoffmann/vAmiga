@@ -38,6 +38,13 @@ Memory::dealloc()
 }
 
 void
+Memory::_initialize()
+{
+    agnus = &_amiga->agnus;
+    copper = &_amiga->agnus.copper;
+}
+
+void
 Memory::_powerOn()
 {
     // Make Rom writable if an A1000 is emulated
@@ -745,11 +752,11 @@ Memory::peekCustom16(uint32_t addr)
         case 0x000 >> 1: // BLTDDAT
             return 0xFF;
         case 0x002 >> 1: // DMACONR
-            return _agnus->peekDMACONR();
+            return agnus->peekDMACONR();
         case 0x004 >> 1: // VPOSR
-            return _agnus->peekVPOSR();
+            return agnus->peekVPOSR();
         case 0x006 >> 1: // VHPOSR
-            return _agnus->peekVHPOSR();
+            return agnus->peekVHPOSR();
         case 0x008 >> 1: // DSKDATR
             return _paula->diskController.peekDSKDATR();
         case 0x00A >> 1: // JOY0DAT
@@ -841,9 +848,9 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
     switch ((addr >> 1) & 0xFF) {
 
         case 0x020 >> 1: // DSKPTH
-            _agnus->pokeDSKPTH(value); return;
+            agnus->pokeDSKPTH(value); return;
         case 0x022 >> 1: // DSKPTL
-            _agnus->pokeDSKPTL(value); return;
+            agnus->pokeDSKPTL(value); return;
         case 0x024 >> 1: // DSKLEN
             _paula->diskController.pokeDSKLEN(value); return;
         case 0x026 >> 1: // DSKDAT
@@ -851,11 +858,11 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x28 >> 1: // REFPTR
             return;
         case 0x02A >> 1: // VPOSW
-            _agnus->pokeVPOS(value); return;
+            agnus->pokeVPOS(value); return;
         case 0x02C >> 1: // VHPOSW
-            _agnus->pokeVHPOS(value); return;
+            agnus->pokeVHPOS(value); return;
         case 0x02E >> 1: // COPCON
-            _agnus->copper.pokeCOPCON(value); return;
+            copper->pokeCOPCON(value); return;
         case 0x030 >> 1: // SERDAT
             _paula->pokeSERDAT(value); return;
         case 0x032 >> 1: // SERPER
@@ -870,54 +877,54 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x03E >> 1: // STRLONG
             return; // ignore
         case 0x040 >> 1: // BLTCON0
-            _agnus->blitter.pokeBLTCON0(value); return;
+            agnus->blitter.pokeBLTCON0(value); return;
         case 0x042 >> 1: // BLTCON1
-            _agnus->blitter.pokeBLTCON1(value); return;
+            agnus->blitter.pokeBLTCON1(value); return;
         case 0x044 >> 1: // BLTAFWM
-            _agnus->blitter.pokeBLTAFWM(value); return;
+            agnus->blitter.pokeBLTAFWM(value); return;
         case 0x046 >> 1: // BLTALWM
-            _agnus->blitter.pokeBLTALWM(value); return;
+            agnus->blitter.pokeBLTALWM(value); return;
         case 0x048 >> 1: // BLTCPTH
-            _agnus->blitter.pokeBLTCPTH(value); return;
+            agnus->blitter.pokeBLTCPTH(value); return;
         case 0x04A >> 1: // BLTCPTL
-            _agnus->blitter.pokeBLTCPTL(value); return;
+            agnus->blitter.pokeBLTCPTL(value); return;
         case 0x04C >> 1: // BLTBPTH
-            _agnus->blitter.pokeBLTBPTH(value); return;
+            agnus->blitter.pokeBLTBPTH(value); return;
         case 0x04E >> 1: // BLTBPTL
-            _agnus->blitter.pokeBLTBPTL(value); return;
+            agnus->blitter.pokeBLTBPTL(value); return;
         case 0x050 >> 1: // BLTAPTH
-            _agnus->blitter.pokeBLTAPTH(value); return;
+            agnus->blitter.pokeBLTAPTH(value); return;
         case 0x052 >> 1: // BLTAPTL
-            _agnus->blitter.pokeBLTAPTL(value); return;
+            agnus->blitter.pokeBLTAPTL(value); return;
         case 0x054 >> 1: // BLTDPTH
-            _agnus->blitter.pokeBLTDPTH(value); return;
+            agnus->blitter.pokeBLTDPTH(value); return;
         case 0x056 >> 1: // BLTDPTL
-            _agnus->blitter.pokeBLTDPTL(value); return;
+            agnus->blitter.pokeBLTDPTL(value); return;
         case 0x058 >> 1: // BLTSIZE
-            _agnus->blitter.pokeBLTSIZE(value); return;
+            agnus->blitter.pokeBLTSIZE(value); return;
         case 0x05A >> 1: // unused
         case 0x05C >> 1: // unused
         case 0x05E >> 1: // unused
             return;
         case 0x060 >> 1: // BLTCMOD
-            _agnus->blitter.pokeBLTCMOD(value); return;
+            agnus->blitter.pokeBLTCMOD(value); return;
         case 0x062 >> 1: // BLTBMOD
-            _agnus->blitter.pokeBLTBMOD(value); return;
+            agnus->blitter.pokeBLTBMOD(value); return;
         case 0x064 >> 1: // BLTAMOD
-            _agnus->blitter.pokeBLTAMOD(value); return;
+            agnus->blitter.pokeBLTAMOD(value); return;
         case 0x066 >> 1: // BLTDMOD
-            _agnus->blitter.pokeBLTDMOD(value); return;
+            agnus->blitter.pokeBLTDMOD(value); return;
         case 0x068 >> 1: // unused
         case 0x06A >> 1: // unused
         case 0x06C >> 1: // unused
         case 0x06E >> 1: // unused
             return;
         case 0x070 >> 1: // BLTCDAT
-            _agnus->blitter.pokeBLTCDAT(value); return;
+            agnus->blitter.pokeBLTCDAT(value); return;
         case 0x072 >> 1: // BLTBDAT
-            _agnus->blitter.pokeBLTBDAT(value); return;
+            agnus->blitter.pokeBLTBDAT(value); return;
         case 0x074 >> 1: // BLTADAT
-            _agnus->blitter.pokeBLTADAT(value); return;
+            agnus->blitter.pokeBLTADAT(value); return;
         case 0x076 >> 1: // unused
         case 0x078 >> 1: // unused
         case 0x07A >> 1: // unused
@@ -926,29 +933,29 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x07E >> 1: // DSKSYNC
             _paula->diskController.pokeDSKSYNC(value); return;
         case 0x080 >> 1: // COP1LCH
-            _agnus->copper.pokeCOPxLCH(0, value); return;
+            copper->pokeCOPxLCH(0, value); return;
         case 0x082 >> 1: // COP1LCL
-            _agnus->copper.pokeCOPxLCL(0, value); return;
+            copper->pokeCOPxLCL(0, value); return;
         case 0x084 >> 1: // COP2LCH
-            _agnus->copper.pokeCOPxLCH(1, value); return;
+            copper->pokeCOPxLCH(1, value); return;
         case 0x086 >> 1: // COP2LCL
-            _agnus->copper.pokeCOPxLCL(1, value); return;
+            copper->pokeCOPxLCL(1, value); return;
         case 0x088 >> 1: // COPJMP1
-            _agnus->copper.pokeCOPJMP(0); return;
+            copper->pokeCOPJMP(0); return;
         case 0x08A >> 1: // COPJMP1
-            _agnus->copper.pokeCOPJMP(1); return;
+            copper->pokeCOPJMP(1); return;
         case 0x08C >> 1: // COPINS
-            _agnus->copper.pokeCOPINS(value); return;
+            copper->pokeCOPINS(value); return;
         case 0x08E >> 1: // DIWSTRT
-            _agnus->pokeDIWSTRT(value); return;
+            agnus->pokeDIWSTRT(value); return;
         case 0x090 >> 1: // DIWSTOP
-            _agnus->pokeDIWSTOP(value); return;
+            agnus->pokeDIWSTOP(value); return;
         case 0x092 >> 1: // DDFSTRT
-            _agnus->pokeDDFSTRT(value); return;
+            agnus->pokeDDFSTRT(value); return;
         case 0x094 >> 1: // DDFSTOP
-            _agnus->pokeDDFSTOP(value); return;
+            agnus->pokeDDFSTOP(value); return;
         case 0x096 >> 1: // DMACON
-            _agnus->pokeDMACON(value); return;
+            agnus->pokeDMACON(value); return;
         
         case 0x098 >> 1:  // CLXCON
         warn("pokeCustom16(CLXCON, %X): MISSING IMPLEMENTATION\n", value);
@@ -961,9 +968,9 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x09E >> 1: // ADKCON
             _paula->pokeADKCON(value); return;
         case 0x0A0 >> 1: // AUD0LCH
-            _agnus->pokeAUDxLCH(0, value); return;
+            agnus->pokeAUDxLCH(0, value); return;
         case 0x0A2 >> 1: // AUD0LCL
-            _agnus->pokeAUDxLCL(0, value); return;
+            agnus->pokeAUDxLCL(0, value); return;
         case 0x0A4 >> 1: // AUD0LEN
             _paula->audioUnit.pokeAUDxLEN(0, value); return;
         case 0x0A6 >> 1: // AUD0PER
@@ -976,9 +983,9 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x0AE >> 1: // Unused
             return;
         case 0x0B0 >> 1: // AUD1LCH
-            _agnus->pokeAUDxLCH(1, value); return;
+            agnus->pokeAUDxLCH(1, value); return;
         case 0x0B2 >> 1: // AUD1LCL
-            _agnus->pokeAUDxLCL(1, value); return;
+            agnus->pokeAUDxLCL(1, value); return;
         case 0x0B4 >> 1: // AUD1LEN
             _paula->audioUnit.pokeAUDxLEN(1, value); return;
         case 0x0B6 >> 1: // AUD1PER
@@ -991,9 +998,9 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x0BE >> 1: // Unused
             return;
         case 0x0C0 >> 1: // AUD2LCH
-            _agnus->pokeAUDxLCH(2, value); return;
+            agnus->pokeAUDxLCH(2, value); return;
         case 0x0C2 >> 1: // AUD2LCL
-            _agnus->pokeAUDxLCL(2, value); return;
+            agnus->pokeAUDxLCL(2, value); return;
         case 0x0C4 >> 1: // AUD2LEN
             _paula->audioUnit.pokeAUDxLEN(2, value); return;
         case 0x0C6 >> 1: // AUD2PER
@@ -1006,9 +1013,9 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x0CE >> 1: // Unused
             return;
         case 0x0D0 >> 1: // AUD3LCH
-            _agnus->pokeAUDxLCH(3, value); return;
+            agnus->pokeAUDxLCH(3, value); return;
         case 0x0D2 >> 1: // AUD3LCL
-            _agnus->pokeAUDxLCL(3, value); return;
+            agnus->pokeAUDxLCL(3, value); return;
         case 0x0D4 >> 1: // AUD3LEN
             _paula->audioUnit.pokeAUDxLEN(3, value); return;
         case 0x0D6 >> 1: // AUD3PER
@@ -1021,29 +1028,29 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x0DE >> 1: // Unused
             return;
         case 0x0E0 >> 1: // BPL1PTH
-            _agnus->pokeBPLxPTH(0, value); return;
+            agnus->pokeBPLxPTH(0, value); return;
         case 0x0E2 >> 1: // BPL1PTL
-            _agnus->pokeBPLxPTL(0, value); return;
+            agnus->pokeBPLxPTL(0, value); return;
         case 0x0E4 >> 1: // BPL2PTH
-            _agnus->pokeBPLxPTH(1, value); return;
+            agnus->pokeBPLxPTH(1, value); return;
         case 0x0E6 >> 1: // BPL2PTL
-            _agnus->pokeBPLxPTL(1, value); return;
+            agnus->pokeBPLxPTL(1, value); return;
         case 0x0E8 >> 1: // BPL3PTH
-            _agnus->pokeBPLxPTH(2, value); return;
+            agnus->pokeBPLxPTH(2, value); return;
         case 0x0EA >> 1: // BPL3PTL
-            _agnus->pokeBPLxPTL(2, value); return;
+            agnus->pokeBPLxPTL(2, value); return;
         case 0x0EC >> 1: // BPL4PTH
-            _agnus->pokeBPLxPTH(3, value); return;
+            agnus->pokeBPLxPTH(3, value); return;
         case 0x0EE >> 1: // BPL4PTL
-            _agnus->pokeBPLxPTL(3, value); return;
+            agnus->pokeBPLxPTL(3, value); return;
         case 0x0F0 >> 1: // BPL5PTH
-            _agnus->pokeBPLxPTH(4, value); return;
+            agnus->pokeBPLxPTH(4, value); return;
         case 0x0F2 >> 1: // BPL5PTL
-            _agnus->pokeBPLxPTL(4, value); return;
+            agnus->pokeBPLxPTL(4, value); return;
         case 0x0F4 >> 1: // BPL6PTH
-            _agnus->pokeBPLxPTH(5, value); return;
+            agnus->pokeBPLxPTH(5, value); return;
         case 0x0F6 >> 1: // BPL6PTL
-            _agnus->pokeBPLxPTL(5, value); return;
+            agnus->pokeBPLxPTL(5, value); return;
         case 0x0F8 >> 1: // Unused
         case 0x0FA >> 1: // Unused
         case 0x0FC >> 1: // Unused
@@ -1058,9 +1065,9 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x106 >> 1: // Unused
             return;
         case 0x108 >> 1: // BPL1MOD
-            _agnus->pokeBPL1MOD(value); return;
+            agnus->pokeBPL1MOD(value); return;
         case 0x10A >> 1: // BPL2MOD
-            _agnus->pokeBPL2MOD(value); return;
+            agnus->pokeBPL2MOD(value); return;
         case 0x10C >> 1: // Unused
         case 0x10E >> 1: // Unused
             return;
@@ -1080,37 +1087,37 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x11E >> 1: // Unused
             return;
         case 0x120 >> 1: // SPR0PTH
-            _agnus->pokeSPRxPTH(0, value); return;
+            agnus->pokeSPRxPTH(0, value); return;
         case 0x122 >> 1: // SPR0PTL
-            _agnus->pokeSPRxPTL(0, value); return;
+            agnus->pokeSPRxPTL(0, value); return;
         case 0x124 >> 1: // SPR1PTH
-            _agnus->pokeSPRxPTH(1, value); return;
+            agnus->pokeSPRxPTH(1, value); return;
         case 0x126 >> 1: // SPR1PTL
-            _agnus->pokeSPRxPTL(1, value); return;
+            agnus->pokeSPRxPTL(1, value); return;
         case 0x128 >> 1: // SPR2PTH
-            _agnus->pokeSPRxPTH(2, value); return;
+            agnus->pokeSPRxPTH(2, value); return;
         case 0x12A >> 1: // SPR2PTL
-            _agnus->pokeSPRxPTL(2, value); return;
+            agnus->pokeSPRxPTL(2, value); return;
         case 0x12C >> 1: // SPR3PTH
-            _agnus->pokeSPRxPTH(3, value); return;
+            agnus->pokeSPRxPTH(3, value); return;
         case 0x12E >> 1: // SPR3PTL
-            _agnus->pokeSPRxPTL(3, value); return;
+            agnus->pokeSPRxPTL(3, value); return;
         case 0x130 >> 1: // SPR4PTH
-            _agnus->pokeSPRxPTH(4, value); return;
+            agnus->pokeSPRxPTH(4, value); return;
         case 0x132 >> 1: // SPR4PTL
-            _agnus->pokeSPRxPTL(4, value); return;
+            agnus->pokeSPRxPTL(4, value); return;
         case 0x134 >> 1: // SPR5PTH
-            _agnus->pokeSPRxPTH(5, value); return;
+            agnus->pokeSPRxPTH(5, value); return;
         case 0x136 >> 1: // SPR5PTL
-            _agnus->pokeSPRxPTL(5, value); return;
+            agnus->pokeSPRxPTL(5, value); return;
         case 0x138 >> 1: // SPR6PTH
-            _agnus->pokeSPRxPTH(6, value); return;
+            agnus->pokeSPRxPTH(6, value); return;
         case 0x13A >> 1: // SPR6PTL
-            _agnus->pokeSPRxPTL(6, value); return;
+            agnus->pokeSPRxPTL(6, value); return;
         case 0x13C >> 1: // SPR7PTH
-            _agnus->pokeSPRxPTH(7, value); return;
+            agnus->pokeSPRxPTH(7, value); return;
         case 0x13E >> 1: // SPR7PTL
-            _agnus->pokeSPRxPTL(7, value); return;
+            agnus->pokeSPRxPTL(7, value); return;
         case 0x140 >> 1: // SPR0POS
             _denise->pokeSPRxPOS(0, value); return;
         case 0x142 >> 1: // SPR0CTL

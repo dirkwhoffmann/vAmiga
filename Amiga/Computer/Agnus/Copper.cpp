@@ -25,6 +25,12 @@ Copper::Copper()
 }
 
 void
+Copper::_initialize()
+{
+    agnus = &_amiga->agnus;
+}
+
+void
 Copper::_powerOn()
 {
     
@@ -55,7 +61,7 @@ Copper::_inspect()
     pthread_mutex_lock(&lock);
     
     info.cdang     = cdang;
-    info.active    = _agnus->eventHandler.isPending(COP_SLOT);
+    info.active    = agnus->eventHandler.isPending(COP_SLOT);
     info.coppc     = coppc;
     info.copins[0] = copins1;
     info.copins[1] = copins2;
@@ -187,10 +193,10 @@ uint32_t
 Copper::nextTriggerPosition()
 {
     // Get the current beam position
-    Beam b = _agnus->beamPosition();
+    Beam b = agnus->beamPosition();
 
     // Advance two cycles to get to the first possible trigger position
-    b = _agnus->addToBeam(b, 2);
+    b = agnus->addToBeam(b, 2);
 
     // Translate position to a binary 17-bit representation
     uint32_t beam = (b.y << 8) + b.x;
@@ -334,7 +340,7 @@ Copper::isIllegalInstr(uint32_t addr)
 void
 Copper::serviceEvent(EventID id)
 {
-    debug(2, "(%d,%d): ", _agnus->vpos, _agnus->hpos);
+    debug(2, "(%d,%d): ", agnus->vpos, agnus->hpos);
     
     switch (id) {
             
@@ -346,13 +352,13 @@ Copper::serviceEvent(EventID id)
              * Once DMA access is granted, it continues with fetching the
              * first instruction word.
              */
-            if (_agnus->copperCanHaveBus()) {
+            if (agnus->copperCanHaveBus()) {
                 _handler->scheduleRel(COP_SLOT, DMA_CYCLES(2), COP_FETCH);
             }
             
         case COP_FETCH:
             
-            if (_agnus->copperCanHaveBus()) {
+            if (agnus->copperCanHaveBus()) {
                 
                 // Load the first instruction word
                 copins1 = _mem->peek16(coppc);
@@ -366,7 +372,7 @@ Copper::serviceEvent(EventID id)
             
         case COP_MOVE:
             
-            if (_agnus->copperCanHaveBus()) {
+            if (agnus->copperCanHaveBus()) {
                 
                 // Load the second instruction word
                 copins2 = _mem->peek16(coppc);
@@ -393,7 +399,7 @@ Copper::serviceEvent(EventID id)
             
         case COP_WAIT_OR_SKIP:
             
-            if (_agnus->copperCanHaveBus()) {
+            if (agnus->copperCanHaveBus()) {
 
                 // Load the second instruction word
                 copins2 = _mem->peek16(coppc);
@@ -411,7 +417,7 @@ Copper::serviceEvent(EventID id)
                     uint32_t trigger = nextTriggerPosition();
                     
                     // In how many cycles do we get there?
-                    Cycle delay = _agnus->beamDiff(trigger);
+                    Cycle delay = agnus->beamDiff(trigger);
                     
                     debug(2, "   trigger = (%d,%d) delay = %lld\n",
                              VPOS(trigger), HPOS(trigger), delay);
@@ -472,7 +478,7 @@ Copper::vsyncAction()
      */
 
     // TODO: What is the exact timing here?
-    if (_agnus->copDMA()) {
+    if (agnus->copDMA()) {
         _handler->scheduleRel(COP_SLOT, DMA_CYCLES(4), COP_JMP1);
     } else {
         _handler->cancel(COP_SLOT);

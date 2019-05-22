@@ -82,7 +82,6 @@ public:
     CPU          *_cpu     = NULL;
     CIAA         *_ciaA    = NULL;
     CIAB         *_ciaB    = NULL;
-    Agnus        *_agnus   = NULL;
     Denise       *_denise  = NULL;
     Paula        *_paula   = NULL;
     ZorroManager *_zorro   = NULL;

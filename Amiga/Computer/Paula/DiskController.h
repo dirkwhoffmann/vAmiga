@@ -15,7 +15,10 @@
 class Drive;
 
 class DiskController : public HardwareComponent {
-    
+
+    // Quick-access references
+    class Agnus *agnus;
+
     //
     // Configuration items
     //

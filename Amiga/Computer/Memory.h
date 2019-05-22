@@ -94,6 +94,10 @@ const uint32_t KICK_ROM_MASK = 0x003FFFF;
 class Memory : public HardwareComponent {
     
     friend class Copper;
+
+    // Quick-access references
+    class Agnus *agnus;
+    class Copper *copper;
     
     public:
     
@@ -164,7 +168,8 @@ class Memory : public HardwareComponent {
     //
     
     private:
-    
+
+    void _initialize() override;
     void _powerOn() override;
     void _powerOff() override;
     void _reset() override;

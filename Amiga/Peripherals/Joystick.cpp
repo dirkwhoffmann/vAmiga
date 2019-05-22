@@ -18,6 +18,12 @@ Joystick::Joystick(int nr)
 }
 
 void
+Joystick::_initialize()
+{
+    agnus = &_amiga->agnus; 
+}
+
+void
 Joystick::_powerOn()
 {
     button = false;
@@ -63,7 +69,7 @@ Joystick::setAutofireBullets(int value)
 void
 Joystick::scheduleNextShot()
 {
-    nextAutofireFrame = _agnus->frame + (int)(50.0 / (2 * autofireFrequency));
+    nextAutofireFrame = agnus->frame + (int)(50.0 / (2 * autofireFrequency));
 }
 
 uint16_t
@@ -151,7 +157,7 @@ Joystick::execute()
         return;
     
     // Wait until it's time to push or release fire
-    if (_agnus->frame != nextAutofireFrame)
+    if (agnus->frame != nextAutofireFrame)
         return;
     
     // Are there any bullets left?

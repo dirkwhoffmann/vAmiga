@@ -24,6 +24,12 @@ EventHandler::EventHandler()
 }
 
 void
+EventHandler::_initialize()
+{
+    agnus = &_amiga->agnus;
+}
+
+void
 EventHandler::_powerOn()
 {
     // Wipe out the primary event table
@@ -69,12 +75,12 @@ EventHandler::_inspect()
     pthread_mutex_lock(&lock);
     
     info.masterClock = _amiga->masterClock;
-    info.dmaClock = _agnus->clock;
+    info.dmaClock = agnus->clock;
     info.ciaAClock = _ciaA->clock;
     info.ciaBClock  = _ciaB->clock;
-    info.frame = _agnus->frame;
-    info.vpos = _agnus->vpos;
-    info.hpos = _agnus->hpos;
+    info.frame = agnus->frame;
+    info.vpos = agnus->vpos;
+    info.hpos = agnus->hpos;
     
     // Primary events
     for (unsigned i = 0; i < PRIM_SLOT_COUNT; i++)
@@ -97,12 +103,12 @@ EventHandler::_inspectPrimSlot(uint32_t slot)
 
     i->eventId = primSlot[slot].id;
     i->trigger = trigger;
-    i->triggerRel = trigger - _agnus->clock;
-    i->currentFrame = _agnus->belongsToCurrentFrame(trigger);
+    i->triggerRel = trigger - agnus->clock;
+    i->currentFrame = agnus->belongsToCurrentFrame(trigger);
 
     if (trigger != NEVER) {
 
-        Beam beam = _agnus->cycleToBeam(trigger);
+        Beam beam = agnus->cycleToBeam(trigger);
         i->vpos = beam.y;
         i->hpos = beam.x;
 
@@ -246,12 +252,12 @@ EventHandler::_inspectSecSlot(uint32_t slot)
 
     i->eventId = primSlot[slot].id;
     i->trigger = trigger;
-    i->triggerRel = trigger - _agnus->clock;
-    i->currentFrame = _agnus->belongsToCurrentFrame(trigger);
+    i->triggerRel = trigger - agnus->clock;
+    i->currentFrame = agnus->belongsToCurrentFrame(trigger);
 
     if (trigger != NEVER) {
 
-        Beam beam = _agnus->cycleToBeam(trigger);
+        Beam beam = agnus->cycleToBeam(trigger);
         i->vpos = beam.y;
         i->hpos = beam.x;
 
@@ -466,25 +472,25 @@ EventHandler::_executeUntil(Cycle cycle) {
     // Check for a bitplane event
     if (isDue(DMA_SLOT, cycle)) {
         assert(checkTriggeredEvent(DMA_SLOT));
-        _agnus->serviceDMAEvent(primSlot[DMA_SLOT].id);
+        agnus->serviceDMAEvent(primSlot[DMA_SLOT].id);
     }
     
     // Check for a Copper event
     if (isDue(COP_SLOT, cycle)) {
         assert(checkTriggeredEvent(COP_SLOT));
-        _agnus->copper.serviceEvent(primSlot[COP_SLOT].id);
+        agnus->copper.serviceEvent(primSlot[COP_SLOT].id);
     }
     
     // Check for a Blitter event
     if (isDue(BLT_SLOT, cycle)) {
         assert(checkTriggeredEvent(BLT_SLOT));
-        _agnus->blitter.serviceEvent(primSlot[BLT_SLOT].id);
+        agnus->blitter.serviceEvent(primSlot[BLT_SLOT].id);
     }
     
     // Check for a raster event
     if (isDue(RAS_SLOT, cycle)) {
         assert(checkTriggeredEvent(RAS_SLOT));
-        _agnus->serviceRASEvent(primSlot[RAS_SLOT].id);
+        agnus->serviceRASEvent(primSlot[RAS_SLOT].id);
     }
     
     // Check if a secondary event needs to be processed
@@ -579,7 +585,7 @@ EventHandler::scheduleRel(EventSlot s, Cycle cycle, EventID id)
 {
     assert(isPrimarySlot(s));
     
-    cycle += _agnus->clock;
+    cycle += agnus->clock;
     
     primSlot[s].triggerCycle = cycle;
     primSlot[s].id = id;
@@ -597,7 +603,7 @@ EventHandler::schedulePos(EventSlot s, int16_t vpos, int16_t hpos, EventID id)
     Beam beam;
     beam.y = vpos;
     beam.x = hpos;
-    Cycle cycle = _agnus->beamToCycle(beam);
+    Cycle cycle = agnus->beamToCycle(beam);
 
     primSlot[s].triggerCycle = cycle;
     primSlot[s].id = id;
@@ -622,7 +628,7 @@ EventHandler::rescheduleRel(EventSlot s, Cycle cycle)
 {
     assert(isPrimarySlot(s));
     
-    cycle += _agnus->clock;
+    cycle += agnus->clock;
     
     primSlot[s].triggerCycle = cycle;
     if (cycle < nextPrimTrigger) nextPrimTrigger = cycle;
@@ -664,7 +670,7 @@ EventHandler::scheduleSecRel(EventSlot s, Cycle cycle, EventID id)
 {
     assert(isSecondarySlot(s));
     
-    cycle += _agnus->clock;
+    cycle += agnus->clock;
     
     // Schedule event in secondary table
     secSlot[s].triggerCycle = cycle;
@@ -684,7 +690,7 @@ EventHandler::scheduleSecPos(EventSlot s, int16_t vpos, int16_t hpos, EventID id
     Beam beam;
     beam.y = vpos;
     beam.x = hpos;
-    Cycle cycle = _agnus->beamToCycle(beam);
+    Cycle cycle = agnus->beamToCycle(beam);
 
     secSlot[s].triggerCycle = cycle;
     secSlot[s].id = id;
@@ -711,7 +717,7 @@ EventHandler::rescheduleSecRel(EventSlot s, Cycle cycle)
 {
     assert(isSecondarySlot(s));
     
-    cycle += _agnus->clock;
+    cycle += agnus->clock;
     
     secSlot[s].triggerCycle = cycle;
     if (cycle < nextSecTrigger) nextSecTrigger = cycle;
@@ -765,10 +771,10 @@ EventHandler::serveINSEvent()
         case INS_CPU:    _cpu->inspect(); break;
         case INS_MEM:    _mem->inspect(); break;
         case INS_CIA:    _ciaA->inspect(); _ciaB->inspect(); break;
-        case INS_AGNUS:  _agnus->inspect(); break;
+        case INS_AGNUS:  agnus->inspect(); break;
         case INS_PAULA:  _paula->inspect(); break;
         case INS_DENISE: _denise->inspect(); break;
-        case INS_EVENTS: _agnus->eventHandler.inspect(); break;
+        case INS_EVENTS: agnus->eventHandler.inspect(); break;
         default:         assert(false);
     }
     
@@ -846,7 +852,7 @@ EventHandler::checkTriggeredEvent(EventSlot s)
     assert(isPrimarySlot(s));
     
     // Note: This function has to be called at the trigger cycle
-    if (_agnus->clock != primSlot[s].triggerCycle) {
+    if (agnus->clock != primSlot[s].triggerCycle) {
         return true;
     }
     

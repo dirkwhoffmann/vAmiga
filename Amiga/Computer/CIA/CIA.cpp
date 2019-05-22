@@ -63,6 +63,12 @@ CIA::~CIA()
 }
 
 void
+CIA::_initialize()
+{
+    agnus = &_amiga->agnus;
+}
+
+void
 CIA::_powerOn()
 {
 	CNT = true;
@@ -1150,7 +1156,7 @@ CIA::wakeUp()
     if (!sleeping) return;
     sleeping = false;
     
-    Cycle targetCycle = CIA_CYCLES(AS_CIA_CYCLES(_agnus->clock));
+    Cycle targetCycle = CIA_CYCLES(AS_CIA_CYCLES(agnus->clock));
     wakeUp(targetCycle);
     
     /*

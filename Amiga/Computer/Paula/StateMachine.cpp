@@ -45,6 +45,12 @@ StateMachine::setNr(uint8_t nr)
     }
 }
 
+void
+StateMachine::_initialize() {
+
+    agnus = &_amiga->agnus;
+}
+
 int16_t
 StateMachine::execute(DMACycle cycles)
 {
@@ -53,7 +59,7 @@ StateMachine::execute(DMACycle cycles)
         case 0b000:
 
             audlen = audlenLatch;
-            _agnus->audlc[nr] = audlcLatch;
+            agnus->audlc[nr] = audlcLatch;
             audper = 0;
             state = 0b001;
             break;
@@ -98,15 +104,15 @@ StateMachine::execute(DMACycle cycles)
                 auddat = LO_BYTE(auddatLatch);
 
                 // Read the next two samples from memory
-                auddatLatch = _mem->peekChip16(_agnus->audlc[nr]);
-                INC_DMAPTR(_agnus->audlc[nr]);
+                auddatLatch = _mem->peekChip16(agnus->audlc[nr]);
+                INC_DMAPTR(agnus->audlc[nr]);
 
                 // Decrease the length counter
                 if (audlen > 1) {
                     audlen--;
                 } else {
                     audlen = audlenLatch;
-                    _agnus->audlc[nr] = audlcLatch;
+                    agnus->audlc[nr] = audlcLatch;
 
                     // Trigger Audio interrupt
                     _paula->pokeINTREQ(0x8000 | (0x80 << nr));
@@ -124,14 +130,14 @@ StateMachine::execute(DMACycle cycles)
             audper = 0;
 
             // Read the next two samples from memory
-            auddatLatch = _mem->peekChip16(_agnus->audlc[nr]);
-            INC_DMAPTR(_agnus->audlc[nr]);
+            auddatLatch = _mem->peekChip16(agnus->audlc[nr]);
+            INC_DMAPTR(agnus->audlc[nr]);
 
             if (audlen > 1) {
                 audlen--;
             } else {
                 audlen = audlenLatch;
-                _agnus->audlc[nr] = audlcLatch;
+                agnus->audlc[nr] = audlcLatch;
 
                 // Trigger Audio interrupt
                 _paula->pokeINTREQ(0x8000 | (0x80 << nr));

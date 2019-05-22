@@ -62,8 +62,9 @@ struct Event
 
 class EventHandler : public HardwareComponent
 {
-    private:
-    
+    // Quick-access references
+    class Agnus *agnus;
+
     // Information shown in the GUI inspector panel
     EventHandlerInfo info;
     
@@ -101,7 +102,8 @@ class EventHandler : public HardwareComponent
     //
     
     private:
-    
+
+    void _initialize() override;
     void _powerOn() override;
     void _powerOff() override;
     void _reset() override;

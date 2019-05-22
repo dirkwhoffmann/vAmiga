@@ -52,9 +52,7 @@ extern Amiga *activeAmiga;
  * Paula, you need to invoke a public method on amiga->paula.
  */
 class Amiga : public HardwareComponent {
-    
-    private:
-    
+
     // The Amiga model we're going to emulate
     AmigaModel model = AMIGA_500;
     

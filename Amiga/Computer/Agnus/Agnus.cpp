@@ -1290,7 +1290,7 @@ Agnus::hsyncHandler()
     
     // Compute some sound samples
     // _paula->audioUnit.hsyncHandler();
-    _paula->audioUnit.executeUntil(_agnus->clock);
+    _paula->audioUnit.executeUntil(clock);
     
     // CIA B counts HSYNCs
     _ciaB->incrementTOD();

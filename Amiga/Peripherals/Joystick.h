@@ -13,7 +13,10 @@
 #include "HardwareComponent.h"
 
 class Joystick : public HardwareComponent {
-    
+
+    // Quick-access references
+    class Agnus *agnus;
+
     // The control port this joystick is connected to (1 or 2)
     int nr;
     
@@ -56,7 +59,8 @@ public:
     //
     
 private:
-    
+
+    void _initialize() override;
     void _powerOn() override;
     void _dump() override;
     void didLoadFromBuffer(uint8_t **buffer) override;

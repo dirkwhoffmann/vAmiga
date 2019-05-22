@@ -64,6 +64,12 @@ Denise::~Denise()
 }
 
 void
+Denise::_initialize()
+{
+    agnus = &_amiga->agnus;
+}
+
+void
 Denise::_powerOn()
 {
     clock = 0;
@@ -122,12 +128,12 @@ Denise::_inspect()
     info.bplcon2 = bplcon2;
     info.bpu = (bplcon0 >> 12) & 0b111;
 
-    info.diwstrt = _agnus->diwstrt;
-    info.diwstop = _agnus->diwstop;
-    info.hstrt = _agnus->hstrt;
-    info.hstop = _agnus->hstop;
-    info.vstrt = _agnus->vstrt;
-    info.vstop = _agnus->vstop;
+    info.diwstrt = agnus->diwstrt;
+    info.diwstop = agnus->diwstop;
+    info.hstrt = agnus->hstrt;
+    info.hstop = agnus->hstop;
+    info.vstrt = agnus->vstrt;
+    info.vstop = agnus->vstop;
 
     info.joydat[0] = peekJOY0DATR();
     info.joydat[1] = peekJOY1DATR();
@@ -239,11 +245,11 @@ Denise::pokeBPLCON0(uint16_t value)
     uint8_t bpu = bplconBPU();
 
     // Let Agnus know
-    _agnus->activeBitplanes = bpu;
+    agnus->activeBitplanes = bpu;
 
     // Update the DMA time slot allocation table (hires / lores may change).
     // _agnus->forceUpdateBitplaneDma();
-    _agnus->switchBitplaneDmaOff();
+    agnus->switchBitplaneDmaOff();
 
     // Clear data registers of all inactive bitplanes.
     for (int plane = 5; plane >= bpu; plane--) bpldat[plane] = 0;
@@ -258,6 +264,9 @@ Denise::pokeBPLCON0(uint16_t value)
      *        (five or six bit-planes active)." [HRM]
      */
     ham = (bplcon0 & 0x8C00) == 0x0800 && (bpu == 5 || bpu == 6);
+
+    shiftReg[0] = 0xAAAA;
+    shiftReg[1] = 0xCCCC;
 }
 
 void
@@ -267,7 +276,7 @@ Denise::pokeBPLCON1(uint16_t value)
     
     bplcon1 = value & 0xFF;
     
-    uint16_t ddfstrt = _agnus->ddfstrt;
+    uint16_t ddfstrt = agnus->ddfstrt;
 
     // Compute scroll values (adapted from WinFellow)
     scrollLowOdd  = (bplcon1        + (ddfstrt & 0b0100) ? 8 : 0) & 0x0F;
@@ -308,7 +317,7 @@ Denise::pokeSPRxPOS(int x, uint16_t value)
     sprhstrt[x] = ((value & 0xFF) << 1) | (sprhstrt[x] & 0x01);
     
     // Update debugger info
-    if (_agnus->vpos == 25) {
+    if (agnus->vpos == 25) {
         info.sprite[x].pos = value;
     }
 }
@@ -329,9 +338,9 @@ Denise::pokeSPRxCTL(int x, uint16_t value)
     WRITE_BIT(attach, x, GET_BIT(value, 7));
     
     // Update debugger info
-    if (_agnus->vpos == 25) {
+    if (agnus->vpos == 25) {
         info.sprite[x].ctl = value;
-        info.sprite[x].ptr = _agnus->sprpt[x];
+        info.sprite[x].ptr = agnus->sprpt[x];
     }
 }
 
@@ -461,9 +470,6 @@ Denise::serviceEvent(EventID id, int64_t data)
 void
 Denise::fillShiftRegisters()
 {
-    // warn("fillShiftRegisters: IMPLEMENTATION MISSING (vpos = %d)\n", amiga->agnus.vpos);
-    // warn("blpdat: %X %X %X %X\n", bpldat[0], bpldat[1], bpldat[2], bpldat[3]);
-
     shiftReg[0] = bpldat[0];
     shiftReg[1] = bpldat[1];
     shiftReg[2] = bpldat[2];
@@ -476,9 +482,9 @@ int *
 Denise::pixelAddr(int pixel)
 {
     assert(pixel < HPIXELS);
-    assert(_agnus->vpos >= 26); // 0 .. 25 is VBLANK area
+    assert(agnus->vpos >= 26); // 0 .. 25 is VBLANK area
 
-    int offset = pixel + (_agnus->vpos - 26) * HPIXELS;
+    int offset = pixel + (agnus->vpos - 26) * HPIXELS;
     // debug("pixel offset for pixel %d is %d\n", pixel, offset);
     assert(offset < VPIXELS * HPIXELS);
     
@@ -488,16 +494,29 @@ Denise::pixelAddr(int pixel)
 int
 Denise::draw()
 {
+    int drawnPixels;
+
     if (lores()) {
 
         ham ? draw32HAM() : draw32();
-        return 32;
+        drawnPixels = 32;
 
     } else {
 
         draw16();
-        return 16;
+        drawnPixels = 16;
     }
+
+#ifdef BORDER_DEBUG
+    shiftReg[0] = 0xAAAA;
+    shiftReg[1] = 0xCCCC;
+    shiftReg[2] = 0x0;
+    shiftReg[3] = 0x0;
+    shiftReg[4] = 0x0;
+    shiftReg[5] = 0x0;
+#endif
+
+    return drawnPixels;
 }
 
 void
@@ -659,12 +678,12 @@ Denise::drawBorder()
 
     // Draw left border
     // debug("hstrt = %d hstop = %d\n", _agnus->hstrt, _agnus->hstop);
-    for (int i = 0; i < (2 * _agnus->hstrt) - hblank; i++) {
+    for (int i = 0; i < (2 * agnus->hstrt) - hblank; i++) {
         if (i >= 0) ptr[i] = rgbaHBorderL;
     }
 
     // Draw right border
-    for (int i = (2 * _agnus->hstop) - hblank; i < HPIXELS; i++) {
+    for (int i = (2 * agnus->hstop) - hblank; i < HPIXELS; i++) {
         if (i >= 0) ptr[i] = rgbaHBorderR;
     }
 
