@@ -126,14 +126,22 @@ DmaDebugger::computeOverlay()
     if (!enabled) return;
 
     BusOwner *owners = amiga->agnus.busOwner;
+    uint16_t *values = amiga->agnus.busValue;
     GpuColor col;
     int *ptr = amiga->denise.pixelAddr(0);
 
-    for (int i = 0; i < HPOS_COUNT; i++, ptr += 2) {
+    for (int i = 0; i < HPOS_COUNT - 40; i++, ptr += 4) {
 
-        int data = rand() % 16;
-        int data1 = (data >> 2) & 0x3;
-        int data2 = data & 0x3;
+        int data = values[i];
+        int chunk1 = (data & 0xC000) >> 14;
+        int chunk2 = (data & 0x0C00) >> 10;
+        int chunk3 = (data & 0x00C0) >> 6;
+        int chunk4 = (data & 0x000C) >> 2;
+
+        assert(chunk1 < 4);
+        assert(chunk2 < 4);
+        assert(chunk3 < 4);
+        assert(chunk4 < 4);
 
         BusOwner owner = owners[i];
         owners[i] = BUS_NONE;
@@ -149,15 +157,33 @@ DmaDebugger::computeOverlay()
 
                 if (visualize[owner]) {
 
-                    col = GpuColor(ptr[0]).mix(debugColor[owner][data1], opacity);
+                    col = GpuColor(ptr[0]).mix(debugColor[owner][chunk1], opacity);
                     ptr[0] = col.rawValue;
 
-                    col = GpuColor(ptr[1]).mix(debugColor[owner][data2], opacity);
+                    col = GpuColor(ptr[1]).mix(debugColor[owner][chunk2], opacity);
                     ptr[1] = col.rawValue;
+
+                    col = GpuColor(ptr[2]).mix(debugColor[owner][chunk3], opacity);
+                    ptr[2] = col.rawValue;
+
+                    col = GpuColor(ptr[3]).mix(debugColor[owner][chunk4], opacity);
+                    ptr[3] = col.rawValue;
                 }
                 break;
 
             default:
+
+                // EXPERIMENTAL
+                /*
+                col = GpuColor(ptr[0]).shade(opacity);
+                ptr[0] = col.rawValue;
+                col = GpuColor(ptr[1]).shade(opacity);
+                ptr[1] = col.rawValue;
+                col = GpuColor(ptr[2]).shade(opacity);
+                ptr[2] = col.rawValue;
+                col = GpuColor(ptr[3]).shade(opacity);
+                ptr[3] = col.rawValue;
+                */
                 break;
         }
     }

@@ -265,6 +265,9 @@ Agnus::doDiskDMA()
     uint16_t result = mem->peekChip16(dskpt);
     INC_DMAPTR(dskpt);
 
+    busOwner[hpos] = BUS_DISK;
+    busValue[hpos] = result;
+
     return result;
 }
 
@@ -273,6 +276,9 @@ Agnus::doDiskDMA(uint16_t value)
 {
     mem->pokeChip16(dskpt, value);
     INC_DMAPTR(dskpt);
+
+    busOwner[hpos] = BUS_DISK;
+    busValue[hpos] = value;
 }
 
 uint16_t
@@ -280,6 +286,13 @@ Agnus::doAudioDMA(int channel)
 {
     uint16_t result = mem->peekChip16(audlc[channel]);
     INC_DMAPTR(audlc[channel]);
+
+    // We have to fake the horizontal position here, because this function
+    // is not yet executed at the correct DMA cycle.
+    int hpos = 0xD + (2 * channel);
+
+    busOwner[hpos] = BUS_AUDIO;
+    busValue[hpos] = result;
 
     return result;
 }
@@ -290,6 +303,9 @@ Agnus::doSpriteDMA(int channel)
     uint16_t result = mem->peekChip16(sprpt[channel]);
     INC_DMAPTR(sprpt[channel]);
 
+    busOwner[hpos] = BUS_SPRITE;
+    busValue[hpos] = result;
+
     return result; 
 }
 
@@ -298,6 +314,9 @@ Agnus::doBitplaneDMA(int channel)
 {
     uint16_t result = mem->peekChip16(bplpt[channel]);
     INC_DMAPTR(bplpt[channel]);
+
+    busOwner[hpos] = BUS_BITPLANE;
+    busValue[hpos] = result;
 
     return result;
 }
@@ -1048,8 +1067,6 @@ Agnus::serviceDMAEvent(EventID id)
             
         case DMA_DISK:
 
-            busOwner[hpos] = BUS_DISK;
-
             if (paula->diskController.getFifoBuffering())
                 paula->diskController.performDMA();
             else
@@ -1057,104 +1074,83 @@ Agnus::serviceDMAEvent(EventID id)
             break;
         
         case DMA_A0:
-            busOwner[hpos] = BUS_AUDIO;
             break;
             
         case DMA_A1:
-            busOwner[hpos] = BUS_AUDIO;
             break;
             
         case DMA_A2:
-            busOwner[hpos] = BUS_AUDIO;
             break;
             
         case DMA_A3:
-            busOwner[hpos] = BUS_AUDIO;
             break;
             
         case DMA_S0_1:
-            busOwner[hpos] = BUS_SPRITE;
             serviceS1Event(0);
             break;
             
         case DMA_S1_1:
-            busOwner[hpos] = BUS_SPRITE;
             serviceS1Event(1);
             break;
             
         case DMA_S2_1:
-            busOwner[hpos] = BUS_SPRITE;
             serviceS1Event(2);
             break;
             
         case DMA_S3_1:
-            busOwner[hpos] = BUS_SPRITE;
             serviceS1Event(3);
             break;
             
         case DMA_S4_1:
-            busOwner[hpos] = BUS_SPRITE;
             serviceS1Event(4);
             break;
             
         case DMA_S5_1:
-            busOwner[hpos] = BUS_SPRITE;
             serviceS1Event(5);
             break;
             
         case DMA_S6_1:
-            busOwner[hpos] = BUS_SPRITE;
             serviceS1Event(6);
             break;
             
         case DMA_S7_1:
-            busOwner[hpos] = BUS_SPRITE;
             serviceS1Event(7);
             break;
             
         case DMA_S0_2:
-            busOwner[hpos] = BUS_SPRITE;
             serviceS2Event(0);
             break;
             
         case DMA_S1_2:
-            busOwner[hpos] = BUS_SPRITE;
             serviceS2Event(1);
             break;
             
         case DMA_S2_2:
-            busOwner[hpos] = BUS_SPRITE;
             serviceS2Event(2);
             break;
             
         case DMA_S3_2:
-            busOwner[hpos] = BUS_SPRITE;
             serviceS2Event(3);
             break;
             
         case DMA_S4_2:
-            busOwner[hpos] = BUS_SPRITE;
             serviceS2Event(4);
             break;
             
         case DMA_S5_2:
-            busOwner[hpos] = BUS_SPRITE;
             serviceS2Event(5);
             break;
             
         case DMA_S6_2:
-            busOwner[hpos] = BUS_SPRITE;
             serviceS2Event(6);
             break;
             
         case DMA_S7_2:
-            busOwner[hpos] = BUS_SPRITE;
             serviceS2Event(7);
             break;
         
         case DMA_H1:
         case DMA_L1:
-            busOwner[hpos] = BUS_BITPLANE;
             denise->bpldat[PLANE1] = doBitplaneDMA(PLANE1);
 
             // The bitplane 1 fetch is an important one. Once it is performed,
@@ -1164,29 +1160,24 @@ Agnus::serviceDMAEvent(EventID id)
             
         case DMA_H2:
         case DMA_L2:
-            busOwner[hpos] = BUS_BITPLANE;
             denise->bpldat[PLANE2] = doBitplaneDMA(PLANE2);
             break;
             
         case DMA_H3:
         case DMA_L3:
-            busOwner[hpos] = BUS_BITPLANE;
             denise->bpldat[PLANE3] = doBitplaneDMA(PLANE3);
             break;
             
         case DMA_H4:
         case DMA_L4:
-            busOwner[hpos] = BUS_BITPLANE;
             denise->bpldat[PLANE4] = doBitplaneDMA(PLANE4);
             break;
             
         case DMA_L5:
-            busOwner[hpos] = BUS_BITPLANE;
             denise->bpldat[PLANE5] = doBitplaneDMA(PLANE5);
             break;
             
         case DMA_L6:
-            busOwner[hpos] = BUS_BITPLANE;
             denise->bpldat[PLANE6] = doBitplaneDMA(PLANE6);
             break;
             
