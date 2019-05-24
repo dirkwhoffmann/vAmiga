@@ -11,6 +11,7 @@
 #define _DMA_DEBUGGER_INC
 
 #include "HardwareComponent.h"
+#include "Colors.h"
 
 class DmaDebugger : public HardwareComponent {
 

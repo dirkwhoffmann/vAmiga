@@ -73,6 +73,9 @@ DmaDebugger::setOpacity(float value)
 void
 DmaDebugger::computeOverlay()
 {
+    // Only proceed if the debugger is enabled
+    if (!enabled) return;
+
     BusOwner *owners = amiga->agnus.busOwner;
     int *ptr = amiga->denise.pixelAddr(0);
 

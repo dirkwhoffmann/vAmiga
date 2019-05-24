@@ -14,6 +14,7 @@
 #include "EventHandler.h"
 #include "Copper.h"
 #include "Blitter.h"
+#include "DmaDebugger.h"
 
 // Bit plane indices
 #define PLANE1 0
@@ -83,6 +84,9 @@ class Agnus : public HardwareComponent
     
     // The event sheduler, a key component of this emulator.
     EventHandler events;
+
+    // A graphics engine for visualizing DMA accesses
+    DmaDebugger dmaDebugger;
     
     
     //

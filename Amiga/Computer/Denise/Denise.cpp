@@ -19,7 +19,6 @@ Denise::Denise()
     registerSubcomponents(vector<HardwareComponent *> {
         
         &colorizer,
-        &dmaDebugger
     });
     
     registerSnapshotItems(vector<SnapshotItem> {
@@ -682,7 +681,7 @@ Denise::drawBorder()
         for (int i = 0; i < HPIXELS; i++) {
             ptr[i] = rgbaVBorder;
         }
-        
+
     } else {
 
         // Draw left border
@@ -698,7 +697,7 @@ Denise::drawBorder()
     }
 
     // Invoke DMA debugger
-    if (dmaDebugger.isEnabled()) dmaDebugger.computeOverlay();
+    agnus->dmaDebugger.computeOverlay();
 
 #ifdef LINE_DEBUG
     

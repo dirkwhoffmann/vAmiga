@@ -375,6 +375,22 @@ struct ADFFileWrapper { ADFFile *adf; };
     const char *str = wrapper->agnus->copper.disassemble(list, offset);
     return str ? [NSString stringWithUTF8String:str] : NULL;
 }
+- (void) dmaDebugSetEnable:(BOOL)value
+{
+    wrapper->agnus->dmaDebugger.setEnabled(value);
+}
+- (void) dmaDebugSetVisualize:(BusOwner)owner value:(BOOL)value
+{
+    wrapper->agnus->dmaDebugger.setVisualized(owner, value);
+}
+- (void) dmaDebugSetColor:(BusOwner)owner r:(double)r g:(double)g b:(double)b
+{
+    wrapper->agnus->dmaDebugger.setColor(owner, r, g, b);
+}
+- (void) dmaDebugSetOpacity:(double)value
+{
+    wrapper->agnus->dmaDebugger.setOpacity(value);
+}
 
 @end
 
@@ -480,18 +496,6 @@ struct ADFFileWrapper { ADFFile *adf; };
 - (BOOL) isShortFrame
 {
     return wrapper->denise->agnus->isShortFrame();
-}
-- (void) dmaDebugSetEnable:(BOOL)value
-{
-    wrapper->denise->dmaDebugger.setEnabled(value);
-}
-- (void) dmaDebugSetVisualize:(BusOwner)owner value:(BOOL)value
-{
-    wrapper->denise->dmaDebugger.setVisualized(owner, value);
-}
-- (void) dmaDebugSetColor:(BusOwner)owner r:(double)r g:(double)g b:(double)b
-{
-    wrapper->denise->dmaDebugger.setColor(owner, r, g, b);
 }
 
 @end

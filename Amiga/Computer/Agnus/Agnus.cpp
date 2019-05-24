@@ -26,6 +26,7 @@ Agnus::Agnus()
         &copper,
         &blitter,
         &events,
+        &dmaDebugger
     });
     
     registerSnapshotItems(vector<SnapshotItem> {

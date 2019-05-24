@@ -417,8 +417,6 @@
 				5027418D2297CACF0038E5AF /* Colors.cpp */,
 				502F7DD32221E52200AEEC65 /* Colorizer.h */,
 				502F7DD22221E52200AEEC65 /* Colorizer.cpp */,
-				50E204E92295A3F20082B63D /* DmaDebugger.h */,
-				50E204E82295A3F20082B63D /* DmaDebugger.cpp */,
 			);
 			path = Denise;
 			sourceTree = "<group>";
@@ -434,6 +432,8 @@
 				50D375DE222C7C6B0040987C /* Blitter.h */,
 				50D375DD222C7C6B0040987C /* Blitter.cpp */,
 				50E1E5D12242B9DA008EF4B0 /* FastBlitter.cpp */,
+				50E204E92295A3F20082B63D /* DmaDebugger.h */,
+				50E204E82295A3F20082B63D /* DmaDebugger.cpp */,
 			);
 			path = Agnus;
 			sourceTree = "<group>";
