@@ -10,7 +10,7 @@
 #include "Amiga.h"
 
 #define SPR_DMA(x) amiga->mem.peekChip16(amiga->agnus.sprpt[x])
-#define INC_SPRDMAPTR(x) INC_DMAPTR(amiga->agnus.sprpt[x])
+// #define INC_SPRDMAPTR(x) INC_DMAPTR(amiga->agnus.sprpt[x])
 
 Denise::Denise()
 {
@@ -370,102 +370,6 @@ Denise::armSprite(int x)
 
     // sprShiftReg[x] = HI_W_LO_W(sprdatb[x], sprdata[x]);
 }
-
-/*
-void
-Denise::serveSprDma1Event(int x)
-{
-    assert(x < 8);
-    
-    // int16_t vpos = amiga->agnus.vpos;
-    // vstrtCmp[x] = vpos == vstrt[x] && vpos >= 24;
-    // vstopCmp[x] = vpos == vstop[x];
-
-    switch(sprDmaState[x]) {
-
-        case SPR_FETCH_CONFIG:
-
-            debug(2, "serveSprDma1Event(%d, %X) SPR_FETCH_CONFIG\n", x, SPR_DMA(x));
-            pokeSPRxPOS(x, SPR_DMA(x));
-            INC_SPRDMAPTR(x);
-            break;
-            
-        case SPR_WAIT_VSTART:
-            
-            debug(2, "serveSprDma1Event(%d, %X) SPR_WAIT_VSTART\n", x, SPR_DMA(x));
-            if (inFirstSprLine(x)) {
-                pokeSPRxDATB(x, SPR_DMA(x));
-                INC_SPRDMAPTR(x);
-            }
-            break;
-
-        case SPR_FETCH_DATA:
-            
-            debug(2, "serveSprDma1Event(%d, %X) SPR_FETCH_DATA\n", x, SPR_DMA(x));
-            if (inLastSprLine(x)) {
-                pokeSPRxPOS(x, SPR_DMA(x));
-            } else {
-                pokeSPRxDATB(x, SPR_DMA(x));
-            }
-            INC_SPRDMAPTR(x);
-            break;
-            
-        default:
-            assert(false);
-    }
-}
-
-void
-Denise::serveSprDma2Event(int x)
-{
-    assert(x < 8);
-
-    switch(sprDmaState[x]) {
-            
-        case SPR_FETCH_CONFIG:
-            
-            debug(2, "serveSprDma2Event(%d, %X) SPR_FETCH_CONFIG\n", x, SPR_DMA(x));
-            pokeSPRxCTL(x, SPR_DMA(x));
-            INC_SPRDMAPTR(x);
-            sprDmaState[x] = inFirstSprLine(x) ? SPR_FETCH_DATA : SPR_WAIT_VSTART;
-            break;
-            
-        case SPR_WAIT_VSTART:
-            
-            debug(2, "serveSprDma2Event(%d, %X) SPR_WAIT_VSTART\n", x, SPR_DMA(x));
-            if (inFirstSprLine(x)) {
-                pokeSPRxDATA(x, SPR_DMA(x));
-                INC_SPRDMAPTR(x);
-                sprDmaState[x] = inLastSprLine(x) ? SPR_FETCH_CONFIG : SPR_FETCH_DATA;
-            }
-            break;
-            
-        case SPR_FETCH_DATA:
-            
-            debug(2, "serveSprDma2Event(%d, %X) SPR_FETCH_DATA\n", x, SPR_DMA(x));
-            if (inLastSprLine(x)) {
-                pokeSPRxCTL(x, SPR_DMA(x));
-            } else {
-                pokeSPRxDATB(x, SPR_DMA(x));
-            }
-            INC_SPRDMAPTR(x);
-            sprDmaState[x] = inFirstSprLine(x) ? SPR_FETCH_DATA : SPR_WAIT_VSTART;
-            break;
-            
-        default:
-            assert(false);
-    }
-}
-*/
-
-
-/*
-void
-Denise::serviceEvent(EventID id, int64_t data)
-{
-  
-}
-*/
 
 void
 Denise::fillShiftRegisters()

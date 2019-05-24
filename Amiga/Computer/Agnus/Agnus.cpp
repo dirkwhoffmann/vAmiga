@@ -1226,9 +1226,8 @@ Agnus::serviceS1Event(int nr)
         sprDmaState[nr] = SPR_DMA_IDLE;
 
         // Read the next control word (POS part)
-        uint16_t pos = mem->peekChip16(sprpt[nr]);
-        INC_DMAPTR(sprpt[nr]);
-        
+        uint16_t pos = doSpriteDMA(nr);
+
         // Extract vertical trigger coordinate bits from POS
         sprvstrt[nr] = ((pos & 0xFF00) >> 8) | (sprvstrt[nr] & 0x0100);
         denise->pokeSPRxPOS(nr, pos);
@@ -1238,8 +1237,7 @@ Agnus::serviceS1Event(int nr)
     if (sprDmaState[nr] == SPR_DMA_DATA) {
         
         // Read DATA
-        denise->pokeSPRxDATB(nr, mem->peekChip16(sprpt[nr]));
-        INC_DMAPTR(sprpt[nr]);
+        denise->pokeSPRxDATB(nr, doSpriteDMA(nr));
     }
 }
 
@@ -1253,8 +1251,7 @@ Agnus::serviceS2Event(int nr)
         assert(sprDmaState[nr] == SPR_DMA_IDLE);
         
         // Read the next control word (CTL part)
-        uint16_t ctl = mem->peekChip16(sprpt[nr]);
-        INC_DMAPTR(sprpt[nr]);
+        uint16_t ctl = doSpriteDMA(nr);
         
         // Extract vertical trigger coordinate bits from CTL
         sprvstrt[nr] = ((ctl & 0b100) << 6) | (sprvstrt[nr] & 0x00FF);
@@ -1266,8 +1263,7 @@ Agnus::serviceS2Event(int nr)
     if (sprDmaState[nr] == SPR_DMA_DATA) {
         
         // Read DATB
-        denise->pokeSPRxDATA(nr, mem->peekChip16(sprpt[nr]));
-        INC_DMAPTR(sprpt[nr]);
+        denise->pokeSPRxDATA(nr, doSpriteDMA(nr));
     }
 }
 
