@@ -196,7 +196,8 @@ class Agnus : public HardwareComponent
 
     // Indicates if bitplane DMA is enabled in the current rasterline.
     bool bitplaneDMA;
-    
+
+
     //
     // DMA allocation tables
     //
@@ -342,7 +343,18 @@ public:
     Cycle beamDiff(int16_t vEnd, int16_t hEnd) { return beamDiff(vpos, hpos, vEnd, hEnd); }
     Cycle beamDiff(int32_t end) { return beamDiff(VPOS(end), HPOS(end)); }
     
-    
+
+    //
+    // Performing DMAs
+    //
+
+    uint16_t doReadDiskDMA();
+    void doWriteDiskDMA(uint16_t value);
+    uint16_t doAudioDMA(int channel);
+    uint16_t doSpriteDMA(int channel);
+    uint16_t doBitplaneDMA(int channel);
+
+
     //
     // Managing the DMA allocation tables
     //

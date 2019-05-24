@@ -267,6 +267,49 @@ Agnus::beamDiff(int16_t vStart, int16_t hStart, int16_t vEnd, int16_t hEnd)
     return DMA_CYCLES(vDiff * 227 + hDiff);
 }
 
+uint16_t
+Agnus::doReadDiskDMA()
+{
+    uint16_t result = mem->peekChip16(dskpt);
+    INC_DMAPTR(dskpt);
+
+    return result;
+}
+
+void
+Agnus::doWriteDiskDMA(uint16_t value)
+{
+    mem->pokeChip16(dskpt, value);
+    INC_DMAPTR(dskpt);
+}
+
+uint16_t
+Agnus::doAudioDMA(int channel)
+{
+    uint16_t result = mem->peekChip16(audlc[channel]);
+    INC_DMAPTR(audlc[channel]);
+
+    return result;
+}
+
+uint16_t
+Agnus::doSpriteDMA(int channel)
+{
+    uint16_t result = mem->peekChip16(sprpt[channel]);
+    INC_DMAPTR(sprpt[channel]);
+
+    return result; 
+}
+
+uint16_t
+Agnus::doBitplaneDMA(int channel)
+{
+    uint16_t result = mem->peekChip16(bplpt[channel]);
+    INC_DMAPTR(bplpt[channel]);
+
+    return result;
+}
+
 void
 Agnus::clearDMAEventTable()
 {
