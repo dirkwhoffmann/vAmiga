@@ -99,4 +99,31 @@ extension Inspector {
         amigaProxy?.denise.setBPU(activePlanes)
         refresh(everything: false)
     }
+
+    @IBAction func dmaDebugOnOffAction(_ sender: NSButton!) {
+
+        track("New value: \(sender.state)")
+        refresh(everything: false)
+    }
+
+    @IBAction func dmaDebugShowAction(_ sender: NSButton!) {
+
+        track("Tag: \(sender.tag) New value: \(sender.state)")
+        refresh(everything: false)
+    }
+
+    @IBAction func dmaDebugColorAction(_ sender: NSColorWell!) {
+
+        let color = sender.color
+        track("Tag: \(sender.tag) New value: \(color)")
+        refresh(everything: false)
+    }
+
+    @IBAction func dmaDebugOpacityAction(_ sender: NSSlider!) {
+
+        track()
+        let value = sender.floatValue
+        track("New value: \(value)")
+        refresh(everything: false)
+    }
 }

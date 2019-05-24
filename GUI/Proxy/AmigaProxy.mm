@@ -481,7 +481,18 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->denise->agnus->isShortFrame();
 }
-
+- (void) dmaDebugSetEnable:(BOOL)value
+{
+    wrapper->denise->dmaDebugger.setEnabled(value);
+}
+- (void) dmaDebugSetVisualize:(BusOwner)owner value:(BOOL)value
+{
+    wrapper->denise->dmaDebugger.setVisualized(owner, value);
+}
+- (void) dmaDebugSetColor:(BusOwner)owner r:(double)r g:(double)g b:(double)b
+{
+    wrapper->denise->dmaDebugger.setColor(owner, r, g, b);
+}
 
 @end
 

@@ -67,9 +67,10 @@ Agnus::Agnus()
 void
 Agnus::_initialize()
 {
-    mem    = &amiga->mem;
+    mem = &amiga->mem;
     denise = &amiga->denise;
-    paula  = &amiga->paula;
+    // dmaDebugger = &amiga->denise.dmaDebugger;
+    paula = &amiga->paula;
 }
 
 void

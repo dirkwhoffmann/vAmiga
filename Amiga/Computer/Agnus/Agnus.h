@@ -62,6 +62,7 @@ class Agnus : public HardwareComponent
     // Quick-access references
     class Memory *mem;
     class Denise *denise;
+    // class DmaDebugger *dmaDebugger;
     class Paula *paula;
 
     // Information shown in the GUI inspector panel

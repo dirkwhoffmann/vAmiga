@@ -307,6 +307,10 @@ struct AmigaFileWrapper;
 - (NSString *) disassemble:(NSInteger)addr;
 - (NSString *) disassemble:(NSInteger)list instr:(NSInteger)offset;
 
+// Gets or sets the opacity of the superimposed visual effect
+float getOpacity();
+void setOpacity(float value);
+
 @end
 
 
@@ -346,6 +350,10 @@ struct AmigaFileWrapper;
 - (BOOL) interlaceMode;
 - (BOOL) isLongFrame;
 - (BOOL) isShortFrame;
+
+- (void) dmaDebugSetEnable:(BOOL)value;
+- (void) dmaDebugSetVisualize:(BusOwner)owner value:(BOOL)value;
+- (void) dmaDebugSetColor:(BusOwner)owner r:(double)r g:(double)g b:(double)b;
 
 @end
 

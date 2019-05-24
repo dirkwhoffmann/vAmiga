@@ -59,6 +59,7 @@ public:
     // Gets or sets a debug color
     uint32_t getColor(BusOwner owner);
     void setColor(BusOwner owner, RgbColor color);
+    void setColor(BusOwner owner, double r, double g, double b);
 
     // Gets or sets the opacity of the superimposed visual effect
     float getOpacity();

@@ -52,6 +52,12 @@ DmaDebugger::setColor(BusOwner owner, RgbColor color)
     }
 }
 
+void
+DmaDebugger::setColor(BusOwner owner, double r, double g, double b)
+{
+    setColor(owner, RgbColor(r, g, b));
+}
+
 float
 DmaDebugger::getOpacity()
 {
