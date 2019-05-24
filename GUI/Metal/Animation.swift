@@ -24,6 +24,15 @@ public extension MetalView {
             currentEyeZ != targetEyeZ ||
             currentAlpha != targetAlpha
     }
+
+    func textureAnimates() -> Bool {
+
+        return
+            currentTexOriginX != targetTexOriginX ||
+            currentTexOriginY != targetTexOriginY ||
+            currentTexWidth != targetTexWidth ||
+            currentTexHeight != targetTexHeight
+    }
     
     func eyeX() -> Float {
         
@@ -104,13 +113,49 @@ public extension MetalView {
         } else {
             currentAlpha += deltaAlpha
         }
-    
+
         currentXAngle -= (currentXAngle >= 360.0) ? 360 : 0
         currentXAngle += (currentXAngle < 0.0) ? 360 : 0
         currentYAngle -= (currentYAngle >= 360.0) ? 360 : 0
         currentYAngle += (currentYAngle < 0.0) ? 360 : 0
         currentZAngle -= (currentZAngle >= 360.0) ? 360 : 0
         currentZAngle += (currentZAngle < 0.0) ? 360 : 0
+    }
+
+    func updateTextureRect() {
+
+        track("\(currentTexOriginX) \(targetTexOriginX) \(deltaTexOriginX)")
+        if abs(currentTexOriginX - targetTexOriginX) < abs(deltaTexOriginX) {
+            currentTexOriginX = targetTexOriginX
+        } else {
+            currentTexOriginX += deltaTexOriginX
+        }
+
+        track("\(currentTexOriginY) \(targetTexOriginY) \(deltaTexOriginY)")
+        if abs(currentTexOriginY - targetTexOriginY) < abs(deltaTexOriginY) {
+            currentTexOriginY = targetTexOriginY
+        } else {
+            currentTexOriginY += deltaTexOriginY
+        }
+
+        if abs(currentTexWidth - targetTexWidth) < abs(deltaTexWidth) {
+            currentTexWidth = targetTexWidth
+        } else {
+            currentTexWidth += deltaTexWidth
+        }
+
+        if abs(currentTexHeight - targetTexHeight) < abs(deltaTexHeight) {
+            currentTexHeight = targetTexHeight
+        } else {
+            currentTexHeight += deltaTexHeight
+        }
+/*
+        textureRect.origin.x = currentTexOriginX
+        textureRect.origin.y = currentTexOriginY
+        textureRect.size.width = currentTexWidth
+        textureRect.size.height = currentTexHeight
+*/
+        updateScreenGeometry()
     }
     
     func computeAnimationDeltaSteps(animationCycles: Int) {
@@ -124,7 +169,40 @@ public extension MetalView {
         deltaEyeZ = (targetEyeZ - currentEyeZ) / cycles
         deltaAlpha = (targetAlpha - currentAlpha) / cycles
     }
-    
+
+    func computeTextureDeltaSteps(animationCycles: Int) {
+
+        let cycles = CGFloat(animationCycles)
+        deltaTexOriginX = (targetTexOriginX - currentTexOriginX) / cycles
+        deltaTexOriginY = (targetTexOriginY - currentTexOriginY) / cycles
+        deltaTexWidth = (targetTexWidth - currentTexWidth) / cycles
+        deltaTexHeight = (targetTexHeight - currentTexHeight) / cycles
+    }
+
+    func zoomTextureIn(cycles: Int = 60) {
+
+        track("Zooming texture in...")
+
+        targetTexOriginX = 0.0
+        targetTexOriginY = 0.0
+        targetTexWidth = 728.0 / 768.0
+        targetTexHeight = 286.0 / 288.0
+
+        self.computeTextureDeltaSteps(animationCycles: cycles)
+    }
+
+    func zoomTextureOut(cycles: Int = 60) {
+
+        track("Zooming texture out...")
+
+        targetTexOriginX = 0.0
+        targetTexOriginY = 0.0
+        targetTexWidth = 1.0
+        targetTexHeight = 1.0
+
+        self.computeTextureDeltaSteps(animationCycles: cycles)
+    }
+
     func zoom() {
     
         track("Zooming in...")

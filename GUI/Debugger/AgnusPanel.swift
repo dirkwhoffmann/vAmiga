@@ -135,8 +135,14 @@ extension Inspector {
 
     @IBAction func dmaDebugOnOffAction(_ sender: NSButton!) {
 
-        track("New value: \(sender.state)")
-        amigaProxy?.dma.dmaDebugSetEnable(sender.state == .on)
+        if sender.state == .on {
+            amigaProxy?.dma.dmaDebugSetEnable(true)
+            myController?.metal.zoomTextureOut()
+        } else {
+            amigaProxy?.dma.dmaDebugSetEnable(false)
+            myController?.metal.zoomTextureIn()
+        }
+        
         refresh(everything: false)
     }
 

@@ -306,7 +306,13 @@ public extension MetalView {
                 matrix_from_rotation(radians: yAngle, x: 0.0, y: 0.5, z: 0.0) *
                 matrix_from_rotation(radians: zAngle, x: 0.0, y: 0.0, z: 0.5)
         }
-        
+
+        if textureAnimates() {
+
+           //  texturRect =
+
+        }
+
         vertexUniforms3D.mvp = proj * view * model
     }
 

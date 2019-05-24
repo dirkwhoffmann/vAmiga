@@ -602,6 +602,7 @@ extension MyController {
             
             // track("Power on")
             metal.blendIn()
+            metal.zoomTextureIn(cycles: 1)
             toolbar.validateVisibleItems()
             myAppDelegate.inspector?.refresh(everything: true)
             

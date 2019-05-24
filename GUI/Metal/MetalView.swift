@@ -194,9 +194,22 @@ public class MetalView: MTKView {
     var currentAlpha = Float(0.0)
     var targetAlpha = Float(1.0)  // Start with an invisible screen
     var deltaAlpha = Float(0.0)
-        
+
+    var currentTexOriginX = CGFloat(0.0)
+    var currentTexOriginY = CGFloat(0.0)
+    var currentTexWidth = CGFloat(0.0)
+    var currentTexHeight = CGFloat(0.0)
+    var targetTexOriginX = CGFloat(20.0)
+    var targetTexOriginY = CGFloat(20.0)
+    var targetTexWidth = CGFloat(340.0)
+    var targetTexHeight = CGFloat(220.0)
+    var deltaTexOriginX = CGFloat(0.0)
+    var deltaTexOriginY = CGFloat(0.0)
+    var deltaTexWidth = CGFloat(0.0)
+    var deltaTexHeight = CGFloat(0.0)
+
     /// Texture cut-out (normalized)
-    var textureRect = CGRect.init(x: 0.0, y: 0.0, width: 0.0, height: 0.0)
+    var textureRect = CGRect.init(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
     
     /// Currently selected texture enhancer
     var enhancer = Defaults.enhancer {
@@ -279,6 +292,7 @@ public class MetalView: MTKView {
     public func updateScreenGeometry() {
     
         // Setup parameters looking good for a PAL texture
+        /*
         let textureW = CGFloat(EmulatorTexture.size.0)
         let textureH = CGFloat(EmulatorTexture.size.1)
         let width    = CGFloat(728) //  CGFloat(HPIXELS)
@@ -288,10 +302,15 @@ public class MetalView: MTKView {
                                   y: CGFloat(0) / textureH,
                                   width: width / textureW,
                                   height: height / textureH)
-        
+        */
+        textureRect = CGRect.init(x: currentTexOriginX,
+                                  y: currentTexOriginY,
+                                  width: currentTexWidth,
+                                  height: currentTexHeight)
+
         // Enable this for debugging (will display the whole texture)
-        textureRect = CGRect.init(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
-        
+        // textureRect = CGRect.init(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
+
         // Update texture coordinates in vertex buffer
         buildVertexBuffer()
     }
@@ -528,6 +547,7 @@ public class MetalView: MTKView {
     func drawScene3D() {
     
         let animates = self.animates()
+        let textureAnimates = self.textureAnimates()
         let paused = controller.amiga.isPaused()
         let renderBackground = !fullscreen && !paused && (animates || (currentAlpha < 1.0))
         let renderForeground = currentAlpha > 0.0
@@ -535,6 +555,10 @@ public class MetalView: MTKView {
         if animates {
             updateAngles()
             buildMatrices3D()
+        }
+
+        if textureAnimates {
+            updateTextureRect()
         }
 
         startFrame()
