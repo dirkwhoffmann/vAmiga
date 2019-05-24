@@ -677,22 +677,28 @@ Denise::drawBorder()
     int *ptr = pixelAddr(0);
     int hblank = 4 * 0x35;
 
-    // Draw left border
-    // debug("hstrt = %d hstop = %d\n", _agnus->hstrt, _agnus->hstop);
-    for (int i = 0; i < (2 * agnus->hstrt) - hblank; i++) {
-        if (i >= 0) ptr[i] = rgbaHBorderL;
-    }
-
-    // Draw right border
-    for (int i = (2 * agnus->hstop) - hblank; i < HPIXELS; i++) {
-        if (i >= 0) ptr[i] = rgbaHBorderR;
-    }
-
+    // Draw vertical border
     if (!inDisplayWindow) {
         for (int i = 0; i < HPIXELS; i++) {
             ptr[i] = rgbaVBorder;
         }
+        
+    } else {
+
+        // Draw left border
+        // debug("hstrt = %d hstop = %d\n", _agnus->hstrt, _agnus->hstop);
+        for (int i = 0; i < (2 * agnus->hstrt) - hblank; i++) {
+            if (i >= 0) ptr[i] = rgbaHBorderL;
+        }
+
+        // Draw right border
+        for (int i = (2 * agnus->hstop) - hblank; i < HPIXELS; i++) {
+            if (i >= 0) ptr[i] = rgbaHBorderR;
+        }
     }
+
+    // Invoke DMA debugger
+    if (dmaDebugger.isEnabled()) dmaDebugger.computeOverlay();
 
 #ifdef LINE_DEBUG
     

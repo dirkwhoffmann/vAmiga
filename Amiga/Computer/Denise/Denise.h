@@ -11,6 +11,7 @@
 #define _DENISE_INC
 
 #include "HardwareComponent.h"
+#include "Colors.h"
 #include "Colorizer.h"
 #include "DmaDebugger.h"
 
@@ -255,12 +256,10 @@ public:
     // Synthesizing pixels
     //
     
-private:
+public:
     
     // Returns the frame buffer address of a certain pixel in the current line
     int *pixelAddr(int pixel);
-    
-public:
 
     // Synthesizes pixels. Returns the number of drawn pixels
     int draw();

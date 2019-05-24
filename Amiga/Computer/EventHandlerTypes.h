@@ -50,8 +50,8 @@ typedef enum : long
     SEC_SLOT_COUNT,
 } EventSlot;
 
-static inline bool isPrimarySlot(int32_t s) { return s <= PRIM_SLOT_COUNT; }
-static inline bool isSecondarySlot(int32_t s) { return s <= SEC_SLOT_COUNT; }
+static inline bool isPrimarySlot(int32_t s) { return s < PRIM_SLOT_COUNT; }
+static inline bool isSecondarySlot(int32_t s) { return s < SEC_SLOT_COUNT; }
 
 typedef enum : long
 {
@@ -151,11 +151,11 @@ typedef enum : long
     INS_EVENTS
 } EventID;
 
-static inline bool isCiaEvent(EventID id) { return id <= CIA_EVENT_COUNT; }
-static inline bool isDmaEvent(EventID id) { return id <= DMA_EVENT_COUNT; }
-static inline bool isCopEvent(EventID id) { return id <= COP_EVENT_COUNT; }
-static inline bool isBltEvent(EventID id) { return id <= BLT_EVENT_COUNT; }
-static inline bool isRasEvent(EventID id) { return id <= RAS_EVENT_COUNT; }
+static inline bool isCiaEvent(EventID id) { return id < CIA_EVENT_COUNT; }
+static inline bool isDmaEvent(EventID id) { return id < DMA_EVENT_COUNT; }
+static inline bool isCopEvent(EventID id) { return id < COP_EVENT_COUNT; }
+static inline bool isBltEvent(EventID id) { return id < BLT_EVENT_COUNT; }
+static inline bool isRasEvent(EventID id) { return id < RAS_EVENT_COUNT; }
 
 // Inspection interval in seconds (interval between INS_xxx events)
 static const double inspectionInterval = 0.1;

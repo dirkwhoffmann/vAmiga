@@ -17,7 +17,10 @@ class DmaDebugger : public HardwareComponent {
 private:
 
     // Indicates if DMA debugging is turned on or off
-    bool enabled = false;
+    bool enabled = true;
+
+    // Color storage
+    RgbColor debugColor[BUS_OWNER_COUNT][4];
 
 
     //
@@ -55,7 +58,7 @@ public:
 
     // Gets or sets a debug color
     uint32_t getColor(BusOwner owner);
-    void setColor(BusOwner owner, uint32_t color);
+    void setColor(BusOwner owner, RgbColor color);
 
     // Gets or sets the opacity of the superimposed visual effect
     float getOpacity();
@@ -67,7 +70,7 @@ public:
     //
 
     // Superimposes the debug output onto the current rasterline
-    void overlayDmaUsage();
+    void computeOverlay();
 };
 
 #endif

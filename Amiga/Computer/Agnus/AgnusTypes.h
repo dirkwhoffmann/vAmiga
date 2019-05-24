@@ -29,9 +29,11 @@ typedef enum : int8_t
     BUS_BITPLANE,
     BUS_BLITTER,
     BUS_COPPER,
-    BUS_USAGE_COUNT
+    BUS_OWNER_COUNT
 }
 BusOwner;
+
+static inline bool isBusOwner(long value) { return value < BUS_OWNER_COUNT; }
 
 typedef enum
 {
