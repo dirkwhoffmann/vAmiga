@@ -18,9 +18,9 @@ RgbColor::RgbColor(const AmigaColor &c)
 }
 RgbColor::RgbColor(const GpuColor &c)
 {
-    r = ((c.rawValue >> 16) & 0xFF) / 255.0;
+    r = (c.rawValue & 0xFF) / 255.0;
     g = ((c.rawValue >> 8) & 0xFF) / 255.0;
-    b = (c.rawValue & 0xFF) / 255.0;
+    b = ((c.rawValue >> 16) & 0xFF) / 255.0;
 }
 
 RgbColor::RgbColor(const YuvColor &c)
@@ -33,6 +33,9 @@ RgbColor::RgbColor(const YuvColor &c)
 RgbColor
 RgbColor::mix(RgbColor additive, double weight)
 {
+    // printf("mix: old %f %f %f weight = %f\n", r, g, b, weight);
+    // printf("mix: add %f %f %f\n", additive.r, additive.g, additive.b);
+
     assert(additive.r <= 1.0);
     assert(additive.g <= 1.0);
     assert(additive.b <= 1.0);
@@ -40,6 +43,9 @@ RgbColor::mix(RgbColor additive, double weight)
     double newR = r + (additive.r - r) * weight;
     double newG = g + (additive.g - g) * weight;
     double newB = b + (additive.b - b) * weight;
+
+    RgbColor c = RgbColor(newR, newG, newB);
+    // printf("mix: new %f %f %f\n", c.r, c.g, c.b);
 
     return RgbColor(newR, newG, newB);
 }
@@ -115,17 +121,17 @@ GpuColor::GpuColor(const AmigaColor &c)
     uint8_t g = c.rawValue & 0x0F0;
     uint8_t b = c.rawValue & 0x00F;
 
-    rawValue = (a << 24) | (r << 12) | (g << 8) | (b << 4);
+    rawValue = (a << 24) | (b << 20) | (g << 8) | (r >> 4);
 }
 
 GpuColor::GpuColor(const RgbColor &c)
 {
-    uint8_t a = 0xFF;
-    uint8_t r = c.r * 0xFF;
-    uint8_t g = c.g * 0xFF;
-    uint8_t b = c.b * 0xFF;
+    uint8_t a = 255;
+    uint8_t r = c.r * 255;
+    uint8_t g = c.g * 255;
+    uint8_t b = c.b * 255;
 
-    rawValue = (a << 24) | (r << 12) | (g << 8) | (b << 4);
+    rawValue = (a << 24) | (b << 16) | (g << 8) | r;
 }
 
 const GpuColor GpuColor::black(RgbColor::black);

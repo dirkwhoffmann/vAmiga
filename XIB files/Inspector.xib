@@ -2788,7 +2788,7 @@
                                                     <slider horizontalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="M0E-AU-SFY">
                                                         <rect key="frame" x="34" y="23" width="15" height="102"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <sliderCell key="cell" controlSize="small" alignment="left" maxValue="100" doubleValue="50" tickMarkPosition="right" sliderType="linear" id="OVp-xH-aDp"/>
+                                                        <sliderCell key="cell" controlSize="small" continuous="YES" alignment="left" maxValue="100" doubleValue="50" tickMarkPosition="right" sliderType="linear" id="OVp-xH-aDp"/>
                                                         <connections>
                                                             <action selector="dmaDebugOpacityAction:" target="-2" id="ZSz-Vi-loQ"/>
                                                         </connections>

@@ -333,6 +333,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->agnus->getInfo();
 }
+- (DMADebuggerInfo) getDebuggerInfo
+{
+    return wrapper->agnus->dmaDebugger.getInfo();
+}
 - (NSInteger) primSlotCount
 {
     return wrapper->agnus->events.primSlotCount();

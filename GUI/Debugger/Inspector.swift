@@ -450,7 +450,7 @@ class Inspector: NSWindowController {
             case "Memory":
                 refreshMemory(everything: everything)
 
-            case "DMA":
+            case "Agnus":
                 refreshAgnus(everything: everything)
 
             case "Copper":
@@ -494,7 +494,7 @@ extension Inspector: NSTabViewDelegate {
         case "CPU":    amigaProxy?.setInspectionTarget(INS_CPU)
         case "CIA":    amigaProxy?.setInspectionTarget(INS_CIA)
         case "Memory": amigaProxy?.setInspectionTarget(INS_MEM)
-        case "DMA":    amigaProxy?.setInspectionTarget(INS_AGNUS)
+        case "Agnus":  amigaProxy?.setInspectionTarget(INS_AGNUS)
         case "Copper": amigaProxy?.setInspectionTarget(INS_AGNUS)
         case "Denise": amigaProxy?.setInspectionTarget(INS_DENISE)
         case "Paula":  amigaProxy?.setInspectionTarget(INS_PAULA)

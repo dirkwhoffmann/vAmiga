@@ -20,8 +20,14 @@ private:
     // Indicates if DMA debugging is turned on or off
     bool enabled = true;
 
-    // Color storage
+    // Indicates if a certain DMA channel should be visualized
+    bool visualize[BUS_OWNER_COUNT]; 
+
+    // DMA debugging colors
     RgbColor debugColor[BUS_OWNER_COUNT][4];
+
+    // Opacity of debug overlay
+    double opacity = 0.5;
 
 
     //
@@ -31,6 +37,9 @@ private:
 public:
 
     DmaDebugger();
+
+    // Returns the current settings
+    DMADebuggerInfo getInfo();
 
 
     //
@@ -58,13 +67,13 @@ public:
     void setVisualized(BusOwner owner, bool value);
 
     // Gets or sets a debug color
-    uint32_t getColor(BusOwner owner);
+    RgbColor getColor(BusOwner owner);
     void setColor(BusOwner owner, RgbColor color);
     void setColor(BusOwner owner, double r, double g, double b);
 
     // Gets or sets the opacity of the superimposed visual effect
-    float getOpacity();
-    void setOpacity(float value);
+    double getOpacity();
+    void setOpacity(double value);
 
 
     //

@@ -254,25 +254,6 @@ CIAInfo;
 
 typedef struct
 {
-    uint16_t dmacon;
-    uint16_t diwstrt;
-    uint16_t diwstop;
-    uint16_t ddfstrt;
-    uint16_t ddfstop;
-    
-    uint16_t bpl1mod;
-    uint16_t bpl2mod;
-    uint8_t  numBpls;
-    
-    uint32_t dskpt;
-    uint32_t audlc[4];
-    uint32_t bplpt[6];
-    uint32_t sprpt[8];
-}
-DMAInfo;
-
-typedef struct
-{
     const char *slotName;
     const char *eventName;
     long eventId;

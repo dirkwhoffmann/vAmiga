@@ -258,7 +258,7 @@ class Agnus : public HardwareComponent
     
     // Returns the latest internal state recorded by inspect()
     DMAInfo getInfo();
-    
+
 
     //
     // Examining the current frame

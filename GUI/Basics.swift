@@ -111,6 +111,11 @@ extension URL {
 
 extension NSColor {
 
+    convenience init(r: Double, g: Double, b: Double) {
+
+        self.init(red: CGFloat(r), green: CGFloat(g), blue: CGFloat(b), alpha: 1.0)
+    }
+
     convenience init(rgba: UInt32) {
 
         let r = CGFloat(rgba & 0xFF)

@@ -130,7 +130,7 @@ Agnus::_inspect()
     for (unsigned i = 0; i < 4; i++) info.audlc[i] = audlc[i];
     for (unsigned i = 0; i < 6; i++) info.bplpt[i] = bplpt[i];
     for (unsigned i = 0; i < 8; i++) info.sprpt[i] = sprpt[i];
-    
+
     pthread_mutex_unlock(&lock);
 }
 

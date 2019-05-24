@@ -56,8 +56,10 @@ extension Inspector {
         dmaBpl4Enable.state = info.numBpls >= 4 ? .on : .off
         dmaBpl5Enable.state = info.numBpls >= 5 ? .on : .off
         dmaBpl6Enable.state = info.numBpls >= 6 ? .on : .off
+
+        refreshDmaDebugger()
     }
-    
+
     @IBAction func dmaDMACONTextAction(_ sender: NSTextField!) {
         
         let value = sender.integerValue & 0xFFFF
@@ -99,16 +101,50 @@ extension Inspector {
         amigaProxy?.denise.setBPU(activePlanes)
         refresh(everything: false)
     }
+}
+
+extension Inspector {
+
+    func refreshDmaDebugger() {
+
+        guard let dma = amigaProxy?.dma else { return }
+        let info = dma.getDebuggerInfo()
+        let rgb = info.colorRGB
+
+        dmaDebugEnable.state = info.enabled ? .on : .off
+        dmaDebugDisk.state = info.visualize.2 ? .on : .off
+        dmaDebugAudio.state = info.visualize.3 ? .on : .off
+        dmaDebugSprite.state = info.visualize.4 ? .on : .off
+        dmaDebugBitplane.state = info.visualize.5 ? .on : .off
+        dmaDebugDiskCol.color = NSColor.init(r: rgb.2.0, g: rgb.2.1, b: rgb.2.2)
+        dmaDebugAudioCol.color = NSColor.init(r: rgb.3.0, g: rgb.3.1, b: rgb.3.2)
+        dmaDebugSpriteCol.color = NSColor.init(r: rgb.4.0, g: rgb.4.1, b: rgb.4.2)
+        dmaDebugBitplaneCol.color = NSColor.init(r: rgb.5.0, g: rgb.5.1, b: rgb.5.2)
+        dmaDebugOpacity.doubleValue = info.opacity * 100.0
+
+        dmaDebugDisk.isEnabled = info.enabled
+        dmaDebugAudio.isEnabled = info.enabled
+        dmaDebugSprite.isEnabled = info.enabled
+        dmaDebugBitplane.isEnabled = info.enabled
+        dmaDebugDiskCol.isEnabled = info.enabled
+        dmaDebugAudioCol.isEnabled = info.enabled
+        dmaDebugSpriteCol.isEnabled = info.enabled
+        dmaDebugBitplaneCol.isEnabled = info.enabled
+        dmaDebugOpacity.isEnabled = info.enabled
+    }
 
     @IBAction func dmaDebugOnOffAction(_ sender: NSButton!) {
 
         track("New value: \(sender.state)")
+        amigaProxy?.dma.dmaDebugSetEnable(sender.state == .on)
         refresh(everything: false)
     }
 
     @IBAction func dmaDebugShowAction(_ sender: NSButton!) {
 
         track("Tag: \(sender.tag) New value: \(sender.state)")
+        let owner = BusOwner(Int8(sender.tag))
+        amigaProxy?.dma.dmaDebugSetVisualize(owner, value: sender.state == .on)
         refresh(everything: false)
     }
 
@@ -116,6 +152,11 @@ extension Inspector {
 
         let color = sender.color
         track("Tag: \(sender.tag) New value: \(color)")
+        let owner = BusOwner(Int8(sender.tag))
+        let r = Double(sender.color.redComponent)
+        let g = Double(sender.color.greenComponent)
+        let b = Double(sender.color.blueComponent)
+        amigaProxy?.dma.dmaDebugSetColor(owner, r: r, g: g, b: b)
         refresh(everything: false)
     }
 
@@ -124,6 +165,7 @@ extension Inspector {
         track()
         let value = sender.floatValue
         track("New value: \(value)")
+        amigaProxy?.dma.dmaDebugSetOpacity(sender.doubleValue / 100.0)
         refresh(everything: false)
     }
 }

@@ -295,6 +295,7 @@ struct AmigaFileWrapper;
 - (void) dumpBlitter;
 
 - (DMAInfo) getInfo;
+- (DMADebuggerInfo) getDebuggerInfo;
 - (NSInteger) primSlotCount;
 - (NSInteger) secSlotCount;
 - (EventSlotInfo) getPrimarySlotInfo:(NSInteger)slot;
