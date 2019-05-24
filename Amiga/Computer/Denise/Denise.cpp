@@ -9,9 +9,6 @@
 
 #include "Amiga.h"
 
-#define SPR_DMA(x) amiga->mem.peekChip16(amiga->agnus.sprpt[x])
-// #define INC_SPRDMAPTR(x) INC_DMAPTR(amiga->agnus.sprpt[x])
-
 Denise::Denise()
 {
     setDescription("Denise");

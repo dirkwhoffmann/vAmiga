@@ -9,14 +9,6 @@
 
 #include "Amiga.h"
 
-// DEPRECATED. USE doDMA instead
-/* Emulates a Direct Memory Access.
- * ptr is a DMA pointer register and dest the destination
- */
-#define DO_DMA(ptr,dest) \
-dest = mem->peekChip16(ptr); \
-ptr = (ptr + 2) & 0x7FFFE;
-
 Agnus::Agnus()
 {
     setDescription("Agnus");
@@ -1163,8 +1155,8 @@ Agnus::serviceDMAEvent(EventID id)
         case DMA_H1:
         case DMA_L1:
             busOwner[hpos] = BUS_BITPLANE;
-            DO_DMA(bplpt[PLANE1], denise->bpldat[PLANE1]);
-            
+            denise->bpldat[PLANE1] = doBitplaneDMA(PLANE1);
+
             // The bitplane 1 fetch is an important one. Once it is performed,
             // Denise fills it's shift registers.
             denise->fillShiftRegisters();
@@ -1173,29 +1165,29 @@ Agnus::serviceDMAEvent(EventID id)
         case DMA_H2:
         case DMA_L2:
             busOwner[hpos] = BUS_BITPLANE;
-            DO_DMA(bplpt[PLANE2], denise->bpldat[PLANE2]);
+            denise->bpldat[PLANE2] = doBitplaneDMA(PLANE2);
             break;
             
         case DMA_H3:
         case DMA_L3:
             busOwner[hpos] = BUS_BITPLANE;
-            DO_DMA(bplpt[PLANE3], denise->bpldat[PLANE3]);
+            denise->bpldat[PLANE3] = doBitplaneDMA(PLANE3);
             break;
             
         case DMA_H4:
         case DMA_L4:
             busOwner[hpos] = BUS_BITPLANE;
-            DO_DMA(bplpt[PLANE4], denise->bpldat[PLANE4]);
+            denise->bpldat[PLANE4] = doBitplaneDMA(PLANE4);
             break;
             
         case DMA_L5:
             busOwner[hpos] = BUS_BITPLANE;
-            DO_DMA(bplpt[PLANE5], denise->bpldat[PLANE5]);
+            denise->bpldat[PLANE5] = doBitplaneDMA(PLANE5);
             break;
             
         case DMA_L6:
             busOwner[hpos] = BUS_BITPLANE;
-            DO_DMA(bplpt[PLANE6], denise->bpldat[PLANE6]);
+            denise->bpldat[PLANE6] = doBitplaneDMA(PLANE6);
             break;
             
         default:
