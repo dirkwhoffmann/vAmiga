@@ -268,7 +268,7 @@ Agnus::beamDiff(int16_t vStart, int16_t hStart, int16_t vEnd, int16_t hEnd)
 }
 
 uint16_t
-Agnus::doReadDiskDMA()
+Agnus::doDiskDMA()
 {
     uint16_t result = mem->peekChip16(dskpt);
     INC_DMAPTR(dskpt);
@@ -277,7 +277,7 @@ Agnus::doReadDiskDMA()
 }
 
 void
-Agnus::doWriteDiskDMA(uint16_t value)
+Agnus::doDiskDMA(uint16_t value)
 {
     mem->pokeChip16(dskpt, value);
     INC_DMAPTR(dskpt);

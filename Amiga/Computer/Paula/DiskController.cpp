@@ -434,6 +434,7 @@ DiskController::executeFifo()
     }
 }
 
+/*
 uint16_t
 DiskController::dmaRead()
 {
@@ -451,6 +452,7 @@ DiskController::dmaWrite(uint16_t word)
     INC_DMAPTR(agnus->dskpt);
     mem->pokeChip16(addr, word);
 }
+*/
 
 void
 DiskController::performDMA()
@@ -495,7 +497,7 @@ DiskController::performDMARead(Drive *drive)
         uint16_t word = readFifo16();
         
         // Write word into memory.
-        dmaWrite(word);
+        agnus->doDiskDMA(word); //  dmaWrite(word);
 
         // Compute checksum (for debugging).
         checksum = fnv_1a_it32(checksum, word);
@@ -530,7 +532,7 @@ DiskController::performDMAWrite(Drive *drive)
     
     do {
         // Read next word from memory.
-        uint16_t word = dmaRead();
+        uint16_t word = agnus->doDiskDMA(); // dmaRead();
         checksum = fnv_1a_it32(checksum, word);
         // plaindebug("%d: %X (%X)\n", dsklen & 0x3FFF, word, dcheck);
         
@@ -613,7 +615,7 @@ DiskController::performSimpleDMARead(Drive *drive)
         uint16_t word = drive->readHead16();
         
         // Write word into memory.
-        dmaWrite(word);
+        agnus->doDiskDMA(word); // dmaWrite(word);
 
         // Compute checksum (for debugging).
         checksum = fnv_1a_it32(checksum, word);
@@ -636,7 +638,7 @@ DiskController::performSimpleDMAWrite(Drive *drive)
     for (unsigned i = 0; i < acceleration; i++) {
         
         // Read word from memory
-        uint16_t word = dmaRead();
+        uint16_t word = agnus->doDiskDMA(); // dmaRead();
         
         // Compute checksum (for debugging)
         checksum = fnv_1a_it32(checksum, word);
@@ -693,7 +695,7 @@ DiskController::performTurboRead(Drive *drive)
         uint16_t word = drive->readHead16();
         
         // Write word into memory.
-        dmaWrite(word);
+        agnus->doDiskDMA(word); // dmaWrite(word);
         
         // Compute checksum (for debugging)
         checksum = fnv_1a_it32(checksum, word);
@@ -710,7 +712,7 @@ DiskController::performTurboWrite(Drive *drive)
     for (unsigned i = 0; i < (dsklen & 0x3FFF); i++) {
         
         // Read word from memory
-        uint16_t word = dmaRead();
+        uint16_t word = agnus->doDiskDMA(); // dmaRead();
         
         // Compute checksum (for debugging)
         checksum = fnv_1a_it32(checksum, word);

@@ -348,8 +348,8 @@ public:
     // Performing DMAs
     //
 
-    uint16_t doReadDiskDMA();
-    void doWriteDiskDMA(uint16_t value);
+    uint16_t doDiskDMA();
+    void doDiskDMA(uint16_t value);
     uint16_t doAudioDMA(int channel);
     uint16_t doSpriteDMA(int channel);
     uint16_t doBitplaneDMA(int channel);

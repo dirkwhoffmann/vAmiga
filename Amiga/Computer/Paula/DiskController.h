@@ -252,10 +252,10 @@ private:
 public:
     
     // Reads a word from memory and increases the disk DMA pointer.
-    uint16_t dmaRead();
+    // uint16_t dmaRead();
 
     // Write a word into memory and increases the disk DMA pointer.
-    void dmaWrite(uint16_t word);
+    // void dmaWrite(uint16_t word);
 
     
     /* The emulator supports three disk DMA modes at the moment:
