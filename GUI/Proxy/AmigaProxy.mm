@@ -387,6 +387,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->agnus->dmaDebugger.setVisualized(owner, value);
 }
+- (void) dmaDebugSwitchColor:(BusOwner)owner
+{
+    wrapper->agnus->dmaDebugger.switchColor(owner);
+}
 - (void) dmaDebugSetColor:(BusOwner)owner r:(double)r g:(double)g b:(double)b
 {
     wrapper->agnus->dmaDebugger.setColor(owner, r, g, b);

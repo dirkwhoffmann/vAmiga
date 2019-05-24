@@ -14,15 +14,19 @@ DmaDebugger::DmaDebugger()
     setDescription("DmaDebugger");
 
     for (unsigned i = 0; i < BUS_OWNER_COUNT; i++) {
+
         visualize[i] = true;
+        setColor((BusOwner)i, i % 7);
     }
 
+    /*
     setColor(BUS_DISK, RgbColor::yellow);
     setColor(BUS_AUDIO, RgbColor::blue);
     setColor(BUS_SPRITE, RgbColor::magenta);
     setColor(BUS_BITPLANE, RgbColor::red);
     setColor(BUS_BLITTER, RgbColor::green);
     setColor(BUS_COPPER, RgbColor::blue);
+    */
 }
 
 DMADebuggerInfo
@@ -35,7 +39,7 @@ DmaDebugger::getInfo()
     result.enabled = enabled;
     result.opacity = opacity;
 
-    for (unsigned i = 0; i < BUS_OWNER_COUNT; i++) {
+    for (uint8_t i = 0; i < BUS_OWNER_COUNT; i++) {
 
         RgbColor color = debugColor[i][0];
         result.visualize[i] = visualize[i];
@@ -70,6 +74,33 @@ DmaDebugger::getColor(BusOwner owner)
 }
 
 void
+DmaDebugger::switchColor(BusOwner owner)
+{
+    setColor(owner, (colorIndex[owner] + 1) % 7);
+}
+
+void
+DmaDebugger::setColor(BusOwner owner, uint8_t nr)
+{
+    assert(isBusOwner(owner));
+    assert(nr < 7);
+
+    const RgbColor color[7] = {
+        RgbColor(1.0,0.4,0.4),
+        RgbColor(1.0,1.0,0.4),
+        RgbColor(0.4,1.0,0.4),
+        RgbColor(0.4,1.0,1.0),
+        RgbColor(0.4,0.4,1.0),
+        RgbColor(1.0,0.4,1.0),
+        RgbColor(0.7,0.7,0.7)
+    };
+
+    colorIndex[owner] = nr;
+    setColor(owner, color[nr]);
+}
+
+
+void
 DmaDebugger::setColor(BusOwner owner, RgbColor color)
 {
     assert(isBusOwner(owner));
@@ -77,14 +108,8 @@ DmaDebugger::setColor(BusOwner owner, RgbColor color)
     float weight[4] = { 0.00, 0.15, 0.30, 0.45 };
 
     for (int i = 0; i < 4; i++) {
-
         debugColor[owner][i] = color.shade(weight[i]);
     }
-    printf("setColor: color %f %f %f\n", color.r, color.g, color.b);
-    printf("col 0: %f %f %f\n", debugColor[owner][0].r, debugColor[owner][0].g, debugColor[owner][0].b);
-    printf("col 1: %f %f %f\n", debugColor[owner][1].r, debugColor[owner][1].g, debugColor[owner][1].b);
-    printf("col 2: %f %f %f\n", debugColor[owner][2].r, debugColor[owner][2].g, debugColor[owner][2].b);
-    printf("col 3: %f %f %f\n", debugColor[owner][3].r, debugColor[owner][3].g, debugColor[owner][3].b);
 }
 
 void

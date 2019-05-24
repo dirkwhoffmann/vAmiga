@@ -156,7 +156,8 @@ extension Inspector {
         let r = Double(sender.color.redComponent)
         let g = Double(sender.color.greenComponent)
         let b = Double(sender.color.blueComponent)
-        amigaProxy?.dma.dmaDebugSetColor(owner, r: r, g: g, b: b)
+        // amigaProxy?.dma.dmaDebugSetColor(owner, r: r, g: g, b: b)
+        amigaProxy?.dma.dmaDebugSwitchColor(owner)
         refresh(everything: false)
     }
 

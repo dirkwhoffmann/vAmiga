@@ -26,6 +26,9 @@ private:
     // DMA debugging colors
     RgbColor debugColor[BUS_OWNER_COUNT][4];
 
+    // Selected color index for all DMA channels
+    uint8_t colorIndex[BUS_OWNER_COUNT];
+
     // Opacity of debug overlay
     double opacity = 0.5;
 
@@ -68,6 +71,8 @@ public:
 
     // Gets or sets a debug color
     RgbColor getColor(BusOwner owner);
+    void switchColor(BusOwner owner);
+    void setColor(BusOwner owner, uint8_t nr);
     void setColor(BusOwner owner, RgbColor color);
     void setColor(BusOwner owner, double r, double g, double b);
 
