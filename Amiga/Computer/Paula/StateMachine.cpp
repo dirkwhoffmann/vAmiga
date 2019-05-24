@@ -105,8 +105,7 @@ StateMachine::execute(DMACycle cycles)
                 auddat = LO_BYTE(auddatLatch);
 
                 // Read the next two samples from memory
-                auddatLatch = amiga->mem.peekChip16(agnus->audlc[nr]);
-                INC_DMAPTR(agnus->audlc[nr]);
+                auddatLatch = agnus->doAudioDMA(nr);
 
                 // Decrease the length counter
                 if (audlen > 1) {
@@ -131,8 +130,7 @@ StateMachine::execute(DMACycle cycles)
             audper = 0;
 
             // Read the next two samples from memory
-            auddatLatch = amiga->mem.peekChip16(agnus->audlc[nr]);
-            INC_DMAPTR(agnus->audlc[nr]);
+            auddatLatch = agnus->doAudioDMA(nr);
 
             if (audlen > 1) {
                 audlen--;

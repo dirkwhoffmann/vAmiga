@@ -434,26 +434,6 @@ DiskController::executeFifo()
     }
 }
 
-/*
-uint16_t
-DiskController::dmaRead()
-{
-    uint32_t addr = agnus->dskpt;
-    
-    INC_DMAPTR(agnus->dskpt);
-    return mem->peekChip16(addr);
-}
-
-void
-DiskController::dmaWrite(uint16_t word)
-{
-    uint32_t addr = agnus->dskpt;
-    
-    INC_DMAPTR(agnus->dskpt);
-    mem->pokeChip16(addr, word);
-}
-*/
-
 void
 DiskController::performDMA()
 {
