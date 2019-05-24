@@ -111,6 +111,8 @@ extension Inspector {
         let info = dma.getDebuggerInfo()
         let rgb = info.colorRGB
 
+        track("bpl color = \(NSColor.init(r: rgb.5.0, g: rgb.5.1, b: rgb.5.2))")
+
         dmaDebugEnable.state = info.enabled ? .on : .off
         dmaDebugDisk.state = info.visualize.2 ? .on : .off
         dmaDebugAudio.state = info.visualize.3 ? .on : .off
@@ -156,8 +158,7 @@ extension Inspector {
         let r = Double(sender.color.redComponent)
         let g = Double(sender.color.greenComponent)
         let b = Double(sender.color.blueComponent)
-        // amigaProxy?.dma.dmaDebugSetColor(owner, r: r, g: g, b: b)
-        amigaProxy?.dma.dmaDebugSwitchColor(owner)
+        amigaProxy?.dma.dmaDebugSetColor(owner, r: r, g: g, b: b)
         refresh(everything: false)
     }
 
