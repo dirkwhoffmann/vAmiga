@@ -174,7 +174,6 @@ extension MetalView {
         }
     }
 
-
     //
     // Texture animations
     //
@@ -233,29 +232,26 @@ extension MetalView {
 
         animates |= AnimationType.geometry
     }
-    
-    func rotateBack() {
-    
-        track("Rotating back...")
 
-        angleX.target = 0.0
-        angleY.target = 90.0
-        angleZ.target = 0.0
+    func rotate(x: Float = 0.0, y: Float = 0.0, z: Float = 0.0) {
+
+        angleX.target = x
+        angleY.target = y
+        angleZ.target = z
 
         let steps = 60
         angleX.steps = steps
         angleY.steps = steps
         angleZ.steps = steps
-
-        angleY.target -= (angleY.target >= 360) ? 360 : 0 // TODO: REMOVE ASAP
 
         animates |= AnimationType.geometry
     }
-    
-    func rotate() {
-    
-        track("Rotating...")
 
+    func rotateRight() {
+    
+        track("Rotating right...")
+        rotate(y: -90)
+        /*
         angleX.target = 0.0
         angleY.target = 90.0
         angleZ.target = 0.0
@@ -265,15 +261,33 @@ extension MetalView {
         angleY.steps = steps
         angleZ.steps = steps
 
-        angleY.target += (angleY.target < 0) ? 360 : 0 // TODO: REMOVE ASAP
+        animates |= AnimationType.geometry
+         */
+    }
+    
+    func rotateLeft() {
+    
+        track("Rotating right...")
+        rotate(y: 90)
+        /*
+        angleX.target = 0.0
+        angleY.target = 90.0
+        angleZ.target = 0.0
+
+        let steps = 60
+        angleX.steps = steps
+        angleY.steps = steps
+        angleZ.steps = steps
 
         animates |= AnimationType.geometry
+        */
     }
 
     func rotateDown() {
 
         track("Rotating down...")
-
+        rotate(x: 90)
+        /*
         angleX.target = 90.0
         angleY.target = 0.0
         angleZ.target = 0.0
@@ -284,6 +298,13 @@ extension MetalView {
         angleZ.steps = steps
 
         animates |= AnimationType.geometry
+         */
+    }
+
+    func rotateUp() {
+
+        track("Rotating up...")
+        rotate(x: -90)
     }
 
     func scroll() {
@@ -358,10 +379,10 @@ extension MetalView {
     // Matrix utilities
     //
     
-    func matrixFromPerspective(fovY: Float,
-                               aspect: Float,
-                               nearZ: Float,
-                               farZ: Float) -> matrix_float4x4 {
+    func perspectiveMatrix(fovY: Float,
+                           aspect: Float,
+                           nearZ: Float,
+                           farZ: Float) -> matrix_float4x4 {
         
         // Variant 1: Keeps correct aspect ratio independent of window size
         let yscale = 1.0 / tanf(fovY * 0.5) // 1 / tan == cot
@@ -382,9 +403,9 @@ extension MetalView {
         return m
     }
     
-    func matrixFromTranslation(x: Float,
-                               y: Float,
-                               z: Float) -> matrix_float4x4 {
+    func translationMatrix(x: Float,
+                           y: Float,
+                           z: Float) -> matrix_float4x4 {
 
         var m = matrix_identity_float4x4
         m.columns.3 = float4(x, y, z, 1.0)
@@ -392,11 +413,11 @@ extension MetalView {
         return m
     }
     
-    func matrixFromRotation(radians: Float,
-                            x: Float,
-                            y: Float,
-                            z: Float) -> matrix_float4x4 {
-    
+    func rotationMatrix(radians: Float,
+                        x: Float,
+                        y: Float,
+                        z: Float) -> matrix_float4x4 {
+
         var v = vector_float3(x, y, z)
         v = normalize(v)
         let cos = cosf(radians)

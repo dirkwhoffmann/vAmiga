@@ -272,8 +272,7 @@ class DiskMountController: DialogController {
         df.insertDisk(disk)
         df.setWriteProtection(writeProtect)
 
-        // myController?.metal.rotateBack()
-        myController?.metal.rotateDown()
+        myController?.metal.rotateUp()
         hideSheet()
     }
     

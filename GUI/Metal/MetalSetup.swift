@@ -267,7 +267,7 @@ public extension MetalView {
         let model  = matrix_identity_float4x4
         let view   = matrix_identity_float4x4
         let aspect = Float(layerWidth) / Float(layerHeight)
-        let proj   = matrixFromPerspective(fovY: (Float(65.0 * (.pi / 180.0))),
+        let proj   = perspectiveMatrix(fovY: (Float(65.0 * (.pi / 180.0))),
                                              aspect: aspect,
                                              nearZ: 0.1,
                                              farZ: 100.0)
@@ -292,23 +292,22 @@ public extension MetalView {
         let aspect = Float(layerWidth) / Float(layerHeight)
 
         let view = matrix_identity_float4x4
-        let proj = matrixFromPerspective(fovY: Float(65.0 * (.pi / 180.0)),
+        let proj = perspectiveMatrix(fovY: Float(65.0 * (.pi / 180.0)),
                                          aspect: aspect,
                                          nearZ: 0.1,
                                          farZ: 100.0)
 
-        let transEye = matrixFromTranslation(x: -eyeX.current,
+        let transEye = translationMatrix(x: -eyeX.current,
                                              y: -eyeY.current,
                                              z: eyeZ.current + 1.39 - 0.16)
 
-        let transRotX = matrixFromTranslation(x: 0.0,
+        let transRotX = translationMatrix(x: 0.0,
                                               y: 0.0,
                                               z: 0.16)
 
-        let rotX = matrixFromRotation(radians: xAngle, x: 0.5, y: 0.0, z: 0.0)
-        let rotY = matrixFromRotation(radians: yAngle, x: 0.0, y: 0.5, z: 0.0)
-        let rotZ = matrixFromRotation(radians: zAngle, x: 0.0, y: 0.0, z: 0.5)
-        // TODO: Delete rotZ which is not used at all
+        let rotX = rotationMatrix(radians: xAngle, x: 0.5, y: 0.0, z: 0.0)
+        let rotY = rotationMatrix(radians: yAngle, x: 0.0, y: 0.5, z: 0.0)
+        let rotZ = rotationMatrix(radians: zAngle, x: 0.0, y: 0.0, z: 0.5)
 
         // Chain all transformations
         let model = transEye * rotX * transRotX * rotY * rotZ
@@ -341,8 +340,6 @@ public extension MetalView {
         let dx = Float(0.64)
         let dy = Float(0.48)
         let dz = Float(0.64)
-        // let width = 2*dx
-        let height = 2*dy
         let bgx = Float(6.4)
         let bgy = Float(4.8)
         let bgz = Float(-6.8)
@@ -398,13 +395,13 @@ public extension MetalView {
         setVertex(29, float3(+dx, -dy, +dz), lowerRight)
     
         // -Y
-        setVertex(30, float3(+dx, -dy, -dy), lowerLeft)
-        setVertex(31, float3(-dx, -dy, -dy), upperLeft)
-        setVertex(32, float3(-dx, -dy, +dy), upperRight)
+        setVertex(30, float3(+dx, -dy, -dz), upperRight)
+        setVertex(31, float3(-dx, -dy, -dz), upperLeft)
+        setVertex(32, float3(-dx, -dy, -dz + 2*dy), lowerLeft)
     
-        setVertex(33, float3(+dx, -dy, -dy), lowerLeft)
-        setVertex(34, float3(+dx, -dy, +dy), lowerRight)
-        setVertex(35, float3(-dx, -dy, +dy), upperRight)
+        setVertex(33, float3(+dx, -dy, -dz), upperRight)
+        setVertex(34, float3(+dx, -dy, -dz + 2*dy), lowerRight)
+        setVertex(35, float3(-dx, -dy, -dz + 2*dy), lowerLeft)
     
         // +Y
         setVertex(36, float3(+dx, +dy, -dz), lowerRight)
@@ -412,8 +409,8 @@ public extension MetalView {
         setVertex(38, float3(-dx, +dy, -dz + 2*dy), upperLeft)
     
         setVertex(39, float3(+dx, +dy, -dz), lowerRight)
-        setVertex(40, float3(-dx, +dy, -dz + height), upperLeft)
-        setVertex(41, float3(+dx, +dy, -dz + height), upperRight)
+        setVertex(40, float3(-dx, +dy, -dz + 2*dy), upperLeft)
+        setVertex(41, float3(+dx, +dy, -dz + 2*dy), upperRight)
     
         // 2D drawing quad
         setVertex(42, float3(-1, 1, 0), lowerLeft)
