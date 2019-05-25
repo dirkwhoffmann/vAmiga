@@ -68,14 +68,6 @@ extension MetalView {
             || eyeZ.animates()
             || alpha.animates()
     }
-
-    func textureAnimatesDeprecated() -> Bool {
-
-        return cutoutX1.animates()
-            || cutoutY1.animates()
-            || cutoutX2.animates()
-            || cutoutY2.animates()
-    }
     
     func getEyeX() -> Float {
         
@@ -166,6 +158,7 @@ extension MetalView {
                                       y: CGFloat(cutoutY1.current),
                                       width: CGFloat(cutoutX2.current - cutoutX1.current),
                                       height: CGFloat(cutoutY2.current - cutoutY1.current))
+            buildVertexBuffer()
 
             // Check if animation has terminated
             if !cont {
@@ -221,19 +214,25 @@ extension MetalView {
         track("Zooming in...")
 
         eyeZ.current = 6.0
+        eyeZ.target = 0.0
         angleX.target = 0.0
         angleY.target = 0.0
         angleZ.target = 0.0
+        alpha.target = 1.0
 
         let steps = 120
+        eyeZ.steps = steps
         angleX.steps = steps
         angleY.steps = steps
         angleZ.steps = steps
+        alpha.steps = 1
 
-        animates |= AnimationType.geometry
+        animates |= AnimationType.geometry + AnimationType.alpha
     }
 
     func rotate(x: Float = 0.0, y: Float = 0.0, z: Float = 0.0) {
+
+        track("Rotating x: \(x) y: \(y) z: \(z)...")
 
         angleX.target = x
         angleY.target = y
@@ -247,76 +246,23 @@ extension MetalView {
         animates |= AnimationType.geometry
     }
 
-    func rotateRight() {
-    
-        track("Rotating right...")
-        rotate(y: -90)
-        /*
-        angleX.target = 0.0
-        angleY.target = 90.0
-        angleZ.target = 0.0
-
-        let steps = 60
-        angleX.steps = steps
-        angleY.steps = steps
-        angleZ.steps = steps
-
-        animates |= AnimationType.geometry
-         */
-    }
-    
-    func rotateLeft() {
-    
-        track("Rotating right...")
-        rotate(y: 90)
-        /*
-        angleX.target = 0.0
-        angleY.target = 90.0
-        angleZ.target = 0.0
-
-        let steps = 60
-        angleX.steps = steps
-        angleY.steps = steps
-        angleZ.steps = steps
-
-        animates |= AnimationType.geometry
-        */
-    }
-
-    func rotateDown() {
-
-        track("Rotating down...")
-        rotate(x: 90)
-        /*
-        angleX.target = 90.0
-        angleY.target = 0.0
-        angleZ.target = 0.0
-
-        let steps = 60
-        angleX.steps = steps
-        angleY.steps = steps
-        angleZ.steps = steps
-
-        animates |= AnimationType.geometry
-         */
-    }
-
-    func rotateUp() {
-
-        track("Rotating up...")
-        rotate(x: -90)
-    }
+    func rotateRight() { rotate(y: -90) }
+    func rotateLeft() { rotate(y: 90) }
+    func rotateDown() { rotate(x: 90) }
+    func rotateUp() { rotate(x: -90) }
 
     func scroll() {
         
         track("Scrolling...")
 
         eyeY.current = -1.5
+        eyeY.target = 0
         angleX.target = 0.0
         angleY.target = 0.0
         angleZ.target = 0.0
 
         let steps = 120
+        eyeY.steps = steps
         angleX.steps = steps
         angleY.steps = steps
         angleZ.steps = steps
@@ -343,7 +289,7 @@ extension MetalView {
         
         track("Blending in...")
 
-        angleX.target = 0.0
+        angleX.target = 0
         angleY.target = 0
         angleZ.target = 0
         alpha.target = 1.0

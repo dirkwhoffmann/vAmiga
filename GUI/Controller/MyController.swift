@@ -601,7 +601,8 @@ extension MyController {
         case MSG_POWER_ON:
             
             // track("Power on")
-            metal.blendIn()
+            // metal.blendIn()
+            metal.zoom()
             metal.zoomTextureIn(cycles: 1)
             toolbar.validateVisibleItems()
             myAppDelegate.inspector?.refresh(everything: true)

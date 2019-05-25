@@ -297,6 +297,7 @@ public class MetalView: MTKView {
     // Expand view vertically by the height of the status bar
     public func expand() { adjustHeight(24.0) }
 
+    /*
     public func updateScreenGeometry() {
 
         // Update texture cutout
@@ -311,6 +312,7 @@ public class MetalView: MTKView {
         // Update texture coordinates in vertex buffer
         buildVertexBuffer()
     }
+    */
 
     func updateLongFrameTexture(bytes: UnsafeMutablePointer<Int32>) {
 
@@ -543,8 +545,6 @@ public class MetalView: MTKView {
     
     func drawScene3D() {
     
-        // let animates = self.animatesDeprecated()
-        // let textureAnimates = self.textureAnimatesDeprecated()
         let paused = controller.amiga.isPaused()
         let renderBackground = !fullscreen && !paused && (animates != 0 || (alpha.current < 1.0))
         let renderForeground = alpha.current > 0.0
