@@ -162,7 +162,7 @@ extension MetalView {
 
     func computeTextureDeltaSteps(animationCycles: Int) {
 
-        let cycles = CGFloat(animationCycles)
+        let cycles = Float(animationCycles)
         deltaTexOriginX = (targetTexOriginX - currentTexOriginX) / cycles
         deltaTexOriginY = (targetTexOriginY - currentTexOriginY) / cycles
         deltaTexWidth = (targetTexWidth - currentTexWidth) / cycles

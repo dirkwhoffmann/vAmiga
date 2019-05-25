@@ -215,18 +215,18 @@ public class MetalView: MTKView {
     var deltaAlpha = Float(0.0)
 */
 
-    var currentTexOriginX = CGFloat(0.0)
-    var currentTexOriginY = CGFloat(0.0)
-    var currentTexWidth = CGFloat(0.0)
-    var currentTexHeight = CGFloat(0.0)
-    var targetTexOriginX = CGFloat(20.0)
-    var targetTexOriginY = CGFloat(20.0)
-    var targetTexWidth = CGFloat(340.0)
-    var targetTexHeight = CGFloat(220.0)
-    var deltaTexOriginX = CGFloat(0.0)
-    var deltaTexOriginY = CGFloat(0.0)
-    var deltaTexWidth = CGFloat(0.0)
-    var deltaTexHeight = CGFloat(0.0)
+    var currentTexOriginX = Float(0.0)
+    var currentTexOriginY = Float(0.0)
+    var currentTexWidth = Float(0.0)
+    var currentTexHeight = Float(0.0)
+    var targetTexOriginX = Float(20.0)
+    var targetTexOriginY = Float(20.0)
+    var targetTexWidth = Float(340.0)
+    var targetTexHeight = Float(220.0)
+    var deltaTexOriginX = Float(0.0)
+    var deltaTexOriginY = Float(0.0)
+    var deltaTexWidth = Float(0.0)
+    var deltaTexHeight = Float(0.0)
 
     // Texture cut-out (normalized)
     var textureRect = CGRect.init(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
@@ -311,10 +311,10 @@ public class MetalView: MTKView {
     public func updateScreenGeometry() {
 
         // Update texture cutout
-        textureRect = CGRect.init(x: currentTexOriginX,
-                                  y: currentTexOriginY,
-                                  width: currentTexWidth,
-                                  height: currentTexHeight)
+        textureRect = CGRect.init(x: CGFloat(currentTexOriginX),
+                                  y: CGFloat(currentTexOriginY),
+                                  width: CGFloat(currentTexWidth),
+                                  height: CGFloat(currentTexHeight))
 
         // Enable this for debugging (will display the whole texture)
         // textureRect = CGRect.init(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
