@@ -197,6 +197,9 @@ public class MetalView: MTKView {
     
     // Shader options
     var shaderOptions = Defaults.shaderOptions
+
+    // Indicates if an animation is currently performed
+    var animates = 0
     
     // Animation parameters
     var angleX = AnimatedFloat(0.0)
@@ -213,19 +216,6 @@ public class MetalView: MTKView {
     var cutoutY1 = AnimatedFloat(0.0)
     var cutoutX2 = AnimatedFloat(1.0)
     var cutoutY2 = AnimatedFloat(1.0)
-
-    // var currentTexOriginX = Float(0.0)
-    // var currentTexOriginY = Float(0.0)
-    // var currentTexWidth = Float(0.0)
-    // var currentTexHeight = Float(0.0)
-    // var targetTexOriginX = Float(20.0)
-    // var targetTexOriginY = Float(20.0)
-    // var targetTexWidth = Float(340.0)
-    // var targetTexHeight = Float(220.0)
-    // var deltaTexOriginX = Float(0.0)
-    // var deltaTexOriginY = Float(0.0)
-    // var deltaTexWidth = Float(0.0)
-    // var deltaTexHeight = Float(0.0)
 
     // Texture cut-out (normalized)
     var textureRect = CGRect.init(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
@@ -553,13 +543,16 @@ public class MetalView: MTKView {
     
     func drawScene3D() {
     
-        let animates = self.animates()
-        let textureAnimates = self.textureAnimates()
+        // let animates = self.animatesDeprecated()
+        // let textureAnimates = self.textureAnimatesDeprecated()
         let paused = controller.amiga.isPaused()
-        let renderBackground = !fullscreen && !paused && (animates || (alpha.current < 1.0))
+        let renderBackground = !fullscreen && !paused && (animates != 0 || (alpha.current < 1.0))
         let renderForeground = alpha.current > 0.0
-        
-        if animates {
+
+        // Perform a single animation step
+        if animates != 0 { performAnimationStep() }
+
+        /*
             updateAngles()
             buildMatrices3D()
         }
@@ -567,6 +560,7 @@ public class MetalView: MTKView {
         if textureAnimates {
             updateTextureRect()
         }
+        */
 
         startFrame()
         
@@ -617,7 +611,7 @@ public class MetalView: MTKView {
             // Draw
             commandEncoder.drawPrimitives(type: MTLPrimitiveType.triangle,
                                           vertexStart: 6,
-                                          vertexCount: (animates ? 24 : 6),
+                                          vertexCount: (animates != 0 ? 24 : 6),
                                           instanceCount: 1)
         }
                 

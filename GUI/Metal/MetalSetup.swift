@@ -296,7 +296,7 @@ public extension MetalView {
                                              nearZ: 0.1,
                                              farZ: 100.0)
     
-        if animates() {
+        if animatesDeprecated() {
             let xAngle = -(angleX.current / 180.0) * .pi
             let yAngle =  (angleY.current / 180.0) * .pi
             let zAngle =  (angleZ.current / 180.0) * .pi

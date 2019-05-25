@@ -10,6 +10,12 @@
 import Foundation
 import simd
 
+struct AnimationType {
+    static let geometry = 1
+    static let alpha = 2
+    static let texture = 4
+}
+
 class AnimatedFloat {
 
     var current: Float
@@ -52,7 +58,7 @@ class AnimatedFloat {
 extension MetalView {
  
     // Returns true iff an animation is in progress
-    func animates() -> Bool {
+    func animatesDeprecated() -> Bool {
 
         return angleX.animates()
             || angleY.animates()
@@ -63,7 +69,7 @@ extension MetalView {
             || alpha.animates()
     }
 
-    func textureAnimates() -> Bool {
+    func textureAnimatesDeprecated() -> Bool {
 
         return cutoutX1.animates()
             || cutoutY1.animates()
@@ -84,7 +90,7 @@ extension MetalView {
     
     func getEyeY() -> Float {
         
-        return eyeY.current // currentEyeY
+        return eyeY.current
     }
     
     func setEyeY(_ newY: Float) {
@@ -95,7 +101,7 @@ extension MetalView {
     
     func getEyeZ() -> Float {
         
-        return eyeZ.current // currentEyeZ
+        return eyeZ.current
     }
     
     func setEyeZ(_ newZ: Float) {
@@ -103,7 +109,71 @@ extension MetalView {
         eyeZ.set(newZ)
         self.buildMatrices3D()
     }
-    
+
+    func performAnimationStep() {
+
+        assert(animates != 0)
+
+        var cont: Bool
+
+        // Check for geometry animation
+        if (animates & AnimationType.geometry) != 0 {
+
+            angleX.move()
+            angleY.move()
+            angleZ.move()
+            cont = angleX.animates() || angleY.animates() || angleZ.animates()
+
+            eyeX.move()
+            eyeY.move()
+            eyeZ.move()
+            cont = cont || eyeX.animates() || eyeY.animates() || eyeZ.animates()
+
+            // Check if animation has terminated
+            if !cont {
+                animates -= AnimationType.geometry
+                angleX.set(0)
+                angleY.set(0)
+                angleZ.set(0)
+            }
+
+            buildMatrices3D()
+        }
+
+        // Check for alpha channel animation
+        if (animates & AnimationType.alpha) != 0 {
+
+            alpha.move()
+            cont = alpha.animates()
+
+            // Check if animation has terminated
+            if !cont {
+                animates -= AnimationType.alpha
+            }
+        }
+
+        // Check for texture animation
+        if (animates & AnimationType.texture) != 0 {
+
+            cutoutX1.move()
+            cutoutY1.move()
+            cutoutX2.move()
+            cutoutY2.move()
+            cont = cutoutX1.animates() || cutoutY1.animates() || cutoutX2.animates() || cutoutY2.animates()
+
+            // Update texture cutout
+            textureRect = CGRect.init(x: CGFloat(cutoutX1.current),
+                                      y: CGFloat(cutoutY1.current),
+                                      width: CGFloat(cutoutX2.current - cutoutX1.current),
+                                      height: CGFloat(cutoutY2.current - cutoutY1.current))
+
+            // Check if animation has terminated
+            if !cont {
+                animates -= AnimationType.texture
+            }
+        }
+    }
+
     func updateAngles() {
 
         angleX.move()
@@ -135,6 +205,10 @@ extension MetalView {
         updateScreenGeometry()
     }
 
+    //
+    // Texture animations
+    //
+
     func zoomTextureIn(cycles: Int = 60) {
 
         track("Zooming texture in...")
@@ -148,6 +222,8 @@ extension MetalView {
         cutoutY1.steps = cycles
         cutoutX2.steps = cycles
         cutoutY2.steps = cycles
+
+        animates |= AnimationType.texture
     }
 
     func zoomTextureOut(cycles: Int = 60) {
@@ -163,7 +239,13 @@ extension MetalView {
         cutoutY1.steps = cycles
         cutoutX2.steps = cycles
         cutoutY2.steps = cycles
+
+        animates |= AnimationType.texture
     }
+
+    //
+    // Geometry animations
+    //
 
     func zoom() {
     
@@ -178,6 +260,8 @@ extension MetalView {
         angleX.steps = steps
         angleY.steps = steps
         angleZ.steps = steps
+
+        animates |= AnimationType.geometry
     }
     
     func rotateBack() {
@@ -194,7 +278,8 @@ extension MetalView {
         angleZ.steps = steps
 
         angleY.target -= (angleY.target >= 360) ? 360 : 0
-        // targetYAngle -= (targetYAngle >= 360) ? 360 : 0
+
+        animates |= AnimationType.geometry
     }
     
     func rotate() {
@@ -211,7 +296,8 @@ extension MetalView {
         angleZ.steps = steps
 
         angleY.target += (angleY.target < 0) ? 360 : 0
-        // targetYAngle += (targetYAngle < 0) ? 360 : 0
+
+        animates |= AnimationType.geometry
     }
     
     func scroll() {
@@ -227,7 +313,22 @@ extension MetalView {
         angleX.steps = steps
         angleY.steps = steps
         angleZ.steps = steps
+
+        animates |= AnimationType.geometry
     }
+
+    func snapToFront() {
+
+        track("Snapping to front...")
+
+        eyeZ.current = -0.05
+
+        animates |= AnimationType.geometry
+    }
+
+    //
+    // Alpha channel animations
+    //
 
     func blendIn() {
         
@@ -243,6 +344,8 @@ extension MetalView {
         angleY.steps = steps
         angleZ.steps = steps
         alpha.steps = steps
+
+        animates |= AnimationType.alpha
     }
 
     func blendOut() {
@@ -259,15 +362,10 @@ extension MetalView {
         angleY.steps = steps
         angleZ.steps = steps
         alpha.steps = steps
-    }
-    
-    func snapToFront() {
-        
-        track("Snapping to front...")
 
-        eyeZ.current = -0.05
+        animates |= AnimationType.alpha
     }
-    
+
     //
     // Matrix utilities
     //
