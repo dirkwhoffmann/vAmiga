@@ -174,36 +174,6 @@ extension MetalView {
         }
     }
 
-    func updateAngles() {
-
-        angleX.move()
-        angleY.move()
-        angleZ.move()
-
-        eyeX.move()
-        eyeY.move()
-        eyeZ.move()
-
-        alpha.move()
-
-        // DEPRECATED
-        angleX.current -= (angleX.current >= 360) ? 360 : 0
-        angleX.current += (angleX.current < 0) ? 360 : 0
-        angleY.current -= (angleY.current >= 360.0) ? 360 : 0
-        angleY.current += (angleY.current < 0.0) ? 360 : 0
-        angleZ.current -= (angleZ.current >= 360.0) ? 360 : 0
-        angleZ.current += (angleZ.current < 0.0) ? 360 : 0
-    }
-
-    func updateTextureRect() {
-
-        cutoutX1.move()
-        cutoutY1.move()
-        cutoutX2.move()
-        cutoutY2.move()
-
-        updateScreenGeometry()
-    }
 
     //
     // Texture animations
@@ -269,7 +239,7 @@ extension MetalView {
         track("Rotating back...")
 
         angleX.target = 0.0
-        angleY.target += 90.0
+        angleY.target = 90.0
         angleZ.target = 0.0
 
         let steps = 60
@@ -277,7 +247,7 @@ extension MetalView {
         angleY.steps = steps
         angleZ.steps = steps
 
-        angleY.target -= (angleY.target >= 360) ? 360 : 0
+        angleY.target -= (angleY.target >= 360) ? 360 : 0 // TODO: REMOVE ASAP
 
         animates |= AnimationType.geometry
     }
@@ -287,7 +257,7 @@ extension MetalView {
         track("Rotating...")
 
         angleX.target = 0.0
-        angleY.target -= 90.0
+        angleY.target = 90.0
         angleZ.target = 0.0
 
         let steps = 60
@@ -295,11 +265,27 @@ extension MetalView {
         angleY.steps = steps
         angleZ.steps = steps
 
-        angleY.target += (angleY.target < 0) ? 360 : 0
+        angleY.target += (angleY.target < 0) ? 360 : 0 // TODO: REMOVE ASAP
 
         animates |= AnimationType.geometry
     }
-    
+
+    func rotateDown() {
+
+        track("Rotating down...")
+
+        angleX.target = 90.0
+        angleY.target = 0.0
+        angleZ.target = 0.0
+
+        let steps = 60
+        angleX.steps = steps
+        angleY.steps = steps
+        angleZ.steps = steps
+
+        animates |= AnimationType.geometry
+    }
+
     func scroll() {
         
         track("Scrolling...")
@@ -322,6 +308,8 @@ extension MetalView {
         track("Snapping to front...")
 
         eyeZ.current = -0.05
+        eyeZ.target = 0
+        eyeZ.steps = 10
 
         animates |= AnimationType.geometry
     }
