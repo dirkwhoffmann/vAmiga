@@ -203,12 +203,11 @@ public class MetalView: MTKView {
     var angleY = AnimatedFloat(0.0)
     var angleZ = AnimatedFloat(0.0)
 
-    /*
     var eyeX = AnimatedFloat(Defaults.eyeX)
     var eyeY = AnimatedFloat(Defaults.eyeY)
     var eyeZ = AnimatedFloat(Defaults.eyeZ)
-    */
 
+    /*
     var currentEyeX = Defaults.eyeX
     var targetEyeX = Defaults.eyeX
     var deltaEyeX = Float(0.0)
@@ -218,6 +217,8 @@ public class MetalView: MTKView {
     var currentEyeZ = Defaults.eyeZ
     var targetEyeZ = Defaults.eyeZ
     var deltaEyeZ = Float(0.0)
+    */
+
     var currentAlpha = Float(0.0)
     var targetAlpha = Float(1.0)  // Start with an invisible screen
     var deltaAlpha = Float(0.0)

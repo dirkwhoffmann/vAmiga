@@ -89,9 +89,9 @@ extension PreferencesController {
         vidMisalignmentYSlider.isEnabled = shaderOptions.disalignment > 0
 
         // Geometry
-        vidEyeXSlider.floatValue = metal.eyeX()
-        vidEyeYSlider.floatValue = metal.eyeY()
-        vidEyeZSlider.floatValue = metal.eyeZ()
+        vidEyeXSlider.floatValue = metal.getEyeX()
+        vidEyeYSlider.floatValue = metal.getEyeY()
+        vidEyeZSlider.floatValue = metal.getEyeZ()
     }
 
     //

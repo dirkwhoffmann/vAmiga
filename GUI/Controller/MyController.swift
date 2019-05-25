@@ -157,15 +157,15 @@ class MyController: NSWindowController, MessageReceiver {
         set { amiga.denise.setSaturation(newValue) }
     }
     var eyeX: Float {
-        get { return metal.eyeX() }
+        get { return metal.getEyeX() }
         set { metal.setEyeX(newValue) }
     }
     var eyeY: Float {
-        get { return metal.eyeY() }
+        get { return metal.getEyeY() }
         set { metal.setEyeY(newValue) }
     }
     var eyeZ: Float {
-        get { return metal.eyeZ() }
+        get { return metal.getEyeZ() }
         set { metal.setEyeZ(newValue) }
     }
     var blur: Int32 {

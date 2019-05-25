@@ -13,24 +13,29 @@ import simd
 class AnimatedFloat {
 
     var current: Float
-
-    var delta: Float
+    var delta = Float(0.0)
     var steps = 1 { didSet { delta = (target - current) / Float(steps) } }
     var target: Float { didSet { delta = (target - current) / Float(steps) } }
 
-    init(current: Float = 0.0, target: Float = 0.0, delta: Float = 0.0) {
+    init(current: Float = 0.0, target: Float = 0.0) {
 
         self.current = current
         self.target = target
-        self.delta = delta
     }
 
     convenience init(_ value: Float) {
 
-        self.init(current: value, target: value, delta: 0.0)
+        self.init(current: value, target: value)
+    }
+
+    func set(_ value: Float) {
+
+        current = value
+        target = value
     }
 
     func animates() -> Bool {
+
         return current != target
     }
 
@@ -52,9 +57,9 @@ extension MetalView {
         return angleX.animates()
             || angleY.animates()
             || angleZ.animates()
-            || currentEyeX != targetEyeX
-            || currentEyeY != targetEyeY
-            || currentEyeZ != targetEyeZ
+            || eyeX.animates()
+            || eyeY.animates()
+            || eyeZ.animates()
             || currentAlpha != targetAlpha
         /*
         return
@@ -77,39 +82,42 @@ extension MetalView {
             currentTexHeight != targetTexHeight
     }
     
-    func eyeX() -> Float {
+    func getEyeX() -> Float {
         
-        return currentEyeX
+        return eyeX.current // currentEyeX
     }
     
     func setEyeX(_ newX: Float) {
-        
-        currentEyeX = newX
-        targetEyeX = newX
+
+        eyeX.set(newX)
+        // currentEyeX = newX
+        // targetEyeX = newX
         self.buildMatrices3D()
     }
     
-    func eyeY() -> Float {
+    func getEyeY() -> Float {
         
-        return currentEyeY
+        return eyeY.current // currentEyeY
     }
     
     func setEyeY(_ newY: Float) {
-    
-        currentEyeY = newY
-        targetEyeY = newY
+
+        eyeY.set(newY)
+        // currentEyeY = newY
+        // targetEyeY = newY
         self.buildMatrices3D()
     }
     
-    func eyeZ() -> Float {
+    func getEyeZ() -> Float {
         
-        return currentEyeZ
+        return eyeZ.current // currentEyeZ
     }
     
     func setEyeZ(_ newZ: Float) {
-    
-        currentEyeZ = newZ
-        targetEyeZ = newZ
+
+        eyeZ.set(newZ)
+        // currentEyeZ = newZ
+        // targetEyeZ = newZ
         self.buildMatrices3D()
     }
     
@@ -118,6 +126,11 @@ extension MetalView {
         angleX.move()
         angleY.move()
         angleZ.move()
+
+        eyeX.move()
+        eyeY.move()
+        eyeZ.move()
+
         /*
         if abs(currentXAngle - targetXAngle) < abs(deltaXAngle) {
             currentXAngle = targetXAngle
@@ -137,7 +150,7 @@ extension MetalView {
         } else {
             currentZAngle += deltaZAngle
         }
-        */
+
         if abs(currentEyeX - targetEyeX) < abs(deltaEyeX) {
             currentEyeX = targetEyeX
         } else {
@@ -155,7 +168,8 @@ extension MetalView {
         } else {
             currentEyeZ += deltaEyeZ
         }
-    
+        */
+
         if abs(currentAlpha - targetAlpha) < abs(deltaAlpha) {
             currentAlpha = targetAlpha
         } else {
@@ -169,15 +183,6 @@ extension MetalView {
         angleY.current += (angleY.current < 0.0) ? 360 : 0
         angleZ.current -= (angleZ.current >= 360.0) ? 360 : 0
         angleZ.current += (angleZ.current < 0.0) ? 360 : 0
-
-        /*
-        currentXAngle -= (currentXAngle >= 360.0) ? 360 : 0
-        currentXAngle += (currentXAngle < 0.0) ? 360 : 0
-        currentYAngle -= (currentYAngle >= 360.0) ? 360 : 0
-        currentYAngle += (currentYAngle < 0.0) ? 360 : 0
-        currentZAngle -= (currentZAngle >= 360.0) ? 360 : 0
-        currentZAngle += (currentZAngle < 0.0) ? 360 : 0
-        */
     }
 
     func updateTextureRect() {
@@ -220,9 +225,9 @@ extension MetalView {
         // deltaXAngle = (targetXAngle - currentXAngle) / cycles
         // deltaYAngle = (targetYAngle - currentYAngle) / cycles
         // deltaZAngle = (targetZAngle - currentZAngle) / cycles
-        deltaEyeX = (targetEyeX - currentEyeX) / cycles
-        deltaEyeY = (targetEyeY - currentEyeY) / cycles
-        deltaEyeZ = (targetEyeZ - currentEyeZ) / cycles
+        // deltaEyeX = (targetEyeX - currentEyeX) / cycles
+        // deltaEyeY = (targetEyeY - currentEyeY) / cycles
+        // deltaEyeZ = (targetEyeZ - currentEyeZ) / cycles
         deltaAlpha = (targetAlpha - currentAlpha) / cycles
     }
 
@@ -263,7 +268,8 @@ extension MetalView {
     
         track("Zooming in...")
     
-        currentEyeZ  = 6
+        // currentEyeZ  = 6
+        eyeZ.current = 6.0
         angleX.target = 0.0
         angleY.target = 0.0
         angleZ.target = 0.0
@@ -318,7 +324,8 @@ extension MetalView {
         
         track("Scrolling...")
     
-        currentEyeY = -1.5
+        // currentEyeY = -1.5
+        eyeY.current = -1.5
         angleX.target = 0.0
         angleY.target = 0.0
         angleZ.target = 0.0
@@ -370,8 +377,9 @@ extension MetalView {
     func snapToFront() {
         
         track("Snapping to front...")
-        
-        currentEyeZ   = -0.05
+
+        eyeZ.current = -0.05
+        // currentEyeZ   = -0.05
         
         self.computeAnimationDeltaSteps(animationCycles: 15 /* 0.25 sec */)
     }
