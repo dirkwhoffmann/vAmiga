@@ -488,7 +488,7 @@ public class MetalView: MTKView {
                              target: scanlineTexture,
                              options: &shaderOptions)
         
-        // Create render pass descriptor
+        // Create a render pass descriptor
         let descriptor = MTLRenderPassDescriptor.init()
         descriptor.colorAttachments[0].texture = drawable.texture
         descriptor.colorAttachments[0].clearColor = MTLClearColorMake(0, 0, 0, 1)
@@ -500,7 +500,7 @@ public class MetalView: MTKView {
         descriptor.depthAttachment.loadAction = MTLLoadAction.clear
         descriptor.depthAttachment.storeAction = MTLStoreAction.dontCare
         
-        // Create command encoder
+        // Create a command encoder
         commandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: descriptor)
         commandEncoder.setRenderPipelineState(pipeline)
         commandEncoder.setDepthStencilState(depthState)
@@ -601,7 +601,7 @@ public class MetalView: MTKView {
             // Draw
             commandEncoder.drawPrimitives(type: MTLPrimitiveType.triangle,
                                           vertexStart: 6,
-                                          vertexCount: (animates != 0 ? 24 : 6),
+                                          vertexCount: (animates != 0 ? 36 : 6),
                                           instanceCount: 1)
         }
                 

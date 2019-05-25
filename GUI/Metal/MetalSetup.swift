@@ -294,16 +294,24 @@ public extension MetalView {
         let view = matrix_identity_float4x4
         let proj = matrixFromPerspective(fovY: Float(65.0 * (.pi / 180.0)),
                                          aspect: aspect,
-                                         nearZ: Float(0.1),
-                                         farZ: Float(100.0))
-        var model = matrixFromTranslation(x: -eyeX.current,
-                                          y: -eyeY.current,
-                                          z: eyeZ.current + 1.39)
+                                         nearZ: 0.1,
+                                         farZ: 100.0)
 
-        model = model *
-            matrixFromRotation(radians: xAngle, x: 0.5, y: 0.0, z: 0.0) *
-            matrixFromRotation(radians: yAngle, x: 0.0, y: 0.5, z: 0.0) *
-            matrixFromRotation(radians: zAngle, x: 0.0, y: 0.0, z: 0.5)
+        let transEye = matrixFromTranslation(x: -eyeX.current,
+                                             y: -eyeY.current,
+                                             z: eyeZ.current + 1.39 - 0.16)
+
+        let transRotX = matrixFromTranslation(x: 0.0,
+                                              y: 0.0,
+                                              z: 0.16)
+
+        let rotX = matrixFromRotation(radians: xAngle, x: 0.5, y: 0.0, z: 0.0)
+        let rotY = matrixFromRotation(radians: yAngle, x: 0.0, y: 0.5, z: 0.0)
+        let rotZ = matrixFromRotation(radians: zAngle, x: 0.0, y: 0.0, z: 0.5)
+        // TODO: Delete rotZ which is not used at all
+
+        // Chain all transformations
+        let model = transEye * rotX * transRotX * rotY * rotZ
 
         vertexUniforms3D.mvp = proj * view * model
     }
@@ -333,13 +341,16 @@ public extension MetalView {
         let dx = Float(0.64)
         let dy = Float(0.48)
         let dz = Float(0.64)
+        // let width = 2*dx
+        let height = 2*dy
         let bgx = Float(6.4)
         let bgy = Float(4.8)
         let bgz = Float(-6.8)
-        let upperLeft = float2(Float(textureRect.minX), Float(textureRect.maxY))
-        let upperRight = float2(Float(textureRect.maxX), Float(textureRect.maxY))
-        let lowerLeft = float2(Float(textureRect.minX), Float(textureRect.minY))
-        let lowerRight = float2(Float(textureRect.maxX), Float(textureRect.minY))
+
+        let upperLeft = float2(Float(textureRect.minX), Float(textureRect.minY))
+        let upperRight = float2(Float(textureRect.maxX), Float(textureRect.minY))
+        let lowerLeft = float2(Float(textureRect.minX), Float(textureRect.maxY))
+        let lowerRight = float2(Float(textureRect.maxX), Float(textureRect.maxY))
 
         // Background
         setVertex(0, float3(-bgx, +bgy, -bgz), float2(0.0, 0.0))
@@ -351,58 +362,58 @@ public extension MetalView {
         setVertex(5, float3(+bgx, -bgy, -bgz), float2(1.0, 1.0))
     
         // -Z
-        setVertex(6, float3(-dx, +dy, -dz), lowerLeft)
-        setVertex(7, float3(-dx, -dy, -dz), upperLeft)
-        setVertex(8, float3(+dx, -dy, -dz), upperRight)
+        setVertex(6, float3(-dx, +dy, -dz), upperLeft)
+        setVertex(7, float3(-dx, -dy, -dz), lowerLeft)
+        setVertex(8, float3(+dx, -dy, -dz), lowerRight)
     
-        setVertex(9, float3(-dx, +dy, -dz), lowerLeft)
-        setVertex(10, float3(+dx, +dy, -dz), lowerRight)
-        setVertex(11, float3(+dx, -dy, -dz), upperRight)
+        setVertex(9, float3(-dx, +dy, -dz), upperLeft)
+        setVertex(10, float3(+dx, +dy, -dz), upperRight)
+        setVertex(11, float3(+dx, -dy, -dz), lowerRight)
     
         // +Z
-        setVertex(12, float3(-dx, +dy, +dz), lowerRight)
-        setVertex(13, float3(-dx, -dy, +dz), upperRight)
-        setVertex(14, float3(+dx, -dy, +dz), upperLeft)
+        setVertex(12, float3(-dx, +dy, +dz), upperRight)
+        setVertex(13, float3(-dx, -dy, +dz), lowerRight)
+        setVertex(14, float3(+dx, -dy, +dz), lowerLeft)
     
-        setVertex(15, float3(-dx, +dy, +dz), lowerRight)
-        setVertex(16, float3(+dx, +dy, +dz), lowerLeft)
-        setVertex(17, float3(+dx, -dy, +dz), upperLeft)
+        setVertex(15, float3(-dx, +dy, +dz), upperRight)
+        setVertex(16, float3(+dx, +dy, +dz), upperLeft)
+        setVertex(17, float3(+dx, -dy, +dz), lowerLeft)
     
         // -X
-        setVertex(18, float3(-dx, +dy, -dz), lowerRight)
-        setVertex(19, float3(-dx, -dy, -dz), upperRight)
-        setVertex(20, float3(-dx, -dy, +dz), upperLeft)
+        setVertex(18, float3(-dx, +dy, -dz), upperRight)
+        setVertex(19, float3(-dx, -dy, -dz), lowerRight)
+        setVertex(20, float3(-dx, -dy, +dz), lowerLeft)
     
-        setVertex(21, float3(-dx, +dy, -dz), lowerRight)
-        setVertex(22, float3(-dx, +dy, +dz), lowerLeft)
-        setVertex(23, float3(-dx, -dy, +dz), upperLeft)
+        setVertex(21, float3(-dx, +dy, -dz), upperRight)
+        setVertex(22, float3(-dx, +dy, +dz), upperLeft)
+        setVertex(23, float3(-dx, -dy, +dz), lowerLeft)
     
         // +X
-        setVertex(24, float3(+dx, +dy, -dz), lowerLeft)
-        setVertex(25, float3(+dx, -dy, -dz), upperLeft)
-        setVertex(26, float3(+dx, -dy, +dz), upperRight)
+        setVertex(24, float3(+dx, +dy, -dz), upperLeft)
+        setVertex(25, float3(+dx, -dy, -dz), lowerLeft)
+        setVertex(26, float3(+dx, -dy, +dz), lowerRight)
     
-        setVertex(27, float3(+dx, +dy, -dz), lowerLeft)
-        setVertex(28, float3(+dx, +dy, +dz), lowerRight)
-        setVertex(29, float3(+dx, -dy, +dz), upperRight)
+        setVertex(27, float3(+dx, +dy, -dz), upperLeft)
+        setVertex(28, float3(+dx, +dy, +dz), upperRight)
+        setVertex(29, float3(+dx, -dy, +dz), lowerRight)
     
         // -Y
-        setVertex(30, float3(+dx, -dy, -dz), lowerLeft)
-        setVertex(31, float3(-dx, -dy, -dz), upperLeft)
-        setVertex(32, float3(-dx, -dy, +dz), upperRight)
+        setVertex(30, float3(+dx, -dy, -dy), lowerLeft)
+        setVertex(31, float3(-dx, -dy, -dy), upperLeft)
+        setVertex(32, float3(-dx, -dy, +dy), upperRight)
     
-        setVertex(33, float3(+dx, -dy, -dz), lowerLeft)
-        setVertex(34, float3(+dx, -dy, +dz), lowerRight)
-        setVertex(35, float3(-dx, -dy, +dz), upperRight)
+        setVertex(33, float3(+dx, -dy, -dy), lowerLeft)
+        setVertex(34, float3(+dx, -dy, +dy), lowerRight)
+        setVertex(35, float3(-dx, -dy, +dy), upperRight)
     
         // +Y
-        setVertex(36, float3(+dx, +dy, -dz), lowerLeft)
-        setVertex(37, float3(-dx, +dy, -dz), upperLeft)
-        setVertex(38, float3(-dx, +dy, +dz), upperRight)
+        setVertex(36, float3(+dx, +dy, -dz), lowerRight)
+        setVertex(37, float3(-dx, +dy, -dz), lowerLeft)
+        setVertex(38, float3(-dx, +dy, -dz + 2*dy), upperLeft)
     
-        setVertex(39, float3(+dx, +dy, -dz), lowerLeft)
-        setVertex(40, float3(-dx, +dy, +dz), upperRight)
-        setVertex(41, float3(+dx, +dy, +dz), lowerRight)
+        setVertex(39, float3(+dx, +dy, -dz), lowerRight)
+        setVertex(40, float3(-dx, +dy, -dz + height), upperLeft)
+        setVertex(41, float3(+dx, +dy, -dz + height), upperRight)
     
         // 2D drawing quad
         setVertex(42, float3(-1, 1, 0), lowerLeft)
