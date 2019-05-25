@@ -65,11 +65,12 @@ extension MetalView {
 
     func textureAnimates() -> Bool {
 
-        return
-            currentTexOriginX != targetTexOriginX ||
-            currentTexOriginY != targetTexOriginY ||
-            currentTexWidth != targetTexWidth ||
-            currentTexHeight != targetTexHeight
+        return cutoutX1.animates()
+            || cutoutY1.animates()
+            // currentTexOriginX != targetTexOriginX ||
+            // currentTexOriginY != targetTexOriginY ||
+            || currentTexWidth != targetTexWidth
+            || currentTexHeight != targetTexHeight
     }
     
     func getEyeX() -> Float {
@@ -128,6 +129,9 @@ extension MetalView {
 
     func updateTextureRect() {
 
+        cutoutX1.move()
+        cutoutY1.move()
+        /*
         if abs(currentTexOriginX - targetTexOriginX) < abs(deltaTexOriginX) {
             currentTexOriginX = targetTexOriginX
         } else {
@@ -139,6 +143,7 @@ extension MetalView {
         } else {
             currentTexOriginY += deltaTexOriginY
         }
+        */
 
         if abs(currentTexWidth - targetTexWidth) < abs(deltaTexWidth) {
             currentTexWidth = targetTexWidth
@@ -163,8 +168,8 @@ extension MetalView {
     func computeTextureDeltaSteps(animationCycles: Int) {
 
         let cycles = Float(animationCycles)
-        deltaTexOriginX = (targetTexOriginX - currentTexOriginX) / cycles
-        deltaTexOriginY = (targetTexOriginY - currentTexOriginY) / cycles
+        // deltaTexOriginX = (targetTexOriginX - currentTexOriginX) / cycles
+        // deltaTexOriginY = (targetTexOriginY - currentTexOriginY) / cycles
         deltaTexWidth = (targetTexWidth - currentTexWidth) / cycles
         deltaTexHeight = (targetTexHeight - currentTexHeight) / cycles
     }
@@ -173,8 +178,10 @@ extension MetalView {
 
         track("Zooming texture in...")
 
-        targetTexOriginX = 0.0
-        targetTexOriginY = 0.0
+        cutoutX1.target = 0.0
+        cutoutY1.target = 0.0
+        // targetTexOriginX = 0.0
+        // targetTexOriginY = 0.0
         targetTexWidth = 728.0 / 768.0
         targetTexHeight = 286.0 / 288.0
 
@@ -185,8 +192,10 @@ extension MetalView {
 
         track("Zooming texture out...")
 
-        targetTexOriginX = 0.0
-        targetTexOriginY = 0.0
+        cutoutX1.target = 0.0
+        cutoutY1.target = 0.0
+        // targetTexOriginX = 0.0
+        // targetTexOriginY = 0.0
         targetTexWidth = 1.0
         targetTexHeight = 1.0
 

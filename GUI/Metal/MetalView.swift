@@ -208,23 +208,22 @@ public class MetalView: MTKView {
     var eyeZ = AnimatedFloat(Defaults.eyeZ)
 
     var alpha = AnimatedFloat(0.0)
-    // var alpha = AnimatedFloat(current: 0.0, target: 1.0) // Start invisible
-/*
-    var currentAlpha = Float(0.0)
-    var targetAlpha = Float(1.0)  // Start with an invisible screen
-    var deltaAlpha = Float(0.0)
-*/
 
-    var currentTexOriginX = Float(0.0)
-    var currentTexOriginY = Float(0.0)
+    var cutoutX1 = AnimatedFloat(0.0)
+    var cutoutY1 = AnimatedFloat(0.0)
+    var cutoutX2 = AnimatedFloat(1.0)
+    var cutoutY2 = AnimatedFloat(1.0)
+
+    // var currentTexOriginX = Float(0.0)
+    // var currentTexOriginY = Float(0.0)
     var currentTexWidth = Float(0.0)
     var currentTexHeight = Float(0.0)
-    var targetTexOriginX = Float(20.0)
-    var targetTexOriginY = Float(20.0)
+    // var targetTexOriginX = Float(20.0)
+    // var targetTexOriginY = Float(20.0)
     var targetTexWidth = Float(340.0)
     var targetTexHeight = Float(220.0)
-    var deltaTexOriginX = Float(0.0)
-    var deltaTexOriginY = Float(0.0)
+    // var deltaTexOriginX = Float(0.0)
+    // var deltaTexOriginY = Float(0.0)
     var deltaTexWidth = Float(0.0)
     var deltaTexHeight = Float(0.0)
 
@@ -311,8 +310,8 @@ public class MetalView: MTKView {
     public func updateScreenGeometry() {
 
         // Update texture cutout
-        textureRect = CGRect.init(x: CGFloat(currentTexOriginX),
-                                  y: CGFloat(currentTexOriginY),
+        textureRect = CGRect.init(x: CGFloat(cutoutX1.current),
+                                  y: CGFloat(cutoutY1.current),
                                   width: CGFloat(currentTexWidth),
                                   height: CGFloat(currentTexHeight))
 
