@@ -67,10 +67,8 @@ extension MetalView {
 
         return cutoutX1.animates()
             || cutoutY1.animates()
-            // currentTexOriginX != targetTexOriginX ||
-            // currentTexOriginY != targetTexOriginY ||
-            || currentTexWidth != targetTexWidth
-            || currentTexHeight != targetTexHeight
+            || cutoutX2.animates()
+            || cutoutY2.animates()
     }
     
     func getEyeX() -> Float {
@@ -131,47 +129,10 @@ extension MetalView {
 
         cutoutX1.move()
         cutoutY1.move()
-        /*
-        if abs(currentTexOriginX - targetTexOriginX) < abs(deltaTexOriginX) {
-            currentTexOriginX = targetTexOriginX
-        } else {
-            currentTexOriginX += deltaTexOriginX
-        }
+        cutoutX2.move()
+        cutoutY2.move()
 
-        if abs(currentTexOriginY - targetTexOriginY) < abs(deltaTexOriginY) {
-            currentTexOriginY = targetTexOriginY
-        } else {
-            currentTexOriginY += deltaTexOriginY
-        }
-        */
-
-        if abs(currentTexWidth - targetTexWidth) < abs(deltaTexWidth) {
-            currentTexWidth = targetTexWidth
-        } else {
-            currentTexWidth += deltaTexWidth
-        }
-
-        if abs(currentTexHeight - targetTexHeight) < abs(deltaTexHeight) {
-            currentTexHeight = targetTexHeight
-        } else {
-            currentTexHeight += deltaTexHeight
-        }
-/*
-        textureRect.origin.x = currentTexOriginX
-        textureRect.origin.y = currentTexOriginY
-        textureRect.size.width = currentTexWidth
-        textureRect.size.height = currentTexHeight
-*/
         updateScreenGeometry()
-    }
-
-    func computeTextureDeltaSteps(animationCycles: Int) {
-
-        let cycles = Float(animationCycles)
-        // deltaTexOriginX = (targetTexOriginX - currentTexOriginX) / cycles
-        // deltaTexOriginY = (targetTexOriginY - currentTexOriginY) / cycles
-        deltaTexWidth = (targetTexWidth - currentTexWidth) / cycles
-        deltaTexHeight = (targetTexHeight - currentTexHeight) / cycles
     }
 
     func zoomTextureIn(cycles: Int = 60) {
@@ -180,12 +141,13 @@ extension MetalView {
 
         cutoutX1.target = 0.0
         cutoutY1.target = 0.0
-        // targetTexOriginX = 0.0
-        // targetTexOriginY = 0.0
-        targetTexWidth = 728.0 / 768.0
-        targetTexHeight = 286.0 / 288.0
+        cutoutX2.target = 728.0 / 768.0
+        cutoutY2.target = 286.0 / 288.0
 
-        self.computeTextureDeltaSteps(animationCycles: cycles)
+        cutoutX1.steps = cycles
+        cutoutY1.steps = cycles
+        cutoutX2.steps = cycles
+        cutoutY2.steps = cycles
     }
 
     func zoomTextureOut(cycles: Int = 60) {
@@ -194,12 +156,13 @@ extension MetalView {
 
         cutoutX1.target = 0.0
         cutoutY1.target = 0.0
-        // targetTexOriginX = 0.0
-        // targetTexOriginY = 0.0
-        targetTexWidth = 1.0
-        targetTexHeight = 1.0
+        cutoutX2.target = 1.0
+        cutoutY2.target = 1.0
 
-        self.computeTextureDeltaSteps(animationCycles: cycles)
+        cutoutX1.steps = cycles
+        cutoutY1.steps = cycles
+        cutoutX2.steps = cycles
+        cutoutY2.steps = cycles
     }
 
     func zoom() {
