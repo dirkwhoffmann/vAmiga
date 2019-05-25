@@ -552,16 +552,6 @@ public class MetalView: MTKView {
         // Perform a single animation step
         if animates != 0 { performAnimationStep() }
 
-        /*
-            updateAngles()
-            buildMatrices3D()
-        }
-
-        if textureAnimates {
-            updateTextureRect()
-        }
-        */
-
         startFrame()
         
         // #if false

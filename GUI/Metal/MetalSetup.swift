@@ -267,7 +267,7 @@ public extension MetalView {
         let model  = matrix_identity_float4x4
         let view   = matrix_identity_float4x4
         let aspect = Float(layerWidth) / Float(layerHeight)
-        let proj   = matrix_from_perspective(fovY: (Float(65.0 * (.pi / 180.0))),
+        let proj   = matrixFromPerspective(fovY: (Float(65.0 * (.pi / 180.0))),
                                              aspect: aspect,
                                              nearZ: 0.1,
                                              farZ: 100.0)
@@ -285,27 +285,25 @@ public extension MetalView {
     }
     
     func buildMatrices3D() {
-    
-        var model  = matrix_from_translation(x: -eyeX.current,
-                                             y: -eyeY.current,
-                                             z: eyeZ.current + 1.39)
-        let view   = matrix_identity_float4x4
+
+        let xAngle = -(angleX.current / 180.0) * .pi
+        let yAngle = (angleY.current / 180.0) * .pi
+        let zAngle = (angleZ.current / 180.0) * .pi
         let aspect = Float(layerWidth) / Float(layerHeight)
-        let proj   = matrix_from_perspective(fovY: (Float(65.0 * (.pi / 180.0))),
-                                             aspect: aspect,
-                                             nearZ: 0.1,
-                                             farZ: 100.0)
-    
-        if animatesDeprecated() {
-            let xAngle = -(angleX.current / 180.0) * .pi
-            let yAngle =  (angleY.current / 180.0) * .pi
-            let zAngle =  (angleZ.current / 180.0) * .pi
-    
-            model = model *
-                matrix_from_rotation(radians: xAngle, x: 0.5, y: 0.0, z: 0.0) *
-                matrix_from_rotation(radians: yAngle, x: 0.0, y: 0.5, z: 0.0) *
-                matrix_from_rotation(radians: zAngle, x: 0.0, y: 0.0, z: 0.5)
-        }
+
+        let view = matrix_identity_float4x4
+        let proj = matrixFromPerspective(fovY: Float(65.0 * (.pi / 180.0)),
+                                         aspect: aspect,
+                                         nearZ: Float(0.1),
+                                         farZ: Float(100.0))
+        var model = matrixFromTranslation(x: -eyeX.current,
+                                          y: -eyeY.current,
+                                          z: eyeZ.current + 1.39)
+
+        model = model *
+            matrixFromRotation(radians: xAngle, x: 0.5, y: 0.0, z: 0.0) *
+            matrixFromRotation(radians: yAngle, x: 0.0, y: 0.5, z: 0.0) *
+            matrixFromRotation(radians: zAngle, x: 0.0, y: 0.0, z: 0.5)
 
         vertexUniforms3D.mvp = proj * view * model
     }
