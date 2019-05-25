@@ -60,17 +60,7 @@ extension MetalView {
             || eyeX.animates()
             || eyeY.animates()
             || eyeZ.animates()
-            || currentAlpha != targetAlpha
-        /*
-        return
-            currentXAngle != targetXAngle ||
-            currentYAngle != targetYAngle ||
-            currentZAngle != targetZAngle ||
-            currentEyeX != targetEyeX ||
-            currentEyeY != targetEyeY ||
-            currentEyeZ != targetEyeZ ||
-            currentAlpha != targetAlpha
-         */
+            || alpha.animates()
     }
 
     func textureAnimates() -> Bool {
@@ -90,8 +80,6 @@ extension MetalView {
     func setEyeX(_ newX: Float) {
 
         eyeX.set(newX)
-        // currentEyeX = newX
-        // targetEyeX = newX
         self.buildMatrices3D()
     }
     
@@ -103,8 +91,6 @@ extension MetalView {
     func setEyeY(_ newY: Float) {
 
         eyeY.set(newY)
-        // currentEyeY = newY
-        // targetEyeY = newY
         self.buildMatrices3D()
     }
     
@@ -116,8 +102,6 @@ extension MetalView {
     func setEyeZ(_ newZ: Float) {
 
         eyeZ.set(newZ)
-        // currentEyeZ = newZ
-        // targetEyeZ = newZ
         self.buildMatrices3D()
     }
     
@@ -131,50 +115,7 @@ extension MetalView {
         eyeY.move()
         eyeZ.move()
 
-        /*
-        if abs(currentXAngle - targetXAngle) < abs(deltaXAngle) {
-            currentXAngle = targetXAngle
-        } else {
-            currentXAngle += deltaXAngle
-        }
-        */
-        /*
-        if abs(currentYAngle - targetYAngle) < abs(deltaYAngle) {
-            currentYAngle = targetYAngle
-        } else {
-            currentYAngle += deltaYAngle
-        }
-    
-        if abs(currentZAngle - targetZAngle) < abs(deltaZAngle) {
-            currentZAngle = targetZAngle
-        } else {
-            currentZAngle += deltaZAngle
-        }
-
-        if abs(currentEyeX - targetEyeX) < abs(deltaEyeX) {
-            currentEyeX = targetEyeX
-        } else {
-            currentEyeX += deltaEyeX
-        }
-    
-        if abs(currentEyeY - targetEyeY) < abs(deltaEyeY) {
-            currentEyeY = targetEyeY
-        } else {
-            currentEyeY += deltaEyeY
-        }
-    
-        if abs(currentEyeZ - targetEyeZ) < abs(deltaEyeZ) {
-            currentEyeZ = targetEyeZ
-        } else {
-            currentEyeZ += deltaEyeZ
-        }
-        */
-
-        if abs(currentAlpha - targetAlpha) < abs(deltaAlpha) {
-            currentAlpha = targetAlpha
-        } else {
-            currentAlpha += deltaAlpha
-        }
+        alpha.move()
 
         // DEPRECATED
         angleX.current -= (angleX.current >= 360) ? 360 : 0
@@ -218,18 +159,6 @@ extension MetalView {
 */
         updateScreenGeometry()
     }
-    
-    func computeAnimationDeltaSteps(animationCycles: Int) {
-    
-        let cycles = Float(animationCycles)
-        // deltaXAngle = (targetXAngle - currentXAngle) / cycles
-        // deltaYAngle = (targetYAngle - currentYAngle) / cycles
-        // deltaZAngle = (targetZAngle - currentZAngle) / cycles
-        // deltaEyeX = (targetEyeX - currentEyeX) / cycles
-        // deltaEyeY = (targetEyeY - currentEyeY) / cycles
-        // deltaEyeZ = (targetEyeZ - currentEyeZ) / cycles
-        deltaAlpha = (targetAlpha - currentAlpha) / cycles
-    }
 
     func computeTextureDeltaSteps(animationCycles: Int) {
 
@@ -267,19 +196,16 @@ extension MetalView {
     func zoom() {
     
         track("Zooming in...")
-    
-        // currentEyeZ  = 6
+
         eyeZ.current = 6.0
         angleX.target = 0.0
         angleY.target = 0.0
         angleZ.target = 0.0
 
-        let steps = 120 /* 60 = 1 sec */
+        let steps = 120
         angleX.steps = steps
         angleY.steps = steps
         angleZ.steps = steps
-
-        self.computeAnimationDeltaSteps(animationCycles: 120 /* 2 sec */)
     }
     
     func rotateBack() {
@@ -290,12 +216,10 @@ extension MetalView {
         angleY.target += 90.0
         angleZ.target = 0.0
 
-        let steps = 60 /* 1 sec */
+        let steps = 60
         angleX.steps = steps
         angleY.steps = steps
         angleZ.steps = steps
-
-        self.computeAnimationDeltaSteps(animationCycles: 60 /* 1 sec */)
 
         angleY.target -= (angleY.target >= 360) ? 360 : 0
         // targetYAngle -= (targetYAngle >= 360) ? 360 : 0
@@ -309,12 +233,10 @@ extension MetalView {
         angleY.target -= 90.0
         angleZ.target = 0.0
 
-        let steps = 60 /* 60 = 1 sec */
+        let steps = 60
         angleX.steps = steps
         angleY.steps = steps
         angleZ.steps = steps
-
-        self.computeAnimationDeltaSteps(animationCycles: 60 /* 1 sec */)
 
         angleY.target += (angleY.target < 0) ? 360 : 0
         // targetYAngle += (targetYAngle < 0) ? 360 : 0
@@ -323,19 +245,16 @@ extension MetalView {
     func scroll() {
         
         track("Scrolling...")
-    
-        // currentEyeY = -1.5
+
         eyeY.current = -1.5
         angleX.target = 0.0
         angleY.target = 0.0
         angleZ.target = 0.0
 
-        let steps = 120 /* 60 = 1 sec */
+        let steps = 120
         angleX.steps = steps
         angleY.steps = steps
         angleZ.steps = steps
-
-        self.computeAnimationDeltaSteps(animationCycles: 120 /* 2 sec */)
     }
 
     func blendIn() {
@@ -345,33 +264,29 @@ extension MetalView {
         angleX.target = 0.0
         angleY.target = 0
         angleZ.target = 0
-        targetAlpha  = 1.0
+        alpha.target = 1.0
 
-        let steps = 10 /* 60 = 1 sec */
+        let steps = 10
         angleX.steps = steps
         angleY.steps = steps
         angleZ.steps = steps
-
-        computeAnimationDeltaSteps(animationCycles: 10)
-        // computeAnimationDeltaSteps(animationCycles: 1 /* almost immediately */)
+        alpha.steps = steps
     }
 
     func blendOut() {
         
         track("Blending out...")
-        
-        // targetXAngle = 0
+
         angleX.target = 0.0
         angleY.target = 0.0
         angleZ.target = 0.0
-        targetAlpha  = 0.0
+        alpha.target = 0.0
 
-        let steps = 40 /* 60 = 1 sec */
+        let steps = 40
         angleX.steps = steps
         angleY.steps = steps
         angleZ.steps = steps
-
-        computeAnimationDeltaSteps(animationCycles: 40)
+        alpha.steps = steps
     }
     
     func snapToFront() {
@@ -379,9 +294,6 @@ extension MetalView {
         track("Snapping to front...")
 
         eyeZ.current = -0.05
-        // currentEyeZ   = -0.05
-        
-        self.computeAnimationDeltaSteps(animationCycles: 15 /* 0.25 sec */)
     }
     
     //

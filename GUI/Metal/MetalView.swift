@@ -207,21 +207,13 @@ public class MetalView: MTKView {
     var eyeY = AnimatedFloat(Defaults.eyeY)
     var eyeZ = AnimatedFloat(Defaults.eyeZ)
 
-    /*
-    var currentEyeX = Defaults.eyeX
-    var targetEyeX = Defaults.eyeX
-    var deltaEyeX = Float(0.0)
-    var currentEyeY = Defaults.eyeY
-    var targetEyeY = Defaults.eyeY
-    var deltaEyeY = Float(0.0)
-    var currentEyeZ = Defaults.eyeZ
-    var targetEyeZ = Defaults.eyeZ
-    var deltaEyeZ = Float(0.0)
-    */
-
+    var alpha = AnimatedFloat(0.0)
+    // var alpha = AnimatedFloat(current: 0.0, target: 1.0) // Start invisible
+/*
     var currentAlpha = Float(0.0)
     var targetAlpha = Float(1.0)  // Start with an invisible screen
     var deltaAlpha = Float(0.0)
+*/
 
     var currentTexOriginX = CGFloat(0.0)
     var currentTexOriginY = CGFloat(0.0)
@@ -565,8 +557,8 @@ public class MetalView: MTKView {
         let animates = self.animates()
         let textureAnimates = self.textureAnimates()
         let paused = controller.amiga.isPaused()
-        let renderBackground = !fullscreen && !paused && (animates || (currentAlpha < 1.0))
-        let renderForeground = currentAlpha > 0.0
+        let renderBackground = !fullscreen && !paused && (animates || (alpha.current < 1.0))
+        let renderForeground = alpha.current > 0.0
         
         if animates {
             updateAngles()
@@ -614,7 +606,7 @@ public class MetalView: MTKView {
                                           length: MemoryLayout<VertexUniforms>.stride,
                                           index: 1)
             // Configure fragment shader
-            fragmentUniforms.alpha = paused ? 0.5 : currentAlpha
+            fragmentUniforms.alpha = paused ? 0.5 : alpha.current
             commandEncoder.setFragmentTexture(scanlineTexture, index: 0)
             commandEncoder.setFragmentTexture(bloomTextureR, index: 1)
             commandEncoder.setFragmentTexture(bloomTextureG, index: 2)
