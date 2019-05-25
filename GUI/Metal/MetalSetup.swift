@@ -298,9 +298,8 @@ public extension MetalView {
     
         if animates() {
             let xAngle = -(angleX.current / 180.0) * .pi
-            // let xAngle: Float = -(currentXAngle / 180.0) * .pi
-            let yAngle: Float = (currentYAngle / 180.0) * .pi
-            let zAngle: Float = (currentZAngle / 180.0) * .pi
+            let yAngle =  (angleY.current / 180.0) * .pi
+            let zAngle =  (angleZ.current / 180.0) * .pi
     
             model = model *
                 matrix_from_rotation(radians: xAngle, x: 0.5, y: 0.0, z: 0.0) *

@@ -200,18 +200,15 @@ public class MetalView: MTKView {
     
     // Animation parameters
     var angleX = AnimatedFloat(0.0)
+    var angleY = AnimatedFloat(0.0)
+    var angleZ = AnimatedFloat(0.0)
 
     /*
-    var currentXAngle = Float(0.0)
-    var targetXAngle = Float(0.0)
-    var deltaXAngle = Float(0.0)
+    var eyeX = AnimatedFloat(Defaults.eyeX)
+    var eyeY = AnimatedFloat(Defaults.eyeY)
+    var eyeZ = AnimatedFloat(Defaults.eyeZ)
     */
-    var currentYAngle = Float(0.0)
-    var targetYAngle = Float(0.0)
-    var deltaYAngle = Float(0.0)
-    var currentZAngle = Float(0.0)
-    var targetZAngle = Float(0.0)
-    var deltaZAngle = Float(0.0)
+
     var currentEyeX = Defaults.eyeX
     var targetEyeX = Defaults.eyeX
     var deltaEyeX = Float(0.0)
