@@ -21,38 +21,50 @@ public class MetalView: MTKView {
     
     @IBOutlet weak var controller: MyController!
     
-    /// Number of drawn frames since power up
+    /* Number of drawn frames since power up
+     * Used to determine the fps value shown in the emulator's bottom bar.
+     */
     var frames: UInt64 = 0
     
-    // Synchronization semaphore
+    /* Synchronization semaphore
+     * The semaphore is locked in function draw() and released in function
+     * endFrame(). It's puprpose is to prevent a new frame from being drawn
+     * if the previous isn't finished yet. Not sure if we really need it.
+     */
     var semaphore: DispatchSemaphore!
     
-    // Tracking area for trapping the mouse
+    /* Tracking area for trapping the mouse
+     * We use a tracking area to determine when the mouse is moved into or
+     * out of the emulator window.
+     */
     var trackingArea: NSTrackingArea?
     
-    // Indicates if the mouse is inside the tracking area
+    // Indicates whether the mouse is currently within the tracking area.
     var insideTrackingArea = false
     
-    // Indicates if the Amiga has control over the mouse
+    // Shows whether the Amiga is currently in control of the mouse.
     var gotMouse = false
 
-    // Selected method for retaining and releasing the mouse
-    var retainMouseKeyComb    = 0
-    var retainMouseWithKeys   = true
-    var retainMouseByClick    = true
+    // The selected method for retaining and releasing the mouse
+    var retainMouseKeyComb = 0
+    var retainMouseWithKeys = true
+    var retainMouseByClick = true
     var retainMouseByEntering = false
-    var releaseMouseKeyComb   = 0
-    var releaseMouseWithKeys  = true
+    var releaseMouseKeyComb = 0
+    var releaseMouseWithKeys = true
     var releaseMouseByShaking = true
     
-    // Mouse shake detection
+    // Variables needed to detect a mouse detection
     var dxsign = CGFloat(1)
     var dxsum = CGFloat(0)
     var dxturns = 0
     var lastTurn = DispatchTime.init(uptimeNanoseconds: 0)
     var lastShake = DispatchTime.init(uptimeNanoseconds: 0)
-    
+
+    //
     // Metal objects
+    //
+
     var library: MTLLibrary! = nil
     var queue: MTLCommandQueue! = nil
     var pipeline: MTLRenderPipelineState! = nil
@@ -60,14 +72,20 @@ public class MetalView: MTKView {
     var commandBuffer: MTLCommandBuffer! = nil
     var commandEncoder: MTLRenderCommandEncoder! = nil
     var drawable: CAMetalDrawable! = nil
-    
-    // Metal layer
+
+    //
+    // Metal layers
+    //
+
     var metalLayer: CAMetalLayer! = nil
     var layerWidth = CGFloat(0.0)
     var layerHeight = CGFloat(0.0)
     var layerIsDirty = true
-    
-    // Buffers
+
+    //
+    // Metal buffers and uniforms
+    //
+
     var positionBuffer: MTLBuffer! = nil
 
     var vertexUniforms2D = VertexUniforms(mvp: matrix_identity_float4x4)
@@ -83,67 +101,75 @@ public class MetalView: MTKView {
                                       longFrameScale: 1.0,
                                       shortFrameScale: 1.0)
 
+    //
     // Textures
-    
-    /// Background image behind the cube
+    //
+
+    // Background image behind the cube
     var bgTexture: MTLTexture! = nil
     
-    /// Texture to hold the pixel depth information
+    // Texture to hold the pixel depth information
     var depthTexture: MTLTexture! = nil
     
-    /// Long frame texture (raw data from emulator, 1024 x 512)
-    /// This texture is filled with the screen buffer data from the emulator.
-    /// The texture is updated in function updateLongFrameTexture() which is
-    /// called periodically in drawRect().
+    /* Long frame texture (raw data from emulator, 1024 x 512)
+     * This texture is filled with the screen buffer data from the emulator.
+     * The texture is updated in function updateLongFrameTexture() which is
+     * called periodically in drawRect().
+     */
     var longFrameTexture: MTLTexture! = nil
 
-    /// Short frame texture (raw data from emulator, 1024 x 512)
-    /// This texture is filled with the screen buffer data from the emulator.
-    /// The texture is updated in function updateShortFrameTexture() which is
-    /// called periodically in drawRect().
+    /* Short frame texture (raw data from emulator, 1024 x 512)
+     * This texture is filled with the screen buffer data from the emulator.
+     * The texture is updated in function updateShortFrameTexture() which is
+     * called periodically in drawRect().
+     */
     var shortFrameTexture: MTLTexture! = nil
- 
-    /// Merge texture (1024 x 1024)
-    /// The long frame and short frame textures are merged into this one.
+
+    /* Merge texture (1024 x 1024)
+     * The long frame and short frame textures are merged into this one.
+     */
     var mergeTexture: MTLTexture! = nil
     
-    /// Bloom textures to emulate blooming (512 x 512)
-    /// To emulate a bloom effect, the C64 texture is first split into it's
-    /// R, G, and B parts. Each texture is then run through a Gaussian blur
-    /// filter with a large radius. These blurred textures are passed into
-    /// the fragment shader as a secondary textures where they are recomposed
-    /// with the upscaled primary texture.
+    /* Bloom textures to emulate blooming (512 x 512)
+     * To emulate a bloom effect, the C64 texture is first split into it's
+     * R, G, and B parts. Each texture is then run through a Gaussian blur
+     * filter with a large radius. These blurred textures are passed into
+     * the fragment shader as a secondary textures where they are recomposed
+     * with the upscaled primary texture.
+     */
     var bloomTextureR: MTLTexture! = nil
     var bloomTextureG: MTLTexture! = nil
     var bloomTextureB: MTLTexture! = nil
 
-    /// Lowres enhancement texture (experimental)
-    /// Trying to use in-texture upscaling to enhance lowres mode
+    /* Lowres enhancement texture (experimental)
+     * Trying to use in-texture upscaling to enhance lowres mode
+     */
     var lowresEnhancedTexture: MTLTexture! = nil
     
-    /// Upscaled emulator texture (2048 x 2048)
-    /// In the first texture processing stage, the emulator texture is bumped up
-    /// by a factor of 4. The user can choose between bypass upscaling which
-    /// simply replaces each pixel by a 4x4 quad or more sophisticated upscaling
-    /// algorithms such as xBr.
+    /* Upscaled emulator texture (2048 x 2048)
+     * In the first texture processing stage, the emulator texture is bumped up
+     * by a factor of 4. The user can choose between bypass upscaling which
+     * simply replaces each pixel by a 4x4 quad or more sophisticated upscaling
+     * algorithms such as xBr.
+     */
     var upscaledTexture: MTLTexture! = nil
     
-    /// Upscaled texture with scanlines (2048 x 2048)
-    /// In the second texture processing stage, a scanline effect is applied to
-    /// the upscaled texture.
+    /* Upscaled texture with scanlines (2048 x 2048)
+     * In the second texture processing stage, a scanline effect is applied to
+     * the upscaled texture.
+     */
     var scanlineTexture: MTLTexture! = nil
     
-    /// Dotmask texture (variable size)
-    /// This texture is used by the fragment shader to emulate a dotmask
-    /// effect.
+    /* Dotmask texture (variable size)
+     * This texture is used by the fragment shader to emulate a dotmask
+     * effect.
+     */
     var dotMaskTexture: MTLTexture! = nil
     
-    // An instance of the merge filter
+    /* An instance of the merge filter
+     */
     var mergeFilter: MergeFilter! = nil
-    
-    // An instance of the lowres enhancer
-    // var lowresEnhancer : InPlaceEpxScaler! = nil
-    
+
     // Array holding all available lowres enhancers
     var enhancerGallery = [ComputeKernel?](repeating: nil, count: 3)
     
@@ -173,9 +199,13 @@ public class MetalView: MTKView {
     var shaderOptions = Defaults.shaderOptions
     
     // Animation parameters
+    var angleX = AnimatedFloat(0.0)
+
+    /*
     var currentXAngle = Float(0.0)
     var targetXAngle = Float(0.0)
     var deltaXAngle = Float(0.0)
+    */
     var currentYAngle = Float(0.0)
     var targetYAngle = Float(0.0)
     var deltaYAngle = Float(0.0)
@@ -208,10 +238,10 @@ public class MetalView: MTKView {
     var deltaTexWidth = CGFloat(0.0)
     var deltaTexHeight = CGFloat(0.0)
 
-    /// Texture cut-out (normalized)
+    // Texture cut-out (normalized)
     var textureRect = CGRect.init(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
     
-    /// Currently selected texture enhancer
+    // Currently selected texture enhancer
     var enhancer = Defaults.enhancer {
         didSet {
             if upscaler >= enhancerGallery.count || enhancerGallery[upscaler] == nil {
@@ -221,7 +251,7 @@ public class MetalView: MTKView {
         }
     }
     
-    /// Currently selected texture upscaler
+    // Currently selected texture upscaler
     var upscaler = Defaults.upscaler {
         didSet {
             if upscaler >= upscalerGallery.count || upscalerGallery[upscaler] == nil {
@@ -236,7 +266,6 @@ public class MetalView: MTKView {
 
     // Indicates if the current frame is a long frame or a short frame (DEPRECATED)
     // var longFrame = false
-
     var flickerToggle = false
 
     // Indicates the type of the frame that is read next
@@ -274,7 +303,7 @@ public class MetalView: MTKView {
     
     override public var acceptsFirstResponder: Bool { return true }
     
-    //! Adjusts view height by a certain number of pixels
+    // Adjusts view height by a certain number of pixels
     func adjustHeight(_ height: CGFloat) {
     
         var newFrame = frame
@@ -283,26 +312,15 @@ public class MetalView: MTKView {
         frame = newFrame
     }
     
-    //! Shrinks view vertically by the height of the status bar
+    // Shrinks view vertically by the height of the status bar
     public func shrink() { adjustHeight(-24.0) }
     
-    //! Expand view vertically by the height of the status bar
+    // Expand view vertically by the height of the status bar
     public func expand() { adjustHeight(24.0) }
 
     public func updateScreenGeometry() {
-    
-        // Setup parameters looking good for a PAL texture
-        /*
-        let textureW = CGFloat(EmulatorTexture.size.0)
-        let textureH = CGFloat(EmulatorTexture.size.1)
-        let width    = CGFloat(728) //  CGFloat(HPIXELS)
-        let height   = CGFloat(VPIXELS - 2)
 
-        textureRect = CGRect.init(x: CGFloat(0) / textureW,
-                                  y: CGFloat(0) / textureH,
-                                  width: width / textureW,
-                                  height: height / textureH)
-        */
+        // Update texture cutout
         textureRect = CGRect.init(x: currentTexOriginX,
                                   y: currentTexOriginY,
                                   width: currentTexWidth,

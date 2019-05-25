@@ -297,7 +297,8 @@ public extension MetalView {
                                              farZ: 100.0)
     
         if animates() {
-            let xAngle: Float = -(currentXAngle / 180.0) * .pi
+            let xAngle = -(angleX.current / 180.0) * .pi
+            // let xAngle: Float = -(currentXAngle / 180.0) * .pi
             let yAngle: Float = (currentYAngle / 180.0) * .pi
             let zAngle: Float = (currentZAngle / 180.0) * .pi
     
