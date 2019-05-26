@@ -18,7 +18,7 @@ class DmaDebugger : public HardwareComponent {
 private:
 
     // Indicates if DMA debugging is turned on or off
-    bool enabled = true;
+    bool enabled = false;
 
     // Indicates if a certain DMA channel should be visualized
     bool visualize[BUS_OWNER_COUNT]; 
@@ -60,7 +60,7 @@ public:
 
     // Turns DMA debugging on or off
     bool isEnabled() { return enabled; }
-    void setEnabled(bool value) { enabled = value; }
+    void setEnabled(bool value);
 
     // Enables or disables the visual effects for a certain DMA source
     bool isVisualized(BusOwner owner);
@@ -83,6 +83,9 @@ public:
 
     // Superimposes the debug output onto the current rasterline
     void computeOverlay();
+
+    // Cleans up some texture data at the end of each frame
+    void vSyncHandler();
 };
 
 #endif

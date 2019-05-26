@@ -137,10 +137,8 @@ extension Inspector {
 
         if sender.state == .on {
             amigaProxy?.dma.dmaDebugSetEnable(true)
-            myController?.metal.zoomTextureOut()
         } else {
             amigaProxy?.dma.dmaDebugSetEnable(false)
-            myController?.metal.zoomTextureIn()
         }
         
         refresh(everything: false)

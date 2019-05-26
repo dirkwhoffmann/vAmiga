@@ -30,6 +30,8 @@ typedef enum
     MSG_WARP_OFF,
     MSG_POWER_LED_ON,
     MSG_POWER_LED_OFF,
+    MSG_DMA_DEBUG_ON,
+    MSG_DMA_DEBUG_OFF,
     
     // CPU
     MSG_BREAKPOINT_CONFIG,

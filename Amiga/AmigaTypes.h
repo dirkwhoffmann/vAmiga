@@ -72,22 +72,6 @@ typedef enum : long
     VA_RT_CLOCK,
     VA_EXACT_BLITTER,
     VA_FIFO_BUFFERING,
-
-    // DEPRECATED
-    /*
-    VA_DF0_CONNECT,
-    VA_DF0_TYPE,
-    VA_DF0_SPEED,
-    VA_DF1_CONNECT,
-    VA_DF1_TYPE,
-    VA_DF1_SPEED,
-    VA_DF2_CONNECT,
-    VA_DF2_TYPE,
-    VA_DF2_SPEED,
-    VA_DF3_CONNECT,
-    VA_DF3_TYPE,
-    VA_DF3_SPEED
-    */
 }
 ConfigOption;
 

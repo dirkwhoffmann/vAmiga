@@ -383,11 +383,10 @@ int *
 Denise::pixelAddr(int pixel)
 {
     assert(pixel < HPIXELS);
-    assert(agnus->vpos >= 26); // 0 .. 25 is VBLANK area
+    assert(agnus->vpos > VBLANK_MAX); // 0 .. 25 is VBLANK area
 
-    int offset = pixel + (agnus->vpos - 26) * HPIXELS;
-    // debug("pixel offset for pixel %d is %d\n", pixel, offset);
-    assert(offset < VPIXELS * HPIXELS);
+    int offset = pixel + agnus->vpos * HPIXELS;
+    assert(offset < PIXELS);
     
     return frameBuffer->data + offset;
 }
@@ -526,13 +525,13 @@ Denise::drawSprites()
 {
     int nr = 0, col = 17;
 
-    // EXPERIMENTAL
     while (armed != 0) {
 
         if (armed & 0x1) {
 
-            int hblank = 4 * 0x35;
-            int16_t pixel = 2 * sprhstrt[nr] - hblank + 2;
+            // int hblank = 4 * 0x35;
+            // int16_t pixel = 2 * sprhstrt[nr] - hblank + 2;
+            int16_t pixel = 2 * sprhstrt[nr] + 2;
             if (pixel >= HPIXELS - 33) { pixel = HPIXELS - 33; } // ????
             int *ptr = pixelAddr(pixel);
 
@@ -575,11 +574,11 @@ Denise::drawBorder()
 #endif
 
     int *ptr = pixelAddr(0);
-    int hblank = 4 * 0x35;
+    // int hblank = 4 * 0x35;
 
     // Draw vertical border
     if (!inDisplayWindow) {
-        for (int i = 0; i < HPIXELS; i++) {
+        for (int i = FIRST_VISIBLE_PIXEL; i < HPIXELS; i++) {
             ptr[i] = rgbaVBorder;
         }
 
@@ -587,13 +586,13 @@ Denise::drawBorder()
 
         // Draw left border
         // debug("hstrt = %d hstop = %d\n", _agnus->hstrt, _agnus->hstop);
-        for (int i = 0; i < (2 * agnus->hstrt) - hblank; i++) {
-            if (i >= 0) ptr[i] = rgbaHBorderL;
+        for (int i = FIRST_VISIBLE_PIXEL; i < (2 * agnus->hstrt); i++) {
+            ptr[i] = rgbaHBorderL;
         }
 
         // Draw right border
-        for (int i = (2 * agnus->hstop) - hblank; i < HPIXELS; i++) {
-            if (i >= 0) ptr[i] = rgbaHBorderR;
+        for (int i = (2 * agnus->hstop); i < HPIXELS; i++) {
+            ptr[i] = rgbaHBorderR;
         }
     }
 
@@ -666,6 +665,7 @@ Denise::prepareForNextFrame(bool longFrame, bool interlace)
     frameBuffer->longFrame = longFrame;
     frameBuffer->interlace = interlace;
 
+    agnus->dmaDebugger.vSyncHandler();
     // pthread_mutex_unlock(&lock);
 }
 

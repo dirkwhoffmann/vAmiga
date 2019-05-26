@@ -171,14 +171,14 @@ extension MetalView {
     // Texture animations
     //
 
-    func zoomTextureIn(cycles: Int = 60) {
+    func zoomTextureIn(cycles: Int = 30) {
 
         track("Zooming texture in...")
 
-        cutoutX1.target = 0.0
-        cutoutY1.target = 0.0
-        cutoutX2.target = 728.0 / 768.0
-        cutoutY2.target = 286.0 / 288.0
+        cutoutX1.target = MetalView.cutoutX1default
+        cutoutY1.target = MetalView.cutoutY1default
+        cutoutX2.target = MetalView.cutoutX2default
+        cutoutY2.target = MetalView.cutoutY2default
 
         cutoutX1.steps = cycles
         cutoutY1.steps = cycles
@@ -188,7 +188,7 @@ extension MetalView {
         animates |= AnimationType.texture
     }
 
-    func zoomTextureOut(cycles: Int = 60) {
+    func zoomTextureOut(cycles: Int = 30) {
 
         track("Zooming texture out...")
 

@@ -603,7 +603,6 @@ extension MyController {
             // track("Power on")
             // metal.blendIn()
             metal.zoom()
-            metal.zoomTextureIn(cycles: 1)
             toolbar.validateVisibleItems()
             myAppDelegate.inspector?.refresh(everything: true)
             
@@ -631,6 +630,12 @@ extension MyController {
         case MSG_POWER_LED_OFF:
             // track("MSG_POWER_LED_OFF")
             powerLED.image = NSImage.init(named: "powerLedOff")
+
+        case MSG_DMA_DEBUG_ON:
+            metal.zoomTextureOut()
+
+        case MSG_DMA_DEBUG_OFF:
+            metal.zoomTextureIn()
 
         case MSG_DRIVE_CONNECT:
             

@@ -212,13 +212,21 @@ public class MetalView: MTKView {
 
     var alpha = AnimatedFloat(0.0)
 
-    var cutoutX1 = AnimatedFloat(0.0)
-    var cutoutY1 = AnimatedFloat(0.0)
-    var cutoutX2 = AnimatedFloat(1.0)
-    var cutoutY2 = AnimatedFloat(1.0)
+    static let cutoutX1default = Float(HBLANK_PIXELS) / Float(HPIXELS)
+    static let cutoutY1default = Float(VBLANK_PIXELS) / Float(VPIXELS)
+    static let cutoutX2default = Float(1.0)
+    static let cutoutY2default = Float(1.0)
+
+    var cutoutX1 = AnimatedFloat(cutoutX1default)
+    var cutoutY1 = AnimatedFloat(cutoutY1default)
+    var cutoutX2 = AnimatedFloat(cutoutX2default)
+    var cutoutY2 = AnimatedFloat(cutoutY2default)
 
     // Texture cut-out (normalized)
-    var textureRect = CGRect.init(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
+    var textureRect = CGRect.init(x: CGFloat(cutoutX1default),
+                                  y: CGFloat(cutoutY1default),
+                                  width: CGFloat(cutoutX2default - cutoutX1default),
+                                  height: CGFloat(cutoutY2default - cutoutY1default))
     
     // Currently selected texture enhancer
     var enhancer = Defaults.enhancer {
@@ -314,16 +322,15 @@ public class MetalView: MTKView {
     }
     */
 
+    /*
     func updateLongFrameTexture(bytes: UnsafeMutablePointer<Int32>) {
 
         let w = EmulatorTexture.width
         let h = EmulatorTexture.height
         longFrameTexture.replace(region: MTLRegionMake2D(0, 0, w, h),
                                  mipmapLevel: 0,
-                                 slice: 0,
                                  withBytes: bytes,
-                                 bytesPerRow: 4 * HPIXELS,
-                                 bytesPerImage: 4 * VPIXELS * HPIXELS)
+                                 bytesPerRow: 4 * Int(HPIXELS))
     }
 
     func updateShortFrameTexture(bytes: UnsafeMutablePointer<Int32>) {
@@ -333,16 +340,9 @@ public class MetalView: MTKView {
         shortFrameTexture.replace(region: MTLRegionMake2D(0, 0, w, h),
                                   mipmapLevel: 0,
                                   withBytes: bytes,
-                                  bytesPerRow: 4 * HPIXELS)
-        /*
-        shortFrameTexture.replace(region: MTLRegionMake2D(0, 0, w, h),
-                                  mipmapLevel: 0,
-                                  slice: 0,
-                                  withBytes: bytes,
-                                  bytesPerRow: 4 * HPIXELS,
-                                  bytesPerImage: 4 * VPIXELS * HPIXELS)
-        */
+                                  bytesPerRow: 4 * Int(HPIXELS))
     }
+    */
 
     func updateTexture(bytes: UnsafeMutablePointer<Int32>, longFrame: Bool) {
 
@@ -353,29 +353,12 @@ public class MetalView: MTKView {
             longFrameTexture.replace(region: MTLRegionMake2D(0, 0, w, h),
                                      mipmapLevel: 0,
                                      withBytes: bytes,
-                                     bytesPerRow: 4 * HPIXELS)
-            /*
-            longFrameTexture.replace(region: MTLRegionMake2D(0, 0, w, h),
-                                     mipmapLevel: 0,
-                                     slice: 0,
-                                     withBytes: bytes,
-                                     bytesPerRow: 4 * HPIXELS,
-                                     bytesPerImage: 4 * VPIXELS * HPIXELS)
-             */
-
+                                     bytesPerRow: 4 * Int(HPIXELS))
         } else {
             shortFrameTexture.replace(region: MTLRegionMake2D(0, 0, w, h),
                                      mipmapLevel: 0,
                                      withBytes: bytes,
-                                     bytesPerRow: 4 * HPIXELS)
-            /*
-            shortFrameTexture.replace(region: MTLRegionMake2D(0, 0, w, h),
-                                      mipmapLevel: 0,
-                                      slice: 0,
-                                      withBytes: bytes,
-                                      bytesPerRow: 4 * HPIXELS,
-                                      bytesPerImage: 4 * VPIXELS * HPIXELS)
-            */
+                                     bytesPerRow: 4 * Int(HPIXELS))
         }
     }
 

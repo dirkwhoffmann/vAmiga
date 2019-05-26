@@ -1254,7 +1254,7 @@ void
 Agnus::serviceRASEvent(EventID id)
 {
     uint8_t incr;
-    int hblank = 4 * 0x35;
+    // int hblank = 4 * 0x35;
 
     switch (id) {
             
@@ -1265,7 +1265,8 @@ Agnus::serviceRASEvent(EventID id)
             
         case RAS_DIWSTRT:
 
-            denise->pixel = (hpos * 4) - hblank + 2;
+            // denise->pixel = (hpos * 4) - hblank + 2;
+            denise->pixel = (hpos * 4) + 2;
 
             incr = denise->draw() / 4;
 
