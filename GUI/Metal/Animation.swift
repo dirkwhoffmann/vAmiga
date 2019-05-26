@@ -68,7 +68,8 @@ extension MetalView {
             || shiftZ.animates()
             || alpha.animates()
     }
-    
+
+    /*
     func getEyeX() -> Float {
         
         return shiftX.current
@@ -98,10 +99,10 @@ extension MetalView {
     
     func setEyeZ(_ newZ: Float) {
 
-        track("eyeZ = \(newZ)")
         shiftZ.set(newZ)
         self.buildMatrices3D()
     }
+    */
 
     func performAnimationStep() {
 

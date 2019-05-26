@@ -89,9 +89,9 @@ extension PreferencesController {
         vidMisalignmentYSlider.isEnabled = shaderOptions.disalignment > 0
 
         // Geometry
-        vidEyeXSlider.floatValue = metal.getEyeX()
-        vidEyeYSlider.floatValue = metal.getEyeY()
-        vidEyeZSlider.floatValue = metal.getEyeZ()
+        vidEyeXSlider.floatValue = controller.eyeX
+        vidEyeYSlider.floatValue = controller.eyeY
+        vidEyeZSlider.floatValue = controller.eyeZ
     }
 
     //
@@ -287,28 +287,21 @@ extension PreferencesController {
     //
         
     @IBAction func vidEyeXAction(_ sender: NSSlider!) {
-        
-        if let metal = myController?.metal {
-            metal.setEyeX(sender.floatValue)
-            refresh()
-            
-        }
+
+        myController?.eyeX = sender.floatValue
+        refresh()
     }
     
     @IBAction func vidEyeYAction(_ sender: NSSlider!) {
         
-        if let metal = myController?.metal {
-            metal.setEyeY(sender.floatValue)
-            refresh()
-        }
+        myController?.eyeY = sender.floatValue
+        refresh()
     }
     
     @IBAction func vidEyeZAction(_ sender: NSSlider!) {
         
-        if let metal = myController?.metal {
-            metal.setEyeZ(sender.floatValue)
-            refresh()
-        }
+        myController?.eyeZ = sender.floatValue
+        refresh()
     }
     
     //

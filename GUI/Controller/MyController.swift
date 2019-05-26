@@ -156,6 +156,16 @@ class MyController: NSWindowController, MessageReceiver {
         get { return amiga.denise.saturation() }
         set { amiga.denise.setSaturation(newValue) }
     }
+    var eyeX: Float = 0.0 {
+        didSet { metal.buildMatrices3D() }
+    }
+    var eyeY: Float = 0.0 {
+        didSet { metal.buildMatrices3D() }
+    }
+    var eyeZ: Float = 0.0 {
+        didSet { metal.buildMatrices3D() }
+    }
+    /*
     var eyeX: Float {
         get { return metal.getEyeX() }
         set { metal.setEyeX(newValue) }
@@ -168,6 +178,7 @@ class MyController: NSWindowController, MessageReceiver {
         get { return metal.getEyeZ() }
         set { metal.setEyeZ(newValue) }
     }
+    */
     var blur: Int32 {
         get { return metal.shaderOptions.blur }
         set { metal.shaderOptions.blur = newValue }

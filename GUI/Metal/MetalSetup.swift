@@ -314,24 +314,29 @@ public extension MetalView {
     
     func buildMatrices3D() {
 
-        let xAngle = -(angleX.current / 180.0) * .pi
-        let yAngle = (angleY.current / 180.0) * .pi
-        let zAngle = (angleZ.current / 180.0) * .pi
+        let xAngle = -angleX.current / 180.0 * .pi
+        let yAngle = angleY.current / 180.0 * .pi
+        let zAngle = angleZ.current / 180.0 * .pi
+
+        let xShift = -shiftX.current - controller.eyeX
+        let yShift = -shiftY.current - controller.eyeY
+        let zShift = shiftZ.current + controller.eyeZ
+
         let aspect = Float(layerWidth) / Float(layerHeight)
 
         let view = matrix_identity_float4x4
         let proj = perspectiveMatrix(fovY: Float(65.0 * (.pi / 180.0)),
-                                         aspect: aspect,
-                                         nearZ: 0.1,
-                                         farZ: 100.0)
+                                     aspect: aspect,
+                                     nearZ: 0.1,
+                                     farZ: 100.0)
 
-        let transEye = translationMatrix(x: -shiftX.current,
-                                             y: -shiftY.current,
-                                             z: shiftZ.current + 1.39 - 0.16)
+        let transEye = translationMatrix(x: xShift,
+                                         y: yShift,
+                                         z: zShift + 1.39 - 0.16)
 
         let transRotX = translationMatrix(x: 0.0,
-                                              y: 0.0,
-                                              z: 0.16)
+                                          y: 0.0,
+                                          z: 0.16)
 
         let rotX = rotationMatrix(radians: xAngle, x: 0.5, y: 0.0, z: 0.0)
         let rotY = rotationMatrix(radians: yAngle, x: 0.0, y: 0.5, z: 0.0)
