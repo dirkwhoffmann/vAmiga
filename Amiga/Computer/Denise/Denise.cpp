@@ -80,11 +80,11 @@ Denise::_powerOn()
     // Initialize frame buffers with a recognizable debug pattern
     for (unsigned line = 0; line < VPIXELS; line++) {
         for (unsigned i = 0; i < HPIXELS; i++) {
-            longFrame1.data[line * HPIXELS + i] =
-            longFrame2.data[line * HPIXELS + i] =
-            shortFrame1.data[line * HPIXELS + i] =
-            shortFrame2.data[line * HPIXELS + i] =
-            (line % 2) ? 0x000000FF : 0x0000FFFF;
+
+            int pos = line * HPIXELS + i;
+            int col = (line / 4) % 2 == (i / 8) % 2 ? 0x00222222 : 0x00444444;
+            longFrame1.data[pos] = longFrame2.data[pos] = col;
+            shortFrame1.data[pos] = shortFrame2.data[pos] = col;
         }
     }
 }
@@ -529,8 +529,6 @@ Denise::drawSprites()
 
         if (armed & 0x1) {
 
-            // int hblank = 4 * 0x35;
-            // int16_t pixel = 2 * sprhstrt[nr] - hblank + 2;
             int16_t pixel = 2 * sprhstrt[nr] + 2;
             if (pixel >= HPIXELS - 33) { pixel = HPIXELS - 33; } // ????
             int *ptr = pixelAddr(pixel);
@@ -574,11 +572,10 @@ Denise::drawBorder()
 #endif
 
     int *ptr = pixelAddr(0);
-    // int hblank = 4 * 0x35;
 
     // Draw vertical border
     if (!inDisplayWindow) {
-        for (int i = FIRST_VISIBLE_PIXEL; i < HPIXELS; i++) {
+        for (int i = FIRST_VISIBLE; i <= LAST_VISIBLE; i++) {
             ptr[i] = rgbaVBorder;
         }
 
@@ -586,17 +583,17 @@ Denise::drawBorder()
 
         // Draw left border
         // debug("hstrt = %d hstop = %d\n", _agnus->hstrt, _agnus->hstop);
-        for (int i = FIRST_VISIBLE_PIXEL; i < (2 * agnus->hstrt); i++) {
+        for (int i = FIRST_VISIBLE; i < (2 * agnus->hstrt); i++) {
             ptr[i] = rgbaHBorderL;
         }
 
         // Draw right border
-        for (int i = (2 * agnus->hstop); i < HPIXELS; i++) {
+        for (int i = (2 * agnus->hstop); i <= LAST_VISIBLE; i++) {
             ptr[i] = rgbaHBorderR;
         }
     }
 
-    // Invoke DMA debugger
+    // Invoke the DMA debugger
     agnus->dmaDebugger.computeOverlay();
 
 #ifdef LINE_DEBUG

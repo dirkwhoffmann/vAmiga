@@ -144,7 +144,7 @@ DmaDebugger::computeOverlay()
     int *ptr = amiga->denise.pixelAddr(0);
 
     // Clear old data in the HBLANK area
-    for (int i = 0; i < HBLANK_PIXELS; ptr[i++] = 0x00333333);
+    for (int i = 0; i < HBLANK_PIXELS; ptr[i++] = 0);
 
     for (int i = 0; i < HPOS_CNT; i++, ptr += 4) {
 
@@ -208,9 +208,15 @@ DmaDebugger::computeOverlay()
 void
 DmaDebugger::vSyncHandler()
 {
+    // Only proceed if the debugger is enabled
+    if (!enabled) return;
+
     // Clear old data in the next frame's VBLANK area
     int *ptr = amiga->denise.frameBuffer->data;
-    for (int i = 0; i < VBLANK_CNT * HPIXELS; ptr[i++] = 0x00333333);
-
+    for (int row = 0; row < VBLANK_CNT; row++) {
+        for (int col = 0; col <= LAST_VISIBLE; col++) {
+            ptr[row * HPIXELS + col] = 0;
+        }
+    }
 }
 

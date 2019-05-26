@@ -223,11 +223,14 @@ public class MetalView: MTKView {
     var cutoutY2 = AnimatedFloat(cutoutY2default)
 
     // Texture cut-out (normalized)
+    /*
     var textureRect = CGRect.init(x: CGFloat(cutoutX1default),
                                   y: CGFloat(cutoutY1default),
                                   width: CGFloat(cutoutX2default - cutoutX1default),
                                   height: CGFloat(cutoutY2default - cutoutY1default))
-    
+     */
+    var textureRect = CGRect.init(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
+
     // Currently selected texture enhancer
     var enhancer = Defaults.enhancer {
         didSet {
@@ -322,40 +325,20 @@ public class MetalView: MTKView {
     }
     */
 
-    /*
-    func updateLongFrameTexture(bytes: UnsafeMutablePointer<Int32>) {
-
-        let w = EmulatorTexture.width
-        let h = EmulatorTexture.height
-        longFrameTexture.replace(region: MTLRegionMake2D(0, 0, w, h),
-                                 mipmapLevel: 0,
-                                 withBytes: bytes,
-                                 bytesPerRow: 4 * Int(HPIXELS))
-    }
-
-    func updateShortFrameTexture(bytes: UnsafeMutablePointer<Int32>) {
-
-        let w = EmulatorTexture.width
-        let h = EmulatorTexture.height
-        shortFrameTexture.replace(region: MTLRegionMake2D(0, 0, w, h),
-                                  mipmapLevel: 0,
-                                  withBytes: bytes,
-                                  bytesPerRow: 4 * Int(HPIXELS))
-    }
-    */
-
     func updateTexture(bytes: UnsafeMutablePointer<Int32>, longFrame: Bool) {
 
-        let w = EmulatorTexture.width
-        let h = EmulatorTexture.height
+        let w = longFrameTexture.width
+        let h = longFrameTexture.height
+        // let region = MTLRegionMake3D(0, 0, 0, w, h, 1)
+        let region = MTLRegionMake2D(0, 0, w, h)
 
         if longFrame {
-            longFrameTexture.replace(region: MTLRegionMake2D(0, 0, w, h),
+            longFrameTexture.replace(region: region,
                                      mipmapLevel: 0,
                                      withBytes: bytes,
                                      bytesPerRow: 4 * Int(HPIXELS))
         } else {
-            shortFrameTexture.replace(region: MTLRegionMake2D(0, 0, w, h),
+            shortFrameTexture.replace(region: region,
                                      mipmapLevel: 0,
                                      withBytes: bytes,
                                      bytesPerRow: 4 * Int(HPIXELS))

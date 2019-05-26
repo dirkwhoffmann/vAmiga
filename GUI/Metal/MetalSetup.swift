@@ -122,13 +122,19 @@ public extension MetalView {
         
         descriptor.width = EmulatorTexture.width
         descriptor.height = EmulatorTexture.height
-        
+
+        track("Creating emulator texture \(descriptor.width) x \(descriptor.height)")
+
         // Emulator textures (raw data of long and short frames)
         descriptor.usage = [ .shaderRead ]
         longFrameTexture = device?.makeTexture(descriptor: descriptor)
         assert(longFrameTexture != nil, "Failed to create long frame texture.")
         shortFrameTexture = device?.makeTexture(descriptor: descriptor)
         assert(shortFrameTexture != nil, "Failed to create short frame texture.")
+
+        let actualWidth = longFrameTexture.width
+        let actualHeight = longFrameTexture.height
+        track("Created \(actualWidth) x \(actualHeight)")
 
         //
         // Textures that combine a short and a long frame (not yet upscaled)
@@ -381,6 +387,11 @@ public extension MetalView {
         let upperRight = float2(Float(textureRect.maxX), Float(textureRect.minY))
         let lowerLeft = float2(Float(textureRect.minX), Float(textureRect.maxY))
         let lowerRight = float2(Float(textureRect.maxX), Float(textureRect.maxY))
+
+        track("upperLeft = \(upperLeft)")
+        track("upperRight = \(upperRight)")
+        track("lowerLeft = \(lowerLeft)")
+        track("lowerRight = \(lowerRight)")
 
         // Background
         setVertex(0, float3(-bgx, +bgy, -bgz), float2(0.0, 0.0))

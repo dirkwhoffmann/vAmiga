@@ -368,21 +368,20 @@ static const char *customReg[256] = {
 #define VBLANK_CNT 26
 #define HBLANK_CNT 54
 
-#define VPOS_MAX   (VPOS_CNT - 1)
-#define HPOS_MAX   (HPOS_CNT - 1)
-#define VBLANK_MAX (VBLANK_CNT - 1)
-#define HBLANK_MAX (HBLANK_CNT - 1)
-
-#define FIRST_VISIBLE (HBLANK_MAX + 1)
+#define VPOS_MAX   312
+#define HPOS_MAX   226
+#define VBLANK_MAX 25
+#define HBLANK_MAX 53
 
 // Screen buffer pixel counts
-#define VPIXELS       (VPOS_CNT)
-#define HPIXELS       (4 * HPOS_CNT)
+#define VPIXELS       313
+#define HPIXELS       1024
 #define PIXELS        (VPIXELS * HPIXELS)
-#define HBLANK_PIXELS (4 * HBLANK_CNT)
-#define VBLANK_PIXELS (VBLANK_CNT)
+#define HBLANK_PIXELS 216
+#define VBLANK_PIXELS 26
 
-#define FIRST_VISIBLE_PIXEL (4 * FIRST_VISIBLE)
+#define FIRST_VISIBLE 216
+#define LAST_VISIBLE  (907 + 15 * 4)
 
 // Screen buffer size
 // static const long BUFSIZE = VPIXELS * HPIXELS * 4;

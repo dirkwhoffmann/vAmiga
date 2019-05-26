@@ -62,7 +62,7 @@ ZorroManager::_dump()
 uint8_t
 ZorroManager::peekFastRamDevice(uint32_t addr)
 {
-    debug("    peekFastRamDevice(%X)\n", addr & 0xFFFF);
+    debug(2, "    peekFastRamDevice(%X)\n", addr & 0xFFFF);
     
     if (fastRamConf || mem->fastRamSize == 0) return 0xF; // Already configured
     

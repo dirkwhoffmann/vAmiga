@@ -1393,7 +1393,6 @@ Agnus::hsyncHandler()
     
     // Schedule first RAS event
     scheduleFirstRASEvent(vpos);
-    // scheduleNextRASEvent(vpos, hpos);
 }
 
 void
