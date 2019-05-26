@@ -13,7 +13,6 @@ using namespace metal;
 
 #define SCALE_FACTOR 2
 
-
 //
 // Vertex shader data types
 // 
