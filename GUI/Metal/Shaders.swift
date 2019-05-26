@@ -110,30 +110,6 @@ struct FragmentUniforms {
 }
 
 //
-// Static texture parameters
-// 
-
-// Parameters of a short / long frame texture delivered by the emulator
-struct EmulatorTexture {
-    // static let size = (Int(1024), Int(512))
-    static let size = (Int(768), Int(288))
-}
-
-// Parameters of a textures that combines a short and a long frame
-struct MergedTexture {
-    // static let size = (Int(1024), Int(1024))
-    static let size = (Int(768), Int(2 * 288))
-    static let cutout = (Int(768), Int(2 * 288))
-}
-
-// Parameters of a (merged) texture that got upscaled
-struct UpscaledTexture {
-    // static let size = (Int(2048), Int(2048))
-    static let size = (Int(2 * 768), Int(2 * 2 * 288))
-    static let cutout = (Int(2 * 768), Int(2 * 2 * 288))
-}
-
-//
 // Base class for all compute kernels
 //
 

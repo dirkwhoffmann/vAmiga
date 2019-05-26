@@ -10,6 +10,33 @@
 import Foundation
 import simd
 
+//
+// Static texture parameters
+//
+
+// Parameters of a short / long frame texture delivered by the emulator
+struct EmulatorTexture {
+
+    static let width = 768
+    static let height = 288
+}
+
+// Parameters of a textures that combines a short and a long frame
+struct MergedTexture {
+
+    static let width = EmulatorTexture.width
+    static let height = 2 * EmulatorTexture.height
+    static let cutout = (width, height)
+}
+
+// Parameters of a (merged) texture that got upscaled
+struct UpscaledTexture {
+
+    static let width = 2 * MergedTexture.width
+    static let height = 2 * MergedTexture.height
+    static let cutout = (width, height)
+}
+
 public extension MetalView {
 
     func checkForMetal() {
@@ -93,8 +120,8 @@ public extension MetalView {
         // Emulator textures (one for short frames, one for long frames)
         //
         
-        descriptor.width = EmulatorTexture.size.0
-        descriptor.height = EmulatorTexture.size.1
+        descriptor.width = EmulatorTexture.width
+        descriptor.height = EmulatorTexture.height
         
         // Emulator textures (raw data of long and short frames)
         descriptor.usage = [ .shaderRead ]
@@ -107,8 +134,8 @@ public extension MetalView {
         // Textures that combine a short and a long frame (not yet upscaled)
         //
         
-        descriptor.width = MergedTexture.size.0
-        descriptor.height = MergedTexture.size.1
+        descriptor.width = MergedTexture.width
+        descriptor.height = MergedTexture.height
         
         // Merged emulator texture (long frame + short frame)
         descriptor.usage = [ .shaderRead, .shaderWrite, .renderTarget ]
@@ -132,8 +159,8 @@ public extension MetalView {
         // Upscaled textures
         //
         
-        descriptor.width  = UpscaledTexture.size.0
-        descriptor.height = UpscaledTexture.size.1
+        descriptor.width  = UpscaledTexture.width
+        descriptor.height = UpscaledTexture.height
         
         // Upscaled emulator texture
         descriptor.usage = [ .shaderRead, .shaderWrite, .pixelFormatView, .renderTarget ]
@@ -175,8 +202,8 @@ public extension MetalView {
         mergeFilter = MergeFilter.init(device: device!, library: library, cutout: mc)
         
         // Build low-res enhancers (first-pass, in-texture upscaling)
-        enhancerGallery[0] = BypassFilter.init(device: device!, library: library, cutout: uc)
-        enhancerGallery[1] = InPlaceEpxScaler.init(device: device!, library: library, cutout: uc)
+        enhancerGallery[0] = BypassFilter.init(device: device!, library: library, cutout: mc)
+        enhancerGallery[1] = InPlaceEpxScaler.init(device: device!, library: library, cutout: mc)
         enhancerGallery[2] = InPlaceXbrScaler.init(device: device!, library: library, cutout: mc)
         
         // Build upscalers (second-pass upscaling)
