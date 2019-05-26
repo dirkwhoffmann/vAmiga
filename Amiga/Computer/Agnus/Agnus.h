@@ -36,6 +36,9 @@
 #define AU1EN 0b0000000010
 #define AU0EN 0b0000000001
 
+// Hsync action bits
+#define HSYNC_BPLCON0 0x01
+
 // Increments a DMA pointer register by 2
 #define INC_DMAPTR(x) (x) = ((x) + 2) & 0x7FFFE;
 
@@ -177,8 +180,11 @@ class Agnus : public HardwareComponent
     
     
     //
-    // DMA bookkeeping
+    // Bookkeeping
     //
+
+    // The number of currently active bitplanes
+    uint8_t activeBitplanes;
 
     // Recorded DMA usage for all cycles in the current rasterline
     BusOwner busOwner[HPOS_CNT];
@@ -212,12 +218,16 @@ class Agnus : public HardwareComponent
     
     
     //
-    // Bitplane bookkeeping
+    // Operation control
     //
-    
-    // The number of currently active bitplanes
-    uint8_t activeBitplanes;
-    
+
+    /* Work items to be processed at the end of the current rasterline
+     * This variable is 0 most of the time. If some special action needs to
+     * be taken at the end of the current rasterline, certain bits are set
+     * to 1.
+     */
+    uint64_t hsyncActions;
+
     
     //
     // Constructing and destructing

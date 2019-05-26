@@ -241,12 +241,12 @@ Denise::pokeBPLCON0(uint16_t value)
     // Determine the number of bitplanes
     uint8_t bpu = bplconBPU();
 
-    // Let Agnus know
+    // Let Agnus know about the register change
     agnus->activeBitplanes = bpu;
+    agnus->hsyncActions |= HSYNC_BPLCON0; 
 
     // Update the DMA time slot allocation table (hires / lores may change).
     // _agnus->forceUpdateBitplaneDma();
-    agnus->switchBitplaneDmaOff();
 
     // Clear data registers of all inactive bitplanes.
     for (int plane = 5; plane >= bpu; plane--) bpldat[plane] = 0;

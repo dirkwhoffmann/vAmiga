@@ -50,10 +50,12 @@ Agnus::Agnus()
         { &bpl1mod,         sizeof(bpl1mod),         0 },
         { &bpl2mod,         sizeof(bpl2mod),         0 },
         { &sprpt,           sizeof(sprpt),           DWORD_ARRAY },
+        { &activeBitplanes, sizeof(activeBitplanes), 0 },
         { &bitplaneDMA,     sizeof(bitplaneDMA),     0 },
         { &dmaEvent,        sizeof(dmaEvent),        0 },
         { &nextDmaEvent,    sizeof(nextDmaEvent),    0 },
-        { &activeBitplanes, sizeof(activeBitplanes), 0 }
+        { &hsyncActions,    sizeof(hsyncActions),    0 }
+
     });
 }
 
@@ -1393,6 +1395,18 @@ Agnus::hsyncHandler()
     
     // Schedule first RAS event
     scheduleFirstRASEvent(vpos);
+
+    // Process pending work items
+    if (hsyncActions) {
+
+        if (hsyncActions & HSYNC_BPLCON0) {
+
+            // Force the DMA time slot allocation table to update.
+            // (hires / lores may have changed)
+            forceUpdateBitplaneDma();
+        }
+        hsyncActions = 0;
+    }
 }
 
 void
