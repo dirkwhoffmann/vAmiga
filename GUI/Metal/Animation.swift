@@ -63,43 +63,43 @@ extension MetalView {
         return angleX.animates()
             || angleY.animates()
             || angleZ.animates()
-            || eyeX.animates()
-            || eyeY.animates()
-            || eyeZ.animates()
+            || shiftX.animates()
+            || shiftY.animates()
+            || shiftZ.animates()
             || alpha.animates()
     }
     
     func getEyeX() -> Float {
         
-        return eyeX.current // currentEyeX
+        return shiftX.current
     }
     
     func setEyeX(_ newX: Float) {
 
-        eyeX.set(newX)
+        shiftX.set(newX)
         self.buildMatrices3D()
     }
     
     func getEyeY() -> Float {
         
-        return eyeY.current
+        return shiftY.current
     }
     
     func setEyeY(_ newY: Float) {
 
-        eyeY.set(newY)
+        shiftY.set(newY)
         self.buildMatrices3D()
     }
     
     func getEyeZ() -> Float {
         
-        return eyeZ.current
+        return shiftZ.current
     }
     
     func setEyeZ(_ newZ: Float) {
 
         track("eyeZ = \(newZ)")
-        eyeZ.set(newZ)
+        shiftZ.set(newZ)
         self.buildMatrices3D()
     }
 
@@ -117,10 +117,10 @@ extension MetalView {
             angleZ.move()
             cont = angleX.animates() || angleY.animates() || angleZ.animates()
 
-            eyeX.move()
-            eyeY.move()
-            eyeZ.move()
-            cont = cont || eyeX.animates() || eyeY.animates() || eyeZ.animates()
+            shiftX.move()
+            shiftY.move()
+            shiftZ.move()
+            cont = cont || shiftX.animates() || shiftY.animates() || shiftZ.animates()
 
             // Check if animation has terminated
             if !cont {
@@ -214,15 +214,15 @@ extension MetalView {
     
         track("Zooming in...")
 
-        eyeZ.current = 6.0
-        eyeZ.target = 0.0
+        shiftZ.current = 6.0
+        shiftZ.target = 0.0
         angleX.target = 0.0
         angleY.target = 0.0
         angleZ.target = 0.0
         alpha.target = 1.0
 
         let steps = 120
-        eyeZ.steps = steps
+        shiftZ.steps = steps
         angleX.steps = steps
         angleY.steps = steps
         angleZ.steps = steps
@@ -256,14 +256,14 @@ extension MetalView {
         
         track("Scrolling...")
 
-        eyeY.current = -1.5
-        eyeY.target = 0
+        shiftY.current = -1.5
+        shiftY.target = 0
         angleX.target = 0.0
         angleY.target = 0.0
         angleZ.target = 0.0
 
         let steps = 120
-        eyeY.steps = steps
+        shiftY.steps = steps
         angleX.steps = steps
         angleY.steps = steps
         angleZ.steps = steps
@@ -275,9 +275,9 @@ extension MetalView {
 
         track("Snapping to front...")
 
-        eyeZ.current = -0.05
-        eyeZ.target = 0
-        eyeZ.steps = 10
+        shiftZ.current = -0.05
+        shiftZ.target = 0
+        shiftZ.steps = 10
 
         animates |= AnimationType.geometry
     }

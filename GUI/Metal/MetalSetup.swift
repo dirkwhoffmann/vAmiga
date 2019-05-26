@@ -325,9 +325,9 @@ public extension MetalView {
                                          nearZ: 0.1,
                                          farZ: 100.0)
 
-        let transEye = translationMatrix(x: -eyeX.current,
-                                             y: -eyeY.current,
-                                             z: eyeZ.current + 1.39 - 0.16)
+        let transEye = translationMatrix(x: -shiftX.current,
+                                             y: -shiftY.current,
+                                             z: shiftZ.current + 1.39 - 0.16)
 
         let transRotX = translationMatrix(x: 0.0,
                                               y: 0.0,

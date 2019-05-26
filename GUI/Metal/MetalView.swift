@@ -206,9 +206,9 @@ public class MetalView: MTKView {
     var angleY = AnimatedFloat(0.0)
     var angleZ = AnimatedFloat(0.0)
 
-    var eyeX = AnimatedFloat(Defaults.eyeX)
-    var eyeY = AnimatedFloat(Defaults.eyeY)
-    var eyeZ = AnimatedFloat(Defaults.eyeZ)
+    var shiftX = AnimatedFloat(0.0)
+    var shiftY = AnimatedFloat(0.0)
+    var shiftZ = AnimatedFloat(Defaults.eyeZ)
 
     var alpha = AnimatedFloat(0.0)
 
