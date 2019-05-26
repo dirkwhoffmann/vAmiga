@@ -130,7 +130,7 @@ DmaDebugger::computeOverlay()
     GpuColor col;
     int *ptr = amiga->denise.pixelAddr(0);
 
-    for (int i = 0; i < HPOS_COUNT - 40; i++, ptr += 4) {
+    for (int i = 0; i < HPOS_CNT - 40; i++, ptr += 4) {
 
         int data = values[i];
         int chunk1 = (data & 0xC000) >> 14;

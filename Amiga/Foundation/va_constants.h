@@ -362,11 +362,19 @@ static const char *customReg[256] = {
 // Screen parameters
 //
 
+// Maximum vertical and horizontal beam positions
+#define VPOS_CNT 313
+#define HPOS_CNT 227
+#define VPOS_MAX 312
+#define HPOS_MAX 226
+
 // Vertical screen buffer size
-static const long VPIXELS = 288;
+// static const long VPIXELS = 288;
+static const long VPIXELS = VPOS_CNT;
 
 // Horizontal screen buffer size
-static const long HPIXELS = 768;
+// static const long HPIXELS = 768;
+static const long HPIXELS = 4 * HPOS_CNT;
 
 // Screen buffer size
 static const long BUFSIZE = VPIXELS * HPIXELS * 4;

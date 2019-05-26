@@ -316,7 +316,9 @@ public class MetalView: MTKView {
 
     func updateLongFrameTexture(bytes: UnsafeMutablePointer<Int32>) {
 
-        longFrameTexture.replace(region: MTLRegionMake2D(0, 0, HPIXELS, VPIXELS),
+        let w = EmulatorTexture.width
+        let h = EmulatorTexture.height
+        longFrameTexture.replace(region: MTLRegionMake2D(0, 0, w, h),
                                  mipmapLevel: 0,
                                  slice: 0,
                                  withBytes: bytes,
@@ -326,7 +328,9 @@ public class MetalView: MTKView {
 
     func updateShortFrameTexture(bytes: UnsafeMutablePointer<Int32>) {
 
-        shortFrameTexture.replace(region: MTLRegionMake2D(0, 0, HPIXELS, VPIXELS),
+        let w = EmulatorTexture.width
+        let h = EmulatorTexture.height
+        shortFrameTexture.replace(region: MTLRegionMake2D(0, 0, w, h),
                                   mipmapLevel: 0,
                                   slice: 0,
                                   withBytes: bytes,
@@ -336,15 +340,18 @@ public class MetalView: MTKView {
 
     func updateTexture(bytes: UnsafeMutablePointer<Int32>, longFrame: Bool) {
 
+        let w = EmulatorTexture.width
+        let h = EmulatorTexture.height
+
         if longFrame {
-            longFrameTexture.replace(region: MTLRegionMake2D(0, 0, HPIXELS, VPIXELS),
+            longFrameTexture.replace(region: MTLRegionMake2D(0, 0, w, h),
                                      mipmapLevel: 0,
                                      slice: 0,
                                      withBytes: bytes,
                                      bytesPerRow: 4 * HPIXELS,
                                      bytesPerImage: 4 * VPIXELS * HPIXELS)
         } else {
-            shortFrameTexture.replace(region: MTLRegionMake2D(0, 0, HPIXELS, VPIXELS),
+            shortFrameTexture.replace(region: MTLRegionMake2D(0, 0, w, h),
                                       mipmapLevel: 0,
                                       slice: 0,
                                       withBytes: bytes,

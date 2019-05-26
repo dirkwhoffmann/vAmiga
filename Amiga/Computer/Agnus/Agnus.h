@@ -39,13 +39,6 @@
 // Increments a DMA pointer register by 2
 #define INC_DMAPTR(x) (x) = ((x) + 2) & 0x7FFFE;
 
-// Maximum vertical and horizontal beam positions
-#define VPOS_MAX 312
-#define HPOS_MAX 226
-
-// Number of DMA cycles per rasterline
-#define HPOS_COUNT 227
-
 // Assembles a beam position out of two components
 #define BEAM(y,x) (((y) << 8) | (x))
 
@@ -189,10 +182,10 @@ class Agnus : public HardwareComponent
     //
 
     // Recorded DMA usage for all cycles in the current rasterline
-    BusOwner busOwner[HPOS_COUNT];
+    BusOwner busOwner[HPOS_CNT];
 
     // Recorded DMA values for all cycles in the current rasterline
-    uint16_t busValue[HPOS_COUNT];
+    uint16_t busValue[HPOS_CNT];
 
     // Indicates if bitplane DMA is enabled in the current rasterline.
     bool bitplaneDMA;
