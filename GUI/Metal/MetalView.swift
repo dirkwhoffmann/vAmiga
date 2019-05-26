@@ -214,8 +214,8 @@ public class MetalView: MTKView {
 
     static let cutoutX1default = Float(HBLANK_PIXELS) / Float(HPIXELS)
     static let cutoutY1default = Float(VBLANK_PIXELS) / Float(VPIXELS)
-    static let cutoutX2default = Float(1.0)
-    static let cutoutY2default = Float(1.0)
+    static let cutoutX2default = (Float)(4 * HPOS_CNT) / Float(HPIXELS)
+    static let cutoutY2default = (Float)(VPOS_CNT) / Float(VPIXELS)
 
     var cutoutX1 = AnimatedFloat(cutoutX1default)
     var cutoutY1 = AnimatedFloat(cutoutY1default)
@@ -223,13 +223,13 @@ public class MetalView: MTKView {
     var cutoutY2 = AnimatedFloat(cutoutY2default)
 
     // Texture cut-out (normalized)
-    /*
     var textureRect = CGRect.init(x: CGFloat(cutoutX1default),
                                   y: CGFloat(cutoutY1default),
                                   width: CGFloat(cutoutX2default - cutoutX1default),
                                   height: CGFloat(cutoutY2default - cutoutY1default))
-     */
-    var textureRect = CGRect.init(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
+
+    // Use this for  debugging (displays the whole texture):
+    // var textureRect = CGRect.init(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
 
     // Currently selected texture enhancer
     var enhancer = Defaults.enhancer {

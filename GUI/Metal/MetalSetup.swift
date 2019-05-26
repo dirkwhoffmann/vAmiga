@@ -388,11 +388,6 @@ public extension MetalView {
         let lowerLeft = float2(Float(textureRect.minX), Float(textureRect.maxY))
         let lowerRight = float2(Float(textureRect.maxX), Float(textureRect.maxY))
 
-        track("upperLeft = \(upperLeft)")
-        track("upperRight = \(upperRight)")
-        track("lowerLeft = \(lowerLeft)")
-        track("lowerRight = \(lowerRight)")
-
         // Background
         setVertex(0, float3(-bgx, +bgy, -bgz), float2(0.0, 0.0))
         setVertex(1, float3(-bgx, -bgy, -bgz), float2(0.0, 1.0))
