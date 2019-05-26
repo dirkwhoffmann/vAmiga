@@ -262,8 +262,8 @@ Denise::pokeBPLCON0(uint16_t value)
      */
     ham = (bplcon0 & 0x8C00) == 0x0800 && (bpu == 5 || bpu == 6);
 
-    shiftReg[0] = 0xAAAA;
-    shiftReg[1] = 0xCCCC;
+    // shiftReg[0] = 0xAAAA;
+    // shiftReg[1] = 0xCCCC;
 }
 
 void

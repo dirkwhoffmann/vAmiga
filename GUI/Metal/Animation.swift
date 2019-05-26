@@ -98,6 +98,7 @@ extension MetalView {
     
     func setEyeZ(_ newZ: Float) {
 
+        track("eyeZ = \(newZ)")
         eyeZ.set(newZ)
         self.buildMatrices3D()
     }
