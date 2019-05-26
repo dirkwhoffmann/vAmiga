@@ -332,10 +332,16 @@ public class MetalView: MTKView {
         let h = EmulatorTexture.height
         shortFrameTexture.replace(region: MTLRegionMake2D(0, 0, w, h),
                                   mipmapLevel: 0,
+                                  withBytes: bytes,
+                                  bytesPerRow: 4 * HPIXELS)
+        /*
+        shortFrameTexture.replace(region: MTLRegionMake2D(0, 0, w, h),
+                                  mipmapLevel: 0,
                                   slice: 0,
                                   withBytes: bytes,
                                   bytesPerRow: 4 * HPIXELS,
                                   bytesPerImage: 4 * VPIXELS * HPIXELS)
+        */
     }
 
     func updateTexture(bytes: UnsafeMutablePointer<Int32>, longFrame: Bool) {
@@ -346,17 +352,30 @@ public class MetalView: MTKView {
         if longFrame {
             longFrameTexture.replace(region: MTLRegionMake2D(0, 0, w, h),
                                      mipmapLevel: 0,
+                                     withBytes: bytes,
+                                     bytesPerRow: 4 * HPIXELS)
+            /*
+            longFrameTexture.replace(region: MTLRegionMake2D(0, 0, w, h),
+                                     mipmapLevel: 0,
                                      slice: 0,
                                      withBytes: bytes,
                                      bytesPerRow: 4 * HPIXELS,
                                      bytesPerImage: 4 * VPIXELS * HPIXELS)
+             */
+
         } else {
+            shortFrameTexture.replace(region: MTLRegionMake2D(0, 0, w, h),
+                                     mipmapLevel: 0,
+                                     withBytes: bytes,
+                                     bytesPerRow: 4 * HPIXELS)
+            /*
             shortFrameTexture.replace(region: MTLRegionMake2D(0, 0, w, h),
                                       mipmapLevel: 0,
                                       slice: 0,
                                       withBytes: bytes,
                                       bytesPerRow: 4 * HPIXELS,
                                       bytesPerImage: 4 * VPIXELS * HPIXELS)
+            */
         }
     }
 
