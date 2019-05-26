@@ -214,7 +214,7 @@ public class MetalView: MTKView {
 
     static let cutoutX1default = Float(HBLANK_PIXELS) / Float(HPIXELS)
     static let cutoutY1default = Float(VBLANK_PIXELS) / Float(VPIXELS)
-    static let cutoutX2default = (Float)(4 * HPOS_CNT) / Float(HPIXELS)
+    static let cutoutX2default = (Float)(4 * (HPOS_CNT + 8)) / Float(HPIXELS)
     static let cutoutY2default = (Float)(VPOS_CNT) / Float(VPIXELS)
 
     var cutoutX1 = AnimatedFloat(cutoutX1default)

@@ -207,14 +207,14 @@ class Agnus : public HardwareComponent
      * dmaEvent[7] and dmaEvent[9] equal AUDEN. If no DMA event takes place at
      * a specific cycle, the array element is 0.
      */
-    EventID dmaEvent[HPOS_MAX + 1];
+    EventID dmaEvent[HPOS_CNT];
     
     /* Jump table for quick handling the DMA time slot allocation table.
      * For a given horizontal position hpos, nextDmaEvent[hpos] points to the
      * next horizontal position where a DMA event happens. The array element
      * equals 0, if no further DMA access happens after hpos.
      */
-    uint8_t nextDmaEvent[HPOS_MAX + 1];
+    uint8_t nextDmaEvent[HPOS_CNT];
     
     
     //
@@ -388,7 +388,7 @@ public:
     
     // Updates the DMA time slot allocation's jump table.
     void updateJumpTable(int16_t to);
-    void updateJumpTable() { updateJumpTable(HPOS_MAX - 1); }
+    void updateJumpTable() { updateJumpTable(HPOS_MAX); }
     
     // Dumps the DMA time slot allocation table to the console for debugging.
     void dumpDMAEventTable(int from, int to);

@@ -71,8 +71,6 @@ Agnus::_initialize()
 void
 Agnus::_powerOn()
 {
-    // clock = 0;
-
     // Start with a long frame
     lof = 1;
     frameInfo.numLines = 313;
@@ -443,10 +441,10 @@ Agnus::switchBitplaneDmaOn()
     bitplaneDMA = true;
 
     if (denise->hires()) {
-        
+
         // Determine start and stop cycle
-        uint8_t start = ddfstrt; // MAX(ddfstrt & 0b11111100, 0x18);
-        uint8_t stop  = ddfstop; // MIN(ddfstop & 0b11111100, 0xD8);
+        uint16_t start = ddfstrt;
+        uint16_t stop  = ddfstop;
         
         // Align stop such that (stop - start) is dividable by 8
         stop += (stop - start) & 0b100;
@@ -466,11 +464,14 @@ Agnus::switchBitplaneDmaOn()
         }
         
     } else {
-        
+
         // Determine start and stop cycle
-        uint8_t start = ddfstrt; // MAX(ddfstrt & 0b11111000, 0x18);
-        uint8_t stop  = ddfstop; // MIN(ddfstop & 0b11111000, 0xD8);
-        
+        uint16_t start = ddfstrt;
+        uint16_t stop  = ddfstop;
+
+        // Align stop such that (stop - start) is dividable by 8
+        stop += (stop - start) & 0b100;
+
         // Determine event IDs
         EventID l6 = (activeBitplanes >= 6) ? DMA_L6 : EVENT_NONE;
         EventID l5 = (activeBitplanes >= 5) ? DMA_L5 : EVENT_NONE;
@@ -481,9 +482,11 @@ Agnus::switchBitplaneDmaOn()
         
         // Schedule events
         for (unsigned i = start; i <= stop; i += 8) {
+            dmaEvent[i+0] = EVENT_NONE;
             dmaEvent[i+1] = l4;
             dmaEvent[i+2] = l6;
             dmaEvent[i+3] = l2;
+            dmaEvent[i+4] = EVENT_NONE;
             dmaEvent[i+5] = l3;
             dmaEvent[i+6] = l5;
             dmaEvent[i+7] = l1;
@@ -507,8 +510,9 @@ Agnus::switchBitplaneDmaOff()
     bitplaneDMA = false;
 
     // Clear the event table
-    memset(dmaEvent + 0x18, 0, sizeof(dmaEvent) - 0x18);
-    
+    for (int i = 0x18; i < HPOS_CNT; dmaEvent[i++] = (EventID)0);
+    // dumpDMAEventTable(180, HPOS_MAX);
+
     // Because bitplane DMA and sprite DMA overlap, the previous operation
     // might have wiped out sprite events. These events need to be restored.
     if (dmaEvent[0x15] != EVENT_NONE) {
@@ -551,7 +555,7 @@ Agnus::forceUpdateBitplaneDma()
 void
 Agnus::updateJumpTable(int16_t to)
 {
-    assert(to < HPOS_MAX);
+    assert(to <= HPOS_MAX);
     assert(dmaEvent[HPOS_MAX] == 0);
     
     // Build the jump table
@@ -1256,7 +1260,6 @@ void
 Agnus::serviceRASEvent(EventID id)
 {
     uint8_t incr;
-    // int hblank = 4 * 0x35;
 
     switch (id) {
             
