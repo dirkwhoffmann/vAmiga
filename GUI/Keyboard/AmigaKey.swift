@@ -9,8 +9,6 @@
 
 // swiftlint:disable colon
 
-import Foundation
-
 /* List of Amiga key codes that are common to all keyboards
  */
 struct AmigaKeycode {

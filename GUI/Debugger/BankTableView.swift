@@ -7,8 +7,6 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-// import Foundation
-
 class BankTableView: NSTableView {
     
     @IBOutlet weak var inspector: Inspector!

@@ -7,8 +7,6 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-import Foundation
-
 class WaveformView: NSView {
     
     // Remembers the highest amplitude (used for auto scaling)

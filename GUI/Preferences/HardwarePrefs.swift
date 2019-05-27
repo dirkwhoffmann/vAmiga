@@ -9,8 +9,6 @@
 
 // swiftlint:disable colon
 
-import Foundation
-
 extension PreferencesController {
     
     func refreshHardwareTab() {

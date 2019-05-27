@@ -7,8 +7,6 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-import Foundation
-
 class TraceTableView: NSTableView {
     
     @IBOutlet weak var inspector: Inspector!

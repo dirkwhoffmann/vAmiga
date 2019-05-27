@@ -7,8 +7,6 @@
 // See https://www.gnu.org for license information
 //
 
-import Foundation
-
 struct InputDevice {
     static let none = -1
     static let keyset1 = 0

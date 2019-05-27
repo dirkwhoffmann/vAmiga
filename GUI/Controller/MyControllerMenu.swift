@@ -7,8 +7,6 @@
 // See https://www.gnu.org for license information
 //
 
-import Foundation
-
 extension MyController: NSMenuItemValidation {
     
     open func validateMenuItem(_ item: NSMenuItem) -> Bool {

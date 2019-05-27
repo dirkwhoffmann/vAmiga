@@ -7,8 +7,6 @@
 // See https://www.gnu.org for license information
 //
 
-import Foundation
-
 @available(OSX 10.12.2, *)
 extension NSTouchBarItem.Identifier {
     

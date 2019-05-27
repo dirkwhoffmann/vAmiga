@@ -7,8 +7,6 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-import Foundation
-
 class ExportDiskController: DialogController {
 
     @IBOutlet weak var button: NSPopUpButton!

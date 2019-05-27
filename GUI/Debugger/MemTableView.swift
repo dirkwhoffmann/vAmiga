@@ -7,8 +7,6 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-import Foundation
-
 struct MemoryHighlighting {
     static let none = 0
     static let paula = 1

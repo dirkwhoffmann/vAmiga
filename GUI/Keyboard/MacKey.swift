@@ -9,7 +9,6 @@
 
 // swiftlint:disable colon
 
-import Foundation
 import Carbon.HIToolbox
 
 /* Mapping from Mac key codes to Amiga key codes.

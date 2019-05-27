@@ -7,8 +7,6 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-import Foundation
-
 let fmt8  = MyFormatter.init(radix: 16, min: 0, max: 0xFF)
 let fmt16 = MyFormatter.init(radix: 16, min: 0, max: 0xFFFF)
 let fmt24 = MyFormatter.init(radix: 16, min: 0, max: 0xFFFFFF)

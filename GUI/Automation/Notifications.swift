@@ -7,8 +7,6 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-import Foundation
-
 extension MyAppDelegate {
     
     @objc func vamResetCommand(_ notification: Notification) {

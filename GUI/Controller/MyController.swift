@@ -7,8 +7,6 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-import Foundation
-
 enum AutoMountAction: Int, Codable {
     
     case openBrowser = 0

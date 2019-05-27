@@ -7,7 +7,6 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-import Foundation
 import Metal
 import MetalKit
 import MetalPerformanceShaders

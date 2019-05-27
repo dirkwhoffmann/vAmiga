@@ -9,8 +9,6 @@
 
 // swiftlint:disable colon
 
-import Foundation
-
 struct Rom {
     
     static let missing             = 0x0000000000000000 as UInt64

@@ -7,8 +7,6 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-import Foundation
-
 extension Inspector {
     
     private var selectedCia: Int { return ciaSelector.indexOfSelectedItem }

@@ -14,6 +14,7 @@
 		5020B17D21EF121E00B9E80E /* Agnus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5020B17B21EF121E00B9E80E /* Agnus.cpp */; };
 		5020B18021EF136100B9E80E /* Denise.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5020B17E21EF136100B9E80E /* Denise.cpp */; };
 		5027418F2297CACF0038E5AF /* Colors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5027418D2297CACF0038E5AF /* Colors.cpp */; };
+		502BB09E229C00C800A8DFCD /* CompatibilityPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502BB09D229C00C800A8DFCD /* CompatibilityPrefs.swift */; };
 		502EFD0A2248EC0200F0E118 /* EventPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502EFD092248EC0200F0E118 /* EventPanel.swift */; };
 		502EFD0C2248ECAA00F0E118 /* EventTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502EFD0B2248ECAA00F0E118 /* EventTableView.swift */; };
 		502F7DCE2221706000AEEC65 /* Copper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 502F7DCD2221706000AEEC65 /* Copper.cpp */; };
@@ -185,6 +186,7 @@
 		5020B17F21EF136100B9E80E /* Denise.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Denise.h; sourceTree = "<group>"; };
 		5027418D2297CACF0038E5AF /* Colors.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Colors.cpp; sourceTree = "<group>"; };
 		5027418E2297CACF0038E5AF /* Colors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Colors.h; sourceTree = "<group>"; };
+		502BB09D229C00C800A8DFCD /* CompatibilityPrefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompatibilityPrefs.swift; sourceTree = "<group>"; };
 		502EFD092248EC0200F0E118 /* EventPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventPanel.swift; sourceTree = "<group>"; };
 		502EFD0B2248ECAA00F0E118 /* EventTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTableView.swift; sourceTree = "<group>"; };
 		502F7DCD2221706000AEEC65 /* Copper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Copper.cpp; sourceTree = "<group>"; };
@@ -617,6 +619,7 @@
 				508FE03B21EA22CC0043D0E9 /* RomPrefs.swift */,
 				508FE03C21EA22CC0043D0E9 /* EmulatorPrefs.swift */,
 				508FE03E21EA22CC0043D0E9 /* HardwarePrefs.swift */,
+				502BB09D229C00C800A8DFCD /* CompatibilityPrefs.swift */,
 				508FE03F21EA22CC0043D0E9 /* RomDropView.swift */,
 				508FE04021EA22CC0043D0E9 /* VideoPrefs.swift */,
 				508FE04121EA22CC0043D0E9 /* DevicesPrefs.swift */,
@@ -1053,6 +1056,7 @@
 				509CF4D12208487900C500F0 /* TraceTableView.swift in Sources */,
 				508FE02721EA227B0043D0E9 /* Basics.swift in Sources */,
 				505A3A3A21F4996400132020 /* sse_utils.cpp in Sources */,
+				502BB09E229C00C800A8DFCD /* CompatibilityPrefs.swift in Sources */,
 				50C50B86220479E000D796DA /* BankTableView.swift in Sources */,
 				50D2ADC6220754A100E32AB0 /* m68kopnz.c in Sources */,
 				508FE05A21EA22CC0043D0E9 /* DialogController.swift in Sources */,
