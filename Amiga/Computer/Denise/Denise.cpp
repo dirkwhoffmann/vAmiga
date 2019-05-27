@@ -383,7 +383,6 @@ int *
 Denise::pixelAddr(int pixel)
 {
     assert(pixel < HPIXELS);
-    assert(agnus->vpos > VBLANK_MAX); // 0 .. 25 is VBLANK area
 
     int offset = pixel + agnus->vpos * HPIXELS;
     assert(offset < PIXELS);
@@ -593,9 +592,6 @@ Denise::drawBorder()
         }
     }
 
-    // Invoke the DMA debugger
-    agnus->dmaDebugger.computeOverlay();
-
 #ifdef LINE_DEBUG
     if (agnus->vpos == 37) {
         for (int i = 0; i < 256; i++) { ptr[i] = 0x00FFFF00; }
@@ -627,6 +623,9 @@ Denise::endOfLine(int vpos)
         // Reset the horizontal pixel counter
         pixel = 0;
     }
+
+    // Invoke the DMA debugger
+    agnus->dmaDebugger.computeOverlay();
 
     // Initialize the HAM color storage with the background color.
     colorizer.prepareForHAM();
