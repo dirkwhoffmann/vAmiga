@@ -62,15 +62,24 @@ class PreferencesController: DialogController {
     @IBOutlet weak var hwDf3Type: NSPopUpButton!
     @IBOutlet weak var hwDf3Speed: NSPopUpButton!
 
-    // Compatibility
-    @IBOutlet weak var hwExactBlitter: NSButton!
-    @IBOutlet weak var hwFifoBuffering: NSButton!
-
     // Lock
-    // @IBOutlet weak var hwLockImage: NSImageView!
     @IBOutlet weak var hwLockText: NSTextField!
     @IBOutlet weak var hwLockSubText: NSTextField!
-    
+
+    //
+    // Compatibility preferences
+    //
+
+    // Blitter
+    @IBOutlet weak var compExactBlitter: NSButton!
+
+    // Disk controller
+    @IBOutlet weak var compFifoBuffering: NSButton!
+
+    // Lock
+    @IBOutlet weak var compLockText: NSTextField!
+    @IBOutlet weak var compLockSubText: NSTextField!
+
     //
     // Video preferences
     //

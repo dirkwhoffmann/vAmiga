@@ -429,12 +429,14 @@ Amiga::configureDriveSpeed(unsigned driveNr, uint16_t value)
 void
 Amiga::configureExactBlitter(bool value)
 {
+    debug("configureExactBlitter(%d)\n", value);
     configure(VA_EXACT_BLITTER, value);
 }
 
 void
 Amiga::configureFifoBuffering(bool value)
 {
+    debug("configureFifoBuffering(%d)\n", value);
     configure(VA_FIFO_BUFFERING, value);
 }
 

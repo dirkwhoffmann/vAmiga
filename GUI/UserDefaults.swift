@@ -64,6 +64,7 @@ extension MyController {
         registerVideoUserDefaults()
         registerEmulatorUserDefaults()
         registerHardwareUserDefaults()
+        registerCompatibilityUserDefaults()
     }
     
     func resetUserDefaults() {
@@ -78,6 +79,7 @@ extension MyController {
         resetVideoUserDefaults()
         resetEmulatorUserDefaults()
         resetHardwareUserDefaults()
+        resetCompatibilityUserDefaults()
         
         amiga.resume()
     }
@@ -94,6 +96,7 @@ extension MyController {
         loadVideoUserDefaults()
         loadEmulatorUserDefaults()
         loadHardwareUserDefaults()
+        loadCompatibilityUserDefaults()
         
         amiga.resume()
     }
@@ -124,6 +127,7 @@ extension MyController {
         saveVideoUserDefaults()
         saveEmulatorUserDefaults()
         saveHardwareUserDefaults()
+        saveCompatibilityUserDefaults()
     }
 
     func saveUserDefaults(url: URL) {
@@ -763,10 +767,6 @@ extension Keys {
 
     // Extensions
     static let realTimeClock      = "VAMIGARealTimeClockKey"
-    
-    // Compatibility
-    static let exactBlitter       = "VAMIGAAccurateBlitterKey"
-    static let fifoBuffering      = "VAMIGAFifoBufferingKey"
 }
 
 extension Defaults {
@@ -794,9 +794,6 @@ extension Defaults {
         static let df3Speed          = 1
 
         static let realTimeClock     = false
-        
-        static let exactBlitter      = false
-        static let fifoBuffering     = true
     }
     
     struct A1000 {
@@ -822,9 +819,6 @@ extension Defaults {
         static let df3Speed          = 1
 
         static let realTimeClock     = false
-        
-        static let exactBlitter      = false
-        static let fifoBuffering     = true
     }
     
     struct A2000 {
@@ -850,9 +844,6 @@ extension Defaults {
         static let df3Speed          = 1
 
         static let realTimeClock     = true
-        
-        static let exactBlitter      = false
-        static let fifoBuffering     = true
     }
 }
 
@@ -884,10 +875,7 @@ extension MyController {
             Keys.df3Type: defaultModel.df3Type.rawValue,
             Keys.df3Speed: defaultModel.df3Speed,
 
-            Keys.realTimeClock: defaultModel.realTimeClock,
-            
-            Keys.fifoBuffering: defaultModel.fifoBuffering,
-            Keys.exactBlitter: defaultModel.exactBlitter
+            Keys.realTimeClock: defaultModel.realTimeClock
         ]
         
         let defaults = UserDefaults.standard
@@ -918,10 +906,7 @@ extension MyController {
                     Keys.df3Type,
                     Keys.df3Speed,
 
-                    Keys.realTimeClock,
-                    
-                    Keys.exactBlitter,
-                    Keys.fifoBuffering ]
+                    Keys.realTimeClock ]
 
         for key in keys { defaults.removeObject(forKey: key) }
         
@@ -955,9 +940,6 @@ extension MyController {
         amiga.configureDrive(3, speed: defaults.integer(forKey: Keys.df3Speed))
 
         amiga.configureRealTimeClock(defaults.bool(forKey: Keys.realTimeClock))
-        
-        amiga.configureExactBlitter(defaults.bool(forKey: Keys.exactBlitter))
-        amiga.configureFifoBuffering(defaults.bool(forKey: Keys.fifoBuffering))
 
         amiga.resume()
     }
@@ -989,7 +971,74 @@ extension MyController {
         defaults.set(config.df3.speed, forKey: Keys.df3Speed)
 
         defaults.set(config.realTimeClock, forKey: Keys.realTimeClock)
-        
+    }
+}
+
+//
+// User defaults (Compatibility)
+//
+
+extension Keys {
+
+    // Blitter
+    static let exactBlitter       = "VAMIGAAccurateBlitterKey"
+
+    // Disk controller
+    static let fifoBuffering      = "VAMIGAFifoBufferingKey"
+}
+
+extension Defaults {
+
+    // Blitter
+    static let exactBlitter      = false
+
+    // Disk controller
+    static let fifoBuffering     = true
+}
+
+extension MyController {
+
+    static func registerCompatibilityUserDefaults() {
+
+        let dictionary: [String: Any] = [
+
+            Keys.exactBlitter: Defaults.exactBlitter,
+            Keys.fifoBuffering: Defaults.fifoBuffering
+        ]
+
+        let defaults = UserDefaults.standard
+        defaults.register(defaults: dictionary)
+    }
+
+    func resetCompatibilityUserDefaults() {
+
+        let defaults = UserDefaults.standard
+
+        let keys = [ Keys.exactBlitter,
+                     Keys.fifoBuffering ]
+
+        for key in keys { defaults.removeObject(forKey: key) }
+
+        loadCompatibilityUserDefaults()
+    }
+
+    func loadCompatibilityUserDefaults() {
+
+        let defaults = UserDefaults.standard
+
+        amiga.suspend()
+
+        amiga.configureExactBlitter(defaults.bool(forKey: Keys.exactBlitter))
+        amiga.configureFifoBuffering(defaults.bool(forKey: Keys.fifoBuffering))
+
+        amiga.resume()
+    }
+
+    func saveCompatibilityUserDefaults() {
+
+        let defaults = UserDefaults.standard
+        let config = amiga.config()
+
         defaults.set(config.exactBlitter, forKey: Keys.exactBlitter)
         defaults.set(config.fifoBuffering, forKey: Keys.fifoBuffering)
     }

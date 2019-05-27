@@ -7,6 +7,8 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="PreferencesController" customModule="vAmiga" customModuleProvider="target">
             <connections>
+                <outlet property="compExactBlitter" destination="UgB-Xh-RTc" id="9dc-zZ-dNg"/>
+                <outlet property="compFifoBuffering" destination="Klz-l3-bRD" id="c7X-nf-1wG"/>
                 <outlet property="devAutofire" destination="BRc-s1-1v6" id="rBS-KA-uBE"/>
                 <outlet property="devAutofireBullets" destination="ABB-dw-Ain" id="nNU-wQ-kaw"/>
                 <outlet property="devAutofireCease" destination="mZY-PC-1oR" id="gKU-Sa-Yp9"/>
@@ -882,7 +884,7 @@ DQ
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="hwUnlockAction:" target="-2" id="2Wf-yo-gJO"/>
+                                                <action selector="compUnlockAction:" target="-2" id="Zm3-aU-mw8"/>
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="z3k-xf-hLY">
@@ -893,11 +895,11 @@ DQ
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="romFactorySettingsAction:" target="-2" id="Sqg-2L-wf7"/>
+                                                <action selector="compFactorySettingsAction:" target="-2" id="crG-Wb-If4"/>
                                             </connections>
                                         </button>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="v46-rS-r6d">
-                                            <rect key="frame" x="190" y="316" width="221" height="17"/>
+                                            <rect key="frame" x="84" y="374" width="221" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Blitter" id="ahL-af-Psh">
                                                 <font key="font" metaFont="systemBold"/>
@@ -906,7 +908,7 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AZD-x4-6qF">
-                                            <rect key="frame" x="190" y="251" width="221" height="17"/>
+                                            <rect key="frame" x="84" y="255" width="221" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Disk Controller" id="VQU-cn-kcC">
                                                 <font key="font" metaFont="systemBold"/>
@@ -915,27 +917,56 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UgB-Xh-RTc">
-                                            <rect key="frame" x="209" y="292" width="169" height="18"/>
+                                            <rect key="frame" x="103" y="350" width="160" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="check" title="Emulate cyle-accurately" bezelStyle="regularSquare" imagePosition="left" enabled="NO" inset="2" id="hiG-WT-xcQ">
+                                            <buttonCell key="cell" type="check" title="Emulate original timing" bezelStyle="regularSquare" imagePosition="left" enabled="NO" inset="2" id="hiG-WT-xcQ">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="hwExactBlitterAction:" target="-2" id="yVd-yh-IyY"/>
+                                                <action selector="compExactBlitterAction:" target="-2" id="W1j-Ve-Cw3"/>
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Klz-l3-bRD">
-                                            <rect key="frame" x="209" y="227" width="146" height="18"/>
+                                            <rect key="frame" x="103" y="231" width="146" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="Emulate FIFO-buffer" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="PZl-DT-hFY">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="hwFifoBufferingAction:" target="-2" id="4ys-5g-BgW"/>
+                                                <action selector="compFifoBufferingAction:" target="-2" id="hhe-Dg-GKB"/>
                                             </connections>
                                         </button>
+                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Khc-KH-dky">
+                                            <rect key="frame" x="121" y="316" width="379" height="28"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <textFieldCell key="cell" controlSize="small" selectable="YES" title="Enable to emulate the Blitter cycle-accurately. Disable to perform each Blitter operation in a single chunk." id="oYW-p5-yeI">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ber-sF-SMP">
+                                            <rect key="frame" x="121" y="280" width="391" height="28"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <textFieldCell key="cell" controlSize="small" selectable="YES" title="This compatibility feature is not supported yet." id="whC-sw-iso">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="15s-0e-aWe">
+                                            <rect key="frame" x="121" y="157" width="391" height="68"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <textFieldCell key="cell" controlSize="small" selectable="YES" id="kyO-ld-bbs">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <string key="title">If activated, a FIFO buffer is emulated. In a real Amiga, such a buffer is used to temporarily store the data exchanged between the computer and the floppy drive.
+</string>
+                                                <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
                                     </subviews>
                                 </view>
                             </tabViewItem>
