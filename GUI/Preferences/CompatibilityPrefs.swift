@@ -11,6 +11,8 @@ extension PreferencesController {
 
     func refreshCompatibilityTab() {
 
+        track()
+
         guard let amiga = amigaProxy else { return }
 
         let config = amiga.config()
@@ -23,7 +25,7 @@ extension PreferencesController {
         compFifoBuffering.state = config.fifoBuffering ? .on : .off
 
         // Lock controls if emulator is powered on
-        compExactBlitter.isEnabled = poweredOff
+        compExactBlitter.isEnabled = false // poweredOff
         compFifoBuffering.isEnabled = poweredOff
     }
 

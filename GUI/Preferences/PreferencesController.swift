@@ -224,6 +224,7 @@ class PreferencesController: DialogController {
             switch id {
             case "Roms": refreshRomTab()
             case "Hardware": refreshHardwareTab()
+            case "Compatibility": refreshCompatibilityTab()
             case "Video": refreshVideoTab()
             case "Emulator": refreshEmulatorTab()
             case "Devices": refreshDevicesTab()

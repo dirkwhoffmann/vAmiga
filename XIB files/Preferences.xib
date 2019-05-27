@@ -821,7 +821,7 @@ DQ
                                     </subviews>
                                 </view>
                             </tabViewItem>
-                            <tabViewItem label="Compatibility" identifier="" id="o4a-8k-sKr">
+                            <tabViewItem label="Compatibility" identifier="Compatibility" id="o4a-8k-sKr">
                                 <view key="view" ambiguous="YES" id="Lyv-D5-lfU">
                                     <rect key="frame" x="10" y="33" width="600" height="424"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -961,7 +961,7 @@ DQ
                                             <autoresizingMask key="autoresizingMask"/>
                                             <textFieldCell key="cell" controlSize="small" selectable="YES" id="kyO-ld-bbs">
                                                 <font key="font" metaFont="smallSystem"/>
-                                                <string key="title">If activated, a FIFO buffer is emulated. In a real Amiga, such a buffer is used to temporarily store the data exchanged between the computer and the floppy drive.
+                                                <string key="title">Enable to emulate a FIFO buffer. In a real Amiga, such a buffer is used to temporarily store the data exchanged between the computer and the floppy drive.
 </string>
                                                 <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
