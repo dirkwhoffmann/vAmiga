@@ -243,10 +243,10 @@ Denise::pokeBPLCON0(uint16_t value)
 
     // Let Agnus know about the register change
     agnus->activeBitplanes = bpu;
-    agnus->hsyncActions |= HSYNC_BPLCON0; 
+    // agnus->hsyncActions |= HSYNC_BPLCON0;
 
     // Update the DMA time slot allocation table (hires / lores may change).
-    // _agnus->forceUpdateBitplaneDma();
+    agnus->forceUpdateBitplaneDma();
 
     // Clear data registers of all inactive bitplanes.
     for (int plane = 5; plane >= bpu; plane--) bpldat[plane] = 0;
@@ -597,7 +597,9 @@ Denise::drawBorder()
     agnus->dmaDebugger.computeOverlay();
 
 #ifdef LINE_DEBUG
-    
+    if (agnus->vpos == 37) {
+        for (int i = 0; i < 256; i++) { ptr[i] = 0x00FFFF00; }
+    }
 #endif
 }
 

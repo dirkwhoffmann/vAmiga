@@ -911,7 +911,7 @@ Agnus::pokeDDFSTRT(uint16_t value)
     debug(BPL_DEBUG, "pokeDDFSTRT(%X)\n", value);
 
     // Fit to raster and cap minimum value at 0x18
-    uint16_t oldValue = ddfstop;
+    uint16_t oldValue = ddfstrt;
     uint16_t newValue = MAX(value & 0xFC, 0x18);
 
     if (newValue != value) {
@@ -1343,13 +1343,15 @@ Agnus::hsyncHandler()
     if ((vpos & 0b1111) == 0) amiga->keyboard.execute();
     
     // Add bit plane pointer modulo values
-    bplpt[0] += bpl1mod;
-    bplpt[1] += bpl2mod;
-    bplpt[2] += bpl1mod;
-    bplpt[3] += bpl2mod;
-    bplpt[4] += bpl1mod;
-    bplpt[5] += bpl2mod;
-    
+    switch (activeBitplanes) {
+        case 6: bplpt[PLANE6] += bpl2mod; // fallthrough
+        case 5: bplpt[PLANE5] += bpl1mod; // fallthrough
+        case 4: bplpt[PLANE4] += bpl2mod; // fallthrough
+        case 3: bplpt[PLANE3] += bpl1mod; // fallthrough
+        case 2: bplpt[PLANE2] += bpl2mod; // fallthrough
+        case 1: bplpt[PLANE1] += bpl1mod;
+    }
+
     // Increment vpos and reset hpos
     
     /* Important: When the end of a line is reached, we reset the horizontal
