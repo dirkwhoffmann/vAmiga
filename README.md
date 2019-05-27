@@ -6,22 +6,22 @@
 ### Achieved milestones:
 
 - Milestone 1: Show the hand & disk logo.
-  
-  <img src="http://www.dirkwhoffmann.de/vAMIGA/pics/milestone1a.png" width="150">
-
 - Milestone 2: Make vAmiga load the Workbench.
+- Milestone 4: Fix Paccer (which I wrote exactly 30 years ago 😲).
+
+  <img src="http://www.dirkwhoffmann.de/vAMIGA/pics/milestone1a.png" width="150">
+  <img src="http://www.dirkwhoffmann.de/vAMIGA/pics/milestone2a.png" width="150">    
+  <img src="http://www.dirkwhoffmann.de/vAMIGA/pics/milestone4a.png" width="150">    
+
   
-   <img src="http://www.dirkwhoffmann.de/vAMIGA/pics/milestone2a.png" width="150">    
    
-### Next milestones:
+### Unachieved milestones:
 
 - Milestone 3: Rescue the princess in Defender of the Crown (😎).
+- Milestone 5: Let the Boing ball bounce.
   
    <img src="http://www.dirkwhoffmann.de/vAMIGA/pics/milestone3.png" width="150">    
-   
-- Milestone 4: Fix Paccer (which I wrote exactly 30 years ago 😲).
-  
-   <img src="http://www.dirkwhoffmann.de/vAMIGA/pics/milestone4.png" width="150">    
+   <img src="http://www.dirkwhoffmann.de/vAMIGA/pics/milestone5.png" width="150">    
    
    
 ### Where to go from here?
