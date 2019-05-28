@@ -77,7 +77,7 @@ Colorizer::pokeColorReg(int reg, uint16_t value)
 {
     assert(reg < 32);
 
-    // debug("pokeColorReg(%d) %d\n", reg, value);
+    debug(COL_DEBUG, "pokeCOLOR%02d(%X)\n", reg, value);
 
     colorReg[reg] = value & 0xFFF;
     updateColorTable(reg);

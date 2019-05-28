@@ -427,12 +427,7 @@ Denise::draw()
 void
 Denise::newDraw(bool lores)
 {
-    if (currentPixel != (agnus->hpos * 4) + 6) {
-        debug("currentPixel = %d\n", currentPixel);
-        debug("dmaFirstBpl1Event = %d\n", agnus->dmaFirstBpl1Event);
-        assert(currentPixel == (agnus->hpos * 4) + 6);
-    }
-    currentPixel = (agnus->hpos * 4) + 6;
+    assert(currentPixel == (agnus->hpos * 4) + 6);
 
     // Check if the vertical position is inside the drawing area
     if (inDisplayWindow) {
