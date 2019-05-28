@@ -648,7 +648,7 @@ Denise::newDrawBorder()
 
     int *ptr = pixelAddr(0);
 
-    if (!agnus->bitplaneDMA) {
+    if (!agnus->bitplaneDMA || !inDisplayWindow) {
 
         // Fill the whole line with the background color
         for (int i = FIRST_VISIBLE; i <= LAST_VISIBLE; i++) {
