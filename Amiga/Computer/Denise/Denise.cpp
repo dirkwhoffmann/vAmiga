@@ -44,7 +44,9 @@ Denise::Denise()
 
         { &ham,             sizeof(ham),             0 },
 
-        { &pixel,           sizeof(pixel),           0 },
+        // { &dmaPixelStart,   sizeof(dmaPixelStart),   0 },
+        // { &dmaPixelEnd,     sizeof(dmaPixelEnd),     0 },
+        { &currentPixel,    sizeof(currentPixel),    0 },
         { &inDisplayWindow, sizeof(inDisplayWindow), 0 },
 
     });
@@ -75,7 +77,7 @@ Denise::_powerOn()
     stableLongFrame = &longFrame2;
     stableShortFrame = &shortFrame2;
     frameBuffer = &longFrame1;
-    pixel = 0;
+    currentPixel = 0;
     
     // Initialize frame buffers with a recognizable debug pattern
     for (unsigned line = 0; line < VPIXELS; line++) {
@@ -243,10 +245,10 @@ Denise::pokeBPLCON0(uint16_t value)
 
     // Let Agnus know about the register change
     agnus->activeBitplanes = bpu;
-    // agnus->hsyncActions |= HSYNC_BPLCON0;
+    agnus->hsyncActions |= HSYNC_BPLCON0;
 
     // Update the DMA time slot allocation table (hires / lores may change).
-    agnus->forceUpdateBitplaneDma();
+    // agnus->forceUpdateBitplaneDma();
 
     // Clear data registers of all inactive bitplanes.
     for (int plane = 5; plane >= bpu; plane--) bpldat[plane] = 0;
@@ -369,7 +371,7 @@ Denise::armSprite(int x)
 }
 
 void
-Denise::fillShiftRegisters()
+Denise::fillShiftRegisters(bool lores)
 {
     shiftReg[0] = bpldat[0];
     shiftReg[1] = bpldat[1];
@@ -377,6 +379,10 @@ Denise::fillShiftRegisters()
     shiftReg[3] = bpldat[3];
     shiftReg[4] = bpldat[4];
     shiftReg[5] = bpldat[5];
+
+#ifndef DEPRECATED_RAS
+    newDraw(lores);
+#endif
 }
 
 int *
@@ -419,9 +425,35 @@ Denise::draw()
 }
 
 void
+Denise::newDraw(bool lores)
+{
+    if (currentPixel != (agnus->hpos * 4) + 6) {
+        debug("currentPixel = %d\n", currentPixel);
+        debug("dmaFirstBpl1Event = %d\n", agnus->dmaFirstBpl1Event);
+        assert(currentPixel == (agnus->hpos * 4) + 6);
+    }
+    currentPixel = (agnus->hpos * 4) + 6;
+
+    // Check if the vertical position is inside the drawing area
+    if (inDisplayWindow) {
+
+        if (lores) {
+
+            ham ? draw32HAM() : draw32();
+            // currentPixel += 32;
+
+        } else {
+
+            draw16();
+            // currentPixel += 16;
+        }
+    }
+}
+
+void
 Denise::draw16()
 {
-    int *ptr = pixelAddr(pixel);
+    int *ptr = pixelAddr(currentPixel);
     
     for (int i = 0; i < 16; i++) {
         
@@ -448,13 +480,13 @@ Denise::draw16()
     *pixelAddr(pixel) = 0x000000FF;
 #endif
 
-    pixel += 16;
+    currentPixel += 16;
 }
 
 void
 Denise::draw32()
 {
-    int *ptr = pixelAddr(pixel);
+    int *ptr = pixelAddr(currentPixel);
 
     for (int i = 0; i < 16; i++) {
         
@@ -482,13 +514,13 @@ Denise::draw32()
     *pixelAddr(pixel) = 0x000000FF;
 #endif
 
-    pixel += 32;
+    currentPixel += 32;
 }
 
 void
 Denise::draw32HAM()
 {
-    int *ptr = pixelAddr(pixel);
+    int *ptr = pixelAddr(currentPixel);
 
     for (int i = 0; i < 16; i++) {
 
@@ -517,7 +549,7 @@ Denise::draw32HAM()
     *pixelAddr(pixel) = 0x000000FF;
 #endif
 
-    pixel += 32;
+    currentPixel += 32;
 }
 
 void
@@ -601,8 +633,52 @@ Denise::drawBorder()
 }
 
 void
+Denise::newDrawBorder()
+{
+#ifndef BORDER_DEBUG
+    int rgba = colorizer.getRGBA(0);
+    int rgbaHBorderL = rgba;
+    int rgbaHBorderR = rgba;
+    int rgbaVBorder  = rgba;
+#else
+    int rgbaHBorderL = 0x00000044;
+    int rgbaHBorderR = 0x00000088;
+    int rgbaVBorder  = 0x000000CC;
+#endif
+
+    int *ptr = pixelAddr(0);
+
+    // Draw vertical border
+    if (!inDisplayWindow) {
+        for (int i = FIRST_VISIBLE; i <= LAST_VISIBLE; i++) {
+            ptr[i] = rgbaVBorder;
+        }
+
+    } else {
+
+        // Draw left border
+        for (int i = FIRST_VISIBLE; i < (2 * agnus->hstrt); i++) {
+            ptr[i] = rgbaHBorderL;
+        }
+
+        // Draw right border
+        for (int i = (2 * agnus->hstop); i <= LAST_VISIBLE; i++) {
+            ptr[i] = rgbaHBorderR;
+        }
+    }
+
+#ifdef LINE_DEBUG
+    if (agnus->vpos == 37) {
+        for (int i = 0; i < 256; i++) { ptr[i] = 0x00FFFF00; }
+    }
+#endif
+}
+
+void
 Denise::beginOfLine(int vpos)
 {
+    // Reset the horizontal pixel counter
+    currentPixel = (agnus->dmaFirstBpl1Event * 4) + 6;
 }
 
 void
@@ -619,10 +695,12 @@ Denise::endOfLine(int vpos)
         if (armed) drawSprites();
 
         // Draw border
+#ifdef DEPRECATED_RES
         drawBorder();
+#else
+        newDrawBorder();
+#endif
 
-        // Reset the horizontal pixel counter
-        pixel = 0;
     }
 
     // Invoke the DMA debugger

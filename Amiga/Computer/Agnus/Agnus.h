@@ -215,7 +215,11 @@ class Agnus : public HardwareComponent
      * equals 0, if no further DMA access happens after hpos.
      */
     uint8_t nextDmaEvent[HPOS_CNT];
-    
+
+    // DMA cycle of the first and last DMA_H1 or DMA_L1 event
+    uint8_t dmaFirstBpl1Event;
+    uint8_t dmaLastBpl1Event;
+
     
     //
     // Operation control

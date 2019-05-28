@@ -135,8 +135,16 @@ public:
     // Pointer to the screen buffer Denise is currently working on
     ScreenBuffer *frameBuffer = &longFrame1;
 
+    
+    //
+    // Drawing parameters
+    //
+
+    // int16_t dmaPixelStart;
+    // int16_t dmaPixelEnd;
+
     // The current rasterline has been drawn up to this horizontal position
-    short pixel;
+    short currentPixel;
 
     // Indicates if the current rasterline is inside the display window
     bool inDisplayWindow;
@@ -245,7 +253,7 @@ public:
     // Handling DMA
     //
     
-    void fillShiftRegisters();
+    void fillShiftRegisters(bool lores);
     
     
     //
@@ -258,7 +266,11 @@ public:
     int *pixelAddr(int pixel);
 
     // Synthesizes pixels. Returns the number of drawn pixels
+    // DEPRECATED
     int draw();
+
+    // Synthesizes pixels. Returns the number of drawn pixels
+    void newDraw(bool lores);
 
 private:
 
@@ -282,7 +294,7 @@ public:
      * This method is called at the end of each rasterline.
      */
     void drawBorder();
-    
+    void newDrawBorder(); 
     
     //
     // Accessing the frame buffers

@@ -23,38 +23,40 @@ Agnus::Agnus()
     
     registerSnapshotItems(vector<SnapshotItem> {
         
-        { &clock,           sizeof(clock),           0 },
-        { &frame,           sizeof(frame),           0 },
-        { &vpos,            sizeof(vpos),            0 },
-        { &hpos,            sizeof(hpos),            0 },
-        { &frameInfo.nr,          sizeof(frameInfo.nr),            0 },
-        { &frameInfo.interlaced,  sizeof(frameInfo.interlaced),    0 },
-        { &frameInfo.numLines,    sizeof(frameInfo.numLines),      0 },
-        { &lof,             sizeof(lof),             0 },
-        { &hstrt,           sizeof(hstrt),           0 },
-        { &hstop,           sizeof(hstop),           0 },
-        { &vstrt,           sizeof(vstrt),           0 },
-        { &vstop,           sizeof(vstop),           0 },
-        { &sprvstrt,        sizeof(sprvstrt),        WORD_ARRAY },
-        { &sprvstop,        sizeof(sprvstop),        WORD_ARRAY },
-        { &sprDmaState,     sizeof(sprDmaState),     DWORD_ARRAY },
-        { &dmacon,          sizeof(dmacon),          0 },
-        { &dskpt,           sizeof(dskpt),           0 },
-        { &diwstrt,         sizeof(diwstrt),         0 },
-        { &diwstop,         sizeof(diwstop),         0 },
-        { &ddfstrt,         sizeof(ddfstrt),         0 },
-        { &ddfstop,         sizeof(ddfstop),         0 },
-        { &audlc,           sizeof(audlc),           DWORD_ARRAY },
-        { &audlcold,        sizeof(audlcold),        DWORD_ARRAY },
-        { &bplpt,           sizeof(bplpt),           DWORD_ARRAY },
-        { &bpl1mod,         sizeof(bpl1mod),         0 },
-        { &bpl2mod,         sizeof(bpl2mod),         0 },
-        { &sprpt,           sizeof(sprpt),           DWORD_ARRAY },
-        { &activeBitplanes, sizeof(activeBitplanes), 0 },
-        { &bitplaneDMA,     sizeof(bitplaneDMA),     0 },
-        { &dmaEvent,        sizeof(dmaEvent),        0 },
-        { &nextDmaEvent,    sizeof(nextDmaEvent),    0 },
-        { &hsyncActions,    sizeof(hsyncActions),    0 }
+        { &clock,             sizeof(clock),             0 },
+        { &frame,             sizeof(frame),             0 },
+        { &vpos,              sizeof(vpos),              0 },
+        { &hpos,              sizeof(hpos),              0 },
+        { &frameInfo.nr,         sizeof(frameInfo.nr),         0 },
+        { &frameInfo.interlaced, sizeof(frameInfo.interlaced), 0 },
+        { &frameInfo.numLines,   sizeof(frameInfo.numLines),   0 },
+        { &lof,               sizeof(lof),               0 },
+        { &hstrt,             sizeof(hstrt),             0 },
+        { &hstop,             sizeof(hstop),             0 },
+        { &vstrt,             sizeof(vstrt),             0 },
+        { &vstop,             sizeof(vstop),             0 },
+        { &sprvstrt,          sizeof(sprvstrt),          WORD_ARRAY },
+        { &sprvstop,          sizeof(sprvstop),          WORD_ARRAY },
+        { &sprDmaState,       sizeof(sprDmaState),       DWORD_ARRAY },
+        { &dmacon,            sizeof(dmacon),            0 },
+        { &dskpt,             sizeof(dskpt),             0 },
+        { &diwstrt,           sizeof(diwstrt),           0 },
+        { &diwstop,           sizeof(diwstop),           0 },
+        { &ddfstrt,           sizeof(ddfstrt),           0 },
+        { &ddfstop,           sizeof(ddfstop),           0 },
+        { &audlc,             sizeof(audlc),             DWORD_ARRAY },
+        { &audlcold,          sizeof(audlcold),          DWORD_ARRAY },
+        { &bplpt,             sizeof(bplpt),             DWORD_ARRAY },
+        { &bpl1mod,           sizeof(bpl1mod),           0 },
+        { &bpl2mod,           sizeof(bpl2mod),           0 },
+        { &sprpt,             sizeof(sprpt),             DWORD_ARRAY },
+        { &activeBitplanes,   sizeof(activeBitplanes),   0 },
+        { &bitplaneDMA,       sizeof(bitplaneDMA),       0 },
+        { &dmaEvent,          sizeof(dmaEvent),          0 },
+        { &nextDmaEvent,      sizeof(nextDmaEvent),      0 },
+        { &dmaFirstBpl1Event, sizeof(dmaFirstBpl1Event), 0 },
+        { &dmaLastBpl1Event,  sizeof(dmaLastBpl1Event),  0 },
+        { &hsyncActions,      sizeof(hsyncActions),      0 }
 
     });
 }
@@ -462,6 +464,8 @@ Agnus::switchBitplaneDmaOn()
             dmaEvent[i+2] = dmaEvent[i+6] = h2;
             dmaEvent[i+3] = dmaEvent[i+7] = h1;
         }
+        dmaFirstBpl1Event = start + 3;
+        dmaLastBpl1Event = stop + 7;
         
     } else {
 
@@ -491,6 +495,8 @@ Agnus::switchBitplaneDmaOn()
             dmaEvent[i+6] = l5;
             dmaEvent[i+7] = l1;
         }
+        dmaFirstBpl1Event = start + 7;
+        dmaLastBpl1Event = stop + 7;
     }
 
     // Because bitplane DMA and sprite DMA overlap, some sprite events might
@@ -521,6 +527,9 @@ Agnus::switchBitplaneDmaOff()
     }
 
     updateJumpTable();
+
+    dmaFirstBpl1Event = 0;
+    dmaLastBpl1Event = 0;
 }
 
 bool
@@ -1161,7 +1170,7 @@ Agnus::serviceDMAEvent(EventID id)
 
             // The bitplane 1 fetch is an important one. Once it is performed,
             // Denise fills it's shift registers.
-            denise->fillShiftRegisters();
+            denise->fillShiftRegisters(id == DMA_L1);
             break;
             
         case DMA_H2:
@@ -1259,7 +1268,7 @@ Agnus::serviceS2Event(int nr)
 void
 Agnus::serviceRASEvent(EventID id)
 {
-    uint8_t incr;
+    uint8_t incr = 32;
 
     switch (id) {
             
@@ -1270,14 +1279,12 @@ Agnus::serviceRASEvent(EventID id)
             
         case RAS_DIWSTRT:
 
-            // denise->pixel = (hpos * 4) - hblank + 2;
-            denise->pixel = (hpos * 4) + 2;
-
+            assert(false);
+            denise->currentPixel = (hpos * 4) + 2;
             incr = denise->draw() / 4;
 
             // Schedule next RAS event
             if (hpos < hstop / 2 && hpos + incr < HPOS_MAX) {
-                // TODO: Replace by scheduleRel which is faster
                 events.schedulePos(RAS_SLOT, vpos, hpos + incr, RAS_DIWDRAW);
             } else {
                 events.schedulePos(RAS_SLOT, vpos, HPOS_MAX, RAS_HSYNC);
@@ -1286,11 +1293,11 @@ Agnus::serviceRASEvent(EventID id)
             
         case RAS_DIWDRAW:
 
+            assert(false); 
             incr = denise->draw() / 4;
-            
+
             // Schedule next RAS event
             if (hpos < hstop / 2 && hpos + incr < HPOS_MAX) {
-                // TODO: Replace by scheduleRel which is faster
                 events.schedulePos(RAS_SLOT, vpos, hpos + incr, RAS_DIWDRAW);
             } else {
                 events.schedulePos(RAS_SLOT, vpos, HPOS_MAX, RAS_HSYNC);
@@ -1306,6 +1313,8 @@ Agnus::serviceRASEvent(EventID id)
 void
 Agnus::scheduleFirstRASEvent(int16_t vpos)
 {
+#ifdef DEPRECATED_RAS
+
     // Map hstrt to DMA cycle values
     uint16_t hstrtdma = hstrt / 2;
     
@@ -1314,11 +1323,10 @@ Agnus::scheduleFirstRASEvent(int16_t vpos)
         
         events.schedulePos(RAS_SLOT, vpos, hstrtdma, RAS_DIWSTRT);
         return;
-
-    } else {
-        
-        events.schedulePos(RAS_SLOT, vpos, HPOS_MAX, RAS_HSYNC);
     }
+#endif
+
+    events.schedulePos(RAS_SLOT, vpos, HPOS_MAX, RAS_HSYNC);
 }
 
 void
@@ -1412,6 +1420,9 @@ Agnus::hsyncHandler()
         }
         hsyncActions = 0;
     }
+
+    // Let Denise prepare for the next rasterline
+    denise->beginOfLine(vpos);
 }
 
 void
