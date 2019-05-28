@@ -703,13 +703,6 @@ Denise::endOfLine(int vpos)
 #endif
     }
 
-    int *ptr = pixelAddr(0);
-    if (!agnus->bitplaneDMA) {
-        for (int i = FIRST_VISIBLE; i < FIRST_VISIBLE+100; i++) {
-            ptr[i] = 0x00FFFF00;
-        }
-    }
-
     // Invoke the DMA debugger
     agnus->dmaDebugger.computeOverlay();
 

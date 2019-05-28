@@ -1215,10 +1215,10 @@ void
 Agnus::serviceS1Event(int nr)
 {
     // Activate sprite data DMA if the first sprite line has been reached
-    if (vpos == sprvstrt[nr]) { sprDmaState[nr] = SPR_DMA_DATA; }
+    if (vpos == sprvstrt[nr] + 1) { sprDmaState[nr] = SPR_DMA_DATA; }
     
     // Deactivate sprite data DMA if the last sprite line has been reached
-    if (vpos == sprvstop[nr]) {
+    if (vpos == sprvstop[nr] + 1) {
         
         // Deactivate sprite data DMA
         sprDmaState[nr] = SPR_DMA_IDLE;
@@ -1243,7 +1243,7 @@ void
 Agnus::serviceS2Event(int nr)
 {
     // Deactivate sprite data DMA if the last sprite line has been reached
-    if (vpos == sprvstop[nr]) {
+    if (vpos == sprvstop[nr] + 1) {
         
         // Sprite DMA should already be inactive in the second DMA cycle
         assert(sprDmaState[nr] == SPR_DMA_IDLE);
