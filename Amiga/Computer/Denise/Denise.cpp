@@ -508,6 +508,7 @@ Denise::draw32HAM()
         // Draw two lores pixels
         uint32_t rgba = colorizer.computeHAM(index * inDisplayWindow);
 
+        // if ((index >> 4) != 0) rgba = 0;
         *ptr++ = rgba;
         *ptr++ = rgba;
     }

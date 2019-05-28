@@ -209,7 +209,7 @@ Agnus::cycleToBeam(Cycle cycle)
     Beam result;
 
     Cycle diff = AS_DMA_CYCLES(cycle - startOfCurrentFrame());
-    // assert(diff >= 0);
+    assert(diff >= 0);
 
     result.y = diff / DMACyclesPerLine();
     result.x = diff % DMACyclesPerLine();

@@ -235,7 +235,6 @@ Colorizer::computeHAM(uint8_t index)
         case 0b00: // Get color from register
 
             hamRGB = colorReg[index];
-
             break;
 
         case 0b01: // Modify blue
@@ -261,4 +260,6 @@ Colorizer::computeHAM(uint8_t index)
     }
 
     return computeRGBA(hamRGB);
+    // hamRGB &= 0xFFF;
+    // return ((hamRGB & 0xF00) >> 4) | ((hamRGB & 0xF0) << 8) | ((hamRGB & 0xF) << 20);
 }
