@@ -648,8 +648,9 @@ Denise::newDrawBorder()
 
     int *ptr = pixelAddr(0);
 
-    // Draw vertical border
-    if (!inDisplayWindow) {
+    if (!agnus->bitplaneDMA) {
+
+        // Fill the whole line with the background color
         for (int i = FIRST_VISIBLE; i <= LAST_VISIBLE; i++) {
             ptr[i] = rgbaVBorder;
         }
@@ -700,7 +701,13 @@ Denise::endOfLine(int vpos)
 #else
         newDrawBorder();
 #endif
+    }
 
+    int *ptr = pixelAddr(0);
+    if (!agnus->bitplaneDMA) {
+        for (int i = FIRST_VISIBLE; i < FIRST_VISIBLE+100; i++) {
+            ptr[i] = 0x00FFFF00;
+        }
     }
 
     // Invoke the DMA debugger

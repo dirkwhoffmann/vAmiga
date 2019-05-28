@@ -440,7 +440,7 @@ Agnus::switchSpriteDmaOff()
 void
 Agnus::switchBitplaneDmaOn()
 {
-    bitplaneDMA = true;
+    bitplaneDMA = (activeBitplanes >= 1);
 
     if (denise->hires()) {
 
