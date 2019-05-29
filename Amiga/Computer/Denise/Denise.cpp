@@ -20,34 +20,34 @@ Denise::Denise()
     
     registerSnapshotItems(vector<SnapshotItem> {
         
-        { &clock,           sizeof(clock),           0 },
-        { &sprhstrt,        sizeof(sprhstrt),        WORD_ARRAY },
-        { &sprShiftReg,     sizeof(sprShiftReg),     WORD_ARRAY },
-        { &sprDmaState,     sizeof(sprDmaState),     DWORD_ARRAY },
-        { &attach,          sizeof(attach),          0 },
-        { &armed,           sizeof(armed),           0 },
+        { &clock,            sizeof(clock),            0 },
+        { &sprhstrt,         sizeof(sprhstrt),         WORD_ARRAY },
+        { &sprShiftReg,      sizeof(sprShiftReg),      WORD_ARRAY },
+        { &sprDmaState,      sizeof(sprDmaState),      DWORD_ARRAY },
+        { &attach,           sizeof(attach),           0 },
+        { &armed,            sizeof(armed),            0 },
 
-        { &bplcon0,         sizeof(bplcon0),         0 },
-        { &bplcon1,         sizeof(bplcon1),         0 },
-        { &bplcon2,         sizeof(bplcon2),         0 },
-        { &bpldat,          sizeof(bpldat),          WORD_ARRAY },
-        { &sprdata,         sizeof(sprdata),         WORD_ARRAY },
-        { &sprdatb,         sizeof(sprdatb),         WORD_ARRAY },
+        { &bplcon0,          sizeof(bplcon0),          0 },
+        { &bplcon1,          sizeof(bplcon1),          0 },
+        { &bplcon2,          sizeof(bplcon2),          0 },
+        { &bpldat,           sizeof(bpldat),           WORD_ARRAY },
+        { &sprdata,          sizeof(sprdata),          WORD_ARRAY },
+        { &sprdatb,          sizeof(sprdatb),          WORD_ARRAY },
 
         // { &joydat,        sizeof(joydat),        WORD_ARRAY },
-        { &shiftReg,        sizeof(shiftReg),        DWORD_ARRAY },
+        { &shiftReg,         sizeof(shiftReg),         DWORD_ARRAY },
         
-        { &scrollLowEven,   sizeof(scrollLowEven),   0 },
-        { &scrollLowOdd,    sizeof(scrollLowOdd),    0 },
-        { &scrollHiEven,    sizeof(scrollHiEven),    0 },
-        { &scrollHiOdd,     sizeof(scrollHiOdd),     0 },
+        { &scrollLowEven,    sizeof(scrollLowEven),    0 },
+        { &scrollLowOdd,     sizeof(scrollLowOdd),     0 },
+        { &scrollHiEven,     sizeof(scrollHiEven),     0 },
+        { &scrollHiOdd,      sizeof(scrollHiOdd),      0 },
 
-        { &ham,             sizeof(ham),             0 },
+        { &ham,              sizeof(ham),              0 },
 
-        // { &dmaPixelStart,   sizeof(dmaPixelStart),   0 },
-        // { &dmaPixelEnd,     sizeof(dmaPixelEnd),     0 },
-        { &currentPixel,    sizeof(currentPixel),    0 },
-        { &inDisplayWindow, sizeof(inDisplayWindow), 0 },
+        { &firstCanvasPixel, sizeof(firstCanvasPixel), 0 },
+        { &lastCanvasPixel,  sizeof(lastCanvasPixel),  0 },
+        { &currentPixel,     sizeof(currentPixel),     0 },
+        { &inDisplayWindow,  sizeof(inDisplayWindow),  0 },
 
     });
 
@@ -435,12 +435,10 @@ Denise::newDraw(bool lores)
         if (lores) {
 
             ham ? draw32HAM() : draw32();
-            // currentPixel += 32;
 
         } else {
 
             draw16();
-            // currentPixel += 16;
         }
     }
 }
@@ -632,34 +630,55 @@ Denise::newDrawBorder()
 {
 #ifndef BORDER_DEBUG
     int rgba = colorizer.getRGBA(0);
-    int rgbaHBorderL = rgba;
-    int rgbaHBorderR = rgba;
-    int rgbaVBorder  = rgba;
+    int rgbaBorderL = rgba;
+    int rgbaBorderR = rgba;
+    int rgbaBorderV = rgba;
+    int openL = rgba;
+    int openR = rgba;
 #else
-    int rgbaHBorderL = 0x00000044;
-    int rgbaHBorderR = 0x00000088;
-    int rgbaVBorder  = 0x000000CC;
+    int rgbaBorderL = 0x00000044;
+    int rgbaBorderR = 0x00000088;
+    int rgbaBorderV = 0x000000CC;
+    int openL = 0x00888800;
+    int openR = 0x00AAAA00;
 #endif
 
     int *ptr = pixelAddr(0);
 
+    /*
     if (!agnus->bitplaneDMA || !inDisplayWindow) {
 
         // Fill the whole line with the background color
         for (int i = FIRST_VISIBLE; i <= LAST_VISIBLE; i++) {
             ptr[i] = rgbaVBorder;
         }
+    */
+    if (firstCanvasPixel == 0) {
+        assert(lastCanvasPixel == 0);
+
+        // Fill the whole line with the background color
+        for (int i = FIRST_VISIBLE; i <= LAST_VISIBLE; i++) {
+            ptr[i] = rgbaBorderV;
+        }
 
     } else {
 
         // Draw left border
-        for (int i = FIRST_VISIBLE; i < (2 * agnus->hstrt); i++) {
-            ptr[i] = rgbaHBorderL;
+        for (int i = FIRST_VISIBLE; i < 2 * agnus->hstrt; i++) {
+            ptr[i] = rgbaBorderL;
+        }
+        // for (int i = FIRST_VISIBLE; i < firstCanvasPixel; i++) {
+        for (int i = (2 * agnus->hstrt); i < firstCanvasPixel; i++) {
+            ptr[i] = openL;
         }
 
         // Draw right border
         for (int i = (2 * agnus->hstop); i <= LAST_VISIBLE; i++) {
-            ptr[i] = rgbaHBorderR;
+            ptr[i] = rgbaBorderR;
+        }
+        // for (int i = lastCanvasPixel + 1; i <= LAST_VISIBLE; i++) {
+        for (int i = lastCanvasPixel + 1; i < 2 * agnus->hstop; i++) {
+            ptr[i] = openR;
         }
     }
 

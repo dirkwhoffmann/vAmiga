@@ -464,9 +464,27 @@ Agnus::switchBitplaneDmaOn()
             dmaEvent[i+2] = dmaEvent[i+6] = h2;
             dmaEvent[i+3] = dmaEvent[i+7] = h1;
         }
-        dmaFirstBpl1Event = start + 3;
-        dmaLastBpl1Event = stop + 7;
-        
+
+        // Remember start / stop positions
+        if (dmaEvent[start+3] != EVENT_NONE) {
+
+            dmaFirstBpl1Event = start + 3;
+            dmaLastBpl1Event = stop + 7;
+
+            assert(dmaEvent[dmaFirstBpl1Event] == DMA_H1);
+            assert(dmaEvent[dmaLastBpl1Event] == DMA_H1);
+
+            denise->firstCanvasPixel = (dmaFirstBpl1Event * 4) + 6;
+            denise->lastCanvasPixel = (dmaLastBpl1Event * 4) + 6 + 15;
+
+        } else {
+
+            dmaFirstBpl1Event = 0;
+            dmaLastBpl1Event = 0;
+            denise->firstCanvasPixel = 0;
+            denise->lastCanvasPixel = 0;
+        }
+
     } else {
 
         // Determine start and stop cycle
@@ -495,8 +513,26 @@ Agnus::switchBitplaneDmaOn()
             dmaEvent[i+6] = l5;
             dmaEvent[i+7] = l1;
         }
-        dmaFirstBpl1Event = start + 7;
-        dmaLastBpl1Event = stop + 7;
+
+        // Remember start / stop positions
+        if (dmaEvent[start+7] != EVENT_NONE) {
+
+            dmaFirstBpl1Event = start + 7;
+            dmaLastBpl1Event = stop + 7;
+
+            assert(dmaEvent[dmaFirstBpl1Event] == DMA_L1);
+            assert(dmaEvent[dmaLastBpl1Event] == DMA_L1);
+
+            denise->firstCanvasPixel = (dmaFirstBpl1Event * 4) + 6;
+            denise->lastCanvasPixel = (dmaLastBpl1Event * 4) + 6 + 31;
+
+        } else {
+
+            dmaFirstBpl1Event = 0;
+            dmaLastBpl1Event = 0;
+            denise->firstCanvasPixel = 0;
+            denise->lastCanvasPixel = 0;
+        }
     }
 
     // Because bitplane DMA and sprite DMA overlap, some sprite events might
@@ -530,6 +566,8 @@ Agnus::switchBitplaneDmaOff()
 
     dmaFirstBpl1Event = 0;
     dmaLastBpl1Event = 0;
+    denise->firstCanvasPixel = 0;
+    denise->lastCanvasPixel = 0;
 }
 
 bool
@@ -996,7 +1034,8 @@ void
 Agnus::pokeBPL1MOD(uint16_t value)
 {
     debug(BPL_DEBUG, "pokeBPL1MOD(%X)\n", value);
-    
+    assert(value % 1 == 0);
+
     bpl1mod = value & 0xFFFE;
 }
 
@@ -1004,7 +1043,8 @@ void
 Agnus::pokeBPL2MOD(uint16_t value)
 {
     debug(BPL_DEBUG, "pokeBPL2MOD(%X)\n", value);
-    
+    assert(value % 1 == 0);
+
     bpl2mod = value & 0xFFFE;
 }
 

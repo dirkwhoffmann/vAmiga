@@ -140,8 +140,9 @@ public:
     // Drawing parameters
     //
 
-    // int16_t dmaPixelStart;
-    // int16_t dmaPixelEnd;
+    // Position of the first and the last pixel covered by bitplane DMA
+    int16_t firstCanvasPixel;
+    int16_t lastCanvasPixel;
 
     // The current rasterline has been drawn up to this horizontal position
     short currentPixel;
@@ -295,7 +296,11 @@ public:
      */
     void drawBorder();
     void newDrawBorder(); 
-    
+
+    // Sets the canvas pixel parameters (called by Agnus)
+    // void setCanvasPixels(int16_t firstCanvasPixel, int16_t endCanvasPixel);
+
+
     //
     // Accessing the frame buffers
     //
