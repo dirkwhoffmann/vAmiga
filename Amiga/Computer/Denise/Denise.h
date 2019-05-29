@@ -65,17 +65,19 @@ public:
     // uint16_t joydat[2];
     
     /* The 6 bitplane parallel-to-serial shift registers
-     * Denise transfers the current values of the bpldat registers into
-     * the shift registers after BPLDAT1 is written to. This is emulated
-     * in function fillShiftRegisters().
+     * Denise transfers the current values of the BPLDAT registers into the
+     * shift registers after BPLDAT1 is written to. This is emulated in
+     * function fillShiftRegisters().
      */
     uint32_t shiftReg[6];
     
     // Scroll values. The variables are set in pokeBPLCON1()
+    /*
     int8_t scrollLowEven;
     int8_t scrollLowOdd;
     int8_t scrollHiEven;
     int8_t scrollHiOdd;
+    */
 
     // Indicates if we're running in HAM mode (updated in pokeBPLCON0)
     bool ham;
@@ -209,8 +211,12 @@ public:
     bool bplconDBPLF() { return GET_BIT(bplcon0, 10); }
     bool bplconLACE() { return GET_BIT(bplcon0, 2); }
 
-    // OCS registers 0x102 and 0x104 (w)
+    // OCS register 0x102 (w)
     void pokeBPLCON1(uint16_t value);
+    uint8_t scrollOdd() { return bplcon1 & 0xF; }
+    uint8_t scrollEven() { return (bplcon1 >> 4) & 0xF; }
+
+    // OCS register 0x104 (w)
     void pokeBPLCON2(uint16_t value);
     
     // OCS registers 0x110, ..., 0x11A (w)

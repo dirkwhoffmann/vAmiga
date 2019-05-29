@@ -34,13 +34,14 @@ Denise::Denise()
         { &sprdata,          sizeof(sprdata),          WORD_ARRAY },
         { &sprdatb,          sizeof(sprdatb),          WORD_ARRAY },
 
-        // { &joydat,        sizeof(joydat),        WORD_ARRAY },
         { &shiftReg,         sizeof(shiftReg),         DWORD_ARRAY },
-        
+
+        /*
         { &scrollLowEven,    sizeof(scrollLowEven),    0 },
         { &scrollLowOdd,     sizeof(scrollLowOdd),     0 },
         { &scrollHiEven,     sizeof(scrollHiEven),     0 },
         { &scrollHiOdd,      sizeof(scrollHiOdd),      0 },
+        */
 
         { &ham,              sizeof(ham),              0 },
 
@@ -271,18 +272,25 @@ Denise::pokeBPLCON0(uint16_t value)
 void
 Denise::pokeBPLCON1(uint16_t value)
 {
-    debug(BPL_DEBUG, "pokeBPLCON1(%X)\n", value);
-    
-    bplcon1 = value & 0xFF;
-    
-    uint16_t ddfstrt = agnus->ddfstrt;
+    // debug(BPL_DEBUG, "pokeBPLCON1(%X)\n", value);
+    debug("pokeBPLCON1(%X)\n", value);
 
+    bplcon1 = value & 0xFF;
+
+    /*
+    scrollOdd = bplcon1 & 0xF;
+    scrollEven = (bplcon1 >> 4) & 0xF;
+    */
+    
     // Compute scroll values (adapted from WinFellow)
+    /*
+    uint16_t ddfstrt = agnus->ddfstrt;
     scrollLowOdd  = (bplcon1        + (ddfstrt & 0b0100) ? 8 : 0) & 0x0F;
     scrollHiOdd   = ((scrollLowOdd  + (ddfstrt & 0b0010) ? 4 : 0) & 0x07) << 1;
     scrollLowEven = ((bplcon1 >> 4) + (ddfstrt & 0b0100) ? 8 : 0) & 0x0F;
     scrollHiEven  = ((scrollLowEven + (ddfstrt & 0b0010) ? 4 : 0) & 0x07) << 1;
-}
+    */
+    }
 
 void
 Denise::pokeBPLCON2(uint16_t value)
@@ -373,12 +381,12 @@ Denise::armSprite(int x)
 void
 Denise::fillShiftRegisters(bool lores)
 {
-    shiftReg[0] = bpldat[0];
-    shiftReg[1] = bpldat[1];
-    shiftReg[2] = bpldat[2];
-    shiftReg[3] = bpldat[3];
-    shiftReg[4] = bpldat[4];
-    shiftReg[5] = bpldat[5];
+    shiftReg[0] = (shiftReg[0] << 16) | bpldat[0];
+    shiftReg[1] = (shiftReg[1] << 16) | bpldat[1];
+    shiftReg[2] = (shiftReg[2] << 16) | bpldat[2];
+    shiftReg[3] = (shiftReg[3] << 16) | bpldat[3];
+    shiftReg[4] = (shiftReg[4] << 16) | bpldat[4];
+    shiftReg[5] = (shiftReg[5] << 16) | bpldat[5];
 
 #ifndef DEPRECATED_RAS
     newDraw(lores);
@@ -447,21 +455,23 @@ void
 Denise::draw16()
 {
     int *ptr = pixelAddr(currentPixel);
-    
+
+    uint32_t maskOdd = 0x8000 << scrollOdd();
+    uint32_t maskEven = 0x8000 << scrollEven();
+
     for (int i = 0; i < 16; i++) {
         
         // Read a bit slice
         uint8_t index =
-        ((shiftReg[0] & 0x8000) >> 15) |
-        ((shiftReg[1] & 0x8000) >> 14) |
-        ((shiftReg[2] & 0x8000) >> 13) |
-        ((shiftReg[3] & 0x8000) >> 12) |
-        ((shiftReg[4] & 0x8000) >> 11) |
-        ((shiftReg[5] & 0x8000) >> 10);
+        (!!(shiftReg[0] & maskOdd)  << 0) |
+        (!!(shiftReg[1] & maskEven) << 1) |
+        (!!(shiftReg[2] & maskOdd)  << 2) |
+        (!!(shiftReg[3] & maskEven) << 3) |
+        (!!(shiftReg[4] & maskOdd)  << 4) |
+        (!!(shiftReg[5] & maskEven) << 5);
         
-        for (unsigned j = 0; j < 6; j++) {
-            shiftReg[j] <<= 1;
-        }
+        maskOdd >>= 1;
+        maskEven >>= 1;
 
         // Draw a single hires pixel
         uint32_t rgba = colorizer.getRGBA(index * inDisplayWindow);
@@ -481,21 +491,23 @@ Denise::draw32()
 {
     int *ptr = pixelAddr(currentPixel);
 
+    uint32_t maskOdd = 0x8000 << scrollOdd();
+    uint32_t maskEven = 0x8000 << scrollEven();
+
     for (int i = 0; i < 16; i++) {
         
         // Read a bit slice
         uint8_t index =
-        ((shiftReg[0] & 0x8000) >> 15) |
-        ((shiftReg[1] & 0x8000) >> 14) |
-        ((shiftReg[2] & 0x8000) >> 13) |
-        ((shiftReg[3] & 0x8000) >> 12) |
-        ((shiftReg[4] & 0x8000) >> 11) |
-        ((shiftReg[5] & 0x8000) >> 10);
-        
-        for (unsigned j = 0; j < 6; j++) {
-            shiftReg[j] <<= 1;
-        }
-        
+        (!!(shiftReg[0] & maskOdd)  << 0) |
+        (!!(shiftReg[1] & maskEven) << 1) |
+        (!!(shiftReg[2] & maskOdd)  << 2) |
+        (!!(shiftReg[3] & maskEven) << 3) |
+        (!!(shiftReg[4] & maskOdd)  << 4) |
+        (!!(shiftReg[5] & maskEven) << 5);
+
+        maskOdd >>= 1;
+        maskEven >>= 1;
+
         // Draw two lores pixels
         uint32_t rgba = colorizer.getRGBA(index * inDisplayWindow);
 
@@ -515,20 +527,22 @@ Denise::draw32HAM()
 {
     int *ptr = pixelAddr(currentPixel);
 
+    uint32_t maskOdd = 0x8000 << scrollOdd();
+    uint32_t maskEven = 0x8000 << scrollEven();
+
     for (int i = 0; i < 16; i++) {
 
         // Read a bit slice
         uint8_t index =
-        ((shiftReg[0] & 0x8000) >> 15) |
-        ((shiftReg[1] & 0x8000) >> 14) |
-        ((shiftReg[2] & 0x8000) >> 13) |
-        ((shiftReg[3] & 0x8000) >> 12) |
-        ((shiftReg[4] & 0x8000) >> 11) |
-        ((shiftReg[5] & 0x8000) >> 10);
+        (!!(shiftReg[0] & maskOdd)  << 0) |
+        (!!(shiftReg[1] & maskEven) << 1) |
+        (!!(shiftReg[2] & maskOdd)  << 2) |
+        (!!(shiftReg[3] & maskEven) << 3) |
+        (!!(shiftReg[4] & maskOdd)  << 4) |
+        (!!(shiftReg[5] & maskEven) << 5);
 
-        for (unsigned j = 0; j < 6; j++) {
-            shiftReg[j] <<= 1;
-        }
+        maskOdd >>= 1;
+        maskEven >>= 1;
 
         // Draw two lores pixels
         uint32_t rgba = colorizer.computeHAM(index * inDisplayWindow);
