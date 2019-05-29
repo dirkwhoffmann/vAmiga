@@ -474,6 +474,9 @@ Agnus::switchBitplaneDmaOn()
             assert(dmaEvent[dmaFirstBpl1Event] == DMA_H1);
             assert(dmaEvent[dmaLastBpl1Event] == DMA_H1);
 
+            dmaEvent[dmaFirstBpl1Event] = DMA_H1_FIRST;
+            dmaEvent[dmaLastBpl1Event] = DMA_H1_LAST;
+
             denise->firstCanvasPixel = (dmaFirstBpl1Event * 4) + 6;
             denise->lastCanvasPixel = (dmaLastBpl1Event * 4) + 6 + 15;
 
@@ -522,6 +525,9 @@ Agnus::switchBitplaneDmaOn()
 
             assert(dmaEvent[dmaFirstBpl1Event] == DMA_L1);
             assert(dmaEvent[dmaLastBpl1Event] == DMA_L1);
+
+            dmaEvent[dmaFirstBpl1Event] = DMA_L1_FIRST;
+            dmaEvent[dmaLastBpl1Event] = DMA_L1_LAST;
 
             denise->firstCanvasPixel = (dmaFirstBpl1Event * 4) + 6;
             denise->lastCanvasPixel = (dmaLastBpl1Event * 4) + 6 + 31;
@@ -628,38 +634,42 @@ Agnus::dumpDMAEventTable(int from, int to)
         r2[i] = (digit2 < 10) ? digit2 + '0' : (digit2 - 10) + 'A';
         
         switch(dmaEvent[i + from]) {
-            case DMA_DISK:  r3[i] = 'D'; r4[i] = 'I'; break;
-            case DMA_A0:    r3[i] = 'A'; r4[i] = '0'; break;
-            case DMA_A1:    r3[i] = 'A'; r4[i] = '1'; break;
-            case DMA_A2:    r3[i] = 'A'; r4[i] = '2'; break;
-            case DMA_A3:    r3[i] = 'A'; r4[i] = '3'; break;
-            case DMA_S0_1:  r3[i] = 's'; r4[i] = '0'; break;
-            case DMA_S1_1:  r3[i] = 's'; r4[i] = '1'; break;
-            case DMA_S2_1:  r3[i] = 's'; r4[i] = '2'; break;
-            case DMA_S3_1:  r3[i] = 's'; r4[i] = '3'; break;
-            case DMA_S4_1:  r3[i] = 's'; r4[i] = '4'; break;
-            case DMA_S5_1:  r3[i] = 's'; r4[i] = '5'; break;
-            case DMA_S6_1:  r3[i] = 's'; r4[i] = '6'; break;
-            case DMA_S7_1:  r3[i] = 's'; r4[i] = '7'; break;
-            case DMA_S0_2:  r3[i] = 'S'; r4[i] = '0'; break;
-            case DMA_S1_2:  r3[i] = 'S'; r4[i] = '1'; break;
-            case DMA_S2_2:  r3[i] = 'S'; r4[i] = '2'; break;
-            case DMA_S3_2:  r3[i] = 'S'; r4[i] = '3'; break;
-            case DMA_S4_2:  r3[i] = 'S'; r4[i] = '4'; break;
-            case DMA_S5_2:  r3[i] = 'S'; r4[i] = '5'; break;
-            case DMA_S6_2:  r3[i] = 'S'; r4[i] = '6'; break;
-            case DMA_S7_2:  r3[i] = 'S'; r4[i] = '7'; break;
-            case DMA_L1:    r3[i] = 'L'; r4[i] = '1'; break;
-            case DMA_L2:    r3[i] = 'L'; r4[i] = '2'; break;
-            case DMA_L3:    r3[i] = 'L'; r4[i] = '3'; break;
-            case DMA_L4:    r3[i] = 'L'; r4[i] = '4'; break;
-            case DMA_L5:    r3[i] = 'L'; r4[i] = '5'; break;
-            case DMA_L6:    r3[i] = 'L'; r4[i] = '6'; break;
-            case DMA_H1:    r3[i] = 'H'; r4[i] = '1'; break;
-            case DMA_H2:    r3[i] = 'H'; r4[i] = '2'; break;
-            case DMA_H3:    r3[i] = 'H'; r4[i] = '3'; break;
-            case DMA_H4:    r3[i] = 'H'; r4[i] = '4'; break;
-            default:        r3[i] = '.'; r4[i] = '.'; break;
+            case DMA_DISK:     r3[i] = 'D'; r4[i] = 'I'; break;
+            case DMA_A0:       r3[i] = 'A'; r4[i] = '0'; break;
+            case DMA_A1:       r3[i] = 'A'; r4[i] = '1'; break;
+            case DMA_A2:       r3[i] = 'A'; r4[i] = '2'; break;
+            case DMA_A3:       r3[i] = 'A'; r4[i] = '3'; break;
+            case DMA_S0_1:     r3[i] = 's'; r4[i] = '0'; break;
+            case DMA_S1_1:     r3[i] = 's'; r4[i] = '1'; break;
+            case DMA_S2_1:     r3[i] = 's'; r4[i] = '2'; break;
+            case DMA_S3_1:     r3[i] = 's'; r4[i] = '3'; break;
+            case DMA_S4_1:     r3[i] = 's'; r4[i] = '4'; break;
+            case DMA_S5_1:     r3[i] = 's'; r4[i] = '5'; break;
+            case DMA_S6_1:     r3[i] = 's'; r4[i] = '6'; break;
+            case DMA_S7_1:     r3[i] = 's'; r4[i] = '7'; break;
+            case DMA_S0_2:     r3[i] = 'S'; r4[i] = '0'; break;
+            case DMA_S1_2:     r3[i] = 'S'; r4[i] = '1'; break;
+            case DMA_S2_2:     r3[i] = 'S'; r4[i] = '2'; break;
+            case DMA_S3_2:     r3[i] = 'S'; r4[i] = '3'; break;
+            case DMA_S4_2:     r3[i] = 'S'; r4[i] = '4'; break;
+            case DMA_S5_2:     r3[i] = 'S'; r4[i] = '5'; break;
+            case DMA_S6_2:     r3[i] = 'S'; r4[i] = '6'; break;
+            case DMA_S7_2:     r3[i] = 'S'; r4[i] = '7'; break;
+            case DMA_L1:       r3[i] = 'L'; r4[i] = '1'; break;
+            case DMA_L1_FIRST: r3[i] = 'L'; r4[i] = '>'; break;
+            case DMA_L1_LAST:  r3[i] = 'L'; r4[i] = '<'; break;
+            case DMA_L2:       r3[i] = 'L'; r4[i] = '2'; break;
+            case DMA_L3:       r3[i] = 'L'; r4[i] = '3'; break;
+            case DMA_L4:       r3[i] = 'L'; r4[i] = '4'; break;
+            case DMA_L5:       r3[i] = 'L'; r4[i] = '5'; break;
+            case DMA_L6:       r3[i] = 'L'; r4[i] = '6'; break;
+            case DMA_H1:       r3[i] = 'H'; r4[i] = '1'; break;
+            case DMA_H1_FIRST: r3[i] = 'H'; r4[i] = '>'; break;
+            case DMA_H1_LAST:  r3[i] = 'H'; r4[i] = '<'; break;
+            case DMA_H2:       r3[i] = 'H'; r4[i] = '2'; break;
+            case DMA_H3:       r3[i] = 'H'; r4[i] = '3'; break;
+            case DMA_H4:       r3[i] = 'H'; r4[i] = '4'; break;
+            default:           r3[i] = '.'; r4[i] = '.'; break;
         }
     }
     r1[i] = r2[i] = r3[i] = r4[i] = 0;
@@ -1203,14 +1213,19 @@ Agnus::serviceDMAEvent(EventID id)
         case DMA_S7_2:
             serviceS2Event(7);
             break;
-        
-        case DMA_H1:
-        case DMA_L1:
-            denise->bpldat[PLANE1] = doBitplaneDMA(PLANE1);
 
-            // The bitplane 1 fetch is an important one. Once it is performed,
-            // Denise fills it's shift registers.
-            denise->fillShiftRegisters(id == DMA_L1);
+        case DMA_H1:
+        case DMA_H1_FIRST:
+        case DMA_H1_LAST:
+            denise->bpldat[PLANE1] = doBitplaneDMA(PLANE1);
+            denise->fillShiftRegisters(false);
+            break;
+
+        case DMA_L1:
+        case DMA_L1_FIRST:
+        case DMA_L1_LAST:
+            denise->bpldat[PLANE1] = doBitplaneDMA(PLANE1);
+            denise->fillShiftRegisters(true);
             break;
             
         case DMA_H2:
