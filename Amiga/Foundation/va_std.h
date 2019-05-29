@@ -35,7 +35,6 @@
 #include "va_types.h"
 #include "va_constants.h"
 
-
 //
 // Converting units
 //

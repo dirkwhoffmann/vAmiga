@@ -109,6 +109,7 @@
 		509F7F1A21EDDF4F00A530E4 /* BootRom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509F7F1821EDDF4F00A530E4 /* BootRom.cpp */; };
 		509F7F1D21EDEA0200A530E4 /* KickRom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509F7F1B21EDEA0200A530E4 /* KickRom.cpp */; };
 		50A2953F21FF12EF0046BAA0 /* ControlPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A2953D21FF12EF0046BAA0 /* ControlPort.cpp */; };
+		50A87580229EB04A00CC89F8 /* TimeRecorded.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A8757E229EB04A00CC89F8 /* TimeRecorded.cpp */; };
 		50B0AF93222531C500EE3689 /* CopperTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B0AF92222531C500EE3689 /* CopperTableView.swift */; };
 		50B0DD1E220B5CEF00D6618A /* BreakpointManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B0DD1C220B5CEF00D6618A /* BreakpointManager.cpp */; };
 		50B14C0721EB218E002E32A6 /* AmigaObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0521EB218E002E32A6 /* AmigaObject.cpp */; };
@@ -312,6 +313,8 @@
 		509F7F1C21EDEA0200A530E4 /* KickRom.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KickRom.h; sourceTree = "<group>"; };
 		50A2953D21FF12EF0046BAA0 /* ControlPort.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ControlPort.cpp; sourceTree = "<group>"; };
 		50A2953E21FF12EF0046BAA0 /* ControlPort.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ControlPort.h; sourceTree = "<group>"; };
+		50A8757E229EB04A00CC89F8 /* TimeRecorded.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TimeRecorded.cpp; sourceTree = "<group>"; };
+		50A8757F229EB04A00CC89F8 /* TimeRecorded.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TimeRecorded.h; sourceTree = "<group>"; };
 		50B0AF92222531C500EE3689 /* CopperTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopperTableView.swift; sourceTree = "<group>"; };
 		50B0DD1C220B5CEF00D6618A /* BreakpointManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BreakpointManager.cpp; sourceTree = "<group>"; };
 		50B0DD1D220B5CEF00D6618A /* BreakpointManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BreakpointManager.h; sourceTree = "<group>"; };
@@ -790,6 +793,8 @@
 				50B14C1121EB4314002E32A6 /* va_std.cpp */,
 				505A3A3921F4996400132020 /* sse_utils.h */,
 				505A3A3821F4996400132020 /* sse_utils.cpp */,
+				50A8757F229EB04A00CC89F8 /* TimeRecorded.h */,
+				50A8757E229EB04A00CC89F8 /* TimeRecorded.cpp */,
 				50B14C0621EB218E002E32A6 /* AmigaObject.h */,
 				50B14C0521EB218E002E32A6 /* AmigaObject.cpp */,
 				50B14C0C21EB3708002E32A6 /* HardwareComponent.h */,
@@ -1095,6 +1100,7 @@
 				508FE01821EA227B0043D0E9 /* MyController.swift in Sources */,
 				5014DD1521F3625200BC14BA /* Keyboard.cpp in Sources */,
 				50A2953F21FF12EF0046BAA0 /* ControlPort.cpp in Sources */,
+				50A87580229EB04A00CC89F8 /* TimeRecorded.cpp in Sources */,
 				501B821D2262FFB200042871 /* RTC.cpp in Sources */,
 				508FE02B21EA227B0043D0E9 /* WindowDelegate.swift in Sources */,
 				50B14C2821EB97EC002E32A6 /* AmigaProxy.mm in Sources */,
