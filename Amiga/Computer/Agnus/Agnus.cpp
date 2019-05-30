@@ -439,7 +439,7 @@ Agnus::switchSpriteDmaOff()
 void
 Agnus::switchBitplaneDmaOn()
 {
-    debug(1, "switchBitplaneDmaOn: bpu = %d bplVstrt = %d bplVstop = %d\n",
+    debug(BPL_DEBUG, "switchBitplaneDmaOn: bpu = %d bplVstrt = %d bplVstop = %d\n",
           denise->bplconBPU(), bplVstrt, bplVstop);
 
     if (denise->hires()) {
@@ -558,7 +558,7 @@ Agnus::switchBitplaneDmaOff()
     // Quick-exit if the event table is free of any bitplane DMA events
     if (dmaFirstBpl1Event == 0) return;
 
-    debug(1, "switchBitplaneDmaOff: \n");
+    debug(BPL_DEBUG, "switchBitplaneDmaOff: \n");
 
     // Clear the event table
     for (int i = 0x18; i < HPOS_CNT; dmaEvent[i++] = (EventID)0);
