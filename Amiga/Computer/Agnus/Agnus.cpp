@@ -944,7 +944,7 @@ Agnus::pokeDIWSTRT(uint16_t value)
     hstrt = LO_BYTE(value);
     vstrt = HI_BYTE(value);
 
-    debug(2, "diwstrt = %d hstrt = %d vstrt = %d\n", diwstrt, hstrt, vstrt);
+    // debug("diwstrt = %d hstrt = %d vstrt = %d\n", diwstrt, hstrt, vstrt);
 }
 
 void
@@ -1214,18 +1214,44 @@ Agnus::serviceDMAEvent(EventID id)
             serviceS2Event(7);
             break;
 
-        case DMA_H1:
         case DMA_H1_FIRST:
-        case DMA_H1_LAST:
+            denise->prepareShiftRegisters();
+            // fallthrough
+
+        case DMA_H1:
             denise->bpldat[PLANE1] = doBitplaneDMA(PLANE1);
-            denise->fillShiftRegisters(false);
+            denise->fillShiftRegisters();
+#ifndef DEPRECATED_RAS
+            denise->newDrawHires(16);
+#endif
             break;
 
-        case DMA_L1:
+        case DMA_H1_LAST:
+            denise->bpldat[PLANE1] = doBitplaneDMA(PLANE1);
+            denise->fillShiftRegisters();
+#ifndef DEPRECATED_RAS
+            denise->newDrawHires(16 + denise->scrollHiresOdd);
+#endif
+            break;
+
         case DMA_L1_FIRST:
+            denise->prepareShiftRegisters();
+            // fallthrough
+
+        case DMA_L1:
+            denise->bpldat[PLANE1] = doBitplaneDMA(PLANE1);
+            denise->fillShiftRegisters();
+#ifndef DEPRECATED_RAS
+            denise->newDrawLores(16);
+#endif
+            break;
+
         case DMA_L1_LAST:
             denise->bpldat[PLANE1] = doBitplaneDMA(PLANE1);
-            denise->fillShiftRegisters(true);
+            denise->fillShiftRegisters();
+#ifndef DEPRECATED_RAS
+            denise->newDrawLores(16 + denise->scrollHiresOdd);
+#endif
             break;
             
         case DMA_H2:

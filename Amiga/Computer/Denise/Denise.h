@@ -71,13 +71,11 @@ public:
      */
     uint32_t shiftReg[6];
     
-    // Scroll values. The variables are set in pokeBPLCON1()
-    /*
-    int8_t scrollLowEven;
-    int8_t scrollLowOdd;
-    int8_t scrollHiEven;
-    int8_t scrollHiOdd;
-    */
+    // Scroll values (set in pokeBPLCON1())
+    int8_t scrollLoresOdd;
+    int8_t scrollLoresEven;
+    int8_t scrollHiresOdd;
+    int8_t scrollHiresEven;
 
     // Indicates if we're running in HAM mode (updated in pokeBPLCON0)
     bool ham;
@@ -213,8 +211,6 @@ public:
 
     // OCS register 0x102 (w)
     void pokeBPLCON1(uint16_t value);
-    uint8_t scrollOdd() { return bplcon1 & 0xF; }
-    uint8_t scrollEven() { return (bplcon1 >> 4) & 0xF; }
 
     // OCS register 0x104 (w)
     void pokeBPLCON2(uint16_t value);
@@ -257,11 +253,18 @@ public:
     
     
     //
-    // Handling DMA
+    // Managing the bitplane shift registers
     //
-    
-    void fillShiftRegisters(bool lores);
-    
+
+    // Called by a DMA_L1_FIRST or DMA_H1_FIRST event
+    void prepareShiftRegisters();
+
+    // Transfers the bitplane register contents to the shift registers
+    void fillShiftRegisters();
+
+    // Called by a DMA_L1_LAST or DMA_H1_LAST event
+    // void flushShiftRegisters();
+
     
     //
     // Synthesizing pixels
@@ -276,19 +279,20 @@ public:
     // DEPRECATED
     int draw();
 
-    // Synthesizes pixels. Returns the number of drawn pixels
-    void newDraw(bool lores);
+    // Synthesizes pixels.
+    void newDrawLores(int pixels = 16);
+    void newDrawHires(int pixels = 16);
 
 private:
 
     // Synthesizes 16 hires pixels from the current shift register data
-    void draw16();
+    void draw16(int pixels = 16);
 
     // Synthesizes 32 lores pixels from the current shift register data
-    void draw32();
+    void draw32(int pixels = 16);
 
     // Synthesizes 32 lores pixels in HAM mode
-    void draw32HAM();
+    void draw32HAM(int pixels = 16);
 
 public:
 

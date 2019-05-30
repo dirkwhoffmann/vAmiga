@@ -59,6 +59,9 @@
 // Enable to draw the display window border in debug colors
 #define BORDER_DEBUG
 
+// Enable to debug the biplane shift registers
+#define SHIFTREG_DEBUG
+
 // Enable to highlight the first pixel in a 16-bit lores or hires pixel chunk
 // #define PIXEL_DEBUG
 

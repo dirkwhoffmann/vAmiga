@@ -36,12 +36,10 @@ Denise::Denise()
 
         { &shiftReg,         sizeof(shiftReg),         DWORD_ARRAY },
 
-        /*
-        { &scrollLowEven,    sizeof(scrollLowEven),    0 },
-        { &scrollLowOdd,     sizeof(scrollLowOdd),     0 },
-        { &scrollHiEven,     sizeof(scrollHiEven),     0 },
-        { &scrollHiOdd,      sizeof(scrollHiOdd),      0 },
-        */
+        { &scrollLoresOdd,   sizeof(scrollLoresOdd),   0 },
+        { &scrollLoresEven,  sizeof(scrollLoresEven),  0 },
+        { &scrollHiresOdd,   sizeof(scrollHiresOdd),   0 },
+        { &scrollHiresEven,  sizeof(scrollHiresEven),  0 },
 
         { &ham,              sizeof(ham),              0 },
 
@@ -272,25 +270,16 @@ Denise::pokeBPLCON0(uint16_t value)
 void
 Denise::pokeBPLCON1(uint16_t value)
 {
-    // debug(BPL_DEBUG, "pokeBPLCON1(%X)\n", value);
-    debug("pokeBPLCON1(%X)\n", value);
+    debug(BPL_DEBUG, "pokeBPLCON1(%X)\n", value);
 
     bplcon1 = value & 0xFF;
 
-    /*
-    scrollOdd = bplcon1 & 0xF;
-    scrollEven = (bplcon1 >> 4) & 0xF;
-    */
-    
-    // Compute scroll values (adapted from WinFellow)
-    /*
-    uint16_t ddfstrt = agnus->ddfstrt;
-    scrollLowOdd  = (bplcon1        + (ddfstrt & 0b0100) ? 8 : 0) & 0x0F;
-    scrollHiOdd   = ((scrollLowOdd  + (ddfstrt & 0b0010) ? 4 : 0) & 0x07) << 1;
-    scrollLowEven = ((bplcon1 >> 4) + (ddfstrt & 0b0100) ? 8 : 0) & 0x0F;
-    scrollHiEven  = ((scrollLowEven + (ddfstrt & 0b0010) ? 4 : 0) & 0x07) << 1;
-    */
-    }
+    // Compute scroll values
+    scrollLoresOdd  = (bplcon1 & 0b00001111);
+    scrollLoresEven = (bplcon1 & 0b11110000) >> 4;
+    scrollHiresEven = (bplcon1 & 0b00000111) << 1;
+    scrollHiresOdd  = (bplcon1 & 0b01110000) >> 3;
+}
 
 void
 Denise::pokeBPLCON2(uint16_t value)
@@ -379,7 +368,18 @@ Denise::armSprite(int x)
 }
 
 void
-Denise::fillShiftRegisters(bool lores)
+Denise::prepareShiftRegisters()
+{
+    for (unsigned i = 0; i < 6; shiftReg[i++] = 0);
+
+#ifdef SHIFTREG_DEBUG
+    shiftReg[0] = 0xAAAAAAAA;
+    shiftReg[1] = 0xCCCCCCCC;
+#endif
+}
+
+void
+Denise::fillShiftRegisters()
 {
     shiftReg[0] = (shiftReg[0] << 16) | bpldat[0];
     shiftReg[1] = (shiftReg[1] << 16) | bpldat[1];
@@ -387,10 +387,6 @@ Denise::fillShiftRegisters(bool lores)
     shiftReg[3] = (shiftReg[3] << 16) | bpldat[3];
     shiftReg[4] = (shiftReg[4] << 16) | bpldat[4];
     shiftReg[5] = (shiftReg[5] << 16) | bpldat[5];
-
-#ifndef DEPRECATED_RAS
-    newDraw(lores);
-#endif
 }
 
 int *
@@ -421,8 +417,8 @@ Denise::draw()
     }
 
 #ifdef BORDER_DEBUG
-    shiftReg[0] = 0xAAAA;
-    shiftReg[1] = 0xCCCC;
+    shiftReg[0] = 0xAAAAAAAA;
+    shiftReg[1] = 0xCCCCCCCC;
     shiftReg[2] = 0x0;
     shiftReg[3] = 0x0;
     shiftReg[4] = 0x0;
@@ -433,33 +429,32 @@ Denise::draw()
 }
 
 void
-Denise::newDraw(bool lores)
+Denise::newDrawLores(int pixels)
 {
     assert(currentPixel == (agnus->hpos * 4) + 6);
 
     // Check if the vertical position is inside the drawing area
-    if (inDisplayWindow) {
-
-        if (lores) {
-
-            ham ? draw32HAM() : draw32();
-
-        } else {
-
-            draw16();
-        }
-    }
+    if (inDisplayWindow) { ham ? draw32HAM(pixels) : draw32(pixels); }
 }
 
 void
-Denise::draw16()
+Denise::newDrawHires(int pixels)
+{
+    assert(currentPixel == (agnus->hpos * 4) + 6);
+
+    // Check if the vertical position is inside the drawing area
+    if (inDisplayWindow) { draw16(pixels); }
+}
+
+void
+Denise::draw16(int pixels)
 {
     int *ptr = pixelAddr(currentPixel);
 
-    uint32_t maskOdd = 0x8000 << scrollOdd();
-    uint32_t maskEven = 0x8000 << scrollEven();
+    uint32_t maskOdd = 0x8000 << scrollHiresOdd;
+    uint32_t maskEven = 0x8000 << scrollHiresEven;
 
-    for (int i = 0; i < 16; i++) {
+    for (int i = 0; i < pixels; i++) {
         
         // Read a bit slice
         uint8_t index =
@@ -483,18 +478,18 @@ Denise::draw16()
     *pixelAddr(pixel) = 0x000000FF;
 #endif
 
-    currentPixel += 16;
+    currentPixel += pixels;
 }
 
 void
-Denise::draw32()
+Denise::draw32(int pixels)
 {
     int *ptr = pixelAddr(currentPixel);
 
-    uint32_t maskOdd = 0x8000 << scrollOdd();
-    uint32_t maskEven = 0x8000 << scrollEven();
+    uint32_t maskOdd = 0x8000 << scrollLoresOdd;
+    uint32_t maskEven = 0x8000 << scrollLoresEven;
 
-    for (int i = 0; i < 16; i++) {
+    for (int i = 0; i < pixels; i++) {
         
         // Read a bit slice
         uint8_t index =
@@ -519,18 +514,18 @@ Denise::draw32()
     *pixelAddr(pixel) = 0x000000FF;
 #endif
 
-    currentPixel += 32;
+    currentPixel += 2 * pixels;
 }
 
 void
-Denise::draw32HAM()
+Denise::draw32HAM(int pixels)
 {
     int *ptr = pixelAddr(currentPixel);
 
-    uint32_t maskOdd = 0x8000 << scrollOdd();
-    uint32_t maskEven = 0x8000 << scrollEven();
+    uint32_t maskOdd = 0x8000 << scrollLoresOdd;
+    uint32_t maskEven = 0x8000 << scrollHiresOdd;
 
-    for (int i = 0; i < 16; i++) {
+    for (int i = 0; i < pixels; i++) {
 
         // Read a bit slice
         uint8_t index =
@@ -556,7 +551,7 @@ Denise::draw32HAM()
     *pixelAddr(pixel) = 0x000000FF;
 #endif
 
-    currentPixel += 32;
+    currentPixel += 2 * pixels;
 }
 
 void
@@ -681,7 +676,6 @@ Denise::newDrawBorder()
         for (int i = FIRST_VISIBLE; i < 2 * agnus->hstrt; i++) {
             ptr[i] = rgbaBorderL;
         }
-        // for (int i = FIRST_VISIBLE; i < firstCanvasPixel; i++) {
         for (int i = (2 * agnus->hstrt); i < firstCanvasPixel; i++) {
             ptr[i] = openL;
         }
@@ -690,8 +684,7 @@ Denise::newDrawBorder()
         for (int i = (2 * agnus->hstop); i <= LAST_VISIBLE; i++) {
             ptr[i] = rgbaBorderR;
         }
-        // for (int i = lastCanvasPixel + 1; i <= LAST_VISIBLE; i++) {
-        for (int i = lastCanvasPixel + 1; i < 2 * agnus->hstop; i++) {
+        for (int i = currentPixel; i < 2 * agnus->hstop; i++) {
             ptr[i] = openR;
         }
     }
