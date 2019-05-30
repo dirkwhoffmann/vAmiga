@@ -523,7 +523,7 @@ Denise::draw32HAM(int pixels)
     int *ptr = pixelAddr(currentPixel);
 
     uint32_t maskOdd = 0x8000 << scrollLoresOdd;
-    uint32_t maskEven = 0x8000 << scrollHiresOdd;
+    uint32_t maskEven = 0x8000 << scrollLoresEven;
 
     for (int i = 0; i < pixels; i++) {
 
@@ -542,7 +542,6 @@ Denise::draw32HAM(int pixels)
         // Draw two lores pixels
         uint32_t rgba = colorizer.computeHAM(index * inDisplayWindow);
 
-        // if ((index >> 4) != 0) rgba = 0;
         *ptr++ = rgba;
         *ptr++ = rgba;
     }
