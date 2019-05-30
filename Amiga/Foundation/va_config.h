@@ -66,7 +66,7 @@
 // #define PIXEL_DEBUG
 
 // Enable to colorize certain rasterlines
-// #define LINE_DEBUG
+#define LINE_DEBUG
 
 // Enable this to use the deprecated RAS event drawing approach
 // #define DEPRECATED_RAS

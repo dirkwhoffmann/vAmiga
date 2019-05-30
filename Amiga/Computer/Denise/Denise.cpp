@@ -627,7 +627,7 @@ Denise::drawBorder()
     }
 
 #ifdef LINE_DEBUG
-    if (agnus->vpos == 37) {
+    if (agnus->vpos == 311) {
         for (int i = 0; i < 256; i++) { ptr[i] = 0x00FFFF00; }
     }
 #endif
@@ -653,14 +653,6 @@ Denise::newDrawBorder()
 
     int *ptr = pixelAddr(0);
 
-    /*
-    if (!agnus->bitplaneDMA || !inDisplayWindow) {
-
-        // Fill the whole line with the background color
-        for (int i = FIRST_VISIBLE; i <= LAST_VISIBLE; i++) {
-            ptr[i] = rgbaVBorder;
-        }
-    */
     if (firstCanvasPixel == 0) {
         assert(lastCanvasPixel == 0);
 
@@ -689,7 +681,7 @@ Denise::newDrawBorder()
     }
 
 #ifdef LINE_DEBUG
-    if (agnus->vpos == 37) {
+    if (agnus->vpos == 311) {
         for (int i = 0; i < 256; i++) { ptr[i] = 0x00FFFF00; }
     }
 #endif
