@@ -69,10 +69,10 @@ extension Inspector {
         // Display window section
         //
 
-        let hstrt = info.hstrt
-        let vstrt = info.vstrt
-        let hstop = info.hstop
-        let vstop = info.vstop
+        let hstrt = info.diwHstrt
+        let vstrt = info.diwVstrt
+        let hstop = info.diwHstop
+        let vstop = info.diwVstop
         deniseDIWSTRT.integerValue = Int(info.diwstrt)
         deniseDIWSTRTText.stringValue = "(\(hstrt),\(vstrt))"
         deniseDIWSTOP.integerValue = Int(info.diwstop)

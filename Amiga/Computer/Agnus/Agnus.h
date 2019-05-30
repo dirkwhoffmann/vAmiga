@@ -123,21 +123,20 @@ class Agnus : public HardwareComponent
     bool lof;
 
     /* The display window coordinates.
-     * These values are calculated out of diwstrt and diwstop and updated
-     * automatically inside pokeDIWSTRT() and pokeDIWSTOP().
-     * DEPRECATED (?!)
+     * These values are calculated out of diwstrt and diwstop inside
+     * pokeDIWSTRT() and pokeDIWSTOP().
      */
-    int16_t hstrt;
-    int16_t hstop;
-    int16_t vstrt;
-    int16_t vstop;
+    int16_t diwHstrt;
+    int16_t diwHstop;
+    int16_t diwVstrt;
+    int16_t diwVstop;
 
     /* The vertical trigger positions of all 8 sprites.
      * Note: The horizontal trigger positions are stored inside Denise. Agnus
      * knows nothing about them.
      */
-    int16_t sprvstrt[8];
-    int16_t sprvstop[8];
+    int16_t sprVStrt[8];
+    int16_t sprVStop[8];
 
     // The current DMA states of all 8 sprites.
     SprDMAState sprDmaState[8];

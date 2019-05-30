@@ -128,10 +128,10 @@ Denise::_inspect()
 
     info.diwstrt = agnus->diwstrt;
     info.diwstop = agnus->diwstop;
-    info.hstrt = agnus->hstrt;
-    info.hstop = agnus->hstop;
-    info.vstrt = agnus->vstrt;
-    info.vstop = agnus->vstop;
+    info.diwHstrt = agnus->diwHstrt;
+    info.diwHstop = agnus->diwHstop;
+    info.diwVstrt = agnus->diwVstrt;
+    info.diwVstop = agnus->diwVstop;
 
     info.joydat[0] = peekJOY0DATR();
     info.joydat[1] = peekJOY1DATR();
@@ -615,13 +615,13 @@ Denise::drawBorder()
     } else {
 
         // Draw left border
-        // debug("hstrt = %d hstop = %d\n", _agnus->hstrt, _agnus->hstop);
-        for (int i = FIRST_VISIBLE; i < (2 * agnus->hstrt); i++) {
+        // debug("diwHstrt = %d diwHstop = %d\n", _agnus->diwHstrt, _agnus->diwHstop);
+        for (int i = FIRST_VISIBLE; i < (2 * agnus->diwHstrt); i++) {
             ptr[i] = rgbaHBorderL;
         }
 
         // Draw right border
-        for (int i = (2 * agnus->hstop); i <= LAST_VISIBLE; i++) {
+        for (int i = (2 * agnus->diwHstop); i <= LAST_VISIBLE; i++) {
             ptr[i] = rgbaHBorderR;
         }
     }
@@ -664,18 +664,18 @@ Denise::newDrawBorder()
     } else {
 
         // Draw left border
-        for (int i = FIRST_VISIBLE; i < 2 * agnus->hstrt; i++) {
+        for (int i = FIRST_VISIBLE; i < 2 * agnus->diwHstrt; i++) {
             ptr[i] = rgbaBorderL;
         }
-        for (int i = (2 * agnus->hstrt); i < firstCanvasPixel; i++) {
+        for (int i = (2 * agnus->diwHstrt); i < firstCanvasPixel; i++) {
             ptr[i] = openL;
         }
 
         // Draw right border
-        for (int i = (2 * agnus->hstop); i <= LAST_VISIBLE; i++) {
+        for (int i = (2 * agnus->diwHstop); i <= LAST_VISIBLE; i++) {
             ptr[i] = rgbaBorderR;
         }
-        for (int i = currentPixel; i < 2 * agnus->hstop; i++) {
+        for (int i = currentPixel; i < 2 * agnus->diwHstop; i++) {
             ptr[i] = openR;
         }
     }

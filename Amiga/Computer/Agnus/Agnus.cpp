@@ -31,12 +31,12 @@ Agnus::Agnus()
         { &frameInfo.interlaced, sizeof(frameInfo.interlaced), 0 },
         { &frameInfo.numLines,   sizeof(frameInfo.numLines),   0 },
         { &lof,               sizeof(lof),               0 },
-        { &hstrt,             sizeof(hstrt),             0 },
-        { &hstop,             sizeof(hstop),             0 },
-        { &vstrt,             sizeof(vstrt),             0 },
-        { &vstop,             sizeof(vstop),             0 },
-        { &sprvstrt,          sizeof(sprvstrt),          WORD_ARRAY },
-        { &sprvstop,          sizeof(sprvstop),          WORD_ARRAY },
+        { &diwHstrt,             sizeof(diwHstrt),             0 },
+        { &diwHstop,             sizeof(diwHstop),             0 },
+        { &diwVstrt,             sizeof(diwVstrt),             0 },
+        { &diwVstop,             sizeof(diwVstop),             0 },
+        { &sprVStrt,          sizeof(sprVStrt),          WORD_ARRAY },
+        { &sprVStop,          sizeof(sprVStop),          WORD_ARRAY },
         { &sprDmaState,       sizeof(sprDmaState),       DWORD_ARRAY },
         { &dmacon,            sizeof(dmacon),            0 },
         { &dskpt,             sizeof(dskpt),             0 },
@@ -136,10 +136,10 @@ Agnus::_dump()
     for (unsigned i = 0; i < 6; i++) plainmsg("bplpt[%d] = %X\n", i, bplpt[i]);
     for (unsigned i = 0; i < 8; i++) plainmsg("bplpt[%d] = %X\n", i, sprpt[i]);
     
-    plainmsg("  hstrt : %d\n", hstrt);
-    plainmsg("  hstop : %d\n", hstop);
-    plainmsg("  vstrt : %d\n", vstrt);
-    plainmsg("  vstop : %d\n", vstop);
+    plainmsg("  hstrt : %d\n", diwHstrt);
+    plainmsg("  hstop : %d\n", diwHstop);
+    plainmsg("  vstrt : %d\n", diwVstrt);
+    plainmsg("  vstop : %d\n", diwVstop);
 
     plainmsg("\nDMA time slot allocation:\n\n");
 
@@ -440,7 +440,7 @@ Agnus::switchSpriteDmaOff()
 void
 Agnus::switchBitplaneDmaOn()
 {
-    // debug("switchBitplaneDmaOn: bpu = %d vstrt = %d vstop = %d\n", denise->bplconBPU(), vstrt, vstop);
+    // debug("switchBitplaneDmaOn: bpu = %d diwVstrt = %d diwVstop = %d\n", denise->bplconBPU(), vstrt, diwVstop);
 
     bitplaneDMA = true;
 
@@ -585,8 +585,8 @@ Agnus::isBitplaneDmaLine()
 {
     return
     vpos >= 26
-    && vpos >= vstrt
-    && vpos < vstop
+    && vpos >= diwVstrt
+    && vpos < diwVstop
     && vpos < frameInfo.numLines - 1
     && (dmacon & (DMAEN | BPLEN)) == (DMAEN | BPLEN);
 }
@@ -945,10 +945,10 @@ Agnus::pokeDIWSTRT(uint16_t value)
     // V7 V6 V5 V4 V3 V2 V1 V0 H7 H6 H5 H4 H3 H2 H1 H0  and  H8 = 0, V8 = 0
     
     diwstrt = value;
-    hstrt = LO_BYTE(value);
-    vstrt = HI_BYTE(value);
+    diwHstrt = LO_BYTE(value);
+    diwVstrt = HI_BYTE(value);
 
-    // debug("diwstrt = %d hstrt = %d vstrt = %d\n", diwstrt, hstrt, vstrt);
+    // debug("diwstrt = %d diwHstrt = %d diwVstrt = %d\n", diwstrt, diwHstrt, diwVstrt);
 }
 
 void
@@ -960,10 +960,10 @@ Agnus::pokeDIWSTOP(uint16_t value)
     // V7 V6 V5 V4 V3 V2 V1 V0 H7 H6 H5 H4 H3 H2 H1 H0  and  H8 = 1, V8 = !V7
 
     diwstop = value;
-    hstop = LO_BYTE(value) | 0x100;
-    vstop = HI_BYTE(value) | ((~value & 0x8000) >> 7);
+    diwHstop = LO_BYTE(value) | 0x100;
+    diwVstop = HI_BYTE(value) | ((~value & 0x8000) >> 7);
     
-    debug(2, "diwstop = %X hstop = %X vstop = %X\n", diwstop, hstop, vstop);
+    debug(2, "diwstop = %X hstop = %X vstop = %X\n", diwstop, diwHstop, diwVstop);
 }
 
 void
@@ -1292,10 +1292,10 @@ void
 Agnus::serviceS1Event(int nr)
 {
     // Activate sprite data DMA if the first sprite line has been reached
-    if (vpos == sprvstrt[nr] + 1) { sprDmaState[nr] = SPR_DMA_DATA; }
+    if (vpos == sprVStrt[nr] + 1) { sprDmaState[nr] = SPR_DMA_DATA; }
     
     // Deactivate sprite data DMA if the last sprite line has been reached
-    if (vpos == sprvstop[nr] + 1) {
+    if (vpos == sprVStop[nr] + 1) {
         
         // Deactivate sprite data DMA
         sprDmaState[nr] = SPR_DMA_IDLE;
@@ -1304,7 +1304,7 @@ Agnus::serviceS1Event(int nr)
         uint16_t pos = doSpriteDMA(nr);
 
         // Extract vertical trigger coordinate bits from POS
-        sprvstrt[nr] = ((pos & 0xFF00) >> 8) | (sprvstrt[nr] & 0x0100);
+        sprVStrt[nr] = ((pos & 0xFF00) >> 8) | (sprVStrt[nr] & 0x0100);
         denise->pokeSPRxPOS(nr, pos);
     }
     
@@ -1320,7 +1320,7 @@ void
 Agnus::serviceS2Event(int nr)
 {
     // Deactivate sprite data DMA if the last sprite line has been reached
-    if (vpos == sprvstop[nr] + 1) {
+    if (vpos == sprVStop[nr] + 1) {
         
         // Sprite DMA should already be inactive in the second DMA cycle
         assert(sprDmaState[nr] == SPR_DMA_IDLE);
@@ -1329,8 +1329,8 @@ Agnus::serviceS2Event(int nr)
         uint16_t ctl = doSpriteDMA(nr);
         
         // Extract vertical trigger coordinate bits from CTL
-        sprvstrt[nr] = ((ctl & 0b100) << 6) | (sprvstrt[nr] & 0x00FF);
-        sprvstop[nr] = ((ctl & 0b010) << 7) | (ctl >> 8);
+        sprVStrt[nr] = ((ctl & 0b100) << 6) | (sprVStrt[nr] & 0x00FF);
+        sprVStop[nr] = ((ctl & 0b010) << 7) | (ctl >> 8);
         denise->pokeSPRxCTL(nr, ctl);
     }
     
@@ -1421,7 +1421,7 @@ Agnus::hsyncHandler()
     updateBitplaneDma();
 
     // Determine if the new line is inside the display window
-    denise->inDisplayWindow = (vpos >= vstrt) && (vpos < vstop);
+    denise->inDisplayWindow = (vpos >= diwVstrt) && (vpos < diwVstop);
 
     // Check if we have reached line 25 (sprite DMA starts here)
     if (vpos == 25) {
@@ -1429,7 +1429,7 @@ Agnus::hsyncHandler()
             
             // Reset vertical sprite trigger coordinates which forces the sprite
             // logic to read in the control words for all sprites in this line.
-            for (unsigned i = 0; i < 8; i++) { sprvstop[i] = 25; }
+            for (unsigned i = 0; i < 8; i++) { sprVStop[i] = 25; }
             
             switchSpriteDmaOn();
         }
@@ -1463,7 +1463,7 @@ Agnus::hsyncHandler()
 void
 Agnus::vsyncHandler()
 {
-    // debug("vstrt = %d vstop = %d hstrt = %d hstop = %d\n", vstrt, vstop, hstrt, hstop);
+    // debug("diwVstrt = %d diwVstop = %d diwHstrt = %d diwHstop = %d\n", diwVstrt, diwVstop, diwHstrt, hstop);
 
     // Advance to the next frame
     frameInfo.nr++;

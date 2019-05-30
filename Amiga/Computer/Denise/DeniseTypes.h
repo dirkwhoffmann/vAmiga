@@ -42,10 +42,10 @@ typedef struct
 
     uint16_t diwstrt;
     uint16_t diwstop;
-    int16_t hstrt;
-    int16_t hstop;
-    int16_t vstrt;
-    int16_t vstop;
+    int16_t diwHstrt;
+    int16_t diwHstop;
+    int16_t diwVstrt;
+    int16_t diwVstop;
 
     uint16_t joydat[2];
     uint16_t clxdat;
