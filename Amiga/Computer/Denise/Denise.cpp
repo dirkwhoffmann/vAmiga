@@ -246,9 +246,6 @@ Denise::pokeBPLCON0(uint16_t value)
     agnus->activeBitplanes = bpu;
     agnus->hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
 
-    // Update the DMA time slot allocation table (hires / lores may change).
-    // agnus->forceUpdateBitplaneDma();
-
     // Clear data registers of all inactive bitplanes.
     for (int plane = 5; plane >= bpu; plane--) bpldat[plane] = 0;
 

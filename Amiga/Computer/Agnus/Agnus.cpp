@@ -51,10 +51,8 @@ Agnus::Agnus()
         { &bpl2mod,           sizeof(bpl2mod),           0 },
         { &sprpt,             sizeof(sprpt),             DWORD_ARRAY },
         { &activeBitplanes,   sizeof(activeBitplanes),   0 },
-        { &bitplaneDMA,       sizeof(bitplaneDMA),       0 },
         { &dmaEvent,          sizeof(dmaEvent),          0 },
         { &nextDmaEvent,      sizeof(nextDmaEvent),      0 },
-        // { &dmaTableIsDirty,   sizeof(dmaTableIsDirty),   0 },
         { &dmaFirstBpl1Event, sizeof(dmaFirstBpl1Event), 0 },
         { &dmaLastBpl1Event,  sizeof(dmaLastBpl1Event),  0 },
         { &hsyncActions,      sizeof(hsyncActions),      0 }
@@ -441,10 +439,8 @@ Agnus::switchSpriteDmaOff()
 void
 Agnus::switchBitplaneDmaOn()
 {
-    debug(BPL_DEBUG, "switchBitplaneDmaOn: bpu = %d bplVstrt = %d bplVstop = %d\n",
+    debug(1, "switchBitplaneDmaOn: bpu = %d bplVstrt = %d bplVstop = %d\n",
           denise->bplconBPU(), bplVstrt, bplVstop);
-
-    bitplaneDMA = true;
 
     if (denise->hires()) {
 
@@ -559,13 +555,13 @@ Agnus::switchBitplaneDmaOn()
 void
 Agnus::switchBitplaneDmaOff()
 {
-    debug(BPL_DEBUG, "switchBitplaneDmaOff: \n");
+    // Quick-exit if the event table is free of any bitplane DMA events
+    if (dmaFirstBpl1Event == 0) return;
 
-    bitplaneDMA = false;
+    debug(1, "switchBitplaneDmaOff: \n");
 
     // Clear the event table
     for (int i = 0x18; i < HPOS_CNT; dmaEvent[i++] = (EventID)0);
-    // dumpDMAEventTable(180, HPOS_MAX);
 
     // Because bitplane DMA and sprite DMA overlap, the previous operation
     // might have wiped out sprite events. These events need to be restored.
@@ -583,54 +579,25 @@ Agnus::switchBitplaneDmaOff()
 }
 
 void
+Agnus::updateBitplaneDma()
+{
+    // Determine if bitplane DMA has to be on or off
+    bool bplDma =
+    denise->bplconBPU() &&                          // at least one bitplane
+    vpos >= bplVstrt && vpos < bplVstop &&          // vpos inside display area
+    (dmacon & (DMAEN | BPLEN)) == (DMAEN | BPLEN);  // DMA is enabled
+
+    // Update the event table accordingly
+    bplDma ? switchBitplaneDmaOn() : switchBitplaneDmaOff();
+}
+
+void
 Agnus::computeBplVstrtVstop()
 {
     bplVstrt = MAX(diwVstrt, 26); // 0 .. 25 is VBLANK area
     bplVstop = MIN(diwVstop, frameInfo.numLines - 1);
 
     // debug(1, "bplVstrt = %d bplVstop = %d\n", bplVstrt, bplVstop);
-}
-
-bool
-Agnus::isBitplaneDmaLine()
-{
-    return
-    vpos >= bplVstrt && vpos < bplVstop
-    && (dmacon & (DMAEN | BPLEN)) == (DMAEN | BPLEN);
-}
-
-void
-Agnus::updateBitplaneDma()
-{
-    bool newDisplayDma = isBitplaneDmaLine();
-
-    // This function update the DMA table only if the DMA state has changed.
-    if (bitplaneDMA ^ newDisplayDma) {
-        newDisplayDma ? switchBitplaneDmaOn() : switchBitplaneDmaOff();
-    }
-}
-
-void
-Agnus::forceUpdateBitplaneDma()
-{
-    // Determine if bitplane DMA must be on or off
-    bool on =
-    denise->bplconBPU() &&                          // at least one bitplane
-    vpos >= bplVstrt && vpos < bplVstop &&          // vpos inside display area
-    (dmacon & (DMAEN | BPLEN)) == (DMAEN | BPLEN);  // DMA is enabled
-
-    if (on) {
-
-        // Always switch DMA on, even if the table is already build
-        // (lores / hires, bpu may have changed).
-        switchBitplaneDmaOn();
-
-    } else {
-
-        // If the table is already cleared, we can skip the call
-        // to switchBitplaneDmaOff().
-        if (bitplaneDMA) switchBitplaneDmaOff();
-    }
 }
 
 void
@@ -1470,7 +1437,7 @@ Agnus::hsyncHandler()
 
             // Force the DMA time slot allocation table to update.
             // (hires / lores may have changed)
-            forceUpdateBitplaneDma();
+            updateBitplaneDma();
         }
         hsyncActions = 0;
     }

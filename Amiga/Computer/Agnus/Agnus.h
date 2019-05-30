@@ -197,9 +197,6 @@ class Agnus : public HardwareComponent
     // Recorded DMA values for all cycles in the current rasterline
     uint16_t busValue[HPOS_CNT];
 
-    // Indicates if bitplane DMA is enabled in the current rasterline.
-    bool bitplaneDMA;
-
 
     //
     // DMA allocation tables
@@ -393,14 +390,11 @@ public:
     // Adds or removes the bitplane DMA events to the DMA event table.
     void switchBitplaneDmaOn();
     void switchBitplaneDmaOff();
+    void updateBitplaneDma();
 
     // Computes variables BplVstrt and BplVstop
     void computeBplVstrtVstop();
 
-    bool isBitplaneDmaLine();
-    void updateBitplaneDma();
-    void forceUpdateBitplaneDma();
-    
     // Updates the DMA time slot allocation's jump table.
     void updateJumpTable(int16_t to);
     void updateJumpTable() { updateJumpTable(HPOS_MAX); }
