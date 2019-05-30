@@ -37,7 +37,7 @@
 #define AU0EN 0b0000000001
 
 // Hsync action bits
-#define HSYNC_BPLCON0 0x01
+#define HSYNC_UPDATE_EVENT_TABLE 0x01
 
 // Increments a DMA pointer register by 2
 #define INC_DMAPTR(x) (x) = ((x) + 2) & 0x7FFFE;
@@ -220,6 +220,9 @@ class Agnus : public HardwareComponent
      * equals 0, if no further DMA access happens after hpos.
      */
     uint8_t nextDmaEvent[HPOS_CNT];
+
+    // Indicates if the dma event table needs an update
+    // bool dmaTableIsDirty;
 
     // DMA cycle of the first and last DMA_H1 or DMA_L1 event
     uint8_t dmaFirstBpl1Event;

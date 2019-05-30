@@ -244,7 +244,7 @@ Denise::pokeBPLCON0(uint16_t value)
 
     // Let Agnus know about the register change
     agnus->activeBitplanes = bpu;
-    agnus->hsyncActions |= HSYNC_BPLCON0;
+    agnus->hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
 
     // Update the DMA time slot allocation table (hires / lores may change).
     // agnus->forceUpdateBitplaneDma();
