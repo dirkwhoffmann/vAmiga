@@ -57,18 +57,15 @@
 #define CPT_DEBUG 2
 
 // Enable to draw the display window border in debug colors
-#define BORDER_DEBUG
+// #define BORDER_DEBUG
 
 // Enable to debug the biplane shift registers
-#define SHIFTREG_DEBUG
+// #define SHIFTREG_DEBUG
 
 // Enable to highlight the first pixel in a 16-bit lores or hires pixel chunk
 // #define PIXEL_DEBUG
 
 // Enable to colorize certain rasterlines
-#define LINE_DEBUG
-
-// Enable this to use the deprecated RAS event drawing approach
-// #define DEPRECATED_RAS
+// #define LINE_DEBUG
 
 #endif

@@ -229,8 +229,6 @@ EventHandler::_inspectPrimSlot(uint32_t slot)
             
             case 0:                i->eventName = "none"; break;
             case RAS_HSYNC:        i->eventName = "RAS_HSYNC"; break;
-            case RAS_DIWSTRT:      i->eventName = "RAS_DIWSTRT"; break;
-            case RAS_DIWDRAW:      i->eventName = "RAS_DIWDRAW"; break;
             default:               i->eventName = "*** INVALID ***"; break;
         }
         break;

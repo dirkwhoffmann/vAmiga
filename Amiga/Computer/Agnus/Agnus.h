@@ -131,7 +131,7 @@ class Agnus : public HardwareComponent
     int16_t hstop;
     int16_t vstrt;
     int16_t vstop;
-    
+
     /* The vertical trigger positions of all 8 sprites.
      * Note: The horizontal trigger positions are stored inside Denise. Agnus
      * knows nothing about them.

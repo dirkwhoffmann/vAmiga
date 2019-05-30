@@ -440,7 +440,7 @@ Agnus::switchSpriteDmaOff()
 void
 Agnus::switchBitplaneDmaOn()
 {
-    debug("switchBitplaneDmaOn: bpu = %d vstrt = %d vstop = %d\n", denise->bplconBPU(), vstrt, vstop);
+    // debug("switchBitplaneDmaOn: bpu = %d vstrt = %d vstop = %d\n", denise->bplconBPU(), vstrt, vstop);
 
     bitplaneDMA = true;
 
@@ -557,7 +557,7 @@ Agnus::switchBitplaneDmaOn()
 void
 Agnus::switchBitplaneDmaOff()
 {
-    debug("switchBitplaneDmaOff: \n");
+    // debug("switchBitplaneDmaOff: \n");
 
     bitplaneDMA = false;
 
@@ -1225,17 +1225,13 @@ Agnus::serviceDMAEvent(EventID id)
         case DMA_H1:
             denise->bpldat[PLANE1] = doBitplaneDMA(PLANE1);
             denise->fillShiftRegisters();
-#ifndef DEPRECATED_RAS
             denise->newDrawHires(16);
-#endif
             break;
 
         case DMA_H1_LAST:
             denise->bpldat[PLANE1] = doBitplaneDMA(PLANE1);
             denise->fillShiftRegisters();
-#ifndef DEPRECATED_RAS
             denise->newDrawHires(16 + denise->scrollHiresOdd);
-#endif
             break;
 
         case DMA_L1_FIRST:
@@ -1245,17 +1241,13 @@ Agnus::serviceDMAEvent(EventID id)
         case DMA_L1:
             denise->bpldat[PLANE1] = doBitplaneDMA(PLANE1);
             denise->fillShiftRegisters();
-#ifndef DEPRECATED_RAS
             denise->newDrawLores(16);
-#endif
             break;
 
         case DMA_L1_LAST:
             denise->bpldat[PLANE1] = doBitplaneDMA(PLANE1);
             denise->fillShiftRegisters();
-#ifndef DEPRECATED_RAS
             denise->newDrawLores(16 + denise->scrollHiresOdd);
-#endif
             break;
             
         case DMA_H2:
@@ -1353,42 +1345,13 @@ Agnus::serviceS2Event(int nr)
 void
 Agnus::serviceRASEvent(EventID id)
 {
-    uint8_t incr = 32;
-
     switch (id) {
             
         case RAS_HSYNC:
             
             hsyncHandler();
             break;
-            
-        case RAS_DIWSTRT:
 
-            assert(false);
-            denise->currentPixel = (hpos * 4) + 2;
-            incr = denise->draw() / 4;
-
-            // Schedule next RAS event
-            if (hpos < hstop / 2 && hpos + incr < HPOS_MAX) {
-                events.schedulePos(RAS_SLOT, vpos, hpos + incr, RAS_DIWDRAW);
-            } else {
-                events.schedulePos(RAS_SLOT, vpos, HPOS_MAX, RAS_HSYNC);
-            }
-            return;
-            
-        case RAS_DIWDRAW:
-
-            assert(false); 
-            incr = denise->draw() / 4;
-
-            // Schedule next RAS event
-            if (hpos < hstop / 2 && hpos + incr < HPOS_MAX) {
-                events.schedulePos(RAS_SLOT, vpos, hpos + incr, RAS_DIWDRAW);
-            } else {
-                events.schedulePos(RAS_SLOT, vpos, HPOS_MAX, RAS_HSYNC);
-            }
-            return;
-            
         default:
             assert(false);
             break;
@@ -1398,19 +1361,6 @@ Agnus::serviceRASEvent(EventID id)
 void
 Agnus::scheduleFirstRASEvent(int16_t vpos)
 {
-#ifdef DEPRECATED_RAS
-
-    // Map hstrt to DMA cycle values
-    uint16_t hstrtdma = hstrt / 2;
-    
-    // Check if the vertical position is inside the drawing area
-    if (vpos > 25 && vpos >= vstrt && vpos <= vstop) {
-        
-        events.schedulePos(RAS_SLOT, vpos, hstrtdma, RAS_DIWSTRT);
-        return;
-    }
-#endif
-
     events.schedulePos(RAS_SLOT, vpos, HPOS_MAX, RAS_HSYNC);
 }
 
