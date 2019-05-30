@@ -580,14 +580,20 @@ Agnus::switchBitplaneDmaOff()
     denise->lastCanvasPixel = 0;
 }
 
+void
+Agnus::computeBplVstrtVstop()
+{
+    bplVstrt = MAX(diwVstrt, 26); // 0 .. 25 is VBLANK area
+    bplVstop = MIN(diwVstop, frameInfo.numLines - 1);
+
+    // debug(1, "bplVstrt = %d bplVstop = %d\n", bplVstrt, bplVstop);
+}
+
 bool
 Agnus::isBitplaneDmaLine()
 {
     return
-    vpos >= 26
-    && vpos >= diwVstrt
-    && vpos < diwVstop
-    && vpos < frameInfo.numLines - 1
+    vpos >= bplVstrt && vpos < bplVstop
     && (dmacon & (DMAEN | BPLEN)) == (DMAEN | BPLEN);
 }
 
@@ -947,8 +953,10 @@ Agnus::pokeDIWSTRT(uint16_t value)
     diwstrt = value;
     diwHstrt = LO_BYTE(value);
     diwVstrt = HI_BYTE(value);
+    computeBplVstrtVstop();
 
-    // debug("diwstrt = %d diwHstrt = %d diwVstrt = %d\n", diwstrt, diwHstrt, diwVstrt);
+    debug(BPL_DEBUG, "diwstrt = %X diwHstrt = %d diwVstrt = %d bplVstrt = %d\n",
+          diwstrt, diwHstrt, diwVstrt, bplVstrt);
 }
 
 void
@@ -962,8 +970,10 @@ Agnus::pokeDIWSTOP(uint16_t value)
     diwstop = value;
     diwHstop = LO_BYTE(value) | 0x100;
     diwVstop = HI_BYTE(value) | ((~value & 0x8000) >> 7);
-    
-    debug(2, "diwstop = %X hstop = %X vstop = %X\n", diwstop, diwHstop, diwVstop);
+    computeBplVstrtVstop();
+
+    debug(BPL_DEBUG, "diwstop = %X diwHstop = %d diwVstop = %d bplVstop = %d\n",
+          diwstop, diwHstop, diwVstop, bplVstop);
 }
 
 void
@@ -1476,6 +1486,9 @@ Agnus::vsyncHandler()
 
     // Determine if the next frame is a long or a short frame
     frameInfo.numLines = lof ? 313 : 312;
+
+    // Update variables that depend on long frame / short frame properties
+    computeBplVstrtVstop();
 
     // Increment frame and reset vpos
     frame++; // DEPRECATED
