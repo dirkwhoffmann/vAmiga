@@ -880,14 +880,17 @@ void
 Agnus::pokeDSKPTH(uint16_t value)
 {
     dskpt = REPLACE_HI_WORD(dskpt, value & 0x7);
-    debug(DSK_DEBUG, "pokeDSKPTH(%X) newPtr: %X\n", value, dskpt);
+
+    debug(DSK_DEBUG, "pokeDSKPTH(%X): dskpt = %X\n", value, dskpt);
 }
 
 void
 Agnus::pokeDSKPTL(uint16_t value)
 {
-    dskpt = REPLACE_LO_WORD(dskpt, value);
-    debug(DSK_DEBUG, "pokeDSKPTL(%X) newPtr: %X\n", value, dskpt);
+    assert(IS_EVEN(value));
+    dskpt = REPLACE_LO_WORD(dskpt, value & 0xFFFE);
+
+    debug(DSK_DEBUG, "pokeDSKPTL(%X): dskpt = %X\n", value, dskpt);
 }
 
 uint16_t
@@ -1036,7 +1039,7 @@ Agnus::pokeBPLxPTL(int x, uint16_t value)
     debug(BPL_DEBUG, "pokeBPL%dPTL(%X)\n", x, value);
     assert(x < 6);
     
-    bplpt[x] = REPLACE_LO_WORD(bplpt[x], value);
+    bplpt[x] = REPLACE_LO_WORD(bplpt[x], value & 0xFFFE);
 }
 
 void
@@ -1072,7 +1075,7 @@ Agnus::pokeSPRxPTL(int x, uint16_t value)
     debug(SPR_DEBUG, "pokeSPR%dPTL(%X)\n", x, value);
     assert(x < 8);
     
-    sprpt[x] = REPLACE_LO_WORD(sprpt[x], value);
+    sprpt[x] = REPLACE_LO_WORD(sprpt[x], value & 0xFFFE);
 }
 
 void
