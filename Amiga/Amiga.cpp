@@ -470,7 +470,7 @@ Amiga::_powerOn()
     // cpu.bpManager.setBreakpointAt(0xFEA212); //
     // cpu.bpManager.setBreakpointAt(0xfeaa22);
     // cpu.bpManager.setBreakpointAt(0xfe85a6);  // After MFM decoding with Blitter
-    // cpu.bpManager.setBreakpointAt(0xFC81F4);
+    // cpu.bpManager.setBreakpointAt(0x070048);
     // Update the recorded debug information
     inspect();
     

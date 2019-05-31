@@ -46,6 +46,10 @@ extension SpriteTableView: NSTableViewDataSource {
 
             let sprInfo = amiga!.denise.getSpriteInfo(inspector.selectedSprite)
             let addr = Int(sprInfo.ptr) + 4 * row
+            if (addr & 1) != 0 {
+                track("addr = \(addr)")
+                fatalError()
+            }
             let data = (amiga!.mem.spypeek16(addr) & (0x8000 >> nr)) != 0
             let datb = (amiga!.mem.spypeek16(addr + 2) & (0x8000 >> nr)) != 0
             

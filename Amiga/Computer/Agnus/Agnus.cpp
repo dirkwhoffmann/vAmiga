@@ -1040,6 +1040,7 @@ Agnus::pokeBPLxPTL(int x, uint16_t value)
     assert(x < 6);
     
     bplpt[x] = REPLACE_LO_WORD(bplpt[x], value & 0xFFFE);
+    debug("chipmem(%x) = %x\n", bplpt[x], mem->peekChip16(bplpt[x]));
 }
 
 void
@@ -1230,6 +1231,7 @@ Agnus::serviceDMAEvent(EventID id)
             denise->bpldat[PLANE1] = doBitplaneDMA(PLANE1);
             denise->fillShiftRegisters();
             denise->drawHires(16 + denise->scrollHiresOdd);
+            addBPLxMOD();
             break;
 
         case DMA_L1_FIRST:
@@ -1246,6 +1248,7 @@ Agnus::serviceDMAEvent(EventID id)
             denise->bpldat[PLANE1] = doBitplaneDMA(PLANE1);
             denise->fillShiftRegisters();
             denise->drawLores(16 + denise->scrollHiresOdd);
+            addBPLxMOD();
             break;
             
         case DMA_H2:
@@ -1384,14 +1387,7 @@ Agnus::hsyncHandler()
     if ((vpos & 0b1111) == 0) amiga->keyboard.execute();
     
     // Add bit plane pointer modulo values
-    switch (activeBitplanes) {
-        case 6: bplpt[PLANE6] += bpl2mod; // fallthrough
-        case 5: bplpt[PLANE5] += bpl1mod; // fallthrough
-        case 4: bplpt[PLANE4] += bpl2mod; // fallthrough
-        case 3: bplpt[PLANE3] += bpl1mod; // fallthrough
-        case 2: bplpt[PLANE2] += bpl2mod; // fallthrough
-        case 1: bplpt[PLANE1] += bpl1mod;
-    }
+    // addBPLxMOD();
 
     // Increment vpos and reset hpos
     

@@ -147,7 +147,7 @@ Denise::_inspect()
     
     // Sprite information
     
-    for (unsigned i = 0; i < 8; i++) {
+    for (int i = 0; i < 8; i++) {
 
         /* The sprite info is extracted from the pos and ctl values that are
          * recorded by the hsync handler at the beginning of rasterline 26.
@@ -331,9 +331,11 @@ Denise::pokeSPRxCTL(int x, uint16_t value)
     WRITE_BIT(attach, x, GET_BIT(value, 7));
     
     // Update debugger info
-    if (agnus->vpos == 25) {
+    if (agnus->vpos == 26) {
         info.sprite[x].ctl = value;
         info.sprite[x].ptr = agnus->sprpt[x];
+        // debug("info.sprite[%d].ptr = %x\n", x, agnus->sprpt[x]);
+        assert(IS_EVEN(info.sprite[x].ptr));
     }
 }
 
@@ -473,7 +475,11 @@ Denise::draw32(int pixels)
         maskEven >>= 1;
 
         // Draw two lores pixels
-        uint32_t rgba = colorizer.getRGBA(index * inDisplayWindow);
+        // index &= 0x10;
+        // uint32_t rgba = colorizer.getRGBA(index * inDisplayWindow);
+        uint16_t col = colorizer.peekColorReg(index);
+        uint32_t rgba = ((col & 0xF00) >> 4) | ((col & 0xF0) << 8) | ((col & 0xF) << 20);
+        // if (index) rgba = 0x00FFFF00;
 
         *ptr++ = rgba;
         *ptr++ = rgba;

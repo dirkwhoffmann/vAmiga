@@ -392,7 +392,7 @@ Copper::serviceEvent(EventID id)
                 
                 // Write into the custom register
                 if (!skip) {
-                    // debug("poke(%X,%X)\n", reg, copins2);
+                    debug(COP_DEBUG, "MOVE %X <- %X\n", reg, copins2);
                     mem->pokeCustom16(reg, copins2);
                 }
                 skip = false;

@@ -39,7 +39,7 @@
 #define DMA_DEBUG 2
 
 // Set to 1 to debug bitplane relevant registers
-#define BPL_DEBUG 2
+#define BPL_DEBUG 1
 
 // Set to 1 to debug color registers
 #define COL_DEBUG 1
@@ -55,6 +55,9 @@
 
 // Set to 1 to debug the control ports and connected devices
 #define CPT_DEBUG 2
+
+// Set to 1 to debug the Copper
+#define COP_DEBUG 2
 
 // Enable to draw the display window border in debug colors
 // #define BORDER_DEBUG
