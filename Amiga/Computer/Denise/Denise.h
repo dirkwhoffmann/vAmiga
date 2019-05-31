@@ -275,13 +275,9 @@ public:
     // Returns the frame buffer address of a certain pixel in the current line
     int *pixelAddr(int pixel);
 
-    // Synthesizes pixels. Returns the number of drawn pixels
-    // DEPRECATED
-    int draw();
-
     // Synthesizes pixels.
-    void newDrawLores(int pixels = 16);
-    void newDrawHires(int pixels = 16);
+    void drawLores(int pixels = 16);
+    void drawHires(int pixels = 16);
 
 private:
 

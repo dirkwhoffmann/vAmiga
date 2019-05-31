@@ -397,36 +397,8 @@ Denise::pixelAddr(int pixel)
     return frameBuffer->data + offset;
 }
 
-int
-Denise::draw()
-{
-    int drawnPixels;
-
-    if (lores()) {
-
-        ham ? draw32HAM() : draw32();
-        drawnPixels = 32;
-
-    } else {
-
-        draw16();
-        drawnPixels = 16;
-    }
-
-#ifdef BORDER_DEBUG
-    shiftReg[0] = 0xAAAAAAAA;
-    shiftReg[1] = 0xCCCCCCCC;
-    shiftReg[2] = 0x0;
-    shiftReg[3] = 0x0;
-    shiftReg[4] = 0x0;
-    shiftReg[5] = 0x0;
-#endif
-
-    return drawnPixels;
-}
-
 void
-Denise::newDrawLores(int pixels)
+Denise::drawLores(int pixels)
 {
     assert(currentPixel == (agnus->hpos * 4) + 6);
 
@@ -435,7 +407,7 @@ Denise::newDrawLores(int pixels)
 }
 
 void
-Denise::newDrawHires(int pixels)
+Denise::drawHires(int pixels)
 {
     assert(currentPixel == (agnus->hpos * 4) + 6);
 

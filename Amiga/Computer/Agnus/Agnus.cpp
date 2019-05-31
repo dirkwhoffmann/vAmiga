@@ -1223,13 +1223,13 @@ Agnus::serviceDMAEvent(EventID id)
         case DMA_H1:
             denise->bpldat[PLANE1] = doBitplaneDMA(PLANE1);
             denise->fillShiftRegisters();
-            denise->newDrawHires(16);
+            denise->drawHires(16);
             break;
 
         case DMA_H1_LAST:
             denise->bpldat[PLANE1] = doBitplaneDMA(PLANE1);
             denise->fillShiftRegisters();
-            denise->newDrawHires(16 + denise->scrollHiresOdd);
+            denise->drawHires(16 + denise->scrollHiresOdd);
             break;
 
         case DMA_L1_FIRST:
@@ -1239,13 +1239,13 @@ Agnus::serviceDMAEvent(EventID id)
         case DMA_L1:
             denise->bpldat[PLANE1] = doBitplaneDMA(PLANE1);
             denise->fillShiftRegisters();
-            denise->newDrawLores(16);
+            denise->drawLores(16);
             break;
 
         case DMA_L1_LAST:
             denise->bpldat[PLANE1] = doBitplaneDMA(PLANE1);
             denise->fillShiftRegisters();
-            denise->newDrawLores(16 + denise->scrollHiresOdd);
+            denise->drawLores(16 + denise->scrollHiresOdd);
             break;
             
         case DMA_H2:
