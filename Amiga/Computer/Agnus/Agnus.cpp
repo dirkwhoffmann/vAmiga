@@ -1040,7 +1040,6 @@ Agnus::pokeBPLxPTL(int x, uint16_t value)
     assert(x < 6);
     
     bplpt[x] = REPLACE_LO_WORD(bplpt[x], value & 0xFFFE);
-    debug("chipmem(%x) = %x\n", bplpt[x], mem->peekChip16(bplpt[x]));
 }
 
 void
@@ -1386,9 +1385,6 @@ Agnus::hsyncHandler()
     // Check the keyboard once in a while
     if ((vpos & 0b1111) == 0) amiga->keyboard.execute();
     
-    // Add bit plane pointer modulo values
-    // addBPLxMOD();
-
     // Increment vpos and reset hpos
     
     /* Important: When the end of a line is reached, we reset the horizontal
