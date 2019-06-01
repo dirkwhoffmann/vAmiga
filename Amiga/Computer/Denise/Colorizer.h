@@ -96,8 +96,12 @@ public:
     // Peeks a value from one of the 32 color registers.
     uint16_t peekColorReg(int reg);
 
-    // Pokes a value into one of the 32 color registers.
-    void pokeColorReg(int reg, uint16_t value);
+    /* Pokes a value into one of the 32 color registers.
+     * cycle = Master cycle in which the write happens.
+     */
+    void pokeColorReg(int reg, uint16_t value, Cycle cycle);
+    void pokeColorRegCpu(int reg, uint16_t value);
+    void pokeColorRegCopper(int reg, uint16_t value);
 
 
     //

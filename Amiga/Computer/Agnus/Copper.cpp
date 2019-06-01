@@ -245,7 +245,7 @@ Copper::move(int addr, uint16_t value)
     if (addr >= 0x180 && addr <= 0x1BE) {
 
         int reg = (addr - 0x180) / 2;
-        colorizer->pokeColorReg(reg, value);
+        colorizer->pokeColorRegCopper(reg, value);
         return;
     }
 

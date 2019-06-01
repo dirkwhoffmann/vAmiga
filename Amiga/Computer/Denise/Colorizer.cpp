@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "Colorizer.h"
+#include "Amiga.h"
 
 Colorizer::Colorizer()
 {
@@ -73,7 +73,7 @@ Colorizer::peekColorReg(int reg)
 }
 
 void
-Colorizer::pokeColorReg(int reg, uint16_t value)
+Colorizer::pokeColorReg(int reg, uint16_t value, Cycle cycle)
 {
     assert(reg < 32);
 
@@ -83,6 +83,17 @@ Colorizer::pokeColorReg(int reg, uint16_t value)
     updateColorTable(reg);
 }
 
+void
+Colorizer::pokeColorRegCpu(int reg, uint16_t value)
+{
+    pokeColorReg(reg, value, amiga->masterClock);
+}
+
+void
+Colorizer::pokeColorRegCopper(int reg, uint16_t value)
+{
+    pokeColorReg(reg, value, amiga->agnus.clock);
+}
 
 void
 Colorizer::clearColorCache()
