@@ -265,8 +265,12 @@ public:
      * This function is called once (in the constructor).
      */
     void registerSnapshotItems(vector<SnapshotItem> items);
-    
-    
+
+    /* Initializes all snapshot items with 0 that are not marked as persistent.
+     * This function is called inside initialize() and powerOn().
+     */
+    void clearNonPersistantSnapshotItems();
+
 public:
     
     //

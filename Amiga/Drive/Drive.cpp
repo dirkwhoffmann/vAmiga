@@ -43,7 +43,7 @@ Drive::Drive(unsigned nr)
 void
 Drive::_powerOn()
 {
- 
+
 }
 
 void

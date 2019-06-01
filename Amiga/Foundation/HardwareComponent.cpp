@@ -54,8 +54,11 @@ HardwareComponent::initialize(Amiga *amiga)
     for (HardwareComponent *c : subComponents) {
         c->initialize(amiga);
     }
-    
-    // Call the delegation method
+
+    // Initialize all non-persistant snapshot items with 0
+    clearNonPersistantSnapshotItems();
+
+    // Initialize this component
     _initialize();
 }
 
@@ -69,10 +72,8 @@ HardwareComponent::powerOn()
             c->powerOn();
         }
         
-        // Zero out all snapshot items that are not marked as persistent.
-        for (SnapshotItem i : snapshotItems) {
-            if ((i.flags & PERSISTANT) == 0) memset(i.data, 0, i.size);
-        }
+        // Initialize all non-persistant snapshot items with 0
+        clearNonPersistantSnapshotItems(); 
         
         // Power this component on
         debug(2, "Powering on\n");
@@ -218,6 +219,14 @@ HardwareComponent::registerSnapshotItems(vector<SnapshotItem> items) {
         
         // Calculate snapshot size
         snapshotSize += item.size;
+    }
+}
+
+void
+HardwareComponent::clearNonPersistantSnapshotItems()
+{
+    for (SnapshotItem i : snapshotItems) {
+        if ((i.flags & PERSISTANT) == 0) memset(i.data, 0, i.size);
     }
 }
 
