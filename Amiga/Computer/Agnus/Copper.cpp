@@ -160,7 +160,7 @@ Copper::findMatch(Beam &result)
     Beam b = agnus->beamPosition();
 
     // Advance to the position where the comparator circuit gets active
-    b = agnus->addToBeam(b, 2);
+    b = agnus->addToBeam(b, 4);
 
     // Set up the comparison positions
     int16_t vComp = getVP();
@@ -496,7 +496,7 @@ Copper::serviceEvent(EventID id)
                     // Clear the skip flag
                     skip = false;
 
-// #if 0
+#if 0
                     // Determine where the WAIT command will trigger
                     uint32_t trigger = nextTriggerPosition();
                     
@@ -512,8 +512,8 @@ Copper::serviceEvent(EventID id)
                     } else {
                         events->scheduleRel(COP_SLOT, delay, COP_FETCH);
                     }
-// #endif
-#if 0
+#endif
+//#if 0
 
                 // Find the trigger position for this WAIT command
                     Beam trigger;
@@ -531,7 +531,7 @@ Copper::serviceEvent(EventID id)
                         // Stop the Copper
                         events->disable(COP_SLOT);
                     }
-#endif
+// #endif
 
                 }
 
