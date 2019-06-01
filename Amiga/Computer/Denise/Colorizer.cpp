@@ -25,6 +25,7 @@ void
 Colorizer::_powerOn()
 {
     clearColorCache();
+    updateRGBA();
 }
 
 
@@ -35,6 +36,7 @@ Colorizer::setPalette(Palette p)
     
     clearColorCache();
     updateColorTable();
+    updateRGBA();
 }
 
 void
@@ -44,6 +46,7 @@ Colorizer::setBrightness(double value)
     
     clearColorCache();
     updateColorTable();
+    updateRGBA();
 }
 
 void
@@ -52,7 +55,8 @@ Colorizer::setSaturation(double value)
     saturation = value;
     
     clearColorCache();
-    updateColorTable(); 
+    updateColorTable();
+    updateRGBA();
 }
 
 void
@@ -61,7 +65,9 @@ Colorizer::setContrast(double value)
     contrast = value;
 
     clearColorCache();
-    updateColorTable();    
+    updateColorTable();
+    updateRGBA();
+
 }
 
 uint16_t
@@ -184,6 +190,7 @@ Colorizer::computeRGBA(uint16_t rgb)
 {
     assert(rgb < 4096);
 
+    /*
     // Compute color if it is not cached yet
     if (colorCache[rgb] == 0) {
 
@@ -199,12 +206,35 @@ Colorizer::computeRGBA(uint16_t rgb)
     }
 
     return colorCache[rgb];
+    */
+    return rgba[rgb];
 }
 
 uint32_t
 Colorizer::computeRGBA(uint8_t r, uint8_t g, uint8_t b)
 {
     return computeRGBA((r << 8) | (g << 4) | b);
+}
+
+void
+Colorizer::updateRGBA()
+{
+    debug("updateRGBA\n");
+
+    // Iterate through all 4096 colors
+    for (uint16_t col = 0x000; col <= 0xFFF; col++) {
+
+        // Convert the Amiga color into an RGBA value
+        uint8_t r = (col >> 4) & 0xF0;
+        uint8_t g = (col >> 0) & 0xF0;
+        uint8_t b = (col << 4) & 0xF0;
+
+        // Convert the Amiga value to an RGBA value
+        adjustRGB(r, g, b);
+
+        // Write the result into the register lookup table
+        rgba[col] = HI_HI_LO_LO(0xFF, b, g, r);
+    }
 }
 
 void

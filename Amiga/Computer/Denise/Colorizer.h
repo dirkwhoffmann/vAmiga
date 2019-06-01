@@ -20,11 +20,15 @@ private:
     // TimeRecorded<uint16_t> colorReg[32];
     uint16_t colorReg[32];
 
+    // The RGBA values of all 4096 Amiga colors
+    uint32_t rgba[4096];
+
     /* The 64 Amiga colors in RGBA format
      * The first 32 entries represent the colors that are stored in the color
      * registers in RGBA format. The other 32 colors contain the RGBA values
      * used in halfbright mode. They are computed out of the first 32 colors by
      * dividing each color component by 2.
+     * DEPRECATED
      */
     uint32_t colorRGBA[64];
     
@@ -33,6 +37,7 @@ private:
      * is stored in the color cache. If not, it is computed on-the-fly and
      * stored in the cache. Whenever a color adjustment parameter changes,
      * the color cache is cleared.
+     * DEPRECATED
      */
     uint32_t colorCache[4096];
 
@@ -111,6 +116,7 @@ public:
 private:
 
     // Clears the color cache
+    // DEPRECATED
     void clearColorCache();
 
     // Adjusts the RGBA value according to the selected color parameters
@@ -139,12 +145,17 @@ public:
     // Returns the RGBA value for a certain sprite color.
     uint32_t getSpriteRGBA(int s, int nr) { return colorRGBA[16 + nr + 2 * (s & 6)]; }
 
+    // Updates the entire RGBA lookup table
+    void updateRGBA();
+
     // Updates the complete color lookup table.
+    // DEPRECATED
     void updateColorTable();
 
 private:
 
     // Updates the lookup table for a certain color register.
+    // DEPRECATED
     void updateColorTable(int nr);
 
 
