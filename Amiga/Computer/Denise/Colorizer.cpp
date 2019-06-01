@@ -30,8 +30,6 @@ void
 Colorizer::setPalette(Palette p)
 {
     palette = p;
-
-    updateColorTable();
     updateRGBA();
 }
 
@@ -39,8 +37,6 @@ void
 Colorizer::setBrightness(double value)
 {
     brightness = value;
-
-    updateColorTable();
     updateRGBA();
 }
 
@@ -48,8 +44,6 @@ void
 Colorizer::setSaturation(double value)
 {
     saturation = value;
-
-    updateColorTable();
     updateRGBA();
 }
 
@@ -57,8 +51,6 @@ void
 Colorizer::setContrast(double value)
 {
     contrast = value;
-
-    updateColorTable();
     updateRGBA();
 
 }
@@ -78,8 +70,12 @@ Colorizer::pokeColorReg(int reg, uint16_t value, Cycle cycle)
 
     debug(COL_DEBUG, "pokeCOLOR%02d(%X)\n", reg, value);
 
+    uint8_t r = (value & 0xF00) >> 8;
+    uint8_t g = (value & 0x0F0) >> 4;
+    uint8_t b = (value & 0x00F);
+
     colorReg[reg] = value & 0xFFF;
-    updateColorTable(reg);
+    colorReg[reg + 32] = ((r / 2) << 8) | ((g / 2) << 4) | (b / 2);
 }
 
 void
@@ -203,35 +199,6 @@ Colorizer::updateRGBA()
         // Write the result into the register lookup table
         rgba[col] = HI_HI_LO_LO(0xFF, b, g, r);
     }
-}
-
-void
-Colorizer::updateColorTable()
-{
-    for (unsigned reg = 0; reg < 32; reg++) {
-        updateColorTable(reg);
-    }
-}
-
-void
-Colorizer::updateColorTable(int nr)
-{
-    assert(nr < 32);
-
-    // xx xx xx xx R3 R2 R1 R0 G3 G2 G1 G0 B3 B2 B1 B0
-    uint32_t col = colorReg[nr] & 0xFFF;
-
-    // Convert the Amiga color into an RGBA value
-    uint32_t rgba = computeRGBA(col >> 8, (col >> 4) & 0xF, col & 0xF);
-
-    // Write the result into the register lookup table
-    colorRGBA[nr] = rgba;
-
-    // Compute the half-bright version for this color
-    uint8_t b = (rgba >> 12) & 0xFF;
-    uint8_t g = (rgba >> 8) & 0xFF;
-    uint8_t r = (rgba >> 0) & 0xFF;
-    colorRGBA[nr + 32] = HI_HI_LO_LO(0xFF, b / 2, g / 2, r / 2);
 }
 
 uint32_t

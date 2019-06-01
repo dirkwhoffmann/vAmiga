@@ -16,9 +16,12 @@ class Colorizer : public HardwareComponent {
     
 private:
     
-    // The 32 Amiga color registers
-    // TimeRecorded<uint16_t> colorReg[32];
-    uint16_t colorReg[32];
+    /* The Amiga color registers
+     * Array elements 0 .. 31 represent to 32 Amiga color registers.
+     * Array elements 32 .. 63 are fake registers. They contain the color
+     * values of register 0 .. 31 modified for halfbright mode.
+     */
+    uint16_t colorReg[64];
 
     // The RGBA values of all 4096 Amiga colors
     uint32_t rgba[4096];
@@ -127,23 +130,15 @@ public:
 public:
 
     // Returns the RGBA value for a certain color register.
-    uint32_t getRGBA(int nr) { return colorRGBA[nr]; }
+    uint32_t getRGBA(int nr) { assert(nr < 64); return rgba[colorReg[nr]]; }
+        // return colorRGBA[nr]; }
 
     // Returns the RGBA value for a certain sprite color.
-    uint32_t getSpriteRGBA(int s, int nr) { return colorRGBA[16 + nr + 2 * (s & 6)]; }
+    uint32_t getSpriteRGBA(int s, int nr) { return rgba[colorReg[16 + nr + 2 * (s & 6)]]; }
+        // return colorRGBA[16 + nr + 2 * (s & 6)]; }
 
     // Updates the entire RGBA lookup table
     void updateRGBA();
-
-    // Updates the complete color lookup table.
-    // DEPRECATED
-    void updateColorTable();
-
-private:
-
-    // Updates the lookup table for a certain color register.
-    // DEPRECATED
-    void updateColorTable(int nr);
 
 
     //

@@ -201,10 +201,7 @@ Denise::getSprInfo(int nr)
 void
 Denise::didLoadFromBuffer(uint8_t **buffer)
 {
-    // The values in the color registers may have changed. To make the change
-    // visible, we need to recompute the RGBA patterns based on the new values.
-    // CAN BE DELETED WHEN updateColorTable() IS REPLACE BY updateRGBA()
-    colorizer.updateColorTable();
+ 
 }
 
 uint16_t
