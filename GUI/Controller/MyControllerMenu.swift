@@ -565,6 +565,16 @@ extension MyController: NSMenuItemValidation {
         amiga.mem.dump()
         amiga.resume()
     }
+    @IBAction func dumpDiskControllerAction(_ sender: Any!) {
+        amiga.suspend()
+        amiga.diskController.dump()
+        amiga.resume()
+    }
+    @IBAction func dumpDfxAction(_ sender: NSMenuItem!) {
+        amiga.suspend()
+        amiga.df(sender).dump()
+        amiga.resume()
+    }
     @IBAction func dumpDf0Action(_ sender: Any!) {
         amiga.suspend()
         amiga.df0.dump()

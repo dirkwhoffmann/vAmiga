@@ -72,7 +72,20 @@ Drive::_ping()
 void
 Drive::_dump()
 {
-    msg("Has disk: %s\n", hasDisk() ? "yes" : "no");
+    plainmsg("             Nr: %d\n", nr);
+    plainmsg("           Type: %s\n", driveTypeName(type));
+    plainmsg("          Speed: %d\n", speed);
+    plainmsg("       Id count: %d\n", idCount);
+    plainmsg("         Id bit: %d\n", idBit);
+    plainmsg("          Motor: %s\n", motor ? "on" : "off");
+    plainmsg("      dskchange: %d\n", dskchange);
+    plainmsg("         dsklen: %X\n", dsklen);
+    plainmsg("            prb: %X\n", prb);
+    plainmsg("           Side: %d\n", head.side);
+    plainmsg("      Cyclinder: %d\n", head.cylinder);
+    plainmsg("         Offset: %d\n", head.offset);
+    plainmsg("cylinderHistory: %X\n", cylinderHistory);
+    plainmsg("           Disk: %s\n", disk ? "yes" : "no");
 }
 
 void

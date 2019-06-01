@@ -339,16 +339,34 @@
                                                         </connections>
                                                     </menuItem>
                                                     <menuItem isSeparatorItem="YES" id="Ckq-D1-KNg"/>
-                                                    <menuItem title="Df0" id="4Hl-hF-ZHu">
+                                                    <menuItem title="Disk Controller" id="4Hl-hF-ZHu">
                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                         <connections>
-                                                            <action selector="dumpDf0Action:" target="-1" id="fGu-aZ-BTM"/>
+                                                            <action selector="dumpDiskControllerAction:" target="-1" id="tQV-Iy-zHh"/>
                                                         </connections>
                                                     </menuItem>
-                                                    <menuItem title="Df1" id="GU7-rg-V8M">
+                                                    <menuItem title="Df0" id="GU7-rg-V8M">
                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                         <connections>
-                                                            <action selector="dumpDf1Action:" target="-1" id="6YI-gD-KXO"/>
+                                                            <action selector="dumpDfxAction:" target="-1" id="nEI-gy-Est"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Df1" tag="1" id="exv-s0-alr">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="dumpDfxAction:" target="-1" id="dEr-Qx-Pc7"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Df2" tag="2" id="680-W0-SXm">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="dumpDfxAction:" target="-1" id="OsQ-Cy-4bN"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Df3" tag="3" id="mPl-nO-Ojc">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="dumpDfxAction:" target="-1" id="Ron-UM-0MD"/>
                                                         </connections>
                                                     </menuItem>
                                                     <menuItem isSeparatorItem="YES" id="1Jv-rH-svr"/>
