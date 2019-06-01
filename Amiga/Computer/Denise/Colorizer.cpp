@@ -91,6 +91,27 @@ Colorizer::pokeColorRegCopper(int reg, uint16_t value)
 }
 
 void
+Colorizer::updateRGBA()
+{
+    debug("updateRGBA\n");
+
+    // Iterate through all 4096 colors
+    for (uint16_t col = 0x000; col <= 0xFFF; col++) {
+
+        // Convert the Amiga color into an RGBA value
+        uint8_t r = (col >> 4) & 0xF0;
+        uint8_t g = (col >> 0) & 0xF0;
+        uint8_t b = (col << 4) & 0xF0;
+
+        // Convert the Amiga value to an RGBA value
+        adjustRGB(r, g, b);
+
+        // Write the result into the register lookup table
+        rgba[col] = HI_HI_LO_LO(0xFF, b, g, r);
+    }
+}
+
+void
 Colorizer::adjustRGB(uint8_t &r, uint8_t &g, uint8_t &b)
 {
     // Normalize adjustment parameters
@@ -168,40 +189,6 @@ Colorizer::adjustRGB(uint8_t &r, uint8_t &g, uint8_t &b)
 }
 
 uint32_t
-Colorizer::computeRGBA(uint16_t rgb)
-{
-    assert(rgb < 4096);
-    return rgba[rgb];
-}
-
-uint32_t
-Colorizer::computeRGBA(uint8_t r, uint8_t g, uint8_t b)
-{
-    return computeRGBA((r << 8) | (g << 4) | b);
-}
-
-void
-Colorizer::updateRGBA()
-{
-    debug("updateRGBA\n");
-
-    // Iterate through all 4096 colors
-    for (uint16_t col = 0x000; col <= 0xFFF; col++) {
-
-        // Convert the Amiga color into an RGBA value
-        uint8_t r = (col >> 4) & 0xF0;
-        uint8_t g = (col >> 0) & 0xF0;
-        uint8_t b = (col << 4) & 0xF0;
-
-        // Convert the Amiga value to an RGBA value
-        adjustRGB(r, g, b);
-
-        // Write the result into the register lookup table
-        rgba[col] = HI_HI_LO_LO(0xFF, b, g, r);
-    }
-}
-
-uint32_t
 Colorizer::computeHAM(uint8_t index)
 {
     assert(index < 64);
@@ -235,7 +222,7 @@ Colorizer::computeHAM(uint8_t index)
             assert(false);
     }
 
-    return computeRGBA(hamRGB);
+    return rgba[hamRGB];
     // hamRGB &= 0xFFF;
     // return ((hamRGB & 0xF00) >> 4) | ((hamRGB & 0xF0) << 8) | ((hamRGB & 0xF) << 20);
 }

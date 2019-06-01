@@ -17,7 +17,7 @@ class Colorizer : public HardwareComponent {
 private:
     
     /* The Amiga color registers
-     * Array elements 0 .. 31 represent to 32 Amiga color registers.
+     * Array elements 0 .. 31 represent to 32 native Amiga color registers.
      * Array elements 32 .. 63 are fake registers. They contain the color
      * values of register 0 .. 31 modified for halfbright mode.
      */
@@ -25,15 +25,6 @@ private:
 
     // The RGBA values of all 4096 Amiga colors
     uint32_t rgba[4096];
-
-    /* The 64 Amiga colors in RGBA format
-     * The first 32 entries represent the colors that are stored in the color
-     * registers in RGBA format. The other 32 colors contain the RGBA values
-     * used in halfbright mode. They are computed out of the first 32 colors by
-     * dividing each color component by 2.
-     * DEPRECATED
-     */
-    uint32_t colorRGBA[64];
 
     // The most recently computed HAM pixel in Amiga RGB format
     uint16_t hamRGB;
@@ -104,26 +95,6 @@ public:
 
 
     //
-    // Managing the color cache
-    //
-
-private:
-
-    // Adjusts the RGBA value according to the selected color parameters
-    void adjustRGB(uint8_t &r, uint8_t &g, uint8_t &b);
-
-public:
-
-    /* Computes the RGBA value for a color given in 12-bit Amiga RGB format.
-     * If the requested color is already stored in the color cache, the cached
-     * value is returned. Otherwise, the color is computed and written into
-     * the cache before it is returned to the caller.
-     */
-    uint32_t computeRGBA(uint16_t rgb);
-    uint32_t computeRGBA(uint8_t r, uint8_t g, uint8_t b);
-
-
-    //
     // Managing the color lookup table
     //
 
@@ -131,14 +102,17 @@ public:
 
     // Returns the RGBA value for a certain color register.
     uint32_t getRGBA(int nr) { assert(nr < 64); return rgba[colorReg[nr]]; }
-        // return colorRGBA[nr]; }
 
     // Returns the RGBA value for a certain sprite color.
     uint32_t getSpriteRGBA(int s, int nr) { return rgba[colorReg[16 + nr + 2 * (s & 6)]]; }
-        // return colorRGBA[16 + nr + 2 * (s & 6)]; }
+
+private:
 
     // Updates the entire RGBA lookup table
     void updateRGBA();
+
+    // Adjusts the RGBA value according to the selected color parameters
+    void adjustRGB(uint8_t &r, uint8_t &g, uint8_t &b);
 
 
     //
