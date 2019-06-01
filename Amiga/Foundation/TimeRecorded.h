@@ -60,10 +60,14 @@ public:
     // Write a value into the pipeline.
     void write(T value, Cycle cycle) {
 
-        Cycle delta = cycle - lastWrite;
+        // Only proceed if a new value is written
+        if (value == pipeline[0]) return;
 
         // Shift pipeline
-        for (int i = capacity - 1; i >= delta; i++) pipeline[i] = pipeline[i - delta];
+        Cycle delta = cycle - lastWrite;
+        for (int i = capacity - 1; i >= delta; i++) {
+            pipeline[i] = pipeline[i - delta];
+        }
 
         // Fill in new values
         for (int i = 0; i < delta; i++) pipeline[i] = value;

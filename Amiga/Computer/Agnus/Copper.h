@@ -18,7 +18,9 @@ class Copper : public HardwareComponent
     class Memory *mem;
     class Agnus *agnus;
     class EventHandler *events; 
-
+    // class Denise *denise;
+    class Colorizer *colorizer; 
+    
     // Information shown in the GUI inspector panel
     CopperInfo info;
     
@@ -120,6 +122,8 @@ private:
     // Called by findMatch() to determine the horizontal trigger position
     bool findHorizontalMatch(int16_t hStrt, int16_t hComp, int16_t hMask, int16_t &result);
 
+    // Emulates the Copper writing a value into one of the custom registers
+    void move(int addr, uint16_t value);
 
     // Runs the comparator circuit.
     // DEPRECATED

@@ -17,8 +17,9 @@ class Colorizer : public HardwareComponent {
 private:
     
     // The 32 Amiga color registers
+    // TimeRecorded<uint16_t> colorReg[32];
     uint16_t colorReg[32];
-    
+
     /* The 64 Amiga colors in RGBA format
      * The first 32 entries represent the colors that are stored in the color
      * registers in RGBA format. The other 32 colors contain the RGBA values

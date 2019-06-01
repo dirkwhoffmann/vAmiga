@@ -29,7 +29,9 @@ Copper::_initialize()
 {
     mem = &amiga->mem;
     agnus = &amiga->agnus;
-    events = &amiga->agnus.events; 
+    events = &amiga->agnus.events;
+    //denise = &amiga->denise;
+    colorizer = &amiga->denise.colorizer;
 }
 
 void
@@ -227,6 +229,28 @@ Copper::findHorizontalMatch(int16_t hStrt, int16_t hComp, int16_t hMask, int16_t
         }
     }
     return false;
+}
+
+void
+Copper::move(int addr, uint16_t value)
+{
+    debug(COP_DEBUG, "MOVE %X <- %X\n", addr, value);
+
+    assert(IS_EVEN(addr));
+    assert(addr < 0x1FF);
+
+    // Catch registers with special timing needs
+
+    // Color registers
+    if (addr >= 0x180 && addr <= 0x1BE) {
+
+        int reg = (addr - 0x180) / 2;
+        colorizer->pokeColorReg(reg, value);
+        return;
+    }
+
+    // Do a standard poke
+    mem->pokeCustom16(addr, value);
 }
 
 bool
@@ -469,10 +493,7 @@ Copper::serviceEvent(EventID id)
                 }
                 
                 // Write into the custom register
-                if (!skip) {
-                    debug(COP_DEBUG, "MOVE %X <- %X\n", reg, copins2);
-                    mem->pokeCustom16(reg, copins2);
-                }
+                if (!skip) move(reg, copins2);
                 skip = false;
                 
                 // Schedule next event
