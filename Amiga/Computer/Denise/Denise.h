@@ -61,9 +61,6 @@ public:
     uint16_t sprdata[8];
     uint16_t sprdatb[8];
 
-    // Counter for digital (mouse) input (port 1 and 2)
-    // uint16_t joydat[2];
-    
     /* The 6 bitplane parallel-to-serial shift registers
      * Denise transfers the current values of the BPLDAT registers into the
      * shift registers after BPLDAT1 is written to. This is emulated in
@@ -111,7 +108,17 @@ public:
     // Screen buffers
     //
 
-    /* Denise keeps four screen buffers, two for storing long frames and
+    /* Bitplane data of the currently drawn rasterline.
+     * While emulating the DMA cycles in a single rasterline, Denise writes
+     * the fetched bitplane data into this array. Each array element stores
+     * the color register indice of a single pixel that will later appear on
+     * the screen. After the rasterline is finished, Denise reads the values
+     * from this array, translates them into RGBA, and writes the RGBA values
+     * into one of the four frame buffers (see below).
+     */
+    uint8_t rasterline[LAST_VISIBLE + 1]; // HPOS_CNT * 4];
+
+    /* Denise keeps four frame buffers, two for storing long frames and
      * another two for storing short frames. The short frame buffers are only
      * used in interlace mode. At each point in time, one of the two buffers
      * is the "working buffer" and the other one the "stable buffer". Denise
@@ -132,7 +139,7 @@ public:
     ScreenBuffer *stableLongFrame = &longFrame2;
     ScreenBuffer *stableShortFrame = &shortFrame2;
 
-    // Pointer to the screen buffer Denise is currently working on
+    // Pointer to the frame buffer Denise is currently working on
     ScreenBuffer *frameBuffer = &longFrame1;
 
     
@@ -300,11 +307,10 @@ public:
     /* Draws the left and the right border.
      * This method is called at the end of each rasterline.
      */
-    void drawBorder();
-    void newDrawBorder(); 
+    void drawBorder(); 
 
-    // Sets the canvas pixel parameters (called by Agnus)
-    // void setCanvasPixels(int16_t firstCanvasPixel, int16_t endCanvasPixel);
+    // Writes the current line into the frame buffer.
+    void translateToRGBA();
 
 
     //

@@ -374,7 +374,7 @@ static const char *customReg[256] = {
 #define HBLANK_MAX 53
 
 // Screen buffer pixel counts
-#define VPIXELS       320 // 313
+#define VPIXELS       320
 #define HPIXELS       1024
 #define PIXELS        (VPIXELS * HPIXELS)
 #define HBLANK_PIXELS 216
@@ -382,8 +382,5 @@ static const char *customReg[256] = {
 
 #define FIRST_VISIBLE 216
 #define LAST_VISIBLE  (907 + 15 * 4)
-
-// Screen buffer size
-// static const long BUFSIZE = VPIXELS * HPIXELS * 4;
 
 #endif 

@@ -437,6 +437,8 @@ Denise::draw16(int pixels)
         maskEven >>= 1;
 
         // Draw a single hires pixel
+        assert(currentPixel + i < sizeof(rasterline));
+        rasterline[currentPixel + i] = index;
         uint32_t rgba = colorizer.getRGBA(index * inDisplayWindow);
 
         *ptr++ = rgba;
@@ -472,6 +474,8 @@ Denise::draw32(int pixels)
         maskEven >>= 1;
 
         // Draw two lores pixels
+        assert(currentPixel + i < sizeof(rasterline));
+        rasterline[currentPixel + i] = index;
         uint32_t rgba = colorizer.getRGBA(index * inDisplayWindow);
 
         *ptr++ = rgba;
@@ -508,6 +512,8 @@ Denise::draw32HAM(int pixels)
         maskEven >>= 1;
 
         // Draw two lores pixels
+        assert(currentPixel + i < sizeof(rasterline));
+        rasterline[currentPixel + i] = index;
         uint32_t rgba = colorizer.computeHAM(index * inDisplayWindow);
 
         *ptr++ = rgba;
@@ -531,7 +537,7 @@ Denise::drawSprites()
         if (armed & 0x1) {
 
             int16_t pixel = 2 * sprhstrt[nr] + 2;
-            if (pixel >= HPIXELS - 33) { pixel = HPIXELS - 33; } // ????
+            if (pixel >= HPIXELS - 33) { pixel = HPIXELS - 33; } // TODO: ????
             int *ptr = pixelAddr(pixel);
 
             int rgba[4];
@@ -545,6 +551,9 @@ Denise::drawSprites()
                 colNr |=    !!GET_BIT(sprdatb[nr], i);
 
                 if (colNr) {
+                    assert(pixel + 2*i + 1 < sizeof(rasterline));
+                    rasterline[pixel + 2*i] = colNr;
+                    rasterline[pixel + 2*i + 1] = colNr;
                     *ptr++ = rgba[colNr];
                     *ptr++ = rgba[colNr];
                 } else {
@@ -560,49 +569,6 @@ Denise::drawSprites()
 
 void
 Denise::drawBorder()
-{
-#ifndef BORDER_DEBUG
-    int rgba = colorizer.getRGBA(0);
-    int rgbaHBorderL = rgba;
-    int rgbaHBorderR = rgba;
-    int rgbaVBorder  = rgba;
-#else
-    int rgbaHBorderL = 0x00000044;
-    int rgbaHBorderR = 0x00000088;
-    int rgbaVBorder  = 0x000000CC;
-#endif
-
-    int *ptr = pixelAddr(0);
-
-    // Draw vertical border
-    if (!inDisplayWindow) {
-        for (int i = FIRST_VISIBLE; i <= LAST_VISIBLE; i++) {
-            ptr[i] = rgbaVBorder;
-        }
-
-    } else {
-
-        // Draw left border
-        // debug("diwHstrt = %d diwHstop = %d\n", _agnus->diwHstrt, _agnus->diwHstop);
-        for (int i = FIRST_VISIBLE; i < (2 * agnus->diwHstrt); i++) {
-            ptr[i] = rgbaHBorderL;
-        }
-
-        // Draw right border
-        for (int i = (2 * agnus->diwHstop); i <= LAST_VISIBLE; i++) {
-            ptr[i] = rgbaHBorderR;
-        }
-    }
-
-#ifdef LINE_DEBUG
-    if (agnus->vpos == 311) {
-        for (int i = 0; i < 256; i++) { ptr[i] = 0x00FFFF00; }
-    }
-#endif
-}
-
-void
-Denise::newDrawBorder()
 {
 #ifndef BORDER_DEBUG
     int rgba = colorizer.getRGBA(0);
@@ -634,17 +600,25 @@ Denise::newDrawBorder()
         // Draw left border
         for (int i = FIRST_VISIBLE; i < 2 * agnus->diwHstrt; i++) {
             ptr[i] = rgbaBorderL;
+            assert(i < sizeof(rasterline));
+            rasterline[i] = 0;
         }
         for (int i = (2 * agnus->diwHstrt); i < firstCanvasPixel; i++) {
             ptr[i] = openL;
+            assert(i < sizeof(rasterline));
+            rasterline[i] = 0;
         }
 
         // Draw right border
         for (int i = (2 * agnus->diwHstop); i <= LAST_VISIBLE; i++) {
             ptr[i] = rgbaBorderR;
+            assert(i < sizeof(rasterline));
+            rasterline[i] = 0;
         }
         for (int i = currentPixel; i < 2 * agnus->diwHstop; i++) {
             ptr[i] = openR;
+            assert(i < sizeof(rasterline));
+            rasterline[i] = 0;
         }
     }
 
@@ -653,6 +627,13 @@ Denise::newDrawBorder()
         for (int i = 0; i < 256; i++) { ptr[i] = 0x00FFFF00; }
     }
 #endif
+}
+
+void
+Denise::translateToRGBA()
+{
+    // TODO
+
 }
 
 void
@@ -667,20 +648,17 @@ Denise::endOfLine(int vpos)
 {
     // debug("endOfLine pixel = %d HPIXELS = %d\n", pixel, HPIXELS);
 
+    // Make sure we're below the VBLANK area
     if (vpos >= 26) {
-        
-        // Fill the rest of the current line with the background color.
-        // drawRightBorder();
 
         // Draw sprites if one or more of them is armed.
         if (armed) drawSprites();
 
-        // Draw border
-#ifdef DEPRECATED_RES
+        // Draw border pixels
         drawBorder();
-#else
-        newDrawBorder();
-#endif
+
+        // Synthesize RGBA values and write into the frame buffer
+        translateToRGBA();
     }
 
     // Invoke the DMA debugger
