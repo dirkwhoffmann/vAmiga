@@ -97,7 +97,22 @@ DiskController::_inspect()
 void
 DiskController::_dump()
 {
-    
+    plainmsg("    connected : %d,%d,%d,%d\n",
+             connected[0], connected[1], connected[2], connected[3]);
+    plainmsg("fifoBuffering : %s\n", fifoBuffering ? "yes" : "no");
+    plainmsg("     selected : %d\n", selected);
+    plainmsg(" acceleration : %d\n", acceleration);
+    plainmsg("        state : %s\n", driveStateName(state));
+    plainmsg("     syncFlag : %s\n", syncFlag ? "true" : "false");
+    plainmsg("     incoming : %X (cylcle = %lld)\n", incoming, incomingCycle);
+    plainmsg("         fifo : %llX (count = %d)\n", fifo, fifoCount);
+    plainmsg("\n");
+    plainmsg("       dsklen : %X\n", dsklen);
+    plainmsg("      dsksync : %X\n", dsksync);
+    plainmsg("          prb : %X\n", prb);
+    plainmsg("\n");
+    plainmsg("   spinning() : %d\n", spinning());
+
 }
 
 bool
@@ -110,7 +125,7 @@ DiskController::spinning(unsigned driveNr)
 bool
 DiskController::spinning()
 {
-    return df[0]->motor | df[1]->motor | df[2]->motor | df[3]->motor;
+    return df[0]->motor || df[1]->motor || df[2]->motor || df[3]->motor;
 }
 
 DiskControllerInfo
