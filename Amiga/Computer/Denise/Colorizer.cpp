@@ -17,14 +17,11 @@ Colorizer::Colorizer()
         
         { &colorReg,  sizeof(colorReg),  WORD_ARRAY },
     });
-
-    clearColorCache();
 }
 
 void
 Colorizer::_powerOn()
 {
-    clearColorCache();
     updateRGBA();
 }
 
@@ -33,8 +30,7 @@ void
 Colorizer::setPalette(Palette p)
 {
     palette = p;
-    
-    clearColorCache();
+
     updateColorTable();
     updateRGBA();
 }
@@ -43,8 +39,7 @@ void
 Colorizer::setBrightness(double value)
 {
     brightness = value;
-    
-    clearColorCache();
+
     updateColorTable();
     updateRGBA();
 }
@@ -53,8 +48,7 @@ void
 Colorizer::setSaturation(double value)
 {
     saturation = value;
-    
-    clearColorCache();
+
     updateColorTable();
     updateRGBA();
 }
@@ -64,7 +58,6 @@ Colorizer::setContrast(double value)
 {
     contrast = value;
 
-    clearColorCache();
     updateColorTable();
     updateRGBA();
 
@@ -99,13 +92,6 @@ void
 Colorizer::pokeColorRegCopper(int reg, uint16_t value)
 {
     pokeColorReg(reg, value, amiga->agnus.clock);
-}
-
-void
-Colorizer::clearColorCache()
-{
-    memset(colorCache, 0, sizeof(colorCache));
-    memset(colorRGBA, 0, sizeof(colorRGBA));
 }
 
 void
@@ -189,24 +175,6 @@ uint32_t
 Colorizer::computeRGBA(uint16_t rgb)
 {
     assert(rgb < 4096);
-
-    /*
-    // Compute color if it is not cached yet
-    if (colorCache[rgb] == 0) {
-
-        uint8_t r = (rgb >> 4) & 0xF0;
-        uint8_t g = (rgb >> 0) & 0xF0;
-        uint8_t b = (rgb << 4) & 0xF0;
-
-        // Convert the Amiga value to an RGBA value
-        adjustRGB(r, g, b);
-
-        // Write value into cache
-        colorCache[rgb] = HI_HI_LO_LO(0xFF, b, g, r);
-    }
-
-    return colorCache[rgb];
-    */
     return rgba[rgb];
 }
 

@@ -31,15 +31,6 @@ private:
      * DEPRECATED
      */
     uint32_t colorRGBA[64];
-    
-    /* Color cache for all possible 4096 colors
-     * When computeRGBA() is invoked, the function first checks if the color
-     * is stored in the color cache. If not, it is computed on-the-fly and
-     * stored in the cache. Whenever a color adjustment parameter changes,
-     * the color cache is cleared.
-     * DEPRECATED
-     */
-    uint32_t colorCache[4096];
 
     // The most recently computed HAM pixel in Amiga RGB format
     uint16_t hamRGB;
@@ -114,10 +105,6 @@ public:
     //
 
 private:
-
-    // Clears the color cache
-    // DEPRECATED
-    void clearColorCache();
 
     // Adjusts the RGBA value according to the selected color parameters
     void adjustRGB(uint8_t &r, uint8_t &g, uint8_t &b);
