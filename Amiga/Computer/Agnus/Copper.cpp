@@ -152,6 +152,84 @@ Copper::pokeCOPxLCL(int x, uint16_t value)
 }
 
 bool
+Copper::findMatch(Beam &result)
+{
+    int16_t vMatch, hMatch;
+
+    // Get the current beam position
+    Beam b = agnus->beamPosition();
+
+    // Advance to the position where the comparator circuit gets active
+    b = agnus->addToBeam(b, 2);
+
+    // Set up the comparison positions
+    int16_t vComp = getVP();
+    int16_t hComp = getHP();
+
+    // Set up the comparison masks
+    int16_t vMask = getVM() | 0x80;
+    int16_t hMask = getHM() & 0xFE;
+
+    // Check if the current line matches the vertical trigger position
+    if ((b.y & vMask) >= (vComp & vMask)) {
+
+        // Check if we find a horizontal match in this line
+        if (findHorizontalMatch(b.x, hComp, hMask, hMatch)) {
+
+            // Success. We've found a match in the current line
+            result.y = b.y;
+            result.x = hMatch;
+            return true;
+        }
+    }
+
+    // Find the first vertical match below the current line
+    if (!findVerticalMatch(b.y + 1, vComp, vMask, vMatch)) return false;
+
+    // Find the first horizontal match in that line
+    if (!findHorizontalMatch(0, hComp, hMask, hMatch)) return false;
+
+    // Success. We've found a match below the current line
+    result.y = vMatch;
+    result.x = hMatch;
+    return true;
+}
+
+bool
+Copper::findVerticalMatch(int16_t vStrt, int16_t vComp, int16_t vMask, int16_t &result)
+{
+    int16_t vStop = agnus->frameInfo.numLines;
+
+    // Iterate through all vertical positions
+    for (int v = vStrt; v < vStop; v++) {
+
+        // Check if the comparator triggers at this position
+        if ((v & vMask) >= (vComp & vMask)) {
+            result = v;
+            return true;
+        }
+    }
+    return false;
+}
+
+bool
+Copper::findHorizontalMatch(int16_t hStrt, int16_t hComp, int16_t hMask, int16_t &result)
+{
+    int16_t hStop = agnus->DMACyclesPerLine(); 
+
+    // Iterate through all horizontal positions
+    for (int h = hStrt; h < hStop; h++) {
+
+        // Check if the comparator triggers at this position
+        if ((h & hMask) >= (hComp & hMask)) {
+            result = h;
+            return true;
+        }
+    }
+    return false;
+}
+
+bool
 Copper::comparator(uint32_t beam, uint32_t waitpos, uint32_t mask)
 {
     // Get comparison bits for the vertical beam position
@@ -211,7 +289,7 @@ Copper::nextTriggerPosition()
      * We do this by starting with the maximum possible value:
      */
     uint32_t pos = 0x1FFE2;
-    
+
     /* Now, we iterate through bit from left to right and set the bit we see
      * to 0 as long as conditions 1) and 2) hold.
      */
@@ -414,10 +492,11 @@ Copper::serviceEvent(EventID id)
                 
                 // Is it a WAIT command?
                 if (isWaitCmd()) {
-                    
+
                     // Clear the skip flag
                     skip = false;
-                    
+
+// #if 0
                     // Determine where the WAIT command will trigger
                     uint32_t trigger = nextTriggerPosition();
                     
@@ -433,9 +512,29 @@ Copper::serviceEvent(EventID id)
                     } else {
                         events->scheduleRel(COP_SLOT, delay, COP_FETCH);
                     }
-                    // amiga->agnus.eventHandler.dump();
+// #endif
+#if 0
+
+                // Find the trigger position for this WAIT command
+                    Beam trigger;
+                    if (findMatch(trigger)) {
+
+                        // In how many cycles do we get there?
+                        Cycle delay = agnus->beamDiff(trigger.y, trigger.x);
+                        assert(delay < NEVER);
+
+                        // Schedule the Copper to wake up
+                        events->scheduleRel(COP_SLOT, delay, COP_FETCH);
+
+                    } else {
+
+                        // Stop the Copper
+                        events->disable(COP_SLOT);
+                    }
+#endif
+
                 }
-                
+
                 // It must be a SKIP command then.
                 else {
                     
@@ -444,8 +543,6 @@ Copper::serviceEvent(EventID id)
                     assert(isSkipCmd());
                     skip = comparator();
                 }
-              
-
             }
             break;
             

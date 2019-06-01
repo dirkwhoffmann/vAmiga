@@ -101,7 +101,28 @@ private:
     // Advances the program counter.
     inline void advancePC() { coppc = (coppc + 2) & 0x7FFFE; }
 
+    /* Searches for the next matching beam position.
+     * This function is called when a WAIT statement is processed. It is uses
+     * to compute where the Copper wakes up.
+     *
+     * Return values:
+     *
+     * true:  The Copper wakes up in the current frame.
+     *        The wake-up position is returned in variable 'result'.
+     * false: The Copper does not wake up the current frame.
+     *        Variable 'result' remains untouched.
+     */
+    bool findMatch(Beam &result);
+
+    // Called by findMatch() to determine the vertical trigger position
+    bool findVerticalMatch(int16_t vStrt, int16_t vComp, int16_t vMask, int16_t &result);
+
+    // Called by findMatch() to determine the horizontal trigger position
+    bool findHorizontalMatch(int16_t hStrt, int16_t hComp, int16_t hMask, int16_t &result);
+
+
     // Runs the comparator circuit.
+    // DEPRECATED
     bool comparator(uint32_t beam, uint32_t waitpos, uint32_t mask);
     bool comparator(uint32_t waitpos);
     bool comparator();
@@ -109,6 +130,7 @@ private:
     /* Computes the beam position where the Copper needs to wake up.
      * This functions is invoked when a WAIT command is processed.
      */
+    // DEPRECATED
     uint32_t nextTriggerPosition(); 
     
     
