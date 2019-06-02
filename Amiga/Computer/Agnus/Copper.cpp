@@ -245,10 +245,7 @@ Copper::move(int addr, uint16_t value)
     if (addr >= 0x180 && addr <= 0x1BE) {
 
         int reg = (addr - 0x180) / 2;
-        colorizer->recordColorRegisterChange(reg, value, agnus->hpos);
-
-        // REMOVE ASAP:
-        colorizer->setColor(reg, value);
+        colorizer->recordColorRegisterChange(reg, value, 4 * agnus->hpos);
         return;
     }
 

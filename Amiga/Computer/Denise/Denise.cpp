@@ -363,10 +363,7 @@ Denise::pokeCOLORx(int x, uint16_t value)
     assert(x < 32);
     debug(COL_DEBUG, "pokeCOLOR%(%X)\n", x, value);
 
-    colorizer.recordColorRegisterChange(x, value & 0xFFF, agnus->hpos * 4);
-
-    // REMOVE ASAP
-    colorizer.setColor(x, value);
+    colorizer.recordColorRegisterChange(x, value & 0xFFF, 4 * agnus->hpos);
 }
 
 void

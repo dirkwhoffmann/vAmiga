@@ -232,9 +232,6 @@ Colorizer::recordColorRegisterChange(uint32_t addr, uint16_t value, int16_t pixe
         colorChanges[newPos] = colorChanges[newPos - 1];
         colorChanges[--newPos] = swap;
     }
-
-    // REMOVE ASAP
-    
 }
 
 void
@@ -245,6 +242,7 @@ Colorizer::translateToRGBA(const uint8_t *src, int *dest)
     // Process recorded color changes
     for (int change = 0; change < colorChangeCount; change++) {
 
+        // debug("Color change %d/%d: %d \n", change, colorChangeCount, colorChanges[change].pixel);
         // Draw a chunk of pixels
         for (; pixel < colorChanges[change].pixel; pixel++) {
 
@@ -253,7 +251,8 @@ Colorizer::translateToRGBA(const uint8_t *src, int *dest)
         }
 
         // Perform the color change
-        // TODO
+        // debug("Pixel %d Setting color %d to %X\n", pixel, colorChanges[change].addr, colorChanges[change].value);
+        setColor(colorChanges[change].addr, colorChanges[change].value);
     }
 
     // Draw the rest of the line
@@ -280,7 +279,7 @@ Colorizer::translateToRGBA_HAM(const uint8_t *src, int *dest)
         }
 
         // Perform the color change
-        // TODO
+        setColor(colorChanges[change].addr, colorChanges[change].value);
     }
 
     // Draw the rest of the line

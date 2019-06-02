@@ -104,6 +104,7 @@ public:
 
     // Performs a consistency check for debugging.
     bool isColorTableIndex(int nr) { return nr < colorTableCnt; }
+    
     // Changes one of the 32 Amiga color registers.
     void setColor(int reg, uint16_t value);
 

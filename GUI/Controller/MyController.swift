@@ -334,7 +334,6 @@ class MyController: NSWindowController, MessageReceiver {
     // Updates the warp status
     func updateWarp() {
         let loading = amiga.diskController.spinning()
-        track("loading = \(loading) alwaysWarp = \(alwaysWarp)")
         amiga.setWarp(alwaysWarp || (loading && warpLoad))
     }
     
