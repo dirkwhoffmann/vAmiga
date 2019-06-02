@@ -530,59 +530,52 @@ void
 Denise::drawBorder()
 {
 #ifndef BORDER_DEBUG
-    int rgba = colorizer.getRGBA(0);
-    int rgbaBorderL = rgba;
-    int rgbaBorderR = rgba;
-    int rgbaBorderV = rgba;
-    int openL = rgba;
-    int openR = rgba;
+    int borderL = 0;
+    int borderR = 0;
+    int borderV = 0;
+    int openL = 0;
+    int openR = 0;
 #else
-    int rgbaBorderL = 0x00000044;
-    int rgbaBorderR = 0x00000088;
-    int rgbaBorderV = 0x000000CC;
+    int borderL = 0x00000044; // FIXME
+    int borderR = 0x00000088;
+    int borderV = 0x000000CC;
     int openL = 0x00888800;
     int openR = 0x00AAAA00;
 #endif
-
-    int *ptr = pixelAddr(0);
 
     if (firstCanvasPixel == 0) {
         assert(lastCanvasPixel == 0);
 
         // Fill the whole line with the background color
         for (int i = FIRST_VISIBLE; i <= LAST_VISIBLE; i++) {
-            ptr[i] = rgbaBorderV;
-            rasterline[i] = 0;
+            rasterline[i] = borderV;
         }
 
     } else {
 
         // Draw left border
         for (int i = FIRST_VISIBLE; i < 2 * agnus->diwHstrt; i++) {
-            ptr[i] = rgbaBorderL;
             assert(i < sizeof(rasterline));
-            rasterline[i] = 0;
+            rasterline[i] = borderL;
         }
         for (int i = (2 * agnus->diwHstrt); i < firstCanvasPixel; i++) {
-            ptr[i] = openL;
             assert(i < sizeof(rasterline));
-            rasterline[i] = 0;
+            rasterline[i] = openL;
         }
 
         // Draw right border
         for (int i = (2 * agnus->diwHstop); i <= LAST_VISIBLE; i++) {
-            ptr[i] = rgbaBorderR;
             assert(i < sizeof(rasterline));
-            rasterline[i] = 0;
+            rasterline[i] = borderR;
         }
         for (int i = currentPixel; i < 2 * agnus->diwHstop; i++) {
-            ptr[i] = openR;
             assert(i < sizeof(rasterline));
-            rasterline[i] = 0;
+            rasterline[i] = openR;
         }
     }
 
 #ifdef LINE_DEBUG
+    // FIXME
     if (agnus->vpos == 311) {
         for (int i = 0; i < 256; i++) { ptr[i] = 0x00FFFF00; }
     }
