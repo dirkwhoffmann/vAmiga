@@ -434,18 +434,14 @@ Denise::drawLores(int pixels)
         maskEven >>= 1;
 
         // Draw two lores pixels
-        assert(currentPixel + 2*i + 1 < sizeof(rasterline));
-        rasterline[currentPixel + 2*i] = index * inDisplayWindow;
-        rasterline[currentPixel + 2*i + 1] = index * inDisplayWindow;
+        assert(currentPixel + 1 < sizeof(rasterline));
+        rasterline[currentPixel++] = index * inDisplayWindow;
+        rasterline[currentPixel++] = index * inDisplayWindow;
     }
 
 #ifdef PIXEL_DEBUG
-    // FIX ME
-    *pixelAddr(pixel) = 0x000000FF;
+    rasterline[currentPixel - 16] = 64;
 #endif
-
-    currentPixel += 2 * pixels;
-
 }
 
 void
@@ -474,16 +470,13 @@ Denise::drawHires(int pixels)
         maskEven >>= 1;
 
         // Draw a single hires pixel
-        assert(currentPixel + i < sizeof(rasterline));
-        rasterline[currentPixel + i] = index * inDisplayWindow;
+        assert(currentPixel < sizeof(rasterline));
+        rasterline[currentPixel++] = index * inDisplayWindow;
     }
 
 #ifdef PIXEL_DEBUG
-    // FIX ME
-    *pixelAddr(pixel) = 0x000000FF;
+    rasterline[currentPixel - 16] = 64;
 #endif
-
-    currentPixel += pixels;
 }
 
 void
@@ -522,11 +515,11 @@ Denise::drawBorder()
     int openL = 0;
     int openR = 0;
 #else
-    int borderL = 0x00000044; // FIXME
-    int borderR = 0x00000088;
-    int borderV = 0x000000CC;
-    int openL = 0x00888800;
-    int openR = 0x00AAAA00;
+    int borderL = 64;
+    int borderR = 65;
+    int borderV = 66;
+    int openL = 68;
+    int openR = 69;
 #endif
 
     if (firstCanvasPixel == 0) {
@@ -561,10 +554,7 @@ Denise::drawBorder()
     }
 
 #ifdef LINE_DEBUG
-    // FIXME
-    if (agnus->vpos == 311) {
-        for (int i = 0; i < 256; i++) { ptr[i] = 0x00FFFF00; }
-    }
+    if (agnus->vpos == 256) for (int i = 0; i <= LAST_VISIBLE; rasterline[i++] = 64);
 #endif
 }
 

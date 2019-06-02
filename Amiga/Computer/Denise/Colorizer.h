@@ -30,7 +30,8 @@ private:
      * 32 .. 63: Additional colors used in halfbright mode.
      * 64 .. 71: Some predefined debug colors
      */
-    uint16_t colorReg[32 + 32 + 8];
+    static const int colorTableCnt = 32 + 32 + 8;
+    uint16_t colors[colorTableCnt];
 
     // The RGBA values of all 4096 Amiga colors
     uint32_t rgba[4096];
@@ -101,11 +102,13 @@ public:
 
 public:
 
+    // Performs a consistency check for debugging.
+    bool isColorTableIndex(int nr) { return nr < colorTableCnt; }
     // Changes one of the 32 Amiga color registers.
     void setColor(int reg, uint16_t value);
 
     // Returns a color value in Amiga format or RGBA format
-    uint16_t getColor(int nr) { assert(nr < 64); return colorReg[nr]; }
+    uint16_t getColor(int nr) { assert(isColorTableIndex(nr)); return colors[nr]; }
     uint32_t getRGBA(int nr) { return rgba[getColor(nr)]; }
 
     // Returns sprite color in Amiga format or RGBA format
@@ -135,7 +138,7 @@ public:
     /* Resets the stored RGB value to the background color
      * This function needs to be called at the beginning of each rasterline.
      */
-    void prepareForHAM() { hamRGB = colorReg[0]; }
+    void prepareForHAM() { hamRGB = colors[0]; }
 
     // Computes the Amiga color value for a color given in HAM format.
     uint16_t computeHAM(uint8_t index);

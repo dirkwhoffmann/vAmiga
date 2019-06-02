@@ -15,8 +15,18 @@ Colorizer::Colorizer()
     
     registerSnapshotItems(vector<SnapshotItem> {
         
-        { &colorReg,  sizeof(colorReg),  WORD_ARRAY },
+        { &colors,  64 * sizeof(uint16_t),  WORD_ARRAY },
     });
+
+    // Setup some debug colors (in Amiga color format)
+    colors[64] = 0x0F00;
+    colors[65] = 0x0D00;
+    colors[66] = 0x0A00;
+    colors[67] = 0x0900;
+    colors[68] = 0x00FF;
+    colors[69] = 0x00DD;
+    colors[70] = 0x00AA;
+    colors[71] = 0x0099;
 }
 
 void
@@ -66,8 +76,8 @@ Colorizer::setColor(int reg, uint16_t value)
     uint8_t g = (value & 0x0F0) >> 4;
     uint8_t b = (value & 0x00F);
 
-    colorReg[reg] = value & 0xFFF;
-    colorReg[reg + 32] = ((r / 2) << 8) | ((g / 2) << 4) | (b / 2);
+    colors[reg] = value & 0xFFF;
+    colors[reg + 32] = ((r / 2) << 8) | ((g / 2) << 4) | (b / 2);
 }
 
 void
@@ -171,13 +181,11 @@ Colorizer::adjustRGB(uint8_t &r, uint8_t &g, uint8_t &b)
 uint16_t
 Colorizer::computeHAM(uint8_t index)
 {
-    assert(index < 64);
-
-    switch (index >> 4) {
+    switch ((index >> 4) & 0b11) {
 
         case 0b00: // Get color from register
 
-            hamRGB = colorReg[index];
+            hamRGB = colors[index];
             break;
 
         case 0b01: // Modify blue
@@ -240,8 +248,8 @@ Colorizer::translateToRGBA(const uint8_t *src, int *dest)
         // Draw a chunk of pixels
         for (; pixel < colorChanges[change].pixel; pixel++) {
 
-            assert(src[pixel] < 64);
-            dest[pixel] = rgba[colorReg[src[pixel]]];
+            assert(isColorTableIndex(src[pixel]));
+            dest[pixel] = rgba[colors[src[pixel]]];
         }
 
         // Perform the color change
@@ -251,11 +259,8 @@ Colorizer::translateToRGBA(const uint8_t *src, int *dest)
     // Draw the rest of the line
     for (; pixel < LAST_VISIBLE; pixel++) {
 
-        if (src[pixel] >= 64) {
-            debug("pixel = %d src[pixel] = %d\n", pixel, src[pixel]);
-        }
-        assert(src[pixel] < 64);
-        dest[pixel] = rgba[colorReg[src[pixel]]];
+        assert(isColorTableIndex(src[pixel]));
+        dest[pixel] = rgba[colors[src[pixel]]];
     }
 
     colorChangeCount = 0;
@@ -271,8 +276,6 @@ Colorizer::translateToRGBA_HAM(const uint8_t *src, int *dest)
 
         // Draw a chunk of pixels
         for (; pixel < colorChanges[change].pixel; pixel++) {
-
-            assert(src[pixel] < 64);
             dest[pixel] = rgba[computeHAM(src[pixel])];
         }
 
@@ -282,8 +285,6 @@ Colorizer::translateToRGBA_HAM(const uint8_t *src, int *dest)
 
     // Draw the rest of the line
     for (; pixel < LAST_VISIBLE; pixel++) {
-
-        assert(src[pixel] < 64);
         dest[pixel] = rgba[computeHAM(src[pixel])];
     }
 
