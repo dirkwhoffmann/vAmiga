@@ -95,21 +95,21 @@ Blitter::doFastCopyBlit()
 
             // Fetch A
             if (useA) {
-                anew = mem->peek16(bltapt); // TODO: Call peekChip
+                anew = mem->peek16(bltapt);
                 if (bltdebug) plainmsg("    A = peek(%X) = %X\n", bltapt, anew);
                 INC_OCS_PTR(bltapt, incr);
             }
             
             // Fetch B
             if (useB) {
-                bnew = mem->peek16(bltbpt); // TODO: Call peekChip
+                bnew = mem->peek16(bltbpt);
                 if (bltdebug) plainmsg("    B = peek(%X) = %X\n", bltbpt, bnew);
                 INC_OCS_PTR(bltbpt, incr);
             }
             
             // Fetch C
             if (useC) {
-                chold = mem->peek16(bltcpt); // TODO: Call peekChip
+                chold = mem->peek16(bltcpt);
                 if (bltdebug) plainmsg("    C = peek(%X) = %X\n", bltcpt, chold);
                 INC_OCS_PTR(bltcpt, incr);
             }
@@ -132,9 +132,8 @@ Blitter::doFastCopyBlit()
             
             // Run the minterm logic circuit
             if (bltdebug) plainmsg("    ahold = %X bhold = %X chold = %X bltcon0 = %X (hex)\n", ahold, bhold, chold, bltcon0);
-            // dhold = doMintermLogicQuick(ahold, bhold, chold, bltcon0 & 0xFF);
-            // assert(dhold == doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF));
-             dhold = doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF);
+            dhold = doMintermLogicQuick(ahold, bhold, chold, bltcon0 & 0xFF);
+            assert(dhold == doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF));
 
             // Run the fill logic circuit
             if (bltconFE()) doFill(dhold, fillCarry);
@@ -144,7 +143,7 @@ Blitter::doFastCopyBlit()
         
             // Write D
             if (useD) {
-                mem->pokeChip16(bltdpt, dhold);
+                mem->poke16(bltdpt, dhold);
                 if (bltdebug) plainmsg("D: poke(%X), %X\n", bltdpt, dhold);
                 check1 = fnv_1a_it32(check1, dhold);
                 check2 = fnv_1a_it32(check2, bltdpt);
@@ -251,7 +250,7 @@ Blitter::doFastLineBlit()
     {
         // Read C-data from memory if the C-channel is enabled
         if (c_enabled) {
-            bltcdat_local = mem->peekChip16(bltcpt_local);
+            bltcdat_local = mem->peek16(bltcpt_local);
         }
         
         // Calculate data for the A-channel
@@ -276,7 +275,7 @@ Blitter::doFastLineBlit()
         
         // Save result to D-channel, same as the C ptr after first pixel.
         if (c_enabled) { // C-channel must be enabled
-            mem->pokeChip16(bltdpt_local, bltddat_local);
+            mem->poke16(bltdpt_local, bltddat_local);
             check1 = fnv_1a_it32(check1, bltddat_local);
             check2 = fnv_1a_it32(check2, bltdpt_local);
         }
