@@ -21,7 +21,7 @@
 - Master the Alpine9000 test suite.
 - Let the Juggler juggle.
 - Fix the intro screen of "The Pawn".
-- Rescue the princess.
+- Rescue the princess 😎.
   
    <img src="http://www.dirkwhoffmann.de/vAMIGA/pics/milestone6.png" width="150">    
    <img src="http://www.dirkwhoffmann.de/vAMIGA/pics/milestone7.png" width="150">    
