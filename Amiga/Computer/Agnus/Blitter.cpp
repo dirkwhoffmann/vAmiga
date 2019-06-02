@@ -688,7 +688,12 @@ uint16_t
 Blitter::doMintermLogic(uint16_t a, uint16_t b, uint16_t c, uint8_t minterm)
 {
     uint16_t result = 0;
-    
+
+    // if (copycount == 1182) minterm = 0xCA; // if (A) keep B else keep C
+    // if (copycount == 1182) minterm = 0xF0; // keep A
+    // if (copycount == 1182) minterm = 0xAA; // keep C
+    // if (copycount == 1182) minterm = 0xCC; // keep B
+        
     if (minterm & 0b10000000) result |=  a &  b &  c;
     if (minterm & 0b01000000) result |=  a &  b & ~c;
     if (minterm & 0b00100000) result |=  a & ~b &  c;

@@ -221,7 +221,7 @@ Colorizer::recordColorRegisterChange(uint32_t addr, uint16_t value, int16_t pixe
     int newPos = colorChangeCount++;
 
     // Add new entry
-    assert(newPos < 128);
+    assert(newPos < 256);
     colorChanges[newPos].addr = addr;
     colorChanges[newPos].value = value;
     colorChanges[newPos].pixel = pixel;

@@ -30,12 +30,8 @@ Blitter::doFastBlit()
 void
 Blitter::doFastCopyBlit()
 {
-    plaindebug(2, "%d COPY BLIT (%d,%d) (%s)\n",
-               copycount++, bltsizeH(), bltsizeW(), bltconDESC() ? "descending" : "ascending");
-    bltdebug = false; // (copycount == 1360);
-    
     copycount++;
-  
+
     uint32_t check1 = fnv_1a_init32();
     uint32_t check2 = fnv_1a_init32();
     
@@ -59,13 +55,13 @@ Blitter::doFastCopyBlit()
     int32_t bmod = bltbmod;
     int32_t cmod = bltcmod;
     int32_t dmod = bltdmod;
-    
-    /*
-    printf("BLITTER Blit %d (%d,%d) (%d%d%d%d) %x %x %x %x %s\n",
+
+    plaindebug(BLT_DEBUG, "BLITTER Blit %d (%d,%d) (%d%d%d%d) %x %x %x %x %s\n",
     copycount, bltsizeW(), bltsizeH(), useA, useB, useC, useD,
-           bltapt, bltbpt, bltcpt, bltdpt, bltDESC() ? "D" : "");
-    */
-    
+           bltapt, bltbpt, bltcpt, bltdpt, bltconDESC() ? "D" : "");
+
+    // if (copycount == 1182) bltdebug = 1;
+
     // Reverse direction is descending mode
     if (bltconDESC()) {
         incr = -incr;
@@ -83,7 +79,7 @@ Blitter::doFastCopyBlit()
     
     aold = 0;
     bold = 0;
-    
+
     for (int y = 0; y < ymax; y++) {
         
         // Reset the fill carry bit
@@ -136,9 +132,10 @@ Blitter::doFastCopyBlit()
             
             // Run the minterm logic circuit
             if (bltdebug) plainmsg("    ahold = %X bhold = %X chold = %X bltcon0 = %X (hex)\n", ahold, bhold, chold, bltcon0);
-            dhold = doMintermLogicQuick(ahold, bhold, chold, bltcon0 & 0xFF);
-            assert(dhold == doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF));
-            
+            // dhold = doMintermLogicQuick(ahold, bhold, chold, bltcon0 & 0xFF);
+            // assert(dhold == doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF));
+             dhold = doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF);
+
             // Run the fill logic circuit
             if (bltconFE()) doFill(dhold, fillCarry);
             
@@ -168,53 +165,6 @@ Blitter::doFastCopyBlit()
     }
     
     // printf("BLITTER check1: %x check2: %x\n", check1, check2);
-}
-
-uint16_t logicFunction(int minterm,uint16_t wordA, uint16_t wordB, uint16_t wordC) {
-    
-    //Not section
-    uint16_t notA = ~wordA;
-    uint16_t notB = ~wordB;
-    uint16_t notC = ~wordC;
-    uint16_t channelD = 0;
-    
-    //Logic Section
-    // printf("ahold = %d bhold = %d chold = %d bltcon0 = %X (hex)\n", wordA, wordB, wordC, minterm);
-    
-    if(minterm & 0x80){
-        channelD =            (wordA & wordB & wordC);
-        // printf("    channelD = %d\n", channelD);
-    }
-    if(minterm & 0x40){
-        channelD = channelD | (wordA & wordB & notC);
-        // printf("    channelD = %d\n", channelD);
-    }
-    if(minterm & 0x20){
-        channelD = channelD | (wordA & notB  & wordC);
-        // printf("    channelD = %d\n", channelD);
-    }
-    if(minterm & 0x10){
-        channelD = channelD | (wordA & notB  & notC);
-        // printf("    channelD = %d\n", channelD);
-    }
-    if(minterm & 0x08){
-        channelD = channelD | (notA  & wordB & wordC);
-        // printf("    channelD = %d\n", channelD);
-    }
-    if(minterm & 0x04){
-        channelD = channelD | (notA  & wordB & notC);
-        // printf("    channelD = %d\n", channelD);
-    }
-    if(minterm & 0x02){
-        channelD = channelD | (notA  & notB  & wordC);
-        // printf("    channelD = %d\n", channelD);
-    }
-    if(minterm & 0x01){
-        channelD = channelD | (notA  & notB  & notC);
-        // printf("    channelD = %d\n", channelD);
-    }
-    
-    return channelD;
 }
 
 #define blitterLineIncreaseX(a_shift, cpt) \
@@ -255,11 +205,11 @@ Blitter::doFastLineBlit()
     bool useC = bltUSEC();
     bool useD = bltUSED();
     */
-    /*
-    printf("BLITTER Line %d (%d,%d) (%d%d%d%d) %x %x %x %x\n",
-           linecount, bltsizeW(), bltsizeH(), useA, useB, useC, useD,
-           bltapt, bltbpt, bltcpt, bltdpt);
-    */
+
+    plaindebug(BLT_DEBUG, "BLITTER Line %d (%d,%d) (%d%d%d%d) %x %x %x %x\n",
+               linecount, bltsizeW(), bltsizeH(),
+               bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
+               bltapt, bltbpt, bltcpt, bltdpt);
     
     // Adapted from WinFellow
     
