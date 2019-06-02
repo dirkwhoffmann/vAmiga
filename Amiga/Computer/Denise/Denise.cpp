@@ -489,40 +489,26 @@ Denise::drawHires(int pixels)
 void
 Denise::drawSprites()
 {
-    int nr = 0, col = 17;
-
-    while (armed != 0) {
+    for (int nr = 0; armed != 0; nr++, armed <<= 1) {
 
         if (armed & 0x1) {
 
+            int colorBase = 16 + 2 * (nr & 6);
+
             int16_t pixel = 2 * sprhstrt[nr] + 2;
             if (pixel >= HPIXELS - 33) { pixel = HPIXELS - 33; } // TODO: ????
-            int *ptr = pixelAddr(pixel);
 
-            int rgba[4];
-            rgba[1] = colorizer.getRGBA(col);
-            rgba[2] = colorizer.getRGBA(col + 1);
-            rgba[3] = colorizer.getRGBA(col + 2);
+            for (int i = 0; i < 16; i++, pixel += 2) {
 
-            for (int i = 15; i >= 0; i--) {
+                int offset = (sprdata[nr] >> (14 - i)) & 2;
+                offset |=    (sprdatb[nr] >> (15 - i)) & 1;
 
-                int colNr = !!GET_BIT(sprdata[nr], i) << 1;
-                colNr |=    !!GET_BIT(sprdatb[nr], i);
-
-                if (colNr) {
-                    assert(pixel + 2*(15-i) + 1 < sizeof(rasterline));
-                    rasterline[pixel + 2*(15-i)] = 16 + colNr;
-                    rasterline[pixel + 2*(15-i) + 1] = 16 + colNr;
-                    *ptr++ = rgba[colNr];
-                    *ptr++ = rgba[colNr];
-                } else {
-                    ptr += 2;
+                if (offset) {
+                    assert(pixel + 1 < sizeof(rasterline));
+                    rasterline[pixel] = rasterline[pixel+1] = colorBase + offset;
                 }
             }
         }
-        armed >>= 1;
-        col += (nr & 1) << 2;
-        nr++;
     }
 }
 
