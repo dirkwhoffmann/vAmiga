@@ -179,7 +179,7 @@ Drive::setMotor(bool value)
 {
     if (!motor && value) {
         
-        // printf("Motor on\n");
+        debug(DSK_DEBUG, "Motor on\n");
         
         amiga->putMessage(MSG_DRIVE_LED_ON, nr);
         amiga->putMessage(MSG_DRIVE_MOTOR_ON, nr);
@@ -187,7 +187,7 @@ Drive::setMotor(bool value)
     
     else if (motor && !value) {
   
-        // printf("Motor off\n");
+        debug(DSK_DEBUG, "Motor off\n");
         
         // Reset identification shift register counter
         idCount = 0;

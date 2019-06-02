@@ -48,7 +48,7 @@
 #define SPR_DEBUG 2
 
 // Set to 1 to debug disk relevant registers
-#define DSK_DEBUG 2
+#define DSK_DEBUG 1
 
 // Set to 1 to debug audio relevant registers
 #define AUD_DEBUG 2

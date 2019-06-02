@@ -89,7 +89,8 @@ Blitter::_initialize()
 void
 Blitter::_powerOn()
 {
-    
+    copycount = 0;
+    linecount = 0;
 }
 
 void
@@ -202,91 +203,91 @@ Blitter::getInfo()
 void
 Blitter::pokeBLTCON0(uint16_t value)
 {
-    debug(2, "pokeBLTCON0(%X)\n", value);
+    debug(BLT_DEBUG, "pokeBLTCON0(%X)\n", value);
     bltcon0 = value;
 }
 
 void
 Blitter::pokeBLTCON1(uint16_t value)
 {
-    debug(2, "pokeBLTCON1(%X)\n", value);
+    debug(BLT_DEBUG, "pokeBLTCON1(%X)\n", value);
     bltcon1 = value;
 }
 
 void
 Blitter::pokeBLTAPTH(uint16_t value)
 {
-    debug(2, "pokeBLTAPTH(%X)\n", value);
+    debug(BLT_DEBUG, "pokeBLTAPTH(%X)\n", value);
     bltapt = REPLACE_HI_WORD(bltapt, value & 0x0007);
 }
 
 void
 Blitter::pokeBLTAPTL(uint16_t value)
 {
-    debug(2, "pokeBLTAPTL(%X)\n", value);
+    debug(BLT_DEBUG, "pokeBLTAPTL(%X)\n", value);
     bltapt = REPLACE_LO_WORD(bltapt, value & 0xFFFE);
 }
 
 void
 Blitter::pokeBLTBPTH(uint16_t value)
 {
-    debug(2, "pokeBLTBPTH(%X)\n", value);
+    debug(BLT_DEBUG, "pokeBLTBPTH(%X)\n", value);
     bltbpt = REPLACE_HI_WORD(bltbpt, value & 0x0007);
 }
 
 void
 Blitter::pokeBLTBPTL(uint16_t value)
 {
-    debug(2, "pokeBLTBPTL(%X)\n", value);
+    debug(BLT_DEBUG, "pokeBLTBPTL(%X)\n", value);
     bltbpt = REPLACE_LO_WORD(bltbpt, value & 0xFFFE);
 }
 
 void
 Blitter::pokeBLTCPTH(uint16_t value)
 {
-    debug(2, "pokeBLTCPTH(%X)\n", value);
+    debug(BLT_DEBUG, "pokeBLTCPTH(%X)\n", value);
     bltcpt = REPLACE_HI_WORD(bltcpt, value & 0x0007);
 }
 
 void
 Blitter::pokeBLTCPTL(uint16_t value)
 {
-    debug(2, "pokeBLTCPTL(%X)\n", value);
+    debug(BLT_DEBUG, "pokeBLTCPTL(%X)\n", value);
     bltcpt = REPLACE_LO_WORD(bltcpt, value & 0xFFFE);
 }
 
 void
 Blitter::pokeBLTDPTH(uint16_t value)
 {
-    debug(2, "pokeBLTDPTH(%X)\n", value);
+    debug(BLT_DEBUG, "pokeBLTDPTH(%X)\n", value);
     bltdpt = REPLACE_HI_WORD(bltdpt, value & 0x0007);
 }
 
 void
 Blitter::pokeBLTDPTL(uint16_t value)
 {
-    debug(2, "pokeBLTDPTL(%X)\n", value);
+    debug(BLT_DEBUG, "pokeBLTDPTL(%X)\n", value);
     bltdpt = REPLACE_LO_WORD(bltdpt, value & 0xFFFE);
 }
 
 void
 Blitter::pokeBLTAFWM(uint16_t value)
 {
-    debug(2, "pokeBLTAFWM(%X)\n", value);
+    debug(BLT_DEBUG, "pokeBLTAFWM(%X)\n", value);
     bltafwm = value;
 }
 
 void
 Blitter::pokeBLTALWM(uint16_t value)
 {
-    debug(2, "pokeBLTALWM(%X)\n", value);
+    debug(BLT_DEBUG, "pokeBLTALWM(%X)\n", value);
     bltalwm = value;
 }
 
 void
 Blitter::pokeBLTSIZE(uint16_t value)
 {
-    debug(2, "pokeBLTSIZE(%X)\n", value);
+    debug(BLT_DEBUG, "pokeBLTSIZE(%X)\n", value);
     
     bltsize = value;
     bzero = true;
@@ -317,34 +318,34 @@ Blitter::pokeBLTSIZE(uint16_t value)
 void
 Blitter::pokeBLTAMOD(uint16_t value)
 {
-    debug(2, "pokeBLTAMOD(%X)\n", value);
+    debug(BLT_DEBUG, "pokeBLTAMOD(%X)\n", value);
     bltamod = (int16_t)(value & 0xFFFE);
 }
 void
 Blitter::pokeBLTBMOD(uint16_t value)
 {
-    debug(2, "pokeBLTBMOD(%X)\n", value);
+    debug(BLT_DEBUG, "pokeBLTBMOD(%X)\n", value);
     bltbmod = (int16_t)(value & 0xFFFE);
 }
 
 void
 Blitter::pokeBLTCMOD(uint16_t value)
 {
-    debug(2, "pokeBLTCMOD(%X)\n", value);
+    debug(BLT_DEBUG, "pokeBLTCMOD(%X)\n", value);
     bltcmod = (int16_t)(value & 0xFFFE);
 }
 
 void
 Blitter::pokeBLTDMOD(uint16_t value)
 {
-    debug(2, "pokeBLTDMOD(%X)\n", value);
+    debug(BLT_DEBUG, "pokeBLTDMOD(%X)\n", value);
     bltdmod = (int16_t)(value & 0xFFFE);
 }
 
 void
 Blitter::pokeBLTADAT(uint16_t value)
 {
-    debug(2, "pokeBLTADAT(%X)\n", value);
+    debug(BLT_DEBUG, "pokeBLTADAT(%X)\n", value);
     anew = value;
     /*
     // Apply masks
@@ -358,7 +359,7 @@ Blitter::pokeBLTADAT(uint16_t value)
 void
 Blitter::pokeBLTBDAT(uint16_t value)
 {
-    debug(2, "pokeBLTBDAT(%X)\n", value);
+    debug(BLT_DEBUG, "pokeBLTBDAT(%X)\n", value);
     bnew = value;
     /*
      bshift = (bshift << 16) | value;
@@ -368,7 +369,7 @@ Blitter::pokeBLTBDAT(uint16_t value)
 void
 Blitter::pokeBLTCDAT(uint16_t value)
 {
-    debug(2, "pokeBLTCDAT(%X)\n", value);
+    debug(BLT_DEBUG, "pokeBLTCDAT(%X)\n", value);
     chold = value;
 }
 
@@ -524,16 +525,13 @@ Blitter::serviceEvent(EventID id)
             break;
             
         case BLT_FAST_BLIT:
-            
-            // Only proceed if Blitter DMA is enabled
-            if (!agnus->bltDMA()) {
-                agnus->events.disable(BLT_SLOT);
-                break;
+
+            if (agnus->bltDMA()) {
+                doFastBlit();
             }
-            
-            doFastBlit();
+            agnus->events.disable(BLT_SLOT);
             break;
-            
+
         default:
             
             assert(false);
@@ -689,11 +687,6 @@ Blitter::doMintermLogic(uint16_t a, uint16_t b, uint16_t c, uint8_t minterm)
 {
     uint16_t result = 0;
 
-    // if (copycount == 1182) minterm = 0xCA; // if (A) keep B else keep C
-    // if (copycount == 1182) minterm = 0xF0; // keep A
-    // if (copycount == 1182) minterm = 0xAA; // keep C
-    // if (copycount == 1182) minterm = 0xCC; // keep B
-        
     if (minterm & 0b10000000) result |=  a &  b &  c;
     if (minterm & 0b01000000) result |=  a &  b & ~c;
     if (minterm & 0b00100000) result |=  a & ~b &  c;

@@ -164,7 +164,7 @@ Blitter::doFastCopyBlit()
         if (useD) INC_OCS_PTR(bltdpt, dmod);
     }
     
-    // printf("BLITTER check1: %x check2: %x\n", check1, check2);
+    plaindebug(BLT_DEBUG, "BLITTER check1: %x check2: %x\n", check1, check2);
 }
 
 #define blitterLineIncreaseX(a_shift, cpt) \

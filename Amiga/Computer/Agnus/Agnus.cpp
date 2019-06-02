@@ -767,7 +767,6 @@ Agnus::pokeDMACON(uint16_t value)
             // Blitter DMA on
             debug(DMA_DEBUG, "Blitter DMA switched on\n");
             // amiga->agnus.eventHandler.scheduleRel(BLT_SLOT, DMA_CYCLES(1), BLT_EXECUTE);
-            events.scheduleRel(BLT_SLOT, DMA_CYCLES(1), BLT_FAST_BLIT);
     
         } else {
             

@@ -683,7 +683,7 @@ DiskController::performTurboDMA(Drive *drive)
 void
 DiskController::performTurboRead(Drive *drive)
 {
-    plaindebug(1, "Turbo-reading %d words from disk.\n", dsklen & 0x3FFF);
+    plaindebug(DSK_DEBUG, "Turbo-reading %d words from disk (dskptr = %X).\n", dsklen & 0x3FFF, agnus->dskpt);
     
     for (unsigned i = 0; i < (dsklen & 0x3FFF); i++) {
         
@@ -697,7 +697,7 @@ DiskController::performTurboRead(Drive *drive)
         checksum = fnv_1a_it32(checksum, word);
     }
         
-    plaindebug(2, "Turbo read %s: checksum = %X\n", drive->getDescription(), checksum);
+    plaindebug(DSK_DEBUG, "Turbo read %s: checksum = %X (dskptr = %X)\n", drive->getDescription(), checksum, agnus->dskpt);
 }
 
 void
