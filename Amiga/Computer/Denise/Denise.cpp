@@ -413,9 +413,39 @@ Denise::drawLores(int pixels)
 {
     assert(currentPixel == (agnus->hpos * 4) + 6);
 
-    // Check if the vertical position is inside the drawing area
-    // if (inDisplayWindow) { ham ? draw32HAM(pixels) : draw32(pixels); }
-    if (inDisplayWindow) { draw32(pixels); }
+    // Only proceed if the vertical position is inside the drawing area
+    if (!inDisplayWindow) return;
+
+    uint32_t maskOdd = 0x8000 << scrollLoresOdd;
+    uint32_t maskEven = 0x8000 << scrollLoresEven;
+
+    for (int i = 0; i < pixels; i++) {
+
+        // Read a bit slice
+        uint8_t index =
+        (!!(shiftReg[0] & maskOdd)  << 0) |
+        (!!(shiftReg[1] & maskEven) << 1) |
+        (!!(shiftReg[2] & maskOdd)  << 2) |
+        (!!(shiftReg[3] & maskEven) << 3) |
+        (!!(shiftReg[4] & maskOdd)  << 4) |
+        (!!(shiftReg[5] & maskEven) << 5);
+
+        maskOdd >>= 1;
+        maskEven >>= 1;
+
+        // Draw two lores pixels
+        assert(currentPixel + 2*i + 1 < sizeof(rasterline));
+        rasterline[currentPixel + 2*i] = index * inDisplayWindow;
+        rasterline[currentPixel + 2*i + 1] = index * inDisplayWindow;
+    }
+
+#ifdef PIXEL_DEBUG
+    // FIX ME
+    *pixelAddr(pixel) = 0x000000FF;
+#endif
+
+    currentPixel += 2 * pixels;
+
 }
 
 void
@@ -423,14 +453,8 @@ Denise::drawHires(int pixels)
 {
     assert(currentPixel == (agnus->hpos * 4) + 6);
 
-    // Check if the vertical position is inside the drawing area
-    if (inDisplayWindow) { draw16(pixels); }
-}
-
-void
-Denise::draw16(int pixels)
-{
-    int *ptr = pixelAddr(currentPixel);
+    // Only proceed if the vertical position is inside the drawing area
+    if (!inDisplayWindow) return;
 
     uint32_t maskOdd = 0x8000 << scrollHiresOdd;
     uint32_t maskEven = 0x8000 << scrollHiresEven;
@@ -452,89 +476,14 @@ Denise::draw16(int pixels)
         // Draw a single hires pixel
         assert(currentPixel + i < sizeof(rasterline));
         rasterline[currentPixel + i] = index * inDisplayWindow;
-        uint32_t rgba = colorizer.getRGBA(index * inDisplayWindow);
-
-        *ptr++ = rgba;
     }
 
 #ifdef PIXEL_DEBUG
+    // FIX ME
     *pixelAddr(pixel) = 0x000000FF;
 #endif
 
     currentPixel += pixels;
-}
-
-void
-Denise::draw32(int pixels)
-{
-    int *ptr = pixelAddr(currentPixel);
-
-    uint32_t maskOdd = 0x8000 << scrollLoresOdd;
-    uint32_t maskEven = 0x8000 << scrollLoresEven;
-
-    for (int i = 0; i < pixels; i++) {
-        
-        // Read a bit slice
-        uint8_t index =
-        (!!(shiftReg[0] & maskOdd)  << 0) |
-        (!!(shiftReg[1] & maskEven) << 1) |
-        (!!(shiftReg[2] & maskOdd)  << 2) |
-        (!!(shiftReg[3] & maskEven) << 3) |
-        (!!(shiftReg[4] & maskOdd)  << 4) |
-        (!!(shiftReg[5] & maskEven) << 5);
-
-        maskOdd >>= 1;
-        maskEven >>= 1;
-
-        // Draw two lores pixels
-        assert(currentPixel + 2*i + 1 < sizeof(rasterline));
-        rasterline[currentPixel + 2*i] = index * inDisplayWindow;
-        rasterline[currentPixel + 2*i + 1] = index * inDisplayWindow;
-        uint32_t rgba = colorizer.getRGBA(index * inDisplayWindow);
-
-        *ptr++ = rgba;
-        *ptr++ = rgba;
-    }
-
-#ifdef PIXEL_DEBUG
-    *pixelAddr(pixel) = 0x000000FF;
-#endif
-
-    currentPixel += 2 * pixels;
-}
-
-void
-Denise::draw32HAM(int pixels)
-{
-    uint32_t maskOdd = 0x8000 << scrollLoresOdd;
-    uint32_t maskEven = 0x8000 << scrollLoresEven;
-
-    for (int i = 0; i < pixels; i++) {
-
-        // Read a bit slice
-        uint8_t index =
-        (!!(shiftReg[0] & maskOdd)  << 0) |
-        (!!(shiftReg[1] & maskEven) << 1) |
-        (!!(shiftReg[2] & maskOdd)  << 2) |
-        (!!(shiftReg[3] & maskEven) << 3) |
-        (!!(shiftReg[4] & maskOdd)  << 4) |
-        (!!(shiftReg[5] & maskEven) << 5);
-
-        maskOdd >>= 1;
-        maskEven >>= 1;
-
-        // Draw two lores pixels
-        uint16_t color = colorizer.computeHAM(index * inDisplayWindow);
-        assert(currentPixel + 2*i + 1 < sizeof(rasterline));
-        rasterline[currentPixel + 2*i] = color;
-        rasterline[currentPixel + 2*i + 1] = color;
-    }
-
-#ifdef PIXEL_DEBUG
-    *pixelAddr(pixel) = 0x000000FF;
-#endif
-
-    currentPixel += 2 * pixels;
 }
 
 void

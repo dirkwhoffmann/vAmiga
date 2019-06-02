@@ -289,17 +289,6 @@ public:
     void drawLores(int pixels = 16);
     void drawHires(int pixels = 16);
 
-private:
-
-    // Synthesizes 16 hires pixels from the current shift register data
-    void draw16(int pixels = 16);
-
-    // Synthesizes 32 lores pixels from the current shift register data
-    void draw32(int pixels = 16);
-
-    // Synthesizes 32 lores pixels in HAM mode
-    void draw32HAM(int pixels = 16);
-
 public:
 
     /* Draws the sprite pixels.
