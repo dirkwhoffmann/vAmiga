@@ -157,7 +157,7 @@ public:
     // Indicates if the current rasterline is inside the display window
     bool inDisplayWindow;
 
-    
+
     //
     // Constructing and destructing
     //
@@ -236,7 +236,10 @@ public:
     
     // OCS registers 0x146, 0x14E, ..., 0x176, 0x17E (w)
     void pokeSPRxDATB(int x, uint16_t value);
-    
+
+    // OCS registers 0x180, 0x181, ..., 0x1BC, 0x1BE (w)
+    void pokeCOLORx(int x, uint16_t value);
+
     
     //
     // Handling sprites
@@ -308,9 +311,6 @@ public:
      * This method is called at the end of each rasterline.
      */
     void drawBorder(); 
-
-    // Writes the current line into the frame buffer.
-    void translateToRGBA();
 
 
     //

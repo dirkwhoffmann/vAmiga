@@ -1189,69 +1189,69 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x17E >> 1: // SPR7DATB
             denise->pokeSPRxDATB(7, value); return;
         case 0x180 >> 1: // COLOR00
-            denise->colorizer.pokeColorRegCpu(0, value); return;
+            denise->pokeCOLORx(0, value); return;
         case 0x182 >> 1: // COLOR01
-            denise->colorizer.pokeColorRegCpu(1, value); return;
+            denise->pokeCOLORx(1, value); return;
         case 0x184 >> 1: // COLOR02
-            denise->colorizer.pokeColorRegCpu(2, value); return;
+            denise->pokeCOLORx(2, value); return;
         case 0x186 >> 1: // COLOR03
-            denise->colorizer.pokeColorRegCpu(3, value); return;
+            denise->pokeCOLORx(3, value); return;
         case 0x188 >> 1: // COLOR04
-            denise->colorizer.pokeColorRegCpu(4, value); return;
+            denise->pokeCOLORx(4, value); return;
         case 0x18A >> 1: // COLOR05
-            denise->colorizer.pokeColorRegCpu(5, value); return;
+            denise->pokeCOLORx(5, value); return;
         case 0x18C >> 1: // COLOR06
-            denise->colorizer.pokeColorRegCpu(6, value); return;
+            denise->pokeCOLORx(6, value); return;
         case 0x18E >> 1: // COLOR07
-            denise->colorizer.pokeColorRegCpu(7, value); return;
+            denise->pokeCOLORx(7, value); return;
         case 0x190 >> 1: // COLOR08
-            denise->colorizer.pokeColorRegCpu(8, value); return;
+            denise->pokeCOLORx(8, value); return;
         case 0x192 >> 1: // COLOR09
-            denise->colorizer.pokeColorRegCpu(9, value); return;
+            denise->pokeCOLORx(9, value); return;
         case 0x194 >> 1: // COLOR10
-            denise->colorizer.pokeColorRegCpu(10, value); return;
+            denise->pokeCOLORx(10, value); return;
         case 0x196 >> 1: // COLOR11
-            denise->colorizer.pokeColorRegCpu(11, value); return;
+            denise->pokeCOLORx(11, value); return;
         case 0x198 >> 1: // COLOR12
-            denise->colorizer.pokeColorRegCpu(12, value); return;
+            denise->pokeCOLORx(12, value); return;
         case 0x19A >> 1: // COLOR13
-            denise->colorizer.pokeColorRegCpu(13, value); return;
+            denise->pokeCOLORx(13, value); return;
         case 0x19C >> 1: // COLOR14
-            denise->colorizer.pokeColorRegCpu(14, value); return;
+            denise->pokeCOLORx(14, value); return;
         case 0x19E >> 1: // COLOR15
-            denise->colorizer.pokeColorRegCpu(15, value); return;
+            denise->pokeCOLORx(15, value); return;
         case 0x1A0 >> 1: // COLOR16
-            denise->colorizer.pokeColorRegCpu(16, value); return;
+            denise->pokeCOLORx(16, value); return;
         case 0x1A2 >> 1: // COLOR17
-            denise->colorizer.pokeColorRegCpu(17, value); return;
+            denise->pokeCOLORx(17, value); return;
         case 0x1A4 >> 1: // COLOR18
-            denise->colorizer.pokeColorRegCpu(18, value); return;
+            denise->pokeCOLORx(18, value); return;
         case 0x1A6 >> 1: // COLOR19
-            denise->colorizer.pokeColorRegCpu(19, value); return;
+            denise->pokeCOLORx(19, value); return;
         case 0x1A8 >> 1: // COLOR20
-            denise->colorizer.pokeColorRegCpu(20, value); return;
+            denise->pokeCOLORx(20, value); return;
         case 0x1AA >> 1: // COLOR21
-            denise->colorizer.pokeColorRegCpu(21, value); return;
+            denise->pokeCOLORx(21, value); return;
         case 0x1AC >> 1: // COLOR22
-            denise->colorizer.pokeColorRegCpu(22, value); return;
+            denise->pokeCOLORx(22, value); return;
         case 0x1AE >> 1: // COLOR23
-            denise->colorizer.pokeColorRegCpu(23, value); return;
+            denise->pokeCOLORx(23, value); return;
         case 0x1B0 >> 1: // COLOR24
-            denise->colorizer.pokeColorRegCpu(24, value); return;
+            denise->pokeCOLORx(24, value); return;
         case 0x1B2 >> 1: // COLOR25
-            denise->colorizer.pokeColorRegCpu(25, value); return;
+            denise->pokeCOLORx(25, value); return;
         case 0x1B4 >> 1: // COLOR26
-            denise->colorizer.pokeColorRegCpu(26, value); return;
+            denise->pokeCOLORx(26, value); return;
         case 0x1B6 >> 1: // COLOR27
-            denise->colorizer.pokeColorRegCpu(27, value); return;
+            denise->pokeCOLORx(27, value); return;
         case 0x1B8 >> 1: // COLOR28
-            denise->colorizer.pokeColorRegCpu(28, value); return;
+            denise->pokeCOLORx(28, value); return;
         case 0x1BA >> 1: // COLOR29
-            denise->colorizer.pokeColorRegCpu(29, value); return;
+            denise->pokeCOLORx(29, value); return;
         case 0x1BC >> 1: // COLOR30
-            denise->colorizer.pokeColorRegCpu(30, value); return;
+            denise->pokeCOLORx(30, value); return;
         case 0x1BE >> 1: // COLOR31
-            denise->colorizer.pokeColorRegCpu(31, value); return;
+            denise->pokeCOLORx(31, value); return;
     }
     
     if (addr <= 0x1E) {

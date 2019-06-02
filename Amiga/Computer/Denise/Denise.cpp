@@ -141,7 +141,7 @@ Denise::_inspect()
         info.bpldat[i] = bpldat[i];
     }
     for (unsigned i = 0; i < 32; i++) {
-        info.colorReg[i] = colorizer.peekColorReg(i);
+        info.colorReg[i] = colorizer.getColor(i);
         info.color[i] = colorizer.getRGBA(i);
     }
     
@@ -356,11 +356,21 @@ Denise::pokeSPRxDATB(int x, uint16_t value)
 }
 
 void
+Denise::pokeCOLORx(int x, uint16_t value)
+{
+    assert(x < 32);
+    debug(COL_DEBUG, "pokeCOLOR%(%X)\n", x, value);
+
+    colorizer.recordColorRegisterChange(x, value & 0xFFF, agnus->hpos * 4);
+
+    // REMOVE ASAP
+    colorizer.setColor(x, value);
+}
+
+void
 Denise::armSprite(int x)
 {
     SET_BIT(armed, x);
-
-    // sprShiftReg[x] = HI_W_LO_W(sprdatb[x], sprdata[x]);
 }
 
 void
@@ -630,13 +640,6 @@ Denise::drawBorder()
 }
 
 void
-Denise::translateToRGBA()
-{
-    // TODO
-
-}
-
-void
 Denise::beginOfLine(int vpos)
 {
     // Reset the horizontal pixel counter
@@ -658,7 +661,7 @@ Denise::endOfLine(int vpos)
         drawBorder();
 
         // Synthesize RGBA values and write into the frame buffer
-        translateToRGBA();
+        colorizer.translateToRGBA(rasterline, frameBuffer->data + vpos * HPIXELS);
     }
 
     // Invoke the DMA debugger

@@ -55,20 +55,12 @@ Colorizer::setContrast(double value)
 
 }
 
-uint16_t
-Colorizer::peekColorReg(int reg)
-{
-    assert(reg < 32);
-
-    return colorReg[reg];
-}
-
 void
-Colorizer::pokeColorReg(int reg, uint16_t value, Cycle cycle)
+Colorizer::setColor(int reg, uint16_t value)
 {
     assert(reg < 32);
 
-    debug(COL_DEBUG, "pokeCOLOR%02d(%X)\n", reg, value);
+    debug(COL_DEBUG, "setColor%02d(%X)\n", reg, value);
 
     uint8_t r = (value & 0xF00) >> 8;
     uint8_t g = (value & 0x0F0) >> 4;
@@ -76,18 +68,6 @@ Colorizer::pokeColorReg(int reg, uint16_t value, Cycle cycle)
 
     colorReg[reg] = value & 0xFFF;
     colorReg[reg + 32] = ((r / 2) << 8) | ((g / 2) << 4) | (b / 2);
-}
-
-void
-Colorizer::pokeColorRegCpu(int reg, uint16_t value)
-{
-    pokeColorReg(reg, value, amiga->masterClock);
-}
-
-void
-Colorizer::pokeColorRegCopper(int reg, uint16_t value)
-{
-    pokeColorReg(reg, value, amiga->agnus.clock);
 }
 
 void
@@ -225,4 +205,56 @@ Colorizer::computeHAM(uint8_t index)
     return rgba[hamRGB];
     // hamRGB &= 0xFFF;
     // return ((hamRGB & 0xF00) >> 4) | ((hamRGB & 0xF0) << 8) | ((hamRGB & 0xF) << 20);
+}
+
+void
+Colorizer::recordColorRegisterChange(uint32_t addr, uint16_t value, int16_t pixel) {
+
+    int newPos = colorChangeCount++;
+
+    // Add new entry
+    assert(newPos < 128);
+    colorChanges[newPos].addr = addr;
+    colorChanges[newPos].value = value;
+    colorChanges[newPos].pixel = pixel;
+
+    // Move the new entry to it's correct location (keep the list sorted)
+    while (newPos > 0 && colorChanges[newPos].pixel < colorChanges[newPos - 1].pixel) {
+        RegisterChange swap = colorChanges[newPos];
+        colorChanges[newPos] = colorChanges[newPos - 1];
+        colorChanges[--newPos] = swap;
+    }
+
+    // REMOVE ASAP
+    
+}
+
+void
+Colorizer::translateToRGBA(const uint8_t *src, int *dest)
+{
+    int pixel = 0;
+
+    // Process recorded color changes
+    for (int change = 0; change < colorChangeCount; change++) {
+
+        // Draw a chunk of pixels
+        assert(pixel <= colorChanges[change].pixel);
+        while (pixel < colorChanges[change].pixel) {
+
+            // TODO
+            pixel++;
+        }
+
+        // Perform the color change
+        // TODO
+    }
+
+    // Draw the rest of the line
+    while (pixel <= LAST_VISIBLE) {
+
+        // TODO
+        pixel++;
+    }
+
+    colorChangeCount = 0;
 }

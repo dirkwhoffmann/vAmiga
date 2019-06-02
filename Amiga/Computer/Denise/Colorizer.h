@@ -12,16 +12,25 @@
 
 #include "HardwareComponent.h"
 
+typedef struct {
+
+    uint32_t addr;
+    uint16_t value;
+    int16_t pixel;
+}
+RegisterChange;
+
 class Colorizer : public HardwareComponent {
     
 private:
     
-    /* The Amiga color registers
-     * Array elements 0 .. 31 represent to 32 native Amiga color registers.
-     * Array elements 32 .. 63 are fake registers. They contain the color
-     * values of register 0 .. 31 modified for halfbright mode.
+    /* Color lookup table
+     *
+     *  0 .. 31: Values of the 32 Amiga color registers.
+     * 32 .. 63: Additional colors used in halfbright mode.
+     * 64 .. 71: Some predefined debug colors
      */
-    uint16_t colorReg[64];
+    uint16_t colorReg[32 + 32 + 8];
 
     // The RGBA values of all 4096 Amiga colors
     uint32_t rgba[4096];
@@ -39,6 +48,15 @@ private:
     double contrast = 100.0;
     double saturation = 1.25;
 
+
+    /* Recorded color register changes
+     * The recorded changes are processed in translateToRGBA()
+     */
+    RegisterChange colorChanges[128];
+
+    // Number of recorded color changes
+    int colorChangeCount = 0;
+    
 
     //
     // Constructing and destructing
@@ -83,28 +101,21 @@ public:
 
 public:
 
-    // Peeks a value from one of the 32 color registers.
-    uint16_t peekColorReg(int reg);
+    // Changes one of the 32 Amiga color registers.
+    void setColor(int reg, uint16_t value);
 
-    /* Pokes a value into one of the 32 color registers.
-     * cycle = Master cycle in which the write happens.
-     */
-    void pokeColorReg(int reg, uint16_t value, Cycle cycle);
-    void pokeColorRegCpu(int reg, uint16_t value);
-    void pokeColorRegCopper(int reg, uint16_t value);
+    // Returns a color value in Amiga format or RGBA format
+    uint16_t getColor(int nr) { assert(nr < 64); return colorReg[nr]; }
+    uint32_t getRGBA(int nr) { return rgba[getColor(nr)]; }
+
+    // Returns sprite color in Amiga format or RGBA format
+    uint16_t getSpriteColor(int s, int nr) { assert(s < 8); return getColor(16 + nr + 2 * (s & 6)); }
+    uint32_t getSpriteRGBA(int s, int nr) { return rgba[getSpriteColor(s,nr)]; }
 
 
     //
     // Managing the color lookup table
     //
-
-public:
-
-    // Returns the RGBA value for a certain color register.
-    uint32_t getRGBA(int nr) { assert(nr < 64); return rgba[colorReg[nr]]; }
-
-    // Returns the RGBA value for a certain sprite color.
-    uint32_t getSpriteRGBA(int s, int nr) { return rgba[colorReg[16 + nr + 2 * (s & 6)]]; }
 
 private:
 
@@ -133,6 +144,18 @@ public:
      */
     uint32_t computeHAM(uint8_t index);
 
+
+    //
+    // Synthesizing pixels
+    //
+
+public:
+
+    // Records a color register change to be processed in translateToRGBA()
+    void recordColorRegisterChange(uint32_t addr, uint16_t value, int16_t pixel);
+
+    // Translates bitplane data to RGBA values.
+    void translateToRGBA(const uint8_t *src, int *dest);
 };
 
 #endif
