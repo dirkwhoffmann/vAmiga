@@ -77,7 +77,9 @@ Denise::_powerOn()
     stableShortFrame = &shortFrame2;
     frameBuffer = &longFrame1;
     currentPixel = 0;
-    
+
+    memset(rasterline, 0, sizeof(rasterline));
+
     // Initialize frame buffers with a recognizable debug pattern
     for (unsigned line = 0; line < VPIXELS; line++) {
         for (unsigned i = 0; i < HPIXELS; i++) {
@@ -412,7 +414,8 @@ Denise::drawLores(int pixels)
     assert(currentPixel == (agnus->hpos * 4) + 6);
 
     // Check if the vertical position is inside the drawing area
-    if (inDisplayWindow) { ham ? draw32HAM(pixels) : draw32(pixels); }
+    // if (inDisplayWindow) { ham ? draw32HAM(pixels) : draw32(pixels); }
+    if (inDisplayWindow) { draw32(pixels); }
 }
 
 void
@@ -448,7 +451,7 @@ Denise::draw16(int pixels)
 
         // Draw a single hires pixel
         assert(currentPixel + i < sizeof(rasterline));
-        rasterline[currentPixel + i] = index;
+        rasterline[currentPixel + i] = index * inDisplayWindow;
         uint32_t rgba = colorizer.getRGBA(index * inDisplayWindow);
 
         *ptr++ = rgba;
@@ -484,8 +487,9 @@ Denise::draw32(int pixels)
         maskEven >>= 1;
 
         // Draw two lores pixels
-        assert(currentPixel + i < sizeof(rasterline));
-        rasterline[currentPixel + i] = index;
+        assert(currentPixel + 2*i + 1 < sizeof(rasterline));
+        rasterline[currentPixel + 2*i] = index * inDisplayWindow;
+        rasterline[currentPixel + 2*i + 1] = index * inDisplayWindow;
         uint32_t rgba = colorizer.getRGBA(index * inDisplayWindow);
 
         *ptr++ = rgba;
@@ -502,8 +506,6 @@ Denise::draw32(int pixels)
 void
 Denise::draw32HAM(int pixels)
 {
-    int *ptr = pixelAddr(currentPixel);
-
     uint32_t maskOdd = 0x8000 << scrollLoresOdd;
     uint32_t maskEven = 0x8000 << scrollLoresEven;
 
@@ -522,12 +524,10 @@ Denise::draw32HAM(int pixels)
         maskEven >>= 1;
 
         // Draw two lores pixels
-        assert(currentPixel + i < sizeof(rasterline));
-        rasterline[currentPixel + i] = index;
-        uint32_t rgba = colorizer.computeHAM(index * inDisplayWindow);
-
-        *ptr++ = rgba;
-        *ptr++ = rgba;
+        uint16_t color = colorizer.computeHAM(index * inDisplayWindow);
+        assert(currentPixel + 2*i + 1 < sizeof(rasterline));
+        rasterline[currentPixel + 2*i] = color;
+        rasterline[currentPixel + 2*i + 1] = color;
     }
 
 #ifdef PIXEL_DEBUG
@@ -561,9 +561,9 @@ Denise::drawSprites()
                 colNr |=    !!GET_BIT(sprdatb[nr], i);
 
                 if (colNr) {
-                    assert(pixel + 2*i + 1 < sizeof(rasterline));
-                    rasterline[pixel + 2*i] = colNr;
-                    rasterline[pixel + 2*i + 1] = colNr;
+                    assert(pixel + 2*(15-i) + 1 < sizeof(rasterline));
+                    rasterline[pixel + 2*(15-i)] = 16 + colNr;
+                    rasterline[pixel + 2*(15-i) + 1] = 16 + colNr;
                     *ptr++ = rgba[colNr];
                     *ptr++ = rgba[colNr];
                 } else {
@@ -603,6 +603,7 @@ Denise::drawBorder()
         // Fill the whole line with the background color
         for (int i = FIRST_VISIBLE; i <= LAST_VISIBLE; i++) {
             ptr[i] = rgbaBorderV;
+            rasterline[i] = 0;
         }
 
     } else {
@@ -661,7 +662,11 @@ Denise::endOfLine(int vpos)
         drawBorder();
 
         // Synthesize RGBA values and write into the frame buffer
-        colorizer.translateToRGBA(rasterline, frameBuffer->data + vpos * HPIXELS);
+        if (ham) {
+            colorizer.translateToRGBA_HAM(rasterline, frameBuffer->data + vpos * HPIXELS);
+        } else {
+            colorizer.translateToRGBA(rasterline, frameBuffer->data + vpos * HPIXELS);
+        }
     }
 
     // Invoke the DMA debugger

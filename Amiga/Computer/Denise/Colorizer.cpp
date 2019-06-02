@@ -168,7 +168,7 @@ Colorizer::adjustRGB(uint8_t &r, uint8_t &g, uint8_t &b)
     b = uint8_t(newB);
 }
 
-uint32_t
+uint16_t
 Colorizer::computeHAM(uint8_t index)
 {
     assert(index < 64);
@@ -202,13 +202,13 @@ Colorizer::computeHAM(uint8_t index)
             assert(false);
     }
 
-    return rgba[hamRGB];
-    // hamRGB &= 0xFFF;
-    // return ((hamRGB & 0xF00) >> 4) | ((hamRGB & 0xF0) << 8) | ((hamRGB & 0xF) << 20);
+    return hamRGB;
 }
 
 void
 Colorizer::recordColorRegisterChange(uint32_t addr, uint16_t value, int16_t pixel) {
+
+    // debug("recordColorRegisterChange(%X, %X, %d)\n", addr, value, pixel);
 
     int newPos = colorChangeCount++;
 
@@ -232,17 +232,16 @@ Colorizer::recordColorRegisterChange(uint32_t addr, uint16_t value, int16_t pixe
 void
 Colorizer::translateToRGBA(const uint8_t *src, int *dest)
 {
-    int pixel = 0;
+    int pixel = FIRST_VISIBLE;
 
     // Process recorded color changes
     for (int change = 0; change < colorChangeCount; change++) {
 
         // Draw a chunk of pixels
-        assert(pixel <= colorChanges[change].pixel);
-        while (pixel < colorChanges[change].pixel) {
+        for (; pixel < colorChanges[change].pixel; pixel++) {
 
-            // TODO
-            pixel++;
+            assert(src[pixel] < 64);
+            dest[pixel] = rgba[colorReg[src[pixel]]];
         }
 
         // Perform the color change
@@ -250,10 +249,42 @@ Colorizer::translateToRGBA(const uint8_t *src, int *dest)
     }
 
     // Draw the rest of the line
-    while (pixel <= LAST_VISIBLE) {
+    for (; pixel < LAST_VISIBLE; pixel++) {
 
+        if (src[pixel] >= 64) {
+            debug("pixel = %d src[pixel] = %d\n", pixel, src[pixel]);
+        }
+        assert(src[pixel] < 64);
+        dest[pixel] = rgba[colorReg[src[pixel]]];
+    }
+
+    colorChangeCount = 0;
+}
+
+void
+Colorizer::translateToRGBA_HAM(const uint8_t *src, int *dest)
+{
+    int pixel = FIRST_VISIBLE;
+
+    // Process recorded color changes
+    for (int change = 0; change < colorChangeCount; change++) {
+
+        // Draw a chunk of pixels
+        for (; pixel < colorChanges[change].pixel; pixel++) {
+
+            assert(src[pixel] < 64);
+            dest[pixel] = rgba[computeHAM(src[pixel])];
+        }
+
+        // Perform the color change
         // TODO
-        pixel++;
+    }
+
+    // Draw the rest of the line
+    for (; pixel < LAST_VISIBLE; pixel++) {
+
+        assert(src[pixel] < 64);
+        dest[pixel] = rgba[computeHAM(src[pixel])];
     }
 
     colorChangeCount = 0;

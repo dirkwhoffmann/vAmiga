@@ -137,12 +137,8 @@ public:
      */
     void prepareForHAM() { hamRGB = colorReg[0]; }
 
-    /* Computes the RGBA value for a color given in the Amiga's HAM format.
-     * If the requested color is already stored in the color cache, the cached
-     * value is returned. Otherwise, the color is computed and written into
-     * the cache before it is returned to the caller.
-     */
-    uint32_t computeHAM(uint8_t index);
+    // Computes the Amiga color value for a color given in HAM format.
+    uint16_t computeHAM(uint8_t index);
 
 
     //
@@ -156,6 +152,7 @@ public:
 
     // Translates bitplane data to RGBA values.
     void translateToRGBA(const uint8_t *src, int *dest);
+    void translateToRGBA_HAM(const uint8_t *src, int *dest);
 };
 
 #endif
