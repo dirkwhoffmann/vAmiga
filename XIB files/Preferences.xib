@@ -822,7 +822,7 @@ DQ
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Compatibility" identifier="Compatibility" id="o4a-8k-sKr">
-                                <view key="view" ambiguous="YES" id="Lyv-D5-lfU">
+                                <view key="view" id="Lyv-D5-lfU">
                                     <rect key="frame" x="10" y="33" width="600" height="424"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -971,7 +971,7 @@ DQ
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Video" identifier="Video" id="bAS-eu-ehA">
-                                <view key="view" id="TZi-Ij-edC">
+                                <view key="view" ambiguous="YES" id="TZi-Ij-edC">
                                     <rect key="frame" x="10" y="33" width="600" height="424"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -1602,7 +1602,7 @@ DQ
                                         <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="o9J-vh-j0n">
                                             <rect key="frame" x="167" y="72" width="120" height="15"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="1" doubleValue="1" tickMarkPosition="above" sliderType="linear" id="Yov-Hg-sww"/>
+                                            <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="0.5" doubleValue="0.25" tickMarkPosition="above" sliderType="linear" id="Yov-Hg-sww"/>
                                             <connections>
                                                 <action selector="vidFlickerWeightAction:" target="-2" id="le2-90-W8Z"/>
                                             </connections>

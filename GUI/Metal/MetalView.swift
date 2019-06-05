@@ -254,8 +254,7 @@ public class MetalView: MTKView {
     var enableMetal = false
 
     // Indicates if the current frame is a long frame or a short frame (DEPRECATED)
-    // var longFrame = false
-    var flickerToggle = false
+    var flickerToggle = 0
 
     // Indicates the type of the frame that is read next
     var requestLongFrame = true
@@ -418,9 +417,9 @@ public class MetalView: MTKView {
 
             let weight = shaderOptions.flicker > 0 ? (1.0 - shaderOptions.flickerWeight) : Float(1.0)
             mergeUniforms.interlace = 1
-            mergeUniforms.longFrameScale = flickerToggle ? 1.0 : weight
-            mergeUniforms.shortFrameScale = flickerToggle ? weight : 1.0
-            flickerToggle = !flickerToggle
+            mergeUniforms.longFrameScale = (flickerToggle & 2) == 0 ? 1.0 : weight
+            mergeUniforms.shortFrameScale = (flickerToggle & 2) == 0 ? weight : 1.0
+            flickerToggle += 1
          } else {
             mergeUniforms.interlace = 0
             mergeUniforms.longFrameScale = 1.0

@@ -160,7 +160,7 @@ CIA::triggerTimerIrq()
 void
 CIA::triggerTodIrq()
 {
-    debug("triggerTodIrq()\n");
+    debug(CIA_DEBUG, "triggerTodIrq()\n");
     delay |= CIASetInt0;
     delay |= CIASetIcr0;
 }
@@ -168,7 +168,7 @@ CIA::triggerTodIrq()
 void
 CIA::triggerFlagPinIrq()
 {
-    debug("triggerFlagPinIrq()\n");
+    debug(CIA_DEBUG, "triggerFlagPinIrq()\n");
     delay |= CIASetInt0;
     delay |= CIASetIcr0;
 }
@@ -873,7 +873,7 @@ CIA::executeOneCycle()
 	
 	if (timerAOutput) {
         
-        debug("Timer A underflow\n");
+        debug(CIA_DEBUG, "Timer A underflow\n");
         
         icrAck &= ~0x01;
         
@@ -1426,7 +1426,7 @@ CIAB::scheduleWakeUp()
 void 
 CIAB::pullDownInterruptLine()
 {
-    debug("Pulling down IRQ line\n");
+    debug(CIA_DEBUG, "Pulling down IRQ line\n");
     paula->setINTREQ(0x8000 | (1 << 13));
 }
 
