@@ -396,6 +396,9 @@ DiskController::executeFifo()
     // Only proceed if a drive is selected.
     Drive *drive = getSelectedDrive();
     if (drive == NULL) return;
+
+    // Only proceed if the selected drive is not a turbo drive
+    if (drive->isTurboDrive()) return;
     
     switch (state) {
             
