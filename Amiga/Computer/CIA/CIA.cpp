@@ -200,8 +200,8 @@ CIA::peek(uint16_t addr)
         case 0x01: // CIA_DATA_PORT_B
 
             updatePB();
-            plaindebug("%s Peek %d (hex: %02X) = %d (DDRB = %X)\n",
-                       getDescription(), addr, addr, PB, DDRB);
+            // plaindebug("%s Peek %d (hex: %02X) = %d (DDRB = %X)\n",
+            //            getDescription(), addr, addr, PB, DDRB);
             return PB;
 
         case 0x02: // CIA_DATA_DIRECTION_A

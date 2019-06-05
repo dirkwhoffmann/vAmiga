@@ -101,7 +101,8 @@ class DiskController : public HardwareComponent {
     
     // For debugging, an FNV-32 checksum is computed for each DMA operation.
     uint32_t checksum = fnv_1a_init32();
-    
+    uint64_t checkcnt = 0;
+
     
     //
     // Constructing and destructing
@@ -254,7 +255,7 @@ public:
     /* The emulator supports three disk DMA modes at the moment:
      *
      *     1. Standard DMA mode    (most accurate)
-     *     2. Simplified DMA mode
+     *     2. Simple DMA mode
      *     3. Turbo DMA mode       (least accurate)
      *
      * In standard DMA mode, performDMA() is invoked three times per raster
@@ -264,7 +265,7 @@ public:
      * between the FIFO and the drive takes place in serveDiskEvent(), which is
      * called periodically by the event handler.
      *
-     * In simplified DMA mode, performDMA() is called three times per raster
+     * In simple DMA mode, performDMA() is called three times per raster
      * line, just like in standard mode. The FIFO phase is skipped. I.e., data
      * is read from or written to the drive immediately when a DMA transfer
      * takes place.
