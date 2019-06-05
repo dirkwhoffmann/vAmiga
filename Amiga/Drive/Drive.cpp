@@ -251,7 +251,7 @@ Drive::rotate()
 {
     // Only proceed if a disk is present
     if (disk == NULL) return;
-    
+
     // debug("head = %d\n", head.offset);
     
     if (++head.offset == disk->trackLen) {
@@ -299,9 +299,10 @@ Drive::moveHead(int dir)
         // debug("[%lld] Moving up to cylinder %d\n", amiga->agnus.frame, head.cylinder);
         // if (nr == 0) plainmsg("Df%d cylinder %d\n", nr, head.cylinder);
     }
-    
+
+#ifdef ALIGN_DRIVE_HEAD
     head.offset = 0; 
-    // findSyncMark(); // REMOVE ASAP
+#endif
     
     /* Inform the GUI
      * We send a MSG_DRIVE_HEAD_POLL, if a disk change polling signature is

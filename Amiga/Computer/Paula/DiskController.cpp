@@ -194,8 +194,6 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
     checksum = fnv_1a_init32();
     checkcnt = 0;
 
-    // if (drive) drive->head.offset = 0;
-    
     // Remember the new value
     dsklen = newDskLen;
     
@@ -208,6 +206,10 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
     
     // Enable DMA the DMAEN bit (bit 15) has been written twice.
     else if (oldDsklen & newDskLen & 0x8000) {
+
+#ifdef ALIGN_DRIVE_HEAD
+        if (drive) drive->head.offset = 0;
+#endif
         
         // Check if the WRITE bit (bit 14) also has been written twice.
         if (oldDsklen & newDskLen & 0x4000) {

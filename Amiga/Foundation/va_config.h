@@ -77,4 +77,7 @@
 // Enable to colorize certain rasterlines
 // #define LINE_DEBUG
 
+// Enable to make drive operations deterministic
+// #define ALIGN_DRIVE_HEAD
+
 #endif
