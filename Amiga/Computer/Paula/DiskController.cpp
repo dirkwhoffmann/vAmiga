@@ -194,7 +194,7 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
     checksum = fnv_1a_init32();
     checkcnt = 0;
 
-    if (drive) drive->head.offset = 0;
+    // if (drive) drive->head.offset = 0;
     
     // Remember the new value
     dsklen = newDskLen;
@@ -398,11 +398,12 @@ DiskController::executeFifo()
     if (drive == NULL) return;
 
     // Only proceed if the selected drive is not a turbo drive
-    if (drive->isTurboDrive()) return;
+    // if (drive->isTurboDrive()) return;
     
     switch (state) {
             
         case DRIVE_DMA_OFF:
+            drive->rotate();
             break;
             
         case DRIVE_DMA_WAIT:
@@ -422,9 +423,6 @@ DiskController::executeFifo()
                 // Trigger a word SYNC interrupt.
                 debug(DSK_DEBUG, "SYNC IRQ\n");
                 paula->pokeINTREQ(0x9000);
-
-                // checksum = fnv_1a_init32();
-                // checkcnt = 0;
 
                 // Enable DMA if the controller was waiting for it.
                 if (state == DRIVE_DMA_WAIT) {
@@ -693,8 +691,12 @@ DiskController::performTurboDMA(Drive *drive)
 void
 DiskController::performTurboRead(Drive *drive)
 {
-    plaindebug(DSK_DEBUG, "Turbo-reading %d words from disk (dskptr = %X).\n", dsklen & 0x3FFF, agnus->dskpt);
-    
+    plaindebug(DSK_DEBUG, "Turbo-reading %d words from disk (offset = %d).\n", dsklen & 0x3FFF, drive->head.offset);
+
+    drive->findSyncMark();
+    plaindebug(DSK_DEBUG, "Moving to SYNC mark at offset %d\n", drive->head.offset);
+
+
     for (unsigned i = 0; i < (dsklen & 0x3FFF); i++) {
         
         // Read word from disk.
@@ -708,7 +710,7 @@ DiskController::performTurboRead(Drive *drive)
         checkcnt++;
     }
         
-    plaindebug(DSK_DEBUG, "Turbo read %s: checkcnt = %d checksum = %X\n", drive->getDescription(), checkcnt, checksum);
+    plaindebug(DSK_DEBUG, "Turbo read %s: cyl: %d side: %d offset: %d checkcnt = %d checksum = %X\n", drive->getDescription(), drive->head.cylinder, drive->head.side, drive->head.offset, checkcnt, checksum);
 }
 
 void

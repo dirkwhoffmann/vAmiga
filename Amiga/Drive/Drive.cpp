@@ -249,6 +249,9 @@ Drive::writeHead16(uint16_t value)
 void
 Drive::rotate()
 {
+    // Only proceed if a disk is present
+    if (disk == NULL) return;
+    
     // debug("head = %d\n", head.offset);
     
     if (++head.offset == disk->trackLen) {
