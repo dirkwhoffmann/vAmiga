@@ -485,17 +485,19 @@ Denise::drawSprites()
 
             int colorBase = 16 + 2 * (nr & 6);
 
-            int16_t pixel = 2 * sprhstrt[nr] + 2;
-            if (pixel >= HPIXELS - 33) { pixel = HPIXELS - 33; } // TODO: ????
+            int16_t strt = 2 * sprhstrt[nr] + 2;
+            int16_t stop = MIN(strt + 32, LAST_VISIBLE - 1);
 
-            for (int i = 0; i < 16; i++, pixel += 2) {
+            // int16_t pixel = 2 * sprhstrt[nr] + 2;
+
+            for (int i = 0; strt < stop; i++, strt += 2) {
 
                 int offset = (sprdata[nr] >> (14 - i)) & 2;
                 offset |=    (sprdatb[nr] >> (15 - i)) & 1;
 
                 if (offset) {
-                    assert(pixel + 1 < sizeof(rasterline));
-                    rasterline[pixel] = rasterline[pixel+1] = colorBase + offset;
+                    assert(strt + 1 < sizeof(rasterline));
+                    rasterline[strt] = rasterline[strt+1] = colorBase + offset;
                 }
             }
         }
