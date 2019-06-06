@@ -479,25 +479,21 @@ Denise::drawHires(int pixels)
 void
 Denise::drawSprites()
 {
-    for (int nr = 0; armed != 0; nr++, armed <<= 1) {
+    for (int nr = 0; armed != 0; nr++, armed >>= 1) {
 
         if (armed & 0x1) {
 
-            int colorBase = 16 + 2 * (nr & 6);
+            int baseCol = 16 + 2 * (nr & 6);
+            int16_t pos = 2 * sprhstrt[nr] + 2;
 
-            int16_t strt = 2 * sprhstrt[nr] + 2;
-            int16_t stop = MIN(strt + 32, LAST_VISIBLE - 1);
+            for (int i = 0; i < 16; i++, pos += 2) {
 
-            // int16_t pixel = 2 * sprhstrt[nr] + 2;
+                int col = (sprdata[nr] >> (14 - i)) & 2;
+                col |=    (sprdatb[nr] >> (15 - i)) & 1;
 
-            for (int i = 0; strt < stop; i++, strt += 2) {
-
-                int offset = (sprdata[nr] >> (14 - i)) & 2;
-                offset |=    (sprdatb[nr] >> (15 - i)) & 1;
-
-                if (offset) {
-                    assert(strt + 1 < sizeof(rasterline));
-                    rasterline[strt] = rasterline[strt+1] = colorBase + offset;
+                if (col) {
+                    if (pos < LAST_VISIBLE) rasterline[pos] = baseCol + col;
+                    if (pos < LAST_VISIBLE) rasterline[pos+1] = baseCol + col;
                 }
             }
         }
