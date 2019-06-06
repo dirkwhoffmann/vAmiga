@@ -18,6 +18,9 @@ extension PreferencesController {
         let config = amiga.config()
         let poweredOff = amiga.isPoweredOff()
 
+        // Audio
+        compFilterType.selectItem(withTag: config.filterType.rawValue)
+            
         // Blitter
         compExactBlitter.state = config.exactBlitter ? .on : .off
 
@@ -25,8 +28,14 @@ extension PreferencesController {
         compFifoBuffering.state = config.fifoBuffering ? .on : .off
 
         // Lock controls if emulator is powered on
-        compExactBlitter.isEnabled = false // poweredOff
+        compExactBlitter.isEnabled = false
         compFifoBuffering.isEnabled = poweredOff
+    }
+
+    @IBAction func compFilterTypeAction(_ sender: NSPopUpButton!) {
+
+        amigaProxy?.configure(VA_FILTER_TYPE, value: sender.tag)
+        refresh()
     }
 
     @IBAction func compExactBlitterAction(_ sender: NSButton!) {

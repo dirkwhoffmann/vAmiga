@@ -70,6 +70,9 @@ class PreferencesController: DialogController {
     // Compatibility preferences
     //
 
+    // Audio
+    @IBOutlet weak var compFilterType: NSPopUpButton!
+
     // Blitter
     @IBOutlet weak var compExactBlitter: NSButton!
 

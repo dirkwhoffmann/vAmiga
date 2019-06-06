@@ -141,6 +141,20 @@ AudioUnit::setSampleRate(double hz)
     filterR.setSampleRate(hz);
 }
 
+FilterType
+AudioUnit::getFilterType()
+{
+    assert(filterL.getFilterType() == filterR.getFilterType());
+    return filterL.getFilterType();
+}
+
+void
+AudioUnit::setFilterType(FilterType type)
+{
+    filterL.setFilterType(type);
+    filterR.setFilterType(type);
+}
+
 void
 AudioUnit::clearRingbuffer()
 {
@@ -264,10 +278,13 @@ AudioUnit::writeData(short left, short right)
     // Check for buffer overflow
     if (bufferCapacity() == 0)
         handleBufferOverflow();
-
-    // Convert sound samples to floating point values and write into ringbuffer
+/*
+    // Convert samples to float values and write them into the ringbuffer
     ringBufferL[writePtr] = float(left) * scale; // filterL.apply(float(left) * scale);
     ringBufferR[writePtr] = float(right) * scale; // filterR.apply(float(right) * scale);
+*/
+    ringBufferL[writePtr] = filterL.apply(float(left) * scale);
+    ringBufferR[writePtr] = filterR.apply(float(right) * scale);
 
     advanceWritePtr();
 }

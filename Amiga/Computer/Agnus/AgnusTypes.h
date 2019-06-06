@@ -33,7 +33,7 @@ typedef enum : int8_t
 }
 BusOwner;
 
-static inline bool isBusOwner(long value) { return value < BUS_OWNER_COUNT; }
+static inline bool isBusOwner(long value) { return value >= 0 && value < BUS_OWNER_COUNT; }
 
 typedef enum
 {

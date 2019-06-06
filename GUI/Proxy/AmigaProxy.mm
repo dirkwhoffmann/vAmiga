@@ -551,6 +551,14 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->paula->audioUnit.setSampleRate(rate);
 }
+- (FilterType) filterType
+{
+    return wrapper->paula->audioUnit.getFilterType();
+}
+- (void) setFilterType:(FilterType)type
+{
+    wrapper->paula->audioUnit.setFilterType(type);
+}
 - (NSInteger) ringbufferSize
 {
     return wrapper->paula->audioUnit.ringbufferSize();
@@ -1254,6 +1262,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->amiga->getMemConfig();
 }
+- (BOOL) configure:(ConfigOption)option value:(NSInteger)value
+{
+    return wrapper->amiga->configure(option, value);
+}
 - (BOOL) configureModel:(NSInteger)model
 {
     return wrapper->amiga->configureModel((AmigaModel)model);
@@ -1262,7 +1274,6 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->amiga->configureLayout(value);
 }
-
 - (BOOL) configureChipMemory:(NSInteger)size
 {
     return wrapper->amiga->configureChipMemory((unsigned)size);

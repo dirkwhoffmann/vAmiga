@@ -31,6 +31,7 @@ AudioFilter::clear()
 void
 AudioFilter::setFilterType(FilterType type)
 {
+    assert(isFilterType(type));
     this->type = type;
 }
 

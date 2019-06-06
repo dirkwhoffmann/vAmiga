@@ -12,6 +12,8 @@
 #ifndef _PAULA_T_INC
 #define _PAULA_T_INC
 
+#include "DriveTypes.h"
+
 //
 // Enumerations
 //
@@ -19,9 +21,12 @@
 typedef enum : long
 {
     FILT_NONE,
-    FILT_BUTTERWORTH
+    FILT_BUTTERWORTH,
+    FILT_COUNT
 }
 FilterType;
+
+static inline bool isFilterType(long value) { return value >= 0 && value < FILT_COUNT; }
 
 
 //

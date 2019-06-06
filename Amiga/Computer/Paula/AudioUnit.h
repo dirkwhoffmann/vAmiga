@@ -150,13 +150,19 @@ private:
     
 public:
     
-    // Returns the current sample rate in Hz.
+    // Returns the current sample rate in Hz
     double getSampleRate();
     
-    // Sets the sample rate in Hz.
+    // Sets the sample rate in Hz
     void setSampleRate(double hz);
     
-    
+    // Returns the filter type
+    FilterType getFilterType();
+
+    // Sets the filter type
+    void setFilterType(FilterType type);
+
+
     //
     // Controlling the volume
     //

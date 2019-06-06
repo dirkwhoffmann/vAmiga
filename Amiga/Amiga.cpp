@@ -185,7 +185,8 @@ Amiga::getConfig()
     config.model = model;
     config.realTimeClock = realTimeClock;
     config.layout = keyboard.layout;
-    config.exactBlitter = agnus.blitter.getExactEmulation(); 
+    config.filterType = paula.audioUnit.getFilterType();
+    config.exactBlitter = agnus.blitter.getExactEmulation();
     config.fifoBuffering = paula.diskController.getFifoBuffering();
     
     config.df0.connected = paula.diskController.isConnected(0);
@@ -291,7 +292,19 @@ Amiga::configure(ConfigOption option, long value)
             realTimeClock = value;
             mem.updateMemSrcTable();
             break;
-            
+
+        case VA_FILTER_TYPE:
+
+            if (!isFilterType(value)) {
+                warn("Invalid filter type: %d\n", value);
+                warn("       Valid values: 0 ... %d\n", FILT_COUNT);
+                return false;
+            }
+
+            if (current.filterType == value) return true;
+            paula.audioUnit.setFilterType((FilterType)value);
+            break;
+
         case VA_EXACT_BLITTER:
             
             if (current.exactBlitter == value) return true;

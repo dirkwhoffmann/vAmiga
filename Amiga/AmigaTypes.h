@@ -12,7 +12,7 @@
 #ifndef _AMIGA_T_INC
 #define _AMIGA_T_INC
 
-#include "DriveTypes.h"
+#include "PaulaTypes.h"
 
 //
 // Type aliases
@@ -70,6 +70,7 @@ typedef enum : long
     VA_DRIVE_TYPE,
     VA_DRIVE_SPEED,
     VA_RT_CLOCK,
+    VA_FILTER_TYPE,
     VA_EXACT_BLITTER,
     VA_FIFO_BUFFERING,
 }
@@ -114,6 +115,7 @@ typedef struct
     DriveConfiguration df1;
     DriveConfiguration df2;
     DriveConfiguration df3;
+    FilterType filterType;
     bool exactBlitter;
     bool fifoBuffering;
 }

@@ -980,6 +980,9 @@ extension MyController {
 
 extension Keys {
 
+    // Audio
+    static let filterType         = "VAMIGAFilterType"
+
     // Blitter
     static let exactBlitter       = "VAMIGAAccurateBlitterKey"
 
@@ -988,6 +991,9 @@ extension Keys {
 }
 
 extension Defaults {
+
+    // Audio
+    static let filterType        = FILT_BUTTERWORTH
 
     // Blitter
     static let exactBlitter      = false
@@ -1002,6 +1008,7 @@ extension MyController {
 
         let dictionary: [String: Any] = [
 
+            Keys.filterType: Defaults.filterType.rawValue,
             Keys.exactBlitter: Defaults.exactBlitter,
             Keys.fifoBuffering: Defaults.fifoBuffering
         ]
@@ -1014,7 +1021,8 @@ extension MyController {
 
         let defaults = UserDefaults.standard
 
-        let keys = [ Keys.exactBlitter,
+        let keys = [ Keys.filterType,
+                     Keys.exactBlitter,
                      Keys.fifoBuffering ]
 
         for key in keys { defaults.removeObject(forKey: key) }
@@ -1028,6 +1036,7 @@ extension MyController {
 
         amiga.suspend()
 
+        amiga.configure(VA_FILTER_TYPE, value: defaults.integer(forKey: Keys.filterType))
         amiga.configureExactBlitter(defaults.bool(forKey: Keys.exactBlitter))
         amiga.configureFifoBuffering(defaults.bool(forKey: Keys.fifoBuffering))
 
@@ -1039,6 +1048,7 @@ extension MyController {
         let defaults = UserDefaults.standard
         let config = amiga.config()
 
+        defaults.set(config.filterType.rawValue, forKey: Keys.filterType)
         defaults.set(config.exactBlitter, forKey: Keys.exactBlitter)
         defaults.set(config.fifoBuffering, forKey: Keys.fifoBuffering)
     }

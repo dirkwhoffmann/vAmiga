@@ -129,6 +129,7 @@ struct AmigaFileWrapper;
 
 - (AmigaConfiguration) config;
 - (AmigaMemConfiguration) memConfig;
+- (BOOL) configure:(ConfigOption)option value:(NSInteger)value;
 - (BOOL) configureModel:(NSInteger)model;
 - (BOOL) configureLayout:(NSInteger)value;
 - (BOOL) configureChipMemory:(NSInteger)size;
