@@ -527,24 +527,27 @@ Denise::drawBorder()
 
     } else {
 
+        int16_t hstrt = MAX(FIRST_VISIBLE, 2 * agnus->diwHstrt);
+        int16_t hstop = MIN(LAST_VISIBLE + 1, 2 * agnus->diwHstop);
+
         // Draw left border
-        for (int i = FIRST_VISIBLE; i < 2 * agnus->diwHstrt; i++) {
+        for (int i = FIRST_VISIBLE; i < hstrt; i++) {
             assert(i < sizeof(rasterline));
             rasterline[i] = borderL;
         }
-        for (int i = (2 * agnus->diwHstrt); i < firstCanvasPixel; i++) {
+        for (int i = hstrt; i < firstCanvasPixel; i++) {
             assert(i < sizeof(rasterline));
             rasterline[i] = openL;
         }
 
         // Draw right border
-        for (int i = (2 * agnus->diwHstop); i <= LAST_VISIBLE; i++) {
-            assert(i < sizeof(rasterline));
-            rasterline[i] = borderR;
-        }
-        for (int i = currentPixel; i < 2 * agnus->diwHstop; i++) {
+        for (int i = currentPixel; i < hstop; i++) {
             assert(i < sizeof(rasterline));
             rasterline[i] = openR;
+        }
+        for (int i = hstop; i <= LAST_VISIBLE; i++) {
+            assert(i < sizeof(rasterline));
+            rasterline[i] = borderR;
         }
     }
 
