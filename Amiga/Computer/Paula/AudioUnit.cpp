@@ -285,16 +285,22 @@ void
 AudioUnit::writeData(short left, short right)
 {
     // Check for buffer overflow
-    if (bufferCapacity() == 0)
-        handleBufferOverflow();
-/*
-    // Convert samples to float values and write them into the ringbuffer
-    ringBufferL[writePtr] = float(left) * scale; // filterL.apply(float(left) * scale);
-    ringBufferR[writePtr] = float(right) * scale; // filterR.apply(float(right) * scale);
-*/
-    ringBufferL[writePtr] = filterL.apply(float(left) * scale);
-    ringBufferR[writePtr] = filterR.apply(float(right) * scale);
+    if (bufferCapacity() == 0) handleBufferOverflow();
 
+    // Convert samples to floating point values
+    float fl = float(left) * scale;
+    float fr = float(right) * scale;
+
+    // Apply audio filter if applicable
+    if ((filterActivation == FILTACT_POWER_LED && amiga->ciaA.powerLED()) ||
+        (filterActivation == FILTACT_ALWAYS)) {
+        fl = filterL.apply(fl);
+        fr = filterR.apply(fr);
+    }
+
+    // Write samples into ringbuffer
+    ringBufferL[writePtr] = fl;
+    ringBufferR[writePtr] = fr;
     advanceWritePtr();
 }
 
