@@ -29,6 +29,7 @@ typedef enum
     MSG_WARP_ON,
     MSG_WARP_OFF,
     MSG_POWER_LED_ON,
+    MSG_POWER_LED_DIM,
     MSG_POWER_LED_OFF,
     MSG_DMA_DEBUG_ON,
     MSG_DMA_DEBUG_OFF,

@@ -633,11 +633,12 @@ extension MyController {
             refreshStatusBar()
             
         case MSG_POWER_LED_ON:
-            // track("MSG_POWER_LED_ON")
             powerLED.image = NSImage.init(named: "powerLedOn")
 
+        case MSG_POWER_LED_DIM:
+            powerLED.image = NSImage.init(named: "powerLedDim")
+
         case MSG_POWER_LED_OFF:
-            // track("MSG_POWER_LED_OFF")
             powerLED.image = NSImage.init(named: "powerLedOff")
 
         case MSG_DMA_DEBUG_ON:

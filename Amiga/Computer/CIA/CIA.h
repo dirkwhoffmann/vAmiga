@@ -461,6 +461,7 @@ class CIAA : public CIA {
 public:
     
     CIAA();
+    void _powerOn() override;
     void _powerOff() override;
     void _dump() override;
     

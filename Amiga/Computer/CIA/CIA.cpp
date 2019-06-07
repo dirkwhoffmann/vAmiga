@@ -1240,6 +1240,13 @@ CIAA::_dump()
 }
 
 void
+CIAA::_powerOn()
+{
+    CIA::_powerOn();
+    amiga->putMessage(MSG_POWER_LED_DIM);
+}
+
+void
 CIAA::_powerOff()
 {
     amiga->putMessage(MSG_POWER_LED_OFF);
@@ -1319,7 +1326,7 @@ CIAA::updatePA()
     // Power LED bit
     if ((oldPA ^ PA) & 0b00000010) {
         // debug("/LED has changed\n");
-        amiga->putMessage((PA & 0b00000010) ? MSG_POWER_LED_OFF : MSG_POWER_LED_ON);
+        amiga->putMessage((PA & 0b00000010) ? MSG_POWER_LED_DIM : MSG_POWER_LED_ON);
     }
 
     // Overlay bit (OVL)
