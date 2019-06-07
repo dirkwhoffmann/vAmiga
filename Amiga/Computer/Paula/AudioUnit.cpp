@@ -141,6 +141,15 @@ AudioUnit::setSampleRate(double hz)
     filterR.setSampleRate(hz);
 }
 
+void
+AudioUnit::setFilterActivation(FilterActivation activation)
+{
+    debug("setFilterActivation(%d)\n", activation);
+
+    assert(isFilterActivation(activation));
+    filterActivation = activation;
+}
+
 FilterType
 AudioUnit::getFilterType()
 {

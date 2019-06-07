@@ -71,7 +71,8 @@ class PreferencesController: DialogController {
     //
 
     // Audio
-    @IBOutlet weak var compFilterType: NSPopUpButton!
+    // @IBOutlet weak var compFilterType: NSPopUpButton!
+    @IBOutlet weak var compFilterActivation: NSPopUpButton!
 
     // Blitter
     @IBOutlet weak var compExactBlitter: NSButton!

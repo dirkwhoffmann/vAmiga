@@ -185,6 +185,7 @@ Amiga::getConfig()
     config.model = model;
     config.realTimeClock = realTimeClock;
     config.layout = keyboard.layout;
+    config.filterActivation = paula.audioUnit.getFilterActivation();
     config.filterType = paula.audioUnit.getFilterType();
     config.exactBlitter = agnus.blitter.getExactEmulation();
     config.fifoBuffering = paula.diskController.getFifoBuffering();
@@ -293,11 +294,23 @@ Amiga::configure(ConfigOption option, long value)
             mem.updateMemSrcTable();
             break;
 
+        case VA_FILTER_ACTIVATION:
+
+            if (!isFilterActivation(value)) {
+                warn("Invalid filter activation: %d\n", value);
+                warn("       Valid values: 0 ... %d\n", FILTACT_COUNT - 1);
+                return false;
+            }
+
+            if (current.filterActivation == value) return true;
+            paula.audioUnit.setFilterActivation((FilterActivation)value);
+            break;
+
         case VA_FILTER_TYPE:
 
             if (!isFilterType(value)) {
                 warn("Invalid filter type: %d\n", value);
-                warn("       Valid values: 0 ... %d\n", FILT_COUNT);
+                warn("       Valid values: 0 ... %d\n", FILT_COUNT - 1);
                 return false;
             }
 

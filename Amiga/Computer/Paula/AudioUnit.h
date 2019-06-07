@@ -14,8 +14,15 @@
 #include "AudioFilter.h"
 
 class AudioUnit : public HardwareComponent {
-    
+
     //
+    // Configuration
+    //
+
+    // The currently set filter activation method
+    FilterActivation filterActivation;
+
+
     // Sub components
     //
     
@@ -155,7 +162,13 @@ public:
     
     // Sets the sample rate in Hz
     void setSampleRate(double hz);
-    
+
+    // Returns the filter activation method
+    FilterActivation getFilterActivation() { return filterActivation; }
+
+    // Sets the filter activation method
+    void setFilterActivation(FilterActivation activation);
+
     // Returns the filter type
     FilterType getFilterType();
 

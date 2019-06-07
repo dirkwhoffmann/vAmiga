@@ -551,6 +551,14 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->paula->audioUnit.setSampleRate(rate);
 }
+- (FilterActivation) filterActivation
+{
+    return wrapper->paula->audioUnit.getFilterActivation();
+}
+- (void) setFilterActivation:(FilterActivation)activation
+{
+    wrapper->paula->audioUnit.setFilterActivation(activation);
+}
 - (FilterType) filterType
 {
     return wrapper->paula->audioUnit.getFilterType();

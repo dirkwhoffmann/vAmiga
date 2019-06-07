@@ -28,6 +28,17 @@ FilterType;
 
 static inline bool isFilterType(long value) { return value >= 0 && value < FILT_COUNT; }
 
+typedef enum : long
+{
+    FILTACT_POWER_LED,
+    FILTACT_NEVER,
+    FILTACT_ALWAYS,
+    FILTACT_COUNT
+}
+FilterActivation;
+
+static inline bool isFilterActivation(long value) { return value >= 0 && value < FILTACT_COUNT; }
+
 
 //
 // Structures

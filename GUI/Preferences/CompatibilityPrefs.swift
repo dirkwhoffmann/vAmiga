@@ -19,7 +19,8 @@ extension PreferencesController {
         let poweredOff = amiga.isPoweredOff()
 
         // Audio
-        compFilterType.selectItem(withTag: config.filterType.rawValue)
+        compFilterActivation.selectItem(withTag: config.filterActivation.rawValue)
+        // compFilterType.selectItem(withTag: config.filterType.rawValue)
             
         // Blitter
         compExactBlitter.state = config.exactBlitter ? .on : .off
@@ -32,9 +33,10 @@ extension PreferencesController {
         compFifoBuffering.isEnabled = poweredOff
     }
 
-    @IBAction func compFilterTypeAction(_ sender: NSPopUpButton!) {
+    @IBAction func compFilterActivationAction(_ sender: NSPopUpButton!) {
 
-        amigaProxy?.configure(VA_FILTER_TYPE, value: sender.tag)
+        track("\(sender.selectedTag())")
+        amigaProxy?.configure(VA_FILTER_ACTIVATION, value: sender.selectedTag())
         refresh()
     }
 
