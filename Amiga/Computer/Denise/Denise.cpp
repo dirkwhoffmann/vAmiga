@@ -165,6 +165,8 @@ Denise::_inspect()
         info.sprite[i].vstrt = ((pos & 0xFF00) >> 8) | ((ctl & 0b100) << 6);
         info.sprite[i].vstop = ((ctl & 0xFF00) >> 8) | ((ctl & 0b010) << 7);
         info.sprite[i].attach = GET_BIT(ctl, 7);
+
+        // debug("%d: hstrt = %d vstsrt = %d vstop = %d\n", i, info.sprite[i].hstrt, info.sprite[i].vstrt, info.sprite[i].vstop);
     }
 
     pthread_mutex_unlock(&lock);
@@ -310,7 +312,7 @@ Denise::pokeSPRxPOS(int x, uint16_t value)
     sprhstrt[x] = ((value & 0xFF) << 1) | (sprhstrt[x] & 0x01);
     
     // Update debugger info
-    if (agnus->vpos == 25) {
+    if (agnus->vpos == 26) {
         info.sprite[x].pos = value;
     }
 }

@@ -1309,7 +1309,7 @@ Agnus::serviceS1Event(int nr)
     
     // Read sprite data if data DMA is activated
     if (sprDmaState[nr] == SPR_DMA_DATA) {
-        
+
         // Read DATA
         denise->pokeSPRxDATB(nr, doSpriteDMA(nr));
     }
@@ -1402,8 +1402,12 @@ Agnus::hsyncHandler()
         vsyncHandler();
     }
 
+    // Switch sprite DMA off in the last rasterline
     if (vpos == frameInfo.numLines - 1) {
         switchSpriteDmaOff();
+        for (unsigned i = 0; i < 8; i++) {
+            sprDmaState[i] = SPR_DMA_IDLE;
+        }
     }
 
     // Switch bitplane DMA on or off
