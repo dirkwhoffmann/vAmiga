@@ -14,8 +14,6 @@ extension Inspector {
         guard let dma = amigaProxy?.dma else { return }
         let info = dma.getCopperInfo()
         
-        track("Refreshing Copper inspector tab")
-        
         if everything {
 
             let elements = [ copCOPPC: fmt24,

@@ -39,7 +39,7 @@
 #define CIA_DEBUG 2
 
 // Set to 1 to debug DMA relevant registers
-#define DMA_DEBUG 1
+#define DMA_DEBUG 2
 
 // Set to 1 to debug bitplane relevant registers
 #define BPL_DEBUG 2
@@ -51,7 +51,7 @@
 #define SPR_DEBUG 2
 
 // Set to 1 to debug disk relevant registers
-#define DSK_DEBUG 1
+#define DSK_DEBUG 2
 
 // Set to 1 to debug audio relevant registers
 #define AUD_DEBUG 2

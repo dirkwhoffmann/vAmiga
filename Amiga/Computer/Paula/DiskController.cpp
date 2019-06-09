@@ -239,7 +239,6 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
     }
     
     // If the selected drive is a turbo drive, perform DMA immediately
-    if (drive) debug("TURBO DRIVE: %d\n", drive->isTurboDrive());
     if (drive && drive->isTurboDrive()) performTurboDMA(drive);
 }
 
@@ -505,8 +504,6 @@ DiskController::performDMARead(Drive *drive)
         // Compute checksum (for debugging).
         checksum = fnv_1a_it32(checksum, word);
         checkcnt++;
-
-        if (checkcnt % 128 == 0) debug("performDMARead... %d\n", checkcnt);
 
         // Finish up if this was the last word to transfer.
         if ((--dsklen & 0x3FFF) == 0) {

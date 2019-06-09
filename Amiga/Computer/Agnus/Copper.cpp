@@ -109,13 +109,13 @@ void
 Copper::pokeCOPJMP(int x)
 {
     assert(x < 2);
-    
-    debug(2, "pokeCOPJMP%d\n", x + 1);
+
+    debug(COP_DEBUG, "COPPC: %X pokeCOPJMP(%d)\n", coppc, x);
     
     /* "When you write to a Copper strobe address, the Copper reloads its
      *  program counter from the corresponding location register." [HRM]
      */
-    coppc = coplc[1];
+    coppc = coplc[x];
 }
 
 void
@@ -234,7 +234,7 @@ Copper::findHorizontalMatch(int16_t hStrt, int16_t hComp, int16_t hMask, int16_t
 void
 Copper::move(int addr, uint16_t value)
 {
-    debug(COP_DEBUG, "MOVE %X <- %X\n", addr, value);
+    debug(COP_DEBUG, "COPPC: %X move(%s, $%X) (%d)\n", coppc, customReg[addr >> 1], value, value);
 
     assert(IS_EVEN(addr));
     assert(addr < 0x1FF);
@@ -466,7 +466,7 @@ Copper::serviceEvent(EventID id)
                 
                 // Load the first instruction word
                 copins1 = mem->peek16(coppc);
-                debug(2, "COP_FETCH: coppc = %X copins1 = %X\n", coppc, copins1);
+                // debug(COP_DEBUG, "COP_FETCH: coppc = %X copins1 = %X\n", coppc, copins1);
                 advancePC();
                 
                 // Determine the next state based on the instruction type
@@ -480,7 +480,7 @@ Copper::serviceEvent(EventID id)
                 
                 // Load the second instruction word
                 copins2 = mem->peek16(coppc);
-                debug(2, "COP_MOVE: coppc = %X copins2 = %X\n", coppc, copins2);
+                // debug(COP_DEBUG, "COP_MOVE: coppc = %X copins2 = %X\n", coppc, copins2);
                 advancePC();
                 
                 // Extract register number from the first instruction word
@@ -507,8 +507,8 @@ Copper::serviceEvent(EventID id)
 
                 // Load the second instruction word
                 copins2 = mem->peek16(coppc);
-                debug(2, "COP_WAIT_OR_SKIP: coppc = %X copins2 = %X\n", coppc, copins2);
-                debug(2, "    VPHP = %X VMHM = %X\n", getVPHP(), getVMHM());
+                // debug(COP_DEBUG, "COP_WAIT_OR_SKIP: coppc = %X copins2 = %X\n", coppc, copins2);
+                // debug(COP_DEBUG, "    VPHP = %X VMHM = %X\n", getVPHP(), getVMHM());
                 advancePC();
                 
                 // Is it a WAIT command?
@@ -571,7 +571,7 @@ Copper::serviceEvent(EventID id)
         
             // Load COP1LC into the program counter
             coppc = coplc[0];
-            debug(2, "COP_JMP1: coppc = %X\n", coppc);
+            // debug(COP_DEBUG, "COP_JMP1: coppc = %X\n", coppc);
             events->scheduleRel(COP_SLOT, DMA_CYCLES(2), COP_REQUEST_DMA);
             break;
 
@@ -579,7 +579,7 @@ Copper::serviceEvent(EventID id)
             
             // Load COP2LC into the program counter
             coppc = coplc[1];
-            debug(2, "COP_JMP2: coppc = %X\n", coppc);
+            // debug(COP_DEBUG, "COP_JMP2: coppc = %X\n", coppc);
             events->scheduleRel(COP_SLOT, DMA_CYCLES(2), COP_REQUEST_DMA);
             break;
 

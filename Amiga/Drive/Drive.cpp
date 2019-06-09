@@ -294,15 +294,13 @@ Drive::moveHead(int dir)
         
         // Move drive head outwards (towards the lower tracks)
         if (head.cylinder > 0) head.cylinder--;
-        // debug("[%lld] Moving down to cylinder %d\n", amiga->agnus.frame, head.cylinder);
-        // if (nr == 0) plainmsg("Df%d cylinder %d\n", nr, head.cylinder);
-    
+        debug(DSK_DEBUG, "Stepping down to cylinder %d\n", head.cylinder);
+
     } else {
         
         // Move drive head inwards (towards the upper tracks)
         if (head.cylinder < 79) head.cylinder++;
-        // debug("[%lld] Moving up to cylinder %d\n", amiga->agnus.frame, head.cylinder);
-        // if (nr == 0) plainmsg("Df%d cylinder %d\n", nr, head.cylinder);
+        debug(DSK_DEBUG, "Stepping up to cylinder %d\n", head.cylinder);
     }
 
 #ifdef ALIGN_DRIVE_HEAD

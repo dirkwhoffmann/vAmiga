@@ -554,7 +554,9 @@ Denise::drawBorder()
     }
 
 #ifdef LINE_DEBUG
-    if (agnus->vpos == 256) for (int i = 0; i <= LAST_VISIBLE; rasterline[i++] = 64);
+    int16_t vpos = agnus->vpos;
+    bool lines = vpos == 208 || vpos == 255;
+    if (lines) for (int i = 0; i <= LAST_VISIBLE; rasterline[i++] = 64);
 #endif
 }
 
