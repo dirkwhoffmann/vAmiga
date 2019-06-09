@@ -239,6 +239,7 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
     }
     
     // If the selected drive is a turbo drive, perform DMA immediately
+    if (drive) debug("TURBO DRIVE: %d\n", drive->isTurboDrive());
     if (drive && drive->isTurboDrive()) performTurboDMA(drive);
 }
 
@@ -423,7 +424,7 @@ DiskController::executeFifo()
             if ((syncFlag = compareFifo(dsksync))) {
                 
                 // Trigger a word SYNC interrupt.
-                debug(DSK_DEBUG, "SYNC IRQ\n");
+                debug(DSK_DEBUG, "SYNC IRQ (dsklen = %d)\n", dsklen);
                 paula->pokeINTREQ(0x9000);
 
                 // Enable DMA if the controller was waiting for it.
@@ -488,7 +489,7 @@ void
 DiskController::performDMARead(Drive *drive)
 {
     // Only proceed if the FIFO contains enough data.
-    if (!fifoHasWord()) return;
+    if (!fifoHasWord()) { return; }
 
     // Determine how many words we are supposed to transfer.
     uint32_t remaining = acceleration;
@@ -504,6 +505,8 @@ DiskController::performDMARead(Drive *drive)
         // Compute checksum (for debugging).
         checksum = fnv_1a_it32(checksum, word);
         checkcnt++;
+
+        if (checkcnt % 128 == 0) debug("performDMARead... %d\n", checkcnt);
 
         // Finish up if this was the last word to transfer.
         if ((--dsklen & 0x3FFF) == 0) {
@@ -670,7 +673,12 @@ DiskController::performTurboDMA(Drive *drive)
     
     // Perform action depending on DMA state
     switch (state) {
-            
+
+        case DRIVE_DMA_WAIT:
+
+            drive->findSyncMark();
+            // fallthrough
+
         case DRIVE_DMA_READ:
             
             performTurboRead(drive);
@@ -695,9 +703,10 @@ DiskController::performTurboRead(Drive *drive)
 {
     plaindebug(DSK_DEBUG, "Turbo-reading %d words from disk (offset = %d).\n", dsklen & 0x3FFF, drive->head.offset);
 
+    /*
     drive->findSyncMark();
     plaindebug(DSK_DEBUG, "Moving to SYNC mark at offset %d\n", drive->head.offset);
-
+    */
 
     for (unsigned i = 0; i < (dsklen & 0x3FFF); i++) {
         
@@ -705,7 +714,7 @@ DiskController::performTurboRead(Drive *drive)
         uint16_t word = drive->readHead16();
         
         // Write word into memory.
-        agnus->doDiskDMA(word); // dmaWrite(word);
+        agnus->doDiskDMA(word);
         
         // Compute checksum (for debugging)
         checksum = fnv_1a_it32(checksum, word);

@@ -698,7 +698,7 @@ Agnus::pokeDMACON(uint16_t value)
     bool oldCOPEN = (dmacon & COPEN) && oldDMAEN;
     bool oldBLTEN = (dmacon & BLTEN) && oldDMAEN;
     bool oldSPREN = (dmacon & SPREN) && oldDMAEN;
-    bool oldDSKEN = (dmacon & DSKEN) && oldDMAEN;
+    // bool oldDSKEN = (dmacon & DSKEN) && oldDMAEN;
     bool oldAU0EN = (dmacon & AU0EN) && oldDMAEN;
     bool oldAU1EN = (dmacon & AU1EN) && oldDMAEN;
     bool oldAU2EN = (dmacon & AU2EN) && oldDMAEN;
@@ -713,7 +713,7 @@ Agnus::pokeDMACON(uint16_t value)
     bool newCOPEN = (dmacon & COPEN) && newDMAEN;
     bool newBLTEN = (dmacon & BLTEN) && newDMAEN;
     bool newSPREN = (dmacon & SPREN) && newDMAEN;
-    bool newDSKEN = (dmacon & DSKEN) && newDMAEN;
+    // bool newDSKEN = (dmacon & DSKEN) && newDMAEN;
     bool newAU0EN = (dmacon & AU0EN) && newDMAEN;
     bool newAU1EN = (dmacon & AU1EN) && newDMAEN;
     bool newAU2EN = (dmacon & AU2EN) && newDMAEN;
@@ -792,10 +792,11 @@ Agnus::pokeDMACON(uint16_t value)
         }
     }
     
-    // Disk DMA
-    if (oldDSKEN ^ newDSKEN) {
-        
-        if (newDSKEN) {
+    // Disk DMA (only the master bit is checked)
+    // if (oldDSKEN ^ newDSKEN) {
+    if (oldDMAEN ^ newDMAEN) {
+
+        if (newDMAEN) {
             
             // Disk DMA on
             debug(DMA_DEBUG, "Disk DMA switched on\n");

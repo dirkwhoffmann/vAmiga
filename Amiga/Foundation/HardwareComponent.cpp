@@ -31,7 +31,7 @@ HardwareComponent::prefix()
     uint16_t dmacon = amiga->agnus.dmacon;
     bool dmaen = dmacon & DMAEN;
     fprintf(stderr, "%c%c%c%c ",
-            (dmacon & BPLEN) ? (dmaen ? 'P' : 'p') : '-',
+            (dmacon & BPLEN) ? (dmaen ? 'G' : 'g') : '-',
             (dmacon & COPEN) ? (dmaen ? 'C' : 'c') : '-',
             (dmacon & BLTEN) ? (dmaen ? 'B' : 'b') : '-',
             (dmacon & DSKEN) ? (dmaen ? 'D' : 'd') : '-');
