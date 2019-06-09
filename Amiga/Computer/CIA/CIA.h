@@ -186,26 +186,28 @@ protected:
     /* Serial data register
      * http://unusedino.de/ec64/technical/misc/cia6526/serial.html
      * "The serial port is a buffered, 8-bit synchronous shift register system.
-     *  A control bit selects input or output mode. In input mode, data on the SP pin
-     *  is shifted into the shift register on the rising edge of the signal applied
-     *  to the CNT pin. After 8 CNT pulses, the data in the shift register is dumped
-     *  into the Serial Data Register and an interrupt is generated. In the output
-     *  mode, TIMER A is used for the baud rate generator. Data is shifted out on the
-     *  SP pin at 1/2 the underflow rate of TIMER A. [...] Transmission will start
-     *  following a write to the Serial Data Register (provided TIMER A is running
-     *  and in continuous mode). The clock signal derived from TIMER A appears as an
-     *  output on the CNT pin. The data in the Serial Data Register will be loaded
-     *  into the shift register then shift out to the SP pin when a CNT pulse occurs.
-     *  Data shifted out becomes valid on the falling edge of CNT and remains valid
-     *  until the next falling edge. After 8 CNT pulses, an interrupt is generated to
-     *  indicate more data can be sent. If the Serial Data Register was loaded with
-     *  new information prior to this interrupt, the new data will automatically be
-     *  loaded into the shift register and transmission will continue. If the
-     *  microprocessor stays one byte ahead of the shift register, transmission will
-     *  be continuous. If no further data is to be transmitted, after the 8th CNT
-     *  pulse, CNT will return high and SP will remain at the level of the last data
-     *  bit transmitted. SDR data is shifted out MSB first and serial input data
-     *  should also appear in this format.
+     *  A control bit selects input or output mode. In input mode, data on the
+     *  SP pin is shifted into the shift register on the rising edge of the
+     *  signal applied to the CNT pin. After 8 CNT pulses, the data in the shift
+     *  register is dumped into the Serial Data Register and an interrupt is
+     *  generated. In the output mode, TIMER A is used for the baud rate
+     *  generator. Data is shifted out on the SP pin at 1/2 the underflow rate
+     *  of TIMER A. [...] Transmission will start following a write to the
+     *  Serial Data Register (provided TIMER A is running and in continuous
+     *  mode). The clock signal derived from TIMER A appears as an output on the
+     *  CNT pin. The data in the Serial Data Register will be loaded into the
+     *  shift register then shift out to the SP pin when a CNT pulse occurs.
+     *  Data shifted out becomes valid on the falling edge of CNT and remains
+     *  valid until the next falling edge. After 8 CNT pulses, an interrupt is
+     *  generated to indicate more data can be sent. If the Serial Data Register
+     *  was loaded with new information prior to this interrupt, the new data
+     *  will automatically be loaded into the shift register and transmission
+     *  will continue. If the microprocessor stays one byte ahead of the shift
+     *  register, transmission will be continuous. If no further data is to be
+     *  transmitted, after the 8th CNT pulse, CNT will return high and SP will
+     *  remain at the level of the last data bit transmitted. SDR data is
+     *  shifted out MSB first and serial input data should also appear in this
+     *  format.
      */
     uint8_t SDR;
     

@@ -260,10 +260,13 @@ Drive::rotate()
         head.offset = 0;
         
         /* If this drive is currently selected, we emulate a falling edge on
-         * the flag pin of CIA A. This causes the CIA to trigger the INDEX
+         * the flag pin of CIA B. This causes the CIA to trigger the INDEX
          * interrupt if the corresponding enable bit is set.
          */
-        if (isSelected()) amiga->ciaA.emulateFallingEdgeOnFlagPin();
+        if (isSelected()) {
+            // debug("emulateFallingEdgeOnFlagPin()\n"); 
+            amiga->ciaB.emulateFallingEdgeOnFlagPin();
+        }
     }
     assert(head.offset < disk->trackLen);
 }

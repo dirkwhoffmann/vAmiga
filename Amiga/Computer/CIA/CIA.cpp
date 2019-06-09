@@ -184,7 +184,9 @@ uint8_t
 CIA::peek(uint16_t addr)
 {
 	uint8_t result;
-    
+
+    debug(CIA_DEBUG, "Peek($%X) (%d)\n", addr, addr);
+
     wakeUp();
 
     assert(addr <= 0x000F);
@@ -378,7 +380,7 @@ CIA::spypeek(uint16_t addr)
 void
 CIA::poke(uint16_t addr, uint8_t value)
 {
-    // debug("Poke(%d) = %d (hex: %02X)\n", addr, value, value);
+    debug(CIA_DEBUG, "Poke($%X,$%X) (%d,%d)\n", addr, value, addr, value);
     
     wakeUp();
     
