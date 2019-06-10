@@ -33,6 +33,8 @@ struct Rom {
     static let kick13_35_5_o       = 0x08a1122c7dec695d as UInt64
 
     static let kick204_37_175      = 0x845588ccf58fce86 as UInt64
+
+    static let diag1_1             = 0x3caee2ad138eb229 as UInt64
 }
 
 let knownRoms: [UInt64: String] = [
@@ -56,7 +58,9 @@ let knownRoms: [UInt64: String] = [
     Rom.kick13_35_5_h:       "Kickstart 1.3 (revision 34.5)",
     Rom.kick13_35_5_o:       "Kickstart 1.3 (revision 34.5)",
     
-    Rom.kick204_37_175:      "Kickstart 2.04 (revision 37.175)"
+    Rom.kick204_37_175:      "Kickstart 2.04 (revision 37.175)",
+
+    Rom.diag1_1:             "DiagROM 1.1"
 ]
 
 extension PreferencesController {
@@ -83,10 +87,11 @@ extension PreferencesController {
         track("hash = \(hash)")
 
         let hasRom        = hash != 0
-        let hasArosRom    = hash == 0xE74215EB368CD7F1
+        let hasArosRom    = hash == Rom.aros    // 0xE74215EB368CD7F1
+        let hasDiagRom    = hash == Rom.diag1_1 // 0x3caee2ad138eb229
         let hasKnownRom   = knownRoms[hash] != nil
         let hasUnknownRom = hasRom && !hasKnownRom
-        let hasOrigRom    = hasKnownRom && !hasArosRom
+        let hasOrigRom    = hasKnownRom && !hasArosRom && !hasDiagRom
 
         let bootRomURL    = controller.bootRomURL
         let kickRomURL    = controller.kickRomURL
@@ -95,6 +100,7 @@ extension PreferencesController {
         let romMissing    = NSImage.init(named: "rom_light")
         let romOriginal   = NSImage.init(named: "rom_original")
         let romAros       = NSImage.init(named: "rom_aros")
+        let romDiag       = NSImage.init(named: "rom_diag")
         let romUnknown    = NSImage.init(named: "rom_unknown")
         
         // Lock controls if emulator is powered on
@@ -105,6 +111,7 @@ extension PreferencesController {
         // Rom icon
         romDropView.image =
             hasArosRom ? romAros :
+            hasDiagRom ? romDiag :
             hasOrigRom ? romOriginal :
             hasRom     ? romUnknown : romMissing
 
