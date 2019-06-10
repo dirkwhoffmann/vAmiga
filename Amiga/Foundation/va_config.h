@@ -63,7 +63,7 @@
 #define COP_DEBUG 2
 
 // Set to 1 to debug the Blitter
-#define BLT_DEBUG 1
+#define BLT_DEBUG 2
 
 // Enable to draw the display window border in debug colors
 #define BORDER_DEBUG

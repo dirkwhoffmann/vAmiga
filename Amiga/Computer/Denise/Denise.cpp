@@ -262,6 +262,9 @@ Denise::pokeBPLCON0(uint16_t value)
      */
     ham = (bplcon0 & 0x8C00) == 0x0800 && (bpu == 5 || bpu == 6);
 
+    // agnus->updateBitplaneDma();
+    // agnus->switchBitplaneDmaOff();
+
     // shiftReg[0] = 0xAAAA;
     // shiftReg[1] = 0xCCCC;
 }
@@ -410,7 +413,7 @@ Denise::pixelAddr(int pixel)
 void
 Denise::drawLores(int pixels)
 {
-    assert(currentPixel == (agnus->hpos * 4) + 6);
+    // assert(currentPixel == (agnus->hpos * 4) + 6);
 
     // Only proceed if the vertical position is inside the drawing area
     if (!inDisplayWindow) return;
@@ -555,6 +558,7 @@ Denise::drawBorder()
 
 #ifdef LINE_DEBUG
     rasterline[FIRST_VISIBLE] = 64;
+    rasterline[2 * 0x18] = 65;
     int16_t vpos = agnus->vpos;
     // bool lines = vpos == 208 || vpos == 255;
     bool lines = vpos == 255;

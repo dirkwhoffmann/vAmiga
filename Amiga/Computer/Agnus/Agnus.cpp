@@ -900,7 +900,7 @@ Agnus::peekVHPOSR()
     // V7 V6 V5 V4 V3 V2 V1 V0 H8 H7 H6 H5 H4 H3 H2 H1
     uint16_t result = BEAM(vpos, hpos) & 0xFFFF;
 
-    debug(BPL_DEBUG, "peekVHPOSR() = %X\n", result);
+    // debug(BPL_DEBUG, "peekVHPOSR() = %X\n", result);
     return result;
 }
 
@@ -982,6 +982,7 @@ Agnus::pokeDDFSTRT(uint16_t value)
     }
 
     ddfstrt = newValue;
+    updateBitplaneDma();
 }
 
 void
@@ -1002,6 +1003,7 @@ Agnus::pokeDDFSTOP(uint16_t value)
     }
 
     ddfstop = newValue;
+    updateBitplaneDma();
 }
 
 void
