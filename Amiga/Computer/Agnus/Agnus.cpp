@@ -982,6 +982,7 @@ Agnus::pokeDDFSTRT(uint16_t value)
     }
 
     ddfstrt = newValue;
+    // hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
     updateBitplaneDma();
 }
 
@@ -1003,6 +1004,7 @@ Agnus::pokeDDFSTOP(uint16_t value)
     }
 
     ddfstop = newValue;
+    // hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
     updateBitplaneDma();
 }
 

@@ -413,7 +413,7 @@ Denise::pixelAddr(int pixel)
 void
 Denise::drawLores(int pixels)
 {
-    // assert(currentPixel == (agnus->hpos * 4) + 6);
+    assert(currentPixel == (agnus->hpos * 4) + 6);
 
     // Only proceed if the vertical position is inside the drawing area
     if (!inDisplayWindow) return;
@@ -522,6 +522,9 @@ Denise::drawBorder()
     int openR = 69;
 #endif
 
+    int16_t hstrt = MAX(FIRST_VISIBLE, 2 * agnus->diwHstrt);
+    int16_t hstop = MIN(LAST_VISIBLE + 1, 2 * agnus->diwHstop);
+
     if (firstCanvasPixel == 0) {
         assert(lastCanvasPixel == 0);
 
@@ -531,9 +534,6 @@ Denise::drawBorder()
         }
 
     } else {
-
-        int16_t hstrt = MAX(FIRST_VISIBLE, 2 * agnus->diwHstrt);
-        int16_t hstop = MIN(LAST_VISIBLE + 1, 2 * agnus->diwHstop);
 
         // Draw left border
         for (int i = FIRST_VISIBLE; i < hstrt; i++) {
@@ -560,9 +560,10 @@ Denise::drawBorder()
     rasterline[FIRST_VISIBLE] = 64;
     rasterline[2 * 0x18] = 65;
     int16_t vpos = agnus->vpos;
-    // bool lines = vpos == 208 || vpos == 255;
-    bool lines = vpos == 255;
-    if (lines) for (int i = 0; i <= LAST_VISIBLE; rasterline[i++] = 64);
+    bool lines = vpos == 208 || vpos == 255;
+    // bool lines = vpos == 255;
+    if (lines) for (int i = FIRST_VISIBLE + 40; i <= LAST_VISIBLE / 2; rasterline[i++] = 64);
+    if (vpos == 208) debug("line 208 hstrt = %d hstop = %d firstCanvasPixel = %d last = %d\n", hstrt, hstop, firstCanvasPixel, lastCanvasPixel);
 #endif
 }
 
