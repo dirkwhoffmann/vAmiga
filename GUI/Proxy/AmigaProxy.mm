@@ -523,6 +523,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->paula->getInfo();
 }
+- (AudioInfo) getAudioInfo
+{
+    return wrapper->paula->audioUnit.getInfo();
+}
 - (DiskControllerInfo) getDiskControllerInfo
 {
     return wrapper->paula->diskController.getInfo();

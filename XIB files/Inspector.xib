@@ -11,6 +11,26 @@
                 <outlet property="audioBufferLevelText" destination="3Ju-sY-QEB" id="Fpy-Vj-4JF"/>
                 <outlet property="audioBufferOverflows" destination="ZmY-xb-vSn" id="8ea-ZK-SNB"/>
                 <outlet property="audioBufferUnderflows" destination="Hy8-dx-FOY" id="S84-lk-msy"/>
+                <outlet property="audioDat0" destination="MP6-bq-y6n" id="QXS-Dm-MkN"/>
+                <outlet property="audioDat1" destination="1Ma-EY-GlC" id="7yq-hN-2OZ"/>
+                <outlet property="audioDat2" destination="v4d-oH-Och" id="WLG-oE-nhZ"/>
+                <outlet property="audioDat3" destination="JVn-RP-6te" id="cGU-kU-qds"/>
+                <outlet property="audioLen0" destination="1M0-r9-lzu" id="L1g-2h-G9a"/>
+                <outlet property="audioLen1" destination="5mu-nQ-zuY" id="hnX-zR-x7Q"/>
+                <outlet property="audioLen2" destination="kmu-mF-zMR" id="TVd-1W-9iC"/>
+                <outlet property="audioLen3" destination="byr-lf-YCR" id="2aJ-NG-xPv"/>
+                <outlet property="audioLoc0" destination="kcr-zx-JiR" id="vQN-jf-oBY"/>
+                <outlet property="audioLoc1" destination="J0n-s9-3Fn" id="mto-Dk-YZv"/>
+                <outlet property="audioLoc2" destination="S7Y-jz-gaX" id="5bt-tW-f8P"/>
+                <outlet property="audioLoc3" destination="9eZ-lv-BI8" id="4RP-nG-LGK"/>
+                <outlet property="audioPer0" destination="zwq-ze-IyJ" id="rOE-xh-tQk"/>
+                <outlet property="audioPer1" destination="Poj-OO-SKs" id="oBf-0M-vhX"/>
+                <outlet property="audioPer2" destination="8U9-Vg-5pd" id="Kai-8p-ecM"/>
+                <outlet property="audioPer3" destination="ZYE-ST-Syy" id="0Qx-5t-d4z"/>
+                <outlet property="audioVol0" destination="aqZ-QZ-ibu" id="ite-IX-lbk"/>
+                <outlet property="audioVol1" destination="dav-oV-k3r" id="X2z-bB-yjM"/>
+                <outlet property="audioVol2" destination="Lfa-vu-5Ip" id="ToG-o9-1Be"/>
+                <outlet property="audioVol3" destination="tkC-eQ-FZk" id="pMC-WQ-pep"/>
                 <outlet property="audioWaveformView" destination="Shk-dk-APM" id="RAd-yH-ibw"/>
                 <outlet property="breakTableView" destination="S0w-pd-Wb0" id="5Py-ER-4gX"/>
                 <outlet property="ciaAlarmHi" destination="g4a-rb-TAd" id="LsO-a5-zkL"/>
@@ -3268,7 +3288,7 @@
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Denise" identifier="" id="kn4-b1-ULt">
-                                <view key="view" ambiguous="YES" id="iv0-wC-hpe">
+                                <view key="view" id="iv0-wC-hpe">
                                     <rect key="frame" x="10" y="33" width="824" height="406"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -4314,7 +4334,7 @@
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Paula" identifier="" id="ox5-bZ-2Aj">
-                                <view key="view" id="FXI-VY-h9b">
+                                <view key="view" ambiguous="YES" id="FXI-VY-h9b">
                                     <rect key="frame" x="10" y="33" width="824" height="406"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>

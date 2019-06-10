@@ -13,6 +13,7 @@ extension Inspector {
         
         guard let paula = amigaProxy?.paula else { return }
         let info = paula.getInfo()
+        let audInfo = paula.getAudioInfo()
         let dskInfo = paula.getDiskControllerInfo()
         
         // track("Refreshing Paula inspector tab")
@@ -24,7 +25,29 @@ extension Inspector {
                              dskDsklen: fmt16,
                              dskDskbytr: fmt16,
                              dskAdkconHi: fmt8,
-                             dskDsksync: fmt16 ]
+                             dskDsksync: fmt16,
+
+                             audioLen0: fmt16,
+                             audioPer0: fmt16,
+                             audioVol0: fmt16,
+                             audioDat0: fmt16,
+                             audioLoc0: fmt16,
+                             audioLen1: fmt16,
+                             audioPer1: fmt16,
+                             audioVol1: fmt16,
+                             audioDat1: fmt16,
+                             audioLoc1: fmt16,
+                             audioLen2: fmt16,
+                             audioPer2: fmt16,
+                             audioVol2: fmt16,
+                             audioDat2: fmt16,
+                             audioLoc2: fmt16,
+                             audioLen3: fmt16,
+                             audioPer3: fmt16,
+                             audioVol3: fmt16,
+                             audioDat3: fmt16,
+                             audioLoc3: fmt16
+                             ]
 
             for (c, f) in elements { assignFormatter(f, c!) }
         }
@@ -135,8 +158,33 @@ extension Inspector {
         default: break
         }
         */
-        
-        // Audio buffer
+
+        // Audio section
+        audioLen0.intValue = Int32(audInfo.channel.0.audlenLatch)
+        audioPer0.intValue = Int32(audInfo.channel.0.audperLatch)
+        audioVol0.intValue = Int32(audInfo.channel.0.audvolLatch)
+        audioDat0.intValue = Int32(audInfo.channel.0.auddatLatch)
+        audioLoc0.intValue = Int32(audInfo.channel.0.audlcLatch)
+
+        audioLen1.intValue = Int32(audInfo.channel.1.audlenLatch)
+        audioPer1.intValue = Int32(audInfo.channel.1.audperLatch)
+        audioVol1.intValue = Int32(audInfo.channel.1.audvolLatch)
+        audioDat1.intValue = Int32(audInfo.channel.1.auddatLatch)
+        audioLoc1.intValue = Int32(audInfo.channel.1.audlcLatch)
+
+        audioLen2.intValue = Int32(audInfo.channel.2.audlenLatch)
+        audioPer2.intValue = Int32(audInfo.channel.2.audperLatch)
+        audioVol2.intValue = Int32(audInfo.channel.2.audvolLatch)
+        audioDat2.intValue = Int32(audInfo.channel.2.auddatLatch)
+        audioLoc2.intValue = Int32(audInfo.channel.2.audlcLatch)
+
+        audioLen3.intValue = Int32(audInfo.channel.3.audlenLatch)
+        audioPer3.intValue = Int32(audInfo.channel.3.audperLatch)
+        audioVol3.intValue = Int32(audInfo.channel.3.audvolLatch)
+        audioDat3.intValue = Int32(audInfo.channel.3.auddatLatch)
+        audioLoc3.intValue = Int32(audInfo.channel.3.audlcLatch)
+
+        // Audio sample sequencer
         let fillLevel = Int32(paula.fillLevel() * 100)
         audioBufferLevel.intValue = fillLevel
         audioBufferLevelText.stringValue = "\(fillLevel) %"

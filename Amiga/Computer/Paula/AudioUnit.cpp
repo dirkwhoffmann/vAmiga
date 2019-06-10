@@ -47,6 +47,19 @@ AudioUnit::_powerOn()
 }
 
 void
+AudioUnit::_inspect()
+{
+    // Prevent external access to variable 'info'
+    pthread_mutex_lock(&lock);
+
+    for (unsigned i = 0; i < 4; i++) {
+        info.channel[i] = channel[i].getInfo();
+    }
+
+    pthread_mutex_unlock(&lock);
+}
+
+void
 AudioUnit::_dump()
 {
 }
@@ -123,6 +136,18 @@ AudioUnit::executeUntil(Cycle targetClock)
         // Write sound samples into buffers
         writeData(left, right);
     }
+}
+
+AudioInfo
+AudioUnit::getInfo()
+{
+    AudioInfo result;
+
+    pthread_mutex_lock(&lock);
+    result = info;
+    pthread_mutex_unlock(&lock);
+
+    return result;
 }
 
 double

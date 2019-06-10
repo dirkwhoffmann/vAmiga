@@ -66,4 +66,26 @@ typedef struct
 }
 DiskControllerInfo;
 
+typedef struct
+{
+    int8_t state;
+
+    uint16_t audlenLatch;
+    uint16_t audlen;
+    uint16_t audperLatch;
+    int32_t audper;
+    uint16_t audvolLatch;
+    uint16_t audvol;
+    uint16_t auddatLatch;
+    uint16_t auddat;
+    uint32_t audlcLatch;
+}
+AudioChannelInfo;
+
+typedef struct
+{
+    AudioChannelInfo channel[4];
+}
+AudioInfo;
+
 #endif

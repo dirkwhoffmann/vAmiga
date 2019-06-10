@@ -46,10 +46,42 @@ StateMachine::setNr(uint8_t nr)
 }
 
 void
-StateMachine::_initialize() {
-
+StateMachine::_initialize()
+{
     agnus = &amiga->agnus;
     paula = &amiga->paula;
+}
+
+void
+StateMachine::_inspect()
+{
+    // Prevent external access to variable 'info'
+    pthread_mutex_lock(&lock);
+
+    info.state = state;
+    info.audlenLatch = audlenLatch;
+    info.audlen = audlen;
+    info.audperLatch = audperLatch;
+    info.audper = audper;
+    info.audvolLatch = audvolLatch;
+    info.audvol = audvol;
+    info.auddatLatch = auddatLatch;
+    info.auddat = auddat;
+    info.audlcLatch = audlcLatch;
+
+    pthread_mutex_unlock(&lock);
+}
+
+AudioChannelInfo
+StateMachine::getInfo()
+{
+    AudioChannelInfo result;
+
+    pthread_mutex_lock(&lock);
+    result = info;
+    pthread_mutex_unlock(&lock);
+
+    return result;
 }
 
 int16_t

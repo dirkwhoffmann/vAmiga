@@ -20,6 +20,13 @@ class StateMachine : public HardwareComponent {
     class Agnus *agnus;
     class Paula *paula; 
 
+    //
+    // Bookkeeping
+    //
+
+    // Information shown in the GUI inspector panel
+    AudioChannelInfo info;
+
 public:
 
     // The audio channel controlled by this state machine
@@ -67,6 +74,16 @@ public:
 private:
 
     void _initialize() override;
+    void _inspect() override;
+
+    //
+    // Accessing properties
+    //
+
+public:
+
+    // Returns the latest internal state recorded by inspect()
+    AudioChannelInfo getInfo();
 
 
     //

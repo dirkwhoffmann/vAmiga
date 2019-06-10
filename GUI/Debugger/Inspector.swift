@@ -319,6 +319,28 @@ class Inspector: NSWindowController {
     @IBOutlet weak var paulaReq2: NSButton!
     @IBOutlet weak var paulaReq1: NSButton!
     @IBOutlet weak var paulaReq0: NSButton!
+
+    @IBOutlet weak var audioLen0: NSTextField!
+    @IBOutlet weak var audioPer0: NSTextField!
+    @IBOutlet weak var audioVol0: NSTextField!
+    @IBOutlet weak var audioDat0: NSTextField!
+    @IBOutlet weak var audioLoc0: NSTextField!
+    @IBOutlet weak var audioLen1: NSTextField!
+    @IBOutlet weak var audioPer1: NSTextField!
+    @IBOutlet weak var audioVol1: NSTextField!
+    @IBOutlet weak var audioDat1: NSTextField!
+    @IBOutlet weak var audioLoc1: NSTextField!
+    @IBOutlet weak var audioLen2: NSTextField!
+    @IBOutlet weak var audioPer2: NSTextField!
+    @IBOutlet weak var audioVol2: NSTextField!
+    @IBOutlet weak var audioDat2: NSTextField!
+    @IBOutlet weak var audioLoc2: NSTextField!
+    @IBOutlet weak var audioLen3: NSTextField!
+    @IBOutlet weak var audioPer3: NSTextField!
+    @IBOutlet weak var audioVol3: NSTextField!
+    @IBOutlet weak var audioDat3: NSTextField!
+    @IBOutlet weak var audioLoc3: NSTextField!
+
     @IBOutlet weak var audioWaveformView: WaveformView!
     @IBOutlet weak var audioBufferLevel: NSLevelIndicator!
     @IBOutlet weak var audioBufferLevelText: NSTextField!

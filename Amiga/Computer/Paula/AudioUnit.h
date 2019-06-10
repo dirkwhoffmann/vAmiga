@@ -22,6 +22,14 @@ class AudioUnit : public HardwareComponent {
     // The currently set filter activation method
     FilterActivation filterActivation;
 
+    
+    //
+    // Bookkeeping
+    //
+
+    // Information shown in the GUI inspector panel
+    AudioInfo info;
+
 
     // Sub components
     //
@@ -145,11 +153,22 @@ private:
     void _powerOn() override;
     void _run() override;
     void _pause() override;
+    void _inspect() override;
     void _dump() override;
     
     // void setClockFrequency(uint32_t frequency);
     void didLoadFromBuffer(uint8_t **buffer) override { clearRingbuffer(); }
-    
+
+
+    //
+    // Accessing properties
+    //
+
+public:
+
+    // Returns the latest internal state recorded by inspect()
+    AudioInfo getInfo();
+
     
     //
     // Configuring the device
