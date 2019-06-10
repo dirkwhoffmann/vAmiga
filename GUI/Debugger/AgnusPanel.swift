@@ -15,7 +15,20 @@ extension Inspector {
         let info = dma.getInfo()
         
         if everything {
-            
+
+            let elements = [ dmaDIWSTRT: fmt16,
+                             dmaDIWSTOP: fmt16,
+                             dmaDDFSTRT: fmt16,
+                             dmaDDFSTOP: fmt16,
+
+                             dmaBPL1PT: fmt16,
+                             dmaBPL2PT: fmt16,
+                             dmaBPL3PT: fmt16,
+                             dmaBPL4PT: fmt16,
+                             dmaBPL5PT: fmt16,
+                             dmaBPL6PT: fmt16
+            ]
+            for (c, f) in elements { assignFormatter(f, c!) }
         }
         
         // DMA control

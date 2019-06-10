@@ -63,10 +63,10 @@
 #define COP_DEBUG 2
 
 // Set to 1 to debug the Blitter
-#define BLT_DEBUG 2
+#define BLT_DEBUG 1
 
 // Enable to draw the display window border in debug colors
-// #define BORDER_DEBUG
+#define BORDER_DEBUG
 
 // Enable to debug the biplane shift registers
 // #define SHIFTREG_DEBUG
@@ -75,7 +75,7 @@
 // #define PIXEL_DEBUG
 
 // Enable to colorize certain rasterlines
-// #define LINE_DEBUG
+#define LINE_DEBUG
 
 // Enable to make drive operations deterministic
 // #define ALIGN_DRIVE_HEAD
