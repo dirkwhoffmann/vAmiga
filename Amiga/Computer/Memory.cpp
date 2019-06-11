@@ -794,8 +794,8 @@ Memory::peekCustom16(uint32_t addr)
     
     warn("peekCustom16(%X [%s]): MISSING IMPLEMENTATION\n",
          addr, customReg[(addr >> 1) & 0xFF]);
-    amiga->pause();
-    return 42;
+    // amiga->pause();
+    return 0;
 }
 
 uint32_t
