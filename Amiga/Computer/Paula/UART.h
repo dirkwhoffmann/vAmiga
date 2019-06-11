@@ -25,6 +25,10 @@ class UART : public HardwareComponent {
     // Registers
     //
 
+    // Serial data register
+    uint16_t serdat;
+
+    // Port period and control register
     uint16_t serper;
 
 
@@ -35,7 +39,6 @@ class UART : public HardwareComponent {
 public:
 
     UART();
-
 
     //
     // Methods from HardwareComponent
@@ -48,6 +51,21 @@ private:
     void _powerOff() override;
     void _reset() override;
     void _dump() override;
+
+    //
+    // Accessing registers
+    //
+
+public:
+    
+    // OCS register $018(r) (Serial port data and status read)
+    uint16_t peekSERDATR();
+
+    // OCS register $030(w) (Serial port data and stop bits write)
+    void pokeSERDAT(uint16_t value);
+
+    // OCS register $032(w) (Serial port period and control)
+    void pokeSERPER(uint16_t value);
 
 }; 
 

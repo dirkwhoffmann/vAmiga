@@ -16,6 +16,7 @@ UART::UART()
     // Register snapshot items
     registerSnapshotItems(vector<SnapshotItem> {
 
+        { &serdat,     sizeof(serdat),     0 },
         { &serper,     sizeof(serper),     0 },
     });
 }
@@ -49,5 +50,23 @@ void
 UART::_dump()
 {
     plainmsg("   serper: %X\n", serper);
+}
+
+uint16_t
+UART::peekSERDATR()
+{
+    return serdat;
+}
+
+void
+UART::pokeSERDAT(uint16_t value)
+{
+    serdat = value;
+}
+
+void
+UART::pokeSERPER(uint16_t value)
+{
+    serper = value;
 }
 

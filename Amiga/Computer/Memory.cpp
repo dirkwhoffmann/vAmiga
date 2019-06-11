@@ -780,7 +780,7 @@ Memory::peekCustom16(uint32_t addr)
         case 0x016 >> 1: // POTGOR
             return paula->peekPOTGOR();
         case 0x018 >> 1: // SERDATR
-            return paula->peekSERDATR();
+            return paula->uart.peekSERDATR();
         case 0x01A >> 1: // DSKBYTR
             return paula->diskController.peekDSKBYTR();
         case 0x01C >> 1: // INTENAR
@@ -870,9 +870,9 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x02E >> 1: // COPCON
             copper->pokeCOPCON(value); return;
         case 0x030 >> 1: // SERDAT
-            paula->pokeSERDAT(value); return;
+            paula->uart.pokeSERDAT(value); return;
         case 0x032 >> 1: // SERPER
-            paula->pokeSERPER(value); return;
+            paula->uart.pokeSERPER(value); return;
         case 0x034 >> 1: // POTGO
             paula->pokePOTGO(value); return;
         case 0x036 >> 1: // JOYTEST

@@ -46,6 +46,7 @@ typedef enum : long
     IRQ_RBF_SLOT,     // Source 11 IRQ (Serial port receive buffer full)
     IRQ_DSKSYN_SLOT,  // Source 12 IRQ (Disk sync register matches disk data)
     IRQ_EXTER_SLOT,   // Source 13 IRQ (I/O ports and CIA B)
+    SER_SLOT,         // Serial interface (UART)
     INSPECTOR_SLOT,   // Handles periodic calls to inspect()
     SEC_SLOT_COUNT,
 } EventSlot;
@@ -135,12 +136,17 @@ typedef enum : long
     
     // Disk controller slot
     DSK_ROTATE = 1,
+    DSK_EVENT_COUNT,
     
     // IRQ slots
     IRQ_SET = 1,
     IRQ_CLEAR,
     IRQ_EVENT_COUNT,
-    
+
+    // Serial interface slot (UART)
+    SER_TXD = 1,
+    SER_EVENT_COUNT,
+
     // Inspector slot
     INS_NONE = 1,
     INS_AMIGA,
@@ -150,7 +156,8 @@ typedef enum : long
     INS_AGNUS,
     INS_PAULA,
     INS_DENISE,
-    INS_EVENTS
+    INS_EVENTS,
+    INS_EVENT_COUNT
 } EventID;
 
 static inline bool isCiaEvent(EventID id) { return id < CIA_EVENT_COUNT; }

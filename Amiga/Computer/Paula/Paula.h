@@ -51,18 +51,7 @@ class Paula : public HardwareComponent {
     // The interrupt enable register
     uint16_t intena;
     
-    
-    //
-    // Serial port registers
-    //
-    
-    // Serial port data and stop bits write
-    uint16_t serdat;
-    
-    // Serial port period and control
-    uint16_t serper;
-    
-    
+
     //
     // Control port registers
     //
@@ -131,16 +120,7 @@ class Paula : public HardwareComponent {
     
     // OCS register 0x09E (w)
     void pokeADKCON(uint16_t value);
-    
-    // OCS register 0x018 (r)
-    uint16_t peekSERDATR() { return serdat; }
-    
-    // OCS register 0x030 (w)
-    void pokeSERDAT(uint16_t value) { serdat = value; }
-    
-    // OCS register 0x032 (w)
-    void pokeSERPER(uint16_t value) { serper = value; }
-    
+
     // OCS register 0x016 (r) (orignally called POTINP)
     uint16_t peekPOTGOR();
     

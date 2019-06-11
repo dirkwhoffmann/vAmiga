@@ -29,9 +29,6 @@ Paula::Paula()
         { &intreq,   sizeof(intreq),   0 },
         { &intena,   sizeof(intena),   0 },
         
-        { &serdat,   sizeof(serdat),   0 },
-        { &serper,   sizeof(serper),   0 },
-
         { &potgo,    sizeof(potgo),    0 },
     
         { &adkcon,   sizeof(adkcon),   0 },
