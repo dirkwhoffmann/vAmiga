@@ -17,7 +17,8 @@ Paula::Paula()
     registerSubcomponents(vector<HardwareComponent *> {
         
         &audioUnit,
-        &diskController
+        &diskController,
+        &uart
     });
     
     // Register snapshot items
@@ -156,7 +157,8 @@ Paula::peekPOTGOR()
     
     result &= amiga->controlPort1.potgor();
     result &= amiga->controlPort2.potgor();
-    
+
+    debug(2, "peekPOTGOR = %X\n", result);
     return result;
 }
 

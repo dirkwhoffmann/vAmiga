@@ -12,6 +12,7 @@
 
 #include "AudioUnit.h"
 #include "DiskController.h"
+#include "UART.h"
 
 class Paula : public HardwareComponent {
     
@@ -26,12 +27,10 @@ class Paula : public HardwareComponent {
     //
     
     public:
-    
-    // Audio unit
+
     AudioUnit audioUnit;
-    
-    // The disk controller
     DiskController diskController;
+    UART uart; 
     
     
     //
