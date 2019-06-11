@@ -21,9 +21,13 @@ class UART : public HardwareComponent {
     class EventHandler *events;
     class Paula *paula;
 
+
     //
-    // Registers
+    // Variables
     //
+
+    // Current value of the TXD pin
+    bool txd;
 
     // Serial data register
     uint16_t serdat;
@@ -31,6 +35,11 @@ class UART : public HardwareComponent {
     // Port period and control register
     uint16_t serper;
 
+    // The serial shift register
+    uint16_t shiftReg;
+
+    // Transmit-Buffer-Empty bit
+    // bool tbe; 
 
     //
     // Constructing and destructing
@@ -53,6 +62,21 @@ private:
     void _dump() override;
 
     //
+    // Accessing UART interface pins
+    //
+
+    /*
+    bool getTXD();
+    bool setRXD();
+
+    bool getDTR();
+    bool getRTS();
+    bool getCD();
+    bool getCTS();
+    bool getDSR();
+    */
+
+    //
     // Accessing registers
     //
 
@@ -67,8 +91,30 @@ public:
     // OCS register $032(w) (Serial port period and control)
     void pokeSERPER(uint16_t value);
 
-}; 
+private:
 
+    // Returns the length of a received packet (8 or 9 bits)
+    int packetLength() { return GET_BIT(serper, 15) ? 9 : 8; }
+
+    // Returns the baud rate bits
+    int rate() { return serper & 0x7FFF; }
+
+    // Returns true if the shift register is empty
+    bool shiftRegEmpty() { return shiftReg == 0; }
+
+    // Fills the shift register and starts the transmission
+    void fillShiftRegister();
+
+
+    //
+    // Serving events
+    //
+
+public:
+
+    // Processes a event
+    void serveEvent(EventID id);
+
+};
 
 #endif
-

@@ -572,6 +572,9 @@ EventHandler::_executeSecUntil(Cycle cycle) {
     if (isDueSec(IRQ_EXTER_SLOT, cycle)) {
         serveIRQEvent(IRQ_EXTER_SLOT, 13);
     }
+    if (isDueSec(SER_SLOT, cycle)) {
+        paula->uart.serveEvent(secSlot[SER_SLOT].id);
+    }
     if (isDueSec(INSPECTOR_SLOT, cycle)) {
         serveINSEvent();
     }

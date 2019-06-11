@@ -248,20 +248,7 @@ public:
     // Copy data from SPRDATA and SPRDATB into the serial shift registers
     void armSprite(int x);
 
-    
-    //
-    // Serving events
-    //
-    
-    // Processes the first DMA event of a sprite
-    // void serveSprDma1Event(int x);
-    
-    // Processes the second DMA event of a sprite
-    // void serveSprDma2Event(int x);
 
-    
-    
-    
     //
     // Managing the bitplane shift registers
     //
