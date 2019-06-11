@@ -63,7 +63,9 @@ uint8_t
 ZorroManager::peekFastRamDevice(uint32_t addr)
 {
     debug(2, "    peekFastRamDevice(%X)\n", addr & 0xFFFF);
-    
+    debug(2, "    fastRamSize = %d\n", mem->fastRamSize);
+    // assert(false);
+
     if (fastRamConf || mem->fastRamSize == 0) return 0xF; // Already configured
     
     /* Register pair 00/02 (er_Type)

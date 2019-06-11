@@ -24,7 +24,7 @@ const uint32_t KICK_ROM_MASK = 0x007FFFF;
 #define ASSERT_FAST_ADDR(x) assert(fastRam != NULL); assert(((x) - FAST_RAM_STRT) < fastRamSize);
 #define ASSERT_SLOW_ADDR(x) assert(slowRam != NULL); assert(((x) & SLOW_RAM_MASK) < slowRamSize);
 #define ASSERT_BOOT_ADDR(x) assert(bootRom != NULL); assert(((x) & BOOT_ROM_MASK) < bootRomSize);
-#define ASSERT_KICK_ADDR(x) assert(kickRom != NULL); assert(((x) & KICK_ROM_MASK) < kickRomSize);
+#define ASSERT_KICK_ADDR(x) assert(kickRom != NULL);
 #define ASSERT_CIA_ADDR(x)  assert((x) >= 0xA00000 && (x) <= 0xBFFFFF);
 #define ASSERT_RTC_ADDR(x)  assert((x) >= 0xDC0000 && (x) <= 0xDEFFFF);
 #define ASSERT_OCS_ADDR(x)  assert((x) >= 0xC00000 && (x) <= 0xDFFFFF);
@@ -56,9 +56,9 @@ const uint32_t KICK_ROM_MASK = 0x007FFFF;
 #define READ_BOOT_32(x) READ_32(bootRom + ((x) & BOOT_ROM_MASK))
 
 // Reads a value from Kickstart ROM in big endian format
-#define READ_KICK_8(x)  READ_8(kickRom + ((x) & KICK_ROM_MASK))
-#define READ_KICK_16(x) READ_16(kickRom + ((x) & KICK_ROM_MASK))
-#define READ_KICK_32(x) READ_32(kickRom + ((x) & KICK_ROM_MASK))
+#define READ_KICK_8(x)  READ_8(kickRom + ((x)  % kickRomSize))
+#define READ_KICK_16(x) READ_16(kickRom + ((x) % kickRomSize))
+#define READ_KICK_32(x) READ_32(kickRom + ((x) % kickRomSize))
 
 // Writes a value into memory in big endian format
 #define WRITE_8(x,y)  (*(uint8_t *)(x) = y)
@@ -86,9 +86,9 @@ const uint32_t KICK_ROM_MASK = 0x007FFFF;
 #define WRITE_BOOT_32(x,y) WRITE_32(bootRom + ((x) & BOOT_ROM_MASK), (y))
 
 // Writes a value into Kickstart ROM in big endian format
-#define WRITE_KICK_8(x,y)  WRITE_8(kickRom  + ((x) & KICK_ROM_MASK), (y))
-#define WRITE_KICK_16(x,y) WRITE_16(kickRom + ((x) & KICK_ROM_MASK), (y))
-#define WRITE_KICK_32(x,y) WRITE_32(kickRom + ((x) & KICK_ROM_MASK), (y))
+#define WRITE_KICK_8(x,y)  WRITE_8(kickRom  + ((x) % kickRomSize), (y))
+#define WRITE_KICK_16(x,y) WRITE_16(kickRom + ((x) % kickRomSize), (y))
+#define WRITE_KICK_32(x,y) WRITE_32(kickRom + ((x) % kickRomSize), (y))
 
 
 class Memory : public HardwareComponent {
