@@ -213,7 +213,7 @@ void
 Memory::loadRom(AmigaFile *rom, uint8_t *target, size_t length)
 {
     if (rom) {
-        
+
         assert(target != NULL);
         memset(target, 0, length);
         
@@ -675,7 +675,7 @@ void
 Memory::pokeCIA16(uint32_t addr, uint16_t value)
 {
     debug("pokeCIA16(%6X, %X)\n", addr, value);
-    assert(false);
+    // assert(false);
     
     assert(IS_EVEN(addr));
     

@@ -17,7 +17,7 @@
 const uint32_t FAST_RAM_STRT = 0x0200000;
 const uint32_t SLOW_RAM_MASK = 0x007FFFF;
 const uint32_t BOOT_ROM_MASK = 0x003FFFF;
-const uint32_t KICK_ROM_MASK = 0x003FFFF;
+const uint32_t KICK_ROM_MASK = 0x007FFFF;
 
 // Verifies the range of an address
 #define ASSERT_CHIP_ADDR(x) assert(chipRam != NULL);
