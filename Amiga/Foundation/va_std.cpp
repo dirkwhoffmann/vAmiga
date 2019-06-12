@@ -184,10 +184,12 @@ bool matchingBufferHeader(const uint8_t *buffer, const uint8_t *header, size_t l
     assert(header != NULL);
     
     for (unsigned i = 0; i < length; i++) {
+        printf("%02X (%02X) ", header[i], buffer[i]);
         if (header[i] != buffer[i])
             return false;
     }
-    
+    printf("\n");
+
     return true;
 }
 

@@ -10,7 +10,7 @@
 #include "ExtRom.h"
 
 // AROS Extended ROM
-const uint8_t ExtRom::magicBytes1[] = { 0x11, 0x14, 0x4E, 0xF9, 0x00, 0xF8, 0x00, 0xFC };
+const uint8_t ExtRom::magicBytes1[] = { 0x11, 0x14, 0x4E, 0xF9, 0x00, 0xF8, 0x00, 0x02 };
 
 ExtRom::ExtRom()
 {
@@ -20,7 +20,11 @@ ExtRom::ExtRom()
 bool
 ExtRom::isExtRomBuffer(const uint8_t *buffer, size_t length)
 {
+    printf("length = %zu %d\n", length, KB(512));
+
     if (length != KB(512)) return false;
+
+    printf("length = %zu %d\n", length, KB(512));
 
     return matchingBufferHeader(buffer, magicBytes1, sizeof(magicBytes1));
 }

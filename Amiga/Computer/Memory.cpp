@@ -338,6 +338,8 @@ Memory::loadExtRomFromBuffer(const uint8_t *buffer, size_t length)
 {
     assert(buffer != NULL);
 
+    debug("loadExtRomFromBuffer\n");
+
     ExtRom *rom = ExtRom::makeWithBuffer(buffer, length);
 
     if (!rom) {
@@ -352,6 +354,8 @@ bool
 Memory::loadExtRomFromFile(const char *path)
 {
     assert(path != NULL);
+
+    debug("loadExtRomFromFile\n");
 
     ExtRom *rom = ExtRom::makeWithFile(path);
 

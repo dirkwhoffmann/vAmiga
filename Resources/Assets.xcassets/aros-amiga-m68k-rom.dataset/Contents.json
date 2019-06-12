@@ -6,7 +6,7 @@
   "data" : [
     {
       "idiom" : "universal",
-      "filename" : "aros.rom.bin"
+      "filename" : "aros-amiga-m68k-rom.bin"
     }
   ]
 }

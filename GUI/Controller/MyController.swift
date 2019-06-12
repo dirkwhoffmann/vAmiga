@@ -90,6 +90,7 @@ class MyController: NSWindowController, MessageReceiver {
     // Rom URLs
     var bootRomURL: URL = Defaults.bootRom
     var kickRomURL: URL = Defaults.kickRom
+    var extRomURL: URL = Defaults.extRom
 
     // Devices preferences
     var disconnectJoyKeys: Bool {

@@ -257,6 +257,32 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->mem->kickRomFingerprint();
 }
+- (BOOL) hasExtRom
+{
+    return wrapper->mem->hasExtRom();
+}
+- (void) deleteExtRom
+{
+    wrapper->mem->deleteExtRom();
+}
+- (BOOL) isExtRom:(NSURL *)url
+{
+    return ExtRom::isExtRomFile([[url path] UTF8String]);
+}
+- (BOOL) loadExtRomFromBuffer:(NSData *)data
+{
+    if (data == NULL) return NO;
+    const uint8_t *bytes = (const uint8_t *)[data bytes];
+    return wrapper->mem->loadExtRomFromBuffer(bytes, [data length]);
+}
+- (BOOL) loadExtRomFromFile:(NSURL *)url
+{
+    return wrapper->mem->loadExtRomFromFile([[url path] UTF8String]);
+}
+- (uint64_t) extRomFingerprint
+{
+    return wrapper->mem->extRomFingerprint();
+}
 - (MemorySource *) getMemSrcTable
 {
     return wrapper->mem->getMemSrcTable();

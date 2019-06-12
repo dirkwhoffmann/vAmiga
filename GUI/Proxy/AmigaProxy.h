@@ -267,6 +267,13 @@ struct AmigaFileWrapper;
 - (BOOL) loadKickRomFromFile:(NSURL *)url;
 - (uint64_t) kickRomFingerprint;
 
+- (BOOL) hasExtRom;
+- (void) deleteExtRom;
+- (BOOL) isExtRom:(NSURL *)url;
+- (BOOL) loadExtRomFromBuffer:(NSData *)buffer;
+- (BOOL) loadExtRomFromFile:(NSURL *)url;
+- (uint64_t) extRomFingerprint;
+
 - (MemorySource *) getMemSrcTable; 
 - (MemorySource) memSrc:(NSInteger)addr;
 - (NSInteger) spypeek8:(NSInteger)addr;

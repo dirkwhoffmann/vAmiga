@@ -20,7 +20,7 @@ struct Rom {
     static let boot_a1000          = 0x55bee0af674e7cfa as UInt64
 
     // Kickstart Roms
-    static let aros                = 0xe74215eb368cd7f1 as UInt64
+    static let aros                = 0x23de891c17754732 as UInt64
     
     static let kick12_33_180       = 0xe5cb7ee5200c4f0f as UInt64
     static let kick12_33_180_o     = 0xe3ff65d2c3a9b9e5 as UInt64
@@ -80,10 +80,12 @@ extension PreferencesController {
         let poweredOff   = amiga.isPoweredOff()
         let bootHash     = amiga.mem.bootRomFingerprint()
         let kickHash     = amiga.mem.kickRomFingerprint()
+        let extHash      = amiga.mem.extRomFingerprint()
         let hash         = config.model == AMIGA_1000 ? bootHash : kickHash
 
         track("bootHash = \(bootHash)")
         track("kickHash = \(kickHash)")
+        track("extHash = \(extHash)")
         track("hash = \(hash)")
 
         let hasRom        = hash != 0
@@ -196,8 +198,10 @@ extension PreferencesController {
         amigaProxy?.mem.deleteBootRom()
         
         // Revert to the AROS Kickstart replacement
-        amigaProxy?.mem.loadKickRom(fromBuffer: NSDataAsset(name: "aros.rom")?.data)
+        amigaProxy?.mem.loadKickRom(fromBuffer: NSDataAsset(name: "aros-amiga-m68k-rom")?.data)
         myController?.kickRomURL = URL(fileURLWithPath: "")
+        amigaProxy?.mem.loadExtRom(fromBuffer: NSDataAsset(name: "aros-amiga-m68k-ext")?.data)
+        myController?.extRomURL = URL(fileURLWithPath: "")
         refresh()
     }
 }
