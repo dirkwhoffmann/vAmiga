@@ -152,7 +152,7 @@ CIA::emulateFallingEdgeOnFlagPin()
 void
 CIA::triggerTimerIrq()
 {
-    // debug("triggerTimerIrq()\n");
+    debug(CIA_DEBUG, "triggerTimerIrq()\n");
     delay |= (delay & CIAReadIcr0) ? CIASetInt0 : CIASetInt1;
     delay |= (delay & CIAReadIcr0) ? CIASetIcr0 : CIASetIcr1;
 }
@@ -176,6 +176,7 @@ CIA::triggerFlagPinIrq()
 void
 CIA::triggerSerialIrq()
 {
+    debug(CIA_DEBUG, "triggerSerialIrq()\n");
     delay |= CIASetInt0;
     delay |= CIASetIcr0;
 }
@@ -185,7 +186,7 @@ CIA::peek(uint16_t addr)
 {
 	uint8_t result;
 
-    debug(CIA_DEBUG, "Peek($%X) (%d)\n", addr, addr);
+    // debug(CIA_DEBUG, "Peek($%X) (%d)\n", addr, addr);
 
     wakeUp();
 
@@ -440,7 +441,7 @@ CIA::poke(uint16_t addr, uint8_t value)
              *  register 7 for Timer B) will transfer the timer latch to the
              *  counter and initiate counting regardless of the start bit." [HRM]
              */
-            if (CRB & 0x08) {
+            if (CRA & 0x08) {
                 delay |= CIALoadA0 | CIACountA0;
                 feed |= CIACountA0;
                 if (!(CRA & 0x01))

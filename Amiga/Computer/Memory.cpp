@@ -661,7 +661,7 @@ Memory::spypeekCIA32(uint32_t addr)
 void
 Memory::pokeCIA8(uint32_t addr, uint8_t value)
 {
-    // debug("pokeCIA8(%6X, %X)\n", addr, value);
+    // debug(CIA_DEBUG, "pokeCIA8(%6X, %X)\n", addr, value);
     
     uint32_t reg = (addr >> 8) & 0b1111;
     uint32_t selA = (addr & 0x1000) == 0;
@@ -756,7 +756,7 @@ Memory::peekCustom16(uint32_t addr)
     switch ((addr >> 1) & 0xFF) {
             
         case 0x000 >> 1: // BLTDDAT
-            return 0xFF;
+            return 0x00;
         case 0x002 >> 1: // DMACONR
             return agnus->peekDMACONR();
         case 0x004 >> 1: // VPOSR
@@ -789,7 +789,7 @@ Memory::peekCustom16(uint32_t addr)
             return paula->peekINTREQR();
 
         default: // Write-only register
-            return 0xFF;
+            return 0x00;
     }
     
     warn("peekCustom16(%X [%s]): MISSING IMPLEMENTATION\n",

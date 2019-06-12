@@ -121,7 +121,6 @@ extension Inspector {
         ciaSDRbinary.intValue = Int32(info.sdr)
         
         let idlePercentage = Int(info.idlePercentage * 100)
-        track("Idle since \(info.idleCycles)")
         ciaIdleCycles.stringValue = "\(info.idleCycles) cycles"
         ciaIdleLevel.integerValue = idlePercentage
         ciaIdleLevelText.stringValue = "\(idlePercentage) %"

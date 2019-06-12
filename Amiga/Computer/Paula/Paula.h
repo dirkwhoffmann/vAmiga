@@ -104,7 +104,7 @@ class Paula : public HardwareComponent {
     public:
     
     // OCS register 0x010 (r)
-    uint16_t peekADKCONR() { debug("peekADKCONR()"); return adkcon; }
+    uint16_t peekADKCONR() { return adkcon; }
     
     // OCS register 0x01E (r)
     uint16_t peekINTREQR() { return intreq; }
