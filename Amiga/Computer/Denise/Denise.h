@@ -38,7 +38,7 @@ public:
     
 
     //
-    // Counters
+    // Variables
     //
     
     // Denise has been executed up to this clock cycle.

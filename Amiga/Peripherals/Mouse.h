@@ -25,7 +25,11 @@ private:
     // The current mouse position
     int64_t mouseX;
     int64_t mouseY;
-    
+
+    // Recorded mouse position in getDeltaX() and getDeltaY()
+    int64_t oldMouseX;
+    int64_t oldMouseY;
+
     /* The target mouse position
      * In order to achieve a smooth mouse movement, a new mouse coordinate is
      * not written directly into mouseX and mouseY. Instead, these variables
@@ -42,8 +46,8 @@ private:
     // Mouse movement in pixels per execution step
     int64_t shiftX = 31;
     int64_t shiftY = 31;
-    
-    
+
+
     //
     // Constructing and destructing
     //
@@ -69,6 +73,10 @@ private:
     
 public:
     
+    // Returns a horizontal or vertical position change
+    int64_t getDeltaX();
+    int64_t getDeltaY();
+
     // Returns the mouse coordinates as they appear in the JOYDAT register.
     uint16_t getXY();
     

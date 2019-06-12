@@ -42,7 +42,11 @@ ControlPort::joydat()
             return 0;
 
         case CPD_MOUSE:
-            return amiga->mouse.getXY();
+
+            mouseCounterX += amiga->mouse.getDeltaX();
+            mouseCounterY += amiga->mouse.getDeltaY();
+            // assert(HI_LO(mouseCounterY & 0xFF, mouseCounterX & 0xFF) == amiga->mouse.getXY());
+            return HI_LO(mouseCounterY & 0xFF, mouseCounterX & 0xFF);
 
         case CPD_JOYSTICK:
             return nr == 1 ? amiga->joystick1.joydat() : amiga->joystick2.joydat();

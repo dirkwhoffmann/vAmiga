@@ -21,6 +21,8 @@ Mouse::_powerOn()
     rightButton = false;
     mouseX = 0;
     mouseY = 0;
+    oldMouseX = 0;
+    oldMouseY = 0;
     targetX = 0;
     targetY = 0;
 }
@@ -32,12 +34,36 @@ Mouse::_dump()
     plainmsg("rightButton = %d\n", rightButton);
     plainmsg("     mouseX = %lld\n", mouseX);
     plainmsg("     mouseY = %lld\n", mouseY);
+    plainmsg("  oldMouseX = %lld\n", oldMouseX);
+    plainmsg("  oldMouseY = %lld\n", oldMouseY);
     plainmsg("    targetX = %d\n", targetX);
     plainmsg("    targetY = %d\n", targetY);
     plainmsg("   dividerX = %d\n", dividerX);
     plainmsg("   dividerY = %d\n", dividerY);
     plainmsg("     shiftX = %d\n", shiftX);
     plainmsg("     shiftY = %d\n", shiftY);
+}
+
+int64_t
+Mouse::getDeltaX()
+{
+    execute();
+
+    int64_t result = mouseX - oldMouseX;
+    oldMouseX = mouseX;
+
+    return result;
+}
+
+int64_t
+Mouse::getDeltaY()
+{
+    execute();
+
+    int64_t result = mouseY - oldMouseY;
+    oldMouseY = mouseY;
+
+    return result;
 }
 
 uint16_t

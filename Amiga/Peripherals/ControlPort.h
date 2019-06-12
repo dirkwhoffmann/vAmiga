@@ -22,7 +22,11 @@ private:
     // Connected device
     ControlPortDevice device = CPD_NONE;
     
- 
+    // The two mouse position counters
+    int64_t mouseCounterX = 0;
+    int64_t mouseCounterY = 0;
+
+
     //
     // Constructing and destructing
     //
