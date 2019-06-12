@@ -13,18 +13,21 @@
 #include "HardwareComponent.h"
 #include "BootRom.h"
 #include "KickRom.h"
+#include "ExtRom.h"
 
 const uint32_t FAST_RAM_STRT = 0x0200000;
 const uint32_t SLOW_RAM_MASK = 0x007FFFF;
 const uint32_t BOOT_ROM_MASK = 0x003FFFF;
 const uint32_t KICK_ROM_MASK = 0x007FFFF;
+const uint32_t EXT_ROM_MASK  = 0x007FFFF;
 
 // Verifies the range of an address
 #define ASSERT_CHIP_ADDR(x) assert(chipRam != NULL);
 #define ASSERT_FAST_ADDR(x) assert(fastRam != NULL); assert(((x) - FAST_RAM_STRT) < fastRamSize);
 #define ASSERT_SLOW_ADDR(x) assert(slowRam != NULL); assert(((x) & SLOW_RAM_MASK) < slowRamSize);
 #define ASSERT_BOOT_ADDR(x) assert(bootRom != NULL); assert(((x) & BOOT_ROM_MASK) < bootRomSize);
-#define ASSERT_KICK_ADDR(x) assert(kickRom != NULL);
+#define ASSERT_KICK_ADDR(x) assert(kickRom != NULL); 
+#define ASSERT_EXT_ADDR(x)  assert(extRom  != NULL); assert(((x) & EXT_ROM_MASK) < extRomSize);
 #define ASSERT_CIA_ADDR(x)  assert((x) >= 0xA00000 && (x) <= 0xBFFFFF);
 #define ASSERT_RTC_ADDR(x)  assert((x) >= 0xDC0000 && (x) <= 0xDEFFFF);
 #define ASSERT_OCS_ADDR(x)  assert((x) >= 0xC00000 && (x) <= 0xDFFFFF);
@@ -60,6 +63,11 @@ const uint32_t KICK_ROM_MASK = 0x007FFFF;
 #define READ_KICK_16(x) READ_16(kickRom + ((x) % kickRomSize))
 #define READ_KICK_32(x) READ_32(kickRom + ((x) % kickRomSize))
 
+// Reads a value from Extended ROM in big endian format
+#define READ_EXT_8(x)  READ_8(extRom + ((x)  % extRomSize))
+#define READ_EXT_16(x) READ_16(extRom + ((x) % extRomSize))
+#define READ_EXT_32(x) READ_32(extRom + ((x) % extRomSize))
+
 // Writes a value into memory in big endian format
 #define WRITE_8(x,y)  (*(uint8_t *)(x) = y)
 #define WRITE_16(x,y) (*(uint16_t *)(x) = htons(y))
@@ -89,6 +97,11 @@ const uint32_t KICK_ROM_MASK = 0x007FFFF;
 #define WRITE_KICK_8(x,y)  WRITE_8(kickRom  + ((x) % kickRomSize), (y))
 #define WRITE_KICK_16(x,y) WRITE_16(kickRom + ((x) % kickRomSize), (y))
 #define WRITE_KICK_32(x,y) WRITE_32(kickRom + ((x) % kickRomSize), (y))
+
+// Writes a value into Extended ROM in big endian format
+#define WRITE_EXT_8(x,y)  WRITE_8(extRom  + ((x) & EXT_ROM_MASK), (y))
+#define WRITE_EXT_16(x,y) WRITE_16(extRom + ((x) & EXT_ROM_MASK), (y))
+#define WRITE_EXT_32(x,y) WRITE_32(extRom + ((x) & EXT_ROM_MASK), (y))
 
 
 class Memory : public HardwareComponent {
@@ -124,7 +137,11 @@ class Memory : public HardwareComponent {
     // Kickstart Rom and size
     uint8_t *kickRom = NULL;
     size_t kickRomSize = 0;
-    
+
+    // Extended Rom and size
+    uint8_t *extRom = NULL;
+    size_t extRomSize = 0;
+
     // Chip Ram and size
     uint8_t *chipRam = NULL;
     size_t chipRamSize = 0;
@@ -227,34 +244,34 @@ class Memory : public HardwareComponent {
     
     public:
     
-    // Returns true if a Boot Rom is installed.
+    // Checks if a certain ROM is installed
     bool hasBootRom() { return bootRom != NULL; }
-    
-    // Returns a fingerprint for the currently installed Boot Rom
+    bool hasKickRom() { return kickRom != NULL; }
+    bool hasExtRom() { return extRom != NULL; }
+
+    // Returns a fingerprint for a certain ROM
     uint64_t bootRomFingerprint() { return fnv_1a(bootRom, bootRomSize); }
-    
-    // Installs a Boot Rom.
+    uint64_t kickRomFingerprint() { return fnv_1a(kickRom, kickRomSize); }
+    uint64_t extRomFingerprint() { return fnv_1a(extRom,  extRomSize); }
+
+    // Deletes a previously installed ROM
+    void deleteBootRom() { alloc(0, bootRom, bootRomSize); }
+    void deleteKickRom() { alloc(0, kickRom, kickRomSize); }
+    void deleteExtRom() { alloc(0, extRom, extRomSize); }
+
+    // Installs a new ROM
     bool loadBootRom(BootRom *rom);
     bool loadBootRomFromBuffer(const uint8_t *buffer, size_t length);
     bool loadBootRomFromFile(const char *path);
-    
-    // Deletes the currently installed Boot Rom.
-    void deleteBootRom() { alloc(0, bootRom, bootRomSize); }
-    
-    // Returns true if a Kickstart Rom is installed
-    bool hasKickRom() { return kickRom != NULL; }
-    
-    // Returns a fingerprint for the currently installed Kickstart Rom
-    uint64_t kickRomFingerprint() { return fnv_1a(kickRom, kickRomSize); }
-    
-    // Installs the Kickstart Rom.
+
     bool loadKickRom(KickRom *rom);
     bool loadKickRomFromBuffer(const uint8_t *buffer, size_t length);
     bool loadKickRomFromFile(const char *path);
-    
-    // Deletes the currently installed Kickstart Rom.
-    void deleteKickRom() { alloc(0, kickRom, kickRomSize); }
-    
+
+    bool loadExtRom(ExtRom *rom);
+    bool loadExtRomFromBuffer(const uint8_t *buffer, size_t length);
+    bool loadExtRomFromFile(const char *path);
+
     
     //
     // Managing the memory source table

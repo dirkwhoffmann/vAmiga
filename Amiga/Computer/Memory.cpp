@@ -32,6 +32,7 @@ Memory::dealloc()
 {
     if (bootRom) { delete[] bootRom; bootRom = NULL; }
     if (kickRom) { delete[] kickRom; kickRom = NULL; }
+    if (extRom) { delete[] extRom; extRom = NULL; }
     if (chipRam) { delete[] chipRam; chipRam = NULL; }
     if (slowRam) { delete[] slowRam; slowRam = NULL; }
     if (fastRam) { delete[] fastRam; fastRam = NULL; }
@@ -89,6 +90,7 @@ Memory::_dump()
     plainmsg("     Boot Rom: %d KB at %p\n", bootRomSize >> 10, bootRom);
     plainmsg("     Kick Rom: %d KB at %p (%s)\n", kickRomSize >> 10,
              kickRom, kickIsWritable ? "unlocked" : "locked");
+    plainmsg("     Ext  Rom: %d KB at %p\n", extRomSize >> 10, extRom);
     plainmsg("     Chip Ram: %d KB at %p\n", chipRamSize >> 10, chipRam);
     plainmsg("     Slow Ram: %d KB at %p\n", slowRamSize >> 10, slowRam);
     plainmsg("     Fast Ram: %d KB at %p\n", fastRamSize >> 10, fastRam);
@@ -101,6 +103,7 @@ Memory::stateSize()
     
     result += sizeof(uint32_t) + bootRomSize;
     result += sizeof(uint32_t) + kickRomSize;
+    result += sizeof(uint32_t) + extRomSize;
     result += sizeof(uint32_t) + chipRamSize;
     result += sizeof(uint32_t) + slowRamSize;
     result += sizeof(uint32_t) + fastRamSize;
@@ -114,6 +117,7 @@ Memory::didLoadFromBuffer(uint8_t **buffer)
     // Load memory size information
     bootRomSize = (size_t)read32(buffer);
     kickRomSize = (size_t)read32(buffer);
+    extRomSize = (size_t)read32(buffer);
     chipRamSize = (size_t)read32(buffer);
     slowRamSize = (size_t)read32(buffer);
     fastRamSize = (size_t)read32(buffer);
@@ -123,6 +127,7 @@ Memory::didLoadFromBuffer(uint8_t **buffer)
     // false. Furthermore, the real maximum size limits should be used.
     assert(bootRomSize < 0xFFFFFF);
     assert(kickRomSize < 0xFFFFFF);
+    assert(extRomSize < 0xFFFFFF);
     assert(chipRamSize < 0xFFFFFF);
     assert(slowRamSize < 0xFFFFFF);
     assert(fastRamSize < 0xFFFFFF);
@@ -133,6 +138,7 @@ Memory::didLoadFromBuffer(uint8_t **buffer)
     // Allocate new memory
     if (bootRomSize) bootRom = new (std::nothrow) uint8_t[bootRomSize + 3];
     if (kickRomSize) kickRom = new (std::nothrow) uint8_t[kickRomSize + 3];
+    if (extRomSize) extRom = new (std::nothrow) uint8_t[extRomSize + 3];
     if (chipRamSize) chipRam = new (std::nothrow) uint8_t[chipRamSize + 3];
     if (slowRamSize) slowRam = new (std::nothrow) uint8_t[slowRamSize + 3];
     if (fastRamSize) fastRam = new (std::nothrow) uint8_t[fastRamSize + 3];
@@ -140,6 +146,7 @@ Memory::didLoadFromBuffer(uint8_t **buffer)
     // Load memory contents from buffer
     readBlock(buffer, bootRom, bootRomSize);
     readBlock(buffer, kickRom, kickRomSize);
+    readBlock(buffer, extRom, extRomSize);
     readBlock(buffer, chipRam, chipRamSize);
     readBlock(buffer, slowRam, slowRamSize);
     readBlock(buffer, fastRam, fastRamSize);
@@ -151,6 +158,7 @@ Memory::didSaveToBuffer(uint8_t **buffer)
     // Save memory size information
     write32(buffer, (uint32_t)bootRomSize);
     write32(buffer, (uint32_t)kickRomSize);
+    write32(buffer, (uint32_t)extRomSize);
     write32(buffer, (uint32_t)chipRamSize);
     write32(buffer, (uint32_t)slowRamSize);
     write32(buffer, (uint32_t)fastRamSize);
@@ -158,6 +166,7 @@ Memory::didSaveToBuffer(uint8_t **buffer)
     // Save memory contents
     writeBlock(buffer, bootRom, bootRomSize);
     writeBlock(buffer, kickRom, kickRomSize);
+    writeBlock(buffer, extRom, extRomSize);
     writeBlock(buffer, chipRam, chipRamSize);
     writeBlock(buffer, slowRam, slowRamSize);
     writeBlock(buffer, fastRam, fastRamSize);
@@ -165,6 +174,7 @@ Memory::didSaveToBuffer(uint8_t **buffer)
     /*
     debug("bootRomSize = %d\n", bootRomSize);
     debug("kickRomSize = %d\n", kickRomSize);
+    debug("extRomSize = %d\n", extRomSize);
     debug("chipRamSize = %d\n", chipRamSize);
     debug("slowRamSize = %d\n", slowRamSize);
     debug("fastRamSize = %d\n", fastRamSize);
@@ -309,6 +319,48 @@ Memory::loadKickRomFromFile(const char *path)
     }
     
     return loadKickRom(rom);
+}
+
+bool
+Memory::loadExtRom(ExtRom *rom)
+{
+    assert(rom != NULL);
+
+    if (!alloc(rom->getSize(), extRom, extRomSize))
+        return false;
+
+    loadRom(rom, extRom, extRomSize);
+    return true;
+}
+
+bool
+Memory::loadExtRomFromBuffer(const uint8_t *buffer, size_t length)
+{
+    assert(buffer != NULL);
+
+    ExtRom *rom = ExtRom::makeWithBuffer(buffer, length);
+
+    if (!rom) {
+        msg("Failed to read Extended Rom from buffer at %p\n", buffer);
+        return false;
+    }
+
+    return loadExtRom(rom);
+}
+
+bool
+Memory::loadExtRomFromFile(const char *path)
+{
+    assert(path != NULL);
+
+    ExtRom *rom = ExtRom::makeWithFile(path);
+
+    if (!rom) {
+        msg("Failed to read Extended Rom from file %s\n", path);
+        return false;
+    }
+
+    return loadExtRom(rom);
 }
 
 void
