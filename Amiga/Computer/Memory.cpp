@@ -401,12 +401,11 @@ uint16_t
 Memory::peek16(uint32_t addr)
 {
     if (!IS_EVEN(addr)) {
-        debug("PC: %X peek16(%X) memSrc = %d\n", cpu->getPC(), addr, memSrc[(addr & 0xFFFFFF) >> 16]);
-        amiga->dump();
+        warn("peek16(%X): Address violation error (reading odd address)\n", addr);
+        // amiga->dump();
     }
-    
-    assert(IS_EVEN(addr));
-    
+    // assert(IS_EVEN(addr));
+
     addr &= 0xFFFFFF;
     switch (memSrc[addr >> 16]) {
             

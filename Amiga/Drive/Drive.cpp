@@ -161,7 +161,7 @@ Drive::driveStatusFlags()
         if (head.cylinder == 0) { result &= 0b11101111; }
         
         // PA3: /DSKPROT
-        if (!hasWriteEnabledDisk()) { result &= 0b11110111; }
+        if (hasWriteProtectedDisk()) { result &= 0b11110111; }
         
         /* PA2: /DSKCHANGE
          * "Disk has been removed from the drive. The signal goes low whenever
