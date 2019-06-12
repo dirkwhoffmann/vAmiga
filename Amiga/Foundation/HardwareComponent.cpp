@@ -26,7 +26,7 @@ HardwareComponent::prefix()
     fprintf(stderr, "[%lld] (%3d,%3d) ",
             amiga->agnus.frame, amiga->agnus.vpos, amiga->agnus.hpos);
 
-    fprintf(stderr, " %06X: ", amiga->cpu.getPC());
+    fprintf(stderr, " %06X ", amiga->cpu.getPC());
 
     uint16_t dmacon = amiga->agnus.dmacon;
     bool dmaen = dmacon & DMAEN;
@@ -36,7 +36,11 @@ HardwareComponent::prefix()
             (dmacon & BLTEN) ? (dmaen ? 'B' : 'b') : '-',
             (dmacon & DSKEN) ? (dmaen ? 'D' : 'd') : '-');
 
-    fprintf(stderr, "%04X %04X: ", amiga->paula.intena, amiga->paula.intreq);
+    fprintf(stderr, "%04X %04X ", amiga->paula.intena, amiga->paula.intreq);
+
+    if (amiga->agnus.copper.servicing) {
+        fprintf(stderr, "[%06X] ", amiga->agnus.copper.getCopPC());
+    }
 
     if (getDescription())
         fprintf(stderr, "%s: ", getDescription());

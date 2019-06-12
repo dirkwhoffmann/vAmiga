@@ -30,7 +30,6 @@ Copper::_initialize()
     mem = &amiga->mem;
     agnus = &amiga->agnus;
     events = &amiga->agnus.events;
-    //denise = &amiga->denise;
     colorizer = &amiga->denise.colorizer;
 }
 
@@ -65,7 +64,7 @@ Copper::_inspect()
     pthread_mutex_lock(&lock);
     
     info.cdang     = cdang;
-    info.active    = agnus->events.isPending(COP_SLOT);
+    info.active    = events->isPending(COP_SLOT);
     info.coppc     = coppc;
     info.copins[0] = copins1;
     info.copins[1] = copins2;
@@ -78,7 +77,15 @@ Copper::_inspect()
 void
 Copper::_dump()
 {
-    plainmsg("   cdang: %d\n", cdang);
+    bool active = events->isPending(COP_SLOT);
+    plainmsg("    cdang: %d\n", cdang);
+    plainmsg("   active: %s\n", active ? "yes" : "no");
+    if (active) plainmsg("    state: %d\n", events->primSlot[COP_SLOT].id);
+    plainmsg("    coppc: %X\n", coppc);
+    plainmsg("  copins1: %X\n", copins1);
+    plainmsg("  copins2: %X\n", copins2);
+    plainmsg(" coplc[0]: %X\n", coplc[0]);
+    plainmsg(" coplc[1]: %X\n", coplc[1]);
 }
 
 CopperInfo
@@ -96,7 +103,7 @@ Copper::getInfo()
 void
 Copper::pokeCOPCON(uint16_t value)
 {
-    debug(2, "pokeCOPCON(%X)\n", value);
+    debug(COPREG_DEBUG, "pokeCOPCON(%04X)\n", value);
     
     /* "This is a 1-bit register that when set true, allows the Copper to
      *  access the blitter hardware. This bit is cleared by power-on reset, so
@@ -108,10 +115,9 @@ Copper::pokeCOPCON(uint16_t value)
 void
 Copper::pokeCOPJMP(int x)
 {
+    debug(COPREG_DEBUG, "COPPC: %X pokeCOPJMP(%d)\n", coppc, x);
     assert(x < 2);
 
-    debug(COP_DEBUG, "COPPC: %X pokeCOPJMP(%d)\n", coppc, x);
-    
     /* "When you write to a Copper strobe address, the Copper reloads its
      *  program counter from the corresponding location register." [HRM]
      */
@@ -121,6 +127,8 @@ Copper::pokeCOPJMP(int x)
 void
 Copper::pokeCOPINS(uint16_t value)
 {
+    debug(COPREG_DEBUG, "COPPC: %X pokeCOPINS(%04X)\n", coppc, value);
+
     /* COPINS is a dummy address that can be used to write the first or
      * the secons instruction register, depending on the current state.
      */
@@ -136,21 +144,47 @@ Copper::pokeCOPINS(uint16_t value)
 }
 
 void
-Copper::pokeCOPxLCH(int x, uint16_t value)
+Copper::pokeCOP1LCH(uint16_t value)
 {
-    assert(x < 2);
+    debug(COPREG_DEBUG, "pokeCOP1LCH(%04X)\n", value);
     
-    debug(2, "pokeCOP%dLCH(%X)\n", x, value);
-    coplc[x] = REPLACE_HI_WORD(coplc[x], value);
+    coplc[0] = REPLACE_HI_WORD(coplc[0], value);
+
+    // Update program counter if DMA is off
+    /* THIS IS NOT 100% CORRECT. IN WINFELLOW, THE PC IS ONLY WRITTEN TO IF
+     * DMA WAS OFF SINCE THE LAST VSYNC EVENT (?!). NEED A TEST CASE FOR THIS.
+     */
+    if (!agnus->copDMA()) coppc = coplc[0];
 }
 
 void
-Copper::pokeCOPxLCL(int x, uint16_t value)
+Copper::pokeCOP1LCL(uint16_t value)
 {
-    assert(x < 2);
+    debug(COPREG_DEBUG, "pokeCOP1LCL(%04X)\n", value);
     
-    debug(2, "pokeCOP%dLCL(%X)\n", x, value);
-    coplc[x] = REPLACE_LO_WORD(coplc[x], value & 0xFFFE);
+    coplc[0] = REPLACE_LO_WORD(coplc[0], value & 0xFFFE);
+
+    // Update program counter if DMA is off
+    /* THIS IS NOT 100% CORRECT. IN WINFELLOW, THE PC IS ONLY WRITTEN TO IF
+     * DMA WAS OFF SINCE THE LAST VSYNC EVENT (?!). NEED A TEST CASE FOR THIS.
+     */
+    if (!agnus->copDMA()) coppc = coplc[0];
+}
+
+void
+Copper::pokeCOP2LCH(uint16_t value)
+{
+    debug(COPREG_DEBUG, "pokeCOP2LCH(%04X)\n", value);
+
+    coplc[1] = REPLACE_HI_WORD(coplc[1], value);
+}
+
+void
+Copper::pokeCOP2LCL(uint16_t value)
+{
+    debug(COPREG_DEBUG, "pokeCOP2LCL(%04X)\n", value);
+
+    coplc[1] = REPLACE_LO_WORD(coplc[1], value & 0xFFFE);
 }
 
 bool
@@ -445,7 +479,9 @@ void
 Copper::serviceEvent(EventID id)
 {
     debug(2, "(%d,%d): ", agnus->vpos, agnus->hpos);
-    
+
+    servicing = true;
+
     switch (id) {
             
         case COP_REQUEST_DMA:
@@ -459,7 +495,8 @@ Copper::serviceEvent(EventID id)
             if (agnus->copperCanHaveBus()) {
                 events->scheduleRel(COP_SLOT, DMA_CYCLES(2), COP_FETCH);
             }
-            
+            break;
+
         case COP_FETCH:
             
             if (agnus->copperCanHaveBus()) {
@@ -517,26 +554,7 @@ Copper::serviceEvent(EventID id)
                     // Clear the skip flag
                     skip = false;
 
-#if 0
-                    // Determine where the WAIT command will trigger
-                    uint32_t trigger = nextTriggerPosition();
-                    
-                    // In how many cycles do we get there?
-                    Cycle delay = agnus->beamDiff(trigger);
-                    
-                    debug(2, "   trigger = (%d,%d) delay = %lld\n",
-                             VPOS(trigger), HPOS(trigger), delay);
-                    
-                    // Stop the Copper or schedule a wake up event
-                    if (delay == NEVER) {
-                        events->disable(COP_SLOT);
-                    } else {
-                        events->scheduleRel(COP_SLOT, delay, COP_FETCH);
-                    }
-#endif
-//#if 0
-
-                // Find the trigger position for this WAIT command
+                    // Find the trigger position for this WAIT command
                     Beam trigger;
                     if (findMatch(trigger)) {
 
@@ -552,8 +570,6 @@ Copper::serviceEvent(EventID id)
                         // Stop the Copper
                         events->disable(COP_SLOT);
                     }
-// #endif
-
                 }
 
                 // It must be a SKIP command then.
@@ -588,6 +604,8 @@ Copper::serviceEvent(EventID id)
             assert(false);
             break;
     }
+
+    servicing = false;
 }
 
 void

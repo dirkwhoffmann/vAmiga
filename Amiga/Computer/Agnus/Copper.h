@@ -45,6 +45,11 @@ class Copper : public HardwareComponent
    
     // Storage for disassembled instruction
     char disassembly[128];
+
+public:
+
+    // Indicates if Copper is currently servicing an event (for debugging only)
+    bool servicing = false;
     
     
     //
@@ -80,6 +85,9 @@ private:
     // Returns the latest internal state recorded by inspect()
     CopperInfo getInfo();
     
+    // Returns the program counter
+    uint32_t getCopPC() { return coppc; }
+
     
     //
     // Accessing registers
@@ -90,9 +98,11 @@ public:
     void pokeCOPCON(uint16_t value);
     void pokeCOPJMP(int x);
     void pokeCOPINS(uint16_t value);
-    void pokeCOPxLCH(int x, uint16_t value);
-    void pokeCOPxLCL(int x, uint16_t value);
-    
+    void pokeCOP1LCH(uint16_t value);
+    void pokeCOP1LCL(uint16_t value);
+    void pokeCOP2LCH(uint16_t value);
+    void pokeCOP2LCL(uint16_t value);
+
     
     //
     // Running the device

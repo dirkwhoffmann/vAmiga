@@ -939,13 +939,13 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x07E >> 1: // DSKSYNC
             paula->diskController.pokeDSKSYNC(value); return;
         case 0x080 >> 1: // COP1LCH
-            copper->pokeCOPxLCH(0, value); return;
+            copper->pokeCOP1LCH(value); return;
         case 0x082 >> 1: // COP1LCL
-            copper->pokeCOPxLCL(0, value); return;
+            copper->pokeCOP1LCL(value); return;
         case 0x084 >> 1: // COP2LCH
-            copper->pokeCOPxLCH(1, value); return;
+            copper->pokeCOP2LCH(value); return;
         case 0x086 >> 1: // COP2LCL
-            copper->pokeCOPxLCL(1, value); return;
+            copper->pokeCOP2LCL(value); return;
         case 0x088 >> 1: // COPJMP1
             copper->pokeCOPJMP(0); return;
         case 0x08A >> 1: // COPJMP1

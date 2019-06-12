@@ -59,6 +59,9 @@
 // Set to 1 to debug the control ports and connected devices
 #define CPT_DEBUG 2
 
+// Set to 1 to debug Copper registers
+#define COPREG_DEBUG 2
+
 // Set to 1 to debug the Copper
 #define COP_DEBUG 2
 

@@ -284,41 +284,4 @@ typedef struct
 }
 EventHandlerInfo;
 
-typedef struct
-{
-    bool active;
-    bool cdang;
-    uint32_t coppc;
-    uint32_t coplc[2];
-    uint16_t copins[2];
-}
-CopperInfo;
-
-typedef struct
-{
-    bool active;
-    uint16_t bltcon0;
-    uint16_t bltcon1;
-    uint16_t bltapt;
-    uint16_t bltbpt;
-    uint16_t bltcpt;
-    uint16_t bltdpt;
-    uint16_t bltafwm;
-    uint16_t bltalwm;
-    uint16_t bltsize;
-    int16_t bltamod;
-    int16_t bltbmod;
-    int16_t bltcmod;
-    int16_t bltdmod;
-    uint16_t anew;
-    uint16_t bnew;
-    uint16_t ahold;
-    uint16_t bhold;
-    uint16_t chold;
-    uint16_t dhold;
-    bool bbusy;
-    bool bzero;
-}
-BlitterInfo;
-
 #endif
