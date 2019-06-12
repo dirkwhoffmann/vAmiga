@@ -76,6 +76,7 @@ class Inspector: NSWindowController {
     @IBOutlet weak var memOCSButton: NSButton!
     @IBOutlet weak var memAutoConfButton: NSButton!
     @IBOutlet weak var memRomButton: NSButton!
+    @IBOutlet weak var memExtRomButton: NSButton!
 
     var bank = 0
     var memSrc = MEM_CHIP

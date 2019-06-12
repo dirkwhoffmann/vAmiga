@@ -69,6 +69,8 @@ extension BankTableView: NSTableViewDataSource {
                 return "OCS"
             case MEM_KICK.rawValue:
                 return "Kickstart"
+            case MEM_EXTROM.rawValue:
+                return "Extended Rom"
             default:
                 return "???"
             }

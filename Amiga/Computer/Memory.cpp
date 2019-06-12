@@ -373,7 +373,8 @@ Memory::updateMemSrcTable()
     AmigaConfiguration config = amiga->getConfig();
     MemorySource mem_boot = bootRom ? MEM_BOOT : MEM_UNMAPPED;
     MemorySource mem_kick = kickRom ? MEM_KICK : MEM_UNMAPPED;
-    
+    MemorySource mem_ext = extRom ? MEM_EXTROM : MEM_UNMAPPED;
+
     assert(chipRamSize % 0x10000 == 0);
     assert(slowRamSize % 0x10000 == 0);
     assert(fastRamSize % 0x10000 == 0);
@@ -415,6 +416,10 @@ Memory::updateMemSrcTable()
     for (unsigned i = 0xE8; i <= 0xEF; i++)
     memSrc[i] = MEM_AUTOCONF;
     
+    // Extended Rom
+    for (unsigned i = 0xF0; i <= 0xF7; i++)
+        memSrc[i] = mem_ext;
+
     // Boot Rom or Kickstart mirror
     for (unsigned i = 0xF8; i <= 0xFB; i++)
         memSrc[i] = kickIsWritable ? mem_boot : mem_kick;
@@ -448,6 +453,7 @@ Memory::peek8(uint32_t addr)
         case MEM_AUTOCONF: ASSERT_AUTO_ADDR(addr); return peekAutoConf8(addr);
         case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); assert(false); return READ_BOOT_8(addr);
         case MEM_KICK:     ASSERT_KICK_ADDR(addr); return READ_KICK_8(addr);
+        case MEM_EXTROM:   ASSERT_EXT_ADDR(addr);  return READ_EXT_8(addr);
         default:           assert(false);
     }
     return 0;
@@ -475,6 +481,7 @@ Memory::peek16(uint32_t addr)
         case MEM_AUTOCONF: ASSERT_AUTO_ADDR(addr); return peekAutoConf16(addr);
         case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); assert(false); return READ_BOOT_16(addr);
         case MEM_KICK:     ASSERT_KICK_ADDR(addr); return READ_KICK_16(addr);
+        case MEM_EXTROM:   ASSERT_EXT_ADDR(addr);  return READ_EXT_16(addr);
         default:           assert(false);
     }
     return 0;
@@ -503,6 +510,7 @@ Memory::spypeek8(uint32_t addr)
         case MEM_AUTOCONF: ASSERT_AUTO_ADDR(addr); return spypeekAutoConf8(addr);
         case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); return READ_BOOT_8(addr);
         case MEM_KICK:     ASSERT_KICK_ADDR(addr); return READ_KICK_8(addr);
+        case MEM_EXTROM:   ASSERT_EXT_ADDR(addr);  return READ_EXT_8(addr);
         default:           assert(false);
     }
     return 0;
@@ -526,6 +534,7 @@ Memory::spypeek16(uint32_t addr)
         case MEM_AUTOCONF: ASSERT_AUTO_ADDR(addr); return spypeekAutoConf16(addr);
         case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); return READ_BOOT_16(addr);
         case MEM_KICK:     ASSERT_KICK_ADDR(addr); return READ_KICK_16(addr);
+        case MEM_EXTROM:   ASSERT_EXT_ADDR(addr);  return READ_EXT_16(addr);
         default:           assert(false);
     }
     return 0;
@@ -555,6 +564,7 @@ Memory::poke8(uint32_t addr, uint8_t value)
         case MEM_AUTOCONF: ASSERT_AUTO_ADDR(addr); pokeAutoConf8(addr, value); break;
         case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); break;
         case MEM_KICK:     ASSERT_KICK_ADDR(addr); break;
+        case MEM_EXTROM:   ASSERT_EXT_ADDR(addr); break;
         default:           assert(false);
     }
 }
@@ -577,6 +587,7 @@ Memory::poke16(uint32_t addr, uint16_t value)
         case MEM_AUTOCONF: ASSERT_AUTO_ADDR(addr); pokeAutoConf16(addr, value); break;
         case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); break;
         case MEM_KICK:     ASSERT_KICK_ADDR(addr); break;
+        case MEM_EXTROM:   ASSERT_EXT_ADDR(addr); break;
         default:           assert(false);
     }
 }

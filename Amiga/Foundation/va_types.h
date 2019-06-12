@@ -99,7 +99,8 @@ typedef enum
     MEM_OCS,
     MEM_AUTOCONF,
     MEM_BOOT,
-    MEM_KICK
+    MEM_KICK,
+    MEM_EXTROM
 }
 MemorySource;
 

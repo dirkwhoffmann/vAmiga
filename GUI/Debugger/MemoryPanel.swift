@@ -29,6 +29,7 @@ struct MemColors {
     static let ocs = NSColor.init(r: 0xFF, g: 0xFF, b: 0x66, a: 0xFF)
     static let autoConf = NSColor.init(r: 0xFF, g: 0x66, b: 0x66, a: 0xFF)
     static let rom = NSColor.init(r: 0x66, g: 0xB2, b: 0xFF, a: 0xFF)
+    static let extRom = NSColor.init(r: 0x33, g: 0x59, b: 0x7F, a: 0xFF)
 }
 
 extension Inspector {
@@ -59,6 +60,7 @@ extension Inspector {
         memOCSButton.image      = NSImage.init(color: MemColors.ocs, size: size)
         memAutoConfButton.image = NSImage.init(color: MemColors.autoConf, size: size)
         memRomButton.image      = NSImage.init(color: MemColors.rom, size: size)
+        memExtRomButton.image   = NSImage.init(color: MemColors.extRom, size: size)
 
         let chipRamKB = memConfig.chipRamSize
         let fastRamKB = memConfig.fastRamSize
@@ -97,6 +99,7 @@ extension Inspector {
             case MEM_AUTOCONF.rawValue: color = MemColors.autoConf
             case MEM_BOOT.rawValue:     color = MemColors.rom
             case MEM_KICK.rawValue:     color = MemColors.rom
+            case MEM_EXTROM.rawValue:   color = MemColors.extRom
             default:                    fatalError()
             }
             let ciColor: CIColor = CIColor(color: color)!
@@ -147,36 +150,7 @@ extension Inspector {
             memTableView.selectRowIndexes([row], byExtendingSelection: false)
         }
     }
-    
-    /*
-    @IBAction func memBankAction(_ sender: NSTextField!) {
-     
-        track("\(sender.integerValue)")
-        setBank(sender.integerValue)
-    }
-    
-    @IBAction func memStepperAction(_ sender: NSStepper!) {
-        
-        track("\(sender.integerValue)")
-        setBank(sender.integerValue)
-    }
-    
-    @IBAction func memAreaAction(_ sender: NSPopUpButton!) {
-        
-        switch (UInt32(sender.selectedTag())) {
-            
-        case MEM_CHIP.rawValue:   setBank(0x00)
-        case MEM_FAST.rawValue:   setBank(0x20)
-        case MEM_CIA.rawValue:    setBank(0xA0)
-        case MEM_SLOW.rawValue:   setBank(0xC0)
-        case MEM_RTC.rawValue:    setBank(0xDC)
-        case MEM_CUSTOM.rawValue: setBank(0xDF)
-        case MEM_KICK.rawValue:   setBank(0xFC)
-            
-        default: fatalError()
-        }
-    }
-    */
+
     @IBAction func memSliderAction(_ sender: NSSlider!) {
         
         let value = sender.integerValue
