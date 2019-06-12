@@ -38,8 +38,8 @@ class Copper : public HardwareComponent
     bool cdang;
     
     // The Copper instruction registers
-    uint16_t copins1 = 0;
-    uint16_t copins2 = 0;
+    uint16_t cop1ins = 0;
+    uint16_t cop2ins = 0;
 
     // The Copper program counter
     uint32_t coppc = 0;
@@ -97,7 +97,8 @@ private:
 public:
     
     void pokeCOPCON(uint16_t value);
-    void pokeCOPJMP(int x);
+    void pokeCOPJMP1();
+    void pokeCOPJMP2();
     void pokeCOPINS(uint16_t value);
     void pokeCOP1LCH(uint16_t value);
     void pokeCOP1LCL(uint16_t value);
@@ -156,7 +157,7 @@ private:
 private:
     
     /*             MOVE              WAIT              SKIP
-     * Bit   copins1 copins2   copins1 copins2   copins1 copins2
+     * Bit   cop1ins cop2ins   cop1ins cop2ins   cop1ins cop2ins
      *  15      x     DW15       VP7     BFD       VP7     BFD
      *  14      x     DW14       VP6     VM6       VP6     VM6
      *  13      x     DW13       VP5     VM5       VP5     VM5

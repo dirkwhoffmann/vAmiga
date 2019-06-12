@@ -19,8 +19,8 @@ Copper::Copper()
         { &cop1lc,  sizeof(cop1lc),  0 },
         { &cop2lc,  sizeof(cop2lc),  0 },
         { &cdang,   sizeof(cdang),   0 },
-        { &copins1, sizeof(copins1), 0 },
-        { &copins2, sizeof(copins2), 0 },
+        { &cop1ins, sizeof(cop1ins), 0 },
+        { &cop2ins, sizeof(cop2ins), 0 },
         { &coppc,   sizeof(coppc),   0 },
     });
 }
@@ -64,13 +64,13 @@ Copper::_inspect()
     // Prevent external access to variable 'info'
     pthread_mutex_lock(&lock);
     
-    info.cdang     = cdang;
-    info.active    = events->isPending(COP_SLOT);
-    info.coppc     = coppc;
-    info.copins[0] = copins1;
-    info.copins[1] = copins2;
-    info.cop1lc    = cop1lc;
-    info.cop2lc    = cop2lc;
+    info.cdang   = cdang;
+    info.active  = events->isPending(COP_SLOT);
+    info.coppc   = coppc;
+    info.cop1ins = cop1ins;
+    info.cop2ins = cop2ins;
+    info.cop1lc  = cop1lc;
+    info.cop2lc  = cop2lc;
     
     pthread_mutex_unlock(&lock);
 }
@@ -83,8 +83,8 @@ Copper::_dump()
     plainmsg("   active: %s\n", active ? "yes" : "no");
     if (active) plainmsg("    state: %d\n", events->primSlot[COP_SLOT].id);
     plainmsg("    coppc: %X\n", coppc);
-    plainmsg("  copins1: %X\n", copins1);
-    plainmsg("  copins2: %X\n", copins2);
+    plainmsg("  copins1: %X\n", cop1ins);
+    plainmsg("  copins2: %X\n", cop2ins);
     plainmsg("   cop1lc: %X\n", cop1lc);
     plainmsg("   cop2lc: %X\n", cop2lc);
 }
@@ -114,15 +114,17 @@ Copper::pokeCOPCON(uint16_t value)
 }
 
 void
-Copper::pokeCOPJMP(int x)
+Copper::pokeCOPJMP1()
 {
-    debug(COPREG_DEBUG, "COPPC: %X pokeCOPJMP(%d)\n", coppc, x);
-    assert(x < 2);
+    debug(COPREG_DEBUG, "pokeCOPJMP1(): Jumping to %X\n", cop1lc);
+    coppc = cop1lc;
+}
 
-    /* "When you write to a Copper strobe address, the Copper reloads its
-     *  program counter from the corresponding location register." [HRM]
-     */
-    coppc = (x == 0) ? cop1lc : cop2lc;
+void
+Copper::pokeCOPJMP2()
+{
+    debug(COPREG_DEBUG, "pokeCOPJMP2(): Jumping to %X\n", cop2lc);
+    coppc = cop2lc;
 }
 
 void
@@ -136,12 +138,12 @@ Copper::pokeCOPINS(uint16_t value)
 
     // TODO: The following is almost certainly wrong...
     /* if (state == COP_MOVE || state == COP_WAIT_OR_SKIP) {
-        copins2 = value;
+        cop2ins = value;
     } else {
-        copins1 = value;
+        cop1ins = value;
     }
     */
-    copins1 = value;
+    cop1ins = value;
 }
 
 void
@@ -365,7 +367,7 @@ Copper::nextTriggerPosition()
 bool
 Copper::isMoveCmd()
 {
-    return !(copins1 & 1);
+    return !(cop1ins & 1);
 }
 
 bool Copper::isMoveCmd(uint32_t addr)
@@ -376,7 +378,7 @@ bool Copper::isMoveCmd(uint32_t addr)
 
 bool Copper::isWaitCmd()
 {
-     return (copins1 & 1) && !(copins2 & 1);
+     return (cop1ins & 1) && !(cop2ins & 1);
 }
 
 bool Copper::isWaitCmd(uint32_t addr)
@@ -388,7 +390,7 @@ bool Copper::isWaitCmd(uint32_t addr)
 bool
 Copper::isSkipCmd()
 {
-    return (copins1 & 1) && (copins2 & 1);
+    return (cop1ins & 1) && (cop2ins & 1);
 }
 
 bool
@@ -401,7 +403,7 @@ Copper::isSkipCmd(uint32_t addr)
 uint16_t
 Copper::getRA()
 {
-    return copins1 & 0x1FE;
+    return cop1ins & 0x1FE;
 }
 
 uint16_t
@@ -414,7 +416,7 @@ Copper::getRA(uint32_t addr)
 uint16_t
 Copper::getDW()
 {
-    return copins1;
+    return cop1ins;
 }
 
 uint16_t
@@ -427,7 +429,7 @@ Copper::getDW(uint32_t addr)
 bool
 Copper::getBFD()
 {
-    return (copins2 & 0x8000) != 0;
+    return (cop2ins & 0x8000) != 0;
 }
 
 bool
@@ -440,7 +442,7 @@ Copper::getBFD(uint32_t addr)
 uint16_t
 Copper::getVPHP()
 {
-    return copins1 & 0xFFFE;
+    return cop1ins & 0xFFFE;
 }
 
 uint16_t
@@ -453,7 +455,7 @@ Copper::getVPHP(uint32_t addr)
 uint16_t
 Copper::getVMHM()
 {
-    return (copins2 & 0x7FFE) | 0x8001;
+    return (cop2ins & 0x7FFE) | 0x8001;
 }
 
 uint16_t
@@ -503,8 +505,8 @@ Copper::serviceEvent(EventID id)
             if (agnus->copperCanHaveBus()) {
                 
                 // Load the first instruction word
-                copins1 = mem->peek16(coppc);
-                // debug(COP_DEBUG, "COP_FETCH: coppc = %X copins1 = %X\n", coppc, copins1);
+                cop1ins = mem->peek16(coppc);
+                // debug(COP_DEBUG, "COP_FETCH: coppc = %X cop1ins = %X\n", coppc, cop1ins);
                 advancePC();
                 
                 // Determine the next state based on the instruction type
@@ -517,12 +519,12 @@ Copper::serviceEvent(EventID id)
             if (agnus->copperCanHaveBus()) {
                 
                 // Load the second instruction word
-                copins2 = mem->peek16(coppc);
-                // debug(COP_DEBUG, "COP_MOVE: coppc = %X copins2 = %X\n", coppc, copins2);
+                cop2ins = mem->peek16(coppc);
+                // debug(COP_DEBUG, "COP_MOVE: coppc = %X cop2ins = %X\n", coppc, cop2ins);
                 advancePC();
                 
                 // Extract register number from the first instruction word
-                uint16_t reg = (copins1 & 0x1FE);
+                uint16_t reg = (cop1ins & 0x1FE);
                 
                 if (isIllegalAddress(reg)) {
                     
@@ -531,7 +533,7 @@ Copper::serviceEvent(EventID id)
                 }
                 
                 // Write into the custom register
-                if (!skip) move(reg, copins2);
+                if (!skip) move(reg, cop2ins);
                 skip = false;
                 
                 // Schedule next event
@@ -544,8 +546,8 @@ Copper::serviceEvent(EventID id)
             if (agnus->copperCanHaveBus()) {
 
                 // Load the second instruction word
-                copins2 = mem->peek16(coppc);
-                // debug(COP_DEBUG, "COP_WAIT_OR_SKIP: coppc = %X copins2 = %X\n", coppc, copins2);
+                cop2ins = mem->peek16(coppc);
+                // debug(COP_DEBUG, "COP_WAIT_OR_SKIP: coppc = %X cop2ins = %X\n", coppc, cop2ins);
                 // debug(COP_DEBUG, "    VPHP = %X VMHM = %X\n", getVPHP(), getVMHM());
                 advancePC();
                 

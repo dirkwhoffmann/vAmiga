@@ -28,8 +28,8 @@ extension Inspector {
         copActive.state = info.active ? .on : .off
         copCDANG.state = info.cdang ? .on : .off
         copCOPPC.integerValue = Int(info.coppc)
-        copCOPINS1.integerValue = Int(info.copins.0)
-        copCOPINS2.integerValue = Int(info.copins.1)
+        copCOPINS1.integerValue = Int(info.cop1ins)
+        copCOPINS2.integerValue = Int(info.cop2ins)
         copCOP1LC.integerValue = Int(info.cop1lc)
         copCOP2LC.integerValue = Int(info.cop2lc)
 
