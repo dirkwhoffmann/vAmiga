@@ -37,7 +37,7 @@ public:
     
 
     //
-    // Delivering data for peek methods
+    // Managing registers
     //
     
     public:
@@ -50,6 +50,9 @@ public:
 
     // Returns the control port bits showing up in the CIAA PA register.
     uint8_t ciapa();
+
+    // Emulates a write access to JOYTEST
+    void pokeJOYTEST(uint16_t value);
 
     
     //

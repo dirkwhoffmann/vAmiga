@@ -77,6 +77,16 @@ ControlPort::ciapa()
 }
 
 void
+ControlPort::pokeJOYTEST(uint16_t value)
+{
+    mouseCounterY &= ~0b11111100;
+    mouseCounterY |= HI_BYTE(value) & 0b11111100;
+
+    mouseCounterX &= ~0b11111100;
+    mouseCounterX |= LO_BYTE(value) & 0b11111100;
+}
+
+void
 ControlPort::connectDevice(ControlPortDevice device)
 {
     if (isControlPortDevice(device)) {

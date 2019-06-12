@@ -212,7 +212,7 @@ uint16_t
 Denise::peekJOY0DATR()
 {
     uint16_t result = amiga->controlPort1.joydat();
-    debug(2, "peekJOY0DATR() = $X (%d)\n", result, result);
+    debug(2, "peekJOY0DATR() = $%04X (%d)\n", result, result);
 
     return result;
 }
@@ -229,17 +229,10 @@ Denise::peekJOY1DATR()
 void
 Denise::pokeJOYTEST(uint16_t value)
 {
-    debug("pokeJOYTEST(%04X)\n", value);
+    debug(2, "pokeJOYTEST(%04X)\n", value);
 
-    /*
-    value     &= 0b1111110011111100;
-    
-    joydat[0] &= 0b0000001100000011;
-    joydat[0] |= value;
-
-    joydat[1] &= 0b0000001100000011;
-    joydat[1] |= value;
-    */
+    amiga->controlPort1.pokeJOYTEST(value);
+    amiga->controlPort2.pokeJOYTEST(value);
 }
 
 void
