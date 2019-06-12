@@ -51,7 +51,7 @@ public:
     
      
     //
-    // Methods from VAFile
+    // Methods from AmigaFile
     //
     
     AmigaFileType fileType() override { return FILETYPE_BOOT_ROM; }

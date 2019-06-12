@@ -163,12 +163,13 @@ typedef enum
     FILETYPE_SNAPSHOT,
     FILETYPE_ADF,
     FILETYPE_BOOT_ROM,
-    FILETYPE_KICK_ROM
+    FILETYPE_KICK_ROM,
+    FILETYPE_EXT_ROM
 }
 AmigaFileType;
 
-inline bool isVAFileType(AmigaFileType model) {
-    return model >= FILETYPE_UKNOWN && model <= FILETYPE_KICK_ROM;
+inline bool isAmigaFileType(long value) {
+    return value >= FILETYPE_UKNOWN && value <= FILETYPE_EXT_ROM;
 }
 
 

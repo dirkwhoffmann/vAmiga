@@ -88,23 +88,6 @@ AmigaFile::read()
     return result;
 }
 
-/*
-const char *
-VAFile::readHex(size_t num)
-{
-    assert(sizeof(name) > 3 * num);
-    
-    for (unsigned i = 0; i < num; i++) {
-        
-        int byte = read();
-        if (byte == EOF) break;
-        sprintf(name + (3 * i), "%02X ", byte);
-    }
-    
-    return name;
-}
-*/
-
 void
 AmigaFile::flash(uint8_t *buffer, size_t offset)
 {

@@ -37,6 +37,7 @@
 // File types
 #include "BootRom.h"
 #include "KickRom.h"
+#include "ExtRom.h"
 #include "AmigaSnapshot.h"
 #include "ADFFile.h"
 
