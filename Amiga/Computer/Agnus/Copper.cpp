@@ -16,7 +16,8 @@ Copper::Copper()
     registerSnapshotItems(vector<SnapshotItem> {
         
         { &skip,    sizeof(skip),    0 },
-        { &coplc,   sizeof(coplc),   DWORD_ARRAY },
+        { &cop1lc,  sizeof(cop1lc),  0 },
+        { &cop2lc,  sizeof(cop2lc),  0 },
         { &cdang,   sizeof(cdang),   0 },
         { &copins1, sizeof(copins1), 0 },
         { &copins2, sizeof(copins2), 0 },
@@ -68,8 +69,8 @@ Copper::_inspect()
     info.coppc     = coppc;
     info.copins[0] = copins1;
     info.copins[1] = copins2;
-    info.coplc[0]  = coplc[0];
-    info.coplc[1]  = coplc[1];
+    info.cop1lc    = cop1lc;
+    info.cop2lc    = cop2lc;
     
     pthread_mutex_unlock(&lock);
 }
@@ -84,8 +85,8 @@ Copper::_dump()
     plainmsg("    coppc: %X\n", coppc);
     plainmsg("  copins1: %X\n", copins1);
     plainmsg("  copins2: %X\n", copins2);
-    plainmsg(" coplc[0]: %X\n", coplc[0]);
-    plainmsg(" coplc[1]: %X\n", coplc[1]);
+    plainmsg("   cop1lc: %X\n", cop1lc);
+    plainmsg("   cop2lc: %X\n", cop2lc);
 }
 
 CopperInfo
@@ -121,7 +122,7 @@ Copper::pokeCOPJMP(int x)
     /* "When you write to a Copper strobe address, the Copper reloads its
      *  program counter from the corresponding location register." [HRM]
      */
-    coppc = coplc[x];
+    coppc = (x == 0) ? cop1lc : cop2lc;
 }
 
 void
@@ -148,13 +149,13 @@ Copper::pokeCOP1LCH(uint16_t value)
 {
     debug(COPREG_DEBUG, "pokeCOP1LCH(%04X)\n", value);
     
-    coplc[0] = REPLACE_HI_WORD(coplc[0], value);
+    cop1lc = REPLACE_HI_WORD(cop1lc, value);
 
     // Update program counter if DMA is off
     /* THIS IS NOT 100% CORRECT. IN WINFELLOW, THE PC IS ONLY WRITTEN TO IF
      * DMA WAS OFF SINCE THE LAST VSYNC EVENT (?!). NEED A TEST CASE FOR THIS.
      */
-    if (!agnus->copDMA()) coppc = coplc[0];
+    if (!agnus->copDMA()) coppc = cop1lc;
 }
 
 void
@@ -162,13 +163,13 @@ Copper::pokeCOP1LCL(uint16_t value)
 {
     debug(COPREG_DEBUG, "pokeCOP1LCL(%04X)\n", value);
     
-    coplc[0] = REPLACE_LO_WORD(coplc[0], value & 0xFFFE);
+    cop1lc = REPLACE_LO_WORD(cop1lc, value & 0xFFFE);
 
     // Update program counter if DMA is off
     /* THIS IS NOT 100% CORRECT. IN WINFELLOW, THE PC IS ONLY WRITTEN TO IF
      * DMA WAS OFF SINCE THE LAST VSYNC EVENT (?!). NEED A TEST CASE FOR THIS.
      */
-    if (!agnus->copDMA()) coppc = coplc[0];
+    if (!agnus->copDMA()) coppc = cop1lc;
 }
 
 void
@@ -176,7 +177,7 @@ Copper::pokeCOP2LCH(uint16_t value)
 {
     debug(COPREG_DEBUG, "pokeCOP2LCH(%04X)\n", value);
 
-    coplc[1] = REPLACE_HI_WORD(coplc[1], value);
+    cop2lc = REPLACE_HI_WORD(cop2lc, value);
 }
 
 void
@@ -184,7 +185,7 @@ Copper::pokeCOP2LCL(uint16_t value)
 {
     debug(COPREG_DEBUG, "pokeCOP2LCL(%04X)\n", value);
 
-    coplc[1] = REPLACE_LO_WORD(coplc[1], value & 0xFFFE);
+    cop2lc = REPLACE_LO_WORD(cop2lc, value & 0xFFFE);
 }
 
 bool
@@ -586,7 +587,7 @@ Copper::serviceEvent(EventID id)
         case COP_JMP1:
         
             // Load COP1LC into the program counter
-            coppc = coplc[0];
+            coppc = cop1lc;
             // debug(COP_DEBUG, "COP_JMP1: coppc = %X\n", coppc);
             events->scheduleRel(COP_SLOT, DMA_CYCLES(2), COP_REQUEST_DMA);
             break;
@@ -594,7 +595,7 @@ Copper::serviceEvent(EventID id)
         case COP_JMP2:
             
             // Load COP2LC into the program counter
-            coppc = coplc[1];
+            coppc = cop2lc;
             // debug(COP_DEBUG, "COP_JMP2: coppc = %X\n", coppc);
             events->scheduleRel(COP_SLOT, DMA_CYCLES(2), COP_REQUEST_DMA);
             break;
@@ -660,7 +661,7 @@ Copper::disassemble(unsigned list, uint32_t offset)
 {
     assert(list == 1 || list == 2);
     
-    uint32_t addr = (list == 1) ? coplc[0] : coplc[1];
+    uint32_t addr = (list == 1) ? cop1lc : cop2lc;
     addr = (addr + 2 * offset) & 0x7FFFF;
     
     return disassemble(addr);

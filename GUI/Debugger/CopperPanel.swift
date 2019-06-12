@@ -30,8 +30,8 @@ extension Inspector {
         copCOPPC.integerValue = Int(info.coppc)
         copCOPINS1.integerValue = Int(info.copins.0)
         copCOPINS2.integerValue = Int(info.copins.1)
-        copCOP1LC.integerValue = Int(info.coplc.0)
-        copCOP2LC.integerValue = Int(info.coplc.1)
+        copCOP1LC.integerValue = Int(info.cop1lc)
+        copCOP2LC.integerValue = Int(info.cop2lc)
 
         copList1.refresh(everything: everything)
         copList2.refresh(everything: everything)

@@ -79,7 +79,8 @@ typedef struct
     bool active;
     bool cdang;
     uint32_t coppc;
-    uint32_t coplc[2];
+    uint32_t cop1lc;
+    uint32_t cop2lc;
     uint16_t copins[2];
 }
 CopperInfo;

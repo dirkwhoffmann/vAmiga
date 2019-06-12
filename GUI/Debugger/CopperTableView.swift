@@ -66,7 +66,7 @@ extension CopperTableView: NSTableViewDataSource {
     var coplc: Int {
         assert(tag == 1 || tag == 2)
         let info = amiga!.dma.getCopperInfo()
-        return (tag == 1) ? Int(info.coplc.0) : Int(info.coplc.1)
+        return (tag == 1) ? Int(info.cop1lc) : Int(info.cop2lc)
     }
     
     func numberOfRows(in tableView: NSTableView) -> Int { return numRows; }
