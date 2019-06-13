@@ -21,8 +21,7 @@ UART::UART()
         { &serdat,     sizeof(serdat),     0 },
         { &serper,     sizeof(serper),     0 },
         { &shiftReg,   sizeof(shiftReg),   0 },
-
-        // { &tbe,        sizeof(tbe),        0 },
+        { &recCnt,     sizeof(recCnt),     0 },
     });
 }
 
@@ -30,7 +29,8 @@ void
 UART::_initialize()
 {
     events = &amiga->agnus.events;
-    paula  = &amiga->paula;
+    paula = &amiga->paula;
+    serialPort = &amiga->serialPort;
 }
 
 void
@@ -124,17 +124,17 @@ UART::fillShiftRegister()
     paula->pokeINTREQ(0x8001);
 
     // Schedule the transmission of the first bit
-    events->scheduleSecRel(SER_SLOT, 0, SER_TXD);
+    events->scheduleSecRel(TXD_SLOT, 0, TXD_BIT);
 }
 
 void
-UART::serveEvent(EventID id)
+UART::serveTxdEvent(EventID id)
 {
-    static int data = 0; // For debugging only
+    static int tmp = 0; // For debugging only
 
     switch (id) {
 
-        case SER_TXD:
+        case TXD_BIT:
 
             // This event should not occurr if the shift register is empty
             assert(!shiftRegEmpty());
@@ -142,12 +142,12 @@ UART::serveEvent(EventID id)
             // Shift the right-most bit out
             txd = shiftReg & 1;
             shiftReg >>= 1;
-            data = (data << 1) | txd;
+            tmp = (tmp << 1) | txd;
             // debug("Bit: %X\n", txd);
 
             // Transmit the next bit if the shift register is not empty
             if (shiftReg) {
-                events->scheduleSecRel(SER_SLOT, DMA_CYCLES(rate() + 1), SER_TXD);
+                events->scheduleSecRel(TXD_SLOT, rate(), TXD_BIT);
                 return;
             }
 
@@ -160,11 +160,27 @@ UART::serveEvent(EventID id)
 
             // Terminate the transmission
             debug(SER_DEBUG, "End of transmission\n");
-            events->cancelSec(SER_SLOT);
+            events->cancelSec(TXD_SLOT);
 
             break;
 
         default:
             assert(false);
+    }
+}
+
+void
+UART::serveRxdEvent(EventID id)
+{
+    debug(SER_DEBUG, "serveRxdEvent(%d)\n", id);
+
+    debug("Receiving bit: %d (recCnt = %d)\n", serialPort->getRXD(), recCnt);
+
+    // Schedule next event or abort
+    if (recCnt > 0) {
+        events->scheduleSecRel(RXD_SLOT, rate(), RXD_BIT);
+        recCnt--;
+    } else {
+        events->cancelSec(RXD_SLOT);
     }
 }

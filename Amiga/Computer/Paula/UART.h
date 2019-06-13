@@ -20,8 +20,9 @@ class UART : public HardwareComponent {
 
     class EventHandler *events;
     class Paula *paula;
+    class SerialPort *serialPort;
 
-
+    
     //
     // Variables
     //
@@ -38,8 +39,8 @@ class UART : public HardwareComponent {
     // The serial shift register
     uint16_t shiftReg;
 
-    // Transmit-Buffer-Empty bit
-    // bool tbe; 
+    // Bit reception counter
+    uint8_t recCnt;
 
     //
     // Constructing and destructing
@@ -91,13 +92,13 @@ public:
     // OCS register $032(w) (Serial port period and control)
     void pokeSERPER(uint16_t value);
 
+    // Returns the baud rate converted to DMA cycles
+    int rate() { return DMA_CYCLES((serper & 0x7FFF) + 1); }
+
 private:
 
     // Returns the length of a received packet (8 or 9 bits)
     int packetLength() { return GET_BIT(serper, 15) ? 9 : 8; }
-
-    // Returns the baud rate bits
-    int rate() { return serper & 0x7FFF; }
 
     // Returns true if the shift register is empty
     bool shiftRegEmpty() { return shiftReg == 0; }
@@ -112,8 +113,11 @@ private:
 
 public:
 
-    // Processes a event
-    void serveEvent(EventID id);
+    // Processes a bit transmission event
+    void serveTxdEvent(EventID id);
+
+    // Process a bit reception event
+    void serveRxdEvent(EventID id);
 
 };
 

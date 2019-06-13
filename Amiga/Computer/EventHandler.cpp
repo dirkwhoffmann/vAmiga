@@ -291,7 +291,8 @@ EventHandler::_inspectSecSlot(uint32_t slot)
         case IRQ_RBF_SLOT:       i->slotName = "Serial Input IRQ"; break;
         case IRQ_DSKSYN_SLOT:    i->slotName = "Disk Sync IRQ"; break;
         case IRQ_EXTER_SLOT:     i->slotName = "CIA B IRQ"; break;
-        case SER_SLOT:           i->slotName = "UART"; break;
+        case TXD_SLOT:           i->slotName = "Serial out (UART)"; break;
+        case RXD_SLOT:           i->slotName = "Serial in (UART)"; break;
         case INSPECTOR_SLOT:     i->slotName = "Debugger"; break;
         default:                 i->slotName = "*** INVALID ***"; break;
     }
@@ -332,12 +333,22 @@ EventHandler::_inspectSecSlot(uint32_t slot)
             }
             break;
 
-        case SER_SLOT:
+        case TXD_SLOT:
 
             switch (secSlot[slot].id) {
 
                 case 0:          i->eventName = "none"; break;
-                case SER_TXD:    i->eventName = "SER_TXD"; break;
+                case TXD_BIT:    i->eventName = "TXD_BIT"; break;
+                default:         i->eventName = "*** INVALID ***"; break;
+            }
+            break;
+
+        case RXD_SLOT:
+
+            switch (secSlot[slot].id) {
+
+                case 0:          i->eventName = "none"; break;
+                case RXD_BIT:    i->eventName = "RXD_BIT"; break;
                 default:         i->eventName = "*** INVALID ***"; break;
             }
             break;
@@ -572,8 +583,11 @@ EventHandler::_executeSecUntil(Cycle cycle) {
     if (isDueSec(IRQ_EXTER_SLOT, cycle)) {
         serveIRQEvent(IRQ_EXTER_SLOT, 13);
     }
-    if (isDueSec(SER_SLOT, cycle)) {
-        paula->uart.serveEvent(secSlot[SER_SLOT].id);
+    if (isDueSec(TXD_SLOT, cycle)) {
+        paula->uart.serveTxdEvent(secSlot[TXD_SLOT].id);
+    }
+    if (isDueSec(RXD_SLOT, cycle)) {
+        paula->uart.serveRxdEvent(secSlot[RXD_SLOT].id);
     }
     if (isDueSec(INSPECTOR_SLOT, cycle)) {
         serveINSEvent();

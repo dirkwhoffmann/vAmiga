@@ -21,6 +21,13 @@ SerialPort::SerialPort()
 }
 
 void
+SerialPort::_initialize()
+{
+    events = &amiga->agnus.events;
+    uart = &amiga->paula.uart;
+}
+
+void
 SerialPort::_powerOn()
 {
     port = 0x1FFFFFE; 
@@ -61,3 +68,13 @@ SerialPort::setPin(int nr, bool value)
     debug("setPin(%d,%d) port = %X\n", nr, value, port);
 }
 
+void
+SerialPort::setRXD(bool value)
+{
+    setPin(3, value);
+
+    // Schedule the first reception event if this is the first bit
+    if (!events->hasEventSec(RXD_SLOT)) {
+        events->scheduleSecRel(RXD_SLOT, uart->rate() / 2, RXD_BIT);
+    }
+}
