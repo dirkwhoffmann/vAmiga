@@ -68,6 +68,7 @@ CIA::_initialize()
     agnus = &amiga->agnus;
     events = &amiga->agnus.events;
     paula = &amiga->paula;
+    serialPort = &amiga->serialPort;
 }
 
 void
@@ -1467,13 +1468,29 @@ CIAB::portAinternal()
 uint8_t
 CIAB::portAexternal()
 {
-    return 0;
+    uint8_t result = 0b11111000;
+
+    // Parallel port
+    // NOT IMPLEMENTED
+
+    // Serial port
+    if (serialPort->getDSR()) CLR_BIT(result, 3);
+    if (serialPort->getCTS()) CLR_BIT(result, 4);
+    if (serialPort->getCD())  CLR_BIT(result, 5);
+    if (serialPort->getRTS()) CLR_BIT(result, 6);
+    if (serialPort->getDTR()) CLR_BIT(result, 7);
+
+    return result;
 }
 
 void
 CIAB::updatePA()
 {
+    debug("updatePA()\n");
+
     PA = (portAinternal() & DDRA) | (portAexternal() & ~DDRA);
+
+    debug("PA = %X\n", PA);
 }
 
 //            -------

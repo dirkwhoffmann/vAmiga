@@ -16,8 +16,6 @@ UART::UART()
     // Register snapshot items
     registerSnapshotItems(vector<SnapshotItem> {
 
-        { &txd,        sizeof(txd),        0 },
-
         { &serdat,     sizeof(serdat),     0 },
         { &serper,     sizeof(serper),     0 },
         { &shiftReg,   sizeof(shiftReg),   0 },
@@ -78,7 +76,8 @@ UART::peekSERDATR()
 
     // Bits 14, 15: MISSING
 
-    debug(SER_DEBUG, "peekSERDATR() = %X\n", result);
+    // debug(SER_DEBUG, "peekSERDATR() = %X\n", result);
+    debug(2, "peekSERDATR() = %X\n", result);
 
     return result;
 }
@@ -128,10 +127,18 @@ UART::fillShiftRegister()
 }
 
 void
+UART::rxdHasChanged(bool value)
+{
+    // Schedule the first reception event if this bit is a start bit
+    if (value == 0 && !events->hasEventSec(RXD_SLOT)) {
+        recCnt = packetLength();
+        events->scheduleSecRel(RXD_SLOT, rate() / 2, RXD_BIT);
+    }
+}
+
+void
 UART::serveTxdEvent(EventID id)
 {
-    static int tmp = 0; // For debugging only
-
     switch (id) {
 
         case TXD_BIT:
@@ -139,19 +146,17 @@ UART::serveTxdEvent(EventID id)
             // This event should not occurr if the shift register is empty
             assert(!shiftRegEmpty());
 
-            // Shift the right-most bit out
-            txd = shiftReg & 1;
+            // Shift out the right-most bit
+            serialPort->setTXD(shiftReg & 1);
             shiftReg >>= 1;
-            tmp = (tmp << 1) | txd;
-            // debug("Bit: %X\n", txd);
 
-            // Transmit the next bit if the shift register is not empty
+            // Continue with the next bit if the shift register still contains data
             if (shiftReg) {
                 events->scheduleSecRel(TXD_SLOT, rate(), TXD_BIT);
                 return;
             }
 
-            // Continue with the next data packet if serdat is not empty
+            // Continue with the next packet if serdat has been filled in the meantime
             if (serdat) {
                 debug(SER_DEBUG, "Transmission continues with packet %X\n", serper);
                 fillShiftRegister();
@@ -177,9 +182,9 @@ UART::serveRxdEvent(EventID id)
     debug("Receiving bit: %d (recCnt = %d)\n", serialPort->getRXD(), recCnt);
 
     // Schedule next event or abort
-    if (recCnt > 0) {
+    assert(recCnt > 0);
+    if (--recCnt > 0) {
         events->scheduleSecRel(RXD_SLOT, rate(), RXD_BIT);
-        recCnt--;
     } else {
         events->cancelSec(RXD_SLOT);
     }

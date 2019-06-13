@@ -27,9 +27,6 @@ class UART : public HardwareComponent {
     // Variables
     //
 
-    // Current value of the TXD pin
-    bool txd;
-
     // Serial data register
     uint16_t serdat;
 
@@ -105,6 +102,16 @@ private:
 
     // Fills the shift register and starts the transmission
     void fillShiftRegister();
+
+
+    //
+    // Operationg this device
+    //
+
+public:
+
+    // Called when the RXD port pin changes it's value
+    void rxdHasChanged(bool value);
 
 
     //

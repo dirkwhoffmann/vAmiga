@@ -76,7 +76,8 @@ protected:
     class Agnus *agnus;
     class EventHandler *events;
     class Paula *paula; 
-
+    class SerialPort *serialPort;
+    
     // Information shown in the GUI inspector panel
     CIAInfo info;
     

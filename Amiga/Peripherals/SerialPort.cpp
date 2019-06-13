@@ -53,28 +53,45 @@ SerialPort::getPin(int nr)
 {
     assert(nr >= 1 && nr <= 25);
 
-    bool result = GET_BIT(port, nr);
+    bool result = !!GET_BIT(port, nr);
 
-    debug("port = %X getPin(%d) = %d\n", port, result);
+    debug(SER_DEBUG, "getPin(%2d) = %d port = %X\n", nr, result, port);
     return result;
 }
 
 void
 SerialPort::setPin(int nr, bool value)
 {
+    debug(SER_DEBUG, "setPin(%2d,%d)\n", nr, value);
     assert(nr >= 1 && nr <= 25);
 
-    SET_BIT(port, nr);
-    debug("setPin(%d,%d) port = %X\n", nr, value, port);
-}
+    // Only continue if the pin value changes
+    if (GET_BIT(port, nr) == value) return;
 
-void
-SerialPort::setRXD(bool value)
-{
-    setPin(3, value);
+    // Set the new pin value
+    WRITE_BIT(port, nr, value);
 
-    // Schedule the first reception event if this is the first bit
-    if (!events->hasEventSec(RXD_SLOT)) {
-        events->scheduleSecRel(RXD_SLOT, uart->rate() / 2, RXD_BIT);
+    // Perform special actions
+    switch (nr) {
+
+        case 3: // RXD
+
+            // Emulate the loopback cable (if connected)
+            if (device == SPD_LOOPBACK) {
+                setRXD(value);
+            }
+
+            // Let the UART know about the change
+            uart->rxdHasChanged(value);
+            break;
+
+        case 4: // RTS
+
+            // Emulate the loopback cable (if connected)
+            if (device == SPD_LOOPBACK) {
+                setCTS(value);
+                setDSR(value);
+            }
+            break;
     }
 }
