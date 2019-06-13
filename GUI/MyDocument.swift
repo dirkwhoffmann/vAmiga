@@ -51,6 +51,7 @@ class MyDocument: NSDocument {
         
         // Install the AROS Kickstart replacement per default
         amiga.mem.loadKickRom(fromBuffer: NSDataAsset(name: "aros-amiga-m68k-rom")?.data)
+        amiga.mem.loadExtRom(fromBuffer: NSDataAsset(name: "aros-amiga-m68k-ext")?.data)
     }
  
     deinit {

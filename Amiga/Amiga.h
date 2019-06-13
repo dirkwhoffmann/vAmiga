@@ -28,6 +28,7 @@
 #include "Paula.h"
 #include "ZorroManager.h"
 #include "ControlPort.h"
+#include "SerialPort.h"
 #include "Mouse.h"
 #include "Joystick.h"
 #include "Keyboard.h"
@@ -123,7 +124,10 @@ class Amiga : public HardwareComponent {
     // Control ports
     ControlPort controlPort1 = ControlPort(1);
     ControlPort controlPort2 = ControlPort(2);
-    
+
+    // Serial port
+    SerialPort serialPort;
+
     // Mouse
     Mouse mouse;
     

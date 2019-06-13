@@ -68,7 +68,7 @@
 // Set to 1 to debug the Blitter
 #define BLT_DEBUG 2
 
-// Set to 1 to debug the serial interface (UART)
+// Set to 1 to debug the serial interface
 #define SER_DEBUG 2
 
 // Enable to draw the display window border in debug colors

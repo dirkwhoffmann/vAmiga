@@ -9,8 +9,8 @@
 
 // This file must conform to standard ANSI-C to be compatible with Swift.
 
-#ifndef _CONTROLPORT_T_INC
-#define _CONTROLPORT_T_INC
+#ifndef _PORT_T_INC
+#define _PORT_T_INC
 
 //
 // Enumerations
@@ -26,6 +26,17 @@ ControlPortDevice;
 
 inline bool isControlPortDevice(long value) {
     return value >= CPD_NONE && value <= CPD_JOYSTICK;
+}
+
+typedef enum : long
+{
+    SPD_NONE,
+    SPD_LOOPBACK
+}
+SerialPortDevice;
+
+inline bool isSerialPortDevice(long value) {
+    return value >= SPD_NONE && value <= SPD_LOOPBACK;
 }
 
 #endif

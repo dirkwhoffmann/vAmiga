@@ -75,6 +75,7 @@ Amiga::Amiga()
         &zorro,
         &controlPort1,
         &controlPort2,
+        &serialPort,
         &joystick1,
         &joystick2,
         &mouse,

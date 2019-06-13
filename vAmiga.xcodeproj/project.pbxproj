@@ -126,6 +126,7 @@
 		50B14C2321EB8445002E32A6 /* 1541_door_open_1.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 50B14C1B21EB8445002E32A6 /* 1541_door_open_1.aiff */; };
 		50B14C2621EB905A002E32A6 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 50B14C2521EB9059002E32A6 /* Credits.rtf */; };
 		50B14C2821EB97EC002E32A6 /* AmigaProxy.mm in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C2721EB97EC002E32A6 /* AmigaProxy.mm */; };
+		50B35B6222B2382E001A9C17 /* SerialPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B35B6022B2382E001A9C17 /* SerialPort.cpp */; };
 		50BBE08B21F5EB9B0099BBBB /* A1000ANSI.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50BBE08A21F5EB9B0099BBBB /* A1000ANSI.xib */; };
 		50C2DE4421F756900043FD1B /* MyControllerStatusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */; };
 		50C50B86220479E000D796DA /* BankTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C50B85220479E000D796DA /* BankTableView.swift */; };
@@ -341,6 +342,8 @@
 		50B14C2521EB9059002E32A6 /* Credits.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		50B14C2721EB97EC002E32A6 /* AmigaProxy.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AmigaProxy.mm; sourceTree = "<group>"; };
 		50B14C2921EB9806002E32A6 /* AmigaProxy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaProxy.h; sourceTree = "<group>"; };
+		50B35B6022B2382E001A9C17 /* SerialPort.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SerialPort.cpp; sourceTree = "<group>"; };
+		50B35B6122B2382E001A9C17 /* SerialPort.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SerialPort.h; sourceTree = "<group>"; };
 		50BBE08A21F5EB9B0099BBBB /* A1000ANSI.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = A1000ANSI.xib; path = "XIB files/A1000ANSI.xib"; sourceTree = SOURCE_ROOT; };
 		50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyControllerStatusBar.swift; sourceTree = "<group>"; };
 		50C50B85220479E000D796DA /* BankTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankTableView.swift; sourceTree = "<group>"; };
@@ -365,7 +368,7 @@
 		50D661862282BE1800D67D88 /* AmigaTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaTypes.h; sourceTree = "<group>"; };
 		50D7CDC22286E968002689F0 /* Joystick.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Joystick.cpp; sourceTree = "<group>"; };
 		50D7CDC32286E968002689F0 /* Joystick.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Joystick.h; sourceTree = "<group>"; };
-		50D7CDC52286EA48002689F0 /* ControlPortTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ControlPortTypes.h; sourceTree = "<group>"; };
+		50D7CDC52286EA48002689F0 /* PortTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PortTypes.h; sourceTree = "<group>"; };
 		50DED6AE2202EBA200B8195F /* Inspector.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Inspector.xib; sourceTree = "<group>"; };
 		50DED6B02202EC3100B8195F /* Inspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Inspector.swift; sourceTree = "<group>"; };
 		50DF2C9E2268CFC000795256 /* AgnusTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgnusTypes.h; sourceTree = "<group>"; };
@@ -778,9 +781,11 @@
 		50A2953C21FF12C20046BAA0 /* Peripherals */ = {
 			isa = PBXGroup;
 			children = (
-				50D7CDC52286EA48002689F0 /* ControlPortTypes.h */,
+				50D7CDC52286EA48002689F0 /* PortTypes.h */,
 				50A2953E21FF12EF0046BAA0 /* ControlPort.h */,
 				50A2953D21FF12EF0046BAA0 /* ControlPort.cpp */,
+				50B35B6122B2382E001A9C17 /* SerialPort.h */,
+				50B35B6022B2382E001A9C17 /* SerialPort.cpp */,
 				505554AB2264C47600CB07E0 /* Mouse.h */,
 				505554AA2264C47600CB07E0 /* Mouse.cpp */,
 				50D7CDC32286E968002689F0 /* Joystick.h */,
@@ -1086,6 +1091,7 @@
 				50DF2CA02269135800795256 /* SpriteTableView.swift in Sources */,
 				5020B18021EF136100B9E80E /* Denise.cpp in Sources */,
 				50B14C1021EB410B002E32A6 /* Amiga.cpp in Sources */,
+				50B35B6222B2382E001A9C17 /* SerialPort.cpp in Sources */,
 				507FD926221CBFCD00B34DA7 /* CopperPanel.swift in Sources */,
 				50C2DE4421F756900043FD1B /* MyControllerStatusBar.swift in Sources */,
 				509CF4CD22083F9800C500F0 /* CPUPanel.swift in Sources */,
