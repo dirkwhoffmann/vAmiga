@@ -115,6 +115,8 @@ UART::copyToTransmitShiftRegister()
 {
     debug(SER_DEBUG, "Copying %X into transmit shift register\n", transmitBuffer);
 
+    plainmsg("%c", transmitBuffer & 0xFF);
+    
     assert(transmitShiftReg == 0);
     assert(transmitBuffer != 0);
 
@@ -172,8 +174,6 @@ UART::serveTxdEvent(EventID id)
 {
     debug(SER_DEBUG, "serveTxdEvent(%d)\n", id);
 
-    bool stop = false;
-
     switch (id) {
 
         case TXD_BIT:
@@ -193,7 +193,7 @@ UART::serveTxdEvent(EventID id)
                 if (transmitBuffer) {
 
                     // Copy new packet into shift register
-                    debug(SER_DEBUG, "Transmission continues with packet %X\n", transmitBuffer);
+                    // debug(1, "Transmission continues with packet %X '%c'\n", transmitBuffer, transmitBuffer & 0xFF);
                     copyToTransmitShiftRegister();
 
                 } else {
