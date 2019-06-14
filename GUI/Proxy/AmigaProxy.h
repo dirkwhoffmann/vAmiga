@@ -20,6 +20,7 @@
 @class DeniseProxy;
 @class PaulaProxy;
 @class ControlPortProxy;
+@class SerialPortProxy;
 @class MouseProxy;
 @class JoystickProxy;
 @class KeyboardProxy;
@@ -40,6 +41,7 @@ struct AgnusWrapper;
 struct DeniseWrapper;
 struct PaulaWrapper;
 struct AmigaControlPortWrapper;
+struct AmigaSerialPortWrapper;
 struct KeyboardWrapper;
 struct DiskControllerWrapper;
 struct AmigaDriveWrapper;
@@ -62,6 +64,7 @@ struct AmigaFileWrapper;
     PaulaProxy *paula;
     ControlPortProxy *controlPort1;
     ControlPortProxy *controlPort2;
+    SerialPortProxy *serialPort;
     MouseProxy *mouse;
     JoystickProxy *joystick1;
     JoystickProxy *joystick2;
@@ -83,6 +86,7 @@ struct AmigaFileWrapper;
 @property (readonly) PaulaProxy *paula;
 @property (readonly) ControlPortProxy *controlPort1;
 @property (readonly) ControlPortProxy *controlPort2;
+@property (readonly) SerialPortProxy *serialPort;
 @property (readonly) MouseProxy *mouse;
 @property (readonly) JoystickProxy *joystick1;
 @property (readonly) JoystickProxy *joystick2;
@@ -410,10 +414,22 @@ struct AmigaFileWrapper;
 }
 
 - (void) dump;
-
 - (void) connectDevice:(ControlPortDevice)value;
 
-// - (void) connectMouse:(BOOL)value;
+@end
+
+
+//
+// SerialPort Proxy
+//
+
+@interface SerialPortProxy : NSObject {
+
+    struct AmigaSerialPortWrapper *wrapper;
+}
+
+- (void) dump;
+- (void) connectDevice:(SerialPortDevice)value;
 
 @end
 

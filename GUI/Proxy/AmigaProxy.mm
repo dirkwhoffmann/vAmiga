@@ -19,6 +19,7 @@ struct AgnusWrapper { Agnus *agnus; };
 struct DeniseWrapper { Denise *denise; };
 struct PaulaWrapper { Paula *paula; };
 struct AmigaControlPortWrapper { ControlPort *port; };
+struct AmigaSerialPortWrapper { SerialPort *port; };
 struct MouseWrapper { Mouse *mouse; };
 struct JoystickWrapper { Joystick *joystick; };
 struct KeyboardWrapper { Keyboard *keyboard; };
@@ -676,12 +677,33 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->port->connectDevice(value);
 }
-/*
-- (void) connectMouse:(BOOL)value
+
+@end
+
+
+//
+// Serial port
+//
+
+@implementation SerialPortProxy
+
+- (instancetype) initWithSerialPort:(SerialPort *)port
 {
-    wrapper->port->connectDevice(value ? CPD_MOUSE : CPD_NONE);
+    if (self = [super init]) {
+        wrapper = new AmigaSerialPortWrapper();
+        wrapper->port = port;
+    }
+    return self;
 }
-*/
+
+- (void) dump
+{
+    wrapper->port->dump();
+}
+- (void) connectDevice:(SerialPortDevice)value
+{
+    wrapper->port->connectDevice(value);
+}
 
 @end
 
@@ -1136,6 +1158,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 @synthesize paula;
 @synthesize controlPort1;
 @synthesize controlPort2;
+@synthesize serialPort;
 @synthesize mouse;
 @synthesize joystick1;
 @synthesize joystick2;
@@ -1167,6 +1190,7 @@ struct ADFFileWrapper { ADFFile *adf; };
     paula = [[PaulaProxy alloc] initWithPaula:&amiga->paula];
     controlPort1 = [[ControlPortProxy alloc] initWithControlPort:&amiga->controlPort1];
     controlPort2 = [[ControlPortProxy alloc] initWithControlPort:&amiga->controlPort2];
+    serialPort = [[SerialPortProxy alloc] initWithSerialPort:&amiga->serialPort];
     mouse = [[MouseProxy alloc] initWithMouse:&amiga->mouse];
     joystick1 = [[JoystickProxy alloc] initWithJoystick:&amiga->joystick1];
     joystick2 = [[JoystickProxy alloc] initWithJoystick:&amiga->joystick2];
