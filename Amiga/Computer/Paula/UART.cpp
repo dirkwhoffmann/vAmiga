@@ -16,10 +16,13 @@ UART::UART()
     // Register snapshot items
     registerSnapshotItems(vector<SnapshotItem> {
 
-        { &serdat,     sizeof(serdat),     0 },
-        { &serper,     sizeof(serper),     0 },
-        { &shiftReg,   sizeof(shiftReg),   0 },
-        { &recCnt,     sizeof(recCnt),     0 },
+        { &serper,            sizeof(serper),            0 },
+        { &receiveBuffer,     sizeof(receiveBuffer),     0 },
+        { &receiveShiftReg,   sizeof(receiveShiftReg),   0 },
+        { &transmitBuffer,    sizeof(transmitBuffer),    0 },
+        { &transmitShiftReg,  sizeof(transmitShiftReg),  0 },
+        { &ovrun,             sizeof(ovrun),             0 },
+        { &recCnt,            sizeof(recCnt),            0 },
     });
 }
 
@@ -58,7 +61,11 @@ UART::_dump()
 uint16_t
 UART::peekSERDATR()
 {
-    uint16_t result = 0; // = receiveBuffer
+    // Get the RBF bit from INTREQ
+    bool rbf = GET_BIT(paula->intreq, 11);
+
+    // Clear the overrun bit if the interrupt has been acknowledged
+    if (!rbf) ovrun = false;
 
     /* 15      OVRUN      Serial port receiver overun
      * 14      RBF        Serial port receive buffer full
@@ -70,11 +77,12 @@ UART::peekSERDATR()
      * 08      STP / DB8  Stop bit if LONG, data bit if not.
      * 07..00  DB7 - DB0  Data bits
      */
-
-    if (shiftReg == 0) SET_BIT(result, 12);
-    if (serdat == 0)   SET_BIT(result, 13);
-
-    // Bits 14, 15: MISSING
+    uint16_t result = receiveShiftReg & 0x3FF;
+    WRITE_BIT(result, 15, ovrun);
+    WRITE_BIT(result, 14, rbf);
+    WRITE_BIT(result, 13, transmitBuffer == 0);
+    WRITE_BIT(result, 12, transmitShiftReg == 0);
+    WRITE_BIT(result, 11, serialPort->getRXD());
 
     // debug(SER_DEBUG, "peekSERDATR() = %X\n", result);
     debug(2, "peekSERDATR() = %X\n", result);
@@ -87,12 +95,11 @@ UART::pokeSERDAT(uint16_t value)
 {
     debug(SER_DEBUG, "pokeSERDAT(%X)\n", value);
 
-    // Write value into SERDAT register
-    serdat = value & 0x3FF;
-    // tbe = false;
+    // Write value into the transmit buffer
+    transmitBuffer = value & 0x3FF;
 
     // Start the transmission if the shift register is empty
-    if (shiftReg == 0 && serdat != 0) fillShiftRegister();
+    if (transmitShiftReg == 0 && transmitBuffer != 0) copyToTransmitShiftRegister();
 }
 
 void
@@ -104,21 +111,21 @@ UART::pokeSERPER(uint16_t value)
 }
 
 void
-UART::fillShiftRegister()
+UART::copyToTransmitShiftRegister()
 {
-    debug(SER_DEBUG, "fillShiftRegister(%X)\n", serdat);
+    debug(SER_DEBUG, "Copying %X into transmit shift register\n", transmitBuffer);
 
-    assert(shiftReg == 0);
-    assert(serdat != 0);
+    assert(transmitShiftReg == 0);
+    assert(transmitBuffer != 0);
 
-    // Move the payload from serdat into the shift register
-    shiftReg = serdat;
-    serdat = 0;
+    // Move the contents of the transmit buffer into the shift register
+    transmitShiftReg = transmitBuffer;
+    transmitBuffer = 0;
 
-    // Prefix the payload with a start bit (leading 0)
-    shiftReg <<= 1;
+    // Prefix the data with a start bit (leading 0)
+    transmitShiftReg <<= 1;
 
-    // Trigger the TBE interrupt
+    // Trigger a TBE interrupt
     debug(SER_DEBUG, "Triggering TBE interrupt\n");
     paula->pokeINTREQ(0x8001);
 
@@ -127,18 +134,44 @@ UART::fillShiftRegister()
 }
 
 void
+UART::copyFromReceiveShiftRegister()
+{
+    debug(SER_DEBUG, "Copying %X into receive buffer\n", receiveShiftReg);
+
+    receiveBuffer = receiveShiftReg;
+    receiveShiftReg = 0;
+
+    // Update the overrun bit
+    // Bit will be 1 if the RBF interrupt hasn't been acknowledged yet
+    ovrun = GET_BIT(paula->intreq, 11);
+
+    // Trigger the RBF interrupt (Read Buffer Full)
+    debug(SER_DEBUG, "Triggering RBF interrupt\n");
+    paula->pokeINTREQ(0x8800);
+}
+
+void
 UART::rxdHasChanged(bool value)
 {
-    // Schedule the first reception event if this bit is a start bit
+    // Schedule the first reception event if transmission has not yet started
     if (value == 0 && !events->hasEventSec(RXD_SLOT)) {
-        recCnt = packetLength();
-        events->scheduleSecRel(RXD_SLOT, rate() / 2, RXD_BIT);
+
+        // Reset the bit counter
+        recCnt = 0;
+
+        // Trigger the event in the middle of the first data bit
+        Cycle delay = rate() * 3 / 2;
+
+        // Schedule the event
+        events->scheduleSecRel(RXD_SLOT, delay, RXD_BIT);
     }
 }
 
 void
 UART::serveTxdEvent(EventID id)
 {
+    debug(SER_DEBUG, "serveTxdEvent(%d)\n", id);
+
     switch (id) {
 
         case TXD_BIT:
@@ -146,20 +179,20 @@ UART::serveTxdEvent(EventID id)
             // This event should not occurr if the shift register is empty
             assert(!shiftRegEmpty());
 
-            // Shift out the right-most bit
-            serialPort->setTXD(shiftReg & 1);
-            shiftReg >>= 1;
+            // Shift out bit from TXD line
+            serialPort->setTXD(transmitShiftReg & 1);
+            transmitShiftReg >>= 1;
 
             // Continue with the next bit if the shift register still contains data
-            if (shiftReg) {
+            if (transmitShiftReg) {
                 events->scheduleSecRel(TXD_SLOT, rate(), TXD_BIT);
                 return;
             }
 
             // Continue with the next packet if serdat has been filled in the meantime
-            if (serdat) {
+            if (transmitBuffer) {
                 debug(SER_DEBUG, "Transmission continues with packet %X\n", serper);
-                fillShiftRegister();
+                copyToTransmitShiftRegister();
                 return;
             }
 
@@ -179,13 +212,23 @@ UART::serveRxdEvent(EventID id)
 {
     debug(SER_DEBUG, "serveRxdEvent(%d)\n", id);
 
-    debug("Receiving bit: %d (recCnt = %d)\n", serialPort->getRXD(), recCnt);
+    bool rxd = serialPort->getRXD();
+    debug("Receiving bit %d: %d\n", recCnt, rxd);
 
-    // Schedule next event or abort
-    assert(recCnt > 0);
-    if (--recCnt > 0) {
-        events->scheduleSecRel(RXD_SLOT, rate(), RXD_BIT);
-    } else {
-        events->cancelSec(RXD_SLOT);
+    // Shift in bit from RXD line
+    WRITE_BIT(receiveShiftReg, recCnt++, rxd);
+
+    // Check if this was the last bit to receive
+    if (recCnt >= packetLength() + 2) {
+
+        // Copy shift register contents into the receive buffer
+        copyFromReceiveShiftRegister();
+
+        // Stop receiving if the last bit was a stop bit or continue
+        if (rxd) {
+            events->cancelSec(RXD_SLOT);
+        } else {
+            events->scheduleSecRel(RXD_SLOT, rate(), RXD_BIT);
+        }
     }
 }

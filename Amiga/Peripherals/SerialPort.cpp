@@ -55,14 +55,14 @@ SerialPort::getPin(int nr)
 
     bool result = !!GET_BIT(port, nr);
 
-    debug(SER_DEBUG, "getPin(%2d) = %d port = %X\n", nr, result, port);
+    debug(2, "getPin(%d) = %d port = %X\n", nr, result, port);
     return result;
 }
 
 void
 SerialPort::setPin(int nr, bool value)
 {
-    debug(SER_DEBUG, "setPin(%2d,%d)\n", nr, value);
+    debug(2, "setPin(%d,%d)\n", nr, value);
     assert(nr >= 1 && nr <= 25);
 
     // Only continue if the pin value changes

@@ -266,8 +266,8 @@ Denise::pokeBPLCON0(uint16_t value)
     // agnus->updateBitplaneDma();
     // agnus->switchBitplaneDmaOff();
 
-    // shiftReg[0] = 0xAAAA;
-    // shiftReg[1] = 0xCCCC;
+    // outputShiftReg[0] = 0xAAAA;
+    // outputShiftReg[1] = 0xCCCC;
 }
 
 void

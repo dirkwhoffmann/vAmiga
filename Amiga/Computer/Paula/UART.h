@@ -27,14 +27,19 @@ class UART : public HardwareComponent {
     // Variables
     //
 
-    // Serial data register
-    uint16_t serdat;
-
     // Port period and control register
     uint16_t serper;
 
-    // The serial shift register
-    uint16_t shiftReg;
+    // Input registers
+    uint16_t receiveBuffer;
+    uint16_t receiveShiftReg;
+
+    // Output registers
+    uint16_t transmitBuffer;
+    uint16_t transmitShiftReg;
+
+    // Overrun bit
+    bool ovrun;
 
     // Bit reception counter
     uint8_t recCnt;
@@ -98,10 +103,13 @@ private:
     int packetLength() { return GET_BIT(serper, 15) ? 9 : 8; }
 
     // Returns true if the shift register is empty
-    bool shiftRegEmpty() { return shiftReg == 0; }
+    bool shiftRegEmpty() { return transmitShiftReg == 0; }
 
-    // Fills the shift register and starts the transmission
-    void fillShiftRegister();
+    // Copies the contents of the transmit buffer to the transmit shift register
+    void copyToTransmitShiftRegister();
+
+    // Copies the contents of the receive shift register to the receive buffer
+    void copyFromReceiveShiftRegister();
 
 
     //
