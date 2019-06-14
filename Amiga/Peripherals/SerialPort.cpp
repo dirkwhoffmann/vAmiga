@@ -74,12 +74,15 @@ SerialPort::setPin(int nr, bool value)
     // Perform special actions
     switch (nr) {
 
-        case 3: // RXD
+        case 2: // TXD
 
             // Emulate the loopback cable (if connected)
             if (device == SPD_LOOPBACK) {
                 setRXD(value);
             }
+            break;
+
+        case 3: // RXD
 
             // Let the UART know about the change
             uart->rxdHasChanged(value);
@@ -93,5 +96,14 @@ SerialPort::setPin(int nr, bool value)
                 setDSR(value);
             }
             break;
+
+        case 20: // DTR
+
+            // Emulate the loopback cable (if connected)
+            if (device == SPD_LOOPBACK) {
+                setCD(value);
+            }
+            break;
+
     }
 }

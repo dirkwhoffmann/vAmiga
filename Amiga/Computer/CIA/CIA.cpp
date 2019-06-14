@@ -1486,11 +1486,18 @@ CIAB::portAexternal()
 void
 CIAB::updatePA()
 {
-    debug("updatePA()\n");
+    debug(CIA_DEBUG, "updatePA()\n");
 
-    PA = (portAinternal() & DDRA) | (portAexternal() & ~DDRA);
+    uint8_t internal = portAinternal() & DDRA;
 
-    debug("PA = %X\n", PA);
+    if (GET_BIT(DDRA, 6)) serialPort->setRTS(!GET_BIT(internal, 6));
+    if (GET_BIT(DDRA, 7)) serialPort->setDTR(!GET_BIT(internal, 7));
+
+    uint8_t external = portAexternal() & ~DDRA;
+    
+    PA = internal | external;
+
+    debug(1, "DDRA = %X PA = %X internal = %X\n", DDRA, PA, portAinternal());
 }
 
 //            -------

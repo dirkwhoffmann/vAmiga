@@ -172,6 +172,8 @@ UART::serveTxdEvent(EventID id)
 {
     debug(SER_DEBUG, "serveTxdEvent(%d)\n", id);
 
+    bool stop = false;
+
     switch (id) {
 
         case TXD_BIT:
@@ -180,26 +182,31 @@ UART::serveTxdEvent(EventID id)
             assert(!shiftRegEmpty());
 
             // Shift out bit from TXD line
+            debug(SER_DEBUG, "Transmitting bit %d\n", transmitShiftReg & 1);
             serialPort->setTXD(transmitShiftReg & 1);
             transmitShiftReg >>= 1;
 
-            // Continue with the next bit if the shift register still contains data
-            if (transmitShiftReg) {
-                events->scheduleSecRel(TXD_SLOT, rate(), TXD_BIT);
-                return;
+            // Check if the shift register is empty
+            if (!transmitShiftReg) {
+
+                // Check if there is a new data packet to send
+                if (transmitBuffer) {
+
+                    // Copy new packet into shift register
+                    debug(1, "Transmission continues with packet %X\n", transmitBuffer);
+                    copyToTransmitShiftRegister();
+
+                } else {
+
+                    // Abort the transmission
+                    debug(SER_DEBUG, "End of transmission\n");
+                    events->cancelSec(TXD_SLOT);
+                    break;
+                }
             }
 
-            // Continue with the next packet if serdat has been filled in the meantime
-            if (transmitBuffer) {
-                debug(SER_DEBUG, "Transmission continues with packet %X\n", serper);
-                copyToTransmitShiftRegister();
-                return;
-            }
-
-            // Terminate the transmission
-            debug(SER_DEBUG, "End of transmission\n");
-            events->cancelSec(TXD_SLOT);
-
+            // Schedule the next event
+            events->scheduleSecRel(TXD_SLOT, rate(), TXD_BIT);
             break;
 
         default:
@@ -213,7 +220,7 @@ UART::serveRxdEvent(EventID id)
     debug(SER_DEBUG, "serveRxdEvent(%d)\n", id);
 
     bool rxd = serialPort->getRXD();
-    debug("Receiving bit %d: %d\n", recCnt, rxd);
+    debug(SER_DEBUG, "Receiving bit %d: %d\n", recCnt, rxd);
 
     // Shift in bit from RXD line
     WRITE_BIT(receiveShiftReg, recCnt++, rxd);
@@ -223,12 +230,18 @@ UART::serveRxdEvent(EventID id)
 
         // Copy shift register contents into the receive buffer
         copyFromReceiveShiftRegister();
+        debug(1, "Received packet %X\n", receiveBuffer);
 
-        // Stop receiving if the last bit was a stop bit or continue
+        // Stop receiving if the last bit was a stop bit
         if (rxd) {
             events->cancelSec(RXD_SLOT);
+            return;
         } else {
-            events->scheduleSecRel(RXD_SLOT, rate(), RXD_BIT);
+            // Prepare for the next packet
+            recCnt = 0;
         }
     }
+
+    // Schedule the next reception event
+    events->scheduleSecRel(RXD_SLOT, rate(), RXD_BIT);
 }
