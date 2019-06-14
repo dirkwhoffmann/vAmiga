@@ -1486,10 +1486,11 @@ CIAB::portAexternal()
 void
 CIAB::updatePA()
 {
-    debug(CIA_DEBUG, "updatePA()\n");
+    // debug(CIA_DEBUG, "updatePA()\n");
 
     uint8_t internal = portAinternal() & DDRA;
 
+    // Drive bits that are configured as output
     if (GET_BIT(DDRA, 6)) serialPort->setRTS(!GET_BIT(internal, 6));
     if (GET_BIT(DDRA, 7)) serialPort->setDTR(!GET_BIT(internal, 7));
 
@@ -1497,7 +1498,7 @@ CIAB::updatePA()
     
     PA = internal | external;
 
-    debug(1, "DDRA = %X PA = %X internal = %X\n", DDRA, PA, portAinternal());
+    // debug(CIA_DEBUG, "DDRA = %X PA = %X internal = %X\n", DDRA, PA, portAinternal());
 }
 
 //            -------

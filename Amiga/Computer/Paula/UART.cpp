@@ -77,7 +77,7 @@ UART::peekSERDATR()
      * 08      STP / DB8  Stop bit if LONG, data bit if not.
      * 07..00  DB7 - DB0  Data bits
      */
-    uint16_t result = receiveShiftReg & 0x3FF;
+    uint16_t result = receiveBuffer & 0x3FF;
     WRITE_BIT(result, 15, ovrun);
     WRITE_BIT(result, 14, rbf);
     WRITE_BIT(result, 13, transmitBuffer == 0);
@@ -193,7 +193,7 @@ UART::serveTxdEvent(EventID id)
                 if (transmitBuffer) {
 
                     // Copy new packet into shift register
-                    debug(1, "Transmission continues with packet %X\n", transmitBuffer);
+                    debug(SER_DEBUG, "Transmission continues with packet %X\n", transmitBuffer);
                     copyToTransmitShiftRegister();
 
                 } else {
@@ -230,7 +230,7 @@ UART::serveRxdEvent(EventID id)
 
         // Copy shift register contents into the receive buffer
         copyFromReceiveShiftRegister();
-        debug(1, "Received packet %X\n", receiveBuffer);
+        debug(SER_DEBUG, "Received packet %X\n", receiveBuffer);
 
         // Stop receiving if the last bit was a stop bit
         if (rxd) {
