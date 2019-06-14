@@ -59,6 +59,9 @@ private:
 
 public:
 
+    // Returns the currently connected device
+    SerialPortDevice getDevice() { return device; }
+    
     // Connects or disconnects a device
     void connectDevice(SerialPortDevice device);
 

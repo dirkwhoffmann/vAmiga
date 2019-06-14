@@ -190,7 +190,8 @@ Amiga::getConfig()
     config.filterType = paula.audioUnit.getFilterType();
     config.exactBlitter = agnus.blitter.getExactEmulation();
     config.fifoBuffering = paula.diskController.getFifoBuffering();
-    
+    config.serialDevice = serialPort.getDevice();
+
     config.df0.connected = paula.diskController.isConnected(0);
     config.df0.type = df0.getType();
     config.df0.speed = df0.getSpeed();
@@ -329,6 +330,17 @@ Amiga::configure(ConfigOption option, long value)
 
             if (current.fifoBuffering == value) return true;
             paula.diskController.setFifoBuffering(value);
+            break;
+
+        case VA_SERIAL_DEVICE:
+
+            if (!isSerialPortDevice(value)) {
+                warn("Invalid serial port device: %d\n", value);
+                return false;
+            }
+
+            if (current.serialDevice == value) return true;
+            serialPort.connectDevice((SerialPortDevice)value);
             break;
 
         default: assert(false);

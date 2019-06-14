@@ -777,6 +777,9 @@ extension Keys {
 
     // Extensions
     static let realTimeClock      = "VAMIGARealTimeClockKey"
+
+    // Ports
+    static let serialDevice       = "VAMIGASerialDeviceKey"
 }
 
 extension Defaults {
@@ -804,6 +807,8 @@ extension Defaults {
         static let df3Speed          = 1
 
         static let realTimeClock     = false
+
+        static let serialDevice      = SPD_NONE
     }
     
     struct A1000 {
@@ -829,6 +834,8 @@ extension Defaults {
         static let df3Speed          = 1
 
         static let realTimeClock     = false
+
+        static let serialDevice      = SPD_NONE
     }
     
     struct A2000 {
@@ -854,6 +861,8 @@ extension Defaults {
         static let df3Speed          = 1
 
         static let realTimeClock     = true
+
+        static let serialDevice      = SPD_NONE
     }
 }
 
@@ -885,7 +894,9 @@ extension MyController {
             Keys.df3Type: defaultModel.df3Type.rawValue,
             Keys.df3Speed: defaultModel.df3Speed,
 
-            Keys.realTimeClock: defaultModel.realTimeClock
+            Keys.realTimeClock: defaultModel.realTimeClock,
+
+            Keys.serialDevice: defaultModel.serialDevice.rawValue
         ]
         
         let defaults = UserDefaults.standard
@@ -916,7 +927,9 @@ extension MyController {
                     Keys.df3Type,
                     Keys.df3Speed,
 
-                    Keys.realTimeClock ]
+                    Keys.realTimeClock,
+
+                    Keys.serialDevice ]
 
         for key in keys { defaults.removeObject(forKey: key) }
         
@@ -950,7 +963,8 @@ extension MyController {
         amiga.configureDrive(3, speed: defaults.integer(forKey: Keys.df3Speed))
 
         amiga.configureRealTimeClock(defaults.bool(forKey: Keys.realTimeClock))
-
+        track("VA_SERIAL_DEVICE")
+        amiga.configure(VA_SERIAL_DEVICE, value: defaults.integer(forKey: Keys.serialDevice))
         amiga.resume()
     }
 
@@ -981,6 +995,7 @@ extension MyController {
         defaults.set(config.df3.speed, forKey: Keys.df3Speed)
 
         defaults.set(config.realTimeClock, forKey: Keys.realTimeClock)
+        defaults.set(config.serialDevice, forKey: Keys.serialDevice)
     }
 }
 

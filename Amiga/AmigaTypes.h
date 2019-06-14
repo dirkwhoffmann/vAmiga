@@ -74,12 +74,13 @@ typedef enum : long
     VA_FILTER_TYPE,
     VA_EXACT_BLITTER,
     VA_FIFO_BUFFERING,
+    VA_SERIAL_DEVICE
 }
 ConfigOption;
 
 inline bool isConfigOption(long value)
 {
-    return value >= VA_AMIGA_MODEL && value <= VA_FIFO_BUFFERING;
+    return value >= VA_AMIGA_MODEL && value <= VA_SERIAL_DEVICE;
 }
 
 typedef enum
@@ -112,14 +113,15 @@ typedef struct
     AmigaModel model;
     bool realTimeClock;
     long layout;
-    DriveConfiguration df0;
-    DriveConfiguration df1;
-    DriveConfiguration df2;
-    DriveConfiguration df3;
     FilterActivation filterActivation;
     FilterType filterType;
     bool exactBlitter;
     bool fifoBuffering;
+    long serialDevice;
+    DriveConfiguration df0;
+    DriveConfiguration df1;
+    DriveConfiguration df2;
+    DriveConfiguration df3;
 }
 AmigaConfiguration;
 

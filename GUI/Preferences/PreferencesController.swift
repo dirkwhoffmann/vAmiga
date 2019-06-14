@@ -62,6 +62,9 @@ class PreferencesController: DialogController {
     @IBOutlet weak var hwDf3Type: NSPopUpButton!
     @IBOutlet weak var hwDf3Speed: NSPopUpButton!
 
+    // Ports
+    @IBOutlet weak var hwSerialDevice: NSPopUpButton!
+
     // Lock
     @IBOutlet weak var hwLockText: NSTextField!
     @IBOutlet weak var hwLockSubText: NSTextField!

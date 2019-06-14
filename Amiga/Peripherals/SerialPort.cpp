@@ -44,8 +44,12 @@ void
 SerialPort::connectDevice(SerialPortDevice device)
 {
     if (isSerialPortDevice(device)) {
+        debug("connectDevice(%d)\n");
         this->device = device;
+    } else {
+        assert(false); 
     }
+
 }
 
 bool

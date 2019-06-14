@@ -43,6 +43,9 @@ extension PreferencesController {
         hwDf2Speed.selectItem(withTag: Int(config.df2.speed))
         hwDf3Speed.selectItem(withTag: Int(config.df3.speed))
 
+        // Ports
+        hwSerialDevice.selectItem(withTag: Int(config.serialDevice))
+
         // Lock controls if emulator is powered on
         hwAmigaModelPopup.isEnabled = poweredOff
         hwRealTimeClock.isEnabled = poweredOff && config.model != AMIGA_2000
@@ -109,7 +112,13 @@ extension PreferencesController {
         amigaProxy?.configureDrive(nr, speed: sender.selectedTag())
         refresh()
     }
-    
+
+    @IBAction func hwSerialDeviceAction(_ sender: NSPopUpButton!) {
+
+        amigaProxy?.configure(VA_SERIAL_DEVICE, value: sender.selectedTag())
+        refresh()
+    }
+
     @IBAction func hwUnlockAction(_ sender: Any!) {
                 
         amigaProxy?.powerOff()

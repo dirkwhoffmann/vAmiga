@@ -20,7 +20,6 @@ Keyboard::Keyboard()
         
         { &state,           sizeof(state),           0 },
         { &handshake,       sizeof(handshake),       0 },
-        { &handshake,       sizeof(handshake),       0 },
         { &typeAheadBuffer, sizeof(typeAheadBuffer), BYTE_ARRAY },
         { &bufferIndex,     sizeof(bufferIndex),     0 },
     });
