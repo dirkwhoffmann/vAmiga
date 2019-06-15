@@ -625,4 +625,9 @@ extension MyController: NSMenuItemValidation {
         amiga.controlPort2.dump()
         amiga.resume()
     }
+    @IBAction func dumpSerialPortAction(_ sender: Any!) {
+        amiga.suspend()
+        amiga.serialPort.dump()
+        amiga.resume()
+    }
 }

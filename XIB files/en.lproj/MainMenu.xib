@@ -389,6 +389,12 @@
                                                             <action selector="dumpControlPort2Action:" target="-1" id="fLb-Ob-PLo"/>
                                                         </connections>
                                                     </menuItem>
+                                                    <menuItem title="Serial Port" id="7rp-tH-s2H">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="dumpSerialPortAction:" target="-1" id="Gs1-fL-bUK"/>
+                                                        </connections>
+                                                    </menuItem>
                                                 </items>
                                             </menu>
                                             <connections>

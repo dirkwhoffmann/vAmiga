@@ -38,6 +38,13 @@ SerialPort::_dump()
 {
     plainmsg("    device: %d\n", device);
     plainmsg("      port: %X\n", port);
+
+    /*
+    bool txd = getTXD();
+
+    debug("DEBUG INTERCEPTION: TXD is %d. Changing to %d\n", txd, !txd);
+    setTXD(!txd);
+    */
 }
 
 void
@@ -47,7 +54,7 @@ SerialPort::connectDevice(SerialPortDevice device)
         debug("connectDevice(%d)\n");
         this->device = device;
     } else {
-        assert(false); 
+        assert(false);
     }
 
 }

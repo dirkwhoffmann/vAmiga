@@ -93,7 +93,7 @@ UART::peekSERDATR()
 void
 UART::pokeSERDAT(uint16_t value)
 {
-    debug(SER_DEBUG, "pokeSERDAT(%X)\n", value);
+    debug(1, "pokeSERDAT(%X)\n", value);
 
     // Write value into the transmit buffer
     transmitBuffer = value & 0x3FF;
@@ -138,16 +138,33 @@ UART::copyToTransmitShiftRegister()
 void
 UART::copyFromReceiveShiftRegister()
 {
+    static int count = 0;
+
     debug(SER_DEBUG, "Copying %X into receive buffer\n", receiveShiftReg);
 
     receiveBuffer = receiveShiftReg;
     receiveShiftReg = 0;
 
-    plainmsg("%c", receiveBuffer & 0xFF);
+    plainmsg("receiveBuffer: %X ('%c')\n", receiveBuffer & 0xFF, receiveBuffer & 0xFF);
+
+    count++;
+    /*
+    if (count >= 10) {
+        if (count == 10) {
+            debug("DEBUG INTERCEPTION: Sending $1C\n");
+            receiveBuffer = 0x11C;
+            paula->pokeINTREQ(0x8800);
+            return;
+        }
+        debug("DEBUG INTERCEPTION: OMITTING\n");
+        return;
+    }
+    */
 
     // Update the overrun bit
     // Bit will be 1 if the RBF interrupt hasn't been acknowledged yet
     ovrun = GET_BIT(paula->intreq, 11);
+    if (ovrun) warn("********** OVERRUN BIT IS 1 **********\n");
 
     // Trigger the RBF interrupt (Read Buffer Full)
     debug(SER_DEBUG, "Triggering RBF interrupt\n");
