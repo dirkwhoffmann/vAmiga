@@ -63,8 +63,10 @@ typedef enum
     MSG_DRIVE_HEAD,
     MSG_DRIVE_HEAD_POLL,
     
-    
-    
+    // Ports
+    MSG_SER_IN,
+    MSG_SER_OUT,
+
     //
     // DEPRECATED C64 related messages ...
     //

@@ -115,10 +115,11 @@ UART::copyToTransmitShiftRegister()
 {
     debug(SER_DEBUG, "Copying %X into transmit shift register\n", transmitBuffer);
 
-    // plainmsg("%c", transmitBuffer & 0xFF);
-    
     assert(transmitShiftReg == 0);
     assert(transmitBuffer != 0);
+
+    // Inform the GUI about the outgoing data
+    amiga->putMessage(MSG_SER_OUT, transmitBuffer);
 
     // Move the contents of the transmit buffer into the shift register
     transmitShiftReg = transmitBuffer;
@@ -145,7 +146,10 @@ UART::copyFromReceiveShiftRegister()
     receiveBuffer = receiveShiftReg;
     receiveShiftReg = 0;
 
-    plainmsg("receiveBuffer: %X ('%c')\n", receiveBuffer & 0xFF, receiveBuffer & 0xFF);
+    // Inform the GUI about the incoming data
+    amiga->putMessage(MSG_SER_IN, receiveBuffer);
+
+    // plainmsg("receiveBuffer: %X ('%c')\n", receiveBuffer & 0xFF, receiveBuffer & 0xFF);
 
     count++;
     /*
@@ -164,7 +168,7 @@ UART::copyFromReceiveShiftRegister()
     // Update the overrun bit
     // Bit will be 1 if the RBF interrupt hasn't been acknowledged yet
     ovrun = GET_BIT(paula->intreq, 11);
-    if (ovrun) warn("********** OVERRUN BIT IS 1 **********\n");
+    if (ovrun) debug(SER_DEBUG, "OVERRUN BIT IS 1\n");
 
     // Trigger the RBF interrupt (Read Buffer Full)
     debug(SER_DEBUG, "Triggering RBF interrupt\n");

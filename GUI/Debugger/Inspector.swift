@@ -377,6 +377,10 @@ class Inspector: NSWindowController {
     @IBOutlet weak var dskFifo4: NSTextField!
     @IBOutlet weak var dskFifo5: NSTextField!
 
+    // Debug Panel (Ports)
+    @IBOutlet weak var poSerialIn: NSTextView!
+    @IBOutlet weak var poSerialOut: NSTextView!
+
     // Debug Panel (Events)
     @IBOutlet weak var evMasterClock: NSTextField!
     @IBOutlet weak var evInCpuCycles: NSTextField!
@@ -398,7 +402,9 @@ class Inspector: NSWindowController {
     var selectedSprite: Int { return sprSelector.indexOfSelectedItem }
     
     var timer: Timer?
-    
+
+    var refreshCounter = 0
+
     // Factory method
     static func make() -> Inspector? {
         
@@ -421,6 +427,17 @@ class Inspector: NSWindowController {
         
         // Configure the event tables
         evPrimTableView.primary = true
+
+        /*
+        let font = NSFont.monospacedDigitSystemFont(ofSize: 15, weight: .black)
+        let attr = [NSAttributedString.Key.font: font]
+        poSerialIn.typingAttributes = attr
+        poSerialOut.typingAttributes = attr
+        poSerialIn.font = font
+        poSerialOut.font = font
+        poSerialIn.textStorage!.font = font
+        poSerialOut.textStorage!.font = font
+        */
     }
     
     override func showWindow(_ sender: Any?) {
@@ -459,36 +476,22 @@ class Inspector: NSWindowController {
         if window?.isVisible == false { return }
         
         if let id = debugPanel.selectedTabViewItem?.label {
-            
+
             switch id {
 
-            case "CPU":
-                refreshCPU(everything: everything)
-
-            case "CIA":
-                refreshCIA(everything: everything)
-                
-            case "Memory":
-                refreshMemory(everything: everything)
-
-            case "Agnus":
-                refreshAgnus(everything: everything)
-
-            case "Copper":
-                refreshCopper(everything: everything)
-
-            case "Denise":
-                refreshDenise(everything: everything)
-                
-            case "Paula":
-                refreshPaula(everything: everything)
-
-            case "Events":
-                refreshEvents(everything: everything)
-                
-            default:
-                break
+            case "CPU": refreshCPU(everything: everything)
+            case "CIA": refreshCIA(everything: everything)
+            case "Memory": refreshMemory(everything: everything)
+            case "Agnus": refreshAgnus(everything: everything)
+            case "Copper": refreshCopper(everything: everything)
+            case "Denise": refreshDenise(everything: everything)
+            case "Paula": refreshPaula(everything: everything)
+            case "Ports": refreshPorts(everything: everything)
+            case "Events": refreshEvents(everything: everything)
+            default: break
             }
+
+            refreshCounter += 1
         }
     }
 }

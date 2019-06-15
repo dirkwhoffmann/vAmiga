@@ -73,6 +73,10 @@ class MyController: NSWindowController, MessageReceiver {
     // Drive that receives drag and drop inputs
     var dragAndDropDrive: DriveProxy?
 
+    // Serial input and output
+    var serialIn = ""
+    var serialOut = ""
+
     //
     // Preferences items
     //
@@ -609,16 +613,15 @@ extension MyController {
             myAppDelegate.inspector?.refresh(everything: true)
     
         case MSG_POWER_ON:
-            
-            // track("Power on")
-            // metal.blendIn()
+
+            serialIn = ""
+            serialOut = ""
             metal.zoom()
             toolbar.validateVisibleItems()
             myAppDelegate.inspector?.refresh(everything: true)
             
         case MSG_POWER_OFF:
-            
-            // track("Power off")
+
             metal.blendOut()
             toolbar.validateVisibleItems()
             myAppDelegate.inspector?.refresh(everything: true)
@@ -734,6 +737,14 @@ extension MyController {
             if driveNoise && !driveNoiseNoPoll {
                 playSound(name: "drive_click", volume: 1.0)
             }
+
+        case MSG_SER_IN:
+            //myAppDelegate.inspector?.poSerialIn.append(serdat: msg.data)
+            serialIn += String(UnicodeScalar(msg.data & 0xFF)!)
+
+        case MSG_SER_OUT:
+            // myAppDelegate.inspector?.poSerialOut.append(serdat: msg.data)
+            serialOut += String(UnicodeScalar.init(msg.data & 0xFF)!)
 
         // DEPRECATED MESSAGES BELOW...
             
