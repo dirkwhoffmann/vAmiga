@@ -192,5 +192,18 @@ extension Inspector {
         audioBufferOverflows.intValue = Int32(paula.bufferOverflows())
         audioWaveformView.update()
     }
-    
+
+    @IBAction func paulaINTENAAction(_ sender: NSButton!) {
+
+        let value = sender.state == .on
+        amigaProxy?.paula.setINTENA(sender.tag, value: value)
+        refreshPaula(everything: false)
+    }
+
+    @IBAction func paulaINTREQAction(_ sender: NSButton!) {
+
+        let value = sender.state == .on
+        amigaProxy?.paula.setINTREQ(sender.tag, value: value)
+        refreshPaula(everything: false)
+    }
 }

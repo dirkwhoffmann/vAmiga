@@ -568,12 +568,15 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->paula->audioUnit.dump();
 }
-/*
-- (SIDInfo) getInfo
+- (void) setINTENA:(NSInteger)bit value:(BOOL)value
 {
-    return wrapper->paula->audioUnit.getInfo();
+    wrapper->paula->debugSetINTENA(bit, value);
 }
-*/
+- (void) setINTREQ:(NSInteger)bit value:(BOOL)value
+{
+    wrapper->paula->debugSetINTREQ(bit, value);
+
+}
 - (uint32_t) sampleRate
 {
     return wrapper->paula->audioUnit.getSampleRate();

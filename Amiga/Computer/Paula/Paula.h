@@ -16,7 +16,7 @@
 
 class Paula : public HardwareComponent {
     
-    private:
+private:
     
     // Information shown in the GUI inspector panel
     PaulaInfo info;
@@ -26,11 +26,11 @@ class Paula : public HardwareComponent {
     // Sub components
     //
     
-    public:
+public:
 
     AudioUnit audioUnit;
     DiskController diskController;
-    UART uart; 
+    UART uart;
     
     
     //
@@ -67,7 +67,7 @@ class Paula : public HardwareComponent {
     // Constructing and destructing
     //
     
-    public:
+public:
     
     Paula();
     
@@ -76,13 +76,13 @@ class Paula : public HardwareComponent {
     // Methods from HardwareComponent
     //
     
-    private:
+private:
     
     void _powerOn() override;
     void _powerOff() override;
     void _reset() override;
     void _ping() override;
-    void _inspect() override; 
+    void _inspect() override;
     void _dump() override;
     void _setWarp(bool value) override;
     
@@ -91,7 +91,7 @@ class Paula : public HardwareComponent {
     // Accessing properties
     //
     
-    public:
+public:
     
     // Returns the latest internal state recorded by inspect()
     PaulaInfo getInfo();
@@ -101,7 +101,7 @@ class Paula : public HardwareComponent {
     // Accessing registers
     //
     
-    public:
+public:
     
     // OCS register 0x010 (r)
     uint16_t peekADKCONR() { return adkcon; }
@@ -132,14 +132,14 @@ class Paula : public HardwareComponent {
     // Managing events
     //
     
-    public:
+public:
     
     
     //
     // Managing interrupts
     //
     
-    public:
+public:
     
     // Changes the value of INTREQ.
     void setINTREQ(uint16_t value);
@@ -147,14 +147,26 @@ class Paula : public HardwareComponent {
     // Changes the value of INTENA.
     void setINTENA(uint16_t value);
     
-    private:
+private:
     
     // Computes the interrupt level of a pending interrupt.
     int interruptLevel();
     
     // Checks intena and intreq and triggers an interrupt (if pending).
     void checkInterrupt();
-    
+
+
+    //
+    // Debugging the component
+    //
+
+public:
+
+    // Called by the GUI to manually change the INTENA register
+    void debugSetINTENA(unsigned bit, bool value);
+
+    // Called by the GUI to manually change the INTREQ register
+    void debugSetINTREQ(unsigned bit, bool value);
 };
 
 #endif

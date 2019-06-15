@@ -115,7 +115,7 @@ UART::copyToTransmitShiftRegister()
 {
     debug(SER_DEBUG, "Copying %X into transmit shift register\n", transmitBuffer);
 
-    plainmsg("%c", transmitBuffer & 0xFF);
+    // plainmsg("%c", transmitBuffer & 0xFF);
     
     assert(transmitShiftReg == 0);
     assert(transmitBuffer != 0);
@@ -142,6 +142,8 @@ UART::copyFromReceiveShiftRegister()
 
     receiveBuffer = receiveShiftReg;
     receiveShiftReg = 0;
+
+    plainmsg("%c", receiveBuffer & 0xFF);
 
     // Update the overrun bit
     // Bit will be 1 if the RBF interrupt hasn't been acknowledged yet

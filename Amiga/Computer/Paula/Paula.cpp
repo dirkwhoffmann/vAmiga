@@ -187,7 +187,7 @@ void
 Paula::checkInterrupt()
 {
     int level = interruptLevel();
-    
+
     /*
     if (level) {
         uint16_t mask = intena & intreq;
@@ -210,6 +210,33 @@ Paula::checkInterrupt()
         // debug("*** SETTING IRQ LEVEL TO 0\n");
     }
     */
-    
+
     m68k_set_irq(level);
 }
+
+void
+Paula::debugSetINTENA(unsigned bit, bool value)
+{
+    assert(bit <= 14);
+
+    debug("debugSetINTENA(%d, %d)\n", bit, value);
+
+    amiga->suspend();
+    setINTENA((value ? 0x8000 : 0) | (1 << bit));
+    inspect();
+    amiga->resume();
+}
+
+void
+Paula::debugSetINTREQ(unsigned bit, bool value)
+{
+    assert(bit <= 14);
+
+    debug("debugSetINTREQ(%d, %d)\n", bit, value);
+
+    amiga->suspend();
+    setINTREQ((value ? 0x8000 : 0) | (1 << bit));
+    inspect();
+    amiga->resume();
+}
+
