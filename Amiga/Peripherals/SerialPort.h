@@ -12,6 +12,15 @@
 
 #include "HardwareComponent.h"
 
+#define TXD_MASK (1 << 2)
+#define RXD_MASK (1 << 3)
+#define RTS_MASK (1 << 4)
+#define CTS_MASK (1 << 5)
+#define DSR_MASK (1 << 6)
+#define CD_MASK (1 << 8)
+#define DTR_MASK (1 << 20)
+#define RI_MASK (1 << 22)
+
 class SerialPort : public HardwareComponent {
 
     // References (for quickly accessing other components)
@@ -105,6 +114,10 @@ public:
     void setDSR(bool value) { setPin(6, value); }
     void setCD(bool value) { setPin(8, value); }
     void setDTR(bool value) { setPin(20, value); }
+
+private:
+
+    void setPort(uint32_t mask, bool value);
 };
 
 #endif

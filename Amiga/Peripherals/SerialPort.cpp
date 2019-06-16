@@ -98,9 +98,15 @@ SerialPort::setPin(int nr, bool value)
     debug(2, "setPin(%d,%d)\n", nr, value);
     assert(nr >= 1 && nr <= 25);
 
-    // Only continue if the pin value changes
-    if (GET_BIT(port, nr) == value) return;
+    setPort(1 << nr, value);
 
+    /*
+    if (GET_BIT(port, nr) != value) {
+        setPort(1 << nr, value);
+    }
+    */
+
+    /*
     // Set the new pin value
     WRITE_BIT(port, nr, value);
 
@@ -137,6 +143,36 @@ SerialPort::setPin(int nr, bool value)
                 setCD(value);
             }
             break;
-
     }
+    */
 }
+
+void
+SerialPort::setPort(uint32_t mask, bool value)
+{
+    uint32_t oldPort = port;
+
+    /* Emulate a loopback cable if connected
+     *
+     *     Connected pins: A: 2 - 3       (TXD - RXD)
+     *                     B: 4 - 5 - 6   (RTS - CTS - DSR)
+     *                     C: 8 - 20 - 22 (CD - DTR - RI)
+     */
+    if (device == SPD_LOOPBACK) {
+
+        uint32_t maskA = TXD_MASK | RXD_MASK;
+        uint32_t maskB = RTS_MASK | CTS_MASK | DSR_MASK;
+        uint32_t maskC = CD_MASK | DTR_MASK | RI_MASK;
+
+        if (mask & maskA) mask |= maskA;
+        if (mask & maskB) mask |= maskB;
+        if (mask & maskC) mask |= maskC;
+    }
+
+    // Change the port pins
+    if (value) port |= mask; else port &= ~mask;
+
+    // Let the UART know if RXD has changed
+    if ((oldPort ^ port) & RXD_MASK) uart->rxdHasChanged(value);
+}
+
