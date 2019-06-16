@@ -53,6 +53,16 @@ UART::_reset()
 }
 
 void
+UART::_inspect()
+{
+    pthread_mutex_lock(&lock);
+
+    // info.xxx = xxx;
+
+    pthread_mutex_unlock(&lock);
+}
+
+void
 UART::_dump()
 {
     plainmsg("   serper: %X\n", serper);

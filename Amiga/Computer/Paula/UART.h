@@ -62,6 +62,7 @@ private:
     void _powerOn() override;
     void _powerOff() override;
     void _reset() override;
+    void _inspect() override;
     void _dump() override;
 
     //

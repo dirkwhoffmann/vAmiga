@@ -34,6 +34,16 @@ SerialPort::_powerOn()
 }
 
 void
+SerialPort::_inspect()
+{
+    pthread_mutex_lock(&lock);
+
+    // info.xxx = xxx;
+
+    pthread_mutex_unlock(&lock);
+}
+
+void
 SerialPort::_dump()
 {
     plainmsg("    device: %d\n", device);

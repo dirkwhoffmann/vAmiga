@@ -12,6 +12,10 @@
 #ifndef _EVENT_T_INC
 #define _EVENT_T_INC
 
+//
+// Enumerations
+//
+
 typedef enum : long
 {
     //
@@ -174,5 +178,41 @@ static inline bool isRasEvent(EventID id) { return id < RAS_EVENT_COUNT; }
 // Inspection interval in seconds (interval between INS_xxx events)
 static const double inspectionInterval = 0.1;
 
+
+//
+// Structures
+//
+
+typedef struct
+{
+    const char *slotName;
+    const char *eventName;
+    long eventId;
+    Cycle trigger;
+    Cycle triggerRel;
+
+    // The trigger cycle translated to a beam position.
+    long vpos;
+    long hpos;
+
+    // Indicates if (vpos, hpos) is a position inside the current frame.
+    bool currentFrame;
+}
+EventSlotInfo;
+
+typedef struct
+{
+    Cycle masterClock;
+    Cycle dmaClock;
+    Cycle ciaAClock;
+    Cycle ciaBClock;
+    long frame;
+    long vpos;
+    long hpos;
+
+    EventSlotInfo primary[PRIM_SLOT_COUNT];
+    EventSlotInfo secondary[SEC_SLOT_COUNT];
+}
+EventHandlerInfo;
 
 #endif

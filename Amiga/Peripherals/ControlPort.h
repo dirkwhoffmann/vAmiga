@@ -34,6 +34,16 @@ private:
 public:
     
     ControlPort(int nr);
+
+
+    //
+    // Methods from HardwareComponent
+    //
+
+private:
+
+    void _inspect() override;
+    void _dump() override;
     
 
     //

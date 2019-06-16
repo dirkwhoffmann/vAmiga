@@ -12,6 +12,29 @@
 #ifndef _DENISE_T_INC
 #define _DENISE_T_INC
 
+//
+// Enumerations
+//
+
+typedef enum : long
+{
+    COLOR_PALETTE = 0,
+    BLACK_WHITE_PALETTE,
+    PAPER_WHITE_PALETTE,
+    GREEN_PALETTE,
+    AMBER_PALETTE,
+    SEPIA_PALETTE
+}
+Palette;
+
+inline bool isPalette(Palette model) {
+    return model >= COLOR_PALETTE && model <= SEPIA_PALETTE;
+}
+
+//
+// Structures
+//
+
 typedef struct
 {
     int32_t *data;

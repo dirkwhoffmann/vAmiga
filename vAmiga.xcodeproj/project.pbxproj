@@ -207,6 +207,10 @@
 		504F9654220ACFE0005F8AB7 /* Breakpoint.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Breakpoint.cpp; sourceTree = "<group>"; };
 		504F9655220ACFE0005F8AB7 /* Breakpoint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Breakpoint.h; sourceTree = "<group>"; };
 		504F9657220B2CEE005F8AB7 /* BreakTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakTableView.swift; sourceTree = "<group>"; };
+		5051922722B61C1B0012C4BB /* FileTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FileTypes.h; sourceTree = "<group>"; };
+		5051922822B61C8A0012C4BB /* CPUTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPUTypes.h; sourceTree = "<group>"; };
+		5051922922B61CEC0012C4BB /* CIATypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CIATypes.h; sourceTree = "<group>"; };
+		5051922A22B61DAA0012C4BB /* MemoryTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MemoryTypes.h; sourceTree = "<group>"; };
 		505554AA2264C47600CB07E0 /* Mouse.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Mouse.cpp; sourceTree = "<group>"; };
 		505554AB2264C47600CB07E0 /* Mouse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Mouse.h; sourceTree = "<group>"; };
 		505A214E22869FF10016EA21 /* AudioFilter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AudioFilter.cpp; sourceTree = "<group>"; };
@@ -457,6 +461,7 @@
 		508E7F962206CDC600F7D88C /* CPU */ = {
 			isa = PBXGroup;
 			children = (
+				5051922822B61C8A0012C4BB /* CPUTypes.h */,
 				508E7F942206CDBD00F7D88C /* CPU.h */,
 				508E7F932206CDBD00F7D88C /* CPU.cpp */,
 				50B0DD1D220B5CEF00D6618A /* BreakpointManager.h */,
@@ -525,6 +530,7 @@
 		508FDF5621EA1FBC0043D0E9 /* CIA */ = {
 			isa = PBXGroup;
 			children = (
+				5051922922B61CEC0012C4BB /* CIATypes.h */,
 				508FDF5721EA1FBC0043D0E9 /* CIA.h */,
 				508FDF5C21EA1FBC0043D0E9 /* CIA.cpp */,
 				508FDF5821EA1FBC0043D0E9 /* TOD.h */,
@@ -659,6 +665,7 @@
 		508FE06621EA31E50043D0E9 /* FileTypes */ = {
 			isa = PBXGroup;
 			children = (
+				5051922722B61C1B0012C4BB /* FileTypes.h */,
 				508FE06421EA318D0043D0E9 /* AmigaFile.h */,
 				508FE06321EA318D0043D0E9 /* AmigaFile.cpp */,
 				509F7F1921EDDF4F00A530E4 /* BootRom.h */,
@@ -754,6 +761,7 @@
 				501E715122677BFF0070B17D /* EventHandlerTypes.h */,
 				5085FE5621FB3BAE009753EF /* EventHandler.h */,
 				5085FE5521FB3BAE009753EF /* EventHandler.cpp */,
+				5051922A22B61DAA0012C4BB /* MemoryTypes.h */,
 				5064851021EC7A1700FC4AC3 /* Memory.h */,
 				5064850F21EC7A1700FC4AC3 /* Memory.cpp */,
 				501B821C2262FFB200042871 /* RTC.h */,

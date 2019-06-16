@@ -18,6 +18,17 @@
 
 typedef enum : long
 {
+    SPD_NONE,
+    SPD_LOOPBACK
+}
+SerialPortDevice;
+
+inline bool isSerialPortDevice(long value) {
+    return value >= SPD_NONE && value <= SPD_LOOPBACK;
+}
+
+typedef enum : long
+{
     CPD_NONE,
     CPD_MOUSE,
     CPD_JOYSTICK
@@ -28,15 +39,28 @@ inline bool isControlPortDevice(long value) {
     return value >= CPD_NONE && value <= CPD_JOYSTICK;
 }
 
-typedef enum : long
+typedef enum
 {
-    SPD_NONE,
-    SPD_LOOPBACK
+    JOYSTICK_UP,
+    JOYSTICK_DOWN,
+    JOYSTICK_LEFT,
+    JOYSTICK_RIGHT,
+    JOYSTICK_FIRE
 }
-SerialPortDevice;
+JoystickDirection;
 
-inline bool isSerialPortDevice(long value) {
-    return value >= SPD_NONE && value <= SPD_LOOPBACK;
+typedef enum
+{
+    PULL_UP,
+    PULL_DOWN,
+    PULL_LEFT,
+    PULL_RIGHT,
+    PRESS_FIRE,
+    RELEASE_X,
+    RELEASE_Y,
+    RELEASE_XY,
+    RELEASE_FIRE
 }
+JoystickEvent;
 
 #endif

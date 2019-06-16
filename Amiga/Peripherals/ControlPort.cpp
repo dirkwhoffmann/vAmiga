@@ -17,6 +17,24 @@ ControlPort::ControlPort(int nr)
     setDescription(nr == 1 ? "ControlPort1" : "ControlPort2");
 }
 
+void
+ControlPort::_inspect()
+{
+    pthread_mutex_lock(&lock);
+
+    // info.xxx = xxx;
+
+    pthread_mutex_unlock(&lock);
+}
+
+void
+ControlPort::_dump()
+{
+    plainmsg("         device: %d\n", device);
+    plainmsg("  mouseCounterX: %d\n", mouseCounterX);
+    plainmsg("  mouseCounterY: %d\n", mouseCounterY);
+}
+
 uint16_t
 ControlPort::potgor()
 {
