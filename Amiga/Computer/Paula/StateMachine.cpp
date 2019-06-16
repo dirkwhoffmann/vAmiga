@@ -159,35 +159,34 @@ StateMachine::execute(DMACycle cycles)
             // Decrease the period counter
             percount(cycles);
 
-            // Check if the period counter underflows
-            if (perfin()) {
+            // Only continue if the period counter did underflow
+            if (audper > 1) break;
 
-                // Reload the period counter
-                percntrld();
+            // Reload the period counter
+            audper += audperLatch; 
 
-                // ??? Can't find this in the state machine (from WinFellow?)
-                audvol = audvolLatch;
+            // ??? Can't find this in the state machine (from WinFellow?)
+            audvol = audvolLatch;
 
-                // Put out the low byte
-                auddat = LO_BYTE(auddatLatch);
+            // Put out the low byte
+            auddat = LO_BYTE(auddatLatch);
 
-                // Read the next two samples from memory
-                auddatLatch = agnus->doAudioDMA(nr);
+            // Read the next two samples from memory
+            auddatLatch = agnus->doAudioDMA(nr);
 
-                // Decrease the length counter
-                if (audlen > 1) {
-                    audlen--;
-                } else {
-                    audlen = audlenLatch;
-                    agnus->audlc[nr] = audlcLatch;
+            // Decrease the length counter
+            if (audlen > 1) {
+                audlen--;
+            } else {
+                audlen = audlenLatch;
+                agnus->audlc[nr] = audlcLatch;
 
-                    // Trigger Audio interrupt
-                    paula->pokeINTREQ(0x8000 | (0x80 << nr));
-                }
-
-                // Switch to state 2
-                state = 0b010;
+                // Trigger Audio interrupt
+                paula->pokeINTREQ(0x8000 | (0x80 << nr));
             }
+
+            // Switch to state 2
+            state = 0b010;
 
             /* "As long as the interrupt is cleared by the processor in time,
              *  the machine remains in the main loop. Otherwise, it enters the
