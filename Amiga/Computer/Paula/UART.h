@@ -14,14 +14,13 @@
 
 class UART : public HardwareComponent {
 
-    //
     // References (for quickly accessing other components)
-    //
-
     class EventHandler *events;
     class Paula *paula;
     class SerialPort *serialPort;
 
+    // Information shown in the GUI inspector panel
+    UARTInfo info;
     
     //
     // Variables
@@ -65,20 +64,16 @@ private:
     void _inspect() override;
     void _dump() override;
 
+
     //
-    // Accessing UART interface pins
+    // Reading the internal state
     //
 
-    /*
-    bool getTXD();
-    bool setRXD();
+public:
 
-    bool getDTR();
-    bool getRTS();
-    bool getCD();
-    bool getCTS();
-    bool getDSR();
-    */
+    // Returns the latest internal state recorded by inspect()
+    UARTInfo getInfo();
+
 
     //
     // Accessing registers

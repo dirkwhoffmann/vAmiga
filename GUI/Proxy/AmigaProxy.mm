@@ -558,6 +558,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->paula->diskController.getInfo();
 }
+- (UARTInfo) getUARTInfo
+{
+    return wrapper->paula->uart.getInfo();
+}
 
 
 //
@@ -676,6 +680,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->port->dump();
 }
+- (ControlPortInfo) getInfo
+{
+    return wrapper->port->getInfo();
+}
 - (void) connectDevice:(ControlPortDevice)value
 {
     wrapper->port->connectDevice(value);
@@ -702,6 +710,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 - (void) dump
 {
     wrapper->port->dump();
+}
+- (SerialPortInfo) getInfo
+{
+    return wrapper->port->getInfo();
 }
 - (void) connectDevice:(SerialPortDevice)value
 {

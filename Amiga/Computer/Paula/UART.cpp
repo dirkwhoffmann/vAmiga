@@ -57,7 +57,10 @@ UART::_inspect()
 {
     pthread_mutex_lock(&lock);
 
-    // info.xxx = xxx;
+    info.receiveBuffer = receiveBuffer;
+    info.receiveShiftReg = receiveShiftReg;
+    info.transmitBuffer = transmitBuffer;
+    info.transmitShiftReg = transmitShiftReg;
 
     pthread_mutex_unlock(&lock);
 }
@@ -66,6 +69,18 @@ void
 UART::_dump()
 {
     plainmsg("   serper: %X\n", serper);
+}
+
+UARTInfo
+UART::getInfo()
+{
+    UARTInfo result;
+
+    pthread_mutex_lock(&lock);
+    result = info;
+    pthread_mutex_unlock(&lock);
+
+    return result;
 }
 
 uint16_t

@@ -15,12 +15,47 @@ extension Inspector {
 
     func refreshPorts(everything: Bool) {
 
-        guard let controller = myController else { return }
+        guard
+            let controller = myController,
+            let port1Info = amigaProxy?.controlPort1.getInfo(),
+            let port2Info = amigaProxy?.controlPort2.getInfo(),
+            let serialInfo = amigaProxy?.serialPort.getInfo(),
+            let uartInfo = amigaProxy?.paula.getUARTInfo()
+            else { return }
 
         if everything {
 
         }
 
+        // Control port 1
+        po0M0V.state = port1Info.m0v ? .on : .off
+        po0M0H.state = port1Info.m0h ? .on : .off
+        po0M1V.state = port1Info.m1v ? .on : .off
+        po0M1H.state = port1Info.m1h ? .on : .off
+        po0POY.integerValue = Int(port1Info.poty)
+        po0POX.integerValue = Int(port1Info.potx)
+
+        // Control port 2
+        po1M0V.state = port2Info.m0v ? .on : .off
+        po1M0H.state = port2Info.m0h ? .on : .off
+        po1M1V.state = port2Info.m1v ? .on : .off
+        po1M1H.state = port2Info.m1h ? .on : .off
+        po1POY.integerValue = Int(port2Info.poty)
+        po1POX.integerValue = Int(port2Info.potx)
+
+        // Serial port
+        poTXD.state = serialInfo.txd ? .on : .off
+        poRXD.state = serialInfo.rxd ? .on : .off
+        poCTS.state = serialInfo.cts ? .on : .off
+        poDSR.state = serialInfo.dsr ? .on : .off
+        poCD.state = serialInfo.cd ? .on : .off
+        poDTR.state = serialInfo.dtr ? .on : .off
+        poRecShift.integerValue = Int(uartInfo.receiveShiftReg)
+        poRecBuffer.integerValue = Int(uartInfo.receiveBuffer)
+        poTransShift.integerValue = Int(uartInfo.transmitShiftReg)
+        poTransBuffer.integerValue = Int(uartInfo.transmitBuffer)
+
+        // Logging windows
         if refreshCounter % 2 == 0 {
 
             let serialInSize = controller.serialIn.count

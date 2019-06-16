@@ -14,12 +14,12 @@
 
 class SerialPort : public HardwareComponent {
 
-    //
     // References (for quickly accessing other components)
-    //
-
     class EventHandler *events;
     class UART *uart;
+
+    // Information shown in the GUI inspector panel
+    SerialPortInfo info;
 
 
     //
@@ -52,6 +52,16 @@ private:
     void _powerOn() override;
     void _inspect() override;
     void _dump() override;
+
+
+    //
+    // Reading the internal state
+    //
+
+public:
+
+    // Returns the latest internal state recorded by inspect()
+    SerialPortInfo getInfo();
 
 
     //

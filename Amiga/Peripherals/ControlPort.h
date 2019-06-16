@@ -14,8 +14,9 @@
 
 class ControlPort : public HardwareComponent {
 
-private:
-    
+    // Information shown in the GUI inspector panel
+    ControlPortInfo info;
+
     // Represented control port (1 or 2)
     int nr;
     
@@ -45,6 +46,15 @@ private:
     void _inspect() override;
     void _dump() override;
     
+    //
+    // Reading the internal state
+    //
+
+public:
+
+    // Returns the latest internal state recorded by inspect()
+    ControlPortInfo getInfo();
+
 
     //
     // Managing registers

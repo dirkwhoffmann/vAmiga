@@ -63,4 +63,33 @@ typedef enum
 }
 JoystickEvent;
 
+//
+// Structures
+//
+
+typedef struct
+{
+    bool m0v;
+    bool m0h;
+    bool m1v;
+    bool m1h;
+    uint16_t potx;
+    uint16_t poty;
+}
+ControlPortInfo;
+
+typedef struct
+{
+    uint32_t port;
+
+    bool txd;
+    bool rxd;
+    bool rts;
+    bool cts;
+    bool dsr;
+    bool cd;
+    bool dtr;
+}
+SerialPortInfo;
+
 #endif

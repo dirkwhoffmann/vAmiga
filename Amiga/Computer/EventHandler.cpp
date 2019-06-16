@@ -812,6 +812,7 @@ EventHandler::serveINSEvent()
         case INS_DENISE: denise->inspect(); break;
         case INS_PORTS:
             amiga->serialPort.inspect();
+            amiga->paula.uart.inspect();
             amiga->controlPort1.inspect();
             amiga->controlPort2.inspect();
             break;

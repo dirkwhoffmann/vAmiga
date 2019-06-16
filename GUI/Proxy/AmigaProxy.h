@@ -381,6 +381,7 @@ struct AmigaFileWrapper;
 - (PaulaInfo) getInfo;
 - (AudioInfo) getAudioInfo;
 - (DiskControllerInfo) getDiskControllerInfo;
+- (UARTInfo) getUARTInfo;
 
 - (void) setINTENA:(NSInteger)bit value:(BOOL)value;
 - (void) setINTREQ:(NSInteger)bit value:(BOOL)value;
@@ -417,6 +418,7 @@ struct AmigaFileWrapper;
 }
 
 - (void) dump;
+- (ControlPortInfo) getInfo;
 - (void) connectDevice:(ControlPortDevice)value;
 
 @end
@@ -432,6 +434,7 @@ struct AmigaFileWrapper;
 }
 
 - (void) dump;
+- (SerialPortInfo) getInfo;
 - (void) connectDevice:(SerialPortDevice)value;
 
 @end

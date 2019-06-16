@@ -378,6 +378,32 @@ class Inspector: NSWindowController {
     @IBOutlet weak var dskFifo5: NSTextField!
 
     // Debug Panel (Ports)
+    @IBOutlet weak var po0M0V: NSButton!
+    @IBOutlet weak var po0M0H: NSButton!
+    @IBOutlet weak var po0M1V: NSButton!
+    @IBOutlet weak var po0M1H: NSButton!
+    @IBOutlet weak var po0POY: NSTextField!
+    @IBOutlet weak var po0POX: NSTextField!
+
+    @IBOutlet weak var po1M0V: NSButton!
+    @IBOutlet weak var po1M0H: NSButton!
+    @IBOutlet weak var po1M1V: NSButton!
+    @IBOutlet weak var po1M1H: NSButton!
+    @IBOutlet weak var po1POY: NSTextField!
+    @IBOutlet weak var po1POX: NSTextField!
+
+    @IBOutlet weak var poTXD: NSButton!
+    @IBOutlet weak var poRXD: NSButton!
+    @IBOutlet weak var poCTS: NSButton!
+    @IBOutlet weak var poDSR: NSButton!
+    @IBOutlet weak var poCD: NSButton!
+    @IBOutlet weak var poDTR: NSButton!
+
+    @IBOutlet weak var poRecShift: NSTextField!
+    @IBOutlet weak var poRecBuffer: NSTextField!
+    @IBOutlet weak var poTransShift: NSTextField!
+    @IBOutlet weak var poTransBuffer: NSTextField!
+
     @IBOutlet weak var poSerialIn: NSTextView!
     @IBOutlet weak var poSerialOut: NSTextView!
 

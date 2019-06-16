@@ -22,7 +22,22 @@ ControlPort::_inspect()
 {
     pthread_mutex_lock(&lock);
 
-    // info.xxx = xxx;
+    /* The port pin values are not stored in plain text. We can easily
+     * reverse-engineer them out of the JOYDAT register value though.
+     */
+    uint16_t dat = joydat();
+    bool x0 = !!GET_BIT(dat, 0);
+    bool x1 = !!GET_BIT(dat, 1);
+    bool y0 = !!GET_BIT(dat, 8);
+    bool y1 = !!GET_BIT(dat, 9);
+
+    info.m0v = y0 ^ !y1;
+    info.m0h = x0 ^ !x1;
+    info.m1v = !y1;
+    info.m1h = !x1;
+
+    info.potx = 0; // TODO
+    info.poty = 0; // TODO
 
     pthread_mutex_unlock(&lock);
 }
@@ -33,6 +48,18 @@ ControlPort::_dump()
     plainmsg("         device: %d\n", device);
     plainmsg("  mouseCounterX: %d\n", mouseCounterX);
     plainmsg("  mouseCounterY: %d\n", mouseCounterY);
+}
+
+ControlPortInfo
+ControlPort::getInfo()
+{
+    ControlPortInfo result;
+
+    pthread_mutex_lock(&lock);
+    result = info;
+    pthread_mutex_unlock(&lock);
+
+    return result;
 }
 
 uint16_t

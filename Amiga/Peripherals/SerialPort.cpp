@@ -38,7 +38,14 @@ SerialPort::_inspect()
 {
     pthread_mutex_lock(&lock);
 
-    // info.xxx = xxx;
+    info.port = port; 
+    info.txd = getTXD();
+    info.rxd = getRXD();
+    info.rts = getRTS();
+    info.cts = getCTS();
+    info.dsr = getDSR();
+    info.cd = getCD();
+    info.dtr = getDTR();
 
     pthread_mutex_unlock(&lock);
 }
@@ -48,13 +55,18 @@ SerialPort::_dump()
 {
     plainmsg("    device: %d\n", device);
     plainmsg("      port: %X\n", port);
+}
 
-    /*
-    bool txd = getTXD();
+SerialPortInfo
+SerialPort::getInfo()
+{
+    SerialPortInfo result;
 
-    debug("DEBUG INTERCEPTION: TXD is %d. Changing to %d\n", txd, !txd);
-    setTXD(!txd);
-    */
+    pthread_mutex_lock(&lock);
+    result = info;
+    pthread_mutex_unlock(&lock);
+
+    return result;
 }
 
 void

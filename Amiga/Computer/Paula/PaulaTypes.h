@@ -54,6 +54,15 @@ PaulaInfo;
 
 typedef struct
 {
+    uint16_t receiveBuffer;
+    uint16_t receiveShiftReg;
+    uint16_t transmitBuffer;
+    uint16_t transmitShiftReg;
+}
+UARTInfo;
+
+typedef struct
+{
     int8_t selectedDrive;
     DriveState state;
     int32_t fifo[6];
