@@ -37,6 +37,9 @@ class UART : public HardwareComponent {
     uint16_t transmitBuffer;
     uint16_t transmitShiftReg;
 
+    // Bit that is currently outputted on the TXD line
+    bool outBit; 
+
     // Overrun bit
     bool ovrun;
 
@@ -113,6 +116,9 @@ private:
     //
 
 public:
+
+    // Updates the value on the UART's TXD line
+    void updateTXD();
 
     // Called when the RXD port pin changes it's value
     void rxdHasChanged(bool value);

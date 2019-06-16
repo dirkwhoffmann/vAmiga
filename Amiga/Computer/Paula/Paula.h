@@ -105,7 +105,8 @@ public:
     
     // OCS register 0x010 (r)
     uint16_t peekADKCONR() { return adkcon; }
-    
+    bool UARTBRK() { return GET_BIT(adkcon, 11); }
+
     // OCS register 0x01E (r)
     uint16_t peekINTREQR() { return intreq; }
     

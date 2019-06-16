@@ -126,7 +126,13 @@ void
 Paula::pokeADKCON(uint16_t value)
 {
     plaindebug(2, "pokeADKCON(%X)\n", value);
+
+    // uint16_t oldAdkcon = adkcon;
+
     if (value & 0x8000) adkcon |= (value & 0x7FFF); else adkcon &= ~value;
+
+    // Take care of a possible change of the UARTBRK bit
+    uart.updateTXD();
 }
 
 void

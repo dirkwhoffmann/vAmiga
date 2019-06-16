@@ -21,6 +21,7 @@ UART::UART()
         { &receiveShiftReg,   sizeof(receiveShiftReg),   0 },
         { &transmitBuffer,    sizeof(transmitBuffer),    0 },
         { &transmitShiftReg,  sizeof(transmitShiftReg),  0 },
+        { &outBit,            sizeof(outBit),            0 },
         { &ovrun,             sizeof(ovrun),             0 },
         { &recCnt,            sizeof(recCnt),            0 },
     });
@@ -37,7 +38,7 @@ UART::_initialize()
 void
 UART::_powerOn()
 {
-    // tbe = true;
+    outBit = 1;
 }
 
 void
@@ -118,7 +119,7 @@ UART::peekSERDATR()
 void
 UART::pokeSERDAT(uint16_t value)
 {
-    debug(1, "pokeSERDAT(%X)\n", value);
+    debug(SER_DEBUG, "pokeSERDAT(%X)\n", value);
 
     // Write value into the transmit buffer
     transmitBuffer = value & 0x3FF;
@@ -201,6 +202,13 @@ UART::copyFromReceiveShiftRegister()
 }
 
 void
+UART::updateTXD()
+{
+    // If the UARTBRK bit is set, the TXD line is forced to 0
+    serialPort->setTXD(outBit && !paula->UARTBRK());
+}
+
+void
 UART::rxdHasChanged(bool value)
 {
     // Schedule the first reception event if transmission has not yet started
@@ -220,7 +228,7 @@ UART::rxdHasChanged(bool value)
 void
 UART::serveTxdEvent(EventID id)
 {
-    debug(SER_DEBUG, "serveTxdEvent(%d)\n", id);
+    debug(2, "serveTxdEvent(%d)\n", id);
 
     switch (id) {
 
@@ -229,10 +237,12 @@ UART::serveTxdEvent(EventID id)
             // This event should not occurr if the shift register is empty
             assert(!shiftRegEmpty());
 
-            // Shift out bit from TXD line
-            debug(SER_DEBUG, "Transmitting bit %d\n", transmitShiftReg & 1);
-            serialPort->setTXD(transmitShiftReg & 1);
+            // Shift out bit and let it appear on the TXD line
+            debug(2, "Transmitting bit %d\n", transmitShiftReg & 1);
+            // serialPort->setTXD(transmitShiftReg & 1);
+            outBit = transmitShiftReg & 1;
             transmitShiftReg >>= 1;
+            updateTXD();
 
             // Check if the shift register is empty
             if (!transmitShiftReg) {
@@ -265,10 +275,10 @@ UART::serveTxdEvent(EventID id)
 void
 UART::serveRxdEvent(EventID id)
 {
-    debug(SER_DEBUG, "serveRxdEvent(%d)\n", id);
+    debug(2, "serveRxdEvent(%d)\n", id);
 
     bool rxd = serialPort->getRXD();
-    debug(SER_DEBUG, "Receiving bit %d: %d\n", recCnt, rxd);
+    debug(2, "Receiving bit %d: %d\n", recCnt, rxd);
 
     // Shift in bit from RXD line
     WRITE_BIT(receiveShiftReg, recCnt++, rxd);
