@@ -138,24 +138,6 @@ StateMachine::execute(DMACycle cycles)
 
         case 0b011: // State 3
 
-            /* Transitions as stated in the HRM:
-             *
-             *  [ perfin && (AUDxON || !AUDxIP) ]
-             * --------------------------------------> 010
-             *  [ pbufld1,
-             *    AUDxDR if (AUDxON && napnav),
-             *    percntrld ]
-             *  [ AudxIR if intreq2 && AUDxON && napnav,
-             *    AUDxIR if napnav & !AUDxON ]
-             *
-             *  [ perfin && !AUDxON && AUDxIP ]
-             * --------------------------------------> 000
-             *
-             *       [ lencntrld if lenfin && AUDxON && AUDxDAT  ]
-             * < - - [ lencount  if !lenfin && AUDxON && AUDxDAT ] - ->
-             *       [ intreq2   if lenfin && AUDxON && AUDxDAT  ]
-             */
-
             // Decrease the period counter
             audper -= cycles;
 
@@ -174,30 +156,33 @@ StateMachine::execute(DMACycle cycles)
             // Read the next two samples from memory
             auddatLatch = agnus->doAudioDMA(nr);
 
-            // Decrease the length counter
-            if (audlen > 1) {
-                audlen--;
+            // Switch to next state
+            state = 0b010;
+
+            // Perform DMA mode specific action
+            if (dmaMode()) {
+
+                // Decrease the length counter
+                if (audlen > 1) {
+                    audlen--;
+                } else {
+                    audlen = audlenLatch;
+                    agnus->audlc[nr] = audlcLatch;
+
+                    // Trigger Audio interrupt
+                    paula->pokeINTREQ(0x8000 | (0x80 << nr));
+                }
+
+            // Perform non-DMA mode specific action
             } else {
-                audlen = audlenLatch;
-                agnus->audlc[nr] = audlcLatch;
 
                 // Trigger Audio interrupt
                 paula->pokeINTREQ(0x8000 | (0x80 << nr));
+
+                // Go idle if the audio IRQ hasn't been acknowledged
+                if (irqIsPending()) state = 0b000;
             }
 
-            // Switch to next state
-            if (!dmaMode() && irqIsPending()) {
-                state = 0b000;
-            } else {
-                state = 0b010;
-            }
-
-            /* "As long as the interrupt is cleared by the processor in time,
-             *  the machine remains in the main loop. Otherwise, it enters the
-             *  idle state. Interrupts are generated on every word transition
-             *  (011-010).
-             */
-            // MISSING: Transition back to 000
             break;
 
         case 0b101: // State 5
@@ -218,7 +203,7 @@ StateMachine::execute(DMACycle cycles)
             audvol = audvolLatch;
 
             // (2)
-            audper = 0; // ???? SHOULD BE: percntrld();
+            audper = 0; // ???? SHOULD BE: audper += audperLatch;
 
             // Read the next two samples from memory
             auddatLatch = agnus->doAudioDMA(nr);
@@ -244,4 +229,21 @@ StateMachine::execute(DMACycle cycles)
     }
 
     return (int8_t)auddat * audvolLatch;
+}
+
+void
+StateMachine::pokeAUDxDAT(uint16_t value)
+{
+    auddatLatch = value;
+
+    /* "In interrupt-driven operation, transfer to the main loop (states 010
+     *  and 011) occurs immediately after data is written by the processor."
+     * [HRM]
+     */
+    if (!dmaMode() && !irqIsPending()) {
+
+        audvol = audvolLatch;
+        audper += audperLatch;
+        paula->pokeINTREQ(0x8000 | (0x80 << nr));
+    }
 }
