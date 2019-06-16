@@ -25,6 +25,17 @@ extension Inspector {
 
         if everything {
 
+            let elements = [ po0POY: fmt16,
+                             po0POX: fmt16,
+                             po1POY: fmt16,
+                             po1POX: fmt16,
+                             poRecShift: fmt16,
+                             poRecBuffer: fmt16,
+                             poTransShift: fmt16,
+                             poTransBuffer: fmt16
+            ]
+
+            for (c, f) in elements { assignFormatter(f, c!) }
         }
 
         // Control port 1
@@ -59,20 +70,32 @@ extension Inspector {
         if refreshCounter % 2 == 0 {
 
             let serialInSize = controller.serialIn.count
+
+            // Truncate logging info if it has become too large
             if serialInSize > 8192 {
                 controller.serialIn = "...\n" + controller.serialIn.dropFirst( serialInSize - 8000)
             }
-            poSerialIn.string = controller.serialIn
-            poSerialIn.scrollToEndOfDocument(nil)
-            poSerialIn.font = serDatFont
+
+            // Update text view if necessary
+            if poSerialIn.string.count != serialInSize {
+                poSerialIn.string = controller.serialIn
+                poSerialIn.scrollToEndOfDocument(nil)
+                poSerialIn.font = serDatFont
+            }
 
             let serialOutSize = controller.serialOut.count
+
+            // Truncate logging info if it has become too large
             if serialOutSize > 8192 {
                 controller.serialOut = "...\n" + controller.serialOut.dropFirst( serialOutSize - 8000)
             }
-            poSerialOut.string = controller.serialOut
-            poSerialOut.scrollToEndOfDocument(nil)
-            poSerialOut.font = serDatFont
+
+            // Update text view if necessary
+            if poSerialOut.string.count != serialOutSize {
+                poSerialOut.string = controller.serialOut
+                poSerialOut.scrollToEndOfDocument(nil)
+                poSerialOut.font = serDatFont
+            }
         }
     }
 }
