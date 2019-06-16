@@ -366,6 +366,7 @@ EventHandler::_inspectSecSlot(uint32_t slot)
                 case INS_AGNUS:  i->eventName = "INS_AGNUS"; break;
                 case INS_PAULA:  i->eventName = "INS_PAULA"; break;
                 case INS_DENISE: i->eventName = "INS_DENISE"; break;
+                case INS_PORTS:  i->eventName = "INS_PORTS"; break;
                 case INS_EVENTS: i->eventName = "INS_EVENTS"; break;
                 default:         i->eventName = "*** INVALID ***"; break;
             }
@@ -809,6 +810,11 @@ EventHandler::serveINSEvent()
         case INS_AGNUS:  agnus->inspect(); break;
         case INS_PAULA:  paula->inspect(); break;
         case INS_DENISE: denise->inspect(); break;
+        case INS_PORTS:
+            amiga->serialPort.inspect();
+            amiga->controlPort1.inspect();
+            amiga->controlPort2.inspect();
+            break;
         case INS_EVENTS: agnus->events.inspect(); break;
         default:         assert(false);
     }

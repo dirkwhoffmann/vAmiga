@@ -165,6 +165,7 @@ typedef enum : long
     INS_AGNUS,
     INS_PAULA,
     INS_DENISE,
+    INS_PORTS,
     INS_EVENTS,
     INS_EVENT_COUNT
 } EventID;

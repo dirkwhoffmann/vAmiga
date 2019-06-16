@@ -522,6 +522,7 @@ extension Inspector: NSTabViewDelegate {
         case "Copper": amigaProxy?.setInspectionTarget(INS_AGNUS)
         case "Denise": amigaProxy?.setInspectionTarget(INS_DENISE)
         case "Paula":  amigaProxy?.setInspectionTarget(INS_PAULA)
+        case "Ports":  amigaProxy?.setInspectionTarget(INS_PORTS)
         case "Events": amigaProxy?.setInspectionTarget(INS_EVENTS)
         default:       break
         }
