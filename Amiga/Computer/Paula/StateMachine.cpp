@@ -84,6 +84,18 @@ StateMachine::getInfo()
     return result;
 }
 
+bool
+StateMachine::AUDxON()
+{
+    return amiga->agnus.audDMA(nr);
+}
+
+bool
+StateMachine::AUDxIP()
+{
+    return GET_BIT(amiga->paula.intreq, 7 + nr);
+}
+
 int16_t
 StateMachine::execute(DMACycle cycles)
 {
@@ -126,39 +138,35 @@ StateMachine::execute(DMACycle cycles)
 
         case 0b011: // State 3
 
-            /*    Always: (1) percount
+            /* Transitions as stated in the HRM:
              *
-             * Condition: perfin && (AUDxON || !AUDxIP)
+             *  [ perfin && (AUDxON || !AUDxIP) ]
+             * --------------------------------------> 010
+             *  [ pbufld1,
+             *    AUDxDR if (AUDxON && napnav),
+             *    percntrld ]
+             *  [ AudxIR if intreq2 && AUDxON && napnav,
+             *    AUDxIR if napnav & !AUDxON ]
              *
-             *       Actions: (2) pbufld1
-             *                (3) AUDxDR if (AUDxON && napnav)
-             *                (4) percntrld
-             *                (5) Transition to 010
+             *  [ perfin && !AUDxON && AUDxIP ]
+             * --------------------------------------> 000
              *
-             * Condition: lenfin && AUDxON && AUDxDAT
-             *
-             *       Actions: (6) lencntrld
-             *                (7) intreq2
-             *
-             * Condition: !lenfin && AUDxON && AUDxDAT
-             *
-             *       Actions: (8) lencount
-             *
-             * Condition: perfin && !AUDxON && AUDxIP
-             *
-             *       Actions: (9) Transition to 000
+             *       [ lencntrld if lenfin && AUDxON && AUDxDAT  ]
+             * < - - [ lencount  if !lenfin && AUDxON && AUDxDAT ] - ->
+             *       [ intreq2   if lenfin && AUDxON && AUDxDAT  ]
              */
 
-            // audper -= cycles;
-            percount(cycles); // (1)
+            // Decrease the period counter
+            percount(cycles);
 
-            // if (audper < 0) {
+            // Check if the period counter underflows
             if (perfin()) {
 
-                // audper += audperLatch;
-                percntrld(); // (4)
+                // Reload the period counter
+                percntrld();
 
-                audvol = audvolLatch; // ????
+                // ??? Can't find this in the state machine (from WinFellow?)
+                audvol = audvolLatch;
 
                 // Put out the low byte
                 auddat = LO_BYTE(auddatLatch);
@@ -166,18 +174,6 @@ StateMachine::execute(DMACycle cycles)
                 // Read the next two samples from memory
                 auddatLatch = agnus->doAudioDMA(nr);
 
-                if (lenfin()) {
-
-                    lencntrld(); // (6)
-                    agnus->audlc[nr] = audlcLatch; // ???
-                    paula->pokeINTREQ(0x8000 | (0x80 << nr)); // (7)
-
-                } else {
-
-                    lencount(); // (8)
-                }
-
-                /*
                 // Decrease the length counter
                 if (audlen > 1) {
                     audlen--;
@@ -188,11 +184,9 @@ StateMachine::execute(DMACycle cycles)
                     // Trigger Audio interrupt
                     paula->pokeINTREQ(0x8000 | (0x80 << nr));
                 }
-                */
 
-                // (5)
+                // Switch to state 2
                 state = 0b010;
-
             }
 
             /* "As long as the interrupt is cleared by the processor in time,

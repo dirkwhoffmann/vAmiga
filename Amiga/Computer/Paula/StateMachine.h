@@ -92,7 +92,12 @@ public:
 
 private:
 
+    // DMA on "x" indicates channel number (signal from DMACON).
+    bool AUDxON();
 
+    // Audio interrupt pending
+    bool AUDxIP();
+    
     // Reloads period counter from back-up latch
     void percntrld() { audper += audperLatch; }
 

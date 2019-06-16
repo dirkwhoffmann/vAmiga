@@ -429,7 +429,7 @@ AudioUnit::pokeAUDxDAT(int x, uint16_t value)
      *  and 011) occurs immediately after data is written by the processor."
      * [HRM]
      */
-    if (!amiga->agnus.audDMA()) {
+    if (!amiga->agnus.audDMA(x)) {
         // TODO
     }
 }
