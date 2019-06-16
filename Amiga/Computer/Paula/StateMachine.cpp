@@ -84,6 +84,52 @@ StateMachine::getInfo()
     return result;
 }
 
+void
+StateMachine::pokeAUDxLEN(uint16_t value)
+{
+    debug(AUD_DEBUG, "pokeAUD%dLEN(%X)\n", nr, value);
+
+    audlenLatch = value;
+}
+
+void
+StateMachine::pokeAUDxPER(uint16_t value)
+{
+    debug(AUD_DEBUG, "pokeAUD%dPER(%X)\n", nr, value);
+
+    audperLatch = value;
+}
+
+void
+StateMachine::pokeAUDxVOL(uint16_t value)
+{
+    debug(AUD_DEBUG, "pokeAUD%dVOL(%X)\n", nr, value);
+
+    /* Behaviour: 1. Only the lowest 7 bits are evaluated.
+     *            2. All values greater than 64 are treated as 64 (max volume).
+     */
+    audvolLatch = MIN(value & 0x7F, 64);
+}
+
+void
+StateMachine::pokeAUDxDAT(uint16_t value)
+{
+    debug(AUD_DEBUG, "pokeAUD%dDAT(%X)\n", nr, value);
+
+    auddatLatch = value;
+
+    /* "In interrupt-driven operation, transfer to the main loop (states 010
+     *  and 011) occurs immediately after data is written by the processor."
+     * [HRM]
+     */
+    if (!dmaMode() && !irqIsPending()) {
+
+        audvol = audvolLatch;
+        audper += audperLatch;
+        paula->pokeINTREQ(0x8000 | (0x80 << nr));
+    }
+}
+
 bool
 StateMachine::dmaMode()
 {
@@ -187,19 +233,6 @@ StateMachine::execute(DMACycle cycles)
 
         case 0b101: // State 5
 
-            /* Condition: AUDxON && AUDxDAT
-             *
-             *   Actions: (1) volcntrld
-             *            (2) percntrld
-             *            (3) pbufldl
-             *            (4) AUDxDR if napna
-             *            (5) Transition to 010
-             *
-             * Condition: !AUDxON
-             *
-             *   Actions: (6) Transition to 000
-             */
-
             audvol = audvolLatch;
 
             // (2)
@@ -229,21 +262,4 @@ StateMachine::execute(DMACycle cycles)
     }
 
     return (int8_t)auddat * audvolLatch;
-}
-
-void
-StateMachine::pokeAUDxDAT(uint16_t value)
-{
-    auddatLatch = value;
-
-    /* "In interrupt-driven operation, transfer to the main loop (states 010
-     *  and 011) occurs immediately after data is written by the processor."
-     * [HRM]
-     */
-    if (!dmaMode() && !irqIsPending()) {
-
-        audvol = audvolLatch;
-        audper += audperLatch;
-        paula->pokeINTREQ(0x8000 | (0x80 << nr));
-    }
 }

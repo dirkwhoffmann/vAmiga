@@ -87,6 +87,25 @@ public:
 
 
     //
+    // Accessing registers
+    //
+
+public:
+
+    // OCS registers 0xA4, 0xB4, 0x0C4, 0xD4 (w)
+    void pokeAUDxLEN(uint16_t value);
+
+    // OCS registers 0xA6, 0xB6, 0x0B6, 0xD6 (w)
+    void pokeAUDxPER(uint16_t value);
+
+    // OCS registers 0xA8, 0xB8, 0x0C8, 0xD8 (w)
+    void pokeAUDxVOL(uint16_t value);
+
+    // OCS registers 0xAA, 0xBA, 0x0CA, 0xDA (w)
+    void pokeAUDxDAT(uint16_t value);
+
+
+    //
     // Running the device
     //
 
@@ -107,9 +126,6 @@ public:
      * The return value is the current audio sample of this channel.
      */
     int16_t execute(DMACycle cycles);
-
-    // Handler for the AUDxDAT register
-    void pokeAUDxDAT(uint16_t value);
 };
 
 #endif
