@@ -92,32 +92,38 @@ public:
 
 private:
 
+    // Returns true if the audio unit is operation in DMA mode
+    bool dmaMode();
+
+    // Returns true if the audio interrupt is pending
+    bool irqIsPending();
+
     // DMA on "x" indicates channel number (signal from DMACON).
-    bool AUDxON();
+    // bool AUDxON();
 
     // Audio interrupt pending
-    bool AUDxIP();
+    // bool AUDxIP();
     
     // Reloads period counter from back-up latch
-    void percntrld() { audper += audperLatch; }
+    // void percntrld() { audper += audperLatch; }
 
     // Count period counter down
-    void percount(int32_t cycles) { audper -= cycles; }
+    // void percount(int32_t cycles) { audper -= cycles; }
 
     // Period counter finished (value <= 1)
-    bool perfin() { return audper <= 1; }
+    // bool perfin() { return audper <= 1; }
 
     // Reloads length counter from back-up latch
-    void lencntrld() { audlen = audlenLatch; }
+    // void lencntrld() { audlen = audlenLatch; }
 
     // Reloads volume counter from back-up latch
-    void volcntrld() { audvol = audvolLatch; }
+    // void volcntrld() { audvol = audvolLatch; }
 
     // Count length counter down one notch
-    void lencount() { audlen--; }
+    // void lencount() { audlen--; }
 
     // Length countel' finished (value = 1)
-    bool lenfin() { return audlen <= 1; }
+    // bool lenfin() { return audlen <= 1; }
 
 public:
 

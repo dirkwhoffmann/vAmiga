@@ -85,13 +85,13 @@ StateMachine::getInfo()
 }
 
 bool
-StateMachine::AUDxON()
+StateMachine::dmaMode()
 {
     return amiga->agnus.audDMA(nr);
 }
 
 bool
-StateMachine::AUDxIP()
+StateMachine::irqIsPending()
 {
     return GET_BIT(amiga->paula.intreq, 7 + nr);
 }
@@ -157,13 +157,13 @@ StateMachine::execute(DMACycle cycles)
              */
 
             // Decrease the period counter
-            percount(cycles);
+            audper -= cycles;
 
             // Only continue if the period counter did underflow
             if (audper > 1) break;
 
             // Reload the period counter
-            audper += audperLatch; 
+            audper += audperLatch;
 
             // ??? Can't find this in the state machine (from WinFellow?)
             audvol = audvolLatch;
@@ -185,8 +185,12 @@ StateMachine::execute(DMACycle cycles)
                 paula->pokeINTREQ(0x8000 | (0x80 << nr));
             }
 
-            // Switch to state 2
-            state = 0b010;
+            // Switch to next state
+            if (!dmaMode() && irqIsPending()) {
+                state = 0b000;
+            } else {
+                state = 0b010;
+            }
 
             /* "As long as the interrupt is cleared by the processor in time,
              *  the machine remains in the main loop. Otherwise, it enters the
@@ -211,7 +215,7 @@ StateMachine::execute(DMACycle cycles)
              *   Actions: (6) Transition to 000
              */
 
-            volcntrld();
+            audvol = audvolLatch;
 
             // (2)
             audper = 0; // ???? SHOULD BE: percntrld();
