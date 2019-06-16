@@ -1448,16 +1448,16 @@ CIAB::releaseInterruptLine()
     // amiga->paula.setINTREQ(1 << 13);
 }
 
-//                            -------
-//  Parallel port:  BUSY ---> | PA0 |
-//  Parallel Port:  POUT ---> | PA1 |
-//  Parallel port:   SEL ---> | PA2 |
-//    Serial port:  /DSR ---> | PA3 |
-//    Serial port:  /CTS ---> | PA4 |
-//    Serial port:   /CD ---> | PA5 |
-//    Serial port:  /RTS <--- | PA6 |
-//    Serial port:  /DTR <--- | PA7 |
-//                            -------
+//                                 -------
+//      Parallel port: BUSY   ---> | PA0 |
+//      Parallel Port: POUT   ---> | PA1 |
+//  Parallel / Serial: SEL/RI ---> | PA2 |
+//        Serial port: /DSR   ---> | PA3 |
+//        Serial port: /CTS   ---> | PA4 |
+//        Serial port: /CD    ---> | PA5 |
+//        Serial port: /RTS   <--- | PA6 |
+//        Serial port: /DTR   <--- | PA7 |
+//                                 -------
 
 uint8_t
 CIAB::portAinternal()
@@ -1468,10 +1468,13 @@ CIAB::portAinternal()
 uint8_t
 CIAB::portAexternal()
 {
-    uint8_t result = 0b11111000;
+    uint8_t result = 0b11111100;
 
     // Parallel port
     // NOT IMPLEMENTED
+
+    // Shared between parallel and serial port
+    if (serialPort->getRI()) CLR_BIT(result, 2); 
 
     // Serial port
     if (serialPort->getDSR()) CLR_BIT(result, 3);

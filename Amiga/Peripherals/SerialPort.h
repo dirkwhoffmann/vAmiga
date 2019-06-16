@@ -106,6 +106,7 @@ public:
     bool getDSR() { return getPin(6); }
     bool getCD() { return getPin(8); }
     bool getDTR() { return getPin(20); }
+    bool getRI() { return getPin(22); }
 
     void setTXD(bool value) { setPin(2, value); }
     void setRXD(bool value) { setPin(3, value); }
@@ -114,6 +115,7 @@ public:
     void setDSR(bool value) { setPin(6, value); }
     void setCD(bool value) { setPin(8, value); }
     void setDTR(bool value) { setPin(20, value); }
+    void setRI(bool value) { setPin(22, value); }
 
 private:
 
