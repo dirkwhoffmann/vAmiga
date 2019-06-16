@@ -424,4 +424,12 @@ AudioUnit::pokeAUDxDAT(int x, uint16_t value)
     assert(x < 4);
 
     channel[x].auddatLatch = value;
+
+    /* "In interrupt-driven operation, transfer to the main loop (states 010
+     *  and 011) occurs immediately after data is written by the processor."
+     * [HRM]
+     */
+    if (!amiga->agnus.audDMA()) {
+        // TODO
+    }
 }

@@ -90,6 +90,30 @@ public:
     // Running the device
     //
 
+private:
+
+
+    // Reloads period counter from back-up latch
+    void percntrld() { audper += audperLatch; }
+
+    // Count period counter down
+    void percount(int32_t cycles) { audper -= cycles; }
+
+    // Period counter finished (value <= 1)
+    bool perfin() { return audper <= 1; }
+
+    // Reloads length counter from back-up latch
+    void lencntrld() { audlen = audlenLatch; }
+
+    // Reloads volume counter from back-up latch
+    void volcntrld() { audvol = audvolLatch; }
+
+    // Count length counter down one notch
+    void lencount() { audlen--; }
+
+    // Length countel' finished (value = 1)
+    bool lenfin() { return audlen <= 1; }
+
 public:
 
     // Move the machine to a specific state

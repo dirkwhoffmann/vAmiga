@@ -423,7 +423,8 @@ public:
     inline bool au2DMA() { return (dmacon & (DMAEN | AU2EN)) == (DMAEN | AU2EN); }
     inline bool au1DMA() { return (dmacon & (DMAEN | AU1EN)) == (DMAEN | AU1EN); }
     inline bool au0DMA() { return (dmacon & (DMAEN | AU0EN)) == (DMAEN | AU0EN); }
-    
+    inline bool audDMA() { return dmacon & DMAEN; }
+
     // DSKPTH, DSKPTL
     void pokeDSKPTH(uint16_t value);
     void pokeDSKPTL(uint16_t value);

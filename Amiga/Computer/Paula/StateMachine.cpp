@@ -89,7 +89,7 @@ StateMachine::execute(DMACycle cycles)
 {
     switch(state) {
 
-        case 0b000:
+        case 0b000: // State 0 (Idle)
 
             audlen = audlenLatch;
             agnus->audlc[nr] = audlcLatch;
@@ -97,7 +97,7 @@ StateMachine::execute(DMACycle cycles)
             state = 0b001;
             break;
 
-        case 0b001:
+        case 0b001: // State 1
 
             if (audlen > 1) audlen--;
 
@@ -107,7 +107,7 @@ StateMachine::execute(DMACycle cycles)
             state = 0b101;
             break;
 
-        case 0b010:
+        case 0b010: // State 2
 
             audper -= cycles;
 
@@ -124,14 +124,41 @@ StateMachine::execute(DMACycle cycles)
             }
             break;
 
-        case 0b011:
+        case 0b011: // State 3
 
-            audper -= cycles;
+            /*    Always: (1) percount
+             *
+             * Condition: perfin && (AUDxON || !AUDxIP)
+             *
+             *       Actions: (2) pbufld1
+             *                (3) AUDxDR if (AUDxON && napnav)
+             *                (4) percntrld
+             *                (5) Transition to 010
+             *
+             * Condition: lenfin && AUDxON && AUDxDAT
+             *
+             *       Actions: (6) lencntrld
+             *                (7) intreq2
+             *
+             * Condition: !lenfin && AUDxON && AUDxDAT
+             *
+             *       Actions: (8) lencount
+             *
+             * Condition: perfin && !AUDxON && AUDxIP
+             *
+             *       Actions: (9) Transition to 000
+             */
 
-            if (audper < 0) {
+            // audper -= cycles;
+            percount(cycles); // (1)
 
-                audper += audperLatch;
-                audvol = audvolLatch;
+            // if (audper < 0) {
+            if (perfin()) {
+
+                // audper += audperLatch;
+                percntrld(); // (4)
+
+                audvol = audvolLatch; // ????
 
                 // Put out the low byte
                 auddat = LO_BYTE(auddatLatch);
@@ -139,6 +166,18 @@ StateMachine::execute(DMACycle cycles)
                 // Read the next two samples from memory
                 auddatLatch = agnus->doAudioDMA(nr);
 
+                if (lenfin()) {
+
+                    lencntrld(); // (6)
+                    agnus->audlc[nr] = audlcLatch; // ???
+                    paula->pokeINTREQ(0x8000 | (0x80 << nr)); // (7)
+
+                } else {
+
+                    lencount(); // (8)
+                }
+
+                /*
                 // Decrease the length counter
                 if (audlen > 1) {
                     audlen--;
@@ -149,17 +188,40 @@ StateMachine::execute(DMACycle cycles)
                     // Trigger Audio interrupt
                     paula->pokeINTREQ(0x8000 | (0x80 << nr));
                 }
+                */
 
-                // Switch back to state 2
+                // (5)
                 state = 0b010;
 
             }
+
+            /* "As long as the interrupt is cleared by the processor in time,
+             *  the machine remains in the main loop. Otherwise, it enters the
+             *  idle state. Interrupts are generated on every word transition
+             *  (011-010).
+             */
+            // MISSING: Transition back to 000
             break;
 
-        case 0b101:
+        case 0b101: // State 5
 
-            audvol = audvolLatch;
-            audper = 0;
+            /* Condition: AUDxON && AUDxDAT
+             *
+             *   Actions: (1) volcntrld
+             *            (2) percntrld
+             *            (3) pbufldl
+             *            (4) AUDxDR if napna
+             *            (5) Transition to 010
+             *
+             * Condition: !AUDxON
+             *
+             *   Actions: (6) Transition to 000
+             */
+
+            volcntrld();
+
+            // (2)
+            audper = 0; // ???? SHOULD BE: percntrld();
 
             // Read the next two samples from memory
             auddatLatch = agnus->doAudioDMA(nr);
