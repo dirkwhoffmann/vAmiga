@@ -29,6 +29,8 @@ Drive::Drive(unsigned nr)
         { &idCount,          sizeof(idCount),          0 },
         { &idBit,            sizeof(idBit),            0 },
         { &motor,            sizeof(motor),            0 },
+        { &motorOnCycle,     sizeof(motorOnCycle),     0 },
+        { &motorOffCycle,    sizeof(motorOffCycle),    0 },
         { &dskchange,        sizeof(dskchange),        0 },
         { &dsklen,           sizeof(dsklen),           0 },
         { &prb,              sizeof(prb),              0 },
@@ -154,12 +156,11 @@ Drive::driveStatusFlags()
     if (isSelected()) {
         
         // PA5: /DSKRDY
-        if (!motor) {
-            // debug("ID mode is on\n");
+        // debug("ID mode is %s\n", idMode() ? "on" : "off");
+        if (idMode()) {
             if (idBit) result &= 0b11011111;
         } else {
-            // debug("ID mode is off\n");
-            if (motor && hasDisk()) result &= 0b11011111;
+            if (motorAtFullSpeed()) result &= 0b11011111;
         }
         
         // PA4: /DSKTRACK0
@@ -185,24 +186,53 @@ Drive::setMotor(bool value)
 {
     if (!motor && value) {
         
-        debug(DSK_DEBUG, "Motor on\n");
-        
+        motorOnCycle = amiga->masterClock;
+
+        debug(DSK_DEBUG, "Motor on (Cycle: %d)\n", motorOnCycle);
+
         amiga->putMessage(MSG_DRIVE_LED_ON, nr);
         amiga->putMessage(MSG_DRIVE_MOTOR_ON, nr);
     }
     
     else if (motor && !value) {
-  
-        debug(DSK_DEBUG, "Motor off\n");
-        
-        // Reset identification shift register counter
-        idCount = 0;
-        
+
+
+        idCount = 0; // Reset identification shift register counter
+        motorOffCycle = amiga->masterClock;
+
+        debug(DSK_DEBUG, "Motor off (Cycle: %d)\n", motorOffCycle);
+
         amiga->putMessage(MSG_DRIVE_LED_OFF, nr);
         amiga->putMessage(MSG_DRIVE_MOTOR_OFF, nr);
     }
     
     motor = value;
+}
+
+Cycle
+Drive::motorOnTime()
+{
+    return motor ? amiga->masterClock - motorOnCycle : 0;
+}
+
+Cycle
+Drive::motorOffTime()
+{
+    return motor ? 0 : (amiga->masterClock - motorOffCycle);
+}
+
+bool
+Drive::motorAtFullSpeed()
+{
+    Cycle delay = 380 * 28000; // 380 msec
+    return isOriginalDrive() ? (motorOnTime() > delay) : motor;
+}
+
+bool
+Drive::motorStopped()
+{
+    Cycle delay = 0;
+    return isOriginalDrive() ? (motorOffTime() > delay) : !motor;
 }
 
 void

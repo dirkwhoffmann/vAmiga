@@ -55,9 +55,18 @@ private:
      * On a real drive, it can take up to one half second (500ms) until the
      * drive runs at full speed. We don't emulate  accurate timing here and
      * set the variable to true once the drive motor is switched on.
+     *
+     * ENHANCEMENT: MAKE it A COMPUTED VALUE:
+     * bool motor() { motorOffCycle >= motorOnCycle; }
      */
     bool motor;
-    
+
+    // Records when the drive motor was switch on the last time
+    Cycle motorOnCycle;
+
+    // Records when the drive motor was switch off the last time
+    Cycle motorOffCycle;
+
     /* Disk change status
      * This variable controls the /CHNG bit in the CIA A PRA register. Note
      * that the variable only changes its value under certain circumstances.
@@ -135,8 +144,14 @@ public:
     // Sets the accleration factor.
     void setSpeed(uint16_t value);
 
+    // Indicates whether this drive is an original Amiga drive.
+    bool isOriginalDrive() { return speed == 1; }
+
     // Indicates whether this drive is a turbo drive.
     bool isTurboDrive() { return speed > 128; }
+
+    // Indicates whether identification mode is enabled.
+    bool idMode() { return motorStopped(); }
 
     /* Returns the drive identification code.
      * Each drive identifies itself by a 32 bit identification code that is
@@ -144,7 +159,6 @@ public:
      * identification mode is activated by switching the drive motor on and
      * off.
      */
-    
     uint32_t getDriveId();
     
     
@@ -157,8 +171,7 @@ public:
     
     // Returns true if this drive is pushing data onto the data lines
     bool isDataSource();
-    
-    
+
     uint8_t driveStatusFlags();
     
 
@@ -170,7 +183,14 @@ public:
     void setMotor(bool value);
     void switchMotorOn() { setMotor(true); }
     void switchMotorOff() { setMotor(false); }
-    
+
+    Cycle motorOnTime();
+    Cycle motorOffTime();
+    bool motorAtFullSpeed();
+    bool motorStopped();
+    bool motorSpeedingUp() { return motor && !motorAtFullSpeed(); }
+    bool motorSlowingDown() { return !motor && !motorStopped(); }
+
     // Selects the active drive head (0 = lower, 1 = upper).
     void selectSide(int side);
 
