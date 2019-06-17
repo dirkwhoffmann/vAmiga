@@ -116,18 +116,24 @@ Drive::setSpeed(uint16_t value)
 uint32_t
 Drive::getDriveId()
 {
-    /* Floopy drives identify themselve with the following codes:
+    /* External floopy drives identify themselve with the following codes:
      *
      *   3.5" DD :  0xFFFFFFFF
      *   3.5" HD :  0xAAAAAAAA  if an HD disk is inserted
      *              0xFFFFFFFF  if no disk or a DD disk is inserted
      *   5.25"SD :  0x55555555
      *
-     * An unconnected drive corresponds to ID 0x00000000.
+     * An unconnected drive corresponds to ID 0x00000000. The internal drive
+     * does not identify itself. It's ID is also read as 0x00000000.
      */
     
     assert(type == DRIVE_35_DD);
-    return 0xFFFFFFFF;
+
+    if (nr == 0) {
+        return 0x00000000;
+    } else {
+        return 0xFFFFFFFF;
+    }
 }
 
 bool
