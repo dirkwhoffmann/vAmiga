@@ -52,7 +52,10 @@ public:
     // Indicates if Copper is currently servicing an event (for debugging only)
     bool servicing = false;
     
-    
+    // Temporary debug flag
+    bool verbose = false;
+
+
     //
     // Constructing and destructing
     //

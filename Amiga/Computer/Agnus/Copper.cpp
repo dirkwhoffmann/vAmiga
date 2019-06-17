@@ -87,6 +87,8 @@ Copper::_dump()
     plainmsg("  copins2: %X\n", cop2ins);
     plainmsg("   cop1lc: %X\n", cop1lc);
     plainmsg("   cop2lc: %X\n", cop2lc);
+
+    verbose = !verbose; 
 }
 
 CopperInfo

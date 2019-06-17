@@ -63,8 +63,8 @@ typedef struct
     uint16_t ddfstrt;
     uint16_t ddfstop;
 
-    uint16_t bpl1mod;
-    uint16_t bpl2mod;
+    int16_t bpl1mod;
+    int16_t bpl2mod;
     uint8_t  numBpls;
 
     uint32_t dskpt;

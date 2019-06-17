@@ -175,10 +175,10 @@ class Agnus : public HardwareComponent
     uint32_t bplpt[6];
     
     // The bitplane modulo registers for odd bitplanes
-    uint16_t bpl1mod;
+    int16_t bpl1mod;
     
     // The bitplane modulo registers for even bitplanes
-    uint16_t bpl2mod;
+    int16_t bpl2mod;
     
     // The sprite DMA pointers
     uint32_t sprpt[8];

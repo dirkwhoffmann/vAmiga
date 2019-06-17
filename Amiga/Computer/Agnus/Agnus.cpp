@@ -1050,18 +1050,16 @@ void
 Agnus::pokeBPL1MOD(uint16_t value)
 {
     debug(BPL_DEBUG, "pokeBPL1MOD(%X)\n", value);
-    assert(value % 1 == 0);
 
-    bpl1mod = value & 0xFFFE;
+    bpl1mod = int16_t(value & 0xFFFE);
 }
 
 void
 Agnus::pokeBPL2MOD(uint16_t value)
 {
     debug(BPL_DEBUG, "pokeBPL2MOD(%X)\n", value);
-    assert(value % 1 == 0);
 
-    bpl2mod = value & 0xFFFE;
+    bpl2mod = int16_t(value & 0xFFFE);
 }
 
 void
