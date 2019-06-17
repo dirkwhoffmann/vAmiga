@@ -51,11 +51,11 @@ public:
      *    - a disk usually occupies 80 * 2 * 12.664 =  2.026.240 MFM bytes
      */
     
-    static const long sectorSize      = 1088;
-    static const long trackGapSize    = 700; // 696;
-    static const long maxTrackSize    = 12668; // 12664;
-    static const long maxCylinderSize = 2 * maxTrackSize;
-    static const long maxDiskSize     = 80 * maxCylinderSize;
+    static const long sectorSize   = 1088;
+    static const long trackGapSize = 700; // 696;
+    static const long trackSize    = 12668; // 12664;
+    static const long cylinderSize = 2 * trackSize;
+    static const long diskSize     = 80 * cylinderSize;
     
     // static const uint64_t MFM_DATA_BIT_MASK8  = 0x55;
     // static const uint64_t MFM_CLOCK_BIT_MASK8 = 0xAA;
@@ -63,14 +63,11 @@ public:
     // The type of this disk
     DiskType type = DISK_35_DD;
     
-    // Length of a single track in bytes
-    uint16_t trackLen = maxTrackSize;
-    
     // MFM encoded disk data
     union {
-        uint8_t raw[maxDiskSize];
-        uint8_t cyclinder[80][2][maxTrackSize];
-        uint8_t track[160][maxTrackSize];
+        uint8_t raw[diskSize];
+        uint8_t cyclinder[80][2][trackSize];
+        uint8_t track[160][trackSize];
     } data;
     
     bool writeProtected;

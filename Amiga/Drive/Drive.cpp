@@ -260,7 +260,7 @@ Drive::rotate()
 
     // debug("head = %d\n", head.offset);
     
-    if (++head.offset == disk->trackLen) {
+    if (++head.offset == disk->trackSize) {
         
         // Start over at the beginning of the current cyclinder
         head.offset = 0;
@@ -272,15 +272,17 @@ Drive::rotate()
         if (isSelected()) {
             // debug("emulateFallingEdgeOnFlagPin()\n"); 
             amiga->ciaB.emulateFallingEdgeOnFlagPin();
+        } else {
+            warn("Rotating an unselected drive\n");
         }
     }
-    assert(head.offset < disk->trackLen);
+    assert(head.offset < disk->trackSize);
 }
 
 void
 Drive::findSyncMark()
 {
-    for (unsigned i = 0; i < disk->trackLen; i++) {
+    for (unsigned i = 0; i < disk->trackSize; i++) {
         
         if (readHead() != 0x44) continue;
         if (readHead() != 0x89) continue;

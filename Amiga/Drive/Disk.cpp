@@ -85,7 +85,7 @@ Disk::readByte(Cylinder cylinder, Side side, uint16_t offset)
 {
     assert(isValidCylinderNr(cylinder));
     assert(isValidSideNr(side));
-    assert(offset < trackLen);
+    assert(offset < trackSize);
 
     return data.cyclinder[cylinder][side][offset];
 }
@@ -95,7 +95,7 @@ Disk::writeByte(uint8_t value, Cylinder cylinder, Side side, uint16_t offset)
 {
     assert(isValidCylinderNr(cylinder));
     assert(isValidSideNr(side));
-    assert(offset < trackLen);
+    assert(offset < trackSize);
     
     data.cyclinder[cylinder][side][offset] = value;
 }
@@ -129,7 +129,7 @@ void
 Disk::clearTrack(Track t)
 {
     assert(isValidTrack(t));
-    memset(data.track[t], 0xAA, maxTrackSize);
+    memset(data.track[t], 0xAA, trackSize);
 }
 
 bool
@@ -169,7 +169,7 @@ Disk::encodeTrack(ADFFile *adf, Track t, long smax)
     }
     
     // Get the clock bit right at offset position 0
-    if (data.track[t][trackLen - 1] & 1) data.track[t][0] &= 0x7F;
+    if (data.track[t][trackSize - 1] & 1) data.track[t][0] &= 0x7F;
     
     // First five bytes of track gap
     /*
@@ -313,13 +313,13 @@ Disk::decodeTrack(uint8_t *dst, Track t, long smax)
     debug(2, "Decoding track %d\n", t);
     
     // Create a local (double) copy of the track to easy analysis
-    uint8_t local[2 * trackLen];
-    memcpy(local, data.track[t], trackLen);
-    memcpy(local + trackLen, data.track[t], trackLen);
+    uint8_t local[2 * trackSize];
+    memcpy(local, data.track[t], trackSize);
+    memcpy(local + trackSize, data.track[t], trackSize);
     
     // Seek all sync marks
     int sectorStart[smax], index = 0, nr = 0;
-    while (index < trackLen + sectorSize && nr < smax) {
+    while (index < trackSize + sectorSize && nr < smax) {
 
         if (local[index++] != 0x44) continue;
         if (local[index++] != 0x89) continue;
