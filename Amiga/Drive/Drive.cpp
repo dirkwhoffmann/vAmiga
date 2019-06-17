@@ -289,7 +289,7 @@ Drive::rotate()
         
         // Start over at the beginning of the current cyclinder
         head.offset = 0;
-        
+
         /* If this drive is currently selected, we emulate a falling edge on
          * the flag pin of CIA B. This causes the CIA to trigger the INDEX
          * interrupt if the corresponding enable bit is set.
