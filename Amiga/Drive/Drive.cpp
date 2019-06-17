@@ -221,9 +221,9 @@ Drive::readHead()
     
     if (disk) {
         result = disk->readByte(head.cylinder, head.side, head.offset);
-        rotate();
     }
-    
+    rotate();
+
     return result;
 }
 
@@ -241,8 +241,8 @@ Drive::writeHead(uint8_t value)
 {
     if (disk) {
         disk->writeByte(value, head.cylinder, head.side, head.offset);
-        rotate();
     }
+    rotate();
 }
 
 void
@@ -255,11 +255,6 @@ Drive::writeHead16(uint16_t value)
 void
 Drive::rotate()
 {
-    // Only proceed if a disk is present
-    if (disk == NULL) return;
-
-    // debug("head = %d\n", head.offset);
-    
     if (++head.offset == disk->trackSize) {
         
         // Start over at the beginning of the current cyclinder
@@ -272,11 +267,10 @@ Drive::rotate()
         if (isSelected()) {
             // debug("emulateFallingEdgeOnFlagPin()\n"); 
             amiga->ciaB.emulateFallingEdgeOnFlagPin();
-        } else {
-            warn("Rotating an unselected drive\n");
         }
     }
-    assert(head.offset < disk->trackSize);
+
+    assert(head.offset < Disk::trackSize);
 }
 
 void
