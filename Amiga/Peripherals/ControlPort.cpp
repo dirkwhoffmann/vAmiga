@@ -62,6 +62,7 @@ ControlPort::getInfo()
     return result;
 }
 
+/*
 uint16_t
 ControlPort::potgor()
 {
@@ -74,6 +75,7 @@ ControlPort::potgor()
             return 0xFFFF;
     }
 }
+*/
 
 uint16_t
 ControlPort::joydat()

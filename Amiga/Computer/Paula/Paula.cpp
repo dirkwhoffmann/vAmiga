@@ -169,14 +169,27 @@ Paula::peekPOTxDAT(int x)
 {
     assert(x == 0 || x == 1);
 
+    uint8_t potX, potY;
     uint16_t result;
 
-    if (x == 0) {
-        result = HI_LO(potCntY0, potCntX0);
-    } else {
-        result = HI_LO(potCntY1, potCntX1);
+    int outy = x ? 15 : 11;
+    int daty = x ? 14 : 10;
+    int outx = x ? 13 : 9;
+    int datx = x ? 12 : 8;
 
+    if GET_BIT(potgo, outy) { // POTY is configured as output?
+        potY = GET_BIT(potgo, daty) ? 0xFF : 0x00;
+    } else {
+        potY = potCntY0;
     }
+
+    if GET_BIT(potgo, outx) { // POTX is configured as output?
+        potX = GET_BIT(potgo, datx) ? 0xFF : 0x00;
+    } else {
+        potX = potCntX0;
+    }
+
+    result = HI_LO(potY, potX);
 
     debug(POT_DEBUG, "peekPOT%dDAT() = %X\n", x, result);
     return result;
@@ -185,19 +198,35 @@ Paula::peekPOTxDAT(int x)
 uint16_t
 Paula::peekPOTGOR()
 {
-    uint16_t result = 0xFFFF;
-    
-    result &= amiga->controlPort1.potgor();
-    result &= amiga->controlPort2.potgor();
+    uint16_t result = potgo & 0b1010101011111111;
 
-    debug(POT_DEBUG, "peekPOTGOR = %X\n", result);
+    bool outry = GET_BIT(potgo, 15);
+    bool datry = GET_BIT(potgo, 14);
+    bool outrx = GET_BIT(potgo, 13);
+    bool datrx = GET_BIT(potgo, 12);
+    bool outly = GET_BIT(potgo, 11);
+    bool datly = GET_BIT(potgo, 10);
+    bool outlx = GET_BIT(potgo,  9);
+    bool datlx = GET_BIT(potgo,  8);
+
+    bool poty0 = amiga->controlPort1.getPotY() & 0x80;
+    bool potx0 = amiga->controlPort1.getPotX() & 0x80;
+    bool poty1 = amiga->controlPort2.getPotY() & 0x80;
+    bool potx1 = amiga->controlPort2.getPotX() & 0x80;
+
+    WRITE_BIT(result, 14, outry ? datry : poty0);
+    WRITE_BIT(result, 12, outrx ? datrx : potx0);
+    WRITE_BIT(result, 10, outly ? datly : poty1);
+    WRITE_BIT(result,  8, outlx ? datlx : potx1);
+
+    // debug(POT_DEBUG, "peekPOTGOR = %X\n", result);
     return result;
 }
 
 void
 Paula::pokePOTGO(uint16_t value)
 {
-    // debug(POT_DEBUG, "pokePOTGO(%X)\n", value);
+    debug(POT_DEBUG, "pokePOTGO(%X)\n", value);
 
     potgo = value;
 
@@ -209,7 +238,7 @@ Paula::pokePOTGO(uint16_t value)
 
     // Check the START bit
     if (GET_BIT(value, 0)) {
-        debug(POT_DEBUG, "START = 1\n");
+        debug(POT_DEBUG, "Starting potentiometer scan procedure\n");
 
         // Schedule the first DISCHARGE event
         events->scheduleSecPos(POT_SLOT, agnus->vpos, HPOS_MAX, POT_DISCHARGE);

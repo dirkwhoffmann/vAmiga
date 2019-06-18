@@ -71,7 +71,8 @@ public:
     public:
     
     // Returns the control port bits showing up in the POTGOR register.
-    uint16_t potgor();
+    // DEPRECATED
+    // uint16_t potgor();
 
     // Returns the control port bits showing up in the JOYxDAT register.
     uint16_t joydat();
