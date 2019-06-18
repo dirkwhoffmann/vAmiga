@@ -17,6 +17,10 @@
 class Paula : public HardwareComponent {
     
 private:
+
+    // Quick-access references
+    class Agnus *agnus;
+    class EventHandler *events;
     
     // Information shown in the GUI inspector panel
     PaulaInfo info;
@@ -58,10 +62,18 @@ public:
     
     // The pot control register
     uint16_t potgo;
-    
+
+    // Potentiometer counter for the first control port
+    uint8_t potCntX0;
+    uint8_t potCntY0;
+
+    // Potentiometer counter for the second control port
+    uint8_t potCntX1;
+    uint8_t potCntY1;
+
     // The Audio and Disk Control Register (ADKCON)
     uint16_t adkcon;
-    
+
     
     //
     // Constructing and destructing
@@ -77,7 +89,8 @@ public:
     //
     
 private:
-    
+
+    void _initialize() override;
     void _powerOn() override;
     void _powerOff() override;
     void _reset() override;
@@ -122,19 +135,24 @@ public:
     // OCS register 0x09E (w)
     void pokeADKCON(uint16_t value);
 
-    // OCS register 0x016 (r) (orignally called POTINP)
+    // OCS register 0x012 and 0x014 (r)
+    uint16_t peekPOTxDAT(int x);
+
+    // OCS register 0x016 (r) (originally called POTINP)
     uint16_t peekPOTGOR();
     
     // OCS register 0x030 (w)
     void pokePOTGO(uint16_t value);
-    
-    
+
+
     //
-    // Managing events
+    // Serving events
     //
     
 public:
-    
+
+    void servePotEvent(EventID id);
+
     
     //
     // Managing interrupts

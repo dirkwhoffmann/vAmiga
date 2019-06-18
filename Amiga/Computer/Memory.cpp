@@ -840,9 +840,9 @@ Memory::peekCustom16(uint32_t addr)
         case 0x010 >> 1: // ADKCONR
             return paula->peekADKCONR();
         case 0x012 >> 1: // POT0DAT
-            break;
+            return paula->peekPOTxDAT(0);
         case 0x014 >> 1: // POT1DAT
-            break;
+            return paula->peekPOTxDAT(1);
         case 0x016 >> 1: // POTGOR
             return paula->peekPOTGOR();
         case 0x018 >> 1: // SERDATR

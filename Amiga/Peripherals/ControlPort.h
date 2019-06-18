@@ -27,6 +27,10 @@ class ControlPort : public HardwareComponent {
     int64_t mouseCounterX = 0;
     int64_t mouseCounterY = 0;
 
+    // The two potentiometer values
+    uint8_t potX = 128;
+    uint8_t potY = 128; 
+
 
     //
     // Constructing and destructing
@@ -55,6 +59,10 @@ public:
     // Returns the latest internal state recorded by inspect()
     ControlPortInfo getInfo();
 
+    // Getter for potX and potY
+    uint8_t getPotX() { return potX; }
+    uint8_t getPotY() { return potY; }
+    
 
     //
     // Managing registers

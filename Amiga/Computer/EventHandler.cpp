@@ -293,6 +293,7 @@ EventHandler::_inspectSecSlot(uint32_t slot)
         case IRQ_EXTER_SLOT:     i->slotName = "CIA B IRQ"; break;
         case TXD_SLOT:           i->slotName = "Serial out (UART)"; break;
         case RXD_SLOT:           i->slotName = "Serial in (UART)"; break;
+        case POT_SLOT:           i->slotName = "Potentiometer"; break;
         case INSPECTOR_SLOT:     i->slotName = "Debugger"; break;
         default:                 i->slotName = "*** INVALID ***"; break;
     }
@@ -350,6 +351,17 @@ EventHandler::_inspectSecSlot(uint32_t slot)
                 case 0:          i->eventName = "none"; break;
                 case RXD_BIT:    i->eventName = "RXD_BIT"; break;
                 default:         i->eventName = "*** INVALID ***"; break;
+            }
+            break;
+
+        case POT_SLOT:
+
+            switch (secSlot[slot].id) {
+
+                case 0:             i->eventName = "none"; break;
+                case POT_DISCHARGE: i->eventName = "POT_DISCHARGE"; break;
+                case POT_CHARGE:    i->eventName = "POT_CHARGE"; break;
+                default:            i->eventName = "*** INVALID ***"; break;
             }
             break;
 
@@ -589,6 +601,9 @@ EventHandler::_executeSecUntil(Cycle cycle) {
     }
     if (isDueSec(RXD_SLOT, cycle)) {
         paula->uart.serveRxdEvent(secSlot[RXD_SLOT].id);
+    }
+    if (isDueSec(POT_SLOT, cycle)) {
+        paula->servePotEvent(secSlot[POT_SLOT].id);
     }
     if (isDueSec(INSPECTOR_SLOT, cycle)) {
         serveINSEvent();

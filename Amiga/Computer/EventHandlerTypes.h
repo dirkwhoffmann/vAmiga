@@ -52,6 +52,7 @@ typedef enum : long
     IRQ_EXTER_SLOT,   // Source 13 IRQ (I/O ports and CIA B)
     TXD_SLOT,         // Serial data out (UART)
     RXD_SLOT,         // Serial data in (UART)
+    POT_SLOT,         // Potentiometer
     INSPECTOR_SLOT,   // Handles periodic calls to inspect()
     SEC_SLOT_COUNT,
 } EventSlot;
@@ -156,6 +157,11 @@ typedef enum : long
     RXD_BIT = 1,
     RXD_EVENT_COUT,
 
+    // Potentiometer
+    POT_DISCHARGE = 1,
+    POT_CHARGE,
+    POT_EVENT_COUNT,
+
     // Inspector slot
     INS_NONE = 1,
     INS_AMIGA,
@@ -168,6 +174,7 @@ typedef enum : long
     INS_PORTS,
     INS_EVENTS,
     INS_EVENT_COUNT
+
 } EventID;
 
 static inline bool isCiaEvent(EventID id) { return id < CIA_EVENT_COUNT; }

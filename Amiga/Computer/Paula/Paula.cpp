@@ -30,9 +30,20 @@ Paula::Paula()
         { &intena,   sizeof(intena),   0 },
         
         { &potgo,    sizeof(potgo),    0 },
-    
+        { &potCntX0, sizeof(potCntX0), 0 },
+        { &potCntY0, sizeof(potCntY0), 0 },
+        { &potCntX1, sizeof(potCntX1), 0 },
+        { &potCntY1, sizeof(potCntY1), 0 },
+
         { &adkcon,   sizeof(adkcon),   0 },
     });
+}
+
+void
+Paula::_initialize()
+{
+    agnus = &amiga->agnus;
+    events = &amiga->agnus.events;
 }
 
 void
@@ -154,6 +165,24 @@ Paula::setINTENA(uint16_t value)
 }
 
 uint16_t
+Paula::peekPOTxDAT(int x)
+{
+    assert(x == 0 || x == 1);
+
+    uint16_t result;
+
+    if (x == 0) {
+        result = HI_LO(potCntY0, potCntX0);
+    } else {
+        result = HI_LO(potCntY1, potCntX1);
+
+    }
+
+    debug(POT_DEBUG, "peekPOT%dDAT() = %X\n", x, result);
+    return result;
+}
+
+uint16_t
 Paula::peekPOTGOR()
 {
     uint16_t result = 0xFFFF;
@@ -161,15 +190,85 @@ Paula::peekPOTGOR()
     result &= amiga->controlPort1.potgor();
     result &= amiga->controlPort2.potgor();
 
-    debug(2, "peekPOTGOR = %X\n", result);
+    debug(POT_DEBUG, "peekPOTGOR = %X\n", result);
     return result;
 }
 
 void
 Paula::pokePOTGO(uint16_t value)
 {
-    debug(2, "pokePOTGO(%X)\n", value);
+    // debug(POT_DEBUG, "pokePOTGO(%X)\n", value);
+
     potgo = value;
+
+    // Writing into this register clears the potentiometer counter
+    potCntX0 = 0;
+    potCntY0 = 0;
+    potCntX1 = 0;
+    potCntY1 = 0;
+
+    // Check the START bit
+    if (GET_BIT(value, 0)) {
+        debug(POT_DEBUG, "START = 1\n");
+
+        // Schedule the first DISCHARGE event
+        events->scheduleSecPos(POT_SLOT, agnus->vpos, HPOS_MAX, POT_DISCHARGE);
+        events->secSlot[POT_SLOT].data = 8;
+    }
+}
+
+void
+Paula::servePotEvent(EventID id)
+{
+    bool cont;
+
+    debug(POT_DEBUG, "servePotEvent(%d)\n", id);
+
+    switch (id) {
+
+        case POT_DISCHARGE:
+
+            events->secSlot[POT_SLOT].data--;
+            if (events->secSlot[POT_SLOT].data) {
+
+                // Schedule another DISCHARGE event
+                potCntX0++;
+                potCntY0++;
+                potCntX1++;
+                potCntY1++;
+                events->scheduleSecRel(POT_SLOT, DMA_CYCLES(HPOS_MAX), POT_DISCHARGE);
+
+            } else {
+
+                // Schedule first CHARGE event
+                potCntX0 = 0;
+                potCntY0 = 0;
+                potCntX1 = 0;
+                potCntY1 = 0;
+                events->scheduleSecRel(POT_SLOT, DMA_CYCLES(HPOS_MAX), POT_CHARGE);
+            }
+            break;
+
+        case POT_CHARGE:
+
+            // Increment pot counters if target value hasn't been reached yet
+            cont = false;
+            if (potCntX0 < amiga->controlPort1.getPotX()) { potCntX0++; cont = true; }
+            if (potCntY0 < amiga->controlPort1.getPotY()) { potCntY0++; cont = true; }
+            if (potCntX1 < amiga->controlPort2.getPotX()) { potCntX1++; cont = true; }
+            if (potCntY1 < amiga->controlPort2.getPotY()) { potCntY1++; cont = true; }
+
+            // Schedule next pot event if at least counter is still running
+            if (cont) {
+                events->scheduleSecRel(POT_SLOT, DMA_CYCLES(HPOS_CNT), POT_CHARGE);
+            } else {
+                events->cancelSec(POT_SLOT);
+            }
+            break;
+
+        default:
+            assert(false);
+    }
 }
 
 int
