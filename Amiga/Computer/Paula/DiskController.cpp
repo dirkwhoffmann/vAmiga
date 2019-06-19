@@ -52,6 +52,7 @@ DiskController::_initialize()
 void
 DiskController::_powerOn()
 {
+    prb = 0xFF; 
     selected = -1;
     dsksync = 0x4489;
 }

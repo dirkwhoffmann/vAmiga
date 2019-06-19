@@ -219,6 +219,11 @@ Paula::peekPOTGOR()
     WRITE_BIT(result, 10, outly ? datly : poty1);
     WRITE_BIT(result,  8, outlx ? datlx : potx1);
 
+    // Connected devices can pull down lines even if they are configured
+    // as outputs
+    result &= amiga->controlPort1.potgor();
+    result &= amiga->controlPort2.potgor();
+
     // debug(POT_DEBUG, "peekPOTGOR = %X\n", result);
     return result;
 }

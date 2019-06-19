@@ -62,20 +62,15 @@ ControlPort::getInfo()
     return result;
 }
 
-/*
 uint16_t
 ControlPort::potgor()
 {
-    switch (device) {
-            
-        case CPD_MOUSE:
-            return amiga->mouse.rightButton ? 0xFBFF : 0xFFFF;
-            
-        default:
-            return 0xFFFF;
-    }
+    if (device == CPD_MOUSE)
+        if (amiga->mouse.rightButton)
+            return (nr == 1) ? 0xFBFF : 0xBFFF;
+
+    return 0xFFFF;
 }
-*/
 
 uint16_t
 ControlPort::joydat()
