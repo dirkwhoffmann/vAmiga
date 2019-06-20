@@ -568,7 +568,7 @@ DiskController::performDMAWrite(Drive *drive)
             }
             state = DRIVE_DMA_OFF;
             
-            plainmsg("performWrite: checkcnt = %d checksum = %X\n", checkcnt, checksum);
+            debug(DSK_DEBUG, "performWrite: checkcnt = %d checksum = %X\n", checkcnt, checksum);
             return;
         }
         
@@ -630,7 +630,7 @@ DiskController::performSimpleDMARead(Drive *drive)
             
             paula->pokeINTREQ(0x8002);
             state = DRIVE_DMA_OFF;
-            plainmsg("doSimpleDMARead: checkcnt = %d checksum = %X\n", checkcnt, checksum);
+            debug(DSK_DEBUG, "doSimpleDMARead: checkcnt = %d checksum = %X\n", checkcnt, checksum);
             return;
         }
     }
@@ -657,7 +657,7 @@ DiskController::performSimpleDMAWrite(Drive *drive)
             
             paula->pokeINTREQ(0x8002);
             state = DRIVE_DMA_OFF;
-            plainmsg("doSimpleDMAWrite: checkcnt = %d checksum = %X\n", checkcnt, checksum);
+            debug(DSK_DEBUG, "doSimpleDMAWrite: checkcnt = %d checksum = %X\n", checkcnt, checksum);
             return;
         }
     }
@@ -740,6 +740,6 @@ DiskController::performTurboWrite(Drive *drive)
         drive->writeHead16(word);
     }
     
-    plaindebug(2, "Turbo write %s: checkcnt = %d checksum = %X\n", drive->getDescription(), checkcnt, checksum);
+    plaindebug(DSK_DEBUG, "Turbo write %s: checkcnt = %d checksum = %X\n", drive->getDescription(), checkcnt, checksum);
 }
 
