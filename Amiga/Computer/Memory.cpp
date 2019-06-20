@@ -855,6 +855,8 @@ Memory::peekCustom16(uint32_t addr)
             return paula->peekINTREQR();
 
         default: // Write-only register
+            warn("peekCustom16(%X [%s]): WRITE-ONLY-REGISTER\n",
+                 addr, customReg[(addr >> 1) & 0xFF]);
             return 0x00;
     }
     
@@ -927,7 +929,7 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
             paula->diskController.pokeDSKLEN(value); return;
         case 0x026 >> 1: // DSKDAT
             paula->diskController.pokeDSKDAT(value); return;
-        case 0x28 >> 1: // REFPTR
+        case 0x028 >> 1: // REFPTR
             return;
         case 0x02A >> 1: // VPOSW
             agnus->pokeVPOS(value); return;
@@ -977,7 +979,7 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x05A >> 1: // unused
         case 0x05C >> 1: // unused
         case 0x05E >> 1: // unused
-            return;
+            break;
         case 0x060 >> 1: // BLTCMOD
             agnus->blitter.pokeBLTCMOD(value); return;
         case 0x062 >> 1: // BLTBMOD
@@ -990,7 +992,7 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x06A >> 1: // unused
         case 0x06C >> 1: // unused
         case 0x06E >> 1: // unused
-            return;
+            break;
         case 0x070 >> 1: // BLTCDAT
             agnus->blitter.pokeBLTCDAT(value); return;
         case 0x072 >> 1: // BLTBDAT
@@ -1001,7 +1003,7 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x078 >> 1: // unused
         case 0x07A >> 1: // unused
         case 0x07C >> 1: // unused
-            return;
+            break;
         case 0x07E >> 1: // DSKSYNC
             paula->diskController.pokeDSKSYNC(value); return;
         case 0x080 >> 1: // COP1LCH
@@ -1053,7 +1055,7 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
             paula->audioUnit.pokeAUDxDAT(0, value); return;
         case 0x0AC >> 1: // Unused
         case 0x0AE >> 1: // Unused
-            return;
+            break;
         case 0x0B0 >> 1: // AUD1LCH
             agnus->pokeAUDxLCH(1, value); return;
         case 0x0B2 >> 1: // AUD1LCL
@@ -1068,7 +1070,7 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
             paula->audioUnit.pokeAUDxDAT(1, value); return;
         case 0x0BC >> 1: // Unused
         case 0x0BE >> 1: // Unused
-            return;
+            break;
         case 0x0C0 >> 1: // AUD2LCH
             agnus->pokeAUDxLCH(2, value); return;
         case 0x0C2 >> 1: // AUD2LCL
@@ -1083,7 +1085,7 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
             paula->audioUnit.pokeAUDxDAT(2, value); return;
         case 0x0CC >> 1: // Unused
         case 0x0CE >> 1: // Unused
-            return;
+            break;
         case 0x0D0 >> 1: // AUD3LCH
             agnus->pokeAUDxLCH(3, value); return;
         case 0x0D2 >> 1: // AUD3LCL
@@ -1098,7 +1100,7 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
             paula->audioUnit.pokeAUDxDAT(3, value); return;
         case 0x0DC >> 1: // Unused
         case 0x0DE >> 1: // Unused
-            return;
+            break;
         case 0x0E0 >> 1: // BPL1PTH
             agnus->pokeBPLxPTH(0, value); return;
         case 0x0E2 >> 1: // BPL1PTL
@@ -1127,7 +1129,7 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x0FA >> 1: // Unused
         case 0x0FC >> 1: // Unused
         case 0x0FE >> 1: // Unused
-            return;
+            break;
         case 0x100 >> 1: // BPLCON0
             denise->pokeBPLCON0(value); return;
         case 0x102 >> 1: // BPLCON1
@@ -1135,14 +1137,14 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x104 >> 1: // BPLCON2
             denise->pokeBPLCON2(value); return;
         case 0x106 >> 1: // Unused
-            return;
+            break;
         case 0x108 >> 1: // BPL1MOD
             agnus->pokeBPL1MOD(value); return;
         case 0x10A >> 1: // BPL2MOD
             agnus->pokeBPL2MOD(value); return;
         case 0x10C >> 1: // Unused
         case 0x10E >> 1: // Unused
-            return;
+            break;
         case 0x110 >> 1: // BPL1DAT
             denise->pokeBPLxDAT(0, value); return;
         case 0x112 >> 1: // BPL2DAT
@@ -1157,7 +1159,7 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
             denise->pokeBPLxDAT(5, value); return;
         case 0x11C >> 1: // Unused
         case 0x11E >> 1: // Unused
-            return;
+            break;
         case 0x120 >> 1: // SPR0PTH
             agnus->pokeSPRxPTH(0, value); return;
         case 0x122 >> 1: // SPR0PTL
@@ -1321,8 +1323,11 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
     }
     
     if (addr <= 0x1E) {
-        warn("pokeCustom16(%s,%X): Trying to write into a read-only register.\n",
-             customReg[(addr >> 1) & 0xFF], value);
+        warn("pokeCustom16(%X [%s]): READ-ONLY-REGISTER\n",
+             addr, customReg[(addr >> 1) & 0xFF]);
+    } else {
+        warn("pokeCustom16(%X [%s]): NO OCS REGISTER\n",
+             addr, customReg[(addr >> 1) & 0xFF]);
     }
 }
 

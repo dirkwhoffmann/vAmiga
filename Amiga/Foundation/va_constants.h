@@ -353,7 +353,7 @@ static const char *customReg[256] = {
     "BPLHMOD (AGA)",  "SPRHPTH (AGA)",  "SPRHPTL (AGA)",
     "BPLHPTH (AGA)",  "BPLHPTL (AGA)",  "unused",
     "unused",         "unused",         "unused",
-    "unused",         "unused",         "unused",
+    "unused",         "unused",         "FMODE (AGA)",
     "NO-OP"
 };
 
