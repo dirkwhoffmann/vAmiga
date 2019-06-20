@@ -80,8 +80,8 @@ CIA::_powerOn()
 	latchA = 0xFFFF;
 	latchB = 0xFFFF;
     
-    PA = 0xFF;
-    PB = 0xFF;
+    // PA = 0xFF;
+    // PB = 0xFF;
     updatePA();
     updatePB();
     
@@ -1322,20 +1322,35 @@ void
 CIAA::updatePA()
 {
     uint8_t oldPA = PA;
-    
-    PA = (portAinternal() & DDRA) | (portAexternal() & ~DDRA);
+    uint8_t internal = portAinternal();
+    uint8_t external = portAexternal();
+    uint8_t mask = DDRA;
+
+    /* If a DIP model is emulated, the values of the drive lines are dominant.
+     * This means that they appear in the PRA register regardless of the value
+     * in the data direction register. If a PLCC model is emulated, the data
+     * direction register bits take full effect.
+     */
+    switch (type) {
+
+        case CIA_8520_DIP:  mask &= 0b11000011; break;
+        default:            break;
+    }
+
+    PA = (internal & mask) | (external & ~mask);
+
+    // A grounded joystick line always forces the corresponding bit to 0
+    PA &= external | 0b00111111;
 
     // plaindebug("CIAA: Peek(0) = %X (PC = %X DDRA = %X)\n", PA, amiga->cpu.getPC(), DDRA);
     
-    // Power LED bit
+    // Check the LED bit
     if ((oldPA ^ PA) & 0b00000010) {
-        // debug("/LED has changed\n");
         amiga->putMessage((PA & 0b00000010) ? MSG_POWER_LED_DIM : MSG_POWER_LED_ON);
     }
 
-    // Overlay bit (OVL)
+    // Check the OVL bot (Kickstart overlay)
     if ((oldPA ^ PA) & 0b00000001) {
-        // debug("OVL has changed\n");
         amiga->mem.updateMemSrcTable();
     }
     
@@ -1375,7 +1390,8 @@ void
 CIAA::updatePB()
 {
     PB = (portBinternal() & DDRB) | (portBexternal() & ~DDRB);
- 
+    // TODO: Special action for CIA_8520_DIP models
+
     // Check if timer A underflow shows up on PB6
     if (GET_BIT(PB67TimerMode, 6))
         COPY_BIT(PB67TimerOut, PB, 6);
@@ -1493,13 +1509,14 @@ CIAB::updatePA()
 
     uint8_t internal = portAinternal() & DDRA;
 
-    // Drive bits that are configured as output
+    // Check drive bits that are configured as output
     if (GET_BIT(DDRA, 6)) serialPort->setRTS(!GET_BIT(internal, 6));
     if (GET_BIT(DDRA, 7)) serialPort->setDTR(!GET_BIT(internal, 7));
 
     uint8_t external = portAexternal() & ~DDRA;
     
     PA = internal | external;
+    // TODO: Special action for CIA_8520_DIP models
 
     // debug(CIA_DEBUG, "DDRA = %X PA = %X internal = %X\n", DDRA, PA, portAinternal());
 }
@@ -1541,8 +1558,24 @@ void
 CIAB::updatePB()
 {
     uint8_t oldPB = PB;
-    PB = (portBinternal() & DDRB) | (portBexternal() & ~DDRB);
-    
+    uint8_t internal = portBinternal();
+    uint8_t external = portBexternal();
+    uint8_t mask = DDRB;
+
+    /* If a DIP model is emulated, the internal register values are dominant.
+     * This means that they appear in the PRB register regardless of the value
+     * in the data direction register. If a PLCC model is emulated, the data
+     * direction register bits take full effect.
+     */
+    switch (type) {
+
+        case CIA_8520_DIP:  mask |= 0b11111111; break;
+        default:            break;
+    }
+
+    PB = (internal & mask) | (external & ~mask);
+
+    // Notify the disk controller about the changed bits
     if (oldPB ^ PB) {
         /*
         debug("PB changed: MTR: %d SEL3: %d SEL2: %d SEL1: %d SEL0: %d SIDE: %d DIR: %d STEP: %d\n",
@@ -1552,4 +1585,3 @@ CIAB::updatePB()
         paula->diskController.PRBdidChange(oldPB, PB);
     }
 }
-

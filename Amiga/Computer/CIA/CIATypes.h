@@ -12,6 +12,34 @@
 #ifndef _CIA_T_INC
 #define _CIA_T_INC
 
+/* Emulated CIA model
+ *
+ *   CIA_8520_DIP  mimics option "[ ] 391078-01" in UAE (default)
+ *   CIA_8520_PLCC mimics option "[X] 391078-01" in UAE (A600 behaviour)
+ */
+typedef enum : long
+{
+    CIA_8520_DIP,
+    CIA_8520_PLCC
+}
+CIAType;
+
+inline bool isCIAType(long value)
+{
+    return value >= CIA_8520_DIP && value <= CIA_8520_PLCC;
+}
+
+inline const char *ciaTypeName(CIAType type)
+{
+    assert(isCIAType(type));
+
+    switch (type) {
+        case CIA_8520_DIP:   return "CIA_8520_DIP";
+        case CIA_8520_PLCC:  return "CIA_8520_PLCC";
+        default:             return "???";
+    }
+}
+
 typedef union
 {
     struct

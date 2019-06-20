@@ -72,6 +72,9 @@ class CIA : public HardwareComponent {
 
 protected:
 
+    // The type of this CIA
+    CIAType type = CIA_8520_DIP;
+
     // Quick-access references
     class Agnus *agnus;
     class EventHandler *events;

@@ -72,7 +72,7 @@
 #define SER_DEBUG 2
 
 // Set to 1 to debug the potentiometer inputs
-#define POT_DEBUG 1
+#define POT_DEBUG 2
 
 // Set to 1 to debug the keyboard
 #define KB_DEBUG 1
