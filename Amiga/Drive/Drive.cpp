@@ -160,7 +160,7 @@ Drive::driveStatusFlags()
         if (idMode()) {
             if (idBit) result &= 0b11011111;
         } else {
-            if (motorAtFullSpeed()) result &= 0b11011111;
+            if (motorAtFullSpeed() && hasDisk()) result &= 0b11011111;
         }
         
         // PA4: /DSKTRACK0

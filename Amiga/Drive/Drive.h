@@ -151,7 +151,8 @@ public:
     bool isTurboDrive() { return speed > 128; }
 
     // Indicates whether identification mode is enabled.
-    bool idMode() { return motorStopped(); }
+    // bool idMode() { return motorStopped(); }
+    bool idMode() { return !motor; }
 
     /* Returns the drive identification code.
      * Each drive identifies itself by a 32 bit identification code that is
