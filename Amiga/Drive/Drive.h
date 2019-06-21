@@ -209,9 +209,22 @@ public:
     // Rotates the disk to the next sync mark.
     void findSyncMark();
 
+    //
+    // Moving the drive head
+    //
+
     // Moves the drive head (0 = inwards, 1 = outwards).
     void moveHead(int dir);
-    
+
+    // Records a cylinder change (needed for diskPollingMode() to work)
+    void recordCylinder(uint8_t cylinder);
+
+    /* Returns true if the drive is in disk polling mode
+     * Disk polling mode is detected by analyzing the movement history that
+     * has been recorded by recordCylinder()
+     */
+    bool pollsForDisk();
+
     
     //
     // Handling disks

@@ -1334,8 +1334,8 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         warn("pokeCustom16(%X [%s]): READ-ONLY-REGISTER\n",
              addr, customReg[(addr >> 1) & 0xFF]);
     } else {
-        warn("pokeCustom16(%X [%s]): NO OCS REGISTER\n",
-             addr, customReg[(addr >> 1) & 0xFF]);
+        // warn("pokeCustom16(%X [%s]): NO OCS REGISTER\n",
+        //      addr, customReg[(addr >> 1) & 0xFF]);
     }
 }
 

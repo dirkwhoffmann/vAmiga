@@ -325,13 +325,19 @@ Drive::moveHead(int dir)
     if (dir) {
         
         // Move drive head outwards (towards the lower tracks)
-        if (head.cylinder > 0) head.cylinder--;
+        if (head.cylinder > 0) {
+            head.cylinder--;
+            recordCylinder(head.cylinder);
+        }
         debug(DSK_DEBUG, "Stepping down to cylinder %d\n", head.cylinder);
 
     } else {
         
         // Move drive head inwards (towards the upper tracks)
-        if (head.cylinder < 79) head.cylinder++;
+        if (head.cylinder < 79) {
+            head.cylinder++;
+            recordCylinder(head.cylinder);
+        }
         debug(DSK_DEBUG, "Stepping up to cylinder %d\n", head.cylinder);
     }
 
@@ -339,16 +345,44 @@ Drive::moveHead(int dir)
     head.offset = 0; 
 #endif
     
-    /* Inform the GUI
-     * We send a MSG_DRIVE_HEAD_POLL, if a disk change polling signature is
-     * detected. If no pattern is detected, MSG_DRIVE_HEAD is sent.
+    // Inform the GUI
+    amiga->putMessage(pollsForDisk() ? MSG_DRIVE_HEAD_POLL : MSG_DRIVE_HEAD);
+}
+
+void
+Drive::recordCylinder(uint8_t cylinder)
+{
+    cylinderHistory = (cylinderHistory << 8) | cylinder;
+}
+
+bool
+Drive::pollsForDisk()
+{
+    // Disk polling is only performed if no disk is inserted
+    if (hasDisk()) return false;
+
+    /* Head polling sequences of different Kickstart versions:
+     *
+     * Kickstart 1.2 and 1.3: 0-1-0-1-0-1-...
+     * Kickstart 2.0:         0-1-2-3-2-1-...
      */
-    cylinderHistory = ((cylinderHistory << 8) | head.cylinder) & 0xFFFFFFFF;
-    if (cylinderHistory == 0x00010001 || cylinderHistory == 0x01000100) {
-        amiga->putMessage(MSG_DRIVE_HEAD_POLL);
-    } else {
-        amiga->putMessage(MSG_DRIVE_HEAD);
+    static const uint64_t signature[] = {
+
+        // Kickstart 1.2 and 1.3
+        0x010001000100,
+        0x000100010001,
+
+        // Kickstart 2.0
+        0x020302030203,
+        0x030203020302,
+    };
+
+    uint64_t mask = 0xFFFFFFFF;
+    for (unsigned i = 0; i < sizeof(signature) / 8; i++) {
+        if ((cylinderHistory & mask) == (signature[i] & mask)) return true;
     }
+
+    return false;
 }
 
 bool
