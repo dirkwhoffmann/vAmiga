@@ -120,7 +120,7 @@ HardwareComponent::run()
         }
         
         // Start this component
-        debug(2, "Run\n");
+        debug(RUN_DEBUG, "Run\n");
         running = true;
         _run();
     }
@@ -132,7 +132,7 @@ HardwareComponent::pause()
     if (running) {
         
         // Pause this component
-        debug(2, "Pause\n");
+        debug(RUN_DEBUG, "Pause\n");
         running = false;
         _pause();
 

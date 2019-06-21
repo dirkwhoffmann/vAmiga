@@ -549,7 +549,7 @@ Memory::spypeek32(uint32_t addr)
 void
 Memory::poke8(uint32_t addr, uint8_t value)
 {
-    // debug("PC: %X poke8(%X,%X)\n", amiga->cpu.getPC(), addr, value);
+    // if (addr >= 0xC2F3A0 && addr <= 0xC2F3B0) debug("**** poke8(%X,%X)\n", addr, value);
 
     addr &= 0xFFFFFF;
     switch (memSrc[addr >> 16]) {
@@ -572,6 +572,7 @@ Memory::poke8(uint32_t addr, uint8_t value)
 void
 Memory::poke16(uint32_t addr, uint16_t value)
 {
+    // if (addr >= 0xC2F3A0 && addr <= 0xC2F3B0) debug("**** SLOW poke8(%X,%X)\n", addr, value);
     // debug("PC: %X poke16(%X,%X)\n", amiga->cpu.getPC(), addr, value);
 
     addr &= 0xFFFFFF;
@@ -818,7 +819,12 @@ uint16_t
 Memory::peekCustom16(uint32_t addr)
 {
     assert(IS_EVEN(addr));
-    
+
+    /*
+    if (addr != 0xDFF018)
+        debug("peekCustom16(%X [%s])\n", addr, customReg[(addr >> 1) & 0xFF]);
+    */
+
     switch ((addr >> 1) & 0xFF) {
             
         case 0x000 >> 1: // BLTDDAT
@@ -916,7 +922,9 @@ void
 Memory::pokeCustom16(uint32_t addr, uint16_t value)
 {
     // if (addr >= 0x180 && addr <= 0x1BE) debug("Poke Color reg %X\n", addr);
-    
+
+    // debug("pokeCustom16(%X [%s], %X)\n", addr, customReg[(addr >> 1) & 0xFF], value);
+
     assert(IS_EVEN(addr));
     
     switch ((addr >> 1) & 0xFF) {

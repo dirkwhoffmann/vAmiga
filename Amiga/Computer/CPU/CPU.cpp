@@ -59,18 +59,18 @@ extern "C" void m68k_write_memory_8(unsigned int addr, unsigned int value)
 extern "C" void m68k_write_memory_16(unsigned int addr, unsigned int value)
 {
     assert(activeAmiga != NULL);
-    /*
-    if (addr == 0x15150 || (addr >= 0xB160 && addr <= 0xB180)) printf("CPU::poke16(%x), %x\n", addr, value);
-    */
+
+    // if (addr >= 0xC2F3A0 && addr <= 0xC2F3B0) printf("%X CPU::poke16(%x), %x\n", addr, value);
+
     activeAmiga->mem.poke16(addr, value);
 }
 
 extern "C" void m68k_write_memory_32(unsigned int addr, unsigned int value)
 {
     assert(activeAmiga != NULL);
+
     /*
-    if (addr == 0x15150 || addr == 0x1514E || (addr >= 0xB160 && addr <= 0xB180)) {
-        printf("%X CPU::poke32(%x), %x\n", activeAmiga->cpu.getPC(), addr, value);
+    if (addr >= 0xC2F3A0 && addr <= 0xC2F3B0) printf("%X CPU::poke32(%x), %x\n", activeAmiga->cpu.getPC(), addr, value);
         if (addr == 0x15150) activeAmiga->runLoopCtrl |= RL_STOP;
     }
     */

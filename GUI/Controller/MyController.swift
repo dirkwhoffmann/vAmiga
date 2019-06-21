@@ -600,15 +600,13 @@ extension MyController {
             mydocument?.mountAmigaAttachment()
         
         case MSG_RUN:
-            
-            track("Run")
+
             needsSaving = true
             toolbar.validateVisibleItems()
             myAppDelegate.inspector?.refresh(everything: true)
     
         case MSG_PAUSE:
             
-            track("Pause")
             toolbar.validateVisibleItems()
             myAppDelegate.inspector?.refresh(everything: true)
     

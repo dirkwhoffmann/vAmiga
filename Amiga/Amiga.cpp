@@ -510,7 +510,27 @@ Amiga::_powerOn()
     // cpu.bpManager.setBreakpointAt(0xfeaa22);
     // cpu.bpManager.setBreakpointAt(0xfe85a6);  // After MFM decoding with Blitter
     // cpu.bpManager.setBreakpointAt(0x05005A);
-    // cpu.bpManager.setBreakpointAt(0xF800E0);
+    // cpu.bpManager.setBreakpointAt(0xFD8186); //
+    // cpu.bpManager.setBreakpointAt(0xFD8192); //
+
+    // cpu.bpManager.setBreakpointAt(0xFF5A60); // Copy(Init) slow ram stuff
+
+    // cpu.bpManager.setBreakpointAt(0xFF4D68); // Jumps to init routine
+    // cpu.bpManager.setBreakpointAt(0xFD465C); // Start of video init
+    // cpu.bpManager.setBreakpointAt(0xFD466C); // Audio init
+
+    // cpu.bpManager.setBreakpointAt(0xFD7952); // Bitplane init
+
+    // cpu.bpManager.setBreakpointAt(0xFD7962); // AROS ERROR
+    // cpu.bpManager.setBreakpointAt(0xF890C6); //
+    // cpu.bpManager.setBreakpointAt(0xFD822E); // Jumps to error output routine
+
+    // cpu.bpManager.setBreakpointAt(0xFD818C); // BEFORE AUD registers
+    // cpu.bpManager.setBreakpointAt(0xFA93E6); // FIRST FMODE non-OCS access
+    // cpu.bpManager.setBreakpointAt(0xFD7982); // WRITE TO BPLCON3
+
+
+
     // Update the recorded debug information
     inspect();
     
@@ -531,8 +551,6 @@ Amiga::_powerOff()
 void
 Amiga::_run()
 {
-    debug(1, "Run\n");
-    
     // Check for missing Roms.
     if (!readyToPowerUp()) {
         putMessage(MSG_ROM_MISSING);
@@ -552,8 +570,6 @@ Amiga::_run()
 void
 Amiga::_pause()
 {
-    debug(1, "Pause (p = %p)\n", p);
-    
     // Cancel the emulator thread if it still running
     if (p) signalStop();
     
@@ -940,7 +956,7 @@ Amiga::stepOver()
 void
 Amiga::runLoop()
 {
-    debug("runLoop()\n");
+    debug(RUN_DEBUG, "runLoop()\n");
 
     // Prepare to run
     amiga->restartTimer();
@@ -986,7 +1002,7 @@ Amiga::runLoop()
             if (runLoopCtrl & RL_ENABLE_BREAKPOINTS) {
                 if (cpu.bpManager.shouldStop()) {
                     putMessage(MSG_BREAKPOINT_REACHED);
-                    debug("BREAKPOINT_REACHED\n");
+                    debug(RUN_DEBUG, "BREAKPOINT_REACHED\n");
                     break;
                 }
             }
@@ -994,7 +1010,7 @@ Amiga::runLoop()
             // Are we requests to terminate the run loop?
             if (runLoopCtrl & RL_STOP) {
                 clearControlFlags(RL_STOP);
-                debug("RL_STOP\n");
+                debug(RUN_DEBUG, "RL_STOP\n");
                 break;
             }
         }

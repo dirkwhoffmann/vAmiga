@@ -135,8 +135,8 @@ Denise::_inspect()
     info.diwVstrt = agnus->diwVstrt;
     info.diwVstop = agnus->diwVstop;
 
-    info.joydat[0] = peekJOY0DATR();
-    info.joydat[1] = peekJOY1DATR();
+    info.joydat[0] = amiga->controlPort1.joydat();
+    info.joydat[1] = amiga->controlPort2.joydat();
     info.clxdat = 0;
 
     for (unsigned i = 0; i < 6; i++) {

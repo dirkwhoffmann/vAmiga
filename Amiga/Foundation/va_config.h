@@ -35,6 +35,9 @@
 // Default debug level (used for statements with no custom level)
 #define DEBUG_LEVEL 1
 
+// Set to 1 to debug the run loop
+#define RUN_DEBUG 2
+
 // Set to 1 to debug the CIAs
 #define CIA_DEBUG 2
 

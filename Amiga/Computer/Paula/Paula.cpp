@@ -198,7 +198,7 @@ Paula::peekPOTxDAT(int x)
 uint16_t
 Paula::peekPOTGOR()
 {
-    uint16_t result = potgo & 0b1010101011111111;
+    uint16_t result = 0;
 
     bool outry = GET_BIT(potgo, 15);
     bool datry = GET_BIT(potgo, 14);
@@ -224,7 +224,7 @@ Paula::peekPOTGOR()
     result &= amiga->controlPort1.potgor();
     result &= amiga->controlPort2.potgor();
 
-    // debug(POT_DEBUG, "peekPOTGOR = %X\n", result);
+    debug(POT_DEBUG, "peekPOTGOR = %X\n", result);
     return result;
 }
 

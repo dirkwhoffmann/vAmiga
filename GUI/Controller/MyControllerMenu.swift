@@ -280,19 +280,16 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func stopAndGoAction(_ sender: NSButton!) {
         
-        track()
         amigaProxy?.stopAndGo()
     }
     
     @IBAction func stepIntoAction(_ sender: NSButton!) {
-        
-        // track()
+
         amigaProxy?.stepInto()
     }
     
     @IBAction func stepOverAction(_ sender: NSButton!) {
-        
-        track()
+
         amigaProxy?.stepOver()
         
     }
