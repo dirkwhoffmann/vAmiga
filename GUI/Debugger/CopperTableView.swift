@@ -12,7 +12,7 @@ class CopperTableView: NSTableView {
     // @IBOutlet weak var inspector: Inspector!
     
     var amiga = amigaProxy
-    var numRows = 5
+    var numRows = 512
     
     override func awakeFromNib() {
         
@@ -42,7 +42,7 @@ class CopperTableView: NSTableView {
     
     @IBAction func copPlusAction(_ sender: NSButton!) {
         
-        if numRows < 128 {
+        if numRows < 512 {
             numRows += 1
         } else {
             NSSound.beep()

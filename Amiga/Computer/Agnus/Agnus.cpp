@@ -1468,7 +1468,7 @@ Agnus::vsyncHandler()
     frameInfo.interlaced = denise->bplconLACE();
 
     // If yes, toggle the the long frame flipflop
-    if (frameInfo.interlaced) lof = !lof;
+    lof = (frameInfo.interlaced) ? !lof : true;
 
     // Determine if the next frame is a long or a short frame
     frameInfo.numLines = lof ? 313 : 312;
