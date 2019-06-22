@@ -11,6 +11,7 @@
 
 // AROS Extended ROM
 const uint8_t ExtRom::magicBytes1[] = { 0x11, 0x14, 0x4E, 0xF9, 0x00, 0xF8, 0x00, 0x02 };
+const uint8_t ExtRom::magicBytes2[] = { 0x4E, 0x71, 0x4E, 0xF9, 0x00, 0xF8, 0x00, 0x02 };
 
 ExtRom::ExtRom()
 {
@@ -26,7 +27,9 @@ ExtRom::isExtRomBuffer(const uint8_t *buffer, size_t length)
 
     printf("length = %zu %d\n", length, KB(512));
 
-    return matchingBufferHeader(buffer, magicBytes1, sizeof(magicBytes1));
+    return
+    matchingBufferHeader(buffer, magicBytes1, sizeof(magicBytes1)) ||
+    matchingBufferHeader(buffer, magicBytes2, sizeof(magicBytes2));
 }
 
 bool
@@ -34,7 +37,9 @@ ExtRom::isExtRomFile(const char *path)
 {
     if (!checkFileSize(path, KB(512))) return false;
 
-    return matchingFileHeader(path, magicBytes1, sizeof(magicBytes1));
+    return
+    matchingFileHeader(path, magicBytes1, sizeof(magicBytes1)) ||
+    matchingFileHeader(path, magicBytes2, sizeof(magicBytes2));
 }
 
 ExtRom *

@@ -451,7 +451,7 @@ Memory::peek8(uint32_t addr)
         case MEM_RTC:      ASSERT_RTC_ADDR(addr);  return peekRTC8(addr);
         case MEM_OCS:      ASSERT_OCS_ADDR(addr);  return peekCustom8(addr);
         case MEM_AUTOCONF: ASSERT_AUTO_ADDR(addr); return peekAutoConf8(addr);
-        case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); assert(false); return READ_BOOT_8(addr);
+        case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); return READ_BOOT_8(addr);
         case MEM_KICK:     ASSERT_KICK_ADDR(addr); return READ_KICK_8(addr);
         case MEM_EXTROM:   ASSERT_EXT_ADDR(addr);  return READ_EXT_8(addr);
         default:           assert(false);
@@ -479,7 +479,7 @@ Memory::peek16(uint32_t addr)
         case MEM_RTC:      ASSERT_RTC_ADDR(addr);  return peekRTC16(addr);
         case MEM_OCS:      ASSERT_OCS_ADDR(addr);  return peekCustom16(addr);
         case MEM_AUTOCONF: ASSERT_AUTO_ADDR(addr); return peekAutoConf16(addr);
-        case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); assert(false); return READ_BOOT_16(addr);
+        case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); return READ_BOOT_16(addr);
         case MEM_KICK:     ASSERT_KICK_ADDR(addr); return READ_KICK_16(addr);
         case MEM_EXTROM:   ASSERT_EXT_ADDR(addr);  return READ_EXT_16(addr);
         default:           assert(false);
@@ -519,8 +519,10 @@ Memory::spypeek8(uint32_t addr)
 uint16_t
 Memory::spypeek16(uint32_t addr)
 {
-    assert(IS_EVEN(addr));
-    
+    if (!IS_EVEN(addr)) {
+        warn("spypeek16(%X): Address violation error (reading odd address)\n", addr);
+    }
+
     addr &= 0xFFFFFF;
     switch (memSrc[addr >> 16]) {
             
@@ -820,10 +822,10 @@ Memory::peekCustom16(uint32_t addr)
 {
     assert(IS_EVEN(addr));
 
-    /*
+
     if (addr != 0xDFF018)
         debug("peekCustom16(%X [%s])\n", addr, customReg[(addr >> 1) & 0xFF]);
-    */
+    
 
     switch ((addr >> 1) & 0xFF) {
             
@@ -868,7 +870,7 @@ Memory::peekCustom16(uint32_t addr)
     
     warn("peekCustom16(%X [%s]): MISSING IMPLEMENTATION\n",
          addr, customReg[(addr >> 1) & 0xFF]);
-    // amiga->pause();
+
     return 0;
 }
 
@@ -923,7 +925,7 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
 {
     // if (addr >= 0x180 && addr <= 0x1BE) debug("Poke Color reg %X\n", addr);
 
-    // debug("pokeCustom16(%X [%s], %X)\n", addr, customReg[(addr >> 1) & 0xFF], value);
+    debug("pokeCustom16(%X [%s], %X)\n", addr, customReg[(addr >> 1) & 0xFF], value);
 
     assert(IS_EVEN(addr));
     
@@ -1334,8 +1336,8 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         warn("pokeCustom16(%X [%s]): READ-ONLY-REGISTER\n",
              addr, customReg[(addr >> 1) & 0xFF]);
     } else {
-        // warn("pokeCustom16(%X [%s]): NO OCS REGISTER\n",
-        //      addr, customReg[(addr >> 1) & 0xFF]);
+        warn("pokeCustom16(%X [%s]): NO OCS REGISTER\n",
+              addr, customReg[(addr >> 1) & 0xFF]);
     }
 }
 

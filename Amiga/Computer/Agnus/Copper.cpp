@@ -490,9 +490,9 @@ Copper::serviceEvent(EventID id)
     switch (id) {
             
         case COP_REQUEST_DMA:
-            
-            // plainmsg("COP_REQUEST_DMA\n");
-            
+
+            if (verbose) debug("COP_REQUEST_DMA\n");
+
             /* In this state, Copper waits for a free DMA cycle.
              * Once DMA access is granted, it continues with fetching the
              * first instruction word.
@@ -503,7 +503,9 @@ Copper::serviceEvent(EventID id)
             break;
 
         case COP_FETCH:
-            
+
+            if (verbose) debug("COP_FETCH\n");
+
             if (agnus->copperCanHaveBus()) {
                 
                 // Load the first instruction word
@@ -517,7 +519,9 @@ Copper::serviceEvent(EventID id)
             break;
             
         case COP_MOVE:
-            
+
+            if (verbose) debug("COP_MOVE\n");
+
             if (agnus->copperCanHaveBus()) {
                 
                 // Load the second instruction word
@@ -544,7 +548,9 @@ Copper::serviceEvent(EventID id)
             break;
             
         case COP_WAIT_OR_SKIP:
-            
+
+            if (verbose) debug("COP_WAIT_OR_SKIP\n");
+
             if (agnus->copperCanHaveBus()) {
 
                 // Load the second instruction word
@@ -566,6 +572,8 @@ Copper::serviceEvent(EventID id)
                         // In how many cycles do we get there?
                         Cycle delay = agnus->beamDiff(trigger.y, trigger.x);
                         assert(delay < NEVER);
+
+                        if (verbose) debug("FOUND MATCH in %d cycles\n", delay);
 
                         // Schedule the Copper to wake up
                         events->scheduleRel(COP_SLOT, delay, COP_FETCH);
@@ -589,7 +597,9 @@ Copper::serviceEvent(EventID id)
             break;
             
         case COP_JMP1:
-        
+
+            if (verbose) debug("COP_JMP1\n");
+
             // Load COP1LC into the program counter
             coppc = cop1lc;
             // debug(COP_DEBUG, "COP_JMP1: coppc = %X\n", coppc);
@@ -597,7 +607,9 @@ Copper::serviceEvent(EventID id)
             break;
 
         case COP_JMP2:
-            
+
+            if (verbose) debug("COP_JMP2\n");
+
             // Load COP2LC into the program counter
             coppc = cop2lc;
             // debug(COP_DEBUG, "COP_JMP2: coppc = %X\n", coppc);

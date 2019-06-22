@@ -528,6 +528,9 @@ Amiga::_powerOn()
     // cpu.bpManager.setBreakpointAt(0xFD818C); // BEFORE AUD registers
     // cpu.bpManager.setBreakpointAt(0xFA93E6); // FIRST FMODE non-OCS access
     // cpu.bpManager.setBreakpointAt(0xFD7982); // WRITE TO BPLCON3
+    // cpu.bpManager.setBreakpointAt(0xFD81C8); // Coming back from resetsprite()
+    // cpu.bpManager.setBreakpointAt(0xF8AB64); // Jump to FindResident in TaggedOpenLibrary
+    
 
 
 

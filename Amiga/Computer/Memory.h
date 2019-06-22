@@ -17,7 +17,8 @@
 
 const uint32_t FAST_RAM_STRT = 0x0200000;
 const uint32_t SLOW_RAM_MASK = 0x007FFFF;
-const uint32_t BOOT_ROM_MASK = 0x003FFFF;
+// const uint32_t BOOT_ROM_MASK = 0x003FFFF;
+const uint32_t BOOT_ROM_MASK = 0x0007FFF;
 const uint32_t KICK_ROM_MASK = 0x007FFFF;
 const uint32_t EXT_ROM_MASK  = 0x007FFFF;
 
@@ -59,12 +60,12 @@ const uint32_t EXT_ROM_MASK  = 0x007FFFF;
 #define READ_BOOT_32(x) READ_32(bootRom + ((x) & BOOT_ROM_MASK))
 
 // Reads a value from Kickstart ROM in big endian format
-#define READ_KICK_8(x)  READ_8(kickRom + ((x)  % kickRomSize))
+#define READ_KICK_8(x)  READ_8(kickRom + ((x) % kickRomSize))
 #define READ_KICK_16(x) READ_16(kickRom + ((x) % kickRomSize))
 #define READ_KICK_32(x) READ_32(kickRom + ((x) % kickRomSize))
 
 // Reads a value from Extended ROM in big endian format
-#define READ_EXT_8(x)  READ_8(extRom + ((x)  % extRomSize))
+#define READ_EXT_8(x)  READ_8(extRom + ((x) % extRomSize))
 #define READ_EXT_16(x) READ_16(extRom + ((x) % extRomSize))
 #define READ_EXT_32(x) READ_32(extRom + ((x) % extRomSize))
 
@@ -74,32 +75,32 @@ const uint32_t EXT_ROM_MASK  = 0x007FFFF;
 #define WRITE_32(x,y) (*(uint32_t *)(x) = htonl(y))
 
 // Writes a value into Chip RAM in big endian format
-#define WRITE_CHIP_8(x,y)  WRITE_8(chipRam  + ((x) % chipRamSize), (y))
+#define WRITE_CHIP_8(x,y)  WRITE_8(chipRam + ((x) % chipRamSize), (y))
 #define WRITE_CHIP_16(x,y) WRITE_16(chipRam + ((x) % chipRamSize), (y))
 #define WRITE_CHIP_32(x,y) WRITE_32(chipRam + ((x) % chipRamSize), (y))
 
 // Writes a value into Fast RAM in big endian format
-#define WRITE_FAST_8(x,y)  WRITE_8(fastRam  + ((x) - FAST_RAM_STRT), (y))
+#define WRITE_FAST_8(x,y)  WRITE_8(fastRam + ((x) - FAST_RAM_STRT), (y))
 #define WRITE_FAST_16(x,y) WRITE_16(fastRam + ((x) - FAST_RAM_STRT), (y))
 #define WRITE_FAST_32(x,y) WRITE_32(fastRam + ((x) - FAST_RAM_STRT), (y))
 
 // Writes a value into Slow RAM in big endian format
-#define WRITE_SLOW_8(x,y)  WRITE_8(slowRam  + ((x) & SLOW_RAM_MASK), (y))
+#define WRITE_SLOW_8(x,y)  WRITE_8(slowRam + ((x) & SLOW_RAM_MASK), (y))
 #define WRITE_SLOW_16(x,y) WRITE_16(slowRam + ((x) & SLOW_RAM_MASK), (y))
 #define WRITE_SLOW_32(x,y) WRITE_32(slowRam + ((x) & SLOW_RAM_MASK), (y))
 
 // Writes a value into Boot ROM in big endian format
-#define WRITE_BOOT_8(x,y)  WRITE_8(bootRom  + ((x) & BOOT_ROM_MASK), (y))
+#define WRITE_BOOT_8(x,y)  WRITE_8(bootRom + ((x) & BOOT_ROM_MASK), (y))
 #define WRITE_BOOT_16(x,y) WRITE_16(bootRom + ((x) & BOOT_ROM_MASK), (y))
 #define WRITE_BOOT_32(x,y) WRITE_32(bootRom + ((x) & BOOT_ROM_MASK), (y))
 
 // Writes a value into Kickstart ROM in big endian format
-#define WRITE_KICK_8(x,y)  WRITE_8(kickRom  + ((x) % kickRomSize), (y))
+#define WRITE_KICK_8(x,y)  WRITE_8(kickRom + ((x) % kickRomSize), (y))
 #define WRITE_KICK_16(x,y) WRITE_16(kickRom + ((x) % kickRomSize), (y))
 #define WRITE_KICK_32(x,y) WRITE_32(kickRom + ((x) % kickRomSize), (y))
 
 // Writes a value into Extended ROM in big endian format
-#define WRITE_EXT_8(x,y)  WRITE_8(extRom  + ((x) & EXT_ROM_MASK), (y))
+#define WRITE_EXT_8(x,y)  WRITE_8(extRom + ((x) & EXT_ROM_MASK), (y))
 #define WRITE_EXT_16(x,y) WRITE_16(extRom + ((x) & EXT_ROM_MASK), (y))
 #define WRITE_EXT_32(x,y) WRITE_32(extRom + ((x) & EXT_ROM_MASK), (y))
 

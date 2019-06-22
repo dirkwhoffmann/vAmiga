@@ -10,8 +10,8 @@
 #include "KickRom.h"
 
 // AROS Kickstart replacement
-// const uint8_t KickRom::magicBytes1[] = { 0x11, 0x11, 0x4E, 0xF9, 0x00, 0xF8, 0x00 };
 const uint8_t KickRom::magicBytes1[] = { 0x11, 0x14, 0x4E, 0xF9, 0x00, 0xF8, 0x00 };
+const uint8_t KickRom::magicBytes1a[] = { 0x11, 0x11, 0x4E, 0xF9, 0x00, 0xF8, 0x00 };
 
 // Kickstart 1.2 and 1.3
 const uint8_t KickRom::magicBytes2[] = { 0x11, 0x11, 0x4E, 0xF9, 0x00, 0xFC, 0x00 };
@@ -31,6 +31,7 @@ KickRom::isKickRomBuffer(const uint8_t *buffer, size_t length)
     
     return
     matchingBufferHeader(buffer, magicBytes1, sizeof(magicBytes1)) ||
+    matchingBufferHeader(buffer, magicBytes1a, sizeof(magicBytes1a)) ||
     matchingBufferHeader(buffer, magicBytes2, sizeof(magicBytes2)) ||
     matchingBufferHeader(buffer, magicBytes3, sizeof(magicBytes3));
 }
@@ -43,6 +44,7 @@ KickRom::isKickRomFile(const char *path)
     
     return
     matchingFileHeader(path, magicBytes1, sizeof(magicBytes1)) ||
+    matchingFileHeader(path, magicBytes1a, sizeof(magicBytes1a)) ||
     matchingFileHeader(path, magicBytes2, sizeof(magicBytes2)) ||
     matchingFileHeader(path, magicBytes3, sizeof(magicBytes3));
 }

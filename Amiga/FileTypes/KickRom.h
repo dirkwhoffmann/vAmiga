@@ -18,6 +18,7 @@ private:
     
     // Accepted header signatures
     static const uint8_t magicBytes1[];
+    static const uint8_t magicBytes1a[];
     static const uint8_t magicBytes2[];
     static const uint8_t magicBytes3[];
 
