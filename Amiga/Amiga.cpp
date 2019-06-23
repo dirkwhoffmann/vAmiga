@@ -530,7 +530,14 @@ Amiga::_powerOn()
     // cpu.bpManager.setBreakpointAt(0xFD7982); // WRITE TO BPLCON3
     // cpu.bpManager.setBreakpointAt(0xFD81C8); // Coming back from resetsprite()
     // cpu.bpManager.setBreakpointAt(0xF8AB64); // Jump to FindResident in TaggedOpenLibrary
-    
+
+    // Hunting Boot Rom bug
+    // cpu.bpManager.setBreakpointAt(0xF8008C); // Boot Rom start
+    // cpu.bpManager.setBreakpointAt(0xF800B4); // Setting bg color to grey
+    // cpu.bpManager.setBreakpointAt(0xF8011E); //
+    // cpu.bpManager.setBreakpointAt(0xF80082); // Setting bg color to cyan (error)
+    // cpu.bpManager.setBreakpointAt(0xF802E0); // Tests if mem can be written to
+
 
 
 

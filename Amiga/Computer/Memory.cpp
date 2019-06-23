@@ -56,7 +56,12 @@ Memory::_powerOn()
 {
     // Make Rom writable if an A1000 is emulated
     kickIsWritable = amiga->getConfig().model == AMIGA_1000;
-    
+
+    // Remove Extended Rom if an A1000 is emulated.
+    if (hasExtRom() && amiga->getConfig().model == AMIGA_1000) {
+        deleteExtRom();
+    }
+
     // Wipe out RAM
     if (chipRam) memset(chipRam, 0, chipRamSize);
     if (slowRam) memset(slowRam, 0, slowRamSize);
@@ -564,8 +569,8 @@ Memory::poke8(uint32_t addr, uint8_t value)
         case MEM_RTC:      ASSERT_RTC_ADDR(addr);  pokeRTC8(addr, value); break;
         case MEM_OCS:      ASSERT_OCS_ADDR(addr);  pokeCustom8(addr, value); break;
         case MEM_AUTOCONF: ASSERT_AUTO_ADDR(addr); pokeAutoConf8(addr, value); break;
-        case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); break;
-        case MEM_KICK:     ASSERT_KICK_ADDR(addr); break;
+        case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); pokeBoot8(addr, value); break;
+        case MEM_KICK:     ASSERT_KICK_ADDR(addr); pokeKick16(addr, value); break;
         case MEM_EXTROM:   ASSERT_EXT_ADDR(addr); break;
         default:           assert(false);
     }
@@ -588,8 +593,8 @@ Memory::poke16(uint32_t addr, uint16_t value)
         case MEM_RTC:      ASSERT_RTC_ADDR(addr);  pokeRTC16(addr, value);;
         case MEM_OCS:      ASSERT_OCS_ADDR(addr);  pokeCustom16(addr, value); break;
         case MEM_AUTOCONF: ASSERT_AUTO_ADDR(addr); pokeAutoConf16(addr, value); break;
-        case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); break;
-        case MEM_KICK:     ASSERT_KICK_ADDR(addr); break;
+        case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); pokeBoot16(addr, value); break;
+        case MEM_KICK:     ASSERT_KICK_ADDR(addr); pokeKick16(addr, value); break;
         case MEM_EXTROM:   ASSERT_EXT_ADDR(addr); break;
         default:           assert(false);
     }
@@ -822,10 +827,10 @@ Memory::peekCustom16(uint32_t addr)
 {
     assert(IS_EVEN(addr));
 
-
+    /*
     if (addr != 0xDFF018)
         debug("peekCustom16(%X [%s])\n", addr, customReg[(addr >> 1) & 0xFF]);
-    
+    */
 
     switch ((addr >> 1) & 0xFF) {
             
@@ -917,7 +922,7 @@ Memory::pokeCustom8(uint32_t addr, uint8_t value)
      *  writes same value to upper and lower byte."
      *     [http://eab.abime.net/showthread.php?p=1156399]
      */
-    pokeCustom16(addr & 0x1FE, HI_LO(value,value));
+    pokeCustom16(addr & 0x1FE, HI_LO(value, value));
 }
 
 void
@@ -925,7 +930,7 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
 {
     // if (addr >= 0x180 && addr <= 0x1BE) debug("Poke Color reg %X\n", addr);
 
-    debug("pokeCustom16(%X [%s], %X)\n", addr, customReg[(addr >> 1) & 0xFF], value);
+    // debug("pokeCustom16(%X [%s], %X)\n", addr, customReg[(addr >> 1) & 0xFF], value);
 
     assert(IS_EVEN(addr));
     
@@ -1380,6 +1385,46 @@ Memory::pokeAutoConf16(uint32_t addr, uint16_t value)
     // debug("pokeAutoConf16(%X, %X)\n", addr, value);
     zorro->pokeFastRamDevice(addr, HI_BYTE(value));
     zorro->pokeFastRamDevice(addr + 1, LO_BYTE(value));
+}
+
+void
+Memory::pokeBoot8(uint32_t addr, uint8_t value)
+{
+    debug("pokeBoot8(%X, %X)\n", addr, value);
+    reportSuspiciousBehavior();
+}
+
+void
+Memory::pokeBoot16(uint32_t addr, uint16_t value)
+{
+    debug("pokeBoot16(%X, %X)\n", addr, value);
+
+    // Turn the WOM into a ROM
+    debug("Locking WOM\n");
+    kickIsWritable = false;
+}
+
+void
+Memory::pokeKick8(uint32_t addr, uint8_t value)
+{
+    debug("pokeKick8(%X, %X)\n", addr, value);
+
+    // It's suspicious if a program is doing that, so we better investigate...
+    assert(false);
+}
+
+void
+Memory::pokeKick16(uint32_t addr, uint16_t value)
+{
+    // debug("pokeKick16(%X, %X)\n", addr, value);
+
+    if (kickIsWritable) {
+
+        // Make sure we're emulating an A1000
+        assert(amiga->getConfig().model == AMIGA_1000);
+
+        WRITE_KICK_16(addr, value);
+    }
 }
 
 const char *

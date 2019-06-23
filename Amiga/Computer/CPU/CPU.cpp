@@ -407,13 +407,16 @@ CPU::recordInstruction()
     instr.cycle = amiga->masterClock;
     instr.pc = getPC();
     instr.sp = getSP();
-    
+
     // Store record
     assert(writePtr < traceBufferCapacity);
     traceBuffer[writePtr] = instr;
 
     // Advance write pointer
     writePtr = (writePtr + 1) % traceBufferCapacity;
+
+    // DisassembledInstruction diss = disassemble(instr.pc);
+    // plainmsg("%X: %s\n", diss.addr, diss.instr);
 }
 
 #if 0

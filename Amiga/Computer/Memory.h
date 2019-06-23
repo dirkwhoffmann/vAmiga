@@ -15,12 +15,12 @@
 #include "KickRom.h"
 #include "ExtRom.h"
 
-const uint32_t FAST_RAM_STRT = 0x0200000;
-const uint32_t SLOW_RAM_MASK = 0x007FFFF;
-// const uint32_t BOOT_ROM_MASK = 0x003FFFF;
-const uint32_t BOOT_ROM_MASK = 0x0007FFF;
-const uint32_t KICK_ROM_MASK = 0x007FFFF;
-const uint32_t EXT_ROM_MASK  = 0x007FFFF;
+const uint32_t FAST_RAM_STRT = 0x200000;
+const uint32_t SLOW_RAM_MASK = 0x07FFFF;
+const uint32_t BOOT_ROM_MASK = 0x00FFFF;
+// const uint32_t BOOT_ROM_MASK = 0x007FFF;
+const uint32_t KICK_ROM_MASK = 0x07FFFF;
+const uint32_t EXT_ROM_MASK  = 0x07FFFF;
 
 // Verifies the range of an address
 #define ASSERT_CHIP_ADDR(x) assert(chipRam != NULL);
@@ -402,6 +402,22 @@ class Memory : public HardwareComponent {
     
     void pokeAutoConf8(uint32_t addr, uint8_t value);
     void pokeAutoConf16(uint32_t addr, uint16_t value);
+
+    //
+    // Boot Rom
+    //
+
+    void pokeBoot8(uint32_t addr, uint8_t value);
+    void pokeBoot16(uint32_t addr, uint16_t value);
+
+
+    //
+    // Kickstart Rom
+    //
+
+    void pokeKick8(uint32_t addr, uint8_t value);
+    void pokeKick16(uint32_t addr, uint16_t value);
+
 
     //
     // Debugging

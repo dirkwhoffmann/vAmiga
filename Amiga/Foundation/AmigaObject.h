@@ -80,6 +80,12 @@ class AmigaObject {
     
     void warn(const char *fmt, ...);
     void panic(const char *fmt, ...);
+
+    //
+    // Convenience wrappers
+    //
+    
+    void reportSuspiciousBehavior();
 };
 
 #endif

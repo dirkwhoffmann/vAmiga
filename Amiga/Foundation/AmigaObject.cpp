@@ -99,3 +99,15 @@ AmigaObject::panic(const char *fmt, ...)
     VAPRINT("PANIC: ")
     std::abort();
 }
+
+void
+AmigaObject::reportSuspiciousBehavior()
+{
+    plainmsg("\n");
+    plainmsg("Execution has been aborted, because a suspicous program operation has been\n");
+    plainmsg("detected. Manual investigation is needed to determine whether this is an\n");
+    plainmsg("error or not.\n\n");
+    plainmsg("Please file a bug report.\n\n");
+
+    std::abort();
+}
