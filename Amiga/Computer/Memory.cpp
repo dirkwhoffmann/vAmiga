@@ -868,12 +868,12 @@ Memory::peekCustom16(uint32_t addr)
             return paula->peekINTREQR();
 
         default: // Write-only register
-            warn("peekCustom16(%X [%s]): WRITE-ONLY-REGISTER\n",
+            debug(OCS_DEBUG, "peekCustom16(%X [%s]): WRITE-ONLY-REGISTER\n",
                  addr, customReg[(addr >> 1) & 0xFF]);
             return 0x00;
     }
     
-    warn("peekCustom16(%X [%s]): MISSING IMPLEMENTATION\n",
+    debug(OCS_DEBUG, "peekCustom16(%X [%s]): MISSING IMPLEMENTATION\n",
          addr, customReg[(addr >> 1) & 0xFF]);
 
     return 0;
@@ -1338,10 +1338,10 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
     }
     
     if (addr <= 0x1E) {
-        warn("pokeCustom16(%X [%s]): READ-ONLY-REGISTER\n",
+        debug(OCS_DEBUG, "pokeCustom16(%X [%s]): READ-ONLY-REGISTER\n",
              addr, customReg[(addr >> 1) & 0xFF]);
     } else {
-        warn("pokeCustom16(%X [%s]): NO OCS REGISTER\n",
+        debug(OCS_DEBUG, "pokeCustom16(%X [%s]): NO OCS REGISTER\n",
               addr, customReg[(addr >> 1) & 0xFF]);
     }
 }

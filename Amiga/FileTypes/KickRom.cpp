@@ -19,6 +19,9 @@ const uint8_t KickRom::magicBytes2[] = { 0x11, 0x11, 0x4E, 0xF9, 0x00, 0xFC, 0x0
 // Kickstart 2.04
 const uint8_t KickRom::magicBytes3[] = { 0x11, 0x14, 0x4E, 0xF9, 0x00, 0xF8, 0x00 };
 
+// Diagnostic v2.0 (Logica)
+const uint8_t KickRom::magicBytes4[] = { 0x11, 0x11, 0x4E, 0xF9, 0x00, 0xF8, 0x04 };
+
 KickRom::KickRom()
 {
     setDescription("KickRom");
@@ -33,7 +36,8 @@ KickRom::isKickRomBuffer(const uint8_t *buffer, size_t length)
     matchingBufferHeader(buffer, magicBytes1, sizeof(magicBytes1)) ||
     matchingBufferHeader(buffer, magicBytes1a, sizeof(magicBytes1a)) ||
     matchingBufferHeader(buffer, magicBytes2, sizeof(magicBytes2)) ||
-    matchingBufferHeader(buffer, magicBytes3, sizeof(magicBytes3));
+    matchingBufferHeader(buffer, magicBytes3, sizeof(magicBytes3)) ||
+    matchingBufferHeader(buffer, magicBytes4, sizeof(magicBytes4));
 }
 
 bool
@@ -46,7 +50,8 @@ KickRom::isKickRomFile(const char *path)
     matchingFileHeader(path, magicBytes1, sizeof(magicBytes1)) ||
     matchingFileHeader(path, magicBytes1a, sizeof(magicBytes1a)) ||
     matchingFileHeader(path, magicBytes2, sizeof(magicBytes2)) ||
-    matchingFileHeader(path, magicBytes3, sizeof(magicBytes3));
+    matchingFileHeader(path, magicBytes3, sizeof(magicBytes3)) ||
+    matchingFileHeader(path, magicBytes4, sizeof(magicBytes4));
 }
 
 KickRom *

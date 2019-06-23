@@ -32,7 +32,8 @@ struct Rom {
 
     static let kick204_37_175      = 0x845588ccf58fce86 as UInt64
 
-    static let diag1_1             = 0x3caee2ad138eb229 as UInt64
+    static let diag11              = 0x3caee2ad138eb229 as UInt64
+    static let logica20            = 0x110c854766f14cd8 as UInt64
 }
 
 let knownRoms: [UInt64: String] = [
@@ -56,7 +57,8 @@ let knownRoms: [UInt64: String] = [
     
     Rom.kick204_37_175:      "Kickstart 2.04 (revision 37.175)",
 
-    Rom.diag1_1:             "DiagROM 1.1"
+    Rom.diag11:              "DiagROM 1.1",
+    Rom.logica20:            "The Diagnostic V2.0 (Logica)"
 ]
 
 extension PreferencesController {
@@ -85,8 +87,8 @@ extension PreferencesController {
         track("hash = \(hash)")
 
         let hasRom        = hash != 0
-        let hasArosRom    = hash == Rom.aros    // 0xE74215EB368CD7F1
-        let hasDiagRom    = hash == Rom.diag1_1 // 0x3caee2ad138eb229
+        let hasArosRom    = hash == Rom.aros
+        let hasDiagRom    = hash == Rom.diag11 || hash == Rom.logica20
         let hasKnownRom   = knownRoms[hash] != nil
         let hasUnknownRom = hasRom && !hasKnownRom
         let hasOrigRom    = hasKnownRom && !hasArosRom && !hasDiagRom

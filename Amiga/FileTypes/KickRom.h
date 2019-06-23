@@ -21,6 +21,7 @@ private:
     static const uint8_t magicBytes1a[];
     static const uint8_t magicBytes2[];
     static const uint8_t magicBytes3[];
+    static const uint8_t magicBytes4[];
 
 public:
     

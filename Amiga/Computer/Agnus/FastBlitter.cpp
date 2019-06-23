@@ -56,7 +56,7 @@ Blitter::doFastCopyBlit()
     int32_t cmod = bltcmod;
     int32_t dmod = bltdmod;
 
-    plaindebug(BLT_DEBUG, "BLITTER Blit %d (%d,%d) (%d%d%d%d) %x %x %x %x %s\n",
+    plaindebug(BLT_CHECKSUM, "BLITTER Blit %d (%d,%d) (%d%d%d%d) %x %x %x %x %s\n",
     copycount, bltsizeW(), bltsizeH(), useA, useB, useC, useD,
            bltapt, bltbpt, bltcpt, bltdpt, bltconDESC() ? "D" : "");
 
@@ -163,7 +163,7 @@ Blitter::doFastCopyBlit()
         if (useD) INC_OCS_PTR(bltdpt, dmod);
     }
     
-    plaindebug(BLT_DEBUG, "BLITTER check1: %x check2: %x\n", check1, check2);
+    plaindebug(BLT_CHECKSUM, "BLITTER check1: %x check2: %x\n", check1, check2);
 }
 
 #define blitterLineIncreaseX(a_shift, cpt) \
@@ -205,7 +205,7 @@ Blitter::doFastLineBlit()
     bool useD = bltUSED();
     */
 
-    plaindebug(BLT_DEBUG, "BLITTER Line %d (%d,%d) (%d%d%d%d) %x %x %x %x\n",
+    plaindebug(BLT_CHECKSUM, "BLITTER Line %d (%d,%d) (%d%d%d%d) %x %x %x %x\n",
                linecount, bltsizeW(), bltsizeH(),
                bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
                bltapt, bltbpt, bltcpt, bltdpt);

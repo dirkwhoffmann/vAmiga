@@ -70,6 +70,7 @@
 
 // Set to 1 to debug the Blitter
 #define BLT_DEBUG 2
+#define BLT_CHECKSUM 2
 
 // Set to 1 to debug the serial interface
 #define SER_DEBUG 2
@@ -79,6 +80,9 @@
 
 // Set to 1 to debug the keyboard
 #define KB_DEBUG 1
+
+// Set to 1 to warn about custom register access violations
+#define OCS_DEBUG 2
 
 // Enable to draw the display window border in debug colors
 // #define BORDER_DEBUG
@@ -90,9 +94,9 @@
 // #define PIXEL_DEBUG
 
 // Enable to colorize certain rasterlines
-// #define LINE_DEBUG
+#define LINE_DEBUG
 
 // Enable to make drive operations deterministic
-// #define ALIGN_DRIVE_HEAD
+#define ALIGN_DRIVE_HEAD
 
 #endif

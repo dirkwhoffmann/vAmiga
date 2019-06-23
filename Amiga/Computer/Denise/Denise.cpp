@@ -261,8 +261,12 @@ Denise::pokeBPLCON0(uint16_t value)
      *      - Bits BPU2, BPU1, and BPUO - bits 14, 13, and 12, are 101 or 110
      *        (five or six bit-planes active)." [HRM]
      */
+    bool oldHam = ham;
     ham = (bplcon0 & 0x8C00) == 0x0800 && (bpu == 5 || bpu == 6);
 
+    if (oldHam ^ham) {
+        debug("Switching HAM mode %s\n", ham ? "on" : "off");
+    }
     // agnus->updateBitplaneDma();
     // agnus->switchBitplaneDmaOff();
 
@@ -561,10 +565,10 @@ Denise::drawBorder()
     rasterline[FIRST_VISIBLE] = 64;
     rasterline[2 * 0x18] = 65;
     int16_t vpos = agnus->vpos;
-    bool lines = vpos == 208 || vpos == 255;
+    bool lines = vpos == 0x50 || vpos == 276 || vpos == 255;
     // bool lines = vpos == 255;
     if (lines) for (int i = FIRST_VISIBLE + 40; i <= LAST_VISIBLE / 2; rasterline[i++] = 64);
-    if (vpos == 208) debug("line 208 hstrt = %d hstop = %d firstCanvasPixel = %d last = %d\n", hstrt, hstop, firstCanvasPixel, lastCanvasPixel);
+    // if (vpos == 208) debug("line 208 hstrt = %d hstop = %d firstCanvasPixel = %d last = %d\n", hstrt, hstop, firstCanvasPixel, lastCanvasPixel);
 #endif
 }
 
