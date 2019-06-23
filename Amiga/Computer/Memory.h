@@ -16,11 +16,10 @@
 #include "ExtRom.h"
 
 const uint32_t FAST_RAM_STRT = 0x200000;
-const uint32_t SLOW_RAM_MASK = 0x07FFFF;
-const uint32_t BOOT_ROM_MASK = 0x00FFFF;
-// const uint32_t BOOT_ROM_MASK = 0x007FFF;
-const uint32_t KICK_ROM_MASK = 0x07FFFF;
-const uint32_t EXT_ROM_MASK  = 0x07FFFF;
+const uint32_t SLOW_RAM_MASK = 0x07FFFF; // 512 KB
+const uint32_t BOOT_ROM_MASK = 0x001FFF; //   8 KB
+const uint32_t KICK_ROM_MASK = 0x07FFFF; // 512 KB
+const uint32_t EXT_ROM_MASK  = 0x07FFFF; // 512 KB
 
 // Verifies the range of an address
 #define ASSERT_CHIP_ADDR(x) assert(chipRam != NULL);

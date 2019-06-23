@@ -14,10 +14,8 @@ struct Rom {
     static let missing             = 0x0000000000000000 as UInt64
     
     // Boot Roms
-    static let boot_252179_01      = 0xa160593cffcbb233 as UInt64
-    static let boot_252180_01      = 0xa98647146962eb76 as UInt64
-    static let boot_a1000_1985     = 0xe923584a55d5c10c as UInt64
-    static let boot_a1000          = 0x55bee0af674e7cfa as UInt64
+    static let boot_a1000_1985_8k  = 0xe923584a55d5c10c as UInt64
+    static let boot_a1000_1985_64k = 0x83b3ec51d394e10c as UInt64
 
     // Kickstart Roms
     static let aros                = 0x23de891c17754732 as UInt64
@@ -40,10 +38,8 @@ struct Rom {
 let knownRoms: [UInt64: String] = [
 
     // Boot Roms
-    Rom.boot_252179_01:      "Amiga 1000 Boot Rom (252179-01)",
-    Rom.boot_252180_01:      "Amiga 1000 Boot Rom (252180-01)",
-    Rom.boot_a1000_1985:     "Amiga 1000 Boot Rom (1985)",
-    Rom.boot_a1000:          "Amiga 1000 Boot Rom",
+    Rom.boot_a1000_1985_8k:  "Amiga 1000 Boot Rom (1985)",
+    Rom.boot_a1000_1985_64k: "Amiga 1000 Boot Rom (1985)",
 
     // Kickstart Roms
     Rom.aros:                "Free AROS Kickstart replacement",
