@@ -45,7 +45,7 @@
 #define DMA_DEBUG 2
 
 // Set to 1 to debug bitplane relevant registers
-#define BPL_DEBUG 2
+#define BPL_DEBUG 1
 
 // Set to 1 to debug color registers
 #define COL_DEBUG 2
@@ -94,7 +94,7 @@
 // #define PIXEL_DEBUG
 
 // Enable to colorize certain rasterlines
-#define LINE_DEBUG
+// #define LINE_DEBUG
 
 // Enable to make drive operations deterministic
 #define ALIGN_DRIVE_HEAD

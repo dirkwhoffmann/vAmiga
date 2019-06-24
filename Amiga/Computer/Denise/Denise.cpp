@@ -267,7 +267,8 @@ Denise::pokeBPLCON0(uint16_t value)
     if (oldHam ^ham) {
         debug("Switching HAM mode %s\n", ham ? "on" : "off");
     }
-    // agnus->updateBitplaneDma();
+
+    agnus->updateBitplaneDma();
     // agnus->switchBitplaneDmaOff();
 
     // outputShiftReg[0] = 0xAAAA;
@@ -418,7 +419,10 @@ Denise::pixelAddr(int pixel)
 void
 Denise::drawLores(int pixels)
 {
-    assert(currentPixel == (agnus->hpos * 4) + 6);
+    if (currentPixel != (agnus->hpos * 4) + 6) {
+        debug("currentPixel = %d hpos = %d\n", currentPixel, agnus->hpos);
+        assert(currentPixel == (agnus->hpos * 4) + 6);
+    }
 
     // Only proceed if the vertical position is inside the drawing area
     if (!inDisplayWindow) return;
