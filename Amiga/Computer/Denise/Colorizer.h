@@ -154,9 +154,9 @@ public:
     // Records a color register change to be processed in translateToRGBA()
     void recordColorRegisterChange(uint32_t addr, uint16_t value, int16_t pixel);
 
-    // Translates bitplane data to RGBA values.
-    void translateToRGBA(const uint8_t *src, int *dest);
-    void translateToRGBA_HAM(const uint8_t *src, int *dest);
+    // Translates bitplane data to RGBA values
+    void translateToRGBA(uint8_t *src, int *dest);
+    void translateToRGBA_HAM(uint8_t *src, int *dest);
 };
 
 #endif

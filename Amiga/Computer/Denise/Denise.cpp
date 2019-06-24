@@ -268,7 +268,7 @@ Denise::pokeBPLCON0(uint16_t value)
         debug("Switching HAM mode %s\n", ham ? "on" : "off");
     }
 
-    agnus->updateBitplaneDma();
+    // agnus->updateBitplaneDma();
     // agnus->switchBitplaneDmaOff();
 
     // outputShiftReg[0] = 0xAAAA;

@@ -45,7 +45,7 @@
 #define DMA_DEBUG 2
 
 // Set to 1 to debug bitplane relevant registers
-#define BPL_DEBUG 1
+#define BPL_DEBUG 2
 
 // Set to 1 to debug color registers
 #define COL_DEBUG 2
