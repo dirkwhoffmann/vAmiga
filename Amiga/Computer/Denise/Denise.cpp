@@ -253,9 +253,6 @@ Denise::pokeBPLCON0(uint16_t value)
     agnus->activeBitplanes = bpu;
     agnus->hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
 
-    // Clear data registers of all inactive bitplanes.
-    // for (int plane = 5; plane >= bpu; plane--) bpldat[plane] = 0;
-
     /* "Bit 11 of register BPLCON0 selects hold-and-modify mode. The following
      *  bits in BPLCONO must be set for hold-and-modify mode to be active:
      *
@@ -290,7 +287,17 @@ Denise::pokeBPLCON0(uint16_t value)
          */
 
         // Agnus will know about the change in 4 cycles.
+        // debug("Before allocateBplSlots (oldbpu = %d bpu = %d bplVstrt = %d bplVstop = %d diwVstrt = %d diwVstop = %d)\n", oldbpu, bpu, agnus->bplVstrt, agnus->bplVstop, agnus->diwVstrt, agnus->diwVstop);
+        // agnus->dumpDMAEventTable();
+        bool bplDma =
+        agnus->vpos >= agnus->bplVstrt && agnus->vpos < agnus->bplVstop &&
+        (agnus->dmacon & (DMAEN | BPLEN)) == (DMAEN | BPLEN);
+        if (!bplDma) bpu = 0;
         agnus->allocateBplSlots(bpu, hires(), agnus->hpos + 4);
+        // debug("After allocateBplSlots (oldbpu = %d bpu = %d)\n", oldbpu, bpu);
+        // agnus->dumpDMAEventTable();
+
+        // agnus->updateBitplaneDma();
 
         // Reschedule the next event according to the changed table
         // TODO: Wrap this in a nicer API
@@ -581,7 +588,7 @@ Denise::drawBorder()
 
         // Fill the whole line with the background color
         for (int i = FIRST_VISIBLE; i <= LAST_VISIBLE; i++) {
-            rasterline[i] = borderV;
+            // rasterline[i] = borderV;
         }
 
     } else {

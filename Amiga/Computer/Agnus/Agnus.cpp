@@ -545,8 +545,8 @@ Agnus::switchBitplaneDmaOn()
         // Schedule events
         for (unsigned i = start; i <= stop; i += 8) {
             dmaEvent[i]   = dmaEvent[i+4] = h4;
-            dmaEvent[i+1] = dmaEvent[i+5] = h3;
-            dmaEvent[i+2] = dmaEvent[i+6] = h2;
+            dmaEvent[i+1] = dmaEvent[i+5] = h2;
+            dmaEvent[i+2] = dmaEvent[i+6] = h3;
             dmaEvent[i+3] = dmaEvent[i+7] = h1;
         }
 
@@ -1135,6 +1135,9 @@ Agnus::pokeDDFSTOP(uint16_t value)
     // Align dmaStop such that (dmaStop - dmaStart) is dividable by 8
     dmaStop += (dmaStop - dmaStrt) & 0b100;
 
+    // Goto last event in fetch unit
+    dmaStop += 7;
+    
     updateBitplaneDma();
 }
 
