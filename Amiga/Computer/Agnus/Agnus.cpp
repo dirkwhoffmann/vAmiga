@@ -393,7 +393,7 @@ Agnus::clearDMAEventTable()
 void
 Agnus::allocateBplSlots(int bpu, bool hires, int first, int last)
 {
-    assert(first >= 0x30 && last <= 0xDF);
+    assert(first >= 0x18 && last <= 0xDF);
     assert(bpu >= 0 && bpu <= 6);
     assert(hires == 0 || hires == 1);
 
@@ -1137,7 +1137,7 @@ Agnus::pokeDDFSTOP(uint16_t value)
 
     // Goto last event in fetch unit
     dmaStop += 7;
-    
+
     updateBitplaneDma();
 }
 

@@ -269,7 +269,7 @@ public:
     void prepareShiftRegisters();
 
     // Transfers the bitplane register contents to the shift registers
-    void fillShiftRegisters();
+    void fillShiftRegisters(); // DEPRECATED
 
     // Called by a DMA_L1_LAST or DMA_H1_LAST event
     // void flushShiftRegisters();
