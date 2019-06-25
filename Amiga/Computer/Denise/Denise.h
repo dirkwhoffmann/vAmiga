@@ -20,6 +20,8 @@ public:
 
     // Quick-access references
     class Agnus *agnus;
+    class EventHandler *events;
+    
 
 private:
     
@@ -152,6 +154,7 @@ public:
     int16_t lastCanvasPixel;
 
     // The current rasterline has been drawn up to this horizontal position
+    // DEPRECATED
     short currentPixel;
 
     // Indicates if the current rasterline is inside the display window
@@ -193,6 +196,15 @@ public:
     // Returns the latest internal state recorded by inspect()
     DeniseInfo getInfo();
     SpriteInfo getSprInfo(int nr);
+
+
+    //
+    // Translating coordinates
+    //
+
+    // Translates a DMA cycle (hpos) to it's corresponding pixel position (ppos)
+    int16_t ppos(int16_t hpos) { return (hpos * 4) + 6; }
+
     
     //
     // Accessing registers
@@ -209,7 +221,7 @@ public:
     
     // OCS register 0x100 (w)
     void pokeBPLCON0(uint16_t value);
-    bool hires() { return GET_BIT(bplcon0, 15); }
+    bool hires() { return !!GET_BIT(bplcon0, 15); }
     bool lores() { return !GET_BIT(bplcon0, 15); }
     uint8_t bplconBPU() { return (bplcon0 >> 12) & 0b111; }
     bool bplconHOMOD() { return GET_BIT(bplcon0, 11); }

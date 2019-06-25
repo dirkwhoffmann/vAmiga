@@ -9,6 +9,8 @@
 
 #include "Amiga.h"
 
+int dirk = 0;
+
 Denise::Denise()
 {
     setDescription("Denise");
@@ -65,6 +67,7 @@ void
 Denise::_initialize()
 {
     agnus = &amiga->agnus;
+    events = &amiga->agnus.events;
 }
 
 void
@@ -76,7 +79,6 @@ Denise::_powerOn()
     stableLongFrame = &longFrame2;
     stableShortFrame = &shortFrame2;
     frameBuffer = &longFrame1;
-    currentPixel = 0;
 
     memset(rasterline, 0, sizeof(rasterline));
 
@@ -239,10 +241,12 @@ void
 Denise::pokeBPLCON0(uint16_t value)
 {
     debug(BPL_DEBUG, "pokeBPLCON0(%X)\n", value);
-    
+
+    uint8_t oldbpu = bplconBPU();
+
     bplcon0 = value;
 
-    // Determine the number of bitplanes
+    // Bitplanes in use
     uint8_t bpu = bplconBPU();
 
     // Let Agnus know about the register change
@@ -250,7 +254,7 @@ Denise::pokeBPLCON0(uint16_t value)
     agnus->hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
 
     // Clear data registers of all inactive bitplanes.
-    for (int plane = 5; plane >= bpu; plane--) bpldat[plane] = 0;
+    // for (int plane = 5; plane >= bpu; plane--) bpldat[plane] = 0;
 
     /* "Bit 11 of register BPLCON0 selects hold-and-modify mode. The following
      *  bits in BPLCONO must be set for hold-and-modify mode to be active:
@@ -268,11 +272,50 @@ Denise::pokeBPLCON0(uint16_t value)
         debug("Switching HAM mode %s\n", ham ? "on" : "off");
     }
 
-    // agnus->updateBitplaneDma();
-    // agnus->switchBitplaneDmaOff();
+    if (agnus->hpos == 130 || agnus->hpos == 2) {
+        debug("hpos = %d oldbpu = %d newbpu = %d\n", agnus->hpos, oldbpu, bpu);
+        agnus->dumpDMAEventTable();
+    }
 
-    // outputShiftReg[0] = 0xAAAA;
-    // outputShiftReg[1] = 0xCCCC;
+    // Check if the number of used bitplanes has changed
+    if (oldbpu != bpu) {
+
+        // Agnus will know about the change in 4 cycles.
+        agnus->allocateBplSlots(bpu, hires(), agnus->hpos + 4);
+
+        // Reschedule the next event according to the changed table
+        uint8_t next = agnus->nextDmaEvent[agnus->hpos];
+        if (next) {
+            events->schedulePos(DMA_SLOT, agnus->vpos, next, agnus->dmaEvent[next]);
+        } else {
+            events->cancel(DMA_SLOT);
+        }
+
+        // Create the table from scratch in the next rasterline
+        agnus->hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
+    }
+
+    /*
+    agnus->updateBitplaneDma();
+    // Schedule next event
+    int hpos = agnus->hpos;
+    if (hpos == 130) {
+        dirk = 1;
+        hpos += 3;
+    }
+    uint8_t next = agnus->nextDmaEvent[hpos];
+    if (next) {
+        events->schedulePos(DMA_SLOT, agnus->vpos, next, agnus->dmaEvent[next]);
+        if (hpos == 133) { debug("Next DMA event at $%X (%d)\n", next, agnus->dmaEvent[next]); }
+    } else {
+        events->cancel(DMA_SLOT);
+    }
+    */
+
+    if (agnus->hpos == 130 || agnus->hpos == 2) {
+        debug("hpos = %d oldbpu = %d newbpu = %d\n", agnus->hpos, oldbpu, bpu);
+        agnus->dumpDMAEventTable();
+    }
 }
 
 void
@@ -386,7 +429,9 @@ Denise::armSprite(int x)
 void
 Denise::prepareShiftRegisters()
 {
+    /*
     for (unsigned i = 0; i < 6; shiftReg[i++] = 0);
+     */
 
 #ifdef SHIFTREG_DEBUG
     shiftReg[0] = 0xAAAAAAAA;
@@ -397,12 +442,24 @@ Denise::prepareShiftRegisters()
 void
 Denise::fillShiftRegisters()
 {
+    for (unsigned i = 0; i < 6; i++) {
+        shiftReg[i] = REPLACE_LO_WORD(shiftReg[i], bpldat[i]);
+    }
+
+    /*
     shiftReg[0] = (shiftReg[0] << 16) | bpldat[0];
-    shiftReg[1] = (shiftReg[1] << 16) | bpldat[1];
-    shiftReg[2] = (shiftReg[2] << 16) | bpldat[2];
-    shiftReg[3] = (shiftReg[3] << 16) | bpldat[3];
+    if (!dirk) shiftReg[1] = (shiftReg[1] << 16) | bpldat[1];
+    if (!dirk) shiftReg[2] = (shiftReg[2] << 16) | bpldat[2];
+    if (!dirk) shiftReg[3] = (shiftReg[3] << 16) | bpldat[3];
     shiftReg[4] = (shiftReg[4] << 16) | bpldat[4];
     shiftReg[5] = (shiftReg[5] << 16) | bpldat[5];
+
+    if (dirk) {
+        debug("ShiftReg: %X %X %X\n", shiftReg[1], shiftReg[2], shiftReg[3]);
+        debug("BPLDAT:   %X %X %X\n", bpldat[1], bpldat[2], bpldat[3]);
+    }
+    dirk = 0;
+    */
 }
 
 int *
@@ -419,10 +476,8 @@ Denise::pixelAddr(int pixel)
 void
 Denise::drawLores(int pixels)
 {
-    if (currentPixel != (agnus->hpos * 4) + 6) {
-        debug("currentPixel = %d hpos = %d\n", currentPixel, agnus->hpos);
-        assert(currentPixel == (agnus->hpos * 4) + 6);
-    }
+    // assert(currentPixel == (agnus->hpos * 4) + 6);
+    currentPixel = ppos(agnus->hpos);
 
     // Only proceed if the vertical position is inside the drawing area
     if (!inDisplayWindow) return;
@@ -450,15 +505,19 @@ Denise::drawLores(int pixels)
         rasterline[currentPixel++] = index * inDisplayWindow;
     }
 
+    // Shift out drawn bits
+    for (int i = 0; i < 6; i++) shiftReg[i] <<= 16;
+
 #ifdef PIXEL_DEBUG
-    rasterline[currentPixel - 16] = 64;
+    rasterline[currentPixel - 2 * pixels] = 64;
 #endif
 }
 
 void
 Denise::drawHires(int pixels)
 {
-    assert(currentPixel == (agnus->hpos * 4) + 6);
+    // assert(currentPixel == (agnus->hpos * 4) + 6);
+    currentPixel = ppos(agnus->hpos);
 
     // Only proceed if the vertical position is inside the drawing area
     if (!inDisplayWindow) return;
@@ -485,8 +544,11 @@ Denise::drawHires(int pixels)
         rasterline[currentPixel++] = index * inDisplayWindow;
     }
 
+    // Shift out drawn bits
+    for (int i = 0; i < 6; i++) shiftReg[i] <<= 16;
+
 #ifdef PIXEL_DEBUG
-    rasterline[currentPixel - 16] = 64;
+    rasterline[currentPixel - pixels] = 64;
 #endif
 }
 

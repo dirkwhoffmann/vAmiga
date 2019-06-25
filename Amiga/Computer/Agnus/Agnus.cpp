@@ -23,41 +23,101 @@ Agnus::Agnus()
     
     registerSnapshotItems(vector<SnapshotItem> {
         
-        { &clock,             sizeof(clock),             0 },
-        { &frame,             sizeof(frame),             0 },
-        { &vpos,              sizeof(vpos),              0 },
-        { &hpos,              sizeof(hpos),              0 },
+        { &clock,                sizeof(clock),                0 },
+        { &frame,                sizeof(frame),                0 },
+        { &vpos,                 sizeof(vpos),                 0 },
+        { &hpos,                 sizeof(hpos),                 0 },
         { &frameInfo.nr,         sizeof(frameInfo.nr),         0 },
         { &frameInfo.interlaced, sizeof(frameInfo.interlaced), 0 },
         { &frameInfo.numLines,   sizeof(frameInfo.numLines),   0 },
-        { &lof,               sizeof(lof),               0 },
+        { &lof,                  sizeof(lof),                  0 },
+        { &dmaStrt,              sizeof(dmaStrt),              0 },
+        { &dmaStop,              sizeof(dmaStop),              0 },
         { &diwHstrt,             sizeof(diwHstrt),             0 },
         { &diwHstop,             sizeof(diwHstop),             0 },
         { &diwVstrt,             sizeof(diwVstrt),             0 },
         { &diwVstop,             sizeof(diwVstop),             0 },
-        { &sprVStrt,          sizeof(sprVStrt),          WORD_ARRAY },
-        { &sprVStop,          sizeof(sprVStop),          WORD_ARRAY },
-        { &sprDmaState,       sizeof(sprDmaState),       DWORD_ARRAY },
-        { &dmacon,            sizeof(dmacon),            0 },
-        { &dskpt,             sizeof(dskpt),             0 },
-        { &diwstrt,           sizeof(diwstrt),           0 },
-        { &diwstop,           sizeof(diwstop),           0 },
-        { &ddfstrt,           sizeof(ddfstrt),           0 },
-        { &ddfstop,           sizeof(ddfstop),           0 },
-        { &audlc,             sizeof(audlc),             DWORD_ARRAY },
-        { &audlcold,          sizeof(audlcold),          DWORD_ARRAY },
-        { &bplpt,             sizeof(bplpt),             DWORD_ARRAY },
-        { &bpl1mod,           sizeof(bpl1mod),           0 },
-        { &bpl2mod,           sizeof(bpl2mod),           0 },
-        { &sprpt,             sizeof(sprpt),             DWORD_ARRAY },
-        { &activeBitplanes,   sizeof(activeBitplanes),   0 },
-        { &dmaEvent,          sizeof(dmaEvent),          0 },
-        { &nextDmaEvent,      sizeof(nextDmaEvent),      0 },
-        { &dmaFirstBpl1Event, sizeof(dmaFirstBpl1Event), 0 },
-        { &dmaLastBpl1Event,  sizeof(dmaLastBpl1Event),  0 },
-        { &hsyncActions,      sizeof(hsyncActions),      0 }
-
+        { &sprVStrt,             sizeof(sprVStrt),             WORD_ARRAY },
+        { &sprVStop,             sizeof(sprVStop),             WORD_ARRAY },
+        { &sprDmaState,          sizeof(sprDmaState),          DWORD_ARRAY },
+        { &dmacon,               sizeof(dmacon),               0 },
+        { &dskpt,                sizeof(dskpt),                0 },
+        { &diwstrt,              sizeof(diwstrt),              0 },
+        { &diwstop,              sizeof(diwstop),              0 },
+        { &ddfstrt,              sizeof(ddfstrt),              0 },
+        { &ddfstop,              sizeof(ddfstop),              0 },
+        { &audlc,                sizeof(audlc),                DWORD_ARRAY },
+        { &audlcold,             sizeof(audlcold),             DWORD_ARRAY },
+        { &bplpt,                sizeof(bplpt),                DWORD_ARRAY },
+        { &bpl1mod,              sizeof(bpl1mod),              0 },
+        { &bpl2mod,              sizeof(bpl2mod),              0 },
+        { &sprpt,                sizeof(sprpt),                DWORD_ARRAY },
+        { &activeBitplanes,      sizeof(activeBitplanes),      0 },
+        { &dmaEvent,             sizeof(dmaEvent),             0 },
+        { &nextDmaEvent,         sizeof(nextDmaEvent),         0 },
+        { &dmaFirstBpl1Event,    sizeof(dmaFirstBpl1Event),    0 },
+        { &dmaLastBpl1Event,     sizeof(dmaLastBpl1Event),     0 },
+        { &hsyncActions,         sizeof(hsyncActions),         0 }
     });
+
+    initLookupTables();
+}
+
+void
+Agnus::initLookupTables()
+{
+    initLoresBplEventTable();
+    initHiresBplEventTable();
+}
+
+void
+Agnus::initLoresBplEventTable()
+{
+    memset(bitplaneDMA[0], 0, sizeof(bitplaneDMA[0]));
+
+    for (int bpu = 0; bpu < 7; bpu++) {
+
+        // Goto the first bitplane DMA slot
+        EventID *p = &bitplaneDMA[0][bpu][0x30];
+
+        // Iterate through all 22 fetch units
+        for (int unit = 0; unit < 22; unit++, p += 8) {
+
+            switch(bpu) {
+                case 6: p[2] = DMA_L6;
+                case 5: p[6] = DMA_L5;
+                case 4: p[1] = DMA_L4;
+                case 3: p[5] = DMA_L3;
+                case 2: p[3] = DMA_L2;
+                case 1: p[7] = DMA_L1;
+            }
+        }
+    }
+}
+
+void
+Agnus::initHiresBplEventTable()
+{
+    memset(bitplaneDMA[1], 0, sizeof(bitplaneDMA[1]));
+
+    for (int bpu = 0; bpu < 7; bpu++) {
+
+        // Goto the first bitplane DMA slot
+        EventID *p = &bitplaneDMA[1][bpu][0x30];
+
+        // Iterate through all 22 fetch units
+        for (int unit = 0; unit < 22; unit++, p += 8) {
+
+            switch(bpu) {
+                case 6:
+                case 5:
+                case 4: p[0] = p[4] = DMA_H4;
+                case 3: p[2] = p[6] = DMA_H3;
+                case 2: p[1] = p[5] = DMA_H2;
+                case 1: p[3] = p[7] = DMA_H1;
+            }
+        }
+    }
 }
 
 void
@@ -142,9 +202,7 @@ Agnus::_dump()
 
     plainmsg("\nDMA time slot allocation:\n\n");
 
-    dumpDMAEventTable(0x00, 0x4F);
-    dumpDMAEventTable(0x50, 0x9F);
-    dumpDMAEventTable(0xA0, 0xE2);
+    dumpDMAEventTable();
     
     events.dump();
 }
@@ -330,6 +388,33 @@ Agnus::clearDMAEventTable()
     
     // Clear the jump table
     memset(nextDmaEvent, 0, sizeof(nextDmaEvent));
+}
+
+void
+Agnus::allocateBplSlots(int bpu, bool hires, int first, int last)
+{
+    assert(first >= 0x30 && last <= 0xDF);
+    assert(bpu >= 0 && bpu <= 6);
+    assert(hires == 0 || hires == 1);
+
+    // Update events
+    for (unsigned i = first; i <= last; i++) {
+        dmaEvent[i] = bitplaneDMA[hires][bpu][i];
+    }
+
+    // SET L1/H1 last event (TODO: GET RID OF THE SPECIAL 'LAST' EVENTS)
+    if (dmaEvent[last] == DMA_L1) dmaEvent[last] = DMA_L1_LAST;
+    if (dmaEvent[last] == DMA_H1) dmaEvent[last] = DMA_H1_LAST;
+
+    // Update jump table
+    updateJumpTable();
+}
+
+void
+Agnus::allocateBplSlots(int bpu, bool hires, int first)
+{
+    debug("first = %d, dmaStrt = %d, dmaStop = %d\n", first, dmaStrt, dmaStop);
+    allocateBplSlots(bpu, hires, MAX(first, dmaStrt), dmaStop);
 }
 
 void
@@ -550,6 +635,18 @@ Agnus::switchBitplaneDmaOn()
     }
 
     updateJumpTable();
+
+    // Do some consistency checks with the new lookup tables
+    for (int i = 0; i < HPOS_CNT; i++) {
+        if ((dmaEvent[i] >= DMA_L1 && dmaEvent[i] <= DMA_L6) &&
+            (dmaEvent[i] >= DMA_H1 && dmaEvent[i] <= DMA_H4)) {
+            if (dmaEvent[i] != bitplaneDMA[denise->hires()][activeBitplanes][i]) {
+                warn("EVENT INCONSISTENCY DETECTED\n");
+                dumpDMAEventTable();
+                assert(false);
+            }
+        }
+    }
 }
 
 void
@@ -672,6 +769,30 @@ Agnus::dumpDMAEventTable(int from, int to)
     plainmsg("%s\n", r2);
     plainmsg("%s\n", r3);
     plainmsg("%s\n", r4);
+}
+
+void
+Agnus::dumpDMAEventTable()
+{
+    // Dump the event table
+    plainmsg("Event table:\n\n");
+    dumpDMAEventTable(0x00, 0x4F);
+    dumpDMAEventTable(0x50, 0x9F);
+    dumpDMAEventTable(0xA0, 0xE2);
+
+    // Dump the jump table
+    plainmsg("\nJump table:\n\n");
+    int i = nextDmaEvent[0];
+    plainmsg("%d", i);
+    while (i) {
+        i = nextDmaEvent[i];
+        plainmsg(" -> %X", i);
+    }
+    plainmsg("\n");
+
+    // for (i = 0; nextDmaEvent[i]; i++) { plainmsg("%d, ", nextDmaEvent[i]); }
+    plainmsg("\n");
+
 }
 
 uint16_t
@@ -982,7 +1103,9 @@ Agnus::pokeDDFSTRT(uint16_t value)
     }
 
     ddfstrt = newValue;
-    // hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
+    dmaStrt = ddfstrt;
+
+
     updateBitplaneDma();
 }
 
@@ -1004,7 +1127,8 @@ Agnus::pokeDDFSTOP(uint16_t value)
     }
 
     ddfstop = newValue;
-    // hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
+    dmaStop = ddfstop + 7;
+
     updateBitplaneDma();
 }
 

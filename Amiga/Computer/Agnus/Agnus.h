@@ -82,8 +82,27 @@ class Agnus : public HardwareComponent
 
     // A graphics engine for visualizing DMA accesses
     DmaDebugger dmaDebugger;
-    
-    
+
+
+    //
+    // Lookup tables
+    //
+
+    /* Bitplane DMA events as they appear in a single rasterline.
+     *
+     * Parameters: bitplaneDMA[Resolution][Bitplanes][Cycle]
+     *
+     *             Resolution : 0 or 1        (0 = LORES / 1 = HIRES)
+     *              Bitplanes : 0 .. 6        (Bitplanes in use, BPU)
+     *                  Cycle : 0 .. HPOS_MAX (DMA cycle)
+     *
+     * The lookup table is used to quickly update the DMA event table.
+     * Depending on the current resoution and BPU value, a segment of this
+     * lookup table is copied into the DMA event table.
+     */
+    EventID bitplaneDMA[2][7][HPOS_CNT];
+
+
     //
     // Counters
     //
@@ -121,6 +140,14 @@ class Agnus : public HardwareComponent
 
     // The long frame flipflop
     bool lof;
+
+    /* The bitplane DMA cycle window.
+     *     dmaStrt is the first cycle of the first fetch unit
+     *     dmaStop is the last cycle of the last fetch unit
+     * The values are updated in pokeDDFSTRT() and pokeDDFSTOP()
+     */
+    int16_t dmaStrt;
+    int16_t dmaStop;
 
     /* The display window coordinates.
      * These values are calculated out of diwstrt and diwstop inside
@@ -245,8 +272,13 @@ class Agnus : public HardwareComponent
     public:
     
     Agnus();
-    
-    
+
+    // Initializes the lookup tables
+    void initLookupTables();
+    void initLoresBplEventTable();
+    void initHiresBplEventTable();
+
+
     //
     // Methods from HardwareComponent
     //
@@ -374,7 +406,11 @@ public:
 
     // Removes all events from the DMA time slot allocation table.
     void clearDMAEventTable();
-    
+
+    // Allocates the bitplane DMA slots
+    void allocateBplSlots(int bpu, bool hires, int first, int last);
+    void allocateBplSlots(int bpu, bool hires, int first);
+
     // Adds or removes the disk DMA events to the DMA event table.
     void switchDiskDmaOn();
     void switchDiskDmaOff();
@@ -401,6 +437,7 @@ public:
     
     // Dumps the DMA time slot allocation table to the console for debugging.
     void dumpDMAEventTable(int from, int to);
+    void dumpDMAEventTable();
  
     
     //

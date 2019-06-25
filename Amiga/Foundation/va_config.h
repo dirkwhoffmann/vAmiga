@@ -45,7 +45,7 @@
 #define DMA_DEBUG 2
 
 // Set to 1 to debug bitplane relevant registers
-#define BPL_DEBUG 2
+#define BPL_DEBUG 1
 
 // Set to 1 to debug color registers
 #define COL_DEBUG 2
@@ -91,7 +91,7 @@
 // #define SHIFTREG_DEBUG
 
 // Enable to highlight the first pixel in a 16-bit lores or hires pixel chunk
-// #define PIXEL_DEBUG
+#define PIXEL_DEBUG
 
 // Enable to colorize certain rasterlines
 // #define LINE_DEBUG
