@@ -272,18 +272,28 @@ Denise::pokeBPLCON0(uint16_t value)
         debug("Switching HAM mode %s\n", ham ? "on" : "off");
     }
 
+    /*
     if (agnus->hpos == 130 || agnus->hpos == 2) {
         debug("hpos = %d oldbpu = %d newbpu = %d\n", agnus->hpos, oldbpu, bpu);
         agnus->dumpDMAEventTable();
     }
+    */
 
     // Check if the number of used bitplanes has changed
     if (oldbpu != bpu) {
+
+        /* TODO:
+         * BPLCON0 is usually written in each frame, in cycle.
+         * To speed up, just check the hpos. If it is smaller than the start
+         * of the DMA window, a standard update() is enough and the scheduled
+         * update in hsyncActions (HSYNC_UPDATE_EVENT_TABLE) can be omitted.
+         */
 
         // Agnus will know about the change in 4 cycles.
         agnus->allocateBplSlots(bpu, hires(), agnus->hpos + 4);
 
         // Reschedule the next event according to the changed table
+        // TODO: Wrap this in a nicer API
         uint8_t next = agnus->nextDmaEvent[agnus->hpos];
         if (next) {
             events->schedulePos(DMA_SLOT, agnus->vpos, next, agnus->dmaEvent[next]);
@@ -296,26 +306,11 @@ Denise::pokeBPLCON0(uint16_t value)
     }
 
     /*
-    agnus->updateBitplaneDma();
-    // Schedule next event
-    int hpos = agnus->hpos;
-    if (hpos == 130) {
-        dirk = 1;
-        hpos += 3;
-    }
-    uint8_t next = agnus->nextDmaEvent[hpos];
-    if (next) {
-        events->schedulePos(DMA_SLOT, agnus->vpos, next, agnus->dmaEvent[next]);
-        if (hpos == 133) { debug("Next DMA event at $%X (%d)\n", next, agnus->dmaEvent[next]); }
-    } else {
-        events->cancel(DMA_SLOT);
-    }
-    */
-
     if (agnus->hpos == 130 || agnus->hpos == 2) {
         debug("hpos = %d oldbpu = %d newbpu = %d\n", agnus->hpos, oldbpu, bpu);
         agnus->dumpDMAEventTable();
     }
+    */
 }
 
 void
@@ -445,21 +440,6 @@ Denise::fillShiftRegisters()
     for (unsigned i = 0; i < 6; i++) {
         shiftReg[i] = REPLACE_LO_WORD(shiftReg[i], bpldat[i]);
     }
-
-    /*
-    shiftReg[0] = (shiftReg[0] << 16) | bpldat[0];
-    if (!dirk) shiftReg[1] = (shiftReg[1] << 16) | bpldat[1];
-    if (!dirk) shiftReg[2] = (shiftReg[2] << 16) | bpldat[2];
-    if (!dirk) shiftReg[3] = (shiftReg[3] << 16) | bpldat[3];
-    shiftReg[4] = (shiftReg[4] << 16) | bpldat[4];
-    shiftReg[5] = (shiftReg[5] << 16) | bpldat[5];
-
-    if (dirk) {
-        debug("ShiftReg: %X %X %X\n", shiftReg[1], shiftReg[2], shiftReg[3]);
-        debug("BPLDAT:   %X %X %X\n", bpldat[1], bpldat[2], bpldat[3]);
-    }
-    dirk = 0;
-    */
 }
 
 int *

@@ -413,7 +413,7 @@ Agnus::allocateBplSlots(int bpu, bool hires, int first, int last)
 void
 Agnus::allocateBplSlots(int bpu, bool hires, int first)
 {
-    debug("first = %d, dmaStrt = %d, dmaStop = %d\n", first, dmaStrt, dmaStop);
+    // debug("bpu = %d first = %d, dmaStrt = %d, dmaStop = %d\n", bpu, first, dmaStrt, dmaStop);
     allocateBplSlots(bpu, hires, MAX(first, dmaStrt), dmaStop);
 }
 
@@ -716,7 +716,7 @@ Agnus::dumpDMAEventTable(int from, int to)
 {
     char r1[256], r2[256], r3[256], r4[256];
     int i;
-    
+
     for (i = 0; i <= (to - from); i++) {
         
         int digit1 = (from + i) / 16;
@@ -776,6 +776,9 @@ Agnus::dumpDMAEventTable()
 {
     // Dump the event table
     plainmsg("Event table:\n\n");
+    plainmsg("ddfstrt = %X dffstop = %X dmaStart = %X dmaStop = %X\n\n",
+             ddfstrt, ddfstop, dmaStrt, dmaStop);
+
     dumpDMAEventTable(0x00, 0x4F);
     dumpDMAEventTable(0x50, 0x9F);
     dumpDMAEventTable(0xA0, 0xE2);
@@ -1127,7 +1130,10 @@ Agnus::pokeDDFSTOP(uint16_t value)
     }
 
     ddfstop = newValue;
-    dmaStop = ddfstop + 7;
+    dmaStop = ddfstop;
+
+    // Align dmaStop such that (dmaStop - dmaStart) is dividable by 8
+    dmaStop += (dmaStop - dmaStrt) & 0b100;
 
     updateBitplaneDma();
 }
