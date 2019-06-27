@@ -27,8 +27,8 @@ typedef enum : int8_t
     BUS_AUDIO,
     BUS_SPRITE,
     BUS_BITPLANE,
-    BUS_BLITTER,
     BUS_COPPER,
+    BUS_BLITTER,
     BUS_OWNER_COUNT
 }
 BusOwner;

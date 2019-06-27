@@ -184,13 +184,12 @@ DmaDebugger::computeOverlay()
 
                     col = GpuColor(ptr[3]).mix(debugColor[owner][chunk4], opacity);
                     ptr[3] = col.rawValue;
+                    break;
                 }
-                break;
-
+                // fallthrough
+                
             default:
 
-                // EXPERIMENTAL
-                /*
                 col = GpuColor(ptr[0]).shade(opacity);
                 ptr[0] = col.rawValue;
                 col = GpuColor(ptr[1]).shade(opacity);
@@ -199,9 +198,14 @@ DmaDebugger::computeOverlay()
                 ptr[2] = col.rawValue;
                 col = GpuColor(ptr[3]).shade(opacity);
                 ptr[3] = col.rawValue;
-                */
                 break;
         }
+    }
+
+    // Area at the far right that belongs to the next DMA line
+    for (unsigned i = 0; i < 15 * 4; i++, ptr++) {
+        col = GpuColor(ptr[0]).shade(opacity);
+        ptr[0] = col.rawValue;
     }
 }
 

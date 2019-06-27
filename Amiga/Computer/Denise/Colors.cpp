@@ -44,7 +44,7 @@ RgbColor::mix(RgbColor additive, double weight)
     double newG = g + (additive.g - g) * weight;
     double newB = b + (additive.b - b) * weight;
 
-    RgbColor c = RgbColor(newR, newG, newB);
+    // RgbColor c = RgbColor(newR, newG, newB);
     // printf("mix: new %f %f %f\n", c.r, c.g, c.b);
 
     return RgbColor(newR, newG, newB);
