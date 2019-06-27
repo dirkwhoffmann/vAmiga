@@ -131,6 +131,7 @@ extension Inspector {
         dmaDebugAudioCol.color = NSColor.init(r: rgb.3.0, g: rgb.3.1, b: rgb.3.2)
         dmaDebugSpriteCol.color = NSColor.init(r: rgb.4.0, g: rgb.4.1, b: rgb.4.2)
         dmaDebugBitplaneCol.color = NSColor.init(r: rgb.5.0, g: rgb.5.1, b: rgb.5.2)
+        dmaDebugCopperCol.color = NSColor.init(r: rgb.6.0, g: rgb.6.1, b: rgb.6.2)
         dmaDebugOpacity.doubleValue = info.opacity * 100.0
 
         dmaDebugDisk.isEnabled = info.enabled
@@ -141,6 +142,7 @@ extension Inspector {
         dmaDebugAudioCol.isEnabled = info.enabled
         dmaDebugSpriteCol.isEnabled = info.enabled
         dmaDebugBitplaneCol.isEnabled = info.enabled
+        dmaDebugCopperCol.isEnabled = info.enabled
         dmaDebugOpacity.isEnabled = info.enabled
     }
 

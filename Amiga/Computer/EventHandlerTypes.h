@@ -183,6 +183,8 @@ static inline bool isCopEvent(EventID id) { return id < COP_EVENT_COUNT; }
 static inline bool isBltEvent(EventID id) { return id < BLT_EVENT_COUNT; }
 static inline bool isRasEvent(EventID id) { return id < RAS_EVENT_COUNT; }
 
+static inline bool isBplEvent(EventID id) { return id >= DMA_L1 && id <= DMA_H4; }
+
 // Inspection interval in seconds (interval between INS_xxx events)
 static const double inspectionInterval = 0.1;
 

@@ -190,10 +190,12 @@ class Inspector: NSWindowController {
     @IBOutlet weak var dmaDebugAudio: NSButton!
     @IBOutlet weak var dmaDebugSprite: NSButton!
     @IBOutlet weak var dmaDebugBitplane: NSButton!
+    @IBOutlet weak var dmaDebugCopper: NSButton!
     @IBOutlet weak var dmaDebugDiskCol: NSColorWell!
     @IBOutlet weak var dmaDebugAudioCol: NSColorWell!
     @IBOutlet weak var dmaDebugSpriteCol: NSColorWell!
     @IBOutlet weak var dmaDebugBitplaneCol: NSColorWell!
+    @IBOutlet weak var dmaDebugCopperCol: NSColorWell!
     @IBOutlet weak var dmaDebugOpacity: NSSlider!
 
     // Debug panel (Copper)

@@ -1335,6 +1335,8 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
             denise->pokeCOLORx(30, value); return;
         case 0x1BE >> 1: // COLOR31
             denise->pokeCOLORx(31, value); return;
+        case 0x1FE >> 1: // COLOR31
+            copper->pokeNOOP(value); return;
     }
     
     if (addr <= 0x1E) {

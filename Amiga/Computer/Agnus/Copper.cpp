@@ -192,6 +192,15 @@ Copper::pokeCOP2LCL(uint16_t value)
     cop2lc = REPLACE_LO_WORD(cop2lc, value & 0xFFFE);
 }
 
+void
+Copper::pokeNOOP(uint16_t value)
+{
+    debug(COPREG_DEBUG, "pokeNOOP(%04X)\n", value);
+
+    // REMOVE ASAP
+    verbose = !verbose; 
+}
+
 bool
 Copper::findMatch(Beam &result)
 {
@@ -288,8 +297,8 @@ Copper::move(int addr, uint16_t value)
         return;
     }
 
-    // Do a standard poke
-    mem->pokeCustom16(addr, value);
+    // Write the value
+    agnus->copperWrite(addr, value);
 }
 
 bool
@@ -483,6 +492,8 @@ Copper::isIllegalInstr(uint32_t addr)
 void
 Copper::serviceEvent(EventID id)
 {
+    uint16_t reg;
+
     debug(2, "(%d,%d): ", agnus->vpos, agnus->hpos);
 
     servicing = true;
@@ -493,106 +504,100 @@ Copper::serviceEvent(EventID id)
 
             if (verbose) debug("COP_REQUEST_DMA\n");
 
-            /* In this state, Copper waits for a free DMA cycle.
-             * Once DMA access is granted, it continues with fetching the
-             * first instruction word.
-             */
-            if (agnus->copperCanHaveBus()) {
-                events->scheduleRel(COP_SLOT, DMA_CYCLES(2), COP_FETCH);
-            }
+            // Wait for the next free DMA cycle
+            if (!agnus->copperCanHaveBus()) { reschedule(); break; }
+
+            // Continue with fetching the first instruction word
+            schedule(COP_FETCH);
             break;
 
         case COP_FETCH:
 
             if (verbose) debug("COP_FETCH\n");
 
-            if (agnus->copperCanHaveBus()) {
-                
-                // Load the first instruction word
-                cop1ins = mem->peek16(coppc);
-                // debug(COP_DEBUG, "COP_FETCH: coppc = %X cop1ins = %X\n", coppc, cop1ins);
-                advancePC();
-                
-                // Determine the next state based on the instruction type
-                events->scheduleRel(COP_SLOT, DMA_CYCLES(2), isMoveCmd() ? COP_MOVE : COP_WAIT_OR_SKIP);
-            }
+            // Wait for the next free DMA cycle
+            if (!agnus->copperCanHaveBus()) { reschedule(); break; }
+
+            // Load the first instruction word
+            cop1ins = agnus->copperRead(coppc);
+            advancePC();
+
+            // Fork execution depending on the instruction type
+            schedule(isMoveCmd() ? COP_MOVE : COP_WAIT_OR_SKIP);
             break;
             
         case COP_MOVE:
 
             if (verbose) debug("COP_MOVE\n");
 
-            if (agnus->copperCanHaveBus()) {
-                
-                // Load the second instruction word
-                cop2ins = mem->peek16(coppc);
-                // debug(COP_DEBUG, "COP_MOVE: coppc = %X cop2ins = %X\n", coppc, cop2ins);
-                advancePC();
-                
-                // Extract register number from the first instruction word
-                uint16_t reg = (cop1ins & 0x1FE);
-                
-                if (isIllegalAddress(reg)) {
-                    
-                    events->cancel(COP_SLOT); // Stops the Copper
-                    break;
-                }
-                
-                // Write into the custom register
-                if (!skip) move(reg, cop2ins);
-                skip = false;
-                
-                // Schedule next event
-                events->scheduleRel(COP_SLOT, DMA_CYCLES(2), COP_FETCH);
-            }
+            // Wait for the next free DMA cycle
+            if (!agnus->copperCanHaveBus()) { reschedule(); break; }
+
+            // Load the second instruction word
+            cop2ins = agnus->copperRead(coppc);
+            advancePC();
+
+            // Extract register number from the first instruction word
+            reg = (cop1ins & 0x1FE);
+
+            // Stop the Copper if the address is illegal
+            if (isIllegalAddress(reg)) { events->cancel(COP_SLOT); break; }
+
+            // Write into the custom register
+            if (!skip) move(reg, cop2ins);
+            skip = false;
+
+            // Schedule next event
+            schedule(COP_FETCH);
             break;
             
         case COP_WAIT_OR_SKIP:
 
             if (verbose) debug("COP_WAIT_OR_SKIP\n");
 
-            if (agnus->copperCanHaveBus()) {
+            // Wait for the next free DMA cycle
+            if (!agnus->copperCanHaveBus()) { reschedule(); break; }
 
-                // Load the second instruction word
-                cop2ins = mem->peek16(coppc);
-                // debug(COP_DEBUG, "COP_WAIT_OR_SKIP: coppc = %X cop2ins = %X\n", coppc, cop2ins);
-                // debug(COP_DEBUG, "    VPHP = %X VMHM = %X\n", getVPHP(), getVMHM());
-                advancePC();
+            // Load the second instruction word
+            cop2ins = agnus->copperRead(coppc);
+            advancePC();
                 
-                // Is it a WAIT command?
-                if (isWaitCmd()) {
+            // Is it a WAIT command?
+            if (isWaitCmd()) {
 
-                    // Clear the skip flag
-                    skip = false;
+                // Clear the skip flag
+                skip = false;
 
-                    // Find the trigger position for this WAIT command
-                    Beam trigger;
-                    if (findMatch(trigger)) {
+                // Find the trigger position for this WAIT command
+                Beam trigger;
+                if (findMatch(trigger)) {
 
-                        // In how many cycles do we get there?
-                        Cycle delay = agnus->beamDiff(trigger.y, trigger.x);
-                        assert(delay < NEVER);
+                    // In how many cycles do we get there?
+                    Cycle delay = agnus->beamDiff(trigger.y, trigger.x);
+                    assert(delay < NEVER);
 
-                        if (verbose) debug("FOUND MATCH in %d cycles\n", delay);
+                    if (verbose) debug("FOUND MATCH in %d cycles\n", delay);
 
-                        // Schedule the Copper to wake up
-                        events->scheduleRel(COP_SLOT, delay, COP_FETCH);
+                    // Copper wakes up 2 cycles earlier
+                    delay -= DMA_CYCLES(2);
 
-                    } else {
+                    // with a COP_REQUEST_DMA event.
+                    events->scheduleRel(COP_SLOT, delay, COP_REQUEST_DMA);
 
-                        // Stop the Copper
-                        events->disable(COP_SLOT);
-                    }
+                } else {
+
+                    // Stop the Copper (TODO: Better use cancel)
+                    events->disable(COP_SLOT);
                 }
+            }
 
-                // It must be a SKIP command then.
-                else {
-                    
-                    // Determine if the next command has to be skipped by
-                    // running the comparator circuit.
-                    assert(isSkipCmd());
-                    skip = comparator();
-                }
+            // It must be a SKIP command then.
+            else {
+
+                // Determine if the next command has to be skipped by
+                // running the comparator circuit.
+                assert(isSkipCmd());
+                skip = comparator();
             }
             break;
             
@@ -602,8 +607,8 @@ Copper::serviceEvent(EventID id)
 
             // Load COP1LC into the program counter
             coppc = cop1lc;
-            // debug(COP_DEBUG, "COP_JMP1: coppc = %X\n", coppc);
-            events->scheduleRel(COP_SLOT, DMA_CYCLES(2), COP_REQUEST_DMA);
+
+            schedule(COP_REQUEST_DMA);
             break;
 
         case COP_JMP2:
@@ -612,8 +617,7 @@ Copper::serviceEvent(EventID id)
 
             // Load COP2LC into the program counter
             coppc = cop2lc;
-            // debug(COP_DEBUG, "COP_JMP2: coppc = %X\n", coppc);
-            events->scheduleRel(COP_SLOT, DMA_CYCLES(2), COP_REQUEST_DMA);
+            schedule(COP_REQUEST_DMA);
             break;
 
         default:
@@ -623,6 +627,18 @@ Copper::serviceEvent(EventID id)
     }
 
     servicing = false;
+}
+
+void
+Copper::schedule(EventID next)
+{
+    events->scheduleRel(COP_SLOT, DMA_CYCLES(2), next);
+}
+
+void
+Copper::reschedule()
+{
+    events->rescheduleRel(COP_SLOT, DMA_CYCLES(2));
 }
 
 void

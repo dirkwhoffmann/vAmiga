@@ -332,6 +332,22 @@ public:
     Cycle startOfNextFrame();
 
 
+
+    //
+    // Working with DMA slot numbers
+    //
+
+public:
+
+    // Returns the firsr DMA cycle belonging to the next fetch unit
+    // EXPERIMENTAL
+    int16_t nextFetchUnit(int16_t hpos) { return hpos + (4 - (hpos & 3)); }
+
+    // Returns the next aligned DMA cycle greater or equal to the provided position
+    // EXPERIMENTAL
+    int16_t alignToFetchUnit(int16_t hpos) { return nextFetchUnit(hpos - 1); }
+
+
     //
     // Working with beam positions
     //
@@ -397,6 +413,8 @@ public:
     uint16_t doSpriteDMA(int channel);
     uint16_t doBitplaneDMA(int channel);
 
+    uint16_t copperRead(uint32_t addr);
+    void copperWrite(uint32_t addr, uint16_t value);
 
     //
     // Managing the DMA allocation tables

@@ -380,6 +380,26 @@ Agnus::doBitplaneDMA(int channel)
     return result;
 }
 
+uint16_t
+Agnus::copperRead(uint32_t addr)
+{
+    uint16_t result = mem->peek16(addr);
+
+    busOwner[hpos] = BUS_COPPER;
+    busValue[hpos] = result;
+
+    return result;
+}
+
+void
+Agnus::copperWrite(uint32_t addr, uint16_t value)
+{
+    mem->pokeCustom16(addr, value);
+
+    busOwner[hpos] = BUS_COPPER;
+    busValue[hpos] = value;
+}
+
 void
 Agnus::clearDMAEventTable()
 {
@@ -1232,15 +1252,17 @@ Agnus::addBPLxMOD()
 bool
 Agnus::copperCanHaveBus()
 {
-    // For now, we only check the DMACON register.
-    // Later, we need to check if the bus is really free and if the current
-    // cylce is even.
-    
-    if (dmacon & 0b1010000000) {
-        // debug("COPPER DMA IS ENABLED !!!!\n"); 
+    // Deny access if Copper DMA is disabled
+    if ((dmacon & (DMAEN|COPEN)) != (DMAEN|COPEN)) return false;
+
+    // Deny access if the current slot is used for bitplane DMA
+    if (isBplEvent(dmaEvent[hpos])) {
+        debug(COP_DEBUG, "Copper blocked by bitplane DMA\n");
+        return false;
     }
-        
-    return (dmacon & 0b1010000000) != 0;
+
+    // Grant access
+    return true;
 }
 
 void

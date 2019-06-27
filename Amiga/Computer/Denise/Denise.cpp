@@ -265,8 +265,8 @@ Denise::pokeBPLCON0(uint16_t value)
     bool oldHam = ham;
     ham = (bplcon0 & 0x8C00) == 0x0800 && (bpu == 5 || bpu == 6);
 
-    if (oldHam ^ham) {
-        debug("Switching HAM mode %s\n", ham ? "on" : "off");
+    if (oldHam ^ ham) {
+        // debug("Switching HAM mode %s\n", ham ? "on" : "off");
     }
 
     /*
@@ -289,11 +289,15 @@ Denise::pokeBPLCON0(uint16_t value)
         // Agnus will know about the change in 4 cycles.
         // debug("Before allocateBplSlots (oldbpu = %d bpu = %d bplVstrt = %d bplVstop = %d diwVstrt = %d diwVstop = %d)\n", oldbpu, bpu, agnus->bplVstrt, agnus->bplVstop, agnus->diwVstrt, agnus->diwVstop);
         // agnus->dumpDMAEventTable();
+
         bool bplDma =
         agnus->vpos >= agnus->bplVstrt && agnus->vpos < agnus->bplVstop &&
         (agnus->dmacon & (DMAEN | BPLEN)) == (DMAEN | BPLEN);
         if (!bplDma) bpu = 0;
-        agnus->allocateBplSlots(bpu, hires(), agnus->hpos + 4);
+
+        int16_t pos = agnus->hpos + 4;
+        agnus->allocateBplSlots(bpu, hires(), pos);
+
         // debug("After allocateBplSlots (oldbpu = %d bpu = %d)\n", oldbpu, bpu);
         // agnus->dumpDMAEventTable();
 

@@ -107,6 +107,7 @@ public:
     void pokeCOP1LCL(uint16_t value);
     void pokeCOP2LCH(uint16_t value);
     void pokeCOP2LCL(uint16_t value);
+    void pokeNOOP(uint16_t value);
 
     
     //
@@ -232,6 +233,12 @@ public:
     
     // Processes a Copper event
     void serviceEvent(EventID id);
+
+    // Schedules the next Copper event
+    void schedule(EventID next);
+
+    // Reschedules the current Copper event
+    void reschedule();
 
 private:
     

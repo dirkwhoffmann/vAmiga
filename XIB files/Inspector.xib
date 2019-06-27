@@ -228,6 +228,8 @@
                 <outlet property="dmaDebugAudioCol" destination="nhV-5E-i52" id="3wo-oj-EMs"/>
                 <outlet property="dmaDebugBitplane" destination="y9R-3z-Von" id="4w5-ZZ-Wp7"/>
                 <outlet property="dmaDebugBitplaneCol" destination="Sus-JH-egW" id="gfk-1x-jlb"/>
+                <outlet property="dmaDebugCopper" destination="AvK-EQ-RbG" id="1xH-Z4-1p1"/>
+                <outlet property="dmaDebugCopperCol" destination="zOj-NW-AxU" id="B1V-Vz-X1g"/>
                 <outlet property="dmaDebugDisk" destination="Yeu-aj-Rj8" id="arg-Ls-odW"/>
                 <outlet property="dmaDebugDiskCol" destination="B3g-Ux-QJ0" id="UFa-vc-X5m"/>
                 <outlet property="dmaDebugEnable" destination="gJv-sA-PV6" id="tt3-5V-CCB"/>
@@ -2377,8 +2379,8 @@
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Agnus" identifier="" id="2wr-Zc-eub">
-                                <view key="view" id="7eA-vd-r9Y">
-                                    <rect key="frame" x="10" y="33" width="1013" height="406"/>
+                                <view key="view" ambiguous="YES" id="7eA-vd-r9Y">
+                                    <rect key="frame" x="10" y="33" width="822" height="406"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <box fixedFrame="YES" title="DMA Control" translatesAutoresizingMaskIntoConstraints="NO" id="DFQ-EU-VAw">
@@ -2833,14 +2835,14 @@
                                             <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="baustelle" id="0QU-JP-HX7"/>
                                         </imageView>
                                         <box fixedFrame="YES" title="DMA Debugger" translatesAutoresizingMaskIntoConstraints="NO" id="Ag2-qF-6QQ">
-                                            <rect key="frame" x="553" y="187" width="265" height="189"/>
+                                            <rect key="frame" x="553" y="162" width="265" height="214"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <view key="contentView" id="8ZG-nV-vxH">
-                                                <rect key="frame" x="3" y="3" width="259" height="171"/>
+                                                <rect key="frame" x="3" y="3" width="259" height="196"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gJv-sA-PV6">
-                                                        <rect key="frame" x="10" y="134" width="231" height="20"/>
+                                                        <rect key="frame" x="10" y="159" width="231" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="Visualize Direct Memory Accesses" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="LQJ-vr-dn7">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -2851,7 +2853,7 @@
                                                         </connections>
                                                     </button>
                                                     <slider horizontalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="M0E-AU-SFY">
-                                                        <rect key="frame" x="34" y="23" width="15" height="102"/>
+                                                        <rect key="frame" x="34" y="27" width="15" height="123"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <sliderCell key="cell" controlSize="small" continuous="YES" alignment="left" maxValue="100" doubleValue="50" tickMarkPosition="right" sliderType="linear" id="OVp-xH-aDp"/>
                                                         <connections>
@@ -2859,7 +2861,7 @@
                                                         </connections>
                                                     </slider>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="ucn-IE-yL8">
-                                                        <rect key="frame" x="61" y="78" width="23" height="20"/>
+                                                        <rect key="frame" x="61" y="103" width="23" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="5UV-E7-rin">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -2870,7 +2872,7 @@
                                                         </connections>
                                                     </button>
                                                     <colorWell fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="nhV-5E-i52">
-                                                        <rect key="frame" x="85" y="76" width="44" height="23"/>
+                                                        <rect key="frame" x="85" y="101" width="44" height="23"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                         <connections>
@@ -2878,7 +2880,7 @@
                                                         </connections>
                                                     </colorWell>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TcV-QL-p90">
-                                                        <rect key="frame" x="135" y="80" width="72" height="14"/>
+                                                        <rect key="frame" x="135" y="105" width="72" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Audio DMA" id="vNh-tT-oVI">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -2887,7 +2889,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="Yeu-aj-Rj8">
-                                                        <rect key="frame" x="61" y="104" width="23" height="20"/>
+                                                        <rect key="frame" x="61" y="129" width="23" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="KJZ-qS-8bm">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -2898,7 +2900,7 @@
                                                         </connections>
                                                     </button>
                                                     <colorWell fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="B3g-Ux-QJ0">
-                                                        <rect key="frame" x="85" y="102" width="44" height="23"/>
+                                                        <rect key="frame" x="85" y="127" width="44" height="23"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                         <connections>
@@ -2906,7 +2908,7 @@
                                                         </connections>
                                                     </colorWell>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9dY-aI-ruM">
-                                                        <rect key="frame" x="135" y="106" width="64" height="14"/>
+                                                        <rect key="frame" x="135" y="131" width="64" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Disk DMA" id="Zth-Y3-5js">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -2915,7 +2917,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="4" translatesAutoresizingMaskIntoConstraints="NO" id="nNQ-r2-lJA">
-                                                        <rect key="frame" x="61" y="52" width="23" height="20"/>
+                                                        <rect key="frame" x="61" y="77" width="23" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="fgr-RP-NWG">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -2926,7 +2928,7 @@
                                                         </connections>
                                                     </button>
                                                     <colorWell fixedFrame="YES" tag="4" translatesAutoresizingMaskIntoConstraints="NO" id="uxM-Mo-w4m">
-                                                        <rect key="frame" x="85" y="50" width="44" height="23"/>
+                                                        <rect key="frame" x="85" y="75" width="44" height="23"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                         <connections>
@@ -2934,7 +2936,7 @@
                                                         </connections>
                                                     </colorWell>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JAN-rg-Tcw">
-                                                        <rect key="frame" x="135" y="54" width="73" height="14"/>
+                                                        <rect key="frame" x="135" y="79" width="73" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Sprite DMA" id="z1H-LN-bot">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -2943,7 +2945,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="5" translatesAutoresizingMaskIntoConstraints="NO" id="y9R-3z-Von">
-                                                        <rect key="frame" x="61" y="26" width="23" height="20"/>
+                                                        <rect key="frame" x="61" y="51" width="23" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="M6Q-7a-pRH">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -2954,7 +2956,7 @@
                                                         </connections>
                                                     </button>
                                                     <colorWell fixedFrame="YES" tag="5" translatesAutoresizingMaskIntoConstraints="NO" id="Sus-JH-egW">
-                                                        <rect key="frame" x="85" y="24" width="44" height="23"/>
+                                                        <rect key="frame" x="85" y="49" width="44" height="23"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                         <connections>
@@ -2962,9 +2964,37 @@
                                                         </connections>
                                                     </colorWell>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bqa-4N-OKx">
-                                                        <rect key="frame" x="135" y="28" width="87" height="14"/>
+                                                        <rect key="frame" x="135" y="53" width="87" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Bitplane DMA" id="2Jg-2z-kIO">
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                    </textField>
+                                                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="6" translatesAutoresizingMaskIntoConstraints="NO" id="AvK-EQ-RbG">
+                                                        <rect key="frame" x="61" y="25" width="23" height="20"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="2Cp-Eu-2IN">
+                                                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                        </buttonCell>
+                                                        <connections>
+                                                            <action selector="dmaDebugShowAction:" target="-2" id="tdh-jp-fBO"/>
+                                                        </connections>
+                                                    </button>
+                                                    <colorWell fixedFrame="YES" tag="5" translatesAutoresizingMaskIntoConstraints="NO" id="zOj-NW-AxU">
+                                                        <rect key="frame" x="85" y="23" width="44" height="23"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <connections>
+                                                            <action selector="dmaDebugColorAction:" target="-2" id="DWC-TI-Tgf"/>
+                                                        </connections>
+                                                    </colorWell>
+                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vmp-ew-oXe">
+                                                        <rect key="frame" x="135" y="27" width="87" height="14"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Copper DMA" id="IZg-4r-iZb">
                                                             <font key="font" metaFont="smallSystem"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -5444,7 +5474,7 @@
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Ports" identifier="" id="Upk-CO-AOR">
-                                <view key="view" ambiguous="YES" id="q4f-Gs-vEh">
+                                <view key="view" id="q4f-Gs-vEh">
                                     <rect key="frame" x="10" y="33" width="822" height="406"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>

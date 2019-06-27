@@ -32,57 +32,63 @@
 // Debug settings
 //
 
-// Default debug level (used for statements with no custom level)
+// Default debug level (used for statements with no custom level) DEPRECATED
 #define DEBUG_LEVEL 1
 
-// Set to 1 to debug the run loop
+//
+// Custom debug levels (set to 1 to enable debug output)
+//
+
+// Debugging the run loop
 #define RUN_DEBUG 2
 
-// Set to 1 to debug the CIAs
+// Debugging the Complex Interface Adapters (CIAs)
 #define CIA_DEBUG 2
 
-// Set to 1 to debug DMA relevant registers
+// Debugging DMA registers
 #define DMA_DEBUG 2
 
-// Set to 1 to debug bitplane relevant registers
+// Debugging bitplane registers
 #define BPL_DEBUG 2
 
-// Set to 1 to debug color registers
+// Debugging color registers
 #define COL_DEBUG 2
 
-// Set to 1 to debug sprite relevant registers
+// Debugging sprite registers
 #define SPR_DEBUG 2
 
-// Set to 1 to debug disk relevant registers
+// Debugging disk registers
 #define DSK_DEBUG 2
 
-// Set to 1 to debug audio relevant registers
+// Debugging audio registers
 #define AUD_DEBUG 2
 
-// Set to 1 to debug the control ports and connected devices
+// Debugging the control ports and connected devices
 #define CPT_DEBUG 2
 
-// Set to 1 to debug Copper registers
+// Debugging the Copper
 #define COPREG_DEBUG 2
-
-// Set to 1 to debug the Copper
 #define COP_DEBUG 2
 
-// Set to 1 to debug the Blitter
+// Debugging the Blitter
 #define BLT_DEBUG 2
 #define BLT_CHECKSUM 2
 
-// Set to 1 to debug the serial interface
+// Debugging the serial interface
 #define SER_DEBUG 2
 
-// Set to 1 to debug the potentiometer inputs
+// Debugging the potentiometer inputs
 #define POT_DEBUG 2
 
-// Set to 1 to debug the keyboard
+// Debugging the keyboard
 #define KB_DEBUG 1
 
-// Set to 1 to warn about custom register access violations
+// Debugging custom register access violations
 #define OCS_DEBUG 2
+
+//
+//
+//
 
 // Enable to draw the display window border in debug colors
 // #define BORDER_DEBUG
