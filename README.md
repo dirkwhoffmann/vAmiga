@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/dirkwhoffmann/vAmiga.svg?branch=master)](https://travis-ci.org/dirkwhoffmann/vAmiga)
 [![GitQ](https://gitq.com/badge.svg)](https://gitq.com/dirkwhoffmann/vAMIGA)
 
-![alt Objective](http://www.dirkwhoffmann.de/vAMIGA/pics/objective5.png)
+![alt Objective](http://www.dirkwhoffmann.de/vAMIGA/pics/objective6.png)
 
 ### Achieved milestones:
 
