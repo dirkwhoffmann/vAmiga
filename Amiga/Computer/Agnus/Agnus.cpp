@@ -714,7 +714,7 @@ Agnus::computeBplVstrtVstop()
     bplVstrt = MAX(diwVstrt, 26); // 0 .. 25 is VBLANK area
     bplVstop = MIN(diwVstop, frameInfo.numLines - 1);
 
-    // debug(1, "bplVstrt = %d bplVstop = %d\n", bplVstrt, bplVstop);
+    // debug("diwVstrt = %d diwVstop = %d bplVstrt = %d bplVstop = %d\n", diwVstrt, diwVstop, bplVstrt, bplVstop);
 }
 
 void

@@ -546,6 +546,10 @@ Denise::drawHires(int pixels)
 void
 Denise::drawSprites()
 {
+    // Only proceed if we are not inside the upper or lower border area
+    // if (!agnus->inDisplayArea()) return; 
+    if (!agnus->inBplDmaArea()) return;
+
     for (int nr = 0; armed != 0; nr++, armed >>= 1) {
 
         if (armed & 0x1) {
@@ -573,13 +577,13 @@ Denise::drawBorder()
 #ifndef BORDER_DEBUG
     int borderL = 0;
     int borderR = 0;
-    int borderV = 0;
+    // int borderV = 0;
     int openL = 0;
     int openR = 0;
 #else
     int borderL = 64;
     int borderR = 65;
-    int borderV = 66;
+    // int borderV = 66;
     int openL = 68;
     int openR = 69;
 #endif
@@ -587,6 +591,7 @@ Denise::drawBorder()
     int16_t hstrt = MAX(FIRST_VISIBLE, 2 * agnus->diwHstrt);
     int16_t hstop = MIN(LAST_VISIBLE + 1, 2 * agnus->diwHstop);
 
+#if 0
     if (firstCanvasPixel == 0) {
         assert(lastCanvasPixel == 0);
 
@@ -616,6 +621,19 @@ Denise::drawBorder()
             assert(i < sizeof(rasterline));
             rasterline[i] = borderR;
         }
+    }
+#endif
+
+    // Draw left border
+    for (int i = FIRST_VISIBLE; i < agnus->diwHstrt; i++) {
+        assert(i < sizeof(rasterline));
+        rasterline[i] = borderL;
+    }
+
+    // Draw right border
+    for (int i = hstop; i <= agnus->diwHstop; i++) {
+        assert(i < sizeof(rasterline));
+        rasterline[i] = borderR;
     }
 
 #ifdef LINE_DEBUG

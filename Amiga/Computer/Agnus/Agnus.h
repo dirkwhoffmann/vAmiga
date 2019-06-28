@@ -305,7 +305,7 @@ class Agnus : public HardwareComponent
 
 
     //
-    // Examining the current frame
+    // Investigating the current frame
     //
 
 public:
@@ -332,9 +332,20 @@ public:
     Cycle startOfNextFrame();
 
 
+    //
+    // Investigating the current rasterline
+    //
+
+public:
+
+    // Indicates if the current rasterline belongs to the display area.
+    // bool inDisplayArea() { return vpos >= bplVstrt && vpos < bplVstop; }
+
+    // Indicates if the current rasterline is a bitplane DMA line
+    bool inBplDmaArea() { return vpos >= bplVstrt && vpos < bplVstop && bplDMA(); }
 
     //
-    // Working with DMA slot numbers
+    // Working with DMA slots
     //
 
 public:

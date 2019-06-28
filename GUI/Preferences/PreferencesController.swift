@@ -212,12 +212,6 @@ class PreferencesController: DialogController {
     @IBOutlet weak var keyMatrixScrollView: NSScrollView!
     @IBOutlet weak var keyMatrixCollectionView: NSCollectionView!
 
-    // Double array of key images, indexed by their row and column number
-    var keyImage = Array(repeating: Array(repeating: nil as NSImage?, count: 8), count: 8)
-    
-    // Selected C64 key
-    // var selectedKey: C64Key?
-        
     override func awakeFromNib() {
     
         awakeVideoPrefsFromNib()
