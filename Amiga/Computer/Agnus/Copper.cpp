@@ -88,7 +88,18 @@ Copper::_dump()
     plainmsg("   cop1lc: %X\n", cop1lc);
     plainmsg("   cop2lc: %X\n", cop2lc);
 
-    verbose = !verbose; 
+    // verbose = !verbose;
+
+    plainmsg("\n");
+    plainmsg("First Copper list\n");
+    plainmsg("-----------------\n");
+
+    uint32_t addr = cop1lc;
+    for (int i = 0; i < 100; i++, addr += 4) {
+        plainmsg("%04X %04X: ", mem->spypeek16(addr), mem->spypeek16(addr+2));
+        plainmsg(disassemble(addr));
+        plainmsg("\n");
+    }
 }
 
 CopperInfo
@@ -695,6 +706,6 @@ Copper::disassemble(unsigned list, uint32_t offset)
     
     uint32_t addr = (list == 1) ? cop1lc : cop2lc;
     addr = (addr + 2 * offset) & 0x7FFFF;
-    
+
     return disassemble(addr);
 }
