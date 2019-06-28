@@ -3,7 +3,11 @@
 
 ![alt Objective](http://www.dirkwhoffmann.de/vAMIGA/pics/objective6.png)
 
-### Achieved milestones:
+Checkout the Wiki section for more details.
+
+## Milestones
+
+### Achieved:
 
 - Show the hand & disk logo.
 - Make vAmiga load the Workbench.
@@ -16,7 +20,7 @@
   <img src="http://www.dirkwhoffmann.de/vAMIGA/pics/milestone5.png" width="150">    
   
    
-### Unachieved milestones:
+### Unachieved:
 
 - Master the Alpine9000 test suite.
 - Let the Juggler juggle.
@@ -30,6 +34,7 @@
 
    
    
-### Where to go from here?
+## Where to go from here?
 
-Checkout the Wiki section for more details.
+- [vAmiga Test Suite](https://github.com/dirkwhoffmann/vAmigaTS)
+- [VirtualC64](https://github.com/dirkwhoffmann/VirtualC64)
