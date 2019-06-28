@@ -35,6 +35,9 @@ class PreferencesController: DialogController {
    
     @IBOutlet weak var romFactoryButton: NSButton!
 
+    // Button
+    @IBOutlet weak var romOKButton: NSButton!
+
     //
     // Hardware preferences
     //
@@ -69,6 +72,9 @@ class PreferencesController: DialogController {
     @IBOutlet weak var hwLockText: NSTextField!
     @IBOutlet weak var hwLockSubText: NSTextField!
 
+    // Button
+    @IBOutlet weak var hwOKButton: NSButton!
+
     //
     // Compatibility preferences
     //
@@ -86,6 +92,9 @@ class PreferencesController: DialogController {
     // Lock
     @IBOutlet weak var compLockText: NSTextField!
     @IBOutlet weak var compLockSubText: NSTextField!
+
+    // Button
+    @IBOutlet weak var compOKButton: NSButton!
 
     //
     // Video preferences
@@ -127,6 +136,9 @@ class PreferencesController: DialogController {
     @IBOutlet weak var vidEyeYSlider: NSSlider!
     @IBOutlet weak var vidEyeZSlider: NSSlider!
 
+    // Button
+    @IBOutlet weak var vidOKButton: NSButton!
+
     //
     // Emulator preferences
     //
@@ -154,6 +166,9 @@ class PreferencesController: DialogController {
     @IBOutlet weak var emuPauseInBackground: NSButton!
     @IBOutlet weak var emuAutoSnapshots: NSButton!
     @IBOutlet weak var emuSnapshotInterval: NSTextField!
+
+    // Button
+    @IBOutlet weak var emuOKButton: NSButton!
 
     //
     // Devices preferences
@@ -203,21 +218,24 @@ class PreferencesController: DialogController {
     @IBOutlet weak var devAutofireBullets: NSTextField!
     @IBOutlet weak var devAutofireFrequency: NSSlider!
 
-    //
-    // Keymap preferences
-    //
-    
-    @IBOutlet weak var info: NSTextField!
-    @IBOutlet weak var keyMappingPopup: NSPopUpButton!
-    @IBOutlet weak var keyMatrixScrollView: NSScrollView!
-    @IBOutlet weak var keyMatrixCollectionView: NSCollectionView!
+    // Button
+    @IBOutlet weak var devOKButton: NSButton!
+
+    // Indicates if the user manually shut down the emulator
+    var manuallyPoweredOff = false
+
+    // Indicates if we should automatically boot when the window closes
+    var autoPowerUp: Bool { return manuallyPoweredOff && amigaProxy?.readyToPowerUp() == true; }
+
+    // Rerturns the label of the OK button
+    var okLabel: String { return autoPowerUp ? "Power" : "OK"; }
 
     override func awakeFromNib() {
     
         awakeVideoPrefsFromNib()
         refresh()
     }
-    
+
     override func refresh() {
         
         if let id = prefTabView.selectedTabViewItem?.identifier as? String {
@@ -244,7 +262,14 @@ class PreferencesController: DialogController {
             }
         }
     }
-    
+
+    @IBAction func unlockAction(_ sender: Any!) {
+
+        amigaProxy?.powerOff()
+        manuallyPoweredOff = true
+        refresh()
+    }
+
     @IBAction override func cancelAction(_ sender: Any!) {
         
         track()
@@ -261,6 +286,9 @@ class PreferencesController: DialogController {
         
         hideSheet()
         myController?.saveUserDefaults()
+
+        // Automatically power up if flag is set
+        if autoPowerUp { amigaProxy?.run() }
     }
 }
 

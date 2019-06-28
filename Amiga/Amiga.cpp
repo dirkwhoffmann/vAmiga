@@ -713,7 +713,8 @@ Amiga::readyToPowerUp()
         msg("NOT READY YET: Kickstart Rom is missing.\n");
         return false;
     }
-    
+
+    // msg("Ready to power up\n");
     return true;
 }
 

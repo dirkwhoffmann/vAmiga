@@ -52,6 +52,9 @@ extension PreferencesController {
         hwChipRamPopup.isEnabled = poweredOff
         hwSlowRamPopup.isEnabled = poweredOff
         hwFastRamPopup.isEnabled = poweredOff
+
+        // Label the OK button
+        hwOKButton.title = okLabel
     }
     
     @IBAction func hwAmigaModelAction(_ sender: NSPopUpButton!) {
@@ -116,12 +119,6 @@ extension PreferencesController {
     @IBAction func hwSerialDeviceAction(_ sender: NSPopUpButton!) {
 
         amigaProxy?.configure(VA_SERIAL_DEVICE, value: sender.selectedTag())
-        refresh()
-    }
-
-    @IBAction func hwUnlockAction(_ sender: Any!) {
-                
-        amigaProxy?.powerOff()
         refresh()
     }
     

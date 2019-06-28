@@ -31,6 +31,9 @@ extension PreferencesController {
         // Lock controls if emulator is powered on
         compExactBlitter.isEnabled = false
         compFifoBuffering.isEnabled = poweredOff
+
+        // Label the OK button
+        compOKButton.title = okLabel
     }
 
     @IBAction func compFilterActivationAction(_ sender: NSPopUpButton!) {
@@ -49,12 +52,6 @@ extension PreferencesController {
     @IBAction func compFifoBufferingAction(_ sender: NSButton!) {
 
         amigaProxy?.configureFifoBuffering(sender.state == .on)
-        refresh()
-    }
-
-    @IBAction func compUnlockAction(_ sender: Any!) {
-
-        amigaProxy?.powerOff()
         refresh()
     }
 

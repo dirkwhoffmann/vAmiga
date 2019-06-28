@@ -10,6 +10,7 @@
                 <outlet property="compExactBlitter" destination="UgB-Xh-RTc" id="9dc-zZ-dNg"/>
                 <outlet property="compFifoBuffering" destination="Klz-l3-bRD" id="c7X-nf-1wG"/>
                 <outlet property="compFilterActivation" destination="ZrM-uT-4JR" id="L6k-6C-7Wh"/>
+                <outlet property="compOKButton" destination="o9a-Eq-CnW" id="PtT-hk-GXk"/>
                 <outlet property="devAutofire" destination="BRc-s1-1v6" id="rBS-KA-uBE"/>
                 <outlet property="devAutofireBullets" destination="ABB-dw-Ain" id="nNU-wQ-kaw"/>
                 <outlet property="devAutofireCease" destination="mZY-PC-1oR" id="gKU-Sa-Yp9"/>
@@ -28,6 +29,7 @@
                 <outlet property="devLeft1button" destination="DYo-fh-MRZ" id="Zk8-cu-HpA"/>
                 <outlet property="devLeft2" destination="c0g-Vp-X6r" id="9l1-XA-avh"/>
                 <outlet property="devLeft2button" destination="xQv-LS-FDA" id="bBQ-ZL-VUd"/>
+                <outlet property="devOKButton" destination="Qq8-DB-XvV" id="R91-b1-ndB"/>
                 <outlet property="devReleaseMouseByShaking" destination="HME-Qi-t5z" id="ILi-ej-rOR"/>
                 <outlet property="devReleaseMouseKeyComb" destination="dnS-il-6DA" id="8yK-Ks-Q1Y"/>
                 <outlet property="devReleaseMouseWithKeys" destination="JC1-m2-KEn" id="B7S-hl-c0B"/>
@@ -51,6 +53,7 @@
                 <outlet property="emuDriveSoundsNoPoll" destination="LzI-UV-eUd" id="d0J-ca-Lsf"/>
                 <outlet property="emuEjectWithoutAskingButton" destination="AJ6-dV-aBm" id="UUV-EB-6ZM"/>
                 <outlet property="emuExitOnEscButton" destination="UYh-qY-MoT" id="1q1-Qh-1VF"/>
+                <outlet property="emuOKButton" destination="zAR-Cw-JcH" id="jDs-jx-59h"/>
                 <outlet property="emuPauseInBackground" destination="KGL-Xj-tLX" id="pmE-hC-l1q"/>
                 <outlet property="emuScreenshotSourcePopup" destination="r9b-OW-xJR" id="Wy5-iX-9MH"/>
                 <outlet property="emuScreenshotTargetPopup" destination="MMd-M5-OMQ" id="7uQ-e0-Ie6"/>
@@ -73,6 +76,7 @@
                 <outlet property="hwLayoutPopup" destination="EWH-Iz-zuX" id="cWR-LH-Ffq"/>
                 <outlet property="hwLockSubText" destination="M4r-6P-yfY" id="wxV-Tm-80C"/>
                 <outlet property="hwLockText" destination="3ER-DN-63K" id="aH1-Iu-24q"/>
+                <outlet property="hwOKButton" destination="cMh-0b-Yb2" id="hqp-3Y-hPC"/>
                 <outlet property="hwRealTimeClock" destination="T70-4F-bOm" id="eAd-aV-2Nk"/>
                 <outlet property="hwSerialDevice" destination="rtO-bR-8WM" id="cgA-jC-NxC"/>
                 <outlet property="hwSlowRamPopup" destination="W0y-DM-pGD" id="bNq-71-Or8"/>
@@ -84,6 +88,7 @@
                 <outlet property="romLockImage" destination="ocy-5V-Vt8" id="4ld-NF-sBM"/>
                 <outlet property="romLockSubText" destination="m4i-nF-H2q" id="Cht-S3-Gdp"/>
                 <outlet property="romLockText" destination="Wuy-cg-IBP" id="KJg-sx-tEJ"/>
+                <outlet property="romOKButton" destination="sYt-GY-XZQ" id="5fM-nQ-Sla"/>
                 <outlet property="romSubText" destination="LBs-Al-1wH" id="7Pa-6O-tJv"/>
                 <outlet property="romText" destination="Mc6-g5-kfE" id="EUW-Nv-ECK"/>
                 <outlet property="romWarning" destination="phr-t4-w1Y" id="bOF-hP-v7T"/>
@@ -106,6 +111,7 @@
                 <outlet property="vidMisalignmentPopUp" destination="f3c-4e-uVF" id="DcI-ia-qNS"/>
                 <outlet property="vidMisalignmentXSlider" destination="F6O-Zb-pow" id="oFX-xP-n95"/>
                 <outlet property="vidMisalignmentYSlider" destination="KkN-hN-xfa" id="7Dv-3R-1xx"/>
+                <outlet property="vidOKButton" destination="QaY-Vj-eY6" id="GDz-X3-M03"/>
                 <outlet property="vidPalettePopUp" destination="kQF-8P-rsa" id="GKR-Yp-cSv"/>
                 <outlet property="vidSaturationSlider" destination="Kth-Hh-Zmk" id="Kcz-Ie-bo4"/>
                 <outlet property="vidScanlineBrightnessSlider" destination="91k-67-6iN" id="Ny4-2J-Tad"/>
@@ -134,7 +140,7 @@
                         <font key="font" metaFont="system"/>
                         <tabViewItems>
                             <tabViewItem label="Roms" identifier="Roms" id="VwS-fe-RFZ">
-                                <view key="view" id="4If-78-eR2">
+                                <view key="view" ambiguous="YES" id="4If-78-eR2">
                                     <rect key="frame" x="10" y="33" width="600" height="424"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -225,7 +231,7 @@ Gw
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="romUnlockAction:" target="-2" id="sBB-Uj-QHI"/>
+                                                <action selector="unlockAction:" target="-2" id="dlB-yI-KeR"/>
                                             </connections>
                                         </button>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mc6-g5-kfE">
@@ -279,7 +285,7 @@ Gw
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Hardware" identifier="Hardware" id="vMg-zr-Ex1">
-                                <view key="view" ambiguous="YES" id="yrH-J2-nFc">
+                                <view key="view" id="yrH-J2-nFc">
                                     <rect key="frame" x="10" y="33" width="600" height="424"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -767,7 +773,7 @@ DQ
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="hwUnlockAction:" target="-2" id="5zq-if-RVf"/>
+                                                <action selector="unlockAction:" target="-2" id="pGe-tA-W64"/>
                                             </connections>
                                         </button>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sEr-Dn-1es">
@@ -925,7 +931,7 @@ DQ
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="compUnlockAction:" target="-2" id="Zm3-aU-mw8"/>
+                                                <action selector="unlockAction:" target="-2" id="neX-xe-twq"/>
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="z3k-xf-hLY">

@@ -162,18 +162,15 @@ extension PreferencesController {
         romLockImage.isHidden = poweredOff
         romLockText.isHidden = poweredOff
         romLockSubText.isHidden = poweredOff
+
+        // Label the OK button
+        romOKButton.title = okLabel
     }
 
     //
     // Action methods
     //
 
-    @IBAction func romUnlockAction(_ sender: Any!) {
-        
-        amigaProxy?.powerOff()
-        refresh()
-    }
-    
     @IBAction func romDeleteAction(_ sender: Any!) {
         
         if amigaProxy?.config().model == AMIGA_1000 {
