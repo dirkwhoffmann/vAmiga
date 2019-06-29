@@ -93,7 +93,7 @@ TOD::checkForInterrupt()
     // at least 1 or larger due to bus cycle delays when reading old value."
     // Needs further investigation.
     if (cia->nr == 1 /* CIA B */ && alarm.value == 0) {
-        return;
+        // return;
     }
     
     if (!matching && tod.value == alarm.value) {
