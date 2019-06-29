@@ -15,13 +15,14 @@ Copper::Copper()
     
     registerSnapshotItems(vector<SnapshotItem> {
         
-        { &skip,    sizeof(skip),    0 },
-        { &cop1lc,  sizeof(cop1lc),  0 },
-        { &cop2lc,  sizeof(cop2lc),  0 },
-        { &cdang,   sizeof(cdang),   0 },
-        { &cop1ins, sizeof(cop1ins), 0 },
-        { &cop2ins, sizeof(cop2ins), 0 },
-        { &coppc,   sizeof(coppc),   0 },
+        { &skip,      sizeof(skip),      0 },
+        { &cop1lc,    sizeof(cop1lc),    0 },
+        { &cop2lc,    sizeof(cop2lc),    0 },
+        { &cdang,     sizeof(cdang),     0 },
+        { &cop1ins,   sizeof(cop1ins),   0 },
+        { &cop2ins,   sizeof(cop2ins),   0 },
+        { &coppc,     sizeof(coppc),     0 },
+        { &coppcBase, sizeof(coppcBase), 0 },
     });
 }
 
@@ -66,12 +67,12 @@ Copper::_inspect()
     
     info.cdang   = cdang;
     info.active  = events->isPending(COP_SLOT);
-    info.coppc   = coppc;
+    info.coppc   = coppcBase;
     info.cop1ins = cop1ins;
     info.cop2ins = cop2ins;
     info.cop1lc  = cop1lc;
     info.cop2lc  = cop2lc;
-    
+
     pthread_mutex_unlock(&lock);
 }
 
@@ -531,6 +532,7 @@ Copper::serviceEvent(EventID id)
 
             // Load the first instruction word
             cop1ins = agnus->copperRead(coppc);
+            coppcBase = coppc;
             advancePC();
 
             // Fork execution depending on the instruction type
@@ -551,7 +553,7 @@ Copper::serviceEvent(EventID id)
             // Extract register number from the first instruction word
             reg = (cop1ins & 0x1FE);
 
-            // Stop the Copper if the address is illegal
+            // Stop the Copper if address is illegal
             if (isIllegalAddress(reg)) { events->cancel(COP_SLOT); break; }
 
             // Write into the custom register
@@ -589,26 +591,30 @@ Copper::serviceEvent(EventID id)
 
                     if (verbose) debug("FOUND MATCH in %d cycles\n", delay);
 
-                    // Copper wakes up 2 cycles earlier
+                    // Copper wakes up 2 cycles earlier...
                     delay -= DMA_CYCLES(2);
 
-                    // with a COP_REQUEST_DMA event.
+                    // ... with a COP_REQUEST_DMA event.
                     events->scheduleRel(COP_SLOT, delay, COP_REQUEST_DMA);
 
                 } else {
 
-                    // Stop the Copper (TODO: Better use cancel)
+                    // Stop the Copper (TODO: Better use events->cancel)
                     events->disable(COP_SLOT);
                 }
-            }
 
-            // It must be a SKIP command then.
-            else {
+            } else {
 
-                // Determine if the next command has to be skipped by
-                // running the comparator circuit.
+                if (verbose) debug("SKIP\n");
+
+                // It must be a SKIP command then.
                 assert(isSkipCmd());
+
+                // Run the comparator to see if the next command is skipped
                 skip = comparator();
+
+                // Continue with fetching the next command
+                schedule(COP_FETCH);
             }
             break;
             

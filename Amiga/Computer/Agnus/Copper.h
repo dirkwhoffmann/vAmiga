@@ -43,6 +43,9 @@ class Copper : public HardwareComponent
 
     // The Copper program counter
     uint32_t coppc = 0;
+
+    // The Copper program counter at the time of the COP_FETCH event
+    uint32_t coppcBase = 0;
    
     // Storage for disassembled instruction
     char disassembly[128];
