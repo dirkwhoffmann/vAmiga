@@ -97,7 +97,6 @@ TOD::checkForInterrupt()
     }
     
     if (!matching && tod.value == alarm.value) {
-        // debug("§§§§ TOD ALARM %X\n", alarm.value);
         cia->todInterrupt();
     }
     
