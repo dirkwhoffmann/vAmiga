@@ -18,21 +18,31 @@ class Copper : public HardwareComponent
     class Memory *mem;
     class Agnus *agnus;
     class EventHandler *events; 
-    // class Denise *denise;
-    class Colorizer *colorizer; 
+    class Colorizer *colorizer;
     
     // Information shown in the GUI inspector panel
     CopperInfo info;
-    
+
+    // The currently executed Copper list (1 or 2)
+    uint8_t copList = 1;
+
     /* Indicates if the next instruction should be skipped.
      * This flag is usually false. It is set to true by the SKIP instruction
      * if the skip condition holds.
      */
     bool skip = false;
      
-    // The Copper DMA pointers
+    // The Copper list location pointers
     uint32_t cop1lc;
     uint32_t cop2lc;
+
+    /* Address of the last executed instruction in each Copper list
+     * These values are needed by the debugger to determine the end of the
+     * Copper lists. Note that these values cannot be computed directly.
+     * They are computed by observing the program counter in advancePC()
+     */
+    uint32_t cop1end;
+    uint32_t cop2end;
 
     // The Copper Danger Bit (CDANG)
     bool cdang;
@@ -45,7 +55,7 @@ class Copper : public HardwareComponent
     uint32_t coppc = 0;
 
     // The Copper program counter at the time of the COP_FETCH event
-    uint32_t coppcBase = 0;
+    // uint32_t coppcBase = 0;
    
     // Storage for disassembled instruction
     char disassembly[128];
@@ -120,7 +130,10 @@ public:
 private:
  
     // Advances the program counter.
-    inline void advancePC() { coppc = (coppc + 2) & 0x7FFFE; }
+    void advancePC() { INC_OCS_PTR(coppc, 2); }
+
+    // Switches the Copper list.
+    void switchToCopperList(int nr);
 
     /* Searches for the next matching beam position.
      * This function is called when a WAIT statement is processed. It is uses
@@ -254,7 +267,11 @@ private:
     //
     
 public:
-    
+
+    // Returns the number of instructions in Copper list 1 or 2
+    int instrCount(int nr);
+
+    // Disassembles a single Copper command
     char *disassemble(uint32_t addr);
     char *disassemble(unsigned list, uint32_t offset);
 };

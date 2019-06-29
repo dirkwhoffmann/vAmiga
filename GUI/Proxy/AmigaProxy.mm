@@ -392,6 +392,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->agnus->blitter.getInfo();
 }
+- (NSInteger) instrCount:(NSInteger)list
+{
+    return wrapper->agnus->copper.instrCount(list);
+}
 - (BOOL) isIllegalInstr:(NSInteger)addr
 {
     return wrapper->agnus->copper.isIllegalInstr(addr);

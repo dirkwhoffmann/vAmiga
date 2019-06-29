@@ -15,14 +15,17 @@ Copper::Copper()
     
     registerSnapshotItems(vector<SnapshotItem> {
         
+        { &copList,   sizeof(copList),   0 },
         { &skip,      sizeof(skip),      0 },
         { &cop1lc,    sizeof(cop1lc),    0 },
         { &cop2lc,    sizeof(cop2lc),    0 },
+        { &cop1end,   sizeof(cop1end),   0 },
+        { &cop2end,   sizeof(cop2end),   0 },
         { &cdang,     sizeof(cdang),     0 },
         { &cop1ins,   sizeof(cop1ins),   0 },
         { &cop2ins,   sizeof(cop2ins),   0 },
         { &coppc,     sizeof(coppc),     0 },
-        { &coppcBase, sizeof(coppcBase), 0 },
+        // { &coppcBase, sizeof(coppcBase), 0 },
     });
 }
 
@@ -67,11 +70,13 @@ Copper::_inspect()
     
     info.cdang   = cdang;
     info.active  = events->isPending(COP_SLOT);
-    info.coppc   = coppcBase;
+    info.coppc   = coppc; // coppcBase;
     info.cop1ins = cop1ins;
     info.cop2ins = cop2ins;
     info.cop1lc  = cop1lc;
     info.cop2lc  = cop2lc;
+    info.length1 = cop1end - cop1lc;
+    info.length2 = cop2end - cop2lc;
 
     pthread_mutex_unlock(&lock);
 }
@@ -88,9 +93,12 @@ Copper::_dump()
     plainmsg("  copins2: %X\n", cop2ins);
     plainmsg("   cop1lc: %X\n", cop1lc);
     plainmsg("   cop2lc: %X\n", cop2lc);
+    plainmsg("  cop1end: %X\n", cop1end);
+    plainmsg("  cop2end: %X\n", cop2end);
 
     // verbose = !verbose;
 
+    /*
     plainmsg("\n");
     plainmsg("First Copper list\n");
     plainmsg("-----------------\n");
@@ -101,6 +109,7 @@ Copper::_dump()
         plainmsg(disassemble(addr));
         plainmsg("\n");
     }
+    */
 }
 
 CopperInfo
@@ -131,14 +140,14 @@ void
 Copper::pokeCOPJMP1()
 {
     debug(COPREG_DEBUG, "pokeCOPJMP1(): Jumping to %X\n", cop1lc);
-    coppc = cop1lc;
+    switchToCopperList(1);
 }
 
 void
 Copper::pokeCOPJMP2()
 {
     debug(COPREG_DEBUG, "pokeCOPJMP2(): Jumping to %X\n", cop2lc);
-    coppc = cop2lc;
+    switchToCopperList(2);
 }
 
 void
@@ -164,28 +173,34 @@ void
 Copper::pokeCOP1LCH(uint16_t value)
 {
     debug(COPREG_DEBUG, "pokeCOP1LCH(%04X)\n", value);
-    
-    cop1lc = REPLACE_HI_WORD(cop1lc, value);
+
+    if (HI_WORD(cop1lc) != value) {
+        cop1lc = REPLACE_HI_WORD(cop1lc, value);
+        cop1end = cop1lc;
+    }
 
     // Update program counter if DMA is off
     /* THIS IS NOT 100% CORRECT. IN WINFELLOW, THE PC IS ONLY WRITTEN TO IF
      * DMA WAS OFF SINCE THE LAST VSYNC EVENT (?!). NEED A TEST CASE FOR THIS.
      */
-    if (!agnus->copDMA()) coppc = cop1lc;
+    if (!agnus->copDMA()) switchToCopperList(1);
 }
 
 void
 Copper::pokeCOP1LCL(uint16_t value)
 {
     debug(COPREG_DEBUG, "pokeCOP1LCL(%04X)\n", value);
-    
-    cop1lc = REPLACE_LO_WORD(cop1lc, value & 0xFFFE);
+
+    if (LO_WORD(cop1lc) != value) {
+        cop1lc = REPLACE_LO_WORD(cop1lc, value & 0xFFFE);
+        cop1end = cop1lc;
+    }
 
     // Update program counter if DMA is off
     /* THIS IS NOT 100% CORRECT. IN WINFELLOW, THE PC IS ONLY WRITTEN TO IF
      * DMA WAS OFF SINCE THE LAST VSYNC EVENT (?!). NEED A TEST CASE FOR THIS.
      */
-    if (!agnus->copDMA()) coppc = cop1lc;
+    if (!agnus->copDMA()) switchToCopperList(1);
 }
 
 void
@@ -193,7 +208,10 @@ Copper::pokeCOP2LCH(uint16_t value)
 {
     debug(COPREG_DEBUG, "pokeCOP2LCH(%04X)\n", value);
 
-    cop2lc = REPLACE_HI_WORD(cop2lc, value);
+    if (HI_WORD(cop2lc) != value) {
+        cop2lc = REPLACE_HI_WORD(cop2lc, value);
+        cop2end = cop2lc;
+    }
 }
 
 void
@@ -201,7 +219,10 @@ Copper::pokeCOP2LCL(uint16_t value)
 {
     debug(COPREG_DEBUG, "pokeCOP2LCL(%04X)\n", value);
 
-    cop2lc = REPLACE_LO_WORD(cop2lc, value & 0xFFFE);
+    if (LO_WORD(cop2lc) != value) {
+        cop2lc = REPLACE_LO_WORD(cop2lc, value & 0xFFFE);
+        cop2end = cop2lc;
+    }
 }
 
 void
@@ -211,6 +232,15 @@ Copper::pokeNOOP(uint16_t value)
 
     // REMOVE ASAP
     verbose = !verbose; 
+}
+
+void
+Copper::switchToCopperList(int nr)
+{
+    assert(nr == 1 || nr == 2);
+
+    coppc = (nr == 1) ? cop1lc : cop2lc;
+    copList = nr;
 }
 
 bool
@@ -532,8 +562,15 @@ Copper::serviceEvent(EventID id)
 
             // Load the first instruction word
             cop1ins = agnus->copperRead(coppc);
-            coppcBase = coppc;
+            // coppcBase = coppc;
             advancePC();
+
+            // Dynamically determine the end of the Copper list
+            if (copList == 1) {
+                if (coppc > cop1end) cop1end = coppc;
+            } else {
+                if (coppc > cop2end) cop2end = coppc;
+            }
 
             // Fork execution depending on the instruction type
             schedule(isMoveCmd() ? COP_MOVE : COP_WAIT_OR_SKIP);
@@ -622,9 +659,10 @@ Copper::serviceEvent(EventID id)
 
             if (verbose) debug("COP_JMP1\n");
 
-            // Load COP1LC into the program counter
-            coppc = cop1lc;
+            // Perform the jump
+            switchToCopperList(1);
 
+            // Request a free bus slot
             schedule(COP_REQUEST_DMA);
             break;
 
@@ -632,8 +670,10 @@ Copper::serviceEvent(EventID id)
 
             if (verbose) debug("COP_JMP2\n");
 
-            // Load COP2LC into the program counter
-            coppc = cop2lc;
+            // Perform the jump
+            switchToCopperList(2);
+
+            // Request a free bus slot
             schedule(COP_REQUEST_DMA);
             break;
 
@@ -675,6 +715,18 @@ Copper::vsyncAction()
         events->cancel(COP_SLOT);
     }
 }
+
+int
+Copper::instrCount(int nr)
+{
+    assert(nr == 1 || nr == 2);
+
+    int strt = (nr == 1) ? cop1lc  : cop2lc;
+    int stop = (nr == 1) ? cop1end : cop2end;
+
+    return 1 + (stop - strt) / 4;
+}
+
 
 char *
 Copper::disassemble(uint32_t addr)

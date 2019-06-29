@@ -317,6 +317,7 @@ struct AmigaFileWrapper;
 - (BlitterInfo) getBlitterInfo;
 
 - (BOOL) isIllegalInstr:(NSInteger)addr;
+- (NSInteger) instrCount:(NSInteger)list;
 - (NSString *) disassemble:(NSInteger)addr;
 - (NSString *) disassemble:(NSInteger)list instr:(NSInteger)offset;
 

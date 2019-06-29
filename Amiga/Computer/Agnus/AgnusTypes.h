@@ -83,6 +83,8 @@ typedef struct
     uint32_t cop2lc;
     uint16_t cop1ins;
     uint16_t cop2ins;
+    int16_t length1;
+    int16_t length2;
 }
 CopperInfo;
 
