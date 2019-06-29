@@ -233,7 +233,8 @@ public:
 
     // OCS register 0x104 (w)
     void pokeBPLCON2(uint16_t value);
-    
+    bool PF2PRI() { return GET_BIT(bplcon2, 6); }
+
     // OCS registers 0x110, ..., 0x11A (w)
     void pokeBPLxDAT(int x, uint16_t value);
     
@@ -284,7 +285,7 @@ public:
     // Returns the frame buffer address of a certain pixel in the current line
     int *pixelAddr(int pixel);
 
-    // Synthesizes pixels.
+    // Synthesizes pixels
     void drawLores(int pixels = 16);
     void drawHires(int pixels = 16);
 

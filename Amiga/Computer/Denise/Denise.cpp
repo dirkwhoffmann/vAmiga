@@ -467,6 +467,8 @@ Denise::pixelAddr(int pixel)
 void
 Denise::drawLores(int pixels)
 {
+    uint8_t index;
+
     // assert(currentPixel == (agnus->hpos * 4) + 6);
     currentPixel = ppos(agnus->hpos);
 
@@ -476,28 +478,72 @@ Denise::drawLores(int pixels)
     uint32_t maskOdd = 0x8000 << scrollLoresOdd;
     uint32_t maskEven = 0x8000 << scrollLoresEven;
 
-    for (int i = 0; i < pixels; i++) {
+    if (bplconDBPLF()) {
 
-        // Read a bit slice
-        uint8_t index =
-        (!!(shiftReg[0] & maskOdd)  << 0) |
-        (!!(shiftReg[1] & maskEven) << 1) |
-        (!!(shiftReg[2] & maskOdd)  << 2) |
-        (!!(shiftReg[3] & maskEven) << 3) |
-        (!!(shiftReg[4] & maskOdd)  << 4) |
-        (!!(shiftReg[5] & maskEven) << 5);
+        //
+        // Dual-playfield mode
+        //
 
-        maskOdd >>= 1;
-        maskEven >>= 1;
+        bool pf2pri = PF2PRI();
 
-        // Draw two lores pixels
-        assert(currentPixel + 1 < sizeof(rasterline));
-        rasterline[currentPixel++] = index * inDisplayWindow;
-        rasterline[currentPixel++] = index * inDisplayWindow;
+        for (int i = 0; i < pixels; i++) {
+
+            // Get bit slices for both playfields
+            uint8_t index1 =
+            (!!(shiftReg[0] & maskOdd)  << 0) |
+            (!!(shiftReg[2] & maskOdd)  << 1) |
+            (!!(shiftReg[4] & maskOdd)  << 2);
+
+            uint8_t index2 =
+            (!!(shiftReg[1] & maskEven) << 0) |
+            (!!(shiftReg[3] & maskEven) << 1) |
+            (!!(shiftReg[5] & maskEven) << 2);
+
+            maskOdd >>= 1;
+            maskEven >>= 1;
+
+            // Check priority
+            if (pf2pri) {
+                index = index2 ? (index2 | 0b1000) : index1;
+            } else {
+                index = index1 ? index1 : (index2 | 0b1000);
+            }
+
+            // Draw two lores pixels
+            assert(currentPixel + 1 < sizeof(rasterline));
+            rasterline[currentPixel++] = index;
+            rasterline[currentPixel++] = index;
+        }
+
+    } else {
+
+        //
+        // Single-playfield mode
+        //
+
+        for (int i = 0; i < pixels; i++) {
+
+            // Read a bit slice
+            index =
+            (!!(shiftReg[0] & maskOdd)  << 0) |
+            (!!(shiftReg[1] & maskEven) << 1) |
+            (!!(shiftReg[2] & maskOdd)  << 2) |
+            (!!(shiftReg[3] & maskEven) << 3) |
+            (!!(shiftReg[4] & maskOdd)  << 4) |
+            (!!(shiftReg[5] & maskEven) << 5);
+
+            maskOdd >>= 1;
+            maskEven >>= 1;
+
+            // Draw two lores pixels
+            assert(currentPixel + 1 < sizeof(rasterline));
+            rasterline[currentPixel++] = index * inDisplayWindow;
+            rasterline[currentPixel++] = index * inDisplayWindow;
+        }
     }
 
     // Shift out drawn bits
-    for (int i = 0; i < 6; i++) shiftReg[i] <<= 16;
+    for (int i = 0; i < 6; i++) shiftReg[i] <<= pixels;
 
 #ifdef PIXEL_DEBUG
     rasterline[currentPixel - 2 * pixels] = 64;
@@ -507,6 +553,8 @@ Denise::drawLores(int pixels)
 void
 Denise::drawHires(int pixels)
 {
+    uint8_t index;
+
     // assert(currentPixel == (agnus->hpos * 4) + 6);
     currentPixel = ppos(agnus->hpos);
 
@@ -516,23 +564,69 @@ Denise::drawHires(int pixels)
     uint32_t maskOdd = 0x8000 << scrollHiresOdd;
     uint32_t maskEven = 0x8000 << scrollHiresEven;
 
-    for (int i = 0; i < pixels; i++) {
-        
-        // Read a bit slice
-        uint8_t index =
-        (!!(shiftReg[0] & maskOdd)  << 0) |
-        (!!(shiftReg[1] & maskEven) << 1) |
-        (!!(shiftReg[2] & maskOdd)  << 2) |
-        (!!(shiftReg[3] & maskEven) << 3) |
-        (!!(shiftReg[4] & maskOdd)  << 4) |
-        (!!(shiftReg[5] & maskEven) << 5);
-        
-        maskOdd >>= 1;
-        maskEven >>= 1;
+    if (bplconDBPLF()) {
 
-        // Draw a single hires pixel
-        assert(currentPixel < sizeof(rasterline));
-        rasterline[currentPixel++] = index * inDisplayWindow;
+        //
+        // Dual-playfield mode
+        //
+
+        bool pf2pri = PF2PRI();
+
+        for (int i = 0; i < pixels; i++) {
+
+            // Get bit slices for both playfields
+            uint8_t index1 =
+            (!!(shiftReg[0] & maskOdd)  << 0) |
+            (!!(shiftReg[2] & maskOdd)  << 1) |
+            (!!(shiftReg[4] & maskOdd)  << 2);
+
+            uint8_t index2 =
+            (!!(shiftReg[1] & maskEven) << 0) |
+            (!!(shiftReg[3] & maskEven) << 1) |
+            (!!(shiftReg[5] & maskEven) << 2);
+
+            maskOdd >>= 1;
+            maskEven >>= 1;
+
+            // Check priority
+            if (pf2pri) {
+                index = index2 ? (index2 | 0b1000) : index1;
+            } else {
+                index = index1 ? index1 : (index2 | 0b1000);
+            }
+
+            // Draw a single hires pixel
+            assert(currentPixel < sizeof(rasterline));
+            rasterline[currentPixel++] = index;
+        }
+
+        // Shift out drawn bits
+        for (int i = 0; i < 6; i++) shiftReg[i] <<= 16;
+
+    } else {
+
+        //
+        // Single-playfield mode
+        //
+
+        for (int i = 0; i < pixels; i++) {
+
+            // Read a bit slice
+            index =
+            (!!(shiftReg[0] & maskOdd)  << 0) |
+            (!!(shiftReg[1] & maskEven) << 1) |
+            (!!(shiftReg[2] & maskOdd)  << 2) |
+            (!!(shiftReg[3] & maskEven) << 3) |
+            (!!(shiftReg[4] & maskOdd)  << 4) |
+            (!!(shiftReg[5] & maskEven) << 5);
+
+            maskOdd >>= 1;
+            maskEven >>= 1;
+
+            // Draw a single hires pixel
+            assert(currentPixel < sizeof(rasterline));
+            rasterline[currentPixel++] = index;
+        }
     }
 
     // Shift out drawn bits
