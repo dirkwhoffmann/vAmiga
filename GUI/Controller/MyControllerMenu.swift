@@ -537,7 +537,7 @@ extension MyController: NSMenuItemValidation {
     @IBAction func dumpEventsAction(_ sender: Any!) {
         amiga.suspend()
         track()
-        amiga.dma.dumpEventHandler()
+        amiga.agnus.dumpEventHandler()
         track()
         amiga.resume()
         track()
@@ -584,17 +584,17 @@ extension MyController: NSMenuItemValidation {
     }
     @IBAction func dumpAgnusAction(_ sender: Any!) {
         amiga.suspend()
-        amiga.dma.dump()
+        amiga.agnus.dump()
         amiga.resume()
     }
     @IBAction func dumpCopperAction(_ sender: Any!) {
         amiga.suspend()
-        amiga.dma.dumpCopper()
+        amiga.agnus.dumpCopper()
         amiga.resume()
     }
     @IBAction func dumpBlitterAction(_ sender: Any!) {
         amiga.suspend()
-        amiga.dma.dumpBlitter()
+        amiga.agnus.dumpBlitter()
         amiga.resume()
     }
     @IBAction func dumpPaulaAction(_ sender: Any!) {

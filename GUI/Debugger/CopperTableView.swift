@@ -65,14 +65,14 @@ extension CopperTableView: NSTableViewDataSource {
     
     var coplc: Int {
         assert(tag == 1 || tag == 2)
-        let info = amiga!.dma.getCopperInfo()
+        let info = amiga!.agnus.getCopperInfo()
         return (tag == 1) ? Int(info.cop1lc) : Int(info.cop2lc)
     }
     
     func numberOfRows(in tableView: NSTableView) -> Int {
 
         // return numRows;
-        return amiga?.dma.instrCount(tag) ?? 0
+        return amiga?.agnus.instrCount(tag) ?? 0
     }
     
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
@@ -91,7 +91,7 @@ extension CopperTableView: NSTableViewDataSource {
             return amiga?.mem.spypeek16(addr + 2)
 
         case "instr":
-            return amiga?.dma.disassemble(addr)
+            return amiga?.agnus.disassemble(addr)
 
         default:
             return "???"
@@ -129,7 +129,7 @@ extension CopperTableView: NSTableViewDelegate {
         
         if let cell = cell as? NSTextFieldCell {
             if tableColumn?.identifier.rawValue == "instr" {
-                if amiga?.dma.isIllegalInstr(coplc + 4 * row) == true {
+                if amiga?.agnus.isIllegalInstr(coplc + 4 * row) == true {
                     cell.textColor = .red
                     return
                 }

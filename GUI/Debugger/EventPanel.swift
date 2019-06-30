@@ -18,7 +18,7 @@ extension Inspector {
             
         }
         
-        if let info = amigaProxy?.dma.getEventInfo() {
+        if let info = amigaProxy?.agnus.getEventInfo() {
             evMasterClock.stringValue = String(format: "%lld",
                                                info.masterClock)
             evInCpuCycles.stringValue = String(format: "%lld",

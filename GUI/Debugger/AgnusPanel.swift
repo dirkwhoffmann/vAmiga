@@ -11,7 +11,7 @@ extension Inspector {
     
     func refreshAgnus(everything: Bool) {
         
-        guard let dma = amigaProxy?.dma else { return }
+        guard let dma = amigaProxy?.agnus else { return }
         let info = dma.getInfo()
         
         if everything {
@@ -118,7 +118,7 @@ extension Inspector {
 
     func refreshDmaDebugger() {
 
-        guard let dma = amigaProxy?.dma else { return }
+        guard let dma = amigaProxy?.agnus else { return }
         let info = dma.getDebuggerInfo()
         let rgb = info.colorRGB
 
@@ -149,9 +149,9 @@ extension Inspector {
     @IBAction func dmaDebugOnOffAction(_ sender: NSButton!) {
 
         if sender.state == .on {
-            amigaProxy?.dma.dmaDebugSetEnable(true)
+            amigaProxy?.agnus.dmaDebugSetEnable(true)
         } else {
-            amigaProxy?.dma.dmaDebugSetEnable(false)
+            amigaProxy?.agnus.dmaDebugSetEnable(false)
         }
         
         refresh(everything: false)
@@ -161,7 +161,7 @@ extension Inspector {
 
         track("Tag: \(sender.tag) New value: \(sender.state)")
         let owner = BusOwner(Int8(sender.tag))
-        amigaProxy?.dma.dmaDebugSetVisualize(owner, value: sender.state == .on)
+        amigaProxy?.agnus.dmaDebugSetVisualize(owner, value: sender.state == .on)
         refresh(everything: false)
     }
 
@@ -173,7 +173,7 @@ extension Inspector {
         let r = Double(sender.color.redComponent)
         let g = Double(sender.color.greenComponent)
         let b = Double(sender.color.blueComponent)
-        amigaProxy?.dma.dmaDebugSetColor(owner, r: r, g: g, b: b)
+        amigaProxy?.agnus.dmaDebugSetColor(owner, r: r, g: g, b: b)
         refresh(everything: false)
     }
 
@@ -182,7 +182,7 @@ extension Inspector {
         track()
         let value = sender.floatValue
         track("New value: \(value)")
-        amigaProxy?.dma.dmaDebugSetOpacity(sender.doubleValue / 100.0)
+        amigaProxy?.agnus.dmaDebugSetOpacity(sender.doubleValue / 100.0)
         refresh(everything: false)
     }
 }

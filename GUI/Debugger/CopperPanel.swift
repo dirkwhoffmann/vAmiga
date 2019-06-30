@@ -11,7 +11,7 @@ extension Inspector {
     
     func refreshCopper(everything: Bool) {
         
-        guard let dma = amigaProxy?.dma else { return }
+        guard let dma = amigaProxy?.agnus else { return }
         let info = dma.getCopperInfo()
         
         if everything {

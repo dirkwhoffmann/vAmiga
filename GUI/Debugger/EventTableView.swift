@@ -34,7 +34,7 @@ extension EventTableView: NSTableViewDataSource {
     
     func numberOfRows(in tableView: NSTableView) -> Int {
         
-        if let dma = amiga?.dma {
+        if let dma = amiga?.agnus {
             return primary ? dma.primSlotCount() : dma.secSlotCount()
         } else {
             return 0
@@ -44,8 +44,8 @@ extension EventTableView: NSTableViewDataSource {
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
         
         let info = primary ?
-            amiga!.dma.getPrimarySlotInfo(row) :
-            amiga!.dma.getSecondarySlotInfo(row)
+            amiga!.agnus.getPrimarySlotInfo(row) :
+            amiga!.agnus.getSecondarySlotInfo(row)
         
         let willTrigger = (info.trigger != INT64_MAX)
         
@@ -101,8 +101,8 @@ extension EventTableView: NSTableViewDelegate {
             if tableColumn?.identifier.rawValue != "slot" {
                 
                 let info = primary ?
-                    amiga!.dma.getPrimarySlotInfo(row) :
-                    amiga!.dma.getSecondarySlotInfo(row)
+                    amiga!.agnus.getPrimarySlotInfo(row) :
+                    amiga!.agnus.getSecondarySlotInfo(row)
                 
                 if info.trigger == INT64_MAX {
                     cell.textColor = .secondaryLabelColor
