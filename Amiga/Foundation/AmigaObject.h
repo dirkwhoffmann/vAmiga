@@ -28,7 +28,7 @@ class AmigaObject {
     public:
     
     // Debug level for this component
-    unsigned debugLevel = DEBUG_LEVEL;
+    unsigned debugLevel = 1;
     
     private:
     

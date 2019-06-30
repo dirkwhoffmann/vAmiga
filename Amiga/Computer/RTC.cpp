@@ -15,10 +15,11 @@ RTC::RTC()
     
     registerSnapshotItems(vector<SnapshotItem> {
         
-        { &timeDiff,  sizeof(timeDiff),  0},
-        { &reg,       sizeof(reg),       BYTE_ARRAY },
-        { &lastCall,  sizeof(lastCall),  0},
-        { &lastValue, sizeof(lastValue), 0},
+        { &timeDiff,          sizeof(timeDiff),          0},
+        { &reg,               sizeof(reg),               BYTE_ARRAY },
+        { &lastCall,          sizeof(lastCall),          0},
+        { &lastMeasure,       sizeof(lastMeasure),       0},
+        { &lastMeasuredValue, sizeof(lastMeasuredValue), 0},
     });
     
 }
@@ -51,25 +52,34 @@ RTC::getTime()
 {
     Cycle result;
     
-    long elapsedSec = (amiga->masterClock - lastCall) / 28000000;
-    debug(2, "elapsedSec = %d\n", elapsedSec);
+    long timeBetweenCalls = (amiga->masterClock - lastCall) / 28000000;
+    // debug(2, "timeBetweenCalls = %d\n", timeBetweenCalls);
     
-    /* Under normal circumstances, we compute the current time of the real-time
-     * clock out of the current time of the host machine and variable timeDiff.
-     */
-    if (elapsedSec > 2) result = time(NULL) + timeDiff;
-    
-    /* If the time between two read accesses is short, we compute the current
-     * time based on the elapsed cycle count. This ensures that the real-time
-     * clock behaves properly if the emulator is run in warp mode.
-     * When Kickstarts boots, it tests the real-time clock by peeking the time
-     * two times while waiting for more than 1 sec between the two calls.
-     */
-    else result = lastValue + elapsedSec;
+    if (timeBetweenCalls > 2) {
+
+        /* If the time between two read accesses is long, we compute the result
+         * of the host machine's current time and variable timeDiff.
+         */
+        lastMeasure = amiga->masterClock;
+        lastMeasuredValue = time(NULL);
+        result = lastMeasuredValue + timeDiff;
+
+    } else {
+
+        /* If the time between two read accesses is short, we compute the result
+         * out of the master-clock cycles that have elapsed since the host
+         * machine's time was queried the last time.
+         * This ensures that the real-time clock behaves properly if the
+         * emulator runs in warp mode. E.g., when Kickstarts boots, it tests
+         * the real-time clock by peeking the time twice with a time delay
+         * of more than 1 second. If we simply query the host machine's
+         * time, the time difference would be less than 1 second in warp mode.
+         */
+        long elapsedTime = (amiga->masterClock - lastMeasure) / 28000000;
+        result = lastMeasuredValue + elapsedTime;
+    }
     
     lastCall = amiga->masterClock;
-    lastValue = result;
-    
     return result;
 }
 
@@ -83,19 +93,19 @@ uint8_t
 RTC::peek(unsigned nr)
 {
     assert(nr < 16);
-    
-    debug(2, "Reading RTC register %d\n", nr);
-    
+
     time2registers();
-    return reg[nr];
+    uint8_t result = reg[nr];
+
+    debug(RTC_DEBUG, "peek(%d) = $%X\n", result);
+    return result;
 }
 
 void
 RTC::poke(unsigned nr, uint8_t value)
 {
     assert(nr < 16);
-    
-    debug(2, "Writing RTC register %d\n", nr);
+    debug(RTC_DEBUG, "poke(%d, $%02X)\n", nr, value);
     
     switch (nr) {
         

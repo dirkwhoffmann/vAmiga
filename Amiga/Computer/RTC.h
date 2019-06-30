@@ -32,9 +32,12 @@ class RTC : public HardwareComponent {
     
     // The last call to function getTime()
     Cycle lastCall;
-    
-    // The last return value from function getTime()
-    time_t lastValue;
+
+    // The last time we've queried the host system's real-time clock
+    Cycle lastMeasure;
+
+    // The result of our last query
+    time_t lastMeasuredValue;
     
     
     //

@@ -10,85 +10,47 @@
 #ifndef VACONFIG_H
 #define VACONFIG_H
 
-//
-// Release options (Uncomment these options for a release build!)
-//
-
-// Disables assertion checking
-// #define NDEBUG
-
 
 //
-// Constants
+// Release settings
 //
 
-// Snapshot version number of this release
+// Snapshot version number
 #define V_MAJOR 0
 #define V_MINOR 1
 #define V_SUBMINOR 0
+
+// Assertion checking
+// #define NDEBUG   // Uncomment this option in a release build
 
 
 //
 // Debug settings
 //
 
-// Default debug level (used for statements with no custom level) DEPRECATED
-#define DEBUG_LEVEL 1
+// Custom debug levels for certain components.
+// Set to 1 to generate debug output.
 
-//
-// Custom debug levels (set to 1 to enable debug output)
-//
+#define RUN_DEBUG 2    // Emulator thread run loop
+#define CIA_DEBUG 2    // CIAs
+#define TOD_DEBUG 1    // TODs (24-bit counters inside the CIAs)
+#define RTC_DEBUG 2    // Real-time clock
+#define DMA_DEBUG 2    // DMA registers
+#define BPL_DEBUG 2    // Bitplane registers
+#define COL_DEBUG 2    // Color registers
+#define SPR_DEBUG 2    // Sprite registers
+#define DSK_DEBUG 2    // Disk registers
+#define AUD_DEBUG 2    // Audio registers
+#define CPT_DEBUG 2    // Control ports and connected devices
+#define COPREG_DEBUG 2 // Copper registers
+#define COP_DEBUG 2    // Copper internals
+#define BLT_DEBUG 2    // Blitter registers
+#define BLT_CHECKSUM 2 // Blitter checksum computation
+#define SER_DEBUG 2    // Serial interface
+#define POT_DEBUG 2    // Potentiometer inputs
+#define KB_DEBUG 1     // Keyboard
+#define OCS_DEBUG 2    // Custom register access violations
 
-// Debugging the run loop
-#define RUN_DEBUG 2
-
-// Debugging the Complex Interface Adapters (CIAs)
-#define CIA_DEBUG 2
-
-// Debugging DMA registers
-#define DMA_DEBUG 2
-
-// Debugging bitplane registers
-#define BPL_DEBUG 2
-
-// Debugging color registers
-#define COL_DEBUG 2
-
-// Debugging sprite registers
-#define SPR_DEBUG 2
-
-// Debugging disk registers
-#define DSK_DEBUG 2
-
-// Debugging audio registers
-#define AUD_DEBUG 2
-
-// Debugging the control ports and connected devices
-#define CPT_DEBUG 2
-
-// Debugging the Copper
-#define COPREG_DEBUG 2
-#define COP_DEBUG 2
-
-// Debugging the Blitter
-#define BLT_DEBUG 2
-#define BLT_CHECKSUM 2
-
-// Debugging the serial interface
-#define SER_DEBUG 2
-
-// Debugging the potentiometer inputs
-#define POT_DEBUG 2
-
-// Debugging the keyboard
-#define KB_DEBUG 1
-
-// Debugging custom register access violations
-#define OCS_DEBUG 2
-
-//
-//
-//
 
 // Enable to draw the display window border in debug colors
 // #define BORDER_DEBUG
