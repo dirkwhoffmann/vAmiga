@@ -1090,6 +1090,8 @@ Agnus::pokeDIWSTRT(uint16_t value)
     // V7 V6 V5 V4 V3 V2 V1 V0 H7 H6 H5 H4 H3 H2 H1 H0  and  H8 = 0, V8 = 0
     
     diwstrt = value;
+
+    // DEPRECATED (REMOVE ASAP)
     diwHstrtDeprecated = LO_BYTE(value);
     diwVstrtDeprecated = HI_BYTE(value);
     computeBplVstrtVstop();
@@ -1100,6 +1102,17 @@ Agnus::pokeDIWSTRT(uint16_t value)
 
     // Invalidate the coordinate if it is out of range
     if (diwHstrt < 2) diwHstrt = -1;
+
+    //
+    // Recalculate diwFlopOn based on the new values
+    //
+
+    // Take into account that a value change needs 4 DMA cycles to show up
+    int16_t realhpos = hpos + 4;
+    int16_t pixelpos = realhpos * 2;
+
+    // Update diwFlopOn if hpos hasn't matched the old trigger position yet.
+    if (pixelpos < diwFlopOn) diwFlopOn = diwHstrt;
 
     debug(BPL_DEBUG, "diwstrt = %X diwHstrt = %d diwVstrt = %d bplVstrt = %d\n",
           diwstrt, diwHstrt, diwVstrt, bplVstrt);
@@ -1114,6 +1127,8 @@ Agnus::pokeDIWSTOP(uint16_t value)
     // V7 V6 V5 V4 V3 V2 V1 V0 H7 H6 H5 H4 H3 H2 H1 H0  and  H8 = 1, V8 = !V7
 
     diwstop = value;
+
+    // DEPRECATED (REMOVE ASAP)
     diwHstopDeprecated = LO_BYTE(value) | 0x100;
     diwVstopDeprecated = HI_BYTE(value) | ((~value & 0x8000) >> 7);
     computeBplVstrtVstop();
@@ -1124,6 +1139,17 @@ Agnus::pokeDIWSTOP(uint16_t value)
 
     // Invalidate the coordinate if it is out of range
     if (diwHstop > 0x1C7) diwHstop = -1;
+
+    //
+    // Recalculate diwFlopOff based on the new values
+    //
+
+    // Take into account that a value change needs 4 DMA cycles to take effect
+    int16_t realhpos = hpos + 4;
+    int16_t pixelpos = realhpos * 2;
+
+    // Update diwFlopOff if hpos hasn't matched the old trigger position yet.
+    if (pixelpos < diwFlopOff) diwFlopOff = diwHstop;
 
     debug(BPL_DEBUG, "diwstop = %X diwHstop = %d diwVstop = %d bplVstop = %d\n",
           diwstop, diwHstop, diwVstop, bplVstop);
