@@ -40,6 +40,13 @@ Agnus::Agnus()
         { &sprVStrt,             sizeof(sprVStrt),             WORD_ARRAY },
         { &sprVStop,             sizeof(sprVStop),             WORD_ARRAY },
         { &sprDmaState,          sizeof(sprDmaState),          DWORD_ARRAY },
+        { &diwHstrt,             sizeof(diwHstrt),             0 },
+        { &diwHstop,             sizeof(diwHstop),             0 },
+        { &diwVstrt,             sizeof(diwVstrt),             0 },
+        { &diwVstop,             sizeof(diwVstop),             0 },
+        { &diwFlopOn,            sizeof(diwFlopOn),            0 },
+        { &diwFlopOff,           sizeof(diwFlopOff),           0 },
+        { &diwFlop,              sizeof(diwFlop),              0 },
         { &dmacon,               sizeof(dmacon),               0 },
         { &dskpt,                sizeof(dskpt),                0 },
         { &diwstrt,              sizeof(diwstrt),              0 },
@@ -1087,8 +1094,15 @@ Agnus::pokeDIWSTRT(uint16_t value)
     diwVstrtDeprecated = HI_BYTE(value);
     computeBplVstrtVstop();
 
+    // Extract the upper left corner of the display window
+    diwVstrt = HI_BYTE(value);
+    diwHstrt = LO_BYTE(value);
+
+    // Invalidate the coordinate if it is out of range
+    if (diwHstrt < 2) diwHstrt = -1;
+
     debug(BPL_DEBUG, "diwstrt = %X diwHstrt = %d diwVstrt = %d bplVstrt = %d\n",
-          diwstrt, diwHstrtDeprecated, diwVstrtDeprecated, bplVstrt);
+          diwstrt, diwHstrt, diwVstrt, bplVstrt);
 }
 
 void
@@ -1104,8 +1118,15 @@ Agnus::pokeDIWSTOP(uint16_t value)
     diwVstopDeprecated = HI_BYTE(value) | ((~value & 0x8000) >> 7);
     computeBplVstrtVstop();
 
+    // Extract the lower right corner of the display window
+    diwVstop = HI_BYTE(value) | ((~value & 0x8000) >> 7);
+    diwHstop = LO_BYTE(value) | 0x100;
+
+    // Invalidate the coordinate if it is out of range
+    if (diwHstop > 0x1C7) diwHstop = -1;
+
     debug(BPL_DEBUG, "diwstop = %X diwHstop = %d diwVstop = %d bplVstop = %d\n",
-          diwstop, diwHstopDeprecated, diwVstopDeprecated, bplVstop);
+          diwstop, diwHstop, diwVstop, bplVstop);
 }
 
 void
@@ -1524,34 +1545,37 @@ Agnus::scheduleFirstRASEvent(int16_t vpos)
 void
 Agnus::hsyncHandler()
 {
-    // Make sure that we are really at the end of the line
-    if (hpos != 226) {
-        dump();
-    }
-    assert(hpos == 226 /* 0xE2 */);
-    
-    // Let Denise finish the current rasterline
+    // Make sure we really reached the end of the line
+    if (hpos != HPOS_MAX) { dump(); assert(false); }
+
+    //
+    // Let other components finish up the current line
+    //
+
+    // Let Denise draw the current line
     denise->endOfLine(vpos);
-    
-    // Compute some sound samples
+
+    // Let Paula synthesize new sound samples
     paula->audioUnit.executeUntil(clock);
     
-    // CIA B counts HSYNCs
+    // Let CIA B count the HSYNCs
     amiga->ciaB.incrementTOD();
     
     // Check the keyboard once in a while
     if ((vpos & 0b1111) == 0) amiga->keyboard.execute();
-    
-    // Increment vpos and reset hpos
-    
-    /* Important: When the end of a line is reached, we reset the horizontal
+
+    //
+    // Increment the position counters
+    //
+
+    /* Remember: When the end of a line is reached, we reset the horizontal
      * counter. The new value should be 0. To make things work, we have to set
      * it to -1, because there is an upcoming hpos++ instruction at the end
      * of executeUntil(). This means that we can not rely on the correct
      * hpos value in the hsync and vsync handlers(). The value will be
-     * -1 and not 0 as expected. Take care of that and fell free to come up
-     * with a nicer solution!
-     */
+     * -1 and not 0 as expected. Take care of that and feel free to come up
+     * with a nicer solution! */
+
     vpos++;
     hpos = -1;
 
@@ -1560,7 +1584,11 @@ Agnus::hsyncHandler()
         vsyncHandler();
     }
 
-    // Switch sprite DMA off in the last rasterline
+    //
+    // Prepare for the next line
+    //
+
+    // Switch sprite DMA off if the last rasterline has been reached
     if (vpos == frameInfo.numLines - 1) {
         switchSpriteDmaOff();
         for (unsigned i = 0; i < 8; i++) {
@@ -1571,7 +1599,7 @@ Agnus::hsyncHandler()
     // Switch bitplane DMA on or off
     if (vpos == bplVstrt || vpos == bplVstop) hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
 
-    // Determine if the new line is inside the display window
+    // Determine if the new line is inside the display window (DEPRECATED)
     denise->inDisplayWindow = (vpos >= diwVstrtDeprecated) && (vpos < diwVstopDeprecated);
 
     // Check if we have reached line 25 (sprite DMA starts here)
@@ -1586,7 +1614,15 @@ Agnus::hsyncHandler()
         }
     }
 
+    // Update the DIW flop variables
+    diwFlop = (diwFlopOff != -1) ? false : (diwFlopOn != -1) ? true : diwFlop;
+    diwFlopOn = diwHstrt;
+    diwFlopOff = diwHstop;
+
+    //
     // Process pending work items
+    //
+
     if (hsyncActions) {
 
         if (hsyncActions & HSYNC_UPDATE_EVENT_TABLE) {
@@ -1597,7 +1633,11 @@ Agnus::hsyncHandler()
         }
         hsyncActions = 0;
     }
-    
+
+    //
+    // Schedule events
+    //
+
     // Schedule the first hi-prio DMA event (if any)
     if (nextDmaEvent[0]) {
         EventID eventID = dmaEvent[nextDmaEvent[0]];
@@ -1607,7 +1647,10 @@ Agnus::hsyncHandler()
     // Schedule first RAS event
     scheduleFirstRASEvent(vpos);
 
-    // Let Denise prepare for the next rasterline
+    //
+    // Let other components prepare for the next line
+    //
+
     denise->beginOfLine(vpos);
 }
 

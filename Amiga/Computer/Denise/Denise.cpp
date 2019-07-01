@@ -438,11 +438,6 @@ Denise::prepareShiftRegisters()
     /*
     for (unsigned i = 0; i < 6; shiftReg[i++] = 0);
      */
-
-#ifdef SHIFTREG_DEBUG
-    shiftReg[0] = 0xAAAAAAAA;
-    shiftReg[1] = 0xCCCCCCCC;
-#endif
 }
 
 void
@@ -671,63 +666,37 @@ Denise::drawBorder()
 #ifndef BORDER_DEBUG
     int borderL = 0;
     int borderR = 0;
-    // int borderV = 0;
-    int openL = 0;
-    int openR = 0;
+    int borderV = 0;
 #else
     int borderL = 64;
     int borderR = 65;
-    // int borderV = 66;
-    int openL = 68;
-    int openR = 69;
+    int borderV = 66;
 #endif
 
-    int16_t hstrt = MAX(FIRST_VISIBLE, 2 * agnus->diwHstrtDeprecated);
-    int16_t hstop = MIN(LAST_VISIBLE + 1, 2 * agnus->diwHstopDeprecated);
+    // Check if the whole line is blank
+    if (!agnus->diwFlop && agnus->diwFlopOn == -1) {
 
-#if 0
-    if (firstCanvasPixel == 0) {
-        assert(lastCanvasPixel == 0);
-
-        // Fill the whole line with the background color
         for (int i = FIRST_VISIBLE; i <= LAST_VISIBLE; i++) {
-            // rasterline[i] = borderV;
+           rasterline[i] = borderV;
         }
 
     } else {
 
         // Draw left border
-        for (int i = FIRST_VISIBLE; i < hstrt; i++) {
-            assert(i < sizeof(rasterline));
-            rasterline[i] = borderL;
-        }
-        for (int i = hstrt; i < firstCanvasPixel; i++) {
-            assert(i < sizeof(rasterline));
-            rasterline[i] = openL;
+        if (!agnus->diwFlop && agnus->diwFlopOn != -1) {
+            for (int i = FIRST_VISIBLE; i < 2 * agnus->diwFlopOn; i++) {
+                assert(i < sizeof(rasterline));
+                rasterline[i] = borderL;
+            }
         }
 
         // Draw right border
-        for (int i = currentPixel; i < hstop; i++) {
-            assert(i < sizeof(rasterline));
-            rasterline[i] = openR;
+        if (agnus->diwFlopOff != -1) {
+            for (int i = 2 * agnus->diwFlopOff; i <= LAST_VISIBLE; i++) {
+                assert(i < sizeof(rasterline));
+                rasterline[i] = borderR;
+            }
         }
-        for (int i = hstop; i <= LAST_VISIBLE; i++) {
-            assert(i < sizeof(rasterline));
-            rasterline[i] = borderR;
-        }
-    }
-#endif
-
-    // Draw left border
-    for (int i = FIRST_VISIBLE; i < agnus->diwHstrtDeprecated; i++) {
-        assert(i < sizeof(rasterline));
-        rasterline[i] = borderL;
-    }
-
-    // Draw right border
-    for (int i = hstop; i <= agnus->diwHstopDeprecated; i++) {
-        assert(i < sizeof(rasterline));
-        rasterline[i] = borderR;
     }
 
 #ifdef LINE_DEBUG

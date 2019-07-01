@@ -174,7 +174,59 @@ class Agnus : public HardwareComponent
     // The current DMA states of all 8 sprites.
     SprDMAState sprDmaState[8];
 
-    
+
+    //
+    // Display window (DIW)
+    //
+
+    // Register values as they have been written by pokeDIWSTRT/STOP()
+    uint16_t diwstrt;
+    uint16_t diwstop;
+
+    /* Extracted display window coordinates
+     *
+     * The coordinates are computed out of diwstrt and diwstop and set in
+     * pokeDIWSTRT/STOP(). The following values are possible:
+     *
+     *    diwHstrt : $02  ... $FF   or -1
+     *    diwHStop : $100 ... $1C7  or -1
+     *    diwVStrt : ??
+     *    diwVStop : ??
+     *
+     * A -1 is assigned if DIWSTRT or DIWSTOP are written with values that
+     * result in coordinates outside the valid range.
+     */
+    int16_t diwHstrt;
+    int16_t diwHstop;
+    int16_t diwVstrt;
+    int16_t diwVstop;
+
+    /* The DIW flipflop
+     *
+     * The current implementation is based on the following assumptions:
+     *
+     * 1. Denise contains a single flipflop controlling the display window
+     *    horizontally. The flop is cleared inside the border area and set
+     *    inside the display area.
+     * 2. When hpos matches the position in DIWSTRT, the flipflop is set.
+     * 3. When hpos matches the position in DIWSTOP, the flipflop is reset.
+     * 4. The smallest valid value for DIWSTRT is $02. If it is smaller, it is
+     *    not recognised.
+     * 5. The largest valid value for DIWSTOP is $(1)C7. If it is larger, it is
+     *    not recognised.
+     */
+
+    /* At the end of a rasterline, this variable conains the pixel coordinate
+     * where the hpos counter matched diwHstrt or diwHstop, respectively. A
+     * value of -1 indicates that no matching event took place.
+     */
+    int16_t diwFlopOn;
+    int16_t diwFlopOff;
+
+    // Value of the DIW flipflop as it was on the beginning of the rasterline.
+    bool diwFlop;
+
+
     //
     // Registers
     //
@@ -186,8 +238,8 @@ class Agnus : public HardwareComponent
     uint32_t dskpt;
     
     // The display window registers
-    uint16_t diwstrt;
-    uint16_t diwstop;
+    // uint16_t diwstrt;
+    // uint16_t diwstop;
     
     // The display data fetch registers
     uint16_t ddfstrt;
