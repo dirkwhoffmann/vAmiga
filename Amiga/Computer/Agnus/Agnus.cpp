@@ -44,9 +44,10 @@ Agnus::Agnus()
         { &diwHstop,             sizeof(diwHstop),             0 },
         { &diwVstrt,             sizeof(diwVstrt),             0 },
         { &diwVstop,             sizeof(diwVstop),             0 },
-        { &diwFlopOn,            sizeof(diwFlopOn),            0 },
-        { &diwFlopOff,           sizeof(diwFlopOff),           0 },
-        { &diwFlop,              sizeof(diwFlop),              0 },
+        { &vFlop,                sizeof(vFlop),                0 },
+        { &hFlop,                sizeof(hFlop),                0 },
+        { &hFlopOn,              sizeof(hFlopOn),              0 },
+        { &hFlopOff,             sizeof(hFlopOff),             0 },
         { &dmacon,               sizeof(dmacon),               0 },
         { &dskpt,                sizeof(dskpt),                0 },
         { &diwstrt,              sizeof(diwstrt),              0 },
@@ -1112,7 +1113,7 @@ Agnus::pokeDIWSTRT(uint16_t value)
     int16_t pixelpos = realhpos * 2;
 
     // Update diwFlopOn if hpos hasn't matched the old trigger position yet.
-    if (pixelpos < diwFlopOn) diwFlopOn = diwHstrt;
+    if (pixelpos < hFlopOn) hFlopOn = diwHstrt;
 
     debug(BPL_DEBUG, "diwstrt = %X diwHstrt = %d diwVstrt = %d bplVstrt = %d\n",
           diwstrt, diwHstrt, diwVstrt, bplVstrt);
@@ -1149,7 +1150,7 @@ Agnus::pokeDIWSTOP(uint16_t value)
     int16_t pixelpos = realhpos * 2;
 
     // Update diwFlopOff if hpos hasn't matched the old trigger position yet.
-    if (pixelpos < diwFlopOff) diwFlopOff = diwHstop;
+    if (pixelpos < hFlopOff) hFlopOff = diwHstop;
 
     debug(BPL_DEBUG, "diwstop = %X diwHstop = %d diwVstop = %d bplVstop = %d\n",
           diwstop, diwHstop, diwVstop, bplVstop);
@@ -1640,10 +1641,11 @@ Agnus::hsyncHandler()
         }
     }
 
-    // Update the DIW flop variables
-    diwFlop = (diwFlopOff != -1) ? false : (diwFlopOn != -1) ? true : diwFlop;
-    diwFlopOn = diwHstrt;
-    diwFlopOff = diwHstop;
+    // Update the DIW flipflops
+    vFlop = (vpos == diwVstop) ? false : (vpos == diwVstrt) ? true : vFlop;
+    hFlop = (hFlopOff != -1) ? false : (hFlopOn != -1) ? true : hFlop;
+    hFlopOn = diwHstrt;
+    hFlopOff = diwHstop;
 
     //
     // Process pending work items
@@ -1654,7 +1656,6 @@ Agnus::hsyncHandler()
         if (hsyncActions & HSYNC_UPDATE_EVENT_TABLE) {
 
             // Force the DMA time slot allocation table to update.
-            // (hires / lores may have changed)
             updateBitplaneDma();
         }
         hsyncActions = 0;

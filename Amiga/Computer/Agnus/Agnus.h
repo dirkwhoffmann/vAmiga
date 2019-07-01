@@ -216,15 +216,23 @@ class Agnus : public HardwareComponent
      *    not recognised.
      */
 
+    /* Value of the DIW flipflops
+     * Variable vFlop stores the value of the vertical DIW flipflop. The value
+     * is updated at the beginning of each rasterline and cannot change
+     * thereafter. Variable hFlop stores the value of the horizontal DIW
+     * flipflop as it was at the beginning of the rasterline. To find out
+     * the value of the horizontal flipflop inside or at the end of a
+     * rasterline, hFlopOn and hFlopOff need to be evaluated.
+     */
+    bool vFlop;
+    bool hFlop;
+
     /* At the end of a rasterline, this variable conains the pixel coordinate
      * where the hpos counter matched diwHstrt or diwHstop, respectively. A
      * value of -1 indicates that no matching event took place.
      */
-    int16_t diwFlopOn;
-    int16_t diwFlopOff;
-
-    // Value of the DIW flipflop as it was on the beginning of the rasterline.
-    bool diwFlop;
+    int16_t hFlopOn;
+    int16_t hFlopOff;
 
 
     //

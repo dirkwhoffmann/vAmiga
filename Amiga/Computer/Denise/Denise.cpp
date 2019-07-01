@@ -663,18 +663,24 @@ Denise::drawSprites()
 void
 Denise::drawBorder()
 {
-#ifndef BORDER_DEBUG
     int borderL = 0;
     int borderR = 0;
     int borderV = 0;
-#else
-    int borderL = 64;
-    int borderR = 65;
-    int borderV = 66;
+
+#ifdef BORDER_DEBUG
+    borderL = 64;
+    borderR = 65;
+    borderV = 66;
 #endif
 
-    // Check if the whole line is blank
-    if (!agnus->diwFlop && agnus->diwFlopOn == -1) {
+    // Check if the horizontal flipflop was set somewhere in this rasterline
+    bool hFlopWasSet = agnus->hFlop || agnus->hFlopOn != -1;
+
+    // Check if the whole line is blank (drawn in background color)
+    bool lineIsBlank = !agnus->vFlop || !hFlopWasSet;
+
+    // Draw the border
+    if (lineIsBlank) {
 
         for (int i = FIRST_VISIBLE; i <= LAST_VISIBLE; i++) {
            rasterline[i] = borderV;
@@ -683,16 +689,16 @@ Denise::drawBorder()
     } else {
 
         // Draw left border
-        if (!agnus->diwFlop && agnus->diwFlopOn != -1) {
-            for (int i = FIRST_VISIBLE; i < 2 * agnus->diwFlopOn; i++) {
+        if (!agnus->hFlop && agnus->hFlopOn != -1) {
+            for (int i = FIRST_VISIBLE; i < 2 * agnus->hFlopOn; i++) {
                 assert(i < sizeof(rasterline));
                 rasterline[i] = borderL;
             }
         }
 
         // Draw right border
-        if (agnus->diwFlopOff != -1) {
-            for (int i = 2 * agnus->diwFlopOff; i <= LAST_VISIBLE; i++) {
+        if (agnus->hFlopOff != -1) {
+            for (int i = 2 * agnus->hFlopOff; i <= LAST_VISIBLE; i++) {
                 assert(i < sizeof(rasterline));
                 rasterline[i] = borderR;
             }
@@ -704,9 +710,7 @@ Denise::drawBorder()
     rasterline[2 * 0x18] = 65;
     int16_t vpos = agnus->vpos;
     bool lines = vpos == 26 || vpos == 0x50 || vpos == 276 || vpos == 255;
-    // bool lines = vpos == 255;
     if (lines) for (int i = FIRST_VISIBLE + 40; i <= LAST_VISIBLE / 2; rasterline[i++] = 64);
-    // if (vpos == 208) debug("line 208 hstrt = %d hstop = %d firstCanvasPixel = %d last = %d\n", hstrt, hstop, firstCanvasPixel, lastCanvasPixel);
 #endif
 }
 
