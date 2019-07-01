@@ -33,10 +33,10 @@ Agnus::Agnus()
         { &lof,                  sizeof(lof),                  0 },
         { &dmaStrt,              sizeof(dmaStrt),              0 },
         { &dmaStop,              sizeof(dmaStop),              0 },
-        { &diwHstrt,             sizeof(diwHstrt),             0 },
-        { &diwHstop,             sizeof(diwHstop),             0 },
-        { &diwVstrt,             sizeof(diwVstrt),             0 },
-        { &diwVstop,             sizeof(diwVstop),             0 },
+        { &diwHstrtDeprecated,             sizeof(diwHstrtDeprecated),             0 },
+        { &diwHstopDeprecated,             sizeof(diwHstopDeprecated),             0 },
+        { &diwVstrtDeprecated,             sizeof(diwVstrtDeprecated),             0 },
+        { &diwVstopDeprecated,             sizeof(diwVstopDeprecated),             0 },
         { &sprVStrt,             sizeof(sprVStrt),             WORD_ARRAY },
         { &sprVStop,             sizeof(sprVStop),             WORD_ARRAY },
         { &sprDmaState,          sizeof(sprDmaState),          DWORD_ARRAY },
@@ -195,10 +195,10 @@ Agnus::_dump()
     for (unsigned i = 0; i < 6; i++) plainmsg("bplpt[%d] = %X\n", i, bplpt[i]);
     for (unsigned i = 0; i < 8; i++) plainmsg("bplpt[%d] = %X\n", i, sprpt[i]);
     
-    plainmsg("  hstrt : %d\n", diwHstrt);
-    plainmsg("  hstop : %d\n", diwHstop);
-    plainmsg("  vstrt : %d\n", diwVstrt);
-    plainmsg("  vstop : %d\n", diwVstop);
+    plainmsg("  hstrt : %d\n", diwHstrtDeprecated);
+    plainmsg("  hstop : %d\n", diwHstopDeprecated);
+    plainmsg("  vstrt : %d\n", diwVstrtDeprecated);
+    plainmsg("  vstop : %d\n", diwVstopDeprecated);
 
     plainmsg("\nDMA time slot allocation:\n\n");
 
@@ -711,8 +711,8 @@ Agnus::updateBitplaneDma()
 void
 Agnus::computeBplVstrtVstop()
 {
-    bplVstrt = MAX(diwVstrt, 26); // 0 .. 25 is VBLANK area
-    bplVstop = MIN(diwVstop, frameInfo.numLines - 1);
+    bplVstrt = MAX(diwVstrtDeprecated, 26); // 0 .. 25 is VBLANK area
+    bplVstop = MIN(diwVstopDeprecated, frameInfo.numLines - 1);
 
     // debug("diwVstrt = %d diwVstop = %d bplVstrt = %d bplVstop = %d\n", diwVstrt, diwVstop, bplVstrt, bplVstop);
 }
@@ -1083,12 +1083,12 @@ Agnus::pokeDIWSTRT(uint16_t value)
     // V7 V6 V5 V4 V3 V2 V1 V0 H7 H6 H5 H4 H3 H2 H1 H0  and  H8 = 0, V8 = 0
     
     diwstrt = value;
-    diwHstrt = LO_BYTE(value);
-    diwVstrt = HI_BYTE(value);
+    diwHstrtDeprecated = LO_BYTE(value);
+    diwVstrtDeprecated = HI_BYTE(value);
     computeBplVstrtVstop();
 
     debug(BPL_DEBUG, "diwstrt = %X diwHstrt = %d diwVstrt = %d bplVstrt = %d\n",
-          diwstrt, diwHstrt, diwVstrt, bplVstrt);
+          diwstrt, diwHstrtDeprecated, diwVstrtDeprecated, bplVstrt);
 }
 
 void
@@ -1100,12 +1100,12 @@ Agnus::pokeDIWSTOP(uint16_t value)
     // V7 V6 V5 V4 V3 V2 V1 V0 H7 H6 H5 H4 H3 H2 H1 H0  and  H8 = 1, V8 = !V7
 
     diwstop = value;
-    diwHstop = LO_BYTE(value) | 0x100;
-    diwVstop = HI_BYTE(value) | ((~value & 0x8000) >> 7);
+    diwHstopDeprecated = LO_BYTE(value) | 0x100;
+    diwVstopDeprecated = HI_BYTE(value) | ((~value & 0x8000) >> 7);
     computeBplVstrtVstop();
 
     debug(BPL_DEBUG, "diwstop = %X diwHstop = %d diwVstop = %d bplVstop = %d\n",
-          diwstop, diwHstop, diwVstop, bplVstop);
+          diwstop, diwHstopDeprecated, diwVstopDeprecated, bplVstop);
 }
 
 void
@@ -1572,7 +1572,7 @@ Agnus::hsyncHandler()
     if (vpos == bplVstrt || vpos == bplVstop) hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
 
     // Determine if the new line is inside the display window
-    denise->inDisplayWindow = (vpos >= diwVstrt) && (vpos < diwVstop);
+    denise->inDisplayWindow = (vpos >= diwVstrtDeprecated) && (vpos < diwVstopDeprecated);
 
     // Check if we have reached line 25 (sprite DMA starts here)
     if (vpos == 25) {

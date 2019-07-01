@@ -153,10 +153,10 @@ class Agnus : public HardwareComponent
      * These values are calculated out of diwstrt and diwstop inside
      * pokeDIWSTRT() and pokeDIWSTOP().
      */
-    int16_t diwHstrt;
-    int16_t diwHstop;
-    int16_t diwVstrt;
-    int16_t diwVstop;
+    int16_t diwHstrtDeprecated;
+    int16_t diwHstopDeprecated;
+    int16_t diwVstrtDeprecated;
+    int16_t diwVstopDeprecated;
 
     /* The first and the last possible bitplane DMA line.
      * The values are update via computeBplVstrtVstop()
@@ -186,7 +186,6 @@ class Agnus : public HardwareComponent
     uint32_t dskpt;
     
     // The display window registers
-    // TODO: MOVE TO DENISE
     uint16_t diwstrt;
     uint16_t diwstop;
     

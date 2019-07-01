@@ -132,10 +132,10 @@ Denise::_inspect()
 
     info.diwstrt = agnus->diwstrt;
     info.diwstop = agnus->diwstop;
-    info.diwHstrt = agnus->diwHstrt;
-    info.diwHstop = agnus->diwHstop;
-    info.diwVstrt = agnus->diwVstrt;
-    info.diwVstop = agnus->diwVstop;
+    info.diwHstrt = agnus->diwHstrtDeprecated;
+    info.diwHstop = agnus->diwHstopDeprecated;
+    info.diwVstrt = agnus->diwVstrtDeprecated;
+    info.diwVstop = agnus->diwVstopDeprecated;
 
     info.joydat[0] = amiga->controlPort1.joydat();
     info.joydat[1] = amiga->controlPort2.joydat();
@@ -682,8 +682,8 @@ Denise::drawBorder()
     int openR = 69;
 #endif
 
-    int16_t hstrt = MAX(FIRST_VISIBLE, 2 * agnus->diwHstrt);
-    int16_t hstop = MIN(LAST_VISIBLE + 1, 2 * agnus->diwHstop);
+    int16_t hstrt = MAX(FIRST_VISIBLE, 2 * agnus->diwHstrtDeprecated);
+    int16_t hstop = MIN(LAST_VISIBLE + 1, 2 * agnus->diwHstopDeprecated);
 
 #if 0
     if (firstCanvasPixel == 0) {
@@ -719,13 +719,13 @@ Denise::drawBorder()
 #endif
 
     // Draw left border
-    for (int i = FIRST_VISIBLE; i < agnus->diwHstrt; i++) {
+    for (int i = FIRST_VISIBLE; i < agnus->diwHstrtDeprecated; i++) {
         assert(i < sizeof(rasterline));
         rasterline[i] = borderL;
     }
 
     // Draw right border
-    for (int i = hstop; i <= agnus->diwHstop; i++) {
+    for (int i = hstop; i <= agnus->diwHstopDeprecated; i++) {
         assert(i < sizeof(rasterline));
         rasterline[i] = borderR;
     }
