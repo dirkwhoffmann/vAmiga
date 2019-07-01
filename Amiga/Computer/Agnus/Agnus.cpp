@@ -33,10 +33,6 @@ Agnus::Agnus()
         { &lof,                  sizeof(lof),                  0 },
         { &dmaStrt,              sizeof(dmaStrt),              0 },
         { &dmaStop,              sizeof(dmaStop),              0 },
-        { &diwHstrtDeprecated,             sizeof(diwHstrtDeprecated),             0 },
-        { &diwHstopDeprecated,             sizeof(diwHstopDeprecated),             0 },
-        { &diwVstrtDeprecated,             sizeof(diwVstrtDeprecated),             0 },
-        { &diwVstopDeprecated,             sizeof(diwVstopDeprecated),             0 },
         { &sprVStrt,             sizeof(sprVStrt),             WORD_ARRAY },
         { &sprVStop,             sizeof(sprVStop),             WORD_ARRAY },
         { &sprDmaState,          sizeof(sprDmaState),          DWORD_ARRAY },
@@ -203,10 +199,10 @@ Agnus::_dump()
     for (unsigned i = 0; i < 6; i++) plainmsg("bplpt[%d] = %X\n", i, bplpt[i]);
     for (unsigned i = 0; i < 8; i++) plainmsg("bplpt[%d] = %X\n", i, sprpt[i]);
     
-    plainmsg("  hstrt : %d\n", diwHstrtDeprecated);
-    plainmsg("  hstop : %d\n", diwHstopDeprecated);
-    plainmsg("  vstrt : %d\n", diwVstrtDeprecated);
-    plainmsg("  vstop : %d\n", diwVstopDeprecated);
+    plainmsg("  hstrt : %d\n", diwHstrt);
+    plainmsg("  hstop : %d\n", diwHstop);
+    plainmsg("  vstrt : %d\n", diwVstrt);
+    plainmsg("  vstop : %d\n", diwVstop);
 
     plainmsg("\nDMA time slot allocation:\n\n");
 
@@ -708,8 +704,9 @@ Agnus::updateBitplaneDma()
 {
     // Determine if bitplane DMA has to be on or off
     bool bplDma =
+    vFlop &&                                        // Vertical DIW flop set
     denise->bplconBPU() &&                          // at least one bitplane
-    vpos >= bplVstrt && vpos < bplVstop &&          // vpos inside display area
+    vpos >= bplVstrt && vpos < bplVstop &&       // DEPRECATED
     (dmacon & (DMAEN | BPLEN)) == (DMAEN | BPLEN);  // DMA is enabled
 
     // Update the event table accordingly
@@ -719,8 +716,8 @@ Agnus::updateBitplaneDma()
 void
 Agnus::computeBplVstrtVstop()
 {
-    bplVstrt = MAX(diwVstrtDeprecated, 26); // 0 .. 25 is VBLANK area
-    bplVstop = MIN(diwVstopDeprecated, frameInfo.numLines - 1);
+    bplVstrt = MAX(diwVstrt, 26); // 0 .. 25 is VBLANK area
+    bplVstop = MIN(diwVstop, frameInfo.numLines - 1);
 
     // debug("diwVstrt = %d diwVstop = %d bplVstrt = %d bplVstop = %d\n", diwVstrt, diwVstop, bplVstrt, bplVstop);
 }
@@ -1092,14 +1089,10 @@ Agnus::pokeDIWSTRT(uint16_t value)
     
     diwstrt = value;
 
-    // DEPRECATED (REMOVE ASAP)
-    diwHstrtDeprecated = LO_BYTE(value);
-    diwVstrtDeprecated = HI_BYTE(value);
-    computeBplVstrtVstop();
-
     // Extract the upper left corner of the display window
     diwVstrt = HI_BYTE(value);
     diwHstrt = LO_BYTE(value);
+    computeBplVstrtVstop();
 
     // Invalidate the coordinate if it is out of range
     if (diwHstrt < 2) diwHstrt = -1;
@@ -1129,14 +1122,12 @@ Agnus::pokeDIWSTOP(uint16_t value)
 
     diwstop = value;
 
-    // DEPRECATED (REMOVE ASAP)
-    diwHstopDeprecated = LO_BYTE(value) | 0x100;
-    diwVstopDeprecated = HI_BYTE(value) | ((~value & 0x8000) >> 7);
+    // Extract the lower right corner of the display window
+    diwVstop = HI_BYTE(value) | ((value & 0x8000) ? 0 : 0x100);
+    diwHstop = LO_BYTE(value) | 0x100;
     computeBplVstrtVstop();
 
-    // Extract the lower right corner of the display window
-    diwVstop = HI_BYTE(value) | ((~value & 0x8000) >> 7);
-    diwHstop = LO_BYTE(value) | 0x100;
+    debug("diwstop = $%X diwVstrt = %d diwVstop = %d\n", diwstop, diwVstrt, diwVstop);
 
     // Invalidate the coordinate if it is out of range
     if (diwHstop > 0x1C7) diwHstop = -1;
@@ -1627,7 +1618,7 @@ Agnus::hsyncHandler()
     if (vpos == bplVstrt || vpos == bplVstop) hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
 
     // Determine if the new line is inside the display window (DEPRECATED)
-    denise->inDisplayWindow = (vpos >= diwVstrtDeprecated) && (vpos < diwVstopDeprecated);
+    denise->inDisplayWindow = (vpos >= diwVstrt) && (vpos < diwVstop);
 
     // Check if we have reached line 25 (sprite DMA starts here)
     if (vpos == 25) {
@@ -1641,8 +1632,19 @@ Agnus::hsyncHandler()
         }
     }
 
-    // Update the DIW flipflops
-    vFlop = (vpos == diwVstop) ? false : (vpos == diwVstrt) ? true : vFlop;
+    // Update the vertical DIW flipflop
+    if (vpos == diwVstrt && !vFlop) {
+        vFlop = true;
+        updateBitplaneDma();
+        debug("vFlop = %d diwVstrt = %d\n", vFlop, diwVstrt);
+    }
+    if (vpos == diwVstop && vFlop) {
+        vFlop = false;
+        updateBitplaneDma();
+        debug("vFlop = %d diwVstop = %d\n", vFlop, diwVstop);
+    }
+
+    // Update the horizontal DIW flipflop
     hFlop = (hFlopOff != -1) ? false : (hFlopOn != -1) ? true : hFlop;
     hFlopOn = diwHstrt;
     hFlopOff = diwHstop;
@@ -1708,6 +1710,9 @@ Agnus::vsyncHandler()
     // Reset vertical position counter
     vpos = 0;
 
+    // Reset the vertical DIW flipflop
+    vFlop = false;
+    
     // CIA A counts VSYNCs
     amiga->ciaA.incrementTOD();
     

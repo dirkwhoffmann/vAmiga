@@ -48,7 +48,7 @@
 #define OCS_DEBUG 2         // Custom register access violations
 
 // Additional debugging aids (uncomment to enable)
-// #define BORDER_DEBUG     // Draws the border in debug colors
+#define BORDER_DEBUG     // Draws the border in debug colors
 // #define PIXEL_DEBUG      // Highlight first pixel in each 16-bit pixel chunk
 // #define LINE_DEBUG       // Colorizes certain rasterlines
 // #define ALIGN_DRIVE_HEAD // Makes drive operations deterministic

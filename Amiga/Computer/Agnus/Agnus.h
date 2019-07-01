@@ -149,15 +149,6 @@ class Agnus : public HardwareComponent
     int16_t dmaStrt;
     int16_t dmaStop;
 
-    /* The display window coordinates.
-     * These values are calculated out of diwstrt and diwstop inside
-     * pokeDIWSTRT() and pokeDIWSTOP().
-     */
-    int16_t diwHstrtDeprecated;
-    int16_t diwHstopDeprecated;
-    int16_t diwVstrtDeprecated;
-    int16_t diwVstopDeprecated;
-
     /* The first and the last possible bitplane DMA line.
      * The values are update via computeBplVstrtVstop()
      */
@@ -186,12 +177,10 @@ class Agnus : public HardwareComponent
     /* Extracted display window coordinates
      *
      * The coordinates are computed out of diwstrt and diwstop and set in
-     * pokeDIWSTRT/STOP(). The following values are possible:
+     * pokeDIWSTRT/STOP(). The following horizontal values are possible:
      *
      *    diwHstrt : $02  ... $FF   or -1
-     *    diwHStop : $100 ... $1C7  or -1
-     *    diwVStrt : ??
-     *    diwVStop : ??
+     *    diwHstop : $100 ... $1C7  or -1
      *
      * A -1 is assigned if DIWSTRT or DIWSTOP are written with values that
      * result in coordinates outside the valid range.
@@ -401,7 +390,7 @@ public:
     // bool inDisplayArea() { return vpos >= bplVstrt && vpos < bplVstop; }
 
     // Indicates if the current rasterline is a bitplane DMA line
-    bool inBplDmaArea() { return vpos >= bplVstrt && vpos < bplVstop && bplDMA(); }
+    // bool inBplDmaArea() { return vpos >= bplVstrt && vpos < bplVstop && bplDMA(); }
 
     //
     // Working with DMA slots

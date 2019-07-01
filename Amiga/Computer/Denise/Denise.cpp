@@ -132,10 +132,10 @@ Denise::_inspect()
 
     info.diwstrt = agnus->diwstrt;
     info.diwstop = agnus->diwstop;
-    info.diwHstrt = agnus->diwHstrtDeprecated;
-    info.diwHstop = agnus->diwHstopDeprecated;
-    info.diwVstrt = agnus->diwVstrtDeprecated;
-    info.diwVstop = agnus->diwVstopDeprecated;
+    info.diwHstrt = agnus->diwHstrt;
+    info.diwHstop = agnus->diwHstop;
+    info.diwVstrt = agnus->diwVstrt;
+    info.diwVstop = agnus->diwVstop;
 
     info.joydat[0] = amiga->controlPort1.joydat();
     info.joydat[1] = amiga->controlPort2.joydat();
@@ -636,8 +636,8 @@ void
 Denise::drawSprites()
 {
     // Only proceed if we are not inside the upper or lower border area
-    // if (!agnus->inDisplayArea()) return; 
-    if (!agnus->inBplDmaArea()) return;
+    // if (!agnus->inBplDmaArea()) return;
+    if (!agnus->vFlop) return;
 
     for (int nr = 0; armed != 0; nr++, armed >>= 1) {
 
