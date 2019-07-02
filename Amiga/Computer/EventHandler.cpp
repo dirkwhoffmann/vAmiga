@@ -543,18 +543,18 @@ EventHandler::_executeUntil(Cycle cycle) {
         assert(checkTriggeredEvent(BLT_SLOT));
         agnus->blitter.serviceEvent(primSlot[BLT_SLOT].id);
     }
-    
+
+    // Check if a secondary event needs to be processed
+    if (isDue(SEC_SLOT, cycle)) {
+        _executeSecUntil(cycle);
+    }
+
     // Check for a raster event
     if (isDue(RAS_SLOT, cycle)) {
         assert(checkTriggeredEvent(RAS_SLOT));
         agnus->serviceRASEvent(primSlot[RAS_SLOT].id);
     }
-    
-    // Check if a secondary event needs to be processed
-    if (isDue(SEC_SLOT, cycle)) {
-        _executeSecUntil(cycle);
-    }
-    
+
     // Determine the next trigger cycle
     nextPrimTrigger = primSlot[0].triggerCycle;
     for (unsigned i = 1; i < PRIM_SLOT_COUNT; i++)
@@ -612,10 +612,10 @@ EventHandler::_executeSecUntil(Cycle cycle) {
         serveIRQEvent(IRQ_EXTER_SLOT, 13);
     }
     if (isDueSec(REG_COP_SLOT, cycle)) {
-        serveRegEvent(secSlot[REG_COP_SLOT].id, secSlot[REG_COP_SLOT].data);
+        serveRegEvent(REG_COP_SLOT);
     }
     if (isDueSec(REG_CPU_SLOT, cycle)) {
-        serveRegEvent(secSlot[REG_CPU_SLOT].id, secSlot[REG_CPU_SLOT].data);
+        serveRegEvent(REG_CPU_SLOT);
     }
     if (isDueSec(TXD_SLOT, cycle)) {
         paula->uart.serveTxdEvent(secSlot[TXD_SLOT].id);
@@ -738,6 +738,13 @@ EventHandler::scheduleSecAbs(EventSlot s, Cycle cycle, EventID id)
 }
 
 void
+EventHandler::scheduleSecAbs(EventSlot s, Cycle cycle, EventID id, int64_t data)
+{
+    scheduleSecAbs(s, cycle, id);
+    secSlot[s].data = data;
+}
+
+void
 EventHandler::scheduleSecRel(EventSlot s, Cycle cycle, EventID id)
 {
     assert(isSecondarySlot(s));
@@ -751,6 +758,13 @@ EventHandler::scheduleSecRel(EventSlot s, Cycle cycle, EventID id)
     
     // Update the secondary table trigger in the primary table
     scheduleAbs(SEC_SLOT, nextSecTrigger, SEC_TRIGGER);
+}
+
+void
+EventHandler::scheduleSecRel(EventSlot s, Cycle cycle, EventID id, int64_t data)
+{
+    scheduleSecRel(s, cycle, id);
+    secSlot[s].data = data;
 }
 
 void
@@ -770,6 +784,13 @@ EventHandler::scheduleSecPos(EventSlot s, int16_t vpos, int16_t hpos, EventID id
     
     // Update the secondary table trigger in the primary table
     scheduleAbs(SEC_SLOT, nextSecTrigger, SEC_TRIGGER);
+}
+
+void
+EventHandler::scheduleSecPos(EventSlot s, int16_t vpos, int16_t hpos, EventID id, int64_t data)
+{
+    scheduleSecPos(s, vpos, hpos, id);
+    secSlot[s].data = data;
 }
 
 void
@@ -834,8 +855,41 @@ EventHandler::serveIRQEvent(EventSlot s, int irqBit)
 }
 
 void
-EventHandler::serveRegEvent(EventID id, int64_t data)
+EventHandler::scheduleRegEvent(EventSlot slot, Cycle cycle, EventID id, int64_t data)
 {
+    assert(slot == REG_COP_SLOT || slot == REG_CPU_SLOT);
+
+    /* Here is the thing: A Copper write can occur every fourth cycle and
+     * most writes are delayed by four cycles as well. Hence, this function
+     * may be called under situations where a pending event is still in the
+     * slot.
+     * We solve this by serving the pending event first. But beware: We'll
+     * probably run into problem with this approach if the old event is not
+     * due yet. If such a situation really arises, we need to come up with a
+     * different design. For example, we could add a second reg write slot for
+     * the Copper and the CPU and schedule the event in any these two slots (we
+     * can choose any of them as long as it is free). Alternatively, we could
+     * add seperate event slots for each OCS register. However, this would blow
+     * up the size of the secondary table and might therefore be a bad idea.
+     */
+    if (hasEventSec(slot)) {
+        // Hopefully this event is due, so we can serve it and clear the slot
+        assert(isDueSec(slot, amiga->masterClock));
+        serveRegEvent(slot);
+    }
+
+    // Schedule event
+    scheduleSecRel(slot, cycle, id, data);
+}
+
+void
+EventHandler::serveRegEvent(EventSlot slot)
+{
+    EventID id = secSlot[slot].id;
+    uint16_t data = (uint16_t)secSlot[slot].data;
+
+    // debug("serveRegEvent(%d)\n", slot);
+
     switch (id) {
 
         case REG_DIWSTRT:
@@ -849,6 +903,9 @@ EventHandler::serveRegEvent(EventID id, int64_t data)
         default:
             assert(false);
     }
+
+    // Remove event
+    cancelSec(slot);
 }
 
 void

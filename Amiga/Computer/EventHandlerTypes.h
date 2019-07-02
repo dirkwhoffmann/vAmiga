@@ -27,8 +27,8 @@ typedef enum : long
     DMA_SLOT,         // Disk, Audio, Sprite, and Bitplane DMA
     COP_SLOT,         // Copper DMA
     BLT_SLOT,         // Blitter DMA
-    RAS_SLOT,         // Raster line events
     SEC_SLOT,         // Secondary events
+    RAS_SLOT,         // Raster line events (TODO: Move to secondary table)
     PRIM_SLOT_COUNT,
     
     //

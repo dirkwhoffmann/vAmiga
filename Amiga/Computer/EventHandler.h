@@ -235,9 +235,12 @@ class EventHandler : public HardwareComponent
     
     // Schedules a new event in the secondary event table.
     void scheduleSecAbs(EventSlot s, Cycle cycle, EventID id);
+    void scheduleSecAbs(EventSlot s, Cycle cycle, EventID id, int64_t data);
     void scheduleSecRel(EventSlot s, Cycle cycle, EventID id);
+    void scheduleSecRel(EventSlot s, Cycle cycle, EventID id, int64_t data);
     void scheduleSecPos(EventSlot s, int16_t vpos, int16_t hpos, EventID id);
-    
+    void scheduleSecPos(EventSlot s, int16_t vpos, int16_t hpos, EventID id, int64_t data);
+
     // Reschedules an existing event in the secondary event table.
     void rescheduleSecAbs(EventSlot s, Cycle cycle);
     void rescheduleSecRel(EventSlot s, Cycle cycle);
@@ -247,14 +250,17 @@ class EventHandler : public HardwareComponent
     
     // Deletes an event in the secondary event table.
     void cancelSec(EventSlot s);
-    
+
+    // Schedules a register write event
+    void scheduleRegEvent(EventSlot slot, Cycle cycle, EventID id, int64_t data);
+
     private:
 
     // Serves an interrupt slot event
     void serveIRQEvent(EventSlot slot, int irqBit);
 
     // Serves a register write event
-    void serveRegEvent(EventID id, int64_t value);
+    void serveRegEvent(EventSlot slot);
 
     // Serves an inspection event
     void serveINSEvent();

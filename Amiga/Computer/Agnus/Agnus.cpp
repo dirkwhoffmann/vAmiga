@@ -1095,7 +1095,10 @@ Agnus::pokeDIWSTRT(uint16_t value)
 {
     debug(BPL_DEBUG, "pokeDIWSTRT(%X)\n", value);
 
-    setDIWSTRT(value);
+    // Simulate a 4 cycle delay
+    // TODO: Pass a boolean flag `cpu` that shows who writes to the register.
+    // Depending on this variable, schedule in REG_CPU_SLOT or REG_COP_SLOT.
+    events.scheduleRegEvent(REG_COP_SLOT, DMA_CYCLES(4), REG_DIWSTRT, (int64_t)value);
 }
 
 void
@@ -1103,7 +1106,10 @@ Agnus::pokeDIWSTOP(uint16_t value)
 {
     debug(BPL_DEBUG, "pokeDIWSTOP(%X)\n", value);
 
-    setDIWSTOP(value);
+    // Simulate a 4 cycle delay
+    // TODO: Pass a boolean flag `cpu` that shows who writes to the register.
+    // Depending on this variable, schedule in REG_CPU_SLOT or REG_COP_SLOT.
+    events.scheduleRegEvent(REG_COP_SLOT, DMA_CYCLES(4), REG_DIWSTOP, (int64_t)value);
 }
 
 void
@@ -1128,8 +1134,9 @@ Agnus::setDIWSTRT(uint16_t value)
     //
 
     // Take into account that a value change needs 4 DMA cycles to show up
-    int16_t realhpos = hpos + 4;
-    int16_t pixelpos = realhpos * 2;
+    // int16_t realhpos = hpos + 4;
+    // int16_t pixelpos = realhpos * 2;
+    int16_t pixelpos = hpos * 2;
 
     // Update diwFlopOn if hpos hasn't matched the old trigger position yet.
     if (pixelpos < hFlopOn) hFlopOn = diwHstrt;
@@ -1141,7 +1148,7 @@ Agnus::setDIWSTRT(uint16_t value)
 void
 Agnus::setDIWSTOP(uint16_t value)
 {
-    debug(BPL_DEBUG, "pokeDIWSTOP(%X)\n", value);
+    debug(BPL_DEBUG, "setDIWSTOP(%X)\n", value);
     
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // V7 V6 V5 V4 V3 V2 V1 V0 H7 H6 H5 H4 H3 H2 H1 H0  and  H8 = 1, V8 = !V7
@@ -1152,7 +1159,7 @@ Agnus::setDIWSTOP(uint16_t value)
     diwVstop = HI_BYTE(value) | ((value & 0x8000) ? 0 : 0x100);
     diwHstop = LO_BYTE(value) | 0x100;
 
-    debug("diwstop = $%X diwVstrt = %d diwVstop = %d\n", diwstop, diwVstrt, diwVstop);
+    // debug("diwstop = $%X diwVstrt = %d diwVstop = %d\n", diwstop, diwVstrt, diwVstop);
 
     // Invalidate the coordinate if it is out of range
     if (diwHstop > 0x1C7) diwHstop = -1;
@@ -1162,8 +1169,9 @@ Agnus::setDIWSTOP(uint16_t value)
     //
 
     // Take into account that a value change needs 4 DMA cycles to take effect
-    int16_t realhpos = hpos + 4;
-    int16_t pixelpos = realhpos * 2;
+    // int16_t realhpos = hpos + 4;
+    // int16_t pixelpos = realhpos * 2;
+    int16_t pixelpos = hpos * 2;
 
     // Update diwFlopOff if hpos hasn't matched the old trigger position yet.
     if (pixelpos < hFlopOff) hFlopOff = diwHstop;
@@ -1664,12 +1672,12 @@ Agnus::hsyncHandler()
     if (vpos == diwVstrt && !vFlop) {
         vFlop = true;
         updateBitplaneDma();
-        debug("vFlop = %d diwVstrt = %d\n", vFlop, diwVstrt);
+        // debug("vFlop = %d diwVstrt = %d\n", vFlop, diwVstrt);
     }
     if (vpos == diwVstop && vFlop) {
         vFlop = false;
         updateBitplaneDma();
-        debug("vFlop = %d diwVstop = %d\n", vFlop, diwVstop);
+        // debug("vFlop = %d diwVstop = %d\n", vFlop, diwVstop);
     }
 
     // Update the horizontal DIW flipflop
