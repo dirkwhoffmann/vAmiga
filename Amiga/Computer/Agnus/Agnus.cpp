@@ -249,6 +249,16 @@ Agnus::startOfNextFrame()
     return startOfCurrentFrame() + cyclesInCurrentFrame();
 }
 
+bool
+Agnus::inBplDmaArea() {
+    return
+    vFlop                             // Vertical DIW flipflop
+    && vpos >= 26                     // Outside VBLANK area
+    && vpos < frameInfo.numLines - 1  // Not in last line of frame
+    && denise->bplconBPU()            // At least one bitplane enabled
+    && bplDMA();                      // Bitplane DMA enabled
+}
+
 Beam
 Agnus::beamPosition()
 {
@@ -548,8 +558,7 @@ Agnus::switchSpriteDmaOff()
 void
 Agnus::switchBitplaneDmaOn()
 {
-    debug(BPL_DEBUG, "switchBitplaneDmaOn: bpu = %d bplVstrt = %d bplVstop = %d\n",
-          denise->bplconBPU(), bplVstrt, bplVstop);
+    debug(BPL_DEBUG, "switchBitplaneDmaOn: bpu = %d\n", denise->bplconBPU());
 
     if (denise->hires()) {
 
@@ -703,11 +712,13 @@ void
 Agnus::updateBitplaneDma()
 {
     // Determine if bitplane DMA has to be on or off
-    bool bplDma =
+    bool bplDma = inBplDmaArea();
+    /*
     vFlop &&                                        // Vertical DIW flop set
     denise->bplconBPU() &&                          // at least one bitplane
     vpos >= bplVstrt && vpos < bplVstop &&       // DEPRECATED
     (dmacon & (DMAEN | BPLEN)) == (DMAEN | BPLEN);  // DMA is enabled
+    */
 
     // Update the event table accordingly
     bplDma ? switchBitplaneDmaOn() : switchBitplaneDmaOff();
@@ -718,8 +729,6 @@ Agnus::computeBplVstrtVstop()
 {
     bplVstrt = MAX(diwVstrt, 26); // 0 .. 25 is VBLANK area
     bplVstop = MIN(diwVstop, frameInfo.numLines - 1);
-
-    // debug("diwVstrt = %d diwVstop = %d bplVstrt = %d bplVstop = %d\n", diwVstrt, diwVstop, bplVstrt, bplVstop);
 }
 
 void
@@ -1108,8 +1117,8 @@ Agnus::pokeDIWSTRT(uint16_t value)
     // Update diwFlopOn if hpos hasn't matched the old trigger position yet.
     if (pixelpos < hFlopOn) hFlopOn = diwHstrt;
 
-    debug(BPL_DEBUG, "diwstrt = %X diwHstrt = %d diwVstrt = %d bplVstrt = %d\n",
-          diwstrt, diwHstrt, diwVstrt, bplVstrt);
+    debug(BPL_DEBUG, "diwstrt = %X diwHstrt = %d diwVstrt = %d\n",
+          diwstrt, diwHstrt, diwVstrt);
 }
 
 void
@@ -1143,8 +1152,8 @@ Agnus::pokeDIWSTOP(uint16_t value)
     // Update diwFlopOff if hpos hasn't matched the old trigger position yet.
     if (pixelpos < hFlopOff) hFlopOff = diwHstop;
 
-    debug(BPL_DEBUG, "diwstop = %X diwHstop = %d diwVstop = %d bplVstop = %d\n",
-          diwstop, diwHstop, diwVstop, bplVstop);
+    debug(BPL_DEBUG, "diwstop = %X diwHstop = %d diwVstop = %d\n",
+          diwstop, diwHstop, diwVstop);
 }
 
 void
@@ -1614,8 +1623,16 @@ Agnus::hsyncHandler()
         }
     }
 
-    // Switch bitplane DMA on or off
-    if (vpos == bplVstrt || vpos == bplVstop) hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
+    // Check if this line is a bitplane DMA line
+    bool bplDmaArea = inBplDmaArea();
+
+    // Update the event table if the values has changed
+    if (bplDmaArea ^ oldBplDmaArea) {
+        hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
+        oldBplDmaArea = bplDmaArea;
+    }
+
+    // if (vpos == bplVstrt || vpos == bplVstop) hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
 
     // Determine if the new line is inside the display window (DEPRECATED)
     denise->inDisplayWindow = (vpos >= diwVstrt) && (vpos < diwVstop);

@@ -272,7 +272,10 @@ class Agnus : public HardwareComponent
     // Recorded DMA values for all cycles in the current rasterline
     uint16_t busValue[HPOS_CNT];
 
+    // Unsed in the hsyncHandler to remember the result of inBplDmaArea
+    bool oldBplDmaArea;
 
+    
     //
     // DMA allocation tables
     //
@@ -386,11 +389,9 @@ public:
 
 public:
 
-    // Indicates if the current rasterline belongs to the display area.
-    // bool inDisplayArea() { return vpos >= bplVstrt && vpos < bplVstop; }
-
     // Indicates if the current rasterline is a bitplane DMA line
-    // bool inBplDmaArea() { return vpos >= bplVstrt && vpos < bplVstop && bplDMA(); }
+    bool inBplDmaArea();
+
 
     //
     // Working with DMA slots
