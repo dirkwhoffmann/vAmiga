@@ -286,13 +286,15 @@ Denise::pokeBPLCON0(uint16_t value)
          */
 
         // Agnus will know about the change in 4 cycles.
-        // debug("Before allocateBplSlots (oldbpu = %d bpu = %d bplVstrt = %d bplVstop = %d diwVstrt = %d diwVstop = %d)\n", oldbpu, bpu, agnus->bplVstrt, agnus->bplVstop, agnus->diwVstrt, agnus->diwVstop);
+        // debug("Before allocateBplSlots (oldbpu = %d bpu = %d diwVstrt = %d diwVstop = %d)\n", oldbpu, bpu, agnus->diwVstrt, agnus->diwVstop);
         // agnus->dumpDMAEventTable();
 
-        bool bplDma =
+        bool bplDma = agnus->inBplDmaArea();
+        /*
         agnus->vpos >= agnus->bplVstrt && agnus->vpos < agnus->bplVstop &&
         (agnus->dmacon & (DMAEN | BPLEN)) == (DMAEN | BPLEN);
-        if (!bplDma) bpu = 0;
+        */
+         if (!bplDma) bpu = 0;
 
         int16_t pos = agnus->hpos + 4;
         agnus->allocateBplSlots(bpu, hires(), pos);

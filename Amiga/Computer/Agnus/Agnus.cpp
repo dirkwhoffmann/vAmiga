@@ -724,12 +724,14 @@ Agnus::updateBitplaneDma()
     bplDma ? switchBitplaneDmaOn() : switchBitplaneDmaOff();
 }
 
+/*
 void
 Agnus::computeBplVstrtVstop()
 {
     bplVstrt = MAX(diwVstrt, 26); // 0 .. 25 is VBLANK area
     bplVstop = MIN(diwVstop, frameInfo.numLines - 1);
 }
+*/
 
 void
 Agnus::updateJumpTable(int16_t to)
@@ -1101,7 +1103,6 @@ Agnus::pokeDIWSTRT(uint16_t value)
     // Extract the upper left corner of the display window
     diwVstrt = HI_BYTE(value);
     diwHstrt = LO_BYTE(value);
-    computeBplVstrtVstop();
 
     // Invalidate the coordinate if it is out of range
     if (diwHstrt < 2) diwHstrt = -1;
@@ -1134,7 +1135,6 @@ Agnus::pokeDIWSTOP(uint16_t value)
     // Extract the lower right corner of the display window
     diwVstop = HI_BYTE(value) | ((value & 0x8000) ? 0 : 0x100);
     diwHstop = LO_BYTE(value) | 0x100;
-    computeBplVstrtVstop();
 
     debug("diwstop = $%X diwVstrt = %d diwVstop = %d\n", diwstop, diwVstrt, diwVstop);
 
@@ -1711,9 +1711,6 @@ Agnus::vsyncHandler()
 
     // Determine if the next frame is a long or a short frame
     frameInfo.numLines = lof ? 313 : 312;
-
-    // Update variables that depend on long frame / short frame properties
-    computeBplVstrtVstop();
 
     // Increment frame and reset vpos
     frame++; // DEPRECATED

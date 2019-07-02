@@ -149,12 +149,6 @@ class Agnus : public HardwareComponent
     int16_t dmaStrt;
     int16_t dmaStop;
 
-    /* The first and the last possible bitplane DMA line.
-     * The values are update via computeBplVstrtVstop()
-     */
-    int16_t bplVstrt;
-    int16_t bplVstop;
-
     /* The vertical trigger positions of all 8 sprites.
      * Note: The horizontal trigger positions are stored inside Denise. Agnus
      * knows nothing about them.
@@ -507,7 +501,7 @@ public:
     void updateBitplaneDma();
 
     // Computes variables BplVstrt and BplVstop
-    void computeBplVstrtVstop();
+    // void computeBplVstrtVstop();
 
     // Updates the DMA time slot allocation's jump table.
     void updateJumpTable(int16_t to);
