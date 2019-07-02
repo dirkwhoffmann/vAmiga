@@ -30,6 +30,7 @@ EventHandler::_initialize()
     ciaB   = &amiga->ciaB;
     mem    = &amiga->mem;
     agnus  = &amiga->agnus;
+    copper = &amiga->agnus.copper;
     denise = &amiga->denise;
     paula  = &amiga->paula;
 }
@@ -291,6 +292,8 @@ EventHandler::_inspectSecSlot(uint32_t slot)
         case IRQ_RBF_SLOT:       i->slotName = "Serial Input IRQ"; break;
         case IRQ_DSKSYN_SLOT:    i->slotName = "Disk Sync IRQ"; break;
         case IRQ_EXTER_SLOT:     i->slotName = "CIA B IRQ"; break;
+        case REG_COP_SLOT:       i->slotName = "Delayed Copper Write"; break;
+        case REG_CPU_SLOT:       i->slotName = "Delayed CPU Write"; break;
         case TXD_SLOT:           i->slotName = "Serial out (UART)"; break;
         case RXD_SLOT:           i->slotName = "Serial in (UART)"; break;
         case POT_SLOT:           i->slotName = "Potentiometer"; break;
@@ -331,6 +334,18 @@ EventHandler::_inspectSecSlot(uint32_t slot)
                 case IRQ_SET:    i->eventName = "IRQ_SET"; break;
                 case IRQ_CLEAR:  i->eventName = "IRQ_CLEAR"; break;
                 default:         i->eventName = "*** INVALID ***"; break;
+            }
+            break;
+
+        case REG_COP_SLOT:
+        case REG_CPU_SLOT:
+
+            switch (secSlot[slot].id) {
+
+                case 0:           i->eventName = "none"; break;
+                case REG_DIWSTRT: i->eventName = "REG_DIWSTRT"; break;
+                case REG_DIWSTOP: i->eventName = "REG_DIWSTOP"; break;
+                default:          i->eventName = "*** INVALID ***"; break;
             }
             break;
 
@@ -596,6 +611,12 @@ EventHandler::_executeSecUntil(Cycle cycle) {
     if (isDueSec(IRQ_EXTER_SLOT, cycle)) {
         serveIRQEvent(IRQ_EXTER_SLOT, 13);
     }
+    if (isDueSec(REG_COP_SLOT, cycle)) {
+        serveRegEvent(secSlot[REG_COP_SLOT].id, secSlot[REG_COP_SLOT].data);
+    }
+    if (isDueSec(REG_CPU_SLOT, cycle)) {
+        serveRegEvent(secSlot[REG_CPU_SLOT].id, secSlot[REG_CPU_SLOT].data);
+    }
     if (isDueSec(TXD_SLOT, cycle)) {
         paula->uart.serveTxdEvent(secSlot[TXD_SLOT].id);
     }
@@ -810,6 +831,24 @@ EventHandler::serveIRQEvent(EventSlot s, int irqBit)
     }
     
     cancelSec(s);
+}
+
+void
+EventHandler::serveRegEvent(EventID id, int64_t data)
+{
+    switch (id) {
+
+        case REG_DIWSTRT:
+            agnus->setDIWSTRT((uint16_t)data);
+            break;
+
+        case REG_DIWSTOP:
+            agnus->setDIWSTOP((uint16_t)data);
+            break;
+
+        default:
+            assert(false);
+    }
 }
 
 void

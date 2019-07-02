@@ -67,6 +67,7 @@ class EventHandler : public HardwareComponent
     class CIAB *ciaB;
     class Memory *mem;
     class Agnus *agnus;
+    class Copper *copper;
     class Denise *denise;
     class Paula *paula; 
     
@@ -192,14 +193,14 @@ class EventHandler : public HardwareComponent
     /* To schedule an event, an event slot, a trigger cycle, and an event id
      * needs to be provided. The trigger cycle can be specified in three ways:
      *
-     *   Absolute (_Abs):
+     *   Absolute (Abs):
      *   The time stamp is an absolute value measured in master clock cycles.
      *
-     *   Relative (_Rel):
+     *   Relative (Rel):
      *   The time stamp is relative to the current DMA clock and measured in
      *   master clock cycles.
      *
-     *   Positional (_Pos):
+     *   Positional (Pos):
      *   The time stamp is provided as a beam position in the current frame.
      *
      * Events can also be rescheduled, disabled, or canceled:
@@ -249,8 +250,11 @@ class EventHandler : public HardwareComponent
     
     private:
 
-    // Serves an IRQ_SET or IRQ_CLEAR event
+    // Serves an interrupt slot event
     void serveIRQEvent(EventSlot slot, int irqBit);
+
+    // Serves a register write event
+    void serveRegEvent(EventID id, int64_t value);
 
     // Serves an inspection event
     void serveINSEvent();

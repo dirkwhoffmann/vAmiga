@@ -548,7 +548,9 @@ public:
     // DIWSTRT, DIWSTOP
     void pokeDIWSTRT(uint16_t value);
     void pokeDIWSTOP(uint16_t value);
-    
+    void setDIWSTRT(uint16_t value);
+    void setDIWSTOP(uint16_t value);
+
     // DDFSTRT, DDFSTOP
     void pokeDDFSTRT(uint16_t value);
     void pokeDDFSTOP(uint16_t value);

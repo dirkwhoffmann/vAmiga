@@ -50,6 +50,8 @@ typedef enum : long
     IRQ_RBF_SLOT,     // Source 11 IRQ (Serial port receive buffer full)
     IRQ_DSKSYN_SLOT,  // Source 12 IRQ (Disk sync register matches disk data)
     IRQ_EXTER_SLOT,   // Source 13 IRQ (I/O ports and CIA B)
+    REG_COP_SLOT,     // Delayed Copper writes to custom registers
+    REG_CPU_SLOT,     // Delayed CPU writes to custom registers
     TXD_SLOT,         // Serial data out (UART)
     RXD_SLOT,         // Serial data in (UART)
     POT_SLOT,         // Potentiometer
@@ -148,6 +150,11 @@ typedef enum : long
     IRQ_SET = 1,
     IRQ_CLEAR,
     IRQ_EVENT_COUNT,
+
+    // REG slots
+    REG_DIWSTRT = 1,
+    REG_DIWSTOP = 2,
+    REG_EVENT_COUNT,
 
     // Serial data out (UART)
     TXD_BIT = 1,

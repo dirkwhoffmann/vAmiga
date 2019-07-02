@@ -1095,9 +1095,25 @@ Agnus::pokeDIWSTRT(uint16_t value)
 {
     debug(BPL_DEBUG, "pokeDIWSTRT(%X)\n", value);
 
+    setDIWSTRT(value);
+}
+
+void
+Agnus::pokeDIWSTOP(uint16_t value)
+{
+    debug(BPL_DEBUG, "pokeDIWSTOP(%X)\n", value);
+
+    setDIWSTOP(value);
+}
+
+void
+Agnus::setDIWSTRT(uint16_t value)
+{
+    debug(BPL_DEBUG, "setDIWSTRT(%X)\n", value);
+
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // V7 V6 V5 V4 V3 V2 V1 V0 H7 H6 H5 H4 H3 H2 H1 H0  and  H8 = 0, V8 = 0
-    
+
     diwstrt = value;
 
     // Extract the upper left corner of the display window
@@ -1123,7 +1139,7 @@ Agnus::pokeDIWSTRT(uint16_t value)
 }
 
 void
-Agnus::pokeDIWSTOP(uint16_t value)
+Agnus::setDIWSTOP(uint16_t value)
 {
     debug(BPL_DEBUG, "pokeDIWSTOP(%X)\n", value);
     

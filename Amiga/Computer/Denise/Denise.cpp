@@ -285,24 +285,12 @@ Denise::pokeBPLCON0(uint16_t value)
          * update in hsyncActions (HSYNC_UPDATE_EVENT_TABLE) can be omitted.
          */
 
-        // Agnus will know about the change in 4 cycles.
-        // debug("Before allocateBplSlots (oldbpu = %d bpu = %d diwVstrt = %d diwVstop = %d)\n", oldbpu, bpu, agnus->diwVstrt, agnus->diwVstop);
-        // agnus->dumpDMAEventTable();
+        // Check if bitplane DMA is possible
+        if (!agnus->inBplDmaArea()) bpu = 0;
 
-        bool bplDma = agnus->inBplDmaArea();
-        /*
-        agnus->vpos >= agnus->bplVstrt && agnus->vpos < agnus->bplVstop &&
-        (agnus->dmacon & (DMAEN | BPLEN)) == (DMAEN | BPLEN);
-        */
-         if (!bplDma) bpu = 0;
-
+        // Agnus will know about the change in 4 cycles
         int16_t pos = agnus->hpos + 4;
         agnus->allocateBplSlots(bpu, hires(), pos);
-
-        // debug("After allocateBplSlots (oldbpu = %d bpu = %d)\n", oldbpu, bpu);
-        // agnus->dumpDMAEventTable();
-
-        // agnus->updateBitplaneDma();
 
         // Reschedule the next event according to the changed table
         // TODO: Wrap this in a nicer API
@@ -316,13 +304,6 @@ Denise::pokeBPLCON0(uint16_t value)
         // Create the table from scratch in the next rasterline
         agnus->hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
     }
-
-    /*
-    if (agnus->hpos == 130 || agnus->hpos == 2) {
-        debug("hpos = %d oldbpu = %d newbpu = %d\n", agnus->hpos, oldbpu, bpu);
-        agnus->dumpDMAEventTable();
-    }
-    */
 }
 
 void

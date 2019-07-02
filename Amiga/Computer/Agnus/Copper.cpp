@@ -331,9 +331,9 @@ Copper::move(int addr, uint16_t value)
 
     // Catch registers with special timing needs
 
-    // Color registers
     if (addr >= 0x180 && addr <= 0x1BE) {
 
+         // Color registers
         int reg = (addr - 0x180) / 2;
         colorizer->recordColorRegisterChange(reg, value, 4 * agnus->hpos);
         return;
