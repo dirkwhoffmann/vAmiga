@@ -468,7 +468,7 @@ Denise::drawLores(int pixels)
     currentPixel = ppos(agnus->hpos);
 
     // Only proceed if the vertical position is inside the drawing area
-    if (!inDisplayWindow) return;
+    // if (!inDisplayWindow) return;
 
     uint32_t maskOdd = 0x8000 << scrollLoresOdd;
     uint32_t maskEven = 0x8000 << scrollLoresEven;
@@ -532,8 +532,8 @@ Denise::drawLores(int pixels)
 
             // Draw two lores pixels
             assert(currentPixel + 1 < sizeof(rasterline));
-            rasterline[currentPixel++] = index * inDisplayWindow;
-            rasterline[currentPixel++] = index * inDisplayWindow;
+            rasterline[currentPixel++] = index;
+            rasterline[currentPixel++] = index;
         }
     }
 
@@ -554,7 +554,7 @@ Denise::drawHires(int pixels)
     currentPixel = ppos(agnus->hpos);
 
     // Only proceed if the vertical position is inside the drawing area
-    if (!inDisplayWindow) return;
+    // if (!inDisplayWindow) return;
 
     uint32_t maskOdd = 0x8000 << scrollHiresOdd;
     uint32_t maskEven = 0x8000 << scrollHiresEven;
