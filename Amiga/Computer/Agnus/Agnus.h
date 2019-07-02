@@ -613,13 +613,19 @@ public:
     void serviceRASEvent(EventID id);
 
     // Schedules the first RAS slot event
-    void scheduleFirstRASEvent(int16_t vpos);
+    // void scheduleFirstRASEvent(int16_t vpos);
+
+    // Services a synchronization event (HSYNC)
+    void serviceSYNCEvent(EventID id);
+
+    // Schedules the first SYNC slot event
+    void scheduleFirstSYNCEvent(int16_t vpos);
 
     // Schedules the next RAS slot event
     // void scheduleNextRASEvent(int16_t vpos, int16_t hpos);
     
-    /* This functions serves the RAS_HSYNC event in the RAS slot.
-     * The RAS_HSYNC event is triggered at the end of each rasterline.
+    /* This functions serves the SYNC_HSYNC event in the SYNC slot.
+     * The SYNC_HSYNC event is triggered at the end of each rasterline.
      */
     void hsyncHandler();
     

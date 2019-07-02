@@ -27,8 +27,11 @@ typedef enum : long
     DMA_SLOT,         // Disk, Audio, Sprite, and Bitplane DMA
     COP_SLOT,         // Copper DMA
     BLT_SLOT,         // Blitter DMA
+    RAS_SLOT,         // TODO: This slot is currently unused. It's only event
+                      // was RAS_HSYNC which has been replaced by the secondary
+                      // event SYNC_HSYNC. I didn't delete the slot, because
+                      // I'm still unsure if we really don't need it.
     SEC_SLOT,         // Secondary events
-    RAS_SLOT,         // Raster line events (TODO: Move to secondary table)
     PRIM_SLOT_COUNT,
     
     //
@@ -55,6 +58,7 @@ typedef enum : long
     TXD_SLOT,         // Serial data out (UART)
     RXD_SLOT,         // Serial data in (UART)
     POT_SLOT,         // Potentiometer
+    SYNC_SLOT,        // Synchronization (HSYNC)
     INSPECTOR_SLOT,   // Handles periodic calls to inspect()
     SEC_SLOT_COUNT,
 } EventSlot;
@@ -169,6 +173,10 @@ typedef enum : long
     POT_CHARGE,
     POT_EVENT_COUNT,
 
+    // SYNC slot
+    SYNC_HSYNC = 1,
+    SYNC_EVENT_COUNT,
+    
     // Inspector slot
     INS_NONE = 1,
     INS_AMIGA,

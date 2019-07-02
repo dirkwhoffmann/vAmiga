@@ -297,6 +297,7 @@ EventHandler::_inspectSecSlot(uint32_t slot)
         case TXD_SLOT:           i->slotName = "Serial out (UART)"; break;
         case RXD_SLOT:           i->slotName = "Serial in (UART)"; break;
         case POT_SLOT:           i->slotName = "Potentiometer"; break;
+        case SYNC_SLOT:          i->slotName = "SYNC"; break;
         case INSPECTOR_SLOT:     i->slotName = "Debugger"; break;
         default:                 i->slotName = "*** INVALID ***"; break;
     }
@@ -377,6 +378,16 @@ EventHandler::_inspectSecSlot(uint32_t slot)
                 case POT_DISCHARGE: i->eventName = "POT_DISCHARGE"; break;
                 case POT_CHARGE:    i->eventName = "POT_CHARGE"; break;
                 default:            i->eventName = "*** INVALID ***"; break;
+            }
+            break;
+
+        case SYNC_SLOT:
+
+            switch (secSlot[slot].id) {
+
+                case 0:          i->eventName = "none"; break;
+                case SYNC_HSYNC: i->eventName = "SYNC_HSYNC"; break;
+                default:         i->eventName = "*** INVALID ***"; break;
             }
             break;
 
@@ -544,15 +555,15 @@ EventHandler::_executeUntil(Cycle cycle) {
         agnus->blitter.serviceEvent(primSlot[BLT_SLOT].id);
     }
 
-    // Check if a secondary event needs to be processed
-    if (isDue(SEC_SLOT, cycle)) {
-        _executeSecUntil(cycle);
-    }
-
     // Check for a raster event
     if (isDue(RAS_SLOT, cycle)) {
         assert(checkTriggeredEvent(RAS_SLOT));
         agnus->serviceRASEvent(primSlot[RAS_SLOT].id);
+    }
+
+    // Check if a secondary event needs to be processed
+    if (isDue(SEC_SLOT, cycle)) {
+        _executeSecUntil(cycle);
     }
 
     // Determine the next trigger cycle
@@ -625,6 +636,10 @@ EventHandler::_executeSecUntil(Cycle cycle) {
     }
     if (isDueSec(POT_SLOT, cycle)) {
         paula->servePotEvent(secSlot[POT_SLOT].id);
+    }
+    if (isDueSec(SYNC_SLOT, cycle)) {
+        assert(secSlot[SYNC_SLOT].id == SYNC_HSYNC);
+        agnus->serviceSYNCEvent(secSlot[SYNC_SLOT].id);
     }
     if (isDueSec(INSPECTOR_SLOT, cycle)) {
         serveINSEvent();
