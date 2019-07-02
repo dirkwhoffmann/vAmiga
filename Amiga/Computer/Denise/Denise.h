@@ -157,9 +157,6 @@ public:
     // DEPRECATED
     short currentPixel;
 
-    // Indicates if the current rasterline is inside the display window
-    bool inDisplayWindow;
-
 
     //
     // Constructing and destructing

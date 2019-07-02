@@ -1632,11 +1632,6 @@ Agnus::hsyncHandler()
         oldBplDmaArea = bplDmaArea;
     }
 
-    // if (vpos == bplVstrt || vpos == bplVstop) hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
-
-    // Determine if the new line is inside the display window (DEPRECATED)
-    denise->inDisplayWindow = (vpos >= diwVstrt) && (vpos < diwVstop);
-
     // Check if we have reached line 25 (sprite DMA starts here)
     if (vpos == 25) {
         if ((dmacon & DMAEN) && (dmacon & SPREN)) {

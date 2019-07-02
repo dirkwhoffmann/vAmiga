@@ -48,7 +48,6 @@ Denise::Denise()
         { &firstCanvasPixel, sizeof(firstCanvasPixel), 0 },
         { &lastCanvasPixel,  sizeof(lastCanvasPixel),  0 },
         { &currentPixel,     sizeof(currentPixel),     0 },
-        { &inDisplayWindow,  sizeof(inDisplayWindow),  0 },
 
     });
 
@@ -467,9 +466,6 @@ Denise::drawLores(int pixels)
     // assert(currentPixel == (agnus->hpos * 4) + 6);
     currentPixel = ppos(agnus->hpos);
 
-    // Only proceed if the vertical position is inside the drawing area
-    // if (!inDisplayWindow) return;
-
     uint32_t maskOdd = 0x8000 << scrollLoresOdd;
     uint32_t maskEven = 0x8000 << scrollLoresEven;
 
@@ -552,9 +548,6 @@ Denise::drawHires(int pixels)
 
     // assert(currentPixel == (agnus->hpos * 4) + 6);
     currentPixel = ppos(agnus->hpos);
-
-    // Only proceed if the vertical position is inside the drawing area
-    // if (!inDisplayWindow) return;
 
     uint32_t maskOdd = 0x8000 << scrollHiresOdd;
     uint32_t maskEven = 0x8000 << scrollHiresEven;
