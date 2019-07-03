@@ -142,7 +142,25 @@ class EventHandler : public HardwareComponent
     // Returns the number of event slots in the primary or secondary table.
     inline long primSlotCount() { return LAST_PRIM_SLOT + 1; }
     inline long secSlotCount() { return  LAST_SEC_SLOT - FIRST_SEC_SLOT + 1; }
-    
+
+
+    // Returns true iff the specified slot contains an event.
+    template<EventSlot s> bool hasEvent() {
+        assert(s < SLOT_COUNT); return slot[s].id != (EventID)0; }
+
+    // Returns true iff the specified slot contains a pending event.
+    template<EventSlot s> bool isPending() {
+        assert(s < SLOT_COUNT); return slot[s].triggerCycle != NEVER; }
+
+    // Returns true iff the specified slot contains a due event.
+    template<EventSlot s> bool isDue(Cycle cycle) {
+        assert(s < SLOT_COUNT); return cycle >= slot[s].triggerCycle; }
+
+
+    //
+    // OLD API (DEPRECATED)
+    //
+
     // Checks whether a particular slot in the primary table contains an event.
     inline bool hasEvent(EventSlot s) {
         assert(isPrimarySlot(s)); return slot[s].id != 0; }
