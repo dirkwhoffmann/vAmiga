@@ -364,29 +364,9 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->agnus->dmaDebugger.getInfo();
 }
-- (NSInteger) slotCount
-{
-    return wrapper->agnus->events.slotCount();
-}
-- (NSInteger) primSlotCount
-{
-    return wrapper->agnus->events.primSlotCount();
-}
-- (NSInteger) secSlotCount
-{
-    return wrapper->agnus->events.secSlotCount();
-}
 - (EventSlotInfo) getSlotInfo:(NSInteger)slot
 {
     return wrapper->agnus->events.getSlotInfo(slot);
-}
-- (EventSlotInfo) getPrimarySlotInfo:(NSInteger)slot
-{
-    return wrapper->agnus->events.getPrimarySlotInfo(slot);
-}
-- (EventSlotInfo) getSecondarySlotInfo:(NSInteger)slot
-{
-    return wrapper->agnus->events.getSecondarySlotInfo(slot);
 }
 - (EventHandlerInfo) getEventInfo
 {

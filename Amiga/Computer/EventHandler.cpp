@@ -384,36 +384,6 @@ EventHandler::getSlotInfo(int nr)
     return result;
 }
 
-EventSlotInfo
-EventHandler::getPrimarySlotInfo(int slot)
-{
-    assert(isPrimarySlot(slot));
-    
-    EventSlotInfo result;
-    
-    pthread_mutex_lock(&lock);
-    result = info.slotInfo[slot];
-    pthread_mutex_unlock(&lock);
-    
-    return result;
-}
-
-EventSlotInfo
-EventHandler::getSecondarySlotInfo(int slot)
-{
-    slot += FIRST_SEC_SLOT;
-
-    assert(isSecondarySlot(slot));
-    
-    EventSlotInfo result;
-    
-    pthread_mutex_lock(&lock);
-    result = info.slotInfo[slot];
-    pthread_mutex_unlock(&lock);
-    
-    return result;
-}
-
 void
 EventHandler::_executeUntil(Cycle cycle) {
     

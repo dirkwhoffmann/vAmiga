@@ -83,16 +83,10 @@ class EventHandler : public HardwareComponent
 
     // The event table
     Event slot[SLOT_COUNT];
-
-    // The primary event table (DEPRECATED)
-    // Event primSlot[LAST_PRIM_SLOT + 1];
     
     // Next trigger cycle for an event in the primary event table
     Cycle nextPrimTrigger = NEVER;
-    
-    // The secondary event table (DEPRECATED)
-    // Event secSlot[LAST_SEC_SLOT + 1];
-    
+
     // Next trigger cycle for an event in the secondary event table
     Cycle nextSecTrigger = NEVER;
     
@@ -136,15 +130,7 @@ class EventHandler : public HardwareComponent
     // Returns the latest internal state recorded by inspect()
     EventHandlerInfo getInfo();
     EventSlotInfo getSlotInfo(int nr);
-    EventSlotInfo getPrimarySlotInfo(int nr); // DEPRECATED
-    EventSlotInfo getSecondarySlotInfo(int nr); // DEPRECATED
     
-    // Returns the number of event slots in the primary or secondary table.
-    long slotCount() { return SLOT_COUNT; }
-    long primSlotCount() { return LAST_PRIM_SLOT + 1; }
-    long secSlotCount() { return  LAST_SEC_SLOT - FIRST_SEC_SLOT + 1; }
-
-
     // Returns true iff the specified slot contains an event.
     template<EventSlot s> bool hasEvent() {
         assert(s < SLOT_COUNT); return slot[s].id != (EventID)0; }
