@@ -655,6 +655,21 @@ EventHandler::_executeSecUntil(Cycle cycle) {
     rescheduleAbs(SEC_SLOT, nextSecTrigger);
 }
 
+Cycle
+EventHandler::relToCycle(Cycle cycle)
+{
+    return cycle + agnus->clock; 
+}
+
+Cycle
+EventHandler::posToCycle(int16_t vpos, int16_t hpos)
+{
+    Beam beam;
+    beam.y = vpos;
+    beam.x = hpos;
+    return agnus->beamToCycle(beam);
+}
+
 void
 EventHandler::scheduleAbs(EventSlot s, Cycle cycle, EventID id)
 {

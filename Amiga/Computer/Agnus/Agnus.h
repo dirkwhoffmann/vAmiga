@@ -16,6 +16,8 @@
 #include "Blitter.h"
 #include "DmaDebugger.h"
 
+class EventHandler;
+
 // Bit plane indices
 #define PLANE1 0
 #define PLANE2 1

@@ -196,6 +196,9 @@ class EventHandler : public HardwareComponent
      *   Absolute (Abs):
      *   The time stamp is an absolute value measured in master clock cycles.
      *
+     *   Incremental (Inc):
+     *   The time stamp is relative to the current time stamp in the slot.
+     *
      *   Relative (Rel):
      *   The time stamp is relative to the current DMA clock and measured in
      *   master clock cycles.
@@ -214,9 +217,99 @@ class EventHandler : public HardwareComponent
      *   Canceling means that the slot is emptied by deleting the event ID
      *   and setting the trigger cycle to NEVER.
      */
-    
+
+    Cycle relToCycle(Cycle cycle);
+    Cycle posToCycle(int16_t vpos, int16_t hpos);
+
     public:
-    
+
+    template<EventSlot s> void scheduleAbs(Cycle cycle, EventID id)
+    {
+        assert(isPrimarySlot(s));
+
+        primSlot[s].triggerCycle = cycle;
+        primSlot[s].id = id;
+        if (cycle < nextPrimTrigger) nextPrimTrigger = cycle;
+
+        assert(checkScheduledEvent(s));
+    }
+
+    template<EventSlot s> void scheduleAbs(Cycle cycle, EventID id, int64_t data)
+    {
+        scheduleAbs<s>(cycle, id);
+        primSlot[s].data = data;
+    }
+
+    template<EventSlot s> void scheduleInc(Cycle cycle, EventID id)
+    {
+        scheduleAbs<s>(cycle, primSlot[s].triggerCycle + cycle);
+    }
+
+    template<EventSlot s> void scheduleInc(Cycle cycle, EventID id, int64_t data)
+    {
+        scheduleAbs<s>(cycle, primSlot[s].triggerCycle + cycle);
+        primSlot[s].data = data;
+    }
+
+    template<EventSlot s> void scheduleRel(Cycle cycle, EventID id)
+    {
+        scheduleAbs<s>(relToCycle(cycle), id);
+    }
+
+    template<EventSlot s> void scheduleRel(Cycle cycle, EventID id, int64_t data)
+    {
+        scheduleAbs<s>(relToCycle(cycle), id);
+        primSlot[s].data = data;
+    }
+
+
+    template<EventSlot s> void schedulePos(int16_t vpos, int16_t hpos, EventID id)
+    {
+        scheduleAbs<s>(posToCycle(vpos, hpos), id);
+    }
+
+    template<EventSlot s> void schedulePos(int16_t vpos, int16_t hpos, EventID id, int64_t data)
+    {
+        scheduleAbs<s>(posToCycle(vpos, hpos), id, data);
+        primSlot[s].data = data;
+    }
+
+    template<EventSlot s> void rescheduleAbs(Cycle cycle)
+    {
+        assert(isPrimarySlot(s));
+
+        primSlot[s].triggerCycle = cycle;
+        if (cycle < nextPrimTrigger) nextPrimTrigger = cycle;
+
+        assert(checkScheduledEvent(s));
+    }
+
+    template<EventSlot s> void rescheduleInc(Cycle cycle)
+    {
+        rescheduleAbs<s>(relToCycle(cycle), primSlot[s].triggerCycle + cycle);
+    }
+
+    template<EventSlot s> void rescheduleRel(Cycle cycle)
+    {
+        rescheduleAbs<s>(relToCycle(cycle));
+    }
+
+    template<EventSlot s> void reschedulePos(int16_t vpos, int16_t hpos)
+    {
+        rescheduleAbs<s>(posToCycle(vpos, hpos));
+    }
+
+    template<EventSlot s> void cancel()
+    {
+        primSlot[s].id = (EventID)0;
+        primSlot[s].data = 0;
+        primSlot[s].triggerCycle = NEVER;
+    }
+
+    //
+    // OLD API (DEPRECATED)
+    //
+
     // Schedules a new event in the primary event table.
     void scheduleAbs(EventSlot s, Cycle cycle, EventID id);
     void scheduleRel(EventSlot s, Cycle cycle, EventID id);
@@ -226,7 +319,7 @@ class EventHandler : public HardwareComponent
     void rescheduleAbs(EventSlot s, Cycle cycle);
     void rescheduleRel(EventSlot s, Cycle cycle);
     
-    // Disables an event in the primary event table.
+    // Disables an event in the primary event table. (DEPRECATED)
     void disable(EventSlot s);
     
     // Deletes an event in the primary event table.
