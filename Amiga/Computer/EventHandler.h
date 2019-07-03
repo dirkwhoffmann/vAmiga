@@ -178,12 +178,12 @@ class EventHandler : public HardwareComponent
         assert(isSecondarySlot(s)); return slot[s].triggerCycle != NEVER; }
     
     // Checks whether a particular slot in the primary table contains a due event.
-    inline bool isDue(EventSlot s, Cycle cycle) {
-        assert(isPrimarySlot(s)); return cycle >= slot[s].triggerCycle; }
+    // inline bool isDue(EventSlot s, Cycle cycle) {
+    //     assert(isPrimarySlot(s)); return cycle >= slot[s].triggerCycle; }
     
     // Checks whether a particular slot in the secondary table contains a due event.
-    inline bool isDueSec(EventSlot s, Cycle cycle) {
-        assert(isSecondarySlot(s)); return cycle >= slot[s].triggerCycle; }
+    // inline bool isDueSec(EventSlot s, Cycle cycle) {
+    //     assert(isSecondarySlot(s)); return cycle >= slot[s].triggerCycle; }
     
     
     //

@@ -499,7 +499,7 @@ void
 EventHandler::_executeUntil(Cycle cycle) {
     
     // Check for a CIA A event
-    if (isDue(CIAA_SLOT, cycle)) {
+    if (isDue<CIAA_SLOT>(cycle)) {
         
         assert(checkTriggeredEvent(CIAA_SLOT));
         
@@ -519,7 +519,7 @@ EventHandler::_executeUntil(Cycle cycle) {
     }
     
     // Check for a CIA B event
-    if (isDue(CIAB_SLOT, cycle)) {
+    if (isDue<CIAB_SLOT>(cycle)) {
         
         assert(checkTriggeredEvent(CIAB_SLOT));
         
@@ -539,31 +539,31 @@ EventHandler::_executeUntil(Cycle cycle) {
     }
     
     // Check for a bitplane event
-    if (isDue(DMA_SLOT, cycle)) {
+    if (isDue<DMA_SLOT>(cycle)) {
         assert(checkTriggeredEvent(DMA_SLOT));
         agnus->serviceDMAEvent(slot[DMA_SLOT].id);
     }
     
     // Check for a Copper event
-    if (isDue(COP_SLOT, cycle)) {
+    if (isDue<COP_SLOT>(cycle)) {
         assert(checkTriggeredEvent(COP_SLOT));
         agnus->copper.serviceEvent(slot[COP_SLOT].id);
     }
     
     // Check for a Blitter event
-    if (isDue(BLT_SLOT, cycle)) {
+    if (isDue<BLT_SLOT>(cycle)) {
         assert(checkTriggeredEvent(BLT_SLOT));
         agnus->blitter.serviceEvent(slot[BLT_SLOT].id);
     }
 
     // Check for a raster event
-    if (isDue(RAS_SLOT, cycle)) {
+    if (isDue<RAS_SLOT>(cycle)) {
         assert(checkTriggeredEvent(RAS_SLOT));
         agnus->serviceRASEvent(slot[RAS_SLOT].id);
     }
 
     // Check if a secondary event needs to be processed
-    if (isDue(SEC_SLOT, cycle)) {
+    if (isDue<SEC_SLOT>(cycle)) {
         _executeSecUntil(cycle);
     }
 
@@ -578,71 +578,71 @@ void
 EventHandler::_executeSecUntil(Cycle cycle) {
     
     // Check all secondary event slots one by one
-    if (isDueSec(DSK_SLOT, cycle)) {
+    if (isDue<DSK_SLOT>(cycle)) {
         paula->diskController.serveDiskEvent();
     }
-    if (isDueSec(IRQ_TBE_SLOT, cycle)) {
+    if (isDue<IRQ_TBE_SLOT>(cycle)) {
         serveIRQEvent(IRQ_TBE_SLOT, 0);
     }
-    if (isDueSec(IRQ_DSKBLK_SLOT, cycle)) {
+    if (isDue<IRQ_DSKBLK_SLOT>(cycle)) {
         serveIRQEvent(IRQ_DSKBLK_SLOT, 1);
     }
-    if (isDueSec(IRQ_SOFT_SLOT, cycle)) {
+    if (isDue<IRQ_SOFT_SLOT>(cycle)) {
         serveIRQEvent(IRQ_SOFT_SLOT, 2);
     }
-    if (isDueSec(IRQ_PORTS_SLOT, cycle)) {
+    if (isDue<IRQ_PORTS_SLOT>(cycle)) {
         serveIRQEvent(IRQ_PORTS_SLOT, 3);
     }
-    if (isDueSec(IRQ_COPR_SLOT, cycle)) {
+    if (isDue<IRQ_COPR_SLOT>(cycle)) {
         serveIRQEvent(IRQ_COPR_SLOT, 4);
     }
-    if (isDueSec(IRQ_VERTB_SLOT, cycle)) {
+    if (isDue<IRQ_VERTB_SLOT>(cycle)) {
         serveIRQEvent(IRQ_VERTB_SLOT, 5);
     }
-    if (isDueSec(IRQ_BLIT_SLOT, cycle)) {
+    if (isDue<IRQ_BLIT_SLOT>(cycle)) {
         serveIRQEvent(IRQ_BLIT_SLOT, 6);
     }
-    if (isDueSec(IRQ_AUD0_SLOT, cycle)) {
+    if (isDue<IRQ_AUD0_SLOT>(cycle)) {
         serveIRQEvent(IRQ_AUD0_SLOT, 7);
     }
-    if (isDueSec(IRQ_AUD1_SLOT, cycle)) {
+    if (isDue<IRQ_AUD1_SLOT>(cycle)) {
         serveIRQEvent(IRQ_AUD1_SLOT, 8);
     }
-    if (isDueSec(IRQ_AUD2_SLOT, cycle)) {
+    if (isDue<IRQ_AUD2_SLOT>(cycle)) {
         serveIRQEvent(IRQ_AUD2_SLOT, 9);
     }
-    if (isDueSec(IRQ_AUD3_SLOT, cycle)) {
+    if (isDue<IRQ_AUD3_SLOT>(cycle)) {
         serveIRQEvent(IRQ_AUD3_SLOT, 10);
     }
-    if (isDueSec(IRQ_RBF_SLOT, cycle)) {
+    if (isDue<IRQ_RBF_SLOT>(cycle)) {
         serveIRQEvent(IRQ_RBF_SLOT, 11);
     }
-    if (isDueSec(IRQ_DSKSYN_SLOT, cycle)) {
+    if (isDue<IRQ_DSKSYN_SLOT>(cycle)) {
         serveIRQEvent(IRQ_DSKSYN_SLOT, 12);
     }
-    if (isDueSec(IRQ_EXTER_SLOT, cycle)) {
+    if (isDue<IRQ_EXTER_SLOT>(cycle)) {
         serveIRQEvent(IRQ_EXTER_SLOT, 13);
     }
-    if (isDueSec(REG_COP_SLOT, cycle)) {
+    if (isDue<REG_COP_SLOT>(cycle)) {
         serveRegEvent(REG_COP_SLOT);
     }
-    if (isDueSec(REG_CPU_SLOT, cycle)) {
+    if (isDue<REG_CPU_SLOT>(cycle)) {
         serveRegEvent(REG_CPU_SLOT);
     }
-    if (isDueSec(TXD_SLOT, cycle)) {
+    if (isDue<TXD_SLOT>(cycle)) {
         paula->uart.serveTxdEvent(slot[TXD_SLOT].id);
     }
-    if (isDueSec(RXD_SLOT, cycle)) {
+    if (isDue<RXD_SLOT>(cycle)) {
         paula->uart.serveRxdEvent(slot[RXD_SLOT].id);
     }
-    if (isDueSec(POT_SLOT, cycle)) {
+    if (isDue<POT_SLOT>(cycle)) {
         paula->servePotEvent(slot[POT_SLOT].id);
     }
-    if (isDueSec(SYNC_SLOT, cycle)) {
+    if (isDue<SYNC_SLOT>(cycle)) {
         assert(slot[SYNC_SLOT].id == SYNC_HSYNC);
         agnus->serviceSYNCEvent(slot[SYNC_SLOT].id);
     }
-    if (isDueSec(INSPECTOR_SLOT, cycle)) {
+    if (isDue<INSPECTOR_SLOT>(cycle)) {
         serveINSEvent();
     }
     
@@ -888,8 +888,6 @@ EventHandler::serveIRQEvent(EventSlot s, int irqBit)
 void
 EventHandler::scheduleRegEvent(EventSlot slot, Cycle cycle, EventID id, int64_t data)
 {
-    assert(slot == REG_COP_SLOT || slot == REG_CPU_SLOT);
-
     /* Here is the thing: A Copper write can occur every fourth cycle and
      * most writes are delayed by four cycles as well. Hence, this function
      * may be called under situations where a pending event is still in the
@@ -903,10 +901,24 @@ EventHandler::scheduleRegEvent(EventSlot slot, Cycle cycle, EventID id, int64_t 
      * add seperate event slots for each OCS register. However, this would blow
      * up the size of the secondary table and might therefore be a bad idea.
      */
-    if (hasEventSec(slot)) {
-        // Hopefully this event is due, so we can serve it and clear the slot
-        assert(isDueSec(slot, amiga->masterClock));
-        serveRegEvent(slot);
+    switch (slot) {
+
+        case REG_COP_SLOT:
+            if (hasEvent<REG_COP_SLOT>()) {
+                assert(isDue<REG_COP_SLOT>(amiga->masterClock));
+                serveRegEvent(slot);
+            }
+            break;
+
+        case REG_CPU_SLOT:
+            if (hasEvent<REG_CPU_SLOT>()) {
+                assert(isDue<REG_CPU_SLOT>(amiga->masterClock));
+                serveRegEvent(slot);
+            }
+            break;
+
+        default:
+            assert(false);
     }
 
     // Schedule event
