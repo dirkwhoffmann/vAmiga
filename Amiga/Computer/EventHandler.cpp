@@ -106,6 +106,7 @@ EventHandler::_inspectPrimSlot(uint32_t nr)
     EventSlotInfo *i = &info.primary[nr];
     Cycle trigger = slot[nr].triggerCycle;
 
+    i->slotName = slotName((EventSlot)nr);
     i->eventId = slot[nr].id;
     i->trigger = trigger;
     i->triggerRel = trigger - agnus->clock;
@@ -126,19 +127,8 @@ EventHandler::_inspectPrimSlot(uint32_t nr)
     switch ((EventSlot)nr) {
 
         case CIAA_SLOT:
-
-            i->slotName = "CIA A";
-            switch (slot[nr].id) {
-                case 0:                i->eventName = "none"; break;
-                case CIA_EXECUTE:      i->eventName = "CIA_EXECUTE"; break;
-                case CIA_WAKEUP:       i->eventName = "CIA_WAKEUP"; break;
-                default:               i->eventName = "*** INVALID ***"; break;
-            }
-            break;
-
         case CIAB_SLOT:
 
-            i->slotName = "CIA B";
             switch (slot[nr].id) {
                 case 0:                i->eventName = "none"; break;
                 case CIA_EXECUTE:      i->eventName = "CIA_EXECUTE"; break;
@@ -149,7 +139,6 @@ EventHandler::_inspectPrimSlot(uint32_t nr)
 
         case DMA_SLOT:
 
-            i->slotName = "DMA";
             switch (slot[nr].id) {
                 case 0:                i->eventName = "none"; break;
                 case DMA_DISK:         i->eventName = "DMA_DISK"; break;
@@ -193,7 +182,6 @@ EventHandler::_inspectPrimSlot(uint32_t nr)
 
         case COP_SLOT:
 
-            i->slotName = "Copper";
             switch (slot[nr].id) {
 
                 case 0:                i->eventName = "none"; break;
@@ -211,7 +199,6 @@ EventHandler::_inspectPrimSlot(uint32_t nr)
 
         case BLT_SLOT:
 
-            i->slotName = "Blitter";
             switch (slot[nr].id) {
 
                 case 0:                i->eventName = "none"; break;
@@ -224,7 +211,6 @@ EventHandler::_inspectPrimSlot(uint32_t nr)
 
         case RAS_SLOT:
 
-            i->slotName = "Raster";
             switch (slot[nr].id) {
 
                 case 0:                i->eventName = "none"; break;
@@ -235,7 +221,6 @@ EventHandler::_inspectPrimSlot(uint32_t nr)
 
         case SEC_SLOT:
 
-            i->slotName = "Secondary";
             switch (slot[nr].id) {
 
                 case 0:                i->eventName = "none"; break;
@@ -257,6 +242,7 @@ EventHandler::_inspectSecSlot(uint32_t nr)
     EventSlotInfo *i = &info.secondary[nr];
     Cycle trigger = slot[nr].triggerCycle;
 
+    i->slotName = slotName((EventSlot)nr);
     i->eventId = slot[nr].id;
     i->trigger = trigger;
     i->triggerRel = trigger - agnus->clock;
@@ -274,33 +260,6 @@ EventHandler::_inspectSecSlot(uint32_t nr)
         i->hpos = 0;
     }
 
-    switch ((EventSlot)nr) {
-
-        case DSK_SLOT:           i->slotName = "Disk Controller"; break;
-        case IRQ_TBE_SLOT:       i->slotName = "Serial Output IRQ"; break;
-        case IRQ_DSKBLK_SLOT:    i->slotName = "Disk DMA IRQ"; break;
-        case IRQ_SOFT_SLOT:      i->slotName = "Software IRQ"; break;
-        case IRQ_PORTS_SLOT:     i->slotName = "CIA A IRQ"; break;
-        case IRQ_COPR_SLOT:      i->slotName = "Copper IRQ"; break;
-        case IRQ_VERTB_SLOT:     i->slotName = "VBlank IRQ"; break;
-        case IRQ_BLIT_SLOT:      i->slotName = "Blitter IRQ"; break;
-        case IRQ_AUD0_SLOT:      i->slotName = "Audio 0 IRQ"; break;
-        case IRQ_AUD1_SLOT:      i->slotName = "Audio 1 IRQ"; break;
-        case IRQ_AUD2_SLOT:      i->slotName = "Audio 2 IRQ"; break;
-        case IRQ_AUD3_SLOT:      i->slotName = "Audio 3 IRQ"; break;
-        case IRQ_RBF_SLOT:       i->slotName = "Serial Input IRQ"; break;
-        case IRQ_DSKSYN_SLOT:    i->slotName = "Disk Sync IRQ"; break;
-        case IRQ_EXTER_SLOT:     i->slotName = "CIA B IRQ"; break;
-        case REG_COP_SLOT:       i->slotName = "Copper Write"; break;
-        case REG_CPU_SLOT:       i->slotName = "CPU Write"; break;
-        case TXD_SLOT:           i->slotName = "Serial out (UART)"; break;
-        case RXD_SLOT:           i->slotName = "Serial in (UART)"; break;
-        case POT_SLOT:           i->slotName = "Potentiometer"; break;
-        case SYNC_SLOT:          i->slotName = "SYNC"; break;
-        case INSPECTOR_SLOT:     i->slotName = "Debugger"; break;
-        default:                 i->slotName = "*** INVALID ***"; break;
-    }
-    
     switch ((EventSlot)nr) {
 
         case DSK_SLOT:

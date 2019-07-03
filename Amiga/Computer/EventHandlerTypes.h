@@ -71,6 +71,46 @@ typedef enum : long
 static inline bool isPrimarySlot(int32_t s) { return s <= LAST_PRIM_SLOT; }
 static inline bool isSecondarySlot(int32_t s) { return s >= FIRST_SEC_SLOT && s <= LAST_SEC_SLOT; }
 
+inline const char *slotName(EventSlot nr)
+{
+    switch (nr) {
+        case CIAA_SLOT:          return "CIA A"; 
+        case CIAB_SLOT:          return "CIA B";
+        case DMA_SLOT:           return "DMA";
+        case COP_SLOT:           return "Copper";
+        case BLT_SLOT:           return "Blitter";
+        case RAS_SLOT:           return "Raster";
+        case SEC_SLOT:           return "Secondary";
+
+        case DSK_SLOT:           return "Disk";
+        case IRQ_TBE_SLOT:       return "Serial Out IRQ";
+        case IRQ_DSKBLK_SLOT:    return "Disk DMA IRQ";
+        case IRQ_SOFT_SLOT:      return "Software IRQ";
+        case IRQ_PORTS_SLOT:     return "CIA A IRQ";
+        case IRQ_COPR_SLOT:      return "Copper IRQ";
+        case IRQ_VERTB_SLOT:     return "VBlank IRQ";
+        case IRQ_BLIT_SLOT:      return "Blitter IRQ";
+        case IRQ_AUD0_SLOT:      return "Audio 0 IRQ";
+        case IRQ_AUD1_SLOT:      return "Audio 1 IRQ";
+        case IRQ_AUD2_SLOT:      return "Audio 2 IRQ";
+        case IRQ_AUD3_SLOT:      return "Audio 3 IRQ";
+        case IRQ_RBF_SLOT:       return "Serial In IRQ";
+        case IRQ_DSKSYN_SLOT:    return "Disk Sync IRQ";
+        case IRQ_EXTER_SLOT:     return "CIA B IRQ";
+        case REG_COP_SLOT:       return "Copper Write";
+        case REG_CPU_SLOT:       return "CPU Write";
+        case TXD_SLOT:           return "UART out";
+        case RXD_SLOT:           return "UART in";
+        case POT_SLOT:           return "Potentiometer";
+        case SYNC_SLOT:          return "Sync";
+        case INSPECTOR_SLOT:     return "Debugger";
+
+        default:
+            assert(false);
+            return "*** INVALID ***";
+    }
+}
+
 typedef enum : long
 {
     EVENT_NONE = 0,
