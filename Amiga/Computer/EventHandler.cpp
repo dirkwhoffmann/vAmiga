@@ -371,6 +371,20 @@ EventHandler::getInfo()
 }
 
 EventSlotInfo
+EventHandler::getSlotInfo(int nr)
+{
+    assert(isEventSlot(nr));
+
+    EventSlotInfo result;
+
+    pthread_mutex_lock(&lock);
+    result = info.slotInfo[nr];
+    pthread_mutex_unlock(&lock);
+
+    return result;
+}
+
+EventSlotInfo
 EventHandler::getPrimarySlotInfo(int slot)
 {
     assert(isPrimarySlot(slot));
