@@ -10,8 +10,7 @@
 class EventTableView: NSTableView {
     
     var amiga = amigaProxy
-    var primary = false
-    
+
     override func awakeFromNib() {
         
         delegate = self
@@ -33,20 +32,20 @@ class EventTableView: NSTableView {
 extension EventTableView: NSTableViewDataSource {
     
     func numberOfRows(in tableView: NSTableView) -> Int {
-        
+
+        return SLOT_COUNT.rawValue
+        /*
         if let dma = amiga?.agnus {
             return primary ? dma.primSlotCount() : dma.secSlotCount()
         } else {
             return 0
         }
+        */
     }
     
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
         
-        let info = primary ?
-            amiga!.agnus.getPrimarySlotInfo(row) :
-            amiga!.agnus.getSecondarySlotInfo(row)
-        
+        guard let info = amiga?.agnus.getSlotInfo(row) else { return nil }
         let willTrigger = (info.trigger != INT64_MAX)
         
         switch tableColumn?.identifier.rawValue {
@@ -97,14 +96,8 @@ extension EventTableView: NSTableViewDelegate {
     func tableView(_ tableView: NSTableView, willDisplayCell cell: Any, for tableColumn: NSTableColumn?, row: Int) {
         
         if let cell = cell as? NSTextFieldCell {
-            
             if tableColumn?.identifier.rawValue != "slot" {
-                
-                let info = primary ?
-                    amiga!.agnus.getPrimarySlotInfo(row) :
-                    amiga!.agnus.getSecondarySlotInfo(row)
-                
-                if info.trigger == INT64_MAX {
+                if amiga?.agnus.getSlotInfo(row).trigger == INT64_MAX {
                     cell.textColor = .secondaryLabelColor
                     return
                 }

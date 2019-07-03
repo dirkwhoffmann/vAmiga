@@ -306,7 +306,7 @@ EventHandler::_inspectSlot(EventSlot nr)
             switch (slot[nr].id) {
 
                 case 0:             i->eventName = "none"; break;
-                case SYNC_HSYNC:    i->eventName = "SYNC_HSYNC"; break;
+                case SYNC_H:        i->eventName = "SYNC_H"; break;
                 default:            i->eventName = "*** INVALID ***"; break;
             }
             break;
@@ -558,7 +558,7 @@ EventHandler::_executeSecUntil(Cycle cycle) {
         paula->servePotEvent(slot[POT_SLOT].id);
     }
     if (isDue<SYNC_SLOT>(cycle)) {
-        assert(slot[SYNC_SLOT].id == SYNC_HSYNC);
+        assert(slot[SYNC_SLOT].id == SYNC_H);
         agnus->serviceSYNCEvent(slot[SYNC_SLOT].id);
     }
     if (isDue<INSPECTOR_SLOT>(cycle)) {

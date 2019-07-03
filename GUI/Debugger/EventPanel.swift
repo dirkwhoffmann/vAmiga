@@ -10,10 +10,7 @@
 extension Inspector {
     
     func refreshEvents(everything: Bool) {
-        
-        // guard let dma = amigaProxy?.dma else { return }
-        // let info = dma.getInfo()
-        
+
         if everything {
             
         }
@@ -44,8 +41,7 @@ extension Inspector {
             evHPos.integerValue = info.hpos
         }
         
-        evPrimTableView.reloadData()
-        evSecTableView.reloadData()
+        evTableView.reloadData()
     }
         
 }

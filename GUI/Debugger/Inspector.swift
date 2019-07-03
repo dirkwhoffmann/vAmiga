@@ -424,8 +424,7 @@ class Inspector: NSWindowController {
     @IBOutlet weak var evVPos: NSTextField!
     @IBOutlet weak var evHPos: NSTextField!
 
-    @IBOutlet weak var evPrimTableView: EventTableView!
-    @IBOutlet weak var evSecTableView: EventTableView!
+    @IBOutlet weak var evTableView: EventTableView!
 
     var selectedSprite: Int { return sprSelector.indexOfSelectedItem }
     
@@ -452,20 +451,6 @@ class Inspector: NSWindowController {
         ciaSDRbinary.formatter = bF
         ciaICRbinary.formatter = bF
         ciaIMRbinary.formatter = bF
-        
-        // Configure the event tables
-        evPrimTableView.primary = true
-
-        /*
-        let font = NSFont.monospacedDigitSystemFont(ofSize: 15, weight: .black)
-        let attr = [NSAttributedString.Key.font: font]
-        poSerialIn.typingAttributes = attr
-        poSerialOut.typingAttributes = attr
-        poSerialIn.font = font
-        poSerialOut.font = font
-        poSerialIn.textStorage!.font = font
-        poSerialOut.textStorage!.font = font
-        */
     }
     
     override func showWindow(_ sender: Any?) {

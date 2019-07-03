@@ -147,7 +147,7 @@ Agnus::_powerOn()
     // events.scheduleAbs(RAS_SLOT, DMA_CYCLES(HPOS_MAX), RAS_HSYNC);
 
     // Schedule the first SYNC event
-    events.scheduleSecAbs(SYNC_SLOT, DMA_CYCLES(HPOS_MAX), SYNC_HSYNC);
+    events.scheduleSecAbs(SYNC_SLOT, DMA_CYCLES(HPOS_MAX), SYNC_H);
 
     // Schedule the first CIA A and CIA B events
     events.scheduleAbs(CIAA_SLOT, CIA_CYCLES(1), CIA_EXECUTE);
@@ -1605,7 +1605,7 @@ Agnus::serviceSYNCEvent(EventID id)
 {
     switch (id) {
 
-        case SYNC_HSYNC:
+        case SYNC_H:
 
             hsyncHandler();
             break;
@@ -1619,7 +1619,7 @@ Agnus::serviceSYNCEvent(EventID id)
 void
 Agnus::scheduleFirstSYNCEvent(int16_t vpos)
 {
-    events.scheduleSecPos(SYNC_SLOT, vpos, HPOS_MAX, SYNC_HSYNC);
+    events.scheduleSecPos(SYNC_SLOT, vpos, HPOS_MAX, SYNC_H);
 }
 
 void

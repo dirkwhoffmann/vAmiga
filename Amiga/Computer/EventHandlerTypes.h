@@ -29,7 +29,7 @@ typedef enum : long
     BLT_SLOT,         // Blitter DMA
     RAS_SLOT,         // TODO: This slot is currently unused. It's only event
                       // was RAS_HSYNC which has been replaced by the secondary
-                      // event SYNC_HSYNC. I didn't delete the slot, because
+                      // event SYNC_H. I didn't delete the slot, because
                       // I'm still unsure if we really don't need it.
     SEC_SLOT,         // Secondary events
 
@@ -220,7 +220,7 @@ typedef enum : long
     POT_EVENT_COUNT,
 
     // SYNC slot
-    SYNC_HSYNC = 1,
+    SYNC_H = 1,
     SYNC_EVENT_COUNT,
     
     // Inspector slot

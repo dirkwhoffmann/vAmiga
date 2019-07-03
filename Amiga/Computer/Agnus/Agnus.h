@@ -626,8 +626,8 @@ public:
     // Schedules the next RAS slot event
     // void scheduleNextRASEvent(int16_t vpos, int16_t hpos);
     
-    /* This functions serves the SYNC_HSYNC event in the SYNC slot.
-     * The SYNC_HSYNC event is triggered at the end of each rasterline.
+    /* This functions serves the SYNC_H event in the SYNC slot.
+     * The SYNC_H event is triggered at the end of each rasterline.
      */
     void hsyncHandler();
     
