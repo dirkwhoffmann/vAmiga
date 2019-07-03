@@ -121,8 +121,7 @@ class EventHandler : public HardwareComponent
     void _dump() override;
     
     // Helper functions
-    void _inspectPrimSlot(EventSlot slot);
-    void _inspectSecSlot(EventSlot slot);
+    void _inspectSlot(EventSlot slot);
     void _dumpPrimaryTable();
     void _dumpSecondaryTable();
     void _dumpSlot(const char *slotName, const char *eventName, const Event event);

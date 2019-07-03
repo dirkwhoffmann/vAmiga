@@ -160,7 +160,7 @@ Copper::pokeCOPINS(uint16_t value)
      */
 
     // TODO: The following is almost certainly wrong...
-    /* if (state == COP_MOVE || state == COP_WAIT_OR_SKIP) {
+    /* if (state == COP_MOVE || state == COP_WAIT_SKIP) {
         cop2ins = value;
     } else {
         cop1ins = value;
@@ -542,9 +542,9 @@ Copper::serviceEvent(EventID id)
 
     switch (id) {
             
-        case COP_REQUEST_DMA:
+        case COP_REQ_DMA:
 
-            if (verbose) debug("COP_REQUEST_DMA\n");
+            if (verbose) debug("COP_REQ_DMA\n");
 
             // Wait for the next free DMA cycle
             if (!agnus->copperCanHaveBus()) { reschedule(); break; }
@@ -573,7 +573,7 @@ Copper::serviceEvent(EventID id)
             }
 
             // Fork execution depending on the instruction type
-            schedule(isMoveCmd() ? COP_MOVE : COP_WAIT_OR_SKIP);
+            schedule(isMoveCmd() ? COP_MOVE : COP_WAIT_SKIP);
             break;
             
         case COP_MOVE:
@@ -601,9 +601,9 @@ Copper::serviceEvent(EventID id)
             schedule(COP_FETCH);
             break;
             
-        case COP_WAIT_OR_SKIP:
+        case COP_WAIT_SKIP:
 
-            if (verbose) debug("COP_WAIT_OR_SKIP\n");
+            if (verbose) debug("COP_WAIT_SKIP\n");
 
             // Wait for the next free DMA cycle
             if (!agnus->copperCanHaveBus()) { reschedule(); break; }
@@ -631,8 +631,8 @@ Copper::serviceEvent(EventID id)
                     // Copper wakes up 2 cycles earlier...
                     delay -= DMA_CYCLES(2);
 
-                    // ... with a COP_REQUEST_DMA event.
-                    events->scheduleRel(COP_SLOT, delay, COP_REQUEST_DMA);
+                    // ... with a COP_REQ_DMA event.
+                    events->scheduleRel(COP_SLOT, delay, COP_REQ_DMA);
 
                 } else {
 
@@ -663,7 +663,7 @@ Copper::serviceEvent(EventID id)
             switchToCopperList(1);
 
             // Request a free bus slot
-            schedule(COP_REQUEST_DMA);
+            schedule(COP_REQ_DMA);
             break;
 
         case COP_JMP2:
@@ -674,7 +674,7 @@ Copper::serviceEvent(EventID id)
             switchToCopperList(2);
 
             // Request a free bus slot
-            schedule(COP_REQUEST_DMA);
+            schedule(COP_REQ_DMA);
             break;
 
         default:

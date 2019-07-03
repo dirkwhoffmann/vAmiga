@@ -86,20 +86,15 @@ EventHandler::_inspect()
     info.frame = agnus->frame;
     info.vpos = agnus->vpos;
     info.hpos = agnus->hpos;
-    
-    // Primary events
-    for (int i = 0; i <= LAST_PRIM_SLOT; i++)
-        _inspectPrimSlot((EventSlot)i);
-    
-    // Secondary events
-    for (unsigned i = FIRST_SEC_SLOT; i <= LAST_SEC_SLOT; i++)
-        _inspectSecSlot((EventSlot)i);
+
+    // Inspect all slots
+    for (int i = 0; i < SLOT_COUNT; i++) _inspectSlot((EventSlot)i);
     
     pthread_mutex_unlock(&lock);
 }
 
 void
-EventHandler::_inspectPrimSlot(EventSlot nr)
+EventHandler::_inspectSlot(EventSlot nr)
 {
     assert(isEventSlot(nr));
     
@@ -130,53 +125,53 @@ EventHandler::_inspectPrimSlot(EventSlot nr)
         case CIAB_SLOT:
 
             switch (slot[nr].id) {
-                case 0:                i->eventName = "none"; break;
-                case CIA_EXECUTE:      i->eventName = "CIA_EXECUTE"; break;
-                case CIA_WAKEUP:       i->eventName = "CIA_WAKEUP"; break;
-                default:               i->eventName = "*** INVALID ***"; break;
+                case 0:             i->eventName = "none"; break;
+                case CIA_EXECUTE:   i->eventName = "CIA_EXECUTE"; break;
+                case CIA_WAKEUP:    i->eventName = "CIA_WAKEUP"; break;
+                default:            i->eventName = "*** INVALID ***"; break;
             }
             break;
 
         case DMA_SLOT:
 
             switch (slot[nr].id) {
-                case 0:                i->eventName = "none"; break;
-                case DMA_DISK:         i->eventName = "DMA_DISK"; break;
-                case DMA_A0:           i->eventName = "DMA_A0"; break;
-                case DMA_A1:           i->eventName = "DMA_A1"; break;
-                case DMA_A2:           i->eventName = "DMA_A2"; break;
-                case DMA_A3:           i->eventName = "DMA_A3"; break;
-                case DMA_S0_1:         i->eventName = "DMA_S0_1"; break;
-                case DMA_S1_1:         i->eventName = "DMA_S1_1"; break;
-                case DMA_S2_1:         i->eventName = "DMA_S2_1"; break;
-                case DMA_S3_1:         i->eventName = "DMA_S3_1"; break;
-                case DMA_S4_1:         i->eventName = "DMA_S4_1"; break;
-                case DMA_S5_1:         i->eventName = "DMA_S5_1"; break;
-                case DMA_S6_1:         i->eventName = "DMA_S6_1"; break;
-                case DMA_S7_1:         i->eventName = "DMA_S7_1"; break;
-                case DMA_S0_2:         i->eventName = "DMA_S0_2"; break;
-                case DMA_S1_2:         i->eventName = "DMA_S1_2"; break;
-                case DMA_S2_2:         i->eventName = "DMA_S2_2"; break;
-                case DMA_S3_2:         i->eventName = "DMA_S3_2"; break;
-                case DMA_S4_2:         i->eventName = "DMA_S4_2"; break;
-                case DMA_S5_2:         i->eventName = "DMA_S5_2"; break;
-                case DMA_S6_2:         i->eventName = "DMA_S6_2"; break;
-                case DMA_S7_2:         i->eventName = "DMA_S7_2"; break;
-                case DMA_L1:           i->eventName = "DMA_L1"; break;
-                case DMA_L1_FIRST:     i->eventName = "DMA_L1_FIRST"; break;
-                case DMA_L1_LAST:      i->eventName = "DMA_L1_LAST"; break;
-                case DMA_L2:           i->eventName = "DMA_L2"; break;
-                case DMA_L3:           i->eventName = "DMA_L3"; break;
-                case DMA_L4:           i->eventName = "DMA_L4"; break;
-                case DMA_L5:           i->eventName = "DMA_L5"; break;
-                case DMA_L6:           i->eventName = "DMA_L6"; break;
-                case DMA_H1:           i->eventName = "DMA_H1"; break;
-                case DMA_H1_FIRST:     i->eventName = "DMA_H1_FIRST"; break;
-                case DMA_H1_LAST:      i->eventName = "DMA_H1_LAST"; break;
-                case DMA_H2:           i->eventName = "DMA_H2"; break;
-                case DMA_H3:           i->eventName = "DMA_H3"; break;
-                case DMA_H4:           i->eventName = "DMA_H4"; break;
-                default:               i->eventName = "*** INVALID ***"; break;
+                case 0:             i->eventName = "none"; break;
+                case DMA_DISK:      i->eventName = "DMA_DISK"; break;
+                case DMA_A0:        i->eventName = "DMA_A0"; break;
+                case DMA_A1:        i->eventName = "DMA_A1"; break;
+                case DMA_A2:        i->eventName = "DMA_A2"; break;
+                case DMA_A3:        i->eventName = "DMA_A3"; break;
+                case DMA_S0_1:      i->eventName = "DMA_S0_1"; break;
+                case DMA_S1_1:      i->eventName = "DMA_S1_1"; break;
+                case DMA_S2_1:      i->eventName = "DMA_S2_1"; break;
+                case DMA_S3_1:      i->eventName = "DMA_S3_1"; break;
+                case DMA_S4_1:      i->eventName = "DMA_S4_1"; break;
+                case DMA_S5_1:      i->eventName = "DMA_S5_1"; break;
+                case DMA_S6_1:      i->eventName = "DMA_S6_1"; break;
+                case DMA_S7_1:      i->eventName = "DMA_S7_1"; break;
+                case DMA_S0_2:      i->eventName = "DMA_S0_2"; break;
+                case DMA_S1_2:      i->eventName = "DMA_S1_2"; break;
+                case DMA_S2_2:      i->eventName = "DMA_S2_2"; break;
+                case DMA_S3_2:      i->eventName = "DMA_S3_2"; break;
+                case DMA_S4_2:      i->eventName = "DMA_S4_2"; break;
+                case DMA_S5_2:      i->eventName = "DMA_S5_2"; break;
+                case DMA_S6_2:      i->eventName = "DMA_S6_2"; break;
+                case DMA_S7_2:      i->eventName = "DMA_S7_2"; break;
+                case DMA_L1:        i->eventName = "DMA_L1"; break;
+                case DMA_L1_FIRST:  i->eventName = "DMA_L1_FIRST"; break;
+                case DMA_L1_LAST:   i->eventName = "DMA_L1_LAST"; break;
+                case DMA_L2:        i->eventName = "DMA_L2"; break;
+                case DMA_L3:        i->eventName = "DMA_L3"; break;
+                case DMA_L4:        i->eventName = "DMA_L4"; break;
+                case DMA_L5:        i->eventName = "DMA_L5"; break;
+                case DMA_L6:        i->eventName = "DMA_L6"; break;
+                case DMA_H1:        i->eventName = "DMA_H1"; break;
+                case DMA_H1_FIRST:  i->eventName = "DMA_H1_FIRST"; break;
+                case DMA_H1_LAST:   i->eventName = "DMA_H1_LAST"; break;
+                case DMA_H2:        i->eventName = "DMA_H2"; break;
+                case DMA_H3:        i->eventName = "DMA_H3"; break;
+                case DMA_H4:        i->eventName = "DMA_H4"; break;
+                default:            i->eventName = "*** INVALID ***"; break;
             }
             break;
 
@@ -184,16 +179,16 @@ EventHandler::_inspectPrimSlot(EventSlot nr)
 
             switch (slot[nr].id) {
 
-                case 0:                i->eventName = "none"; break;
-                case COP_REQUEST_DMA:  i->eventName = "COP_REQUEST_DMA"; break;
-                case COP_FETCH:        i->eventName = "COP_FETCH"; break;
-                case COP_MOVE:         i->eventName = "COP_MOVE"; break;
-                case COP_WAIT_OR_SKIP: i->eventName = "WAIT_OR_SKIP"; break;
-                case COP_WAIT:         i->eventName = "COP_WAIT"; break;
-                case COP_SKIP:         i->eventName = "COP_SKIP"; break;
-                case COP_JMP1:         i->eventName = "COP_JMP1"; break;
-                case COP_JMP2:         i->eventName = "COP_JMP2"; break;
-                default:               i->eventName = "*** INVALID ***"; break;
+                case 0:             i->eventName = "none"; break;
+                case COP_REQ_DMA:   i->eventName = "COP_REQ_DMA"; break;
+                case COP_FETCH:     i->eventName = "COP_FETCH"; break;
+                case COP_MOVE:      i->eventName = "COP_MOVE"; break;
+                case COP_WAIT_SKIP: i->eventName = "WAIT_OR_SKIP"; break;
+                case COP_WAIT:      i->eventName = "COP_WAIT"; break;
+                case COP_SKIP:      i->eventName = "COP_SKIP"; break;
+                case COP_JMP1:      i->eventName = "COP_JMP1"; break;
+                case COP_JMP2:      i->eventName = "COP_JMP2"; break;
+                default:            i->eventName = "*** INVALID ***"; break;
             }
             break;
 
@@ -201,11 +196,11 @@ EventHandler::_inspectPrimSlot(EventSlot nr)
 
             switch (slot[nr].id) {
 
-                case 0:                i->eventName = "none"; break;
-                case BLT_INIT:         i->eventName = "BLT_INIT"; break;
-                case BLT_EXECUTE:      i->eventName = "BLT_EXECUTE"; break;
-                case BLT_FAST_BLIT:    i->eventName = "BLT_FAST_BLIT"; break;
-                default:               i->eventName = "*** INVALID ***"; break;
+                case 0:             i->eventName = "none"; break;
+                case BLT_INIT:      i->eventName = "BLT_INIT"; break;
+                case BLT_EXECUTE:   i->eventName = "BLT_EXECUTE"; break;
+                case BLT_FAST_BLIT: i->eventName = "BLT_FAST_BLIT"; break;
+                default:            i->eventName = "*** INVALID ***"; break;
             }
             break;
 
@@ -213,9 +208,9 @@ EventHandler::_inspectPrimSlot(EventSlot nr)
 
             switch (slot[nr].id) {
 
-                case 0:                i->eventName = "none"; break;
-                case RAS_HSYNC:        i->eventName = "RAS_HSYNC"; break;
-                default:               i->eventName = "*** INVALID ***"; break;
+                case 0:             i->eventName = "none"; break;
+                case RAS_HSYNC:     i->eventName = "RAS_HSYNC"; break;
+                default:            i->eventName = "*** INVALID ***"; break;
             }
             break;
 
@@ -223,52 +218,19 @@ EventHandler::_inspectPrimSlot(EventSlot nr)
 
             switch (slot[nr].id) {
 
-                case 0:                i->eventName = "none"; break;
-                case SEC_TRIGGER:      i->eventName = "SEC_TRIGGER"; break;
-                default:               i->eventName = "*** INVALID ***"; break;
+                case 0:             i->eventName = "none"; break;
+                case SEC_TRIGGER:   i->eventName = "SEC_TRIGGER"; break;
+                default:            i->eventName = "*** INVALID ***"; break;
             }
             break;
-
-        default: assert(false);
-    }
-    
-}
-
-void
-EventHandler::_inspectSecSlot(EventSlot nr)
-{
-    assert(isSecondarySlot(nr));
-    
-    EventSlotInfo *i = &info.slotInfo[nr];
-    Cycle trigger = slot[nr].triggerCycle;
-
-    i->slotName = slotName((EventSlot)nr);
-    i->eventId = slot[nr].id;
-    i->trigger = trigger;
-    i->triggerRel = trigger - agnus->clock;
-    i->currentFrame = agnus->belongsToCurrentFrame(trigger);
-
-    if (trigger != NEVER) {
-
-        Beam beam = agnus->cycleToBeam(trigger);
-        i->vpos = beam.y;
-        i->hpos = beam.x;
-
-    } else {
-
-        i->vpos = 0;
-        i->hpos = 0;
-    }
-
-    switch ((EventSlot)nr) {
 
         case DSK_SLOT:
 
             switch (slot[nr].id) {
 
-                case 0:          i->eventName = "none"; break;
-                case DSK_ROTATE: i->eventName = "DSK_ROTATE"; break;
-                default:         i->eventName = "*** INVALID ***"; break;
+                case 0:             i->eventName = "none"; break;
+                case DSK_ROTATE:    i->eventName = "DSK_ROTATE"; break;
+                default:            i->eventName = "*** INVALID ***"; break;
             }
             break;
 
@@ -289,10 +251,10 @@ EventHandler::_inspectSecSlot(EventSlot nr)
 
             switch (slot[nr].id) {
 
-                case 0:          i->eventName = "none"; break;
-                case IRQ_SET:    i->eventName = "IRQ_SET"; break;
-                case IRQ_CLEAR:  i->eventName = "IRQ_CLEAR"; break;
-                default:         i->eventName = "*** INVALID ***"; break;
+                case 0:             i->eventName = "none"; break;
+                case IRQ_SET:       i->eventName = "IRQ_SET"; break;
+                case IRQ_CLEAR:     i->eventName = "IRQ_CLEAR"; break;
+                default:            i->eventName = "*** INVALID ***"; break;
             }
             break;
 
@@ -301,10 +263,10 @@ EventHandler::_inspectSecSlot(EventSlot nr)
 
             switch (slot[nr].id) {
 
-                case 0:           i->eventName = "none"; break;
-                case REG_DIWSTRT: i->eventName = "REG_DIWSTRT"; break;
-                case REG_DIWSTOP: i->eventName = "REG_DIWSTOP"; break;
-                default:          i->eventName = "*** INVALID ***"; break;
+                case 0:             i->eventName = "none"; break;
+                case REG_DIWSTRT:   i->eventName = "REG_DIWSTRT"; break;
+                case REG_DIWSTOP:   i->eventName = "REG_DIWSTOP"; break;
+                default:            i->eventName = "*** INVALID ***"; break;
             }
             break;
 
@@ -312,9 +274,9 @@ EventHandler::_inspectSecSlot(EventSlot nr)
 
             switch (slot[nr].id) {
 
-                case 0:          i->eventName = "none"; break;
-                case TXD_BIT:    i->eventName = "TXD_BIT"; break;
-                default:         i->eventName = "*** INVALID ***"; break;
+                case 0:             i->eventName = "none"; break;
+                case TXD_BIT:       i->eventName = "TXD_BIT"; break;
+                default:            i->eventName = "*** INVALID ***"; break;
             }
             break;
 
@@ -322,9 +284,9 @@ EventHandler::_inspectSecSlot(EventSlot nr)
 
             switch (slot[nr].id) {
 
-                case 0:          i->eventName = "none"; break;
-                case RXD_BIT:    i->eventName = "RXD_BIT"; break;
-                default:         i->eventName = "*** INVALID ***"; break;
+                case 0:             i->eventName = "none"; break;
+                case RXD_BIT:       i->eventName = "RXD_BIT"; break;
+                default:            i->eventName = "*** INVALID ***"; break;
             }
             break;
 
@@ -343,9 +305,9 @@ EventHandler::_inspectSecSlot(EventSlot nr)
 
             switch (slot[nr].id) {
 
-                case 0:          i->eventName = "none"; break;
-                case SYNC_HSYNC: i->eventName = "SYNC_HSYNC"; break;
-                default:         i->eventName = "*** INVALID ***"; break;
+                case 0:             i->eventName = "none"; break;
+                case SYNC_HSYNC:    i->eventName = "SYNC_HSYNC"; break;
+                default:            i->eventName = "*** INVALID ***"; break;
             }
             break;
 
@@ -353,18 +315,18 @@ EventHandler::_inspectSecSlot(EventSlot nr)
 
             switch (slot[nr].id) {
 
-                case 0:          i->eventName = "none"; break;
-                case INS_NONE:   i->eventName = "INS_NONE"; break;
-                case INS_AMIGA:  i->eventName = "INS_AMIGA"; break;
-                case INS_CPU:    i->eventName = "INS_CPU"; break;
-                case INS_MEM:    i->eventName = "INS_MEM"; break;
-                case INS_CIA:    i->eventName = "INS_CIA"; break;
-                case INS_AGNUS:  i->eventName = "INS_AGNUS"; break;
-                case INS_PAULA:  i->eventName = "INS_PAULA"; break;
-                case INS_DENISE: i->eventName = "INS_DENISE"; break;
-                case INS_PORTS:  i->eventName = "INS_PORTS"; break;
-                case INS_EVENTS: i->eventName = "INS_EVENTS"; break;
-                default:         i->eventName = "*** INVALID ***"; break;
+                case 0:             i->eventName = "none"; break;
+                case INS_NONE:      i->eventName = "INS_NONE"; break;
+                case INS_AMIGA:     i->eventName = "INS_AMIGA"; break;
+                case INS_CPU:       i->eventName = "INS_CPU"; break;
+                case INS_MEM:       i->eventName = "INS_MEM"; break;
+                case INS_CIA:       i->eventName = "INS_CIA"; break;
+                case INS_AGNUS:     i->eventName = "INS_AGNUS"; break;
+                case INS_PAULA:     i->eventName = "INS_PAULA"; break;
+                case INS_DENISE:    i->eventName = "INS_DENISE"; break;
+                case INS_PORTS:     i->eventName = "INS_PORTS"; break;
+                case INS_EVENTS:    i->eventName = "INS_EVENTS"; break;
+                default:            i->eventName = "*** INVALID ***"; break;
             }
             break;
 

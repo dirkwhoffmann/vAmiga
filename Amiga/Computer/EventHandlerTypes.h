@@ -164,10 +164,10 @@ typedef enum : long
     DMA_EVENT_COUNT,
     
     // Copper slot
-    COP_REQUEST_DMA = 1,
+    COP_REQ_DMA = 1,
     COP_FETCH,
     COP_MOVE,
-    COP_WAIT_OR_SKIP,
+    COP_WAIT_SKIP,
     COP_WAIT,
     COP_SKIP,
     COP_JMP1,
