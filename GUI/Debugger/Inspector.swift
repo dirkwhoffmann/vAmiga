@@ -416,13 +416,16 @@ class Inspector: NSWindowController {
     @IBOutlet weak var evInCiaCycles: NSTextField!
 
     @IBOutlet weak var evCpuProgress: NSTextField!
+    @IBOutlet weak var evCpuProgress2: NSTextField!
     @IBOutlet weak var evDmaProgress: NSTextField!
+    @IBOutlet weak var evDmaProgress2: NSTextField!
     @IBOutlet weak var evCiaAProgress: NSTextField!
+    @IBOutlet weak var evCiaAProgress2: NSTextField!
     @IBOutlet weak var evCiaBProgress: NSTextField!
+    @IBOutlet weak var evCiaBProgress2: NSTextField!
 
     @IBOutlet weak var evFrame: NSTextField!
-    @IBOutlet weak var evVPos: NSTextField!
-    @IBOutlet weak var evHPos: NSTextField!
+    @IBOutlet weak var evPos: NSTextField!
 
     @IBOutlet weak var evTableView: EventTableView!
 
