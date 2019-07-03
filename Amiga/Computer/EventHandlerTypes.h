@@ -68,6 +68,7 @@ typedef enum : long
 
 } EventSlot;
 
+static inline bool isEventSlot(int32_t s) { return s < SLOT_COUNT; }
 static inline bool isPrimarySlot(int32_t s) { return s <= LAST_PRIM_SLOT; }
 static inline bool isSecondarySlot(int32_t s) { return s >= FIRST_SEC_SLOT && s <= LAST_SEC_SLOT; }
 
@@ -280,8 +281,7 @@ typedef struct
     long vpos;
     long hpos;
 
-    EventSlotInfo primary[LAST_PRIM_SLOT + 1];
-    EventSlotInfo secondary[LAST_SEC_SLOT + 1];
+    EventSlotInfo slotInfo[SLOT_COUNT];
 }
 EventHandlerInfo;
 

@@ -88,22 +88,22 @@ EventHandler::_inspect()
     info.hpos = agnus->hpos;
     
     // Primary events
-    for (unsigned i = 0; i <= LAST_PRIM_SLOT; i++)
-        _inspectPrimSlot(i);
+    for (int i = 0; i <= LAST_PRIM_SLOT; i++)
+        _inspectPrimSlot((EventSlot)i);
     
     // Secondary events
     for (unsigned i = FIRST_SEC_SLOT; i <= LAST_SEC_SLOT; i++)
-        _inspectSecSlot(i);
+        _inspectSecSlot((EventSlot)i);
     
     pthread_mutex_unlock(&lock);
 }
 
 void
-EventHandler::_inspectPrimSlot(uint32_t nr)
+EventHandler::_inspectPrimSlot(EventSlot nr)
 {
-    assert(isPrimarySlot(nr));
+    assert(isEventSlot(nr));
     
-    EventSlotInfo *i = &info.primary[nr];
+    EventSlotInfo *i = &info.slotInfo[nr];
     Cycle trigger = slot[nr].triggerCycle;
 
     i->slotName = slotName((EventSlot)nr);
@@ -235,11 +235,11 @@ EventHandler::_inspectPrimSlot(uint32_t nr)
 }
 
 void
-EventHandler::_inspectSecSlot(uint32_t nr)
+EventHandler::_inspectSecSlot(EventSlot nr)
 {
     assert(isSecondarySlot(nr));
     
-    EventSlotInfo *i = &info.secondary[nr];
+    EventSlotInfo *i = &info.slotInfo[nr];
     Cycle trigger = slot[nr].triggerCycle;
 
     i->slotName = slotName((EventSlot)nr);
@@ -379,30 +379,14 @@ EventHandler::_dump()
     
     amiga->dumpClock();
     
-    plainmsg("Primary events:\n");
-    for (unsigned i = 0; i <= LAST_PRIM_SLOT; i++) {
+    plainmsg("Events:\n");
+    for (unsigned i = 0; i < SLOT_COUNT; i++) {
         
-        plainmsg("Slot: %-17s ", info.primary[i].slotName);
-        plainmsg("Event: %-15s ", info.primary[i].eventName);
+        plainmsg("Slot: %-17s ", info.slotInfo[i].slotName);
+        plainmsg("Event: %-15s ", info.slotInfo[i].eventName);
         plainmsg("Trigger: ");
         
-        Cycle trigger = info.primary[i].trigger;
-        if (trigger == NEVER) {
-            plainmsg("never\n");
-        } else {
-            plainmsg("%lld ", trigger);
-            plainmsg("(%lld DMA cycles away)\n", AS_DMA_CYCLES(trigger - info.dmaClock));
-        }
-    }
-    
-    plainmsg("Secondary events:\n");
-    for (unsigned i = FIRST_SEC_SLOT; i <= LAST_SEC_SLOT; i++) {
-        
-        plainmsg("Slot: %-17s ", info.secondary[i].slotName);
-        plainmsg("Event: %-15s ", info.secondary[i].eventName);
-        plainmsg("Trigger: ");
-        
-        Cycle trigger = info.secondary[i].trigger;
+        Cycle trigger = info.slotInfo[i].trigger;
         if (trigger == NEVER) {
             plainmsg("never\n");
         } else {
@@ -432,7 +416,7 @@ EventHandler::getPrimarySlotInfo(int slot)
     EventSlotInfo result;
     
     pthread_mutex_lock(&lock);
-    result = info.primary[slot];
+    result = info.slotInfo[slot];
     pthread_mutex_unlock(&lock);
     
     return result;
@@ -448,7 +432,7 @@ EventHandler::getSecondarySlotInfo(int slot)
     EventSlotInfo result;
     
     pthread_mutex_lock(&lock);
-    result = info.secondary[slot];
+    result = info.slotInfo[slot];
     pthread_mutex_unlock(&lock);
     
     return result;
