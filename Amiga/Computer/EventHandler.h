@@ -80,15 +80,18 @@ class EventHandler : public HardwareComponent
     //
     
     public:
-    
-    // The primary event table
-    Event primSlot[LAST_PRIM_SLOT + 1];
+
+    // The event table
+    Event slot[SLOT_COUNT];
+
+    // The primary event table (DEPRECATED)
+    // Event primSlot[LAST_PRIM_SLOT + 1];
     
     // Next trigger cycle for an event in the primary event table
     Cycle nextPrimTrigger = NEVER;
     
-    // The secondary event table
-    Event secSlot[LAST_SEC_SLOT + 1];
+    // The secondary event table (DEPRECATED)
+    // Event secSlot[LAST_SEC_SLOT + 1];
     
     // Next trigger cycle for an event in the secondary event table
     Cycle nextSecTrigger = NEVER;
@@ -142,27 +145,27 @@ class EventHandler : public HardwareComponent
     
     // Checks whether a particular slot in the primary table contains an event.
     inline bool hasEvent(EventSlot s) {
-        assert(isPrimarySlot(s)); return primSlot[s].id != 0; }
+        assert(isPrimarySlot(s)); return slot[s].id != 0; }
     
     // Checks whether a particular slot in the secondary table contains an event.
     inline bool hasEventSec(EventSlot s) {
-        assert(isSecondarySlot(s)); return secSlot[s].id != 0; }
+        assert(isSecondarySlot(s)); return slot[s].id != 0; }
     
     // Checks whether a particular slot in the primary table contains a pending event.
     inline bool isPending(EventSlot s) {
-        assert(isPrimarySlot(s)); return primSlot[s].triggerCycle != NEVER; }
+        assert(isPrimarySlot(s)); return slot[s].triggerCycle != NEVER; }
     
     // Checks whether a particular slot in the secondary table contains a pending event.
     inline bool isPendingSec(EventSlot s) {
-        assert(isSecondarySlot(s)); return secSlot[s].triggerCycle != NEVER; }
+        assert(isSecondarySlot(s)); return slot[s].triggerCycle != NEVER; }
     
     // Checks whether a particular slot in the primary table contains a due event.
     inline bool isDue(EventSlot s, Cycle cycle) {
-        assert(isPrimarySlot(s)); return cycle >= primSlot[s].triggerCycle; }
+        assert(isPrimarySlot(s)); return cycle >= slot[s].triggerCycle; }
     
     // Checks whether a particular slot in the secondary table contains a due event.
     inline bool isDueSec(EventSlot s, Cycle cycle) {
-        assert(isSecondarySlot(s)); return cycle >= secSlot[s].triggerCycle; }
+        assert(isSecondarySlot(s)); return cycle >= slot[s].triggerCycle; }
     
     
     //
@@ -227,8 +230,8 @@ class EventHandler : public HardwareComponent
     {
         assert(isPrimarySlot(s));
 
-        primSlot[s].triggerCycle = cycle;
-        primSlot[s].id = id;
+        slot[s].triggerCycle = cycle;
+        slot[s].id = id;
         if (cycle < nextPrimTrigger) nextPrimTrigger = cycle;
 
         assert(checkScheduledEvent(s));
@@ -237,18 +240,18 @@ class EventHandler : public HardwareComponent
     template<EventSlot s> void scheduleAbs(Cycle cycle, EventID id, int64_t data)
     {
         scheduleAbs<s>(cycle, id);
-        primSlot[s].data = data;
+        slot[s].data = data;
     }
 
     template<EventSlot s> void scheduleInc(Cycle cycle, EventID id)
     {
-        scheduleAbs<s>(cycle, primSlot[s].triggerCycle + cycle);
+        scheduleAbs<s>(cycle, slot[s].triggerCycle + cycle);
     }
 
     template<EventSlot s> void scheduleInc(Cycle cycle, EventID id, int64_t data)
     {
-        scheduleAbs<s>(cycle, primSlot[s].triggerCycle + cycle);
-        primSlot[s].data = data;
+        scheduleAbs<s>(cycle, slot[s].triggerCycle + cycle);
+        slot[s].data = data;
     }
 
     template<EventSlot s> void scheduleRel(Cycle cycle, EventID id)
@@ -259,7 +262,7 @@ class EventHandler : public HardwareComponent
     template<EventSlot s> void scheduleRel(Cycle cycle, EventID id, int64_t data)
     {
         scheduleAbs<s>(relToCycle(cycle), id);
-        primSlot[s].data = data;
+        slot[s].data = data;
     }
 
 
@@ -271,14 +274,14 @@ class EventHandler : public HardwareComponent
     template<EventSlot s> void schedulePos(int16_t vpos, int16_t hpos, EventID id, int64_t data)
     {
         scheduleAbs<s>(posToCycle(vpos, hpos), id, data);
-        primSlot[s].data = data;
+        slot[s].data = data;
     }
 
     template<EventSlot s> void rescheduleAbs(Cycle cycle)
     {
         assert(isPrimarySlot(s));
 
-        primSlot[s].triggerCycle = cycle;
+        slot[s].triggerCycle = cycle;
         if (cycle < nextPrimTrigger) nextPrimTrigger = cycle;
 
         assert(checkScheduledEvent(s));
@@ -286,7 +289,7 @@ class EventHandler : public HardwareComponent
 
     template<EventSlot s> void rescheduleInc(Cycle cycle)
     {
-        rescheduleAbs<s>(relToCycle(cycle), primSlot[s].triggerCycle + cycle);
+        rescheduleAbs<s>(relToCycle(cycle), slot[s].triggerCycle + cycle);
     }
 
     template<EventSlot s> void rescheduleRel(Cycle cycle)
@@ -301,9 +304,9 @@ class EventHandler : public HardwareComponent
 
     template<EventSlot s> void cancel()
     {
-        primSlot[s].id = (EventID)0;
-        primSlot[s].data = 0;
-        primSlot[s].triggerCycle = NEVER;
+        slot[s].id = (EventID)0;
+        slot[s].data = 0;
+        slot[s].triggerCycle = NEVER;
     }
 
     //

@@ -247,7 +247,7 @@ Paula::pokePOTGO(uint16_t value)
 
         // Schedule the first DISCHARGE event
         events->scheduleSecPos(POT_SLOT, agnus->vpos, HPOS_MAX, POT_DISCHARGE);
-        events->secSlot[POT_SLOT].data = 8;
+        events->slot[POT_SLOT].data = 8;
     }
 }
 
@@ -262,8 +262,8 @@ Paula::servePotEvent(EventID id)
 
         case POT_DISCHARGE:
 
-            events->secSlot[POT_SLOT].data--;
-            if (events->secSlot[POT_SLOT].data) {
+            events->slot[POT_SLOT].data--;
+            if (events->slot[POT_SLOT].data) {
 
                 // Schedule another DISCHARGE event
                 potCntX0++;

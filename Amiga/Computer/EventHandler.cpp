@@ -15,9 +15,8 @@ EventHandler::EventHandler()
     
     registerSnapshotItems(vector<SnapshotItem> {
         
-        { &primSlot,        sizeof(primSlot),        BYTE_ARRAY },
+        { &slot,            sizeof(slot),            BYTE_ARRAY },
         { &nextPrimTrigger, sizeof(nextPrimTrigger), 0 },
-        { &secSlot,         sizeof(secSlot),         BYTE_ARRAY },
         { &nextSecTrigger,  sizeof(nextSecTrigger),  0 },
         
     });
@@ -40,16 +39,16 @@ EventHandler::_powerOn()
 {
     // Wipe out the primary event table
     for (unsigned i = 0; i <= LAST_PRIM_SLOT; i++) {
-        primSlot[i].triggerCycle = NEVER;
-        primSlot[i].id = (EventID)0;
-        primSlot[i].data = 0;
+        slot[i].triggerCycle = NEVER;
+        slot[i].id = (EventID)0;
+        slot[i].data = 0;
     }
     
     // Wipe out the secondary event table
     for (unsigned i = FIRST_SEC_SLOT; i <= LAST_SEC_SLOT; i++) {
-        secSlot[i].triggerCycle = NEVER;
-        secSlot[i].id = (EventID)0;
-        secSlot[i].data = 0;
+        slot[i].triggerCycle = NEVER;
+        slot[i].id = (EventID)0;
+        slot[i].data = 0;
     }
     
     // Schedule the first inspection event (retriggers automatically)
@@ -100,14 +99,14 @@ EventHandler::_inspect()
 }
 
 void
-EventHandler::_inspectPrimSlot(uint32_t slot)
+EventHandler::_inspectPrimSlot(uint32_t nr)
 {
-    assert(isPrimarySlot(slot));
+    assert(isPrimarySlot(nr));
     
-    EventSlotInfo *i = &info.primary[slot];
-    Cycle trigger = primSlot[slot].triggerCycle;
+    EventSlotInfo *i = &info.primary[nr];
+    Cycle trigger = slot[nr].triggerCycle;
 
-    i->eventId = primSlot[slot].id;
+    i->eventId = slot[nr].id;
     i->trigger = trigger;
     i->triggerRel = trigger - agnus->clock;
     i->currentFrame = agnus->belongsToCurrentFrame(trigger);
@@ -124,12 +123,12 @@ EventHandler::_inspectPrimSlot(uint32_t slot)
         i->hpos = 0;
     }
 
-    switch ((EventSlot)slot) {
+    switch ((EventSlot)nr) {
 
         case CIAA_SLOT:
 
             i->slotName = "CIA A";
-            switch (primSlot[slot].id) {
+            switch (slot[nr].id) {
                 case 0:                i->eventName = "none"; break;
                 case CIA_EXECUTE:      i->eventName = "CIA_EXECUTE"; break;
                 case CIA_WAKEUP:       i->eventName = "CIA_WAKEUP"; break;
@@ -140,7 +139,7 @@ EventHandler::_inspectPrimSlot(uint32_t slot)
         case CIAB_SLOT:
 
             i->slotName = "CIA B";
-            switch (primSlot[slot].id) {
+            switch (slot[nr].id) {
                 case 0:                i->eventName = "none"; break;
                 case CIA_EXECUTE:      i->eventName = "CIA_EXECUTE"; break;
                 case CIA_WAKEUP:       i->eventName = "CIA_WAKEUP"; break;
@@ -151,7 +150,7 @@ EventHandler::_inspectPrimSlot(uint32_t slot)
         case DMA_SLOT:
 
             i->slotName = "DMA";
-            switch (primSlot[slot].id) {
+            switch (slot[nr].id) {
                 case 0:                i->eventName = "none"; break;
                 case DMA_DISK:         i->eventName = "DMA_DISK"; break;
                 case DMA_A0:           i->eventName = "DMA_A0"; break;
@@ -195,7 +194,7 @@ EventHandler::_inspectPrimSlot(uint32_t slot)
         case COP_SLOT:
 
             i->slotName = "Copper";
-            switch (primSlot[slot].id) {
+            switch (slot[nr].id) {
 
                 case 0:                i->eventName = "none"; break;
                 case COP_REQUEST_DMA:  i->eventName = "COP_REQUEST_DMA"; break;
@@ -213,7 +212,7 @@ EventHandler::_inspectPrimSlot(uint32_t slot)
         case BLT_SLOT:
 
             i->slotName = "Blitter";
-            switch (primSlot[slot].id) {
+            switch (slot[nr].id) {
 
                 case 0:                i->eventName = "none"; break;
                 case BLT_INIT:         i->eventName = "BLT_INIT"; break;
@@ -226,7 +225,7 @@ EventHandler::_inspectPrimSlot(uint32_t slot)
         case RAS_SLOT:
 
             i->slotName = "Raster";
-            switch (primSlot[slot].id) {
+            switch (slot[nr].id) {
 
                 case 0:                i->eventName = "none"; break;
                 case RAS_HSYNC:        i->eventName = "RAS_HSYNC"; break;
@@ -237,7 +236,7 @@ EventHandler::_inspectPrimSlot(uint32_t slot)
         case SEC_SLOT:
 
             i->slotName = "Secondary";
-            switch (primSlot[slot].id) {
+            switch (slot[nr].id) {
 
                 case 0:                i->eventName = "none"; break;
                 case SEC_TRIGGER:      i->eventName = "SEC_TRIGGER"; break;
@@ -251,14 +250,14 @@ EventHandler::_inspectPrimSlot(uint32_t slot)
 }
 
 void
-EventHandler::_inspectSecSlot(uint32_t slot)
+EventHandler::_inspectSecSlot(uint32_t nr)
 {
-    assert(isSecondarySlot(slot));
+    assert(isSecondarySlot(nr));
     
-    EventSlotInfo *i = &info.secondary[slot];
-    Cycle trigger = secSlot[slot].triggerCycle;
+    EventSlotInfo *i = &info.secondary[nr];
+    Cycle trigger = slot[nr].triggerCycle;
 
-    i->eventId = primSlot[slot].id;
+    i->eventId = slot[nr].id;
     i->trigger = trigger;
     i->triggerRel = trigger - agnus->clock;
     i->currentFrame = agnus->belongsToCurrentFrame(trigger);
@@ -275,7 +274,7 @@ EventHandler::_inspectSecSlot(uint32_t slot)
         i->hpos = 0;
     }
 
-    switch ((EventSlot)slot) {
+    switch ((EventSlot)nr) {
 
         case DSK_SLOT:           i->slotName = "Disk Controller"; break;
         case IRQ_TBE_SLOT:       i->slotName = "Serial Output IRQ"; break;
@@ -302,11 +301,11 @@ EventHandler::_inspectSecSlot(uint32_t slot)
         default:                 i->slotName = "*** INVALID ***"; break;
     }
     
-    switch ((EventSlot)slot) {
+    switch ((EventSlot)nr) {
 
         case DSK_SLOT:
 
-            switch (secSlot[slot].id) {
+            switch (slot[nr].id) {
 
                 case 0:          i->eventName = "none"; break;
                 case DSK_ROTATE: i->eventName = "DSK_ROTATE"; break;
@@ -329,7 +328,7 @@ EventHandler::_inspectSecSlot(uint32_t slot)
         case IRQ_DSKSYN_SLOT:
         case IRQ_EXTER_SLOT:
 
-            switch (secSlot[slot].id) {
+            switch (slot[nr].id) {
 
                 case 0:          i->eventName = "none"; break;
                 case IRQ_SET:    i->eventName = "IRQ_SET"; break;
@@ -341,7 +340,7 @@ EventHandler::_inspectSecSlot(uint32_t slot)
         case REG_COP_SLOT:
         case REG_CPU_SLOT:
 
-            switch (secSlot[slot].id) {
+            switch (slot[nr].id) {
 
                 case 0:           i->eventName = "none"; break;
                 case REG_DIWSTRT: i->eventName = "REG_DIWSTRT"; break;
@@ -352,7 +351,7 @@ EventHandler::_inspectSecSlot(uint32_t slot)
 
         case TXD_SLOT:
 
-            switch (secSlot[slot].id) {
+            switch (slot[nr].id) {
 
                 case 0:          i->eventName = "none"; break;
                 case TXD_BIT:    i->eventName = "TXD_BIT"; break;
@@ -362,7 +361,7 @@ EventHandler::_inspectSecSlot(uint32_t slot)
 
         case RXD_SLOT:
 
-            switch (secSlot[slot].id) {
+            switch (slot[nr].id) {
 
                 case 0:          i->eventName = "none"; break;
                 case RXD_BIT:    i->eventName = "RXD_BIT"; break;
@@ -372,7 +371,7 @@ EventHandler::_inspectSecSlot(uint32_t slot)
 
         case POT_SLOT:
 
-            switch (secSlot[slot].id) {
+            switch (slot[nr].id) {
 
                 case 0:             i->eventName = "none"; break;
                 case POT_DISCHARGE: i->eventName = "POT_DISCHARGE"; break;
@@ -383,7 +382,7 @@ EventHandler::_inspectSecSlot(uint32_t slot)
 
         case SYNC_SLOT:
 
-            switch (secSlot[slot].id) {
+            switch (slot[nr].id) {
 
                 case 0:          i->eventName = "none"; break;
                 case SYNC_HSYNC: i->eventName = "SYNC_HSYNC"; break;
@@ -393,7 +392,7 @@ EventHandler::_inspectSecSlot(uint32_t slot)
 
         case INSPECTOR_SLOT:
 
-            switch (secSlot[slot].id) {
+            switch (slot[nr].id) {
 
                 case 0:          i->eventName = "none"; break;
                 case INS_NONE:   i->eventName = "INS_NONE"; break;
@@ -504,7 +503,7 @@ EventHandler::_executeUntil(Cycle cycle) {
         
         assert(checkTriggeredEvent(CIAA_SLOT));
         
-        switch(primSlot[CIAA_SLOT].id) {
+        switch(slot[CIAA_SLOT].id) {
 
             case CIA_EXECUTE:
                 ciaA->executeOneCycle();
@@ -524,7 +523,7 @@ EventHandler::_executeUntil(Cycle cycle) {
         
         assert(checkTriggeredEvent(CIAB_SLOT));
         
-        switch(primSlot[CIAB_SLOT].id) {
+        switch(slot[CIAB_SLOT].id) {
 
             case CIA_EXECUTE:
                 ciaB->executeOneCycle();
@@ -542,25 +541,25 @@ EventHandler::_executeUntil(Cycle cycle) {
     // Check for a bitplane event
     if (isDue(DMA_SLOT, cycle)) {
         assert(checkTriggeredEvent(DMA_SLOT));
-        agnus->serviceDMAEvent(primSlot[DMA_SLOT].id);
+        agnus->serviceDMAEvent(slot[DMA_SLOT].id);
     }
     
     // Check for a Copper event
     if (isDue(COP_SLOT, cycle)) {
         assert(checkTriggeredEvent(COP_SLOT));
-        agnus->copper.serviceEvent(primSlot[COP_SLOT].id);
+        agnus->copper.serviceEvent(slot[COP_SLOT].id);
     }
     
     // Check for a Blitter event
     if (isDue(BLT_SLOT, cycle)) {
         assert(checkTriggeredEvent(BLT_SLOT));
-        agnus->blitter.serviceEvent(primSlot[BLT_SLOT].id);
+        agnus->blitter.serviceEvent(slot[BLT_SLOT].id);
     }
 
     // Check for a raster event
     if (isDue(RAS_SLOT, cycle)) {
         assert(checkTriggeredEvent(RAS_SLOT));
-        agnus->serviceRASEvent(primSlot[RAS_SLOT].id);
+        agnus->serviceRASEvent(slot[RAS_SLOT].id);
     }
 
     // Check if a secondary event needs to be processed
@@ -569,10 +568,10 @@ EventHandler::_executeUntil(Cycle cycle) {
     }
 
     // Determine the next trigger cycle
-    nextPrimTrigger = primSlot[0].triggerCycle;
+    nextPrimTrigger = slot[0].triggerCycle;
     for (unsigned i = 1; i <= LAST_PRIM_SLOT; i++)
-        if (primSlot[i].triggerCycle < nextPrimTrigger)
-            nextPrimTrigger = primSlot[i].triggerCycle;
+        if (slot[i].triggerCycle < nextPrimTrigger)
+            nextPrimTrigger = slot[i].triggerCycle;
 }
 
 void
@@ -631,27 +630,27 @@ EventHandler::_executeSecUntil(Cycle cycle) {
         serveRegEvent(REG_CPU_SLOT);
     }
     if (isDueSec(TXD_SLOT, cycle)) {
-        paula->uart.serveTxdEvent(secSlot[TXD_SLOT].id);
+        paula->uart.serveTxdEvent(slot[TXD_SLOT].id);
     }
     if (isDueSec(RXD_SLOT, cycle)) {
-        paula->uart.serveRxdEvent(secSlot[RXD_SLOT].id);
+        paula->uart.serveRxdEvent(slot[RXD_SLOT].id);
     }
     if (isDueSec(POT_SLOT, cycle)) {
-        paula->servePotEvent(secSlot[POT_SLOT].id);
+        paula->servePotEvent(slot[POT_SLOT].id);
     }
     if (isDueSec(SYNC_SLOT, cycle)) {
-        assert(secSlot[SYNC_SLOT].id == SYNC_HSYNC);
-        agnus->serviceSYNCEvent(secSlot[SYNC_SLOT].id);
+        assert(slot[SYNC_SLOT].id == SYNC_HSYNC);
+        agnus->serviceSYNCEvent(slot[SYNC_SLOT].id);
     }
     if (isDueSec(INSPECTOR_SLOT, cycle)) {
         serveINSEvent();
     }
     
     // Determine the next trigger cycle
-    nextSecTrigger = secSlot[FIRST_SEC_SLOT].triggerCycle;
+    nextSecTrigger = slot[FIRST_SEC_SLOT].triggerCycle;
     for (unsigned i = FIRST_SEC_SLOT + 1; i <= LAST_SEC_SLOT; i++)
-        if (secSlot[i].triggerCycle < nextSecTrigger)
-            nextSecTrigger = secSlot[i].triggerCycle;
+        if (slot[i].triggerCycle < nextSecTrigger)
+            nextSecTrigger = slot[i].triggerCycle;
     
     // Update the secondary table trigger in the primary table
     rescheduleAbs(SEC_SLOT, nextSecTrigger);
@@ -677,8 +676,8 @@ EventHandler::scheduleAbs(EventSlot s, Cycle cycle, EventID id)
 {
     assert(isPrimarySlot(s));
     
-    primSlot[s].triggerCycle = cycle;
-    primSlot[s].id = id;
+    slot[s].triggerCycle = cycle;
+    slot[s].id = id;
     if (cycle < nextPrimTrigger) nextPrimTrigger = cycle;
     
     assert(checkScheduledEvent(s));
@@ -691,8 +690,8 @@ EventHandler::scheduleRel(EventSlot s, Cycle cycle, EventID id)
     
     cycle += agnus->clock;
     
-    primSlot[s].triggerCycle = cycle;
-    primSlot[s].id = id;
+    slot[s].triggerCycle = cycle;
+    slot[s].id = id;
     if (cycle < nextPrimTrigger) nextPrimTrigger = cycle;
     
     assert(checkScheduledEvent(s));
@@ -709,8 +708,8 @@ EventHandler::schedulePos(EventSlot s, int16_t vpos, int16_t hpos, EventID id)
     beam.x = hpos;
     Cycle cycle = agnus->beamToCycle(beam);
 
-    primSlot[s].triggerCycle = cycle;
-    primSlot[s].id = id;
+    slot[s].triggerCycle = cycle;
+    slot[s].id = id;
     if (cycle < nextPrimTrigger) nextPrimTrigger = cycle;
     
     assert(checkScheduledEvent(s));
@@ -721,7 +720,7 @@ EventHandler::rescheduleAbs(EventSlot s, Cycle cycle)
 {
     assert(isPrimarySlot(s));
     
-    primSlot[s].triggerCycle = cycle;
+    slot[s].triggerCycle = cycle;
     if (cycle < nextPrimTrigger) nextPrimTrigger = cycle;
     
     assert(checkScheduledEvent(s));
@@ -734,7 +733,7 @@ EventHandler::rescheduleRel(EventSlot s, Cycle cycle)
     
     cycle += agnus->clock;
     
-    primSlot[s].triggerCycle = cycle;
+    slot[s].triggerCycle = cycle;
     if (cycle < nextPrimTrigger) nextPrimTrigger = cycle;
     
     assert(checkScheduledEvent(s));
@@ -744,15 +743,15 @@ void
 EventHandler::disable(EventSlot s)
 {
     assert(isPrimarySlot(s));
-    primSlot[s].triggerCycle = NEVER;
+    slot[s].triggerCycle = NEVER;
 }
 
 void
 EventHandler::cancel(EventSlot s)
 {
     assert(isPrimarySlot(s));
-    primSlot[s].id = (EventID)0;
-    primSlot[s].triggerCycle = NEVER;
+    slot[s].id = (EventID)0;
+    slot[s].triggerCycle = NEVER;
 }
 
 void
@@ -761,8 +760,8 @@ EventHandler::scheduleSecAbs(EventSlot s, Cycle cycle, EventID id)
     assert(isSecondarySlot(s));
     
     // Schedule event in secondary table
-    secSlot[s].triggerCycle = cycle;
-    secSlot[s].id = id;
+    slot[s].triggerCycle = cycle;
+    slot[s].id = id;
     if (cycle < nextSecTrigger) nextSecTrigger = cycle;
     
     // Update the secondary table trigger in the primary table
@@ -773,7 +772,7 @@ void
 EventHandler::scheduleSecAbs(EventSlot s, Cycle cycle, EventID id, int64_t data)
 {
     scheduleSecAbs(s, cycle, id);
-    secSlot[s].data = data;
+    slot[s].data = data;
 }
 
 void
@@ -784,8 +783,8 @@ EventHandler::scheduleSecRel(EventSlot s, Cycle cycle, EventID id)
     cycle += agnus->clock;
     
     // Schedule event in secondary table
-    secSlot[s].triggerCycle = cycle;
-    secSlot[s].id = id;
+    slot[s].triggerCycle = cycle;
+    slot[s].id = id;
     if (cycle < nextSecTrigger) nextSecTrigger = cycle;
     
     // Update the secondary table trigger in the primary table
@@ -796,7 +795,7 @@ void
 EventHandler::scheduleSecRel(EventSlot s, Cycle cycle, EventID id, int64_t data)
 {
     scheduleSecRel(s, cycle, id);
-    secSlot[s].data = data;
+    slot[s].data = data;
 }
 
 void
@@ -810,8 +809,8 @@ EventHandler::scheduleSecPos(EventSlot s, int16_t vpos, int16_t hpos, EventID id
     beam.x = hpos;
     Cycle cycle = agnus->beamToCycle(beam);
 
-    secSlot[s].triggerCycle = cycle;
-    secSlot[s].id = id;
+    slot[s].triggerCycle = cycle;
+    slot[s].id = id;
     if (cycle < nextSecTrigger) nextSecTrigger = cycle;
     
     // Update the secondary table trigger in the primary table
@@ -822,7 +821,7 @@ void
 EventHandler::scheduleSecPos(EventSlot s, int16_t vpos, int16_t hpos, EventID id, int64_t data)
 {
     scheduleSecPos(s, vpos, hpos, id);
-    secSlot[s].data = data;
+    slot[s].data = data;
 }
 
 void
@@ -830,7 +829,7 @@ EventHandler::rescheduleSecAbs(EventSlot s, Cycle cycle)
 {
     assert(isSecondarySlot(s));
     
-    secSlot[s].triggerCycle = cycle;
+    slot[s].triggerCycle = cycle;
     if (cycle < nextSecTrigger) nextSecTrigger = cycle;
     
     // Update the secondary table trigger in the primary table
@@ -844,7 +843,7 @@ EventHandler::rescheduleSecRel(EventSlot s, Cycle cycle)
     
     cycle += agnus->clock;
     
-    secSlot[s].triggerCycle = cycle;
+    slot[s].triggerCycle = cycle;
     if (cycle < nextSecTrigger) nextSecTrigger = cycle;
     
     // Update the secondary table trigger in the primary table
@@ -855,21 +854,21 @@ void
 EventHandler::disableSec(EventSlot s)
 {
     assert(isSecondarySlot(s));
-    secSlot[s].triggerCycle = NEVER;
+    slot[s].triggerCycle = NEVER;
 }
 
 void
 EventHandler::cancelSec(EventSlot s)
 {
     assert(isSecondarySlot(s));
-    secSlot[s].id = (EventID)0;
-    secSlot[s].triggerCycle = NEVER;
+    slot[s].id = (EventID)0;
+    slot[s].triggerCycle = NEVER;
 }
 
 void
 EventHandler::serveIRQEvent(EventSlot s, int irqBit)
 {
-    switch (secSlot[s].id) {
+    switch (slot[s].id) {
 
         case IRQ_SET:
             paula->setINTREQ(0x8000 | (1 << irqBit));
@@ -915,10 +914,10 @@ EventHandler::scheduleRegEvent(EventSlot slot, Cycle cycle, EventID id, int64_t 
 }
 
 void
-EventHandler::serveRegEvent(EventSlot slot)
+EventHandler::serveRegEvent(EventSlot nr)
 {
-    EventID id = secSlot[slot].id;
-    uint16_t data = (uint16_t)secSlot[slot].data;
+    EventID id = slot[nr].id;
+    uint16_t data = (uint16_t)slot[nr].data;
 
     // debug("serveRegEvent(%d)\n", slot);
 
@@ -937,13 +936,13 @@ EventHandler::serveRegEvent(EventSlot slot)
     }
 
     // Remove event
-    cancelSec(slot);
+    cancelSec(nr);
 }
 
 void
 EventHandler::serveINSEvent()
 {
-    switch (secSlot[INSPECTOR_SLOT].id) {
+    switch (slot[INSPECTOR_SLOT].id) {
 
         case INS_NONE:   break;
         case INS_AMIGA:  amiga->inspect(); break;
@@ -972,13 +971,13 @@ EventHandler::checkScheduledEvent(EventSlot s)
 {
     assert(isPrimarySlot(s));
     
-    if (primSlot[s].triggerCycle < 0) {
+    if (slot[s].triggerCycle < 0) {
         _dump();
         panic("Scheduled event has a too small trigger cycle.");
         return false;
     }
     
-    EventID id = primSlot[s].id;
+    EventID id = slot[s].id;
     
     if (id == 0) {
         _dump();
@@ -994,7 +993,7 @@ EventHandler::checkScheduledEvent(EventSlot s)
                 panic("Invalid CIA event ID.");
                 return false;
             }
-            if (primSlot[s].triggerCycle != INT64_MAX && primSlot[s].triggerCycle % 40 != 0) {
+            if (slot[s].triggerCycle != INT64_MAX && slot[s].triggerCycle % 40 != 0) {
                 _dump();
                 panic("Scheduled trigger cycle is not a CIA cycle.");
                 return false;
@@ -1037,7 +1036,7 @@ EventHandler::checkTriggeredEvent(EventSlot s)
     assert(isPrimarySlot(s));
     
     // Note: This function has to be called at the trigger cycle
-    if (agnus->clock != primSlot[s].triggerCycle) {
+    if (agnus->clock != slot[s].triggerCycle) {
         return true;
     }
     

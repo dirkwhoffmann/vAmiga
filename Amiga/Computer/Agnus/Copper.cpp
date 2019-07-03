@@ -87,7 +87,7 @@ Copper::_dump()
     bool active = events->isPending(COP_SLOT);
     plainmsg("    cdang: %d\n", cdang);
     plainmsg("   active: %s\n", active ? "yes" : "no");
-    if (active) plainmsg("    state: %d\n", events->primSlot[COP_SLOT].id);
+    if (active) plainmsg("    state: %d\n", events->slot[COP_SLOT].id);
     plainmsg("    coppc: %X\n", coppc);
     plainmsg("  copins1: %X\n", cop1ins);
     plainmsg("  copins2: %X\n", cop2ins);

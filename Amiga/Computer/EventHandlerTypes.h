@@ -63,7 +63,9 @@ typedef enum : long
     SYNC_SLOT,        // Synchronization (HSYNC)
     INSPECTOR_SLOT,   // Handles periodic calls to inspect()
 
-    LAST_SEC_SLOT = INSPECTOR_SLOT
+    LAST_SEC_SLOT = INSPECTOR_SLOT,
+    SLOT_COUNT
+
 } EventSlot;
 
 static inline bool isPrimarySlot(int32_t s) { return s <= LAST_PRIM_SLOT; }
