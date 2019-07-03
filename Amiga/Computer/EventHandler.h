@@ -82,13 +82,13 @@ class EventHandler : public HardwareComponent
     public:
     
     // The primary event table
-    Event primSlot[PRIM_SLOT_COUNT];
+    Event primSlot[LAST_PRIM_SLOT + 1];
     
     // Next trigger cycle for an event in the primary event table
     Cycle nextPrimTrigger = NEVER;
     
     // The secondary event table
-    Event secSlot[SEC_SLOT_COUNT];
+    Event secSlot[LAST_SEC_SLOT + 1];
     
     // Next trigger cycle for an event in the secondary event table
     Cycle nextSecTrigger = NEVER;
@@ -137,8 +137,8 @@ class EventHandler : public HardwareComponent
     EventSlotInfo getSecondarySlotInfo(int slot);
     
     // Returns the number of event slots in the primary or secondary table.
-    inline long primSlotCount() { return PRIM_SLOT_COUNT; }
-    inline long secSlotCount() { return SEC_SLOT_COUNT; }
+    inline long primSlotCount() { return LAST_PRIM_SLOT + 1; }
+    inline long secSlotCount() { return  LAST_SEC_SLOT - FIRST_SEC_SLOT + 1; }
     
     // Checks whether a particular slot in the primary table contains an event.
     inline bool hasEvent(EventSlot s) {

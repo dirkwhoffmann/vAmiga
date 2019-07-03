@@ -39,14 +39,14 @@ void
 EventHandler::_powerOn()
 {
     // Wipe out the primary event table
-    for (unsigned i = 0; i < PRIM_SLOT_COUNT; i++) {
+    for (unsigned i = 0; i <= LAST_PRIM_SLOT; i++) {
         primSlot[i].triggerCycle = NEVER;
         primSlot[i].id = (EventID)0;
         primSlot[i].data = 0;
     }
     
     // Wipe out the secondary event table
-    for (unsigned i = 0; i < SEC_SLOT_COUNT; i++) {
+    for (unsigned i = FIRST_SEC_SLOT; i <= LAST_SEC_SLOT; i++) {
         secSlot[i].triggerCycle = NEVER;
         secSlot[i].id = (EventID)0;
         secSlot[i].data = 0;
@@ -89,11 +89,11 @@ EventHandler::_inspect()
     info.hpos = agnus->hpos;
     
     // Primary events
-    for (unsigned i = 0; i < PRIM_SLOT_COUNT; i++)
+    for (unsigned i = 0; i <= LAST_PRIM_SLOT; i++)
         _inspectPrimSlot(i);
     
     // Secondary events
-    for (unsigned i = 0; i < SEC_SLOT_COUNT; i++)
+    for (unsigned i = FIRST_SEC_SLOT; i <= LAST_SEC_SLOT; i++)
         _inspectSecSlot(i);
     
     pthread_mutex_unlock(&lock);
@@ -292,8 +292,8 @@ EventHandler::_inspectSecSlot(uint32_t slot)
         case IRQ_RBF_SLOT:       i->slotName = "Serial Input IRQ"; break;
         case IRQ_DSKSYN_SLOT:    i->slotName = "Disk Sync IRQ"; break;
         case IRQ_EXTER_SLOT:     i->slotName = "CIA B IRQ"; break;
-        case REG_COP_SLOT:       i->slotName = "Delayed Copper Write"; break;
-        case REG_CPU_SLOT:       i->slotName = "Delayed CPU Write"; break;
+        case REG_COP_SLOT:       i->slotName = "Copper Write"; break;
+        case REG_CPU_SLOT:       i->slotName = "CPU Write"; break;
         case TXD_SLOT:           i->slotName = "Serial out (UART)"; break;
         case RXD_SLOT:           i->slotName = "Serial in (UART)"; break;
         case POT_SLOT:           i->slotName = "Potentiometer"; break;
@@ -422,7 +422,7 @@ EventHandler::_dump()
     amiga->dumpClock();
     
     plainmsg("Primary events:\n");
-    for (unsigned i = 0; i <PRIM_SLOT_COUNT; i++) {
+    for (unsigned i = 0; i <= LAST_PRIM_SLOT; i++) {
         
         plainmsg("Slot: %-17s ", info.primary[i].slotName);
         plainmsg("Event: %-15s ", info.primary[i].eventName);
@@ -438,7 +438,7 @@ EventHandler::_dump()
     }
     
     plainmsg("Secondary events:\n");
-    for (unsigned i = 0; i < SEC_SLOT_COUNT; i++) {
+    for (unsigned i = FIRST_SEC_SLOT; i <= LAST_SEC_SLOT; i++) {
         
         plainmsg("Slot: %-17s ", info.secondary[i].slotName);
         plainmsg("Event: %-15s ", info.secondary[i].eventName);
@@ -483,6 +483,8 @@ EventHandler::getPrimarySlotInfo(int slot)
 EventSlotInfo
 EventHandler::getSecondarySlotInfo(int slot)
 {
+    slot += FIRST_SEC_SLOT;
+
     assert(isSecondarySlot(slot));
     
     EventSlotInfo result;
@@ -568,7 +570,7 @@ EventHandler::_executeUntil(Cycle cycle) {
 
     // Determine the next trigger cycle
     nextPrimTrigger = primSlot[0].triggerCycle;
-    for (unsigned i = 1; i < PRIM_SLOT_COUNT; i++)
+    for (unsigned i = 1; i <= LAST_PRIM_SLOT; i++)
         if (primSlot[i].triggerCycle < nextPrimTrigger)
             nextPrimTrigger = primSlot[i].triggerCycle;
 }
@@ -646,8 +648,8 @@ EventHandler::_executeSecUntil(Cycle cycle) {
     }
     
     // Determine the next trigger cycle
-    nextSecTrigger = secSlot[0].triggerCycle;
-    for (unsigned i = 1; i < SEC_SLOT_COUNT; i++)
+    nextSecTrigger = secSlot[FIRST_SEC_SLOT].triggerCycle;
+    for (unsigned i = FIRST_SEC_SLOT + 1; i <= LAST_SEC_SLOT; i++)
         if (secSlot[i].triggerCycle < nextSecTrigger)
             nextSecTrigger = secSlot[i].triggerCycle;
     

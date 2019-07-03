@@ -32,13 +32,15 @@ typedef enum : long
                       // event SYNC_HSYNC. I didn't delete the slot, because
                       // I'm still unsure if we really don't need it.
     SEC_SLOT,         // Secondary events
-    PRIM_SLOT_COUNT,
-    
+
+    LAST_PRIM_SLOT = SEC_SLOT,
+    FIRST_SEC_SLOT,
+
     //
     // Secondary slot table
     //
-    
-    DSK_SLOT = 0,     // Disk controller
+
+    DSK_SLOT = FIRST_SEC_SLOT,     // Disk controller
     IRQ_TBE_SLOT,     // Source 0 IRQ (Serial port transmit buffer empty)
     IRQ_DSKBLK_SLOT,  // Source 1 IRQ (Disk block finished)
     IRQ_SOFT_SLOT,    // Source 2 IRQ (Software-initiated)
@@ -60,11 +62,12 @@ typedef enum : long
     POT_SLOT,         // Potentiometer
     SYNC_SLOT,        // Synchronization (HSYNC)
     INSPECTOR_SLOT,   // Handles periodic calls to inspect()
-    SEC_SLOT_COUNT,
+
+    LAST_SEC_SLOT = INSPECTOR_SLOT
 } EventSlot;
 
-static inline bool isPrimarySlot(int32_t s) { return s < PRIM_SLOT_COUNT; }
-static inline bool isSecondarySlot(int32_t s) { return s < SEC_SLOT_COUNT; }
+static inline bool isPrimarySlot(int32_t s) { return s <= LAST_PRIM_SLOT; }
+static inline bool isSecondarySlot(int32_t s) { return s >= FIRST_SEC_SLOT && s <= LAST_SEC_SLOT; }
 
 typedef enum : long
 {
@@ -235,8 +238,8 @@ typedef struct
     long vpos;
     long hpos;
 
-    EventSlotInfo primary[PRIM_SLOT_COUNT];
-    EventSlotInfo secondary[SEC_SLOT_COUNT];
+    EventSlotInfo primary[LAST_PRIM_SLOT + 1];
+    EventSlotInfo secondary[LAST_SEC_SLOT + 1];
 }
 EventHandlerInfo;
 
