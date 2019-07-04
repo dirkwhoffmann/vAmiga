@@ -1514,7 +1514,8 @@ Agnus::serviceDMAEvent(EventID id)
     uint8_t next = nextDmaEvent[hpos];
     // debug("id = %d hpos = %d, next = %d\n", id, hpos, next);
     if (next) {
-        events.schedulePos<DMA_SLOT>(vpos, next, dmaEvent[next]);
+        // events.schedulePos<DMA_SLOT>(vpos, next, dmaEvent[next]);
+        events.scheduleInc<DMA_SLOT>(DMA_CYCLES(next - hpos), dmaEvent[next]);
     } else {
         events.cancel(DMA_SLOT);
     }
