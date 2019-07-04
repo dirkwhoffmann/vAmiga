@@ -557,7 +557,19 @@ void
 EventHandler::scheduleAbs(EventSlot s, Cycle cycle, EventID id)
 {
     assert(isPrimarySlot(s));
-    
+
+    // Pass to new API (remove this function later)
+    switch (s) {
+        case CIAA_SLOT: scheduleAbs<CIAA_SLOT>(cycle, id); return;
+        case CIAB_SLOT: scheduleAbs<CIAB_SLOT>(cycle, id); return;
+        case DMA_SLOT:  scheduleAbs<DMA_SLOT>(cycle, id); return;
+        case COP_SLOT:  scheduleAbs<COP_SLOT>(cycle, id); return;
+        case BLT_SLOT:  scheduleAbs<BLT_SLOT>(cycle, id); return;
+        case RAS_SLOT:  scheduleAbs<RAS_SLOT>(cycle, id); return;
+        case SEC_SLOT:  scheduleAbs<SEC_SLOT>(cycle, id); return;
+        default: assert(false);
+    }
+
     slot[s].triggerCycle = cycle;
     slot[s].id = id;
     if (cycle < nextTrigger) nextTrigger = cycle;
