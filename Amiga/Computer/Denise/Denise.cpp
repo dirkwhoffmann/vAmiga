@@ -296,7 +296,7 @@ Denise::pokeBPLCON0(uint16_t value)
         // TODO: Wrap this in a nicer API
         uint8_t next = agnus->nextDmaEvent[agnus->hpos];
         if (next) {
-            events->schedulePos(DMA_SLOT, agnus->vpos, next, agnus->dmaEvent[next]);
+            events->schedulePos<DMA_SLOT>(agnus->vpos, next, agnus->dmaEvent[next]);
         } else {
             events->cancel(DMA_SLOT);
         }

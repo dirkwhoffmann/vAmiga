@@ -321,7 +321,7 @@ class EventHandler : public HardwareComponent
     // Schedules a new event in the primary event table.
     void scheduleAbs(EventSlot s, Cycle cycle, EventID id);
     // void scheduleRel(EventSlot s, Cycle cycle, EventID id);
-    void schedulePos(EventSlot s, int16_t vpos, int16_t hpos, EventID id);
+    // void schedulePos(EventSlot s, int16_t vpos, int16_t hpos, EventID id);
     
     // Reschedules an existing event in the primary event table.
     void rescheduleAbs(EventSlot s, Cycle cycle);

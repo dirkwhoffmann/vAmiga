@@ -603,7 +603,7 @@ EventHandler::scheduleRel(EventSlot s, Cycle cycle, EventID id)
     assert(checkScheduledEvent(s));
 }
 */
-
+/*
 void
 EventHandler::schedulePos(EventSlot s, int16_t vpos, int16_t hpos, EventID id)
 {
@@ -633,6 +633,7 @@ EventHandler::schedulePos(EventSlot s, int16_t vpos, int16_t hpos, EventID id)
     
     assert(checkScheduledEvent(s));
 }
+*/
 
 void
 EventHandler::rescheduleAbs(EventSlot s, Cycle cycle)

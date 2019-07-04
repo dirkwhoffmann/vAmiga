@@ -1514,7 +1514,7 @@ Agnus::serviceDMAEvent(EventID id)
     uint8_t next = nextDmaEvent[hpos];
     // debug("id = %d hpos = %d, next = %d\n", id, hpos, next);
     if (next) {
-        events.schedulePos(DMA_SLOT, vpos, next, dmaEvent[next]);
+        events.schedulePos<DMA_SLOT>(vpos, next, dmaEvent[next]);
     } else {
         events.cancel(DMA_SLOT);
     }
@@ -1735,7 +1735,7 @@ Agnus::hsyncHandler()
     // Schedule the first hi-prio DMA event (if any)
     if (nextDmaEvent[0]) {
         EventID eventID = dmaEvent[nextDmaEvent[0]];
-        events.schedulePos(DMA_SLOT, vpos, nextDmaEvent[0], eventID);
+        events.schedulePos<DMA_SLOT>(vpos, nextDmaEvent[0], eventID);
     }
     
     // Schedule first RAS event
