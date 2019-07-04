@@ -288,12 +288,8 @@ class EventHandler : public HardwareComponent
 
     template<EventSlot s> void rescheduleAbs(Cycle cycle)
     {
-        assert(isPrimarySlot(s));
-
         slot[s].triggerCycle = cycle;
         if (cycle < nextTrigger) nextTrigger = cycle;
-
-        assert(checkScheduledEvent(s));
     }
 
     template<EventSlot s> void rescheduleInc(Cycle cycle)
