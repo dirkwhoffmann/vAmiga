@@ -294,7 +294,7 @@ Blitter::pokeBLTSIZE(uint16_t value)
     bbusy = true;
     
     // WE ONLY DO FAST BLITS AT THE MOMENT
-    events->scheduleRel(BLT_SLOT, DMA_CYCLES(1), BLT_FAST_BLIT);
+    events->scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_FAST_BLIT);
     
     
     /*

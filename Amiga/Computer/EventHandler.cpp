@@ -17,8 +17,7 @@ EventHandler::EventHandler()
         
         { &slot,            sizeof(slot),            BYTE_ARRAY },
         { &nextTrigger,     sizeof(nextTrigger),     0 },
-        { &nextSecTrigger,  sizeof(nextSecTrigger),  0 },
-        
+
     });
 }
 
@@ -529,7 +528,7 @@ EventHandler::_executeSecUntil(Cycle cycle) {
     }
     
     // Determine the next trigger cycle
-    nextSecTrigger = slot[FIRST_SEC_SLOT].triggerCycle;
+    Cycle nextSecTrigger = slot[FIRST_SEC_SLOT].triggerCycle;
     for (unsigned i = FIRST_SEC_SLOT + 1; i <= LAST_SEC_SLOT; i++)
         if (slot[i].triggerCycle < nextSecTrigger)
             nextSecTrigger = slot[i].triggerCycle;
@@ -577,6 +576,7 @@ EventHandler::scheduleAbs(EventSlot s, Cycle cycle, EventID id)
     assert(checkScheduledEvent(s));
 }
 
+/*
 void
 EventHandler::scheduleRel(EventSlot s, Cycle cycle, EventID id)
 {
@@ -602,6 +602,7 @@ EventHandler::scheduleRel(EventSlot s, Cycle cycle, EventID id)
     
     assert(checkScheduledEvent(s));
 }
+*/
 
 void
 EventHandler::schedulePos(EventSlot s, int16_t vpos, int16_t hpos, EventID id)
@@ -704,6 +705,7 @@ EventHandler::scheduleSecAbs(EventSlot s, Cycle cycle, EventID id)
         default: assert(false);
     }
 
+    /*
     // Schedule event in secondary table
     slot[s].triggerCycle = cycle;
     slot[s].id = id;
@@ -711,6 +713,7 @@ EventHandler::scheduleSecAbs(EventSlot s, Cycle cycle, EventID id)
     
     // Update the secondary table trigger in the primary table
     scheduleAbs(SEC_SLOT, nextSecTrigger, SEC_TRIGGER);
+    */
 }
 
 void
@@ -752,6 +755,7 @@ EventHandler::scheduleSecRel(EventSlot s, Cycle cycle, EventID id)
         default: assert(false);
     }
 
+    /*
     cycle += agnus->clock;
     
     // Schedule event in secondary table
@@ -761,6 +765,7 @@ EventHandler::scheduleSecRel(EventSlot s, Cycle cycle, EventID id)
     
     // Update the secondary table trigger in the primary table
     scheduleAbs(SEC_SLOT, nextSecTrigger, SEC_TRIGGER);
+    */
 }
 
 void
@@ -803,6 +808,7 @@ EventHandler::scheduleSecPos(EventSlot s, int16_t vpos, int16_t hpos, EventID id
         default: assert(false);
     }
 
+    /*
     Beam beam;
     beam.y = vpos;
     beam.x = hpos;
@@ -814,6 +820,7 @@ EventHandler::scheduleSecPos(EventSlot s, int16_t vpos, int16_t hpos, EventID id
     
     // Update the secondary table trigger in the primary table
     scheduleAbs(SEC_SLOT, nextSecTrigger, SEC_TRIGGER);
+    */
 }
 
 void
@@ -855,11 +862,13 @@ EventHandler::rescheduleSecAbs(EventSlot s, Cycle cycle)
         default: assert(false);
     }
 
+    /*
     slot[s].triggerCycle = cycle;
     if (cycle < nextSecTrigger) nextSecTrigger = cycle;
     
     // Update the secondary table trigger in the primary table
     scheduleAbs(SEC_SLOT, nextSecTrigger, SEC_TRIGGER);
+    */
 }
 
 void
@@ -894,6 +903,7 @@ EventHandler::rescheduleSecRel(EventSlot s, Cycle cycle)
         default: assert(false);
     }
 
+    /*
     cycle += agnus->clock;
     
     slot[s].triggerCycle = cycle;
@@ -901,6 +911,7 @@ EventHandler::rescheduleSecRel(EventSlot s, Cycle cycle)
     
     // Update the secondary table trigger in the primary table
     scheduleAbs(SEC_SLOT, nextSecTrigger, SEC_TRIGGER);
+    */
 }
 
 void

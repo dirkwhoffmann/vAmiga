@@ -632,7 +632,7 @@ Copper::serviceEvent(EventID id)
                     delay -= DMA_CYCLES(2);
 
                     // ... with a COP_REQ_DMA event.
-                    events->scheduleRel(COP_SLOT, delay, COP_REQ_DMA);
+                    events->scheduleRel<COP_SLOT>(delay, COP_REQ_DMA);
 
                 } else {
 
@@ -689,13 +689,13 @@ Copper::serviceEvent(EventID id)
 void
 Copper::schedule(EventID next)
 {
-    events->scheduleRel(COP_SLOT, DMA_CYCLES(2), next);
+    events->scheduleInc<COP_SLOT>(DMA_CYCLES(2), next);
 }
 
 void
 Copper::reschedule()
 {
-    events->rescheduleRel(COP_SLOT, DMA_CYCLES(2));
+    events->rescheduleInc<COP_SLOT>(DMA_CYCLES(2));
 }
 
 void
@@ -710,7 +710,7 @@ Copper::vsyncAction()
 
     // TODO: What is the exact timing here?
     if (agnus->copDMA()) {
-        events->scheduleRel(COP_SLOT, DMA_CYCLES(4), COP_JMP1);
+        events->scheduleRel<COP_SLOT>(DMA_CYCLES(4), COP_JMP1);
     } else {
         events->cancel(COP_SLOT);
     }

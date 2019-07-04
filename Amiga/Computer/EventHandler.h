@@ -89,7 +89,7 @@ class EventHandler : public HardwareComponent
 
     // Next trigger cycle for an event in the secondary event table
     // DEPRECATED
-    Cycle nextSecTrigger = NEVER;
+    // Cycle nextSecTrigger = NEVER;
     
     
     //
@@ -254,12 +254,12 @@ class EventHandler : public HardwareComponent
 
     template<EventSlot s> void scheduleInc(Cycle cycle, EventID id)
     {
-        scheduleAbs<s>(cycle, slot[s].triggerCycle + cycle);
+        scheduleAbs<s>(slot[s].triggerCycle + cycle, id);
     }
 
     template<EventSlot s> void scheduleInc(Cycle cycle, EventID id, int64_t data)
     {
-        scheduleAbs<s>(cycle, slot[s].triggerCycle + cycle);
+        scheduleAbs<s>(slot[s].triggerCycle + cycle, id);
         slot[s].data = data;
     }
 
@@ -294,7 +294,7 @@ class EventHandler : public HardwareComponent
 
     template<EventSlot s> void rescheduleInc(Cycle cycle)
     {
-        rescheduleAbs<s>(relToCycle(cycle), slot[s].triggerCycle + cycle);
+        rescheduleAbs<s>(slot[s].triggerCycle + cycle);
     }
 
     template<EventSlot s> void rescheduleRel(Cycle cycle)
@@ -320,7 +320,7 @@ class EventHandler : public HardwareComponent
 
     // Schedules a new event in the primary event table.
     void scheduleAbs(EventSlot s, Cycle cycle, EventID id);
-    void scheduleRel(EventSlot s, Cycle cycle, EventID id);
+    // void scheduleRel(EventSlot s, Cycle cycle, EventID id);
     void schedulePos(EventSlot s, int16_t vpos, int16_t hpos, EventID id);
     
     // Reschedules an existing event in the primary event table.
