@@ -16,7 +16,7 @@ EventHandler::EventHandler()
     registerSnapshotItems(vector<SnapshotItem> {
         
         { &slot,            sizeof(slot),            BYTE_ARRAY },
-        { &nextPrimTrigger, sizeof(nextPrimTrigger), 0 },
+        { &nextTrigger,     sizeof(nextTrigger),     0 },
         { &nextSecTrigger,  sizeof(nextSecTrigger),  0 },
         
     });
@@ -457,10 +457,10 @@ EventHandler::_executeUntil(Cycle cycle) {
     }
 
     // Determine the next trigger cycle
-    nextPrimTrigger = slot[0].triggerCycle;
+    nextTrigger = slot[0].triggerCycle;
     for (unsigned i = 1; i <= LAST_PRIM_SLOT; i++)
-        if (slot[i].triggerCycle < nextPrimTrigger)
-            nextPrimTrigger = slot[i].triggerCycle;
+        if (slot[i].triggerCycle < nextTrigger)
+            nextTrigger = slot[i].triggerCycle;
 }
 
 void
@@ -567,7 +567,7 @@ EventHandler::scheduleAbs(EventSlot s, Cycle cycle, EventID id)
     
     slot[s].triggerCycle = cycle;
     slot[s].id = id;
-    if (cycle < nextPrimTrigger) nextPrimTrigger = cycle;
+    if (cycle < nextTrigger) nextTrigger = cycle;
     
     assert(checkScheduledEvent(s));
 }
@@ -581,7 +581,7 @@ EventHandler::scheduleRel(EventSlot s, Cycle cycle, EventID id)
     
     slot[s].triggerCycle = cycle;
     slot[s].id = id;
-    if (cycle < nextPrimTrigger) nextPrimTrigger = cycle;
+    if (cycle < nextTrigger) nextTrigger = cycle;
     
     assert(checkScheduledEvent(s));
 }
@@ -599,7 +599,7 @@ EventHandler::schedulePos(EventSlot s, int16_t vpos, int16_t hpos, EventID id)
 
     slot[s].triggerCycle = cycle;
     slot[s].id = id;
-    if (cycle < nextPrimTrigger) nextPrimTrigger = cycle;
+    if (cycle < nextTrigger) nextTrigger = cycle;
     
     assert(checkScheduledEvent(s));
 }
@@ -610,7 +610,7 @@ EventHandler::rescheduleAbs(EventSlot s, Cycle cycle)
     assert(isPrimarySlot(s));
     
     slot[s].triggerCycle = cycle;
-    if (cycle < nextPrimTrigger) nextPrimTrigger = cycle;
+    if (cycle < nextTrigger) nextTrigger = cycle;
     
     assert(checkScheduledEvent(s));
 }
@@ -623,7 +623,7 @@ EventHandler::rescheduleRel(EventSlot s, Cycle cycle)
     cycle += agnus->clock;
     
     slot[s].triggerCycle = cycle;
-    if (cycle < nextPrimTrigger) nextPrimTrigger = cycle;
+    if (cycle < nextTrigger) nextTrigger = cycle;
     
     assert(checkScheduledEvent(s));
 }

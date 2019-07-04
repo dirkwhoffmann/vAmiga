@@ -85,9 +85,10 @@ class EventHandler : public HardwareComponent
     Event slot[SLOT_COUNT];
     
     // Next trigger cycle for an event in the primary event table
-    Cycle nextPrimTrigger = NEVER;
+    Cycle nextTrigger = NEVER;
 
     // Next trigger cycle for an event in the secondary event table
+    // DEPRECATED
     Cycle nextSecTrigger = NEVER;
     
     
@@ -183,7 +184,7 @@ class EventHandler : public HardwareComponent
      * This function is called inside the execution function of Agnus.
      */
     inline void executeUntil(Cycle cycle) {
-        if (cycle >= nextPrimTrigger) _executeUntil(cycle); }
+        if (cycle >= nextTrigger) _executeUntil(cycle); }
     
     private:
     
@@ -233,13 +234,16 @@ class EventHandler : public HardwareComponent
 
     template<EventSlot s> void scheduleAbs(Cycle cycle, EventID id)
     {
-        assert(isPrimarySlot(s));
-
+        // Schedule event
         slot[s].triggerCycle = cycle;
         slot[s].id = id;
-        if (cycle < nextPrimTrigger) nextPrimTrigger = cycle;
+        if (cycle < nextTrigger) nextTrigger = cycle;
 
-        assert(checkScheduledEvent(s));
+        // Perform special actions for secondary events
+        if (isSecondarySlot(s)) {
+
+            if (cycle < slot[SEC_SLOT].triggerCycle) slot[SEC_SLOT].triggerCycle = cycle;
+        }
     }
 
     template<EventSlot s> void scheduleAbs(Cycle cycle, EventID id, int64_t data)
@@ -287,7 +291,7 @@ class EventHandler : public HardwareComponent
         assert(isPrimarySlot(s));
 
         slot[s].triggerCycle = cycle;
-        if (cycle < nextPrimTrigger) nextPrimTrigger = cycle;
+        if (cycle < nextTrigger) nextTrigger = cycle;
 
         assert(checkScheduledEvent(s));
     }
