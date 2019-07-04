@@ -581,7 +581,19 @@ void
 EventHandler::scheduleRel(EventSlot s, Cycle cycle, EventID id)
 {
     assert(isPrimarySlot(s));
-    
+
+    // Pass to new API (remove this function later)
+    switch (s) {
+        case CIAA_SLOT: scheduleRel<CIAA_SLOT>(cycle, id); return;
+        case CIAB_SLOT: scheduleRel<CIAB_SLOT>(cycle, id); return;
+        case DMA_SLOT:  scheduleRel<DMA_SLOT>(cycle, id); return;
+        case COP_SLOT:  scheduleRel<COP_SLOT>(cycle, id); return;
+        case BLT_SLOT:  scheduleRel<BLT_SLOT>(cycle, id); return;
+        case RAS_SLOT:  scheduleRel<RAS_SLOT>(cycle, id); return;
+        case SEC_SLOT:  scheduleRel<SEC_SLOT>(cycle, id); return;
+        default: assert(false);
+    }
+
     cycle += agnus->clock;
     
     slot[s].triggerCycle = cycle;
@@ -596,6 +608,18 @@ EventHandler::schedulePos(EventSlot s, int16_t vpos, int16_t hpos, EventID id)
 {
     assert(isPrimarySlot(s));
     assert(isVposHpos(vpos, hpos));
+
+    // Pass to new API (remove this function later)
+    switch (s) {
+        case CIAA_SLOT: schedulePos<CIAA_SLOT>(vpos, hpos, id); return;
+        case CIAB_SLOT: schedulePos<CIAB_SLOT>(vpos, hpos, id); return;
+        case DMA_SLOT:  schedulePos<DMA_SLOT>(vpos, hpos, id); return;
+        case COP_SLOT:  schedulePos<COP_SLOT>(vpos, hpos, id); return;
+        case BLT_SLOT:  schedulePos<BLT_SLOT>(vpos, hpos, id); return;
+        case RAS_SLOT:  schedulePos<RAS_SLOT>(vpos, hpos, id); return;
+        case SEC_SLOT:  schedulePos<SEC_SLOT>(vpos, hpos, id); return;
+        default: assert(false);
+    }
 
     Beam beam;
     beam.y = vpos;
@@ -652,7 +676,34 @@ void
 EventHandler::scheduleSecAbs(EventSlot s, Cycle cycle, EventID id)
 {
     assert(isSecondarySlot(s));
-    
+
+    // Pass to new API (remove this function later)
+    switch (s) {
+        case DSK_SLOT: scheduleAbs<DSK_SLOT>(cycle, id); return;
+        case IRQ_TBE_SLOT: scheduleAbs<IRQ_TBE_SLOT>(cycle, id); return;
+        case IRQ_DSKBLK_SLOT: scheduleAbs<IRQ_DSKBLK_SLOT>(cycle, id); return;
+        case IRQ_SOFT_SLOT: scheduleAbs<IRQ_SOFT_SLOT>(cycle, id); return;
+        case IRQ_PORTS_SLOT: scheduleAbs<IRQ_PORTS_SLOT>(cycle, id); return;
+        case IRQ_COPR_SLOT: scheduleAbs<IRQ_COPR_SLOT>(cycle, id); return;
+        case IRQ_VERTB_SLOT: scheduleAbs<IRQ_VERTB_SLOT>(cycle, id); return;
+        case IRQ_BLIT_SLOT: scheduleAbs<IRQ_BLIT_SLOT>(cycle, id); return;
+        case IRQ_AUD0_SLOT: scheduleAbs<IRQ_AUD0_SLOT>(cycle, id); return;
+        case IRQ_AUD1_SLOT: scheduleAbs<IRQ_AUD1_SLOT>(cycle, id); return;
+        case IRQ_AUD2_SLOT: scheduleAbs<IRQ_AUD2_SLOT>(cycle, id); return;
+        case IRQ_AUD3_SLOT: scheduleAbs<IRQ_AUD3_SLOT>(cycle, id); return;
+        case IRQ_RBF_SLOT: scheduleAbs<IRQ_RBF_SLOT>(cycle, id); return;
+        case IRQ_DSKSYN_SLOT: scheduleAbs<IRQ_DSKSYN_SLOT>(cycle, id); return;
+        case IRQ_EXTER_SLOT: scheduleAbs<IRQ_EXTER_SLOT>(cycle, id); return;
+        case REG_COP_SLOT: scheduleAbs<REG_COP_SLOT>(cycle, id); return;
+        case REG_CPU_SLOT: scheduleAbs<REG_CPU_SLOT>(cycle, id); return;
+        case TXD_SLOT: scheduleAbs<TXD_SLOT>(cycle, id); return;
+        case RXD_SLOT: scheduleAbs<RXD_SLOT>(cycle, id); return;
+        case POT_SLOT: scheduleAbs<POT_SLOT>(cycle, id); return;
+        case SYNC_SLOT: scheduleAbs<SYNC_SLOT>(cycle, id); return;
+        case INSPECTOR_SLOT: scheduleAbs<INSPECTOR_SLOT>(cycle, id); return;
+        default: assert(false);
+    }
+
     // Schedule event in secondary table
     slot[s].triggerCycle = cycle;
     slot[s].id = id;
