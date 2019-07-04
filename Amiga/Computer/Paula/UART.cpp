@@ -213,7 +213,7 @@ void
 UART::rxdHasChanged(bool value)
 {
     // Schedule the first reception event if transmission has not yet started
-    if (value == 0 && !events->hasEventSec(RXD_SLOT)) {
+    if (value == 0 && !events->hasEvent<RXD_SLOT>()) {
 
         // Reset the bit counter
         recCnt = 0;

@@ -552,6 +552,7 @@ EventHandler::posToCycle(int16_t vpos, int16_t hpos)
     return agnus->beamToCycle(beam);
 }
 
+/*
 void
 EventHandler::scheduleAbs(EventSlot s, Cycle cycle, EventID id)
 {
@@ -575,6 +576,7 @@ EventHandler::scheduleAbs(EventSlot s, Cycle cycle, EventID id)
     
     assert(checkScheduledEvent(s));
 }
+*/
 
 /*
 void

@@ -1261,17 +1261,13 @@ CIAA::_powerOff()
 void
 CIAA::scheduleNextExecution()
 {
-    events->scheduleAbs(CIAA_SLOT,
-                        clock + CIA_CYCLES(1),
-                        CIA_EXECUTE);
+    events->scheduleAbs<CIAA_SLOT>(clock + CIA_CYCLES(1), CIA_EXECUTE);
 }
 
 void
 CIAA::scheduleWakeUp()
 {
-    events->scheduleAbs(CIAA_SLOT,
-                        wakeUpCycle,
-                        CIA_WAKEUP);
+    events->scheduleAbs<CIAA_SLOT>(wakeUpCycle, CIA_WAKEUP);
 }
 
 void 
@@ -1439,17 +1435,13 @@ CIAB::_dump()
 void
 CIAB::scheduleNextExecution()
 {
-    events->scheduleAbs(CIAB_SLOT,
-                        clock + CIA_CYCLES(1),
-                        CIA_EXECUTE);
+    events->scheduleAbs<CIAB_SLOT>(clock + CIA_CYCLES(1), CIA_EXECUTE);
 }
 
 void
 CIAB::scheduleWakeUp()
 {
-    events->scheduleAbs(CIAB_SLOT,
-                        wakeUpCycle,
-                        CIA_WAKEUP);
+    events->scheduleAbs<CIAB_SLOT>(wakeUpCycle, CIA_WAKEUP);
 }
 
 void 

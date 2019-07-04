@@ -150,8 +150,8 @@ Agnus::_powerOn()
     events.scheduleSecAbs(SYNC_SLOT, DMA_CYCLES(HPOS_MAX), SYNC_H);
 
     // Schedule the first CIA A and CIA B events
-    events.scheduleAbs(CIAA_SLOT, CIA_CYCLES(1), CIA_EXECUTE);
-    events.scheduleAbs(CIAB_SLOT, CIA_CYCLES(1), CIA_EXECUTE);
+    events.scheduleAbs<CIAA_SLOT>(CIA_CYCLES(1), CIA_EXECUTE);
+    events.scheduleAbs<CIAB_SLOT>(CIA_CYCLES(1), CIA_EXECUTE);
 }
 
 void
@@ -913,7 +913,7 @@ Agnus::pokeDMACON(uint16_t value)
             // (the next even DMA cycle)
             Cycle trigger = (clock + 15) & ~15;
             
-            events.scheduleAbs(COP_SLOT, trigger, COP_FETCH);
+            events.scheduleAbs<COP_SLOT>(trigger, COP_FETCH);
             
         } else {
             
@@ -1592,14 +1592,6 @@ Agnus::serviceRASEvent(EventID id)
     }
     */
 }
-
-/*
-void
-Agnus::scheduleFirstRASEvent(int16_t vpos)
-{
-    events.schedulePos(RAS_SLOT, vpos, HPOS_MAX, RAS_HSYNC);
-}
-*/
 
 void
 Agnus::serviceSYNCEvent(EventID id)

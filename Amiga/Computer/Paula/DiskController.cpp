@@ -327,7 +327,7 @@ DiskController::PRBdidChange(uint8_t oldValue, uint8_t newValue)
         // debug("Cancelling DSK_SLOT events\n");
         events->cancelSec(DSK_SLOT);
     }
-    else if (!events->hasEventSec(DSK_SLOT)) {
+    else if (!events->hasEvent<DSK_SLOT>()) {
         // debug("Activating DSK_SLOT events\n");
         events->scheduleSecRel(DSK_SLOT, DMA_CYCLES(56), DSK_ROTATE);
     }

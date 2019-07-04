@@ -69,7 +69,7 @@ Copper::_inspect()
     pthread_mutex_lock(&lock);
     
     info.cdang   = cdang;
-    info.active  = events->isPending(COP_SLOT);
+    info.active  = events->isPending<COP_SLOT>();
     info.coppc   = coppc; // coppcBase;
     info.cop1ins = cop1ins;
     info.cop2ins = cop2ins;
@@ -84,7 +84,7 @@ Copper::_inspect()
 void
 Copper::_dump()
 {
-    bool active = events->isPending(COP_SLOT);
+    bool active = events->isPending<COP_SLOT>();
     plainmsg("    cdang: %d\n", cdang);
     plainmsg("   active: %s\n", active ? "yes" : "no");
     if (active) plainmsg("    state: %d\n", events->slot[COP_SLOT].id);
