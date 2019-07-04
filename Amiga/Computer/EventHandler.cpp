@@ -767,6 +767,7 @@ EventHandler::scheduleSecPos(EventSlot s, int16_t vpos, int16_t hpos, EventID id
 }
 */
 
+/*
 void
 EventHandler::rescheduleSecAbs(EventSlot s, Cycle cycle)
 {
@@ -798,14 +799,6 @@ EventHandler::rescheduleSecAbs(EventSlot s, Cycle cycle)
         case INSPECTOR_SLOT: rescheduleAbs<INSPECTOR_SLOT>(cycle); return;
         default: assert(false);
     }
-
-    /*
-    slot[s].triggerCycle = cycle;
-    if (cycle < nextSecTrigger) nextSecTrigger = cycle;
-    
-    // Update the secondary table trigger in the primary table
-    scheduleAbs(SEC_SLOT, nextSecTrigger, SEC_TRIGGER);
-    */
 }
 
 void
@@ -839,18 +832,9 @@ EventHandler::rescheduleSecRel(EventSlot s, Cycle cycle)
         case INSPECTOR_SLOT: rescheduleRel<INSPECTOR_SLOT>(cycle); return;
         default: assert(false);
     }
-
-    /*
-    cycle += agnus->clock;
-    
-    slot[s].triggerCycle = cycle;
-    if (cycle < nextSecTrigger) nextSecTrigger = cycle;
-    
-    // Update the secondary table trigger in the primary table
-    scheduleAbs(SEC_SLOT, nextSecTrigger, SEC_TRIGGER);
-    */
 }
-
+*/
+/*
 void
 EventHandler::disableSec(EventSlot s)
 {
@@ -894,6 +878,7 @@ EventHandler::cancelSec(EventSlot s)
     slot[s].id = (EventID)0;
     slot[s].triggerCycle = NEVER;
 }
+*/
 
 void
 EventHandler::serveIRQEvent(EventSlot s, int irqBit)
@@ -912,7 +897,7 @@ EventHandler::serveIRQEvent(EventSlot s, int irqBit)
             assert(false);
     }
     
-    cancelSec(s);
+    cancel(s);
 }
 
 void
@@ -977,7 +962,7 @@ EventHandler::serveRegEvent(EventSlot nr)
     }
 
     // Remove event
-    cancelSec(nr);
+    cancel(nr);
 }
 
 void
@@ -1004,7 +989,7 @@ EventHandler::serveINSEvent()
     }
     
     // Reschedule event
-    rescheduleSecRel(INSPECTOR_SLOT, (Cycle)(inspectionInterval * 28000000));
+    rescheduleRel<INSPECTOR_SLOT>((Cycle)(inspectionInterval * 28000000));
 }
 
 bool

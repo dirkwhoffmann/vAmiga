@@ -296,7 +296,7 @@ Paula::servePotEvent(EventID id)
             if (cont) {
                 events->scheduleInc<POT_SLOT>(DMA_CYCLES(HPOS_CNT), POT_CHARGE);
             } else {
-                events->cancelSec(POT_SLOT);
+                events->cancel<POT_SLOT>();
             }
             break;
 

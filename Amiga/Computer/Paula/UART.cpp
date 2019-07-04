@@ -259,7 +259,7 @@ UART::serveTxdEvent(EventID id)
 
                     // Abort the transmission
                     debug(SER_DEBUG, "End of transmission\n");
-                    events->cancelSec(TXD_SLOT);
+                    events->cancel<TXD_SLOT>();
                     break;
                 }
             }
@@ -293,7 +293,7 @@ UART::serveRxdEvent(EventID id)
 
         // Stop receiving if the last bit was a stop bit
         if (rxd) {
-            events->cancelSec(RXD_SLOT);
+            events->cancel<RXD_SLOT>();
             return;
         } else {
             // Prepare for the next packet

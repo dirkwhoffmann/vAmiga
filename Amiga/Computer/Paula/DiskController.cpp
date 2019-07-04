@@ -325,7 +325,7 @@ DiskController::PRBdidChange(uint8_t oldValue, uint8_t newValue)
     // Schedule the first rotation event if at least one drive is spinning.
     if (!spinning()) {
         // debug("Cancelling DSK_SLOT events\n");
-        events->cancelSec(DSK_SLOT);
+        events->cancel<DSK_SLOT>();
     }
     else if (!events->hasEvent<DSK_SLOT>()) {
         // debug("Activating DSK_SLOT events\n");

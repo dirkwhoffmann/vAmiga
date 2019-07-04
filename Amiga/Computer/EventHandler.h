@@ -285,6 +285,14 @@ class EventHandler : public HardwareComponent
         slot[s].triggerCycle = NEVER;
     }
 
+    void cancel(EventSlot s)
+    {
+        slot[s].id = (EventID)0;
+        slot[s].data = 0;
+        slot[s].triggerCycle = NEVER;
+    }
+
+
     //
     // OLD API (DEPRECATED)
     //
@@ -314,14 +322,14 @@ class EventHandler : public HardwareComponent
     // void scheduleSecPos(EventSlot s, int16_t vpos, int16_t hpos, EventID id, int64_t data);
 
     // Reschedules an existing event in the secondary event table.
-    void rescheduleSecAbs(EventSlot s, Cycle cycle);
-    void rescheduleSecRel(EventSlot s, Cycle cycle);
+    // void rescheduleSecAbs(EventSlot s, Cycle cycle);
+    // void rescheduleSecRel(EventSlot s, Cycle cycle);
     
     // Disables an event in the secondary event table.
-    void disableSec(EventSlot s);
+    // void disableSec(EventSlot s);
     
     // Deletes an event in the secondary event table.
-    void cancelSec(EventSlot s);
+    // void cancelSec(EventSlot s);
 
     // Schedules a register write event
     void scheduleRegEvent(EventSlot slot, Cycle cycle, EventID id, int64_t data);
