@@ -534,7 +534,7 @@ EventHandler::_executeSecUntil(Cycle cycle) {
             nextSecTrigger = slot[i].triggerCycle;
     
     // Update the secondary table trigger in the primary table
-    rescheduleAbs(SEC_SLOT, nextSecTrigger);
+    rescheduleAbs<SEC_SLOT>(nextSecTrigger);
 }
 
 Cycle
@@ -637,6 +637,7 @@ EventHandler::schedulePos(EventSlot s, int16_t vpos, int16_t hpos, EventID id)
 }
 */
 
+/*
 void
 EventHandler::rescheduleAbs(EventSlot s, Cycle cycle)
 {
@@ -660,6 +661,7 @@ EventHandler::rescheduleRel(EventSlot s, Cycle cycle)
     
     assert(checkScheduledEvent(s));
 }
+*/
 
 void
 EventHandler::disable(EventSlot s)

@@ -146,37 +146,6 @@ class EventHandler : public HardwareComponent
 
 
     //
-    // OLD API (DEPRECATED)
-    //
-
-    /*
-    // Checks whether a particular slot in the primary table contains an event.
-    inline bool hasEvent(EventSlot s) {
-        assert(isPrimarySlot(s)); return slot[s].id != 0; }
-    
-    // Checks whether a particular slot in the secondary table contains an event.
-    inline bool hasEventSec(EventSlot s) {
-        assert(isSecondarySlot(s)); return slot[s].id != 0; }
-    
-    // Checks whether a particular slot in the primary table contains a pending event.
-    inline bool isPending(EventSlot s) {
-        assert(isPrimarySlot(s)); return slot[s].triggerCycle != NEVER; }
-    
-    // Checks whether a particular slot in the secondary table contains a pending event.
-    inline bool isPendingSec(EventSlot s) {
-        assert(isSecondarySlot(s)); return slot[s].triggerCycle != NEVER; }
-    */
-    
-    // Checks whether a particular slot in the primary table contains a due event.
-    // inline bool isDue(EventSlot s, Cycle cycle) {
-    //     assert(isPrimarySlot(s)); return cycle >= slot[s].triggerCycle; }
-    
-    // Checks whether a particular slot in the secondary table contains a due event.
-    // inline bool isDueSec(EventSlot s, Cycle cycle) {
-    //     assert(isSecondarySlot(s)); return cycle >= slot[s].triggerCycle; }
-    
-    
-    //
     // Processing events
     //
     
@@ -326,8 +295,8 @@ class EventHandler : public HardwareComponent
     // void schedulePos(EventSlot s, int16_t vpos, int16_t hpos, EventID id);
     
     // Reschedules an existing event in the primary event table.
-    void rescheduleAbs(EventSlot s, Cycle cycle);
-    void rescheduleRel(EventSlot s, Cycle cycle);
+    // void rescheduleAbs(EventSlot s, Cycle cycle);
+    // void rescheduleRel(EventSlot s, Cycle cycle);
     
     // Disables an event in the primary event table. (DEPRECATED)
     void disable(EventSlot s);

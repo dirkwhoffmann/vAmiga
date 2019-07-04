@@ -519,7 +519,7 @@ Blitter::serviceEvent(EventID id)
             } else {
             
                 // Continue running the Blitter
-                agnus->events.rescheduleRel(BLT_SLOT, DMA_CYCLES(1));
+                agnus->events.rescheduleInc<BLT_SLOT>(DMA_CYCLES(1));
             }
             
             break;
