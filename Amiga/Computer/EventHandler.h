@@ -299,10 +299,10 @@ class EventHandler : public HardwareComponent
     // void rescheduleRel(EventSlot s, Cycle cycle);
     
     // Disables an event in the primary event table. (DEPRECATED)
-    void disable(EventSlot s);
+    // void disable(EventSlot s);
     
     // Deletes an event in the primary event table.
-    void cancel(EventSlot s);
+    // void cancel(EventSlot s);
     
     
     // Schedules a new event in the secondary event table.

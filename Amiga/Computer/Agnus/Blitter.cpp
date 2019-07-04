@@ -407,7 +407,7 @@ Blitter::serviceEvent(EventID id)
             
             // Only proceed if Blitter DMA is enabled
             if (!agnus->bltDMA()) {
-                agnus->events.disable(BLT_SLOT);
+                agnus->events.cancel<BLT_SLOT>();
                 break;
             }
 
@@ -514,7 +514,7 @@ Blitter::serviceEvent(EventID id)
                 events->scheduleSecRel(IRQ_BLIT_SLOT, 0, IRQ_SET);
                 
                 // Terminate the Blitter
-                events->cancel(BLT_SLOT);
+                events->cancel<BLT_SLOT>();
                 
             } else {
             
@@ -529,7 +529,7 @@ Blitter::serviceEvent(EventID id)
             if (agnus->bltDMA()) {
                 doFastBlit();
             }
-            agnus->events.disable(BLT_SLOT);
+            agnus->events.cancel<BLT_SLOT>();
             break;
 
         default:

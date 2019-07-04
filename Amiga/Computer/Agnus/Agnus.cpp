@@ -919,7 +919,7 @@ Agnus::pokeDMACON(uint16_t value)
             
             // Copper DMA off
             debug(DMA_DEBUG, "Copper DMA switched off\n");
-            events.cancel(COP_SLOT);
+            events.cancel<COP_SLOT>();
         }
     }
     
@@ -935,7 +935,7 @@ Agnus::pokeDMACON(uint16_t value)
             
             // Blitter DMA off
             debug(DMA_DEBUG, "Blitter DMA switched off\n");
-            events.disable(BLT_SLOT);
+            events.cancel<BLT_SLOT>();
         }
     }
     
@@ -1517,7 +1517,7 @@ Agnus::serviceDMAEvent(EventID id)
         // events.schedulePos<DMA_SLOT>(vpos, next, dmaEvent[next]);
         events.scheduleInc<DMA_SLOT>(DMA_CYCLES(next - hpos), dmaEvent[next]);
     } else {
-        events.cancel(DMA_SLOT);
+        events.cancel<DMA_SLOT>();
     }
 }
 

@@ -663,6 +663,7 @@ EventHandler::rescheduleRel(EventSlot s, Cycle cycle)
 }
 */
 
+/*
 void
 EventHandler::disable(EventSlot s)
 {
@@ -677,6 +678,7 @@ EventHandler::cancel(EventSlot s)
     slot[s].id = (EventID)0;
     slot[s].triggerCycle = NEVER;
 }
+*/
 
 void
 EventHandler::scheduleSecAbs(EventSlot s, Cycle cycle, EventID id)

@@ -591,7 +591,7 @@ Copper::serviceEvent(EventID id)
             reg = (cop1ins & 0x1FE);
 
             // Stop the Copper if address is illegal
-            if (isIllegalAddress(reg)) { events->cancel(COP_SLOT); break; }
+            if (isIllegalAddress(reg)) { events->cancel<COP_SLOT>(); break; }
 
             // Write into the custom register
             if (!skip) move(reg, cop2ins);
@@ -636,8 +636,7 @@ Copper::serviceEvent(EventID id)
 
                 } else {
 
-                    // Stop the Copper (TODO: Better use events->cancel)
-                    events->disable(COP_SLOT);
+                    events->cancel<COP_SLOT>();
                 }
 
             } else {
@@ -712,7 +711,7 @@ Copper::vsyncAction()
     if (agnus->copDMA()) {
         events->scheduleRel<COP_SLOT>(DMA_CYCLES(4), COP_JMP1);
     } else {
-        events->cancel(COP_SLOT);
+        events->cancel<COP_SLOT>();
     }
 }
 
