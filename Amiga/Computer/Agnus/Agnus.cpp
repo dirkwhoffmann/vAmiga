@@ -147,7 +147,7 @@ Agnus::_powerOn()
     // events.scheduleAbs(RAS_SLOT, DMA_CYCLES(HPOS_MAX), RAS_HSYNC);
 
     // Schedule the first SYNC event
-    events.scheduleSecAbs(SYNC_SLOT, DMA_CYCLES(HPOS_MAX), SYNC_H);
+    events.scheduleAbs<SYNC_SLOT>(DMA_CYCLES(HPOS_MAX), SYNC_H);
 
     // Schedule the first CIA A and CIA B events
     events.scheduleAbs<CIAA_SLOT>(CIA_CYCLES(1), CIA_EXECUTE);
