@@ -292,45 +292,6 @@ class EventHandler : public HardwareComponent
         slot[s].triggerCycle = NEVER;
     }
 
-
-    //
-    // OLD API (DEPRECATED)
-    //
-
-    // Schedules a new event in the primary event table.
-    // void scheduleAbs(EventSlot s, Cycle cycle, EventID id);
-    // void scheduleRel(EventSlot s, Cycle cycle, EventID id);
-    // void schedulePos(EventSlot s, int16_t vpos, int16_t hpos, EventID id);
-    
-    // Reschedules an existing event in the primary event table.
-    // void rescheduleAbs(EventSlot s, Cycle cycle);
-    // void rescheduleRel(EventSlot s, Cycle cycle);
-    
-    // Disables an event in the primary event table. (DEPRECATED)
-    // void disable(EventSlot s);
-    
-    // Deletes an event in the primary event table.
-    // void cancel(EventSlot s);
-    
-    
-    // Schedules a new event in the secondary event table.
-    // void scheduleSecAbs(EventSlot s, Cycle cycle, EventID id);
-    // void scheduleSecAbs(EventSlot s, Cycle cycle, EventID id, int64_t data);
-    // void scheduleSecRel(EventSlot s, Cycle cycle, EventID id);
-    // void scheduleSecRel(EventSlot s, Cycle cycle, EventID id, int64_t data);
-    // void scheduleSecPos(EventSlot s, int16_t vpos, int16_t hpos, EventID id);
-    // void scheduleSecPos(EventSlot s, int16_t vpos, int16_t hpos, EventID id, int64_t data);
-
-    // Reschedules an existing event in the secondary event table.
-    // void rescheduleSecAbs(EventSlot s, Cycle cycle);
-    // void rescheduleSecRel(EventSlot s, Cycle cycle);
-    
-    // Disables an event in the secondary event table.
-    // void disableSec(EventSlot s);
-    
-    // Deletes an event in the secondary event table.
-    // void cancelSec(EventSlot s);
-
     // Schedules a register write event
     void scheduleRegEvent(EventSlot slot, Cycle cycle, EventID id, int64_t data);
 
