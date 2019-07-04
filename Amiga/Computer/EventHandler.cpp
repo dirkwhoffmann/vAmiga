@@ -723,6 +723,7 @@ EventHandler::scheduleSecRel(EventSlot s, Cycle cycle, EventID id, int64_t data)
 }
 */
 
+/*
 void
 EventHandler::scheduleSecPos(EventSlot s, int16_t vpos, int16_t hpos, EventID id)
 {
@@ -755,28 +756,16 @@ EventHandler::scheduleSecPos(EventSlot s, int16_t vpos, int16_t hpos, EventID id
         case INSPECTOR_SLOT: schedulePos<INSPECTOR_SLOT>(vpos, hpos, id); return;
         default: assert(false);
     }
-
-    /*
-    Beam beam;
-    beam.y = vpos;
-    beam.x = hpos;
-    Cycle cycle = agnus->beamToCycle(beam);
-
-    slot[s].triggerCycle = cycle;
-    slot[s].id = id;
-    if (cycle < nextSecTrigger) nextSecTrigger = cycle;
-    
-    // Update the secondary table trigger in the primary table
-    scheduleAbs(SEC_SLOT, nextSecTrigger, SEC_TRIGGER);
-    */
 }
-
+*/
+/*
 void
 EventHandler::scheduleSecPos(EventSlot s, int16_t vpos, int16_t hpos, EventID id, int64_t data)
 {
     scheduleSecPos(s, vpos, hpos, id);
     slot[s].data = data;
 }
+*/
 
 void
 EventHandler::rescheduleSecAbs(EventSlot s, Cycle cycle)

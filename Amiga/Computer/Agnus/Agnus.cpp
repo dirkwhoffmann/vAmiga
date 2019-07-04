@@ -1612,7 +1612,7 @@ Agnus::serviceSYNCEvent(EventID id)
 void
 Agnus::scheduleFirstSYNCEvent(int16_t vpos)
 {
-    events.scheduleSecPos(SYNC_SLOT, vpos, HPOS_MAX, SYNC_H);
+    events.schedulePos<SYNC_SLOT>(vpos, HPOS_MAX, SYNC_H);
 }
 
 void
