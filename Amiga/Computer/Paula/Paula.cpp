@@ -270,7 +270,7 @@ Paula::servePotEvent(EventID id)
                 potCntY0++;
                 potCntX1++;
                 potCntY1++;
-                events->scheduleSecRel(POT_SLOT, DMA_CYCLES(HPOS_MAX), POT_DISCHARGE);
+                events->scheduleInc<POT_SLOT>(DMA_CYCLES(HPOS_MAX), POT_DISCHARGE);
 
             } else {
 
@@ -279,7 +279,7 @@ Paula::servePotEvent(EventID id)
                 potCntY0 = 0;
                 potCntX1 = 0;
                 potCntY1 = 0;
-                events->scheduleSecRel(POT_SLOT, DMA_CYCLES(HPOS_MAX), POT_CHARGE);
+                events->scheduleInc<POT_SLOT>(DMA_CYCLES(HPOS_MAX), POT_CHARGE);
             }
             break;
 
@@ -294,7 +294,7 @@ Paula::servePotEvent(EventID id)
 
             // Schedule next pot event if at least counter is still running
             if (cont) {
-                events->scheduleSecRel(POT_SLOT, DMA_CYCLES(HPOS_CNT), POT_CHARGE);
+                events->scheduleInc<POT_SLOT>(DMA_CYCLES(HPOS_CNT), POT_CHARGE);
             } else {
                 events->cancelSec(POT_SLOT);
             }

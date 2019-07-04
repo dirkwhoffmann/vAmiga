@@ -329,7 +329,7 @@ DiskController::PRBdidChange(uint8_t oldValue, uint8_t newValue)
     }
     else if (!events->hasEvent<DSK_SLOT>()) {
         // debug("Activating DSK_SLOT events\n");
-        events->scheduleSecRel(DSK_SLOT, DMA_CYCLES(56), DSK_ROTATE);
+        events->scheduleRel<DSK_SLOT>(DMA_CYCLES(56), DSK_ROTATE);
     }
 }
 
@@ -342,7 +342,7 @@ DiskController::serveDiskEvent()
         executeFifo();
     
         // Schedule next event.
-        events->scheduleSecRel(DSK_SLOT, DMA_CYCLES(56), DSK_ROTATE);
+        events->scheduleRel<DSK_SLOT>(DMA_CYCLES(56), DSK_ROTATE);
     }
 }
 

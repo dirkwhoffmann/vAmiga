@@ -156,7 +156,7 @@ Amiga::setInspectionTarget(EventID id)
 {
     suspend();
     inspectionTarget = id;
-    events->scheduleSecRel(INSPECTOR_SLOT, 0, inspectionTarget);
+    events->scheduleRel<INSPECTOR_SLOT>(0, inspectionTarget);
     resume();
 }
 
@@ -974,7 +974,7 @@ Amiga::runLoop()
     
     // Enable or disable debugging features
     debugMode ? setControlFlags(RL_DEBUG) : clearControlFlags(RL_DEBUG);
-    events->scheduleSecRel(INSPECTOR_SLOT, 0, inspectionTarget);
+    events->scheduleRel<INSPECTOR_SLOT>(0, inspectionTarget);
     
     // Enter the loop
     do {

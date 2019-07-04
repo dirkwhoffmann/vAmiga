@@ -308,8 +308,8 @@ class EventHandler : public HardwareComponent
     // Schedules a new event in the secondary event table.
     // void scheduleSecAbs(EventSlot s, Cycle cycle, EventID id);
     // void scheduleSecAbs(EventSlot s, Cycle cycle, EventID id, int64_t data);
-    void scheduleSecRel(EventSlot s, Cycle cycle, EventID id);
-    void scheduleSecRel(EventSlot s, Cycle cycle, EventID id, int64_t data);
+    // void scheduleSecRel(EventSlot s, Cycle cycle, EventID id);
+    // void scheduleSecRel(EventSlot s, Cycle cycle, EventID id, int64_t data);
     void scheduleSecPos(EventSlot s, int16_t vpos, int16_t hpos, EventID id);
     void scheduleSecPos(EventSlot s, int16_t vpos, int16_t hpos, EventID id, int64_t data);
 

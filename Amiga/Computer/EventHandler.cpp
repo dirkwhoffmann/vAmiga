@@ -679,7 +679,7 @@ EventHandler::cancel(EventSlot s)
     slot[s].triggerCycle = NEVER;
 }
 */
-
+/*
 void
 EventHandler::scheduleSecRel(EventSlot s, Cycle cycle, EventID id)
 {
@@ -711,26 +711,17 @@ EventHandler::scheduleSecRel(EventSlot s, Cycle cycle, EventID id)
         case INSPECTOR_SLOT: scheduleRel<INSPECTOR_SLOT>(cycle, id); return;
         default: assert(false);
     }
-
-    /*
-    cycle += agnus->clock;
-    
-    // Schedule event in secondary table
-    slot[s].triggerCycle = cycle;
-    slot[s].id = id;
-    if (cycle < nextSecTrigger) nextSecTrigger = cycle;
-    
-    // Update the secondary table trigger in the primary table
-    scheduleAbs(SEC_SLOT, nextSecTrigger, SEC_TRIGGER);
-    */
 }
+*/
 
+/*
 void
 EventHandler::scheduleSecRel(EventSlot s, Cycle cycle, EventID id, int64_t data)
 {
     scheduleSecRel(s, cycle, id);
     slot[s].data = data;
 }
+*/
 
 void
 EventHandler::scheduleSecPos(EventSlot s, int16_t vpos, int16_t hpos, EventID id)
@@ -958,6 +949,7 @@ EventHandler::scheduleRegEvent(EventSlot slot, Cycle cycle, EventID id, int64_t 
                 assert(isDue<REG_COP_SLOT>(amiga->masterClock));
                 serveRegEvent(slot);
             }
+            scheduleRel<REG_COP_SLOT>(cycle, id, data);
             break;
 
         case REG_CPU_SLOT:
@@ -965,14 +957,12 @@ EventHandler::scheduleRegEvent(EventSlot slot, Cycle cycle, EventID id, int64_t 
                 assert(isDue<REG_CPU_SLOT>(amiga->masterClock));
                 serveRegEvent(slot);
             }
+            scheduleRel<REG_CPU_SLOT>(cycle, id, data);
             break;
 
         default:
             assert(false);
     }
-
-    // Schedule event
-    scheduleSecRel(slot, cycle, id, data);
 }
 
 void

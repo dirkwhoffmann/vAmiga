@@ -160,7 +160,7 @@ UART::copyToTransmitShiftRegister()
     paula->pokeINTREQ(0x8001);
 
     // Schedule the transmission of the first bit
-    events->scheduleSecRel(TXD_SLOT, 0, TXD_BIT);
+    events->scheduleRel<TXD_SLOT>(0, TXD_BIT);
 }
 
 void
@@ -222,7 +222,7 @@ UART::rxdHasChanged(bool value)
         Cycle delay = rate() * 3 / 2;
 
         // Schedule the event
-        events->scheduleSecRel(RXD_SLOT, delay, RXD_BIT);
+        events->scheduleRel<RXD_SLOT>(delay, RXD_BIT);
     }
 }
 
@@ -265,7 +265,7 @@ UART::serveTxdEvent(EventID id)
             }
 
             // Schedule the next event
-            events->scheduleSecRel(TXD_SLOT, rate(), TXD_BIT);
+            events->scheduleInc<TXD_SLOT>(rate(), TXD_BIT);
             break;
 
         default:
@@ -302,5 +302,5 @@ UART::serveRxdEvent(EventID id)
     }
 
     // Schedule the next reception event
-    events->scheduleSecRel(RXD_SLOT, rate(), RXD_BIT);
+    events->scheduleInc<RXD_SLOT>(rate(), RXD_BIT);
 }
