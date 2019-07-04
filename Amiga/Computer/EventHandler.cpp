@@ -37,22 +37,15 @@ EventHandler::_initialize()
 void
 EventHandler::_powerOn()
 {
-    // Wipe out the primary event table
-    for (unsigned i = 0; i <= LAST_PRIM_SLOT; i++) {
+    // Clear the event table
+    for (unsigned i = 0; i < SLOT_COUNT; i++) {
         slot[i].triggerCycle = NEVER;
         slot[i].id = (EventID)0;
         slot[i].data = 0;
     }
-    
-    // Wipe out the secondary event table
-    for (unsigned i = FIRST_SEC_SLOT; i <= LAST_SEC_SLOT; i++) {
-        slot[i].triggerCycle = NEVER;
-        slot[i].id = (EventID)0;
-        slot[i].data = 0;
-    }
-    
-    // Schedule the first inspection event (retriggers automatically)
-    // scheduleSecRel(INSPECTOR_SLOT, 0, INS_NONE);
+
+    // Initialize the SEC_SLOT
+    scheduleAbs<SEC_SLOT>(NEVER, SEC_TRIGGER);
 }
 
 void
