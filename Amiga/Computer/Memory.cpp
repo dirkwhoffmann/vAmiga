@@ -1057,62 +1057,62 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x09E >> 1: // ADKCON
             paula->pokeADKCON(value); return;
         case 0x0A0 >> 1: // AUD0LCH
-            agnus->pokeAUDxLCH(0, value); return;
+            agnus->pokeAUDxLCH<0>(value); return;
         case 0x0A2 >> 1: // AUD0LCL
-            agnus->pokeAUDxLCL(0, value); return;
+            agnus->pokeAUDxLCL<0>(value); return;
         case 0x0A4 >> 1: // AUD0LEN
-            paula->audioUnit.pokeAUDxLEN(0, value); return;
+            paula->audioUnit.pokeAUDxLEN<0>(value); return;
         case 0x0A6 >> 1: // AUD0PER
-            paula->audioUnit.pokeAUDxPER(0, value); return;
+            paula->audioUnit.pokeAUDxPER<0>(value); return;
         case 0x0A8 >> 1: // AUD0VOL
-            paula->audioUnit.pokeAUDxVOL(0, value); return;
+            paula->audioUnit.pokeAUDxVOL<0>(value); return;
         case 0x0AA >> 1: // AUD0DAT
-            paula->audioUnit.pokeAUDxDAT(0, value); return;
+            paula->audioUnit.pokeAUDxDAT<0>(value); return;
         case 0x0AC >> 1: // Unused
         case 0x0AE >> 1: // Unused
             break;
         case 0x0B0 >> 1: // AUD1LCH
-            agnus->pokeAUDxLCH(1, value); return;
+            agnus->pokeAUDxLCH<1>(value); return;
         case 0x0B2 >> 1: // AUD1LCL
-            agnus->pokeAUDxLCL(1, value); return;
+            agnus->pokeAUDxLCL<1>(value); return;
         case 0x0B4 >> 1: // AUD1LEN
-            paula->audioUnit.pokeAUDxLEN(1, value); return;
+            paula->audioUnit.pokeAUDxLEN<1>(value); return;
         case 0x0B6 >> 1: // AUD1PER
-            paula->audioUnit.pokeAUDxPER(1, value); return;
+            paula->audioUnit.pokeAUDxPER<1>(value); return;
         case 0x0B8 >> 1: // AUD1VOL
-            paula->audioUnit.pokeAUDxVOL(1, value); return;
+            paula->audioUnit.pokeAUDxVOL<1>(value); return;
         case 0x0BA >> 1: // AUD1DAT
-            paula->audioUnit.pokeAUDxDAT(1, value); return;
+            paula->audioUnit.pokeAUDxDAT<1>(value); return;
         case 0x0BC >> 1: // Unused
         case 0x0BE >> 1: // Unused
             break;
         case 0x0C0 >> 1: // AUD2LCH
-            agnus->pokeAUDxLCH(2, value); return;
+            agnus->pokeAUDxLCH<2>(value); return;
         case 0x0C2 >> 1: // AUD2LCL
-            agnus->pokeAUDxLCL(2, value); return;
+            agnus->pokeAUDxLCL<2>(value); return;
         case 0x0C4 >> 1: // AUD2LEN
-            paula->audioUnit.pokeAUDxLEN(2, value); return;
+            paula->audioUnit.pokeAUDxLEN<2>(value); return;
         case 0x0C6 >> 1: // AUD2PER
-            paula->audioUnit.pokeAUDxPER(2, value); return;
+            paula->audioUnit.pokeAUDxPER<2>(value); return;
         case 0x0C8 >> 1: // AUD2VOL
-            paula->audioUnit.pokeAUDxVOL(2, value); return;
+            paula->audioUnit.pokeAUDxVOL<2>(value); return;
         case 0x0CA >> 1: // AUD2DAT
-            paula->audioUnit.pokeAUDxDAT(2, value); return;
+            paula->audioUnit.pokeAUDxDAT<2>(value); return;
         case 0x0CC >> 1: // Unused
         case 0x0CE >> 1: // Unused
             break;
         case 0x0D0 >> 1: // AUD3LCH
-            agnus->pokeAUDxLCH(3, value); return;
+            agnus->pokeAUDxLCH<3>(value); return;
         case 0x0D2 >> 1: // AUD3LCL
-            agnus->pokeAUDxLCL(3, value); return;
+            agnus->pokeAUDxLCL<3>(value); return;
         case 0x0D4 >> 1: // AUD3LEN
-            paula->audioUnit.pokeAUDxLEN(3, value); return;
+            paula->audioUnit.pokeAUDxLEN<3>(value); return;
         case 0x0D6 >> 1: // AUD3PER
-            paula->audioUnit.pokeAUDxPER(3, value); return;
+            paula->audioUnit.pokeAUDxPER<3>(value); return;
         case 0x0D8 >> 1: // AUD3VOL
-            paula->audioUnit.pokeAUDxVOL(3, value); return;
+            paula->audioUnit.pokeAUDxVOL<3>(value); return;
         case 0x0DA >> 1: // AUD3DAT
-            paula->audioUnit.pokeAUDxDAT(3, value); return;
+            paula->audioUnit.pokeAUDxDAT<3>(value); return;
         case 0x0DC >> 1: // Unused
         case 0x0DE >> 1: // Unused
             break;

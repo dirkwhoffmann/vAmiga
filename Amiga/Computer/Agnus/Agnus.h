@@ -593,6 +593,8 @@ public:
     void pokeDDFSTOP(uint16_t value);
     
     // AUDxLCL, AUDxLCL
+    template <int x> void pokeAUDxLCH(uint16_t value);
+    template <int x> void pokeAUDxLCL(uint16_t value);
     void pokeAUDxLCH(int x, uint16_t value);
     void pokeAUDxLCL(int x, uint16_t value);
     
@@ -627,11 +629,9 @@ private:
 
     // Executes the first sprite DMA cycle
     template <int nr> void executeFirstSpriteCycle();
-    // void executeFirstSpriteCycle(int nr);
 
     // Executes the second sprite DMA cycle
     template <int nr> void executeSecondSpriteCycle();
-    // void executeSecondSpriteCycle(int nr);
 
     /* Concludes a rasterline
      * Called when servicing a SYNC_H event in the SYNC slot.

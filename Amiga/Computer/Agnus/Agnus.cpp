@@ -1272,6 +1272,24 @@ Agnus::pokeDDFSTOP(uint16_t value)
     updateBitplaneDma();
 }
 
+template <int x> void
+Agnus::pokeAUDxLCH(uint16_t value)
+{
+    debug(AUD_DEBUG, "pokeAUD%dLCH(%X)\n", x, value);
+
+    paula->audioUnit.channel[x].audlcLatch =
+    REPLACE_HI_WORD(paula->audioUnit.channel[x].audlcLatch, value & 0x7);
+}
+
+template <int x> void
+Agnus::pokeAUDxLCL(uint16_t value)
+{
+    debug(AUD_DEBUG, "pokeAUD%dLCL(%X)\n", x, value);
+
+    paula->audioUnit.channel[x].audlcLatch =
+    REPLACE_LO_WORD(paula->audioUnit.channel[x].audlcLatch, value);
+}
+
 void
 Agnus::pokeAUDxLCH(int x, uint16_t value)
 {
@@ -1406,36 +1424,6 @@ Agnus::executeFirstSpriteCycle()
         denise->pokeSPRxDATB(nr, doSpriteDMA(nr));
     }
 }
-
-/*
-void
-Agnus::executeFirstSpriteCycle(int nr)
-{
-    // Activate sprite data DMA if the first sprite line has been reached
-    if (vpos == sprVStrt[nr]) { sprDmaState[nr] = SPR_DMA_DATA; }
-    
-    // Deactivate sprite data DMA if the last sprite line has been reached
-    if (vpos == sprVStop[nr]) {
-        
-        // Deactivate sprite data DMA
-        sprDmaState[nr] = SPR_DMA_IDLE;
-
-        // Read the next control word (POS part)
-        uint16_t pos = doSpriteDMA(nr);
-
-        // Extract vertical trigger coordinate bits from POS
-        sprVStrt[nr] = ((pos & 0xFF00) >> 8) | (sprVStrt[nr] & 0x0100);
-        denise->pokeSPRxPOS(nr, pos);
-    }
-    
-    // Read sprite data if data DMA is activated
-    if (sprDmaState[nr] == SPR_DMA_DATA) {
-
-        // Read DATA
-        denise->pokeSPRxDATB(nr, doSpriteDMA(nr));
-    }
-}
-*/
 
 template <int nr> void
 Agnus::executeSecondSpriteCycle()
@@ -1638,6 +1626,11 @@ Agnus::vsyncHandler()
     }
 }
 
+
+//
+// Instantiate template functions
+//
+
 template void Agnus::executeFirstSpriteCycle<0>();
 template void Agnus::executeFirstSpriteCycle<1>();
 template void Agnus::executeFirstSpriteCycle<2>();
@@ -1655,3 +1648,13 @@ template void Agnus::executeSecondSpriteCycle<4>();
 template void Agnus::executeSecondSpriteCycle<5>();
 template void Agnus::executeSecondSpriteCycle<6>();
 template void Agnus::executeSecondSpriteCycle<7>();
+
+template void Agnus::pokeAUDxLCH<0>(uint16_t value);
+template void Agnus::pokeAUDxLCH<1>(uint16_t value);
+template void Agnus::pokeAUDxLCH<2>(uint16_t value);
+template void Agnus::pokeAUDxLCH<3>(uint16_t value);
+
+template void Agnus::pokeAUDxLCL<0>(uint16_t value);
+template void Agnus::pokeAUDxLCL<1>(uint16_t value);
+template void Agnus::pokeAUDxLCL<2>(uint16_t value);
+template void Agnus::pokeAUDxLCL<3>(uint16_t value);
