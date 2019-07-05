@@ -575,13 +575,13 @@ Agnus::serviceDMAEvent(EventID id)
             // fallthrough
 
         case DMA_H1:
-            denise->bpldat[PLANE1] = doBitplaneDMA(PLANE1);
+            denise->bpldat[PLANE1] = doBitplaneDMA<0>();
             denise->fillShiftRegisters();
             denise->drawHires(16);
             break;
 
         case DMA_H1_LAST:
-            denise->bpldat[PLANE1] = doBitplaneDMA(PLANE1);
+            denise->bpldat[PLANE1] = doBitplaneDMA<0>();
             denise->fillShiftRegisters();
             denise->drawHires(16 + denise->scrollHiresOdd);
             addBPLxMOD();
@@ -592,13 +592,13 @@ Agnus::serviceDMAEvent(EventID id)
             // fallthrough
 
         case DMA_L1:
-            denise->bpldat[PLANE1] = doBitplaneDMA(PLANE1);
+            denise->bpldat[PLANE1] = doBitplaneDMA<0>();
             denise->fillShiftRegisters();
             denise->drawLores(16);
             break;
 
         case DMA_L1_LAST:
-            denise->bpldat[PLANE1] = doBitplaneDMA(PLANE1);
+            denise->bpldat[PLANE1] = doBitplaneDMA<0>();
             denise->fillShiftRegisters();
             denise->drawLores(16 + denise->scrollHiresOdd);
             addBPLxMOD();
@@ -606,25 +606,25 @@ Agnus::serviceDMAEvent(EventID id)
 
         case DMA_H2:
         case DMA_L2:
-            denise->bpldat[PLANE2] = doBitplaneDMA(PLANE2);
+            denise->bpldat[PLANE2] = doBitplaneDMA<1>();
             break;
 
         case DMA_H3:
         case DMA_L3:
-            denise->bpldat[PLANE3] = doBitplaneDMA(PLANE3);
+            denise->bpldat[PLANE3] = doBitplaneDMA<2>();
             break;
 
         case DMA_H4:
         case DMA_L4:
-            denise->bpldat[PLANE4] = doBitplaneDMA(PLANE4);
+            denise->bpldat[PLANE4] = doBitplaneDMA<3>();
             break;
 
         case DMA_L5:
-            denise->bpldat[PLANE5] = doBitplaneDMA(PLANE5);
+            denise->bpldat[PLANE5] = doBitplaneDMA<4>();
             break;
 
         case DMA_L6:
-            denise->bpldat[PLANE6] = doBitplaneDMA(PLANE6);
+            denise->bpldat[PLANE6] = doBitplaneDMA<5>();
             break;
 
         default:

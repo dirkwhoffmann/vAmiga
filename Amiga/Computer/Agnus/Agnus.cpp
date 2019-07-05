@@ -421,8 +421,8 @@ Agnus::doSpriteDMA(int channel)
     return result; 
 }
 
-uint16_t
-Agnus::doBitplaneDMA(int channel)
+template <int channel> uint16_t
+Agnus::doBitplaneDMA()
 {
     uint16_t result = mem->peekChip16(bplpt[channel]);
     INC_DMAPTR(bplpt[channel]);
@@ -1666,3 +1666,10 @@ template void Agnus::pokeSPRxPTL<4>(uint16_t value);
 template void Agnus::pokeSPRxPTL<5>(uint16_t value);
 template void Agnus::pokeSPRxPTL<6>(uint16_t value);
 template void Agnus::pokeSPRxPTL<7>(uint16_t value);
+
+template uint16_t Agnus::doBitplaneDMA<0>();
+template uint16_t Agnus::doBitplaneDMA<1>();
+template uint16_t Agnus::doBitplaneDMA<2>();
+template uint16_t Agnus::doBitplaneDMA<3>();
+template uint16_t Agnus::doBitplaneDMA<4>();
+template uint16_t Agnus::doBitplaneDMA<5>();

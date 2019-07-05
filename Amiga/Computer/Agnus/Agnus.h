@@ -501,7 +501,7 @@ public:
     void doDiskDMA(uint16_t value);
     uint16_t doAudioDMA(int channel);
     uint16_t doSpriteDMA(int channel);
-    uint16_t doBitplaneDMA(int channel);
+    template <int channel> uint16_t doBitplaneDMA();
 
     uint16_t copperRead(uint32_t addr);
     void copperWrite(uint32_t addr, uint16_t value);
