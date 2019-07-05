@@ -398,6 +398,7 @@ AudioUnit::handleBufferOverflow()
     alignWritePtr();
 }
 
+/*
 template<> void AudioUnit::pokeAUDxLEN<0>(uint16_t value) { channel0.pokeAUDxLEN(value); }
 template<> void AudioUnit::pokeAUDxLEN<1>(uint16_t value) { channel1.pokeAUDxLEN(value); }
 template<> void AudioUnit::pokeAUDxLEN<2>(uint16_t value) { channel2.pokeAUDxLEN(value); }
@@ -417,4 +418,4 @@ template<> void AudioUnit::pokeAUDxDAT<0>(uint16_t value) { channel0.pokeAUDxDAT
 template<> void AudioUnit::pokeAUDxDAT<1>(uint16_t value) { channel1.pokeAUDxDAT(value); }
 template<> void AudioUnit::pokeAUDxDAT<2>(uint16_t value) { channel2.pokeAUDxDAT(value); }
 template<> void AudioUnit::pokeAUDxDAT<3>(uint16_t value) { channel3.pokeAUDxDAT(value); }
-
+*/
