@@ -64,7 +64,7 @@ class Agnus : public HardwareComponent
 
     // Information shown in the GUI inspector panel
     DMAInfo info;
-    EventHandlerInfo eventInfo;
+    EventInfo eventInfo;
 
     
     //
@@ -352,16 +352,25 @@ public:
     void _ping() override;
     void _inspect() override; 
     void _dump() override;
-    
-    
+
+    void inspectEvents();
+    void inspectEventSlot(EventSlot nr);
+
+public:
+
+    void dumpEvents();
+
+
     //
     // Reading the internal state
     //
     
     public:
     
-    // Returns the latest internal state recorded by inspect()
+    // Returns the latest recorded internal state
     DMAInfo getInfo();
+    EventInfo getEventInfo();
+    EventSlotInfo getEventSlotInfo(int nr);
 
 
     //
@@ -633,9 +642,6 @@ public:
 
     // Services a raster event (Pixel drawing, HSYNC)
     void serviceRASEvent(EventID id);
-
-    // Schedules the first RAS slot event
-    // void scheduleFirstRASEvent(int16_t vpos);
 
     // Services a synchronization event (HSYNC)
     void serviceSYNCEvent(EventID id);

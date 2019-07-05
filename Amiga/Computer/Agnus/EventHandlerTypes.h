@@ -287,7 +287,7 @@ typedef struct
 
     EventSlotInfo slotInfo[SLOT_COUNT];
 }
-EventHandlerInfo;
+EventInfo;
 
 struct Event
 {

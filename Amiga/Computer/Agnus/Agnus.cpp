@@ -220,7 +220,6 @@ Agnus::_dump()
     plainmsg("\nDMA time slot allocation:\n\n");
 
     dumpDMAEventTable();
-    _dumpEvents();
 }
 
 DMAInfo
@@ -1356,7 +1355,7 @@ Agnus::executeUntil(Cycle targetClock)
     while (clock <= targetClock - DMA_CYCLES(1)) {
 
         // Process all pending events
-        executeEventsUntil(clock);
+        if (clock >= nextTrigger) executePrimaryEventsUntil(clock);
         
         // Advance the internal counters
         hpos++;

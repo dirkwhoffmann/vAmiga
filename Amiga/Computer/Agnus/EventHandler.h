@@ -7,57 +7,52 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-
 /* About the event handler.
+ *
  * vAmiga is an event triggered emulator. If an action has to be performed at
- * a specific cycle (e.g., activating the Copper at a specific beam position),
- * the action is scheduled via the event handler and executed when the trigger
- * cycle is reached.
+ * a specific DMA cycle (e.g., activating the Copper at a certain beam
+ * position), the action is scheduled via the event handling API and executed
+ * when the trigger cycle is reached.
  * The event handler is part of Agnus, because this component is in charge of
- * synchronize timing between the various components.
+ * synchronize timing between components.
  * Scheduled events are stored in so called event slots. Each slot is either
  * empty or contains a single event and is bound to a specific component. E.g.,
  * there is slot for Copper events, a slot for the Blitter events, and a slot
- * storing rasterline events (pixel drawing, HSYNC action).
+ * for managing UART event.
  * From a theoretical point of view, each event slot represents a state machine
  * running in parallel to the ones in the other slots. Keep in mind that the
  * state machines do interact with each other in various ways (e.g., by blocking
- * the DMA bus). As a result, the slot ordering is of great importance: If two
- * events trigger at the same cycle, the the slot with a smaller number is
+ * the DMA bus). As a result, the slot ordering is important: If two events
+ * trigger at the same cycle, the the slot with a smaller number is always
  * served first.
- * The available event slots are stored in two different tables: The primary
- * event table and the secondary event table. The primary table contains the
- * slots for all frequently occurring events (CIA execution, DMA operations,
- * etc.). The secondary table contains the slots for events that occurr
- * occasionally (e.g., a serial port interrupt). The separation into two event
- * tables has been done for speed reasons. It keeps the primary table short
- * which has to be crawled through whenever an event is processed.
- * The secondary event table is linked to the primary table via the secondary
- * event slot (SEC_SLOT). Triggering an event in this slot causes the event
- * handler to process all pending events in the secondary event list. Hence,
- * whenever a secondary event is scheduled, a primary event is scheduled in
- * SEC_SLOT with a trigger cycle matching the smallest trigger cycle of all
- * secondary events.
+ * To optimize speed, the event slots are categorized into primary slots and
+ * secondary slots. The primary slots are those that who store frequently
+ * occurring events (CIA execution, DMA operations, etc.) and the secondary
+ * slots are those who store events that only occurr occasionally (e.g., a
+ * signal change on the serial port). Correspondingly, we call an event a
+ * primary event if if it scheduled in a primary slot and a secondary event if
+ * it is called in a secondary slot.
+ * By default, the event handler only checks the primary event slots on a
+ * regular basis. To make the event handler check all slots, a special event
+ * has to be scheduled in the SEC_SLOT (which is a primary slot and therefore
+ * always checked). Triggering this event works like a wakeup by telling the
+ * event handler to check for secondary events as well. Hence, whenever an
+ * event is schedules in a secondary slot, it has to be ensured that SEC_SLOT
+ * contains a wakeup with a trigger cycle matching the smallest trigger cycle
+ * of all secondary events.
+ * Scheduling the wakeup event in SEC_SLOT is transparant for the callee. When
+ * an event is scheduled, the event handler automatically checks if the selected
+ * slot is primary or secondary and schedules the SEC_SLOT automatically in the
+ * latter case.
  */
 
 
-// Helper functions
-
 private:
 
-void _inspectEvents();
-void _inspectSlot(EventSlot slot);
-void _dumpPrimaryTable();
-void _dumpSecondaryTable();
-void _dumpSlot(const char *slotName, const char *eventName, const Event event);
+
 
 public:
 
-void _dumpEvents();
-
-// Returns the latest internal state recorded by inspect()
-EventHandlerInfo getEventInfo();
-EventSlotInfo getSlotInfo(int nr);
 
 // Returns true iff the specified slot contains an event.
 template<EventSlot s> bool hasEvent() {
@@ -76,21 +71,17 @@ template<EventSlot s> bool isDue(Cycle cycle) {
 // Processing events
 //
 
-public:
-
-/* Processes all events that are due prior to or at the provided cycle.
- * This function is called inside the execution function of Agnus.
- */
-void executeEventsUntil(Cycle cycle) {
-    if (cycle >= nextTrigger) _executeEventsUntil(cycle); }
-
 private:
 
-// Called by executeUntil(...) to process events in the primary table.
-void _executeEventsUntil(Cycle cycle);
+/* Processes all primary events that are due prior to or at the provided cycle.
+ * Called inside Agnus::executeUntil().
+ */
+void executePrimaryEventsUntil(Cycle cycle);
 
-// Called by executeUntil(...) to process events in the secondary table.
-void _executeSecEventsUntil(Cycle cycle);
+/* Processes all secondary events that are due prior to or at the provided cycle.
+ * Called inside executePrimaryEventsUntil() if the SEC_SLOT is due.
+ */
+void executeSecondaryEventsUntil(Cycle cycle);
 
 
 //
@@ -168,7 +159,6 @@ template<EventSlot s> void scheduleRel(Cycle cycle, EventID id, int64_t data)
     scheduleAbs<s>(clock + cycle, id);
     slot[s].data = data;
 }
-
 
 template<EventSlot s> void schedulePos(int16_t vpos, int16_t hpos, EventID id)
 {

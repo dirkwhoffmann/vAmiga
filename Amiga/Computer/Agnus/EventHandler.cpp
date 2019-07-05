@@ -10,7 +10,7 @@
 #include "Amiga.h"
 
 void
-Agnus::_inspectEvents()
+Agnus::inspectEvents()
 {
     // Prevent external access to variable 'info'
     pthread_mutex_lock(&lock);
@@ -24,13 +24,13 @@ Agnus::_inspectEvents()
     eventInfo.hpos = hpos;
 
     // Inspect all slots
-    for (int i = 0; i < SLOT_COUNT; i++) _inspectSlot((EventSlot)i);
+    for (int i = 0; i < SLOT_COUNT; i++) inspectEventSlot((EventSlot)i);
     
     pthread_mutex_unlock(&lock);
 }
 
 void
-Agnus::_inspectSlot(EventSlot nr)
+Agnus::inspectEventSlot(EventSlot nr)
 {
     assert(isEventSlot(nr));
     
@@ -271,9 +271,9 @@ Agnus::_inspectSlot(EventSlot nr)
 }
 
 void
-Agnus::_dumpEvents()
+Agnus::dumpEvents()
 {
-    _inspectEvents();
+    inspectEvents();
     
     amiga->dumpClock();
     
@@ -294,10 +294,10 @@ Agnus::_dumpEvents()
     }
 }
 
-EventHandlerInfo
+EventInfo
 Agnus::getEventInfo()
 {
-    EventHandlerInfo result;
+    EventInfo result;
     
     pthread_mutex_lock(&lock);
     result = eventInfo;
@@ -307,7 +307,7 @@ Agnus::getEventInfo()
 }
 
 EventSlotInfo
-Agnus::getSlotInfo(int nr)
+Agnus::getEventSlotInfo(int nr)
 {
     assert(isEventSlot(nr));
 
@@ -321,7 +321,7 @@ Agnus::getSlotInfo(int nr)
 }
 
 void
-Agnus::_executeEventsUntil(Cycle cycle) {
+Agnus::executePrimaryEventsUntil(Cycle cycle) {
     
     // Check for a CIA A event
     if (isDue<CIAA_SLOT>(cycle)) {
@@ -389,7 +389,7 @@ Agnus::_executeEventsUntil(Cycle cycle) {
 
     // Check if a secondary event needs to be processed
     if (isDue<SEC_SLOT>(cycle)) {
-        _executeSecEventsUntil(cycle);
+        executeSecondaryEventsUntil(cycle);
     }
 
     // Determine the next trigger cycle
@@ -400,7 +400,7 @@ Agnus::_executeEventsUntil(Cycle cycle) {
 }
 
 void
-Agnus::_executeSecEventsUntil(Cycle cycle) {
+Agnus::executeSecondaryEventsUntil(Cycle cycle) {
     
     // Check all secondary event slots one by one
     if (isDue<DSK_SLOT>(cycle)) {
@@ -602,7 +602,7 @@ Agnus::serveINSEvent()
             amiga->controlPort1.inspect();
             amiga->controlPort2.inspect();
             break;
-        case INS_EVENTS: _inspectEvents(); break;
+        case INS_EVENTS: inspectEvents(); break;
         default:         assert(false);
     }
     
