@@ -30,11 +30,6 @@ AudioUnit::AudioUnit()
         { &clock,           sizeof(clock),           0 },
         { &dmaEnabled,      sizeof(dmaEnabled),      0 },
     });
-
-    channel0.nr = 0;
-    channel1.nr = 1;
-    channel2.nr = 2;
-    channel3.nr = 3;
 }
 
 void
@@ -422,3 +417,4 @@ template<> void AudioUnit::pokeAUDxDAT<0>(uint16_t value) { channel0.pokeAUDxDAT
 template<> void AudioUnit::pokeAUDxDAT<1>(uint16_t value) { channel1.pokeAUDxDAT(value); }
 template<> void AudioUnit::pokeAUDxDAT<2>(uint16_t value) { channel2.pokeAUDxDAT(value); }
 template<> void AudioUnit::pokeAUDxDAT<3>(uint16_t value) { channel3.pokeAUDxDAT(value); }
+

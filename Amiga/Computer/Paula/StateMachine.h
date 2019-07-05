@@ -12,6 +12,7 @@
 
 #include "HardwareComponent.h"
 
+template <int nr>
 class StateMachine : public HardwareComponent {
 
     friend class AudioUnit;
@@ -28,9 +29,6 @@ class StateMachine : public HardwareComponent {
     AudioChannelInfo info;
 
 public:
-
-    // The audio channel controlled by this state machine
-    int8_t nr;
 
     // The current state of this machine
     int8_t state;
@@ -62,9 +60,6 @@ public:
 public:
 
     StateMachine();
-
-    // Sets the channel number (for debugging output only)
-    void setNr(uint8_t nr);
 
 
     //

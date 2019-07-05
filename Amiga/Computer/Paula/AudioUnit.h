@@ -37,10 +37,10 @@ class AudioUnit : public HardwareComponent {
 public:
 
     // State machines
-    StateMachine channel0;
-    StateMachine channel1;
-    StateMachine channel2;
-    StateMachine channel3;
+    StateMachine<0> channel0;
+    StateMachine<1> channel1;
+    StateMachine<2> channel2;
+    StateMachine<3> channel3;
 
     // Audio filters
     AudioFilter filterL;

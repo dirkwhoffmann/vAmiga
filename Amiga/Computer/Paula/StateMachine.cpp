@@ -9,8 +9,18 @@
 
 #include "Amiga.h"
 
-StateMachine::StateMachine()
+template <int nr>
+StateMachine<nr>::StateMachine()
 {
+    // Set description
+    switch (nr) {
+        case 0: setDescription("StateMachine 0"); return;
+        case 1: setDescription("StateMachine 1"); return;
+        case 2: setDescription("StateMachine 2"); return;
+        case 3: setDescription("StateMachine 3"); return;
+        default: assert(false);
+    }
+
     // Register snapshot items
     registerSnapshotItems(vector<SnapshotItem> {
 
@@ -28,32 +38,15 @@ StateMachine::StateMachine()
     });
 }
 
-void
-StateMachine::setNr(uint8_t nr)
-{
-    assert(nr < 4);
-    this->nr = nr;
-
-    switch (nr) {
-
-        case 0: setDescription("StateMachine 0"); return;
-        case 1: setDescription("StateMachine 1"); return;
-        case 2: setDescription("StateMachine 2"); return;
-        case 3: setDescription("StateMachine 3"); return;
-
-        default: assert(false);
-    }
-}
-
-void
-StateMachine::_initialize()
+template <int nr> void
+StateMachine<nr>::_initialize()
 {
     agnus = &amiga->agnus;
     paula = &amiga->paula;
 }
 
-void
-StateMachine::_inspect()
+template <int nr> void
+StateMachine<nr>::_inspect()
 {
     // Prevent external access to variable 'info'
     pthread_mutex_lock(&lock);
@@ -72,8 +65,8 @@ StateMachine::_inspect()
     pthread_mutex_unlock(&lock);
 }
 
-AudioChannelInfo
-StateMachine::getInfo()
+template <int nr> AudioChannelInfo
+StateMachine<nr>::getInfo()
 {
     AudioChannelInfo result;
 
@@ -84,24 +77,24 @@ StateMachine::getInfo()
     return result;
 }
 
-void
-StateMachine::pokeAUDxLEN(uint16_t value)
+template <int nr> void
+StateMachine<nr>::pokeAUDxLEN(uint16_t value)
 {
     debug(AUD_DEBUG, "pokeAUD%dLEN(%X)\n", nr, value);
 
     audlenLatch = value;
 }
 
-void
-StateMachine::pokeAUDxPER(uint16_t value)
+template <int nr> void
+StateMachine<nr>::pokeAUDxPER(uint16_t value)
 {
     debug(AUD_DEBUG, "pokeAUD%dPER(%X)\n", nr, value);
 
     audperLatch = value;
 }
 
-void
-StateMachine::pokeAUDxVOL(uint16_t value)
+template <int nr> void
+StateMachine<nr>::pokeAUDxVOL(uint16_t value)
 {
     debug(AUD_DEBUG, "pokeAUD%dVOL(%X)\n", nr, value);
 
@@ -111,8 +104,8 @@ StateMachine::pokeAUDxVOL(uint16_t value)
     audvolLatch = MIN(value & 0x7F, 64);
 }
 
-void
-StateMachine::pokeAUDxDAT(uint16_t value)
+template <int nr> void
+StateMachine<nr>::pokeAUDxDAT(uint16_t value)
 {
     debug(AUD_DEBUG, "pokeAUD%dDAT(%X)\n", nr, value);
 
@@ -130,36 +123,36 @@ StateMachine::pokeAUDxDAT(uint16_t value)
     }
 }
 
-void
-StateMachine::pokeAUDxLCH(uint16_t value)
+template <int nr> void
+StateMachine<nr>::pokeAUDxLCH(uint16_t value)
 {
     debug(AUD_DEBUG, "pokeAUD%dLCH(%X)\n", nr, value);
 
     audlcLatch = REPLACE_HI_WORD(audlcLatch, value & 0x7);
 }
 
-void
-StateMachine::pokeAUDxLCL(uint16_t value)
+template <int nr> void
+StateMachine<nr>::pokeAUDxLCL(uint16_t value)
 {
     debug(AUD_DEBUG, "pokeAUD%dLCL(%X)\n", nr, value);
 
     audlcLatch = REPLACE_LO_WORD(audlcLatch, value);
 }
 
-bool
-StateMachine::dmaMode()
+template <int nr> bool
+StateMachine<nr>::dmaMode()
 {
     return amiga->agnus.audDMA(nr);
 }
 
-bool
-StateMachine::irqIsPending()
+template <int nr> bool
+StateMachine<nr>::irqIsPending()
 {
     return GET_BIT(amiga->paula.intreq, 7 + nr);
 }
 
-int16_t
-StateMachine::execute(DMACycle cycles)
+template <int nr> int16_t
+StateMachine<nr>::execute(DMACycle cycles)
 {
     switch(state) {
 
@@ -279,3 +272,53 @@ StateMachine::execute(DMACycle cycles)
 
     return (int8_t)auddat * audvolLatch;
 }
+
+template StateMachine<0>::StateMachine();
+template StateMachine<1>::StateMachine();
+template StateMachine<2>::StateMachine();
+template StateMachine<3>::StateMachine();
+
+template void StateMachine<0>::_initialize();
+template void StateMachine<1>::_initialize();
+template void StateMachine<2>::_initialize();
+template void StateMachine<3>::_initialize();
+
+template AudioChannelInfo StateMachine<0>::getInfo();
+template AudioChannelInfo StateMachine<1>::getInfo();
+template AudioChannelInfo StateMachine<2>::getInfo();
+template AudioChannelInfo StateMachine<3>::getInfo();
+
+template void StateMachine<0>::pokeAUDxLEN(uint16_t value);
+template void StateMachine<1>::pokeAUDxLEN(uint16_t value);
+template void StateMachine<2>::pokeAUDxLEN(uint16_t value);
+template void StateMachine<3>::pokeAUDxLEN(uint16_t value);
+
+template void StateMachine<0>::pokeAUDxPER(uint16_t value);
+template void StateMachine<1>::pokeAUDxPER(uint16_t value);
+template void StateMachine<2>::pokeAUDxPER(uint16_t value);
+template void StateMachine<3>::pokeAUDxPER(uint16_t value);
+
+template void StateMachine<0>::pokeAUDxVOL(uint16_t value);
+template void StateMachine<1>::pokeAUDxVOL(uint16_t value);
+template void StateMachine<2>::pokeAUDxVOL(uint16_t value);
+template void StateMachine<3>::pokeAUDxVOL(uint16_t value);
+
+template void StateMachine<0>::pokeAUDxDAT(uint16_t value);
+template void StateMachine<1>::pokeAUDxDAT(uint16_t value);
+template void StateMachine<2>::pokeAUDxDAT(uint16_t value);
+template void StateMachine<3>::pokeAUDxDAT(uint16_t value);
+
+template void StateMachine<0>::pokeAUDxLCH(uint16_t value);
+template void StateMachine<1>::pokeAUDxLCH(uint16_t value);
+template void StateMachine<2>::pokeAUDxLCH(uint16_t value);
+template void StateMachine<3>::pokeAUDxLCH(uint16_t value);
+
+template void StateMachine<0>::pokeAUDxLCL(uint16_t value);
+template void StateMachine<1>::pokeAUDxLCL(uint16_t value);
+template void StateMachine<2>::pokeAUDxLCL(uint16_t value);
+template void StateMachine<3>::pokeAUDxLCL(uint16_t value);
+
+template int16_t StateMachine<0>::execute(DMACycle cycles);
+template int16_t StateMachine<1>::execute(DMACycle cycles);
+template int16_t StateMachine<2>::execute(DMACycle cycles);
+template int16_t StateMachine<3>::execute(DMACycle cycles);
