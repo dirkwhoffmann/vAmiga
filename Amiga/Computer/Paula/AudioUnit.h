@@ -37,7 +37,10 @@ class AudioUnit : public HardwareComponent {
 public:
 
     // State machines
-    StateMachine channel[4];
+    StateMachine channel0;
+    StateMachine channel1;
+    StateMachine channel2;
+    StateMachine channel3;
 
     // Audio filters
     AudioFilter filterL;
@@ -320,16 +323,16 @@ public:
 public:
 
     // OCS registers 0xA4, 0xB4, 0x0C4, 0xD4 (w)
-    template <int x> void pokeAUDxLEN(uint16_t value) { channel[x].pokeAUDxLEN(value); }
+    template <int x> void pokeAUDxLEN(uint16_t value); // { channel[x].pokeAUDxLEN(value); }
     
     // OCS registers 0xA6, 0xB6, 0x0B6, 0xD6 (w)
-    template <int x> void pokeAUDxPER(uint16_t value) { channel[x].pokeAUDxPER(value); }
+    template <int x> void pokeAUDxPER(uint16_t value); // { channel[x].pokeAUDxPER(value); }
     
     // OCS registers 0xA8, 0xB8, 0x0C8, 0xD8 (w)
-    template <int x> void pokeAUDxVOL(uint16_t value) { channel[x].pokeAUDxVOL(value); }
+    template <int x> void pokeAUDxVOL(uint16_t value); // { channel[x].pokeAUDxVOL(value); }
     
     // OCS registers 0xAA, 0xBA, 0x0CA, 0xDA (w)
-    template <int x> void pokeAUDxDAT(uint16_t value) { channel[x].pokeAUDxDAT(value); }
+    template <int x> void pokeAUDxDAT(uint16_t value); // { channel[x].pokeAUDxDAT(value); }
     
 };
 

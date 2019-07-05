@@ -1272,6 +1272,7 @@ Agnus::pokeDDFSTOP(uint16_t value)
     updateBitplaneDma();
 }
 
+/*
 template <int x> void
 Agnus::pokeAUDxLCH(uint16_t value)
 {
@@ -1289,6 +1290,7 @@ Agnus::pokeAUDxLCL(uint16_t value)
     paula->audioUnit.channel[x].audlcLatch =
     REPLACE_LO_WORD(paula->audioUnit.channel[x].audlcLatch, value);
 }
+*/
 
 template <int x> void
 Agnus::pokeBPLxPTH(uint16_t value)
@@ -1624,16 +1626,6 @@ template void Agnus::executeSecondSpriteCycle<4>();
 template void Agnus::executeSecondSpriteCycle<5>();
 template void Agnus::executeSecondSpriteCycle<6>();
 template void Agnus::executeSecondSpriteCycle<7>();
-
-template void Agnus::pokeAUDxLCH<0>(uint16_t value);
-template void Agnus::pokeAUDxLCH<1>(uint16_t value);
-template void Agnus::pokeAUDxLCH<2>(uint16_t value);
-template void Agnus::pokeAUDxLCH<3>(uint16_t value);
-
-template void Agnus::pokeAUDxLCL<0>(uint16_t value);
-template void Agnus::pokeAUDxLCL<1>(uint16_t value);
-template void Agnus::pokeAUDxLCL<2>(uint16_t value);
-template void Agnus::pokeAUDxLCL<3>(uint16_t value);
 
 template void Agnus::pokeBPLxPTH<0>(uint16_t value);
 template void Agnus::pokeBPLxPTH<1>(uint16_t value);

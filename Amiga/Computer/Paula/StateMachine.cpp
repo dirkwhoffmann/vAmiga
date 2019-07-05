@@ -130,6 +130,22 @@ StateMachine::pokeAUDxDAT(uint16_t value)
     }
 }
 
+void
+StateMachine::pokeAUDxLCH(uint16_t value)
+{
+    debug(AUD_DEBUG, "pokeAUD%dLCH(%X)\n", nr, value);
+
+    audlcLatch = REPLACE_HI_WORD(audlcLatch, value & 0x7);
+}
+
+void
+StateMachine::pokeAUDxLCL(uint16_t value)
+{
+    debug(AUD_DEBUG, "pokeAUD%dLCL(%X)\n", nr, value);
+
+    audlcLatch = REPLACE_LO_WORD(audlcLatch, value);
+}
+
 bool
 StateMachine::dmaMode()
 {

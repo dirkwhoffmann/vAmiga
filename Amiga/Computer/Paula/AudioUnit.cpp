@@ -16,10 +16,10 @@ AudioUnit::AudioUnit()
     // Register subcomponents
     registerSubcomponents(vector<HardwareComponent *> {
 
-        &channel[0],
-        &channel[1],
-        &channel[2],
-        &channel[3],
+        &channel0,
+        &channel1,
+        &channel2,
+        &channel3,
         &filterL,
         &filterR
     });
@@ -31,7 +31,10 @@ AudioUnit::AudioUnit()
         { &dmaEnabled,      sizeof(dmaEnabled),      0 },
     });
 
-    for (unsigned i = 0; i < 4; i++) channel[i].setNr(i);
+    channel0.nr = 0;
+    channel1.nr = 1;
+    channel2.nr = 2;
+    channel3.nr = 3;
 }
 
 void
@@ -52,9 +55,10 @@ AudioUnit::_inspect()
     // Prevent external access to variable 'info'
     pthread_mutex_lock(&lock);
 
-    for (unsigned i = 0; i < 4; i++) {
-        info.channel[i] = channel[i].getInfo();
-    }
+    info.channel[0] = channel0.getInfo();
+    info.channel[1] = channel1.getInfo();
+    info.channel[2] = channel2.getInfo();
+    info.channel[3] = channel3.getInfo();
 
     pthread_mutex_unlock(&lock);
 }
@@ -79,14 +83,26 @@ AudioUnit::_pause()
 void
 AudioUnit::enableDMA(int nr)
 {
-    channel[nr].setState(0b000);
+    switch (nr) {
+        case 0: channel0.setState(0b000); break;
+        case 1: channel1.setState(0b000); break;
+        case 2: channel2.setState(0b000); break;
+        case 3: channel3.setState(0b000); break;
+        default: assert(false);
+    }
     SET_BIT(dmaEnabled, nr);
 }
 
 void
 AudioUnit::disableDMA(int nr)
 {
-    channel[nr].setState(0b000);
+    switch (nr) {
+        case 0: channel0.setState(0b000); break;
+        case 1: channel1.setState(0b000); break;
+        case 2: channel2.setState(0b000); break;
+        case 3: channel3.setState(0b000); break;
+        default: assert(false);
+    }
     CLR_BIT(dmaEnabled, nr);
 }
 
@@ -114,22 +130,22 @@ AudioUnit::executeUntil(Cycle targetClock)
 
             // Channel 0 (left)
             if (GET_BIT(dmaEnabled, 0)) {
-                left += channel[0].execute(toExecute);
+                left += channel0.execute(toExecute);
             }
 
             // Channel 1 (right)
             if (GET_BIT(dmaEnabled, 1)) {
-                right += channel[1].execute(toExecute);
+                right += channel1.execute(toExecute);
             }
 
             // Channel 2 (right)
             if (GET_BIT(dmaEnabled, 2)) {
-                right += channel[2].execute(toExecute);
+                right += channel2.execute(toExecute);
             }
 
             // Channel 3 (left)
             if (GET_BIT(dmaEnabled, 3)) {
-                left += channel[3].execute(toExecute);
+                left += channel3.execute(toExecute);
             }
         }
 
@@ -386,3 +402,23 @@ AudioUnit::handleBufferOverflow()
     // Reset the write pointer
     alignWritePtr();
 }
+
+template<> void AudioUnit::pokeAUDxLEN<0>(uint16_t value) { channel0.pokeAUDxLEN(value); }
+template<> void AudioUnit::pokeAUDxLEN<1>(uint16_t value) { channel1.pokeAUDxLEN(value); }
+template<> void AudioUnit::pokeAUDxLEN<2>(uint16_t value) { channel2.pokeAUDxLEN(value); }
+template<> void AudioUnit::pokeAUDxLEN<3>(uint16_t value) { channel3.pokeAUDxLEN(value); }
+
+template<> void AudioUnit::pokeAUDxPER<0>(uint16_t value) { channel0.pokeAUDxPER(value); }
+template<> void AudioUnit::pokeAUDxPER<1>(uint16_t value) { channel1.pokeAUDxPER(value); }
+template<> void AudioUnit::pokeAUDxPER<2>(uint16_t value) { channel2.pokeAUDxPER(value); }
+template<> void AudioUnit::pokeAUDxPER<3>(uint16_t value) { channel3.pokeAUDxPER(value); }
+
+template<> void AudioUnit::pokeAUDxVOL<0>(uint16_t value) { channel0.pokeAUDxVOL(value); }
+template<> void AudioUnit::pokeAUDxVOL<1>(uint16_t value) { channel1.pokeAUDxVOL(value); }
+template<> void AudioUnit::pokeAUDxVOL<2>(uint16_t value) { channel2.pokeAUDxVOL(value); }
+template<> void AudioUnit::pokeAUDxVOL<3>(uint16_t value) { channel3.pokeAUDxVOL(value); }
+
+template<> void AudioUnit::pokeAUDxDAT<0>(uint16_t value) { channel0.pokeAUDxDAT(value); }
+template<> void AudioUnit::pokeAUDxDAT<1>(uint16_t value) { channel1.pokeAUDxDAT(value); }
+template<> void AudioUnit::pokeAUDxDAT<2>(uint16_t value) { channel2.pokeAUDxDAT(value); }
+template<> void AudioUnit::pokeAUDxDAT<3>(uint16_t value) { channel3.pokeAUDxDAT(value); }

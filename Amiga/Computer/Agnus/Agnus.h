@@ -593,8 +593,8 @@ public:
     void pokeDDFSTOP(uint16_t value);
     
     // AUDxLCL, AUDxLCL
-    template <int x> void pokeAUDxLCH(uint16_t value);
-    template <int x> void pokeAUDxLCL(uint16_t value);
+    // template <int x> void pokeAUDxLCH(uint16_t value);
+    // template <int x> void pokeAUDxLCL(uint16_t value);
 
     // BPLxPTL, BPLxPTH
     template <int x> void pokeBPLxPTH(uint16_t value);
