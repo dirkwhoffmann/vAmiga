@@ -231,7 +231,7 @@ public:
     bool PF2PRI() { return GET_BIT(bplcon2, 6); }
 
     // OCS registers 0x110, ..., 0x11A (w)
-    void pokeBPLxDAT(int x, uint16_t value);
+    template <int x> void pokeBPLxDAT(uint16_t value);
     
     // OCS registers 0x140, 0x148, ..., 0x170, 0x178 (w)
     void pokeSPRxPOS(int x, uint16_t value);

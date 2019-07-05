@@ -327,8 +327,8 @@ Denise::pokeBPLCON2(uint16_t value)
     bplcon2 = value;
 }
 
-void
-Denise::pokeBPLxDAT(int x, uint16_t value)
+template <int x> void
+Denise::pokeBPLxDAT(uint16_t value)
 {
     assert(x < 6);
     debug(BPL_DEBUG, "pokeBPL%dDATA(%X)\n", x + 1, value);
@@ -847,3 +847,11 @@ Denise::debugSetBPLCONxNibble(unsigned x, unsigned nibble, uint8_t value)
 
     amiga->resume();
 }
+
+template void Denise::pokeBPLxDAT<0>(uint16_t value);
+template void Denise::pokeBPLxDAT<1>(uint16_t value);
+template void Denise::pokeBPLxDAT<2>(uint16_t value);
+template void Denise::pokeBPLxDAT<3>(uint16_t value);
+template void Denise::pokeBPLxDAT<4>(uint16_t value);
+template void Denise::pokeBPLxDAT<5>(uint16_t value);
+template void Denise::pokeBPLxDAT<6>(uint16_t value);

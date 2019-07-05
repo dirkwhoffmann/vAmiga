@@ -1161,17 +1161,17 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x10E >> 1: // Unused
             break;
         case 0x110 >> 1: // BPL1DAT
-            denise->pokeBPLxDAT(0, value); return;
+            denise->pokeBPLxDAT<0>(value); return;
         case 0x112 >> 1: // BPL2DAT
-            denise->pokeBPLxDAT(1, value); return;
+            denise->pokeBPLxDAT<1>(value); return;
         case 0x114 >> 1: // BPL3DAT
-            denise->pokeBPLxDAT(2, value); return;
+            denise->pokeBPLxDAT<2>(value); return;
         case 0x116 >> 1: // BPL4DAT
-            denise->pokeBPLxDAT(3, value); return;
+            denise->pokeBPLxDAT<3>(value); return;
         case 0x118 >> 1: // BPL5DAT
-            denise->pokeBPLxDAT(4, value); return;
+            denise->pokeBPLxDAT<4>(value); return;
         case 0x11A >> 1: // BPL6DAT
-            denise->pokeBPLxDAT(5, value); return;
+            denise->pokeBPLxDAT<5>(value); return;
         case 0x11C >> 1: // Unused
         case 0x11E >> 1: // Unused
             break;
