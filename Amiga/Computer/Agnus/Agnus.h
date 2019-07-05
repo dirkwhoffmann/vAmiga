@@ -595,12 +595,10 @@ public:
     // AUDxLCL, AUDxLCL
     template <int x> void pokeAUDxLCH(uint16_t value);
     template <int x> void pokeAUDxLCL(uint16_t value);
-    void pokeAUDxLCH(int x, uint16_t value);
-    void pokeAUDxLCL(int x, uint16_t value);
-    
+
     // BPLxPTL, BPLxPTH
-    void pokeBPLxPTH(int x, uint16_t value);
-    void pokeBPLxPTL(int x, uint16_t value);
+    template <int x> void pokeBPLxPTH(uint16_t value);
+    template <int x> void pokeBPLxPTL(uint16_t value);
     
     // BPL1MOD, BPL2MOD
     void pokeBPL1MOD(uint16_t value);

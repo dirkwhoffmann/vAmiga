@@ -1290,40 +1290,18 @@ Agnus::pokeAUDxLCL(uint16_t value)
     REPLACE_LO_WORD(paula->audioUnit.channel[x].audlcLatch, value);
 }
 
-void
-Agnus::pokeAUDxLCH(int x, uint16_t value)
-{
-    debug(AUD_DEBUG, "pokeAUD%dLCH(%X)\n", x, value);
-    assert(x < 4);
-
-    paula->audioUnit.channel[x].audlcLatch =
-    REPLACE_HI_WORD(paula->audioUnit.channel[x].audlcLatch, value & 0x7);
-}
-
-void
-Agnus::pokeAUDxLCL(int x, uint16_t value)
-{
-    debug(AUD_DEBUG, "pokeAUD%dLCL(%X)\n", x, value);
-    assert(x < 4);
-
-    paula->audioUnit.channel[x].audlcLatch =
-    REPLACE_LO_WORD(paula->audioUnit.channel[x].audlcLatch, value);
-}
-
-void
-Agnus::pokeBPLxPTH(int x, uint16_t value)
+template <int x> void
+Agnus::pokeBPLxPTH(uint16_t value)
 {
     debug(BPL_DEBUG, "pokeBPL%dPTH(%X)\n", x, value);
-    assert(x < 6);
     
     bplpt[x] = REPLACE_HI_WORD(bplpt[x], value & 0x7);
 }
 
-void
-Agnus::pokeBPLxPTL(int x, uint16_t value)
+template <int x> void
+Agnus::pokeBPLxPTL(uint16_t value)
 {
     debug(BPL_DEBUG, "pokeBPL%dPTL(%X)\n", x, value);
-    assert(x < 6);
     
     bplpt[x] = REPLACE_LO_WORD(bplpt[x], value & 0xFFFE);
 }
@@ -1658,3 +1636,17 @@ template void Agnus::pokeAUDxLCL<0>(uint16_t value);
 template void Agnus::pokeAUDxLCL<1>(uint16_t value);
 template void Agnus::pokeAUDxLCL<2>(uint16_t value);
 template void Agnus::pokeAUDxLCL<3>(uint16_t value);
+
+template void Agnus::pokeBPLxPTH<0>(uint16_t value);
+template void Agnus::pokeBPLxPTH<1>(uint16_t value);
+template void Agnus::pokeBPLxPTH<2>(uint16_t value);
+template void Agnus::pokeBPLxPTH<3>(uint16_t value);
+template void Agnus::pokeBPLxPTH<4>(uint16_t value);
+template void Agnus::pokeBPLxPTH<5>(uint16_t value);
+
+template void Agnus::pokeBPLxPTL<0>(uint16_t value);
+template void Agnus::pokeBPLxPTL<1>(uint16_t value);
+template void Agnus::pokeBPLxPTL<2>(uint16_t value);
+template void Agnus::pokeBPLxPTL<3>(uint16_t value);
+template void Agnus::pokeBPLxPTL<4>(uint16_t value);
+template void Agnus::pokeBPLxPTL<5>(uint16_t value);
