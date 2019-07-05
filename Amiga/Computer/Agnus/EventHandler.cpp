@@ -507,67 +507,67 @@ Agnus::serviceDMAEvent(EventID id)
             break;
 
         case DMA_S0_1:
-            serviceS1Event(0);
+            executeFirstSpriteCycle<0>();
             break;
 
         case DMA_S1_1:
-            serviceS1Event(1);
+            executeFirstSpriteCycle<1>();
             break;
 
         case DMA_S2_1:
-            serviceS1Event(2);
+            executeFirstSpriteCycle<2>();
             break;
 
         case DMA_S3_1:
-            serviceS1Event(3);
+            executeFirstSpriteCycle<3>();
             break;
 
         case DMA_S4_1:
-            serviceS1Event(4);
+            executeFirstSpriteCycle<4>();
             break;
 
         case DMA_S5_1:
-            serviceS1Event(5);
+            executeFirstSpriteCycle<5>();
             break;
 
         case DMA_S6_1:
-            serviceS1Event(6);
+            executeFirstSpriteCycle<6>();
             break;
 
         case DMA_S7_1:
-            serviceS1Event(7);
+            executeFirstSpriteCycle<7>();
             break;
 
         case DMA_S0_2:
-            serviceS2Event(0);
+            executeSecondSpriteCycle<0>();
             break;
 
         case DMA_S1_2:
-            serviceS2Event(1);
+            executeSecondSpriteCycle<1>();
             break;
 
         case DMA_S2_2:
-            serviceS2Event(2);
+            executeSecondSpriteCycle<2>();
             break;
 
         case DMA_S3_2:
-            serviceS2Event(3);
+            executeSecondSpriteCycle<3>();
             break;
 
         case DMA_S4_2:
-            serviceS2Event(4);
+            executeSecondSpriteCycle<4>();
             break;
 
         case DMA_S5_2:
-            serviceS2Event(5);
+            executeSecondSpriteCycle<5>();
             break;
 
         case DMA_S6_2:
-            serviceS2Event(6);
+            executeSecondSpriteCycle<6>();
             break;
 
         case DMA_S7_2:
-            serviceS2Event(7);
+            executeSecondSpriteCycle<7>();
             break;
 
         case DMA_H1_FIRST:

@@ -71,7 +71,7 @@ class Agnus : public HardwareComponent
     // Sub components
     //
     
-    public:
+public:
     
     // Every Amiga fan knows what the Copper is.
     Copper copper;
@@ -132,7 +132,7 @@ public:
      * DEPRECATED: will be replaced by frame.nr
      */
     Frame frame;
-        
+
     // The current vertical beam position (0 .. VPOS_MAX)
     int16_t vpos;
     
@@ -329,7 +329,7 @@ public:
     // Constructing and destructing
     //
     
-    public:
+public:
     
     Agnus();
 
@@ -343,14 +343,14 @@ public:
     // Methods from HardwareComponent
     //
     
-    private:
+private:
 
-    void _initialize() override; 
+    void _initialize() override;
     void _powerOn() override;
     void _powerOff() override;
     void _reset() override;
     void _ping() override;
-    void _inspect() override; 
+    void _inspect() override;
     void _dump() override;
 
     void inspectEvents();
@@ -365,7 +365,7 @@ public:
     // Reading the internal state
     //
     
-    public:
+public:
     
     // Returns the latest recorded internal state
     DMAInfo getInfo();
@@ -482,10 +482,22 @@ public:
     
 
     //
+    // Managing DMA access
+    //
+
+    // Returns true if Copper is allowed to perform a DMA cycle
+    bool copperCanHaveBus();
+
+
+    //
     // Performing DMAs
     //
 
     uint16_t doDiskDMA();
+
+    template <int channel> uint16_t doSpriteDMA();
+
+    // OLD
     void doDiskDMA(uint16_t value);
     uint16_t doAudioDMA(int channel);
     uint16_t doSpriteDMA(int channel);
@@ -494,11 +506,12 @@ public:
     uint16_t copperRead(uint32_t addr);
     void copperWrite(uint32_t addr, uint16_t value);
 
+
     //
     // Managing the DMA allocation tables
     //
     
-    public:
+public:
 
     // Removes all events from the DMA time slot allocation table.
     void clearDMAEventTable();
@@ -534,13 +547,13 @@ public:
     // Dumps the DMA time slot allocation table to the console for debugging.
     void dumpDMAEventTable(int from, int to);
     void dumpDMAEventTable();
- 
+
     
     //
     // Accessing registers
     //
     
-    public:
+public:
     
     // DMACON
     uint16_t peekDMACONR();
@@ -599,25 +612,36 @@ public:
      * This method is called whenever the bitplane DMA restarts.
      */
     void addBPLxMOD();
-    
-    
-    //
-    // Stuff to cleanup
-    //
-    
-    public:
-    
-    // Returns true if Copper is allowed to perform a DMA cycle
-    bool copperCanHaveBus();
-    
-    
+
+
     //
     // Running the device
     //
     
-    public:
-    
+public:
+
+    // Executes the device until the target clock is reached
     void executeUntil(Cycle targetClock);
+
+private:
+
+    // Executes the first sprite DMA cycle
+    template <int nr> void executeFirstSpriteCycle();
+    // void executeFirstSpriteCycle(int nr);
+
+    // Executes the second sprite DMA cycle
+    template <int nr> void executeSecondSpriteCycle();
+    // void executeSecondSpriteCycle(int nr);
+
+    /* Concludes a rasterline
+     * Called when servicing a SYNC_H event in the SYNC slot.
+     */
+    void hsyncHandler();
+
+    /* Concludes a rasterline
+     * Called by hsyncHandler() when the last rasterline has been concluded.
+     */
+    void vsyncHandler();
 
 
     //
@@ -626,25 +650,6 @@ public:
 
 #include "EventHandler.h"
 
-        
-    //
-    // Handling events
-    //
-    
-    public:
-
-    
-    // Sub-handlers for sprite DMA events (called by serviceDMAEvent).
-    void serviceS1Event(int nr);
-    void serviceS2Event(int nr);
-
-    /* This functions serves the SYNC_H event in the SYNC slot.
-     * The SYNC_H event is triggered at the end of each rasterline.
-     */
-    void hsyncHandler();
-    
-    // This function is called when the end of a frame has been reached.
-    void vsyncHandler();
 };
 
 #endif

@@ -343,6 +343,22 @@ Agnus::beamDiff(int16_t vStart, int16_t hStart, int16_t vEnd, int16_t hEnd)
     return DMA_CYCLES(vDiff * 227 + hDiff);
 }
 
+bool
+Agnus::copperCanHaveBus()
+{
+    // Deny access if Copper DMA is disabled
+    if ((dmacon & (DMAEN|COPEN)) != (DMAEN|COPEN)) return false;
+
+    // Deny access if the current slot is used for bitplane DMA
+    if (isBplEvent(dmaEvent[hpos])) {
+        debug(COP_DEBUG, "Copper blocked by bitplane DMA\n");
+        return false;
+    }
+
+    // Grant access
+    return true;
+}
+
 uint16_t
 Agnus::doDiskDMA()
 {
@@ -376,6 +392,18 @@ Agnus::doAudioDMA(int channel)
     int hpos = 0xD + (2 * channel);
 
     busOwner[hpos] = BUS_AUDIO;
+    busValue[hpos] = result;
+
+    return result;
+}
+
+template <int channel> uint16_t
+Agnus::doSpriteDMA()
+{
+    uint16_t result = mem->peekChip16(sprpt[channel]);
+    INC_DMAPTR(sprpt[channel]);
+
+    busOwner[hpos] = BUS_SPRITE;
     busValue[hpos] = result;
 
     return result;
@@ -1332,22 +1360,6 @@ Agnus::addBPLxMOD()
     }
 }
 
-bool
-Agnus::copperCanHaveBus()
-{
-    // Deny access if Copper DMA is disabled
-    if ((dmacon & (DMAEN|COPEN)) != (DMAEN|COPEN)) return false;
-
-    // Deny access if the current slot is used for bitplane DMA
-    if (isBplEvent(dmaEvent[hpos])) {
-        debug(COP_DEBUG, "Copper blocked by bitplane DMA\n");
-        return false;
-    }
-
-    // Grant access
-    return true;
-}
-
 void
 Agnus::executeUntil(Cycle targetClock)
 {
@@ -1367,8 +1379,37 @@ Agnus::executeUntil(Cycle targetClock)
     }
 }
 
+template <int nr> void
+Agnus::executeFirstSpriteCycle()
+{
+    // Activate sprite data DMA if the first sprite line has been reached
+    if (vpos == sprVStrt[nr]) { sprDmaState[nr] = SPR_DMA_DATA; }
+
+    // Deactivate sprite data DMA if the last sprite line has been reached
+    if (vpos == sprVStop[nr]) {
+
+        // Deactivate sprite data DMA
+        sprDmaState[nr] = SPR_DMA_IDLE;
+
+        // Read the next control word (POS part)
+        uint16_t pos = doSpriteDMA<nr>();
+
+        // Extract vertical trigger coordinate bits from POS
+        sprVStrt[nr] = ((pos & 0xFF00) >> 8) | (sprVStrt[nr] & 0x0100);
+        denise->pokeSPRxPOS(nr, pos);
+    }
+
+    // Read sprite data if data DMA is activated
+    if (sprDmaState[nr] == SPR_DMA_DATA) {
+
+        // Read DATA
+        denise->pokeSPRxDATB(nr, doSpriteDMA(nr));
+    }
+}
+
+/*
 void
-Agnus::serviceS1Event(int nr)
+Agnus::executeFirstSpriteCycle(int nr)
 {
     // Activate sprite data DMA if the first sprite line has been reached
     if (vpos == sprVStrt[nr]) { sprDmaState[nr] = SPR_DMA_DATA; }
@@ -1394,9 +1435,10 @@ Agnus::serviceS1Event(int nr)
         denise->pokeSPRxDATB(nr, doSpriteDMA(nr));
     }
 }
+*/
 
-void
-Agnus::serviceS2Event(int nr)
+template <int nr> void
+Agnus::executeSecondSpriteCycle()
 {
     // Deactivate sprite data DMA if the last sprite line has been reached
     if (vpos == sprVStop[nr] + 1) {
@@ -1595,3 +1637,21 @@ Agnus::vsyncHandler()
         amiga->synchronizeTiming();
     }
 }
+
+template void Agnus::executeFirstSpriteCycle<0>();
+template void Agnus::executeFirstSpriteCycle<1>();
+template void Agnus::executeFirstSpriteCycle<2>();
+template void Agnus::executeFirstSpriteCycle<3>();
+template void Agnus::executeFirstSpriteCycle<4>();
+template void Agnus::executeFirstSpriteCycle<5>();
+template void Agnus::executeFirstSpriteCycle<6>();
+template void Agnus::executeFirstSpriteCycle<7>();
+
+template void Agnus::executeSecondSpriteCycle<0>();
+template void Agnus::executeSecondSpriteCycle<1>();
+template void Agnus::executeSecondSpriteCycle<2>();
+template void Agnus::executeSecondSpriteCycle<3>();
+template void Agnus::executeSecondSpriteCycle<4>();
+template void Agnus::executeSecondSpriteCycle<5>();
+template void Agnus::executeSecondSpriteCycle<6>();
+template void Agnus::executeSecondSpriteCycle<7>();
