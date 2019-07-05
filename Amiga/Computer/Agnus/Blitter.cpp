@@ -510,7 +510,7 @@ Blitter::serviceEvent(EventID id)
                 bbusy = false;
                 
                 // Trigger the Blitter interrupt
-                agnus->scheduleInc<IRQ_BLIT_SLOT>(0, IRQ_SET);
+                agnus->scheduleRel<IRQ_BLIT_SLOT>(0, IRQ_SET);
                 
                 // Terminate the Blitter
                 agnus->cancel<BLT_SLOT>();
@@ -518,7 +518,7 @@ Blitter::serviceEvent(EventID id)
             } else {
             
                 // Continue running the Blitter
-                agnus->rescheduleInc<BLT_SLOT>(DMA_CYCLES(1));
+                agnus->rescheduleRel<BLT_SLOT>(DMA_CYCLES(1));
             }
             
             break;

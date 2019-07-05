@@ -637,7 +637,7 @@ Agnus::serviceDMAEvent(EventID id)
     // debug("id = %d hpos = %d, next = %d\n", id, hpos, next);
     if (next) {
         // events.schedulePos<DMA_SLOT>(vpos, next, dmaEvent[next]);
-        scheduleInc<DMA_SLOT>(DMA_CYCLES(next - hpos), dmaEvent[next]);
+        scheduleRel<DMA_SLOT>(DMA_CYCLES(next - hpos), dmaEvent[next]);
     } else {
         cancel<DMA_SLOT>();
     }

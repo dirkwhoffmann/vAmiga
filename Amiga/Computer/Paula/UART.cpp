@@ -265,7 +265,7 @@ UART::serveTxdEvent(EventID id)
             }
 
             // Schedule the next event
-            agnus->scheduleInc<TXD_SLOT>(rate(), TXD_BIT);
+            agnus->scheduleRel<TXD_SLOT>(rate(), TXD_BIT);
             break;
 
         default:
@@ -302,5 +302,5 @@ UART::serveRxdEvent(EventID id)
     }
 
     // Schedule the next reception event
-    agnus->scheduleInc<RXD_SLOT>(rate(), RXD_BIT);
+    agnus->scheduleRel<RXD_SLOT>(rate(), RXD_BIT);
 }
