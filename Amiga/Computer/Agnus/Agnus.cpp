@@ -1322,20 +1322,18 @@ Agnus::pokeBPL2MOD(uint16_t value)
     bpl2mod = int16_t(value & 0xFFFE);
 }
 
-void
-Agnus::pokeSPRxPTH(int x, uint16_t value)
+template <int x> void
+Agnus::pokeSPRxPTH(uint16_t value)
 {
     debug(SPR_DEBUG, "pokeSPR%dPTH(%X)\n", x, value);
-    assert(x < 8);
     
     sprpt[x] = REPLACE_HI_WORD(sprpt[x], value & 0x7);
 }
 
-void
-Agnus::pokeSPRxPTL(int x, uint16_t value)
+template <int x> void
+Agnus::pokeSPRxPTL(uint16_t value)
 {
     debug(SPR_DEBUG, "pokeSPR%dPTL(%X)\n", x, value);
-    assert(x < 8);
     
     sprpt[x] = REPLACE_LO_WORD(sprpt[x], value & 0xFFFE);
 }
@@ -1650,3 +1648,21 @@ template void Agnus::pokeBPLxPTL<2>(uint16_t value);
 template void Agnus::pokeBPLxPTL<3>(uint16_t value);
 template void Agnus::pokeBPLxPTL<4>(uint16_t value);
 template void Agnus::pokeBPLxPTL<5>(uint16_t value);
+
+template void Agnus::pokeSPRxPTH<0>(uint16_t value);
+template void Agnus::pokeSPRxPTH<1>(uint16_t value);
+template void Agnus::pokeSPRxPTH<2>(uint16_t value);
+template void Agnus::pokeSPRxPTH<3>(uint16_t value);
+template void Agnus::pokeSPRxPTH<4>(uint16_t value);
+template void Agnus::pokeSPRxPTH<5>(uint16_t value);
+template void Agnus::pokeSPRxPTH<6>(uint16_t value);
+template void Agnus::pokeSPRxPTH<7>(uint16_t value);
+
+template void Agnus::pokeSPRxPTL<0>(uint16_t value);
+template void Agnus::pokeSPRxPTL<1>(uint16_t value);
+template void Agnus::pokeSPRxPTL<2>(uint16_t value);
+template void Agnus::pokeSPRxPTL<3>(uint16_t value);
+template void Agnus::pokeSPRxPTL<4>(uint16_t value);
+template void Agnus::pokeSPRxPTL<5>(uint16_t value);
+template void Agnus::pokeSPRxPTL<6>(uint16_t value);
+template void Agnus::pokeSPRxPTL<7>(uint16_t value);

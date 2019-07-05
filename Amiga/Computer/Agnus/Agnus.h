@@ -605,8 +605,8 @@ public:
     void pokeBPL2MOD(uint16_t value);
     
     // SPRxPTL, SPRxPTH
-    void pokeSPRxPTH(int x, uint16_t value);
-    void pokeSPRxPTL(int x, uint16_t value);
+    template <int x> void pokeSPRxPTH(uint16_t value);
+    template <int x> void pokeSPRxPTL(uint16_t value);
     
     /* Adds BPLxMOD to the pointers of the active bitplanes
      * This method is called whenever the bitplane DMA restarts.

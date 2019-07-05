@@ -1176,37 +1176,37 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x11E >> 1: // Unused
             break;
         case 0x120 >> 1: // SPR0PTH
-            agnus->pokeSPRxPTH(0, value); return;
+            agnus->pokeSPRxPTH<0>(value); return;
         case 0x122 >> 1: // SPR0PTL
-            agnus->pokeSPRxPTL(0, value); return;
+            agnus->pokeSPRxPTL<0>(value); return;
         case 0x124 >> 1: // SPR1PTH
-            agnus->pokeSPRxPTH(1, value); return;
+            agnus->pokeSPRxPTH<1>(value); return;
         case 0x126 >> 1: // SPR1PTL
-            agnus->pokeSPRxPTL(1, value); return;
+            agnus->pokeSPRxPTL<1>(value); return;
         case 0x128 >> 1: // SPR2PTH
-            agnus->pokeSPRxPTH(2, value); return;
+            agnus->pokeSPRxPTH<2>(value); return;
         case 0x12A >> 1: // SPR2PTL
-            agnus->pokeSPRxPTL(2, value); return;
+            agnus->pokeSPRxPTL<2>(value); return;
         case 0x12C >> 1: // SPR3PTH
-            agnus->pokeSPRxPTH(3, value); return;
+            agnus->pokeSPRxPTH<3>(value); return;
         case 0x12E >> 1: // SPR3PTL
-            agnus->pokeSPRxPTL(3, value); return;
+            agnus->pokeSPRxPTL<3>(value); return;
         case 0x130 >> 1: // SPR4PTH
-            agnus->pokeSPRxPTH(4, value); return;
+            agnus->pokeSPRxPTH<4>(value); return;
         case 0x132 >> 1: // SPR4PTL
-            agnus->pokeSPRxPTL(4, value); return;
+            agnus->pokeSPRxPTL<4>(value); return;
         case 0x134 >> 1: // SPR5PTH
-            agnus->pokeSPRxPTH(5, value); return;
+            agnus->pokeSPRxPTH<5>(value); return;
         case 0x136 >> 1: // SPR5PTL
-            agnus->pokeSPRxPTL(5, value); return;
+            agnus->pokeSPRxPTL<5>(value); return;
         case 0x138 >> 1: // SPR6PTH
-            agnus->pokeSPRxPTH(6, value); return;
+            agnus->pokeSPRxPTH<6>(value); return;
         case 0x13A >> 1: // SPR6PTL
-            agnus->pokeSPRxPTL(6, value); return;
+            agnus->pokeSPRxPTL<6>(value); return;
         case 0x13C >> 1: // SPR7PTH
-            agnus->pokeSPRxPTH(7, value); return;
+            agnus->pokeSPRxPTH<7>(value); return;
         case 0x13E >> 1: // SPR7PTL
-            agnus->pokeSPRxPTL(7, value); return;
+            agnus->pokeSPRxPTL<7>(value); return;
         case 0x140 >> 1: // SPR0POS
             denise->pokeSPRxPOS(0, value); return;
         case 0x142 >> 1: // SPR0CTL
