@@ -481,6 +481,7 @@ Agnus::_executeSecEventsUntil(Cycle cycle) {
     rescheduleAbs<SEC_SLOT>(nextSecTrigger);
 }
 
+/*
 Cycle
 Agnus::relToCycle(Cycle cycle)
 {
@@ -495,6 +496,7 @@ Agnus::posToCycle(int16_t vpos, int16_t hpos)
     beam.x = hpos;
     return beamToCycle(beam);
 }
+*/
 
 void
 Agnus::serveIRQEvent(EventSlot s, int irqBit)

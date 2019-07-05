@@ -125,9 +125,6 @@ void _executeSecEventsUntil(Cycle cycle);
  *   and setting the trigger cycle to NEVER.
  */
 
-Cycle relToCycle(Cycle cycle);
-Cycle posToCycle(int16_t vpos, int16_t hpos);
-
 public:
 
 template<EventSlot s> void scheduleAbs(Cycle cycle, EventID id)
@@ -163,25 +160,24 @@ template<EventSlot s> void scheduleInc(Cycle cycle, EventID id, int64_t data)
 
 template<EventSlot s> void scheduleRel(Cycle cycle, EventID id)
 {
-    scheduleAbs<s>(relToCycle(cycle), id);
+    scheduleAbs<s>(clock + cycle, id);
 }
 
 template<EventSlot s> void scheduleRel(Cycle cycle, EventID id, int64_t data)
 {
-    scheduleAbs<s>(relToCycle(cycle), id);
+    scheduleAbs<s>(clock + cycle, id);
     slot[s].data = data;
 }
 
 
 template<EventSlot s> void schedulePos(int16_t vpos, int16_t hpos, EventID id)
 {
-    scheduleAbs<s>(posToCycle(vpos, hpos), id);
+    scheduleAbs<s>(beamToCycle( Beam { vpos, hpos } ), id);
 }
 
 template<EventSlot s> void schedulePos(int16_t vpos, int16_t hpos, EventID id, int64_t data)
 {
-    scheduleAbs<s>(posToCycle(vpos, hpos), id, data);
-    slot[s].data = data;
+    scheduleAbs<s>(beamToCycle( Beam { vpos, hpos } ), id, data);
 }
 
 template<EventSlot s> void rescheduleAbs(Cycle cycle)
@@ -197,12 +193,12 @@ template<EventSlot s> void rescheduleInc(Cycle cycle)
 
 template<EventSlot s> void rescheduleRel(Cycle cycle)
 {
-    rescheduleAbs<s>(relToCycle(cycle));
+    rescheduleAbs<s>(clock + cycle);
 }
 
 template<EventSlot s> void reschedulePos(int16_t vpos, int16_t hpos)
 {
-    rescheduleAbs<s>(posToCycle(vpos, hpos));
+    rescheduleAbs<s>(beamToCycle( Beam { vpos, hpos } ));
 }
 
 template<EventSlot s> void cancel()
