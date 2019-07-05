@@ -24,7 +24,6 @@
 class SerialPort : public HardwareComponent {
 
     // References (for quickly accessing other components)
-    class EventHandler *events;
     class UART *uart;
 
     // Information shown in the GUI inspector panel

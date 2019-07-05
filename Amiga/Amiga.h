@@ -15,7 +15,6 @@
 #include "MessageQueue.h"
 
 // Sub components
-#include "EventHandler.h"
 #include "CPU.h"
 #include "BreakpointManager.h"
 #include "CIA.h"
@@ -54,9 +53,6 @@ extern Amiga *activeAmiga;
  * Paula, you need to invoke a public method on amiga->paula.
  */
 class Amiga : public HardwareComponent {
-
-    // Quick-access references
-    class EventHandler *events;
 
     // The Amiga model we're going to emulate
     AmigaModel model = AMIGA_500;

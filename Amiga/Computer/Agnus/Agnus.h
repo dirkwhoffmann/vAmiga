@@ -11,12 +11,9 @@
 #define _AGNUS_INC
 
 #include "HardwareComponent.h"
-#include "EventHandler.h"
 #include "Copper.h"
 #include "Blitter.h"
 #include "DmaDebugger.h"
-
-class EventHandler;
 
 // Bit plane indices
 #define PLANE1 0
@@ -59,13 +56,16 @@ static inline bool isVposHpos(int16_t vpos, int16_t hpos) {
 class Agnus : public HardwareComponent
 {
     // Quick-access references
+    class CIAA *ciaA;
+    class CIAB *ciaB;
     class Memory *mem;
     class Denise *denise;
     class Paula *paula;
 
     // Information shown in the GUI inspector panel
     DMAInfo info;
-    
+    EventHandlerInfo eventInfo;
+
     
     //
     // Sub components
@@ -80,7 +80,7 @@ class Agnus : public HardwareComponent
     Blitter blitter;
     
     // The event sheduler, a key component of this emulator.
-    EventHandler events;
+    // EventHandler events;
 
     // A graphics engine for visualizing DMA accesses
     DmaDebugger dmaDebugger;
@@ -103,6 +103,19 @@ class Agnus : public HardwareComponent
      * lookup table is copied into the DMA event table.
      */
     EventID bitplaneDMA[2][7][HPOS_CNT];
+
+
+    //
+    // Events
+    //
+
+public:
+
+    // The event table
+    Event slot[SLOT_COUNT];
+
+    // Next trigger cycle for an event in the primary event table
+    Cycle nextTrigger = NEVER;
 
 
     //
@@ -596,7 +609,14 @@ public:
     public:
     
     void executeUntil(Cycle targetClock);
-    
+
+
+    //
+    // Class extensions
+    //
+
+#include "EventHandler.h"
+
         
     //
     // Handling events

@@ -9,75 +9,19 @@
 
 #include "Amiga.h"
 
-EventHandler::EventHandler()
-{
-    setDescription("EventHandler");
-    
-    registerSnapshotItems(vector<SnapshotItem> {
-        
-        { &slot,            sizeof(slot),            BYTE_ARRAY },
-        { &nextTrigger,     sizeof(nextTrigger),     0 },
-
-    });
-}
-
 void
-EventHandler::_initialize()
-{
-    ciaA   = &amiga->ciaA;
-    ciaB   = &amiga->ciaB;
-    mem    = &amiga->mem;
-    agnus  = &amiga->agnus;
-    copper = &amiga->agnus.copper;
-    denise = &amiga->denise;
-    paula  = &amiga->paula;
-}
-
-void
-EventHandler::_powerOn()
-{
-    // Clear the event table
-    for (unsigned i = 0; i < SLOT_COUNT; i++) {
-        slot[i].triggerCycle = NEVER;
-        slot[i].id = (EventID)0;
-        slot[i].data = 0;
-    }
-
-    // Initialize the SEC_SLOT
-    scheduleAbs<SEC_SLOT>(NEVER, SEC_TRIGGER);
-}
-
-void
-EventHandler::_powerOff()
-{
-    
-}
-
-void
-EventHandler::_reset()
-{
-    
-}
-
-void
-EventHandler::_ping()
-{
-    
-}
-
-void
-EventHandler::_inspect()
+Agnus::_inspectEvents()
 {
     // Prevent external access to variable 'info'
     pthread_mutex_lock(&lock);
     
-    info.masterClock = amiga->masterClock;
-    info.dmaClock = agnus->clock;
-    info.ciaAClock = ciaA->clock;
-    info.ciaBClock  = ciaB->clock;
-    info.frame = agnus->frame;
-    info.vpos = agnus->vpos;
-    info.hpos = agnus->hpos;
+    eventInfo.masterClock = amiga->masterClock;
+    eventInfo.dmaClock = clock;
+    eventInfo.ciaAClock = ciaA->clock;
+    eventInfo.ciaBClock  = ciaB->clock;
+    eventInfo.frame = frame;
+    eventInfo.vpos = vpos;
+    eventInfo.hpos = hpos;
 
     // Inspect all slots
     for (int i = 0; i < SLOT_COUNT; i++) _inspectSlot((EventSlot)i);
@@ -86,22 +30,22 @@ EventHandler::_inspect()
 }
 
 void
-EventHandler::_inspectSlot(EventSlot nr)
+Agnus::_inspectSlot(EventSlot nr)
 {
     assert(isEventSlot(nr));
     
-    EventSlotInfo *i = &info.slotInfo[nr];
+    EventSlotInfo *i = &eventInfo.slotInfo[nr];
     Cycle trigger = slot[nr].triggerCycle;
 
     i->slotName = slotName((EventSlot)nr);
     i->eventId = slot[nr].id;
     i->trigger = trigger;
-    i->triggerRel = trigger - agnus->clock;
-    i->currentFrame = agnus->belongsToCurrentFrame(trigger);
+    i->triggerRel = trigger - clock;
+    i->currentFrame = belongsToCurrentFrame(trigger);
 
     if (trigger != NEVER) {
 
-        Beam beam = agnus->cycleToBeam(trigger);
+        Beam beam = cycleToBeam(trigger);
         i->vpos = beam.y;
         i->hpos = beam.x;
 
@@ -327,57 +271,57 @@ EventHandler::_inspectSlot(EventSlot nr)
 }
 
 void
-EventHandler::_dump()
+Agnus::_dumpEvents()
 {
-    _inspect();
+    _inspectEvents();
     
     amiga->dumpClock();
     
     plainmsg("Events:\n");
     for (unsigned i = 0; i < SLOT_COUNT; i++) {
         
-        plainmsg("Slot: %-17s ", info.slotInfo[i].slotName);
-        plainmsg("Event: %-15s ", info.slotInfo[i].eventName);
+        plainmsg("Slot: %-17s ", eventInfo.slotInfo[i].slotName);
+        plainmsg("Event: %-15s ", eventInfo.slotInfo[i].eventName);
         plainmsg("Trigger: ");
         
-        Cycle trigger = info.slotInfo[i].trigger;
+        Cycle trigger = eventInfo.slotInfo[i].trigger;
         if (trigger == NEVER) {
             plainmsg("never\n");
         } else {
             plainmsg("%lld ", trigger);
-            plainmsg("(%lld DMA cycles away)\n", AS_DMA_CYCLES(trigger - info.dmaClock));
+            plainmsg("(%lld DMA cycles away)\n", AS_DMA_CYCLES(trigger - eventInfo.dmaClock));
         }
     }
 }
 
 EventHandlerInfo
-EventHandler::getInfo()
+Agnus::getEventInfo()
 {
     EventHandlerInfo result;
     
     pthread_mutex_lock(&lock);
-    result = info;
+    result = eventInfo;
     pthread_mutex_unlock(&lock);
     
     return result;
 }
 
 EventSlotInfo
-EventHandler::getSlotInfo(int nr)
+Agnus::getSlotInfo(int nr)
 {
     assert(isEventSlot(nr));
 
     EventSlotInfo result;
 
     pthread_mutex_lock(&lock);
-    result = info.slotInfo[nr];
+    result = eventInfo.slotInfo[nr];
     pthread_mutex_unlock(&lock);
 
     return result;
 }
 
 void
-EventHandler::_executeUntil(Cycle cycle) {
+Agnus::_executeEventsUntil(Cycle cycle) {
     
     // Check for a CIA A event
     if (isDue<CIAA_SLOT>(cycle)) {
@@ -422,30 +366,30 @@ EventHandler::_executeUntil(Cycle cycle) {
     // Check for a bitplane event
     if (isDue<DMA_SLOT>(cycle)) {
         assert(checkTriggeredEvent(DMA_SLOT));
-        agnus->serviceDMAEvent(slot[DMA_SLOT].id);
+        serviceDMAEvent(slot[DMA_SLOT].id);
     }
     
     // Check for a Copper event
     if (isDue<COP_SLOT>(cycle)) {
         assert(checkTriggeredEvent(COP_SLOT));
-        agnus->copper.serviceEvent(slot[COP_SLOT].id);
+        copper.serviceEvent(slot[COP_SLOT].id);
     }
     
     // Check for a Blitter event
     if (isDue<BLT_SLOT>(cycle)) {
         assert(checkTriggeredEvent(BLT_SLOT));
-        agnus->blitter.serviceEvent(slot[BLT_SLOT].id);
+        blitter.serviceEvent(slot[BLT_SLOT].id);
     }
 
     // Check for a raster event
     if (isDue<RAS_SLOT>(cycle)) {
         assert(checkTriggeredEvent(RAS_SLOT));
-        agnus->serviceRASEvent(slot[RAS_SLOT].id);
+        serviceRASEvent(slot[RAS_SLOT].id);
     }
 
     // Check if a secondary event needs to be processed
     if (isDue<SEC_SLOT>(cycle)) {
-        _executeSecUntil(cycle);
+        _executeSecEventsUntil(cycle);
     }
 
     // Determine the next trigger cycle
@@ -456,7 +400,7 @@ EventHandler::_executeUntil(Cycle cycle) {
 }
 
 void
-EventHandler::_executeSecUntil(Cycle cycle) {
+Agnus::_executeSecEventsUntil(Cycle cycle) {
     
     // Check all secondary event slots one by one
     if (isDue<DSK_SLOT>(cycle)) {
@@ -521,7 +465,7 @@ EventHandler::_executeSecUntil(Cycle cycle) {
     }
     if (isDue<SYNC_SLOT>(cycle)) {
         assert(slot[SYNC_SLOT].id == SYNC_H);
-        agnus->serviceSYNCEvent(slot[SYNC_SLOT].id);
+        serviceSYNCEvent(slot[SYNC_SLOT].id);
     }
     if (isDue<INSPECTOR_SLOT>(cycle)) {
         serveINSEvent();
@@ -538,22 +482,22 @@ EventHandler::_executeSecUntil(Cycle cycle) {
 }
 
 Cycle
-EventHandler::relToCycle(Cycle cycle)
+Agnus::relToCycle(Cycle cycle)
 {
-    return cycle + agnus->clock; 
+    return cycle + clock;
 }
 
 Cycle
-EventHandler::posToCycle(int16_t vpos, int16_t hpos)
+Agnus::posToCycle(int16_t vpos, int16_t hpos)
 {
     Beam beam;
     beam.y = vpos;
     beam.x = hpos;
-    return agnus->beamToCycle(beam);
+    return beamToCycle(beam);
 }
 
 void
-EventHandler::serveIRQEvent(EventSlot s, int irqBit)
+Agnus::serveIRQEvent(EventSlot s, int irqBit)
 {
     switch (slot[s].id) {
 
@@ -573,7 +517,7 @@ EventHandler::serveIRQEvent(EventSlot s, int irqBit)
 }
 
 void
-EventHandler::scheduleRegEvent(EventSlot slot, Cycle cycle, EventID id, int64_t data)
+Agnus::scheduleRegEvent(EventSlot slot, Cycle cycle, EventID id, int64_t data)
 {
     /* Here is the thing: A Copper write can occur every fourth cycle and
      * most writes are delayed by four cycles as well. Hence, this function
@@ -612,7 +556,7 @@ EventHandler::scheduleRegEvent(EventSlot slot, Cycle cycle, EventID id, int64_t 
 }
 
 void
-EventHandler::serveRegEvent(EventSlot nr)
+Agnus::serveRegEvent(EventSlot nr)
 {
     EventID id = slot[nr].id;
     uint16_t data = (uint16_t)slot[nr].data;
@@ -622,11 +566,11 @@ EventHandler::serveRegEvent(EventSlot nr)
     switch (id) {
 
         case REG_DIWSTRT:
-            agnus->setDIWSTRT((uint16_t)data);
+            setDIWSTRT((uint16_t)data);
             break;
 
         case REG_DIWSTOP:
-            agnus->setDIWSTOP((uint16_t)data);
+            setDIWSTOP((uint16_t)data);
             break;
 
         default:
@@ -638,7 +582,7 @@ EventHandler::serveRegEvent(EventSlot nr)
 }
 
 void
-EventHandler::serveINSEvent()
+Agnus::serveINSEvent()
 {
     switch (slot[INSPECTOR_SLOT].id) {
 
@@ -647,7 +591,7 @@ EventHandler::serveINSEvent()
         case INS_CPU:    amiga->cpu.inspect(); break;
         case INS_MEM:    mem->inspect(); break;
         case INS_CIA:    ciaA->inspect(); ciaB->inspect(); break;
-        case INS_AGNUS:  agnus->inspect(); break;
+        case INS_AGNUS:  inspect(); break;
         case INS_PAULA:  paula->inspect(); break;
         case INS_DENISE: denise->inspect(); break;
         case INS_PORTS:
@@ -656,7 +600,7 @@ EventHandler::serveINSEvent()
             amiga->controlPort1.inspect();
             amiga->controlPort2.inspect();
             break;
-        case INS_EVENTS: agnus->events.inspect(); break;
+        case INS_EVENTS: _inspectEvents(); break;
         default:         assert(false);
     }
     
@@ -665,7 +609,7 @@ EventHandler::serveINSEvent()
 }
 
 bool
-EventHandler::checkScheduledEvent(EventSlot s)
+Agnus::checkScheduledEvent(EventSlot s)
 {
     assert(isPrimarySlot(s));
     
@@ -729,12 +673,12 @@ EventHandler::checkScheduledEvent(EventSlot s)
 }
 
 bool
-EventHandler::checkTriggeredEvent(EventSlot s)
+Agnus::checkTriggeredEvent(EventSlot s)
 {
     assert(isPrimarySlot(s));
     
     // Note: This function has to be called at the trigger cycle
-    if (agnus->clock != slot[s].triggerCycle) {
+    if (clock != slot[s].triggerCycle) {
         return true;
     }
     

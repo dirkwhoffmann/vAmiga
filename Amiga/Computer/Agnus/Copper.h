@@ -17,7 +17,6 @@ class Copper : public HardwareComponent
     // Quick-access references
     class Memory *mem;
     class Agnus *agnus;
-    class EventHandler *events; 
     class Colorizer *colorizer;
     
     // Information shown in the GUI inspector panel

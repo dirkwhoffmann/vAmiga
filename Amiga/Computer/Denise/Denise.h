@@ -20,9 +20,7 @@ public:
 
     // Quick-access references
     class Agnus *agnus;
-    class EventHandler *events;
     
-
 private:
     
     // Information shown in the GUI inspector panel

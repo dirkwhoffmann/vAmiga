@@ -20,7 +20,6 @@ private:
 
     // Quick-access references
     class Agnus *agnus;
-    class EventHandler *events;
     
     // Information shown in the GUI inspector panel
     PaulaInfo info;

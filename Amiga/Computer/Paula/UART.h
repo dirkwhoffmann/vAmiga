@@ -15,7 +15,7 @@
 class UART : public HardwareComponent {
 
     // References (for quickly accessing other components)
-    class EventHandler *events;
+    class Agnus *agnus;
     class Paula *paula;
     class SerialPort *serialPort;
 

@@ -12,6 +12,10 @@
 #ifndef _EVENT_T_INC
 #define _EVENT_T_INC
 
+// Time stamp used for messages that never trigger
+#define NEVER INT64_MAX
+
+
 //
 // Enumerations
 //
@@ -284,5 +288,18 @@ typedef struct
     EventSlotInfo slotInfo[SLOT_COUNT];
 }
 EventHandlerInfo;
+
+struct Event
+{
+    // Indicates when the event is due.
+    Cycle triggerCycle;
+
+    // Identifier of the scheduled event.
+    EventID id;
+
+    // Optional data value
+    // Can be used to pass additional information to the event handler.
+    int64_t data;
+};
 
 #endif

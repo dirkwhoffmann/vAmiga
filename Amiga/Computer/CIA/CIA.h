@@ -77,7 +77,6 @@ protected:
 
     // Quick-access references
     class Agnus *agnus;
-    class EventHandler *events;
     class Paula *paula; 
     class SerialPort *serialPort;
     

@@ -43,7 +43,6 @@ void
 Paula::_initialize()
 {
     agnus = &amiga->agnus;
-    events = &amiga->agnus.events;
 }
 
 void
@@ -246,8 +245,8 @@ Paula::pokePOTGO(uint16_t value)
         debug(POT_DEBUG, "Starting potentiometer scan procedure\n");
 
         // Schedule the first DISCHARGE event
-        events->schedulePos<POT_SLOT>(agnus->vpos, HPOS_MAX, POT_DISCHARGE);
-        events->slot[POT_SLOT].data = 8;
+        agnus->schedulePos<POT_SLOT>(agnus->vpos, HPOS_MAX, POT_DISCHARGE);
+        agnus->slot[POT_SLOT].data = 8;
     }
 }
 
@@ -262,15 +261,15 @@ Paula::servePotEvent(EventID id)
 
         case POT_DISCHARGE:
 
-            events->slot[POT_SLOT].data--;
-            if (events->slot[POT_SLOT].data) {
+            agnus->slot[POT_SLOT].data--;
+            if (agnus->slot[POT_SLOT].data) {
 
                 // Schedule another DISCHARGE event
                 potCntX0++;
                 potCntY0++;
                 potCntX1++;
                 potCntY1++;
-                events->scheduleInc<POT_SLOT>(DMA_CYCLES(HPOS_MAX), POT_DISCHARGE);
+                agnus->scheduleInc<POT_SLOT>(DMA_CYCLES(HPOS_MAX), POT_DISCHARGE);
 
             } else {
 
@@ -279,7 +278,7 @@ Paula::servePotEvent(EventID id)
                 potCntY0 = 0;
                 potCntX1 = 0;
                 potCntY1 = 0;
-                events->scheduleInc<POT_SLOT>(DMA_CYCLES(HPOS_MAX), POT_CHARGE);
+                agnus->scheduleInc<POT_SLOT>(DMA_CYCLES(HPOS_MAX), POT_CHARGE);
             }
             break;
 
@@ -294,9 +293,9 @@ Paula::servePotEvent(EventID id)
 
             // Schedule next pot event if at least counter is still running
             if (cont) {
-                events->scheduleInc<POT_SLOT>(DMA_CYCLES(HPOS_CNT), POT_CHARGE);
+                agnus->scheduleInc<POT_SLOT>(DMA_CYCLES(HPOS_CNT), POT_CHARGE);
             } else {
-                events->cancel<POT_SLOT>();
+                agnus->cancel<POT_SLOT>();
             }
             break;
 

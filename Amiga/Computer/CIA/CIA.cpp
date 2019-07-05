@@ -66,7 +66,6 @@ void
 CIA::_initialize()
 {
     agnus = &amiga->agnus;
-    events = &amiga->agnus.events;
     paula = &amiga->paula;
     serialPort = &amiga->serialPort;
 }
@@ -1261,13 +1260,13 @@ CIAA::_powerOff()
 void
 CIAA::scheduleNextExecution()
 {
-    events->scheduleAbs<CIAA_SLOT>(clock + CIA_CYCLES(1), CIA_EXECUTE);
+    agnus->scheduleAbs<CIAA_SLOT>(clock + CIA_CYCLES(1), CIA_EXECUTE);
 }
 
 void
 CIAA::scheduleWakeUp()
 {
-    events->scheduleAbs<CIAA_SLOT>(wakeUpCycle, CIA_WAKEUP);
+    agnus->scheduleAbs<CIAA_SLOT>(wakeUpCycle, CIA_WAKEUP);
 }
 
 void 
@@ -1435,13 +1434,13 @@ CIAB::_dump()
 void
 CIAB::scheduleNextExecution()
 {
-    events->scheduleAbs<CIAB_SLOT>(clock + CIA_CYCLES(1), CIA_EXECUTE);
+    agnus->scheduleAbs<CIAB_SLOT>(clock + CIA_CYCLES(1), CIA_EXECUTE);
 }
 
 void
 CIAB::scheduleWakeUp()
 {
-    events->scheduleAbs<CIAB_SLOT>(wakeUpCycle, CIA_WAKEUP);
+    agnus->scheduleAbs<CIAB_SLOT>(wakeUpCycle, CIA_WAKEUP);
 }
 
 void 

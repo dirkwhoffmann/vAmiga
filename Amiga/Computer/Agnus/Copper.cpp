@@ -34,7 +34,6 @@ Copper::_initialize()
 {
     mem = &amiga->mem;
     agnus = &amiga->agnus;
-    events = &amiga->agnus.events;
     colorizer = &amiga->denise.colorizer;
 }
 
@@ -69,7 +68,7 @@ Copper::_inspect()
     pthread_mutex_lock(&lock);
     
     info.cdang   = cdang;
-    info.active  = events->isPending<COP_SLOT>();
+    info.active  = agnus->isPending<COP_SLOT>();
     info.coppc   = coppc; // coppcBase;
     info.cop1ins = cop1ins;
     info.cop2ins = cop2ins;
@@ -84,10 +83,10 @@ Copper::_inspect()
 void
 Copper::_dump()
 {
-    bool active = events->isPending<COP_SLOT>();
+    bool active = agnus->isPending<COP_SLOT>();
     plainmsg("    cdang: %d\n", cdang);
     plainmsg("   active: %s\n", active ? "yes" : "no");
-    if (active) plainmsg("    state: %d\n", events->slot[COP_SLOT].id);
+    if (active) plainmsg("    state: %d\n", agnus->slot[COP_SLOT].id);
     plainmsg("    coppc: %X\n", coppc);
     plainmsg("  copins1: %X\n", cop1ins);
     plainmsg("  copins2: %X\n", cop2ins);
@@ -591,7 +590,7 @@ Copper::serviceEvent(EventID id)
             reg = (cop1ins & 0x1FE);
 
             // Stop the Copper if address is illegal
-            if (isIllegalAddress(reg)) { events->cancel<COP_SLOT>(); break; }
+            if (isIllegalAddress(reg)) { agnus->cancel<COP_SLOT>(); break; }
 
             // Write into the custom register
             if (!skip) move(reg, cop2ins);
@@ -632,11 +631,11 @@ Copper::serviceEvent(EventID id)
                     delay -= DMA_CYCLES(2);
 
                     // ... with a COP_REQ_DMA event.
-                    events->scheduleRel<COP_SLOT>(delay, COP_REQ_DMA);
+                    agnus->scheduleRel<COP_SLOT>(delay, COP_REQ_DMA);
 
                 } else {
 
-                    events->cancel<COP_SLOT>();
+                    agnus->cancel<COP_SLOT>();
                 }
 
             } else {
@@ -688,13 +687,13 @@ Copper::serviceEvent(EventID id)
 void
 Copper::schedule(EventID next)
 {
-    events->scheduleInc<COP_SLOT>(DMA_CYCLES(2), next);
+    agnus->scheduleInc<COP_SLOT>(DMA_CYCLES(2), next);
 }
 
 void
 Copper::reschedule()
 {
-    events->rescheduleInc<COP_SLOT>(DMA_CYCLES(2));
+    agnus->rescheduleInc<COP_SLOT>(DMA_CYCLES(2));
 }
 
 void
@@ -709,9 +708,9 @@ Copper::vsyncAction()
 
     // TODO: What is the exact timing here?
     if (agnus->copDMA()) {
-        events->scheduleRel<COP_SLOT>(DMA_CYCLES(4), COP_JMP1);
+        agnus->scheduleRel<COP_SLOT>(DMA_CYCLES(4), COP_JMP1);
     } else {
-        events->cancel<COP_SLOT>();
+        agnus->cancel<COP_SLOT>();
     }
 }
 

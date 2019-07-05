@@ -17,12 +17,14 @@ Agnus::Agnus()
         
         &copper,
         &blitter,
-        &events,
         &dmaDebugger
     });
     
     registerSnapshotItems(vector<SnapshotItem> {
-        
+
+        { &slot,            sizeof(slot),            BYTE_ARRAY },
+        { &nextTrigger,     sizeof(nextTrigger),     0 },
+
         { &clock,                sizeof(clock),                0 },
         { &frame,                sizeof(frame),                0 },
         { &vpos,                 sizeof(vpos),                 0 },
@@ -127,9 +129,10 @@ Agnus::initHiresBplEventTable()
 void
 Agnus::_initialize()
 {
+    ciaA = &amiga->ciaA;
+    ciaB = &amiga->ciaB;
     mem = &amiga->mem;
     denise = &amiga->denise;
-    // dmaDebugger = &amiga->denise.dmaDebugger;
     paula = &amiga->paula;
 }
 
@@ -143,15 +146,22 @@ Agnus::_powerOn()
     // Initialize lookup tables
     clearDMAEventTable();
     
-    // Schedule the first RAS event
-    // events.scheduleAbs(RAS_SLOT, DMA_CYCLES(HPOS_MAX), RAS_HSYNC);
+    // Clear the event table
+    for (unsigned i = 0; i < SLOT_COUNT; i++) {
+        slot[i].triggerCycle = NEVER;
+        slot[i].id = (EventID)0;
+        slot[i].data = 0;
+    }
+
+    // Initialize the SEC_SLOT
+    scheduleAbs<SEC_SLOT>(NEVER, SEC_TRIGGER);
 
     // Schedule the first SYNC event
-    events.scheduleAbs<SYNC_SLOT>(DMA_CYCLES(HPOS_MAX), SYNC_H);
+    scheduleAbs<SYNC_SLOT>(DMA_CYCLES(HPOS_MAX), SYNC_H);
 
     // Schedule the first CIA A and CIA B events
-    events.scheduleAbs<CIAA_SLOT>(CIA_CYCLES(1), CIA_EXECUTE);
-    events.scheduleAbs<CIAB_SLOT>(CIA_CYCLES(1), CIA_EXECUTE);
+    scheduleAbs<CIAA_SLOT>(CIA_CYCLES(1), CIA_EXECUTE);
+    scheduleAbs<CIAB_SLOT>(CIA_CYCLES(1), CIA_EXECUTE);
 }
 
 void
@@ -210,8 +220,7 @@ Agnus::_dump()
     plainmsg("\nDMA time slot allocation:\n\n");
 
     dumpDMAEventTable();
-    
-    events.dump();
+    _dumpEvents();
 }
 
 DMAInfo
@@ -913,13 +922,13 @@ Agnus::pokeDMACON(uint16_t value)
             // (the next even DMA cycle)
             Cycle trigger = (clock + 15) & ~15;
             
-            events.scheduleAbs<COP_SLOT>(trigger, COP_FETCH);
+            scheduleAbs<COP_SLOT>(trigger, COP_FETCH);
             
         } else {
             
             // Copper DMA off
             debug(DMA_DEBUG, "Copper DMA switched off\n");
-            events.cancel<COP_SLOT>();
+            cancel<COP_SLOT>();
         }
     }
     
@@ -929,13 +938,13 @@ Agnus::pokeDMACON(uint16_t value)
         if (newBLTEN) {
             // Blitter DMA on
             debug(DMA_DEBUG, "Blitter DMA switched on\n");
-            // amiga->agnus.eventHandler.scheduleRel(BLT_SLOT, DMA_CYCLES(1), BLT_EXECUTE);
+            // amiga->agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_EXECUTE);
     
         } else {
             
             // Blitter DMA off
             debug(DMA_DEBUG, "Blitter DMA switched off\n");
-            events.cancel<BLT_SLOT>();
+            cancel<BLT_SLOT>();
         }
     }
     
@@ -1101,7 +1110,7 @@ Agnus::pokeDIWSTRT(uint16_t value)
     // Simulate a 4 cycle delay
     // TODO: Pass a boolean flag `cpu` that shows who writes to the register.
     // Depending on this variable, schedule in REG_CPU_SLOT or REG_COP_SLOT.
-    events.scheduleRegEvent(REG_COP_SLOT, DMA_CYCLES(4), REG_DIWSTRT, (int64_t)value);
+    scheduleRegEvent(REG_COP_SLOT, DMA_CYCLES(4), REG_DIWSTRT, (int64_t)value);
 }
 
 void
@@ -1112,7 +1121,7 @@ Agnus::pokeDIWSTOP(uint16_t value)
     // Simulate a 4 cycle delay
     // TODO: Pass a boolean flag `cpu` that shows who writes to the register.
     // Depending on this variable, schedule in REG_CPU_SLOT or REG_COP_SLOT.
-    events.scheduleRegEvent(REG_COP_SLOT, DMA_CYCLES(4), REG_DIWSTOP, (int64_t)value);
+    scheduleRegEvent(REG_COP_SLOT, DMA_CYCLES(4), REG_DIWSTOP, (int64_t)value);
 }
 
 void
@@ -1347,7 +1356,7 @@ Agnus::executeUntil(Cycle targetClock)
     while (clock <= targetClock - DMA_CYCLES(1)) {
 
         // Process all pending events
-        events.executeUntil(clock);
+        executeEventsUntil(clock);
         
         // Advance the internal counters
         hpos++;
@@ -1515,9 +1524,9 @@ Agnus::serviceDMAEvent(EventID id)
     // debug("id = %d hpos = %d, next = %d\n", id, hpos, next);
     if (next) {
         // events.schedulePos<DMA_SLOT>(vpos, next, dmaEvent[next]);
-        events.scheduleInc<DMA_SLOT>(DMA_CYCLES(next - hpos), dmaEvent[next]);
+        scheduleInc<DMA_SLOT>(DMA_CYCLES(next - hpos), dmaEvent[next]);
     } else {
-        events.cancel<DMA_SLOT>();
+        cancel<DMA_SLOT>();
     }
 }
 
@@ -1612,7 +1621,7 @@ Agnus::serviceSYNCEvent(EventID id)
 void
 Agnus::scheduleFirstSYNCEvent(int16_t vpos)
 {
-    events.schedulePos<SYNC_SLOT>(vpos, HPOS_MAX, SYNC_H);
+    schedulePos<SYNC_SLOT>(vpos, HPOS_MAX, SYNC_H);
 }
 
 void
@@ -1728,7 +1737,7 @@ Agnus::hsyncHandler()
     // Schedule the first hi-prio DMA event (if any)
     if (nextDmaEvent[0]) {
         EventID eventID = dmaEvent[nextDmaEvent[0]];
-        events.schedulePos<DMA_SLOT>(vpos, nextDmaEvent[0], eventID);
+        schedulePos<DMA_SLOT>(vpos, nextDmaEvent[0], eventID);
     }
     
     // Schedule first RAS event

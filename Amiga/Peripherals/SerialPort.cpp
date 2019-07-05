@@ -23,7 +23,6 @@ SerialPort::SerialPort()
 void
 SerialPort::_initialize()
 {
-    events = &amiga->agnus.events;
     uart = &amiga->paula.uart;
 }
 

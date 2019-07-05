@@ -30,7 +30,7 @@ UART::UART()
 void
 UART::_initialize()
 {
-    events = &amiga->agnus.events;
+    agnus = &amiga->agnus;
     paula = &amiga->paula;
     serialPort = &amiga->serialPort;
 }
@@ -160,7 +160,7 @@ UART::copyToTransmitShiftRegister()
     paula->pokeINTREQ(0x8001);
 
     // Schedule the transmission of the first bit
-    events->scheduleRel<TXD_SLOT>(0, TXD_BIT);
+    agnus->scheduleRel<TXD_SLOT>(0, TXD_BIT);
 }
 
 void
@@ -213,7 +213,7 @@ void
 UART::rxdHasChanged(bool value)
 {
     // Schedule the first reception event if transmission has not yet started
-    if (value == 0 && !events->hasEvent<RXD_SLOT>()) {
+    if (value == 0 && !agnus->hasEvent<RXD_SLOT>()) {
 
         // Reset the bit counter
         recCnt = 0;
@@ -222,7 +222,7 @@ UART::rxdHasChanged(bool value)
         Cycle delay = rate() * 3 / 2;
 
         // Schedule the event
-        events->scheduleRel<RXD_SLOT>(delay, RXD_BIT);
+        agnus->scheduleRel<RXD_SLOT>(delay, RXD_BIT);
     }
 }
 
@@ -259,13 +259,13 @@ UART::serveTxdEvent(EventID id)
 
                     // Abort the transmission
                     debug(SER_DEBUG, "End of transmission\n");
-                    events->cancel<TXD_SLOT>();
+                    agnus->cancel<TXD_SLOT>();
                     break;
                 }
             }
 
             // Schedule the next event
-            events->scheduleInc<TXD_SLOT>(rate(), TXD_BIT);
+            agnus->scheduleInc<TXD_SLOT>(rate(), TXD_BIT);
             break;
 
         default:
@@ -293,7 +293,7 @@ UART::serveRxdEvent(EventID id)
 
         // Stop receiving if the last bit was a stop bit
         if (rxd) {
-            events->cancel<RXD_SLOT>();
+            agnus->cancel<RXD_SLOT>();
             return;
         } else {
             // Prepare for the next packet
@@ -302,5 +302,5 @@ UART::serveRxdEvent(EventID id)
     }
 
     // Schedule the next reception event
-    events->scheduleInc<RXD_SLOT>(rate(), RXD_BIT);
+    agnus->scheduleInc<RXD_SLOT>(rate(), RXD_BIT);
 }

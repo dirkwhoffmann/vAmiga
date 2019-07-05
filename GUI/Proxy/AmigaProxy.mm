@@ -346,7 +346,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 - (void) dumpEventHandler
 {
-    wrapper->agnus->events.dump();
+    wrapper->agnus->_dumpEvents();
 }
 - (void) dumpCopper
 {
@@ -366,11 +366,11 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 - (EventSlotInfo) getSlotInfo:(NSInteger)slot
 {
-    return wrapper->agnus->events.getSlotInfo(slot);
+    return wrapper->agnus->getSlotInfo(slot);
 }
 - (EventHandlerInfo) getEventInfo
 {
-    return wrapper->agnus->events.getInfo();
+    return wrapper->agnus->getEventInfo();
 }
 - (CopperInfo) getCopperInfo
 {

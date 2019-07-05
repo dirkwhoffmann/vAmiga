@@ -19,7 +19,6 @@ class DiskController : public HardwareComponent {
     // Quick-access references
     class Memory *mem; 
     class Agnus *agnus;
-    class EventHandler *events;
     class Paula *paula; 
     
     //

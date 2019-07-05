@@ -18,7 +18,6 @@
 //
 
 class Amiga;
-class EventHandler;
 class Memory;
 class CPU;
 class CIAA;
