@@ -397,25 +397,3 @@ AudioUnit::handleBufferOverflow()
     // Reset the write pointer
     alignWritePtr();
 }
-
-/*
-template<> void AudioUnit::pokeAUDxLEN<0>(uint16_t value) { channel0.pokeAUDxLEN(value); }
-template<> void AudioUnit::pokeAUDxLEN<1>(uint16_t value) { channel1.pokeAUDxLEN(value); }
-template<> void AudioUnit::pokeAUDxLEN<2>(uint16_t value) { channel2.pokeAUDxLEN(value); }
-template<> void AudioUnit::pokeAUDxLEN<3>(uint16_t value) { channel3.pokeAUDxLEN(value); }
-
-template<> void AudioUnit::pokeAUDxPER<0>(uint16_t value) { channel0.pokeAUDxPER(value); }
-template<> void AudioUnit::pokeAUDxPER<1>(uint16_t value) { channel1.pokeAUDxPER(value); }
-template<> void AudioUnit::pokeAUDxPER<2>(uint16_t value) { channel2.pokeAUDxPER(value); }
-template<> void AudioUnit::pokeAUDxPER<3>(uint16_t value) { channel3.pokeAUDxPER(value); }
-
-template<> void AudioUnit::pokeAUDxVOL<0>(uint16_t value) { channel0.pokeAUDxVOL(value); }
-template<> void AudioUnit::pokeAUDxVOL<1>(uint16_t value) { channel1.pokeAUDxVOL(value); }
-template<> void AudioUnit::pokeAUDxVOL<2>(uint16_t value) { channel2.pokeAUDxVOL(value); }
-template<> void AudioUnit::pokeAUDxVOL<3>(uint16_t value) { channel3.pokeAUDxVOL(value); }
-
-template<> void AudioUnit::pokeAUDxDAT<0>(uint16_t value) { channel0.pokeAUDxDAT(value); }
-template<> void AudioUnit::pokeAUDxDAT<1>(uint16_t value) { channel1.pokeAUDxDAT(value); }
-template<> void AudioUnit::pokeAUDxDAT<2>(uint16_t value) { channel2.pokeAUDxDAT(value); }
-template<> void AudioUnit::pokeAUDxDAT<3>(uint16_t value) { channel3.pokeAUDxDAT(value); }
-*/
