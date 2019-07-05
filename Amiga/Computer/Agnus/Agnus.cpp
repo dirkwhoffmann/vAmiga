@@ -1368,7 +1368,7 @@ Agnus::executeUntil(Cycle targetClock)
         
         // Note: If this assertion hits, the HSYNC event hasn't been served!
         assert(hpos <= HPOS_MAX);
-        
+
         clock += DMA_CYCLES(1);
     }
 }

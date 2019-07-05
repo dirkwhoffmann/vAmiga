@@ -21,10 +21,10 @@
  * for managing UART event.
  * From a theoretical point of view, each event slot represents a state machine
  * running in parallel to the ones in the other slots. Keep in mind that the
- * state machines do interact with each other in various ways (e.g., by blocking
- * the DMA bus). As a result, the slot ordering is important: If two events
- * trigger at the same cycle, the the slot with a smaller number is always
- * served first.
+ * state machines do interact with each other in various ways (e.g., by
+ * blocking the DMA bus). As a result, the slot ordering is important: If two
+ * events trigger at the same cycle, the the slot with a smaller number is
+ * always served first.
  * To optimize speed, the event slots are categorized into primary slots and
  * secondary slots. The primary slots are those that who store frequently
  * occurring events (CIA execution, DMA operations, etc.) and the secondary
@@ -41,9 +41,9 @@
  * contains a wakeup with a trigger cycle matching the smallest trigger cycle
  * of all secondary events.
  * Scheduling the wakeup event in SEC_SLOT is transparant for the callee. When
- * an event is scheduled, the event handler automatically checks if the selected
- * slot is primary or secondary and schedules the SEC_SLOT automatically in the
- * latter case.
+ * an event is scheduled, the event handler automatically checks if the
+ * selected slot is primary or secondary and schedules the SEC_SLOT
+ * automatically in the latter case.
  */
 
 public:
@@ -66,31 +66,28 @@ template<EventSlot s> bool isDue(Cycle cycle) {
 //
 
 /* To schedule an event, an event slot, a trigger cycle, and an event id
- * needs to be provided. The trigger cycle can be specified in three ways:
+ * need to be provided. The trigger cycle is measured in master cycles. It can
+ * be specified in multiple ways:
  *
  *   Absolute (Abs):
- *   The time stamp is an absolute value measured in master clock cycles.
- *
- *   Incremental (Inc):
- *   The time stamp is relative to the current time stamp in the slot.
+ *   The trigger cycle is specified as an absolute value.
  *
  *   Relative (Rel):
- *   The time stamp is relative to the current DMA clock and measured in
- *   master clock cycles.
+ *   The time stamp is relative to the current DMA clock.
+ *
+ *   Incremental (Inc):
+ *   The trigger cycle is specified relative to the current slot value.
  *
  *   Positional (Pos):
- *   The time stamp is provided as a beam position in the current frame.
+ *   The time stamp is specified as a beam position in the current frame.
  *
- * Events can also be rescheduled, disabled, or canceled:
+ * Events can also be rescheduled or canceled:
  *
  *   Rescheduling means that the event ID in the selected event slot
  *   remains unchanged.
  *
- *   Disabling means that the trigger cycle is set to NEVER. All other slot
- *   items are untouched.
- *
- *   Canceling means that the slot is emptied by deleting the event ID
- *   and setting the trigger cycle to NEVER.
+ *   Canceling means that the slot is emptied by deleting the setting the
+ *   event ID and the event data to zero and the trigger cycle to NEVER.
  */
 
 public:
@@ -115,17 +112,6 @@ template<EventSlot s> void scheduleAbs(Cycle cycle, EventID id, int64_t data)
     slot[s].data = data;
 }
 
-template<EventSlot s> void scheduleInc(Cycle cycle, EventID id)
-{
-    scheduleAbs<s>(slot[s].triggerCycle + cycle, id);
-}
-
-template<EventSlot s> void scheduleInc(Cycle cycle, EventID id, int64_t data)
-{
-    scheduleAbs<s>(slot[s].triggerCycle + cycle, id);
-    slot[s].data = data;
-}
-
 template<EventSlot s> void scheduleRel(Cycle cycle, EventID id)
 {
     scheduleAbs<s>(clock + cycle, id);
@@ -134,6 +120,17 @@ template<EventSlot s> void scheduleRel(Cycle cycle, EventID id)
 template<EventSlot s> void scheduleRel(Cycle cycle, EventID id, int64_t data)
 {
     scheduleAbs<s>(clock + cycle, id);
+    slot[s].data = data;
+}
+
+template<EventSlot s> void scheduleInc(Cycle cycle, EventID id)
+{
+    scheduleAbs<s>(slot[s].triggerCycle + cycle, id);
+}
+
+template<EventSlot s> void scheduleInc(Cycle cycle, EventID id, int64_t data)
+{
+    scheduleAbs<s>(slot[s].triggerCycle + cycle, id);
     slot[s].data = data;
 }
 
