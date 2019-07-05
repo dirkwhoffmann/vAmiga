@@ -632,26 +632,12 @@ public:
     //
     
     public:
-    
-    // Services a high-priority DMA event (Disk, Audio, Sprites, Bitplanes)
-    void serviceDMAEvent(EventID id);
+
     
     // Sub-handlers for sprite DMA events (called by serviceDMAEvent).
     void serviceS1Event(int nr);
     void serviceS2Event(int nr);
 
-    // Services a raster event (Pixel drawing, HSYNC)
-    void serviceRASEvent(EventID id);
-
-    // Services a synchronization event (HSYNC)
-    void serviceSYNCEvent(EventID id);
-
-    // Schedules the first SYNC slot event
-    void scheduleFirstSYNCEvent(int16_t vpos);
-
-    // Schedules the next RAS slot event
-    // void scheduleNextRASEvent(int16_t vpos, int16_t hpos);
-    
     /* This functions serves the SYNC_H event in the SYNC slot.
      * The SYNC_H event is triggered at the end of each rasterline.
      */

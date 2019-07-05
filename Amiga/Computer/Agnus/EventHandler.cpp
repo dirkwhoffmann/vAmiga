@@ -322,12 +322,12 @@ Agnus::getEventSlotInfo(int nr)
 
 void
 Agnus::executePrimaryEventsUntil(Cycle cycle) {
-    
+
     // Check for a CIA A event
     if (isDue<CIAA_SLOT>(cycle)) {
-        
+
         assert(checkTriggeredEvent(CIAA_SLOT));
-        
+
         switch(slot[CIAA_SLOT].id) {
 
             case CIA_EXECUTE:
@@ -342,12 +342,12 @@ Agnus::executePrimaryEventsUntil(Cycle cycle) {
                 assert(false);
         }
     }
-    
+
     // Check for a CIA B event
     if (isDue<CIAB_SLOT>(cycle)) {
-        
+
         assert(checkTriggeredEvent(CIAB_SLOT));
-        
+
         switch(slot[CIAB_SLOT].id) {
 
             case CIA_EXECUTE:
@@ -362,19 +362,19 @@ Agnus::executePrimaryEventsUntil(Cycle cycle) {
                 assert(false);
         }
     }
-    
+
     // Check for a bitplane event
     if (isDue<DMA_SLOT>(cycle)) {
         assert(checkTriggeredEvent(DMA_SLOT));
         serviceDMAEvent(slot[DMA_SLOT].id);
     }
-    
+
     // Check for a Copper event
     if (isDue<COP_SLOT>(cycle)) {
         assert(checkTriggeredEvent(COP_SLOT));
         copper.serviceEvent(slot[COP_SLOT].id);
     }
-    
+
     // Check for a Blitter event
     if (isDue<BLT_SLOT>(cycle)) {
         assert(checkTriggeredEvent(BLT_SLOT));
@@ -383,8 +383,8 @@ Agnus::executePrimaryEventsUntil(Cycle cycle) {
 
     // Check for a raster event
     if (isDue<RAS_SLOT>(cycle)) {
-        assert(checkTriggeredEvent(RAS_SLOT));
-        serviceRASEvent(slot[RAS_SLOT].id);
+        // Slot is currently unused
+        // assert(checkTriggeredEvent(RAS_SLOT));
     }
 
     // Check if a secondary event needs to be processed
@@ -401,58 +401,58 @@ Agnus::executePrimaryEventsUntil(Cycle cycle) {
 
 void
 Agnus::executeSecondaryEventsUntil(Cycle cycle) {
-    
+
     // Check all secondary event slots one by one
     if (isDue<DSK_SLOT>(cycle)) {
         paula->diskController.serveDiskEvent();
     }
     if (isDue<IRQ_TBE_SLOT>(cycle)) {
-        serveIRQEvent(IRQ_TBE_SLOT, 0);
+        serviceIRQEvent(IRQ_TBE_SLOT, 0);
     }
     if (isDue<IRQ_DSKBLK_SLOT>(cycle)) {
-        serveIRQEvent(IRQ_DSKBLK_SLOT, 1);
+        serviceIRQEvent(IRQ_DSKBLK_SLOT, 1);
     }
     if (isDue<IRQ_SOFT_SLOT>(cycle)) {
-        serveIRQEvent(IRQ_SOFT_SLOT, 2);
+        serviceIRQEvent(IRQ_SOFT_SLOT, 2);
     }
     if (isDue<IRQ_PORTS_SLOT>(cycle)) {
-        serveIRQEvent(IRQ_PORTS_SLOT, 3);
+        serviceIRQEvent(IRQ_PORTS_SLOT, 3);
     }
     if (isDue<IRQ_COPR_SLOT>(cycle)) {
-        serveIRQEvent(IRQ_COPR_SLOT, 4);
+        serviceIRQEvent(IRQ_COPR_SLOT, 4);
     }
     if (isDue<IRQ_VERTB_SLOT>(cycle)) {
-        serveIRQEvent(IRQ_VERTB_SLOT, 5);
+        serviceIRQEvent(IRQ_VERTB_SLOT, 5);
     }
     if (isDue<IRQ_BLIT_SLOT>(cycle)) {
-        serveIRQEvent(IRQ_BLIT_SLOT, 6);
+        serviceIRQEvent(IRQ_BLIT_SLOT, 6);
     }
     if (isDue<IRQ_AUD0_SLOT>(cycle)) {
-        serveIRQEvent(IRQ_AUD0_SLOT, 7);
+        serviceIRQEvent(IRQ_AUD0_SLOT, 7);
     }
     if (isDue<IRQ_AUD1_SLOT>(cycle)) {
-        serveIRQEvent(IRQ_AUD1_SLOT, 8);
+        serviceIRQEvent(IRQ_AUD1_SLOT, 8);
     }
     if (isDue<IRQ_AUD2_SLOT>(cycle)) {
-        serveIRQEvent(IRQ_AUD2_SLOT, 9);
+        serviceIRQEvent(IRQ_AUD2_SLOT, 9);
     }
     if (isDue<IRQ_AUD3_SLOT>(cycle)) {
-        serveIRQEvent(IRQ_AUD3_SLOT, 10);
+        serviceIRQEvent(IRQ_AUD3_SLOT, 10);
     }
     if (isDue<IRQ_RBF_SLOT>(cycle)) {
-        serveIRQEvent(IRQ_RBF_SLOT, 11);
+        serviceIRQEvent(IRQ_RBF_SLOT, 11);
     }
     if (isDue<IRQ_DSKSYN_SLOT>(cycle)) {
-        serveIRQEvent(IRQ_DSKSYN_SLOT, 12);
+        serviceIRQEvent(IRQ_DSKSYN_SLOT, 12);
     }
     if (isDue<IRQ_EXTER_SLOT>(cycle)) {
-        serveIRQEvent(IRQ_EXTER_SLOT, 13);
+        serviceIRQEvent(IRQ_EXTER_SLOT, 13);
     }
     if (isDue<REG_COP_SLOT>(cycle)) {
-        serveRegEvent(REG_COP_SLOT);
+        serviceREGEvent(REG_COP_SLOT);
     }
     if (isDue<REG_CPU_SLOT>(cycle)) {
-        serveRegEvent(REG_CPU_SLOT);
+        serviceREGEvent(REG_CPU_SLOT);
     }
     if (isDue<TXD_SLOT>(cycle)) {
         paula->uart.serveTxdEvent(slot[TXD_SLOT].id);
@@ -470,36 +470,181 @@ Agnus::executeSecondaryEventsUntil(Cycle cycle) {
     if (isDue<INSPECTOR_SLOT>(cycle)) {
         serveINSEvent();
     }
-    
+
     // Determine the next trigger cycle
     Cycle nextSecTrigger = slot[FIRST_SEC_SLOT].triggerCycle;
     for (unsigned i = FIRST_SEC_SLOT + 1; i <= LAST_SEC_SLOT; i++)
         if (slot[i].triggerCycle < nextSecTrigger)
             nextSecTrigger = slot[i].triggerCycle;
-    
+
     // Update the secondary table trigger in the primary table
     rescheduleAbs<SEC_SLOT>(nextSecTrigger);
 }
 
-/*
-Cycle
-Agnus::relToCycle(Cycle cycle)
+void
+Agnus::serviceDMAEvent(EventID id)
 {
-    return cycle + clock;
-}
+    switch (id) {
 
-Cycle
-Agnus::posToCycle(int16_t vpos, int16_t hpos)
-{
-    Beam beam;
-    beam.y = vpos;
-    beam.x = hpos;
-    return beamToCycle(beam);
+        case DMA_DISK:
+
+            if (paula->diskController.getFifoBuffering())
+                paula->diskController.performDMA();
+            else
+                paula->diskController.performSimpleDMA();
+            break;
+
+        case DMA_A0:
+            break;
+
+        case DMA_A1:
+            break;
+
+        case DMA_A2:
+            break;
+
+        case DMA_A3:
+            break;
+
+        case DMA_S0_1:
+            serviceS1Event(0);
+            break;
+
+        case DMA_S1_1:
+            serviceS1Event(1);
+            break;
+
+        case DMA_S2_1:
+            serviceS1Event(2);
+            break;
+
+        case DMA_S3_1:
+            serviceS1Event(3);
+            break;
+
+        case DMA_S4_1:
+            serviceS1Event(4);
+            break;
+
+        case DMA_S5_1:
+            serviceS1Event(5);
+            break;
+
+        case DMA_S6_1:
+            serviceS1Event(6);
+            break;
+
+        case DMA_S7_1:
+            serviceS1Event(7);
+            break;
+
+        case DMA_S0_2:
+            serviceS2Event(0);
+            break;
+
+        case DMA_S1_2:
+            serviceS2Event(1);
+            break;
+
+        case DMA_S2_2:
+            serviceS2Event(2);
+            break;
+
+        case DMA_S3_2:
+            serviceS2Event(3);
+            break;
+
+        case DMA_S4_2:
+            serviceS2Event(4);
+            break;
+
+        case DMA_S5_2:
+            serviceS2Event(5);
+            break;
+
+        case DMA_S6_2:
+            serviceS2Event(6);
+            break;
+
+        case DMA_S7_2:
+            serviceS2Event(7);
+            break;
+
+        case DMA_H1_FIRST:
+            denise->prepareShiftRegisters();
+            // fallthrough
+
+        case DMA_H1:
+            denise->bpldat[PLANE1] = doBitplaneDMA(PLANE1);
+            denise->fillShiftRegisters();
+            denise->drawHires(16);
+            break;
+
+        case DMA_H1_LAST:
+            denise->bpldat[PLANE1] = doBitplaneDMA(PLANE1);
+            denise->fillShiftRegisters();
+            denise->drawHires(16 + denise->scrollHiresOdd);
+            addBPLxMOD();
+            break;
+
+        case DMA_L1_FIRST:
+            denise->prepareShiftRegisters();
+            // fallthrough
+
+        case DMA_L1:
+            denise->bpldat[PLANE1] = doBitplaneDMA(PLANE1);
+            denise->fillShiftRegisters();
+            denise->drawLores(16);
+            break;
+
+        case DMA_L1_LAST:
+            denise->bpldat[PLANE1] = doBitplaneDMA(PLANE1);
+            denise->fillShiftRegisters();
+            denise->drawLores(16 + denise->scrollHiresOdd);
+            addBPLxMOD();
+            break;
+
+        case DMA_H2:
+        case DMA_L2:
+            denise->bpldat[PLANE2] = doBitplaneDMA(PLANE2);
+            break;
+
+        case DMA_H3:
+        case DMA_L3:
+            denise->bpldat[PLANE3] = doBitplaneDMA(PLANE3);
+            break;
+
+        case DMA_H4:
+        case DMA_L4:
+            denise->bpldat[PLANE4] = doBitplaneDMA(PLANE4);
+            break;
+
+        case DMA_L5:
+            denise->bpldat[PLANE5] = doBitplaneDMA(PLANE5);
+            break;
+
+        case DMA_L6:
+            denise->bpldat[PLANE6] = doBitplaneDMA(PLANE6);
+            break;
+
+        default:
+            debug("id = %d\n", id);
+            assert(false);
+    }
+
+    // Schedule next event
+    uint8_t next = nextDmaEvent[hpos];
+    // debug("id = %d hpos = %d, next = %d\n", id, hpos, next);
+    if (next) {
+        // events.schedulePos<DMA_SLOT>(vpos, next, dmaEvent[next]);
+        scheduleInc<DMA_SLOT>(DMA_CYCLES(next - hpos), dmaEvent[next]);
+    } else {
+        cancel<DMA_SLOT>();
+    }
 }
-*/
 
 void
-Agnus::serveIRQEvent(EventSlot s, int irqBit)
+Agnus::serviceIRQEvent(EventSlot s, int irqBit)
 {
     switch (slot[s].id) {
 
@@ -519,46 +664,7 @@ Agnus::serveIRQEvent(EventSlot s, int irqBit)
 }
 
 void
-Agnus::scheduleRegEvent(EventSlot slot, Cycle cycle, EventID id, int64_t data)
-{
-    /* Here is the thing: A Copper write can occur every fourth cycle and
-     * most writes are delayed by four cycles as well. Hence, this function
-     * may be called under situations where a pending event is still in the
-     * slot.
-     * We solve this by serving the pending event first. But beware: We'll
-     * probably run into problem with this approach if the old event is not
-     * due yet. If such a situation really arises, we need to come up with a
-     * different design. For example, we could add a second reg write slot for
-     * the Copper and the CPU and schedule the event in any these two slots (we
-     * can choose any of them as long as it is free). Alternatively, we could
-     * add seperate event slots for each OCS register. However, this would blow
-     * up the size of the secondary table and might therefore be a bad idea.
-     */
-    switch (slot) {
-
-        case REG_COP_SLOT:
-            if (hasEvent<REG_COP_SLOT>()) {
-                assert(isDue<REG_COP_SLOT>(amiga->masterClock));
-                serveRegEvent(slot);
-            }
-            scheduleRel<REG_COP_SLOT>(cycle, id, data);
-            break;
-
-        case REG_CPU_SLOT:
-            if (hasEvent<REG_CPU_SLOT>()) {
-                assert(isDue<REG_CPU_SLOT>(amiga->masterClock));
-                serveRegEvent(slot);
-            }
-            scheduleRel<REG_CPU_SLOT>(cycle, id, data);
-            break;
-
-        default:
-            assert(false);
-    }
-}
-
-void
-Agnus::serveRegEvent(EventSlot nr)
+Agnus::serviceREGEvent(EventSlot nr)
 {
     EventID id = slot[nr].id;
     uint16_t data = (uint16_t)slot[nr].data;
@@ -584,6 +690,22 @@ Agnus::serveRegEvent(EventSlot nr)
 }
 
 void
+Agnus::serviceSYNCEvent(EventID id)
+{
+    switch (id) {
+
+        case SYNC_H:
+
+            hsyncHandler();
+            break;
+
+        default:
+            assert(false);
+            break;
+    }
+}
+
+void
 Agnus::serveINSEvent()
 {
     switch (slot[INSPECTOR_SLOT].id) {
@@ -605,9 +727,48 @@ Agnus::serveINSEvent()
         case INS_EVENTS: inspectEvents(); break;
         default:         assert(false);
     }
-    
+
     // Reschedule event
     rescheduleRel<INSPECTOR_SLOT>((Cycle)(inspectionInterval * 28000000));
+}
+
+void
+Agnus::scheduleRegEvent(EventSlot slot, Cycle cycle, EventID id, int64_t data)
+{
+    /* Here is the thing: A Copper write can occur every fourth cycle and
+     * most writes are delayed by four cycles as well. Hence, this function
+     * may be called under situations where a pending event is still in the
+     * slot.
+     * We solve this by serving the pending event first. But beware: We'll
+     * probably run into problem with this approach if the old event is not
+     * due yet. If such a situation really arises, we need to come up with a
+     * different design. For example, we could add a second reg write slot for
+     * the Copper and the CPU and schedule the event in any these two slots (we
+     * can choose any of them as long as it is free). Alternatively, we could
+     * add seperate event slots for each OCS register. However, this would blow
+     * up the size of the secondary table and might therefore be a bad idea.
+     */
+    switch (slot) {
+
+        case REG_COP_SLOT:
+            if (hasEvent<REG_COP_SLOT>()) {
+                assert(isDue<REG_COP_SLOT>(amiga->masterClock));
+                serviceREGEvent(slot);
+            }
+            scheduleRel<REG_COP_SLOT>(cycle, id, data);
+            break;
+
+        case REG_CPU_SLOT:
+            if (hasEvent<REG_CPU_SLOT>()) {
+                assert(isDue<REG_CPU_SLOT>(amiga->masterClock));
+                serviceREGEvent(slot);
+            }
+            scheduleRel<REG_CPU_SLOT>(cycle, id, data);
+            break;
+
+        default:
+            assert(false);
+    }
 }
 
 bool

@@ -1368,168 +1368,6 @@ Agnus::executeUntil(Cycle targetClock)
 }
 
 void
-Agnus::serviceDMAEvent(EventID id)
-{
-    switch (id) {
-            
-        case DMA_DISK:
-
-            if (paula->diskController.getFifoBuffering())
-                paula->diskController.performDMA();
-            else
-                paula->diskController.performSimpleDMA();
-            break;
-        
-        case DMA_A0:
-            break;
-            
-        case DMA_A1:
-            break;
-            
-        case DMA_A2:
-            break;
-            
-        case DMA_A3:
-            break;
-            
-        case DMA_S0_1:
-            serviceS1Event(0);
-            break;
-            
-        case DMA_S1_1:
-            serviceS1Event(1);
-            break;
-            
-        case DMA_S2_1:
-            serviceS1Event(2);
-            break;
-            
-        case DMA_S3_1:
-            serviceS1Event(3);
-            break;
-            
-        case DMA_S4_1:
-            serviceS1Event(4);
-            break;
-            
-        case DMA_S5_1:
-            serviceS1Event(5);
-            break;
-            
-        case DMA_S6_1:
-            serviceS1Event(6);
-            break;
-            
-        case DMA_S7_1:
-            serviceS1Event(7);
-            break;
-            
-        case DMA_S0_2:
-            serviceS2Event(0);
-            break;
-            
-        case DMA_S1_2:
-            serviceS2Event(1);
-            break;
-            
-        case DMA_S2_2:
-            serviceS2Event(2);
-            break;
-            
-        case DMA_S3_2:
-            serviceS2Event(3);
-            break;
-            
-        case DMA_S4_2:
-            serviceS2Event(4);
-            break;
-            
-        case DMA_S5_2:
-            serviceS2Event(5);
-            break;
-            
-        case DMA_S6_2:
-            serviceS2Event(6);
-            break;
-            
-        case DMA_S7_2:
-            serviceS2Event(7);
-            break;
-
-        case DMA_H1_FIRST:
-            denise->prepareShiftRegisters();
-            // fallthrough
-
-        case DMA_H1:
-            denise->bpldat[PLANE1] = doBitplaneDMA(PLANE1);
-            denise->fillShiftRegisters();
-            denise->drawHires(16);
-            break;
-
-        case DMA_H1_LAST:
-            denise->bpldat[PLANE1] = doBitplaneDMA(PLANE1);
-            denise->fillShiftRegisters();
-            denise->drawHires(16 + denise->scrollHiresOdd);
-            addBPLxMOD();
-            break;
-
-        case DMA_L1_FIRST:
-            denise->prepareShiftRegisters();
-            // fallthrough
-
-        case DMA_L1:
-            denise->bpldat[PLANE1] = doBitplaneDMA(PLANE1);
-            denise->fillShiftRegisters();
-            denise->drawLores(16);
-            break;
-
-        case DMA_L1_LAST:
-            denise->bpldat[PLANE1] = doBitplaneDMA(PLANE1);
-            denise->fillShiftRegisters();
-            denise->drawLores(16 + denise->scrollHiresOdd);
-            addBPLxMOD();
-            break;
-            
-        case DMA_H2:
-        case DMA_L2:
-            denise->bpldat[PLANE2] = doBitplaneDMA(PLANE2);
-            break;
-            
-        case DMA_H3:
-        case DMA_L3:
-            denise->bpldat[PLANE3] = doBitplaneDMA(PLANE3);
-            break;
-            
-        case DMA_H4:
-        case DMA_L4:
-            denise->bpldat[PLANE4] = doBitplaneDMA(PLANE4);
-            break;
-            
-        case DMA_L5:
-            denise->bpldat[PLANE5] = doBitplaneDMA(PLANE5);
-            break;
-            
-        case DMA_L6:
-            denise->bpldat[PLANE6] = doBitplaneDMA(PLANE6);
-            break;
-            
-        default:
-            debug("id = %d\n", id);
-            assert(false);
-    }
-    
-    // Schedule next event
-    uint8_t next = nextDmaEvent[hpos];
-    // debug("id = %d hpos = %d, next = %d\n", id, hpos, next);
-    if (next) {
-        // events.schedulePos<DMA_SLOT>(vpos, next, dmaEvent[next]);
-        scheduleInc<DMA_SLOT>(DMA_CYCLES(next - hpos), dmaEvent[next]);
-    } else {
-        cancel<DMA_SLOT>();
-    }
-}
-
-void
 Agnus::serviceS1Event(int nr)
 {
     // Activate sprite data DMA if the first sprite line has been reached
@@ -1581,46 +1419,6 @@ Agnus::serviceS2Event(int nr)
         // Read DATB
         denise->pokeSPRxDATA(nr, doSpriteDMA(nr));
     }
-}
-
-void
-Agnus::serviceRASEvent(EventID id)
-{
-    /*
-    switch (id) {
-            
-        case RAS_HSYNC:
-            
-            hsyncHandler();
-            break;
-
-        default:
-            assert(false);
-            break;
-    }
-    */
-}
-
-void
-Agnus::serviceSYNCEvent(EventID id)
-{
-    switch (id) {
-
-        case SYNC_H:
-
-            hsyncHandler();
-            break;
-
-        default:
-            assert(false);
-            break;
-    }
-}
-
-void
-Agnus::scheduleFirstSYNCEvent(int16_t vpos)
-{
-    schedulePos<SYNC_SLOT>(vpos, HPOS_MAX, SYNC_H);
 }
 
 void
@@ -1738,12 +1536,9 @@ Agnus::hsyncHandler()
         EventID eventID = dmaEvent[nextDmaEvent[0]];
         schedulePos<DMA_SLOT>(vpos, nextDmaEvent[0], eventID);
     }
-    
-    // Schedule first RAS event
-    // scheduleFirstRASEvent(vpos);
 
     // Schedule first SYNC event
-    scheduleFirstSYNCEvent(vpos);
+    schedulePos<SYNC_SLOT>(vpos, HPOS_MAX, SYNC_H);
 
 
     //

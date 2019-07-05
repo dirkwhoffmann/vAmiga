@@ -46,13 +46,7 @@
  * latter case.
  */
 
-
-private:
-
-
-
 public:
-
 
 // Returns true iff the specified slot contains an event.
 template<EventSlot s> bool hasEvent() {
@@ -65,23 +59,6 @@ template<EventSlot s> bool isPending() {
 // Returns true iff the specified slot contains a due event.
 template<EventSlot s> bool isDue(Cycle cycle) {
     assert(s < SLOT_COUNT); return cycle >= slot[s].triggerCycle; }
-
-
-//
-// Processing events
-//
-
-private:
-
-/* Processes all primary events that are due prior to or at the provided cycle.
- * Called inside Agnus::executeUntil().
- */
-void executePrimaryEventsUntil(Cycle cycle);
-
-/* Processes all secondary events that are due prior to or at the provided cycle.
- * Called inside executePrimaryEventsUntil() if the SEC_SLOT is due.
- */
-void executeSecondaryEventsUntil(Cycle cycle);
 
 
 //
@@ -208,13 +185,34 @@ void cancel(EventSlot s)
 // Schedules a register write event
 void scheduleRegEvent(EventSlot slot, Cycle cycle, EventID id, int64_t data);
 
+
+//
+// Processing events
+//
+
 private:
 
-// Serves an interrupt slot event
-void serveIRQEvent(EventSlot slot, int irqBit);
+/* Processes all primary events that are due prior to or at the provided cycle.
+ * Called inside Agnus::executeUntil().
+ */
+void executePrimaryEventsUntil(Cycle cycle);
 
-// Serves a register write event
-void serveRegEvent(EventSlot slot);
+/* Processes all secondary events that are due prior to or at the provided cycle.
+ * Called inside executePrimaryEventsUntil() if the SEC_SLOT is due.
+ */
+void executeSecondaryEventsUntil(Cycle cycle);
+
+// Event handler for the DMA slot
+void serviceDMAEvent(EventID id);
+
+// Event handler for the SYNC slot
+void serviceSYNCEvent(EventID id);
+
+// Event handler for the various IRQ slots
+void serviceIRQEvent(EventSlot slot, int irqBit);
+
+// Event handler for slots REG_COPPER and REG_CPU
+void serviceREGEvent(EventSlot slot);
 
 // Serves an inspection event
 void serveINSEvent();
