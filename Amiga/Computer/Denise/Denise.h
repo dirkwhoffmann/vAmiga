@@ -234,16 +234,16 @@ public:
     template <int x> void pokeBPLxDAT(uint16_t value);
     
     // OCS registers 0x140, 0x148, ..., 0x170, 0x178 (w)
-    void pokeSPRxPOS(int x, uint16_t value);
+    template <int x> void pokeSPRxPOS(uint16_t value);
 
     // OCS registers 0x142, 0x14A, ..., 0x172, 0x17A (w)
-    void pokeSPRxCTL(int x, uint16_t value);
+    template <int x> void pokeSPRxCTL(uint16_t value);
 
     // OCS registers 0x144, 0x14C, ..., 0x174, 0x17C (w)
-    void pokeSPRxDATA(int x, uint16_t value);
+    template <int x> void pokeSPRxDATA(uint16_t value);
     
     // OCS registers 0x146, 0x14E, ..., 0x176, 0x17E (w)
-    void pokeSPRxDATB(int x, uint16_t value);
+    template <int x> void pokeSPRxDATB(uint16_t value);
 
     // OCS registers 0x180, 0x181, ..., 0x1BC, 0x1BE (w)
     void pokeCOLORx(int x, uint16_t value);

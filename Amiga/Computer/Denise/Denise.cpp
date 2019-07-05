@@ -336,8 +336,8 @@ Denise::pokeBPLxDAT(uint16_t value)
     bpldat[x] = value;
 }
 
-void
-Denise::pokeSPRxPOS(int x, uint16_t value)
+template <int x> void
+Denise::pokeSPRxPOS(uint16_t value)
 {
     assert(x < 8);
     debug(SPR_DEBUG, "pokeSPR%dPOS(%X)\n", x, value);
@@ -356,8 +356,8 @@ Denise::pokeSPRxPOS(int x, uint16_t value)
     }
 }
 
-void
-Denise::pokeSPRxCTL(int x, uint16_t value)
+template <int x> void
+Denise::pokeSPRxCTL(uint16_t value)
 {
     assert(x < 8);
     debug(SPR_DEBUG, "pokeSPR%dCTL(%X)\n", x, value);
@@ -379,8 +379,8 @@ Denise::pokeSPRxCTL(int x, uint16_t value)
     }
 }
 
-void
-Denise::pokeSPRxDATA(int x, uint16_t value)
+template <int x> void
+Denise::pokeSPRxDATA(uint16_t value)
 {
     assert(x < 8);
     debug(SPR_DEBUG, "pokeSPR%dDATA(%X)\n", x, value);
@@ -389,8 +389,8 @@ Denise::pokeSPRxDATA(int x, uint16_t value)
     armSprite(x);
 }
 
-void
-Denise::pokeSPRxDATB(int x, uint16_t value)
+template <int x> void
+Denise::pokeSPRxDATB(uint16_t value)
 {
     assert(x < 8);
     debug(SPR_DEBUG, "pokeSPR%dDATB(%X)\n", x, value);
@@ -855,3 +855,39 @@ template void Denise::pokeBPLxDAT<3>(uint16_t value);
 template void Denise::pokeBPLxDAT<4>(uint16_t value);
 template void Denise::pokeBPLxDAT<5>(uint16_t value);
 template void Denise::pokeBPLxDAT<6>(uint16_t value);
+
+template void Denise::pokeSPRxPOS<0>(uint16_t value);
+template void Denise::pokeSPRxPOS<1>(uint16_t value);
+template void Denise::pokeSPRxPOS<2>(uint16_t value);
+template void Denise::pokeSPRxPOS<3>(uint16_t value);
+template void Denise::pokeSPRxPOS<4>(uint16_t value);
+template void Denise::pokeSPRxPOS<5>(uint16_t value);
+template void Denise::pokeSPRxPOS<6>(uint16_t value);
+template void Denise::pokeSPRxPOS<7>(uint16_t value);
+
+template void Denise::pokeSPRxCTL<0>(uint16_t value);
+template void Denise::pokeSPRxCTL<1>(uint16_t value);
+template void Denise::pokeSPRxCTL<2>(uint16_t value);
+template void Denise::pokeSPRxCTL<3>(uint16_t value);
+template void Denise::pokeSPRxCTL<4>(uint16_t value);
+template void Denise::pokeSPRxCTL<5>(uint16_t value);
+template void Denise::pokeSPRxCTL<6>(uint16_t value);
+template void Denise::pokeSPRxCTL<7>(uint16_t value);
+
+template void Denise::pokeSPRxDATA<0>(uint16_t value);
+template void Denise::pokeSPRxDATA<1>(uint16_t value);
+template void Denise::pokeSPRxDATA<2>(uint16_t value);
+template void Denise::pokeSPRxDATA<3>(uint16_t value);
+template void Denise::pokeSPRxDATA<4>(uint16_t value);
+template void Denise::pokeSPRxDATA<5>(uint16_t value);
+template void Denise::pokeSPRxDATA<6>(uint16_t value);
+template void Denise::pokeSPRxDATA<7>(uint16_t value);
+
+template void Denise::pokeSPRxDATB<0>(uint16_t value);
+template void Denise::pokeSPRxDATB<1>(uint16_t value);
+template void Denise::pokeSPRxDATB<2>(uint16_t value);
+template void Denise::pokeSPRxDATB<3>(uint16_t value);
+template void Denise::pokeSPRxDATB<4>(uint16_t value);
+template void Denise::pokeSPRxDATB<5>(uint16_t value);
+template void Denise::pokeSPRxDATB<6>(uint16_t value);
+template void Denise::pokeSPRxDATB<7>(uint16_t value);

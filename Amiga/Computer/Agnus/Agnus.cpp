@@ -1390,14 +1390,14 @@ Agnus::executeFirstSpriteCycle()
 
         // Extract vertical trigger coordinate bits from POS
         sprVStrt[nr] = ((pos & 0xFF00) >> 8) | (sprVStrt[nr] & 0x0100);
-        denise->pokeSPRxPOS(nr, pos);
+        denise->pokeSPRxPOS<nr>(pos);
     }
 
     // Read sprite data if data DMA is activated
     if (sprDmaState[nr] == SPR_DMA_DATA) {
 
         // Read DATA
-        denise->pokeSPRxDATB(nr, doSpriteDMA(nr));
+        denise->pokeSPRxDATB<nr>(doSpriteDMA(nr));
     }
 }
 
@@ -1416,14 +1416,14 @@ Agnus::executeSecondSpriteCycle()
         // Extract vertical trigger coordinate bits from CTL
         sprVStrt[nr] = ((ctl & 0b100) << 6) | (sprVStrt[nr] & 0x00FF);
         sprVStop[nr] = ((ctl & 0b010) << 7) | (ctl >> 8);
-        denise->pokeSPRxCTL(nr, ctl);
+        denise->pokeSPRxCTL<nr>(ctl);
     }
     
     // Read sprite data if data DMA is activated
     if (sprDmaState[nr] == SPR_DMA_DATA) {
         
         // Read DATB
-        denise->pokeSPRxDATA(nr, doSpriteDMA(nr));
+        denise->pokeSPRxDATA<nr>(doSpriteDMA(nr));
     }
 }
 
