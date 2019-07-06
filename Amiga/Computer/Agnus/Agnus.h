@@ -508,7 +508,7 @@ public:
 
 
     //
-    // Managing the DMA allocation tables
+    // Managing the DMA allocation table
     //
     
 public:
@@ -537,13 +537,16 @@ public:
     void switchBitplaneDmaOff();
     void updateBitplaneDma();
 
-    // Computes variables BplVstrt and BplVstop
-    // void computeBplVstrtVstop();
-
     // Updates the DMA time slot allocation's jump table.
     void updateJumpTable(int16_t to);
     void updateJumpTable() { updateJumpTable(HPOS_MAX); }
-    
+
+    // Returns true if the event in the specified slot is the Lx event.
+    bool isLastLx(int16_t dmaCycle);
+
+    // Returns true if the event in the specified slot is the Hx event.
+    bool isLastHx(int16_t dmaCycle);
+
     // Dumps the DMA time slot allocation table to the console for debugging.
     void dumpDMAEventTable(int from, int to);
     void dumpDMAEventTable();
@@ -609,7 +612,13 @@ public:
     // SPRxPTL, SPRxPTH
     template <int x> void pokeSPRxPTH(uint16_t value);
     template <int x> void pokeSPRxPTL(uint16_t value);
-    
+
+    // Adds the modulo register to a bitplane pointer
+    template <int x> void addBPLMOD() {
+        assert(x < 6);
+        INC_OCS_PTR(bplpt[x], (x % 2) ? bpl2mod : bpl1mod);
+    }
+
     /* Adds BPLxMOD to the pointers of the active bitplanes
      * This method is called whenever the bitplane DMA restarts.
      */

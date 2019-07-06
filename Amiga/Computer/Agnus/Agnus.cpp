@@ -786,6 +786,36 @@ Agnus::updateJumpTable(int16_t to)
     }
 }
 
+bool
+Agnus::isLastLx(int16_t dmaCycle)
+{
+    EventID id = dmaEvent[dmaCycle];
+    assert(id >= DMA_L1 && id <= DMA_L6);
+
+    EventID next = dmaEvent[dmaCycle + 8];
+
+    if (id == DMA_L1_FIRST || id == DMA_L1_LAST || id == DMA_L1) {
+        return (next != DMA_L1_FIRST && next != DMA_L1_LAST && next != DMA_L1);
+    } else {
+        return next != id;
+    }
+}
+
+bool
+Agnus::isLastHx(int16_t dmaCycle)
+{
+    EventID id = dmaEvent[dmaCycle];
+    assert(id >= DMA_H1 && id <= DMA_H4);
+
+    EventID next = dmaEvent[dmaCycle + 4];
+
+    if (id == DMA_H1_FIRST || id == DMA_H1_LAST || id == DMA_H1) {
+        return (next != DMA_H1_FIRST && next != DMA_H1_LAST && next != DMA_H1);
+    } else {
+        return next != id;
+    }
+}
+
 void
 Agnus::dumpDMAEventTable(int from, int to)
 {

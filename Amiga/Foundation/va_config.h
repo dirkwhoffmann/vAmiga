@@ -32,7 +32,7 @@
 #define TOD_DEBUG 2         // TODs (24-bit counters inside the CIAs)
 #define RTC_DEBUG 2         // Real-time clock
 #define DMA_DEBUG 2         // DMA registers
-#define BPL_DEBUG 1         // Bitplane registers
+#define BPL_DEBUG 2         // Bitplane registers
 #define COL_DEBUG 2         // Color registers
 #define SPR_DEBUG 2         // Sprite registers
 #define DSK_DEBUG 2         // Disk registers
