@@ -94,16 +94,12 @@ Agnus::inspectEventSlot(EventSlot nr)
                 case DMA_S6_2:      i->eventName = "DMA_S6_2"; break;
                 case DMA_S7_2:      i->eventName = "DMA_S7_2"; break;
                 case DMA_L1:        i->eventName = "DMA_L1"; break;
-                case DMA_L1_FIRST:  i->eventName = "DMA_L1_FIRST"; break;
-                case DMA_L1_LAST:   i->eventName = "DMA_L1_LAST"; break;
                 case DMA_L2:        i->eventName = "DMA_L2"; break;
                 case DMA_L3:        i->eventName = "DMA_L3"; break;
                 case DMA_L4:        i->eventName = "DMA_L4"; break;
                 case DMA_L5:        i->eventName = "DMA_L5"; break;
                 case DMA_L6:        i->eventName = "DMA_L6"; break;
                 case DMA_H1:        i->eventName = "DMA_H1"; break;
-                case DMA_H1_FIRST:  i->eventName = "DMA_H1_FIRST"; break;
-                case DMA_H1_LAST:   i->eventName = "DMA_H1_LAST"; break;
                 case DMA_H2:        i->eventName = "DMA_H2"; break;
                 case DMA_H3:        i->eventName = "DMA_H3"; break;
                 case DMA_H4:        i->eventName = "DMA_H4"; break;
@@ -572,39 +568,28 @@ Agnus::serviceDMAEvent(EventID id)
             executeSecondSpriteCycle<7>();
             break;
 
-        case DMA_H1_FIRST:
-            // fallthrough
-
         case DMA_H1:
-            assert(!isLastHx(hpos));
             denise->bpldat[PLANE1] = doBitplaneDMA<0>();
             denise->fillShiftRegisters();
-            denise->drawHires(16);
-            break;
 
-        case DMA_H1_LAST:
-            assert(isLastHx(hpos));
-            denise->bpldat[PLANE1] = doBitplaneDMA<0>();
-            denise->fillShiftRegisters();
-            denise->drawHires(16 + denise->scrollHiresOdd);
-            if(isLastHx(hpos)) addBPLMOD<0>();
+            if(isLastHx(hpos)) {
+                denise->drawHires(16 + denise->scrollHiresOdd);
+                addBPLMOD<0>();
+            } else {
+                denise->drawHires(16);
+            }
             break;
-
-        case DMA_L1_FIRST:
-            // fallthrough
 
         case DMA_L1:
             denise->bpldat[PLANE1] = doBitplaneDMA<0>();
             denise->fillShiftRegisters();
-            denise->drawLores(16);
-            break;
 
-        case DMA_L1_LAST:
-            assert(isLastLx(hpos));
-            denise->bpldat[PLANE1] = doBitplaneDMA<0>();
-            denise->fillShiftRegisters();
-            denise->drawLores(16 + denise->scrollHiresOdd);
-            if(isLastLx(hpos)) addBPLMOD<0>();
+            if(isLastLx(hpos)) {
+                denise->drawLores(16 + denise->scrollHiresOdd);
+                addBPLMOD<0>();
+            } else {
+                denise->drawLores(16);
+            }
             break;
 
         case DMA_H2:

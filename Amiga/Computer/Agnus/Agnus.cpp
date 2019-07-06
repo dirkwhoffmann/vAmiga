@@ -475,10 +475,6 @@ Agnus::allocateBplSlots(int bpu, bool hires, int first, int last)
         dmaEvent[i] = bitplaneDMA[hires][bpu][i];
     }
 
-    // SET L1/H1 last event (TODO: GET RID OF THE SPECIAL 'LAST' EVENTS)
-    if (dmaEvent[last] == DMA_L1) dmaEvent[last] = DMA_L1_LAST;
-    if (dmaEvent[last] == DMA_H1) dmaEvent[last] = DMA_H1_LAST;
-
     // Update jump table
     updateJumpTable();
 }
@@ -631,9 +627,6 @@ Agnus::switchBitplaneDmaOn()
             assert(dmaEvent[dmaFirstBpl1Event] == DMA_H1);
             assert(dmaEvent[dmaLastBpl1Event] == DMA_H1);
 
-            dmaEvent[dmaFirstBpl1Event] = DMA_H1_FIRST;
-            dmaEvent[dmaLastBpl1Event] = DMA_H1_LAST;
-
             denise->firstCanvasPixel = (dmaFirstBpl1Event * 4) + 6;
             denise->lastCanvasPixel = (dmaLastBpl1Event * 4) + 6 + 15;
 
@@ -682,9 +675,6 @@ Agnus::switchBitplaneDmaOn()
 
             assert(dmaEvent[dmaFirstBpl1Event] == DMA_L1);
             assert(dmaEvent[dmaLastBpl1Event] == DMA_L1);
-
-            dmaEvent[dmaFirstBpl1Event] = DMA_L1_FIRST;
-            dmaEvent[dmaLastBpl1Event] = DMA_L1_LAST;
 
             denise->firstCanvasPixel = (dmaFirstBpl1Event * 4) + 6;
             denise->lastCanvasPixel = (dmaLastBpl1Event * 4) + 6 + 31;
@@ -835,16 +825,12 @@ Agnus::dumpDMAEventTable(int from, int to)
             case DMA_S6_2:     r3[i] = 'S'; r4[i] = '6'; break;
             case DMA_S7_2:     r3[i] = 'S'; r4[i] = '7'; break;
             case DMA_L1:       r3[i] = 'L'; r4[i] = '1'; break;
-            case DMA_L1_FIRST: r3[i] = 'L'; r4[i] = '>'; break;
-            case DMA_L1_LAST:  r3[i] = 'L'; r4[i] = '<'; break;
             case DMA_L2:       r3[i] = 'L'; r4[i] = '2'; break;
             case DMA_L3:       r3[i] = 'L'; r4[i] = '3'; break;
             case DMA_L4:       r3[i] = 'L'; r4[i] = '4'; break;
             case DMA_L5:       r3[i] = 'L'; r4[i] = '5'; break;
             case DMA_L6:       r3[i] = 'L'; r4[i] = '6'; break;
             case DMA_H1:       r3[i] = 'H'; r4[i] = '1'; break;
-            case DMA_H1_FIRST: r3[i] = 'H'; r4[i] = '>'; break;
-            case DMA_H1_LAST:  r3[i] = 'H'; r4[i] = '<'; break;
             case DMA_H2:       r3[i] = 'H'; r4[i] = '2'; break;
             case DMA_H3:       r3[i] = 'H'; r4[i] = '3'; break;
             case DMA_H4:       r3[i] = 'H'; r4[i] = '4'; break;
