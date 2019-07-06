@@ -250,6 +250,8 @@ public:
     // The display data fetch registers
     uint16_t ddfstrt;
     uint16_t ddfstop;
+    uint16_t ddfstrtAligned; // DEPRECATED
+    uint16_t ddfstopAligned; // DEPRECATED
     
     // The audio DMA pointers
     uint32_t audlc[4];
