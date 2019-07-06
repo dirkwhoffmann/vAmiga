@@ -1229,7 +1229,7 @@ Agnus::pokeDDFSTRT(uint16_t value)
     uint16_t newValue = MAX(value & 0xFC, 0x18);
 
     if (newValue != value) {
-        warn("Strange value detected in pokeDDFSTRT(%X)\n", value);
+        debug(BPL_DEBUG, "Strange value detected in pokeDDFSTRT(%X)\n", value);
     }
 
     if (newValue != oldValue) {
@@ -1253,7 +1253,7 @@ Agnus::pokeDDFSTOP(uint16_t value)
     uint16_t newValue = MIN(value & 0xFC, 0xD8);
 
     if (newValue != value) {
-        warn("Strange value detected in pokeDDFSTOP(%X)\n", value);
+        debug(BPL_DEBUG, "Strange value detected in pokeDDFSTOP(%X)\n", value);
     }
 
     if (newValue != oldValue) {
@@ -1271,26 +1271,6 @@ Agnus::pokeDDFSTOP(uint16_t value)
 
     updateBitplaneDma();
 }
-
-/*
-template <int x> void
-Agnus::pokeAUDxLCH(uint16_t value)
-{
-    debug(AUD_DEBUG, "pokeAUD%dLCH(%X)\n", x, value);
-
-    paula->audioUnit.channel[x].audlcLatch =
-    REPLACE_HI_WORD(paula->audioUnit.channel[x].audlcLatch, value & 0x7);
-}
-
-template <int x> void
-Agnus::pokeAUDxLCL(uint16_t value)
-{
-    debug(AUD_DEBUG, "pokeAUD%dLCL(%X)\n", x, value);
-
-    paula->audioUnit.channel[x].audlcLatch =
-    REPLACE_LO_WORD(paula->audioUnit.channel[x].audlcLatch, value);
-}
-*/
 
 template <int x> void
 Agnus::pokeBPLxPTH(uint16_t value)
@@ -1313,7 +1293,12 @@ Agnus::pokeBPL1MOD(uint16_t value)
 {
     debug(BPL_DEBUG, "pokeBPL1MOD(%X)\n", value);
 
-    bpl1mod = int16_t(value & 0xFFFE);
+    // Simulate delay
+    // TODO: Pass a boolean flag `cpu` that shows who writes to the register.
+    // Depending on this variable, schedule in REG_CPU_SLOT or REG_COP_SLOT.
+    scheduleRegEvent(REG_COP_SLOT, DMA_CYCLES(1), REG_BPL1MOD, (int64_t)value);
+
+    if (vpos == 184) dumpDMAEventTable();
 }
 
 void
@@ -1321,6 +1306,23 @@ Agnus::pokeBPL2MOD(uint16_t value)
 {
     debug(BPL_DEBUG, "pokeBPL2MOD(%X)\n", value);
 
+    // Simulate delay
+    // TODO: Pass a boolean flag `cpu` that shows who writes to the register.
+    // Depending on this variable, schedule in REG_CPU_SLOT or REG_COP_SLOT.
+    scheduleRegEvent(REG_COP_SLOT, DMA_CYCLES(1), REG_BPL2MOD, (int64_t)value);
+}
+
+void
+Agnus::setBPL1MOD(uint16_t value)
+{
+    debug(BPL_DEBUG, "setBPL1MOD(%X)\n", value);
+    bpl1mod = int16_t(value & 0xFFFE);
+}
+
+void
+Agnus::setBPL2MOD(uint16_t value)
+{
+    debug(BPL_DEBUG, "setBPL2MOD(%X)\n", value);
     bpl2mod = int16_t(value & 0xFFFE);
 }
 
