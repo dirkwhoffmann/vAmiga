@@ -414,14 +414,6 @@ Denise::armSprite(int x)
 }
 
 void
-Denise::prepareShiftRegisters()
-{
-    /*
-    for (unsigned i = 0; i < 6; shiftReg[i++] = 0);
-     */
-}
-
-void
 Denise::fillShiftRegisters()
 {
     for (unsigned i = 0; i < 6; i++) {

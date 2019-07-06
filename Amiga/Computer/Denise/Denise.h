@@ -261,9 +261,6 @@ public:
     // Managing the bitplane shift registers
     //
 
-    // Called by a DMA_L1_FIRST or DMA_H1_FIRST event
-    void prepareShiftRegisters();
-
     // Transfers the bitplane register contents to the shift registers
     void fillShiftRegisters(); // DEPRECATED
 

@@ -573,7 +573,6 @@ Agnus::serviceDMAEvent(EventID id)
             break;
 
         case DMA_H1_FIRST:
-            denise->prepareShiftRegisters();
             // fallthrough
 
         case DMA_H1:
@@ -589,15 +588,12 @@ Agnus::serviceDMAEvent(EventID id)
             denise->fillShiftRegisters();
             denise->drawHires(16 + denise->scrollHiresOdd);
             if(isLastHx(hpos)) addBPLMOD<0>();
-            // addBPLxMOD();
             break;
 
         case DMA_L1_FIRST:
-            denise->prepareShiftRegisters();
             // fallthrough
 
         case DMA_L1:
-            assert(!isLastLx(hpos));
             denise->bpldat[PLANE1] = doBitplaneDMA<0>();
             denise->fillShiftRegisters();
             denise->drawLores(16);
@@ -609,7 +605,6 @@ Agnus::serviceDMAEvent(EventID id)
             denise->fillShiftRegisters();
             denise->drawLores(16 + denise->scrollHiresOdd);
             if(isLastLx(hpos)) addBPLMOD<0>();
-            // addBPLxMOD();
             break;
 
         case DMA_H2:
