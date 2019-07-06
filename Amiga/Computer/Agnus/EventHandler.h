@@ -189,15 +189,10 @@ void scheduleRegEvent(EventSlot slot, Cycle cycle, EventID id, int64_t data);
 
 private:
 
-/* Processes all primary events that are due prior to or at the provided cycle.
+/* Processes all events that are due prior to or at the provided cycle.
  * Called inside Agnus::executeUntil().
  */
-void executePrimaryEventsUntil(Cycle cycle);
-
-/* Processes all secondary events that are due prior to or at the provided cycle.
- * Called inside executePrimaryEventsUntil() if the SEC_SLOT is due.
- */
-void executeSecondaryEventsUntil(Cycle cycle);
+void executeEventsUntil(Cycle cycle);
 
 // Event handler for the DMA slot
 void serviceDMAEvent(EventID id);

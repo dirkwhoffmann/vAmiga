@@ -319,9 +319,29 @@ Agnus::getEventSlotInfo(int nr)
 }
 
 void
-Agnus::executePrimaryEventsUntil(Cycle cycle) {
+Agnus::executeEventsUntil(Cycle cycle) {
 
-    // Check for a CIA A event
+    // Determine if we need to check all slots
+    bool all = isDue<SEC_SLOT>(cycle);
+
+    //
+    // Check all secondary events that need to be proceeded early
+    //
+
+    if (unlikely(all)) {
+
+        if (isDue<REG_COP_SLOT>(cycle)) {
+            serviceREGEvent(REG_COP_SLOT);
+        }
+        if (isDue<REG_CPU_SLOT>(cycle)) {
+            serviceREGEvent(REG_CPU_SLOT);
+        }
+    }
+
+    //
+    // Check all primary slots
+    //
+
     if (isDue<CIAA_SLOT>(cycle)) {
 
         assert(checkTriggeredEvent(CIAA_SLOT));
@@ -341,7 +361,6 @@ Agnus::executePrimaryEventsUntil(Cycle cycle) {
         }
     }
 
-    // Check for a CIA B event
     if (isDue<CIAB_SLOT>(cycle)) {
 
         assert(checkTriggeredEvent(CIAB_SLOT));
@@ -361,122 +380,109 @@ Agnus::executePrimaryEventsUntil(Cycle cycle) {
         }
     }
 
-    // Check for a bitplane event
     if (isDue<DMA_SLOT>(cycle)) {
         assert(checkTriggeredEvent(DMA_SLOT));
         serviceDMAEvent(slot[DMA_SLOT].id);
     }
 
-    // Check for a Copper event
     if (isDue<COP_SLOT>(cycle)) {
         assert(checkTriggeredEvent(COP_SLOT));
         copper.serviceEvent(slot[COP_SLOT].id);
     }
 
-    // Check for a Blitter event
     if (isDue<BLT_SLOT>(cycle)) {
         assert(checkTriggeredEvent(BLT_SLOT));
         blitter.serviceEvent(slot[BLT_SLOT].id);
     }
 
-    // Check for a raster event
     if (isDue<RAS_SLOT>(cycle)) {
         // Slot is currently unused
         // assert(checkTriggeredEvent(RAS_SLOT));
     }
 
-    // Check if a secondary event needs to be processed
-    if (isDue<SEC_SLOT>(cycle)) {
-        executeSecondaryEventsUntil(cycle);
+    //
+    // Check all secondary events that need to be proceeded late
+    //
+
+    if (unlikely(all)) {
+
+        if (isDue<DSK_SLOT>(cycle)) {
+            paula->diskController.serveDiskEvent();
+        }
+        if (isDue<IRQ_TBE_SLOT>(cycle)) {
+            serviceIRQEvent(IRQ_TBE_SLOT, 0);
+        }
+        if (isDue<IRQ_DSKBLK_SLOT>(cycle)) {
+            serviceIRQEvent(IRQ_DSKBLK_SLOT, 1);
+        }
+        if (isDue<IRQ_SOFT_SLOT>(cycle)) {
+            serviceIRQEvent(IRQ_SOFT_SLOT, 2);
+        }
+        if (isDue<IRQ_PORTS_SLOT>(cycle)) {
+            serviceIRQEvent(IRQ_PORTS_SLOT, 3);
+        }
+        if (isDue<IRQ_COPR_SLOT>(cycle)) {
+            serviceIRQEvent(IRQ_COPR_SLOT, 4);
+        }
+        if (isDue<IRQ_VERTB_SLOT>(cycle)) {
+            serviceIRQEvent(IRQ_VERTB_SLOT, 5);
+        }
+        if (isDue<IRQ_BLIT_SLOT>(cycle)) {
+            serviceIRQEvent(IRQ_BLIT_SLOT, 6);
+        }
+        if (isDue<IRQ_AUD0_SLOT>(cycle)) {
+            serviceIRQEvent(IRQ_AUD0_SLOT, 7);
+        }
+        if (isDue<IRQ_AUD1_SLOT>(cycle)) {
+            serviceIRQEvent(IRQ_AUD1_SLOT, 8);
+        }
+        if (isDue<IRQ_AUD2_SLOT>(cycle)) {
+            serviceIRQEvent(IRQ_AUD2_SLOT, 9);
+        }
+        if (isDue<IRQ_AUD3_SLOT>(cycle)) {
+            serviceIRQEvent(IRQ_AUD3_SLOT, 10);
+        }
+        if (isDue<IRQ_RBF_SLOT>(cycle)) {
+            serviceIRQEvent(IRQ_RBF_SLOT, 11);
+        }
+        if (isDue<IRQ_DSKSYN_SLOT>(cycle)) {
+            serviceIRQEvent(IRQ_DSKSYN_SLOT, 12);
+        }
+        if (isDue<IRQ_EXTER_SLOT>(cycle)) {
+            serviceIRQEvent(IRQ_EXTER_SLOT, 13);
+        }
+        if (isDue<TXD_SLOT>(cycle)) {
+            paula->uart.serveTxdEvent(slot[TXD_SLOT].id);
+        }
+        if (isDue<RXD_SLOT>(cycle)) {
+            paula->uart.serveRxdEvent(slot[RXD_SLOT].id);
+        }
+        if (isDue<POT_SLOT>(cycle)) {
+            paula->servePotEvent(slot[POT_SLOT].id);
+        }
+        if (isDue<SYNC_SLOT>(cycle)) {
+            assert(slot[SYNC_SLOT].id == SYNC_H);
+            serviceSYNCEvent(slot[SYNC_SLOT].id);
+        }
+        if (isDue<INSPECTOR_SLOT>(cycle)) {
+            serveINSEvent();
+        }
+
+        // Determine the next trigger cycle for all secondary slots
+        Cycle nextSecTrigger = slot[FIRST_SEC_SLOT].triggerCycle;
+        for (unsigned i = FIRST_SEC_SLOT + 1; i <= LAST_SEC_SLOT; i++)
+            if (slot[i].triggerCycle < nextSecTrigger)
+                nextSecTrigger = slot[i].triggerCycle;
+
+        // Update the secondary table trigger in the primary table
+        rescheduleAbs<SEC_SLOT>(nextSecTrigger);
     }
 
-    // Determine the next trigger cycle
+    // Determine the next trigger cycle for all primary slots
     nextTrigger = slot[0].triggerCycle;
     for (unsigned i = 1; i <= LAST_PRIM_SLOT; i++)
         if (slot[i].triggerCycle < nextTrigger)
             nextTrigger = slot[i].triggerCycle;
-}
-
-void
-Agnus::executeSecondaryEventsUntil(Cycle cycle) {
-
-    // Check all secondary event slots one by one
-    if (isDue<DSK_SLOT>(cycle)) {
-        paula->diskController.serveDiskEvent();
-    }
-    if (isDue<IRQ_TBE_SLOT>(cycle)) {
-        serviceIRQEvent(IRQ_TBE_SLOT, 0);
-    }
-    if (isDue<IRQ_DSKBLK_SLOT>(cycle)) {
-        serviceIRQEvent(IRQ_DSKBLK_SLOT, 1);
-    }
-    if (isDue<IRQ_SOFT_SLOT>(cycle)) {
-        serviceIRQEvent(IRQ_SOFT_SLOT, 2);
-    }
-    if (isDue<IRQ_PORTS_SLOT>(cycle)) {
-        serviceIRQEvent(IRQ_PORTS_SLOT, 3);
-    }
-    if (isDue<IRQ_COPR_SLOT>(cycle)) {
-        serviceIRQEvent(IRQ_COPR_SLOT, 4);
-    }
-    if (isDue<IRQ_VERTB_SLOT>(cycle)) {
-        serviceIRQEvent(IRQ_VERTB_SLOT, 5);
-    }
-    if (isDue<IRQ_BLIT_SLOT>(cycle)) {
-        serviceIRQEvent(IRQ_BLIT_SLOT, 6);
-    }
-    if (isDue<IRQ_AUD0_SLOT>(cycle)) {
-        serviceIRQEvent(IRQ_AUD0_SLOT, 7);
-    }
-    if (isDue<IRQ_AUD1_SLOT>(cycle)) {
-        serviceIRQEvent(IRQ_AUD1_SLOT, 8);
-    }
-    if (isDue<IRQ_AUD2_SLOT>(cycle)) {
-        serviceIRQEvent(IRQ_AUD2_SLOT, 9);
-    }
-    if (isDue<IRQ_AUD3_SLOT>(cycle)) {
-        serviceIRQEvent(IRQ_AUD3_SLOT, 10);
-    }
-    if (isDue<IRQ_RBF_SLOT>(cycle)) {
-        serviceIRQEvent(IRQ_RBF_SLOT, 11);
-    }
-    if (isDue<IRQ_DSKSYN_SLOT>(cycle)) {
-        serviceIRQEvent(IRQ_DSKSYN_SLOT, 12);
-    }
-    if (isDue<IRQ_EXTER_SLOT>(cycle)) {
-        serviceIRQEvent(IRQ_EXTER_SLOT, 13);
-    }
-    if (isDue<REG_COP_SLOT>(cycle)) {
-        serviceREGEvent(REG_COP_SLOT);
-    }
-    if (isDue<REG_CPU_SLOT>(cycle)) {
-        serviceREGEvent(REG_CPU_SLOT);
-    }
-    if (isDue<TXD_SLOT>(cycle)) {
-        paula->uart.serveTxdEvent(slot[TXD_SLOT].id);
-    }
-    if (isDue<RXD_SLOT>(cycle)) {
-        paula->uart.serveRxdEvent(slot[RXD_SLOT].id);
-    }
-    if (isDue<POT_SLOT>(cycle)) {
-        paula->servePotEvent(slot[POT_SLOT].id);
-    }
-    if (isDue<SYNC_SLOT>(cycle)) {
-        assert(slot[SYNC_SLOT].id == SYNC_H);
-        serviceSYNCEvent(slot[SYNC_SLOT].id);
-    }
-    if (isDue<INSPECTOR_SLOT>(cycle)) {
-        serveINSEvent();
-    }
-
-    // Determine the next trigger cycle
-    Cycle nextSecTrigger = slot[FIRST_SEC_SLOT].triggerCycle;
-    for (unsigned i = FIRST_SEC_SLOT + 1; i <= LAST_SEC_SLOT; i++)
-        if (slot[i].triggerCycle < nextSecTrigger)
-            nextSecTrigger = slot[i].triggerCycle;
-
-    // Update the secondary table trigger in the primary table
-    rescheduleAbs<SEC_SLOT>(nextSecTrigger);
 }
 
 void

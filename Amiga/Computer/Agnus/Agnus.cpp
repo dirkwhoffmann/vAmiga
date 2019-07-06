@@ -1294,7 +1294,7 @@ Agnus::pokeBPL1MOD(uint16_t value)
     // Simulate delay
     // TODO: Pass a boolean flag `cpu` that shows who writes to the register.
     // Depending on this variable, schedule in REG_CPU_SLOT or REG_COP_SLOT.
-    scheduleRegEvent(REG_COP_SLOT, DMA_CYCLES(1), REG_BPL1MOD, (int64_t)value);
+    scheduleRegEvent(REG_COP_SLOT, DMA_CYCLES(2), REG_BPL1MOD, (int64_t)value);
 
     if (vpos == 184) dumpDMAEventTable();
 }
@@ -1307,7 +1307,7 @@ Agnus::pokeBPL2MOD(uint16_t value)
     // Simulate delay
     // TODO: Pass a boolean flag `cpu` that shows who writes to the register.
     // Depending on this variable, schedule in REG_CPU_SLOT or REG_COP_SLOT.
-    scheduleRegEvent(REG_COP_SLOT, DMA_CYCLES(1), REG_BPL2MOD, (int64_t)value);
+    scheduleRegEvent(REG_COP_SLOT, DMA_CYCLES(2), REG_BPL2MOD, (int64_t)value);
 }
 
 void
@@ -1363,7 +1363,7 @@ Agnus::executeUntil(Cycle targetClock)
     while (clock <= targetClock - DMA_CYCLES(1)) {
 
         // Process all pending events
-        if (clock >= nextTrigger) executePrimaryEventsUntil(clock);
+        if (clock >= nextTrigger) executeEventsUntil(clock);
         
         // Advance the internal counters
         hpos++;

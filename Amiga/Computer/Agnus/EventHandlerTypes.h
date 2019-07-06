@@ -44,7 +44,10 @@ typedef enum : long
     // Secondary slot table
     //
 
-    DSK_SLOT = FIRST_SEC_SLOT,     // Disk controller
+    REG_COP_SLOT = FIRST_SEC_SLOT, // Delayed Copper writes to custom registers
+    REG_CPU_SLOT,                  // Delayed CPU writes to custom registers
+
+    DSK_SLOT ,        // Disk controller
     IRQ_TBE_SLOT,     // Source 0 IRQ (Serial port transmit buffer empty)
     IRQ_DSKBLK_SLOT,  // Source 1 IRQ (Disk block finished)
     IRQ_SOFT_SLOT,    // Source 2 IRQ (Software-initiated)
@@ -59,8 +62,6 @@ typedef enum : long
     IRQ_RBF_SLOT,     // Source 11 IRQ (Serial port receive buffer full)
     IRQ_DSKSYN_SLOT,  // Source 12 IRQ (Disk sync register matches disk data)
     IRQ_EXTER_SLOT,   // Source 13 IRQ (I/O ports and CIA B)
-    REG_COP_SLOT,     // Delayed Copper writes to custom registers
-    REG_CPU_SLOT,     // Delayed CPU writes to custom registers
     TXD_SLOT,         // Serial data out (UART)
     RXD_SLOT,         // Serial data in (UART)
     POT_SLOT,         // Potentiometer
