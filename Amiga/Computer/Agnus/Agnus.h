@@ -90,6 +90,32 @@ public:
     // Lookup tables
     //
 
+    /* DAS lookup tables (Disk, Audio, Sprite DMA)
+     *
+     * nextDASEvent[DMA enable bits][DAS Event ID]:
+     * Used to lookup the next EventID to be scheduled in the DAS slot
+     *
+     * nextDASDelay[DMA enable bits][DAS Event ID]:
+     * Used to lookup when the newly scheduled event should trigger
+     *
+     *             DMA enable bits : Lowest 6 bits of DMACON
+     *                DAS Event ID : Any DAS slot EventID, e.g., DMA_A0
+     *
+     * Example: If all DMA channels are enabled, the DMA time slot allocation
+     *          table looks as follows:
+     *
+     * 0000000000000000111111111111111100000000000000001111 ...
+     * 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123 ...
+     *        D D D A A A A S S S S S S S S S S S S S S S S
+     *        0 1 2 0 1 2 3 0 0 1 1 2 2 3 3 4 4 5 5 6 6 7 7
+     *                          1 2 1 2 1 2 1 2 1 2 1 2 1 2
+     *
+     * In this case: nextDASEvent[DMA_A0][0b111111] = DMA_A1
+     *               nextDASDelay[DMA_A0][0b111111] = 2
+     */
+    EventID nextDASEvent[64][DAS_EVENT_CNT];
+    int16_t nextDASDelay[64][DAS_EVENT_CNT];
+
     /* Bitplane DMA events as they appear in a single rasterline.
      *
      * Parameters: bitplaneDMA[Resolution][Bitplanes][Cycle]
@@ -350,6 +376,7 @@ public:
     void initLookupTables();
     void initLoresBplEventTable();
     void initHiresBplEventTable();
+    void initDASTables();
 
 
     //

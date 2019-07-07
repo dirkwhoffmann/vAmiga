@@ -131,27 +131,27 @@ typedef enum : long
     CIA_EVENT_COUNT,
     
     // DMA slot
-    DMA_DISK = 1,
-    DMA_A0,
-    DMA_A1,
-    DMA_A2,
-    DMA_A3,
-    DMA_S0_1,
-    DMA_S1_1,
-    DMA_S2_1,
-    DMA_S3_1,
-    DMA_S4_1,
-    DMA_S5_1,
-    DMA_S6_1,
-    DMA_S7_1,
-    DMA_S0_2,
-    DMA_S1_2,
-    DMA_S2_2,
-    DMA_S3_2,
-    DMA_S4_2,
-    DMA_S5_2,
-    DMA_S6_2,
-    DMA_S7_2,
+    DMA_DISK = 1, // DEPRECATED
+    DMA_A0, // DEPRECATED
+    DMA_A1, // DEPRECATED
+    DMA_A2, // DEPRECATED
+    DMA_A3, // DEPRECATED
+    DMA_S0_1, // DEPRECATED
+    DMA_S1_1, // DEPRECATED
+    DMA_S2_1, // DEPRECATED
+    DMA_S3_1, // DEPRECATED
+    DMA_S4_1, // DEPRECATED
+    DMA_S5_1,// DEPRECATED
+    DMA_S6_1, // DEPRECATED
+    DMA_S7_1, // DEPRECATED
+    DMA_S0_2, // DEPRECATED
+    DMA_S1_2, // DEPRECATED
+    DMA_S2_2, // DEPRECATED
+    DMA_S3_2, // DEPRECATED
+    DMA_S4_2, // DEPRECATED
+    DMA_S5_2, // DEPRECATED
+    DMA_S6_2, // DEPRECATED
+    DMA_S7_2, // DEPRECATED
     DMA_L1,
     DMA_L2,
     DMA_L3,
@@ -163,7 +163,33 @@ typedef enum : long
     DMA_H3,
     DMA_H4,
     DMA_EVENT_COUNT,
-    
+
+    // DAS slot
+    DAS_D0 = 1,
+    DAS_D1,
+    DAS_D2,
+    DAS_A0,
+    DAS_A1,
+    DAS_A2,
+    DAS_A3,
+    DAS_S0_1,
+    DAS_S0_2,
+    DAS_S1_1,
+    DAS_S1_2,
+    DAS_S2_1,
+    DAS_S2_2,
+    DAS_S3_1,
+    DAS_S3_2,
+    DAS_S4_1,
+    DAS_S4_2,
+    DAS_S5_1,
+    DAS_S5_2,
+    DAS_S6_1,
+    DAS_S6_2,
+    DAS_S7_1,
+    DAS_S7_2,
+    DAS_EVENT_CNT,
+
     // Copper slot
     COP_REQ_DMA = 1,
     COP_FETCH,
