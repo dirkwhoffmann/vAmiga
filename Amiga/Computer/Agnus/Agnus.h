@@ -156,13 +156,24 @@ public:
     // The long frame flipflop
     bool lof;
 
+    /* The bitplane DMA window.
+     *     dmaStrtLores is the first lores bitplane DMA cycle
+     *     dmaStrtHires is the first hires bitplane DMA cycle
+     *     dmaStopLores is the last lores bitplane DMA cycle + 1
+     *     dmaStopHires is the last hires bitplane DMA cycle + 1
+     */
+    int16_t dmaStrtLores;
+    int16_t dmaStrtHires;
+    int16_t dmaStopLores;
+    int16_t dmaStopHires;
+
     /* The bitplane DMA cycle window.
      *     dmaStrt is the first cycle of the first fetch unit
      *     dmaStop is the last cycle of the last fetch unit
      * The values are updated in pokeDDFSTRT() and pokeDDFSTOP()
      */
-    int16_t dmaStrt;
-    int16_t dmaStop;
+    int16_t dmaStrt; // DEPRECATED
+    int16_t dmaStop; // DEPRECATED
 
     /* The vertical trigger positions of all 8 sprites.
      * Note: The horizontal trigger positions are stored inside Denise. Agnus
@@ -596,7 +607,8 @@ public:
     // DDFSTRT, DDFSTOP
     void pokeDDFSTRT(uint16_t value);
     void pokeDDFSTOP(uint16_t value);
-    
+    void computeDDFWindow();
+
     // AUDxLCL, AUDxLCL
     // template <int x> void pokeAUDxLCH(uint16_t value);
     // template <int x> void pokeAUDxLCL(uint16_t value);

@@ -33,6 +33,10 @@ Agnus::Agnus()
         { &frameInfo.interlaced, sizeof(frameInfo.interlaced), 0 },
         { &frameInfo.numLines,   sizeof(frameInfo.numLines),   0 },
         { &lof,                  sizeof(lof),                  0 },
+        { &dmaStrtLores,         sizeof(dmaStrtLores),         0 },
+        { &dmaStrtHires,         sizeof(dmaStrtHires),         0 },
+        { &dmaStopLores,         sizeof(dmaStopLores),         0 },
+        { &dmaStopHires,         sizeof(dmaStopHires),         0 },
         { &dmaStrt,              sizeof(dmaStrt),              0 },
         { &dmaStop,              sizeof(dmaStop),              0 },
         { &sprVStrt,             sizeof(sprVStrt),             WORD_ARRAY },
@@ -469,9 +473,11 @@ Agnus::clearDMAEventTable()
 void
 Agnus::allocateBplSlots(int bpu, bool hires, int first, int last)
 {
-    assert(first >= 0x18 && last <= 0xDF);
     assert(bpu >= 0 && bpu <= 6);
     assert(hires == 0 || hires == 1);
+
+    if (first < 0x18 || first > 0xDF) return;
+    if (last < 0x18 || last > 0xDF) return;
 
     // Update events
     for (unsigned i = first; i <= last; i++) {
@@ -485,8 +491,12 @@ Agnus::allocateBplSlots(int bpu, bool hires, int first, int last)
 void
 Agnus::allocateBplSlots(int bpu, bool hires, int first)
 {
-    // debug("bpu = %d first = %d, dmaStrt = %d, dmaStop = %d\n", bpu, first, dmaStrt, dmaStop);
-    allocateBplSlots(bpu, hires, MAX(first, dmaStrt), dmaStop);
+    // allocateBplSlots(bpu, hires, MAX(first, dmaStrt), dmaStop);
+    if (hires) {
+        allocateBplSlots(bpu, hires, MAX(first, dmaStrtHires), dmaStopHires - 1);
+    } else {
+        allocateBplSlots(bpu, hires, MAX(first, dmaStrtLores), dmaStopLores - 1);
+    }
 }
 
 void
@@ -596,17 +606,24 @@ Agnus::switchSpriteDmaOff()
 void
 Agnus::switchBitplaneDmaOn()
 {
+    // Clear slots first (TODO: THIS IS UGLY AND SLOW)
+    switchBitplaneDmaOff();
+
     debug(BPL_DEBUG, "switchBitplaneDmaOn: bpu = %d\n", denise->bplconBPU());
 
     if (denise->hires()) {
 
+        /*
         // Determine start and stop cycle
         uint16_t start = ddfstrtAligned;
         uint16_t stop  = ddfstopAligned;
         
         // Align stop such that (stop - start) is dividable by 8
         stop += (stop - start) & 0b100;
-        
+        */
+        int16_t start = dmaStrtHires;
+        int16_t stop = dmaStopHires;
+
         // Determine event IDs
         EventID h4 = (activeBitplanes >= 4) ? DMA_H4 : EVENT_NONE;
         EventID h3 = (activeBitplanes >= 3) ? DMA_H3 : EVENT_NONE;
@@ -614,7 +631,7 @@ Agnus::switchBitplaneDmaOn()
         EventID h1 = (activeBitplanes >= 1) ? DMA_H1 : EVENT_NONE;
         
         // Schedule events
-        for (unsigned i = start; i <= stop; i += 8) {
+        for (unsigned i = start; i < stop; i += 8) {
             dmaEvent[i]   = dmaEvent[i+4] = h4;
             dmaEvent[i+1] = dmaEvent[i+5] = h2;
             dmaEvent[i+2] = dmaEvent[i+6] = h3;
@@ -625,7 +642,7 @@ Agnus::switchBitplaneDmaOn()
         if (dmaEvent[start+3] != EVENT_NONE) {
 
             dmaFirstBpl1Event = start + 3;
-            dmaLastBpl1Event = stop + 7;
+            dmaLastBpl1Event = stop - 1;
 
             assert(dmaEvent[dmaFirstBpl1Event] == DMA_H1);
             assert(dmaEvent[dmaLastBpl1Event] == DMA_H1);
@@ -641,14 +658,34 @@ Agnus::switchBitplaneDmaOn()
             denise->lastCanvasPixel = 0;
         }
 
+        /*
+        debug("HIRES ddfstrt = %X ddfstop = %X dmaStrt = %X dmaStop = %X\n",
+              ddfstrt, ddfstop, dmaStrtHires, dmaStopHires);
+        dumpDMAEventTable();
+        */
+
     } else {
 
+        /*
         // Determine start and stop cycle
         uint16_t start = ddfstrtAligned;
         uint16_t stop  = ddfstopAligned;
 
         // Align stop such that (stop - start) is dividable by 8
         stop += (stop - start) & 0b100;
+        */
+
+        // Align fetch start and stop
+        /*
+        uint16_t start = (ddfstrt + 4) & ~0b111;
+        uint16_t stop = (ddfstop + 4) & ~0b111; // WRONG
+
+        // Compute real stop position
+        stop = start + (((ddfstop & ~3) - (ddfstrt & ~3) + 7) & ~7);
+        */
+
+        int16_t start = dmaStrtLores;
+        int16_t stop = dmaStopLores;
 
         // Determine event IDs
         EventID l6 = (activeBitplanes >= 6) ? DMA_L6 : EVENT_NONE;
@@ -659,7 +696,7 @@ Agnus::switchBitplaneDmaOn()
         EventID l1 = (activeBitplanes >= 1) ? DMA_L1 : EVENT_NONE;
         
         // Schedule events
-        for (unsigned i = start; i <= stop; i += 8) {
+        for (unsigned i = start; i < stop; i += 8) {
             dmaEvent[i+0] = EVENT_NONE;
             dmaEvent[i+1] = l4;
             dmaEvent[i+2] = l6;
@@ -674,7 +711,7 @@ Agnus::switchBitplaneDmaOn()
         if (dmaEvent[start+7] != EVENT_NONE) {
 
             dmaFirstBpl1Event = start + 7;
-            dmaLastBpl1Event = stop + 7;
+            dmaLastBpl1Event = stop - 1;
 
             assert(dmaEvent[dmaFirstBpl1Event] == DMA_L1);
             assert(dmaEvent[dmaLastBpl1Event] == DMA_L1);
@@ -712,6 +749,9 @@ Agnus::switchBitplaneDmaOn()
             }
         }
     }
+
+    // debug("EventTable:\n");
+    // dumpDMAEventTable();
 }
 
 void
@@ -782,13 +822,15 @@ Agnus::updateJumpTable(int16_t to)
 bool
 Agnus::isLastLx(int16_t dmaCycle)
 {
-    return (hpos >= dmaStop - 7);
+    return (hpos >= dmaStopLores - 8);
+    // return dmaEvent[hpos] != dmaEvent[hpos + 8];
 }
 
 bool
 Agnus::isLastHx(int16_t dmaCycle)
 {
-    return (hpos >= dmaStop - 3);
+    return (hpos >= dmaStopHires - 4);
+    // return dmaEvent[hpos] != dmaEvent[hpos + 4];
 }
 
 void
@@ -852,8 +894,12 @@ Agnus::dumpDMAEventTable()
 {
     // Dump the event table
     plainmsg("Event table:\n\n");
-    plainmsg("ddfstrt = %X dffstop = %X dmaStart = %X dmaStop = %X\n\n",
-             ddfstrtAligned, ddfstopAligned, dmaStrt, dmaStop);
+    plainmsg("ddfstrt = %X dffstop = %X\n",
+             ddfstrt, ddfstop);
+    plainmsg("dmaStrtLores = %X dmaStrtHires = %X\n",
+             dmaStrtLores, dmaStrtHires);
+    plainmsg("dmaStopLores = %X dmaStopHires = %X\n",
+             dmaStopLores, dmaStopHires);
 
     dumpDMAEventTable(0x00, 0x4F);
     dumpDMAEventTable(0x50, 0x9F);
@@ -1239,10 +1285,14 @@ Agnus::pokeDDFSTRT(uint16_t value)
         debug(BPL_DEBUG, "DDFSTRT changed from %d to %d\n", oldValue, newValue);
     }
 
+    // DEPRECATED
     ddfstrtAligned = newValue;
     dmaStrt = ddfstrtAligned;
 
+    // Compute the DMA window
+    computeDDFWindow();
 
+    // hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
     updateBitplaneDma();
 }
 
@@ -1265,16 +1315,42 @@ Agnus::pokeDDFSTOP(uint16_t value)
         debug(BPL_DEBUG, "DDFSTOP changed from %d to %d\n", oldValue, newValue);
     }
 
+    // DEPRECATED
     ddfstopAligned = newValue;
     dmaStop = ddfstopAligned;
-
     // Align dmaStop such that (dmaStop - dmaStart) is dividable by 8
     dmaStop += (dmaStop - dmaStrt) & 0b100;
-
     // Goto last event in fetch unit
     dmaStop += 7;
 
+    // Compute the DMA window
+    computeDDFWindow();
+
+    // hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
     updateBitplaneDma();
+}
+
+void
+Agnus::computeDDFWindow()
+{
+    // Clip values
+    int16_t strt = MAX(ddfstrt, 0x18);
+    int16_t stop = MIN(ddfstop, 0xDF);
+
+    // Compute the beginning of the DMA window
+    dmaStrtLores = (strt + 4) & ~7;
+    dmaStrtHires = (strt + 2) & ~3;
+
+    // Compute the number of fetch units
+    int numUnitsLores = ((stop & ~3) - (strt & ~3) + 7) / 8;
+    int numUnitsHires = ((stop & ~3) - (strt & ~3) + 7) / 4;
+
+    numUnitsHires += 2; // THIS SHOULDN'T BE 
+    numUnitsLores += 1;
+
+    // Compute the end of the DMA window
+    dmaStopLores = dmaStrtLores + 8 * numUnitsLores;
+    dmaStopHires = dmaStrtHires + 4 * numUnitsHires;
 }
 
 template <int x> void
@@ -1302,8 +1378,6 @@ Agnus::pokeBPL1MOD(uint16_t value)
     // TODO: Pass a boolean flag `cpu` that shows who writes to the register.
     // Depending on this variable, schedule in REG_CPU_SLOT or REG_COP_SLOT.
     scheduleRegEvent(REG_COP_SLOT, DMA_CYCLES(2), REG_BPL1MOD, (int64_t)value);
-
-    if (vpos == 184) dumpDMAEventTable();
 }
 
 void
