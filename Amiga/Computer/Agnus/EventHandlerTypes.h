@@ -28,7 +28,8 @@ typedef enum : long
     
     CIAA_SLOT = 0,    // CIA A execution
     CIAB_SLOT,        // CIA B execution
-    DMA_SLOT,         // Disk, Audio, Sprite, and Bitplane DMA
+    DMA_SLOT,         // Bitplane DMA
+    DAS_SLOT,         // Disk, Audio, and Sprite DMA
     COP_SLOT,         // Copper DMA
     BLT_SLOT,         // Blitter DMA
     RAS_SLOT,         // TODO: This slot is currently unused. It's only event
@@ -82,7 +83,8 @@ inline const char *slotName(EventSlot nr)
     switch (nr) {
         case CIAA_SLOT:          return "CIA A"; 
         case CIAB_SLOT:          return "CIA B";
-        case DMA_SLOT:           return "DMA";
+        case DMA_SLOT:           return "Bitplane DMA";
+        case DAS_SLOT:           return "Dsk/Aud/Spr DMA";
         case COP_SLOT:           return "Copper";
         case BLT_SLOT:           return "Blitter";
         case RAS_SLOT:           return "Raster";
@@ -188,7 +190,7 @@ typedef enum : long
     DAS_S6_2,
     DAS_S7_1,
     DAS_S7_2,
-    DAS_EVENT_CNT,
+    DAS_EVENT_COUNT,
 
     // Copper slot
     COP_REQ_DMA = 1,
@@ -269,6 +271,7 @@ typedef enum : long
 
 static inline bool isCiaEvent(EventID id) { return id < CIA_EVENT_COUNT; }
 static inline bool isDmaEvent(EventID id) { return id < DMA_EVENT_COUNT; }
+static inline bool isDasEvent(EventID id) { return id < DAS_EVENT_COUNT; }
 static inline bool isCopEvent(EventID id) { return id < COP_EVENT_COUNT; }
 static inline bool isBltEvent(EventID id) { return id < BLT_EVENT_COUNT; }
 static inline bool isRasEvent(EventID id) { return id < RAS_EVENT_COUNT; }

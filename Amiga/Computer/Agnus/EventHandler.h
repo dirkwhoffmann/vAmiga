@@ -103,6 +103,8 @@ template<EventSlot s> void scheduleAbs(Cycle cycle, EventID id)
     if (isSecondarySlot(s)) {
 
         if (cycle < slot[SEC_SLOT].triggerCycle) slot[SEC_SLOT].triggerCycle = cycle;
+    } else {
+        checkScheduledEvent(s);
     }
 }
 
@@ -196,6 +198,9 @@ void executeEventsUntil(Cycle cycle);
 
 // Event handler for the DMA slot
 void serviceDMAEvent(EventID id);
+
+// Event handler for the DAS slot
+void serviceDASEvent(EventID id);
 
 // Event handler for the SYNC slot
 void serviceSYNCEvent(EventID id);

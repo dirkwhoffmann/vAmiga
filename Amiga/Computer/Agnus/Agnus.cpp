@@ -141,6 +141,8 @@ Agnus::initDASTables()
 
     // Start from scratch
     memset(table, EVENT_NONE, sizeof(table));
+    memset(firstDASEvent, 0, sizeof(firstDASEvent));
+    memset(firstDASDelay, 0, sizeof(firstDASDelay));
     memset(nextDASEvent, 0, sizeof(nextDASEvent));
     memset(nextDASDelay, 0, sizeof(nextDASDelay));
 
@@ -172,8 +174,17 @@ Agnus::initDASTables()
         table[0x31] = (dma & SPREN) ? DAS_S7_1 : EVENT_NONE;
         table[0x33] = (dma & SPREN) ? DAS_S7_2 : EVENT_NONE;
 
-        // Iterate through all DAS events
-        for (unsigned id = 1; id < DAS_EVENT_CNT; id++) {
+        // Determine the first event in a rasterline
+        for (unsigned i = 0; i < 0x34; i++) {
+            if (table[i] != EVENT_NONE) {
+                firstDASEvent[dma] = table[i];
+                firstDASDelay[dma] = i;
+                break;
+            }
+        }
+
+        // Determine the successor event for any RAS event
+        for (unsigned id = 1; id < DAS_EVENT_COUNT; id++) {
 
             // Determine the DMA cycle of this event
             int16_t cycle = 5 + 2 * id;
@@ -183,9 +194,9 @@ Agnus::initDASTables()
             do { next = (next + 1) % 0x34; } while (table[next] == EVENT_NONE);
 
             // Setup the table entries
-            nextDASEvent[dma][id] = table[next];
-            nextDASDelay[dma][id] = next - cycle;
-            if (next <= cycle) nextDASDelay[dma][id] += DMACyclesPerLine();
+            nextDASEvent[id][dma] = table[next];
+            nextDASDelay[id][dma] = next - cycle;
+            if (next <= cycle) nextDASDelay[id][dma] += DMACyclesPerLine();
         }
     }
 
@@ -193,9 +204,9 @@ Agnus::initDASTables()
     /*
     unsigned dma = 0b010000;
     for (unsigned id = 0; id < DAS_EVENT_CNT; id++) {
-        if (nextDASEvent[dma][id] != EVENT_NONE) {
+        if (nextDASEvent[id][dma] != EVENT_NONE) {
             plainmsg("Event %d -> Event %d in %d DMA cycles\n",
-                     id, nextDASEvent[dma][id], nextDASDelay[dma][id]);
+                     id, nextDASEvent[id][dma], nextDASDelay[id][dma]);
         }
     }
     */
@@ -570,24 +581,38 @@ Agnus::allocateBplSlots(int bpu, bool hires, int first)
 void
 Agnus::switchDiskDmaOn()
 {
+    debug(DMA_DEBUG, "switchDiskDmaOn()\n");
+
     dmaEvent[0x07] = DMA_DISK;
     dmaEvent[0x09] = DMA_DISK;
     dmaEvent[0x0B] = DMA_DISK;
+
+    // hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
     updateJumpTable(0x0B);
+    // updateJumpTable();
+    hsyncActions |= HSYNC_UPDATE_DAS_SLOT;
 }
 
 void
 Agnus::switchDiskDmaOff()
 {
+    debug(DMA_DEBUG, "switchDiskDmaOff()\n");
+
     dmaEvent[0x07] = EVENT_NONE;
     dmaEvent[0x09] = EVENT_NONE;
     dmaEvent[0x0B] = EVENT_NONE;
+
+    // hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
     updateJumpTable(0x0B);
+    // updateJumpTable();
+    hsyncActions |= HSYNC_UPDATE_DAS_SLOT;
 }
 
 void
 Agnus::switchAudioDmaOn(int channel)
 {
+    debug(DMA_DEBUG, "switchAudioDmaOn()\n");
+
     switch (channel) {
         
         case 0: dmaEvent[0x0D] = DMA_A0; break;
@@ -598,12 +623,17 @@ Agnus::switchAudioDmaOn(int channel)
         default: assert(false);
     }
     
+    //hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
     updateJumpTable(0x13);
+    // updateJumpTable();
+    hsyncActions |= HSYNC_UPDATE_DAS_SLOT;
 }
 
 void
 Agnus::switchAudioDmaOff(int channel)
 {
+    debug(DMA_DEBUG, "switchAudioDmaOff()\n");
+
     switch (channel) {
         
         case 0: dmaEvent[0x0D] = EVENT_NONE; break;
@@ -613,13 +643,18 @@ Agnus::switchAudioDmaOff(int channel)
         
         default: assert(false);
     }
-    
+
+    // hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
     updateJumpTable(0x13);
+    // updateJumpTable();
+    hsyncActions |= HSYNC_UPDATE_DAS_SLOT;
 }
 
 void
 Agnus::switchSpriteDmaOn()
 {
+    // debug(DMA_DEBUG, "switchSpriteDmaOn()\n");
+
     dmaEvent[0x15] = DMA_S0_1;
     dmaEvent[0x17] = DMA_S0_2;
 
@@ -640,13 +675,18 @@ Agnus::switchSpriteDmaOn()
     if (dmaEvent[0x2F] == EVENT_NONE) dmaEvent[0x2F] = DMA_S6_2;
     if (dmaEvent[0x31] == EVENT_NONE) dmaEvent[0x31] = DMA_S7_1;
     if (dmaEvent[0x33] == EVENT_NONE) dmaEvent[0x33] = DMA_S7_2;
-    
+
+    // hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
     updateJumpTable(0x33);
+    // updateJumpTable();
+    hsyncActions |= HSYNC_UPDATE_DAS_SLOT;
 }
 
 void
 Agnus::switchSpriteDmaOff()
 {
+    // debug(DMA_DEBUG, "switchSpriteDmaOff()\n");
+
     dmaEvent[0x15] = EVENT_NONE;
     dmaEvent[0x17] = EVENT_NONE;
     
@@ -668,7 +708,10 @@ Agnus::switchSpriteDmaOff()
     if (dmaEvent[0x31] == DMA_S7_1) dmaEvent[0x31] = EVENT_NONE;
     if (dmaEvent[0x33] == DMA_S7_2) dmaEvent[0x33] = EVENT_NONE;
     
+    // hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
     updateJumpTable(0x33);
+    // updateJumpTable();
+    hsyncActions |= HSYNC_UPDATE_DAS_SLOT;
 }
 
 void
@@ -916,6 +959,7 @@ Agnus::dumpDMAEventTable(int from, int to)
         r2[i] = (digit2 < 10) ? digit2 + '0' : (digit2 - 10) + 'A';
         
         switch(dmaEvent[i + from]) {
+            case EVENT_NONE:   r3[i] = '.'; r4[i] = '.'; break;
             case DMA_DISK:     r3[i] = 'D'; r4[i] = 'I'; break;
             case DMA_A0:       r3[i] = 'A'; r4[i] = '0'; break;
             case DMA_A1:       r3[i] = 'A'; r4[i] = '1'; break;
@@ -947,7 +991,7 @@ Agnus::dumpDMAEventTable(int from, int to)
             case DMA_H2:       r3[i] = 'H'; r4[i] = '2'; break;
             case DMA_H3:       r3[i] = 'H'; r4[i] = '3'; break;
             case DMA_H4:       r3[i] = 'H'; r4[i] = '4'; break;
-            default:           r3[i] = '.'; r4[i] = '.'; break;
+            default:           assert(false);
         }
     }
     r1[i] = r2[i] = r3[i] = r4[i] = 0;
@@ -1675,6 +1719,19 @@ Agnus::hsyncHandler()
     //
 
     if (hsyncActions) {
+
+        if (hsyncActions & HSYNC_UPDATE_DAS_SLOT) {
+
+            /*
+            EventID firstEvent = firstDASEvent[dmacon & 0x3F];
+
+            if (firstEvent) {
+                schedulePos<DAS_SLOT>(vpos, firstDASDelay[dmacon & 0x3F], firstEvent);
+            } else {
+                cancel<DAS_SLOT>();
+            }
+            */
+        }
 
         if (hsyncActions & HSYNC_UPDATE_EVENT_TABLE) {
 

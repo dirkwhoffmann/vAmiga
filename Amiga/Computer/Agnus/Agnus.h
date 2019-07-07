@@ -37,6 +37,7 @@
 
 // Hsync action bits
 #define HSYNC_UPDATE_EVENT_TABLE 0x01
+#define HSYNC_UPDATE_DAS_SLOT    0x02
 
 // Increments a DMA pointer register by 2
 #define INC_DMAPTR(x) (x) = ((x) + 2) & 0x7FFFE;
@@ -92,10 +93,13 @@ public:
 
     /* DAS lookup tables (Disk, Audio, Sprite DMA)
      *
-     * nextDASEvent[DMA enable bits][DAS Event ID]:
+     * firstDASEvent[DMA enable bits]:
+     * Used to lookup the first DAS event in a rasterline
+     *
+     * nextDASEvent[DAS Event ID][DMA enable bits]:
      * Used to lookup the next EventID to be scheduled in the DAS slot
      *
-     * nextDASDelay[DMA enable bits][DAS Event ID]:
+     * nextDASDelay[DAS Event ID][DMA enable bits]:
      * Used to lookup when the newly scheduled event should trigger
      *
      *             DMA enable bits : Lowest 6 bits of DMACON
@@ -113,8 +117,10 @@ public:
      * In this case: nextDASEvent[DMA_A0][0b111111] = DMA_A1
      *               nextDASDelay[DMA_A0][0b111111] = 2
      */
-    EventID nextDASEvent[64][DAS_EVENT_CNT];
-    int16_t nextDASDelay[64][DAS_EVENT_CNT];
+    EventID firstDASEvent[64];
+    int16_t firstDASDelay[64];
+    EventID nextDASEvent[DAS_EVENT_COUNT][64];
+    int16_t nextDASDelay[DAS_EVENT_COUNT][64];
 
     /* Bitplane DMA events as they appear in a single rasterline.
      *

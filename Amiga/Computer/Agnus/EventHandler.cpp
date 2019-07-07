@@ -107,6 +107,35 @@ Agnus::inspectEventSlot(EventSlot nr)
             }
             break;
 
+        case DAS_SLOT:
+
+            switch (slot[nr].id) {
+                case 0:             i->eventName = "none"; break;
+                case DAS_D0:        i->eventName = "DAS_D0"; break;
+                case DAS_D1:        i->eventName = "DAS_D1"; break;
+                case DAS_D2:        i->eventName = "DAS_D2"; break;
+                case DAS_A0:        i->eventName = "DAS_A0"; break;
+                case DAS_A1:        i->eventName = "DAS_A1"; break;
+                case DAS_A2:        i->eventName = "DAS_A2"; break;
+                case DAS_A3:        i->eventName = "DAS_A3"; break;
+                case DAS_S0_1:      i->eventName = "DAS_S0_2"; break;
+                case DAS_S1_1:      i->eventName = "DAS_S1_1"; break;
+                case DAS_S1_2:      i->eventName = "DAS_S1_2"; break;
+                case DAS_S2_1:      i->eventName = "DAS_S2_2"; break;
+                case DAS_S3_1:      i->eventName = "DAS_S3_1"; break;
+                case DAS_S3_2:      i->eventName = "DAS_S3_2"; break;
+                case DAS_S4_1:      i->eventName = "DAS_S4_1"; break;
+                case DAS_S4_2:      i->eventName = "DAS_S4_2"; break;
+                case DAS_S5_1:      i->eventName = "DAS_S5_1"; break;
+                case DAS_S5_2:      i->eventName = "DAS_S5_2"; break;
+                case DAS_S6_1:      i->eventName = "DAS_S6_1"; break;
+                case DAS_S6_2:      i->eventName = "DAS_S6_2"; break;
+                case DAS_S7_1:      i->eventName = "DAS_S7_1"; break;
+                case DAS_S7_2:      i->eventName = "DAS_S7_2"; break;
+                default:            i->eventName = "*** INVALID ***"; break;
+            }
+            break;
+
         case COP_SLOT:
 
             switch (slot[nr].id) {
@@ -385,6 +414,11 @@ Agnus::executeEventsUntil(Cycle cycle) {
         serviceDMAEvent(slot[DMA_SLOT].id);
     }
 
+    if (isDue<DAS_SLOT>(cycle)) {
+        assert(checkTriggeredEvent(DAS_SLOT));
+        serviceDASEvent(slot[DAS_SLOT].id);
+    }
+
     if (isDue<COP_SLOT>(cycle)) {
         assert(checkTriggeredEvent(COP_SLOT));
         copper.serviceEvent(slot[COP_SLOT].id);
@@ -639,6 +673,7 @@ Agnus::serviceDMAEvent(EventID id)
             break;
 
         default:
+            dumpEvents(); 
             debug("id = %d\n", id);
             assert(false);
     }
@@ -651,6 +686,135 @@ Agnus::serviceDMAEvent(EventID id)
         scheduleRel<DMA_SLOT>(DMA_CYCLES(next - hpos), dmaEvent[next]);
     } else {
         cancel<DMA_SLOT>();
+    }
+}
+
+void
+Agnus::serviceDASEvent(EventID id)
+{
+    switch (id) {
+
+        case DAS_D0:
+        case DAS_D1:
+        case DAS_D2:
+
+            assert(dmaEvent[hpos] == DMA_DISK);
+            /*
+            if (paula->diskController.getFifoBuffering())
+                paula->diskController.performDMA();
+            else
+                paula->diskController.performSimpleDMA();
+            */
+            break;
+
+        case DAS_A0:
+            assert(dmaEvent[hpos] == DMA_A0);
+            break;
+
+        case DAS_A1:
+            assert(dmaEvent[hpos] == DMA_A1);
+            break;
+
+        case DAS_A2:
+            assert(dmaEvent[hpos] == DMA_A2);
+            break;
+
+        case DAS_A3:
+            assert(dmaEvent[hpos] == DMA_A3);
+            break;
+
+        case DAS_S0_1:
+            assert(dmaEvent[hpos] == DMA_S0_1);
+            // executeFirstSpriteCycle<0>();
+            break;
+
+        case DAS_S0_2:
+            assert(dmaEvent[hpos] == DMA_S0_2);
+            // executeSecondSpriteCycle<0>();
+            break;
+
+        case DAS_S1_1:
+            assert(dmaEvent[hpos] == DMA_S1_1);
+            // executeFirstSpriteCycle<1>();
+            break;
+
+        case DAS_S1_2:
+            assert(dmaEvent[hpos] == DMA_S1_2);
+            // executeSecondSpriteCycle<1>();
+            break;
+
+        case DAS_S2_1:
+            assert(dmaEvent[hpos] == DMA_S2_1);
+            // executeFirstSpriteCycle<2>();
+            break;
+
+        case DAS_S2_2:
+            assert(dmaEvent[hpos] == DMA_S2_2);
+            // executeSecondSpriteCycle<2>();
+            break;
+
+        case DAS_S3_1:
+            assert(dmaEvent[hpos] == DMA_S3_1);
+            // executeFirstSpriteCycle<3>();
+            break;
+
+        case DAS_S3_2:
+            assert(dmaEvent[hpos] == DMA_S3_2);
+            // executeSecondSpriteCycle<3>();
+            break;
+
+        case DAS_S4_1:
+            assert(dmaEvent[hpos] == DMA_S4_1);
+            // executeFirstSpriteCycle<4>();
+            break;
+
+        case DAS_S4_2:
+            assert(dmaEvent[hpos] == DMA_S4_2);
+            // executeSecondSpriteCycle<4>();
+            break;
+
+        case DAS_S5_1:
+            assert(dmaEvent[hpos] == DMA_S5_1);
+            // executeFirstSpriteCycle<5>();
+            break;
+
+        case DAS_S5_2:
+            assert(dmaEvent[hpos] == DMA_S5_2);
+            // executeSecondSpriteCycle<5>();
+            break;
+
+        case DAS_S6_1:
+            assert(dmaEvent[hpos] == DMA_S6_1);
+            // executeFirstSpriteCycle<6>();
+            break;
+
+        case DAS_S6_2:
+            assert(dmaEvent[hpos] == DMA_S6_2);
+            // executeSecondSpriteCycle<6>();
+            break;
+
+        case DAS_S7_1:
+            assert(dmaEvent[hpos] == DMA_S7_1);
+            // executeFirstSpriteCycle<7>();
+            break;
+
+        case DAS_S7_2:
+            assert(dmaEvent[hpos] == DMA_S7_2);
+            // executeSecondSpriteCycle<7>();
+            break;
+
+        default:
+            debug("id = %d\n", id);
+            assert(false);
+    }
+
+    // Schedule next event
+    EventID event = nextDASEvent[id][dmacon & 0b111111];
+    if (event != EVENT_NONE) {
+        assert(nextDASDelay[id] != 0);
+        scheduleRel<DAS_SLOT>((Cycle)nextDASDelay[id], event);
+    } else {
+        cancel<DAS_SLOT>();
     }
 }
 
@@ -815,6 +979,14 @@ Agnus::checkScheduledEvent(EventSlot s)
             if (!isDmaEvent(id)) {
                 _dump();
                 panic("Invalid DMA event ID.");
+                return false;
+            }
+            break;
+
+        case DAS_SLOT:
+            if (!isDasEvent(id)) {
+                _dump();
+                panic("Invalid DAS event ID.");
                 return false;
             }
             break;
