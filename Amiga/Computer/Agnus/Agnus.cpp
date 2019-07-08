@@ -1308,7 +1308,10 @@ Agnus::pokeDDFSTRT(uint16_t value)
 {
     debug(BPL_DEBUG, "pokeDDFSTRT(%X)\n", value);
 
-    ddfstrt = value;
+    // 15 13 12 11 10 09 08 07 06 05 04 03 02 01 00
+    // -- -- -- -- -- -- -- H8 H7 H6 H5 H4 H3 -- --
+
+    ddfstrt = value & 0xFC;
 
     // Fit to raster and cap minimum value at 0x18
     uint16_t oldValue = ddfstrtAligned;
@@ -1338,7 +1341,10 @@ Agnus::pokeDDFSTOP(uint16_t value)
 {
     debug(BPL_DEBUG, "pokeDDFSTOP(%X)\n", value);
 
-    ddfstop = value;
+    // 15 13 12 11 10 09 08 07 06 05 04 03 02 01 00
+    // -- -- -- -- -- -- -- H8 H7 H6 H5 H4 H3 -- --
+
+    ddfstop = value & 0xFC;
 
     // Fit to raster and cap maximum value at 0xD8
     uint16_t oldValue = ddfstopAligned;
@@ -1372,22 +1378,32 @@ Agnus::computeDDFWindow()
 {
     // Clip values
     int16_t strt = MAX(ddfstrt, 0x18);
-    int16_t stop = MIN(ddfstop, 0xDF);
+    int16_t stop = MIN(ddfstop, 0xD8);
 
     // Compute the beginning of the DMA window
     dmaStrtLores = (strt + 4) & ~7;
     dmaStrtHires = (strt + 2) & ~3;
 
-    // Compute the number of fetch units
-    int numUnitsLores = ((stop & ~3) - (strt & ~3) + 7) / 8;
-    int numUnitsHires = ((stop & ~3) - (strt & ~3) + 7) / 4;
+    // debug("ddfstrt = %X ddfstop = %X\n", ddfstrt, ddfstop);
 
-    numUnitsHires += 2; // THIS SHOULDN'T BE 
-    numUnitsLores += 1;
+    // Compute the number of fetch units
+    int numUnitsLores = (((stop - strt) +  7) >> 3) + 1;
+    int numUnitsHires = (((stop - strt) + 15) >> 3) * 2;
+
+    int numUnitsHires2 = (((stop - strt) + 15) >> 2) & ~1; // Winfellow
+    assert(numUnitsHires == numUnitsHires2);
 
     // Compute the end of the DMA window
     dmaStopLores = dmaStrtLores + 8 * numUnitsLores;
     dmaStopHires = dmaStrtHires + 4 * numUnitsHires;
+
+    if (dmaStopLores > 0xE0 || dmaStopHires > 0xE0) {
+        debug("strt = $%X (%d) stop = $%X (%d)\n", strt, strt, stop, stop);
+        debug("numUnitsLores = %d numUnitsHires = %d\n", numUnitsLores, numUnitsHires);
+        debug("dmaStopLores = $%X (%d) dmaStopHires = $%X (%d)\n",
+              dmaStopLores, dmaStopLores, dmaStopHires, dmaStopHires);
+        assert(false);
+    }
 }
 
 template <int x> void
