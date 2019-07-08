@@ -536,6 +536,9 @@ public:
     // Managing DMA access
     //
 
+    // Indicates if bitplane DMA is blocked by a hardware stops
+    bool bplHwStop() { return hpos < 0x18 || hpos >= 0xE0; }
+
     // Returns true if Copper is allowed to perform a DMA cycle
     bool copperCanHaveBus();
 

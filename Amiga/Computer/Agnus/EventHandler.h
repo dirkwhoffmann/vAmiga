@@ -197,7 +197,7 @@ private:
 void executeEventsUntil(Cycle cycle);
 
 // Event handler for the DMA slot
-void serviceDMAEvent(EventID id);
+void serviceBplEvent(EventID id);
 
 // Event handler for the DAS slot
 void serviceDASEvent(EventID id);
