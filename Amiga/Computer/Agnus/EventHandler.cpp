@@ -72,27 +72,6 @@ Agnus::inspectEventSlot(EventSlot nr)
 
             switch (slot[nr].id) {
                 case 0:             i->eventName = "none"; break;
-                case DMA_DISK:      i->eventName = "DMA_DISK"; break;
-                case DMA_A0:        i->eventName = "DMA_A0"; break;
-                case DMA_A1:        i->eventName = "DMA_A1"; break;
-                case DMA_A2:        i->eventName = "DMA_A2"; break;
-                case DMA_A3:        i->eventName = "DMA_A3"; break;
-                case DMA_S0_1:      i->eventName = "DMA_S0_1"; break;
-                case DMA_S1_1:      i->eventName = "DMA_S1_1"; break;
-                case DMA_S2_1:      i->eventName = "DMA_S2_1"; break;
-                case DMA_S3_1:      i->eventName = "DMA_S3_1"; break;
-                case DMA_S4_1:      i->eventName = "DMA_S4_1"; break;
-                case DMA_S5_1:      i->eventName = "DMA_S5_1"; break;
-                case DMA_S6_1:      i->eventName = "DMA_S6_1"; break;
-                case DMA_S7_1:      i->eventName = "DMA_S7_1"; break;
-                case DMA_S0_2:      i->eventName = "DMA_S0_2"; break;
-                case DMA_S1_2:      i->eventName = "DMA_S1_2"; break;
-                case DMA_S2_2:      i->eventName = "DMA_S2_2"; break;
-                case DMA_S3_2:      i->eventName = "DMA_S3_2"; break;
-                case DMA_S4_2:      i->eventName = "DMA_S4_2"; break;
-                case DMA_S5_2:      i->eventName = "DMA_S5_2"; break;
-                case DMA_S6_2:      i->eventName = "DMA_S6_2"; break;
-                case DMA_S7_2:      i->eventName = "DMA_S7_2"; break;
                 case DMA_L1:        i->eventName = "DMA_L1"; break;
                 case DMA_L2:        i->eventName = "DMA_L2"; break;
                 case DMA_L3:        i->eventName = "DMA_L3"; break;
