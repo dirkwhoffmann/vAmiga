@@ -1279,9 +1279,8 @@ Agnus::pokeDDFSTRT(uint16_t value)
     // Compute the data fetch window
     computeDDFWindow();
 
-    // Update the DMA allocation table
-    // hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
-    updateBitplaneDma();
+    // Update the DMA allocation table at the end of the rasterline
+    hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
 }
 
 void
@@ -1297,9 +1296,8 @@ Agnus::pokeDDFSTOP(uint16_t value)
     // Compute the data fetch window
     computeDDFWindow();
 
-    // Update the DMA allocation table
-    // hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
-    updateBitplaneDma();
+    // Update the DMA allocation table at the end of the rasterline
+    hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
 }
 
 void
