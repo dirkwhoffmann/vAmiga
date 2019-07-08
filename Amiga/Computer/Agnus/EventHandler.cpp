@@ -493,6 +493,8 @@ Agnus::serviceBplEvent(EventID id)
             if (!bplHwStop()) {
                 denise->bpldat[PLANE1] = doBitplaneDMA<0>();
                 denise->fillShiftRegisters();
+            } else {
+                INC_DMAPTR(bplpt[PLANE1]);
             }
 
             if(unlikely(isLastHx(hpos))) {
@@ -507,6 +509,8 @@ Agnus::serviceBplEvent(EventID id)
             if (!bplHwStop()) {
                 denise->bpldat[PLANE1] = doBitplaneDMA<0>();
                 denise->fillShiftRegisters();
+            } else {
+                INC_DMAPTR(bplpt[PLANE1]);
             }
 
             if(unlikely(isLastLx(hpos))) {
@@ -519,41 +523,57 @@ Agnus::serviceBplEvent(EventID id)
 
         case BPL_H2:
             if (!bplHwStop()) denise->bpldat[PLANE2] = doBitplaneDMA<1>();
+            else INC_DMAPTR(bplpt[PLANE2]);
+
             if(unlikely(isLastHx(hpos))) addBPLMOD<1>();
             break;
 
         case BPL_L2:
             if (!bplHwStop()) denise->bpldat[PLANE2] = doBitplaneDMA<1>();
+            else INC_DMAPTR(bplpt[PLANE2]);
+
             if(unlikely(isLastLx(hpos))) addBPLMOD<1>();
             break;
 
         case BPL_H3:
             if (!bplHwStop()) denise->bpldat[PLANE3] = doBitplaneDMA<2>();
+            else INC_DMAPTR(bplpt[PLANE3]);
+
             if(unlikely(isLastHx(hpos))) addBPLMOD<2>();
             break;
 
         case BPL_L3:
             if (!bplHwStop()) denise->bpldat[PLANE3] = doBitplaneDMA<2>();
+            else INC_DMAPTR(bplpt[PLANE3]);
+
             if(unlikely(isLastLx(hpos))) addBPLMOD<2>();
             break;
 
         case BPL_H4:
             if (!bplHwStop()) denise->bpldat[PLANE4] = doBitplaneDMA<3>();
+            else INC_DMAPTR(bplpt[PLANE4]);
+
             if(unlikely(isLastHx(hpos))) addBPLMOD<3>();
             break;
 
         case BPL_L4:
             if (!bplHwStop()) denise->bpldat[PLANE4] = doBitplaneDMA<3>();
+            else INC_DMAPTR(bplpt[PLANE4]);
+
             if(unlikely(isLastLx(hpos))) addBPLMOD<3>();
             break;
 
         case BPL_L5:
             if (!bplHwStop()) denise->bpldat[PLANE5] = doBitplaneDMA<4>();
+            else INC_DMAPTR(bplpt[PLANE5]);
+
             if(unlikely(isLastLx(hpos))) addBPLMOD<4>();
             break;
 
         case BPL_L6:
             if (!bplHwStop()) denise->bpldat[PLANE6] = doBitplaneDMA<5>();
+            else INC_DMAPTR(bplpt[PLANE6]);
+
             if(unlikely(isLastLx(hpos))) addBPLMOD<5>();
             break;
 

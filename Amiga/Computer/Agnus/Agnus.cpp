@@ -92,11 +92,10 @@ Agnus::initLoresBplEventTable()
 
     for (int bpu = 0; bpu < 7; bpu++) {
 
-        // Goto the first bitplane DMA slot
-        EventID *p = &bitplaneDMA[0][bpu][0x30];
+        EventID *p = &bitplaneDMA[0][bpu][0];
 
         // Iterate through all 22 fetch units
-        for (int unit = 0; unit < 22; unit++, p += 8) {
+        for (int i = 0; i <= 0xD8; i += 8, p += 8) {
 
             switch(bpu) {
                 case 6: p[2] = BPL_L6;
@@ -117,11 +116,9 @@ Agnus::initHiresBplEventTable()
 
     for (int bpu = 0; bpu < 7; bpu++) {
 
-        // Goto the first bitplane DMA slot
-        EventID *p = &bitplaneDMA[1][bpu][0x30];
+        EventID *p = &bitplaneDMA[1][bpu][0];
 
-        // Iterate through all 22 fetch units
-        for (int unit = 0; unit < 22; unit++, p += 8) {
+        for (int i = 0; i <= 0xD8; i += 8, p += 8) {
 
             switch(bpu) {
                 case 6:
@@ -509,11 +506,11 @@ Agnus::doSpriteDMA(int channel)
     return result; 
 }
 
-template <int channel> uint16_t
+template <int bitplane> uint16_t
 Agnus::doBitplaneDMA()
 {
-    uint16_t result = mem->peekChip16(bplpt[channel]);
-    INC_DMAPTR(bplpt[channel]);
+    uint16_t result = mem->peekChip16(bplpt[bitplane]);
+    INC_DMAPTR(bplpt[bitplane]);
 
     busOwner[hpos] = BUS_BITPLANE;
     busValue[hpos] = result;
