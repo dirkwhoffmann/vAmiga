@@ -547,67 +547,67 @@ Agnus::serviceDMAEvent(EventID id)
             break;
 
         case DMA_S0_1:
-            executeFirstSpriteCycle<0>();
+            // executeFirstSpriteCycle<0>();
             break;
 
         case DMA_S1_1:
-            executeFirstSpriteCycle<1>();
+            // executeFirstSpriteCycle<1>();
             break;
 
         case DMA_S2_1:
-            executeFirstSpriteCycle<2>();
+            // executeFirstSpriteCycle<2>();
             break;
 
         case DMA_S3_1:
-            executeFirstSpriteCycle<3>();
+            // executeFirstSpriteCycle<3>();
             break;
 
         case DMA_S4_1:
-            executeFirstSpriteCycle<4>();
+            // executeFirstSpriteCycle<4>();
             break;
 
         case DMA_S5_1:
-            executeFirstSpriteCycle<5>();
+            // executeFirstSpriteCycle<5>();
             break;
 
         case DMA_S6_1:
-            executeFirstSpriteCycle<6>();
+            // executeFirstSpriteCycle<6>();
             break;
 
         case DMA_S7_1:
-            executeFirstSpriteCycle<7>();
+            // executeFirstSpriteCycle<7>();
             break;
 
         case DMA_S0_2:
-            executeSecondSpriteCycle<0>();
+            // executeSecondSpriteCycle<0>();
             break;
 
         case DMA_S1_2:
-            executeSecondSpriteCycle<1>();
+            // executeSecondSpriteCycle<1>();
             break;
 
         case DMA_S2_2:
-            executeSecondSpriteCycle<2>();
+            // executeSecondSpriteCycle<2>();
             break;
 
         case DMA_S3_2:
-            executeSecondSpriteCycle<3>();
+            // executeSecondSpriteCycle<3>();
             break;
 
         case DMA_S4_2:
-            executeSecondSpriteCycle<4>();
+            // executeSecondSpriteCycle<4>();
             break;
 
         case DMA_S5_2:
-            executeSecondSpriteCycle<5>();
+            // executeSecondSpriteCycle<5>();
             break;
 
         case DMA_S6_2:
-            executeSecondSpriteCycle<6>();
+            // executeSecondSpriteCycle<6>();
             break;
 
         case DMA_S7_2:
-            executeSecondSpriteCycle<7>();
+            // executeSecondSpriteCycle<7>();
             break;
 
         case DMA_H1:
@@ -735,97 +735,97 @@ Agnus::serviceDASEvent(EventID id)
         case DAS_S0_1:
             assert(hpos == 0x15);
             assert(dmaEvent[hpos] == DMA_S0_1);
-            // executeFirstSpriteCycle<0>();
+            executeFirstSpriteCycle<0>();
             break;
 
         case DAS_S0_2:
             assert(hpos == 0x17);
             assert(dmaEvent[hpos] == DMA_S0_2);
-            // executeSecondSpriteCycle<0>();
+            executeSecondSpriteCycle<0>();
             break;
 
         case DAS_S1_1:
             assert(hpos == 0x19);
             assert(dmaEvent[hpos] == DMA_S1_1);
-            // executeFirstSpriteCycle<1>();
+            executeFirstSpriteCycle<1>();
             break;
 
         case DAS_S1_2:
             assert(hpos == 0x1B);
             assert(dmaEvent[hpos] == DMA_S1_2);
-            // executeSecondSpriteCycle<1>();
+            executeSecondSpriteCycle<1>();
             break;
 
         case DAS_S2_1:
             assert(hpos == 0x1D);
             assert(dmaEvent[hpos] == DMA_S2_1);
-            // executeFirstSpriteCycle<2>();
+            executeFirstSpriteCycle<2>();
             break;
 
         case DAS_S2_2:
             assert(hpos == 0x1F);
             assert(dmaEvent[hpos] == DMA_S2_2);
-            // executeSecondSpriteCycle<2>();
+            executeSecondSpriteCycle<2>();
             break;
 
         case DAS_S3_1:
             assert(hpos == 0x21);
             assert(dmaEvent[hpos] == DMA_S3_1);
-            // executeFirstSpriteCycle<3>();
+            executeFirstSpriteCycle<3>();
             break;
 
         case DAS_S3_2:
             assert(hpos == 0x23);
             assert(dmaEvent[hpos] == DMA_S3_2);
-            // executeSecondSpriteCycle<3>();
+            executeSecondSpriteCycle<3>();
             break;
 
         case DAS_S4_1:
             assert(hpos == 0x25);
             assert(dmaEvent[hpos] == DMA_S4_1);
-            // executeFirstSpriteCycle<4>();
+            executeFirstSpriteCycle<4>();
             break;
 
         case DAS_S4_2:
             assert(hpos == 0x27);
             assert(dmaEvent[hpos] == DMA_S4_2);
-            // executeSecondSpriteCycle<4>();
+            executeSecondSpriteCycle<4>();
             break;
 
         case DAS_S5_1:
             assert(hpos == 0x29);
             assert(dmaEvent[hpos] == DMA_S5_1);
-            // executeFirstSpriteCycle<5>();
+            executeFirstSpriteCycle<5>();
             break;
 
         case DAS_S5_2:
             assert(hpos == 0x2B);
             assert(dmaEvent[hpos] == DMA_S5_2);
-            // executeSecondSpriteCycle<5>();
+            executeSecondSpriteCycle<5>();
             break;
 
         case DAS_S6_1:
             assert(hpos == 0x2D);
             assert(dmaEvent[hpos] == DMA_S6_1);
-            // executeFirstSpriteCycle<6>();
+            executeFirstSpriteCycle<6>();
             break;
 
         case DAS_S6_2:
             assert(hpos == 0x2F);
             assert(dmaEvent[hpos] == DMA_S6_2);
-            // executeSecondSpriteCycle<6>();
+            executeSecondSpriteCycle<6>();
             break;
 
         case DAS_S7_1:
             assert(hpos == 0x31);
             assert(dmaEvent[hpos] == DMA_S7_1);
-            // executeFirstSpriteCycle<7>();
+            executeFirstSpriteCycle<7>();
             break;
 
         case DAS_S7_2:
             assert(hpos == 0x33);
             assert(dmaEvent[hpos] == DMA_S7_2);
-            // executeSecondSpriteCycle<7>();
+            executeSecondSpriteCycle<7>();
             break;
 
         default:
