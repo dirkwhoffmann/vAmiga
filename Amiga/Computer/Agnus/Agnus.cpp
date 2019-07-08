@@ -1765,7 +1765,6 @@ Agnus::hsyncHandler()
 
         if (hsyncActions & HSYNC_UPDATE_DAS_SLOT) {
 
-            /*
             EventID firstEvent = firstDASEvent[dmacon & 0x3F];
 
             if (firstEvent) {
@@ -1773,7 +1772,6 @@ Agnus::hsyncHandler()
             } else {
                 cancel<DAS_SLOT>();
             }
-            */
         }
 
         if (hsyncActions & HSYNC_UPDATE_EVENT_TABLE) {
