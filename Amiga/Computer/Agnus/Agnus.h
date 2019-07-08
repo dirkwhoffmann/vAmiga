@@ -204,7 +204,7 @@ public:
      *     dmaStop is the last cycle of the last fetch unit
      * The values are updated in pokeDDFSTRT() and pokeDDFSTOP()
      */
-    int16_t dmaStrt; // DEPRECATED
+    // int16_t dmaStrt; // DEPRECATED
     int16_t dmaStop; // DEPRECATED
 
     /* The vertical trigger positions of all 8 sprites.
@@ -298,8 +298,6 @@ public:
     // The display data fetch registers
     uint16_t ddfstrt;
     uint16_t ddfstop;
-    uint16_t ddfstrtAligned; // DEPRECATED
-    uint16_t ddfstopAligned; // DEPRECATED
     
     // The audio DMA pointers
     uint32_t audlc[4];

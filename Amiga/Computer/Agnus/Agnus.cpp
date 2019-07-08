@@ -37,8 +37,6 @@ Agnus::Agnus()
         { &dmaStrtHires,         sizeof(dmaStrtHires),         0 },
         { &dmaStopLores,         sizeof(dmaStopLores),         0 },
         { &dmaStopHires,         sizeof(dmaStopHires),         0 },
-        { &dmaStrt,              sizeof(dmaStrt),              0 },
-        { &dmaStop,              sizeof(dmaStop),              0 },
         { &sprVStrt,             sizeof(sprVStrt),             WORD_ARRAY },
         { &sprVStop,             sizeof(sprVStop),             WORD_ARRAY },
         { &sprDmaState,          sizeof(sprDmaState),          DWORD_ARRAY },
@@ -57,9 +55,6 @@ Agnus::Agnus()
         { &diwstop,              sizeof(diwstop),              0 },
         { &ddfstrt,              sizeof(ddfstrt),              0 },
         { &ddfstop,              sizeof(ddfstop),              0 },
-        { &ddfstopAligned,              sizeof(ddfstopAligned),              0 },
-        { &ddfstrtAligned,              sizeof(ddfstrtAligned),              0 },
-        { &ddfstopAligned,              sizeof(ddfstopAligned),              0 },
         { &audlc,                sizeof(audlc),                DWORD_ARRAY },
         { &audlcold,             sizeof(audlcold),             DWORD_ARRAY },
         { &bplpt,                sizeof(bplpt),                DWORD_ARRAY },
@@ -273,8 +268,8 @@ Agnus::_inspect()
     info.dmacon  = dmacon;
     info.diwstrt = diwstrt;
     info.diwstop = diwstop;
-    info.ddfstrt = ddfstrtAligned;
-    info.ddfstop = ddfstopAligned;
+    info.ddfstrt = ddfstrt;
+    info.ddfstop = ddfstop;
     
     info.bpl1mod = bpl1mod;
     info.bpl2mod = bpl2mod;
@@ -587,14 +582,6 @@ Agnus::oldSwitchBitplaneDmaOn()
 
     if (denise->hires()) {
 
-        /*
-        // Determine start and stop cycle
-        uint16_t start = ddfstrtAligned;
-        uint16_t stop  = ddfstopAligned;
-        
-        // Align stop such that (stop - start) is dividable by 8
-        stop += (stop - start) & 0b100;
-        */
         int16_t start = dmaStrtHires;
         int16_t stop = dmaStopHires;
 
@@ -632,31 +619,7 @@ Agnus::oldSwitchBitplaneDmaOn()
             denise->lastCanvasPixel = 0;
         }
 
-        /*
-        debug("HIRES ddfstrt = %X ddfstop = %X dmaStrt = %X dmaStop = %X\n",
-              ddfstrt, ddfstop, dmaStrtHires, dmaStopHires);
-        dumpDMAEventTable();
-        */
-
     } else {
-
-        /*
-        // Determine start and stop cycle
-        uint16_t start = ddfstrtAligned;
-        uint16_t stop  = ddfstopAligned;
-
-        // Align stop such that (stop - start) is dividable by 8
-        stop += (stop - start) & 0b100;
-        */
-
-        // Align fetch start and stop
-        /*
-        uint16_t start = (ddfstrt + 4) & ~0b111;
-        uint16_t stop = (ddfstop + 4) & ~0b111; // WRONG
-
-        // Compute real stop position
-        stop = start + (((ddfstop & ~3) - (ddfstrt & ~3) + 7) & ~7);
-        */
 
         int16_t start = dmaStrtLores;
         int16_t stop = dmaStopLores;
@@ -1313,25 +1276,10 @@ Agnus::pokeDDFSTRT(uint16_t value)
 
     ddfstrt = value & 0xFC;
 
-    // Fit to raster and cap minimum value at 0x18
-    uint16_t oldValue = ddfstrtAligned;
-    uint16_t newValue = MAX(value & 0xFC, 0x18);
-
-    if (newValue != value) {
-        debug(BPL_DEBUG, "Strange value detected in pokeDDFSTRT(%X)\n", value);
-    }
-
-    if (newValue != oldValue) {
-        debug(BPL_DEBUG, "DDFSTRT changed from %d to %d\n", oldValue, newValue);
-    }
-
-    // DEPRECATED
-    ddfstrtAligned = newValue;
-    dmaStrt = ddfstrtAligned;
-
-    // Compute the DMA window
+    // Compute the data fetch window
     computeDDFWindow();
 
+    // Update the DMA allocation table
     // hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
     updateBitplaneDma();
 }
@@ -1346,29 +1294,10 @@ Agnus::pokeDDFSTOP(uint16_t value)
 
     ddfstop = value & 0xFC;
 
-    // Fit to raster and cap maximum value at 0xD8
-    uint16_t oldValue = ddfstopAligned;
-    uint16_t newValue = MIN(value & 0xFC, 0xD8);
-
-    if (newValue != value) {
-        debug(BPL_DEBUG, "Strange value detected in pokeDDFSTOP(%X)\n", value);
-    }
-
-    if (newValue != oldValue) {
-        debug(BPL_DEBUG, "DDFSTOP changed from %d to %d\n", oldValue, newValue);
-    }
-
-    // DEPRECATED
-    ddfstopAligned = newValue;
-    dmaStop = ddfstopAligned;
-    // Align dmaStop such that (dmaStop - dmaStart) is dividable by 8
-    dmaStop += (dmaStop - dmaStrt) & 0b100;
-    // Goto last event in fetch unit
-    dmaStop += 7;
-
-    // Compute the DMA window
+    // Compute the data fetch window
     computeDDFWindow();
 
+    // Update the DMA allocation table
     // hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
     updateBitplaneDma();
 }
