@@ -1306,7 +1306,7 @@ void
 Agnus::computeDDFWindow()
 {
     // Clip values
-    int16_t strt = MAX(ddfstrt, 0x18);
+    int16_t strt = ddfstrt; //  MAX(ddfstrt, 0x18);
     int16_t stop = MIN(ddfstop, 0xD8);
 
     // Compute the beginning of the DMA window
