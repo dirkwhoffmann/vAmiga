@@ -1541,7 +1541,7 @@ template <int nr> void
 Agnus::executeSecondSpriteCycle()
 {
     // Deactivate sprite data DMA if the last sprite line has been reached
-    if (vpos == sprVStop[nr] + 1) {
+    if (vpos == sprVStop[nr]) {
         
         // Sprite DMA should already be inactive in the second DMA cycle
         assert(sprDmaState[nr] == SPR_DMA_IDLE);
