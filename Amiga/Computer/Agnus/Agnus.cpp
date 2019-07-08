@@ -581,12 +581,12 @@ Agnus::allocateBplSlots(int bpu, bool hires, int first)
 }
 
 void
-Agnus::switchBitplaneDmaOn()
+Agnus::oldSwitchBitplaneDmaOn()
 {
     // Clear slots first (TODO: THIS IS UGLY AND SLOW)
     switchBitplaneDmaOff();
 
-    debug(BPL_DEBUG, "switchBitplaneDmaOn: bpu = %d\n", denise->bplconBPU());
+    debug(BPL_DEBUG, "oldSwitchBitplaneDmaOn: bpu = %d\n", denise->bplconBPU());
 
     if (denise->hires()) {
 
@@ -721,6 +721,99 @@ Agnus::switchBitplaneDmaOn()
     // debug("EventTable:\n");
     // dumpDMAEventTable();
 }
+
+void
+Agnus::switchBitplaneDmaOn()
+{
+    int16_t start;
+    int16_t stop;
+
+    bool hires = denise->hires();
+
+    // Determine the range that is covered by fetch units
+    if (hires) {
+
+        start = dmaStrtHires;
+        stop = dmaStopHires;
+        assert((stop - start) % 4 == 0);
+
+    } else {
+
+        start = dmaStrtLores;
+        stop = dmaStopLores;
+        assert((stop - start) % 8 == 0);
+    }
+
+    debug(BPL_DEBUG, "switchBitplaneDmaOn()\n");
+    debug(BPL_DEBUG, "hires = %d start = %d stop = %d\n", hires, start, stop);
+
+    assert(start >= 0 && start <= HPOS_MAX);
+    assert(stop >= 0 && stop <= HPOS_MAX);
+
+    // Wipe out all events outside the fetch unit window
+    for (int i = 0; i < start; i++) dmaEvent[i] = EVENT_NONE;
+    for (int i = stop; i < HPOS_MAX; i++) dmaEvent[i] = EVENT_NONE;
+
+    // Copy events from the proper lookup table
+    for (int i = start; i < stop; i++) {
+        dmaEvent[i] = bitplaneDMA[hires][activeBitplanes][i];
+    }
+
+    // Set some variables (inherited from the old function)
+    // TODO: Check if all variables are still needed.
+
+    if (hires) {
+
+        // Remember start / stop positions
+        if (dmaEvent[start+3] != EVENT_NONE) {
+
+            dmaFirstBpl1Event = start + 3;
+            dmaLastBpl1Event = stop - 1;
+
+            assert(dmaEvent[dmaFirstBpl1Event] == BPL_H1);
+            assert(dmaEvent[dmaLastBpl1Event] == BPL_H1);
+
+            denise->firstCanvasPixel = (dmaFirstBpl1Event * 4) + 6;
+            denise->lastCanvasPixel = (dmaLastBpl1Event * 4) + 6 + 15;
+
+        } else {
+
+            dmaFirstBpl1Event = 0;
+            dmaLastBpl1Event = 0;
+            denise->firstCanvasPixel = 0;
+            denise->lastCanvasPixel = 0;
+        }
+
+    } else {
+
+        // Remember start / stop positions
+        if (dmaEvent[start+7] != EVENT_NONE) {
+
+            dmaFirstBpl1Event = start + 7;
+            dmaLastBpl1Event = stop - 1;
+
+            assert(dmaEvent[dmaFirstBpl1Event] == BPL_L1);
+            assert(dmaEvent[dmaLastBpl1Event] == BPL_L1);
+
+            denise->firstCanvasPixel = (dmaFirstBpl1Event * 4) + 6;
+            denise->lastCanvasPixel = (dmaLastBpl1Event * 4) + 6 + 31;
+
+        } else {
+
+            dmaFirstBpl1Event = 0;
+            dmaLastBpl1Event = 0;
+            denise->firstCanvasPixel = 0;
+            denise->lastCanvasPixel = 0;
+        }
+    }
+
+    // Link everything together
+    updateJumpTable();
+
+    // debug("EventTable:\n");
+    // dumpDMAEventTable();
+}
+
 
 void
 Agnus::switchBitplaneDmaOff()

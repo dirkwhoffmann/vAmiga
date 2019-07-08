@@ -572,6 +572,7 @@ public:
     void allocateBplSlots(int bpu, bool hires, int first);
 
     // Adds or removes the bitplane DMA events to the DMA event table.
+    void oldSwitchBitplaneDmaOn(); // DEPRECATED
     void switchBitplaneDmaOn();
     void switchBitplaneDmaOff();
     void updateBitplaneDma();
