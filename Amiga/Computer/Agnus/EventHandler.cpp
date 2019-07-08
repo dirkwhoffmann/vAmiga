@@ -526,11 +526,13 @@ Agnus::serviceDMAEvent(EventID id)
 
         case DMA_DISK:
 
+            /*
             if (paula->diskController.getFifoBuffering())
                 paula->diskController.performDMA();
             else
                 paula->diskController.performSimpleDMA();
             break;
+            */
 
         case DMA_A0:
             break;
@@ -703,12 +705,11 @@ Agnus::serviceDASEvent(EventID id)
             assert(hpos == 0x7 || hpos == 0x9 || hpos == 0xB);
             assert(dmaEvent[hpos] == DMA_DISK);
 
-            /*
             if (paula->diskController.getFifoBuffering())
                 paula->diskController.performDMA();
             else
                 paula->diskController.performSimpleDMA();
-            */
+
             break;
 
         case DAS_A0:
