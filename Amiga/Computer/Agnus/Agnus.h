@@ -38,6 +38,7 @@
 // Hsync action bits
 #define HSYNC_UPDATE_EVENT_TABLE 0x01
 #define HSYNC_UPDATE_DAS_SLOT    0x02
+#define HSYNC_CHECK_DMACON       0x04 // DEPRECATED
 
 // Increments a DMA pointer register by 2
 #define INC_DMAPTR(x) (x) = ((x) + 2) & 0x7FFFE;
@@ -567,14 +568,17 @@ public:
     void allocateBplSlots(int bpu, bool hires, int first);
 
     // Adds or removes the disk DMA events to the DMA event table.
+    void updateDiskDma();
     void switchDiskDmaOn();
     void switchDiskDmaOff();
 
     // Adds or removes the audio DMA events to the DMA event table.
+    void updateAudioDma();
     void switchAudioDmaOn(int channel);
     void switchAudioDmaOff(int channel);
 
     // Adds or removes the sprite DMA events to the DMA event table.
+    void updateSpriteDma();
     void switchSpriteDmaOn();
     void switchSpriteDmaOff();
     

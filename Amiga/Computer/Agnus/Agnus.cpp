@@ -579,6 +579,13 @@ Agnus::allocateBplSlots(int bpu, bool hires, int first)
 }
 
 void
+Agnus::updateDiskDma()
+{
+    // We only check the master bit (is this correct?)
+    (dmacon & DMAEN) ? switchDiskDmaOn() : switchDiskDmaOff();
+}
+
+void
 Agnus::switchDiskDmaOn()
 {
     debug(DMA_DEBUG, "switchDiskDmaOn()\n");
@@ -609,6 +616,15 @@ Agnus::switchDiskDmaOff()
 }
 
 void
+Agnus::updateAudioDma()
+{
+    audDMA(0) ? switchAudioDmaOn(0) : switchAudioDmaOff(0);
+    audDMA(1) ? switchAudioDmaOn(1) : switchAudioDmaOff(1);
+    audDMA(2) ? switchAudioDmaOn(2) : switchAudioDmaOff(2);
+    audDMA(3) ? switchAudioDmaOn(3) : switchAudioDmaOff(3);
+}
+
+void
 Agnus::switchAudioDmaOn(int channel)
 {
     debug(DMA_DEBUG, "switchAudioDmaOn()\n");
@@ -622,7 +638,7 @@ Agnus::switchAudioDmaOn(int channel)
         
         default: assert(false);
     }
-    
+
     //hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
     updateJumpTable(0x13);
     // updateJumpTable();
@@ -648,6 +664,12 @@ Agnus::switchAudioDmaOff(int channel)
     updateJumpTable(0x13);
     // updateJumpTable();
     hsyncActions |= HSYNC_UPDATE_DAS_SLOT;
+}
+
+void
+Agnus::updateSpriteDma()
+{
+    sprDMA() ? switchSpriteDmaOn() : switchSpriteDmaOff();
 }
 
 void
@@ -1136,7 +1158,8 @@ Agnus::pokeDMACON(uint16_t value)
     
     // Sprite DMA
     if (oldSPREN ^ newSPREN) {
-        
+
+        /*
         if (newSPREN) {
             // Sprite DMA on
             debug(DMA_DEBUG, "Sprite DMA switched on\n");
@@ -1148,12 +1171,15 @@ Agnus::pokeDMACON(uint16_t value)
             debug(DMA_DEBUG, "Sprite DMA switched off\n");
             switchSpriteDmaOff();
         }
+        */
+        hsyncActions |= HSYNC_CHECK_DMACON;
     }
     
     // Disk DMA (only the master bit is checked)
     // if (oldDSKEN ^ newDSKEN) {
     if (oldDMAEN ^ newDMAEN) {
 
+        /*
         if (newDMAEN) {
             
             // Disk DMA on
@@ -1166,6 +1192,8 @@ Agnus::pokeDMACON(uint16_t value)
             debug(DMA_DEBUG, "Disk DMA switched off\n");
             switchDiskDmaOff();
         }
+        */
+        hsyncActions |= HSYNC_CHECK_DMACON;
     }
     
     // Audio DMA
@@ -1174,15 +1202,17 @@ Agnus::pokeDMACON(uint16_t value)
         if (newAU0EN) {
             
             // debug("Audio 0 DMA switched on\n");
-            switchAudioDmaOn(0);
+            // switchAudioDmaOn(0);
             paula->audioUnit.enableDMA(0);
             
         } else {
             
             // debug("Audio 0 DMA switched off\n");
-            switchAudioDmaOff(0);
+            // switchAudioDmaOff(0);
             paula->audioUnit.disableDMA(0);
         }
+
+        hsyncActions |= HSYNC_CHECK_DMACON;
     }
     
     if (oldAU1EN ^ newAU1EN) {
@@ -1190,15 +1220,17 @@ Agnus::pokeDMACON(uint16_t value)
         if (newAU1EN) {
             
             // debug("Audio 1 DMA switched on\n");
-            switchAudioDmaOn(1);
+            // switchAudioDmaOn(1);
             paula->audioUnit.enableDMA(1);
             
         } else {
             
             // debug("Audio 1 DMA switched off\n");
-            switchAudioDmaOff(1);
+            // switchAudioDmaOff(1);
             paula->audioUnit.disableDMA(1);
         }
+
+        hsyncActions |= HSYNC_CHECK_DMACON;
     }
     
     if (oldAU2EN ^ newAU2EN) {
@@ -1206,15 +1238,17 @@ Agnus::pokeDMACON(uint16_t value)
         if (newAU2EN) {
             
             // debug("Audio 2 DMA switched on\n");
-            switchAudioDmaOn(2);
+            // switchAudioDmaOn(2);
             paula->audioUnit.enableDMA(2);
             
         } else {
             
             // debug("Audio 2 DMA switched off\n");
-            switchAudioDmaOff(2);
+            // switchAudioDmaOff(2);
             paula->audioUnit.disableDMA(2);
         }
+
+        hsyncActions |= HSYNC_CHECK_DMACON;
     }
     
     if (oldAU3EN ^ newAU3EN) {
@@ -1222,15 +1256,17 @@ Agnus::pokeDMACON(uint16_t value)
         if (newAU3EN) {
             
             // debug("Audio 3 DMA switched on\n");
-            switchAudioDmaOn(3);
+            // switchAudioDmaOn(3);
             paula->audioUnit.enableDMA(3);
             
         } else {
             
             // debug("Audio 3 DMA switched off\n");
-            switchAudioDmaOff(3);
+            // switchAudioDmaOff(3);
             paula->audioUnit.disableDMA(3);
         }
+
+        hsyncActions |= HSYNC_CHECK_DMACON;
     }
 }
 
@@ -1719,6 +1755,13 @@ Agnus::hsyncHandler()
     //
 
     if (hsyncActions) {
+
+        if (hsyncActions & HSYNC_CHECK_DMACON) {
+
+            updateDiskDma();
+            updateAudioDma();
+            updateSpriteDma();
+        }
 
         if (hsyncActions & HSYNC_UPDATE_DAS_SLOT) {
 
