@@ -118,7 +118,8 @@ Agnus::inspectEventSlot(EventSlot nr)
                 case DAS_A1:        i->eventName = "DAS_A1"; break;
                 case DAS_A2:        i->eventName = "DAS_A2"; break;
                 case DAS_A3:        i->eventName = "DAS_A3"; break;
-                case DAS_S0_1:      i->eventName = "DAS_S0_2"; break;
+                case DAS_S0_1:      i->eventName = "DAS_S0_1"; break;
+                case DAS_S0_2:      i->eventName = "DAS_S0_2"; break;
                 case DAS_S1_1:      i->eventName = "DAS_S1_1"; break;
                 case DAS_S1_2:      i->eventName = "DAS_S1_2"; break;
                 case DAS_S2_1:      i->eventName = "DAS_S2_2"; break;
@@ -161,16 +162,6 @@ Agnus::inspectEventSlot(EventSlot nr)
                 case BLT_INIT:      i->eventName = "BLT_INIT"; break;
                 case BLT_EXECUTE:   i->eventName = "BLT_EXECUTE"; break;
                 case BLT_FAST_BLIT: i->eventName = "BLT_FAST_BLIT"; break;
-                default:            i->eventName = "*** INVALID ***"; break;
-            }
-            break;
-
-        case RAS_SLOT:
-
-            switch (slot[nr].id) {
-
-                case 0:             i->eventName = "none"; break;
-                case RAS_HSYNC:     i->eventName = "RAS_HSYNC"; break;
                 default:            i->eventName = "*** INVALID ***"; break;
             }
             break;
@@ -427,11 +418,6 @@ Agnus::executeEventsUntil(Cycle cycle) {
     if (isDue<BLT_SLOT>(cycle)) {
         assert(checkTriggeredEvent(BLT_SLOT));
         blitter.serviceEvent(slot[BLT_SLOT].id);
-    }
-
-    if (isDue<RAS_SLOT>(cycle)) {
-        // Slot is currently unused
-        // assert(checkTriggeredEvent(RAS_SLOT));
     }
 
     //

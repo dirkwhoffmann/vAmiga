@@ -32,10 +32,6 @@ typedef enum : long
     DAS_SLOT,         // Disk, Audio, and Sprite DMA
     COP_SLOT,         // Copper DMA
     BLT_SLOT,         // Blitter DMA
-    RAS_SLOT,         // TODO: This slot is currently unused. It's only event
-                      // was RAS_HSYNC which has been replaced by the secondary
-                      // event SYNC_H. I didn't delete the slot, because
-                      // I'm still unsure if we really don't need it.
     SEC_SLOT,         // Secondary events
 
     LAST_PRIM_SLOT = SEC_SLOT,
@@ -84,13 +80,12 @@ inline const char *slotName(EventSlot nr)
         case CIAA_SLOT:          return "CIA A"; 
         case CIAB_SLOT:          return "CIA B";
         case DMA_SLOT:           return "Bitplane DMA";
-        case DAS_SLOT:           return "Dsk/Aud/Spr DMA";
+        case DAS_SLOT:           return "Disk, Audio, Sprite DMA";
         case COP_SLOT:           return "Copper";
         case BLT_SLOT:           return "Blitter";
-        case RAS_SLOT:           return "Raster";
         case SEC_SLOT:           return "Secondary";
 
-        case DSK_SLOT:           return "Disk";
+        case DSK_SLOT:           return "Disk Controller";
         case IRQ_TBE_SLOT:       return "Serial Out IRQ";
         case IRQ_DSKBLK_SLOT:    return "Disk DMA IRQ";
         case IRQ_SOFT_SLOT:      return "Software IRQ";
@@ -208,11 +203,7 @@ typedef enum : long
     BLT_EXECUTE,
     BLT_FAST_BLIT,
     BLT_EVENT_COUNT,
-    
-    // Raster slot
-    RAS_HSYNC = 1,
-    RAS_EVENT_COUNT,
-    
+        
     // SEC slot
     SEC_TRIGGER = 1,
     SEC_EVENT_COUNT,
@@ -274,7 +265,6 @@ static inline bool isDmaEvent(EventID id) { return id < DMA_EVENT_COUNT; }
 static inline bool isDasEvent(EventID id) { return id < DAS_EVENT_COUNT; }
 static inline bool isCopEvent(EventID id) { return id < COP_EVENT_COUNT; }
 static inline bool isBltEvent(EventID id) { return id < BLT_EVENT_COUNT; }
-static inline bool isRasEvent(EventID id) { return id < RAS_EVENT_COUNT; }
 
 static inline bool isBplEvent(EventID id) { return id >= DMA_L1 && id <= DMA_H4; }
 
