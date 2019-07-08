@@ -692,6 +692,8 @@ Agnus::serviceDMAEvent(EventID id)
 void
 Agnus::serviceDASEvent(EventID id)
 {
+    // debug("serviceDASEvent(%d)\n", id);
+
     switch (id) {
 
         case DAS_D0:
@@ -700,6 +702,7 @@ Agnus::serviceDASEvent(EventID id)
 
             assert(hpos == 0x7 || hpos == 0x9 || hpos == 0xB);
             assert(dmaEvent[hpos] == DMA_DISK);
+
             /*
             if (paula->diskController.getFifoBuffering())
                 paula->diskController.performDMA();
@@ -830,10 +833,10 @@ Agnus::serviceDASEvent(EventID id)
     }
 
     // Schedule next event
-    EventID event = nextDASEvent[id][dmacon & 0b111111];
+    EventID event = nextDASEvent[id][dmaDAS];
     if (event != EVENT_NONE) {
         assert(nextDASDelay[id] != 0);
-        scheduleRel<DAS_SLOT>((Cycle)nextDASDelay[id], event);
+        scheduleRel<DAS_SLOT>(DMA_CYCLES(nextDASDelay[id][dmaDAS]), event);
     } else {
         cancel<DAS_SLOT>();
     }

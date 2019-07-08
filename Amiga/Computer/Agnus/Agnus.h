@@ -34,6 +34,7 @@
 #define AU2EN 0b0000000100
 #define AU1EN 0b0000000010
 #define AU0EN 0b0000000001
+#define AUDEN 0b0000001111
 
 // Hsync action bits
 #define HSYNC_UPDATE_EVENT_TABLE 0x01
@@ -283,7 +284,12 @@ public:
     
     // The DMA control register
     uint16_t dmacon;
-    
+
+    // This value is updated in the hsync handler with the lowest 6 bits of
+    // dmacon if the master enable bit is 1 or set to 0 if the master enable
+    // bit is 0. It is used as an offset into the DAS lookup tables.
+    uint16_t dmaDAS;
+
     // The disk DMA pointer
     uint32_t dskpt;
     

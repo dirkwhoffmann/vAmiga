@@ -51,6 +51,7 @@ Agnus::Agnus()
         { &hFlopOn,              sizeof(hFlopOn),              0 },
         { &hFlopOff,             sizeof(hFlopOff),             0 },
         { &dmacon,               sizeof(dmacon),               0 },
+        { &dmaDAS,               sizeof(dmaDAS),               0 },
         { &dskpt,                sizeof(dskpt),                0 },
         { &diwstrt,              sizeof(diwstrt),              0 },
         { &diwstop,              sizeof(diwstop),              0 },
@@ -150,9 +151,9 @@ Agnus::initDASTables()
     for (unsigned dma = 1; dma < 64; dma++) {
 
         // Setup the time slot allocation table for this combination
-        table[0x07] = (dma & DSKEN) ? DAS_D0 : EVENT_NONE;
-        table[0x09] = (dma & DSKEN) ? DAS_D1 : EVENT_NONE;
-        table[0x0B] = (dma & DSKEN) ? DAS_D2 : EVENT_NONE;
+        table[0x07] = DAS_D0; // always enabled if the master bit is set
+        table[0x09] = DAS_D1; // always enabled if the master bit is set
+        table[0x0B] = DAS_D2; // always enabled if the master bit is set
         table[0x0D] = (dma & AU0EN) ? DAS_A0 : EVENT_NONE;
         table[0x0F] = (dma & AU1EN) ? DAS_A1 : EVENT_NONE;
         table[0x11] = (dma & AU2EN) ? DAS_A2 : EVENT_NONE;
@@ -348,6 +349,7 @@ Agnus::startOfNextFrame()
 
 bool
 Agnus::inBplDmaArea() {
+
     return
     vFlop                             // Vertical DIW flipflop
     && vpos >= 26                     // Outside VBLANK area
@@ -916,6 +918,8 @@ Agnus::switchBitplaneDmaOff()
 void
 Agnus::updateBitplaneDma()
 {
+    debug(BPL_DEBUG, "updateBitplaneDma()\n");
+
     // Determine if bitplane DMA has to be on or off
     bool bplDma = inBplDmaArea();
     /*
@@ -1715,7 +1719,7 @@ Agnus::hsyncHandler()
     // Check if this line is a bitplane DMA line
     bool bplDmaArea = inBplDmaArea();
 
-    // Update the event table if the values has changed
+    // Update the event table if the value has changed
     if (bplDmaArea ^ oldBplDmaArea) {
         hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
         oldBplDmaArea = bplDmaArea;
@@ -1733,22 +1737,44 @@ Agnus::hsyncHandler()
         }
     }
 
-    // Update the vertical DIW flipflop
+
+    //
+    // Determine the disk, audio and sprite DMA status for the next line
+    //
+
+    if (dmacon & DMAEN) {
+
+        // Copy DMA enable bits from dmacon
+        dmaDAS = dmacon & 0b111111;
+
+        // Disable sprites outside the sprite DMA area
+        if (vpos < 25 || vpos >= frameInfo.numLines - 1) dmaDAS &= 0b011111;
+
+    } else {
+
+        dmaDAS = 0;
+    }
+
+
+    //
+    // Update the DIW flipflops
+    //
+
+    // Vertical flipflop
     if (vpos == diwVstrt && !vFlop) {
         vFlop = true;
         updateBitplaneDma();
-        // debug("vFlop = %d diwVstrt = %d\n", vFlop, diwVstrt);
     }
     if (vpos == diwVstop && vFlop) {
         vFlop = false;
         updateBitplaneDma();
-        // debug("vFlop = %d diwVstop = %d\n", vFlop, diwVstop);
     }
 
-    // Update the horizontal DIW flipflop
+    // Horizontal DIW flipflop
     hFlop = (hFlopOff != -1) ? false : (hFlopOn != -1) ? true : hFlop;
     hFlopOn = diwHstrt;
     hFlopOff = diwHstop;
+
 
     //
     // Process pending work items
@@ -1765,13 +1791,6 @@ Agnus::hsyncHandler()
 
         if (hsyncActions & HSYNC_UPDATE_DAS_SLOT) {
 
-            EventID firstEvent = firstDASEvent[dmacon & 0x3F];
-
-            if (firstEvent) {
-                schedulePos<DAS_SLOT>(vpos, firstDASDelay[dmacon & 0x3F], firstEvent);
-            } else {
-                cancel<DAS_SLOT>();
-            }
         }
 
         if (hsyncActions & HSYNC_UPDATE_EVENT_TABLE) {
@@ -1782,17 +1801,25 @@ Agnus::hsyncHandler()
         hsyncActions = 0;
     }
 
+
     //
     // Schedule events
     //
 
-    // Schedule the first hi-prio DMA event (if any)
+    // Schedule the first biplane event (if any)
     if (nextDmaEvent[0]) {
         EventID eventID = dmaEvent[nextDmaEvent[0]];
         schedulePos<DMA_SLOT>(vpos, nextDmaEvent[0], eventID);
     }
 
-    // Schedule first SYNC event
+    // Schedule the first DAS event (if any)
+    if (firstDASEvent[dmaDAS]) {
+        schedulePos<DAS_SLOT>(vpos, firstDASDelay[dmaDAS], firstDASEvent[dmaDAS]);
+    } else {
+        cancel<DAS_SLOT>();
+    }
+
+    // Schedule the first SYNC event
     schedulePos<SYNC_SLOT>(vpos, HPOS_MAX, SYNC_H);
 
 
