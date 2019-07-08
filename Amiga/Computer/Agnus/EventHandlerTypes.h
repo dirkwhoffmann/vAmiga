@@ -28,7 +28,7 @@ typedef enum : long
     
     CIAA_SLOT = 0,    // CIA A execution
     CIAB_SLOT,        // CIA B execution
-    DMA_SLOT,         // Bitplane DMA
+    BPL_SLOT,         // Bitplane DMA
     DAS_SLOT,         // Disk, Audio, and Sprite DMA
     COP_SLOT,         // Copper DMA
     BLT_SLOT,         // Blitter DMA
@@ -79,7 +79,7 @@ inline const char *slotName(EventSlot nr)
     switch (nr) {
         case CIAA_SLOT:          return "CIA A"; 
         case CIAB_SLOT:          return "CIA B";
-        case DMA_SLOT:           return "Bitplane DMA";
+        case BPL_SLOT:           return "Bitplane DMA";
         case DAS_SLOT:           return "Disk, Audio, Sprite DMA";
         case COP_SLOT:           return "Copper";
         case BLT_SLOT:           return "Blitter";
@@ -127,18 +127,18 @@ typedef enum : long
     CIA_WAKEUP,
     CIA_EVENT_COUNT,
     
-    // DMA slot
-    DMA_L1 = 1,
-    DMA_L2,
-    DMA_L3,
-    DMA_L4,
-    DMA_L5,
-    DMA_L6,
-    DMA_H1,
-    DMA_H2,
-    DMA_H3,
-    DMA_H4,
-    DMA_EVENT_COUNT,
+    // BPL slot
+    BPL_L1 = 1,
+    BPL_L2,
+    BPL_L3,
+    BPL_L4,
+    BPL_L5,
+    BPL_L6,
+    BPL_H1,
+    BPL_H2,
+    BPL_H3,
+    BPL_H4,
+    BPL_EVENT_COUNT,
 
     // DAS slot
     DAS_D0 = 1,
@@ -240,12 +240,10 @@ typedef enum : long
 } EventID;
 
 static inline bool isCiaEvent(EventID id) { return id < CIA_EVENT_COUNT; }
-static inline bool isDmaEvent(EventID id) { return id < DMA_EVENT_COUNT; }
+static inline bool isBplEvent(EventID id) { return id < BPL_EVENT_COUNT; }
 static inline bool isDasEvent(EventID id) { return id < DAS_EVENT_COUNT; }
 static inline bool isCopEvent(EventID id) { return id < COP_EVENT_COUNT; }
 static inline bool isBltEvent(EventID id) { return id < BLT_EVENT_COUNT; }
-
-static inline bool isBplEvent(EventID id) { return id >= DMA_L1 && id <= DMA_H4; }
 
 // Inspection interval in seconds (interval between INS_xxx events)
 static const double inspectionInterval = 0.1;

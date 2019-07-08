@@ -295,9 +295,9 @@ Denise::pokeBPLCON0(uint16_t value)
         // TODO: Wrap this in a nicer API
         uint8_t next = agnus->nextDmaEvent[agnus->hpos];
         if (next) {
-            agnus->schedulePos<DMA_SLOT>(agnus->vpos, next, agnus->dmaEvent[next]);
+            agnus->schedulePos<BPL_SLOT>(agnus->vpos, next, agnus->dmaEvent[next]);
         } else {
-            agnus->cancel<DMA_SLOT>();
+            agnus->cancel<BPL_SLOT>();
         }
 
         // Create the table from scratch in the next rasterline

@@ -99,12 +99,12 @@ Agnus::initLoresBplEventTable()
         for (int unit = 0; unit < 22; unit++, p += 8) {
 
             switch(bpu) {
-                case 6: p[2] = DMA_L6;
-                case 5: p[6] = DMA_L5;
-                case 4: p[1] = DMA_L4;
-                case 3: p[5] = DMA_L3;
-                case 2: p[3] = DMA_L2;
-                case 1: p[7] = DMA_L1;
+                case 6: p[2] = BPL_L6;
+                case 5: p[6] = BPL_L5;
+                case 4: p[1] = BPL_L4;
+                case 3: p[5] = BPL_L3;
+                case 2: p[3] = BPL_L2;
+                case 1: p[7] = BPL_L1;
             }
         }
     }
@@ -126,10 +126,10 @@ Agnus::initHiresBplEventTable()
             switch(bpu) {
                 case 6:
                 case 5:
-                case 4: p[0] = p[4] = DMA_H4;
-                case 3: p[2] = p[6] = DMA_H3;
-                case 2: p[1] = p[5] = DMA_H2;
-                case 1: p[3] = p[7] = DMA_H1;
+                case 4: p[0] = p[4] = BPL_H4;
+                case 3: p[2] = p[6] = BPL_H3;
+                case 2: p[1] = p[5] = BPL_H2;
+                case 1: p[3] = p[7] = BPL_H1;
             }
         }
     }
@@ -438,7 +438,7 @@ Agnus::copperCanHaveBus()
     if ((dmacon & (DMAEN|COPEN)) != (DMAEN|COPEN)) return false;
 
     // Deny access if the current slot is used for bitplane DMA
-    if (isBplEvent(dmaEvent[hpos])) {
+    if (dmaEvent[hpos]) {
         debug(COP_DEBUG, "Copper blocked by bitplane DMA\n");
         return false;
     }
@@ -602,10 +602,10 @@ Agnus::switchBitplaneDmaOn()
         int16_t stop = dmaStopHires;
 
         // Determine event IDs
-        EventID h4 = (activeBitplanes >= 4) ? DMA_H4 : EVENT_NONE;
-        EventID h3 = (activeBitplanes >= 3) ? DMA_H3 : EVENT_NONE;
-        EventID h2 = (activeBitplanes >= 2) ? DMA_H2 : EVENT_NONE;
-        EventID h1 = (activeBitplanes >= 1) ? DMA_H1 : EVENT_NONE;
+        EventID h4 = (activeBitplanes >= 4) ? BPL_H4 : EVENT_NONE;
+        EventID h3 = (activeBitplanes >= 3) ? BPL_H3 : EVENT_NONE;
+        EventID h2 = (activeBitplanes >= 2) ? BPL_H2 : EVENT_NONE;
+        EventID h1 = (activeBitplanes >= 1) ? BPL_H1 : EVENT_NONE;
         
         // Schedule events
         for (unsigned i = start; i < stop; i += 8) {
@@ -621,8 +621,8 @@ Agnus::switchBitplaneDmaOn()
             dmaFirstBpl1Event = start + 3;
             dmaLastBpl1Event = stop - 1;
 
-            assert(dmaEvent[dmaFirstBpl1Event] == DMA_H1);
-            assert(dmaEvent[dmaLastBpl1Event] == DMA_H1);
+            assert(dmaEvent[dmaFirstBpl1Event] == BPL_H1);
+            assert(dmaEvent[dmaLastBpl1Event] == BPL_H1);
 
             denise->firstCanvasPixel = (dmaFirstBpl1Event * 4) + 6;
             denise->lastCanvasPixel = (dmaLastBpl1Event * 4) + 6 + 15;
@@ -665,12 +665,12 @@ Agnus::switchBitplaneDmaOn()
         int16_t stop = dmaStopLores;
 
         // Determine event IDs
-        EventID l6 = (activeBitplanes >= 6) ? DMA_L6 : EVENT_NONE;
-        EventID l5 = (activeBitplanes >= 5) ? DMA_L5 : EVENT_NONE;
-        EventID l4 = (activeBitplanes >= 4) ? DMA_L4 : EVENT_NONE;
-        EventID l3 = (activeBitplanes >= 3) ? DMA_L3 : EVENT_NONE;
-        EventID l2 = (activeBitplanes >= 2) ? DMA_L2 : EVENT_NONE;
-        EventID l1 = (activeBitplanes >= 1) ? DMA_L1 : EVENT_NONE;
+        EventID l6 = (activeBitplanes >= 6) ? BPL_L6 : EVENT_NONE;
+        EventID l5 = (activeBitplanes >= 5) ? BPL_L5 : EVENT_NONE;
+        EventID l4 = (activeBitplanes >= 4) ? BPL_L4 : EVENT_NONE;
+        EventID l3 = (activeBitplanes >= 3) ? BPL_L3 : EVENT_NONE;
+        EventID l2 = (activeBitplanes >= 2) ? BPL_L2 : EVENT_NONE;
+        EventID l1 = (activeBitplanes >= 1) ? BPL_L1 : EVENT_NONE;
         
         // Schedule events
         for (unsigned i = start; i < stop; i += 8) {
@@ -690,8 +690,8 @@ Agnus::switchBitplaneDmaOn()
             dmaFirstBpl1Event = start + 7;
             dmaLastBpl1Event = stop - 1;
 
-            assert(dmaEvent[dmaFirstBpl1Event] == DMA_L1);
-            assert(dmaEvent[dmaLastBpl1Event] == DMA_L1);
+            assert(dmaEvent[dmaFirstBpl1Event] == BPL_L1);
+            assert(dmaEvent[dmaLastBpl1Event] == BPL_L1);
 
             denise->firstCanvasPixel = (dmaFirstBpl1Event * 4) + 6;
             denise->lastCanvasPixel = (dmaLastBpl1Event * 4) + 6 + 31;
@@ -709,8 +709,7 @@ Agnus::switchBitplaneDmaOn()
 
     // Do some consistency checks with the new lookup tables
     for (int i = 0; i < HPOS_CNT; i++) {
-        if ((dmaEvent[i] >= DMA_L1 && dmaEvent[i] <= DMA_L6) &&
-            (dmaEvent[i] >= DMA_H1 && dmaEvent[i] <= DMA_H4)) {
+        if (dmaEvent[i]) {
             if (dmaEvent[i] != bitplaneDMA[denise->hires()][activeBitplanes][i]) {
                 warn("EVENT INCONSISTENCY DETECTED\n");
                 dumpDMAEventTable();
@@ -813,16 +812,16 @@ Agnus::dumpDMAEventTable(int from, int to)
         
         switch(dmaEvent[i + from]) {
             case EVENT_NONE:   r3[i] = '.'; r4[i] = '.'; break;
-            case DMA_L1:       r3[i] = 'L'; r4[i] = '1'; break;
-            case DMA_L2:       r3[i] = 'L'; r4[i] = '2'; break;
-            case DMA_L3:       r3[i] = 'L'; r4[i] = '3'; break;
-            case DMA_L4:       r3[i] = 'L'; r4[i] = '4'; break;
-            case DMA_L5:       r3[i] = 'L'; r4[i] = '5'; break;
-            case DMA_L6:       r3[i] = 'L'; r4[i] = '6'; break;
-            case DMA_H1:       r3[i] = 'H'; r4[i] = '1'; break;
-            case DMA_H2:       r3[i] = 'H'; r4[i] = '2'; break;
-            case DMA_H3:       r3[i] = 'H'; r4[i] = '3'; break;
-            case DMA_H4:       r3[i] = 'H'; r4[i] = '4'; break;
+            case BPL_L1:       r3[i] = 'L'; r4[i] = '1'; break;
+            case BPL_L2:       r3[i] = 'L'; r4[i] = '2'; break;
+            case BPL_L3:       r3[i] = 'L'; r4[i] = '3'; break;
+            case BPL_L4:       r3[i] = 'L'; r4[i] = '4'; break;
+            case BPL_L5:       r3[i] = 'L'; r4[i] = '5'; break;
+            case BPL_L6:       r3[i] = 'L'; r4[i] = '6'; break;
+            case BPL_H1:       r3[i] = 'H'; r4[i] = '1'; break;
+            case BPL_H2:       r3[i] = 'H'; r4[i] = '2'; break;
+            case BPL_H3:       r3[i] = 'H'; r4[i] = '3'; break;
+            case BPL_H4:       r3[i] = 'H'; r4[i] = '4'; break;
             default:           assert(false);
         }
     }
@@ -1591,7 +1590,7 @@ Agnus::hsyncHandler()
     // Schedule the first biplane event (if any)
     if (nextDmaEvent[0]) {
         EventID eventID = dmaEvent[nextDmaEvent[0]];
-        schedulePos<DMA_SLOT>(vpos, nextDmaEvent[0], eventID);
+        schedulePos<BPL_SLOT>(vpos, nextDmaEvent[0], eventID);
     }
 
     // Schedule the first DAS event (if any)

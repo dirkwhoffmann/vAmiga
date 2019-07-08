@@ -358,7 +358,7 @@ public:
     // Indicates if the dma event table needs an update
     // bool dmaTableIsDirty;
 
-    // DMA cycle of the first and last DMA_H1 or DMA_L1 event
+    // DMA cycle of the first and last BPL_H1 or BPL_L1 event
     uint8_t dmaFirstBpl1Event;
     uint8_t dmaLastBpl1Event;
 

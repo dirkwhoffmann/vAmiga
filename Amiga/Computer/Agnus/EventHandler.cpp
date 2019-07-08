@@ -68,20 +68,20 @@ Agnus::inspectEventSlot(EventSlot nr)
             }
             break;
 
-        case DMA_SLOT:
+        case BPL_SLOT:
 
             switch (slot[nr].id) {
                 case 0:             i->eventName = "none"; break;
-                case DMA_L1:        i->eventName = "DMA_L1"; break;
-                case DMA_L2:        i->eventName = "DMA_L2"; break;
-                case DMA_L3:        i->eventName = "DMA_L3"; break;
-                case DMA_L4:        i->eventName = "DMA_L4"; break;
-                case DMA_L5:        i->eventName = "DMA_L5"; break;
-                case DMA_L6:        i->eventName = "DMA_L6"; break;
-                case DMA_H1:        i->eventName = "DMA_H1"; break;
-                case DMA_H2:        i->eventName = "DMA_H2"; break;
-                case DMA_H3:        i->eventName = "DMA_H3"; break;
-                case DMA_H4:        i->eventName = "DMA_H4"; break;
+                case BPL_L1:        i->eventName = "BPL_L1"; break;
+                case BPL_L2:        i->eventName = "BPL_L2"; break;
+                case BPL_L3:        i->eventName = "BPL_L3"; break;
+                case BPL_L4:        i->eventName = "BPL_L4"; break;
+                case BPL_L5:        i->eventName = "BPL_L5"; break;
+                case BPL_L6:        i->eventName = "BPL_L6"; break;
+                case BPL_H1:        i->eventName = "BPL_H1"; break;
+                case BPL_H2:        i->eventName = "BPL_H2"; break;
+                case BPL_H3:        i->eventName = "BPL_H3"; break;
+                case BPL_H4:        i->eventName = "BPL_H4"; break;
                 default:            i->eventName = "*** INVALID ***"; break;
             }
             break;
@@ -379,9 +379,9 @@ Agnus::executeEventsUntil(Cycle cycle) {
         }
     }
 
-    if (isDue<DMA_SLOT>(cycle)) {
-        assert(checkTriggeredEvent(DMA_SLOT));
-        serviceDMAEvent(slot[DMA_SLOT].id);
+    if (isDue<BPL_SLOT>(cycle)) {
+        assert(checkTriggeredEvent(BPL_SLOT));
+        serviceDMAEvent(slot[BPL_SLOT].id);
     }
 
     if (isDue<DAS_SLOT>(cycle)) {
@@ -489,7 +489,7 @@ Agnus::serviceDMAEvent(EventID id)
 {
     switch (id) {
 
-        case DMA_H1:
+        case BPL_H1:
             denise->bpldat[PLANE1] = doBitplaneDMA<0>();
             denise->fillShiftRegisters();
 
@@ -501,7 +501,7 @@ Agnus::serviceDMAEvent(EventID id)
             }
             break;
 
-        case DMA_L1:
+        case BPL_L1:
             denise->bpldat[PLANE1] = doBitplaneDMA<0>();
             denise->fillShiftRegisters();
 
@@ -513,42 +513,42 @@ Agnus::serviceDMAEvent(EventID id)
             }
             break;
 
-        case DMA_H2:
+        case BPL_H2:
             denise->bpldat[PLANE2] = doBitplaneDMA<1>();
             if(unlikely(isLastHx(hpos))) addBPLMOD<1>();
             break;
 
-        case DMA_L2:
+        case BPL_L2:
             denise->bpldat[PLANE2] = doBitplaneDMA<1>();
             if(unlikely(isLastLx(hpos))) addBPLMOD<1>();
             break;
 
-        case DMA_H3:
+        case BPL_H3:
             denise->bpldat[PLANE3] = doBitplaneDMA<2>();
             if(unlikely(isLastHx(hpos))) addBPLMOD<2>();
             break;
 
-        case DMA_L3:
+        case BPL_L3:
             denise->bpldat[PLANE3] = doBitplaneDMA<2>();
             if(unlikely(isLastLx(hpos))) addBPLMOD<2>();
             break;
 
-        case DMA_H4:
+        case BPL_H4:
             denise->bpldat[PLANE4] = doBitplaneDMA<3>();
             if(unlikely(isLastHx(hpos))) addBPLMOD<3>();
             break;
 
-        case DMA_L4:
+        case BPL_L4:
             denise->bpldat[PLANE4] = doBitplaneDMA<3>();
             if(unlikely(isLastLx(hpos))) addBPLMOD<3>();
             break;
 
-        case DMA_L5:
+        case BPL_L5:
             denise->bpldat[PLANE5] = doBitplaneDMA<4>();
             if(unlikely(isLastLx(hpos))) addBPLMOD<4>();
             break;
 
-        case DMA_L6:
+        case BPL_L6:
             denise->bpldat[PLANE6] = doBitplaneDMA<5>();
             if(unlikely(isLastLx(hpos))) addBPLMOD<5>();
             break;
@@ -562,9 +562,9 @@ Agnus::serviceDMAEvent(EventID id)
     // Schedule next event
     uint8_t next = nextDmaEvent[hpos];
     if (next) {
-        scheduleRel<DMA_SLOT>(DMA_CYCLES(next - hpos), dmaEvent[next]);
+        scheduleRel<BPL_SLOT>(DMA_CYCLES(next - hpos), dmaEvent[next]);
     } else {
-        cancel<DMA_SLOT>();
+        cancel<BPL_SLOT>();
     }
 }
 
@@ -856,10 +856,10 @@ Agnus::checkScheduledEvent(EventSlot s)
             }
             break;
 
-        case DMA_SLOT:
-            if (!isDmaEvent(id)) {
+        case BPL_SLOT:
+            if (!isBplEvent(id)) {
                 _dump();
-                panic("Invalid DMA event ID.");
+                panic("Invalid BPL event ID.");
                 return false;
             }
             break;
