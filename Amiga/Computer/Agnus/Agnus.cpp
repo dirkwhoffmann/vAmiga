@@ -581,164 +581,6 @@ Agnus::allocateBplSlots(int bpu, bool hires, int first)
 }
 
 void
-Agnus::updateDiskDma()
-{
-    // We only check the master bit (is this correct?)
-    (dmacon & DMAEN) ? switchDiskDmaOn() : switchDiskDmaOff();
-}
-
-void
-Agnus::switchDiskDmaOn()
-{
-    debug(DMA_DEBUG, "switchDiskDmaOn()\n");
-
-    dmaEvent[0x07] = DMA_DISK;
-    dmaEvent[0x09] = DMA_DISK;
-    dmaEvent[0x0B] = DMA_DISK;
-
-    // hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
-    updateJumpTable(0x0B);
-    // updateJumpTable();
-    hsyncActions |= HSYNC_UPDATE_DAS_SLOT;
-}
-
-void
-Agnus::switchDiskDmaOff()
-{
-    debug(DMA_DEBUG, "switchDiskDmaOff()\n");
-
-    dmaEvent[0x07] = EVENT_NONE;
-    dmaEvent[0x09] = EVENT_NONE;
-    dmaEvent[0x0B] = EVENT_NONE;
-
-    // hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
-    updateJumpTable(0x0B);
-    // updateJumpTable();
-    hsyncActions |= HSYNC_UPDATE_DAS_SLOT;
-}
-
-void
-Agnus::updateAudioDma()
-{
-    audDMA(0) ? switchAudioDmaOn(0) : switchAudioDmaOff(0);
-    audDMA(1) ? switchAudioDmaOn(1) : switchAudioDmaOff(1);
-    audDMA(2) ? switchAudioDmaOn(2) : switchAudioDmaOff(2);
-    audDMA(3) ? switchAudioDmaOn(3) : switchAudioDmaOff(3);
-}
-
-void
-Agnus::switchAudioDmaOn(int channel)
-{
-    debug(DMA_DEBUG, "switchAudioDmaOn()\n");
-
-    switch (channel) {
-        
-        case 0: dmaEvent[0x0D] = DMA_A0; break;
-        case 1: dmaEvent[0x0F] = DMA_A1; break;
-        case 2: dmaEvent[0x11] = DMA_A2; break;
-        case 3: dmaEvent[0x13] = DMA_A3; break;
-        
-        default: assert(false);
-    }
-
-    //hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
-    updateJumpTable(0x13);
-    // updateJumpTable();
-    hsyncActions |= HSYNC_UPDATE_DAS_SLOT;
-}
-
-void
-Agnus::switchAudioDmaOff(int channel)
-{
-    debug(DMA_DEBUG, "switchAudioDmaOff()\n");
-
-    switch (channel) {
-        
-        case 0: dmaEvent[0x0D] = EVENT_NONE; break;
-        case 1: dmaEvent[0x0F] = EVENT_NONE; break;
-        case 2: dmaEvent[0x11] = EVENT_NONE; break;
-        case 3: dmaEvent[0x13] = EVENT_NONE; break;
-        
-        default: assert(false);
-    }
-
-    // hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
-    updateJumpTable(0x13);
-    // updateJumpTable();
-    hsyncActions |= HSYNC_UPDATE_DAS_SLOT;
-}
-
-void
-Agnus::updateSpriteDma()
-{
-    sprDMA() ? switchSpriteDmaOn() : switchSpriteDmaOff();
-}
-
-void
-Agnus::switchSpriteDmaOn()
-{
-    // debug(DMA_DEBUG, "switchSpriteDmaOn()\n");
-
-    dmaEvent[0x15] = DMA_S0_1;
-    dmaEvent[0x17] = DMA_S0_2;
-
-    /* Note: Except for sprite 0, sprite DMA and bitplane DMA may overlap.
-     * Bitplane DMA has priority over sprite DMA.
-     */
-    if (dmaEvent[0x19] == EVENT_NONE) dmaEvent[0x19] = DMA_S1_1;
-    if (dmaEvent[0x1B] == EVENT_NONE) dmaEvent[0x1B] = DMA_S1_2;
-    if (dmaEvent[0x1D] == EVENT_NONE) dmaEvent[0x1D] = DMA_S2_1;
-    if (dmaEvent[0x1F] == EVENT_NONE) dmaEvent[0x1F] = DMA_S2_2;
-    if (dmaEvent[0x21] == EVENT_NONE) dmaEvent[0x21] = DMA_S3_1;
-    if (dmaEvent[0x23] == EVENT_NONE) dmaEvent[0x23] = DMA_S3_2;
-    if (dmaEvent[0x25] == EVENT_NONE) dmaEvent[0x25] = DMA_S4_1;
-    if (dmaEvent[0x27] == EVENT_NONE) dmaEvent[0x27] = DMA_S4_2;
-    if (dmaEvent[0x29] == EVENT_NONE) dmaEvent[0x29] = DMA_S5_1;
-    if (dmaEvent[0x2B] == EVENT_NONE) dmaEvent[0x2B] = DMA_S5_2;
-    if (dmaEvent[0x2D] == EVENT_NONE) dmaEvent[0x2D] = DMA_S6_1;
-    if (dmaEvent[0x2F] == EVENT_NONE) dmaEvent[0x2F] = DMA_S6_2;
-    if (dmaEvent[0x31] == EVENT_NONE) dmaEvent[0x31] = DMA_S7_1;
-    if (dmaEvent[0x33] == EVENT_NONE) dmaEvent[0x33] = DMA_S7_2;
-
-    // hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
-    updateJumpTable(0x33);
-    // updateJumpTable();
-    hsyncActions |= HSYNC_UPDATE_DAS_SLOT;
-}
-
-void
-Agnus::switchSpriteDmaOff()
-{
-    // debug(DMA_DEBUG, "switchSpriteDmaOff()\n");
-
-    dmaEvent[0x15] = EVENT_NONE;
-    dmaEvent[0x17] = EVENT_NONE;
-    
-    /* Note: Except for sprite 0, sprite DMA and bitplane DMA may overlap.
-     * Bitplane DMA has priority over sprite DMA.
-     */
-    if (dmaEvent[0x19] == DMA_S1_1) dmaEvent[0x19] = EVENT_NONE;
-    if (dmaEvent[0x1B] == DMA_S1_2) dmaEvent[0x1B] = EVENT_NONE;
-    if (dmaEvent[0x1D] == DMA_S2_1) dmaEvent[0x1D] = EVENT_NONE;
-    if (dmaEvent[0x1F] == DMA_S2_2) dmaEvent[0x1F] = EVENT_NONE;
-    if (dmaEvent[0x21] == DMA_S3_1) dmaEvent[0x21] = EVENT_NONE;
-    if (dmaEvent[0x23] == DMA_S3_2) dmaEvent[0x23] = EVENT_NONE;
-    if (dmaEvent[0x25] == DMA_S4_1) dmaEvent[0x25] = EVENT_NONE;
-    if (dmaEvent[0x27] == DMA_S4_2) dmaEvent[0x27] = EVENT_NONE;
-    if (dmaEvent[0x29] == DMA_S5_1) dmaEvent[0x29] = EVENT_NONE;
-    if (dmaEvent[0x2B] == DMA_S5_2) dmaEvent[0x2B] = EVENT_NONE;
-    if (dmaEvent[0x2D] == DMA_S6_1) dmaEvent[0x2D] = EVENT_NONE;
-    if (dmaEvent[0x2F] == DMA_S6_2) dmaEvent[0x2F] = EVENT_NONE;
-    if (dmaEvent[0x31] == DMA_S7_1) dmaEvent[0x31] = EVENT_NONE;
-    if (dmaEvent[0x33] == DMA_S7_2) dmaEvent[0x33] = EVENT_NONE;
-    
-    // hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
-    updateJumpTable(0x33);
-    // updateJumpTable();
-    hsyncActions |= HSYNC_UPDATE_DAS_SLOT;
-}
-
-void
 Agnus::switchBitplaneDmaOn()
 {
     // Clear slots first (TODO: THIS IS UGLY AND SLOW)
@@ -863,14 +705,6 @@ Agnus::switchBitplaneDmaOn()
         }
     }
 
-    // Because bitplane DMA and sprite DMA overlap, some sprite events might
-    // have been overwritten with EVENT_NONE by the code above. These events
-    // need to be restored.
-    if (dmaEvent[0x15] != EVENT_NONE) {
-        assert(dmaEvent[0x15] == DMA_S0_1);
-        switchSpriteDmaOn();
-    }
-
     updateJumpTable();
 
     // Do some consistency checks with the new lookup tables
@@ -899,13 +733,6 @@ Agnus::switchBitplaneDmaOff()
 
     // Clear the event table
     for (int i = 0x18; i < HPOS_CNT; dmaEvent[i++] = (EventID)0);
-
-    // Because bitplane DMA and sprite DMA overlap, the previous operation
-    // might have wiped out sprite events. These events need to be restored.
-    if (dmaEvent[0x15] != EVENT_NONE) {
-        assert(dmaEvent[0x15] == DMA_S0_1);
-        switchSpriteDmaOn();
-    }
 
     updateJumpTable();
 
@@ -1176,7 +1003,6 @@ Agnus::pokeDMACON(uint16_t value)
             switchSpriteDmaOff();
         }
         */
-        hsyncActions |= HSYNC_CHECK_DMACON;
     }
     
     // Disk DMA (only the master bit is checked)
@@ -1197,7 +1023,6 @@ Agnus::pokeDMACON(uint16_t value)
             switchDiskDmaOff();
         }
         */
-        hsyncActions |= HSYNC_CHECK_DMACON;
     }
     
     // Audio DMA
@@ -1215,8 +1040,6 @@ Agnus::pokeDMACON(uint16_t value)
             // switchAudioDmaOff(0);
             paula->audioUnit.disableDMA(0);
         }
-
-        hsyncActions |= HSYNC_CHECK_DMACON;
     }
     
     if (oldAU1EN ^ newAU1EN) {
@@ -1233,8 +1056,6 @@ Agnus::pokeDMACON(uint16_t value)
             // switchAudioDmaOff(1);
             paula->audioUnit.disableDMA(1);
         }
-
-        hsyncActions |= HSYNC_CHECK_DMACON;
     }
     
     if (oldAU2EN ^ newAU2EN) {
@@ -1251,8 +1072,6 @@ Agnus::pokeDMACON(uint16_t value)
             // switchAudioDmaOff(2);
             paula->audioUnit.disableDMA(2);
         }
-
-        hsyncActions |= HSYNC_CHECK_DMACON;
     }
     
     if (oldAU3EN ^ newAU3EN) {
@@ -1269,8 +1088,6 @@ Agnus::pokeDMACON(uint16_t value)
             // switchAudioDmaOff(3);
             paula->audioUnit.disableDMA(3);
         }
-
-        hsyncActions |= HSYNC_CHECK_DMACON;
     }
 }
 
@@ -1710,7 +1527,6 @@ Agnus::hsyncHandler()
 
     // Switch sprite DMA off if the last rasterline has been reached
     if (vpos == frameInfo.numLines - 1) {
-        switchSpriteDmaOff();
         for (unsigned i = 0; i < 8; i++) {
             sprDmaState[i] = SPR_DMA_IDLE;
         }
@@ -1732,8 +1548,6 @@ Agnus::hsyncHandler()
             // Reset vertical sprite trigger coordinates which forces the sprite
             // logic to read in the control words for all sprites in this line.
             for (unsigned i = 0; i < 8; i++) { sprVStop[i] = 25; }
-            
-            switchSpriteDmaOn();
         }
     }
 
@@ -1781,17 +1595,6 @@ Agnus::hsyncHandler()
     //
 
     if (hsyncActions) {
-
-        if (hsyncActions & HSYNC_CHECK_DMACON) {
-
-            updateDiskDma();
-            updateAudioDma();
-            updateSpriteDma();
-        }
-
-        if (hsyncActions & HSYNC_UPDATE_DAS_SLOT) {
-
-        }
 
         if (hsyncActions & HSYNC_UPDATE_EVENT_TABLE) {
 
