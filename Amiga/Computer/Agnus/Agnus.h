@@ -299,7 +299,14 @@ public:
     // The display data fetch registers
     uint16_t ddfstrt;
     uint16_t ddfstop;
-    uint16_t ddfstrtAtTrigger;
+
+    /* The value of DDFSTRT that was used to compute the starting position
+     * of the data fetch window in the current rasterline. Under normal
+     * circumstances, the value of this variable matched ddfstart. It only
+     * differs if register DDFSTRT has been written to after the data fetch
+     * window has already opened.
+     */
+     uint16_t usedValueOfddfstrt;
 
     // The audio DMA pointers
     uint32_t audlc[4];

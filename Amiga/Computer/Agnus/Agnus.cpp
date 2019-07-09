@@ -1277,18 +1277,21 @@ Agnus::pokeDDFSTRT(uint16_t value)
     ddfstrt = value & 0xFC;
 
     // Compute the data fetch window
-    computeDDFWindow();
+    // computeDDFWindow();
 
-    // Update the DMA allocation table
+    // Check if the change takes effect in the current rasterline
     if (hpos <= dmaStrtLores - 2) {
-        // The change is early enough to take effect immediately
-        ddfstrtAtTrigger = ddfstrt;
+
+        // Recompute the data fetch window based on the new values
+        computeDDFWindow();
         updateBitplaneDma();
         scheduleNextBplEvent();
-    } else {
-        // Let the hsync handler do the update
-        hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
+        usedValueOfddfstrt = ddfstrt;
     }
+
+    // Let the hsync handler compute the final data fetch window for all
+    // consecutive rasterlines.
+    hsyncActions |= HSYNC_COMPUTE_DDF_WINDOW;
 }
 
 void
@@ -1301,23 +1304,19 @@ Agnus::pokeDDFSTOP(uint16_t value)
 
     ddfstop = value & 0xFC;
 
-    // Compute the data fetch window
-    // computeDDFWindow(ddfstrtAtTrigger, ddfstop);
-    // hsyncActions |= HSYNC_COMPUTE_DDF_WINDOW;
-
-    // Update the DMA allocation table
+    // Check if the change takes effect immediataly
     if (hpos <= dmaStopLores - 2) {
-        // The change is early enough to take effect immediately
-        computeDDFWindow(ddfstrtAtTrigger, ddfstop);
+
+        // Recompute the data fetch window based on the new ddfstop value
+        // and the ddfstrt value as it was when the window opened.
+        computeDDFWindow(usedValueOfddfstrt, ddfstop);
         updateBitplaneDma();
         scheduleNextBplEvent();
-        hsyncActions |= HSYNC_COMPUTE_DDF_WINDOW;
-        hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
-    } else {
-        // Let the hsync handler do the update
-        hsyncActions |= HSYNC_COMPUTE_DDF_WINDOW;
-        hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
     }
+
+    // Let the hsync handler compute the final data fetch window for all
+    // consecutive rasterlines.
+    hsyncActions |= HSYNC_COMPUTE_DDF_WINDOW;
 }
 
 void
@@ -1621,7 +1620,7 @@ Agnus::hsyncHandler()
     hFlopOff = diwHstop;
 
     // Experimental
-    ddfstrtAtTrigger = ddfstrt;
+    usedValueOfddfstrt = ddfstrt;
 
 
     //
@@ -1632,12 +1631,17 @@ Agnus::hsyncHandler()
 
         if (hsyncActions & HSYNC_COMPUTE_DDF_WINDOW) {
 
+            /* Compute the data fetch window parameters based on the current
+             * values of ddfstrt and ddfstop and update the bitplane DMA
+             * allocation table accordingly.
+             */
             computeDDFWindow();
+            updateBitplaneDma();
         }
 
         if (hsyncActions & HSYNC_UPDATE_EVENT_TABLE) {
 
-            // Force the DMA time slot allocation table to update.
+            // Update the bitplane DMA allocation table.
             updateBitplaneDma();
         }
 
