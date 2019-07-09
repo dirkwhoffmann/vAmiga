@@ -584,6 +584,12 @@ Agnus::serviceBplEvent(EventID id)
     }
 
     // Schedule next event
+    scheduleNextBplEvent();
+}
+
+void
+Agnus::scheduleNextBplEvent()
+{
     uint8_t next = nextDmaEvent[hpos];
     if (next) {
         scheduleRel<BPL_SLOT>(DMA_CYCLES(next - hpos), dmaEvent[next]);

@@ -1279,8 +1279,16 @@ Agnus::pokeDDFSTRT(uint16_t value)
     // Compute the data fetch window
     computeDDFWindow();
 
-    // Update the DMA allocation table at the end of the rasterline
-    hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
+    // Update the DMA allocation table
+    if (hpos <= dmaStrtLores - 2) {
+        // The change is early enough to take effect immediately
+        ddfstrtAtTrigger = ddfstrt;
+        updateBitplaneDma();
+        scheduleNextBplEvent();
+    } else {
+        // Let the hsync handler do the update
+        hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
+    }
 }
 
 void
@@ -1294,14 +1302,26 @@ Agnus::pokeDDFSTOP(uint16_t value)
     ddfstop = value & 0xFC;
 
     // Compute the data fetch window
-    computeDDFWindow();
+    // computeDDFWindow(ddfstrtAtTrigger, ddfstop);
+    // hsyncActions |= HSYNC_COMPUTE_DDF_WINDOW;
 
-    // Update the DMA allocation table at the end of the rasterline
-    hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
+    // Update the DMA allocation table
+    if (hpos <= dmaStopLores - 2) {
+        // The change is early enough to take effect immediately
+        computeDDFWindow(ddfstrtAtTrigger, ddfstop);
+        updateBitplaneDma();
+        scheduleNextBplEvent();
+        hsyncActions |= HSYNC_COMPUTE_DDF_WINDOW;
+        hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
+    } else {
+        // Let the hsync handler do the update
+        hsyncActions |= HSYNC_COMPUTE_DDF_WINDOW;
+        hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
+    }
 }
 
 void
-Agnus::computeDDFWindow()
+Agnus::computeDDFWindow(uint16_t ddfstrt, uint16_t ddfstop)
 {
     // Clip values
     int16_t strt = ddfstrt; //  MAX(ddfstrt, 0x18);
@@ -1321,8 +1341,8 @@ Agnus::computeDDFWindow()
     assert(numUnitsHires == numUnitsHires2);
 
     // Compute the end of the DMA window
-    dmaStopLores = dmaStrtLores + 8 * numUnitsLores;
-    dmaStopHires = dmaStrtHires + 4 * numUnitsHires;
+    dmaStopLores = MIN(dmaStrtLores + 8 * numUnitsLores, 0xE0);
+    dmaStopHires = MIN(dmaStrtHires + 4 * numUnitsHires, 0xE0);
 
     if (dmaStopLores > 0xE0 || dmaStopHires > 0xE0) {
         debug("strt = $%X (%d) stop = $%X (%d)\n", strt, strt, stop, stop);
@@ -1600,6 +1620,9 @@ Agnus::hsyncHandler()
     hFlopOn = diwHstrt;
     hFlopOff = diwHstop;
 
+    // Experimental
+    ddfstrtAtTrigger = ddfstrt;
+
 
     //
     // Process pending work items
@@ -1607,11 +1630,18 @@ Agnus::hsyncHandler()
 
     if (hsyncActions) {
 
+        if (hsyncActions & HSYNC_COMPUTE_DDF_WINDOW) {
+
+            computeDDFWindow();
+        }
+
         if (hsyncActions & HSYNC_UPDATE_EVENT_TABLE) {
 
             // Force the DMA time slot allocation table to update.
             updateBitplaneDma();
         }
+
+
         hsyncActions = 0;
     }
 

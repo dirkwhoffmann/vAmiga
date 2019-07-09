@@ -38,6 +38,7 @@
 
 // Hsync action bits
 #define HSYNC_UPDATE_EVENT_TABLE 0x01
+#define HSYNC_COMPUTE_DDF_WINDOW 0x02
 
 // Increments a DMA pointer register by 2
 #define INC_DMAPTR(x) (x) = ((x) + 2) & 0x7FFFE;
@@ -298,7 +299,8 @@ public:
     // The display data fetch registers
     uint16_t ddfstrt;
     uint16_t ddfstop;
-    
+    uint16_t ddfstrtAtTrigger;
+
     // The audio DMA pointers
     uint32_t audlc[4];
     uint32_t audlcold[4];
@@ -635,7 +637,8 @@ public:
     // DDFSTRT, DDFSTOP
     void pokeDDFSTRT(uint16_t value);
     void pokeDDFSTOP(uint16_t value);
-    void computeDDFWindow();
+    void computeDDFWindow(uint16_t ddfstrt, uint16_t ddfstop);
+    void computeDDFWindow() { computeDDFWindow(ddfstrt, ddfstop); }
 
     // AUDxLCL, AUDxLCL
     // template <int x> void pokeAUDxLCH(uint16_t value);
