@@ -200,6 +200,9 @@ public:
     int16_t dmaStopLores;
     int16_t dmaStopHires;
 
+    bool inLoresDmaArea(int16_t pos) { return pos >= dmaStrtLores && pos < dmaStopLores; }
+    bool inHiresDmaArea(int16_t pos) { return pos >= dmaStrtHires && pos < dmaStopHires; }
+
     /* The bitplane DMA cycle window.
      *     dmaStrt is the first cycle of the first fetch unit
      *     dmaStop is the last cycle of the last fetch unit

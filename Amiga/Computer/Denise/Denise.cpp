@@ -675,7 +675,7 @@ Denise::drawBorder()
     rasterline[FIRST_VISIBLE] = 64;
     rasterline[2 * 0x18] = 65;
     int16_t vpos = agnus->vpos;
-    bool lines = vpos == 26 || vpos == 0x50 || vpos == 276 || vpos == 255;
+    bool lines = vpos == 200; // vpos == 26 || vpos == 0x50 || vpos == 276 || vpos == 255;
     if (lines) for (int i = FIRST_VISIBLE + 40; i <= LAST_VISIBLE / 2; rasterline[i++] = 64);
 #endif
 }

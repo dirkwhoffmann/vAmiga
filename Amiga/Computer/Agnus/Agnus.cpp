@@ -551,12 +551,23 @@ Agnus::allocateBplSlots(int bpu, bool hires, int first, int last)
     assert(bpu >= 0 && bpu <= 6);
     assert(hires == 0 || hires == 1);
 
-    if (first < 0x18 || first > 0xDF) return;
-    if (last < 0x18 || last > 0xDF) return;
+    // if (first < 0x18 || first > 0xDF) return;
+    // if (last < 0x18 || last > 0xDF) return;
 
     // Update events
+    /*
     for (unsigned i = first; i <= last; i++) {
         dmaEvent[i] = bitplaneDMA[hires][bpu][i];
+    }
+    */
+    if (hires) {
+        for (unsigned i = first; i <= last; i++) {
+            dmaEvent[i] = inHiresDmaArea(i) ? bitplaneDMA[1][bpu][i] : EVENT_NONE;
+        }
+    } else {
+        for (unsigned i = first; i <= last; i++) {
+            dmaEvent[i] = inLoresDmaArea(i) ? bitplaneDMA[0][bpu][i] : EVENT_NONE;
+        }
     }
 
     // Update jump table
@@ -566,12 +577,14 @@ Agnus::allocateBplSlots(int bpu, bool hires, int first, int last)
 void
 Agnus::allocateBplSlots(int bpu, bool hires, int first)
 {
-    // allocateBplSlots(bpu, hires, MAX(first, dmaStrt), dmaStop);
+    allocateBplSlots(bpu, hires, first, HPOS_MAX);
+    /*
     if (hires) {
         allocateBplSlots(bpu, hires, MAX(first, dmaStrtHires), dmaStopHires - 1);
     } else {
         allocateBplSlots(bpu, hires, MAX(first, dmaStrtLores), dmaStopLores - 1);
     }
+    */
 }
 
 void
@@ -787,7 +800,6 @@ Agnus::switchBitplaneDmaOff()
 
     // Clear the event table
     for (int i = 0x18; i < HPOS_CNT; dmaEvent[i++] = (EventID)0);
-
     updateJumpTable();
 
     dmaFirstBpl1Event = 0;
@@ -803,12 +815,6 @@ Agnus::updateBitplaneDma()
 
     // Determine if bitplane DMA has to be on or off
     bool bplDma = inBplDmaArea();
-    /*
-    vFlop &&                                        // Vertical DIW flop set
-    denise->bplconBPU() &&                          // at least one bitplane
-    vpos >= bplVstrt && vpos < bplVstop &&       // DEPRECATED
-    (dmacon & (DMAEN | BPLEN)) == (DMAEN | BPLEN);  // DMA is enabled
-    */
 
     // Update the event table accordingly
     bplDma ? switchBitplaneDmaOn() : switchBitplaneDmaOff();
@@ -1148,7 +1154,7 @@ Agnus::peekVHPOSR()
     // V7 V6 V5 V4 V3 V2 V1 V0 H8 H7 H6 H5 H4 H3 H2 H1
     uint16_t result = BEAM(vpos, hpos) & 0xFFFF;
 
-    debug(BPL_DEBUG, "peekVHPOSR() = %X\n", result);
+    // debug(BPL_DEBUG, "peekVHPOSR() = %X\n", result);
     return result;
 }
 
