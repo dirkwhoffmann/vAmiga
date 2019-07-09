@@ -300,13 +300,15 @@ public:
     uint16_t ddfstrt;
     uint16_t ddfstop;
 
-    /* The value of DDFSTRT that was used to compute the starting position
-     * of the data fetch window in the current rasterline. Under normal
-     * circumstances, the value of this variable matched ddfstart. It only
-     * differs if register DDFSTRT has been written to after the data fetch
-     * window has already opened.
+    /* The most recent values written to DDFSTRT and DDFSTOP.
+     * When pokeDDSTRT() or pokeDDFSTOP() is called, variables ddfstrt and
+     * ddfstop are not updated immediately. Instead, these variables are set.
+     * Furthermore, an action flag is set that causes the hsync handler to
+     * transfer the values into ddfstrt and ddfstop at the end of the current
+     * rasterline.
      */
-     uint16_t usedValueOfddfstrt;
+    uint16_t ddfstrtPoked;
+    uint16_t ddfstopPoked;
 
     // The audio DMA pointers
     uint32_t audlc[4];

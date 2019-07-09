@@ -55,6 +55,8 @@ Agnus::Agnus()
         { &diwstop,              sizeof(diwstop),              0 },
         { &ddfstrt,              sizeof(ddfstrt),              0 },
         { &ddfstop,              sizeof(ddfstop),              0 },
+        { &ddfstrtPoked,         sizeof(ddfstrtPoked),         0 },
+        { &ddfstopPoked,         sizeof(ddfstopPoked),         0 },
         { &audlc,                sizeof(audlc),                DWORD_ARRAY },
         { &audlcold,             sizeof(audlcold),             DWORD_ARRAY },
         { &bplpt,                sizeof(bplpt),                DWORD_ARRAY },
@@ -1274,24 +1276,18 @@ Agnus::pokeDDFSTRT(uint16_t value)
     // 15 13 12 11 10 09 08 07 06 05 04 03 02 01 00
     // -- -- -- -- -- -- -- H8 H7 H6 H5 H4 H3 -- --
 
-    ddfstrt = value & 0xFC;
+    // Force the hsync handler to recompute the data fetch window.
+    ddfstrtPoked = value & 0xFC;
+    hsyncActions |= HSYNC_COMPUTE_DDF_WINDOW;
 
-    // Compute the data fetch window
-    // computeDDFWindow();
-
-    // Check if the change takes effect in the current rasterline
+    // Check if the change affects the current rasterline as well
     if (hpos <= dmaStrtLores - 2) {
 
-        // Recompute the data fetch window based on the new values
+        ddfstrt = ddfstrtPoked;
         computeDDFWindow();
         updateBitplaneDma();
         scheduleNextBplEvent();
-        usedValueOfddfstrt = ddfstrt;
     }
-
-    // Let the hsync handler compute the final data fetch window for all
-    // consecutive rasterlines.
-    hsyncActions |= HSYNC_COMPUTE_DDF_WINDOW;
 }
 
 void
@@ -1302,21 +1298,18 @@ Agnus::pokeDDFSTOP(uint16_t value)
     // 15 13 12 11 10 09 08 07 06 05 04 03 02 01 00
     // -- -- -- -- -- -- -- H8 H7 H6 H5 H4 H3 -- --
 
-    ddfstop = value & 0xFC;
+    // Force the hsync handler to recompute the data fetch window.
+    ddfstopPoked = value & 0xFC;
+    hsyncActions |= HSYNC_COMPUTE_DDF_WINDOW;
 
-    // Check if the change takes effect immediataly
+    // Check if the change affects the current rasterline as well.
     if (hpos <= dmaStopLores - 2) {
 
-        // Recompute the data fetch window based on the new ddfstop value
-        // and the ddfstrt value as it was when the window opened.
-        computeDDFWindow(usedValueOfddfstrt, ddfstop);
+        ddfstop = ddfstopPoked;
+        computeDDFWindow();
         updateBitplaneDma();
         scheduleNextBplEvent();
     }
-
-    // Let the hsync handler compute the final data fetch window for all
-    // consecutive rasterlines.
-    hsyncActions |= HSYNC_COMPUTE_DDF_WINDOW;
 }
 
 void
@@ -1619,10 +1612,6 @@ Agnus::hsyncHandler()
     hFlopOn = diwHstrt;
     hFlopOff = diwHstop;
 
-    // Experimental
-    usedValueOfddfstrt = ddfstrt;
-
-
     //
     // Process pending work items
     //
@@ -1631,10 +1620,9 @@ Agnus::hsyncHandler()
 
         if (hsyncActions & HSYNC_COMPUTE_DDF_WINDOW) {
 
-            /* Compute the data fetch window parameters based on the current
-             * values of ddfstrt and ddfstop and update the bitplane DMA
-             * allocation table accordingly.
-             */
+            // Update ddfstrt and ddfstop and recompute the data fetch window
+            ddfstrt = ddfstrtPoked;
+            ddfstop = ddfstopPoked;
             computeDDFWindow();
             updateBitplaneDma();
         }
