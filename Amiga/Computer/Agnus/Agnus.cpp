@@ -1272,37 +1272,19 @@ Agnus::pokeDDFSTRT(uint16_t value)
     // 15 13 12 11 10 09 08 07 06 05 04 03 02 01 00
     // -- -- -- -- -- -- -- H8 H7 H6 H5 H4 H3 -- --
 
-    /*
-    ddfstrtPoked = value & 0xFC;
-    hsyncActions |= HSYNC_COMPUTE_DDF_WINDOW;
-
-    // Check if the change affects the current rasterline as well
-    if (hpos <= dmaStrtLores - 2) {
-
-        ddfstrt = ddfstrtPoked;
-        computeDDFWindow();
-        updateBitplaneDma();
-        scheduleNextBplEvent();
-    }
-    */
-
     ddfstrt = value & 0xFC;
 
-    int16_t oldStrt = denise->hires() ? dmaStrtHires : dmaStrtLores;
+    // Let the hsync handler recompute the data fetch window
+    hsyncActions |= HSYNC_COMPUTE_DDF_WINDOW;
 
+    // Check if the modification also affects the current rasterline
+    int16_t oldStrt = denise->hires() ? dmaStrtHires : dmaStrtLores;
     if (hpos <= oldStrt - 2) {
 
-        // Compute the actual start position immediately
         computeDDFStrt();
         updateBitplaneDma();
         scheduleNextBplEvent();
-
-    } else {
-
-        // Let the hsync handler do the computation
-        hsyncActions |= HSYNC_COMPUTE_DDF_WINDOW;
     }
-    hsyncActions |= HSYNC_COMPUTE_DDF_WINDOW;
 }
 
 void
@@ -1313,37 +1295,19 @@ Agnus::pokeDDFSTOP(uint16_t value)
     // 15 13 12 11 10 09 08 07 06 05 04 03 02 01 00
     // -- -- -- -- -- -- -- H8 H7 H6 H5 H4 H3 -- --
 
-    /*
-    ddfstopPoked = value & 0xFC;
-    hsyncActions |= HSYNC_COMPUTE_DDF_WINDOW;
-
-    // Check if the change affects the current rasterline as well.
-    if (hpos <= dmaStopLores - 2) {
-
-        ddfstop = ddfstopPoked;
-        computeDDFWindow();
-        updateBitplaneDma();
-        scheduleNextBplEvent();
-    }
-    */
-
     ddfstop = value & 0xFC;
 
-    int16_t oldStop = denise->hires() ? dmaStopHires : dmaStopLores;
+    // Let the hsync handler recompute the data fetch window
+    hsyncActions |= HSYNC_COMPUTE_DDF_WINDOW;
 
+    // Check if the modification also affects the current rasterline
+    int16_t oldStop = denise->hires() ? dmaStopHires : dmaStopLores;
     if (hpos <= oldStop - 2) {
 
-        // Compute the actual stop position immediately
         computeDDFStop();
         updateBitplaneDma();
         scheduleNextBplEvent();
-
-    } else {
-
-        // Let the hsync handler do the computation
-        hsyncActions |= HSYNC_COMPUTE_DDF_WINDOW;
     }
-    hsyncActions |= HSYNC_COMPUTE_DDF_WINDOW;
 }
 
 void
@@ -1404,10 +1368,9 @@ Agnus::computeDDFStrt()
 
     // Align ddfstrt to the next possible fetch unit start
     dmaStrtHires = strt;
-    dmaStrtLores = strt + (strt & 0b100);
-    dmaStrtLoresShift = dmaStrtLores - strt;
+    dmaStrtLoresShift = strt & 0b100;
+    dmaStrtLores = strt + dmaStrtLoresShift;
 
-    assert(dmaStrtLores == ((strt + 4) & ~7));
     assert(dmaStrtLoresShift == 0 || dmaStrtLoresShift == 4);
 }
 
@@ -1418,14 +1381,22 @@ Agnus::computeDDFStop()
     int16_t stop = MIN(ddfstop, 0xD8);
 
     // Compute the number of fetch units
-    int numUnitsLores = (((stop - strt) +  7) >> 3) + 1;
-    int numUnitsHires = (((stop - strt) + 15) >> 3) * 2;
+    int fetchUnits = ((stop - strt) + 15) >> 3;
 
-    assert(numUnitsLores == ((stop - strt) + 15) >> 3);
+    // Compute the end of the DMA window
+    dmaStopLores = MIN(dmaStrtLores + 8 * fetchUnits, 0xE0);
+    dmaStopHires = MIN(dmaStrtHires + 8 * fetchUnits, 0xE0);
+
+    /*
+    // Compute the number of fetch units
+    int numUnitsLores = (((stop - strt) + 15) >> 3);
+    int numUnitsHires = (((stop - strt) + 15) >> 3) * 2;
+    assert(numUnitsLores == (((stop - strt) +  7) >> 3) + 1);
 
     // Compute the end of the DMA window
     dmaStopLores = MIN(dmaStrtLores + 8 * numUnitsLores, 0xE0);
     dmaStopHires = MIN(dmaStrtHires + 4 * numUnitsHires, 0xE0);
+    */
 }
 
 template <int x> void
@@ -1703,18 +1674,15 @@ Agnus::hsyncHandler()
 
         if (hsyncActions & HSYNC_COMPUTE_DDF_WINDOW) {
 
-            // Update ddfstrt and ddfstop and recompute the data fetch window
+            // Update the display data fetch window
             computeDDFStrt();
             computeDDFStop();
-            // ddfstrt = ddfstrtPoked;
-            // ddfstop = ddfstopPoked;
-            // computeDDFWindow();
             hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
         }
 
         if (hsyncActions & HSYNC_UPDATE_EVENT_TABLE) {
 
-            // Update the bitplane DMA allocation table.
+            // Update the bitplane DMA allocation table
             updateBitplaneDma();
         }
 
