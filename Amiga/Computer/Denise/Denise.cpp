@@ -160,7 +160,7 @@ Denise::_inspect()
          */
         uint16_t pos = info.sprite[i].pos;
         uint16_t ctl = info.sprite[i].ctl;
-
+        info.sprite[i].ptr = agnus->sprpt[i]; 
         info.sprite[i].hstrt = ((pos & 0x00FF) << 1) | (ctl & 0b001);
         info.sprite[i].vstrt = ((pos & 0xFF00) >> 8) | ((ctl & 0b100) << 6);
         info.sprite[i].vstop = ((ctl & 0xFF00) >> 8) | ((ctl & 0b010) << 7);
