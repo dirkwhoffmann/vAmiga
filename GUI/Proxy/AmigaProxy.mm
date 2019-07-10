@@ -310,7 +310,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 - (void) pokeCustom16:(NSInteger)addr value:(NSInteger)value
 {
-    wrapper->mem->pokeCustom16((uint32_t)addr, value);
+    wrapper->mem->pokeCustom16<POKE_CPU>((uint32_t)addr, value);
 }
 - (NSString *) ascii:(NSInteger)addr
 {

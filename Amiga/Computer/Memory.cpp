@@ -591,7 +591,7 @@ Memory::poke16(uint32_t addr, uint16_t value)
         case MEM_CIA:      ASSERT_CIA_ADDR(addr);  pokeCIA16(addr, value); break;
         case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); WRITE_SLOW_16(addr, value); break;
         case MEM_RTC:      ASSERT_RTC_ADDR(addr);  pokeRTC16(addr, value);;
-        case MEM_OCS:      ASSERT_OCS_ADDR(addr);  pokeCustom16(addr, value); break;
+        case MEM_OCS:      ASSERT_OCS_ADDR(addr);  pokeCustom16<POKE_CPU>(addr, value); break;
         case MEM_AUTOCONF: ASSERT_AUTO_ADDR(addr); pokeAutoConf16(addr, value); break;
         case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); pokeBoot16(addr, value); break;
         case MEM_KICK:     ASSERT_KICK_ADDR(addr); pokeKick16(addr, value); break;
@@ -922,10 +922,10 @@ Memory::pokeCustom8(uint32_t addr, uint8_t value)
      *  writes same value to upper and lower byte."
      *     [http://eab.abime.net/showthread.php?p=1156399]
      */
-    pokeCustom16(addr & 0x1FE, HI_LO(value, value));
+    pokeCustom16<POKE_CPU>(addr & 0x1FE, HI_LO(value, value));
 }
 
-void
+template <PokeSource s> void
 Memory::pokeCustom16(uint32_t addr, uint16_t value)
 {
     // if (addr >= 0x180 && addr <= 0x1BE) debug("Poke Color reg %X\n", addr);
@@ -1154,9 +1154,9 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x106 >> 1: // Unused
             break;
         case 0x108 >> 1: // BPL1MOD
-            agnus->pokeBPL1MOD(value); return;
+            agnus->pokeBPL1MOD<s>(value); return;
         case 0x10A >> 1: // BPL2MOD
-            agnus->pokeBPL2MOD(value); return;
+            agnus->pokeBPL2MOD<s>(value); return;
         case 0x10C >> 1: // Unused
         case 0x10E >> 1: // Unused
             break;
@@ -1352,8 +1352,8 @@ void
 Memory::pokeCustom32(uint32_t addr, uint32_t value)
 {
     assert(false);
-    pokeCustom16(addr,     HI_WORD(value));
-    pokeCustom16(addr + 2, LO_WORD(value));
+    pokeCustom16<POKE_CPU>(addr,     HI_WORD(value));
+    pokeCustom16<POKE_CPU>(addr + 2, LO_WORD(value));
 }
 
 uint8_t
@@ -1469,3 +1469,6 @@ Memory::hex(uint32_t addr, size_t bytes)
     hex(str, addr, bytes, sizeof(str));
     return str;
 }
+
+template void Memory::pokeCustom16<POKE_CPU>(uint32_t addr, uint16_t value);
+template void Memory::pokeCustom16<POKE_COPPER>(uint32_t addr, uint16_t value);

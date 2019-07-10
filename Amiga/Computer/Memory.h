@@ -386,7 +386,7 @@ class Memory : public HardwareComponent {
     uint32_t spypeekCustom32(uint32_t addr);
     
     void pokeCustom8(uint32_t addr, uint8_t value);
-    void pokeCustom16(uint32_t addr, uint16_t value);
+    template <PokeSource s> void pokeCustom16(uint32_t addr, uint16_t value);
     void pokeCustom32(uint32_t addr, uint32_t value);
     
     //

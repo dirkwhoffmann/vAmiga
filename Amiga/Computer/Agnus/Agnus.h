@@ -689,8 +689,8 @@ public:
     template <int x> void pokeBPLxPTL(uint16_t value);
     
     // BPL1MOD, BPL2MOD
-    void pokeBPL1MOD(uint16_t value);
-    void pokeBPL2MOD(uint16_t value);
+    template <PokeSource s> void pokeBPL1MOD(uint16_t value);
+    template <PokeSource s> void pokeBPL2MOD(uint16_t value);
     void setBPL1MOD(uint16_t value);
     void setBPL2MOD(uint16_t value);
 

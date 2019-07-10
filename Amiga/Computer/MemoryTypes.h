@@ -39,7 +39,17 @@ typedef enum
 {
     POKE_CPU,
     POKE_COPPER,
+    POKE_SOURCE_COUNT
 }
 PokeSource;
+
+static inline bool isPokeSource(long value) { return value >= 0 && value < POKE_SOURCE_COUNT; }
+
+inline const char *pokeSourceName(PokeSource source)
+{
+    return
+    source == POKE_CPU ? "CPU" :
+    source == POKE_COPPER ? "Copper" : "???";
+}
 
 #endif

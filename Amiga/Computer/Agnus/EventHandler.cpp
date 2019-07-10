@@ -828,6 +828,10 @@ Agnus::scheduleRegEvent(Cycle cycle, EventID id, int64_t data)
      * can choose any of them as long as it is free). Alternatively, we could
      * add seperate event slots for each OCS register. However, this would blow
      * up the size of the secondary table and might therefore be a bad idea.
+     *
+     * Update: Since we moved up the priority of REG_COP_SLOT and REG_CPU_SLOT,
+     * such a write conflict should no longer happen.
+     * TODO: Add assertions to check this.
      */
     switch (s) {
 
