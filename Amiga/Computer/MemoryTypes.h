@@ -32,4 +32,14 @@ typedef enum
 }
 MemorySource;
 
+/* Poke source.
+ * Some poke methods need to know who called them.
+ */
+typedef enum
+{
+    POKE_CPU,
+    POKE_COPPER,
+}
+PokeSource;
+
 #endif

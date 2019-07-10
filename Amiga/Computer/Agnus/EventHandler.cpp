@@ -813,8 +813,8 @@ Agnus::serveINSEvent()
     rescheduleRel<INSPECTOR_SLOT>((Cycle)(inspectionInterval * 28000000));
 }
 
-void
-Agnus::scheduleRegEvent(EventSlot slot, Cycle cycle, EventID id, int64_t data)
+template <EventSlot s> void
+Agnus::scheduleRegEvent(Cycle cycle, EventID id, int64_t data)
 {
     /* Here is the thing: A Copper write can occur every fourth cycle and
      * most writes are delayed by four cycles as well. Hence, this function
@@ -829,12 +829,12 @@ Agnus::scheduleRegEvent(EventSlot slot, Cycle cycle, EventID id, int64_t data)
      * add seperate event slots for each OCS register. However, this would blow
      * up the size of the secondary table and might therefore be a bad idea.
      */
-    switch (slot) {
+    switch (s) {
 
         case REG_COP_SLOT:
             if (hasEvent<REG_COP_SLOT>()) {
                 assert(isDue<REG_COP_SLOT>(amiga->masterClock));
-                serviceREGEvent(slot);
+                serviceREGEvent(s);
             }
             scheduleRel<REG_COP_SLOT>(cycle, id, data);
             break;
@@ -842,7 +842,7 @@ Agnus::scheduleRegEvent(EventSlot slot, Cycle cycle, EventID id, int64_t data)
         case REG_CPU_SLOT:
             if (hasEvent<REG_CPU_SLOT>()) {
                 assert(isDue<REG_CPU_SLOT>(amiga->masterClock));
-                serviceREGEvent(slot);
+                serviceREGEvent(s);
             }
             scheduleRel<REG_CPU_SLOT>(cycle, id, data);
             break;
@@ -936,3 +936,6 @@ Agnus::checkTriggeredEvent(EventSlot s)
     
     return true;
 }
+
+template void Agnus::scheduleRegEvent<REG_CPU_SLOT>(Cycle cycle, EventID id, int64_t data);
+template void Agnus::scheduleRegEvent<REG_COP_SLOT>(Cycle cycle, EventID id, int64_t data);

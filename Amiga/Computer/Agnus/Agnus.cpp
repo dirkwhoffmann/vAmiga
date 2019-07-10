@@ -1181,7 +1181,7 @@ Agnus::pokeDIWSTRT(uint16_t value)
     // Simulate a 4 cycle delay
     // TODO: Pass a boolean flag `cpu` that shows who writes to the register.
     // Depending on this variable, schedule in REG_CPU_SLOT or REG_COP_SLOT.
-    scheduleRegEvent(REG_COP_SLOT, DMA_CYCLES(4), REG_DIWSTRT, (int64_t)value);
+    scheduleRegEvent<REG_COP_SLOT>(DMA_CYCLES(4), REG_DIWSTRT, (int64_t)value);
 }
 
 void
@@ -1192,7 +1192,7 @@ Agnus::pokeDIWSTOP(uint16_t value)
     // Simulate a 4 cycle delay
     // TODO: Pass a boolean flag `cpu` that shows who writes to the register.
     // Depending on this variable, schedule in REG_CPU_SLOT or REG_COP_SLOT.
-    scheduleRegEvent(REG_COP_SLOT, DMA_CYCLES(4), REG_DIWSTOP, (int64_t)value);
+    scheduleRegEvent<REG_COP_SLOT>(DMA_CYCLES(4), REG_DIWSTOP, (int64_t)value);
 }
 
 void
@@ -1371,7 +1371,7 @@ Agnus::pokeBPL1MOD(uint16_t value)
     // Simulate delay
     // TODO: Pass a boolean flag `cpu` that shows who writes to the register.
     // Depending on this variable, schedule in REG_CPU_SLOT or REG_COP_SLOT.
-    scheduleRegEvent(REG_COP_SLOT, DMA_CYCLES(2), REG_BPL1MOD, (int64_t)value);
+    scheduleRegEvent<REG_COP_SLOT>(DMA_CYCLES(2), REG_BPL1MOD, (int64_t)value);
 }
 
 void
@@ -1382,7 +1382,7 @@ Agnus::pokeBPL2MOD(uint16_t value)
     // Simulate delay
     // TODO: Pass a boolean flag `cpu` that shows who writes to the register.
     // Depending on this variable, schedule in REG_CPU_SLOT or REG_COP_SLOT.
-    scheduleRegEvent(REG_COP_SLOT, DMA_CYCLES(2), REG_BPL2MOD, (int64_t)value);
+    scheduleRegEvent<REG_COP_SLOT>(DMA_CYCLES(2), REG_BPL2MOD, (int64_t)value);
 }
 
 void

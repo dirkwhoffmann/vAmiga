@@ -182,7 +182,7 @@ void cancel(EventSlot s)
 }
 
 // Schedules a register write event
-void scheduleRegEvent(EventSlot slot, Cycle cycle, EventID id, int64_t data);
+template<EventSlot s> void scheduleRegEvent(Cycle cycle, EventID id, int64_t data);
 
 
 //
