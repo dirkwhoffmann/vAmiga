@@ -1173,26 +1173,42 @@ Agnus::pokeVPOS(uint16_t value)
     // Don't know what to do here ...
 }
 
-void
+template <PokeSource s> void
 Agnus::pokeDIWSTRT(uint16_t value)
 {
-    debug(BPL_DEBUG, "pokeDIWSTRT(%X)\n", value);
+    debug(BPL_DEBUG, "pokeDIWSTRT<%s>(%X)\n", pokeSourceName(s), value);
 
-    // Simulate a 4 cycle delay
-    // TODO: Pass a boolean flag `cpu` that shows who writes to the register.
-    // Depending on this variable, schedule in REG_CPU_SLOT or REG_COP_SLOT.
-    scheduleRegEvent<REG_COP_SLOT>(DMA_CYCLES(4), REG_DIWSTRT, (int64_t)value);
+    switch (s) {
+        case POKE_CPU:
+            scheduleRegEvent<REG_CPU_SLOT>(DMA_CYCLES(2), REG_DIWSTRT, (int64_t)value);
+            break;
+
+        case POKE_COPPER:
+            scheduleRegEvent<REG_COP_SLOT>(DMA_CYCLES(2), REG_DIWSTRT, (int64_t)value);
+            break;
+
+        default:
+            assert(false);
+    }
 }
 
-void
+template <PokeSource s> void
 Agnus::pokeDIWSTOP(uint16_t value)
 {
-    debug(BPL_DEBUG, "pokeDIWSTOP(%X)\n", value);
+    debug(BPL_DEBUG, "pokeDIWSTOP<%s>(%X)\n", pokeSourceName(s), value);
 
-    // Simulate a 4 cycle delay
-    // TODO: Pass a boolean flag `cpu` that shows who writes to the register.
-    // Depending on this variable, schedule in REG_CPU_SLOT or REG_COP_SLOT.
-    scheduleRegEvent<REG_COP_SLOT>(DMA_CYCLES(4), REG_DIWSTOP, (int64_t)value);
+    switch (s) {
+        case POKE_CPU:
+            scheduleRegEvent<REG_CPU_SLOT>(DMA_CYCLES(2), REG_DIWSTOP, (int64_t)value);
+            break;
+
+        case POKE_COPPER:
+            scheduleRegEvent<REG_COP_SLOT>(DMA_CYCLES(2), REG_DIWSTOP, (int64_t)value);
+            break;
+
+        default:
+            assert(false);
+    }
 }
 
 void
@@ -1387,7 +1403,6 @@ Agnus::pokeBPL2MOD(uint16_t value)
 {
     debug(BPL_DEBUG, "pokeBPL2MOD<%s>(%X)\n", pokeSourceName(s), value);
 
-    // Simulate delay
     switch (s) {
         case POKE_CPU:
             scheduleRegEvent<REG_CPU_SLOT>(DMA_CYCLES(2), REG_BPL2MOD, (int64_t)value);
@@ -1793,6 +1808,11 @@ template uint16_t Agnus::doBitplaneDMA<2>();
 template uint16_t Agnus::doBitplaneDMA<3>();
 template uint16_t Agnus::doBitplaneDMA<4>();
 template uint16_t Agnus::doBitplaneDMA<5>();
+
+template void Agnus::pokeDIWSTRT<POKE_CPU>(uint16_t value);
+template void Agnus::pokeDIWSTRT<POKE_COPPER>(uint16_t value);
+template void Agnus::pokeDIWSTOP<POKE_CPU>(uint16_t value);
+template void Agnus::pokeDIWSTOP<POKE_COPPER>(uint16_t value);
 
 template void Agnus::pokeBPL1MOD<POKE_CPU>(uint16_t value);
 template void Agnus::pokeBPL1MOD<POKE_COPPER>(uint16_t value);

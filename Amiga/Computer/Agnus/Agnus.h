@@ -667,8 +667,8 @@ public:
     void pokeVPOS(uint16_t value);
     
     // DIWSTRT, DIWSTOP
-    void pokeDIWSTRT(uint16_t value);
-    void pokeDIWSTOP(uint16_t value);
+    template <PokeSource s> void pokeDIWSTRT(uint16_t value);
+    template <PokeSource s> void pokeDIWSTOP(uint16_t value);
     void setDIWSTRT(uint16_t value);
     void setDIWSTOP(uint16_t value);
 

@@ -1036,9 +1036,9 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x08C >> 1: // COPINS
             copper->pokeCOPINS(value); return;
         case 0x08E >> 1: // DIWSTRT
-            agnus->pokeDIWSTRT(value); return;
+            agnus->pokeDIWSTRT<s>(value); return;
         case 0x090 >> 1: // DIWSTOP
-            agnus->pokeDIWSTOP(value); return;
+            agnus->pokeDIWSTOP<s>(value); return;
         case 0x092 >> 1: // DDFSTRT
             agnus->pokeDDFSTRT(value); return;
         case 0x094 >> 1: // DDFSTOP
