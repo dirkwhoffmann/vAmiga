@@ -324,17 +324,6 @@ public:
     bool inHiresDmaArea(int16_t pos) { return pos >= dmaStrtHires && pos < dmaStopHires; }
 
 
-    /* The most recent values written to DDFSTRT and DDFSTOP.
-     * When pokeDDSTRT() or pokeDDFSTOP() is called, variables ddfstrt and
-     * ddfstop are not updated immediately. Instead, these variables are set.
-     * Furthermore, an action flag is set that causes the hsync handler to
-     * transfer the values into ddfstrt and ddfstop at the end of the current
-     * rasterline.
-     */
-    uint16_t ddfstrtPoked; // DEPRECATED
-    uint16_t ddfstopPoked; // DEPRECATED
-
-
     //
     // Registers
     //
