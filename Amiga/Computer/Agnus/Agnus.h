@@ -189,20 +189,6 @@ public:
     // The long frame flipflop
     bool lof;
 
-    /* The bitplane DMA window.
-     *     dmaStrtLores is the first lores bitplane DMA cycle
-     *     dmaStrtHires is the first hires bitplane DMA cycle
-     *     dmaStopLores is the last lores bitplane DMA cycle + 1
-     *     dmaStopHires is the last hires bitplane DMA cycle + 1
-     */
-    int16_t dmaStrtLores;
-    int16_t dmaStrtHires;
-    int16_t dmaStopLores;
-    int16_t dmaStopHires;
-
-    bool inLoresDmaArea(int16_t pos) { return pos >= dmaStrtLores && pos < dmaStopLores; }
-    bool inHiresDmaArea(int16_t pos) { return pos >= dmaStrtHires && pos < dmaStopHires; }
-
     /* The vertical trigger positions of all 8 sprites.
      * Note: The horizontal trigger positions are stored inside Denise. Agnus
      * knows nothing about them.
@@ -299,9 +285,11 @@ public:
      *
      * 1. The four-pixel resolution is achieved by ignoring the two lower bits
      *    in DDFSTRT and DDFSTOP.
-     * 2. The actual DMA start position depends solely on DDFSTRT. It is
-     *    computed by aligning DDFSTRT to the next DMA cycle that is dividable
-     *    by 8.
+     * 2. The actual DMA start position depends solely on DDFSTRT. In hires
+     *    mode, the start position always matches DDFSTRT. In lores mode, it
+     *    matches DDFSTRT only if DDFSTRT is dividable by 8. Otherwise, the
+     *    value is rounded up to the next position dividable by eight (because
+     *    the lower two bits are always 0, this is equivalent to adding 4).
      * 3. The actual DMA stop position depends on both DDFSTRT and DDFSTOP.
      *    Hence, if DDFSTRT changes, the stop position needs to be recomputed
      *    even if DDFSTOP hasn't changed at all.
@@ -323,6 +311,18 @@ public:
     uint16_t ddfstrt;
     uint16_t ddfstop;
 
+    // The actual data fetch window
+    int16_t dmaStrtLores; // First lores bitplane DMA cycle
+    int16_t dmaStrtHires; // First hires bitplane DMA cycle
+    int16_t dmaStopLores; // Last lores bitplane DMA cycle + 1
+    int16_t dmaStopHires; // Last hires bitplane DMA cycle + 1
+
+    // Difference between dmaStrtLores and ddfstrt (either 0 or 4)
+    int16_t dmaStrtLoresShift;
+
+    bool inLoresDmaArea(int16_t pos) { return pos >= dmaStrtLores && pos < dmaStopLores; }
+    bool inHiresDmaArea(int16_t pos) { return pos >= dmaStrtHires && pos < dmaStopHires; }
+
 
     /* The most recent values written to DDFSTRT and DDFSTOP.
      * When pokeDDSTRT() or pokeDDFSTOP() is called, variables ddfstrt and
@@ -331,9 +331,8 @@ public:
      * transfer the values into ddfstrt and ddfstop at the end of the current
      * rasterline.
      */
-    uint16_t ddfstrtPoked;
-    uint16_t ddfstopPoked;
-
+    uint16_t ddfstrtPoked; // DEPRECATED
+    uint16_t ddfstopPoked; // DEPRECATED
 
 
     //
@@ -687,8 +686,13 @@ public:
     // DDFSTRT, DDFSTOP
     void pokeDDFSTRT(uint16_t value);
     void pokeDDFSTOP(uint16_t value);
-    void computeDDFWindow(uint16_t ddfstrt, uint16_t ddfstop);
-    void computeDDFWindow() { computeDDFWindow(ddfstrt, ddfstop); }
+
+    // Computes the data fetch start and stop out of the  window out
+    void computeDDFStrt();
+    void computeDDFStop();
+
+    void computeDDFWindow(uint16_t ddfstrt, uint16_t ddfstop); // DEPRECATED
+    void computeDDFWindow() { computeDDFWindow(ddfstrt, ddfstop); } // DEPRECATED
 
     // AUDxLCL, AUDxLCL
     // template <int x> void pokeAUDxLCH(uint16_t value);

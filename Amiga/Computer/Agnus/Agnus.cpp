@@ -1316,14 +1316,35 @@ Agnus::computeDDFWindow(uint16_t ddfstrt, uint16_t ddfstop)
     int16_t stop = MIN(ddfstop, 0xD8);
 
     // Compute the beginning of the DMA window
-    dmaStrtLores = (strt + 4) & ~7;
     dmaStrtHires = (strt + 2) & ~3;
+    dmaStrtLores = (strt + 4) & ~7;
+    dmaStrtLoresShift = dmaStrtLores - strt;
+
+    assert(dmaStrtHires == strt);
+    assert(dmaStrtLoresShift == 0 || dmaStrtLoresShift == 4);
 
     // debug("ddfstrt = %X ddfstop = %X\n", ddfstrt, ddfstop);
 
     // Compute the number of fetch units
-    int numUnitsLores = (((stop - strt) +  7) >> 3) + 1;
+    // int numUnitsLoresNew = (((stop - dmaStrtLores) +  7) >> 3) + 1;
+    // int numUnitsHiresNew = (((stop - dmaStrtHires) + 15) >> 3) * 2;
+
+    int numUnitsLores = (((stop - strt) + 7) >> 3) + 1;
     int numUnitsHires = (((stop - strt) + 15) >> 3) * 2;
+    int numUnitsHiresNew = ((((stop - strt) + 7) >> 3) + 1) * 2;
+
+    assert(numUnitsHiresNew == numUnitsHires);
+    /*
+    if (numUnitsLoresNew != numUnitsLores) {
+        debug("strt = $%X (%d) stop = $%X (%d)\n", strt, strt, stop, stop);
+        debug("numUnitsLores = %d numUnitsLoresNew = %d\n", numUnitsLores, numUnitsLoresNew);
+        debug("dmaStrtLores = $%X (%d)\n", dmaStrtLores, dmaStrtLores);
+        assert(false);
+    }
+    */
+
+    // assert(numUnitsLoresNew == numUnitsLores);
+    // assert(numUnitsHiresNew == numUnitsHires);
 
     int numUnitsHires2 = (((stop - strt) + 15) >> 2) & ~1; // Winfellow
     assert(numUnitsHires == numUnitsHires2);
@@ -1332,13 +1353,41 @@ Agnus::computeDDFWindow(uint16_t ddfstrt, uint16_t ddfstop)
     dmaStopLores = MIN(dmaStrtLores + 8 * numUnitsLores, 0xE0);
     dmaStopHires = MIN(dmaStrtHires + 4 * numUnitsHires, 0xE0);
 
-    if (dmaStopLores > 0xE0 || dmaStopHires > 0xE0) {
-        debug("strt = $%X (%d) stop = $%X (%d)\n", strt, strt, stop, stop);
-        debug("numUnitsLores = %d numUnitsHires = %d\n", numUnitsLores, numUnitsHires);
-        debug("dmaStopLores = $%X (%d) dmaStopHires = $%X (%d)\n",
-              dmaStopLores, dmaStopLores, dmaStopHires, dmaStopHires);
-        assert(false);
-    }
+    int16_t dmaStrtLoresOld = dmaStrtLores;
+    int16_t dmaStrtHiresOld = dmaStrtHires;
+    assert(dmaStrtLoresOld == dmaStrtLores);
+    assert(dmaStrtHiresOld == dmaStrtHires);
+}
+
+void
+Agnus::computeDDFStrt()
+{
+    int16_t strt = ddfstrt;
+
+    // Align ddfstrt to the next possible fetch unit start
+    dmaStrtHires = strt;
+    dmaStrtLores = strt + (strt & 0b100);
+    dmaStrtLoresShift = dmaStrtLores - strt;
+
+    assert(dmaStrtLores == ((strt + 4) & ~7));
+    assert(dmaStrtLoresShift == 0 || dmaStrtLoresShift == 4);
+}
+
+void
+Agnus::computeDDFStop()
+{
+    int16_t strt = dmaStrtLores - dmaStrtLoresShift;
+    int16_t stop = MIN(ddfstop, 0xD8);
+
+    // Compute the number of fetch units
+    int numUnitsLores = (((stop - strt) +  7) >> 3) + 1;
+    int numUnitsHires = (((stop - strt) + 15) >> 3) * 2;
+
+    assert(numUnitsLores == ((stop - strt) + 15) >> 3);
+
+    // Compute the end of the DMA window
+    dmaStopLores = MIN(dmaStrtLores + 8 * numUnitsLores, 0xE0);
+    dmaStopHires = MIN(dmaStrtHires + 4 * numUnitsHires, 0xE0);
 }
 
 template <int x> void
