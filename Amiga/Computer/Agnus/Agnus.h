@@ -687,12 +687,9 @@ public:
     void pokeDDFSTRT(uint16_t value);
     void pokeDDFSTOP(uint16_t value);
 
-    // Computes the data fetch start and stop out of the  window out
+    // Computes the data fetch window's start and stop position
     void computeDDFStrt();
     void computeDDFStop();
-
-    void computeDDFWindow(uint16_t ddfstrt, uint16_t ddfstop); // DEPRECATED
-    void computeDDFWindow() { computeDDFWindow(ddfstrt, ddfstop); } // DEPRECATED
 
     // AUDxLCL, AUDxLCL
     // template <int x> void pokeAUDxLCH(uint16_t value);

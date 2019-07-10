@@ -1311,57 +1311,6 @@ Agnus::pokeDDFSTOP(uint16_t value)
 }
 
 void
-Agnus::computeDDFWindow(uint16_t ddfstrt, uint16_t ddfstop)
-{
-    // Clip values
-    int16_t strt = ddfstrt; //  MAX(ddfstrt, 0x18);
-    int16_t stop = MIN(ddfstop, 0xD8);
-
-    // Compute the beginning of the DMA window
-    dmaStrtHires = (strt + 2) & ~3;
-    dmaStrtLores = (strt + 4) & ~7;
-    dmaStrtLoresShift = dmaStrtLores - strt;
-
-    assert(dmaStrtHires == strt);
-    assert(dmaStrtLoresShift == 0 || dmaStrtLoresShift == 4);
-
-    // debug("ddfstrt = %X ddfstop = %X\n", ddfstrt, ddfstop);
-
-    // Compute the number of fetch units
-    // int numUnitsLoresNew = (((stop - dmaStrtLores) +  7) >> 3) + 1;
-    // int numUnitsHiresNew = (((stop - dmaStrtHires) + 15) >> 3) * 2;
-
-    int numUnitsLores = (((stop - strt) + 7) >> 3) + 1;
-    int numUnitsHires = (((stop - strt) + 15) >> 3) * 2;
-    int numUnitsHiresNew = ((((stop - strt) + 7) >> 3) + 1) * 2;
-
-    assert(numUnitsHiresNew == numUnitsHires);
-    /*
-    if (numUnitsLoresNew != numUnitsLores) {
-        debug("strt = $%X (%d) stop = $%X (%d)\n", strt, strt, stop, stop);
-        debug("numUnitsLores = %d numUnitsLoresNew = %d\n", numUnitsLores, numUnitsLoresNew);
-        debug("dmaStrtLores = $%X (%d)\n", dmaStrtLores, dmaStrtLores);
-        assert(false);
-    }
-    */
-
-    // assert(numUnitsLoresNew == numUnitsLores);
-    // assert(numUnitsHiresNew == numUnitsHires);
-
-    int numUnitsHires2 = (((stop - strt) + 15) >> 2) & ~1; // Winfellow
-    assert(numUnitsHires == numUnitsHires2);
-
-    // Compute the end of the DMA window
-    dmaStopLores = MIN(dmaStrtLores + 8 * numUnitsLores, 0xE0);
-    dmaStopHires = MIN(dmaStrtHires + 4 * numUnitsHires, 0xE0);
-
-    int16_t dmaStrtLoresOld = dmaStrtLores;
-    int16_t dmaStrtHiresOld = dmaStrtHires;
-    assert(dmaStrtLoresOld == dmaStrtLores);
-    assert(dmaStrtHiresOld == dmaStrtHires);
-}
-
-void
 Agnus::computeDDFStrt()
 {
     int16_t strt = ddfstrt;
