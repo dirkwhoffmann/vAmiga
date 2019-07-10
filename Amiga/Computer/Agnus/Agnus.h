@@ -37,8 +37,8 @@
 #define AUDEN 0b0000001111
 
 // Hsync action bits
-#define HSYNC_UPDATE_EVENT_TABLE 0x01
-#define HSYNC_COMPUTE_DDF_WINDOW 0x02
+#define HSYNC_COMPUTE_DDF_WINDOW 0x01
+#define HSYNC_UPDATE_EVENT_TABLE 0x02
 
 // Increments a DMA pointer register by 2
 #define INC_DMAPTR(x) (x) = ((x) + 2) & 0x7FFFE;
