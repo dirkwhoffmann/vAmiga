@@ -551,15 +551,6 @@ Agnus::allocateBplSlots(int bpu, bool hires, int first, int last)
     assert(bpu >= 0 && bpu <= 6);
     assert(hires == 0 || hires == 1);
 
-    // if (first < 0x18 || first > 0xDF) return;
-    // if (last < 0x18 || last > 0xDF) return;
-
-    // Update events
-    /*
-    for (unsigned i = first; i <= last; i++) {
-        dmaEvent[i] = bitplaneDMA[hires][bpu][i];
-    }
-    */
     if (hires) {
         for (unsigned i = first; i <= last; i++) {
             dmaEvent[i] = inHiresDmaArea(i) ? bitplaneDMA[1][bpu][i] : EVENT_NONE;
@@ -570,7 +561,6 @@ Agnus::allocateBplSlots(int bpu, bool hires, int first, int last)
         }
     }
 
-    // Update jump table
     updateJumpTable();
 }
 

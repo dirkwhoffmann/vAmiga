@@ -203,14 +203,6 @@ public:
     bool inLoresDmaArea(int16_t pos) { return pos >= dmaStrtLores && pos < dmaStopLores; }
     bool inHiresDmaArea(int16_t pos) { return pos >= dmaStrtHires && pos < dmaStopHires; }
 
-    /* The bitplane DMA cycle window.
-     *     dmaStrt is the first cycle of the first fetch unit
-     *     dmaStop is the last cycle of the last fetch unit
-     * The values are updated in pokeDDFSTRT() and pokeDDFSTOP()
-     */
-    // int16_t dmaStrt; // DEPRECATED
-    int16_t dmaStop; // DEPRECATED
-
     /* The vertical trigger positions of all 8 sprites.
      * Note: The horizontal trigger positions are stored inside Denise. Agnus
      * knows nothing about them.
@@ -223,8 +215,32 @@ public:
 
 
     //
-    // Display window (DIW)
+    // Display Window (DIW)
     //
+
+    /* The Amiga limits the visible screen area by an upper, a lower, a left,
+     * and a right border. The border encloses an area called the Display
+     * Window (DIW). The color of the pixels inside the display window depends
+     * on the bitplane data. The pixels of the border area are always drawn in
+     * the background color (which might change inside the border area).
+     * The size of the display window is controlled by two registers called
+     * DIWSTRT and DIWSTOP. They contain the vertical and horizontal positions
+     * at which the window starts and stops. The resolution of vertical start
+     * and stop is one scan line. The resolution of horizontal start and stop
+     * is one low-resolution pixel.
+     *
+     * The current implementation is based on the following assumptions:
+     *
+     * 1. Denise contains a single flipflop controlling the display window
+     *    horizontally. The flop is cleared inside the border area and set
+     *    inside the display area.
+     * 2. When hpos matches the position in DIWSTRT, the flipflop is set.
+     * 3. When hpos matches the position in DIWSTOP, the flipflop is reset.
+     * 4. The smallest valid value for DIWSTRT is $02. If it is smaller, it is
+     *    not recognised.
+     * 5. The largest valid value for DIWSTOP is $(1)C7. If it is larger, it is
+     *    not recognised.
+     */
 
     // Register values as they have been written by pokeDIWSTRT/STOP()
     uint16_t diwstrt;
@@ -246,21 +262,6 @@ public:
     int16_t diwVstrt;
     int16_t diwVstop;
 
-    /* The DIW flipflop
-     *
-     * The current implementation is based on the following assumptions:
-     *
-     * 1. Denise contains a single flipflop controlling the display window
-     *    horizontally. The flop is cleared inside the border area and set
-     *    inside the display area.
-     * 2. When hpos matches the position in DIWSTRT, the flipflop is set.
-     * 3. When hpos matches the position in DIWSTOP, the flipflop is reset.
-     * 4. The smallest valid value for DIWSTRT is $02. If it is smaller, it is
-     *    not recognised.
-     * 5. The largest valid value for DIWSTOP is $(1)C7. If it is larger, it is
-     *    not recognised.
-     */
-
     /* Value of the DIW flipflops
      * Variable vFlop stores the value of the vertical DIW flipflop. The value
      * is updated at the beginning of each rasterline and cannot change
@@ -281,6 +282,61 @@ public:
 
 
     //
+    // Display Data Fetch (DDF)
+    //
+
+    /* Register DDFSTRT and DDFSTOP define the area where the system performs
+     * bitplane DMA. From a hardware engineer's point of view, these registers
+     * are completely independent of DIWSTRT and DIWSTOP. From a software
+     * engineer's point of view they appear closely related though. To get
+     * graphics output right, bitplane DMA has to start closely before the
+     * display window opens (left border ends) and to stop closely after the
+     * display window closes (right border begins).
+     * DDFSTRT and DDFSTOP have a resolution of four lowres pixels (unlike
+     * DIWSTRT and DIWSTOP which have a resolution of one lores pixels).
+     *
+     * The current implementation is based on the following assumptions:
+     *
+     * 1. The four-pixel resolution is achieved by ignoring the two lower bits
+     *    in DDFSTRT and DDFSTOP.
+     * 2. The actual DMA start position depends solely on DDFSTRT. It is
+     *    computed by aligning DDFSTRT to the next DMA cycle that is dividable
+     *    by 8.
+     * 3. The actual DMA stop position depends on both DDFSTRT and DDFSTOP.
+     *    Hence, if DDFSTRT changes, the stop position needs to be recomputed
+     *    even if DDFSTOP hasn't changed at all.
+     * 4. Agnus switches bitplane DMA on and off by constantly comparing the
+     *    horizontal raster position with the DMA start and stop positions that
+     *    have been computed out of DDFSTRT and DDFSTOP. Hence, if DDFSTRT
+     *    changes before DMA is switched on, the changed values takes effect
+     *    immediately (i.e., in the same rasterline). If it changes when DMA is
+     *    already on, the change takes effect in the next rasterline.
+     * 5. The values written to DDFSTRT and DDFSTOP are not clipped if they
+     *    describe a position outside the two hardware stops (at 0x18 and 0xD8).
+     *    E.g., if a very small value is written to DDFSTRT, Agnus starts
+     *    incrementing the bitplane pointers even if the left hardware stop is
+     *    not crossed yet. Agnus simply refused to perform DMA until the
+     *    hardware stop has been crossed.
+     */
+
+    // The display data fetch registers
+    uint16_t ddfstrt;
+    uint16_t ddfstop;
+
+
+    /* The most recent values written to DDFSTRT and DDFSTOP.
+     * When pokeDDSTRT() or pokeDDFSTOP() is called, variables ddfstrt and
+     * ddfstop are not updated immediately. Instead, these variables are set.
+     * Furthermore, an action flag is set that causes the hsync handler to
+     * transfer the values into ddfstrt and ddfstop at the end of the current
+     * rasterline.
+     */
+    uint16_t ddfstrtPoked;
+    uint16_t ddfstopPoked;
+
+
+
+    //
     // Registers
     //
     
@@ -294,24 +350,6 @@ public:
 
     // The disk DMA pointer
     uint32_t dskpt;
-    
-    // The display window registers
-    // uint16_t diwstrt;
-    // uint16_t diwstop;
-    
-    // The display data fetch registers
-    uint16_t ddfstrt;
-    uint16_t ddfstop;
-
-    /* The most recent values written to DDFSTRT and DDFSTOP.
-     * When pokeDDSTRT() or pokeDDFSTOP() is called, variables ddfstrt and
-     * ddfstop are not updated immediately. Instead, these variables are set.
-     * Furthermore, an action flag is set that causes the hsync handler to
-     * transfer the values into ddfstrt and ddfstop at the end of the current
-     * rasterline.
-     */
-    uint16_t ddfstrtPoked;
-    uint16_t ddfstopPoked;
 
     // The audio DMA pointers
     uint32_t audlc[4];
