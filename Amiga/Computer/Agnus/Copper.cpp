@@ -687,13 +687,15 @@ Copper::serviceEvent(EventID id)
 void
 Copper::schedule(EventID next)
 {
-    agnus->scheduleRel<COP_SLOT>(DMA_CYCLES(2), next);
+    int cycles = (agnus->hpos == 0xE2) ? DMA_CYCLES(1) : DMA_CYCLES(2);
+    agnus->scheduleRel<COP_SLOT>(cycles, next);
 }
 
 void
 Copper::reschedule()
 {
-    agnus->rescheduleRel<COP_SLOT>(DMA_CYCLES(2));
+    int cycles = (agnus->hpos == 0xE2) ? DMA_CYCLES(1) : DMA_CYCLES(2);
+    agnus->rescheduleRel<COP_SLOT>(cycles);
 }
 
 void
