@@ -694,6 +694,11 @@ Copper::schedule(EventID next)
 void
 Copper::reschedule()
 {
+    // TODO:
+    // Add a check to the hsync handler: If the Copper slot contains an
+    // event that triggers at an odd cycle, (this address must be cycle 1 then),
+    // reschedule it at cycle 0. If this is done, the cycles variable can be
+    // deleted. It is then OK to always increment by DMA_CYCLES(2)
     int cycles = (agnus->hpos == 0xE2) ? DMA_CYCLES(1) : DMA_CYCLES(2);
     agnus->rescheduleRel<COP_SLOT>(cycles);
 }
