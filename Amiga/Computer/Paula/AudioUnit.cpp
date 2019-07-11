@@ -244,7 +244,7 @@ AudioUnit::readStereoSample(float *left, float *right)
     }
 
     // Apply volume
-    float divider = 40000.0f;
+    float divider = 10000.0f;
     if (volume > 0) {
         l *= (float)volume / divider;
         r *= (float)volume / divider;
