@@ -46,8 +46,8 @@ Agnus::inspectEventSlot(EventSlot nr)
     if (trigger != NEVER) {
 
         Beam beam = cycleToBeam(trigger);
-        i->vpos = beam.y;
-        i->hpos = beam.x;
+        i->vpos = beam.v;
+        i->hpos = beam.h;
 
     } else {
 

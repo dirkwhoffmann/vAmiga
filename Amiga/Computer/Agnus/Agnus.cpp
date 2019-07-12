@@ -356,8 +356,8 @@ Agnus::beamPosition()
 {
     Beam result;
 
-    result.y = vpos;
-    result.x = hpos;
+    result.v = vpos;
+    result.h = hpos;
 
     return result;
 }
@@ -365,7 +365,7 @@ Agnus::beamPosition()
 Cycle
 Agnus::beamToCycle(Beam beam)
 {
-    return startOfCurrentFrame() + DMA_CYCLES(beam.y * DMACyclesPerLine() + beam.x);
+    return startOfCurrentFrame() + DMA_CYCLES(beam.v * DMACyclesPerLine() + beam.h);
 }
 
 Beam
@@ -376,8 +376,8 @@ Agnus::cycleToBeam(Cycle cycle)
     Cycle diff = AS_DMA_CYCLES(cycle - startOfCurrentFrame());
     assert(diff >= 0);
 
-    result.y = diff / DMACyclesPerLine();
-    result.x = diff % DMACyclesPerLine();
+    result.v = diff / DMACyclesPerLine();
+    result.h = diff % DMACyclesPerLine();
     return result;
 }
 
@@ -386,9 +386,9 @@ Agnus::addToBeam(Beam beam, Cycle cycles)
 {
     Beam result;
 
-    Cycle cycle = beam.y * DMACyclesPerLine() + beam.x + cycles;
-    result.y = cycle / DMACyclesPerLine();
-    result.x = cycle % DMACyclesPerLine();
+    Cycle cycle = beam.v * DMACyclesPerLine() + beam.h + cycles;
+    result.v = cycle / DMACyclesPerLine();
+    result.h = cycle % DMACyclesPerLine();
 
     return result;
 }

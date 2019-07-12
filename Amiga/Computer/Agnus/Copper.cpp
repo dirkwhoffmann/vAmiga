@@ -262,27 +262,27 @@ Copper::findMatch(Beam &result)
     int16_t hMask = getHM() & 0xFE;
 
     // Check if the current line matches the vertical trigger position
-    if ((b.y & vMask) >= (vComp & vMask)) {
+    if ((b.v & vMask) >= (vComp & vMask)) {
 
         // Check if we find a horizontal match in this line
-        if (findHorizontalMatch(b.x, hComp, hMask, hMatch)) {
+        if (findHorizontalMatch(b.h, hComp, hMask, hMatch)) {
 
             // Success. We've found a match in the current line
-            result.y = b.y;
-            result.x = hMatch;
+            result.v = b.v;
+            result.h = hMatch;
             return true;
         }
     }
 
     // Find the first vertical match below the current line
-    if (!findVerticalMatch(b.y + 1, vComp, vMask, vMatch)) return false;
+    if (!findVerticalMatch(b.v + 1, vComp, vMask, vMatch)) return false;
 
     // Find the first horizontal match in that line
     if (!findHorizontalMatch(0, hComp, hMask, hMatch)) return false;
 
     // Success. We've found a match below the current line
-    result.y = vMatch;
-    result.x = hMatch;
+    result.v = vMatch;
+    result.h = hMatch;
     return true;
 }
 
@@ -384,7 +384,7 @@ bool
 Copper::comparator(Beam beam, uint16_t waitpos, uint16_t mask)
 {
     // Get comparison bits for the vertical beam position
-    uint8_t vBeam = beam.y & 0xFF;
+    uint8_t vBeam = beam.v & 0xFF;
     uint8_t vWaitpos = HI_BYTE(waitpos);
     uint8_t vMask = HI_BYTE(mask) | 0x80;
 
@@ -401,7 +401,7 @@ Copper::comparator(Beam beam, uint16_t waitpos, uint16_t mask)
     }
 
     // Get comparison bits for horizontal position
-    uint8_t hBeam = beam.x & 0xFE;
+    uint8_t hBeam = beam.h & 0xFE;
     uint8_t hWaitpos = LO_BYTE(waitpos) & 0xFE;
     uint8_t hMask = LO_BYTE(mask) & 0xFE;
 
@@ -698,7 +698,7 @@ Copper::serviceEvent(EventID id)
             if (findMatch(trigger)) {
 
                 // In how many cycles do we get there?
-                Cycle delay = agnus->beamDiff(trigger.y, trigger.x);
+                Cycle delay = agnus->beamDiff(trigger.v, trigger.h);
                 assert(delay < NEVER);
 
                 if (verbose) debug("FOUND MATCH in %d cycles\n", delay);
@@ -732,17 +732,19 @@ Copper::serviceEvent(EventID id)
             if (verbose) debug("COP_SKIP2\n");
 
             // Wait for the next free DMA cycle
-            // The skip command seems to be blocked at 0xE0 as well.
-            if (!agnus->copperCanHaveBus() || agnus->hpos == 0xE0) { reschedule(); break; }
+            if (!agnus->copperCanHaveBus()) { reschedule(); break; }
+
+            // vAmigaTS::copskip2 indicates that this state already blocks at 0xE0
+            if (agnus->hpos == 0xE0) { reschedule(); break; }
 
             // Compute the beam position that needs to be compared
             beam = agnus->addToBeam(agnus->beamPosition(), 2);
 
             // Run the comparator to see if the next command is skipped
-            if (verbose) debug("Running comparator with (%d,%d)\n", beam.y, beam.x);
+            if (verbose) debug("Running comparator with (%d,%d)\n", beam.v, beam.h);
             skip = comparator(beam);
 
-            // Continue with fetching the next command
+            // Continue with the next command
             schedule(COP_FETCH);
             break;
 
