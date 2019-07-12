@@ -160,6 +160,7 @@ private:
     // DEPRECATED
     bool comparator(uint32_t beam, uint32_t waitpos, uint32_t mask);
     bool comparator(uint32_t waitpos);
+    bool comparator(Beam waitpos);
     bool comparator();
     
     /* Computes the beam position where the Copper needs to wake up.

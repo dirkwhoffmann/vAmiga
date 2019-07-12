@@ -120,16 +120,18 @@ Agnus::inspectEventSlot(EventSlot nr)
 
             switch (slot[nr].id) {
 
-                case 0:             i->eventName = "none"; break;
-                case COP_REQ_DMA:   i->eventName = "COP_REQ_DMA"; break;
-                case COP_FETCH:     i->eventName = "COP_FETCH"; break;
-                case COP_MOVE:      i->eventName = "COP_MOVE"; break;
-                case COP_WAIT_SKIP: i->eventName = "WAIT_OR_SKIP"; break;
-                case COP_WAIT:      i->eventName = "COP_WAIT"; break;
-                case COP_SKIP:      i->eventName = "COP_SKIP"; break;
-                case COP_JMP1:      i->eventName = "COP_JMP1"; break;
-                case COP_JMP2:      i->eventName = "COP_JMP2"; break;
-                default:            i->eventName = "*** INVALID ***"; break;
+                case 0:                i->eventName = "none"; break;
+                case COP_REQ_DMA:      i->eventName = "COP_REQ_DMA"; break;
+                case COP_FETCH:        i->eventName = "COP_FETCH"; break;
+                case COP_MOVE:         i->eventName = "COP_MOVE"; break;
+                case COP_WAIT_OR_SKIP: i->eventName = "WAIT_OR_SKIP"; break;
+                case COP_WAIT1:        i->eventName = "COP_WAIT1"; break;
+                case COP_WAIT2:        i->eventName = "COP_WAIT2"; break;
+                case COP_SKIP1:        i->eventName = "COP_SKIP1"; break;
+                case COP_SKIP2:        i->eventName = "COP_SKIP1"; break;
+                case COP_JMP1:         i->eventName = "COP_JMP1"; break;
+                case COP_JMP2:         i->eventName = "COP_JMP2"; break;
+                default:               i->eventName = "*** INVALID ***"; break;
             }
             break;
 

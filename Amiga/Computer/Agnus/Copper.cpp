@@ -158,8 +158,8 @@ Copper::pokeCOPINS(uint16_t value)
      * the secons instruction register, depending on the current state.
      */
 
-    // TODO: The following is almost certainly wrong...
-    /* if (state == COP_MOVE || state == COP_WAIT_SKIP) {
+    // TODO: The following is certainly wrong...
+    /* if (state == COP_MOVE || state == COP_WAIT_OR_SKIP) {
         cop2ins = value;
     } else {
         cop1ins = value;
@@ -365,7 +365,13 @@ Copper::comparator(uint32_t beam, uint32_t waitpos, uint32_t mask)
     uint8_t hBeam = beam & 0xFE;
     uint8_t hWaitpos = waitpos & 0xFE;
     uint8_t hMask = mask & 0xFE;
-    
+
+    /*
+    debug("Comparing horizontal position waitpos = %d vWait = %d hWait = %d \n", waitpos, vWaitpos, hWaitpos);
+    debug("hBeam = %d ($x) hMask = %X\n", hBeam, hBeam, hMask);
+    debug("Result = %d\n", (hBeam & hMask) >= (hWaitpos & hMask));
+    */
+
     // Compare horizontal positions
     return (hBeam & hMask) >= (hWaitpos & hMask);
 }
@@ -377,9 +383,15 @@ Copper::comparator(uint32_t beam)
 }
 
 bool
+Copper::comparator(Beam waitpos)
+{
+    return comparator(HI_W_LO_W(waitpos.y, waitpos.x));
+}
+
+bool
 Copper::comparator()
 {
-    return comparator(getVPHP());
+    return comparator(agnus->beamPosition());
 }
 
 uint32_t
@@ -534,6 +546,7 @@ void
 Copper::serviceEvent(EventID id)
 {
     uint16_t reg;
+    Beam beam;
 
     debug(2, "(%d,%d): ", agnus->vpos, agnus->hpos);
 
@@ -572,7 +585,7 @@ Copper::serviceEvent(EventID id)
             }
 
             // Fork execution depending on the instruction type
-            schedule(isMoveCmd() ? COP_MOVE : COP_WAIT_SKIP);
+            schedule(isMoveCmd() ? COP_MOVE : COP_WAIT_OR_SKIP);
             break;
             
         case COP_MOVE:
@@ -600,9 +613,9 @@ Copper::serviceEvent(EventID id)
             schedule(COP_FETCH);
             break;
             
-        case COP_WAIT_SKIP:
+        case COP_WAIT_OR_SKIP:
 
-            if (verbose) debug("COP_WAIT_SKIP\n");
+            if (verbose) debug("COP_WAIT_OR_SKIP\n");
 
             // Wait for the next free DMA cycle
             if (!agnus->copperCanHaveBus()) { reschedule(); break; }
@@ -610,49 +623,79 @@ Copper::serviceEvent(EventID id)
             // Load the second instruction word
             cop2ins = agnus->copperRead(coppc);
             advancePC();
-                
-            // Is it a WAIT command?
-            if (isWaitCmd()) {
 
-                // Clear the skip flag
-                skip = false;
+            // Fork execution depending on the instruction type
+            schedule(isWaitCmd() ? COP_WAIT1 : COP_SKIP1);
+            break;
 
-                // Find the trigger position for this WAIT command
-                Beam trigger;
-                if (findMatch(trigger)) {
+        case COP_WAIT1:
 
-                    // In how many cycles do we get there?
-                    Cycle delay = agnus->beamDiff(trigger.y, trigger.x);
-                    assert(delay < NEVER);
+            if (verbose) debug("COP_WAIT1\n");
 
-                    if (verbose) debug("FOUND MATCH in %d cycles\n", delay);
+            // Wait for the next free DMA cycle
+            if (!agnus->copperCanHaveBus()) { reschedule(); break; }
 
-                    // Copper wakes up 2 cycles earlier...
-                    delay -= DMA_CYCLES(2);
+            // Schedule next state
+            schedule(COP_WAIT2);
+            break;
 
-                    // ... with a COP_REQ_DMA event.
-                    agnus->scheduleRel<COP_SLOT>(delay, COP_REQ_DMA);
+        case COP_WAIT2:
 
-                } else {
+            if (verbose) debug("COP_WAIT2\n");
 
-                    agnus->cancel<COP_SLOT>();
-                }
+            // Clear the skip flag
+            skip = false;
+
+            // Find the trigger position for this WAIT command
+            Beam trigger;
+            if (findMatch(trigger)) {
+
+                // In how many cycles do we get there?
+                Cycle delay = agnus->beamDiff(trigger.y, trigger.x);
+                assert(delay < NEVER);
+
+                if (verbose) debug("FOUND MATCH in %d cycles\n", delay);
+
+                // Copper wakes up 2 cycles earlier...
+                delay -= DMA_CYCLES(2);
+
+                // ... with a COP_REQ_DMA event.
+                agnus->scheduleRel<COP_SLOT>(delay, COP_REQ_DMA);
 
             } else {
 
-                if (verbose) debug("SKIP\n");
-
-                // It must be a SKIP command then.
-                assert(isSkipCmd());
-
-                // Run the comparator to see if the next command is skipped
-                skip = comparator();
-
-                // Continue with fetching the next command
-                schedule(COP_FETCH);
+                agnus->cancel<COP_SLOT>();
             }
             break;
-            
+
+        case COP_SKIP1:
+
+            if (verbose) debug("COP_SKIP1\n");
+
+            // Wait for the next free DMA cycle
+            if (!agnus->copperCanHaveBus()) { reschedule(); break; }
+
+            // Schedule next state
+            schedule(COP_SKIP2);
+            break;
+
+        case COP_SKIP2:
+
+            if (verbose) debug("COP_SKIP2\n");
+
+            // It must be a SKIP command then.
+            assert(isSkipCmd());
+
+            // Compute the beam position that needs to be compared
+            beam = agnus->addToBeam(agnus->beamPosition(), 2);
+
+            // Run the comparator to see if the next command is skipped
+            skip = comparator(beam);
+
+            // Continue with fetching the next command
+            schedule(COP_FETCH);
+            break;
+
         case COP_JMP1:
 
             if (verbose) debug("COP_JMP1\n");
@@ -710,12 +753,13 @@ Copper::vsyncAction()
      *  used to start the program counter. That is, no matter what the Copper is
      *  doing, when the end of vertical blanking occurs, the Copper is
      *  automatically forced to restart its operations at the address contained
-     *  in COPlLC." [HRM]
+     *  in COP1LC." [HRM]
      */
 
     // TODO: What is the exact timing here?
+    switchToCopperList(1);
     if (agnus->copDMA()) {
-        agnus->scheduleRel<COP_SLOT>(DMA_CYCLES(4), COP_JMP1);
+        agnus->scheduleRel<COP_SLOT>(DMA_CYCLES(0), COP_REQ_DMA);
     } else {
         agnus->cancel<COP_SLOT>();
     }
