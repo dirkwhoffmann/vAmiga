@@ -342,6 +342,7 @@ Copper::move(int addr, uint16_t value)
     agnus->copperWrite(addr, value);
 }
 
+#if 0
 bool
 Copper::comparator(uint32_t beam, uint32_t waitpos, uint32_t mask)
 {
@@ -350,7 +351,8 @@ Copper::comparator(uint32_t beam, uint32_t waitpos, uint32_t mask)
     uint8_t vWaitpos = (waitpos >> 8) & 0xFF;
     uint8_t vMask = (mask >> 8) | 0x80;
     
-    // debug(" * vBeam = %X vWaitpos = %X vMask = %X\n", vBeam, vWaitpos, vMask);
+    if (verbose) debug(" * vBeam = %X vWaitpos = %X vMask = %X\n", vBeam, vWaitpos, vMask);
+
     // Compare vertical positions
     if ((vBeam & vMask) < (vWaitpos & vMask)) {
         // debug("beam %d waitpos %d mask 0x%x FALSE\n", beam, waitpos, mask);
@@ -366,6 +368,7 @@ Copper::comparator(uint32_t beam, uint32_t waitpos, uint32_t mask)
     uint8_t hWaitpos = waitpos & 0xFE;
     uint8_t hMask = mask & 0xFE;
 
+    if (verbose) debug(" * hBeam = %X hWaitpos = %X hMask = %X\n", hBeam, hWaitpos, hMask);
     /*
     debug("Comparing horizontal position waitpos = %d vWait = %d hWait = %d \n", waitpos, vWaitpos, hWaitpos);
     debug("hBeam = %d ($x) hMask = %X\n", hBeam, hBeam, hMask);
@@ -375,17 +378,56 @@ Copper::comparator(uint32_t beam, uint32_t waitpos, uint32_t mask)
     // Compare horizontal positions
     return (hBeam & hMask) >= (hWaitpos & hMask);
 }
+#endif
 
+bool
+Copper::comparator(Beam beam, uint16_t waitpos, uint16_t mask)
+{
+    // Get comparison bits for the vertical beam position
+    uint8_t vBeam = beam.y & 0xFF;
+    uint8_t vWaitpos = HI_BYTE(waitpos);
+    uint8_t vMask = HI_BYTE(mask) | 0x80;
+
+    if (verbose) debug(" * vBeam = %X vWaitpos = %X vMask = %X\n", vBeam, vWaitpos, vMask);
+
+    // Compare vertical positions
+    if ((vBeam & vMask) < (vWaitpos & vMask)) {
+        // debug("beam %d waitpos %d mask 0x%x FALSE\n", beam, waitpos, mask);
+        return false;
+    }
+    if ((vBeam & vMask) > (vWaitpos & vMask)) {
+        // debug("beam %d waitpos %d mask 0x%x TRUE\n", beam, waitpos, mask);
+        return true;
+    }
+
+    // Get comparison bits for horizontal position
+    uint8_t hBeam = beam.x & 0xFE;
+    uint8_t hWaitpos = LO_BYTE(waitpos) & 0xFE;
+    uint8_t hMask = LO_BYTE(mask) & 0xFE;
+
+    if (verbose) debug(" * hBeam = %X hWaitpos = %X hMask = %X\n", hBeam, hWaitpos, hMask);
+    /*
+     debug("Comparing horizontal position waitpos = %d vWait = %d hWait = %d \n", waitpos, vWaitpos, hWaitpos);
+     debug("hBeam = %d ($x) hMask = %X\n", hBeam, hBeam, hMask);
+     debug("Result = %d\n", (hBeam & hMask) >= (hWaitpos & hMask));
+     */
+
+    // Compare horizontal positions
+    return (hBeam & hMask) >= (hWaitpos & hMask);
+}
+
+/*
 bool
 Copper::comparator(uint32_t beam)
 {
     return comparator(beam, getVPHP(), getVMHM());
 }
+*/
 
 bool
-Copper::comparator(Beam waitpos)
+Copper::comparator(Beam beam)
 {
-    return comparator(HI_W_LO_W(waitpos.y, waitpos.x));
+    return comparator(beam, getVPHP(), getVMHM());
 }
 
 bool
@@ -394,6 +436,7 @@ Copper::comparator()
     return comparator(agnus->beamPosition());
 }
 
+#if 0
 uint32_t
 Copper::nextTriggerPosition()
 {
@@ -427,6 +470,7 @@ Copper::nextTriggerPosition()
 
     return pos;
 }
+#endif
 
 bool
 Copper::isMoveCmd()
@@ -670,6 +714,7 @@ Copper::serviceEvent(EventID id)
 
         case COP_SKIP1:
 
+            verbose = 1;
             if (verbose) debug("COP_SKIP1\n");
 
             // Wait for the next free DMA cycle
@@ -690,6 +735,7 @@ Copper::serviceEvent(EventID id)
             beam = agnus->addToBeam(agnus->beamPosition(), 2);
 
             // Run the comparator to see if the next command is skipped
+            if (verbose) debug("Running comparator with (%d,%d)\n", beam.y, beam.x);
             skip = comparator(beam);
 
             // Continue with fetching the next command

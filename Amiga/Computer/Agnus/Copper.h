@@ -157,17 +157,18 @@ private:
     void move(int addr, uint16_t value);
 
     // Runs the comparator circuit.
-    // DEPRECATED
-    bool comparator(uint32_t beam, uint32_t waitpos, uint32_t mask);
-    bool comparator(uint32_t waitpos);
-    bool comparator(Beam waitpos);
+    // bool comparator(uint32_t beam, uint32_t waitpos, uint32_t mask); // DEPRECATED
+    // bool comparator(uint32_t waitpos); // DEPRECATED
+
+    bool comparator(Beam beam, uint16_t waitpos, uint16_t mask);
+    bool comparator(Beam beam);
     bool comparator();
     
     /* Computes the beam position where the Copper needs to wake up.
      * This functions is invoked when a WAIT command is processed.
      */
     // DEPRECATED
-    uint32_t nextTriggerPosition(); 
+    // uint32_t nextTriggerPosition(); 
     
     
     //
