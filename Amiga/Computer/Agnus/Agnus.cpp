@@ -27,8 +27,8 @@ Agnus::Agnus()
 
         { &clock,                sizeof(clock),                0 },
         { &frame,                sizeof(frame),                0 },
-        { &vpos,                 sizeof(vpos),                 0 },
-        { &hpos,                 sizeof(hpos),                 0 },
+        { &pos.v,                sizeof(pos.v),                0 },
+        { &pos.h,                sizeof(pos.h),                0 },
         { &frameInfo.nr,         sizeof(frameInfo.nr),         0 },
         { &frameInfo.interlaced, sizeof(frameInfo.interlaced), 0 },
         { &frameInfo.numLines,   sizeof(frameInfo.numLines),   0 },
@@ -331,7 +331,7 @@ Agnus::belongsToCurrentFrame(Cycle cycle)
 Cycle
 Agnus::startOfCurrentFrame()
 {
-    return clock - DMA_CYCLES(vpos * DMACyclesPerLine() + hpos);
+    return clock - DMA_CYCLES(pos.v * DMACyclesPerLine() + pos.h);
 }
 
 Cycle
@@ -344,11 +344,11 @@ bool
 Agnus::inBplDmaArea() {
 
     return
-    vFlop                             // Vertical DIW flipflop
-    && vpos >= 26                     // Outside VBLANK area
-    && vpos < frameInfo.numLines - 1  // Not in last line of frame
-    && denise->bplconBPU()            // At least one bitplane enabled
-    && bplDMA();                      // Bitplane DMA enabled
+    vFlop                              // Vertical DIW flipflop
+    && pos.v >= 26                     // Outside VBLANK area
+    && pos.v < frameInfo.numLines - 1  // Not in last line of frame
+    && denise->bplconBPU()             // At least one bitplane enabled
+    && bplDMA();                       // Bitplane DMA enabled
 }
 
 Beam
@@ -356,8 +356,8 @@ Agnus::beamPosition()
 {
     Beam result;
 
-    result.v = vpos;
-    result.h = hpos;
+    result.v = pos.v;
+    result.h = pos.h;
 
     return result;
 }
@@ -431,7 +431,7 @@ Agnus::copperCanHaveBus()
     if (!copDMA()) return false;
 
     // Deny access if the current slot is used for bitplane DMA
-    if (dmaEvent[hpos]) {
+    if (dmaEvent[pos.h]) {
         debug(COP_DEBUG, "Copper blocked by bitplane DMA\n");
         return false;
     }
@@ -440,7 +440,7 @@ Agnus::copperCanHaveBus()
     // TODO: Think about adding a permanent event BPL_EOL which always
     // triggeres at $E2. Once this is done, this statement can be deletete
     // entirely.
-    if (hpos == 0xE2) {
+    if (pos.h == 0xE2) {
         debug(COP_DEBUG, "Copper blocked in last DMA cycle\n");
         return false;
     }
@@ -455,8 +455,8 @@ Agnus::doDiskDMA()
     uint16_t result = mem->peekChip16(dskpt);
     INC_DMAPTR(dskpt);
 
-    busOwner[hpos] = BUS_DISK;
-    busValue[hpos] = result;
+    busOwner[pos.h] = BUS_DISK;
+    busValue[pos.h] = result;
 
     return result;
 }
@@ -467,8 +467,8 @@ Agnus::doDiskDMA(uint16_t value)
     mem->pokeChip16(dskpt, value);
     INC_DMAPTR(dskpt);
 
-    busOwner[hpos] = BUS_DISK;
-    busValue[hpos] = value;
+    busOwner[pos.h] = BUS_DISK;
+    busValue[pos.h] = value;
 }
 
 uint16_t
@@ -493,8 +493,8 @@ Agnus::doSpriteDMA()
     uint16_t result = mem->peekChip16(sprpt[channel]);
     INC_DMAPTR(sprpt[channel]);
 
-    busOwner[hpos] = BUS_SPRITE;
-    busValue[hpos] = result;
+    busOwner[pos.h] = BUS_SPRITE;
+    busValue[pos.h] = result;
 
     return result;
 }
@@ -505,8 +505,8 @@ Agnus::doSpriteDMA(int channel)
     uint16_t result = mem->peekChip16(sprpt[channel]);
     INC_DMAPTR(sprpt[channel]);
 
-    busOwner[hpos] = BUS_SPRITE;
-    busValue[hpos] = result;
+    busOwner[pos.h] = BUS_SPRITE;
+    busValue[pos.h] = result;
 
     return result; 
 }
@@ -517,8 +517,8 @@ Agnus::doBitplaneDMA()
     uint16_t result = mem->peekChip16(bplpt[bitplane]);
     INC_DMAPTR(bplpt[bitplane]);
 
-    busOwner[hpos] = BUS_BITPLANE;
-    busValue[hpos] = result;
+    busOwner[pos.h] = BUS_BITPLANE;
+    busValue[pos.h] = result;
 
     return result;
 }
@@ -528,8 +528,8 @@ Agnus::copperRead(uint32_t addr)
 {
     uint16_t result = mem->peek16(addr);
 
-    busOwner[hpos] = BUS_COPPER;
-    busValue[hpos] = result;
+    busOwner[pos.h] = BUS_COPPER;
+    busValue[pos.h] = result;
 
     return result;
 }
@@ -539,8 +539,8 @@ Agnus::copperWrite(uint32_t addr, uint16_t value)
 {
     mem->pokeCustom16<POKE_COPPER>(addr, value);
 
-    busOwner[hpos] = BUS_COPPER;
-    busValue[hpos] = value;
+    busOwner[pos.h] = BUS_COPPER;
+    busValue[pos.h] = value;
 }
 
 void
@@ -844,14 +844,14 @@ Agnus::updateJumpTable(int16_t to)
 bool
 Agnus::isLastLx(int16_t dmaCycle)
 {
-    return (hpos >= dmaStopLores - 8);
+    return (pos.h >= dmaStopLores - 8);
     // return dmaEvent[hpos] != dmaEvent[hpos + 8];
 }
 
 bool
 Agnus::isLastHx(int16_t dmaCycle)
 {
-    return (hpos >= dmaStopHires - 4);
+    return (pos.h >= dmaStopHires - 4);
     // return dmaEvent[hpos] != dmaEvent[hpos + 4];
 }
 
@@ -1150,7 +1150,7 @@ Agnus::peekVHPOSR()
 {
     // 15 14 13 12 11 10 09 08 07 06 05 04 03 02 01 00
     // V7 V6 V5 V4 V3 V2 V1 V0 H8 H7 H6 H5 H4 H3 H2 H1
-    uint16_t result = BEAM(vpos, hpos) & 0xFFFF;
+    uint16_t result = BEAM(pos.v, pos.h) & 0xFFFF;
 
     // debug(BPL_DEBUG, "peekVHPOSR() = %X\n", result);
     return result;
@@ -1168,7 +1168,7 @@ Agnus::peekVPOSR()
 {
     // 15 14 13 12 11 10 09 08 07 06 05 04 03 02 01 00
     // LF -- -- -- -- -- -- -- -- -- -- -- -- -- -- V8
-    uint16_t result = (vpos >> 8) | (isLongFrame() ? 0x8000 : 0);
+    uint16_t result = (pos.v >> 8) | (isLongFrame() ? 0x8000 : 0);
     assert((result & 0x7FFE) == 0);
 
     debug(BPL_DEBUG, "peekVPOSR() = %X\n", result);
@@ -1244,7 +1244,7 @@ Agnus::setDIWSTRT(uint16_t value)
     // Take into account that a value change needs 4 DMA cycles to show up
     // int16_t realhpos = hpos + 4;
     // int16_t pixelpos = realhpos * 2;
-    int16_t pixelpos = hpos * 2;
+    int16_t pixelpos = pos.h * 2;
 
     // Update diwFlopOn if hpos hasn't matched the old trigger position yet.
     if (pixelpos < hFlopOn) hFlopOn = diwHstrt;
@@ -1279,7 +1279,7 @@ Agnus::setDIWSTOP(uint16_t value)
     // Take into account that a value change needs 4 DMA cycles to take effect
     // int16_t realhpos = hpos + 4;
     // int16_t pixelpos = realhpos * 2;
-    int16_t pixelpos = hpos * 2;
+    int16_t pixelpos = pos.h * 2;
 
     // Update diwFlopOff if hpos hasn't matched the old trigger position yet.
     if (pixelpos < hFlopOff) hFlopOff = diwHstop;
@@ -1303,7 +1303,7 @@ Agnus::pokeDDFSTRT(uint16_t value)
 
     // Check if the modification also affects the current rasterline
     int16_t oldStrt = denise->hires() ? dmaStrtHires : dmaStrtLores;
-    if (hpos <= oldStrt - 2) {
+    if (pos.h <= oldStrt - 2) {
 
         computeDDFStrt();
         updateBitplaneDma();
@@ -1326,7 +1326,7 @@ Agnus::pokeDDFSTOP(uint16_t value)
 
     // Check if the modification also affects the current rasterline
     int16_t oldStop = denise->hires() ? dmaStopHires : dmaStopLores;
-    if (hpos <= oldStop - 2) {
+    if (pos.h <= oldStop - 2) {
 
         computeDDFStop();
         updateBitplaneDma();
@@ -1482,10 +1482,10 @@ Agnus::executeUntil(Cycle targetClock)
         if (clock >= nextTrigger) executeEventsUntil(clock);
         
         // Advance the internal counters
-        hpos++;
+        pos.h++;
         
         // Note: If this assertion hits, the HSYNC event hasn't been served!
-        assert(hpos <= HPOS_MAX);
+        assert(pos.h <= HPOS_MAX);
 
         clock += DMA_CYCLES(1);
     }
@@ -1495,10 +1495,10 @@ template <int nr> void
 Agnus::executeFirstSpriteCycle()
 {
     // Activate sprite data DMA if the first sprite line has been reached
-    if (vpos == sprVStrt[nr]) { sprDmaState[nr] = SPR_DMA_DATA; }
+    if (pos.v == sprVStrt[nr]) { sprDmaState[nr] = SPR_DMA_DATA; }
 
     // Deactivate sprite data DMA if the last sprite line has been reached
-    if (vpos == sprVStop[nr]) {
+    if (pos.v == sprVStop[nr]) {
 
         // Deactivate sprite data DMA
         sprDmaState[nr] = SPR_DMA_IDLE;
@@ -1523,7 +1523,7 @@ template <int nr> void
 Agnus::executeSecondSpriteCycle()
 {
     // Deactivate sprite data DMA if the last sprite line has been reached
-    if (vpos == sprVStop[nr]) {
+    if (pos.v == sprVStop[nr]) {
         
         // Sprite DMA should already be inactive in the second DMA cycle
         assert(sprDmaState[nr] == SPR_DMA_IDLE);
@@ -1549,14 +1549,14 @@ void
 Agnus::hsyncHandler()
 {
     // Make sure we really reached the end of the line
-    if (hpos != HPOS_MAX) { dump(); assert(false); }
+    if (pos.h != HPOS_MAX) { dump(); assert(false); }
 
     //
     // Let other components finish up the current line
     //
 
     // Let Denise draw the current line
-    denise->endOfLine(vpos);
+    denise->endOfLine(pos.v);
 
     // Let Paula synthesize new sound samples
     paula->audioUnit.executeUntil(clock);
@@ -1565,7 +1565,7 @@ Agnus::hsyncHandler()
     amiga->ciaB.incrementTOD();
     
     // Check the keyboard once in a while
-    if ((vpos & 0b1111) == 0) amiga->keyboard.execute();
+    if ((pos.v & 0b1111) == 0) amiga->keyboard.execute();
 
     //
     // Increment the position counters
@@ -1579,11 +1579,11 @@ Agnus::hsyncHandler()
      * -1 and not 0 as expected. Take care of that and feel free to come up
      * with a nicer solution! */
 
-    vpos++;
-    hpos = -1;
+    pos.v++;
+    pos.h = -1;
 
     // Check if the current frame is finished
-    if (vpos >= frameInfo.numLines) {
+    if (pos.v >= frameInfo.numLines) {
         vsyncHandler();
     }
 
@@ -1592,7 +1592,7 @@ Agnus::hsyncHandler()
     //
 
     // Switch sprite DMA off if the last rasterline has been reached
-    if (vpos == frameInfo.numLines - 1) {
+    if (pos.v == frameInfo.numLines - 1) {
         for (unsigned i = 0; i < 8; i++) {
             sprDmaState[i] = SPR_DMA_IDLE;
         }
@@ -1608,7 +1608,7 @@ Agnus::hsyncHandler()
     }
 
     // Check if we have reached line 25 (sprite DMA starts here)
-    if (vpos == 25) {
+    if (pos.v == 25) {
         if ((dmacon & DMAEN) && (dmacon & SPREN)) {
             
             // Reset vertical sprite trigger coordinates which forces the sprite
@@ -1628,7 +1628,7 @@ Agnus::hsyncHandler()
         dmaDAS = dmacon & 0b111111;
 
         // Disable sprites outside the sprite DMA area
-        if (vpos < 25 || vpos >= frameInfo.numLines - 1) dmaDAS &= 0b011111;
+        if (pos.v < 25 || pos.v >= frameInfo.numLines - 1) dmaDAS &= 0b011111;
 
     } else {
 
@@ -1641,11 +1641,11 @@ Agnus::hsyncHandler()
     //
 
     // Vertical flipflop
-    if (vpos == diwVstrt && !vFlop) {
+    if (pos.v == diwVstrt && !vFlop) {
         vFlop = true;
         updateBitplaneDma();
     }
-    if (vpos == diwVstop && vFlop) {
+    if (pos.v == diwVstop && vFlop) {
         vFlop = false;
         updateBitplaneDma();
     }
@@ -1687,25 +1687,25 @@ Agnus::hsyncHandler()
     // Schedule the first biplane event (if any)
     if (nextDmaEvent[0]) {
         EventID eventID = dmaEvent[nextDmaEvent[0]];
-        schedulePos<BPL_SLOT>(vpos, nextDmaEvent[0], eventID);
+        schedulePos<BPL_SLOT>(pos.v, nextDmaEvent[0], eventID);
     }
 
     // Schedule the first DAS event (if any)
     if (firstDASEvent[dmaDAS]) {
-        schedulePos<DAS_SLOT>(vpos, firstDASDelay[dmaDAS], firstDASEvent[dmaDAS]);
+        schedulePos<DAS_SLOT>(pos.v, firstDASDelay[dmaDAS], firstDASEvent[dmaDAS]);
     } else {
         cancel<DAS_SLOT>();
     }
 
     // Schedule the first SYNC event
-    schedulePos<SYNC_SLOT>(vpos, HPOS_MAX, SYNC_H);
+    schedulePos<SYNC_SLOT>(pos.v, HPOS_MAX, SYNC_H);
 
 
     //
     // Let other components prepare for the next line
     //
 
-    denise->beginOfLine(vpos);
+    denise->beginOfLine(pos.v);
 }
 
 void
@@ -1730,7 +1730,7 @@ Agnus::vsyncHandler()
     assert(frame == frameInfo.nr);
 
     // Reset vertical position counter
-    vpos = 0;
+    pos.v = 0;
 
     // Reset the vertical DIW flipflop
     vFlop = false;

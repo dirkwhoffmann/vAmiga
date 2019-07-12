@@ -20,8 +20,8 @@ Agnus::inspectEvents()
     eventInfo.ciaAClock = ciaA->clock;
     eventInfo.ciaBClock  = ciaB->clock;
     eventInfo.frame = frame;
-    eventInfo.vpos = vpos;
-    eventInfo.hpos = hpos;
+    eventInfo.vpos = pos.v;
+    eventInfo.hpos = pos.h;
 
     // Inspect all slots
     for (int i = 0; i < SLOT_COUNT; i++) inspectEventSlot((EventSlot)i);
@@ -499,7 +499,7 @@ Agnus::serviceBplEvent(EventID id)
                 INC_DMAPTR(bplpt[PLANE1]);
             }
 
-            if(unlikely(isLastHx(hpos))) {
+            if(unlikely(isLastHx(pos.h))) {
                 denise->drawHires(16 + denise->scrollHiresOdd);
                 addBPLMOD<0>();
             } else {
@@ -515,7 +515,7 @@ Agnus::serviceBplEvent(EventID id)
                 INC_DMAPTR(bplpt[PLANE1]);
             }
 
-            if(unlikely(isLastLx(hpos))) {
+            if(unlikely(isLastLx(pos.h))) {
                 denise->drawLores(16 + denise->scrollHiresOdd);
                 addBPLMOD<0>();
             } else {
@@ -527,56 +527,56 @@ Agnus::serviceBplEvent(EventID id)
             if (!bplHwStop()) denise->bpldat[PLANE2] = doBitplaneDMA<1>();
             else INC_DMAPTR(bplpt[PLANE2]);
 
-            if(unlikely(isLastHx(hpos))) addBPLMOD<1>();
+            if(unlikely(isLastHx(pos.h))) addBPLMOD<1>();
             break;
 
         case BPL_L2:
             if (!bplHwStop()) denise->bpldat[PLANE2] = doBitplaneDMA<1>();
             else INC_DMAPTR(bplpt[PLANE2]);
 
-            if(unlikely(isLastLx(hpos))) addBPLMOD<1>();
+            if(unlikely(isLastLx(pos.h))) addBPLMOD<1>();
             break;
 
         case BPL_H3:
             if (!bplHwStop()) denise->bpldat[PLANE3] = doBitplaneDMA<2>();
             else INC_DMAPTR(bplpt[PLANE3]);
 
-            if(unlikely(isLastHx(hpos))) addBPLMOD<2>();
+            if(unlikely(isLastHx(pos.h))) addBPLMOD<2>();
             break;
 
         case BPL_L3:
             if (!bplHwStop()) denise->bpldat[PLANE3] = doBitplaneDMA<2>();
             else INC_DMAPTR(bplpt[PLANE3]);
 
-            if(unlikely(isLastLx(hpos))) addBPLMOD<2>();
+            if(unlikely(isLastLx(pos.h))) addBPLMOD<2>();
             break;
 
         case BPL_H4:
             if (!bplHwStop()) denise->bpldat[PLANE4] = doBitplaneDMA<3>();
             else INC_DMAPTR(bplpt[PLANE4]);
 
-            if(unlikely(isLastHx(hpos))) addBPLMOD<3>();
+            if(unlikely(isLastHx(pos.h))) addBPLMOD<3>();
             break;
 
         case BPL_L4:
             if (!bplHwStop()) denise->bpldat[PLANE4] = doBitplaneDMA<3>();
             else INC_DMAPTR(bplpt[PLANE4]);
 
-            if(unlikely(isLastLx(hpos))) addBPLMOD<3>();
+            if(unlikely(isLastLx(pos.h))) addBPLMOD<3>();
             break;
 
         case BPL_L5:
             if (!bplHwStop()) denise->bpldat[PLANE5] = doBitplaneDMA<4>();
             else INC_DMAPTR(bplpt[PLANE5]);
 
-            if(unlikely(isLastLx(hpos))) addBPLMOD<4>();
+            if(unlikely(isLastLx(pos.h))) addBPLMOD<4>();
             break;
 
         case BPL_L6:
             if (!bplHwStop()) denise->bpldat[PLANE6] = doBitplaneDMA<5>();
             else INC_DMAPTR(bplpt[PLANE6]);
 
-            if(unlikely(isLastLx(hpos))) addBPLMOD<5>();
+            if(unlikely(isLastLx(pos.h))) addBPLMOD<5>();
             break;
 
         default:
@@ -592,9 +592,9 @@ Agnus::serviceBplEvent(EventID id)
 void
 Agnus::scheduleNextBplEvent()
 {
-    uint8_t next = nextDmaEvent[hpos];
+    uint8_t next = nextDmaEvent[pos.h];
     if (next) {
-        scheduleRel<BPL_SLOT>(DMA_CYCLES(next - hpos), dmaEvent[next]);
+        scheduleRel<BPL_SLOT>(DMA_CYCLES(next - pos.h), dmaEvent[next]);
     } else {
         cancel<BPL_SLOT>();
     }
@@ -611,7 +611,7 @@ Agnus::serviceDASEvent(EventID id)
         case DAS_D1:
         case DAS_D2:
 
-            assert(hpos == 0x7 || hpos == 0x9 || hpos == 0xB);
+            assert(pos.h == 0x7 || pos.h == 0x9 || pos.h == 0xB);
 
             if (paula->diskController.getFifoBuffering())
                 paula->diskController.performDMA();
@@ -621,98 +621,98 @@ Agnus::serviceDASEvent(EventID id)
             break;
 
         case DAS_A0:
-            assert(hpos == 0xD);
+            assert(pos.h == 0xD);
             break;
 
         case DAS_A1:
-            assert(hpos == 0xF);
+            assert(pos.h == 0xF);
             break;
 
         case DAS_A2:
-            assert(hpos == 0x11);
+            assert(pos.h == 0x11);
             break;
 
         case DAS_A3:
-            assert(hpos == 0x13);
+            assert(pos.h == 0x13);
             break;
 
         case DAS_S0_1:
-            assert(hpos == 0x15);
+            assert(pos.h == 0x15);
             executeFirstSpriteCycle<0>();
             break;
 
         case DAS_S0_2:
-            assert(hpos == 0x17);
+            assert(pos.h == 0x17);
             executeSecondSpriteCycle<0>();
             break;
 
         case DAS_S1_1:
-            assert(hpos == 0x19);
+            assert(pos.h == 0x19);
             executeFirstSpriteCycle<1>();
             break;
 
         case DAS_S1_2:
-            assert(hpos == 0x1B);
+            assert(pos.h == 0x1B);
             executeSecondSpriteCycle<1>();
             break;
 
         case DAS_S2_1:
-            assert(hpos == 0x1D);
+            assert(pos.h == 0x1D);
             executeFirstSpriteCycle<2>();
             break;
 
         case DAS_S2_2:
-            assert(hpos == 0x1F);
+            assert(pos.h == 0x1F);
             executeSecondSpriteCycle<2>();
             break;
 
         case DAS_S3_1:
-            assert(hpos == 0x21);
+            assert(pos.h == 0x21);
             executeFirstSpriteCycle<3>();
             break;
 
         case DAS_S3_2:
-            assert(hpos == 0x23);
+            assert(pos.h == 0x23);
             executeSecondSpriteCycle<3>();
             break;
 
         case DAS_S4_1:
-            assert(hpos == 0x25);
+            assert(pos.h == 0x25);
             executeFirstSpriteCycle<4>();
             break;
 
         case DAS_S4_2:
-            assert(hpos == 0x27);
+            assert(pos.h == 0x27);
             executeSecondSpriteCycle<4>();
             break;
 
         case DAS_S5_1:
-            assert(hpos == 0x29);
+            assert(pos.h == 0x29);
             executeFirstSpriteCycle<5>();
             break;
 
         case DAS_S5_2:
-            assert(hpos == 0x2B);
+            assert(pos.h == 0x2B);
             executeSecondSpriteCycle<5>();
             break;
 
         case DAS_S6_1:
-            assert(hpos == 0x2D);
+            assert(pos.h == 0x2D);
             executeFirstSpriteCycle<6>();
             break;
 
         case DAS_S6_2:
-            assert(hpos == 0x2F);
+            assert(pos.h == 0x2F);
             executeSecondSpriteCycle<6>();
             break;
 
         case DAS_S7_1:
-            assert(hpos == 0x31);
+            assert(pos.h == 0x31);
             executeFirstSpriteCycle<7>();
             break;
 
         case DAS_S7_2:
-            assert(hpos == 0x33);
+            assert(pos.h == 0x33);
             executeSecondSpriteCycle<7>();
             break;
 

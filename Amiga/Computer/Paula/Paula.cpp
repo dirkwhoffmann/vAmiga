@@ -245,7 +245,7 @@ Paula::pokePOTGO(uint16_t value)
         debug(POT_DEBUG, "Starting potentiometer scan procedure\n");
 
         // Schedule the first DISCHARGE event
-        agnus->schedulePos<POT_SLOT>(agnus->vpos, HPOS_MAX, POT_DISCHARGE);
+        agnus->schedulePos<POT_SLOT>(agnus->pos.v, HPOS_MAX, POT_DISCHARGE);
         agnus->slot[POT_SLOT].data = 8;
     }
 }

@@ -24,7 +24,7 @@ void
 HardwareComponent::prefix()
 {
     fprintf(stderr, "[%lld] (%3d,%3d) ",
-            amiga->agnus.frame, amiga->agnus.vpos, amiga->agnus.hpos);
+            amiga->agnus.frame, amiga->agnus.pos.v, amiga->agnus.pos.h);
 
     fprintf(stderr, " %06X ", amiga->cpu.getPC());
 

@@ -167,11 +167,14 @@ public:
      */
     Frame frame;
 
+    // The current beam position
+    Beam pos;
+
     // The current vertical beam position (0 .. VPOS_MAX)
-    int16_t vpos;
+    // int16_t vpos;
     
     // The current horizontal beam position (0 .. HPOS_MAX)
-    int16_t hpos;
+    // int16_t hpos;
 
     // Information about the currently drawn frame
     struct {
@@ -469,6 +472,10 @@ public:
 
 public:
 
+    // Returns the current position of the video beam
+    int16_t vpos() { return pos.v; }
+    int16_t hpos() { return pos.h; }
+
     // Indicates if the current frame is a long or a short frame
     bool isLongFrame() { return frameInfo.numLines == 313; }
     bool isShortFrame() { return frameInfo.numLines == 312; }
@@ -547,7 +554,7 @@ public:
 
     // Returns the current beam position as a 17 bit value
     // DEPRECATED
-    uint32_t getBeam() { return BEAM(vpos, hpos); }
+    uint32_t getBeam() { return BEAM(vpos(), hpos()); }
     
     /* Returns the number of DMA cycles per rasterline
      * The value is valid for PAL machines, only.
@@ -567,7 +574,7 @@ public:
      * DEPRECATED
      */
     Cycle beamDiff(int16_t vStart, int16_t hStart, int16_t vEnd, int16_t hEnd);
-    Cycle beamDiff(int16_t vEnd, int16_t hEnd) { return beamDiff(vpos, hpos, vEnd, hEnd); }
+    Cycle beamDiff(int16_t vEnd, int16_t hEnd) { return beamDiff(vpos(), hpos(), vEnd, hEnd); }
     Cycle beamDiff(int32_t end) { return beamDiff(VPOS(end), HPOS(end)); }
     
 
@@ -576,7 +583,7 @@ public:
     //
 
     // Indicates if bitplane DMA is blocked by a hardware stops
-    bool bplHwStop() { return hpos < 0x18 || hpos >= 0xE0; }
+    bool bplHwStop() { return pos.h < 0x18 || pos.h >= 0xE0; }
 
     // Returns true if Copper is allowed to perform a DMA cycle
     bool copperCanHaveBus();

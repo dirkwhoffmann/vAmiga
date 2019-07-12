@@ -618,8 +618,8 @@ Amiga::_inspect()
     info.ciaAClock = ciaA.clock;
     info.ciaBClock = ciaB.clock;
     info.frame = agnus.frame;
-    info.vpos = agnus.vpos;
-    info.hpos = agnus.hpos;
+    info.vpos = agnus.pos.v;
+    info.hpos = agnus.pos.h;
     
     pthread_mutex_unlock(&lock);
 }
@@ -1053,6 +1053,6 @@ Amiga::dumpClock()
              AS_DMA_CYCLES(ciaB.clock),
              AS_CIA_CYCLES(ciaB.clock));
     plainmsg("  Color clock: (%d,%d) hex: ($%X,$%X) Frame: %lld\n",
-             agnus.vpos, agnus.hpos, agnus.vpos, agnus.hpos, agnus.frame);
+             agnus.pos.v, agnus.pos.h, agnus.pos.v, agnus.pos.h, agnus.frame);
     plainmsg("\n");
 }

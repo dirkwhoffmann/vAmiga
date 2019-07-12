@@ -334,7 +334,7 @@ Copper::move(int addr, uint16_t value)
 
          // Color registers
         int reg = (addr - 0x180) / 2;
-        colorizer->recordColorRegisterChange(reg, value, 4 * agnus->hpos);
+        colorizer->recordColorRegisterChange(reg, value, 4 * agnus->pos.h);
         return;
     }
 
@@ -593,7 +593,7 @@ Copper::serviceEvent(EventID id)
     Beam beam;
     Beam trigger;
 
-    debug(2, "(%d,%d): ", agnus->vpos, agnus->hpos);
+    debug(2, "(%d,%d): ", agnus->pos.v, agnus->pos.h);
 
     servicing = true;
 
@@ -735,7 +735,7 @@ Copper::serviceEvent(EventID id)
             if (!agnus->copperCanHaveBus()) { reschedule(); break; }
 
             // vAmigaTS::copskip2 indicates that this state already blocks at 0xE0
-            if (agnus->hpos == 0xE0) { reschedule(); break; }
+            if (agnus->pos.h == 0xE0) { reschedule(); break; }
 
             // Compute the beam position that needs to be compared
             beam = agnus->addToBeam(agnus->beamPosition(), 2);
@@ -782,7 +782,7 @@ Copper::serviceEvent(EventID id)
 void
 Copper::schedule(EventID next)
 {
-    int cycles = (agnus->hpos == 0xE2) ? DMA_CYCLES(1) : DMA_CYCLES(2);
+    int cycles = (agnus->pos.h == 0xE2) ? DMA_CYCLES(1) : DMA_CYCLES(2);
     agnus->scheduleRel<COP_SLOT>(cycles, next);
 }
 
@@ -794,7 +794,7 @@ Copper::reschedule()
     // event that triggers at an odd cycle, (this address must be cycle 1 then),
     // reschedule it at cycle 0. If this is done, the cycles variable can be
     // deleted. It is then OK to always increment by DMA_CYCLES(2)
-    int cycles = (agnus->hpos == 0xE2) ? DMA_CYCLES(1) : DMA_CYCLES(2);
+    int cycles = (agnus->pos.h == 0xE2) ? DMA_CYCLES(1) : DMA_CYCLES(2);
     agnus->rescheduleRel<COP_SLOT>(cycles);
 }
 

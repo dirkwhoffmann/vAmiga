@@ -288,14 +288,14 @@ Denise::pokeBPLCON0(uint16_t value)
         if (!agnus->inBplDmaArea()) bpu = 0;
 
         // Agnus will know about the change in 4 cycles
-        int16_t pos = agnus->hpos + 4;
+        int16_t pos = agnus->pos.h + 4;
         agnus->allocateBplSlots(bpu, hires(), pos);
 
         // Reschedule the next event according to the changed table
         // TODO: Wrap this in a nicer API
-        uint8_t next = agnus->nextDmaEvent[agnus->hpos];
+        uint8_t next = agnus->nextDmaEvent[agnus->pos.h];
         if (next) {
-            agnus->schedulePos<BPL_SLOT>(agnus->vpos, next, agnus->dmaEvent[next]);
+            agnus->schedulePos<BPL_SLOT>(agnus->pos.v, next, agnus->dmaEvent[next]);
         } else {
             agnus->cancel<BPL_SLOT>();
         }
@@ -351,7 +351,7 @@ Denise::pokeSPRxPOS(uint16_t value)
     sprhstrt[x] = ((value & 0xFF) << 1) | (sprhstrt[x] & 0x01);
     
     // Update debugger info
-    if (agnus->vpos == 26) {
+    if (agnus->pos.v == 26) {
         info.sprite[x].pos = value;
     }
 }
@@ -372,7 +372,7 @@ Denise::pokeSPRxCTL(uint16_t value)
     WRITE_BIT(attach, x, GET_BIT(value, 7));
     
     // Update debugger info
-    if (agnus->vpos == 26) {
+    if (agnus->pos.v == 26) {
         info.sprite[x].ctl = value;
         info.sprite[x].ptr = agnus->sprpt[x];
         assert(IS_EVEN(info.sprite[x].ptr));
@@ -404,7 +404,7 @@ Denise::pokeCOLORx(int x, uint16_t value)
     assert(x < 32);
     debug(COL_DEBUG, "pokeCOLOR%(%X)\n", x, value);
 
-    colorizer.recordColorRegisterChange(x, value & 0xFFF, 4 * agnus->hpos);
+    colorizer.recordColorRegisterChange(x, value & 0xFFF, 4 * agnus->pos.h);
 }
 
 void
@@ -426,7 +426,7 @@ Denise::pixelAddr(int pixel)
 {
     assert(pixel < HPIXELS);
 
-    int offset = pixel + agnus->vpos * HPIXELS;
+    int offset = pixel + agnus->pos.v * HPIXELS;
     assert(offset < PIXELS);
     
     return frameBuffer->data + offset;
@@ -438,7 +438,7 @@ Denise::drawLores(int pixels)
     uint8_t index;
 
     // assert(currentPixel == (agnus->hpos * 4) + 6);
-    currentPixel = ppos(agnus->hpos);
+    currentPixel = ppos(agnus->pos.h);
 
     uint8_t indexMask = (1 << bplconBPU()) - 1;
     uint32_t maskOdd = 0x8000 << scrollLoresOdd;
@@ -525,7 +525,7 @@ Denise::drawHires(int pixels)
     uint8_t index;
 
     // assert(currentPixel == (agnus->hpos * 4) + 6);
-    currentPixel = ppos(agnus->hpos);
+    currentPixel = ppos(agnus->pos.h);
 
     uint8_t indexMask = (1 << bplconBPU()) - 1;
     uint32_t maskOdd = 0x8000 << scrollHiresOdd;
@@ -854,7 +854,6 @@ template void Denise::pokeBPLxDAT<2>(uint16_t value);
 template void Denise::pokeBPLxDAT<3>(uint16_t value);
 template void Denise::pokeBPLxDAT<4>(uint16_t value);
 template void Denise::pokeBPLxDAT<5>(uint16_t value);
-template void Denise::pokeBPLxDAT<6>(uint16_t value);
 
 template void Denise::pokeSPRxPOS<0>(uint16_t value);
 template void Denise::pokeSPRxPOS<1>(uint16_t value);
