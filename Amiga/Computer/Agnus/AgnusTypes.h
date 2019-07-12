@@ -12,13 +12,6 @@
 #ifndef _AGNUS_T_INC
 #define _AGNUS_T_INC
 
-typedef struct
-{
-    int16_t v;
-    int16_t h;
-}
-Beam;
-
 typedef enum : int8_t
 {
     BUS_NONE,

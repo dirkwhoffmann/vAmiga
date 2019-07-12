@@ -82,5 +82,4 @@ public:
     void debug();
 };
 
-
 #endif

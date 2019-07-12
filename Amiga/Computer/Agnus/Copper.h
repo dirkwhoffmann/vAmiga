@@ -168,7 +168,7 @@ private:
      * This functions is invoked when a WAIT command is processed.
      */
     // DEPRECATED
-    // uint32_t nextTriggerPosition(); 
+    // uint32_t nextTriggerPosition();
     
     
     //

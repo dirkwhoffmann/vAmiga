@@ -203,6 +203,7 @@
 		5030891021EFA74600FEAD12 /* Paula.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Paula.h; sourceTree = "<group>"; };
 		50384C8421FC6B66006E7748 /* AmigaSnapshot.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaSnapshot.cpp; sourceTree = "<group>"; };
 		50384C8521FC6B66006E7748 /* AmigaSnapshot.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaSnapshot.h; sourceTree = "<group>"; };
+		503990C522D8CCB600035783 /* Beam.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Beam.h; sourceTree = "<group>"; };
 		5043F6C4221972F90047CC30 /* MyToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyToolbar.swift; sourceTree = "<group>"; };
 		504F9654220ACFE0005F8AB7 /* Breakpoint.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Breakpoint.cpp; sourceTree = "<group>"; };
 		504F9655220ACFE0005F8AB7 /* Breakpoint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Breakpoint.h; sourceTree = "<group>"; };
@@ -817,6 +818,7 @@
 				50B14C1121EB4314002E32A6 /* va_std.cpp */,
 				505A3A3921F4996400132020 /* sse_utils.h */,
 				505A3A3821F4996400132020 /* sse_utils.cpp */,
+				503990C522D8CCB600035783 /* Beam.h */,
 				50A8757F229EB04A00CC89F8 /* TimeRecorded.h */,
 				50A8757E229EB04A00CC89F8 /* TimeRecorded.cpp */,
 				50B14C0621EB218E002E32A6 /* AmigaObject.h */,
