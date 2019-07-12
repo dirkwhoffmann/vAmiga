@@ -687,6 +687,9 @@ Copper::serviceEvent(EventID id)
 
             if (verbose) debug("COP_WAIT2\n");
 
+            // Wait for the next free DMA cycle
+            if (!agnus->copperCanHaveBus()) { reschedule(); break; }
+            
             // Clear the skip flag
             skip = false;
 
@@ -714,7 +717,7 @@ Copper::serviceEvent(EventID id)
 
         case COP_SKIP1:
 
-            verbose = 1;
+            // verbose = 1;
             if (verbose) debug("COP_SKIP1\n");
 
             // Wait for the next free DMA cycle
@@ -728,8 +731,9 @@ Copper::serviceEvent(EventID id)
 
             if (verbose) debug("COP_SKIP2\n");
 
-            // It must be a SKIP command then.
-            assert(isSkipCmd());
+            // Wait for the next free DMA cycle
+            // The skip command seems to be blocked at 0xE0 as well.
+            if (!agnus->copperCanHaveBus() || agnus->hpos == 0xE0) { reschedule(); break; }
 
             // Compute the beam position that needs to be compared
             beam = agnus->addToBeam(agnus->beamPosition(), 2);

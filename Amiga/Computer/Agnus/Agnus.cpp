@@ -440,7 +440,10 @@ Agnus::copperCanHaveBus()
     // TODO: Think about adding a permanent event BPL_EOL which always
     // triggeres at $E2. Once this is done, this statement can be deletete
     // entirely.
-    if (hpos == 0xE2) return false;
+    if (hpos == 0xE2) {
+        debug(COP_DEBUG, "Copper blocked in last DMA cycle\n");
+        return false;
+    }
 
     // Grant access
     return true;

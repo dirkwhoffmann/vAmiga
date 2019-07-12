@@ -33,13 +33,13 @@
 #define RTC_DEBUG 2         // Real-time clock
 #define DMA_DEBUG 2         // DMA registers
 #define BPL_DEBUG 2         // Bitplane registers
-#define COL_DEBUG 1         // Color registers
+#define COL_DEBUG 2         // Color registers
 #define SPR_DEBUG 2         // Sprite registers
 #define DSK_DEBUG 2         // Disk registers
 #define AUD_DEBUG 2         // Audio registers
 #define CPT_DEBUG 2         // Control ports and connected devices
 #define COPREG_DEBUG 2      // Copper registers
-#define COP_DEBUG 1         // Copper internals
+#define COP_DEBUG 2         // Copper internals
 #define BLT_DEBUG 2         // Blitter registers
 #define BLT_CHECKSUM 2      // Blitter checksum computation
 #define SER_DEBUG 2         // Serial interface
