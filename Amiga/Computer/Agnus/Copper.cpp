@@ -591,6 +591,7 @@ Copper::serviceEvent(EventID id)
 {
     uint16_t reg;
     Beam beam;
+    Beam trigger;
 
     debug(2, "(%d,%d): ", agnus->vpos, agnus->hpos);
 
@@ -694,7 +695,6 @@ Copper::serviceEvent(EventID id)
             skip = false;
 
             // Find the trigger position for this WAIT command
-            Beam trigger;
             if (findMatch(trigger)) {
 
                 // In how many cycles do we get there?

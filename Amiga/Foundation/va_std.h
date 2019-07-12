@@ -34,7 +34,6 @@
 #include "va_config.h"
 #include "va_types.h"
 #include "va_constants.h"
-#include "Beam.h"
 
 
 //

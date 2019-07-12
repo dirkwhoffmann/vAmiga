@@ -138,12 +138,12 @@ template<EventSlot s> void scheduleInc(Cycle cycle, EventID id, int64_t data)
 
 template<EventSlot s> void schedulePos(int16_t vpos, int16_t hpos, EventID id)
 {
-    scheduleAbs<s>(beamToCycle( Beam { vpos, hpos } ), id);
+    scheduleAbs<s>(beamToCycle( Beam(vpos, hpos) ), id);
 }
 
 template<EventSlot s> void schedulePos(int16_t vpos, int16_t hpos, EventID id, int64_t data)
 {
-    scheduleAbs<s>(beamToCycle( Beam { vpos, hpos } ), id, data);
+    scheduleAbs<s>(beamToCycle( Beam(vpos, hpos) ), id, data);
 }
 
 template<EventSlot s> void rescheduleAbs(Cycle cycle)

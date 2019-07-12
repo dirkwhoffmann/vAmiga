@@ -10,6 +10,8 @@
 #ifndef _COPPER_INC
 #define _COPPER_INC
 
+#include "Beam.h"
+
 class Copper : public HardwareComponent
 {
     friend class Agnus;

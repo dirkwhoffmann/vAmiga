@@ -14,6 +14,7 @@
 #include "Copper.h"
 #include "Blitter.h"
 #include "DmaDebugger.h"
+#include "Beam.h"
 
 // Bit plane indices
 #define PLANE1 0
