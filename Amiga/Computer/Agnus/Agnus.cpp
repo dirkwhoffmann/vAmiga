@@ -347,7 +347,7 @@ Agnus::inBplDmaArea() {
     vFlop                              // Vertical DIW flipflop
     && pos.v >= 26                     // Outside VBLANK area
     && pos.v < frameInfo.numLines - 1  // Not in last line of frame
-    && denise->bplconBPU()             // At least one bitplane enabled
+    && activeBitplanes                 // At least one bitplane enabled
     && bplDMA();                       // Bitplane DMA enabled
 }
 
@@ -556,6 +556,7 @@ Agnus::clearDMAEventTable()
 void
 Agnus::allocateBplSlots(int bpu, bool hires, int first, int last)
 {
+    debug("allocateBplSlots(%d, %d, %d, %d\n", bpu, hires, first, last);
     assert(bpu >= 0 && bpu <= 6);
     assert(hires == 0 || hires == 1);
 
@@ -1469,6 +1470,43 @@ Agnus::addBPLxMOD()
         case 3: INC_OCS_PTR(bplpt[2], bpl1mod); // fallthrough
         case 2: INC_OCS_PTR(bplpt[1], bpl2mod); // fallthrough
         case 1: INC_OCS_PTR(bplpt[0], bpl1mod);
+    }
+}
+
+void
+Agnus::pokeBPLCON0(uint16_t oldValue, uint16_t newValue)
+{
+    // Only continue if the value has changed
+    if (oldValue == newValue) return;
+
+    // Update the DMA allocation table in the next rasterline
+    hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
+
+    // Check if the hires bit or one of the BPU bits have been modified
+    if ((oldValue ^ newValue) & 0xF000) {
+
+        /* Determine the number of enabled bitplanes.
+         *
+         *     - In hires mode, at most 4 bitplanes are possible.
+         *     - In lores mode, at most 6 bitplanes are possible.
+         *     - Invalid numbers disable bitplane DMA.
+         */
+        bool hires = (newValue & 0x8000);
+        activeBitplanes = (newValue & 0x7000) >> 12;
+        if (activeBitplanes > (hires ? 4 : 6)) activeBitplanes = 0;
+
+        /* TODO:
+         * BPLCON0 is usually written in each frame.
+         * To speed up, just check the hpos. If it is smaller than the start
+         * of the DMA window, a standard update() is enough and the scheduled
+         * update in hsyncActions (HSYNC_UPDATE_EVENT_TABLE) can be omitted.
+         */
+
+        // Update the DMA allocation table with a 4 cycle delay.
+        allocateBplSlots(inBplDmaArea() ? activeBitplanes : 0, hires, pos.h + 4);
+
+        // Update the currently scheduled event according to the modified table
+        scheduleNextBplEvent();
     }
 }
 

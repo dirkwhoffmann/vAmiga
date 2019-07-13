@@ -240,16 +240,11 @@ Denise::pokeBPLCON0(uint16_t value)
 {
     debug(BPL_DEBUG, "pokeBPLCON0(%X)\n", value);
 
-    uint8_t oldbpu = bplconBPU();
-
-    bplcon0 = value;
-
-    // Bitplanes in use
-    uint8_t bpu = bplconBPU();
-
     // Let Agnus know about the register change
-    agnus->activeBitplanes = bpu;
-    agnus->hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
+    agnus->pokeBPLCON0(bplcon0, value);
+
+    // Remember the new value
+    bplcon0 = value;
 
     /* "Bit 11 of register BPLCON0 selects hold-and-modify mode. The following
      *  bits in BPLCONO must be set for hold-and-modify mode to be active:
@@ -260,48 +255,12 @@ Denise::pokeBPLCON0(uint16_t value)
      *      - Bits BPU2, BPU1, and BPUO - bits 14, 13, and 12, are 101 or 110
      *        (five or six bit-planes active)." [HRM]
      */
+    uint8_t bpu = bplconBPU();
     bool oldHam = ham;
     ham = (bplcon0 & 0x8C00) == 0x0800 && (bpu == 5 || bpu == 6);
 
     if (oldHam ^ ham) {
         // debug("Switching HAM mode %s\n", ham ? "on" : "off");
-    }
-
-    /*
-    if (agnus->hpos == 130 || agnus->hpos == 2) {
-        debug("hpos = %d oldbpu = %d newbpu = %d\n", agnus->hpos, oldbpu, bpu);
-        agnus->dumpDMAEventTable();
-    }
-    */
-
-    // Check if the number of used bitplanes has changed
-    if (oldbpu != bpu) {
-
-        /* TODO:
-         * BPLCON0 is usually written in each frame, in cycle.
-         * To speed up, just check the hpos. If it is smaller than the start
-         * of the DMA window, a standard update() is enough and the scheduled
-         * update in hsyncActions (HSYNC_UPDATE_EVENT_TABLE) can be omitted.
-         */
-
-        // Check if bitplane DMA is possible
-        if (!agnus->inBplDmaArea()) bpu = 0;
-
-        // Agnus will know about the change in 4 cycles
-        int16_t pos = agnus->pos.h + 4;
-        agnus->allocateBplSlots(bpu, hires(), pos);
-
-        // Reschedule the next event according to the changed table
-        // TODO: Wrap this in a nicer API
-        uint8_t next = agnus->nextDmaEvent[agnus->pos.h];
-        if (next) {
-            agnus->schedulePos<BPL_SLOT>(agnus->pos.v, next, agnus->dmaEvent[next]);
-        } else {
-            agnus->cancel<BPL_SLOT>();
-        }
-
-        // Create the table from scratch in the next rasterline
-        agnus->hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
     }
 }
 

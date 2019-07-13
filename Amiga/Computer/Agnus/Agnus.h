@@ -719,7 +719,15 @@ public:
 
 
     //
-    // Running the device
+    // Responding to changes in other components
+    //
+
+    // Called by Denise when BPLCON0 is written to
+    void pokeBPLCON0(uint16_t oldValue, uint16_t newValue);
+
+
+    //
+    // Operating the device
     //
     
 public:
