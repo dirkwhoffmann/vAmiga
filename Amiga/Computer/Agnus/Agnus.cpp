@@ -556,7 +556,6 @@ Agnus::clearDMAEventTable()
 void
 Agnus::allocateBplSlots(int bpu, bool hires, int first, int last)
 {
-    debug("allocateBplSlots(%d, %d, %d, %d\n", bpu, hires, first, last);
     assert(bpu >= 0 && bpu <= 6);
     assert(hires == 0 || hires == 1);
 
