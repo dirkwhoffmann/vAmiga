@@ -529,9 +529,6 @@ public:
 
 public:
 
-    // Returns the current beam position
-    Beam beamPosition();
-
     /* Translates a beam position to a master cycle.
      * 'beam' is a position inside the current frame.
      */

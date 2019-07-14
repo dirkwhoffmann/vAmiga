@@ -248,7 +248,7 @@ Copper::findMatch(Beam &result)
     int16_t vMatch, hMatch;
 
     // Get the current beam position
-    Beam b = agnus->beamPosition();
+    Beam b = agnus->pos;
 
     // Advance to the position where the comparator circuit gets active
     // No longer needed, because we added two new Copper states to wait command
@@ -441,44 +441,8 @@ Copper::comparator(Beam beam)
 bool
 Copper::comparator()
 {
-    return comparator(agnus->beamPosition());
+    return comparator(agnus->pos);
 }
-
-#if 0
-uint32_t
-Copper::nextTriggerPosition()
-{
-    // Get the current beam position
-    Beam b = agnus->beamPosition();
-
-    // Advance two cycles to get to the first possible trigger position
-    b = agnus->addToBeam(b, 2);
-
-    // Translate position to a binary 17-bit representation
-    uint32_t beam = (b.y << 8) + b.x;
-
-    /* We are going to compute the smallest beam position satisfying
-     *
-     *   1) computed position >= current beam position + 2,
-     *   2) the comparator circuit triggers.
-     *
-     * We do this by starting with the maximum possible value:
-     */
-    uint32_t pos = 0x1FFE2;
-
-    /* Now, we iterate through bit from left to right and set the bit we see
-     * to 0 as long as conditions 1) and 2) hold.
-     */
-    for (int i = 16; i >= 0; i--) {
-        uint32_t newPos = pos & ~(1 << i);
-        if (newPos >= beam && comparator(newPos)) {
-            pos = newPos;
-        }
-    }
-
-    return pos;
-}
-#endif
 
 bool
 Copper::isMoveCmd()
@@ -747,7 +711,7 @@ Copper::serviceEvent(EventID id)
             if (agnus->pos.h == 0xE0) { reschedule(); break; }
 
             // Compute the beam position that needs to be compared
-            beam = agnus->addToBeam(agnus->beamPosition(), 2);
+            beam = agnus->addToBeam(agnus->pos, 2);
 
             // Run the comparator to see if the next command is skipped
             if (verbose) debug("Running comparator with (%d,%d)\n", beam.v, beam.h);

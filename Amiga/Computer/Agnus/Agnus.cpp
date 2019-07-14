@@ -351,17 +351,6 @@ Agnus::inBplDmaArea() {
     && bplDMA();                       // Bitplane DMA enabled
 }
 
-Beam
-Agnus::beamPosition()
-{
-    Beam result;
-
-    result.v = pos.v;
-    result.h = pos.h;
-
-    return result;
-}
-
 Cycle
 Agnus::beamToCycle(Beam beam)
 {
