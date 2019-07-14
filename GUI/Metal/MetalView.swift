@@ -322,12 +322,12 @@ public class MetalView: MTKView {
         if longFrame {
             longFrameTexture.replace(region: region,
                                      mipmapLevel: 0,
-                                     withBytes: bytes,
+                                     withBytes: bytes + (15 * 4),
                                      bytesPerRow: 4 * Int(HPIXELS))
         } else {
             shortFrameTexture.replace(region: region,
                                      mipmapLevel: 0,
-                                     withBytes: bytes,
+                                     withBytes: bytes + (15 * 4),
                                      bytesPerRow: 4 * Int(HPIXELS))
         }
     }
