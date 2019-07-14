@@ -362,25 +362,47 @@ static const char *customReg[256] = {
 // Screen parameters
 //
 
-// Beam positions
-#define VPOS_CNT   313
-#define HPOS_CNT   227
-#define VBLANK_CNT 26
-#define HBLANK_CNT 54
+/* Beam positions
+ *
+ * The vertical coordinates are measured in "scanlines".
+ * The horizontal coordinates are measured in DMA cycles.
+ */
 
-#define VPOS_MAX   312
-#define HPOS_MAX   226
-#define VBLANK_MAX 25
-#define HBLANK_MAX 53
+#define VPOS_MAX      312
+#define VPOS_CNT      313
+#define HPOS_MAX      226
+#define HPOS_CNT      227
 
-// Screen buffer pixel counts
-#define VPIXELS       313  // VPOS_CNT
-#define HPIXELS       908  // 4 * HPOS_CNT  // (was 1024)
+/* Screen buffer parameters
+ *
+ * All values are measured in pixels.
+ * One DMA cycle corresponds to 4 pixels. Hence, HPIXELS equals 4 * HPOS_CNT.
+ * VPIXELS is one greater than VPOS_CNT, because of the misalignment offset
+ * applied to the screen buffer start address (see below).
+ */
+
+#define VPIXELS       314                        // VPOS_CNT + 1 line
+#define HPIXELS       908                        // 4 * HPOS_CNT
 #define PIXELS        (VPIXELS * HPIXELS)
-#define HBLANK_PIXELS 216
-#define VBLANK_PIXELS 26
+#define LAST_PIXEL    907
 
-#define FIRST_VISIBLE 216
-#define LAST_VISIBLE  907
+/* Blanking area
+ *
+ * Note: The first DMA cycle belonging to the HBLANK area is cycle $0F (15) and
+ * the last is cycle $35 (53). To mimic a real PAL screen, a misalignment
+ * offset is added to the start address of the screen buffer before it is
+ * written into the GPU texture. This offset aligns the HBLANK to the left
+ * and causes the image data belonging to DMA cycles $00 to $0E to appear in
+ * the previous scanline. This is also the reason why VPIXELS needs to be
+ * greater than VPOS_CNT. Otherwise, we would access unallocated memory at the
+ * end of the last scanline.
+ */
+
+#define HBLANK_MIN    15
+#define HBLANK_MAX    53
+#define HBLANK_CNT    39
+#define VBLANK_MIN    0
+#define VBLANK_MAX    25
+#define VBLANK_CNT    26
 
 #endif 

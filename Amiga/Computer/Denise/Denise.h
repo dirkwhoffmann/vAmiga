@@ -116,7 +116,7 @@ public:
      * from this array, translates them into RGBA, and writes the RGBA values
      * into one of the four frame buffers (see below).
      */
-    uint8_t rasterline[LAST_VISIBLE + 1]; // HPOS_CNT * 4];
+    uint8_t rasterline[HPIXELS];
 
     /* Denise keeps four frame buffers, two for storing long frames and
      * another two for storing short frames. The short frame buffers are only

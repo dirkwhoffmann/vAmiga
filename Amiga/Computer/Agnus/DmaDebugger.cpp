@@ -143,9 +143,6 @@ DmaDebugger::computeOverlay()
     GpuColor col;
     int *ptr = amiga->denise.pixelAddr(0);
 
-    // Clear old data in the HBLANK area
-    // for (int i = 0; i < HBLANK_PIXELS; ptr[i++] = 0);
-
     for (int i = 0; i < HPOS_CNT; i++, ptr += 4) {
 
         int data = values[i];
@@ -218,7 +215,7 @@ DmaDebugger::vSyncHandler()
     // Clear old data in the next frame's VBLANK area
     int *ptr = amiga->denise.frameBuffer->data;
     for (int row = 0; row < VBLANK_CNT; row++) {
-        for (int col = 0; col <= LAST_VISIBLE; col++) {
+        for (int col = 0; col <= LAST_PIXEL; col++) {
             ptr[row * HPIXELS + col] = 0;
         }
     }

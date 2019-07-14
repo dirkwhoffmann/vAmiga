@@ -238,10 +238,9 @@ void
 Colorizer::translateToRGBA(uint8_t *src, int *dest)
 {
     int pixel = 0;
-    int change = 0;
 
     // Process recorded color changes
-    for (; change < colorChangeCount; change++) {
+    for (int change = 0; change < colorChangeCount; change++) {
 
         // Draw a chunk of pixels
         for (; pixel < colorChanges[change].pixel; pixel++) {
@@ -256,7 +255,7 @@ Colorizer::translateToRGBA(uint8_t *src, int *dest)
     }
 
     // Draw the rest of the line
-    for (; pixel <= LAST_VISIBLE; pixel++) {
+    for (; pixel <= LAST_PIXEL; pixel++) {
 
         assert(isColorTableIndex(src[pixel]));
         dest[pixel] = rgba[colors[src[pixel]]];
@@ -274,7 +273,7 @@ Colorizer::translateToRGBA(uint8_t *src, int *dest)
 void
 Colorizer::translateToRGBA_HAM(uint8_t *src, int *dest)
 {
-    int pixel = FIRST_VISIBLE;
+    int pixel = 0;
 
     // Process recorded color changes
     for (int change = 0; change < colorChangeCount; change++) {
@@ -290,7 +289,7 @@ Colorizer::translateToRGBA_HAM(uint8_t *src, int *dest)
     }
 
     // Draw the rest of the line
-    for (; pixel <= LAST_VISIBLE; pixel++) {
+    for (; pixel <= LAST_PIXEL; pixel++) {
         dest[pixel] = rgba[computeHAM(src[pixel])];
         src[pixel] = 0;
     }

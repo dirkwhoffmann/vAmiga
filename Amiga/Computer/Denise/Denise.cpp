@@ -578,8 +578,8 @@ Denise::drawSprites()
                 col |=    (sprdatb[nr] >> (15 - i)) & 1;
 
                 if (col) {
-                    if (pos < LAST_VISIBLE) rasterline[pos] = baseCol + col;
-                    if (pos < LAST_VISIBLE) rasterline[pos+1] = baseCol + col;
+                    if (pos < LAST_PIXEL) rasterline[pos] = baseCol + col;
+                    if (pos < LAST_PIXEL) rasterline[pos+1] = baseCol + col;
                 }
             }
         }
@@ -608,7 +608,7 @@ Denise::drawBorder()
     // Draw the border
     if (lineIsBlank) {
 
-        for (int i = FIRST_VISIBLE; i <= LAST_VISIBLE; i++) {
+        for (int i = 0; i <= LAST_PIXEL; i++) {
            rasterline[i] = borderV;
         }
 
@@ -616,7 +616,7 @@ Denise::drawBorder()
 
         // Draw left border
         if (!agnus->hFlop && agnus->hFlopOn != -1) {
-            for (int i = FIRST_VISIBLE; i < 2 * agnus->hFlopOn; i++) {
+            for (int i = 0; i < 2 * agnus->hFlopOn; i++) {
                 assert(i < sizeof(rasterline));
                 rasterline[i] = borderL;
             }
@@ -624,7 +624,7 @@ Denise::drawBorder()
 
         // Draw right border
         if (agnus->hFlopOff != -1) {
-            for (int i = 2 * agnus->hFlopOff; i <= LAST_VISIBLE; i++) {
+            for (int i = 2 * agnus->hFlopOff; i <= LAST_PIXEL; i++) {
                 assert(i < sizeof(rasterline));
                 rasterline[i] = borderR;
             }
@@ -632,11 +632,9 @@ Denise::drawBorder()
     }
 
 #ifdef LINE_DEBUG
-    rasterline[FIRST_VISIBLE] = 64;
-    rasterline[2 * 0x18] = 65;
     int16_t vpos = agnus->vpos;
     bool lines = vpos == 0xEF; // vpos == 26 || vpos == 0x50 || vpos == 276 || vpos == 255;
-    if (lines) for (int i = FIRST_VISIBLE + 40; i <= LAST_VISIBLE / 2; rasterline[i++] = 64);
+    if (lines) for (int i = 0; i <= LAST_PIXEL / 2; rasterline[i++] = 64);
 #endif
 }
 
