@@ -51,10 +51,10 @@ Denise::Denise()
 
     });
 
-    longFrame1.data = new int[HPIXELS * VPIXELS];
-    longFrame2.data = new int[HPIXELS * VPIXELS];
-    shortFrame1.data = new int[HPIXELS * VPIXELS];
-    shortFrame2.data = new int[HPIXELS * VPIXELS];
+    longFrame1.data = new int[PIXELS];
+    longFrame2.data = new int[PIXELS];
+    shortFrame1.data = new int[PIXELS];
+    shortFrame2.data = new int[PIXELS];
 }
 
 Denise::~Denise()
@@ -95,14 +95,7 @@ Denise::_powerOn()
 void
 Denise::_powerOff()
 {
-    /* REMOVE AFTER DEBUGGING
-    for (unsigned line = 0; line < VPIXELS; line++) {
-        for (unsigned i = 0; i < HPIXELS; i++) {
-            screenBuffer1[line * HPIXELS + i] =
-            screenBuffer2[line * HPIXELS + i] = 0x000000FF;
-        }
-    }
-    */
+    
 }
 
 void

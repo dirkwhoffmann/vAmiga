@@ -237,10 +237,11 @@ Colorizer::recordColorRegisterChange(uint32_t addr, uint16_t value, int16_t pixe
 void
 Colorizer::translateToRGBA(uint8_t *src, int *dest)
 {
-    int pixel = FIRST_VISIBLE;
+    int pixel = 0; // FIRST_VISIBLE;
     int change = 0;
 
     // Draw the first 15 pixels that appear in the scanline above
+    /*
     int *above = dest - HPIXELS + 4 * 0xE3;
     for (int i = 0; i < 4 * 15; i++) {
 
@@ -251,6 +252,7 @@ Colorizer::translateToRGBA(uint8_t *src, int *dest)
         }
         above[i] = rgba[colors[0]];
     }
+    */
 
     // Process recorded color changes
     for (; change < colorChangeCount; change++) {
@@ -273,6 +275,11 @@ Colorizer::translateToRGBA(uint8_t *src, int *dest)
         assert(isColorTableIndex(src[pixel]));
         dest[pixel] = rgba[colors[src[pixel]]];
         src[pixel] = 0;
+    }
+
+    // Wipe out the HBLANK area
+    for (pixel = 4 * 0x0F; pixel <= 4 * 0x35; pixel++) {
+        dest[pixel] = 0x00444444;
     }
 
     colorChangeCount = 0;

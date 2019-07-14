@@ -144,7 +144,7 @@ DmaDebugger::computeOverlay()
     int *ptr = amiga->denise.pixelAddr(0);
 
     // Clear old data in the HBLANK area
-    for (int i = 0; i < HBLANK_PIXELS; ptr[i++] = 0);
+    // for (int i = 0; i < HBLANK_PIXELS; ptr[i++] = 0);
 
     for (int i = 0; i < HPOS_CNT; i++, ptr += 4) {
 

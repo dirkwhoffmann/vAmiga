@@ -211,10 +211,16 @@ public class MetalView: MTKView {
 
     var alpha = AnimatedFloat(0.0)
 
+    /*
     static let cutoutX1default = Float(HBLANK_PIXELS) / Float(HPIXELS)
     static let cutoutY1default = Float(VBLANK_PIXELS) / Float(VPIXELS)
     static let cutoutX2default = (Float)(4 * (HPOS_CNT + 8)) / Float(HPIXELS)
     static let cutoutY2default = (Float)(VPOS_CNT) / Float(VPIXELS)
+    */
+    static let cutoutX1default = Float(FIRST_VISIBLE) / Float(EmulatorTexture.width)
+    static let cutoutY1default = Float(VBLANK_PIXELS) / Float(EmulatorTexture.height)
+    static let cutoutX2default = (Float)(LAST_VISIBLE) / Float(EmulatorTexture.width)
+    static let cutoutY2default = (Float)(VPOS_CNT) / Float(EmulatorTexture.height)
 
     var cutoutX1 = AnimatedFloat(cutoutX1default)
     var cutoutY1 = AnimatedFloat(cutoutY1default)
@@ -306,26 +312,9 @@ public class MetalView: MTKView {
     // Expand view vertically by the height of the status bar
     public func expand() { adjustHeight(24.0) }
 
-    /*
-    public func updateScreenGeometry() {
-
-        // Update texture cutout
-        textureRect = CGRect.init(x: CGFloat(cutoutX1.current),
-                                  y: CGFloat(cutoutY1.current),
-                                  width: CGFloat(cutoutX2.current - cutoutX1.current),
-                                  height: CGFloat(cutoutY2.current - cutoutY1.current))
-
-        // Enable this for debugging (will display the whole texture)
-        // textureRect = CGRect.init(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
-
-        // Update texture coordinates in vertex buffer
-        buildVertexBuffer()
-    }
-    */
-
     func updateTexture(bytes: UnsafeMutablePointer<Int32>, longFrame: Bool) {
 
-        let w = longFrameTexture.width
+        let w = Int(HPIXELS) //    longFrameTexture.width
         let h = longFrameTexture.height
         // let region = MTLRegionMake3D(0, 0, 0, w, h, 1)
         let region = MTLRegionMake2D(0, 0, w, h)

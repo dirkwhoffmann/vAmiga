@@ -16,8 +16,8 @@ import simd
 // Parameters of a short / long frame texture delivered by the emulator
 struct EmulatorTexture {
 
-    static let width = Int(HPIXELS)
-    static let height = Int(VPIXELS)
+    static let width = 1024 // Int(HPIXELS)
+    static let height = 320 // Int(VPIXELS)
 }
 
 // Parameters of a textures that combines a short and a long frame
