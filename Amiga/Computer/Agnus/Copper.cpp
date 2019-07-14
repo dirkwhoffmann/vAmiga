@@ -251,7 +251,8 @@ Copper::findMatch(Beam &result)
     Beam b = agnus->beamPosition();
 
     // Advance to the position where the comparator circuit gets active
-    b = agnus->addToBeam(b, 4);
+    // No longer needed, because we added two new Copper states to wait command
+    // b = agnus->addToBeam(b, 4);
 
     // Set up the comparison positions
     int16_t vComp = getVP();
@@ -261,8 +262,15 @@ Copper::findMatch(Beam &result)
     int16_t vMask = getVM() | 0x80;
     int16_t hMask = getHM() & 0xFE;
 
+    // Check if the current line is already below the vertical trigger position
+    if ((b.v & vMask) > (vComp & vMask)) {
+
+        // Success. The current position already matches
+        return true;
+    }
+
     // Check if the current line matches the vertical trigger position
-    if ((b.v & vMask) >= (vComp & vMask)) {
+    if ((b.v & vMask) == (vComp & vMask)) {
 
         // Check if we find a horizontal match in this line
         if (findHorizontalMatch(b.h, hComp, hMask, hMatch)) {
@@ -674,7 +682,8 @@ Copper::serviceEvent(EventID id)
             break;
 
         case COP_WAIT1:
-
+            
+            // verbose = true;
             if (verbose) debug("COP_WAIT1\n");
 
             // Wait for the next free DMA cycle

@@ -1117,29 +1117,29 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x0DE >> 1: // Unused
             break;
         case 0x0E0 >> 1: // BPL1PTH
-            agnus->pokeBPLxPTH<0>(value); return;
+            agnus->pokeBPLxPTH<0,s>(value); return;
         case 0x0E2 >> 1: // BPL1PTL
-            agnus->pokeBPLxPTL<0>(value); return;
+            agnus->pokeBPLxPTL<0,s>(value); return;
         case 0x0E4 >> 1: // BPL2PTH
-            agnus->pokeBPLxPTH<1>(value); return;
+            agnus->pokeBPLxPTH<1,s>(value); return;
         case 0x0E6 >> 1: // BPL2PTL
-            agnus->pokeBPLxPTL<1>(value); return;
+            agnus->pokeBPLxPTL<1,s>(value); return;
         case 0x0E8 >> 1: // BPL3PTH
-            agnus->pokeBPLxPTH<2>(value); return;
+            agnus->pokeBPLxPTH<2,s>(value); return;
         case 0x0EA >> 1: // BPL3PTL
-            agnus->pokeBPLxPTL<2>(value); return;
+            agnus->pokeBPLxPTL<2,s>(value); return;
         case 0x0EC >> 1: // BPL4PTH
-            agnus->pokeBPLxPTH<3>(value); return;
+            agnus->pokeBPLxPTH<3,s>(value); return;
         case 0x0EE >> 1: // BPL4PTL
-            agnus->pokeBPLxPTL<3>(value); return;
+            agnus->pokeBPLxPTL<3,s>(value); return;
         case 0x0F0 >> 1: // BPL5PTH
-            agnus->pokeBPLxPTH<4>(value); return;
+            agnus->pokeBPLxPTH<4,s>(value); return;
         case 0x0F2 >> 1: // BPL5PTL
-            agnus->pokeBPLxPTL<4>(value); return;
+            agnus->pokeBPLxPTL<4,s>(value); return;
         case 0x0F4 >> 1: // BPL6PTH
-            agnus->pokeBPLxPTH<5>(value); return;
+            agnus->pokeBPLxPTH<5,s>(value); return;
         case 0x0F6 >> 1: // BPL6PTL
-            agnus->pokeBPLxPTL<5>(value); return;
+            agnus->pokeBPLxPTL<5,s>(value); return;
         case 0x0F8 >> 1: // Unused
         case 0x0FA >> 1: // Unused
         case 0x0FC >> 1: // Unused

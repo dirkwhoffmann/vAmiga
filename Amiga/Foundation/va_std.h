@@ -292,7 +292,7 @@ bool checkFileSizeRange(const char *filename, long min, long max);
 /* Checks the header signature (magic bytes) of a file.
  * This function is used for determining the type of a file.
  *   - path      File name, must not be Null
- *   - header    Expected byte sequence.
+ *   - header    Expected byte sequence
  *   - length    Length of the expected byte sequence in bytes
  */
 bool matchingFileHeader(const char *path, const uint8_t *header, size_t length);

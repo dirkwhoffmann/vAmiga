@@ -207,6 +207,8 @@ typedef enum : long
     REG_DIWSTOP,
     REG_BPL1MOD,
     REG_BPL2MOD,
+    REG_BPL0PTH,
+    REG_BPL0PTL,
     REG_EVENT_COUNT,
 
     // Serial data out (UART)

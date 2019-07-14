@@ -201,6 +201,8 @@ Agnus::inspectEventSlot(EventSlot nr)
                 case REG_DIWSTOP:   i->eventName = "REG_DIWSTOP"; break;
                 case REG_BPL1MOD:   i->eventName = "REG_BPL1MOD"; break;
                 case REG_BPL2MOD:   i->eventName = "REG_BPL2MOD"; break;
+                case REG_BPL0PTH:   i->eventName = "REG_BPL0PTH"; break;
+                case REG_BPL0PTL:   i->eventName = "REG_BPL0PTL"; break;
                 default:            i->eventName = "*** INVALID ***"; break;
             }
             break;
@@ -765,6 +767,9 @@ Agnus::serviceREGEvent(EventSlot nr)
         case REG_DIWSTOP: setDIWSTOP((uint16_t)data); break;
         case REG_BPL1MOD: setBPL1MOD((uint16_t)data); break;
         case REG_BPL2MOD: setBPL2MOD((uint16_t)data); break;
+        case REG_BPL0PTH: setBPLxPTH<0>((uint16_t)data); break;
+        case REG_BPL0PTL: setBPLxPTL<0>((uint16_t)data); break;
+
         default: assert(false);
     }
 
