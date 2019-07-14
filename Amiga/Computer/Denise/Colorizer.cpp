@@ -238,9 +238,22 @@ void
 Colorizer::translateToRGBA(uint8_t *src, int *dest)
 {
     int pixel = FIRST_VISIBLE;
+    int change = 0;
+
+    // Draw the first 15 pixels that appear in the scanline above
+    int *above = dest - HPIXELS + 4 * 0xE3;
+    for (int i = 0; i < 4 * 15; i++) {
+
+        // Check for a color change
+        if (change < colorChangeCount && colorChanges[change].pixel == i) {
+            setColor(colorChanges[change].addr, colorChanges[change].value);
+            change++;
+        }
+        above[i] = rgba[colors[0]];
+    }
 
     // Process recorded color changes
-    for (int change = 0; change < colorChangeCount; change++) {
+    for (; change < colorChangeCount; change++) {
 
         // Draw a chunk of pixels
         for (; pixel < colorChanges[change].pixel; pixel++) {

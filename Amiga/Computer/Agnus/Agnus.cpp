@@ -1628,6 +1628,11 @@ Agnus::hsyncHandler()
     // Make sure we really reached the end of the line
     if (pos.h != HPOS_MAX) { dump(); assert(false); }
 
+    // Schedule the next event
+    // scheduleInc<SYNC_SLOT>(DMA_CYCLES(16), SYNC_HBLANK, pos.v);
+    scheduleInc<SYNC_SLOT>(DMA_CYCLES(HPOS_CNT), SYNC_EOL, pos.v);
+
+
     //
     // Let other components finish up the current line
     //
@@ -1774,9 +1779,6 @@ Agnus::hsyncHandler()
         cancel<DAS_SLOT>();
     }
 
-    // Schedule the next event
-    scheduleInc<SYNC_SLOT>(DMA_CYCLES(16), SYNC_HBLANK);
-
 
     //
     // Let other components prepare for the next line
@@ -1834,13 +1836,16 @@ Agnus::vsyncHandler()
 }
 
 void
-Agnus::hblankHandler()
+Agnus::hblankHandler(int16_t vpos)
 {
     // Make sure this function is called in the correct DMA cycle
-    if (pos.h != 0xF) { debug("hblankHandler()\n"); assert(false); }
+    if (pos.h != 0xF) { debug("hblankHandler(%d)\n", vpos); assert(false); }
 
     // Schedule next event
     scheduleInc<SYNC_SLOT>(DMA_CYCLES(211), SYNC_EOL);
+
+    // Let Denise draw the previous rasterline
+    denise->endOfLine(vpos);
 }
 
 

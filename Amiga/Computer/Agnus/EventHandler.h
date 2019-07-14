@@ -204,7 +204,7 @@ void scheduleNextBplEvent();
 void serviceDASEvent(EventID id);
 
 // Event handler for the SYNC slot
-void serviceSYNCEvent(EventID id);
+void serviceSYNCEvent(EventID id, int64_t data);
 
 // Event handler for the various IRQ slots
 void serviceIRQEvent(EventSlot slot, int irqBit);

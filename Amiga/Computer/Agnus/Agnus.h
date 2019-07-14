@@ -753,7 +753,7 @@ private:
     void vsyncHandler();
 
     // Called when servicing a SYNC_HBLANK event in the SYNC slot.
-    void hblankHandler();
+    void hblankHandler(int16_t vpos);
 
 
     //

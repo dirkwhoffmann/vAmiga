@@ -465,7 +465,7 @@ Agnus::executeEventsUntil(Cycle cycle) {
             paula->servePotEvent(slot[POT_SLOT].id);
         }
         if (isDue<SYNC_SLOT>(cycle)) {
-            serviceSYNCEvent(slot[SYNC_SLOT].id);
+            serviceSYNCEvent(slot[SYNC_SLOT].id, slot[SYNC_SLOT].data);
         }
         if (isDue<INSPECTOR_SLOT>(cycle)) {
             serveINSEvent();
@@ -778,7 +778,7 @@ Agnus::serviceREGEvent(EventSlot nr)
 }
 
 void
-Agnus::serviceSYNCEvent(EventID id)
+Agnus::serviceSYNCEvent(EventID id, int64_t data)
 {
     switch (id) {
 
@@ -789,7 +789,7 @@ Agnus::serviceSYNCEvent(EventID id)
 
         case SYNC_HBLANK:
 
-            hblankHandler();
+            hblankHandler((int16_t)data);
             break;
 
         default:
