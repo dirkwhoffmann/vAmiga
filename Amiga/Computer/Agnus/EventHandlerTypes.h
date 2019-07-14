@@ -226,7 +226,6 @@ typedef enum : long
 
     // SYNC slot
     SYNC_EOL = 1,
-    SYNC_HBLANK,
     SYNC_EVENT_COUNT,
     
     // Inspector slot

@@ -244,7 +244,6 @@ Agnus::inspectEventSlot(EventSlot nr)
 
                 case 0:             i->eventName = "none"; break;
                 case SYNC_EOL:      i->eventName = "SYNC_EOL"; break;
-                case SYNC_HBLANK:   i->eventName = "SYNC_HBLANK"; break;
                 default:            i->eventName = "*** INVALID ***"; break;
             }
             break;
@@ -785,11 +784,6 @@ Agnus::serviceSYNCEvent(EventID id, int64_t data)
         case SYNC_EOL:
 
             hsyncHandler();
-            break;
-
-        case SYNC_HBLANK:
-
-            hblankHandler((int16_t)data);
             break;
 
         default:
