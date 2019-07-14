@@ -64,7 +64,7 @@ struct Beam
 
     int operator-(const Beam& beam) const
     {
-        return (v - beam.v) * HPOS_CNT + (h - beam.h);
+        return (v * HPOS_CNT + h) - (beam.v * HPOS_CNT + beam.h);
     }
 
     Beam& operator++()

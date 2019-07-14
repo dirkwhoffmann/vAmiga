@@ -266,6 +266,7 @@ Copper::findMatch(Beam &result)
     if ((b.v & vMask) > (vComp & vMask)) {
 
         // Success. The current position already matches
+        result = b;
         return true;
     }
 
@@ -565,9 +566,10 @@ Copper::serviceEvent(EventID id)
     Beam beam;
     Beam trigger;
 
-    debug(2, "(%d,%d): ", agnus->pos.v, agnus->pos.h);
-
     servicing = true;
+
+    // Copper can only get the evenly numbered slots
+    if (agnus->pos.h % 2) { reschedule(); return; }
 
     switch (id) {
             
@@ -671,16 +673,31 @@ Copper::serviceEvent(EventID id)
             if (findMatch(trigger)) {
 
                 // In how many cycles do we get there?
-                Cycle delay = agnus->beamDiff(trigger.v, trigger.h);
-                assert(delay < NEVER);
+                // Cycle delay = agnus->beamDiff(trigger.v, trigger.h);
+                int delay = trigger - agnus->pos;
+                // assert(delay < NEVER);
+                // assert(delay % 2 == 0);
 
-                if (verbose) debug("FOUND MATCH in %d cycles\n", delay);
+                if (verbose) debug("(%d,%d) matches in %d cycles\n", trigger.v, trigger.h, delay);
 
-                // Copper wakes up 2 cycles earlier...
-                delay -= DMA_CYCLES(2);
+                if (delay == 0) {
 
-                // ... with a COP_REQ_DMA event.
-                agnus->scheduleRel<COP_SLOT>(delay, COP_REQ_DMA);
+                    // Copper does not stop
+                    agnus->scheduleRel<COP_SLOT>(DMA_CYCLES(2), COP_FETCH);
+
+                } else if (delay == 2) {
+
+                    // Copper does not stop
+                    agnus->scheduleRel<COP_SLOT>(DMA_CYCLES(2), COP_FETCH);
+
+                } else {
+
+                    // Copper wakes up 2 cycles earlier
+                    delay -= 2;
+
+                    // ... with a COP_REQ_DMA event.
+                    agnus->scheduleRel<COP_SLOT>(DMA_CYCLES(delay), COP_REQ_DMA);
+                }
 
             } else {
 

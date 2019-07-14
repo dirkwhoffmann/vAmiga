@@ -473,8 +473,8 @@ public:
 public:
 
     // Returns the current position of the video beam
-    int16_t vpos() { return pos.v; }
-    int16_t hpos() { return pos.h; }
+    // int16_t vpos() { return pos.v; }
+    // int16_t hpos() { return pos.h; }
 
     // Indicates if the current frame is a long or a short frame
     bool isLongFrame() { return frameInfo.numLines == 313; }
@@ -551,7 +551,7 @@ public:
 
     // Returns the current beam position as a 17 bit value
     // DEPRECATED
-    uint32_t getBeam() { return BEAM(vpos(), hpos()); }
+    uint32_t getBeam() { return BEAM(pos.v, pos.h); }
     
     /* Returns the number of DMA cycles per rasterline
      * The value is valid for PAL machines, only.
@@ -571,7 +571,7 @@ public:
      * DEPRECATED
      */
     Cycle beamDiff(int16_t vStart, int16_t hStart, int16_t vEnd, int16_t hEnd);
-    Cycle beamDiff(int16_t vEnd, int16_t hEnd) { return beamDiff(vpos(), hpos(), vEnd, hEnd); }
+    Cycle beamDiff(int16_t vEnd, int16_t hEnd) { return beamDiff(pos.v, pos.h, vEnd, hEnd); }
     Cycle beamDiff(int32_t end) { return beamDiff(VPOS(end), HPOS(end)); }
     
 
@@ -743,14 +743,17 @@ private:
     template <int nr> void executeSecondSpriteCycle();
 
     /* Concludes a rasterline
-     * Called when servicing a SYNC_H event in the SYNC slot.
+     * Called when servicing a SYNC_EOL event in the SYNC slot.
      */
     void hsyncHandler();
 
-    /* Concludes a rasterline
+    /* Concludes a frame
      * Called by hsyncHandler() when the last rasterline has been concluded.
      */
     void vsyncHandler();
+
+    // Called when servicing a SYNC_HBLANK event in the SYNC slot.
+    void hblankHandler();
 
 
     //

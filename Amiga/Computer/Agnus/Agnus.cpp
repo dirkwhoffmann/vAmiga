@@ -237,7 +237,7 @@ Agnus::_powerOn()
     scheduleAbs<SEC_SLOT>(NEVER, SEC_TRIGGER);
 
     // Schedule the first SYNC event
-    scheduleAbs<SYNC_SLOT>(DMA_CYCLES(HPOS_MAX), SYNC_H);
+    scheduleAbs<SYNC_SLOT>(DMA_CYCLES(HPOS_MAX), SYNC_EOL);
 
     // Schedule the first CIA A and CIA B events
     scheduleAbs<CIAA_SLOT>(CIA_CYCLES(1), CIA_EXECUTE);
@@ -408,7 +408,8 @@ Agnus::beamDiff(int16_t vStart, int16_t hStart, int16_t vEnd, int16_t hEnd)
     // Compute vertical and horizontal difference
     int32_t vDiff  = vEnd - vStart;
     int32_t hDiff  = hEnd - hStart;
-    
+    debug("vdiff: %d hdiff: %d\n", vDiff, hDiff);
+
     // In PAL mode, all lines have the same length (227 color clocks)
     return DMA_CYCLES(vDiff * 227 + hDiff);
 }
@@ -1378,7 +1379,6 @@ Agnus::pokeBPLxPTH(uint16_t value)
             break;
 
         case POKE_COPPER:
-            debug("POKE_COPPER\n");
             scheduleRegEvent<REG_COP_SLOT>(DMA_CYCLES(2), REG_BPL0PTH, (int64_t)value);
             break;
 
@@ -1404,7 +1404,6 @@ Agnus::pokeBPLxPTL(uint16_t value)
             break;
 
         case POKE_COPPER:
-            debug("POKE_COPPER\n");
             scheduleRegEvent<REG_COP_SLOT>(DMA_CYCLES(0), REG_BPL0PTL, (int64_t)value);
             break;
 
@@ -1775,8 +1774,8 @@ Agnus::hsyncHandler()
         cancel<DAS_SLOT>();
     }
 
-    // Schedule the first SYNC event
-    schedulePos<SYNC_SLOT>(pos.v, HPOS_MAX, SYNC_H);
+    // Schedule the next event
+    scheduleInc<SYNC_SLOT>(DMA_CYCLES(16), SYNC_HBLANK);
 
 
     //
@@ -1832,6 +1831,16 @@ Agnus::vsyncHandler()
     if (!amiga->getWarp()) {
         amiga->synchronizeTiming();
     }
+}
+
+void
+Agnus::hblankHandler()
+{
+    // Make sure this function is called in the correct DMA cycle
+    if (pos.h != 0xF) { debug("hblankHandler()\n"); assert(false); }
+
+    // Schedule next event
+    scheduleInc<SYNC_SLOT>(DMA_CYCLES(211), SYNC_EOL);
 }
 
 

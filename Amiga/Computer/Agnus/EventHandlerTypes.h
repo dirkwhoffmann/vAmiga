@@ -225,7 +225,8 @@ typedef enum : long
     POT_EVENT_COUNT,
 
     // SYNC slot
-    SYNC_H = 1,
+    SYNC_EOL = 1,
+    SYNC_HBLANK,
     SYNC_EVENT_COUNT,
     
     // Inspector slot

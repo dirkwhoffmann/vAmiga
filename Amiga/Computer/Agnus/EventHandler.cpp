@@ -243,7 +243,8 @@ Agnus::inspectEventSlot(EventSlot nr)
             switch (slot[nr].id) {
 
                 case 0:             i->eventName = "none"; break;
-                case SYNC_H:        i->eventName = "SYNC_H"; break;
+                case SYNC_EOL:      i->eventName = "SYNC_EOL"; break;
+                case SYNC_HBLANK:   i->eventName = "SYNC_HBLANK"; break;
                 default:            i->eventName = "*** INVALID ***"; break;
             }
             break;
@@ -464,7 +465,6 @@ Agnus::executeEventsUntil(Cycle cycle) {
             paula->servePotEvent(slot[POT_SLOT].id);
         }
         if (isDue<SYNC_SLOT>(cycle)) {
-            assert(slot[SYNC_SLOT].id == SYNC_H);
             serviceSYNCEvent(slot[SYNC_SLOT].id);
         }
         if (isDue<INSPECTOR_SLOT>(cycle)) {
@@ -782,9 +782,14 @@ Agnus::serviceSYNCEvent(EventID id)
 {
     switch (id) {
 
-        case SYNC_H:
+        case SYNC_EOL:
 
             hsyncHandler();
+            break;
+
+        case SYNC_HBLANK:
+
+            hblankHandler();
             break;
 
         default:
