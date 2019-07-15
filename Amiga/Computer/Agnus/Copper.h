@@ -254,10 +254,10 @@ public:
     void serviceEvent(EventID id);
 
     // Schedules the next Copper event
-    void schedule(EventID next);
+    void schedule(EventID next, int delay = 2);
 
     // Reschedules the current Copper event
-    void reschedule();
+    void reschedule(int delay = 2);
 
 private:
     

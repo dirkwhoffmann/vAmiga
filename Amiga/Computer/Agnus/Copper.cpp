@@ -569,7 +569,7 @@ Copper::serviceEvent(EventID id)
     servicing = true;
 
     // Copper can only get the evenly numbered slots
-    if (agnus->pos.h % 2) { reschedule(); return; }
+    if (agnus->pos.h % 2) { reschedule(1); return; }
 
     switch (id) {
             
@@ -770,15 +770,15 @@ Copper::serviceEvent(EventID id)
 }
 
 void
-Copper::schedule(EventID next)
+Copper::schedule(EventID next, int delay)
 {
-    agnus->scheduleRel<COP_SLOT>(DMA_CYCLES(2), next);
+    agnus->scheduleRel<COP_SLOT>(DMA_CYCLES(delay), next);
 }
 
 void
-Copper::reschedule()
+Copper::reschedule(int delay)
 {
-    agnus->rescheduleRel<COP_SLOT>(DMA_CYCLES(2));
+    agnus->rescheduleRel<COP_SLOT>(DMA_CYCLES(delay));
 }
 
 void

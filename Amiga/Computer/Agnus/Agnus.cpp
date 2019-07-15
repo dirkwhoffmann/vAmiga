@@ -413,20 +413,8 @@ Agnus::copperCanHaveBus()
     // Deny access if Copper DMA is disabled
     if (!copDMA()) return false;
 
-    // Deny access if the current slot is used for bitplane DMA
-    if (dmaEvent[pos.h]) {
-        debug(COP_DEBUG, "Copper blocked by bitplane DMA\n");
-        return false;
-    }
-
-    // Deny if Copper wants to access the bus in the last DMA cycle slot
-    // TODO: Think about adding a permanent event BPL_EOL which always
-    // triggeres at $E2. Once this is done, this statement can be deletete
-    // entirely.
-    if (pos.h == 0xE2) {
-        debug(COP_DEBUG, "Copper blocked in last DMA cycle\n");
-        return false;
-    }
+    // Dely access if bus is already is use
+    if (busOwner[pos.h] != BUS_NONE) return false;
 
     // Grant access
     return true;
