@@ -577,8 +577,12 @@ public:
     // Indicates if bitplane DMA is blocked by a hardware stops
     bool bplHwStop() { return pos.h < 0x18 || pos.h >= 0xE0; }
 
-    // Returns true if Copper is allowed to perform a DMA cycle
-    bool copperCanHaveBus();
+    /* Returns true if Copper execution is blocked.
+     * The first function is called in Copper states that do not perform
+     * DMA and the second function in those states that do.
+     */
+    bool copperCanRun();
+    bool copperCanDoDMA();
 
 
     //

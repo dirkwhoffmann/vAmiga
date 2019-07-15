@@ -408,16 +408,30 @@ Agnus::beamDiff(int16_t vStart, int16_t hStart, int16_t vEnd, int16_t hEnd)
 }
 
 bool
-Agnus::copperCanHaveBus()
+Agnus::copperCanRun()
 {
     // Deny access if Copper DMA is disabled
     if (!copDMA()) return false;
 
-    // Dely access if bus is already is use
-    if (busOwner[pos.h] != BUS_NONE) return false;
+    // Deny access if the bus is already in use
+    if (busOwner[pos.h] != BUS_NONE) {
+        debug(COP_DEBUG, "Copper blocked (bus busy)\n");
+        return false;
+    }
 
-    // Grant access
     return true;
+}
+
+bool
+Agnus::copperCanDoDMA()
+{
+    // Deny access in cycle $E0
+    if (unlikely(pos.h == 0xE0)) {
+        debug(COP_DEBUG, "Copper blocked (at $E0)\n");
+        return false;
+    }
+
+    return copperCanRun();
 }
 
 uint16_t

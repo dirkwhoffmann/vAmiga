@@ -257,7 +257,7 @@ public:
     void schedule(EventID next, int delay = 2);
 
     // Reschedules the current Copper event
-    void reschedule(int delay = 2);
+    void reschedule(int delay = 1);
 
 private:
     

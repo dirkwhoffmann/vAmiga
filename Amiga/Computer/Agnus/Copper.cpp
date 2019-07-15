@@ -569,7 +569,11 @@ Copper::serviceEvent(EventID id)
     servicing = true;
 
     // Copper can only get the evenly numbered slots
-    if (agnus->pos.h % 2) { reschedule(1); return; }
+    /*
+    if (agnus->pos.h % 2) {
+        debug("Copper blocked at odd cycle\n");
+        reschedule(1); return; }
+    */
 
     switch (id) {
             
@@ -577,8 +581,8 @@ Copper::serviceEvent(EventID id)
 
             if (verbose) debug("COP_REQ_DMA\n");
 
-            // Wait for the next free DMA cycle
-            if (!agnus->copperCanHaveBus()) { reschedule(); break; }
+            // Wait for the next free cycle suitable for DMA
+            if (!agnus->copperCanDoDMA()) { reschedule(); break; }
 
             // Continue with fetching the first instruction word
             schedule(COP_FETCH);
@@ -588,8 +592,8 @@ Copper::serviceEvent(EventID id)
 
             if (verbose) debug("COP_FETCH\n");
 
-            // Wait for the next free DMA cycle
-            if (!agnus->copperCanHaveBus()) { reschedule(); break; }
+            // Wait for the next free cycle suitable for DMA
+            if (!agnus->copperCanDoDMA()) { reschedule(); break; }
 
             // Load the first instruction word
             cop1ins = agnus->copperRead(coppc);
@@ -611,8 +615,8 @@ Copper::serviceEvent(EventID id)
 
             if (verbose) debug("COP_MOVE\n");
 
-            // Wait for the next free DMA cycle
-            if (!agnus->copperCanHaveBus()) { reschedule(); break; }
+            // Wait for the next free cycle suitable for DMA
+            if (!agnus->copperCanDoDMA()) { reschedule(); break; }
 
             // Load the second instruction word
             cop2ins = agnus->copperRead(coppc);
@@ -636,8 +640,8 @@ Copper::serviceEvent(EventID id)
 
             if (verbose) debug("COP_WAIT_OR_SKIP\n");
 
-            // Wait for the next free DMA cycle
-            if (!agnus->copperCanHaveBus()) { reschedule(); break; }
+            // Wait for the next free cycle suitable for DMA
+            if (!agnus->copperCanDoDMA()) { reschedule(); break; }
 
             // Load the second instruction word
             cop2ins = agnus->copperRead(coppc);
@@ -649,11 +653,11 @@ Copper::serviceEvent(EventID id)
 
         case COP_WAIT1:
             
-            // verbose = true;
+            verbose = true;
             if (verbose) debug("COP_WAIT1\n");
 
-            // Wait for the next free DMA cycle
-            if (!agnus->copperCanHaveBus()) { reschedule(); break; }
+            // Wait for the next free cycle
+            if (!agnus->copperCanRun()) { reschedule(); break; }
 
             // Schedule next state
             schedule(COP_WAIT2);
@@ -663,8 +667,8 @@ Copper::serviceEvent(EventID id)
 
             if (verbose) debug("COP_WAIT2\n");
 
-            // Wait for the next free DMA cycle
-            if (!agnus->copperCanHaveBus()) { reschedule(); break; }
+            // Wait for the next free cycle
+            if (!agnus->copperCanRun()) { reschedule(); break; }
             
             // Clear the skip flag
             skip = false;
@@ -710,8 +714,8 @@ Copper::serviceEvent(EventID id)
             // verbose = 1;
             if (verbose) debug("COP_SKIP1\n");
 
-            // Wait for the next free DMA cycle
-            if (!agnus->copperCanHaveBus()) { reschedule(); break; }
+            // Wait for the next free cycle
+            if (!agnus->copperCanRun()) { reschedule(); break; }
 
             // Schedule next state
             schedule(COP_SKIP2);
@@ -722,7 +726,7 @@ Copper::serviceEvent(EventID id)
             if (verbose) debug("COP_SKIP2\n");
 
             // Wait for the next free DMA cycle
-            if (!agnus->copperCanHaveBus()) { reschedule(); break; }
+            if (!agnus->copperCanRun()) { reschedule(); break; }
 
             // vAmigaTS::copskip2 indicates that this state already blocks at 0xE0
             if (agnus->pos.h == 0xE0) { reschedule(); break; }
