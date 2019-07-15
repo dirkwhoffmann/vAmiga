@@ -27,7 +27,7 @@ private:
     RgbColor debugColor[BUS_OWNER_COUNT][5];
 
     // Opacity of debug overlay
-    double opacity = 1.0;
+    double opacity = 0.5;
 
 
     //

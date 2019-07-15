@@ -158,18 +158,20 @@ DmaDebugger::computeOverlay()
 
                 if (visualize[owner]) {
 
-                    double opacity = 1.0; // Experimental
-                    
-                    col = GpuColor(ptr[0]).mix(debugColor[owner][chunk1], opacity);
+                    // col = GpuColor(ptr[0]).mix(debugColor[owner][chunk1], opacity);
+                    col = debugColor[owner][chunk1];
                     ptr[0] = col.rawValue;
 
-                    col = GpuColor(ptr[1]).mix(debugColor[owner][chunk2], opacity);
+                    // col = GpuColor(ptr[1]).mix(debugColor[owner][chunk2], opacity);
+                    col = debugColor[owner][chunk2];
                     ptr[1] = col.rawValue;
 
-                    col = GpuColor(ptr[2]).mix(debugColor[owner][chunk3], opacity);
+                    // col = GpuColor(ptr[2]).mix(debugColor[owner][chunk3], opacity);
+                    col = debugColor[owner][chunk3];
                     ptr[2] = col.rawValue;
 
-                    col = GpuColor(ptr[3]).mix(debugColor[owner][chunk4], opacity);
+                    // col = GpuColor(ptr[3]).mix(debugColor[owner][chunk4], opacity);
+                    col = debugColor[owner][chunk4];
                     ptr[3] = col.rawValue;
                     break;
                 }
