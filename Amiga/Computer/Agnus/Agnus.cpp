@@ -141,12 +141,13 @@ Agnus::initDASTables()
     memset(nextDASDelay, 0, sizeof(nextDASDelay));
 
     // Iterate through all possible DMA enable / disable combinations
-    for (unsigned dma = 1; dma < 64; dma++) {
+    for (unsigned dma = 0; dma < 64; dma++) {
 
         // Setup the time slot allocation table for this combination
-        table[0x07] = DAS_D0; // always enabled if the master bit is set
-        table[0x09] = DAS_D1; // always enabled if the master bit is set
-        table[0x0B] = DAS_D2; // always enabled if the master bit is set
+        table[0x01] = DAS_REFRESH;
+        table[0x07] = dma ? DAS_D0 : EVENT_NONE; // enable if master bit is set
+        table[0x09] = dma ? DAS_D1 : EVENT_NONE; // enable if master bit is set
+        table[0x0B] = dma ? DAS_D2 : EVENT_NONE; // enable if master bit is set
         table[0x0D] = (dma & AU0EN) ? DAS_A0 : EVENT_NONE;
         table[0x0F] = (dma & AU1EN) ? DAS_A1 : EVENT_NONE;
         table[0x11] = (dma & AU2EN) ? DAS_A2 : EVENT_NONE;
@@ -176,12 +177,14 @@ Agnus::initDASTables()
                 break;
             }
         }
+        assert(firstDASEvent[dma] == DAS_REFRESH);
+        assert(firstDASDelay[dma] == 1);
 
         // Determine the successor event for any RAS event
         for (unsigned id = 1; id < DAS_EVENT_COUNT; id++) {
 
             // Determine the DMA cycle of this event
-            int16_t cycle = 5 + 2 * id;
+            int16_t cycle = DASEventCycle((EventID)id);
             int16_t next = cycle;
 
             // Find the next event starting from that position

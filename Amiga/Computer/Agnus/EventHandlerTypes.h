@@ -141,7 +141,8 @@ typedef enum : long
     BPL_EVENT_COUNT,
 
     // DAS slot
-    DAS_D0 = 1,
+    DAS_REFRESH = 1,
+    DAS_D0,
     DAS_D1,
     DAS_D2,
     DAS_A0,
@@ -248,6 +249,41 @@ static inline bool isBplEvent(EventID id) { return id < BPL_EVENT_COUNT; }
 static inline bool isDasEvent(EventID id) { return id < DAS_EVENT_COUNT; }
 static inline bool isCopEvent(EventID id) { return id < COP_EVENT_COUNT; }
 static inline bool isBltEvent(EventID id) { return id < BLT_EVENT_COUNT; }
+
+static inline int DASEventCycle(EventID id) {
+
+    switch(id) {
+
+        case DAS_REFRESH: return 0x01;
+        case DAS_D0:      return 0x07;
+        case DAS_D1:      return 0x09;
+        case DAS_D2:      return 0x0B;
+        case DAS_A0:      return 0x0D;
+        case DAS_A1:      return 0x0F;
+        case DAS_A2:      return 0x11;
+        case DAS_A3:      return 0x13;
+        case DAS_S0_1:    return 0x15;
+        case DAS_S0_2:    return 0x17;
+        case DAS_S1_1:    return 0x19;
+        case DAS_S1_2:    return 0x1B;
+        case DAS_S2_1:    return 0x1D;
+        case DAS_S2_2:    return 0x1F;
+        case DAS_S3_1:    return 0x21;
+        case DAS_S3_2:    return 0x23;
+        case DAS_S4_1:    return 0x25;
+        case DAS_S4_2:    return 0x27;
+        case DAS_S5_1:    return 0x29;
+        case DAS_S5_2:    return 0x2B;
+        case DAS_S6_1:    return 0x2D;
+        case DAS_S6_2:    return 0x2F;
+        case DAS_S7_1:    return 0x31;
+        case DAS_S7_2:    return 0x33;
+
+        default:
+            assert(false);
+            return 0;
+    }
+}
 
 // Inspection interval in seconds (interval between INS_xxx events)
 static const double inspectionInterval = 0.1;

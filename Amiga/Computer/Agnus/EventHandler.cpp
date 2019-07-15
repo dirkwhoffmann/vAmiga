@@ -90,6 +90,7 @@ Agnus::inspectEventSlot(EventSlot nr)
 
             switch (slot[nr].id) {
                 case 0:             i->eventName = "none"; break;
+                case DAS_REFRESH:   i->eventName = "DAS_REFRESH"; break;
                 case DAS_D0:        i->eventName = "DAS_D0"; break;
                 case DAS_D1:        i->eventName = "DAS_D1"; break;
                 case DAS_D2:        i->eventName = "DAS_D2"; break;
@@ -606,130 +607,118 @@ Agnus::serviceDASEvent(EventID id)
 {
     // debug("serviceDASEvent(%d)\n", id);
 
+    assert(pos.h == DASEventCycle(id));
+
     switch (id) {
+
+        case DAS_REFRESH:
+
+            // Block memory refresh DMA cycles
+            busOwner[0x01] = BUS_REFRESH;
+            busOwner[0x03] = BUS_REFRESH;
+            busOwner[0x05] = BUS_REFRESH;
+            busOwner[0xE2] = BUS_REFRESH;
+            break;
 
         case DAS_D0:
         case DAS_D1:
         case DAS_D2:
 
-            assert(pos.h == 0x7 || pos.h == 0x9 || pos.h == 0xB);
-
             if (paula->diskController.getFifoBuffering())
                 paula->diskController.performDMA();
             else
                 paula->diskController.performSimpleDMA();
-
             break;
 
         case DAS_A0:
-            assert(pos.h == 0xD);
-            break;
-
         case DAS_A1:
-            assert(pos.h == 0xF);
-            break;
-
         case DAS_A2:
-            assert(pos.h == 0x11);
-            break;
-
         case DAS_A3:
-            assert(pos.h == 0x13);
             break;
 
         case DAS_S0_1:
-            assert(pos.h == 0x15);
             executeFirstSpriteCycle<0>();
             break;
 
         case DAS_S0_2:
-            assert(pos.h == 0x17);
             executeSecondSpriteCycle<0>();
             break;
 
         case DAS_S1_1:
-            assert(pos.h == 0x19);
             executeFirstSpriteCycle<1>();
             break;
 
         case DAS_S1_2:
-            assert(pos.h == 0x1B);
             executeSecondSpriteCycle<1>();
             break;
 
         case DAS_S2_1:
-            assert(pos.h == 0x1D);
             executeFirstSpriteCycle<2>();
             break;
 
         case DAS_S2_2:
-            assert(pos.h == 0x1F);
             executeSecondSpriteCycle<2>();
             break;
 
         case DAS_S3_1:
-            assert(pos.h == 0x21);
             executeFirstSpriteCycle<3>();
             break;
 
         case DAS_S3_2:
-            assert(pos.h == 0x23);
             executeSecondSpriteCycle<3>();
             break;
 
         case DAS_S4_1:
-            assert(pos.h == 0x25);
             executeFirstSpriteCycle<4>();
             break;
 
         case DAS_S4_2:
-            assert(pos.h == 0x27);
             executeSecondSpriteCycle<4>();
             break;
 
         case DAS_S5_1:
-            assert(pos.h == 0x29);
             executeFirstSpriteCycle<5>();
             break;
 
         case DAS_S5_2:
-            assert(pos.h == 0x2B);
             executeSecondSpriteCycle<5>();
             break;
 
         case DAS_S6_1:
-            assert(pos.h == 0x2D);
             executeFirstSpriteCycle<6>();
             break;
 
         case DAS_S6_2:
-            assert(pos.h == 0x2F);
             executeSecondSpriteCycle<6>();
             break;
 
         case DAS_S7_1:
-            assert(pos.h == 0x31);
             executeFirstSpriteCycle<7>();
             break;
 
         case DAS_S7_2:
-            assert(pos.h == 0x33);
             executeSecondSpriteCycle<7>();
             break;
 
         default:
-            debug("id = %d\n", id);
             assert(false);
     }
 
     // Schedule next event
     EventID event = nextDASEvent[id][dmaDAS];
+    assert(event != EVENT_NONE);
+    scheduleRel<DAS_SLOT>(DMA_CYCLES(nextDASDelay[id][dmaDAS]), event);
+
+    /*
+    EventID event = nextDASEvent[id][dmaDAS];
+    assert(event != EVENT_NONE);
     if (event != EVENT_NONE) {
-        assert(nextDASDelay[id] != 0);
+        assert(nextDASDelay[id][dmaDAS] != 0);
         scheduleRel<DAS_SLOT>(DMA_CYCLES(nextDASDelay[id][dmaDAS]), event);
     } else {
         cancel<DAS_SLOT>();
     }
+    */
 }
 
 void
