@@ -13,11 +13,20 @@ DmaDebugger::DmaDebugger()
 {
     setDescription("DmaDebugger");
 
+    // Visualize all DMA channels by default
     for (unsigned i = 0; i < BUS_OWNER_COUNT; i++) {
-
         visualize[i] = true;
-        setColor((BusOwner)i, i % 7);
     }
+
+    // Assign default colors
+    setColor(BUS_REFRESH,  RgbColor((uint8_t)0xFF, 0x00, 0x00));
+    setColor(BUS_CPU,      RgbColor((uint8_t)0xFF, 0xFF, 0xFF));
+    setColor(BUS_DISK,     RgbColor((uint8_t)0x00, 0xFF, 0x00));
+    setColor(BUS_AUDIO,    RgbColor((uint8_t)0xFF, 0x00, 0xFF));
+    setColor(BUS_BITPLANE, RgbColor((uint8_t)0x00, 0xFF, 0xFF));
+    setColor(BUS_SPRITE,   RgbColor((uint8_t)0x00, 0x80, 0xFF));
+    setColor(BUS_COPPER,   RgbColor((uint8_t)0xFF, 0xFF, 0x00));
+    setColor(BUS_BLITTER,  RgbColor((uint8_t)0xFF, 0x80, 0x00));
 }
 
 DMADebuggerInfo
@@ -76,26 +85,6 @@ DmaDebugger::getColor(BusOwner owner)
     assert(isBusOwner(owner));
     return debugColor[owner][4];
 }
-
-void
-DmaDebugger::setColor(BusOwner owner, uint8_t nr)
-{
-    assert(isBusOwner(owner));
-    assert(nr < 7);
-
-    const RgbColor color[7] = {
-        RgbColor(1.0,0.4,0.4),
-        RgbColor(1.0,1.0,0.4),
-        RgbColor(0.4,1.0,0.4),
-        RgbColor(0.4,1.0,1.0),
-        RgbColor(0.4,0.4,1.0),
-        RgbColor(1.0,0.4,1.0),
-        RgbColor(0.7,0.7,0.7)
-    };
-
-    setColor(owner, color[nr]);
-}
-
 
 void
 DmaDebugger::setColor(BusOwner owner, RgbColor color)
@@ -169,6 +158,8 @@ DmaDebugger::computeOverlay()
 
                 if (visualize[owner]) {
 
+                    double opacity = 1.0; // Experimental
+                    
                     col = GpuColor(ptr[0]).mix(debugColor[owner][chunk1], opacity);
                     ptr[0] = col.rawValue;
 
@@ -186,13 +177,13 @@ DmaDebugger::computeOverlay()
                 
             default:
 
-                col = GpuColor(ptr[0]).shade(opacity);
+                col = GpuColor(ptr[0]).shade(1.0 - opacity);
                 ptr[0] = col.rawValue;
-                col = GpuColor(ptr[1]).shade(opacity);
+                col = GpuColor(ptr[1]).shade(1.0 - opacity);
                 ptr[1] = col.rawValue;
-                col = GpuColor(ptr[2]).shade(opacity);
+                col = GpuColor(ptr[2]).shade(1.0 - opacity);
                 ptr[2] = col.rawValue;
-                col = GpuColor(ptr[3]).shade(opacity);
+                col = GpuColor(ptr[3]).shade(1.0 - opacity);
                 ptr[3] = col.rawValue;
                 break;
         }

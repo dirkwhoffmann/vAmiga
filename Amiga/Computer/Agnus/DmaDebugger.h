@@ -68,7 +68,6 @@ public:
 
     // Gets or sets a debug color
     RgbColor getColor(BusOwner owner);
-    void setColor(BusOwner owner, uint8_t nr);
     void setColor(BusOwner owner, RgbColor color);
     void setColor(BusOwner owner, double r, double g, double b);
 

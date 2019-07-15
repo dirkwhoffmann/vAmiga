@@ -15,14 +15,14 @@
 typedef enum : int8_t
 {
     BUS_NONE,
+    BUS_REFRESH,
     BUS_CPU,
     BUS_DISK,
     BUS_AUDIO,
-    BUS_SPRITE,
     BUS_BITPLANE,
+    BUS_SPRITE,
     BUS_COPPER,
     BUS_BLITTER,
-    BUS_REFRESH,
     BUS_OWNER_COUNT
 }
 BusOwner;

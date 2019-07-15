@@ -123,28 +123,41 @@ extension Inspector {
         let rgb = info.colorRGB
 
         dmaDebugEnable.state = info.enabled ? .on : .off
-        dmaDebugDisk.state = info.visualize.2 ? .on : .off
-        dmaDebugAudio.state = info.visualize.3 ? .on : .off
-        dmaDebugSprite.state = info.visualize.4 ? .on : .off
+
+        dmaDebugRefresh.state = info.visualize.1 ? .on : .off
+        dmaDebugDisk.state = info.visualize.3 ? .on : .off
+        dmaDebugAudio.state = info.visualize.4 ? .on : .off
         dmaDebugBitplane.state = info.visualize.5 ? .on : .off
-        dmaDebugCopper.state = info.visualize.6 ? .on : .off
-        dmaDebugDiskCol.color = NSColor.init(r: rgb.2.0, g: rgb.2.1, b: rgb.2.2)
-        dmaDebugAudioCol.color = NSColor.init(r: rgb.3.0, g: rgb.3.1, b: rgb.3.2)
-        dmaDebugSpriteCol.color = NSColor.init(r: rgb.4.0, g: rgb.4.1, b: rgb.4.2)
+        dmaDebugSprite.state = info.visualize.6 ? .on : .off
+        dmaDebugCopper.state = info.visualize.7 ? .on : .off
+        dmaDebugBlitter.state = info.visualize.8 ? .on : .off
+
+        dmaDebugRefreshCol.color = NSColor.init(r: rgb.1.0, g: rgb.1.1, b: rgb.1.2)
+        dmaDebugDiskCol.color = NSColor.init(r: rgb.3.0, g: rgb.3.1, b: rgb.3.2)
+        dmaDebugAudioCol.color = NSColor.init(r: rgb.4.0, g: rgb.4.1, b: rgb.4.2)
         dmaDebugBitplaneCol.color = NSColor.init(r: rgb.5.0, g: rgb.5.1, b: rgb.5.2)
-        dmaDebugCopperCol.color = NSColor.init(r: rgb.6.0, g: rgb.6.1, b: rgb.6.2)
+        dmaDebugSpriteCol.color = NSColor.init(r: rgb.6.0, g: rgb.6.1, b: rgb.6.2)
+        dmaDebugCopperCol.color = NSColor.init(r: rgb.7.0, g: rgb.7.1, b: rgb.7.2)
+        dmaDebugBlitterCol.color = NSColor.init(r: rgb.8.0, g: rgb.8.1, b: rgb.8.2)
+
         dmaDebugOpacity.doubleValue = info.opacity * 100.0
 
+        dmaDebugRefresh.isEnabled = info.enabled
         dmaDebugDisk.isEnabled = info.enabled
         dmaDebugAudio.isEnabled = info.enabled
-        dmaDebugSprite.isEnabled = info.enabled
         dmaDebugBitplane.isEnabled = info.enabled
+        dmaDebugSprite.isEnabled = info.enabled
         dmaDebugCopper.isEnabled = info.enabled
+        dmaDebugBlitter.isEnabled = info.enabled
+
+        dmaDebugRefreshCol.isEnabled = info.enabled
         dmaDebugDiskCol.isEnabled = info.enabled
         dmaDebugAudioCol.isEnabled = info.enabled
-        dmaDebugSpriteCol.isEnabled = info.enabled
         dmaDebugBitplaneCol.isEnabled = info.enabled
+        dmaDebugSpriteCol.isEnabled = info.enabled
         dmaDebugCopperCol.isEnabled = info.enabled
+        dmaDebugBlitterCol.isEnabled = info.enabled
+
         dmaDebugOpacity.isEnabled = info.enabled
     }
 
