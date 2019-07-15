@@ -1757,7 +1757,10 @@ Agnus::hsyncHandler()
         hsyncActions = 0;
     }
 
+    // Clear the bus usage table
+    for (int i = 0; i < HPOS_CNT; i++) busOwner[i] = BUS_NONE;
 
+    
     //
     // Schedule events
     //

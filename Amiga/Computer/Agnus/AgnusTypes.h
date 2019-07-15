@@ -22,6 +22,7 @@ typedef enum : int8_t
     BUS_BITPLANE,
     BUS_COPPER,
     BUS_BLITTER,
+    BUS_REFRESH,
     BUS_OWNER_COUNT
 }
 BusOwner;

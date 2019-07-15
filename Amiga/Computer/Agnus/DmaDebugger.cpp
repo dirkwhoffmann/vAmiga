@@ -157,7 +157,6 @@ DmaDebugger::computeOverlay()
         assert(chunk4 < 4);
 
         BusOwner owner = owners[i];
-        owners[i] = BUS_NONE;
 
         switch (owner) {
 
@@ -197,12 +196,6 @@ DmaDebugger::computeOverlay()
                 ptr[3] = col.rawValue;
                 break;
         }
-    }
-
-    // Area at the far right that belongs to the next DMA line
-    for (unsigned i = 0; i < 15 * 4; i++, ptr++) {
-        col = GpuColor(ptr[0]).shade(opacity);
-        ptr[0] = col.rawValue;
     }
 }
 
