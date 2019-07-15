@@ -705,20 +705,9 @@ Agnus::serviceDASEvent(EventID id)
     }
 
     // Schedule next event
+    int16_t delay = nextDASDelay[id][dmaDAS];
     EventID event = nextDASEvent[id][dmaDAS];
-    assert(event != EVENT_NONE);
-    scheduleRel<DAS_SLOT>(DMA_CYCLES(nextDASDelay[id][dmaDAS]), event);
-
-    /*
-    EventID event = nextDASEvent[id][dmaDAS];
-    assert(event != EVENT_NONE);
-    if (event != EVENT_NONE) {
-        assert(nextDASDelay[id][dmaDAS] != 0);
-        scheduleRel<DAS_SLOT>(DMA_CYCLES(nextDASDelay[id][dmaDAS]), event);
-    } else {
-        cancel<DAS_SLOT>();
-    }
-    */
+    scheduleRel<DAS_SLOT>(DMA_CYCLES(delay), event);
 }
 
 void

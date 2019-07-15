@@ -135,8 +135,6 @@ Agnus::initDASTables()
 
     // Start from scratch
     memset(table, EVENT_NONE, sizeof(table));
-    memset(firstDASEvent, 0, sizeof(firstDASEvent));
-    memset(firstDASDelay, 0, sizeof(firstDASDelay));
     memset(nextDASEvent, 0, sizeof(nextDASEvent));
     memset(nextDASDelay, 0, sizeof(nextDASDelay));
 
@@ -168,17 +166,6 @@ Agnus::initDASTables()
         table[0x2F] = (dma & SPREN) ? DAS_S6_2 : EVENT_NONE;
         table[0x31] = (dma & SPREN) ? DAS_S7_1 : EVENT_NONE;
         table[0x33] = (dma & SPREN) ? DAS_S7_2 : EVENT_NONE;
-
-        // Determine the first event in a rasterline
-        for (unsigned i = 0; i < 0x34; i++) {
-            if (table[i] != EVENT_NONE) {
-                firstDASEvent[dma] = table[i];
-                firstDASDelay[dma] = i;
-                break;
-            }
-        }
-        assert(firstDASEvent[dma] == DAS_REFRESH);
-        assert(firstDASDelay[dma] == 1);
 
         // Determine the successor event for any RAS event
         for (unsigned id = 1; id < DAS_EVENT_COUNT; id++) {
@@ -239,12 +226,15 @@ Agnus::_powerOn()
     // Initialize the SEC_SLOT
     scheduleAbs<SEC_SLOT>(NEVER, SEC_TRIGGER);
 
-    // Schedule the first SYNC event
-    scheduleAbs<SYNC_SLOT>(DMA_CYCLES(HPOS_MAX), SYNC_EOL);
-
     // Schedule the first CIA A and CIA B events
     scheduleAbs<CIAA_SLOT>(CIA_CYCLES(1), CIA_EXECUTE);
     scheduleAbs<CIAB_SLOT>(CIA_CYCLES(1), CIA_EXECUTE);
+
+    // Schedule first DAS event
+    scheduleAbs<DAS_SLOT>(DMA_CYCLES(1), DAS_REFRESH);
+
+    // Schedule first SYNC event
+    scheduleAbs<SYNC_SLOT>(DMA_CYCLES(HPOS_MAX), SYNC_EOL);
 }
 
 void
@@ -1772,13 +1762,6 @@ Agnus::hsyncHandler()
     if (nextDmaEvent[0]) {
         EventID eventID = dmaEvent[nextDmaEvent[0]];
         schedulePos<BPL_SLOT>(pos.v, nextDmaEvent[0], eventID);
-    }
-
-    // Schedule the first DAS event (if any)
-    if (firstDASEvent[dmaDAS]) {
-        schedulePos<DAS_SLOT>(pos.v, firstDASDelay[dmaDAS], firstDASEvent[dmaDAS]);
-    } else {
-        cancel<DAS_SLOT>();
     }
 
     // Schedule the next SYNC event

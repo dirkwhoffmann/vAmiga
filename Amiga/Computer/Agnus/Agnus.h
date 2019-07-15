@@ -95,9 +95,6 @@ public:
 
     /* DAS lookup tables (Disk, Audio, Sprite DMA)
      *
-     * firstDASEvent[DMA enable bits]:
-     * Used to lookup the first DAS event in a rasterline
-     *
      * nextDASEvent[DAS Event ID][DMA enable bits]:
      * Used to lookup the next EventID to be scheduled in the DAS slot
      *
@@ -119,8 +116,6 @@ public:
      * In this case: nextDASEvent[DMA_A0][0b111111] = DMA_A1
      *               nextDASDelay[DMA_A0][0b111111] = 2
      */
-    EventID firstDASEvent[64];
-    int16_t firstDASDelay[64];
     EventID nextDASEvent[DAS_EVENT_COUNT][64];
     int16_t nextDASDelay[DAS_EVENT_COUNT][64];
 
