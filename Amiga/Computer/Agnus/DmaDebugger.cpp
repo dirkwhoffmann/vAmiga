@@ -149,12 +149,18 @@ DmaDebugger::computeOverlay()
 
         switch (owner) {
 
+            case BUS_REFRESH:
+
+                chunk1 = chunk2 = chunk3 = chunk4 = 0x3;
+                // fallthrough
+
+            case BUS_CPU:
             case BUS_DISK:
             case BUS_AUDIO:
-            case BUS_SPRITE:
             case BUS_BITPLANE:
-            case BUS_BLITTER:
+            case BUS_SPRITE:
             case BUS_COPPER:
+            case BUS_BLITTER:
 
                 if (visualize[owner]) {
 
