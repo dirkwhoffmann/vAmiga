@@ -740,10 +740,7 @@ Copper::serviceEvent(EventID id)
             if (findMatchNew(trigger)) {
 
                 // In how many cycles do we get there?
-                // Cycle delay = agnus->beamDiff(trigger.v, trigger.h);
                 int delay = trigger - agnus->pos;
-                // assert(delay < NEVER);
-                // assert(delay % 2 == 0);
 
                 if (verbose) debug("(%d,%d) matches in %d cycles\n", trigger.v, trigger.h, delay);
 
@@ -759,7 +756,7 @@ Copper::serviceEvent(EventID id)
 
                 } else {
 
-                    // Copper wakes up 2 cycles earlier
+                    // Copper wakes up 2 cycles earlier ...
                     delay -= 2;
 
                     // ... with a COP_REQ_DMA event.
