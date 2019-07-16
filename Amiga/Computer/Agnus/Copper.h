@@ -152,7 +152,6 @@ private:
 
     // Called by findMatch() to determine the vertical trigger position
     bool findVerticalMatch(int16_t vStrt, int16_t vComp, int16_t vMask, int16_t &result);
-    bool findVerticalMatchNew(uint32_t &beam, uint32_t comp, uint32_t mask);
 
     // Called by findMatch() to determine the horizontal trigger position
     bool findHorizontalMatch(int16_t hStrt, int16_t hComp, int16_t hMask, int16_t &result);

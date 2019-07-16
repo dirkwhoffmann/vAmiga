@@ -369,37 +369,10 @@ Copper::findMatchNew(Beam &match)
     return false;
 }
 
-
-bool
-Copper::findVerticalMatchNew(uint32_t &match, uint32_t comp, uint32_t mask)
-{
-    assert((match & 0xFF) == 0);
-
-    debug("findVerticalMatchNew(%X,%X,%X)\n", match, comp, mask);
-
-    uint32_t vStop = agnus->frameInfo.numLines;
-
-    // Iterate through all vertical positions
-    for (uint32_t beam = match | 0xFF; (beam >> 8) < vStop; beam += 0x100) {
-
-        // Check if the comparator triggers at this position
-        if ((beam & mask) >= (comp & mask)) {
-
-            // Success
-            match = beam & ~0xFF;
-            return true;
-        }
-    }
-
-    return false;
-}
-
 bool
 Copper::findHorizontalMatchNew(uint32_t &match, uint32_t comp, uint32_t mask)
 {
     int16_t hStop = HPOS_CNT;
-
-    debug("findHorizontalMatchNew(%X,%X,%X)\n", match, comp, mask);
 
     // Iterate through all horizontal positions
     for (uint32_t beam = match; (beam & 0xFF) < hStop; beam++) {
@@ -407,7 +380,6 @@ Copper::findHorizontalMatchNew(uint32_t &match, uint32_t comp, uint32_t mask)
         // Check if the comparator triggers at this position
         if ((beam & mask) >= (comp & mask)) {
 
-            debug("HTriggers at %X\n", beam);
             // Success
             match = beam;
             return true;
@@ -672,6 +644,9 @@ Copper::serviceEvent(EventID id)
             // Wait for the next free cycle suitable for DMA
             if (!agnus->copperCanDoDMA()) { reschedule(); break; }
 
+            // Don't wake up in an odd cycle
+            if (agnus->pos.h % 2) { reschedule(); break; }
+
             // Continue with fetching the first instruction word
             schedule(COP_FETCH);
             break;
@@ -741,7 +716,7 @@ Copper::serviceEvent(EventID id)
 
         case COP_WAIT1:
             
-            verbose = true;
+            // verbose = true;
             if (verbose) debug("COP_WAIT1\n");
 
             // Wait for the next free cycle
