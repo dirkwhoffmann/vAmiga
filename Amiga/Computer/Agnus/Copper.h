@@ -148,12 +148,15 @@ private:
      *        Variable 'result' remains untouched.
      */
     bool findMatch(Beam &result);
+    bool findMatchNew(Beam &result);
 
     // Called by findMatch() to determine the vertical trigger position
     bool findVerticalMatch(int16_t vStrt, int16_t vComp, int16_t vMask, int16_t &result);
+    bool findVerticalMatchNew(uint32_t &beam, uint32_t comp, uint32_t mask);
 
     // Called by findMatch() to determine the horizontal trigger position
     bool findHorizontalMatch(int16_t hStrt, int16_t hComp, int16_t hMask, int16_t &result);
+    bool findHorizontalMatchNew(uint32_t &beam, uint32_t comp, uint32_t mask);
 
     // Emulates the Copper writing a value into one of the custom registers
     void move(int addr, uint16_t value);

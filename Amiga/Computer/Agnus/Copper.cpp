@@ -250,10 +250,6 @@ Copper::findMatch(Beam &result)
     // Get the current beam position
     Beam b = agnus->pos;
 
-    // Advance to the position where the comparator circuit gets active
-    // No longer needed, because we added two new Copper states to wait command
-    // b = agnus->addToBeam(b, 4);
-
     // Set up the comparison positions
     int16_t vComp = getVP();
     int16_t hComp = getHP();
@@ -317,6 +313,8 @@ Copper::findHorizontalMatch(int16_t hStrt, int16_t hComp, int16_t hMask, int16_t
 {
     int16_t hStop = agnus->DMACyclesPerLine(); 
 
+    debug("findHorizontalMatch(%X,%X,%X)\n", hStrt, hComp, hMask);
+
     // Iterate through all horizontal positions
     for (int h = hStrt; h < hStop; h++) {
 
@@ -326,6 +324,96 @@ Copper::findHorizontalMatch(int16_t hStrt, int16_t hComp, int16_t hMask, int16_t
             return true;
         }
     }
+    return false;
+}
+
+bool
+Copper::findMatchNew(Beam &match)
+{
+    // Start searching at the current beam position
+    uint32_t beam = (agnus->pos.v << 8) | agnus->pos.h;
+
+    // Get the comparison position and the comparison mask
+    uint32_t comp = getVPHP();
+    uint32_t mask = getVMHM();
+
+    // Iterate through all lines starting from the current position
+    while ((beam >> 8) < agnus->frameInfo.numLines) {
+
+        // Check if the vertical components are equal
+        if ((beam & mask & ~0xFF) == (comp & mask & ~0xFF)) {
+
+            // Try to match the horizontal coordinate as well
+            if (findHorizontalMatchNew(beam, comp, mask)) {
+
+                // Success
+                match.v = beam >> 8;
+                match.h = beam & 0xFF;
+                return true;
+            }
+        }
+
+        // Check if the vertical beam position is greater
+        else if ((beam & mask & ~0xFF) > (comp & mask & ~0xFF)) {
+
+            // Success
+            match.v = beam >> 8;
+            match.h = beam & 0xFF;
+            return true;
+        }
+
+        // Jump to the beginning of the next line
+        beam = (beam & ~0xFF) + 0x100;
+    }
+
+    return false;
+}
+
+
+bool
+Copper::findVerticalMatchNew(uint32_t &match, uint32_t comp, uint32_t mask)
+{
+    assert((match & 0xFF) == 0);
+
+    debug("findVerticalMatchNew(%X,%X,%X)\n", match, comp, mask);
+
+    uint32_t vStop = agnus->frameInfo.numLines;
+
+    // Iterate through all vertical positions
+    for (uint32_t beam = match | 0xFF; (beam >> 8) < vStop; beam += 0x100) {
+
+        // Check if the comparator triggers at this position
+        if ((beam & mask) >= (comp & mask)) {
+
+            // Success
+            match = beam & ~0xFF;
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool
+Copper::findHorizontalMatchNew(uint32_t &match, uint32_t comp, uint32_t mask)
+{
+    int16_t hStop = HPOS_CNT;
+
+    debug("findHorizontalMatchNew(%X,%X,%X)\n", match, comp, mask);
+
+    // Iterate through all horizontal positions
+    for (uint32_t beam = match; (beam & 0xFF) < hStop; beam++) {
+
+        // Check if the comparator triggers at this position
+        if ((beam & mask) >= (comp & mask)) {
+
+            debug("HTriggers at %X\n", beam);
+            // Success
+            match = beam;
+            return true;
+        }
+    }
+
     return false;
 }
 
@@ -674,7 +762,7 @@ Copper::serviceEvent(EventID id)
             skip = false;
 
             // Find the trigger position for this WAIT command
-            if (findMatch(trigger)) {
+            if (findMatchNew(trigger)) {
 
                 // In how many cycles do we get there?
                 // Cycle delay = agnus->beamDiff(trigger.v, trigger.h);

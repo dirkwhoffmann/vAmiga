@@ -78,6 +78,13 @@ struct Beam
         if (--h < 0) { v--; h = HPOS_MAX; }
         return *this;
     }
+
+    /*
+    uint16_t bitFormat()
+    {
+        return (v << 8) | h;
+    }
+    */
 };
 
 #endif
