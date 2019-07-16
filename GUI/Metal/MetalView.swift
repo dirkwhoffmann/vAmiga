@@ -211,9 +211,10 @@ public class MetalView: MTKView {
 
     var alpha = AnimatedFloat(0.0)
 
+    // Screen parameters mimicing SAE
     static let cutoutX1default = Float(4 * HBLANK_CNT) / Float(EmulatorTexture.width)
     static let cutoutY1default = Float(VBLANK_CNT) / Float(EmulatorTexture.height)
-    static let cutoutX2default = (Float)(LAST_PIXEL) / Float(EmulatorTexture.width)
+    static let cutoutX2default = (Float)(LAST_PIXEL - 8 * 4) / Float(EmulatorTexture.width)
     static let cutoutY2default = (Float)(VPOS_CNT - 1) / Float(EmulatorTexture.height)
 
     var cutoutX1 = AnimatedFloat(cutoutX1default)
