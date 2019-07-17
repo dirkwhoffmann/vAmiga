@@ -1172,18 +1172,7 @@ Agnus::pokeDIWSTRT(uint16_t value)
 {
     debug(BPL_DEBUG, "pokeDIWSTRT<%s>(%X)\n", pokeSourceName(s), value);
 
-    switch (s) {
-        case POKE_CPU:
-            scheduleRegEvent<REG_CPU_SLOT>(DMA_CYCLES(2), REG_DIWSTRT, (int64_t)value);
-            break;
-
-        case POKE_COPPER:
-            scheduleRegEvent<REG_COP_SLOT>(DMA_CYCLES(2), REG_DIWSTRT, (int64_t)value);
-            break;
-
-        default:
-            assert(false);
-    }
+    scheduleRegEvent<s>(DMA_CYCLES(2), REG_DIWSTRT, (int64_t)value);
 }
 
 template <PokeSource s> void
@@ -1191,18 +1180,7 @@ Agnus::pokeDIWSTOP(uint16_t value)
 {
     debug(BPL_DEBUG, "pokeDIWSTOP<%s>(%X)\n", pokeSourceName(s), value);
 
-    switch (s) {
-        case POKE_CPU:
-            scheduleRegEvent<REG_CPU_SLOT>(DMA_CYCLES(2), REG_DIWSTOP, (int64_t)value);
-            break;
-
-        case POKE_COPPER:
-            scheduleRegEvent<REG_COP_SLOT>(DMA_CYCLES(2), REG_DIWSTOP, (int64_t)value);
-            break;
-
-        default:
-            assert(false);
-    }
+    scheduleRegEvent<s>(DMA_CYCLES(2), REG_DIWSTOP, (int64_t)value);
 }
 
 void
@@ -1367,19 +1345,7 @@ Agnus::pokeBPLxPTH(uint16_t value)
         return;
     }
 
-    switch (s) {
-        case POKE_CPU:
-            // scheduleRegEvent<REG_CPU_SLOT>(DMA_CYCLES(2), REG_BPL0PTH, (int64_t)value);
-            setBPLxPTH<x>(value);
-            break;
-
-        case POKE_COPPER:
-            scheduleRegEvent<REG_COP_SLOT>(DMA_CYCLES(2), REG_BPL0PTH, (int64_t)value);
-            break;
-
-        default:
-            assert(false);
-    }
+    scheduleRegEvent<s>(DMA_CYCLES(2), REG_BPL0PTH, (int64_t)value);
 }
 
 template <int x, PokeSource s> void
@@ -1392,19 +1358,7 @@ Agnus::pokeBPLxPTL(uint16_t value)
         return;
     }
 
-    switch (s) {
-        case POKE_CPU:
-            // scheduleRegEvent<REG_CPU_SLOT>(DMA_CYCLES(2), REG_BPL0PTL, (int64_t)value);
-            setBPLxPTL<x>(value);
-            break;
-
-        case POKE_COPPER:
-            scheduleRegEvent<REG_COP_SLOT>(DMA_CYCLES(0), REG_BPL0PTL, (int64_t)value);
-            break;
-
-        default:
-            assert(false);
-    }
+    scheduleRegEvent<s>(DMA_CYCLES(0), REG_BPL0PTL, (int64_t)value);
 }
 
 template <int x> void
@@ -1428,18 +1382,7 @@ Agnus::pokeBPL1MOD(uint16_t value)
 {
     debug(BPL_DEBUG, "pokeBPL1MOD<%s>(%X)\n", pokeSourceName(s), value);
 
-    switch (s) {
-        case POKE_CPU:
-            scheduleRegEvent<REG_CPU_SLOT>(DMA_CYCLES(2), REG_BPL1MOD, (int64_t)value);
-            break;
-
-        case POKE_COPPER:
-            scheduleRegEvent<REG_COP_SLOT>(DMA_CYCLES(2), REG_BPL1MOD, (int64_t)value);
-            break;
-
-        default:
-            assert(false);
-    }
+    scheduleRegEvent<s>(DMA_CYCLES(2), REG_BPL1MOD, (int64_t)value);
 }
 
 template <PokeSource s> void
@@ -1447,18 +1390,7 @@ Agnus::pokeBPL2MOD(uint16_t value)
 {
     debug(BPL_DEBUG, "pokeBPL2MOD<%s>(%X)\n", pokeSourceName(s), value);
 
-    switch (s) {
-        case POKE_CPU:
-            scheduleRegEvent<REG_CPU_SLOT>(DMA_CYCLES(2), REG_BPL2MOD, (int64_t)value);
-            break;
-
-        case POKE_COPPER:
-            scheduleRegEvent<REG_COP_SLOT>(DMA_CYCLES(2), REG_BPL2MOD, (int64_t)value);
-            break;
-
-        default:
-            assert(false);
-    }
+    scheduleRegEvent<s>(DMA_CYCLES(2), REG_BPL2MOD, (int64_t)value);
 }
 
 void

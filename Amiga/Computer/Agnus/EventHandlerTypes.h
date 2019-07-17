@@ -43,6 +43,7 @@ typedef enum : long
 
     REG_COP_SLOT = FIRST_SEC_SLOT, // Delayed Copper writes to custom registers
     REG_CPU_SLOT,                  // Delayed CPU writes to custom registers
+    REG_CPU_SLOT2,                 // Second slot for delayed CPU writes
 
     DSK_SLOT ,        // Disk controller
     IRQ_TBE_SLOT,     // Source 0 IRQ (Serial port transmit buffer empty)

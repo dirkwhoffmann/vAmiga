@@ -182,7 +182,7 @@ void cancel(EventSlot s)
 }
 
 // Schedules a register write event
-template<EventSlot s> void scheduleRegEvent(Cycle cycle, EventID id, int64_t data);
+template<PokeSource s> void scheduleRegEvent(Cycle cycle, EventID id, int64_t data);
 
 
 //

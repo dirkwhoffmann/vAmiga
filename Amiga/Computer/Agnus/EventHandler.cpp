@@ -797,7 +797,7 @@ Agnus::serveINSEvent()
     rescheduleRel<INSPECTOR_SLOT>((Cycle)(inspectionInterval * 28000000));
 }
 
-template <EventSlot s> void
+template <PokeSource s> void
 Agnus::scheduleRegEvent(Cycle cycle, EventID id, int64_t data)
 {
     /* Here is the thing: A Copper write can occur every fourth cycle and
@@ -819,18 +819,19 @@ Agnus::scheduleRegEvent(Cycle cycle, EventID id, int64_t data)
      */
     switch (s) {
 
-        case REG_COP_SLOT:
+        case POKE_COPPER:
             if (hasEvent<REG_COP_SLOT>()) {
+                assert(false); 
                 assert(isDue<REG_COP_SLOT>(amiga->masterClock));
-                serviceREGEvent(s);
+                serviceREGEvent(REG_COP_SLOT);
             }
             scheduleRel<REG_COP_SLOT>(cycle, id, data);
             break;
 
-        case REG_CPU_SLOT:
+        case POKE_CPU:
             if (hasEvent<REG_CPU_SLOT>()) {
                 assert(isDue<REG_CPU_SLOT>(amiga->masterClock));
-                serviceREGEvent(s);
+                serviceREGEvent(REG_CPU_SLOT);
             }
             scheduleRel<REG_CPU_SLOT>(cycle, id, data);
             break;
@@ -925,5 +926,5 @@ Agnus::checkTriggeredEvent(EventSlot s)
     return true;
 }
 
-template void Agnus::scheduleRegEvent<REG_CPU_SLOT>(Cycle cycle, EventID id, int64_t data);
-template void Agnus::scheduleRegEvent<REG_COP_SLOT>(Cycle cycle, EventID id, int64_t data);
+template void Agnus::scheduleRegEvent<POKE_COPPER>(Cycle cycle, EventID id, int64_t data);
+template void Agnus::scheduleRegEvent<POKE_CPU>(Cycle cycle, EventID id, int64_t data);
