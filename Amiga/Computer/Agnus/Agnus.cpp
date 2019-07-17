@@ -1339,13 +1339,8 @@ template <int x, PokeSource s> void
 Agnus::pokeBPLxPTH(uint16_t value)
 {
     debug(BPL_DEBUG, "pokeBPL%dPTH(%X)\n", x, value);
-
-    if (x != 0) {
-        bplpt[x] = REPLACE_HI_WORD(bplpt[x], value & 0x7);
-        return;
-    }
-
-    scheduleRegEvent<s>(DMA_CYCLES(2), REG_BPL0PTH, (int64_t)value);
+    
+    scheduleRegEvent<s>(DMA_CYCLES(2), REG_BPLxPTH, HI_W_LO_W(x, value));
 }
 
 template <int x, PokeSource s> void
@@ -1353,12 +1348,7 @@ Agnus::pokeBPLxPTL(uint16_t value)
 {
     debug(BPL_DEBUG, "pokeBPL%dPTL(%X)\n", x, value);
 
-    if (x != 0) {
-        bplpt[x] = REPLACE_LO_WORD(bplpt[x], value & 0xFFFE);
-        return;
-    }
-
-    scheduleRegEvent<s>(DMA_CYCLES(0), REG_BPL0PTL, (int64_t)value);
+    scheduleRegEvent<s>(DMA_CYCLES(2), REG_BPLxPTL, HI_W_LO_W(x, value));
 }
 
 template <int x> void
@@ -1369,10 +1359,28 @@ Agnus::setBPLxPTH(uint16_t value)
     bplpt[x] = REPLACE_HI_WORD(bplpt[x], value & 0x7);
 }
 
+void
+Agnus::setBPLxPTH(int x, uint16_t value)
+{
+    debug(BPL_DEBUG, "setBPLxPTH(%d, %X)\n", x, value);
+    assert(x < 6);
+
+    bplpt[x] = REPLACE_HI_WORD(bplpt[x], value & 0x7);
+}
+
 template <int x> void
 Agnus::setBPLxPTL(uint16_t value)
 {
     debug(BPL_DEBUG, "pokeBPL%dPTL(%X)\n", x, value);
+    assert(x < 6);
+
+    bplpt[x] = REPLACE_LO_WORD(bplpt[x], value & 0xFFFE);
+}
+
+void
+Agnus::setBPLxPTL(int x, uint16_t value)
+{
+    debug(BPL_DEBUG, "pokeBPLxPTL(%d, %X)\n", x, value);
 
     bplpt[x] = REPLACE_LO_WORD(bplpt[x], value & 0xFFFE);
 }

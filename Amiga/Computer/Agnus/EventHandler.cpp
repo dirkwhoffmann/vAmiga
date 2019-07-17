@@ -203,8 +203,8 @@ Agnus::inspectEventSlot(EventSlot nr)
                 case REG_DIWSTOP:   i->eventName = "REG_DIWSTOP"; break;
                 case REG_BPL1MOD:   i->eventName = "REG_BPL1MOD"; break;
                 case REG_BPL2MOD:   i->eventName = "REG_BPL2MOD"; break;
-                case REG_BPL0PTH:   i->eventName = "REG_BPL0PTH"; break;
-                case REG_BPL0PTL:   i->eventName = "REG_BPL0PTL"; break;
+                case REG_BPLxPTH:   i->eventName = "REG_BPLxPTH"; break;
+                case REG_BPLxPTL:   i->eventName = "REG_BPLxPTL"; break;
                 default:            i->eventName = "*** INVALID ***"; break;
             }
             break;
@@ -738,7 +738,7 @@ void
 Agnus::serviceREGEvent(EventSlot nr)
 {
     EventID id = slot[nr].id;
-    uint16_t data = (uint16_t)slot[nr].data;
+    int64_t data = slot[nr].data;
 
     // debug("serveRegEvent(%d)\n", slot);
 
@@ -748,8 +748,8 @@ Agnus::serviceREGEvent(EventSlot nr)
         case REG_DIWSTOP: setDIWSTOP((uint16_t)data); break;
         case REG_BPL1MOD: setBPL1MOD((uint16_t)data); break;
         case REG_BPL2MOD: setBPL2MOD((uint16_t)data); break;
-        case REG_BPL0PTH: setBPLxPTH<0>((uint16_t)data); break;
-        case REG_BPL0PTL: setBPLxPTL<0>((uint16_t)data); break;
+        case REG_BPLxPTH: setBPLxPTH(HI_WORD(data), LO_WORD(data)); break;
+        case REG_BPLxPTL: setBPLxPTL(HI_WORD(data), LO_WORD(data)); break;
 
         default: assert(false);
     }
@@ -839,8 +839,6 @@ Agnus::scheduleRegEvent(Cycle cycle, EventID id, int64_t data)
             // already be occupied when we reach here. In this case, we schedule
             // the event in the second slot.
             if (hasEvent<REG_CPU_SLOT1>()) {
-
-                dumpEvents();
 
                 assert(isDue<REG_CPU_SLOT1>(amiga->masterClock + cycle));
                 scheduleRel<REG_CPU_SLOT2>(cycle, id, data);
