@@ -230,7 +230,7 @@ Copper::pokeNOOP(uint16_t value)
     debug(COPREG_DEBUG, "pokeNOOP(%04X)\n", value);
 
     // REMOVE ASAP
-    verbose = !verbose; 
+    // verbose = !verbose;
 }
 
 void

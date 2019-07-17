@@ -193,7 +193,8 @@ Agnus::inspectEventSlot(EventSlot nr)
             break;
 
         case REG_COP_SLOT:
-        case REG_CPU_SLOT:
+        case REG_CPU_SLOT1:
+        case REG_CPU_SLOT2:
 
             switch (slot[nr].id) {
 
@@ -337,8 +338,11 @@ Agnus::executeEventsUntil(Cycle cycle) {
         if (isDue<REG_COP_SLOT>(cycle)) {
             serviceREGEvent(REG_COP_SLOT);
         }
-        if (isDue<REG_CPU_SLOT>(cycle)) {
-            serviceREGEvent(REG_CPU_SLOT);
+        if (isDue<REG_CPU_SLOT1>(cycle)) {
+            serviceREGEvent(REG_CPU_SLOT1);
+        }
+        if (isDue<REG_CPU_SLOT2>(cycle)) {
+            serviceREGEvent(REG_CPU_SLOT2);
         }
     }
 
@@ -820,6 +824,7 @@ Agnus::scheduleRegEvent(Cycle cycle, EventID id, int64_t data)
     switch (s) {
 
         case POKE_COPPER:
+
             if (hasEvent<REG_COP_SLOT>()) {
                 assert(false); 
                 assert(isDue<REG_COP_SLOT>(amiga->masterClock));
@@ -829,11 +834,22 @@ Agnus::scheduleRegEvent(Cycle cycle, EventID id, int64_t data)
             break;
 
         case POKE_CPU:
-            if (hasEvent<REG_CPU_SLOT>()) {
-                assert(isDue<REG_CPU_SLOT>(amiga->masterClock));
-                serviceREGEvent(REG_CPU_SLOT);
+
+            // If the CPU performs a 32-bit write, the first CPU slot can
+            // already be occupied when we reach here. In this case, we schedule
+            // the event in the second slot.
+            if (hasEvent<REG_CPU_SLOT1>()) {
+
+                dumpEvents();
+
+                assert(isDue<REG_CPU_SLOT1>(amiga->masterClock + cycle));
+                scheduleRel<REG_CPU_SLOT2>(cycle, id, data);
+
+            } else {
+
+                assert(!hasEvent<REG_CPU_SLOT2>());
+                scheduleRel<REG_CPU_SLOT1>(cycle, id, data);
             }
-            scheduleRel<REG_CPU_SLOT>(cycle, id, data);
             break;
 
         default:

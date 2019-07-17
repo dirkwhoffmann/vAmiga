@@ -42,7 +42,7 @@ typedef enum : long
     //
 
     REG_COP_SLOT = FIRST_SEC_SLOT, // Delayed Copper writes to custom registers
-    REG_CPU_SLOT,                  // Delayed CPU writes to custom registers
+    REG_CPU_SLOT1,                 // Delayed CPU writes to custom registers
     REG_CPU_SLOT2,                 // Second slot for delayed CPU writes
 
     DSK_SLOT ,        // Disk controller
@@ -102,7 +102,8 @@ inline const char *slotName(EventSlot nr)
         case IRQ_DSKSYN_SLOT:    return "Disk Sync IRQ";
         case IRQ_EXTER_SLOT:     return "CIA B IRQ";
         case REG_COP_SLOT:       return "Copper Write";
-        case REG_CPU_SLOT:       return "CPU Write";
+        case REG_CPU_SLOT1:      return "CPU Write (1)";
+        case REG_CPU_SLOT2:      return "CPU Write (2)";
         case TXD_SLOT:           return "UART out";
         case RXD_SLOT:           return "UART in";
         case POT_SLOT:           return "Potentiometer";
