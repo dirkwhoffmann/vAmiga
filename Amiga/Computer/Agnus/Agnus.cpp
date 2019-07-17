@@ -1338,16 +1338,48 @@ Agnus::computeDDFStop()
 template <int x, PokeSource s> void
 Agnus::pokeBPLxPTH(uint16_t value)
 {
+    bool skip;
+
     debug(BPL_DEBUG, "pokeBPL%dPTH(%X)\n", x, value);
-    
+    switch(dmaEvent[pos.h + 1]) {
+        case BPL_L1: skip = (x == 0); break;
+        case BPL_L2: skip = (x == 1); break;
+        case BPL_L3: skip = (x == 2); break;
+        case BPL_L4: skip = (x == 3); break;
+        case BPL_L5: skip = (x == 4); break;
+        case BPL_L6: skip = (x == 5); break;
+        default: skip = false; break;
+    }
+
+    if (skip && dmaEvent[pos.h + 2] == EVENT_NONE) {
+        debug("Value is lost\n");
+        // Written value is lost
+        return;
+    }
     scheduleRegEvent<s>(DMA_CYCLES(2), REG_BPLxPTH, HI_W_LO_W(x, value));
 }
 
 template <int x, PokeSource s> void
 Agnus::pokeBPLxPTL(uint16_t value)
 {
-    debug(BPL_DEBUG, "pokeBPL%dPTL(%X)\n", x, value);
+    bool skip;
 
+    debug(BPL_DEBUG, "pokeBPL%dPTL(%X)\n", x, value);
+    switch(dmaEvent[pos.h + 1]) {
+        case BPL_L1: skip = (x == 0); break;
+        case BPL_L2: skip = (x == 1); break;
+        case BPL_L3: skip = (x == 2); break;
+        case BPL_L4: skip = (x == 3); break;
+        case BPL_L5: skip = (x == 4); break;
+        case BPL_L6: skip = (x == 5); break;
+        default: skip = false; break;
+    }
+
+    if (skip && dmaEvent[pos.h + 2] == EVENT_NONE) {
+        debug("Value is lost\n");
+        // Written value is lost
+        return;
+    }
     scheduleRegEvent<s>(DMA_CYCLES(2), REG_BPLxPTL, HI_W_LO_W(x, value));
 }
 
