@@ -267,7 +267,7 @@ CIA::peek(uint16_t addr)
 			break;
 			
         case 0x0D: // CIA_INTERRUPT_CONTROL
-		
+
             // Set upper bit if an IRQ is being triggered
             if ((delay & CIASetInt1) && (icr & 0x1F)) {
                 icr |= 0x80;
@@ -287,7 +287,7 @@ CIA::peek(uint16_t addr)
             // Schedule the ICR bits to be cleared
             delay |= CIAClearIcr0; // Uppermost bit
             delay |= CIAAckIcr0;   // Other bits
-            icrAck = 0xFF;
+            icrAck = result;
 
             // Remember the read access
             delay |= CIAReadIcr0;
