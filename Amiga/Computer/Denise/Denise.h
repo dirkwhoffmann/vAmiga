@@ -111,12 +111,12 @@ public:
     /* Bitplane data of the currently drawn rasterline.
      * While emulating the DMA cycles in a single rasterline, Denise writes
      * the fetched bitplane data into this array. Each array element stores
-     * the color register indice of a single pixel that will later appear on
+     * the color register index of a single pixel that will later appear on
      * the screen. After the rasterline is finished, Denise reads the values
      * from this array, translates them into RGBA, and writes the RGBA values
      * into one of the four frame buffers (see below).
      */
-    uint8_t rasterline[HPIXELS];
+    uint8_t rasterline[HPIXELS + (4 * 16) + 6];
 
     /* Denise keeps four frame buffers, two for storing long frames and
      * another two for storing short frames. The short frame buffers are only

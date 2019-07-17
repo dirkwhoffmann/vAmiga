@@ -665,6 +665,17 @@ Denise::endOfLine(int vpos)
         } else {
             colorizer.translateToRGBA(rasterline, frameBuffer->data + vpos * HPIXELS);
         }
+
+        /* Note that Denise has already synthesized pixels that belong to the
+         * next DMA line (i.e., the pixels that have been written into the
+         * rasterline array with offset values > $E2). We move them to the
+         * beginning of the rasterline array to make the appear when the next
+         * line is drawn.
+         */
+        for (int i = 4 * 0xE3; i < sizeof(rasterline); i++) {
+            rasterline[i - 4 * 0xE3] = rasterline[i];
+            rasterline[i] = 0;
+        }
     }
 
     // Invoke the DMA debugger

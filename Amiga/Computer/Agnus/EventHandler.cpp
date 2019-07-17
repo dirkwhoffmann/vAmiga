@@ -518,7 +518,7 @@ Agnus::serviceBplEvent(EventID id)
             }
 
             if(unlikely(isLastLx(pos.h))) {
-                denise->drawLores(16 + denise->scrollHiresOdd);
+                denise->drawLores(16 + denise->scrollLoresOdd);
                 addBPLMOD<0>();
             } else {
                 denise->drawLores(16);
