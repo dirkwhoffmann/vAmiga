@@ -1092,7 +1092,6 @@ CIA::executeOneCycle()
     
     // Check for Serial interrupt
     if (delay & CIASerInt2) {
-        debug("Setting icrbit 0x08\n");
         icr |= 0x08;
         if (imr & 0x08) {
             triggerSerialIrq();
