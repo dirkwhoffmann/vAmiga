@@ -1345,8 +1345,29 @@ Agnus::pokeBPLxPTH(uint16_t value)
 {
     debug(BPL_DEBUG, "pokeBPL%dPTH(%X)\n", x, value);
 
-    /* As usual, writing into an Agnus register needs 2 cycles to take effect.
-     * This is shown in the left scenario:
+    // Check if the written value gets lost
+    if (skipBPLxPT(x, value)) return;
+
+
+    scheduleRegEvent<s>(DMA_CYCLES(2), REG_BPLxPTH, HI_W_LO_W(x, value));
+}
+
+template <int x, PokeSource s> void
+Agnus::pokeBPLxPTL(uint16_t value)
+{
+    debug(BPL_DEBUG, "pokeBPL%dPTL(%X)\n", x, value);
+
+    // Check if the written value gets lost
+    if (skipBPLxPT(x, value)) return;
+
+    scheduleRegEvent<s>(DMA_CYCLES(2), REG_BPLxPTL, HI_W_LO_W(x, value));
+}
+
+bool
+Agnus::skipBPLxPT(int x, uint16_t value)
+{
+    /* If a new value is written into BPLxPTL or BPLxPTH, this usually happens
+     * as described in the left scenario:
      *
      * 88888888888888889999999999999999      88888888888888889999999999999999
      * 0123456789ABCDEF0123456789ABCDEF      0123456789ABCDEF0123456789ABCDEF
@@ -1361,44 +1382,25 @@ Agnus::pokeBPLxPTH(uint16_t value)
      *
      *     (1) There is a Lx or Hx event once cycle after the BPL1PT write.
      *     (2) There is no DMA going on when the write would happen.
+     *
+     * According to the UAE documentation, the following conditions must
+     * probably hold, too. They are not checked in the SAE source code though.
+     * TODO: Check test cases bplpt1 and bplpt2 on a real Amiga.
+     *
      *     (3) The write does not happen in the last fetch unit.
+     *     (4) The write is to BPL0PTL or BPL0PTH.
      */
 
     if (isBplxEvent(dmaEvent[pos.h + 1], x)) {     // (1)
         if (dmaEvent[pos.h + 2] == EVENT_NONE) {   // (2)
-            if(!inLastFetchUnit(pos.h + 2)) {      // (3)
+            if (true) { // }(!inLastFetchUnit(pos.h + 2)) { // (3)
                 debug(BPL_DEBUG, "Value is lost\n");
-                return;
+                return true;
             }
         }
     }
 
-    scheduleRegEvent<s>(DMA_CYCLES(2), REG_BPLxPTH, HI_W_LO_W(x, value));
-}
-
-template <int x, PokeSource s> void
-Agnus::pokeBPLxPTL(uint16_t value)
-{
-    debug(BPL_DEBUG, "pokeBPL%dPTL(%X)\n", x, value);
-
-    if (isBplxEvent(dmaEvent[pos.h + 1], x)) {
-        if (dmaEvent[pos.h + 2] == EVENT_NONE) {
-            if(!inLastFetchUnit(pos.h + 2)) {
-                debug(BPL_DEBUG, "Written value is lost\n");
-                return;
-            }
-        }
-    }
-
-    scheduleRegEvent<s>(DMA_CYCLES(2), REG_BPLxPTL, HI_W_LO_W(x, value));
-}
-
-template <int x> void
-Agnus::setBPLxPTH(uint16_t value)
-{
-    debug(BPL_DEBUG, "setBPL%dPTH(%X)\n", x, value);
-
-    bplpt[x - 1] = REPLACE_HI_WORD(bplpt[x - 1], value & 0x7);
+    return false;
 }
 
 void
@@ -1408,14 +1410,6 @@ Agnus::setBPLxPTH(int x, uint16_t value)
     assert(1 <= x && x <= 6);
 
     bplpt[x - 1] = REPLACE_HI_WORD(bplpt[x - 1], value & 0x7);
-}
-
-template <int x> void
-Agnus::setBPLxPTL(uint16_t value)
-{
-    debug(BPL_DEBUG, "pokeBPL%dPTL(%X)\n", x, value);
-
-    bplpt[x - 1] = REPLACE_LO_WORD(bplpt[x - 1], value & 0xFFFE);
 }
 
 void
@@ -1855,20 +1849,6 @@ template void Agnus::pokeBPLxPTL<5, POKE_CPU>(uint16_t value);
 template void Agnus::pokeBPLxPTL<5, POKE_COPPER>(uint16_t value);
 template void Agnus::pokeBPLxPTL<6, POKE_CPU>(uint16_t value);
 template void Agnus::pokeBPLxPTL<6, POKE_COPPER>(uint16_t value);
-
-template void Agnus::setBPLxPTH<1>(uint16_t value);
-template void Agnus::setBPLxPTH<2>(uint16_t value);
-template void Agnus::setBPLxPTH<3>(uint16_t value);
-template void Agnus::setBPLxPTH<4>(uint16_t value);
-template void Agnus::setBPLxPTH<5>(uint16_t value);
-template void Agnus::setBPLxPTH<6>(uint16_t value);
-
-template void Agnus::setBPLxPTL<1>(uint16_t value);
-template void Agnus::setBPLxPTL<2>(uint16_t value);
-template void Agnus::setBPLxPTL<3>(uint16_t value);
-template void Agnus::setBPLxPTL<4>(uint16_t value);
-template void Agnus::setBPLxPTL<5>(uint16_t value);
-template void Agnus::setBPLxPTL<6>(uint16_t value);
 
 template void Agnus::pokeSPRxPTH<0>(uint16_t value);
 template void Agnus::pokeSPRxPTH<1>(uint16_t value);
