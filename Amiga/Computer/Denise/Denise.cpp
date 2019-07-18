@@ -233,12 +233,17 @@ Denise::pokeBPLCON0(uint16_t value)
 {
     debug(BPL_DEBUG, "pokeBPLCON0(%X)\n", value);
 
-    // Let Agnus know about the register change
+    // BPLCON0 is shared by Agnus and Denise
     agnus->pokeBPLCON0(bplcon0, value);
+    pokeBPLCON0(bplcon0, value);
 
     // Remember the new value
     bplcon0 = value;
+}
 
+void
+Denise::pokeBPLCON0(uint16_t oldValue, uint16_t newValue)
+{
     /* "Bit 11 of register BPLCON0 selects hold-and-modify mode. The following
      *  bits in BPLCONO must be set for hold-and-modify mode to be active:
      *
@@ -248,9 +253,9 @@ Denise::pokeBPLCON0(uint16_t value)
      *      - Bits BPU2, BPU1, and BPUO - bits 14, 13, and 12, are 101 or 110
      *        (five or six bit-planes active)." [HRM]
      */
-    uint8_t bpu = bplconBPU();
+    uint8_t bpu = (newValue >> 12) & 0b111;
     bool oldHam = ham;
-    ham = (bplcon0 & 0x8C00) == 0x0800 && (bpu == 5 || bpu == 6);
+    ham = (newValue & 0x8C00) == 0x0800 && (bpu == 5 || bpu == 6);
 
     if (oldHam ^ ham) {
         // debug("Switching HAM mode %s\n", ham ? "on" : "off");

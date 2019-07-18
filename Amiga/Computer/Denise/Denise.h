@@ -216,6 +216,8 @@ public:
     
     // OCS register 0x100 (w)
     void pokeBPLCON0(uint16_t value);
+    void pokeBPLCON0(uint16_t oldValue, uint16_t newValue);
+
     bool hires() { return !!GET_BIT(bplcon0, 15); }
     bool lores() { return !GET_BIT(bplcon0, 15); }
     uint8_t bplconBPU() { return (bplcon0 >> 12) & 0b111; }
