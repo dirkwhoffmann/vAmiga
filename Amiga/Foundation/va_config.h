@@ -28,7 +28,7 @@
 
 // Custom debug levels (set to 1 to generate debug output)
 #define RUN_DEBUG 2         // Emulator thread run loop
-#define CIA_DEBUG 2         // CIAs
+#define CIA_DEBUG 1         // CIAs
 #define TOD_DEBUG 2         // TODs (24-bit counters inside the CIAs)
 #define RTC_DEBUG 2         // Real-time clock
 #define DMA_DEBUG 2         // DMA registers

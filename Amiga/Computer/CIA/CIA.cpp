@@ -1092,6 +1092,7 @@ CIA::executeOneCycle()
     
     // Check for Serial interrupt
     if (delay & CIASerInt2) {
+        debug("Setting icrbit 0x08\n");
         icr |= 0x08;
         if (imr & 0x08) {
             triggerSerialIrq();
@@ -1401,13 +1402,16 @@ CIAA::updatePB()
 void
 CIAA::setKeyCode(uint8_t keyCode)
 {
-    // debug("setKeyCode: %X\n", keyCode);
+    debug(CIA_DEBUG, "setKeyCode: %X\n", keyCode);
     
     // Put the key code into the serial data register
     SDR = keyCode;
     
     // Trigger a serial data interrupt
-    delay |= CIASerInt0;    
+    delay |= CIASerInt0;
+
+    // Wake up the CIA
+    wakeUp();
 }
 
 // -----------------------------------------------------------------------------
