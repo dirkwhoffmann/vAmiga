@@ -830,15 +830,20 @@ bool
 Agnus::isLastLx(int16_t dmaCycle)
 {
     return (pos.h >= dmaStopLores - 8);
-    // return dmaEvent[hpos] != dmaEvent[hpos + 8];
 }
 
 bool
 Agnus::isLastHx(int16_t dmaCycle)
 {
     return (pos.h >= dmaStopHires - 4);
-    // return dmaEvent[hpos] != dmaEvent[hpos + 4];
 }
+
+bool
+Agnus::inLastFetchUnit(int16_t dmaCycle)
+{
+    return denise->hires() ? isLastHx(dmaCycle) : isLastLx(dmaCycle);
+}
+
 
 void
 Agnus::dumpDMAEventTable(int from, int to)
@@ -1338,48 +1343,53 @@ Agnus::computeDDFStop()
 template <int x, PokeSource s> void
 Agnus::pokeBPLxPTH(uint16_t value)
 {
-    bool skip;
-
     debug(BPL_DEBUG, "pokeBPL%dPTH(%X)\n", x, value);
-    switch(dmaEvent[pos.h + 1]) {
-        case BPL_L1: skip = (x == 0); break;
-        case BPL_L2: skip = (x == 1); break;
-        case BPL_L3: skip = (x == 2); break;
-        case BPL_L4: skip = (x == 3); break;
-        case BPL_L5: skip = (x == 4); break;
-        case BPL_L6: skip = (x == 5); break;
-        default: skip = false; break;
+
+    /* As usual, writing into an Agnus register needs 2 cycles to take effect.
+     * This is shown in the left scenario:
+     *
+     * 88888888888888889999999999999999      88888888888888889999999999999999
+     * 0123456789ABCDEF0123456789ABCDEF      0123456789ABCDEF0123456789ABCDEF
+     * .4.2.351.4.2.351.4.2.351.4.2.351      .4.2.351.4.2.351.4.2.351.4.2.351
+     *     ^ ^                                     ^ ^
+     *     | |                                     | |
+     *     | Change takes effect here              | New value is lost
+     *     Write to BPLxPT                         Write to BPL1PT
+     *
+     * The right scenario shows that the new value can get lost under certain
+     * circumstances. The following must hold:
+     *
+     *     (1) There is a Lx or Hx event once cycle after the BPL1PT write.
+     *     (2) There is no DMA going on when the write would happen.
+     *     (3) The write does not happen in the last fetch unit.
+     */
+
+    if (isBplxEvent(dmaEvent[pos.h + 1], x)) {     // (1)
+        if (dmaEvent[pos.h + 2] == EVENT_NONE) {   // (2)
+            if(!inLastFetchUnit(pos.h + 2)) {      // (3)
+                debug(BPL_DEBUG, "Value is lost\n");
+                return;
+            }
+        }
     }
 
-    if (skip && dmaEvent[pos.h + 2] == EVENT_NONE) {
-        debug("Value is lost\n");
-        // Written value is lost
-        return;
-    }
     scheduleRegEvent<s>(DMA_CYCLES(2), REG_BPLxPTH, HI_W_LO_W(x, value));
 }
 
 template <int x, PokeSource s> void
 Agnus::pokeBPLxPTL(uint16_t value)
 {
-    bool skip;
-
     debug(BPL_DEBUG, "pokeBPL%dPTL(%X)\n", x, value);
-    switch(dmaEvent[pos.h + 1]) {
-        case BPL_L1: skip = (x == 0); break;
-        case BPL_L2: skip = (x == 1); break;
-        case BPL_L3: skip = (x == 2); break;
-        case BPL_L4: skip = (x == 3); break;
-        case BPL_L5: skip = (x == 4); break;
-        case BPL_L6: skip = (x == 5); break;
-        default: skip = false; break;
+
+    if (isBplxEvent(dmaEvent[pos.h + 1], x)) {
+        if (dmaEvent[pos.h + 2] == EVENT_NONE) {
+            if(!inLastFetchUnit(pos.h + 2)) {
+                debug(BPL_DEBUG, "Written value is lost\n");
+                return;
+            }
+        }
     }
 
-    if (skip && dmaEvent[pos.h + 2] == EVENT_NONE) {
-        debug("Value is lost\n");
-        // Written value is lost
-        return;
-    }
     scheduleRegEvent<s>(DMA_CYCLES(2), REG_BPLxPTL, HI_W_LO_W(x, value));
 }
 
@@ -1388,33 +1398,33 @@ Agnus::setBPLxPTH(uint16_t value)
 {
     debug(BPL_DEBUG, "setBPL%dPTH(%X)\n", x, value);
 
-    bplpt[x] = REPLACE_HI_WORD(bplpt[x], value & 0x7);
+    bplpt[x - 1] = REPLACE_HI_WORD(bplpt[x - 1], value & 0x7);
 }
 
 void
 Agnus::setBPLxPTH(int x, uint16_t value)
 {
     debug(BPL_DEBUG, "setBPLxPTH(%d, %X)\n", x, value);
-    assert(x < 6);
+    assert(1 <= x && x <= 6);
 
-    bplpt[x] = REPLACE_HI_WORD(bplpt[x], value & 0x7);
+    bplpt[x - 1] = REPLACE_HI_WORD(bplpt[x - 1], value & 0x7);
 }
 
 template <int x> void
 Agnus::setBPLxPTL(uint16_t value)
 {
     debug(BPL_DEBUG, "pokeBPL%dPTL(%X)\n", x, value);
-    assert(x < 6);
 
-    bplpt[x] = REPLACE_LO_WORD(bplpt[x], value & 0xFFFE);
+    bplpt[x - 1] = REPLACE_LO_WORD(bplpt[x - 1], value & 0xFFFE);
 }
 
 void
 Agnus::setBPLxPTL(int x, uint16_t value)
 {
     debug(BPL_DEBUG, "pokeBPLxPTL(%d, %X)\n", x, value);
+    assert(1 <= x && x <= 6);
 
-    bplpt[x] = REPLACE_LO_WORD(bplpt[x], value & 0xFFFE);
+    bplpt[x - 1] = REPLACE_LO_WORD(bplpt[x - 1], value & 0xFFFE);
 }
 
 template <PokeSource s> void
@@ -1820,8 +1830,6 @@ template void Agnus::executeSecondSpriteCycle<5>();
 template void Agnus::executeSecondSpriteCycle<6>();
 template void Agnus::executeSecondSpriteCycle<7>();
 
-template void Agnus::pokeBPLxPTH<0, POKE_CPU>(uint16_t value);
-template void Agnus::pokeBPLxPTH<0, POKE_COPPER>(uint16_t value);
 template void Agnus::pokeBPLxPTH<1, POKE_CPU>(uint16_t value);
 template void Agnus::pokeBPLxPTH<1, POKE_COPPER>(uint16_t value);
 template void Agnus::pokeBPLxPTH<2, POKE_CPU>(uint16_t value);
@@ -1832,9 +1840,9 @@ template void Agnus::pokeBPLxPTH<4, POKE_CPU>(uint16_t value);
 template void Agnus::pokeBPLxPTH<4, POKE_COPPER>(uint16_t value);
 template void Agnus::pokeBPLxPTH<5, POKE_CPU>(uint16_t value);
 template void Agnus::pokeBPLxPTH<5, POKE_COPPER>(uint16_t value);
+template void Agnus::pokeBPLxPTH<6, POKE_CPU>(uint16_t value);
+template void Agnus::pokeBPLxPTH<6, POKE_COPPER>(uint16_t value);
 
-template void Agnus::pokeBPLxPTL<0, POKE_CPU>(uint16_t value);
-template void Agnus::pokeBPLxPTL<0, POKE_COPPER>(uint16_t value);
 template void Agnus::pokeBPLxPTL<1, POKE_CPU>(uint16_t value);
 template void Agnus::pokeBPLxPTL<1, POKE_COPPER>(uint16_t value);
 template void Agnus::pokeBPLxPTL<2, POKE_CPU>(uint16_t value);
@@ -1845,20 +1853,22 @@ template void Agnus::pokeBPLxPTL<4, POKE_CPU>(uint16_t value);
 template void Agnus::pokeBPLxPTL<4, POKE_COPPER>(uint16_t value);
 template void Agnus::pokeBPLxPTL<5, POKE_CPU>(uint16_t value);
 template void Agnus::pokeBPLxPTL<5, POKE_COPPER>(uint16_t value);
+template void Agnus::pokeBPLxPTL<6, POKE_CPU>(uint16_t value);
+template void Agnus::pokeBPLxPTL<6, POKE_COPPER>(uint16_t value);
 
-template void Agnus::setBPLxPTH<0>(uint16_t value);
 template void Agnus::setBPLxPTH<1>(uint16_t value);
 template void Agnus::setBPLxPTH<2>(uint16_t value);
 template void Agnus::setBPLxPTH<3>(uint16_t value);
 template void Agnus::setBPLxPTH<4>(uint16_t value);
 template void Agnus::setBPLxPTH<5>(uint16_t value);
+template void Agnus::setBPLxPTH<6>(uint16_t value);
 
-template void Agnus::setBPLxPTL<0>(uint16_t value);
 template void Agnus::setBPLxPTL<1>(uint16_t value);
 template void Agnus::setBPLxPTL<2>(uint16_t value);
 template void Agnus::setBPLxPTL<3>(uint16_t value);
 template void Agnus::setBPLxPTL<4>(uint16_t value);
 template void Agnus::setBPLxPTL<5>(uint16_t value);
+template void Agnus::setBPLxPTL<6>(uint16_t value);
 
 template void Agnus::pokeSPRxPTH<0>(uint16_t value);
 template void Agnus::pokeSPRxPTH<1>(uint16_t value);

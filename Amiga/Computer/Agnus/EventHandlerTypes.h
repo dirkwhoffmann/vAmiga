@@ -252,8 +252,30 @@ static inline bool isDasEvent(EventID id) { return id < DAS_EVENT_COUNT; }
 static inline bool isCopEvent(EventID id) { return id < COP_EVENT_COUNT; }
 static inline bool isBltEvent(EventID id) { return id < BLT_EVENT_COUNT; }
 
-static inline int DASEventCycle(EventID id) {
+static inline bool isBplxEvent(EventID id, int x)
+{
+    assert(1 <= x && x <= 6);
 
+    switch(id) {
+
+        case BPL_L1:
+        case BPL_H1: return x == 1;
+        case BPL_L2:
+        case BPL_H2: return x == 2;
+        case BPL_L3:
+        case BPL_H3: return x == 3;
+        case BPL_L4:
+        case BPL_H4: return x == 4;
+        case BPL_L5: return x == 5;
+        case BPL_L6: return x == 6;
+
+        default:
+            return false;
+    }
+}
+
+static inline int DASEventCycle(EventID id)
+{
     switch(id) {
 
         case DAS_REFRESH: return 0x01;

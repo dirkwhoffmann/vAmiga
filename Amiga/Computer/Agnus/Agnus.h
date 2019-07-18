@@ -311,10 +311,10 @@ public:
     uint16_t ddfstop;
 
     // The actual data fetch window
-    int16_t dmaStrtLores; // First lores bitplane DMA cycle
-    int16_t dmaStrtHires; // First hires bitplane DMA cycle
-    int16_t dmaStopLores; // Last lores bitplane DMA cycle + 1
-    int16_t dmaStopHires; // Last hires bitplane DMA cycle + 1
+    int16_t dmaStrtLores;      // First lores bitplane DMA cycle
+    int16_t dmaStrtHires;      // First hires bitplane DMA cycle
+    int16_t dmaStopLores;      // Last lores bitplane DMA cycle + 1
+    int16_t dmaStopHires;      // Last hires bitplane DMA cycle + 1
 
     // Difference between dmaStrtLores and ddfstrt (either 0 or 4)
     int16_t dmaStrtLoresShift;
@@ -631,6 +631,9 @@ public:
 
     // Returns true if the event in the specified slot is the Hx event.
     bool isLastHx(int16_t dmaCycle);
+
+    // Returns true if the specified position belongs to the last fetch unit.
+    bool inLastFetchUnit(int16_t dmaCycle);
 
     // Dumps the DMA time slot allocation table to the console for debugging.
     void dumpDMAEventTable(int from, int to);
