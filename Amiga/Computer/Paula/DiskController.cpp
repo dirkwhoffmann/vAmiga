@@ -145,12 +145,6 @@ DiskController::getInfo()
 void
 DiskController::setState(DriveState state)
 {
-    /*
-     if (this->state == DRIVE_DMA_OFF && state == DRIVE_DMA_READ) {
-     clearFifo();
-     }
-     */
-    
     this->state = state;
 }
 
@@ -690,8 +684,8 @@ DiskController::performTurboDMA(Drive *drive)
             return;
     }
     
-    // Trigger disk interrupt
-    paula->pokeINTREQ(0x8002);
+    // Trigger disk interrupt with some delay
+    agnus->scheduleRel<IRQ_DSKBLK_SLOT>(DMA_CYCLES(512), IRQ_SET);
     state = DRIVE_DMA_OFF;
 }
 
