@@ -712,6 +712,7 @@ public:
     template <int x> void addBPLMOD() {
         assert(x < 6);
         INC_OCS_PTR(bplpt[x], (x % 2) ? bpl2mod : bpl1mod);
+        // debug("addBPLMOD %d by %d to %d ($%X)\n", x, (x % 2) ? bpl2mod : bpl1mod, bplpt[x], bplpt[x]);
     }
 
     /* Adds BPLxMOD to the pointers of the active bitplanes

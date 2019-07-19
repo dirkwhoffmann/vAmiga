@@ -771,7 +771,7 @@ Copper::serviceEvent(EventID id)
 
         case COP_SKIP1:
 
-            // verbose = 1;
+            verbose = 1;
             if (verbose) debug("COP_SKIP1\n");
 
             // Wait for the next free cycle

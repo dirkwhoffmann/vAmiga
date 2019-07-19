@@ -148,7 +148,7 @@ Blitter::doFastCopyBlit()
                 check1 = fnv_1a_it32(check1, dhold);
                 check2 = fnv_1a_it32(check2, bltdpt);
                 // plainmsg("    check1 = %X check2 = %X\n", check1, check2);
-                assert(bltdpt);
+
                 INC_OCS_PTR(bltdpt, incr);
             }
             
