@@ -1382,21 +1382,11 @@ Agnus::skipBPLxPT(int x, uint16_t value)
      *
      *     (1) There is a Lx or Hx event once cycle after the BPL1PT write.
      *     (2) There is no DMA going on when the write would happen.
-     *
-     * According to the UAE documentation, the following conditions must
-     * probably hold, too. They are not checked in the SAE source code though.
-     * TODO: Check test cases bplpt1 and bplpt2 on a real Amiga.
-     *
-     *     (3) The write does not happen in the last fetch unit.
-     *     (4) The write is to BPL0PTL or BPL0PTH.
      */
 
-    if (isBplxEvent(dmaEvent[pos.h + 1], x)) {     // (1)
-        if (dmaEvent[pos.h + 2] == EVENT_NONE) {   // (2)
-            if (true) { // }(!inLastFetchUnit(pos.h + 2)) { // (3)
-                debug(BPL_DEBUG, "Value is lost\n");
-                return true;
-            }
+    if (isBplxEvent(dmaEvent[pos.h + 1], x)) { // (1)
+        if (dmaEvent[pos.h + 2] == EVENT_NONE) { // (2)
+            return true;
         }
     }
 
