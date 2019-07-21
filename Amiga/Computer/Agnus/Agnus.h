@@ -702,7 +702,7 @@ public:
     // BPLxPTL, BPLxPTH
     template <int x, PokeSource s> void pokeBPLxPTH(uint16_t value);
     template <int x, PokeSource s> void pokeBPLxPTL(uint16_t value);
-    bool skipBPLxPT(int x, uint16_t value);
+    bool skipBPLxPT(int x);
     void setBPLxPTH(int x, uint16_t value);
     void setBPLxPTL(int x, uint16_t value);
 
@@ -720,7 +720,7 @@ public:
     template <int x> void addBPLMOD() {
         assert(x < 6);
         INC_OCS_PTR(bplpt[x], (x % 2) ? bpl2mod : bpl1mod);
-        debug("addBPLMOD %d by %d to %d ($%X)\n", x, (x % 2) ? bpl2mod : bpl1mod, bplpt[x], bplpt[x]);
+        // debug("addBPLMOD%d +%d = %d ($%X)\n", x, (x % 2) ? bpl2mod : bpl1mod, bplpt[x], bplpt[x]);
     }
 
     /* Adds BPLxMOD to the pointers of the active bitplanes

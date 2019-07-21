@@ -39,7 +39,7 @@
 #define AUD_DEBUG 2         // Audio registers
 #define CPT_DEBUG 2         // Control ports and connected devices
 #define COPREG_DEBUG 2      // Copper registers
-#define COP_DEBUG 1         // Copper internals
+#define COP_DEBUG 2         // Copper internals
 #define BLT_DEBUG 2         // Blitter registers
 #define BLT_CHECKSUM 2      // Blitter checksum computation
 #define SER_DEBUG 2         // Serial interface

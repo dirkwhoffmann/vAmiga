@@ -718,7 +718,7 @@ Copper::serviceEvent(EventID id)
 
         case COP_WAIT1:
             
-            verbose = true;
+            // verbose = true;
             if (verbose) debug("COP_WAIT1\n");
 
             // Wait for the next free cycle

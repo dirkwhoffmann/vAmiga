@@ -791,6 +791,9 @@ Agnus::switchBitplaneDmaOff()
     dmaLastBpl1Event = 0;
     denise->firstCanvasPixel = 0;
     denise->lastCanvasPixel = 0;
+
+    // Clear any pending event in the BPL slot
+    cancel(BPL_SLOT);
 }
 
 void
@@ -1274,20 +1277,14 @@ Agnus::pokeDDFSTRT(uint16_t value)
     // Take action if we haven't reached the old DDFSTRT cycle yet
     if (pos.h < ddfstrtReached) {
 
-        debug("Haven't reached DDFSTRT yet\n");
-
         // Check if the new position has already been passed
         if (ddfstrt <= pos.h + 2) {
-
-            debug("New position has been passed already.\n");
 
             // DDFSTRT never matches in the current rasterline. Disable DMA
             ddfstrtReached = -1;
             switchBitplaneDmaOff();
 
         } else {
-
-            // debug("Update DMA table immediately.\n");
 
             // Update the matching position and recalculute the DMA table
             ddfstrtReached = ddfstrt;
@@ -1324,6 +1321,7 @@ Agnus::pokeDDFSTOP(uint16_t value)
     hsyncActions |= HSYNC_COMPUTE_DDF_WINDOW;
 
     // Check if the modification also affects the current rasterline
+    /*
     int16_t oldStop = denise->hires() ? dmaStopHires : dmaStopLores;
     if (pos.h <= oldStop - 2) {
 
@@ -1331,6 +1329,7 @@ Agnus::pokeDDFSTOP(uint16_t value)
         updateBitplaneDma();
         scheduleNextBplEvent();
     }
+    */
 }
 
 void
@@ -1377,7 +1376,7 @@ Agnus::pokeBPLxPTH(uint16_t value)
     debug(BPL_DEBUG, "pokeBPL%dPTH(%X)\n", x, value);
 
     // Check if the written value gets lost
-    if (skipBPLxPT(x, value)) return;
+    if (skipBPLxPT(x)) return;
 
     scheduleRegEvent<s>(DMA_CYCLES(2), REG_BPLxPTH, HI_W_LO_W(x, value));
 }
@@ -1388,13 +1387,13 @@ Agnus::pokeBPLxPTL(uint16_t value)
     debug(BPL_DEBUG, "pokeBPL%dPTL(%X)\n", x, value);
 
     // Check if the written value gets lost
-    if (skipBPLxPT(x, value)) return;
+    if (skipBPLxPT(x)) return;
 
     scheduleRegEvent<s>(DMA_CYCLES(2), REG_BPLxPTL, HI_W_LO_W(x, value));
 }
 
 bool
-Agnus::skipBPLxPT(int x, uint16_t value)
+Agnus::skipBPLxPT(int x)
 {
     /* If a new value is written into BPLxPTL or BPLxPTH, this usually happens
      * as described in the left scenario:
