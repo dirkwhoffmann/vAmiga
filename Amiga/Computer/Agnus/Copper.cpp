@@ -343,6 +343,8 @@ Copper::findMatchNew(Beam &match)
         // Check if the vertical components are equal
         if ((beam & mask & ~0xFF) == (comp & mask & ~0xFF)) {
 
+            // debug("Matching vertically: beam = %X comp = %X mask = %X\n", beam, comp, mask);
+
             // Try to match the horizontal coordinate as well
             if (findHorizontalMatchNew(beam, comp, mask)) {
 
@@ -716,7 +718,7 @@ Copper::serviceEvent(EventID id)
 
         case COP_WAIT1:
             
-            // verbose = true;
+            verbose = true;
             if (verbose) debug("COP_WAIT1\n");
 
             // Wait for the next free cycle
@@ -765,13 +767,13 @@ Copper::serviceEvent(EventID id)
 
             } else {
 
+                if (verbose) debug("(%d,%d) does not match in this frame\n", trigger.v, trigger.h);
                 agnus->cancel<COP_SLOT>();
             }
             break;
 
         case COP_SKIP1:
 
-            verbose = 1;
             if (verbose) debug("COP_SKIP1\n");
 
             // Wait for the next free cycle

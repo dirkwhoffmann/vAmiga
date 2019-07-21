@@ -258,7 +258,7 @@ public:
     bool vFlop;
     bool hFlop;
 
-    /* At the end of a rasterline, this variable conains the pixel coordinate
+    /* At the end of a rasterline, these variable conains the pixel coordinates
      * where the hpos counter matched diwHstrt or diwHstop, respectively. A
      * value of -1 indicates that no matching event took place.
      */
@@ -309,6 +309,14 @@ public:
     // The display data fetch registers
     uint16_t ddfstrt;
     uint16_t ddfstop;
+
+    /* At the end of a rasterline, these variables conains the DMA cycles
+     * where the hpos counter matched ddfstrt or ddfstop, respectively. A
+     * value of -1 indicates that no matching event took place.
+     */
+    int16_t ddfstrtReached;
+    int16_t ddfstopReached;
+
 
     // The actual data fetch window
     int16_t dmaStrtLores;      // First lores bitplane DMA cycle
@@ -712,7 +720,7 @@ public:
     template <int x> void addBPLMOD() {
         assert(x < 6);
         INC_OCS_PTR(bplpt[x], (x % 2) ? bpl2mod : bpl1mod);
-        // debug("addBPLMOD %d by %d to %d ($%X)\n", x, (x % 2) ? bpl2mod : bpl1mod, bplpt[x], bplpt[x]);
+        debug("addBPLMOD %d by %d to %d ($%X)\n", x, (x % 2) ? bpl2mod : bpl1mod, bplpt[x], bplpt[x]);
     }
 
     /* Adds BPLxMOD to the pointers of the active bitplanes

@@ -56,6 +56,8 @@ Agnus::Agnus()
         { &diwstop,              sizeof(diwstop),              0 },
         { &ddfstrt,              sizeof(ddfstrt),              0 },
         { &ddfstop,              sizeof(ddfstop),              0 },
+        { &ddfstrtReached,       sizeof(ddfstrtReached),       0 },
+        { &ddfstopReached,       sizeof(ddfstopReached),       0 },
         { &audlc,                sizeof(audlc),                DWORD_ARRAY },
         { &audlcold,             sizeof(audlcold),             DWORD_ARRAY },
         { &bplpt,                sizeof(bplpt),                DWORD_ARRAY },
@@ -1269,14 +1271,43 @@ Agnus::pokeDDFSTRT(uint16_t value)
     // Let the hsync handler recompute the data fetch window
     hsyncActions |= HSYNC_COMPUTE_DDF_WINDOW;
 
-    // Check if the modification also affects the current rasterline
-    int16_t oldStrt = denise->hires() ? dmaStrtHires : dmaStrtLores;
-    if (pos.h <= oldStrt - 2) {
+    // Take action if we haven't reached the old DDFSTRT cycle yet
+    if (pos.h < ddfstrtReached) {
 
+        debug("Haven't reached DDFSTRT yet\n");
+
+        // Check if the new position has already been passed
+        if (ddfstrt <= pos.h + 2) {
+
+            debug("New position has been passed already.\n");
+
+            // DDFSTRT never matches in the current rasterline. Disable DMA
+            ddfstrtReached = -1;
+            switchBitplaneDmaOff();
+
+        } else {
+
+            // debug("Update DMA table immediately.\n");
+
+            // Update the matching position and recalculute the DMA table
+            ddfstrtReached = ddfstrt;
+            computeDDFStrt();
+            updateBitplaneDma();
+            scheduleNextBplEvent();
+        }
+    }
+
+    // int16_t oldStrt = denise->hires() ? dmaStrtHires : dmaStrtLores;
+    // if (pos.h <= oldStrt - 2) {
+    /*
+    if (pos.h < ddfstrt - 2) {
+
+        debug("Recomputing allocation table: %d\n", ddfstrt);
         computeDDFStrt();
         updateBitplaneDma();
         scheduleNextBplEvent();
     }
+    */
 }
 
 void
@@ -1348,7 +1379,6 @@ Agnus::pokeBPLxPTH(uint16_t value)
     // Check if the written value gets lost
     if (skipBPLxPT(x, value)) return;
 
-
     scheduleRegEvent<s>(DMA_CYCLES(2), REG_BPLxPTH, HI_W_LO_W(x, value));
 }
 
@@ -1385,7 +1415,11 @@ Agnus::skipBPLxPT(int x, uint16_t value)
      */
 
     if (isBplxEvent(dmaEvent[pos.h + 1], x)) { // (1)
+
         if (dmaEvent[pos.h + 2] == EVENT_NONE) { // (2)
+
+            debug("skipBPLxPT: Value gets lost\n");
+            dumpDMAEventTable();
             return true;
         }
     }
@@ -1693,6 +1727,13 @@ Agnus::hsyncHandler()
     hFlop = (hFlopOff != -1) ? false : (hFlopOn != -1) ? true : hFlop;
     hFlopOn = diwHstrt;
     hFlopOff = diwHstop;
+
+    //
+    // Update the DDF related variables
+    //
+
+    ddfstrtReached = ddfstrt;
+    ddfstopReached = ddfstop;
 
     //
     // Process pending work items
