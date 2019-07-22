@@ -721,6 +721,10 @@ Copper::serviceEvent(EventID id)
             // verbose = true;
             if (verbose) debug("COP_WAIT1\n");
 
+            if (getBFD() == 0) {
+                debug("***** BFD FLAG NOT IMPLEMENTED YET\n");
+            }
+
             // Wait for the next free cycle
             if (!agnus->copperCanRun()) { reschedule(); break; }
 

@@ -451,13 +451,13 @@ public extension MetalView {
         setVertex(41, float3(+dx, +dy, -dz + 2*dy), upperRight)
     
         // 2D drawing quad
-        setVertex(42, float3(-1, 1, 0), lowerLeft)
-        setVertex(43, float3(-1, -1, 0), upperLeft)
-        setVertex(44, float3( 1, -1, 0), upperRight)
+        setVertex(42, float3(-1, 1, 0), upperLeft)
+        setVertex(43, float3(-1, -1, 0), lowerLeft)
+        setVertex(44, float3( 1, -1, 0), lowerRight)
     
-        setVertex(45, float3(-1, 1, 0), lowerLeft)
-        setVertex(46, float3( 1, 1, 0), lowerRight)
-        setVertex(47, float3( 1, -1, 0), upperRight)
+        setVertex(45, float3(-1, 1, 0), upperLeft)
+        setVertex(46, float3( 1, 1, 0), upperRight)
+        setVertex(47, float3( 1, -1, 0), lowerRight)
     
         let opt = MTLResourceOptions.cpuCacheModeWriteCombined
         let len = capacity * 4
