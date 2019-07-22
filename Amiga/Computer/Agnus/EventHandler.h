@@ -48,9 +48,13 @@
 
 public:
 
-// Returns true iff the specified slot contains an event.
+// Returns true iff the specified slot contains any event.
 template<EventSlot s> bool hasEvent() {
     assert(s < SLOT_COUNT); return slot[s].id != (EventID)0; }
+
+// Returns true iff the specified slot contains a specific event.
+template<EventSlot s> bool hasEvent(EventID id) {
+    assert(s < SLOT_COUNT); return slot[s].id == id; }
 
 // Returns true iff the specified slot contains a pending event.
 template<EventSlot s> bool isPending() {

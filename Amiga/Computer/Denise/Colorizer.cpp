@@ -78,6 +78,13 @@ Colorizer::setColor(int reg, uint16_t value)
 
     colors[reg] = value & 0xFFF;
     colors[reg + 32] = ((r / 2) << 8) | ((g / 2) << 4) | (b / 2);
+
+    /*
+    colors[8] = 0xF00;
+    colors[9] = 0xFF0;
+    colors[10] = 0x0F0;
+    colors[11] = 0x00F;
+    */
 }
 
 void

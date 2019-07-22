@@ -293,9 +293,14 @@ Blitter::pokeBLTSIZE(uint16_t value)
     bbusy = true;
     
     // WE ONLY DO FAST BLITS AT THE MOMENT
-    agnus->scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_FAST_BLIT);
-    
-    
+
+    // Schedule the blit operation
+    if (agnus->bltDMA()) {
+        agnus->scheduleRel<BLT_SLOT>(DMA_CYCLES(0), BLT_FAST_BLIT);
+    } else {
+        agnus->scheduleAbs<BLT_SLOT>(NEVER, BLT_FAST_BLIT);
+    }
+
     /*
     if (bltLINE()) {
         // TODO
@@ -370,6 +375,22 @@ Blitter::pokeBLTCDAT(uint16_t value)
 {
     debug(BLT_DEBUG, "pokeBLTCDAT(%X)\n", value);
     chold = value;
+}
+
+void
+Blitter::pokeDMACON(uint16_t oldValue, uint16_t newValue)
+{
+    bool oldBltDma = (oldValue & (DMAEN | BLTEN)) == (DMAEN | BLTEN);
+    bool newBltDma = (newValue & (DMAEN | BLTEN)) == (DMAEN | BLTEN);
+
+    // Check if Blitter DMA got switched on
+    if (!oldBltDma && newBltDma) {
+
+        // Perform pending blit operation (if any)
+        if (agnus->hasEvent<BLT_SLOT>(BLT_FAST_BLIT)) {
+            agnus->scheduleRel<BLT_SLOT>(DMA_CYCLES(0), BLT_FAST_BLIT);
+        }
+    }
 }
 
 void
@@ -525,9 +546,7 @@ Blitter::serviceEvent(EventID id)
             
         case BLT_FAST_BLIT:
 
-            if (agnus->bltDMA()) {
-                doFastBlit();
-            }
+            doFastBlit();
             agnus->cancel<BLT_SLOT>();
             break;
 

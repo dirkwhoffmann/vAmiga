@@ -229,8 +229,17 @@ class Blitter : public HardwareComponent {
     
     bool isFirstWord() { return xCounter == bltsizeW(); }
     bool isLastWord() { return xCounter == 1; }
+
     
-    
+    //
+    // Handling requests of other components
+    //
+
+    // Called by Agnus when DMACON is written to
+    void pokeDMACON(uint16_t oldValue, uint16_t newValue);
+
+
+
     //
     // Serving events
     //

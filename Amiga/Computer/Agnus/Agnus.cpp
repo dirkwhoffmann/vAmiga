@@ -935,7 +935,9 @@ void
 Agnus::pokeDMACON(uint16_t value)
 {
     debug(DMA_DEBUG, "pokeDMACON(%X)\n", value);
-    
+
+    uint16_t olddmacon = dmacon;
+
     bool oldDMAEN = (dmacon & DMAEN);
     bool oldBPLEN = (dmacon & BPLEN) && oldDMAEN;
     bool oldCOPEN = (dmacon & COPEN) && oldDMAEN;
@@ -961,6 +963,10 @@ Agnus::pokeDMACON(uint16_t value)
     bool newAU1EN = (dmacon & AU1EN) && newDMAEN;
     bool newAU2EN = (dmacon & AU2EN) && newDMAEN;
     bool newAU3EN = (dmacon & AU3EN) && newDMAEN;
+
+    // Inform the delegates
+    blitter.pokeDMACON(olddmacon, dmacon);
+
 
     // Bitplane DMA
     if (oldBPLEN ^ newBPLEN) {

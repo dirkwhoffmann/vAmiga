@@ -730,7 +730,7 @@ public:
 
 
     //
-    // Responding to changes in other components
+    // Handling requests of other components
     //
 
     // Called by Denise when BPLCON0 is written to

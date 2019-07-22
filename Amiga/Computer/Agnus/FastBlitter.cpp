@@ -24,7 +24,7 @@ Blitter::doFastBlit()
     agnus->scheduleRel<IRQ_BLIT_SLOT>(0, IRQ_SET);
     
     // Terminate the Blitter
-    agnus->cancel<BLT_SLOT>();
+    // agnus->cancel<BLT_SLOT>();
 }
 
 void
