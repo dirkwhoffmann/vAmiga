@@ -537,7 +537,7 @@ Amiga::_powerOn()
     // cpu.bpManager.setBreakpointAt(0xF80082); // Setting bg color to cyan (error)
     // cpu.bpManager.setBreakpointAt(0xF802E0); // Tests if mem can be written to
 
-
+    // cpu.bpManager.setBreakpointAt(0x034434); // Shadow of the beast, DSKLEN POKE
 
 
     // Update the recorded debug information

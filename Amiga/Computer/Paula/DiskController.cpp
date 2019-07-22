@@ -422,7 +422,7 @@ DiskController::executeFifo()
 
                 // Enable DMA if the controller was waiting for it.
                 if (state == DRIVE_DMA_WAIT) {
-                    debug(DSK_DEBUG, "DRIVE_DMA_SYNC_WAIT -> DRIVE_DMA_READ\n");
+                    debug(DSK_DEBUG, "DRIVE_DMA_SYNC_WAIT -> DRIVE_DMA_READ (%d)\n", drive->head.cylinder);
                     state = DRIVE_DMA_READ;
                     clearFifo();
                 }
@@ -613,7 +613,7 @@ DiskController::performSimpleDMARead(Drive *drive)
         uint16_t word = drive->readHead16();
         
         // Write word into memory.
-        agnus->doDiskDMA(word); // dmaWrite(word);
+        agnus->doDiskDMA(word);
 
         // Compute checksum (for debugging).
         checksum = fnv_1a_it32(checksum, word);
@@ -637,7 +637,7 @@ DiskController::performSimpleDMAWrite(Drive *drive)
     for (unsigned i = 0; i < acceleration; i++) {
         
         // Read word from memory
-        uint16_t word = agnus->doDiskDMA(); // dmaRead();
+        uint16_t word = agnus->doDiskDMA();
         
         // Compute checksum (for debugging)
         checksum = fnv_1a_it32(checksum, word);
@@ -705,7 +705,8 @@ DiskController::performTurboRead(Drive *drive)
         uint16_t word = drive->readHead16();
         
         // Write word into memory.
-        agnus->doDiskDMA(word);
+        mem->pokeChip16(agnus->dskpt, word);
+        INC_DMAPTR(agnus->dskpt);
         
         // Compute checksum (for debugging)
         checksum = fnv_1a_it32(checksum, word);
@@ -723,7 +724,8 @@ DiskController::performTurboWrite(Drive *drive)
     for (unsigned i = 0; i < (dsklen & 0x3FFF); i++) {
         
         // Read word from memory
-        uint16_t word = agnus->doDiskDMA(); // dmaRead();
+        uint16_t word = mem->peekChip16(agnus->dskpt);
+        INC_DMAPTR(agnus->dskpt);
         
         // Compute checksum (for debugging)
         checksum = fnv_1a_it32(checksum, word);
