@@ -868,9 +868,32 @@ Memory::peekCustom16(uint32_t addr)
             return paula->peekINTREQR();
 
         default: // Write-only register
+
             debug(OCS_DEBUG, "peekCustom16(%X [%s]): WRITE-ONLY-REGISTER\n",
-                 addr, customReg[(addr >> 1) & 0xFF]);
-            return 0x00;
+                  addr, customReg[(addr >> 1) & 0xFF]);
+
+            /* Derived from the UAE source code documentation:
+             *
+             * Reading a write-only OCS register causes the last value of the
+             * data bus to be written into this registers.
+             *
+             * Return values:
+             *
+             * - BLTDDAT (0x000) always returns the last data bus value.
+             * - All other registers return
+             *   - DMA cycle data (if DMA happened on the bus).
+             *   - 0xFFFF or some some ANDed old data otherwise.
+             */
+
+            // TODO: Remember the last data bus value
+            // In the meantime, we write 0, because SAE is doing this.
+            pokeCustom16<POKE_CPU>(addr, 0);
+
+            if (agnus->busOwner[agnus->pos.h] != BUS_NONE) {
+                return agnus->busValue[agnus->pos.h];
+            } else {
+                return 0xFFFF;
+            }
     }
     
     debug(OCS_DEBUG, "peekCustom16(%X [%s]): MISSING IMPLEMENTATION\n",
