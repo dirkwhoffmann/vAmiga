@@ -710,9 +710,6 @@ Denise::endOfLine(int vpos)
 
     // Invoke the DMA debugger
     agnus->dmaDebugger.computeOverlay();
-
-    // Initialize the HAM color storage with the background color.
-    colorizer.prepareForHAM();
 }
 
 void

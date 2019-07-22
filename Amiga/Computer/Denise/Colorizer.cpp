@@ -282,6 +282,9 @@ Colorizer::translateToRGBA_HAM(uint8_t *src, int *dest)
 {
     int pixel = 0;
 
+    // Initialize the HAM color storage with the background color
+    prepareForHAM();
+
     // Process recorded color changes
     for (int change = 0; change < colorChangeCount; change++) {
 
