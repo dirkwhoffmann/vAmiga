@@ -64,7 +64,7 @@ public:
     /* The 6 bitplane parallel-to-serial shift registers
      * Denise transfers the current values of the BPLDAT registers into the
      * shift registers after BPLDAT1 is written to. This is emulated in
-     * function fillShiftRegisters().
+     * function fillShiftRegister().
      */
     uint32_t shiftReg[6];
     
@@ -268,12 +268,6 @@ public:
     {
         shiftReg[x] = REPLACE_LO_WORD(shiftReg[x], value);
     }
-
-    // Transfers the bitplane register contents to the shift registers
-    void fillShiftRegisters(); // DEPRECATED
-
-    // Called by a DMA_L1_LAST or DMA_H1_LAST event
-    // void flushShiftRegisters();
 
     
     //
