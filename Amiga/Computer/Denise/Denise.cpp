@@ -386,10 +386,8 @@ Denise::drawLores(int pixels)
 {
     uint8_t index;
 
-    // assert(currentPixel == (agnus->hpos * 4) + 6);
     currentPixel = ppos(agnus->pos.h);
 
-    // uint8_t indexMask = (1 << bplconBPU()) - 1;
     uint32_t maskOdd = 0x8000 << scrollLoresOdd;
     uint32_t maskEven = 0x8000 << scrollLoresEven;
 
@@ -409,11 +407,6 @@ Denise::drawLores(int pixels)
          *  6  | Plane 1, 3, 5         | Plane 2, 4, 5
          */
 
-        // int numPlanes1 = (bplconBPU() + 1) / 2;
-        // int numPlanes2 = (bplconBPU() + 0) / 2;
-        // uint8_t indexMask1 = (1 << numPlanes1) - 1;
-        // uint8_t indexMask2 = (1 << numPlanes2) - 1;
-
         bool pf2pri = PF2PRI();
 
         for (int i = 0; i < pixels; i++) {
@@ -423,13 +416,11 @@ Denise::drawLores(int pixels)
             (!!(shiftReg[0] & maskOdd)  << 0) |
             (!!(shiftReg[2] & maskOdd)  << 1) |
             (!!(shiftReg[4] & maskOdd)  << 2);
-            // index1 &= indexMask1;
 
             uint8_t index2 =
             (!!(shiftReg[1] & maskEven) << 0) |
             (!!(shiftReg[3] & maskEven) << 1) |
             (!!(shiftReg[5] & maskEven) << 2);
-            // index2 &= indexMask2;
 
             // If not transparent, PF2 uses color registers 9 to 11
             if (index2) index2 |= 0b1000;
@@ -466,7 +457,6 @@ Denise::drawLores(int pixels)
             (!!(shiftReg[3] & maskEven) << 3) |
             (!!(shiftReg[4] & maskOdd)  << 4) |
             (!!(shiftReg[5] & maskEven) << 5);
-            // index &= indexMask;
 
             maskOdd >>= 1;
             maskEven >>= 1;
@@ -494,7 +484,6 @@ Denise::drawHires(int pixels)
     // assert(currentPixel == (agnus->hpos * 4) + 6);
     currentPixel = ppos(agnus->pos.h);
 
-    // uint8_t indexMask = (1 << bplconBPU()) - 1;
     uint32_t maskOdd = 0x8000 << scrollHiresOdd;
     uint32_t maskEven = 0x8000 << scrollHiresEven;
 
@@ -513,13 +502,11 @@ Denise::drawHires(int pixels)
             (!!(shiftReg[0] & maskOdd)  << 0) |
             (!!(shiftReg[2] & maskOdd)  << 1) |
             (!!(shiftReg[4] & maskOdd)  << 2);
-            // index1 &= indexMask;
 
             uint8_t index2 =
             (!!(shiftReg[1] & maskEven) << 0) |
             (!!(shiftReg[3] & maskEven) << 1) |
             (!!(shiftReg[5] & maskEven) << 2);
-            // index2 &= indexMask;
 
             // If not transparent, PF2 uses color registers 9 to 11
             if (index2) index2 |= 0b1000;
@@ -558,7 +545,6 @@ Denise::drawHires(int pixels)
             (!!(shiftReg[3] & maskEven) << 3) |
             (!!(shiftReg[4] & maskOdd)  << 4) |
             (!!(shiftReg[5] & maskEven) << 5);
-            // index &= indexMask;
 
             maskOdd >>= 1;
             maskEven >>= 1;
