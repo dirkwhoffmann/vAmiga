@@ -264,6 +264,12 @@ public:
     //
 
     // Transfers the bitplane register contents to the shift registers
+    template <int x> void fillShiftRegister(uint16_t value)
+    {
+        shiftReg[x] = REPLACE_LO_WORD(shiftReg[x], value);
+    }
+
+    // Transfers the bitplane register contents to the shift registers
     void fillShiftRegisters(); // DEPRECATED
 
     // Called by a DMA_L1_LAST or DMA_H1_LAST event
