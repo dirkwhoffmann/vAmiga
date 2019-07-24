@@ -101,6 +101,23 @@ Paula::getInfo()
 }
 
 void
+Paula::_warpOn()
+{
+    /* Warping has the unavoidable drawback that audio playback gets out of
+     * sync. To cope with this issue, we ramp down the volume when warping is
+     * switched on and fade in smoothly when it is switched off.
+     */
+    audioUnit.rampDown();
+}
+
+void
+Paula::_warpOff()
+{
+    audioUnit.rampUp();
+    audioUnit.alignWritePtr();
+}
+
+void
 Paula::_setWarp(bool value)
 {
     /* Warping has the unavoidable drawback that audio playback gets out of

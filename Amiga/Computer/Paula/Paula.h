@@ -96,6 +96,8 @@ private:
     void _ping() override;
     void _inspect() override;
     void _dump() override;
+    void _warpOn() override;
+    void _warpOff() override;
     void _setWarp(bool value) override;
     
     

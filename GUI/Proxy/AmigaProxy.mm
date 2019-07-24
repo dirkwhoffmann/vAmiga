@@ -1407,28 +1407,14 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->amiga->getWarp();
 }
-- (void) setWarp:(BOOL)value
+- (void) warpOn
 {
-    wrapper->amiga->setWarp(value);
+    wrapper->amiga->warpOn();
 }
-/*
-- (BOOL) alwaysWarp
+- (void) warpOff
 {
-    return wrapper->amiga->getAlwaysWarp();
+    wrapper->amiga->warpOff();
 }
-- (void) setAlwaysWarp:(BOOL)value
-{
-    wrapper->amiga->setAlwaysWarp(value);
-}
-- (BOOL) warpLoad
-{
-    return wrapper->amiga->getWarpLoad();
-}
-- (void) setWarpLoad:(BOOL)value
-{
-    wrapper->amiga->setWarpLoad(value);
-}
-*/
 - (BOOL) takeAutoSnapshots
 {
     return wrapper->amiga->getTakeAutoSnapshots();

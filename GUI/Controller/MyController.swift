@@ -339,7 +339,12 @@ class MyController: NSWindowController, MessageReceiver {
     // Updates the warp status
     func updateWarp() {
         let loading = amiga.diskController.spinning()
-        amiga.setWarp(alwaysWarp || (loading && warpLoad))
+        if alwaysWarp || (loading && warpLoad) {
+            amiga.warpOn()
+        } else {
+            amiga.warpOff()
+        }
+        // amiga.setWarp(alwaysWarp || (loading && warpLoad))
     }
     
     // Returns the icon of the sand clock in the bottom bar

@@ -191,6 +191,38 @@ HardwareComponent::dump()
 }
 
 void
+HardwareComponent::warpOn()
+{
+    if (warp) return;
+
+    warp = true;
+
+    // Enable warp mode for all subcomponents
+    for (HardwareComponent *c : subComponents) {
+        c->warpOn();
+    }
+
+    // Enable warp mode for this component
+    _warpOn();
+}
+
+void
+HardwareComponent::warpOff()
+{
+    if (!warp) return;
+
+    warp = false;
+
+    // Disable warp mode for all subcomponents
+    for (HardwareComponent *c : subComponents) {
+        c->warpOff();
+    }
+
+    // Disable warp mode for this component
+    _warpOff();
+}
+
+void
 HardwareComponent::setWarp(bool value)
 {
     if (warp != value) {
@@ -331,7 +363,9 @@ HardwareComponent::saveToBuffer(uint8_t *buffer)
     for (HardwareComponent *c : subComponents) {
         ptr += c->saveToBuffer(ptr);
     }
-    
+
+    // uint8_t *old = ptr;
+
     // Save internal state of this component
     for (SnapshotItem i : snapshotItems) {
         
@@ -372,6 +406,21 @@ HardwareComponent::saveToBuffer(uint8_t *buffer)
                 assert(false);
         }
     }
+    /*
+    size_t count = ptr - old;
+    uint8_t *test = new uint8_t[count];
+
+    debug("Verifying buffer...\n");
+    size_t count2 = applyToConfigItems(SerWriter(test));
+    debug("count = %d count2 = %d\n", count, count2);
+    for (int i = 0; i < count; i++) {
+        if (test[i] != old[i]) {
+            debug("Value mismatch at index %d (%d <-> %d)\n", i, test[i], old[i]); 
+        }
+    }
+
+    delete [] test;
+    */
     
     // Call delegation method
     ptr += didSaveToBuffer(ptr);

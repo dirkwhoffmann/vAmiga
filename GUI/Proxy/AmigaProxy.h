@@ -156,7 +156,8 @@ struct AmigaFileWrapper;
 - (void) stepOver;
 
 - (BOOL) warp;
-- (void) setWarp:(BOOL)value;
+- (void) warpOn;
+- (void) warpOff;
 
 // Handling snapshots
 - (BOOL) takeAutoSnapshots;

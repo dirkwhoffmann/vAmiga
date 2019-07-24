@@ -653,6 +653,19 @@ Amiga::_dump()
 }
 
 void
+Amiga::_warpOn()
+{
+putMessage(MSG_WARP_ON);
+}
+
+void
+Amiga::_warpOff()
+{
+    restartTimer();
+    putMessage(MSG_WARP_OFF);
+}
+
+void
 Amiga::_setWarp(bool value) {
     
     if (value) {

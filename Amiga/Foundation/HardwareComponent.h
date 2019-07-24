@@ -245,8 +245,17 @@ public:
     
     // Getter for warp mode
     bool getWarp() { return warp; }
-    
-    // Switches warp mode on or off
+
+    // Switches warp mode on
+    void warpOn();
+    virtual void _warpOn() { }
+
+    // Switches warp mode off
+    void warpOff();
+    virtual void _warpOff() { }
+
+
+    // Switches warp mode on or off (DEPRECATED)
     void setWarp(bool value);
     virtual void _setWarp(bool value) { }
     

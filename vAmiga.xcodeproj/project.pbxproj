@@ -387,6 +387,7 @@
 		50ECF98522B153FB007B3DE7 /* ExtRom.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExtRom.h; sourceTree = "<group>"; };
 		50EE993E21FF4D8E003BD74B /* AudioUnit.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AudioUnit.cpp; sourceTree = "<group>"; };
 		50EE993F21FF4D8E003BD74B /* AudioUnit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioUnit.h; sourceTree = "<group>"; };
+		50EFC7DF22E840870036A3DF /* Serializable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Serializable.h; sourceTree = "<group>"; };
 		50F0BD2422AF883C001F4616 /* UART.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UART.cpp; sourceTree = "<group>"; };
 		50F0BD2522AF883C001F4616 /* UART.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UART.h; sourceTree = "<group>"; };
 		50F5A84D2214112F00AD5611 /* PaulaPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaulaPanel.swift; sourceTree = "<group>"; };
@@ -823,6 +824,7 @@
 				50A8757E229EB04A00CC89F8 /* TimeRecorded.cpp */,
 				50B14C0621EB218E002E32A6 /* AmigaObject.h */,
 				50B14C0521EB218E002E32A6 /* AmigaObject.cpp */,
+				50EFC7DF22E840870036A3DF /* Serializable.h */,
 				50B14C0C21EB3708002E32A6 /* HardwareComponent.h */,
 				50B14C0B21EB3708002E32A6 /* HardwareComponent.cpp */,
 			);
