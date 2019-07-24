@@ -262,6 +262,55 @@ public:
     
     CIA();
     ~CIA();
+
+
+    //
+    // Iterating snapshot items
+    //
+
+    template <class T>
+    void applyToPersistentItems(T& worker)
+    {
+    }
+
+    template <class T>
+    void applyToResetItems(T& worker)
+    {
+        worker
+
+        & clock
+        & idleCycles
+        & counterA
+        & latchA
+        & counterB
+        & latchB
+        & delay
+        & feed
+        & CRA
+        & CRB
+        & icr
+        & icrAck
+        & imr
+        & PB67TimerMode
+        & PB67TimerOut
+        & PB67Toggle
+        & PRA
+        & PRB
+        & DDRA
+        & DDRB
+        & PA
+        & PB
+        & SDR
+        & serClk
+        & serCounter
+        & CNT
+        & INT
+        & tiredness
+        & sleeping
+        & wakeUpCycle
+        & sleepCycle;
+    }
+
     
     //
     // Methods from HardwareComponent
@@ -274,6 +323,11 @@ public:
     
     // Dump trace line
     void dumpTrace();
+
+public:
+
+    size_t _loadFromBuffer(uint8_t *buffer) override;
+    size_t _saveToBuffer(uint8_t *buffer) override;
     
     
     //

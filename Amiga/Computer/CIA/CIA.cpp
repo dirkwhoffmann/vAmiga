@@ -779,6 +779,32 @@ CIA::_dump()
 	tod.dump();
 }
 
+size_t
+CIA::_loadFromBuffer(uint8_t *buffer)
+{
+    debug("_loadFromBuffer\n");
+
+    SerReader r(buffer);
+
+    applyToPersistentItems(r);
+    applyToResetItems(r);
+
+    return r.ptr - buffer;
+}
+
+size_t
+CIA::_saveToBuffer(uint8_t *buffer)
+{
+    debug("_saveToBuffer\n");
+
+    SerWriter w(buffer);
+
+    applyToPersistentItems(w);
+    applyToResetItems(w);
+
+    return w.ptr - buffer;
+}
+
 CIAInfo
 CIA::getInfo()
 {

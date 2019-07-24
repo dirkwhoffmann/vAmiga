@@ -39,20 +39,6 @@ BreakpointManager::breakpointAtAddr(uint32_t addr)
     return NULL;
 }
 
-
-/*
-map<uint32_t, Breakpoint>::iterator
-BreakpointManager::breakpoint(long nr)
-{
-    if (nr < breakpoints.size()) {
-        auto it = breakpoints.begin();
-        return next(it, nr);
-    } else {
-        return breakpoints.end();
-    }
-}
-*/
-
 bool
 BreakpointManager::hasBreakpointAt(uint32_t addr)
 {

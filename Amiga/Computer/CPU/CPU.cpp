@@ -90,13 +90,6 @@ CPU::CPU()
         
         &bpManager,
     });
-    
-    // Register snapshot items
-    /*
-     registerSnapshotItems(vector<SnapshotItem> {
-     { &clock, sizeof(clock), 0 },
-     });
-     */
 }
 
 CPU::~CPU()
@@ -287,6 +280,32 @@ CPU::didSaveToBuffer(uint8_t *buffer) const
     writeBlock(&ptr, context, m68k_context_size());
 
     return ptr - buffer;
+}
+
+size_t
+CPU::_loadFromBuffer(uint8_t *buffer)
+{
+    debug("_loadFromBuffer\n");
+
+    SerReader r(buffer);
+
+    applyToPersistentItems(r);
+    applyToResetItems(r);
+
+    return r.ptr - buffer;
+}
+
+size_t
+CPU::_saveToBuffer(uint8_t *buffer)
+{
+    debug("_saveToBuffer\n");
+
+    SerWriter w(buffer);
+
+    applyToPersistentItems(w);
+    applyToResetItems(w);
+
+    return w.ptr - buffer;
 }
 
 void

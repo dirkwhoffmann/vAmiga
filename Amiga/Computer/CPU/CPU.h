@@ -70,6 +70,21 @@ class CPU : public HardwareComponent {
     CPU();
     ~CPU();
     
+
+    //
+    // Iterating snapshot items
+    //
+
+    template <class T>
+    void applyToPersistentItems(T& worker)
+    {
+    }
+
+    template <class T>
+    void applyToResetItems(T& worker)
+    {
+    }
+
     
     //
     // Methods from HardwareComponent
@@ -89,7 +104,12 @@ class CPU : public HardwareComponent {
     size_t stateSize() const override;
     size_t didLoadFromBuffer(uint8_t *buffer) override;
     size_t didSaveToBuffer(uint8_t *buffer) const override;
-    
+
+public:
+
+    size_t _loadFromBuffer(uint8_t *buffer) override;
+    size_t _saveToBuffer(uint8_t *buffer) override;
+
     
     //
     // Reading the internal state
