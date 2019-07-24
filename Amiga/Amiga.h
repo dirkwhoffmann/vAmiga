@@ -265,7 +265,25 @@ class Amiga : public HardwareComponent {
     
     Amiga();
     ~Amiga();
-    
+
+    template <class T>
+    void applyToPersistentItems(T& worker)
+    {
+        worker
+
+        & model
+        & realTimeClock;
+    }
+
+    template <class T>
+    void applyToResetItems(T& worker)
+    {
+        worker
+
+        & masterClock
+        & clockBase;
+    }
+
     /* Makes this Amiga the active emulator instance.
      * Background: Because we only have one CPU core available, we need to
      * share this core among all emulator instances. This means that only one
@@ -354,7 +372,9 @@ class Amiga : public HardwareComponent {
     void _warpOff() override;
     void _setWarp(bool value) override;
 
-    
+    // size_t _loadFromBuffer(uint8_t *buffer) override;
+    // size_t _saveToBuffer(uint8_t *buffer) override;
+
     //
     // Reading the internal state
     //
