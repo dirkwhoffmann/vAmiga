@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _SERIALIZABLE_INC
-#define _SERIALIZABLE_INC
+#ifndef _SERIALIZATION_INC
+#define _SERIALIZATION_INC
 
 //
 // Basic I/O
@@ -175,6 +175,17 @@ public:
     DESERIALIZE64(int64_t)
     DESERIALIZE64(uint64_t)
     DESERIALIZE64(AmigaModel)
+    DESERIALIZE32(MemorySource)
+
+    template <class T, size_t N>
+    SerReader& operator&(T (&v)[N])
+    {
+        // uint32_t len = N;
+        // *this & len;
+        for(size_t i = 0; i < N; ++i)
+            *this & v[i];
+        return *this;
+    }
 };
 
 
@@ -214,6 +225,17 @@ public:
     SERIALIZE64(int64_t)
     SERIALIZE64(uint64_t)
     SERIALIZE64(AmigaModel)
+    SERIALIZE32(MemorySource)
+
+    template <class T, size_t N>
+    SerWriter& operator&(T (&v)[N])
+    {
+        // uint32_t len = N;
+        // *this & len;
+        for(size_t i = 0; i < N; ++i)
+            *this & v[i];
+        return *this;
+    }
 };
 
 

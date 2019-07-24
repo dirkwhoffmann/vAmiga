@@ -12,7 +12,7 @@
 
 // General
 #include "HardwareComponent.h"
-#include "Serializable.h"
+#include "Serialization.h"
 #include "MessageQueue.h"
 
 // Sub components
@@ -269,7 +269,7 @@ class Amiga : public HardwareComponent {
 
 
     //
-    // Performing actions on sub-components and snapshot items
+    // Iterating snapshot items
     //
 
     template <class T>
@@ -380,8 +380,10 @@ class Amiga : public HardwareComponent {
 
 public:
     
+    size_t _loadFromBuffer(uint8_t *buffer) override;
     size_t _saveToBuffer(uint8_t *buffer) override;
-    
+
+
     //
     // Reading the internal state
     //

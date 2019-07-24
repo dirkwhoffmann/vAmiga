@@ -193,6 +193,32 @@ Memory::didSaveToBuffer(uint8_t *buffer) const
     return ptr - buffer;
 }
 
+size_t
+Memory::_loadFromBuffer(uint8_t *buffer)
+{
+    debug("Memory::_loadFromBuffer\n");
+
+    SerReader r(buffer);
+
+    applyToPersistentItems(r);
+    applyToResetItems(r);
+
+    return r.ptr - buffer;
+}
+
+size_t
+Memory::_saveToBuffer(uint8_t *buffer)
+{
+    debug("Memory::_saveToBuffer\n");
+
+    SerWriter w(buffer);
+
+    applyToPersistentItems(w);
+    applyToResetItems(w);
+
+    return w.ptr - buffer;
+}
+
 bool
 Memory::alloc(size_t size, uint8_t *&ptrref, size_t &sizeref)
 {

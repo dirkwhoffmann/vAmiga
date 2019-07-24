@@ -666,6 +666,19 @@ Amiga::_warpOff()
 }
 
 size_t
+Amiga::_loadFromBuffer(uint8_t *buffer)
+{
+    debug("Amiga::_loadFromBuffer\n");
+
+    SerReader r(buffer);
+
+    applyToPersistentItems(r);
+    applyToResetItems(r);
+
+    return r.ptr - buffer;
+}
+
+size_t
 Amiga::_saveToBuffer(uint8_t *buffer)
 {
     debug("Amiga::_saveToBuffer\n");
