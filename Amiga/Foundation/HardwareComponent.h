@@ -281,7 +281,7 @@ public:
     
     /* Loads the internal state from a memory buffer.
      */
-    void loadFromBuffer(uint8_t **buffer);
+    size_t loadFromBuffer(uint8_t *buffer);
     
     /* Delegation methods called inside loadFromBuffer()
      * A component can override this method to add custom behavior if not all

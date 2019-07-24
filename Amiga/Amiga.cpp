@@ -852,7 +852,7 @@ Amiga::loadFromSnapshotUnsafe(AmigaSnapshot *snapshot)
     uint8_t *ptr;
     
     if (snapshot && (ptr = snapshot->getData())) {
-        loadFromBuffer(&ptr);
+        loadFromBuffer(ptr);
         ping();
     }
 }

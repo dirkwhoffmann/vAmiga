@@ -248,19 +248,19 @@ HardwareComponent::stateSize()
     return result;
 }
 
-void
-HardwareComponent::loadFromBuffer(uint8_t **buffer)
+size_t
+HardwareComponent::loadFromBuffer(uint8_t *buffer)
 {
-    uint8_t *old = *buffer;
+    uint8_t *ptr = buffer;
     
     debug(3, "    Loading internal state ...\n");
     
     // Call delegation method
-    *buffer += willLoadFromBuffer(*buffer);
+    ptr += willLoadFromBuffer(ptr);
     
     // Load internal state of all subcomponents
     for (HardwareComponent *c : subComponents) {
-        c->loadFromBuffer(buffer);
+        ptr += c->loadFromBuffer(ptr);
     }
     
     // Load internal state of this component
@@ -271,32 +271,32 @@ HardwareComponent::loadFromBuffer(uint8_t **buffer)
             case 0: // Auto detect
                 
                 switch (i.size) {
-                    case 1:  *i.data8  = read8(buffer);  break;
-                    case 2:  *i.data16 = read16(buffer); break;
-                    case 4:  *i.data32 = read32(buffer); break;
-                    case 8:  *i.data64 = read64(buffer); break;
-                    default: readBlock(buffer, i.data8, i.size);
+                    case 1:  *i.data8  = read8(&ptr);  break;
+                    case 2:  *i.data16 = read16(&ptr); break;
+                    case 4:  *i.data32 = read32(&ptr); break;
+                    case 8:  *i.data64 = read64(&ptr); break;
+                    default: readBlock(&ptr, i.data8, i.size);
                 }
                 break;
             
             case 1: // Byte array
             
-                readBlock(buffer, i.data8, i.size);
+                readBlock(&ptr, i.data8, i.size);
                 break;
                 
             case 2: // Word array
                 
-                readBlock16(buffer, i.data16, i.size);
+                readBlock16(&ptr, i.data16, i.size);
                 break;
                 
             case 4: // Double word array
                 
-                readBlock32(buffer, i.data32, i.size);
+                readBlock32(&ptr, i.data32, i.size);
                 break;
                 
             case 8: // Quad word array
                 
-                readBlock64(buffer, i.data64, i.size);
+                readBlock64(&ptr, i.data64, i.size);
                 break;
                 
             default:
@@ -305,14 +305,16 @@ HardwareComponent::loadFromBuffer(uint8_t **buffer)
     }
     
     // Call delegation method
-    *buffer += didLoadFromBuffer(*buffer);
+    ptr += didLoadFromBuffer(ptr);
     
     // Verify that the number of processed bytes matches the state size
-    if (*buffer - old != stateSize()) {
+    if (ptr - buffer != stateSize()) {
         panic("loadFromBuffer: Snapshot size is wrong. Got %d, expected %d.",
-              *buffer - old, stateSize());
+              ptr - buffer, stateSize());
         assert(false);
     }
+
+    return ptr - buffer;
 }
 
 void
