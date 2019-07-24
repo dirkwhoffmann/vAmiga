@@ -131,40 +131,68 @@ AmigaSnapshot::makeWithFile(const char *path)
 AmigaSnapshot *
 AmigaSnapshot::makeWithAmiga(Amiga *amiga)
 {
-    AmigaSnapshot *snapshot = new AmigaSnapshot(amiga->stateSize());
+    /* This routine has temporarily been enriched with debug code.
+     * REMOVE ASAP
+     */
 
+    // Take a snapshot with the old approach
+    AmigaSnapshot *snapshot = new AmigaSnapshot(amiga->stateSize());
     snapshot->takeScreenshot(amiga);
     uint8_t *ptr = snapshot->getData();
     clock_t start = clock();
     size_t count = amiga->saveToBuffer(ptr);
     clock_t end = clock();
     double elapsed = (double(end - start) / double(CLOCKS_PER_SEC));
-
     printf("First snapshot taken (%f msec)\n", 1000.0 * elapsed);
 
+    // Take the snapshot with the new approach
     AmigaSnapshot *snapshot2 = new AmigaSnapshot(amiga->stateSize());
-
     uint8_t *ptr2 = snapshot2->getData();
     start = clock();
     size_t count2 = serializeToBuffer(*amiga, ptr2);
     end = clock();
     elapsed = (double(end - start) / double(CLOCKS_PER_SEC));
+    printf("Second snapshot taken (%f msec)\n", 1000.0 * elapsed);
 
-    printf("Second snap taken (%f msec)\n", 1000.0 * elapsed);
-
+    // Verify that snapshot 1 and snapshot 2 match
     if (count != count2) {
         printf("Size mismatch (%zu <-> %zu)\n", count, count2);
     }
-
     size_t size = amiga->stateSize();
-    printf("Verifying %zu bytes\n", size);
-    for (unsigned i = 0; i < size; i++) {
+    printf("Verifying %zu bytes at %p and %p\n", size, ptr, ptr2);
+    for (size_t i = 0; i < size; i++) {
         if (ptr[i] != ptr2[i]) {
-            printf("Value mismatch at %d (%d <-> %d)\n", i, ptr[i], ptr2[i]);
+            printf("Value mismatch at %zu (%d <-> %d)\n", i, ptr[i], ptr2[i]);
+            assert(false);
         }
     }
 
-    printf("Verification done\n");
+    // Reload the snapshot to test the loader
+    printf("Let's try to reload the snapshot\n");
+    deserializeFromBuffer(*amiga, ptr2);
+    // amiga->loadFromSnapshotUnsafe(snapshot2);
+
+    // Take another snapshot
+    AmigaSnapshot *snapshot3 = new AmigaSnapshot(amiga->stateSize());
+    uint8_t *ptr3 = snapshot3->getData();
+    start = clock();
+    size_t count3 = serializeToBuffer(*amiga, ptr3);
+    end = clock();
+    elapsed = (double(end - start) / double(CLOCKS_PER_SEC));
+    printf("Third snapshot taken (%f msec)\n", 1000.0 * elapsed);
+
+    // Verify that snapshot 2 and snapshot 3 match
+    if (count2 != count3) {
+        printf("Size mismatch (%zu <-> %zu)\n", count2, count3);
+    }
+    size = amiga->stateSize();
+    printf("Verifying %zu bytes at %p and %p\n", size, ptr2, ptr3);
+    for (size_t i = 0; i < size; i++) {
+        if (ptr2[i] != ptr3[i]) {
+            printf("Value mismatch at %zu (%d <-> %d)\n", i, ptr2[i], ptr3[i]);
+            assert(false);
+        }
+    }
 
     return snapshot;
 }

@@ -665,6 +665,19 @@ Amiga::_warpOff()
     putMessage(MSG_WARP_OFF);
 }
 
+size_t
+Amiga::_saveToBuffer(uint8_t *buffer)
+{
+    debug("Amiga::_saveToBuffer\n");
+    
+    SerWriter w(buffer);
+    
+    applyToPersistentItems(w);
+    applyToResetItems(w);
+
+    return w.ptr - buffer;
+}
+
 void
 Amiga::_setWarp(bool value) {
     
@@ -865,7 +878,8 @@ Amiga::loadFromSnapshotUnsafe(AmigaSnapshot *snapshot)
     uint8_t *ptr;
     
     if (snapshot && (ptr = snapshot->getData())) {
-        loadFromBuffer(ptr);
+        // loadFromBuffer(ptr);
+        deserializeFromBuffer(*this, ptr);
         ping();
     }
 }
