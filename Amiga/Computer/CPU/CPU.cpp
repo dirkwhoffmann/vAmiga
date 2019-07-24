@@ -274,7 +274,6 @@ CPU::didLoadFromBuffer(uint8_t *buffer)
     readBlock(&ptr, context, m68k_context_size());
     m68k_set_context(context);
 
-    debug("didLoadFromBuffer %d bytes\n", ptr - buffer);
     return ptr - buffer;
 }
 

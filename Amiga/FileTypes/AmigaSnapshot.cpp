@@ -135,7 +135,7 @@ AmigaSnapshot::makeWithAmiga(Amiga *amiga)
     
     snapshot->takeScreenshot(amiga);
     uint8_t *ptr = snapshot->getData();
-    amiga->saveToBuffer(&ptr);
+    amiga->saveToBuffer(ptr);
     
     return snapshot;
 }

@@ -317,19 +317,19 @@ HardwareComponent::loadFromBuffer(uint8_t *buffer)
     return ptr - buffer;
 }
 
-void
-HardwareComponent::saveToBuffer(uint8_t **buffer)
+size_t
+HardwareComponent::saveToBuffer(uint8_t *buffer)
 {
-    uint8_t *old = *buffer;
+    uint8_t *ptr = buffer;
     
     debug(4, "    Saving internal state ...\n");
     
     // Call delegation method
-    *buffer += willSaveToBuffer(*buffer);
+    ptr += willSaveToBuffer(ptr);
     
     // Save internal state of all subcomponents
     for (HardwareComponent *c : subComponents) {
-        c->saveToBuffer(buffer);
+        ptr += c->saveToBuffer(ptr);
     }
     
     // Save internal state of this component
@@ -340,32 +340,32 @@ HardwareComponent::saveToBuffer(uint8_t **buffer)
             case 0: // Auto detect
                 
                 switch (i.size) {
-                    case 1:  write8(buffer, *i.data8); break;
-                    case 2:  write16(buffer, *i.data16); break;
-                    case 4:  write32(buffer, *i.data32); break;
-                    case 8:  write64(buffer, *i.data64); break;
-                    default: writeBlock(buffer, i.data8, i.size);
+                    case 1:  write8(&ptr, *i.data8); break;
+                    case 2:  write16(&ptr, *i.data16); break;
+                    case 4:  write32(&ptr, *i.data32); break;
+                    case 8:  write64(&ptr, *i.data64); break;
+                    default: writeBlock(&ptr, i.data8, i.size);
                 }
                 break;
                 
             case 1: // Byte array
                 
-                writeBlock(buffer, i.data8, i.size);
+                writeBlock(&ptr, i.data8, i.size);
                 break;
                 
             case 2: // Word array
                 
-                writeBlock16(buffer, i.data16, i.size);
+                writeBlock16(&ptr, i.data16, i.size);
                 break;
                 
             case 4: // Double word array
                 
-                writeBlock32(buffer, i.data32, i.size);
+                writeBlock32(&ptr, i.data32, i.size);
                 break;
                 
             case 8: // Quad word array
                 
-                writeBlock64(buffer, i.data64, i.size);
+                writeBlock64(&ptr, i.data64, i.size);
                 break;
                 
             default:
@@ -374,12 +374,14 @@ HardwareComponent::saveToBuffer(uint8_t **buffer)
     }
     
     // Call delegation method
-    *buffer += didSaveToBuffer(*buffer);
+    ptr += didSaveToBuffer(ptr);
     
     // Verify that the number of written bytes matches the state size
-    if (*buffer - old != stateSize()) {
+    if (ptr - buffer != stateSize()) {
         panic("saveToBuffer: Snapshot size is wrong. Got %d, expected %d.",
-              *buffer - old, stateSize());
+              ptr - buffer, stateSize());
         assert(false);
     }
+
+    return ptr - buffer;
 }

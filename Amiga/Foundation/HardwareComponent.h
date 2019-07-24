@@ -292,7 +292,7 @@ public:
     
     /* Saves the internal state to a memory buffer.
      */
-    void saveToBuffer(uint8_t **buffer);
+    size_t saveToBuffer(uint8_t *buffer);
     
     /* Delegation methods called inside saveToBuffer()
      * A component can override this method to add custom behavior if not all
