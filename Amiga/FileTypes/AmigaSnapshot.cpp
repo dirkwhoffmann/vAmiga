@@ -146,7 +146,7 @@ AmigaSnapshot::makeWithAmiga(Amiga *amiga)
 
     uint8_t *ptr2 = snapshot2->getData();
     start = clock();
-    size_t count2 = serializeToBuffer(amiga, ptr2);
+    size_t count2 = serializeToBuffer(*amiga, ptr2);
     end = clock();
     elapsed = (double(end - start) / double(CLOCKS_PER_SEC));
 

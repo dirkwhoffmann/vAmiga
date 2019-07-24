@@ -21,7 +21,7 @@ HardwareComponent::~HardwareComponent()
 }
 
 void
-HardwareComponent::prefix()
+HardwareComponent::prefix() const
 {
     fprintf(stderr, "[%lld] (%3d,%3d) ",
             amiga->agnus.frame, amiga->agnus.pos.v, amiga->agnus.pos.h);
@@ -269,7 +269,7 @@ HardwareComponent::clearNonPersistantSnapshotItems()
 }
 
 size_t
-HardwareComponent::stateSize()
+HardwareComponent::stateSize() const
 {
     uint32_t result = snapshotSize;
     
@@ -360,7 +360,7 @@ HardwareComponent::_loadFromBuffer(uint8_t *buffer)
 }
 
 size_t
-HardwareComponent::saveToBuffer(uint8_t *buffer)
+HardwareComponent::saveToBuffer(uint8_t *buffer) const
 {
     uint8_t *ptr = buffer;
     
@@ -391,7 +391,7 @@ HardwareComponent::saveToBuffer(uint8_t *buffer)
 }
 
 size_t
-HardwareComponent::_saveToBuffer(uint8_t *buffer)
+HardwareComponent::_saveToBuffer(uint8_t *buffer) const
 {
     uint8_t *ptr = buffer;
 

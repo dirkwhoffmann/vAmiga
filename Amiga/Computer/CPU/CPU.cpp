@@ -256,7 +256,7 @@ CPU::getTracedInstrInfo(long index)
 }
 
 size_t
-CPU::stateSize()
+CPU::stateSize() const
 {
     size_t result = HardwareComponent::stateSize();
     
@@ -278,7 +278,7 @@ CPU::didLoadFromBuffer(uint8_t *buffer)
 }
 
 size_t
-CPU::didSaveToBuffer(uint8_t *buffer)
+CPU::didSaveToBuffer(uint8_t *buffer) const
 {
     uint8_t *ptr = buffer;
 

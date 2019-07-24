@@ -199,9 +199,9 @@ class Memory : public HardwareComponent {
     void _ping() override;
     void _dump() override;
     
-    size_t stateSize() override;
+    size_t stateSize() const override;
     size_t didLoadFromBuffer(uint8_t *buffer) override;
-    size_t didSaveToBuffer(uint8_t *buffer) override;
+    size_t didSaveToBuffer(uint8_t *buffer) const override;
     
     
     //

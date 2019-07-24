@@ -46,7 +46,7 @@ class AmigaObject {
     public:
     
     // Getter and setter for the textual description.
-    const char *getDescription() { return description ? description : ""; }
+    const char *getDescription() const { return description ? description : ""; }
     void setDescription(const char *str) { description = strdup(str); }
     
     
@@ -68,24 +68,24 @@ class AmigaObject {
      * plaindebug(...) instead. Some Amiga objects overwrite prefix() to
      * provide addition standard debug information when a message is printed.
      */
-    virtual void prefix();
+    virtual void prefix() const;
     
-    void msg(const char *fmt, ...);
-    void plainmsg(const char *fmt, ...);
+    void msg(const char *fmt, ...) const;
+    void plainmsg(const char *fmt, ...) const;
     
-    void debug(const char *fmt, ...);
-    void debug(int level, const char *fmt, ...);
-    void plaindebug(const char *fmt, ...);
-    void plaindebug(int level, const char *fmt, ...);
+    void debug(const char *fmt, ...) const;
+    void debug(int level, const char *fmt, ...) const;
+    void plaindebug(const char *fmt, ...) const;
+    void plaindebug(int level, const char *fmt, ...) const;
     
-    void warn(const char *fmt, ...);
-    void panic(const char *fmt, ...);
+    void warn(const char *fmt, ...) const;
+    void panic(const char *fmt, ...) const;
 
     //
     // Convenience wrappers
     //
     
-    void reportSuspiciousBehavior();
+    void reportSuspiciousBehavior() const;
 };
 
 #endif

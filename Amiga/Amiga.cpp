@@ -679,24 +679,6 @@ Amiga::_setWarp(bool value) {
     }
 }
 
-/*
-size_t
-Amiga::_loadFromBuffer(uint8_t *buffer)
-{
-    return 0;
-}
-
-size_t
-Amiga::_saveToBuffer(uint8_t *buffer)
-{
-    SerWriter w(buffer);
-    applyToPersistentItems(w);
-    applyToResetItems(w);
-
-    return w.ptr - buffer;
-}
-*/
-
 void
 Amiga::suspend()
 {

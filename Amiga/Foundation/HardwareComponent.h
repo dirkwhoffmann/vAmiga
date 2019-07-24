@@ -123,7 +123,7 @@ public:
     
 private:
     
-    void prefix() override;
+    void prefix() const override;
     
     
     //
@@ -287,7 +287,7 @@ public:
     //
     
     // Returns the size of the internal state in bytes.
-    virtual size_t stateSize();
+    virtual size_t stateSize() const;
     
     /* Loads the internal state from a memory buffer.
      */
@@ -303,15 +303,15 @@ public:
     
     /* Saves the internal state to a memory buffer.
      */
-    size_t saveToBuffer(uint8_t *buffer);
-    virtual size_t _saveToBuffer(uint8_t *buffer);
+    size_t saveToBuffer(uint8_t *buffer) const;
+    virtual size_t _saveToBuffer(uint8_t *buffer) const;
 
     /* Delegation methods called inside saveToBuffer()
      * A component can override this method to add custom behavior if not all
      * elements can be processed by the default implementation.
      */
-    virtual size_t willSaveToBuffer(uint8_t *buffer) {return 0; }
-    virtual size_t didSaveToBuffer(uint8_t *buffer) { return 0; }
+    virtual size_t willSaveToBuffer(uint8_t *buffer) const {return 0; }
+    virtual size_t didSaveToBuffer(uint8_t *buffer) const { return 0; }
 };
 
 #endif

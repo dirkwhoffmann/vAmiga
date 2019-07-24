@@ -86,9 +86,9 @@ class CPU : public HardwareComponent {
     void _inspect() override; 
     void _dump() override;
     
-    size_t stateSize() override;
+    size_t stateSize() const override;
     size_t didLoadFromBuffer(uint8_t *buffer) override;
-    size_t didSaveToBuffer(uint8_t *buffer) override;
+    size_t didSaveToBuffer(uint8_t *buffer) const override;
     
     
     //

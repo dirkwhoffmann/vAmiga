@@ -102,7 +102,7 @@ Memory::_dump()
 }
 
 size_t
-Memory::stateSize()
+Memory::stateSize() const
 {
     size_t result = HardwareComponent::stateSize();
     
@@ -162,7 +162,7 @@ Memory::didLoadFromBuffer(uint8_t *buffer)
 }
 
 size_t
-Memory::didSaveToBuffer(uint8_t *buffer)
+Memory::didSaveToBuffer(uint8_t *buffer) const
 {
     uint8_t *ptr = buffer;
 

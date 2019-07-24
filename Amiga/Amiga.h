@@ -372,9 +372,7 @@ class Amiga : public HardwareComponent {
     void _warpOff() override;
     void _setWarp(bool value) override;
 
-    // size_t _loadFromBuffer(uint8_t *buffer) override;
-    // size_t _saveToBuffer(uint8_t *buffer) override;
-
+    
     //
     // Reading the internal state
     //

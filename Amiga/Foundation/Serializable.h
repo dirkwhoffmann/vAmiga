@@ -11,10 +11,10 @@
 #define _SERIALIZABLE_INC
 
 template <class T>
-size_t serializeToBuffer(T& component, uint8_t *buffer) {
+size_t serializeToBuffer(const T& component, uint8_t *buffer) {
 
     printf("serializeToBuffer\n");
-    return component->saveToBuffer(buffer);
+    return component.saveToBuffer(buffer);
 }
 
 class SerWriter
