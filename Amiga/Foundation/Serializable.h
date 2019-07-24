@@ -15,6 +15,34 @@ size_t serializeToBuffer(const T& component, uint8_t *buffer) {
 
     printf("serializeToBuffer\n");
     return component.saveToBuffer(buffer);
+
+    uint8_t *ptr = buffer;
+
+    printf("    Serializing internal state ...\n");
+
+    // Call delegation method
+    ptr += component.willSaveToBuffer(ptr);
+
+    // Save internal state of all subcomponents
+    for (HardwareComponent *c : component.subComponents) {
+        ptr += c->saveToBuffer(ptr);
+    }
+
+    // Save internal state of this component
+    ptr += component._saveToBuffer(ptr);
+
+    // Call delegation method
+    ptr += component.didSaveToBuffer(ptr);
+
+    // Verify that the number of written bytes matches the state size
+    if (ptr - buffer != component.stateSize()) {
+        printf("saveToBuffer: Snapshot size is wrong. Got %ld, expected %zu.",
+              ptr - buffer, component.stateSize());
+        assert(false);
+    }
+
+    return ptr - buffer;
+
 }
 
 class SerWriter

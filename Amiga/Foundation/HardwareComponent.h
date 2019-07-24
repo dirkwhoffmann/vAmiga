@@ -11,7 +11,6 @@
 #define _AMIGACOMPONENT_INC
 
 #include "AmigaObject.h"
-#include "Serializable.h"
 #include "TimeRecorded.h"
 
 //
@@ -76,6 +75,9 @@ public:
     // Reference to the Amiga top-level object
     Amiga *amiga = NULL;
 
+    // Sub components of this component
+    vector<HardwareComponent *> subComponents;
+
 protected:
     
     /* Access lock for shared variables
@@ -83,10 +85,7 @@ protected:
      * variables that are accessed by both the emulator thread and the GUI.
      */
     pthread_mutex_t lock;
-    
-    // Sub components of this component
-    vector<HardwareComponent *> subComponents;
-    
+
     // Snapshot items of this component
     vector<SnapshotItem> snapshotItems;
     

@@ -12,6 +12,7 @@
 
 // General
 #include "HardwareComponent.h"
+#include "Serializable.h"
 #include "MessageQueue.h"
 
 // Sub components
