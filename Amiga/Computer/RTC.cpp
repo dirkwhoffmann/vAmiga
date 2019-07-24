@@ -47,6 +47,32 @@ RTC::_dump()
     plainmsg("\n");
 }
 
+size_t
+RTC::_loadFromBuffer(uint8_t *buffer)
+{
+    debug("_loadFromBuffer\n");
+
+    SerReader r(buffer);
+
+    applyToPersistentItems(r);
+    applyToResetItems(r);
+
+    return r.ptr - buffer;
+}
+
+size_t
+RTC::_saveToBuffer(uint8_t *buffer)
+{
+    debug("_saveToBuffer\n");
+
+    SerWriter w(buffer);
+
+    applyToPersistentItems(w);
+    applyToResetItems(w);
+
+    return w.ptr - buffer;
+}
+
 time_t
 RTC::getTime()
 {

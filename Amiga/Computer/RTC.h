@@ -47,7 +47,29 @@ class RTC : public HardwareComponent {
     public:
     
     RTC();
-    
+
+
+    //
+    // Iterating snapshot items
+    //
+
+    template <class T>
+    void applyToPersistentItems(T& worker)
+    {
+    }
+
+    template <class T>
+    void applyToResetItems(T& worker)
+    {
+        worker
+
+        & timeDiff
+        & reg
+        & lastCall
+        & lastMeasure
+        & lastMeasuredValue;
+    }
+
     
     //
     // Methods from HardwareComponent
@@ -59,6 +81,11 @@ class RTC : public HardwareComponent {
     void _reset() override;
     void _dump() override;
     
+public:
+
+    size_t _loadFromBuffer(uint8_t *buffer) override;
+    size_t _saveToBuffer(uint8_t *buffer) override;
+
     
     //
     // Accessing the stored time
