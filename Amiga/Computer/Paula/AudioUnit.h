@@ -160,7 +160,7 @@ private:
     void _dump() override;
     
     // void setClockFrequency(uint32_t frequency);
-    void didLoadFromBuffer(uint8_t **buffer) override { clearRingbuffer(); }
+    size_t didLoadFromBuffer(uint8_t *buffer) override;
 
 
     //

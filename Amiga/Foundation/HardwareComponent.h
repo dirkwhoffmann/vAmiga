@@ -287,8 +287,8 @@ public:
      * A component can override this method to add custom behavior if not all
      * elements can be processed by the default implementation.
      */
-    virtual void willLoadFromBuffer(uint8_t **buffer) { };
-    virtual void didLoadFromBuffer(uint8_t **buffer) { };
+    virtual size_t willLoadFromBuffer(uint8_t *buffer) { return 0; }
+    virtual size_t didLoadFromBuffer(uint8_t *buffer) { return 0; }
     
     /* Saves the internal state to a memory buffer.
      */
@@ -298,8 +298,8 @@ public:
      * A component can override this method to add custom behavior if not all
      * elements can be processed by the default implementation.
      */
-    virtual void willSaveToBuffer(uint8_t **buffer) { };
-    virtual void didSaveToBuffer(uint8_t **buffer) { };
+    virtual size_t willSaveToBuffer(uint8_t *buffer) {return 0; }
+    virtual size_t didSaveToBuffer(uint8_t *buffer) { return 0; }
 };
 
 #endif

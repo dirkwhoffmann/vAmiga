@@ -63,6 +63,13 @@ AudioUnit::_dump()
 {
 }
 
+size_t
+AudioUnit::didLoadFromBuffer(uint8_t *buffer)
+{
+    clearRingbuffer();
+    return 0;
+}
+
 void
 AudioUnit::_run()
 {

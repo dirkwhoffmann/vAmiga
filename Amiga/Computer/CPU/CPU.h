@@ -87,8 +87,8 @@ class CPU : public HardwareComponent {
     void _dump() override;
     
     size_t stateSize() override;
-    void didLoadFromBuffer(uint8_t **buffer) override;
-    void didSaveToBuffer(uint8_t **buffer) override;
+    size_t didLoadFromBuffer(uint8_t *buffer) override;
+    size_t didSaveToBuffer(uint8_t *buffer) override;
     
     
     //

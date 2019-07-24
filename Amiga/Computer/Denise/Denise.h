@@ -179,7 +179,7 @@ private:
     void _inspect() override;
     void _dump() override;
     
-    void didLoadFromBuffer(uint8_t **buffer) override;
+    size_t didLoadFromBuffer(uint8_t *buffer) override;
     
     
     //

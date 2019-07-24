@@ -195,10 +195,10 @@ Denise::getSprInfo(int nr)
     return result;
 }
 
-void
-Denise::didLoadFromBuffer(uint8_t **buffer)
+size_t
+Denise::didLoadFromBuffer(uint8_t *buffer)
 {
- 
+    return 0;
 }
 
 uint16_t

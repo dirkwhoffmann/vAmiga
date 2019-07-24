@@ -37,13 +37,15 @@ Joystick::_dump()
     plainmsg("Button:  %s AxisX: %d AxisY: %d\n", button ? "YES" : "NO", axisX, axisY);
 }
 
-void
-Joystick::didLoadFromBuffer(uint8_t **buffer)
+size_t
+Joystick::didLoadFromBuffer(uint8_t *buffer)
 {
     // Discard any active joystick movements
     button = false;
     axisX = 0;
     axisY = 0;
+
+    return 0;
 }
 
 void

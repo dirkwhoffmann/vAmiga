@@ -116,16 +116,18 @@ Memory::stateSize()
     return result;
 }
 
-void
-Memory::didLoadFromBuffer(uint8_t **buffer)
+size_t
+Memory::didLoadFromBuffer(uint8_t *buffer)
 {
+    uint8_t *ptr = buffer;
+
     // Load memory size information
-    bootRomSize = (size_t)read32(buffer);
-    kickRomSize = (size_t)read32(buffer);
-    extRomSize = (size_t)read32(buffer);
-    chipRamSize = (size_t)read32(buffer);
-    slowRamSize = (size_t)read32(buffer);
-    fastRamSize = (size_t)read32(buffer);
+    bootRomSize = (size_t)read32(&ptr);
+    kickRomSize = (size_t)read32(&ptr);
+    extRomSize = (size_t)read32(&ptr);
+    chipRamSize = (size_t)read32(&ptr);
+    slowRamSize = (size_t)read32(&ptr);
+    fastRamSize = (size_t)read32(&ptr);
     
     // Do some consistency checks
     // Note: We should do this a little less agressive, e.g., by returning
@@ -149,32 +151,36 @@ Memory::didLoadFromBuffer(uint8_t **buffer)
     if (fastRamSize) fastRam = new (std::nothrow) uint8_t[fastRamSize + 3];
 
     // Load memory contents from buffer
-    readBlock(buffer, bootRom, bootRomSize);
-    readBlock(buffer, kickRom, kickRomSize);
-    readBlock(buffer, extRom, extRomSize);
-    readBlock(buffer, chipRam, chipRamSize);
-    readBlock(buffer, slowRam, slowRamSize);
-    readBlock(buffer, fastRam, fastRamSize);
+    readBlock(&ptr, bootRom, bootRomSize);
+    readBlock(&ptr, kickRom, kickRomSize);
+    readBlock(&ptr, extRom, extRomSize);
+    readBlock(&ptr, chipRam, chipRamSize);
+    readBlock(&ptr, slowRam, slowRamSize);
+    readBlock(&ptr, fastRam, fastRamSize);
+
+    return ptr - buffer;
 }
 
-void
-Memory::didSaveToBuffer(uint8_t **buffer)
+size_t
+Memory::didSaveToBuffer(uint8_t *buffer)
 {
+    uint8_t *ptr = buffer;
+
     // Save memory size information
-    write32(buffer, (uint32_t)bootRomSize);
-    write32(buffer, (uint32_t)kickRomSize);
-    write32(buffer, (uint32_t)extRomSize);
-    write32(buffer, (uint32_t)chipRamSize);
-    write32(buffer, (uint32_t)slowRamSize);
-    write32(buffer, (uint32_t)fastRamSize);
+    write32(&ptr, (uint32_t)bootRomSize);
+    write32(&ptr, (uint32_t)kickRomSize);
+    write32(&ptr, (uint32_t)extRomSize);
+    write32(&ptr, (uint32_t)chipRamSize);
+    write32(&ptr, (uint32_t)slowRamSize);
+    write32(&ptr, (uint32_t)fastRamSize);
 
     // Save memory contents
-    writeBlock(buffer, bootRom, bootRomSize);
-    writeBlock(buffer, kickRom, kickRomSize);
-    writeBlock(buffer, extRom, extRomSize);
-    writeBlock(buffer, chipRam, chipRamSize);
-    writeBlock(buffer, slowRam, slowRamSize);
-    writeBlock(buffer, fastRam, fastRamSize);
+    writeBlock(&ptr, bootRom, bootRomSize);
+    writeBlock(&ptr, kickRom, kickRomSize);
+    writeBlock(&ptr, extRom, extRomSize);
+    writeBlock(&ptr, chipRam, chipRamSize);
+    writeBlock(&ptr, slowRam, slowRamSize);
+    writeBlock(&ptr, fastRam, fastRamSize);
     
     /*
     debug("bootRomSize = %d\n", bootRomSize);
@@ -184,6 +190,7 @@ Memory::didSaveToBuffer(uint8_t **buffer)
     debug("slowRamSize = %d\n", slowRamSize);
     debug("fastRamSize = %d\n", fastRamSize);
     */
+    return ptr - buffer;
 }
 
 bool

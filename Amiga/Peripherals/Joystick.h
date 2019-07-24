@@ -63,7 +63,7 @@ private:
     void _initialize() override;
     void _powerOn() override;
     void _dump() override;
-    void didLoadFromBuffer(uint8_t **buffer) override;
+    size_t didLoadFromBuffer(uint8_t *buffer) override;
     
     
     //

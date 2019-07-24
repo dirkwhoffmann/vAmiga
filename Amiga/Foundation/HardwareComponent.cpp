@@ -256,7 +256,7 @@ HardwareComponent::loadFromBuffer(uint8_t **buffer)
     debug(3, "    Loading internal state ...\n");
     
     // Call delegation method
-    willLoadFromBuffer(buffer);
+    *buffer += willLoadFromBuffer(*buffer);
     
     // Load internal state of all subcomponents
     for (HardwareComponent *c : subComponents) {
@@ -305,7 +305,7 @@ HardwareComponent::loadFromBuffer(uint8_t **buffer)
     }
     
     // Call delegation method
-    didLoadFromBuffer(buffer);
+    *buffer += didLoadFromBuffer(*buffer);
     
     // Verify that the number of processed bytes matches the state size
     if (*buffer - old != stateSize()) {
@@ -323,7 +323,7 @@ HardwareComponent::saveToBuffer(uint8_t **buffer)
     debug(4, "    Saving internal state ...\n");
     
     // Call delegation method
-    willSaveToBuffer(buffer);
+    *buffer += willSaveToBuffer(*buffer);
     
     // Save internal state of all subcomponents
     for (HardwareComponent *c : subComponents) {
@@ -372,7 +372,7 @@ HardwareComponent::saveToBuffer(uint8_t **buffer)
     }
     
     // Call delegation method
-    didSaveToBuffer(buffer);
+    *buffer += didSaveToBuffer(*buffer);
     
     // Verify that the number of written bytes matches the state size
     if (*buffer - old != stateSize()) {

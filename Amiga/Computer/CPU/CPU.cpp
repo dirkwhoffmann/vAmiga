@@ -265,20 +265,29 @@ CPU::stateSize()
     return result;
 }
 
-void
-CPU::didLoadFromBuffer(uint8_t **buffer)
+size_t
+CPU::didLoadFromBuffer(uint8_t *buffer)
 {
+    uint8_t *ptr = buffer;
+
     uint8_t context[sizeof(m68ki_cpu_core)];
-    readBlock(buffer, context, m68k_context_size());
+    readBlock(&ptr, context, m68k_context_size());
     m68k_set_context(context);
+
+    debug("didLoadFromBuffer %d bytes\n", ptr - buffer);
+    return ptr - buffer;
 }
 
-void
-CPU::didSaveToBuffer(uint8_t **buffer)
+size_t
+CPU::didSaveToBuffer(uint8_t *buffer)
 {
+    uint8_t *ptr = buffer;
+
     uint8_t context[sizeof(m68ki_cpu_core)];
     m68k_get_context(context);
-    writeBlock(buffer, context, m68k_context_size());
+    writeBlock(&ptr, context, m68k_context_size());
+
+    return ptr - buffer;
 }
 
 void
