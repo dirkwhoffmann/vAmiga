@@ -68,6 +68,29 @@ class TOD : public HardwareComponent {
     //
     
     TOD(CIA *cia);
+
+
+    //
+    // Iterating over snapshot items
+    //
+
+    template <class T>
+    void applyToPersistentItems(T& worker)
+    {
+    }
+
+    template <class T>
+    void applyToResetItems(T& worker)
+    {
+        worker
+
+        & tod.value
+        & latch.value
+        & alarm.value
+        & frozen
+        & stopped
+        & matching;
+    }
     
     
     //
@@ -77,7 +100,12 @@ class TOD : public HardwareComponent {
     void _powerOn() override;
     void _inspect() override;
     void _dump() override;
-    
+
+public:
+
+    size_t _loadFromBuffer(uint8_t *buffer) override;
+    size_t _saveToBuffer(uint8_t *buffer) override;
+
     
     //
     // Reading the internal state

@@ -265,7 +265,7 @@ public:
 
 
     //
-    // Iterating snapshot items
+    // Iterating over snapshot items
     //
 
     template <class T>

@@ -180,12 +180,18 @@ public:
     DESERIALIZE64(double)
     DESERIALIZE64(AmigaModel)
     DESERIALIZE32(MemorySource)
+    DESERIALIZE64(EventID)
+    DESERIALIZE32(SprDMAState)
+
+    SerReader& operator&(Event &v)
+    {
+        *this & v.triggerCycle & v.id & v.data;
+        return *this;
+    }
 
     template <class T, size_t N>
     SerReader& operator&(T (&v)[N])
     {
-        // uint32_t len = N;
-        // *this & len;
         for(size_t i = 0; i < N; ++i)
             *this & v[i];
         return *this;
@@ -234,6 +240,14 @@ public:
     SERIALIZE64(double)
     SERIALIZE64(AmigaModel)
     SERIALIZE32(MemorySource)
+    SERIALIZE64(EventID)
+    SERIALIZE32(SprDMAState)
+
+    SerWriter& operator&(Event &v)
+    {
+        *this & v.triggerCycle & v.id & v.data;
+        return *this;
+    }
 
     template <class T, size_t N>
     SerWriter& operator&(T (&v)[N])

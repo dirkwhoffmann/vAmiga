@@ -50,7 +50,7 @@ class RTC : public HardwareComponent {
 
 
     //
-    // Iterating snapshot items
+    // Iterating over snapshot items
     //
 
     template <class T>

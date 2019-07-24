@@ -436,6 +436,71 @@ public:
 
 
     //
+    // Iterating over snapshot items
+    //
+
+    template <class T>
+    void applyToPersistentItems(T& worker)
+    {
+    }
+
+    template <class T>
+    void applyToResetItems(T& worker)
+    {
+        worker
+
+        & slot
+        & nextTrigger
+
+        & clock
+        & frame
+        & pos.v
+        & pos.h
+        & frameInfo.nr
+        & frameInfo.interlaced
+        & frameInfo.numLines
+        & lof
+        & dmaStrtLores
+        & dmaStrtHires
+        & dmaStopLores
+        & dmaStopHires
+        & dmaStrtLoresShift
+        & sprVStrt
+        & sprVStop
+        & sprDmaState
+        & diwHstrt
+        & diwHstop
+        & diwVstrt
+        & diwVstop
+        & vFlop
+        & hFlop
+        & hFlopOn
+        & hFlopOff
+        & dmacon
+        & dmaDAS
+        & dskpt
+        & diwstrt
+        & diwstop
+        & ddfstrt
+        & ddfstop
+        & ddfstrtReached
+        & ddfstopReached
+        & audlc
+        & audlcold
+        & bplpt
+        & bpl1mod
+        & bpl2mod
+        & sprpt
+        & activeBitplanes
+        & dmaEvent
+        & nextDmaEvent
+        & dmaFirstBpl1Event
+        & dmaLastBpl1Event
+        & hsyncActions;
+    }
+    
+
+    //
     // Methods from HardwareComponent
     //
     
@@ -449,6 +514,13 @@ private:
     void _inspect() override;
     void _dump() override;
 
+public:
+
+    size_t _loadFromBuffer(uint8_t *buffer) override;
+    size_t _saveToBuffer(uint8_t *buffer) override;
+
+private:
+    
     void inspectEvents();
     void inspectEventSlot(EventSlot nr);
 
