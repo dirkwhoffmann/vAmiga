@@ -72,6 +72,31 @@ UART::_dump()
     plainmsg("   serper: %X\n", serper);
 }
 
+size_t
+UART::_loadFromBuffer(uint8_t *buffer)
+{
+    debug("_loadFromBuffer\n");
+
+    SerReader read(buffer);
+
+    forAllSnashotItems(read);
+
+    return read.ptr - buffer;
+}
+
+size_t
+UART::_saveToBuffer(uint8_t *buffer)
+{
+    debug("_saveToBuffer\n");
+
+    SerWriter write(buffer);
+
+    forAllSnashotItems(write);
+
+    debug("%d bytes written\n", write.ptr - buffer);
+    return write.ptr - buffer;
+}
+
 UARTInfo
 UART::getInfo()
 {

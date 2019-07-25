@@ -63,6 +63,28 @@ public:
 
 
     //
+    // Iterating over snapshot items
+    //
+
+    template <class T>
+    void forAllSnapshotItems(T& worker)
+    {
+        worker
+
+        & state
+        & audlenLatch
+        & audlen
+        & audperLatch
+        & audper
+        & audvolLatch
+        & audvol
+        & auddatLatch
+        & auddat
+        & audlcLatch;
+    }
+
+
+    //
     // Methods from HardwareComponent
     //
 
@@ -70,7 +92,10 @@ private:
 
     void _initialize() override;
     void _inspect() override;
+    size_t _loadFromBuffer(uint8_t *buffer) override;
+    size_t _saveToBuffer(uint8_t *buffer) override;
 
+    
     //
     // Accessing properties
     //

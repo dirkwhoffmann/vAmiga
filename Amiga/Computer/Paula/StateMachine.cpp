@@ -65,6 +65,31 @@ StateMachine<nr>::_inspect()
     pthread_mutex_unlock(&lock);
 }
 
+template <int nr> size_t
+StateMachine<nr>::_loadFromBuffer(uint8_t *buffer)
+{
+    debug("_loadFromBuffer\n");
+
+    SerReader r(buffer);
+
+    forAllSnapshotItems(r);
+
+    return r.ptr - buffer;
+}
+
+template <int nr> size_t
+StateMachine<nr>::_saveToBuffer(uint8_t *buffer)
+{
+    debug("_saveToBuffer\n");
+
+    SerWriter w(buffer);
+
+    forAllSnapshotItems(w);
+
+    debug("%d bytes written\n", w.ptr - buffer);
+    return w.ptr - buffer;
+}
+
 template <int nr> AudioChannelInfo
 StateMachine<nr>::getInfo()
 {

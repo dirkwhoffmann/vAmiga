@@ -32,8 +32,28 @@ public:
     
     AudioFilter();
 
-    // Removes all samples in the sample pipeline
-    void clear();
+
+    //
+    // Iterating over snapshot items
+    //
+
+    template <class T>
+    void applyToPersistantSnapshotItems(T& worker)
+    {
+        worker
+
+        & type;
+    }
+
+    
+    //
+    // Methods from HardwareComponent
+    //
+
+private:
+
+    size_t _loadFromBuffer(uint8_t *buffer) override;
+    size_t _saveToBuffer(uint8_t *buffer) override;
 
 
     //
@@ -53,7 +73,11 @@ public:
     //
     // Using the device
     //
-    
+
+    // Initializes the filter pipeline with zero elements
+    void clear();
+
+    // Inserts a sample into the filter pipeline
     float apply(float sample);
     
 };

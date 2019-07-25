@@ -24,7 +24,7 @@ Denise::Denise()
         
         { &clock,            sizeof(clock),            0 },
         { &sprhstrt,         sizeof(sprhstrt),         WORD_ARRAY },
-        { &sprShiftReg,      sizeof(sprShiftReg),      WORD_ARRAY },
+        { &sprShiftReg,      sizeof(sprShiftReg),      DWORD_ARRAY },
         { &sprDmaState,      sizeof(sprDmaState),      DWORD_ARRAY },
         { &attach,           sizeof(attach),           0 },
         { &armed,            sizeof(armed),            0 },
@@ -218,12 +218,6 @@ Denise::_saveToBuffer(uint8_t *buffer)
 
     debug("%d bytes written\n", w.ptr - buffer);
     return w.ptr - buffer;
-}
-
-size_t
-Denise::didLoadFromBuffer(uint8_t *buffer)
-{
-    return 0;
 }
 
 uint16_t

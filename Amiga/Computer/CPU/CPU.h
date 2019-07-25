@@ -100,13 +100,9 @@ class CPU : public HardwareComponent {
     void _ping() override;
     void _inspect() override; 
     void _dump() override;
-    
     size_t stateSize() const override;
     size_t didLoadFromBuffer(uint8_t *buffer) override;
     size_t didSaveToBuffer(uint8_t *buffer) const override;
-
-public:
-
     size_t _loadFromBuffer(uint8_t *buffer) override;
     size_t _saveToBuffer(uint8_t *buffer) override;
 

@@ -15,7 +15,7 @@ Colorizer::Colorizer()
     
     registerSnapshotItems(vector<SnapshotItem> {
         
-        { &colors,  64 * sizeof(uint16_t),  WORD_ARRAY },
+        { &colors,  sizeof(colors),  WORD_ARRAY },
     });
 
     // Setup some debug colors (in Amiga color format)
@@ -35,6 +35,30 @@ Colorizer::_powerOn()
     updateRGBA();
 }
 
+size_t
+Colorizer::_loadFromBuffer(uint8_t *buffer)
+{
+    debug("_loadFromBuffer\n");
+
+    SerReader r(buffer);
+
+    applyToResetItems(r);
+
+    return r.ptr - buffer;
+}
+
+size_t
+Colorizer::_saveToBuffer(uint8_t *buffer)
+{
+    debug("_saveToBuffer\n");
+
+    SerWriter w(buffer);
+
+    applyToResetItems(w);
+
+    debug("%d bytes written\n", w.ptr - buffer);
+    return w.ptr - buffer;
+}
 
 void
 Colorizer::setPalette(Palette p)

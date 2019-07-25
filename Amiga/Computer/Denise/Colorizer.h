@@ -73,9 +73,16 @@ public:
     //
 
     template <class T>
-    void applyToSubComponents(T& worker)
+    void applyToPersistentItems(T& worker)
     {
-        debug("applyToSubComponents\n");
+    }
+
+    template <class T>
+    void applyToResetItems(T& worker)
+    {
+        worker
+
+        & colors;
     }
 
 
@@ -86,7 +93,9 @@ public:
 private:
     
     void _powerOn() override;
-
+    size_t _loadFromBuffer(uint8_t *buffer) override;
+    size_t _saveToBuffer(uint8_t *buffer) override;
+    
 
     //
     // Configuring the color palette

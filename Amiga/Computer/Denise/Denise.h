@@ -215,7 +215,6 @@ private:
     
     size_t _loadFromBuffer(uint8_t *buffer) override;
     size_t _saveToBuffer(uint8_t *buffer) override;
-    size_t didLoadFromBuffer(uint8_t *buffer) override;
 
 
     //

@@ -80,9 +80,6 @@ class RTC : public HardwareComponent {
     void _powerOn() override;
     void _reset() override;
     void _dump() override;
-    
-public:
-
     size_t _loadFromBuffer(uint8_t *buffer) override;
     size_t _saveToBuffer(uint8_t *buffer) override;
 

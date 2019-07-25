@@ -111,6 +111,39 @@ public:
     
     DiskController();
     
+
+    //
+    // Iterating over snapshot items
+    //
+
+    template <class T>
+    void applyToPersistantSnapshotItems(T& worker)
+    {
+        worker
+
+        & connected
+        & fifoBuffering;
+    }
+
+    template <class T>
+    void forAllSnashotItems(T& worker)
+    {
+        worker
+
+        & selected
+        & acceleration
+        & state
+        & syncFlag
+        & incoming
+        & incomingCycle
+        & fifo
+        & fifoCount
+        & dsklen
+        & prb
+        & checksum
+        & checkcnt;
+    }
+
     
     //
     // Methods from HardwareComponent
@@ -125,7 +158,9 @@ private:
     void _ping() override;
     void _inspect() override;
     void _dump() override;
-    
+    size_t _loadFromBuffer(uint8_t *buffer) override;
+    size_t _saveToBuffer(uint8_t *buffer) override;
+
     
     //
     // Accesing the internal state

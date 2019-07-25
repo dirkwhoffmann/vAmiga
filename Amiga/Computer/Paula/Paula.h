@@ -81,6 +81,32 @@ public:
 public:
     
     Paula();
+
+
+    //
+    // Iterating over snapshot items
+    //
+
+    template <class T>
+    void applyToPersistentItems(T& worker)
+    {
+    }
+
+    template <class T>
+    void applyToResetItems(T& worker)
+    {
+        worker
+
+        & clock
+        & intreq
+        & intena
+        & potgo
+        & potCntX0
+        & potCntY0
+        & potCntX1
+        & potCntY1
+        & adkcon;
+    }
     
     
     //
@@ -99,7 +125,9 @@ private:
     void _warpOn() override;
     void _warpOff() override;
     void _setWarp(bool value) override;
-    
+    size_t _loadFromBuffer(uint8_t *buffer) override;
+    size_t _saveToBuffer(uint8_t *buffer) override;
+
     
     //
     // Accessing properties

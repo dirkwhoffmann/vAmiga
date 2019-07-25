@@ -64,8 +64,7 @@ TOD::_loadFromBuffer(uint8_t *buffer)
 
     SerReader r(buffer);
 
-    applyToPersistentItems(r);
-    applyToResetItems(r);
+    forAllSnapshotItems(r);
 
     return r.ptr - buffer;
 }
@@ -77,8 +76,7 @@ TOD::_saveToBuffer(uint8_t *buffer)
 
     SerWriter w(buffer);
 
-    applyToPersistentItems(w);
-    applyToResetItems(w);
+    forAllSnapshotItems(w);
 
     debug("%d bytes written\n", w.ptr - buffer);
     return w.ptr - buffer;

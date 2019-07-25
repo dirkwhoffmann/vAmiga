@@ -268,6 +268,8 @@ public:
     // Iterating over snapshot items
     //
 
+private:
+
     template <class T>
     void applyToPersistentItems(T& worker)
     {
@@ -316,19 +318,18 @@ public:
     // Methods from HardwareComponent
     //
 
+protected:
+
     void _initialize() override;
     void _powerOn() override;
     void _inspect() override;
     void _dump() override;
-    
+    size_t _loadFromBuffer(uint8_t *buffer) override;
+    size_t _saveToBuffer(uint8_t *buffer) override;
+
     // Dump trace line
     void dumpTrace();
 
-public:
-
-    size_t _loadFromBuffer(uint8_t *buffer) override;
-    size_t _saveToBuffer(uint8_t *buffer) override;
-    
     
     //
     // Reading the internal state

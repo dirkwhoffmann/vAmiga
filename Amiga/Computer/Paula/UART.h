@@ -55,6 +55,26 @@ public:
     UART();
 
     //
+    // Iterating over snapshot items
+    //
+
+    template <class T>
+    void forAllSnashotItems(T& worker)
+    {
+        worker
+
+        & serper
+        & receiveBuffer
+        & receiveShiftReg
+        & transmitBuffer
+        & transmitShiftReg
+        & outBit
+        & ovrun
+        & recCnt;
+    }
+
+    
+    //
     // Methods from HardwareComponent
     //
 
@@ -66,6 +86,8 @@ private:
     void _reset() override;
     void _inspect() override;
     void _dump() override;
+    size_t _loadFromBuffer(uint8_t *buffer) override;
+    size_t _saveToBuffer(uint8_t *buffer) override;
 
 
     //

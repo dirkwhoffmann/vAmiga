@@ -135,6 +135,31 @@ Paula::_setWarp(bool value)
     }
 }
 
+size_t
+Paula::_loadFromBuffer(uint8_t *buffer)
+{
+    debug("_loadFromBuffer\n");
+
+    SerReader r(buffer);
+
+    applyToResetItems(r);
+
+    return r.ptr - buffer;
+}
+
+size_t
+Paula::_saveToBuffer(uint8_t *buffer)
+{
+    debug("_saveToBuffer\n");
+
+    SerWriter w(buffer);
+
+    applyToResetItems(w);
+
+    debug("%d bytes written\n", w.ptr - buffer);
+    return w.ptr - buffer;
+}
+
 void
 Paula::pokeINTREQ(uint16_t value)
 {

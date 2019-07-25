@@ -22,10 +22,29 @@ AudioFilter::AudioFilter()
     a1 = a2 = b0 = b1 = b2 = 0.0;
 }
 
-void
-AudioFilter::clear()
+size_t
+AudioFilter::_loadFromBuffer(uint8_t *buffer)
 {
-    x1 = x2 = y1 = y2 = 0.0;
+    debug("_loadFromBuffer\n");
+
+    SerReader r(buffer);
+
+    applyToPersistantSnapshotItems(r);
+
+    return r.ptr - buffer;
+}
+
+size_t
+AudioFilter::_saveToBuffer(uint8_t *buffer)
+{
+    debug("_saveToBuffer\n");
+
+    SerWriter w(buffer);
+
+    applyToPersistantSnapshotItems(w);
+
+    debug("%d bytes written\n", w.ptr - buffer);
+    return w.ptr - buffer;
 }
 
 void
@@ -59,6 +78,12 @@ AudioFilter::setSampleRate(double sampleRate)
     b2 = b0;
     a1 = 2.0 * (ita * ita - 1.0) * b0;
     a2 = -(1.0 - q * ita + ita * ita) * b0;
+}
+
+void
+AudioFilter::clear()
+{
+    x1 = x2 = y1 = y2 = 0.0;
 }
 
 float

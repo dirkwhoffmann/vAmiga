@@ -146,6 +146,20 @@ public:
     
     AudioUnit();
     
+
+    //
+    // Iterating over snapshot items
+    //
+
+    template <class T>
+    void applyToResetItems(T& worker)
+    {
+        worker
+
+        & clock
+        & dmaEnabled;
+    }
+
     
     //
     // Methods from HardwareComponent
@@ -158,8 +172,8 @@ private:
     void _pause() override;
     void _inspect() override;
     void _dump() override;
-    
-    // void setClockFrequency(uint32_t frequency);
+    size_t _loadFromBuffer(uint8_t *buffer) override;
+    size_t _saveToBuffer(uint8_t *buffer) override;
     size_t didLoadFromBuffer(uint8_t *buffer) override;
 
 

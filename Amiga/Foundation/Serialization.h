@@ -185,6 +185,7 @@ public:
     DESERIALIZE32(MemorySource)
     DESERIALIZE64(EventID)
     DESERIALIZE32(SprDMAState)
+    DESERIALIZE64(FilterType)
 
     SerReader& operator&(Event &v)
     {
@@ -246,6 +247,7 @@ public:
     SERIALIZE32(MemorySource)
     SERIALIZE64(EventID)
     SERIALIZE32(SprDMAState)
+    SERIALIZE64(FilterType)
 
     SerWriter& operator&(Event &v)
     {

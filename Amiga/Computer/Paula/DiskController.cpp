@@ -113,7 +113,31 @@ DiskController::_dump()
     plainmsg("          prb : %X\n", prb);
     plainmsg("\n");
     plainmsg("   spinning() : %d\n", spinning());
+}
 
+size_t
+DiskController::_loadFromBuffer(uint8_t *buffer)
+{
+    debug("_loadFromBuffer\n");
+
+    SerReader r(buffer);
+
+    applyToPersistantSnapshotItems(r);
+
+    return r.ptr - buffer;
+}
+
+size_t
+DiskController::_saveToBuffer(uint8_t *buffer)
+{
+    debug("_saveToBuffer\n");
+
+    SerWriter w(buffer);
+
+    applyToPersistantSnapshotItems(w);
+
+    debug("%d bytes written\n", w.ptr - buffer);
+    return w.ptr - buffer;
 }
 
 bool
