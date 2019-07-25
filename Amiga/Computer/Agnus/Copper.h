@@ -77,7 +77,34 @@ public:
 public:
     
     Copper();
-    
+
+
+    //
+    // Iterating over snapshot items
+    //
+
+    template <class T>
+    void applyToPersistentItems(T& worker)
+    {
+    }
+
+    template <class T>
+    void applyToResetItems(T& worker)
+    {
+        worker
+
+        & copList
+        & skip
+        & cop1lc
+        & cop2lc
+        & cop1end
+        & cop2end
+        & cdang
+        & cop1ins
+        & cop2ins
+        & coppc;
+    }
+
     
     //
     // Methods from HardwareComponent
@@ -93,7 +120,12 @@ private:
     void _inspect() override; 
     void _dump() override;
     
+public:
 
+    size_t _loadFromBuffer(uint8_t *buffer) override;
+    size_t _saveToBuffer(uint8_t *buffer) override;
+
+    
     //
     // Reading the internal state
     //

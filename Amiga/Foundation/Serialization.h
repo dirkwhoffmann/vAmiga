@@ -261,4 +261,19 @@ public:
 };
 
 
+class SerWalker
+{
+
+public:
+
+    template <class T>
+    SerWalker& operator&(T &v)
+    {
+        v.applyToSubComponents(*this);
+        printf("Serial Walker\n");
+        return *this;
+    }
+
+};
+
 #endif

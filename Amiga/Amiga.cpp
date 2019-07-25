@@ -542,7 +542,11 @@ Amiga::_powerOn()
 
     // Update the recorded debug information
     inspect();
-    
+
+    // REMOVE ASAP
+    SerWalker w;
+    applyToSubComponents(w);
+
     putMessage(MSG_POWER_ON);
 }
 

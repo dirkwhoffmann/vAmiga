@@ -69,6 +69,17 @@ public:
 
 
     //
+    // Iterating over snapshot items
+    //
+
+    template <class T>
+    void applyToSubComponents(T& worker)
+    {
+        debug("applyToSubComponents\n");
+    }
+
+
+    //
     // Methods from HardwareComponent
     //
     

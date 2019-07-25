@@ -164,7 +164,22 @@ public:
     
     Denise();
     ~Denise();
-    
+
+
+    //
+    // Iterating over snapshot items
+    //
+
+    template <class T>
+    void applyToSubComponents(T& worker)
+    {
+        debug("applyToSubComponents\n");
+
+        worker
+        & colorizer;
+    }
+
+
     //
     // Methods from HardwareComponent
     //

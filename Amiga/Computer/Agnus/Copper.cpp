@@ -25,7 +25,6 @@ Copper::Copper()
         { &cop1ins,   sizeof(cop1ins),   0 },
         { &cop2ins,   sizeof(cop2ins),   0 },
         { &coppc,     sizeof(coppc),     0 },
-        // { &coppcBase, sizeof(coppcBase), 0 },
     });
 }
 
@@ -94,21 +93,32 @@ Copper::_dump()
     plainmsg("   cop2lc: %X\n", cop2lc);
     plainmsg("  cop1end: %X\n", cop1end);
     plainmsg("  cop2end: %X\n", cop2end);
+}
 
-    // verbose = !verbose;
+size_t
+Copper::_loadFromBuffer(uint8_t *buffer)
+{
+    debug("_loadFromBuffer\n");
 
-    /*
-    plainmsg("\n");
-    plainmsg("First Copper list\n");
-    plainmsg("-----------------\n");
+    SerReader r(buffer);
 
-    uint32_t addr = cop1lc;
-    for (int i = 0; i < 100; i++, addr += 4) {
-        plainmsg("%04X %04X: ", mem->spypeek16(addr), mem->spypeek16(addr+2));
-        plainmsg(disassemble(addr));
-        plainmsg("\n");
-    }
-    */
+    applyToPersistentItems(r);
+    applyToResetItems(r);
+
+    return r.ptr - buffer;
+}
+
+size_t
+Copper::_saveToBuffer(uint8_t *buffer)
+{
+    debug("_saveToBuffer\n");
+
+    SerWriter w(buffer);
+
+    applyToPersistentItems(w);
+    applyToResetItems(w);
+
+    return w.ptr - buffer;
 }
 
 CopperInfo
