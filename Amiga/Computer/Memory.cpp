@@ -17,7 +17,7 @@ Memory::Memory()
     registerSnapshotItems(vector<SnapshotItem> {
 
         { &kickIsWritable,  sizeof(kickIsWritable),  0 },
-        { &memSrc,          sizeof(memSrc),          0 },
+        { &memSrc,          sizeof(memSrc),          DWORD_ARRAY },
         
     });
 }
@@ -216,6 +216,7 @@ Memory::_saveToBuffer(uint8_t *buffer)
     applyToPersistentItems(w);
     applyToResetItems(w);
 
+    debug("%d bytes written\n", w.ptr - buffer);
     return w.ptr - buffer;
 }
 

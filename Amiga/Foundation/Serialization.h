@@ -70,6 +70,7 @@ inline void write64(uint8_t *& buffer, uint64_t value)
 // Deserializing a hardware component
 //
 
+/*
 template <class T>
 size_t deserializeFromBuffer(T& component, uint8_t *buffer)
 {
@@ -137,6 +138,7 @@ size_t serializeToBuffer(T& component, uint8_t *buffer)
     return ptr - buffer;
 
 }
+*/
 
 
 //
@@ -252,6 +254,7 @@ public:
     template <class T, size_t N>
     SerWriter& operator&(T (&v)[N])
     {
+        printf("Writing array of %lu elements\n", N);
         // uint32_t len = N;
         // *this & len;
         for(size_t i = 0; i < N; ++i)

@@ -305,6 +305,7 @@ CPU::_saveToBuffer(uint8_t *buffer)
     applyToPersistentItems(w);
     applyToResetItems(w);
 
+    debug("%d bytes written\n", w.ptr - buffer);
     return w.ptr - buffer;
 }
 

@@ -351,6 +351,37 @@ HardwareComponent::loadFromBuffer(uint8_t *buffer)
 }
 
 size_t
+HardwareComponent::loadFromBufferNew(uint8_t *buffer)
+{
+    uint8_t *ptr = buffer;
+
+    debug(3, "    Loading internal state ...\n");
+
+    // Call delegation method
+    ptr += willLoadFromBuffer(ptr);
+
+    // Load internal state of all subcomponents
+    for (HardwareComponent *c : subComponents) {
+        ptr += c->loadFromBufferNew(ptr);
+    }
+
+    // Load internal state of this component
+    ptr += _loadFromBuffer(ptr);
+
+    // Call delegation method
+    ptr += didLoadFromBuffer(ptr);
+
+    // Verify that the number of processed bytes matches the state size
+    if (ptr - buffer != stateSize()) {
+        panic("loadFromBuffer: Snapshot size is wrong. Got %d, expected %d.",
+              ptr - buffer, stateSize());
+        assert(false);
+    }
+
+    return ptr - buffer;
+}
+
+size_t
 HardwareComponent::_loadFromBuffer(uint8_t *buffer)
 {
     uint8_t *ptr = buffer;
@@ -458,6 +489,37 @@ HardwareComponent::saveToBuffer(uint8_t *buffer)
     // Call delegation method
     ptr += didSaveToBuffer(ptr);
     
+    // Verify that the number of written bytes matches the state size
+    if (ptr - buffer != stateSize()) {
+        panic("saveToBuffer: Snapshot size is wrong. Got %d, expected %d.",
+              ptr - buffer, stateSize());
+        assert(false);
+    }
+
+    return ptr - buffer;
+}
+
+size_t
+HardwareComponent::saveToBufferNew(uint8_t *buffer)
+{
+    uint8_t *ptr = buffer;
+
+    debug(4, "    Saving internal state ...\n");
+
+    // Call delegation method
+    ptr += willSaveToBuffer(ptr);
+
+    // Save internal state of all subcomponents
+    for (HardwareComponent *c : subComponents) {
+        ptr += c->saveToBufferNew(ptr);
+    }
+
+    // Save internal state of this component
+    ptr += _saveToBuffer(ptr);
+
+    // Call delegation method
+    ptr += didSaveToBuffer(ptr);
+
     // Verify that the number of written bytes matches the state size
     if (ptr - buffer != stateSize()) {
         panic("saveToBuffer: Snapshot size is wrong. Got %d, expected %d.",

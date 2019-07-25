@@ -291,6 +291,7 @@ public:
     /* Loads the internal state from a memory buffer.
      */
     size_t loadFromBuffer(uint8_t *buffer);
+    size_t loadFromBufferNew(uint8_t *buffer);
     virtual size_t _loadFromBuffer(uint8_t *buffer);
 
     /* Delegation methods called inside loadFromBuffer()
@@ -303,6 +304,7 @@ public:
     /* Saves the internal state to a memory buffer.
      */
     size_t saveToBuffer(uint8_t *buffer);
+    size_t saveToBufferNew(uint8_t *buffer);
     virtual size_t _saveToBuffer(uint8_t *buffer);
 
     /* Delegation methods called inside saveToBuffer()

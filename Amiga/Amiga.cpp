@@ -692,6 +692,7 @@ Amiga::_saveToBuffer(uint8_t *buffer)
     applyToPersistentItems(w);
     applyToResetItems(w);
 
+    debug("%d bytes written\n", w.ptr - buffer);
     return w.ptr - buffer;
 }
 
@@ -895,8 +896,8 @@ Amiga::loadFromSnapshotUnsafe(AmigaSnapshot *snapshot)
     uint8_t *ptr;
     
     if (snapshot && (ptr = snapshot->getData())) {
-        // loadFromBuffer(ptr);
-        deserializeFromBuffer(*this, ptr);
+        loadFromBufferNew(ptr);
+        // deserializeFromBuffer(*this, ptr);
         ping();
     }
 }

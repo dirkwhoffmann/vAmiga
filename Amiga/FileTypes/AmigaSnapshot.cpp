@@ -149,7 +149,7 @@ AmigaSnapshot::makeWithAmiga(Amiga *amiga)
     AmigaSnapshot *snapshot2 = new AmigaSnapshot(amiga->stateSize());
     uint8_t *ptr2 = snapshot2->getData();
     start = clock();
-    size_t count2 = serializeToBuffer(*amiga, ptr2);
+    size_t count2 = amiga->saveToBufferNew(ptr2);
     end = clock();
     elapsed = (double(end - start) / double(CLOCKS_PER_SEC));
     printf("Second snapshot taken (%f msec)\n", 1000.0 * elapsed);
@@ -169,14 +169,13 @@ AmigaSnapshot::makeWithAmiga(Amiga *amiga)
 
     // Reload the snapshot to test the loader
     printf("Let's try to reload the snapshot\n");
-    deserializeFromBuffer(*amiga, ptr2);
-    // amiga->loadFromSnapshotUnsafe(snapshot2);
+    amiga->loadFromSnapshotUnsafe(snapshot2);
 
     // Take another snapshot
     AmigaSnapshot *snapshot3 = new AmigaSnapshot(amiga->stateSize());
     uint8_t *ptr3 = snapshot3->getData();
     start = clock();
-    size_t count3 = serializeToBuffer(*amiga, ptr3);
+    size_t count3 = amiga->saveToBufferNew(ptr3);
     end = clock();
     elapsed = (double(end - start) / double(CLOCKS_PER_SEC));
     printf("Third snapshot taken (%f msec)\n", 1000.0 * elapsed);
