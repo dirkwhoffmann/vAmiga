@@ -196,7 +196,7 @@ Denise::getSprInfo(int nr)
 }
 
 size_t
-Denise::_loadFromBuffer(uint8_t *buffer)
+Denise::_load(uint8_t *buffer)
 {
     debug("_loadFromBuffer\n");
 
@@ -208,7 +208,7 @@ Denise::_loadFromBuffer(uint8_t *buffer)
 }
 
 size_t
-Denise::_saveToBuffer(uint8_t *buffer)
+Denise::_save(uint8_t *buffer)
 {
     debug("_saveToBuffer\n");
 

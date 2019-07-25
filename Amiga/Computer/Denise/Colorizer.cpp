@@ -36,7 +36,7 @@ Colorizer::_powerOn()
 }
 
 size_t
-Colorizer::_loadFromBuffer(uint8_t *buffer)
+Colorizer::_load(uint8_t *buffer)
 {
     debug("_loadFromBuffer\n");
 
@@ -48,7 +48,7 @@ Colorizer::_loadFromBuffer(uint8_t *buffer)
 }
 
 size_t
-Colorizer::_saveToBuffer(uint8_t *buffer)
+Colorizer::_save(uint8_t *buffer)
 {
     debug("_saveToBuffer\n");
 

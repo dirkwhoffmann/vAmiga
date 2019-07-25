@@ -298,7 +298,7 @@ Agnus::_dump()
 }
 
 size_t
-Agnus::_loadFromBuffer(uint8_t *buffer)
+Agnus::_load(uint8_t *buffer)
 {
     debug("_loadFromBuffer\n");
 
@@ -311,7 +311,7 @@ Agnus::_loadFromBuffer(uint8_t *buffer)
 }
 
 size_t
-Agnus::_saveToBuffer(uint8_t *buffer)
+Agnus::_save(uint8_t *buffer)
 {
     debug("_saveToBuffer\n");
 

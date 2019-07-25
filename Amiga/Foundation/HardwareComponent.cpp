@@ -366,7 +366,7 @@ HardwareComponent::loadFromBufferNew(uint8_t *buffer)
     }
 
     // Load internal state of this component
-    ptr += _loadFromBuffer(ptr);
+    ptr += _load(ptr);
 
     // Call delegation method
     ptr += didLoadFromBuffer(ptr);
@@ -382,7 +382,7 @@ HardwareComponent::loadFromBufferNew(uint8_t *buffer)
 }
 
 size_t
-HardwareComponent::_loadFromBuffer(uint8_t *buffer)
+HardwareComponent::_load(uint8_t *buffer)
 {
     uint8_t *ptr = buffer;
 
@@ -515,7 +515,7 @@ HardwareComponent::saveToBufferNew(uint8_t *buffer)
     }
 
     // Save internal state of this component
-    ptr += _saveToBuffer(ptr);
+    ptr += _save(ptr);
 
     // Call delegation method
     ptr += didSaveToBuffer(ptr);
@@ -531,7 +531,7 @@ HardwareComponent::saveToBufferNew(uint8_t *buffer)
 }
 
 size_t
-HardwareComponent::_saveToBuffer(uint8_t *buffer)
+HardwareComponent::_save(uint8_t *buffer)
 {
     uint8_t *ptr = buffer;
 

@@ -136,7 +136,7 @@ Paula::_setWarp(bool value)
 }
 
 size_t
-Paula::_loadFromBuffer(uint8_t *buffer)
+Paula::_load(uint8_t *buffer)
 {
     debug("_loadFromBuffer\n");
 
@@ -148,7 +148,7 @@ Paula::_loadFromBuffer(uint8_t *buffer)
 }
 
 size_t
-Paula::_saveToBuffer(uint8_t *buffer)
+Paula::_save(uint8_t *buffer)
 {
     debug("_saveToBuffer\n");
 

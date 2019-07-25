@@ -64,7 +64,7 @@ AudioUnit::_dump()
 }
 
 size_t
-AudioUnit::_loadFromBuffer(uint8_t *buffer)
+AudioUnit::_load(uint8_t *buffer)
 {
     debug("_loadFromBuffer\n");
 
@@ -76,7 +76,7 @@ AudioUnit::_loadFromBuffer(uint8_t *buffer)
 }
 
 size_t
-AudioUnit::_saveToBuffer(uint8_t *buffer)
+AudioUnit::_save(uint8_t *buffer)
 {
     debug("_saveToBuffer\n");
 

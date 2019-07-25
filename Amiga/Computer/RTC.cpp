@@ -48,7 +48,7 @@ RTC::_dump()
 }
 
 size_t
-RTC::_loadFromBuffer(uint8_t *buffer)
+RTC::_load(uint8_t *buffer)
 {
     debug("_loadFromBuffer\n");
 
@@ -61,7 +61,7 @@ RTC::_loadFromBuffer(uint8_t *buffer)
 }
 
 size_t
-RTC::_saveToBuffer(uint8_t *buffer)
+RTC::_save(uint8_t *buffer)
 {
     debug("_saveToBuffer\n");
 

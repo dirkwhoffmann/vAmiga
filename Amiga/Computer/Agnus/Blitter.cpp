@@ -188,7 +188,7 @@ Blitter::_dump()
 }
 
 size_t
-Blitter::_loadFromBuffer(uint8_t *buffer)
+Blitter::_load(uint8_t *buffer)
 {
     debug("_loadFromBuffer\n");
 
@@ -201,7 +201,7 @@ Blitter::_loadFromBuffer(uint8_t *buffer)
 }
 
 size_t
-Blitter::_saveToBuffer(uint8_t *buffer)
+Blitter::_save(uint8_t *buffer)
 {
     debug("_saveToBuffer\n");
 

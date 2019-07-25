@@ -123,7 +123,7 @@ size_t serializeToBuffer(T& component, uint8_t *buffer)
     }
 
     // Save internal state of this component
-    ptr += component._saveToBuffer(ptr);
+    ptr += component._save(ptr);
 
     // Call delegation method
     ptr += component.didSaveToBuffer(ptr);

@@ -116,7 +116,7 @@ DiskController::_dump()
 }
 
 size_t
-DiskController::_loadFromBuffer(uint8_t *buffer)
+DiskController::_load(uint8_t *buffer)
 {
     debug("_loadFromBuffer\n");
 
@@ -128,7 +128,7 @@ DiskController::_loadFromBuffer(uint8_t *buffer)
 }
 
 size_t
-DiskController::_saveToBuffer(uint8_t *buffer)
+DiskController::_save(uint8_t *buffer)
 {
     debug("_saveToBuffer\n");
 

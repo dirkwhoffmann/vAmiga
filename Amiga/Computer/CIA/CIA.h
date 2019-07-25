@@ -324,8 +324,8 @@ protected:
     void _powerOn() override;
     void _inspect() override;
     void _dump() override;
-    size_t _loadFromBuffer(uint8_t *buffer) override;
-    size_t _saveToBuffer(uint8_t *buffer) override;
+    size_t _load(uint8_t *buffer) override;
+    size_t _save(uint8_t *buffer) override;
 
     // Dump trace line
     void dumpTrace();

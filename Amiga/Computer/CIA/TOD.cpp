@@ -58,7 +58,7 @@ TOD::_dump()
 }
 
 size_t
-TOD::_loadFromBuffer(uint8_t *buffer)
+TOD::_load(uint8_t *buffer)
 {
     debug("_loadFromBuffer\n");
 
@@ -70,7 +70,7 @@ TOD::_loadFromBuffer(uint8_t *buffer)
 }
 
 size_t
-TOD::_saveToBuffer(uint8_t *buffer)
+TOD::_save(uint8_t *buffer)
 {
     debug("_saveToBuffer\n");
 

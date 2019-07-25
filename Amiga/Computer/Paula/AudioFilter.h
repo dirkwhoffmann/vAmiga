@@ -52,8 +52,8 @@ public:
 
 private:
 
-    size_t _loadFromBuffer(uint8_t *buffer) override;
-    size_t _saveToBuffer(uint8_t *buffer) override;
+    size_t _load(uint8_t *buffer) override;
+    size_t _save(uint8_t *buffer) override;
 
 
     //

@@ -194,7 +194,7 @@ Memory::didSaveToBuffer(uint8_t *buffer) const
 }
 
 size_t
-Memory::_loadFromBuffer(uint8_t *buffer)
+Memory::_load(uint8_t *buffer)
 {
     debug("Memory::_loadFromBuffer\n");
 
@@ -207,7 +207,7 @@ Memory::_loadFromBuffer(uint8_t *buffer)
 }
 
 size_t
-Memory::_saveToBuffer(uint8_t *buffer)
+Memory::_save(uint8_t *buffer)
 {
     debug("Memory::_saveToBuffer\n");
 

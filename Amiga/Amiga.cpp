@@ -666,7 +666,7 @@ Amiga::_warpOff()
 }
 
 size_t
-Amiga::_loadFromBuffer(uint8_t *buffer)
+Amiga::_load(uint8_t *buffer)
 {
     debug("Amiga::_loadFromBuffer\n");
 
@@ -679,7 +679,7 @@ Amiga::_loadFromBuffer(uint8_t *buffer)
 }
 
 size_t
-Amiga::_saveToBuffer(uint8_t *buffer)
+Amiga::_save(uint8_t *buffer)
 {
     debug("Amiga::_saveToBuffer\n");
     

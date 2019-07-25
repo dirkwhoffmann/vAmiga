@@ -66,7 +66,7 @@ StateMachine<nr>::_inspect()
 }
 
 template <int nr> size_t
-StateMachine<nr>::_loadFromBuffer(uint8_t *buffer)
+StateMachine<nr>::_load(uint8_t *buffer)
 {
     debug("_loadFromBuffer\n");
 
@@ -78,7 +78,7 @@ StateMachine<nr>::_loadFromBuffer(uint8_t *buffer)
 }
 
 template <int nr> size_t
-StateMachine<nr>::_saveToBuffer(uint8_t *buffer)
+StateMachine<nr>::_save(uint8_t *buffer)
 {
     debug("_saveToBuffer\n");
 

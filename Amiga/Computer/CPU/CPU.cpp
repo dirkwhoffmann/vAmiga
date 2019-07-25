@@ -283,7 +283,7 @@ CPU::didSaveToBuffer(uint8_t *buffer) const
 }
 
 size_t
-CPU::_loadFromBuffer(uint8_t *buffer)
+CPU::_load(uint8_t *buffer)
 {
     debug("_loadFromBuffer\n");
 
@@ -296,7 +296,7 @@ CPU::_loadFromBuffer(uint8_t *buffer)
 }
 
 size_t
-CPU::_saveToBuffer(uint8_t *buffer)
+CPU::_save(uint8_t *buffer)
 {
     debug("_saveToBuffer\n");
 

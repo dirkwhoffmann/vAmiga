@@ -23,7 +23,7 @@ AudioFilter::AudioFilter()
 }
 
 size_t
-AudioFilter::_loadFromBuffer(uint8_t *buffer)
+AudioFilter::_load(uint8_t *buffer)
 {
     debug("_loadFromBuffer\n");
 
@@ -35,7 +35,7 @@ AudioFilter::_loadFromBuffer(uint8_t *buffer)
 }
 
 size_t
-AudioFilter::_saveToBuffer(uint8_t *buffer)
+AudioFilter::_save(uint8_t *buffer)
 {
     debug("_saveToBuffer\n");
 

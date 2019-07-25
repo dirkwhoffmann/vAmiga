@@ -780,7 +780,7 @@ CIA::_dump()
 }
 
 size_t
-CIA::_loadFromBuffer(uint8_t *buffer)
+CIA::_load(uint8_t *buffer)
 {
     debug("_loadFromBuffer\n");
 
@@ -793,7 +793,7 @@ CIA::_loadFromBuffer(uint8_t *buffer)
 }
 
 size_t
-CIA::_saveToBuffer(uint8_t *buffer)
+CIA::_save(uint8_t *buffer)
 {
     debug("_saveToBuffer\n");
 

@@ -96,7 +96,7 @@ Copper::_dump()
 }
 
 size_t
-Copper::_loadFromBuffer(uint8_t *buffer)
+Copper::_load(uint8_t *buffer)
 {
     debug("_loadFromBuffer\n");
 
@@ -109,7 +109,7 @@ Copper::_loadFromBuffer(uint8_t *buffer)
 }
 
 size_t
-Copper::_saveToBuffer(uint8_t *buffer)
+Copper::_save(uint8_t *buffer)
 {
     debug("_saveToBuffer\n");
 

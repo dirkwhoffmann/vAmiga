@@ -73,7 +73,7 @@ UART::_dump()
 }
 
 size_t
-UART::_loadFromBuffer(uint8_t *buffer)
+UART::_load(uint8_t *buffer)
 {
     debug("_loadFromBuffer\n");
 
@@ -85,7 +85,7 @@ UART::_loadFromBuffer(uint8_t *buffer)
 }
 
 size_t
-UART::_saveToBuffer(uint8_t *buffer)
+UART::_save(uint8_t *buffer)
 {
     debug("_saveToBuffer\n");
 
