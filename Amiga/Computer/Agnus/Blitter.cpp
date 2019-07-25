@@ -15,7 +15,7 @@ Blitter::Blitter()
     
     registerSnapshotItems(vector<SnapshotItem> {
 
-        { &exact, sizeof(exact), PERSISTANT },
+        { &exact,         sizeof(exact), PERSISTANT },
 
         { &bltcon0,       sizeof(bltcon0),       0 },
         { &bltcon1,       sizeof(bltcon1),       0 },
@@ -185,6 +185,33 @@ Blitter::_dump()
     plainmsg("     dhold: %X\n", dhold);
     plainmsg("    ashift: %X bshift: %X\n", ashift, bshift);
     plainmsg("     bbusy: %s bzero: %s\n", bbusy ? "yes" : "no", bzero ? "yes" : "no");
+}
+
+size_t
+Blitter::_loadFromBuffer(uint8_t *buffer)
+{
+    debug("_loadFromBuffer\n");
+
+    SerReader r(buffer);
+
+    applyToPersistentItems(r);
+    applyToResetItems(r);
+
+    return r.ptr - buffer;
+}
+
+size_t
+Blitter::_saveToBuffer(uint8_t *buffer)
+{
+    debug("_saveToBuffer\n");
+
+    SerWriter w(buffer);
+
+    applyToPersistentItems(w);
+    applyToResetItems(w);
+
+    debug("%d bytes written\n", w.ptr - buffer);
+    return w.ptr - buffer;
 }
 
 BlitterInfo

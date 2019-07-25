@@ -437,19 +437,6 @@ public:
     //
 
     template <class T>
-    void applyToSubComponents(T& worker)
-    {
-        printf("Agnus::applyToSubComponents: I'm here\n");
-        /*
-        worker
-
-        &copper,
-        &blitter,
-        &dmaDebugger;
-        */
-    }
-
-    template <class T>
     void applyToPersistentItems(T& worker)
     {
     }
@@ -459,7 +446,7 @@ public:
     {
         worker
 
-        & slot
+        // & slot // TODO: UNCOMMENT ASAP
         & nextTrigger
 
         & clock

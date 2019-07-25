@@ -22,7 +22,7 @@ Agnus::Agnus()
     
     registerSnapshotItems(vector<SnapshotItem> {
 
-        { &slot,            sizeof(slot),            BYTE_ARRAY },
+        // { &slot,            sizeof(slot),            BYTE_ARRAY },
         { &nextTrigger,     sizeof(nextTrigger),     0 },
 
         { &clock,                sizeof(clock),                0 },

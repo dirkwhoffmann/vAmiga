@@ -46,11 +46,11 @@ public:
     // Methods from HardwareComponent
     //
 
-    /*
 private:
 
-    void _powerOn() override;
-     */
+    size_t _loadFromBuffer(uint8_t *buffer) override {return 0; }
+    size_t _saveToBuffer(uint8_t *buffer) override { return 0; }
+    
 
     //
     // Configuring the device

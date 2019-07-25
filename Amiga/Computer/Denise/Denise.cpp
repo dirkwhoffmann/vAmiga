@@ -196,6 +196,31 @@ Denise::getSprInfo(int nr)
 }
 
 size_t
+Denise::_loadFromBuffer(uint8_t *buffer)
+{
+    debug("_loadFromBuffer\n");
+
+    SerReader r(buffer);
+
+    applyToResetItems(r);
+
+    return r.ptr - buffer;
+}
+
+size_t
+Denise::_saveToBuffer(uint8_t *buffer)
+{
+    debug("_saveToBuffer\n");
+
+    SerWriter w(buffer);
+
+    applyToResetItems(w);
+
+    debug("%d bytes written\n", w.ptr - buffer);
+    return w.ptr - buffer;
+}
+
+size_t
 Denise::didLoadFromBuffer(uint8_t *buffer)
 {
     return 0;

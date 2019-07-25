@@ -171,15 +171,34 @@ public:
     //
 
     template <class T>
-    void applyToSubComponents(T& worker)
+    void applyToResetItems(T& worker)
     {
-        debug("applyToSubComponents\n");
-
         worker
-        & colorizer;
+
+        & clock
+        & sprhstrt
+        & sprShiftReg
+        & sprDmaState
+        & attach
+        & armed
+        & bplcon0
+        & bplcon1
+        & bplcon2
+        & bpldat
+        & sprdata
+        & sprdatb
+        & shiftReg
+        & scrollLoresOdd
+        & scrollLoresEven
+        & scrollHiresOdd
+        & scrollHiresEven
+        & ham
+        & firstCanvasPixel
+        & lastCanvasPixel
+        & currentPixel;
     }
 
-
+    
     //
     // Methods from HardwareComponent
     //
@@ -194,9 +213,11 @@ private:
     void _inspect() override;
     void _dump() override;
     
+    size_t _loadFromBuffer(uint8_t *buffer) override;
+    size_t _saveToBuffer(uint8_t *buffer) override;
     size_t didLoadFromBuffer(uint8_t *buffer) override;
-    
-    
+
+
     //
     // Reading the internal state
     //

@@ -169,6 +169,7 @@ public:
 
     DESERIALIZE8(bool)
     DESERIALIZE8(char)
+    DESERIALIZE8(signed char)
     DESERIALIZE8(unsigned char)
     DESERIALIZE16(short)
     DESERIALIZE16(unsigned short)
@@ -229,6 +230,7 @@ public:
 
     SERIALIZE8(bool)
     SERIALIZE8(char)
+    SERIALIZE8(signed char)
     SERIALIZE8(unsigned char)
     SERIALIZE16(short)
     SERIALIZE16(unsigned short)
@@ -261,22 +263,6 @@ public:
             *this & v[i];
         return *this;
     }
-};
-
-
-class SerWalker
-{
-
-public:
-
-    template <class T>
-    SerWalker& operator&(T &v)
-    {
-        v.applyToSubComponents(*this);
-        printf("Serial Walker\n");
-        return *this;
-    }
-
 };
 
 #endif

@@ -133,6 +133,60 @@ class Blitter : public HardwareComponent {
     
     Blitter();
     
+
+    //
+    // Iterating over snapshot items
+    //
+
+    template <class T>
+    void applyToPersistentItems(T& worker)
+    {
+        worker
+
+        & exact;
+    }
+
+    template <class T>
+    void applyToResetItems(T& worker)
+    {
+        worker
+
+        & bltcon0
+        & bltcon1
+
+        & bltapt
+        & bltbpt
+        & bltcpt
+        & bltdpt
+
+        & bltafwm
+        & bltalwm
+
+        & bltsize
+
+        & bltamod
+        & bltbmod
+        & bltcmod
+        & bltdmod
+
+        & anew
+        & bnew
+        & aold
+        & bold
+        & ahold
+        & bhold
+        & chold
+        & dhold
+        & ashift
+        & bshift
+
+        & xCounter
+        & yCounter
+
+        & bbusy
+        & bzero;
+    }
+
     
     //
     // Methods from HardwareComponent
@@ -147,6 +201,8 @@ class Blitter : public HardwareComponent {
     void _ping() override;
     void _inspect() override; 
     void _dump() override;
+    size_t _loadFromBuffer(uint8_t *buffer) override;
+    size_t _saveToBuffer(uint8_t *buffer) override;
     
     
     //

@@ -119,9 +119,6 @@ private:
     void _ping() override;
     void _inspect() override; 
     void _dump() override;
-    
-public:
-
     size_t _loadFromBuffer(uint8_t *buffer) override;
     size_t _saveToBuffer(uint8_t *buffer) override;
 
