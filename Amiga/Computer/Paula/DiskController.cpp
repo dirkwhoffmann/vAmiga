@@ -120,11 +120,12 @@ DiskController::_load(uint8_t *buffer)
 {
     debug("_loadFromBuffer\n");
 
-    SerReader r(buffer);
+    SerReader reader(buffer);
 
-    applyToPersistantSnapshotItems(r);
+    applyToPersistentItems(reader);
+    applyToResetItems(reader);
 
-    return r.ptr - buffer;
+    return reader.ptr - buffer;
 }
 
 size_t
@@ -132,12 +133,13 @@ DiskController::_save(uint8_t *buffer)
 {
     debug("_saveToBuffer\n");
 
-    SerWriter w(buffer);
+    SerWriter writer(buffer);
 
-    applyToPersistantSnapshotItems(w);
+    applyToPersistentItems(writer);
+    applyToResetItems(writer);
 
-    debug("%d bytes written\n", w.ptr - buffer);
-    return w.ptr - buffer;
+    debug("%d bytes written\n", writer.ptr - buffer);
+    return writer.ptr - buffer;
 }
 
 bool

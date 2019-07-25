@@ -108,6 +108,39 @@ public:
 public:
     
     Drive(unsigned nr);
+
+
+    //
+    // Iterating over snapshot items
+    //
+
+    template <class T>
+    void applyToPersistentItems(T& worker)
+    {
+        worker
+
+        & type
+        & speed;
+    }
+
+    template <class T>
+    void applyToResetItems(T& worker)
+    {
+        worker
+
+        & idCount
+        & idBit
+        & motor
+        & motorOnCycle
+        & motorOffCycle
+        & dskchange
+        & dsklen
+        & prb
+        & head.side
+        & head.cylinder
+        & head.offset
+        & cylinderHistory;
+    }
     
     
     //
@@ -121,7 +154,8 @@ private:
      void _reset() override;
      void _ping() override;
      void _dump() override;
-    
+    size_t _load(uint8_t *buffer) override;
+    size_t _save(uint8_t *buffer) override;
     
 public:
     

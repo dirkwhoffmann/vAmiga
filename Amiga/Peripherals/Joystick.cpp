@@ -38,6 +38,30 @@ Joystick::_dump()
 }
 
 size_t
+Joystick::_load(uint8_t *buffer)
+{
+    SerReader reader(buffer);
+
+    applyToPersistentItems(reader);
+    applyToResetItems(reader);
+
+    debug(SNAP_DEBUG, "Deserialized from %d bytes\n", reader.ptr - buffer);
+    return reader.ptr - buffer;
+}
+
+size_t
+Joystick::_save(uint8_t *buffer)
+{
+    SerWriter writer(buffer);
+
+    applyToPersistentItems(writer);
+    applyToResetItems(writer);
+
+    debug(SNAP_DEBUG, "Serialized to %d bytes\n", writer.ptr - buffer);
+    return writer.ptr - buffer;
+}
+
+size_t
 Joystick::didLoadFromBuffer(uint8_t *buffer)
 {
     // Discard any active joystick movements

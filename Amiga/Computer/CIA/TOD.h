@@ -75,7 +75,12 @@ class TOD : public HardwareComponent {
     //
 
     template <class T>
-    void forAllSnapshotItems(T& worker)
+    void applyToPersitentItems(T& worker)
+    {
+    }
+
+    template <class T>
+    void applyToResetItems(T& worker)
     {
         worker
 

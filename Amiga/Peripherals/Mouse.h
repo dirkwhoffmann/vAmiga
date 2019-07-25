@@ -55,7 +55,23 @@ private:
 public:
     
     Mouse();
+
     
+    //
+    // Iterating over snapshot items
+    //
+
+    template <class T>
+    void applyToPersistentItems(T& worker)
+    {
+    }
+
+    template <class T>
+    void applyToResetItems(T& worker)
+    {
+    }
+
+
     
     //
     // Methods from HardwareComponent
@@ -65,6 +81,8 @@ private:
     
     void _powerOn() override;
     void _dump() override;
+    size_t _load(uint8_t *buffer) override;
+    size_t _save(uint8_t *buffer) override;
     
     
     //

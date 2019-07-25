@@ -38,13 +38,18 @@ public:
     //
 
     template <class T>
-    void applyToPersistantSnapshotItems(T& worker)
+    void applyToPersistentItems(T& worker)
     {
         worker
 
         & type;
     }
 
+    template <class T>
+    void applyToResetItems(T& worker)
+    {
+    }
+    
     
     //
     // Methods from HardwareComponent

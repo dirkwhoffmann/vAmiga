@@ -11,7 +11,7 @@
 #define _SERIALIZATION_INC
 
 //
-// Basic I/O
+// Basic memory buffer I/O
 //
 
 inline uint8_t read8(uint8_t *& buffer)
@@ -66,80 +66,6 @@ inline void write64(uint8_t *& buffer, uint64_t value)
     write32(buffer, (uint32_t)(value));
 }
 
-//
-// Deserializing a hardware component
-//
-
-/*
-template <class T>
-size_t deserializeFromBuffer(T& component, uint8_t *buffer)
-{
-    printf("deserializeFromBuffer\n");
-
-    uint8_t *ptr = buffer;
-
-    // Call delegation method
-    ptr += component.willLoadFromBuffer(ptr);
-
-    // Load internal state of all subcomponents
-    for (HardwareComponent *c : component.subComponents) {
-        ptr += c->loadFromBuffer(ptr);
-    }
-
-    // Load internal state of this component
-    ptr += component._loadFromBuffer(ptr);
-
-    // Call delegation method
-    ptr += component.didLoadFromBuffer(ptr);
-
-    // Verify that the number of processed bytes matches the state size
-    if (ptr - buffer != component.stateSize()) {
-        printf("loadFromBuffer: Snapshot size is wrong. Got %ld, expected %zu.",
-              ptr - buffer, component.stateSize());
-        assert(false);
-    }
-
-    return ptr - buffer;
-}
-
-
-//
-// Serialize a hardware component
-//
-
-template <class T>
-size_t serializeToBuffer(T& component, uint8_t *buffer)
-{
-    printf("serializeToBuffer\n");
-
-    uint8_t *ptr = buffer;
-
-    // Call delegation method
-    ptr += component.willSaveToBuffer(ptr);
-
-    // Save internal state of all subcomponents
-    for (HardwareComponent *c : component.subComponents) {
-        ptr += c->saveToBuffer(ptr);
-    }
-
-    // Save internal state of this component
-    ptr += component._save(ptr);
-
-    // Call delegation method
-    ptr += component.didSaveToBuffer(ptr);
-
-    // Verify that the number of written bytes matches the state size
-    if (ptr - buffer != component.stateSize()) {
-        printf("saveToBuffer: Snapshot size is wrong. Got %ld, expected %zu.",
-              ptr - buffer, component.stateSize());
-        assert(false);
-    }
-
-    return ptr - buffer;
-
-}
-*/
-
 
 //
 // Reader (Deserializer)
@@ -186,6 +112,10 @@ public:
     DESERIALIZE64(EventID)
     DESERIALIZE32(SprDMAState)
     DESERIALIZE64(FilterType)
+    DESERIALIZE64(SerialPortDevice)
+    DESERIALIZE64(DriveType)
+    DESERIALIZE32(DriveState)
+    DESERIALIZE32(KeyboardState)
 
     SerReader& operator&(Event &v)
     {
@@ -248,6 +178,10 @@ public:
     SERIALIZE64(EventID)
     SERIALIZE32(SprDMAState)
     SERIALIZE64(FilterType)
+    SERIALIZE64(SerialPortDevice)
+    SERIALIZE64(DriveType)
+    SERIALIZE32(DriveState)
+    SERIALIZE32(KeyboardState)
 
     SerWriter& operator&(Event &v)
     {
@@ -258,9 +192,6 @@ public:
     template <class T, size_t N>
     SerWriter& operator&(T (&v)[N])
     {
-        printf("Writing array of %lu elements\n", N);
-        // uint32_t len = N;
-        // *this & len;
         for(size_t i = 0; i < N; ++i)
             *this & v[i];
         return *this;

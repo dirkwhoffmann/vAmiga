@@ -62,11 +62,12 @@ TOD::_load(uint8_t *buffer)
 {
     debug("_loadFromBuffer\n");
 
-    SerReader r(buffer);
+    SerReader reader(buffer);
 
-    forAllSnapshotItems(r);
+    applyToPersitentItems(reader);
+    applyToResetItems(reader);
 
-    return r.ptr - buffer;
+    return reader.ptr - buffer;
 }
 
 size_t
@@ -74,12 +75,13 @@ TOD::_save(uint8_t *buffer)
 {
     debug("_saveToBuffer\n");
 
-    SerWriter w(buffer);
+    SerWriter writer(buffer);
 
-    forAllSnapshotItems(w);
+    applyToPersitentItems(writer);
+    applyToResetItems(writer);
 
-    debug("%d bytes written\n", w.ptr - buffer);
-    return w.ptr - buffer;
+    debug("%d bytes written\n", writer.ptr - buffer);
+    return writer.ptr - buffer;
 }
 
 CounterInfo

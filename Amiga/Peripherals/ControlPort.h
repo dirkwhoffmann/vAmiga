@@ -42,6 +42,27 @@ public:
 
 
     //
+    // Iterating over snapshot items
+    //
+
+    template <class T>
+    void applyToPersistentItems(T& worker)
+    {
+    }
+
+    template <class T>
+    void applyToResetItems(T& worker)
+    {
+        worker
+
+        & mouseCounterX
+        & mouseCounterY
+        & potX
+        & potY;
+    }
+
+
+    //
     // Methods from HardwareComponent
     //
 
@@ -49,6 +70,9 @@ private:
 
     void _inspect() override;
     void _dump() override;
+    size_t _load(uint8_t *buffer) override;
+    size_t _save(uint8_t *buffer) override;
+
     
     //
     // Reading the internal state

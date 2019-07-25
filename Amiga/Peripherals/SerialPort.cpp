@@ -56,6 +56,30 @@ SerialPort::_dump()
     plainmsg("      port: %X\n", port);
 }
 
+size_t
+SerialPort::_load(uint8_t *buffer)
+{
+    SerReader reader(buffer);
+
+    applyToPersistentItems(reader);
+    applyToResetItems(reader);
+
+    debug(SNAP_DEBUG, "Deserialized from %d bytes\n", reader.ptr - buffer);
+    return reader.ptr - buffer;
+}
+
+size_t
+SerialPort::_save(uint8_t *buffer)
+{
+    SerWriter writer(buffer);
+
+    applyToPersistentItems(writer);
+    applyToResetItems(writer);
+
+    debug(SNAP_DEBUG, "Serialized to %d bytes\n", writer.ptr - buffer);
+    return writer.ptr - buffer;
+}
+
 SerialPortInfo
 SerialPort::getInfo()
 {

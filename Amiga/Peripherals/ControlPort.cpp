@@ -15,6 +15,17 @@ ControlPort::ControlPort(int nr)
     
     this->nr = nr;
     setDescription(nr == 1 ? "ControlPort1" : "ControlPort2");
+
+    // Register snapshot items
+    registerSnapshotItems(vector<SnapshotItem> {
+
+        { &mouseCounterX, sizeof(mouseCounterX), 0 },
+        { &mouseCounterY, sizeof(mouseCounterY), 0 },
+        { &potX,          sizeof(potX),          0 },
+        { &potY,          sizeof(potY),          0 }
+    });
+
+    
 }
 
 void
@@ -48,6 +59,30 @@ ControlPort::_dump()
     plainmsg("         device: %d\n", device);
     plainmsg("  mouseCounterX: %d\n", mouseCounterX);
     plainmsg("  mouseCounterY: %d\n", mouseCounterY);
+}
+
+size_t
+ControlPort::_load(uint8_t *buffer)
+{
+    SerReader reader(buffer);
+
+    applyToPersistentItems(reader);
+    applyToResetItems(reader);
+
+    debug(SNAP_DEBUG, "Deserialized from %d bytes\n", reader.ptr - buffer);
+    return reader.ptr - buffer;
+}
+
+size_t
+ControlPort::_save(uint8_t *buffer)
+{
+    SerWriter writer(buffer);
+
+    applyToPersistentItems(writer);
+    applyToResetItems(writer);
+
+    debug(SNAP_DEBUG, "Serialized to %d bytes\n", writer.ptr - buffer);
+    return writer.ptr - buffer;
 }
 
 ControlPortInfo

@@ -13,16 +13,7 @@
 #include "HardwareComponent.h"
 
 class Keyboard : public HardwareComponent {
-    
-    typedef enum
-    {
-        KB_SEND_SYNC,
-        KB_POWER_UP_KEY_STREAM,
-        KB_TERMINATE_KEY_STREAM,
-        KB_NORMAL_OPERATION
-    }
-    KeyboardState;
-    
+        
     public:
     
     // The keybord layout identifier
@@ -63,6 +54,30 @@ public:
     
     Keyboard();
     
+
+    //
+    // Iterating over snapshot items
+    //
+
+    template <class T>
+    void applyToPersistentItems(T& worker)
+    {
+        worker
+
+        & layout;
+    }
+
+    template <class T>
+    void applyToResetItems(T& worker)
+    {
+        worker
+
+        & state
+        & handshake
+        & typeAheadBuffer
+        & bufferIndex;
+    }
+    
     
     //
     // Methods from HardwareComponent
@@ -70,10 +85,12 @@ public:
     
 private:
     
-     void _powerOn() override;
-     void _reset() override;
-     void _dump() override;
-  
+    void _powerOn() override;
+    void _reset() override;
+    void _dump() override;
+    size_t _load(uint8_t *buffer) override;
+    size_t _save(uint8_t *buffer) override;
+
     
     //
     // Pressing and releasing keys

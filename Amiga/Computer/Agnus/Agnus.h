@@ -446,7 +446,7 @@ public:
     {
         worker
 
-        // & slot // TODO: UNCOMMENT ASAP
+        & slot
         & nextTrigger
 
         & clock

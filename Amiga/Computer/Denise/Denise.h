@@ -171,6 +171,11 @@ public:
     //
 
     template <class T>
+    void applyToPersistentItems(T& worker)
+    {
+    }
+    
+    template <class T>
     void applyToResetItems(T& worker)
     {
         worker

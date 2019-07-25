@@ -77,11 +77,12 @@ UART::_load(uint8_t *buffer)
 {
     debug("_loadFromBuffer\n");
 
-    SerReader read(buffer);
+    SerReader reader(buffer);
 
-    forAllSnashotItems(read);
+    applyToPersistentItems(reader);
+    applyToResetItems(reader);
 
-    return read.ptr - buffer;
+    return reader.ptr - buffer;
 }
 
 size_t
@@ -89,12 +90,13 @@ UART::_save(uint8_t *buffer)
 {
     debug("_saveToBuffer\n");
 
-    SerWriter write(buffer);
+    SerWriter writer(buffer);
 
-    forAllSnashotItems(write);
+    applyToPersistentItems(writer);
+    applyToResetItems(writer);
 
-    debug("%d bytes written\n", write.ptr - buffer);
-    return write.ptr - buffer;
+    debug("%d bytes written\n", writer.ptr - buffer);
+    return writer.ptr - buffer;
 }
 
 UARTInfo

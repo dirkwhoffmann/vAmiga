@@ -14,10 +14,10 @@ StateMachine<nr>::StateMachine()
 {
     // Set description
     switch (nr) {
-        case 0: setDescription("StateMachine 0"); return;
-        case 1: setDescription("StateMachine 1"); return;
-        case 2: setDescription("StateMachine 2"); return;
-        case 3: setDescription("StateMachine 3"); return;
+        case 0: setDescription("StateMachine 0"); break;
+        case 1: setDescription("StateMachine 1"); break;
+        case 2: setDescription("StateMachine 2"); break;
+        case 3: setDescription("StateMachine 3"); break;
         default: assert(false);
     }
 
@@ -70,11 +70,12 @@ StateMachine<nr>::_load(uint8_t *buffer)
 {
     debug("_loadFromBuffer\n");
 
-    SerReader r(buffer);
+    SerReader reader(buffer);
 
-    forAllSnapshotItems(r);
+    applyToPersistentItems(reader);
+    applyToResetItems(reader);
 
-    return r.ptr - buffer;
+    return reader.ptr - buffer;
 }
 
 template <int nr> size_t
@@ -82,12 +83,13 @@ StateMachine<nr>::_save(uint8_t *buffer)
 {
     debug("_saveToBuffer\n");
 
-    SerWriter w(buffer);
+    SerWriter writer(buffer);
 
-    forAllSnapshotItems(w);
+    applyToPersistentItems(writer);
+    applyToResetItems(writer);
 
-    debug("%d bytes written\n", w.ptr - buffer);
-    return w.ptr - buffer;
+    debug("%d bytes written\n", writer.ptr - buffer);
+    return writer.ptr - buffer;
 }
 
 template <int nr> AudioChannelInfo

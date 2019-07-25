@@ -59,7 +59,12 @@ public:
     //
 
     template <class T>
-    void forAllSnashotItems(T& worker)
+    void applyToPersistentItems(T& worker)
+    {
+    }
+    
+    template <class T>
+    void applyToResetItems(T& worker)
     {
         worker
 

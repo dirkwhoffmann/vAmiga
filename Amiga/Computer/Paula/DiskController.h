@@ -117,7 +117,7 @@ public:
     //
 
     template <class T>
-    void applyToPersistantSnapshotItems(T& worker)
+    void applyToPersistentItems(T& worker)
     {
         worker
 
@@ -126,7 +126,7 @@ public:
     }
 
     template <class T>
-    void forAllSnashotItems(T& worker)
+    void applyToResetItems(T& worker)
     {
         worker
 

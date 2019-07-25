@@ -273,15 +273,6 @@ class Amiga : public HardwareComponent {
     //
 
     template <class T>
-    void applyToSubComponents(T& worker)
-    {
-        worker
-
-        & agnus
-        & denise;
-    }
-
-    template <class T>
     void applyToPersistentItems(T& worker)
     {
         worker

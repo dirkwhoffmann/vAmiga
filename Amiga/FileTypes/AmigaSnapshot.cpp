@@ -163,7 +163,6 @@ AmigaSnapshot::makeWithAmiga(Amiga *amiga)
     for (size_t i = 0; i < size; i++) {
         if (ptr[i] != ptr2[i]) {
             printf("Value mismatch at %zu (%d <-> %d)\n", i, ptr[i], ptr2[i]);
-            assert(false);
         }
     }
 
