@@ -101,23 +101,6 @@ Memory::_dump()
     plainmsg("     Fast Ram: %d KB at %p\n", fastRamSize >> 10, fastRam);
 }
 
-/*
-size_t
-Memory::stateSize() const
-{
-    size_t result = HardwareComponent::stateSize();
-    
-    result += sizeof(uint32_t) + bootRomSize;
-    result += sizeof(uint32_t) + kickRomSize;
-    result += sizeof(uint32_t) + extRomSize;
-    result += sizeof(uint32_t) + chipRamSize;
-    result += sizeof(uint32_t) + slowRamSize;
-    result += sizeof(uint32_t) + fastRamSize;
-    
-    return result;
-}
-*/
-
 size_t
 Memory::_size()
 {

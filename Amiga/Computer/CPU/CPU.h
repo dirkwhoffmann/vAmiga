@@ -96,7 +96,6 @@ class CPU : public HardwareComponent {
     void _reset() override { RESET_SNAPSHOT_ITEMS }
     void _inspect() override; 
     void _dump() override;
-    // size_t stateSize() const override;
     size_t _size() override;
     size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS }

@@ -280,12 +280,10 @@ public:
     //
     
     // Returns the size of the internal state in bytes.
-    // virtual size_t stateSize() const; // DEPRECATED
     size_t size();
     virtual size_t _size() = 0;
 
-    /* Loads the internal state from a memory buffer.
-     */
+    // Loads the internal state from a memory buffer.
     size_t load(uint8_t *buffer);
     virtual size_t _load(uint8_t *buffer) = 0;
 
@@ -296,8 +294,7 @@ public:
     virtual size_t willLoadFromBuffer(uint8_t *buffer) { return 0; }
     virtual size_t didLoadFromBuffer(uint8_t *buffer) { return 0; }
     
-    /* Saves the internal state to a memory buffer.
-     */
+    // Saves the internal state to a memory buffer.
     size_t save(uint8_t *buffer);
     virtual size_t _save(uint8_t *buffer) = 0;
 

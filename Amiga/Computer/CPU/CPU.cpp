@@ -218,18 +218,6 @@ CPU::getTracedInstrInfo(long index)
     return result;
 }
 
-/*
-size_t
-CPU::stateSize() const
-{
-    size_t result = HardwareComponent::stateSize();
-    
-    result += m68k_context_size();
-    
-    return result;
-}
-*/
-
 size_t
 CPU::_size()
 {

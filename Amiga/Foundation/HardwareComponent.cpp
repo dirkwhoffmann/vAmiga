@@ -248,20 +248,6 @@ HardwareComponent::clearNonPersistantSnapshotItems()
     }
 }
 
-/*
-size_t
-HardwareComponent::stateSize() const
-{
-    uint32_t result = snapshotSize;
-    
-    for (HardwareComponent *c : subComponents) {
-        result += c->stateSize();
-    }
-
-    return result;
-}
-*/
-
 size_t
 HardwareComponent::size()
 {
@@ -297,7 +283,7 @@ HardwareComponent::load(uint8_t *buffer)
 
     // Verify that the number of written bytes matches the snapshot size
     assert(ptr - buffer == size());
-    // panic("Loaded %d bytes (expected %d)\n", ptr - buffer, stateSize());
+    // panic("Loaded %d bytes (expected %d)\n", ptr - buffer, size());
 
     return ptr - buffer;
 }
@@ -323,7 +309,7 @@ HardwareComponent::save(uint8_t *buffer)
 
     // Verify that the number of written bytes matches the snapshot size
     assert(ptr - buffer == size());
-    // panic("Saved %d bytes (expected %d)\n", ptr - buffer, stateSize());
+    // panic("Saved %d bytes (expected %d)\n", ptr - buffer, size());
 
     return ptr - buffer;
 }
