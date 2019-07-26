@@ -98,7 +98,7 @@ Drive::_load(uint8_t *buffer)
     applyToPersistentItems(reader);
     applyToResetItems(reader);
 
-    debug(SNAP_DEBUG, "Deserialized from %d bytes\n", reader.ptr - buffer);
+    debug(SNAP_DEBUG, "Recreated from %d bytes\n", reader.ptr - buffer);
     return reader.ptr - buffer;
 }
 

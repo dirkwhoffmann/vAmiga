@@ -198,27 +198,24 @@ Denise::getSprInfo(int nr)
 size_t
 Denise::_load(uint8_t *buffer)
 {
-    debug("_loadFromBuffer\n");
-
     SerReader reader(buffer);
 
     applyToPersistentItems(reader);
     applyToResetItems(reader);
 
+    debug(SNAP_DEBUG, "Recreated from %d bytes\n", reader.ptr - buffer);
     return reader.ptr - buffer;
 }
 
 size_t
 Denise::_save(uint8_t *buffer)
 {
-    debug("_saveToBuffer\n");
-
     SerWriter writer(buffer);
 
     applyToPersistentItems(writer);
     applyToResetItems(writer);
 
-    debug("%d bytes written\n", writer.ptr - buffer);
+    debug(SNAP_DEBUG, "Serialized to %d bytes\n", writer.ptr - buffer);
     return writer.ptr - buffer;
 }
 
