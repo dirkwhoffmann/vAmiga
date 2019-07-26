@@ -264,76 +264,6 @@ HardwareComponent::stateSize() const
 }
 
 size_t
-HardwareComponent::loadFromBuffer(uint8_t *buffer)
-{
-    uint8_t *ptr = buffer;
-    
-    debug(3, "    Loading internal state ...\n");
-    
-    // Call delegation method
-    ptr += willLoadFromBuffer(ptr);
-    
-    // Load internal state of all subcomponents
-    for (HardwareComponent *c : subComponents) {
-        ptr += c->loadFromBuffer(ptr);
-    }
-    
-    // Load internal state of this component
-    // ptr += _loadFromBuffer(ptr);
-    for (SnapshotItem i : snapshotItems) {
-
-        switch (i.flags & 0x0F) {
-
-            case 0: // Auto detect
-
-                switch (i.size) {
-                    case 1:  *i.data8  = read8(&ptr);  break;
-                    case 2:  *i.data16 = read16(&ptr); break;
-                    case 4:  *i.data32 = read32(&ptr); break;
-                    case 8:  *i.data64 = read64(&ptr); break;
-                    default: readBlock(&ptr, i.data8, i.size);
-                }
-                break;
-
-            case 1: // Byte array
-
-                readBlock(&ptr, i.data8, i.size);
-                break;
-
-            case 2: // Word array
-
-                readBlock16(&ptr, i.data16, i.size);
-                break;
-
-            case 4: // Double word array
-
-                readBlock32(&ptr, i.data32, i.size);
-                break;
-
-            case 8: // Quad word array
-
-                readBlock64(&ptr, i.data64, i.size);
-                break;
-
-            default:
-                assert(false);
-        }
-    }
-    
-    // Call delegation method
-    ptr += didLoadFromBuffer(ptr);
-    
-    // Verify that the number of processed bytes matches the state size
-    if (ptr - buffer != stateSize()) {
-        panic("loadFromBuffer: Snapshot size is wrong. Got %d, expected %d.",
-              ptr - buffer, stateSize());
-        assert(false);
-    }
-
-    return ptr - buffer;
-}
-
-size_t
 HardwareComponent::loadFromBufferNew(uint8_t *buffer)
 {
     uint8_t *ptr = buffer;
@@ -356,8 +286,8 @@ HardwareComponent::loadFromBufferNew(uint8_t *buffer)
 
     // Verify that the number of processed bytes matches the state size
     if (ptr - buffer != stateSize()) {
-        panic("loadFromBuffer: Snapshot size is wrong. Got %d, expected %d.",
-              ptr - buffer, stateSize());
+        panic("load(%p): Snapshot size is wrong. Got %d, expected %d.",
+              buffer, ptr - buffer, stateSize());
         assert(false);
     }
 
@@ -413,76 +343,6 @@ HardwareComponent::_load(uint8_t *buffer)
 }
 
 size_t
-HardwareComponent::saveToBuffer(uint8_t *buffer)
-{
-    uint8_t *ptr = buffer;
-    
-    debug(4, "    Saving internal state ...\n");
-    
-    // Call delegation method
-    ptr += willSaveToBuffer(ptr);
-    
-    // Save internal state of all subcomponents
-    for (HardwareComponent *c : subComponents) {
-        ptr += c->saveToBuffer(ptr);
-    }
-
-    // Save internal state of this component
-    // ptr += _saveToBuffer(ptr);
-    for (SnapshotItem i : snapshotItems) {
-
-        switch (i.flags & 0x0F) {
-
-            case 0: // Auto detect
-
-                switch (i.size) {
-                    case 1:  write8(&ptr, *i.data8); break;
-                    case 2:  write16(&ptr, *i.data16); break;
-                    case 4:  write32(&ptr, *i.data32); break;
-                    case 8:  write64(&ptr, *i.data64); break;
-                    default: writeBlock(&ptr, i.data8, i.size);
-                }
-                break;
-
-            case 1: // Byte array
-
-                writeBlock(&ptr, i.data8, i.size);
-                break;
-
-            case 2: // Word array
-
-                writeBlock16(&ptr, i.data16, i.size);
-                break;
-
-            case 4: // Double word array
-
-                writeBlock32(&ptr, i.data32, i.size);
-                break;
-
-            case 8: // Quad word array
-
-                writeBlock64(&ptr, i.data64, i.size);
-                break;
-
-            default:
-                assert(false);
-        }
-    }
-
-    // Call delegation method
-    ptr += didSaveToBuffer(ptr);
-    
-    // Verify that the number of written bytes matches the state size
-    if (ptr - buffer != stateSize()) {
-        panic("saveToBuffer: Snapshot size is wrong. Got %d, expected %d.",
-              ptr - buffer, stateSize());
-        assert(false);
-    }
-
-    return ptr - buffer;
-}
-
-size_t
 HardwareComponent::saveToBufferNew(uint8_t *buffer)
 {
     uint8_t *ptr = buffer;
@@ -505,8 +365,8 @@ HardwareComponent::saveToBufferNew(uint8_t *buffer)
 
     // Verify that the number of written bytes matches the state size
     if (ptr - buffer != stateSize()) {
-        panic("saveToBuffer: Snapshot size is wrong. Got %d, expected %d.",
-              ptr - buffer, stateSize());
+        panic("save(%p): Snapshot size is wrong. Got %d, expected %d.",
+              buffer, ptr - buffer, stateSize());
         assert(false);
     }
 
