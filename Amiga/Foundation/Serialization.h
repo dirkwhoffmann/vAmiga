@@ -200,4 +200,64 @@ public:
     }
 };
 
+
+//
+// Resetter
+//
+
+#define RESET(type) \
+SerResetter& operator&(type& v) \
+{ \
+v = (type)0; \
+return *this; \
+}
+
+class SerResetter
+{
+public:
+
+    SerResetter()
+    {
+    }
+
+    RESET(bool)
+    RESET(char)
+    RESET(signed char)
+    RESET(unsigned char)
+    RESET(short)
+    RESET(unsigned short)
+    RESET(int)
+    RESET(unsigned int)
+    RESET(long)
+    RESET(unsigned long)
+    RESET(long long)
+    RESET(unsigned long long)
+    RESET(float)
+    RESET(double)
+    RESET(AmigaModel)
+    RESET(MemorySource)
+    RESET(EventID)
+    RESET(SprDMAState)
+    RESET(FilterType)
+    RESET(SerialPortDevice)
+    RESET(DriveType)
+    RESET(DriveState)
+    RESET(KeyboardState)
+
+    SerResetter& operator&(Event &v)
+    {
+        *this & v.triggerCycle & v.id & v.data;
+        return *this;
+    }
+
+    template <class T, size_t N>
+    SerResetter& operator&(T (&v)[N])
+    {
+        for(size_t i = 0; i < N; ++i) {
+            *this & v[i];
+        }
+        return *this;
+    }
+};
+
 #endif

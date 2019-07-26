@@ -39,8 +39,28 @@ class ZorroManager : public HardwareComponent {
 public:
     
     ZorroManager();
+
     
-    
+    //
+    // Iterating over snapshot items
+    //
+
+    template <class T>
+    void applyToPersistentItems(T& worker)
+    {
+    }
+
+    template <class T>
+    void applyToResetItems(T& worker)
+    {
+        worker
+
+        & autoConfData
+        & fastRamConf
+        & fastRamBaseAddr;
+    }
+
+
     //
     // Methods from HardwareComponent
     //
@@ -50,11 +70,11 @@ private:
     void _initialize() override;
     void _powerOn() override;
     void _powerOff() override;
-    void _reset() override;
     void _ping() override;
     void _dump() override;
-    size_t _load(uint8_t *buffer) override { return 0; }
-    size_t _save(uint8_t *buffer) override { return 0; }
+    void _reset() override { RESET_SNAPSHOT_ITEMS }
+    size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS };
+    size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS };
 
     
 public:

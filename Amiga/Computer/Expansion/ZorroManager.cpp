@@ -42,12 +42,6 @@ ZorroManager::_powerOff()
 }
 
 void
-ZorroManager::_reset()
-{
-    
-}
-
-void
 ZorroManager::_ping()
 {
     

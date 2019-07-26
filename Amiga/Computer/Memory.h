@@ -221,10 +221,7 @@ class Memory : public HardwareComponent {
     size_t stateSize() const override;
     size_t didLoadFromBuffer(uint8_t *buffer) override;
     size_t didSaveToBuffer(uint8_t *buffer) const override;
-
-public:
-
-    size_t _load(uint8_t *buffer) override;
+    size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS };
     size_t _save(uint8_t *buffer) override;
 
     

@@ -75,7 +75,7 @@ class TOD : public HardwareComponent {
     //
 
     template <class T>
-    void applyToPersitentItems(T& worker)
+    void applyToPersistentItems(T& worker)
     {
     }
 
@@ -100,11 +100,9 @@ class TOD : public HardwareComponent {
     void _powerOn() override;
     void _inspect() override;
     void _dump() override;
-
-public:
-
-    size_t _load(uint8_t *buffer) override;
-    size_t _save(uint8_t *buffer) override;
+    void _reset() override { RESET_SNAPSHOT_ITEMS }
+    size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
     
     //

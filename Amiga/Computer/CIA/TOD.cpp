@@ -57,30 +57,6 @@ TOD::_dump()
     msg("\n");
 }
 
-size_t
-TOD::_load(uint8_t *buffer)
-{
-    SerReader reader(buffer);
-
-    applyToPersitentItems(reader);
-    applyToResetItems(reader);
-
-    debug(SNAP_DEBUG, "Recreated from %d bytes\n", reader.ptr - buffer);
-    return reader.ptr - buffer;
-}
-
-size_t
-TOD::_save(uint8_t *buffer)
-{
-    SerWriter writer(buffer);
-
-    applyToPersitentItems(writer);
-    applyToResetItems(writer);
-
-    debug(SNAP_DEBUG, "Serialized to %d bytes\n", writer.ptr - buffer);
-    return writer.ptr - buffer;
-}
-
 CounterInfo
 TOD::getInfo()
 {

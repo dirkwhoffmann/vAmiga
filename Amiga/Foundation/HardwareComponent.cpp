@@ -84,6 +84,7 @@ HardwareComponent::powerOn()
         // Power this component on
         debug(2, "Powering on\n");
         power = true;
+        _reset();
         _powerOn();
     }
 }

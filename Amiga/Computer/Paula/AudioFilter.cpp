@@ -23,18 +23,6 @@ AudioFilter::AudioFilter()
 }
 
 size_t
-AudioFilter::_load(uint8_t *buffer)
-{
-    SerReader reader(buffer);
-
-    applyToPersistentItems(reader);
-    applyToResetItems(reader);
-
-    debug(SNAP_DEBUG, "Recreated from %d bytes\n", reader.ptr - buffer);
-    return reader.ptr - buffer;
-}
-
-size_t
 AudioFilter::_save(uint8_t *buffer)
 {
     SerWriter writer(buffer);

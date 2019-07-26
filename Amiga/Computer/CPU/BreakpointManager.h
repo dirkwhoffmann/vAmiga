@@ -51,6 +51,7 @@ public:
 
 private:
 
+    void _reset(uint8_t *buffer) { }
     size_t _load(uint8_t *buffer) { return 0; }
     size_t _save(uint8_t *buffer) { return 0; }
 

@@ -214,7 +214,7 @@ public:
      * By default, each component resets its subcomponents.
      */
     virtual void reset();
-    virtual void _reset() { }
+    virtual void _reset() { }; // = 0;
     
     /* Asks the component to inform the GUI about its current state.
      * The GUI invokes this function when it needs to update all of its visual
@@ -307,5 +307,28 @@ public:
     virtual size_t willSaveToBuffer(uint8_t *buffer) const {return 0; }
     virtual size_t didSaveToBuffer(uint8_t *buffer) const { return 0; }
 };
+
+//
+// Standard implementations for _reset, _load, and _save
+//
+
+#define RESET_SNAPSHOT_ITEMS \
+SerResetter resetter; \
+applyToResetItems(resetter); \
+debug(SNAP_DEBUG, "Resetted\n");
+
+#define LOAD_SNAPSHOT_ITEMS \
+SerReader reader(buffer); \
+applyToPersistentItems(reader); \
+applyToResetItems(reader); \
+debug(SNAP_DEBUG, "Recreated from %d bytes\n", reader.ptr - buffer); \
+return reader.ptr - buffer; \
+
+#define SAVE_SNAPSHOT_ITEMS \
+SerWriter writer(buffer); \
+applyToPersistentItems(writer); \
+applyToResetItems(writer); \
+debug(SNAP_DEBUG, "Serialized to %d bytes\n", writer.ptr - buffer); \
+return writer.ptr - buffer;
 
 #endif
