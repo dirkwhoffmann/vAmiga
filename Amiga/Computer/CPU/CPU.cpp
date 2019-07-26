@@ -218,6 +218,7 @@ CPU::getTracedInstrInfo(long index)
     return result;
 }
 
+/*
 size_t
 CPU::stateSize() const
 {
@@ -227,6 +228,7 @@ CPU::stateSize() const
     
     return result;
 }
+*/
 
 size_t
 CPU::_size()

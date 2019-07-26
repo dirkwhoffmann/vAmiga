@@ -101,6 +101,7 @@ Memory::_dump()
     plainmsg("     Fast Ram: %d KB at %p\n", fastRamSize >> 10, fastRam);
 }
 
+/*
 size_t
 Memory::stateSize() const
 {
@@ -115,6 +116,7 @@ Memory::stateSize() const
     
     return result;
 }
+*/
 
 size_t
 Memory::_size()

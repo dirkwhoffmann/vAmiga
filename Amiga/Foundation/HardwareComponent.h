@@ -89,7 +89,7 @@ protected:
     vector<SnapshotItem> snapshotItems;
     
     // Snapshot size on disk in bytes (DEPRECATED)
-    unsigned snapshotSize = 0;
+    // unsigned snapshotSize = 0;
 
     /* State model:
      * The virtual hardware components can be in three different states,
@@ -280,7 +280,7 @@ public:
     //
     
     // Returns the size of the internal state in bytes.
-    virtual size_t stateSize() const; // DEPRECATED
+    // virtual size_t stateSize() const; // DEPRECATED
     size_t size();
     virtual size_t _size() = 0;
 

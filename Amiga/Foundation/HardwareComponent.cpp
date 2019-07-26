@@ -233,14 +233,10 @@ void
 HardwareComponent::registerSnapshotItems(vector<SnapshotItem> items) {
     
     snapshotItems = items;
-    snapshotSize = 0;
     
     for (SnapshotItem item : snapshotItems) {
         
         debug(3, "Registering item at address %p", item.data);
-        
-        // Calculate snapshot size
-        snapshotSize += item.size;
     }
 }
 
@@ -252,6 +248,7 @@ HardwareComponent::clearNonPersistantSnapshotItems()
     }
 }
 
+/*
 size_t
 HardwareComponent::stateSize() const
 {
@@ -263,6 +260,7 @@ HardwareComponent::stateSize() const
 
     return result;
 }
+*/
 
 size_t
 HardwareComponent::size()
@@ -297,13 +295,9 @@ HardwareComponent::load(uint8_t *buffer)
     // Call delegation method
     ptr += didLoadFromBuffer(ptr);
 
-    // Verify that the number of processed bytes matches the state size
-    assert(stateSize() == size());
-    if (ptr - buffer != stateSize()) {
-        panic("load(%p): Snapshot size is wrong. Got %d, expected %d.",
-              buffer, ptr - buffer, stateSize());
-        assert(false);
-    }
+    // Verify that the number of written bytes matches the snapshot size
+    assert(ptr - buffer == size());
+    // panic("Loaded %d bytes (expected %d)\n", ptr - buffer, stateSize());
 
     return ptr - buffer;
 }
@@ -312,8 +306,6 @@ size_t
 HardwareComponent::save(uint8_t *buffer)
 {
     uint8_t *ptr = buffer;
-
-    // debug("Saving internal state ...\n");
 
     // Call delegation method
     ptr += willSaveToBuffer(ptr);
@@ -329,13 +321,9 @@ HardwareComponent::save(uint8_t *buffer)
     // Call delegation method
     ptr += didSaveToBuffer(ptr);
 
-    // Verify that the number of written bytes matches the state size
-    assert(stateSize() == size());
-    if (ptr - buffer != stateSize()) {
-        panic("save(%p): Snapshot size is wrong. Got %d, expected %d.",
-              buffer, ptr - buffer, stateSize());
-        assert(false);
-    }
+    // Verify that the number of written bytes matches the snapshot size
+    assert(ptr - buffer == size());
+    // panic("Saved %d bytes (expected %d)\n", ptr - buffer, stateSize());
 
     return ptr - buffer;
 }
