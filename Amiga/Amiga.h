@@ -64,8 +64,8 @@ class Amiga : public HardwareComponent {
     // Information shown in the GUI inspector panel
     AmigaInfo info;
     
-    public:
-        
+public:
+
     /* Inspection target
      * To update the GUI periodically, the emulator schedules this event in the
      * INSPECTOR_SLOT (secondary table) on a periodic basis. If the event is
@@ -74,7 +74,7 @@ class Amiga : public HardwareComponent {
      */
     static EventID inspectionTarget;
     
-    private:
+private:
     
     /* Indicates if the Amiga should be executed in debug mode.
      * Debug mode is enabled when the GUI debugger is opend and disabled when
@@ -89,7 +89,7 @@ class Amiga : public HardwareComponent {
     // Sub components
     //
     
-    public:
+public:
     
     // A Motorola 68000 CPU
     CPU cpu;
@@ -151,7 +151,7 @@ class Amiga : public HardwareComponent {
     // Counters
     //
     
-    public:
+public:
     
     /* The Amiga's master clock
      * This clock runs at 28 MHz and is used to derive all other clock signals.
@@ -163,7 +163,7 @@ class Amiga : public HardwareComponent {
     // Emulator thread
     //
     
-    public:
+public:
     
     /* Run loop control
      * This variable is checked at the end of each runloop iteration. Most of
@@ -174,7 +174,7 @@ class Amiga : public HardwareComponent {
      */
     uint32_t runLoopCtrl = 0;
     
-    private:
+private:
     
     // The invocation counter for implementing suspend() / resume()
     unsigned suspendCounter = 0;
@@ -187,7 +187,7 @@ class Amiga : public HardwareComponent {
     // Emulation speed
     //
     
-    private:
+private:
     
     /* System timer information
      * Used to match the emulation speed with the speed of a real Amiga.
@@ -229,7 +229,7 @@ class Amiga : public HardwareComponent {
     // Snapshot storage
     //
     
-    private:
+private:
     
     // Indicates if snapshots should be taken automatically.
     bool takeAutoSnapshots = true;
@@ -253,7 +253,7 @@ class Amiga : public HardwareComponent {
     // Debugging
     //
     
-    public:
+public:
     
     bool debugDMA = false; // REMOVE AFTER DEBUGGING
     
@@ -262,7 +262,7 @@ class Amiga : public HardwareComponent {
     // Constructing and destructing
     //
     
-    public:
+public:
     
     Amiga();
     ~Amiga();
@@ -325,7 +325,7 @@ class Amiga : public HardwareComponent {
     // Configuring the emulated machine
     //
     
-    public:
+public:
     
     // Returns the currently set configuration.
     AmigaConfiguration getConfig();
@@ -363,7 +363,7 @@ class Amiga : public HardwareComponent {
     // Methods from HardwareComponent
     //
     
-    private:
+private:
 
     void _initialize() override;
     void _powerOn() override;
@@ -376,7 +376,6 @@ class Amiga : public HardwareComponent {
     void _dump() override;
     void _warpOn() override;
     void _warpOff() override;
-    void _setWarp(bool value) override;
 
 public:
     
@@ -388,17 +387,17 @@ public:
     // Reading the internal state
     //
 
-    public:
+public:
 
     // Returns the latest internal state recorded by inspect()
     AmigaInfo getInfo();
- 
+
     
     //
     // Controlling the emulation thread
     //
     
-    public:
+public:
     
     /* Returns true if a call to powerUp() will be successful.
      * An Amiga 500 or Amiga 2000 can be powered up any time (if no original
@@ -439,10 +438,10 @@ public:
     // Accessing the message queue
     //
     
-    public:
+public:
     
     // Registers a listener callback function.
-//     void addListener(const void *sender, void(*func)(const void *, int, long) ) {
+    //     void addListener(const void *sender, void(*func)(const void *, int, long) ) {
     void addListener(const void *sender, Callback func) {
         queue.addListener(sender, func);
     }
@@ -464,7 +463,7 @@ public:
     // Running the emulator
     //
     
-    public:
+public:
     
     // Runs or pauses the emulator
     void stopAndGo() { isRunning() ? pause() : run(); }
@@ -509,32 +508,15 @@ public:
     // Managing emulation speed
     //
     
-    public:
-    
-    /* Getter and setter for 'alwaysWarp'
-     * Side effects:
-     *   setAlwaysWarp sends a notification message if the value changes.
-     */
-    // bool getAlwaysWarp() { return alwaysWarp; }
-    // void setAlwaysWarp(bool value);
-    
-    // Getter and setter for 'warpLoad'
-    // bool getWarpLoad() { return warpLoad; }
-    // void setWarpLoad(bool value) { warpLoad = value; }
-    
-    /* Updates variable 'warp' and returns the new value.
-     * Side effects:
-     *   The function sends a notification message if the value changes.
-     */
-    // bool getWarp();
-    
+public:
+
     /* Restarts the synchronization timer.
      * This function is invoked at launch time to initialize the timer and
      * reinvoked when the synchronization timer got out of sync.
      */
     void restartTimer();
     
-    private:
+private:
     
     // Converts kernel time to nanoseconds.
     uint64_t abs_to_nanos(uint64_t abs) { return abs * tb.numer / tb.denom; }
@@ -551,7 +533,7 @@ public:
      */
     uint64_t frameDelay() { return uint64_t(1000000000) / 50; }
     
-    public:
+public:
     
     /* Puts the emulator thread to sleep.
      * This function makes the emulator thread wait until nanoTargetTime has
@@ -564,7 +546,7 @@ public:
     // Handling snapshots
     //
     
-    public:
+public:
     
     // Returns true if an auto-snapshot should be taken in the current frame.
     bool snapshotIsDue();

@@ -223,23 +223,6 @@ HardwareComponent::warpOff()
 }
 
 void
-HardwareComponent::setWarp(bool value)
-{
-    if (warp != value) {
-        
-        warp = value;
-        
-        // Enable or disable warp mode for all subcomponents
-        for (HardwareComponent *c : subComponents) {
-            c->setWarp(value);
-        }
-        
-        // Enable or disable warp mode for this component
-        _setWarp(value);
-    }
-}
-
-void
 HardwareComponent::registerSubcomponents(vector<HardwareComponent *> components) {
     
     subComponents = components;

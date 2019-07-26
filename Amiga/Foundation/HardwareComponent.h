@@ -253,11 +253,6 @@ public:
     // Switches warp mode off
     void warpOff();
     virtual void _warpOff() { }
-
-
-    // Switches warp mode on or off (DEPRECATED)
-    void setWarp(bool value);
-    virtual void _setWarp(bool value) { }
     
     
     //

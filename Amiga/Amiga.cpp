@@ -693,20 +693,6 @@ Amiga::_save(uint8_t *buffer)
 }
 
 void
-Amiga::_setWarp(bool value) {
-    
-    if (value) {
-        
-        putMessage(MSG_WARP_ON);
-        
-    } else {
-        
-        restartTimer();
-        putMessage(MSG_WARP_OFF);
-    }
-}
-
-void
 Amiga::suspend()
 {
     debug(2, "Suspending (%d)...\n", suspendCounter);

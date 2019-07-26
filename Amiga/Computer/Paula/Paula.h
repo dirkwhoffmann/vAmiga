@@ -124,7 +124,6 @@ private:
     void _dump() override;
     void _warpOn() override;
     void _warpOff() override;
-    void _setWarp(bool value) override;
     size_t _load(uint8_t *buffer) override;
     size_t _save(uint8_t *buffer) override;
 

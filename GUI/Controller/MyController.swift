@@ -344,7 +344,6 @@ class MyController: NSWindowController, MessageReceiver {
         } else {
             amiga.warpOff()
         }
-        // amiga.setWarp(alwaysWarp || (loading && warpLoad))
     }
     
     // Returns the icon of the sand clock in the bottom bar
