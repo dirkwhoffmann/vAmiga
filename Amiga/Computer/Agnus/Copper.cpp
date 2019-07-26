@@ -37,30 +37,6 @@ Copper::_initialize()
 }
 
 void
-Copper::_powerOn()
-{
-    
-}
-
-void
-Copper::_powerOff()
-{
-    
-}
-
-void
-Copper::_reset()
-{
-    
-}
-
-void
-Copper::_ping()
-{
-    
-}
-
-void
 Copper::_inspect()
 {
     // Prevent external access to variable 'info'

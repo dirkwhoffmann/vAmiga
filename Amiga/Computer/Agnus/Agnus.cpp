@@ -278,6 +278,7 @@ Agnus::_dump()
 
     plainmsg("\nDMA time slot allocation:\n\n");
 
+    dumpEvents();
     dumpDMAEventTable();
 }
 

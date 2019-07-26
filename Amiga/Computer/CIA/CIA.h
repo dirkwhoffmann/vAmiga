@@ -558,7 +558,6 @@ class CIAB : public CIA {
 public:
     
     CIAB();
-    void _reset() override;
     void _dump() override;
     
 private:

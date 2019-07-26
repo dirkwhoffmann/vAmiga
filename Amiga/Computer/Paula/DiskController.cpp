@@ -57,18 +57,6 @@ DiskController::_powerOn()
 }
 
 void
-DiskController::_powerOff()
-{
-    
-}
-
-void
-DiskController::_reset()
-{
-    
-}
-
-void
 DiskController::_ping()
 {
     for (int df = 0; df < 4; df++) {

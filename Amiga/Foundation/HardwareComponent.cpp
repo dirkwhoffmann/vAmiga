@@ -61,9 +61,6 @@ HardwareComponent::initialize(Amiga *amiga)
         c->initialize(amiga);
     }
 
-    // Initialize all non-persistant snapshot items with 0
-    clearNonPersistantSnapshotItems();
-
     // Initialize this component
     _initialize();
 }
@@ -78,13 +75,12 @@ HardwareComponent::powerOn()
             c->powerOn();
         }
         
-        // Initialize all non-persistant snapshot items with 0
-        clearNonPersistantSnapshotItems(); 
-        
+        // Reset all non-persistant snapshot items
+        _reset();
+
         // Power this component on
         debug(2, "Powering on\n");
         power = true;
-        _reset();
         _powerOn();
     }
 }
@@ -233,15 +229,18 @@ HardwareComponent::registerSubcomponents(vector<HardwareComponent *> components)
 
 void
 HardwareComponent::registerSnapshotItems(vector<SnapshotItem> items) {
-    
+
+    /*
     snapshotItems = items;
     
     for (SnapshotItem item : snapshotItems) {
         
         debug(3, "Registering item at address %p", item.data);
     }
+    */
 }
 
+/*
 void
 HardwareComponent::clearNonPersistantSnapshotItems()
 {
@@ -249,6 +248,7 @@ HardwareComponent::clearNonPersistantSnapshotItems()
         if ((i.flags & PERSISTANT) == 0) memset(i.data, 0, i.size);
     }
 }
+*/
 
 size_t
 HardwareComponent::size()

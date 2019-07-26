@@ -42,18 +42,6 @@ UART::_powerOn()
 }
 
 void
-UART::_powerOff()
-{
-
-}
-
-void
-UART::_reset()
-{
-
-}
-
-void
 UART::_inspect()
 {
     pthread_mutex_lock(&lock);

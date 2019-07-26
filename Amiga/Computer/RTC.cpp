@@ -33,12 +33,6 @@ RTC::_powerOn()
 }
 
 void
-RTC::_reset()
-{
-    
-}
-
-void
 RTC::_dump()
 {
     for (unsigned i = 0; i < 16; i++) {

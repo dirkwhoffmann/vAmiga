@@ -12,7 +12,7 @@
 CIA::CIA()
 {
 	setDescription("CIA");
-    
+
     subComponents = vector<HardwareComponent *> {
         
         &tod
@@ -1420,11 +1420,6 @@ CIAB::CIAB()
 {
     setDescription("CIAB");
     nr = 1;
-}
-
-void
-CIAB::_reset()
-{
 }
 
 void 

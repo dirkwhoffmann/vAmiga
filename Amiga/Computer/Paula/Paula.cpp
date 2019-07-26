@@ -45,30 +45,6 @@ Paula::_initialize()
 }
 
 void
-Paula::_powerOn()
-{
-
-}
-
-void
-Paula::_powerOff()
-{
-    
-}
-
-void
-Paula::_reset()
-{
-    
-}
-
-void
-Paula::_ping()
-{
-    
-}
-
-void
 Paula::_inspect()
 {
     // Prevent external access to variable 'info'

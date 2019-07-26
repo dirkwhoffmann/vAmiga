@@ -32,12 +32,6 @@ Keyboard::_powerOn()
 }
 
 void
-Keyboard::_reset()
-{
-    
-}
-
-void
 Keyboard::_dump()
 {
     plainmsg("Type ahead buffer: ");

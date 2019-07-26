@@ -86,7 +86,7 @@ protected:
     pthread_mutex_t lock;
 
     // Snapshot items of this component
-    vector<SnapshotItem> snapshotItems;
+    // vector<SnapshotItem> snapshotItems;
     
     // Snapshot size on disk in bytes (DEPRECATED)
     // unsigned snapshotSize = 0;
@@ -271,7 +271,7 @@ public:
     /* Initializes all snapshot items with 0 that are not marked as persistent.
      * This function is called inside initialize() and powerOn().
      */
-    void clearNonPersistantSnapshotItems();
+    // void clearNonPersistantSnapshotItems();
 
 public:
     

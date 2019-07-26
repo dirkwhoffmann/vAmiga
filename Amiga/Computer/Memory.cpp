@@ -72,24 +72,6 @@ Memory::_powerOn()
 }
 
 void
-Memory::_powerOff()
-{
-    
-}
-
-void
-Memory::_reset()
-{
-    
-}
-
-void
-Memory::_ping()
-{
-    
-}
-
-void
 Memory::_dump()
 {
     plainmsg("     Boot Rom: %d KB at %p\n", bootRomSize >> 10, bootRom);

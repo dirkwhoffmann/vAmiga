@@ -93,24 +93,6 @@ Blitter::_powerOn()
 }
 
 void
-Blitter::_powerOff()
-{
-    
-}
-
-void
-Blitter::_reset()
-{
-    
-}
-
-void
-Blitter::_ping()
-{
-    
-}
-
-void
 Blitter::_inspect()
 {
     // Prevent external access to variable 'info'

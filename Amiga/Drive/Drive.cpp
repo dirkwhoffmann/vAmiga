@@ -43,24 +43,6 @@ Drive::Drive(unsigned nr)
 }
 
 void
-Drive::_powerOn()
-{
-
-}
-
-void
-Drive::_powerOff()
-{
-    
-}
-
-void
-Drive::_reset()
-{
-    
-}
-
-void
 Drive::_ping()
 {
     amiga->putMessage(hasDisk() ?

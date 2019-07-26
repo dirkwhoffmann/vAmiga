@@ -153,8 +153,7 @@ private:
     
     void _initialize() override;
     void _powerOn() override;
-    void _powerOff() override;
-    void _reset() override;
+    void _reset() override { RESET_SNAPSHOT_ITEMS }
     void _ping() override;
     void _inspect() override;
     void _dump() override;
