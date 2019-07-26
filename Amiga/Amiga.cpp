@@ -875,7 +875,7 @@ Amiga::loadFromSnapshotUnsafe(AmigaSnapshot *snapshot)
     uint8_t *ptr;
     
     if (snapshot && (ptr = snapshot->getData())) {
-        loadFromBufferNew(ptr);
+        load(ptr);
         // deserializeFromBuffer(*this, ptr);
         ping();
     }

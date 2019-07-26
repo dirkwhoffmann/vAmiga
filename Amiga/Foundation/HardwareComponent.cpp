@@ -264,18 +264,18 @@ HardwareComponent::stateSize() const
 }
 
 size_t
-HardwareComponent::loadFromBufferNew(uint8_t *buffer)
+HardwareComponent::load(uint8_t *buffer)
 {
     uint8_t *ptr = buffer;
 
-    debug(3, "    Loading internal state ...\n");
+    // debug("Loading internal state ...\n");
 
     // Call delegation method
     ptr += willLoadFromBuffer(ptr);
 
     // Load internal state of all subcomponents
     for (HardwareComponent *c : subComponents) {
-        ptr += c->loadFromBufferNew(ptr);
+        ptr += c->load(ptr);
     }
 
     // Load internal state of this component
@@ -343,18 +343,18 @@ HardwareComponent::_load(uint8_t *buffer)
 }
 
 size_t
-HardwareComponent::saveToBufferNew(uint8_t *buffer)
+HardwareComponent::save(uint8_t *buffer)
 {
     uint8_t *ptr = buffer;
 
-    debug(4, "    Saving internal state ...\n");
+    // debug("Saving internal state ...\n");
 
     // Call delegation method
     ptr += willSaveToBuffer(ptr);
 
     // Save internal state of all subcomponents
     for (HardwareComponent *c : subComponents) {
-        ptr += c->saveToBufferNew(ptr);
+        ptr += c->save(ptr);
     }
 
     // Save internal state of this component

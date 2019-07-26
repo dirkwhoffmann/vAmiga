@@ -134,7 +134,7 @@ AmigaSnapshot::makeWithAmiga(Amiga *amiga)
     AmigaSnapshot *snapshot = new AmigaSnapshot(amiga->stateSize());
 
     snapshot->takeScreenshot(amiga);
-    amiga->saveToBufferNew(snapshot->getData());
+    amiga->save(snapshot->getData());
 
     return snapshot;
 }
