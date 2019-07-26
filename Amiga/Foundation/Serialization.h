@@ -126,8 +126,9 @@ public:
     template <class T, size_t N>
     SerReader& operator&(T (&v)[N])
     {
-        for(size_t i = 0; i < N; ++i)
+        for(size_t i = 0; i < N; ++i) {
             *this & v[i];
+        }
         return *this;
     }
 };
@@ -192,8 +193,9 @@ public:
     template <class T, size_t N>
     SerWriter& operator&(T (&v)[N])
     {
-        for(size_t i = 0; i < N; ++i)
+        for(size_t i = 0; i < N; ++i) {
             *this & v[i];
+        }
         return *this;
     }
 };
