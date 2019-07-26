@@ -13,8 +13,7 @@ AudioUnit::AudioUnit()
 {
     setDescription("AudioUnit");
     
-    // Register subcomponents
-    registerSubcomponents(vector<HardwareComponent *> {
+    subComponents = vector<HardwareComponent *> {
 
         &channel0,
         &channel1,
@@ -22,7 +21,7 @@ AudioUnit::AudioUnit()
         &channel3,
         &filterL,
         &filterR
-    });
+    };
 
     // Register snapshot items
     registerSnapshotItems(vector<SnapshotItem> {

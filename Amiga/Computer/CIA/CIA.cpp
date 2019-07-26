@@ -13,11 +13,10 @@ CIA::CIA()
 {
 	setDescription("CIA");
     
-    // Register subcomponents
-    registerSubcomponents(vector<HardwareComponent *> {
+    subComponents = vector<HardwareComponent *> {
         
         &tod
-    });
+    };
     
     // Register snapshot items
     registerSnapshotItems(vector<SnapshotItem> {

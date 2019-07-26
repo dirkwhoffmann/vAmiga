@@ -261,7 +261,7 @@ public:
     /* Registers the subcomponents of this component.
      * This function is called once (in the constructor).
      */
-    void registerSubcomponents(vector<HardwareComponent *> components);
+    // void registerSubcomponents(vector<HardwareComponent *> components);
     
     /* Registers the snapshot items of this component.
      * This function is called once (in the constructor).

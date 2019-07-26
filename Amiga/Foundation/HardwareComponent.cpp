@@ -223,11 +223,13 @@ HardwareComponent::warpOff()
     _warpOff();
 }
 
+/*
 void
 HardwareComponent::registerSubcomponents(vector<HardwareComponent *> components) {
     
     subComponents = components;
 }
+*/
 
 void
 HardwareComponent::registerSnapshotItems(vector<SnapshotItem> items) {

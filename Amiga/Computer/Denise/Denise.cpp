@@ -15,10 +15,10 @@ Denise::Denise()
 {
     setDescription("Denise");
     
-    registerSubcomponents(vector<HardwareComponent *> {
+    subComponents = vector<HardwareComponent *> {
         
         &colorizer,
-    });
+    };
     
     registerSnapshotItems(vector<SnapshotItem> {
         

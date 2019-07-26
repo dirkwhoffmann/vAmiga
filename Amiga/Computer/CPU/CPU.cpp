@@ -85,11 +85,10 @@ CPU::CPU()
 {
     setDescription("CPU");
     
-    // Register subcomponents
-    registerSubcomponents(vector<HardwareComponent *> {
+    subComponents = vector<HardwareComponent *> {
         
         &bpManager,
-    });
+    };
 }
 
 CPU::~CPU()

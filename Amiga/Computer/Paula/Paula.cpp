@@ -12,14 +12,13 @@
 Paula::Paula()
 {
     setDescription("Paula");
-    
-    // Register subcomponents
-    registerSubcomponents(vector<HardwareComponent *> {
+
+    subComponents = vector<HardwareComponent *> {
         
         &audioUnit,
         &diskController,
         &uart
-    });
+    };
     
     // Register snapshot items
     registerSnapshotItems(vector<SnapshotItem> {

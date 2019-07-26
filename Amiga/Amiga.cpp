@@ -61,9 +61,9 @@ void
 Amiga::Amiga()
 {
     setDescription("Amiga");
-    
-    registerSubcomponents(vector<HardwareComponent *> {
-        
+
+    subComponents = vector<HardwareComponent *> {
+
         &cpu,
         &ciaA,
         &ciaB,
@@ -84,7 +84,7 @@ Amiga::Amiga()
         &df1,
         &df2,
         &df3,
-    });
+    };
     
     registerSnapshotItems(vector<SnapshotItem> {
         

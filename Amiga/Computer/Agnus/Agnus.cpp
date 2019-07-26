@@ -13,12 +13,12 @@ Agnus::Agnus()
 {
     setDescription("Agnus");
     
-    registerSubcomponents(vector<HardwareComponent *> {
+    subComponents = vector<HardwareComponent *> {
         
         &copper,
         &blitter,
         &dmaDebugger
-    });
+    };
     
     registerSnapshotItems(vector<SnapshotItem> {
 
