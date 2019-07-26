@@ -48,6 +48,8 @@ public:
 
 private:
 
+    void _reset() override { }
+    size_t _size() override { return 0; }
     size_t _load(uint8_t *buffer) override {return 0; }
     size_t _save(uint8_t *buffer) override { return 0; }
     

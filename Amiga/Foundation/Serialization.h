@@ -66,6 +66,65 @@ inline void write64(uint8_t *& buffer, uint64_t value)
     write32(buffer, (uint32_t)(value));
 }
 
+//
+// Counter (determines the state size)
+//
+
+#define COUNT(type) \
+SerCounter& operator&(type& v) \
+{ \
+count += sizeof(type); \
+return *this; \
+}
+
+class SerCounter
+{
+public:
+
+    size_t count;
+
+    SerCounter() { count = 0; }
+
+    COUNT(bool)
+    COUNT(char)
+    COUNT(signed char)
+    COUNT(unsigned char)
+    COUNT(short)
+    COUNT(unsigned short)
+    COUNT(int)
+    COUNT(unsigned int)
+    COUNT(long)
+    COUNT(unsigned long)
+    COUNT(long long)
+    COUNT(unsigned long long)
+    COUNT(float)
+    COUNT(double)
+    COUNT(AmigaModel)
+    COUNT(MemorySource)
+    COUNT(EventID)
+    COUNT(SprDMAState)
+    COUNT(FilterType)
+    COUNT(SerialPortDevice)
+    COUNT(DriveType)
+    COUNT(DriveState)
+    COUNT(KeyboardState)
+
+    SerCounter& operator&(Event &v)
+    {
+        *this & v.triggerCycle & v.id & v.data;
+        return *this;
+    }
+
+    template <class T, size_t N>
+    SerCounter& operator&(T (&v)[N])
+    {
+        for(size_t i = 0; i < N; ++i) {
+            *this & v[i];
+        }
+        return *this;
+    }
+};
+
 
 //
 // Reader (Deserializer)

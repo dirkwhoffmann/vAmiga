@@ -240,22 +240,6 @@ Agnus::_powerOn()
 }
 
 void
-Agnus::_powerOff()
-{
-    
-}
-void
-Agnus::_reset()
-{
-    
-}
-void
-Agnus::_ping()
-{
-    
-}
-
-void
 Agnus::_inspect()
 {
     // Prevent external access to variable 'info'

@@ -117,6 +117,25 @@ Memory::stateSize() const
 }
 
 size_t
+Memory::_size()
+{
+    SerCounter counter;
+
+    applyToPersistentItems(counter);
+    applyToResetItems(counter);
+
+    counter.count += sizeof(uint32_t) + bootRomSize;
+    counter.count += sizeof(uint32_t) + kickRomSize;
+    counter.count += sizeof(uint32_t) + extRomSize;
+    counter.count += sizeof(uint32_t) + chipRamSize;
+    counter.count += sizeof(uint32_t) + slowRamSize;
+    counter.count += sizeof(uint32_t) + fastRamSize;
+
+    debug(SNAP_DEBUG, "Snapshot size is %d bytes\n", counter.count);
+    return counter.count;
+}
+
+size_t
 Memory::didLoadFromBuffer(uint8_t *buffer)
 {
     uint8_t *ptr = buffer;

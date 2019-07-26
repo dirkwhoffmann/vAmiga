@@ -131,6 +131,7 @@ AmigaSnapshot::makeWithFile(const char *path)
 AmigaSnapshot *
 AmigaSnapshot::makeWithAmiga(Amiga *amiga)
 {
+    assert(amiga->stateSize() == amiga->size());
     AmigaSnapshot *snapshot = new AmigaSnapshot(amiga->stateSize());
 
     snapshot->takeScreenshot(amiga);

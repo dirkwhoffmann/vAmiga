@@ -57,8 +57,10 @@ public:
 
 private:
 
-    size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS };
-    size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS };
+    void _reset() override { RESET_SNAPSHOT_ITEMS }
+    size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
+    size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
 
     //

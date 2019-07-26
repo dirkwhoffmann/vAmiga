@@ -596,7 +596,9 @@ void
 Amiga::_reset()
 {
     msg("Reset\n");
-    
+
+    RESET_SNAPSHOT_ITEMS
+
     amiga->putMessage(MSG_RESET);
     ping();
 }

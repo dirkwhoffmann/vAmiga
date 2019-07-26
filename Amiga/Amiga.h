@@ -290,6 +290,31 @@ public:
         & clockBase;
     }
 
+
+    //
+    // Methods from HardwareComponent
+    //
+
+private:
+
+    void _initialize() override;
+    void _powerOn() override;
+    void _powerOff() override;
+    void _run() override;
+    void _pause() override;
+    void _reset() override;
+    void _ping() override;
+    void _inspect() override;
+    void _dump() override;
+    void _warpOn() override;
+    void _warpOff() override;
+    size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
+    size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS }
+
+    
+public:
+
     /* Makes this Amiga the active emulator instance.
      * Background: Because we only have one CPU core available, we need to
      * share this core among all emulator instances. This means that only one
@@ -357,27 +382,6 @@ public:
     // Configures the compatibility settings (DEPRECATED)
     void configureExactBlitter(bool value);
     void configureFifoBuffering(bool value);
-
-    
-    //
-    // Methods from HardwareComponent
-    //
-    
-private:
-
-    void _initialize() override;
-    void _powerOn() override;
-    void _powerOff() override;
-    void _run() override;
-    void _pause() override;
-    void _reset() override;
-    void _ping() override;
-    void _inspect() override;
-    void _dump() override;
-    void _warpOn() override;
-    void _warpOff() override;
-    size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS };
-    size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS };
 
 
     //

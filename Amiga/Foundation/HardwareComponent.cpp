@@ -265,6 +265,18 @@ HardwareComponent::stateSize() const
 }
 
 size_t
+HardwareComponent::size()
+{
+    size_t result = _size();
+
+    for (HardwareComponent *c : subComponents) {
+        result += c->size();
+    }
+
+    return result;
+}
+
+size_t
 HardwareComponent::load(uint8_t *buffer)
 {
     uint8_t *ptr = buffer;
@@ -286,6 +298,7 @@ HardwareComponent::load(uint8_t *buffer)
     ptr += didLoadFromBuffer(ptr);
 
     // Verify that the number of processed bytes matches the state size
+    assert(stateSize() == size());
     if (ptr - buffer != stateSize()) {
         panic("load(%p): Snapshot size is wrong. Got %d, expected %d.",
               buffer, ptr - buffer, stateSize());
@@ -317,6 +330,7 @@ HardwareComponent::save(uint8_t *buffer)
     ptr += didSaveToBuffer(ptr);
 
     // Verify that the number of written bytes matches the state size
+    assert(stateSize() == size());
     if (ptr - buffer != stateSize()) {
         panic("save(%p): Snapshot size is wrong. Got %d, expected %d.",
               buffer, ptr - buffer, stateSize());

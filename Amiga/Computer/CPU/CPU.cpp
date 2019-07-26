@@ -104,36 +104,6 @@ CPU::_powerOn()
 }
 
 void
-CPU::_powerOff()
-{
-    
-}
-
-void
-CPU::_run()
-{
-    
-}
-
-void
-CPU::_pause()
-{
-    
-}
-
-void
-CPU::_reset()
-{
-    
-}
-
-void
-CPU::_ping()
-{
-    
-}
-
-void
 CPU::_inspect()
 {
     // Prevent external access to variable 'info'
@@ -256,6 +226,20 @@ CPU::stateSize() const
     result += m68k_context_size();
     
     return result;
+}
+
+size_t
+CPU::_size()
+{
+    SerCounter counter;
+
+    applyToPersistentItems(counter);
+    applyToResetItems(counter);
+
+    counter.count += m68k_context_size();
+
+    debug(SNAP_DEBUG, "Snapshot size is %d bytes\n", counter.count);
+    return counter.count;
 }
 
 size_t

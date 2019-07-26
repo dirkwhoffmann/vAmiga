@@ -88,9 +88,9 @@ protected:
     // Snapshot items of this component
     vector<SnapshotItem> snapshotItems;
     
-    // Snapshot size on disk in bytes
+    // Snapshot size on disk in bytes (DEPRECATED)
     unsigned snapshotSize = 0;
-    
+
     /* State model:
      * The virtual hardware components can be in three different states,
      * called 'Off', 'Paused', and 'Running'. The current state is determined
@@ -214,7 +214,7 @@ public:
      * By default, each component resets its subcomponents.
      */
     virtual void reset();
-    virtual void _reset() { }; // = 0;
+    virtual void _reset() = 0;
     
     /* Asks the component to inform the GUI about its current state.
      * The GUI invokes this function when it needs to update all of its visual
@@ -280,8 +280,9 @@ public:
     //
     
     // Returns the size of the internal state in bytes.
-    virtual size_t stateSize() const;
-    // virtual size_t stateSizeNew() const = 0;
+    virtual size_t stateSize() const; // DEPRECATED
+    size_t size();
+    virtual size_t _size() = 0;
 
     /* Loads the internal state from a memory buffer.
      */
@@ -311,6 +312,13 @@ public:
 //
 // Standard implementations for _reset, _load, and _save
 //
+
+#define COMPUTE_SNAPSHOT_SIZE \
+SerCounter counter; \
+applyToPersistentItems(counter); \
+applyToResetItems(counter); \
+debug(SNAP_DEBUG, "Snapshot size is %d bytes\n", counter.count); \
+return counter.count; \
 
 #define RESET_SNAPSHOT_ITEMS \
 SerResetter resetter; \

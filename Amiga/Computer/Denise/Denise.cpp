@@ -93,23 +93,6 @@ Denise::_powerOn()
 }
 
 void
-Denise::_powerOff()
-{
-    
-}
-
-void
-Denise::_reset()
-{
-    
-}
-void
-Denise::_ping()
-{
-    
-}
-
-void
 Denise::_inspect()
 {
     // Prevent external access to variable 'info'
