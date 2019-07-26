@@ -11,7 +11,6 @@
 #define _AMIGACOMPONENT_INC
 
 #include "AmigaObject.h"
-#include "TimeRecorded.h"
 
 //
 // Forward declarations
