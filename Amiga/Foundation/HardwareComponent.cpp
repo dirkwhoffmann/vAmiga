@@ -295,54 +295,6 @@ HardwareComponent::load(uint8_t *buffer)
 }
 
 size_t
-HardwareComponent::_load(uint8_t *buffer)
-{
-    uint8_t *ptr = buffer;
-
-    for (SnapshotItem i : snapshotItems) {
-
-        switch (i.flags & 0x0F) {
-
-            case 0: // Auto detect
-
-                switch (i.size) {
-                    case 1:  *i.data8  = read8(&ptr);  break;
-                    case 2:  *i.data16 = read16(&ptr); break;
-                    case 4:  *i.data32 = read32(&ptr); break;
-                    case 8:  *i.data64 = read64(&ptr); break;
-                    default: readBlock(&ptr, i.data8, i.size);
-                }
-                break;
-
-            case 1: // Byte array
-
-                readBlock(&ptr, i.data8, i.size);
-                break;
-
-            case 2: // Word array
-
-                readBlock16(&ptr, i.data16, i.size);
-                break;
-
-            case 4: // Double word array
-
-                readBlock32(&ptr, i.data32, i.size);
-                break;
-
-            case 8: // Quad word array
-
-                readBlock64(&ptr, i.data64, i.size);
-                break;
-
-            default:
-                assert(false);
-        }
-    }
-
-    return ptr - buffer;
-}
-
-size_t
 HardwareComponent::save(uint8_t *buffer)
 {
     uint8_t *ptr = buffer;
@@ -368,54 +320,6 @@ HardwareComponent::save(uint8_t *buffer)
         panic("save(%p): Snapshot size is wrong. Got %d, expected %d.",
               buffer, ptr - buffer, stateSize());
         assert(false);
-    }
-
-    return ptr - buffer;
-}
-
-size_t
-HardwareComponent::_save(uint8_t *buffer)
-{
-    uint8_t *ptr = buffer;
-
-    for (SnapshotItem i : snapshotItems) {
-
-        switch (i.flags & 0x0F) {
-
-            case 0: // Auto detect
-
-                switch (i.size) {
-                    case 1:  write8(&ptr, *i.data8); break;
-                    case 2:  write16(&ptr, *i.data16); break;
-                    case 4:  write32(&ptr, *i.data32); break;
-                    case 8:  write64(&ptr, *i.data64); break;
-                    default: writeBlock(&ptr, i.data8, i.size);
-                }
-                break;
-
-            case 1: // Byte array
-
-                writeBlock(&ptr, i.data8, i.size);
-                break;
-
-            case 2: // Word array
-
-                writeBlock16(&ptr, i.data16, i.size);
-                break;
-
-            case 4: // Double word array
-
-                writeBlock32(&ptr, i.data32, i.size);
-                break;
-
-            case 8: // Quad word array
-
-                writeBlock64(&ptr, i.data64, i.size);
-                break;
-
-            default:
-                assert(false);
-        }
     }
 
     return ptr - buffer;

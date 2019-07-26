@@ -53,7 +53,9 @@ private:
     void _reset() override;
     void _ping() override;
     void _dump() override;
-    
+    size_t _load(uint8_t *buffer) override { return 0; }
+    size_t _save(uint8_t *buffer) override { return 0; }
+
     
 public:
     

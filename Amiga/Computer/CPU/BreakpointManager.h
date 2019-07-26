@@ -43,7 +43,17 @@ private:
 public:
     
     BreakpointManager();
-    
+
+
+    //
+    // Methods from HardwareComponent
+    //
+
+private:
+
+    size_t _load(uint8_t *buffer) { return 0; }
+    size_t _save(uint8_t *buffer) { return 0; }
+
     
     //
     // Accessing properties

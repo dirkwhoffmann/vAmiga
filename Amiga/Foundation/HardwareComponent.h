@@ -281,11 +281,12 @@ public:
     
     // Returns the size of the internal state in bytes.
     virtual size_t stateSize() const;
-    
+    // virtual size_t stateSizeNew() const = 0;
+
     /* Loads the internal state from a memory buffer.
      */
     size_t load(uint8_t *buffer);
-    virtual size_t _load(uint8_t *buffer);
+    virtual size_t _load(uint8_t *buffer) = 0;
 
     /* Delegation methods called inside load()
      * A component can override this method to add custom behavior if not all
@@ -297,7 +298,7 @@ public:
     /* Saves the internal state to a memory buffer.
      */
     size_t save(uint8_t *buffer);
-    virtual size_t _save(uint8_t *buffer);
+    virtual size_t _save(uint8_t *buffer) = 0;
 
     /* Delegation methods called inside save()
      * A component can override this method to add custom behavior if not all
