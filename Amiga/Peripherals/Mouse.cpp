@@ -44,18 +44,6 @@ Mouse::_dump()
     plainmsg("     shiftY = %d\n", shiftY);
 }
 
-size_t
-Mouse::_save(uint8_t *buffer)
-{
-    SerWriter writer(buffer);
-
-    applyToPersistentItems(writer);
-    applyToResetItems(writer);
-
-    debug(SNAP_DEBUG, "Serialized to %d bytes\n", writer.ptr - buffer);
-    return writer.ptr - buffer;
-}
-
 int64_t
 Mouse::getDeltaX()
 {

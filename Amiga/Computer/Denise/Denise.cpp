@@ -195,18 +195,6 @@ Denise::getSprInfo(int nr)
     return result;
 }
 
-size_t
-Denise::_save(uint8_t *buffer)
-{
-    SerWriter writer(buffer);
-
-    applyToPersistentItems(writer);
-    applyToResetItems(writer);
-
-    debug(SNAP_DEBUG, "Serialized to %d bytes\n", writer.ptr - buffer);
-    return writer.ptr - buffer;
-}
-
 uint16_t
 Denise::peekJOY0DATR()
 {

@@ -64,18 +64,6 @@ AudioUnit::_dump()
 }
 
 size_t
-AudioUnit::_save(uint8_t *buffer)
-{
-    SerWriter writer(buffer);
-
-    applyToPersistentItems(writer);
-    applyToResetItems(writer);
-
-    debug(SNAP_DEBUG, "Serialized to %d bytes\n", writer.ptr - buffer);
-    return writer.ptr - buffer;
-}
-
-size_t
 AudioUnit::didLoadFromBuffer(uint8_t *buffer)
 {
     clearRingbuffer();

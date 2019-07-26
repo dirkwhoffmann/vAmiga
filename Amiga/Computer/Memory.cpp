@@ -193,18 +193,6 @@ Memory::didSaveToBuffer(uint8_t *buffer) const
     return ptr - buffer;
 }
 
-size_t
-Memory::_save(uint8_t *buffer)
-{
-    SerWriter writer(buffer);
-
-    applyToPersistentItems(writer);
-    applyToResetItems(writer);
-
-    debug(SNAP_DEBUG, "Serialized to %d bytes\n", writer.ptr - buffer);
-    return writer.ptr - buffer;
-}
-
 bool
 Memory::alloc(size_t size, uint8_t *&ptrref, size_t &sizeref)
 {

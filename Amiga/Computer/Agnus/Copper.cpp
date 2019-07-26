@@ -95,18 +95,6 @@ Copper::_dump()
     plainmsg("  cop2end: %X\n", cop2end);
 }
 
-size_t
-Copper::_save(uint8_t *buffer)
-{
-    SerWriter writer(buffer);
-
-    applyToPersistentItems(writer);
-    applyToResetItems(writer);
-
-    debug(SNAP_DEBUG, "Serialized to %d bytes\n", writer.ptr - buffer);
-    return writer.ptr - buffer;
-}
-
 CopperInfo
 Copper::getInfo()
 {

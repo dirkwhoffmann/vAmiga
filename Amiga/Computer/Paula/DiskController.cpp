@@ -115,18 +115,6 @@ DiskController::_dump()
     plainmsg("   spinning() : %d\n", spinning());
 }
 
-size_t
-DiskController::_save(uint8_t *buffer)
-{
-    SerWriter writer(buffer);
-
-    applyToPersistentItems(writer);
-    applyToResetItems(writer);
-
-    debug(SNAP_DEBUG, "Serialized to %d bytes\n", writer.ptr - buffer);
-    return writer.ptr - buffer;
-}
-
 bool
 DiskController::spinning(unsigned driveNr)
 {

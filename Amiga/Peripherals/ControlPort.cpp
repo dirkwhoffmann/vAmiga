@@ -61,18 +61,6 @@ ControlPort::_dump()
     plainmsg("  mouseCounterY: %d\n", mouseCounterY);
 }
 
-size_t
-ControlPort::_save(uint8_t *buffer)
-{
-    SerWriter writer(buffer);
-
-    applyToPersistentItems(writer);
-    applyToResetItems(writer);
-
-    debug(SNAP_DEBUG, "Serialized to %d bytes\n", writer.ptr - buffer);
-    return writer.ptr - buffer;
-}
-
 ControlPortInfo
 ControlPort::getInfo()
 {

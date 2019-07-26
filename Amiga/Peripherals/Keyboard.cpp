@@ -47,18 +47,6 @@ Keyboard::_dump()
     plainmsg("\n");
 }
 
-size_t
-Keyboard::_save(uint8_t *buffer)
-{
-    SerWriter writer(buffer);
-
-    applyToPersistentItems(writer);
-    applyToResetItems(writer);
-
-    debug(SNAP_DEBUG, "Serialized to %d bytes\n", writer.ptr - buffer);
-    return writer.ptr - buffer;
-}
-
 void
 Keyboard::sendKeyCode(uint8_t keyCode)
 {

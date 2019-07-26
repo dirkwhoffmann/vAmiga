@@ -65,18 +65,6 @@ StateMachine<nr>::_inspect()
     pthread_mutex_unlock(&lock);
 }
 
-template <int nr> size_t
-StateMachine<nr>::_save(uint8_t *buffer)
-{
-    SerWriter writer(buffer);
-
-    applyToPersistentItems(writer);
-    applyToResetItems(writer);
-
-    debug(SNAP_DEBUG, "Serialized to %d bytes\n", writer.ptr - buffer);
-    return writer.ptr - buffer;
-}
-
 template <int nr> AudioChannelInfo
 StateMachine<nr>::getInfo()
 {

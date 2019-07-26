@@ -47,18 +47,6 @@ RTC::_dump()
     plainmsg("\n");
 }
 
-size_t
-RTC::_save(uint8_t *buffer)
-{
-    SerWriter writer(buffer);
-
-    applyToPersistentItems(writer);
-    applyToResetItems(writer);
-
-    debug(SNAP_DEBUG, "Serialized to %d bytes\n", writer.ptr - buffer);
-    return writer.ptr - buffer;
-}
-
 time_t
 RTC::getTime()
 {

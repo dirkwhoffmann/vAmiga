@@ -665,18 +665,6 @@ Amiga::_warpOff()
     putMessage(MSG_WARP_OFF);
 }
 
-size_t
-Amiga::_save(uint8_t *buffer)
-{
-    SerWriter writer(buffer);
-    
-    applyToPersistentItems(writer);
-    applyToResetItems(writer);
-
-    debug(SNAP_DEBUG, "Serialized to %d bytes\n", writer.ptr - buffer);
-    return writer.ptr - buffer;
-}
-
 void
 Amiga::suspend()
 {

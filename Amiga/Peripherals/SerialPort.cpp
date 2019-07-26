@@ -56,18 +56,6 @@ SerialPort::_dump()
     plainmsg("      port: %X\n", port);
 }
 
-size_t
-SerialPort::_save(uint8_t *buffer)
-{
-    SerWriter writer(buffer);
-
-    applyToPersistentItems(writer);
-    applyToResetItems(writer);
-
-    debug(SNAP_DEBUG, "Serialized to %d bytes\n", writer.ptr - buffer);
-    return writer.ptr - buffer;
-}
-
 SerialPortInfo
 SerialPort::getInfo()
 {

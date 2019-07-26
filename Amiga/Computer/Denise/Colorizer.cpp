@@ -35,18 +35,6 @@ Colorizer::_powerOn()
     updateRGBA();
 }
 
-size_t
-Colorizer::_save(uint8_t *buffer)
-{
-    SerWriter writer(buffer);
-
-    applyToPersistentItems(writer);
-    applyToResetItems(writer);
-
-    debug(SNAP_DEBUG, "Serialized to %d bytes\n", writer.ptr - buffer);
-    return writer.ptr - buffer;
-}
-
 void
 Colorizer::setPalette(Palette p)
 {

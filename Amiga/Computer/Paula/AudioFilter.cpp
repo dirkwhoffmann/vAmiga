@@ -22,18 +22,6 @@ AudioFilter::AudioFilter()
     a1 = a2 = b0 = b1 = b2 = 0.0;
 }
 
-size_t
-AudioFilter::_save(uint8_t *buffer)
-{
-    SerWriter writer(buffer);
-
-    applyToPersistentItems(writer);
-    applyToResetItems(writer);
-
-    debug(SNAP_DEBUG, "Serialized to %d bytes\n", writer.ptr - buffer);
-    return writer.ptr - buffer;
-}
-
 void
 AudioFilter::setFilterType(FilterType type)
 {

@@ -58,7 +58,7 @@ public:
 private:
 
     size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS };
-    size_t _save(uint8_t *buffer) override;
+    size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS };
 
 
     //

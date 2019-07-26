@@ -117,18 +117,6 @@ Paula::_warpOff()
     audioUnit.alignWritePtr();
 }
 
-size_t
-Paula::_save(uint8_t *buffer)
-{
-    SerWriter writer(buffer);
-
-    applyToPersistentItems(writer);
-    applyToResetItems(writer);
-
-    debug(SNAP_DEBUG, "Serialized to %d bytes\n", writer.ptr - buffer);
-    return writer.ptr - buffer;
-}
-
 void
 Paula::pokeINTREQ(uint16_t value)
 {
