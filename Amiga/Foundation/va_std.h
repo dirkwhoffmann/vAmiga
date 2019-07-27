@@ -167,6 +167,7 @@
 // Handling buffers
 //
 
+#if 0
 // Writes a byte value into a buffer.
 inline void write8(uint8_t **ptr, uint8_t value) { *((*ptr)++) = value; }
 
@@ -229,7 +230,7 @@ inline void readBlock32(uint8_t **ptr, uint32_t *values, size_t length) {
 // Reads a quad word block from a buffer in big endian format.
 inline void readBlock64(uint8_t **ptr, uint64_t *values, size_t length) {
     if (length) for (size_t i = 0; i < length / sizeof(uint64_t); i++) values[i] = read64(ptr); }
-
+#endif
 
 //
 // Generating string representations for numbers

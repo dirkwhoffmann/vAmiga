@@ -190,6 +190,13 @@ public:
         }
         return *this;
     }
+
+    void copy(void *dst, size_t n)
+    {
+        memcpy(dst, (void *)ptr, n);
+        ptr += n;
+    }
+
 };
 
 
@@ -219,29 +226,29 @@ public:
     {
     }
 
-    SERIALIZE8(bool)
-    SERIALIZE8(char)
-    SERIALIZE8(signed char)
-    SERIALIZE8(unsigned char)
-    SERIALIZE16(short)
-    SERIALIZE16(unsigned short)
-    SERIALIZE32(int)
-    SERIALIZE32(unsigned int)
-    SERIALIZE64(long)
-    SERIALIZE64(unsigned long)
-    SERIALIZE64(long long)
-    SERIALIZE64(unsigned long long)
-    SERIALIZE32(float)
-    SERIALIZE64(double)
-    SERIALIZE64(AmigaModel)
-    SERIALIZE32(MemorySource)
-    SERIALIZE64(EventID)
-    SERIALIZE32(SprDMAState)
-    SERIALIZE64(FilterType)
-    SERIALIZE64(SerialPortDevice)
-    SERIALIZE64(DriveType)
-    SERIALIZE32(DriveState)
-    SERIALIZE32(KeyboardState)
+    SERIALIZE8(const bool)
+    SERIALIZE8(const char)
+    SERIALIZE8(const signed char)
+    SERIALIZE8(const unsigned char)
+    SERIALIZE16(const short)
+    SERIALIZE16(const unsigned short)
+    SERIALIZE32(const int)
+    SERIALIZE32(const unsigned int)
+    SERIALIZE64(const long)
+    SERIALIZE64(const unsigned long)
+    SERIALIZE64(const long long)
+    SERIALIZE64(const unsigned long long)
+    SERIALIZE32(const float)
+    SERIALIZE64(const double)
+    SERIALIZE64(const AmigaModel)
+    SERIALIZE32(const MemorySource)
+    SERIALIZE64(const EventID)
+    SERIALIZE32(const SprDMAState)
+    SERIALIZE64(const FilterType)
+    SERIALIZE64(const SerialPortDevice)
+    SERIALIZE64(const DriveType)
+    SERIALIZE32(const DriveState)
+    SERIALIZE32(const KeyboardState)
 
     SerWriter& operator&(Event &v)
     {
@@ -257,6 +264,13 @@ public:
         }
         return *this;
     }
+
+    void copy(const void *src, size_t n)
+    {
+        memcpy((void *)ptr, src, n);
+        ptr += n;
+    }
+
 };
 
 

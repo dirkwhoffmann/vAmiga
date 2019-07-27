@@ -91,12 +91,12 @@ Memory::_size()
     applyToPersistentItems(counter);
     applyToResetItems(counter);
 
-    counter.count += sizeof(uint32_t) + bootRomSize;
-    counter.count += sizeof(uint32_t) + kickRomSize;
-    counter.count += sizeof(uint32_t) + extRomSize;
-    counter.count += sizeof(uint32_t) + chipRamSize;
-    counter.count += sizeof(uint32_t) + slowRamSize;
-    counter.count += sizeof(uint32_t) + fastRamSize;
+    counter.count += sizeof(bootRomSize) + bootRomSize;
+    counter.count += sizeof(kickRomSize) + kickRomSize;
+    counter.count += sizeof(extRomSize) + extRomSize;
+    counter.count += sizeof(chipRamSize) + chipRamSize;
+    counter.count += sizeof(slowRamSize) + slowRamSize;
+    counter.count += sizeof(fastRamSize) + fastRamSize;
 
     debug(SNAP_DEBUG, "Snapshot size is %d bytes\n", counter.count);
     return counter.count;
@@ -105,16 +105,17 @@ Memory::_size()
 size_t
 Memory::didLoadFromBuffer(uint8_t *buffer)
 {
-    uint8_t *ptr = buffer;
+    SerReader reader(buffer);
 
     // Load memory size information
-    bootRomSize = (size_t)read32(&ptr);
-    kickRomSize = (size_t)read32(&ptr);
-    extRomSize = (size_t)read32(&ptr);
-    chipRamSize = (size_t)read32(&ptr);
-    slowRamSize = (size_t)read32(&ptr);
-    fastRamSize = (size_t)read32(&ptr);
-    
+    reader
+    & bootRomSize
+    & kickRomSize
+    & extRomSize
+    & chipRamSize
+    & slowRamSize
+    & fastRamSize;
+
     // Do some consistency checks
     // Note: We should do this a little less agressive, e.g., by returning
     // false. Furthermore, the real maximum size limits should be used.
@@ -137,37 +138,37 @@ Memory::didLoadFromBuffer(uint8_t *buffer)
     if (fastRamSize) fastRam = new (std::nothrow) uint8_t[fastRamSize + 3];
 
     // Load memory contents from buffer
-    readBlock(&ptr, bootRom, bootRomSize);
-    readBlock(&ptr, kickRom, kickRomSize);
-    readBlock(&ptr, extRom, extRomSize);
-    readBlock(&ptr, chipRam, chipRamSize);
-    readBlock(&ptr, slowRam, slowRamSize);
-    readBlock(&ptr, fastRam, fastRamSize);
+    reader.copy(bootRom, bootRomSize);
+    reader.copy(kickRom, kickRomSize);
+    reader.copy(extRom, extRomSize);
+    reader.copy(chipRam, chipRamSize);
+    reader.copy(slowRam, slowRamSize);
+    reader.copy(fastRam, fastRamSize);
 
-    return ptr - buffer;
+    return reader.ptr - buffer;
 }
 
 size_t
 Memory::didSaveToBuffer(uint8_t *buffer) const
 {
-    uint8_t *ptr = buffer;
-
     // Save memory size information
-    write32(&ptr, (uint32_t)bootRomSize);
-    write32(&ptr, (uint32_t)kickRomSize);
-    write32(&ptr, (uint32_t)extRomSize);
-    write32(&ptr, (uint32_t)chipRamSize);
-    write32(&ptr, (uint32_t)slowRamSize);
-    write32(&ptr, (uint32_t)fastRamSize);
+    SerWriter writer(buffer);
+    writer
+    & bootRomSize
+    & kickRomSize
+    & extRomSize
+    & chipRamSize
+    & slowRamSize
+    & fastRamSize;
 
     // Save memory contents
-    writeBlock(&ptr, bootRom, bootRomSize);
-    writeBlock(&ptr, kickRom, kickRomSize);
-    writeBlock(&ptr, extRom, extRomSize);
-    writeBlock(&ptr, chipRam, chipRamSize);
-    writeBlock(&ptr, slowRam, slowRamSize);
-    writeBlock(&ptr, fastRam, fastRamSize);
-    
+    writer.copy(bootRom, bootRomSize);
+    writer.copy(kickRom, kickRomSize);
+    writer.copy(extRom, extRomSize);
+    writer.copy(chipRam, chipRamSize);
+    writer.copy(slowRam, slowRamSize);
+    writer.copy(fastRam, fastRamSize);
+
     /*
     debug("bootRomSize = %d\n", bootRomSize);
     debug("kickRomSize = %d\n", kickRomSize);
@@ -176,7 +177,8 @@ Memory::didSaveToBuffer(uint8_t *buffer) const
     debug("slowRamSize = %d\n", slowRamSize);
     debug("fastRamSize = %d\n", fastRamSize);
     */
-    return ptr - buffer;
+
+    return writer.ptr - buffer;
 }
 
 bool

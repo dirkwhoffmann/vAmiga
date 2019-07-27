@@ -234,25 +234,25 @@ CPU::_size()
 size_t
 CPU::didLoadFromBuffer(uint8_t *buffer)
 {
-    uint8_t *ptr = buffer;
+    SerReader reader(buffer);
 
-    uint8_t context[sizeof(m68ki_cpu_core)];
-    readBlock(&ptr, context, m68k_context_size());
+    uint8_t context[m68k_context_size()];
+    reader.copy(context, m68k_context_size());
     m68k_set_context(context);
 
-    return ptr - buffer;
+    return reader.ptr - buffer;
 }
 
 size_t
 CPU::didSaveToBuffer(uint8_t *buffer) const
 {
-    uint8_t *ptr = buffer;
+    SerWriter writer(buffer);
 
-    uint8_t context[sizeof(m68ki_cpu_core)];
+    uint8_t context[m68k_context_size()];
     m68k_get_context(context);
-    writeBlock(&ptr, context, m68k_context_size());
+    writer.copy(context, m68k_context_size());
 
-    return ptr - buffer;
+    return writer.ptr - buffer;
 }
 
 void
