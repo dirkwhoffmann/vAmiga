@@ -13,46 +13,8 @@ CIA::CIA()
 {
 	setDescription("CIA");
 
-    subComponents = vector<HardwareComponent *> {
-        
-        &tod
-    };
-    
-    // Register snapshot items
-    registerSnapshotItems(vector<SnapshotItem> {
-        
-        { &clock,            sizeof(clock),            0 },
-        { &idleCycles,       sizeof(idleCycles),       0 },
-        { &counterA,         sizeof(counterA),         0 },
-        { &latchA,           sizeof(latchA),           0 },
-        { &counterB,         sizeof(counterB),         0 },
-        { &latchB,           sizeof(latchB),           0 },
-        { &delay,            sizeof(delay),            0 },
-        { &feed,             sizeof(feed),             0 },
-        { &CRA,              sizeof(CRA),              0 },
-        { &CRB,              sizeof(CRB),              0 },
-        { &icr,              sizeof(icr),              0 },
-        { &icrAck,           sizeof(icrAck),           0 },
-        { &imr,              sizeof(imr),              0 },
-        { &PB67TimerMode,    sizeof(PB67TimerMode),    0 },
-        { &PB67TimerOut,     sizeof(PB67TimerOut),     0 },
-        { &PB67Toggle,       sizeof(PB67Toggle),       0 },
-        { &PRA,              sizeof(PRA),              0 },
-        { &PRB,              sizeof(PRB),              0 },
-        { &DDRA,             sizeof(DDRA),             0 },
-        { &DDRB,             sizeof(DDRB),             0 },
-        { &PA,               sizeof(PA),               0 },
-        { &PB,               sizeof(PB),               0 },
-        { &SDR,              sizeof(SDR),              0 },
-        { &serClk,           sizeof(serClk),           0 },
-        { &serCounter,       sizeof(serCounter),       0 },
-        { &CNT,              sizeof(CNT),              0 },
-        { &INT,              sizeof(INT),              0 },
-        { &tiredness,        sizeof(tiredness),        0 },
-        { &sleeping,         sizeof(sleeping),         0 },
-        { &wakeUpCycle,      sizeof(wakeUpCycle),      0 },
-        { &sleepCycle,       sizeof(sleepCycle),       0 }});
-    
+    subComponents = vector<HardwareComponent *> { &tod };
+
     PA = 0xFF;
     PB = 0xFF;
 }

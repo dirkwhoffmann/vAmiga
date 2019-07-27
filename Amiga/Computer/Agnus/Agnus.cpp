@@ -20,58 +20,6 @@ Agnus::Agnus()
         &dmaDebugger
     };
     
-    registerSnapshotItems(vector<SnapshotItem> {
-
-        { &slot,            sizeof(slot),            BYTE_ARRAY },
-        { &nextTrigger,     sizeof(nextTrigger),     0 },
-
-        { &clock,                sizeof(clock),                0 },
-        { &frame,                sizeof(frame),                0 },
-        { &pos.v,                sizeof(pos.v),                0 },
-        { &pos.h,                sizeof(pos.h),                0 },
-        { &frameInfo.nr,         sizeof(frameInfo.nr),         0 },
-        { &frameInfo.interlaced, sizeof(frameInfo.interlaced), 0 },
-        { &frameInfo.numLines,   sizeof(frameInfo.numLines),   0 },
-        { &lof,                  sizeof(lof),                  0 },
-        { &dmaStrtLores,         sizeof(dmaStrtLores),         0 },
-        { &dmaStrtHires,         sizeof(dmaStrtHires),         0 },
-        { &dmaStopLores,         sizeof(dmaStopLores),         0 },
-        { &dmaStopHires,         sizeof(dmaStopHires),         0 },
-        { &dmaStrtLoresShift,    sizeof(dmaStrtLoresShift),    0 },
-        { &sprVStrt,             sizeof(sprVStrt),             WORD_ARRAY },
-        { &sprVStop,             sizeof(sprVStop),             WORD_ARRAY },
-        { &sprDmaState,          sizeof(sprDmaState),          DWORD_ARRAY },
-        { &diwHstrt,             sizeof(diwHstrt),             0 },
-        { &diwHstop,             sizeof(diwHstop),             0 },
-        { &diwVstrt,             sizeof(diwVstrt),             0 },
-        { &diwVstop,             sizeof(diwVstop),             0 },
-        { &vFlop,                sizeof(vFlop),                0 },
-        { &hFlop,                sizeof(hFlop),                0 },
-        { &hFlopOn,              sizeof(hFlopOn),              0 },
-        { &hFlopOff,             sizeof(hFlopOff),             0 },
-        { &dmacon,               sizeof(dmacon),               0 },
-        { &dmaDAS,               sizeof(dmaDAS),               0 },
-        { &dskpt,                sizeof(dskpt),                0 },
-        { &diwstrt,              sizeof(diwstrt),              0 },
-        { &diwstop,              sizeof(diwstop),              0 },
-        { &ddfstrt,              sizeof(ddfstrt),              0 },
-        { &ddfstop,              sizeof(ddfstop),              0 },
-        { &ddfstrtReached,       sizeof(ddfstrtReached),       0 },
-        { &ddfstopReached,       sizeof(ddfstopReached),       0 },
-        { &audlc,                sizeof(audlc),                DWORD_ARRAY },
-        { &audlcold,             sizeof(audlcold),             DWORD_ARRAY },
-        { &bplpt,                sizeof(bplpt),                DWORD_ARRAY },
-        { &bpl1mod,              sizeof(bpl1mod),              0 },
-        { &bpl2mod,              sizeof(bpl2mod),              0 },
-        { &sprpt,                sizeof(sprpt),                DWORD_ARRAY },
-        { &activeBitplanes,      sizeof(activeBitplanes),      0 },
-        { &dmaEvent,             sizeof(dmaEvent),             0 },
-        { &nextDmaEvent,         sizeof(nextDmaEvent),         0 },
-        { &dmaFirstBpl1Event,    sizeof(dmaFirstBpl1Event),    0 },
-        { &dmaLastBpl1Event,     sizeof(dmaLastBpl1Event),     0 },
-        { &hsyncActions,         sizeof(hsyncActions),         0 }
-    });
-
     initLookupTables();
 }
 

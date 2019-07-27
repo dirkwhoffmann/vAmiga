@@ -13,11 +13,6 @@ Colorizer::Colorizer()
 {
     setDescription("Colorizer");
     
-    registerSnapshotItems(vector<SnapshotItem> {
-        
-        { &colors,  sizeof(colors),  WORD_ARRAY },
-    });
-
     // Setup some debug colors (in Amiga color format)
     colors[64] = 0x0F00;
     colors[65] = 0x0D00;

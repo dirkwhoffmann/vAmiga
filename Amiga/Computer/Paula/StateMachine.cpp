@@ -20,22 +20,6 @@ StateMachine<nr>::StateMachine()
         case 3: setDescription("StateMachine 3"); break;
         default: assert(false);
     }
-
-    // Register snapshot items
-    registerSnapshotItems(vector<SnapshotItem> {
-
-        { &state,        sizeof(state),        0 },
-
-        { &audlenLatch,  sizeof(audlenLatch),  0 },
-        { &audlen,       sizeof(audlen),       0 },
-        { &audperLatch,  sizeof(audperLatch),  0 },
-        { &audper,       sizeof(audper),       0 },
-        { &audvolLatch,  sizeof(audvolLatch),  0 },
-        { &audvol,       sizeof(audvol),       0 },
-        { &auddatLatch,  sizeof(auddatLatch),  0 },
-        { &auddat,       sizeof(auddat),       0 },
-        { &audlcLatch,   sizeof(audlcLatch),   0 },
-    });
 }
 
 template <int nr> void

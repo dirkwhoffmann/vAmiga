@@ -52,23 +52,7 @@ protected:
         PERSISTANT       = 0x10, // Don't zero out in powerOn()
         
     };
-    
-    /* Fingerprint of a snapshot item
-     */
-    typedef struct {
-        
-        union {
-            void *data;
-            uint8_t *data8;
-            uint16_t *data16;
-            uint32_t *data32;
-            uint64_t *data64;
-        };
-        size_t size;
-        uint8_t flags;
-        
-    } SnapshotItem;
-    
+
 public:
     
     // Reference to the Amiga top-level object
@@ -252,27 +236,8 @@ public:
     // Switches warp mode off
     void warpOff();
     virtual void _warpOff() { }
-    
-    
-    //
-    // Registering snapshot items and subcomponents
-    //
-    
-    /* Registers the subcomponents of this component.
-     * This function is called once (in the constructor).
-     */
-    // void registerSubcomponents(vector<HardwareComponent *> components);
-    
-    /* Registers the snapshot items of this component.
-     * This function is called once (in the constructor).
-     */
-    void registerSnapshotItems(vector<SnapshotItem> items);
 
-    /* Initializes all snapshot items with 0 that are not marked as persistent.
-     * This function is called inside initialize() and powerOn().
-     */
-    // void clearNonPersistantSnapshotItems();
-
+    
 public:
     
     //

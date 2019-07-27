@@ -12,16 +12,6 @@
 RTC::RTC()
 {
     setDescription("RTC");
-    
-    registerSnapshotItems(vector<SnapshotItem> {
-        
-        { &timeDiff,          sizeof(timeDiff),          0},
-        { &reg,               sizeof(reg),               BYTE_ARRAY },
-        { &lastCall,          sizeof(lastCall),          0},
-        { &lastMeasure,       sizeof(lastMeasure),       0},
-        { &lastMeasuredValue, sizeof(lastMeasuredValue), 0},
-    });
-    
 }
 
 void

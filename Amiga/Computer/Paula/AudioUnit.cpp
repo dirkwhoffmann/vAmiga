@@ -22,13 +22,6 @@ AudioUnit::AudioUnit()
         &filterL,
         &filterR
     };
-
-    // Register snapshot items
-    registerSnapshotItems(vector<SnapshotItem> {
-        
-        { &clock,           sizeof(clock),           0 },
-        { &dmaEnabled,      sizeof(dmaEnabled),      0 },
-    });
 }
 
 void

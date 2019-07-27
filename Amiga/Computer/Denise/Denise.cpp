@@ -20,37 +20,6 @@ Denise::Denise()
         &colorizer,
     };
     
-    registerSnapshotItems(vector<SnapshotItem> {
-        
-        { &clock,            sizeof(clock),            0 },
-        { &sprhstrt,         sizeof(sprhstrt),         WORD_ARRAY },
-        { &sprShiftReg,      sizeof(sprShiftReg),      DWORD_ARRAY },
-        { &sprDmaState,      sizeof(sprDmaState),      DWORD_ARRAY },
-        { &attach,           sizeof(attach),           0 },
-        { &armed,            sizeof(armed),            0 },
-
-        { &bplcon0,          sizeof(bplcon0),          0 },
-        { &bplcon1,          sizeof(bplcon1),          0 },
-        { &bplcon2,          sizeof(bplcon2),          0 },
-        { &bpldat,           sizeof(bpldat),           WORD_ARRAY },
-        { &sprdata,          sizeof(sprdata),          WORD_ARRAY },
-        { &sprdatb,          sizeof(sprdatb),          WORD_ARRAY },
-
-        { &shiftReg,         sizeof(shiftReg),         DWORD_ARRAY },
-
-        { &scrollLoresOdd,   sizeof(scrollLoresOdd),   0 },
-        { &scrollLoresEven,  sizeof(scrollLoresEven),  0 },
-        { &scrollHiresOdd,   sizeof(scrollHiresOdd),   0 },
-        { &scrollHiresEven,  sizeof(scrollHiresEven),  0 },
-
-        { &ham,              sizeof(ham),              0 },
-
-        { &firstCanvasPixel, sizeof(firstCanvasPixel), 0 },
-        { &lastCanvasPixel,  sizeof(lastCanvasPixel),  0 },
-        { &currentPixel,     sizeof(currentPixel),     0 },
-
-    });
-
     longFrame1.data = new int[PIXELS];
     longFrame2.data = new int[PIXELS];
     shortFrame1.data = new int[PIXELS];

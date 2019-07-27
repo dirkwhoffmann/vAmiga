@@ -12,12 +12,6 @@
 AudioFilter::AudioFilter()
 {
     setDescription("AudioFilter");
-    
-    // Register snapshot items
-    registerSnapshotItems(vector<SnapshotItem> {
-        
-        { &type,            sizeof(type),            0 },
-    });
 
     a1 = a2 = b0 = b1 = b2 = 0.0;
 }

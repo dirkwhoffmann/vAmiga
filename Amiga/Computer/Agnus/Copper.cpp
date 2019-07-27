@@ -12,20 +12,6 @@
 Copper::Copper()
 {
     setDescription("Copper");
-    
-    registerSnapshotItems(vector<SnapshotItem> {
-        
-        { &copList,   sizeof(copList),   0 },
-        { &skip,      sizeof(skip),      0 },
-        { &cop1lc,    sizeof(cop1lc),    0 },
-        { &cop2lc,    sizeof(cop2lc),    0 },
-        { &cop1end,   sizeof(cop1end),   0 },
-        { &cop2end,   sizeof(cop2end),   0 },
-        { &cdang,     sizeof(cdang),     0 },
-        { &cop1ins,   sizeof(cop1ins),   0 },
-        { &cop2ins,   sizeof(cop2ins),   0 },
-        { &coppc,     sizeof(coppc),     0 },
-    });
 }
 
 void

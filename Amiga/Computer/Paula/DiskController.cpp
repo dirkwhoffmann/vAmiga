@@ -12,27 +12,6 @@
 DiskController::DiskController()
 {
     setDescription("DiskController");
-    
-    // Register snapshot items
-    registerSnapshotItems(vector<SnapshotItem> {
-        
-        { &connected,     sizeof(connected),     BYTE_ARRAY | PERSISTANT },
-        { &fifoBuffering,   sizeof(fifoBuffering),   PERSISTANT },
-
-        { &selected,      sizeof(selected),      0 },
-        { &acceleration,  sizeof(acceleration),  0 },
-        { &state,         sizeof(state),         0 },
-        { &syncFlag,      sizeof(syncFlag),      0 },
-        { &incoming,      sizeof(incoming),      0 },
-        { &incomingCycle, sizeof(incomingCycle), 0 },
-        { &fifo,          sizeof(fifo),          0 },
-        { &fifoCount,     sizeof(fifoCount),     0 },
-        { &dsklen,        sizeof(dsklen),        0 },
-        { &prb,           sizeof(prb),           0 },
-        { &checksum,      sizeof(checksum),      0 },
-        { &checkcnt,      sizeof(checkcnt),      0 },
-
-    });
 }
 
 void

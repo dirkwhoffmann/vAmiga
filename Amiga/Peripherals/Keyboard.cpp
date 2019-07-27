@@ -12,17 +12,6 @@
 Keyboard::Keyboard()
 {
     setDescription("Keyboard");
-    
-    // Register snapshot items
-    registerSnapshotItems(vector<SnapshotItem> {
-        
-        { &layout,          sizeof(layout),          PERSISTANT },
-        
-        { &state,           sizeof(state),           0 },
-        { &handshake,       sizeof(handshake),       0 },
-        { &typeAheadBuffer, sizeof(typeAheadBuffer), BYTE_ARRAY },
-        { &bufferIndex,     sizeof(bufferIndex),     0 },
-    });
 }
 
 void

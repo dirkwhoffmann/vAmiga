@@ -15,16 +15,6 @@ TOD::TOD(CIA *cia)
     debug(3, "    Creating TOD at address %p...\n", this);
     
     this->cia = cia;
-    
-    // Register snapshot items
-    registerSnapshotItems(vector<SnapshotItem> {
-        
-        { &tod.value,        sizeof(tod.value),        0 },
-        { &latch.value,      sizeof(latch.value),      0 },
-        { &alarm.value,      sizeof(alarm.value),      0 },
-        { &frozen,           sizeof(frozen),           0 },
-        { &stopped,          sizeof(stopped),          0 },
-        { &matching,         sizeof(matching),         0 }});
 }
 
 void

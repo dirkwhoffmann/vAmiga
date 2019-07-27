@@ -46,7 +46,7 @@
 #define POT_DEBUG 2         // Potentiometer inputs
 #define KB_DEBUG 1          // Keyboard
 #define OCS_DEBUG 2         // Custom register access violations
-#define SNAP_DEBUG 1        // Snapshot debugging (state serialization)
+#define SNAP_DEBUG 2        // Snapshot debugging (state serialization)
 
 
 // Additional debugging aids (uncomment to enable)

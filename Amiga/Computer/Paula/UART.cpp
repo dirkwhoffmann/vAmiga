@@ -12,19 +12,6 @@
 UART::UART()
 {
     setDescription("UART");
-
-    // Register snapshot items
-    registerSnapshotItems(vector<SnapshotItem> {
-
-        { &serper,            sizeof(serper),            0 },
-        { &receiveBuffer,     sizeof(receiveBuffer),     0 },
-        { &receiveShiftReg,   sizeof(receiveShiftReg),   0 },
-        { &transmitBuffer,    sizeof(transmitBuffer),    0 },
-        { &transmitShiftReg,  sizeof(transmitShiftReg),  0 },
-        { &outBit,            sizeof(outBit),            0 },
-        { &ovrun,             sizeof(ovrun),             0 },
-        { &recCnt,            sizeof(recCnt),            0 },
-    });
 }
 
 void

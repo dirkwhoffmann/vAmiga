@@ -12,12 +12,6 @@
 SerialPort::SerialPort()
 {
     setDescription("SerialPort");
-
-    registerSnapshotItems(vector<SnapshotItem> {
-
-        { &device,        sizeof(device),        PERSISTANT },
-        { &port,          sizeof(port),          0 },
-    });
 }
 
 void

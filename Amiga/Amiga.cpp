@@ -85,16 +85,7 @@ Amiga::Amiga()
         &df2,
         &df3,
     };
-    
-    registerSnapshotItems(vector<SnapshotItem> {
-        
-        { &model,         sizeof(model),         PERSISTANT },
-        { &realTimeClock, sizeof(realTimeClock), PERSISTANT },
-    
-        { &masterClock,   sizeof(masterClock),   0 },
-        { &clockBase,     sizeof(clockBase),     0 },
-    });
-    
+
     // Initialize all components
     initialize(this);
     

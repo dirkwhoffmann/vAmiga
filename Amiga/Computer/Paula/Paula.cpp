@@ -19,23 +19,6 @@ Paula::Paula()
         &diskController,
         &uart
     };
-    
-    // Register snapshot items
-    registerSnapshotItems(vector<SnapshotItem> {
-        
-        { &clock,    sizeof(clock),    0 },
-        
-        { &intreq,   sizeof(intreq),   0 },
-        { &intena,   sizeof(intena),   0 },
-        
-        { &potgo,    sizeof(potgo),    0 },
-        { &potCntX0, sizeof(potCntX0), 0 },
-        { &potCntY0, sizeof(potCntY0), 0 },
-        { &potCntX1, sizeof(potCntX1), 0 },
-        { &potCntY1, sizeof(potCntY1), 0 },
-
-        { &adkcon,   sizeof(adkcon),   0 },
-    });
 }
 
 void

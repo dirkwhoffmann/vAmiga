@@ -18,28 +18,6 @@ Drive::Drive(unsigned nr)
     setDescription(nr == 0 ? "Df0" :
                    nr == 1 ? "Df1" :
                    nr == 2 ? "Df2" : "Df3");
-    
-    registerSnapshotItems(vector<SnapshotItem> {
-
-        // Configuration items
-        { &type,             sizeof(type),             PERSISTANT },
-        { &speed,            sizeof(speed),            PERSISTANT },
-
-        // Internal state items
-        { &idCount,          sizeof(idCount),          0 },
-        { &idBit,            sizeof(idBit),            0 },
-        { &motor,            sizeof(motor),            0 },
-        { &motorOnCycle,     sizeof(motorOnCycle),     0 },
-        { &motorOffCycle,    sizeof(motorOffCycle),    0 },
-        { &dskchange,        sizeof(dskchange),        0 },
-        { &dsklen,           sizeof(dsklen),           0 },
-        { &prb,              sizeof(prb),              0 },
-        { &head.side,        sizeof(head.side),        0 },
-        { &head.cylinder,    sizeof(head.cylinder),    0 },
-        { &head.offset,      sizeof(head.offset),      0 },
-        { &cylinderHistory,  sizeof(cylinderHistory),  0 },
-
-    });
 }
 
 void

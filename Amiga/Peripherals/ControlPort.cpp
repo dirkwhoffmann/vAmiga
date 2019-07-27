@@ -14,18 +14,7 @@ ControlPort::ControlPort(int nr)
     assert(nr == 1 || nr == 2);
     
     this->nr = nr;
-    setDescription(nr == 1 ? "ControlPort1" : "ControlPort2");
-
-    // Register snapshot items
-    registerSnapshotItems(vector<SnapshotItem> {
-
-        { &mouseCounterX, sizeof(mouseCounterX), 0 },
-        { &mouseCounterY, sizeof(mouseCounterY), 0 },
-        { &potX,          sizeof(potX),          0 },
-        { &potY,          sizeof(potY),          0 }
-    });
-
-    
+    setDescription(nr == 1 ? "ControlPort1" : "ControlPort2");    
 }
 
 void

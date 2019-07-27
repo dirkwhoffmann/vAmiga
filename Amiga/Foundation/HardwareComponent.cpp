@@ -219,37 +219,6 @@ HardwareComponent::warpOff()
     _warpOff();
 }
 
-/*
-void
-HardwareComponent::registerSubcomponents(vector<HardwareComponent *> components) {
-    
-    subComponents = components;
-}
-*/
-
-void
-HardwareComponent::registerSnapshotItems(vector<SnapshotItem> items) {
-
-    /*
-    snapshotItems = items;
-    
-    for (SnapshotItem item : snapshotItems) {
-        
-        debug(3, "Registering item at address %p", item.data);
-    }
-    */
-}
-
-/*
-void
-HardwareComponent::clearNonPersistantSnapshotItems()
-{
-    for (SnapshotItem i : snapshotItems) {
-        if ((i.flags & PERSISTANT) == 0) memset(i.data, 0, i.size);
-    }
-}
-*/
-
 size_t
 HardwareComponent::size()
 {

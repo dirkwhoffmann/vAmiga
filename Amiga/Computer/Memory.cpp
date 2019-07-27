@@ -13,13 +13,6 @@
 Memory::Memory()
 {
     setDescription("Memory");
-    
-    registerSnapshotItems(vector<SnapshotItem> {
-
-        { &kickIsWritable,  sizeof(kickIsWritable),  0 },
-        { &memSrc,          sizeof(memSrc),          DWORD_ARRAY },
-        
-    });
 }
 
 Memory::~Memory()

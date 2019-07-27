@@ -12,15 +12,6 @@
 ZorroManager::ZorroManager()
 {
     setDescription("ZorroManager");
-    
-    // Register snapshot items
-    registerSnapshotItems(vector<SnapshotItem> {
-        
-        { &autoConfData,    sizeof(autoConfData),    0 },
-        { &fastRamConf,     sizeof(fastRamConf),     0 },
-        { &fastRamBaseAddr, sizeof(fastRamBaseAddr), 0 },
-        
-    });
 }
 
 void
