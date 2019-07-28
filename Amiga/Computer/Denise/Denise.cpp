@@ -301,13 +301,24 @@ Denise::pokeSPRxDATB(uint16_t value)
     sprdatb[x] = value;
 }
 
+/*
 void
 Denise::pokeCOLORx(int x, uint16_t value)
 {
     assert(x < 32);
     debug(COL_DEBUG, "pokeCOLOR%(%X)\n", x, value);
 
-    colorizer.recordColorRegisterChange(x, value & 0xFFF, 4 * agnus->pos.h);
+    colorizer.recordRegisterChange(0x180 + 2*x, value & 0xFFF, 4 * agnus->pos.h);
+}
+*/
+
+void
+Denise::pokeColorReg(uint32_t addr, uint16_t value)
+{
+    assert(addr >= 0x180 && addr <= 0x1BE && IS_EVEN(addr));
+    debug(COL_DEBUG, "pokeColorReg(%X, %X)\n", addr, value);
+
+    colorizer.recordRegisterChange(addr, value & 0xFFF, 4 * agnus->pos.h);
 }
 
 void

@@ -18,6 +18,7 @@
 using std::vector;
 using std::map;
 using std::pair;
+using std::swap;
 
 /* Base class for all vAmiga objects.
  * This class contains a textual description of the object and offers various

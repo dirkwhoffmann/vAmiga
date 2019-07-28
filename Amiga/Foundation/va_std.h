@@ -142,14 +142,6 @@
 #define UP_TO_NEXT_ODD(x) ((x) | 1)
 #define DOWN_TO_NEXT_ODD(x) ((x) - !((x) & 1))
 
-// Reads a uint16_t or uint32_t from memory in big endian format
-#define READ16_BE(x) (ntohs(*(uint16_t *)(x)))
-#define READ32_BE(x) (ntohl(*(uint32_t *)(x)))
-
-// Write a uint16_t or uint32_t into memory in big endian format
-#define WRITE16_BE(x,y) (*(uint16_t *)(x) = htons(y))
-#define WRITE32_BE(x,y) (*(uint32_t *)(x) = htonl(y))
-
 
 //
 // Performing Amiga specific bit manipulations
@@ -241,29 +233,6 @@ bool matchingBufferHeader(const uint8_t *buffer, const uint8_t *header, size_t l
 //
 // Managing time
 //
-
-
-/* Application launch time in seconds
- * Not used at the moment. Might be needed later for emulating the real-time clock.
- */
-// extern long tv_base;
-
-/* Return the number of elapsed microseconds since program launch.
- * Not used at the moment. Might be needed later for emulating the real-time clock.
- */
- // uint64_t usec();
-
-// Reads the real-time clock (1/10th seconds).
-// uint8_t localTimeSecFrac();
-
-// Reads the real-time clock (seconds).
-// uint8_t localTimeSec();
-
-// Reads the real-time clock (minutes).
-// uint8_t localTimeMin();
-
-// Reads the real-time clock (hours).
-// int8_t localTimeHour();
 
 // Puts the current thread to sleep for a given amout of micro seconds.
 void sleepMicrosec(unsigned usec);

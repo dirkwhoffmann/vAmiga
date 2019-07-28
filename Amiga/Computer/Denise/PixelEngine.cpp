@@ -215,24 +215,39 @@ PixelEngine::computeHAM(uint8_t index)
 }
 
 void
-PixelEngine::recordColorRegisterChange(uint32_t addr, uint16_t value, int16_t pixel) {
+PixelEngine::recordRegisterChange(uint32_t addr, uint16_t value, int16_t pixel) {
 
-    // debug("recordColorRegisterChange(%X, %X, %d)\n", addr, value, pixel);
+    // debug("recordRegisterChange(%X, %X, %d)\n", addr, value, pixel);
 
-    int newPos = colorChangeCount++;
+    int newPos = changeCount++;
 
     // Add new entry
     assert(newPos < 256);
-    colorChanges[newPos].addr = addr;
-    colorChanges[newPos].value = value;
-    colorChanges[newPos].pixel = pixel;
+    changeHistory[newPos].addr = addr;
+    changeHistory[newPos].value = value;
+    changeHistory[newPos].pixel = pixel;
 
-    // Move the new entry to it's correct location (keep the list sorted)
-    while (newPos > 0 && colorChanges[newPos].pixel < colorChanges[newPos - 1].pixel) {
-        RegisterChange swap = colorChanges[newPos];
-        colorChanges[newPos] = colorChanges[newPos - 1];
-        colorChanges[--newPos] = swap;
+    // Keep the list sorted
+    while (newPos > 0 && changeHistory[newPos].pixel < changeHistory[newPos - 1].pixel) {
+
+        swap(changeHistory[newPos], changeHistory[newPos - 1]);
+        newPos--;
     }
+}
+
+void
+PixelEngine::applyRegisterChange(const RegisterChange &change)
+{
+    if (change.addr >= 0x180) {
+
+        // It must be a color register
+        assert(change.addr <= 0x1BE);
+        setColor((change.addr - 0x180) >> 1, change.value);
+        return;
+    }
+
+    panic("Invalid address: %X (value = %X)\n", change.addr, change.value);
+    assert(false);
 }
 
 void
@@ -240,19 +255,21 @@ PixelEngine::translateToRGBA(uint8_t *src, int *dest)
 {
     int pixel = 0;
 
-    // Process recorded color changes
-    for (int change = 0; change < colorChangeCount; change++) {
+    // Iterate over all recorded register changes
+    for (int i = 0; i < changeCount; i++) {
 
-        // Draw a chunk of pixels
-        for (; pixel < colorChanges[change].pixel; pixel++) {
+        RegisterChange &change = changeHistory[i];
+
+        // Draw pixels until the next change happens
+        for (; pixel < change.pixel; pixel++) {
 
             assert(isColorTableIndex(src[pixel]));
             dest[pixel] = rgba[colors[src[pixel]]];
             src[pixel] = 0;
         }
 
-        // Perform the color change
-        setColor(colorChanges[change].addr, colorChanges[change].value);
+        // Perform the register change
+        applyRegisterChange(change);
     }
 
     // Draw the rest of the line
@@ -268,7 +285,8 @@ PixelEngine::translateToRGBA(uint8_t *src, int *dest)
         dest[pixel] = 0x00444444;
     }
 
-    colorChangeCount = 0;
+    // Delete all recorded register changes
+    changeCount = 0;
 }
 
 void
@@ -277,19 +295,19 @@ PixelEngine::translateToRGBA_HAM(uint8_t *src, int *dest)
     int pixel = 0;
 
     // Initialize the HAM color storage with the background color
-    prepareForHAM();
+    hamRGB = colors[0];
 
     // Process recorded color changes
-    for (int change = 0; change < colorChangeCount; change++) {
+    for (int change = 0; change < changeCount; change++) {
 
         // Draw a chunk of pixels
-        for (; pixel < colorChanges[change].pixel; pixel++) {
+        for (; pixel < changeHistory[change].pixel; pixel++) {
             dest[pixel] = rgba[computeHAM(src[pixel])];
             src[pixel] = 0;
         }
 
         // Perform the color change
-        setColor(colorChanges[change].addr, colorChanges[change].value);
+        setColor(changeHistory[change].addr, changeHistory[change].value);
     }
 
     // Draw the rest of the line
@@ -298,5 +316,5 @@ PixelEngine::translateToRGBA_HAM(uint8_t *src, int *dest)
         src[pixel] = 0;
     }
 
-    colorChangeCount = 0;
+    changeCount = 0;
 }

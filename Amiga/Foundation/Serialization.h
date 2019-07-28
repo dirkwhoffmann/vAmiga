@@ -115,6 +115,12 @@ public:
         return *this;
     }
 
+    SerCounter& operator&(RegisterChange &v)
+    {
+        *this & v.addr & v.value & v.pixel;
+        return *this;
+    }
+
     template <class T, size_t N>
     SerCounter& operator&(T (&v)[N])
     {
@@ -179,6 +185,12 @@ public:
     SerReader& operator&(Event &v)
     {
         *this & v.triggerCycle & v.id & v.data;
+        return *this;
+    }
+
+    SerReader& operator&(RegisterChange &v)
+    {
+        *this & v.addr & v.value & v.pixel;
         return *this;
     }
 
@@ -256,6 +268,12 @@ public:
         return *this;
     }
 
+    SerWriter& operator&(RegisterChange &v)
+    {
+        *this & v.addr & v.value & v.pixel;
+        return *this;
+    }
+
     template <class T, size_t N>
     SerWriter& operator&(T (&v)[N])
     {
@@ -320,6 +338,12 @@ public:
     SerResetter& operator&(Event &v)
     {
         *this & v.triggerCycle & v.id & v.data;
+        return *this;
+    }
+
+    SerResetter& operator&(RegisterChange &v)
+    {
+        *this & v.addr & v.value & v.pixel;
         return *this;
     }
 

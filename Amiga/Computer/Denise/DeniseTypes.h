@@ -80,4 +80,12 @@ typedef struct
 }
 DeniseInfo;
 
+typedef struct {
+
+    uint32_t addr;
+    uint16_t value;
+    int16_t pixel;
+}
+RegisterChange;
+
 #endif

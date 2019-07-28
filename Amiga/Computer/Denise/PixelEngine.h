@@ -12,14 +12,6 @@
 
 #include "HardwareComponent.h"
 
-typedef struct {
-
-    uint32_t addr;
-    uint16_t value;
-    int16_t pixel;
-}
-RegisterChange;
-
 class PixelEngine : public HardwareComponent {
     
 private:
@@ -50,13 +42,18 @@ private:
     double saturation = 1.25;
 
 
-    /* Recorded color register changes
-     * The recorded changes are processed in translateToRGBA()
-     */
-    RegisterChange colorChanges[128];
+    //
+    // Register change history
+    //
 
-    // Number of recorded color changes
-    int colorChangeCount = 0;
+    /* Recorded register changes
+     * The change history is recorded by Denise and reset at the end of each
+     * scanline.
+     */
+    RegisterChange changeHistory[128];
+
+    // Number of recorded register changes
+    int changeCount = 0;
     
 
     //
@@ -82,7 +79,9 @@ public:
     {
         worker
 
-        & colors;
+        & colors
+        & changeHistory
+        & changeCount;
     }
 
 
@@ -140,7 +139,7 @@ public:
 
 
     //
-    // Managing the color lookup table
+    // Using the color lookup table
     //
 
 private:
@@ -157,14 +156,20 @@ private:
     //
 
 public:
-    
-    /* Resets the stored RGB value to the background color
-     * This function needs to be called at the beginning of each rasterline.
-     */
-    void prepareForHAM() { hamRGB = colors[0]; }
 
     // Computes the Amiga color value for a color given in HAM format.
     uint16_t computeHAM(uint8_t index);
+
+
+    //
+    // Working with recorded register changes
+    //
+
+    // Records a color register change to be processed in translateToRGBA()
+    void recordRegisterChange(uint32_t addr, uint16_t value, int16_t pixel);
+
+    // Applies a register change
+    void applyRegisterChange(const RegisterChange &change);
 
 
     //
@@ -172,9 +177,6 @@ public:
     //
 
 public:
-
-    // Records a color register change to be processed in translateToRGBA()
-    void recordColorRegisterChange(uint32_t addr, uint16_t value, int16_t pixel);
 
     // Translates bitplane data to RGBA values
     void translateToRGBA(uint8_t *src, int *dest);

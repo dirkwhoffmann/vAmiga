@@ -450,7 +450,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 - (void) pokeColorReg:(NSInteger)reg value:(UInt16)value
 {
-    wrapper->denise->pokeCOLORx(reg, value);
+    wrapper->denise->pokeColorReg(0x180 + 2*reg, value);
 }
 - (double) palette
 {

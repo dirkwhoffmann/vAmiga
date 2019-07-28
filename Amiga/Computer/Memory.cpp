@@ -944,7 +944,7 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
     // debug("pokeCustom16(%X [%s], %X)\n", addr, customReg[(addr >> 1) & 0xFF], value);
 
     assert(IS_EVEN(addr));
-    
+
     switch ((addr >> 1) & 0xFF) {
 
         case 0x020 >> 1: // DSKPTH
@@ -1283,70 +1283,39 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x17E >> 1: // SPR7DATB
             denise->pokeSPRxDATB<7>(value); return;
         case 0x180 >> 1: // COLOR00
-            denise->pokeCOLORx(0, value); return;
         case 0x182 >> 1: // COLOR01
-            denise->pokeCOLORx(1, value); return;
         case 0x184 >> 1: // COLOR02
-            denise->pokeCOLORx(2, value); return;
         case 0x186 >> 1: // COLOR03
-            denise->pokeCOLORx(3, value); return;
         case 0x188 >> 1: // COLOR04
-            denise->pokeCOLORx(4, value); return;
         case 0x18A >> 1: // COLOR05
-            denise->pokeCOLORx(5, value); return;
         case 0x18C >> 1: // COLOR06
-            denise->pokeCOLORx(6, value); return;
         case 0x18E >> 1: // COLOR07
-            denise->pokeCOLORx(7, value); return;
         case 0x190 >> 1: // COLOR08
-            denise->pokeCOLORx(8, value); return;
         case 0x192 >> 1: // COLOR09
-            denise->pokeCOLORx(9, value); return;
         case 0x194 >> 1: // COLOR10
-            denise->pokeCOLORx(10, value); return;
         case 0x196 >> 1: // COLOR11
-            denise->pokeCOLORx(11, value); return;
         case 0x198 >> 1: // COLOR12
-            denise->pokeCOLORx(12, value); return;
         case 0x19A >> 1: // COLOR13
-            denise->pokeCOLORx(13, value); return;
         case 0x19C >> 1: // COLOR14
-            denise->pokeCOLORx(14, value); return;
         case 0x19E >> 1: // COLOR15
-            denise->pokeCOLORx(15, value); return;
         case 0x1A0 >> 1: // COLOR16
-            denise->pokeCOLORx(16, value); return;
         case 0x1A2 >> 1: // COLOR17
-            denise->pokeCOLORx(17, value); return;
         case 0x1A4 >> 1: // COLOR18
-            denise->pokeCOLORx(18, value); return;
         case 0x1A6 >> 1: // COLOR19
-            denise->pokeCOLORx(19, value); return;
         case 0x1A8 >> 1: // COLOR20
-            denise->pokeCOLORx(20, value); return;
         case 0x1AA >> 1: // COLOR21
-            denise->pokeCOLORx(21, value); return;
         case 0x1AC >> 1: // COLOR22
-            denise->pokeCOLORx(22, value); return;
         case 0x1AE >> 1: // COLOR23
-            denise->pokeCOLORx(23, value); return;
         case 0x1B0 >> 1: // COLOR24
-            denise->pokeCOLORx(24, value); return;
         case 0x1B2 >> 1: // COLOR25
-            denise->pokeCOLORx(25, value); return;
         case 0x1B4 >> 1: // COLOR26
-            denise->pokeCOLORx(26, value); return;
         case 0x1B6 >> 1: // COLOR27
-            denise->pokeCOLORx(27, value); return;
         case 0x1B8 >> 1: // COLOR28
-            denise->pokeCOLORx(28, value); return;
         case 0x1BA >> 1: // COLOR29
-            denise->pokeCOLORx(29, value); return;
         case 0x1BC >> 1: // COLOR30
-            denise->pokeCOLORx(30, value); return;
         case 0x1BE >> 1: // COLOR31
-            denise->pokeCOLORx(31, value); return;
-        case 0x1FE >> 1: // COLOR31
+            denise->pokeColorReg(addr & 0x1FF, value); return;
+        case 0x1FE >> 1: // NO-OP (NULL)
             copper->pokeNOOP(value); return;
     }
     

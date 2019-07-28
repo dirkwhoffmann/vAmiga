@@ -286,7 +286,8 @@ public:
     template <int x> void pokeSPRxDATB(uint16_t value);
 
     // OCS registers 0x180, 0x181, ..., 0x1BC, 0x1BE (w)
-    void pokeCOLORx(int x, uint16_t value);
+    // void pokeCOLORx(int x, uint16_t value);
+    void pokeColorReg(uint32_t addr, uint16_t value);
 
     
     //
