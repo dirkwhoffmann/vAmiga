@@ -269,14 +269,9 @@ PixelEngine::translateToRGBA(uint8_t *src, int *dest)
 
         // Draw pixels until the next change happens
         if (denise->bplconDBPLF()) {
-
-            // Dual playfield mode
-            drawDP(src, dest, pixel, change.pixel);
-
+            drawDP(src, dest, pixel, change.pixel); // Dual playfield mode
         } else {
-
-            // Single playfield mode
-            drawSP(src, dest, pixel, change.pixel);
+            drawSP(src, dest, pixel, change.pixel); // Single playfield mode
         }
 
         pixel = change.pixel;
@@ -286,12 +281,20 @@ PixelEngine::translateToRGBA(uint8_t *src, int *dest)
     }
 
     // Draw the rest of the line
+    if (denise->bplconDBPLF()) {
+        drawDP(src, dest, pixel, HPIXELS); // Dual playfield mode
+    } else {
+        drawSP(src, dest, pixel, HPIXELS); // Single playfield mode
+    }
+
+    /*
     for (; pixel <= LAST_PIXEL; pixel++) {
 
         assert(isColorTableIndex(src[pixel]));
         dest[pixel] = rgba[colors[src[pixel]]];
         src[pixel] = 0;
     }
+    */
 
     // Wipe out the HBLANK area
     for (pixel = 4 * 0x0F; pixel <= 4 * 0x35; pixel++) {
@@ -316,10 +319,45 @@ PixelEngine::drawSP(uint8_t *src, int *dest, int from, int to)
 void
 PixelEngine::drawDP(uint8_t *src, int *dest, int from, int to)
 {
+    // Determine playfield priority
+    bool pf2pri = denise->PF2PRI();
+
     for (int i = from; i < to; i++) {
 
-        assert(isColorTableIndex(src[i]));
-        dest[i] = rgba[colors[src[i]]];
+        uint8_t s = src[i];
+
+        /* BPU | Planes in playfield 1 | Planes in playfield 2
+         * ---------------------------------------------------
+         *  1  | Plane 1               | none
+         *  2  | Plane 1               | Plane 2
+         *  3  | Plane 1, 3            | Plane 2
+         *  4  | Plane 1, 3            | Plane 2, 4
+         *  5  | Plane 1, 3, 5         | Plane 2, 4
+         *  6  | Plane 1, 3, 5         | Plane 2, 4, 6
+         */
+
+        // Determine color indices for both playfields
+        uint8_t index1 = ((s & 1) >> 0) | ((s & 4) >> 1) | ((s & 16) >> 2);
+        uint8_t index2 = ((s & 2) >> 1) | ((s & 8) >> 2) | ((s & 32) >> 3);
+
+        // debug("indices %d %d\n", index1, index2);
+        assert(index1 < 8);
+        assert(index2 < 8);
+
+        // If not transparent, PF2 uses color registers 9 and above
+        if (index2) index2 |= 0b1000;
+
+        // Determine final index according to playfield priority
+        uint8_t index;
+        if (pf2pri) {
+            index = index2 ? index2 : index1;
+        } else {
+            index = index1 ? index1 : index2;
+        }
+
+        // Draw the pixel
+        assert(isColorTableIndex(index));
+        dest[i] = rgba[colors[index]];
         src[i] = 0;
     }
 }

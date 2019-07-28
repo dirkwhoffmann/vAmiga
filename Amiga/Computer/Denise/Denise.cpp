@@ -348,7 +348,8 @@ Denise::drawLores(int pixels)
     uint32_t maskOdd = 0x8000 << scrollLoresOdd;
     uint32_t maskEven = 0x8000 << scrollLoresEven;
 
-    if (bplconDBPLF()) {
+    // if (bplconDBPLF()) {
+    if (false) {
 
         //
         // Dual-playfield mode
@@ -418,7 +419,7 @@ Denise::drawLores(int pixels)
             maskOdd >>= 1;
             maskEven >>= 1;
 
-            // Draw two lores pixels
+            // Synthesize two lores pixels
             assert(currentPixel + 1 < sizeof(rasterline));
             rasterline[currentPixel++] = index;
             rasterline[currentPixel++] = index;
@@ -444,8 +445,9 @@ Denise::drawHires(int pixels)
     uint32_t maskOdd = 0x8000 << scrollHiresOdd;
     uint32_t maskEven = 0x8000 << scrollHiresEven;
 
-    if (bplconDBPLF()) {
-
+    // if (bplconDBPLF()) {
+    if (false) {
+        
         //
         // Dual-playfield mode
         //
