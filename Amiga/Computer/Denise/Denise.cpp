@@ -507,11 +507,7 @@ Denise::endOfLine(int vpos)
         drawBorder();
 
         // Synthesize RGBA values and write into the frame buffer
-        if (ham()) {
-            pixelEngine.translateToRGBA_HAM(rasterline, frameBuffer->data + vpos * HPIXELS);
-        } else {
-            pixelEngine.translateToRGBA(rasterline, frameBuffer->data + vpos * HPIXELS);
-        }
+        pixelEngine.translateToRGBA(rasterline, frameBuffer->data + vpos * HPIXELS);
 
         /* Note that Denise has already synthesized pixels that belong to the
          * next DMA line (i.e., the pixels that have been written into the

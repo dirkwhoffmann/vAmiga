@@ -27,9 +27,22 @@ typedef enum : long
 }
 Palette;
 
-inline bool isPalette(Palette model) {
-    return model >= COLOR_PALETTE && model <= SEPIA_PALETTE;
+inline bool isPalette(long value) {
+    return value >= COLOR_PALETTE && value <= SEPIA_PALETTE;
 }
+
+typedef enum
+{
+    MODE_SPF = 0, // Single-playfield mode
+    MODE_DPF,     // Dual-playfield mode
+    MODE_HAM      // Hold-and-modify mode
+}
+DrawingMode;
+
+inline bool isDrawingMode(long value) {
+    return value >= MODE_SPF && value <= MODE_HAM;
+}
+
 
 //
 // Structures

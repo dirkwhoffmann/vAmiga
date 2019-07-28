@@ -108,6 +108,7 @@ public:
     COUNT(DriveType)
     COUNT(DriveState)
     COUNT(KeyboardState)
+    COUNT(DrawingMode)
 
     SerCounter& operator&(Event &v)
     {
@@ -181,6 +182,7 @@ public:
     DESERIALIZE64(DriveType)
     DESERIALIZE32(DriveState)
     DESERIALIZE32(KeyboardState)
+    DESERIALIZE32(DrawingMode)
 
     SerReader& operator&(Event &v)
     {
@@ -261,6 +263,7 @@ public:
     SERIALIZE64(const DriveType)
     SERIALIZE32(const DriveState)
     SERIALIZE32(const KeyboardState)
+    SERIALIZE32(const DrawingMode)
 
     SerWriter& operator&(Event &v)
     {
@@ -334,6 +337,7 @@ public:
     RESET(DriveType)
     RESET(DriveState)
     RESET(KeyboardState)
+    RESET(DrawingMode)
 
     SerResetter& operator&(Event &v)
     {

@@ -249,7 +249,9 @@ PixelEngine::applyRegisterChange(const RegisterChange &change)
         case BPLCON0:
 
             denise->bplcon0 = change.value;
-            ham = denise->ham();
+
+            // Determine drawing mode
+            mode = denise->ham() ? MODE_HAM : denise->dbplf() ? MODE_DPF : MODE_SPF;
             break;
 
         default:
@@ -268,18 +270,21 @@ PixelEngine::translateToRGBA(uint8_t *src, int *dest)
 {
     int pixel = 0;
 
+    // Initialize the HAM color storage with the current background color
+    hamRGB = colors[0];
+
     // Iterate over all recorded register changes
     for (int i = 0; i < changeCount; i++) {
 
         RegisterChange &change = changeHistory[i];
 
         // Draw pixels until the next change happens
-        if (denise->dbplf()) {
-            drawDP(src, dest, pixel, change.pixel); // Dual playfield mode
-        } else {
-            drawSP(src, dest, pixel, change.pixel); // Single playfield mode
+        switch (mode) {
+            case MODE_SPF: drawSPF(src, dest, pixel, change.pixel); break;
+            case MODE_DPF: drawDPF(src, dest, pixel, change.pixel); break;
+            case MODE_HAM: drawHAM(src, dest, pixel, change.pixel); break;
+            default: assert(false);
         }
-
         pixel = change.pixel;
 
         // Perform the register change
@@ -287,20 +292,12 @@ PixelEngine::translateToRGBA(uint8_t *src, int *dest)
     }
 
     // Draw the rest of the line
-    if (denise->dbplf()) {
-        drawDP(src, dest, pixel, HPIXELS); // Dual playfield mode
-    } else {
-        drawSP(src, dest, pixel, HPIXELS); // Single playfield mode
+    switch (mode) {
+        case MODE_SPF: drawSPF(src, dest, pixel, HPIXELS); break;
+        case MODE_DPF: drawDPF(src, dest, pixel, HPIXELS); break;
+        case MODE_HAM: drawHAM(src, dest, pixel, HPIXELS); break;
+        default: assert(false);
     }
-
-    /*
-    for (; pixel <= LAST_PIXEL; pixel++) {
-
-        assert(isColorTableIndex(src[pixel]));
-        dest[pixel] = rgba[colors[src[pixel]]];
-        src[pixel] = 0;
-    }
-    */
 
     // Wipe out the HBLANK area
     for (pixel = 4 * 0x0F; pixel <= 4 * 0x35; pixel++) {
@@ -312,43 +309,28 @@ PixelEngine::translateToRGBA(uint8_t *src, int *dest)
 }
 
 void
-PixelEngine::drawSP(uint8_t *src, int *dest, int from, int to)
+PixelEngine::drawSPF(uint8_t *src, int *dst, int from, int to)
 {
     for (int i = from; i < to; i++) {
 
         assert(isColorTableIndex(src[i]));
-        dest[i] = rgba[colors[src[i]]];
+        dst[i] = rgba[colors[src[i]]];
         src[i] = 0;
     }
 }
 
 void
-PixelEngine::drawDP(uint8_t *src, int *dest, int from, int to)
+PixelEngine::drawDPF(uint8_t *src, int *dst, int from, int to)
 {
     // Determine playfield priority
     bool pf2pri = denise->PF2PRI();
 
     for (int i = from; i < to; i++) {
 
-        uint8_t s = src[i];
-
-        /* BPU | Planes in playfield 1 | Planes in playfield 2
-         * ---------------------------------------------------
-         *  1  | Plane 1               | none
-         *  2  | Plane 1               | Plane 2
-         *  3  | Plane 1, 3            | Plane 2
-         *  4  | Plane 1, 3            | Plane 2, 4
-         *  5  | Plane 1, 3, 5         | Plane 2, 4
-         *  6  | Plane 1, 3, 5         | Plane 2, 4, 6
-         */
-
         // Determine color indices for both playfields
+        uint8_t s = src[i];
         uint8_t index1 = ((s & 1) >> 0) | ((s & 4) >> 1) | ((s & 16) >> 2);
         uint8_t index2 = ((s & 2) >> 1) | ((s & 8) >> 2) | ((s & 32) >> 3);
-
-        // debug("indices %d %d\n", index1, index2);
-        assert(index1 < 8);
-        assert(index2 < 8);
 
         // If not transparent, PF2 uses color registers 9 and above
         if (index2) index2 |= 0b1000;
@@ -361,15 +343,26 @@ PixelEngine::drawDP(uint8_t *src, int *dest, int from, int to)
             index = index1 ? index1 : index2;
         }
 
-        // Draw the pixel
         assert(isColorTableIndex(index));
-        dest[i] = rgba[colors[index]];
+        dst[i] = rgba[colors[index]];
         src[i] = 0;
     }
 }
 
 void
-PixelEngine::translateToRGBA_HAM(uint8_t *src, int *dest)
+PixelEngine::drawHAM(uint8_t *src, int *dst, int from, int to)
+{
+    for (int i = from; i < to; i++) {
+
+        assert(isColorTableIndex(src[i]));
+        dst[i] = rgba[computeHAM(src[i])];
+        src[i] = 0;
+    }
+}
+
+/*
+void
+PixelEngine::translateToRGBA_HAM(uint8_t *src, int *dst)
 {
     int pixel = 0;
 
@@ -381,7 +374,7 @@ PixelEngine::translateToRGBA_HAM(uint8_t *src, int *dest)
 
         // Draw a chunk of pixels
         for (; pixel < changeHistory[change].pixel; pixel++) {
-            dest[pixel] = rgba[computeHAM(src[pixel])];
+            dst[pixel] = rgba[computeHAM(src[pixel])];
             src[pixel] = 0;
         }
 
@@ -391,9 +384,10 @@ PixelEngine::translateToRGBA_HAM(uint8_t *src, int *dest)
 
     // Draw the rest of the line
     for (; pixel <= LAST_PIXEL; pixel++) {
-        dest[pixel] = rgba[computeHAM(src[pixel])];
+        dst[pixel] = rgba[computeHAM(src[pixel])];
         src[pixel] = 0;
     }
 
     changeCount = 0;
 }
+*/

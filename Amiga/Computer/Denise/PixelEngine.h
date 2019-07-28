@@ -36,8 +36,8 @@ private:
     // The most recently computed HAM pixel in Amiga RGB format
     uint16_t hamRGB;
 
-    // Indicates if HAM mode is active
-    bool ham;
+    // The current drawing mode
+    DrawingMode mode;
 
 
     //
@@ -88,7 +88,7 @@ public:
         worker
 
         & colors
-        & ham
+        & mode
         & changeHistory
         & changeCount;
     }
@@ -190,13 +190,29 @@ public:
 
     // Translates bitplane data to RGBA values
     void translateToRGBA(uint8_t *src, int *dest);
-    void translateToRGBA_HAM(uint8_t *src, int *dest);
+    // void translateToRGBA_HAM(uint8_t *src, int *dest);
 
-    // Draws a chunk of pixels in single-playfield mode
-    void drawSP(uint8_t *src, int *dest, int from, int to);
-
-    // Draws a chunk of pixels in dual-playfield mode
-    void drawDP(uint8_t *src, int *dest, int from, int to);
+    /* Draws a chunk of pixels.
+     * There are three variants of this function:
+     *
+     *     drawSP:  Draws in single-playfield mode
+     *     drawDP:  Draws in dual-playfield mode
+     *     drawHAM: Draws in HAM mode
+     *
+     * Parameters:
+     *
+     *     src:     Pointer to a buffer storing color indices
+     *     dst:     Pointer to a buffer storing RGBA values
+     *     from:    First pixel to draw
+     *     to:      Last pixel to draw + 1
+     *
+     * Side effects:
+     *
+     *     The source buffer is cleared (0 is written)
+     */
+    void drawSPF(uint8_t *src, int *dst, int from, int to);
+    void drawDPF(uint8_t *src, int *dst, int from, int to);
+    void drawHAM(uint8_t *src, int *dst, int from, int to);
 
 };
 
