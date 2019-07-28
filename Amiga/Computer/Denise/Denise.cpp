@@ -179,16 +179,20 @@ Denise::pokeBPLCON0(uint16_t value)
 {
     debug(BPL_DEBUG, "pokeBPLCON0(%X)\n", value);
 
-    if (bplcon0 != value) {
-
-        pokeBPLCON0(bplcon0, value);
-        bplcon0 = value;
-    }
+    // Only proceed if the value changes
+    if (bplcon0 != value) pokeBPLCON0(bplcon0, value);
 }
 
 void
 Denise::pokeBPLCON0(uint16_t oldValue, uint16_t newValue)
 {
+    // Schedule the register to be updated inside the pixel engine
+    colorizer.recordRegisterChange(BPLCON0, newValue, 4 * agnus->pos.h + 4);
+
+    //
+    // TODO: Move this to PixelEngine::applyRegisterUpdate()
+    //
+
     /* "Bit 11 of register BPLCON0 selects hold-and-modify mode. The following
      *  bits in BPLCONO must be set for hold-and-modify mode to be active:
      *
@@ -198,8 +202,6 @@ Denise::pokeBPLCON0(uint16_t oldValue, uint16_t newValue)
      *      - Bits BPU2, BPU1, and BPUO - bits 14, 13, and 12, are 101 or 110
      *        (five or six bit-planes active)." [HRM]
      */
-
-    // Check for dual playfield mode
 
     // Check for HAM mode
     uint8_t bpu = (newValue >> 12) & 0b111;

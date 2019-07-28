@@ -244,17 +244,22 @@ PixelEngine::recordRegisterChange(uint32_t addr, uint16_t value, int16_t pixel) 
 void
 PixelEngine::applyRegisterChange(const RegisterChange &change)
 {
-    if (change.addr >= 0x180) {
+    switch (change.addr) {
 
-        // It must be a color register
-        assert(change.addr <= 0x1BE);
-        // debug("Changing color reg %d to %X\n", (change.addr - 0x180) >> 1, change.value);
-        setColor((change.addr - 0x180) >> 1, change.value);
-        return;
+        case BPLCON0:
+
+            denise->bplcon0 = change.value;
+            break;
+
+        default:
+
+            // It must be a color register then
+            assert(change.addr >= 0x180 && change.addr <= 0x1BE);
+
+            // debug("Changing color reg %d to %X\n", (change.addr - 0x180) >> 1, change.value);
+            setColor((change.addr - 0x180) >> 1, change.value);
+            break;
     }
-
-    panic("Invalid address: %X (value = %X)\n", change.addr, change.value);
-    assert(false);
 }
 
 void
