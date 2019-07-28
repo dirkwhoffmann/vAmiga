@@ -1430,26 +1430,21 @@ Agnus::pokeSPRxPTL(uint16_t value)
 }
 
 void
-Agnus::addBPLxMOD()
+Agnus::pokeBPLCON0(uint16_t value)
 {
-    // Add bpl2mod is added to all active even bitplane pointers
-    // Add blp1mod is added to all active odd bitplane pointers
-    
-    switch (activeBitplanes) {
-        case 6: INC_OCS_PTR(bplpt[5], bpl2mod); // fallthrough
-        case 5: INC_OCS_PTR(bplpt[4], bpl1mod); // fallthrough
-        case 4: INC_OCS_PTR(bplpt[3], bpl2mod); // fallthrough
-        case 3: INC_OCS_PTR(bplpt[2], bpl1mod); // fallthrough
-        case 2: INC_OCS_PTR(bplpt[1], bpl2mod); // fallthrough
-        case 1: INC_OCS_PTR(bplpt[0], bpl1mod);
+    debug(DMA_DEBUG, "pokeBPLCON0(%X)\n", value);
+
+    if (bplcon0 != value) {
+
+        pokeBPLCON0(bplcon0, value);
+        bplcon0 = value;
     }
 }
 
 void
 Agnus::pokeBPLCON0(uint16_t oldValue, uint16_t newValue)
 {
-    // Only continue if the value has changed
-    if (oldValue == newValue) return;
+    assert(oldValue != newValue);
 
     // Update the DMA allocation table in the next rasterline
     hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;

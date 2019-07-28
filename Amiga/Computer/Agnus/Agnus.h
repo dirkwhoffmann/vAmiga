@@ -331,7 +331,10 @@ public:
     //
     // Registers
     //
-    
+
+    // A copy of BPLCON0 (Denise has another copy)
+    uint16_t bplcon0;
+
     // The DMA control register
     uint16_t dmacon;
 
@@ -473,6 +476,7 @@ public:
         & hFlop
         & hFlopOn
         & hFlopOff
+        & bplcon0
         & dmacon
         & dmaDAS
         & dskpt
@@ -760,9 +764,9 @@ public:
     void computeDDFStrt();
     void computeDDFStop();
 
-    // AUDxLCL, AUDxLCL
-    // template <int x> void pokeAUDxLCH(uint16_t value);
-    // template <int x> void pokeAUDxLCL(uint16_t value);
+    // BPLCON0
+    void pokeBPLCON0(uint16_t value);
+    void pokeBPLCON0(uint16_t oldValue, uint16_t newValue);
 
     // BPLxPTL, BPLxPTH
     template <int x, PokeSource s> void pokeBPLxPTH(uint16_t value);
@@ -787,19 +791,6 @@ public:
         INC_OCS_PTR(bplpt[x], (x % 2) ? bpl2mod : bpl1mod);
         // debug("addBPLMOD%d +%d = %d ($%X)\n", x, (x % 2) ? bpl2mod : bpl1mod, bplpt[x], bplpt[x]);
     }
-
-    /* Adds BPLxMOD to the pointers of the active bitplanes
-     * This method is called whenever the bitplane DMA restarts.
-     */
-    void addBPLxMOD();
-
-
-    //
-    // Handling requests of other components
-    //
-
-    // Called by Denise when BPLCON0 is written to
-    void pokeBPLCON0(uint16_t oldValue, uint16_t newValue);
 
 
     //

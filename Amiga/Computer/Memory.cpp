@@ -1157,7 +1157,7 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x0FE >> 1: // Unused
             break;
         case 0x100 >> 1: // BPLCON0
-            denise->pokeBPLCON0(value); return;
+            agnus->pokeBPLCON0(value); denise->pokeBPLCON0(value); return;
         case 0x102 >> 1: // BPLCON1
             denise->pokeBPLCON1(value); return;
         case 0x104 >> 1: // BPLCON2
