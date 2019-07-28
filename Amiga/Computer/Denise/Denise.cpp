@@ -348,82 +348,24 @@ Denise::drawLores(int pixels)
     uint32_t maskOdd = 0x8000 << scrollLoresOdd;
     uint32_t maskEven = 0x8000 << scrollLoresEven;
 
-    // if (bplconDBPLF()) {
-    if (false) {
+    for (int i = 0; i < pixels; i++) {
 
-        //
-        // Dual-playfield mode
-        //
+        // Read a bit slice
+        index =
+        (!!(shiftReg[0] & maskOdd)  << 0) |
+        (!!(shiftReg[1] & maskEven) << 1) |
+        (!!(shiftReg[2] & maskOdd)  << 2) |
+        (!!(shiftReg[3] & maskEven) << 3) |
+        (!!(shiftReg[4] & maskOdd)  << 4) |
+        (!!(shiftReg[5] & maskEven) << 5);
 
-        /* BPU | Planes in playfield 1 | Planes in playfield 2
-         * ---------------------------------------------------
-         *  1  | Plane 1               | none
-         *  2  | Plane 1               | Plane 2
-         *  3  | Plane 1, 3            | Plane 2
-         *  4  | Plane 1, 3            | Plane 2, 4
-         *  5  | Plane 1, 3, 5         | Plane 2, 4
-         *  6  | Plane 1, 3, 5         | Plane 2, 4, 5
-         */
+        maskOdd >>= 1;
+        maskEven >>= 1;
 
-        bool pf2pri = PF2PRI();
-
-        for (int i = 0; i < pixels; i++) {
-
-            // Get bit slices for both playfields
-            uint8_t index1 =
-            (!!(shiftReg[0] & maskOdd)  << 0) |
-            (!!(shiftReg[2] & maskOdd)  << 1) |
-            (!!(shiftReg[4] & maskOdd)  << 2);
-
-            uint8_t index2 =
-            (!!(shiftReg[1] & maskEven) << 0) |
-            (!!(shiftReg[3] & maskEven) << 1) |
-            (!!(shiftReg[5] & maskEven) << 2);
-
-            // If not transparent, PF2 uses color registers 9 to 11
-            if (index2) index2 |= 0b1000;
-
-            maskOdd >>= 1;
-            maskEven >>= 1;
-
-            // Check priority
-            if (pf2pri) {
-                index = index2 ? index2 : index1;
-            } else {
-                index = index1 ? index1 : index2;
-            }
-
-            // Draw two lores pixels
-            assert(currentPixel + 1 < sizeof(rasterline));
-            rasterline[currentPixel++] = index;
-            rasterline[currentPixel++] = index;
-        }
-
-    } else {
-
-        //
-        // Single-playfield mode
-        //
-
-        for (int i = 0; i < pixels; i++) {
-
-            // Read a bit slice
-            index =
-            (!!(shiftReg[0] & maskOdd)  << 0) |
-            (!!(shiftReg[1] & maskEven) << 1) |
-            (!!(shiftReg[2] & maskOdd)  << 2) |
-            (!!(shiftReg[3] & maskEven) << 3) |
-            (!!(shiftReg[4] & maskOdd)  << 4) |
-            (!!(shiftReg[5] & maskEven) << 5);
-
-            maskOdd >>= 1;
-            maskEven >>= 1;
-
-            // Synthesize two lores pixels
-            assert(currentPixel + 1 < sizeof(rasterline));
-            rasterline[currentPixel++] = index;
-            rasterline[currentPixel++] = index;
-        }
+        // Synthesize two lores pixels
+        assert(currentPixel + 1 < sizeof(rasterline));
+        rasterline[currentPixel++] = index;
+        rasterline[currentPixel++] = index;
     }
 
     // Shift out drawn bits
@@ -439,83 +381,32 @@ Denise::drawHires(int pixels)
 {
     uint8_t index;
 
-    // assert(currentPixel == (agnus->hpos * 4) + 6);
     currentPixel = ppos(agnus->pos.h);
 
     uint32_t maskOdd = 0x8000 << scrollHiresOdd;
     uint32_t maskEven = 0x8000 << scrollHiresEven;
 
-    // if (bplconDBPLF()) {
-    if (false) {
-        
-        //
-        // Dual-playfield mode
-        //
+    for (int i = 0; i < pixels; i++) {
 
-        bool pf2pri = PF2PRI();
+        // Read a bit slice
+        index =
+        (!!(shiftReg[0] & maskOdd)  << 0) |
+        (!!(shiftReg[1] & maskEven) << 1) |
+        (!!(shiftReg[2] & maskOdd)  << 2) |
+        (!!(shiftReg[3] & maskEven) << 3) |
+        (!!(shiftReg[4] & maskOdd)  << 4) |
+        (!!(shiftReg[5] & maskEven) << 5);
 
-        for (int i = 0; i < pixels; i++) {
+        maskOdd >>= 1;
+        maskEven >>= 1;
 
-            // Get bit slices for both playfields
-            uint8_t index1 =
-            (!!(shiftReg[0] & maskOdd)  << 0) |
-            (!!(shiftReg[2] & maskOdd)  << 1) |
-            (!!(shiftReg[4] & maskOdd)  << 2);
-
-            uint8_t index2 =
-            (!!(shiftReg[1] & maskEven) << 0) |
-            (!!(shiftReg[3] & maskEven) << 1) |
-            (!!(shiftReg[5] & maskEven) << 2);
-
-            // If not transparent, PF2 uses color registers 9 to 11
-            if (index2) index2 |= 0b1000;
-
-            maskOdd >>= 1;
-            maskEven >>= 1;
-
-            // Check priority
-            if (pf2pri) {
-                index = index2 ? index2 : index1;
-            } else {
-                index = index1 ? index1 : index2;
-            }
-
-            // Draw a single hires pixel
-            assert(currentPixel < sizeof(rasterline));
-            rasterline[currentPixel++] = index;
-        }
-
-        // Shift out drawn bits
-        for (int i = 0; i < 6; i++) shiftReg[i] <<= 16;
-
-    } else {
-
-        //
-        // Single-playfield mode
-        //
-
-        for (int i = 0; i < pixels; i++) {
-
-            // Read a bit slice
-            index =
-            (!!(shiftReg[0] & maskOdd)  << 0) |
-            (!!(shiftReg[1] & maskEven) << 1) |
-            (!!(shiftReg[2] & maskOdd)  << 2) |
-            (!!(shiftReg[3] & maskEven) << 3) |
-            (!!(shiftReg[4] & maskOdd)  << 4) |
-            (!!(shiftReg[5] & maskEven) << 5);
-
-            maskOdd >>= 1;
-            maskEven >>= 1;
-
-            // Draw a single hires pixel
-            assert(currentPixel < sizeof(rasterline));
-            rasterline[currentPixel++] = index;
-        }
+        // Synthesize a hires pixel
+        assert(currentPixel < sizeof(rasterline));
+        rasterline[currentPixel++] = index;
     }
 
     // Shift out drawn bits
-    for (int i = 0; i < 6; i++) shiftReg[i] <<= 16;
+    for (int i = 0; i < 6; i++) shiftReg[i] <<= pixels;
 
 #ifdef PIXEL_DEBUG
     rasterline[currentPixel - pixels] = 64;
