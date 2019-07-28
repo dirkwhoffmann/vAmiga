@@ -9,9 +9,9 @@
 
 #include "Amiga.h"
 
-Colorizer::Colorizer()
+PixelEngine::PixelEngine()
 {
-    setDescription("Colorizer");
+    setDescription("PixelEngine");
     
     // Setup some debug colors (in Amiga color format)
     colors[64] = 0x0F00;
@@ -25,34 +25,34 @@ Colorizer::Colorizer()
 }
 
 void
-Colorizer::_powerOn()
+PixelEngine::_powerOn()
 {
     updateRGBA();
 }
 
 void
-Colorizer::setPalette(Palette p)
+PixelEngine::setPalette(Palette p)
 {
     palette = p;
     updateRGBA();
 }
 
 void
-Colorizer::setBrightness(double value)
+PixelEngine::setBrightness(double value)
 {
     brightness = value;
     updateRGBA();
 }
 
 void
-Colorizer::setSaturation(double value)
+PixelEngine::setSaturation(double value)
 {
     saturation = value;
     updateRGBA();
 }
 
 void
-Colorizer::setContrast(double value)
+PixelEngine::setContrast(double value)
 {
     contrast = value;
     updateRGBA();
@@ -60,7 +60,7 @@ Colorizer::setContrast(double value)
 }
 
 void
-Colorizer::setColor(int reg, uint16_t value)
+PixelEngine::setColor(int reg, uint16_t value)
 {
     assert(reg < 32);
 
@@ -82,7 +82,7 @@ Colorizer::setColor(int reg, uint16_t value)
 }
 
 void
-Colorizer::updateRGBA()
+PixelEngine::updateRGBA()
 {
     debug("updateRGBA\n");
 
@@ -103,7 +103,7 @@ Colorizer::updateRGBA()
 }
 
 void
-Colorizer::adjustRGB(uint8_t &r, uint8_t &g, uint8_t &b)
+PixelEngine::adjustRGB(uint8_t &r, uint8_t &g, uint8_t &b)
 {
     // Normalize adjustment parameters
     double brightness = this->brightness - 50.0;
@@ -180,7 +180,7 @@ Colorizer::adjustRGB(uint8_t &r, uint8_t &g, uint8_t &b)
 }
 
 uint16_t
-Colorizer::computeHAM(uint8_t index)
+PixelEngine::computeHAM(uint8_t index)
 {
     switch ((index >> 4) & 0b11) {
 
@@ -215,7 +215,7 @@ Colorizer::computeHAM(uint8_t index)
 }
 
 void
-Colorizer::recordColorRegisterChange(uint32_t addr, uint16_t value, int16_t pixel) {
+PixelEngine::recordColorRegisterChange(uint32_t addr, uint16_t value, int16_t pixel) {
 
     // debug("recordColorRegisterChange(%X, %X, %d)\n", addr, value, pixel);
 
@@ -236,7 +236,7 @@ Colorizer::recordColorRegisterChange(uint32_t addr, uint16_t value, int16_t pixe
 }
 
 void
-Colorizer::translateToRGBA(uint8_t *src, int *dest)
+PixelEngine::translateToRGBA(uint8_t *src, int *dest)
 {
     int pixel = 0;
 
@@ -272,7 +272,7 @@ Colorizer::translateToRGBA(uint8_t *src, int *dest)
 }
 
 void
-Colorizer::translateToRGBA_HAM(uint8_t *src, int *dest)
+PixelEngine::translateToRGBA_HAM(uint8_t *src, int *dest)
 {
     int pixel = 0;
 

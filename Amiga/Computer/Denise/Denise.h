@@ -12,7 +12,7 @@
 
 #include "HardwareComponent.h"
 #include "Colors.h"
-#include "Colorizer.h"
+#include "PixelEngine.h"
 
 class Denise : public HardwareComponent {
 
@@ -34,7 +34,7 @@ private:
 public:
     
     // A color synthesizer for computing RGBA values
-    Colorizer colorizer;
+    PixelEngine colorizer;
     
 
     //

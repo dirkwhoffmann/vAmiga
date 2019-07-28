@@ -19,7 +19,7 @@ class Copper : public HardwareComponent
     // Quick-access references
     class Memory *mem;
     class Agnus *agnus;
-    class Colorizer *colorizer;
+    class PixelEngine *colorizer;
     
     // Information shown in the GUI inspector panel
     CopperInfo info;

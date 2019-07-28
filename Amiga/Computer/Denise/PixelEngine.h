@@ -20,7 +20,7 @@ typedef struct {
 }
 RegisterChange;
 
-class Colorizer : public HardwareComponent {
+class PixelEngine : public HardwareComponent {
     
 private:
     
@@ -65,7 +65,7 @@ private:
     
 public:
     
-    Colorizer();
+    PixelEngine();
 
 
     //
