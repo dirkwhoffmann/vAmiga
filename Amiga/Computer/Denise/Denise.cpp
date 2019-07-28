@@ -320,8 +320,8 @@ Denise::pixelAddr(int pixel)
     return frameBuffer->data + offset;
 }
 
-void
-Denise::drawLores(int pixels)
+template <int HIRES> void
+Denise::draw(int pixels)
 {
     uint8_t index;
 
@@ -344,10 +344,19 @@ Denise::drawLores(int pixels)
         maskOdd >>= 1;
         maskEven >>= 1;
 
-        // Synthesize two lores pixels
-        assert(currentPixel + 1 < sizeof(rasterline));
-        rasterline[currentPixel++] = index;
-        rasterline[currentPixel++] = index;
+        if (HIRES) {
+
+            // Synthesize one hires pixel
+            assert(currentPixel < sizeof(rasterline));
+            rasterline[currentPixel++] = index;
+
+        } else {
+
+            // Synthesize two lores pixels
+            assert(currentPixel + 1 < sizeof(rasterline));
+            rasterline[currentPixel++] = index;
+            rasterline[currentPixel++] = index;
+        }
     }
 
     // Shift out drawn bits
@@ -358,6 +367,7 @@ Denise::drawLores(int pixels)
 #endif
 }
 
+#if 0
 void
 Denise::drawHires(int pixels)
 {
@@ -394,6 +404,7 @@ Denise::drawHires(int pixels)
     rasterline[currentPixel - pixels] = 64;
 #endif
 }
+#endif
 
 void
 Denise::drawSprites()
@@ -684,3 +695,6 @@ template void Denise::pokeSPRxDATB<4>(uint16_t value);
 template void Denise::pokeSPRxDATB<5>(uint16_t value);
 template void Denise::pokeSPRxDATB<6>(uint16_t value);
 template void Denise::pokeSPRxDATB<7>(uint16_t value);
+
+template void Denise::draw<0>(int pixels);
+template void Denise::draw<1>(int pixels);

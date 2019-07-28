@@ -315,8 +315,9 @@ public:
     int *pixelAddr(int pixel);
 
     // Synthesizes pixels
-    void drawLores(int pixels = 16);
-    void drawHires(int pixels = 16);
+    template <int hires> void draw(int pixels);
+    void drawLores(int pixels = 16) { draw<0>(pixels); }
+    void drawHires(int pixels = 16) { draw<1>(pixels); }
 
 public:
 
