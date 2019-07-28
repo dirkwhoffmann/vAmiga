@@ -25,6 +25,12 @@ PixelEngine::PixelEngine()
 }
 
 void
+PixelEngine::_initialize()
+{
+    denise = &amiga->denise;
+}
+
+void
 PixelEngine::_powerOn()
 {
     updateRGBA();
@@ -242,6 +248,7 @@ PixelEngine::applyRegisterChange(const RegisterChange &change)
 
         // It must be a color register
         assert(change.addr <= 0x1BE);
+        // debug("Changing color reg %d to %X\n", (change.addr - 0x180) >> 1, change.value);
         setColor((change.addr - 0x180) >> 1, change.value);
         return;
     }
@@ -261,12 +268,18 @@ PixelEngine::translateToRGBA(uint8_t *src, int *dest)
         RegisterChange &change = changeHistory[i];
 
         // Draw pixels until the next change happens
-        for (; pixel < change.pixel; pixel++) {
+        if (denise->bplconDBPLF()) {
 
-            assert(isColorTableIndex(src[pixel]));
-            dest[pixel] = rgba[colors[src[pixel]]];
-            src[pixel] = 0;
+            // Dual playfield mode
+            drawDP(src, dest, pixel, change.pixel);
+
+        } else {
+
+            // Single playfield mode
+            drawSP(src, dest, pixel, change.pixel);
         }
+
+        pixel = change.pixel;
 
         // Perform the register change
         applyRegisterChange(change);
@@ -287,6 +300,28 @@ PixelEngine::translateToRGBA(uint8_t *src, int *dest)
 
     // Delete all recorded register changes
     changeCount = 0;
+}
+
+void
+PixelEngine::drawSP(uint8_t *src, int *dest, int from, int to)
+{
+    for (int i = from; i < to; i++) {
+
+        assert(isColorTableIndex(src[i]));
+        dest[i] = rgba[colors[src[i]]];
+        src[i] = 0;
+    }
+}
+
+void
+PixelEngine::drawDP(uint8_t *src, int *dest, int from, int to)
+{
+    for (int i = from; i < to; i++) {
+
+        assert(isColorTableIndex(src[i]));
+        dest[i] = rgba[colors[src[i]]];
+        src[i] = 0;
+    }
 }
 
 void

@@ -13,7 +13,12 @@
 #include "HardwareComponent.h"
 
 class PixelEngine : public HardwareComponent {
-    
+
+public:
+
+    // Quick-access references
+    class Denise *denise;
+
 private:
     
     /* Color lookup table
@@ -90,7 +95,8 @@ public:
     //
     
 private:
-    
+
+    void _initialize() override;
     void _powerOn() override;
     void _reset() override { RESET_SNAPSHOT_ITEMS }
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
@@ -181,6 +187,13 @@ public:
     // Translates bitplane data to RGBA values
     void translateToRGBA(uint8_t *src, int *dest);
     void translateToRGBA_HAM(uint8_t *src, int *dest);
+
+    // Draws a chunk of pixels in single-playfield mode
+    void drawSP(uint8_t *src, int *dest, int from, int to);
+
+    // Draws a chunk of pixels in dual-playfield mode
+    void drawDP(uint8_t *src, int *dest, int from, int to);
+
 };
 
 #endif
