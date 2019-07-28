@@ -17,7 +17,7 @@ Denise::Denise()
     
     subComponents = vector<HardwareComponent *> {
         
-        &colorizer,
+        &pixelEngine,
     };
     
     longFrame1.data = new int[PIXELS];
@@ -88,8 +88,8 @@ Denise::_inspect()
         info.bpldat[i] = bpldat[i];
     }
     for (unsigned i = 0; i < 32; i++) {
-        info.colorReg[i] = colorizer.getColor(i);
-        info.color[i] = colorizer.getRGBA(i);
+        info.colorReg[i] = pixelEngine.getColor(i);
+        info.color[i] = pixelEngine.getRGBA(i);
     }
     
     // Sprite information
@@ -187,30 +187,7 @@ void
 Denise::pokeBPLCON0(uint16_t oldValue, uint16_t newValue)
 {
     // Schedule the register to be updated inside the pixel engine
-    colorizer.recordRegisterChange(BPLCON0, newValue, 4 * agnus->pos.h + 4);
-
-    //
-    // TODO: Move this to PixelEngine::applyRegisterUpdate()
-    //
-
-    /* "Bit 11 of register BPLCON0 selects hold-and-modify mode. The following
-     *  bits in BPLCONO must be set for hold-and-modify mode to be active:
-     *
-     *      - Bit HOMOD, bit 11, is 1.
-     *      - Bit DBLPF, bit 10, is 0 (single-playfield mode specified).
-     *      - Bit HIRES, bit 15, is 0 (low-resolution mode specified).
-     *      - Bits BPU2, BPU1, and BPUO - bits 14, 13, and 12, are 101 or 110
-     *        (five or six bit-planes active)." [HRM]
-     */
-
-    // Check for HAM mode
-    uint8_t bpu = (newValue >> 12) & 0b111;
-    bool oldHam = ham;
-    ham = (newValue & 0x8C00) == 0x0800 && (bpu == 5 || bpu == 6);
-
-    if (oldHam ^ ham) {
-        // debug("Switching HAM mode %s\n", ham ? "on" : "off");
-    }
+    pixelEngine.recordRegisterChange(BPLCON0, newValue, 4 * agnus->pos.h + 4);
 }
 
 void
@@ -323,7 +300,7 @@ Denise::pokeColorReg(uint32_t addr, uint16_t value)
     assert(addr >= 0x180 && addr <= 0x1BE && IS_EVEN(addr));
     debug(COL_DEBUG, "pokeColorReg(%X, %X)\n", addr, value);
 
-    colorizer.recordRegisterChange(addr, value & 0xFFF, 4 * agnus->pos.h);
+    pixelEngine.recordRegisterChange(addr, value & 0xFFF, 4 * agnus->pos.h);
 }
 
 void
@@ -519,10 +496,10 @@ Denise::endOfLine(int vpos)
         drawBorder();
 
         // Synthesize RGBA values and write into the frame buffer
-        if (ham) {
-            colorizer.translateToRGBA_HAM(rasterline, frameBuffer->data + vpos * HPIXELS);
+        if (ham()) {
+            pixelEngine.translateToRGBA_HAM(rasterline, frameBuffer->data + vpos * HPIXELS);
         } else {
-            colorizer.translateToRGBA(rasterline, frameBuffer->data + vpos * HPIXELS);
+            pixelEngine.translateToRGBA(rasterline, frameBuffer->data + vpos * HPIXELS);
         }
 
         /* Note that Denise has already synthesized pixels that belong to the

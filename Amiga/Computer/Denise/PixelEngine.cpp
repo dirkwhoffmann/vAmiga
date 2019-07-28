@@ -249,6 +249,7 @@ PixelEngine::applyRegisterChange(const RegisterChange &change)
         case BPLCON0:
 
             denise->bplcon0 = change.value;
+            ham = denise->ham();
             break;
 
         default:
@@ -273,7 +274,7 @@ PixelEngine::translateToRGBA(uint8_t *src, int *dest)
         RegisterChange &change = changeHistory[i];
 
         // Draw pixels until the next change happens
-        if (denise->bplconDBPLF()) {
+        if (denise->dbplf()) {
             drawDP(src, dest, pixel, change.pixel); // Dual playfield mode
         } else {
             drawSP(src, dest, pixel, change.pixel); // Single playfield mode
@@ -286,7 +287,7 @@ PixelEngine::translateToRGBA(uint8_t *src, int *dest)
     }
 
     // Draw the rest of the line
-    if (denise->bplconDBPLF()) {
+    if (denise->dbplf()) {
         drawDP(src, dest, pixel, HPIXELS); // Dual playfield mode
     } else {
         drawSP(src, dest, pixel, HPIXELS); // Single playfield mode

@@ -454,35 +454,35 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 - (double) palette
 {
-   return wrapper->denise->colorizer.getPalette();
+   return wrapper->denise->pixelEngine.getPalette();
 }
 - (void) setPalette:(Palette)p
 {
-    wrapper->denise->colorizer.setPalette(p);
+    wrapper->denise->pixelEngine.setPalette(p);
 }
 - (double) brightness
 {
-    return wrapper->denise->colorizer.getBrightness();
+    return wrapper->denise->pixelEngine.getBrightness();
 }
 - (void) setBrightness:(double)value
 {
-    wrapper->denise->colorizer.setBrightness(value);
+    wrapper->denise->pixelEngine.setBrightness(value);
 }
 - (double) saturation
 {
-    return wrapper->denise->colorizer.getSaturation();
+    return wrapper->denise->pixelEngine.getSaturation();
 }
 - (void) setSaturation:(double)value
 {
-    wrapper->denise->colorizer.setSaturation(value);
+    wrapper->denise->pixelEngine.setSaturation(value);
 }
 - (double) contrast
 {
-    return wrapper->denise->colorizer.getContrast();
+    return wrapper->denise->pixelEngine.getContrast();
 }
 - (void) setContrast:(double)value
 {
-    wrapper->denise->colorizer.setContrast(value);
+    wrapper->denise->pixelEngine.setContrast(value);
 }
 - (void) setBPU:(NSInteger)count
 {

@@ -19,7 +19,7 @@ Copper::_initialize()
 {
     mem = &amiga->mem;
     agnus = &amiga->agnus;
-    colorizer = &amiga->denise.colorizer;
+    colorizer = &amiga->denise.pixelEngine;
 }
 
 void

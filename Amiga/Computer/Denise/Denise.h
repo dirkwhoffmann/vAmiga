@@ -34,7 +34,7 @@ private:
 public:
     
     // A color synthesizer for computing RGBA values
-    PixelEngine colorizer;
+    PixelEngine pixelEngine;
     
 
     //
@@ -73,9 +73,6 @@ public:
     int8_t scrollLoresEven;
     int8_t scrollHiresOdd;
     int8_t scrollHiresEven;
-
-    // Indicates if we're running in HAM mode (updated in pokeBPLCON0)
-    bool ham;
 
 
     //
@@ -197,7 +194,6 @@ public:
         & scrollLoresEven
         & scrollHiresOdd
         & scrollHiresEven
-        & ham
         & firstCanvasPixel
         & lastCanvasPixel
         & currentPixel;
@@ -258,10 +254,10 @@ public:
 
     bool hires() { return !!GET_BIT(bplcon0, 15); }
     bool lores() { return !GET_BIT(bplcon0, 15); }
-    uint8_t bplconBPU() { return (bplcon0 >> 12) & 0b111; }
-    bool bplconHOMOD() { return GET_BIT(bplcon0, 11); }
-    bool bplconDBPLF() { return GET_BIT(bplcon0, 10); }
-    bool bplconLACE() { return GET_BIT(bplcon0, 2); }
+    bool dbplf() { return GET_BIT(bplcon0, 10); }
+    bool lace() { return GET_BIT(bplcon0, 2); }
+    int bpu() { return (bplcon0 >> 12) & 0b111; }
+    bool ham() { return (bplcon0 & 0x8C00) == 0x0800 && (bpu() == 5 || bpu() == 6); };
 
     // OCS register 0x102 (w)
     void pokeBPLCON1(uint16_t value);

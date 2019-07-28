@@ -20,7 +20,7 @@ public:
     class Denise *denise;
 
 private:
-    
+
     /* Color lookup table
      *
      *  0 .. 31: Values of the 32 Amiga color registers.
@@ -35,6 +35,9 @@ private:
 
     // The most recently computed HAM pixel in Amiga RGB format
     uint16_t hamRGB;
+
+    // Indicates if HAM mode is active
+    bool ham;
 
 
     //
@@ -85,6 +88,7 @@ public:
         worker
 
         & colors
+        & ham
         & changeHistory
         & changeCount;
     }

@@ -496,123 +496,6 @@ void
 Agnus::allocateBplSlots(int bpu, bool hires, int first)
 {
     allocateBplSlots(bpu, hires, first, HPOS_MAX);
-    /*
-    if (hires) {
-        allocateBplSlots(bpu, hires, MAX(first, dmaStrtHires), dmaStopHires - 1);
-    } else {
-        allocateBplSlots(bpu, hires, MAX(first, dmaStrtLores), dmaStopLores - 1);
-    }
-    */
-}
-
-void
-Agnus::oldSwitchBitplaneDmaOn()
-{
-    // Clear slots first (TODO: THIS IS UGLY AND SLOW)
-    switchBitplaneDmaOff();
-
-    debug(BPL_DEBUG, "oldSwitchBitplaneDmaOn: bpu = %d\n", denise->bplconBPU());
-
-    if (denise->hires()) {
-
-        int16_t start = dmaStrtHires;
-        int16_t stop = dmaStopHires;
-
-        // Determine event IDs
-        EventID h4 = (activeBitplanes >= 4) ? BPL_H4 : EVENT_NONE;
-        EventID h3 = (activeBitplanes >= 3) ? BPL_H3 : EVENT_NONE;
-        EventID h2 = (activeBitplanes >= 2) ? BPL_H2 : EVENT_NONE;
-        EventID h1 = (activeBitplanes >= 1) ? BPL_H1 : EVENT_NONE;
-        
-        // Schedule events
-        for (unsigned i = start; i < stop; i += 8) {
-            dmaEvent[i]   = dmaEvent[i+4] = h4;
-            dmaEvent[i+1] = dmaEvent[i+5] = h2;
-            dmaEvent[i+2] = dmaEvent[i+6] = h3;
-            dmaEvent[i+3] = dmaEvent[i+7] = h1;
-        }
-
-        // Remember start / stop positions
-        if (dmaEvent[start+3] != EVENT_NONE) {
-
-            dmaFirstBpl1Event = start + 3;
-            dmaLastBpl1Event = stop - 1;
-
-            assert(dmaEvent[dmaFirstBpl1Event] == BPL_H1);
-            assert(dmaEvent[dmaLastBpl1Event] == BPL_H1);
-
-            denise->firstCanvasPixel = (dmaFirstBpl1Event * 4) + 6;
-            denise->lastCanvasPixel = (dmaLastBpl1Event * 4) + 6 + 15;
-
-        } else {
-
-            dmaFirstBpl1Event = 0;
-            dmaLastBpl1Event = 0;
-            denise->firstCanvasPixel = 0;
-            denise->lastCanvasPixel = 0;
-        }
-
-    } else {
-
-        int16_t start = dmaStrtLores;
-        int16_t stop = dmaStopLores;
-
-        // Determine event IDs
-        EventID l6 = (activeBitplanes >= 6) ? BPL_L6 : EVENT_NONE;
-        EventID l5 = (activeBitplanes >= 5) ? BPL_L5 : EVENT_NONE;
-        EventID l4 = (activeBitplanes >= 4) ? BPL_L4 : EVENT_NONE;
-        EventID l3 = (activeBitplanes >= 3) ? BPL_L3 : EVENT_NONE;
-        EventID l2 = (activeBitplanes >= 2) ? BPL_L2 : EVENT_NONE;
-        EventID l1 = (activeBitplanes >= 1) ? BPL_L1 : EVENT_NONE;
-        
-        // Schedule events
-        for (unsigned i = start; i < stop; i += 8) {
-            dmaEvent[i+0] = EVENT_NONE;
-            dmaEvent[i+1] = l4;
-            dmaEvent[i+2] = l6;
-            dmaEvent[i+3] = l2;
-            dmaEvent[i+4] = EVENT_NONE;
-            dmaEvent[i+5] = l3;
-            dmaEvent[i+6] = l5;
-            dmaEvent[i+7] = l1;
-        }
-
-        // Remember start / stop positions
-        if (dmaEvent[start+7] != EVENT_NONE) {
-
-            dmaFirstBpl1Event = start + 7;
-            dmaLastBpl1Event = stop - 1;
-
-            assert(dmaEvent[dmaFirstBpl1Event] == BPL_L1);
-            assert(dmaEvent[dmaLastBpl1Event] == BPL_L1);
-
-            denise->firstCanvasPixel = (dmaFirstBpl1Event * 4) + 6;
-            denise->lastCanvasPixel = (dmaLastBpl1Event * 4) + 6 + 31;
-
-        } else {
-
-            dmaFirstBpl1Event = 0;
-            dmaLastBpl1Event = 0;
-            denise->firstCanvasPixel = 0;
-            denise->lastCanvasPixel = 0;
-        }
-    }
-
-    updateJumpTable();
-
-    // Do some consistency checks with the new lookup tables
-    for (int i = 0; i < HPOS_CNT; i++) {
-        if (dmaEvent[i]) {
-            if (dmaEvent[i] != bitplaneDMA[denise->hires()][activeBitplanes][i]) {
-                warn("EVENT INCONSISTENCY DETECTED\n");
-                dumpDMAEventTable();
-                assert(false);
-            }
-        }
-    }
-
-    // debug("EventTable:\n");
-    // dumpDMAEventTable();
 }
 
 void
@@ -1726,7 +1609,7 @@ Agnus::vsyncHandler()
     frameInfo.nr++;
 
     // Check if we the next frame is drawn in interlace mode
-    frameInfo.interlaced = denise->bplconLACE();
+    frameInfo.interlaced = denise->lace();
 
     // If yes, toggle the the long frame flipflop
     lof = (frameInfo.interlaced) ? !lof : true;
