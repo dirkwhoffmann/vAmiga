@@ -44,9 +44,6 @@ private:
     static const int rgbaIndexCnt = 32 + 32 + 8;
     uint32_t indexedRgba[rgbaIndexCnt];
 
-    // The most recently computed HAM pixel in Amiga RGB format
-    uint16_t hamRGB;
-
     // The current drawing mode
     DrawingMode mode;
 
@@ -215,7 +212,7 @@ public:
      */
     void drawSPF(uint8_t *src, int *dst, int from, int to);
     void drawDPF(uint8_t *src, int *dst, int from, int to);
-    void drawHAM(uint8_t *src, int *dst, int from, int to);
+    void drawHAM(uint8_t *src, int *dst, int from, int to, uint16_t& ham);
 
 };
 

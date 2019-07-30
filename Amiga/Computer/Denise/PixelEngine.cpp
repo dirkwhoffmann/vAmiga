@@ -247,7 +247,7 @@ PixelEngine::translateToRGBA(uint8_t *src, int *dest)
     int pixel = 0;
 
     // Initialize the HAM color storage with the current background color
-    hamRGB = colreg[0];
+    uint16_t ham = colreg[0];
 
     // Iterate over all recorded register changes
     for (int i = 0; i < changeCount; i++) {
@@ -258,7 +258,7 @@ PixelEngine::translateToRGBA(uint8_t *src, int *dest)
         switch (mode) {
             case MODE_SPF: drawSPF(src, dest, pixel, change.pixel); break;
             case MODE_DPF: drawDPF(src, dest, pixel, change.pixel); break;
-            case MODE_HAM: drawHAM(src, dest, pixel, change.pixel); break;
+            case MODE_HAM: drawHAM(src, dest, pixel, change.pixel, ham); break;
             default: assert(false);
         }
         pixel = change.pixel;
@@ -271,7 +271,7 @@ PixelEngine::translateToRGBA(uint8_t *src, int *dest)
     switch (mode) {
         case MODE_SPF: drawSPF(src, dest, pixel, HPIXELS); break;
         case MODE_DPF: drawDPF(src, dest, pixel, HPIXELS); break;
-        case MODE_HAM: drawHAM(src, dest, pixel, HPIXELS); break;
+        case MODE_HAM: drawHAM(src, dest, pixel, HPIXELS, ham); break;
         default: assert(false);
     }
 
@@ -326,11 +326,8 @@ PixelEngine::drawDPF(uint8_t *src, int *dst, int from, int to)
 }
 
 void
-PixelEngine::drawHAM(uint8_t *src, int *dst, int from, int to)
+PixelEngine::drawHAM(uint8_t *src, int *dst, int from, int to, uint16_t& ham)
 {
-    // Get the cached color
-    uint16_t ham = hamRGB;
-
     for (int i = from; i < to; i++) {
 
         uint8_t index = src[i];
@@ -368,8 +365,5 @@ PixelEngine::drawHAM(uint8_t *src, int *dst, int from, int to)
         // Synthesize pixel
         dst[i] = rgba[ham];
         src[i] = 0;
-
-        // Cache the new color
-        hamRGB = ham;
     }
 }
