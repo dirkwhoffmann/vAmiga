@@ -352,10 +352,6 @@ public:
         return result;
     }
 
-    // Returns one of the working buffers
-    // ScreenBuffer getWorkingLongFrame() { return *workingLongFrame; }
-    // ScreenBuffer getWorkingShortFrame() { return *workingShortFrame; }
-
 
     // Called by Agnus at the beginning of each rasterline
     void beginOfLine(int vpos);

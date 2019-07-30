@@ -17,19 +17,45 @@ class PixelEngine : public HardwareComponent {
 public:
 
     // Quick-access references
+    class Agnus *agnus;
     class Denise *denise;
 
 private:
 
-    /* Color lookup table DEPRECATED
-     *
-     *  0 .. 31: Values of the 32 Amiga color registers.
-     * 32 .. 63: Additional colors used in halfbright mode.
-     * 64 .. 71: Some predefined debug colors
-     */
-    // uint16_t colors[colorTableCnt];
+    //
+    // Screen buffers
+    //
 
-    // The 32 color registers
+    /* We keep four frame buffers, two for storing long frames and
+     * another two for storing short frames. The short frame buffers are only
+     * used in interlace mode. At each point in time, one of the two buffers
+     * is the "working buffer" and the other one the "stable buffer". All
+     * drawing functions write to the working buffers, only. The GPU reads from
+     * the stable buffers, only. Once a frame has been completed, the working
+     * buffer and the stable buffer are switched.
+     */
+    ScreenBuffer longFrame1;
+    ScreenBuffer longFrame2;
+    ScreenBuffer shortFrame1;
+    ScreenBuffer shortFrame2;
+
+    // Pointers to the working buffers
+    ScreenBuffer *workingLongFrame = &longFrame1;
+    ScreenBuffer *workingShortFrame = &shortFrame1;
+
+    // Pointers to the stable buffers
+    ScreenBuffer *stableLongFrame = &longFrame2;
+    ScreenBuffer *stableShortFrame = &shortFrame2;
+
+    // Pointer to the frame buffer Denise is currently working on
+    ScreenBuffer *frameBuffer = &longFrame1;
+
+
+    //
+    // Color management
+    //
+
+    // The 32 Amiga color registers
     uint16_t colreg[32];
 
     // RGBA values for all possible 4096 Amiga colors
@@ -44,19 +70,16 @@ private:
     static const int rgbaIndexCnt = 32 + 32 + 8;
     uint32_t indexedRgba[rgbaIndexCnt];
 
-    // The current drawing mode
-    DrawingMode mode;
-
-
-    //
     // Color adjustment parameters
-    //
-    
     Palette palette = COLOR_PALETTE;
     double brightness = 50.0;
     double contrast = 100.0;
     double saturation = 1.25;
 
+
+    // The current drawing mode
+    DrawingMode mode;
+    
 
     //
     // Register change history
@@ -167,6 +190,33 @@ private:
 
     // Adjusts the RGBA value according to the selected color parameters
     void adjustRGB(uint8_t &r, uint8_t &g, uint8_t &b);
+
+
+    //
+    // Working with frame buffers
+    //
+
+public:
+
+    // Returns one of the two stable buffers
+    ScreenBuffer getStableLongFrame() {
+        pthread_mutex_lock(&lock);
+        ScreenBuffer result = *stableLongFrame;
+        pthread_mutex_unlock(&lock);
+        return result;
+    }
+    ScreenBuffer getStableShortFrame() {
+        pthread_mutex_lock(&lock);
+        ScreenBuffer result = *stableShortFrame;
+        pthread_mutex_unlock(&lock);
+        return result;
+    }
+
+    // Returns the frame buffer address of a certain pixel in the current line
+    int *pixelAddr(int pixel); // MOVED TO PIXEL ENGINE
+
+    // Called after each frame to switch the frame buffers
+    void prepareForNextFrame(bool longFrame, bool interlace);
 
 
     //

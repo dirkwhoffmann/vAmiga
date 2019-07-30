@@ -37,12 +37,19 @@ PixelEngine::PixelEngine()
 void
 PixelEngine::_initialize()
 {
+    agnus = &amiga->agnus;
     denise = &amiga->denise;
 }
 
 void
 PixelEngine::_powerOn()
 {
+    workingLongFrame = &longFrame1;
+    workingShortFrame = &shortFrame1;
+    stableLongFrame = &longFrame2;
+    stableShortFrame = &shortFrame2;
+    frameBuffer = &longFrame1;
+
     updateRGBA();
 }
 
@@ -194,6 +201,53 @@ PixelEngine::adjustRGB(uint8_t &r, uint8_t &g, uint8_t &b)
     r = uint8_t(newR);
     g = uint8_t(newG);
     b = uint8_t(newB);
+}
+
+int *
+PixelEngine::pixelAddr(int pixel)
+{
+    int offset = pixel + agnus->pos.v * HPIXELS;
+
+    assert(pixel < HPIXELS);
+    assert(offset < PIXELS);
+
+    return frameBuffer->data + offset;
+}
+
+void
+PixelEngine::prepareForNextFrame(bool longFrame, bool interlace)
+{
+    assert(workingLongFrame == &longFrame1 || workingLongFrame == &longFrame2);
+    assert(workingShortFrame == &shortFrame1 || workingShortFrame == &shortFrame2);
+    assert(stableLongFrame == &longFrame1 || stableLongFrame == &longFrame2);
+    assert(stableShortFrame == &shortFrame1 || stableShortFrame == &shortFrame2);
+    assert(workingLongFrame != stableLongFrame);
+    assert(workingShortFrame != stableShortFrame);
+    assert(frameBuffer == workingLongFrame || frameBuffer == workingShortFrame);
+
+    pthread_mutex_lock(&lock);
+
+    if (frameBuffer == &longFrame1 || frameBuffer == &longFrame2) {
+
+        workingLongFrame = stableLongFrame;
+        stableLongFrame = frameBuffer;
+        frameBuffer = interlace ? workingShortFrame : workingLongFrame;
+
+    } else {
+
+        assert(frameBuffer == &shortFrame1 || frameBuffer == &shortFrame2);
+        workingShortFrame = stableShortFrame;
+        stableShortFrame = frameBuffer;
+        frameBuffer = workingLongFrame;
+
+    }
+
+    frameBuffer->longFrame = longFrame;
+    frameBuffer->interlace = interlace;
+
+    agnus->dmaDebugger.vSyncHandler();
+
+    pthread_mutex_unlock(&lock);
 }
 
 void

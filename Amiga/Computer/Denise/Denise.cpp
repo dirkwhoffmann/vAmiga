@@ -312,9 +312,9 @@ Denise::armSprite(int x)
 int *
 Denise::pixelAddr(int pixel)
 {
-    assert(pixel < HPIXELS);
-
     int offset = pixel + agnus->pos.v * HPIXELS;
+
+    assert(pixel < HPIXELS);
     assert(offset < PIXELS);
     
     return frameBuffer->data + offset;
