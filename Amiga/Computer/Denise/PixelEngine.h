@@ -162,19 +162,11 @@ private:
 
 
     //
-    // Working in HAM mode
-    //
-
-public:
-
-    // Computes the Amiga color value for a color given in HAM format.
-    uint16_t computeHAM(uint8_t index);
-
-
-    //
     // Working with recorded register changes
     //
 
+public:
+    
     // Records a color register change to be processed in translateToRGBA()
     void recordRegisterChange(uint32_t addr, uint16_t value, int16_t pixel);
 

@@ -185,6 +185,7 @@ PixelEngine::adjustRGB(uint8_t &r, uint8_t &g, uint8_t &b)
     b = uint8_t(newB);
 }
 
+/*
 uint16_t
 PixelEngine::computeHAM(uint8_t index)
 {
@@ -219,6 +220,7 @@ PixelEngine::computeHAM(uint8_t index)
 
     return hamRGB;
 }
+*/
 
 void
 PixelEngine::recordRegisterChange(uint32_t addr, uint16_t value, int16_t pixel) {
@@ -352,42 +354,48 @@ PixelEngine::drawDPF(uint8_t *src, int *dst, int from, int to)
 void
 PixelEngine::drawHAM(uint8_t *src, int *dst, int from, int to)
 {
+    // Get the cached color
+    uint16_t ham = hamRGB;
+
     for (int i = from; i < to; i++) {
 
-        assert(isColorTableIndex(src[i]));
-        dst[i] = rgba[computeHAM(src[i])];
-        src[i] = 0;
-    }
-}
+        uint8_t index = src[i];
+        assert(isColorTableIndex(index));
 
-/*
-void
-PixelEngine::translateToRGBA_HAM(uint8_t *src, int *dst)
-{
-    int pixel = 0;
+        switch ((index >> 4) & 0b11) {
 
-    // Initialize the HAM color storage with the background color
-    hamRGB = colors[0];
+            case 0b00: // Get color from register
 
-    // Process recorded color changes
-    for (int change = 0; change < changeCount; change++) {
+                ham = colors[index];
+                break;
 
-        // Draw a chunk of pixels
-        for (; pixel < changeHistory[change].pixel; pixel++) {
-            dst[pixel] = rgba[computeHAM(src[pixel])];
-            src[pixel] = 0;
+            case 0b01: // Modify blue
+
+                ham &= 0xFF0;
+                ham |= (index & 0b1111);
+                break;
+
+            case 0b10: // Modify red
+
+                ham &= 0x0FF;
+                ham |= (index & 0b1111) << 8;
+                break;
+
+            case 0b11: // Modify green
+
+                ham &= 0xF0F;
+                ham |= (index & 0b1111) << 4;
+                break;
+
+            default:
+                assert(false);
         }
 
-        // Perform the color change
-        setColor(changeHistory[change].addr, changeHistory[change].value);
-    }
+        // Synthesize pixel
+        dst[i] = rgba[ham];
+        src[i] = 0;
 
-    // Draw the rest of the line
-    for (; pixel <= LAST_PIXEL; pixel++) {
-        dst[pixel] = rgba[computeHAM(src[pixel])];
-        src[pixel] = 0;
+        // Cache the new color
+        hamRGB = ham;
     }
-
-    changeCount = 0;
 }
-*/
