@@ -13,7 +13,16 @@ PixelEngine::PixelEngine()
 {
     setDescription("PixelEngine");
     
-    // Setup some debug colors (in Amiga color format)
+    // Setup some debug colors
+    indexedRgba[64] = GpuColor(0xF, 0x0, 0x0).rawValue;
+    indexedRgba[65] = GpuColor(0xD, 0x0, 0x0).rawValue;
+    indexedRgba[66] = GpuColor(0xA, 0x0, 0x0).rawValue;
+    indexedRgba[67] = GpuColor(0x9, 0x0, 0x0).rawValue;
+    indexedRgba[68] = GpuColor(0x0, 0xF, 0xF).rawValue;
+    indexedRgba[69] = GpuColor(0x0, 0xD, 0xD).rawValue;
+    indexedRgba[70] = GpuColor(0x0, 0xA, 0xA).rawValue;
+    indexedRgba[71] = GpuColor(0x0, 0x9, 0x9).rawValue;
+    /*
     colors[64] = 0x0F00;
     colors[65] = 0x0D00;
     colors[66] = 0x0A00;
@@ -22,6 +31,7 @@ PixelEngine::PixelEngine()
     colors[69] = 0x00DD;
     colors[70] = 0x00AA;
     colors[71] = 0x0099;
+    */
 }
 
 void
@@ -72,19 +82,17 @@ PixelEngine::setColor(int reg, uint16_t value)
 
     debug(COL_DEBUG, "setColor%02d(%X)\n", reg, value);
 
+    colreg[reg] = value & 0xFFF;
+
     uint8_t r = (value & 0xF00) >> 8;
     uint8_t g = (value & 0x0F0) >> 4;
     uint8_t b = (value & 0x00F);
 
-    colors[reg] = value & 0xFFF;
-    colors[reg + 32] = ((r / 2) << 8) | ((g / 2) << 4) | (b / 2);
+    // colors[reg] = value & 0xFFF; // DEPRECATED
+    // colors[reg + 32] = ((r / 2) << 8) | ((g / 2) << 4) | (b / 2); // DEPRECATED
 
-    /*
-    colors[8] = 0xF00;
-    colors[9] = 0xFF0;
-    colors[10] = 0x0F0;
-    colors[11] = 0x00F;
-    */
+    indexedRgba[reg] = rgba[value & 0xFFF];
+    indexedRgba[reg + 32] = rgba[((r / 2) << 8) | ((g / 2) << 4) | (b / 2)];
 }
 
 void
@@ -106,6 +114,9 @@ PixelEngine::updateRGBA()
         // Write the result into the register lookup table
         rgba[col] = HI_HI_LO_LO(0xFF, b, g, r);
     }
+
+    // Update all RGBA values that are cached in indexedRgba[]
+    for (int i = 0; i < 32; i++) setColor(i, colreg[i]);
 }
 
 void
@@ -185,43 +196,6 @@ PixelEngine::adjustRGB(uint8_t &r, uint8_t &g, uint8_t &b)
     b = uint8_t(newB);
 }
 
-/*
-uint16_t
-PixelEngine::computeHAM(uint8_t index)
-{
-    switch ((index >> 4) & 0b11) {
-
-        case 0b00: // Get color from register
-
-            hamRGB = colors[index];
-            break;
-
-        case 0b01: // Modify blue
-
-            hamRGB &= 0xFF0;
-            hamRGB |= (index & 0b1111);
-            break;
-
-        case 0b10: // Modify red
-
-            hamRGB &= 0x0FF;
-            hamRGB |= (index & 0b1111) << 8;
-            break;
-
-        case 0b11: // Modify green
-
-            hamRGB &= 0xF0F;
-            hamRGB |= (index & 0b1111) << 4;
-            break;
-
-        default:
-            assert(false);
-    }
-
-    return hamRGB;
-}
-*/
-
 void
 PixelEngine::recordRegisterChange(uint32_t addr, uint16_t value, int16_t pixel) {
 
@@ -273,7 +247,7 @@ PixelEngine::translateToRGBA(uint8_t *src, int *dest)
     int pixel = 0;
 
     // Initialize the HAM color storage with the current background color
-    hamRGB = colors[0];
+    hamRGB = colreg[0];
 
     // Iterate over all recorded register changes
     for (int i = 0; i < changeCount; i++) {
@@ -315,8 +289,8 @@ PixelEngine::drawSPF(uint8_t *src, int *dst, int from, int to)
 {
     for (int i = from; i < to; i++) {
 
-        assert(isColorTableIndex(src[i]));
-        dst[i] = rgba[colors[src[i]]];
+        assert(isRgbaIndex(src[i]));
+        dst[i] = indexedRgba[src[i]];
         src[i] = 0;
     }
 }
@@ -345,8 +319,8 @@ PixelEngine::drawDPF(uint8_t *src, int *dst, int from, int to)
             index = index1 ? index1 : index2;
         }
 
-        assert(isColorTableIndex(index));
-        dst[i] = rgba[colors[index]];
+        assert(isRgbaIndex(index));
+        dst[i] = indexedRgba[index];
         src[i] = 0;
     }
 }
@@ -360,13 +334,13 @@ PixelEngine::drawHAM(uint8_t *src, int *dst, int from, int to)
     for (int i = from; i < to; i++) {
 
         uint8_t index = src[i];
-        assert(isColorTableIndex(index));
+        assert(isRgbaIndex(index));
 
         switch ((index >> 4) & 0b11) {
 
             case 0b00: // Get color from register
 
-                ham = colors[index];
+                ham = colreg[index];
                 break;
 
             case 0b01: // Modify blue

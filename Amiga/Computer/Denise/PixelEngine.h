@@ -21,17 +21,28 @@ public:
 
 private:
 
-    /* Color lookup table
+    /* Color lookup table DEPRECATED
      *
      *  0 .. 31: Values of the 32 Amiga color registers.
      * 32 .. 63: Additional colors used in halfbright mode.
      * 64 .. 71: Some predefined debug colors
      */
-    static const int colorTableCnt = 32 + 32 + 8;
-    uint16_t colors[colorTableCnt];
+    // uint16_t colors[colorTableCnt];
 
-    // The RGBA values of all 4096 Amiga colors
+    // The 32 color registers
+    uint16_t colreg[32];
+
+    // RGBA values for all possible 4096 Amiga colors
     uint32_t rgba[4096];
+
+    /* The color register values translated to RGBA
+     * Note that the number of elements exceeds the number of color registers:
+     *  0 .. 31: RGBA values of the 32 color registers.
+     * 32 .. 63: RGBA values of the 32 color registers in halfbright mode.
+     * 64 .. 71: Additional colors used for debugging
+     */
+    static const int rgbaIndexCnt = 32 + 32 + 8;
+    uint32_t indexedRgba[rgbaIndexCnt];
 
     // The most recently computed HAM pixel in Amiga RGB format
     uint16_t hamRGB;
@@ -87,7 +98,7 @@ public:
     {
         worker
 
-        & colors
+        & colreg
         & mode
         & changeHistory
         & changeCount;
@@ -134,14 +145,14 @@ public:
 public:
 
     // Performs a consistency check for debugging.
-    bool isColorTableIndex(int nr) { return nr < colorTableCnt; }
+    bool isRgbaIndex(int nr) { return nr < rgbaIndexCnt; }
     
     // Changes one of the 32 Amiga color registers.
     void setColor(int reg, uint16_t value);
 
     // Returns a color value in Amiga format or RGBA format
-    uint16_t getColor(int nr) { assert(isColorTableIndex(nr)); return colors[nr]; }
-    uint32_t getRGBA(int nr) { return rgba[getColor(nr)]; }
+    uint16_t getColor(int nr) { assert(nr < 32); return colreg[nr]; }
+    uint32_t getRGBA(int nr) { assert(nr < 32); return indexedRgba[nr]; }
 
     // Returns sprite color in Amiga format or RGBA format
     uint16_t getSpriteColor(int s, int nr) { assert(s < 8); return getColor(16 + nr + 2 * (s & 6)); }
@@ -166,7 +177,7 @@ private:
     //
 
 public:
-    
+
     // Records a color register change to be processed in translateToRGBA()
     void recordRegisterChange(uint32_t addr, uint16_t value, int16_t pixel);
 

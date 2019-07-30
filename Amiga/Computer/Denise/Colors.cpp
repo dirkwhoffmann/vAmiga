@@ -134,6 +134,12 @@ GpuColor::GpuColor(const RgbColor &c)
     rawValue = (a << 24) | (b << 16) | (g << 8) | r;
 }
 
+GpuColor::GpuColor(uint8_t r, uint8_t g, uint8_t b)
+{
+    uint8_t a = 255;
+    rawValue = (a << 24) | (b << 16) | (g << 8) | r;
+}
+
 const GpuColor GpuColor::black(RgbColor::black);
 const GpuColor GpuColor::white(RgbColor::white);
 const GpuColor GpuColor::red(RgbColor::red);

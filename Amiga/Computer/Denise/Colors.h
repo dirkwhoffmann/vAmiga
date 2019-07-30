@@ -74,6 +74,10 @@ struct AmigaColor {
     AmigaColor(const struct YuvColor &c) : AmigaColor(RgbColor(c)) { }
     AmigaColor(const struct GpuColor &c);
 
+    uint16_t r() const { return (rawValue >> 4) & 0xF0; }
+    uint16_t g() const { return (rawValue >> 0) & 0xF0; }
+    uint16_t b() const { return (rawValue << 4) & 0xF0; }
+
     static const AmigaColor black;
     static const AmigaColor white;
     static const AmigaColor red;
@@ -96,6 +100,7 @@ struct GpuColor {
     GpuColor(uint32_t v) : rawValue(v) {}
     GpuColor(const struct RgbColor &c);
     GpuColor(const struct AmigaColor &c);
+    GpuColor(uint8_t r, uint8_t g, uint8_t b);
 
     static const GpuColor black;
     static const GpuColor white;
