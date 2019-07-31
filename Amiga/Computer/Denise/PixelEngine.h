@@ -14,6 +14,8 @@
 
 class PixelEngine : public HardwareComponent {
 
+    friend class DmaDebugger;
+    
 public:
 
     // Quick-access references
@@ -198,19 +200,11 @@ private:
 
 public:
 
-    // Returns one of the two stable buffers
-    ScreenBuffer getStableLongFrame() {
-        pthread_mutex_lock(&lock);
-        ScreenBuffer result = *stableLongFrame;
-        pthread_mutex_unlock(&lock);
-        return result;
-    }
-    ScreenBuffer getStableShortFrame() {
-        pthread_mutex_lock(&lock);
-        ScreenBuffer result = *stableShortFrame;
-        pthread_mutex_unlock(&lock);
-        return result;
-    }
+    // Returns the stable frame buffer for long frames
+    ScreenBuffer getStableLongFrame();
+
+    // Returns the stable frame buffer for short frames
+    ScreenBuffer getStableShortFrame();
 
     // Returns the frame buffer address of a certain pixel in the current line
     int *pixelAddr(int pixel); // MOVED TO PIXEL ENGINE
@@ -239,8 +233,7 @@ public:
 public:
 
     // Translates bitplane data to RGBA values
-    void translateToRGBA(uint8_t *src, int *dest);
-    // void translateToRGBA_HAM(uint8_t *src, int *dest);
+    void translateToRGBA(uint8_t *src, int line);
 
     /* Draws a chunk of pixels.
      * There are three variants of this function:

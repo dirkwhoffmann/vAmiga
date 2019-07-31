@@ -502,11 +502,11 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 - (ScreenBuffer) stableLongFrame
 {
-    return wrapper->denise->getStableLongFrame();
+    return wrapper->denise->pixelEngine.getStableLongFrame();
 }
 - (ScreenBuffer) stableShortFrame
 {
-    return wrapper->denise->getStableShortFrame();
+    return wrapper->denise->pixelEngine.getStableShortFrame();
 }
 - (BOOL) interlaceMode
 {

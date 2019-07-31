@@ -19,11 +19,13 @@ Denise::Denise()
         
         &pixelEngine,
     };
-    
+
+    /*
     longFrame1.data = new int[PIXELS];
     longFrame2.data = new int[PIXELS];
     shortFrame1.data = new int[PIXELS];
     shortFrame2.data = new int[PIXELS];
+    */
 }
 
 Denise::~Denise()
@@ -41,15 +43,18 @@ void
 Denise::_powerOn()
 {
     clock = 0;
+    /*
     workingLongFrame = &longFrame1;
     workingShortFrame = &shortFrame1;
     stableLongFrame = &longFrame2;
     stableShortFrame = &shortFrame2;
     frameBuffer = &longFrame1;
+    */
 
     memset(rasterline, 0, sizeof(rasterline));
 
     // Initialize frame buffers with a recognizable debug pattern
+    /*
     for (unsigned line = 0; line < VPIXELS; line++) {
         for (unsigned i = 0; i < HPIXELS; i++) {
 
@@ -59,6 +64,7 @@ Denise::_powerOn()
             shortFrame1.data[pos] = shortFrame2.data[pos] = col;
         }
     }
+    */
 }
 
 void
@@ -309,6 +315,7 @@ Denise::armSprite(int x)
     SET_BIT(armed, x);
 }
 
+/*
 int *
 Denise::pixelAddr(int pixel)
 {
@@ -319,6 +326,7 @@ Denise::pixelAddr(int pixel)
     
     return frameBuffer->data + offset;
 }
+*/
 
 template <int HIRES> void
 Denise::draw(int pixels)
@@ -507,7 +515,7 @@ Denise::endOfLine(int vpos)
         drawBorder();
 
         // Synthesize RGBA values and write into the frame buffer
-        pixelEngine.translateToRGBA(rasterline, frameBuffer->data + vpos * HPIXELS);
+        pixelEngine.translateToRGBA(rasterline, vpos);
 
         /* Note that Denise has already synthesized pixels that belong to the
          * next DMA line (i.e., the pixels that have been written into the
@@ -525,6 +533,7 @@ Denise::endOfLine(int vpos)
     agnus->dmaDebugger.computeOverlay();
 }
 
+/*
 void
 Denise::prepareForNextFrame(bool longFrame, bool interlace)
 {
@@ -560,7 +569,7 @@ Denise::prepareForNextFrame(bool longFrame, bool interlace)
     agnus->dmaDebugger.vSyncHandler();
     // pthread_mutex_unlock(&lock);
 }
-
+*/
 
 void
 Denise::debugSetBPU(int count)

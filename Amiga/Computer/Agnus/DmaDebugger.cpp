@@ -130,7 +130,7 @@ DmaDebugger::computeOverlay()
     BusOwner *owners = amiga->agnus.busOwner;
     uint16_t *values = amiga->agnus.busValue;
     GpuColor col;
-    int *ptr = amiga->denise.pixelAddr(0);
+    int *ptr = amiga->denise.pixelEngine.pixelAddr(0);
 
     for (int i = 0; i < HPOS_CNT; i++, ptr += 4) {
 
@@ -205,7 +205,7 @@ DmaDebugger::vSyncHandler()
     if (!enabled) return;
 
     // Clear old data in the next frame's VBLANK area
-    int *ptr = amiga->denise.frameBuffer->data;
+    int *ptr = amiga->denise.pixelEngine.frameBuffer->data;
     for (int row = 0; row < VBLANK_CNT; row++) {
         for (int col = 0; col <= LAST_PIXEL; col++) {
             ptr[row * HPIXELS + col] = 0;

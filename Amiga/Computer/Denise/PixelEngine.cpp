@@ -12,7 +12,13 @@
 PixelEngine::PixelEngine()
 {
     setDescription("PixelEngine");
-    
+
+    // Allocate frame buffers
+    longFrame1.data = new int[PIXELS];
+    longFrame2.data = new int[PIXELS];
+    shortFrame1.data = new int[PIXELS];
+    shortFrame2.data = new int[PIXELS];
+
     // Setup some debug colors
     indexedRgba[64] = GpuColor(0xF, 0x0, 0x0).rawValue;
     indexedRgba[65] = GpuColor(0xD, 0x0, 0x0).rawValue;
@@ -44,11 +50,23 @@ PixelEngine::_initialize()
 void
 PixelEngine::_powerOn()
 {
+    // Initialize frame buffers
     workingLongFrame = &longFrame1;
     workingShortFrame = &shortFrame1;
     stableLongFrame = &longFrame2;
     stableShortFrame = &shortFrame2;
     frameBuffer = &longFrame1;
+
+    // Create a recognizable debug pattern
+    for (unsigned line = 0; line < VPIXELS; line++) {
+        for (unsigned i = 0; i < HPIXELS; i++) {
+
+            int pos = line * HPIXELS + i;
+            int col = (line / 4) % 2 == (i / 8) % 2 ? 0x00222222 : 0x00444444;
+            longFrame1.data[pos] = longFrame2.data[pos] = col;
+            shortFrame1.data[pos] = shortFrame2.data[pos] = col;
+        }
+    }
 
     updateRGBA();
 }
@@ -203,6 +221,26 @@ PixelEngine::adjustRGB(uint8_t &r, uint8_t &g, uint8_t &b)
     b = uint8_t(newB);
 }
 
+ScreenBuffer
+PixelEngine::getStableLongFrame()
+{
+    pthread_mutex_lock(&lock);
+    ScreenBuffer result = *stableLongFrame;
+    pthread_mutex_unlock(&lock);
+
+    return result;
+}
+
+ScreenBuffer
+PixelEngine::getStableShortFrame()
+{
+    pthread_mutex_lock(&lock);
+    ScreenBuffer result = *stableShortFrame;
+    pthread_mutex_unlock(&lock);
+
+    return result;
+}
+
 int *
 PixelEngine::pixelAddr(int pixel)
 {
@@ -245,9 +283,9 @@ PixelEngine::prepareForNextFrame(bool longFrame, bool interlace)
     frameBuffer->longFrame = longFrame;
     frameBuffer->interlace = interlace;
 
-    agnus->dmaDebugger.vSyncHandler();
-
     pthread_mutex_unlock(&lock);
+
+    agnus->dmaDebugger.vSyncHandler();
 }
 
 void
@@ -296,8 +334,10 @@ PixelEngine::applyRegisterChange(const RegisterChange &change)
 }
 
 void
-PixelEngine::translateToRGBA(uint8_t *src, int *dest)
+PixelEngine::translateToRGBA(uint8_t *src, int line)
 {
+    int32_t *dest = frameBuffer->data + line * HPIXELS;
+
     int pixel = 0;
 
     // Initialize the HAM color storage with the current background color

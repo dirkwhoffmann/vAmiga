@@ -156,7 +156,7 @@ AmigaSnapshot::takeScreenshot(Amiga *amiga)
 {
     AmigaSnapshotHeader *header = (AmigaSnapshotHeader *)data;
     
-    uint32_t *source = (uint32_t *)amiga->denise.getStableLongFrame().data;
+    uint32_t *source = (uint32_t *)amiga->denise.pixelEngine.getStableLongFrame().data;
     uint32_t *target = header->screenshot.screen;
 
     // Texture cutout and scaling factors

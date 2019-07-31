@@ -115,6 +115,7 @@ public:
      */
     uint8_t rasterline[HPIXELS + (4 * 16) + 6];
 
+#if 0
     /* Denise keeps four frame buffers, two for storing long frames and
      * another two for storing short frames. The short frame buffers are only
      * used in interlace mode. At each point in time, one of the two buffers
@@ -138,6 +139,7 @@ public:
 
     // Pointer to the frame buffer Denise is currently working on
     ScreenBuffer *frameBuffer = &longFrame1;
+#endif
 
     
     //
@@ -312,7 +314,7 @@ public:
 public:
     
     // Returns the frame buffer address of a certain pixel in the current line
-    int *pixelAddr(int pixel);
+    // int *pixelAddr(int pixel);
 
     // Synthesizes pixels
     template <int HIRES> void draw(int pixels);
@@ -339,6 +341,7 @@ public:
 public:
     
     // Returns one of the two stable buffers
+    /*
     ScreenBuffer getStableLongFrame() {
         // pthread_mutex_lock(&lock);
         ScreenBuffer result = *stableLongFrame;
@@ -351,6 +354,7 @@ public:
         // pthread_mutex_unlock(&lock);
         return result;
     }
+    */
 
 
     // Called by Agnus at the beginning of each rasterline
@@ -364,7 +368,7 @@ public:
      * longFrame indicates whether the next frame is a long frame.
      * interlace indicates whether the next frame is drawn in interlace mode.
      */
-    void prepareForNextFrame(bool longFrame, bool interlace);
+    // void prepareForNextFrame(bool longFrame, bool interlace);
     
     
     //
