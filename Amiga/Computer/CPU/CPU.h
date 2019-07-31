@@ -54,9 +54,6 @@ class CPU : public HardwareComponent {
     static const size_t traceBufferCapacity = 256;
     RecordedInstruction traceBuffer[traceBufferCapacity];
     
-    // The trace buffer read pointer
-    // int readPtr;
-    
     // The trace buffer write pointer
     int writePtr = 0;
     

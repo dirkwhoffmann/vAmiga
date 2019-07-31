@@ -10,6 +10,8 @@
 #ifndef _SERIALIZATION_INC
 #define _SERIALIZATION_INC
 
+#include "RegisterChange.h"
+
 //
 // Basic memory buffer I/O
 //
@@ -118,7 +120,13 @@ public:
 
     SerCounter& operator&(RegisterChange &v)
     {
-        *this & v.addr & v.value & v.pixel;
+        v.applyToItems(*this);
+        return *this;
+    }
+
+    SerCounter& operator&(ChangeHistory &v)
+    {
+        v.applyToItems(*this);
         return *this;
     }
 
@@ -192,7 +200,13 @@ public:
 
     SerReader& operator&(RegisterChange &v)
     {
-        *this & v.addr & v.value & v.pixel;
+        v.applyToItems(*this);
+        return *this;
+    }
+
+    SerReader& operator&(ChangeHistory &v)
+    {
+        v.applyToItems(*this);
         return *this;
     }
 
@@ -273,7 +287,13 @@ public:
 
     SerWriter& operator&(RegisterChange &v)
     {
-        *this & v.addr & v.value & v.pixel;
+        v.applyToItems(*this);
+        return *this;
+    }
+
+    SerWriter& operator&(ChangeHistory &v)
+    {
+        v.applyToItems(*this);
         return *this;
     }
 
@@ -347,7 +367,13 @@ public:
 
     SerResetter& operator&(RegisterChange &v)
     {
-        *this & v.addr & v.value & v.pixel;
+        v.applyToItems(*this);
+        return *this;
+    }
+
+    SerResetter& operator&(ChangeHistory &v)
+    {
+        v.applyToItems(*this);
         return *this;
     }
 

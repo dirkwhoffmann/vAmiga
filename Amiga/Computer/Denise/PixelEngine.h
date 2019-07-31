@@ -11,6 +11,7 @@
 #define _COLORIZER_INC
 
 #include "HardwareComponent.h"
+#include "RegisterChange.h"
 
 class PixelEngine : public HardwareComponent {
 
@@ -88,13 +89,17 @@ private:
     // Register change history
     //
 
+    ChangeHistory colorRegHistory;
+
     /* Recorded register changes
      * The change history is recorded by Denise and reset at the end of each
      * scanline.
+     * DEPRECATED
      */
     RegisterChange changeHistory[128];
 
     // Number of recorded register changes
+    // DEPRECATED
     int changeCount = 0;
 
     //
@@ -134,6 +139,7 @@ public:
     {
         worker
 
+        & colorRegHistory
         & colreg
         & mode
         & changeHistory
