@@ -50,10 +50,15 @@ public:
     //
     
     // The three bitplane control registers
-    uint16_t bplcon0 = 0;
-    uint16_t bplcon1 = 0;
-    uint16_t bplcon2 = 0;
-    
+    uint16_t bplcon0;
+    uint16_t bplcon1;
+    uint16_t bplcon2;
+
+    // Bitplane priorities (derived from bplcon2)
+    uint8_t pf1pri;
+    uint8_t pf2pri;
+    uint8_t pfpri;
+
     // The 6 bitplane data registers
     uint16_t bpldat[6];
     

@@ -392,6 +392,14 @@ PixelEngine::applyRegisterChange(const RegisterChange &change)
             mode = denise->ham() ? MODE_HAM : denise->dbplf() ? MODE_DPF : MODE_SPF;
             break;
 
+        case BPLCON2:
+
+            // Extract playfield priorities
+            prio1 = (change.value & 0b000111) << 1;
+            prio2 = (change.value & 0b111000) >> 2;
+            prioMin = MIN(prio1, prio2);
+            break;
+
         default:
 
             // It must be a color register then
@@ -455,6 +463,7 @@ PixelEngine::drawSPF(uint8_t *src, int *dst, int from, int to)
 
         assert(isRgbaIndex(src[i]));
         dst[i] = indexedRgba[src[i]];
+        zBuffer[i] = src[i] ? prio2 : 0;
         src[i] = 0;
     }
 }
@@ -462,9 +471,16 @@ PixelEngine::drawSPF(uint8_t *src, int *dst, int from, int to)
 void
 PixelEngine::drawDPF(uint8_t *src, int *dst, int from, int to)
 {
-    // Determine playfield priority
-    bool pf2pri = denise->PF2PRI();
+    if (denise->PF2PRI()) {
+        drawDPF<true>(src, dst, from, to);
+    } else {
+        drawDPF<false>(src, dst, from, to);
+    }
+}
 
+template <bool pf2pri> void
+PixelEngine::drawDPF(uint8_t *src, int *dst, int from, int to)
+{
     for (int i = from; i < to; i++) {
 
         // Determine color indices for both playfields
@@ -472,6 +488,7 @@ PixelEngine::drawDPF(uint8_t *src, int *dst, int from, int to)
         uint8_t index1 = ((s & 1) >> 0) | ((s & 4) >> 1) | ((s & 16) >> 2);
         uint8_t index2 = ((s & 2) >> 1) | ((s & 8) >> 2) | ((s & 32) >> 3);
 
+        /*
         // If not transparent, PF2 uses color registers 9 and above
         if (index2) index2 |= 0b1000;
 
@@ -486,6 +503,34 @@ PixelEngine::drawDPF(uint8_t *src, int *dst, int from, int to)
         assert(isRgbaIndex(index));
         dst[i] = indexedRgba[index];
         src[i] = 0;
+        */
+
+        if (index1) {
+
+            if (index2) { // Case 1: PF1 is solid, PF2 is solid
+
+                dst[i] = indexedRgba[pf2pri ? (index2 | 0b1000) : index1];
+                zBuffer[i] = prioMin;
+
+            } else {      // Case 2: PF1 is solid, PF2 is transparent
+
+                dst[i] = indexedRgba[index1];
+                zBuffer[i] = prio1;
+            }
+
+        } else {
+
+            if (index2) { // Case 1: PF1 is transparent, PF2 is solid
+
+                dst[i] = indexedRgba[index2 | 0b1000];
+                zBuffer[i] = prio2;
+
+            } else {      // Case 2: PF1 is transparent, PF2 is transparent
+
+                dst[i] = indexedRgba[0];
+                zBuffer[i] = INT8_MAX;
+            }
+        }
     }
 }
 
@@ -531,3 +576,6 @@ PixelEngine::drawHAM(uint8_t *src, int *dst, int from, int to, uint16_t& ham)
         src[i] = 0;
     }
 }
+
+template void PixelEngine::drawDPF<true>(uint8_t *src, int *dst, int from, int to);
+template void PixelEngine::drawDPF<false>(uint8_t *src, int *dst, int from, int to);

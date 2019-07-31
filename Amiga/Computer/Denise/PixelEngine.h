@@ -50,6 +50,9 @@ private:
     // Pointer to the frame buffer Denise is currently working on
     ScreenBuffer *frameBuffer = &longFrame[0];
 
+    // zBuffer to implement the sprite / playfield display hierarchy
+    int8_t zBuffer[HPOS_CNT];
+
 
     //
     // Color management
@@ -93,7 +96,20 @@ private:
 
     // Number of recorded register changes
     int changeCount = 0;
-    
+
+    //
+    // Playfield priorities
+    //
+
+    // Priority of playfield 1 (derived from bit PF1P2 - PF1P0 in BPLCON2)
+    uint8_t prio1;
+
+    // Priority of playfield 2 (derived from bit PF2P2 - PF2P0 in BPLCON2)
+    uint8_t prio2;
+
+    // Minimum of pf1pri and pf2pri
+    uint8_t prioMin;
+
 
     //
     // Constructing and destructing
@@ -121,7 +137,10 @@ public:
         & colreg
         & mode
         & changeHistory
-        & changeCount;
+        & changeCount
+        & prio1
+        & prio2
+        & prioMin;
     }
 
 
@@ -262,6 +281,7 @@ public:
      */
     void drawSPF(uint8_t *src, int *dst, int from, int to);
     void drawDPF(uint8_t *src, int *dst, int from, int to);
+    template <bool pf2pri> void drawDPF(uint8_t *src, int *dst, int from, int to);
     void drawHAM(uint8_t *src, int *dst, int from, int to, uint16_t& ham);
 
 };

@@ -185,7 +185,10 @@ void
 Denise::pokeBPLCON2(uint16_t value)
 {
     debug(BPL_DEBUG, "pokeBPLCON2(%X)\n", value);
-    
+
+    // Schedule the register to be updated inside the pixel engine
+    pixelEngine.recordRegisterChange(BPLCON2, value, 4 * agnus->pos.h + 4);
+
     bplcon2 = value;
 }
 
