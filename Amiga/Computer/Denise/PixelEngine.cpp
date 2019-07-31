@@ -14,10 +14,10 @@ PixelEngine::PixelEngine()
     setDescription("PixelEngine");
 
     // Allocate frame buffers
-    longFrame1.data = new int[PIXELS];
-    longFrame2.data = new int[PIXELS];
-    shortFrame1.data = new int[PIXELS];
-    shortFrame2.data = new int[PIXELS];
+    longFrame[0].data = new int[PIXELS];
+    longFrame[1].data = new int[PIXELS];
+    shortFrame[0].data = new int[PIXELS];
+    shortFrame[1].data = new int[PIXELS];
 
     // Setup some debug colors
     indexedRgba[64] = GpuColor(0xF, 0x0, 0x0).rawValue;
@@ -51,11 +51,11 @@ void
 PixelEngine::_powerOn()
 {
     // Initialize frame buffers
-    workingLongFrame = &longFrame1;
-    workingShortFrame = &shortFrame1;
-    stableLongFrame = &longFrame2;
-    stableShortFrame = &shortFrame2;
-    frameBuffer = &longFrame1;
+    workingLongFrame = &longFrame[0];
+    workingShortFrame = &shortFrame[0];
+    stableLongFrame = &longFrame[1];
+    stableShortFrame = &shortFrame[1];
+    frameBuffer = &longFrame[0];
 
     // Create a recognizable debug pattern
     for (unsigned line = 0; line < VPIXELS; line++) {
@@ -63,8 +63,8 @@ PixelEngine::_powerOn()
 
             int pos = line * HPIXELS + i;
             int col = (line / 4) % 2 == (i / 8) % 2 ? 0x00222222 : 0x00444444;
-            longFrame1.data[pos] = longFrame2.data[pos] = col;
-            shortFrame1.data[pos] = shortFrame2.data[pos] = col;
+            longFrame[0].data[pos] = longFrame[1].data[pos] = col;
+            shortFrame[0].data[pos] = shortFrame[1].data[pos] = col;
         }
     }
 
@@ -253,34 +253,43 @@ PixelEngine::pixelAddr(int pixel)
 }
 
 void
-PixelEngine::prepareForNextFrame(bool longFrame, bool interlace)
+PixelEngine::prepareForNextFrame(bool lf, bool interlace)
 {
-    assert(workingLongFrame == &longFrame1 || workingLongFrame == &longFrame2);
-    assert(workingShortFrame == &shortFrame1 || workingShortFrame == &shortFrame2);
-    assert(stableLongFrame == &longFrame1 || stableLongFrame == &longFrame2);
-    assert(stableShortFrame == &shortFrame1 || stableShortFrame == &shortFrame2);
+    bool longf = true;
+
+    assert(workingLongFrame == &longFrame[0] || workingLongFrame == &longFrame[1]);
+    assert(workingShortFrame == &shortFrame[0] || workingShortFrame == &shortFrame[1]);
+    assert(stableLongFrame == &longFrame[0] || stableLongFrame == &longFrame[1]);
+    assert(stableShortFrame == &shortFrame[0] || stableShortFrame == &shortFrame[1]);
     assert(workingLongFrame != stableLongFrame);
     assert(workingShortFrame != stableShortFrame);
     assert(frameBuffer == workingLongFrame || frameBuffer == workingShortFrame);
 
     pthread_mutex_lock(&lock);
 
-    if (frameBuffer == &longFrame1 || frameBuffer == &longFrame2) {
+    if (frameBuffer == &longFrame[0] || frameBuffer == &longFrame[1]) {
 
         workingLongFrame = stableLongFrame;
         stableLongFrame = frameBuffer;
-        frameBuffer = interlace ? workingShortFrame : workingLongFrame;
+
+        if (interlace) {
+            frameBuffer = workingShortFrame;
+            longf = false;
+        } else {
+            frameBuffer = workingLongFrame;
+            longf = true;
+        }
 
     } else {
 
-        assert(frameBuffer == &shortFrame1 || frameBuffer == &shortFrame2);
+        assert(frameBuffer == &shortFrame[0] || frameBuffer == &shortFrame[1]);
         workingShortFrame = stableShortFrame;
         stableShortFrame = frameBuffer;
         frameBuffer = workingLongFrame;
-
     }
 
-    frameBuffer->longFrame = longFrame;
+    assert(longf == lf);
+    frameBuffer->longFrame = lf;
     frameBuffer->interlace = interlace;
 
     pthread_mutex_unlock(&lock);

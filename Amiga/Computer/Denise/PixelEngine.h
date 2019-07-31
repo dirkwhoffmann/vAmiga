@@ -36,21 +36,19 @@ private:
      * the stable buffers, only. Once a frame has been completed, the working
      * buffer and the stable buffer are switched.
      */
-    ScreenBuffer longFrame1;
-    ScreenBuffer longFrame2;
-    ScreenBuffer shortFrame1;
-    ScreenBuffer shortFrame2;
+    ScreenBuffer longFrame[2];
+    ScreenBuffer shortFrame[2];
 
     // Pointers to the working buffers
-    ScreenBuffer *workingLongFrame = &longFrame1;
-    ScreenBuffer *workingShortFrame = &shortFrame1;
+    ScreenBuffer *workingLongFrame = &longFrame[0];
+    ScreenBuffer *workingShortFrame = &shortFrame[0];
 
     // Pointers to the stable buffers
-    ScreenBuffer *stableLongFrame = &longFrame2;
-    ScreenBuffer *stableShortFrame = &shortFrame2;
+    ScreenBuffer *stableLongFrame = &longFrame[0];
+    ScreenBuffer *stableShortFrame = &shortFrame[0];
 
     // Pointer to the frame buffer Denise is currently working on
-    ScreenBuffer *frameBuffer = &longFrame1;
+    ScreenBuffer *frameBuffer = &longFrame[0];
 
 
     //
@@ -198,6 +196,14 @@ private:
     // Working with frame buffers
     //
 
+private:
+
+    // Return true if buffer points to a long frame screen buffer
+    bool isLongFrame(ScreenBuffer *buf) { return buf == &longFrame[0] || buf == &longFrame[1]; }
+
+    // Return true if buffer points to a short frame screen buffer
+    bool isShortFrame(ScreenBuffer *buf) { return buf == &shortFrame[0] || buf == &shortFrame[1]; }
+
 public:
 
     // Returns the stable frame buffer for long frames
@@ -207,10 +213,10 @@ public:
     ScreenBuffer getStableShortFrame();
 
     // Returns the frame buffer address of a certain pixel in the current line
-    int *pixelAddr(int pixel); // MOVED TO PIXEL ENGINE
+    int *pixelAddr(int pixel);
 
     // Called after each frame to switch the frame buffers
-    void prepareForNextFrame(bool longFrame, bool interlace);
+    void prepareForNextFrame(bool lf, bool interlace);
 
 
     //
