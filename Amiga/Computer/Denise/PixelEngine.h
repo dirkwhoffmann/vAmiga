@@ -199,10 +199,10 @@ private:
 private:
 
     // Return true if buffer points to a long frame screen buffer
-    bool isLongFrame(ScreenBuffer *buf) { return buf == &longFrame[0] || buf == &longFrame[1]; }
+    bool isLongFrame(ScreenBuffer *buf);
 
     // Return true if buffer points to a short frame screen buffer
-    bool isShortFrame(ScreenBuffer *buf) { return buf == &shortFrame[0] || buf == &shortFrame[1]; }
+    bool isShortFrame(ScreenBuffer *buf);
 
 public:
 
@@ -216,7 +216,8 @@ public:
     int *pixelAddr(int pixel);
 
     // Called after each frame to switch the frame buffers
-    void prepareForNextFrame(bool lf, bool interlace);
+    // void prepareForNextFrame(bool lf, bool interlace);
+    void prepareForNextFrame(bool interlace);
 
 
     //

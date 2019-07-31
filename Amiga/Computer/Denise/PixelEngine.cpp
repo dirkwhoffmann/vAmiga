@@ -14,10 +14,14 @@ PixelEngine::PixelEngine()
     setDescription("PixelEngine");
 
     // Allocate frame buffers
-    longFrame[0].data = new int[PIXELS];
-    longFrame[1].data = new int[PIXELS];
-    shortFrame[0].data = new int[PIXELS];
-    shortFrame[1].data = new int[PIXELS];
+    for (int i = 0; i < 2; i++) {
+
+        longFrame[i].data = new int[PIXELS];
+        longFrame[i].longFrame = true;
+
+        shortFrame[i].data = new int[PIXELS];
+        shortFrame[i].longFrame = false;
+    }
 
     // Setup some debug colors
     indexedRgba[64] = GpuColor(0xF, 0x0, 0x0).rawValue;
@@ -221,6 +225,22 @@ PixelEngine::adjustRGB(uint8_t &r, uint8_t &g, uint8_t &b)
     b = uint8_t(newB);
 }
 
+bool
+PixelEngine::isLongFrame(ScreenBuffer *buf)
+{
+    bool result = (buf == &longFrame[0] || buf == &longFrame[1]);
+    assert(result == buf->longFrame);
+    return result;
+}
+
+bool
+PixelEngine::isShortFrame(ScreenBuffer *buf)
+{
+    bool result = (buf == &shortFrame[0] || buf == &shortFrame[1]);
+    assert(result == !buf->longFrame);
+    return result;
+}
+
 ScreenBuffer
 PixelEngine::getStableLongFrame()
 {
@@ -252,6 +272,7 @@ PixelEngine::pixelAddr(int pixel)
     return frameBuffer->data + offset;
 }
 
+/*
 void
 PixelEngine::prepareForNextFrame(bool lf, bool interlace)
 {
@@ -292,6 +313,46 @@ PixelEngine::prepareForNextFrame(bool lf, bool interlace)
     frameBuffer->longFrame = lf;
     frameBuffer->interlace = interlace;
 
+    pthread_mutex_unlock(&lock);
+
+    agnus->dmaDebugger.vSyncHandler();
+}
+*/
+
+void
+PixelEngine::prepareForNextFrame(bool interlace)
+{
+    assert(workingLongFrame == &longFrame[0] || workingLongFrame == &longFrame[1]);
+    assert(workingShortFrame == &shortFrame[0] || workingShortFrame == &shortFrame[1]);
+    assert(stableLongFrame == &longFrame[0] || stableLongFrame == &longFrame[1]);
+    assert(stableShortFrame == &shortFrame[0] || stableShortFrame == &shortFrame[1]);
+    assert(workingLongFrame != stableLongFrame);
+    assert(workingShortFrame != stableShortFrame);
+    assert(frameBuffer == workingLongFrame || frameBuffer == workingShortFrame);
+
+    pthread_mutex_lock(&lock);
+
+    if (isLongFrame(frameBuffer)) {
+
+        // Declare the finished buffer stable
+        swap(workingLongFrame, stableLongFrame);
+
+        // Select the next buffer to work on
+        frameBuffer = interlace ? workingShortFrame : workingLongFrame;
+
+    } else {
+
+        assert(isShortFrame(frameBuffer));
+
+        // Declare the finished buffer stable
+        swap(workingShortFrame, stableShortFrame);
+
+        // Select the next buffer to work on
+        frameBuffer = workingLongFrame;
+    }
+
+    frameBuffer->interlace = interlace;
+    
     pthread_mutex_unlock(&lock);
 
     agnus->dmaDebugger.vSyncHandler();
