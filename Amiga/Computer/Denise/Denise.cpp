@@ -19,13 +19,6 @@ Denise::Denise()
         
         &pixelEngine,
     };
-
-    /*
-    longFrame1.data = new int[PIXELS];
-    longFrame2.data = new int[PIXELS];
-    shortFrame1.data = new int[PIXELS];
-    shortFrame2.data = new int[PIXELS];
-    */
 }
 
 Denise::~Denise()
@@ -42,29 +35,7 @@ Denise::_initialize()
 void
 Denise::_powerOn()
 {
-    clock = 0;
-    /*
-    workingLongFrame = &longFrame1;
-    workingShortFrame = &shortFrame1;
-    stableLongFrame = &longFrame2;
-    stableShortFrame = &shortFrame2;
-    frameBuffer = &longFrame1;
-    */
-
     memset(rasterline, 0, sizeof(rasterline));
-
-    // Initialize frame buffers with a recognizable debug pattern
-    /*
-    for (unsigned line = 0; line < VPIXELS; line++) {
-        for (unsigned i = 0; i < HPIXELS; i++) {
-
-            int pos = line * HPIXELS + i;
-            int col = (line / 4) % 2 == (i / 8) % 2 ? 0x00222222 : 0x00444444;
-            longFrame1.data[pos] = longFrame2.data[pos] = col;
-            shortFrame1.data[pos] = shortFrame2.data[pos] = col;
-        }
-    }
-    */
 }
 
 void
@@ -315,19 +286,6 @@ Denise::armSprite(int x)
     SET_BIT(armed, x);
 }
 
-/*
-int *
-Denise::pixelAddr(int pixel)
-{
-    int offset = pixel + agnus->pos.v * HPIXELS;
-
-    assert(pixel < HPIXELS);
-    assert(offset < PIXELS);
-    
-    return frameBuffer->data + offset;
-}
-*/
-
 template <int HIRES> void
 Denise::draw(int pixels)
 {
@@ -532,44 +490,6 @@ Denise::endOfLine(int vpos)
     // Invoke the DMA debugger
     agnus->dmaDebugger.computeOverlay();
 }
-
-/*
-void
-Denise::prepareForNextFrame(bool longFrame, bool interlace)
-{
-    assert(workingLongFrame == &longFrame1 || workingLongFrame == &longFrame2);
-    assert(workingShortFrame == &shortFrame1 || workingShortFrame == &shortFrame2);
-    assert(stableLongFrame == &longFrame1 || stableLongFrame == &longFrame2);
-    assert(stableShortFrame == &shortFrame1 || stableShortFrame == &shortFrame2);
-    assert(workingLongFrame != stableLongFrame);
-    assert(workingShortFrame != stableShortFrame);
-    assert(frameBuffer == workingLongFrame || frameBuffer == workingShortFrame);
-
-    // pthread_mutex_lock(&lock);
-
-    if (frameBuffer == &longFrame1 || frameBuffer == &longFrame2) {
-
-        workingLongFrame = stableLongFrame;
-        stableLongFrame = frameBuffer;
-        frameBuffer = interlace ? workingShortFrame : workingLongFrame;
-
-    } else {
-
-        assert(frameBuffer == &shortFrame1 || frameBuffer == &shortFrame2);
-        workingShortFrame = stableShortFrame;
-        stableShortFrame = frameBuffer;
-        frameBuffer = workingLongFrame;
-
-    }
-
-    // debug("long = %d interlace = %d\n", frameBuffer->longFrame, frameBuffer->interlace);
-    frameBuffer->longFrame = longFrame;
-    frameBuffer->interlace = interlace;
-
-    agnus->dmaDebugger.vSyncHandler();
-    // pthread_mutex_unlock(&lock);
-}
-*/
 
 void
 Denise::debugSetBPU(int count)

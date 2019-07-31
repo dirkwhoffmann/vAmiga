@@ -102,7 +102,7 @@ public:
     
     
     //
-    // Screen buffers
+    // Rasterline data
     //
 
     /* Bitplane data of the currently drawn rasterline.
@@ -115,33 +115,7 @@ public:
      */
     uint8_t rasterline[HPIXELS + (4 * 16) + 6];
 
-#if 0
-    /* Denise keeps four frame buffers, two for storing long frames and
-     * another two for storing short frames. The short frame buffers are only
-     * used in interlace mode. At each point in time, one of the two buffers
-     * is the "working buffer" and the other one the "stable buffer". Denise
-     * writes to the working buffers, only. The GPU reads from the stable
-     * buffers, only. Once a frame has been completed, the working buffer
-     * and the stable buffer is switched.
-     */
-    ScreenBuffer longFrame1;
-    ScreenBuffer longFrame2;
-    ScreenBuffer shortFrame1;
-    ScreenBuffer shortFrame2;
 
-    // Pointers to the working buffers
-    ScreenBuffer *workingLongFrame = &longFrame1;
-    ScreenBuffer *workingShortFrame = &shortFrame1;
-
-    // Pointers to the stable buffers
-    ScreenBuffer *stableLongFrame = &longFrame2;
-    ScreenBuffer *stableShortFrame = &shortFrame2;
-
-    // Pointer to the frame buffer Denise is currently working on
-    ScreenBuffer *frameBuffer = &longFrame1;
-#endif
-
-    
     //
     // Drawing parameters
     //
@@ -312,9 +286,6 @@ public:
     //
     
 public:
-    
-    // Returns the frame buffer address of a certain pixel in the current line
-    // int *pixelAddr(int pixel);
 
     // Synthesizes pixels
     template <int HIRES> void draw(int pixels);
@@ -335,27 +306,10 @@ public:
 
 
     //
-    // Accessing the frame buffers
+    // Delegation methods
     //
     
 public:
-    
-    // Returns one of the two stable buffers
-    /*
-    ScreenBuffer getStableLongFrame() {
-        // pthread_mutex_lock(&lock);
-        ScreenBuffer result = *stableLongFrame;
-        // pthread_mutex_unlock(&lock);
-        return result;
-    }
-    ScreenBuffer getStableShortFrame() {
-        // pthread_mutex_lock(&lock);
-        ScreenBuffer result = *stableShortFrame;
-        // pthread_mutex_unlock(&lock);
-        return result;
-    }
-    */
-
 
     // Called by Agnus at the beginning of each rasterline
     void beginOfLine(int vpos);
@@ -363,13 +317,6 @@ public:
     // Called by Agnus at the end of a rasterline
     void endOfLine(int vpos);
 
-
-    /* Makes Denise ready for the next frame
-     * longFrame indicates whether the next frame is a long frame.
-     * interlace indicates whether the next frame is drawn in interlace mode.
-     */
-    // void prepareForNextFrame(bool longFrame, bool interlace);
-    
     
     //
     // Debugging the component
