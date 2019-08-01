@@ -54,11 +54,6 @@ public:
     uint16_t bplcon1;
     uint16_t bplcon2;
 
-    // Bitplane priorities (derived from bplcon2)
-    uint8_t pf1pri;
-    uint8_t pf2pri;
-    uint8_t pfpri;
-
     // The 6 bitplane data registers
     uint16_t bpldat[6];
     
@@ -78,6 +73,16 @@ public:
     int8_t scrollLoresEven;
     int8_t scrollHiresOdd;
     int8_t scrollHiresEven;
+
+
+    //
+    // Register change history buffer
+    //
+
+public:
+
+    // Control register histroy
+    ChangeHistory conRegHistory;
 
 
     //
@@ -104,7 +109,26 @@ public:
      * An armed sprite is a sprite that will be drawn in this line.
      */
     uint8_t armed;
-    
+
+
+    //
+    // Playfield priorities
+    //
+
+private:
+
+    // Priority of playfield 1 (derived from bit PF1P2 - PF1P0 in BPLCON2)
+    // MOVE TO Denise
+    uint8_t prio1;
+
+    // Priority of playfield 2 (derived from bit PF2P2 - PF2P0 in BPLCON2)
+    // MOVE TO Denise
+    uint8_t prio2;
+
+    // Minimum of pf1pri and pf2pri
+    // MOVE TO Denise
+    uint8_t prioMin;
+
     
     //
     // Rasterline data
@@ -120,10 +144,15 @@ public:
      */
     uint8_t rasterline[HPIXELS + (4 * 16) + 6];
 
+    // zBuffer to implement the sprite / playfield display hierarchy
+    int8_t zBuffer[HPIXELS + (4 * 16) + 6];
 
+    
     //
     // Drawing parameters
     //
+
+public:
 
     // Position of the first and the last pixel covered by bitplane DMA
     int16_t firstCanvasPixel;
@@ -164,6 +193,9 @@ public:
         & sprDmaState
         & attach
         & armed
+        & prio1
+        & prio2
+        & prioMin
         & bplcon0
         & bplcon1
         & bplcon2
@@ -175,6 +207,7 @@ public:
         & scrollLoresEven
         & scrollHiresOdd
         & scrollHiresEven
+        & conRegHistory
         & firstCanvasPixel
         & lastCanvasPixel
         & currentPixel;
@@ -296,6 +329,21 @@ public:
     template <int HIRES> void draw(int pixels);
     void drawLores(int pixels = 16) { draw<0>(pixels); }
     void drawHires(int pixels = 16) { draw<1>(pixels); }
+
+private:
+
+    // Translate bitplane data to color register indices
+    void translate();
+
+    // Called by translate() in single-playfield mode
+    void translateSPF(int from, int to);
+
+    // Called by translate() in dual-playfield mode
+    void translateDPF(int from, int to);
+    template <bool pf2pri> void translateDPF(int from, int to);
+
+    // Called by translate()
+    void applyRegisterChange(const RegisterChange &change);
 
 public:
 

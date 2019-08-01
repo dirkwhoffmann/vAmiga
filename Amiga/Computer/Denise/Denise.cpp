@@ -163,8 +163,8 @@ Denise::pokeBPLCON0(uint16_t value)
 void
 Denise::pokeBPLCON0(uint16_t oldValue, uint16_t newValue)
 {
-    // Schedule the register to be updated inside the pixel engine
-    pixelEngine.conRegHistory.recordChange(BPLCON0, newValue, 4 * agnus->pos.h + 4);
+    // Record the register change
+    conRegHistory.recordChange(BPLCON0, newValue, 4 * agnus->pos.h + 4);
 }
 
 void
@@ -186,10 +186,8 @@ Denise::pokeBPLCON2(uint16_t value)
 {
     debug(BPL_DEBUG, "pokeBPLCON2(%X)\n", value);
 
-    // Schedule the register to be updated inside the pixel engine
-    pixelEngine.conRegHistory.recordChange(BPLCON2, value, 4 * agnus->pos.h + 4);
-
-    bplcon2 = value;
+    // Record the register change
+    conRegHistory.recordChange(BPLCON2, value, 4 * agnus->pos.h + 4);
 }
 
 template <int x> void
@@ -263,24 +261,13 @@ Denise::pokeSPRxDATB(uint16_t value)
     sprdatb[x] = value;
 }
 
-/*
-void
-Denise::pokeCOLORx(int x, uint16_t value)
-{
-    assert(x < 32);
-    debug(COL_DEBUG, "pokeCOLOR%(%X)\n", x, value);
-
-    colorizer.recordRegisterChange(0x180 + 2*x, value & 0xFFF, 4 * agnus->pos.h);
-}
-*/
-
 void
 Denise::pokeColorReg(uint32_t addr, uint16_t value)
 {
     assert(addr >= 0x180 && addr <= 0x1BE && IS_EVEN(addr));
     debug(COL_DEBUG, "pokeColorReg(%X, %X)\n", addr, value);
 
-    pixelEngine.conRegHistory.recordChange(addr, value, 4 * agnus->pos.h);
+    pixelEngine.colRegHistory.recordChange(addr, value, 4 * agnus->pos.h);
 }
 
 void
@@ -336,44 +323,118 @@ Denise::draw(int pixels)
 #endif
 }
 
-#if 0
 void
-Denise::drawHires(int pixels)
+Denise::translate()
 {
-    uint8_t index;
+    int pixel = 0;
 
-    currentPixel = ppos(agnus->pos.h);
+    // Add a dummy register change to ensure we draw until the line end
+    conRegHistory.recordChange(0, 0, sizeof(rasterline));
 
-    uint32_t maskOdd = 0x8000 << scrollHiresOdd;
-    uint32_t maskEven = 0x8000 << scrollHiresEven;
+    // Iterate over all recorded register changes
+    for (int i = 0; i < conRegHistory.count; i++) {
 
-    for (int i = 0; i < pixels; i++) {
+        RegisterChange &change = conRegHistory.change[i];
 
-        // Read a bit slice
-        index =
-        (!!(shiftReg[0] & maskOdd)  << 0) |
-        (!!(shiftReg[1] & maskEven) << 1) |
-        (!!(shiftReg[2] & maskOdd)  << 2) |
-        (!!(shiftReg[3] & maskEven) << 3) |
-        (!!(shiftReg[4] & maskOdd)  << 4) |
-        (!!(shiftReg[5] & maskEven) << 5);
+        // Translate a chunk of bitplane data
+        if (dbplf()) {
+            translateDPF(pixel, change.pixel);
+        } else {
+            translateSPF(pixel, change.pixel);
+        }
+        pixel = change.pixel;
 
-        maskOdd >>= 1;
-        maskEven >>= 1;
-
-        // Synthesize a hires pixel
-        assert(currentPixel < sizeof(rasterline));
-        rasterline[currentPixel++] = index;
+        // Perform the register change
+        applyRegisterChange(change);
     }
 
-    // Shift out drawn bits
-    for (int i = 0; i < 6; i++) shiftReg[i] <<= pixels;
-
-#ifdef PIXEL_DEBUG
-    rasterline[currentPixel - pixels] = 64;
-#endif
+    // Clear the history cache
+    conRegHistory.init();
 }
-#endif
+
+void
+Denise::translateSPF(int from, int to)
+{
+    for (int i = from; i < to; i++) {
+
+        assert(PixelEngine::isRgbaIndex(rasterline[i]));
+        zBuffer[i] = rasterline[i] ? prio2 : 0;
+    }
+}
+
+void
+Denise::translateDPF(int from, int to)
+{
+    if (PF2PRI()) {
+        translateDPF<true>(from, to);
+    } else {
+        translateDPF<false>(from, to);
+    }
+}
+
+template <bool pf2pri> void
+Denise::translateDPF(int from, int to)
+{
+    for (int i = from; i < to; i++) {
+
+        // Determine color indices for both playfields
+        uint8_t s = rasterline[i];
+        uint8_t index1 = ((s & 1) >> 0) | ((s & 4) >> 1) | ((s & 16) >> 2);
+        uint8_t index2 = ((s & 2) >> 1) | ((s & 8) >> 2) | ((s & 32) >> 3);
+
+        if (index1) {
+            if (index2) {
+                // Case 1: PF1 is solid, PF2 is solid
+                rasterline[i] = pf2pri ? (index2 | 0b1000) : index1;
+                zBuffer[i] = prioMin;
+            } else {
+                // Case 2: PF1 is solid, PF2 is transparent
+                rasterline[i] = index1;
+                zBuffer[i] = prio1;
+            }
+        } else {
+            if (index2) {
+                // Case 3: PF1 is transparent, PF2 is solid
+                rasterline[i] = index2 | 0b1000;
+                zBuffer[i] = prio2;
+            } else {
+                // Case 4: PF1 is transparent, PF2 is transparent
+                rasterline[i] = 0;
+                zBuffer[i] = 0;
+            }
+        }
+    }
+}
+
+void
+Denise::applyRegisterChange(const RegisterChange &change)
+{
+    switch (change.addr) {
+
+        case 0:
+            break;
+
+        case BPLCON0:
+            bplcon0 = change.value;
+            break;
+
+        case BPLCON2:
+            bplcon2 = change.value;
+            // debug("Changing BPLCON2 to %X\n", bplcon2);
+            prio1 = (change.value & 0b000111) << 1;
+            prio2 = (change.value & 0b111000) >> 2;
+            prioMin = MIN(prio1, prio2);
+            break;
+
+        default:
+
+            // It must be a color register then
+            assert(change.addr >= 0x180 && change.addr <= 0x1BE);
+
+            // IGNORE
+            break;
+    }
+}
 
 void
 Denise::drawSprites()
@@ -469,19 +530,23 @@ Denise::endOfLine(int vpos)
     // Make sure we're below the VBLANK area
     if (vpos >= 26) {
 
-        // Draw sprites if one or more of them is armed.
+        // Translate bitplane data to color register indices
+        translate();
+
+        // Draw sprites if at least one is armed
         if (armed) drawSprites();
 
         // Draw border pixels
         drawBorder();
 
-        // Synthesize RGBA values and write into the frame buffer
-        pixelEngine.translateToRGBA(rasterline, vpos);
+        // Synthesize RGBA values and write the result into the frame buffer
+        // pixelEngine.translateToRGBA(rasterline, vpos);
+        pixelEngine.colorize(rasterline, vpos);
 
         /* Note that Denise has already synthesized pixels that belong to the
          * next DMA line (i.e., the pixels that have been written into the
          * rasterline array with offset values > $E2). We move them to the
-         * beginning of the rasterline array to make the appear when the next
+         * beginning of the rasterline array to make them appear when the next
          * line is drawn.
          */
         for (int i = 4 * 0xE3; i < sizeof(rasterline); i++) {
@@ -626,3 +691,6 @@ template void Denise::pokeSPRxDATB<7>(uint16_t value);
 
 template void Denise::draw<0>(int pixels);
 template void Denise::draw<1>(int pixels);
+
+template void Denise::translateDPF<true>(int from, int to);
+template void Denise::translateDPF<false>(int from, int to);

@@ -366,47 +366,6 @@ PixelEngine::applyRegisterChange(const RegisterChange &change)
         case 0:
             break;
 
-        case BPLCON0:
-        case BPLCON2:
-
-            assert(false);
-            break;
-
-        default:
-
-            // It must be a color register then
-            assert(change.addr >= 0x180 && change.addr <= 0x1BE);
-
-            // debug("Changing color reg %d to %X\n", (change.addr - 0x180) >> 1, change.value);
-            setColor((change.addr - 0x180) >> 1, change.value);
-            break;
-    }
-}
-
-void
-PixelEngine::applyRegisterChangeOld(const RegisterChange &change)
-{
-    switch (change.addr) {
-
-        case 0:
-            break;
-            
-        case BPLCON0:
-
-            denise->bplcon0 = change.value;
-
-            // Determine drawing mode
-            mode = denise->ham() ? MODE_HAM : denise->dbplf() ? MODE_DPF : MODE_SPF;
-            break;
-
-        case BPLCON2:
-
-            // Extract playfield priorities
-            prio1 = (change.value & 0b000111) << 1;
-            prio2 = (change.value & 0b111000) >> 2;
-            prioMin = MIN(prio1, prio2);
-            break;
-
         default:
 
             // It must be a color register then
@@ -425,8 +384,11 @@ PixelEngine::colorize(uint8_t *src, int line)
     int32_t *dst = frameBuffer->data + line * HPIXELS;
     int pixel = 0;
 
-    // Initialize the HAM register with the current background color
-    uint16_t ham = colreg[0];
+    // Check for HAM mode
+    bool ham = denise->ham();
+
+    // Initialize the HAM mode hold register with the current background color
+    uint16_t hold = colreg[0];
 
     // Add a dummy register change to ensure we draw until the line end
     colRegHistory.recordChange(0, 0, HPIXELS);
@@ -436,12 +398,11 @@ PixelEngine::colorize(uint8_t *src, int line)
 
         RegisterChange &change = colRegHistory.change[i];
 
-        // Draw a chunk of pixels
-        switch (mode) {
-            case MODE_SPF:
-            case MODE_DPF: colorize(src, dst, pixel, change.pixel); break;
-            case MODE_HAM: colorizeHAM(src, dst, pixel, change.pixel, ham); break;
-            default: assert(false);
+        // Colorize a chunk of pixels
+        if (ham) {
+            colorizeHAM(src, dst, pixel, change.pixel, hold);
+        } else {
+            colorize(src, dst, pixel, change.pixel);
         }
         pixel = change.pixel;
 
@@ -462,7 +423,7 @@ void
 PixelEngine::colorize(uint8_t *src, int *dst, int from, int to)
 {
     for (int i = from; i < to; i++) {
-        dst[i] = indexedRgba[i];
+        dst[i] = indexedRgba[src[i]];
         src[i] = 0;
     }
 }
@@ -510,6 +471,7 @@ PixelEngine::colorizeHAM(uint8_t *src, int *dst, int from, int to, uint16_t& ham
     }
 }
 
+#if 0
 void
 PixelEngine::translateToRGBA(uint8_t *src, int line)
 {
@@ -521,9 +483,9 @@ PixelEngine::translateToRGBA(uint8_t *src, int line)
     uint16_t ham = colreg[0];
 
     // Iterate over all recorded register changes
-    for (int i = 0; i < conRegHistory.count; i++) {
+    for (int i = 0; i < colRegHistory.count; i++) {
 
-        RegisterChange &change = conRegHistory.change[i];
+        RegisterChange &change = colRegHistory.change[i];
 
         // Draw pixels until the next change happens
         switch (mode) {
@@ -535,7 +497,8 @@ PixelEngine::translateToRGBA(uint8_t *src, int line)
         pixel = change.pixel;
 
         // Perform the register change
-        applyRegisterChangeOld(change);
+        //applyRegisterChangeOld(change);
+        applyRegisterChange(change);
     }
 
     // Draw the rest of the line
@@ -552,7 +515,7 @@ PixelEngine::translateToRGBA(uint8_t *src, int line)
     }
 
     // Delete all recorded register changes
-    conRegHistory.init();
+    colRegHistory.init();
 }
 
 void
@@ -674,3 +637,4 @@ PixelEngine::drawHAM(uint8_t *src, int *dst, int from, int to, uint16_t& ham)
 
 template void PixelEngine::drawDPF<true>(uint8_t *src, int *dst, int from, int to);
 template void PixelEngine::drawDPF<false>(uint8_t *src, int *dst, int from, int to);
+#endif

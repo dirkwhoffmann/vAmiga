@@ -52,7 +52,7 @@ private:
     ScreenBuffer *frameBuffer = &longFrame[0];
 
     // zBuffer to implement the sprite / playfield display hierarchy
-    int8_t zBuffer[HPOS_CNT];
+    // int8_t zBuffer[HPOS_CNT];
 
 
     //
@@ -86,32 +86,13 @@ private:
     
 
     //
-    // Register change history buffers
+    // Register change history buffer
     //
 
 public:
 
     // Color register history
     ChangeHistory colRegHistory;
-
-    // Control register histroy
-    ChangeHistory conRegHistory;
-
-
-    //
-    // Playfield priorities
-    //
-
-private:
-    
-    // Priority of playfield 1 (derived from bit PF1P2 - PF1P0 in BPLCON2)
-    uint8_t prio1;
-
-    // Priority of playfield 2 (derived from bit PF2P2 - PF2P0 in BPLCON2)
-    uint8_t prio2;
-
-    // Minimum of pf1pri and pf2pri
-    uint8_t prioMin;
 
 
     //
@@ -138,12 +119,8 @@ public:
         worker
 
         & colRegHistory
-        & conRegHistory
         & colreg
-        & mode
-        & prio1
-        & prio2
-        & prioMin;
+        & mode;
     }
 
 
@@ -187,7 +164,7 @@ public:
 public:
 
     // Performs a consistency check for debugging.
-    bool isRgbaIndex(int nr) { return nr < rgbaIndexCnt; }
+    static bool isRgbaIndex(int nr) { return nr < rgbaIndexCnt; }
     
     // Changes one of the 32 Amiga color registers.
     void setColor(int reg, uint16_t value);
@@ -250,7 +227,7 @@ public:
 
     // Applies a register change
     void applyRegisterChange(const RegisterChange &change);
-    void applyRegisterChangeOld(const RegisterChange &change);
+    // void applyRegisterChangeOld(const RegisterChange &change);
 
 
     //
@@ -275,7 +252,7 @@ private:
 public:
 
     // Translates bitplane data to RGBA values DEPRECATED
-    void translateToRGBA(uint8_t *src, int line);
+    // void translateToRGBA(uint8_t *src, int line);
 
     /* Draws a chunk of pixels.
      * There are three variants of this function:
@@ -295,10 +272,12 @@ public:
      *
      *     The source buffer is cleared (0 is written)
      */
+    /*
     void drawSPF(uint8_t *src, int *dst, int from, int to);
     void drawDPF(uint8_t *src, int *dst, int from, int to);
     template <bool pf2pri> void drawDPF(uint8_t *src, int *dst, int from, int to);
     void drawHAM(uint8_t *src, int *dst, int from, int to, uint16_t& ham);
+    */
 
 };
 

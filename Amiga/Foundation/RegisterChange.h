@@ -62,6 +62,15 @@ struct ChangeHistory
             nr--;
         }
     }
+
+    void dump()
+    {
+        for (int i = 0; i < count; i++) {
+            printf("%d: Register %X: change to %X at pixel %d\n",
+                   i, change[i].addr, change[i].value, change[i].pixel);
+        }
+    }
+
 };
 
 #endif
