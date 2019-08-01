@@ -164,7 +164,7 @@ void
 Denise::pokeBPLCON0(uint16_t oldValue, uint16_t newValue)
 {
     // Schedule the register to be updated inside the pixel engine
-    pixelEngine.recordRegisterChange(BPLCON0, newValue, 4 * agnus->pos.h + 4);
+    pixelEngine.conRegHistory.recordChange(BPLCON0, newValue, 4 * agnus->pos.h + 4);
 }
 
 void
@@ -187,7 +187,7 @@ Denise::pokeBPLCON2(uint16_t value)
     debug(BPL_DEBUG, "pokeBPLCON2(%X)\n", value);
 
     // Schedule the register to be updated inside the pixel engine
-    pixelEngine.recordRegisterChange(BPLCON2, value, 4 * agnus->pos.h + 4);
+    pixelEngine.conRegHistory.recordChange(BPLCON2, value, 4 * agnus->pos.h + 4);
 
     bplcon2 = value;
 }
@@ -280,7 +280,7 @@ Denise::pokeColorReg(uint32_t addr, uint16_t value)
     assert(addr >= 0x180 && addr <= 0x1BE && IS_EVEN(addr));
     debug(COL_DEBUG, "pokeColorReg(%X, %X)\n", addr, value);
 
-    pixelEngine.recordRegisterChange(addr, value, 4 * agnus->pos.h);
+    pixelEngine.conRegHistory.recordChange(addr, value, 4 * agnus->pos.h);
 }
 
 void

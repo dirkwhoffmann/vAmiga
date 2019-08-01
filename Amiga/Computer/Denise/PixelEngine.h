@@ -86,26 +86,24 @@ private:
     
 
     //
-    // Register change history
+    // Register change history buffers
     //
 
-    ChangeHistory colorRegHistory;
+public:
 
-    /* Recorded register changes
-     * The change history is recorded by Denise and reset at the end of each
-     * scanline.
-     * DEPRECATED
-     */
-    RegisterChange changeHistory[128];
+    // Color register history
+    ChangeHistory colRegHistory;
 
-    // Number of recorded register changes
-    // DEPRECATED
-    int changeCount = 0;
+    // Control register histroy
+    ChangeHistory conRegHistory;
+
 
     //
     // Playfield priorities
     //
 
+private:
+    
     // Priority of playfield 1 (derived from bit PF1P2 - PF1P0 in BPLCON2)
     uint8_t prio1;
 
@@ -139,11 +137,10 @@ public:
     {
         worker
 
-        & colorRegHistory
+        & colRegHistory
+        & conRegHistory
         & colreg
         & mode
-        & changeHistory
-        & changeCount
         & prio1
         & prio2
         & prioMin;
@@ -250,9 +247,6 @@ public:
     //
 
 public:
-
-    // Records a color register change to be processed in translateToRGBA()
-    void recordRegisterChange(uint32_t addr, uint16_t value, int16_t pixel);
 
     // Applies a register change
     void applyRegisterChange(const RegisterChange &change);

@@ -350,7 +350,7 @@ Copper::move(int addr, uint16_t value)
     if (addr >= 0x180 && addr <= 0x1BE) {
 
          // Color registers
-        colorizer->recordRegisterChange(addr, value, 4 * agnus->pos.h);
+        colorizer->conRegHistory.recordChange(addr, value, 4 * agnus->pos.h);
         return;
     }
 

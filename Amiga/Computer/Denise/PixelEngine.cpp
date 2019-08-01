@@ -359,30 +359,12 @@ PixelEngine::prepareForNextFrame(bool interlace)
 }
 
 void
-PixelEngine::recordRegisterChange(uint32_t addr, uint16_t value, int16_t pixel) {
-
-    // debug("recordRegisterChange(%X, %X, %d)\n", addr, value, pixel);
-
-    int newPos = changeCount++;
-
-    // Add new entry
-    assert(newPos < 256);
-    changeHistory[newPos].addr = addr;
-    changeHistory[newPos].value = value;
-    changeHistory[newPos].pixel = pixel;
-
-    // Keep the list sorted
-    while (newPos > 0 && changeHistory[newPos].pixel < changeHistory[newPos - 1].pixel) {
-
-        swap(changeHistory[newPos], changeHistory[newPos - 1]);
-        newPos--;
-    }
-}
-
-void
 PixelEngine::applyRegisterChange(const RegisterChange &change)
 {
     switch (change.addr) {
+
+        case 0:
+            break;
 
         case BPLCON0:
         case BPLCON2:
@@ -406,6 +388,9 @@ PixelEngine::applyRegisterChangeOld(const RegisterChange &change)
 {
     switch (change.addr) {
 
+        case 0:
+            break;
+            
         case BPLCON0:
 
             denise->bplcon0 = change.value;
@@ -444,12 +429,12 @@ PixelEngine::colorize(uint8_t *src, int line)
     uint16_t ham = colreg[0];
 
     // Add a dummy register change to ensure we draw until the line end
-    colorRegHistory.recordChange(0, 0, HPIXELS);
+    colRegHistory.recordChange(0, 0, HPIXELS);
 
     // Iterate over all recorded register changes
-    for (int i = 0; i < changeCount; i++) {
+    for (int i = 0; i < colRegHistory.count; i++) {
 
-        RegisterChange &change = changeHistory[i];
+        RegisterChange &change = colRegHistory.change[i];
 
         // Draw a chunk of pixels
         switch (mode) {
@@ -470,7 +455,7 @@ PixelEngine::colorize(uint8_t *src, int line)
     }
 
     // Clear the history cache
-    colorRegHistory.init();
+    colRegHistory.init();
 }
 
 void
@@ -536,9 +521,9 @@ PixelEngine::translateToRGBA(uint8_t *src, int line)
     uint16_t ham = colreg[0];
 
     // Iterate over all recorded register changes
-    for (int i = 0; i < changeCount; i++) {
+    for (int i = 0; i < conRegHistory.count; i++) {
 
-        RegisterChange &change = changeHistory[i];
+        RegisterChange &change = conRegHistory.change[i];
 
         // Draw pixels until the next change happens
         switch (mode) {
@@ -567,7 +552,7 @@ PixelEngine::translateToRGBA(uint8_t *src, int line)
     }
 
     // Delete all recorded register changes
-    changeCount = 0;
+    conRegHistory.init();
 }
 
 void
@@ -577,7 +562,7 @@ PixelEngine::drawSPF(uint8_t *src, int *dst, int from, int to)
 
         assert(isRgbaIndex(src[i]));
         dst[i] = indexedRgba[src[i]];
-        zBuffer[i] = src[i] ? prio2 : 0;
+        // zBuffer[i] = src[i] ? prio2 : 0;
         src[i] = 0;
     }
 }
@@ -624,12 +609,10 @@ PixelEngine::drawDPF(uint8_t *src, int *dst, int from, int to)
             if (index2) { // Case 1: PF1 is solid, PF2 is solid
 
                 dst[i] = indexedRgba[pf2pri ? (index2 | 0b1000) : index1];
-                zBuffer[i] = prioMin;
 
             } else {      // Case 2: PF1 is solid, PF2 is transparent
 
                 dst[i] = indexedRgba[index1];
-                zBuffer[i] = prio1;
             }
 
         } else {
@@ -637,12 +620,10 @@ PixelEngine::drawDPF(uint8_t *src, int *dst, int from, int to)
             if (index2) { // Case 1: PF1 is transparent, PF2 is solid
 
                 dst[i] = indexedRgba[index2 | 0b1000];
-                zBuffer[i] = prio2;
 
             } else {      // Case 2: PF1 is transparent, PF2 is transparent
 
                 dst[i] = indexedRgba[0];
-                zBuffer[i] = INT8_MAX;
             }
         }
     }
