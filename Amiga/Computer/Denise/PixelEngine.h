@@ -256,6 +256,7 @@ public:
 
     // Applies a register change
     void applyRegisterChange(const RegisterChange &change);
+    void applyRegisterChangeOld(const RegisterChange &change);
 
 
     //
@@ -264,7 +265,22 @@ public:
 
 public:
 
-    // Translates bitplane data to RGBA values
+    /* Colorizes a rasterline.
+     * This function implements the last stage in the emulator's graphics
+     * pipelile. It translates a line of color register indices into a line
+     * of RGBA values in GPU format.
+     */
+    void colorize(uint8_t *src, int line);
+
+private:
+
+    void colorize(uint8_t *src, int *dst, int from, int to);
+    void colorizeHAM(uint8_t *src, int *dst, int from, int to, uint16_t& ham);
+
+
+public:
+
+    // Translates bitplane data to RGBA values DEPRECATED
     void translateToRGBA(uint8_t *src, int line);
 
     /* Draws a chunk of pixels.

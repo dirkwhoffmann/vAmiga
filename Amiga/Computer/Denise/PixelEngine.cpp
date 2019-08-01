@@ -385,6 +385,28 @@ PixelEngine::applyRegisterChange(const RegisterChange &change)
     switch (change.addr) {
 
         case BPLCON0:
+        case BPLCON2:
+
+            assert(false);
+            break;
+
+        default:
+
+            // It must be a color register then
+            assert(change.addr >= 0x180 && change.addr <= 0x1BE);
+
+            // debug("Changing color reg %d to %X\n", (change.addr - 0x180) >> 1, change.value);
+            setColor((change.addr - 0x180) >> 1, change.value);
+            break;
+    }
+}
+
+void
+PixelEngine::applyRegisterChangeOld(const RegisterChange &change)
+{
+    switch (change.addr) {
+
+        case BPLCON0:
 
             denise->bplcon0 = change.value;
 
@@ -408,6 +430,98 @@ PixelEngine::applyRegisterChange(const RegisterChange &change)
             // debug("Changing color reg %d to %X\n", (change.addr - 0x180) >> 1, change.value);
             setColor((change.addr - 0x180) >> 1, change.value);
             break;
+    }
+}
+
+void
+PixelEngine::colorize(uint8_t *src, int line)
+{
+    // Jump to the first pixel in the specified line in the active frame buffer
+    int32_t *dst = frameBuffer->data + line * HPIXELS;
+    int pixel = 0;
+
+    // Initialize the HAM register with the current background color
+    uint16_t ham = colreg[0];
+
+    // Add a dummy register change to ensure we draw until the line end
+    colorRegHistory.recordChange(0, 0, HPIXELS);
+
+    // Iterate over all recorded register changes
+    for (int i = 0; i < changeCount; i++) {
+
+        RegisterChange &change = changeHistory[i];
+
+        // Draw a chunk of pixels
+        switch (mode) {
+            case MODE_SPF:
+            case MODE_DPF: colorize(src, dst, pixel, change.pixel); break;
+            case MODE_HAM: colorizeHAM(src, dst, pixel, change.pixel, ham); break;
+            default: assert(false);
+        }
+        pixel = change.pixel;
+
+        // Perform the register change
+        applyRegisterChange(change);
+    }
+
+    // Wipe out the HBLANK area
+    for (int pixel = 4 * 0x0F; pixel <= 4 * 0x35; pixel++) {
+        dst[pixel] = 0x00444444;
+    }
+
+    // Clear the history cache
+    colorRegHistory.init();
+}
+
+void
+PixelEngine::colorize(uint8_t *src, int *dst, int from, int to)
+{
+    for (int i = from; i < to; i++) {
+        dst[i] = indexedRgba[i];
+        src[i] = 0;
+    }
+}
+
+void
+PixelEngine::colorizeHAM(uint8_t *src, int *dst, int from, int to, uint16_t& ham)
+{
+    for (int i = from; i < to; i++) {
+
+        uint8_t index = src[i];
+        assert(isRgbaIndex(index));
+
+        switch ((index >> 4) & 0b11) {
+
+            case 0b00: // Get color from register
+
+                ham = colreg[index];
+                break;
+
+            case 0b01: // Modify blue
+
+                ham &= 0xFF0;
+                ham |= (index & 0b1111);
+                break;
+
+            case 0b10: // Modify red
+
+                ham &= 0x0FF;
+                ham |= (index & 0b1111) << 8;
+                break;
+
+            case 0b11: // Modify green
+
+                ham &= 0xF0F;
+                ham |= (index & 0b1111) << 4;
+                break;
+
+            default:
+                assert(false);
+        }
+
+        // Synthesize pixel
+        dst[i] = rgba[ham];
+        src[i] = 0;
     }
 }
 
@@ -436,7 +550,7 @@ PixelEngine::translateToRGBA(uint8_t *src, int line)
         pixel = change.pixel;
 
         // Perform the register change
-        applyRegisterChange(change);
+        applyRegisterChangeOld(change);
     }
 
     // Draw the rest of the line
