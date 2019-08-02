@@ -49,10 +49,15 @@ public:
     // Registers
     //
     
-    // The three bitplane control registers
+    // The bitplane control registers
     uint16_t bplcon0;
     uint16_t bplcon1;
     uint16_t bplcon2;
+
+    // The bitplane control registers at cycle 0 in the current rasterline
+    uint16_t initialBplcon0;
+    uint16_t initialBplcon1;
+    uint16_t initialBplcon2;
 
     // The 6 bitplane data registers
     uint16_t bpldat[6];
@@ -199,6 +204,9 @@ public:
         & bplcon0
         & bplcon1
         & bplcon2
+        & initialBplcon0
+        & initialBplcon1
+        & initialBplcon2
         & bpldat
         & sprdata
         & sprdatb
@@ -266,12 +274,18 @@ public:
     void pokeBPLCON0(uint16_t value);
     void pokeBPLCON0(uint16_t oldValue, uint16_t newValue);
 
-    bool hires() { return !!GET_BIT(bplcon0, 15); }
-    bool lores() { return !GET_BIT(bplcon0, 15); }
-    bool dbplf() { return GET_BIT(bplcon0, 10); }
-    bool lace() { return GET_BIT(bplcon0, 2); }
-    int bpu() { return (bplcon0 >> 12) & 0b111; }
-    bool ham() { return (bplcon0 & 0x8C00) == 0x0800 && (bpu() == 5 || bpu() == 6); };
+    bool hires(uint16_t v) { return !!GET_BIT(v, 15); }
+    bool hires() { return hires(bplcon0); }
+    bool lores(uint16_t v) { return !GET_BIT(v, 15); }
+    bool lores() { return lores(bplcon0); }
+    bool dbplf(uint16_t v) { return GET_BIT(v, 10); }
+    bool dbplf() { return dbplf(bplcon0); }
+    bool lace(uint16_t v) { return GET_BIT(v, 2); }
+    bool lace() { return lace(bplcon0); }
+    int bpu(uint16_t v) { return (v >> 12) & 0b111; }
+    int bpu() { return bpu(bplcon0); }
+    bool ham(uint16_t v) { return (v & 0x8C00) == 0x0800 && (bpu(v) == 5 || bpu(v) == 6); }
+    bool ham() { return ham(bplcon0); }
 
     // OCS register 0x102 (w)
     void pokeBPLCON1(uint16_t value);
@@ -296,7 +310,6 @@ public:
     template <int x> void pokeSPRxDATB(uint16_t value);
 
     // OCS registers 0x180, 0x181, ..., 0x1BC, 0x1BE (w)
-    // void pokeCOLORx(int x, uint16_t value);
     void pokeColorReg(uint32_t addr, uint16_t value);
 
     
@@ -306,6 +319,9 @@ public:
     
     // Copy data from SPRDATA and SPRDATB into the serial shift registers
     void armSprite(int x);
+
+    // Extracts the sprite priorities from BPLCON2
+    void updateSpritePriorities(uint16_t bplcon2);
 
 
     //
@@ -343,7 +359,7 @@ private:
     template <bool pf2pri> void translateDPF(int from, int to);
 
     // Called by translate()
-    void applyRegisterChange(const RegisterChange &change);
+    // void applyRegisterChange(const RegisterChange &change);
 
 public:
 

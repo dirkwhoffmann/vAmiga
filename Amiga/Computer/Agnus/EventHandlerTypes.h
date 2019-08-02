@@ -208,6 +208,9 @@ typedef enum : long
     // REG slots
     REG_DIWSTRT = 1,
     REG_DIWSTOP,
+    REG_BPLCON0,
+    REG_BPLCON1,
+    REG_BPLCON2,
     REG_BPL1MOD,
     REG_BPL2MOD,
     REG_BPLxPTH,

@@ -156,15 +156,18 @@ Denise::pokeBPLCON0(uint16_t value)
 {
     debug(BPL_DEBUG, "pokeBPLCON0(%X)\n", value);
 
-    // Only proceed if the value changes
-    if (bplcon0 != value) pokeBPLCON0(bplcon0, value);
+    if (bplcon0 != value) {
+
+        pokeBPLCON0(bplcon0, value);
+        bplcon0 = value;
+    }
 }
 
 void
 Denise::pokeBPLCON0(uint16_t oldValue, uint16_t newValue)
 {
     // Record the register change
-    conRegHistory.recordChange(BPLCON0, newValue, 4 * agnus->pos.h + 4);
+    conRegHistory.recordChange(BPLCON0, newValue, 4 * agnus->pos.h);
 }
 
 void
@@ -276,6 +279,14 @@ Denise::armSprite(int x)
     SET_BIT(armed, x);
 }
 
+void
+Denise::updateSpritePriorities(uint16_t bplcon2)
+{
+    prio1 = (bplcon2 & 0b000111) << 1;
+    prio2 = (bplcon2 & 0b111000) >> 2;
+    prioMin = MIN(prio1, prio2);
+}
+
 template <int HIRES> void
 Denise::draw(int pixels)
 {
@@ -328,6 +339,12 @@ Denise::translate()
 {
     int pixel = 0;
 
+    uint16_t bplcon0 = initialBplcon0;
+    bool dual = dbplf(bplcon0);
+
+    uint16_t bplcon2 = initialBplcon2;
+    updateSpritePriorities(bplcon2);
+
     // Add a dummy register change to ensure we draw until the line end
     conRegHistory.recordChange(0, 0, sizeof(rasterline));
 
@@ -337,15 +354,30 @@ Denise::translate()
         RegisterChange &change = conRegHistory.change[i];
 
         // Translate a chunk of bitplane data
-        if (dbplf()) {
+        if (dual) {
             translateDPF(pixel, change.pixel);
         } else {
             translateSPF(pixel, change.pixel);
         }
         pixel = change.pixel;
 
-        // Perform the register change
-        applyRegisterChange(change);
+        // Apply the register change
+        switch (change.addr) {
+
+            case BPLCON0:
+                bplcon0 = change.value;
+                dual = dbplf(bplcon0);
+                break;
+
+            case BPLCON2:
+                bplcon2 = change.value;
+                updateSpritePriorities(bplcon2);
+                break;
+
+            default:
+                assert(change.addr == 0);
+                break;
+        }
     }
 
     // Clear the history cache
@@ -406,6 +438,7 @@ Denise::translateDPF(int from, int to)
     }
 }
 
+/*
 void
 Denise::applyRegisterChange(const RegisterChange &change)
 {
@@ -435,6 +468,7 @@ Denise::applyRegisterChange(const RegisterChange &change)
             break;
     }
 }
+*/
 
 void
 Denise::drawSprites()
@@ -520,6 +554,11 @@ Denise::beginOfLine(int vpos)
 {
     // Reset the horizontal pixel counter
     currentPixel = (agnus->dmaFirstBpl1Event * 4) + 6;
+
+    // Save the current values of the bitplane control registers
+    initialBplcon0 = bplcon0;
+    initialBplcon1 = bplcon1;
+    initialBplcon2 = bplcon2;
 }
 
 void

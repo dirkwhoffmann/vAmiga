@@ -201,6 +201,9 @@ Agnus::inspectEventSlot(EventSlot nr)
                 case 0:             i->eventName = "none"; break;
                 case REG_DIWSTRT:   i->eventName = "REG_DIWSTRT"; break;
                 case REG_DIWSTOP:   i->eventName = "REG_DIWSTOP"; break;
+                case REG_BPLCON0:   i->eventName = "REG_BPLCON0"; break;
+                case REG_BPLCON1:   i->eventName = "REG_BPLCON1"; break;
+                case REG_BPLCON2:   i->eventName = "REG_BPLCON2"; break;
                 case REG_BPL1MOD:   i->eventName = "REG_BPL1MOD"; break;
                 case REG_BPL2MOD:   i->eventName = "REG_BPL2MOD"; break;
                 case REG_BPLxPTH:   i->eventName = "REG_BPLxPTH"; break;
@@ -776,12 +779,34 @@ Agnus::serviceREGEvent(EventSlot nr)
 
     switch (id) {
 
-        case REG_DIWSTRT: setDIWSTRT((uint16_t)data); break;
-        case REG_DIWSTOP: setDIWSTOP((uint16_t)data); break;
-        case REG_BPL1MOD: setBPL1MOD((uint16_t)data); break;
-        case REG_BPL2MOD: setBPL2MOD((uint16_t)data); break;
-        case REG_BPLxPTH: setBPLxPTH(HI_WORD(data), LO_WORD(data)); break;
-        case REG_BPLxPTL: setBPLxPTL(HI_WORD(data), LO_WORD(data)); break;
+        case REG_DIWSTRT:
+            setDIWSTRT((uint16_t)data);
+            break;
+        case REG_DIWSTOP:
+            setDIWSTOP((uint16_t)data);
+            break;
+        case REG_BPLCON0:
+            pokeBPLCON0((uint16_t)data);
+            denise->pokeBPLCON0((uint16_t)data);
+            break;
+        case REG_BPLCON1:
+            denise->pokeBPLCON1((uint16_t)data);
+            break;
+        case REG_BPLCON2:
+            denise->pokeBPLCON2((uint16_t)data);
+            break;
+        case REG_BPL1MOD:
+            setBPL1MOD((uint16_t)data);
+            break;
+        case REG_BPL2MOD:
+            setBPL2MOD((uint16_t)data);
+            break;
+        case REG_BPLxPTH:
+            setBPLxPTH(HI_WORD(data), LO_WORD(data));
+            break;
+        case REG_BPLxPTL:
+            setBPLxPTL(HI_WORD(data), LO_WORD(data));
+            break;
 
         default: assert(false);
     }
