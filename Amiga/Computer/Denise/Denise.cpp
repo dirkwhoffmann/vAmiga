@@ -390,7 +390,7 @@ Denise::translateSPF(int from, int to)
     for (int i = from; i < to; i++) {
 
         assert(PixelEngine::isRgbaIndex(rasterline[i]));
-        zBuffer[i] = rasterline[i] ? prio2 : 0;
+        zBuffer[i] = rasterline[i] ? prio2 : INT8_MAX;
     }
 }
 
@@ -432,7 +432,7 @@ Denise::translateDPF(int from, int to)
             } else {
                 // Case 4: PF1 is transparent, PF2 is transparent
                 rasterline[i] = 0;
-                zBuffer[i] = 0;
+                zBuffer[i] = INT8_MAX;
             }
         }
     }
@@ -476,9 +476,9 @@ Denise::drawSprites()
     // Only proceed if we are not inside the upper or lower border area
     if (!agnus->inBplDmaArea()) return;
 
-    for (int nr = 0; armed != 0; nr++, armed >>= 1) {
+    for (int nr = 7; armed != 0; nr--, armed <<= 1) {
 
-        if (armed & 0x1) {
+        if (armed & 0x80) {
 
             int baseCol = 16 + 2 * (nr & 6);
             int16_t pos = 2 * sprhstrt[nr] + 2;
@@ -489,8 +489,12 @@ Denise::drawSprites()
                 col |=    (sprdatb[nr] >> (15 - i)) & 1;
 
                 if (col) {
-                    if (pos < LAST_PIXEL) rasterline[pos] = baseCol + col;
-                    if (pos < LAST_PIXEL) rasterline[pos+1] = baseCol + col;
+                    if (pos < LAST_PIXEL && nr < zBuffer[pos]) {
+                        rasterline[pos] = baseCol + col;
+                    }
+                    if (pos < LAST_PIXEL && nr < zBuffer[pos+1]) {
+                        rasterline[pos+1] = baseCol + col;
+                    }
                 }
             }
         }
