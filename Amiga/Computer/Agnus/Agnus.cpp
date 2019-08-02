@@ -1239,8 +1239,8 @@ Agnus::skipBPLxPT(int x)
 
         if (dmaEvent[pos.h + 2] == EVENT_NONE) { // (2)
 
-            debug("skipBPLxPT: Value gets lost\n");
-            dumpDMAEventTable();
+            // debug("skipBPLxPT: Value gets lost\n");
+            // dumpDMAEventTable();
             return true;
         }
     }
