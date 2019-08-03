@@ -189,7 +189,9 @@ Denise::pokeBPLCON2(uint16_t value)
 {
     debug(BPL_DEBUG, "pokeBPLCON2(%X)\n", value);
 
-    // Record the register change
+    bplcon2 = value;
+
+    // Record the pixel coordinate where the change takes place
     conRegHistory.recordChange(BPLCON2, value, 4 * agnus->pos.h + 4);
 }
 
@@ -537,7 +539,7 @@ Denise::drawSprite()
     uint32_t d0 = (uint32_t)sprdatb[x] << 0;
 
     int baseCol = 16 + 2 * (x & 6);
-    int16_t pos = 2 * sprhstrt[x] + 16; // 2 + 14;
+    int16_t pos = 2 * sprhstrt[x] + 32;
 
     for (int i = 15; i >= 0; i--) {
 
@@ -546,7 +548,7 @@ Denise::drawSprite()
         if (col) {
             if (pos < LAST_PIXEL && x < zBuffer[pos]) {
                 rasterline[pos] = baseCol | col;
-            }
+            } 
             if (pos < LAST_PIXEL && x < zBuffer[pos+1]) {
                 rasterline[pos+1] = baseCol | col;
             }
@@ -569,7 +571,7 @@ Denise::drawSpritePair()
     uint32_t d1 = (uint32_t)sprdata[x-1] << 1;
     uint32_t d0 = (uint32_t)sprdatb[x-1] << 0;
 
-    int16_t pos = 2 * sprhstrt[x] + 16; // 2 + 14;
+    int16_t pos = 2 * sprhstrt[x] + 32;
 
     for (int i = 15; i >= 0; i--) {
 
@@ -703,7 +705,7 @@ Denise::endOfLine(int vpos)
         translate();
 
         // Draw sprites if at least one is armed
-        if (armed) { drawSprites(); }
+        if (armed) drawSprites();
 
         // Draw border pixels
         drawBorder();
