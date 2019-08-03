@@ -316,7 +316,10 @@ public:
     //
     // Handling sprites
     //
-    
+
+    // Returns true if sprite x is attached to sprite x - 1
+    bool attached(int x);
+
     // Copy data from SPRDATA and SPRDATB into the serial shift registers
     void armSprite(int x);
 
@@ -367,6 +370,9 @@ public:
      * This method is called at the end of each rasterline.
      */
     void drawSprites();
+    template <int x> void drawSprite();
+    template <int x> void drawSpritePair();
+    // void drawSpritesOld();
 
     /* Draws the left and the right border.
      * This method is called at the end of each rasterline.

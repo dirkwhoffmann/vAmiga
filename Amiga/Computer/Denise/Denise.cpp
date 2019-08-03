@@ -273,6 +273,15 @@ Denise::pokeColorReg(uint32_t addr, uint16_t value)
     pixelEngine.colRegHistory.recordChange(addr, value, 4 * agnus->pos.h);
 }
 
+bool
+Denise::attached(int x) {
+
+    assert(x >= 1 && x <= 7);
+    assert(IS_ODD(x));
+
+    return GET_BIT(attach,x) && sprhstrt[x-1] == sprhstrt[x];
+}
+
 void
 Denise::armSprite(int x)
 {
@@ -476,6 +485,122 @@ Denise::drawSprites()
     // Only proceed if we are not inside the upper or lower border area
     if (!agnus->inBplDmaArea()) return;
 
+    // Sprites 6 and 7
+    if (armed & 0b11000000) {
+        if (attached(7)) {
+            drawSpritePair<7>();
+        } else {
+            if (armed & 0b10000000) drawSprite<7>();
+            if (armed & 0b01000000) drawSprite<6>();
+        }
+    }
+
+    // Sprites 4 and 5
+    if (armed & 0b00110000) {
+        if (attached(5)) {
+            drawSpritePair<5>();
+        } else {
+            if (armed & 0b00100000) drawSprite<5>();
+            if (armed & 0b00010000) drawSprite<4>();
+        }
+    }
+
+    // Sprites 2 and 3
+    if (armed & 0b00001100) {
+        if (attached(3)) {
+            drawSpritePair<3>();
+        } else {
+            if (armed & 0b00001000) drawSprite<3>();
+            if (armed & 0b00000100) drawSprite<2>();
+        }
+    }
+
+    // Sprites 1 and 0
+    if (armed & 0b00000011) {
+        if (attached(1)) {
+            drawSpritePair<1>();
+        } else {
+            if (armed & 0b00000010) drawSprite<1>();
+            if (armed & 0b00000001) drawSprite<0>();
+        }
+    }
+
+    armed = 0;
+}
+
+template <int x> void
+Denise::drawSprite()
+{
+    assert(x >= 0 && x <= 7);
+
+    uint32_t d1 = (uint32_t)sprdata[x] << 1;
+    uint32_t d0 = (uint32_t)sprdatb[x] << 0;
+
+    int baseCol = 16 + 2 * (x & 6);
+    int16_t pos = 2 * sprhstrt[x] + 16; // 2 + 14;
+
+    for (int i = 15; i >= 0; i--) {
+
+        int col = (d1 & 0b0010) | (d0 & 0b0001);
+
+        if (col) {
+            if (pos < LAST_PIXEL && x < zBuffer[pos]) {
+                rasterline[pos] = baseCol | col;
+            }
+            if (pos < LAST_PIXEL && x < zBuffer[pos+1]) {
+                rasterline[pos+1] = baseCol | col;
+            }
+        }
+
+        d1 >>= 1;
+        d0 >>= 1;
+        pos -= 2;
+    }
+}
+
+template <int x> void
+Denise::drawSpritePair()
+{
+    assert(x >= 1 && x <= 7);
+    assert(IS_ODD(x));
+
+    uint32_t d3 = (uint32_t)sprdata[x]   << 3;
+    uint32_t d2 = (uint32_t)sprdatb[x]   << 2;
+    uint32_t d1 = (uint32_t)sprdata[x-1] << 1;
+    uint32_t d0 = (uint32_t)sprdatb[x-1] << 0;
+
+    int16_t pos = 2 * sprhstrt[x] + 16; // 2 + 14;
+
+    for (int i = 15; i >= 0; i--) {
+
+        int col = (d3 & 0b1000) | (d2 & 0b0100) | (d1 & 0b0010) | (d0 & 0b0001);
+
+        if (col) {
+            if (pos < LAST_PIXEL && x < zBuffer[pos]) {
+                rasterline[pos] = 0b10000 | col;
+            }
+            if (pos < LAST_PIXEL && x < zBuffer[pos+1]) {
+                rasterline[pos+1] = 0b10000 | col;
+            }
+        }
+
+        d3 >>= 1;
+        d2 >>= 1;
+        d1 >>= 1;
+        d0 >>= 1;
+        pos -= 2;
+    }
+}
+
+/*
+void
+Denise::drawSpritesOld()
+{
+    // Only proceed if we are not inside the upper or lower border area
+    if (!agnus->inBplDmaArea()) return;
+
+    if (armed) debug("old: armed = %X\n", armed);
+
     for (int nr = 7; armed != 0; nr--, armed <<= 1) {
 
         if (armed & 0x80) {
@@ -500,6 +625,7 @@ Denise::drawSprites()
         }
     }
 }
+*/
 
 void
 Denise::drawBorder()
@@ -577,7 +703,7 @@ Denise::endOfLine(int vpos)
         translate();
 
         // Draw sprites if at least one is armed
-        if (armed) drawSprites();
+        if (armed) { drawSprites(); }
 
         // Draw border pixels
         drawBorder();
