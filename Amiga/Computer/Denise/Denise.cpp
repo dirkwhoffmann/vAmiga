@@ -293,9 +293,33 @@ Denise::armSprite(int x)
 void
 Denise::updateSpritePriorities(uint16_t bplcon2)
 {
-    prio1 = (bplcon2 & 0b000111) << 1;
-    prio2 = (bplcon2 & 0b111000) >> 2;
-    prioMin = MIN(prio1, prio2);
+    switch (bplcon2 & 0b111) {
+
+        case 0: prio1 = Z_0; break;
+        case 1: prio1 = Z_1; break;
+        case 2: prio1 = Z_2; break;
+        case 3: prio1 = Z_3; break;
+        case 4: prio1 = Z_4; break;
+
+        default:
+            // TODO: Check the effect of illegal values
+            break;
+    }
+
+    switch ((bplcon2 >> 3) & 0b111) {
+
+        case 0: prio2 = Z_0; break;
+        case 1: prio2 = Z_1; break;
+        case 2: prio2 = Z_2; break;
+        case 3: prio2 = Z_3; break;
+        case 4: prio2 = Z_4; break;
+
+        default:
+            // TODO: Check the effect of illegal values
+            break;
+    }
+
+    prio12 = MAX(prio1, prio2);
 }
 
 template <int HIRES> void
@@ -401,7 +425,7 @@ Denise::translateSPF(int from, int to)
     for (int i = from; i < to; i++) {
 
         assert(PixelEngine::isRgbaIndex(rasterline[i]));
-        zBuffer[i] = rasterline[i] ? prio2 : INT8_MAX;
+        zBuffer[i] = rasterline[i] ? : 0 ;
     }
 }
 
@@ -429,57 +453,25 @@ Denise::translateDPF(int from, int to)
             if (index2) {
                 // Case 1: PF1 is solid, PF2 is solid
                 rasterline[i] = pf2pri ? (index2 | 0b1000) : index1;
-                zBuffer[i] = prioMin;
+                zBuffer[i] = prio12 | (Z_DPF | Z_PF1 | Z_PF2);
             } else {
                 // Case 2: PF1 is solid, PF2 is transparent
                 rasterline[i] = index1;
-                zBuffer[i] = prio1;
+                zBuffer[i] = prio1 | (Z_DPF | Z_PF2);
             }
         } else {
             if (index2) {
                 // Case 3: PF1 is transparent, PF2 is solid
                 rasterline[i] = index2 | 0b1000;
-                zBuffer[i] = prio2;
+                zBuffer[i] = prio2 | (Z_DPF | Z_PF2);
             } else {
                 // Case 4: PF1 is transparent, PF2 is transparent
                 rasterline[i] = 0;
-                zBuffer[i] = INT8_MAX;
+                zBuffer[i] = Z_DPF;
             }
         }
     }
 }
-
-/*
-void
-Denise::applyRegisterChange(const RegisterChange &change)
-{
-    switch (change.addr) {
-
-        case 0:
-            break;
-
-        case BPLCON0:
-            bplcon0 = change.value;
-            break;
-
-        case BPLCON2:
-            bplcon2 = change.value;
-            // debug("Changing BPLCON2 to %X\n", bplcon2);
-            prio1 = (change.value & 0b000111) << 1;
-            prio2 = (change.value & 0b111000) >> 2;
-            prioMin = MIN(prio1, prio2);
-            break;
-
-        default:
-
-            // It must be a color register then
-            assert(change.addr >= 0x180 && change.addr <= 0x1BE);
-
-            // IGNORE
-            break;
-    }
-}
-*/
 
 void
 Denise::drawSprites()
@@ -535,6 +527,9 @@ Denise::drawSprite()
 {
     assert(x >= 0 && x <= 7);
 
+    const uint16_t depth[8] = { Z_SP0, Z_SP1, Z_SP2, Z_SP3, Z_SP4, Z_SP5, Z_SP6, Z_SP7 };
+    uint16_t z = depth[x];
+
     uint32_t d1 = (uint32_t)sprdata[x] << 1;
     uint32_t d0 = (uint32_t)sprdatb[x] << 0;
 
@@ -546,11 +541,13 @@ Denise::drawSprite()
         int col = (d1 & 0b0010) | (d0 & 0b0001);
 
         if (col) {
-            if (pos < LAST_PIXEL && x < zBuffer[pos]) {
+            if (pos < LAST_PIXEL && z > zBuffer[pos]) {
                 rasterline[pos] = baseCol | col;
+                zBuffer[pos] |= z;
             } 
-            if (pos < LAST_PIXEL && x < zBuffer[pos+1]) {
+            if (pos < LAST_PIXEL && z > zBuffer[pos+1]) {
                 rasterline[pos+1] = baseCol | col;
+                zBuffer[pos+1] |= z;
             }
         }
 
@@ -566,6 +563,9 @@ Denise::drawSpritePair()
     assert(x >= 1 && x <= 7);
     assert(IS_ODD(x));
 
+    const uint16_t depth[8] = { Z_SP0, Z_SP1, Z_SP2, Z_SP3, Z_SP4, Z_SP5, Z_SP6, Z_SP7 };
+    uint16_t z = depth[x];
+
     uint32_t d3 = (uint32_t)sprdata[x]   << 3;
     uint32_t d2 = (uint32_t)sprdatb[x]   << 2;
     uint32_t d1 = (uint32_t)sprdata[x-1] << 1;
@@ -578,11 +578,13 @@ Denise::drawSpritePair()
         int col = (d3 & 0b1000) | (d2 & 0b0100) | (d1 & 0b0010) | (d0 & 0b0001);
 
         if (col) {
-            if (pos < LAST_PIXEL && x < zBuffer[pos]) {
+            if (pos < LAST_PIXEL && z > zBuffer[pos]) {
                 rasterline[pos] = 0b10000 | col;
+                zBuffer[pos+1] |= z;
             }
-            if (pos < LAST_PIXEL && x < zBuffer[pos+1]) {
+            if (pos < LAST_PIXEL && z > zBuffer[pos+1]) {
                 rasterline[pos+1] = 0b10000 | col;
+                zBuffer[pos+1] |= z;
             }
         }
 
@@ -593,41 +595,6 @@ Denise::drawSpritePair()
         pos -= 2;
     }
 }
-
-/*
-void
-Denise::drawSpritesOld()
-{
-    // Only proceed if we are not inside the upper or lower border area
-    if (!agnus->inBplDmaArea()) return;
-
-    if (armed) debug("old: armed = %X\n", armed);
-
-    for (int nr = 7; armed != 0; nr--, armed <<= 1) {
-
-        if (armed & 0x80) {
-
-            int baseCol = 16 + 2 * (nr & 6);
-            int16_t pos = 2 * sprhstrt[nr] + 2;
-
-            for (int i = 0; i < 16; i++, pos += 2) {
-
-                int col = (sprdata[nr] >> (14 - i)) & 2;
-                col |=    (sprdatb[nr] >> (15 - i)) & 1;
-
-                if (col) {
-                    if (pos < LAST_PIXEL && nr < zBuffer[pos]) {
-                        rasterline[pos] = baseCol + col;
-                    }
-                    if (pos < LAST_PIXEL && nr < zBuffer[pos+1]) {
-                        rasterline[pos+1] = baseCol + col;
-                    }
-                }
-            }
-        }
-    }
-}
-*/
 
 void
 Denise::drawBorder()

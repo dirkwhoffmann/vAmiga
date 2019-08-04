@@ -130,16 +130,13 @@ public:
 private:
 
     // Priority of playfield 1 (derived from bit PF1P2 - PF1P0 in BPLCON2)
-    // MOVE TO Denise
-    uint8_t prio1;
+    uint16_t prio1;
 
     // Priority of playfield 2 (derived from bit PF2P2 - PF2P0 in BPLCON2)
-    // MOVE TO Denise
-    uint8_t prio2;
+    uint16_t prio2;
 
     // Minimum of pf1pri and pf2pri
-    // MOVE TO Denise
-    uint8_t prioMin;
+    uint16_t prio12;
 
     
     //
@@ -156,8 +153,48 @@ private:
      */
     uint8_t rasterline[HPIXELS + (4 * 16) + 6];
 
-    // zBuffer to implement the sprite / playfield display hierarchy
-    int8_t zBuffer[HPIXELS + (4 * 16) + 6];
+    /* The depth buffer
+     * The depth buffer is built up in function translate() and serves several
+     * purposes. First, it is used to implement the display priority. For
+     * example, it is used to decide whether to draw a sprite pixel in front of
+     * or behind a particular playing field pixel. Note: The larger the value,
+     * the closer a pixel is. In traditonal z-buffers, it is the other way
+     * round.
+     *
+     * Secondly, it is used to code meta-information about the pixels in the
+     * current rasterline. This is done by coding the pixel depth with special
+     * bit patterns storing that information. E.g., the pixel depth can be
+     * used to determine, if the pixel has been drawn in dual-playfield mode or
+     * if a sprite-to-sprite collision has taken place.
+     *
+     * The following bit format is utilized:
+     *
+     * _0_ SP0 SP1 _1_ SP2 SP3 _2_ SP4 SP5 _3_ SP6 SP7 _4_ DPF PF1 PF2
+     *
+     *  DPF : Set if the pixel is drawn in dual-playfield mode.
+     *  PF1 : Set if the pixel is solid in playfield 1.
+     *  PF1 : Set if the pixel is solid in playfield 2.
+     *  SPx : Set if the pixel is solid in sprite x.
+     *  _x_ : Playfield priority derived from the current value in BPLCON2.
+     */
+     uint16_t zBuffer[HPIXELS + (4 * 16) + 6];
+
+    const uint16_t Z_0   = 0b1000000000000000;
+    const uint16_t Z_SP0 = 0b0100000000000000;
+    const uint16_t Z_SP1 = 0b0010000000000000;
+    const uint16_t Z_1   = 0b0001000000000000;
+    const uint16_t Z_SP2 = 0b0000100000000000;
+    const uint16_t Z_SP3 = 0b0000010000000000;
+    const uint16_t Z_2   = 0b0000001000000000;
+    const uint16_t Z_SP4 = 0b0000000100000000;
+    const uint16_t Z_SP5 = 0b0000000010000000;
+    const uint16_t Z_3   = 0b0000000001000000;
+    const uint16_t Z_SP6 = 0b0000000000100000;
+    const uint16_t Z_SP7 = 0b0000000000010000;
+    const uint16_t Z_4   = 0b0000000000001000;
+    const uint16_t Z_PF1 = 0b0000000000000100;
+    const uint16_t Z_PF2 = 0b0000000000000010;
+    const uint16_t Z_DPF = 0b0000000000000001;
 
     
     //
@@ -218,7 +255,7 @@ public:
         & armed
         & prio1
         & prio2
-        & prioMin
+        & prio12
         & bplcon0
         & bplcon1
         & bplcon2

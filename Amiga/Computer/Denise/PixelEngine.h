@@ -51,9 +51,6 @@ private:
     // Pointer to the frame buffer Denise is currently working on
     ScreenBuffer *frameBuffer = &longFrame[0];
 
-    // zBuffer to implement the sprite / playfield display hierarchy
-    // int8_t zBuffer[HPOS_CNT];
-
 
     //
     // Color management

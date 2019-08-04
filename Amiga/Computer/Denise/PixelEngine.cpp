@@ -525,7 +525,6 @@ PixelEngine::drawSPF(uint8_t *src, int *dst, int from, int to)
 
         assert(isRgbaIndex(src[i]));
         dst[i] = indexedRgba[src[i]];
-        // zBuffer[i] = src[i] ? prio2 : 0;
         src[i] = 0;
     }
 }
