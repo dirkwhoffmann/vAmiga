@@ -179,22 +179,22 @@ private:
      */
      uint16_t zBuffer[HPIXELS + (4 * 16) + 6];
 
-    const uint16_t Z_0   = 0b1000000000000000;
-    const uint16_t Z_SP0 = 0b0100000000000000;
-    const uint16_t Z_SP1 = 0b0010000000000000;
-    const uint16_t Z_1   = 0b0001000000000000;
-    const uint16_t Z_SP2 = 0b0000100000000000;
-    const uint16_t Z_SP3 = 0b0000010000000000;
-    const uint16_t Z_2   = 0b0000001000000000;
-    const uint16_t Z_SP4 = 0b0000000100000000;
-    const uint16_t Z_SP5 = 0b0000000010000000;
-    const uint16_t Z_3   = 0b0000000001000000;
-    const uint16_t Z_SP6 = 0b0000000000100000;
-    const uint16_t Z_SP7 = 0b0000000000010000;
-    const uint16_t Z_4   = 0b0000000000001000;
-    const uint16_t Z_PF1 = 0b0000000000000100;
-    const uint16_t Z_PF2 = 0b0000000000000010;
-    const uint16_t Z_DPF = 0b0000000000000001;
+    const uint16_t Z_0   = 0b10000000'00000000;
+    const uint16_t Z_SP0 = 0b01000000'00000000;
+    const uint16_t Z_SP1 = 0b00100000'00000000;
+    const uint16_t Z_1   = 0b00010000'00000000;
+    const uint16_t Z_SP2 = 0b00001000'00000000;
+    const uint16_t Z_SP3 = 0b00000100'00000000;
+    const uint16_t Z_2   = 0b00000010'00000000;
+    const uint16_t Z_SP4 = 0b00000001'00000000;
+    const uint16_t Z_SP5 = 0b00000000'10000000;
+    const uint16_t Z_3   = 0b00000000'01000000;
+    const uint16_t Z_SP6 = 0b00000000'00100000;
+    const uint16_t Z_SP7 = 0b00000000'00010000;
+    const uint16_t Z_4   = 0b00000000'00001000;
+    const uint16_t Z_PF1 = 0b00000000'00000100;
+    const uint16_t Z_PF2 = 0b00000000'00000010;
+    const uint16_t Z_DPF = 0b00000000'00000001;
 
     
     //

@@ -303,6 +303,7 @@ Denise::updateSpritePriorities(uint16_t bplcon2)
 
         default:
             // TODO: Check the effect of illegal values
+            assert(false);
             break;
     }
 
@@ -316,10 +317,12 @@ Denise::updateSpritePriorities(uint16_t bplcon2)
 
         default:
             // TODO: Check the effect of illegal values
+            assert(false);
             break;
     }
 
     prio12 = MAX(prio1, prio2);
+    debug("bplcon2 = %X prio1 = %d prio2 = %d prio12 = %d\n", bplcon2, prio1, prio2, prio12);
 }
 
 template <int HIRES> void
@@ -425,7 +428,7 @@ Denise::translateSPF(int from, int to)
     for (int i = from; i < to; i++) {
 
         assert(PixelEngine::isRgbaIndex(rasterline[i]));
-        zBuffer[i] = rasterline[i] ? : 0 ;
+        zBuffer[i] = rasterline[i] ? prio2 : 0;
     }
 }
 
@@ -452,8 +455,10 @@ Denise::translateDPF(int from, int to)
         if (index1) {
             if (index2) {
                 // Case 1: PF1 is solid, PF2 is solid
-                rasterline[i] = pf2pri ? (index2 | 0b1000) : index1;
-                zBuffer[i] = prio12 | (Z_DPF | Z_PF1 | Z_PF2);
+                rasterline[i] = 0; // pf2pri ? (index2 | 0b1000) : index1;
+                // zBuffer[i] = prio12 | (Z_DPF | Z_PF1 | Z_PF2);
+                zBuffer[i] = pf2pri ? prio2 : prio1;
+                zBuffer[i] |= (Z_DPF | Z_PF1 | Z_PF2);
             } else {
                 // Case 2: PF1 is solid, PF2 is transparent
                 rasterline[i] = index1;
