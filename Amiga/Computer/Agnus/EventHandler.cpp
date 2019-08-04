@@ -796,10 +796,10 @@ Agnus::serviceREGEvent(EventSlot nr)
             denise->pokeBPLCON2((uint16_t)data);
             break;
         case REG_BPL1MOD:
-            setBPL1MOD((uint16_t)data);
+            pokeBPL1MOD((uint16_t)data);
             break;
         case REG_BPL2MOD:
-            setBPL2MOD((uint16_t)data);
+            pokeBPL2MOD((uint16_t)data);
             break;
         case REG_BPLxPTH:
             setBPLxPTH(HI_WORD(data), LO_WORD(data));

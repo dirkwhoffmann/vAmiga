@@ -775,10 +775,8 @@ public:
     void setBPLxPTL(int x, uint16_t value);
 
     // BPL1MOD, BPL2MOD
-    template <PokeSource s> void pokeBPL1MOD(uint16_t value);
-    template <PokeSource s> void pokeBPL2MOD(uint16_t value);
-    void setBPL1MOD(uint16_t value);
-    void setBPL2MOD(uint16_t value);
+    void pokeBPL1MOD(uint16_t value);
+    void pokeBPL2MOD(uint16_t value);
 
     // SPRxPTL, SPRxPTH
     template <int x> void pokeSPRxPTH(uint16_t value);

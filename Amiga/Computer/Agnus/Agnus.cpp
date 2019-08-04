@@ -1266,33 +1266,17 @@ Agnus::setBPLxPTL(int x, uint16_t value)
     bplpt[x - 1] = REPLACE_LO_WORD(bplpt[x - 1], value & 0xFFFE);
 }
 
-template <PokeSource s> void
+void
 Agnus::pokeBPL1MOD(uint16_t value)
 {
-    debug(BPL_DEBUG, "pokeBPL1MOD<%s>(%X)\n", pokeSourceName(s), value);
-
-    scheduleRegEvent<s>(DMA_CYCLES(2), REG_BPL1MOD, (int64_t)value);
-}
-
-template <PokeSource s> void
-Agnus::pokeBPL2MOD(uint16_t value)
-{
-    debug(BPL_DEBUG, "pokeBPL2MOD<%s>(%X)\n", pokeSourceName(s), value);
-
-    scheduleRegEvent<s>(DMA_CYCLES(2), REG_BPL2MOD, (int64_t)value);
-}
-
-void
-Agnus::setBPL1MOD(uint16_t value)
-{
-    debug(BPL_DEBUG, "setBPL1MOD(%X)\n", value);
+    debug(BPL_DEBUG, "pokeBPL1MOD(%X)\n", value);
     bpl1mod = int16_t(value & 0xFFFE);
 }
 
 void
-Agnus::setBPL2MOD(uint16_t value)
+Agnus::pokeBPL2MOD(uint16_t value)
 {
-    debug(BPL_DEBUG, "setBPL2MOD(%X)\n", value);
+    debug(BPL_DEBUG, "pokeBPL2MOD(%X)\n", value);
     bpl2mod = int16_t(value & 0xFFFE);
 }
 
@@ -1727,7 +1711,3 @@ template void Agnus::pokeDIWSTRT<POKE_COPPER>(uint16_t value);
 template void Agnus::pokeDIWSTOP<POKE_CPU>(uint16_t value);
 template void Agnus::pokeDIWSTOP<POKE_COPPER>(uint16_t value);
 
-template void Agnus::pokeBPL1MOD<POKE_CPU>(uint16_t value);
-template void Agnus::pokeBPL1MOD<POKE_COPPER>(uint16_t value);
-template void Agnus::pokeBPL2MOD<POKE_CPU>(uint16_t value);
-template void Agnus::pokeBPL2MOD<POKE_COPPER>(uint16_t value);

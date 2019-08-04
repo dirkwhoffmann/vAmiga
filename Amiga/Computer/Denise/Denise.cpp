@@ -167,7 +167,7 @@ void
 Denise::pokeBPLCON0(uint16_t oldValue, uint16_t newValue)
 {
     // Record the register change
-    conRegHistory.recordChange(BPLCON0, newValue, 4 * agnus->pos.h);
+    conRegHistory.recordChange(BPLCON0, newValue, 4 * agnus->pos.h - 4);
 }
 
 void
@@ -322,7 +322,7 @@ Denise::updateSpritePriorities(uint16_t bplcon2)
     }
 
     prio12 = MAX(prio1, prio2);
-    debug("bplcon2 = %X prio1 = %d prio2 = %d prio12 = %d\n", bplcon2, prio1, prio2, prio12);
+    // debug("bplcon2 = %X prio1 = %d prio2 = %d prio12 = %d\n", bplcon2, prio1, prio2, prio12);
 }
 
 template <int HIRES> void
@@ -453,24 +453,32 @@ Denise::translateDPF(int from, int to)
         uint8_t index2 = ((s & 2) >> 1) | ((s & 8) >> 2) | ((s & 32) >> 3);
 
         if (index1) {
-            if (index2) {
-                // Case 1: PF1 is solid, PF2 is solid
-                rasterline[i] = 0; // pf2pri ? (index2 | 0b1000) : index1;
-                // zBuffer[i] = prio12 | (Z_DPF | Z_PF1 | Z_PF2);
-                zBuffer[i] = pf2pri ? prio2 : prio1;
+
+            if (index2) { // Case 1: PF1 is solid, PF2 is solid
+
+                if (pf2pri) {
+                    rasterline[i] = index2 | 0b1000;
+                    zBuffer[i] = prio2;
+                } else {
+                    rasterline[i] = index1;
+                    zBuffer[i] = prio1;
+                }
                 zBuffer[i] |= (Z_DPF | Z_PF1 | Z_PF2);
-            } else {
-                // Case 2: PF1 is solid, PF2 is transparent
+
+            } else { // Case 2: PF1 is solid, PF2 is transparent
+
                 rasterline[i] = index1;
                 zBuffer[i] = prio1 | (Z_DPF | Z_PF2);
             }
+
         } else {
-            if (index2) {
-                // Case 3: PF1 is transparent, PF2 is solid
+            if (index2) { // Case 3: PF1 is transparent, PF2 is solid
+
                 rasterline[i] = index2 | 0b1000;
                 zBuffer[i] = prio2 | (Z_DPF | Z_PF2);
-            } else {
-                // Case 4: PF1 is transparent, PF2 is transparent
+
+            } else { // Case 4: PF1 is transparent, PF2 is transparent
+
                 rasterline[i] = 0;
                 zBuffer[i] = Z_DPF;
             }
