@@ -387,10 +387,13 @@ public:
     //
 
     // Transfers the bitplane register contents to the shift registers
-    template <int x> void fillShiftRegister(uint16_t value)
+    void fillShiftRegisters()
     {
-        shiftReg[x] = REPLACE_LO_WORD(shiftReg[x], value);
+        for (int i = 0; i < 6; i++) {
+            shiftReg[i] = REPLACE_LO_WORD(shiftReg[i], bpldat[i]);
+        }
     }
+
 
     
     //

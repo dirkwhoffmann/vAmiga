@@ -503,7 +503,7 @@ Agnus::serviceBplEvent(EventID id)
         case BPL_H1:
             if (!bplHwStop()) {
                 denise->bpldat[PLANE1] = doBitplaneDMA<0>();
-                denise->fillShiftRegister<0>(denise->bpldat[0]);
+                denise->fillShiftRegisters();
             } else {
                 INC_DMAPTR(bplpt[PLANE1]);
             }
@@ -519,7 +519,7 @@ Agnus::serviceBplEvent(EventID id)
         case BPL_L1:
             if (!bplHwStop()) {
                 denise->bpldat[PLANE1] = doBitplaneDMA<0>();
-                denise->fillShiftRegister<0>(denise->bpldat[0]);
+                denise->fillShiftRegisters();
             } else {
                 INC_DMAPTR(bplpt[PLANE1]);
             }
@@ -535,7 +535,6 @@ Agnus::serviceBplEvent(EventID id)
         case BPL_H2:
             if (!bplHwStop()) {
                 denise->bpldat[PLANE2] = doBitplaneDMA<1>();
-                denise->fillShiftRegister<1>(denise->bpldat[1]);
             } else {
                 INC_DMAPTR(bplpt[PLANE2]);
             }
@@ -546,7 +545,6 @@ Agnus::serviceBplEvent(EventID id)
         case BPL_L2:
             if (!bplHwStop()) {
                 denise->bpldat[PLANE2] = doBitplaneDMA<1>();
-                denise->fillShiftRegister<1>(denise->bpldat[1]);
             } else {
                 INC_DMAPTR(bplpt[PLANE2]);
             }
@@ -557,7 +555,6 @@ Agnus::serviceBplEvent(EventID id)
         case BPL_H3:
             if (!bplHwStop()) {
                 denise->bpldat[PLANE3] = doBitplaneDMA<2>();
-                denise->fillShiftRegister<2>(denise->bpldat[2]);
             } else {
                 INC_DMAPTR(bplpt[PLANE3]);
             }
@@ -568,7 +565,6 @@ Agnus::serviceBplEvent(EventID id)
         case BPL_L3:
             if (!bplHwStop()) {
                 denise->bpldat[PLANE3] = doBitplaneDMA<2>();
-                denise->fillShiftRegister<2>(denise->bpldat[2]);
             } else {
                 INC_DMAPTR(bplpt[PLANE3]);
             }
@@ -579,7 +575,6 @@ Agnus::serviceBplEvent(EventID id)
         case BPL_H4:
             if (!bplHwStop()) {
                 denise->bpldat[PLANE4] = doBitplaneDMA<3>();
-                denise->fillShiftRegister<3>(denise->bpldat[3]);
             } else {
                 INC_DMAPTR(bplpt[PLANE4]);
             }
@@ -590,7 +585,6 @@ Agnus::serviceBplEvent(EventID id)
         case BPL_L4:
             if (!bplHwStop()) {
                 denise->bpldat[PLANE4] = doBitplaneDMA<3>();
-                denise->fillShiftRegister<3>(denise->bpldat[3]);
             } else {
                 INC_DMAPTR(bplpt[PLANE4]);
             }
@@ -601,7 +595,6 @@ Agnus::serviceBplEvent(EventID id)
         case BPL_L5:
             if (!bplHwStop()) {
                 denise->bpldat[PLANE5] = doBitplaneDMA<4>();
-                denise->fillShiftRegister<4>(denise->bpldat[4]);
             } else {
                 INC_DMAPTR(bplpt[PLANE5]);
             }
@@ -612,7 +605,6 @@ Agnus::serviceBplEvent(EventID id)
         case BPL_L6:
             if (!bplHwStop()) {
                 denise->bpldat[PLANE6] = doBitplaneDMA<5>();
-                denise->fillShiftRegister<5>(denise->bpldat[5]);
             } else {
                 INC_DMAPTR(bplpt[PLANE6]);
             }
