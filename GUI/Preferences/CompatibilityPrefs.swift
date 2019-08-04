@@ -18,9 +18,11 @@ extension PreferencesController {
         let config = amiga.config()
         let poweredOff = amiga.isPoweredOff()
 
+        // Graphics
+        compCollisionCheck.state = config.collisionCheck ? .on : .off
+
         // Audio
         compFilterActivation.selectItem(withTag: config.filterActivation.rawValue)
-        // compFilterType.selectItem(withTag: config.filterType.rawValue)
             
         // Blitter
         compExactBlitter.state = config.exactBlitter ? .on : .off
@@ -34,6 +36,13 @@ extension PreferencesController {
 
         // Label the OK button
         compOKButton.title = okLabel
+    }
+
+    @IBAction func compCollisionCheckAction(_ sender: NSButton!) {
+
+        // amigaProxy?.configureCollisionCheck(sender.state == .on)
+        amigaProxy?.configure(VA_COLLISION_CHECK, enable: sender.state == .on)
+        refresh()
     }
 
     @IBAction func compFilterActivationAction(_ sender: NSPopUpButton!) {

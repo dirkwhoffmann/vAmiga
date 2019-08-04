@@ -70,6 +70,7 @@ typedef enum : long
     VA_DRIVE_TYPE,
     VA_DRIVE_SPEED,
     VA_RT_CLOCK,
+    VA_COLLISION_CHECK,
     VA_FILTER_ACTIVATION,
     VA_FILTER_TYPE,
     VA_EXACT_BLITTER,
@@ -113,6 +114,7 @@ typedef struct
     AmigaModel model;
     bool realTimeClock;
     long layout;
+    bool collisionCheck;
     FilterActivation filterActivation;
     FilterType filterType;
     bool exactBlitter;

@@ -79,6 +79,9 @@ class PreferencesController: DialogController {
     // Compatibility preferences
     //
 
+    // Graphics
+    @IBOutlet weak var compCollisionCheck: NSButton!
+
     // Audio
     // @IBOutlet weak var compFilterType: NSPopUpButton!
     @IBOutlet weak var compFilterActivation: NSPopUpButton!

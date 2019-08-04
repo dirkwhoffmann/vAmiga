@@ -38,6 +38,13 @@ public:
     
 
     //
+    // Configuration
+    //
+
+    bool collisionCheck;
+
+
+    //
     // Variables
     //
     
@@ -179,12 +186,23 @@ public:
 
 
     //
+    // Configuring device properties
+    //
+
+    bool getCollisionCheck() { return collisionCheck; }
+    void setCollisionCheck(bool value) { collisionCheck = value; debug("collisionCheck = %d\n", collisionCheck); }
+
+
+    //
     // Iterating over snapshot items
     //
 
     template <class T>
     void applyToPersistentItems(T& worker)
     {
+        worker
+
+        & collisionCheck;
     }
     
     template <class T>

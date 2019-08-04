@@ -97,7 +97,7 @@ Denise::_inspect()
 void
 Denise::_dump()
 {
-
+    plainmsg(" CollisionCheck: %d\n", collisionCheck);
 }
 
 DeniseInfo

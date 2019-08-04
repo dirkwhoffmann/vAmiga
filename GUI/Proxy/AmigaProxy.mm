@@ -1335,6 +1335,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->amiga->configure(option, value);
 }
+- (BOOL) configure:(ConfigOption)option enable:(BOOL)value
+{
+    return wrapper->amiga->configure(option, value ? 1 : 0);
+}
 - (BOOL) configureModel:(NSInteger)model
 {
     return wrapper->amiga->configureModel((AmigaModel)model);

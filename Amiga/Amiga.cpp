@@ -177,6 +177,7 @@ Amiga::getConfig()
     config.model = model;
     config.realTimeClock = realTimeClock;
     config.layout = keyboard.layout;
+    config.collisionCheck = denise.getCollisionCheck();
     config.filterActivation = paula.audioUnit.getFilterActivation();
     config.filterType = paula.audioUnit.getFilterType();
     config.exactBlitter = agnus.blitter.getExactEmulation();
@@ -285,6 +286,13 @@ Amiga::configure(ConfigOption option, long value)
             if (current.realTimeClock == value) return true;
             realTimeClock = value;
             mem.updateMemSrcTable();
+            break;
+
+        case VA_COLLISION_CHECK:
+
+            // debug("VA_COLLISION_CHECK %d\n", value); 
+            if (current.collisionCheck == value) return true;
+            denise.setCollisionCheck(value);
             break;
 
         case VA_FILTER_ACTIVATION:
@@ -455,6 +463,15 @@ Amiga::configureDriveSpeed(unsigned driveNr, uint16_t value)
 {
     return configureDrive(driveNr, VA_DRIVE_SPEED, value);
 }
+
+/*
+void
+Amiga::configureCollisionCheck(bool value)
+{
+    debug("configureCollisionCheck(%d)\n", value);
+    configure(VA_COLLISION_CHECK, value);
+}
+*/
 
 void
 Amiga::configureExactBlitter(bool value)
