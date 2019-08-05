@@ -452,6 +452,36 @@ Denise::translateDPF(int from, int to)
         uint8_t index1 = ((s & 1) >> 0) | ((s & 4) >> 1) | ((s & 16) >> 2);
         uint8_t index2 = ((s & 2) >> 1) | ((s & 8) >> 2) | ((s & 32) >> 3);
 
+        if (pf2pri) {
+
+            // Playfield 2 appears in front
+            if (index2) {
+                rasterline[i] = index2 | 0b1000;
+                zBuffer[i] = prio2 | Z_DPF;
+            } else if (index1) {
+                rasterline[i] = index1;
+                zBuffer[i] = prio1 | Z_DPF;
+            } else {
+                rasterline[i] = 0;
+                zBuffer[i] = Z_DPF;
+            }
+
+        } else {
+
+            // Playfield 1 appears in front
+            if (index1) {
+                rasterline[i] = index1;
+                zBuffer[i] = prio1 | Z_DPF;
+            } else if (index2) {
+                rasterline[i] = index2 | 0b1000;
+                zBuffer[i] = prio2 | Z_DPF;
+            } else {
+                rasterline[i] = 0;
+                zBuffer[i] = Z_DPF;
+            }
+        }
+
+        /*
         if (index1) {
 
             if (index2) { // Case 1: PF1 is solid, PF2 is solid
@@ -483,6 +513,7 @@ Denise::translateDPF(int from, int to)
                 zBuffer[i] = Z_DPF;
             }
         }
+        */
     }
 }
 

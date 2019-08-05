@@ -419,8 +419,6 @@ private:
     void translateDPF(int from, int to);
     template <bool pf2pri> void translateDPF(int from, int to);
 
-    // Called by translate()
-    // void applyRegisterChange(const RegisterChange &change);
 
 public:
 
