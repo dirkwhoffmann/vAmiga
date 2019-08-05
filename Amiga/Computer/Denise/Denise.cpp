@@ -586,8 +586,31 @@ Denise::drawSprite()
     uint32_t d0 = (uint32_t)sprdatb[x] << 0;
 
     int baseCol = 16 + 2 * (x & 6);
-    int16_t pos = 2 * sprhstrt[x] + 32;
+    // int16_t pos = 2 * sprhstrt[x] + 32;
 
+    int start = 2 * sprhstrt[x];
+    int end = MIN(start + 31, LAST_PIXEL);
+
+    for (int pos = end; pos >= start; pos -= 2) {
+
+        int col = (d1 & 0b0010) | (d0 & 0b0001);
+
+        if (col) {
+            if (z > zBuffer[pos]) {
+                iBuffer[pos] = baseCol | col;
+                zBuffer[pos] |= z;
+            }
+            if (z > zBuffer[pos-1]) {
+                iBuffer[pos-1] = baseCol | col;
+                zBuffer[pos-1] |= z;
+            }
+        }
+
+        d1 >>= 1;
+        d0 >>= 1;
+    }
+
+    /*
     for (int i = 15; i >= 0; i--) {
 
         int col = (d1 & 0b0010) | (d0 & 0b0001);
@@ -597,7 +620,7 @@ Denise::drawSprite()
                 iBuffer[pos] = baseCol | col;
                 zBuffer[pos] |= z;
             } 
-            if (pos < LAST_PIXEL && z > zBuffer[pos+1]) {
+        if (pos+1 < LAST_PIXEL && z > zBuffer[pos+1]) {
                 iBuffer[pos+1] = baseCol | col;
                 zBuffer[pos+1] |= z;
             }
@@ -607,6 +630,13 @@ Denise::drawSprite()
         d0 >>= 1;
         pos -= 2;
     }
+    */
+}
+
+void
+Denise::checkSpriteCollisions(int start)
+{
+
 }
 
 template <int x> void
@@ -623,6 +653,30 @@ Denise::drawSpritePair()
     uint32_t d1 = (uint32_t)sprdata[x-1] << 1;
     uint32_t d0 = (uint32_t)sprdatb[x-1] << 0;
 
+    int start = 2 * sprhstrt[x];
+    int end = MIN(start + 31, LAST_PIXEL);
+
+    for (int pos = end; pos >= start; pos -= 2) {
+
+        int col = (d3 & 0b1000) | (d2 & 0b0100) | (d1 & 0b0010) | (d0 & 0b0001);
+
+        if (col) {
+            if (z > zBuffer[pos]) {
+                iBuffer[pos] = 0b10000 | col;
+                zBuffer[pos] |= z;
+            }
+            if (z > zBuffer[pos-1]) {
+                iBuffer[pos-1] = 0b10000 | col;
+                zBuffer[pos-1] |= z;
+            }
+        }
+
+        d3 >>= 1;
+        d2 >>= 1;
+        d1 >>= 1;
+        d0 >>= 1;
+    }
+    /*
     int16_t pos = 2 * sprhstrt[x] + 32;
 
     for (int i = 15; i >= 0; i--) {
@@ -632,9 +686,9 @@ Denise::drawSpritePair()
         if (col) {
             if (pos < LAST_PIXEL && z > zBuffer[pos]) {
                 iBuffer[pos] = 0b10000 | col;
-                zBuffer[pos+1] |= z;
+                zBuffer[pos] |= z;
             }
-            if (pos < LAST_PIXEL && z > zBuffer[pos+1]) {
+            if (pos+1 < LAST_PIXEL && z > zBuffer[pos+1]) {
                 iBuffer[pos+1] = 0b10000 | col;
                 zBuffer[pos+1] |= z;
             }
@@ -646,6 +700,7 @@ Denise::drawSpritePair()
         d0 >>= 1;
         pos -= 2;
     }
+    */
 }
 
 void

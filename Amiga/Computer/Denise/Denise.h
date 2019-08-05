@@ -439,7 +439,10 @@ public:
     void drawSprites();
     template <int x> void drawSprite();
     template <int x> void drawSpritePair();
-    // void drawSpritesOld();
+
+    // Checks for sprite-to-sprite collisions
+    void checkSpriteCollisions(int start); 
+
 
     /* Draws the left and the right border.
      * This method is called at the end of each rasterline.
