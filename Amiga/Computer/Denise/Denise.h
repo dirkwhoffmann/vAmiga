@@ -143,32 +143,38 @@ private:
     // Rasterline data
     //
 
-    /* Bitplane data of the currently drawn rasterline.
-     * While emulating the DMA cycles in a single rasterline, Denise writes
-     * the fetched bitplane data into this array.
-     */
-    uint8_t rasterline[HPIXELS + (4 * 16) + 6];
-
-    /* Derived color register indices of the currently drawn rasterline.
-     * At the end of a rasterline, Denise translates the fetched bitplane data
-     * into color register indices. The result of the tranlsation is stored in
-     * this array.
-     */
-    uint8_t colorIndex[HPIXELS + (4 * 16) + 6];
-
-    /* The depth buffer
-     * The depth buffer is built up in function translate() and serves several
-     * purposes. First, it is used to implement the display priority. For
-     * example, it is used to decide whether to draw a sprite pixel in front of
-     * or behind a particular playing field pixel. Note: The larger the value,
-     * the closer a pixel is. In traditonal z-buffers, it is the other way
-     * round.
+    /* Three important buffers are involved in the generation of pixel data:
      *
-     * Secondly, it is used to code meta-information about the pixels in the
-     * current rasterline. This is done by coding the pixel depth with special
-     * bit patterns storing that information. E.g., the pixel depth can be
-     * used to determine, if the pixel has been drawn in dual-playfield mode or
-     * if a sprite-to-sprite collision has taken place.
+     * bBuffer: The bitplane data buffer
+     *
+     * While emulating the DMA cycles of a single rasterline, Denise writes
+     * the fetched bitplane data into this buffer. It contains the raw
+     * bitplane bits coming out the 6 serial shift registers.
+     *
+     * iBuffer: The color index buffer
+     *
+     * At the end of each rasterline, Denise translates the fetched bitplane
+     * data to color register indices. In single-playfield mode, this is a
+     * one-to-one-mapping. In dual-playfield mode, the bitplane data has to
+     * be split into two color indices and the right one has to be choosen
+     * according to the playfield priority bit.
+     *
+     * zBuffer: The pixel depth buffer
+     *
+     * During the translating of the bBuffer into the iBuffer, a depth buffer
+     * is build. This buffer serves multiple purposes.
+     *
+     * 1. The depth buffer it is used to implement the display priority. For
+     *    example, it is used to decide whether to draw a sprite pixel in front
+     *    of or behind a particular playing field pixel. Note: The larger the
+     *    value, the closer a pixel is. In traditonal z-buffers, it is the other
+     *    way round.
+     *
+     * 2. The depth buffer is utilized to code meta-information about the pixels
+     *    in the current rasterline. This is done by coding the pixel depth with
+     *    special bit patterns storing that information. E.g., the pixel depth
+     *    can be used to determine, if the pixel has been drawn in dual-
+     *    playfield mode or if a sprite-to-sprite collision has taken place.
      *
      * The following bit format is utilized:
      *
@@ -180,7 +186,9 @@ private:
      *  SPx : Set if the pixel is solid in sprite x.
      *  _x_ : Playfield priority derived from the current value in BPLCON2.
      */
-     uint16_t zBuffer[HPIXELS + (4 * 16) + 6];
+    uint8_t bBuffer[HPIXELS + (4 * 16) + 6];
+    uint8_t iBuffer[HPIXELS + (4 * 16) + 6];
+    uint16_t zBuffer[HPIXELS + (4 * 16) + 6];
 
     const uint16_t Z_0   = 0b10000000'00000000;
     const uint16_t Z_SP0 = 0b01000000'00000000;
