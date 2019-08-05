@@ -73,6 +73,10 @@ public:
     uint16_t sprdata[8];
     uint16_t sprdatb[8];
 
+    // Sprite collision registers
+    uint16_t clxdat;
+    uint16_t clxcon;
+
     /* The 6 bitplane parallel-to-serial shift registers
      * Denise transfers the current values of the BPLDAT registers into the
      * shift registers after BPLDAT1 is written to. This is emulated in
@@ -276,6 +280,8 @@ public:
         & bpldat
         & sprdata
         & sprdatb
+        & clxdat
+        & clxcon
         & shiftReg
         & scrollLoresOdd
         & scrollLoresEven
@@ -335,7 +341,7 @@ public:
 
     // OCS register 0x036 (w)
     void pokeJOYTEST(uint16_t value);
-    
+
     // OCS register 0x100 (w)
     void pokeBPLCON0(uint16_t value);
     void pokeBPLCON0(uint16_t oldValue, uint16_t newValue);
@@ -359,6 +365,10 @@ public:
     // OCS register 0x104 (w)
     void pokeBPLCON2(uint16_t value);
     bool PF2PRI() { return GET_BIT(bplcon2, 6); }
+
+    // OCS register 0x00E (r) and 0x098 (w)
+    uint16_t peekCLXDAT();
+    void pokeCLXCON(uint16_t value);
 
     // OCS registers 0x110, ..., 0x11A (w)
     template <int x> void pokeBPLxDAT(uint16_t value);
@@ -441,7 +451,7 @@ public:
     template <int x> void drawSpritePair();
 
     // Checks for sprite-to-sprite collisions
-    void checkSpriteCollisions(int start); 
+    void checkSpriteSpriteCollisions(int start, int end); 
 
 
     /* Draws the left and the right border.

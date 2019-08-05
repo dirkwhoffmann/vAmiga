@@ -197,6 +197,20 @@ Denise::pokeBPLCON2(uint16_t value)
     conRegHistory.recordChange(BPLCON2, value, 4 * agnus->pos.h + 4);
 }
 
+uint16_t
+Denise::peekCLXDAT()
+{
+    uint16_t result = clxdat;
+    clxdat = 0;
+    return result;
+}
+
+void
+Denise::pokeCLXCON(uint16_t value)
+{
+    clxcon = value;
+}
+
 template <int x> void
 Denise::pokeBPLxDAT(uint16_t value)
 {
@@ -586,7 +600,6 @@ Denise::drawSprite()
     uint32_t d0 = (uint32_t)sprdatb[x] << 0;
 
     int baseCol = 16 + 2 * (x & 6);
-    // int16_t pos = 2 * sprhstrt[x] + 32;
 
     int start = 2 * sprhstrt[x];
     int end = MIN(start + 31, LAST_PIXEL);
@@ -610,33 +623,8 @@ Denise::drawSprite()
         d0 >>= 1;
     }
 
-    /*
-    for (int i = 15; i >= 0; i--) {
-
-        int col = (d1 & 0b0010) | (d0 & 0b0001);
-
-        if (col) {
-            if (pos < LAST_PIXEL && z > zBuffer[pos]) {
-                iBuffer[pos] = baseCol | col;
-                zBuffer[pos] |= z;
-            } 
-        if (pos+1 < LAST_PIXEL && z > zBuffer[pos+1]) {
-                iBuffer[pos+1] = baseCol | col;
-                zBuffer[pos+1] |= z;
-            }
-        }
-
-        d1 >>= 1;
-        d0 >>= 1;
-        pos -= 2;
-    }
-    */
-}
-
-void
-Denise::checkSpriteCollisions(int start)
-{
-
+    // Set sprite collision bits if enabled
+    if (collisionCheck) checkSpriteSpriteCollisions(start, end);
 }
 
 template <int x> void
@@ -676,31 +664,30 @@ Denise::drawSpritePair()
         d1 >>= 1;
         d0 >>= 1;
     }
-    /*
-    int16_t pos = 2 * sprhstrt[x] + 32;
 
-    for (int i = 15; i >= 0; i--) {
+    // Set sprite collision bits if enabled
+    if (collisionCheck) checkSpriteSpriteCollisions(start, end);
+}
 
-        int col = (d3 & 0b1000) | (d2 & 0b0100) | (d1 & 0b0010) | (d0 & 0b0001);
+void
+Denise::checkSpriteSpriteCollisions(int start, int end)
+{
+    // Set up comparison masks for all sprites
+    uint16_t comp01 = Z_SP0 | (GET_BIT(clxcon, 12) ? Z_SP1 : 0);
+    uint16_t comp23 = Z_SP2 | (GET_BIT(clxcon, 13) ? Z_SP3 : 0);
+    uint16_t comp45 = Z_SP4 | (GET_BIT(clxcon, 14) ? Z_SP5 : 0);
+    uint16_t comp67 = Z_SP6 | (GET_BIT(clxcon, 15) ? Z_SP7 : 0);
 
-        if (col) {
-            if (pos < LAST_PIXEL && z > zBuffer[pos]) {
-                iBuffer[pos] = 0b10000 | col;
-                zBuffer[pos] |= z;
-            }
-            if (pos+1 < LAST_PIXEL && z > zBuffer[pos+1]) {
-                iBuffer[pos+1] = 0b10000 | col;
-                zBuffer[pos+1] |= z;
-            }
-        }
+    for (int pos = end; pos >= start; pos -= 2) {
 
-        d3 >>= 1;
-        d2 >>= 1;
-        d1 >>= 1;
-        d0 >>= 1;
-        pos -= 2;
+        uint16_t z = zBuffer[pos];
+        if ((z & comp45) && (z & comp67)) SET_BIT(clxdat, 14);
+        if ((z & comp23) && (z & comp67)) SET_BIT(clxdat, 13);
+        if ((z & comp23) && (z & comp45)) SET_BIT(clxdat, 12);
+        if ((z & comp01) && (z & comp67)) SET_BIT(clxdat, 11);
+        if ((z & comp01) && (z & comp45)) SET_BIT(clxdat, 10);
+        if ((z & comp01) && (z & comp23)) SET_BIT(clxdat, 9);
     }
-    */
 }
 
 void

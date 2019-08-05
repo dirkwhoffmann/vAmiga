@@ -837,7 +837,7 @@ Memory::peekCustom16(uint32_t addr)
         case 0x00C >> 1: // JOY1DAT
             return denise->peekJOY1DATR();
         case 0x00E >> 1: // CLXDAT
-            break;
+            return denise->peekCLXDAT();
         case 0x010 >> 1: // ADKCONR
             return paula->peekADKCONR();
         case 0x012 >> 1: // POT0DAT
@@ -854,40 +854,35 @@ Memory::peekCustom16(uint32_t addr)
             return paula->peekINTENAR();
         case 0x01E >> 1: // INTREQR
             return paula->peekINTREQR();
-
-        default: // Write-only register
-
-            debug(OCS_DEBUG, "peekCustom16(%X [%s]): WRITE-ONLY-REGISTER\n",
-                  addr, customReg[(addr >> 1) & 0xFF]);
-
-            /* Derived from the UAE source code documentation:
-             *
-             * Reading a write-only OCS register causes the last value of the
-             * data bus to be written into this registers.
-             *
-             * Return values:
-             *
-             * - BLTDDAT (0x000) always returns the last data bus value.
-             * - All other registers return
-             *   - DMA cycle data (if DMA happened on the bus).
-             *   - 0xFFFF or some some ANDed old data otherwise.
-             */
-
-            // TODO: Remember the last data bus value
-            // In the meantime, we write 0, because SAE is doing this.
-            pokeCustom16<POKE_CPU>(addr, 0);
-
-            if (agnus->busOwner[agnus->pos.h] != BUS_NONE) {
-                return agnus->busValue[agnus->pos.h];
-            } else {
-                return 0xFFFF;
-            }
     }
-    
-    debug(OCS_DEBUG, "peekCustom16(%X [%s]): MISSING IMPLEMENTATION\n",
-         addr, customReg[(addr >> 1) & 0xFF]);
 
-    return 0;
+    /* Reading a write-only register
+     *
+     * Derived from the UAE source code documentation:
+     *
+     * Reading a write-only OCS register causes the last value of the
+     * data bus to be written into this registers.
+     *
+     * Return values:
+     *
+     * - BLTDDAT (0x000) always returns the last data bus value.
+     * - All other registers return
+     *   - DMA cycle data (if DMA happened on the bus).
+     *   - 0xFFFF or some some ANDed old data otherwise.
+     */
+
+    debug(OCS_DEBUG, "peekCustom16(%X [%s]): WRITE-ONLY-REGISTER\n",
+          addr, customReg[(addr >> 1) & 0xFF]);
+
+    // TODO: Remember the last data bus value
+    // In the meantime, we write 0, because SAE is doing this.
+    pokeCustom16<POKE_CPU>(addr, 0);
+
+    if (agnus->busOwner[agnus->pos.h] != BUS_NONE) {
+        return agnus->busValue[agnus->pos.h];
+    } else {
+        return 0xFFFF;
+    }
 }
 
 uint32_t
@@ -1058,9 +1053,7 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
             agnus->pokeDMACON(value); return;
         
         case 0x098 >> 1:  // CLXCON
-        warn("pokeCustom16(CLXCON, %X): MISSING IMPLEMENTATION\n", value);
-        return;
-        
+            denise->pokeCLXCON(value); return;
         case 0x09A >> 1: // INTENA
             paula->pokeINTENA(value); return;
         case 0x09C >> 1: // INTREQ
