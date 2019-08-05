@@ -36,6 +36,8 @@ void
 Denise::_powerOn()
 {
     memset(rasterline, 0, sizeof(rasterline));
+    memset(colorIndex, 0, sizeof(colorIndex));
+    memset(zBuffer, 0, sizeof(zBuffer));
 }
 
 void
@@ -383,7 +385,7 @@ Denise::translate()
     uint16_t bplcon2 = initialBplcon2;
     updateSpritePriorities(bplcon2);
 
-    // Add a dummy register change to ensure we draw until the line end
+    // Add a dummy register change to ensure we draw until the line ends
     conRegHistory.recordChange(0, 0, sizeof(rasterline));
 
     // Iterate over all recorded register changes
@@ -427,8 +429,12 @@ Denise::translateSPF(int from, int to)
 {
     for (int i = from; i < to; i++) {
 
-        assert(PixelEngine::isRgbaIndex(rasterline[i]));
-        zBuffer[i] = rasterline[i] ? prio2 : 0;
+        uint8_t s = rasterline[i];
+        rasterline[i] = 0;
+
+        assert(PixelEngine::isRgbaIndex(s));
+        colorIndex[i] = s;
+        zBuffer[i] = s ? prio2 : 0;
     }
 }
 
@@ -447,8 +453,10 @@ Denise::translateDPF(int from, int to)
 {
     for (int i = from; i < to; i++) {
 
-        // Determine color indices for both playfields
         uint8_t s = rasterline[i];
+        rasterline[i] = 0;
+
+        // Determine color indices for both playfields
         uint8_t index1 = ((s & 1) >> 0) | ((s & 4) >> 1) | ((s & 16) >> 2);
         uint8_t index2 = ((s & 2) >> 1) | ((s & 8) >> 2) | ((s & 32) >> 3);
 
@@ -456,13 +464,13 @@ Denise::translateDPF(int from, int to)
 
             // Playfield 2 appears in front
             if (index2) {
-                rasterline[i] = index2 | 0b1000;
+                colorIndex[i] = index2 | 0b1000;
                 zBuffer[i] = prio2 | Z_DPF;
             } else if (index1) {
-                rasterline[i] = index1;
+                colorIndex[i] = index1;
                 zBuffer[i] = prio1 | Z_DPF;
             } else {
-                rasterline[i] = 0;
+                colorIndex[i] = 0;
                 zBuffer[i] = Z_DPF;
             }
 
@@ -470,13 +478,13 @@ Denise::translateDPF(int from, int to)
 
             // Playfield 1 appears in front
             if (index1) {
-                rasterline[i] = index1;
+                colorIndex[i] = index1;
                 zBuffer[i] = prio1 | Z_DPF;
             } else if (index2) {
-                rasterline[i] = index2 | 0b1000;
+                colorIndex[i] = index2 | 0b1000;
                 zBuffer[i] = prio2 | Z_DPF;
             } else {
-                rasterline[i] = 0;
+                colorIndex[i] = 0;
                 zBuffer[i] = Z_DPF;
             }
         }
@@ -487,29 +495,29 @@ Denise::translateDPF(int from, int to)
             if (index2) { // Case 1: PF1 is solid, PF2 is solid
 
                 if (pf2pri) {
-                    rasterline[i] = index2 | 0b1000;
+                    colorIndex[i] = index2 | 0b1000;
                     zBuffer[i] = prio2;
                 } else {
-                    rasterline[i] = index1;
+                    colorIndex[i] = index1;
                     zBuffer[i] = prio1;
                 }
                 zBuffer[i] |= (Z_DPF | Z_PF1 | Z_PF2);
 
             } else { // Case 2: PF1 is solid, PF2 is transparent
 
-                rasterline[i] = index1;
+                colorIndex[i] = index1;
                 zBuffer[i] = prio1 | (Z_DPF | Z_PF2);
             }
 
         } else {
             if (index2) { // Case 3: PF1 is transparent, PF2 is solid
 
-                rasterline[i] = index2 | 0b1000;
+                colorIndex[i] = index2 | 0b1000;
                 zBuffer[i] = prio2 | (Z_DPF | Z_PF2);
 
             } else { // Case 4: PF1 is transparent, PF2 is transparent
 
-                rasterline[i] = 0;
+                colorIndex[i] = 0;
                 zBuffer[i] = Z_DPF;
             }
         }
@@ -586,11 +594,11 @@ Denise::drawSprite()
 
         if (col) {
             if (pos < LAST_PIXEL && z > zBuffer[pos]) {
-                rasterline[pos] = baseCol | col;
+                colorIndex[pos] = baseCol | col;
                 zBuffer[pos] |= z;
             } 
             if (pos < LAST_PIXEL && z > zBuffer[pos+1]) {
-                rasterline[pos+1] = baseCol | col;
+                colorIndex[pos+1] = baseCol | col;
                 zBuffer[pos+1] |= z;
             }
         }
@@ -623,11 +631,11 @@ Denise::drawSpritePair()
 
         if (col) {
             if (pos < LAST_PIXEL && z > zBuffer[pos]) {
-                rasterline[pos] = 0b10000 | col;
+                colorIndex[pos] = 0b10000 | col;
                 zBuffer[pos+1] |= z;
             }
             if (pos < LAST_PIXEL && z > zBuffer[pos+1]) {
-                rasterline[pos+1] = 0b10000 | col;
+                colorIndex[pos+1] = 0b10000 | col;
                 zBuffer[pos+1] |= z;
             }
         }
@@ -663,7 +671,7 @@ Denise::drawBorder()
     if (lineIsBlank) {
 
         for (int i = 0; i <= LAST_PIXEL; i++) {
-           rasterline[i] = borderV;
+           colorIndex[i] = borderV;
         }
 
     } else {
@@ -671,16 +679,16 @@ Denise::drawBorder()
         // Draw left border
         if (!agnus->hFlop && agnus->hFlopOn != -1) {
             for (int i = 0; i < 2 * agnus->hFlopOn; i++) {
-                assert(i < sizeof(rasterline));
-                rasterline[i] = borderL;
+                assert(i < sizeof(colorIndex));
+                colorIndex[i] = borderL;
             }
         }
 
         // Draw right border
         if (agnus->hFlopOff != -1) {
             for (int i = 2 * agnus->hFlopOff; i <= LAST_PIXEL; i++) {
-                assert(i < sizeof(rasterline));
-                rasterline[i] = borderR;
+                assert(i < sizeof(colorIndex));
+                colorIndex[i] = borderR;
             }
         }
     }
@@ -688,7 +696,7 @@ Denise::drawBorder()
 #ifdef LINE_DEBUG
     int16_t vpos = agnus->pos.v;
     bool lines = vpos == 300 || vpos == 0xA0; // vpos == 26 || vpos == 0x50 || vpos == 276 || vpos == 255;
-    if (lines) for (int i = 0; i <= LAST_PIXEL / 2; rasterline[i++] = 64);
+    if (lines) for (int i = 0; i <= LAST_PIXEL / 2; colorIndex[i++] = 64);
 #endif
 }
 
@@ -722,8 +730,7 @@ Denise::endOfLine(int vpos)
         drawBorder();
 
         // Synthesize RGBA values and write the result into the frame buffer
-        // pixelEngine.translateToRGBA(rasterline, vpos);
-        pixelEngine.colorize(rasterline, vpos);
+        pixelEngine.colorize(colorIndex, vpos);
 
         /* Note that Denise has already synthesized pixels that belong to the
          * next DMA line (i.e., the pixels that have been written into the
@@ -731,9 +738,10 @@ Denise::endOfLine(int vpos)
          * beginning of the rasterline array to make them appear when the next
          * line is drawn.
          */
-        for (int i = 4 * 0xE3; i < sizeof(rasterline); i++) {
-            rasterline[i - 4 * 0xE3] = rasterline[i];
-            rasterline[i] = 0;
+        // TODO: DO WE STILL NEED THIS???
+        for (int i = 4 * 0xE3; i < sizeof(colorIndex); i++) {
+            colorIndex[i - 4 * 0xE3] = colorIndex[i];
+            colorIndex[i] = 0;
         }
     }
 
