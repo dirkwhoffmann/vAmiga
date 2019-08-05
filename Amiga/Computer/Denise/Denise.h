@@ -211,6 +211,11 @@ private:
     const uint16_t Z_PF2 = 0b00000000'00000010;
     const uint16_t Z_DPF = 0b00000000'00000001;
 
+    const uint16_t Z_SP[8] = { Z_SP0, Z_SP1, Z_SP2, Z_SP3, Z_SP4, Z_SP5, Z_SP6, Z_SP7 };
+    const uint16_t Z_SP01234567 = Z_SP0|Z_SP1|Z_SP2|Z_SP3|Z_SP4|Z_SP5|Z_SP6|Z_SP7;
+    const uint16_t Z_SP0246 = Z_SP0|Z_SP2|Z_SP4|Z_SP6;
+    const uint16_t Z_SP1357 = Z_SP1|Z_SP3|Z_SP5|Z_SP7;
+
     
     //
     // Drawing parameters
@@ -450,9 +455,9 @@ public:
     template <int x> void drawSprite();
     template <int x> void drawSpritePair();
 
-    // Checks for sprite-to-sprite collisions
-    void checkSpriteSpriteCollisions(int start, int end); 
-
+    // Performs a collision check
+    template <int x> void checkSpriteSpriteCollisions(int start, int end);
+    template <int x> void checkSpritePlayfieldCollisions(int start, int end);
 
     /* Draws the left and the right border.
      * This method is called at the end of each rasterline.

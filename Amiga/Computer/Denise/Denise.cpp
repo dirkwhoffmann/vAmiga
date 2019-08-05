@@ -624,7 +624,7 @@ Denise::drawSprite()
     }
 
     // Set sprite collision bits if enabled
-    if (collisionCheck) checkSpriteSpriteCollisions(start, end);
+    if (collisionCheck) checkSpriteSpriteCollisions<x>(start, end);
 }
 
 template <int x> void
@@ -633,8 +633,8 @@ Denise::drawSpritePair()
     assert(x >= 1 && x <= 7);
     assert(IS_ODD(x));
 
-    const uint16_t depth[8] = { Z_SP0, Z_SP1, Z_SP2, Z_SP3, Z_SP4, Z_SP5, Z_SP6, Z_SP7 };
-    uint16_t z = depth[x];
+    // const uint16_t depth[8] = { Z_SP0, Z_SP1, Z_SP2, Z_SP3, Z_SP4, Z_SP5, Z_SP6, Z_SP7 };
+    uint16_t z = Z_SP[x];
 
     uint32_t d3 = (uint32_t)sprdata[x]   << 3;
     uint32_t d2 = (uint32_t)sprdatb[x]   << 2;
@@ -666,21 +666,33 @@ Denise::drawSpritePair()
     }
 
     // Set sprite collision bits if enabled
-    if (collisionCheck) checkSpriteSpriteCollisions(start, end);
+    if (collisionCheck) checkSpriteSpriteCollisions<x>(start, end);
 }
 
-void
+template <int x> void
 Denise::checkSpriteSpriteCollisions(int start, int end)
 {
-    // Set up comparison masks for all sprites
+    // For the odd sprites, only proceed if collision detection is enabled
+    if (IS_ODD(x) && !GET_BIT(clxcon, 12 + (x/2))) return;
+
+    // Set up the sprite comparison masks
     uint16_t comp01 = Z_SP0 | (GET_BIT(clxcon, 12) ? Z_SP1 : 0);
     uint16_t comp23 = Z_SP2 | (GET_BIT(clxcon, 13) ? Z_SP3 : 0);
     uint16_t comp45 = Z_SP4 | (GET_BIT(clxcon, 14) ? Z_SP5 : 0);
     uint16_t comp67 = Z_SP6 | (GET_BIT(clxcon, 15) ? Z_SP7 : 0);
 
+    // Iterate over all sprite pixels
     for (int pos = end; pos >= start; pos -= 2) {
 
         uint16_t z = zBuffer[pos];
+
+        // Skip this pixel if there are no other sprites here
+        if (!(z & (Z_SP01234567 ^ Z_SP[x]))) continue;
+
+        // Skip this pixel if the sprite is transparent here
+        if (!(z & Z_SP[x])) continue;
+
+        // Set sprite collision bits
         if ((z & comp45) && (z & comp67)) SET_BIT(clxdat, 14);
         if ((z & comp23) && (z & comp67)) SET_BIT(clxdat, 13);
         if ((z & comp23) && (z & comp45)) SET_BIT(clxdat, 12);
@@ -689,6 +701,52 @@ Denise::checkSpriteSpriteCollisions(int start, int end)
         if ((z & comp01) && (z & comp23)) SET_BIT(clxdat, 9);
     }
 }
+
+template <int x> void
+Denise::checkSpritePlayfieldCollisions(int start, int end)
+{
+    // For the odd sprites, only proceed if collision detection is enabled
+    if (IS_ODD(x) && !GET_BIT(clxcon, 12 + (x/2))) return;
+
+    // Set up the sprite comparison mask
+    uint16_t sprMask;
+    switch(x) {
+        case 0: sprMask = Z_SP0 | (GET_BIT(clxcon, 12) ? Z_SP1 : 0); break;
+        case 2: sprMask = Z_SP2 | (GET_BIT(clxcon, 13) ? Z_SP3 : 0); break;
+        case 4: sprMask = Z_SP4 | (GET_BIT(clxcon, 14) ? Z_SP5 : 0); break;
+        case 6: sprMask = Z_SP6 | (GET_BIT(clxcon, 15) ? Z_SP7 : 0); break;
+        default: sprMask = 0; assert(false);
+    }
+
+    uint8_t enabled1 = (clxcon >> 6) & 0b010101;
+    uint8_t enabled2 = (clxcon >> 6) & 0b101010;
+    uint8_t compare1 = clxcon & 0b010101;
+    uint8_t compare2 = clxcon & 0b101010;
+
+    // Check for sprite-playfield collisions
+    for (int pos = end; pos >= start; pos -= 2) {
+
+        uint16_t z = zBuffer[pos];
+
+        // Skip this pixel if the sprite is transparent here
+        if (!(z & Z_SP[x])) continue;
+
+        bool collides = true;
+
+        // Check for a collision with playfield 1
+        collides &= ((bBuffer[pos] & enabled1) == compare1);
+        if (collides) SET_BIT(clxdat, 1 + (x / 2));
+
+        // Emulate single-playfield oddity which is described here:
+        // http://eab.abime.net/showpost.php?p=965074&postcount=2
+        if (zBuffer[pos] & Z_DPF) collides = true;
+
+        // Check for a collision with playfield 2
+        collides &= ((bBuffer[pos] & enabled2) == compare2);
+        if (collides) SET_BIT(clxdat, 5 + (x / 2));
+    }
+}
+
 
 void
 Denise::drawBorder()
