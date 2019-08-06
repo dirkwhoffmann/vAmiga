@@ -200,7 +200,7 @@ Denise::pokeBPLCON2(uint16_t value)
 uint16_t
 Denise::peekCLXDAT()
 {
-    uint16_t result = clxdat;
+    uint16_t result = clxdat | 0x8000;
     clxdat = 0;
     return result;
 }
@@ -444,7 +444,6 @@ Denise::translateSPF(int from, int to)
     for (int i = from; i < to; i++) {
 
         uint8_t s = bBuffer[i];
-        bBuffer[i] = 0;
 
         assert(PixelEngine::isRgbaIndex(s));
         iBuffer[i] = s;
@@ -468,12 +467,12 @@ Denise::translateDPF(int from, int to)
     for (int i = from; i < to; i++) {
 
         uint8_t s = bBuffer[i];
-        bBuffer[i] = 0;
 
         // Determine color indices for both playfields
         uint8_t index1 = ((s & 1) >> 0) | ((s & 4) >> 1) | ((s & 16) >> 2);
         uint8_t index2 = ((s & 2) >> 1) | ((s & 8) >> 2) | ((s & 32) >> 3);
 
+        /*
         if (pf2pri) {
 
             // Playfield 2 appears in front
@@ -502,40 +501,42 @@ Denise::translateDPF(int from, int to)
                 zBuffer[i] = Z_DPF;
             }
         }
+        */
 
-        /*
         if (index1) {
+            if (index2) {
 
-            if (index2) { // Case 1: PF1 is solid, PF2 is solid
-
+                // PF1 is solid, PF2 is solid
                 if (pf2pri) {
-                    colorIndex[i] = index2 | 0b1000;
-                    zBuffer[i] = prio2;
+                    iBuffer[i] = index2 | 0b1000;
+                    zBuffer[i] = prio2 | Z_DPF | Z_PF1 | Z_PF2;
                 } else {
-                    colorIndex[i] = index1;
-                    zBuffer[i] = prio1;
+                    iBuffer[i] = index1;
+                    zBuffer[i] = prio1 | Z_DPF | Z_PF1 | Z_PF2;
                 }
-                zBuffer[i] |= (Z_DPF | Z_PF1 | Z_PF2);
+                clxdat |= 1;
 
-            } else { // Case 2: PF1 is solid, PF2 is transparent
+            } else {
 
-                colorIndex[i] = index1;
-                zBuffer[i] = prio1 | (Z_DPF | Z_PF2);
+                // PF1 is solid, PF2 is transparent
+                iBuffer[i] = index1;
+                zBuffer[i] = prio1 | Z_DPF | Z_PF2;
             }
 
         } else {
-            if (index2) { // Case 3: PF1 is transparent, PF2 is solid
+            if (index2) {
 
-                colorIndex[i] = index2 | 0b1000;
-                zBuffer[i] = prio2 | (Z_DPF | Z_PF2);
+                // PF1 is transparent, PF2 is solid
+                iBuffer[i] = index2 | 0b1000;
+                zBuffer[i] = prio2 | Z_DPF | Z_PF2;
 
-            } else { // Case 4: PF1 is transparent, PF2 is transparent
+            } else {
 
-                colorIndex[i] = 0;
+                // PF1 is transparent, PF2 is transparent
+                iBuffer[i] = 0;
                 zBuffer[i] = Z_DPF;
             }
         }
-        */
     }
 }
 
@@ -601,7 +602,7 @@ Denise::drawSprite()
 
     int baseCol = 16 + 2 * (x & 6);
 
-    int start = 2 * sprhstrt[x];
+    int start = 2 + 2 * sprhstrt[x];
     int end = MIN(start + 31, LAST_PIXEL);
 
     for (int pos = end; pos >= start; pos -= 2) {
@@ -624,7 +625,10 @@ Denise::drawSprite()
     }
 
     // Set sprite collision bits if enabled
-    if (collisionCheck) checkSpriteSpriteCollisions<x>(start, end);
+    if (collisionCheck) {
+        checkSpriteSpriteCollisions<x>(start, end);
+        checkSpritePlayfieldCollisions<x>(start, end);
+    }
 }
 
 template <int x> void
@@ -641,7 +645,7 @@ Denise::drawSpritePair()
     uint32_t d1 = (uint32_t)sprdata[x-1] << 1;
     uint32_t d0 = (uint32_t)sprdatb[x-1] << 0;
 
-    int start = 2 * sprhstrt[x];
+    int start = 2 + 2 * sprhstrt[x];
     int end = MIN(start + 31, LAST_PIXEL);
 
     for (int pos = end; pos >= start; pos -= 2) {
@@ -666,7 +670,10 @@ Denise::drawSpritePair()
     }
 
     // Set sprite collision bits if enabled
-    if (collisionCheck) checkSpriteSpriteCollisions<x>(start, end);
+    if (collisionCheck) {
+        checkSpriteSpriteCollisions<x>(start, end);
+        checkSpritePlayfieldCollisions<x>(start, end);
+    }
 }
 
 template <int x> void
@@ -686,10 +693,10 @@ Denise::checkSpriteSpriteCollisions(int start, int end)
 
         uint16_t z = zBuffer[pos];
 
-        // Skip this pixel if there are no other sprites here
+        // Skip if there are no other sprites at this pixel coordinate
         if (!(z & (Z_SP01234567 ^ Z_SP[x]))) continue;
 
-        // Skip this pixel if the sprite is transparent here
+        // Skip if the sprite is transparent at this pixel coordinate
         if (!(z & Z_SP[x])) continue;
 
         // Set sprite collision bits
@@ -728,7 +735,7 @@ Denise::checkSpritePlayfieldCollisions(int start, int end)
 
         uint16_t z = zBuffer[pos];
 
-        // Skip this pixel if the sprite is transparent here
+        // Skip if the sprite is transparent at this pixel coordinate
         if (!(z & Z_SP[x])) continue;
 
         bool collides = true;
@@ -810,6 +817,9 @@ Denise::beginOfLine(int vpos)
     initialBplcon0 = bplcon0;
     initialBplcon1 = bplcon1;
     initialBplcon2 = bplcon2;
+
+    // Clear the bBuffer
+    memset(bBuffer, 0, sizeof(bBuffer));
 }
 
 void
