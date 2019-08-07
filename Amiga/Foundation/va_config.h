@@ -35,6 +35,7 @@
 #define BPL_DEBUG 2         // Bitplane registers
 #define COL_DEBUG 2         // Color registers
 #define SPR_DEBUG 2         // Sprite registers
+#define CLX_DEBUG 2         // Collision detection (CLXDAT, CLXCON)
 #define DSK_DEBUG 2         // Disk registers
 #define AUD_DEBUG 2         // Audio registers
 #define CPT_DEBUG 2         // Control ports and connected devices

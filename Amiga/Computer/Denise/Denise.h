@@ -464,6 +464,8 @@ public:
     // Collision checking
     //
 
+public:
+
     // Checks for sprite-sprite collisions in the current rasterline
     template <int x> void checkS2SCollisions(int start, int end);
 
@@ -473,7 +475,12 @@ public:
     // Checks for playfield-playfield collisions in the current rasterline
     void checkP2PCollisions();
 
+private:
 
+    // Getter and setter for CLXDAT bits
+
+
+    
     //
     // Delegation methods
     //

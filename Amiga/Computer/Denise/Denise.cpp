@@ -796,21 +796,24 @@ Denise::checkS2PCollisions(int start, int end)
         // Skip if the sprite is transparent at this pixel coordinate
         if (!(z & Z_SP[x])) continue;
 
-        bool collides = true;
-
-        // debug("x: %d bBuffer[%d] = %X e1 = %X e2 = %X, c1 = %X c2 = %X\n", x, pos, bBuffer[pos], enabled1, enabled2, compare1, compare2);
+        debug(CLX_DEBUG, "<%d> b[%d] = %X e1 = %X e2 = %X, c1 = %X c2 = %X\n",
+              x, pos, bBuffer[pos], enabled1, enabled2, compare1, compare2);
 
         // Check for a collision with playfield 2
-        collides &= ((bBuffer[pos] & enabled2) == compare2);
-        if (collides) SET_BIT(clxdat, 5 + (x / 2));
+        if ((bBuffer[pos] & enabled2) == compare2) {
+            SET_BIT(clxdat, 5 + (x / 2));
 
-        // Emulate single-playfield oddity which is described here:
-        // http://eab.abime.net/showpost.php?p=965074&postcount=2
-        if (zBuffer[pos] & Z_DPF) collides = true;
+        } else {
+            // There is a hardware oddity in single-playfield mode. If PF2
+            // doesn't match, playfield 1 doesn't match, too. No matter what.
+            // See http://eab.abime.net/showpost.php?p=965074&postcount=2
+            if ((zBuffer[pos] & Z_DPF) == 0) continue;
+        }
 
         // Check for a collision with playfield 1
-        collides &= ((bBuffer[pos] & enabled1) == compare1);
-        if (collides) SET_BIT(clxdat, 1 + (x / 2));
+        if ((bBuffer[pos] & enabled1) == compare1) {
+           SET_BIT(clxdat, 1 + (x / 2));
+        }
     }
 }
 
@@ -830,7 +833,8 @@ Denise::checkP2PCollisions()
     for (int pos = 0; pos < HPIXELS; pos++) {
 
         uint16_t b = bBuffer[pos];
-        // debug("P2P: e1 = %X e2 = %X c1 = %X c2 = %X bBuffer[%d] = %X\n", enabled1, enabled2, compare1, compare2, pos, b);
+        debug(CLX_DEBUG, "b[%d] = %X e1 = %X e2 = %X c1 = %X c2 = %X\n",
+              pos, b, enabled1, enabled2, compare1, compare2);
 
         // Check if there is a hit with playfield 1
         if ((b & enabled1) != compare1) continue;
