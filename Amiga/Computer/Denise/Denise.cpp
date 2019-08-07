@@ -99,7 +99,9 @@ Denise::_inspect()
 void
 Denise::_dump()
 {
-    plainmsg(" CollisionCheck: %d\n", collisionCheck);
+    plainmsg(" clxSprSpr: %d\n", clxSprSpr);
+    plainmsg(" clxSprPlf: %d\n", clxSprPlf);
+    plainmsg(" clxPlfPlf: %d\n", clxPlfPlf);
 }
 
 DeniseInfo
@@ -626,11 +628,9 @@ Denise::drawSprite()
         d0 >>= 1;
     }
 
-    // Set sprite collision bits if enabled
-    if (collisionCheck) {
-        checkS2SCollisions<x>(start, end);
-        checkS2PCollisions<x>(start, end);
-    }
+    // Perform collision checks (if enabled)
+    if (clxSprSpr) checkS2SCollisions<x>(start, end);
+    if (clxSprPlf) checkS2PCollisions<x>(start, end);
 }
 
 template <int x> void
@@ -671,11 +671,9 @@ Denise::drawSpritePair()
         d0 >>= 1;
     }
 
-    // Set sprite collision bits if enabled
-    if (collisionCheck) {
-        checkS2SCollisions<x>(start, end);
-        checkS2PCollisions<x>(start, end);
-    }
+    // Perform collision checks (if enabled)
+    if (clxSprSpr) checkS2SCollisions<x>(start, end);
+    if (clxSprPlf) checkS2PCollisions<x>(start, end);
 }
 
 void
@@ -881,8 +879,8 @@ Denise::endOfLine(int vpos)
         // Draw border pixels
         drawBorder();
 
-        // Check for playfield / playfield collisions
-        if (collisionCheck) checkP2PCollisions();
+        // Perform playfield-playfield collision check (if enabled)
+        if (clxPlfPlf) checkP2PCollisions();
 
         // Synthesize RGBA values and write the result into the frame buffer
         pixelEngine.colorize(iBuffer, vpos);

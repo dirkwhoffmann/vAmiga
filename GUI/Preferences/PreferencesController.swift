@@ -80,7 +80,9 @@ class PreferencesController: DialogController {
     //
 
     // Graphics
-    @IBOutlet weak var compCollisionCheck: NSButton!
+    @IBOutlet weak var compClxSprSpr: NSButton!
+    @IBOutlet weak var compClxSprPlf: NSButton!
+    @IBOutlet weak var compClxPlfPlf: NSButton!
 
     // Audio
     // @IBOutlet weak var compFilterType: NSPopUpButton!

@@ -41,7 +41,14 @@ public:
     // Configuration
     //
 
-    bool collisionCheck;
+    // Check for sprite-sprite collisions
+    bool clxSprSpr;
+
+    // Check for sprite-playfield collisions
+    bool clxSprPlf;
+
+    // Check for playfield-playfield collisions
+    bool clxPlfPlf;
 
 
     //
@@ -246,8 +253,14 @@ public:
     // Configuring device properties
     //
 
-    bool getCollisionCheck() { return collisionCheck; }
-    void setCollisionCheck(bool value) { collisionCheck = value; }
+    bool getClxSprSpr() { return clxSprSpr; }
+    void setClxSprSpr(bool value) { clxSprSpr = value; }
+
+    bool getClxSprPlf() { return clxSprPlf; }
+    void setClxSprPlf(bool value) { clxSprPlf = value; }
+
+    bool getClxPlfPlf() { return clxPlfPlf; }
+    void setClxPlfPlf(bool value) { clxPlfPlf = value; }
 
 
     //
@@ -259,7 +272,9 @@ public:
     {
         worker
 
-        & collisionCheck;
+        & clxSprSpr
+        & clxSprPlf
+        & clxPlfPlf;
     }
     
     template <class T>

@@ -1006,7 +1006,9 @@ extension MyController {
 extension Keys {
 
     // Graphics
-    static let collisionCheck    = "VAMIGACollisionCheck"
+    static let clxSprSpr         = "VAMIGAClxSprSpr"
+    static let clxSprPlf         = "VAMIGAClxSprPlf"
+    static let clxPlfPlf         = "VAMIGAClxPlfPlf"
 
     // Audio
     static let filterActivation  = "VAMIGAFilterActivation"
@@ -1022,7 +1024,9 @@ extension Keys {
 extension Defaults {
 
     // Graphics
-    static let collisionCheck    = true
+    static let clxSprSpr         = false
+    static let clxSprPlf         = false
+    static let clxPlfPlf         = false
 
     // Audio
     static let filterActivation  = FILTACT_POWER_LED
@@ -1041,7 +1045,9 @@ extension MyController {
 
         let dictionary: [String: Any] = [
 
-            Keys.collisionCheck: Defaults.collisionCheck,
+            Keys.clxSprSpr: Defaults.clxSprSpr,
+            Keys.clxSprPlf: Defaults.clxSprPlf,
+            Keys.clxPlfPlf: Defaults.clxPlfPlf,
             Keys.filterActivation: Defaults.filterActivation.rawValue,
             Keys.filterType: Defaults.filterType.rawValue,
             Keys.exactBlitter: Defaults.exactBlitter,
@@ -1056,7 +1062,9 @@ extension MyController {
 
         let defaults = UserDefaults.standard
 
-        let keys = [ Keys.collisionCheck,
+        let keys = [ Keys.clxSprSpr,
+                     Keys.clxSprPlf,
+                     Keys.clxPlfPlf,
                      Keys.filterActivation,
                      Keys.filterType,
                      Keys.exactBlitter,
@@ -1073,7 +1081,9 @@ extension MyController {
 
         amiga.suspend()
 
-        amiga.configure(VA_COLLISION_CHECK, enable: defaults.bool(forKey: Keys.collisionCheck))
+        amiga.configure(VA_CLX_SPR_SPR, enable: defaults.bool(forKey: Keys.clxSprSpr))
+        amiga.configure(VA_CLX_SPR_PLF, enable: defaults.bool(forKey: Keys.clxSprPlf))
+        amiga.configure(VA_CLX_PLF_PLF, enable: defaults.bool(forKey: Keys.clxPlfPlf))
         amiga.configure(VA_FILTER_ACTIVATION, value: defaults.integer(forKey: Keys.filterActivation))
         amiga.configure(VA_FILTER_TYPE, value: defaults.integer(forKey: Keys.filterType))
         amiga.configureExactBlitter(defaults.bool(forKey: Keys.exactBlitter))
@@ -1087,7 +1097,9 @@ extension MyController {
         let defaults = UserDefaults.standard
         let config = amiga.config()
 
-        defaults.set(config.collisionCheck, forKey: Keys.collisionCheck)
+        defaults.set(config.clxSprSpr, forKey: Keys.clxSprSpr)
+        defaults.set(config.clxSprPlf, forKey: Keys.clxSprPlf)
+        defaults.set(config.clxPlfPlf, forKey: Keys.clxPlfPlf)
         defaults.set(config.filterActivation.rawValue, forKey: Keys.filterActivation)
         defaults.set(config.filterType.rawValue, forKey: Keys.filterType)
         defaults.set(config.exactBlitter, forKey: Keys.exactBlitter)

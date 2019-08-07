@@ -177,7 +177,9 @@ Amiga::getConfig()
     config.model = model;
     config.realTimeClock = realTimeClock;
     config.layout = keyboard.layout;
-    config.collisionCheck = denise.getCollisionCheck();
+    config.clxSprSpr = denise.getClxSprSpr();
+    config.clxSprPlf = denise.getClxSprPlf();
+    config.clxPlfPlf = denise.getClxPlfPlf();
     config.filterActivation = paula.audioUnit.getFilterActivation();
     config.filterType = paula.audioUnit.getFilterType();
     config.exactBlitter = agnus.blitter.getExactEmulation();
@@ -288,11 +290,22 @@ Amiga::configure(ConfigOption option, long value)
             mem.updateMemSrcTable();
             break;
 
-        case VA_COLLISION_CHECK:
+        case VA_CLX_SPR_SPR:
 
-            // debug("VA_COLLISION_CHECK %d\n", value); 
-            if (current.collisionCheck == value) return true;
-            denise.setCollisionCheck(value);
+            if (current.clxSprSpr == value) return true;
+            denise.setClxSprSpr(value);
+            break;
+
+        case VA_CLX_SPR_PLF:
+
+            if (current.clxSprPlf == value) return true;
+            denise.setClxSprPlf(value);
+            break;
+
+        case VA_CLX_PLF_PLF:
+
+            if (current.clxPlfPlf == value) return true;
+            denise.setClxPlfPlf(value);
             break;
 
         case VA_FILTER_ACTIVATION:
@@ -463,15 +476,6 @@ Amiga::configureDriveSpeed(unsigned driveNr, uint16_t value)
 {
     return configureDrive(driveNr, VA_DRIVE_SPEED, value);
 }
-
-/*
-void
-Amiga::configureCollisionCheck(bool value)
-{
-    debug("configureCollisionCheck(%d)\n", value);
-    configure(VA_COLLISION_CHECK, value);
-}
-*/
 
 void
 Amiga::configureExactBlitter(bool value)

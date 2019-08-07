@@ -19,7 +19,9 @@ extension PreferencesController {
         let poweredOff = amiga.isPoweredOff()
 
         // Graphics
-        compCollisionCheck.state = config.collisionCheck ? .on : .off
+        compClxSprSpr.state = config.clxSprSpr ? .on : .off
+        compClxSprPlf.state = config.clxSprPlf ? .on : .off
+        compClxPlfPlf.state = config.clxPlfPlf ? .on : .off
 
         // Audio
         compFilterActivation.selectItem(withTag: config.filterActivation.rawValue)
@@ -38,10 +40,21 @@ extension PreferencesController {
         compOKButton.title = okLabel
     }
 
-    @IBAction func compCollisionCheckAction(_ sender: NSButton!) {
+    @IBAction func compClxSprSprAction(_ sender: NSButton!) {
 
-        // amigaProxy?.configureCollisionCheck(sender.state == .on)
-        amigaProxy?.configure(VA_COLLISION_CHECK, enable: sender.state == .on)
+        amigaProxy?.configure(VA_CLX_SPR_SPR, enable: sender.state == .on)
+        refresh()
+    }
+
+    @IBAction func compClxSprPlfAction(_ sender: NSButton!) {
+
+        amigaProxy?.configure(VA_CLX_SPR_PLF, enable: sender.state == .on)
+        refresh()
+    }
+
+    @IBAction func compClxPlfPlfAction(_ sender: NSButton!) {
+
+        amigaProxy?.configure(VA_CLX_PLF_PLF, enable: sender.state == .on)
         refresh()
     }
 
