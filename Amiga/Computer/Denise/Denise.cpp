@@ -767,24 +767,25 @@ template <int x> void
 Denise::checkS2PCollisions(int start, int end)
 {
     // For the odd sprites, only proceed if collision detection is enabled
-    if (IS_ODD(x) && !GET_BIT(clxcon, 12 + (x/2))) return;
+    if (IS_ODD(x) && !getENSP<x>()) return;
 
     // Set up the sprite comparison mask
     uint16_t sprMask;
     switch(x) {
         case 0:
-        case 1: sprMask = Z_SP0 | (GET_BIT(clxcon, 12) ? Z_SP1 : 0); break;
+        case 1: sprMask = Z_SP0 | (getENSP<1>() ? Z_SP1 : 0); break;
         case 2:
-        case 3: sprMask = Z_SP2 | (GET_BIT(clxcon, 13) ? Z_SP3 : 0); break;
+        case 3: sprMask = Z_SP2 | (getENSP<3>() ? Z_SP3 : 0); break;
         case 4:
-        case 5: sprMask = Z_SP4 | (GET_BIT(clxcon, 14) ? Z_SP5 : 0); break;
+        case 5: sprMask = Z_SP4 | (getENSP<5>() ? Z_SP5 : 0); break;
         case 6:
-        case 7: sprMask = Z_SP6 | (GET_BIT(clxcon, 15) ? Z_SP7 : 0); break;
+        case 7: sprMask = Z_SP6 | (getENSP<7>() ? Z_SP7 : 0); break;
+
         default: sprMask = 0; assert(false);
     }
 
     uint8_t enabled1 = getENBP1();
-    uint8_t enabled2 = getENBP1();
+    uint8_t enabled2 = getENBP2();
     uint8_t compare1 = getMVBP1() & enabled1;
     uint8_t compare2 = getMVBP2() & enabled2;
 
@@ -825,7 +826,7 @@ Denise::checkP2PCollisions()
 
     // Set up comparison masks
     uint8_t enabled1 = getENBP1();
-    uint8_t enabled2 = getENBP1();
+    uint8_t enabled2 = getENBP2();
     uint8_t compare1 = getMVBP1() & enabled1;
     uint8_t compare2 = getMVBP2() & enabled2;
 

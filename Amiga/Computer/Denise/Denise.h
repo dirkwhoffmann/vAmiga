@@ -478,6 +478,7 @@ public:
 private:
 
     // Getter for CLXCON bits
+    template <int x> uint16_t getENSP() { return GET_BIT(clxcon, 12 + (x/2)); }
     uint16_t getENBP1() { return (clxcon >> 6) & 0b010101; }
     uint16_t getENBP2() { return (clxcon >> 6) & 0b101010; }
     uint16_t getMVBP1() { return clxcon & 0b010101; }
