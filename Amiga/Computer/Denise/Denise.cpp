@@ -285,6 +285,9 @@ Denise::pokeSPRxDATB(uint16_t value)
 void
 Denise::pokeColorReg(uint32_t addr, uint16_t value)
 {
+
+    // if (addr == 0x182) value = 0; //REMOVE ASAP
+
     assert(addr >= 0x180 && addr <= 0x1BE && IS_EVEN(addr));
     debug(COL_DEBUG, "pokeColorReg(%X, %X)\n", addr, value);
 
@@ -514,13 +517,12 @@ Denise::translateDPF(int from, int to)
                     iBuffer[i] = index1;
                     zBuffer[i] = prio1 | Z_DPF | Z_PF1 | Z_PF2;
                 }
-                clxdat |= 1;
 
             } else {
 
                 // PF1 is solid, PF2 is transparent
                 iBuffer[i] = index1;
-                zBuffer[i] = prio1 | Z_DPF | Z_PF2;
+                zBuffer[i] = prio1 | Z_DPF | Z_PF1;
             }
 
         } else {
@@ -626,8 +628,8 @@ Denise::drawSprite()
 
     // Set sprite collision bits if enabled
     if (collisionCheck) {
-        checkSpriteSpriteCollisions<x>(start, end);
-        checkSpritePlayfieldCollisions<x>(start, end);
+        checkS2SCollisions<x>(start, end);
+        checkS2PCollisions<x>(start, end);
     }
 }
 
@@ -671,13 +673,65 @@ Denise::drawSpritePair()
 
     // Set sprite collision bits if enabled
     if (collisionCheck) {
-        checkSpriteSpriteCollisions<x>(start, end);
-        checkSpritePlayfieldCollisions<x>(start, end);
+        checkS2SCollisions<x>(start, end);
+        checkS2PCollisions<x>(start, end);
     }
 }
 
+void
+Denise::drawBorder()
+{
+    int borderL = 0;
+    int borderR = 0;
+    int borderV = 0;
+
+#ifdef BORDER_DEBUG
+    borderL = 64;
+    borderR = 65;
+    borderV = 66;
+#endif
+
+    // Check if the horizontal flipflop was set somewhere in this rasterline
+    bool hFlopWasSet = agnus->hFlop || agnus->hFlopOn != -1;
+
+    // Check if the whole line is blank (drawn in background color)
+    bool lineIsBlank = !agnus->vFlop || !hFlopWasSet;
+
+    // Draw the border
+    if (lineIsBlank) {
+
+        for (int i = 0; i <= LAST_PIXEL; i++) {
+            iBuffer[i] = borderV;
+        }
+
+    } else {
+
+        // Draw left border
+        if (!agnus->hFlop && agnus->hFlopOn != -1) {
+            for (int i = 0; i < 2 * agnus->hFlopOn; i++) {
+                assert(i < sizeof(iBuffer));
+                iBuffer[i] = borderL;
+            }
+        }
+
+        // Draw right border
+        if (agnus->hFlopOff != -1) {
+            for (int i = 2 * agnus->hFlopOff; i <= LAST_PIXEL; i++) {
+                assert(i < sizeof(iBuffer));
+                iBuffer[i] = borderR;
+            }
+        }
+    }
+
+#ifdef LINE_DEBUG
+    int16_t vpos = agnus->pos.v;
+    bool lines = vpos == 300 || vpos == 0xA0; // vpos == 26 || vpos == 0x50 || vpos == 276 || vpos == 255;
+    if (lines) for (int i = 0; i <= LAST_PIXEL / 2; colorIndex[i++] = 64);
+#endif
+}
+
 template <int x> void
-Denise::checkSpriteSpriteCollisions(int start, int end)
+Denise::checkS2SCollisions(int start, int end)
 {
     // For the odd sprites, only proceed if collision detection is enabled
     if (IS_ODD(x) && !GET_BIT(clxcon, 12 + (x/2))) return;
@@ -710,7 +764,7 @@ Denise::checkSpriteSpriteCollisions(int start, int end)
 }
 
 template <int x> void
-Denise::checkSpritePlayfieldCollisions(int start, int end)
+Denise::checkS2PCollisions(int start, int end)
 {
     // For the odd sprites, only proceed if collision detection is enabled
     if (IS_ODD(x) && !GET_BIT(clxcon, 12 + (x/2))) return;
@@ -718,17 +772,21 @@ Denise::checkSpritePlayfieldCollisions(int start, int end)
     // Set up the sprite comparison mask
     uint16_t sprMask;
     switch(x) {
-        case 0: sprMask = Z_SP0 | (GET_BIT(clxcon, 12) ? Z_SP1 : 0); break;
-        case 2: sprMask = Z_SP2 | (GET_BIT(clxcon, 13) ? Z_SP3 : 0); break;
-        case 4: sprMask = Z_SP4 | (GET_BIT(clxcon, 14) ? Z_SP5 : 0); break;
-        case 6: sprMask = Z_SP6 | (GET_BIT(clxcon, 15) ? Z_SP7 : 0); break;
+        case 0:
+        case 1: sprMask = Z_SP0 | (GET_BIT(clxcon, 12) ? Z_SP1 : 0); break;
+        case 2:
+        case 3: sprMask = Z_SP2 | (GET_BIT(clxcon, 13) ? Z_SP3 : 0); break;
+        case 4:
+        case 5: sprMask = Z_SP4 | (GET_BIT(clxcon, 14) ? Z_SP5 : 0); break;
+        case 6:
+        case 7: sprMask = Z_SP6 | (GET_BIT(clxcon, 15) ? Z_SP7 : 0); break;
         default: sprMask = 0; assert(false);
     }
 
     uint8_t enabled1 = (clxcon >> 6) & 0b010101;
     uint8_t enabled2 = (clxcon >> 6) & 0b101010;
-    uint8_t compare1 = clxcon & 0b010101;
-    uint8_t compare2 = clxcon & 0b101010;
+    uint8_t compare1 = clxcon & 0b010101 & enabled1;
+    uint8_t compare2 = clxcon & 0b101010 & enabled2;
 
     // Check for sprite-playfield collisions
     for (int pos = end; pos >= start; pos -= 2) {
@@ -740,71 +798,50 @@ Denise::checkSpritePlayfieldCollisions(int start, int end)
 
         bool collides = true;
 
-        // Check for a collision with playfield 1
-        collides &= ((bBuffer[pos] & enabled1) == compare1);
-        if (collides) SET_BIT(clxdat, 1 + (x / 2));
+        // debug("x: %d bBuffer[%d] = %X e1 = %X e2 = %X, c1 = %X c2 = %X\n", x, pos, bBuffer[pos], enabled1, enabled2, compare1, compare2);
+
+        // Check for a collision with playfield 2
+        collides &= ((bBuffer[pos] & enabled2) == compare2);
+        if (collides) SET_BIT(clxdat, 5 + (x / 2));
 
         // Emulate single-playfield oddity which is described here:
         // http://eab.abime.net/showpost.php?p=965074&postcount=2
         if (zBuffer[pos] & Z_DPF) collides = true;
 
-        // Check for a collision with playfield 2
-        collides &= ((bBuffer[pos] & enabled2) == compare2);
-        if (collides) SET_BIT(clxdat, 5 + (x / 2));
+        // Check for a collision with playfield 1
+        collides &= ((bBuffer[pos] & enabled1) == compare1);
+        if (collides) SET_BIT(clxdat, 1 + (x / 2));
     }
 }
 
-
 void
-Denise::drawBorder()
+Denise::checkP2PCollisions()
 {
-    int borderL = 0;
-    int borderR = 0;
-    int borderV = 0;
+    // Quick-exit if the collision bit already set
+    if (GET_BIT(clxdat, 0)) return;
 
-#ifdef BORDER_DEBUG
-    borderL = 64;
-    borderR = 65;
-    borderV = 66;
-#endif
+    // Set up comparison masks
+    uint8_t enabled1 = (clxcon >> 6) & 0b010101;
+    uint8_t enabled2 = (clxcon >> 6) & 0b101010;
+    uint8_t compare1 = clxcon & 0b010101 & enabled1;
+    uint8_t compare2 = clxcon & 0b101010 & enabled2;
 
-    // Check if the horizontal flipflop was set somewhere in this rasterline
-    bool hFlopWasSet = agnus->hFlop || agnus->hFlopOn != -1;
+    // Check all pixels one by one
+    for (int pos = 0; pos < HPIXELS; pos++) {
 
-    // Check if the whole line is blank (drawn in background color)
-    bool lineIsBlank = !agnus->vFlop || !hFlopWasSet;
+        uint16_t b = bBuffer[pos];
+        // debug("P2P: e1 = %X e2 = %X c1 = %X c2 = %X bBuffer[%d] = %X\n", enabled1, enabled2, compare1, compare2, pos, b);
 
-    // Draw the border
-    if (lineIsBlank) {
+        // Check if there is a hit with playfield 1
+        if ((b & enabled1) != compare1) continue;
 
-        for (int i = 0; i <= LAST_PIXEL; i++) {
-           iBuffer[i] = borderV;
-        }
+        // Check if there is a hit with playfield 2
+        if ((b & enabled2) != compare2) continue;
 
-    } else {
-
-        // Draw left border
-        if (!agnus->hFlop && agnus->hFlopOn != -1) {
-            for (int i = 0; i < 2 * agnus->hFlopOn; i++) {
-                assert(i < sizeof(iBuffer));
-                iBuffer[i] = borderL;
-            }
-        }
-
-        // Draw right border
-        if (agnus->hFlopOff != -1) {
-            for (int i = 2 * agnus->hFlopOff; i <= LAST_PIXEL; i++) {
-                assert(i < sizeof(iBuffer));
-                iBuffer[i] = borderR;
-            }
-        }
+        // Set collision bit
+        SET_BIT(clxdat, 0);
+        return;
     }
-
-#ifdef LINE_DEBUG
-    int16_t vpos = agnus->pos.v;
-    bool lines = vpos == 300 || vpos == 0xA0; // vpos == 26 || vpos == 0x50 || vpos == 276 || vpos == 255;
-    if (lines) for (int i = 0; i <= LAST_PIXEL / 2; colorIndex[i++] = 64);
-#endif
 }
 
 void
@@ -838,6 +875,9 @@ Denise::endOfLine(int vpos)
 
         // Draw border pixels
         drawBorder();
+
+        // Check for playfield / playfield collisions
+        if (collisionCheck) checkP2PCollisions();
 
         // Synthesize RGBA values and write the result into the frame buffer
         pixelEngine.colorize(iBuffer, vpos);

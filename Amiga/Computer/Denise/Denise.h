@@ -247,7 +247,7 @@ public:
     //
 
     bool getCollisionCheck() { return collisionCheck; }
-    void setCollisionCheck(bool value) { collisionCheck = value; debug("collisionCheck = %d\n", collisionCheck); }
+    void setCollisionCheck(bool value) { collisionCheck = value; }
 
 
     //
@@ -455,14 +455,23 @@ public:
     template <int x> void drawSprite();
     template <int x> void drawSpritePair();
 
-    // Performs a collision check
-    template <int x> void checkSpriteSpriteCollisions(int start, int end);
-    template <int x> void checkSpritePlayfieldCollisions(int start, int end);
-
     /* Draws the left and the right border.
      * This method is called at the end of each rasterline.
      */
     void drawBorder(); 
+
+    //
+    // Collision checking
+    //
+
+    // Checks for sprite-sprite collisions in the current rasterline
+    template <int x> void checkS2SCollisions(int start, int end);
+
+    // Checks for sprite-playfield collisions in the current rasterline
+    template <int x> void checkS2PCollisions(int start, int end);
+
+    // Checks for playfield-playfield collisions in the current rasterline
+    void checkP2PCollisions();
 
 
     //
