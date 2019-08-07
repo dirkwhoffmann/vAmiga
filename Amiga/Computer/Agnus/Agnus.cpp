@@ -1339,8 +1339,8 @@ Agnus::pokeBPLCON0(uint16_t oldValue, uint16_t newValue)
         // Update the DMA allocation table with a 4 cycle delay.
         allocateBplSlots(inBplDmaArea() ? activeBitplanes : 0, hires, pos.h + 2);
 
-        // Update the currently scheduled event according to the modified table
-        scheduleNextBplEvent();
+        // If there is a scheduled event, update it w.r.t. to the new table
+        updateCurrentBplEvent();
     }
 }
 

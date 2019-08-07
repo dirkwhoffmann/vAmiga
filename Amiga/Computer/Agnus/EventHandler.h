@@ -203,6 +203,7 @@ void executeEventsUntil(Cycle cycle);
 // Event handler for the DMA slot
 void serviceBplEvent(EventID id);
 void scheduleNextBplEvent();
+void updateCurrentBplEvent();
 
 // Event handler for the DAS slot
 void serviceDASEvent(EventID id);

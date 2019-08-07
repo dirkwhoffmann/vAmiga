@@ -634,6 +634,18 @@ Agnus::scheduleNextBplEvent()
 }
 
 void
+Agnus::updateCurrentBplEvent()
+{
+    int16_t prevPos = MAX(pos.h - 1, 0);
+    uint8_t next = nextDmaEvent[prevPos];
+    if (next) {
+        scheduleRel<BPL_SLOT>(DMA_CYCLES(next - pos.h), dmaEvent[next]);
+    } else {
+        cancel<BPL_SLOT>();
+    }
+}
+
+void
 Agnus::serviceDASEvent(EventID id)
 {
     // debug("serviceDASEvent(%d)\n", id);
