@@ -783,10 +783,10 @@ Denise::checkS2PCollisions(int start, int end)
         default: sprMask = 0; assert(false);
     }
 
-    uint8_t enabled1 = (clxcon >> 6) & 0b010101;
-    uint8_t enabled2 = (clxcon >> 6) & 0b101010;
-    uint8_t compare1 = clxcon & 0b010101 & enabled1;
-    uint8_t compare2 = clxcon & 0b101010 & enabled2;
+    uint8_t enabled1 = getENBP1();
+    uint8_t enabled2 = getENBP1();
+    uint8_t compare1 = getMVBP1() & enabled1;
+    uint8_t compare2 = getMVBP2() & enabled2;
 
     // Check for sprite-playfield collisions
     for (int pos = end; pos >= start; pos -= 2) {
@@ -824,10 +824,10 @@ Denise::checkP2PCollisions()
     if (GET_BIT(clxdat, 0)) return;
 
     // Set up comparison masks
-    uint8_t enabled1 = (clxcon >> 6) & 0b010101;
-    uint8_t enabled2 = (clxcon >> 6) & 0b101010;
-    uint8_t compare1 = clxcon & 0b010101 & enabled1;
-    uint8_t compare2 = clxcon & 0b101010 & enabled2;
+    uint8_t enabled1 = getENBP1();
+    uint8_t enabled2 = getENBP1();
+    uint8_t compare1 = getMVBP1() & enabled1;
+    uint8_t compare2 = getMVBP2() & enabled2;
 
     // Check all pixels one by one
     for (int pos = 0; pos < HPIXELS; pos++) {
