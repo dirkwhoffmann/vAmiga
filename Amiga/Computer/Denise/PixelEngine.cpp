@@ -109,7 +109,7 @@ PixelEngine::setColor(int reg, uint16_t value)
 {
     assert(reg < 32);
 
-    debug(DB_COL, "setColor%02d(%X)\n", reg, value);
+    debug(COL_DEBUG, "setColor%02d(%X)\n", reg, value);
 
     colreg[reg] = value & 0xFFF;
 

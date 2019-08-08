@@ -147,7 +147,7 @@ Paula::peekPOTxDAT(int x)
 
     result = HI_LO(potY, potX);
 
-    debug(DB_POT, "peekPOT%dDAT() = %X\n", x, result);
+    debug(POT_DEBUG, "peekPOT%dDAT() = %X\n", x, result);
     return result;
 }
 
@@ -180,14 +180,14 @@ Paula::peekPOTGOR()
     result &= amiga->controlPort1.potgor();
     result &= amiga->controlPort2.potgor();
 
-    debug(DB_POT, "peekPOTGOR = %X\n", result);
+    debug(POT_DEBUG, "peekPOTGOR = %X\n", result);
     return result;
 }
 
 void
 Paula::pokePOTGO(uint16_t value)
 {
-    debug(DB_POT, "pokePOTGO(%X)\n", value);
+    debug(POT_DEBUG, "pokePOTGO(%X)\n", value);
 
     potgo = value;
 
@@ -199,7 +199,7 @@ Paula::pokePOTGO(uint16_t value)
 
     // Check the START bit
     if (GET_BIT(value, 0)) {
-        debug(DB_POT, "Starting potentiometer scan procedure\n");
+        debug(POT_DEBUG, "Starting potentiometer scan procedure\n");
 
         // Schedule the first DISCHARGE event
         agnus->schedulePos<POT_SLOT>(agnus->pos.v, HPOS_MAX, POT_DISCHARGE);
@@ -212,7 +212,7 @@ Paula::servePotEvent(EventID id)
 {
     bool cont;
 
-    debug(DB_POT, "servePotEvent(%d)\n", id);
+    debug(POT_DEBUG, "servePotEvent(%d)\n", id);
 
     switch (id) {
 

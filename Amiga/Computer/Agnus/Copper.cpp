@@ -72,7 +72,7 @@ Copper::getInfo()
 void
 Copper::pokeCOPCON(uint16_t value)
 {
-    debug(DB_COPREG, "pokeCOPCON(%04X)\n", value);
+    debug(COPREG_DEBUG, "pokeCOPCON(%04X)\n", value);
     
     /* "This is a 1-bit register that when set true, allows the Copper to
      *  access the blitter hardware. This bit is cleared by power-on reset, so
@@ -84,21 +84,21 @@ Copper::pokeCOPCON(uint16_t value)
 void
 Copper::pokeCOPJMP1()
 {
-    debug(DB_COPREG, "pokeCOPJMP1(): Jumping to %X\n", cop1lc);
+    debug(COPREG_DEBUG, "pokeCOPJMP1(): Jumping to %X\n", cop1lc);
     switchToCopperList(1);
 }
 
 void
 Copper::pokeCOPJMP2()
 {
-    debug(DB_COPREG, "pokeCOPJMP2(): Jumping to %X\n", cop2lc);
+    debug(COPREG_DEBUG, "pokeCOPJMP2(): Jumping to %X\n", cop2lc);
     switchToCopperList(2);
 }
 
 void
 Copper::pokeCOPINS(uint16_t value)
 {
-    debug(DB_COPREG, "COPPC: %X pokeCOPINS(%04X)\n", coppc, value);
+    debug(COPREG_DEBUG, "COPPC: %X pokeCOPINS(%04X)\n", coppc, value);
 
     /* COPINS is a dummy address that can be used to write the first or
      * the secons instruction register, depending on the current state.
@@ -117,7 +117,7 @@ Copper::pokeCOPINS(uint16_t value)
 void
 Copper::pokeCOP1LCH(uint16_t value)
 {
-    debug(DB_COPREG, "pokeCOP1LCH(%04X)\n", value);
+    debug(COPREG_DEBUG, "pokeCOP1LCH(%04X)\n", value);
 
     if (HI_WORD(cop1lc) != value) {
         cop1lc = REPLACE_HI_WORD(cop1lc, value);
@@ -134,7 +134,7 @@ Copper::pokeCOP1LCH(uint16_t value)
 void
 Copper::pokeCOP1LCL(uint16_t value)
 {
-    debug(DB_COPREG, "pokeCOP1LCL(%04X)\n", value);
+    debug(COPREG_DEBUG, "pokeCOP1LCL(%04X)\n", value);
 
     if (LO_WORD(cop1lc) != value) {
         cop1lc = REPLACE_LO_WORD(cop1lc, value & 0xFFFE);
@@ -151,7 +151,7 @@ Copper::pokeCOP1LCL(uint16_t value)
 void
 Copper::pokeCOP2LCH(uint16_t value)
 {
-    debug(DB_COPREG, "pokeCOP2LCH(%04X)\n", value);
+    debug(COPREG_DEBUG, "pokeCOP2LCH(%04X)\n", value);
 
     if (HI_WORD(cop2lc) != value) {
         cop2lc = REPLACE_HI_WORD(cop2lc, value);
@@ -162,7 +162,7 @@ Copper::pokeCOP2LCH(uint16_t value)
 void
 Copper::pokeCOP2LCL(uint16_t value)
 {
-    debug(DB_COPREG, "pokeCOP2LCL(%04X)\n", value);
+    debug(COPREG_DEBUG, "pokeCOP2LCL(%04X)\n", value);
 
     if (LO_WORD(cop2lc) != value) {
         cop2lc = REPLACE_LO_WORD(cop2lc, value & 0xFFFE);
@@ -173,7 +173,7 @@ Copper::pokeCOP2LCL(uint16_t value)
 void
 Copper::pokeNOOP(uint16_t value)
 {
-    debug(DB_COPREG, "pokeNOOP(%04X)\n", value);
+    debug(COPREG_DEBUG, "pokeNOOP(%04X)\n", value);
 
     // REMOVE ASAP
     // verbose = !verbose;
@@ -340,7 +340,7 @@ Copper::findHorizontalMatchNew(uint32_t &match, uint32_t comp, uint32_t mask)
 void
 Copper::move(int addr, uint16_t value)
 {
-    debug(DB_COP, "COPPC: %X move(%s, $%X) (%d)\n", coppc, customReg[addr >> 1], value, value);
+    debug(COP_DEBUG, "COPPC: %X move(%s, $%X) (%d)\n", coppc, customReg[addr >> 1], value, value);
 
     assert(IS_EVEN(addr));
     assert(addr < 0x1FF);

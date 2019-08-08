@@ -115,7 +115,7 @@ CIA::emulateFallingEdgeOnFlagPin()
 void
 CIA::triggerTimerIrq()
 {
-    debug(DB_CIA, "triggerTimerIrq()\n");
+    debug(CIA_DEBUG, "triggerTimerIrq()\n");
     delay |= (delay & CIAReadIcr0) ? CIASetInt0 : CIASetInt1;
     delay |= (delay & CIAReadIcr0) ? CIASetIcr0 : CIASetIcr1;
 }
@@ -123,7 +123,7 @@ CIA::triggerTimerIrq()
 void
 CIA::triggerTodIrq()
 {
-    debug(DB_CIA, "triggerTodIrq()\n");
+    debug(CIA_DEBUG, "triggerTodIrq()\n");
     delay |= CIASetInt0;
     delay |= CIASetIcr0;
 }
@@ -131,7 +131,7 @@ CIA::triggerTodIrq()
 void
 CIA::triggerFlagPinIrq()
 {
-    debug(DB_CIA, "triggerFlagPinIrq()\n");
+    debug(CIA_DEBUG, "triggerFlagPinIrq()\n");
     delay |= CIASetInt0;
     delay |= CIASetIcr0;
 }
@@ -139,7 +139,7 @@ CIA::triggerFlagPinIrq()
 void
 CIA::triggerSerialIrq()
 {
-    debug(DB_CIA, "triggerSerialIrq()\n");
+    debug(CIA_DEBUG, "triggerSerialIrq()\n");
     delay |= CIASetInt0;
     delay |= CIASetIcr0;
 }
@@ -149,7 +149,7 @@ CIA::peek(uint16_t addr)
 {
 	uint8_t result;
 
-    // debug(DB_CIA, "Peek($%X) (%d)\n", addr, addr);
+    // debug(CIA_DEBUG, "Peek($%X) (%d)\n", addr, addr);
 
     wakeUp();
 
@@ -344,7 +344,7 @@ CIA::spypeek(uint16_t addr)
 void
 CIA::poke(uint16_t addr, uint8_t value)
 {
-    debug(DB_CIA, "Poke($%X,$%X) (%d,%d)\n", addr, value, addr, value);
+    debug(CIA_DEBUG, "Poke($%X,$%X) (%d,%d)\n", addr, value, addr, value);
     
     wakeUp();
     
@@ -839,7 +839,7 @@ CIA::executeOneCycle()
 	
 	if (timerAOutput) {
         
-        debug(DB_CIA, "Timer A underflow\n");
+        debug(CIA_DEBUG, "Timer A underflow\n");
         
         icrAck &= ~0x01;
         
@@ -1362,7 +1362,7 @@ CIAA::updatePB()
 void
 CIAA::setKeyCode(uint8_t keyCode)
 {
-    debug(DB_CIA, "setKeyCode: %X\n", keyCode);
+    debug(CIA_DEBUG, "setKeyCode: %X\n", keyCode);
     
     // Put the key code into the serial data register
     SDR = keyCode;
@@ -1405,7 +1405,7 @@ CIAB::scheduleWakeUp()
 void 
 CIAB::pullDownInterruptLine()
 {
-    debug(DB_CIA, "Pulling down IRQ line\n");
+    debug(CIA_DEBUG, "Pulling down IRQ line\n");
     paula->setINTREQ(0x8000 | (1 << 13));
 }
 
@@ -1457,7 +1457,7 @@ CIAB::portAexternal()
 void
 CIAB::updatePA()
 {
-    // debug(DB_CIA, "updatePA()\n");
+    // debug(CIA_DEBUG, "updatePA()\n");
 
     uint8_t internal = portAinternal() & DDRA;
 
@@ -1470,7 +1470,7 @@ CIAB::updatePA()
     PA = internal | external;
     // TODO: Special action for CIA_8520_DIP models
 
-    // debug(DB_CIA, "DDRA = %X PA = %X internal = %X\n", DDRA, PA, portAinternal());
+    // debug(CIA_DEBUG, "DDRA = %X PA = %X internal = %X\n", DDRA, PA, portAinternal());
 }
 
 //            -------

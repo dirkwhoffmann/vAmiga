@@ -148,7 +148,7 @@ Drive::setMotor(bool value)
         
         motorOnCycle = amiga->masterClock;
 
-        debug(DB_DSK, "Motor on (Cycle: %d)\n", motorOnCycle);
+        debug(DSK_DEBUG, "Motor on (Cycle: %d)\n", motorOnCycle);
 
         amiga->putMessage(MSG_DRIVE_LED_ON, nr);
         amiga->putMessage(MSG_DRIVE_MOTOR_ON, nr);
@@ -160,7 +160,7 @@ Drive::setMotor(bool value)
         idCount = 0; // Reset identification shift register counter
         motorOffCycle = amiga->masterClock;
 
-        debug(DB_DSK, "Motor off (Cycle: %d)\n", motorOffCycle);
+        debug(DSK_DEBUG, "Motor off (Cycle: %d)\n", motorOffCycle);
 
         amiga->putMessage(MSG_DRIVE_LED_OFF, nr);
         amiga->putMessage(MSG_DRIVE_MOTOR_OFF, nr);
@@ -273,7 +273,7 @@ Drive::findSyncMark()
         break;
     }
 
-    debug(DB_DSK, "Moving to SYNC mark at offset %d\n", head.offset);
+    debug(DSK_DEBUG, "Moving to SYNC mark at offset %d\n", head.offset);
 }
 
 void
@@ -289,7 +289,7 @@ Drive::moveHead(int dir)
             head.cylinder--;
             recordCylinder(head.cylinder);
         }
-        debug(DB_DSK, "Stepping down to cylinder %d\n", head.cylinder);
+        debug(DSK_DEBUG, "Stepping down to cylinder %d\n", head.cylinder);
 
     } else {
         
@@ -298,7 +298,7 @@ Drive::moveHead(int dir)
             head.cylinder++;
             recordCylinder(head.cylinder);
         }
-        debug(DB_DSK, "Stepping up to cylinder %d\n", head.cylinder);
+        debug(DSK_DEBUG, "Stepping up to cylinder %d\n", head.cylinder);
     }
 
 #ifdef ALIGN_DRIVE_HEAD

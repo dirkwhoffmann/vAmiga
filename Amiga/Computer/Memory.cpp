@@ -91,7 +91,7 @@ Memory::_size()
     counter.count += sizeof(slowRamSize) + slowRamSize;
     counter.count += sizeof(fastRamSize) + fastRamSize;
 
-    debug(DB_SNAP, "Snapshot size is %d bytes\n", counter.count);
+    debug(SNAP_DEBUG, "Snapshot size is %d bytes\n", counter.count);
     return counter.count;
 }
 
@@ -723,7 +723,7 @@ Memory::spypeekCIA32(uint32_t addr)
 void
 Memory::pokeCIA8(uint32_t addr, uint8_t value)
 {
-    // debug(DB_CIA, "pokeCIA8(%6X, %X)\n", addr, value);
+    // debug(CIA_DEBUG, "pokeCIA8(%6X, %X)\n", addr, value);
     
     uint32_t reg = (addr >> 8) & 0b1111;
     uint32_t selA = (addr & 0x1000) == 0;
@@ -871,7 +871,7 @@ Memory::peekCustom16(uint32_t addr)
      *   - 0xFFFF or some some ANDed old data otherwise.
      */
 
-    debug(DB_ACCESS, "peekCustom16(%X [%s]): WRITE-ONLY-REGISTER\n",
+    debug(REGACC_DEBUG, "peekCustom16(%X [%s]): WRITE-ONLY-REGISTER\n",
           addr, customReg[(addr >> 1) & 0xFF]);
 
     // TODO: Remember the last data bus value
@@ -1318,10 +1318,10 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
     }
     
     if (addr <= 0x1E) {
-        debug(DB_ACCESS, "pokeCustom16(%X [%s]): READ-ONLY-REGISTER\n",
+        debug(REGACC_DEBUG, "pokeCustom16(%X [%s]): READ-ONLY-REGISTER\n",
              addr, customReg[(addr >> 1) & 0xFF]);
     } else {
-        debug(DB_ACCESS, "pokeCustom16(%X [%s]): NO OCS REGISTER\n",
+        debug(REGACC_DEBUG, "pokeCustom16(%X [%s]): NO OCS REGISTER\n",
               addr, customReg[(addr >> 1) & 0xFF]);
     }
 }

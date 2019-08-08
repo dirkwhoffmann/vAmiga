@@ -28,29 +28,31 @@
 
 // Custom debug levels (set to 1 to generate debug output)
 
-static const int DB_RUNLOOP = 2;  // Run loop of the emulator thread
-static const int DB_CIA     = 2;  // CIAs
-static const int DB_TOD     = 2;  // TODs (CIA 24-bit counters)
-static const int DB_RTC     = 2;  // Real-time clock
-static const int DB_DMA     = 2;  // DMA registers
-static const int DB_BPL     = 2;  // Bitplane registers
-static const int DB_COL     = 2;  // Color registers
-static const int DB_SPR     = 2;  // Sprite registers
-static const int DB_CLX     = 2;  // Collision detection (CLXDAT, CLXCON)
-static const int DB_DSK     = 2;  // Disk registers
-static const int DB_AUD     = 2;  // Audio 
-static const int DB_AUDBUF  = 2;  // Audio buffers
-static const int DB_AUDREG  = 2;  // Audio registers
-static const int DB_PORTS   = 2;  // Control ports and connected devices
-static const int DB_COP     = 2;  // Copper
-static const int DB_COPREG  = 2;  // Copper registers
-static const int DB_BLT     = 2;  // Blitter
-static const int DB_BLT_CHK = 2;  // Blitter checksums
-static const int DB_SER     = 2;  // Serial interface
-static const int DB_POT     = 2;  // Potentiometer inputs
-static const int DB_KB      = 1;  // Keyboard
-static const int DB_ACCESS  = 2;  // Register access violations
-static const int DB_SNAP    = 2;  // Snapshot debugging (serialization)
+static const int RUNLOOP_DEBUG = 2;  // Run loop of the emulator thread
+static const int CIA_DEBUG     = 2;  // CIAs
+static const int TOD_DEBUG     = 2;  // TODs (CIA 24-bit counters)
+static const int RTC_DEBUG     = 2;  // Real-time clock
+static const int DMA_DEBUG     = 2;  // DMA registers
+static const int BPL_DEBUG     = 2;  // Bitplane registers
+static const int DIW_DEBUG     = 1;  // Display window logic
+static const int DDF_DEBUG     = 2;  // Display data fetch logic
+static const int COL_DEBUG     = 2;  // Color registers
+static const int SPR_DEBUG     = 2;  // Sprite registers
+static const int CLX_DEBUG     = 2;  // Collision detection (CLXDAT, CLXCON)
+static const int DSK_DEBUG     = 2;  // Disk registers
+static const int AUD_DEBUG     = 2;  // Audio 
+static const int AUDBUF_DEBUG  = 2;  // Audio buffers
+static const int AUDREG_DEBUG  = 2;  // Audio registers
+static const int PORT_DEBUG    = 2;  // Control ports and connected devices
+static const int COP_DEBUG     = 2;  // Copper
+static const int COPREG_DEBUG  = 2;  // Copper registers
+static const int BLITREG_DEBUG = 2;  // Blitter
+static const int BLIT_CHECKSUM = 2;  // Blitter checksums
+static const int SER_DEBUG     = 2;  // Serial interface
+static const int POT_DEBUG     = 2;  // Potentiometer inputs
+static const int KB_DEBUG      = 1;  // Keyboard
+static const int REGACC_DEBUG  = 2;  // Register access violations
+static const int SNAP_DEBUG    = 2;  // Snapshot debugging (serialization)
 
 // Additional debugging aids (uncomment to enable)
 // #define BORDER_DEBUG     // Draws the border in debug colors

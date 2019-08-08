@@ -227,7 +227,7 @@ CPU::_size()
 
     counter.count += m68k_context_size();
 
-    debug(DB_SNAP, "Snapshot size is %d bytes\n", counter.count);
+    debug(SNAP_DEBUG, "Snapshot size is %d bytes\n", counter.count);
     return counter.count;
 }
 

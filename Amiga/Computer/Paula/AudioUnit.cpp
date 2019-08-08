@@ -169,7 +169,7 @@ AudioUnit::getSampleRate()
 void
 AudioUnit::setSampleRate(double hz)
 {
-    debug(DB_AUD, "setSampleRate(%f)\n", hz);
+    debug(AUD_DEBUG, "setSampleRate(%f)\n", hz);
 
     sampleRate = hz;
     filterL.setSampleRate(hz);
@@ -179,7 +179,7 @@ AudioUnit::setSampleRate(double hz)
 void
 AudioUnit::setFilterActivation(FilterActivation activation)
 {
-    debug(DB_AUD, "setFilterActivation(%d)\n", activation);
+    debug(AUD_DEBUG, "setFilterActivation(%d)\n", activation);
 
     assert(isFilterActivation(activation));
     filterActivation = activation;
@@ -202,7 +202,7 @@ AudioUnit::setFilterType(FilterType type)
 void
 AudioUnit::clearRingbuffer()
 {
-    debug(DB_AUDBUF, "Clearing ringbuffer\n");
+    debug(AUDBUF_DEBUG, "Clearing ringbuffer\n");
     
     // Wipe out the ringbuffers
     for (unsigned i = 0; i < bufferSize; i++) {
@@ -347,7 +347,7 @@ AudioUnit::handleBufferUnderflow()
     // (1) The consumer runs slightly faster than the producer.
     // (2) The producer is halted or not startet yet.
     
-    debug(DB_AUDBUF, "SID RINGBUFFER UNDERFLOW (r: %ld w: %ld)\n", readPtr, writePtr);
+    debug(AUDBUF_DEBUG, "SID RINGBUFFER UNDERFLOW (r: %ld w: %ld)\n", readPtr, writePtr);
     
     // Determine the elapsed seconds since the last pointer adjustment.
     uint64_t now = mach_absolute_time();
@@ -376,7 +376,7 @@ AudioUnit::handleBufferOverflow()
     // (1) The consumer runs slightly slower than the producer.
     // (2) The consumer is halted or not startet yet.
     
-    debug(DB_AUDBUF, "SID RINGBUFFER OVERFLOW (r: %ld w: %ld)\n", readPtr, writePtr);
+    debug(AUDBUF_DEBUG, "SID RINGBUFFER OVERFLOW (r: %ld w: %ld)\n", readPtr, writePtr);
     
     // Determine the elapsed seconds since the last pointer adjustment.
     uint64_t now = mach_absolute_time();

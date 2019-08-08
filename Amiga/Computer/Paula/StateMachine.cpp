@@ -64,7 +64,7 @@ StateMachine<nr>::getInfo()
 template <int nr> void
 StateMachine<nr>::pokeAUDxLEN(uint16_t value)
 {
-    debug(DB_AUDREG, "pokeAUD%dLEN(%X)\n", nr, value);
+    debug(AUDREG_DEBUG, "pokeAUD%dLEN(%X)\n", nr, value);
 
     audlenLatch = value;
 }
@@ -72,7 +72,7 @@ StateMachine<nr>::pokeAUDxLEN(uint16_t value)
 template <int nr> void
 StateMachine<nr>::pokeAUDxPER(uint16_t value)
 {
-    debug(DB_AUDREG, "pokeAUD%dPER(%X)\n", nr, value);
+    debug(AUDREG_DEBUG, "pokeAUD%dPER(%X)\n", nr, value);
 
     audperLatch = value;
 }
@@ -80,7 +80,7 @@ StateMachine<nr>::pokeAUDxPER(uint16_t value)
 template <int nr> void
 StateMachine<nr>::pokeAUDxVOL(uint16_t value)
 {
-    debug(DB_AUDREG, "pokeAUD%dVOL(%X)\n", nr, value);
+    debug(AUDREG_DEBUG, "pokeAUD%dVOL(%X)\n", nr, value);
 
     /* Behaviour: 1. Only the lowest 7 bits are evaluated.
      *            2. All values greater than 64 are treated as 64 (max volume).
@@ -91,7 +91,7 @@ StateMachine<nr>::pokeAUDxVOL(uint16_t value)
 template <int nr> void
 StateMachine<nr>::pokeAUDxDAT(uint16_t value)
 {
-    debug(DB_AUDREG, "pokeAUD%dDAT(%X)\n", nr, value);
+    debug(AUDREG_DEBUG, "pokeAUD%dDAT(%X)\n", nr, value);
 
     auddatLatch = value;
 
@@ -110,7 +110,7 @@ StateMachine<nr>::pokeAUDxDAT(uint16_t value)
 template <int nr> void
 StateMachine<nr>::pokeAUDxLCH(uint16_t value)
 {
-    debug(DB_AUDREG, "pokeAUD%dLCH(%X)\n", nr, value);
+    debug(AUDREG_DEBUG, "pokeAUD%dLCH(%X)\n", nr, value);
 
     audlcLatch = REPLACE_HI_WORD(audlcLatch, value & 0x7);
 }
@@ -118,7 +118,7 @@ StateMachine<nr>::pokeAUDxLCH(uint16_t value)
 template <int nr> void
 StateMachine<nr>::pokeAUDxLCL(uint16_t value)
 {
-    debug(DB_AUDREG, "pokeAUD%dLCL(%X)\n", nr, value);
+    debug(AUDREG_DEBUG, "pokeAUD%dLCL(%X)\n", nr, value);
 
     audlcLatch = REPLACE_LO_WORD(audlcLatch, value);
 }

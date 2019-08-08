@@ -350,7 +350,7 @@ Agnus::copperCanRun()
 
     // Deny access if the bus is already in use
     if (busOwner[pos.h] != BUS_NONE) {
-        debug(DB_COP, "Copper blocked (bus busy)\n");
+        debug(COP_DEBUG, "Copper blocked (bus busy)\n");
         return false;
     }
 
@@ -362,7 +362,7 @@ Agnus::copperCanDoDMA()
 {
     // Deny access in cycle $E0
     if (unlikely(pos.h == 0xE0)) {
-        debug(DB_COP, "Copper blocked (at $E0)\n");
+        debug(COP_DEBUG, "Copper blocked (at $E0)\n");
         return false;
     }
 
@@ -520,8 +520,8 @@ Agnus::switchBitplaneDmaOn()
         assert((stop - start) % 8 == 0);
     }
 
-    debug(DB_BPL, "switchBitplaneDmaOn()\n");
-    debug(DB_BPL, "hires = %d start = %d stop = %d\n", hires, start, stop);
+    debug(BPL_DEBUG, "switchBitplaneDmaOn()\n");
+    debug(BPL_DEBUG, "hires = %d start = %d stop = %d\n", hires, start, stop);
 
     assert(start >= 0 && start <= HPOS_MAX);
     assert(stop >= 0 && stop <= HPOS_MAX);
@@ -597,7 +597,7 @@ Agnus::switchBitplaneDmaOff()
     // Quick-exit if the event table is free of any bitplane DMA events
     if (dmaFirstBpl1Event == 0) return;
 
-    debug(DB_BPL, "switchBitplaneDmaOff: \n");
+    debug(BPL_DEBUG, "switchBitplaneDmaOff: \n");
 
     // Clear the event table
     for (int i = 0x18; i < HPOS_CNT; dmaEvent[i++] = (EventID)0);
@@ -615,7 +615,7 @@ Agnus::switchBitplaneDmaOff()
 void
 Agnus::updateBitplaneDma()
 {
-    debug(DB_BPL, "updateBitplaneDma()\n");
+    debug(BPL_DEBUG, "updateBitplaneDma()\n");
 
     // Determine if bitplane DMA has to be on or off
     bool bplDma = inBplDmaArea();
@@ -750,7 +750,7 @@ Agnus::peekDMACONR()
 void
 Agnus::pokeDMACON(uint16_t value)
 {
-    debug(DB_DMA, "pokeDMACON(%X)\n", value);
+    debug(DMA_DEBUG, "pokeDMACON(%X)\n", value);
 
     uint16_t olddmacon = dmacon;
 
@@ -790,13 +790,13 @@ Agnus::pokeDMACON(uint16_t value)
         if (newBPLEN) {
             
             // Bitplane DMA on
-            debug(DB_DMA, "Bitplane DMA switched on\n");
+            debug(DMA_DEBUG, "Bitplane DMA switched on\n");
             // switchBitplaneDmaOn();
 
         } else {
             
             // Bitplane DMA off
-            debug(DB_DMA, "Bitplane DMA switched off\n");
+            debug(DMA_DEBUG, "Bitplane DMA switched off\n");
             // switchBitplaneDmaOff();
         }
 
@@ -809,7 +809,7 @@ Agnus::pokeDMACON(uint16_t value)
         if (newCOPEN) {
             
             // Copper DMA on
-            debug(DB_DMA, "Copper DMA switched on\n");
+            debug(DMA_DEBUG, "Copper DMA switched on\n");
             
             // Determine trigger cycle for the first Copper event
             // (the next even DMA cycle)
@@ -820,7 +820,7 @@ Agnus::pokeDMACON(uint16_t value)
         } else {
             
             // Copper DMA off
-            debug(DB_DMA, "Copper DMA switched off\n");
+            debug(DMA_DEBUG, "Copper DMA switched off\n");
             cancel<COP_SLOT>();
         }
     }
@@ -830,13 +830,13 @@ Agnus::pokeDMACON(uint16_t value)
         
         if (newBLTEN) {
             // Blitter DMA on
-            debug(DB_DMA, "Blitter DMA switched on\n");
+            debug(DMA_DEBUG, "Blitter DMA switched on\n");
             // amiga->agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_EXECUTE);
     
         } else {
             
             // Blitter DMA off
-            debug(DB_DMA, "Blitter DMA switched off\n");
+            debug(DMA_DEBUG, "Blitter DMA switched off\n");
             cancel<BLT_SLOT>();
         }
     }
@@ -847,12 +847,12 @@ Agnus::pokeDMACON(uint16_t value)
         /*
         if (newSPREN) {
             // Sprite DMA on
-            debug(DB_DMA, "Sprite DMA switched on\n");
+            debug(DMA_DEBUG, "Sprite DMA switched on\n");
             
         } else {
             
             // Sprite DMA off
-            debug(DB_DMA, "Sprite DMA switched off\n");
+            debug(DMA_DEBUG, "Sprite DMA switched off\n");
         }
         */
     }
@@ -865,12 +865,12 @@ Agnus::pokeDMACON(uint16_t value)
         if (newDMAEN) {
             
             // Disk DMA on
-            debug(DB_DMA, "Disk DMA switched on\n");
+            debug(DMA_DEBUG, "Disk DMA switched on\n");
             
         } else {
             
             // Disk DMA off
-            debug(DB_DMA, "Disk DMA switched off\n");
+            debug(DMA_DEBUG, "Disk DMA switched off\n");
         }
         */
     }
@@ -938,7 +938,7 @@ Agnus::pokeDSKPTH(uint16_t value)
 {
     dskpt = REPLACE_HI_WORD(dskpt, value & 0x7);
 
-    debug(DB_DSK, "pokeDSKPTH(%X): dskpt = %X\n", value, dskpt);
+    debug(DSK_DEBUG, "pokeDSKPTH(%X): dskpt = %X\n", value, dskpt);
 }
 
 void
@@ -947,7 +947,7 @@ Agnus::pokeDSKPTL(uint16_t value)
     assert(IS_EVEN(value));
     dskpt = REPLACE_LO_WORD(dskpt, value & 0xFFFE);
 
-    debug(DB_DSK, "pokeDSKPTL(%X): dskpt = %X\n", value, dskpt);
+    debug(DSK_DEBUG, "pokeDSKPTL(%X): dskpt = %X\n", value, dskpt);
 }
 
 uint16_t
@@ -957,14 +957,14 @@ Agnus::peekVHPOSR()
     // V7 V6 V5 V4 V3 V2 V1 V0 H8 H7 H6 H5 H4 H3 H2 H1
     uint16_t result = BEAM(pos.v, pos.h) & 0xFFFF;
 
-    // debug(DB_BPL, "peekVHPOSR() = %X\n", result);
+    // debug(BPL_DEBUG, "peekVHPOSR() = %X\n", result);
     return result;
 }
 
 void
 Agnus::pokeVHPOS(uint16_t value)
 {
-    debug(DB_BPL, "pokeVHPOS(%X)\n", value);
+    debug(BPL_DEBUG, "pokeVHPOS(%X)\n", value);
     // Don't know what to do here ...
 }
 
@@ -976,7 +976,7 @@ Agnus::peekVPOSR()
     uint16_t result = (pos.v >> 8) | (isLongFrame() ? 0x8000 : 0);
     assert((result & 0x7FFE) == 0);
 
-    debug(DB_BPL, "peekVPOSR() = %X\n", result);
+    debug(BPL_DEBUG, "peekVPOSR() = %X\n", result);
     return result;
 
 }
@@ -990,7 +990,7 @@ Agnus::pokeVPOS(uint16_t value)
 template <PokeSource s> void
 Agnus::pokeDIWSTRT(uint16_t value)
 {
-    debug(DB_BPL, "pokeDIWSTRT<%s>(%X)\n", pokeSourceName(s), value);
+    debug(DIW_DEBUG, "pokeDIWSTRT<%s>(%X)\n", pokeSourceName(s), value);
 
     scheduleRegEvent<s>(DMA_CYCLES(2), REG_DIWSTRT, (int64_t)value);
 }
@@ -998,7 +998,7 @@ Agnus::pokeDIWSTRT(uint16_t value)
 template <PokeSource s> void
 Agnus::pokeDIWSTOP(uint16_t value)
 {
-    debug(DB_BPL, "pokeDIWSTOP<%s>(%X)\n", pokeSourceName(s), value);
+    debug(DIW_DEBUG, "pokeDIWSTOP<%s>(%X)\n", pokeSourceName(s), value);
 
     scheduleRegEvent<s>(DMA_CYCLES(2), REG_DIWSTOP, (int64_t)value);
 }
@@ -1006,7 +1006,7 @@ Agnus::pokeDIWSTOP(uint16_t value)
 void
 Agnus::setDIWSTRT(uint16_t value)
 {
-    debug(DB_BPL, "setDIWSTRT(%X)\n", value);
+    debug(DIW_DEBUG, "setDIWSTRT(%X)\n", value);
 
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // V7 V6 V5 V4 V3 V2 V1 V0 H7 H6 H5 H4 H3 H2 H1 H0  and  H8 = 0, V8 = 0
@@ -1032,14 +1032,14 @@ Agnus::setDIWSTRT(uint16_t value)
     // Update diwFlopOn if hpos hasn't matched the old trigger position yet.
     if (pixelpos < hFlopOn) hFlopOn = diwHstrt;
 
-    debug(DB_BPL, "diwstrt = %X diwHstrt = %d diwVstrt = %d\n",
+    debug(BPL_DEBUG, "diwstrt = %X diwHstrt = %d diwVstrt = %d\n",
           diwstrt, diwHstrt, diwVstrt);
 }
 
 void
 Agnus::setDIWSTOP(uint16_t value)
 {
-    debug(DB_BPL, "setDIWSTOP(%X)\n", value);
+    debug(DIW_DEBUG, "setDIWSTOP(%X)\n", value);
     
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // V7 V6 V5 V4 V3 V2 V1 V0 H7 H6 H5 H4 H3 H2 H1 H0  and  H8 = 1, V8 = !V7
@@ -1053,7 +1053,10 @@ Agnus::setDIWSTOP(uint16_t value)
     // debug("diwstop = $%X diwVstrt = %d diwVstop = %d\n", diwstop, diwVstrt, diwVstop);
 
     // Invalidate the coordinate if it is out of range
-    if (diwHstop > 0x1C7) diwHstop = -1;
+    if (diwHstop > 0x1C7) {
+        debug(DIW_DEBUG, "Coordinate is out of range\n");
+        diwHstop = -1;
+    }
 
     //
     // Recalculate diwFlopOff based on the new values
@@ -1065,16 +1068,19 @@ Agnus::setDIWSTOP(uint16_t value)
     int16_t pixelpos = pos.h * 2;
 
     // Update diwFlopOff if hpos hasn't matched the old trigger position yet.
-    if (pixelpos < hFlopOff) hFlopOff = diwHstop;
+    if (pixelpos < hFlopOff) {
+        debug(DIW_DEBUG, "hpos hasn't matched the old trigger position yet");
+        hFlopOff = diwHstop;
+    }
 
-    debug(DB_BPL, "diwstop = %X diwHstop = %d diwVstop = %d\n",
+    debug(DIW_DEBUG, "diwstop = %X diwHstop = %d diwVstop = %d\n",
           diwstop, diwHstop, diwVstop);
 }
 
 void
 Agnus::pokeDDFSTRT(uint16_t value)
 {
-    debug(DB_BPL, "pokeDDFSTRT(%X)\n", value);
+    debug(DDF_DEBUG, "pokeDDFSTRT(%X)\n", value);
 
     // 15 13 12 11 10 09 08 07 06 05 04 03 02 01 00
     // -- -- -- -- -- -- -- H8 H7 H6 H5 H4 H3 -- --
@@ -1120,7 +1126,7 @@ Agnus::pokeDDFSTRT(uint16_t value)
 void
 Agnus::pokeDDFSTOP(uint16_t value)
 {
-    debug(DB_BPL, "pokeDDFSTOP(%X)\n", value);
+    debug(DDF_DEBUG, "pokeDDFSTOP(%X)\n", value);
 
     // 15 13 12 11 10 09 08 07 06 05 04 03 02 01 00
     // -- -- -- -- -- -- -- H8 H7 H6 H5 H4 H3 -- --
@@ -1152,6 +1158,7 @@ Agnus::computeDDFStrt()
     dmaStrtLoresShift = strt & 0b100;
     dmaStrtLores = strt + dmaStrtLoresShift;
 
+    debug(DDF_DEBUG, "computeDDFStrt: %d %d\n", dmaStrtLores, dmaStrtHires);
     assert(dmaStrtLoresShift == 0 || dmaStrtLoresShift == 4);
 }
 
@@ -1168,6 +1175,8 @@ Agnus::computeDDFStop()
     dmaStopLores = MIN(dmaStrtLores + 8 * fetchUnits, 0xE0);
     dmaStopHires = MIN(dmaStrtHires + 8 * fetchUnits, 0xE0);
 
+    debug(DDF_DEBUG, "computeDDFStop: %d %d\n", dmaStopLores, dmaStopHires);
+
     /*
     // Compute the number of fetch units
     int numUnitsLores = (((stop - strt) + 15) >> 3);
@@ -1183,7 +1192,7 @@ Agnus::computeDDFStop()
 template <int x, PokeSource s> void
 Agnus::pokeBPLxPTH(uint16_t value)
 {
-    debug(DB_BPL, "pokeBPL%dPTH(%X)\n", x, value);
+    debug(BPL_DEBUG, "pokeBPL%dPTH(%X)\n", x, value);
 
     // Check if the written value gets lost
     if (skipBPLxPT(x)) return;
@@ -1194,7 +1203,7 @@ Agnus::pokeBPLxPTH(uint16_t value)
 template <int x, PokeSource s> void
 Agnus::pokeBPLxPTL(uint16_t value)
 {
-    debug(DB_BPL, "pokeBPL%dPTL(%X)\n", x, value);
+    debug(BPL_DEBUG, "pokeBPL%dPTL(%X)\n", x, value);
 
     // Check if the written value gets lost
     if (skipBPLxPT(x)) return;
@@ -1239,7 +1248,7 @@ Agnus::skipBPLxPT(int x)
 void
 Agnus::setBPLxPTH(int x, uint16_t value)
 {
-    debug(DB_BPL, "setBPLxPTH(%d, %X)\n", x, value);
+    debug(BPL_DEBUG, "setBPLxPTH(%d, %X)\n", x, value);
     assert(1 <= x && x <= 6);
 
     bplpt[x - 1] = REPLACE_HI_WORD(bplpt[x - 1], value & 0x7);
@@ -1248,7 +1257,7 @@ Agnus::setBPLxPTH(int x, uint16_t value)
 void
 Agnus::setBPLxPTL(int x, uint16_t value)
 {
-    debug(DB_BPL, "pokeBPLxPTL(%d, %X)\n", x, value);
+    debug(BPL_DEBUG, "pokeBPLxPTL(%d, %X)\n", x, value);
     assert(1 <= x && x <= 6);
 
     bplpt[x - 1] = REPLACE_LO_WORD(bplpt[x - 1], value & 0xFFFE);
@@ -1257,21 +1266,21 @@ Agnus::setBPLxPTL(int x, uint16_t value)
 void
 Agnus::pokeBPL1MOD(uint16_t value)
 {
-    debug(DB_BPL, "pokeBPL1MOD(%X)\n", value);
+    debug(BPL_DEBUG, "pokeBPL1MOD(%X)\n", value);
     bpl1mod = int16_t(value & 0xFFFE);
 }
 
 void
 Agnus::pokeBPL2MOD(uint16_t value)
 {
-    debug(DB_BPL, "pokeBPL2MOD(%X)\n", value);
+    debug(BPL_DEBUG, "pokeBPL2MOD(%X)\n", value);
     bpl2mod = int16_t(value & 0xFFFE);
 }
 
 template <int x> void
 Agnus::pokeSPRxPTH(uint16_t value)
 {
-    debug(DB_SPR, "pokeSPR%dPTH(%X)\n", x, value);
+    debug(SPR_DEBUG, "pokeSPR%dPTH(%X)\n", x, value);
     
     sprpt[x] = REPLACE_HI_WORD(sprpt[x], value & 0x7);
 }
@@ -1279,7 +1288,7 @@ Agnus::pokeSPRxPTH(uint16_t value)
 template <int x> void
 Agnus::pokeSPRxPTL(uint16_t value)
 {
-    debug(DB_SPR, "pokeSPR%dPTL(%X)\n", x, value);
+    debug(SPR_DEBUG, "pokeSPR%dPTL(%X)\n", x, value);
     
     sprpt[x] = REPLACE_LO_WORD(sprpt[x], value & 0xFFFE);
 }
@@ -1287,7 +1296,7 @@ Agnus::pokeSPRxPTL(uint16_t value)
 void
 Agnus::pokeBPLCON0(uint16_t value)
 {
-    debug(DB_DMA, "pokeBPLCON0(%X)\n", value);
+    debug(DMA_DEBUG, "pokeBPLCON0(%X)\n", value);
 
     if (bplcon0 != value) {
 

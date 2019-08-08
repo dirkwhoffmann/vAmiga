@@ -158,7 +158,7 @@ Denise::pokeJOYTEST(uint16_t value)
 void
 Denise::pokeBPLCON0(uint16_t value)
 {
-    debug(DB_BPL, "pokeBPLCON0(%X)\n", value);
+    debug(BPL_DEBUG, "pokeBPLCON0(%X)\n", value);
 
     if (bplcon0 != value) {
 
@@ -177,7 +177,7 @@ Denise::pokeBPLCON0(uint16_t oldValue, uint16_t newValue)
 void
 Denise::pokeBPLCON1(uint16_t value)
 {
-    debug(DB_BPL, "pokeBPLCON1(%X)\n", value);
+    debug(BPL_DEBUG, "pokeBPLCON1(%X)\n", value);
 
     bplcon1 = value & 0xFF;
 
@@ -191,7 +191,7 @@ Denise::pokeBPLCON1(uint16_t value)
 void
 Denise::pokeBPLCON2(uint16_t value)
 {
-    debug(DB_BPL, "pokeBPLCON2(%X)\n", value);
+    debug(BPL_DEBUG, "pokeBPLCON2(%X)\n", value);
 
     bplcon2 = value;
 
@@ -217,7 +217,7 @@ template <int x> void
 Denise::pokeBPLxDAT(uint16_t value)
 {
     assert(x < 6);
-    debug(DB_BPL, "pokeBPL%dDATA(%X)\n", x + 1, value);
+    debug(BPL_DEBUG, "pokeBPL%dDATA(%X)\n", x + 1, value);
     
     bpldat[x] = value;
 }
@@ -226,7 +226,7 @@ template <int x> void
 Denise::pokeSPRxPOS(uint16_t value)
 {
     assert(x < 8);
-    debug(DB_SPR, "pokeSPR%dPOS(%X)\n", x, value);
+    debug(SPR_DEBUG, "pokeSPR%dPOS(%X)\n", x, value);
 
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0  (Ex = VSTART)
     // E7 E6 E5 E4 E3 E2 E1 E0 H8 H7 H6 H5 H4 H3 H2 H1  (Hx = HSTART)
@@ -246,7 +246,7 @@ template <int x> void
 Denise::pokeSPRxCTL(uint16_t value)
 {
     assert(x < 8);
-    debug(DB_SPR, "pokeSPR%dCTL(%X)\n", x, value);
+    debug(SPR_DEBUG, "pokeSPR%dCTL(%X)\n", x, value);
     
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // L7 L6 L5 L4 L3 L2 L1 L0 AT  -  -  -  - E8 L8 H0  (Lx = VSTOP)
@@ -269,7 +269,7 @@ template <int x> void
 Denise::pokeSPRxDATA(uint16_t value)
 {
     assert(x < 8);
-    debug(DB_SPR, "pokeSPR%dDATA(%X)\n", x, value);
+    debug(SPR_DEBUG, "pokeSPR%dDATA(%X)\n", x, value);
     
     sprdata[x] = value;
     armSprite(x);
@@ -279,7 +279,7 @@ template <int x> void
 Denise::pokeSPRxDATB(uint16_t value)
 {
     assert(x < 8);
-    debug(DB_SPR, "pokeSPR%dDATB(%X)\n", x, value);
+    debug(SPR_DEBUG, "pokeSPR%dDATB(%X)\n", x, value);
     
     sprdatb[x] = value;
 }
@@ -291,7 +291,7 @@ Denise::pokeColorReg(uint32_t addr, uint16_t value)
     // if (addr == 0x182) value = 0; //REMOVE ASAP
 
     assert(addr >= 0x180 && addr <= 0x1BE && IS_EVEN(addr));
-    debug(DB_COL, "pokeColorReg(%X, %X)\n", addr, value);
+    debug(COL_DEBUG, "pokeColorReg(%X, %X)\n", addr, value);
 
     pixelEngine.colRegHistory.recordChange(addr, value, 4 * agnus->pos.h);
 }
@@ -795,7 +795,7 @@ Denise::checkS2PCollisions(int start, int end)
         // Skip if the sprite is transparent at this pixel coordinate
         if (!(z & Z_SP[x])) continue;
 
-        debug(DB_CLX, "<%d> b[%d] = %X e1 = %X e2 = %X, c1 = %X c2 = %X\n",
+        debug(CLX_DEBUG, "<%d> b[%d] = %X e1 = %X e2 = %X, c1 = %X c2 = %X\n",
               x, pos, bBuffer[pos], enabled1, enabled2, compare1, compare2);
 
         // Check for a collision with playfield 2
@@ -832,7 +832,7 @@ Denise::checkP2PCollisions()
     for (int pos = 0; pos < HPIXELS; pos++) {
 
         uint16_t b = bBuffer[pos];
-        debug(DB_CLX, "b[%d] = %X e1 = %X e2 = %X c1 = %X c2 = %X\n",
+        debug(CLX_DEBUG, "b[%d] = %X e1 = %X e2 = %X c1 = %X c2 = %X\n",
               pos, b, enabled1, enabled2, compare1, compare2);
 
         // Check if there is a hit with playfield 1
