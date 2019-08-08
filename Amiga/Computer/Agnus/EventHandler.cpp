@@ -503,7 +503,7 @@ Agnus::serviceBplEvent(EventID id)
         case BPL_H1:
             if (!bplHwStop()) {
                 denise->bpldat[PLANE1] = doBitplaneDMA<0>();
-                denise->fillShiftRegisters();
+                denise->fillShiftRegisters(activeBitplanes);
             } else {
                 INC_DMAPTR(bplpt[PLANE1]);
             }
@@ -519,7 +519,7 @@ Agnus::serviceBplEvent(EventID id)
         case BPL_L1:
             if (!bplHwStop()) {
                 denise->bpldat[PLANE1] = doBitplaneDMA<0>();
-                denise->fillShiftRegisters();
+                denise->fillShiftRegisters(activeBitplanes);
             } else {
                 INC_DMAPTR(bplpt[PLANE1]);
             }
