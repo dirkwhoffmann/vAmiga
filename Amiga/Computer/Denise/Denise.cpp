@@ -892,10 +892,12 @@ Denise::endOfLine(int vpos)
          * line is drawn.
          */
         // TODO: DO WE STILL NEED THIS???
+        /*
         for (int i = 4 * 0xE3; i < sizeof(iBuffer); i++) {
             iBuffer[i - 4 * 0xE3] = iBuffer[i];
             iBuffer[i] = 0;
         }
+        */
     }
 
     // Invoke the DMA debugger
