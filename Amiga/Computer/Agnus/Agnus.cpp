@@ -1017,8 +1017,13 @@ Agnus::setDIWSTRT(uint16_t value)
     diwVstrt = HI_BYTE(value);
     diwHstrt = LO_BYTE(value);
 
+    debug(DIW_DEBUG, "diwstrt = $%X diwVstrt = %d diwHstrt = %d\n", diwstrt, diwVstrt, diwHstrt);
+
     // Invalidate the coordinate if it is out of range
-    if (diwHstrt < 2) diwHstrt = -1;
+    if (false) { // }(diwHstrt < 2) {
+        debug(DIW_DEBUG, "Coordinate is too small\n");
+        diwHstrt = -1;
+    }
 
     //
     // Recalculate diwFlopOn based on the new values
@@ -1032,8 +1037,7 @@ Agnus::setDIWSTRT(uint16_t value)
     // Update diwFlopOn if hpos hasn't matched the old trigger position yet.
     if (pixelpos < hFlopOn) hFlopOn = diwHstrt;
 
-    debug(BPL_DEBUG, "diwstrt = %X diwHstrt = %d diwVstrt = %d\n",
-          diwstrt, diwHstrt, diwVstrt);
+    debug(DIW_DEBUG, "diwstrt = $%X diwVstrt = %d diwHstrt = %d\n", diwstrt, diwVstrt, diwHstrt);
 }
 
 void
@@ -1050,11 +1054,11 @@ Agnus::setDIWSTOP(uint16_t value)
     diwVstop = HI_BYTE(value) | ((value & 0x8000) ? 0 : 0x100);
     diwHstop = LO_BYTE(value) | 0x100;
 
-    // debug("diwstop = $%X diwVstrt = %d diwVstop = %d\n", diwstop, diwVstrt, diwVstop);
+    debug(DIW_DEBUG, "diwstop = $%X diwVstop = %d diwHstop = %d\n", diwstop, diwVstop, diwHstop);
 
     // Invalidate the coordinate if it is out of range
-    if (diwHstop > 0x1C7) {
-        debug(DIW_DEBUG, "Coordinate is out of range\n");
+    if (false) { // (diwHstop > 0x1C7) {
+        debug(DIW_DEBUG, "Coordinate is too large\n");
         diwHstop = -1;
     }
 
@@ -1073,8 +1077,7 @@ Agnus::setDIWSTOP(uint16_t value)
         hFlopOff = diwHstop;
     }
 
-    debug(DIW_DEBUG, "diwstop = %X diwHstop = %d diwVstop = %d\n",
-          diwstop, diwHstop, diwVstop);
+    debug(DIW_DEBUG, "diwstop = $%X diwVstop = %d diwHstop = %d\n", diwstop, diwVstop, diwHstop);
 }
 
 void

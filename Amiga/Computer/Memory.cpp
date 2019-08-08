@@ -630,7 +630,7 @@ Memory::peekCIA8(uint32_t addr)
 uint16_t
 Memory::peekCIA16(uint32_t addr)
 {
-    debug("peekCIA16(%6X)\n", addr);
+    debug(CIA_DEBUG, "peekCIA16(%6X)\n", addr);
     // assert(false);
     
     uint32_t reg = (addr >> 8)  & 0b1111;
@@ -658,7 +658,7 @@ Memory::peekCIA16(uint32_t addr)
 uint32_t
 Memory::peekCIA32(uint32_t addr)
 {
-    debug("peekCIA32(%6X)\n", addr);
+    debug(CIA_DEBUG, "peekCIA32(%6X)\n", addr);
     assert(false);
     
     return HI_W_LO_W(peekCIA16(addr), peekCIA16(addr + 2));
