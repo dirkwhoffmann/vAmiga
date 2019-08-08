@@ -66,7 +66,7 @@ BreakpointManager::hasConditionalBreakpointAt(uint32_t addr)
 void
 BreakpointManager::setBreakpointAt(uint32_t addr)
 {
-    debug(RUN_DEBUG, "setBreakpointAt %X %d %d\n", addr, hasBreakpointAt(addr), numBreakpoints);
+    debug(DB_RUNLOOP, "setBreakpointAt %X %d %d\n", addr, hasBreakpointAt(addr), numBreakpoints);
     
     if (!hasBreakpointAt(addr) && numBreakpoints + 1 < maxBreakpoints) {
         

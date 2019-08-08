@@ -119,7 +119,7 @@ HardwareComponent::run()
         }
         
         // Start this component
-        debug(RUN_DEBUG, "Run\n");
+        debug(DB_RUNLOOP, "Run\n");
         running = true;
         _run();
     }
@@ -131,7 +131,7 @@ HardwareComponent::pause()
     if (running) {
         
         // Pause this component
-        debug(RUN_DEBUG, "Pause\n");
+        debug(DB_RUNLOOP, "Pause\n");
         running = false;
         _pause();
 

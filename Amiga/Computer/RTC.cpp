@@ -81,7 +81,7 @@ RTC::peek(unsigned nr)
     time2registers();
     uint8_t result = reg[nr];
 
-    debug(RTC_DEBUG, "peek(%d) = $%X\n", result);
+    debug(DB_RTC, "peek(%d) = $%X\n", result);
     return result;
 }
 
@@ -89,7 +89,7 @@ void
 RTC::poke(unsigned nr, uint8_t value)
 {
     assert(nr < 16);
-    debug(RTC_DEBUG, "poke(%d, $%02X)\n", nr, value);
+    debug(DB_RTC, "poke(%d, $%02X)\n", nr, value);
     
     switch (nr) {
         

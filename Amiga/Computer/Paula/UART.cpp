@@ -85,7 +85,7 @@ UART::peekSERDATR()
     WRITE_BIT(result, 12, transmitShiftReg == 0);
     WRITE_BIT(result, 11, serialPort->getRXD());
 
-    // debug(SER_DEBUG, "peekSERDATR() = %X\n", result);
+    // debug(DB_SER, "peekSERDATR() = %X\n", result);
     debug(2, "peekSERDATR() = %X\n", result);
 
     return result;
@@ -94,7 +94,7 @@ UART::peekSERDATR()
 void
 UART::pokeSERDAT(uint16_t value)
 {
-    debug(SER_DEBUG, "pokeSERDAT(%X)\n", value);
+    debug(DB_SER, "pokeSERDAT(%X)\n", value);
 
     // Write value into the transmit buffer
     transmitBuffer = value & 0x3FF;
@@ -106,7 +106,7 @@ UART::pokeSERDAT(uint16_t value)
 void
 UART::pokeSERPER(uint16_t value)
 {
-    debug(SER_DEBUG, "pokeSERPER(%X)\n", value);
+    debug(DB_SER, "pokeSERPER(%X)\n", value);
 
     serper = value;
 }
@@ -114,14 +114,14 @@ UART::pokeSERPER(uint16_t value)
 void
 UART::copyToTransmitShiftRegister()
 {
-    debug(SER_DEBUG, "Copying %X into transmit shift register\n", transmitBuffer);
+    debug(DB_SER, "Copying %X into transmit shift register\n", transmitBuffer);
 
     assert(transmitShiftReg == 0);
     assert(transmitBuffer != 0);
 
     // Inform the GUI about the outgoing data
     amiga->putMessage(MSG_SER_OUT, transmitBuffer);
-    debug(POT_DEBUG, "transmitBuffer: %X ('%c')\n", transmitBuffer & 0xFF, transmitBuffer & 0xFF);
+    debug(DB_POT, "transmitBuffer: %X ('%c')\n", transmitBuffer & 0xFF, transmitBuffer & 0xFF);
 
     // Move the contents of the transmit buffer into the shift register
     transmitShiftReg = transmitBuffer;
@@ -131,7 +131,7 @@ UART::copyToTransmitShiftRegister()
     transmitShiftReg <<= 1;
 
     // Trigger a TBE interrupt
-    debug(SER_DEBUG, "Triggering TBE interrupt\n");
+    debug(DB_SER, "Triggering TBE interrupt\n");
     paula->pokeINTREQ(0x8001);
 
     // Schedule the transmission of the first bit
@@ -143,7 +143,7 @@ UART::copyFromReceiveShiftRegister()
 {
     static int count = 0;
 
-    debug(SER_DEBUG, "Copying %X into receive buffer\n", receiveShiftReg);
+    debug(DB_SER, "Copying %X into receive buffer\n", receiveShiftReg);
 
     receiveBuffer = receiveShiftReg;
     receiveShiftReg = 0;
@@ -170,10 +170,10 @@ UART::copyFromReceiveShiftRegister()
     // Update the overrun bit
     // Bit will be 1 if the RBF interrupt hasn't been acknowledged yet
     ovrun = GET_BIT(paula->intreq, 11);
-    if (ovrun) debug(SER_DEBUG, "OVERRUN BIT IS 1\n");
+    if (ovrun) debug(DB_SER, "OVERRUN BIT IS 1\n");
 
     // Trigger the RBF interrupt (Read Buffer Full)
-    debug(SER_DEBUG, "Triggering RBF interrupt\n");
+    debug(DB_SER, "Triggering RBF interrupt\n");
     paula->pokeINTREQ(0x8800);
 }
 
@@ -233,7 +233,7 @@ UART::serveTxdEvent(EventID id)
                 } else {
 
                     // Abort the transmission
-                    debug(SER_DEBUG, "End of transmission\n");
+                    debug(DB_SER, "End of transmission\n");
                     agnus->cancel<TXD_SLOT>();
                     break;
                 }
@@ -264,7 +264,7 @@ UART::serveRxdEvent(EventID id)
 
         // Copy shift register contents into the receive buffer
         copyFromReceiveShiftRegister();
-        debug(SER_DEBUG, "Received packet %X\n", receiveBuffer);
+        debug(DB_SER, "Received packet %X\n", receiveBuffer);
 
         // Stop receiving if the last bit was a stop bit
         if (rxd) {

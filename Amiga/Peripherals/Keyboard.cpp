@@ -107,7 +107,7 @@ Keyboard::pressKey(long keycode)
         
     if (!keyDown[keycode] && !bufferIsFull()) {
         
-        debug(KB_DEBUG, "Pressing Amiga key %02X\n", keycode);
+        debug(DB_KB, "Pressing Amiga key %02X\n", keycode);
         
         keyDown[keycode] = true;
         writeToBuffer(keycode);
@@ -121,7 +121,7 @@ Keyboard::releaseKey(long keycode)
 
     if (keyDown[keycode] && !bufferIsFull()) {
         
-        debug(KB_DEBUG, "Releasing Amiga key %02X\n", keycode);
+        debug(DB_KB, "Releasing Amiga key %02X\n", keycode);
         
         keyDown[keycode] = false;
         writeToBuffer(keycode | 0x80);

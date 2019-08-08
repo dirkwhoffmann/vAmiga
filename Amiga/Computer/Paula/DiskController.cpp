@@ -145,7 +145,7 @@ DiskController::peekDSKDATR()
 void
 DiskController::pokeDSKLEN(uint16_t newDskLen)
 {
-    debug(DSK_DEBUG, "pokeDSKLEN(%X)\n", newDskLen);
+    debug(DB_DSK, "pokeDSKLEN(%X)\n", newDskLen);
     
     Drive *drive = getSelectedDrive(); 
     uint16_t oldDsklen = dsklen;
@@ -159,7 +159,7 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
     
     // Disable DMA if the DMAEN bit (15) is zero
     if (!(newDskLen & 0x8000)) {
-        debug(DSK_DEBUG, "dma = DRIVE_DMA_OFF\n");
+        debug(DB_DSK, "dma = DRIVE_DMA_OFF\n");
         state = DRIVE_DMA_OFF;
         clearFifo();
     }
@@ -174,7 +174,7 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
         // Check if the WRITE bit (bit 14) also has been written twice.
         if (oldDsklen & newDskLen & 0x4000) {
             
-            debug(DSK_DEBUG, "dma = DRIVE_DMA_WRITE\n");
+            debug(DB_DSK, "dma = DRIVE_DMA_WRITE\n");
             state = DRIVE_DMA_WRITE;
             clearFifo();
             
@@ -184,14 +184,14 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
             if (GET_BIT(paula->adkcon, 10)) {
                 
                 // Wait with reading until a sync mark has been found
-                debug(DSK_DEBUG, "dma = DRIVE_DMA_READ_SYNC\n");
+                debug(DB_DSK, "dma = DRIVE_DMA_READ_SYNC\n");
                 state = DRIVE_DMA_WAIT;
                 clearFifo();
                 
             } else {
                 
                 // Start reading immediately
-                debug(DSK_DEBUG, "dma = DRIVE_DMA_READ\n");
+                debug(DB_DSK, "dma = DRIVE_DMA_READ\n");
                 state = DRIVE_DMA_READ;
                 clearFifo();
             }
@@ -235,14 +235,14 @@ DiskController::peekDSKBYTR()
     // WORDEQUAL
     if (syncFlag) SET_BIT(result, 12);
 
-    debug(DSK_DEBUG, "peekDSKBYTR() = %X\n", result);
+    debug(DB_DSK, "peekDSKBYTR() = %X\n", result);
     return result;
 }
 
 void
 DiskController::pokeDSKSYNC(uint16_t value)
 {
-    debug(DSK_DEBUG, "pokeDSKSYNC(%X)\n", value);
+    debug(DB_DSK, "pokeDSKSYNC(%X)\n", value);
     // assert(false);
     dsksync = value;
 }
@@ -383,12 +383,12 @@ DiskController::executeFifo()
             if ((syncFlag = compareFifo(dsksync))) {
                 
                 // Trigger a word SYNC interrupt.
-                debug(DSK_DEBUG, "SYNC IRQ (dsklen = %d)\n", dsklen);
+                debug(DB_DSK, "SYNC IRQ (dsklen = %d)\n", dsklen);
                 paula->pokeINTREQ(0x9000);
 
                 // Enable DMA if the controller was waiting for it.
                 if (state == DRIVE_DMA_WAIT) {
-                    debug(DSK_DEBUG, "DRIVE_DMA_SYNC_WAIT -> DRIVE_DMA_READ (%d)\n", drive->head.cylinder);
+                    debug(DB_DSK, "DRIVE_DMA_SYNC_WAIT -> DRIVE_DMA_READ (%d)\n", drive->head.cylinder);
                     state = DRIVE_DMA_READ;
                     clearFifo();
                 }
@@ -470,7 +470,7 @@ DiskController::performDMARead(Drive *drive)
             
             paula->pokeINTREQ(0x8002);
             state = DRIVE_DMA_OFF;
-            plaindebug(DSK_DEBUG, "performRead: checkcnt = %d checksum = %X\n", checkcnt, checksum);
+            plaindebug(DB_DSK, "performRead: checkcnt = %d checksum = %X\n", checkcnt, checksum);
             return;
         }
         
@@ -527,7 +527,7 @@ DiskController::performDMAWrite(Drive *drive)
             }
             state = DRIVE_DMA_OFF;
             
-            debug(DSK_DEBUG, "performWrite: checkcnt = %d checksum = %X\n", checkcnt, checksum);
+            debug(DB_DSK, "performWrite: checkcnt = %d checksum = %X\n", checkcnt, checksum);
             return;
         }
         
@@ -589,7 +589,7 @@ DiskController::performSimpleDMARead(Drive *drive)
             
             paula->pokeINTREQ(0x8002);
             state = DRIVE_DMA_OFF;
-            debug(DSK_DEBUG, "doSimpleDMARead: checkcnt = %d checksum = %X\n", checkcnt, checksum);
+            debug(DB_DSK, "doSimpleDMARead: checkcnt = %d checksum = %X\n", checkcnt, checksum);
             return;
         }
     }
@@ -616,7 +616,7 @@ DiskController::performSimpleDMAWrite(Drive *drive)
             
             paula->pokeINTREQ(0x8002);
             state = DRIVE_DMA_OFF;
-            debug(DSK_DEBUG, "doSimpleDMAWrite: checkcnt = %d checksum = %X\n", checkcnt, checksum);
+            debug(DB_DSK, "doSimpleDMAWrite: checkcnt = %d checksum = %X\n", checkcnt, checksum);
             return;
         }
     }
@@ -658,11 +658,11 @@ DiskController::performTurboDMA(Drive *drive)
 void
 DiskController::performTurboRead(Drive *drive)
 {
-    plaindebug(DSK_DEBUG, "Turbo-reading %d words from disk (offset = %d).\n", dsklen & 0x3FFF, drive->head.offset);
+    plaindebug(DB_DSK, "Turbo-reading %d words from disk (offset = %d).\n", dsklen & 0x3FFF, drive->head.offset);
 
     /*
     drive->findSyncMark();
-    plaindebug(DSK_DEBUG, "Moving to SYNC mark at offset %d\n", drive->head.offset);
+    plaindebug(DB_DSK, "Moving to SYNC mark at offset %d\n", drive->head.offset);
     */
 
     for (unsigned i = 0; i < (dsklen & 0x3FFF); i++) {
@@ -679,7 +679,7 @@ DiskController::performTurboRead(Drive *drive)
         checkcnt++;
     }
         
-    plaindebug(DSK_DEBUG, "Turbo read %s: cyl: %d side: %d offset: %d checkcnt = %d checksum = %X\n", drive->getDescription(), drive->head.cylinder, drive->head.side, drive->head.offset, checkcnt, checksum);
+    plaindebug(DB_DSK, "Turbo read %s: cyl: %d side: %d offset: %d checkcnt = %d checksum = %X\n", drive->getDescription(), drive->head.cylinder, drive->head.side, drive->head.offset, checkcnt, checksum);
 }
 
 void
@@ -701,6 +701,6 @@ DiskController::performTurboWrite(Drive *drive)
         drive->writeHead16(word);
     }
     
-    plaindebug(DSK_DEBUG, "Turbo write %s: checkcnt = %d checksum = %X\n", drive->getDescription(), checkcnt, checksum);
+    plaindebug(DB_DSK, "Turbo write %s: checkcnt = %d checksum = %X\n", drive->getDescription(), checkcnt, checksum);
 }
 

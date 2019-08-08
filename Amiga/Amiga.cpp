@@ -980,7 +980,7 @@ Amiga::stepOver()
 void
 Amiga::runLoop()
 {
-    debug(RUN_DEBUG, "runLoop()\n");
+    debug(DB_RUNLOOP, "runLoop()\n");
 
     // Prepare to run
     amiga->restartTimer();
@@ -1026,7 +1026,7 @@ Amiga::runLoop()
             if (runLoopCtrl & RL_ENABLE_BREAKPOINTS) {
                 if (cpu.bpManager.shouldStop()) {
                     putMessage(MSG_BREAKPOINT_REACHED);
-                    debug(RUN_DEBUG, "BREAKPOINT_REACHED\n");
+                    debug(DB_RUNLOOP, "BREAKPOINT_REACHED\n");
                     break;
                 }
             }
@@ -1034,7 +1034,7 @@ Amiga::runLoop()
             // Are we requests to terminate the run loop?
             if (runLoopCtrl & RL_STOP) {
                 clearControlFlags(RL_STOP);
-                debug(RUN_DEBUG, "RL_STOP\n");
+                debug(DB_RUNLOOP, "RL_STOP\n");
                 break;
             }
         }
