@@ -614,12 +614,8 @@ Denise::drawSprite()
         int col = (d1 & 0b0010) | (d0 & 0b0001);
 
         if (col) {
-            if (z > zBuffer[pos]) {
-                iBuffer[pos] = baseCol | col;
-            }
-            if (z > zBuffer[pos-1]) {
-                iBuffer[pos-1] = baseCol | col;
-            }
+            if (z > zBuffer[pos]) iBuffer[pos] = baseCol | col;
+            if (z > zBuffer[pos-1]) iBuffer[pos-1] = baseCol | col;
             zBuffer[pos] |= z;
             zBuffer[pos-1] |= z;
         }
