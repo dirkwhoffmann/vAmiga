@@ -758,6 +758,15 @@ Denise::checkS2SCollisions(int start, int end)
         if ((z & comp01) && (z & comp67)) SET_BIT(clxdat, 11);
         if ((z & comp01) && (z & comp45)) SET_BIT(clxdat, 10);
         if ((z & comp01) && (z & comp23)) SET_BIT(clxdat, 9);
+
+        if (CLX_DEBUG == 1) {
+            if ((z & comp45) && (z & comp67)) debug("Collision between 45 and 67\n");
+            if ((z & comp23) && (z & comp67)) debug("Collision between 23 and 67\n");
+            if ((z & comp23) && (z & comp45)) debug("Collision between 23 and 45\n");
+            if ((z & comp01) && (z & comp67)) debug("Collision between 01 and 67\n");
+            if ((z & comp01) && (z & comp45)) debug("Collision between 01 and 45\n");
+            if ((z & comp01) && (z & comp23)) debug("Collision between 01 and 23\n");
+        }
     }
 }
 
@@ -795,8 +804,8 @@ Denise::checkS2PCollisions(int start, int end)
         // Skip if the sprite is transparent at this pixel coordinate
         if (!(z & Z_SP[x])) continue;
 
-        debug(CLX_DEBUG, "<%d> b[%d] = %X e1 = %X e2 = %X, c1 = %X c2 = %X\n",
-              x, pos, bBuffer[pos], enabled1, enabled2, compare1, compare2);
+        // debug(CLX_DEBUG, "<%d> b[%d] = %X e1 = %X e2 = %X, c1 = %X c2 = %X\n",
+        //       x, pos, bBuffer[pos], enabled1, enabled2, compare1, compare2);
 
         // Check for a collision with playfield 2
         if ((bBuffer[pos] & enabled2) == compare2) {
@@ -832,8 +841,8 @@ Denise::checkP2PCollisions()
     for (int pos = 0; pos < HPIXELS; pos++) {
 
         uint16_t b = bBuffer[pos];
-        debug(CLX_DEBUG, "b[%d] = %X e1 = %X e2 = %X c1 = %X c2 = %X\n",
-              pos, b, enabled1, enabled2, compare1, compare2);
+        // debug(CLX_DEBUG, "b[%d] = %X e1 = %X e2 = %X c1 = %X c2 = %X\n",
+        //       pos, b, enabled1, enabled2, compare1, compare2);
 
         // Check if there is a hit with playfield 1
         if ((b & enabled1) != compare1) continue;
