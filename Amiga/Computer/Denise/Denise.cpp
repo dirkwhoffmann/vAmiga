@@ -616,12 +616,12 @@ Denise::drawSprite()
         if (col) {
             if (z > zBuffer[pos]) {
                 iBuffer[pos] = baseCol | col;
-                zBuffer[pos] |= z;
             }
             if (z > zBuffer[pos-1]) {
                 iBuffer[pos-1] = baseCol | col;
-                zBuffer[pos-1] |= z;
             }
+            zBuffer[pos] |= z;
+            zBuffer[pos-1] |= z;
         }
 
         d1 >>= 1;
@@ -805,11 +805,13 @@ Denise::checkS2PCollisions(int start, int end)
         if (!(z & Z_SP[x])) continue;
 
         // debug(CLX_DEBUG, "<%d> b[%d] = %X e1 = %X e2 = %X, c1 = %X c2 = %X\n",
-        //       x, pos, bBuffer[pos], enabled1, enabled2, compare1, compare2);
+        //     x, pos, bBuffer[pos], enabled1, enabled2, compare1, compare2);
 
         // Check for a collision with playfield 2
         if ((bBuffer[pos] & enabled2) == compare2) {
+            debug(CLX_DEBUG, "S%d collides with PF2\n", x);
             SET_BIT(clxdat, 5 + (x / 2));
+            SET_BIT(clxdat, 1 + (x / 2));
 
         } else {
             // There is a hardware oddity in single-playfield mode. If PF2
@@ -820,7 +822,8 @@ Denise::checkS2PCollisions(int start, int end)
 
         // Check for a collision with playfield 1
         if ((bBuffer[pos] & enabled1) == compare1) {
-           SET_BIT(clxdat, 1 + (x / 2));
+            debug(CLX_DEBUG, "S%d collides with PF1\n", x);
+            SET_BIT(clxdat, 1 + (x / 2));
         }
     }
 }
