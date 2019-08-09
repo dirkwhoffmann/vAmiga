@@ -1014,33 +1014,51 @@ Agnus::setDIWSTRT(uint16_t value)
     diwstrt = value;
 
     // Extract the upper left corner of the display window
-    diwVstrt = HI_BYTE(value);
-    diwHstrt = LO_BYTE(value);
+    int16_t newDiwVstrt = HI_BYTE(value);
+    int16_t newDiwHstrt = LO_BYTE(value);
 
-    debug(DIW_DEBUG, "diwstrt = $%X diwVstrt = %d diwHstrt = %d\n", diwstrt, diwVstrt, diwHstrt);
+    debug(DIW_DEBUG, "newDiwVstrt = %d newDiwHstrt = %d\n", newDiwVstrt, newDiwHstrt);
 
-    // Invalidate the coordinate if it is out of range
-    if (diwHstrt < 2) {
-        debug(DIW_DEBUG, "diwHstrt is too small\n");
-        diwHstrt = -1;
+    // Invalidate the horizontal coordinate if it is out of range
+    if (newDiwHstrt < 2) {
+        debug(DIW_DEBUG, "newDiwHstrt is too small\n");
+        newDiwHstrt = -1;
     }
 
-    //
-    // Recalculate diwFlopOn based on the new values
-    //
+    /* Check if the change already takes effect in the current rasterline.
+     *
+     *     old: Old trigger coordinate (diwHstrt)
+     *     new: New trigger coordinate (newDiwHstrt)
+     *     cur: Position of the electron beam (derivable from pos.h)
+     *
+     * The following cases have to be taken into accout:
+     *
+     *    1) cur < old < new : Change takes effect in this rasterline.
+     *    2) cur < new < old : Change takes effect in this rasterline.
+     *    3) new < cur < old : Neither the old nor the new trigger hits.
+     *    4) new < old < cur : Already triggered. Nothing to do in this line.
+     *    5) old < cur < new : Already triggered. Nothing to do in this line.
+     *    6) old < new < cur : Already triggered. Nothing to do in this line.
+     */
 
-    // Take into account that a value change needs 4 DMA cycles to show up
-    // int16_t realhpos = hpos + 4;
-    // int16_t pixelpos = realhpos * 2;
-    int16_t pixelpos = pos.h * 2;
+    int16_t cur = 2 * pos.h;
 
-    // Update value if the electron beam hasn't passed the old trigger position.
-    if (pixelpos < hFlopOn) {
-        hFlopOn = diwHstrt;
-        debug(DIW_DEBUG, "hpos hasn't matched hFlopOn yet (%d,%d)\n", pixelpos, hFlopOn);
+     // (1) and (2)
+    if (cur < diwHstrt && cur < newDiwHstrt) {
+
+        debug(DIW_DEBUG, "Updating hFlopOn immediately at %d\n", cur);
+        hFlopOn = newDiwHstrt;
     }
 
-    debug(DIW_DEBUG, "diwstrt = $%X diwVstrt = %d diwHstrt = %d\n", diwstrt, diwVstrt, diwHstrt);
+    // (3)
+    if (newDiwHstrt < cur && cur < diwHstrt) {
+
+        debug(DIW_DEBUG, "hFlop not switched on in current line\n");
+        hFlopOn = -1;
+    }
+
+    diwVstrt = newDiwVstrt;
+    diwHstrt = newDiwHstrt;
 }
 
 void
@@ -1057,8 +1075,7 @@ Agnus::setDIWSTOP(uint16_t value)
     int16_t newDiwVstop = HI_BYTE(value) | ((value & 0x8000) ? 0 : 0x100);
     int16_t newDiwHstop = LO_BYTE(value) | 0x100;
 
-    debug(DIW_DEBUG, "diwstop = $%X newDiwVstop = %d newDiwHstop = %d\n",
-          diwstop, newDiwVstop, newDiwHstop);
+    debug(DIW_DEBUG, "newDiwVstop = %d newDiwHstop = %d\n", newDiwVstop, newDiwHstop);
 
     // Invalidate the coordinate if it is out of range
     if (newDiwHstop > 0x1C7) {
@@ -1066,41 +1083,25 @@ Agnus::setDIWSTOP(uint16_t value)
         newDiwHstop = -1;
     }
 
-    /* Check if the change takes effect in the current rasterline
-     */
-    int16_t pixelpos = pos.h * 2;
-    bool immediate = pixelpos < diwHstop && pixelpos < newDiwHstop;
+    // Check if the change already takes effect in the current rasterline.
+    int16_t cur = 2 * pos.h;
 
-    //
-    // Recalculate diwFlopOff based on the new values
-    //
+    // (1) and (2) (see setDIWSTRT)
+    if (cur < diwHstop && cur < newDiwHstop) {
 
-    if (immediate) {
-        debug(DIW_DEBUG, "Updating hFlopOff immediately with %d\n", diwHstop);
+        debug(DIW_DEBUG, "Updating hFlopOff immediately at %d\n", cur);
         hFlopOff = newDiwHstop;
     }
-    if (newDiwHstop < pixelpos && newDiwHstop < diwHstop) {
+
+    // (3) (see setDIWSTRT)
+    if (newDiwHstop < cur && cur < diwHstop) {
+
         debug(DIW_DEBUG, "hFlop not switched off in current line\n");
         hFlopOff = -1;
     }
 
     diwVstop = newDiwVstop;
     diwHstop = newDiwHstop;
-
-    // Take into account that a value change needs 4 DMA cycles to take effect
-    // int16_t realhpos = hpos + 4;
-    // int16_t pixelpos = realhpos * 2;
-
-
-    // Update value if the electron beam hasn't passed the old trigger position.
-    /*
-    if (pixelpos < hFlopOff) {
-        debug(DIW_DEBUG, "hpos hasn't matched hFlopOff yet (%d,%d)\n", pixelpos, hFlopOff);
-        hFlopOff = diwHstop;
-    }
-
-    debug(DIW_DEBUG, "diwstop = $%X diwVstop = %d diwHstop = %d\n", diwstop, diwVstop, diwHstop);
-    */
 }
 
 void
