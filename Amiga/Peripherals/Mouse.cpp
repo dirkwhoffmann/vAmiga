@@ -17,6 +17,13 @@ Mouse::Mouse()
 void
 Mouse::_powerOn()
 {
+
+}
+
+void Mouse::_reset()
+{
+    RESET_SNAPSHOT_ITEMS
+
     leftButton = false;
     rightButton = false;
     mouseX = 0;

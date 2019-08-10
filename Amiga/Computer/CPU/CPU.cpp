@@ -99,6 +99,12 @@ CPU::~CPU()
 void
 CPU::_powerOn()
 {
+}
+
+void
+CPU::_reset()
+{
+    RESET_SNAPSHOT_ITEMS
     clearTraceBuffer();
 }
 

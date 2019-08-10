@@ -25,6 +25,13 @@ UART::_initialize()
 void
 UART::_powerOn()
 {
+
+}
+
+void
+UART::_reset()
+{
+    RESET_SNAPSHOT_ITEMS
     outBit = 1;
 }
 

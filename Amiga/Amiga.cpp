@@ -492,6 +492,14 @@ Amiga::configureFifoBuffering(bool value)
 }
 
 void
+Amiga::reset()
+{
+    suspend();
+    HardwareComponent::reset();
+    resume();
+}
+
+void
 Amiga::_initialize()
 {
 }
@@ -513,24 +521,6 @@ Amiga::_powerOn()
     
     // For debugging, we start in debug mode and set a breakpoint
     debugMode = true;
-    
-    // cpu.bpManager.setBreakpointAt(0xFC570E); // Blitter
-    // cpu.bpManager.setBreakpointAt(0xFE8A6E); // All Blitter stuff done
-    // cpu.bpManager.setBreakpointAt(0xFEA1D8); // DSKPT
-    // cpu.bpManager.setBreakpointAt(0xFEA212); //
-    // cpu.bpManager.setBreakpointAt(0xfeaa22);
-    // cpu.bpManager.setBreakpointAt(0xfe85a6);  // After MFM decoding with Blitter
-    // cpu.bpManager.setBreakpointAt(0x05005A);
-    // cpu.bpManager.setBreakpointAt(0xFD8186); //
-    // cpu.bpManager.setBreakpointAt(0xFD8192); //
-
-    // cpu.bpManager.setBreakpointAt(0xFF5A60); // Copy(Init) slow ram stuff
-
-    // cpu.bpManager.setBreakpointAt(0xFF4D68); // Jumps to init routine
-    // cpu.bpManager.setBreakpointAt(0xFD465C); // Start of video init
-    // cpu.bpManager.setBreakpointAt(0xFD466C); // Audio init
-
-    // cpu.bpManager.setBreakpointAt(0xFD7952); // Bitplane init
 
     // cpu.bpManager.setBreakpointAt(0xFD7962); // AROS ERROR
     // cpu.bpManager.setBreakpointAt(0xF890C6); //
@@ -611,8 +601,12 @@ Amiga::_reset()
 
     RESET_SNAPSHOT_ITEMS
 
+    masterClock = 0;
+    makeActiveInstance();
+    m68k_init();
+    m68k_pulse_reset();
+
     amiga->putMessage(MSG_RESET);
-    ping();
 }
 
 void

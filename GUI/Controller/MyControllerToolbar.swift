@@ -42,13 +42,11 @@ extension MyController {
         // Avoid double mappings
         inputDevice2 = (inputDevice1 == inputDevice2) ? InputDevice.none : inputDevice2
 
-        /*
-        amiga.controlPort1.connectMouse(inputDevice1 == InputDevice.mouse)
-        amiga.controlPort2.connectMouse(inputDevice2 == InputDevice.mouse)
-        */
+        // Connect devices
         connectPort(port: 1, device: inputDevice1)
         connectPort(port: 2, device: inputDevice2)
 
+        // Save the port settings in the user defaults
         UserDefaults.standard.set(inputDevice1, forKey: Keys.inputDevice1)
         UserDefaults.standard.set(inputDevice2, forKey: Keys.inputDevice2)
         
@@ -68,13 +66,11 @@ extension MyController {
         // Avoid double mappings
         inputDevice1 = (inputDevice1 == inputDevice2) ? InputDevice.none : inputDevice1
 
-        /*
-        amiga.controlPort1.connectMouse(inputDevice1 == InputDevice.mouse)
-        amiga.controlPort2.connectMouse(inputDevice2 == InputDevice.mouse)
-        */
+        // Connect devices
         connectPort(port: 1, device: inputDevice1)
         connectPort(port: 2, device: inputDevice2)
 
+        // Save the port settings in the user defaults
         UserDefaults.standard.set(inputDevice1, forKey: Keys.inputDevice1)
         UserDefaults.standard.set(inputDevice2, forKey: Keys.inputDevice2)
         

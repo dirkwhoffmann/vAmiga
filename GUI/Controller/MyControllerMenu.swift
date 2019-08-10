@@ -295,7 +295,8 @@ extension MyController: NSMenuItemValidation {
     }
     
     @IBAction func resetAction(_ sender: Any!) {
-        
+
+        track()
         amiga.reset()
     }
     

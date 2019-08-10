@@ -34,22 +34,28 @@ CIA::_initialize()
 void
 CIA::_powerOn()
 {
-	CNT = true;
-	INT = 1;
+
+}
+
+void
+CIA::_reset()
+{
+    RESET_SNAPSHOT_ITEMS
+
+    CNT = true;
+    INT = 1;
 
     counterA = 0xFFFF;
     counterB = 0xFFFF;
-	latchA = 0xFFFF;
-	latchB = 0xFFFF;
-    
-    // PA = 0xFF;
-    // PB = 0xFF;
+    latchA = 0xFFFF;
+    latchB = 0xFFFF;
+
     updatePA();
     updatePB();
-    
+
     CRA = 0x4; // seen in SAE
     CRB = 0x4; // seen in SAE
-    
+
     // The OVL bit influences the memory layout. Hence, we need to update it.
     amiga->mem.updateMemSrcTable();
 }

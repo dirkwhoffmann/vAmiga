@@ -159,13 +159,19 @@ Agnus::_initialize()
 void
 Agnus::_powerOn()
 {
+}
+
+void Agnus::_reset()
+{
+    RESET_SNAPSHOT_ITEMS
+
     // Start with a long frame
     lof = 1;
     frameInfo.numLines = 313;
 
     // Initialize lookup tables
     clearDMAEventTable();
-    
+
     // Clear the event table
     for (unsigned i = 0; i < SLOT_COUNT; i++) {
         slot[i].triggerCycle = NEVER;

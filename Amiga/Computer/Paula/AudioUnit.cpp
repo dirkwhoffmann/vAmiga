@@ -27,13 +27,6 @@ AudioUnit::AudioUnit()
 void
 AudioUnit::_powerOn()
 {
-    clearRingbuffer();
-
-    bufferUnderflows = 0;
-    bufferOverflows = 0;
-
-    volume = 100000;
-    targetVolume = 100000;
 }
 
 void
@@ -72,6 +65,20 @@ void
 AudioUnit::_pause()
 {
     clearRingbuffer();
+}
+
+void
+AudioUnit::_reset()
+{
+   RESET_SNAPSHOT_ITEMS
+
+    clearRingbuffer();
+
+    bufferUnderflows = 0;
+    bufferOverflows = 0;
+
+    volume = 100000;
+    targetVolume = 100000;
 }
 
 void

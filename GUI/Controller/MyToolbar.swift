@@ -14,22 +14,28 @@ class MyToolbar: NSToolbar {
     // Toolbar items
     @IBOutlet weak var controlPort1: NSPopUpButton!
     @IBOutlet weak var controlPort2: NSPopUpButton!
-    @IBOutlet weak var pauseTbItem: NSToolbarItem!
+    @IBOutlet weak var pauseButton: NSToolbarItem!
+    @IBOutlet weak var resetButton: NSToolbarItem!
     @IBOutlet weak var snapshotSegCtrl: NSSegmentedControl!
     
     override func validateVisibleItems() {
         
         guard let amiga = amigaProxy else { return }
-        let button = pauseTbItem.view as? NSButton
-        
-        button?.isEnabled = amiga.isPoweredOn()
+        let pause = pauseButton.view as? NSButton
+        let reset = resetButton.view as? NSButton
 
+        // Disable the Pause and Reset button if the emulator if powered off
+        let poweredOn = amiga.isPoweredOn()
+        pause?.isEnabled = poweredOn
+        reset?.isEnabled = poweredOn
+
+        // Adjust the appearance of the Pause button
         if amiga.isRunning() {
-            button?.image = NSImage.init(named: "pauseTemplate")
-            pauseTbItem.label = "Pause"
+            pause?.image = NSImage.init(named: "pauseTemplate")
+            pauseButton.label = "Pause"
         } else {
-            button?.image = NSImage.init(named: "continueTemplate")
-            pauseTbItem.label = "Run"
+            pause?.image = NSImage.init(named: "continueTemplate")
+            pauseButton.label = "Run"
         }
         
         validateJoystickToolbarItems()

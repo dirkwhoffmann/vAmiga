@@ -54,14 +54,7 @@ PixelEngine::_initialize()
 void
 PixelEngine::_powerOn()
 {
-    // Initialize frame buffers
-    workingLongFrame = &longFrame[0];
-    workingShortFrame = &shortFrame[0];
-    stableLongFrame = &longFrame[1];
-    stableShortFrame = &shortFrame[1];
-    frameBuffer = &longFrame[0];
-
-    // Create a recognizable debug pattern
+    // Initialize frame buffers with a checkerboard debug pattern
     for (unsigned line = 0; line < VPIXELS; line++) {
         for (unsigned i = 0; i < HPIXELS; i++) {
 
@@ -71,6 +64,19 @@ PixelEngine::_powerOn()
             shortFrame[0].data[pos] = shortFrame[1].data[pos] = col;
         }
     }
+}
+
+void
+PixelEngine::_reset()
+{
+    RESET_SNAPSHOT_ITEMS
+
+    // Initialize frame buffers
+    workingLongFrame = &longFrame[0];
+    workingShortFrame = &shortFrame[0];
+    stableLongFrame = &longFrame[1];
+    stableShortFrame = &shortFrame[1];
+    frameBuffer = &longFrame[0];
 
     updateRGBA();
 }

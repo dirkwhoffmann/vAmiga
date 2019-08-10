@@ -175,7 +175,7 @@ private:
     void _powerOn() override;
     void _run() override;
     void _pause() override;
-    void _reset() override { RESET_SNAPSHOT_ITEMS }
+    void _reset() override;
     void _inspect() override;
     void _dump() override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }

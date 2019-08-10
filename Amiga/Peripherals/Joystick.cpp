@@ -26,6 +26,14 @@ Joystick::_initialize()
 void
 Joystick::_powerOn()
 {
+
+}
+
+void
+Joystick::_reset()
+{
+    RESET_SNAPSHOT_ITEMS
+
     button = false;
     axisX = 0;
     axisY = 0;

@@ -23,7 +23,14 @@ SerialPort::_initialize()
 void
 SerialPort::_powerOn()
 {
-    port = 0x1FFFFFE; 
+
+}
+
+ void
+SerialPort::_reset()
+{
+   RESET_SNAPSHOT_ITEMS
+   port = 0x1FFFFFE;
 }
 
 void

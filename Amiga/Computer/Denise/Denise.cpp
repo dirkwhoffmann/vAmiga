@@ -35,6 +35,13 @@ Denise::_initialize()
 void
 Denise::_powerOn()
 {
+}
+
+void
+Denise::_reset()
+{
+    RESET_SNAPSHOT_ITEMS
+
     memset(bBuffer, 0, sizeof(bBuffer));
     memset(iBuffer, 0, sizeof(iBuffer));
     memset(zBuffer, 0, sizeof(zBuffer));

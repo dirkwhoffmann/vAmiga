@@ -17,6 +17,14 @@ Keyboard::Keyboard()
 void
 Keyboard::_powerOn()
 {
+
+}
+
+void
+Keyboard::_reset()
+{
+    RESET_SNAPSHOT_ITEMS
+
     memset(keyDown, 0, sizeof(keyDown));
 }
 

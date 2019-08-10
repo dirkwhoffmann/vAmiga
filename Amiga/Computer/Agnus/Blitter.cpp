@@ -48,6 +48,13 @@ Blitter::_initialize()
 void
 Blitter::_powerOn()
 {
+}
+
+ void
+Blitter::_reset()
+{
+    RESET_SNAPSHOT_ITEMS
+
     copycount = 0;
     linecount = 0;
 }

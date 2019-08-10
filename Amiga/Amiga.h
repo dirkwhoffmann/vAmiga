@@ -295,6 +295,8 @@ public:
     // Methods from HardwareComponent
     //
 
+    void reset() override;
+
 private:
 
     void _initialize() override;

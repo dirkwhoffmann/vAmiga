@@ -65,6 +65,15 @@ Memory::_powerOn()
 }
 
 void
+Memory::_reset()
+{
+    RESET_SNAPSHOT_ITEMS
+
+    // Set up the memory lookup table
+    updateMemSrcTable();
+}
+
+void
 Memory::_dump()
 {
     plainmsg("     Boot Rom: %d KB at %p\n", bootRomSize >> 10, bootRom);

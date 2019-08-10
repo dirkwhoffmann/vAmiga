@@ -205,7 +205,7 @@
                         <popUpButton key="view" tag="10" id="L2b-nG-yBo" userLabel="Port 1">
                             <rect key="frame" x="0.0" y="14" width="48" height="23"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES"/>
-                            <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyUpOrDown" inset="2" autoenablesItems="NO" selectedItem="VD3-Wr-Ufe" id="Oxd-8A-P5o" userLabel="PopupButtonCell">
+                            <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" image="devNoneTemplate" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyUpOrDown" inset="2" autoenablesItems="NO" selectedItem="VD3-Wr-Ufe" id="Oxd-8A-P5o" userLabel="PopupButtonCell">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="menu"/>
                                 <menu key="menu" autoenablesItems="NO" id="zHf-yH-YTM">
@@ -326,6 +326,22 @@
                             <action selector="stopAndGoAction:" target="-2" id="nYX-eP-iZh"/>
                         </connections>
                     </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="8971C7C7-912D-4B39-9399-870B3826DBA5" label="Reset" paletteLabel="Reset" tag="1" image="resetTemplate" id="Yax-iM-1LE" userLabel="Reset">
+                        <nil key="toolTip"/>
+                        <size key="minSize" width="38" height="25"/>
+                        <size key="maxSize" width="38" height="38"/>
+                        <button key="view" verticalHuggingPriority="750" tag="1" id="aeA-0b-sne">
+                            <rect key="frame" x="0.0" y="14" width="38" height="25"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="resetTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="IQr-xE-Y9D">
+                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="system"/>
+                            </buttonCell>
+                        </button>
+                        <connections>
+                            <action selector="resetAction:" target="-2" id="MKH-2d-rUU"/>
+                        </connections>
+                    </toolbarItem>
                     <toolbarItem implicitItemIdentifier="24E37695-F012-4018-9A52-6D5F6A2522D8" label="Snapshots" paletteLabel="Snapshots" sizingBehavior="auto" id="nxb-IG-KLe">
                         <nil key="toolTip"/>
                         <segmentedControl key="view" verticalHuggingPriority="750" id="AHD-MB-nXC">
@@ -359,13 +375,15 @@
                     <toolbarItem reference="z3f-Tz-HUC"/>
                     <toolbarItem reference="1851"/>
                     <toolbarItem reference="dOU-Sh-aV4"/>
+                    <toolbarItem reference="Yax-iM-1LE"/>
                     <toolbarItem reference="wVB-PW-axj"/>
                 </defaultToolbarItems>
                 <connections>
                     <outlet property="controlPort1" destination="L2b-nG-yBo" id="LaW-Wo-oKb"/>
                     <outlet property="controlPort2" destination="4MP-rV-xX2" id="SJk-D4-9MF"/>
                     <outlet property="controller" destination="-2" id="V0k-GF-uXZ"/>
-                    <outlet property="pauseTbItem" destination="dOU-Sh-aV4" id="Dh5-qN-YsP"/>
+                    <outlet property="pauseButton" destination="dOU-Sh-aV4" id="GIe-gS-1Hn"/>
+                    <outlet property="resetButton" destination="Yax-iM-1LE" id="ooV-Rk-fGf"/>
                     <outlet property="snapshotSegCtrl" destination="AHD-MB-nXC" id="Gpg-sH-vaL"/>
                 </connections>
             </toolbar>
@@ -393,6 +411,7 @@
         <image name="powerLedOff" width="100" height="50"/>
         <image name="powerTemplate" width="241" height="240"/>
         <image name="prefEmulatorTemplate" width="241" height="240"/>
+        <image name="resetTemplate" width="241" height="241"/>
         <image name="ttBrowseTemplate" width="240" height="240"/>
         <image name="ttRestoreTemplate" width="241" height="240"/>
         <image name="ttRewindTemplate" width="241" height="240"/>
