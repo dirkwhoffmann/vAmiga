@@ -212,8 +212,7 @@ public:
     int *pixelAddr(int pixel);
 
     // Called after each frame to switch the frame buffers
-    // void prepareForNextFrame(bool lf, bool interlace);
-    void prepareForNextFrame(bool interlace);
+    void beginOfFrame(bool interlace);
 
 
     //

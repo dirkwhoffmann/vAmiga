@@ -1632,8 +1632,9 @@ Agnus::vsyncHandler()
     // Reset vertical position counter
     pos.v = 0;
 
-    // Reset the vertical DIW flipflop
+    // Initialize the DIW flipflops
     vFlop = false;
+    hFlop = true; 
     
     // CIA A counts VSYNCs
     amiga->ciaA.incrementTOD();
@@ -1643,7 +1644,7 @@ Agnus::vsyncHandler()
     
     // Let the subcomponents do their own VSYNC stuff
     copper.vsyncAction();
-    denise->pixelEngine.prepareForNextFrame(frameInfo.interlaced);
+    denise->beginOfFrame(frameInfo.interlaced);
     amiga->joystick1.execute();
     amiga->joystick2.execute();
 

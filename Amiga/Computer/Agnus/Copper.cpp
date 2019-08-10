@@ -667,7 +667,7 @@ Copper::serviceEvent(EventID id)
             if (verbose) debug("COP_WAIT1\n");
 
             if (getBFD() == 0) {
-                debug("***** BFD FLAG NOT IMPLEMENTED YET\n");
+                // debug("***** BFD FLAG NOT IMPLEMENTED YET\n");
             }
 
             // Wait for the next free cycle

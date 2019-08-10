@@ -856,6 +856,12 @@ Denise::checkP2PCollisions()
 }
 
 void
+Denise::beginOfFrame(bool interlace)
+{
+    pixelEngine.beginOfFrame(interlace);
+}
+
+void
 Denise::beginOfLine(int vpos)
 {
     // Reset the horizontal pixel counter

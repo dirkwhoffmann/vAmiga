@@ -272,55 +272,8 @@ PixelEngine::pixelAddr(int pixel)
     return frameBuffer->data + offset;
 }
 
-/*
 void
-PixelEngine::prepareForNextFrame(bool lf, bool interlace)
-{
-    bool longf = true;
-
-    assert(workingLongFrame == &longFrame[0] || workingLongFrame == &longFrame[1]);
-    assert(workingShortFrame == &shortFrame[0] || workingShortFrame == &shortFrame[1]);
-    assert(stableLongFrame == &longFrame[0] || stableLongFrame == &longFrame[1]);
-    assert(stableShortFrame == &shortFrame[0] || stableShortFrame == &shortFrame[1]);
-    assert(workingLongFrame != stableLongFrame);
-    assert(workingShortFrame != stableShortFrame);
-    assert(frameBuffer == workingLongFrame || frameBuffer == workingShortFrame);
-
-    pthread_mutex_lock(&lock);
-
-    if (frameBuffer == &longFrame[0] || frameBuffer == &longFrame[1]) {
-
-        workingLongFrame = stableLongFrame;
-        stableLongFrame = frameBuffer;
-
-        if (interlace) {
-            frameBuffer = workingShortFrame;
-            longf = false;
-        } else {
-            frameBuffer = workingLongFrame;
-            longf = true;
-        }
-
-    } else {
-
-        assert(frameBuffer == &shortFrame[0] || frameBuffer == &shortFrame[1]);
-        workingShortFrame = stableShortFrame;
-        stableShortFrame = frameBuffer;
-        frameBuffer = workingLongFrame;
-    }
-
-    assert(longf == lf);
-    frameBuffer->longFrame = lf;
-    frameBuffer->interlace = interlace;
-
-    pthread_mutex_unlock(&lock);
-
-    agnus->dmaDebugger.vSyncHandler();
-}
-*/
-
-void
-PixelEngine::prepareForNextFrame(bool interlace)
+PixelEngine::beginOfFrame(bool interlace)
 {
     assert(workingLongFrame == &longFrame[0] || workingLongFrame == &longFrame[1]);
     assert(workingShortFrame == &shortFrame[0] || workingShortFrame == &shortFrame[1]);
