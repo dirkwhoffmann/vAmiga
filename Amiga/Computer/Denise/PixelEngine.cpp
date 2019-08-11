@@ -318,6 +318,16 @@ PixelEngine::beginOfFrame(bool interlace)
 }
 
 void
+PixelEngine::endOfVBlankLine()
+{
+    // Apply all color register changes that happened in this line
+    for (int i = 0; i < colRegHistory.count; i++) {
+        applyRegisterChange(colRegHistory.change[i]);
+    }
+
+}
+
+void
 PixelEngine::applyRegisterChange(const RegisterChange &change)
 {
     switch (change.addr) {

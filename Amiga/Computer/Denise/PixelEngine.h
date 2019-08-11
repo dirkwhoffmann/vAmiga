@@ -211,6 +211,9 @@ public:
     // Returns the frame buffer address of a certain pixel in the current line
     int *pixelAddr(int pixel);
 
+    // Called after each line in the VBLANK area
+    void endOfVBlankLine();
+
     // Called after each frame to switch the frame buffers
     void beginOfFrame(bool interlace);
 

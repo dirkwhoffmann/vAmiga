@@ -882,6 +882,10 @@ Denise::beginOfLine(int vpos)
     // Reset the horizontal pixel counter
     currentPixel = (agnus->dmaFirstBpl1Event * 4) + 6;
 
+    // Reset the register history buffers
+    conRegHistory.init();
+    pixelEngine.colRegHistory.init();
+
     // Save the current values of the bitplane control registers
     initialBplcon0 = bplcon0;
     initialBplcon1 = bplcon1;
@@ -896,7 +900,7 @@ Denise::endOfLine(int vpos)
 {
     // debug("endOfLine pixel = %d HPIXELS = %d\n", pixel, HPIXELS);
 
-    // Make sure we're below the VBLANK area
+    // Check if we are below the VBLANK area
     if (vpos >= 26) {
 
         // Translate bitplane data to color register indices
@@ -914,19 +918,8 @@ Denise::endOfLine(int vpos)
         // Synthesize RGBA values and write the result into the frame buffer
         pixelEngine.colorize(iBuffer, vpos);
 
-        /* Note that Denise has already synthesized pixels that belong to the
-         * next DMA line (i.e., the pixels that have been written into the
-         * rasterline array with offset values > $E2). We move them to the
-         * beginning of the rasterline array to make them appear when the next
-         * line is drawn.
-         */
-        // TODO: DO WE STILL NEED THIS???
-        /*
-        for (int i = 4 * 0xE3; i < sizeof(iBuffer); i++) {
-            iBuffer[i - 4 * 0xE3] = iBuffer[i];
-            iBuffer[i] = 0;
-        }
-        */
+    } else {
+        pixelEngine.endOfVBlankLine();
     }
 
     // Invoke the DMA debugger
