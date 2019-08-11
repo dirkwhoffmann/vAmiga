@@ -92,16 +92,33 @@ public:
     
     Disk(DiskType type);
     
-    // Factory method
+    // Factory methods
     static Disk *makeWithFile(ADFFile *file);
-  
+    static Disk *makeWithReader(SerReader &reader, DiskType diskType);
 
-public:
-    
+
+    //
+    // Iterating over snapshot items
+    //
+
+    template <class T>
+    void applyToPersistentItems(T& worker)
+    {
+        worker
+
+        & type
+        & data.raw
+        & writeProtected
+        & modified;
+    }
+
+
     //
     // Getter and Setter
     //
-    
+
+public:
+
     DiskType getType() { return type; }
     
     bool isWriteProtected() { return writeProtected; }

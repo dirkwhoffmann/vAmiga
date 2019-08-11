@@ -9,7 +9,6 @@
 
 #include "Amiga.h"
 
-
 Drive::Drive(unsigned nr)
 {
     assert(nr < 4); // df0 - df3
@@ -48,6 +47,81 @@ Drive::_dump()
     plainmsg("         Offset: %d\n", head.offset);
     plainmsg("cylinderHistory: %X\n", cylinderHistory);
     plainmsg("           Disk: %s\n", disk ? "yes" : "no");
+}
+
+size_t
+Drive::_size()
+{
+    SerCounter counter;
+
+    applyToPersistentItems(counter);
+    applyToResetItems(counter);
+
+    // Add the size of the boolean indicating whether a disk is inserted
+    counter.count += sizeof(bool);
+
+    if (hasDisk()) {
+
+        // Add the disk type and disk state
+        counter & disk->getType();
+        disk->applyToPersistentItems(counter);
+    }
+
+    debug(SNAP_DEBUG, "Snapshot size is %d bytes\n", counter.count);
+    return counter.count;
+}
+
+size_t
+Drive::_load(uint8_t *buffer)
+{
+    SerReader reader(buffer);
+    bool diskInSnapshot;
+    DiskType diskType;
+
+    // Read own state
+    applyToPersistentItems(reader);
+    applyToResetItems(reader);
+
+    // Check if a disk is attached to this snapshot
+    reader & diskInSnapshot;
+
+    // Create the disk
+    if (diskInSnapshot) {
+
+        // Delete the old disk if present
+        if (disk) delete disk;
+
+        reader & diskType;
+        disk = Disk::makeWithReader(reader, diskType);
+    }
+
+    debug(SNAP_DEBUG, "Recreated from %d bytes\n", reader.ptr - buffer);
+    return reader.ptr - buffer;
+}
+
+size_t
+Drive::_save(uint8_t *buffer)
+{
+    SerWriter writer(buffer);
+
+    // Write own state
+    applyToPersistentItems(writer);
+    applyToResetItems(writer);
+
+    // Indicate whether this drive has a disk is inserted
+    writer & hasDisk();
+
+    if (hasDisk()) {
+
+        // Write the disk type
+        writer & disk->getType();
+
+        // Write the disk's state
+        disk->applyToPersistentItems(writer);
+    }
+
+    debug(SNAP_DEBUG, "Serialized to %d bytes\n", writer.ptr - buffer);
+    return writer.ptr - buffer;
 }
 
 void

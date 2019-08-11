@@ -80,6 +80,15 @@ Disk::makeWithFile(ADFFile *file)
     return disk;
 }
 
+Disk *
+Disk::makeWithReader(SerReader &reader, DiskType diskType)
+{
+    Disk *disk = new Disk(diskType);
+    disk->applyToPersistentItems(reader);
+    
+    return disk;
+}
+
 uint8_t
 Disk::readByte(Cylinder cylinder, Side side, uint16_t offset)
 {

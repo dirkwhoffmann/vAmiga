@@ -280,7 +280,7 @@ SerCounter counter; \
 applyToPersistentItems(counter); \
 applyToResetItems(counter); \
 debug(SNAP_DEBUG, "Snapshot size is %d bytes\n", counter.count); \
-return counter.count; \
+return counter.count;
 
 #define RESET_SNAPSHOT_ITEMS \
 SerResetter resetter; \
@@ -292,7 +292,7 @@ SerReader reader(buffer); \
 applyToPersistentItems(reader); \
 applyToResetItems(reader); \
 debug(SNAP_DEBUG, "Recreated from %d bytes\n", reader.ptr - buffer); \
-return reader.ptr - buffer; \
+return reader.ptr - buffer;
 
 #define SAVE_SNAPSHOT_ITEMS \
 SerWriter writer(buffer); \
