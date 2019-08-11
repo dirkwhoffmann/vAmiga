@@ -614,7 +614,15 @@ Denise::drawSprite()
     int baseCol = 16 + 2 * (x & 6);
 
     int start = 2 + 2 * sprhstrt[x];
-    int end = MIN(start + 31, LAST_PIXEL);
+    int end = start + 31;
+
+    // Adjust the end position if it lies outside the valid range
+    if (end > LAST_PIXEL) {
+        int overshoot = (1 + end - LAST_PIXEL) / 2;
+        d1 >>= overshoot;
+        d0 >>= overshoot;
+        end -= overshoot;
+    }
 
     for (int pos = end; pos >= start; pos -= 2) {
 
