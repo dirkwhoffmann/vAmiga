@@ -35,6 +35,7 @@ void
 Agnus::initLoresBplEventTable()
 {
     memset(bitplaneDMA[0], 0, sizeof(bitplaneDMA[0]));
+    memset(fetchUnitNr[0], 0, sizeof(fetchUnitNr[0]));
 
     for (int bpu = 0; bpu < 7; bpu++) {
 
@@ -53,12 +54,17 @@ Agnus::initLoresBplEventTable()
             }
         }
     }
+
+    for (int i = 0; i <= 0xD8; i++) {
+        fetchUnitNr[0][i] = i % 8;
+    }
 }
 
 void
 Agnus::initHiresBplEventTable()
 {
     memset(bitplaneDMA[1], 0, sizeof(bitplaneDMA[1]));
+    memset(fetchUnitNr[1], 0, sizeof(fetchUnitNr[1]));
 
     for (int bpu = 0; bpu < 7; bpu++) {
 
@@ -75,6 +81,10 @@ Agnus::initHiresBplEventTable()
                 case 1: p[3] = p[7] = BPL_H1;
             }
         }
+    }
+
+    for (int i = 0; i <= 0xD8; i++) {
+        fetchUnitNr[0][i] = i % 4;
     }
 }
 
@@ -808,13 +818,29 @@ Agnus::pokeDMACON(uint16_t oldValue, uint16_t newValue)
         // Update the DMA allocation table in the next rasterline
         hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
 
-        // Let the change take effect in the current rasterline as well
-        bool hires = Denise::hires(bplcon0);
-        dmacon = newValue;
-        allocateBplSlots(inBplDmaArea() ? activeBitplanes : 0, hires, pos.h + 4);
+        if (newBPLEN) {
 
-        // Since the table has changed, we also need to update the event slot
-        scheduleBplEventForCycle(pos.h);
+            // Bitplane DMA is switched off
+
+            // Check if the current line is affected by the change
+            if (pos.h + 2 < ddfstrtReached) {
+
+                bool hires = Denise::hires(bplcon0);
+                // We have to assign dmacon here, because if we don't, the
+                // the call to inBplDmaArea() gives us the wrong result.
+                // This is very ugly. Think about a better way to judge if
+                // DMA should be on or off
+                dmacon = newValue;
+                allocateBplSlots(inBplDmaArea() ? activeBitplanes : 0, hires, pos.h + 2);
+                scheduleNextBplEvent();
+            }
+
+        } else {
+
+            // Bitplane DMA is switched off
+            allocateBplSlots(0, 0, pos.h + 2);
+            cancel(BPL_SLOT);
+        }
 
         // Let Denise know about the change
         denise->pokeDMACON(oldValue, newValue);

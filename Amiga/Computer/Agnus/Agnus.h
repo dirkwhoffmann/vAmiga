@@ -126,6 +126,19 @@ public:
      */
     EventID bitplaneDMA[2][7][HPOS_CNT];
 
+    /* Fetch unit cycle numbers.
+     *
+     * Parameters: fetchUnitNr[Resolution][Cycle]
+     *
+     *             Resolution : 0 or 1        (0 = LORES / 1 = HIRES)
+     *                  Cycle : 0 .. HPOS_MAX (DMA cycle)
+     *
+     * The lookup table is used to determine the position of a given DMA
+     * cycle inside the fetch unit. The first cycle in a fetch unit in numbered
+     * 0, the second cycle is numbered 1 and so on.
+     */
+    uint8_t fetchUnitNr[2][HPOS_CNT];
+
 
     //
     // Events
