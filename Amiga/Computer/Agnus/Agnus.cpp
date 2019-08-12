@@ -775,6 +775,7 @@ Agnus::pokeDMACON(uint16_t value)
 void
 Agnus::pokeDMACON(uint16_t oldValue, uint16_t newValue)
 {
+    assert(oldValue != newValue);
 
     bool oldDMAEN = (oldValue & DMAEN);
     bool oldBPLEN = (oldValue & BPLEN) && oldDMAEN;
@@ -804,8 +805,19 @@ Agnus::pokeDMACON(uint16_t oldValue, uint16_t newValue)
     // Bitplane DMA
     if (oldBPLEN ^ newBPLEN) {
 
-        denise->pokeDMACON(oldValue, newValue);
+        // Update the DMA allocation table in the next rasterline
         hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
+
+        // Let the change take effect in the current rasterline as well
+        bool hires = Denise::hires(bplcon0);
+        dmacon = newValue;
+        allocateBplSlots(inBplDmaArea() ? activeBitplanes : 0, hires, pos.h + 4);
+
+        // Since the table has changed, we also need to update the event slot
+        scheduleBplEventForCycle(pos.h);
+
+        // Let Denise know about the change
+        denise->pokeDMACON(oldValue, newValue);
     }
     
     // Copper DMA
@@ -1365,7 +1377,7 @@ Agnus::pokeBPLCON0(uint16_t oldValue, uint16_t newValue)
          * update in hsyncActions (HSYNC_UPDATE_EVENT_TABLE) can be omitted.
          */
 
-        // Update the DMA allocation table with a 4 cycle delay
+        // Update the DMA allocation table with a 2 cycle delay
         allocateBplSlots(inBplDmaArea() ? activeBitplanes : 0, hires, pos.h + 2);
 
         // Since the table has changed, we also need to update the event slot

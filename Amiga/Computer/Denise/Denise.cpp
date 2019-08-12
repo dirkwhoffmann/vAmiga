@@ -933,6 +933,8 @@ Denise::pokeDMACON(uint16_t oldValue, uint16_t newValue)
 
         // Bitplane DMA on
         debug(DMA_DEBUG, "Bitplane DMA switched on\n");
+
+
         // switchBitplaneDmaOn();
 
     } else {
