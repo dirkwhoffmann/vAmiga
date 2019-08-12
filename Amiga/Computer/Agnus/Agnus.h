@@ -51,10 +51,6 @@
 #define VPOS(x) ((x) >> 8)
 #define HPOS(x) ((x) & 0xFF)
 
-// Verifies a VPOS / HPOS combination
-static inline bool isVposHpos(int16_t vpos, int16_t hpos) {
-    return vpos >= 0 && vpos <= VPOS_MAX && hpos >= 0 && hpos <= HPOS_MAX;
-}
 
 class Agnus : public HardwareComponent
 {

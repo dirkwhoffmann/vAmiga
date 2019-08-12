@@ -190,35 +190,47 @@ template<PokeSource s> void scheduleRegEvent(Cycle cycle, EventID id, int64_t da
 
 
 //
+// Scheduling specific events
+//
+
+// Schedules the next BPL event relative to a given DMA cycle.
+void scheduleNextBplEvent(int16_t hpos);
+
+// Schedules the next BPL event relative to the currently emulated DMA cycle.
+void scheduleNextBplEvent() { scheduleNextBplEvent(pos.h); }
+
+// Schedules the earliest BPL event that occurs at or after a given DMA cycle.
+void scheduleBplEventForCycle(int16_t hpos);
+
+
+//
 // Processing events
 //
 
 private:
 
-/* Processes all events that are due prior to or at the provided cycle.
- * Called inside Agnus::executeUntil().
+/* Executes the event handler up to a given master cycle.
+ * This method is called inside Agnus::executeUntil().
  */
 void executeEventsUntil(Cycle cycle);
 
-// Event handler for the DMA slot
+/* Event handlers
+ *
+ *    serviceBplEvent: Handler for the BPL slot
+ *    serviceDASEvent: Handles for the DAS slot
+ *   serviceSYNCEvent: Handler for the SYNC slot
+ *    serviceIRQEvent: Handler for all IRQ slots
+ *    serviceREGEvent: Handler for slots REG_COP, REG_CPU1, and REG_CPU2
+ *    serviceINSEvent: Handler for the INS slot
+ */
 void serviceBplEvent(EventID id);
-void scheduleNextBplEvent();
-void updateCurrentBplEvent();
-
-// Event handler for the DAS slot
 void serviceDASEvent(EventID id);
-
-// Event handler for the SYNC slot
 void serviceSYNCEvent(EventID id, int64_t data);
-
-// Event handler for the various IRQ slots
 void serviceIRQEvent(EventSlot slot, int irqBit);
-
-// Event handler for slots REG_COPPER and REG_CPU
 void serviceREGEvent(EventSlot slot);
+void serviceINSEvent();
 
-// Serves an inspection event
-void serveINSEvent();
+
 
 
 //

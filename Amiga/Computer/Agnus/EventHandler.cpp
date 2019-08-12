@@ -327,6 +327,44 @@ Agnus::getEventSlotInfo(int nr)
 }
 
 void
+Agnus::scheduleNextBplEvent(int16_t hpos)
+{
+    uint8_t next = nextDmaEvent[hpos];
+    if (next) {
+        scheduleRel<BPL_SLOT>(DMA_CYCLES(next - pos.h), dmaEvent[next]);
+    } else {
+        cancel<BPL_SLOT>();
+    }
+}
+
+void
+Agnus::scheduleBplEventForCycle(int16_t hpos)
+{
+    assert(isHPos(hpos));
+    assert(hpos >= pos.h);
+
+    if (dmaEvent[hpos] != EVENT_NONE) {
+        scheduleRel<BPL_SLOT>(DMA_CYCLES(hpos - pos.h), dmaEvent[hpos]);
+    } else {
+        scheduleNextBplEvent(hpos);
+    }
+}
+
+/*
+void
+Agnus::updateCurrentBplEvent()
+{
+    int16_t prevPos = MAX(pos.h - 1, 0);
+    uint8_t next = nextDmaEvent[prevPos];
+    if (next) {
+        scheduleRel<BPL_SLOT>(DMA_CYCLES(next - pos.h), dmaEvent[next]);
+    } else {
+        cancel<BPL_SLOT>();
+    }
+}
+*/
+
+void
 Agnus::executeEventsUntil(Cycle cycle) {
 
     // Determine if we need to check all slots
@@ -475,7 +513,7 @@ Agnus::executeEventsUntil(Cycle cycle) {
             serviceSYNCEvent(slot[SYNC_SLOT].id, slot[SYNC_SLOT].data);
         }
         if (isDue<INSPECTOR_SLOT>(cycle)) {
-            serveINSEvent();
+            serviceINSEvent();
         }
 
         // Determine the next trigger cycle for all secondary slots
@@ -620,29 +658,6 @@ Agnus::serviceBplEvent(EventID id)
 
     // Schedule next event
     scheduleNextBplEvent();
-}
-
-void
-Agnus::scheduleNextBplEvent()
-{
-    uint8_t next = nextDmaEvent[pos.h];
-    if (next) {
-        scheduleRel<BPL_SLOT>(DMA_CYCLES(next - pos.h), dmaEvent[next]);
-    } else {
-        cancel<BPL_SLOT>();
-    }
-}
-
-void
-Agnus::updateCurrentBplEvent()
-{
-    int16_t prevPos = MAX(pos.h - 1, 0);
-    uint8_t next = nextDmaEvent[prevPos];
-    if (next) {
-        scheduleRel<BPL_SLOT>(DMA_CYCLES(next - pos.h), dmaEvent[next]);
-    } else {
-        cancel<BPL_SLOT>();
-    }
 }
 
 void
@@ -836,7 +851,7 @@ Agnus::serviceSYNCEvent(EventID id, int64_t data)
 }
 
 void
-Agnus::serveINSEvent()
+Agnus::serviceINSEvent()
 {
     switch (slot[INSPECTOR_SLOT].id) {
 

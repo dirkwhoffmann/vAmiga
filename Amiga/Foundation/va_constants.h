@@ -373,6 +373,10 @@ static const char *customReg[256] = {
 #define HPOS_MAX      226
 #define HPOS_CNT      227
 
+static inline bool isVPos(int16_t pos) { return pos >= 0 && pos < VPOS_CNT; }
+static inline bool isHPos(int16_t pos) { return pos >= 0 && pos < HPOS_CNT; }
+
+
 /* Screen buffer parameters
  *
  * All values are measured in pixels.

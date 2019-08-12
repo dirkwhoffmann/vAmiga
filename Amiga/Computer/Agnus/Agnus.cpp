@@ -1366,11 +1366,11 @@ Agnus::pokeBPLCON0(uint16_t oldValue, uint16_t newValue)
          * update in hsyncActions (HSYNC_UPDATE_EVENT_TABLE) can be omitted.
          */
 
-        // Update the DMA allocation table with a 4 cycle delay.
+        // Update the DMA allocation table with a 4 cycle delay
         allocateBplSlots(inBplDmaArea() ? activeBitplanes : 0, hires, pos.h + 2);
 
-        // If there is a scheduled event, update it w.r.t. to the new table
-        updateCurrentBplEvent();
+        // Since the table has changed, we also need to update the event slot
+        scheduleBplEventForCycle(pos.h);
     }
 }
 
