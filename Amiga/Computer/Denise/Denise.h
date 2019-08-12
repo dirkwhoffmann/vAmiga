@@ -525,7 +525,10 @@ public:
     // Called by Agnus at the end of a rasterline
     void endOfLine(int vpos);
 
-    
+    // Called by Agnus if the DMACON register changes
+    void pokeDMACON(uint16_t oldValue, uint16_t newValue);
+
+
     //
     // Debugging the component
     //

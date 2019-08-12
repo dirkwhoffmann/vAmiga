@@ -126,7 +126,7 @@ StateMachine<nr>::pokeAUDxLCL(uint16_t value)
 template <int nr> bool
 StateMachine<nr>::dmaMode()
 {
-    return amiga->agnus.audDMA(nr);
+    return amiga->agnus.audDMA<nr>();
 }
 
 template <int nr> bool

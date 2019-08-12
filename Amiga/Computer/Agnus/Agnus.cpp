@@ -758,54 +758,53 @@ Agnus::pokeDMACON(uint16_t value)
 {
     debug(DMA_DEBUG, "pokeDMACON(%X)\n", value);
 
-    uint16_t olddmacon = dmacon;
+    // Compute the real value (Bit 15 determines if bits are set or cleared)
+    if (value & 0x8000) {
+        value = (dmacon | value) & 0x07FF;
+    } else {
+        value = (dmacon & ~value) & 0x07FF;
+    }
 
-    bool oldDMAEN = (dmacon & DMAEN);
-    bool oldBPLEN = (dmacon & BPLEN) && oldDMAEN;
-    bool oldCOPEN = (dmacon & COPEN) && oldDMAEN;
-    bool oldBLTEN = (dmacon & BLTEN) && oldDMAEN;
-    bool oldSPREN = (dmacon & SPREN) && oldDMAEN;
-    // bool oldDSKEN = (dmacon & DSKEN) && oldDMAEN;
-    bool oldAU0EN = (dmacon & AU0EN) && oldDMAEN;
-    bool oldAU1EN = (dmacon & AU1EN) && oldDMAEN;
-    bool oldAU2EN = (dmacon & AU2EN) && oldDMAEN;
-    bool oldAU3EN = (dmacon & AU3EN) && oldDMAEN;
+    if (dmacon != value) {
 
-    
-    if (value & 0x8000) dmacon |= value; else dmacon &= ~value;
-    dmacon &= 0x07FF;
-    
-    bool newDMAEN = (dmacon & DMAEN);
-    bool newBPLEN = (dmacon & BPLEN) && newDMAEN;
-    bool newCOPEN = (dmacon & COPEN) && newDMAEN;
-    bool newBLTEN = (dmacon & BLTEN) && newDMAEN;
-    bool newSPREN = (dmacon & SPREN) && newDMAEN;
-    // bool newDSKEN = (dmacon & DSKEN) && newDMAEN;
-    bool newAU0EN = (dmacon & AU0EN) && newDMAEN;
-    bool newAU1EN = (dmacon & AU1EN) && newDMAEN;
-    bool newAU2EN = (dmacon & AU2EN) && newDMAEN;
-    bool newAU3EN = (dmacon & AU3EN) && newDMAEN;
+        pokeDMACON(dmacon, value);
+        dmacon = value;
+    }
+}
+
+void
+Agnus::pokeDMACON(uint16_t oldValue, uint16_t newValue)
+{
+
+    bool oldDMAEN = (oldValue & DMAEN);
+    bool oldBPLEN = (oldValue & BPLEN) && oldDMAEN;
+    bool oldCOPEN = (oldValue & COPEN) && oldDMAEN;
+    bool oldBLTEN = (oldValue & BLTEN) && oldDMAEN;
+    bool oldSPREN = (oldValue & SPREN) && oldDMAEN;
+    // bool oldDSKEN = (oldValue & DSKEN) && oldDMAEN;
+    bool oldAU0EN = (oldValue & AU0EN) && oldDMAEN;
+    bool oldAU1EN = (oldValue & AU1EN) && oldDMAEN;
+    bool oldAU2EN = (oldValue & AU2EN) && oldDMAEN;
+    bool oldAU3EN = (oldValue & AU3EN) && oldDMAEN;
+
+    bool newDMAEN = (newValue & DMAEN);
+    bool newBPLEN = (newValue & BPLEN) && newDMAEN;
+    bool newCOPEN = (newValue & COPEN) && newDMAEN;
+    bool newBLTEN = (newValue & BLTEN) && newDMAEN;
+    bool newSPREN = (newValue & SPREN) && newDMAEN;
+    // bool newDSKEN = (newValue & DSKEN) && newDMAEN;
+    bool newAU0EN = (newValue & AU0EN) && newDMAEN;
+    bool newAU1EN = (newValue & AU1EN) && newDMAEN;
+    bool newAU2EN = (newValue & AU2EN) && newDMAEN;
+    bool newAU3EN = (newValue & AU3EN) && newDMAEN;
 
     // Inform the delegates
-    blitter.pokeDMACON(olddmacon, dmacon);
-
+    blitter.pokeDMACON(oldValue, newValue);
 
     // Bitplane DMA
     if (oldBPLEN ^ newBPLEN) {
 
-        if (newBPLEN) {
-            
-            // Bitplane DMA on
-            debug(DMA_DEBUG, "Bitplane DMA switched on\n");
-            // switchBitplaneDmaOn();
-
-        } else {
-            
-            // Bitplane DMA off
-            debug(DMA_DEBUG, "Bitplane DMA switched off\n");
-            // switchBitplaneDmaOff();
-        }
-
+        denise->pokeDMACON(oldValue, newValue);
         hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
     }
     

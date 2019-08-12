@@ -717,23 +717,28 @@ public:
     //
     
 public:
-    
-    // DMACON
+
+    // DMACONR
     uint16_t peekDMACONR();
+
+    // DMACON
     void pokeDMACON(uint16_t value);
-    
-    // Returns true if DMA access of a certain type is currently enabled.
-    inline bool bplDMA() { return (dmacon & (DMAEN | BPLEN)) == (DMAEN | BPLEN); }
-    inline bool copDMA() { return (dmacon & (DMAEN | COPEN)) == (DMAEN | COPEN); }
-    inline bool bltDMA() { return (dmacon & (DMAEN | BLTEN)) == (DMAEN | BLTEN); }
-    inline bool sprDMA() { return (dmacon & (DMAEN | SPREN)) == (DMAEN | SPREN); }
-    inline bool dskDMA() { return (dmacon & (DMAEN | DSKEN)) == (DMAEN | DSKEN); }
-    inline bool au3DMA() { return (dmacon & (DMAEN | AU3EN)) == (DMAEN | AU3EN); }
-    inline bool au2DMA() { return (dmacon & (DMAEN | AU2EN)) == (DMAEN | AU2EN); }
-    inline bool au1DMA() { return (dmacon & (DMAEN | AU1EN)) == (DMAEN | AU1EN); }
-    inline bool au0DMA() { return (dmacon & (DMAEN | AU0EN)) == (DMAEN | AU0EN); }
-    inline bool audDMA(int x) {
-        return (dmacon & (DMAEN | (AU0EN << x))) == (DMAEN | (AU0EN << x)); }
+    void pokeDMACON(uint16_t oldValue, uint16_t newValue);
+
+    // Returns true if DMA access of a certain type is enabled
+    static bool bplDMA(uint16_t v) { return (v & (DMAEN | BPLEN)) == (DMAEN | BPLEN); }
+    inline bool bplDMA() { return bplDMA(dmacon); }
+    static bool copDMA(uint16_t v) { return (v & (DMAEN | COPEN)) == (DMAEN | COPEN); }
+    inline bool copDMA() { return copDMA(dmacon); }
+    static bool bltDMA(uint16_t v) { return (v & (DMAEN | BLTEN)) == (DMAEN | BLTEN); }
+    inline bool bltDMA() { return bltDMA(dmacon); }
+    static bool sprDMA(uint16_t v) { return (v & (DMAEN | SPREN)) == (DMAEN | SPREN); }
+    inline bool sprDMA() { return sprDMA(dmacon); }
+    static bool dskDMA(uint16_t v) { return (v & (DMAEN | DSKEN)) == (DMAEN | DSKEN); }
+    inline bool dskDMA() { return dskDMA(dmacon); }
+    template <int x> static bool audDMA(uint16_t v) {
+        return (v & (DMAEN | (AU0EN << x))) == (DMAEN | (AU0EN << x)); }
+    template <int x> inline bool audDMA() { return audDMA<x>(dmacon); }
 
     // DSKPTH, DSKPTL
     void pokeDSKPTH(uint16_t value);
