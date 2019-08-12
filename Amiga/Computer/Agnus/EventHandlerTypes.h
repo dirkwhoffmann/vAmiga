@@ -206,7 +206,8 @@ typedef enum : long
     IRQ_EVENT_COUNT,
 
     // REG slots
-    REG_DIWSTRT = 1,
+    REG_DMACON = 1,
+    REG_DIWSTRT,
     REG_DIWSTOP,
     REG_BPLCON0,
     REG_BPLCON1,

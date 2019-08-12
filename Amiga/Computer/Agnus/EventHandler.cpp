@@ -199,6 +199,7 @@ Agnus::inspectEventSlot(EventSlot nr)
             switch (slot[nr].id) {
 
                 case 0:             i->eventName = "none"; break;
+                case REG_DMACON:    i->eventName = "REG_DMACON"; break;
                 case REG_DIWSTRT:   i->eventName = "REG_DIWSTRT"; break;
                 case REG_DIWSTOP:   i->eventName = "REG_DIWSTOP"; break;
                 case REG_BPLCON0:   i->eventName = "REG_BPLCON0"; break;
@@ -798,6 +799,8 @@ Agnus::serviceREGEvent(EventSlot nr)
 
     switch (id) {
 
+        case REG_DMACON:
+            pokeDMACON((uint16_t)data);
         case REG_DIWSTRT:
             setDIWSTRT((uint16_t)data);
             break;

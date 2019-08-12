@@ -1059,8 +1059,8 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x094 >> 1: // DDFSTOP
             agnus->pokeDDFSTOP(value); return;
         case 0x096 >> 1: // DMACON
-            agnus->pokeDMACON(value); return;
-        
+            agnus->scheduleRegEvent<s>(DMA_CYCLES(2), REG_DMACON, value);
+            return;
         case 0x098 >> 1:  // CLXCON
             denise->pokeCLXCON(value); return;
         case 0x09A >> 1: // INTENA
