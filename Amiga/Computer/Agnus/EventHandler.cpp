@@ -801,6 +801,7 @@ Agnus::serviceREGEvent(EventSlot nr)
 
         case REG_DMACON:
             pokeDMACON((uint16_t)data);
+            break;
         case REG_DIWSTRT:
             setDIWSTRT((uint16_t)data);
             break;
