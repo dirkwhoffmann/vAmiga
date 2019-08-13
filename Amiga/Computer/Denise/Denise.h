@@ -236,7 +236,7 @@ public:
 
     // The current rasterline has been drawn up to this horizontal position
     // DEPRECATED
-    short currentPixel;
+    // short currentPixel;
 
 
     //
@@ -309,8 +309,7 @@ public:
         & scrollHiresEven
         & conRegHistory
         & firstCanvasPixel
-        & lastCanvasPixel
-        & currentPixel;
+        & lastCanvasPixel;
     }
 
     

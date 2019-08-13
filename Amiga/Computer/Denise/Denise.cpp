@@ -358,7 +358,7 @@ Denise::draw(int pixels)
 {
     uint8_t index;
 
-    currentPixel = ppos(agnus->pos.h);
+    int16_t currentPixel = ppos(agnus->pos.h);
 
     uint32_t maskOdd = 0x8000 << scrollLoresOdd;
     uint32_t maskEven = 0x8000 << scrollLoresEven;
@@ -879,9 +879,6 @@ Denise::beginOfFrame(bool interlace)
 void
 Denise::beginOfLine(int vpos)
 {
-    // Reset the horizontal pixel counter
-    currentPixel = (agnus->dmaFirstBpl1Event * 4) + 6;
-
     // Reset the register history buffers
     conRegHistory.init();
     pixelEngine.colRegHistory.init();
