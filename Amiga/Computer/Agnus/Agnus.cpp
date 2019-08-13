@@ -551,44 +551,6 @@ Agnus::switchBitplaneDmaOn()
         dmaEvent[i] = bitplaneDMA[hires][activeBitplanes][i];
     }
 
-    // Set some variables (inherited from the old function)
-    // TODO: Check if all variables are still needed.
-
-    if (hires) {
-
-        // Remember start / stop positions
-        if (dmaEvent[start+3] != EVENT_NONE) {
-
-            dmaFirstBpl1Event = start + 3;
-            dmaLastBpl1Event = stop - 1;
-
-            assert(dmaEvent[dmaFirstBpl1Event] == BPL_H1);
-            assert(dmaEvent[dmaLastBpl1Event] == BPL_H1);
-
-        } else {
-
-            dmaFirstBpl1Event = 0;
-            dmaLastBpl1Event = 0;
-        }
-
-    } else {
-
-        // Remember start / stop positions
-        if (dmaEvent[start+7] != EVENT_NONE) {
-
-            dmaFirstBpl1Event = start + 7;
-            dmaLastBpl1Event = stop - 1;
-
-            assert(dmaEvent[dmaFirstBpl1Event] == BPL_L1);
-            assert(dmaEvent[dmaLastBpl1Event] == BPL_L1);
-
-        } else {
-
-            dmaFirstBpl1Event = 0;
-            dmaLastBpl1Event = 0;
-        }
-    }
-
     // Link everything together
     updateJumpTable();
 
@@ -602,16 +564,13 @@ Agnus::switchBitplaneDmaOff()
 {
     // Quick-exit if the event table is free of any bitplane DMA events
     // TODO: We need a reliable quick-exit condition
-    // if (dmaFirstBpl1Event == 0) return;
+    // The old variable (dmaFirstBpl1Event) has been removed.
 
     debug(BPL_DEBUG, "switchBitplaneDmaOff: \n");
 
     // Clear the event table
     for (int i = 0x18; i < HPOS_CNT; dmaEvent[i++] = (EventID)0);
     updateJumpTable();
-
-    dmaFirstBpl1Event = 0;
-    dmaLastBpl1Event = 0;
 
     // Clear any pending event in the BPL slot
     cancel(BPL_SLOT);
