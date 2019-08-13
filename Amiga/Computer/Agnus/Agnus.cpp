@@ -1451,7 +1451,6 @@ Agnus::hsyncHandler()
     // Make sure we really reached the end of the line
     if (pos.h != HPOS_MAX) { dump(); assert(false); }
 
-
     //
     // Let other components finish up the current line
     //
@@ -1502,15 +1501,6 @@ Agnus::hsyncHandler()
     // Initialize variables which keep values for certain trigger positions
     dmaconAtDDFStrt = dmacon;
 
-    // Check if this line is a bitplane DMA line
-    bool bplDmaArea = inBplDmaArea();
-
-    // Update the event table if the value has changed
-    if (bplDmaArea ^ oldBplDmaArea) {
-        hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
-        oldBplDmaArea = bplDmaArea;
-    }
-
     // Check if we have reached line 25 (sprite DMA starts here)
     if (pos.v == 25) {
         if ((dmacon & DMAEN) && (dmacon & SPREN)) {
@@ -1520,25 +1510,6 @@ Agnus::hsyncHandler()
             for (unsigned i = 0; i < 8; i++) { sprVStop[i] = 25; }
         }
     }
-
-
-    //
-    // Determine the disk, audio and sprite DMA status for the next line
-    //
-
-    if (dmacon & DMAEN) {
-
-        // Copy DMA enable bits from dmacon
-        dmaDAS = dmacon & 0b111111;
-
-        // Disable sprites outside the sprite DMA area
-        if (pos.v < 25 || pos.v >= frameInfo.numLines - 1) dmaDAS &= 0b011111;
-
-    } else {
-
-        dmaDAS = 0;
-    }
-
 
     //
     // Update frame flipflops
@@ -1572,6 +1543,35 @@ Agnus::hsyncHandler()
 
     ddfstrtReached = ddfstrt;
     ddfstopReached = ddfstop;
+
+    //
+    // Determine the bitplane DMA status for the line to come
+    //
+
+    bool bplDmaArea = ddfVFlop && activeBitplanes && bplDMA();
+
+    // Update the event table if the value has changed
+    if (bplDmaArea ^ oldBplDmaArea) {
+        hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
+        oldBplDmaArea = bplDmaArea;
+    }
+
+    //
+    // Determine the disk, audio and sprite DMA status for the line to come
+    //
+
+    if (dmacon & DMAEN) {
+
+        // Copy DMA enable bits from dmacon
+        dmaDAS = dmacon & 0b111111;
+
+        // Disable sprites outside the sprite DMA area
+        if (pos.v < 25 || pos.v >= frameInfo.numLines - 1) dmaDAS &= 0b011111;
+
+    } else {
+
+        dmaDAS = 0;
+    }
 
     //
     // Process pending work items
