@@ -37,7 +37,12 @@ class MyToolbar: NSToolbar {
             pause?.image = NSImage.init(named: "continueTemplate")
             pauseButton.label = "Run"
         }
-        
+
+        // Change the label of reset button. If we don't do that, the
+        // label color does not change (at least in macOS Mojave)
+        resetButton.label = ""
+        resetButton.label = "Reset"
+
         validateJoystickToolbarItems()
     }
     

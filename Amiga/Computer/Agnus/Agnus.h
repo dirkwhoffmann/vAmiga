@@ -360,6 +360,13 @@ public:
     // The DMA control register
     uint16_t dmacon;
 
+    /* Value of dmacon at the DDFSTRT trigger cycle.
+     * This variable is set at the beginning of each rasterline and updated
+     * on-the-fly when dmacon changes before the trigger conditions has been
+     * reached.
+     */
+    uint16_t dmaconAtDDFStrt;
+
     // This value is updated in the hsync handler with the lowest 6 bits of
     // dmacon if the master enable bit is 1 or set to 0 if the master enable
     // bit is 0. It is used as an offset into the DAS lookup tables.
@@ -493,6 +500,7 @@ public:
         & diwHFlopOff
         & bplcon0
         & dmacon
+        & dmaconAtDDFStrt
         & dmaDAS
         & dskpt
         & diwstrt

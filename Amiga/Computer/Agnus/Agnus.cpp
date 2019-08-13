@@ -745,6 +745,9 @@ Agnus::pokeDMACON(uint16_t oldValue, uint16_t newValue)
 {
     assert(oldValue != newValue);
 
+    // Update variable dmaconAtDDFStrt if DDFSTRT has not been reached yet
+    if (pos.h + 2 < ddfstrtReached) dmaconAtDDFStrt = newValue;
+
     bool oldDMAEN = (oldValue & DMAEN);
     bool oldBPLEN = (oldValue & BPLEN) && oldDMAEN;
     bool oldCOPEN = (oldValue & COPEN) && oldDMAEN;
@@ -778,10 +781,10 @@ Agnus::pokeDMACON(uint16_t oldValue, uint16_t newValue)
 
         if (newBPLEN) {
 
-            // Bitplane DMA is switched off
+            // Bitplane DMA is switched on
 
             // Check if the current line is affected by the change
-            if (pos.h + 2 < ddfstrtReached) {
+            if (pos.h + 2 < ddfstrtReached || bplDMA(dmaconAtDDFStrt)) {
 
                 bool hires = Denise::hires(bplcon0);
                 // We have to assign dmacon here, because if we don't, the
@@ -1496,6 +1499,9 @@ Agnus::hsyncHandler()
         }
     }
 
+    // Initialize variables which keep values for certain trigger positions
+    dmaconAtDDFStrt = dmacon;
+
     // Check if this line is a bitplane DMA line
     bool bplDmaArea = inBplDmaArea();
 
@@ -1555,46 +1561,6 @@ Agnus::hsyncHandler()
 
     // Vertical DDF flipflop
     ddfVFlop = !inVBlank() && !inLastRasterline() && diwVFlop;
-
-    /*
-     diwVFlop                           // Vertical DIW flipflop
-     && pos.v >= 26                     // Outside VBLANK area
-     && pos.v < frameInfo.numLines - 1
-
-     bool doBplDma = belowVBlank() && !lastRasterline() && diwVFlop && bplDMA();
-     if (doBplDma ^ ddfVFlop) {
-        if (isBplDmaLine()) {
-            ddfHFlopOn = ddfHstrt;
-            ddfHFlopOff = ddfHstop;
-            switchBitplaneDmaOn();
-        } else {
-            ddfHFlopOn = -1;
-            ddfHFlopOff = -1;
-        }
-     }
-     void updateDdfHFlop() { updateDdfHFlop(bplcon0); }
-     void updateDdfHFlop(int16_t hpos, uint16_t bplcon0) {
-        ???
-     }
-
-     void isBplDmaLine() {
-
-        bool doBplDma = belowVBlank() && !lastRasterline() && diwVFlop && bplDMA();
-        rerturn doBplDma;
-     }
-
-
-     bool belowVBlank() { return pos.h > 25; }
-     bool lastRasterline() { return pos.h == frameInfo.numLines - 1; }
-
-    if (pos.v == diwVstop && diwVFlop) {
-        diwVFlop = false;
-        updateBitplaneDma();
-    }
-    TODO:
-
-
-     */
 
 
     // Horizontal DDF flipflop
