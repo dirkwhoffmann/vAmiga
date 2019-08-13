@@ -284,25 +284,13 @@ Agnus::startOfNextFrame()
     return startOfCurrentFrame() + cyclesInCurrentFrame();
 }
 
-/*
 bool
-Agnus::inBplDmaArea() {
+Agnus::inBplDmaLine(uint16_t dmacon) {
 
     return
-    diwVFlop                           // Vertical DIW flipflop
-    && pos.v >= 26                     // Outside VBLANK area
-    && pos.v < frameInfo.numLines - 1  // Not in last line of frame
+    ddfVFlop                           // Outside VBLANK, inside DIW
     && activeBitplanes                 // At least one bitplane enabled
-    && bplDMA();                       // Bitplane DMA enabled
-}
-*/
-bool
-Agnus::inBplDmaArea() {
-
-    return
-    ddfVFlop
-    && activeBitplanes                 // At least one bitplane enabled
-    && bplDMA();                       // Bitplane DMA enabled
+    && bplDMA(dmacon);                 // Bitplane DMA enabled
 }
 
 Cycle
@@ -500,11 +488,15 @@ Agnus::clearDMAEventTable()
 }
 
 void
-Agnus::allocateBplSlots(int bpu, bool hires, int first, int last)
+Agnus::allocateBplSlots(uint16_t dmacon, uint16_t bplcon0, int first, int last)
 {
-    assert(bpu >= 0 && bpu <= 6);
-    assert(hires == 0 || hires == 1);
+    int bpu = Denise::bpu(bplcon0);
+    bool hires = Denise::hires(bplcon0);
 
+    // Set number of bitplanes to 0 if we are not in a bitplane DMA line
+    if (!inBplDmaLine(dmacon)) bpu = 0;
+
+    // Allocate slots
     if (hires) {
         for (unsigned i = first; i <= last; i++) {
             dmaEvent[i] = inHiresDmaArea(i) ? bitplaneDMA[1][bpu][i] : EVENT_NONE;
@@ -516,12 +508,6 @@ Agnus::allocateBplSlots(int bpu, bool hires, int first, int last)
     }
 
     updateJumpTable();
-}
-
-void
-Agnus::allocateBplSlots(int bpu, bool hires, int first)
-{
-    allocateBplSlots(bpu, hires, first, HPOS_MAX);
 }
 
 void
@@ -592,7 +578,7 @@ Agnus::updateBitplaneDma()
     debug(BPL_DEBUG, "updateBitplaneDma()\n");
 
     // Determine if bitplane DMA has to be on or off
-    bool bplDma = inBplDmaArea();
+    bool bplDma = inBplDmaLine();
 
     // Update the event table accordingly
     bplDma ? switchBitplaneDmaOn() : switchBitplaneDmaOff();
@@ -741,37 +727,37 @@ Agnus::pokeDMACON(uint16_t value)
 }
 
 void
-Agnus::pokeDMACON(uint16_t oldValue, uint16_t newValue)
+Agnus::pokeDMACON(uint16_t oldDmacon, uint16_t newDmacon)
 {
-    assert(oldValue != newValue);
+    assert(oldDmacon != newDmacon);
 
     // Update variable dmaconAtDDFStrt if DDFSTRT has not been reached yet
-    if (pos.h + 2 < ddfstrtReached) dmaconAtDDFStrt = newValue;
+    if (pos.h + 2 < ddfstrtReached) dmaconAtDDFStrt = newDmacon;
 
-    bool oldDMAEN = (oldValue & DMAEN);
-    bool oldBPLEN = (oldValue & BPLEN) && oldDMAEN;
-    bool oldCOPEN = (oldValue & COPEN) && oldDMAEN;
-    bool oldBLTEN = (oldValue & BLTEN) && oldDMAEN;
-    bool oldSPREN = (oldValue & SPREN) && oldDMAEN;
+    bool oldDMAEN = (oldDmacon & DMAEN);
+    bool oldBPLEN = (oldDmacon & BPLEN) && oldDMAEN;
+    bool oldCOPEN = (oldDmacon & COPEN) && oldDMAEN;
+    bool oldBLTEN = (oldDmacon & BLTEN) && oldDMAEN;
+    bool oldSPREN = (oldDmacon & SPREN) && oldDMAEN;
     // bool oldDSKEN = (oldValue & DSKEN) && oldDMAEN;
-    bool oldAU0EN = (oldValue & AU0EN) && oldDMAEN;
-    bool oldAU1EN = (oldValue & AU1EN) && oldDMAEN;
-    bool oldAU2EN = (oldValue & AU2EN) && oldDMAEN;
-    bool oldAU3EN = (oldValue & AU3EN) && oldDMAEN;
+    bool oldAU0EN = (oldDmacon & AU0EN) && oldDMAEN;
+    bool oldAU1EN = (oldDmacon & AU1EN) && oldDMAEN;
+    bool oldAU2EN = (oldDmacon & AU2EN) && oldDMAEN;
+    bool oldAU3EN = (oldDmacon & AU3EN) && oldDMAEN;
 
-    bool newDMAEN = (newValue & DMAEN);
-    bool newBPLEN = (newValue & BPLEN) && newDMAEN;
-    bool newCOPEN = (newValue & COPEN) && newDMAEN;
-    bool newBLTEN = (newValue & BLTEN) && newDMAEN;
-    bool newSPREN = (newValue & SPREN) && newDMAEN;
+    bool newDMAEN = (newDmacon & DMAEN);
+    bool newBPLEN = (newDmacon & BPLEN) && newDMAEN;
+    bool newCOPEN = (newDmacon & COPEN) && newDMAEN;
+    bool newBLTEN = (newDmacon & BLTEN) && newDMAEN;
+    bool newSPREN = (newDmacon & SPREN) && newDMAEN;
     // bool newDSKEN = (newValue & DSKEN) && newDMAEN;
-    bool newAU0EN = (newValue & AU0EN) && newDMAEN;
-    bool newAU1EN = (newValue & AU1EN) && newDMAEN;
-    bool newAU2EN = (newValue & AU2EN) && newDMAEN;
-    bool newAU3EN = (newValue & AU3EN) && newDMAEN;
+    bool newAU0EN = (newDmacon & AU0EN) && newDMAEN;
+    bool newAU1EN = (newDmacon & AU1EN) && newDMAEN;
+    bool newAU2EN = (newDmacon & AU2EN) && newDMAEN;
+    bool newAU3EN = (newDmacon & AU3EN) && newDMAEN;
 
     // Inform the delegates
-    blitter.pokeDMACON(oldValue, newValue);
+    blitter.pokeDMACON(oldDmacon, newDmacon);
 
     // Bitplane DMA
     if (oldBPLEN ^ newBPLEN) {
@@ -786,25 +772,19 @@ Agnus::pokeDMACON(uint16_t oldValue, uint16_t newValue)
             // Check if the current line is affected by the change
             if (pos.h + 2 < ddfstrtReached || bplDMA(dmaconAtDDFStrt)) {
 
-                bool hires = Denise::hires(bplcon0);
-                // We have to assign dmacon here, because if we don't, the
-                // the call to inBplDmaArea() gives us the wrong result.
-                // This is very ugly. Think about a better way to judge if
-                // DMA should be on or off
-                dmacon = newValue;
-                allocateBplSlots(inBplDmaArea() ? activeBitplanes : 0, hires, pos.h + 2);
+                allocateBplSlots(newDmacon, bplcon0, pos.h + 2);
                 scheduleNextBplEvent();
             }
 
         } else {
 
             // Bitplane DMA is switched off
-            allocateBplSlots(0, 0, pos.h + 2);
+            allocateBplSlots(newDmacon, bplcon0, pos.h + 2);
             cancel(BPL_SLOT);
         }
 
         // Let Denise know about the change
-        denise->pokeDMACON(oldValue, newValue);
+        denise->pokeDMACON(oldDmacon, newDmacon);
     }
     
     // Copper DMA
@@ -1337,15 +1317,15 @@ Agnus::pokeBPLCON0(uint16_t value)
 }
 
 void
-Agnus::pokeBPLCON0(uint16_t oldValue, uint16_t newValue)
+Agnus::pokeBPLCON0(uint16_t oldBplcon0, uint16_t newBplcon0)
 {
-    assert(oldValue != newValue);
+    assert(oldBplcon0 != newBplcon0);
 
     // Update the DMA allocation table in the next rasterline
     hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
 
     // Check if the hires bit or one of the BPU bits have been modified
-    if ((oldValue ^ newValue) & 0xF000) {
+    if ((oldBplcon0 ^ newBplcon0) & 0xF000) {
 
         /* Determine the number of enabled bitplanes.
          *
@@ -1353,8 +1333,8 @@ Agnus::pokeBPLCON0(uint16_t oldValue, uint16_t newValue)
          *     - In lores mode, at most 6 bitplanes are possible.
          *     - Invalid numbers disable bitplane DMA.
          */
-        bool hires = (newValue & 0x8000);
-        activeBitplanes = (newValue & 0x7000) >> 12;
+        bool hires = (newBplcon0 & 0x8000);
+        activeBitplanes = (newBplcon0 & 0x7000) >> 12;
         if (activeBitplanes > (hires ? 4 : 6)) activeBitplanes = 0;
 
         /* TODO:
@@ -1365,7 +1345,7 @@ Agnus::pokeBPLCON0(uint16_t oldValue, uint16_t newValue)
          */
 
         // Update the DMA allocation table with a 2 cycle delay
-        allocateBplSlots(inBplDmaArea() ? activeBitplanes : 0, hires, pos.h + 2);
+        allocateBplSlots(dmacon, newBplcon0, pos.h + 2);
 
         // Since the table has changed, we also need to update the event slot
         scheduleBplEventForCycle(pos.h);
@@ -1548,12 +1528,12 @@ Agnus::hsyncHandler()
     // Determine the bitplane DMA status for the line to come
     //
 
-    bool bplDmaArea = ddfVFlop && activeBitplanes && bplDMA();
+    bool bplDmaLine = inBplDmaLine();
 
     // Update the event table if the value has changed
-    if (bplDmaArea ^ oldBplDmaArea) {
+    if (bplDmaLine ^ oldBplDmaLine) {
         hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
-        oldBplDmaArea = bplDmaArea;
+        oldBplDmaLine = bplDmaLine;
     }
 
     //

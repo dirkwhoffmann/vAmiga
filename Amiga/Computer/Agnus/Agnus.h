@@ -405,8 +405,8 @@ public:
     // Recorded DMA values for all cycles in the current rasterline
     uint16_t busValue[HPOS_CNT];
 
-    // Unsed in the hsyncHandler to remember the result of inBplDmaArea
-    bool oldBplDmaArea;
+    // Unsed in the hsyncHandler to remember the result of inBplDmaLine
+    bool oldBplDmaLine;
 
     
     //
@@ -604,9 +604,9 @@ public:
     // Indicates if the electron beam is in the last rasterline
     bool inLastRasterline() { return pos.v == frameInfo.numLines - 1; }
 
-    // Indicates if the current rasterline is a bitplane DMA line
-    // DEPRECATED
-    bool inBplDmaArea();
+    // Indicates if the electron beam is in a line where bitplane DMA is enabled
+    bool inBplDmaLine() { return inBplDmaLine(dmacon); }
+    bool inBplDmaLine(uint16_t dmacon);
 
 
     //
@@ -719,8 +719,10 @@ public:
     void clearDMAEventTable();
 
     // Allocates the bitplane DMA slots
-    void allocateBplSlots(int bpu, bool hires, int first, int last);
-    void allocateBplSlots(int bpu, bool hires, int first);
+    void allocateBplSlots(uint16_t dmacon, uint16_t bplcon0, int first, int last = HPOS_MAX);
+    void allocateBplSlots(int first, int last = HPOS_MAX) {
+        allocateBplSlots(dmacon, bplcon0, first, last);
+    }
 
     // Adds or removes the bitplane DMA events to the DMA event table.
     void switchBitplaneDmaOn();

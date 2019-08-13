@@ -555,7 +555,7 @@ void
 Denise::drawSprites()
 {
     // Only proceed if we are not inside the upper or lower border area
-    if (!agnus->inBplDmaArea()) return;
+    if (!agnus->inBplDmaLine()) return;
 
     // Sprites 6 and 7
     if (armed & 0b11000000) {
