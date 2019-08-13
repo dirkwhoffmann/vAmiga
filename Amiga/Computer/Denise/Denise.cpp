@@ -360,8 +360,8 @@ Denise::draw(int pixels)
 
     int16_t currentPixel = ppos(agnus->pos.h);
 
-    uint32_t maskOdd = 0x8000 << scrollLoresOdd;
-    uint32_t maskEven = 0x8000 << scrollLoresEven;
+    uint32_t maskOdd = 0x8000 << scrollLoresOdd * (HIRES ? 2 : 1);
+    uint32_t maskEven = 0x8000 << scrollLoresEven * (HIRES ? 2 : 1);
 
     for (int i = 0; i < pixels; i++) {
 
