@@ -701,10 +701,10 @@ Denise::drawBorder()
 #endif
 
     // Check if the horizontal flipflop was set somewhere in this rasterline
-    bool hFlopWasSet = agnus->hFlop || agnus->hFlopOn != -1;
+    bool hFlopWasSet = agnus->diwHFlop || agnus->diwHFlopOn != -1;
 
     // Check if the whole line is blank (drawn in background color)
-    bool lineIsBlank = !agnus->vFlop || !hFlopWasSet;
+    bool lineIsBlank = !agnus->diwVFlop || !hFlopWasSet;
 
     // Draw the border
     if (lineIsBlank) {
@@ -716,16 +716,16 @@ Denise::drawBorder()
     } else {
 
         // Draw left border
-        if (!agnus->hFlop && agnus->hFlopOn != -1) {
-            for (int i = 0; i < 2 * agnus->hFlopOn; i++) {
+        if (!agnus->diwHFlop && agnus->diwHFlopOn != -1) {
+            for (int i = 0; i < 2 * agnus->diwHFlopOn; i++) {
                 assert(i < sizeof(iBuffer));
                 iBuffer[i] = borderL;
             }
         }
 
         // Draw right border
-        if (agnus->hFlopOff != -1) {
-            for (int i = 2 * agnus->hFlopOff; i <= LAST_PIXEL; i++) {
+        if (agnus->diwHFlopOff != -1) {
+            for (int i = 2 * agnus->diwHFlopOff; i <= LAST_PIXEL; i++) {
                 assert(i < sizeof(iBuffer));
                 iBuffer[i] = borderR;
             }

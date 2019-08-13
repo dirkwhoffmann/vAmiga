@@ -261,15 +261,15 @@ public:
      * the value of the horizontal flipflop inside or at the end of a
      * rasterline, hFlopOn and hFlopOff need to be evaluated.
      */
-    bool vFlop;
-    bool hFlop;
+    bool diwVFlop;
+    bool diwHFlop;
 
     /* At the end of a rasterline, these variable conains the pixel coordinates
      * where the hpos counter matched diwHstrt or diwHstop, respectively. A
      * value of -1 indicates that no matching event took place.
      */
-    int16_t hFlopOn;
-    int16_t hFlopOff;
+    int16_t diwHFlopOn;
+    int16_t diwHFlopOff;
 
 
     //
@@ -474,10 +474,10 @@ public:
         & diwHstop
         & diwVstrt
         & diwVstop
-        & vFlop
-        & hFlop
-        & hFlopOn
-        & hFlopOff
+        & diwVFlop
+        & diwHFlop
+        & diwHFlopOn
+        & diwHFlopOff
         & bplcon0
         & dmacon
         & dmaDAS
@@ -577,6 +577,7 @@ public:
 public:
 
     // Indicates if the current rasterline is a bitplane DMA line
+    // DEPRECATED
     bool inBplDmaArea();
 
 

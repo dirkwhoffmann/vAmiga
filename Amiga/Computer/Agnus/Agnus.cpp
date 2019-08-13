@@ -288,7 +288,7 @@ bool
 Agnus::inBplDmaArea() {
 
     return
-    vFlop                              // Vertical DIW flipflop
+    diwVFlop                              // Vertical DIW flipflop
     && pos.v >= 26                     // Outside VBLANK area
     && pos.v < frameInfo.numLines - 1  // Not in last line of frame
     && activeBitplanes                 // At least one bitplane enabled
@@ -1038,14 +1038,14 @@ Agnus::setDIWSTRT(uint16_t value)
     if (cur < diwHstrt && cur < newDiwHstrt) {
 
         debug(DIW_DEBUG, "Updating hFlopOn immediately at %d\n", cur);
-        hFlopOn = newDiwHstrt;
+        diwHFlopOn = newDiwHstrt;
     }
 
     // (3)
     if (newDiwHstrt < cur && cur < diwHstrt) {
 
         debug(DIW_DEBUG, "hFlop not switched on in current line\n");
-        hFlopOn = -1;
+        diwHFlopOn = -1;
     }
 
     diwVstrt = newDiwVstrt;
@@ -1081,14 +1081,14 @@ Agnus::setDIWSTOP(uint16_t value)
     if (cur < diwHstop && cur < newDiwHstop) {
 
         debug(DIW_DEBUG, "Updating hFlopOff immediately at %d\n", cur);
-        hFlopOff = newDiwHstop;
+        diwHFlopOff = newDiwHstop;
     }
 
     // (3) (see setDIWSTRT)
     if (newDiwHstop < cur && cur < diwHstop) {
 
         debug(DIW_DEBUG, "hFlop not switched off in current line\n");
-        hFlopOff = -1;
+        diwHFlopOff = -1;
     }
 
     diwVstop = newDiwVstop;
@@ -1529,19 +1529,19 @@ Agnus::hsyncHandler()
     //
 
     // Vertical flipflop
-    if (pos.v == diwVstrt && !vFlop) {
-        vFlop = true;
+    if (pos.v == diwVstrt && !diwVFlop) {
+        diwVFlop = true;
         updateBitplaneDma();
     }
-    if (pos.v == diwVstop && vFlop) {
-        vFlop = false;
+    if (pos.v == diwVstop && diwVFlop) {
+        diwVFlop = false;
         updateBitplaneDma();
     }
 
     // Horizontal DIW flipflop
-    hFlop = (hFlopOff != -1) ? false : (hFlopOn != -1) ? true : hFlop;
-    hFlopOn = diwHstrt;
-    hFlopOff = diwHstop;
+    diwHFlop = (diwHFlopOff != -1) ? false : (diwHFlopOn != -1) ? true : diwHFlop;
+    diwHFlopOn = diwHstrt;
+    diwHFlopOff = diwHstop;
 
     //
     // Update the DDF related variables
@@ -1624,8 +1624,8 @@ Agnus::vsyncHandler()
     pos.v = 0;
 
     // Initialize the DIW flipflops
-    vFlop = false;
-    hFlop = true; 
+    diwVFlop = false;
+    diwHFlop = true; 
     
     // CIA A counts VSYNCs
     amiga->ciaA.incrementTOD();
