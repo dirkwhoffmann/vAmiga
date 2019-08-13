@@ -220,7 +220,10 @@ public:
      * and stop is one scan line. The resolution of horizontal start and stop
      * is one low-resolution pixel.
      *
-     * The current implementation is based on the following assumptions:
+     * I haven't found detailed information about the how the DIW logic is
+     * implemented in hardware inside Agnus. If you have such information,
+     * please let me know. For the time being, I base my implementation on the
+     * following assumptions:
      *
      * 1. Denise contains a single flipflop controlling the display window
      *    horizontally. The flop is cleared inside the border area and set
@@ -286,7 +289,10 @@ public:
      * DDFSTRT and DDFSTOP have a resolution of four lowres pixels (unlike
      * DIWSTRT and DIWSTOP which have a resolution of one lores pixels).
      *
-     * The current implementation is based on the following assumptions:
+     * I haven't found detailed information about the how the DDF logic is
+     * implemented in hardware inside Agnus. If you have such information,
+     * please let me know. For the time being, I base my implementation on the
+     * following assumptions:
      *
      * 1. The four-pixel resolution is achieved by ignoring the two lower bits
      *    in DDFSTRT and DDFSTOP.
@@ -297,7 +303,7 @@ public:
      *    the lower two bits are always 0, this is equivalent to adding 4).
      * 3. The actual DMA stop position depends on both DDFSTRT and DDFSTOP.
      *    Hence, if DDFSTRT changes, the stop position needs to be recomputed
-     *    even if DDFSTOP hasn't changed at all.
+     *    even if DDFSTOP hasn't changed.
      * 4. Agnus switches bitplane DMA on and off by constantly comparing the
      *    horizontal raster position with the DMA start and stop positions that
      *    have been computed out of DDFSTRT and DDFSTOP. Hence, if DDFSTRT
@@ -322,6 +328,13 @@ public:
      */
     int16_t ddfstrtReached;
     int16_t ddfstopReached;
+
+    /* DDF flipflops
+     *
+     * The vertical DDF flipflop needs to be set to enable bitplane DMA.
+     */
+    bool ddfVFlop;
+    // bool ddfHFlop;
 
 
     // The actual data fetch window
@@ -488,6 +501,7 @@ public:
         & ddfstop
         & ddfstrtReached
         & ddfstopReached
+        & ddfVFlop
         & audlc
         & audlcold
         & bplpt
@@ -539,7 +553,7 @@ public:
 
 
     //
-    // Investigating the current frame
+    // Examining the current frame
     //
 
 public:
@@ -571,10 +585,16 @@ public:
 
 
     //
-    // Investigating the current rasterline
+    // Examining the current rasterline
     //
 
 public:
+
+    // Indicates if the electron beam is inside the VBLANK area
+    bool inVBlank() { return pos.v < 26; }
+
+    // Indicates if the electron beam is in the last rasterline
+    bool inLastRasterline() { return pos.v == frameInfo.numLines - 1; }
 
     // Indicates if the current rasterline is a bitplane DMA line
     // DEPRECATED
