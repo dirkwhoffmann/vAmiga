@@ -357,6 +357,13 @@ public:
     // A copy of BPLCON0 (Denise has another copy)
     uint16_t bplcon0;
 
+    /* Value of bplcon0 at the DDFSTRT trigger cycle.
+     * This variable is set at the beginning of each rasterline and updated
+     * on-the-fly when dmacon changes before the trigger conditions has been
+     * reached.
+     */
+    uint16_t bplcon0AtDDFStrt;
+
     // The DMA control register
     uint16_t dmacon;
 
@@ -499,6 +506,7 @@ public:
         & diwHFlopOn
         & diwHFlopOff
         & bplcon0
+        & bplcon0AtDDFStrt
         & dmacon
         & dmaconAtDDFStrt
         & dmaDAS
@@ -605,8 +613,8 @@ public:
     bool inLastRasterline() { return pos.v == frameInfo.numLines - 1; }
 
     // Indicates if the electron beam is in a line where bitplane DMA is enabled
-    bool inBplDmaLine() { return inBplDmaLine(dmacon); }
-    bool inBplDmaLine(uint16_t dmacon);
+    bool inBplDmaLine() { return inBplDmaLine(dmacon, bplcon0); }
+    bool inBplDmaLine(uint16_t dmacon, uint16_t bplcon0);
 
 
     //

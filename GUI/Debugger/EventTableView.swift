@@ -42,7 +42,7 @@ extension EventTableView: NSTableViewDataSource {
         let willTrigger = (info.trigger != INT64_MAX)
         
         switch tableColumn?.identifier.rawValue {
-            
+
         case "slot":    return String.init(cString: info.slotName)
         case "event":   return String.init(cString: info.eventName)
         case "trigger":

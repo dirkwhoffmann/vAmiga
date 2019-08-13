@@ -285,11 +285,12 @@ Agnus::startOfNextFrame()
 }
 
 bool
-Agnus::inBplDmaLine(uint16_t dmacon) {
+Agnus::inBplDmaLine(uint16_t dmacon, uint16_t bplcon0) {
 
     return
     ddfVFlop                           // Outside VBLANK, inside DIW
-    && activeBitplanes                 // At least one bitplane enabled
+//    && activeBitplanes                 // At least one bitplane enabled
+    && Denise::bpu(bplcon0)            // At least one bitplane enabled
     && bplDMA(dmacon);                 // Bitplane DMA enabled
 }
 
@@ -494,7 +495,7 @@ Agnus::allocateBplSlots(uint16_t dmacon, uint16_t bplcon0, int first, int last)
     bool hires = Denise::hires(bplcon0);
 
     // Set number of bitplanes to 0 if we are not in a bitplane DMA line
-    if (!inBplDmaLine(dmacon)) bpu = 0;
+    if (!inBplDmaLine(dmacon, bplcon0)) bpu = 0;
 
     // Allocate slots
     if (hires) {
@@ -1321,6 +1322,9 @@ Agnus::pokeBPLCON0(uint16_t oldBplcon0, uint16_t newBplcon0)
 {
     assert(oldBplcon0 != newBplcon0);
 
+    // Update variable bplcon0AtDDFStrt if DDFSTRT has not been reached yet
+    if (pos.h + 2 < ddfstrtReached) bplcon0AtDDFStrt = newBplcon0;
+
     // Update the DMA allocation table in the next rasterline
     hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
 
@@ -1480,7 +1484,8 @@ Agnus::hsyncHandler()
 
     // Initialize variables which keep values for certain trigger positions
     dmaconAtDDFStrt = dmacon;
-
+    bplcon0AtDDFStrt = bplcon0;
+    
     // Check if we have reached line 25 (sprite DMA starts here)
     if (pos.v == 25) {
         if ((dmacon & DMAEN) && (dmacon & SPREN)) {
