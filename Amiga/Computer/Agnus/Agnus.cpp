@@ -565,15 +565,10 @@ Agnus::switchBitplaneDmaOn()
             assert(dmaEvent[dmaFirstBpl1Event] == BPL_H1);
             assert(dmaEvent[dmaLastBpl1Event] == BPL_H1);
 
-            denise->firstCanvasPixel = (dmaFirstBpl1Event * 4) + 6;
-            denise->lastCanvasPixel = (dmaLastBpl1Event * 4) + 6 + 15;
-
         } else {
 
             dmaFirstBpl1Event = 0;
             dmaLastBpl1Event = 0;
-            denise->firstCanvasPixel = 0;
-            denise->lastCanvasPixel = 0;
         }
 
     } else {
@@ -587,15 +582,10 @@ Agnus::switchBitplaneDmaOn()
             assert(dmaEvent[dmaFirstBpl1Event] == BPL_L1);
             assert(dmaEvent[dmaLastBpl1Event] == BPL_L1);
 
-            denise->firstCanvasPixel = (dmaFirstBpl1Event * 4) + 6;
-            denise->lastCanvasPixel = (dmaLastBpl1Event * 4) + 6 + 31;
-
         } else {
 
             dmaFirstBpl1Event = 0;
             dmaLastBpl1Event = 0;
-            denise->firstCanvasPixel = 0;
-            denise->lastCanvasPixel = 0;
         }
     }
 
@@ -611,7 +601,8 @@ void
 Agnus::switchBitplaneDmaOff()
 {
     // Quick-exit if the event table is free of any bitplane DMA events
-    if (dmaFirstBpl1Event == 0) return;
+    // TODO: We need a reliable quick-exit condition
+    // if (dmaFirstBpl1Event == 0) return;
 
     debug(BPL_DEBUG, "switchBitplaneDmaOff: \n");
 
@@ -621,8 +612,6 @@ Agnus::switchBitplaneDmaOff()
 
     dmaFirstBpl1Event = 0;
     dmaLastBpl1Event = 0;
-    denise->firstCanvasPixel = 0;
-    denise->lastCanvasPixel = 0;
 
     // Clear any pending event in the BPL slot
     cancel(BPL_SLOT);

@@ -230,13 +230,7 @@ private:
 
 public:
 
-    // Position of the first and the last pixel covered by bitplane DMA
-    int16_t firstCanvasPixel;
-    int16_t lastCanvasPixel;
-
-    // The current rasterline has been drawn up to this horizontal position
-    // DEPRECATED
-    // short currentPixel;
+ 
 
 
     //
@@ -307,9 +301,7 @@ public:
         & scrollLoresEven
         & scrollHiresOdd
         & scrollHiresEven
-        & conRegHistory
-        & firstCanvasPixel
-        & lastCanvasPixel;
+        & conRegHistory;
     }
 
     
