@@ -622,9 +622,7 @@ Denise::drawSprite()
 {
     assert(x >= 0 && x <= 7);
 
-    // Check if the sprite is visible (EXPERIMENTAL AND NOT ACCURATE)
-    // if (sprhstrt[x] > spriteClipEnd) return;
-    // if (2 * agnus->sprEnableReached > sprhstrt[x]) return;
+    // TODO: Add a suitable quick-exit condition here
 
     const uint16_t depth[8] = { Z_SP0, Z_SP1, Z_SP2, Z_SP3, Z_SP4, Z_SP5, Z_SP6, Z_SP7 };
     uint16_t z = depth[x];

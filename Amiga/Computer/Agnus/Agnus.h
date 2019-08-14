@@ -351,27 +351,6 @@ public:
 
 
     //
-    // Sprite enable logic
-    //
-
-    /* In general, sprites can be drawn if we are in a bitplane DMA line as
-     * testes by function inBplDmaLine(). If BPLCON0 changes in the middle
-     * of rasterline, the following conditions are likely to apply on a real
-     * Amiga:
-     *
-     * 1. Enabling sprites is always possible, even at high DMA cycle numbers.
-     * 2. Disbabling sprites only has an effect until the DDFSTRT position
-     *    has been reached. If sprite drawing was enabled at that position,
-     *    it can't be disabled in the same rasterline any more.
-     */
-
-    /* DMA cycle where sprite drawing get enabled in this line
-     * A This variable is set to INT16_MAX if sprite drawing is disabled
-     */
-    int16_t sprEnableReached;
-
-
-    //
     // Registers
     //
 
@@ -526,7 +505,6 @@ public:
         & diwHFlop
         & diwHFlopOn
         & diwHFlopOff
-        & sprEnableReached
         & bplcon0
         & bplcon0AtDDFStrt
         & dmacon

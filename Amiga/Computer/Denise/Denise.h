@@ -134,14 +134,22 @@ public:
     uint8_t armed;
 
     /* Sprite clipping window
+     *
      * The clipping window determines where sprite pixels can be drawn.
 
      *  spriteClipBegin : The first possible sprite pixel in this rasterline
      *    spriteClipEnd : The last possible sprite pixel in this rasterline + 1
      *
      * The variables are set in the hsyncHandler to their expected values.
-     * Note: If DMACON or BPLCON0 are modified in the middle of a rasterline,
-     * these values may change, too.
+     * In general, sprites can be drawn if we are in a bitplane DMA line as
+     * testes by function inBplDmaLine(). If BPLCON0 changes in the middle
+     * of rasterline, the sprite clipping window is adjusted, too. The
+     * following conditions are likely to apply on a real Amiga:
+     *
+     * 1. Enabling sprites is always possible, even at high DMA cycle numbers.
+     * 2. Disbabling sprites only has an effect until the DDFSTRT position
+     *    has been reached. If sprite drawing was enabled at that position,
+     *    it can't be disabled in the same rasterline any more.
      */
     PixelPos spriteClipBegin;
     PixelPos spriteClipEnd;

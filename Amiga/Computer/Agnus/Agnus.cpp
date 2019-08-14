@@ -1360,16 +1360,12 @@ Agnus::pokeBPLCON0(uint16_t oldBplcon0, uint16_t newBplcon0)
         if (inBplDmaLine(dmacon, newBplcon0)) {
 
             // Enable sprite drawing
-            if (sprEnableReached > pos.h + 2) sprEnableReached = pos.h + 2;
-
             int16_t begin = MAX(4 * pos.h + 8, 4 * ddfstrtReached + 32);
             denise->enlargeSpriteClippingRange(begin, HPIXELS);
 
         } else {
 
             // Disable sprite drawing if DDFSTRT hasn't been reached yet
-            if (pos.h <= ddfstrtReached + 4) sprEnableReached = INT16_MAX;
-
             if (pos.h <= ddfstrtReached + 4) {
                 denise->setSpriteClippingRange(HPIXELS, HPIXELS);
             }
@@ -1561,9 +1557,6 @@ Agnus::hsyncHandler()
     } else {
         denise->setSpriteClippingRange(HPIXELS, HPIXELS);
     }
-
-    // DEPRECATED
-    sprEnableReached = bplDmaLine ? ddfstrt : INT16_MAX;
 
 
     //
