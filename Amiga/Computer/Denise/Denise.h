@@ -133,6 +133,18 @@ public:
      */
     uint8_t armed;
 
+    /* Sprite clipping window
+     * The clipping window determines where sprite pixels can be drawn.
+
+     *  spriteClipBegin : The first possible sprite pixel in this rasterline
+     *    spriteClipEnd : The last possible sprite pixel in this rasterline + 1
+     *
+     * The variables are set in the hsyncHandler to their expected values.
+     * Note: If DMACON or BPLCON0 are modified in the middle of a rasterline,
+     * these values may change, too.
+     */
+    PixelPos spriteClipBegin;
+    PixelPos spriteClipEnd;
 
     //
     // Playfield priorities
@@ -282,6 +294,8 @@ public:
         & sprDmaState
         & attach
         & armed
+        & spriteClipBegin
+        & spriteClipEnd
         & prio1
         & prio2
         & prio12
@@ -409,6 +423,10 @@ public:
 
     // Copy data from SPRDATA and SPRDATB into the serial shift registers
     void armSprite(int x);
+
+    // Sets the sprite clipping range (begin and end are DMA cycle numbers)
+    void setSpriteClippingRange(PixelPos begin, PixelPos end);
+    void enlargeSpriteClippingRange(PixelPos begin, PixelPos end);
 
     // Extracts the sprite priorities from BPLCON2
     void updateSpritePriorities(uint16_t bplcon2);

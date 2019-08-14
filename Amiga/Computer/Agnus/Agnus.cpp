@@ -1362,11 +1362,17 @@ Agnus::pokeBPLCON0(uint16_t oldBplcon0, uint16_t newBplcon0)
             // Enable sprite drawing
             if (sprEnableReached > pos.h + 2) sprEnableReached = pos.h + 2;
 
+            int16_t begin = MAX(4 * pos.h + 8, 4 * ddfstrtReached + 32);
+            denise->enlargeSpriteClippingRange(begin, HPIXELS);
+
         } else {
 
             // Disable sprite drawing if DDFSTRT hasn't been reached yet
             if (pos.h <= ddfstrtReached + 4) sprEnableReached = INT16_MAX;
-            // if (pos.v == 0x31) debug("ddfstrtReached = %d sprEnableReached = %d\n", ddfstrtReached, sprEnableReached);
+
+            if (pos.h <= ddfstrtReached + 4) {
+                denise->setSpriteClippingRange(HPIXELS, HPIXELS);
+            }
         }
     }
 }
@@ -1545,18 +1551,30 @@ Agnus::hsyncHandler()
     ddfstopReached = ddfstop;
 
     //
-    // Determine the bitplane DMA status for the line to come
+    // Determine the sprite clipping area
     //
 
-    bool bplDmaLine = inBplDmaLine();
+   bool bplDmaLine = inBplDmaLine();
+
+    if (bplDmaLine) {
+        denise->setSpriteClippingRange(4 * ddfstrt + 32, HPIXELS);
+    } else {
+        denise->setSpriteClippingRange(HPIXELS, HPIXELS);
+    }
+
+    // DEPRECATED
+    sprEnableReached = bplDmaLine ? ddfstrt : INT16_MAX;
+
+
+    //
+    // Determine the bitplane DMA status for the line to come
+    //
 
     // Update the event table if the value has changed
     if (bplDmaLine ^ oldBplDmaLine) {
         hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
         oldBplDmaLine = bplDmaLine;
     }
-
-    sprEnableReached = bplDmaLine ? ddfstrt : INT16_MAX;
 
 
     //
@@ -1575,6 +1593,7 @@ Agnus::hsyncHandler()
 
         dmaDAS = 0;
     }
+
 
     //
     // Process pending work items

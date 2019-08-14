@@ -14,25 +14,6 @@
 
 #include "PaulaTypes.h"
 
-//
-// Type aliases
-//
-
-typedef int64_t Frame;
-
-typedef int64_t Cycle;    // Cycle in master cycle units
-typedef int64_t CPUCycle; // Cycle in CPU cycle units
-typedef int64_t CIACycle; // Cycle in CIA cycle units
-typedef int64_t DMACycle; // Cycle in DMA cycle units
-
-#define CPU_CYCLES(cycles) ((cycles) << 2)
-#define CIA_CYCLES(cycles) ((cycles) * 40)
-#define DMA_CYCLES(cycles) ((cycles) << 3)
-
-#define AS_CPU_CYCLES(cycles) ((cycles) >> 2)
-#define AS_CIA_CYCLES(cycles) ((cycles) / 40)
-#define AS_DMA_CYCLES(cycles) ((cycles) >> 3)
-
 
 //
 // Enumeration types

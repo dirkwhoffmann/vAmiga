@@ -12,15 +12,6 @@
 #ifndef _DISK_T_INC
 #define _DISK_T_INC
 
-//
-// Type aliases
-//
-
-typedef int16_t Side;
-typedef int16_t Cylinder;
-typedef int16_t Track;
-typedef int16_t Sector;
-
 
 //
 // Enumeration types

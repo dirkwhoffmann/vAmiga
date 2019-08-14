@@ -319,6 +319,23 @@ Denise::armSprite(int x)
 }
 
 void
+Denise::setSpriteClippingRange(PixelPos begin, PixelPos end)
+{
+    assert(begin >= 0 && begin <= HPIXELS);
+    assert(end >= 0 && end <= HPIXELS);
+
+    spriteClipBegin = begin;
+    spriteClipEnd = end;
+}
+
+void
+Denise::enlargeSpriteClippingRange(PixelPos begin, PixelPos end)
+{
+    setSpriteClippingRange(MIN(spriteClipBegin, begin),
+                           MAX(spriteClipEnd, end));
+}
+
+void
 Denise::updateSpritePriorities(uint16_t bplcon2)
 {
     switch (bplcon2 & 0b111) {
@@ -605,12 +622,9 @@ Denise::drawSprite()
 {
     assert(x >= 0 && x <= 7);
 
-    // Check if the sprite is visible
-    // TODO: What happens if the sprite starts left of sprEnableReached
-    // and ends right of it. Does it appear partially? This is not covered
-    // by the existing code.
-    // if (agnus->pos.v == 0x31) debug("sprEnableReached = %d sprhstrt[%d] = %d\n", agnus->sprEnableReached, x, sprhstrt[x]);
-    if (2 * agnus->sprEnableReached > sprhstrt[x]) return;
+    // Check if the sprite is visible (EXPERIMENTAL AND NOT ACCURATE)
+    // if (sprhstrt[x] > spriteClipEnd) return;
+    // if (2 * agnus->sprEnableReached > sprhstrt[x]) return;
 
     const uint16_t depth[8] = { Z_SP0, Z_SP1, Z_SP2, Z_SP3, Z_SP4, Z_SP5, Z_SP6, Z_SP7 };
     uint16_t z = depth[x];
@@ -635,11 +649,15 @@ Denise::drawSprite()
 
         int col = (d1 & 0b0010) | (d0 & 0b0001);
 
-        if (col) {
-            if (z > zBuffer[pos]) iBuffer[pos] = baseCol | col;
-            if (z > zBuffer[pos-1]) iBuffer[pos-1] = baseCol | col;
-            zBuffer[pos] |= z;
-            zBuffer[pos-1] |= z;
+        // TODO: This is inefficient. Get this check out of the loop
+        if (pos >= spriteClipBegin && pos < spriteClipEnd) {
+
+            if (col) {
+                if (z > zBuffer[pos]) iBuffer[pos] = baseCol | col;
+                if (z > zBuffer[pos-1]) iBuffer[pos-1] = baseCol | col;
+                zBuffer[pos] |= z;
+                zBuffer[pos-1] |= z;
+            }
         }
 
         d1 >>= 1;

@@ -218,6 +218,7 @@
 		505A214F22869FF10016EA21 /* AudioFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioFilter.h; sourceTree = "<group>"; };
 		505A3A3821F4996400132020 /* sse_utils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = sse_utils.cpp; sourceTree = "<group>"; };
 		505A3A3921F4996400132020 /* sse_utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sse_utils.h; sourceTree = "<group>"; };
+		505A584C23040921002F99D1 /* va_aliases.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = va_aliases.h; sourceTree = "<group>"; };
 		505AD259224A67CD0052A014 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		505AD25A224A67CE0052A014 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MyDocument.xib; sourceTree = "<group>"; };
 		5064850F21EC7A1700FC4AC3 /* Memory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Memory.cpp; sourceTree = "<group>"; };
@@ -813,6 +814,7 @@
 				50B14C0921EB228E002E32A6 /* va_config.h */,
 				5082D83A21EF891200CF7692 /* va_constants.h */,
 				50B14C0A21EB2379002E32A6 /* va_types.h */,
+				505A584C23040921002F99D1 /* va_aliases.h */,
 				50B14C0821EB2248002E32A6 /* va_std.h */,
 				50B14C1121EB4314002E32A6 /* va_std.cpp */,
 				505A3A3921F4996400132020 /* sse_utils.h */,

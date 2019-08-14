@@ -10,6 +10,8 @@
 #ifndef _VATYPES_H
 #define _VATYPES_H
 
+#include "va_aliases.h"
+
 #include "AmigaTypes.h"
 #include "MessageQueueTypes.h"
 #include "EventHandlerTypes.h"
