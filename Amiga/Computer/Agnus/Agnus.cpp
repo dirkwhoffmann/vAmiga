@@ -289,7 +289,6 @@ Agnus::inBplDmaLine(uint16_t dmacon, uint16_t bplcon0) {
 
     return
     ddfVFlop                           // Outside VBLANK, inside DIW
-//    && activeBitplanes                 // At least one bitplane enabled
     && Denise::bpu(bplcon0)            // At least one bitplane enabled
     && bplDMA(dmacon);                 // Bitplane DMA enabled
 }
@@ -1353,6 +1352,22 @@ Agnus::pokeBPLCON0(uint16_t oldBplcon0, uint16_t newBplcon0)
 
         // Since the table has changed, we also need to update the event slot
         scheduleBplEventForCycle(pos.h);
+
+        //
+        // Sprite enable logic
+        //
+
+        if (inBplDmaLine(dmacon, newBplcon0)) {
+
+            // Enable sprite drawing
+            if (sprEnableReached > pos.h + 2) sprEnableReached = pos.h + 2;
+
+        } else {
+
+            // Disable sprite drawing if DDFSTRT hasn't been reached yet
+            if (pos.h <= ddfstrtReached + 4) sprEnableReached = INT16_MAX;
+            // if (pos.v == 0x31) debug("ddfstrtReached = %d sprEnableReached = %d\n", ddfstrtReached, sprEnableReached);
+        }
     }
 }
 
@@ -1540,6 +1555,9 @@ Agnus::hsyncHandler()
         hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
         oldBplDmaLine = bplDmaLine;
     }
+
+    sprEnableReached = bplDmaLine ? ddfstrt : INT16_MAX;
+
 
     //
     // Determine the disk, audio and sprite DMA status for the line to come

@@ -554,9 +554,8 @@ Denise::translateDPF(int from, int to)
 void
 Denise::drawSprites()
 {
-    // Only proceed if we are not inside the upper or lower border area
     // if (!agnus->inBplDmaLine()) return;
-    if (!agnus->inBplDmaLine(agnus->dmaconAtDDFStrt, agnus->bplcon0AtDDFStrt)) return;
+    // if (!agnus->inBplDmaLine(agnus->dmaconAtDDFStrt, agnus->bplcon0AtDDFStrt)) return;
 
     // Sprites 6 and 7
     if (armed & 0b11000000) {
@@ -605,6 +604,13 @@ template <int x> void
 Denise::drawSprite()
 {
     assert(x >= 0 && x <= 7);
+
+    // Check if the sprite is visible
+    // TODO: What happens if the sprite starts left of sprEnableReached
+    // and ends right of it. Does it appear partially? This is not covered
+    // by the existing code.
+    // if (agnus->pos.v == 0x31) debug("sprEnableReached = %d sprhstrt[%d] = %d\n", agnus->sprEnableReached, x, sprhstrt[x]);
+    if (2 * agnus->sprEnableReached > sprhstrt[x]) return;
 
     const uint16_t depth[8] = { Z_SP0, Z_SP1, Z_SP2, Z_SP3, Z_SP4, Z_SP5, Z_SP6, Z_SP7 };
     uint16_t z = depth[x];
