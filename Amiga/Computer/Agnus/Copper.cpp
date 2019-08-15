@@ -121,7 +121,6 @@ Copper::pokeCOP1LCH(uint16_t value)
 
     if (HI_WORD(cop1lc) != value) {
         cop1lc = REPLACE_HI_WORD(cop1lc, value);
-        cop1end = cop1lc;
     }
 
     // Update program counter if DMA is off
@@ -138,7 +137,6 @@ Copper::pokeCOP1LCL(uint16_t value)
 
     if (LO_WORD(cop1lc) != value) {
         cop1lc = REPLACE_LO_WORD(cop1lc, value & 0xFFFE);
-        cop1end = cop1lc;
     }
 
     // Update program counter if DMA is off
@@ -155,7 +153,6 @@ Copper::pokeCOP2LCH(uint16_t value)
 
     if (HI_WORD(cop2lc) != value) {
         cop2lc = REPLACE_HI_WORD(cop2lc, value);
-        cop2end = cop2lc;
     }
 }
 
@@ -166,7 +163,6 @@ Copper::pokeCOP2LCL(uint16_t value)
 
     if (LO_WORD(cop2lc) != value) {
         cop2lc = REPLACE_LO_WORD(cop2lc, value & 0xFFFE);
-        cop2end = cop2lc;
     }
 }
 

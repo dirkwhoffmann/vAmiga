@@ -165,7 +165,7 @@ Denise::pokeJOYTEST(uint16_t value)
 void
 Denise::pokeBPLCON0(uint16_t value)
 {
-    debug(BPL_DEBUG, "pokeBPLCON0(%X)\n", value);
+    debug(BPLREG_DEBUG, "pokeBPLCON0(%X)\n", value);
 
     if (bplcon0 != value) {
 
@@ -184,7 +184,7 @@ Denise::pokeBPLCON0(uint16_t oldValue, uint16_t newValue)
 void
 Denise::pokeBPLCON1(uint16_t value)
 {
-    debug(BPL_DEBUG, "pokeBPLCON1(%X)\n", value);
+    debug(BPLREG_DEBUG, "pokeBPLCON1(%X)\n", value);
 
     bplcon1 = value & 0xFF;
 
@@ -198,7 +198,7 @@ Denise::pokeBPLCON1(uint16_t value)
 void
 Denise::pokeBPLCON2(uint16_t value)
 {
-    debug(BPL_DEBUG, "pokeBPLCON2(%X)\n", value);
+    debug(BPLREG_DEBUG, "pokeBPLCON2(%X)\n", value);
 
     bplcon2 = value;
 
@@ -224,7 +224,7 @@ template <int x> void
 Denise::pokeBPLxDAT(uint16_t value)
 {
     assert(x < 6);
-    debug(BPL_DEBUG, "pokeBPL%dDATA(%X)\n", x + 1, value);
+    debug(BPLREG_DEBUG, "pokeBPL%dDATA(%X)\n", x + 1, value);
     
     bpldat[x] = value;
 }

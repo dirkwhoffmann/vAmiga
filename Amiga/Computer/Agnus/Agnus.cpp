@@ -948,7 +948,7 @@ Agnus::peekVHPOSR()
 void
 Agnus::pokeVHPOS(uint16_t value)
 {
-    debug(BPL_DEBUG, "pokeVHPOS(%X)\n", value);
+    debug(2, "pokeVHPOS(%X)\n", value);
     // Don't know what to do here ...
 }
 
@@ -960,7 +960,7 @@ Agnus::peekVPOSR()
     uint16_t result = (pos.v >> 8) | (isLongFrame() ? 0x8000 : 0);
     assert((result & 0x7FFE) == 0);
 
-    debug(BPL_DEBUG, "peekVPOSR() = %X\n", result);
+    debug(2, "peekVPOSR() = %X\n", result);
     return result;
 
 }
@@ -1203,7 +1203,7 @@ Agnus::computeDDFStop()
 template <int x, PokeSource s> void
 Agnus::pokeBPLxPTH(uint16_t value)
 {
-    debug(BPL_DEBUG, "pokeBPL%dPTH(%X)\n", x, value);
+    debug(BPLREG_DEBUG, "pokeBPL%dPTH($%d) (%X)\n", x, value, value);
 
     // Check if the written value gets lost
     if (skipBPLxPT(x)) return;
@@ -1214,7 +1214,7 @@ Agnus::pokeBPLxPTH(uint16_t value)
 template <int x, PokeSource s> void
 Agnus::pokeBPLxPTL(uint16_t value)
 {
-    debug(BPL_DEBUG, "pokeBPL%dPTL(%X)\n", x, value);
+    debug(BPLREG_DEBUG, "pokeBPL%dPTL(%d) ($%X)\n", x, value, value);
 
     // Check if the written value gets lost
     if (skipBPLxPT(x)) return;
@@ -1259,7 +1259,7 @@ Agnus::skipBPLxPT(int x)
 void
 Agnus::setBPLxPTH(int x, uint16_t value)
 {
-    debug(BPL_DEBUG, "setBPLxPTH(%d, %X)\n", x, value);
+    debug(BPLREG_DEBUG, "setBPLxPTH(%d, %X)\n", x, value);
     assert(1 <= x && x <= 6);
 
     bplpt[x - 1] = REPLACE_HI_WORD(bplpt[x - 1], value & 0x7);
@@ -1268,7 +1268,7 @@ Agnus::setBPLxPTH(int x, uint16_t value)
 void
 Agnus::setBPLxPTL(int x, uint16_t value)
 {
-    debug(BPL_DEBUG, "pokeBPLxPTL(%d, %X)\n", x, value);
+    debug(BPLREG_DEBUG, "pokeBPLxPTL(%d, %X)\n", x, value);
     assert(1 <= x && x <= 6);
 
     bplpt[x - 1] = REPLACE_LO_WORD(bplpt[x - 1], value & 0xFFFE);
@@ -1277,14 +1277,14 @@ Agnus::setBPLxPTL(int x, uint16_t value)
 void
 Agnus::pokeBPL1MOD(uint16_t value)
 {
-    debug(BPL_DEBUG, "pokeBPL1MOD(%X)\n", value);
+    debug(BPLREG_DEBUG, "pokeBPL1MOD(%X)\n", value);
     bpl1mod = int16_t(value & 0xFFFE);
 }
 
 void
 Agnus::pokeBPL2MOD(uint16_t value)
 {
-    debug(BPL_DEBUG, "pokeBPL2MOD(%X)\n", value);
+    debug(BPLREG_DEBUG, "pokeBPL2MOD(%X)\n", value);
     bpl2mod = int16_t(value & 0xFFFE);
 }
 
@@ -1533,8 +1533,8 @@ Agnus::hsyncHandler()
     diwHFlopOff = diwHstop;
 
     // Vertical DDF flipflop
-    ddfVFlop = !inVBlank() && !inLastRasterline() && diwVFlop;
-
+    // ddfVFlop = !inVBlank() && !inLastRasterline() && diwVFlop;
+    ddfVFlop = !inLastRasterline() && diwVFlop;
 
     // Horizontal DDF flipflop
 
