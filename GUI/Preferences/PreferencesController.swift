@@ -84,12 +84,15 @@ class PreferencesController: DialogController {
     @IBOutlet weak var compClxSprPlf: NSButton!
     @IBOutlet weak var compClxPlfPlf: NSButton!
 
-    // Audio
-    // @IBOutlet weak var compFilterType: NSPopUpButton!
-    @IBOutlet weak var compFilterActivation: NSPopUpButton!
-
     // Blitter
-    @IBOutlet weak var compExactBlitter: NSButton!
+    @IBOutlet weak var compBltAccuracy: NSSlider!
+    @IBOutlet weak var compBltCheck1: NSTextField!
+    @IBOutlet weak var compBltText1: NSTextField!
+    @IBOutlet weak var compBltCheck2: NSTextField!
+    @IBOutlet weak var compBltText2: NSTextField!
+
+    // Audio
+    @IBOutlet weak var compFilterActivation: NSPopUpButton!
 
     // Disk controller
     @IBOutlet weak var compFifoBuffering: NSButton!

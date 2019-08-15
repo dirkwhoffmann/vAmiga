@@ -23,17 +23,24 @@ extension PreferencesController {
         compClxSprPlf.state = config.clxSprPlf ? .on : .off
         compClxPlfPlf.state = config.clxPlfPlf ? .on : .off
 
+        // Blitter
+        let acc = config.blitterAccuracy
+        compBltAccuracy.intValue = acc
+        compBltCheck1.stringValue = (acc >= 1) ? "\u{2714}" : "\u{2718}"
+        compBltCheck2.stringValue = (acc >= 2) ? "\u{2714}" : "\u{2718}"
+        compBltCheck1.textColor = (acc >= 1) ? .labelColor : .tertiaryLabelColor
+        compBltCheck2.textColor = (acc >= 2) ? .labelColor : .tertiaryLabelColor
+        compBltText1.textColor = (acc >= 1) ? .labelColor : .tertiaryLabelColor
+        compBltText2.textColor = (acc >= 2) ? .labelColor : .tertiaryLabelColor
+
         // Audio
         compFilterActivation.selectItem(withTag: config.filterActivation.rawValue)
-            
-        // Blitter
-        compExactBlitter.state = config.blitterAccuracy > 0 ? .on : .off
 
         // Disk controller
         compFifoBuffering.state = config.fifoBuffering ? .on : .off
 
         // Lock controls if emulator is powered on
-        compExactBlitter.isEnabled = false
+        compBltAccuracy.isEnabled = poweredOff
         compFifoBuffering.isEnabled = poweredOff
 
         // Label the OK button
@@ -60,14 +67,13 @@ extension PreferencesController {
 
     @IBAction func compFilterActivationAction(_ sender: NSPopUpButton!) {
 
-        track("\(sender.selectedTag())")
         amigaProxy?.configure(VA_FILTER_ACTIVATION, value: sender.selectedTag())
         refresh()
     }
 
-    @IBAction func compExactBlitterAction(_ sender: NSButton!) {
+    @IBAction func compBltAccuracyAction(_ sender: NSSlider!) {
 
-        amigaProxy?.configure(VA_BLITTER_ACCURACY, value: sender.state == .on ? 1 : 0)
+        amigaProxy?.configure(VA_BLITTER_ACCURACY, value: sender.integerValue)
         refresh()
     }
 

@@ -7,10 +7,14 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="PreferencesController" customModule="vAmiga" customModuleProvider="target">
             <connections>
+                <outlet property="compBltAccuracy" destination="IfS-I3-9BI" id="uk3-ge-dJ0"/>
+                <outlet property="compBltCheck1" destination="cSZ-vw-Zcm" id="xDy-2T-TFa"/>
+                <outlet property="compBltCheck2" destination="0jE-AN-Y7n" id="Zxh-Kt-qfZ"/>
+                <outlet property="compBltText1" destination="3Xo-VJ-cts" id="4ha-T5-nxX"/>
+                <outlet property="compBltText2" destination="2Ad-rQ-FTj" id="1XH-Ib-Rff"/>
                 <outlet property="compClxPlfPlf" destination="e4H-ad-8iM" id="grF-R3-fRK"/>
                 <outlet property="compClxSprPlf" destination="96I-Vc-n6m" id="yGN-Jc-ILn"/>
                 <outlet property="compClxSprSpr" destination="Zbl-N1-TfU" id="IfC-bf-h7f"/>
-                <outlet property="compExactBlitter" destination="UgB-Xh-RTc" id="9dc-zZ-dNg"/>
                 <outlet property="compFifoBuffering" destination="Klz-l3-bRD" id="c7X-nf-1wG"/>
                 <outlet property="compFilterActivation" destination="ZrM-uT-4JR" id="L6k-6C-7Wh"/>
                 <outlet property="compOKButton" destination="o9a-Eq-CnW" id="PtT-hk-GXk"/>
@@ -949,7 +953,7 @@ DQ
                                             </connections>
                                         </button>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="v46-rS-r6d">
-                                            <rect key="frame" x="45" y="358" width="109" height="17"/>
+                                            <rect key="frame" x="47" y="262" width="56" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Blitter" id="ahL-af-Psh">
                                                 <font key="font" metaFont="systemBold"/>
@@ -958,7 +962,7 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nha-KU-Yl7">
-                                            <rect key="frame" x="342" y="358" width="145" height="17"/>
+                                            <rect key="frame" x="367" y="259" width="145" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Audio  Filter" id="fu8-hM-7Kk">
                                                 <font key="font" metaFont="systemBold"/>
@@ -966,50 +970,8 @@ DQ
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="p4n-r3-S0n">
-                                            <rect key="frame" x="45" y="274" width="96" height="21"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Display logic" id="YVh-Cq-2VJ">
-                                                <font key="font" metaFont="systemBold"/>
-                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
-                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Zbl-N1-TfU">
-                                            <rect key="frame" x="64" y="245" width="201" height="18"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="check" title="Detect sprite-sprite collisions" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="3hw-lo-7yV">
-                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <connections>
-                                                <action selector="compClxSprSprAction:" target="-2" id="9hS-PQ-4Cs"/>
-                                            </connections>
-                                        </button>
-                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="96I-Vc-n6m">
-                                            <rect key="frame" x="64" y="219" width="218" height="18"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="check" title="Detect sprite-playfield collisions" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="yn0-Dm-p40">
-                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <connections>
-                                                <action selector="compClxSprPlfAction:" target="-2" id="VVW-Rv-5w8"/>
-                                            </connections>
-                                        </button>
-                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="e4H-ad-8iM">
-                                            <rect key="frame" x="64" y="193" width="235" height="18"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="check" title="Detect playfield-playfield collisions" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="2dl-yF-PkG">
-                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <connections>
-                                                <action selector="compClxPlfPlfAction:" target="-2" id="e7W-gH-Np7"/>
-                                            </connections>
-                                        </button>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4uo-XH-OAm">
-                                            <rect key="frame" x="361" y="329" width="68" height="17"/>
+                                            <rect key="frame" x="386" y="230" width="68" height="17"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Activation:" id="aLg-he-hN7">
                                                 <font key="font" metaFont="system"/>
@@ -1017,8 +979,44 @@ DQ
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gXs-uu-ngN">
+                                            <rect key="frame" x="66" y="224" width="65" height="17"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Accuracy:" id="Fda-Ke-p52">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3Xo-VJ-cts">
+                                            <rect key="frame" x="84" y="190" width="252" height="17"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Signals the end of a blit with a time delay" id="WhH-ZH-Cl5">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cSZ-vw-Zcm">
+                                            <rect key="frame" x="61" y="190" width="22" height="17"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="*" id="bzg-zF-AlJ">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2Ad-rQ-FTj">
+                                            <rect key="frame" x="84" y="165" width="254" height="17"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Blocks the CPU while the Blitter operates" id="yg9-ml-SN5">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
                                         <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZrM-uT-4JR" userLabel="System">
-                                            <rect key="frame" x="429" y="323" width="104" height="25"/>
+                                            <rect key="frame" x="454" y="224" width="104" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="Power LED" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="sFv-1H-kZJ" id="XsW-st-XXj" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1037,19 +1035,8 @@ DQ
                                                 <action selector="compFilterActivationAction:" target="-2" id="aAr-U4-y9k"/>
                                             </connections>
                                         </popUpButton>
-                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UgB-Xh-RTc">
-                                            <rect key="frame" x="64" y="330" width="160" height="18"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="check" title="Emulate original timing" bezelStyle="regularSquare" imagePosition="left" enabled="NO" inset="2" id="hiG-WT-xcQ">
-                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <connections>
-                                                <action selector="compExactBlitterAction:" target="-2" id="W1j-Ve-Cw3"/>
-                                            </connections>
-                                        </button>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AZD-x4-6qF">
-                                            <rect key="frame" x="342" y="278" width="126" height="17"/>
+                                            <rect key="frame" x="367" y="384" width="126" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Disk Controller" id="VQU-cn-kcC">
                                                 <font key="font" metaFont="systemBold"/>
@@ -1058,7 +1045,7 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Klz-l3-bRD">
-                                            <rect key="frame" x="361" y="246" width="164" height="18"/>
+                                            <rect key="frame" x="386" y="352" width="164" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="Emulate FIFO-buffering" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="PZl-DT-hFY">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -1068,6 +1055,92 @@ DQ
                                                 <action selector="compFifoBufferingAction:" target="-2" id="hhe-Dg-GKB"/>
                                             </connections>
                                         </button>
+                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="p4n-r3-S0n">
+                                            <rect key="frame" x="47" y="384" width="96" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Display logic" id="YVh-Cq-2VJ">
+                                                <font key="font" metaFont="systemBold"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Zbl-N1-TfU">
+                                            <rect key="frame" x="66" y="355" width="201" height="18"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="check" title="Detect sprite-sprite collisions" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="3hw-lo-7yV">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="compClxSprSprAction:" target="-2" id="9hS-PQ-4Cs"/>
+                                            </connections>
+                                        </button>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="96I-Vc-n6m">
+                                            <rect key="frame" x="66" y="329" width="218" height="18"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="check" title="Detect sprite-playfield collisions" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="yn0-Dm-p40">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="compClxSprPlfAction:" target="-2" id="VVW-Rv-5w8"/>
+                                            </connections>
+                                        </button>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="e4H-ad-8iM">
+                                            <rect key="frame" x="66" y="303" width="235" height="18"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="check" title="Detect playfield-playfield collisions" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="2dl-yF-PkG">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="compClxPlfPlfAction:" target="-2" id="e7W-gH-Np7"/>
+                                            </connections>
+                                        </button>
+                                        <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IfS-I3-9BI">
+                                            <rect key="frame" x="135" y="223" width="156" height="24"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <sliderCell key="cell" continuous="YES" state="on" alignment="left" maxValue="2" doubleValue="1" tickMarkPosition="above" numberOfTickMarks="3" allowsTickMarkValuesOnly="YES" sliderType="linear" id="P7i-8m-bE9"/>
+                                            <connections>
+                                                <action selector="compBltAccuracyAction:" target="-2" id="8gF-Ii-zY5"/>
+                                            </connections>
+                                        </slider>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bWr-9c-b9n">
+                                            <rect key="frame" x="140" y="248" width="11" height="14"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="0" id="WO7-tP-wFa">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bVD-X1-IrW">
+                                            <rect key="frame" x="209" y="248" width="10" height="14"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="1" id="itk-9M-Ifq">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="R0D-AZ-OjI">
+                                            <rect key="frame" x="275" y="248" width="11" height="14"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="2" id="gzu-fV-2VM">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0jE-AN-Y7n">
+                                            <rect key="frame" x="61" y="165" width="22" height="17"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="*" id="2mb-Nd-uX7">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
                                     </subviews>
                                 </view>
                             </tabViewItem>
