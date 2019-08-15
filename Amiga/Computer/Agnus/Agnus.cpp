@@ -1392,6 +1392,38 @@ Agnus::executeUntil(Cycle targetClock)
     }
 }
 
+void
+Agnus::executeUntilBusIsFree()
+{
+#if 0
+    if (!blitter.bbusy) return;
+
+    /* For now, we use a very primitive model here. We consider the bus free,
+     * if and only if the Blitter is idle.
+     */
+    Cycle oldClock = clock;
+
+    do {
+        // Process all pending events
+        if (clock >= nextTrigger) executeEventsUntil(clock);
+
+        // Advance the internal counters
+        pos.h++;
+
+        // Note: If this assertion hits, the HSYNC event hasn't been served!
+        assert(pos.h <= HPOS_MAX);
+
+        clock += DMA_CYCLES(1);
+
+        debug("Skipping cycle\n");
+        
+    } while (blitter.bbusy);
+
+    debug("Blocking the CPU for %d DMA cycles\n", AS_DMA_CYCLES(clock - oldClock));
+#endif
+}
+
+
 template <int nr> void
 Agnus::executeFirstSpriteCycle()
 {

@@ -843,6 +843,9 @@ public:
     // Executes the device until the target clock is reached
     void executeUntil(Cycle targetClock);
 
+    // Executes the device until the CPU can acquire the bus
+    void executeUntilBusIsFree();
+
 private:
 
     // Executes the first sprite DMA cycle

@@ -313,11 +313,11 @@ class Memory : public HardwareComponent {
     //
     
     public:
-    
+
     uint8_t peek8(uint32_t addr);
     uint16_t peek16(uint32_t addr);
     uint32_t peek32(uint32_t addr);
-    
+
     uint8_t spypeek8(uint32_t addr);
     uint16_t spypeek16(uint32_t addr);
     uint32_t spypeek32(uint32_t addr);
@@ -325,6 +325,7 @@ class Memory : public HardwareComponent {
     void poke8(uint32_t addr, uint8_t value);
     void poke16(uint32_t addr, uint16_t value);
     void poke32(uint32_t addr, uint32_t value);
+
     
     //
     // Chip Ram

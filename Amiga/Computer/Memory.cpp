@@ -445,18 +445,69 @@ Memory::peek8(uint32_t addr)
     addr &= 0xFFFFFF;
     switch (memSrc[addr >> 16]) {
             
-        case MEM_UNMAPPED: return 0;
-        case MEM_CHIP:     ASSERT_CHIP_ADDR(addr); return READ_CHIP_8(addr);
-        case MEM_FAST:     ASSERT_FAST_ADDR(addr); return READ_FAST_8(addr);
-        case MEM_CIA:      ASSERT_CIA_ADDR(addr);  return peekCIA8(addr);
-        case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); return READ_SLOW_8(addr);
-        case MEM_RTC:      ASSERT_RTC_ADDR(addr);  return peekRTC8(addr);
-        case MEM_OCS:      ASSERT_OCS_ADDR(addr);  return peekCustom8(addr);
-        case MEM_AUTOCONF: ASSERT_AUTO_ADDR(addr); return peekAutoConf8(addr);
-        case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); return READ_BOOT_8(addr);
-        case MEM_KICK:     ASSERT_KICK_ADDR(addr); return READ_KICK_8(addr);
-        case MEM_EXTROM:   ASSERT_EXT_ADDR(addr);  return READ_EXT_8(addr);
-        default:           assert(false);
+        case MEM_UNMAPPED:
+
+            agnus->executeUntilBusIsFree();
+            return 0;
+
+        case MEM_CHIP:
+
+            agnus->executeUntilBusIsFree();
+            ASSERT_CHIP_ADDR(addr);
+            return READ_CHIP_8(addr);
+
+        case MEM_FAST:
+
+            ASSERT_FAST_ADDR(addr);
+            return READ_FAST_8(addr);
+
+        case MEM_CIA:
+
+            agnus->executeUntilBusIsFree();
+            ASSERT_CIA_ADDR(addr);
+            return peekCIA8(addr);
+
+        case MEM_SLOW:
+
+            agnus->executeUntilBusIsFree();
+            ASSERT_SLOW_ADDR(addr);
+            return READ_SLOW_8(addr);
+
+        case MEM_RTC:
+
+            agnus->executeUntilBusIsFree();
+            ASSERT_RTC_ADDR(addr);
+            return peekRTC8(addr);
+
+        case MEM_OCS:
+
+            agnus->executeUntilBusIsFree();
+            ASSERT_OCS_ADDR(addr);
+            return peekCustom8(addr);
+
+        case MEM_AUTOCONF:
+
+            agnus->executeUntilBusIsFree();
+            ASSERT_AUTO_ADDR(addr);
+            return peekAutoConf8(addr);
+
+        case MEM_BOOT:
+
+            ASSERT_BOOT_ADDR(addr);
+            return READ_BOOT_8(addr);
+
+        case MEM_KICK:
+
+            ASSERT_KICK_ADDR(addr);
+            return READ_KICK_8(addr);
+
+        case MEM_EXTROM:
+
+            ASSERT_EXT_ADDR(addr);
+            return READ_EXT_8(addr);
+
+        default:
+            assert(false);
     }
     return 0;
 }
@@ -468,23 +519,73 @@ Memory::peek16(uint32_t addr)
         warn("peek16(%X): Address violation error (reading odd address)\n", addr);
         // amiga->dump();
     }
-    // assert(IS_EVEN(addr));
 
     addr &= 0xFFFFFF;
     switch (memSrc[addr >> 16]) {
             
-        case MEM_UNMAPPED: return 0;
-        case MEM_CHIP:     ASSERT_CHIP_ADDR(addr); return READ_CHIP_16(addr);
-        case MEM_FAST:     ASSERT_FAST_ADDR(addr); return READ_FAST_16(addr);
-        case MEM_CIA:      ASSERT_CIA_ADDR(addr);  return peekCIA16(addr);
-        case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); return READ_SLOW_16(addr);
-        case MEM_RTC:      ASSERT_RTC_ADDR(addr);  return peekRTC16(addr);
-        case MEM_OCS:      ASSERT_OCS_ADDR(addr);  return peekCustom16(addr);
-        case MEM_AUTOCONF: ASSERT_AUTO_ADDR(addr); return peekAutoConf16(addr);
-        case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); return READ_BOOT_16(addr);
-        case MEM_KICK:     ASSERT_KICK_ADDR(addr); return READ_KICK_16(addr);
-        case MEM_EXTROM:   ASSERT_EXT_ADDR(addr);  return READ_EXT_16(addr);
-        default:           assert(false);
+        case MEM_UNMAPPED:
+
+            agnus->executeUntilBusIsFree();
+            return 0;
+
+        case MEM_CHIP:
+
+            ASSERT_CHIP_ADDR(addr);
+            agnus->executeUntilBusIsFree();
+            return READ_CHIP_16(addr);
+
+        case MEM_FAST:
+
+            ASSERT_FAST_ADDR(addr);
+            return READ_FAST_16(addr);
+
+        case MEM_CIA:
+
+            ASSERT_CIA_ADDR(addr);
+            agnus->executeUntilBusIsFree();
+            return peekCIA16(addr);
+
+        case MEM_SLOW:
+
+            ASSERT_SLOW_ADDR(addr);
+            agnus->executeUntilBusIsFree();
+            return READ_SLOW_16(addr);
+
+        case MEM_RTC:
+
+            ASSERT_RTC_ADDR(addr);
+            agnus->executeUntilBusIsFree();
+            return peekRTC16(addr);
+
+        case MEM_OCS:
+
+            ASSERT_OCS_ADDR(addr);
+            agnus->executeUntilBusIsFree();
+            return peekCustom16(addr);
+
+        case MEM_AUTOCONF:
+
+            ASSERT_AUTO_ADDR(addr);
+            agnus->executeUntilBusIsFree();
+            return peekAutoConf16(addr);
+
+        case MEM_BOOT:
+
+            ASSERT_BOOT_ADDR(addr);
+            return READ_BOOT_16(addr);
+
+        case MEM_KICK:
+
+            ASSERT_KICK_ADDR(addr);
+            return READ_KICK_16(addr);
+
+        case MEM_EXTROM:
+
+            ASSERT_EXT_ADDR(addr);
+            return READ_EXT_16(addr);
+
+        default:
+            assert(false);
     }
     return 0;
 }
