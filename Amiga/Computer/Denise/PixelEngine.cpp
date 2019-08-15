@@ -381,7 +381,7 @@ PixelEngine::colorize(uint8_t *src, int line)
 
     // Wipe out the HBLANK area
     for (int pixel = 4 * 0x0F; pixel <= 4 * 0x35; pixel++) {
-        dst[pixel] = 0x00444444;
+        dst[pixel] = rgbaHBlank;
     }
 
     // Clear the history cache

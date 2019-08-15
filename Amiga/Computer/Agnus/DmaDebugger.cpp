@@ -208,7 +208,7 @@ DmaDebugger::vSyncHandler()
     int *ptr = amiga->denise.pixelEngine.frameBuffer->data;
     for (int row = 0; row < VBLANK_CNT; row++) {
         for (int col = 0; col <= LAST_PIXEL; col++) {
-            ptr[row * HPIXELS + col] = 0;
+            ptr[row * HPIXELS + col] = PixelEngine::rgbaVBlank;
         }
     }
 }

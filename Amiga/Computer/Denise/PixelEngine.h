@@ -19,6 +19,10 @@ class PixelEngine : public HardwareComponent {
     
 public:
 
+    // RGBA colors used to visualize the HBLANK and VBLANK area in the debugger
+    static const int32_t rgbaHBlank = 0x00444444;
+    static const int32_t rgbaVBlank = 0x00444444;
+
     // Quick-access references
     class Agnus *agnus;
     class Denise *denise;
