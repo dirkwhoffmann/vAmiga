@@ -14,10 +14,24 @@ int bltdebug = 0; // REMOVE ASAP
 void
 Blitter::startFastBlit()
 {
-    // Perform a line blit or a copy blit operation
-    bltconLINE() ? doFastLineBlit() : doFastCopyBlit();
+    int delay = 0;
 
-    endFastBlit();
+    if (bltconLINE()) {
+
+        // Perform a line blit
+        doFastLineBlit();
+
+    } else {
+
+        // Perform a copy blit
+        doFastCopyBlit();
+
+        // In accuracy level 1 or above, we signal termination with a delay
+        if (accuracy >= 1) delay = estimatesCycles(bltcon0, bltsizeW(), bltsizeH());
+    }
+
+    // Schedule the termination event
+    agnus->scheduleRel<BLT_SLOT>(delay, BLT_FAST_END);
 }
 
 void

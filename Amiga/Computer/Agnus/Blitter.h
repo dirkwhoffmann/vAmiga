@@ -322,7 +322,7 @@ class Blitter : public HardwareComponent {
     void serviceEvent(EventID id);
 
     //
-    // Minterm and fill logic
+    // Auxiliary functions
     //
 
     // Emulates the minterm logic circuit
@@ -331,6 +331,9 @@ class Blitter : public HardwareComponent {
 
     // Emulates the fill logic circuit
     void doFill(uint16_t &data, bool &carry);
+
+    // Returns the estimated number of DMA cycles of the current Blitter operation
+    int estimatesCycles(uint16_t bltcon0, int width, int height);
 
 
     //
