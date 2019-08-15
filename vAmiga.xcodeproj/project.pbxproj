@@ -103,6 +103,7 @@
 		508FE05C21EA22CC0043D0E9 /* DiskMountController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04A21EA22CC0043D0E9 /* DiskMountController.swift */; };
 		508FE05F21EA22CC0043D0E9 /* ExportDiskController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04D21EA22CC0043D0E9 /* ExportDiskController.swift */; };
 		508FE06521EA318D0043D0E9 /* AmigaFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FE06321EA318D0043D0E9 /* AmigaFile.cpp */; };
+		509047B6230575E6009CEC1C /* SlowBlitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509047B5230575E6009CEC1C /* SlowBlitter.cpp */; };
 		50950ED822881B7A0073F755 /* ZorroManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50950ED622881B7A0073F755 /* ZorroManager.cpp */; };
 		509CF4CD22083F9800C500F0 /* CPUPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509CF4CC22083F9800C500F0 /* CPUPanel.swift */; };
 		509CF4CF220847C600C500F0 /* InstrTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509CF4CE220847C600C500F0 /* InstrTableView.swift */; };
@@ -312,6 +313,7 @@
 		508FE04D21EA22CC0043D0E9 /* ExportDiskController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExportDiskController.swift; sourceTree = "<group>"; };
 		508FE06321EA318D0043D0E9 /* AmigaFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaFile.cpp; sourceTree = "<group>"; };
 		508FE06421EA318D0043D0E9 /* AmigaFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmigaFile.h; sourceTree = "<group>"; };
+		509047B5230575E6009CEC1C /* SlowBlitter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SlowBlitter.cpp; sourceTree = "<group>"; };
 		50950ED622881B7A0073F755 /* ZorroManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ZorroManager.cpp; sourceTree = "<group>"; };
 		50950ED722881B7A0073F755 /* ZorroManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZorroManager.h; sourceTree = "<group>"; };
 		509CF4CC22083F9800C500F0 /* CPUPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPUPanel.swift; sourceTree = "<group>"; };
@@ -456,6 +458,7 @@
 				50D375DE222C7C6B0040987C /* Blitter.h */,
 				50D375DD222C7C6B0040987C /* Blitter.cpp */,
 				50E1E5D12242B9DA008EF4B0 /* FastBlitter.cpp */,
+				509047B5230575E6009CEC1C /* SlowBlitter.cpp */,
 				50E204E92295A3F20082B63D /* DmaDebugger.h */,
 				50E204E82295A3F20082B63D /* DmaDebugger.cpp */,
 			);
@@ -1078,6 +1081,7 @@
 				508FE02521EA227B0043D0E9 /* MemoryPanel.swift in Sources */,
 				50B14C1221EB4314002E32A6 /* va_std.cpp in Sources */,
 				508FE01021EA227B0043D0E9 /* Speedometer.swift in Sources */,
+				509047B6230575E6009CEC1C /* SlowBlitter.cpp in Sources */,
 				508FE01221EA227B0043D0E9 /* CIAPanel.swift in Sources */,
 				504F9656220ACFE0005F8AB7 /* Breakpoint.cpp in Sources */,
 				5030891121EFA74600FEAD12 /* Paula.cpp in Sources */,

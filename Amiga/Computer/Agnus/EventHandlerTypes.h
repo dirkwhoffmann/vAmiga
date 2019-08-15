@@ -185,7 +185,8 @@ typedef enum : long
     // Blitter slot
     BLT_INIT = 1,
     BLT_EXECUTE,
-    BLT_FAST_BLIT,
+    BLT_FAST_STRT,
+    BLT_FAST_END,
     BLT_EVENT_COUNT,
         
     // SEC slot

@@ -12,19 +12,25 @@
 int bltdebug = 0; // REMOVE ASAP
 
 void
-Blitter::doFastBlit()
+Blitter::startFastBlit()
 {
     // Perform a line blit or a copy blit operation
     bltconLINE() ? doFastLineBlit() : doFastCopyBlit();
 
+    endFastBlit();
+}
+
+void
+Blitter::endFastBlit()
+{
     // Clear the Blitter busy flag
     bbusy = false;
-    
+
     // Trigger the Blitter interrupt
     agnus->scheduleRel<IRQ_BLIT_SLOT>(0, IRQ_SET);
-    
-    // Terminate the Blitter
-    // agnus->cancel<BLT_SLOT>();
+
+    // Clear the Blitter slot
+    agnus->cancel<BLT_SLOT>();
 }
 
 void

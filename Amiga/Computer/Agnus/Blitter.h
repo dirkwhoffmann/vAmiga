@@ -320,10 +320,21 @@ class Blitter : public HardwareComponent {
     
     // Processes a Blitter event
     void serviceEvent(EventID id);
-    
-    
+
     //
-    // Cycle-accurate Blitter
+    // Minterm and fill logic
+    //
+
+    // Emulates the minterm logic circuit
+    uint16_t doMintermLogic(uint16_t a, uint16_t b, uint16_t c, uint8_t minterm);
+    uint16_t doMintermLogicQuick(uint16_t a, uint16_t b, uint16_t c, uint8_t minterm);
+
+    // Emulates the fill logic circuit
+    void doFill(uint16_t &data, bool &carry);
+
+
+    //
+    // Slow Blitter (more accurate)  (NOT WORKING YET)
     //
     
     private:
@@ -335,31 +346,23 @@ class Blitter : public HardwareComponent {
     void doBarrelShifterA();
     void doBarrelShifterB();
 
-    // Emulate the minterm logic circuit
-    uint16_t doMintermLogic(uint16_t a, uint16_t b, uint16_t c, uint8_t minterm);
-    uint16_t doMintermLogicQuick(uint16_t a, uint16_t b, uint16_t c, uint8_t minterm);
-
-    // Emulate the fill logic circuit
-    void doFill(uint16_t &data, bool &carry);
-
     
     //
-    // Fast Blitter
+    // Fast Blitter (less accurate)
     //
-    
-    public:
-    
-    /* Performs a blit operation via the fast Blitter
-     * Calls either doFastCopyBlit() or doFastLineBlit()
-     */
-    void doFastBlit();
     
     private:
     
-    // Performs a copy blit operation via the fast Blitter
+    // Invokes the FastBlitter to perform a blit
+    void startFastBlit();
+
+    // Called at the end of a FastBlitter operation
+    void endFastBlit();
+
+    // Performs a copy blit operation via the FastBlitter
     void doFastCopyBlit();
     
-    // Performs a line blit operation via the fast Blitter
+    // Performs a line blit operation via the FastBlitter
     void doFastLineBlit();
 };
 
