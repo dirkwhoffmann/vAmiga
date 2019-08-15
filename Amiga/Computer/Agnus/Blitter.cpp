@@ -94,6 +94,8 @@ Blitter::_inspect()
 void
 Blitter::_dump()
 {
+    plainmsg("  Accuracy: %d\n", accuracy);
+    plainmsg("\n");
     plainmsg("   bltcon0: %X\n", bltcon0);
     plainmsg("\n");
     plainmsg("            Shift A: %d\n", bltconASH());
@@ -350,28 +352,7 @@ Blitter::serviceEvent(EventID id)
     debug(2, "Servicing Blitter event %d\n", id);
     
     switch (id) {
-            
-            /*
-        case BLT_INIT:
 
-            // MOVE THIS FUNCTIONALITY TO pokeBLTSIZE
-            
-            if (bltLINE()) {
-                // TODO
-            } else {
-                
-                // Load micro instruction code
-                
-                // Set counters
-                wcounter = bltsizeW();
-                hcounter = bltsizeH();
-                
-                // Schedule code execution
-                amiga->agnus.scheduleNextEvent(BLT_SLOT, DMA_CYCLES(1), BLT_EXECUTE);
-            }
-            break;
-            */
-            
         case BLT_EXECUTE:
             
             // Only proceed if Blitter DMA is enabled

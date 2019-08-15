@@ -182,7 +182,7 @@ Amiga::getConfig()
     config.clxPlfPlf = denise.getClxPlfPlf();
     config.filterActivation = paula.audioUnit.getFilterActivation();
     config.filterType = paula.audioUnit.getFilterType();
-    config.exactBlitter = agnus.blitter.getExactEmulation();
+    config.blitterAccuracy = agnus.blitter.getAccuracy();
     config.fifoBuffering = paula.diskController.getFifoBuffering();
     config.serialDevice = serialPort.getDevice();
 
@@ -332,10 +332,10 @@ Amiga::configure(ConfigOption option, long value)
             paula.audioUnit.setFilterType((FilterType)value);
             break;
 
-        case VA_EXACT_BLITTER:
+        case VA_BLITTER_ACCURACY:
             
-            if (current.exactBlitter == value) return true;
-            agnus.blitter.setExactEmulation(value);
+            if (current.blitterAccuracy == value) return true;
+            agnus.blitter.setAccuracy(value);
             break;
             
         case VA_FIFO_BUFFERING:
@@ -481,7 +481,7 @@ void
 Amiga::configureExactBlitter(bool value)
 {
     debug("configureExactBlitter(%d)\n", value);
-    configure(VA_EXACT_BLITTER, value);
+    configure(VA_BLITTER_ACCURACY, value);
 }
 
 void

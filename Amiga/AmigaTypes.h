@@ -56,7 +56,7 @@ typedef enum : long
     VA_CLX_PLF_PLF,
     VA_FILTER_ACTIVATION,
     VA_FILTER_TYPE,
-    VA_EXACT_BLITTER,
+    VA_BLITTER_ACCURACY,
     VA_FIFO_BUFFERING,
     VA_SERIAL_DEVICE
 }
@@ -102,7 +102,7 @@ typedef struct
     bool clxPlfPlf;
     FilterActivation filterActivation;
     FilterType filterType;
-    bool exactBlitter;
+    int blitterAccuracy;
     bool fifoBuffering;
     long serialDevice;
     DriveConfiguration df0;

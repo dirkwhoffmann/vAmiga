@@ -144,8 +144,6 @@ struct AmigaFileWrapper;
 - (BOOL) configureDrive:(NSInteger)nr connected:(BOOL)value;
 - (BOOL) configureDrive:(NSInteger)nr type:(NSInteger)value;
 - (BOOL) configureDrive:(NSInteger)nr speed:(NSInteger)value;
-// - (void) configureCollisionCheck:(BOOL)value;
-- (void) configureExactBlitter:(BOOL)value;
 - (void) configureFifoBuffering:(BOOL)value;
 
 // Message queue

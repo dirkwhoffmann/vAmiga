@@ -1015,7 +1015,7 @@ extension Keys {
     static let filterType        = "VAMIGAFilterType"
 
     // Blitter
-    static let exactBlitter      = "VAMIGAAccurateBlitterKey"
+    static let blitterAccuracy   = "VAMIGABlitterAccuracy"
 
     // Disk controller
     static let fifoBuffering     = "VAMIGAFifoBufferingKey"
@@ -1033,7 +1033,7 @@ extension Defaults {
     static let filterType        = FILT_BUTTERWORTH
 
     // Blitter
-    static let exactBlitter      = false
+    static let blitterAccuracy   = 0
 
     // Disk controller
     static let fifoBuffering     = true
@@ -1050,7 +1050,7 @@ extension MyController {
             Keys.clxPlfPlf: Defaults.clxPlfPlf,
             Keys.filterActivation: Defaults.filterActivation.rawValue,
             Keys.filterType: Defaults.filterType.rawValue,
-            Keys.exactBlitter: Defaults.exactBlitter,
+            Keys.blitterAccuracy: Defaults.blitterAccuracy,
             Keys.fifoBuffering: Defaults.fifoBuffering
         ]
 
@@ -1067,7 +1067,7 @@ extension MyController {
                      Keys.clxPlfPlf,
                      Keys.filterActivation,
                      Keys.filterType,
-                     Keys.exactBlitter,
+                     Keys.blitterAccuracy,
                      Keys.fifoBuffering ]
 
         for key in keys { defaults.removeObject(forKey: key) }
@@ -1086,7 +1086,7 @@ extension MyController {
         amiga.configure(VA_CLX_PLF_PLF, enable: defaults.bool(forKey: Keys.clxPlfPlf))
         amiga.configure(VA_FILTER_ACTIVATION, value: defaults.integer(forKey: Keys.filterActivation))
         amiga.configure(VA_FILTER_TYPE, value: defaults.integer(forKey: Keys.filterType))
-        amiga.configureExactBlitter(defaults.bool(forKey: Keys.exactBlitter))
+        amiga.configure(VA_BLITTER_ACCURACY, value: defaults.integer(forKey: Keys.blitterAccuracy))
         amiga.configureFifoBuffering(defaults.bool(forKey: Keys.fifoBuffering))
 
         amiga.resume()
@@ -1102,7 +1102,7 @@ extension MyController {
         defaults.set(config.clxPlfPlf, forKey: Keys.clxPlfPlf)
         defaults.set(config.filterActivation.rawValue, forKey: Keys.filterActivation)
         defaults.set(config.filterType.rawValue, forKey: Keys.filterType)
-        defaults.set(config.exactBlitter, forKey: Keys.exactBlitter)
+        defaults.set(config.blitterAccuracy, forKey: Keys.blitterAccuracy)
         defaults.set(config.fifoBuffering, forKey: Keys.fifoBuffering)
     }
 }

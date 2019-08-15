@@ -1264,12 +1264,6 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->amiga->powerOff();
 }
-/*
-- (void) powerOnOrOff
-{
-    return wrapper->amiga->powerOnOrOff();
-}
-*/
 - (void) reset
 {
     return wrapper->amiga->reset();
@@ -1374,10 +1368,6 @@ struct ADFFileWrapper { ADFFile *adf; };
 - (BOOL) configureDrive:(NSInteger)nr speed:(NSInteger)value
 {
     return wrapper->amiga->configureDriveSpeed((unsigned)nr, value);
-}
-- (void) configureExactBlitter:(BOOL)value
-{
-    wrapper->amiga->configureExactBlitter(value);
 }
 - (void) configureFifoBuffering:(BOOL)value
 {

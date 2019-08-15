@@ -27,7 +27,7 @@ extension PreferencesController {
         compFilterActivation.selectItem(withTag: config.filterActivation.rawValue)
             
         // Blitter
-        compExactBlitter.state = config.exactBlitter ? .on : .off
+        compExactBlitter.state = config.blitterAccuracy > 0 ? .on : .off
 
         // Disk controller
         compFifoBuffering.state = config.fifoBuffering ? .on : .off
@@ -67,7 +67,7 @@ extension PreferencesController {
 
     @IBAction func compExactBlitterAction(_ sender: NSButton!) {
 
-        amigaProxy?.configureExactBlitter(sender.state == .on)
+        amigaProxy?.configure(VA_BLITTER_ACCURACY, value: sender.state == .on ? 1 : 0)
         refresh()
     }
 

@@ -33,8 +33,25 @@ class Blitter : public HardwareComponent {
     // Configuration items
     //
     
-    // Indicates if the Blitter should be emulated cycle-accurately.
-    bool exact = false;
+    /* Blitter emulation accuracy.
+     * The following accuracy levels are implemented at the moment:
+     *
+     * Level 0: Blits are performed immediately by the FastBlitter.
+     *          The busy flag is cleared immediately.
+     *          The Blitter IRQ is triggered immediately.
+     *          The CPU is never blocked.
+     *
+     * Level 1: Blits are performed immediately by the FastBlitter.
+     *          The busy flag is cleared with a delay.
+     *          The Blitter IRQ is triggered with a delay.
+     *          The CPU is never blocked.
+     *
+     * Level 2: Blits are performed immediately by the FastBlitter.
+     *          The busy flag is cleared with a delay.
+     *          The Blitter IRQ is triggered with a delay.
+     *          The CPU is blocked while the Blitter is operating.
+     */
+     int accuracy = 0;
     
     
     //
@@ -143,7 +160,7 @@ class Blitter : public HardwareComponent {
     {
         worker
 
-        & exact;
+        & accuracy;
     }
 
     template <class T>
@@ -215,11 +232,11 @@ class Blitter : public HardwareComponent {
     
 
     //
-    // Accessing properties
+    // COnfiguring the device
     //
 
-    bool getExactEmulation() { return exact; }
-    void setExactEmulation(bool value) { exact = value; }
+    int getAccuracy() { return accuracy; }
+    void setAccuracy(int level) { accuracy = level; }
     
     
     //
