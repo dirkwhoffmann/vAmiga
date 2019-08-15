@@ -1553,7 +1553,7 @@ Agnus::hsyncHandler()
    bool bplDmaLine = inBplDmaLine();
 
     if (bplDmaLine) {
-        denise->setSpriteClippingRange(4 * ddfstrt + 32, HPIXELS);
+        denise->setSpriteClippingRange(4 * ddfstrt + 6, HPIXELS);
     } else {
         denise->setSpriteClippingRange(HPIXELS, HPIXELS);
     }
