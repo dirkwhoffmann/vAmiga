@@ -571,9 +571,6 @@ Denise::translateDPF(int from, int to)
 void
 Denise::drawSprites()
 {
-    // if (!agnus->inBplDmaLine()) return;
-    // if (!agnus->inBplDmaLine(agnus->dmaconAtDDFStrt, agnus->bplcon0AtDDFStrt)) return;
-
     // Sprites 6 and 7
     if (armed & 0b11000000) {
         if (attached(7)) {
@@ -622,7 +619,8 @@ Denise::drawSprite()
 {
     assert(x >= 0 && x <= 7);
 
-    // TODO: Add a suitable quick-exit condition here
+    // Check for a quick-exit
+    if (spriteClipBegin == HPIXELS) return;
 
     const uint16_t depth[8] = { Z_SP0, Z_SP1, Z_SP2, Z_SP3, Z_SP4, Z_SP5, Z_SP6, Z_SP7 };
     uint16_t z = depth[x];
