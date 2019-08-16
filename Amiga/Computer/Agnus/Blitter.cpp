@@ -251,23 +251,6 @@ Blitter::pokeBLTSIZE(uint16_t value)
     } else {
         agnus->scheduleAbs<BLT_SLOT>(NEVER, BLT_START);
     }
-
-    /*
-     if (bltLINE()) {
-     // TODO
-     } else {
-
-     // Set width and height counters
-     wcounter = bltsizeW();
-     hcounter = bltsizeH();
-
-     // Load micro instruction code
-     loadMicrocode();
-
-     // Start the blit
-     events->scheduleRel(BLT_SLOT, DMA_CYCLES(1), BLT_EXECUTE);
-     }
-     */
 }
 
 void
@@ -346,14 +329,18 @@ Blitter::pokeDMACON(uint16_t oldValue, uint16_t newValue)
 
 void
 Blitter::serviceEvent(EventID id)
-{
-    uint16_t instr;
-    
+{    
     debug(2, "Servicing Blitter event %d\n", id);
     
     switch (id) {
 
         case BLT_START:
+
+            // bltdebug = 1;
+            // accuracy = 3;
+            plaindebug(BLIT_CHECKSUM, "BLITTER Blit %d (%d,%d) (%d%d%d%d) %x %x %x %x %s\n",
+                       copycount, bltsizeW(), bltsizeH(), bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
+                       bltapt, bltbpt, bltcpt, bltdpt, bltconDESC() ? "D" : "");
 
             // Select the fast or slow bitter depending on the accuracy level
             (accuracy >= 3) ? startSlowBlitter() : startFastBlitter();
@@ -361,124 +348,8 @@ Blitter::serviceEvent(EventID id)
 
 
         case BLT_EXECUTE:
-            
-            // Only proceed if Blitter DMA is enabled
-            if (!agnus->bltDMA()) {
-                agnus->cancel<BLT_SLOT>();
-                break;
-            }
 
-            // Execute next Blitter micro instruction
-            instr = microInstr[bltpc];
-            debug(2, "Executing micro instruction %d (%X)\n", bltpc, instr);
-            bltpc++;
-            
-            if (instr & WRITE_D) {
-                
-                debug(2, "WRITE_D\n");
-                mem->pokeChip16(bltdpt, dhold);
-                INC_OCS_PTR(bltdpt, 2 + (isLastWord() ? bltdmod : 0));
-            }
-            
-            if (instr & HOLD_A) {
-                
-                debug(2, "HOLD_A\n");
-                // Emulate the barrel shifter on data path A
-                ahold = (ashift >> bltconASH()) & 0xFFFF;
-            }
-
-            if (instr & HOLD_B) {
-
-                debug(2, "HOLD_B\n");
-                // Emulate the barrel shifter on data path B
-                bhold = (bshift >> bltconBSH()) & 0xFFFF;
-            }
-            
-            if (instr & HOLD_D) {
-
-                debug(2, "HOLD_D\n");
-                
-                // Run the minterm logic circuit
-                doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF);
-                
-                // Run the fill logic circuit
-                // TODO
-                
-                // Update the zero flag
-                if (dhold) bzero = false;
-                
-                // Move to the next coordinate
-                if (xCounter > 1) {
-                    xCounter--;
-                } else {
-                    if (yCounter > 1) {
-                        xCounter = bltsizeW();
-                        yCounter--;
-                    }
-                }
-            }
-            
-            if (instr & FETCH_A) {
-                
-                debug(2, "FETCH_A\n");
-                // pokeBLTADAT(amiga->mem.peek16(bltapt));
-                anew = mem->peek16(bltapt);
-                INC_OCS_PTR(bltapt, 2 + (isLastWord() ? bltamod : 0));
-            }
-            
-            if (instr & FETCH_B) {
-
-                debug(3, "FETCH_B\n");
-                // pokeBLTBDAT(amiga->mem.peek16(bltbpt));
-                bnew = mem->peek16(bltbpt);
-                INC_OCS_PTR(bltbpt, 2 + (isLastWord() ? bltbmod : 0));
-            }
-
-            if (instr & FETCH_C) {
-                
-                debug(3, "FETCH_C\n");
-                // pokeBLTCDAT(amiga->mem.peek16(bltcpt));
-                chold = mem->peek16(bltcpt);
-                INC_OCS_PTR(bltcpt, 2 + (isLastWord() ? bltcmod : 0));
-            }
-            
-            if (instr & LOOPBACK) {
-                
-                debug(2, "LOOPBACK\n");
-                uint16_t offset = instr & 0b111;
-                
-                if ((yCounter > 1 || xCounter > 1) && offset) {
-
-                    // Move PC back to the beginning of the main cycle
-                    bltpc = bltpc - offset - 1;
-
-                } else {
-                    
-                    // The remaining code flushes the pipeline.
-                    // The Blitter busy flag is already cleared.
-                    bbusy = false;
-                }
-            }
-            
-            if (instr & BLTDONE) {
-                
-                debug(2, "BLTDONE\n");
-                
-                // Clear the Blitter busy flag
-                bbusy = false;
-                
-                // Trigger the Blitter interrupt
-                agnus->scheduleRel<IRQ_BLIT_SLOT>(0, IRQ_SET);
-                
-                // Terminate the Blitter
-                agnus->cancel<BLT_SLOT>();
-                
-            } else {
-
-                // Continue running the Blitter
-                agnus->rescheduleRel<BLT_SLOT>(DMA_CYCLES(1));
-            }
-            
+            executeSlowBlitter();
             break;
 
         case BLT_FAST_END:

@@ -9,21 +9,22 @@
 
 #include "Amiga.h"
 
-int bltdebug = 0; // REMOVE ASAP
-
 void
 Blitter::startFastBlitter()
 {
     int delay = 0;
 
+    check1 = fnv_1a_init32();
+    check2 = fnv_1a_init32();
+
     if (bltconLINE()) {
 
-        // Perform a line blit
+        linecount++;
         doFastLineBlit();
 
     } else {
 
-        // Perform a copy blit
+        copycount++;
         doFastCopyBlit();
 
         // In accuracy level 1 or above, we signal termination with a delay
@@ -50,11 +51,6 @@ Blitter::endFastBlit()
 void
 Blitter::doFastCopyBlit()
 {
-    copycount++;
-
-    uint32_t check1 = fnv_1a_init32();
-    uint32_t check2 = fnv_1a_init32();
-    
     uint16_t xmax = bltsizeW();
     uint16_t ymax = bltsizeH();
     
@@ -64,7 +60,6 @@ Blitter::doFastCopyBlit()
     bool useD = bltconUSED();
     
     bool descending = bltconDESC();
-    
     bool fillCarry;
     
     // Setup shift, increment and modulo offsets
@@ -75,12 +70,6 @@ Blitter::doFastCopyBlit()
     int32_t bmod = bltbmod;
     int32_t cmod = bltcmod;
     int32_t dmod = bltdmod;
-
-    plaindebug(BLIT_CHECKSUM, "BLITTER Blit %d (%d,%d) (%d%d%d%d) %x %x %x %x %s\n",
-    copycount, bltsizeW(), bltsizeH(), useA, useB, useC, useD,
-           bltapt, bltbpt, bltcpt, bltdpt, bltconDESC() ? "D" : "");
-
-    // if (copycount == 1182) bltdebug = 1;
 
     // Reverse direction is descending mode
     if (bltconDESC()) {
@@ -135,10 +124,10 @@ Blitter::doFastCopyBlit()
             }
             if (bltdebug) plainmsg("    After fetch: A = %x B = %x C = %x\n", anew, bnew, chold);
             
-            if (bltdebug) plainmsg("    After masking (%x,%x) %x\n", bltafwm, bltalwm, anew & mask);
+            if (bltdebug) plainmsg("    After masking with %x (%x,%x) %x\n", mask, bltafwm, bltalwm, anew & mask);
             
             // Run the barrel shifters on data path A and B
-            if (bltdebug) plainmsg("    ash = %d bsh = %d\n", bltconASH(), bltconBSH());
+            if (bltdebug) plainmsg("    ash = %d bsh = %d mask = %X\n", bltconASH(), bltconBSH(), mask);
             if (descending) {
                 ahold = HI_W_LO_W(anew & mask, aold) >> ash;
                 bhold = HI_W_LO_W(bnew, bold) >> bsh;
@@ -151,7 +140,7 @@ Blitter::doFastCopyBlit()
             if (bltdebug) printf("    After shifting (%d,%d) A = %x B = %x\n", ash, bsh, ahold, bhold);
             
             // Run the minterm logic circuit
-            if (bltdebug) plainmsg("    ahold = %X bhold = %X chold = %X bltcon0 = %X (hex)\n", ahold, bhold, chold, bltcon0);
+            if (bltdebug) plainmsg("    Minterms: ahold = %X bhold = %X chold = %X bltcon0 = %X (hex)\n", ahold, bhold, chold, bltcon0);
             dhold = doMintermLogicQuick(ahold, bhold, chold, bltcon0 & 0xFF);
             assert(dhold == doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF));
 
@@ -213,11 +202,6 @@ INC_OCS_PTR(cpt, -cmod);
 void
 Blitter::doFastLineBlit()
 {
-    uint32_t check1 = fnv_1a_init32();
-    uint32_t check2 = fnv_1a_init32();
-    
-    linecount++;
-    
     /*
     bool useA = bltUSEA();
     bool useB = bltUSEB();

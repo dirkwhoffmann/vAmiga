@@ -159,15 +159,33 @@ private:
     uint16_t dhold;
     uint32_t ashift;
     uint32_t bshift;
-    
+
+    // Registers used by the slow blitter
+    int     incr;
+    int     ash;
+    int     bsh;
+    int32_t amod;
+    int32_t bmod;
+    int32_t cmod;
+    int32_t dmod;
+
     // Counter registers
     uint16_t xCounter;
     uint16_t yCounter;
     
-    // Blitter flags;
+    //
+    // Blitter flags
+    //
+
     bool bbusy;
     bool bzero;
-    
+
+    //
+    // Auxiliary stuff
+    //
+
+    bool fillCarry;
+    uint16_t mask;
     
     //
     // Micro execution unit
@@ -198,36 +216,41 @@ private:
      *    LOOPBACK : Can be used to check if a LOOPBACKx command is present.
      */
 
-    static const uint16_t BUS       = 0b1000000000000;
+    static const uint16_t BUS       = 0b1'0000'0000'0000;
 
-    static const uint16_t FETCH_A   = 0b0000000010000 | BUS;
-    static const uint16_t FETCH_B   = 0b0000000100000 | BUS;
-    static const uint16_t FETCH_C   = 0b0000001000000 | BUS;
-    static const uint16_t HOLD_A    = 0b0000010000000;
-    static const uint16_t HOLD_B    = 0b0000100000000;
-    static const uint16_t HOLD_D    = 0b0001000000000;
-    static const uint16_t WRITE_D   = 0b0010000000000 | BUS;
-    static const uint16_t BLTDONE   = 0b0100000000000;
-    static const uint16_t BLTIDLE   = 0b0000000000000;
-    static const uint16_t LOOPBACK1 = 0b0000000001001;
-    static const uint16_t LOOPBACK2 = 0b0000000001010;
-    static const uint16_t LOOPBACK3 = 0b0000000001011;
-    static const uint16_t LOOPBACK4 = 0b0000000001100;
-
-    static const uint16_t LOOPBACK  = 0b0000000001111;
-
+    static const uint16_t BLTIDLE   = 0b0'0000'0000'0000;
+    static const uint16_t FETCH_A   = 0b0'0000'0000'0001 | BUS;
+    static const uint16_t FETCH_B   = 0b0'0000'0000'0010 | BUS;
+    static const uint16_t FETCH_C   = 0b0'0000'0000'0100 | BUS;
+    static const uint16_t HOLD_A    = 0b0'0000'0000'1000;
+    static const uint16_t HOLD_B    = 0b0'0000'0001'0000;
+    static const uint16_t HOLD_D    = 0b0'0000'0010'0000;
+    static const uint16_t WRITE_D   = 0b0'0000'0100'0000 | BUS;
+    static const uint16_t BLTDONE   = 0b0'0000'1000'0000;
+    static const uint16_t LOOP      = 0b0'0001'0000'0000;
+    static const uint16_t ENDLOOP   = 0b0'0010'0000'0000;
 
     // The micro program to execute
     uint16_t microInstr[32];
     
     // The program counter indexing the microInstr array
     uint16_t bltpc = 0;
-    
+
+    // Latched program counter marking the begin of the loop
+    uint16_t bltpcl = 0;
+
+    // Debug flags
+    int bltdebug = 0;
+
     // Debug counters
     int copycount = 0;
     int linecount = 0;
 
-    
+    // Debug checksums
+    uint32_t check1;
+    uint32_t check2;
+
+
     //
     // Constructing and destructing
     //
@@ -287,7 +310,14 @@ public:
         & yCounter
 
         & bbusy
-        & bzero;
+        & bzero
+
+        & fillCarry
+        & mask
+
+        & microInstr
+        & bltpc
+        & bltpcl;
     }
 
     
@@ -449,12 +479,22 @@ private:
     // Slow Blitter (Accuracy level 3)
     //
 
-public:
+private:
 
     // Performs a Blitter operation with the slow Blitter
     void startSlowBlitter();
 
-private:
+    // Emulates the next Blitter micro-instruction
+    void executeSlowBlitter();
+
+    // Sets the x or y counter to a new value
+    void setXCounter(uint16_t value);
+    void setYCounter(uint16_t value);
+    void resetXCounter() { setXCounter(bltsizeW()); }
+    void resetYCounter() { setYCounter(bltsizeH()); }
+    void decXCounter() { setXCounter(xCounter - 1); }
+    void decYCounter() { setYCounter(yCounter - 1); }
+
 
     // Program the device
     void loadMicrocode();
