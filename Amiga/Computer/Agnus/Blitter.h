@@ -82,10 +82,10 @@ class Blitter : public HardwareComponent {
 
 
     // Quick-access references
-    class Memory *mem; 
+    class Memory *mem;
     class Agnus *agnus;
 
-    private:
+private:
     
     // Information shown in the GUI inspector panel
     BlitterInfo info;
@@ -118,7 +118,7 @@ class Blitter : public HardwareComponent {
      *          Consumes bus cycles while operating.
      *          Slows down the CPU by inserting wait states.
      */
-     int accuracy = 0;
+    int accuracy = 0;
     
     
     //
@@ -232,7 +232,7 @@ class Blitter : public HardwareComponent {
     // Constructing and destructing
     //
     
-    public:
+public:
     
     Blitter();
     
@@ -295,12 +295,12 @@ class Blitter : public HardwareComponent {
     // Methods from HardwareComponent
     //
     
-    private:
+private:
 
     void _initialize() override;
     void _powerOn() override;
     void _reset() override;
-    void _inspect() override; 
+    void _inspect() override;
     void _dump() override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
     size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS }
@@ -311,7 +311,7 @@ class Blitter : public HardwareComponent {
     // Reading the internal state
     //
     
-    public:
+public:
     
     // Returns the latest internal state recorded by inspect()
     BlitterInfo getInfo();
@@ -322,14 +322,14 @@ class Blitter : public HardwareComponent {
     //
 
     int getAccuracy() { return accuracy; }
-    void setAccuracy(int level) { accuracy = level; }
+    void setAccuracy(int level) { accuracy = level; debug("accuracy = %d\n", accuracy); }
     
     
     //
     // Accessing registers
     //
     
-    public:
+public:
     
     // OCS register 0x040 (w)
     void pokeBLTCON0(uint16_t value);
@@ -402,7 +402,7 @@ class Blitter : public HardwareComponent {
     // Serving events
     //
     
-    public:
+public:
     
     // Processes a Blitter event
     void serviceEvent(EventID id);
@@ -427,27 +427,13 @@ class Blitter : public HardwareComponent {
 
 
     //
-    // Slow Blitter (more accurate)  (NOT WORKING YET)
+    // Fast Blitter (Accuracy levels 0 ... 2)
     //
     
-    private:
-    
-    // Program the device
-    void loadMicrocode();
-
-    // Emulate the barrel shifter
-    void doBarrelShifterA();
-    void doBarrelShifterB();
-
-    
-    //
-    // Fast Blitter (less accurate)
-    //
-    
-    private:
+private:
     
     // Invokes the FastBlitter to perform a blit
-    void startFastBlit();
+    void startFastBlitter();
 
     // Called at the end of a FastBlitter operation
     void endFastBlit();
@@ -457,6 +443,27 @@ class Blitter : public HardwareComponent {
     
     // Performs a line blit operation via the FastBlitter
     void doFastLineBlit();
+
+
+    //
+    // Slow Blitter (Accuracy level 3)
+    //
+
+public:
+
+    // Performs a Blitter operation with the slow Blitter
+    void startSlowBlitter();
+
+private:
+
+    // Program the device
+    void loadMicrocode();
+
+    // Emulate the barrel shifter
+    void doBarrelShifterA();
+    void doBarrelShifterB();
+
+
 };
 
 #endif

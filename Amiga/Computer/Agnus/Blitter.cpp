@@ -247,9 +247,9 @@ Blitter::pokeBLTSIZE(uint16_t value)
 
     // Schedule the blit operation
     if (agnus->bltDMA()) {
-        agnus->scheduleRel<BLT_SLOT>(DMA_CYCLES(0), BLT_FAST_STRT);
+        agnus->scheduleRel<BLT_SLOT>(DMA_CYCLES(0), BLT_START);
     } else {
-        agnus->scheduleAbs<BLT_SLOT>(NEVER, BLT_FAST_STRT);
+        agnus->scheduleAbs<BLT_SLOT>(NEVER, BLT_START);
     }
 
     /*
@@ -338,8 +338,8 @@ Blitter::pokeDMACON(uint16_t oldValue, uint16_t newValue)
     if (!oldBltDma && newBltDma) {
 
         // Perform pending blit operation (if any)
-        if (agnus->hasEvent<BLT_SLOT>(BLT_FAST_STRT)) {
-            agnus->scheduleRel<BLT_SLOT>(DMA_CYCLES(0), BLT_FAST_STRT);
+        if (agnus->hasEvent<BLT_SLOT>(BLT_START)) {
+            agnus->scheduleRel<BLT_SLOT>(DMA_CYCLES(0), BLT_START);
         }
     }
 }
@@ -352,6 +352,13 @@ Blitter::serviceEvent(EventID id)
     debug(2, "Servicing Blitter event %d\n", id);
     
     switch (id) {
+
+        case BLT_START:
+
+            // Select the fast or slow bitter depending on the accuracy level
+            (accuracy >= 3) ? startSlowBlitter() : startFastBlitter();
+            break;
+
 
         case BLT_EXECUTE:
             
@@ -472,11 +479,6 @@ Blitter::serviceEvent(EventID id)
                 agnus->rescheduleRel<BLT_SLOT>(DMA_CYCLES(1));
             }
             
-            break;
-
-        case BLT_FAST_STRT:
-
-            startFastBlit();
             break;
 
         case BLT_FAST_END:

@@ -10,6 +10,22 @@
 #include "Amiga.h"
 
 void
+Blitter::startSlowBlitter()
+{
+    if (bltconLINE()) {
+
+        // Perform a line blit (we fall back to the fast blitter)
+        doFastLineBlit();
+
+    } else {
+
+        // Perform a copy blit
+        warn("SLOW COPY BLITTER NOT IMPLEMENTED YET\n");
+
+    }
+}
+
+void
 Blitter::loadMicrocode()
 {
     bltpc = 0;

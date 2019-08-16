@@ -12,7 +12,7 @@
 int bltdebug = 0; // REMOVE ASAP
 
 void
-Blitter::startFastBlit()
+Blitter::startFastBlitter()
 {
     int delay = 0;
 
