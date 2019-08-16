@@ -24,14 +24,11 @@ extension PreferencesController {
         compClxPlfPlf.state = config.clxPlfPlf ? .on : .off
 
         // Blitter
-        let acc = config.blitterAccuracy
-        compBltAccuracy.intValue = acc
-        compBltCheck1.stringValue = (acc >= 1) ? "\u{2714}" : "\u{2718}"
-        compBltCheck2.stringValue = (acc >= 2) ? "\u{2714}" : "\u{2718}"
-        compBltCheck1.textColor = (acc >= 1) ? .labelColor : .tertiaryLabelColor
-        compBltCheck2.textColor = (acc >= 2) ? .labelColor : .tertiaryLabelColor
-        compBltText1.textColor = (acc >= 1) ? .labelColor : .tertiaryLabelColor
-        compBltText2.textColor = (acc >= 2) ? .labelColor : .tertiaryLabelColor
+        let a = config.blitterAccuracy
+        compBltAccuracy.intValue = a
+        compBltLevel1.textColor = (a >= 1) ? .labelColor : .tertiaryLabelColor
+        compBltLevel2.textColor = (a >= 2) ? .labelColor : .tertiaryLabelColor
+        compBltLevel3.textColor = (a >= 3) ? .labelColor : .tertiaryLabelColor
 
         // Audio
         compFilterActivation.selectItem(withTag: config.filterActivation.rawValue)
@@ -40,7 +37,7 @@ extension PreferencesController {
         compFifoBuffering.state = config.fifoBuffering ? .on : .off
 
         // Lock controls if emulator is powered on
-        compBltAccuracy.isEnabled = poweredOff
+        // compBltAccuracy.isEnabled = poweredOff
         compFifoBuffering.isEnabled = poweredOff
 
         // Label the OK button

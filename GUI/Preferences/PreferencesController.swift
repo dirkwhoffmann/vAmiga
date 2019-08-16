@@ -86,10 +86,9 @@ class PreferencesController: DialogController {
 
     // Blitter
     @IBOutlet weak var compBltAccuracy: NSSlider!
-    @IBOutlet weak var compBltCheck1: NSTextField!
-    @IBOutlet weak var compBltText1: NSTextField!
-    @IBOutlet weak var compBltCheck2: NSTextField!
-    @IBOutlet weak var compBltText2: NSTextField!
+    @IBOutlet weak var compBltLevel3: NSTextField!
+    @IBOutlet weak var compBltLevel2: NSTextField!
+    @IBOutlet weak var compBltLevel1: NSTextField!
 
     // Audio
     @IBOutlet weak var compFilterActivation: NSPopUpButton!
