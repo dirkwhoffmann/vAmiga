@@ -10,10 +10,76 @@
 #ifndef _BLITTER_INC
 #define _BLITTER_INC
 
-// Micro-instructions
 class Blitter : public HardwareComponent {
     
     friend class Agnus;
+
+    //
+    // Constants
+    //
+
+    /* Blitter execution diagram (HRM, Table 6.2):
+     *
+     *           Active
+     * BLTCON0  Channels            Cycle sequence
+     *
+     *    F     A B C D    A0 B0 C0 -- A1 B1 C1 D0 A2 B2 C2 D1 D2
+     *    E     A B C      A0 B0 C0 A1 B1 C1 A2 B2 C2
+     *    D     A B   D    A0 B0 -- A1 B1 D0 A2 B2 D1 -- D2
+     *    C     A B        A0 B0 -- A1 B1 -- A2 B2
+     *    B     A   C D    A0 C0 -- A1 C1 D0 A2 C2 D1 -- D2
+     *    A     A   C      A0 C0 A1 C1 A2 C2
+     *    9     A     D    A0 -- A1 D0 A2 D1 -- D2
+     *    8     A          A0 -- A1 -- A2
+     *    7       B C D    B0 C0 -- -- B1 C1 D0 -- B2 C2 D1 -- D2
+     *    6       B C      B0 C0 -- B1 C1 -- B2 C2
+     *    5       B   D    B0 -- -- B1 D0 -- B2 D1 -- D2
+     *    4       B        B0 -- -- B1 -- -- B2
+     *    3         C D    C0 -- -- C1 D0 -- C2 D1 -- D2
+     *    2         C      C0 -- C1 -- C2
+     *    1           D    D0 -- D1 -- D2
+     *    0                -- -- -- --
+     *
+     * From this table we derive:
+     *
+     *           Cyles: DMA cycles per word
+     *                  [ Total / Bus blocking / Non blocking ]
+     *
+     *     Wait states: Average number of CPU wait states
+     *                  [ DMA cycles / Master cycles ]
+     *
+     * BLTCON0    Cyles          Wait states
+     *
+     *    F     4 (4 / 0)   infinity / infinity
+     *    E     3 (3 / 0)   infinity / infinity
+     *    D     3 (3 / 0)   infinity / infinity
+     *    C     3 (2 / 1)          1 / 8
+     *    B     3 (3 / 0)   infinity / infinity
+     *    A     2 (2 / 0)   infinity / infinity
+     *    9     2 (2 / 0)   infinity / infinity
+     *    8     2 (1 / 1)        0.5 / 4
+     *    7     4 (3 / 1)        1.5 / 12
+     *    6     3 (2 / 1)          1 / 8
+     *    5     3 (2 / 1)          1 / 8
+     *    4     3 (1 / 2)       2.66 / 21.33
+     *    3     3 (2 / 1)          1 / 21.33
+     *    2     2 (1 / 1)        0.5 / 4
+     *    1     2 (1 / 1)        0.5 / 4
+     *    0     2 (0 / 2)          0 / 0
+     */
+    const int blitCycles[16] = {
+        2, 2, 2, 3,
+        3, 3, 3, 4,
+        2, 2, 2, 3,
+        3, 3, 3, 4
+    };
+    const int waitStates[16] = {
+        0, 4, 4, 21,
+        21, 8, 8, 12,
+        4, -1, -1, -1,
+        8, -1, -1, -1
+    };
+
 
     // Quick-access references
     class Memory *mem; 
@@ -36,20 +102,21 @@ class Blitter : public HardwareComponent {
     /* Blitter emulation accuracy.
      * The following accuracy levels are implemented at the moment:
      *
-     * Level 0: Blits are performed immediately by the FastBlitter.
-     *          The busy flag is cleared immediately.
-     *          The Blitter IRQ is triggered immediately.
-     *          The CPU is never blocked.
+     * Level 0: Moves data in a single chunk by using the FastBlitter.
+     *          Consumes no bus cycles while operating.
+     *          Keeps the CPU keeps running full speed.
      *
-     * Level 1: Blits are performed immediately by the FastBlitter.
-     *          The busy flag is cleared with a delay.
-     *          The Blitter IRQ is triggered with a delay.
-     *          The CPU is never blocked.
+     * Level 1: Moves data in a single chunk by using the FastBlitter.
+     *          Consumes bus cycles while operating.
+     *          Keeps the CPU keeps running full speed.
      *
-     * Level 2: Blits are performed immediately by the FastBlitter.
-     *          The busy flag is cleared with a delay.
-     *          The Blitter IRQ is triggered with a delay.
-     *          The CPU is blocked while the Blitter is operating.
+     * Level 2: Moves data in a single chunk by using the FastBlitter.
+     *          Consumes bus cycles while operating.
+     *          Slows down the CPU by inserting wait states.
+     *
+     * Level 3: Moves data word by word by using the SlowBlitter.
+     *          Consumes bus cycles while operating.
+     *          Slows down the CPU by inserting wait states.
      */
      int accuracy = 0;
     
@@ -106,31 +173,50 @@ class Blitter : public HardwareComponent {
     // Micro execution unit
     //
     
-    /* Although the current implementation is far from being timing-accurate,
-     * I am eager to improve it over time. To keep the implementation flexible,
-     * the blitter is emulated as a micro-programmable device. When a blit
-     * starts, a micro-program is set up that will decide on the action that
-     * are performed in each Blitter cycle. The real blitter in the Amiga does
-     * not work this way and uses a standard pipeline-based design.
+    /* To keep the implementation flexible, the blitter is emulated as a
+     * micro-programmable device. When a blit starts, a micro-program is set up
+     * that will decide on the action that are performed in each Blitter cycle.
+     *
+     * A micro-program consists of the following micro-instructions:
+     *
+     *     FETCH_A : Loads register A new.
+     *     FETCH_B : Loads register B new.
+     *     FETCH_C : Loads register C hold.
+     *      HOLD_A : Loads register A hold.
+     *      HOLD_B : Loads register B hold.
+     *      HOLD_D : Loads register D hold.
+     *     WRITE_D : Writes back D hold.
+     *     BLTDONE : Marks the last instruction.
+     *     BLTIDLE : Does nothing.
+     *   LOOPBACK2 : Executes the 2 foregoing statements again.
+     *   LOOPBACK3 : Executes the 3 foregoing statements again.
+     *   LOOPBACK4 : Executes the 4 foregoing statements again.
+     *
+     * Additional bit masks:
+     *
+     *         BUS : Indicates that the Blitter needs bus access to proceed.
+     *    LOOPBACK : Can be used to check if a LOOPBACKx command is present.
      */
-    
-    // The Blitter micro-instructions
-    static const uint16_t LOOPBACK  = 0b0000000001111; // Loops back or flashes the pipeline
-    static const uint16_t FETCH_A   = 0b0000000010000; // Loads register "A new"
-    static const uint16_t FETCH_B   = 0b0000000100000; // Loads register "B new"
-    static const uint16_t FETCH_C   = 0b0000001000000; // Loads register "C hold"
-    static const uint16_t HOLD_A    = 0b0000010000000; // Loads register "A hold"
-    static const uint16_t HOLD_B    = 0b0000100000000; // Loads register "B hold"
-    static const uint16_t HOLD_D    = 0b0001000000000; // Loads register "D hold"
-    static const uint16_t WRITE_D   = 0b0010000000000; // Writes back "D hold"
-    static const uint16_t BLTDONE   = 0b0100000000000; // Marks the last instruction
-    
-    static const uint16_t BLTIDLE   = 0b000000000000; // Does nothing
-    static const uint16_t LOOPBACK0 = 0b000000001000; // Signals the end of the main loop
-    static const uint16_t LOOPBACK2 = 0b000000001010; // Executes the main loop again
-    static const uint16_t LOOPBACK3 = 0b000000001011; // Executes the main loop again
-    static const uint16_t LOOPBACK4 = 0b000000001100; // Executes the main loop again
-    
+
+    static const uint16_t BUS       = 0b1000000000000;
+
+    static const uint16_t FETCH_A   = 0b0000000010000 | BUS;
+    static const uint16_t FETCH_B   = 0b0000000100000 | BUS;
+    static const uint16_t FETCH_C   = 0b0000001000000 | BUS;
+    static const uint16_t HOLD_A    = 0b0000010000000;
+    static const uint16_t HOLD_B    = 0b0000100000000;
+    static const uint16_t HOLD_D    = 0b0001000000000;
+    static const uint16_t WRITE_D   = 0b0010000000000 | BUS;
+    static const uint16_t BLTDONE   = 0b0100000000000;
+    static const uint16_t BLTIDLE   = 0b0000000000000;
+    static const uint16_t LOOPBACK1 = 0b0000000001001;
+    static const uint16_t LOOPBACK2 = 0b0000000001010;
+    static const uint16_t LOOPBACK3 = 0b0000000001011;
+    static const uint16_t LOOPBACK4 = 0b0000000001100;
+
+    static const uint16_t LOOPBACK  = 0b0000000001111;
+
+
     // The micro program to execute
     uint16_t microInstr[32];
     
@@ -332,7 +418,11 @@ class Blitter : public HardwareComponent {
     // Emulates the fill logic circuit
     void doFill(uint16_t &data, bool &carry);
 
-    // Returns the estimated number of DMA cycles of the current Blitter operation
+    /* Estimates the duration of a blit operation
+     * The returned value is the estimates number of bus cycles needed by the
+     * Blitter to perform the specified blit. It is used by the FastBlitter to
+     * terminate Blitter activity after the proper amount of time.
+     */
     int estimatesCycles(uint16_t bltcon0, int width, int height);
 
 

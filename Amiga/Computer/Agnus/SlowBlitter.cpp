@@ -43,7 +43,7 @@ Blitter::loadMicrocode()
 
     switch ((A << 3) | (B << 2) | (C << 1) | D) {
 
-        case 0b1111: { // A0 B0 C0 -- A1 B1 C1 D0 A2 B2 C2 D1 D2
+        case 0xF: { // A0 B0 C0 -- A1 B1 C1 D0 A2 B2 C2 D1 D2
 
             uint16_t prog[] = {
 
@@ -63,7 +63,7 @@ Blitter::loadMicrocode()
             break;
         }
 
-        case 0b1110: { // A0 B0 C0 A1 B1 C1 A2 B2 C2
+        case 0xE: { // A0 B0 C0 A1 B1 C1 A2 B2 C2
 
             uint16_t prog[] = {
 
@@ -81,13 +81,210 @@ Blitter::loadMicrocode()
             break;
         }
 
-        case 0b0000: { // -- -- -- --
+        case 0xD: { // A0 B0 -- A1 B1 D0 A2 B2 D1 -- D2
+
+            uint16_t prog[] = {
+
+                FETCH_A,
+                FETCH_B | HOLD_A,
+                HOLD_B,
+
+                FETCH_A | HOLD_D,
+                FETCH_B | HOLD_A,
+                HOLD_B | WRITE_D | LOOPBACK2,
+
+                WRITE_D | BLTDONE
+            };
+            memcpy(microInstr, prog, sizeof(prog));
+            break;
+        }
+
+        case 0xC: { // A0 B0 -- A1 B1 -- A2 B2
+
+            uint16_t prog[] = {
+
+                FETCH_A,
+                FETCH_B | HOLD_A,
+                HOLD_B | LOOPBACK2,
+                BLTDONE
+            };
+            memcpy(microInstr, prog, sizeof(prog));
+            break;
+        }
+
+        case 0xB: { // A0 C0 -- A1 C1 D0 A2 C2 D1 -- D2
+
+            uint16_t prog[] = {
+
+                FETCH_A,
+                FETCH_C | HOLD_A,
+                HOLD_D,
+
+                FETCH_A,
+                FETCH_C | HOLD_A,
+                WRITE_D | LOOPBACK2,
+
+                BLTIDLE,
+                WRITE_D | BLTDONE
+            };
+            memcpy(microInstr, prog, sizeof(prog));
+            break;
+        }
+
+        case 0xA: { // A0 C0 A1 C1 A2 C2
+
+            uint16_t prog[] = {
+
+                FETCH_A,
+                FETCH_C | HOLD_A | LOOPBACK1,
+                BLTDONE
+            };
+            memcpy(microInstr, prog, sizeof(prog));
+            break;
+        }
+
+        case 0x9: { // A0 -- A1 D0 A2 D1 -- D2
+
+            uint16_t prog[] = {
+
+                FETCH_A,
+                HOLD_A,
+
+                FETCH_A,
+                WRITE_D | HOLD_A | LOOPBACK1,
+                BLTDONE
+            };
+            memcpy(microInstr, prog, sizeof(prog));
+            break;
+        }
+
+        case 0x8: { // A0 -- A1 -- A2
+
+            uint16_t prog[] = {
+
+                FETCH_A,
+                HOLD_A | LOOPBACK1,
+                BLTDONE
+            };
+            memcpy(microInstr, prog, sizeof(prog));
+            break;
+        }
+
+        case 0x7: { // B0 C0 -- -- B1 C1 D0 -- B2 C2 D1 -- D2
+
+            uint16_t prog[] = {
+
+                FETCH_B,
+                FETCH_C | HOLD_B,
+                BLTIDLE,
+                BLTIDLE,
+                FETCH_B,
+                FETCH_C | HOLD_B,
+                WRITE_D,
+                LOOPBACK3,
+                BLTDONE
+            };
+            memcpy(microInstr, prog, sizeof(prog));
+            break;
+        }
+
+        case 0x6: { // B0 C0 -- B1 C1 -- B2 C2
+
+            uint16_t prog[] = {
+
+                FETCH_B,
+                FETCH_C | HOLD_B,
+                BLTIDLE | LOOPBACK2,
+                BLTDONE
+            };
+            memcpy(microInstr, prog, sizeof(prog));
+            break;
+        }
+
+        case 0x5: { // B0 -- -- B1 D0 -- B2 D1 -- D2
+
+            uint16_t prog[] = {
+
+                FETCH_B,
+                HOLD_B,
+
+                HOLD_D,
+                FETCH_B,
+                WRITE_D | HOLD_B | LOOPBACK2,
+
+                HOLD_D,
+                WRITE_D | BLTDONE
+            };
+            memcpy(microInstr, prog, sizeof(prog));
+            break;
+        }
+
+        case 0x4: { // B0 -- -- B1 -- -- B2
+
+            uint16_t prog[] = {
+
+                FETCH_B,
+                BLTIDLE,
+                BLTIDLE | LOOPBACK2,
+
+                FETCH_B | BLTDONE
+            };
+            memcpy(microInstr, prog, sizeof(prog));
+            break;
+        }
+
+        case 0x3: { // C0 -- -- C1 D0 -- C2 D1 -- D2
+
+            uint16_t prog[] = {
+
+                FETCH_C,
+                BLTIDLE,
+                HOLD_D,
+
+                FETCH_C,
+                WRITE_D,
+                HOLD_D | LOOPBACK2,
+
+                WRITE_D | BLTDONE
+            };
+            memcpy(microInstr, prog, sizeof(prog));
+            break;
+        }
+
+        case 0x2: { // C0 -- C1 -- C2
+
+            uint16_t prog[] = {
+
+                FETCH_C,
+                BLTIDLE | LOOPBACK1,
+                FETCH_C | BLTDONE
+            };
+            memcpy(microInstr, prog, sizeof(prog));
+            break;
+        }
+
+        case 0x1: { // D0 -- D1 -- D2
+
+            uint16_t prog[] = {
+
+                WRITE_D,
+                HOLD_D | LOOPBACK1,
+
+                WRITE_D | BLTDONE
+            };
+            memcpy(microInstr, prog, sizeof(prog));
+            break;
+        }
+
+        case 0x0: { // -- -- -- --
 
             uint16_t prog[] = {
 
                 BLTIDLE,
+
                 BLTIDLE,
-                BLTIDLE,
+                BLTIDLE | LOOPBACK1,
+
                 BLTDONE
             };
             memcpy(microInstr, prog, sizeof(prog));
@@ -101,7 +298,7 @@ Blitter::loadMicrocode()
             assert(false);
     }
 
-    debug(2, "Microcode loaded\n");
+    debug(BLT_DEBUG, "Microcode loaded\n");
 }
 
 void

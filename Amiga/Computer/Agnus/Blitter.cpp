@@ -799,7 +799,7 @@ Blitter::estimatesCycles(uint16_t bltcon0, int width, int height)
 
     switch ((bltcon0 >> 8) & 0xF) {
 
-        case 0x0: cyclesNeededPerWord = 1; break; // Table 6.2 is not precise here
+        case 0x0: cyclesNeededPerWord = 1; break;
         case 0x1:
         case 0x2: cyclesNeededPerWord = 2; break;
         case 0x3:
