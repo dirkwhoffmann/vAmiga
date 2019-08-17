@@ -336,7 +336,7 @@ Blitter::serviceEvent(EventID id)
         case BLT_START:
 
             // debugLevel = (copycount  == 11) ? 2 : 1;
-            accuracy = 0;
+            accuracy = 3;
 
             // Debugging
             check1 = fnv_1a_init32();
@@ -357,7 +357,6 @@ Blitter::serviceEvent(EventID id)
             // Select the fast or slow bitter depending on the accuracy level
             (accuracy >= 3) ? startSlowBlitter() : startFastBlitter();
             break;
-
 
         case BLT_EXECUTE:
 

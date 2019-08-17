@@ -20,6 +20,7 @@
  * A micro-program consists of the following micro-instructions:
  *
  *     BLTIDLE : Does nothing.
+ *         BUS : Acquires the bus.
  *     WRITE_D : Writes back D hold.
  *     FETCH_A : Loads register A new.
  *     FETCH_B : Loads register B new.
@@ -35,18 +36,17 @@
  *         BUS : Indicates that the Blitter needs bus access to proceed.
  */
 
-const uint16_t BUS       = 0b1'0000'0000'0000;
-
-const uint16_t BLTIDLE   = 0b0'0000'0000'0000;
-const uint16_t WRITE_D   = 0b0'0000'0100'0000 | BUS;
-const uint16_t FETCH_A   = 0b0'0000'0000'0001 | BUS;
-const uint16_t FETCH_B   = 0b0'0000'0000'0010 | BUS;
-const uint16_t FETCH_C   = 0b0'0000'0000'0100 | BUS;
-const uint16_t HOLD_A    = 0b0'0000'0000'1000;
-const uint16_t HOLD_B    = 0b0'0000'0001'0000;
-const uint16_t HOLD_D    = 0b0'0000'0010'0000;
-const uint16_t BLTDONE   = 0b0'0000'1000'0000;
-const uint16_t REPEAT    = 0b0'0001'0000'0000;
+const uint16_t BLTIDLE   = 0b0000'0000'0000;
+const uint16_t BUS       = 0b0000'0000'0001;
+const uint16_t WRITE_D   = 0b0000'0000'0010;
+const uint16_t FETCH_A   = 0b0000'0000'0100;
+const uint16_t FETCH_B   = 0b0000'0000'1000;
+const uint16_t FETCH_C   = 0b0000'0001'0000;
+const uint16_t HOLD_A    = 0b0000'0010'0000;
+const uint16_t HOLD_B    = 0b0000'0100'0000;
+const uint16_t HOLD_D    = 0b0000'1000'0000;
+const uint16_t BLTDONE   = 0b0001'0000'0000;
+const uint16_t REPEAT    = 0b0010'0000'0000;
 
 
 void
@@ -114,8 +114,11 @@ Blitter::executeSlowBlitter()
         return;
     }
 
+    while (agnus->hasEvent<BLT_SLOT>()) {
+
+
     // Execute next Blitter micro-instruction
-    uint16_t instr = microInstr[bltpc] & 0xFFF;
+    uint16_t instr = microInstr[bltpc];
     debug(BLT_DEBUG, "Executing micro instruction %d (%X)\n", bltpc, instr);
     bltpc++;
 
@@ -269,10 +272,7 @@ Blitter::executeSlowBlitter()
 
            plaindebug(BLIT_CHECKSUM, "BLITTER check1: %x check2: %x\n", check1, check2);
 
-    } else {
-
-        // Continue running the Blitter
-        // agnus->rescheduleRel<BLT_SLOT>(DMA_CYCLES(1));
+    } 
     }
 }
 
@@ -343,10 +343,10 @@ Blitter::loadMicrocode()
 
             uint16_t prog[] = {
 
-                FETCH_A,
-                FETCH_B | HOLD_A,
-                FETCH_C | HOLD_B,
-                WRITE_D | HOLD_D | REPEAT,
+                FETCH_A | BUS,
+                FETCH_B | HOLD_A | BUS,
+                FETCH_C | HOLD_B | BUS,
+                WRITE_D | HOLD_D | BUS | REPEAT,
 
                 WRITE_D | BLTDONE
             };
@@ -358,9 +358,9 @@ Blitter::loadMicrocode()
 
             uint16_t prog[] = {
 
-                FETCH_A | HOLD_D,
-                FETCH_B | HOLD_A,
-                FETCH_C | HOLD_B | REPEAT,
+                FETCH_A | HOLD_D | BUS,
+                FETCH_B | HOLD_A | BUS,
+                FETCH_C | HOLD_B | BUS | REPEAT,
 
                 HOLD_D | BLTDONE
             };
@@ -372,9 +372,9 @@ Blitter::loadMicrocode()
 
             uint16_t prog[] = {
 
-                FETCH_A | HOLD_D,
-                FETCH_B | HOLD_A,
-                WRITE_D | HOLD_B | REPEAT,
+                FETCH_A | HOLD_D | BUS,
+                FETCH_B | HOLD_A | BUS,
+                WRITE_D | HOLD_B | BUS | REPEAT,
 
                 HOLD_D,
                 WRITE_D | BLTDONE
@@ -387,8 +387,8 @@ Blitter::loadMicrocode()
 
             uint16_t prog[] = {
 
-                FETCH_A | HOLD_D,
-                FETCH_B | HOLD_A,
+                FETCH_A | HOLD_D | BUS,
+                FETCH_B | HOLD_A | BUS,
                 HOLD_B  | REPEAT,
 
                 HOLD_D | BLTDONE
@@ -401,9 +401,9 @@ Blitter::loadMicrocode()
 
             uint16_t prog[] = {
 
-                FETCH_A | HOLD_D,
-                FETCH_C | HOLD_A | HOLD_B,
-                WRITE_D | REPEAT,
+                FETCH_A | HOLD_D | BUS,
+                FETCH_C | HOLD_A | HOLD_B | BUS,
+                WRITE_D | REPEAT | BUS,
 
                 HOLD_D,
                 WRITE_D | BLTDONE
@@ -416,8 +416,8 @@ Blitter::loadMicrocode()
 
             uint16_t prog[] = {
 
-                FETCH_A | HOLD_D,
-                FETCH_C | HOLD_A | HOLD_B | REPEAT,
+                FETCH_A | HOLD_D | BUS,
+                FETCH_C | HOLD_A | HOLD_B | BUS | REPEAT,
 
                 HOLD_D | BLTDONE
             };
@@ -429,8 +429,8 @@ Blitter::loadMicrocode()
 
             uint16_t prog[] = {
 
-                FETCH_A | HOLD_D,
-                WRITE_D | HOLD_A | HOLD_B | REPEAT,
+                FETCH_A | HOLD_D | BUS,
+                WRITE_D | HOLD_A | HOLD_B | BUS | REPEAT,
 
                 HOLD_D,
                 WRITE_D | BLTDONE
@@ -443,7 +443,7 @@ Blitter::loadMicrocode()
 
             uint16_t prog[] = {
 
-                FETCH_A | HOLD_D,
+                FETCH_A | HOLD_D | BUS,
                 HOLD_A | HOLD_B | REPEAT,
 
                 HOLD_D | BLTDONE
@@ -456,9 +456,9 @@ Blitter::loadMicrocode()
 
             uint16_t prog[] = {
 
-                FETCH_B | HOLD_A,
-                FETCH_C | HOLD_B,
-                WRITE_D | HOLD_D,
+                FETCH_B | HOLD_A | BUS,
+                FETCH_C | HOLD_B | BUS,
+                WRITE_D | HOLD_D | BUS,
                 REPEAT,
 
                 WRITE_D | BLTDONE
@@ -473,8 +473,8 @@ Blitter::loadMicrocode()
 
             uint16_t prog[] = {
 
-                FETCH_B | HOLD_D,
-                FETCH_C | HOLD_A | HOLD_B | REPEAT,
+                FETCH_B | HOLD_D | BUS,
+                FETCH_C | HOLD_A | HOLD_B | BUS | REPEAT,
 
                 HOLD_D | BLTDONE
             };
@@ -486,8 +486,8 @@ Blitter::loadMicrocode()
 
             uint16_t prog[] = {
 
-                FETCH_B,
-                WRITE_D | HOLD_A | HOLD_B,
+                FETCH_B | BUS,
+                WRITE_D | HOLD_A | HOLD_B | BUS,
                 HOLD_D | REPEAT,
 
                 WRITE_D | BLTDONE
@@ -500,7 +500,7 @@ Blitter::loadMicrocode()
 
             uint16_t prog[] = {
 
-                FETCH_B,
+                FETCH_B | BUS,
                 HOLD_A | HOLD_B,
                 HOLD_D | REPEAT,
 
@@ -514,8 +514,8 @@ Blitter::loadMicrocode()
 
             uint16_t prog[] = {
 
-                FETCH_C | HOLD_A | HOLD_B,
-                WRITE_D,
+                FETCH_C | HOLD_A | HOLD_B | BUS,
+                WRITE_D | BUS,
                 HOLD_D | REPEAT,
 
                 WRITE_D | BLTDONE
@@ -528,7 +528,7 @@ Blitter::loadMicrocode()
 
             uint16_t prog[] = {
 
-                FETCH_C | HOLD_A | HOLD_B,
+                FETCH_C | HOLD_A | HOLD_B | BUS,
                 HOLD_D | REPEAT,
 
                 BLTDONE
@@ -541,7 +541,7 @@ Blitter::loadMicrocode()
 
             uint16_t prog[] = {
 
-                WRITE_D | HOLD_A | HOLD_B,
+                WRITE_D | HOLD_A | HOLD_B | BUS,
                 HOLD_D | REPEAT,
 
                 WRITE_D | BLTDONE
