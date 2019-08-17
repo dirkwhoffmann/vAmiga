@@ -336,11 +336,24 @@ Blitter::serviceEvent(EventID id)
 
         case BLT_START:
 
-            bltdebug = 1;
+            // debugLevel = (copycount  == 921) ? 2 : 1;
             accuracy = 3;
-            plaindebug(BLIT_CHECKSUM, "BLITTER Blit %d (%d,%d) (%d%d%d%d) %x %x %x %x %s\n",
-                       copycount, bltsizeW(), bltsizeH(), bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
-                       bltapt, bltbpt, bltcpt, bltdpt, bltconDESC() ? "D" : "");
+
+            // Debugging
+            check1 = fnv_1a_init32();
+            check2 = fnv_1a_init32();
+            if (bltconLINE()) {
+                linecount++;
+                plaindebug(BLIT_CHECKSUM, "BLITTER Line %d (%d,%d) (%d%d%d%d) %x %x %x %x\n",
+                           linecount, bltsizeW(), bltsizeH(),
+                           bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
+                           bltapt, bltbpt, bltcpt, bltdpt);
+            } else {
+                copycount++;
+                plaindebug(BLIT_CHECKSUM, "BLITTER Blit %d (%d,%d) (%d%d%d%d) %x %x %x %x %s\n",
+                           copycount, bltsizeW(), bltsizeH(), bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
+                           bltapt, bltbpt, bltcpt, bltdpt, bltconDESC() ? "D" : "");
+            }
 
             // Select the fast or slow bitter depending on the accuracy level
             (accuracy >= 3) ? startSlowBlitter() : startFastBlitter();

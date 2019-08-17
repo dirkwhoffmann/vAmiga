@@ -160,7 +160,11 @@ private:
     uint32_t ashift;
     uint32_t bshift;
 
-    // Registers used by the slow blitter
+    //
+    // The Slow Blitter state
+    //
+
+    int     iteration;
     int     incr;
     int     ash;
     int     bsh;
@@ -169,10 +173,10 @@ private:
     int32_t cmod;
     int32_t dmod;
 
-    // Counter registers
     uint16_t xCounter;
     uint16_t yCounter;
-    
+
+
     //
     // Blitter flags
     //
@@ -199,9 +203,6 @@ private:
 
     // Latched program counter marking the begin of the loop
     uint16_t bltpcl = 0;
-
-    // Debug flags
-    int bltdebug = 0;
 
     // Debug counters
     int copycount = 0;
@@ -266,6 +267,15 @@ public:
         & dhold
         & ashift
         & bshift
+
+        & iteration
+        & incr
+        & ash
+        & bsh
+        & amod
+        & bmod
+        & cmod
+        & dmod
 
         & xCounter
         & yCounter
@@ -455,7 +465,6 @@ private:
     void resetYCounter() { setYCounter(bltsizeH()); }
     void decXCounter() { setXCounter(xCounter - 1); }
     void decYCounter() { setYCounter(yCounter - 1); }
-    bool firstIteration() { return xCounter == bltsizeW() && yCounter == bltsizeH(); }
     bool lastIteration() { return xCounter == 1 && yCounter == 1; }
 
 

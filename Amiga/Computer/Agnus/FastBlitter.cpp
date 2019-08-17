@@ -14,17 +14,12 @@ Blitter::startFastBlitter()
 {
     int delay = 0;
 
-    check1 = fnv_1a_init32();
-    check2 = fnv_1a_init32();
-
     if (bltconLINE()) {
 
-        linecount++;
         doFastLineBlit();
 
     } else {
 
-        copycount++;
         doFastCopyBlit();
 
         // In accuracy level 1 or above, we signal termination with a delay
@@ -81,11 +76,13 @@ Blitter::doFastCopyBlit()
         cmod = -cmod;
         dmod = -dmod;
     }
-    
-    if (bltdebug) plainmsg("blit %d: A-%06x (%d) B-%06x (%d) C-%06x (%d) D-%06x (%d) W-%d H-%d\n",
+
+    /*
+    plaindebug(BLT_DEBUG, "blit %d: A-%06x (%d) B-%06x (%d) C-%06x (%d) D-%06x (%d) W-%d H-%d\n",
                            copycount, bltapt, bltamod, bltbpt, bltbmod, bltcpt, bltcmod, bltdpt, bltdmod,
                            bltsizeW(), bltsizeH());
-    
+    */
+
     aold = 0;
     bold = 0;
 
@@ -105,29 +102,29 @@ Blitter::doFastCopyBlit()
             // Fetch A
             if (useA) {
                 anew = mem->peek16(bltapt);
-                if (bltdebug) plainmsg("    A = peek(%X) = %X\n", bltapt, anew);
+                debug(BLT_DEBUG, "    A = peek(%X) = %X\n", bltapt, anew);
                 INC_OCS_PTR(bltapt, incr);
             }
             
             // Fetch B
             if (useB) {
                 bnew = mem->peek16(bltbpt);
-                if (bltdebug) plainmsg("    B = peek(%X) = %X\n", bltbpt, bnew);
+                debug(BLT_DEBUG, "    B = peek(%X) = %X\n", bltbpt, bnew);
                 INC_OCS_PTR(bltbpt, incr);
             }
             
             // Fetch C
             if (useC) {
                 chold = mem->peek16(bltcpt);
-                if (bltdebug) plainmsg("    C = peek(%X) = %X\n", bltcpt, chold);
+                debug(BLT_DEBUG, "    C = peek(%X) = %X\n", bltcpt, chold);
                 INC_OCS_PTR(bltcpt, incr);
             }
-            if (bltdebug) plainmsg("    After fetch: A = %x B = %x C = %x\n", anew, bnew, chold);
+            debug(BLT_DEBUG, "    After fetch: A = %x B = %x C = %x\n", anew, bnew, chold);
             
-            if (bltdebug) plainmsg("    After masking with %x (%x,%x) %x\n", mask, bltafwm, bltalwm, anew & mask);
+            debug(BLT_DEBUG, "    After masking with %x (%x,%x) %x\n", mask, bltafwm, bltalwm, anew & mask);
             
             // Run the barrel shifters on data path A and B
-            if (bltdebug) plainmsg("    ash = %d bsh = %d mask = %X\n", bltconASH(), bltconBSH(), mask);
+            debug(BLT_DEBUG, "    ash = %d bsh = %d mask = %X\n", bltconASH(), bltconBSH(), mask);
             if (descending) {
                 ahold = HI_W_LO_W(anew & mask, aold) >> ash;
                 bhold = HI_W_LO_W(bnew, bold) >> bsh;
@@ -137,10 +134,10 @@ Blitter::doFastCopyBlit()
             }
             aold = anew & mask;
             bold = bnew;
-            if (bltdebug) printf("    After shifting (%d,%d) A = %x B = %x\n", ash, bsh, ahold, bhold);
+            debug(BLT_DEBUG, "    After shifting (%d,%d) A = %x B = %x\n", ash, bsh, ahold, bhold);
             
             // Run the minterm logic circuit
-            if (bltdebug) plainmsg("    Minterms: ahold = %X bhold = %X chold = %X bltcon0 = %X (hex)\n", ahold, bhold, chold, bltcon0);
+            debug(BLT_DEBUG, "    Minterms: ahold = %X bhold = %X chold = %X bltcon0 = %X (hex)\n", ahold, bhold, chold, bltcon0);
             dhold = doMintermLogicQuick(ahold, bhold, chold, bltcon0 & 0xFF);
             assert(dhold == doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF));
 
@@ -153,7 +150,7 @@ Blitter::doFastCopyBlit()
             // Write D
             if (useD) {
                 mem->poke16(bltdpt, dhold);
-                if (bltdebug) plainmsg("D: poke(%X), %X\n", bltdpt, dhold);
+                debug(BLT_DEBUG, "D: poke(%X), %X\n", bltdpt, dhold);
                 check1 = fnv_1a_it32(check1, dhold);
                 check2 = fnv_1a_it32(check2, bltdpt);
                 // plainmsg("    check1 = %X check2 = %X\n", check1, check2);
@@ -202,24 +199,13 @@ INC_OCS_PTR(cpt, -cmod);
 void
 Blitter::doFastLineBlit()
 {
-    /*
-    bool useA = bltUSEA();
-    bool useB = bltUSEB();
-    bool useC = bltUSEC();
-    bool useD = bltUSED();
-    */
-
-    plaindebug(BLIT_CHECKSUM, "BLITTER Line %d (%d,%d) (%d%d%d%d) %x %x %x %x\n",
-               linecount, bltsizeW(), bltsizeH(),
-               bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
-               bltapt, bltbpt, bltcpt, bltdpt);
-    
+    //
     // Adapted from WinFellow
-    
+    //
+
     uint32_t bltcon = HI_W_LO_W(bltcon0, bltcon1);
     
     int height = bltsizeH();
-    // int width  = bltsizeW();
     
     uint16_t bltadat_local = 0;
     uint16_t bltbdat_local = 0;

@@ -52,17 +52,14 @@ const uint16_t REPEAT    = 0b0'0001'0000'0000;
 void
 Blitter::startSlowBlitter()
 {
-    check1 = fnv_1a_init32();
-    check2 = fnv_1a_init32();
-
     if (bltconLINE()) {
 
-        linecount++;
         doFastLineBlit();
 
-    } else {
+        // Schedule the termination event (CLEAN THIS UP)
+        agnus->scheduleRel<BLT_SLOT>(0, BLT_FAST_END);
 
-        copycount++;
+    } else {
 
         // Setup ascending / descending dependent parameters
         if (bltconDESC()) {
@@ -94,9 +91,6 @@ Blitter::startSlowBlitter()
         // Reset the fill carry bit
         fillCarry = !!bltconFCI();
 
-        // Apply the "first word mask" in the first iteration
-        mask = bltafwm;
-
         // Load the micro-code for this blit
         loadMicrocode();
 
@@ -124,18 +118,19 @@ Blitter::executeSlowBlitter()
         /* D is not written in the first iteration, because the pipepline needs
          * to ramp up.
          */
-        if (firstIteration()) {
+        if (iteration == 0) {
 
             debug(BLT_DEBUG, "WRITE_D (skipped)\n");
 
         } else {
 
             mem->poke16(bltdpt, dhold);
-            if (bltdebug) plainmsg("D: poke(%X), %X\n", bltdpt, dhold);
+            debug(BLT_DEBUG, "D: poke(%X), %X\n", bltdpt, dhold);
             check1 = fnv_1a_it32(check1, dhold);
             check2 = fnv_1a_it32(check2, bltdpt);
 
             INC_OCS_PTR(bltdpt, incr);
+            if (xCounter == bltsizeW()) INC_OCS_PTR(bltdpt, dmod);
         }
     }
 
@@ -145,9 +140,10 @@ Blitter::executeSlowBlitter()
 
         // pokeBLTADAT(amiga->mem.peek16(bltapt));
         anew = mem->peek16(bltapt);
-        if (bltdebug) plainmsg("    A = peek(%X) = %X\n", bltapt, anew);
-        if (bltdebug) plainmsg("    After fetch: A = %X\n", anew);
+        debug(BLT_DEBUG, "    A = peek(%X) = %X\n", bltapt, anew);
+        debug(BLT_DEBUG, "    After fetch: A = %X\n", anew);
         INC_OCS_PTR(bltapt, incr);
+        if (xCounter == 1) INC_OCS_PTR(bltapt, amod);
     }
 
     if (instr & FETCH_B) {
@@ -155,9 +151,10 @@ Blitter::executeSlowBlitter()
         debug(BLT_DEBUG, "FETCH_B\n");
 
         bnew = mem->peek16(bltbpt);
-        if (bltdebug) plainmsg("    B = peek(%X) = %X\n", bltbpt, bnew);
-         if (bltdebug) plainmsg("    After fetch: B = %X\n", bnew);
+        debug(BLT_DEBUG, "    B = peek(%X) = %X\n", bltbpt, bnew);
+        debug(BLT_DEBUG, "    After fetch: B = %X\n", bnew);
         INC_OCS_PTR(bltbpt, incr);
+        if (xCounter == 1) INC_OCS_PTR(bltbpt, bmod);
     }
 
     if (instr & FETCH_C) {
@@ -165,26 +162,27 @@ Blitter::executeSlowBlitter()
         debug(BLT_DEBUG, "FETCH_C\n");
 
         chold = mem->peek16(bltcpt);
-         if (bltdebug) plainmsg("    C = peek(%X) = %X\n", bltcpt, chold);
-         if (bltdebug) plainmsg("    After fetch: C = %X\n", chold);
+        debug(BLT_DEBUG, "    C = peek(%X) = %X\n", bltcpt, chold);
+        debug(BLT_DEBUG, "    After fetch: C = %X\n", chold);
         INC_OCS_PTR(bltcpt, incr);
+        if (xCounter == 1) INC_OCS_PTR(bltcpt, cmod);
     }
 
     if (instr & HOLD_A) {
 
         debug(BLT_DEBUG, "HOLD_A\n");
 
-        if (bltdebug) plainmsg("    After masking with %x (%x,%x) %x\n", mask, bltafwm, bltalwm, anew & mask);
+        debug(BLT_DEBUG, "    After masking with %x (%x,%x) %x\n", mask, bltafwm, bltalwm, anew & mask);
 
         // Run the barrel shifters on data path A
-        if (bltdebug) plainmsg("    ash = %d mask = %X\n", bltconASH(), mask);
+        debug(BLT_DEBUG, "    ash = %d mask = %X\n", bltconASH(), mask);
         if (bltconDESC()) {
             ahold = HI_W_LO_W(anew & mask, aold) >> ash;
         } else {
             ahold = HI_W_LO_W(aold, anew & mask) >> ash;
         }
         aold = anew & mask;
-        if (bltdebug) printf("    After shifting A (%d) A = %x\n", ash, ahold);
+        debug(BLT_DEBUG, "    After shifting A (%d) A = %x\n", ash, ahold);
     }
 
     if (instr & HOLD_B) {
@@ -192,14 +190,14 @@ Blitter::executeSlowBlitter()
         debug(BLT_DEBUG, "HOLD_B\n");
 
         // Run the barrel shifters on data path B
-        if (bltdebug) plainmsg("    bsh = %d\n", bltconBSH());
+        debug(BLT_DEBUG, "    bsh = %d\n", bltconBSH());
         if (bltconDESC()) {
             bhold = HI_W_LO_W(bnew, bold) >> bsh;
         } else {
             bhold = HI_W_LO_W(bold, bnew) >> bsh;
         }
         bold = bnew;
-                if (bltdebug) printf("    After shifting B (%d) B = %x\n", bsh, bhold);
+        debug(BLT_DEBUG, "    After shifting B (%d) B = %x\n", bsh, bhold);
     }
 
     if (instr & HOLD_D) {
@@ -207,7 +205,7 @@ Blitter::executeSlowBlitter()
         debug(BLT_DEBUG, "HOLD_D\n");
 
         // Run the minterm logic circuit
-        if (bltdebug) plainmsg("    Minterms: ahold = %X bhold = %X chold = %X bltcon0 = %X (hex)\n", ahold, bhold, chold, bltcon0);
+        debug(BLT_DEBUG, "    Minterms: ahold = %X bhold = %X chold = %X bltcon0 = %X (hex)\n", ahold, bhold, chold, bltcon0);
         dhold = doMintermLogicQuick(ahold, bhold, chold, bltcon0 & 0xFF);
         assert(dhold == doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF));
 
@@ -222,11 +220,14 @@ Blitter::executeSlowBlitter()
 
         debug(BLT_DEBUG, "REPEAT\n");
 
+        iteration++;
+
         // Check if there are remaining words to process
         if (yCounter > 1 || xCounter > 1) {
 
-            // Go back to the first micro-instruction
+            // Jump back to the first micro-instruction
             bltpc = 0;
+
 
             // Decrease word counters
             if (xCounter > 1) {
@@ -237,12 +238,6 @@ Blitter::executeSlowBlitter()
 
                 resetXCounter();
                 decYCounter();
-
-                // Add modulos
-                if (bltconUSEA()) INC_OCS_PTR(bltapt, amod);
-                if (bltconUSEB()) INC_OCS_PTR(bltbpt, bmod);
-                if (bltconUSEC()) INC_OCS_PTR(bltcpt, cmod);
-                if (bltconUSED()) INC_OCS_PTR(bltdpt, dmod);
             }
 
         } else {
@@ -278,8 +273,6 @@ Blitter::executeSlowBlitter()
 void
 Blitter::setXCounter(uint16_t value)
 {
-    debug("setXCounter(%d) xCounter = %d bltsizeW() = %d\n", value, xCounter, bltsizeW()); 
-
     xCounter = value;
 
     // Set the mask for this iteration
@@ -308,6 +301,7 @@ void
 Blitter::loadMicrocode()
 {
     bltpc = 0;
+    iteration = 0;
 
     /* The following code is inspired by Table 6.2 of the HRM:
      *
@@ -456,7 +450,7 @@ Blitter::loadMicrocode()
 
             uint16_t prog[] = {
 
-                FETCH_B,
+                FETCH_B | HOLD_A,
                 FETCH_C | HOLD_B,
                 WRITE_D | HOLD_D,
                 REPEAT,
@@ -544,7 +538,7 @@ Blitter::loadMicrocode()
                 WRITE_D,
                 HOLD_D | REPEAT,
 
-                BLTDONE
+                WRITE_D | BLTDONE
             };
             memcpy(microInstr, prog, sizeof(prog));
             break;
