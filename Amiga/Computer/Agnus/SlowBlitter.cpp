@@ -396,7 +396,7 @@ Blitter::loadMicrocode()
             uint16_t prog[] = {
 
                 FETCH_A | HOLD_D,
-                FETCH_C | HOLD_A,
+                FETCH_C | HOLD_A | HOLD_B,
                 WRITE_D | REPEAT,
 
                 HOLD_D,
@@ -411,7 +411,7 @@ Blitter::loadMicrocode()
             uint16_t prog[] = {
 
                 FETCH_A | HOLD_D,
-                FETCH_C | REPEAT,
+                FETCH_C | HOLD_A | HOLD_B | REPEAT,
 
                 HOLD_D | BLTDONE
             };
@@ -424,7 +424,7 @@ Blitter::loadMicrocode()
             uint16_t prog[] = {
 
                 FETCH_A | HOLD_D,
-                WRITE_D | HOLD_A | REPEAT,
+                WRITE_D | HOLD_A | HOLD_B | REPEAT,
 
                 HOLD_D,
                 WRITE_D | BLTDONE
@@ -438,7 +438,7 @@ Blitter::loadMicrocode()
             uint16_t prog[] = {
 
                 FETCH_A | HOLD_D,
-                HOLD_A | REPEAT,
+                HOLD_A | HOLD_B | REPEAT,
 
                 HOLD_D | BLTDONE
             };
@@ -468,7 +468,7 @@ Blitter::loadMicrocode()
             uint16_t prog[] = {
 
                 FETCH_B | HOLD_D,
-                FETCH_C | HOLD_B | REPEAT,
+                FETCH_C | HOLD_A | HOLD_B | REPEAT,
 
                 HOLD_D | BLTDONE
             };
@@ -481,7 +481,7 @@ Blitter::loadMicrocode()
             uint16_t prog[] = {
 
                 FETCH_B,
-                WRITE_D | HOLD_B,
+                WRITE_D | HOLD_A | HOLD_B,
                 HOLD_D | REPEAT,
 
                 WRITE_D | BLTDONE
@@ -495,7 +495,7 @@ Blitter::loadMicrocode()
             uint16_t prog[] = {
 
                 FETCH_B,
-                HOLD_B,
+                HOLD_A | HOLD_B,
                 HOLD_D | REPEAT,
 
                 BLTDONE
@@ -522,7 +522,7 @@ Blitter::loadMicrocode()
 
             uint16_t prog[] = {
 
-                FETCH_C,
+                FETCH_C | HOLD_A | HOLD_B,
                 HOLD_D | REPEAT,
 
                 BLTDONE
@@ -535,7 +535,7 @@ Blitter::loadMicrocode()
 
             uint16_t prog[] = {
 
-                WRITE_D,
+                WRITE_D | HOLD_A | HOLD_B,
                 HOLD_D | REPEAT,
 
                 WRITE_D | BLTDONE
