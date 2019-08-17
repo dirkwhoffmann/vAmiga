@@ -41,7 +41,8 @@ static const int COL_DEBUG     = 2;  // Color registers
 static const int SPR_DEBUG     = 2;  // Sprite registers
 static const int CLX_DEBUG     = 2;  // Collision detection (CLXDAT, CLXCON)
 static const int DSK_DEBUG     = 2;  // Disk controller
-static const int AUD_DEBUG     = 2;  // Audio 
+static const int DSK_CHECKSUM  = 1;  // Disk checksums
+static const int AUD_DEBUG     = 2;  // Audio
 static const int AUDBUF_DEBUG  = 2;  // Audio buffers
 static const int AUDREG_DEBUG  = 2;  // Audio registers
 static const int PORT_DEBUG    = 2;  // Control ports and connected devices
@@ -60,6 +61,6 @@ static const int SNAP_DEBUG    = 2;  // Snapshot debugging (serialization)
 // #define BORDER_DEBUG     // Draws the border in debug colors
 // #define PIXEL_DEBUG      // Highlight first pixel in each 16-bit pixel chunk
 // #define LINE_DEBUG       // Colorizes certain rasterlines
-// #define ALIGN_DRIVE_HEAD // Makes drive operations deterministic
+#define ALIGN_DRIVE_HEAD // Makes drive operations deterministic
 
 #endif

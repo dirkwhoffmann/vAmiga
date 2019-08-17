@@ -363,7 +363,7 @@ Drive::moveHead(int dir)
             head.cylinder--;
             recordCylinder(head.cylinder);
         }
-        debug(DSK_DEBUG, "Stepping down to cylinder %d\n", head.cylinder);
+        plaindebug(MIN(DSK_DEBUG, DSK_CHECKSUM), "Stepping down to cylinder %d\n", head.cylinder);
 
     } else {
         
@@ -372,7 +372,7 @@ Drive::moveHead(int dir)
             head.cylinder++;
             recordCylinder(head.cylinder);
         }
-        debug(DSK_DEBUG, "Stepping up to cylinder %d\n", head.cylinder);
+        plaindebug(MIN(DSK_DEBUG, DSK_CHECKSUM), "Stepping up to cylinder %d\n", head.cylinder);
     }
 
 #ifdef ALIGN_DRIVE_HEAD

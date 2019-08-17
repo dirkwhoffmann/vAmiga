@@ -335,8 +335,8 @@ Blitter::serviceEvent(EventID id)
 
         case BLT_START:
 
-            // debugLevel = (copycount  == 921) ? 2 : 1;
-            accuracy = 3;
+            // debugLevel = (copycount  == 11) ? 2 : 1;
+            accuracy = 0;
 
             // Debugging
             check1 = fnv_1a_init32();
@@ -736,6 +736,6 @@ Blitter::estimatesCycles(uint16_t bltcon0, int width, int height)
     // Convert back to DMA cycles
     int delay = (int)(linesNeeded * HPOS_CNT);
 
-    debug("Estimated number of DMA cycles (%d,%d): %d\n", width, height, delay);
+    // debug("Estimated number of DMA cycles (%d,%d): %d\n", width, height, delay);
     return delay;
 }

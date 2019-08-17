@@ -478,7 +478,7 @@ DiskController::performDMARead(Drive *drive)
             
             paula->pokeINTREQ(0x8002);
             state = DRIVE_DMA_OFF;
-            plaindebug(DSK_DEBUG, "performRead: checkcnt = %d checksum = %X\n", checkcnt, checksum);
+            plaindebug(DSK_CHECKSUM, "performRead: checkcnt = %d checksum = %X\n", checkcnt, checksum);
             return;
         }
         
@@ -535,7 +535,7 @@ DiskController::performDMAWrite(Drive *drive)
             }
             state = DRIVE_DMA_OFF;
             
-            debug(DSK_DEBUG, "performWrite: checkcnt = %d checksum = %X\n", checkcnt, checksum);
+            debug(DSK_CHECKSUM, "performWrite: checkcnt = %d checksum = %X\n", checkcnt, checksum);
             return;
         }
         
@@ -687,13 +687,13 @@ DiskController::performTurboRead(Drive *drive)
         checkcnt++;
     }
         
-    plaindebug(DSK_DEBUG, "Turbo read %s: cyl: %d side: %d offset: %d checkcnt = %d checksum = %X\n", drive->getDescription(), drive->head.cylinder, drive->head.side, drive->head.offset, checkcnt, checksum);
+    plaindebug(DSK_CHECKSUM, "Turbo read %s: cyl: %d side: %d offset: %d checkcnt = %d checksum = %X\n", drive->getDescription(), drive->head.cylinder, drive->head.side, drive->head.offset, checkcnt, checksum);
 }
 
 void
 DiskController::performTurboWrite(Drive *drive)
 {
-    plaindebug(1, "Turbo-writing %d words to disk.\n", dsklen & 0x3FFF);
+    plaindebug(DSK_DEBUG, "Turbo-writing %d words to disk.\n", dsklen & 0x3FFF);
     
     for (unsigned i = 0; i < (dsklen & 0x3FFF); i++) {
         
@@ -709,6 +709,6 @@ DiskController::performTurboWrite(Drive *drive)
         drive->writeHead16(word);
     }
     
-    plaindebug(DSK_DEBUG, "Turbo write %s: checkcnt = %d checksum = %X\n", drive->getDescription(), checkcnt, checksum);
+    plaindebug(DSK_CHECKSUM, "Turbo write %s: checkcnt = %d checksum = %X\n", drive->getDescription(), checkcnt, checksum);
 }
 

@@ -12,6 +12,12 @@
 void
 Blitter::startFastBlitter()
 {
+    static bool verbose = true;
+    if (verbose) {
+        debug("Using Fast Blitter\n");
+        verbose = false;
+    }
+
     int delay = 0;
 
     if (bltconLINE()) {

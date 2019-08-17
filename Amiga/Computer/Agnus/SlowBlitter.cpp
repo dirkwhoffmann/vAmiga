@@ -52,6 +52,12 @@ const uint16_t REPEAT    = 0b0'0001'0000'0000;
 void
 Blitter::startSlowBlitter()
 {
+    static bool verbose = true;
+    if (verbose) {
+        debug("Using Slow Blitter\n");
+        verbose = false;
+    }
+
     if (bltconLINE()) {
 
         doFastLineBlit();
