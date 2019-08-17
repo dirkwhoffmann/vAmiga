@@ -14,73 +14,6 @@ class Blitter : public HardwareComponent {
     
     friend class Agnus;
 
-    //
-    // Constants
-    //
-
-    /* Blitter execution diagram (HRM, Table 6.2):
-     *
-     *           Active
-     * BLTCON0  Channels            Cycle sequence
-     *
-     *    F     A B C D    A0 B0 C0 -- A1 B1 C1 D0 A2 B2 C2 D1 D2
-     *    E     A B C      A0 B0 C0 A1 B1 C1 A2 B2 C2
-     *    D     A B   D    A0 B0 -- A1 B1 D0 A2 B2 D1 -- D2
-     *    C     A B        A0 B0 -- A1 B1 -- A2 B2
-     *    B     A   C D    A0 C0 -- A1 C1 D0 A2 C2 D1 -- D2
-     *    A     A   C      A0 C0 A1 C1 A2 C2
-     *    9     A     D    A0 -- A1 D0 A2 D1 -- D2
-     *    8     A          A0 -- A1 -- A2
-     *    7       B C D    B0 C0 -- -- B1 C1 D0 -- B2 C2 D1 -- D2
-     *    6       B C      B0 C0 -- B1 C1 -- B2 C2
-     *    5       B   D    B0 -- -- B1 D0 -- B2 D1 -- D2
-     *    4       B        B0 -- -- B1 -- -- B2
-     *    3         C D    C0 -- -- C1 D0 -- C2 D1 -- D2
-     *    2         C      C0 -- C1 -- C2
-     *    1           D    D0 -- D1 -- D2
-     *    0                -- -- -- --
-     *
-     * From this table we derive:
-     *
-     *           Cyles: DMA cycles per word
-     *                  [ Total / Bus blocking / Non blocking ]
-     *
-     *     Wait states: Average number of CPU wait states
-     *                  [ DMA cycles / Master cycles ]
-     *
-     * BLTCON0    Cyles          Wait states
-     *
-     *    F     4 (4 / 0)   infinity / infinity
-     *    E     3 (3 / 0)   infinity / infinity
-     *    D     3 (3 / 0)   infinity / infinity
-     *    C     3 (2 / 1)          1 / 8
-     *    B     3 (3 / 0)   infinity / infinity
-     *    A     2 (2 / 0)   infinity / infinity
-     *    9     2 (2 / 0)   infinity / infinity
-     *    8     2 (1 / 1)        0.5 / 4
-     *    7     4 (3 / 1)        1.5 / 12
-     *    6     3 (2 / 1)          1 / 8
-     *    5     3 (2 / 1)          1 / 8
-     *    4     3 (1 / 2)       2.66 / 21.33
-     *    3     3 (2 / 1)          1 / 21.33
-     *    2     2 (1 / 1)        0.5 / 4
-     *    1     2 (1 / 1)        0.5 / 4
-     *    0     2 (0 / 2)          0 / 0
-     */
-    const int blitCycles[16] = {
-        2, 2, 2, 3,
-        3, 3, 3, 4,
-        2, 2, 2, 3,
-        3, 3, 3, 4
-    };
-    const int waitStates[16] = {
-        0, 4, 4, 21,
-        21, 8, 8, 12,
-        4, -1, -1, -1,
-        8, -1, -1, -1
-    };
-
-
     // Quick-access references
     class Memory *mem;
     class Agnus *agnus;
@@ -161,8 +94,14 @@ private:
     uint32_t bshift;
 
     //
-    // The Slow Blitter state
+    // Slow Blitter
     //
+
+    // The micro program to execute
+    uint16_t microInstr[32];
+
+    // The program counter indexing the microInstr array
+    uint16_t bltpc = 0;
 
     int     iteration;
     int     incr;
@@ -176,6 +115,9 @@ private:
     uint16_t xCounter;
     uint16_t yCounter;
 
+    bool fillCarry;
+    uint16_t mask;
+
 
     //
     // Blitter flags
@@ -185,24 +127,11 @@ private:
     bool bzero;
 
     //
-    // Auxiliary stuff
+    // Counters
     //
 
-    bool fillCarry;
-    uint16_t mask;
-    
-    //
-    // Micro execution unit
-    //
-    
-    // The micro program to execute
-    uint16_t microInstr[32];
-    
-    // The program counter indexing the microInstr array
-    uint16_t bltpc = 0;
-
-    // Latched program counter marking the begin of the loop
-    uint16_t bltpcl = 0;
+    // Total number of words to be processed in copy blit
+    int bltwords;
 
     // Debug counters
     int copycount = 0;
@@ -268,6 +197,9 @@ public:
         & ashift
         & bshift
 
+        & microInstr
+        & bltpc
+
         & iteration
         & incr
         & ash
@@ -280,15 +212,13 @@ public:
         & xCounter
         & yCounter
 
-        & bbusy
-        & bzero
-
         & fillCarry
         & mask
 
-        & microInstr
-        & bltpc
-        & bltpcl;
+        & bbusy
+        & bzero
+        
+        & bltwords;
     }
 
     

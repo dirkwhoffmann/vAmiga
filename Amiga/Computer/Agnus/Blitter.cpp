@@ -240,10 +240,9 @@ Blitter::pokeBLTSIZE(uint16_t value)
     debug(BLITREG_DEBUG, "pokeBLTSIZE(%X)\n", value);
     
     bltsize = value;
+    bltwords = bltsizeW() * bltsizeH();
     bzero = true;
     bbusy = true;
-    
-    // WE ONLY DO FAST BLITS AT THE MOMENT
 
     // Schedule the blit operation
     if (agnus->bltDMA()) {
