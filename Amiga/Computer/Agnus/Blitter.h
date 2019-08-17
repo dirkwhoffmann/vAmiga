@@ -191,45 +191,6 @@ private:
     // Micro execution unit
     //
     
-    /* To keep the implementation flexible, the blitter is emulated as a
-     * micro-programmable device. When a blit starts, a micro-program is set up
-     * that will decide on the action that are performed in each Blitter cycle.
-     *
-     * A micro-program consists of the following micro-instructions:
-     *
-     *     FETCH_A : Loads register A new.
-     *     FETCH_B : Loads register B new.
-     *     FETCH_C : Loads register C hold.
-     *      HOLD_A : Loads register A hold.
-     *      HOLD_B : Loads register B hold.
-     *      HOLD_D : Loads register D hold.
-     *     WRITE_D : Writes back D hold.
-     *     BLTDONE : Marks the last instruction.
-     *     BLTIDLE : Does nothing.
-     *   LOOPBACK2 : Executes the 2 foregoing statements again.
-     *   LOOPBACK3 : Executes the 3 foregoing statements again.
-     *   LOOPBACK4 : Executes the 4 foregoing statements again.
-     *
-     * Additional bit masks:
-     *
-     *         BUS : Indicates that the Blitter needs bus access to proceed.
-     *    LOOPBACK : Can be used to check if a LOOPBACKx command is present.
-     */
-
-    static const uint16_t BUS       = 0b1'0000'0000'0000;
-
-    static const uint16_t BLTIDLE   = 0b0'0000'0000'0000;
-    static const uint16_t FETCH_A   = 0b0'0000'0000'0001 | BUS;
-    static const uint16_t FETCH_B   = 0b0'0000'0000'0010 | BUS;
-    static const uint16_t FETCH_C   = 0b0'0000'0000'0100 | BUS;
-    static const uint16_t HOLD_A    = 0b0'0000'0000'1000;
-    static const uint16_t HOLD_B    = 0b0'0000'0001'0000;
-    static const uint16_t HOLD_D    = 0b0'0000'0010'0000;
-    static const uint16_t WRITE_D   = 0b0'0000'0100'0000 | BUS;
-    static const uint16_t BLTDONE   = 0b0'0000'1000'0000;
-    static const uint16_t LOOP      = 0b0'0001'0000'0000;
-    static const uint16_t ENDLOOP   = 0b0'0010'0000'0000;
-
     // The micro program to execute
     uint16_t microInstr[32];
     
@@ -494,6 +455,8 @@ private:
     void resetYCounter() { setYCounter(bltsizeH()); }
     void decXCounter() { setXCounter(xCounter - 1); }
     void decYCounter() { setYCounter(yCounter - 1); }
+    bool firstIteration() { return xCounter == bltsizeW() && yCounter == bltsizeH(); }
+    bool lastIteration() { return xCounter == 1 && yCounter == 1; }
 
 
     // Program the device

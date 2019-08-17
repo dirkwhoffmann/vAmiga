@@ -9,6 +9,46 @@
 
 #include "Amiga.h"
 
+//
+// Micro-instructions
+//
+
+/* To keep the implementation flexible, the blitter is emulated as a
+ * micro-programmable device. When a blit starts, a micro-program is set up
+ * that will decide on the action that are performed in each Blitter cycle.
+ *
+ * A micro-program consists of the following micro-instructions:
+ *
+ *     BLTIDLE : Does nothing.
+ *     WRITE_D : Writes back D hold.
+ *     FETCH_A : Loads register A new.
+ *     FETCH_B : Loads register B new.
+ *     FETCH_C : Loads register C hold.
+ *      HOLD_A : Loads register A hold.
+ *      HOLD_B : Loads register B hold.
+ *      HOLD_D : Loads register D hold.
+ *     BLTDONE : Marks the last instruction.
+ *      REPEAT : Continues with the next word.
+ *
+ * Additional bit masks:
+ *
+ *         BUS : Indicates that the Blitter needs bus access to proceed.
+ */
+
+const uint16_t BUS       = 0b1'0000'0000'0000;
+
+const uint16_t BLTIDLE   = 0b0'0000'0000'0000;
+const uint16_t WRITE_D   = 0b0'0000'0100'0000 | BUS;
+const uint16_t FETCH_A   = 0b0'0000'0000'0001 | BUS;
+const uint16_t FETCH_B   = 0b0'0000'0000'0010 | BUS;
+const uint16_t FETCH_C   = 0b0'0000'0000'0100 | BUS;
+const uint16_t HOLD_A    = 0b0'0000'0000'1000;
+const uint16_t HOLD_B    = 0b0'0000'0001'0000;
+const uint16_t HOLD_D    = 0b0'0000'0010'0000;
+const uint16_t BLTDONE   = 0b0'0000'1000'0000;
+const uint16_t REPEAT    = 0b0'0001'0000'0000;
+
+
 void
 Blitter::startSlowBlitter()
 {
@@ -78,6 +118,26 @@ Blitter::executeSlowBlitter()
     uint16_t instr = microInstr[bltpc] & 0xFFF;
     debug(BLT_DEBUG, "Executing micro instruction %d (%X)\n", bltpc, instr);
     bltpc++;
+
+    if (instr & WRITE_D) {
+
+        /* D is not written in the first iteration, because the pipepline needs
+         * to ramp up.
+         */
+        if (firstIteration()) {
+
+            debug(BLT_DEBUG, "WRITE_D (skipped)\n");
+
+        } else {
+
+            mem->poke16(bltdpt, dhold);
+            if (bltdebug) plainmsg("D: poke(%X), %X\n", bltdpt, dhold);
+            check1 = fnv_1a_it32(check1, dhold);
+            check2 = fnv_1a_it32(check2, bltdpt);
+
+            INC_OCS_PTR(bltdpt, incr);
+        }
+    }
 
     if (instr & FETCH_A) {
 
@@ -158,54 +218,37 @@ Blitter::executeSlowBlitter()
         if (dhold) bzero = false;
     }
 
-    if (instr & WRITE_D) {
+    if (instr & REPEAT) {
 
-        debug(BLT_DEBUG, "WRITE_D\n");
-
-        mem->poke16(bltdpt, dhold);
-        if (bltdebug) plainmsg("D: poke(%X), %X\n", bltdpt, dhold);
-        check1 = fnv_1a_it32(check1, dhold);
-        check2 = fnv_1a_it32(check2, bltdpt);
-
-        INC_OCS_PTR(bltdpt, 2 + (isLastWord() ? bltdmod : 0));
-    }
-
-    if (instr & LOOP) {
-
-        debug(BLT_DEBUG, "LOOP\n");
-
-        // Latch program counter
-        bltpcl = bltpc;
-
-        // Decrease word counters
-        if (xCounter > 1) {
-
-            decXCounter();
-
-        } else if (yCounter > 1) {
-
-            resetXCounter();
-            decYCounter();
-
-            if (bltconUSEA()) INC_OCS_PTR(bltapt, amod);
-            if (bltconUSEB()) INC_OCS_PTR(bltbpt, bmod);
-            if (bltconUSEC()) INC_OCS_PTR(bltcpt, cmod);
-            if (bltconUSED()) INC_OCS_PTR(bltdpt, dmod);
-        }
-    }
-
-    if (instr & ENDLOOP) {
+        debug(BLT_DEBUG, "REPEAT\n");
 
         // Check if there are remaining words to process
         if (yCounter > 1 || xCounter > 1) {
 
-            // Move PC back to the beginning of the main cycle
-            bltpc = bltpcl;
+            // Go back to the first micro-instruction
+            bltpc = 0;
+
+            // Decrease word counters
+            if (xCounter > 1) {
+
+                decXCounter();
+
+            } else if (yCounter > 1) {
+
+                resetXCounter();
+                decYCounter();
+
+                // Add modulos
+                if (bltconUSEA()) INC_OCS_PTR(bltapt, amod);
+                if (bltconUSEB()) INC_OCS_PTR(bltbpt, bmod);
+                if (bltconUSEC()) INC_OCS_PTR(bltcpt, cmod);
+                if (bltconUSED()) INC_OCS_PTR(bltdpt, dmod);
+            }
 
         } else {
 
             // The remaining code flushes the pipeline.
-            // The Blitter busy flag already get cleared at this point.
+            // The Blitter busy flag gets cleared at this point.
             bbusy = false;
         }
     }
@@ -303,12 +346,7 @@ Blitter::loadMicrocode()
                 FETCH_A,
                 FETCH_B | HOLD_A,
                 FETCH_C | HOLD_B,
-                HOLD_D,
-
-                LOOP | FETCH_A,
-                FETCH_B | HOLD_A,
-                FETCH_C | HOLD_B,
-                WRITE_D | HOLD_D | ENDLOOP,
+                WRITE_D | HOLD_D | REPEAT,
 
                 WRITE_D | BLTDONE
             };
@@ -320,15 +358,11 @@ Blitter::loadMicrocode()
 
             uint16_t prog[] = {
 
-                FETCH_A,
+                FETCH_A | HOLD_D,
                 FETCH_B | HOLD_A,
-                FETCH_C | HOLD_B,
+                FETCH_C | HOLD_B | REPEAT,
 
-                LOOP | FETCH_A | HOLD_D,
-                FETCH_B | HOLD_A,
-                FETCH_C | HOLD_B | ENDLOOP,
-
-                HOLD_D  | BLTDONE
+                HOLD_D | BLTDONE
             };
             memcpy(microInstr, prog, sizeof(prog));
             break;
@@ -338,14 +372,11 @@ Blitter::loadMicrocode()
 
             uint16_t prog[] = {
 
-                FETCH_A,
+                FETCH_A | HOLD_D,
                 FETCH_B | HOLD_A,
-                HOLD_B,
+                WRITE_D | HOLD_B | REPEAT,
 
-                LOOP | FETCH_A | HOLD_D,
-                FETCH_B | HOLD_A,
-                HOLD_B | WRITE_D | ENDLOOP,
-
+                HOLD_D,
                 WRITE_D | BLTDONE
             };
             memcpy(microInstr, prog, sizeof(prog));
@@ -356,10 +387,11 @@ Blitter::loadMicrocode()
 
             uint16_t prog[] = {
 
-                LOOP | FETCH_A,
+                FETCH_A | HOLD_D,
                 FETCH_B | HOLD_A,
-                HOLD_B | ENDLOOP,
-                BLTDONE
+                HOLD_B  | REPEAT,
+
+                HOLD_D | BLTDONE
             };
             memcpy(microInstr, prog, sizeof(prog));
             break;
@@ -369,15 +401,11 @@ Blitter::loadMicrocode()
 
             uint16_t prog[] = {
 
-                FETCH_A,
+                FETCH_A | HOLD_D,
                 FETCH_C | HOLD_A,
+                WRITE_D | REPEAT,
+
                 HOLD_D,
-
-                LOOP | FETCH_A,
-                FETCH_C | HOLD_A,
-                WRITE_D | ENDLOOP,
-
-                BLTIDLE,
                 WRITE_D | BLTDONE
             };
             memcpy(microInstr, prog, sizeof(prog));
@@ -388,9 +416,10 @@ Blitter::loadMicrocode()
 
             uint16_t prog[] = {
 
-                LOOP | FETCH_A,
-                FETCH_C | HOLD_A | ENDLOOP,
-                BLTDONE
+                FETCH_A | HOLD_D,
+                FETCH_C | REPEAT,
+
+                HOLD_D | BLTDONE
             };
             memcpy(microInstr, prog, sizeof(prog));
             break;
@@ -400,12 +429,11 @@ Blitter::loadMicrocode()
 
             uint16_t prog[] = {
 
-                FETCH_A,
-                HOLD_A,
+                FETCH_A | HOLD_D,
+                WRITE_D | HOLD_A | REPEAT,
 
-                LOOP | FETCH_A,
-                WRITE_D | HOLD_A | ENDLOOP,
-                BLTDONE
+                HOLD_D,
+                WRITE_D | BLTDONE
             };
             memcpy(microInstr, prog, sizeof(prog));
             break;
@@ -415,9 +443,10 @@ Blitter::loadMicrocode()
 
             uint16_t prog[] = {
 
-                LOOP | FETCH_A,
-                HOLD_A | ENDLOOP,
-                BLTDONE
+                FETCH_A | HOLD_D,
+                HOLD_A | REPEAT,
+
+                HOLD_D | BLTDONE
             };
             memcpy(microInstr, prog, sizeof(prog));
             break;
@@ -429,14 +458,12 @@ Blitter::loadMicrocode()
 
                 FETCH_B,
                 FETCH_C | HOLD_B,
-                BLTIDLE,
-                BLTIDLE,
+                WRITE_D | HOLD_D,
+                REPEAT,
 
-                LOOP | FETCH_B,
-                FETCH_C | HOLD_B,
-                WRITE_D,
-                ENDLOOP,
-                BLTDONE
+                WRITE_D | BLTDONE
+
+
             };
             memcpy(microInstr, prog, sizeof(prog));
             break;
@@ -446,10 +473,10 @@ Blitter::loadMicrocode()
 
             uint16_t prog[] = {
 
-                LOOP | FETCH_B,
-                FETCH_C | HOLD_B,
-                BLTIDLE | ENDLOOP,
-                BLTDONE
+                FETCH_B | HOLD_D,
+                FETCH_C | HOLD_B | REPEAT,
+
+                HOLD_D | BLTDONE
             };
             memcpy(microInstr, prog, sizeof(prog));
             break;
@@ -460,13 +487,9 @@ Blitter::loadMicrocode()
             uint16_t prog[] = {
 
                 FETCH_B,
-                HOLD_B,
+                WRITE_D | HOLD_B,
+                HOLD_D | REPEAT,
 
-                LOOP | HOLD_D,
-                FETCH_B,
-                WRITE_D | HOLD_B | ENDLOOP,
-
-                HOLD_D,
                 WRITE_D | BLTDONE
             };
             memcpy(microInstr, prog, sizeof(prog));
@@ -477,11 +500,11 @@ Blitter::loadMicrocode()
 
             uint16_t prog[] = {
 
-                LOOP | FETCH_B,
-                BLTIDLE,
-                BLTIDLE | ENDLOOP,
+                FETCH_B,
+                HOLD_B,
+                HOLD_D | REPEAT,
 
-                FETCH_B | BLTDONE
+                BLTDONE
             };
             memcpy(microInstr, prog, sizeof(prog));
             break;
@@ -491,13 +514,9 @@ Blitter::loadMicrocode()
 
             uint16_t prog[] = {
 
-                FETCH_C,
-                HOLD_A | HOLD_B,
-                HOLD_D,
-
-                LOOP | FETCH_C,
-                WRITE_D | HOLD_A | HOLD_B,
-                HOLD_D | ENDLOOP,
+                FETCH_C | HOLD_A | HOLD_B,
+                WRITE_D,
+                HOLD_D | REPEAT,
 
                 WRITE_D | BLTDONE
             };
@@ -509,9 +528,10 @@ Blitter::loadMicrocode()
 
             uint16_t prog[] = {
 
-                LOOP | FETCH_C,
-                BLTIDLE | ENDLOOP,
-                FETCH_C | BLTDONE
+                FETCH_C,
+                HOLD_D | REPEAT,
+
+                BLTDONE
             };
             memcpy(microInstr, prog, sizeof(prog));
             break;
@@ -521,10 +541,10 @@ Blitter::loadMicrocode()
 
             uint16_t prog[] = {
 
-                LOOP | WRITE_D,
-                HOLD_D | ENDLOOP,
+                WRITE_D,
+                HOLD_D | REPEAT,
 
-                WRITE_D | BLTDONE
+                BLTDONE
             };
             memcpy(microInstr, prog, sizeof(prog));
             break;
@@ -535,9 +555,7 @@ Blitter::loadMicrocode()
             uint16_t prog[] = {
 
                 BLTIDLE,
-
-                LOOP | BLTIDLE,
-                BLTIDLE | ENDLOOP,
+                REPEAT,
 
                 BLTDONE
             };

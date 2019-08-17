@@ -336,8 +336,8 @@ Blitter::serviceEvent(EventID id)
 
         case BLT_START:
 
-            // bltdebug = 1;
-            // accuracy = 3;
+            bltdebug = 1;
+            accuracy = 3;
             plaindebug(BLIT_CHECKSUM, "BLITTER Blit %d (%d,%d) (%d%d%d%d) %x %x %x %x %s\n",
                        copycount, bltsizeW(), bltsizeH(), bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
                        bltapt, bltbpt, bltcpt, bltdpt, bltconDESC() ? "D" : "");
