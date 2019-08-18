@@ -28,7 +28,6 @@ extension PreferencesController {
         compBltAccuracy.intValue = a
         compBltLevel1.textColor = (a >= 1) ? .labelColor : .tertiaryLabelColor
         compBltLevel2.textColor = (a >= 2) ? .labelColor : .tertiaryLabelColor
-        compBltLevel3.textColor = (a >= 3) ? .labelColor : .tertiaryLabelColor
 
         // Audio
         compFilterActivation.selectItem(withTag: config.filterActivation.rawValue)
