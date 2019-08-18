@@ -109,19 +109,27 @@ void
 Blitter::executeSlowBlitter()
 {
     // Only proceed if Blitter DMA is enabled
+    // DO WE NEED THIS???
     if (!agnus->bltDMA()) {
         agnus->cancel<BLT_SLOT>();
         return;
     }
 
-    while (agnus->hasEvent<BLT_SLOT>()) {
-
-
-    // Execute next Blitter micro-instruction
+    // Fetch the next micro-instruction
     uint16_t instr = microInstr[bltpc];
     debug(BLT_DEBUG, "Executing micro instruction %d (%X)\n", bltpc, instr);
+
+    // Check if this instruction needs the bus to execute
+    if (instr & BUS) {
+
+        if (!agnus->allocateBus<BUS_BLITTER>()) {
+            // debug("Blitter is blocked\n");
+            return;
+        }
+    }
     bltpc++;
 
+    // Execute the current instruction
     if (instr & WRITE_D) {
 
         /* D is not written in the first iteration, because the pipepline needs
@@ -272,7 +280,6 @@ Blitter::executeSlowBlitter()
 
            plaindebug(BLIT_CHECKSUM, "BLITTER check1: %x check2: %x\n", check1, check2);
 
-    } 
     }
 }
 

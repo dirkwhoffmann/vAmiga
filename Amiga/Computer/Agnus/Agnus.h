@@ -698,6 +698,12 @@ public:
     bool copperCanRun();
     bool copperCanDoDMA();
 
+    /* Attempts to allocate the bus for the specified resource.
+     * Returns true if the bus was successfully allocated.
+     * On success, the bus owner is recorded in the busOwner array.
+     */
+    template <BusOwner owner> bool allocateBus();
+
 
     //
     // Performing DMAs

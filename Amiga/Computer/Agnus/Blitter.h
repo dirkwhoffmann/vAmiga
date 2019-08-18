@@ -455,6 +455,9 @@ private:
     // Emulates the next Blitter micro-instruction
     void executeSlowBlitter();
 
+    // Tries to acquire the bus for the Blitter
+    bool blitterCanHaveBus();
+
     // Sets the x or y counter to a new value
     void setXCounter(uint16_t value);
     void setYCounter(uint16_t value);

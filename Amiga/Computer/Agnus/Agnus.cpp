@@ -376,11 +376,47 @@ Agnus::copperCanDoDMA()
 {
     // Deny access in cycle $E0
     if (unlikely(pos.h == 0xE0)) {
+        assert(busOwner[pos.h] == BUS_REFRESH); // WE DONT NEED THIS ANY MORE!
         debug(COP_DEBUG, "Copper blocked (at $E0)\n");
         return false;
     }
 
     return copperCanRun();
+}
+
+template <BusOwner owner> bool
+Agnus::allocateBus()
+{
+    switch (owner) {
+
+        case BUS_COPPER:
+
+            // IMPLEMENTATION MISSING
+            assert(false);
+            return false;
+
+        case BUS_BLITTER:
+
+            // Deny if the bus has been allocated already
+            if (busOwner[pos.h] != BUS_NONE) {
+                debug(BLT_DEBUG, "Blitter is blocked by %d\n", busOwner[pos.h]);
+                return false;
+            }
+
+            // Check if the CPU has precedence
+            if (false) { // (cpuHasPrecedence
+
+                // cpuBlockings = 0;
+                return false;
+            }
+
+            // Assign the bus to the Blitter
+            busOwner[pos.h] = BUS_BLITTER;
+            return true;
+    }
+
+    assert(false);
+    return false;
 }
 
 uint16_t
@@ -1797,3 +1833,5 @@ template void Agnus::pokeDIWSTRT<POKE_COPPER>(uint16_t value);
 template void Agnus::pokeDIWSTOP<POKE_CPU>(uint16_t value);
 template void Agnus::pokeDIWSTOP<POKE_COPPER>(uint16_t value);
 
+template bool Agnus::allocateBus<BUS_COPPER>();
+template bool Agnus::allocateBus<BUS_BLITTER>();
