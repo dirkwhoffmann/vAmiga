@@ -376,7 +376,6 @@ Agnus::copperCanDoDMA()
 {
     // Deny access in cycle $E0
     if (unlikely(pos.h == 0xE0)) {
-        assert(busOwner[pos.h] == BUS_REFRESH); // WE DONT NEED THIS ANY MORE!
         debug(COP_DEBUG, "Copper blocked (at $E0)\n");
         return false;
     }
@@ -398,10 +397,7 @@ Agnus::allocateBus()
         case BUS_BLITTER:
 
             // Deny if the bus has been allocated already
-            if (busOwner[pos.h] != BUS_NONE) {
-                debug("Blitter is blocked by %d\n", busOwner[pos.h]);
-                return false;
-            }
+            if (busOwner[pos.h] != BUS_NONE) return false;
 
             // Check if the CPU has precedence
             if (!bltpri() && blitter.cpuRequestsBus) {
@@ -410,8 +406,8 @@ Agnus::allocateBus()
 
                     // The CPU gets the bus
                     blitter.cpuDenials = 0;
-                    debug("Blitter lets the CPU run\n");
                     return false;
+
                 } else {
 
                     // The Blitter gets the bus
@@ -525,7 +521,7 @@ Agnus::copperWrite(uint32_t addr, uint16_t value)
 uint16_t
 Agnus::blitterRead(uint32_t addr)
 {
-    // Assure that Blitter owns the bus when this function is called
+    // Assure that the Blitter owns the bus when this function is called
     assert(busOwner[pos.h] == BUS_BLITTER);
 
     uint16_t result = mem->peek16<BUS_BLITTER>(addr);
@@ -538,7 +534,7 @@ Agnus::blitterRead(uint32_t addr)
 void
 Agnus::blitterWrite(uint32_t addr, uint16_t value)
 {
-    // Assure that Blitter owns the bus when this function is called
+    // Assure that the Blitter owns the bus when this function is called
     assert(busOwner[pos.h] == BUS_BLITTER);
 
     mem->poke16<BUS_BLITTER>(addr, value);
@@ -882,9 +878,9 @@ Agnus::pokeDMACON(uint16_t oldDmacon, uint16_t newDmacon)
     if (oldBLTEN ^ newBLTEN) {
         
         if (newBLTEN) {
+
             // Blitter DMA on
             debug(DMA_DEBUG, "Blitter DMA switched on\n");
-            // amiga->agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_EXECUTE);
     
         } else {
             

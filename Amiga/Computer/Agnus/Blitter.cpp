@@ -335,9 +335,6 @@ Blitter::serviceEvent(EventID id)
 
         case BLT_START:
 
-            // debugLevel = (copycount  == 11) ? 2 : 1;
-            accuracy = 3;
-
             // Debugging
             check1 = fnv_1a_init32();
             check2 = fnv_1a_init32();
@@ -355,17 +352,17 @@ Blitter::serviceEvent(EventID id)
             }
 
             // Select the fast or slow bitter depending on the accuracy level
-            (accuracy >= 3) ? startSlowBlitter() : startFastBlitter();
+            (accuracy >= 2) ? startSlowBlitter() : startFastBlitter();
             break;
 
-        case BLT_EXECUTE:
+        case BLT_EXEC_SLOW:
 
             executeSlowBlitter();
             break;
 
-        case BLT_FAST_END:
+        case BLT_EXEC_FAST:
 
-            endFastBlit();
+            executeFastBlitter();
             break;
 
         default:
@@ -673,68 +670,16 @@ Blitter::doFill(uint16_t &data, bool &carry)
     data = HI_LO(resultHi, resultLo);
 }
 
-int
-Blitter::estimatesCycles(uint16_t bltcon0, int width, int height)
+void
+Blitter::terminate()
 {
-    /* Estimate how many DMA cycles we need to process a single word.
-     * The values are extracted from Table 6.2 of the HRM:
-     */
-    int cyclesNeededPerWord = 0;
+    // Clear the Blitter busy flag
+    bbusy = false;
 
-    switch ((bltcon0 >> 8) & 0xF) {
+    // Trigger the Blitter interrupt
+    agnus->scheduleRel<IRQ_BLIT_SLOT>(0, IRQ_SET);
 
-        case 0x0: cyclesNeededPerWord = 1; break;
-        case 0x1:
-        case 0x2: cyclesNeededPerWord = 2; break;
-        case 0x3:
-        case 0x4:
-        case 0x5:
-        case 0x6: cyclesNeededPerWord = 3; break;
-        case 0x7: cyclesNeededPerWord = 4; break;
-        case 0x8:
-        case 0x9:
-        case 0xA: cyclesNeededPerWord = 2; break;
-        case 0xB: cyclesNeededPerWord = 3; break;
-        case 0xC:
-        case 0xD:
-        case 0xE:
-        case 0xF: cyclesNeededPerWord = 4; break;
-    }
-
-    /* Estimate how many DMA cycles we need to process all words.
-     */
-    int cyclesNeeded = width * height * cyclesNeededPerWord;
-
-    /* Estimate the number of available DMA cycler per rasterline
-     */
-    int freeCyclesPerLine = HPOS_CNT;
-
-    // The Blitter can't use memory refresh slots
-    freeCyclesPerLine -= 4;
-
-    // The Blitter can't use disk DMA slots if disk DMA is enabled
-    if (agnus->dskDMA()) freeCyclesPerLine -= 3;
-
-    // The Blitter can't use audio DMA slots if audio DMA is enabled
-    if (agnus->audDMA<0>()) freeCyclesPerLine--;
-    if (agnus->audDMA<1>()) freeCyclesPerLine--;
-    if (agnus->audDMA<2>()) freeCyclesPerLine--;
-    if (agnus->audDMA<3>()) freeCyclesPerLine--;
-
-    // The Blitter can't use sprite DMA slots if sprite DMA is enabled
-    if (agnus->sprDMA()) freeCyclesPerLine -= 16;
-
-    // The Blitter can't have slots used for bitplane DMA
-    for (int i = 0; i < HPOS_CNT; i++) {
-        if (agnus->dmaEvent[i] != EVENT_NONE) freeCyclesPerLine--;
-    }
-
-    // Determine how many rasterlines we need
-    double linesNeeded = (double)cyclesNeeded / (double)freeCyclesPerLine;
-
-    // Convert back to DMA cycles
-    int delay = (int)(linesNeeded * HPOS_CNT);
-
-    // debug("Estimated number of DMA cycles (%d,%d): %d\n", width, height, delay);
-    return delay;
+    // Clear the Blitter slot
+    agnus->cancel<BLT_SLOT>();
 }
+

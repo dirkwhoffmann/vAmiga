@@ -13,27 +13,61 @@ void
 Blitter::startFastBlitter()
 {
     static bool verbose = true;
-    if (verbose) {
-        debug("Using Fast Blitter\n");
-        verbose = false;
-    }
+    if (verbose) { debug("Using Fast Blitter\n"); verbose = false; }
 
-    int delay = 0;
-
+    // Line blit
     if (bltconLINE()) {
 
         doFastLineBlit();
-
-    } else {
-
-        doFastCopyBlit();
-
-        // In accuracy level 1 or above, we signal termination with a delay
-        if (accuracy >= 1) delay = estimatesCycles(bltcon0, bltsizeW(), bltsizeH());
+        terminate();
+        return; 
     }
 
-    // Schedule the termination event
-    agnus->scheduleRel<BLT_SLOT>(delay, BLT_FAST_END);
+    // Copy blit
+    doFastCopyBlit();
+
+    // Depending on the accuracy level, we either terminate immediately or
+    // fake-execute the micro-program until it terminates.
+    switch (accuracy) {
+
+        case 0:
+            terminate();
+            return;
+
+        case 1:
+            loadMicrocode();
+            agnus->scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_EXEC_FAST);
+            return;
+
+        default:
+            assert(false);
+    }
+}
+
+void
+Blitter::executeFastBlitter()
+{
+    // Make sure that Blitter DMA is enabled when calling this function
+    assert(agnus->bltDMA());
+
+    // Execute the next micro-instruction
+    uint16_t instr = microInstr[bltpc];
+
+    if (instr & BUS) {
+        if (!agnus->allocateBus<BUS_BLITTER>()) return;
+    }
+    if (instr & REPEAT) {
+        bltwords--;
+        if (bltwords > 0) bltpc = 0;
+    }
+    if (instr & BLTDONE) {
+        terminate();
+    }
+
+    // Write some fake data to make the DMA debugger happy
+    agnus->busValue[agnus->pos.h] = 0x8888;
+
+    bltpc++;
 }
 
 void
@@ -501,3 +535,4 @@ Blitter::doFastLineBlit()
      memoryWriteWord(0x8040, 0x00DFF09C);
      }
      */
+

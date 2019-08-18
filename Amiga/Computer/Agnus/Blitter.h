@@ -67,6 +67,7 @@ class Blitter : public HardwareComponent {
      *    1     2 (1 / 1)        0.5 / 4
      *    0     2 (0 / 2)          0 / 0
      */
+    /*
     const int blitCycles[16] = {
         2, 2, 2, 3,
         3, 3, 3, 4,
@@ -79,6 +80,46 @@ class Blitter : public HardwareComponent {
         4, -1, -1, -1,
         8, -1, -1, -1
     };
+    */
+
+    //
+    // Micro-instructions
+    //
+
+    /* To keep the implementation flexible, the blitter is emulated as a
+     * micro-programmable device. When a blit starts, a micro-program is set up
+     * that will decide on the action that are performed in each Blitter cycle.
+     *
+     * A micro-program consists of the following micro-instructions:
+     *
+     *     BLTIDLE : Does nothing.
+     *         BUS : Acquires the bus.
+     *     WRITE_D : Writes back D hold.
+     *     FETCH_A : Loads register A new.
+     *     FETCH_B : Loads register B new.
+     *     FETCH_C : Loads register C hold.
+     *      HOLD_A : Loads register A hold.
+     *      HOLD_B : Loads register B hold.
+     *      HOLD_D : Loads register D hold.
+     *     BLTDONE : Marks the last instruction.
+     *      REPEAT : Continues with the next word.
+     *
+     * Additional bit masks:
+     *
+     *         BUS : Indicates that the Blitter needs bus access to proceed.
+     */
+
+    static const uint16_t BLTIDLE   = 0b0000'0000'0000;
+    static const uint16_t BUS       = 0b0000'0000'0001;
+    static const uint16_t WRITE_D   = 0b0000'0000'0010;
+    static const uint16_t FETCH_A   = 0b0000'0000'0100;
+    static const uint16_t FETCH_B   = 0b0000'0000'1000;
+    static const uint16_t FETCH_C   = 0b0000'0001'0000;
+    static const uint16_t HOLD_A    = 0b0000'0010'0000;
+    static const uint16_t HOLD_B    = 0b0000'0100'0000;
+    static const uint16_t HOLD_D    = 0b0000'1000'0000;
+    static const uint16_t BLTDONE   = 0b0001'0000'0000;
+    static const uint16_t REPEAT    = 0b0010'0000'0000;
 
 
     // Quick-access references
@@ -438,12 +479,8 @@ public:
     // Emulates the fill logic circuit
     void doFill(uint16_t &data, bool &carry);
 
-    /* Estimates the duration of a blit operation
-     * The returned value is the estimates number of bus cycles needed by the
-     * Blitter to perform the specified blit. It is used by the FastBlitter to
-     * terminate Blitter activity after the proper amount of time.
-     */
-    int estimatesCycles(uint16_t bltcon0, int width, int height);
+    // Clears the busy flag, triggeres an IRQ, and cancels the Blitter slot
+    void terminate();
 
 
     //
@@ -455,7 +492,10 @@ private:
     // Invokes the FastBlitter to perform a blit
     void startFastBlitter();
 
-    // Called at the end of a FastBlitter operation
+    // Emulates the next Blitter micro-instruction
+    void executeFastBlitter();
+
+    // Called at the end of a FastBlitter operation (DEPRECATED)
     void endFastBlit();
 
     // Performs a copy blit operation via the FastBlitter

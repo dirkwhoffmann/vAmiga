@@ -9,46 +9,6 @@
 
 #include "Amiga.h"
 
-//
-// Micro-instructions
-//
-
-/* To keep the implementation flexible, the blitter is emulated as a
- * micro-programmable device. When a blit starts, a micro-program is set up
- * that will decide on the action that are performed in each Blitter cycle.
- *
- * A micro-program consists of the following micro-instructions:
- *
- *     BLTIDLE : Does nothing.
- *         BUS : Acquires the bus.
- *     WRITE_D : Writes back D hold.
- *     FETCH_A : Loads register A new.
- *     FETCH_B : Loads register B new.
- *     FETCH_C : Loads register C hold.
- *      HOLD_A : Loads register A hold.
- *      HOLD_B : Loads register B hold.
- *      HOLD_D : Loads register D hold.
- *     BLTDONE : Marks the last instruction.
- *      REPEAT : Continues with the next word.
- *
- * Additional bit masks:
- *
- *         BUS : Indicates that the Blitter needs bus access to proceed.
- */
-
-const uint16_t BLTIDLE   = 0b0000'0000'0000;
-const uint16_t BUS       = 0b0000'0000'0001;
-const uint16_t WRITE_D   = 0b0000'0000'0010;
-const uint16_t FETCH_A   = 0b0000'0000'0100;
-const uint16_t FETCH_B   = 0b0000'0000'1000;
-const uint16_t FETCH_C   = 0b0000'0001'0000;
-const uint16_t HOLD_A    = 0b0000'0010'0000;
-const uint16_t HOLD_B    = 0b0000'0100'0000;
-const uint16_t HOLD_D    = 0b0000'1000'0000;
-const uint16_t BLTDONE   = 0b0001'0000'0000;
-const uint16_t REPEAT    = 0b0010'0000'0000;
-
-
 void
 Blitter::startSlowBlitter()
 {
@@ -60,10 +20,9 @@ Blitter::startSlowBlitter()
 
     if (bltconLINE()) {
 
+        // There is no slow line Blitter yet. We call the fast Blitter instead
         doFastLineBlit();
-
-        // Schedule the termination event (CLEAN THIS UP)
-        agnus->scheduleRel<BLT_SLOT>(0, BLT_FAST_END);
+        terminate();
 
     } else {
 
@@ -101,7 +60,7 @@ Blitter::startSlowBlitter()
         loadMicrocode();
 
         // Start the blit
-        agnus->scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_EXECUTE);
+        agnus->scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_EXEC_SLOW);
     }
 }
 
