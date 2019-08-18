@@ -848,6 +848,9 @@ public:
     
 public:
 
+    // Executes the device for a single DMA cycle
+    void executeOneCycle();
+
     // Executes the device until the target clock is reached
     void executeUntil(Cycle targetClock);
 

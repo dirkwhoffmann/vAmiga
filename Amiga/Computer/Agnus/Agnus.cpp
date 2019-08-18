@@ -1419,6 +1419,19 @@ Agnus::pokeBPLCON0(uint16_t oldBplcon0, uint16_t newBplcon0)
 }
 
 void
+Agnus::executeOneCycle()
+{
+    // Process all pending events
+    if (clock >= nextTrigger) executeEventsUntil(clock);
+
+    // Advance the internal counters
+    pos.h++;
+    assert(pos.h <= HPOS_MAX);
+
+    clock += DMA_CYCLES(1);
+}
+
+void
 Agnus::executeUntil(Cycle targetClock)
 {
     // msg("clock is %lld, Executing until %lld\n", clock, targetClock);
@@ -1426,10 +1439,10 @@ Agnus::executeUntil(Cycle targetClock)
 
         // Process all pending events
         if (clock >= nextTrigger) executeEventsUntil(clock);
-        
+
         // Advance the internal counters
         pos.h++;
-        
+
         // Note: If this assertion hits, the HSYNC event hasn't been served!
         assert(pos.h <= HPOS_MAX);
 
@@ -1440,34 +1453,29 @@ Agnus::executeUntil(Cycle targetClock)
 void
 Agnus::executeUntilBusIsFree()
 {
-#if 0
-    if (!blitter.bbusy) return;
+/*
+    int waitStates = 0;
 
-    /* For now, we use a very primitive model here. We consider the bus free,
-     * if and only if the Blitter is idle.
-     */
-    Cycle oldClock = clock;
+    // Quick-exit if CPU runs at full speed all the time
+    if (blitter.accuracy == 0) return;
 
-    do {
-        // Process all pending events
-        if (clock >= nextTrigger) executeEventsUntil(clock);
+    // The CPU usually accesses memory in odd cyles (advance to such a cycle)
+    if (pos.h % 2) executeOneCycle();
 
-        // Advance the internal counters
-        pos.h++;
+    // Emulate wait states until the bus is available to the CPU
+    while (busOwner[pos.h] != BUS_NONE) {
 
-        // Note: If this assertion hits, the HSYNC event hasn't been served!
-        assert(pos.h <= HPOS_MAX);
+        debug("CPU blocked by %d DMA\n", busOwner[pos.h]);
 
-        clock += DMA_CYCLES(1);
+        executeOneCycle();
+        waitStates++;
+    }
 
-        debug("Skipping cycle\n");
-        
-    } while (blitter.bbusy);
-
-    debug("Blocking the CPU for %d DMA cycles\n", AS_DMA_CYCLES(clock - oldClock));
-#endif
+    // Apply wait-states
+    if (waitStates)  { debug("Adding %d wait-states to the CPU\n", waitStates); }
+    amiga->masterClock += waitStates * DMA_CYCLES(1);
+ */
 }
-
 
 template <int nr> void
 Agnus::executeFirstSpriteCycle()
