@@ -107,21 +107,21 @@ Blitter::doFastCopyBlit()
 
             // Fetch A
             if (useA) {
-                anew = mem->peek16(bltapt);
+                anew = mem->peek16<BUS_BLITTER>(bltapt);
                 debug(BLT_DEBUG, "    A = peek(%X) = %X\n", bltapt, anew);
                 INC_OCS_PTR(bltapt, incr);
             }
             
             // Fetch B
             if (useB) {
-                bnew = mem->peek16(bltbpt);
+                bnew = mem->peek16<BUS_BLITTER>(bltbpt);
                 debug(BLT_DEBUG, "    B = peek(%X) = %X\n", bltbpt, bnew);
                 INC_OCS_PTR(bltbpt, incr);
             }
             
             // Fetch C
             if (useC) {
-                chold = mem->peek16(bltcpt);
+                chold = mem->peek16<BUS_BLITTER>(bltcpt);
                 debug(BLT_DEBUG, "    C = peek(%X) = %X\n", bltcpt, chold);
                 INC_OCS_PTR(bltcpt, incr);
             }
@@ -246,7 +246,7 @@ Blitter::doFastLineBlit()
     {
         // Read C-data from memory if the C-channel is enabled
         if (c_enabled) {
-            bltcdat_local = mem->peek16(bltcpt_local);
+            bltcdat_local = mem->peek16<BUS_BLITTER>(bltcpt_local);
         }
         
         // Calculate data for the A-channel

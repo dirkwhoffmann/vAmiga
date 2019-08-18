@@ -722,6 +722,8 @@ public:
     uint16_t copperRead(uint32_t addr);
     void copperWrite(uint32_t addr, uint16_t value);
 
+    uint16_t blitterRead(uint32_t addr);
+    void blitterWrite(uint32_t addr, uint16_t value);
 
     //
     // Managing the DMA allocation table

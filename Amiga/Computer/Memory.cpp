@@ -512,7 +512,7 @@ Memory::peek8(uint32_t addr)
     return 0;
 }
 
-uint16_t
+template <BusOwner owner> uint16_t
 Memory::peek16(uint32_t addr)
 {
     if (!IS_EVEN(addr)) {
@@ -521,72 +521,91 @@ Memory::peek16(uint32_t addr)
     }
 
     addr &= 0xFFFFFF;
-    switch (memSrc[addr >> 16]) {
-            
-        case MEM_UNMAPPED:
 
-            agnus->executeUntilBusIsFree();
-            return 0;
+    switch(owner) {
 
-        case MEM_CHIP:
+        case BUS_CPU:
+
+            switch (memSrc[addr >> 16]) {
+
+                case MEM_UNMAPPED:
+
+                    agnus->executeUntilBusIsFree();
+                    return 0;
+
+                case MEM_CHIP:
+
+                    ASSERT_CHIP_ADDR(addr);
+                    agnus->executeUntilBusIsFree();
+                    return READ_CHIP_16(addr);
+
+                case MEM_FAST:
+
+                    ASSERT_FAST_ADDR(addr);
+                    return READ_FAST_16(addr);
+
+                case MEM_CIA:
+
+                    ASSERT_CIA_ADDR(addr);
+                    agnus->executeUntilBusIsFree();
+                    return peekCIA16(addr);
+
+                case MEM_SLOW:
+
+                    ASSERT_SLOW_ADDR(addr);
+                    agnus->executeUntilBusIsFree();
+                    return READ_SLOW_16(addr);
+
+                case MEM_RTC:
+
+                    ASSERT_RTC_ADDR(addr);
+                    agnus->executeUntilBusIsFree();
+                    return peekRTC16(addr);
+
+                case MEM_OCS:
+
+                    ASSERT_OCS_ADDR(addr);
+                    agnus->executeUntilBusIsFree();
+                    return peekCustom16(addr);
+
+                case MEM_AUTOCONF:
+
+                    ASSERT_AUTO_ADDR(addr);
+                    agnus->executeUntilBusIsFree();
+                    return peekAutoConf16(addr);
+
+                case MEM_BOOT:
+
+                    ASSERT_BOOT_ADDR(addr);
+                    return READ_BOOT_16(addr);
+
+                case MEM_KICK:
+
+                    ASSERT_KICK_ADDR(addr);
+                    return READ_KICK_16(addr);
+
+                case MEM_EXTROM:
+
+                    ASSERT_EXT_ADDR(addr);
+                    return READ_EXT_16(addr);
+
+                default:
+                    break;
+            }
+            break;
+
+        case BUS_COPPER:
 
             ASSERT_CHIP_ADDR(addr);
-            agnus->executeUntilBusIsFree();
-            return READ_CHIP_16(addr);
+            return (memSrc[addr >> 16] == MEM_UNMAPPED) ? 0 : READ_CHIP_16(addr);
+            
+        case BUS_BLITTER:
 
-        case MEM_FAST:
-
-            ASSERT_FAST_ADDR(addr);
-            return READ_FAST_16(addr);
-
-        case MEM_CIA:
-
-            ASSERT_CIA_ADDR(addr);
-            agnus->executeUntilBusIsFree();
-            return peekCIA16(addr);
-
-        case MEM_SLOW:
-
-            ASSERT_SLOW_ADDR(addr);
-            agnus->executeUntilBusIsFree();
-            return READ_SLOW_16(addr);
-
-        case MEM_RTC:
-
-            ASSERT_RTC_ADDR(addr);
-            agnus->executeUntilBusIsFree();
-            return peekRTC16(addr);
-
-        case MEM_OCS:
-
-            ASSERT_OCS_ADDR(addr);
-            agnus->executeUntilBusIsFree();
-            return peekCustom16(addr);
-
-        case MEM_AUTOCONF:
-
-            ASSERT_AUTO_ADDR(addr);
-            agnus->executeUntilBusIsFree();
-            return peekAutoConf16(addr);
-
-        case MEM_BOOT:
-
-            ASSERT_BOOT_ADDR(addr);
-            return READ_BOOT_16(addr);
-
-        case MEM_KICK:
-
-            ASSERT_KICK_ADDR(addr);
-            return READ_KICK_16(addr);
-
-        case MEM_EXTROM:
-
-            ASSERT_EXT_ADDR(addr);
-            return READ_EXT_16(addr);
-
-        default:
-            assert(false);
+            ASSERT_CHIP_ADDR(addr);
+            return (memSrc[addr >> 16] == MEM_UNMAPPED) ? 0 : READ_CHIP_16(addr);
     }
+
+    assert(false);
     return 0;
 }
 
@@ -594,7 +613,7 @@ uint32_t
 Memory::peek32(uint32_t addr)
 {
     // debug("PC: %X peek32(%X)\n", amiga->cpu.getPC(), addr);
-    return HI_W_LO_W(peek16(addr), peek16(addr + 2));
+    return HI_W_LO_W(peek16<BUS_CPU>(addr), peek16<BUS_CPU>(addr + 2));
 }
 
 uint8_t
@@ -1543,7 +1562,7 @@ Memory::hex(char *buffer, uint32_t addr, size_t bytes, size_t bufferSize)
 
     for (unsigned i = 0; i < words; i++) {
         
-        uint16_t value = peek16(addr + 2*i);
+        uint16_t value = spypeek16(addr + 2*i);
         sprint16x(buffer, value);
         buffer += 4;
         *buffer++ = ' ';
@@ -1560,3 +1579,7 @@ Memory::hex(uint32_t addr, size_t bytes)
 
 template void Memory::pokeCustom16<POKE_CPU>(uint32_t addr, uint16_t value);
 template void Memory::pokeCustom16<POKE_COPPER>(uint32_t addr, uint16_t value);
+
+template uint16_t Memory::peek16<BUS_CPU>(uint32_t addr);
+template uint16_t Memory::peek16<BUS_COPPER>(uint32_t addr);
+template uint16_t Memory::peek16<BUS_BLITTER>(uint32_t addr);

@@ -315,7 +315,7 @@ class Memory : public HardwareComponent {
     public:
 
     uint8_t peek8(uint32_t addr);
-    uint16_t peek16(uint32_t addr);
+    template <BusOwner owner> uint16_t peek16(uint32_t addr);
     uint32_t peek32(uint32_t addr);
 
     uint8_t spypeek8(uint32_t addr);

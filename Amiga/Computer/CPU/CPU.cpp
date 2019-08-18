@@ -26,7 +26,7 @@ extern "C" unsigned int m68k_read_memory_8(unsigned int addr)
 extern "C" unsigned int m68k_read_memory_16(unsigned int addr)
 {
     assert(activeAmiga != NULL);
-    return activeAmiga->mem.peek16(addr);
+    return activeAmiga->mem.peek16<BUS_CPU>(addr);
 }
 
 extern "C" unsigned int m68k_read_memory_32(unsigned int addr)

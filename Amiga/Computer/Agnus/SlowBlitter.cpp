@@ -141,7 +141,7 @@ Blitter::executeSlowBlitter()
 
         } else {
 
-            mem->poke16(bltdpt, dhold);
+            agnus->blitterWrite(bltdpt, dhold);
             debug(BLT_DEBUG, "D: poke(%X), %X\n", bltdpt, dhold);
             check1 = fnv_1a_it32(check1, dhold);
             check2 = fnv_1a_it32(check2, bltdpt);
@@ -155,8 +155,7 @@ Blitter::executeSlowBlitter()
 
         debug(BLT_DEBUG, "FETCH_A\n");
 
-        // pokeBLTADAT(amiga->mem.peek16(bltapt));
-        anew = mem->peek16(bltapt);
+        anew = agnus->blitterRead(bltapt);
         debug(BLT_DEBUG, "    A = peek(%X) = %X\n", bltapt, anew);
         debug(BLT_DEBUG, "    After fetch: A = %X\n", anew);
         INC_OCS_PTR(bltapt, incr);
@@ -167,7 +166,7 @@ Blitter::executeSlowBlitter()
 
         debug(BLT_DEBUG, "FETCH_B\n");
 
-        bnew = mem->peek16(bltbpt);
+        bnew = agnus->blitterRead(bltbpt);
         debug(BLT_DEBUG, "    B = peek(%X) = %X\n", bltbpt, bnew);
         debug(BLT_DEBUG, "    After fetch: B = %X\n", bnew);
         INC_OCS_PTR(bltbpt, incr);
@@ -178,7 +177,7 @@ Blitter::executeSlowBlitter()
 
         debug(BLT_DEBUG, "FETCH_C\n");
 
-        chold = mem->peek16(bltcpt);
+        chold = agnus->blitterRead(bltcpt);
         debug(BLT_DEBUG, "    C = peek(%X) = %X\n", bltcpt, chold);
         debug(BLT_DEBUG, "    After fetch: C = %X\n", chold);
         INC_OCS_PTR(bltcpt, incr);
@@ -355,7 +354,7 @@ Blitter::loadMicrocode()
                 FETCH_C | HOLD_B | BUS,
                 WRITE_D | HOLD_D | BUS | REPEAT,
 
-                WRITE_D | BLTDONE
+                WRITE_D | BUS | BLTDONE
             };
             memcpy(microInstr, prog, sizeof(prog));
             break;
@@ -384,7 +383,7 @@ Blitter::loadMicrocode()
                 WRITE_D | HOLD_B | BUS | REPEAT,
 
                 HOLD_D,
-                WRITE_D | BLTDONE
+                WRITE_D | BUS | BLTDONE
             };
             memcpy(microInstr, prog, sizeof(prog));
             break;
@@ -413,7 +412,7 @@ Blitter::loadMicrocode()
                 WRITE_D | REPEAT | BUS,
 
                 HOLD_D,
-                WRITE_D | BLTDONE
+                WRITE_D | BUS | BLTDONE
             };
             memcpy(microInstr, prog, sizeof(prog));
             break;
@@ -440,7 +439,7 @@ Blitter::loadMicrocode()
                 WRITE_D | HOLD_A | HOLD_B | BUS | REPEAT,
 
                 HOLD_D,
-                WRITE_D | BLTDONE
+                WRITE_D | BUS | BLTDONE
             };
             memcpy(microInstr, prog, sizeof(prog));
             break;
@@ -468,7 +467,7 @@ Blitter::loadMicrocode()
                 WRITE_D | HOLD_D | BUS,
                 REPEAT,
 
-                WRITE_D | BLTDONE
+                WRITE_D | BUS | BLTDONE
 
 
             };
@@ -497,7 +496,7 @@ Blitter::loadMicrocode()
                 WRITE_D | HOLD_A | HOLD_B | BUS,
                 HOLD_D | REPEAT,
 
-                WRITE_D | BLTDONE
+                WRITE_D | BUS | BLTDONE
             };
             memcpy(microInstr, prog, sizeof(prog));
             break;
@@ -525,7 +524,7 @@ Blitter::loadMicrocode()
                 WRITE_D | BUS,
                 HOLD_D | REPEAT,
 
-                WRITE_D | BLTDONE
+                WRITE_D | BUS | BLTDONE
             };
             memcpy(microInstr, prog, sizeof(prog));
             break;
@@ -551,7 +550,7 @@ Blitter::loadMicrocode()
                 WRITE_D | HOLD_A | HOLD_B | BUS,
                 HOLD_D | REPEAT,
 
-                WRITE_D | BLTDONE
+                WRITE_D | BUS | BLTDONE
             };
             memcpy(microInstr, prog, sizeof(prog));
             break;

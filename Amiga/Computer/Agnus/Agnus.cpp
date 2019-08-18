@@ -505,7 +505,7 @@ Agnus::doBitplaneDMA()
 uint16_t
 Agnus::copperRead(uint32_t addr)
 {
-    uint16_t result = mem->peek16(addr);
+    uint16_t result = mem->peek16<BUS_COPPER>(addr);
 
     busOwner[pos.h] = BUS_COPPER;
     busValue[pos.h] = result;
@@ -519,6 +519,30 @@ Agnus::copperWrite(uint32_t addr, uint16_t value)
     mem->pokeCustom16<POKE_COPPER>(addr, value);
 
     busOwner[pos.h] = BUS_COPPER;
+    busValue[pos.h] = value;
+}
+
+uint16_t
+Agnus::blitterRead(uint32_t addr)
+{
+    // Assure that Blitter owns the bus when this function is called
+    assert(busOwner[pos.h] == BUS_BLITTER);
+
+    uint16_t result = mem->peek16<BUS_BLITTER>(addr);
+    busOwner[pos.h] = BUS_BLITTER;
+    busValue[pos.h] = result;
+
+    return result;
+}
+
+void
+Agnus::blitterWrite(uint32_t addr, uint16_t value)
+{
+    // Assure that Blitter owns the bus when this function is called
+    assert(busOwner[pos.h] == BUS_BLITTER);
+
+    mem->poke16(addr, value);
+    busOwner[pos.h] = BUS_BLITTER;
     busValue[pos.h] = value;
 }
 

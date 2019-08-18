@@ -336,7 +336,7 @@ Blitter::serviceEvent(EventID id)
         case BLT_START:
 
             // debugLevel = (copycount  == 11) ? 2 : 1;
-            accuracy = 3;
+            accuracy = 0;
 
             // Debugging
             check1 = fnv_1a_init32();
