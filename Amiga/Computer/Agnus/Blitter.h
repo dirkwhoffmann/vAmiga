@@ -187,15 +187,34 @@ private:
 
 
     //
-    // Blitter flags
+    // Flags
     //
 
     bool bbusy;
     bool bzero;
 
+
+    /*
+     * Priority logic (CPU versus Blitter)
+     *
+     * To block the Blitter, three conditions must hold:
+     *
+     *     - The BLTPRI flag is false
+     *     - The CPU must request the bus
+     *     - The CPU request must have been denied for three consecutive cycles
+     */
+
+public:
+
+    bool cpuRequestsBus;
+    int cpuDenials;
+
+
     //
     // Counters
     //
+
+private:
 
     // Total number of words to be processed in copy blit
     int bltwords;
@@ -284,6 +303,9 @@ public:
 
         & bbusy
         & bzero
+
+        & cpuRequestsBus
+        & cpuDenials
         
         & bltwords;
     }
@@ -466,7 +488,6 @@ private:
     void decXCounter() { setXCounter(xCounter - 1); }
     void decYCounter() { setYCounter(yCounter - 1); }
     bool lastIteration() { return xCounter == 1 && yCounter == 1; }
-
 
     // Program the device
     void loadMicrocode();

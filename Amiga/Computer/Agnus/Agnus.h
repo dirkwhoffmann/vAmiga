@@ -775,6 +775,8 @@ public:
     void pokeDMACON(uint16_t oldValue, uint16_t newValue);
 
     // Returns true if DMA access of a certain type is enabled
+    static bool bltpri(uint16_t v) { return GET_BIT(v, 10); }
+    inline bool bltpri() { return bltpri(dmacon); }
     static bool bplDMA(uint16_t v) { return (v & (DMAEN | BPLEN)) == (DMAEN | BPLEN); }
     inline bool bplDMA() { return bplDMA(dmacon); }
     static bool copDMA(uint16_t v) { return (v & (DMAEN | COPEN)) == (DMAEN | COPEN); }

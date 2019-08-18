@@ -399,15 +399,24 @@ Agnus::allocateBus()
 
             // Deny if the bus has been allocated already
             if (busOwner[pos.h] != BUS_NONE) {
-                debug(BLT_DEBUG, "Blitter is blocked by %d\n", busOwner[pos.h]);
+                debug("Blitter is blocked by %d\n", busOwner[pos.h]);
                 return false;
             }
 
             // Check if the CPU has precedence
-            if (false) { // (cpuHasPrecedence
+            if (!bltpri() && blitter.cpuRequestsBus) {
 
-                // cpuBlockings = 0;
-                return false;
+                if (blitter.cpuDenials > 2) {
+
+                    // The CPU gets the bus
+                    blitter.cpuDenials = 0;
+                    debug("Blitter lets the CPU run\n");
+                    return false;
+                } else {
+
+                    // The Blitter gets the bus
+                    blitter.cpuDenials++;
+                }
             }
 
             // Assign the bus to the Blitter
