@@ -2413,9 +2413,6 @@
                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
-                                                        <connections>
-                                                            <action selector="dmaDMACONTextAction:" target="-2" id="ZGa-qw-XJQ"/>
-                                                        </connections>
                                                     </textField>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="10" translatesAutoresizingMaskIntoConstraints="NO" id="aQh-FH-0CC">
                                                         <rect key="frame" x="23" y="241" width="62" height="20"/>
@@ -2424,9 +2421,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="dmaDMACONButtonAction:" target="-2" id="DqF-nG-fs4"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="9" translatesAutoresizingMaskIntoConstraints="NO" id="5JO-8i-wwh">
                                                         <rect key="frame" x="21" y="221" width="64" height="20"/>
@@ -2435,9 +2429,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="dmaDMACONButtonAction:" target="-2" id="Fkj-mp-gOk"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="7" translatesAutoresizingMaskIntoConstraints="NO" id="I91-sx-8tH">
                                                         <rect key="frame" x="10" y="180" width="75" height="20"/>
@@ -2446,9 +2437,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="dmaDMACONButtonAction:" target="-2" id="6g8-gS-2Yh"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="6" translatesAutoresizingMaskIntoConstraints="NO" id="M6w-EX-fWZ">
                                                         <rect key="frame" x="28" y="160" width="57" height="20"/>
@@ -2457,9 +2445,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="dmaDMACONButtonAction:" target="-2" id="876-R2-vP2"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="5" translatesAutoresizingMaskIntoConstraints="NO" id="NmE-Hp-May">
                                                         <rect key="frame" x="26" y="140" width="59" height="20"/>
@@ -2468,9 +2453,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="dmaDMACONButtonAction:" target="-2" id="1sy-rx-5yR"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="4" translatesAutoresizingMaskIntoConstraints="NO" id="fhF-pG-xKL">
                                                         <rect key="frame" x="25" y="120" width="60" height="20"/>
@@ -2479,9 +2461,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="dmaDMACONButtonAction:" target="-2" id="xXJ-g5-E2B"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="b2l-D9-gly">
                                                         <rect key="frame" x="17" y="100" width="68" height="20"/>
@@ -2490,9 +2469,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="dmaDMACONButtonAction:" target="-2" id="Hao-TU-lj5"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="WZs-hX-PfJ">
                                                         <rect key="frame" x="17" y="80" width="68" height="20"/>
@@ -2501,9 +2477,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="dmaDMACONButtonAction:" target="-2" id="EKz-EU-h0s"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="ytl-8k-QeS">
                                                         <rect key="frame" x="19" y="60" width="66" height="20"/>
@@ -2512,9 +2485,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="dmaDMACONButtonAction:" target="-2" id="JnQ-T6-e28"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ffI-4I-nzj">
                                                         <rect key="frame" x="17" y="40" width="68" height="20"/>
@@ -2523,9 +2493,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="dmaDMACONButtonAction:" target="-2" id="q65-O1-qaS"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="8" translatesAutoresizingMaskIntoConstraints="NO" id="GJ1-Vk-7Ws">
                                                         <rect key="frame" x="21" y="201" width="64" height="20"/>
@@ -2534,9 +2501,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="dmaDMACONButtonAction:" target="-2" id="M4A-X0-GJT"/>
-                                                        </connections>
                                                     </button>
                                                 </subviews>
                                             </view>

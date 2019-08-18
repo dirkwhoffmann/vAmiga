@@ -300,6 +300,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->mem->spypeek16((uint32_t)addr);
 }
+/*
 - (void) poke8:(NSInteger)addr value:(NSInteger)value
 {
     wrapper->mem->poke8((uint32_t)addr, value);
@@ -312,6 +313,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->mem->pokeCustom16<POKE_CPU>((uint32_t)addr, value);
 }
+*/
 - (NSString *) ascii:(NSInteger)addr
 {
     const char *str = wrapper->mem->ascii((uint32_t)addr);

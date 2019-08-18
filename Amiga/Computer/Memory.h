@@ -323,7 +323,7 @@ class Memory : public HardwareComponent {
     uint32_t spypeek32(uint32_t addr);
     
     void poke8(uint32_t addr, uint8_t value);
-    void poke16(uint32_t addr, uint16_t value);
+    template <BusOwner owner> void poke16(uint32_t addr, uint16_t value);
     void poke32(uint32_t addr, uint32_t value);
 
     

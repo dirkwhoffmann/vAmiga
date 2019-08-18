@@ -100,7 +100,8 @@ extension CopperTableView: NSTableViewDataSource {
 }
 
 extension CopperTableView: NSTableViewDelegate {
-    
+
+    /*
     func tableView(_ tableView: NSTableView, setObjectValue object: Any?, for tableColumn: NSTableColumn?, row: Int) {
         
         var addr = 0
@@ -124,6 +125,7 @@ extension CopperTableView: NSTableViewDelegate {
             amigaProxy?.resume()
         }
     }
+    */
     
     func tableView(_ tableView: NSTableView, willDisplayCell cell: Any, for tableColumn: NSTableColumn?, row: Int) {
         

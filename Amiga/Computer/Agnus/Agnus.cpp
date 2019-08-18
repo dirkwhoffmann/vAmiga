@@ -541,7 +541,7 @@ Agnus::blitterWrite(uint32_t addr, uint16_t value)
     // Assure that Blitter owns the bus when this function is called
     assert(busOwner[pos.h] == BUS_BLITTER);
 
-    mem->poke16(addr, value);
+    mem->poke16<BUS_BLITTER>(addr, value);
     busOwner[pos.h] = BUS_BLITTER;
     busValue[pos.h] = value;
 }

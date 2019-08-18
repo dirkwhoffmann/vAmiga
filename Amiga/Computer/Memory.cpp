@@ -517,12 +517,21 @@ Memory::peek16(uint32_t addr)
 {
     if (!IS_EVEN(addr)) {
         warn("peek16(%X): Address violation error (reading odd address)\n", addr);
-        // amiga->dump();
     }
 
     addr &= 0xFFFFFF;
 
     switch(owner) {
+
+        case BUS_COPPER:
+
+            ASSERT_CHIP_ADDR(addr);
+            return (memSrc[addr >> 16] == MEM_UNMAPPED) ? 0 : READ_CHIP_16(addr);
+
+        case BUS_BLITTER:
+
+            ASSERT_CHIP_ADDR(addr);
+            return (memSrc[addr >> 16] == MEM_UNMAPPED) ? 0 : READ_CHIP_16(addr);
 
         case BUS_CPU:
 
@@ -588,21 +597,7 @@ Memory::peek16(uint32_t addr)
 
                     ASSERT_EXT_ADDR(addr);
                     return READ_EXT_16(addr);
-
-                default:
-                    break;
             }
-            break;
-
-        case BUS_COPPER:
-
-            ASSERT_CHIP_ADDR(addr);
-            return (memSrc[addr >> 16] == MEM_UNMAPPED) ? 0 : READ_CHIP_16(addr);
-            
-        case BUS_BLITTER:
-
-            ASSERT_CHIP_ADDR(addr);
-            return (memSrc[addr >> 16] == MEM_UNMAPPED) ? 0 : READ_CHIP_16(addr);
     }
 
     assert(false);
@@ -693,40 +688,118 @@ Memory::poke8(uint32_t addr, uint8_t value)
     }
 }
 
-void
+template <BusOwner owner> void
 Memory::poke16(uint32_t addr, uint16_t value)
 {
-    // if (addr >= 0xC2F3A0 && addr <= 0xC2F3B0) debug("**** SLOW poke8(%X,%X)\n", addr, value);
-    // debug("PC: %X poke16(%X,%X)\n", amiga->cpu.getPC(), addr, value);
+    if (!IS_EVEN(addr)) {
+        warn("peek16(%X): Address violation error (reading odd address)\n", addr);
+    }
 
     addr &= 0xFFFFFF;
-    switch (memSrc[addr >> 16]) {
-            
-        case MEM_UNMAPPED: return;
-        case MEM_CHIP:     ASSERT_CHIP_ADDR(addr); WRITE_CHIP_16(addr, value); break;
-        case MEM_FAST:     ASSERT_FAST_ADDR(addr); WRITE_FAST_16(addr, value); break;
-        case MEM_CIA:      ASSERT_CIA_ADDR(addr);  pokeCIA16(addr, value); break;
-        case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); WRITE_SLOW_16(addr, value); break;
-        case MEM_RTC:      ASSERT_RTC_ADDR(addr);  pokeRTC16(addr, value);;
-        case MEM_OCS:      ASSERT_OCS_ADDR(addr);  pokeCustom16<POKE_CPU>(addr, value); break;
-        case MEM_AUTOCONF: ASSERT_AUTO_ADDR(addr); pokeAutoConf16(addr, value); break;
-        case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); pokeBoot16(addr, value); break;
-        case MEM_KICK:     ASSERT_KICK_ADDR(addr); pokeKick16(addr, value); break;
-        case MEM_EXTROM:   ASSERT_EXT_ADDR(addr); break;
-        default:           assert(false);
+
+    switch(owner) {
+
+        case BUS_COPPER:
+
+            ASSERT_CHIP_ADDR(addr);
+            if (memSrc[addr >> 16] != MEM_UNMAPPED) WRITE_CHIP_16(addr, value);
+            return;
+
+        case BUS_BLITTER:
+
+            ASSERT_CHIP_ADDR(addr);
+            if (memSrc[addr >> 16] != MEM_UNMAPPED) WRITE_CHIP_16(addr, value);
+            return;
+
+        case BUS_CPU:
+
+            switch (memSrc[addr >> 16]) {
+
+                case MEM_UNMAPPED:
+
+                    agnus->executeUntilBusIsFree();
+                    return;
+
+                case MEM_CHIP:
+
+                    ASSERT_CHIP_ADDR(addr);
+                    agnus->executeUntilBusIsFree();
+                    WRITE_CHIP_16(addr, value);
+                    return;
+
+                case MEM_FAST:
+
+                    ASSERT_FAST_ADDR(addr);
+                    WRITE_FAST_16(addr, value);
+                    return;
+
+                case MEM_CIA:
+
+                    ASSERT_CIA_ADDR(addr);
+                    agnus->executeUntilBusIsFree();
+                    pokeCIA16(addr, value);
+                    return;
+
+                case MEM_SLOW:
+
+                    ASSERT_SLOW_ADDR(addr);
+                    agnus->executeUntilBusIsFree();
+                    WRITE_SLOW_16(addr, value);
+                    return;
+
+                case MEM_RTC:
+
+                    ASSERT_RTC_ADDR(addr);
+                    agnus->executeUntilBusIsFree();
+                    pokeRTC16(addr, value);
+                    return;
+
+                case MEM_OCS:
+
+                    ASSERT_OCS_ADDR(addr);
+                    agnus->executeUntilBusIsFree();
+                    pokeCustom16<POKE_CPU>(addr, value);
+                    return;
+
+                case MEM_AUTOCONF:
+
+                    ASSERT_AUTO_ADDR(addr);
+                    agnus->executeUntilBusIsFree();
+                    pokeAutoConf16(addr, value);
+                    return;
+
+                case MEM_BOOT:
+
+                    ASSERT_BOOT_ADDR(addr);
+                    pokeBoot16(addr, value);
+                    return;
+
+                case MEM_KICK:
+
+                    ASSERT_KICK_ADDR(addr);
+                    pokeKick16(addr, value);
+                    return;
+
+                case MEM_EXTROM:
+
+                    ASSERT_EXT_ADDR(addr);
+                    return;
+
+                default:
+                    assert(false);
+            }
+            break;
+
+
+
     }
 }
 
 void
 Memory::poke32(uint32_t addr, uint32_t value)
 {
-    /*
-    if ((addr & 0xDF0000) == 0xDF0000)
-        debug("PC: %X poke32(%X,%X)\n", amiga->cpu.getPC(), addr, value);
-    */
-    
-    poke16(addr,     HI_WORD(value));
-    poke16(addr + 2, LO_WORD(value));
+    poke16<BUS_CPU>(addr,     HI_WORD(value));
+    poke16<BUS_CPU>(addr + 2, LO_WORD(value));
 }
 
 uint8_t
@@ -1583,3 +1656,7 @@ template void Memory::pokeCustom16<POKE_COPPER>(uint32_t addr, uint16_t value);
 template uint16_t Memory::peek16<BUS_CPU>(uint32_t addr);
 template uint16_t Memory::peek16<BUS_COPPER>(uint32_t addr);
 template uint16_t Memory::peek16<BUS_BLITTER>(uint32_t addr);
+
+template void Memory::poke16<BUS_CPU>(uint32_t addr, uint16_t value);
+template void Memory::poke16<BUS_COPPER>(uint32_t addr, uint16_t value);
+template void Memory::poke16<BUS_BLITTER>(uint32_t addr, uint16_t value);

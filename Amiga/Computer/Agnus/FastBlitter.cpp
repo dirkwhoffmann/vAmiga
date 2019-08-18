@@ -155,7 +155,7 @@ Blitter::doFastCopyBlit()
         
             // Write D
             if (useD) {
-                mem->poke16(bltdpt, dhold);
+                mem->poke16<BUS_BLITTER>(bltdpt, dhold);
                 debug(BLT_DEBUG, "D: poke(%X), %X\n", bltdpt, dhold);
                 check1 = fnv_1a_it32(check1, dhold);
                 check2 = fnv_1a_it32(check2, bltdpt);
@@ -271,7 +271,7 @@ Blitter::doFastLineBlit()
         
         // Save result to D-channel, same as the C ptr after first pixel.
         if (c_enabled) { // C-channel must be enabled
-            mem->poke16(bltdpt_local, bltddat_local);
+            mem->poke16<BUS_BLITTER>(bltdpt_local, bltddat_local);
             check1 = fnv_1a_it32(check1, bltddat_local);
             check2 = fnv_1a_it32(check2, bltdpt_local);
         }

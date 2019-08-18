@@ -62,7 +62,7 @@ extern "C" void m68k_write_memory_16(unsigned int addr, unsigned int value)
 
     // if (addr >= 0xC2F3A0 && addr <= 0xC2F3B0) printf("%X CPU::poke16(%x), %x\n", addr, value);
 
-    activeAmiga->mem.poke16(addr, value);
+    activeAmiga->mem.poke16<BUS_CPU>(addr, value);
 }
 
 extern "C" void m68k_write_memory_32(unsigned int addr, unsigned int value)
