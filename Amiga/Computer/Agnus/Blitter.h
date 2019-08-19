@@ -18,75 +18,9 @@ class Blitter : public HardwareComponent {
     // Constants
     //
 
-    /* Blitter execution diagram (HRM, Table 6.2):
+    /* Micro-instructions
      *
-     *           Active
-     * BLTCON0  Channels            Cycle sequence
-     *
-     *    F     A B C D    A0 B0 C0 -- A1 B1 C1 D0 A2 B2 C2 D1 D2
-     *    E     A B C      A0 B0 C0 A1 B1 C1 A2 B2 C2
-     *    D     A B   D    A0 B0 -- A1 B1 D0 A2 B2 D1 -- D2
-     *    C     A B        A0 B0 -- A1 B1 -- A2 B2
-     *    B     A   C D    A0 C0 -- A1 C1 D0 A2 C2 D1 -- D2
-     *    A     A   C      A0 C0 A1 C1 A2 C2
-     *    9     A     D    A0 -- A1 D0 A2 D1 -- D2
-     *    8     A          A0 -- A1 -- A2
-     *    7       B C D    B0 C0 -- -- B1 C1 D0 -- B2 C2 D1 -- D2
-     *    6       B C      B0 C0 -- B1 C1 -- B2 C2
-     *    5       B   D    B0 -- -- B1 D0 -- B2 D1 -- D2
-     *    4       B        B0 -- -- B1 -- -- B2
-     *    3         C D    C0 -- -- C1 D0 -- C2 D1 -- D2
-     *    2         C      C0 -- C1 -- C2
-     *    1           D    D0 -- D1 -- D2
-     *    0                -- -- -- --
-     *
-     * From this table we derive:
-     *
-     *           Cyles: DMA cycles per word
-     *                  [ Total / Bus blocking / Non blocking ]
-     *
-     *     Wait states: Average number of CPU wait states
-     *                  [ DMA cycles / Master cycles ]
-     *
-     * BLTCON0    Cyles          Wait states
-     *
-     *    F     4 (4 / 0)   infinity / infinity
-     *    E     3 (3 / 0)   infinity / infinity
-     *    D     3 (3 / 0)   infinity / infinity
-     *    C     3 (2 / 1)          1 / 8
-     *    B     3 (3 / 0)   infinity / infinity
-     *    A     2 (2 / 0)   infinity / infinity
-     *    9     2 (2 / 0)   infinity / infinity
-     *    8     2 (1 / 1)        0.5 / 4
-     *    7     4 (3 / 1)        1.5 / 12
-     *    6     3 (2 / 1)          1 / 8
-     *    5     3 (2 / 1)          1 / 8
-     *    4     3 (1 / 2)       2.66 / 21.33
-     *    3     3 (2 / 1)          1 / 21.33
-     *    2     2 (1 / 1)        0.5 / 4
-     *    1     2 (1 / 1)        0.5 / 4
-     *    0     2 (0 / 2)          0 / 0
-     */
-    /*
-    const int blitCycles[16] = {
-        2, 2, 2, 3,
-        3, 3, 3, 4,
-        2, 2, 2, 3,
-        3, 3, 3, 4
-    };
-    const int waitStates[16] = {
-        0, 4, 4, 21,
-        21, 8, 8, 12,
-        4, -1, -1, -1,
-        8, -1, -1, -1
-    };
-    */
-
-    //
-    // Micro-instructions
-    //
-
-    /* To keep the implementation flexible, the blitter is emulated as a
+     * To keep the implementation flexible, the blitter is emulated as a
      * micro-programmable device. When a blit starts, a micro-program is set up
      * that will decide on the action that are performed in each Blitter cycle.
      *
@@ -103,10 +37,6 @@ class Blitter : public HardwareComponent {
      *      HOLD_D : Loads register D hold.
      *     BLTDONE : Marks the last instruction.
      *      REPEAT : Continues with the next word.
-     *
-     * Additional bit masks:
-     *
-     *         BUS : Indicates that the Blitter needs bus access to proceed.
      */
 
     static const uint16_t BLTIDLE   = 0b0000'0000'0000;
@@ -141,23 +71,19 @@ private:
     //
     
     /* Blitter emulation accuracy.
-     * The following accuracy levels are implemented at the moment:
      *
-     * Level 0: Moves data in a single chunk by using the FastBlitter.
-     *          Consumes no bus cycles while operating.
-     *          Keeps the CPU keeps running full speed.
+     * The following accuracy levels are implemented:
      *
-     * Level 1: Moves data in a single chunk by using the FastBlitter.
-     *          Consumes bus cycles while operating.
-     *          Keeps the CPU keeps running full speed.
+     * Level 0: Moves data in a single chunk.
+     *          Terminates immediately without using up any bus cycles.
      *
-     * Level 2: Moves data in a single chunk by using the FastBlitter.
-     *          Consumes bus cycles while operating.
-     *          Slows down the CPU by inserting wait states.
+     * Level 1: Moves data in a single chunk.
+     *          Uses up bus cycles like the real Blitter does.
      *
-     * Level 3: Moves data word by word by using the SlowBlitter.
-     *          Consumes bus cycles while operating.
-     *          Slows down the CPU by inserting wait states.
+     * Level 2: Moves data word by word like the real Blitter does.
+     *          Uses up bus cycles like the real Blitter does.
+     *
+     * Level 0 and 1 invoke the FastBlitter. Level 2 invokes the SlowBlitter.
      */
     int accuracy = 0;
     
@@ -220,8 +146,15 @@ private:
     int32_t cmod;
     int32_t dmod;
 
+    // Counters tracking the coordinate of the blit window
     uint16_t xCounter;
     uint16_t yCounter;
+
+    // Counters tracking the DMA accesses for each channel
+    int16_t cntA;
+    int16_t cntB;
+    int16_t cntC;
+    int16_t cntD;
 
     bool fillCarry;
     uint16_t mask;
@@ -257,8 +190,8 @@ public:
 
 private:
 
-    // Total number of words to be processed in copy blit
-    int bltwords;
+    // Counter for tracking the remaining words to process
+    int remaining;
 
     // Debug counters
     int copycount = 0;
@@ -338,6 +271,10 @@ public:
 
         & xCounter
         & yCounter
+        & cntA
+        & cntB
+        & cntC
+        & cntD
 
         & fillCarry
         & mask
@@ -348,7 +285,7 @@ public:
         & cpuRequestsBus
         & cpuDenials
         
-        & bltwords;
+        & remaining;
     }
 
     
@@ -521,13 +458,13 @@ private:
     bool blitterCanHaveBus();
 
     // Sets the x or y counter to a new value
+    // DEPRECATED
     void setXCounter(uint16_t value);
     void setYCounter(uint16_t value);
     void resetXCounter() { setXCounter(bltsizeW()); }
     void resetYCounter() { setYCounter(bltsizeH()); }
     void decXCounter() { setXCounter(xCounter - 1); }
     void decYCounter() { setYCounter(yCounter - 1); }
-    bool lastIteration() { return xCounter == 1 && yCounter == 1; }
 
     // Program the device
     void loadMicrocode();

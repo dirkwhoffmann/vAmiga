@@ -18,50 +18,50 @@ Blitter::startSlowBlitter()
         verbose = false;
     }
 
+    // Line blit
     if (bltconLINE()) {
 
         // There is no slow line Blitter yet. We call the fast Blitter instead
         doFastLineBlit();
         terminate();
-
-    } else {
-
-        // Setup ascending / descending dependent parameters
-        if (bltconDESC()) {
-            incr = -2;
-            ash  = 16 - bltconASH();
-            bsh  = 16 - bltconBSH();
-            amod = -bltamod;
-            bmod = -bltbmod;
-            cmod = -bltcmod;
-            dmod = -bltdmod;
-        } else {
-            incr = 2;
-            ash  = bltconASH();
-            bsh  = bltconBSH();
-            amod = bltamod;
-            bmod = bltbmod;
-            cmod = bltcmod;
-            dmod = bltdmod;
-        }
-
-        // Set width and height counters
-        resetXCounter();
-        resetYCounter();
-
-        // Reset registers
-        aold = 0;
-        bold = 0;
-
-        // Reset the fill carry bit
-        fillCarry = !!bltconFCI();
-
-        // Load the micro-code for this blit
-        loadMicrocode();
-
-        // Start the blit
-        agnus->scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_EXEC_SLOW);
+        return;
     }
+
+    // Copy blit
+
+    // Setup ascending / descending dependent parameters
+    if (bltconDESC()) {
+        incr = -2;
+        ash  = 16 - bltconASH();
+        bsh  = 16 - bltconBSH();
+        amod = -bltamod;
+        bmod = -bltbmod;
+        cmod = -bltcmod;
+        dmod = -bltdmod;
+    } else {
+        incr = 2;
+        ash  = bltconASH();
+        bsh  = bltconBSH();
+        amod = bltamod;
+        bmod = bltbmod;
+        cmod = bltcmod;
+        dmod = bltdmod;
+    }
+
+    // Set width and height counters
+    resetXCounter();
+    resetYCounter();
+
+    // Reset registers
+    aold = 0;
+    bold = 0;
+
+    // Reset the fill carry bit
+    fillCarry = !!bltconFCI();
+
+   // Start the blit
+    loadMicrocode();
+    agnus->scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_EXEC_SLOW);
 }
 
 void
@@ -106,7 +106,11 @@ Blitter::executeSlowBlitter()
             check2 = fnv_1a_it32(check2, bltdpt);
 
             INC_OCS_PTR(bltdpt, incr);
-            if (xCounter == bltsizeW()) INC_OCS_PTR(bltdpt, dmod);
+            if (--cntD == 0) {
+                INC_OCS_PTR(bltdpt, dmod);
+                cntD = bltsizeW();
+            }
+            // if (xCounter == bltsizeW()) INC_OCS_PTR(bltdpt, dmod);
         }
     }
 
@@ -118,7 +122,11 @@ Blitter::executeSlowBlitter()
         debug(BLT_DEBUG, "    A = peek(%X) = %X\n", bltapt, anew);
         debug(BLT_DEBUG, "    After fetch: A = %X\n", anew);
         INC_OCS_PTR(bltapt, incr);
-        if (xCounter == 1) INC_OCS_PTR(bltapt, amod);
+        if (--cntA == 0) {
+            INC_OCS_PTR(bltapt, amod);
+            cntA = bltsizeW();
+        }
+        // if (xCounter == 1) INC_OCS_PTR(bltapt, amod);
     }
 
     if (instr & FETCH_B) {
@@ -129,7 +137,11 @@ Blitter::executeSlowBlitter()
         debug(BLT_DEBUG, "    B = peek(%X) = %X\n", bltbpt, bnew);
         debug(BLT_DEBUG, "    After fetch: B = %X\n", bnew);
         INC_OCS_PTR(bltbpt, incr);
-        if (xCounter == 1) INC_OCS_PTR(bltbpt, bmod);
+        if (--cntB == 0) {
+            INC_OCS_PTR(bltbpt, bmod);
+            cntB = bltsizeW();
+        }
+        // if (xCounter == 1) INC_OCS_PTR(bltbpt, bmod);
     }
 
     if (instr & FETCH_C) {
@@ -140,7 +152,11 @@ Blitter::executeSlowBlitter()
         debug(BLT_DEBUG, "    C = peek(%X) = %X\n", bltcpt, chold);
         debug(BLT_DEBUG, "    After fetch: C = %X\n", chold);
         INC_OCS_PTR(bltcpt, incr);
-        if (xCounter == 1) INC_OCS_PTR(bltcpt, cmod);
+        if (--cntC == 0) {
+            INC_OCS_PTR(bltcpt, cmod);
+            cntC = bltsizeW();
+        }
+        // if (xCounter == 1) INC_OCS_PTR(bltcpt, cmod);
     }
 
     if (instr & HOLD_A) {
@@ -194,6 +210,31 @@ Blitter::executeSlowBlitter()
     if (instr & REPEAT) {
 
         debug(BLT_DEBUG, "REPEAT\n");
+        iteration++;
+
+        if (xCounter > 1) {
+
+            bltpc = 0;
+            decXCounter();
+
+        } else if (yCounter > 1) {
+
+            bltpc = 0;
+            resetXCounter();
+            decYCounter();
+
+        } else {
+
+            // The remaining micro-instructions flush the pipeline.
+            // The Blitter busy flag gets cleared at this point.
+            bbusy = false;
+        }
+    }
+
+    /*
+    if (instr & REPEAT) {
+
+        debug(BLT_DEBUG, "REPEAT\n");
 
         iteration++;
 
@@ -202,7 +243,6 @@ Blitter::executeSlowBlitter()
 
             // Jump back to the first micro-instruction
             bltpc = 0;
-
 
             // Decrease word counters
             if (xCounter > 1) {
@@ -222,22 +262,12 @@ Blitter::executeSlowBlitter()
             bbusy = false;
         }
     }
+    */
 
     if (instr & BLTDONE) {
 
         debug(BLT_DEBUG, "BLTDONE\n");
-
-        // Clear the Blitter busy flag (if still set)
-        bbusy = false;
-
-        // Trigger the Blitter interrupt
-        agnus->scheduleRel<IRQ_BLIT_SLOT>(0, IRQ_SET);
-
-        // Terminate the Blitter
-        agnus->cancel<BLT_SLOT>();
-
-           plaindebug(BLIT_CHECKSUM, "BLITTER check1: %x check2: %x\n", check1, check2);
-
+        terminate();
     }
 }
 
@@ -263,9 +293,6 @@ Blitter::setYCounter(uint16_t value)
     
     // Reset the fill carry bit
     fillCarry = !!bltconFCI();
-
-    // Apply the "first word mask" in the first iteration
-    // mask = bltafwm;
 }
 
 void

@@ -13,7 +13,7 @@ void
 Blitter::startFastBlitter()
 {
     static bool verbose = true;
-    if (verbose) { debug("Using Fast Blitter\n"); verbose = false; }
+    if (verbose) { debug("Using Fast Blitter\n"); }
 
     // Line blit
     if (bltconLINE()) {
@@ -31,10 +31,12 @@ Blitter::startFastBlitter()
     switch (accuracy) {
 
         case 0:
+            if (verbose) { debug("Immediate termination\n"); verbose = false; }
             terminate();
             return;
 
         case 1:
+            if (verbose) { debug("Fake micro-code execution\n"); verbose = false; }
             loadMicrocode();
             agnus->scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_EXEC_FAST);
             return;
@@ -57,8 +59,8 @@ Blitter::executeFastBlitter()
         if (!agnus->allocateBus<BUS_BLITTER>()) return;
     }
     if (instr & REPEAT) {
-        bltwords--;
-        if (bltwords > 0) bltpc = 0;
+        remaining--;
+        if (remaining > 0) bltpc = 0;
     }
     if (instr & BLTDONE) {
         terminate();
@@ -208,8 +210,6 @@ Blitter::doFastCopyBlit()
         if (useC) INC_OCS_PTR(bltcpt, cmod);
         if (useD) INC_OCS_PTR(bltdpt, dmod);
     }
-    
-    plaindebug(BLIT_CHECKSUM, "BLITTER check1: %x check2: %x\n", check1, check2);
 }
 
 #define blitterLineIncreaseX(a_shift, cpt) \
@@ -375,8 +375,6 @@ Blitter::doFastLineBlit()
     bltcpt = OCS_PTR(bltcpt_local);
     bltdpt = OCS_PTR(bltdpt_local);
     bzero  = bltzero_local;
-    
-    // printf("BLITTER check1: %x check2: %x\n", check1, check2);
 }
     /*
      void blitterLineMode(void)

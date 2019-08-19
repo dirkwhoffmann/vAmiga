@@ -240,9 +240,14 @@ Blitter::pokeBLTSIZE(uint16_t value)
     debug(BLITREG_DEBUG, "pokeBLTSIZE(%X)\n", value);
     
     bltsize = value;
-    bltwords = bltsizeW() * bltsizeH();
+    remaining = bltsizeW() * bltsizeH();
+    cntA = cntB = cntC = cntD = bltsizeW();
+
     bzero = true;
     bbusy = true;
+
+    check1 = fnv_1a_init32();
+    check2 = fnv_1a_init32();
 
     // Schedule the blit operation
     if (agnus->bltDMA()) {
@@ -335,21 +340,20 @@ Blitter::serviceEvent(EventID id)
 
         case BLT_START:
 
-            // Debugging
-            check1 = fnv_1a_init32();
-            check2 = fnv_1a_init32();
             if (bltconLINE()) {
                 linecount++;
-                plaindebug(BLIT_CHECKSUM, "BLITTER Line %d (%d,%d) (%d%d%d%d) %x %x %x %x\n",
+                debug(BLIT_CHECKSUM, "BLITTER Line %d (%d,%d) (%d%d%d%d) %x %x %x %x\n",
                            linecount, bltsizeW(), bltsizeH(),
                            bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
                            bltapt, bltbpt, bltcpt, bltdpt);
             } else {
                 copycount++;
-                plaindebug(BLIT_CHECKSUM, "BLITTER Blit %d (%d,%d) (%d%d%d%d) %x %x %x %x %s\n",
-                           copycount, bltsizeW(), bltsizeH(), bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
+                debug(BLIT_CHECKSUM, "BLITTER Blit %d (%d,%d) (%d%d%d%d) (%d) %x %x %x %x %s\n",
+                           copycount, bltsizeW(), bltsizeH(), bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(), bltdmod,
                            bltapt, bltbpt, bltcpt, bltdpt, bltconDESC() ? "D" : "");
             }
+
+            // debugLevel = (copycount == 14) ? 2 : 1;
 
             // Select the fast or slow bitter depending on the accuracy level
             (accuracy >= 2) ? startSlowBlitter() : startFastBlitter();
@@ -681,5 +685,9 @@ Blitter::terminate()
 
     // Clear the Blitter slot
     agnus->cancel<BLT_SLOT>();
+
+    // Dump checksums if requested
+    debug(BLIT_CHECKSUM, "%x %x %x %x\n", bltapt, bltbpt, bltcpt, bltdpt);
+    debug(BLIT_CHECKSUM, "BLITTER check1: %x check2: %x\n", check1, check2);
 }
 
