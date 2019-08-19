@@ -356,6 +356,14 @@ Agnus::beamDiff(int16_t vStart, int16_t hStart, int16_t vEnd, int16_t hEnd)
     return DMA_CYCLES(vDiff * 227 + hDiff);
 }
 
+Cycle
+Agnus::getWaitStates()
+{
+    Cycle result = waitStates;
+    waitStates = 0;
+    return result;
+}
+
 bool
 Agnus::copperCanRun()
 {
@@ -1446,6 +1454,8 @@ Agnus::executeOneCycle()
 
     // Advance the internal counters
     pos.h++;
+
+    // If this assertion hits, the HSYNC event hasn't been served
     assert(pos.h <= HPOS_MAX);
 
     clock += DMA_CYCLES(1);
@@ -1463,7 +1473,7 @@ Agnus::executeUntil(Cycle targetClock)
         // Advance the internal counters
         pos.h++;
 
-        // Note: If this assertion hits, the HSYNC event hasn't been served!
+        // If this assertion hits, the HSYNC event hasn't been served
         assert(pos.h <= HPOS_MAX);
 
         clock += DMA_CYCLES(1);
@@ -1473,28 +1483,26 @@ Agnus::executeUntil(Cycle targetClock)
 void
 Agnus::executeUntilBusIsFree()
 {
-/*
-    int waitStates = 0;
-
-    // Quick-exit if CPU runs at full speed all the time
+    /*
+    // Quick-exit if CPU runs at full speed during blit operations
     if (blitter.accuracy == 0) return;
 
     // The CPU usually accesses memory in odd cyles (advance to such a cycle)
+    assert(pos.h != -1); 
     if (pos.h % 2) executeOneCycle();
 
     // Emulate wait states until the bus is available to the CPU
-    while (busOwner[pos.h] != BUS_NONE) {
+    while (currentOwner != BUS_NONE) {
 
-        debug("CPU blocked by %d DMA\n", busOwner[pos.h]);
+        debug("CPU blocked by %d DMA\n", currentOwner);
+        if (currentOwner == BUS_BITPLANE) {
+            debug("activePlanes = %d\n", activeBitplanes);
+        }
 
         executeOneCycle();
         waitStates++;
     }
-
-    // Apply wait-states
-    if (waitStates)  { debug("Adding %d wait-states to the CPU\n", waitStates); }
-    amiga->masterClock += waitStates * DMA_CYCLES(1);
- */
+    */
 }
 
 template <int nr> void

@@ -22,17 +22,27 @@ extern int64_t cpuInstrCount;
 
 class CPU : public HardwareComponent {
     
-    private:
+private:
     
     // Information shown in the GUI inspector panel
     CPUInfo info;
-    
-    
+
+    //
+    // Interrupts
+    //
+
+    // The new interrupt level
+    int irqLevel;
+
+    // Indicates if the irq level should be updated in executeNextInstruction()
+    bool changeIrqLevel;
+
+
     //
     // CPU state switching
     //
     
-    private:
+private:
     
     /* CPU context
      * This variable is usually NULL. When the user switches to another
@@ -41,7 +51,7 @@ class CPU : public HardwareComponent {
      */
     uint8_t *context = NULL;
     
-    public:
+public:
     
     //
     // Debuging tools
@@ -62,7 +72,7 @@ class CPU : public HardwareComponent {
     // Constructing and destructing
     //
     
-    public:
+public:
     
     CPU();
     ~CPU();
@@ -80,6 +90,10 @@ class CPU : public HardwareComponent {
     template <class T>
     void applyToResetItems(T& worker)
     {
+        worker
+
+        & irqLevel
+        & changeIrqLevel;
     }
 
     
@@ -87,11 +101,11 @@ class CPU : public HardwareComponent {
     // Methods from HardwareComponent
     //
     
-    private:
+private:
 
     void _powerOn() override;
     void _reset() override;
-    void _inspect() override; 
+    void _inspect() override;
     void _dump() override;
     size_t _size() override;
     size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS }
@@ -104,7 +118,7 @@ class CPU : public HardwareComponent {
     // Reading the internal state
     //
     
-    public:
+public:
     
     // Returns the latest internal state recorded by inspect()
     CPUInfo getInfo();
@@ -116,7 +130,7 @@ class CPU : public HardwareComponent {
     // Recording and restoring the CPU context
     //
     
-    public:
+public:
     
     // Returns true if a CPU context has been saved previously
     bool hasSavedContext() { return context != NULL; }
@@ -132,7 +146,7 @@ class CPU : public HardwareComponent {
     // Querying registers
     //
     
-    public:
+public:
     
     // Returns the current value of the program counter.
     uint32_t getPC();
@@ -194,9 +208,13 @@ class CPU : public HardwareComponent {
     // Running the device
     //
     
-    public:
-    
+public:
+
+    // Executes the next instruction
     uint64_t executeNextInstruction();
+
+    // Sets the interrupt level
+    void setIrqLevel(int level);
 };
 
 #endif

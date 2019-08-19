@@ -438,9 +438,25 @@ CPU::readRecordedInstruction(long offset)
 uint64_t
 CPU::executeNextInstruction()
 {
+    // Check if we need to change the value of the IRQ lines
+    if (changeIrqLevel) {
+        m68k_set_irq(irqLevel);
+        changeIrqLevel = false;
+    }
+
     // debug("PC = %X\n", getPC());
     int cycles = m68k_execute(1);
     // debug("Executed %d CPU cycles. New PC = %X\n", cycles, getPC());
     
     return cycles;
 }
+
+void
+CPU::setIrqLevel(int level)
+{
+    if (irqLevel != level) {
+        irqLevel = level;
+        changeIrqLevel = true;
+    }
+}
+

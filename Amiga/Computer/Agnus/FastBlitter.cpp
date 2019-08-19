@@ -99,12 +99,17 @@ Blitter::executeFastBlitter()
     // Make sure that Blitter DMA is enabled when calling this function
     assert(agnus->bltDMA());
 
-    // Execute the next micro-instruction
+    // Fetch the next micro-instruction
     uint16_t instr = microInstr[bltpc];
+    debug(BLT_DEBUG, "Executing micro instruction %d (%X)\n", bltpc, instr);
 
+    // Check if this instruction needs the bus to execute
     if (instr & BUS) {
         if (!agnus->allocateBus<BUS_BLITTER>()) return;
     }
+
+    bltpc++;
+
     if (instr & REPEAT) {
         remaining--;
         if (remaining > 0) bltpc = 0;
@@ -115,8 +120,6 @@ Blitter::executeFastBlitter()
 
     // Write some fake data to make the DMA debugger happy
     agnus->busValue[agnus->pos.h] = 0x8888;
-
-    bltpc++;
 }
 
 void

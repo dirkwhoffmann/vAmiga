@@ -24,6 +24,7 @@ Paula::Paula()
 void
 Paula::_initialize()
 {
+    cpu = &amiga->cpu;
     agnus = &amiga->agnus;
 }
 
@@ -306,7 +307,8 @@ Paula::checkInterrupt()
     }
     */
 
-    m68k_set_irq(level);
+    // m68k_set_irq(level);
+    cpu->setIrqLevel(level);
 }
 
 void

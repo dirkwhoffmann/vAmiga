@@ -91,7 +91,7 @@ Blitter::beginSlowCopyBlit()
     static bool verbose = true;
     if (verbose) { verbose = false; debug("Using the slow copy Blitter\n"); }
 
-    // Setup ascending / descending dependent parameters
+    // Setup parameters
     if (bltconDESC()) {
         incr = -2;
         ash  = 16 - bltconASH();
@@ -142,12 +142,9 @@ Blitter::executeSlowBlitter()
 
     // Check if this instruction needs the bus to execute
     if (instr & BUS) {
-
-        if (!agnus->allocateBus<BUS_BLITTER>()) {
-            // debug("Blitter is blocked\n");
-            return;
-        }
+        if (!agnus->allocateBus<BUS_BLITTER>()) return;
     }
+    
     bltpc++;
 
     // Execute the current instruction
@@ -172,7 +169,7 @@ Blitter::executeSlowBlitter()
                 INC_OCS_PTR(bltdpt, dmod);
                 cntD = bltsizeW();
             }
-            // if (xCounter == bltsizeW()) INC_OCS_PTR(bltdpt, dmod);
+            // if (xCounter == bltsizeW()) INC_OCS_PTR(dpt, dmod);
         }
     }
 
@@ -188,7 +185,6 @@ Blitter::executeSlowBlitter()
             INC_OCS_PTR(bltapt, amod);
             cntA = bltsizeW();
         }
-        // if (xCounter == 1) INC_OCS_PTR(bltapt, amod);
     }
 
     if (instr & FETCH_B) {
@@ -203,7 +199,6 @@ Blitter::executeSlowBlitter()
             INC_OCS_PTR(bltbpt, bmod);
             cntB = bltsizeW();
         }
-        // if (xCounter == 1) INC_OCS_PTR(bltbpt, bmod);
     }
 
     if (instr & FETCH_C) {
@@ -218,7 +213,6 @@ Blitter::executeSlowBlitter()
             INC_OCS_PTR(bltcpt, cmod);
             cntC = bltsizeW();
         }
-        // if (xCounter == 1) INC_OCS_PTR(bltcpt, cmod);
     }
 
     if (instr & HOLD_A) {

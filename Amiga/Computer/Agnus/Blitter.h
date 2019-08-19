@@ -137,10 +137,10 @@ private:
     // The program counter indexing the microInstr array
     uint16_t bltpc = 0;
 
-    int     iteration;
-    int     incr;
-    int     ash;
-    int     bsh;
+    int iteration;
+    int incr;
+    int ash;
+    int bsh;
     int32_t amod;
     int32_t bmod;
     int32_t cmod;
@@ -462,9 +462,6 @@ private:
     //
     //  Executing the Slow Blitter (Called for higher accuracy levels)
     //
-
-    // Performs a Blitter operation with the slow Blitter
-    // void startSlowBlitter();
 
     // Starts a slow line blit
     void beginSlowLineBlit();

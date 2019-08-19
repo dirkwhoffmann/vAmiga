@@ -334,8 +334,6 @@ public:
      * The vertical DDF flipflop needs to be set to enable bitplane DMA.
      */
     bool ddfVFlop;
-    // bool ddfHFlop;
-
 
     // The actual data fetch window
     int16_t dmaStrtLores;      // First lores bitplane DMA cycle
@@ -415,6 +413,14 @@ public:
     // Unsed in the hsyncHandler to remember the result of inBplDmaLine
     bool oldBplDmaLine;
 
+
+    //
+    // CPU interaction
+    //
+
+    // Number of wait states if the CPU can't access the bus
+    Cycle waitStates;
+
     
     //
     // DMA allocation tables
@@ -489,14 +495,12 @@ public:
         & frameInfo.interlaced
         & frameInfo.numLines
         & lof
-        & dmaStrtLores
-        & dmaStrtHires
-        & dmaStopLores
-        & dmaStopHires
-        & dmaStrtLoresShift
         & sprVStrt
         & sprVStop
         & sprDmaState
+
+        & diwstrt
+        & diwstop
         & diwHstrt
         & diwHstop
         & diwVstrt
@@ -505,19 +509,24 @@ public:
         & diwHFlop
         & diwHFlopOn
         & diwHFlopOff
+
+        & ddfstrt
+        & ddfstop
+        & ddfstrtReached
+        & ddfstopReached
+        & ddfVFlop
+        & dmaStrtLores
+        & dmaStrtHires
+        & dmaStopLores
+        & dmaStopHires
+        & dmaStrtLoresShift
+
         & bplcon0
         & bplcon0AtDDFStrt
         & dmacon
         & dmaconAtDDFStrt
         & dmaDAS
         & dskpt
-        & diwstrt
-        & diwstop
-        & ddfstrt
-        & ddfstop
-        & ddfstrtReached
-        & ddfstopReached
-        & ddfVFlop
         & audlc
         & audlcold
         & bplpt
@@ -525,6 +534,11 @@ public:
         & bpl2mod
         & sprpt
         & activeBitplanes
+        & busOwner
+        & busValue
+        & oldBplDmaLine
+
+        & waitStates
         & dmaEvent
         & nextDmaEvent
         & hsyncActions;
@@ -687,6 +701,11 @@ public:
     //
     // Managing DMA access
     //
+
+    /* Returns how long the CPU was blocked by ongoing DMA
+     * Variable waitStates is reset to 0 as a side effect.
+     */
+    Cycle getWaitStates();
 
     // Indicates if bitplane DMA is blocked by a hardware stops
     bool bplHwStop() { return pos.h < 0x18 || pos.h >= 0xE0; }

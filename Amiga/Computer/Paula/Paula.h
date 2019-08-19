@@ -19,8 +19,9 @@ class Paula : public HardwareComponent {
 private:
 
     // Quick-access references
+    class CPU *cpu;
     class Agnus *agnus;
-    
+
     // Information shown in the GUI inspector panel
     PaulaInfo info;
     

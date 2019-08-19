@@ -153,91 +153,91 @@ Blitter::getInfo()
 void
 Blitter::pokeBLTCON0(uint16_t value)
 {
-    debug(BLITREG_DEBUG, "pokeBLTCON0(%X)\n", value);
+    debug(BLTREG_DEBUG, "pokeBLTCON0(%X)\n", value);
     bltcon0 = value;
 }
 
 void
 Blitter::pokeBLTCON1(uint16_t value)
 {
-    debug(BLITREG_DEBUG, "pokeBLTCON1(%X)\n", value);
+    debug(BLTREG_DEBUG, "pokeBLTCON1(%X)\n", value);
     bltcon1 = value;
 }
 
 void
 Blitter::pokeBLTAPTH(uint16_t value)
 {
-    debug(BLITREG_DEBUG, "pokeBLTAPTH(%X)\n", value);
+    debug(BLTREG_DEBUG, "pokeBLTAPTH(%X)\n", value);
     bltapt = REPLACE_HI_WORD(bltapt, value & 0x0007);
 }
 
 void
 Blitter::pokeBLTAPTL(uint16_t value)
 {
-    debug(BLITREG_DEBUG, "pokeBLTAPTL(%X)\n", value);
+    debug(BLTREG_DEBUG, "pokeBLTAPTL(%X)\n", value);
     bltapt = REPLACE_LO_WORD(bltapt, value & 0xFFFE);
 }
 
 void
 Blitter::pokeBLTBPTH(uint16_t value)
 {
-    debug(BLITREG_DEBUG, "pokeBLTBPTH(%X)\n", value);
+    debug(BLTREG_DEBUG, "pokeBLTBPTH(%X)\n", value);
     bltbpt = REPLACE_HI_WORD(bltbpt, value & 0x0007);
 }
 
 void
 Blitter::pokeBLTBPTL(uint16_t value)
 {
-    debug(BLITREG_DEBUG, "pokeBLTBPTL(%X)\n", value);
+    debug(BLTREG_DEBUG, "pokeBLTBPTL(%X)\n", value);
     bltbpt = REPLACE_LO_WORD(bltbpt, value & 0xFFFE);
 }
 
 void
 Blitter::pokeBLTCPTH(uint16_t value)
 {
-    debug(BLITREG_DEBUG, "pokeBLTCPTH(%X)\n", value);
+    debug(BLTREG_DEBUG, "pokeBLTCPTH(%X)\n", value);
     bltcpt = REPLACE_HI_WORD(bltcpt, value & 0x0007);
 }
 
 void
 Blitter::pokeBLTCPTL(uint16_t value)
 {
-    debug(BLITREG_DEBUG, "pokeBLTCPTL(%X)\n", value);
+    debug(BLTREG_DEBUG, "pokeBLTCPTL(%X)\n", value);
     bltcpt = REPLACE_LO_WORD(bltcpt, value & 0xFFFE);
 }
 
 void
 Blitter::pokeBLTDPTH(uint16_t value)
 {
-    debug(BLITREG_DEBUG, "pokeBLTDPTH(%X)\n", value);
+    debug(BLTREG_DEBUG, "pokeBLTDPTH(%X)\n", value);
     bltdpt = REPLACE_HI_WORD(bltdpt, value & 0x0007);
 }
 
 void
 Blitter::pokeBLTDPTL(uint16_t value)
 {
-    debug(BLITREG_DEBUG, "pokeBLTDPTL(%X)\n", value);
+    debug(BLTREG_DEBUG, "pokeBLTDPTL(%X)\n", value);
     bltdpt = REPLACE_LO_WORD(bltdpt, value & 0xFFFE);
 }
 
 void
 Blitter::pokeBLTAFWM(uint16_t value)
 {
-    debug(BLITREG_DEBUG, "pokeBLTAFWM(%X)\n", value);
+    debug(BLTREG_DEBUG, "pokeBLTAFWM(%X)\n", value);
     bltafwm = value;
 }
 
 void
 Blitter::pokeBLTALWM(uint16_t value)
 {
-    debug(BLITREG_DEBUG, "pokeBLTALWM(%X)\n", value);
+    debug(BLTREG_DEBUG, "pokeBLTALWM(%X)\n", value);
     bltalwm = value;
 }
 
 void
 Blitter::pokeBLTSIZE(uint16_t value)
 {
-    debug(BLITREG_DEBUG, "pokeBLTSIZE(%X)\n", value);
+    debug(BLTREG_DEBUG, "pokeBLTSIZE(%X)\n", value);
     
     bltsize = value;
     remaining = bltsizeW() * bltsizeH();
@@ -257,34 +257,34 @@ Blitter::pokeBLTSIZE(uint16_t value)
 void
 Blitter::pokeBLTAMOD(uint16_t value)
 {
-    debug(BLITREG_DEBUG, "pokeBLTAMOD(%X)\n", value);
+    debug(BLTREG_DEBUG, "pokeBLTAMOD(%X)\n", value);
     bltamod = (int16_t)(value & 0xFFFE);
 }
 void
 Blitter::pokeBLTBMOD(uint16_t value)
 {
-    debug(BLITREG_DEBUG, "pokeBLTBMOD(%X)\n", value);
+    debug(BLTREG_DEBUG, "pokeBLTBMOD(%X)\n", value);
     bltbmod = (int16_t)(value & 0xFFFE);
 }
 
 void
 Blitter::pokeBLTCMOD(uint16_t value)
 {
-    debug(BLITREG_DEBUG, "pokeBLTCMOD(%X)\n", value);
+    debug(BLTREG_DEBUG, "pokeBLTCMOD(%X)\n", value);
     bltcmod = (int16_t)(value & 0xFFFE);
 }
 
 void
 Blitter::pokeBLTDMOD(uint16_t value)
 {
-    debug(BLITREG_DEBUG, "pokeBLTDMOD(%X)\n", value);
+    debug(BLTREG_DEBUG, "pokeBLTDMOD(%X)\n", value);
     bltdmod = (int16_t)(value & 0xFFFE);
 }
 
 void
 Blitter::pokeBLTADAT(uint16_t value)
 {
-    debug(BLITREG_DEBUG, "pokeBLTADAT(%X)\n", value);
+    debug(BLTREG_DEBUG, "pokeBLTADAT(%X)\n", value);
     anew = value;
     /*
      // Apply masks
@@ -298,7 +298,7 @@ Blitter::pokeBLTADAT(uint16_t value)
 void
 Blitter::pokeBLTBDAT(uint16_t value)
 {
-    debug(BLITREG_DEBUG, "pokeBLTBDAT(%X)\n", value);
+    debug(BLTREG_DEBUG, "pokeBLTBDAT(%X)\n", value);
     bnew = value;
     /*
      bshift = (bshift << 16) | value;
@@ -308,7 +308,7 @@ Blitter::pokeBLTBDAT(uint16_t value)
 void
 Blitter::pokeBLTCDAT(uint16_t value)
 {
-    debug(BLITREG_DEBUG, "pokeBLTCDAT(%X)\n", value);
+    debug(BLTREG_DEBUG, "pokeBLTCDAT(%X)\n", value);
     chold = value;
 }
 
@@ -658,6 +658,10 @@ Blitter::doFill(uint16_t &data, bool &carry)
 void
 Blitter::startBlit()
 {
+    //REMOVE ASAP
+    accuracy = 1;
+
+    // Based on the accuracy level, we run the slow or the fast Blitter
     bool useSlowBlitter = accuracy >= 2;
 
     check1 = fnv_1a_init32();
@@ -666,7 +670,7 @@ Blitter::startBlit()
     if (bltconLINE()) {
 
         linecount++;
-        debug(BLIT_CHECKSUM, "BLITTER Line %d (%d,%d) (%d%d%d%d) %x %x %x %x\n",
+        debug(BLT_CHECKSUM, "BLITTER Line %d (%d,%d) (%d%d%d%d) %x %x %x %x\n",
               linecount, bltsizeW(), bltsizeH(),
               bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
               bltapt, bltbpt, bltcpt, bltdpt);
@@ -675,9 +679,13 @@ Blitter::startBlit()
 
     } else {
         copycount++;
-        debug(BLIT_CHECKSUM, "BLITTER Blit %d (%d,%d) (%d%d%d%d) (%d) %x %x %x %x %s\n",
-              copycount, bltsizeW(), bltsizeH(), bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(), bltdmod,
+        debug(BLT_CHECKSUM, "BLITTER Blit %d (%d,%d) (%d%d%d%d) (%d %d %d %d) %x %x %x %x %s\n",
+              copycount, bltsizeW(), bltsizeH(), bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
+              bltamod, bltbmod, bltcmod, bltdmod,
               bltapt, bltbpt, bltcpt, bltdpt, bltconDESC() ? "D" : "");
+
+        //REMOVE ASAP
+        debugLevel = (copycount == 553) ? 2 : 1;
 
         useSlowBlitter ? beginSlowCopyBlit() : beginFastCopyBlit();
     }
@@ -696,7 +704,7 @@ Blitter::terminate()
     agnus->cancel<BLT_SLOT>();
 
     // Dump checksums if requested
-    debug(BLIT_CHECKSUM, "%x %x %x %x\n", bltapt, bltbpt, bltcpt, bltdpt);
-    debug(BLIT_CHECKSUM, "BLITTER check1: %x check2: %x\n", check1, check2);
+    debug(BLT_CHECKSUM, "%x %x %x %x\n", bltapt, bltbpt, bltcpt, bltdpt);
+    debug(BLT_CHECKSUM, "BLITTER check1: %x check2: %x\n", check1, check2);
 }
 

@@ -999,8 +999,9 @@ Amiga::runLoop()
         CPUCycle cpuCycles = cpu.executeNextInstruction();
         cpuInstrCount++;
         
-        // Advance the masterclock
+        // Advance the masterclock and add additional wait states
         masterClock += CPU_CYCLES(cpuCycles);
+        masterClock += agnus.getWaitStates() * DMA_CYCLES(1);
         
         // Emulate DMA (Agnus is responsible for that)
         agnus.executeUntil(masterClock);
