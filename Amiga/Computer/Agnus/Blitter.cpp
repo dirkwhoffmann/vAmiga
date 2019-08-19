@@ -246,9 +246,6 @@ Blitter::pokeBLTSIZE(uint16_t value)
     bzero = true;
     bbusy = true;
 
-    check1 = fnv_1a_init32();
-    check2 = fnv_1a_init32();
-
     // Schedule the blit operation
     if (agnus->bltDMA()) {
         agnus->scheduleRel<BLT_SLOT>(DMA_CYCLES(0), BLT_START);
@@ -340,23 +337,7 @@ Blitter::serviceEvent(EventID id)
 
         case BLT_START:
 
-            if (bltconLINE()) {
-                linecount++;
-                debug(BLIT_CHECKSUM, "BLITTER Line %d (%d,%d) (%d%d%d%d) %x %x %x %x\n",
-                           linecount, bltsizeW(), bltsizeH(),
-                           bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
-                           bltapt, bltbpt, bltcpt, bltdpt);
-            } else {
-                copycount++;
-                debug(BLIT_CHECKSUM, "BLITTER Blit %d (%d,%d) (%d%d%d%d) (%d) %x %x %x %x %s\n",
-                           copycount, bltsizeW(), bltsizeH(), bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(), bltdmod,
-                           bltapt, bltbpt, bltcpt, bltdpt, bltconDESC() ? "D" : "");
-            }
-
-            // debugLevel = (copycount == 14) ? 2 : 1;
-
-            // Select the fast or slow bitter depending on the accuracy level
-            (accuracy >= 2) ? startSlowBlitter() : startFastBlitter();
+            startBlit();
             break;
 
         case BLT_EXEC_SLOW:
@@ -672,6 +653,34 @@ Blitter::doFill(uint16_t &data, bool &carry)
     carry = nextCarryIn[carry][dataHi];
     
     data = HI_LO(resultHi, resultLo);
+}
+
+void
+Blitter::startBlit()
+{
+    bool useSlowBlitter = accuracy >= 2;
+
+    check1 = fnv_1a_init32();
+    check2 = fnv_1a_init32();
+
+    if (bltconLINE()) {
+
+        linecount++;
+        debug(BLIT_CHECKSUM, "BLITTER Line %d (%d,%d) (%d%d%d%d) %x %x %x %x\n",
+              linecount, bltsizeW(), bltsizeH(),
+              bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
+              bltapt, bltbpt, bltcpt, bltdpt);
+
+        useSlowBlitter ? beginSlowLineBlit() : beginFastLineBlit();
+
+    } else {
+        copycount++;
+        debug(BLIT_CHECKSUM, "BLITTER Blit %d (%d,%d) (%d%d%d%d) (%d) %x %x %x %x %s\n",
+              copycount, bltsizeW(), bltsizeH(), bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(), bltdmod,
+              bltapt, bltbpt, bltcpt, bltdpt, bltconDESC() ? "D" : "");
+
+        useSlowBlitter ? beginSlowCopyBlit() : beginFastCopyBlit();
+    }
 }
 
 void

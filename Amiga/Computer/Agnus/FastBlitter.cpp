@@ -9,6 +9,7 @@
 
 #include "Amiga.h"
 
+/*
 void
 Blitter::startFastBlitter()
 {
@@ -37,6 +38,52 @@ Blitter::startFastBlitter()
 
         case 1:
             if (verbose) { debug("Fake micro-code execution\n"); verbose = false; }
+            loadMicrocode();
+            agnus->scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_EXEC_FAST);
+            return;
+
+        default:
+            assert(false);
+    }
+}
+*/
+
+void
+Blitter::beginFastLineBlit()
+{
+    // Only call this function is line blit mode
+    assert(bltconLINE());
+
+    static bool verbose = true;
+    if (verbose) { verbose = false; debug("Using the fast line Blitter\n"); }
+
+    doFastLineBlit();
+    terminate();
+}
+
+void
+Blitter::beginFastCopyBlit()
+{
+    // Only call this function is copy blit mode
+    assert(!bltconLINE());
+
+    static bool verbose = true;
+    if (verbose) { debug("Using the fast copy Blitter\n"); }
+
+    // Do the blit
+    doFastCopyBlit();
+
+    // Depending on the accuracy level, either terminate immediately or start
+    // fake-executing the micro-program to emulate proper timing.
+    switch (accuracy) {
+
+        case 0:
+            if (verbose) { verbose = false; debug("Immediate termination\n"); }
+            terminate();
+            return;
+
+        case 1:
+            if (verbose) { verbose = false; debug("Fake micro-code execution\n"); }
             loadMicrocode();
             agnus->scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_EXEC_FAST);
             return;

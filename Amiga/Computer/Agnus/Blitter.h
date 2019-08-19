@@ -421,15 +421,32 @@ public:
 
 
     //
-    // Fast Blitter (Accuracy levels 0 ... 2)
+    // Executing the Blitter (Entry points for all accuracy levels)
     //
-    
-private:
-    
-    // Invokes the FastBlitter to perform a blit
-    void startFastBlitter();
 
-    // Emulates the next Blitter micro-instruction
+private:
+
+    // Initiates a blit
+    void startBlit();
+
+    //  Concluded a blit
+    void endBlit();
+
+
+    //
+    //  Executing the Fast Blitter (Called for lower accuracy levels)
+    //
+
+    // Invokes the FastBlitter to perform a blit
+    // void startFastBlitter();
+
+    // Starts a fast line blit
+    void beginFastLineBlit();
+
+    // Starts a fast copy blit
+    void beginFastCopyBlit();
+
+    // Fake-emulates the next micro-instruction of the copy Blitter
     void executeFastBlitter();
 
     // Called at the end of a FastBlitter operation (DEPRECATED)
@@ -443,13 +460,17 @@ private:
 
 
     //
-    // Slow Blitter (Accuracy level 3)
+    //  Executing the Slow Blitter (Called for higher accuracy levels)
     //
 
-private:
-
     // Performs a Blitter operation with the slow Blitter
-    void startSlowBlitter();
+    // void startSlowBlitter();
+
+    // Starts a slow line blit
+    void beginSlowLineBlit();
+
+    // Starts a slow copy blit
+    void beginSlowCopyBlit();
 
     // Emulates the next Blitter micro-instruction
     void executeSlowBlitter();
@@ -472,8 +493,6 @@ private:
     // Emulate the barrel shifter
     void doBarrelShifterA();
     void doBarrelShifterB();
-
-
 };
 
 #endif

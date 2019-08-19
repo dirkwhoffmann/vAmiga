@@ -9,6 +9,7 @@
 
 #include "Amiga.h"
 
+/*
 void
 Blitter::startSlowBlitter()
 {
@@ -60,6 +61,67 @@ Blitter::startSlowBlitter()
     fillCarry = !!bltconFCI();
 
    // Start the blit
+    loadMicrocode();
+    agnus->scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_EXEC_SLOW);
+}
+*/
+
+void
+Blitter::beginSlowLineBlit()
+{
+    /* Note: There is no such thing as a slow line Blitter yet. Until such a
+     * thing has been implemented, we call the fast Blitter instead.
+     */
+
+    // Only call this function is line blit mode
+    assert(bltconLINE());
+
+    static bool verbose = true;
+    if (verbose) { verbose = false; debug("Fall back to the the fast line Blitter\n"); }
+
+    beginFastLineBlit();
+}
+
+void
+Blitter::beginSlowCopyBlit()
+{
+    // Only call this function is copy blit mode
+    assert(!bltconLINE());
+
+    static bool verbose = true;
+    if (verbose) { verbose = false; debug("Using the slow copy Blitter\n"); }
+
+    // Setup ascending / descending dependent parameters
+    if (bltconDESC()) {
+        incr = -2;
+        ash  = 16 - bltconASH();
+        bsh  = 16 - bltconBSH();
+        amod = -bltamod;
+        bmod = -bltbmod;
+        cmod = -bltcmod;
+        dmod = -bltdmod;
+    } else {
+        incr = 2;
+        ash  = bltconASH();
+        bsh  = bltconBSH();
+        amod = bltamod;
+        bmod = bltbmod;
+        cmod = bltcmod;
+        dmod = bltdmod;
+    }
+
+    // Set width and height counters
+    resetXCounter();
+    resetYCounter();
+
+    // Reset registers
+    aold = 0;
+    bold = 0;
+
+    // Reset the fill carry bit
+    fillCarry = !!bltconFCI();
+
+    // Start the blit
     loadMicrocode();
     agnus->scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_EXEC_SLOW);
 }

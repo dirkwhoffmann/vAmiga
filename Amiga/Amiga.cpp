@@ -508,7 +508,16 @@ void
 Amiga::_powerOn()
 {
     debug(1, "Power on\n");
-    
+
+
+    // REMOVE ASAP
+    debug("IntKarate.adf\n");
+    ADFFile *adf = ADFFile::makeWithFile("/Users/hoff/Dropbox/Amiga/Games/IntKarate.adf");
+    if (adf != NULL) {
+        df0.insertDisk(adf);
+        debug("Disk inserted\n");
+    }
+
     masterClock = 0;
     runLoopCtrl = 0;
     
