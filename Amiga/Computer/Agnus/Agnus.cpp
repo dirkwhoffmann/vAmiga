@@ -1794,7 +1794,7 @@ Agnus::hsyncHandler()
     // Make sure that this function is called at the correct DMA cycle
     assert(pos.h == 0); // CHANGE TO HPOS_MAX + 1 later
 
-    debug("BPL_HSYNC: pos.h = %d\n", pos.h);
+    // debug("BPL_HSYNC: pos.h = %d\n", pos.h);
 }
 
 void

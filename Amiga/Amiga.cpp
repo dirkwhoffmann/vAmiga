@@ -528,6 +528,7 @@ Amiga::_powerOn()
     
     m68k_init();
     m68k_set_cpu_type(M68K_CPU_TYPE_68000);
+    m68k_set_int_ack_callback(interrupt_handler);
     m68k_pulse_reset();
     
     // For debugging, we start in debug mode and set a breakpoint
@@ -999,7 +1000,6 @@ Amiga::runLoop()
         
         // Emulate CPU instruction
         CPUCycle cpuCycles = cpu.executeNextInstruction();
-        cpuInstrCount++;
         
         // Advance the masterclock and add additional wait states
         masterClock += CPU_CYCLES(cpuCycles);

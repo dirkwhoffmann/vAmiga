@@ -16,9 +16,10 @@
 extern "C" {
 #include "m68k.h"
 #include "m68kcpu.h"
+
 }
 
-extern int64_t cpuInstrCount;
+extern "C" int interrupt_handler(int irqLevel);
 
 class CPU : public HardwareComponent {
     
@@ -125,7 +126,7 @@ public:
     DisassembledInstruction getInstrInfo(long nr);
     DisassembledInstruction getTracedInstrInfo(long nr);
 
-    
+
     //
     // Recording and restoring the CPU context
     //
@@ -140,8 +141,8 @@ public:
     
     // Restores the current CPU context
     void restoreContext();
-    
-    
+
+
     //
     // Querying registers
     //
@@ -173,8 +174,8 @@ public:
     
     // Returns the length of the currently executed instruction.
     uint32_t lengthOInstruction() { return lengthOfInstruction(getPC()); }
-    
-    
+
+
     //
     // Running the disassembler
     //
@@ -182,8 +183,8 @@ public:
     // Disassembles the instruction at the specified address
     DisassembledInstruction disassemble(uint32_t addr);
     DisassembledInstruction disassemble(uint32_t addr, uint16_t sp);
-    
-    
+
+
     //
     // Tracing program execution
     //
@@ -215,6 +216,14 @@ public:
 
     // Sets the interrupt level
     void setIrqLevel(int level);
+
+
+    //
+    // Handling interrupts
+    //
+
+    // Called by Musashi core when an interrupt occurs
+    unsigned int interruptHandler(unsigned int irqLevel);
 };
 
 #endif

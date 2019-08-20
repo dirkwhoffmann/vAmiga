@@ -12,8 +12,6 @@ extern "C" {
 #include "m68k.h"
 }
 
-int64_t cpuInstrCount = 0;
-
 // Reference to the active Amiga instance
 Amiga *activeAmiga = NULL;
 
@@ -77,6 +75,12 @@ extern "C" void m68k_write_memory_32(unsigned int addr, unsigned int value)
     activeAmiga->mem.poke32(addr, value);
 }
 
+extern "C" int interrupt_handler(int irqLevel)
+{
+    assert(activeAmiga != NULL);
+    return activeAmiga->cpu.interruptHandler(irqLevel);
+}
+
 //
 // CPU class
 //
@@ -99,6 +103,7 @@ CPU::~CPU()
 void
 CPU::_powerOn()
 {
+    irqLevel = -1; 
 }
 
 void
@@ -454,9 +459,21 @@ CPU::executeNextInstruction()
 void
 CPU::setIrqLevel(int level)
 {
-    if (irqLevel != level) {
+    debug(CPU_DEBUG, "setIrqLevel(%d) (was %d)\n", level, irqLevel);
+
+    if (irqLevel != level)
+    {
         irqLevel = level;
         changeIrqLevel = true;
     }
 }
 
+unsigned int
+CPU::interruptHandler(unsigned int irqLevel)
+{
+    debug(CPU_DEBUG, "interruptHandler(%d)\n");
+
+    // Do nothing here. I.e., don't automatically clear the interrupt
+
+    return M68K_INT_ACK_AUTOVECTOR;
+}
