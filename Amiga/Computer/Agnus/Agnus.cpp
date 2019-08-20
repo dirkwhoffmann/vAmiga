@@ -209,7 +209,7 @@ void Agnus::_reset()
     scheduleAbs<SYNC_SLOT>(DMA_CYCLES(HPOS_MAX), SYNC_EOL);
 
     // Schedule first BPL event
-    // TODO
+    scheduleNextBplEvent(); 
 }
 
 void
@@ -655,11 +655,15 @@ Agnus::switchBitplaneDmaOff()
     debug(BPL_DEBUG, "switchBitplaneDmaOff: \n");
 
     // Clear the event table
+    clearDMAEventTable();
+
+    /*
     for (int i = 0x18; i < HPOS_CNT; dmaEvent[i++] = (EventID)0);
     updateJumpTable();
+     */
 
     // Clear any pending event in the BPL slot
-    cancel(BPL_SLOT);
+    // cancel(BPL_SLOT);
 }
 
 void
@@ -1790,7 +1794,7 @@ Agnus::hsyncHandler()
     // Make sure that this function is called at the correct DMA cycle
     assert(pos.h == 0); // CHANGE TO HPOS_MAX + 1 later
 
-    // debug("BPL_HSYNC: pos.h = %d\n", pos.h);
+    debug("BPL_HSYNC: pos.h = %d\n", pos.h);
 }
 
 void
