@@ -124,7 +124,7 @@ public:
      * Depending on the current resoution and BPU value, a segment of this
      * lookup table is copied into the DMA event table.
      */
-    EventID bitplaneDMA[2][7][HPOS_CNT];
+    EventID bitplaneDMA[2][7][HPOS_CNT + 1];
 
     /* Fetch unit cycle numbers.
      *
@@ -137,7 +137,7 @@ public:
      * cycle inside the fetch unit. The first cycle in a fetch unit in numbered
      * 0, the second cycle is numbered 1 and so on.
      */
-    uint8_t fetchUnitNr[2][HPOS_CNT];
+    uint8_t fetchUnitNr[2][HPOS_CNT + 1];
 
 
     //
@@ -432,15 +432,17 @@ public:
      * If, e.g., audio DMA for channel 1 and 2 is activated, elements
      * dmaEvent[7] and dmaEvent[9] equal AUDEN. If no DMA event takes place at
      * a specific cycle, the array element is 0.
+     * The event at position HPOS_CNT is outside the DMA cycle range and
+     * triggers the HSYNC handler.
+     *
      */
-    EventID dmaEvent[HPOS_CNT];
+    EventID dmaEvent[HPOS_CNT + 1];
     
     /* Jump table for quick handling the DMA time slot allocation table.
      * For a given horizontal position hpos, nextDmaEvent[hpos] points to the
-     * next horizontal position where a DMA event happens. The array element
-     * equals 0, if no further DMA access happens after hpos.
+     * next horizontal position where a DMA event happens.
      */
-    uint8_t nextDmaEvent[HPOS_CNT];
+    uint8_t nextDmaEvent[HPOS_CNT + 1];
 
 
     //
@@ -766,7 +768,7 @@ public:
 
     // Updates the DMA time slot allocation's jump table.
     void updateJumpTable(int16_t to);
-    void updateJumpTable() { updateJumpTable(HPOS_MAX); }
+    void updateJumpTable() { updateJumpTable(HPOS_MAX + 1); }
 
     // Returns true if the event in the specified slot is the Lx event.
     bool isLastLx(int16_t dmaCycle);
@@ -778,8 +780,8 @@ public:
     bool inLastFetchUnit(int16_t dmaCycle);
 
     // Dumps the DMA time slot allocation table to the console for debugging.
-    void dumpDMAEventTable(int from, int to);
-    void dumpDMAEventTable();
+    void dumpBplEventTable(int from, int to);
+    void dumpBplEventTable();
 
     
     //
@@ -889,6 +891,7 @@ private:
     /* Concludes a rasterline
      * Called when servicing a SYNC_EOL event in the SYNC slot.
      */
+    void oldHsyncHandler();
     void hsyncHandler();
 
     /* Concludes a frame

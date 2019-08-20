@@ -82,6 +82,7 @@ Agnus::inspectEventSlot(EventSlot nr)
                 case BPL_H2:        i->eventName = "BPL_H2"; break;
                 case BPL_H3:        i->eventName = "BPL_H3"; break;
                 case BPL_H4:        i->eventName = "BPL_H4"; break;
+                case BPL_HSYNC:     i->eventName = "BPL_HSYNC"; break;
                 default:            i->eventName = "*** INVALID ***"; break;
             }
             break;
@@ -331,11 +332,16 @@ void
 Agnus::scheduleNextBplEvent(int16_t hpos)
 {
     uint8_t next = nextDmaEvent[hpos];
+    assert(next != EVENT_NONE);
+
+    scheduleRel<BPL_SLOT>(DMA_CYCLES(next - pos.h), dmaEvent[next]);
+    /*
     if (next) {
         scheduleRel<BPL_SLOT>(DMA_CYCLES(next - pos.h), dmaEvent[next]);
     } else {
         cancel<BPL_SLOT>();
     }
+    */
 }
 
 void
@@ -350,20 +356,6 @@ Agnus::scheduleBplEventForCycle(int16_t hpos)
         scheduleNextBplEvent(hpos);
     }
 }
-
-/*
-void
-Agnus::updateCurrentBplEvent()
-{
-    int16_t prevPos = MAX(pos.h - 1, 0);
-    uint8_t next = nextDmaEvent[prevPos];
-    if (next) {
-        scheduleRel<BPL_SLOT>(DMA_CYCLES(next - pos.h), dmaEvent[next]);
-    } else {
-        cancel<BPL_SLOT>();
-    }
-}
-*/
 
 void
 Agnus::executeEventsUntil(Cycle cycle) {
@@ -651,6 +643,10 @@ Agnus::serviceBplEvent(EventID id)
             if(unlikely(isLastLx(pos.h))) addBPLMOD<5>();
             break;
 
+        case BPL_HSYNC:
+            hsyncHandler();
+            break;
+
         default:
             dumpEvents(); 
             debug("id = %d\n", id);
@@ -845,7 +841,7 @@ Agnus::serviceSYNCEvent(EventID id, int64_t data)
 
         case SYNC_EOL:
 
-            hsyncHandler();
+            oldHsyncHandler();
             break;
 
         default:

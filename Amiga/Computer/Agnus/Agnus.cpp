@@ -53,6 +53,9 @@ Agnus::initLoresBplEventTable()
                 case 1: p[7] = BPL_L1;
             }
         }
+
+        assert(bitplaneDMA[0][bpu][HPOS_CNT] == EVENT_NONE);
+        bitplaneDMA[0][bpu][HPOS_CNT] = BPL_HSYNC;
     }
 
     for (int i = 0; i <= 0xD8; i++) {
@@ -81,6 +84,9 @@ Agnus::initHiresBplEventTable()
                 case 1: p[3] = p[7] = BPL_H1;
             }
         }
+
+        assert(bitplaneDMA[1][bpu][HPOS_CNT] == EVENT_NONE);
+        bitplaneDMA[1][bpu][HPOS_CNT] = BPL_HSYNC;
     }
 
     for (int i = 0; i <= 0xD8; i++) {
@@ -182,7 +188,7 @@ void Agnus::_reset()
     // Initialize lookup tables
     clearDMAEventTable();
 
-    // Clear the event table
+    // Clear event slots
     for (unsigned i = 0; i < SLOT_COUNT; i++) {
         slot[i].triggerCycle = NEVER;
         slot[i].id = (EventID)0;
@@ -199,8 +205,11 @@ void Agnus::_reset()
     // Schedule first DAS event
     scheduleAbs<DAS_SLOT>(DMA_CYCLES(1), DAS_REFRESH);
 
-    // Schedule first SYNC event
+    // Schedule first SYNC event (DEPRECATED)
     scheduleAbs<SYNC_SLOT>(DMA_CYCLES(HPOS_MAX), SYNC_EOL);
+
+    // Schedule first BPL event
+    // TODO
 }
 
 void
@@ -243,7 +252,7 @@ Agnus::_dump()
     plainmsg("\nDMA time slot allocation:\n\n");
 
     dumpEvents();
-    dumpDMAEventTable();
+    dumpBplEventTable();
 }
 
 DMAInfo
@@ -553,16 +562,24 @@ Agnus::blitterWrite(uint32_t addr, uint16_t value)
 void
 Agnus::clearDMAEventTable()
 {
+    memset(dmaEvent, 0, sizeof(dmaEvent));
+    dmaEvent[HPOS_MAX + 1] = BPL_HSYNC;
+    updateJumpTable();
+
+    /*
     // Clear the event table
     memset(dmaEvent, 0, sizeof(dmaEvent));
     
     // Clear the jump table
     memset(nextDmaEvent, 0, sizeof(nextDmaEvent));
+    */
 }
 
 void
 Agnus::allocateBplSlots(uint16_t dmacon, uint16_t bplcon0, int first, int last)
 {
+    assert(first >= 0 && last <= HPOS_MAX);
+
     int bpu = Denise::bpu(bplcon0);
     bool hires = Denise::hires(bplcon0);
 
@@ -624,7 +641,7 @@ Agnus::switchBitplaneDmaOn()
     updateJumpTable();
 
     // debug("EventTable:\n");
-    // dumpDMAEventTable();
+    // dumpBplEventTable();
 }
 
 
@@ -669,15 +686,21 @@ Agnus::computeBplVstrtVstop()
 void
 Agnus::updateJumpTable(int16_t to)
 {
-    assert(to <= HPOS_MAX);
-    assert(dmaEvent[HPOS_MAX] == 0);
-    
+    assert(to <= HPOS_MAX + 1);
+
     // Build the jump table
     uint8_t next = nextDmaEvent[to];
     for (int i = to; i >= 0; i--) {
         nextDmaEvent[i] = next;
         if (dmaEvent[i]) next = i;
     }
+
+    // Make sure the table ends with an HSYNC event
+    if (nextDmaEvent[HPOS_MAX] != HPOS_MAX + 1) {
+        dumpBplEventTable();
+    }
+    assert(nextDmaEvent[HPOS_MAX] == HPOS_MAX + 1);
+    assert(dmaEvent[HPOS_MAX + 1] == BPL_HSYNC);
 }
 
 bool
@@ -700,7 +723,7 @@ Agnus::inLastFetchUnit(int16_t dmaCycle)
 
 
 void
-Agnus::dumpDMAEventTable(int from, int to)
+Agnus::dumpBplEventTable(int from, int to)
 {
     char r1[256], r2[256], r3[256], r4[256];
     int i;
@@ -725,6 +748,7 @@ Agnus::dumpDMAEventTable(int from, int to)
             case BPL_H2:       r3[i] = 'H'; r4[i] = '2'; break;
             case BPL_H3:       r3[i] = 'H'; r4[i] = '3'; break;
             case BPL_H4:       r3[i] = 'H'; r4[i] = '4'; break;
+            case BPL_HSYNC:    r3[i] = 'H'; r4[i] = 'S'; break;
             default:           assert(false);
         }
     }
@@ -736,7 +760,7 @@ Agnus::dumpDMAEventTable(int from, int to)
 }
 
 void
-Agnus::dumpDMAEventTable()
+Agnus::dumpBplEventTable()
 {
     // Dump the event table
     plainmsg("Event table:\n\n");
@@ -747,9 +771,9 @@ Agnus::dumpDMAEventTable()
     plainmsg("dmaStopLores = %X dmaStopHires = %X\n",
              dmaStopLores, dmaStopHires);
 
-    dumpDMAEventTable(0x00, 0x4F);
-    dumpDMAEventTable(0x50, 0x9F);
-    dumpDMAEventTable(0xA0, 0xE2);
+    dumpBplEventTable(0x00, 0x4F);
+    dumpBplEventTable(0x50, 0x9F);
+    dumpBplEventTable(0xA0, 0xE3);
 
     // Dump the jump table
     plainmsg("\nJump table:\n\n");
@@ -1321,7 +1345,7 @@ Agnus::skipBPLxPT(int x)
         if (dmaEvent[pos.h + 2] == EVENT_NONE) { // (2)
 
             // debug("skipBPLxPT: Value gets lost\n");
-            // dumpDMAEventTable();
+            // dumpBplEventTable();
             return true;
         }
     }
@@ -1560,7 +1584,7 @@ Agnus::executeSecondSpriteCycle()
 }
 
 void
-Agnus::hsyncHandler()
+Agnus::oldHsyncHandler()
 {
     // Make sure we really reached the end of the line
     if (pos.h != HPOS_MAX) { dump(); assert(false); }
@@ -1733,11 +1757,21 @@ Agnus::hsyncHandler()
     // Schedule events
     //
 
+    // Schedule the first biplane event
+    if (nextDmaEvent[0] == EVENT_NONE) {
+        dumpBplEventTable();
+    }
+    assert(nextDmaEvent[0] != EVENT_NONE);
+    EventID eventID = dmaEvent[nextDmaEvent[0]];
+    schedulePos<BPL_SLOT>(pos.v, nextDmaEvent[0], eventID);
+
+    /*
     // Schedule the first biplane event (if any)
     if (nextDmaEvent[0]) {
         EventID eventID = dmaEvent[nextDmaEvent[0]];
         schedulePos<BPL_SLOT>(pos.v, nextDmaEvent[0], eventID);
     }
+    */
 
     // Schedule the next SYNC event
     scheduleInc<SYNC_SLOT>(DMA_CYCLES(HPOS_CNT), SYNC_EOL, pos.v);
@@ -1748,6 +1782,15 @@ Agnus::hsyncHandler()
     //
 
     denise->beginOfLine(pos.v);
+}
+
+void
+Agnus::hsyncHandler()
+{
+    // Make sure that this function is called at the correct DMA cycle
+    // assert(pos.h == 0); // CHANGE TO HPOS_MAX + 1 later
+
+    debug("BPL_HSYNC: pos.h = %d\n", pos.h);
 }
 
 void

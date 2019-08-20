@@ -140,6 +140,7 @@ typedef enum : long
     BPL_H2,
     BPL_H3,
     BPL_H4,
+    BPL_HSYNC,
     BPL_EVENT_COUNT,
 
     // DAS slot
@@ -231,7 +232,7 @@ typedef enum : long
     POT_CHARGE,
     POT_EVENT_COUNT,
 
-    // SYNC slot
+    // SYNC slot (DEPRECATED)
     SYNC_EOL = 1,
     SYNC_EVENT_COUNT,
     
