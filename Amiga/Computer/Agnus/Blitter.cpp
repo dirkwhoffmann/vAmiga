@@ -659,7 +659,7 @@ void
 Blitter::startBlit()
 {
     //REMOVE ASAP
-    accuracy = 1;
+    // accuracy = 1;
 
     // Based on the accuracy level, we run the slow or the fast Blitter
     bool useSlowBlitter = accuracy >= 2;
@@ -685,7 +685,7 @@ Blitter::startBlit()
               bltapt, bltbpt, bltcpt, bltdpt, bltconDESC() ? "D" : "");
 
         //REMOVE ASAP
-        debugLevel = (copycount == 553) ? 2 : 1;
+        // debugLevel = (copycount == 553) ? 2 : 1;
 
         useSlowBlitter ? beginSlowCopyBlit() : beginFastCopyBlit();
     }

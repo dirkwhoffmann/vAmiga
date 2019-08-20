@@ -1759,7 +1759,6 @@ Agnus::oldHsyncHandler()
 
     // Schedule the first biplane event
     // NOW DONE IN NEW HSYNC HANDLER
-
     /*
     assert(nextDmaEvent[0] != EVENT_NONE);
     EventID eventID = dmaEvent[nextDmaEvent[0]];
