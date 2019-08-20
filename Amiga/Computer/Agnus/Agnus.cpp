@@ -657,12 +657,10 @@ Agnus::switchBitplaneDmaOff()
     // Clear the event table
     clearDMAEventTable();
 
-    /*
-    for (int i = 0x18; i < HPOS_CNT; dmaEvent[i++] = (EventID)0);
-    updateJumpTable();
-     */
-
-    // Clear any pending event in the BPL slot
+    // Update the BPL slot
+    if (pos.h != -1) {  // Temporary fix until pos.h can never be -1 any more
+        scheduleNextBplEvent();
+    }
     // cancel(BPL_SLOT);
 }
 
