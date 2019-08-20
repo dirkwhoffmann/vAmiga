@@ -1758,12 +1758,13 @@ Agnus::oldHsyncHandler()
     //
 
     // Schedule the first biplane event
-    if (nextDmaEvent[0] == EVENT_NONE) {
-        dumpBplEventTable();
-    }
+    // NOW DONE IN NEW HSYNC HANDLER
+
+    /*
     assert(nextDmaEvent[0] != EVENT_NONE);
     EventID eventID = dmaEvent[nextDmaEvent[0]];
     schedulePos<BPL_SLOT>(pos.v, nextDmaEvent[0], eventID);
+    */
 
     /*
     // Schedule the first biplane event (if any)
@@ -1788,9 +1789,9 @@ void
 Agnus::hsyncHandler()
 {
     // Make sure that this function is called at the correct DMA cycle
-    // assert(pos.h == 0); // CHANGE TO HPOS_MAX + 1 later
+    assert(pos.h == 0); // CHANGE TO HPOS_MAX + 1 later
 
-    debug("BPL_HSYNC: pos.h = %d\n", pos.h);
+    // debug("BPL_HSYNC: pos.h = %d\n", pos.h);
 }
 
 void
