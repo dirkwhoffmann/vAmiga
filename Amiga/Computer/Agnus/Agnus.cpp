@@ -165,6 +165,7 @@ Agnus::initDASTables()
 void
 Agnus::_initialize()
 {
+    cpu = &amiga->cpu;
     ciaA = &amiga->ciaA;
     ciaB = &amiga->ciaB;
     mem = &amiga->mem;
@@ -351,14 +352,6 @@ Agnus::beamDiff(int16_t vStart, int16_t hStart, int16_t vEnd, int16_t hEnd)
 
     // In PAL mode, all lines have the same length (227 color clocks)
     return DMA_CYCLES(vDiff * 227 + hDiff);
-}
-
-Cycle
-Agnus::getWaitStates()
-{
-    Cycle result = waitStates;
-    waitStates = 0;
-    return result;
 }
 
 bool
@@ -1490,26 +1483,29 @@ Agnus::executeUntil(Cycle targetClock)
 void
 Agnus::executeUntilBusIsFree()
 {
-    /*
+    DMACycle blockedCycles = 0;
+
     // Quick-exit if CPU runs at full speed during blit operations
     if (blitter.accuracy == 0) return;
 
-    // The CPU usually accesses memory in odd cyles (advance to such a cycle)
-    assert(pos.h != -1); 
-    if (pos.h % 2) executeOneCycle();
+    // The CPU usually accesses memory in even cyles. Advance to such a cycle
+    if (IS_ODD(pos.h)) executeOneCycle();
+    // if (IS_EVEN(pos.h)) executeOneCycle();
 
-    // Emulate wait states until the bus is available to the CPU
-    while (currentOwner != BUS_NONE) {
-
-        debug("CPU blocked by %d DMA\n", currentOwner);
-        if (currentOwner == BUS_BITPLANE) {
-            debug("activePlanes = %d\n", activeBitplanes);
-        }
+    // We have reached an even cycle now. Emulate that cycle...
+    while (1) {
 
         executeOneCycle();
-        waitStates++;
-    }
-    */
+
+        // Break the loop if the CPU can have the bus at that cycle
+        assert(pos.h > 0);
+        if (busOwner[pos.h - 1] == BUS_NONE) break;
+
+        // The CPU is blocked. Add a wait state and try again
+        blockedCycles++;
+    };
+
+    cpu->addWaitStates(blockedCycles * 2);
 }
 
 template <int nr> void

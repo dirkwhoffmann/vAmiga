@@ -28,15 +28,14 @@ private:
     // Information shown in the GUI inspector panel
     CPUInfo info;
 
-    //
-    // Interrupts
-    //
+    // Action flags
+    uint8_t actions;
 
     // The new interrupt level
     int irqLevel;
 
-    // Indicates if the irq level should be updated in executeNextInstruction()
-    bool changeIrqLevel;
+    // Number of wait states if the CPU can't access the bus
+    CPUCycle waitStates;
 
 
     //
@@ -93,8 +92,9 @@ public:
     {
         worker
 
+        & actions
         & irqLevel
-        & changeIrqLevel;
+        & waitStates;
     }
 
     
@@ -214,8 +214,11 @@ public:
     // Executes the next instruction
     uint64_t executeNextInstruction();
 
-    // Sets the interrupt level
+    // Changes the interrupt level
     void setIrqLevel(int level);
+
+    // Adds wait states to the CPU
+    void addWaitStates(CPUCycle number);
 
 
     //

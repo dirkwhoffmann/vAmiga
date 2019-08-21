@@ -220,7 +220,7 @@ Drive::setMotor(bool value)
 {
     if (!motor && value) {
         
-        motorOnCycle = amiga->masterClock;
+        motorOnCycle = amiga->getMasterClock();
 
         debug(DSK_DEBUG, "Motor on (Cycle: %d)\n", motorOnCycle);
 
@@ -232,7 +232,7 @@ Drive::setMotor(bool value)
 
 
         idCount = 0; // Reset identification shift register counter
-        motorOffCycle = amiga->masterClock;
+        motorOffCycle = amiga->getMasterClock();
 
         debug(DSK_DEBUG, "Motor off (Cycle: %d)\n", motorOffCycle);
 
@@ -246,13 +246,13 @@ Drive::setMotor(bool value)
 Cycle
 Drive::motorOnTime()
 {
-    return motor ? amiga->masterClock - motorOnCycle : 0;
+    return motor ? amiga->getMasterClock() - motorOnCycle : 0;
 }
 
 Cycle
 Drive::motorOffTime()
 {
-    return motor ? 0 : (amiga->masterClock - motorOffCycle);
+    return motor ? 0 : (amiga->getMasterClock() - motorOffCycle);
 }
 
 bool

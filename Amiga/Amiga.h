@@ -151,7 +151,7 @@ public:
     // Counters
     //
     
-public:
+private:
     
     /* The Amiga's master clock
      * This clock runs at 28 MHz and is used to derive all other clock signals.
@@ -394,6 +394,9 @@ public:
 
     // Returns the latest internal state recorded by inspect()
     AmigaInfo getInfo();
+
+    // Returns the master clock
+    Cycle getMasterClock() { return masterClock; }
 
     
     //

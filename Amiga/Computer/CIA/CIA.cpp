@@ -721,7 +721,7 @@ CIA::_dump()
 {
     _inspect();
     
-    msg("            Master Clock : %lld\n", amiga->masterClock);
+    msg("            Master Clock : %lld\n", amiga->getMasterClock());
     msg("                   Clock : %lld\n", clock);
     msg("                Sleeping : %s\n", sleeping ? "yes" : "no");
     msg(" Most recent sleep cycle : %lld\n", sleepCycle);
@@ -1184,14 +1184,14 @@ CIA::wakeUp(Cycle targetCycle)
 bool
 CIA::isUpToDate()
 {
-    assert(clock <= amiga->masterClock);
-    return (amiga->masterClock - clock < CIA_CYCLES(1));
+    assert(clock <= amiga->getMasterClock());
+    return (amiga->getMasterClock() - clock < CIA_CYCLES(1));
 }
 
 Cycle
 CIA::idle()
 {
-    return isAwake() ? 0 : amiga->masterClock - sleepCycle;
+    return isAwake() ? 0 : amiga->getMasterClock() - sleepCycle;
 }
 
 

@@ -55,6 +55,7 @@
 class Agnus : public HardwareComponent
 {
     // Quick-access references
+    class CPU *cpu;
     class CIAA *ciaA;
     class CIAB *ciaB;
     class Memory *mem;
@@ -413,14 +414,6 @@ public:
     // Unsed in the hsyncHandler to remember the result of inBplDmaLine
     bool oldBplDmaLine;
 
-
-    //
-    // CPU interaction
-    //
-
-    // Number of wait states if the CPU can't access the bus
-    Cycle waitStates;
-
     
     //
     // DMA allocation tables
@@ -540,7 +533,6 @@ public:
         & busValue
         & oldBplDmaLine
 
-        & waitStates
         & dmaEvent
         & nextDmaEvent
         & hsyncActions;
@@ -692,11 +684,6 @@ public:
     //
     // Managing DMA access
     //
-
-    /* Returns how long the CPU was blocked by ongoing DMA
-     * Variable waitStates is reset to 0 as a side effect.
-     */
-    Cycle getWaitStates();
 
     // Indicates if bitplane DMA is blocked by a hardware stops
     bool bplHwStop() { return pos.h < 0x18 || pos.h >= 0xE0; }

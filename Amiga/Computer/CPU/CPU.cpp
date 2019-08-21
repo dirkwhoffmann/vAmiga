@@ -269,7 +269,7 @@ CPU::didSaveToBuffer(uint8_t *buffer) const
 void
 CPU::recordContext()
 {
-    // debug("recordContext: context = %p\n", context);
+    debug(CPU_DEBUG, "recordContext: context = %p\n", context);
     assert(context == NULL);
     
     // Allocate memory
@@ -282,7 +282,7 @@ CPU::recordContext()
 void
 CPU::restoreContext()
 {
-    // debug("restoreContext: context = %p\n", context);
+    debug(CPU_DEBUG, "restoreContext: context = %p\n", context);
     if (context) {
         
         // Load the recorded context into the CPU
@@ -367,14 +367,6 @@ CPU::disassemble(uint32_t addr, uint16_t sp)
     return result;
 }
 
-/*
-unsigned
-CPU::recordedInstructions()
-{
-    return (traceBufferCapacity + writePtr - readPtr) % traceBufferCapacity;
-}
-*/
-
 void
 CPU::truncateTraceBuffer(unsigned count)
 {
@@ -389,7 +381,7 @@ CPU::recordInstruction()
     RecordedInstruction instr;
     
     // Setup record
-    instr.cycle = amiga->masterClock;
+    instr.cycle = amiga->getMasterClock();
     instr.pc = getPC();
     instr.sp = getSP();
 
@@ -404,67 +396,48 @@ CPU::recordInstruction()
     // plainmsg("%X: %s\n", diss.addr, diss.instr);
 }
 
-#if 0
-RecordedInstruction
-CPU::readRecordedInstruction(long offset)
-{
-    assert(offset < traceBufferCapacity);
-    
-    size_t i = (readPtr + offset) % traceBufferCapacity;
-    
-    /*
-    if (traceBuffer[i].instr[0] == 0) {
-        uint16_t sp = traceBuffer[i].sp;
-        m68k_disassemble(traceBuffer[i].instr, traceBuffer[i].pc, M68K_CPU_TYPE_68000);
-        traceBuffer[i].flags[0]  = (sp & 0b1000000000000000) ? '1' : '0';
-        traceBuffer[i].flags[1]  = '-';
-        traceBuffer[i].flags[2]  = (sp & 0b0010000000000000) ? '1' : '0';
-        traceBuffer[i].flags[3]  = '-';
-        traceBuffer[i].flags[4]  = '-';
-        traceBuffer[i].flags[5]  = (sp & 0b0000010000000000) ? '1' : '0';
-        traceBuffer[i].flags[6]  = (sp & 0b0000001000000000) ? '1' : '0';
-        traceBuffer[i].flags[7]  = (sp & 0b0000000100000000) ? '1' : '0';
-        traceBuffer[i].flags[8]  = '-';
-        traceBuffer[i].flags[9]  = '-';
-        traceBuffer[i].flags[10] = '-';
-        traceBuffer[i].flags[11] = (sp & 0b0000000000010000) ? '1' : '0';
-        traceBuffer[i].flags[12] = (sp & 0b0000000000001000) ? '1' : '0';
-        traceBuffer[i].flags[13] = (sp & 0b0000000000000100) ? '1' : '0';
-        traceBuffer[i].flags[14] = (sp & 0b0000000000000010) ? '1' : '0';
-        traceBuffer[i].flags[15] = (sp & 0b0000000000000001) ? '1' : '0';
-        traceBuffer[i].flags[16] = 0;
-    }
-    */
-    
-    return traceBuffer[i];
-}
-#endif
-
 uint64_t
 CPU::executeNextInstruction()
 {
-    // Check if we need to change the value of the IRQ lines
-    if (changeIrqLevel) {
-        m68k_set_irq(irqLevel);
-        changeIrqLevel = false;
+    int cycles = 0;
+
+    // Check actions flags
+    if (actions) {
+
+        if (actions & CPU_SET_IRQ_LEVEL) {
+            debug(CPU_DEBUG, "Changing IRQ level to %d\n", irqLevel);
+            m68k_set_irq(irqLevel);
+        }
+
+        if (actions & CPU_ADD_WAIT_STATES) {
+            debug(CPU_DEBUG, "Adding %d wait states\n", waitStates);
+            cycles += waitStates;
+            waitStates = 0;
+        }
+
+        actions = 0;
     }
 
-    // debug("PC = %X\n", getPC());
-    int cycles = m68k_execute(1);
-    // debug("Executed %d CPU cycles. New PC = %X\n", cycles, getPC());
-    
+    cycles += m68k_execute(1);
     return cycles;
 }
 
 void
 CPU::setIrqLevel(int level)
 {
-    debug(CPU_DEBUG, "setIrqLevel(%d) (was %d)\n", level, irqLevel);
-
     if (irqLevel != level)
     {
         irqLevel = level;
-        changeIrqLevel = true;
+        actions |= CPU_SET_IRQ_LEVEL;
+    }
+}
+
+void
+CPU::addWaitStates(Cycle number)
+{
+    if (number) {
+        waitStates += number;
+        actions |= CPU_ADD_WAIT_STATES;
     }
 }
 

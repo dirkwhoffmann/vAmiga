@@ -1230,7 +1230,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 
 - (uint64_t) masterClock
 {
-    return wrapper->amiga->masterClock;
+    return wrapper->amiga->getMasterClock();
 }
 - (void) setInspectionTarget:(EventID)id
 {

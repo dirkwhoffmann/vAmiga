@@ -35,8 +35,9 @@ time_t
 RTC::getTime()
 {
     Cycle result;
-    
-    long timeBetweenCalls = (amiga->masterClock - lastCall) / 28000000;
+    Cycle master = amiga->getMasterClock();
+
+    long timeBetweenCalls = (master - lastCall) / 28000000;
     // debug(2, "timeBetweenCalls = %d\n", timeBetweenCalls);
     
     if (timeBetweenCalls > 2) {
@@ -44,7 +45,7 @@ RTC::getTime()
         /* If the time between two read accesses is long, we compute the result
          * of the host machine's current time and variable timeDiff.
          */
-        lastMeasure = amiga->masterClock;
+        lastMeasure = master;
         lastMeasuredValue = time(NULL);
         result = lastMeasuredValue + timeDiff;
 
@@ -59,11 +60,11 @@ RTC::getTime()
          * of more than 1 second. If we simply query the host machine's
          * time, the time difference would be less than 1 second in warp mode.
          */
-        long elapsedTime = (amiga->masterClock - lastMeasure) / 28000000;
+        long elapsedTime = (master - lastMeasure) / 28000000;
         result = lastMeasuredValue + elapsedTime;
     }
     
-    lastCall = amiga->masterClock;
+    lastCall = master;
     return result;
 }
 

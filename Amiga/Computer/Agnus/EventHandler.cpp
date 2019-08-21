@@ -15,7 +15,7 @@ Agnus::inspectEvents()
     // Prevent external access to variable 'info'
     pthread_mutex_lock(&lock);
     
-    eventInfo.masterClock = amiga->masterClock;
+    eventInfo.masterClock = amiga->getMasterClock();
     eventInfo.dmaClock = clock;
     eventInfo.ciaAClock = ciaA->clock;
     eventInfo.ciaBClock  = ciaB->clock;
@@ -929,7 +929,7 @@ Agnus::scheduleRegEvent(Cycle cycle, EventID id, int64_t data)
 
             if (hasEvent<REG_COP_SLOT>()) {
                 assert(false); 
-                assert(isDue<REG_COP_SLOT>(amiga->masterClock));
+                assert(isDue<REG_COP_SLOT>(amiga->getMasterClock()));
                 serviceREGEvent(REG_COP_SLOT);
             }
             scheduleRel<REG_COP_SLOT>(cycle, id, data);
@@ -942,7 +942,6 @@ Agnus::scheduleRegEvent(Cycle cycle, EventID id, int64_t data)
             // the event in the second slot.
             if (hasEvent<REG_CPU_SLOT1>()) {
 
-                assert(isDue<REG_CPU_SLOT1>(amiga->masterClock + cycle));
                 scheduleRel<REG_CPU_SLOT2>(cycle, id, data);
 
             } else {

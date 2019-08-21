@@ -12,6 +12,11 @@
 #ifndef _CPU_T_INC
 #define _CPU_T_INC
 
+// CPU actions
+#define CPU_SET_IRQ_LEVEL   0b0000'0001
+#define CPU_ADD_WAIT_STATES 0b0000'0010
+
+
 /* Recorded instruction
  * This data structure is used inside the trace ringbuffer. In trace mode,
  * the program counter and the status register are recorded. The instruction
