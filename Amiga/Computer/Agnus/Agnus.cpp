@@ -879,7 +879,7 @@ Agnus::pokeDMACON(uint16_t oldDmacon, uint16_t newDmacon)
 
             // Bitplane DMA is switched off
             allocateBplSlots(newDmacon, bplcon0, pos.h + 2);
-            cancel(BPL_SLOT);
+            scheduleNextBplEvent();
         }
 
         // Let Denise know about the change
@@ -1482,7 +1482,7 @@ Agnus::executeOneCycle()
     pos.h++;
 
     // If this assertion hits, the HSYNC event hasn't been served
-    assert(pos.h <= HPOS_MAX);
+    assert(pos.h <= HPOS_MAX + 1);
 
     clock += DMA_CYCLES(1);
 }
@@ -1500,7 +1500,7 @@ Agnus::executeUntil(Cycle targetClock)
         pos.h++;
 
         // If this assertion hits, the HSYNC event hasn't been served
-        assert(pos.h <= HPOS_MAX);
+        assert(pos.h <= HPOS_MAX + 1);
 
         clock += DMA_CYCLES(1);
     }
@@ -1604,54 +1604,8 @@ Agnus::oldHsyncHandler()
     // Let CIA B count the HSYNCs
     amiga->ciaB.incrementTOD();
     
-    // Check the keyboard once in a while
+    // Check the keyboard once in a while (TODO: Add a secondary event)
     if ((pos.v & 0b1111) == 0) amiga->keyboard.execute();
-
-    //
-    // Increment the position counters
-    //
-
-    /* Remember: When the end of a line is reached, we reset the horizontal
-     * counter. The new value should be 0. To make things work, we have to set
-     * it to -1, because there is an upcoming hpos++ instruction at the end
-     * of executeUntil(). This means that we can not rely on the correct
-     * hpos value in the hsync and vsync handlers(). The value will be
-     * -1 and not 0 as expected. Take care of that and feel free to come up
-     * with a nicer solution! */
-
-    pos.v++;
-    pos.h = -1;
-
-    // Check if the current frame is finished
-    if (pos.v >= frameInfo.numLines) {
-        vsyncHandler();
-    }
-
-    //
-    // Prepare for the next line
-    //
-
-    // Switch sprite DMA off if the last rasterline has been reached
-    if (pos.v == frameInfo.numLines - 1) {
-        for (unsigned i = 0; i < 8; i++) {
-            sprDmaState[i] = SPR_DMA_IDLE;
-        }
-    }
-
-    // Initialize variables which keep values for certain trigger positions
-    dmaconAtDDFStrt = dmacon;
-    bplcon0AtDDFStrt = bplcon0;
-    
-    // Check if we have reached line 25 (sprite DMA starts here)
-    if (pos.v == 25) {
-        if ((dmacon & DMAEN) && (dmacon & SPREN)) {
-            
-            // Reset vertical sprite trigger coordinates which forces the sprite
-            // logic to read in the control words for all sprites in this line.
-            for (unsigned i = 0; i < 8; i++) { sprVStop[i] = 25; }
-        }
-    }
-
 
 
 
@@ -1669,11 +1623,50 @@ Agnus::oldHsyncHandler()
 void
 Agnus::hsyncHandler()
 {
-    // Make sure that this function is called at the correct DMA cycle
-    assert(pos.h == 0); // CHANGE TO HPOS_MAX + 1 later
+    /* Ensure that this function is called at the correct DMA cycle.
+     * The hsync handler is supposed to be called after the last DMA cycle
+     * has been processed which is at $E2. Note that by the time we reach here,
+     * the counter has already incremented by 1. Hence, it must be equal to $E3.
+     */
+    assert(pos.h == HPOS_MAX + 1);
 
     // debug("BPL_HSYNC: pos.h = %d\n", pos.h);
 
+
+    //
+    // End of current line
+    // -------------------------------------------------------------------------
+
+    // Reset the horizontal counter
+    pos.h = 0;
+
+    // Advance the vertical counter
+    if (++pos.v >= frameInfo.numLines) vsyncHandler();
+
+    // -------------------------------------------------------------------------
+    // Begin of next line
+    //
+
+    // Switch sprite DMA off if the last rasterline has been reached
+    if (pos.v == frameInfo.numLines - 1) {
+        for (unsigned i = 0; i < 8; i++) {
+            sprDmaState[i] = SPR_DMA_IDLE;
+        }
+    }
+
+    // Initialize variables which keep values for certain trigger positions
+    dmaconAtDDFStrt = dmacon;
+    bplcon0AtDDFStrt = bplcon0;
+
+    // Check if we have reached line 25 (sprite DMA starts here)
+    if (pos.v == 25) {
+        if ((dmacon & DMAEN) && (dmacon & SPREN)) {
+
+            // Reset vertical sprite trigger coordinates which forces the sprite
+            // logic to read in the control words for all sprites in this line.
+            for (unsigned i = 0; i < 8; i++) { sprVStop[i] = 25; }
+        }
+    }
 
 
     //

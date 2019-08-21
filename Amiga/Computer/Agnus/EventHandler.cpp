@@ -331,17 +331,12 @@ Agnus::getEventSlotInfo(int nr)
 void
 Agnus::scheduleNextBplEvent(int16_t hpos)
 {
-    uint8_t next = nextDmaEvent[hpos];
-    assert(next != EVENT_NONE);
+    assert(isHPos(hpos));
 
+    uint8_t next = nextDmaEvent[hpos];
     scheduleRel<BPL_SLOT>(DMA_CYCLES(next - pos.h), dmaEvent[next]);
-    /*
-    if (next) {
-        scheduleRel<BPL_SLOT>(DMA_CYCLES(next - pos.h), dmaEvent[next]);
-    } else {
-        cancel<BPL_SLOT>();
-    }
-    */
+
+    assert(hasEvent<BPL_SLOT>());
 }
 
 void
@@ -355,6 +350,8 @@ Agnus::scheduleBplEventForCycle(int16_t hpos)
     } else {
         scheduleNextBplEvent(hpos);
     }
+
+    assert(hasEvent<BPL_SLOT>());
 }
 
 void
