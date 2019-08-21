@@ -602,18 +602,19 @@ public:
      * The result depends on the number of lines that are drawn. This values
      * varies between long and short frames.
      */
-    Cycle cyclesInCurrentFrame();
-
-    /* Indicates if the provided master cycle belongs to a specific frame.
-     */
-    bool belongsToCurrentFrame(Cycle cycle);
+    Cycle cyclesInFrame();
 
     /* Returns the master cycle belonging to beam position (0,0)
      * The first function treats (0,0) as the upper left position of the
      * current frame. The second function referes to the next frame.
      */
-    Cycle startOfCurrentFrame();
+    Cycle startOfFrame();
     Cycle startOfNextFrame();
+
+    // Indicates if the provided master cycle belongs to a specific frame.
+    bool belongsToPreviousFrame(Cycle cycle);
+    bool belongsToCurrentFrame(Cycle cycle);
+    bool belongsToNextFrame(Cycle cycle);
 
 
     //
@@ -678,18 +679,6 @@ public:
     // DEPRECATED
     uint32_t getBeam() { return BEAM(pos.v, pos.h); }
     
-    /* Returns the number of DMA cycles per rasterline
-     * The value is valid for PAL machines, only.
-     * DEPRECATED
-     */
-    DMACycle DMACyclesPerLine() { return 227; /* cycles 0x00 ... 0xE2 */ }
-    
-    /* Returns the number of DMA cycles that make up the current frame
-     * The value is valid for PAL machines, only.
-     * DEPRECATED
-     */
-    DMACycle DMACyclesInCurrentFrame();
-
     /* Returns the difference of two beam position in master cycles
      * Returns NEVER if the start position is greater than the end position
      * or if the end position is unreachable.

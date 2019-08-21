@@ -146,7 +146,7 @@ Agnus::initDASTables()
             // Setup the table entries
             nextDASEvent[id][dma] = table[next];
             nextDASDelay[id][dma] = next - cycle;
-            if (next <= cycle) nextDASDelay[id][dma] += DMACyclesPerLine();
+            if (next <= cycle) nextDASDelay[id][dma] += HPOS_CNT;
         }
     }
 
@@ -260,29 +260,39 @@ Agnus::getInfo()
 }
 
 Cycle
-Agnus::cyclesInCurrentFrame()
+Agnus::cyclesInFrame()
 {
-    // TODO: Distinguish between long and short frames
-    return DMA_CYCLES(313 * DMACyclesPerLine());
-}
-
-bool
-Agnus::belongsToCurrentFrame(Cycle cycle)
-{
-    Cycle diff = cycle - startOfCurrentFrame();
-    return diff >= 0 && diff < cyclesInCurrentFrame();
+    return DMA_CYCLES(frameInfo.numLines * HPOS_CNT);
 }
 
 Cycle
-Agnus::startOfCurrentFrame()
+Agnus::startOfFrame()
 {
-    return clock - DMA_CYCLES(pos.v * DMACyclesPerLine() + pos.h);
+    return clock - DMA_CYCLES(pos.v * HPOS_CNT + pos.h);
 }
 
 Cycle
 Agnus::startOfNextFrame()
 {
-    return startOfCurrentFrame() + cyclesInCurrentFrame();
+    return startOfFrame() + cyclesInFrame();
+}
+
+bool
+Agnus::belongsToPreviousFrame(Cycle cycle)
+{
+    return cycle < startOfFrame();
+}
+
+bool
+Agnus::belongsToCurrentFrame(Cycle cycle)
+{
+    return !belongsToPreviousFrame(cycle) && !belongsToNextFrame(cycle);
+}
+
+bool
+Agnus::belongsToNextFrame(Cycle cycle)
+{
+    return cycle >= startOfNextFrame();
 }
 
 bool
@@ -297,7 +307,7 @@ Agnus::inBplDmaLine(uint16_t dmacon, uint16_t bplcon0) {
 Cycle
 Agnus::beamToCycle(Beam beam)
 {
-    return startOfCurrentFrame() + DMA_CYCLES(beam.v * DMACyclesPerLine() + beam.h);
+    return startOfFrame() + DMA_CYCLES(beam.v * HPOS_CNT + beam.h);
 }
 
 Beam
@@ -305,11 +315,11 @@ Agnus::cycleToBeam(Cycle cycle)
 {
     Beam result;
 
-    Cycle diff = AS_DMA_CYCLES(cycle - startOfCurrentFrame());
+    Cycle diff = AS_DMA_CYCLES(cycle - startOfFrame());
     assert(diff >= 0);
 
-    result.v = diff / DMACyclesPerLine();
-    result.h = diff % DMACyclesPerLine();
+    result.v = diff / HPOS_CNT;
+    result.h = diff % HPOS_CNT;
     return result;
 }
 
@@ -318,25 +328,11 @@ Agnus::addToBeam(Beam beam, Cycle cycles)
 {
     Beam result;
 
-    Cycle cycle = beam.v * DMACyclesPerLine() + beam.h + cycles;
-    result.v = cycle / DMACyclesPerLine();
-    result.h = cycle % DMACyclesPerLine();
+    Cycle cycle = beam.v * HPOS_CNT + beam.h + cycles;
+    result.v = cycle / HPOS_CNT;
+    result.h = cycle % HPOS_CNT;
 
     return result;
-}
-
-DMACycle
-Agnus::DMACyclesInCurrentFrame()
-{
-    // TODO: Distinguish between short frames and long frames
-    /*
-    if (screenBuffer2) {
-        return 312 * cyclesPerLine();
-    } else {
-        return 313 * cyclesPerLine();
-    }
-    */
-    return 313 * DMACyclesPerLine();
 }
 
 Cycle

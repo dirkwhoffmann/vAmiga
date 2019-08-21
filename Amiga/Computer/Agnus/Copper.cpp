@@ -253,7 +253,7 @@ Copper::findVerticalMatch(int16_t vStrt, int16_t vComp, int16_t vMask, int16_t &
 bool
 Copper::findHorizontalMatch(int16_t hStrt, int16_t hComp, int16_t hMask, int16_t &result)
 {
-    int16_t hStop = agnus->DMACyclesPerLine(); 
+    int16_t hStop = HPOS_CNT;
 
     debug("findHorizontalMatch(%X,%X,%X)\n", hStrt, hComp, hMask);
 
