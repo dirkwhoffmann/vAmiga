@@ -642,9 +642,6 @@ Agnus::switchBitplaneDmaOn()
 
     // Link everything together
     updateJumpTable();
-
-    // debug("EventTable:\n");
-    // dumpBplEventTable();
 }
 
 
@@ -657,14 +654,8 @@ Agnus::switchBitplaneDmaOff()
 
     debug(BPL_DEBUG, "switchBitplaneDmaOff: \n");
 
-    // Clear the event table
     clearDMAEventTable();
-
-    // Update the BPL slot
-    if (pos.h != -1) {  // Temporary fix until pos.h can never be -1 any more
-        scheduleNextBplEvent();
-    }
-    // cancel(BPL_SLOT);
+    scheduleNextBplEvent();
 }
 
 void
