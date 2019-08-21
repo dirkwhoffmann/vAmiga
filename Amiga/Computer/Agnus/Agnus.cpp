@@ -1652,38 +1652,6 @@ Agnus::oldHsyncHandler()
         }
     }
 
-    //
-    // Update frame flipflops
-    //
-
-    // Vertical DIW flipflop
-    if (pos.v == diwVstrt && !diwVFlop) {
-        diwVFlop = true;
-        updateBitplaneDma();
-    }
-    if (pos.v == diwVstop && diwVFlop) {
-        diwVFlop = false;
-        updateBitplaneDma();
-    }
-
-    // Horizontal DIW flipflop
-    diwHFlop = (diwHFlopOff != -1) ? false : (diwHFlopOn != -1) ? true : diwHFlop;
-    diwHFlopOn = diwHstrt;
-    diwHFlopOff = diwHstop;
-
-    // Vertical DDF flipflop
-    // ddfVFlop = !inVBlank() && !inLastRasterline() && diwVFlop;
-    ddfVFlop = !inLastRasterline() && diwVFlop;
-
-    // Horizontal DDF flipflop
-
-
-    //
-    // Update the DDF related variables
-    //
-
-    ddfstrtReached = ddfstrt;
-    ddfstopReached = ddfstop;
 
 
 
@@ -1707,9 +1675,40 @@ Agnus::hsyncHandler()
     // debug("BPL_HSYNC: pos.h = %d\n", pos.h);
 
 
-    
+
     //
-    // Determine the sprite clipping area
+    // DIW
+    //
+
+    if (pos.v == diwVstrt && !diwVFlop) {
+        diwVFlop = true;
+        updateBitplaneDma();
+    }
+    if (pos.v == diwVstop && diwVFlop) {
+        diwVFlop = false;
+        updateBitplaneDma();
+    }
+
+    // Horizontal DIW flipflop
+    diwHFlop = (diwHFlopOff != -1) ? false : (diwHFlopOn != -1) ? true : diwHFlop;
+    diwHFlopOn = diwHstrt;
+    diwHFlopOff = diwHstop;
+
+
+    //
+    // DDF
+    //
+
+    // Vertical DDF flipflop
+    // ddfVFlop = !inVBlank() && !inLastRasterline() && diwVFlop;
+    ddfVFlop = !inLastRasterline() && diwVFlop;
+
+    ddfstrtReached = ddfstrt;
+    ddfstopReached = ddfstop;
+
+
+    //
+    // Sprite clipping
     //
 
     bool bplDmaLine = inBplDmaLine();
