@@ -129,7 +129,7 @@ Paula::setINTENA(bool setclr, uint16_t value)
 }
 
 void
-Paula::scheduleInterrupt(int nr, Cycle trigger, bool set)
+Paula::scheduleIrq(int nr, Cycle trigger, bool set)
 {
     assert(nr < 16);
     assert(agnus->slot[IRQ_SLOT].id == IRQ_CHECK);
@@ -137,10 +137,17 @@ Paula::scheduleInterrupt(int nr, Cycle trigger, bool set)
     // Don't schedule interrupts that are already pending
     assert(inttrigger[nr] == 0);
 
+    // If the trigger cycle is 0, we service the request immediately
+    if (trigger == 0) {
+        setINTREQ(set, 1 << nr);
+        return;
+    }
+
+    // Record the request
     inttrigger[nr] = trigger;
     WRITE_BIT(reqval, nr, set);
 
-    // Schedule the IRQ_CHECK event at the proper cycle
+    // Service the request with the proper delay
     if (trigger < agnus->slot[IRQ_SLOT].triggerCycle) {
         agnus->scheduleAbs<IRQ_SLOT>(trigger, IRQ_CHECK);
     }

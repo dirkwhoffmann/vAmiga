@@ -204,7 +204,9 @@ public:
     void setINTENA(bool setclr, uint16_t value);
 
     // Schedules an interrupt
-    void scheduleInterrupt(int nr, Cycle trigger, bool set = true);
+    void scheduleIrq(int nr, Cycle trigger, bool set);
+    void raiseIrq(int nr, Cycle trigger = 0) { scheduleIrq(nr, trigger, true); }
+    void clearIrq(int nr, Cycle trigger = 0) { scheduleIrq(nr, trigger, false); }
 
     // Triggers all pending interrupts
     void serviceIrqEvent();
