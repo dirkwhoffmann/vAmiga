@@ -54,19 +54,21 @@ extension EventTableView: NSTableViewDataSource {
         case "frame":
             if !willTrigger {
                 return ""
-            } else if info.currentFrame {
+            } else if info.frameRel == -1 {
+                return "previous"
+            } else if info.frameRel == 0 {
                 return "current"
             } else {
                 return "upcoming"
             }
         case "vpos":
-            if willTrigger {
+            if willTrigger && info.frameRel == 0 {
                 return info.vpos
             } else {
                 return ""
             }
         case "hpos":
-            if willTrigger {
+            if willTrigger && info.frameRel == 0 {
                 return info.hpos
             } else {
                 return ""

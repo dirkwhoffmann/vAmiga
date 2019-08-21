@@ -336,15 +336,18 @@ typedef struct
     const char *slotName;
     const char *eventName;
     long eventId;
+
+    // Trigger cycle of the event
     Cycle trigger;
     Cycle triggerRel;
+
+    // Trigger relative to the current frame
+    // -1 = earlier frame, 0 = current frame, 1 = later frame
+    long frameRel;
 
     // The trigger cycle translated to a beam position.
     long vpos;
     long hpos;
-
-    // Indicates if (vpos, hpos) is a position inside the current frame.
-    bool currentFrame;
 }
 EventSlotInfo;
 

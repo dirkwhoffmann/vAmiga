@@ -41,18 +41,21 @@ Agnus::inspectEventSlot(EventSlot nr)
     i->eventId = slot[nr].id;
     i->trigger = trigger;
     i->triggerRel = trigger - clock;
-    i->currentFrame = belongsToCurrentFrame(trigger);
 
-    if (trigger != NEVER) {
-
+    if (belongsToCurrentFrame(trigger)) {
         Beam beam = cycleToBeam(trigger);
         i->vpos = beam.v;
         i->hpos = beam.h;
-
-    } else {
-
+        i->frameRel = 0;
+    } else if (belongsToNextFrame(trigger)) {
         i->vpos = 0;
         i->hpos = 0;
+        i->frameRel = 1;
+    } else {
+        assert(belongsToPreviousFrame(trigger));
+        i->vpos = 0;
+        i->hpos = 0;
+        i->frameRel = -1;
     }
 
     switch ((EventSlot)nr) {
