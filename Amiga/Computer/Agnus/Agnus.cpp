@@ -648,11 +648,13 @@ Agnus::switchBitplaneDmaOn()
 void
 Agnus::switchBitplaneDmaOff()
 {
-    // Quick-exit if the event table is free of any bitplane DMA events
-    // TODO: We need a reliable quick-exit condition
-    // The old variable (dmaFirstBpl1Event) has been removed.
-
     debug(BPL_DEBUG, "switchBitplaneDmaOff: \n");
+
+    // Quick-exit if nothing happens at regular DMA cycle positions
+    if (nextDmaEvent[0] == HPOS_MAX + 1) {
+        assert(dmaEvent[nextDmaEvent[0]] == BPL_HSYNC);
+        return;
+    }
 
     clearDMAEventTable();
     scheduleNextBplEvent();
