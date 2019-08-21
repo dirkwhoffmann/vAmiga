@@ -287,39 +287,6 @@ Blitter::executeSlowBlitter()
         }
     }
 
-    /*
-    if (instr & REPEAT) {
-
-        debug(BLT_DEBUG, "REPEAT\n");
-
-        iteration++;
-
-        // Check if there are remaining words to process
-        if (yCounter > 1 || xCounter > 1) {
-
-            // Jump back to the first micro-instruction
-            bltpc = 0;
-
-            // Decrease word counters
-            if (xCounter > 1) {
-
-                decXCounter();
-
-            } else if (yCounter > 1) {
-
-                resetXCounter();
-                decYCounter();
-            }
-
-        } else {
-
-            // The remaining code flushes the pipeline.
-            // The Blitter busy flag gets cleared at this point.
-            bbusy = false;
-        }
-    }
-    */
-
     if (instr & BLTDONE) {
 
         debug(BLT_DEBUG, "BLTDONE\n");

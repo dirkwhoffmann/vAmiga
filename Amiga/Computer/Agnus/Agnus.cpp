@@ -1726,6 +1726,23 @@ Agnus::oldHsyncHandler()
         dmaDAS = 0;
     }
 
+    
+    //
+    // Schedule events
+    //
+
+    // Schedule the next SYNC event
+    scheduleInc<SYNC_SLOT>(DMA_CYCLES(HPOS_CNT), SYNC_EOL, pos.v);
+}
+
+void
+Agnus::hsyncHandler()
+{
+    // Make sure that this function is called at the correct DMA cycle
+    assert(pos.h == 0); // CHANGE TO HPOS_MAX + 1 later
+
+    // debug("BPL_HSYNC: pos.h = %d\n", pos.h);
+
 
     //
     // Process pending work items
@@ -1754,45 +1771,12 @@ Agnus::oldHsyncHandler()
     // Clear the bus usage table
     for (int i = 0; i < HPOS_CNT; i++) busOwner[i] = BUS_NONE;
 
-    
-    //
-    // Schedule events
-    //
-
-    // Schedule the first biplane event
-    // NOW DONE IN NEW HSYNC HANDLER
-    /*
-    assert(nextDmaEvent[0] != EVENT_NONE);
-    EventID eventID = dmaEvent[nextDmaEvent[0]];
-    schedulePos<BPL_SLOT>(pos.v, nextDmaEvent[0], eventID);
-    */
-
-    /*
-    // Schedule the first biplane event (if any)
-    if (nextDmaEvent[0]) {
-        EventID eventID = dmaEvent[nextDmaEvent[0]];
-        schedulePos<BPL_SLOT>(pos.v, nextDmaEvent[0], eventID);
-    }
-    */
-
-    // Schedule the next SYNC event
-    scheduleInc<SYNC_SLOT>(DMA_CYCLES(HPOS_CNT), SYNC_EOL, pos.v);
-
 
     //
     // Let other components prepare for the next line
     //
 
     denise->beginOfLine(pos.v);
-}
-
-void
-Agnus::hsyncHandler()
-{
-    // Make sure that this function is called at the correct DMA cycle
-    assert(pos.h == 0); // CHANGE TO HPOS_MAX + 1 later
-
-    // debug("BPL_HSYNC: pos.h = %d\n", pos.h);
 }
 
 void

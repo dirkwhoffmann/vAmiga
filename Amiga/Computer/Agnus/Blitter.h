@@ -449,9 +449,6 @@ private:
     // Fake-emulates the next micro-instruction of the copy Blitter
     void executeFastBlitter();
 
-    // Called at the end of a FastBlitter operation (DEPRECATED)
-    void endFastBlit();
-
     // Performs a copy blit operation via the FastBlitter
     void doFastCopyBlit();
     

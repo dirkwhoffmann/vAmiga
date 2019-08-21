@@ -123,19 +123,6 @@ Blitter::executeFastBlitter()
 }
 
 void
-Blitter::endFastBlit()
-{
-    // Clear the Blitter busy flag
-    bbusy = false;
-
-    // Trigger the Blitter interrupt
-    agnus->scheduleRel<IRQ_BLIT_SLOT>(0, IRQ_SET);
-
-    // Clear the Blitter slot
-    agnus->cancel<BLT_SLOT>();
-}
-
-void
 Blitter::doFastCopyBlit()
 {
     uint16_t xmax = bltsizeW();
