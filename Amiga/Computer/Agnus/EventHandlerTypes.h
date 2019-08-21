@@ -65,7 +65,7 @@ typedef enum : long
     TXD_SLOT,         // Serial data out (UART)
     RXD_SLOT,         // Serial data in (UART)
     POT_SLOT,         // Potentiometer
-    SYNC_SLOT,        // Synchronization (HSYNC)
+    SYNC_SLOT,        // Synchronization (HSYNC) 
     INSPECTOR_SLOT,   // Handles periodic calls to inspect()
 
     LAST_SEC_SLOT = INSPECTOR_SLOT,
