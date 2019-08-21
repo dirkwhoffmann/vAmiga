@@ -1591,30 +1591,7 @@ Agnus::oldHsyncHandler()
     // Make sure we really reached the end of the line
     if (pos.h != HPOS_MAX) { dump(); assert(false); }
 
-    //
-    // Let other components finish up the current line
-    //
-
-    // Let Denise draw the current line
-    denise->endOfLine(pos.v);
-
-    // Let Paula synthesize new sound samples
-    paula->audioUnit.executeUntil(clock);
-    
-    // Let CIA B count the HSYNCs
-    amiga->ciaB.incrementTOD();
-    
-    // Check the keyboard once in a while (TODO: Add a secondary event)
-    if ((pos.v & 0b1111) == 0) amiga->keyboard.execute();
-
-
-
-
-
-    
-    //
-    // Schedule events
-    //
+    // Delete this slot if it turns out that we don't need it any more
 
     // Schedule the next SYNC event
     scheduleInc<SYNC_SLOT>(DMA_CYCLES(HPOS_CNT), SYNC_EOL, pos.v);
@@ -1630,18 +1607,29 @@ Agnus::hsyncHandler()
      */
     assert(pos.h == HPOS_MAX + 1);
 
-    // debug("BPL_HSYNC: pos.h = %d\n", pos.h);
+    // Let Denise draw the current line
+    denise->endOfLine(pos.v);
 
+    // Let Paula synthesize new sound samples
+    paula->audioUnit.executeUntil(clock);
+
+    // Let CIA B count the HSYNCs
+    amiga->ciaB.incrementTOD();
+
+    // Check the keyboard once in a while (TODO: Add a secondary event)
+    if ((pos.v & 0b1111) == 0) amiga->keyboard.execute();
 
     //
     // End of current line
     // -------------------------------------------------------------------------
+
 
     // Reset the horizontal counter
     pos.h = 0;
 
     // Advance the vertical counter
     if (++pos.v >= frameInfo.numLines) vsyncHandler();
+
 
     // -------------------------------------------------------------------------
     // Begin of next line
