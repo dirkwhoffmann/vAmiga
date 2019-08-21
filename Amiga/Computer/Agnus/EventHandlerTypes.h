@@ -60,6 +60,7 @@ typedef enum : long
     IRQ_RBF_SLOT,     // Source 11 IRQ (Serial port receive buffer full)
     IRQ_DSKSYN_SLOT,  // Source 12 IRQ (Disk sync register matches disk data)
     IRQ_EXTER_SLOT,   // Source 13 IRQ (I/O ports and CIA B)
+    KBD_SLOT,         // Keyboard
     TXD_SLOT,         // Serial data out (UART)
     RXD_SLOT,         // Serial data in (UART)
     POT_SLOT,         // Potentiometer
@@ -104,6 +105,7 @@ inline const char *slotName(EventSlot nr)
         case REG_COP_SLOT:       return "Copper Write";
         case REG_CPU_SLOT1:      return "CPU Write (1)";
         case REG_CPU_SLOT2:      return "CPU Write (2)";
+        case KBD_SLOT:           return "Keyboard";
         case TXD_SLOT:           return "UART out";
         case RXD_SLOT:           return "UART in";
         case POT_SLOT:           return "Potentiometer";
@@ -218,6 +220,10 @@ typedef enum : long
     REG_BPLxPTH,
     REG_BPLxPTL,
     REG_EVENT_COUNT,
+
+    // Keyboard
+    KBD_QUERY = 1,
+    KBD_EVENT_COUNT,
 
     // Serial data out (UART)
     TXD_BIT = 1,

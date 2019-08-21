@@ -214,6 +214,16 @@ Agnus::inspectEventSlot(EventSlot nr)
             }
             break;
 
+        case KBD_SLOT:
+
+            switch (slot[nr].id) {
+
+                case 0:             i->eventName = "none"; break;
+                case KBD_QUERY:     i->eventName = "KBD_QUERY"; break;
+                default:            i->eventName = "*** INVALID ***"; break;
+            }
+            break;
+
         case TXD_SLOT:
 
             switch (slot[nr].id) {
@@ -489,6 +499,9 @@ Agnus::executeEventsUntil(Cycle cycle) {
         }
         if (isDue<IRQ_EXTER_SLOT>(cycle)) {
             serviceIRQEvent(IRQ_EXTER_SLOT, 13);
+        }
+        if (isDue<KBD_SLOT>(cycle)) {
+            amiga->keyboard.execute();
         }
         if (isDue<TXD_SLOT>(cycle)) {
             paula->uart.serveTxdEvent(slot[TXD_SLOT].id);

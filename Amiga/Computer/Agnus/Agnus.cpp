@@ -188,27 +188,30 @@ void Agnus::_reset()
     // Initialize lookup tables
     clearDMAEventTable();
 
-    // Clear event slots
+    // Initialize the event slots
     for (unsigned i = 0; i < SLOT_COUNT; i++) {
         slot[i].triggerCycle = NEVER;
         slot[i].id = (EventID)0;
         slot[i].data = 0;
     }
 
-    // Initialize the SEC_SLOT
-    scheduleAbs<SEC_SLOT>(NEVER, SEC_TRIGGER);
-
-    // Schedule the first CIA A and CIA B events
+    // Get the CIAs going
     scheduleAbs<CIAA_SLOT>(CIA_CYCLES(1), CIA_EXECUTE);
     scheduleAbs<CIAB_SLOT>(CIA_CYCLES(1), CIA_EXECUTE);
 
-    // Schedule first DAS event
+    // Schedule the first Disk, Audio, Sprite event
     scheduleAbs<DAS_SLOT>(DMA_CYCLES(1), DAS_REFRESH);
 
-    // Schedule first SYNC event (DEPRECATED)
+    // Schedule the first DAS event
+    scheduleAbs<SEC_SLOT>(NEVER, SEC_TRIGGER);
+
+    // Get the keyboard going
+    scheduleAbs<KBD_SLOT>(DMA_CYCLES(1), KBD_QUERY);
+
+     // Schedule the first SYNC event (DEPRECATED)
     scheduleAbs<SYNC_SLOT>(DMA_CYCLES(HPOS_MAX), SYNC_EOL);
 
-    // Schedule first BPL event
+    // Schedule the first BPL event
     scheduleNextBplEvent(); 
 }
 
@@ -1617,7 +1620,7 @@ Agnus::hsyncHandler()
     amiga->ciaB.incrementTOD();
 
     // Check the keyboard once in a while (TODO: Add a secondary event)
-    if ((pos.v & 0b1111) == 0) amiga->keyboard.execute();
+    // if ((pos.v & 0b1111) == 0) amiga->keyboard.execute();
 
     //
     // End of current line

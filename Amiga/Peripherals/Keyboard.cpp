@@ -51,11 +51,7 @@ Keyboard::sendKeyCode(uint8_t keyCode)
 void
 Keyboard::execute()
 {
-    // Experimental: Ignore the handshake
-    // Emulating the handshake signal leads to weired delay effects which may
-    // be caused by missing time-out checks performed by the real Amiga
-    // keyboard. Ignoring the handshake signal results in a keyboard that
-    // works pretty well, so we stick to this solution for now.
+    // For now, we ignore the handshake...
     handshake = true;
     
     switch (state) {
@@ -99,6 +95,9 @@ Keyboard::execute()
         default:
             assert(false);
     }
+
+    // Reschedule the keyboard event
+    amiga->agnus.rescheduleInc<KBD_SLOT>(DMA_CYCLES(16 * HPOS_CNT));
 }
 
 bool
