@@ -169,6 +169,16 @@ Agnus::inspectEventSlot(EventSlot nr)
             }
             break;
 
+        case IRQ_SLOT:
+
+            switch (slot[nr].id) {
+
+                case 0:             i->eventName = "none"; break;
+                case IRQ_CHECK:     i->eventName = "IRQ_CHECK"; break;
+                default:            i->eventName = "*** INVALID ***"; break;
+            }
+            break;
+
         case IRQ_TBE_SLOT:
         case IRQ_DSKBLK_SLOT:
         case IRQ_SOFT_SLOT:
@@ -457,6 +467,9 @@ Agnus::executeEventsUntil(Cycle cycle) {
 
         if (isDue<DSK_SLOT>(cycle)) {
             paula->diskController.serveDiskEvent();
+        }
+        if (isDue<IRQ_SLOT>(cycle)) {
+            paula->serviceIrqEvent();
         }
         if (isDue<IRQ_TBE_SLOT>(cycle)) {
             serviceIRQEvent(IRQ_TBE_SLOT, 0);

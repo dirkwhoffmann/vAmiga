@@ -45,7 +45,8 @@ typedef enum : long
     REG_CPU_SLOT1,                 // Delayed CPU writes to custom registers
     REG_CPU_SLOT2,                 // Second slot for delayed CPU writes
 
-    DSK_SLOT ,        // Disk controller
+    DSK_SLOT,         // Disk controller
+    IRQ_SLOT,         // Interrupts
     IRQ_TBE_SLOT,     // Source 0 IRQ (Serial port transmit buffer empty)
     IRQ_DSKBLK_SLOT,  // Source 1 IRQ (Disk block finished)
     IRQ_SOFT_SLOT,    // Source 2 IRQ (Software-initiated)
@@ -88,6 +89,7 @@ inline const char *slotName(EventSlot nr)
         case SEC_SLOT:           return "Secondary";
 
         case DSK_SLOT:           return "Disk Controller";
+        case IRQ_SLOT:           return "Interrupts";
         case IRQ_TBE_SLOT:       return "Serial Out IRQ";
         case IRQ_DSKBLK_SLOT:    return "Disk DMA IRQ";
         case IRQ_SOFT_SLOT:      return "Software IRQ";
@@ -204,8 +206,9 @@ typedef enum : long
     DSK_EVENT_COUNT,
     
     // IRQ slots
-    IRQ_SET = 1,
-    IRQ_CLEAR,
+    IRQ_CHECK = 1,
+    IRQ_SET, // DEPRECATED
+    IRQ_CLEAR, // DEPRECATED
     IRQ_EVENT_COUNT,
 
     // REG slots

@@ -46,7 +46,7 @@ public:
     
     
     //
-    // Interrupt registers
+    // Interrupts
     //
     
     // The interrupt request register
@@ -54,7 +54,13 @@ public:
     
     // The interrupt enable register
     uint16_t intena;
-    
+
+    // Counters used to emulate interrupt delays
+    Cycle inttrigger[16];
+
+    // Bit i indicates if the req bit for interrupt i should be set or cleared
+    uint16_t reqval;
+
 
     //
     // Control port registers
@@ -101,6 +107,8 @@ public:
         & clock
         & intreq
         & intena
+        & inttrigger
+        & reqval
         & potgo
         & potCntX0
         & potCntY0
@@ -117,7 +125,7 @@ public:
 private:
 
     void _initialize() override;
-    void _reset() override { RESET_SNAPSHOT_ITEMS }
+    void _reset() override;
     void _inspect() override;
     void _dump() override;
     void _warpOn() override;
@@ -188,11 +196,19 @@ public:
 public:
     
     // Changes the value of INTREQ.
-    void setINTREQ(uint16_t value);
-    
+    void setINTREQ(uint16_t value) { setINTREQ(value & 0x8000, value & 0x7FFF); }
+    void setINTREQ(bool setclr, uint16_t value);
+
     // Changes the value of INTENA.
-    void setINTENA(uint16_t value);
-    
+    void setINTENA(uint16_t value) { setINTENA(value & 0x8000, value & 0x7FFF); }
+    void setINTENA(bool setclr, uint16_t value);
+
+    // Schedules an interrupt
+    void scheduleInterrupt(int nr, Cycle trigger, bool set = true);
+
+    // Triggers all pending interrupts
+    void serviceIrqEvent();
+
 private:
     
     // Computes the interrupt level of a pending interrupt.

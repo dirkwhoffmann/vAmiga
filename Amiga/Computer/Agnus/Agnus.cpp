@@ -195,24 +195,14 @@ void Agnus::_reset()
         slot[i].data = 0;
     }
 
-    // Get the CIAs going
     scheduleAbs<CIAA_SLOT>(CIA_CYCLES(1), CIA_EXECUTE);
     scheduleAbs<CIAB_SLOT>(CIA_CYCLES(1), CIA_EXECUTE);
-
-    // Schedule the first Disk, Audio, Sprite event
     scheduleAbs<DAS_SLOT>(DMA_CYCLES(1), DAS_REFRESH);
-
-    // Schedule the first DAS event
     scheduleAbs<SEC_SLOT>(NEVER, SEC_TRIGGER);
-
-    // Get the keyboard going
     scheduleAbs<KBD_SLOT>(DMA_CYCLES(1), KBD_QUERY);
-
-     // Schedule the first SYNC event (DEPRECATED)
-    scheduleAbs<SYNC_SLOT>(DMA_CYCLES(HPOS_MAX), SYNC_EOL);
-
-    // Schedule the first BPL event
-    scheduleNextBplEvent(); 
+    scheduleAbs<SYNC_SLOT>(DMA_CYCLES(HPOS_MAX), SYNC_EOL); // DEPRECATED
+    scheduleAbs<IRQ_SLOT>(NEVER, IRQ_CHECK);
+    scheduleNextBplEvent();
 }
 
 void

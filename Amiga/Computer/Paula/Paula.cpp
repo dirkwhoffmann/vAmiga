@@ -29,6 +29,13 @@ Paula::_initialize()
 }
 
 void
+Paula::_reset()
+{
+    RESET_SNAPSHOT_ITEMS
+    for (int i = 0; i < 16; i++) inttrigger[i] = NEVER;
+}
+
+void
 Paula::_inspect()
 {
     // Prevent external access to variable 'info'
@@ -104,21 +111,62 @@ Paula::pokeADKCON(uint16_t value)
 }
 
 void
-Paula::setINTREQ(uint16_t value)
+Paula::setINTREQ(bool setclr, uint16_t value)
 {
-    // debug("setINTREQ(%X)\n", value);
-    
-    if (value & 0x8000) intreq |= (value & 0x7FFF); else intreq &= ~value;
+    assert(!(value & 0x8000));
+
+    if (setclr) intreq |= value; else intreq &= ~value;
     checkInterrupt();
 }
 
 void
-Paula::setINTENA(uint16_t value)
+Paula::setINTENA(bool setclr, uint16_t value)
 {
-    // debug("setINTENA(%X)\n", value);
-    
-    if (value & 0x8000) intena |= (value & 0x7FFF); else intena &= ~value;
+    assert(!(value & 0x8000));
+
+    if (setclr) intena |= value; else intena &= ~value;
     checkInterrupt();
+}
+
+void
+Paula::scheduleInterrupt(int nr, Cycle trigger, bool set)
+{
+    assert(nr < 16);
+    assert(agnus->slot[IRQ_SLOT].id == IRQ_CHECK);
+
+    // Don't schedule interrupts that are already pending
+    assert(inttrigger[nr] == 0);
+
+    inttrigger[nr] = trigger;
+    WRITE_BIT(reqval, nr, set);
+
+    // Schedule the IRQ_CHECK event at the proper cycle
+    if (trigger < agnus->slot[IRQ_SLOT].triggerCycle) {
+        agnus->scheduleAbs<IRQ_SLOT>(trigger, IRQ_CHECK);
+    }
+}
+
+void
+Paula::serviceIrqEvent()
+{
+    assert(agnus->slot[IRQ_SLOT].id == IRQ_CHECK);
+
+    Cycle clock = agnus->clock;
+    Cycle next = NEVER;
+
+    // Check all 16 interrupt sources
+    for (int nr = 0; nr < 16; nr++) {
+
+        if (inttrigger[nr] <= clock) {
+            setINTREQ(GET_BIT(reqval, nr), 1 << nr);
+            inttrigger[nr] = NEVER;
+        } else {
+            next = MIN(next, inttrigger[nr]);
+        }
+    }
+
+    // Schedule next event
+    agnus->scheduleAbs<IRQ_SLOT>(next, IRQ_CHECK);
 }
 
 uint16_t
