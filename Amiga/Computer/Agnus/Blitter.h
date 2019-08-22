@@ -317,10 +317,13 @@ public:
     
     // Returns the latest internal state recorded by inspect()
     BlitterInfo getInfo();
-    
+
+    // Returns true if the Blitter is busy
+    bool isBusy() { return bbusy; }
+
 
     //
-    // COnfiguring the device
+    // Configuring the device
     //
 
     int getAccuracy() { return accuracy; }

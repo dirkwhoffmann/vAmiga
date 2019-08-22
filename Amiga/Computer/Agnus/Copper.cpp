@@ -662,8 +662,12 @@ Copper::serviceEvent(EventID id)
             // verbose = true;
             if (verbose) debug("COP_WAIT1\n");
 
+            // Check the Blitte Finish Disable bit
             if (getBFD() == 0) {
-                // debug("***** BFD FLAG NOT IMPLEMENTED YET\n");
+                if (agnus->blitter.isBusy()) {
+                    reschedule();
+                    break;
+                }
             }
 
             // Wait for the next free cycle

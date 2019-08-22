@@ -62,6 +62,6 @@ static const int SNAP_DEBUG    = 2;  // Snapshot debugging (serialization)
 // #define BORDER_DEBUG     // Draws the border in debug colors
 // #define PIXEL_DEBUG      // Highlight first pixel in each 16-bit pixel chunk
 // #define LINE_DEBUG       // Colorizes certain rasterlines
-#define ALIGN_DRIVE_HEAD // Makes drive operations deterministic
+// #define ALIGN_DRIVE_HEAD // Makes drive operations deterministic
 
 #endif
