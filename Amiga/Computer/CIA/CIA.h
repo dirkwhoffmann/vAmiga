@@ -61,7 +61,16 @@ class Joystick;
 #define CIASerClk2     (1ULL << 40)
 #define CIASerClk3     (1ULL << 41)
 
-#define DelayMask ~((1ULL << 42) | CIACountA0 | CIACountB0 | CIALoadA0 | CIALoadB0 | CIAPB6Low0 | CIAPB7Low0 | CIASetInt0 | CIAClearInt0 | CIAOneShotA0 | CIAOneShotB0 | CIAReadIcr0 | CIAClearIcr0 | CIAAckIcr0 | CIASetIcr0 | CIATODInt0 | CIASerInt0 | CIASerLoad0 | CIASerClk0)
+#define CIADelayMask ~((1ULL << 42) \
+| CIACountA0 | CIACountB0 \
+| CIALoadA0 | CIALoadB0 \
+| CIAPB6Low0 | CIAPB7Low0 \
+| CIASetInt0 | CIAClearInt0 \
+| CIAOneShotA0 | CIAOneShotB0 \
+| CIAReadIcr0 | CIAClearIcr0 \
+| CIAAckIcr0 | CIASetIcr0 \
+| CIATODInt0 | CIASerInt0 \
+| CIASerLoad0 | CIASerClk0)
 
 
 // Virtual complex interface adapter (CIA)

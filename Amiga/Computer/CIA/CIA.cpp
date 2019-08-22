@@ -1087,7 +1087,7 @@ CIA::executeOneCycle()
     }
 
 	// Move delay flags left and feed in new bits
-	delay = ((delay << 1) & DelayMask) | feed;
+	delay = ((delay << 1) & CIADelayMask) | feed;
     
     // Go into idle state if possible
     if (oldDelay == delay && oldFeed == feed) tiredness++; else tiredness = 0;
