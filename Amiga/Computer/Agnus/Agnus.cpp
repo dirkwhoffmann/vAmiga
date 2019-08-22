@@ -1459,25 +1459,9 @@ Agnus::pokeBPLCON0(uint16_t oldBplcon0, uint16_t newBplcon0)
 }
 
 void
-Agnus::executeOneCycle()
+Agnus::execute(DMACycle cycles)
 {
-    // Process all pending events
-    if (clock >= nextTrigger) executeEventsUntil(clock);
-
-    // Advance the internal counters
-    pos.h++;
-
-    // If this assertion hits, the HSYNC event hasn't been served
-    assert(pos.h <= HPOS_MAX + 1);
-
-    clock += DMA_CYCLES(1);
-}
-
-void
-Agnus::executeUntil(Cycle targetClock)
-{
-    // msg("clock is %lld, Executing until %lld\n", clock, targetClock);
-    while (clock <= targetClock - DMA_CYCLES(1)) {
+    for (DMACycle i = 0; i < cycles; i++) {
 
         // Process all pending events
         if (clock >= nextTrigger) executeEventsUntil(clock);
@@ -1492,6 +1476,34 @@ Agnus::executeUntil(Cycle targetClock)
     }
 }
 
+/*
+void
+Agnus::executeUntil(Cycle targetClock)
+{
+    execute((targetClock - clock) / DMA_CYCLES(1));
+}
+*/
+
+/*
+void
+Agnus::executeUntil(Cycle targetClock)
+{
+    while (clock <= targetClock - DMA_CYCLES(1)) {
+
+        // Process all pending events
+        if (clock >= nextTrigger) executeEventsUntil(clock);
+
+        // Advance the internal counters
+        pos.h++;
+
+        // If this assertion hits, the HSYNC event hasn't been served
+        assert(pos.h <= HPOS_MAX + 1);
+
+        clock += DMA_CYCLES(1);
+    }
+}
+*/
+
 void
 Agnus::executeUntilBusIsFree()
 {
@@ -1501,13 +1513,13 @@ Agnus::executeUntilBusIsFree()
     if (blitter.accuracy == 0) return;
 
     // The CPU usually accesses memory in even cyles. Advance to such a cycle
-    if (IS_ODD(pos.h)) executeOneCycle();
+    if (IS_ODD(pos.h)) execute();
     // if (IS_EVEN(pos.h)) executeOneCycle();
 
     // We have reached an even cycle now. Emulate that cycle...
     while (1) {
 
-        executeOneCycle();
+        execute();
 
         // Break the loop if the CPU can have the bus at that cycle
         assert(pos.h > 0);
