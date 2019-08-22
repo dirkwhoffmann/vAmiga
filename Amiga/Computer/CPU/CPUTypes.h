@@ -13,8 +13,8 @@
 #define _CPU_T_INC
 
 // CPU actions
-#define CPU_SET_IRQ_LEVEL   0b0000'0001
-#define CPU_ADD_WAIT_STATES 0b0000'0010
+#define CPU_SET_IRQ_LEVEL   0b01
+#define CPU_ADD_WAIT_STATES 0b10
 
 
 /* Recorded instruction

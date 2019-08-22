@@ -76,9 +76,9 @@ Amiga::Amiga()
         &controlPort1,
         &controlPort2,
         &serialPort,
+        &mouse,
         &joystick1,
         &joystick2,
-        &mouse,
         &keyboard,
         &df0,
         &df1,
@@ -511,14 +511,14 @@ Amiga::_powerOn()
 
 
     // REMOVE ASAP
-    /*
+
     debug("IntKarate.adf\n");
     ADFFile *adf = ADFFile::makeWithFile("/Users/hoff/Dropbox/Amiga/Games/IntKarate.adf");
     if (adf != NULL) {
         df0.insertDisk(adf);
         debug("Disk inserted\n");
     }
-    */
+    
 
     masterClock = 0;
     runLoopCtrl = 0;
@@ -552,6 +552,7 @@ Amiga::_powerOn()
     // cpu.bpManager.setBreakpointAt(0xF802E0); // Tests if mem can be written to
 
     // cpu.bpManager.setBreakpointAt(0x034434); // Shadow of the beast, DSKLEN POKE
+    // cpu.bpManager.setBreakpointAt(0xFC54FC);
 
 
     // Update the recorded debug information

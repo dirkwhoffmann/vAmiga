@@ -30,13 +30,11 @@ class Keyboard : public HardwareComponent {
      * is transmitted via the SP line of CIA A.
      */
     bool handshake;
-    
-    /* Size of the keycode type-ahead buffer
-     * The original keyboard stores 10 keycodes in it's buffer.
+
+    /* The keycode type-ahead buffer
+     * The original keyboard stores 10 keycodes.
      */
     static const size_t bufferSize = 10;
-    
-    // The keycode type-ahead buffer
     uint8_t typeAheadBuffer[bufferSize];
     
     // Next free position in the type ahead buffer

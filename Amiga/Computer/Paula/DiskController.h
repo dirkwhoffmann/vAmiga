@@ -139,9 +139,8 @@ public:
         & fifo
         & fifoCount
         & dsklen
-        & prb
-        & checksum
-        & checkcnt;
+        & dsksync
+        & prb;
     }
 
     

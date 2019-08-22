@@ -670,19 +670,21 @@ Blitter::startBlit()
     if (bltconLINE()) {
 
         linecount++;
-        debug(BLT_CHECKSUM, "BLITTER Line %d (%d,%d) (%d%d%d%d) %x %x %x %x\n",
-              linecount, bltsizeW(), bltsizeH(),
-              bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
-              bltapt, bltbpt, bltcpt, bltdpt);
+        plaindebug(BLT_CHECKSUM, "BLITTER Line %d (%d,%d) (%d%d%d%d) (%d %d %d %d) %x %x %x %x\n",
+                   linecount, bltsizeW(), bltsizeH(),
+                   bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
+                   bltamod, bltbmod, bltcmod, bltdmod,
+                   bltapt, bltbpt, bltcpt, bltdpt);
 
         useSlowBlitter ? beginSlowLineBlit() : beginFastLineBlit();
 
     } else {
         copycount++;
-        debug(BLT_CHECKSUM, "BLITTER Blit %d (%d,%d) (%d%d%d%d) (%d %d %d %d) %x %x %x %x %s\n",
-              copycount, bltsizeW(), bltsizeH(), bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
-              bltamod, bltbmod, bltcmod, bltdmod,
-              bltapt, bltbpt, bltcpt, bltdpt, bltconDESC() ? "D" : "");
+        plaindebug(BLT_CHECKSUM, "BLITTER Blit %d (%d,%d) (%d%d%d%d) (%d %d %d %d) %x %x %x %x %s\n",
+                   copycount, bltsizeW(), bltsizeH(),
+                   bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
+                   bltamod, bltbmod, bltcmod, bltdmod,
+                   bltapt, bltbpt, bltcpt, bltdpt, bltconDESC() ? "D" : "");
 
         //REMOVE ASAP
         // debugLevel = (copycount == 553) ? 2 : 1;
@@ -704,7 +706,6 @@ Blitter::terminate()
     agnus->cancel<BLT_SLOT>();
 
     // Dump checksums if requested
-    debug(BLT_CHECKSUM, "%x %x %x %x\n", bltapt, bltbpt, bltcpt, bltdpt);
-    debug(BLT_CHECKSUM, "BLITTER check1: %x check2: %x\n", check1, check2);
+    plaindebug(BLT_CHECKSUM, "BLITTER check1: %x check2: %x ABCD: %x %x %x %x\n", check1, check2, bltapt, bltbpt, bltcpt, bltdpt);
 }
 

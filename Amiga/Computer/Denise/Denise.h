@@ -297,16 +297,7 @@ public:
         worker
 
         & clock
-        & sprhstrt
-        & sprShiftReg
-        & sprDmaState
-        & attach
-        & armed
-        & spriteClipBegin
-        & spriteClipEnd
-        & prio1
-        & prio2
-        & prio12
+
         & bplcon0
         & bplcon1
         & bplcon2
@@ -323,7 +314,18 @@ public:
         & scrollLoresEven
         & scrollHiresOdd
         & scrollHiresEven
-        & conRegHistory;
+        & conRegHistory
+
+        & sprhstrt
+        & sprShiftReg
+        & sprDmaState
+        & attach
+        & armed
+        & spriteClipBegin
+        & spriteClipEnd
+        & prio1
+        & prio2
+        & prio12;
     }
 
     
