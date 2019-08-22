@@ -108,7 +108,9 @@ private:
     
     // The Blitter size register
     uint16_t bltsize;
-    
+    uint16_t bltsizeW;
+    uint16_t bltsizeH;
+
     // The Blitter modulo registers
     int16_t bltamod;
     int16_t bltbmod;
@@ -240,6 +242,8 @@ public:
         & bltalwm
 
         & bltsize
+        & bltsizeW
+        & bltsizeH
 
         & bltamod
         & bltbmod
@@ -368,8 +372,8 @@ public:
     // OCS register 0x058 (w)
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // H9 H8 H7 H6 H5 H4 H3 H2 H1 H0 W5 W4 W3 W2 W1 W0
-    inline uint16_t bltsizeH() { return (bltsize >> 6) ? (bltsize >> 6) : 1024; }
-    inline uint16_t bltsizeW() { return (bltsize & 0x3F) ? (bltsize & 0x3F) : 64; }
+    // inline uint16_t bltsizeH() { return (bltsize >> 6) ? (bltsize >> 6) : 1024; }
+    // inline uint16_t bltsizeW() { return (bltsize & 0x3F) ? (bltsize & 0x3F) : 64; }
     void pokeBLTSIZE(uint16_t value);
     
     // OCS registers 0x060 and 0x066 (w)
@@ -383,7 +387,7 @@ public:
     void pokeBLTBDAT(uint16_t value);
     void pokeBLTCDAT(uint16_t value);
     
-    bool isFirstWord() { return xCounter == bltsizeW(); }
+    bool isFirstWord() { return xCounter == bltsizeW; }
     bool isLastWord() { return xCounter == 1; }
 
     
@@ -476,8 +480,8 @@ private:
     // DEPRECATED
     void setXCounter(uint16_t value);
     void setYCounter(uint16_t value);
-    void resetXCounter() { setXCounter(bltsizeW()); }
-    void resetYCounter() { setYCounter(bltsizeH()); }
+    void resetXCounter() { setXCounter(bltsizeW); }
+    void resetYCounter() { setYCounter(bltsizeH); }
     void decXCounter() { setXCounter(xCounter - 1); }
     void decYCounter() { setYCounter(yCounter - 1); }
 

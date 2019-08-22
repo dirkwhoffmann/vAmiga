@@ -115,8 +115,8 @@ Blitter::_dump()
     plainmsg("\n");
     plainmsg("   bltsize: %X\n", bltsize);
     plainmsg("\n");
-    plainmsg("             height: %d\n", bltsizeH());
-    plainmsg("              width: %d\n", bltsizeW());
+    plainmsg("             height: %d\n", bltsizeH);
+    plainmsg("              width: %d\n", bltsizeW);
     plainmsg("\n");
     plainmsg("    bltapt: %X\n", bltapt);
     plainmsg("    bltbpt: %X\n", bltbpt);
@@ -240,8 +240,10 @@ Blitter::pokeBLTSIZE(uint16_t value)
     debug(BLTREG_DEBUG, "pokeBLTSIZE(%X)\n", value);
     
     bltsize = value;
-    remaining = bltsizeW() * bltsizeH();
-    cntA = cntB = cntC = cntD = bltsizeW();
+    bltsizeW = (bltsize & 0x3F) ? (bltsize & 0x3F) : 64;
+    bltsizeH = (bltsize >> 6) ? (bltsize >> 6) : 1024;
+    remaining = bltsizeW * bltsizeH;
+    cntA = cntB = cntC = cntD = bltsizeW;
 
     bzero = true;
     bbusy = true;
@@ -671,7 +673,7 @@ Blitter::startBlit()
 
         linecount++;
         plaindebug(BLT_CHECKSUM, "BLITTER Line %d (%d,%d) (%d%d%d%d) (%d %d %d %d) %x %x %x %x\n",
-                   linecount, bltsizeW(), bltsizeH(),
+                   linecount, bltsizeW, bltsizeH,
                    bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
                    bltamod, bltbmod, bltcmod, bltdmod,
                    bltapt, bltbpt, bltcpt, bltdpt);
@@ -681,7 +683,7 @@ Blitter::startBlit()
     } else {
         copycount++;
         plaindebug(BLT_CHECKSUM, "BLITTER Blit %d (%d,%d) (%d%d%d%d) (%d %d %d %d) %x %x %x %x %s\n",
-                   copycount, bltsizeW(), bltsizeH(),
+                   copycount, bltsizeW, bltsizeH,
                    bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
                    bltamod, bltbmod, bltcmod, bltdmod,
                    bltapt, bltbpt, bltcpt, bltdpt, bltconDESC() ? "D" : "");

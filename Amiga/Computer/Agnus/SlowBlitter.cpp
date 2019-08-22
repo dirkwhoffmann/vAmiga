@@ -167,7 +167,7 @@ Blitter::executeSlowBlitter()
             INC_OCS_PTR(bltdpt, incr);
             if (--cntD == 0) {
                 INC_OCS_PTR(bltdpt, dmod);
-                cntD = bltsizeW();
+                cntD = bltsizeW;
             }
             // if (xCounter == bltsizeW()) INC_OCS_PTR(dpt, dmod);
         }
@@ -183,7 +183,7 @@ Blitter::executeSlowBlitter()
         INC_OCS_PTR(bltapt, incr);
         if (--cntA == 0) {
             INC_OCS_PTR(bltapt, amod);
-            cntA = bltsizeW();
+            cntA = bltsizeW;
         }
     }
 
@@ -197,7 +197,7 @@ Blitter::executeSlowBlitter()
         INC_OCS_PTR(bltbpt, incr);
         if (--cntB == 0) {
             INC_OCS_PTR(bltbpt, bmod);
-            cntB = bltsizeW();
+            cntB = bltsizeW;
         }
     }
 
@@ -211,7 +211,7 @@ Blitter::executeSlowBlitter()
         INC_OCS_PTR(bltcpt, incr);
         if (--cntC == 0) {
             INC_OCS_PTR(bltcpt, cmod);
-            cntC = bltsizeW();
+            cntC = bltsizeW;
         }
     }
 
@@ -303,7 +303,7 @@ Blitter::setXCounter(uint16_t value)
     mask = 0xFFFF;
 
     // Apply the "first word mask" in the first iteration
-    if (xCounter == bltsizeW()) mask &= bltafwm;
+    if (xCounter == bltsizeW) mask &= bltafwm;
 
     // Apply the "last word mask" in the last iteration
     if (xCounter == 1) mask &= bltalwm;

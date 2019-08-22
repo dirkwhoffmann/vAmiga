@@ -125,8 +125,8 @@ Blitter::executeFastBlitter()
 void
 Blitter::doFastCopyBlit()
 {
-    uint16_t xmax = bltsizeW();
-    uint16_t ymax = bltsizeH();
+    // uint16_t xmax = bltsizeW;
+    // uint16_t ymax = bltsizeH;
     
     bool useA = bltconUSEA();
     bool useB = bltconUSEB();
@@ -138,7 +138,8 @@ Blitter::doFastCopyBlit()
     uint32_t cpt = bltcpt;
     uint32_t dpt = bltdpt;
 
-    bool descending = bltconDESC();
+    bool descend = bltconDESC();
+    bool fill = bltconFE(); 
     bool fillCarry;
 
     // Setup shift, increment and modulo offsets
@@ -151,7 +152,7 @@ Blitter::doFastCopyBlit()
     int32_t dmod = bltdmod;
 
     // Reverse direction is descending mode
-    if (bltconDESC()) {
+    if (descend) {
         incr = -incr;
         ash  = 16 - ash;
         bsh  = 16 - bsh;
@@ -164,13 +165,13 @@ Blitter::doFastCopyBlit()
     /*
     plaindebug(BLT_DEBUG, "blit %d: A-%06x (%d) B-%06x (%d) C-%06x (%d) D-%06x (%d) W-%d H-%d\n",
                            copycount, apt, bltamod, bpt, bltbmod, cpt, bltcmod, dpt, bltdmod,
-                           bltsizeW(), bltsizeH());
+                           bltsizeW, bltsizeH);
     */
 
     aold = 0;
     bold = 0;
 
-    for (int y = 0; y < ymax; y++) {
+    for (int y = 0; y < bltsizeH; y++) {
         
         // Reset the fill carry bit
         fillCarry = !!bltconFCI();
@@ -178,10 +179,10 @@ Blitter::doFastCopyBlit()
         // Apply the "first word mask" in the first iteration
         uint16_t mask = bltafwm;
         
-        for (int x = 0; x < xmax; x++) {
+        for (int x = 0; x < bltsizeW; x++) {
             
             // Apply the "last word mask" in the last iteration
-            if (x == xmax - 1) mask &= bltalwm;
+            if (x == bltsizeW - 1) mask &= bltalwm;
 
             // Fetch A
             if (useA) {
@@ -209,7 +210,7 @@ Blitter::doFastCopyBlit()
             
             // Run the barrel shifters on data path A and B
             debug(BLT_DEBUG, "    ash = %d bsh = %d mask = %X\n", bltconASH(), bltconBSH(), mask);
-            if (descending) {
+            if (descend) {
                 ahold = HI_W_LO_W(anew & mask, aold) >> ash;
                 bhold = HI_W_LO_W(bnew, bold) >> bsh;
             } else {
@@ -226,7 +227,7 @@ Blitter::doFastCopyBlit()
             assert(dhold == doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF));
 
             // Run the fill logic circuit
-            if (bltconFE()) doFill(dhold, fillCarry);
+            if (fill) doFill(dhold, fillCarry);
             
             // Update the zero flag
             if (dhold) bzero = false;
@@ -254,10 +255,10 @@ Blitter::doFastCopyBlit()
     }
 
     // Do some consistency checks
-    assert(apt == useA ? bltapt + (incr * xmax + amod) * ymax : bltapt);
-    assert(bpt == useB ? bltbpt + (incr * xmax + bmod) * ymax : bltbpt);
-    assert(cpt == useC ? bltcpt + (incr * xmax + cmod) * ymax : bltcpt);
-    assert(dpt == useD ? bltdpt + (incr * xmax + dmod) * ymax : bltdpt);
+    assert(apt == useA ? bltapt + (incr * bltsizeW + amod) * bltsizeH : bltapt);
+    assert(bpt == useB ? bltbpt + (incr * bltsizeW + bmod) * bltsizeH : bltbpt);
+    assert(cpt == useC ? bltcpt + (incr * bltsizeW + cmod) * bltsizeH : bltcpt);
+    assert(dpt == useD ? bltdpt + (incr * bltsizeW + dmod) * bltsizeH : bltdpt);
 
     // Write back pointer registers
     bltapt = apt;
@@ -299,7 +300,7 @@ Blitter::doFastLineBlit()
 
     uint32_t bltcon = HI_W_LO_W(bltcon0, bltcon1);
     
-    int height = bltsizeH();
+    int height = bltsizeH;
     
     uint16_t bltadat_local = 0;
     uint16_t bltbdat_local = 0;
