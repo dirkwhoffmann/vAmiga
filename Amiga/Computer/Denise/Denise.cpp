@@ -178,6 +178,7 @@ void
 Denise::pokeBPLCON0(uint16_t oldValue, uint16_t newValue)
 {
     // Record the register change
+    debug(BPLREG_DEBUG, "pokeBPLCON0(%X,%X)\n", oldValue, newValue);
     conRegHistory.recordChange(BPLCON0, newValue, 4 * agnus->pos.h - 4);
 }
 

@@ -132,10 +132,15 @@ Blitter::doFastCopyBlit()
     bool useB = bltconUSEB();
     bool useC = bltconUSEC();
     bool useD = bltconUSED();
-    
+
+    uint32_t apt = bltapt;
+    uint32_t bpt = bltbpt;
+    uint32_t cpt = bltcpt;
+    uint32_t dpt = bltdpt;
+
     bool descending = bltconDESC();
     bool fillCarry;
-    
+
     // Setup shift, increment and modulo offsets
     int     incr = 2;
     int     ash  = bltconASH();
@@ -158,7 +163,7 @@ Blitter::doFastCopyBlit()
 
     /*
     plaindebug(BLT_DEBUG, "blit %d: A-%06x (%d) B-%06x (%d) C-%06x (%d) D-%06x (%d) W-%d H-%d\n",
-                           copycount, bltapt, bltamod, bltbpt, bltbmod, bltcpt, bltcmod, bltdpt, bltdmod,
+                           copycount, apt, bltamod, bpt, bltbmod, cpt, bltcmod, dpt, bltdmod,
                            bltsizeW(), bltsizeH());
     */
 
@@ -180,23 +185,23 @@ Blitter::doFastCopyBlit()
 
             // Fetch A
             if (useA) {
-                anew = mem->peek16<BUS_BLITTER>(bltapt);
-                debug(BLT_DEBUG, "    A = peek(%X) = %X\n", bltapt, anew);
-                INC_OCS_PTR(bltapt, incr);
+                anew = mem->peek16<BUS_BLITTER>(apt);
+                debug(BLT_DEBUG, "    A = peek(%X) = %X\n", apt, anew);
+                INC_OCS_PTR(apt, incr);
             }
             
             // Fetch B
             if (useB) {
-                bnew = mem->peek16<BUS_BLITTER>(bltbpt);
-                debug(BLT_DEBUG, "    B = peek(%X) = %X\n", bltbpt, bnew);
-                INC_OCS_PTR(bltbpt, incr);
+                bnew = mem->peek16<BUS_BLITTER>(bpt);
+                debug(BLT_DEBUG, "    B = peek(%X) = %X\n", bpt, bnew);
+                INC_OCS_PTR(bpt, incr);
             }
             
             // Fetch C
             if (useC) {
-                chold = mem->peek16<BUS_BLITTER>(bltcpt);
-                debug(BLT_DEBUG, "    C = peek(%X) = %X\n", bltcpt, chold);
-                INC_OCS_PTR(bltcpt, incr);
+                chold = mem->peek16<BUS_BLITTER>(cpt);
+                debug(BLT_DEBUG, "    C = peek(%X) = %X\n", cpt, chold);
+                INC_OCS_PTR(cpt, incr);
             }
             debug(BLT_DEBUG, "    After fetch: A = %x B = %x C = %x\n", anew, bnew, chold);
             
@@ -228,13 +233,13 @@ Blitter::doFastCopyBlit()
         
             // Write D
             if (useD) {
-                mem->poke16<BUS_BLITTER>(bltdpt, dhold);
-                debug(BLT_DEBUG, "D: poke(%X), %X\n", bltdpt, dhold);
+                mem->poke16<BUS_BLITTER>(dpt, dhold);
+                debug(BLT_DEBUG, "D: poke(%X), %X\n", dpt, dhold);
                 check1 = fnv_1a_it32(check1, dhold);
-                check2 = fnv_1a_it32(check2, bltdpt);
+                check2 = fnv_1a_it32(check2, dpt);
                 // plainmsg("    check1 = %X check2 = %X\n", check1, check2);
 
-                INC_OCS_PTR(bltdpt, incr);
+                INC_OCS_PTR(dpt, incr);
             }
             
             // Clear the word mask
@@ -242,11 +247,23 @@ Blitter::doFastCopyBlit()
         }
         
         // Add modulo values
-        if (useA) INC_OCS_PTR(bltapt, amod);
-        if (useB) INC_OCS_PTR(bltbpt, bmod);
-        if (useC) INC_OCS_PTR(bltcpt, cmod);
-        if (useD) INC_OCS_PTR(bltdpt, dmod);
+        if (useA) INC_OCS_PTR(apt, amod);
+        if (useB) INC_OCS_PTR(bpt, bmod);
+        if (useC) INC_OCS_PTR(cpt, cmod);
+        if (useD) INC_OCS_PTR(dpt, dmod);
     }
+
+    // Do some consistency checks
+    assert(apt == useA ? bltapt + (incr * xmax + amod) * ymax : bltapt);
+    assert(bpt == useB ? bltbpt + (incr * xmax + bmod) * ymax : bltbpt);
+    assert(cpt == useC ? bltcpt + (incr * xmax + cmod) * ymax : bltcpt);
+    assert(dpt == useD ? bltdpt + (incr * xmax + dmod) * ymax : bltdpt);
+
+    // Write back pointer registers
+    bltapt = apt;
+    bltbpt = bpt;
+    bltcpt = cpt;
+    bltdpt = dpt;
 }
 
 #define blitterLineIncreaseX(a_shift, cpt) \

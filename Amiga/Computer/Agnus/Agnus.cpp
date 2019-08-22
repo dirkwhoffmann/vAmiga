@@ -1403,6 +1403,11 @@ Agnus::pokeBPLCON0(uint16_t oldBplcon0, uint16_t newBplcon0)
     // Check if the hires bit or one of the BPU bits have been modified
     if ((oldBplcon0 ^ newBplcon0) & 0xF000) {
 
+        /*
+        debug("oldBplcon0 = %X newBplcon0 = %X\n", oldBplcon0, newBplcon0);
+        dumpBplEventTable();
+         */
+
         /* Determine the number of enabled bitplanes.
          *
          *     - In hires mode, at most 4 bitplanes are possible.
@@ -1422,6 +1427,13 @@ Agnus::pokeBPLCON0(uint16_t oldBplcon0, uint16_t newBplcon0)
 
         // Update the DMA allocation table with a 2 cycle delay
         allocateBplSlots(dmacon, newBplcon0, pos.h + 2);
+
+        // EXPERIMENTAL
+        /*
+        int posh = pos.h + 2;
+        allocateBplSlots(dmacon, newBplcon0, posh);
+        dumpBplEventTable();
+        */
 
         // Since the table has changed, we also need to update the event slot
         scheduleBplEventForCycle(pos.h);
