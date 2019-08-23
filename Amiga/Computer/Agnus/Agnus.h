@@ -155,9 +155,12 @@ public:
 
 
     //
-    // Counters
+    // Internal state
     //
-    
+
+    // Action flags
+    uint64_t delay;
+
     /* The DMA controller has been executed up to this clock cycle.
      * Measured in master clock units.
      */
@@ -355,6 +358,7 @@ public:
 
     // A copy of BPLCON0 (Denise has another copy)
     uint16_t bplcon0;
+    uint16_t newBplcon0;
 
     /* Value of bplcon0 at the DDFSTRT trigger cycle.
      * This variable is set at the beginning of each rasterline and updated
@@ -365,6 +369,7 @@ public:
 
     // The DMA control register
     uint16_t dmacon;
+    uint16_t newDmacon;
 
     /* Value of dmacon at the DDFSTRT trigger cycle.
      * This variable is set at the beginning of each rasterline and updated
@@ -482,6 +487,7 @@ public:
         & slot
         & nextTrigger
 
+        & delay
         & clock
         & frame
         & pos.v
@@ -517,8 +523,10 @@ public:
         & dmaStrtLoresShift
 
         & bplcon0
+        & newBplcon0
         & bplcon0AtDDFStrt
         & dmacon
+        & newDmacon
         & dmaconAtDDFStrt
         & dmaDAS
         & dskpt
@@ -857,6 +865,9 @@ public:
     void executeUntilBusIsFree();
 
 private:
+
+    // Performs all pending register changes
+    void updateRegisters();
 
     // Executes the first sprite DMA cycle
     template <int nr> void executeFirstSpriteCycle();

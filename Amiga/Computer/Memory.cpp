@@ -1352,6 +1352,7 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x0FE >> 1: // Unused
             break;
         case 0x100 >> 1: // BPLCON0
+            agnus->pokeBPLCON0(value);
             agnus->scheduleRegEvent<s>(DMA_CYCLES(2), REG_BPLCON0, value);
             return;
         case 0x102 >> 1: // BPLCON1

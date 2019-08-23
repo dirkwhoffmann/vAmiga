@@ -12,6 +12,18 @@
 #ifndef _AGNUS_T_INC
 #define _AGNUS_T_INC
 
+// Action flags
+#define AGS_BPLCON0_0 (1ULL << 0) // Schedules a change of BPLCON0
+#define AGS_BPLCON0_1 (1ULL << 1)
+#define AGS_BPLCON0_2 (1ULL << 2) // Changes BPLCON0
+#define AGS_DMACON_0  (1ULL << 3) // Schedules a change of DMACON
+#define AGS_DMACON_1  (1ULL << 4)
+#define AGS_DMACON_2  (1ULL << 5) // Changes DMACON
+#define AGS_COUNT     (1ULL << 6)
+
+#define AGS_DELAY_MASK ~( AGS_COUNT | AGS_BPLCON0_0 | AGS_DMACON_0)
+#define AGS_REG_CHANGE (AGS_BPLCON0_1 | AGS_BPLCON0_2 | AGS_DMACON_1 | AGS_DMACON_2)
+
 typedef enum : int8_t
 {
     BUS_NONE,

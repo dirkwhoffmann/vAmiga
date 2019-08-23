@@ -1377,6 +1377,7 @@ Agnus::pokeSPRxPTL(uint16_t value)
     sprpt[x] = REPLACE_LO_WORD(sprpt[x], value & 0xFFFE);
 }
 
+/*
 void
 Agnus::pokeBPLCON0(uint16_t value)
 {
@@ -1388,11 +1389,26 @@ Agnus::pokeBPLCON0(uint16_t value)
         bplcon0 = value;
     }
 }
+*/
+
+void
+Agnus::pokeBPLCON0(uint16_t value)
+{
+    debug(DMA_DEBUG, "pokeBPLCON0(%X)\n", value);
+
+    if (bplcon0 != value) {
+
+        newBplcon0 = value;
+        delay |= AGS_BPLCON0_0;
+    }
+}
 
 void
 Agnus::pokeBPLCON0(uint16_t oldBplcon0, uint16_t newBplcon0)
 {
     assert(oldBplcon0 != newBplcon0);
+
+    debug(DMA_DEBUG, "pokeBPLCON0(%X,%X)\n", oldBplcon0, newBplcon0);
 
     // Update variable bplcon0AtDDFStrt if DDFSTRT has not been reached yet
     if (pos.h + 2 < ddfstrtReached) bplcon0AtDDFStrt = newBplcon0;
@@ -1456,6 +1472,8 @@ Agnus::pokeBPLCON0(uint16_t oldBplcon0, uint16_t newBplcon0)
             }
         }
     }
+
+    bplcon0 = newBplcon0;
 }
 
 void
@@ -1463,8 +1481,23 @@ Agnus::execute(DMACycle cycles)
 {
     for (DMACycle i = 0; i < cycles; i++) {
 
-        // Process all pending events
-        if (clock >= nextTrigger) executeEventsUntil(clock);
+        // Check if there is additional work to do in this cycle
+        if (delay) {
+
+            // Handle all pending register changes
+            if (delay & AGS_REG_CHANGE) updateRegisters();
+
+            // Process all pending events
+            if (clock >= nextTrigger) executeEventsUntil(clock);
+
+            // Move action flags one bit to the left
+            delay = (delay << 1) & AGS_DELAY_MASK;
+
+        } else {
+
+            // Process all pending events
+            if (clock >= nextTrigger) executeEventsUntil(clock);
+        }
 
         // Advance the internal counters
         pos.h++;
@@ -1530,6 +1563,20 @@ Agnus::executeUntilBusIsFree()
     };
 
     cpu->addWaitStates(blockedCycles * 2);
+}
+
+void
+Agnus::updateRegisters()
+{
+    // BPLCON0
+    if (delay & AGS_BPLCON0_1) {
+        pokeBPLCON0(bplcon0, newBplcon0);
+    }
+
+    // DMACON
+    if (delay & AGS_DMACON_1) {
+        pokeDMACON(dmacon, newDmacon);
+    }
 }
 
 template <int nr> void

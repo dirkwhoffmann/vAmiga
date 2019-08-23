@@ -17,7 +17,7 @@ class IEC;
 class Keyboard;
 class Joystick;
 
-// Adapted from PC64WIN
+// Action flags (adapted from PC64WIN)
 #define CIACountA0     (1ULL << 0) // Decrements timer A
 #define CIACountA1     (1ULL << 1)
 #define CIACountA2     (1ULL << 2)
@@ -131,10 +131,10 @@ protected:
     // Control
     //
     
-    // Performs delay by shifting left at each clock
+    // Action flags
     uint64_t delay;
     
-    // New bits to feed into dwDelay
+    // New bits to feed into delay
     uint64_t feed;
     
     // Control register A

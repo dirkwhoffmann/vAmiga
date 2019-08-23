@@ -831,7 +831,7 @@ Agnus::serviceREGEvent(EventSlot nr)
             setDIWSTOP((uint16_t)data);
             break;
         case REG_BPLCON0:
-            pokeBPLCON0((uint16_t)data);
+            // pokeBPLCON0((uint16_t)data); NOW HANDLED WITH NEW ACTION FLAG SCHEME
             denise->pokeBPLCON0((uint16_t)data);
             break;
         case REG_BPLCON1:
