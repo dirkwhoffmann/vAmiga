@@ -41,6 +41,9 @@ public:
     // Configuration
     //
 
+    // Turns sprite emulation on or off
+    bool emulateSprites = true;
+
     // Check for sprite-sprite collisions
     bool clxSprSpr;
 
@@ -49,6 +52,7 @@ public:
 
     // Check for playfield-playfield collisions
     bool clxPlfPlf;
+
 
 
     //
@@ -268,6 +272,9 @@ public:
     // Configuring device properties
     //
 
+    bool getEmulateSprites() { return emulateSprites; }
+    void setEmulateSprites(bool value) { emulateSprites = value; }
+    
     bool getClxSprSpr() { return clxSprSpr; }
     void setClxSprSpr(bool value) { clxSprSpr = value; }
 
@@ -287,6 +294,7 @@ public:
     {
         worker
 
+        & emulateSprites
         & clxSprSpr
         & clxSprPlf
         & clxPlfPlf;

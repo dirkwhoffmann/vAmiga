@@ -244,33 +244,14 @@
                                         <menuItem isSeparatorItem="YES" id="427">
                                             <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                                         </menuItem>
-                                        <menuItem title="Debug Level" id="l45-bY-cgb">
+                                        <menuItem title="Emulate Sprites" state="on" id="l45-bY-cgb">
                                             <modifierMask key="keyEquivalentModifierMask"/>
-                                            <menu key="submenu" title="Debug Level" id="F5S-uB-hpC">
-                                                <items>
-                                                    <menuItem title="1" tag="1" id="417">
-                                                        <modifierMask key="keyEquivalentModifierMask"/>
-                                                        <connections>
-                                                            <action selector="setDebugLevelAction:" target="-1" id="IBC-Ir-5mr"/>
-                                                        </connections>
-                                                    </menuItem>
-                                                    <menuItem title="2" tag="2" id="418">
-                                                        <modifierMask key="keyEquivalentModifierMask"/>
-                                                        <connections>
-                                                            <action selector="setDebugLevelAction:" target="-1" id="J05-xX-Ohk"/>
-                                                        </connections>
-                                                    </menuItem>
-                                                    <menuItem title="3" tag="3" id="WMO-pG-AUW">
-                                                        <modifierMask key="keyEquivalentModifierMask"/>
-                                                        <connections>
-                                                            <action selector="setDebugLevelAction:" target="-1" id="Itr-aF-ucu"/>
-                                                        </connections>
-                                                    </menuItem>
-                                                </items>
-                                            </menu>
                                             <connections>
-                                                <action selector="debugLevelAction:" target="-1" id="acy-uP-tZW"/>
+                                                <action selector="emulateSpritesAction:" target="-1" id="y0h-Ms-NaO"/>
                                             </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="M9P-Su-DAk">
+                                            <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                                         </menuItem>
                                         <menuItem title="Dump State" id="421">
                                             <modifierMask key="keyEquivalentModifierMask"/>

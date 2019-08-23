@@ -177,6 +177,7 @@ Amiga::getConfig()
     config.model = model;
     config.realTimeClock = realTimeClock;
     config.layout = keyboard.layout;
+    config.emulateSprites = denise.getEmulateSprites();
     config.clxSprSpr = denise.getClxSprSpr();
     config.clxSprPlf = denise.getClxSprPlf();
     config.clxPlfPlf = denise.getClxPlfPlf();
@@ -288,6 +289,12 @@ Amiga::configure(ConfigOption option, long value)
             if (current.realTimeClock == value) return true;
             realTimeClock = value;
             mem.updateMemSrcTable();
+            break;
+
+        case VA_EMULATE_SPRITES:
+
+            if (current.emulateSprites == value) return true;
+            denise.setEmulateSprites(value);
             break;
 
         case VA_CLX_SPR_SPR:

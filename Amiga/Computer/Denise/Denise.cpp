@@ -106,9 +106,10 @@ Denise::_inspect()
 void
 Denise::_dump()
 {
-    plainmsg(" clxSprSpr: %d\n", clxSprSpr);
-    plainmsg(" clxSprPlf: %d\n", clxSprPlf);
-    plainmsg(" clxPlfPlf: %d\n", clxPlfPlf);
+    plainmsg(" emulateSprites: %d\n", emulateSprites);
+    plainmsg("      clxSprSpr: %d\n", clxSprSpr);
+    plainmsg("      clxSprPlf: %d\n", clxSprPlf);
+    plainmsg("      clxPlfPlf: %d\n", clxPlfPlf);
 }
 
 DeniseInfo
@@ -590,43 +591,46 @@ Denise::translateDPF(int from, int to)
 void
 Denise::drawSprites()
 {
-    // Sprites 6 and 7
-    if (armed & 0b11000000) {
-        if (attached(7)) {
-            drawSpritePair<7>();
-        } else {
-            if (armed & 0b10000000) drawSprite<7>();
-            if (armed & 0b01000000) drawSprite<6>();
-        }
-    }
+    if (emulateSprites) {
 
-    // Sprites 4 and 5
-    if (armed & 0b00110000) {
-        if (attached(5)) {
-            drawSpritePair<5>();
-        } else {
-            if (armed & 0b00100000) drawSprite<5>();
-            if (armed & 0b00010000) drawSprite<4>();
+        // Sprites 6 and 7
+        if (armed & 0b11000000) {
+            if (attached(7)) {
+                drawSpritePair<7>();
+            } else {
+                if (armed & 0b10000000) drawSprite<7>();
+                if (armed & 0b01000000) drawSprite<6>();
+            }
         }
-    }
 
-    // Sprites 2 and 3
-    if (armed & 0b00001100) {
-        if (attached(3)) {
-            drawSpritePair<3>();
-        } else {
-            if (armed & 0b00001000) drawSprite<3>();
-            if (armed & 0b00000100) drawSprite<2>();
+        // Sprites 4 and 5
+        if (armed & 0b00110000) {
+            if (attached(5)) {
+                drawSpritePair<5>();
+            } else {
+                if (armed & 0b00100000) drawSprite<5>();
+                if (armed & 0b00010000) drawSprite<4>();
+            }
         }
-    }
 
-    // Sprites 1 and 0
-    if (armed & 0b00000011) {
-        if (attached(1)) {
-            drawSpritePair<1>();
-        } else {
-            if (armed & 0b00000010) drawSprite<1>();
-            if (armed & 0b00000001) drawSprite<0>();
+        // Sprites 2 and 3
+        if (armed & 0b00001100) {
+            if (attached(3)) {
+                drawSpritePair<3>();
+            } else {
+                if (armed & 0b00001000) drawSprite<3>();
+                if (armed & 0b00000100) drawSprite<2>();
+            }
+        }
+
+        // Sprites 1 and 0
+        if (armed & 0b00000011) {
+            if (attached(1)) {
+                drawSpritePair<1>();
+            } else {
+                if (armed & 0b00000010) drawSprite<1>();
+                if (armed & 0b00000001) drawSprite<0>();
+            }
         }
     }
 

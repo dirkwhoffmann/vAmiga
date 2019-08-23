@@ -51,6 +51,7 @@ typedef enum : long
     VA_DRIVE_TYPE,
     VA_DRIVE_SPEED,
     VA_RT_CLOCK,
+    VA_EMULATE_SPRITES,
     VA_CLX_SPR_SPR,
     VA_CLX_SPR_PLF,
     VA_CLX_PLF_PLF,
@@ -97,6 +98,7 @@ typedef struct
     AmigaModel model;
     bool realTimeClock;
     long layout;
+    bool emulateSprites;
     bool clxSprSpr;
     bool clxSprPlf;
     bool clxPlfPlf;

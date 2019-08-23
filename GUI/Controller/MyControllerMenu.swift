@@ -122,9 +122,8 @@ extension MyController: NSMenuItemValidation {
              #selector(MyController.stepOverAction(_:)),
              #selector(MyController.stopAndGoAction(_:)):
             return amiga.isPaused()
-            
-        case #selector(MyController.debugLevelAction(_:)),
-             #selector(MyController.dumpStateAction(_:)):
+
+        case #selector(MyController.dumpStateAction(_:)):
             return !amiga.releaseBuild()
             
         default:
@@ -518,6 +517,7 @@ extension MyController: NSMenuItemValidation {
     // Action methods (Debug menu)
     //
 
+    /*
     @IBAction func debugLevelAction(_ sender: Any!) {
         // Dummy target to make menu item validatable
     }
@@ -526,7 +526,15 @@ extension MyController: NSMenuItemValidation {
         amiga.setDebugLevel(sender.tag)
         amiga.resume()
     }
-    
+    */
+    @IBAction func emulateSpritesAction(_ sender: NSMenuItem!) {
+        amiga.suspend()
+        amiga.configure(VA_EMULATE_SPRITES, enable: sender.state == .off)
+        amiga.resume()
+        sender.state = (sender.state == .off) ? .on : .off
+        track()
+    }
+
     @IBAction func dumpStateAction(_ sender: Any!) {
         // Dummy target to make menu item validatable
     }
