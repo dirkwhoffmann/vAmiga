@@ -1398,26 +1398,26 @@ Agnus::pokeBPLCON0(uint16_t value)
 
     if (bplcon0 != value) {
 
-        newBplcon0 = value;
+        bplcon0New = value;
         delay |= AGS_BPLCON0_0;
     }
 }
 
 void
-Agnus::pokeBPLCON0(uint16_t oldBplcon0, uint16_t newBplcon0)
+Agnus::pokeBPLCON0(uint16_t oldValue, uint16_t newValue)
 {
-    assert(oldBplcon0 != newBplcon0);
+    assert(oldValue != newValue);
 
-    debug(DMA_DEBUG, "pokeBPLCON0(%X,%X)\n", oldBplcon0, newBplcon0);
+    debug(DMA_DEBUG, "pokeBPLCON0(%X,%X)\n", oldValue, newValue);
 
     // Update variable bplcon0AtDDFStrt if DDFSTRT has not been reached yet
-    if (pos.h + 2 < ddfstrtReached) bplcon0AtDDFStrt = newBplcon0;
+    if (pos.h + 2 < ddfstrtReached) bplcon0AtDDFStrt = newValue;
 
     // Update the DMA allocation table in the next rasterline
     hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
 
     // Check if the hires bit or one of the BPU bits have been modified
-    if ((oldBplcon0 ^ newBplcon0) & 0xF000) {
+    if ((oldValue ^ newValue) & 0xF000) {
 
         /*
         debug("oldBplcon0 = %X newBplcon0 = %X\n", oldBplcon0, newBplcon0);
@@ -1430,8 +1430,8 @@ Agnus::pokeBPLCON0(uint16_t oldBplcon0, uint16_t newBplcon0)
          *     - In lores mode, at most 6 bitplanes are possible.
          *     - Invalid numbers disable bitplane DMA.
          */
-        bool hires = (newBplcon0 & 0x8000);
-        activeBitplanes = (newBplcon0 & 0x7000) >> 12;
+        bool hires = (newValue & 0x8000);
+        activeBitplanes = (newValue & 0x7000) >> 12;
         if (activeBitplanes > (hires ? 4 : 6)) activeBitplanes = 0;
 
         /* TODO:
@@ -1442,7 +1442,7 @@ Agnus::pokeBPLCON0(uint16_t oldBplcon0, uint16_t newBplcon0)
          */
 
         // Update the DMA allocation table with a 2 cycle delay
-        allocateBplSlots(dmacon, newBplcon0, pos.h + 2);
+        allocateBplSlots(dmacon, newValue, pos.h + 2);
 
         // EXPERIMENTAL
         /*
@@ -1458,7 +1458,7 @@ Agnus::pokeBPLCON0(uint16_t oldBplcon0, uint16_t newBplcon0)
         // Sprite enable logic
         //
 
-        if (inBplDmaLine(dmacon, newBplcon0)) {
+        if (inBplDmaLine(dmacon, newValue)) {
 
             // Enable sprite drawing
             int16_t begin = MAX(4 * pos.h + 8, 4 * ddfstrtReached + 32);
@@ -1473,7 +1473,7 @@ Agnus::pokeBPLCON0(uint16_t oldBplcon0, uint16_t newBplcon0)
         }
     }
 
-    bplcon0 = newBplcon0;
+    bplcon0 = newValue;
 }
 
 void
@@ -1568,14 +1568,19 @@ Agnus::executeUntilBusIsFree()
 void
 Agnus::updateRegisters()
 {
-    // BPLCON0
+    // BPLCON0 (Agnus view)
     if (delay & AGS_BPLCON0_1) {
-        pokeBPLCON0(bplcon0, newBplcon0);
+        pokeBPLCON0(bplcon0, bplcon0New);
+    }
+
+    // BPLCON0 (Denise view)
+    if (delay & AGS_BPLCON0_DENISE_1) {
+        denise->pokeBPLCON0(denise->bplcon0, denise->bplcon0New);
     }
 
     // DMACON
     if (delay & AGS_DMACON_1) {
-        pokeDMACON(dmacon, newDmacon);
+        pokeDMACON(dmacon, dmaconNew);
     }
 }
 

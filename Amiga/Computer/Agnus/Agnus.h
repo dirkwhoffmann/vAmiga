@@ -358,7 +358,7 @@ public:
 
     // A copy of BPLCON0 (Denise has another copy)
     uint16_t bplcon0;
-    uint16_t newBplcon0;
+    uint16_t bplcon0New;
 
     /* Value of bplcon0 at the DDFSTRT trigger cycle.
      * This variable is set at the beginning of each rasterline and updated
@@ -369,7 +369,7 @@ public:
 
     // The DMA control register
     uint16_t dmacon;
-    uint16_t newDmacon;
+    uint16_t dmaconNew;
 
     /* Value of dmacon at the DDFSTRT trigger cycle.
      * This variable is set at the beginning of each rasterline and updated
@@ -523,10 +523,10 @@ public:
         & dmaStrtLoresShift
 
         & bplcon0
-        & newBplcon0
+        & bplcon0New
         & bplcon0AtDDFStrt
         & dmacon
-        & newDmacon
+        & dmaconNew
         & dmaconAtDDFStrt
         & dmaDAS
         & dskpt

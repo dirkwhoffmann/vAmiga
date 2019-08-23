@@ -162,6 +162,7 @@ Denise::pokeJOYTEST(uint16_t value)
     amiga->controlPort2.pokeJOYTEST(value);
 }
 
+/*
 void
 Denise::pokeBPLCON0(uint16_t value)
 {
@@ -173,13 +174,30 @@ Denise::pokeBPLCON0(uint16_t value)
         bplcon0 = value;
     }
 }
+*/
+
+void
+Denise::pokeBPLCON0(uint16_t value)
+{
+    debug(BPLREG_DEBUG, "pokeBPLCON0(%X)\n", value);
+
+    if (bplcon0 != value) {
+
+        bplcon0New = value;
+        agnus->delay |= AGS_BPLCON0_DENISE_0;
+    }
+}
 
 void
 Denise::pokeBPLCON0(uint16_t oldValue, uint16_t newValue)
 {
-    // Record the register change
     debug(BPLREG_DEBUG, "pokeBPLCON0(%X,%X)\n", oldValue, newValue);
+
+    // Record the register change
     conRegHistory.recordChange(BPLCON0, newValue, 4 * agnus->pos.h - 4);
+
+    // Update value
+    bplcon0 = newValue;
 }
 
 void
