@@ -1411,7 +1411,7 @@ Agnus::pokeBPLCON0(uint16_t oldValue, uint16_t newValue)
     debug(DMA_DEBUG, "pokeBPLCON0(%X,%X)\n", oldValue, newValue);
 
     // Update variable bplcon0AtDDFStrt if DDFSTRT has not been reached yet
-    if (pos.h + 2 < ddfstrtReached) bplcon0AtDDFStrt = newValue;
+    if (pos.h < ddfstrtReached) bplcon0AtDDFStrt = newValue;
 
     // Update the DMA allocation table in the next rasterline
     hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
@@ -1441,8 +1441,8 @@ Agnus::pokeBPLCON0(uint16_t oldValue, uint16_t newValue)
          * update in hsyncActions (HSYNC_UPDATE_EVENT_TABLE) can be omitted.
          */
 
-        // Update the DMA allocation table with a 2 cycle delay
-        allocateBplSlots(dmacon, newValue, pos.h + 2);
+        // Update the DMA allocation table
+        allocateBplSlots(dmacon, newValue, pos.h);
 
         // EXPERIMENTAL
         /*
@@ -1461,13 +1461,13 @@ Agnus::pokeBPLCON0(uint16_t oldValue, uint16_t newValue)
         if (inBplDmaLine(dmacon, newValue)) {
 
             // Enable sprite drawing
-            int16_t begin = MAX(4 * pos.h + 8, 4 * ddfstrtReached + 32);
+            int16_t begin = MAX(4 * pos.h, 4 * ddfstrtReached + 32);
             denise->enlargeSpriteClippingRange(begin, HPIXELS);
 
         } else {
 
             // Disable sprite drawing if DDFSTRT hasn't been reached yet
-            if (pos.h <= ddfstrtReached + 4) {
+            if (pos.h <= ddfstrtReached + 6) {
                 denise->setSpriteClippingRange(HPIXELS, HPIXELS);
             }
         }
@@ -1569,7 +1569,7 @@ void
 Agnus::updateRegisters()
 {
     // BPLCON0 (Agnus view)
-    if (delay & AGS_BPLCON0_1) {
+    if (delay & AGS_BPLCON0_3) {
         pokeBPLCON0(bplcon0, bplcon0New);
     }
 
