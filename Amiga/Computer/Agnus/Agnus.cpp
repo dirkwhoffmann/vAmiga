@@ -1574,7 +1574,7 @@ Agnus::updateRegisters()
     }
 
     // BPLCON0 (Denise view)
-    if (delay & AGS_BPLCON0_DENISE_1) {
+    if (delay & AGS_BPLCON0_DENISE_0) {
         denise->pokeBPLCON0(denise->bplcon0, denise->bplcon0New);
     }
 

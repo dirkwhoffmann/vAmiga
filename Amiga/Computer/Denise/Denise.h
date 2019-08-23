@@ -451,11 +451,8 @@ public:
     // Transfers the bitplane register contents to the shift registers
     void fillShiftRegisters(int numPlanes)
     {
-        /*
-        for (int i = 0; i < 6; i++) {
-            shiftReg[i] = REPLACE_LO_WORD(shiftReg[i], bpldat[i]);
-        }
-        */
+        numPlanes = bpu(); 
+
         switch (numPlanes) {
             case 6: shiftReg[5] = REPLACE_LO_WORD(shiftReg[5], bpldat[5]);
             case 5: shiftReg[4] = REPLACE_LO_WORD(shiftReg[4], bpldat[4]);
