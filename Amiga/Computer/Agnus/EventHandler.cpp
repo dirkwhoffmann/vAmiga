@@ -216,7 +216,6 @@ Agnus::inspectEventSlot(EventSlot nr)
                 case REG_DMACON:    i->eventName = "REG_DMACON"; break;
                 case REG_DIWSTRT:   i->eventName = "REG_DIWSTRT"; break;
                 case REG_DIWSTOP:   i->eventName = "REG_DIWSTOP"; break;
-                case REG_BPLCON0:   i->eventName = "REG_BPLCON0"; break;
                 case REG_BPLCON1:   i->eventName = "REG_BPLCON1"; break;
                 case REG_BPLCON2:   i->eventName = "REG_BPLCON2"; break;
                 case REG_BPL1MOD:   i->eventName = "REG_BPL1MOD"; break;
@@ -829,10 +828,6 @@ Agnus::serviceREGEvent(EventSlot nr)
             break;
         case REG_DIWSTOP:
             setDIWSTOP((uint16_t)data);
-            break;
-        case REG_BPLCON0:
-            // pokeBPLCON0((uint16_t)data); NOW HANDLED WITH NEW ACTION FLAG SCHEME
-            denise->pokeBPLCON0((uint16_t)data);
             break;
         case REG_BPLCON1:
             denise->pokeBPLCON1((uint16_t)data);

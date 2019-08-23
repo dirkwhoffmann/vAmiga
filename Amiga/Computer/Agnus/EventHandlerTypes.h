@@ -215,7 +215,6 @@ typedef enum : long
     REG_DMACON = 1,
     REG_DIWSTRT,
     REG_DIWSTOP,
-    REG_BPLCON0,
     REG_BPLCON1,
     REG_BPLCON2,
     REG_BPL1MOD,
