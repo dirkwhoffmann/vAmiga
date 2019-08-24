@@ -244,7 +244,7 @@ template <int x> void
 Denise::pokeBPLxDAT(uint16_t value)
 {
     assert(x < 6);
-    debug(BPLREG_DEBUG, "pokeBPL%dDATA(%X)\n", x + 1, value);
+    debug(BPLREG_DEBUG, "pokeBPL%dDAT(%X)\n", x + 1, value);
     
     bpldat[x] = value;
 }
@@ -946,10 +946,6 @@ Denise::endOfLine(int vpos)
 
     // Check if we are below the VBLANK area
     if (vpos >= 26) {
-
-        if (vpos == 0x94) {
-            dumpBBuffer();
-        }
 
         // Translate bitplane data to color register indices
         translate();
