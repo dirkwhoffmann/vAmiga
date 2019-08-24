@@ -518,16 +518,15 @@ Amiga::_powerOn()
 
 
     // REMOVE ASAP
-
     /*
-    agnus.blitter.setAccuracy(2);
+    agnus.blitter.setAccuracy(0);
     ADFFile *adf = ADFFile::makeWithFile("/Users/hoff/Dropbox/Amiga/Demos/RinkADink.adf");
     if (adf != NULL) {
         df0.insertDisk(adf);
         debug("Disk inserted\n");
     }
     */
-    
+
     masterClock = 0;
     runLoopCtrl = 0;
     

@@ -332,9 +332,7 @@ Blitter::pokeDMACON(uint16_t oldValue, uint16_t newValue)
 
 void
 Blitter::serviceEvent(EventID id)
-{    
-    debug(2, "Servicing Blitter event %d\n", id);
-    
+{
     switch (id) {
 
         case BLT_START:
@@ -696,7 +694,7 @@ Blitter::startBlit()
                    bltconDESC() ? "D" : "", bltconFE() ? "F" : "");
         }
         //REMOVE ASAP
-        // debugLevel = (copycount == 163229) ? 2 : 1;
+        debugLevel = 1; // (copycount == 15) ? 2 : 1;
 
         useSlowBlitter ? beginSlowCopyBlit() : beginFastCopyBlit();
     }

@@ -1537,6 +1537,13 @@ Agnus::executeUntil(Cycle targetClock)
 }
 */
 
+#ifdef SLOW_BLT_DEBUG
+
+void
+Agnus::executeUntilBusIsFree() { }
+
+#else
+
 void
 Agnus::executeUntilBusIsFree()
 {
@@ -1564,6 +1571,8 @@ Agnus::executeUntilBusIsFree()
 
     cpu->addWaitStates(blockedCycles * 2);
 }
+
+#endif
 
 void
 Agnus::updateRegisters()

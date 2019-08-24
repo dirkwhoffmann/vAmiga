@@ -28,7 +28,7 @@ Blitter::beginSlowLineBlit()
 void
 Blitter::beginSlowCopyBlit()
 {
-    // Only call this function is copy blit mode
+    // Only call this function in copy blit mode
     assert(!bltconLINE());
 
     static bool verbose = true;
@@ -70,6 +70,22 @@ Blitter::beginSlowCopyBlit()
     // Start the blit
     loadMicrocode();
     agnus->scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_EXEC_SLOW);
+
+#ifdef SLOW_BLT_DEBUG
+
+    // In debug mode, we execute the whole micro program immediately.
+    // This let's us compare checksums with the fast Blitter.
+    
+    BusOwner owner = agnus->busOwner[agnus->pos.h];
+
+    while (agnus->hasEvent<BLT_SLOT>()) {
+        agnus->busOwner[agnus->pos.h] = BUS_NONE;
+        serviceEvent(agnus->slot[BLT_SLOT].id);
+    }
+
+    agnus->busOwner[agnus->pos.h] = owner;
+
+#endif
 }
 
 void
@@ -232,7 +248,7 @@ Blitter::executeSlowBlitter()
 
             // The remaining micro-instructions flush the pipeline.
             // The Blitter busy flag gets cleared at this point.
-            bbusy = false;
+            // bbusy = false;
         }
     }
 
