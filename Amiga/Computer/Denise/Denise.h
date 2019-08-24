@@ -567,6 +567,11 @@ public:
     void debugSetBPLCONxBit(unsigned x, unsigned bit, bool value);
     void debugSetBPLCONxNibble(unsigned x, unsigned nibble, uint8_t value);
 
+    // Dumps the bBuffer or the iBuffer to the console
+    void dumpIBuffer() { dumpBuffer(iBuffer, sizeof(iBuffer)); }
+    void dumpBBuffer() { dumpBuffer(bBuffer, sizeof(bBuffer)); }
+    void dumpBuffer(uint8_t *buffer, size_t length);
+
 };
 
 #endif

@@ -24,14 +24,14 @@ PixelEngine::PixelEngine()
     }
 
     // Setup some debug colors
-    indexedRgba[64] = GpuColor(0xF, 0x0, 0x0).rawValue;
-    indexedRgba[65] = GpuColor(0xD, 0x0, 0x0).rawValue;
-    indexedRgba[66] = GpuColor(0xA, 0x0, 0x0).rawValue;
-    indexedRgba[67] = GpuColor(0x9, 0x0, 0x0).rawValue;
-    indexedRgba[68] = GpuColor(0x0, 0xF, 0xF).rawValue;
-    indexedRgba[69] = GpuColor(0x0, 0xD, 0xD).rawValue;
-    indexedRgba[70] = GpuColor(0x0, 0xA, 0xA).rawValue;
-    indexedRgba[71] = GpuColor(0x0, 0x9, 0x9).rawValue;
+    indexedRgba[64] = GpuColor(0xFF, 0x00, 0x00).rawValue;
+    indexedRgba[65] = GpuColor(0xD0, 0x00, 0x00).rawValue;
+    indexedRgba[66] = GpuColor(0xA0, 0x00, 0x00).rawValue;
+    indexedRgba[67] = GpuColor(0x90, 0x00, 0x00).rawValue;
+    indexedRgba[68] = GpuColor(0x00, 0xFF, 0xFF).rawValue;
+    indexedRgba[69] = GpuColor(0x00, 0xD0, 0xD0).rawValue;
+    indexedRgba[70] = GpuColor(0x00, 0xA0, 0xA0).rawValue;
+    indexedRgba[71] = GpuColor(0x00, 0x90, 0x90).rawValue;
     /*
     colors[64] = 0x0F00;
     colors[65] = 0x0D00;

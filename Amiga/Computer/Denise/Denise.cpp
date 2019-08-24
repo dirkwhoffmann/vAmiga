@@ -778,8 +778,11 @@ Denise::drawBorder()
 
 #ifdef LINE_DEBUG
     int16_t vpos = agnus->pos.v;
-    bool lines = vpos == 300 || vpos == 0xA0; // vpos == 26 || vpos == 0x50 || vpos == 276 || vpos == 255;
-    if (lines) for (int i = 0; i <= LAST_PIXEL / 2; colorIndex[i++] = 64);
+    bool lines = vpos == 0x94; // vpos == 26 || vpos == 0x50 || vpos == 276 || vpos == 255;
+    if (lines) {
+        // printf("Line\n");
+        for (int i = 0; i <= LAST_PIXEL / 2; iBuffer[i++] = 64);
+    }
 #endif
 }
 
@@ -944,6 +947,10 @@ Denise::endOfLine(int vpos)
     // Check if we are below the VBLANK area
     if (vpos >= 26) {
 
+        if (vpos == 0x94) {
+            dumpBBuffer();
+        }
+
         // Translate bitplane data to color register indices
         translate();
 
@@ -1071,6 +1078,17 @@ Denise::debugSetBPLCONxNibble(unsigned x, unsigned nibble, uint8_t value)
     }
 
     amiga->resume();
+}
+
+void
+Denise::dumpBuffer(uint8_t *buffer, size_t length)
+{
+    const size_t cols = 16;
+
+    for (int i = 0; i < (length + cols - 1) / cols; i++) {
+        for (int j =0; j < cols; j++) plainmsg("%2d ", buffer[i * cols + j]);
+        plainmsg("\n");
+    }
 }
 
 template void Denise::pokeBPLxDAT<0>(uint16_t value);
