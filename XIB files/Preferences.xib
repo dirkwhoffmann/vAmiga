@@ -1040,7 +1040,7 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UpC-BV-pfa">
-                                            <rect key="frame" x="93" y="309" width="170" height="17"/>
+                                            <rect key="frame" x="112" y="309" width="170" height="17"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Move data word by word" id="6Lr-AA-Ncn">
                                                 <font key="font" metaFont="system"/>
@@ -1048,14 +1048,6 @@ DQ
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <slider horizontalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="A8A-63-3FV">
-                                            <rect key="frame" x="63" y="268" width="24" height="71"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <sliderCell key="cell" continuous="YES" alignment="left" maxValue="2" tickMarkPosition="right" numberOfTickMarks="3" allowsTickMarkValuesOnly="YES" sliderType="linear" id="Sgq-o0-Ebi"/>
-                                            <connections>
-                                                <action selector="compBltAccuracyAction:" target="-2" id="P82-fu-BBx"/>
-                                            </connections>
-                                        </slider>
                                         <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZrM-uT-4JR" userLabel="System">
                                             <rect key="frame" x="123" y="184" width="133" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
@@ -1077,7 +1069,7 @@ DQ
                                             </connections>
                                         </popUpButton>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qfY-yF-MPu">
-                                            <rect key="frame" x="93" y="284" width="170" height="17"/>
+                                            <rect key="frame" x="112" y="284" width="170" height="17"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Use up bus cycles" id="eDS-hq-7V0">
                                                 <font key="font" metaFont="system"/>
@@ -1085,6 +1077,41 @@ DQ
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vJH-hj-biN">
+                                            <rect key="frame" x="63" y="295" width="19" height="17"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="1" id="cec-dt-upW">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SFF-5m-I3C">
+                                            <rect key="frame" x="63" y="269" width="19" height="17"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="0" id="qLm-QV-1Wu">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8Ya-cf-3Ah">
+                                            <rect key="frame" x="63" y="321" width="19" height="17"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="2" id="EgE-yR-rk6">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <slider horizontalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="A8A-63-3FV">
+                                            <rect key="frame" x="83" y="266" width="25" height="74"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <sliderCell key="cell" continuous="YES" alignment="left" maxValue="2" tickMarkPosition="left" numberOfTickMarks="3" allowsTickMarkValuesOnly="YES" sliderType="linear" id="Sgq-o0-Ebi"/>
+                                            <connections>
+                                                <action selector="compBltAccuracyAction:" target="-2" id="P82-fu-BBx"/>
+                                            </connections>
+                                        </slider>
                                     </subviews>
                                 </view>
                             </tabViewItem>
