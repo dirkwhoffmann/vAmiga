@@ -9,63 +9,6 @@
 
 #include "Amiga.h"
 
-/*
-void
-Blitter::startSlowBlitter()
-{
-    static bool verbose = true;
-    if (verbose) {
-        debug("Using Slow Blitter\n");
-        verbose = false;
-    }
-
-    // Line blit
-    if (bltconLINE()) {
-
-        // There is no slow line Blitter yet. We call the fast Blitter instead
-        doFastLineBlit();
-        terminate();
-        return;
-    }
-
-    // Copy blit
-
-    // Setup ascending / descending dependent parameters
-    if (bltconDESC()) {
-        incr = -2;
-        ash  = 16 - bltconASH();
-        bsh  = 16 - bltconBSH();
-        amod = -bltamod;
-        bmod = -bltbmod;
-        cmod = -bltcmod;
-        dmod = -bltdmod;
-    } else {
-        incr = 2;
-        ash  = bltconASH();
-        bsh  = bltconBSH();
-        amod = bltamod;
-        bmod = bltbmod;
-        cmod = bltcmod;
-        dmod = bltdmod;
-    }
-
-    // Set width and height counters
-    resetXCounter();
-    resetYCounter();
-
-    // Reset registers
-    aold = 0;
-    bold = 0;
-
-    // Reset the fill carry bit
-    fillCarry = !!bltconFCI();
-
-   // Start the blit
-    loadMicrocode();
-    agnus->scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_EXEC_SLOW);
-}
-*/
-
 void
 Blitter::beginSlowLineBlit()
 {
@@ -121,6 +64,9 @@ Blitter::beginSlowCopyBlit()
     // Reset the fill carry bit
     fillCarry = !!bltconFCI();
 
+    // Lock pipeline stage D
+    lockD = true;
+
     // Start the blit
     loadMicrocode();
     agnus->scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_EXEC_SLOW);
@@ -129,13 +75,6 @@ Blitter::beginSlowCopyBlit()
 void
 Blitter::executeSlowBlitter()
 {
-    // Only proceed if Blitter DMA is enabled
-    // DO WE NEED THIS???
-    if (!agnus->bltDMA()) {
-        agnus->cancel<BLT_SLOT>();
-        return;
-    }
-
     // Fetch the next micro-instruction
     uint16_t instr = microInstr[bltpc];
     debug(BLT_DEBUG, "Executing micro instruction %d (%X)\n", bltpc, instr);
@@ -153,21 +92,24 @@ Blitter::executeSlowBlitter()
         /* D is not written in the first iteration, because the pipepline needs
          * to ramp up.
          */
-        if (iteration == 0) {
+        // if (iteration == 0) {
+        if (lockD) {
 
             debug(BLT_DEBUG, "WRITE_D (skipped)\n");
+            lockD = false;
 
         } else {
 
             agnus->blitterWrite(bltdpt, dhold);
-            debug(BLT_DEBUG, "D: poke(%X), %X\n", bltdpt, dhold);
             check1 = fnv_1a_it32(check1, dhold);
             check2 = fnv_1a_it32(check2, bltdpt);
+            debug(BLT_DEBUG, "D: poke(%X), %X (check: %X %X)\n", bltdpt, dhold, check1, check2);
 
             INC_OCS_PTR(bltdpt, incr);
             if (--cntD == 0) {
                 INC_OCS_PTR(bltdpt, dmod);
                 cntD = bltsizeW;
+                fillCarry = !!bltconFCI();
             }
             // if (xCounter == bltsizeW()) INC_OCS_PTR(dpt, dmod);
         }
@@ -249,18 +191,25 @@ Blitter::executeSlowBlitter()
 
     if (instr & HOLD_D) {
 
-        debug(BLT_DEBUG, "HOLD_D\n");
+        if (lockD) {
 
-        // Run the minterm logic circuit
-        debug(BLT_DEBUG, "    Minterms: ahold = %X bhold = %X chold = %X bltcon0 = %X (hex)\n", ahold, bhold, chold, bltcon0);
-        dhold = doMintermLogicQuick(ahold, bhold, chold, bltcon0 & 0xFF);
-        assert(dhold == doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF));
+            debug(BLT_DEBUG, "HOLD_D (skipped)\n");
 
-        // Run the fill logic circuit
-        if (bltconFE()) doFill(dhold, fillCarry);
+        } else {
 
-        // Update the zero flag
-        if (dhold) bzero = false;
+            debug(BLT_DEBUG, "HOLD_D\n");
+
+            // Run the minterm logic circuit
+            debug(BLT_DEBUG, "    Minterms: ahold = %X bhold = %X chold = %X bltcon0 = %X (hex)\n", ahold, bhold, chold, bltcon0);
+            dhold = doMintermLogicQuick(ahold, bhold, chold, bltcon0 & 0xFF);
+            assert(dhold == doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF));
+
+            // Run the fill logic circuit
+            if (bltconFE()) doFill(dhold, fillCarry);
+
+            // Update the zero flag
+            if (dhold) bzero = false;
+        }
     }
 
     if (instr & REPEAT) {
@@ -315,7 +264,7 @@ Blitter::setYCounter(uint16_t value)
     yCounter = value;
     
     // Reset the fill carry bit
-    fillCarry = !!bltconFCI();
+    // fillCarry = !!bltconFCI();
 }
 
 void
@@ -445,7 +394,8 @@ Blitter::loadMicrocode()
             uint16_t prog[] = {
 
                 FETCH_A | HOLD_D | BUS,
-                WRITE_D | HOLD_A | HOLD_B | BUS | REPEAT,
+                // WRITE_D | HOLD_A | HOLD_B | BUS | REPEAT,
+                WRITE_D | HOLD_A | BUS | REPEAT,
 
                 HOLD_D,
                 WRITE_D | BUS | BLTDONE

@@ -235,9 +235,9 @@ Blitter::doFastCopyBlit()
             // Write D
             if (useD) {
                 mem->poke16<BUS_BLITTER>(dpt, dhold);
-                debug(BLT_DEBUG, "D: poke(%X), %X\n", dpt, dhold);
                 check1 = fnv_1a_it32(check1, dhold);
                 check2 = fnv_1a_it32(check2, dpt);
+                debug(BLT_DEBUG, "D: poke(%X), %X  (check: %X %X)\n", dpt, dhold, check1, check2);
                 // plainmsg("    check1 = %X check2 = %X\n", check1, check2);
 
                 INC_OCS_PTR(dpt, incr);

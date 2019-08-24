@@ -161,6 +161,8 @@ private:
     bool fillCarry;
     uint16_t mask;
 
+    bool lockD;
+
 
     //
     // Flags
@@ -282,6 +284,7 @@ public:
 
         & fillCarry
         & mask
+        & lockD
 
         & bbusy
         & bzero
@@ -425,6 +428,9 @@ public:
 
     // Clears the busy flag, triggeres an IRQ, and cancels the Blitter slot
     void terminate();
+
+    // Clears the busy flag and cancels the Blitter slot
+    void kill();
 
 
     //

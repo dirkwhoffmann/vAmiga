@@ -245,8 +245,8 @@ Blitter::pokeBLTSIZE(uint16_t value)
     remaining = bltsizeW * bltsizeH;
     cntA = cntB = cntC = cntD = bltsizeW;
 
-    bzero = true;
-    bbusy = true;
+    // bzero = true;
+    // bbusy = true;
 
     // Schedule the blit operation
     if (agnus->bltDMA()) {
@@ -643,6 +643,8 @@ void
 Blitter::doFill(uint16_t &data, bool &carry)
 {
     assert(carry == 0 || carry == 1);
+
+    debug(BLT_DEBUG, "data = %X carry = %X\n", data, carry);
     
     uint8_t dataHi = HI_BYTE(data);
     uint8_t dataLo = LO_BYTE(data);
@@ -660,8 +662,8 @@ Blitter::doFill(uint16_t &data, bool &carry)
 void
 Blitter::startBlit()
 {
-    //REMOVE ASAP
-    // accuracy = 1;
+    bzero = true;
+    bbusy = true;
 
     // Based on the accuracy level, we run the slow or the fast Blitter
     bool useSlowBlitter = accuracy >= 2;
@@ -678,18 +680,23 @@ Blitter::startBlit()
                    bltamod, bltbmod, bltcmod, bltdmod,
                    bltapt, bltbpt, bltcpt, bltdpt);
 
+        //REMOVE ASAP
+        debugLevel = 1;
+        
         useSlowBlitter ? beginSlowLineBlit() : beginFastLineBlit();
 
     } else {
         copycount++;
-        plaindebug(BLT_CHECKSUM, "BLITTER Blit %d (%d,%d) (%d%d%d%d) (%d %d %d %d) %x %x %x %x %s\n",
+        if (bltsizeW != 1 || bltsizeH != 4) {
+        plaindebug(BLT_CHECKSUM, "BLITTER Blit %d (%d,%d) (%d%d%d%d) (%d %d %d %d) %x %x %x %x %s%s\n",
                    copycount, bltsizeW, bltsizeH,
                    bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
                    bltamod, bltbmod, bltcmod, bltdmod,
-                   bltapt, bltbpt, bltcpt, bltdpt, bltconDESC() ? "D" : "");
-
+                   bltapt, bltbpt, bltcpt, bltdpt,
+                   bltconDESC() ? "D" : "", bltconFE() ? "F" : "");
+        }
         //REMOVE ASAP
-        // debugLevel = (copycount == 553) ? 2 : 1;
+        // debugLevel = (copycount == 163229) ? 2 : 1;
 
         useSlowBlitter ? beginSlowCopyBlit() : beginFastCopyBlit();
     }
@@ -708,6 +715,17 @@ Blitter::terminate()
     agnus->cancel<BLT_SLOT>();
 
     // Dump checksums if requested
+    if (bltsizeW != 1 || bltsizeH != 4) {
     plaindebug(BLT_CHECKSUM, "BLITTER check1: %x check2: %x ABCD: %x %x %x %x\n", check1, check2, bltapt, bltbpt, bltcpt, bltdpt);
+    }
 }
 
+void
+Blitter::kill()
+{
+    // Clear the Blitter busy flag
+    bbusy = false;
+
+    // Clear the Blitter slot
+    agnus->cancel<BLT_SLOT>();
+}

@@ -520,14 +520,14 @@ Amiga::_powerOn()
     // REMOVE ASAP
 
     /*
-    debug("IntKarate.adf\n");
-    ADFFile *adf = ADFFile::makeWithFile("/Users/hoff/Dropbox/Amiga/Games/IntKarate.adf");
+    agnus.blitter.setAccuracy(2);
+    ADFFile *adf = ADFFile::makeWithFile("/Users/hoff/Dropbox/Amiga/Demos/RinkADink.adf");
     if (adf != NULL) {
         df0.insertDisk(adf);
         debug("Disk inserted\n");
     }
     */
-
+    
     masterClock = 0;
     runLoopCtrl = 0;
     

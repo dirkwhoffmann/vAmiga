@@ -894,7 +894,7 @@ Agnus::pokeDMACON(uint16_t oldDmacon, uint16_t newDmacon)
             
             // Blitter DMA off
             debug(DMA_DEBUG, "Blitter DMA switched off\n");
-            cancel<BLT_SLOT>();
+            blitter.kill();
         }
     }
     
