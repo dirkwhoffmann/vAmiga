@@ -26,8 +26,11 @@ private:
     // DMA debugging colors
     RgbColor debugColor[BUS_OWNER_COUNT][5];
 
-    // Opacity of debug overlay
+    // Opacity of DMA pixels
     double opacity = 0.5;
+
+    // Selects how DMA pixels are draw (overlayed on top or mixed)
+    bool overlay = true;
 
 
     //
@@ -76,6 +79,10 @@ public:
     // Gets or sets the opacity of the superimposed visual effect
     double getOpacity();
     void setOpacity(double value);
+
+    // Gets or sets the overlay flag
+    bool getOverlay() { return overlay; }
+    void setOverlay(bool value) { overlay = value; }
 
 
     //

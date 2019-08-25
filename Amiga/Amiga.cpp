@@ -520,7 +520,8 @@ Amiga::_powerOn()
     // REMOVE ASAP
     /*
     agnus.blitter.setAccuracy(0);
-    ADFFile *adf = ADFFile::makeWithFile("/Users/hoff/Dropbox/Amiga/Demos/RinkADink.adf");
+    // ADFFile *adf = ADFFile::makeWithFile("/Users/hoff/Dropbox/Amiga/Demos/RinkADink.adf");
+    ADFFile *adf = ADFFile::makeWithFile("/Users/hoff/Dropbox/Amiga/Games/Barbarian.adf");
     if (adf != NULL) {
         df0.insertDisk(adf);
         debug("Disk inserted\n");

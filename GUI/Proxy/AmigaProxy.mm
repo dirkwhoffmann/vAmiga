@@ -416,6 +416,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->agnus->dmaDebugger.setOpacity(value);
 }
+- (void) dmaDebugSetOverlay:(BOOL)value
+{
+    wrapper->agnus->dmaDebugger.setOverlay(value);
+}
 
 @end
 

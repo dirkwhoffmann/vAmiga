@@ -146,18 +146,6 @@ extension Inspector {
         case 1: dskFifo0.stringValue = String(format: "%02X", dskInfo.fifo.0); fallthrough
         default: break
         }
-        
-        /*
-        switch (dskInfo.fifoCount) {
-        case 6: dskFifo5.intValue = dskInfo.fifo.5; fallthrough
-        case 5: dskFifo4.intValue = dskInfo.fifo.4; fallthrough
-        case 4: dskFifo3.intValue = dskInfo.fifo.3; fallthrough
-        case 3: dskFifo2.intValue = dskInfo.fifo.2; fallthrough
-        case 2: dskFifo1.intValue = dskInfo.fifo.1; fallthrough
-        case 1: dskFifo0.intValue = dskInfo.fifo.0; fallthrough
-        default: break
-        }
-        */
 
         // Audio section
         audioLen0.intValue = Int32(audInfo.channel.0.audlenLatch)

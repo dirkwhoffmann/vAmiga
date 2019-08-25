@@ -13,14 +13,15 @@ DmaDebugger::DmaDebugger()
 {
     setDescription("DmaDebugger");
 
-    // Visualize all DMA channels by default
+    // By default, visualize all DMA channels
     for (unsigned i = 0; i < BUS_OWNER_COUNT; i++) {
         visualize[i] = true;
     }
+    visualize[BUS_NONE] = false;
 
     // Assign default colors
-    setColor(BUS_REFRESH,  RgbColor((uint8_t)0xFF, 0x00, 0x00));
     setColor(BUS_CPU,      RgbColor((uint8_t)0xFF, 0xFF, 0xFF));
+    setColor(BUS_REFRESH,  RgbColor((uint8_t)0xFF, 0x00, 0x00));
     setColor(BUS_DISK,     RgbColor((uint8_t)0x00, 0xFF, 0x00));
     setColor(BUS_AUDIO,    RgbColor((uint8_t)0xFF, 0x00, 0xFF));
     setColor(BUS_BITPLANE, RgbColor((uint8_t)0x00, 0xFF, 0xFF));
@@ -38,6 +39,7 @@ DmaDebugger::getInfo()
 
     result.enabled = enabled;
     result.opacity = opacity;
+    result.overlay = overlay; 
 
     for (uint8_t i = 0; i < BUS_OWNER_COUNT; i++) {
 
@@ -124,77 +126,46 @@ DmaDebugger::setOpacity(double value)
 void
 DmaDebugger::computeOverlay()
 {
-    // Only proceed if the debugger is enabled
+    // Only proceed if DMA debugging has been turned on
     if (!enabled) return;
 
     BusOwner *owners = amiga->agnus.busOwner;
     uint16_t *values = amiga->agnus.busValue;
-    GpuColor col;
     int *ptr = amiga->denise.pixelEngine.pixelAddr(0);
 
     for (int i = 0; i < HPOS_CNT; i++, ptr += 4) {
 
-        int data = values[i];
-        int chunk1 = (data & 0xC000) >> 14;
-        int chunk2 = (data & 0x0C00) >> 10;
-        int chunk3 = (data & 0x00C0) >> 6;
-        int chunk4 = (data & 0x000C) >> 2;
-
-        assert(chunk1 < 4);
-        assert(chunk2 < 4);
-        assert(chunk3 < 4);
-        assert(chunk4 < 4);
-
         BusOwner owner = owners[i];
 
-        switch (owner) {
+        // Check for the easy case: Nothing to overlay
+        if (!visualize[owner]) {
 
-            case BUS_REFRESH:
-
-                chunk1 = chunk2 = chunk3 = chunk4 = 0x3;
-                // fallthrough
-
-            case BUS_CPU:
-            case BUS_DISK:
-            case BUS_AUDIO:
-            case BUS_BITPLANE:
-            case BUS_SPRITE:
-            case BUS_COPPER:
-            case BUS_BLITTER:
-
-                if (visualize[owner]) {
-
-                    // col = GpuColor(ptr[0]).mix(debugColor[owner][chunk1], opacity);
-                    col = debugColor[owner][chunk1];
-                    ptr[0] = col.rawValue;
-
-                    // col = GpuColor(ptr[1]).mix(debugColor[owner][chunk2], opacity);
-                    col = debugColor[owner][chunk2];
-                    ptr[1] = col.rawValue;
-
-                    // col = GpuColor(ptr[2]).mix(debugColor[owner][chunk3], opacity);
-                    col = debugColor[owner][chunk3];
-                    ptr[2] = col.rawValue;
-
-                    // col = GpuColor(ptr[3]).mix(debugColor[owner][chunk4], opacity);
-                    col = debugColor[owner][chunk4];
-                    ptr[3] = col.rawValue;
-                    break;
-                }
-                // fallthrough
-                
-            default:
-
-                col = GpuColor(ptr[0]).shade(1.0 - opacity);
-                ptr[0] = col.rawValue;
-                col = GpuColor(ptr[1]).shade(1.0 - opacity);
-                ptr[1] = col.rawValue;
-                col = GpuColor(ptr[2]).shade(1.0 - opacity);
-                ptr[2] = col.rawValue;
-                col = GpuColor(ptr[3]).shade(1.0 - opacity);
-                ptr[3] = col.rawValue;
-                break;
+            if (overlay) {
+                ptr[0] = GpuColor(ptr[0]).shade(1.0 - opacity).rawValue;
+                ptr[1] = GpuColor(ptr[1]).shade(1.0 - opacity).rawValue;
+                ptr[2] = GpuColor(ptr[2]).shade(1.0 - opacity).rawValue;
+                ptr[3] = GpuColor(ptr[3]).shade(1.0 - opacity).rawValue;
+            }
+            continue;
         }
+
+        // The not so easy case: Overlay DMA pixels
+        GpuColor col0 = debugColor[owner][(values[i] & 0xC000) >> 14];
+        GpuColor col1 = debugColor[owner][(values[i] & 0x0C00) >> 10];
+        GpuColor col2 = debugColor[owner][(values[i] & 0x00C0) >> 6];
+        GpuColor col3 = debugColor[owner][(values[i] & 0x000C) >> 2];
+
+        if (!overlay) {
+                col0 = col0.mix(GpuColor(ptr[0]), opacity);
+                col1 = col1.mix(GpuColor(ptr[1]), opacity);
+                col2 = col2.mix(GpuColor(ptr[2]), opacity);
+                col3 = col3.mix(GpuColor(ptr[3]), opacity);
+        }
+
+        ptr[0] = col0.rawValue;
+        ptr[1] = col1.rawValue;
+        ptr[2] = col2.rawValue;
+        ptr[3] = col3.rawValue;
     }
 }
 

@@ -11,6 +11,8 @@
 		500C0A562259402D000121CD /* DiskController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 500C0A542259402D000121CD /* DiskController.cpp */; };
 		5010A78222B50B690041388B /* PortPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5010A78122B50B690041388B /* PortPanel.swift */; };
 		5014DD1521F3625200BC14BA /* Keyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5014DD1321F3625200BC14BA /* Keyboard.cpp */; };
+		5019605B231257270051B669 /* Monitor.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5019605A231257270051B669 /* Monitor.xib */; };
+		5019605D23125E680051B669 /* Monitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5019605C23125E680051B669 /* Monitor.swift */; };
 		501B821D2262FFB200042871 /* RTC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501B821B2262FFB200042871 /* RTC.cpp */; };
 		5020B17D21EF121E00B9E80E /* Agnus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5020B17B21EF121E00B9E80E /* Agnus.cpp */; };
 		5020B18021EF136100B9E80E /* Denise.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5020B17E21EF136100B9E80E /* Denise.cpp */; };
@@ -183,6 +185,8 @@
 		5010A78122B50B690041388B /* PortPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortPanel.swift; sourceTree = "<group>"; };
 		5014DD1321F3625200BC14BA /* Keyboard.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Keyboard.cpp; sourceTree = "<group>"; };
 		5014DD1421F3625200BC14BA /* Keyboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Keyboard.h; sourceTree = "<group>"; };
+		5019605A231257270051B669 /* Monitor.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Monitor.xib; sourceTree = "<group>"; };
+		5019605C23125E680051B669 /* Monitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Monitor.swift; sourceTree = "<group>"; };
 		501B821B2262FFB200042871 /* RTC.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RTC.cpp; sourceTree = "<group>"; };
 		501B821C2262FFB200042871 /* RTC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RTC.h; sourceTree = "<group>"; };
 		501E715022671FC20070B17D /* DeniseTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DeniseTypes.h; sourceTree = "<group>"; };
@@ -552,6 +556,7 @@
 				508FDFB121EA1FF10043D0E9 /* MainMenu.xib */,
 				508FDFAF21EA1FF10043D0E9 /* MyDocument.xib */,
 				50DED6AE2202EBA200B8195F /* Inspector.xib */,
+				5019605A231257270051B669 /* Monitor.xib */,
 				508FDFB321EA1FF10043D0E9 /* SnapshotDialog.xib */,
 				508FDFB421EA1FF10043D0E9 /* KeyViewItem.xib */,
 				508FDFB721EA1FF10043D0E9 /* ExportDiskDialog.xib */,
@@ -716,6 +721,7 @@
 			isa = PBXGroup;
 			children = (
 				50DED6B02202EC3100B8195F /* Inspector.swift */,
+				5019605C23125E680051B669 /* Monitor.swift */,
 				509CF4CC22083F9800C500F0 /* CPUPanel.swift */,
 				508FDFEE21EA22780043D0E9 /* CIAPanel.swift */,
 				508FE00221EA227A0043D0E9 /* MemoryPanel.swift */,
@@ -1012,6 +1018,7 @@
 				50D2ADBC2207547500E32AB0 /* history.txt in Resources */,
 				508FDFC421EA1FF10043D0E9 /* ExportDiskDialog.xib in Resources */,
 				50B14C1F21EB8445002E32A6 /* drive_click.aiff in Resources */,
+				5019605B231257270051B669 /* Monitor.xib in Resources */,
 				50D263CC21F6377700FA167F /* A500ANSI.xib in Resources */,
 				50B14C1C21EB8445002E32A6 /* 1541_door_closed_2.aiff in Resources */,
 				508FDFC721EA1FF10043D0E9 /* DiskMountDialog.xib in Resources */,
@@ -1132,6 +1139,7 @@
 				508FE05F21EA22CC0043D0E9 /* ExportDiskController.swift in Sources */,
 				508FE03521EA22C30043D0E9 /* ScriptCommands.swift in Sources */,
 				508FE01821EA227B0043D0E9 /* MyController.swift in Sources */,
+				5019605D23125E680051B669 /* Monitor.swift in Sources */,
 				5014DD1521F3625200BC14BA /* Keyboard.cpp in Sources */,
 				50A2953F21FF12EF0046BAA0 /* ControlPort.cpp in Sources */,
 				501B821D2262FFB200042871 /* RTC.cpp in Sources */,

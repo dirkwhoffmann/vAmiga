@@ -71,24 +71,6 @@ extension Inspector {
         refreshDmaDebugger()
     }
 
-    /*
-    @IBAction func dmaDMACONTextAction(_ sender: NSTextField!) {
-        
-        let value = sender.integerValue & 0xFFFF
-        
-        track("New value: \(value)")
-        amigaProxy?.mem.pokeCustom16(DMACON, value: value)
-        refresh(everything: false)
-    }
-
-    @IBAction func dmaDMACONButtonAction(_ sender: NSButton!) {
-        
-        let value = (1 << sender.tag) + (sender.state == .on ? 0x8000 : 0)
-        amigaProxy?.mem.pokeCustom16(DMACON, value: Int(value))
-        refresh(everything: false)
-    }
-    */
-
     @IBAction func dmaVPosAction(_ sender: NSButton!) {
         
         let value = sender.integerValue

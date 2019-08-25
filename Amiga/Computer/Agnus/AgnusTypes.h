@@ -31,8 +31,8 @@
 typedef enum : int8_t
 {
     BUS_NONE,
-    BUS_REFRESH,
     BUS_CPU,
+    BUS_REFRESH,
     BUS_DISK,
     BUS_AUDIO,
     BUS_BITPLANE,
@@ -62,6 +62,7 @@ typedef struct
     bool visualize[BUS_OWNER_COUNT];
     double colorRGB[BUS_OWNER_COUNT][3];
     double opacity;
+    bool overlay;
 }
 DMADebuggerInfo;
 
