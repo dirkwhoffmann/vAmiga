@@ -171,14 +171,6 @@ extension Inspector {
         audioVol3.intValue = Int32(audInfo.channel.3.audvolLatch)
         audioDat3.intValue = Int32(audInfo.channel.3.auddatLatch)
         audioLoc3.intValue = Int32(audInfo.channel.3.audlcLatch)
-
-        // Audio sample sequencer
-        let fillLevel = Int32(paula.fillLevel() * 100)
-        audioBufferLevel.intValue = fillLevel
-        audioBufferLevelText.stringValue = "\(fillLevel) %"
-        audioBufferUnderflows.intValue = Int32(paula.bufferUnderflows())
-        audioBufferOverflows.intValue = Int32(paula.bufferOverflows())
-        audioWaveformView.update()
     }
 
     @IBAction func paulaINTENAAction(_ sender: NSButton!) {

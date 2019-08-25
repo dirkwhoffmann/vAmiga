@@ -185,25 +185,6 @@ class Inspector: NSWindowController {
     @IBOutlet weak var dmaBPL1MOD: NSTextField!
     @IBOutlet weak var dmaBPL2MOD: NSTextField!
 
-    @IBOutlet weak var dmaDebugEnable: NSButton!
-    @IBOutlet weak var dmaDebugRefresh: NSButton!
-    @IBOutlet weak var dmaDebugDisk: NSButton!
-    @IBOutlet weak var dmaDebugAudio: NSButton!
-    @IBOutlet weak var dmaDebugBitplane: NSButton!
-    @IBOutlet weak var dmaDebugSprite: NSButton!
-    @IBOutlet weak var dmaDebugCopper: NSButton!
-    @IBOutlet weak var dmaDebugBlitter: NSButton!
-
-    @IBOutlet weak var dmaDebugDiskCol: NSColorWell!
-    @IBOutlet weak var dmaDebugRefreshCol: NSColorWell!
-    @IBOutlet weak var dmaDebugAudioCol: NSColorWell!
-    @IBOutlet weak var dmaDebugBitplaneCol: NSColorWell!
-    @IBOutlet weak var dmaDebugSpriteCol: NSColorWell!
-    @IBOutlet weak var dmaDebugCopperCol: NSColorWell!
-    @IBOutlet weak var dmaDebugBlitterCol: NSColorWell!
-
-    @IBOutlet weak var dmaDebugOpacity: NSSlider!
-
     // Debug panel (Copper)
     @IBOutlet weak var copActive: NSButton!
     @IBOutlet weak var copCOPPC: NSTextField!
@@ -349,12 +330,6 @@ class Inspector: NSWindowController {
     @IBOutlet weak var audioVol3: NSTextField!
     @IBOutlet weak var audioDat3: NSTextField!
     @IBOutlet weak var audioLoc3: NSTextField!
-
-    @IBOutlet weak var audioWaveformView: WaveformView!
-    @IBOutlet weak var audioBufferLevel: NSLevelIndicator!
-    @IBOutlet weak var audioBufferLevelText: NSTextField!
-    @IBOutlet weak var audioBufferUnderflows: NSTextField!
-    @IBOutlet weak var audioBufferOverflows: NSTextField!
     
     @IBOutlet weak var dskStateText: NSTextField!
     @IBOutlet weak var dskSelectDf0: NSButton!
