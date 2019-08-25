@@ -45,15 +45,17 @@ extension MyController: NSWindowDelegate {
     public func windowWillClose(_ notification: Notification) {
         
         track()
-        
-        // Close virtual keyboard
-        // virtualKeyboard?.close()
-        
+
         // Stop timer
+        timerLock.lock()
         timer?.invalidate()
         timer = nil
-        
-        // Quit message queue
+        timerLock.unlock()
+
+        // Disconnect the audio engine
+        audioEngine.shutDown()
+
+        // Unregister from the message queue
         let myself = UnsafeRawPointer(Unmanaged.passUnretained(self).toOpaque())
         amiga.removeListener(myself)
 

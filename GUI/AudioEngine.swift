@@ -94,7 +94,14 @@ public class AudioEngine: NSObject {
             return nil
         }
      }
-    
+
+    func shutDown() {
+
+        track()
+        stopPlayback()
+        paula = nil
+    }
+
     private func renderMono(inputDataList: UnsafeMutablePointer<AudioBufferList>,
                             frameCount: UInt32) {
 
