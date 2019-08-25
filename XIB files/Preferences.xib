@@ -874,7 +874,7 @@ DQ
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Compatibility" identifier="Compatibility" id="o4a-8k-sKr">
-                                <view key="view" ambiguous="YES" id="Lyv-D5-lfU">
+                                <view key="view" id="Lyv-D5-lfU">
                                     <rect key="frame" x="10" y="33" width="600" height="424"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -2085,7 +2085,7 @@ DQ
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Devices" identifier="Devices" id="UAr-A6-she">
-                                <view key="view" id="BsV-QO-hSc">
+                                <view key="view" ambiguous="YES" id="BsV-QO-hSc">
                                     <rect key="frame" x="10" y="33" width="600" height="424"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>

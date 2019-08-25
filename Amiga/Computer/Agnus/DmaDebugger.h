@@ -29,8 +29,8 @@ private:
     // Opacity of DMA pixels
     double opacity = 0.5;
 
-    // Selects how DMA pixels are draw (overlayed on top or mixed)
-    bool overlay = true;
+    // Currently selected display mode
+    DmaDebuggerDisplayMode displayMode = MODULATE_FG_LAYER;
 
 
     //
@@ -80,9 +80,9 @@ public:
     double getOpacity();
     void setOpacity(double value);
 
-    // Gets or sets the overlay flag
-    bool getOverlay() { return overlay; }
-    void setOverlay(bool value) { overlay = value; }
+    // Gets or sets the display mode
+    DmaDebuggerDisplayMode getDisplayMode() { return displayMode; }
+    void setDisplayMode(DmaDebuggerDisplayMode mode) { displayMode = mode; }
 
 
     //

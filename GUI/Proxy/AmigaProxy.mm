@@ -416,9 +416,9 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->agnus->dmaDebugger.setOpacity(value);
 }
-- (void) dmaDebugSetOverlay:(BOOL)value
+- (void) dmaDebugSetDisplayMode:(NSInteger)mode
 {
-    wrapper->agnus->dmaDebugger.setOverlay(value);
+    wrapper->agnus->dmaDebugger.setDisplayMode((DmaDebuggerDisplayMode)mode);
 }
 
 @end

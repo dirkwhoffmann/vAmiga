@@ -39,7 +39,7 @@ DmaDebugger::getInfo()
 
     result.enabled = enabled;
     result.opacity = opacity;
-    result.overlay = overlay; 
+    result.displayMode = displayMode;
 
     for (uint8_t i = 0; i < BUS_OWNER_COUNT; i++) {
 
@@ -133,33 +133,59 @@ DmaDebugger::computeOverlay()
     uint16_t *values = amiga->agnus.busValue;
     int *ptr = amiga->denise.pixelEngine.pixelAddr(0);
 
+    double bgWeight, fgWeight;
+
+    switch (displayMode) {
+
+        case MODULATE_FG_LAYER:
+
+            bgWeight = 0.0;
+            fgWeight = 1.0 - opacity;
+            break;
+
+        case MODULATE_BG_LAYER:
+
+            bgWeight = 1.0 - opacity;
+            fgWeight = 0.0;
+            break;
+
+        case MODULATE_BOTH_LAYERS:
+
+            bgWeight = opacity;
+            fgWeight = 1.0 - opacity;
+            break;
+
+        default: assert(false);
+
+    }
+
     for (int i = 0; i < HPOS_CNT; i++, ptr += 4) {
 
         BusOwner owner = owners[i];
 
-        // Check for the easy case: Nothing to overlay
+        // Handle the easy case first: No foreground pixels
         if (!visualize[owner]) {
 
-            if (overlay) {
-                ptr[0] = GpuColor(ptr[0]).shade(1.0 - opacity).rawValue;
-                ptr[1] = GpuColor(ptr[1]).shade(1.0 - opacity).rawValue;
-                ptr[2] = GpuColor(ptr[2]).shade(1.0 - opacity).rawValue;
-                ptr[3] = GpuColor(ptr[3]).shade(1.0 - opacity).rawValue;
+            if (bgWeight != 0.0) {
+                ptr[0] = GpuColor(ptr[0]).shade(bgWeight).rawValue;
+                ptr[1] = GpuColor(ptr[1]).shade(bgWeight).rawValue;
+                ptr[2] = GpuColor(ptr[2]).shade(bgWeight).rawValue;
+                ptr[3] = GpuColor(ptr[3]).shade(bgWeight).rawValue;
             }
             continue;
         }
 
-        // The not so easy case: Overlay DMA pixels
+        // Get RGBA values of foreground pixels
         GpuColor col0 = debugColor[owner][(values[i] & 0xC000) >> 14];
         GpuColor col1 = debugColor[owner][(values[i] & 0x0C00) >> 10];
         GpuColor col2 = debugColor[owner][(values[i] & 0x00C0) >> 6];
         GpuColor col3 = debugColor[owner][(values[i] & 0x000C) >> 2];
 
-        if (!overlay) {
-                col0 = col0.mix(GpuColor(ptr[0]), opacity);
-                col1 = col1.mix(GpuColor(ptr[1]), opacity);
-                col2 = col2.mix(GpuColor(ptr[2]), opacity);
-                col3 = col3.mix(GpuColor(ptr[3]), opacity);
+        if (fgWeight != 0.0) {
+            col0 = col0.mix(GpuColor(ptr[0]), fgWeight);
+            col1 = col1.mix(GpuColor(ptr[1]), fgWeight);
+            col2 = col2.mix(GpuColor(ptr[2]), fgWeight);
+            col3 = col3.mix(GpuColor(ptr[3]), fgWeight);
         }
 
         ptr[0] = col0.rawValue;

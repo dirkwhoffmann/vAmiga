@@ -31,7 +31,7 @@ class Monitor: NSWindowController {
     @IBOutlet weak var dmaDebugBlitterCol: NSColorWell!
 
     @IBOutlet weak var dmaDebugOpacity: NSSlider!
-    @IBOutlet weak var dmaDebugOverlay: NSButton!
+    @IBOutlet weak var dmaDebugDisplayMode: NSPopUpButton!
 
     // Audio out
     @IBOutlet weak var audioWaveformView: WaveformView!
@@ -133,7 +133,8 @@ extension Monitor {
         dmaDebugCopper.state = info.visualize.7 ? .on : .off
         dmaDebugBlitter.state = info.visualize.8 ? .on : .off
 
-        dmaDebugRefreshCol.color = NSColor.init(r: rgb.1.0, g: rgb.1.1, b: rgb.1.2)
+        dmaDebugCpuCol.color = NSColor.init(r: rgb.1.0, g: rgb.1.1, b: rgb.1.2)
+        dmaDebugRefreshCol.color = NSColor.init(r: rgb.2.0, g: rgb.2.1, b: rgb.2.2)
         dmaDebugDiskCol.color = NSColor.init(r: rgb.3.0, g: rgb.3.1, b: rgb.3.2)
         dmaDebugAudioCol.color = NSColor.init(r: rgb.4.0, g: rgb.4.1, b: rgb.4.2)
         dmaDebugBitplaneCol.color = NSColor.init(r: rgb.5.0, g: rgb.5.1, b: rgb.5.2)
@@ -142,7 +143,7 @@ extension Monitor {
         dmaDebugBlitterCol.color = NSColor.init(r: rgb.8.0, g: rgb.8.1, b: rgb.8.2)
 
         dmaDebugOpacity.doubleValue = info.opacity * 100.0
-        dmaDebugOverlay.state = info.overlay ? .on : .off
+        dmaDebugDisplayMode.selectItem(withTag: info.displayMode.rawValue)
         
         dmaDebugCpu.isEnabled = info.enabled
         dmaDebugRefresh.isEnabled = info.enabled
@@ -162,10 +163,10 @@ extension Monitor {
         dmaDebugBlitterCol.isEnabled = info.enabled
 
         dmaDebugOpacity.isEnabled = info.enabled
-        dmaDebugOverlay.isEnabled = info.enabled
+        dmaDebugDisplayMode.isEnabled = info.enabled
     }
 
-    @IBAction func dmaDebugOnOffAction(_ sender: NSButton!) {
+    @IBAction func dmaDebugEnableAction(_ sender: NSButton!) {
 
         if sender.state == .on {
             amigaProxy?.agnus.dmaDebugSetEnable(true)
@@ -176,7 +177,7 @@ extension Monitor {
         refresh(everything: false)
     }
 
-    @IBAction func dmaDebugShowAction(_ sender: NSButton!) {
+    @IBAction func dmaDebugVisualizeAction(_ sender: NSButton!) {
 
         let owner = BusOwner(Int8(sender.tag))
         amigaProxy?.agnus.dmaDebugSetVisualize(owner, value: sender.state == .on)
@@ -194,6 +195,14 @@ extension Monitor {
         refresh(everything: false)
     }
 
+    @IBAction func dmaDebugDisplayModeAction(_ sender: NSPopUpButton!) {
+
+        track("Value = \(sender.selectedTag())")
+
+        amigaProxy?.agnus.dmaDebugSetDisplayMode(sender.selectedTag())
+        refresh(everything: false)
+    }
+
     @IBAction func dmaDebugOpacityAction(_ sender: NSSlider!) {
 
         track("Value = \(sender.doubleValue)")
@@ -201,13 +210,4 @@ extension Monitor {
         amigaProxy?.agnus.dmaDebugSetOpacity(sender.doubleValue / 100.0)
         refresh(everything: false)
     }
-
-    @IBAction func dmaDebugOverlayAction(_ sender: NSButton!) {
-
-        track("Value = \(sender.state)")
-
-        amigaProxy?.agnus.dmaDebugSetOverlay(sender.state == .on)
-        refresh(everything: false)
-    }
-
 }

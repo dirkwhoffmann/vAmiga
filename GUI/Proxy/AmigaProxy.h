@@ -323,7 +323,7 @@ struct AmigaFileWrapper;
 - (void) dmaDebugSetVisualize:(BusOwner)owner value:(BOOL)value;
 - (void) dmaDebugSetColor:(BusOwner)owner r:(double)r g:(double)g b:(double)b;
 - (void) dmaDebugSetOpacity:(double)value;
-- (void) dmaDebugSetOverlay:(BOOL)value;
+- (void) dmaDebugSetDisplayMode:(NSInteger)mode;
 
 @end
 

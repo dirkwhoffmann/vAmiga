@@ -81,6 +81,17 @@ extension MyController {
         
         openPreferences()
     }
+
+    @IBAction func inspectAction(_ sender: NSSegmentedControl) {
+
+        switch sender.selectedSegment {
+
+        case 0: inspectorAction(sender)
+        case 1: monitorAction(sender)
+
+        default: assert(false)
+        }
+    }
     
     @IBAction func snapshotAction(_ sender: NSSegmentedControl) {
         

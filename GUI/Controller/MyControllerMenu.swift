@@ -333,13 +333,21 @@ extension MyController: NSMenuItemValidation {
         
         hideMouse = !hideMouse
     }
-    
+
     @IBAction func inspectorAction(_ sender: Any!) {
         
         if myAppDelegate.inspector == nil {
             myAppDelegate.inspector = Inspector.make()
         }
         myAppDelegate.inspector?.showWindow(self)
+    }
+
+    @IBAction func monitorAction(_ sender: Any!) {
+
+        if myAppDelegate.monitor == nil {
+            myAppDelegate.monitor = Monitor.make()
+        }
+        myAppDelegate.monitor?.showWindow(self)
     }
 
     //

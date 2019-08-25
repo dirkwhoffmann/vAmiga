@@ -151,7 +151,10 @@ func cgEventCallback(proxy: CGEventTapProxy,
 
     // Inspector (opened as a separate window)
     var inspector: Inspector?
-    
+
+    // Monitor (opened as a separate window)
+    var monitor: Monitor?
+
     // Virtual keyboard (opened as a separate window)
     var virtualKeyboard: VirtualKeyboardController?
     
@@ -202,6 +205,7 @@ func cgEventCallback(proxy: CGEventTapProxy,
 
         // Close auxiliary windows
         inspector?.close()
+        monitor?.close()
         virtualKeyboard?.close()
         
         track()

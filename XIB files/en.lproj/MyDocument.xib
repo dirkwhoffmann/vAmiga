@@ -180,22 +180,6 @@
             </view>
             <toolbar key="toolbar" implicitIdentifier="562FDE63-25B0-4E4E-80C7-EF6E742B5F6F" displayMode="iconAndLabel" sizeMode="regular" id="1845" customClass="MyToolbar" customModule="vAmiga" customModuleProvider="target">
                 <allowedToolbarItems>
-                    <toolbarItem implicitItemIdentifier="76F6E6FD-7489-4F4E-9848-44C11AB82BB0" label="Inspect" paletteLabel="Inspect" tag="30" image="debugTemplate" id="JO0-l6-OG3" userLabel="Inspect">
-                        <nil key="toolTip"/>
-                        <size key="minSize" width="38" height="25"/>
-                        <size key="maxSize" width="38" height="38"/>
-                        <button key="view" verticalHuggingPriority="750" tag="30" id="39Q-56-lAg">
-                            <rect key="frame" x="4" y="14" width="38" height="25"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                            <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="debugTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="H28-q1-hnz">
-                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                <font key="font" metaFont="system"/>
-                            </buttonCell>
-                        </button>
-                        <connections>
-                            <action selector="inspectorAction:" target="-2" id="S3Z-tc-AS1"/>
-                        </connections>
-                    </toolbarItem>
                     <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="1850"/>
                     <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="1851"/>
                     <toolbarItem implicitItemIdentifier="F19B641C-3162-47E1-8228-6B75CA6F1A5A" label="Port 1" paletteLabel="Port 1" tag="10" image="devNoneTemplate" id="kR6-IR-lNs">
@@ -262,22 +246,6 @@
                         </connections>
                     </toolbarItem>
                     <toolbarItem implicitItemIdentifier="NSToolbarSeparatorItem" id="1848"/>
-                    <toolbarItem implicitItemIdentifier="5190E195-C4BB-4179-96BC-374164EFC806" label="Power" paletteLabel="Power" tag="30" image="powerTemplate" id="wVB-PW-axj">
-                        <nil key="toolTip"/>
-                        <size key="minSize" width="38" height="25"/>
-                        <size key="maxSize" width="38" height="38"/>
-                        <button key="view" verticalHuggingPriority="750" tag="30" id="tu0-4o-Osa">
-                            <rect key="frame" x="1" y="14" width="38" height="25"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                            <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="powerTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="22E-O0-WFm">
-                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                <font key="font" metaFont="system"/>
-                            </buttonCell>
-                        </button>
-                        <connections>
-                            <action selector="powerAction:" target="-2" id="eFg-df-Hnh"/>
-                        </connections>
-                    </toolbarItem>
                     <toolbarItem implicitItemIdentifier="173C7588-F1F5-45F4-9A0F-C42BA4D023EB" label="Keyboard" paletteLabel="Keyboard" image="keyboardTemplate" id="Ckl-d3-vFW">
                         <nil key="toolTip"/>
                         <size key="minSize" width="38" height="25"/>
@@ -310,20 +278,20 @@
                             <action selector="preferencesAction:" target="-2" id="FxD-8P-Rg6"/>
                         </connections>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="BD9DC05E-B39D-4D15-9AAB-EC3069C43801" label="Pause" paletteLabel="Pause" tag="1" image="pauseTemplate" id="dOU-Sh-aV4">
+                    <toolbarItem implicitItemIdentifier="D1EF6989-92F2-4FC1-AA6B-A14A2A38C473" label="Pause" paletteLabel="Pause" tag="30" image="pauseTemplate" id="BPW-KG-AkM" userLabel="Pause">
                         <nil key="toolTip"/>
                         <size key="minSize" width="38" height="25"/>
                         <size key="maxSize" width="38" height="38"/>
-                        <button key="view" verticalHuggingPriority="750" tag="1" id="1d9-Lf-kXX">
+                        <button key="view" verticalHuggingPriority="750" tag="30" id="Hi7-3E-CdD">
                             <rect key="frame" x="1" y="14" width="38" height="25"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                            <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="pauseTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="gr2-ap-6Eo">
+                            <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="pauseTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="CS0-py-1mX">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="system"/>
                             </buttonCell>
                         </button>
                         <connections>
-                            <action selector="stopAndGoAction:" target="-2" id="nYX-eP-iZh"/>
+                            <action selector="stopAndGoAction:" target="-1" id="9Yy-Ej-fDB"/>
                         </connections>
                     </toolbarItem>
                     <toolbarItem implicitItemIdentifier="8971C7C7-912D-4B39-9399-870B3826DBA5" label="Reset" paletteLabel="Reset" tag="1" image="resetTemplate" id="Yax-iM-1LE" userLabel="Reset">
@@ -340,6 +308,22 @@
                         </button>
                         <connections>
                             <action selector="resetAction:" target="-2" id="MKH-2d-rUU"/>
+                        </connections>
+                    </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="A1ADC8F5-68BD-4C4E-A04D-EEDAB0B3DE33" label="Power" paletteLabel="Power" tag="30" image="powerTemplate" id="wVB-PW-axj">
+                        <nil key="toolTip"/>
+                        <size key="minSize" width="38" height="25"/>
+                        <size key="maxSize" width="38" height="38"/>
+                        <button key="view" verticalHuggingPriority="750" tag="30" id="tu0-4o-Osa">
+                            <rect key="frame" x="1" y="14" width="38" height="25"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="powerTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="22E-O0-WFm">
+                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="system"/>
+                            </buttonCell>
+                        </button>
+                        <connections>
+                            <action selector="powerAction:" target="-2" id="eFg-df-Hnh"/>
                         </connections>
                     </toolbarItem>
                     <toolbarItem implicitItemIdentifier="24E37695-F012-4018-9A52-6D5F6A2522D8" label="Snapshots" paletteLabel="Snapshots" sizingBehavior="auto" id="nxb-IG-KLe">
@@ -361,9 +345,26 @@
                             </connections>
                         </segmentedControl>
                     </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="06922A6F-0283-42AA-9BE1-47C4D3246922" label="Inspect" paletteLabel="Inspect" sizingBehavior="auto" id="EzM-bM-4na">
+                        <nil key="toolTip"/>
+                        <segmentedControl key="view" verticalHuggingPriority="750" id="MNc-2l-pfj">
+                            <rect key="frame" x="0.0" y="14" width="87" height="23"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <segmentedCell key="cell" borderStyle="border" alignment="left" style="texturedSquare" trackingMode="momentary" id="3Uk-v8-yDJ">
+                                <font key="font" metaFont="system"/>
+                                <segments>
+                                    <segment toolTip="Rewind" image="debugTemplate" width="40"/>
+                                    <segment toolTip="Take Snapshot" image="monitorTemplate" width="40" tag="1"/>
+                                </segments>
+                            </segmentedCell>
+                            <connections>
+                                <action selector="inspectAction:" target="-2" id="MEA-qk-7j3"/>
+                            </connections>
+                        </segmentedControl>
+                    </toolbarItem>
                 </allowedToolbarItems>
                 <defaultToolbarItems>
-                    <toolbarItem reference="JO0-l6-OG3"/>
+                    <toolbarItem reference="EzM-bM-4na"/>
                     <toolbarItem reference="1851"/>
                     <toolbarItem reference="nxb-IG-KLe"/>
                     <toolbarItem reference="1851"/>
@@ -374,7 +375,7 @@
                     <toolbarItem reference="1851"/>
                     <toolbarItem reference="z3f-Tz-HUC"/>
                     <toolbarItem reference="1851"/>
-                    <toolbarItem reference="dOU-Sh-aV4"/>
+                    <toolbarItem reference="BPW-KG-AkM"/>
                     <toolbarItem reference="Yax-iM-1LE"/>
                     <toolbarItem reference="wVB-PW-axj"/>
                 </defaultToolbarItems>
@@ -382,7 +383,7 @@
                     <outlet property="controlPort1" destination="L2b-nG-yBo" id="LaW-Wo-oKb"/>
                     <outlet property="controlPort2" destination="4MP-rV-xX2" id="SJk-D4-9MF"/>
                     <outlet property="controller" destination="-2" id="V0k-GF-uXZ"/>
-                    <outlet property="pauseButton" destination="dOU-Sh-aV4" id="GIe-gS-1Hn"/>
+                    <outlet property="pauseButton" destination="BPW-KG-AkM" id="XDm-2Y-e3O"/>
                     <outlet property="resetButton" destination="Yax-iM-1LE" id="ooV-Rk-fGf"/>
                     <outlet property="snapshotSegCtrl" destination="AHD-MB-nXC" id="Gpg-sH-vaL"/>
                 </connections>
@@ -407,11 +408,12 @@
         <image name="joyKeys1Template" width="24" height="24"/>
         <image name="joyKeys2Template" width="24" height="24"/>
         <image name="keyboardTemplate" width="24" height="24"/>
+        <image name="monitorTemplate" width="241" height="240"/>
         <image name="pauseTemplate" width="240" height="241"/>
         <image name="powerLedOff" width="100" height="50"/>
         <image name="powerTemplate" width="241" height="240"/>
         <image name="prefEmulatorTemplate" width="241" height="240"/>
-        <image name="resetTemplate" width="241" height="241"/>
+        <image name="resetTemplate" width="241" height="240"/>
         <image name="ttBrowseTemplate" width="240" height="240"/>
         <image name="ttRestoreTemplate" width="241" height="240"/>
         <image name="ttRewindTemplate" width="241" height="240"/>
