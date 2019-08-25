@@ -719,15 +719,7 @@ extension MyController {
             
             updateWarp()
             refreshStatusBar()
-            
-        /*
-        case MSG_DRIVE_DMA_ON,
-             MSG_DRIVE_DMA_OFF:
-            
-            updateWarp()
-            refreshStatusBar()
-        */
-            
+
         case MSG_DRIVE_HEAD:
             
             if driveNoise {

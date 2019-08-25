@@ -56,7 +56,7 @@ private:
      * drive runs at full speed. We don't emulate  accurate timing here and
      * set the variable to true once the drive motor is switched on.
      *
-     * ENHANCEMENT: MAKE it A COMPUTED VALUE:
+     * TODO: MAKE it A COMPUTED VALUE:
      * bool motor() { motorOffCycle >= motorOnCycle; }
      */
     bool motor;

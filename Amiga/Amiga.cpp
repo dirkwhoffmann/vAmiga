@@ -86,9 +86,10 @@ Amiga::Amiga()
         &df3,
     };
 
-    // Initialize all components
+    // Set up initial state
     initialize(this);
-    
+    reset();
+
     // Initialize the mach timer info
     mach_timebase_info(&tb);
 }
@@ -624,8 +625,12 @@ Amiga::_reset()
 
     masterClock = 0;
     makeActiveInstance();
+
+    // Initialize the Musashi CPU core
     m68k_init();
-    m68k_pulse_reset();
+
+    // Reset the CPU core (memory needs to be present to read the reset vector)
+    if (mem.chipRam != NULL) m68k_pulse_reset();
 
     amiga->putMessage(MSG_RESET);
 }
@@ -760,44 +765,6 @@ Amiga::clearControlFlags(uint32_t flags)
     runLoopCtrl &= ~flags;
     pthread_mutex_unlock(&lock);
 }
-
-/*
- void
- Amiga::setAlwaysWarp(bool b)
- {
- if (alwaysWarp != b) {
- 
- alwaysWarp = b;
- putMessage(b ? MSG_ALWAYS_WARP_ON : MSG_ALWAYS_WARP_OFF);
- }
- }
- 
- bool
- Amiga::getWarp()
- {
- bool driveDMA = false; // TODO
- bool newValue = alwaysWarp || (warpLoad && driveDMA);
- 
- if (newValue != warp) {
- 
- warp = newValue;
- putMessage(warp ? MSG_WARP_ON : MSG_WARP_OFF);
- 
- if (warp) {
- // Quickly fade out
- paula.audioUnit.rampDown();
- 
- } else {
- // Smoothly fade in
- paula.audioUnit.rampUp();
- paula.audioUnit.alignWritePtr();
- restartTimer();
- }
- }
- 
- return warp;
- }
- */
 
 void
 Amiga::restartTimer()
