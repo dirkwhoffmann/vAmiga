@@ -568,10 +568,15 @@ CIA::poke(uint16_t addr, uint8_t value)
     
             // -0------ : Serial shift register in input mode (read)
             // -1------ : Serial shift register in output mode (write)
-            if (nr == 0 && !(CRA & 0x40) && (value & 0x40)) { // CIA A only
-                amiga->keyboard.emulateHandshake();
+            if ((nr == 0) && ((CRA & 0x40) ^ (value & 0x40))) { // CIA A only
+                amiga->keyboard.setSPLine(!(value & 0x40), clock);
             }
-            
+            /*
+            if (nr == 0 && !(CRA & 0x40) && (value & 0x40)) { // CIA A only
+                amiga->keyboard.setHandshake();
+            }
+            */
+
             if ((value ^ CRA) & 0x40)
             {
                 // Serial direction changing

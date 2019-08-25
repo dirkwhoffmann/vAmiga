@@ -16,12 +16,14 @@ class Keyboard : public HardwareComponent {
         
     public:
     
-    // The keybord layout identifier
+    /* The keybord layout identifier.
+     * This variable is set and read by the GUI, only.
+     */
     long layout = 0;
     
     private:
 
-    // The current state of the keyboard
+    // The current state of the keyboard.
     KeyboardState state;
     
     /* The acknowledge signal sent from the Amiga side.
@@ -30,6 +32,11 @@ class Keyboard : public HardwareComponent {
      * is transmitted via the SP line of CIA A.
      */
     bool handshake;
+
+    // Time stamps recording an Amiga triggered change of the SP line
+    Cycle spWentLow;
+    Cycle spWentHigh;
+
 
     /* The keycode type-ahead buffer
      * The original keyboard stores 10 keycodes.
@@ -72,6 +79,8 @@ public:
 
         & state
         & handshake
+        & spWentLow
+        & spWentHigh
         & typeAheadBuffer
         & bufferIndex;
     }
@@ -112,12 +121,12 @@ public:
     // Sends a keycode to the Amiga
     void sendKeyCode(uint8_t keyCode);
     
-    /* Receives a handshake from the Amiga
-     * This function is called whenever the CIA puts the serial register into
-     * output mode.
+    /* Emulates a handshake from the Amiga
+     * This function is called whenever the CIA switches the serial register
+     * between from input mode to output mode or vice versa.
      */
-    void emulateHandshake() { handshake = true; }
-    
+    void setSPLine(bool value, Cycle cycle);
+
     /* The keyboard execution function
      * This function is called periodically by the hsync handler with a period
      * of approx. 1 msec.

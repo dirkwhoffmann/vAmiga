@@ -49,16 +49,42 @@ Keyboard::sendKeyCode(uint8_t keyCode)
 }
 
 void
+Keyboard::setSPLine(bool value, Cycle cycle)
+{
+    debug(KB_DEBUG, "setHandshake(%d) (old: %d)\n", value, handshake);
+
+    if (value) {
+        if (spWentHigh <= spWentLow) spWentHigh = cycle;
+    } else {
+        if (spWentLow <= spWentHigh) spWentLow = cycle;
+    }
+
+    /* Check for a handshake.
+     *
+     * "This handshake is issued by the processor pulsing the SP line low then
+     *  high. While some keyboards can detect a 1 microsecond handshake pulse,
+     *  the pulse must be at least 85 microseconds for operation with all
+     *  models of Amiga keyboards." [HRM]
+     */
+    int diff = (spWentHigh - spWentLow) / 28;
+    if (diff >= 85) {
+        debug(KB_DEBUG, "Handshake detected (SP low for %d micsec)\n", diff);
+        handshake = true;
+    }
+}
+
+void
 Keyboard::execute()
 {
     // For now, we ignore the handshake...
-    handshake = true;
+    // handshake = true;
     
     switch (state) {
             
         case KB_SEND_SYNC:
             
-            if (handshake) {
+            // if (handshake)
+            {
                 sendKeyCode(0xFF);
                 state = KB_POWER_UP_KEY_STREAM;
             }
@@ -66,29 +92,32 @@ Keyboard::execute()
             
         case KB_POWER_UP_KEY_STREAM:
             
-            if (handshake) {
+            // if (handshake)
+            {
                 debug(2, "Sending KB_POWER_UP_KEY_STREAM\n");
                 sendKeyCode(0xFD);
                 state = KB_TERMINATE_KEY_STREAM;
-                handshake = false;
+                // handshake = false;
             }
             break;
             
         case KB_TERMINATE_KEY_STREAM:
             
-            if (handshake) {
+            // if (handshake)
+            {
                 debug(2, "Sending KB_TERMINATE_KEY_STREAM\n");
                 sendKeyCode(0xFE);
                 state = KB_NORMAL_OPERATION;
-                handshake = false;
+                // handshake = false;
             }
             break;
             
         case KB_NORMAL_OPERATION:
             
-            if (handshake && !bufferIsEmpty()) {
+            // if (handshake && !bufferIsEmpty()) {
+            if (!bufferIsEmpty()) {
                 sendKeyCode(readFromBuffer());
-                handshake = false;
+                // handshake = false;
             }
             break;
             
