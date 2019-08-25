@@ -459,6 +459,8 @@ Drive::toggleWriteProtection()
 void
 Drive::ejectDisk()
 {
+    amiga->suspend();
+
     if (disk) {
         
         // Flag disk change in the CIAA::PA
@@ -471,17 +473,23 @@ Drive::ejectDisk()
         // Notify the GUI
         amiga->putMessage(MSG_DRIVE_DISK_EJECT, nr);
     }
+
+    amiga->resume();
 }
 
 void
 Drive::insertDisk(Disk *disk)
 {
+    amiga->suspend();
+
     if (disk) {
         
         ejectDisk();
         this->disk = disk;
         amiga->putMessage(MSG_DRIVE_DISK_INSERT, nr);
     }
+
+    amiga->resume();
 }
 
 void
