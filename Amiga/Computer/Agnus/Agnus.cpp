@@ -200,7 +200,7 @@ void Agnus::_reset()
     scheduleAbs<CIAB_SLOT>(CIA_CYCLES(1), CIA_EXECUTE);
     scheduleAbs<DAS_SLOT>(DMA_CYCLES(1), DAS_REFRESH);
     scheduleAbs<SEC_SLOT>(NEVER, SEC_TRIGGER);
-    scheduleAbs<KBD_SLOT>(DMA_CYCLES(1), KBD_QUERY);
+    scheduleAbs<KBD_SLOT>(DMA_CYCLES(1), KBD_SELFTEST);
     scheduleAbs<IRQ_SLOT>(NEVER, IRQ_CHECK);
     scheduleNextBplEvent();
 }

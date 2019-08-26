@@ -29,6 +29,14 @@ typedef int64_t DMACycle; // Cycle in DMA cycle units
 #define AS_CIA_CYCLES(cycles) ((cycles) / 40)
 #define AS_DMA_CYCLES(cycles) ((cycles) >> 3)
 
+#define USEC(delay) (delay * 28)
+#define MSEC(delay) (delay * 28000)
+#define SEC(delay)  (delay * 28000000)
+
+#define AS_USEC(delay) (delay / 28)
+#define AS_MSEC(delay) (delay / 28000)
+#define AS_SEC(delay)  (delay / 28000000)
+
 
 //
 // Position number type aliases

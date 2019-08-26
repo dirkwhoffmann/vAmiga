@@ -15,6 +15,12 @@ Keyboard::Keyboard()
 }
 
 void
+Keyboard::_initialize()
+{
+    agnus = &amiga->agnus;
+}
+
+void
 Keyboard::_powerOn()
 {
 
@@ -38,97 +44,6 @@ Keyboard::_dump()
     plainmsg("\n");
 }
 
-void
-Keyboard::sendKeyCode(uint8_t keyCode)
-{
-    // Reorder and invert the key code bits (6-5-4-3-2-1-0-7)
-    keyCode  = ~((keyCode << 1) | (keyCode >> 7)) & 0xFF;
-    
-    // Send it off to CIA A
-    amiga->ciaA.setKeyCode(keyCode);
-}
-
-void
-Keyboard::setSPLine(bool value, Cycle cycle)
-{
-    debug(KB_DEBUG, "setHandshake(%d) (old: %d)\n", value, handshake);
-
-    if (value) {
-        if (spWentHigh <= spWentLow) spWentHigh = cycle;
-    } else {
-        if (spWentLow <= spWentHigh) spWentLow = cycle;
-    }
-
-    /* Check for a handshake.
-     *
-     * "This handshake is issued by the processor pulsing the SP line low then
-     *  high. While some keyboards can detect a 1 microsecond handshake pulse,
-     *  the pulse must be at least 85 microseconds for operation with all
-     *  models of Amiga keyboards." [HRM]
-     */
-    int diff = (spWentHigh - spWentLow) / 28;
-    if (diff >= 85) {
-        debug(KB_DEBUG, "Handshake detected (SP low for %d micsec)\n", diff);
-        handshake = true;
-    }
-}
-
-void
-Keyboard::execute()
-{
-    // For now, we ignore the handshake...
-    // handshake = true;
-    
-    switch (state) {
-            
-        case KB_SEND_SYNC:
-            
-            // if (handshake)
-            {
-                sendKeyCode(0xFF);
-                state = KB_POWER_UP_KEY_STREAM;
-            }
-            break;
-            
-        case KB_POWER_UP_KEY_STREAM:
-            
-            // if (handshake)
-            {
-                debug(2, "Sending KB_POWER_UP_KEY_STREAM\n");
-                sendKeyCode(0xFD);
-                state = KB_TERMINATE_KEY_STREAM;
-                // handshake = false;
-            }
-            break;
-            
-        case KB_TERMINATE_KEY_STREAM:
-            
-            // if (handshake)
-            {
-                debug(2, "Sending KB_TERMINATE_KEY_STREAM\n");
-                sendKeyCode(0xFE);
-                state = KB_NORMAL_OPERATION;
-                // handshake = false;
-            }
-            break;
-            
-        case KB_NORMAL_OPERATION:
-            
-            // if (handshake && !bufferIsEmpty()) {
-            if (!bufferIsEmpty()) {
-                sendKeyCode(readFromBuffer());
-                // handshake = false;
-            }
-            break;
-            
-        default:
-            assert(false);
-    }
-
-    // Reschedule the keyboard event
-    amiga->agnus.rescheduleInc<KBD_SLOT>(DMA_CYCLES(16 * HPOS_CNT));
-}
-
 bool
 Keyboard::keyIsPressed(long keycode)
 {
@@ -140,11 +55,11 @@ void
 Keyboard::pressKey(long keycode)
 {
     assert(keycode < 0x80);
-        
+
     if (!keyDown[keycode] && !bufferIsFull()) {
-        
+
         debug(KB_DEBUG, "Pressing Amiga key %02X\n", keycode);
-        
+
         keyDown[keycode] = true;
         writeToBuffer(keycode);
     }
@@ -156,9 +71,9 @@ Keyboard::releaseKey(long keycode)
     assert(keycode < 0x80);
 
     if (keyDown[keycode] && !bufferIsFull()) {
-        
+
         debug(KB_DEBUG, "Releasing Amiga key %02X\n", keycode);
-        
+
         keyDown[keycode] = false;
         writeToBuffer(keycode | 0x80);
     }
@@ -176,14 +91,14 @@ uint8_t
 Keyboard::readFromBuffer()
 {
     assert(!bufferIsEmpty());
-    
+
     uint8_t result = typeAheadBuffer[0];
-    
+
     bufferIndex--;
     for (unsigned i = 0; i < bufferIndex; i++) {
         typeAheadBuffer[i] = typeAheadBuffer[i+1];
     }
-    
+
     return result;
 }
 
@@ -191,7 +106,147 @@ void
 Keyboard::writeToBuffer(uint8_t keycode)
 {
     assert(!bufferIsFull());
-    
+
     typeAheadBuffer[bufferIndex] = keycode;
     bufferIndex++;
+
+    // Wake up the keyboard if it has gone idle
+    if (!agnus->isPending<KBD_SLOT>()) {
+        debug("Waking up keyboard\n");
+        agnus->rescheduleRel<KBD_SLOT>(0);
+
+    }
+}
+
+void
+Keyboard::setSPLine(bool value, Cycle cycle)
+{
+    debug(KB_DEBUG, "setSPLine(%d)\n", value);
+
+    if (value) {
+        if (spHigh <= spLow) spHigh = cycle;
+    } else {
+        if (spLow <= spHigh) spLow = cycle;
+    }
+
+    // Handshake detection logic
+
+    /* "The handshake is issued by the processor pulsing the SP line low for a
+     *  minimum of 75 microseconds." [HRM 2nd edition]
+     *
+     * "This handshake is issued by the processor pulsing the SP line low then
+     *  high. While some keyboards can detect a 1 microsecond handshake pulse,
+     *  the pulse must be at least 85 microseconds for operation with all
+     *  models of Amiga keyboards." [HRM 3rd editon]
+     */
+    int diff = (spHigh - spLow) / 28;
+    bool accept = diff >= 45;
+    bool reject = diff > 0 && !accept;
+
+    if (accept) {
+
+        debug(KB_DEBUG, "Accepting handshake (SP low for %d usec)\n", diff);
+        if (agnus->hasEvent<KBD_SLOT>(KBD_TIMEOUT)) {
+            // Note: Watchdog events store the next event in their data field
+            agnus->scheduleRel<KBD_SLOT>(0, (EventID)agnus->slot[KBD_SLOT].data);
+        }
+    }
+
+    if (reject) {
+
+        debug(KB_DEBUG, "REJECTING handshake (SP low for %d usec)\n", diff);
+    }
+}
+
+void
+Keyboard::serviceKeyboardEvent(EventID id)
+{
+
+    switch(id) {
+
+        case KBD_SELFTEST:
+
+            debug(KB_DEBUG, "KBD_SELFTEST\n");
+
+            // Continue with KBD_STRM_ON after receiving a handshake
+            agnus->scheduleInc<KBD_SLOT>(SEC(1), KBD_TIMEOUT, KBD_STRM_ON);
+            break;
+
+        case KBD_SYNC:
+
+            debug(KB_DEBUG, "KBD_SYNC\n");
+
+            // Send a SYNC byte
+            sendKeyCode(0xFF);
+
+            // Continue with KBD_STRM_ON after receiving a handshake
+            agnus->scheduleInc<KBD_SLOT>(8 * MSEC(145), KBD_TIMEOUT, KBD_STRM_ON);
+            break;
+
+        case KBD_STRM_ON:
+
+            debug(KB_DEBUG, "KBD_STRM_ON\n");
+
+            // Send the "Initiate power-up key stream" code ($FD)
+            sendKeyCode(0xFD);
+
+            // Continue with KBD_STRM_OFF after receiving a handshake
+            agnus->scheduleInc<KBD_SLOT>(MSEC(145), KBD_TIMEOUT, KBD_STRM_OFF);
+            break;
+
+        case KBD_STRM_OFF:
+
+            debug(KB_DEBUG, "KBD_STRM_OFF\n");
+
+            // Send the "Terminate key stream" code ($FE)
+            sendKeyCode(0xFE);
+
+            // Continue with KBD_STRM_OFF after receiving a handshake
+            agnus->scheduleInc<KBD_SLOT>(MSEC(145), KBD_TIMEOUT, KBD_SEND);
+            break;
+
+        case KBD_SEND:
+
+            debug(KB_DEBUG, "KBD_SEND\n");
+
+            // Send a key code if the buffer is filled
+            if (!bufferIsEmpty()) sendKeyCode(readFromBuffer());
+
+            // Check if there are more keys to send
+            if (!bufferIsEmpty()) {
+
+                // Continue in this state after receiving a handshake
+                agnus->scheduleRel<KBD_SLOT>(9*MSEC(145), KBD_TIMEOUT, KBD_SEND);
+
+            } else {
+
+                // Go idle
+                agnus->rescheduleAbs<KBD_SLOT>(NEVER);
+
+            }
+            break;
+
+        case KBD_TIMEOUT:
+
+            debug(KB_DEBUG, "KBD_TIMEOUT\n");
+
+            // We've received a time-out. Reinitiate the SYNC sequence
+            amiga->agnus.scheduleInc<KBD_SLOT>(DMA_CYCLES(1), KBD_SYNC);
+            break;
+
+        default:
+            assert(false);
+    }
+}
+
+void
+Keyboard::sendKeyCode(uint8_t keyCode)
+{
+    debug(KB_DEBUG, "sendKeyCode(%d)\n", keyCode);
+
+    // Reorder and invert the key code bits (6-5-4-3-2-1-0-7)
+    keyCode  = ~((keyCode << 1) | (keyCode >> 7)) & 0xFF;
+
+    // Send it over to CIA A
+    amiga->ciaA.setKeyCode(keyCode);
 }

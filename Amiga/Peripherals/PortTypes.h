@@ -16,10 +16,10 @@
 // Enumerations
 //
 
-typedef enum
+typedef enum // DEPRECATED
 {
     KB_SEND_SYNC,
-    KB_POWER_UP_KEY_STREAM,
+    KB_INITIATE_POWER_UP_KEY_STREAM,
     KB_TERMINATE_KEY_STREAM,
     KB_NORMAL_OPERATION
 }

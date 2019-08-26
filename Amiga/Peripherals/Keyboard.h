@@ -13,34 +13,26 @@
 #include "HardwareComponent.h"
 
 class Keyboard : public HardwareComponent {
-        
-    public:
+
+    // Quick-access references
+    class Agnus *agnus;
+    
+public:
     
     /* The keybord layout identifier.
      * This variable is set and read by the GUI, only.
      */
     long layout = 0;
     
-    private:
+private:
 
-    // The current state of the keyboard.
-    KeyboardState state;
-    
-    /* The acknowledge signal sent from the Amiga side.
-     * When a keycode has been sent to the Amiga, the keyboard waits for a
-     * handshake signal before transmitting any more keycodes. The handshake
-     * is transmitted via the SP line of CIA A.
+    /* Time stamps recording an Amiga triggered change of the SP line.
+     * The SP line is driven by the Amiga to transmit a handshake.
      */
-    bool handshake;
+    Cycle spLow;
+    Cycle spHigh;
 
-    // Time stamps recording an Amiga triggered change of the SP line
-    Cycle spWentLow;
-    Cycle spWentHigh;
-
-
-    /* The keycode type-ahead buffer
-     * The original keyboard stores 10 keycodes.
-     */
+    // The keycode type-ahead buffer (10 keycodes on an original Amiga)a
     static const size_t bufferSize = 10;
     uint8_t typeAheadBuffer[bufferSize];
     
@@ -49,7 +41,7 @@ class Keyboard : public HardwareComponent {
     
     // Remebers the keys that are currently held down
     bool keyDown[128];
-    
+
     
     //
     // Constructing and destructing
@@ -77,10 +69,8 @@ public:
     {
         worker
 
-        & state
-        & handshake
-        & spWentLow
-        & spWentHigh
+        & spLow
+        & spHigh
         & typeAheadBuffer
         & bufferIndex;
     }
@@ -92,6 +82,7 @@ public:
     
 private:
     
+    void _initialize() override;
     void _powerOn() override;
     void _reset() override;
     void _dump() override;
@@ -110,42 +101,43 @@ public:
     void pressKey(long keycode);
     void releaseKey(long keycode);
     void releaseAllKeys();
-    
+
+
+    //
+    // Managing the type-ahead buffer
+    //
+
+private:
+
+    bool bufferIsEmpty() { return bufferIndex == 0; }
+    bool bufferIsFull() { return bufferIndex == bufferSize; }
+
+    // Reads a keycode from the type-ahead buffer.
+    uint8_t readFromBuffer();
+
+    // Writes a keycode into the type-ahead buffer.
+    void writeToBuffer(uint8_t keycode);
+
     
     //
     // Talking to the Amiga
     //
     
 public:
-    
-    // Sends a keycode to the Amiga
-    void sendKeyCode(uint8_t keyCode);
-    
+
     /* Emulates a handshake from the Amiga
      * This function is called whenever the CIA switches the serial register
      * between from input mode to output mode or vice versa.
      */
     void setSPLine(bool value, Cycle cycle);
 
-    /* The keyboard execution function
-     * This function is called periodically by the hsync handler with a period
-     * of approx. 1 msec.
-     */
-    void execute();
-    
-    
-    //
-    // Managing the type-ahead buffer
-    //
-    
-    bool bufferIsEmpty() { return bufferIndex == 0; }
-    bool bufferIsFull() { return bufferIndex == bufferSize; }
+    // Services a keyboard event
+    void serviceKeyboardEvent(EventID id);
 
-    // Reads a keycode from the type-ahead buffer.
-    uint8_t readFromBuffer();
-    
-    // Writes a keycode into the type-ahead buffer.
-    void writeToBuffer(uint8_t keycode);
+private:
+
+    // Sends a keycode to the Amiga
+    void sendKeyCode(uint8_t keyCode);
 };
 
 #endif

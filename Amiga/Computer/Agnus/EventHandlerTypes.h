@@ -224,7 +224,12 @@ typedef enum : long
     REG_EVENT_COUNT,
 
     // Keyboard
-    KBD_QUERY = 1,
+    KBD_SELFTEST = 1,
+    KBD_SYNC,
+    KBD_STRM_ON,
+    KBD_STRM_OFF,
+    KBD_TIMEOUT,
+    KBD_SEND,
     KBD_EVENT_COUNT,
 
     // Serial data out (UART)
