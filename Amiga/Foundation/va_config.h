@@ -26,7 +26,16 @@
 // Debug settings
 //
 
-// Custom debug levels (set to 1 to generate debug output)
+// Register debugging (set to 1 to generate debug output)
+
+static const int BLTREG_DEBUG  = 1;  // Blitter registers
+static const int DSKREG_DEBUG  = 1;  // Disk controller registers
+static const int BPLREG_DEBUG  = 2;  // Bitplane registers
+static const int AUDREG_DEBUG  = 2;  // Audio registers
+static const int COPREG_DEBUG  = 2;  // Copper registers
+static const int INVREG_DEBUG  = 2;  // Ivalid register accesses
+
+// Component debugging (set to 1 to generate debug output)
 
 static const int RUNLOOP_DEBUG = 2;  // Run loop of the emulator thread
 static const int CPU_DEBUG     = 2;  // CPU
@@ -35,33 +44,36 @@ static const int TOD_DEBUG     = 2;  // TODs (CIA 24-bit counters)
 static const int RTC_DEBUG     = 2;  // Real-time clock
 static const int DMA_DEBUG     = 2;  // DMA registers
 static const int BPL_DEBUG     = 2;  // Bitplane DMA
-static const int BPLREG_DEBUG  = 2;  // Bitplane registers
 static const int DIW_DEBUG     = 2;  // Display window logic
 static const int DDF_DEBUG     = 2;  // Display data fetch logic
 static const int COL_DEBUG     = 2;  // Color registers
 static const int SPR_DEBUG     = 2;  // Sprite registers
 static const int CLX_DEBUG     = 2;  // Collision detection (CLXDAT, CLXCON)
 static const int DSK_DEBUG     = 2;  // Disk controller
-static const int DSK_CHECKSUM  = 2;  // Disk checksums
 static const int AUD_DEBUG     = 2;  // Audio
 static const int AUDBUF_DEBUG  = 2;  // Audio buffers
-static const int AUDREG_DEBUG  = 2;  // Audio registers
 static const int PORT_DEBUG    = 2;  // Control ports and connected devices
 static const int COP_DEBUG     = 2;  // Copper
-static const int COPREG_DEBUG  = 2;  // Copper registers
+
 static const int BLT_DEBUG     = 2;  // Blitter
-static const int BLTREG_DEBUG  = 2;  // Blitter registers
-static const int BLT_CHECKSUM  = 2;  // Blitter checksums
 static const int SER_DEBUG     = 2;  // Serial interface
 static const int POT_DEBUG     = 2;  // Potentiometer inputs
 static const int KB_DEBUG      = 2;  // Keyboard
-static const int REGACC_DEBUG  = 2;  // Register access violations
 static const int SNAP_DEBUG    = 2;  // Snapshot debugging (serialization)
 
+
+// Custom checksum settings (set to 1 to compute checksums)
+
+static const int DSK_CHECKSUM  = 1;  // Disk checksums
+static const int BLT_CHECKSUM  = 1;  // Blitter checksums
+
+
 // Additional debugging aids (uncomment to enable)
+
 // #define BORDER_DEBUG     // Draws the border in debug colors
 // #define PIXEL_DEBUG      // Highlight first pixel in each 16-bit pixel chunk
 // #define LINE_DEBUG       // Colorizes certain rasterlines
 // #define ALIGN_DRIVE_HEAD // Makes drive operations deterministic
 // #define SLOW_BLT_DEBUG   // Execute all slow Blitter instructions in one chunk
+
 #endif

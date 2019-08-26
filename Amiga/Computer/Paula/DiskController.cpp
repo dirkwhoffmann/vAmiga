@@ -153,7 +153,7 @@ DiskController::peekDSKDATR()
 void
 DiskController::pokeDSKLEN(uint16_t newDskLen)
 {
-    debug(DSK_DEBUG, "pokeDSKLEN(%X)\n", newDskLen);
+    debug(DSKREG_DEBUG, "pokeDSKLEN(%X)\n", newDskLen);
     
     Drive *drive = getSelectedDrive(); 
     uint16_t oldDsklen = dsklen;
@@ -243,14 +243,14 @@ DiskController::peekDSKBYTR()
     // WORDEQUAL
     if (syncFlag) SET_BIT(result, 12);
 
-    debug(DSK_DEBUG, "peekDSKBYTR() = %X\n", result);
+    debug(DSKREG_DEBUG, "peekDSKBYTR() = %X\n", result);
     return result;
 }
 
 void
 DiskController::pokeDSKSYNC(uint16_t value)
 {
-    debug(DSK_DEBUG, "pokeDSKSYNC(%X)\n", value);
+    debug(DSKREG_DEBUG, "pokeDSKSYNC(%X)\n", value);
     // assert(false);
     dsksync = value;
 }
@@ -666,12 +666,7 @@ DiskController::performTurboDMA(Drive *drive)
 void
 DiskController::performTurboRead(Drive *drive)
 {
-    plaindebug(DSK_DEBUG, "Turbo-reading %d words from disk (offset = %d).\n", dsklen & 0x3FFF, drive->head.offset);
-
-    /*
-    drive->findSyncMark();
-    plaindebug(DSK_DEBUG, "Moving to SYNC mark at offset %d\n", drive->head.offset);
-    */
+    debug(DSK_CHECKSUM, "Turbo-reading %d words from disk (offset = %d).\n", dsklen & 0x3FFF, drive->head.offset);
 
     for (unsigned i = 0; i < (dsklen & 0x3FFF); i++) {
         
@@ -687,13 +682,13 @@ DiskController::performTurboRead(Drive *drive)
         checkcnt++;
     }
         
-    plaindebug(DSK_CHECKSUM, "Turbo read %s: cyl: %d side: %d offset: %d checkcnt = %d checksum = %X\n", drive->getDescription(), drive->head.cylinder, drive->head.side, drive->head.offset, checkcnt, checksum);
+    debug(DSK_CHECKSUM, "Turbo read %s: cyl: %d side: %d offset: %d checkcnt = %d checksum = %X\n", drive->getDescription(), drive->head.cylinder, drive->head.side, drive->head.offset, checkcnt, checksum);
 }
 
 void
 DiskController::performTurboWrite(Drive *drive)
 {
-    plaindebug(DSK_DEBUG, "Turbo-writing %d words to disk.\n", dsklen & 0x3FFF);
+    plaindebug(DSK_CHECKSUM, "Turbo-writing %d words to disk.\n", dsklen & 0x3FFF);
     
     for (unsigned i = 0; i < (dsklen & 0x3FFF); i++) {
         

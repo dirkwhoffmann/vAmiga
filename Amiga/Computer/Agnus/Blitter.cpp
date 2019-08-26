@@ -660,6 +660,8 @@ Blitter::doFill(uint16_t &data, bool &carry)
 void
 Blitter::startBlit()
 {
+    // assert(!bbusy);
+
     bzero = true;
     bbusy = true;
 
@@ -684,9 +686,10 @@ Blitter::startBlit()
         useSlowBlitter ? beginSlowLineBlit() : beginFastLineBlit();
 
     } else {
+
         copycount++;
         if (bltsizeW != 1 || bltsizeH != 4) {
-        plaindebug(BLT_CHECKSUM, "BLITTER Blit %d (%d,%d) (%d%d%d%d) (%d %d %d %d) %x %x %x %x %s%s\n",
+        debug(BLT_CHECKSUM, "BLITTER Blit %d (%d,%d) (%d%d%d%d) (%d %d %d %d) %x %x %x %x %s%s\n",
                    copycount, bltsizeW, bltsizeH,
                    bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
                    bltamod, bltbmod, bltcmod, bltdmod,
@@ -714,13 +717,16 @@ Blitter::terminate()
 
     // Dump checksums if requested
     if (bltsizeW != 1 || bltsizeH != 4) {
-    plaindebug(BLT_CHECKSUM, "BLITTER check1: %x check2: %x ABCD: %x %x %x %x\n", check1, check2, bltapt, bltbpt, bltcpt, bltdpt);
+    debug(BLT_CHECKSUM, "BLITTER check1: %x check2: %x ABCD: %x %x %x %x\n", check1, check2, bltapt, bltbpt, bltcpt, bltdpt);
     }
 }
 
 void
 Blitter::kill()
 {
+    // assert(!bbusy);
+    // assert(!agnus->isPending<BLT_SLOT>());
+
     // Clear the Blitter busy flag
     bbusy = false;
 

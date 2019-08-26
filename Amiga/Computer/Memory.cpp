@@ -789,9 +789,6 @@ Memory::poke16(uint32_t addr, uint16_t value)
                     assert(false);
             }
             break;
-
-
-
     }
 }
 
@@ -1073,7 +1070,7 @@ Memory::peekCustom16(uint32_t addr)
      *   - 0xFFFF or some some ANDed old data otherwise.
      */
 
-    debug(REGACC_DEBUG, "peekCustom16(%X [%s]): WRITE-ONLY-REGISTER\n",
+    debug(INVREG_DEBUG, "peekCustom16(%X [%s]): WRITE-ONLY-REGISTER\n",
           addr, customReg[(addr >> 1) & 0xFF]);
 
     // TODO: Remember the last data bus value
@@ -1521,10 +1518,10 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
     }
     
     if (addr <= 0x1E) {
-        debug(REGACC_DEBUG, "pokeCustom16(%X [%s]): READ-ONLY-REGISTER\n",
+        debug(INVREG_DEBUG, "pokeCustom16(%X [%s]): READ-ONLY-REGISTER\n",
              addr, customReg[(addr >> 1) & 0xFF]);
     } else {
-        debug(REGACC_DEBUG, "pokeCustom16(%X [%s]): NO OCS REGISTER\n",
+        debug(INVREG_DEBUG, "pokeCustom16(%X [%s]): NO OCS REGISTER\n",
               addr, customReg[(addr >> 1) & 0xFF]);
     }
 }
