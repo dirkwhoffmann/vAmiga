@@ -11,8 +11,6 @@
 #define _BLITTER_INC
 
 class Blitter : public HardwareComponent {
-    
-    friend class Agnus;
 
     //
     // Constants
@@ -172,22 +170,6 @@ private:
     bool bzero;
 
 
-    /*
-     * Priority logic (CPU versus Blitter)
-     *
-     * To block the Blitter, three conditions must hold:
-     *
-     *     - The BLTPRI flag is false
-     *     - The CPU must request the bus
-     *     - The CPU request must have been denied for three consecutive cycles
-     */
-
-public:
-
-    bool cpuRequestsBus;
-    int cpuDenials;
-
-
     //
     // Counters
     //
@@ -288,9 +270,6 @@ public:
 
         & bbusy
         & bzero
-
-        & cpuRequestsBus
-        & cpuDenials
         
         & remaining;
     }
@@ -323,6 +302,9 @@ public:
 
     // Returns true if the Blitter is busy
     bool isBusy() { return bbusy; }
+
+    // Returns the value of the zero flag
+    bool isZero() { return bzero; }
 
 
     //
@@ -403,7 +385,6 @@ public:
 
     // Called by Agnus when DMACON is written to
     void pokeDMACON(uint16_t oldValue, uint16_t newValue);
-
 
 
     //

@@ -429,7 +429,7 @@ public:
 
     
     //
-    // DMA allocation tables
+    // DMA
     //
     
     /* The DMA time slot allocation table for a complete horizontal line.
@@ -450,7 +450,22 @@ public:
      */
     uint8_t nextDmaEvent[HPOS_CNT + 1];
 
-    
+    /*
+     * Priority logic (CPU versus Blitter)
+     *
+     * To block the Blitter, three conditions must hold:
+     *
+     *     - The BLTPRI flag is false
+     *     - The CPU must request the bus
+     *     - The CPU request must have been denied for three consecutive cycles
+     */
+
+private:
+
+    bool cpuRequestsBus;
+    int cpuDenials;
+
+
     //
     // Constructing and destructing
     //
@@ -539,7 +554,9 @@ public:
         & oldBplDmaLine
 
         & dmaEvent
-        & nextDmaEvent;
+        & nextDmaEvent
+        & cpuRequestsBus
+        & cpuDenials;
     }
     
 
@@ -698,6 +715,9 @@ public:
      */
     bool copperCanRun();
     bool copperCanDoDMA();
+
+    //Called by the CPU when it wants to use the bus or no longer needs it.
+    void requestBus(bool value);
 
     /* Attempts to allocate the bus for the specified resource.
      * Returns true if the bus was successfully allocated.

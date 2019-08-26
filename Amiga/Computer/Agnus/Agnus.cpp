@@ -381,6 +381,12 @@ Agnus::copperCanDoDMA()
     return copperCanRun();
 }
 
+void
+Agnus::requestBus(bool value)
+{
+    cpuRequestsBus = value;
+}
+
 template <BusOwner owner> bool
 Agnus::allocateBus()
 {
@@ -398,14 +404,14 @@ Agnus::allocateBus()
             if (busOwner[pos.h] != BUS_NONE) return false;
 
             // Check if the CPU has precedence
-            if (!bltpri() && blitter.cpuRequestsBus) {
+            if (!bltpri() && cpuRequestsBus) {
 
-                if (blitter.cpuDenials > 2) {
+                if (cpuDenials > 2) {
 
                     // debug("Blitter leaves bus to the CPU\n");
 
                     // The CPU gets the bus
-                    blitter.cpuDenials = 0;
+                    cpuDenials = 0;
                     return false;
 
                 } else {
@@ -413,7 +419,7 @@ Agnus::allocateBus()
                     // debug("Blitter ignores the cpu request\n");
 
                     // The Blitter gets the bus
-                    blitter.cpuDenials++;
+                    cpuDenials++;
                 }
             }
 
@@ -777,8 +783,8 @@ Agnus::peekDMACONR()
 
     assert((result & ((1 << 14) | (1 << 13))) == 0);
     
-    if (blitter.bbusy) result |= (1 << 14);
-    if (blitter.bzero) result |= (1 << 13);
+    if (blitter.isBusy()) result |= (1 << 14);
+    if (blitter.isZero()) result |= (1 << 13);
 
     debug(2, "peekDMACONR: %X\n", result);
     return result;
@@ -1552,12 +1558,12 @@ void
 Agnus::executeUntilBusIsFree()
 {
     // Quick-exit if CPU runs at full speed during blit operations
-    if (blitter.accuracy == 0) return;
+    if (blitter.getAccuracy() == 0) return;
 
     DMACycle blockedCycles = 0;
 
     // Tell the Blitter that the CPU wants the bus
-    blitter.cpuRequestsBus = true;
+    cpuRequestsBus = true;
 
     // The CPU usually accesses memory in even cyles. Advance to such a cycle
     if (IS_ODD(pos.h)) execute();
@@ -1576,7 +1582,7 @@ Agnus::executeUntilBusIsFree()
     };
 
     cpu->addWaitStates(blockedCycles * DMA_CYCLES(1));
-    blitter.cpuRequestsBus = false;
+    cpuRequestsBus = false;
 }
 
 #endif
