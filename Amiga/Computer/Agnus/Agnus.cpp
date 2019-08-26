@@ -402,11 +402,15 @@ Agnus::allocateBus()
 
                 if (blitter.cpuDenials > 2) {
 
+                    // debug("Blitter leaves bus to the CPU\n");
+
                     // The CPU gets the bus
                     blitter.cpuDenials = 0;
                     return false;
 
                 } else {
+
+                    // debug("Blitter ignores the cpu request\n");
 
                     // The Blitter gets the bus
                     blitter.cpuDenials++;
@@ -1547,14 +1551,16 @@ Agnus::executeUntilBusIsFree() { }
 void
 Agnus::executeUntilBusIsFree()
 {
-    DMACycle blockedCycles = 0;
-
     // Quick-exit if CPU runs at full speed during blit operations
     if (blitter.accuracy == 0) return;
 
+    DMACycle blockedCycles = 0;
+
+    // Tell the Blitter that the CPU wants the bus
+    blitter.cpuRequestsBus = true;
+
     // The CPU usually accesses memory in even cyles. Advance to such a cycle
     if (IS_ODD(pos.h)) execute();
-    // if (IS_EVEN(pos.h)) executeOneCycle();
 
     // We have reached an even cycle now. Emulate that cycle...
     while (1) {
@@ -1570,6 +1576,7 @@ Agnus::executeUntilBusIsFree()
     };
 
     cpu->addWaitStates(blockedCycles * DMA_CYCLES(1));
+    blitter.cpuRequestsBus = false;
 }
 
 #endif

@@ -28,8 +28,8 @@
 
 // Register debugging (set to 1 to generate debug output)
 
-static const int BLTREG_DEBUG  = 1;  // Blitter registers
-static const int DSKREG_DEBUG  = 1;  // Disk controller registers
+static const int BLTREG_DEBUG  = 2;  // Blitter registers
+static const int DSKREG_DEBUG  = 2;  // Disk controller registers
 static const int BPLREG_DEBUG  = 2;  // Bitplane registers
 static const int AUDREG_DEBUG  = 2;  // Audio registers
 static const int COPREG_DEBUG  = 2;  // Copper registers
@@ -64,8 +64,8 @@ static const int SNAP_DEBUG    = 2;  // Snapshot debugging (serialization)
 
 // Custom checksum settings (set to 1 to compute checksums)
 
-static const int DSK_CHECKSUM  = 1;  // Disk checksums
-static const int BLT_CHECKSUM  = 1;  // Blitter checksums
+static const int DSK_CHECKSUM  = 2;  // Disk checksums
+static const int BLT_CHECKSUM  = 2;  // Blitter checksums
 
 
 // Additional debugging aids (uncomment to enable)
