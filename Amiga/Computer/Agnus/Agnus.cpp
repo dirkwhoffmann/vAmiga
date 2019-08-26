@@ -1569,7 +1569,7 @@ Agnus::executeUntilBusIsFree()
         blockedCycles++;
     };
 
-    cpu->addWaitStates(blockedCycles * 2);
+    cpu->addWaitStates(blockedCycles * DMA_CYCLES(1));
 }
 
 #endif

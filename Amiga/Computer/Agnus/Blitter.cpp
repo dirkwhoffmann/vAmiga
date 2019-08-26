@@ -154,6 +154,7 @@ void
 Blitter::pokeBLTCON0(uint16_t value)
 {
     debug(BLTREG_DEBUG, "pokeBLTCON0(%X)\n", value);
+    if (bbusy) debug(BLTREG_DEBUG, "Blitter is running");
     bltcon0 = value;
 }
 
@@ -161,6 +162,7 @@ void
 Blitter::pokeBLTCON1(uint16_t value)
 {
     debug(BLTREG_DEBUG, "pokeBLTCON1(%X)\n", value);
+    if (bbusy) debug(BLTREG_DEBUG, "Blitter is running");
     bltcon1 = value;
 }
 
@@ -168,6 +170,7 @@ void
 Blitter::pokeBLTAPTH(uint16_t value)
 {
     debug(BLTREG_DEBUG, "pokeBLTAPTH(%X)\n", value);
+    if (bbusy) debug(BLTREG_DEBUG, "Blitter is running");
     bltapt = REPLACE_HI_WORD(bltapt, value & 0x0007);
 }
 
@@ -175,6 +178,7 @@ void
 Blitter::pokeBLTAPTL(uint16_t value)
 {
     debug(BLTREG_DEBUG, "pokeBLTAPTL(%X)\n", value);
+    if (bbusy) debug(BLTREG_DEBUG, "Blitter is running");
     bltapt = REPLACE_LO_WORD(bltapt, value & 0xFFFE);
 }
 
@@ -182,6 +186,7 @@ void
 Blitter::pokeBLTBPTH(uint16_t value)
 {
     debug(BLTREG_DEBUG, "pokeBLTBPTH(%X)\n", value);
+    if (bbusy) debug(BLTREG_DEBUG, "Blitter is running");
     bltbpt = REPLACE_HI_WORD(bltbpt, value & 0x0007);
 }
 
@@ -189,6 +194,7 @@ void
 Blitter::pokeBLTBPTL(uint16_t value)
 {
     debug(BLTREG_DEBUG, "pokeBLTBPTL(%X)\n", value);
+    if (bbusy) debug(BLTREG_DEBUG, "Blitter is running");
     bltbpt = REPLACE_LO_WORD(bltbpt, value & 0xFFFE);
 }
 
@@ -196,6 +202,7 @@ void
 Blitter::pokeBLTCPTH(uint16_t value)
 {
     debug(BLTREG_DEBUG, "pokeBLTCPTH(%X)\n", value);
+    if (bbusy) debug(BLTREG_DEBUG, "Blitter is running");
     bltcpt = REPLACE_HI_WORD(bltcpt, value & 0x0007);
 }
 
@@ -203,6 +210,7 @@ void
 Blitter::pokeBLTCPTL(uint16_t value)
 {
     debug(BLTREG_DEBUG, "pokeBLTCPTL(%X)\n", value);
+    if (bbusy) debug(BLTREG_DEBUG, "Blitter is running");
     bltcpt = REPLACE_LO_WORD(bltcpt, value & 0xFFFE);
 }
 
@@ -210,6 +218,7 @@ void
 Blitter::pokeBLTDPTH(uint16_t value)
 {
     debug(BLTREG_DEBUG, "pokeBLTDPTH(%X)\n", value);
+    if (bbusy) debug(BLTREG_DEBUG, "Blitter is running");
     bltdpt = REPLACE_HI_WORD(bltdpt, value & 0x0007);
 }
 
@@ -217,6 +226,7 @@ void
 Blitter::pokeBLTDPTL(uint16_t value)
 {
     debug(BLTREG_DEBUG, "pokeBLTDPTL(%X)\n", value);
+    if (bbusy) debug(BLTREG_DEBUG, "Blitter is running");
     bltdpt = REPLACE_LO_WORD(bltdpt, value & 0xFFFE);
 }
 
@@ -224,6 +234,7 @@ void
 Blitter::pokeBLTAFWM(uint16_t value)
 {
     debug(BLTREG_DEBUG, "pokeBLTAFWM(%X)\n", value);
+    if (bbusy) debug(BLTREG_DEBUG, "Blitter is running");
     bltafwm = value;
 }
 
@@ -231,6 +242,7 @@ void
 Blitter::pokeBLTALWM(uint16_t value)
 {
     debug(BLTREG_DEBUG, "pokeBLTALWM(%X)\n", value);
+    if (bbusy) debug(BLTREG_DEBUG, "Blitter is running");
     bltalwm = value;
 }
 
@@ -238,6 +250,7 @@ void
 Blitter::pokeBLTSIZE(uint16_t value)
 {
     debug(BLTREG_DEBUG, "pokeBLTSIZE(%X)\n", value);
+    if (bbusy) debug(BLTREG_DEBUG, "Blitter is running");
     
     bltsize = value;
     bltsizeW = (bltsize & 0x3F) ? (bltsize & 0x3F) : 64;
@@ -260,12 +273,14 @@ void
 Blitter::pokeBLTAMOD(uint16_t value)
 {
     debug(BLTREG_DEBUG, "pokeBLTAMOD(%X)\n", value);
+    if (bbusy) debug(BLTREG_DEBUG, "Blitter is running");
     bltamod = (int16_t)(value & 0xFFFE);
 }
 void
 Blitter::pokeBLTBMOD(uint16_t value)
 {
     debug(BLTREG_DEBUG, "pokeBLTBMOD(%X)\n", value);
+    if (bbusy) debug(BLTREG_DEBUG, "Blitter is running");
     bltbmod = (int16_t)(value & 0xFFFE);
 }
 
@@ -273,6 +288,7 @@ void
 Blitter::pokeBLTCMOD(uint16_t value)
 {
     debug(BLTREG_DEBUG, "pokeBLTCMOD(%X)\n", value);
+    if (bbusy) debug(BLTREG_DEBUG, "Blitter is running");
     bltcmod = (int16_t)(value & 0xFFFE);
 }
 
@@ -280,6 +296,7 @@ void
 Blitter::pokeBLTDMOD(uint16_t value)
 {
     debug(BLTREG_DEBUG, "pokeBLTDMOD(%X)\n", value);
+    if (bbusy) debug(BLTREG_DEBUG, "Blitter is running");
     bltdmod = (int16_t)(value & 0xFFFE);
 }
 
@@ -287,6 +304,7 @@ void
 Blitter::pokeBLTADAT(uint16_t value)
 {
     debug(BLTREG_DEBUG, "pokeBLTADAT(%X)\n", value);
+    if (bbusy) debug(BLTREG_DEBUG, "Blitter is running");
     anew = value;
     /*
      // Apply masks
@@ -301,6 +319,7 @@ void
 Blitter::pokeBLTBDAT(uint16_t value)
 {
     debug(BLTREG_DEBUG, "pokeBLTBDAT(%X)\n", value);
+    if (bbusy) debug(BLTREG_DEBUG, "Blitter is running");
     bnew = value;
     /*
      bshift = (bshift << 16) | value;
@@ -311,6 +330,7 @@ void
 Blitter::pokeBLTCDAT(uint16_t value)
 {
     debug(BLTREG_DEBUG, "pokeBLTCDAT(%X)\n", value);
+    if (bbusy) debug(BLTREG_DEBUG, "Blitter is running");
     chold = value;
 }
 

@@ -155,11 +155,19 @@ public:
 
 
     //
-    // Internal state
+    // Operation control
     //
 
-    // Action flags
+    // Action flags checked in every cycle
     uint64_t delay;
+
+    // Action flags checked in the HSYNC handler
+    uint64_t hsyncActions;
+
+
+    //
+    // Counters
+    //
 
     /* The DMA controller has been executed up to this clock cycle.
      * Measured in master clock units.
@@ -442,18 +450,6 @@ public:
      */
     uint8_t nextDmaEvent[HPOS_CNT + 1];
 
-
-    //
-    // Operation control
-    //
-
-    /* Work items to be processed at the end of the current rasterline
-     * This variable is 0 most of the time. If some special action needs to
-     * be taken at the end of the current rasterline, certain bits are set
-     * to 1.
-     */
-    uint64_t hsyncActions;
-
     
     //
     // Constructing and destructing
@@ -488,6 +484,7 @@ public:
         & nextTrigger
 
         & delay
+        & hsyncActions
         & clock
         & frame
         & pos.v
@@ -542,8 +539,7 @@ public:
         & oldBplDmaLine
 
         & dmaEvent
-        & nextDmaEvent
-        & hsyncActions;
+        & nextDmaEvent;
     }
     
 
