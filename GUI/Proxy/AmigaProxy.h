@@ -28,7 +28,7 @@
 @class DriveProxy;
 @class AmigaFileProxy;
 @class ADFFileProxy;
-@class AmigaSnapshotProxy;
+@class SnapshotProxy;
 
 /* Forward declarations of C++ class wrappers.
  * We wrap classes into normal C structs to avoid any reference to C++.
@@ -167,7 +167,7 @@ struct AmigaFileWrapper;
 - (NSInteger) snapshotInterval;
 - (void) setSnapshotInterval:(NSInteger)value;
  
-- (void) loadFromSnapshot:(AmigaSnapshotProxy *)proxy;
+- (void) loadFromSnapshot:(SnapshotProxy *)proxy;
 
 - (BOOL) restoreAutoSnapshot:(NSInteger)nr;
 - (BOOL) restoreUserSnapshot:(NSInteger)nr;
@@ -586,7 +586,7 @@ struct AmigaFileWrapper;
 // Snapshot proxy
 //
 
-@interface AmigaSnapshotProxy : AmigaFileProxy {
+@interface SnapshotProxy : AmigaFileProxy {
 }
 
 + (BOOL)isSupportedSnapshot:(const void *)buffer length:(NSInteger)length;

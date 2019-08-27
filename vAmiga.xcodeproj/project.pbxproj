@@ -23,7 +23,7 @@
 		502F7DCE2221706000AEEC65 /* Copper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 502F7DCD2221706000AEEC65 /* Copper.cpp */; };
 		502F7DD42221E52200AEEC65 /* PixelEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 502F7DD22221E52200AEEC65 /* PixelEngine.cpp */; };
 		5030891121EFA74600FEAD12 /* Paula.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5030890F21EFA74600FEAD12 /* Paula.cpp */; };
-		50384C8621FC6B66006E7748 /* AmigaSnapshot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50384C8421FC6B66006E7748 /* AmigaSnapshot.cpp */; };
+		50384C8621FC6B66006E7748 /* Snapshot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50384C8421FC6B66006E7748 /* Snapshot.cpp */; };
 		5043F6C5221972F90047CC30 /* MyToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5043F6C4221972F90047CC30 /* MyToolbar.swift */; };
 		504F9656220ACFE0005F8AB7 /* Breakpoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 504F9654220ACFE0005F8AB7 /* Breakpoint.cpp */; };
 		504F9658220B2CEE005F8AB7 /* BreakTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504F9657220B2CEE005F8AB7 /* BreakTableView.swift */; };
@@ -206,8 +206,8 @@
 		502F7DD32221E52200AEEC65 /* PixelEngine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PixelEngine.h; sourceTree = "<group>"; };
 		5030890F21EFA74600FEAD12 /* Paula.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Paula.cpp; sourceTree = "<group>"; };
 		5030891021EFA74600FEAD12 /* Paula.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Paula.h; sourceTree = "<group>"; };
-		50384C8421FC6B66006E7748 /* AmigaSnapshot.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaSnapshot.cpp; sourceTree = "<group>"; };
-		50384C8521FC6B66006E7748 /* AmigaSnapshot.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaSnapshot.h; sourceTree = "<group>"; };
+		50384C8421FC6B66006E7748 /* Snapshot.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Snapshot.cpp; sourceTree = "<group>"; };
+		50384C8521FC6B66006E7748 /* Snapshot.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Snapshot.h; sourceTree = "<group>"; };
 		503990C522D8CCB600035783 /* Beam.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Beam.h; sourceTree = "<group>"; };
 		5043F6C4221972F90047CC30 /* MyToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyToolbar.swift; sourceTree = "<group>"; };
 		504F9654220ACFE0005F8AB7 /* Breakpoint.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Breakpoint.cpp; sourceTree = "<group>"; };
@@ -686,8 +686,8 @@
 				509F7F1B21EDEA0200A530E4 /* KickRom.cpp */,
 				50ECF98522B153FB007B3DE7 /* ExtRom.h */,
 				50ECF98422B153FB007B3DE7 /* ExtRom.cpp */,
-				50384C8521FC6B66006E7748 /* AmigaSnapshot.h */,
-				50384C8421FC6B66006E7748 /* AmigaSnapshot.cpp */,
+				50384C8521FC6B66006E7748 /* Snapshot.h */,
+				50384C8421FC6B66006E7748 /* Snapshot.cpp */,
 				508833ED21F0D21B009890EA /* ADFFile.h */,
 				508833EC21F0D21B009890EA /* ADFFile.cpp */,
 			);
@@ -1126,7 +1126,7 @@
 				50B14C0D21EB3708002E32A6 /* HardwareComponent.cpp in Sources */,
 				50D2ADBA2207547500E32AB0 /* m68kcpu.c in Sources */,
 				5043F6C5221972F90047CC30 /* MyToolbar.swift in Sources */,
-				50384C8621FC6B66006E7748 /* AmigaSnapshot.cpp in Sources */,
+				50384C8621FC6B66006E7748 /* Snapshot.cpp in Sources */,
 				502F7DCE2221706000AEEC65 /* Copper.cpp in Sources */,
 				508FE02D21EA227B0043D0E9 /* MyAppDelegate.swift in Sources */,
 				508FE02E21EA227B0043D0E9 /* Alerts.swift in Sources */,

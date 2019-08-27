@@ -418,11 +418,14 @@ public:
     // The number of currently active bitplanes
     uint8_t activeBitplanes;
 
-    // Recorded DMA usage for all cycles in the current rasterline
-    BusOwner busOwner[HPOS_CNT];
+    // The current value of the data bus
+    uint16_t dataBus;
 
     // Recorded DMA values for all cycles in the current rasterline
     uint16_t busValue[HPOS_CNT];
+
+    // Recorded DMA usage for all cycles in the current rasterline
+    BusOwner busOwner[HPOS_CNT];
 
     // Unsed in the hsyncHandler to remember the result of inBplDmaLine
     bool oldBplDmaLine;
@@ -548,9 +551,11 @@ public:
         & bpl1mod
         & bpl2mod
         & sprpt
+        
         & activeBitplanes
-        & busOwner
+        & dataBus
         & busValue
+        & busOwner
         & oldBplDmaLine
 
         & dmaEvent

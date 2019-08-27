@@ -76,13 +76,32 @@ Memory::_reset()
 void
 Memory::_dump()
 {
-    plainmsg("     Boot Rom: %d KB at %p\n", bootRomSize >> 10, bootRom);
-    plainmsg("     Kick Rom: %d KB at %p (%s)\n", kickRomSize >> 10,
-             kickRom, kickIsWritable ? "unlocked" : "locked");
-    plainmsg("     Ext  Rom: %d KB at %p\n", extRomSize >> 10, extRom);
-    plainmsg("     Chip Ram: %d KB at %p\n", chipRamSize >> 10, chipRam);
-    plainmsg("     Slow Ram: %d KB at %p\n", slowRamSize >> 10, slowRam);
-    plainmsg("     Fast Ram: %d KB at %p\n", fastRamSize >> 10, fastRam);
+    struct { uint8_t *addr; size_t size; const char *desc; } mem[6] = {
+        { bootRom, bootRomSize, "Boot Rom" },
+        { kickRom, kickRomSize, "Kick Rom" },
+        { extRom,  extRomSize,  "Ext  Rom" },
+        { chipRam, chipRamSize, "Chip Ram" },
+        { slowRam, slowRamSize, "Slow Ram" },
+        { fastRam, fastRamSize, "Fast Ram" }
+    };
+
+    // Print a summary of the installed memory
+    for (int i = 0; i < 6; i++) {
+
+        size_t size = mem[i].size;
+        uint8_t *addr = mem[i].addr;
+
+        plainmsg("     %s: ", mem[i].desc);
+        if (size == 0) {
+            assert(addr == 0);
+            plainmsg("not present\n");
+        } else {
+            assert(addr != 0);
+            assert(size % KB(1) == 0);
+            uint64_t check = fnv_1a(addr, size);
+            plainmsg("%d KB at: %p Checksum: %x\n", size >> 10, addr, check);
+        }
+    }
 }
 
 size_t

@@ -10,18 +10,18 @@
 #include "Amiga.h"
 
 bool
-AmigaSnapshot::isSnapshot(const uint8_t *buffer, size_t length)
+Snapshot::isSnapshot(const uint8_t *buffer, size_t length)
 {
     uint8_t signature[] = { 'V', 'A', 'S', 'N', 'A', 'P' };
     
     assert(buffer != NULL);
     
-    if (length < sizeof(AmigaSnapshotHeader)) return false;
+    if (length < sizeof(SnapshotHeader)) return false;
     return matchingBufferHeader(buffer, signature, sizeof(signature));
 }
 
 bool
-AmigaSnapshot::isSnapshot(const uint8_t *buffer, size_t length,
+Snapshot::isSnapshot(const uint8_t *buffer, size_t length,
                           uint8_t major, uint8_t minor, uint8_t subminor)
 {
     if (!isSnapshot(buffer, length)) return false;
@@ -29,19 +29,19 @@ AmigaSnapshot::isSnapshot(const uint8_t *buffer, size_t length,
 }
 
 bool
-AmigaSnapshot::isSupportedSnapshot(const uint8_t *buffer, size_t length)
+Snapshot::isSupportedSnapshot(const uint8_t *buffer, size_t length)
 {
     return isSnapshot(buffer, length, V_MAJOR, V_MINOR, V_SUBMINOR);
 }
 
 bool
-AmigaSnapshot::isUnsupportedSnapshot(const uint8_t *buffer, size_t length)
+Snapshot::isUnsupportedSnapshot(const uint8_t *buffer, size_t length)
 {
     return isSnapshot(buffer, length) && !isSupportedSnapshot(buffer, length);
 }
 
 bool
-AmigaSnapshot::isSnapshotFile(const char *path)
+Snapshot::isSnapshotFile(const char *path)
 {
      uint8_t signature[] = { 'V', 'A', 'S', 'N', 'A', 'P' };
     
@@ -51,7 +51,7 @@ AmigaSnapshot::isSnapshotFile(const char *path)
 }
 
 bool
-AmigaSnapshot::isSnapshotFile(const char *path, uint8_t major, uint8_t minor, uint8_t subminor)
+Snapshot::isSnapshotFile(const char *path, uint8_t major, uint8_t minor, uint8_t subminor)
 {
     uint8_t signature[] = { 'V', 'C', '6', '4', major, minor, subminor };
     
@@ -61,30 +61,30 @@ AmigaSnapshot::isSnapshotFile(const char *path, uint8_t major, uint8_t minor, ui
 }
 
 bool
-AmigaSnapshot::isSupportedSnapshotFile(const char *path)
+Snapshot::isSupportedSnapshotFile(const char *path)
 {
     return isSnapshotFile(path, V_MAJOR, V_MINOR, V_SUBMINOR);
 }
 
 bool
-AmigaSnapshot::isUnsupportedSnapshotFile(const char *path)
+Snapshot::isUnsupportedSnapshotFile(const char *path)
 {
     return isSnapshotFile(path) && !isSupportedSnapshotFile(path);
 }
 
-AmigaSnapshot::AmigaSnapshot()
+Snapshot::Snapshot()
 {
     setDescription("Snapshot");
 }
 
-AmigaSnapshot::AmigaSnapshot(size_t capacity)
+Snapshot::Snapshot(size_t capacity)
 {
     uint8_t signature[] = { 'V', 'A', 'S', 'N', 'A', 'P' };
     
-    size = capacity + sizeof(AmigaSnapshotHeader);
+    size = capacity + sizeof(SnapshotHeader);
     data = new uint8_t[size];
     
-    AmigaSnapshotHeader *header = (AmigaSnapshotHeader *)data;
+    SnapshotHeader *header = (SnapshotHeader *)data;
     
     for (unsigned i = 0; i < sizeof(signature); i++)
         header->magic[i] = signature[i];
@@ -94,14 +94,14 @@ AmigaSnapshot::AmigaSnapshot(size_t capacity)
     header->timestamp = time(NULL);
 }
 
-AmigaSnapshot *
-AmigaSnapshot::makeWithBuffer(const uint8_t *buffer, size_t length)
+Snapshot *
+Snapshot::makeWithBuffer(const uint8_t *buffer, size_t length)
 {
-    AmigaSnapshot *snapshot = NULL;
+    Snapshot *snapshot = NULL;
     
     if (isSnapshot(buffer, length)) {
         
-        snapshot = new AmigaSnapshot();
+        snapshot = new Snapshot();
         
         if (!snapshot->readFromBuffer(buffer, length)) {
             delete snapshot;
@@ -111,14 +111,14 @@ AmigaSnapshot::makeWithBuffer(const uint8_t *buffer, size_t length)
     return snapshot;
 }
 
-AmigaSnapshot *
-AmigaSnapshot::makeWithFile(const char *path)
+Snapshot *
+Snapshot::makeWithFile(const char *path)
 {
-    AmigaSnapshot *snapshot = NULL;
+    Snapshot *snapshot = NULL;
     
     if (isSnapshotFile(path)) {
         
-        snapshot = new AmigaSnapshot();
+        snapshot = new Snapshot();
         
         if (!snapshot->readFromFile(path)) {
             delete snapshot;
@@ -128,10 +128,10 @@ AmigaSnapshot::makeWithFile(const char *path)
     return snapshot;
 }
 
-AmigaSnapshot *
-AmigaSnapshot::makeWithAmiga(Amiga *amiga)
+Snapshot *
+Snapshot::makeWithAmiga(Amiga *amiga)
 {
-    AmigaSnapshot *snapshot = new AmigaSnapshot(amiga->size());
+    Snapshot *snapshot = new Snapshot(amiga->size());
 
     snapshot->takeScreenshot(amiga);
     amiga->save(snapshot->getData());
@@ -140,21 +140,21 @@ AmigaSnapshot::makeWithAmiga(Amiga *amiga)
 }
 
 bool
-AmigaSnapshot::bufferHasSameType(const uint8_t* buffer, size_t length)
+Snapshot::bufferHasSameType(const uint8_t* buffer, size_t length)
 {
-    return AmigaSnapshot::isSnapshot(buffer, length);
+    return Snapshot::isSnapshot(buffer, length);
 }
 
 bool
-AmigaSnapshot::fileHasSameType(const char *path)
+Snapshot::fileHasSameType(const char *path)
 {
-    return AmigaSnapshot::isSnapshotFile(path, V_MAJOR, V_MINOR, V_SUBMINOR);
+    return Snapshot::isSnapshotFile(path, V_MAJOR, V_MINOR, V_SUBMINOR);
 }
 
 void
-AmigaSnapshot::takeScreenshot(Amiga *amiga)
+Snapshot::takeScreenshot(Amiga *amiga)
 {
-    AmigaSnapshotHeader *header = (AmigaSnapshotHeader *)data;
+    SnapshotHeader *header = (SnapshotHeader *)data;
     
     uint32_t *source = (uint32_t *)amiga->denise.pixelEngine.getStableLongFrame().data;
     uint32_t *target = header->screenshot.screen;

@@ -152,10 +152,10 @@ class MyDocument: NSDocument {
             
         case "VAMIGA":
             // Check for outdated snapshot formats
-            if AmigaSnapshotProxy.isUnsupportedSnapshot(buffer, length: length) {
+            if SnapshotProxy.isUnsupportedSnapshot(buffer, length: length) {
                 throw NSError.snapshotVersionError(filename: filename)
             }
-            amigaAttachment = AmigaSnapshotProxy.make(withBuffer: buffer, length: length)
+            amigaAttachment = SnapshotProxy.make(withBuffer: buffer, length: length)
             openAsUntitled = false
             
         case "ADF":
@@ -185,9 +185,9 @@ class MyDocument: NSDocument {
         
         switch amigaAttachment {
 
-        case _ as AmigaSnapshotProxy:
+        case _ as SnapshotProxy:
             
-            amiga.load(fromSnapshot: amigaAttachment as? AmigaSnapshotProxy)
+            amiga.load(fromSnapshot: amigaAttachment as? SnapshotProxy)
             return true
        
         case _ as ADFFileProxy:
@@ -231,7 +231,7 @@ class MyDocument: NSDocument {
         if typeName == "vAmiga" {
             
             // Take snapshot
-            if let snapshot = AmigaSnapshotProxy.make(withAmiga: amiga) {
+            if let snapshot = SnapshotProxy.make(withAmiga: amiga) {
 
                 // Write to data buffer
                 if let data = NSMutableData.init(length: snapshot.sizeOnDisk()) {

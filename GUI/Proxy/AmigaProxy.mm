@@ -1031,26 +1031,26 @@ struct ADFFileWrapper { ADFFile *adf; };
 // Snapshot proxy
 //
 
-@implementation AmigaSnapshotProxy
+@implementation SnapshotProxy
 
 + (BOOL) isSupportedSnapshot:(const void *)buffer length:(NSInteger)length
 {
-    return AmigaSnapshot::isSupportedSnapshot((uint8_t *)buffer, length);
+    return Snapshot::isSupportedSnapshot((uint8_t *)buffer, length);
 }
 + (BOOL) isUnsupportedSnapshot:(const void *)buffer length:(NSInteger)length
 {
-    return AmigaSnapshot::isUnsupportedSnapshot((uint8_t *)buffer, length);
+    return Snapshot::isUnsupportedSnapshot((uint8_t *)buffer, length);
 }
 + (BOOL) isSupportedSnapshotFile:(NSString *)path
 {
-    return AmigaSnapshot::isSupportedSnapshotFile([path UTF8String]);
+    return Snapshot::isSupportedSnapshotFile([path UTF8String]);
 }
 + (BOOL) isUnsupportedSnapshotFile:(NSString *)path
 {
-    return AmigaSnapshot::isUnsupportedSnapshotFile([path UTF8String]);
+    return Snapshot::isUnsupportedSnapshotFile([path UTF8String]);
 }
 
-+ (instancetype) make:(AmigaSnapshot *)snapshot
++ (instancetype) make:(Snapshot *)snapshot
 {
     if (snapshot == NULL) {
         return nil;
@@ -1059,19 +1059,19 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 + (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)length
 {
-    AmigaSnapshot *snapshot = AmigaSnapshot::makeWithBuffer((uint8_t *)buffer, length);
+    Snapshot *snapshot = Snapshot::makeWithBuffer((uint8_t *)buffer, length);
     return [self make:snapshot];
 }
 + (instancetype) makeWithFile:(NSString *)path
 {
-    AmigaSnapshot *snapshot = AmigaSnapshot::makeWithFile([path UTF8String]);
+    Snapshot *snapshot = Snapshot::makeWithFile([path UTF8String]);
     return [self make:snapshot];
 }
 + (instancetype) makeWithAmiga:(AmigaProxy *)proxy
 {
     Amiga *amiga = [proxy wrapper]->amiga;
     amiga->suspend();
-    AmigaSnapshot *snapshot = AmigaSnapshot::makeWithAmiga(amiga);
+    Snapshot *snapshot = Snapshot::makeWithAmiga(amiga);
     amiga->resume();
     return [self make:snapshot];
 }
@@ -1435,9 +1435,9 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->amiga->getSnapshotInterval();
 }
-- (void) loadFromSnapshot:(AmigaSnapshotProxy *)proxy
+- (void) loadFromSnapshot:(SnapshotProxy *)proxy
 {
-    AmigaSnapshot *snapshot = (AmigaSnapshot *)([proxy wrapper]->file);
+    Snapshot *snapshot = (Snapshot *)([proxy wrapper]->file);
     wrapper->amiga->loadFromSnapshotSafe(snapshot);
 }
 - (void) setSnapshotInterval:(NSInteger)value
@@ -1469,39 +1469,39 @@ struct ADFFileWrapper { ADFFile *adf; };
     return wrapper->amiga->numUserSnapshots();
 }
 - (NSData *)autoSnapshotData:(NSInteger)nr {
-    AmigaSnapshot *snapshot = wrapper->amiga->autoSnapshot((unsigned)nr);
+    Snapshot *snapshot = wrapper->amiga->autoSnapshot((unsigned)nr);
     return [NSData dataWithBytes: (void *)snapshot->getHeader()
                           length: snapshot->sizeOnDisk()];
 }
 - (NSData *)userSnapshotData:(NSInteger)nr {
-    AmigaSnapshot *snapshot = wrapper->amiga->userSnapshot((unsigned)nr);
+    Snapshot *snapshot = wrapper->amiga->userSnapshot((unsigned)nr);
     return [NSData dataWithBytes: (void *)snapshot->getHeader()
                           length: snapshot->sizeOnDisk()];
 }
 - (unsigned char *)autoSnapshotImageData:(NSInteger)nr
 {
-    AmigaSnapshot *s = wrapper->amiga->autoSnapshot((int)nr);
+    Snapshot *s = wrapper->amiga->autoSnapshot((int)nr);
     return s ? s->getImageData() : NULL;
 }
 - (unsigned char *)userSnapshotImageData:(NSInteger)nr
 {
-    AmigaSnapshot *s = wrapper->amiga->userSnapshot((int)nr);
+    Snapshot *s = wrapper->amiga->userSnapshot((int)nr);
     return s ? s->getImageData() : NULL;
 }
 - (NSSize) autoSnapshotImageSize:(NSInteger)nr {
-    AmigaSnapshot *s = wrapper->amiga->autoSnapshot((int)nr);
+    Snapshot *s = wrapper->amiga->autoSnapshot((int)nr);
     return s ? NSMakeSize(s->getImageWidth(), s->getImageHeight()) : NSMakeSize(0,0);
 }
 - (NSSize) userSnapshotImageSize:(NSInteger)nr {
-    AmigaSnapshot *s = wrapper->amiga->userSnapshot((int)nr);
+    Snapshot *s = wrapper->amiga->userSnapshot((int)nr);
     return s ? NSMakeSize(s->getImageWidth(), s->getImageHeight()) : NSMakeSize(0,0);
 }
 - (time_t)autoSnapshotTimestamp:(NSInteger)nr {
-    AmigaSnapshot *s = wrapper->amiga->autoSnapshot((int)nr);
+    Snapshot *s = wrapper->amiga->autoSnapshot((int)nr);
     return s ? s->getTimestamp() : 0;
 }
 - (time_t)userSnapshotTimestamp:(NSInteger)nr {
-    AmigaSnapshot *s = wrapper->amiga->userSnapshot((int)nr);
+    Snapshot *s = wrapper->amiga->userSnapshot((int)nr);
     return s ? s->getTimestamp() : 0;
 }
 - (void)takeUserSnapshot

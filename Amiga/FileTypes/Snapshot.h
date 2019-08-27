@@ -39,9 +39,9 @@ typedef struct {
     // Date and time of snapshot creation
     time_t timestamp;
     
-} AmigaSnapshotHeader;
+} SnapshotHeader;
 
-class AmigaSnapshot : public AmigaFile {
+class Snapshot : public AmigaFile {
  
     //
     // Class methods
@@ -80,16 +80,16 @@ public:
     // Creating and destructing
     //
     
-    AmigaSnapshot();
-    AmigaSnapshot(size_t capacity);
+    Snapshot();
+    Snapshot(size_t capacity);
     
     // Allocates memory for storing the emulator state.
     bool setCapacity(size_t size);
     
     // Factory methods
-    static AmigaSnapshot *makeWithFile(const char *filename);
-    static AmigaSnapshot *makeWithBuffer(const uint8_t *buffer, size_t size);
-    static AmigaSnapshot *makeWithAmiga(Amiga *amiga);
+    static Snapshot *makeWithFile(const char *filename);
+    static Snapshot *makeWithBuffer(const uint8_t *buffer, size_t size);
+    static Snapshot *makeWithAmiga(Amiga *amiga);
     
     
     //
@@ -109,10 +109,10 @@ public:
 public:
     
     // Returns pointer to header data
-    AmigaSnapshotHeader *getHeader() { return (AmigaSnapshotHeader *)data; }
+    SnapshotHeader *getHeader() { return (SnapshotHeader *)data; }
     
     // Returns pointer to core data
-    uint8_t *getData() { return data + sizeof(AmigaSnapshotHeader); }
+    uint8_t *getData() { return data + sizeof(SnapshotHeader); }
     
     // Returns the timestamp
     time_t getTimestamp() { return getHeader()->timestamp; }

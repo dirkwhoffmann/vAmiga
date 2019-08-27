@@ -248,7 +248,7 @@ int64_t sleepUntil(uint64_t kernelTargetTime, uint64_t kernelEarlyWakeup);
 
 
 //
-// Computing fingerprints
+// Computing checksums
 //
 
 // Returns the FNV-1a seed value.
@@ -259,7 +259,7 @@ inline uint64_t fnv_1a_init64() { return 0xcbf29ce484222325; }
 inline uint32_t fnv_1a_it32(uint32_t prev, uint32_t value) { return (prev ^ value) * 0x1000193; }
 inline uint64_t fnv_1a_it64(uint64_t prev, uint64_t value) { return (prev ^ value) * 0x100000001b3; }
 
-// Computes a 64-bit fingeprint based on the FNV-1a hash algorithm.
+// Computes a 64-bit checksum based on the FNV-1a hash algorithm.
 uint64_t fnv_1a(uint8_t *addr, size_t size);
 
 

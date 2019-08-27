@@ -94,7 +94,7 @@ public extension MetalView {
             let nsData = fileData! as NSData
             let rawPtr = nsData.bytes
             
-            guard let snapshot = AmigaSnapshotProxy.make(withBuffer: rawPtr, length: length) else {
+            guard let snapshot = SnapshotProxy.make(withBuffer: rawPtr, length: length) else {
                 return false
             }
             if document.proceedWithUnexportedDisk() {

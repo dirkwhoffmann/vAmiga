@@ -145,6 +145,8 @@ HardwareComponent::pause()
 void
 HardwareComponent::reset()
 {
+    amiga->suspend();
+
     // Reset all subcomponents
     for (HardwareComponent *c : subComponents) {
         c->reset();
@@ -153,6 +155,8 @@ HardwareComponent::reset()
     // Reset this component
     debug(2, "Reset [%p]\n", this);
     _reset();
+
+    amiga->resume();
 }
 
 void
@@ -280,7 +284,7 @@ HardwareComponent::save(uint8_t *buffer)
 
     // Verify that the number of written bytes matches the snapshot size
     assert(ptr - buffer == size());
-    // panic("Saved %d bytes (expected %d)\n", ptr - buffer, size());
+    debug(SNAP_DEBUG, "Checksum: %x\n", fnv_1a(buffer, ptr - buffer));
 
     return ptr - buffer;
 }

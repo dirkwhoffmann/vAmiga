@@ -39,7 +39,7 @@
 #include "BootRom.h"
 #include "KickRom.h"
 #include "ExtRom.h"
-#include "AmigaSnapshot.h"
+#include "Snapshot.h"
 #include "ADFFile.h"
 
 
@@ -243,10 +243,10 @@ private:
     static const size_t MAX_SNAPSHOTS = 32;
     
     // Storage for auto-taken snapshots
-    vector<AmigaSnapshot *> autoSnapshots;
+    vector<Snapshot *> autoSnapshots;
     
     // Storage for user-taken snapshots
-    vector<AmigaSnapshot *> userSnapshots;
+    vector<Snapshot *> userSnapshots;
     
     
     //
@@ -584,11 +584,11 @@ public:
      * first one can be unsed inside the emulator thread or from outside if the
      * emulator is halted. The second one can be called any time.
      */
-    void loadFromSnapshotUnsafe(AmigaSnapshot *snapshot);
-    void loadFromSnapshotSafe(AmigaSnapshot *snapshot);
+    void loadFromSnapshotUnsafe(Snapshot *snapshot);
+    void loadFromSnapshotSafe(Snapshot *snapshot);
     
     // Restores a certain snapshot from the snapshot storage
-    bool restoreSnapshot(vector<AmigaSnapshot *> &storage, unsigned nr);
+    bool restoreSnapshot(vector<Snapshot *> &storage, unsigned nr);
     bool restoreAutoSnapshot(unsigned nr) { return restoreSnapshot(autoSnapshots, nr); }
     bool restoreUserSnapshot(unsigned nr) { return restoreSnapshot(userSnapshots, nr); }
     
@@ -597,28 +597,28 @@ public:
     bool restoreLatestUserSnapshot() { return restoreUserSnapshot(0); }
     
     // Returns the number of stored snapshots
-    size_t numSnapshots(vector<AmigaSnapshot *> &storage);
+    size_t numSnapshots(vector<Snapshot *> &storage);
     size_t numAutoSnapshots() { return numSnapshots(autoSnapshots); }
     size_t numUserSnapshots() { return numSnapshots(userSnapshots); }
     
     // Returns an snapshot from the snapshot storage
-    AmigaSnapshot *getSnapshot(vector<AmigaSnapshot *> &storage, unsigned nr);
-    AmigaSnapshot *autoSnapshot(unsigned nr) { return getSnapshot(autoSnapshots, nr); }
-    AmigaSnapshot *userSnapshot(unsigned nr) { return getSnapshot(userSnapshots, nr); }
+    Snapshot *getSnapshot(vector<Snapshot *> &storage, unsigned nr);
+    Snapshot *autoSnapshot(unsigned nr) { return getSnapshot(autoSnapshots, nr); }
+    Snapshot *userSnapshot(unsigned nr) { return getSnapshot(userSnapshots, nr); }
     
     /* Takes a snapshot and inserts it into the snapshot storage
      * The new snapshot is inserted at position 0 and all others are moved one
      * position up. If the buffer is full, the oldest snapshot is deleted. Make
      * sure to call the 'Safe' version outside the emulator thread.
      */
-    void takeSnapshot(vector<AmigaSnapshot *> &storage);
+    void takeSnapshot(vector<Snapshot *> &storage);
     void takeAutoSnapshot() { takeSnapshot(autoSnapshots); }
     void takeUserSnapshot() { takeSnapshot(userSnapshots); }
     void takeAutoSnapshotSafe() { suspend(); takeSnapshot(autoSnapshots); resume(); }
     void takeUserSnapshotSafe() { suspend(); takeSnapshot(userSnapshots); resume(); }
     
     // Deletes a snapshot from the snapshot storage
-    void deleteSnapshot(vector<AmigaSnapshot *> &storage, unsigned nr);
+    void deleteSnapshot(vector<Snapshot *> &storage, unsigned nr);
     void deleteAutoSnapshot(unsigned nr) { deleteSnapshot(autoSnapshots, nr); }
     void deleteUserSnapshot(unsigned nr) { deleteSnapshot(userSnapshots, nr); }
     

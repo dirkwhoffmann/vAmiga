@@ -520,9 +520,9 @@ Amiga::_powerOn()
 
     // REMOVE ASAP
     /*
-    agnus.blitter.setAccuracy(0);
-    // ADFFile *adf = ADFFile::makeWithFile("/Users/hoff/Dropbox/Amiga/Demos/RinkADink.adf");
-    ADFFile *adf = ADFFile::makeWithFile("/Users/hoff/Dropbox/Amiga/Games/Barbarian.adf");
+    // gnus.blitter.setAccuracy(0);
+    ADFFile *adf = ADFFile::makeWithFile("/Users/hoff/Dropbox/Amiga/Workbench/A2000WB1.2D.adf");
+    // ADFFile *adf = ADFFile::makeWithFile("/Users/hoff/Dropbox/Amiga/Games/Barbarian.adf");
     if (adf != NULL) {
         df0.insertDisk(adf);
         debug("Disk inserted\n");
@@ -592,7 +592,13 @@ Amiga::_run()
     
     // Make this Amiga the active emulator instance.
     makeActiveInstance();
-    
+
+    // REMOVE ASAP
+#ifdef SNAP_DEBUG
+    Snapshot *snap = Snapshot::makeWithAmiga(this);
+    delete snap;
+#endif
+
     // Start the emulator thread.
     pthread_create(&p, NULL, threadMain, (void *)this);
     
@@ -842,7 +848,7 @@ Amiga::snapshotIsDue()
 }
 
 void
-Amiga::loadFromSnapshotUnsafe(AmigaSnapshot *snapshot)
+Amiga::loadFromSnapshotUnsafe(Snapshot *snapshot)
 {
     uint8_t *ptr;
     
@@ -854,7 +860,7 @@ Amiga::loadFromSnapshotUnsafe(AmigaSnapshot *snapshot)
 }
 
 void
-Amiga::loadFromSnapshotSafe(AmigaSnapshot *snapshot)
+Amiga::loadFromSnapshotSafe(Snapshot *snapshot)
 {
     debug(2, "Amiga::loadFromSnapshotSafe\n");
     
@@ -864,9 +870,9 @@ Amiga::loadFromSnapshotSafe(AmigaSnapshot *snapshot)
 }
 
 bool
-Amiga::restoreSnapshot(vector<AmigaSnapshot *> &storage, unsigned nr)
+Amiga::restoreSnapshot(vector<Snapshot *> &storage, unsigned nr)
 {
-    AmigaSnapshot *snapshot = getSnapshot(storage, nr);
+    Snapshot *snapshot = getSnapshot(storage, nr);
     
     if (snapshot) {
         loadFromSnapshotSafe(snapshot);
@@ -877,35 +883,35 @@ Amiga::restoreSnapshot(vector<AmigaSnapshot *> &storage, unsigned nr)
 }
 
 size_t
-Amiga::numSnapshots(vector<AmigaSnapshot *> &storage)
+Amiga::numSnapshots(vector<Snapshot *> &storage)
 {
     return storage.size();
 }
 
-AmigaSnapshot *
-Amiga::getSnapshot(vector<AmigaSnapshot *> &storage, unsigned nr)
+Snapshot *
+Amiga::getSnapshot(vector<Snapshot *> &storage, unsigned nr)
 {
     return nr < storage.size() ? storage.at(nr) : NULL;
     
 }
 
 void
-Amiga::takeSnapshot(vector<AmigaSnapshot *> &storage)
+Amiga::takeSnapshot(vector<Snapshot *> &storage)
 {
     // Delete oldest snapshot if capacity limit has been reached
     if (storage.size() >= MAX_SNAPSHOTS) {
         deleteSnapshot(storage, MAX_SNAPSHOTS - 1);
     }
     
-    AmigaSnapshot *snapshot = AmigaSnapshot::makeWithAmiga(this);
+    Snapshot *snapshot = Snapshot::makeWithAmiga(this);
     storage.insert(storage.begin(), snapshot);
     putMessage(MSG_SNAPSHOT_TAKEN);
 }
 
 void
-Amiga::deleteSnapshot(vector<AmigaSnapshot *> &storage, unsigned index)
+Amiga::deleteSnapshot(vector<Snapshot *> &storage, unsigned index)
 {
-    AmigaSnapshot *snapshot = getSnapshot(storage, index);
+    Snapshot *snapshot = getSnapshot(storage, index);
     
     if (snapshot) {
         delete snapshot;
