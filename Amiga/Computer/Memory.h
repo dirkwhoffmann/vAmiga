@@ -116,9 +116,9 @@ class Memory : public HardwareComponent {
     class Copper *copper;
     class Denise *denise;
     class Paula *paula;
-    class ZorroManager *zorro; 
+    class ZorroManager *zorro;
     
-    public:
+public:
     
     /* Each memory area is represented by three variables:
      *
@@ -177,7 +177,7 @@ class Memory : public HardwareComponent {
     // Constructing and destructing
     //
     
-    public:
+public:
     
     Memory();
     ~Memory();
@@ -209,7 +209,7 @@ class Memory : public HardwareComponent {
     // Methods from HardwareComponent
     //
     
-    private:
+private:
 
     void _initialize() override;
     void _powerOn() override;
@@ -227,7 +227,7 @@ class Memory : public HardwareComponent {
     // Allocating memory
     //
     
-    private:
+private:
     
     /* Allocates 'size' bytes of memory.
      * As side effects, the memory lookup table is updated and a memory
@@ -240,7 +240,7 @@ class Memory : public HardwareComponent {
     // Managing RAM
     //
     
-    public:
+public:
     
     bool hasChipRam() { return chipRam != NULL; }
     bool allocateChipRam(size_t size) { return alloc(size, chipRam, chipRamSize); }
@@ -250,18 +250,20 @@ class Memory : public HardwareComponent {
     
     bool hasFastRam() { return fastRam != NULL; }
     bool allocateFastRam(size_t size) { return alloc(size, fastRam, fastRamSize); }
-    
+
+    void initializeRam();
+
     
     //
     // Managing ROM
     //
     
-    private:
+private:
     
     // Loads Rom data from a file.
     void loadRom(AmigaFile *rom, uint8_t *target, size_t length);
     
-    public:
+public:
     
     // Checks if a certain ROM is installed
     bool hasBootRom() { return bootRom != NULL; }
@@ -296,7 +298,7 @@ class Memory : public HardwareComponent {
     // Managing the memory source table
     //
     
-    public:
+public:
     
     // Returns the memory source lookup table.
     MemorySource *getMemSrcTable() { return memSrc; }
@@ -312,7 +314,7 @@ class Memory : public HardwareComponent {
     // Accessing memory cells
     //
     
-    public:
+public:
 
     uint8_t peek8(uint32_t addr);
     template <BusOwner owner> uint16_t peek16(uint32_t addr);
@@ -442,7 +444,7 @@ class Memory : public HardwareComponent {
     // Debugging
     //
     
-    public:
+public:
     
     // Returns 16 bytes of memory as an ASCII string.
     const char *ascii(uint32_t addr);

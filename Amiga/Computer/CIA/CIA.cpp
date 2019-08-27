@@ -38,6 +38,14 @@ CIA::_powerOn()
 }
 
 void
+CIA::_run()
+{
+    // Make sure port A and port B show the correct values
+    updatePA();
+    updatePB();
+}
+
+void
 CIA::_reset()
 {
     RESET_SNAPSHOT_ITEMS
@@ -50,14 +58,13 @@ CIA::_reset()
     latchA = 0xFFFF;
     latchB = 0xFFFF;
 
-    updatePA();
-    updatePB();
-
     CRA = 0x4; // seen in SAE
     CRB = 0x4; // seen in SAE
 
     // The OVL bit influences the memory layout. Hence, we need to update it.
     amiga->mem.updateMemSrcTable();
+
+    dump();
 }
 
 void
@@ -726,28 +733,37 @@ CIA::_dump()
 {
     _inspect();
     
-    msg("            Master Clock : %lld\n", amiga->getMasterClock());
     msg("                   Clock : %lld\n", clock);
     msg("                Sleeping : %s\n", sleeping ? "yes" : "no");
+    msg("               Tiredness : %d\n", tiredness);
     msg(" Most recent sleep cycle : %lld\n", sleepCycle);
     msg("Most recent wakeup cycle : %lld\n", wakeUpCycle);
-
-    
+    msg("\n");
 	msg("               Counter A : %04X\n", info.timerA.count);
     msg("                 Latch A : %04X\n", info.timerA.latch);
-    msg("             Data port A : %02X\n", info.portA.reg);
+    msg("         Data register A : %02X\n", info.portA.reg);
     msg("   Data port direction A : %02X\n", info.portA.dir);
+    msg("             Data port A : %02X\n", info.portA.port);
 	msg("      Control register A : %02X\n", CRA);
 	msg("\n");
 	msg("               Counter B : %04X\n", info.timerB.count);
 	msg("                 Latch B : %04X\n", info.timerB.latch);
-	msg("             Data port B : %02X\n", info.portB.reg);
+    msg("         Data register B : %02X\n", info.portB.reg);
 	msg("   Data port direction B : %02X\n", info.portB.dir);
+    msg("             Data port B : %02X\n", info.portB.port);
 	msg("      Control register B : %02X\n", CRB);
 	msg("\n");
 	msg("   Interrupt control reg : %02X\n", info.icr);
 	msg("      Interrupt mask reg : %02X\n", info.imr);
-	msg("\n");	
+	msg("\n");
+    msg("                     SDR : %02X %02X\n", info.sdr, SDR);
+    msg("                  serClk : %02X\n", serClk);
+    msg("              serCounter : %02X\n", serCounter);
+    msg("\n");
+    msg("                     CNT : %d\n", CNT);
+    msg("                     INT : %d\n", INT);
+    msg("\n");
+
 	tod.dump();
 }
 

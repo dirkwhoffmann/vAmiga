@@ -110,6 +110,14 @@ void
 CPU::_reset()
 {
     RESET_SNAPSHOT_ITEMS
+    irqLevel = -1;
+
+    // Initialize the CPU core
+    m68k_init();
+
+    // Reset the CPU core if memory (and thus the reset vector) is present
+    if (amiga->mem.chipRam != NULL) m68k_pulse_reset();
+
     clearTraceBuffer();
 }
 
@@ -251,6 +259,8 @@ CPU::didLoadFromBuffer(uint8_t *buffer)
     reader.copy(context, m68k_context_size());
     m68k_set_context(context);
 
+    debug(SNAP_DEBUG, "CPU state checksum: %x\n", fnv_1a(buffer, reader.ptr - buffer));
+
     return reader.ptr - buffer;
 }
 
@@ -262,6 +272,12 @@ CPU::didSaveToBuffer(uint8_t *buffer) const
     uint8_t context[m68k_context_size()];
     m68k_get_context(context);
     writer.copy(context, m68k_context_size());
+
+    debug("(actions) = %d\n",  (actions));
+    debug("(irqLevel) = %d\n",  (irqLevel));
+    debug("(waitStates) = %d\n",  (waitStates));
+
+    debug(SNAP_DEBUG, "CPU state checksum: %x\n", fnv_1a(buffer, writer.ptr - buffer));
 
     return writer.ptr - buffer;
 }

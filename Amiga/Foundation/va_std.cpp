@@ -38,6 +38,19 @@ void sprintb(char *s, int digits, uint64_t value)
     s[digits] = 0;
 }
 
+void
+hexdump(uint8_t *addr, size_t size)
+{
+    while (size) {
+
+        size_t num = MIN(size, 16);
+        for (int i = 0; i < num; i++) {
+            printf("%02X ", *(addr++));
+        }
+        size -= num;
+    }
+}
+
 char *
 extractFilename(const char *path)
 {

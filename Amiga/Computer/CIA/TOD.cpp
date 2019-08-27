@@ -20,7 +20,7 @@ TOD::TOD(CIA *cia)
 void
 TOD::_powerOn()
 {
-    stopped = true;
+
 }
 
 void
@@ -45,6 +45,13 @@ TOD::_dump()
     msg("            Frozen : %s\n", frozen ? "yes" : "no");
     msg("           Stopped : %s\n", stopped ? "yes" : "no");
     msg("\n");
+}
+
+void
+TOD::_reset()
+{
+    RESET_SNAPSHOT_ITEMS
+    stopped = true;
 }
 
 CounterInfo

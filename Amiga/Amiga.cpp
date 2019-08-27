@@ -64,12 +64,12 @@ Amiga::Amiga()
 
     subComponents = vector<HardwareComponent *> {
 
+        &agnus,
+        &mem,
         &cpu,
         &ciaA,
         &ciaB,
         &rtc,
-        &mem,
-        &agnus,
         &denise,
         &paula,
         &zorro,
@@ -502,8 +502,21 @@ Amiga::configureFifoBuffering(bool value)
 void
 Amiga::reset()
 {
+    msg("****** Reset\n");
+
     suspend();
+
+    assert(!isRunning());
+    
+    // Make this machine the active one
+    makeActiveInstance();
+
+    // Execute the standard reset routine
     HardwareComponent::reset();
+
+    // Inform the GUI
+    amiga->putMessage(MSG_RESET);
+
     resume();
 }
 
@@ -517,9 +530,8 @@ Amiga::_powerOn()
 {
     debug(1, "Power on\n");
 
-
-    // REMOVE ASAP
     /*
+    // REMOVE ASAP
     // gnus.blitter.setAccuracy(0);
     ADFFile *adf = ADFFile::makeWithFile("/Users/hoff/Dropbox/Amiga/Workbench/A2000WB1.2D.adf");
     // ADFFile *adf = ADFFile::makeWithFile("/Users/hoff/Dropbox/Amiga/Games/Barbarian.adf");
@@ -594,10 +606,12 @@ Amiga::_run()
     makeActiveInstance();
 
     // REMOVE ASAP
-#ifdef SNAP_DEBUG
-    Snapshot *snap = Snapshot::makeWithAmiga(this);
-    delete snap;
-#endif
+    if (SNAP_DEBUG == 1) {
+        debug("Creating snapshot\n");
+        Snapshot *snap = Snapshot::makeWithAmiga(this);
+        debug("Snap at %p created\n");
+        delete snap;
+    }
 
     // Start the emulator thread.
     pthread_create(&p, NULL, threadMain, (void *)this);
@@ -625,8 +639,6 @@ Amiga::_pause()
 void
 Amiga::_reset()
 {
-    msg("Reset\n");
-
     RESET_SNAPSHOT_ITEMS
 
     masterClock = 0;

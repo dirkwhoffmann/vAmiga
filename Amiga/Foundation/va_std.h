@@ -181,6 +181,7 @@ inline void sprint24d(char *s, uint24_t value) { sprintd(s, 8, value); }
 inline void sprint24x(char *s, uint24_t value) { sprintx(s, 6, value); }
 inline void sprint24b(char *s, uint24_t value) { sprintb(s, 24, value); }
 
+void hexdump(uint8_t *addr, size_t size);
 
 //
 // Handling files

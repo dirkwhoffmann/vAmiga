@@ -55,10 +55,8 @@ Memory::_powerOn()
         deleteExtRom();
     }
 
-    // Wipe out RAM
-    if (chipRam) memset(chipRam, 0, chipRamSize);
-    if (slowRam) memset(slowRam, 0, slowRamSize);
-    if (fastRam) memset(fastRam, 0, fastRamSize);
+    // Fill the RAM with the proper startup pattern
+    initializeRam();
 
     // Set up the memory lookup table
     updateMemSrcTable();
@@ -71,6 +69,12 @@ Memory::_reset()
 
     // Set up the memory lookup table
     updateMemSrcTable();
+
+    // In debug mode, we also erase the Ram (which does not happen on a real machine)
+#ifdef RESET_MEMORY
+    initializeRam();
+    dump();
+#endif
 }
 
 void
@@ -99,7 +103,7 @@ Memory::_dump()
             assert(addr != 0);
             assert(size % KB(1) == 0);
             uint64_t check = fnv_1a(addr, size);
-            plainmsg("%d KB at: %p Checksum: %x\n", size >> 10, addr, check);
+            plainmsg("%3d KB at: %p Checksum: %x\n", size >> 10, addr, check);
         }
     }
 }
@@ -238,6 +242,17 @@ Memory::alloc(size_t size, uint8_t *&ptrref, size_t &sizeref)
     updateMemSrcTable();
     
     return true;
+}
+
+void
+Memory::initializeRam()
+{
+    // Until we know more about the proper startup pattern, we erase the
+    // Ram by writing zeroes.
+
+    if (chipRam) memset(chipRam, 0, chipRamSize);
+    if (slowRam) memset(slowRam, 0, slowRamSize);
+    if (fastRam) memset(fastRam, 0, fastRamSize);
 }
 
 void

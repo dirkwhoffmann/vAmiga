@@ -81,27 +81,45 @@ class CIA : public HardwareComponent {
 
 protected:
 
+    // Quick-access references
+    class Agnus *agnus;
+    class Paula *paula;
+    class SerialPort *serialPort;
+
+    // Information shown in the GUI inspector panel
+    CIAInfo info;
+
+    // Identification (0 = CIA A, 1 = CIA B)
+    int nr;
+
+
+    //
+    // Sub components
+    //
+
+    // 24-bit counter
+    TOD tod = TOD(this);
+
+
+    //
+    // Configuration
+    //
+
     // The type of this CIA
     CIAType type = CIA_8520_DIP;
 
-    // Quick-access references
-    class Agnus *agnus;
-    class Paula *paula; 
-    class SerialPort *serialPort;
-    
-    // Information shown in the GUI inspector panel
-    CIAInfo info;
-    
+
+    //
+    // Internal state
+    //
+
 public:
     
     // The CIA has been executed up to this clock cycle.
     Cycle clock;
 
 protected:
-    
-    // Identification (0 = CIA A, 1 = CIA B)
-    int nr;
-    
+
     // Total number of skipped cycles (used by the debugger, only).
     Cycle idleCycles;
     
@@ -118,10 +136,7 @@ protected:
     
     // Timer B latch
     uint16_t latchB;
-    
-    // 24-bit counter
-    TOD tod = TOD(this);
-    
+
     
     //
     // Adapted from PC64Win by Wolfgang Lorenz
@@ -331,6 +346,7 @@ protected:
 
     void _initialize() override;
     void _powerOn() override;
+    void _run() override;
     void _reset() override;
     void _inspect() override;
     void _dump() override;
