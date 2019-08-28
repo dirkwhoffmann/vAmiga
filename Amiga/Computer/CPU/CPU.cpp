@@ -140,10 +140,16 @@ CPU::_reset()
     irqLevel = -1;
 
     // Reset the Musashi CPU core
+    memset(&m68ki_cpu, 0, sizeof(m68ki_cpu));
+    m68k_init();
+    m68k_set_cpu_type(M68K_CPU_TYPE_68000);
+    m68k_set_int_ack_callback(interrupt_handler);
     m68k_pulse_reset();
 
     // Remove all previously recorded instructions
     clearTraceBuffer();
+
+    _dumpMusashi(); 
 }
 
 void
@@ -221,6 +227,62 @@ CPU::_dump()
     plainmsg("   Flags: %X\n", info.flags);
 }
 
+void
+CPU::_dumpMusashi()
+{
+    plainmsg("Musashi CPU:\n\n");
+
+    plainmsg("                  cpu_type : %d\n", m68ki_cpu.cpu_type);
+    plainmsg("                       dar : %d %d ...\n", m68ki_cpu.dar[0], m68ki_cpu.dar[1]);
+    plainmsg("                       ppc : %d\n", m68ki_cpu.ppc);
+    plainmsg("                        pc : %d\n", m68ki_cpu.pc);
+    plainmsg("                        sp : %d %d ...\n", m68ki_cpu.sp[0], m68ki_cpu.sp[1]);
+    plainmsg("                       vbr : %d\n", m68ki_cpu.vbr);
+    plainmsg("                       sfc : %d\n", m68ki_cpu.sfc);
+    plainmsg("                       dfc : %d\n", m68ki_cpu.dfc);
+    plainmsg("                      cacr : %d\n", m68ki_cpu.cacr);
+    plainmsg("                      caar : %d\n", m68ki_cpu.caar);
+    plainmsg("                        ir : %d\n", m68ki_cpu.ir);
+    plainmsg("                   t1_flag : %d\n", m68ki_cpu.t1_flag);
+    plainmsg("                   t0_flag : %d\n", m68ki_cpu.t0_flag);
+    plainmsg("                    s_flag : %d\n", m68ki_cpu.s_flag);
+    plainmsg("                    m_flag : %d\n", m68ki_cpu.m_flag);
+    plainmsg("                    x_flag : %d\n", m68ki_cpu.x_flag);
+    plainmsg("                    n_flag : %d\n", m68ki_cpu.n_flag);
+    plainmsg("                not_z_flag : %d\n", m68ki_cpu.not_z_flag);
+    plainmsg("                    v_flag : %d\n", m68ki_cpu.v_flag);
+    plainmsg("                    c_flag : %d\n", m68ki_cpu.c_flag);
+    plainmsg("                  int_mask : %d\n", m68ki_cpu.int_mask);
+    plainmsg("                 int_level : %d\n", m68ki_cpu.int_level);
+    plainmsg("                int_cycles : %d\n", m68ki_cpu.int_cycles);
+    plainmsg("                   stopped : %d\n", m68ki_cpu.stopped);
+    plainmsg("                 pref_addr : %d\n", m68ki_cpu.pref_addr);
+    plainmsg("                 pref_data : %d\n", m68ki_cpu.pref_data);
+    plainmsg("              address_mask : %d\n", m68ki_cpu.address_mask);
+    plainmsg("                   sr_mask : %d\n", m68ki_cpu.sr_mask);
+    plainmsg("                instr_mode : %d\n", m68ki_cpu.instr_mode);
+    plainmsg("                  run_mode : %d\n", m68ki_cpu.run_mode);
+    plainmsg("          cyc_bcc_notake_b : %d\n", m68ki_cpu.cyc_bcc_notake_b);
+    plainmsg("          cyc_bcc_notake_w : %d\n", m68ki_cpu.cyc_bcc_notake_w);
+    plainmsg("          cyc_dbcc_f_noexp : %d\n", m68ki_cpu.cyc_dbcc_f_noexp);
+    plainmsg("            cyc_dbcc_f_exp : %d\n", m68ki_cpu.cyc_dbcc_f_exp);
+    plainmsg("            cyc_scc_r_true : %d\n", m68ki_cpu.cyc_scc_r_true);
+    plainmsg("               cyc_movem_w : %d\n", m68ki_cpu.cyc_movem_w);
+    plainmsg("               cyc_movem_l : %d\n", m68ki_cpu.cyc_movem_l);
+    plainmsg("                 cyc_shift : %d\n", m68ki_cpu.cyc_shift);
+    plainmsg("                 cyc_reset : %d\n", m68ki_cpu.cyc_reset);
+    plainmsg("           cyc_instruction : %p\n", m68ki_cpu.cyc_instruction);
+    plainmsg("             cyc_exception : %p\n", m68ki_cpu.cyc_exception);
+    plainmsg("\n");
+    plainmsg("          int_ack_callback : %p\n", m68ki_cpu.int_ack_callback);
+    plainmsg("         bkpt_ack_callback : %p\n", m68ki_cpu.bkpt_ack_callback);
+    plainmsg("      reset_instr_callback : %p\n", m68ki_cpu.reset_instr_callback);
+    plainmsg("       pc_changed_callback : %p\n", m68ki_cpu.pc_changed_callback);
+    plainmsg("           set_fc_callback : %p\n", m68ki_cpu.set_fc_callback);
+    plainmsg("       instr_hook_callback : %p\n", m68ki_cpu.instr_hook_callback);
+    plainmsg("\n");
+}
+
 CPUInfo
 CPU::getInfo()
 {
@@ -271,7 +333,6 @@ CPU::_size()
 
     counter.count += m68k_context_size();
 
-    debug(SNAP_DEBUG, "Snapshot size is %d bytes\n", counter.count);
     return counter.count;
 }
 
@@ -284,7 +345,8 @@ CPU::didLoadFromBuffer(uint8_t *buffer)
     reader.copy(context, m68k_context_size());
     m68k_set_context(context);
 
-    debug(SNAP_DEBUG, "CPU state checksum: %x\n", fnv_1a(buffer, reader.ptr - buffer));
+    debug(SNAP_DEBUG, "CPU state checksum: %x (%d bytes)\n",
+          fnv_1a(buffer, reader.ptr - buffer), reader.ptr - buffer);
 
     return reader.ptr - buffer;
 }
@@ -302,7 +364,8 @@ CPU::didSaveToBuffer(uint8_t *buffer) const
     debug("(irqLevel) = %d\n",  (irqLevel));
     debug("(waitStates) = %d\n",  (waitStates));
 
-    debug(SNAP_DEBUG, "CPU state checksum: %x\n", fnv_1a(buffer, writer.ptr - buffer));
+    debug(SNAP_DEBUG, "CPU state checksum: %x (%d bytes)\n",
+          fnv_1a(buffer, writer.ptr - buffer), writer.ptr - buffer);
 
     return writer.ptr - buffer;
 }

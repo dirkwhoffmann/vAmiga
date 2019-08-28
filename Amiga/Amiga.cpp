@@ -541,7 +541,6 @@ Amiga::_powerOn()
 {
     debug(1, "Power on\n");
 
-    /*
     // REMOVE ASAP
     // gnus.blitter.setAccuracy(0);
 
@@ -551,7 +550,6 @@ Amiga::_powerOn()
         df0.insertDisk(adf);
         debug("Disk inserted\n");
     }
-    */
 
     masterClock = 0;
     runLoopCtrl = 0;

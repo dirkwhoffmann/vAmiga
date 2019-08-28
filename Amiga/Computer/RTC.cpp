@@ -17,6 +17,14 @@ RTC::RTC()
 void
 RTC::_powerOn()
 {
+
+}
+
+void
+RTC::_reset()
+{
+    RESET_SNAPSHOT_ITEMS
+
     reg[13] = 0b001; // Control register D
     reg[14] = 0b000; // Control register E
     reg[15] = 0b100; // Control register F

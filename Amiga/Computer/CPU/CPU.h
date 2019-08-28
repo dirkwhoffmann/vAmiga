@@ -135,6 +135,7 @@ private:
     void _reset() override;
     void _inspect() override;
     void _dump() override;
+    void _dumpMusashi();
     size_t _size() override;
     size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS }

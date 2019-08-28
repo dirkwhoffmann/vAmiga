@@ -67,7 +67,6 @@ Drive::_size()
         disk->applyToPersistentItems(counter);
     }
 
-    debug(SNAP_DEBUG, "Snapshot size is %d bytes\n", counter.count);
     return counter.count;
 }
 

@@ -279,7 +279,6 @@ public:
 SerCounter counter; \
 applyToPersistentItems(counter); \
 applyToResetItems(counter); \
-debug(SNAP_DEBUG, "Snapshot size is %d bytes\n", counter.count); \
 return counter.count;
 
 #define RESET_SNAPSHOT_ITEMS \

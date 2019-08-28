@@ -123,7 +123,6 @@ Memory::_size()
     counter.count += sizeof(slowRamSize) + slowRamSize;
     counter.count += sizeof(fastRamSize) + fastRamSize;
 
-    debug(SNAP_DEBUG, "Snapshot size is %d bytes\n", counter.count);
     return counter.count;
 }
 
