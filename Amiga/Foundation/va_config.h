@@ -39,6 +39,7 @@ static const int INVREG_DEBUG  = 2;  // Ivalid register accesses
 
 static const int RUNLOOP_DEBUG = 2;  // Run loop of the emulator thread
 static const int CPU_DEBUG     = 2;  // CPU
+static const int IRQ_DEBUG     = 2;  // Interrupts
 static const int CIA_DEBUG     = 2;  // CIAs
 static const int TOD_DEBUG     = 2;  // TODs (CIA 24-bit counters)
 static const int RTC_DEBUG     = 2;  // Real-time clock

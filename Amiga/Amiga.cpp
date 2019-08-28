@@ -986,7 +986,7 @@ Amiga::runLoop()
     do {
         
         // Emulate CPU instruction
-        CPUCycle cpuCycles = cpu.executeNextInstruction();
+        CPUCycle cpuCycles = cpu.executeInstruction();
         
         // Advance the masterclock and add additional wait states
         masterClock += CPU_CYCLES(cpuCycles);

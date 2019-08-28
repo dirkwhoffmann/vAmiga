@@ -444,7 +444,7 @@ CPU::recordInstruction()
 }
 
 uint64_t
-CPU::executeNextInstruction()
+CPU::executeInstruction()
 {
     int cycles = 0;
 
@@ -452,7 +452,7 @@ CPU::executeNextInstruction()
     if (actions) {
 
         if (actions & CPU_SET_IRQ_LEVEL) {
-            debug(CPU_DEBUG, "Changing IRQ level to %d\n", irqLevel);
+            debug(IRQ_DEBUG, "Changing IRQ level to %d\n", irqLevel);
             m68k_set_irq(irqLevel);
         }
 
@@ -474,6 +474,8 @@ CPU::setIrqLevel(int level)
 {
     if (irqLevel != level)
     {
+        debug(IRQ_DEBUG, "IRQ level changed from %d to %d\n", irqLevel, level);
+
         irqLevel = level;
         actions |= CPU_SET_IRQ_LEVEL;
     }

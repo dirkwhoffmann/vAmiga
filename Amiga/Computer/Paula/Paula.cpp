@@ -362,7 +362,6 @@ Paula::checkInterrupt()
     }
     */
 
-    // m68k_set_irq(level);
     cpu->setIrqLevel(level);
 }
 

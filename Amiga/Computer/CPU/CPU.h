@@ -240,7 +240,7 @@ public:
 public:
 
     // Executes the next instruction
-    uint64_t executeNextInstruction();
+    uint64_t executeInstruction();
 
     // Changes the interrupt level
     void setIrqLevel(int level);
