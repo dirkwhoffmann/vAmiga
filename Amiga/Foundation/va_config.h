@@ -30,6 +30,7 @@
 
 static const int BLTREG_DEBUG  = 2;  // Blitter registers
 static const int DSKREG_DEBUG  = 2;  // Disk controller registers
+static const int CIAREG_DEBUG  = 2;  // CIA registers
 static const int BPLREG_DEBUG  = 2;  // Bitplane registers
 static const int AUDREG_DEBUG  = 2;  // Audio registers
 static const int COPREG_DEBUG  = 2;  // Copper registers
@@ -39,7 +40,7 @@ static const int INVREG_DEBUG  = 2;  // Ivalid register accesses
 
 static const int RUNLOOP_DEBUG = 2;  // Run loop of the emulator thread
 static const int CPU_DEBUG     = 2;  // CPU
-static const int IRQ_DEBUG     = 2;  // Interrupts
+static const int INT_DEBUG     = 2;  // Interrupts
 static const int CIA_DEBUG     = 2;  // CIAs
 static const int TOD_DEBUG     = 2;  // TODs (CIA 24-bit counters)
 static const int RTC_DEBUG     = 2;  // Real-time clock
@@ -71,7 +72,7 @@ static const int BLT_CHECKSUM  = 2;  // Blitter checksums
 
 // Additional debugging aids (uncomment to enable)
 
-#define RESET_MEMORY     // Let a reset clear the memory
+#define HARD_RESET       // Restore the initial power up state in reset()
 // #define BORDER_DEBUG     // Draws the border in debug colors
 // #define PIXEL_DEBUG      // Highlight first pixel in each 16-bit pixel chunk
 // #define LINE_DEBUG       // Colorizes certain rasterlines

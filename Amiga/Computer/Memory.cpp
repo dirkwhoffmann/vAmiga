@@ -70,11 +70,12 @@ Memory::_reset()
     // Set up the memory lookup table
     updateMemSrcTable();
 
-    // In debug mode, we also erase the Ram (which does not happen on a real machine)
-#ifdef RESET_MEMORY
+#ifdef HARD_RESET
+    // In hard-reset mode, we also initialize Ram
     initializeRam();
-    dump();
 #endif
+
+    dump();
 }
 
 void
@@ -102,7 +103,7 @@ Memory::_dump()
         } else {
             assert(addr != 0);
             assert(size % KB(1) == 0);
-            uint64_t check = fnv_1a(addr, size);
+            uint32_t check = fnv_1a_32(addr, size);
             plainmsg("%3d KB at: %p Checksum: %x\n", size >> 10, addr, check);
         }
     }
@@ -452,7 +453,7 @@ Memory::updateMemSrcTable()
     memSrc[i] = MEM_AUTOCONF;
     
     // Extended Rom
-    for (unsigned i = 0xF0; i <= 0xF7; i++)
+    for (unsigned i = 0xE0; i <= 0xE7; i++)
         memSrc[i] = mem_ext;
 
     // Boot Rom or Kickstart mirror
@@ -465,10 +466,22 @@ Memory::updateMemSrcTable()
 
     // Overlay Rom with lower memory area if the OVL line is high
     for (unsigned i = 0; ovl && i < 8 && memSrc[0xF8 + i] != MEM_UNMAPPED; i++)
-        memSrc[i] = memSrc[0xF8 + i];
+        memSrc[i] = memSrc[(extRom ? 0xE0 : 0xF8) + i];
     
     if (amiga) amiga->putMessage(MSG_MEM_LAYOUT);
 }
+
+/*
+uint32_t extromcheck =
+fnv_1a_it32
+ (fnv_1a_it32
+  (fnv_1a_it32
+   (fnv_1a_it32
+    (fnv_1a_it32
+     (fnv_1a_init32(), 0x1114), 0x1114), 0x4EF9), 0xF8), 0x2);
+long extcheckcnt = 5;
+long checkverbose = 6;
+*/
 
 uint8_t
 Memory::peek8(uint32_t addr)
@@ -628,6 +641,20 @@ Memory::peek16(uint32_t addr)
 
                 case MEM_EXTROM:
 
+                    // debug("MEM EXTROM addr = %X\n", addr);
+                    /*
+                    extromcheck = fnv_1a_it32(extromcheck, READ_EXT_16(addr));
+                    extcheckcnt++;
+
+                    if (checkverbose < 16) {
+                        checkverbose++;
+                        debug("    %d: (%X) = %X\n", checkverbose, addr, READ_EXT_16(addr));
+                    }
+                    if (extcheckcnt % 1024 == 0) {
+                        debug("MEM_EXTROM %d: %x (extromsize = %X)\n", extcheckcnt, extromcheck, extRomSize);
+                    }
+                    */
+                    
                     ASSERT_EXT_ADDR(addr);
                     return READ_EXT_16(addr);
             }
@@ -640,7 +667,11 @@ Memory::peek16(uint32_t addr)
 uint32_t
 Memory::peek32(uint32_t addr)
 {
-    // debug("PC: %X peek32(%X)\n", amiga->cpu.getPC(), addr);
+    /*
+    if (memSrc[addr >> 16] == MEM_EXTROM) {
+        debug("PC: %X peek32(%X)\n", amiga->cpu.getPC(), addr);
+    }
+    */
     return HI_W_LO_W(peek16<BUS_CPU>(addr), peek16<BUS_CPU>(addr + 2));
 }
 
@@ -1042,15 +1073,24 @@ Memory::peekCustom8(uint32_t addr)
     }
 }
 
+/*
+uint16_t
+Memory::peekCustom16(uint32_t addr)
+{
+    uint16_t result = peekCustom16_debug(addr);
+
+    if (addr != 0xDFF018) {
+        debug("peekCustom16(%X [%s]) = %X\n", addr, customReg[(addr >> 1) & 0xFF], result);
+    }
+
+    return result;
+}
+*/
+
 uint16_t
 Memory::peekCustom16(uint32_t addr)
 {
     assert(IS_EVEN(addr));
-
-    /*
-    if (addr != 0xDFF018)
-        debug("peekCustom16(%X [%s])\n", addr, customReg[(addr >> 1) & 0xFF]);
-    */
 
     switch ((addr >> 1) & 0xFF) {
             
@@ -1168,7 +1208,11 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
 {
     // if (addr >= 0x180 && addr <= 0x1BE) debug("Poke Color reg %X\n", addr);
 
-    // debug("pokeCustom16(%X [%s], %X)\n", addr, customReg[(addr >> 1) & 0xFF], value);
+    if ((addr & 0xFFF) != 0x30) {
+        // debug("pokeCustom16(%X [%s], %X)\n", addr, customReg[(addr >> 1) & 0xFF], value);
+    } else {
+        debug("'%c'\n", (char)value);
+    }
 
     assert(IS_EVEN(addr));
 

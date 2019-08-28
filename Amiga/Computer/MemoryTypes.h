@@ -32,6 +32,8 @@ typedef enum
 }
 MemorySource;
 
+static inline bool isMemorySource(long value) { return value >= 0 && value <= MEM_EXTROM; }
+
 /* Poke source.
  * Some poke methods need to know who called them.
  */

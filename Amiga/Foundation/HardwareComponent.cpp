@@ -282,7 +282,7 @@ HardwareComponent::save(uint8_t *buffer)
 
     // Verify that the number of written bytes matches the snapshot size
     assert(ptr - buffer == size());
-    debug(SNAP_DEBUG, "Checksum: %x\n", fnv_1a(buffer, ptr - buffer));
+    debug(SNAP_DEBUG, "Checksum: %x\n", fnv_1a_64(buffer, ptr - buffer));
     // hexdump(buffer, MIN(ptr - buffer, 128));
 
     return ptr - buffer;

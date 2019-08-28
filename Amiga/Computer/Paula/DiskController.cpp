@@ -213,6 +213,8 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
 void
 DiskController::pokeDSKDAT(uint16_t value)
 {
+    debug(DSKREG_DEBUG, "pokeDSKDAT\n");
+
     // DSKDAT is a strobe register that cannot be accessed by the CPU.
 }
 

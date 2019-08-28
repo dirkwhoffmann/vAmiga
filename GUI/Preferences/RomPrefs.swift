@@ -193,11 +193,11 @@ extension PreferencesController {
         amigaProxy?.mem.deleteBootRom()
         
         // Revert to the AROS Kickstart replacement
-        // amigaProxy?.mem.loadKickRom(fromBuffer: NSDataAsset(name: "aros-amiga-m68k-rom")?.data)
-        amigaProxy?.mem.loadKickRom(fromBuffer: NSDataAsset(name: "aros-rom")?.data)
+        amigaProxy?.mem.loadKickRom(fromBuffer: NSDataAsset(name: "aros-amiga-m68k-rom")?.data)
+        // amigaProxy?.mem.loadKickRom(fromBuffer: NSDataAsset(name: "aros-rom")?.data)
         myController?.kickRomURL = URL(fileURLWithPath: "")
-        // amigaProxy?.mem.loadExtRom(fromBuffer: NSDataAsset(name: "aros-amiga-m68k-ext")?.data)
-        amigaProxy?.mem.loadExtRom(fromBuffer: NSDataAsset(name: "aros-ext")?.data)
+        amigaProxy?.mem.loadExtRom(fromBuffer: NSDataAsset(name: "aros-amiga-m68k-ext")?.data)
+        // amigaProxy?.mem.loadExtRom(fromBuffer: NSDataAsset(name: "aros-ext")?.data)
         myController?.extRomURL = URL(fileURLWithPath: "")
         refresh()
     }

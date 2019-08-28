@@ -82,7 +82,9 @@ extern "C" uint32_t read_on_reset(uint32_t defaultValue)
          * already. If that's the case, the first memory page is mapped to
          * either Boot Rom or Kickstart Rom.
          */
-        assert(mem->memSrc[0x0] == MEM_BOOT || mem->memSrc[0x0] == MEM_KICK);
+        assert(mem->memSrc[0x0] == MEM_BOOT ||
+               mem->memSrc[0x0] == MEM_KICK ||
+               mem->memSrc[0x0] == MEM_EXTROM);
 
         result = activeAmiga->mem.spypeek32(ADDRESS_68K(REG_PC));
     }
@@ -137,19 +139,21 @@ CPU::_reset()
     debug(CPU_DEBUG, "CPU::_reset()\n");
 
     RESET_SNAPSHOT_ITEMS
-    irqLevel = -1;
+    // irqLevel = -1;
 
     // Reset the Musashi CPU core
+#ifdef HARD_RESET
     memset(&m68ki_cpu, 0, sizeof(m68ki_cpu));
     m68k_init();
     m68k_set_cpu_type(M68K_CPU_TYPE_68000);
     m68k_set_int_ack_callback(interrupt_handler);
+#endif
     m68k_pulse_reset();
 
     // Remove all previously recorded instructions
     clearTraceBuffer();
 
-    _dumpMusashi(); 
+    // _dumpMusashi(); 
 }
 
 void
@@ -346,7 +350,7 @@ CPU::didLoadFromBuffer(uint8_t *buffer)
     m68k_set_context(context);
 
     debug(SNAP_DEBUG, "CPU state checksum: %x (%d bytes)\n",
-          fnv_1a(buffer, reader.ptr - buffer), reader.ptr - buffer);
+          fnv_1a_64(buffer, reader.ptr - buffer), reader.ptr - buffer);
 
     return reader.ptr - buffer;
 }
@@ -365,7 +369,7 @@ CPU::didSaveToBuffer(uint8_t *buffer) const
     debug("(waitStates) = %d\n",  (waitStates));
 
     debug(SNAP_DEBUG, "CPU state checksum: %x (%d bytes)\n",
-          fnv_1a(buffer, writer.ptr - buffer), writer.ptr - buffer);
+          fnv_1a_64(buffer, writer.ptr - buffer), writer.ptr - buffer);
 
     return writer.ptr - buffer;
 }
@@ -515,7 +519,7 @@ CPU::executeInstruction()
     if (actions) {
 
         if (actions & CPU_SET_IRQ_LEVEL) {
-            debug(IRQ_DEBUG, "Changing IRQ level to %d\n", irqLevel);
+            debug(CPU_DEBUG, "Changing IRQ level to %d\n", irqLevel);
             m68k_set_irq(irqLevel);
         }
 
@@ -537,7 +541,7 @@ CPU::setIrqLevel(int level)
 {
     if (irqLevel != level)
     {
-        debug(IRQ_DEBUG, "IRQ level changed from %d to %d\n", irqLevel, level);
+        debug(INT_DEBUG, "IRQ level changed from %d to %d\n", irqLevel, level);
 
         irqLevel = level;
         actions |= CPU_SET_IRQ_LEVEL;
@@ -556,7 +560,7 @@ CPU::addWaitStates(Cycle number)
 unsigned int
 CPU::interruptHandler(unsigned int irqLevel)
 {
-    debug(CPU_DEBUG, "interruptHandler(%d)\n");
+    debug(INT_DEBUG, "interruptHandler(%d)\n", irqLevel);
 
     // Do nothing here. I.e., don't automatically clear the interrupt
 

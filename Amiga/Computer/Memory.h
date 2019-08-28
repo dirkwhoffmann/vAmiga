@@ -64,9 +64,13 @@ const uint32_t EXT_ROM_MASK  = 0x07FFFF; // 512 KB
 #define READ_KICK_32(x) READ_32(kickRom + ((x) % kickRomSize))
 
 // Reads a value from Extended ROM in big endian format
-#define READ_EXT_8(x)  READ_8(extRom + ((x) % extRomSize))
-#define READ_EXT_16(x) READ_16(extRom + ((x) % extRomSize))
-#define READ_EXT_32(x) READ_32(extRom + ((x) % extRomSize))
+// #define READ_EXT_8(x)  READ_8(extRom + ((x) % extRomSize))
+// #define READ_EXT_16(x) READ_16(extRom + ((x) % extRomSize))
+// #define READ_EXT_32(x) READ_32(extRom + ((x) % extRomSize))
+
+#define READ_EXT_8(x)  READ_8(extRom + ((x) & 0x7FFFF))
+#define READ_EXT_16(x) READ_16(extRom + ((x) & 0x7FFFF))
+#define READ_EXT_32(x) READ_32(extRom + ((x) & 0x7FFFF))
 
 // Writes a value into memory in big endian format
 #define WRITE_8(x,y)  (*(uint8_t *)(x) = y)
@@ -271,9 +275,9 @@ public:
     bool hasExtRom() { return extRom != NULL; }
 
     // Returns a fingerprint for a certain ROM
-    uint64_t bootRomFingerprint() { return fnv_1a(bootRom, bootRomSize); }
-    uint64_t kickRomFingerprint() { return fnv_1a(kickRom, kickRomSize); }
-    uint64_t extRomFingerprint() { return fnv_1a(extRom,  extRomSize); }
+    uint64_t bootRomFingerprint() { return fnv_1a_64(bootRom, bootRomSize); }
+    uint64_t kickRomFingerprint() { return fnv_1a_64(kickRom, kickRomSize); }
+    uint64_t extRomFingerprint() { return fnv_1a_64(extRom,  extRomSize); }
 
     // Deletes a previously installed ROM
     void deleteBootRom() { alloc(0, bootRom, bootRomSize); }
@@ -400,7 +404,7 @@ public:
     //
     
     uint8_t peekCustom8(uint32_t addr);
-    uint16_t peekCustom16(uint32_t addr);
+    uint16_t peekCustom16(uint32_t addr); 
     uint32_t peekCustom32(uint32_t addr);
     
     uint8_t spypeekCustom8(uint32_t addr);

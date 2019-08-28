@@ -260,8 +260,9 @@ inline uint64_t fnv_1a_init64() { return 0xcbf29ce484222325; }
 inline uint32_t fnv_1a_it32(uint32_t prev, uint32_t value) { return (prev ^ value) * 0x1000193; }
 inline uint64_t fnv_1a_it64(uint64_t prev, uint64_t value) { return (prev ^ value) * 0x100000001b3; }
 
-// Computes a 64-bit checksum based on the FNV-1a hash algorithm.
-uint64_t fnv_1a(uint8_t *addr, size_t size);
+// Computes a FNV-1a for a given buffer
+uint32_t fnv_1a_32(uint8_t *addr, size_t size);
+uint64_t fnv_1a_64(uint8_t *addr, size_t size);
 
 
 //
