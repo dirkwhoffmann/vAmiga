@@ -40,9 +40,7 @@ CIA::_powerOn()
 void
 CIA::_run()
 {
-    // Make sure port A and port B show the correct values
-    updatePA();
-    updatePB();
+
 }
 
 void
@@ -61,10 +59,11 @@ CIA::_reset()
     CRA = 0x4; // seen in SAE
     CRB = 0x4; // seen in SAE
 
+    updatePA();
+    updatePB();
+
     // The OVL bit influences the memory layout. Hence, we need to update it.
     amiga->mem.updateMemSrcTable();
-
-    dump();
 }
 
 void
@@ -1295,11 +1294,14 @@ CIAA::portAexternal()
     
     // Set drive status bits
     result = paula->diskController.driveStatusFlags();
-    
+
     // Set control port bits
     result &= amiga->controlPort1.ciapa();
     result &= amiga->controlPort2.ciapa();
 
+    // The OVL bit must be 1
+    assert(result & 1);
+    
     return result;
 }
 

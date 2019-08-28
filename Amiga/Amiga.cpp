@@ -62,13 +62,22 @@ Amiga::Amiga()
 {
     setDescription("Amiga");
 
+    /* The order of sub-components is important here, because some components
+     * are dependend on others during initialization. I.e.,
+     *
+     * - The control ports, the serial Controller, the disk controller, and the
+     *   disk drives must preceed the CIAs, because the CIA port values depend
+     *   on these devices.
+     *
+     * - The CIAs must preceed memory, because they determine if the lower
+     *   memory banks are overlayed by Rom.
+     *
+     * - Memory mus preceed the CPU, because it contains the CPU reset vector.
+     */
+
     subComponents = vector<HardwareComponent *> {
 
         &agnus,
-        &mem,
-        &cpu,
-        &ciaA,
-        &ciaB,
         &rtc,
         &denise,
         &paula,
@@ -84,6 +93,10 @@ Amiga::Amiga()
         &df1,
         &df2,
         &df3,
+        &ciaA,
+        &ciaB,
+        &mem,
+        &cpu,
     };
 
     // Set up initial state
@@ -502,8 +515,6 @@ Amiga::configureFifoBuffering(bool value)
 void
 Amiga::reset()
 {
-    msg("****** Reset\n");
-
     suspend();
 
     assert(!isRunning());
@@ -533,6 +544,7 @@ Amiga::_powerOn()
     /*
     // REMOVE ASAP
     // gnus.blitter.setAccuracy(0);
+
     ADFFile *adf = ADFFile::makeWithFile("/Users/hoff/Dropbox/Amiga/Workbench/A2000WB1.2D.adf");
     // ADFFile *adf = ADFFile::makeWithFile("/Users/hoff/Dropbox/Amiga/Games/Barbarian.adf");
     if (adf != NULL) {
@@ -546,12 +558,7 @@ Amiga::_powerOn()
     
     // Make this emulator instance the active one
     makeActiveInstance();
-    
-    m68k_init();
-    m68k_set_cpu_type(M68K_CPU_TYPE_68000);
-    m68k_set_int_ack_callback(interrupt_handler);
-    m68k_pulse_reset();
-    
+
     // For debugging, we start in debug mode and set a breakpoint
     debugMode = true;
 
@@ -596,13 +603,13 @@ Amiga::_powerOff()
 void
 Amiga::_run()
 {
-    // Check for missing Roms.
+    // Check for missing Roms
     if (!readyToPowerUp()) {
         putMessage(MSG_ROM_MISSING);
         return;
     }
     
-    // Make this Amiga the active emulator instance.
+    // Make this Amiga the active emulator instance
     makeActiveInstance();
 
     // REMOVE ASAP
@@ -612,6 +619,9 @@ Amiga::_run()
         debug("Snap at %p created\n");
         delete snap;
     }
+
+    debug("Starting emulation thread (PC = %X, irq_handler = %p)\n", cpu.getPC(), cpu.getIrqHandler());
+
 
     // Start the emulator thread.
     pthread_create(&p, NULL, threadMain, (void *)this);
@@ -634,23 +644,6 @@ Amiga::_pause()
 
     // Inform the GUI
     amiga->putMessage(MSG_PAUSE);
-}
-
-void
-Amiga::_reset()
-{
-    RESET_SNAPSHOT_ITEMS
-
-    masterClock = 0;
-    makeActiveInstance();
-
-    // Initialize the Musashi CPU core
-    m68k_init();
-
-    // Reset the CPU core (memory needs to be present to read the reset vector)
-    if (mem.chipRam != NULL) m68k_pulse_reset();
-
-    amiga->putMessage(MSG_RESET);
 }
 
 void

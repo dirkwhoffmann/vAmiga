@@ -48,30 +48,18 @@ extern "C" unsigned int m68k_read_disassembler_32 (unsigned int addr)
 extern "C" void m68k_write_memory_8(unsigned int addr, unsigned int value)
 {
     assert(activeAmiga != NULL);
-    /*
-    if (addr == 0x15150 || (addr >= 0xB160 && addr <= 0xB180)) printf("CPU::poke8(%x), %x\n", addr, value);
-    */
     activeAmiga->mem.poke8(addr, value);
 }
 
 extern "C" void m68k_write_memory_16(unsigned int addr, unsigned int value)
 {
     assert(activeAmiga != NULL);
-
-    // if (addr >= 0xC2F3A0 && addr <= 0xC2F3B0) printf("%X CPU::poke16(%x), %x\n", addr, value);
-
     activeAmiga->mem.poke16<BUS_CPU>(addr, value);
 }
 
 extern "C" void m68k_write_memory_32(unsigned int addr, unsigned int value)
 {
     assert(activeAmiga != NULL);
-
-    /*
-    if (addr >= 0xC2F3A0 && addr <= 0xC2F3B0) printf("%X CPU::poke32(%x), %x\n", activeAmiga->cpu.getPC(), addr, value);
-        if (addr == 0x15150) activeAmiga->runLoopCtrl |= RL_STOP;
-    }
-    */
     activeAmiga->mem.poke32(addr, value);
 }
 
@@ -80,6 +68,32 @@ extern "C" int interrupt_handler(int irqLevel)
     assert(activeAmiga != NULL);
     return activeAmiga->cpu.interruptHandler(irqLevel);
 }
+
+extern "C" uint32_t read_on_reset(uint32_t defaultValue)
+{
+    uint32_t result = defaultValue;
+
+    // Check for attached memory
+    if (activeAmiga && activeAmiga->mem.chipRam) {
+
+        Memory *mem = &activeAmiga->mem;
+
+        /* When we reach here, we expect that memory has been initialised
+         * already. If that's the case, the first memory page is mapped to
+         * either Boot Rom or Kickstart Rom.
+         */
+        assert(mem->memSrc[0x0] == MEM_BOOT || mem->memSrc[0x0] == MEM_KICK);
+
+        result = activeAmiga->mem.spypeek32(ADDRESS_68K(REG_PC));
+    }
+    REG_PC += 4;
+
+    return result;
+}
+
+extern "C" uint32_t read_sp_on_reset(void) { return read_on_reset(0); }
+extern "C" uint32_t read_pc_on_reset(void) { return read_on_reset(0); }
+
 
 //
 // CPU class
@@ -101,23 +115,34 @@ CPU::~CPU()
 }
 
 void
+CPU::_initialize()
+{
+    debug(CPU_DEBUG, "CPU::_initialize()\n");
+
+    // Initialize the Musashi CPU core
+    m68k_init();
+    m68k_set_cpu_type(M68K_CPU_TYPE_68000);
+    m68k_set_int_ack_callback(interrupt_handler);
+}
+
+void
 CPU::_powerOn()
 {
-    irqLevel = -1; 
+    debug(CPU_DEBUG, "CPU::_powerOn()\n");
 }
 
 void
 CPU::_reset()
 {
+    debug(CPU_DEBUG, "CPU::_reset()\n");
+
     RESET_SNAPSHOT_ITEMS
     irqLevel = -1;
 
-    // Initialize the CPU core
-    m68k_init();
+    // Reset the Musashi CPU core
+    m68k_pulse_reset();
 
-    // Reset the CPU core if memory (and thus the reset vector) is present
-    if (amiga->mem.chipRam != NULL) m68k_pulse_reset();
-
+    // Remove all previously recorded instructions
     clearTraceBuffer();
 }
 
@@ -314,6 +339,12 @@ uint32_t
 CPU::getPC()
 {
     return m68k_get_reg(NULL, M68K_REG_PC);
+}
+
+void
+CPU::setPC(uint32_t value)
+{
+    m68k_set_reg(M68K_REG_PC, value);
 }
 
 uint32_t

@@ -304,7 +304,7 @@ private:
     void _powerOff() override;
     void _run() override;
     void _pause() override;
-    void _reset() override;
+    void _reset() override { RESET_SNAPSHOT_ITEMS }
     void _ping() override;
     void _inspect() override;
     void _dump() override;

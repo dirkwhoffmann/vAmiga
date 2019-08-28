@@ -13,13 +13,39 @@
 #include "HardwareComponent.h"
 #include "BreakpointManager.h"
 
+/* vAmiga utilizes the Musashi CPU core for emulating the Amiga CPU.
+ *
+ * To be compatible with vAmiga, the core had to be patched as follows:
+ *
+ * - In function void m68k_pulse_reset(void):
+ *
+ *       The two assignments
+ *            REG_SP = m68ki_read_imm_32();
+ *            REG_PC = m68ki_read_imm_32();
+ *
+ *       have been replaced by:
+ *            REG_SP = read_sp_on_reset();
+ *            REG_PC = read_pc_on_reset();
+ *
+ *  The change was necessary, because m68ki_read_imm_32() invokes vAmiga's
+ *  standard Memory::peek32() function which requires the emulator to be
+ *  running.
+ */
+
 extern "C" {
 #include "m68k.h"
 #include "m68kcpu.h"
-
 }
 
 extern "C" int interrupt_handler(int irqLevel);
+extern "C" uint32_t read_on_reset(uint32_t defaultValue);
+extern "C" uint32_t read_sp_on_reset(void);
+extern "C" uint32_t read_pc_on_reset(void);
+
+
+//
+// CPU wrapper class
+//
 
 class CPU : public HardwareComponent {
     
@@ -104,6 +130,7 @@ public:
     
 private:
 
+    void _initialize() override;
     void _powerOn() override;
     void _reset() override;
     void _inspect() override;
@@ -149,9 +176,10 @@ public:
     
 public:
     
-    // Returns the current value of the program counter.
+    // Getter and setter for the program counter.
     uint32_t getPC();
-    
+    void setPC(uint32_t value); 
+
     // Returns the current value of the status register.
     uint32_t getSP();
     
@@ -160,8 +188,8 @@ public:
     
     // Returns the start address of the following instruction.
     uint32_t getNextPC() { return getPC() + lengthOInstruction(); }
-    
-    
+
+
     //
     // Querying instructions
     //
@@ -224,6 +252,9 @@ public:
     //
     // Handling interrupts
     //
+
+    // Returns the currently installed irq handler (for debugging)
+    void *getIrqHandler() { return (void *)CALLBACK_INT_ACK; }
 
     // Called by Musashi core when an interrupt occurs
     unsigned int interruptHandler(unsigned int irqLevel);
