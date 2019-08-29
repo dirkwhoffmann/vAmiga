@@ -1073,88 +1073,84 @@ Memory::peekCustom8(uint32_t addr)
     }
 }
 
-/*
 uint16_t
 Memory::peekCustom16(uint32_t addr)
 {
-    uint16_t result = peekCustom16_debug(addr);
+    uint32_t result;
 
-    if (addr != 0xDFF018) {
-        debug("peekCustom16(%X [%s]) = %X\n", addr, customReg[(addr >> 1) & 0xFF], result);
-    }
-
-    return result;
-}
-*/
-
-uint16_t
-Memory::peekCustom16(uint32_t addr)
-{
     assert(IS_EVEN(addr));
 
     switch ((addr >> 1) & 0xFF) {
             
         case 0x000 >> 1: // BLTDDAT
-            return 0x00;
+            result = 0x00; break;
         case 0x002 >> 1: // DMACONR
-            return agnus->peekDMACONR();
+            result = agnus->peekDMACONR(); break;
         case 0x004 >> 1: // VPOSR
-            return agnus->peekVPOSR();
+            result = agnus->peekVPOSR(); break;
         case 0x006 >> 1: // VHPOSR
-            return agnus->peekVHPOSR();
+            result = agnus->peekVHPOSR(); break;
         case 0x008 >> 1: // DSKDATR
-            return paula->diskController.peekDSKDATR();
+            result = paula->diskController.peekDSKDATR(); break;
         case 0x00A >> 1: // JOY0DAT
-            return denise->peekJOY0DATR();
+            result = denise->peekJOY0DATR(); break;
         case 0x00C >> 1: // JOY1DAT
-            return denise->peekJOY1DATR();
+            result = denise->peekJOY1DATR(); break;
         case 0x00E >> 1: // CLXDAT
-            return denise->peekCLXDAT();
+            result = denise->peekCLXDAT(); break;
         case 0x010 >> 1: // ADKCONR
-            return paula->peekADKCONR();
+            result = paula->peekADKCONR(); break;
         case 0x012 >> 1: // POT0DAT
-            return paula->peekPOTxDAT(0);
+            result = paula->peekPOTxDAT(0); break;
         case 0x014 >> 1: // POT1DAT
-            return paula->peekPOTxDAT(1);
+            result = paula->peekPOTxDAT(1); break;
         case 0x016 >> 1: // POTGOR
-            return paula->peekPOTGOR();
+            result = paula->peekPOTGOR(); break;
         case 0x018 >> 1: // SERDATR
-            return paula->uart.peekSERDATR();
+            result = paula->uart.peekSERDATR(); break;
         case 0x01A >> 1: // DSKBYTR
-            return paula->diskController.peekDSKBYTR();
+            result = paula->diskController.peekDSKBYTR(); break;
         case 0x01C >> 1: // INTENAR
-            return paula->peekINTENAR();
+            result = paula->peekINTENAR(); break;
         case 0x01E >> 1: // INTREQR
-            return paula->peekINTREQR();
+            result = paula->peekINTREQR(); break;
+
+        default:
+
+            /* Reading a write-only register
+             *
+             * Derived from the UAE source code documentation:
+             *
+             * Reading a write-only OCS register causes the last value of the
+             * data bus to be written into this registers.
+             *
+             * Return values:
+             *
+             * - BLTDDAT (0x000) always returns the last data bus value.
+             * - All other registers return
+             *   - DMA cycle data (if DMA happened on the bus).
+             *   - 0xFFFF or some some ANDed old data otherwise.
+             */
+
+            debug(INVREG_DEBUG, "READING A WRITE-ONLY-REGISTER\n");
+
+            // TODO: Remember the last data bus value
+            // In the meantime, we write 0, because SAE is doing this.
+            pokeCustom16<POKE_CPU>(addr, 0);
+
+            if (agnus->busOwner[agnus->pos.h] != BUS_NONE) {
+                result = agnus->busValue[agnus->pos.h];
+            } else {
+                result = 0xFFFF;
+            }
     }
 
-    /* Reading a write-only register
-     *
-     * Derived from the UAE source code documentation:
-     *
-     * Reading a write-only OCS register causes the last value of the
-     * data bus to be written into this registers.
-     *
-     * Return values:
-     *
-     * - BLTDDAT (0x000) always returns the last data bus value.
-     * - All other registers return
-     *   - DMA cycle data (if DMA happened on the bus).
-     *   - 0xFFFF or some some ANDed old data otherwise.
-     */
-
-    debug(INVREG_DEBUG, "peekCustom16(%X [%s]): WRITE-ONLY-REGISTER\n",
-          addr, customReg[(addr >> 1) & 0xFF]);
-
-    // TODO: Remember the last data bus value
-    // In the meantime, we write 0, because SAE is doing this.
-    pokeCustom16<POKE_CPU>(addr, 0);
-
-    if (agnus->busOwner[agnus->pos.h] != BUS_NONE) {
-        return agnus->busValue[agnus->pos.h];
-    } else {
-        return 0xFFFF;
+    if (addr != 0xDFF018) {
+        debug("peekCustom16(%X [%s]) = %X\n",
+              addr, customReg[(addr >> 1) & 0xFF], result);
     }
+
+    return result;
 }
 
 uint32_t
