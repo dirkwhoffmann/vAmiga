@@ -58,7 +58,7 @@ Keyboard::pressKey(long keycode)
 
     if (!keyDown[keycode] && !bufferIsFull()) {
 
-        debug(KB_DEBUG, "Pressing Amiga key %02X\n", keycode);
+        debug(KBD_DEBUG, "Pressing Amiga key %02X\n", keycode);
 
         keyDown[keycode] = true;
         writeToBuffer(keycode);
@@ -72,7 +72,7 @@ Keyboard::releaseKey(long keycode)
 
     if (keyDown[keycode] && !bufferIsFull()) {
 
-        debug(KB_DEBUG, "Releasing Amiga key %02X\n", keycode);
+        debug(KBD_DEBUG, "Releasing Amiga key %02X\n", keycode);
 
         keyDown[keycode] = false;
         writeToBuffer(keycode | 0x80);
@@ -112,7 +112,7 @@ Keyboard::writeToBuffer(uint8_t keycode)
 
     // Wake up the keyboard if it has gone idle
     if (!agnus->isPending<KBD_SLOT>()) {
-        debug("Waking up keyboard\n");
+        debug(KBD_DEBUG, "Wake up\n");
         agnus->rescheduleRel<KBD_SLOT>(0);
 
     }
@@ -121,7 +121,7 @@ Keyboard::writeToBuffer(uint8_t keycode)
 void
 Keyboard::setSPLine(bool value, Cycle cycle)
 {
-    debug(KB_DEBUG, "setSPLine(%d)\n", value);
+    debug(KBD_DEBUG, "setSPLine(%d)\n", value);
 
     if (value) {
         if (spHigh <= spLow) spHigh = cycle;
@@ -145,7 +145,7 @@ Keyboard::setSPLine(bool value, Cycle cycle)
 
     if (accept) {
 
-        debug(KB_DEBUG, "Accepting handshake (SP low for %d usec)\n", diff);
+        debug(KBD_DEBUG, "Accepting handshake (SP low for %d usec)\n", diff);
         if (agnus->hasEvent<KBD_SLOT>(KBD_TIMEOUT)) {
             // Note: Watchdog events store the next event in their data field
             agnus->scheduleRel<KBD_SLOT>(0, (EventID)agnus->slot[KBD_SLOT].data);
@@ -154,7 +154,7 @@ Keyboard::setSPLine(bool value, Cycle cycle)
 
     if (reject) {
 
-        debug(KB_DEBUG, "REJECTING handshake (SP low for %d usec)\n", diff);
+        debug(KBD_DEBUG, "REJECTING handshake (SP low for %d usec)\n", diff);
     }
 }
 
@@ -166,7 +166,7 @@ Keyboard::serviceKeyboardEvent(EventID id)
 
         case KBD_SELFTEST:
 
-            debug(KB_DEBUG, "KBD_SELFTEST\n");
+            debug(KBD_DEBUG, "KBD_SELFTEST\n");
 
             // Continue with KBD_STRM_ON after receiving a handshake
             agnus->scheduleInc<KBD_SLOT>(SEC(1), KBD_TIMEOUT, KBD_STRM_ON);
@@ -174,7 +174,7 @@ Keyboard::serviceKeyboardEvent(EventID id)
 
         case KBD_SYNC:
 
-            debug(KB_DEBUG, "KBD_SYNC\n");
+            debug(KBD_DEBUG, "KBD_SYNC\n");
 
             // Send a SYNC byte
             sendKeyCode(0xFF);
@@ -185,7 +185,7 @@ Keyboard::serviceKeyboardEvent(EventID id)
 
         case KBD_STRM_ON:
 
-            debug(KB_DEBUG, "KBD_STRM_ON\n");
+            debug(KBD_DEBUG, "KBD_STRM_ON\n");
 
             // Send the "Initiate power-up key stream" code ($FD)
             sendKeyCode(0xFD);
@@ -196,7 +196,7 @@ Keyboard::serviceKeyboardEvent(EventID id)
 
         case KBD_STRM_OFF:
 
-            debug(KB_DEBUG, "KBD_STRM_OFF\n");
+            debug(KBD_DEBUG, "KBD_STRM_OFF\n");
 
             // Send the "Terminate key stream" code ($FE)
             sendKeyCode(0xFE);
@@ -207,7 +207,7 @@ Keyboard::serviceKeyboardEvent(EventID id)
 
         case KBD_SEND:
 
-            debug(KB_DEBUG, "KBD_SEND\n");
+            debug(KBD_DEBUG, "KBD_SEND\n");
 
             // Send a key code if the buffer is filled
             if (!bufferIsEmpty()) sendKeyCode(readFromBuffer());
@@ -228,7 +228,7 @@ Keyboard::serviceKeyboardEvent(EventID id)
 
         case KBD_TIMEOUT:
 
-            debug(KB_DEBUG, "KBD_TIMEOUT\n");
+            debug(KBD_DEBUG, "KBD_TIMEOUT\n");
 
             // We've received a time-out. Reinitiate the SYNC sequence
             amiga->agnus.scheduleInc<KBD_SLOT>(DMA_CYCLES(1), KBD_SYNC);
@@ -242,7 +242,7 @@ Keyboard::serviceKeyboardEvent(EventID id)
 void
 Keyboard::sendKeyCode(uint8_t keyCode)
 {
-    debug(KB_DEBUG, "sendKeyCode(%d)\n", keyCode);
+    debug(KBD_DEBUG, "sendKeyCode(%d)\n", keyCode);
 
     // Reorder and invert the key code bits (6-5-4-3-2-1-0-7)
     keyCode  = ~((keyCode << 1) | (keyCode >> 7)) & 0xFF;

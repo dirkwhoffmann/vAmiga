@@ -165,7 +165,7 @@ Drive::getDriveId()
     assert(type == DRIVE_35_DD);
 
     if (nr == 0) {
-        return 0x00000000;
+        return 0xFFFFFFFF; // 0x00000000;
     } else {
         return 0xFFFFFFFF;
     }

@@ -541,15 +541,12 @@ Amiga::_powerOn()
 {
     debug(1, "Power on\n");
 
-    // REMOVE ASAP
-    // gnus.blitter.setAccuracy(0);
+#ifdef BOOT_DISK
 
-    ADFFile *adf = ADFFile::makeWithFile("/Users/hoff/Dropbox/Amiga/Workbench/A2000WB1.2D.adf");
-    // ADFFile *adf = ADFFile::makeWithFile("/Users/hoff/Dropbox/Amiga/Games/Barbarian.adf");
-    if (adf != NULL) {
-        df0.insertDisk(adf);
-        debug("Disk inserted\n");
-    }
+    ADFFile *adf = ADFFile::makeWithFile(BOOT_DISK);
+    if (adf) df0.insertDisk(adf);
+
+#endif
 
     masterClock = 0;
     runLoopCtrl = 0;

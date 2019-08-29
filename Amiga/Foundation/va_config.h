@@ -60,7 +60,7 @@ static const int COP_DEBUG     = 2;  // Copper
 static const int BLT_DEBUG     = 2;  // Blitter
 static const int SER_DEBUG     = 2;  // Serial interface
 static const int POT_DEBUG     = 2;  // Potentiometer inputs
-static const int KB_DEBUG      = 2;  // Keyboard
+static const int KBD_DEBUG     = 2;  // Keyboard
 static const int SNAP_DEBUG    = 2;  // Snapshot debugging (serialization)
 
 
@@ -72,6 +72,7 @@ static const int BLT_CHECKSUM  = 2;  // Blitter checksums
 
 // Additional debugging aids (uncomment to enable)
 
+// #define BOOT_DISK "/Users/hoff/Dropbox/Amiga/Diagnose/AmigaTestKit.adf"
 #define HARD_RESET       // Restore the initial power up state in reset()
 // #define BORDER_DEBUG     // Draws the border in debug colors
 // #define PIXEL_DEBUG      // Highlight first pixel in each 16-bit pixel chunk
