@@ -156,8 +156,12 @@ public:
     bool UARTBRK() { return GET_BIT(adkcon, 11); }
 
     // OCS register 0x01E (r)
+#ifdef AROS_DEBUG
+    uint16_t peekINTREQR() { return intreq & ~1; }
+#else
     uint16_t peekINTREQR() { return intreq; }
-    
+#endif
+
     // OCS register 0x09C (w)
     void pokeINTREQ(uint16_t value);
     

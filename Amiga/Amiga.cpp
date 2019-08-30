@@ -615,7 +615,7 @@ Amiga::_run()
         delete snap;
     }
 
-    debug("Starting emulation thread (PC = %X, irq_handler = %p)\n", cpu.getPC(), cpu.getIrqHandler());
+    debug(RUNLOOP_DEBUG, "Starting emulation thread (PC = %X, irq_handler = %p)\n", cpu.getPC(), cpu.getIrqHandler());
 
 
     // Start the emulator thread.

@@ -28,6 +28,7 @@
 
 // Register debugging (set to 1 to generate debug output)
 
+static const int OCSREG_DEBUG  = 2;  // General OCS register debugging
 static const int BLTREG_DEBUG  = 2;  // Blitter registers
 static const int DSKREG_DEBUG  = 2;  // Disk controller registers
 static const int CIAREG_DEBUG  = 2;  // CIA registers
@@ -79,5 +80,6 @@ static const int BLT_CHECKSUM  = 2;  // Blitter checksums
 // #define LINE_DEBUG       // Colorizes certain rasterlines
 // #define ALIGN_DRIVE_HEAD // Makes drive operations deterministic
 // #define SLOW_BLT_DEBUG   // Execute all slow Blitter instructions in one chunk
+// #define AROS_DEBUG       // Temporary option for debugging the Aros Rom
 
 #endif

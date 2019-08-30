@@ -45,7 +45,7 @@ typedef struct
 }
 DisassembledInstruction;
 
-#define CPUINFO_INSTR_COUNT 32
+#define CPUINFO_INSTR_COUNT 255
 
 typedef struct
 {

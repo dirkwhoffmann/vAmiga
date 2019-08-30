@@ -20,7 +20,7 @@ BreakpointManager::BreakpointManager()
 Breakpoint *
 BreakpointManager::breakpointWithNr(long nr)
 {
-    if (nr < numBreakpoints) {
+    if ((unsigned long)nr < numBreakpoints) {
         assert(breakpoints[nr] != NULL);
         return breakpoints[nr];
     }
@@ -66,19 +66,25 @@ BreakpointManager::hasConditionalBreakpointAt(uint32_t addr)
 void
 BreakpointManager::setBreakpointAt(uint32_t addr)
 {
+    amiga->suspend();
+
+    _setBreakpointAt(addr);
+
+    amiga->resume();
+}
+
+void
+BreakpointManager::_setBreakpointAt(uint32_t addr)
+{
     debug(RUNLOOP_DEBUG, "setBreakpointAt %X %d %d\n", addr, hasBreakpointAt(addr), numBreakpoints);
     
     if (!hasBreakpointAt(addr) && numBreakpoints + 1 < maxBreakpoints) {
-        
-        amiga->suspend();
-        
+
         assert(breakpoints[numBreakpoints] == NULL);
         breakpoints[numBreakpoints] = new Breakpoint();
         breakpoints[numBreakpoints++]->addr = addr;
         
         amiga->putMessage(MSG_BREAKPOINT_CONFIG);
-        
-        amiga->resume();
     }
 }
 

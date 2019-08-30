@@ -165,7 +165,7 @@ Drive::getDriveId()
     assert(type == DRIVE_35_DD);
 
     if (nr == 0) {
-        return 0xFFFFFFFF; // 0x00000000;
+        return 0x00000000;
     } else {
         return 0xFFFFFFFF;
     }
@@ -192,6 +192,7 @@ Drive::driveStatusFlags()
         // debug("ID mode is %s\n", idMode() ? "on" : "off");
         if (idMode()) {
             if (idBit) result &= 0b11011111;
+            // debug("idBit = %d result = %X\n", idBit, result);
         } else {
             if (motorAtFullSpeed() && hasDisk()) result &= 0b11011111;
         }

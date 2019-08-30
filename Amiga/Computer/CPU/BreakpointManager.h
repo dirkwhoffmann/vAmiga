@@ -92,6 +92,7 @@ public:
     //
 
     void setBreakpointAt(uint32_t addr);
+    void _setBreakpointAt(uint32_t addr);
     void setSoftBreakpointAt(uint32_t addr) { softStop = addr; }
     void deleteBreakpoint(long nr);
     void deleteBreakpointAt(uint32_t addr);
