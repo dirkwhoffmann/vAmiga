@@ -172,6 +172,17 @@ Agnus::inspectEventSlot(EventSlot nr)
             }
             break;
 
+        case DCH_SLOT:
+
+            switch (slot[nr].id) {
+
+                case 0:             i->eventName = "none"; break;
+                case DCH_INSERT:    i->eventName = "DCH_INSERT"; break;
+                case DCH_EJECT:     i->eventName = "DCH_EJECT"; break;
+                default:            i->eventName = "*** INVALID ***"; break;
+            }
+            break;
+
         case IRQ_SLOT:
 
             switch (slot[nr].id) {
@@ -473,7 +484,10 @@ Agnus::executeEventsUntil(Cycle cycle) {
     if (unlikely(all)) {
 
         if (isDue<DSK_SLOT>(cycle)) {
-            paula->diskController.serveDiskEvent();
+            paula->diskController.serviceDiskEvent();
+        }
+        if (isDue<DCH_SLOT>(cycle)) {
+            paula->diskController.serviceDiskChangeEvent(slot[DCH_SLOT].id, (int)slot[DCH_SLOT].data);
         }
         if (isDue<IRQ_SLOT>(cycle)) {
             paula->serviceIrqEvent();

@@ -191,8 +191,8 @@ class MyDocument: NSDocument {
        
         case _ as ADFFileProxy:
             
-            if let drive = myController?.dragAndDropDrive {
-                drive.insertDisk(amigaAttachment as? ADFFileProxy)
+            if let df = myController?.dragAndDropDrive?.nr() {
+                amiga.diskController.insert(df, adf: amigaAttachment as? ADFFileProxy)
             } else {
                 runDiskMountDialog()
             }

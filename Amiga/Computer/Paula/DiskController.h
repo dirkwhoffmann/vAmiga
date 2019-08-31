@@ -12,14 +12,16 @@
 
 #include "HardwareComponent.h"
 
-class Drive;
-
 class DiskController : public HardwareComponent {
 
     // Quick-access references
     class Memory *mem; 
     class Agnus *agnus;
     class Paula *paula; 
+
+    // Temorary storage for a disk waiting to be inserted
+    class Disk *diskToInsert = NULL;
+
     
     //
     // Configuration items
@@ -43,7 +45,7 @@ class DiskController : public HardwareComponent {
     DiskControllerInfo info;
     
     // Quick-references to the disk drives
-    Drive *df[4] = { NULL, NULL, NULL, NULL };
+    class Drive *df[4] = { NULL, NULL, NULL, NULL };
     
     // The currently selected drive (-1 if no drive is selected)
     int8_t selected = -1;
@@ -203,9 +205,24 @@ public:
     void setFifoBuffering(bool value) { fifoBuffering = value; }
     
     // Returns the currently selected drive or NULL if no drive is selected.
-    Drive *getSelectedDrive();
+    class Drive *getSelectedDrive();
 
-    
+
+    //
+    // Handling disks
+    //
+
+    // Ejects a disk from the specified drive
+    void ejectDisk(int nr, Cycle delay = 0);
+
+    // Inserts a disk into the specified drive
+    void insertDisk(class Disk *disk, int nr, Cycle delay = 0);
+    void insertDisk(class ADFFile *file, int nr, Cycle delay = 0);
+
+    // Write protects or unprotects a disk
+    void setWriteProtection(int nr, bool value);
+
+
     //
     // Accessing registers
     //
@@ -240,9 +257,12 @@ public:
     
 public:
     
-    // Serves an event in the disk controller slot.
-    void serveDiskEvent();
-    
+    // Services an event in the disk controller slot.
+    void serviceDiskEvent();
+
+    // Services an event in the disk change slot.
+    void serviceDiskChangeEvent(EventID id, int driveNr);
+
     
     //
     // Working with the FIFO buffer
@@ -270,7 +290,7 @@ private:
     bool compareFifo(uint16_t word);
 
     /* Emulates a data transfert between the selected drive and the FIFO buffer.
-     * This function is executed periodically in serveDiskEvent().
+     * This function is executed periodically in serviceDiskEvent().
      * The exact operation is dependent of the current DMA state. If DMA is
      * off, no action is taken. If a read mode is active, the FIFO is filled
      * with data from the drive. If a write mode is active, data from the FIFO
@@ -295,8 +315,8 @@ public:
      * line, in each of the three DMA slots. Communication with the drive is
      * decoupled by a FIFO buffer. Data is never read directly from or written
      * to the drive. It is always exchanged via the FIFO. Data transfer
-     * between the FIFO and the drive takes place in serveDiskEvent(), which is
-     * called periodically by the event handler.
+     * between the FIFO and the drive takes place in serviceDiskEvent(), which
+     * is called periodically by the event handler.
      *
      * In simple DMA mode, performDMA() is called three times per raster
      * line, just like in standard mode. The FIFO phase is skipped. I.e., data

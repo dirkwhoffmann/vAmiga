@@ -459,7 +459,7 @@ Drive::toggleWriteProtection()
 void
 Drive::ejectDisk()
 {
-    amiga->suspend();
+    debug(DSK_DEBUG, "ejectDisk()\n");
 
     if (disk) {
         
@@ -473,29 +473,21 @@ Drive::ejectDisk()
         // Notify the GUI
         amiga->putMessage(MSG_DRIVE_DISK_EJECT, nr);
     }
-
-    amiga->resume();
 }
 
 void
 Drive::insertDisk(Disk *disk)
 {
-    amiga->suspend();
+    debug(DSK_DEBUG, "insertDisk(%p)", disk);
 
     if (disk) {
-        
-        ejectDisk();
+
+        // Don't insert a disk if there is already one
+        assert(!hasDisk());
+
         this->disk = disk;
         amiga->putMessage(MSG_DRIVE_DISK_INSERT, nr);
     }
-
-    amiga->resume();
-}
-
-void
-Drive::insertDisk(ADFFile *file)
-{
-    insertDisk(Disk::makeWithFile(file));
 }
 
 void

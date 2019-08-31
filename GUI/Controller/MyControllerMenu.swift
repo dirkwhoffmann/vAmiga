@@ -398,7 +398,8 @@ extension MyController: NSMenuItemValidation {
         adf.formatDisk(driveBlankDiskFormat)
         
         // Insert disk into drive
-        drive.insertDisk(adf)
+        amiga.diskController.insert(sender.tag, adf: adf)
+        // drive.insertDisk(adf)
         
         myAppDelegate.clearRecentlyExportedDiskURLs(drive: sender.tag)
     }
@@ -423,7 +424,8 @@ extension MyController: NSMenuItemValidation {
                 if let url = openPanel.url {
                     do {
                         let adf = try self.mydocument?.createADF(from: url)
-                        self.amiga.df(sender).insertDisk(adf)
+                        // self.amiga.df(sender).insertDisk(adf)
+                        self.amiga.diskController.insert(sender.tag, adf: adf)
                     } catch {
                         NSApp.presentError(error)
                     }
@@ -444,7 +446,8 @@ extension MyController: NSMenuItemValidation {
             do {
                 let adf = try self.mydocument?.createADF(from: url)
                 if proceedWithUnexportedDisk(drive: drive) {
-                    amiga.df(drive).insertDisk(adf)
+                    // amiga.df(drive).insertDisk(adf)
+                    amiga.diskController.insert(sender.tag, adf: adf)
                 }
             } catch {
                 NSApp.presentError(error)
@@ -458,7 +461,8 @@ extension MyController: NSMenuItemValidation {
             do {
                 let adf = try self.mydocument?.createADF(from: url)
                 if proceedWithUnexportedDisk(drive: drive) {
-                    drive.insertDisk(adf)
+                    // drive.insertDisk(adf)
+                    amiga.diskController.insert(drive.nr(), adf: adf)
                 }
             } catch {
                 NSApp.presentError(error)
@@ -504,7 +508,8 @@ extension MyController: NSMenuItemValidation {
     @IBAction func ejectDiskAction(_ sender: NSMenuItem!) {
         
         if proceedWithUnexportedDisk(drive: sender.tag) {
-            amiga.df(sender.tag).ejectDisk()
+            // amiga.df(sender.tag).ejectDisk()
+            amiga.diskController.eject(sender.tag)
             myAppDelegate.clearRecentlyExportedDiskURLs(drive: sender.tag)
         }
     }

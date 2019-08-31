@@ -275,7 +275,6 @@ public:
     
     void ejectDisk();
     void insertDisk(Disk *disk);
-    void insertDisk(ADFFile *file);
     
     
     //

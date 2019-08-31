@@ -510,14 +510,16 @@ struct AmigaFileWrapper;
 
 - (void) dump;
 
-- (BOOL) spinning:(NSInteger)df;
+- (BOOL) spinning:(NSInteger)nr;
 - (BOOL) spinning;
 
-- (BOOL) isConnected:(NSInteger)df;
-- (void) setConnected:(NSInteger)df value:(BOOL)value;
-- (void) toggleConnected:(NSInteger)df;
+- (BOOL) isConnected:(NSInteger)nr;
+- (void) setConnected:(NSInteger)nr value:(BOOL)value;
+- (void) toggleConnected:(NSInteger)nr;
 
-// - (BOOL) doesDMA:(NSInteger)nr;
+- (void) eject:(NSInteger)nr;
+- (void) insert:(NSInteger)nr adf:(ADFFileProxy *)fileProxy;
+- (void) setWriteProtection:(NSInteger)nr value:(BOOL)value;
 
 @end
 
@@ -546,8 +548,8 @@ struct AmigaFileWrapper;
 - (BOOL) hasModifiedDisk;
 - (void) setModifiedDisk:(BOOL)value;
 
-- (void) ejectDisk;
-- (void) insertDisk:(ADFFileProxy *)file;
+// - (void) ejectDisk;
+// - (void) insertDisk:(ADFFileProxy *)file;
 
 - (ADFFileProxy *)convertDisk;
 

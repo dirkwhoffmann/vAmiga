@@ -258,17 +258,8 @@ class DiskMountController: DialogController {
         
         track("insertDiskAction df\(sender.tag)")
         
-        var df: DriveProxy!
-        
-        switch sender.tag {
-        case 0: df = amigaProxy!.df0
-        case 1: df = amigaProxy!.df1
-        case 2: df = amigaProxy!.df2
-        default: df = amigaProxy!.df3
-        }
-        
-        df.insertDisk(disk)
-        df.setWriteProtection(writeProtect)
+        amigaProxy?.diskController.insert(sender.tag, adf: disk)
+        amigaProxy?.diskController.setWriteProtection(sender.tag, value: writeProtect)
 
         myController?.metal.rotateDown()
         hideSheet()

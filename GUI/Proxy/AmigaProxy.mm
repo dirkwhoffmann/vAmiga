@@ -861,25 +861,38 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->controller->dump();
 }
-- (BOOL) spinning:(NSInteger)df
+- (BOOL) spinning:(NSInteger)nr
 {
-    return wrapper->controller->spinning(df);
+    return wrapper->controller->spinning(nr);
 }
 - (BOOL) spinning
 {
     return wrapper->controller->spinning();
 }
-- (BOOL) isConnected:(NSInteger)df
+- (BOOL) isConnected:(NSInteger)nr
 {
-    return wrapper->controller->isConnected(df);
+    return wrapper->controller->isConnected(nr);
 }
-- (void) setConnected:(NSInteger)df value:(BOOL)value;
+- (void) setConnected:(NSInteger)nr value:(BOOL)value;
 {
-    wrapper->controller->setConnected(df, value);
+    wrapper->controller->setConnected(nr, value);
 }
-- (void) toggleConnected:(NSInteger)df
+- (void) toggleConnected:(NSInteger)nr
 {
-    wrapper->controller->toggleConnected(df);
+    wrapper->controller->toggleConnected(nr);
+}
+- (void) eject:(NSInteger)nr
+{
+    wrapper->controller->ejectDisk(nr);
+}
+- (void) insert:(NSInteger)nr adf:(ADFFileProxy *)fileProxy
+{
+    AmigaFileWrapper *fileWrapper = [fileProxy wrapper];
+    wrapper->controller->insertDisk((ADFFile *)(fileWrapper->file), nr);
+}
+- (void) setWriteProtection:(NSInteger)nr value:(BOOL)value
+{
+    wrapper->controller->setWriteProtection(nr, value);
 }
 
 @end
@@ -937,6 +950,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->drive->setModifiedDisk(value);
 }
+/*
 - (void) ejectDisk
 {
     wrapper->drive->ejectDisk();
@@ -946,7 +960,7 @@ struct ADFFileWrapper { ADFFile *adf; };
     AmigaFileWrapper *fileWrapper = [fileProxy wrapper];
     wrapper->drive->insertDisk((ADFFile *)(fileWrapper->file));
 }
-
+*/
 - (ADFFileProxy *)convertDisk
 {
     return NULL;

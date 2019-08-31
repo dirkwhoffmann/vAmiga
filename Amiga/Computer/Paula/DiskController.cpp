@@ -41,6 +41,11 @@ DiskController::_reset()
     prb = 0xFF;
     selected = -1;
     dsksync = 0x4489;
+
+    if (diskToInsert) {
+        free(diskToInsert);
+        diskToInsert = NULL;
+    }
 }
 
 void
@@ -141,6 +146,57 @@ DiskController::getSelectedDrive()
 {
     assert(selected < 4);
     return selected < 0 ? NULL : df[selected];
+}
+
+void
+DiskController::ejectDisk(int nr, Cycle delay)
+{
+    assert(nr >= 0 && nr <= 3);
+
+    debug("ejectDisk(%d, %d)\n", nr, delay);
+
+    amiga->suspend();
+    agnus->scheduleRel<DCH_SLOT>(delay, DCH_EJECT);
+    amiga->resume();
+}
+
+void
+DiskController::insertDisk(class Disk *disk, int nr, Cycle delay)
+{
+    assert(disk != NULL);
+    assert(nr >= 0 && nr <= 3);
+
+    debug(DSK_DEBUG, "insertDisk(%p, %d, %d)\n", disk, nr, delay);
+
+    amiga->suspend();
+
+    if (df[nr]->hasDisk()) {
+
+        // Eject the old disk first
+        df[nr]->ejectDisk();
+
+        // Make sure there is enough time between ejecting and inserting
+        delay = MAX(MSEC(1000), delay);
+    }
+
+    diskToInsert = disk;
+    agnus->scheduleRel<DCH_SLOT>(delay, DCH_INSERT);
+    amiga->resume();
+}
+
+void
+DiskController::insertDisk(class ADFFile *file, int nr, Cycle delay)
+{
+    if (Disk *disk = Disk::makeWithFile(file)) {
+        insertDisk(disk, nr, delay);
+    }
+}
+
+void
+DiskController::setWriteProtection(int nr, bool value)
+{
+    assert(nr >= 0 && nr <= 3);
+    df[nr]->setWriteProtection(value);
 }
 
 uint16_t
@@ -303,7 +359,7 @@ DiskController::PRBdidChange(uint8_t oldValue, uint8_t newValue)
 }
 
 void
-DiskController::serveDiskEvent()
+DiskController::serviceDiskEvent()
 {
     if (fifoBuffering) {
         
@@ -313,6 +369,36 @@ DiskController::serveDiskEvent()
         // Schedule next event.
         agnus->scheduleRel<DSK_SLOT>(DMA_CYCLES(56), DSK_ROTATE);
     }
+}
+
+void
+DiskController::serviceDiskChangeEvent(EventID id, int driveNr)
+{
+    assert(driveNr >= 0 && driveNr <= 3);
+
+    switch (id) {
+
+        case DCH_INSERT:
+
+            debug(DSK_DEBUG, "DCH_INSERT\n");
+
+            assert(diskToInsert != NULL);
+            df[driveNr]->insertDisk(diskToInsert);
+            diskToInsert = NULL;
+            break;
+
+        case DCH_EJECT:
+
+            debug(DSK_DEBUG, "DCH_EJECT\n");
+
+            df[driveNr]->ejectDisk();
+            break;
+
+        default:
+            assert(false);
+    }
+
+    agnus->cancel(DCH_SLOT);
 }
 
 void
