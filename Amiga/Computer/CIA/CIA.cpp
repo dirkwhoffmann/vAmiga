@@ -955,6 +955,7 @@ CIA::executeOneCycle()
     if (serCounter) {
         if ((delay & (CIASerClk2 | CIASerClk1)) == CIASerClk1) {      // Positive edge
             if (serCounter == 1) {
+                assert(false); // DO WE EVER REACH HERE?
                 delay |= CIASerInt0; // Trigger interrupt
             }
         }
@@ -1270,15 +1271,15 @@ CIAA::scheduleWakeUp()
 void 
 CIAA::pullDownInterruptLine()
 {
-    // debug("Pulling down IRQ line\n");
+    debug(CIA_DEBUG, "Pulling down IRQ line\n");
     paula->setINTREQ(0x8000 | (1 << 3));
 }
 
 void 
 CIAA::releaseInterruptLine()
 {
-    // debug("Releasing IRQ line\n");
-    // amiga->paula.setINTREQ(1 << 3);
+    debug(CIA_DEBUG, "Releasing IRQ line\n");
+    paula->checkInterrupt();
 }
 
 //              -------
@@ -1452,8 +1453,8 @@ CIAB::pullDownInterruptLine()
 void 
 CIAB::releaseInterruptLine()
 {
-    // debug("Releasing IRQ line\n");
-    // amiga->paula.setINTREQ(1 << 13);
+    debug(CIA_DEBUG, "Releasing IRQ line\n");
+    paula->checkInterrupt();
 }
 
 //                                 -------

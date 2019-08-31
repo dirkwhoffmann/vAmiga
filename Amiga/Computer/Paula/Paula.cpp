@@ -83,10 +83,23 @@ Paula::_warpOff()
     audioUnit.alignWritePtr();
 }
 
+uint16_t
+Paula::peekINTREQR()
+{
+    uint16_t result = intreq;
+
+    if (amiga->ciaA.irqPin() == 0) SET_BIT(result, 3);
+    if (amiga->ciaB.irqPin() == 0) SET_BIT(result, 13);
+
+    debug(INT_DEBUG, "peekINTREQR(): %x\n", result);
+
+    return result;
+}
+
 void
 Paula::pokeINTREQ(uint16_t value)
 {
-    // debug("pokeINTREQ(%X)\n", value);
+    debug(INT_DEBUG, "pokeINTREQ(%X)\n", value);
     setINTREQ(value);
 }
 
@@ -320,9 +333,17 @@ Paula::servePotEvent(EventID id)
 int
 Paula::interruptLevel()
 {
-    uint16_t mask = intreq & intena;
-    
     if (intena & 0x4000) {
+
+        uint16_t mask = intreq;
+
+        if (amiga->ciaA.irqPin() == 0) SET_BIT(mask, 3);
+        if (amiga->ciaB.irqPin() == 0) SET_BIT(mask, 13);
+
+        mask &= intena;
+
+        // debug("INT: %d intena: %x intreq: %x mask: %x\n", amiga->ciaA.irqPin(), intena, intreq, mask);
+
         if (mask & 0b0110000000000000) return 6;
         if (mask & 0b0001100000000000) return 5;
         if (mask & 0b0000011110000000) return 4;

@@ -379,7 +379,10 @@ public:
     // Getter for peripheral port B
     uint8_t getPB() { return PB; }
     uint8_t getDDRB() { return DDRB; }
-    
+
+    // Getter for the interrupt line
+    bool irqPin() { return INT; }
+
     // Simulates a rising edge on the flag pin
     void emulateRisingEdgeOnFlagPin();
     
