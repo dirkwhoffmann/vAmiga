@@ -19,7 +19,7 @@ extension PreferencesController {
         let config = amiga.config()
         let memConfig = amiga.memConfig()
         let poweredOff = amiga.isPoweredOff()
-        
+
         // Machine
         hwAmigaModelPopup.selectItem(withTag: config.model.rawValue)
         hwLayoutPopup.selectItem(withTag: config.layout)
@@ -52,6 +52,16 @@ extension PreferencesController {
         hwChipRamPopup.isEnabled = poweredOff
         hwSlowRamPopup.isEnabled = poweredOff
         hwFastRamPopup.isEnabled = poweredOff
+        hwDf1Connect.isEnabled = poweredOff
+        hwDf2Connect.isEnabled = poweredOff
+        hwDf3Connect.isEnabled = poweredOff
+        hwDf0Type.isEnabled = poweredOff
+        hwDf1Type.isEnabled = poweredOff && config.df1.connected
+        hwDf2Type.isEnabled = poweredOff && config.df2.connected
+        hwDf3Type.isEnabled = poweredOff && config.df3.connected
+        hwDf1Speed.isEnabled = config.df1.connected
+        hwDf2Speed.isEnabled = config.df2.connected
+        hwDf3Speed.isEnabled = config.df3.connected
 
         // Label the OK button
         hwOKButton.title = okLabel

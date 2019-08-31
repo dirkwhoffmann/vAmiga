@@ -1173,12 +1173,12 @@
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="CIA" identifier="" id="Zr1-zQ-1rt">
-                                <view key="view" id="kdT-8z-eJ6">
-                                    <rect key="frame" x="10" y="33" width="824" height="406"/>
+                                <view key="view" ambiguous="YES" id="kdT-8z-eJ6">
+                                    <rect key="frame" x="10" y="33" width="822" height="406"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <box autoresizesSubviews="NO" fixedFrame="YES" borderType="line" title="Data port A" translatesAutoresizingMaskIntoConstraints="NO" id="4t9-8c-Vhl">
-                                            <rect key="frame" x="291" y="158" width="253" height="194"/>
+                                            <rect key="frame" x="290" y="158" width="253" height="194"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <view key="contentView" id="Rbu-L5-7IO">
                                                 <rect key="frame" x="3" y="3" width="247" height="176"/>
@@ -1306,7 +1306,7 @@
                                             </view>
                                         </box>
                                         <box autoresizesSubviews="NO" fixedFrame="YES" borderType="line" title="Data port B" translatesAutoresizingMaskIntoConstraints="NO" id="QHe-v1-hQY">
-                                            <rect key="frame" x="565" y="158" width="253" height="194"/>
+                                            <rect key="frame" x="563" y="158" width="253" height="194"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <view key="contentView" id="kAd-UU-Ctj">
                                                 <rect key="frame" x="3" y="3" width="247" height="176"/>
@@ -1434,7 +1434,7 @@
                                             </view>
                                         </box>
                                         <box autoresizesSubviews="NO" fixedFrame="YES" borderType="line" title="Counter and serial shift register" translatesAutoresizingMaskIntoConstraints="NO" id="kdt-a8-tzk">
-                                            <rect key="frame" x="291" y="27" width="253" height="116"/>
+                                            <rect key="frame" x="290" y="27" width="253" height="116"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <view key="contentView" id="oQs-lC-RAC">
                                                 <rect key="frame" x="3" y="3" width="247" height="98"/>
@@ -1578,7 +1578,7 @@
                                             </view>
                                         </box>
                                         <box autoresizesSubviews="NO" fixedFrame="YES" borderType="line" title="Emulation status" translatesAutoresizingMaskIntoConstraints="NO" id="No2-J5-R5o">
-                                            <rect key="frame" x="565" y="27" width="253" height="116"/>
+                                            <rect key="frame" x="563" y="27" width="253" height="116"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <view key="contentView" id="x7H-2k-Rkn">
                                                 <rect key="frame" x="3" y="3" width="247" height="98"/>
@@ -1868,13 +1868,13 @@
                                             </view>
                                         </box>
                                         <segmentedControl verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fRp-NP-vaa">
-                                            <rect key="frame" x="352" y="367" width="118" height="24"/>
+                                            <rect key="frame" x="349" y="367" width="123" height="24"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <segmentedCell key="cell" borderStyle="border" alignment="left" style="rounded" trackingMode="selectOne" id="UfZ-hD-hy3">
                                                 <font key="font" metaFont="system"/>
                                                 <segments>
-                                                    <segment label="CIA 1" selected="YES"/>
-                                                    <segment label="CIA 2" tag="1"/>
+                                                    <segment label="CIA A" selected="YES"/>
+                                                    <segment label="CIA B" tag="1"/>
                                                 </segments>
                                             </segmentedCell>
                                             <connections>
@@ -4189,7 +4189,7 @@
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Paula" identifier="" id="ox5-bZ-2Aj">
-                                <view key="view" ambiguous="YES" id="FXI-VY-h9b">
+                                <view key="view" id="FXI-VY-h9b">
                                     <rect key="frame" x="10" y="33" width="822" height="406"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
