@@ -533,17 +533,6 @@ CPU::executeInstruction()
     }
 
     cycles += m68k_execute(1);
-
-#ifdef AROS_DEBUG
-    static int aroscnt = 0;
-    if (getPC() == 0xFD37E0) aroscnt++;
-    if (aroscnt == 3) {
-        // At this point, we have reached trackdisk.init
-        bpManager._setBreakpointAt(0xFE25B2);
-        bpManager._setBreakpointAt(0xF860F4);
-    }
-#endif
-
     return cycles;
 }
 

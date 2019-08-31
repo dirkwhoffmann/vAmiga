@@ -1145,15 +1145,8 @@ Memory::peekCustom16(uint32_t addr)
             }
     }
 
-#ifdef AROS_DEBUG
-    if (addr != 0xDFF018 && addr != 0xDFF006 && addr != 0xDFF004) {
-        debug("peekCustom16(%X [%s]) = %X\n",
-              addr, customReg[(addr >> 1) & 0xFF], result);
-    }
-#else
     debug(OCSREG_DEBUG, "peekCustom16(%X [%s]) = %X\n",
           addr, customReg[(addr >> 1) & 0xFF], result);
-#endif
 
     return result;
 }
@@ -1208,17 +1201,12 @@ template <PokeSource s> void
 Memory::pokeCustom16(uint32_t addr, uint16_t value)
 {
 
-#ifdef AROS_DEBUG
-    if ((addr & 0xFFF) != 0x30) {
-        debug("pokeCustom16(%X [%s], %X)\n",
-              addr, customReg[(addr >> 1) & 0xFF], value);
+    if ((addr & 0xFFF) == 0x30) {
+        debug("pokeCustom16(SERDAT, '%c')\n", (char)value);
     } else {
-        debug("'%c'\n", (char)value);
+        debug(OCSREG_DEBUG, "pokeCustom16(%X [%s], %X)\n",
+              addr, customReg[(addr >> 1) & 0xFF], value);
     }
-#else
-    debug(OCSREG_DEBUG, "pokeCustom16(%X [%s], %X)\n",
-          addr, customReg[(addr >> 1) & 0xFF], value);
-#endif
 
     assert(IS_EVEN(addr));
 
