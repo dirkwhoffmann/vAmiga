@@ -362,7 +362,7 @@ Blitter::serviceEvent(EventID id)
 
         case BLT_EXEC_SLOW:
 
-            executeSlowBlitter();
+            executeSlowBlitterOld();
             break;
 
         case BLT_EXEC_FAST:

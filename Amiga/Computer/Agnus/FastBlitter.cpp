@@ -25,25 +25,6 @@ Blitter::beginFastLineBlit()
 void
 Blitter::beginFastCopyBlit()
 {
-    void (Blitter::*blitfunc[])(void) = {
-        &Blitter::doFastCopyBlit<0,0,0,0,0>, &Blitter::doFastCopyBlit<0,0,0,0,1>,
-        &Blitter::doFastCopyBlit<0,0,0,1,0>, &Blitter::doFastCopyBlit<0,0,0,1,1>,
-        &Blitter::doFastCopyBlit<0,0,1,0,0>, &Blitter::doFastCopyBlit<0,0,1,0,1>,
-        &Blitter::doFastCopyBlit<0,0,1,1,0>, &Blitter::doFastCopyBlit<0,0,1,1,1>,
-        &Blitter::doFastCopyBlit<0,1,0,0,0>, &Blitter::doFastCopyBlit<0,1,0,0,1>,
-        &Blitter::doFastCopyBlit<0,1,0,1,0>, &Blitter::doFastCopyBlit<0,1,0,1,1>,
-        &Blitter::doFastCopyBlit<0,1,1,0,0>, &Blitter::doFastCopyBlit<0,1,1,0,1>,
-        &Blitter::doFastCopyBlit<0,1,1,1,0>, &Blitter::doFastCopyBlit<0,1,1,1,1>,
-        &Blitter::doFastCopyBlit<1,0,0,0,0>, &Blitter::doFastCopyBlit<1,0,0,0,1>,
-        &Blitter::doFastCopyBlit<1,0,0,1,0>, &Blitter::doFastCopyBlit<1,0,0,1,1>,
-        &Blitter::doFastCopyBlit<1,0,1,0,0>, &Blitter::doFastCopyBlit<1,0,1,0,1>,
-        &Blitter::doFastCopyBlit<1,0,1,1,0>, &Blitter::doFastCopyBlit<1,0,1,1,1>,
-        &Blitter::doFastCopyBlit<1,1,0,0,0>, &Blitter::doFastCopyBlit<1,1,0,0,1>,
-        &Blitter::doFastCopyBlit<1,1,0,1,0>, &Blitter::doFastCopyBlit<1,1,0,1,1>,
-        &Blitter::doFastCopyBlit<1,1,1,0,0>, &Blitter::doFastCopyBlit<1,1,1,0,1>,
-        &Blitter::doFastCopyBlit<1,1,1,1,0>, &Blitter::doFastCopyBlit<1,1,1,1,1>
-    };
-
     // Only call this function in copy blit mode
     assert(!bltconLINE());
 
@@ -690,3 +671,35 @@ Blitter::doFastLineBlit()
      }
      */
 
+template void Blitter::doFastCopyBlit<0,0,0,0,0>();
+template void Blitter::doFastCopyBlit<0,0,0,0,1>();
+template void Blitter::doFastCopyBlit<0,0,0,1,0>();
+template void Blitter::doFastCopyBlit<0,0,0,1,1>();
+template void Blitter::doFastCopyBlit<0,0,1,0,0>();
+template void Blitter::doFastCopyBlit<0,0,1,0,1>();
+template void Blitter::doFastCopyBlit<0,0,1,1,0>();
+template void Blitter::doFastCopyBlit<0,0,1,1,1>();
+template void Blitter::doFastCopyBlit<0,1,0,0,0>();
+template void Blitter::doFastCopyBlit<0,1,0,0,1>();
+template void Blitter::doFastCopyBlit<0,1,0,1,0>();
+template void Blitter::doFastCopyBlit<0,1,0,1,1>();
+template void Blitter::doFastCopyBlit<0,1,1,0,0>();
+template void Blitter::doFastCopyBlit<0,1,1,0,1>();
+template void Blitter::doFastCopyBlit<0,1,1,1,0>();
+template void Blitter::doFastCopyBlit<0,1,1,1,1>();
+template void Blitter::doFastCopyBlit<1,0,0,0,0>();
+template void Blitter::doFastCopyBlit<1,0,0,0,1>();
+template void Blitter::doFastCopyBlit<1,0,0,1,0>();
+template void Blitter::doFastCopyBlit<1,0,0,1,1>();
+template void Blitter::doFastCopyBlit<1,0,1,0,0>();
+template void Blitter::doFastCopyBlit<1,0,1,0,1>();
+template void Blitter::doFastCopyBlit<1,0,1,1,0>();
+template void Blitter::doFastCopyBlit<1,0,1,1,1>();
+template void Blitter::doFastCopyBlit<1,1,0,0,0>();
+template void Blitter::doFastCopyBlit<1,1,0,0,1>();
+template void Blitter::doFastCopyBlit<1,1,0,1,0>();
+template void Blitter::doFastCopyBlit<1,1,0,1,1>();
+template void Blitter::doFastCopyBlit<1,1,1,0,0>();
+template void Blitter::doFastCopyBlit<1,1,1,0,1>();
+template void Blitter::doFastCopyBlit<1,1,1,1,0>();
+template void Blitter::doFastCopyBlit<1,1,1,1,1>();
