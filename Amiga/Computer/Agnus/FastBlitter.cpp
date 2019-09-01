@@ -10,6 +10,32 @@
 #include "Amiga.h"
 
 void
+Blitter::initFastBlitter()
+{
+    void (Blitter::*blitfunc[32])(void) = {
+        &Blitter::doFastCopyBlit<0,0,0,0,0>, &Blitter::doFastCopyBlit<0,0,0,0,1>,
+        &Blitter::doFastCopyBlit<0,0,0,1,0>, &Blitter::doFastCopyBlit<0,0,0,1,1>,
+        &Blitter::doFastCopyBlit<0,0,1,0,0>, &Blitter::doFastCopyBlit<0,0,1,0,1>,
+        &Blitter::doFastCopyBlit<0,0,1,1,0>, &Blitter::doFastCopyBlit<0,0,1,1,1>,
+        &Blitter::doFastCopyBlit<0,1,0,0,0>, &Blitter::doFastCopyBlit<0,1,0,0,1>,
+        &Blitter::doFastCopyBlit<0,1,0,1,0>, &Blitter::doFastCopyBlit<0,1,0,1,1>,
+        &Blitter::doFastCopyBlit<0,1,1,0,0>, &Blitter::doFastCopyBlit<0,1,1,0,1>,
+        &Blitter::doFastCopyBlit<0,1,1,1,0>, &Blitter::doFastCopyBlit<0,1,1,1,1>,
+        &Blitter::doFastCopyBlit<1,0,0,0,0>, &Blitter::doFastCopyBlit<1,0,0,0,1>,
+        &Blitter::doFastCopyBlit<1,0,0,1,0>, &Blitter::doFastCopyBlit<1,0,0,1,1>,
+        &Blitter::doFastCopyBlit<1,0,1,0,0>, &Blitter::doFastCopyBlit<1,0,1,0,1>,
+        &Blitter::doFastCopyBlit<1,0,1,1,0>, &Blitter::doFastCopyBlit<1,0,1,1,1>,
+        &Blitter::doFastCopyBlit<1,1,0,0,0>, &Blitter::doFastCopyBlit<1,1,0,0,1>,
+        &Blitter::doFastCopyBlit<1,1,0,1,0>, &Blitter::doFastCopyBlit<1,1,0,1,1>,
+        &Blitter::doFastCopyBlit<1,1,1,0,0>, &Blitter::doFastCopyBlit<1,1,1,0,1>,
+        &Blitter::doFastCopyBlit<1,1,1,1,0>, &Blitter::doFastCopyBlit<1,1,1,1,1>
+    };
+
+    assert(sizeof(this->blitfunc) == sizeof(blitfunc));
+    memcpy(this->blitfunc, blitfunc, sizeof(blitfunc));
+}
+
+void
 Blitter::beginFastLineBlit()
 {
     // Only call this function is line blit mode
@@ -48,7 +74,6 @@ Blitter::beginFastCopyBlit()
 
         case 1:
             if (verbose) { verbose = false; debug("Fake micro-code execution\n"); }
-            loadMicrocode();
             agnus->scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_EXEC_FAST);
             return;
 
@@ -57,6 +82,7 @@ Blitter::beginFastCopyBlit()
     }
 }
 
+/*
 void
 Blitter::executeFastBlitter()
 {
@@ -85,6 +111,7 @@ Blitter::executeFastBlitter()
     // Write some fake data to make the DMA debugger happy
     agnus->busValue[agnus->pos.h] = 0x8888;
 }
+*/
 
 template <bool useA, bool useB, bool useC, bool useD, bool desc>
 void Blitter::doFastCopyBlit()
@@ -670,36 +697,3 @@ Blitter::doFastLineBlit()
      memoryWriteWord(0x8040, 0x00DFF09C);
      }
      */
-
-template void Blitter::doFastCopyBlit<0,0,0,0,0>();
-template void Blitter::doFastCopyBlit<0,0,0,0,1>();
-template void Blitter::doFastCopyBlit<0,0,0,1,0>();
-template void Blitter::doFastCopyBlit<0,0,0,1,1>();
-template void Blitter::doFastCopyBlit<0,0,1,0,0>();
-template void Blitter::doFastCopyBlit<0,0,1,0,1>();
-template void Blitter::doFastCopyBlit<0,0,1,1,0>();
-template void Blitter::doFastCopyBlit<0,0,1,1,1>();
-template void Blitter::doFastCopyBlit<0,1,0,0,0>();
-template void Blitter::doFastCopyBlit<0,1,0,0,1>();
-template void Blitter::doFastCopyBlit<0,1,0,1,0>();
-template void Blitter::doFastCopyBlit<0,1,0,1,1>();
-template void Blitter::doFastCopyBlit<0,1,1,0,0>();
-template void Blitter::doFastCopyBlit<0,1,1,0,1>();
-template void Blitter::doFastCopyBlit<0,1,1,1,0>();
-template void Blitter::doFastCopyBlit<0,1,1,1,1>();
-template void Blitter::doFastCopyBlit<1,0,0,0,0>();
-template void Blitter::doFastCopyBlit<1,0,0,0,1>();
-template void Blitter::doFastCopyBlit<1,0,0,1,0>();
-template void Blitter::doFastCopyBlit<1,0,0,1,1>();
-template void Blitter::doFastCopyBlit<1,0,1,0,0>();
-template void Blitter::doFastCopyBlit<1,0,1,0,1>();
-template void Blitter::doFastCopyBlit<1,0,1,1,0>();
-template void Blitter::doFastCopyBlit<1,0,1,1,1>();
-template void Blitter::doFastCopyBlit<1,1,0,0,0>();
-template void Blitter::doFastCopyBlit<1,1,0,0,1>();
-template void Blitter::doFastCopyBlit<1,1,0,1,0>();
-template void Blitter::doFastCopyBlit<1,1,0,1,1>();
-template void Blitter::doFastCopyBlit<1,1,1,0,0>();
-template void Blitter::doFastCopyBlit<1,1,1,0,1>();
-template void Blitter::doFastCopyBlit<1,1,1,1,0>();
-template void Blitter::doFastCopyBlit<1,1,1,1,1>();

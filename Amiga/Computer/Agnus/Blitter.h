@@ -12,44 +12,6 @@
 
 class Blitter : public HardwareComponent {
 
-    //
-    // Constants
-    //
-
-    /* Micro-instructions
-     *
-     * To keep the implementation flexible, the blitter is emulated as a
-     * micro-programmable device. When a blit starts, a micro-program is set up
-     * that will decide on the action that are performed in each Blitter cycle.
-     *
-     * A micro-program consists of the following micro-instructions:
-     *
-     *     BLTIDLE : Does nothing.
-     *         BUS : Acquires the bus.
-     *     WRITE_D : Writes back D hold.
-     *     FETCH_A : Loads register A new.
-     *     FETCH_B : Loads register B new.
-     *     FETCH_C : Loads register C hold.
-     *      HOLD_A : Loads register A hold.
-     *      HOLD_B : Loads register B hold.
-     *      HOLD_D : Loads register D hold.
-     *     BLTDONE : Marks the last instruction.
-     *      REPEAT : Continues with the next word.
-     */
-
-    static const uint16_t BLTIDLE   = 0b0000'0000'0000;
-    static const uint16_t BUS       = 0b0000'0000'0001;
-    static const uint16_t WRITE_D   = 0b0000'0000'0010;
-    static const uint16_t FETCH_A   = 0b0000'0000'0100;
-    static const uint16_t FETCH_B   = 0b0000'0000'1000;
-    static const uint16_t FETCH_C   = 0b0000'0001'0000;
-    static const uint16_t HOLD_A    = 0b0000'0010'0000;
-    static const uint16_t HOLD_B    = 0b0000'0100'0000;
-    static const uint16_t HOLD_D    = 0b0000'1000'0000;
-    static const uint16_t BLTDONE   = 0b0001'0000'0000;
-    static const uint16_t REPEAT    = 0b0010'0000'0000;
-
-
     // Quick-access references
     class Memory *mem;
     class Agnus *agnus;
@@ -131,36 +93,22 @@ private:
     // Fast Blitter
     //
 
-    // The Fast Blitter function table
-    void (Blitter::*blitfunc[32])(void) = {
-        &Blitter::doFastCopyBlit<0,0,0,0,0>, &Blitter::doFastCopyBlit<0,0,0,0,1>,
-        &Blitter::doFastCopyBlit<0,0,0,1,0>, &Blitter::doFastCopyBlit<0,0,0,1,1>,
-        &Blitter::doFastCopyBlit<0,0,1,0,0>, &Blitter::doFastCopyBlit<0,0,1,0,1>,
-        &Blitter::doFastCopyBlit<0,0,1,1,0>, &Blitter::doFastCopyBlit<0,0,1,1,1>,
-        &Blitter::doFastCopyBlit<0,1,0,0,0>, &Blitter::doFastCopyBlit<0,1,0,0,1>,
-        &Blitter::doFastCopyBlit<0,1,0,1,0>, &Blitter::doFastCopyBlit<0,1,0,1,1>,
-        &Blitter::doFastCopyBlit<0,1,1,0,0>, &Blitter::doFastCopyBlit<0,1,1,0,1>,
-        &Blitter::doFastCopyBlit<0,1,1,1,0>, &Blitter::doFastCopyBlit<0,1,1,1,1>,
-        &Blitter::doFastCopyBlit<1,0,0,0,0>, &Blitter::doFastCopyBlit<1,0,0,0,1>,
-        &Blitter::doFastCopyBlit<1,0,0,1,0>, &Blitter::doFastCopyBlit<1,0,0,1,1>,
-        &Blitter::doFastCopyBlit<1,0,1,0,0>, &Blitter::doFastCopyBlit<1,0,1,0,1>,
-        &Blitter::doFastCopyBlit<1,0,1,1,0>, &Blitter::doFastCopyBlit<1,0,1,1,1>,
-        &Blitter::doFastCopyBlit<1,1,0,0,0>, &Blitter::doFastCopyBlit<1,1,0,0,1>,
-        &Blitter::doFastCopyBlit<1,1,0,1,0>, &Blitter::doFastCopyBlit<1,1,0,1,1>,
-        &Blitter::doFastCopyBlit<1,1,1,0,0>, &Blitter::doFastCopyBlit<1,1,1,0,1>,
-        &Blitter::doFastCopyBlit<1,1,1,1,0>, &Blitter::doFastCopyBlit<1,1,1,1,1>
-    };
+    // The Fast Blitter's blit functions
+    void (Blitter::*blitfunc[32])(void);
 
 
     //
     // Slow Blitter
     //
 
-    // The micro program to execute
+    // The Slow Blitter's micro programs
+    void (Blitter::*instruction[16][2][5])(void);
+
+    // The micro program to execute (DEPRECATED)
     uint16_t microInstr[32];
 
     // The program counter indexing the microInstr array
-    uint16_t bltpc = 0;
+    uint16_t bltpc;
 
     int iteration;
     int incr;
@@ -314,8 +262,11 @@ private:
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
     size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS }
-    
-    
+
+    void initFastBlitter();
+    void initSlowBlitter();
+
+
     //
     // Reading the internal state
     //
@@ -350,6 +301,7 @@ public:
     void pokeBLTCON0(uint16_t value);
     
     inline uint16_t bltconASH() { return bltcon0 >> 12; }
+    inline uint16_t bltconUSE() { return (bltcon0 >> 8) & 0xF; }
     inline bool bltconUSEA()    { return bltcon0 & (1 << 11); }
     inline bool bltconUSEB()    { return bltcon0 & (1 << 10); }
     inline bool bltconUSEC()    { return bltcon0 & (1 << 9); }
@@ -466,7 +418,7 @@ private:
     void beginFastCopyBlit();
 
     // Fake-emulates the next micro-instruction of the copy Blitter
-    void executeFastBlitter();
+    // void executeFastBlitter();
 
     // Performs a copy blit operation via the FastBlitter
     template <bool useA, bool useB, bool useC, bool useD, bool desc>
@@ -489,8 +441,8 @@ private:
     void beginSlowCopyBlit();
 
     // Emulates a Blitter micro-instruction
-    template <uint16_t instr> void executeSlowBlitter();
-    void executeSlowBlitterOld();
+    template <uint16_t instr> void exec();
+    // void executeSlowBlitterOld();
 
     // Sets the x or y counter to a new value
     // DEPRECATED
@@ -502,7 +454,7 @@ private:
     void decYCounter() { setYCounter(yCounter - 1); }
 
     // Program the device
-    void loadMicrocode();
+    // void loadMicrocode();
 
     // Emulate the barrel shifter
     void doBarrelShifterA();

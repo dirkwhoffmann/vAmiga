@@ -43,6 +43,9 @@ Blitter::_initialize()
 {
     mem = &amiga->mem;
     agnus = &amiga->agnus;
+
+    initFastBlitter();
+    initSlowBlitter();
 }
 
 void
@@ -362,12 +365,16 @@ Blitter::serviceEvent(EventID id)
 
         case BLT_EXEC_SLOW:
 
-            executeSlowBlitterOld();
+            // executeSlowBlitterOld();
+            debug(BLT_DEBUG, "Instruction %d:%d\n", bltconUSE(), bltpc);
+            (this->*instruction[bltconUSE()][0][bltpc])();
             break;
 
         case BLT_EXEC_FAST:
 
-            executeFastBlitter();
+            // executeFastBlitter();
+            debug(BLT_DEBUG, "Faked instruction %d:%d\n", bltconUSE(), bltpc);
+            (this->*instruction[bltconUSE()][1][bltpc])();
             break;
 
         default:
@@ -682,8 +689,13 @@ Blitter::startBlit()
 {
     // assert(!bbusy);
 
+    // Reset the Blitter flags
     bzero = true;
     bbusy = true;
+
+    // Reset program and iteration counter
+    bltpc = 0;
+    iteration = 0;
 
     // Based on the accuracy level, we run the slow or the fast Blitter
     bool useSlowBlitter = accuracy >= 2;
