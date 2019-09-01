@@ -156,7 +156,7 @@ DiskController::ejectDisk(int nr, Cycle delay)
     debug("ejectDisk(%d, %d)\n", nr, delay);
 
     amiga->suspend();
-    agnus->scheduleRel<DCH_SLOT>(delay, DCH_EJECT);
+    agnus->scheduleRel<DCH_SLOT>(delay, DCH_EJECT, nr);
     amiga->resume();
 }
 
@@ -180,7 +180,7 @@ DiskController::insertDisk(class Disk *disk, int nr, Cycle delay)
     }
 
     diskToInsert = disk;
-    agnus->scheduleRel<DCH_SLOT>(delay, DCH_INSERT);
+    agnus->scheduleRel<DCH_SLOT>(delay, DCH_INSERT, nr);
     amiga->resume();
 }
 
@@ -380,7 +380,7 @@ DiskController::serviceDiskChangeEvent(EventID id, int driveNr)
 
         case DCH_INSERT:
 
-            debug(DSK_DEBUG, "DCH_INSERT\n");
+            debug(DSK_DEBUG, "DCH_INSERT (df%d)\n", driveNr);
 
             assert(diskToInsert != NULL);
             df[driveNr]->insertDisk(diskToInsert);
@@ -389,7 +389,7 @@ DiskController::serviceDiskChangeEvent(EventID id, int driveNr)
 
         case DCH_EJECT:
 
-            debug(DSK_DEBUG, "DCH_EJECT\n");
+            debug(DSK_DEBUG, "DCH_EJECT (df%d)\n", driveNr);
 
             df[driveNr]->ejectDisk();
             break;
