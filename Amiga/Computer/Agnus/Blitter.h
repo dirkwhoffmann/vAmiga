@@ -444,7 +444,10 @@ private:
     void executeFastBlitter();
 
     // Performs a copy blit operation via the FastBlitter
+    template <bool useA, bool useB, bool useC, bool useD, bool desc>
     void doFastCopyBlit();
+    void doFastCopyBlitOld();
+
     
     // Performs a line blit operation via the FastBlitter
     void doFastLineBlit();

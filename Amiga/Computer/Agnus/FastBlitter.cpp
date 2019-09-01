@@ -9,45 +9,6 @@
 
 #include "Amiga.h"
 
-/*
-void
-Blitter::startFastBlitter()
-{
-    static bool verbose = true;
-    if (verbose) { debug("Using Fast Blitter\n"); }
-
-    // Line blit
-    if (bltconLINE()) {
-
-        doFastLineBlit();
-        terminate();
-        return; 
-    }
-
-    // Copy blit
-    doFastCopyBlit();
-
-    // Depending on the accuracy level, we either terminate immediately or
-    // fake-execute the micro-program until it terminates.
-    switch (accuracy) {
-
-        case 0:
-            if (verbose) { debug("Immediate termination\n"); verbose = false; }
-            terminate();
-            return;
-
-        case 1:
-            if (verbose) { debug("Fake micro-code execution\n"); verbose = false; }
-            loadMicrocode();
-            agnus->scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_EXEC_FAST);
-            return;
-
-        default:
-            assert(false);
-    }
-}
-*/
-
 void
 Blitter::beginFastLineBlit()
 {
@@ -64,14 +25,36 @@ Blitter::beginFastLineBlit()
 void
 Blitter::beginFastCopyBlit()
 {
-    // Only call this function is copy blit mode
+    void (Blitter::*blitfunc[])(void) = {
+        &Blitter::doFastCopyBlit<0,0,0,0,0>, &Blitter::doFastCopyBlit<0,0,0,0,1>,
+        &Blitter::doFastCopyBlit<0,0,0,1,0>, &Blitter::doFastCopyBlit<0,0,0,1,1>,
+        &Blitter::doFastCopyBlit<0,0,1,0,0>, &Blitter::doFastCopyBlit<0,0,1,0,1>,
+        &Blitter::doFastCopyBlit<0,0,1,1,0>, &Blitter::doFastCopyBlit<0,0,1,1,1>,
+        &Blitter::doFastCopyBlit<0,1,0,0,0>, &Blitter::doFastCopyBlit<0,1,0,0,1>,
+        &Blitter::doFastCopyBlit<0,1,0,1,0>, &Blitter::doFastCopyBlit<0,1,0,1,1>,
+        &Blitter::doFastCopyBlit<0,1,1,0,0>, &Blitter::doFastCopyBlit<0,1,1,0,1>,
+        &Blitter::doFastCopyBlit<0,1,1,1,0>, &Blitter::doFastCopyBlit<0,1,1,1,1>,
+        &Blitter::doFastCopyBlit<1,0,0,0,0>, &Blitter::doFastCopyBlit<1,0,0,0,1>,
+        &Blitter::doFastCopyBlit<1,0,0,1,0>, &Blitter::doFastCopyBlit<1,0,0,1,1>,
+        &Blitter::doFastCopyBlit<1,0,1,0,0>, &Blitter::doFastCopyBlit<1,0,1,0,1>,
+        &Blitter::doFastCopyBlit<1,0,1,1,0>, &Blitter::doFastCopyBlit<1,0,1,1,1>,
+        &Blitter::doFastCopyBlit<1,1,0,0,0>, &Blitter::doFastCopyBlit<1,1,0,0,1>,
+        &Blitter::doFastCopyBlit<1,1,0,1,0>, &Blitter::doFastCopyBlit<1,1,0,1,1>,
+        &Blitter::doFastCopyBlit<1,1,1,0,0>, &Blitter::doFastCopyBlit<1,1,1,0,1>,
+        &Blitter::doFastCopyBlit<1,1,1,1,0>, &Blitter::doFastCopyBlit<1,1,1,1,1>
+    };
+
+    // Only call this function in copy blit mode
     assert(!bltconLINE());
 
     static bool verbose = true;
     if (verbose) { debug("Using the fast copy Blitter\n"); }
 
+    // Select the proper Blitter function
+    int nr = ((bltcon0 >> 7) & 0b11110) | !!bltconDESC();
+
     // Do the blit
-    doFastCopyBlit();
+    (this->*blitfunc[nr])();
 
     // Depending on the accuracy level, either terminate immediately or start
     // fake-executing the micro-program to emulate proper timing.
@@ -122,8 +105,126 @@ Blitter::executeFastBlitter()
     agnus->busValue[agnus->pos.h] = 0x8888;
 }
 
+template <bool useA, bool useB, bool useC, bool useD, bool desc>
+void Blitter::doFastCopyBlit()
+{
+    uint32_t apt = bltapt;
+    uint32_t bpt = bltbpt;
+    uint32_t cpt = bltcpt;
+    uint32_t dpt = bltdpt;
+
+    bool fill = bltconFE();
+    bool fillCarry;
+
+    int incr = desc ? -2 : 2;
+    int ash = desc ? 16 - bltconASH() : bltconASH();
+    int bsh = desc ? 16 - bltconBSH() : bltconBSH();
+    int32_t amod = desc ? -bltamod : bltamod;
+    int32_t bmod = desc ? -bltbmod : bltbmod;
+    int32_t cmod = desc ? -bltcmod : bltcmod;
+    int32_t dmod = desc ? -bltdmod : bltdmod;
+
+    aold = 0;
+    bold = 0;
+
+    for (int y = 0; y < bltsizeH; y++) {
+
+        // Reset the fill carry bit
+        fillCarry = !!bltconFCI();
+
+        // Apply the "first word mask" in the first iteration
+        uint16_t mask = bltafwm;
+
+        for (int x = 0; x < bltsizeW; x++) {
+
+            // Apply the "last word mask" in the last iteration
+            if (x == bltsizeW - 1) mask &= bltalwm;
+
+            // Fetch A
+            if (useA) {
+                anew = mem->peek16<BUS_BLITTER>(apt);
+                debug(BLT_DEBUG, "    A = peek(%X) = %X\n", apt, anew);
+                INC_OCS_PTR(apt, incr);
+            }
+
+            // Fetch B
+            if (useB) {
+                bnew = mem->peek16<BUS_BLITTER>(bpt);
+                debug(BLT_DEBUG, "    B = peek(%X) = %X\n", bpt, bnew);
+                INC_OCS_PTR(bpt, incr);
+            }
+
+            // Fetch C
+            if (useC) {
+                chold = mem->peek16<BUS_BLITTER>(cpt);
+                debug(BLT_DEBUG, "    C = peek(%X) = %X\n", cpt, chold);
+                INC_OCS_PTR(cpt, incr);
+            }
+            debug(BLT_DEBUG, "    After fetch: A = %x B = %x C = %x\n", anew, bnew, chold);
+
+            debug(BLT_DEBUG, "    After masking with %x (%x,%x) %x\n", mask, bltafwm, bltalwm, anew & mask);
+
+            // Run the barrel shifters on data path A and B
+            debug(BLT_DEBUG, "    ash = %d bsh = %d mask = %X\n", bltconASH(), bltconBSH(), mask);
+            if (desc) {
+                ahold = HI_W_LO_W(anew & mask, aold) >> ash;
+                bhold = HI_W_LO_W(bnew, bold) >> bsh;
+            } else {
+                ahold = HI_W_LO_W(aold, anew & mask) >> ash;
+                bhold = HI_W_LO_W(bold, bnew) >> bsh;
+            }
+            aold = anew & mask;
+            bold = bnew;
+            debug(BLT_DEBUG, "    After shifting (%d,%d) A = %x B = %x\n", ash, bsh, ahold, bhold);
+
+            // Run the minterm logic circuit
+            debug(BLT_DEBUG, "    Minterms: ahold = %X bhold = %X chold = %X bltcon0 = %X (hex)\n", ahold, bhold, chold, bltcon0);
+            dhold = doMintermLogicQuick(ahold, bhold, chold, bltcon0 & 0xFF);
+            assert(dhold == doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF));
+
+            // Run the fill logic circuit
+            if (fill) doFill(dhold, fillCarry);
+
+            // Update the zero flag
+            if (dhold) bzero = false;
+
+            // Write D
+            if (useD) {
+                mem->poke16<BUS_BLITTER>(dpt, dhold);
+                check1 = fnv_1a_it32(check1, dhold);
+                check2 = fnv_1a_it32(check2, dpt);
+                debug(BLT_DEBUG, "D: poke(%X), %X  (check: %X %X)\n", dpt, dhold, check1, check2);
+                // plainmsg("    check1 = %X check2 = %X\n", check1, check2);
+
+                INC_OCS_PTR(dpt, incr);
+            }
+
+            // Clear the word mask
+            mask = 0xFFFF;
+        }
+
+        // Add modulo values
+        if (useA) INC_OCS_PTR(apt, amod);
+        if (useB) INC_OCS_PTR(bpt, bmod);
+        if (useC) INC_OCS_PTR(cpt, cmod);
+        if (useD) INC_OCS_PTR(dpt, dmod);
+    }
+
+    // Do some consistency checks
+    assert(apt == useA ? bltapt + (incr * bltsizeW + amod) * bltsizeH : bltapt);
+    assert(bpt == useB ? bltbpt + (incr * bltsizeW + bmod) * bltsizeH : bltbpt);
+    assert(cpt == useC ? bltcpt + (incr * bltsizeW + cmod) * bltsizeH : bltcpt);
+    assert(dpt == useD ? bltdpt + (incr * bltsizeW + dmod) * bltsizeH : bltdpt);
+
+    // Write back pointer registers
+    bltapt = apt;
+    bltbpt = bpt;
+    bltcpt = cpt;
+    bltdpt = dpt;
+}
+
 void
-Blitter::doFastCopyBlit()
+Blitter::doFastCopyBlitOld()
 {
     // uint16_t xmax = bltsizeW;
     // uint16_t ymax = bltsizeH;
