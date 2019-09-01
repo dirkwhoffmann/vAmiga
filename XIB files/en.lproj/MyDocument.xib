@@ -25,7 +25,8 @@
                 <outlet property="metal" destination="DD4-5B-w9h" id="rGV-rL-MLo"/>
                 <outlet property="powerLED" destination="1208" id="hey-Hi-zTq"/>
                 <outlet property="toolbar" destination="1845" id="JVx-NQ-tw7"/>
-                <outlet property="warpIcon" destination="1052" id="uvG-el-lRi"/>
+                <outlet property="warpIcon" destination="1052" id="QGs-ln-NvN"/>
+                <outlet property="warpLockIcon" destination="z9X-CV-mIy" id="lN1-bx-UuO"/>
                 <outlet property="window" destination="5" id="2164"/>
             </connections>
         </customObject>
@@ -40,15 +41,6 @@
                 <rect key="frame" x="0.0" y="0.0" width="804" height="645"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <textField verticalHuggingPriority="750" id="214">
-                        <rect key="frame" x="562" y="7" width="133" height="11"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                        <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" alignment="right" title="Clock" id="1703">
-                            <font key="font" metaFont="miniSystem"/>
-                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
                     <levelIndicator verticalHuggingPriority="750" id="212">
                         <rect key="frame" x="721" y="3" width="80" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
@@ -64,7 +56,18 @@
                             <font key="font" metaFont="system" size="10"/>
                         </buttonCell>
                         <connections>
-                            <action selector="alwaysWarpAction:" target="-2" id="qwQ-Ql-wzH"/>
+                            <action selector="userWarpAction:" target="-2" id="Pq8-8h-8vR"/>
+                        </connections>
+                    </button>
+                    <button toolTip="Warp mode" id="z9X-CV-mIy">
+                        <rect key="frame" x="683" y="4" width="17" height="17"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="lockTemplate" imagePosition="above" alignment="center" imageScaling="proportionallyDown" id="9Qw-Ug-MUv">
+                            <behavior key="behavior" lightByContents="YES"/>
+                            <font key="font" metaFont="system" size="10"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="autoWarpAction:" target="-2" id="W6s-pv-U13"/>
                         </connections>
                     </button>
                     <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" id="xzf-hU-AKK">
@@ -106,7 +109,7 @@
                         </connections>
                     </button>
                     <button toolTip="Drive LED" tag="2" id="70n-GV-8LP" userLabel="Cmd Lock">
-                        <rect key="frame" x="572" y="4" width="42" height="17"/>
+                        <rect key="frame" x="452" y="4" width="42" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="cmdLockTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="kM6-fj-IIO">
                             <behavior key="behavior" lightByContents="YES"/>
@@ -176,6 +179,15 @@
                             <font key="font" metaFont="system" size="10"/>
                         </buttonCell>
                     </button>
+                    <textField verticalHuggingPriority="750" id="214">
+                        <rect key="frame" x="550" y="6" width="133" height="11"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                        <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" alignment="right" title="Clock" id="1703">
+                            <font key="font" metaFont="miniSystem"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
                 </subviews>
             </view>
             <toolbar key="toolbar" implicitIdentifier="562FDE63-25B0-4E4E-80C7-EF6E742B5F6F" displayMode="iconAndLabel" sizeMode="regular" id="1845" customClass="MyToolbar" customModule="vAmiga" customModuleProvider="target">
@@ -404,10 +416,11 @@
         <image name="devNoneTemplate" width="24" height="24"/>
         <image name="diskTemplate" width="217" height="217"/>
         <image name="driveLedOff" width="100" height="50"/>
-        <image name="hourglass1Template" width="241" height="241"/>
+        <image name="hourglass1Template" width="240" height="241"/>
         <image name="joyKeys1Template" width="24" height="24"/>
         <image name="joyKeys2Template" width="24" height="24"/>
         <image name="keyboardTemplate" width="24" height="24"/>
+        <image name="lockTemplate" width="240" height="240"/>
         <image name="monitorTemplate" width="241" height="240"/>
         <image name="pauseTemplate" width="240" height="241"/>
         <image name="powerLedOff" width="100" height="50"/>

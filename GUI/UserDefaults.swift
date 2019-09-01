@@ -601,11 +601,6 @@ extension Keys {
     static let pauseInBackground    = "VAMIGAPauseInBackground"
     static let autoSnapshots        = "VAMIGAAutoSnapshots"
     static let autoSnapshotInterval = "VAMIGASnapshotInterval"
-    
-    // Media files
-    static let autoMountAction      = "VAMIGAAutoMountAction"
-    static let autoType             = "VAMIGAAutoType"
-    static let autoTypeText         = "VAMIGAAutoTypeText"
 }
 
 extension Defaults {
@@ -684,11 +679,7 @@ extension MyController {
                     
                     Keys.pauseInBackground,
                     Keys.autoSnapshots,
-                    Keys.autoSnapshotInterval,
-                    
-                    Keys.autoMountAction,
-                    Keys.autoType,
-                    Keys.autoTypeText ]
+                    Keys.autoSnapshotInterval ]
 
         for key in keys { defaults.removeObject(forKey: key) }
         

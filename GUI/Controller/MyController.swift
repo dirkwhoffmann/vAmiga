@@ -7,14 +7,13 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-enum AutoMountAction: Int, Codable {
-    
-    case openBrowser = 0
-    case flashFirstFile = 1
-    case insertIntoDrive8 = 2
-    case insertIntoDrive9 = 3
-    case insertIntoDatasette = 4
-    case attachToExpansionPort = 5
+enum WarpMode {
+
+    case auto
+    case on
+    case off
+
+    // func userOverride() -> Bool { return self != .auto }
 }
 
 protocol MessageReceiver {
@@ -23,51 +22,51 @@ protocol MessageReceiver {
 
 class MyController: NSWindowController, MessageReceiver {
 
-    /// Proxy
-    /// Implements a bridge between the emulator written in C++ and the
-    /// GUI written in Swift. Because Swift cannot interact with C++ directly,
-    //  the proxy is written in Objective-C.
+    // Proxy
+    // Implements a bridge between the emulator written in C++ and the
+    // GUI written in Swift. Because Swift cannot interact with C++ directly,
+    // the proxy is written in Objective-C.
     var amiga: AmigaProxy!
 
-    /// Audio Engine
+    // Audio Engine
     var audioEngine: AudioEngine!
     
-    /// Game pad manager
+    // Game pad manager
     var gamePadManager: GamePadManager!
     
-    /// Keyboard controller
+    // Keyboard controller
     var keyboardcontroller: KeyboardController!
     
-    /// Virtual C64 keyboard (opened as a sheet)
+    // Virtual C64 keyboard (opened as a sheet)
     var virtualKeyboardSheet: VirtualKeyboardController?
     
-    /// Preferences controller
+    // Preferences controller
     var preferencesController: PreferencesController?
 
-    /// Loop timer
-    /// The timer fires 60 times a second and executes all tasks that need to be
+    // Loop timer
+    // The timer fires 60 times a second and executes all tasks that need to be
     //  done perdiodically (e.g., updating the speedometer and the debug panels)
     var timer: Timer?
     
     // Timer lock
     var timerLock: NSLock!
     
-    /// Speedometer to measure clock frequence and frames per second
+    // Speedometer to measure clock frequence and frames per second
     var speedometer: Speedometer!
     
-    /// Used inside the timer function to fine tune timed events
+    // Used inside the timer function to fine tune timed events
     var animationCounter = 0
         
-    /// Current mouse coordinate
+    // Current mouse coordinate
     var mouseXY = NSPoint(x: 0, y: 0)
     
-    /// Indicates if mouse is currently hidden DEPRECATED
+    // Indicates if mouse is currently hidden DEPRECATED
     var hideMouse = false
 
-    /// Indicates if a status bar is shown
+    // Indicates if a status bar is shown
     var statusBar = true
 
-    /// Small disk icon to be shown in NSMenuItems
+    // Small disk icon to be shown in NSMenuItems
     var smallDisk = NSImage.init(named: "diskTemplate")!.resize(width: 16.0, height: 16.0)
     
     // Drive that receives drag and drop inputs
@@ -76,6 +75,9 @@ class MyController: NSWindowController, MessageReceiver {
     // Serial input and output
     var serialIn = ""
     var serialOut = ""
+
+    // Warp mode
+    var warpMode = WarpMode.auto { didSet { updateWarp() } }
 
     //
     // Preferences items
@@ -251,7 +253,7 @@ class MyController: NSWindowController, MessageReceiver {
     // Emulator preferences
     //
     
-    var alwaysWarp = false { didSet { updateWarp() } }
+    // var alwaysWarp = false { didSet { updateWarp() } }
     
     var warpLoad = Defaults.warpLoad { didSet { updateWarp() } }
     var driveNoise = Defaults.driveNoise
@@ -338,15 +340,20 @@ class MyController: NSWindowController, MessageReceiver {
 
     // Updates the warp status
     func updateWarp() {
-        let loading = amiga.diskController.spinning()
-        if alwaysWarp || (loading && warpLoad) {
-            amiga.warpOn()
-        } else {
-            amiga.warpOff()
+
+        var warp: Bool
+
+        switch warpMode {
+        case .auto: warp = amiga.diskController.spinning() && warpLoad
+        case .on: warp = true
+        case .off: warp = false
         }
+
+        warp ? amiga.warpOn() : amiga.warpOff()
     }
     
     // Returns the icon of the sand clock in the bottom bar
+    /*
     var hourglassIcon: NSImage? {
         if amiga.warp() {
             if alwaysWarp {
@@ -358,7 +365,19 @@ class MyController: NSWindowController, MessageReceiver {
             return NSImage.init(named: "hourglass1Template")
         }
     }
-    
+    */
+    var hourglassIcon: NSImage? {
+        if amiga.warp() {
+            if warpMode == .auto {
+                return NSImage.init(named: "hourglass2Template")
+            } else {
+                return NSImage.init(named: "hourglass3Template")
+            }
+        } else {
+            return NSImage.init(named: "hourglass1Template")
+        }
+    }
+
     //
     // Outlets
     //
@@ -386,6 +405,7 @@ class MyController: NSWindowController, MessageReceiver {
 
     @IBOutlet weak var clockSpeed: NSTextField!
     @IBOutlet weak var clockSpeedBar: NSLevelIndicator!
+    @IBOutlet weak var warpLockIcon: NSButton!
     @IBOutlet weak var warpIcon: NSButton!
     
     // Toolbar
@@ -630,7 +650,6 @@ extension MyController {
             
         case MSG_RESET:
             
-            // track("Reset")
             myAppDelegate.inspector?.refresh(everything: true)
             
         case MSG_WARP_ON,
@@ -869,13 +888,26 @@ extension MyController {
     // Action methods (status bar)
     //
     
-    @IBAction func alwaysWarpAction(_ sender: Any!) {
-        
-        undoManager?.registerUndo(withTarget: self) { targetSelf in
-            targetSelf.alwaysWarpAction(sender)
+    @IBAction func userWarpAction(_ sender: Any!) {
+
+        track()
+
+        // Disable auto mode and toggle between on and off
+        switch warpMode {
+
+        case .auto: warpMode = amiga.warp() ? .off : .on
+        case .on: warpMode = .off
+        case .off: warpMode = .on
         }
-    
-        alwaysWarp = !alwaysWarp
+
+        refreshStatusBar()
+    }
+
+    @IBAction func autoWarpAction(_ sender: Any!) {
+
+        track()
+        warpMode = .auto
+        refreshStatusBar()
     }
 
     //

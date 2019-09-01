@@ -28,7 +28,9 @@ extension MyController {
         df2Disk.image = amiga.df2.icon
         df3Disk.image = amiga.df3.icon
         warpIcon.image = hourglassIcon
-        
+
+        // Speed and frame rate
+
         // Animation
         df0spinning ? df0DMA.startAnimation(self) : df0DMA.stopAnimation(self)
         df1spinning ? df1DMA.startAnimation(self) : df1DMA.stopAnimation(self)
@@ -57,7 +59,8 @@ extension MyController {
             
             clockSpeed: true,
             clockSpeedBar: true,
-            warpIcon: true
+            warpIcon: true,
+            warpLockIcon: warpMode != .auto
         ]
         
         for (item, visible) in items {
