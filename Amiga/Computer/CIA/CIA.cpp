@@ -955,7 +955,6 @@ CIA::executeOneCycle()
     if (serCounter) {
         if ((delay & (CIASerClk2 | CIASerClk1)) == CIASerClk1) {      // Positive edge
             if (serCounter == 1) {
-                assert(false); // DO WE EVER REACH HERE?
                 delay |= CIASerInt0; // Trigger interrupt
             }
         }
