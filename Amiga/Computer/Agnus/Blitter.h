@@ -408,23 +408,15 @@ private:
     //  Executing the Fast Blitter (Called for lower accuracy levels)
     //
 
-    // Invokes the FastBlitter to perform a blit
-    // void startFastBlitter();
-
     // Starts a fast line blit
     void beginFastLineBlit();
 
     // Starts a fast copy blit
     void beginFastCopyBlit();
 
-    // Fake-emulates the next micro-instruction of the copy Blitter
-    // void executeFastBlitter();
-
     // Performs a copy blit operation via the FastBlitter
     template <bool useA, bool useB, bool useC, bool useD, bool desc>
     void doFastCopyBlit();
-    void doFastCopyBlitOld();
-
     
     // Performs a line blit operation via the FastBlitter
     void doFastLineBlit();
@@ -442,19 +434,14 @@ private:
 
     // Emulates a Blitter micro-instruction
     template <uint16_t instr> void exec();
-    // void executeSlowBlitterOld();
 
     // Sets the x or y counter to a new value
-    // DEPRECATED
     void setXCounter(uint16_t value);
     void setYCounter(uint16_t value);
     void resetXCounter() { setXCounter(bltsizeW); }
     void resetYCounter() { setYCounter(bltsizeH); }
     void decXCounter() { setXCounter(xCounter - 1); }
     void decYCounter() { setYCounter(yCounter - 1); }
-
-    // Program the device
-    // void loadMicrocode();
 
     // Emulate the barrel shifter
     void doBarrelShifterA();

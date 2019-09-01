@@ -365,14 +365,12 @@ Blitter::serviceEvent(EventID id)
 
         case BLT_EXEC_SLOW:
 
-            // executeSlowBlitterOld();
             debug(BLT_DEBUG, "Instruction %d:%d\n", bltconUSE(), bltpc);
             (this->*instruction[bltconUSE()][0][bltpc])();
             break;
 
         case BLT_EXEC_FAST:
 
-            // executeFastBlitter();
             debug(BLT_DEBUG, "Faked instruction %d:%d\n", bltconUSE(), bltpc);
             (this->*instruction[bltconUSE()][1][bltpc])();
             break;
