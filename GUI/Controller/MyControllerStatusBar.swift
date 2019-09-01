@@ -12,7 +12,7 @@ extension MyController {
     public func refreshStatusBar() {
         
         guard let amiga = amigaProxy else { return }
-        
+
         let df0IsConnected = amiga.diskController.isConnected(0)
         let df1IsConnected = amiga.diskController.isConnected(1)
         let df2IsConnected = amiga.diskController.isConnected(2)
@@ -21,6 +21,7 @@ extension MyController {
         let df1spinning = amiga.diskController.spinning(1)
         let df2spinning = amiga.diskController.spinning(2)
         let df3spinning = amiga.diskController.spinning(3)
+        let userWarp = warpMode != .auto
 
         // Icons
         df0Disk.image = amiga.df0.icon
@@ -30,6 +31,9 @@ extension MyController {
         warpIcon.image = hourglassIcon
 
         // Speed and frame rate
+        let x = userWarp ? warpLockIcon.frame.origin.x : warpIcon.frame.origin.x
+        let w = clockSpeed.frame.width
+        clockSpeed.frame.origin.x = x - w
 
         // Animation
         df0spinning ? df0DMA.startAnimation(self) : df0DMA.stopAnimation(self)
@@ -60,7 +64,7 @@ extension MyController {
             clockSpeed: true,
             clockSpeedBar: true,
             warpIcon: true,
-            warpLockIcon: warpMode != .auto
+            warpLockIcon: userWarp
         ]
         
         for (item, visible) in items {
