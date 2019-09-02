@@ -85,6 +85,7 @@ Agnus::inspectEventSlot(EventSlot nr)
                 case BPL_H2:        i->eventName = "BPL_H2"; break;
                 case BPL_H3:        i->eventName = "BPL_H3"; break;
                 case BPL_H4:        i->eventName = "BPL_H4"; break;
+                case BPL_EOL:       i->eventName = "BPL_EOL"; break;
                 case BPL_HSYNC:     i->eventName = "BPL_HSYNC"; break;
                 default:            i->eventName = "*** INVALID ***"; break;
             }
@@ -687,12 +688,16 @@ Agnus::serviceBplEvent(EventID id)
             if(unlikely(isLastLx(pos.h))) addBPLMOD<5>();
             break;
 
+        case BPL_EOL:
+            delay |= AGS_HSYNC;
+            break;
+
         case BPL_HSYNC:
             hsyncHandler();
             break;
 
         default:
-            dumpEvents(); 
+            dumpEvents();
             debug("id = %d\n", id);
             assert(false);
     }

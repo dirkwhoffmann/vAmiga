@@ -54,6 +54,8 @@ Agnus::initLoresBplEventTable()
             }
         }
 
+        assert(bitplaneDMA[0][bpu][HPOS_MAX] == EVENT_NONE);
+        bitplaneDMA[0][bpu][HPOS_MAX] = BPL_EOL;
         assert(bitplaneDMA[0][bpu][HPOS_CNT] == EVENT_NONE);
         bitplaneDMA[0][bpu][HPOS_CNT] = BPL_HSYNC;
     }
@@ -85,6 +87,8 @@ Agnus::initHiresBplEventTable()
             }
         }
 
+        assert(bitplaneDMA[1][bpu][HPOS_MAX] == EVENT_NONE);
+        bitplaneDMA[1][bpu][HPOS_MAX] = BPL_EOL;
         assert(bitplaneDMA[1][bpu][HPOS_CNT] == EVENT_NONE);
         bitplaneDMA[1][bpu][HPOS_CNT] = BPL_HSYNC;
     }
@@ -558,22 +562,15 @@ void
 Agnus::clearDMAEventTable()
 {
     memset(dmaEvent, 0, sizeof(dmaEvent));
+    dmaEvent[HPOS_MAX] = BPL_EOL;
     dmaEvent[HPOS_MAX + 1] = BPL_HSYNC;
     updateJumpTable();
-
-    /*
-    // Clear the event table
-    memset(dmaEvent, 0, sizeof(dmaEvent));
-    
-    // Clear the jump table
-    memset(nextDmaEvent, 0, sizeof(nextDmaEvent));
-    */
 }
 
 void
 Agnus::allocateBplSlots(uint16_t dmacon, uint16_t bplcon0, int first, int last)
 {
-    assert(first >= 0 && last <= HPOS_MAX);
+    assert(first >= 0 && last < HPOS_MAX);
 
     int bpu = Denise::bpu(bplcon0);
     bool hires = Denise::hires(bplcon0);
@@ -593,6 +590,12 @@ Agnus::allocateBplSlots(uint16_t dmacon, uint16_t bplcon0, int first, int last)
     }
 
     updateJumpTable();
+}
+
+void
+Agnus::allocateBplSlots(int first, int last)
+{
+    allocateBplSlots(dmacon, bplcon0, first, last);
 }
 
 void
@@ -643,6 +646,11 @@ Agnus::switchBitplaneDmaOff()
     debug(BPL_DEBUG, "switchBitplaneDmaOff: \n");
 
     // Quick-exit if nothing happens at regular DMA cycle positions
+    if (nextDmaEvent[0] == HPOS_MAX) {
+        assert(dmaEvent[nextDmaEvent[0]] == BPL_EOL);
+        return;
+    }
+    // Quick-exit if nothing happens at regular DMA cycle positions (DEPRECATED)
     if (nextDmaEvent[0] == HPOS_MAX + 1) {
         assert(dmaEvent[nextDmaEvent[0]] == BPL_HSYNC);
         return;
@@ -686,6 +694,13 @@ Agnus::updateJumpTable(int16_t to)
     }
 
     // Make sure the table ends with an HSYNC event
+    if (nextDmaEvent[HPOS_MAX - 1] != HPOS_MAX) {
+        dumpBplEventTable();
+    }
+    assert(nextDmaEvent[HPOS_MAX - 1] == HPOS_MAX);
+    assert(dmaEvent[HPOS_MAX] == BPL_EOL);
+
+    // Make sure the table ends with an HSYNC event (DEPRECATED)
     if (nextDmaEvent[HPOS_MAX] != HPOS_MAX + 1) {
         dumpBplEventTable();
     }
@@ -738,6 +753,7 @@ Agnus::dumpBplEventTable(int from, int to)
             case BPL_H2:       r3[i] = 'H'; r4[i] = '2'; break;
             case BPL_H3:       r3[i] = 'H'; r4[i] = '3'; break;
             case BPL_H4:       r3[i] = 'H'; r4[i] = '4'; break;
+            case BPL_EOL:      r3[i] = 'E'; r4[i] = 'O'; break;
             case BPL_HSYNC:    r3[i] = 'H'; r4[i] = 'S'; break;
             default:           assert(false);
         }
@@ -768,7 +784,7 @@ Agnus::dumpBplEventTable()
     // Dump the jump table
     plainmsg("\nJump table:\n\n");
     int i = nextDmaEvent[0];
-    plainmsg("%d", i);
+    plainmsg("0 -> %X", i);
     while (i) {
         i = nextDmaEvent[i];
         plainmsg(" -> %X", i);
@@ -1497,6 +1513,11 @@ Agnus::execute(DMACycle cycles)
 
         // Check if there is additional work to do in this cycle
         if (delay) {
+
+            // Check for horizontal sync
+            if (delay & AGS_HSYNC) {
+                // hsyncHandler();
+            }
 
             // Handle all pending register changes
             if (delay & AGS_REG_CHANGE) updateRegisters();

@@ -761,10 +761,8 @@ public:
     void clearDMAEventTable();
 
     // Allocates the bitplane DMA slots
-    void allocateBplSlots(uint16_t dmacon, uint16_t bplcon0, int first, int last = HPOS_MAX);
-    void allocateBplSlots(int first, int last = HPOS_MAX) {
-        allocateBplSlots(dmacon, bplcon0, first, last);
-    }
+    void allocateBplSlots(uint16_t dmacon, uint16_t bplcon0, int first, int last = HPOS_MAX-1);
+    void allocateBplSlots(int first, int last = HPOS_MAX-1);
 
     // Adds or removes the bitplane DMA events to the DMA event table.
     void switchBitplaneDmaOn();
