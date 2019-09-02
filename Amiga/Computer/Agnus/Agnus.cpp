@@ -1515,9 +1515,7 @@ Agnus::execute(DMACycle cycles)
         if (delay) {
 
             // Check for horizontal sync
-            if (delay & AGS_HSYNC) {
-                // hsyncHandler();
-            }
+            if (delay & AGS_HSYNC) hsyncHandler();
 
             // Handle all pending register changes
             if (delay & AGS_REG_CHANGE) updateRegisters();

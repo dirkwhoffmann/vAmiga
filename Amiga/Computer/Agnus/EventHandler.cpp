@@ -693,7 +693,7 @@ Agnus::serviceBplEvent(EventID id)
             break;
 
         case BPL_HSYNC:
-            hsyncHandler();
+            // hsyncHandler();
             break;
 
         default:
