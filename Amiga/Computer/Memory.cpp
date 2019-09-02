@@ -1684,7 +1684,7 @@ Memory::ascii(uint32_t addr)
     assert(is_uint24_t(addr));
     
     for (unsigned i = 0; i < 16; i++) {
-        uint8_t value = peek8(addr + i);
+        uint8_t value = spypeek8(addr + i);
         str[i] = isprint(value) ? value : '.';
     }
     str[16] = 0;

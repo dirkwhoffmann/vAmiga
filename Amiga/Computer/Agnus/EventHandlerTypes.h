@@ -147,7 +147,6 @@ typedef enum : long
     BPL_H3,
     BPL_H4,
     BPL_EOL,
-    BPL_HSYNC,
     BPL_EVENT_COUNT,
 
     // DAS slot
