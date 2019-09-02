@@ -1501,17 +1501,12 @@ Agnus::execute(DMACycle cycles)
             // Handle all pending register changes
             if (delay & AGS_REG_CHANGE) updateRegisters();
 
-            // Process all pending events
-            if (clock >= nextTrigger) executeEventsUntil(clock);
-
             // Move action flags one bit to the left
             delay = (delay << 1) & AGS_DELAY_MASK;
-
-        } else {
-
-            // Process all pending events
-            if (clock >= nextTrigger) executeEventsUntil(clock);
         }
+
+        // Process all pending events
+        if (clock >= nextTrigger) executeEventsUntil(clock);
 
         // Advance the internal counters
         pos.h++;
