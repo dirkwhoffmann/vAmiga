@@ -86,7 +86,6 @@ Agnus::inspectEventSlot(EventSlot nr)
                 case BPL_H3:        i->eventName = "BPL_H3"; break;
                 case BPL_H4:        i->eventName = "BPL_H4"; break;
                 case BPL_EOL:       i->eventName = "BPL_EOL"; break;
-                case BPL_HSYNC:     i->eventName = "BPL_HSYNC"; break;
                 default:            i->eventName = "*** INVALID ***"; break;
             }
             break;
@@ -689,14 +688,12 @@ Agnus::serviceBplEvent(EventID id)
             break;
 
         case BPL_EOL:
+
+            // This is the last event in the current rasterline. We tell Agnus
+            // to call the hsync handler at the beginning of the next cycle and
+            // return without scheduling a new BPL event.
             delay |= AGS_HSYNC;
-
-            // Return without scheduling a new event
             return;
-
-        case BPL_HSYNC:
-            assert(false);
-            break;
 
         default:
             dumpEvents();

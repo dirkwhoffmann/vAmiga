@@ -56,8 +56,6 @@ Agnus::initLoresBplEventTable()
 
         assert(bitplaneDMA[0][bpu][HPOS_MAX] == EVENT_NONE);
         bitplaneDMA[0][bpu][HPOS_MAX] = BPL_EOL;
-        assert(bitplaneDMA[0][bpu][HPOS_CNT] == EVENT_NONE);
-        bitplaneDMA[0][bpu][HPOS_CNT] = BPL_HSYNC;
     }
 
     for (int i = 0; i <= 0xD8; i++) {
@@ -89,8 +87,6 @@ Agnus::initHiresBplEventTable()
 
         assert(bitplaneDMA[1][bpu][HPOS_MAX] == EVENT_NONE);
         bitplaneDMA[1][bpu][HPOS_MAX] = BPL_EOL;
-        assert(bitplaneDMA[1][bpu][HPOS_CNT] == EVENT_NONE);
-        bitplaneDMA[1][bpu][HPOS_CNT] = BPL_HSYNC;
     }
 
     for (int i = 0; i <= 0xD8; i++) {
@@ -563,7 +559,6 @@ Agnus::clearDMAEventTable()
 {
     memset(dmaEvent, 0, sizeof(dmaEvent));
     dmaEvent[HPOS_MAX] = BPL_EOL;
-    dmaEvent[HPOS_MAX + 1] = BPL_HSYNC;
     updateJumpTable();
 }
 
@@ -650,11 +645,6 @@ Agnus::switchBitplaneDmaOff()
         assert(dmaEvent[nextDmaEvent[0]] == BPL_EOL);
         return;
     }
-    // Quick-exit if nothing happens at regular DMA cycle positions (DEPRECATED)
-    if (nextDmaEvent[0] == HPOS_MAX + 1) {
-        assert(dmaEvent[nextDmaEvent[0]] == BPL_HSYNC);
-        return;
-    }
 
     clearDMAEventTable();
     scheduleNextBplEvent();
@@ -699,13 +689,6 @@ Agnus::updateJumpTable(int16_t to)
     }
     assert(nextDmaEvent[HPOS_MAX - 1] == HPOS_MAX);
     assert(dmaEvent[HPOS_MAX] == BPL_EOL);
-
-    // Make sure the table ends with an HSYNC event (DEPRECATED)
-    if (nextDmaEvent[HPOS_MAX] != HPOS_MAX + 1) {
-        dumpBplEventTable();
-    }
-    assert(nextDmaEvent[HPOS_MAX] == HPOS_MAX + 1);
-    assert(dmaEvent[HPOS_MAX + 1] == BPL_HSYNC);
 }
 
 bool
@@ -754,7 +737,6 @@ Agnus::dumpBplEventTable(int from, int to)
             case BPL_H3:       r3[i] = 'H'; r4[i] = '3'; break;
             case BPL_H4:       r3[i] = 'H'; r4[i] = '4'; break;
             case BPL_EOL:      r3[i] = 'E'; r4[i] = 'O'; break;
-            case BPL_HSYNC:    r3[i] = 'H'; r4[i] = 'S'; break;
             default:           assert(false);
         }
     }
@@ -1832,7 +1814,7 @@ Agnus::hsyncHandler()
 
     // Schedule the first BPL event
     scheduleNextBplEvent();
-    
+
 
     //
     // Let other components prepare for the next line

@@ -125,7 +125,7 @@ public:
      * Depending on the current resoution and BPU value, a segment of this
      * lookup table is copied into the DMA event table.
      */
-    EventID bitplaneDMA[2][7][HPOS_CNT + 1];
+    EventID bitplaneDMA[2][7][HPOS_CNT];
 
     /* Fetch unit cycle numbers.
      *
@@ -138,7 +138,7 @@ public:
      * cycle inside the fetch unit. The first cycle in a fetch unit in numbered
      * 0, the second cycle is numbered 1 and so on.
      */
-    uint8_t fetchUnitNr[2][HPOS_CNT + 1];
+    uint8_t fetchUnitNr[2][HPOS_CNT];
 
 
     //
@@ -445,13 +445,13 @@ public:
      * triggers the HSYNC handler.
      *
      */
-    EventID dmaEvent[HPOS_CNT + 1];
+    EventID dmaEvent[HPOS_CNT];
     
     /* Jump table for quick handling the DMA time slot allocation table.
      * For a given horizontal position hpos, nextDmaEvent[hpos] points to the
      * next horizontal position where a DMA event happens.
      */
-    uint8_t nextDmaEvent[HPOS_CNT + 1];
+    uint8_t nextDmaEvent[HPOS_CNT];
 
     /*
      * Priority logic (CPU versus Blitter)
