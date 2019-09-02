@@ -690,15 +690,16 @@ Agnus::serviceBplEvent(EventID id)
 
         case BPL_EOL:
             delay |= AGS_HSYNC;
-            break;
+
+            // Return without scheduling a new event
+            return;
 
         case BPL_HSYNC:
-            // hsyncHandler();
+            assert(false);
             break;
 
         default:
             dumpEvents();
-            debug("id = %d\n", id);
             assert(false);
     }
 

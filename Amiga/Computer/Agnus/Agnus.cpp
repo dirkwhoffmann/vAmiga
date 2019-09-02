@@ -1693,11 +1693,6 @@ Agnus::oldHsyncHandler()
 void
 Agnus::hsyncHandler()
 {
-    /* Ensure that this function is called at the correct DMA cycle.
-     * The hsync handler is supposed to be called after the last DMA cycle
-     * has been processed which is at $E2. Note that by the time we reach here,
-     * the counter has already incremented by 1. Hence, it must be equal to $E3.
-     */
     assert(pos.h == HPOS_MAX + 1);
 
     // Let Denise draw the current line
@@ -1709,24 +1704,12 @@ Agnus::hsyncHandler()
     // Let CIA B count the HSYNCs
     amiga->ciaB.incrementTOD();
 
-    // Check the keyboard once in a while (TODO: Add a secondary event)
-    // if ((pos.v & 0b1111) == 0) amiga->keyboard.execute();
-
-    //
-    // End of current line
-    // -------------------------------------------------------------------------
-
-
     // Reset the horizontal counter
     pos.h = 0;
 
     // Advance the vertical counter
     if (++pos.v >= frameInfo.numLines) vsyncHandler();
 
-
-    // -------------------------------------------------------------------------
-    // Begin of next line
-    //
 
     // Switch sprite DMA off if the last rasterline has been reached
     if (pos.v == frameInfo.numLines - 1) {
@@ -1774,7 +1757,6 @@ Agnus::hsyncHandler()
     //
 
     // Vertical DDF flipflop
-    // ddfVFlop = !inVBlank() && !inLastRasterline() && diwVFlop;
     ddfVFlop = !inLastRasterline() && diwVFlop;
 
     ddfstrtReached = ddfstrt;
@@ -1848,6 +1830,9 @@ Agnus::hsyncHandler()
     // Clear the bus usage table
     for (int i = 0; i < HPOS_CNT; i++) busOwner[i] = BUS_NONE;
 
+    // Schedule the first BPL event
+    scheduleNextBplEvent();
+    
 
     //
     // Let other components prepare for the next line
