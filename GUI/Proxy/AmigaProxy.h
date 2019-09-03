@@ -383,9 +383,6 @@ struct AmigaFileWrapper;
 - (DiskControllerInfo) getDiskControllerInfo;
 - (UARTInfo) getUARTInfo;
 
-- (void) setINTENA:(NSInteger)bit value:(BOOL)value;
-- (void) setINTREQ:(NSInteger)bit value:(BOOL)value;
-
 - (uint32_t) sampleRate;
 - (void) setSampleRate:(double)rate;
 

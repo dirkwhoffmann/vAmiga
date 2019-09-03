@@ -218,19 +218,6 @@ public:
     
     // Checks intena and intreq and triggers an interrupt (if pending).
     void checkInterrupt();
-
-
-    //
-    // Debugging the component
-    //
-
-public:
-
-    // Called by the GUI to manually change the INTENA register
-    void debugSetINTENA(unsigned bit, bool value);
-
-    // Called by the GUI to manually change the INTREQ register
-    void debugSetINTREQ(unsigned bit, bool value);
 };
 
 #endif

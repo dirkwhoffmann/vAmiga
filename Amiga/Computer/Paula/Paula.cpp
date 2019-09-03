@@ -385,30 +385,3 @@ Paula::checkInterrupt()
 {
     cpu->setIrqLevel(interruptLevel());
 }
-
-void
-Paula::debugSetINTENA(unsigned bit, bool value)
-{
-    assert(bit <= 14);
-
-    debug("debugSetINTENA(%d, %d)\n", bit, value);
-
-    amiga->suspend();
-    setINTENA((value ? 0x8000 : 0) | (1 << bit));
-    inspect();
-    amiga->resume();
-}
-
-void
-Paula::debugSetINTREQ(unsigned bit, bool value)
-{
-    assert(bit <= 14);
-
-    debug("debugSetINTREQ(%d, %d)\n", bit, value);
-
-    amiga->suspend();
-    setINTREQ((value ? 0x8000 : 0) | (1 << bit));
-    inspect();
-    amiga->resume();
-}
-
