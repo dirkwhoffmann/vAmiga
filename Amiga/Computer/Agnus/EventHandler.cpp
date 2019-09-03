@@ -193,32 +193,6 @@ Agnus::inspectEventSlot(EventSlot nr)
             }
             break;
 
-        /*
-        case IRQ_TBE_SLOT:
-        case IRQ_DSKBLK_SLOT:
-        case IRQ_SOFT_SLOT:
-        case IRQ_PORTS_SLOT:
-        case IRQ_COPR_SLOT:
-        case IRQ_VERTB_SLOT:
-        case IRQ_BLIT_SLOT:
-        case IRQ_AUD0_SLOT:
-        case IRQ_AUD1_SLOT:
-        case IRQ_AUD2_SLOT:
-        case IRQ_AUD3_SLOT:
-        case IRQ_RBF_SLOT:
-        case IRQ_DSKSYN_SLOT:
-        case IRQ_EXTER_SLOT:
-
-            switch (slot[nr].id) {
-
-                case 0:             i->eventName = "none"; break;
-                case IRQ_SET:       i->eventName = "IRQ_SET"; break;
-                case IRQ_CLEAR:     i->eventName = "IRQ_CLEAR"; break;
-                default:            i->eventName = "*** INVALID ***"; break;
-            }
-            break;
-        */
-
         case REG_COP_SLOT:
         case REG_CPU_SLOT1:
         case REG_CPU_SLOT2:
@@ -281,16 +255,6 @@ Agnus::inspectEventSlot(EventSlot nr)
                 case 0:             i->eventName = "none"; break;
                 case POT_DISCHARGE: i->eventName = "POT_DISCHARGE"; break;
                 case POT_CHARGE:    i->eventName = "POT_CHARGE"; break;
-                default:            i->eventName = "*** INVALID ***"; break;
-            }
-            break;
-
-        case SYNC_SLOT:
-
-            switch (slot[nr].id) {
-
-                case 0:             i->eventName = "none"; break;
-                case SYNC_EOL:      i->eventName = "SYNC_EOL"; break;
                 default:            i->eventName = "*** INVALID ***"; break;
             }
             break;
@@ -494,50 +458,6 @@ Agnus::executeEventsUntil(Cycle cycle) {
         if (isDue<IRQ_SLOT>(cycle)) {
             paula->serviceIrqEvent();
         }
-        /*
-        if (isDue<IRQ_TBE_SLOT>(cycle)) {
-            serviceIRQEvent(IRQ_TBE_SLOT, 0);
-        }
-        if (isDue<IRQ_DSKBLK_SLOT>(cycle)) {
-            serviceIRQEvent(IRQ_DSKBLK_SLOT, 1);
-        }
-        if (isDue<IRQ_SOFT_SLOT>(cycle)) {
-            serviceIRQEvent(IRQ_SOFT_SLOT, 2);
-        }
-        if (isDue<IRQ_PORTS_SLOT>(cycle)) {
-            serviceIRQEvent(IRQ_PORTS_SLOT, 3);
-        }
-        if (isDue<IRQ_COPR_SLOT>(cycle)) {
-            serviceIRQEvent(IRQ_COPR_SLOT, 4);
-        }
-        if (isDue<IRQ_VERTB_SLOT>(cycle)) {
-            serviceIRQEvent(IRQ_VERTB_SLOT, 5);
-        }
-        if (isDue<IRQ_BLIT_SLOT>(cycle)) {
-            serviceIRQEvent(IRQ_BLIT_SLOT, 6);
-        }
-        if (isDue<IRQ_AUD0_SLOT>(cycle)) {
-            serviceIRQEvent(IRQ_AUD0_SLOT, 7);
-        }
-        if (isDue<IRQ_AUD1_SLOT>(cycle)) {
-            serviceIRQEvent(IRQ_AUD1_SLOT, 8);
-        }
-        if (isDue<IRQ_AUD2_SLOT>(cycle)) {
-            serviceIRQEvent(IRQ_AUD2_SLOT, 9);
-        }
-        if (isDue<IRQ_AUD3_SLOT>(cycle)) {
-            serviceIRQEvent(IRQ_AUD3_SLOT, 10);
-        }
-        if (isDue<IRQ_RBF_SLOT>(cycle)) {
-            serviceIRQEvent(IRQ_RBF_SLOT, 11);
-        }
-        if (isDue<IRQ_DSKSYN_SLOT>(cycle)) {
-            serviceIRQEvent(IRQ_DSKSYN_SLOT, 12);
-        }
-        if (isDue<IRQ_EXTER_SLOT>(cycle)) {
-            serviceIRQEvent(IRQ_EXTER_SLOT, 13);
-        }
-        */
         if (isDue<KBD_SLOT>(cycle)) {
             amiga->keyboard.serviceKeyboardEvent(slot[KBD_SLOT].id);
         }
@@ -549,9 +469,6 @@ Agnus::executeEventsUntil(Cycle cycle) {
         }
         if (isDue<POT_SLOT>(cycle)) {
             paula->servePotEvent(slot[POT_SLOT].id);
-        }
-        if (isDue<SYNC_SLOT>(cycle)) {
-            serviceSYNCEvent(slot[SYNC_SLOT].id, slot[SYNC_SLOT].data);
         }
         if (isDue<INSPECTOR_SLOT>(cycle)) {
             serviceINSEvent();
@@ -817,26 +734,6 @@ Agnus::serviceDASEvent(EventID id)
 }
 
 void
-Agnus::serviceIRQEvent(EventSlot s, int irqBit)
-{
-    switch (slot[s].id) {
-
-        case IRQ_SET:
-            paula->setINTREQ(0x8000 | (1 << irqBit));
-            break;
-
-        case IRQ_CLEAR:
-            paula->setINTREQ(1 << irqBit);
-            break;
-
-        default:
-            assert(false);
-    }
-    
-    cancel(s);
-}
-
-void
 Agnus::serviceREGEvent(EventSlot nr)
 {
     EventID id = slot[nr].id;
@@ -879,22 +776,6 @@ Agnus::serviceREGEvent(EventSlot nr)
 
     // Remove event
     cancel(nr);
-}
-
-void
-Agnus::serviceSYNCEvent(EventID id, int64_t data)
-{
-    switch (id) {
-
-        case SYNC_EOL:
-
-            oldHsyncHandler();
-            break;
-
-        default:
-            assert(false);
-            break;
-    }
 }
 
 void

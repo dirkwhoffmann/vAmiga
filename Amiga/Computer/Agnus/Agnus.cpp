@@ -1687,18 +1687,6 @@ Agnus::executeSecondSpriteCycle()
 }
 
 void
-Agnus::oldHsyncHandler()
-{
-    // Make sure we really reached the end of the line
-    if (pos.h != HPOS_MAX) { dump(); assert(false); }
-
-    // Delete this slot if it turns out that we don't need it any more
-
-    // Schedule the next SYNC event
-    scheduleInc<SYNC_SLOT>(DMA_CYCLES(HPOS_CNT), SYNC_EOL, pos.v);
-}
-
-void
 Agnus::hsyncHandler()
 {
     assert(pos.h == HPOS_MAX + 1);

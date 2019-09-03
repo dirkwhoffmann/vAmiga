@@ -48,27 +48,10 @@ typedef enum : long
     DSK_SLOT,         // Disk controller
     DCH_SLOT,         // Disk changes (insert, eject)
     IRQ_SLOT,         // Interrupts
-    /*
-    IRQ_TBE_SLOT,     // Source 0 IRQ (Serial port transmit buffer empty)
-    IRQ_DSKBLK_SLOT,  // Source 1 IRQ (Disk block finished)
-    IRQ_SOFT_SLOT,    // Source 2 IRQ (Software-initiated)
-    IRQ_PORTS_SLOT,   // Source 3 IRQ (I/O ports and CIA A)
-    IRQ_COPR_SLOT,    // Source 4 IRQ (Copper)
-    IRQ_VERTB_SLOT,   // Source 5 IRQ (Start of vertical blank)
-    IRQ_BLIT_SLOT,    // Source 6 IRQ (Blitter finished)
-    IRQ_AUD0_SLOT,    // Source 7 IRQ (Audio channel 0 block finished)
-    IRQ_AUD1_SLOT,    // Source 8 IRQ (Audio channel 1 block finished)
-    IRQ_AUD2_SLOT,    // Source 9 IRQ (Audio channel 2 block finished)
-    IRQ_AUD3_SLOT,    // Source 10 IRQ (Audio channel 3 block finished)
-    IRQ_RBF_SLOT,     // Source 11 IRQ (Serial port receive buffer full)
-    IRQ_DSKSYN_SLOT,  // Source 12 IRQ (Disk sync register matches disk data)
-    IRQ_EXTER_SLOT,   // Source 13 IRQ (I/O ports and CIA B)
-    */
     KBD_SLOT,         // Keyboard
     TXD_SLOT,         // Serial data out (UART)
     RXD_SLOT,         // Serial data in (UART)
     POT_SLOT,         // Potentiometer
-    SYNC_SLOT,        // Synchronization (HSYNC) 
     INSPECTOR_SLOT,   // Handles periodic calls to inspect()
 
     LAST_SEC_SLOT = INSPECTOR_SLOT,
@@ -94,22 +77,6 @@ inline const char *slotName(EventSlot nr)
         case DSK_SLOT:           return "Disk Controller";
         case DCH_SLOT:           return "Disk Change";
         case IRQ_SLOT:           return "Interrupts";
-        /*
-        case IRQ_TBE_SLOT:       return "Serial Out IRQ";
-        case IRQ_DSKBLK_SLOT:    return "Disk DMA IRQ";
-        case IRQ_SOFT_SLOT:      return "Software IRQ";
-        case IRQ_PORTS_SLOT:     return "CIA A IRQ";
-        case IRQ_COPR_SLOT:      return "Copper IRQ";
-        case IRQ_VERTB_SLOT:     return "VBlank IRQ";
-        case IRQ_BLIT_SLOT:      return "Blitter IRQ";
-        case IRQ_AUD0_SLOT:      return "Audio 0 IRQ";
-        case IRQ_AUD1_SLOT:      return "Audio 1 IRQ";
-        case IRQ_AUD2_SLOT:      return "Audio 2 IRQ";
-        case IRQ_AUD3_SLOT:      return "Audio 3 IRQ";
-        case IRQ_RBF_SLOT:       return "Serial In IRQ";
-        case IRQ_DSKSYN_SLOT:    return "Disk Sync IRQ";
-        case IRQ_EXTER_SLOT:     return "CIA B IRQ";
-        */
         case REG_COP_SLOT:       return "Copper Write";
         case REG_CPU_SLOT1:      return "CPU Write (1)";
         case REG_CPU_SLOT2:      return "CPU Write (2)";
@@ -117,7 +84,6 @@ inline const char *slotName(EventSlot nr)
         case TXD_SLOT:           return "UART out";
         case RXD_SLOT:           return "UART in";
         case POT_SLOT:           return "Potentiometer";
-        case SYNC_SLOT:          return "Sync";
         case INSPECTOR_SLOT:     return "Debugger";
 
         default:
@@ -255,10 +221,6 @@ typedef enum : long
     POT_DISCHARGE = 1,
     POT_CHARGE,
     POT_EVENT_COUNT,
-
-    // SYNC slot (DEPRECATED)
-    SYNC_EOL = 1,
-    SYNC_EVENT_COUNT,
     
     // Inspector slot
     INS_NONE = 1,

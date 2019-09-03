@@ -894,15 +894,10 @@ private:
     // Executes the second sprite DMA cycle
     template <int nr> void executeSecondSpriteCycle();
 
-    /* Concludes a rasterline
-     * Called when servicing a SYNC_EOL event in the SYNC slot.
-     */
-    void oldHsyncHandler();
+    // Finishes up the current rasterline
     void hsyncHandler();
 
-    /* Concludes a frame
-     * Called by hsyncHandler() when the last rasterline has been concluded.
-     */
+    // Finishes up the current frame
     void vsyncHandler();
 
 

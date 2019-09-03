@@ -219,15 +219,11 @@ void executeEventsUntil(Cycle cycle);
  *
  *    serviceBplEvent: Handler for the BPL slot
  *    serviceDASEvent: Handles for the DAS slot
- *   serviceSYNCEvent: Handler for the SYNC slot
- *    serviceIrqEvent: Handler for all IRQ slots
  *    serviceREGEvent: Handler for slots REG_COP, REG_CPU1, and REG_CPU2
  *    serviceINSEvent: Handler for the INS slot
  */
 void serviceBplEvent(EventID id);
 void serviceDASEvent(EventID id);
-void serviceSYNCEvent(EventID id, int64_t data);
-void serviceIRQEvent(EventSlot slot, int irqBit);
 void serviceREGEvent(EventSlot slot);
 void serviceINSEvent();
 
