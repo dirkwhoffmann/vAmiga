@@ -193,26 +193,6 @@ Agnus::inspectEventSlot(EventSlot nr)
             }
             break;
 
-        case REG_COP_SLOT:
-        case REG_CPU_SLOT1:
-        case REG_CPU_SLOT2:
-
-            switch (slot[nr].id) {
-
-                case 0:             i->eventName = "none"; break;
-                case REG_DMACON:    i->eventName = "REG_DMACON"; break;
-                case REG_DIWSTRT:   i->eventName = "REG_DIWSTRT"; break;
-                case REG_DIWSTOP:   i->eventName = "REG_DIWSTOP"; break;
-                case REG_BPLCON1:   i->eventName = "REG_BPLCON1"; break;
-                case REG_BPLCON2:   i->eventName = "REG_BPLCON2"; break;
-                case REG_BPL1MOD:   i->eventName = "REG_BPL1MOD"; break;
-                case REG_BPL2MOD:   i->eventName = "REG_BPL2MOD"; break;
-                case REG_BPLxPTH:   i->eventName = "REG_BPLxPTH"; break;
-                case REG_BPLxPTL:   i->eventName = "REG_BPLxPTL"; break;
-                default:            i->eventName = "*** INVALID ***"; break;
-            }
-            break;
-
         case KBD_SLOT:
 
             switch (slot[nr].id) {
@@ -361,26 +341,6 @@ Agnus::scheduleBplEventForCycle(int16_t hpos)
 void
 Agnus::executeEventsUntil(Cycle cycle) {
 
-    // Determine if we need to check all slots
-    bool all = isDue<SEC_SLOT>(cycle);
-
-    //
-    // Check all secondary events that need to be proceeded early
-    //
-
-    if (unlikely(all)) {
-
-        if (isDue<REG_COP_SLOT>(cycle)) {
-            serviceREGEvent(REG_COP_SLOT);
-        }
-        if (isDue<REG_CPU_SLOT1>(cycle)) {
-            serviceREGEvent(REG_CPU_SLOT1);
-        }
-        if (isDue<REG_CPU_SLOT2>(cycle)) {
-            serviceREGEvent(REG_CPU_SLOT2);
-        }
-    }
-
     //
     // Check all primary slots
     //
@@ -447,7 +407,7 @@ Agnus::executeEventsUntil(Cycle cycle) {
     // Check all secondary events that need to be proceeded late
     //
 
-    if (unlikely(all)) {
+    if (isDue<SEC_SLOT>(cycle)) {
 
         if (isDue<DSK_SLOT>(cycle)) {
             paula->diskController.serviceDiskEvent();

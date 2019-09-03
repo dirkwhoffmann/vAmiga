@@ -216,7 +216,6 @@ void executeEventsUntil(Cycle cycle);
  *
  *    serviceBplEvent: Handler for the BPL slot
  *    serviceDASEvent: Handles for the DAS slot
- *    serviceREGEvent: Handler for slots REG_COP, REG_CPU1, and REG_CPU2
  *    serviceINSEvent: Handler for the INS slot
  */
 void serviceBplEvent(EventID id);

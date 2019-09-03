@@ -26,33 +26,25 @@ typedef enum : long
     // Primary slot table
     //
     
-    CIAA_SLOT = 0,    // CIA A execution
-    CIAB_SLOT,        // CIA B execution
-    BPL_SLOT,         // Bitplane DMA
-    DAS_SLOT,         // Disk, Audio, and Sprite DMA
-    COP_SLOT,         // Copper DMA
-    BLT_SLOT,         // Blitter DMA
-    SEC_SLOT,         // Secondary events
+    CIAA_SLOT = 0,                  // CIA A execution
+    CIAB_SLOT,                      // CIA B execution
+    BPL_SLOT,                       // Bitplane DMA
+    DAS_SLOT,                       // Disk, Audio, and Sprite DMA
+    COP_SLOT,                       // Copper DMA
+    BLT_SLOT,                       // Blitter DMA
+    SEC_SLOT,                       // Secondary events
 
     LAST_PRIM_SLOT = SEC_SLOT,
     FIRST_SEC_SLOT,
 
-    //
-    // Secondary slot table
-    //
-
-    REG_COP_SLOT = FIRST_SEC_SLOT, // Delayed Copper writes to custom registers
-    REG_CPU_SLOT1,                 // Delayed CPU writes to custom registers
-    REG_CPU_SLOT2,                 // Second slot for delayed CPU writes
-
-    DSK_SLOT,         // Disk controller
-    DCH_SLOT,         // Disk changes (insert, eject)
-    IRQ_SLOT,         // Interrupts
-    KBD_SLOT,         // Keyboard
-    TXD_SLOT,         // Serial data out (UART)
-    RXD_SLOT,         // Serial data in (UART)
-    POT_SLOT,         // Potentiometer
-    INSPECTOR_SLOT,   // Handles periodic calls to inspect()
+    DSK_SLOT = FIRST_SEC_SLOT,      // Disk controller
+    DCH_SLOT,                       // Disk changes (insert, eject)
+    IRQ_SLOT,                       // Interrupts
+    KBD_SLOT,                       // Keyboard
+    TXD_SLOT,                       // Serial data out (UART)
+    RXD_SLOT,                       // Serial data in (UART)
+    POT_SLOT,                       // Potentiometer
+    INSPECTOR_SLOT,                 // Handles periodic calls to inspect()
 
     LAST_SEC_SLOT = INSPECTOR_SLOT,
     SLOT_COUNT
@@ -77,9 +69,6 @@ inline const char *slotName(EventSlot nr)
         case DSK_SLOT:           return "Disk Controller";
         case DCH_SLOT:           return "Disk Change";
         case IRQ_SLOT:           return "Interrupts";
-        case REG_COP_SLOT:       return "Copper Write";
-        case REG_CPU_SLOT1:      return "CPU Write (1)";
-        case REG_CPU_SLOT2:      return "CPU Write (2)";
         case KBD_SLOT:           return "Keyboard";
         case TXD_SLOT:           return "UART out";
         case RXD_SLOT:           return "UART in";
