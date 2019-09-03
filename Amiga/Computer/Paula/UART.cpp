@@ -139,7 +139,6 @@ UART::copyToTransmitShiftRegister()
 
     // Trigger a TBE interrupt
     debug(SER_DEBUG, "Triggering TBE interrupt\n");
-    // paula->pokeINTREQ(0x8001);
     paula->raiseIrq(INT_TBE);
 
     // Schedule the transmission of the first bit
@@ -170,7 +169,6 @@ UART::copyFromReceiveShiftRegister()
 
     // Trigger the RBF interrupt (Read Buffer Full)
     debug(SER_DEBUG, "Triggering RBF interrupt\n");
-    // paula->pokeINTREQ(0x8800);
     paula->raiseIrq(INT_RBF);
 }
 

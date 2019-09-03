@@ -191,22 +191,22 @@ Paula::serviceIrqEvent()
     Cycle next = NEVER;
 
     // Check all 16 interrupt sources
-    for (int nr = 0; nr < 16; nr++) {
+    for (int src = 0; src < 16; src++) {
 
         // Check if the corresponding interrupt bit should be set
-        if (setIntreq[nr] <= clock) {
-            setINTREQ(true, 1 << nr);
-            setIntreq[nr] = NEVER;
+        if (setIntreq[src] <= clock) {
+            setINTREQ(true, 1 << src);
+            setIntreq[src] = NEVER;
         } else {
-             next = MIN(next, setIntreq[nr]);
+             next = MIN(next, setIntreq[src]);
         }
 
         // Check if the corresponding interrupt bit should be cleared
-        if (clrIntreq[nr] <= clock) {
-            setINTREQ(false, 1 << nr);
-            clrIntreq[nr] = NEVER;
+        if (clrIntreq[src] <= clock) {
+            setINTREQ(false, 1 << src);
+            clrIntreq[src] = NEVER;
         } else {
-             next = MIN(next, setIntreq[nr]);
+             next = MIN(next, setIntreq[src]);
         }
     }
 
@@ -383,32 +383,7 @@ Paula::interruptLevel()
 void
 Paula::checkInterrupt()
 {
-    int level = interruptLevel();
-
-    /*
-    if (level) {
-        uint16_t mask = intena & intreq;
-        debug("*** intena: %X inetrq: %X\n", intena, intreq);
-        if (mask & 0x0001) { debug("*** SERPORT IRQ (level %d)\n", level); }
-        if (mask & 0x0002) { debug("*** DISK DMA IRQ (level %d)\n", level); }
-        if (mask & 0x0004) { debug("*** SW IRQ (level %d)\n", level); }
-        if (mask & 0x0008) { debug("*** CIA A IRQ (level %d)\n", level); }
-        if (mask & 0x0010) { debug("*** COPPER IRQ (level %d)\n", level); }
-        if (mask & 0x0020) { debug("*** VERTB IRQ (level %d)\n", level); }
-        if (mask & 0x0040) { debug("*** BLIT IRQ (level %d)\n", level); }
-        if (mask & 0x0080) { debug("*** AUD0 IRQ (level %d)\n", level); }
-        if (mask & 0x0100) { debug("*** AUD1 IRQ (level %d)\n", level); }
-        if (mask & 0x0200) { debug("*** AUD2 IRQ (level %d)\n", level); }
-        if (mask & 0x0400) { debug("*** AUD3 IRQ (level %d)\n", level); }
-        if (mask & 0x0800) { debug("*** Input buf ser port IRQ (level %d)\n", level); }
-        if (mask & 0x1000) { debug("*** DISK SYNC IRQ (level %d)\n", level); }
-        if (mask & 0x2000) { debug("*** CIA B (level %d)\n", level); }
-    } else {
-        // debug("*** SETTING IRQ LEVEL TO 0\n");
-    }
-    */
-
-    cpu->setIrqLevel(level);
+    cpu->setIrqLevel(interruptLevel());
 }
 
 void

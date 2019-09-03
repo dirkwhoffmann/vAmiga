@@ -1271,7 +1271,8 @@ void
 CIAA::pullDownInterruptLine()
 {
     debug(CIA_DEBUG, "Pulling down IRQ line\n");
-    paula->setINTREQ(0x8000 | (1 << 3));
+    paula->raiseIrq(INT_PORTS);
+    // paula->setINTREQ(0x8000 | (1 << 3));
 }
 
 void 
@@ -1446,7 +1447,8 @@ void
 CIAB::pullDownInterruptLine()
 {
     debug(CIA_DEBUG, "Pulling down IRQ line\n");
-    paula->setINTREQ(0x8000 | (1 << 13));
+    paula->raiseIrq(INT_EXTER);
+    // paula->setINTREQ(0x8000 | (1 << 13));
 }
 
 void 

@@ -480,7 +480,6 @@ DiskController::executeFifo()
                 
                 // Trigger a word SYNC interrupt.
                 debug(DSK_DEBUG, "SYNC IRQ (dsklen = %d)\n", dsklen);
-                // paula->pokeINTREQ(0x9000);
                 paula->raiseIrq(INT_DSKSYN);
 
                 // Enable DMA if the controller was waiting for it.
@@ -564,8 +563,7 @@ DiskController::performDMARead(Drive *drive)
 
         // Finish up if this was the last word to transfer.
         if ((--dsklen & 0x3FFF) == 0) {
-            
-            // paula->pokeINTREQ(0x8002);
+
             paula->raiseIrq(INT_DSKBLK);
             state = DRIVE_DMA_OFF;
             plaindebug(DSK_CHECKSUM, "performRead: checkcnt = %d checksum = %X\n", checkcnt, checksum);
@@ -605,8 +603,7 @@ DiskController::performDMAWrite(Drive *drive)
 
         // Finish up if this was the last word to transfer.
         if ((--dsklen & 0x3FFF) == 0) {
-            
-            // paula->pokeINTREQ(0x8002);
+
             paula->raiseIrq(INT_DSKBLK);
 
             /* The timing-accurate approach: Set state to DRIVE_DMA_FLUSH.
@@ -685,8 +682,7 @@ DiskController::performSimpleDMARead(Drive *drive)
         checkcnt++;
 
         if ((--dsklen & 0x3FFF) == 0) {
-            
-            // paula->pokeINTREQ(0x8002);
+
             paula->raiseIrq(INT_DSKBLK);
             state = DRIVE_DMA_OFF;
             debug(DSK_DEBUG, "doSimpleDMARead: checkcnt = %d checksum = %X\n", checkcnt, checksum);
@@ -714,7 +710,6 @@ DiskController::performSimpleDMAWrite(Drive *drive)
         
         if ((--dsklen & 0x3FFF) == 0) {
             
-            // paula->pokeINTREQ(0x8002);
             paula->raiseIrq(INT_DSKBLK);
             state = DRIVE_DMA_OFF;
             debug(DSK_DEBUG, "doSimpleDMAWrite: checkcnt = %d checksum = %X\n", checkcnt, checksum);

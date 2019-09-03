@@ -103,7 +103,6 @@ StateMachine<nr>::pokeAUDxDAT(uint16_t value)
 
         audvol = audvolLatch;
         audper += audperLatch;
-        // paula->pokeINTREQ(0x8000 | (0x80 << nr));
         triggerIrq();
     }
 }
@@ -162,7 +161,6 @@ StateMachine<nr>::execute(DMACycle cycles)
             if (audlen > 1) audlen--;
 
             // Trigger Audio interrupt
-            // paula->pokeINTREQ(0x8000 | (0x80 << nr));
             triggerIrq();
 
             state = 0b101;
@@ -219,7 +217,6 @@ StateMachine<nr>::execute(DMACycle cycles)
                     agnus->audlc[nr] = audlcLatch;
 
                     // Trigger Audio interrupt
-                    // paula->pokeINTREQ(0x8000 | (0x80 << nr));
                     triggerIrq();
                 }
 
@@ -227,7 +224,6 @@ StateMachine<nr>::execute(DMACycle cycles)
             } else {
 
                 // Trigger Audio interrupt
-                // paula->pokeINTREQ(0x8000 | (0x80 << nr));
                 triggerIrq();
 
                 // Go idle if the audio IRQ hasn't been acknowledged
@@ -253,7 +249,6 @@ StateMachine<nr>::execute(DMACycle cycles)
                 agnus->audlc[nr] = audlcLatch;
 
                 // Trigger Audio interrupt
-                // paula->pokeINTREQ(0x8000 | (0x80 << nr));
                 triggerIrq();
             }
 
