@@ -103,7 +103,8 @@ StateMachine<nr>::pokeAUDxDAT(uint16_t value)
 
         audvol = audvolLatch;
         audper += audperLatch;
-        paula->pokeINTREQ(0x8000 | (0x80 << nr));
+        // paula->pokeINTREQ(0x8000 | (0x80 << nr));
+        triggerIrq();
     }
 }
 
@@ -127,6 +128,14 @@ template <int nr> bool
 StateMachine<nr>::dmaMode()
 {
     return amiga->agnus.audDMA<nr>();
+}
+
+template <int nr> void
+StateMachine<nr>::triggerIrq()
+{
+    paula->raiseIrq(nr == 0 ? INT_AUD0 :
+                    nr == 1 ? INT_AUD1 :
+                    nr == 2 ? INT_AUD2 : INT_AUD3);
 }
 
 template <int nr> bool
@@ -153,7 +162,8 @@ StateMachine<nr>::execute(DMACycle cycles)
             if (audlen > 1) audlen--;
 
             // Trigger Audio interrupt
-            paula->pokeINTREQ(0x8000 | (0x80 << nr));
+            // paula->pokeINTREQ(0x8000 | (0x80 << nr));
+            triggerIrq();
 
             state = 0b101;
             break;
@@ -209,14 +219,16 @@ StateMachine<nr>::execute(DMACycle cycles)
                     agnus->audlc[nr] = audlcLatch;
 
                     // Trigger Audio interrupt
-                    paula->pokeINTREQ(0x8000 | (0x80 << nr));
+                    // paula->pokeINTREQ(0x8000 | (0x80 << nr));
+                    triggerIrq();
                 }
 
             // Perform non-DMA mode specific action
             } else {
 
                 // Trigger Audio interrupt
-                paula->pokeINTREQ(0x8000 | (0x80 << nr));
+                // paula->pokeINTREQ(0x8000 | (0x80 << nr));
+                triggerIrq();
 
                 // Go idle if the audio IRQ hasn't been acknowledged
                 if (irqIsPending()) state = 0b000;
@@ -241,7 +253,8 @@ StateMachine<nr>::execute(DMACycle cycles)
                 agnus->audlc[nr] = audlcLatch;
 
                 // Trigger Audio interrupt
-                paula->pokeINTREQ(0x8000 | (0x80 << nr));
+                // paula->pokeINTREQ(0x8000 | (0x80 << nr));
+                triggerIrq();
             }
 
             // Transition to state 2

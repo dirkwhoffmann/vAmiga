@@ -1881,7 +1881,8 @@ Agnus::vsyncHandler()
     amiga->ciaA.incrementTOD();
     
     // Trigger VSYNC interrupt
-    paula->pokeINTREQ(0x8020);
+    // paula->pokeINTREQ(0x8020);
+    paula->raiseIrq(INT_VERTB);
     
     // Let the subcomponents do their own VSYNC stuff
     copper.vsyncAction();

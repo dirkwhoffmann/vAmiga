@@ -55,11 +55,9 @@ public:
     // The interrupt enable register
     uint16_t intena;
 
-    // Counters used to emulate interrupt delays
-    Cycle inttrigger[16];
-
-    // Bit i indicates if the req bit for interrupt i should be set or cleared
-    uint16_t reqval;
+    // Trigger cycle for setting or clearing a bit in INTREQ
+    Cycle setIntreq[16];
+    Cycle clrIntreq[16];
 
 
     //
@@ -107,8 +105,8 @@ public:
         & clock
         & intreq
         & intena
-        & inttrigger
-        & reqval
+        & setIntreq
+        & clrIntreq
         & potgo
         & potCntX0
         & potCntY0
@@ -204,9 +202,9 @@ public:
     void setINTENA(bool setclr, uint16_t value);
 
     // Schedules an interrupt
-    void scheduleIrq(int nr, Cycle trigger, bool set);
-    void raiseIrq(int nr, Cycle trigger = 0) { scheduleIrq(nr, trigger, true); }
-    void clearIrq(int nr, Cycle trigger = 0) { scheduleIrq(nr, trigger, false); }
+    void scheduleIrq(IrqSource src, Cycle trigger, bool set);
+    void raiseIrq(IrqSource src, Cycle trigger = 0) { scheduleIrq(src, trigger, true); }
+    void clearIrq(IrqSource src, Cycle trigger = 0) { scheduleIrq(src, trigger, false); }
 
     // Triggers all pending interrupts
     void serviceIrqEvent();

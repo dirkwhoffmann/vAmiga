@@ -148,6 +148,9 @@ private:
     bool dmaMode();
 
     // Returns true if the audio interrupt is pending
+    void triggerIrq();
+
+    // Returns true if the audio interrupt is pending
     bool irqIsPending();
 
 public:

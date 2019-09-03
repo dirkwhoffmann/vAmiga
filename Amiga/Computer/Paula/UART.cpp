@@ -139,7 +139,8 @@ UART::copyToTransmitShiftRegister()
 
     // Trigger a TBE interrupt
     debug(SER_DEBUG, "Triggering TBE interrupt\n");
-    paula->pokeINTREQ(0x8001);
+    // paula->pokeINTREQ(0x8001);
+    paula->raiseIrq(INT_TBE);
 
     // Schedule the transmission of the first bit
     agnus->scheduleRel<TXD_SLOT>(0, TXD_BIT);
@@ -161,18 +162,6 @@ UART::copyFromReceiveShiftRegister()
     // plainmsg("receiveBuffer: %X ('%c')\n", receiveBuffer & 0xFF, receiveBuffer & 0xFF);
 
     count++;
-    /*
-    if (count >= 10) {
-        if (count == 10) {
-            debug("DEBUG INTERCEPTION: Sending $1C\n");
-            receiveBuffer = 0x11C;
-            paula->pokeINTREQ(0x8800);
-            return;
-        }
-        debug("DEBUG INTERCEPTION: OMITTING\n");
-        return;
-    }
-    */
 
     // Update the overrun bit
     // Bit will be 1 if the RBF interrupt hasn't been acknowledged yet
@@ -181,7 +170,8 @@ UART::copyFromReceiveShiftRegister()
 
     // Trigger the RBF interrupt (Read Buffer Full)
     debug(SER_DEBUG, "Triggering RBF interrupt\n");
-    paula->pokeINTREQ(0x8800);
+    // paula->pokeINTREQ(0x8800);
+    paula->raiseIrq(INT_RBF);
 }
 
 void

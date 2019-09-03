@@ -32,7 +32,11 @@ void
 Paula::_reset()
 {
     RESET_SNAPSHOT_ITEMS
-    for (int i = 0; i < 16; i++) inttrigger[i] = NEVER;
+
+    for (int i = 0; i < 16; i++) {
+        setIntreq[i] = NEVER;
+        clrIntreq[i] = NEVER;
+    }
 }
 
 void
@@ -142,23 +146,35 @@ Paula::setINTENA(bool setclr, uint16_t value)
 }
 
 void
-Paula::scheduleIrq(int nr, Cycle trigger, bool set)
+Paula::scheduleIrq(IrqSource src, Cycle trigger, bool set)
 {
-    assert(nr < 16);
+    assert(isIrqSource(src));
     assert(agnus->slot[IRQ_SLOT].id == IRQ_CHECK);
 
-    // Don't schedule interrupts that are already pending
-    assert(inttrigger[nr] == 0);
+    debug(INT_DEBUG, "scheduleIrq(%d, %d, %d)\n", src, trigger, set); 
 
     // If the trigger cycle is 0, we service the request immediately
     if (trigger == 0) {
-        setINTREQ(set, 1 << nr);
+        setINTREQ(set, 1 << src);
         return;
     }
 
-    // Record the request
-    inttrigger[nr] = trigger;
-    WRITE_BIT(reqval, nr, set);
+    if (set) {
+
+        // Don't set an interrupt that is already scheduled to be set
+        assert(setIntreq[src] == NEVER);
+
+        // Record the request
+        setIntreq[src] = trigger;
+
+    } else {
+
+        // Don't clear an interrupt that is already scheduled to be cleared
+        assert(clrIntreq[src] == NEVER);
+
+        // Record the request
+        clrIntreq[src] = trigger;
+    }
 
     // Service the request with the proper delay
     if (trigger < agnus->slot[IRQ_SLOT].triggerCycle) {
@@ -177,11 +193,20 @@ Paula::serviceIrqEvent()
     // Check all 16 interrupt sources
     for (int nr = 0; nr < 16; nr++) {
 
-        if (inttrigger[nr] <= clock) {
-            setINTREQ(GET_BIT(reqval, nr), 1 << nr);
-            inttrigger[nr] = NEVER;
+        // Check if the corresponding interrupt bit should be set
+        if (setIntreq[nr] <= clock) {
+            setINTREQ(true, 1 << nr);
+            setIntreq[nr] = NEVER;
         } else {
-            next = MIN(next, inttrigger[nr]);
+             next = MIN(next, setIntreq[nr]);
+        }
+
+        // Check if the corresponding interrupt bit should be cleared
+        if (clrIntreq[nr] <= clock) {
+            setINTREQ(false, 1 << nr);
+            clrIntreq[nr] = NEVER;
+        } else {
+             next = MIN(next, setIntreq[nr]);
         }
     }
 
