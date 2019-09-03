@@ -405,9 +405,11 @@ public:
     
     // The bitplane modulo registers for odd bitplanes
     int16_t bpl1mod;
+    int16_t bpl1modNew;
     
     // The bitplane modulo registers for even bitplanes
     int16_t bpl2mod;
+    int16_t bpl2modNew;
     
     // The sprite DMA pointers
     uint32_t sprpt[8];
@@ -553,7 +555,9 @@ public:
         & audlcold
         & bplpt
         & bpl1mod
+        & bpl1modNew
         & bpl2mod
+        & bpl2modNew
         & sprpt
         
         & activeBitplanes
@@ -858,7 +862,9 @@ public:
 
     // BPL1MOD, BPL2MOD
     void pokeBPL1MOD(uint16_t value);
+    void setBPL1MOD(uint16_t value);
     void pokeBPL2MOD(uint16_t value);
+    void setBPL2MOD(uint16_t value);
 
     // SPRxPTL, SPRxPTH
     template <int x> void pokeSPRxPTH(uint16_t value);

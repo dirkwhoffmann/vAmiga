@@ -833,7 +833,6 @@ Agnus::pokeDMACON(uint16_t value)
 void
 Agnus::setDMACON(uint16_t oldValue, uint16_t newValue)
 {
-    debug("setDMACON(%x, %x)\n", oldValue, newValue);
     assert(oldValue != newValue);
 
     dmacon = newValue;
@@ -1389,14 +1388,38 @@ void
 Agnus::pokeBPL1MOD(uint16_t value)
 {
     debug(BPLREG_DEBUG, "pokeBPL1MOD(%X)\n", value);
-    bpl1mod = int16_t(value & 0xFFFE);
+
+    // Retain the new value
+    bpl1modNew = int16_t(value & 0xFFFE);
+
+    // Schedule the register updated
+    if (bpl1modNew != bpl1mod) delay |= AGS_BPL1MOD_0;
+}
+
+void
+Agnus::setBPL1MOD(uint16_t value)
+{
+    debug(BPLREG_DEBUG, "setBPL1MOD(%X)\n", value);
+    bpl1mod = bpl1modNew;
 }
 
 void
 Agnus::pokeBPL2MOD(uint16_t value)
 {
     debug(BPLREG_DEBUG, "pokeBPL2MOD(%X)\n", value);
-    bpl2mod = int16_t(value & 0xFFFE);
+
+    // Retain the new value
+    bpl2modNew = int16_t(value & 0xFFFE);
+
+    // Schedule the register updated
+    if (bpl2modNew != bpl2mod) delay |= AGS_BPL2MOD_0;
+}
+
+void
+Agnus::setBPL2MOD(uint16_t value)
+{
+    debug(BPLREG_DEBUG, "setBPL2MOD(%X)\n", value);
+    bpl2mod = bpl2modNew;
 }
 
 template <int x> void
@@ -1655,6 +1678,12 @@ Agnus::updateRegisters()
 
     // DIWSTOP
     if (delay & AGS_DIWSTOP_1) setDIWSTOP(diwstopNew);
+
+    // BPL1MOD
+    if (delay & AGS_BPL1MOD_1) setBPL1MOD(bpl1modNew);
+
+    // BPL2MOD
+    if (delay & AGS_BPL2MOD_1) setBPL2MOD(bpl2modNew);
 
 }
 
