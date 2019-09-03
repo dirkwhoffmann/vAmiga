@@ -178,7 +178,7 @@ Paula::scheduleIrq(IrqSource src, Cycle trigger, bool set)
 
     // Service the request with the proper delay
     if (trigger < agnus->slot[IRQ_SLOT].triggerCycle) {
-        agnus->scheduleAbs<IRQ_SLOT>(trigger, IRQ_CHECK);
+        agnus->scheduleRel<IRQ_SLOT>(trigger, IRQ_CHECK);
     }
 }
 
@@ -194,7 +194,7 @@ Paula::serviceIrqEvent()
     for (int src = 0; src < 16; src++) {
 
         // Check if the corresponding interrupt bit should be set
-        if (setIntreq[src] <= clock) {
+        if (clock >= setIntreq[src]) {
             setINTREQ(true, 1 << src);
             setIntreq[src] = NEVER;
         } else {
@@ -202,7 +202,7 @@ Paula::serviceIrqEvent()
         }
 
         // Check if the corresponding interrupt bit should be cleared
-        if (clrIntreq[src] <= clock) {
+        if (clock >= clrIntreq[src]) {
             setINTREQ(false, 1 << src);
             clrIntreq[src] = NEVER;
         } else {

@@ -15,6 +15,7 @@ class Blitter : public HardwareComponent {
     // Quick-access references
     class Memory *mem;
     class Agnus *agnus;
+    class Paula *paula;
 
 private:
     

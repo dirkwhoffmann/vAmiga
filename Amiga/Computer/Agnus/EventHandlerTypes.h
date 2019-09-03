@@ -48,6 +48,7 @@ typedef enum : long
     DSK_SLOT,         // Disk controller
     DCH_SLOT,         // Disk changes (insert, eject)
     IRQ_SLOT,         // Interrupts
+    /*
     IRQ_TBE_SLOT,     // Source 0 IRQ (Serial port transmit buffer empty)
     IRQ_DSKBLK_SLOT,  // Source 1 IRQ (Disk block finished)
     IRQ_SOFT_SLOT,    // Source 2 IRQ (Software-initiated)
@@ -62,6 +63,7 @@ typedef enum : long
     IRQ_RBF_SLOT,     // Source 11 IRQ (Serial port receive buffer full)
     IRQ_DSKSYN_SLOT,  // Source 12 IRQ (Disk sync register matches disk data)
     IRQ_EXTER_SLOT,   // Source 13 IRQ (I/O ports and CIA B)
+    */
     KBD_SLOT,         // Keyboard
     TXD_SLOT,         // Serial data out (UART)
     RXD_SLOT,         // Serial data in (UART)
@@ -92,6 +94,7 @@ inline const char *slotName(EventSlot nr)
         case DSK_SLOT:           return "Disk Controller";
         case DCH_SLOT:           return "Disk Change";
         case IRQ_SLOT:           return "Interrupts";
+        /*
         case IRQ_TBE_SLOT:       return "Serial Out IRQ";
         case IRQ_DSKBLK_SLOT:    return "Disk DMA IRQ";
         case IRQ_SOFT_SLOT:      return "Software IRQ";
@@ -106,6 +109,7 @@ inline const char *slotName(EventSlot nr)
         case IRQ_RBF_SLOT:       return "Serial In IRQ";
         case IRQ_DSKSYN_SLOT:    return "Disk Sync IRQ";
         case IRQ_EXTER_SLOT:     return "CIA B IRQ";
+        */
         case REG_COP_SLOT:       return "Copper Write";
         case REG_CPU_SLOT1:      return "CPU Write (1)";
         case REG_CPU_SLOT2:      return "CPU Write (2)";

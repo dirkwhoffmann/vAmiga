@@ -747,7 +747,7 @@ DiskController::performTurboDMA(Drive *drive)
     }
     
     // Trigger disk interrupt with some delay
-    agnus->scheduleRel<IRQ_DSKBLK_SLOT>(DMA_CYCLES(512), IRQ_SET);
+    paula->raiseIrq(INT_DSKBLK, DMA_CYCLES(512));
     state = DRIVE_DMA_OFF;
 }
 

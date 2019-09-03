@@ -193,6 +193,7 @@ Agnus::inspectEventSlot(EventSlot nr)
             }
             break;
 
+        /*
         case IRQ_TBE_SLOT:
         case IRQ_DSKBLK_SLOT:
         case IRQ_SOFT_SLOT:
@@ -216,6 +217,7 @@ Agnus::inspectEventSlot(EventSlot nr)
                 default:            i->eventName = "*** INVALID ***"; break;
             }
             break;
+        */
 
         case REG_COP_SLOT:
         case REG_CPU_SLOT1:
@@ -492,6 +494,7 @@ Agnus::executeEventsUntil(Cycle cycle) {
         if (isDue<IRQ_SLOT>(cycle)) {
             paula->serviceIrqEvent();
         }
+        /*
         if (isDue<IRQ_TBE_SLOT>(cycle)) {
             serviceIRQEvent(IRQ_TBE_SLOT, 0);
         }
@@ -534,6 +537,7 @@ Agnus::executeEventsUntil(Cycle cycle) {
         if (isDue<IRQ_EXTER_SLOT>(cycle)) {
             serviceIRQEvent(IRQ_EXTER_SLOT, 13);
         }
+        */
         if (isDue<KBD_SLOT>(cycle)) {
             amiga->keyboard.serviceKeyboardEvent(slot[KBD_SLOT].id);
         }

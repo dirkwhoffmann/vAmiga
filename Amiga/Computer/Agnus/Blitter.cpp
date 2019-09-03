@@ -43,7 +43,8 @@ Blitter::_initialize()
 {
     mem = &amiga->mem;
     agnus = &amiga->agnus;
-
+    paula = &amiga->paula;
+    
     initFastBlitter();
     initSlowBlitter();
 }
@@ -740,7 +741,8 @@ Blitter::terminate()
     bbusy = false;
 
     // Trigger the Blitter interrupt
-    agnus->scheduleRel<IRQ_BLIT_SLOT>(0, IRQ_SET);
+    // agnus->scheduleRel<IRQ_BLIT_SLOT>(0, IRQ_SET);
+    paula->raiseIrq(INT_BLIT);
 
     // Clear the Blitter slot
     agnus->cancel<BLT_SLOT>();
