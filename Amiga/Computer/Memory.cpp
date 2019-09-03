@@ -1321,7 +1321,6 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
             agnus->pokeDDFSTOP(value); return;
         case 0x096 >> 1: // DMACON
             agnus->pokeDMACON(value); return;
-            // agnus->scheduleRegEvent<s>(DMA_CYCLES(2), REG_DMACON, value); return;
         case 0x098 >> 1:  // CLXCON
             denise->pokeCLXCON(value); return;
         case 0x09A >> 1: // INTENA
@@ -1424,7 +1423,8 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
             denise->pokeBPLCON0(value);
             return;
         case 0x102 >> 1: // BPLCON1
-            agnus->scheduleRegEvent<s>(DMA_CYCLES(2), REG_BPLCON1, value);
+            denise->pokeBPLCON1(value); return;
+            // agnus->scheduleRegEvent<s>(DMA_CYCLES(2), REG_BPLCON1, value);
             return;
         case 0x104 >> 1: // BPLCON2
             agnus->scheduleRegEvent<s>(DMA_CYCLES(2), REG_BPLCON2, value);

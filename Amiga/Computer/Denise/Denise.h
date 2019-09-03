@@ -71,7 +71,9 @@ public:
     uint16_t bplcon0;
     uint16_t bplcon0New;
     uint16_t bplcon1;
+    uint16_t bplcon1New;
     uint16_t bplcon2;
+    uint16_t bplcon2New;
 
     // The bitplane control registers at cycle 0 in the current rasterline
     uint16_t initialBplcon0;
@@ -310,7 +312,9 @@ public:
         & bplcon0
         & bplcon0New
         & bplcon1
+        & bplcon1New
         & bplcon2
+        & bplcon2New
         & initialBplcon0
         & initialBplcon1
         & initialBplcon2
@@ -408,9 +412,11 @@ public:
 
     // OCS register 0x102 (w)
     void pokeBPLCON1(uint16_t value);
+    void setBPLCON1(uint16_t value);
 
     // OCS register 0x104 (w)
     void pokeBPLCON2(uint16_t value);
+    void setBPLCON2(uint16_t value);
     bool PF2PRI() { return GET_BIT(bplcon2, 6); }
 
     // OCS register 0x00E (r) and 0x098 (w)

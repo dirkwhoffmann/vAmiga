@@ -206,6 +206,28 @@ Denise::pokeBPLCON1(uint16_t value)
 {
     debug(BPLREG_DEBUG, "pokeBPLCON1(%X)\n", value);
 
+    // Retain the new value
+    bplcon1New = value & 0xFF;
+
+    // Schedule the register updated
+    if (bplcon1New != bplcon1) agnus->delay |= AGS_BPLCON1_0;
+
+    /*
+    bplcon1 = value & 0xFF;
+
+    // Compute scroll values
+    scrollLoresOdd  = (bplcon1 & 0b00001111);
+    scrollLoresEven = (bplcon1 & 0b11110000) >> 4;
+    scrollHiresEven = (bplcon1 & 0b00000111) << 1;
+    scrollHiresOdd  = (bplcon1 & 0b01110000) >> 3;
+    */
+}
+
+void
+Denise::setBPLCON1(uint16_t value)
+{
+    debug(BPLREG_DEBUG, "setBPLCON1(%X)\n", value);
+
     bplcon1 = value & 0xFF;
 
     // Compute scroll values
@@ -219,6 +241,17 @@ void
 Denise::pokeBPLCON2(uint16_t value)
 {
     debug(BPLREG_DEBUG, "pokeBPLCON2(%X)\n", value);
+
+    bplcon2 = value;
+
+    // Record the pixel coordinate where the change takes place
+    conRegHistory.recordChange(BPLCON2, value, 4 * agnus->pos.h + 4);
+}
+
+void
+Denise::setBPLCON2(uint16_t value)
+{
+    debug(BPLREG_DEBUG, "setBPLCON2(%X)\n", value);
 
     bplcon2 = value;
 

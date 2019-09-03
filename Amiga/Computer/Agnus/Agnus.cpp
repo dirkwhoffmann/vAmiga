@@ -804,7 +804,7 @@ Agnus::pokeDMACON(uint16_t value)
 {
     debug(DMA_DEBUG, "pokeDMACON(%X)\n", value);
 
-    // Compute the new value
+    // Compute new value
     if (value & 0x8000) {
         dmaconNew = (dmacon | value) & 0x07FF;
     } else {
@@ -1641,6 +1641,12 @@ Agnus::updateRegisters()
     // BPLCON0 (Denise view)
     if (delay & AGS_BPLCON0_DENISE_0) denise->pokeBPLCON0(denise->bplcon0, denise->bplcon0New);
 
+    // BPLCON1
+    if (delay & AGS_BPLCON1_1) denise->setBPLCON1(denise->bplcon1New);
+
+    // BPLCON1
+    if (delay & AGS_BPLCON2_1) denise->setBPLCON2(denise->bplcon2New);
+
     // DMACON
     if (delay & AGS_DMACON_1) setDMACON(dmacon, dmaconNew);
 
@@ -1649,6 +1655,7 @@ Agnus::updateRegisters()
 
     // DIWSTOP
     if (delay & AGS_DIWSTOP_1) setDIWSTOP(diwstopNew);
+
 }
 
 template <int nr> void
