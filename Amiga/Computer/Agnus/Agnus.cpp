@@ -1318,7 +1318,19 @@ Agnus::pokeBPLxPTH(uint16_t value)
     // Check if the written value gets lost
     if (skipBPLxPT(x)) return;
 
-    scheduleRegEvent<s>(DMA_CYCLES(2), REG_BPLxPTH, HI_W_LO_W(x, value));
+    // Retain the new value
+    bplpthNew[x - 1] = value;
+
+    // Schedule the register updated
+    switch (x) {
+        case 1: delay |= AGS_BPL1PTH_0; break;
+        case 2: delay |= AGS_BPL2PTH_0; break;
+        case 3: delay |= AGS_BPL3PTH_0; break;
+        case 4: delay |= AGS_BPL4PTH_0; break;
+        case 5: delay |= AGS_BPL5PTH_0; break;
+        case 6: delay |= AGS_BPL6PTH_0; break;
+    }
+    // scheduleRegEvent<s>(DMA_CYCLES(2), REG_BPLxPTH, HI_W_LO_W(x, value));
 }
 
 template <int x, PokeSource s> void
@@ -1685,6 +1697,22 @@ Agnus::updateRegisters()
     // BPL2MOD
     if (delay & AGS_BPL2MOD_1) setBPL2MOD(bpl2modNew);
 
+    // BPLxPT
+    if (delay & (AGS_BPLxPTH_1 | AGS_BPLxPTL_1)) {
+
+        if (delay & AGS_BPL1PTH_1) setBPLxPTH(1, bplpthNew[0]);
+        if (delay & AGS_BPL1PTL_1) setBPLxPTL(1, bplptlNew[0]);
+        if (delay & AGS_BPL2PTH_1) setBPLxPTH(2, bplpthNew[1]);
+        if (delay & AGS_BPL2PTL_1) setBPLxPTL(2, bplptlNew[1]);
+        if (delay & AGS_BPL3PTH_1) setBPLxPTH(3, bplpthNew[2]);
+        if (delay & AGS_BPL3PTL_1) setBPLxPTL(3, bplptlNew[2]);
+        if (delay & AGS_BPL4PTH_1) setBPLxPTH(4, bplpthNew[3]);
+        if (delay & AGS_BPL4PTL_1) setBPLxPTL(4, bplptlNew[3]);
+        if (delay & AGS_BPL5PTH_1) setBPLxPTH(5, bplpthNew[4]);
+        if (delay & AGS_BPL5PTL_1) setBPLxPTL(5, bplptlNew[4]);
+        if (delay & AGS_BPL6PTH_1) setBPLxPTH(6, bplpthNew[5]);
+        if (delay & AGS_BPL6PTL_1) setBPLxPTL(6, bplptlNew[5]);
+    }
 }
 
 template <int nr> void

@@ -34,41 +34,55 @@
 #define AGS_BPL1MOD_1        (1ULL << 18)
 #define AGS_BPL2MOD_0        (1ULL << 19)
 #define AGS_BPL2MOD_1        (1ULL << 20)
-#define AGS_BPL0PTH_0        (1ULL << 21)
-#define AGS_BPL0PTH_1        (1ULL << 22)
-#define AGS_BPL0PTL_0        (1ULL << 23)
-#define AGS_BPL0PTL_1        (1ULL << 24)
-#define AGS_BPL1PTH_0        (1ULL << 25)
-#define AGS_BPL1PTH_1        (1ULL << 26)
-#define AGS_BPL1PTL_0        (1ULL << 27)
-#define AGS_BPL1PTL_1        (1ULL << 28)
-#define AGS_BPL2PTH_0        (1ULL << 29)
-#define AGS_BPL2PTH_1        (1ULL << 30)
-#define AGS_BPL2PTL_0        (1ULL << 31)
-#define AGS_BPL2PTL_1        (1ULL << 32)
-#define AGS_BPL3PTH_0        (1ULL << 33)
-#define AGS_BPL3PTH_1        (1ULL << 34)
-#define AGS_BPL3PTL_0        (1ULL << 35)
-#define AGS_BPL3PTL_1        (1ULL << 36)
-#define AGS_BPL4PTH_0        (1ULL << 37)
-#define AGS_BPL4PTH_1        (1ULL << 38)
-#define AGS_BPL4PTL_0        (1ULL << 39)
-#define AGS_BPL4PTL_1        (1ULL << 40)
-#define AGS_BPL5PTH_0        (1ULL << 41)
-#define AGS_BPL5PTH_1        (1ULL << 42)
-#define AGS_BPL5PTL_0        (1ULL << 43)
-#define AGS_BPL5PTL_1        (1ULL << 44)
+#define AGS_BPL1PTH_0        (1ULL << 21)
+#define AGS_BPL1PTH_1        (1ULL << 22)
+#define AGS_BPL1PTL_0        (1ULL << 23)
+#define AGS_BPL1PTL_1        (1ULL << 24)
+#define AGS_BPL2PTH_0        (1ULL << 25)
+#define AGS_BPL2PTH_1        (1ULL << 26)
+#define AGS_BPL2PTL_0        (1ULL << 27)
+#define AGS_BPL2PTL_1        (1ULL << 28)
+#define AGS_BPL3PTH_0        (1ULL << 29)
+#define AGS_BPL3PTH_1        (1ULL << 30)
+#define AGS_BPL3PTL_0        (1ULL << 31)
+#define AGS_BPL3PTL_1        (1ULL << 32)
+#define AGS_BPL4PTH_0        (1ULL << 33)
+#define AGS_BPL4PTH_1        (1ULL << 34)
+#define AGS_BPL4PTL_0        (1ULL << 35)
+#define AGS_BPL4PTL_1        (1ULL << 36)
+#define AGS_BPL5PTH_0        (1ULL << 37)
+#define AGS_BPL5PTH_1        (1ULL << 38)
+#define AGS_BPL5PTL_0        (1ULL << 39)
+#define AGS_BPL5PTL_1        (1ULL << 40)
+#define AGS_BPL6PTH_0        (1ULL << 41)
+#define AGS_BPL6PTH_1        (1ULL << 42)
+#define AGS_BPL6PTL_0        (1ULL << 43)
+#define AGS_BPL6PTL_1        (1ULL << 44)
 
 #define AGS_COUNT            (1ULL << 45)
+
+#define AGS_BPLxPTH_0 \
+AGS_BPL1PTH_0 | AGS_BPL2PTH_0 | AGS_BPL3PTH_0 | \
+AGS_BPL4PTH_0 | AGS_BPL5PTH_0 | AGS_BPL6PTH_0
+
+#define AGS_BPLxPTH_1 \
+AGS_BPL1PTH_1 | AGS_BPL2PTH_1 | AGS_BPL3PTH_1 | \
+AGS_BPL4PTH_1 | AGS_BPL5PTH_1 | AGS_BPL6PTH_1
+
+#define AGS_BPLxPTL_0 \
+AGS_BPL1PTL_0 | AGS_BPL2PTL_0 | AGS_BPL3PTL_0 | \
+AGS_BPL4PTL_0 | AGS_BPL5PTL_0 | AGS_BPL6PTL_0
+
+#define AGS_BPLxPTL_1 \
+AGS_BPL1PTL_1 | AGS_BPL2PTL_1 | AGS_BPL3PTL_1 | \
+AGS_BPL4PTL_1 | AGS_BPL5PTL_1 | AGS_BPL6PTL_1
 
 #define AGS_DELAY_MASK ~( AGS_COUNT | \
 AGS_BPLCON0_0 | AGS_BPLCON0_DENISE_0 | AGS_BPLCON1_0  | AGS_BPLCON2_0 | \
 AGS_DMACON_0 | \
 AGS_DIWSTRT_0 | AGS_DIWSTOP_0 | \
 AGS_BPL1MOD_0 | AGS_BPL2MOD_0 | \
-AGS_BPL0PTH_0 | AGS_BPL0PTL_0 | AGS_BPL1PTH_0 | AGS_BPL1PTL_0 | \
-AGS_BPL2PTH_0 | AGS_BPL2PTL_0 | AGS_BPL3PTH_0 | AGS_BPL3PTL_0 | \
-AGS_BPL4PTH_0 | AGS_BPL4PTL_0 | AGS_BPL5PTH_0 | AGS_BPL5PTL_0 )
+AGS_BPLxPTH_0 | AGS_BPLxPTL_0 )
 
 #define AGS_REG_CHANGE UINT64_MAX // TODO: USE PROPER MASK AFTER DEBUGGING
 
