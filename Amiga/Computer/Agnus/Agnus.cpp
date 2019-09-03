@@ -804,6 +804,17 @@ Agnus::pokeDMACON(uint16_t value)
 {
     debug(DMA_DEBUG, "pokeDMACON(%X)\n", value);
 
+    // Compute the new value
+    if (value & 0x8000) {
+        dmaconNew = (dmacon | value) & 0x07FF;
+    } else {
+        dmaconNew = (dmacon & ~value) & 0x07FF;
+    }
+
+    // Schedule the value to be updated
+    if (dmaconNew != dmacon) delay |= AGS_DMACON_0;
+
+    /*
     // Compute the real value (Bit 15 determines if bits are set or cleared)
     if (value & 0x8000) {
         value = (dmacon | value) & 0x07FF;
@@ -816,40 +827,44 @@ Agnus::pokeDMACON(uint16_t value)
         setDMACON(dmacon, value);
         dmacon = value;
     }
+    */
 }
 
 void
-Agnus::setDMACON(uint16_t oldDmacon, uint16_t newDmacon)
+Agnus::setDMACON(uint16_t oldValue, uint16_t newValue)
 {
-    assert(oldDmacon != newDmacon);
+    debug("setDMACON(%x, %x)\n", oldValue, newValue);
+    assert(oldValue != newValue);
+
+    dmacon = newValue;
 
     // Update variable dmaconAtDDFStrt if DDFSTRT has not been reached yet
-    if (pos.h + 2 < ddfstrtReached) dmaconAtDDFStrt = newDmacon;
+    if (pos.h + 2 < ddfstrtReached) dmaconAtDDFStrt = newValue;
 
-    bool oldDMAEN = (oldDmacon & DMAEN);
-    bool oldBPLEN = (oldDmacon & BPLEN) && oldDMAEN;
-    bool oldCOPEN = (oldDmacon & COPEN) && oldDMAEN;
-    bool oldBLTEN = (oldDmacon & BLTEN) && oldDMAEN;
-    bool oldSPREN = (oldDmacon & SPREN) && oldDMAEN;
+    bool oldDMAEN = (oldValue & DMAEN);
+    bool oldBPLEN = (oldValue & BPLEN) && oldDMAEN;
+    bool oldCOPEN = (oldValue & COPEN) && oldDMAEN;
+    bool oldBLTEN = (oldValue & BLTEN) && oldDMAEN;
+    bool oldSPREN = (oldValue & SPREN) && oldDMAEN;
     // bool oldDSKEN = (oldValue & DSKEN) && oldDMAEN;
-    bool oldAU0EN = (oldDmacon & AU0EN) && oldDMAEN;
-    bool oldAU1EN = (oldDmacon & AU1EN) && oldDMAEN;
-    bool oldAU2EN = (oldDmacon & AU2EN) && oldDMAEN;
-    bool oldAU3EN = (oldDmacon & AU3EN) && oldDMAEN;
+    bool oldAU0EN = (oldValue & AU0EN) && oldDMAEN;
+    bool oldAU1EN = (oldValue & AU1EN) && oldDMAEN;
+    bool oldAU2EN = (oldValue & AU2EN) && oldDMAEN;
+    bool oldAU3EN = (oldValue & AU3EN) && oldDMAEN;
 
-    bool newDMAEN = (newDmacon & DMAEN);
-    bool newBPLEN = (newDmacon & BPLEN) && newDMAEN;
-    bool newCOPEN = (newDmacon & COPEN) && newDMAEN;
-    bool newBLTEN = (newDmacon & BLTEN) && newDMAEN;
-    bool newSPREN = (newDmacon & SPREN) && newDMAEN;
+    bool newDMAEN = (newValue & DMAEN);
+    bool newBPLEN = (newValue & BPLEN) && newDMAEN;
+    bool newCOPEN = (newValue & COPEN) && newDMAEN;
+    bool newBLTEN = (newValue & BLTEN) && newDMAEN;
+    bool newSPREN = (newValue & SPREN) && newDMAEN;
     // bool newDSKEN = (newValue & DSKEN) && newDMAEN;
-    bool newAU0EN = (newDmacon & AU0EN) && newDMAEN;
-    bool newAU1EN = (newDmacon & AU1EN) && newDMAEN;
-    bool newAU2EN = (newDmacon & AU2EN) && newDMAEN;
-    bool newAU3EN = (newDmacon & AU3EN) && newDMAEN;
+    bool newAU0EN = (newValue & AU0EN) && newDMAEN;
+    bool newAU1EN = (newValue & AU1EN) && newDMAEN;
+    bool newAU2EN = (newValue & AU2EN) && newDMAEN;
+    bool newAU3EN = (newValue & AU3EN) && newDMAEN;
 
     // Inform the delegates
-    blitter.pokeDMACON(oldDmacon, newDmacon);
+    blitter.pokeDMACON(oldValue, newValue);
 
     // Bitplane DMA
     if (oldBPLEN ^ newBPLEN) {
@@ -864,19 +879,19 @@ Agnus::setDMACON(uint16_t oldDmacon, uint16_t newDmacon)
             // Check if the current line is affected by the change
             if (pos.h + 2 < ddfstrtReached || bplDMA(dmaconAtDDFStrt)) {
 
-                allocateBplSlots(newDmacon, bplcon0, pos.h + 2);
+                allocateBplSlots(newValue, bplcon0, pos.h + 2);
                 scheduleNextBplEvent();
             }
 
         } else {
 
             // Bitplane DMA is switched off
-            allocateBplSlots(newDmacon, bplcon0, pos.h + 2);
+            allocateBplSlots(newValue, bplcon0, pos.h + 2);
             scheduleNextBplEvent();
         }
 
         // Let Denise know about the change
-        denise->pokeDMACON(oldDmacon, newDmacon);
+        denise->pokeDMACON(oldValue, newValue);
     }
     
     // Copper DMA
