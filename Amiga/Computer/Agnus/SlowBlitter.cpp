@@ -516,6 +516,7 @@ Blitter::exec()
 
         // This instruction is only used in fake-execution mode. We simply
         // record some fake data to make the DMA debugger happy.
+        assert(agnus->pos.h < HPOS_CNT);
         agnus->busValue[agnus->pos.h] = 0x8888;
     }
 

@@ -401,6 +401,8 @@ public:
     bool lace() { return lace(bplcon0); }
     static int bpu(uint16_t v) { return (v >> 12) & 0b111; }
     int bpu() { return bpu(bplcon0); }
+    static int planes(uint16_t v) { return bpu(v) <= 6 ? bpu(v) : 0; }
+    int planes() { return planes(bplcon0); }
     static bool ham(uint16_t v) { return (v & 0x8C00) == 0x0800 && (bpu(v) == 5 || bpu(v) == 6); }
     bool ham() { return ham(bplcon0); }
 
@@ -453,24 +455,11 @@ public:
 
 
     //
-    // Managing the bitplane shift registers
+    // Handling bitplanes
     //
 
-    // Transfers the bitplane register contents to the shift registers
-    void fillShiftRegisters(int numPlanes)
-    {
-        numPlanes = bpu(); 
-
-        switch (numPlanes) {
-            case 6: shiftReg[5] = REPLACE_LO_WORD(shiftReg[5], bpldat[5]);
-            case 5: shiftReg[4] = REPLACE_LO_WORD(shiftReg[4], bpldat[4]);
-            case 4: shiftReg[3] = REPLACE_LO_WORD(shiftReg[3], bpldat[3]);
-            case 3: shiftReg[2] = REPLACE_LO_WORD(shiftReg[2], bpldat[2]);
-            case 2: shiftReg[1] = REPLACE_LO_WORD(shiftReg[1], bpldat[1]);
-            case 1: shiftReg[0] = REPLACE_LO_WORD(shiftReg[0], bpldat[0]);
-        }
-    }
-
+    // Transfers the bitplane registers to the shift registers
+    void fillShiftRegisters(int numPlanes);
 
     
     //

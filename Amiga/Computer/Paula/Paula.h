@@ -195,11 +195,11 @@ public:
     
 public:
     
-    // Changes the value of INTREQ.
+    // Changes the value of register INTREQ
     void setINTREQ(uint16_t value) { setINTREQ(value & 0x8000, value & 0x7FFF); }
     void setINTREQ(bool setclr, uint16_t value);
 
-    // Changes the value of INTENA.
+    // Changes the value of register INTENA
     void setINTENA(uint16_t value) { setINTENA(value & 0x8000, value & 0x7FFF); }
     void setINTENA(bool setclr, uint16_t value);
 

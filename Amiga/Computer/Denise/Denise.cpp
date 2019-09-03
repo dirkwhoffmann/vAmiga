@@ -390,6 +390,19 @@ Denise::updateSpritePriorities(uint16_t bplcon2)
     // debug("bplcon2 = %X prio1 = %d prio2 = %d prio12 = %d\n", bplcon2, prio1, prio2, prio12);
 }
 
+void
+Denise::fillShiftRegisters(int numPlanes)
+{
+    switch (bpu()) {
+        case 6: shiftReg[5] = REPLACE_LO_WORD(shiftReg[5], bpldat[5]);
+        case 5: shiftReg[4] = REPLACE_LO_WORD(shiftReg[4], bpldat[4]);
+        case 4: shiftReg[3] = REPLACE_LO_WORD(shiftReg[3], bpldat[3]);
+        case 3: shiftReg[2] = REPLACE_LO_WORD(shiftReg[2], bpldat[2]);
+        case 2: shiftReg[1] = REPLACE_LO_WORD(shiftReg[1], bpldat[1]);
+        case 1: shiftReg[0] = REPLACE_LO_WORD(shiftReg[0], bpldat[0]);
+    }
+}
+
 template <int HIRES> void
 Denise::draw(int pixels)
 {

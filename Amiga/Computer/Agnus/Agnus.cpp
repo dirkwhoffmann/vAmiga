@@ -301,7 +301,7 @@ Agnus::inBplDmaLine(uint16_t dmacon, uint16_t bplcon0) {
 
     return
     ddfVFlop                           // Outside VBLANK, inside DIW
-    && Denise::bpu(bplcon0)            // At least one bitplane enabled
+    && Denise::planes(bplcon0)         // At least one bitplane enabled
     && bplDMA(dmacon);                 // Bitplane DMA enabled
 }
 
@@ -438,6 +438,7 @@ Agnus::doDiskDMA()
     dataBus = mem->peekChip16(dskpt);
     INC_DMAPTR(dskpt);
 
+    assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_DISK;
     busValue[pos.h] = dataBus;
 
@@ -462,7 +463,7 @@ Agnus::doAudioDMA(int channel)
     INC_DMAPTR(audlc[channel]);
 
     // We have to fake the horizontal position here, because this function
-    // is not yet executed at the correct DMA cycle.
+    // is not executed at the correct DMA cycle yet.
     int hpos = 0xD + (2 * channel);
 
     busOwner[hpos] = BUS_AUDIO;
@@ -477,6 +478,7 @@ Agnus::doSpriteDMA()
     dataBus = mem->peekChip16(sprpt[channel]);
     INC_DMAPTR(sprpt[channel]);
 
+    assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_SPRITE;
     busValue[pos.h] = dataBus;
 
@@ -489,6 +491,7 @@ Agnus::doSpriteDMA(int channel)
     dataBus = mem->peekChip16(sprpt[channel]);
     INC_DMAPTR(sprpt[channel]);
 
+    assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_SPRITE;
     busValue[pos.h] = dataBus;
 
@@ -501,6 +504,7 @@ Agnus::doBitplaneDMA()
     dataBus = mem->peekChip16(bplpt[bitplane]);
     INC_DMAPTR(bplpt[bitplane]);
 
+    assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_BITPLANE;
     busValue[pos.h] = dataBus;
 
@@ -512,6 +516,7 @@ Agnus::copperRead(uint32_t addr)
 {
     dataBus = mem->peek16<BUS_COPPER>(addr);
 
+    assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_COPPER;
     busValue[pos.h] = dataBus;
 
@@ -523,6 +528,7 @@ Agnus::copperWrite(uint32_t addr, uint16_t value)
 {
     mem->pokeCustom16<POKE_COPPER>(addr, value);
 
+    assert(pos.h < HPOS_CNT);
     dataBus = value;
     busOwner[pos.h] = BUS_COPPER;
     busValue[pos.h] = value;
@@ -532,6 +538,7 @@ uint16_t
 Agnus::blitterRead(uint32_t addr)
 {
     // Assure that the Blitter owns the bus when this function is called
+    assert(pos.h < HPOS_CNT);
     assert(busOwner[pos.h] == BUS_BLITTER);
 
     dataBus = mem->peek16<BUS_BLITTER>(addr);
@@ -545,6 +552,7 @@ void
 Agnus::blitterWrite(uint32_t addr, uint16_t value)
 {
     // Assure that the Blitter owns the bus when this function is called
+    assert(pos.h < HPOS_CNT);
     assert(busOwner[pos.h] == BUS_BLITTER);
 
     mem->poke16<BUS_BLITTER>(addr, value);
@@ -567,20 +575,21 @@ Agnus::allocateBplSlots(uint16_t dmacon, uint16_t bplcon0, int first, int last)
 {
     assert(first >= 0 && last < HPOS_MAX);
 
-    int bpu = Denise::bpu(bplcon0);
+    int planes = Denise::planes(bplcon0);
     bool hires = Denise::hires(bplcon0);
 
     // Set number of bitplanes to 0 if we are not in a bitplane DMA line
-    if (!inBplDmaLine(dmacon, bplcon0)) bpu = 0;
+    if (!inBplDmaLine(dmacon, bplcon0)) planes = 0;
+    assert(planes <= 6);
 
     // Allocate slots
     if (hires) {
-        for (unsigned i = first; i <= last; i++) {
-            dmaEvent[i] = inHiresDmaArea(i) ? bitplaneDMA[1][bpu][i] : EVENT_NONE;
+        for (int i = first; i <= last; i++) {
+            dmaEvent[i] = inHiresDmaArea(i) ? bitplaneDMA[1][planes][i] : EVENT_NONE;
         }
     } else {
-        for (unsigned i = first; i <= last; i++) {
-            dmaEvent[i] = inLoresDmaArea(i) ? bitplaneDMA[0][bpu][i] : EVENT_NONE;
+        for (int i = first; i <= last; i++) {
+            dmaEvent[i] = inLoresDmaArea(i) ? bitplaneDMA[0][planes][i] : EVENT_NONE;
         }
     }
 
@@ -737,7 +746,7 @@ Agnus::dumpBplEventTable(int from, int to)
             case BPL_H3:       r3[i] = 'H'; r4[i] = '3'; break;
             case BPL_H4:       r3[i] = 'H'; r4[i] = '4'; break;
             case BPL_EOL:      r3[i] = 'E'; r4[i] = 'O'; break;
-            default:           assert(false);
+            default:           r3[i] = '?'; r4[i] = '?'; break;
         }
     }
     r1[i] = r2[i] = r3[i] = r4[i] = 0;
@@ -768,14 +777,12 @@ Agnus::dumpBplEventTable()
     int i = nextDmaEvent[0];
     plainmsg("0 -> %X", i);
     while (i) {
+        assert(i < HPOS_CNT);
+        assert(nextDmaEvent[i] > i);
         i = nextDmaEvent[i];
         plainmsg(" -> %X", i);
     }
     plainmsg("\n");
-
-    // for (i = 0; nextDmaEvent[i]; i++) { plainmsg("%d, ", nextDmaEvent[i]); }
-    plainmsg("\n");
-
 }
 
 uint16_t
@@ -1389,20 +1396,6 @@ Agnus::pokeSPRxPTL(uint16_t value)
     sprpt[x] = REPLACE_LO_WORD(sprpt[x], value & 0xFFFE);
 }
 
-/*
-void
-Agnus::pokeBPLCON0(uint16_t value)
-{
-    debug(DMA_DEBUG, "pokeBPLCON0(%X)\n", value);
-
-    if (bplcon0 != value) {
-
-        pokeBPLCON0(bplcon0, value);
-        bplcon0 = value;
-    }
-}
-*/
-
 void
 Agnus::pokeBPLCON0(uint16_t value)
 {
@@ -1513,7 +1506,7 @@ Agnus::execute(DMACycle cycles)
         pos.h++;
 
         // If this assertion hits, the HSYNC event hasn't been served
-        assert(pos.h <= HPOS_MAX + 1);
+        assert(pos.h <= HPOS_CNT);
 
         clock += DMA_CYCLES(1);
     }
@@ -1528,21 +1521,54 @@ Agnus::executeUntil(Cycle targetClock)
 */
 
 /*
+ Optimization:
+ - Move action flags to AGN_SLOT
+ - After that, try those alternative implementations:
+ */
+
+/*
 void
 Agnus::executeUntil(Cycle targetClock)
 {
-    while (clock <= targetClock - DMA_CYCLES(1)) {
+    targetClock = AS_DMA_CYCLES(targetClock); // MOVE TO CALLEE
+    assert(isDMACycle(targetClock));
 
-        // Process all pending events
-        if (clock >= nextTrigger) executeEventsUntil(clock);
+    Cycle dmaCycles = AS_DMA_CYCLES(targetClock - clock);
 
-        // Advance the internal counters
-        pos.h++;
+    if (nextTrigger > targetClock) {
 
-        // If this assertion hits, the HSYNC event hasn't been served
-        assert(pos.h <= HPOS_MAX + 1);
+        pos.h += dmaCycles;
+        clock = targetClock;
+        return;
 
-        clock += DMA_CYCLES(1);
+    } else {
+
+        execute(dmaCycles);
+    }
+}
+*/
+/*
+void
+Agnus::executeUntil(Cycle targetClock)
+{
+    targetClock = AS_DMA_CYCLES(targetClock); // MOVE TO CALLEE
+    assert(isDMACycle(targetClock));
+
+    while (clock <= targetClock) {
+
+        if (nextTrigger > targetClock) {
+
+            pos.h += AS_DMA_CYCLES(targetClock - clock);
+            clock = targetClock;
+            return;
+
+        } else {
+
+            pos.h += AS_DMA_CYCLES(nextTrigger - clock);
+            clock = nextTrigger;
+
+            executeEventsUntil(nextTrigger);
+        }
     }
 }
 */

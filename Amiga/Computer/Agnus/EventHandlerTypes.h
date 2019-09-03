@@ -84,7 +84,7 @@ inline const char *slotName(EventSlot nr)
         case CIAA_SLOT:          return "CIA A"; 
         case CIAB_SLOT:          return "CIA B";
         case BPL_SLOT:           return "Bitplane DMA";
-        case DAS_SLOT:           return "Disk, Audio, Sprite DMA";
+        case DAS_SLOT:           return "Other DMA";
         case COP_SLOT:           return "Copper";
         case BLT_SLOT:           return "Blitter";
         case SEC_SLOT:           return "Secondary";
