@@ -813,13 +813,13 @@ Agnus::pokeDMACON(uint16_t value)
 
     if (dmacon != value) {
 
-        pokeDMACON(dmacon, value);
+        setDMACON(dmacon, value);
         dmacon = value;
     }
 }
 
 void
-Agnus::pokeDMACON(uint16_t oldDmacon, uint16_t newDmacon)
+Agnus::setDMACON(uint16_t oldDmacon, uint16_t newDmacon)
 {
     assert(oldDmacon != newDmacon);
 
@@ -1067,16 +1067,20 @@ template <PokeSource s> void
 Agnus::pokeDIWSTRT(uint16_t value)
 {
     debug(DIW_DEBUG, "pokeDIWSTRT<%s>(%X)\n", pokeSourceName(s), value);
+    diwstrtNew = value;
+    delay |= AGS_DIWSTRT_0;
 
-    scheduleRegEvent<s>(DMA_CYCLES(2), REG_DIWSTRT, (int64_t)value);
+    // scheduleRegEvent<s>(DMA_CYCLES(2), REG_DIWSTRT, (int64_t)value); // DEPRECATED
 }
 
 template <PokeSource s> void
 Agnus::pokeDIWSTOP(uint16_t value)
 {
     debug(DIW_DEBUG, "pokeDIWSTOP<%s>(%X)\n", pokeSourceName(s), value);
+    diwstopNew = value;
+    delay |= AGS_DIWSTOP_0;
 
-    scheduleRegEvent<s>(DMA_CYCLES(2), REG_DIWSTOP, (int64_t)value);
+    // scheduleRegEvent<s>(DMA_CYCLES(2), REG_DIWSTOP, (int64_t)value); // DEPRECATED
 }
 
 void
@@ -1617,19 +1621,19 @@ void
 Agnus::updateRegisters()
 {
     // BPLCON0 (Agnus view)
-    if (delay & AGS_BPLCON0_3) {
-        pokeBPLCON0(bplcon0, bplcon0New);
-    }
+    if (delay & AGS_BPLCON0_3) pokeBPLCON0(bplcon0, bplcon0New);
 
     // BPLCON0 (Denise view)
-    if (delay & AGS_BPLCON0_DENISE_0) {
-        denise->pokeBPLCON0(denise->bplcon0, denise->bplcon0New);
-    }
+    if (delay & AGS_BPLCON0_DENISE_0) denise->pokeBPLCON0(denise->bplcon0, denise->bplcon0New);
 
     // DMACON
-    if (delay & AGS_DMACON_1) {
-        pokeDMACON(dmacon, dmaconNew);
-    }
+    if (delay & AGS_DMACON_1) setDMACON(dmacon, dmaconNew);
+
+    // DIWSTRT
+    if (delay & AGS_DIWSTRT_1) setDIWSTRT(diwstrtNew);
+
+    // DIWSTOP
+    if (delay & AGS_DIWSTOP_1) setDIWSTOP(diwstopNew);
 }
 
 template <int nr> void
