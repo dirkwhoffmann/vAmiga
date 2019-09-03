@@ -186,9 +186,6 @@ void cancel(EventSlot s)
     slot[s].triggerCycle = NEVER;
 }
 
-// Schedules a register write event
-template<PokeSource s> void scheduleRegEvent(Cycle cycle, EventID id, int64_t data);
-
 
 //
 // Scheduling specific events

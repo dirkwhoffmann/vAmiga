@@ -1083,8 +1083,6 @@ Agnus::pokeDIWSTRT(uint16_t value)
     debug(DIW_DEBUG, "pokeDIWSTRT<%s>(%X)\n", pokeSourceName(s), value);
     diwstrtNew = value;
     delay |= AGS_DIWSTRT_0;
-
-    // scheduleRegEvent<s>(DMA_CYCLES(2), REG_DIWSTRT, (int64_t)value); // DEPRECATED
 }
 
 template <PokeSource s> void
@@ -1093,8 +1091,6 @@ Agnus::pokeDIWSTOP(uint16_t value)
     debug(DIW_DEBUG, "pokeDIWSTOP<%s>(%X)\n", pokeSourceName(s), value);
     diwstopNew = value;
     delay |= AGS_DIWSTOP_0;
-
-    // scheduleRegEvent<s>(DMA_CYCLES(2), REG_DIWSTOP, (int64_t)value); // DEPRECATED
 }
 
 void
@@ -1330,7 +1326,6 @@ Agnus::pokeBPLxPTH(uint16_t value)
         case 5: delay |= AGS_BPL5PTH_0; break;
         case 6: delay |= AGS_BPL6PTH_0; break;
     }
-    // scheduleRegEvent<s>(DMA_CYCLES(2), REG_BPLxPTH, HI_W_LO_W(x, value));
 }
 
 template <int x, PokeSource s> void
@@ -1353,7 +1348,6 @@ Agnus::pokeBPLxPTL(uint16_t value)
         case 5: delay |= AGS_BPL5PTL_0; break;
         case 6: delay |= AGS_BPL6PTL_0; break;
     }
-    // scheduleRegEvent<s>(DMA_CYCLES(2), REG_BPLxPTL, HI_W_LO_W(x, value));
 }
 
 bool

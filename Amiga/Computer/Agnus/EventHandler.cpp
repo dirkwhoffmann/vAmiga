@@ -805,59 +805,6 @@ Agnus::serviceINSEvent()
     rescheduleRel<INSPECTOR_SLOT>((Cycle)(inspectionInterval * 28000000));
 }
 
-template <PokeSource s> void
-Agnus::scheduleRegEvent(Cycle cycle, EventID id, int64_t data)
-{
-    /* Here is the thing: A Copper write can occur every fourth cycle and
-     * most writes are delayed by four cycles as well. Hence, this function
-     * may be called under situations where a pending event is still in the
-     * slot.
-     * We solve this by serving the pending event first. But beware: We'll
-     * probably run into problem with this approach if the old event is not
-     * due yet. If such a situation really arises, we need to come up with a
-     * different design. For example, we could add a second reg write slot for
-     * the Copper and the CPU and schedule the event in any these two slots (we
-     * can choose any of them as long as it is free). Alternatively, we could
-     * add seperate event slots for each OCS register. However, this would blow
-     * up the size of the secondary table and might therefore be a bad idea.
-     *
-     * Update: Since we moved up the priority of REG_COP_SLOT and REG_CPU_SLOT,
-     * such a write conflict should no longer happen.
-     * TODO: Add assertions to check this.
-     */
-    switch (s) {
-
-        case POKE_COPPER:
-
-            if (hasEvent<REG_COP_SLOT>()) {
-                assert(false); 
-                assert(isDue<REG_COP_SLOT>(amiga->getMasterClock()));
-                serviceREGEvent(REG_COP_SLOT);
-            }
-            scheduleRel<REG_COP_SLOT>(cycle, id, data);
-            break;
-
-        case POKE_CPU:
-
-            // If the CPU performs a 32-bit write, the first CPU slot can
-            // already be occupied when we reach here. In this case, we schedule
-            // the event in the second slot.
-            if (hasEvent<REG_CPU_SLOT1>()) {
-
-                scheduleRel<REG_CPU_SLOT2>(cycle, id, data);
-
-            } else {
-
-                assert(!hasEvent<REG_CPU_SLOT2>());
-                scheduleRel<REG_CPU_SLOT1>(cycle, id, data);
-            }
-            break;
-
-        default:
-            assert(false);
-    }
-}
-
 bool
 Agnus::checkScheduledEvent(EventSlot s)
 {
@@ -942,6 +889,3 @@ Agnus::checkTriggeredEvent(EventSlot s)
     
     return true;
 }
-
-template void Agnus::scheduleRegEvent<POKE_COPPER>(Cycle cycle, EventID id, int64_t data);
-template void Agnus::scheduleRegEvent<POKE_CPU>(Cycle cycle, EventID id, int64_t data);
