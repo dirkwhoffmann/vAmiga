@@ -1341,7 +1341,19 @@ Agnus::pokeBPLxPTL(uint16_t value)
     // Check if the written value gets lost
     if (skipBPLxPT(x)) return;
 
-    scheduleRegEvent<s>(DMA_CYCLES(2), REG_BPLxPTL, HI_W_LO_W(x, value));
+    // Retain the new value
+    bplptlNew[x - 1] = value;
+
+    // Schedule the register updated
+    switch (x) {
+        case 1: delay |= AGS_BPL1PTL_0; break;
+        case 2: delay |= AGS_BPL2PTL_0; break;
+        case 3: delay |= AGS_BPL3PTL_0; break;
+        case 4: delay |= AGS_BPL4PTL_0; break;
+        case 5: delay |= AGS_BPL5PTL_0; break;
+        case 6: delay |= AGS_BPL6PTL_0; break;
+    }
+    // scheduleRegEvent<s>(DMA_CYCLES(2), REG_BPLxPTL, HI_W_LO_W(x, value));
 }
 
 bool
