@@ -232,15 +232,17 @@ Agnus::_inspect()
 void
 Agnus::_dump()
 {
-    plainmsg("  dskpt = %X\n", dskpt);
-    for (unsigned i = 0; i < 4; i++) plainmsg("audlc[%d] = %X\n", i, audlc[i]);
-    for (unsigned i = 0; i < 6; i++) plainmsg("bplpt[%d] = %X\n", i, bplpt[i]);
-    for (unsigned i = 0; i < 8; i++) plainmsg("bplpt[%d] = %X\n", i, sprpt[i]);
+    plainmsg(" actions : %X\n", actions);
+
+    plainmsg("   dskpt : %X\n", dskpt);
+    for (unsigned i = 0; i < 4; i++) plainmsg("audlc[%d] : %X\n", i, audlc[i]);
+    for (unsigned i = 0; i < 6; i++) plainmsg("bplpt[%d] : %X\n", i, bplpt[i]);
+    for (unsigned i = 0; i < 8; i++) plainmsg("bplpt[%d] : %X\n", i, sprpt[i]);
     
-    plainmsg("  hstrt : %d\n", diwHstrt);
-    plainmsg("  hstop : %d\n", diwHstop);
-    plainmsg("  vstrt : %d\n", diwVstrt);
-    plainmsg("  vstop : %d\n", diwVstop);
+    plainmsg("   hstrt : %d\n", diwHstrt);
+    plainmsg("   hstop : %d\n", diwHstop);
+    plainmsg("   vstrt : %d\n", diwVstrt);
+    plainmsg("   vstop : %d\n", diwVstop);
 
     plainmsg("\nDMA time slot allocation:\n\n");
 
@@ -1543,7 +1545,6 @@ Agnus::execute()
     } else {
         assert(pos.h < 0xE2);
     }
-
 
     // Advance the internal clock and the horizontal counter
     clock += DMA_CYCLES(1);

@@ -121,12 +121,12 @@ template<EventSlot s> void scheduleAbs(Cycle cycle, EventID id, int64_t data)
 
 template<EventSlot s> void scheduleImm(EventID id)
 {
-   scheduleAbs<s>(clock + 1, id);
+    scheduleAbs<s>(0, id);
 }
 
 template<EventSlot s> void scheduleImm(EventID id, int64_t data)
 {
-    scheduleAbs<s>(clock + 1, id);
+    scheduleAbs<s>(0, id);
     slot[s].data = data;
 }
 

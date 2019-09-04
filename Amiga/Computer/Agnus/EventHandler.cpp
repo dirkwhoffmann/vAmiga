@@ -604,10 +604,11 @@ Agnus::serviceBPLEvent(EventID id)
             break;
 
         case BPL_EOL:
+            // This is the last event in the current rasterline.
+            assert(pos.h == 0xE2);
 
-            // This is the last event in the current rasterline. We tell Agnus
-            // to call the hsync handler at the beginning of the next cycle and
-            // return without scheduling a new BPL event.
+            // We tell Agnus to call the hsync handler at the beginning of the
+            // next cycle and return without scheduling a new BPL event.
             setActionFlag(AGN_HSYNC);
             return;
 
