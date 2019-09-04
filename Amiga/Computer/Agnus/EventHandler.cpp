@@ -470,6 +470,20 @@ Agnus::serviceAGNEvent()
 {
     assert(slot[AGN_SLOT].id == AGN_ACTIONS);
 
+    // The event should only fire if at least one action flag is set
+    assert(actions);
+
+    // Check for horizontal sync
+    if (actions & AGS_HSYNC) hsyncHandler();
+
+    // Handle all pending register changes
+    if (actions & AGS_REG_CHANGE) updateRegisters();
+
+    // Move action flags one bit to the left
+    actions = (actions << 1) & AGS_DELAY_MASK;
+
+    // Cancel the event if there is no more work to do
+    if (!actions) cancel(AGN_SLOT);
 }
 
 void

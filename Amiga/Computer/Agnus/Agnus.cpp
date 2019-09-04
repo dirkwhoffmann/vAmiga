@@ -1511,13 +1511,6 @@ Agnus::setBPLCON0(uint16_t oldValue, uint16_t newValue)
         // Update the DMA allocation table
         allocateBplSlots(dmacon, newValue, pos.h);
 
-        // EXPERIMENTAL
-        /*
-        int posh = pos.h + 2;
-        allocateBplSlots(dmacon, newBplcon0, posh);
-        dumpBplEventTable();
-        */
-
         // Since the table has changed, we also need to update the event slot
         scheduleBplEventForCycle(pos.h);
 
@@ -1549,6 +1542,7 @@ Agnus::execute(DMACycle cycles)
     for (DMACycle i = 0; i < cycles; i++) {
 
         // Check if there is additional work to do in this cycle
+        /*
         if (actions) {
 
             // Check for horizontal sync
@@ -1560,6 +1554,7 @@ Agnus::execute(DMACycle cycles)
             // Move action flags one bit to the left
             actions = (actions << 1) & AGS_DELAY_MASK;
         }
+        */
 
         // Process all pending events
         if (clock >= nextTrigger) executeEventsUntil(clock);
