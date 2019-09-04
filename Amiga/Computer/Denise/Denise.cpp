@@ -185,7 +185,7 @@ Denise::pokeBPLCON0(uint16_t value)
     if (bplcon0 != value) {
 
         bplcon0New = value;
-        agnus->setActionFlag(AGS_BPLCON0_DENISE_0);
+        agnus->setActionFlag(AGN_BPLCON0_DENISE_0);
     }
 }
 
@@ -210,7 +210,7 @@ Denise::pokeBPLCON1(uint16_t value)
     bplcon1New = value & 0xFF;
 
     // Schedule the register updated
-    if (bplcon1New != bplcon1) agnus->setActionFlag(AGS_BPLCON1_0);
+    if (bplcon1New != bplcon1) agnus->setActionFlag(AGN_BPLCON1_0);
 }
 
 void
@@ -236,7 +236,7 @@ Denise::pokeBPLCON2(uint16_t value)
     bplcon2New = value;
 
     // Schedule the register updated
-    if (bplcon2New != bplcon2) agnus->setActionFlag(AGS_BPLCON2_0);
+    if (bplcon2New != bplcon2) agnus->setActionFlag(AGN_BPLCON2_0);
 }
 
 void

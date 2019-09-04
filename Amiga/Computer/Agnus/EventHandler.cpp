@@ -474,13 +474,13 @@ Agnus::serviceAGNEvent()
     assert(actions);
 
     // Check for horizontal sync
-    if (actions & AGS_HSYNC) hsyncHandler();
+    if (actions & AGN_HSYNC) hsyncHandler();
 
     // Handle all pending register changes
-    if (actions & AGS_REG_CHANGE) updateRegisters();
+    if (actions & AGN_REG_CHANGE_MASK) updateRegisters();
 
     // Move action flags one bit to the left
-    actions = (actions << 1) & AGS_DELAY_MASK;
+    actions = (actions << 1) & AGN_DELAY_MASK;
 
     // Cancel the event if there is no more work to do
     if (!actions) cancel(AGN_SLOT);
@@ -608,7 +608,7 @@ Agnus::serviceBPLEvent(EventID id)
             // This is the last event in the current rasterline. We tell Agnus
             // to call the hsync handler at the beginning of the next cycle and
             // return without scheduling a new BPL event.
-            setActionFlag(AGS_HSYNC);
+            setActionFlag(AGN_HSYNC);
             return;
 
         default:

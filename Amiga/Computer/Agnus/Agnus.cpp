@@ -812,7 +812,7 @@ Agnus::pokeDMACON(uint16_t value)
     }
 
     // Schedule the value to be updated
-    if (dmaconNew != dmacon) setActionFlag(AGS_DMACON_0);
+    if (dmaconNew != dmacon) setActionFlag(AGN_DMACON_0);
 
     /*
     // Compute the real value (Bit 15 determines if bits are set or cleared)
@@ -1084,7 +1084,7 @@ Agnus::pokeDIWSTRT(uint16_t value)
 {
     debug(DIW_DEBUG, "pokeDIWSTRT<%s>(%X)\n", pokeSourceName(s), value);
     diwstrtNew = value;
-    setActionFlag(AGS_DIWSTRT_0);
+    setActionFlag(AGN_DIWSTRT_0);
 }
 
 template <PokeSource s> void
@@ -1092,7 +1092,7 @@ Agnus::pokeDIWSTOP(uint16_t value)
 {
     debug(DIW_DEBUG, "pokeDIWSTOP<%s>(%X)\n", pokeSourceName(s), value);
     diwstopNew = value;
-    setActionFlag(AGS_DIWSTOP_0);
+    setActionFlag(AGN_DIWSTOP_0);
 }
 
 void
@@ -1321,12 +1321,12 @@ Agnus::pokeBPLxPTH(uint16_t value)
 
     // Schedule the register updated
     switch (x) {
-        case 1: setActionFlag(AGS_BPL1PTH_0); break;
-        case 2: setActionFlag(AGS_BPL2PTH_0); break;
-        case 3: setActionFlag(AGS_BPL3PTH_0); break;
-        case 4: setActionFlag(AGS_BPL4PTH_0); break;
-        case 5: setActionFlag(AGS_BPL5PTH_0); break;
-        case 6: setActionFlag(AGS_BPL6PTH_0); break;
+        case 1: setActionFlag(AGN_BPL1PTH_0); break;
+        case 2: setActionFlag(AGN_BPL2PTH_0); break;
+        case 3: setActionFlag(AGN_BPL3PTH_0); break;
+        case 4: setActionFlag(AGN_BPL4PTH_0); break;
+        case 5: setActionFlag(AGN_BPL5PTH_0); break;
+        case 6: setActionFlag(AGN_BPL6PTH_0); break;
     }
 }
 
@@ -1343,12 +1343,12 @@ Agnus::pokeBPLxPTL(uint16_t value)
 
     // Schedule the register updated
     switch (x) {
-        case 1: setActionFlag(AGS_BPL1PTL_0); break;
-        case 2: setActionFlag(AGS_BPL2PTL_0); break;
-        case 3: setActionFlag(AGS_BPL3PTL_0); break;
-        case 4: setActionFlag(AGS_BPL4PTL_0); break;
-        case 5: setActionFlag(AGS_BPL5PTL_0); break;
-        case 6: setActionFlag(AGS_BPL6PTL_0); break;
+        case 1: setActionFlag(AGN_BPL1PTL_0); break;
+        case 2: setActionFlag(AGN_BPL2PTL_0); break;
+        case 3: setActionFlag(AGN_BPL3PTL_0); break;
+        case 4: setActionFlag(AGN_BPL4PTL_0); break;
+        case 5: setActionFlag(AGN_BPL5PTL_0); break;
+        case 6: setActionFlag(AGN_BPL6PTL_0); break;
     }
 }
 
@@ -1413,7 +1413,7 @@ Agnus::pokeBPL1MOD(uint16_t value)
     bpl1modNew = int16_t(value & 0xFFFE);
 
     // Schedule the register updated
-    if (bpl1modNew != bpl1mod) setActionFlag(AGS_BPL1MOD_0);
+    if (bpl1modNew != bpl1mod) setActionFlag(AGN_BPL1MOD_0);
 }
 
 void
@@ -1432,7 +1432,7 @@ Agnus::pokeBPL2MOD(uint16_t value)
     bpl2modNew = int16_t(value & 0xFFFE);
 
     // Schedule the register updated
-    if (bpl2modNew != bpl2mod) setActionFlag(AGS_BPL2MOD_0);
+    if (bpl2modNew != bpl2mod) setActionFlag(AGN_BPL2MOD_0);
 }
 
 void
@@ -1466,7 +1466,7 @@ Agnus::pokeBPLCON0(uint16_t value)
     if (bplcon0 != value) {
 
         bplcon0New = value;
-        setActionFlag(AGS_BPLCON0_0);
+        setActionFlag(AGN_BPLCON0_0);
     }
 }
 
@@ -1550,6 +1550,25 @@ Agnus::execute()
     assert(pos.h <= HPOS_CNT);
 }
 
+#ifdef AGNUS_EXEC_DEBUG
+
+void
+Agnus::executeUntil(Cycle targetClock)
+{
+    assert(targetClock >= clock);
+
+    // Align to DMA cycle raster
+    targetClock &= ~0b111;
+
+    // Compute the number of DMA cycles to execute
+    DMACycle  dmaCycles = (targetClock - clock) / DMA_CYCLES(1);
+
+    // Execute DMA cycles one after another
+    for (DMACycle i = 0; i < dmaCycles; i++) execute();
+}
+
+#else
+
 void
 Agnus::executeUntil(Cycle targetClock)
 {
@@ -1573,6 +1592,7 @@ Agnus::executeUntil(Cycle targetClock)
         for (DMACycle i = 0; i < dmaCycles; i++) execute();
     }
 }
+#endif
 
 #ifdef SLOW_BLT_DEBUG
 
@@ -1625,47 +1645,47 @@ void
 Agnus::updateRegisters()
 {
     // BPLCON0 (Agnus view)
-    if (actions & AGS_BPLCON0_3) setBPLCON0(bplcon0, bplcon0New);
+    if (actions & AGN_BPLCON0_3) setBPLCON0(bplcon0, bplcon0New);
 
     // BPLCON0 (Denise view)
-    if (actions & AGS_BPLCON0_DENISE_0) denise->setBPLCON0(denise->bplcon0, denise->bplcon0New);
+    if (actions & AGN_BPLCON0_DENISE_0) denise->setBPLCON0(denise->bplcon0, denise->bplcon0New);
 
     // BPLCON1
-    if (actions & AGS_BPLCON1_1) denise->setBPLCON1(denise->bplcon1New);
+    if (actions & AGN_BPLCON1_1) denise->setBPLCON1(denise->bplcon1New);
 
     // BPLCON1
-    if (actions & AGS_BPLCON2_1) denise->setBPLCON2(denise->bplcon2New);
+    if (actions & AGN_BPLCON2_1) denise->setBPLCON2(denise->bplcon2New);
 
     // DMACON
-    if (actions & AGS_DMACON_1) setDMACON(dmacon, dmaconNew);
+    if (actions & AGN_DMACON_1) setDMACON(dmacon, dmaconNew);
 
     // DIWSTRT
-    if (actions & AGS_DIWSTRT_1) setDIWSTRT(diwstrtNew);
+    if (actions & AGN_DIWSTRT_1) setDIWSTRT(diwstrtNew);
 
     // DIWSTOP
-    if (actions & AGS_DIWSTOP_1) setDIWSTOP(diwstopNew);
+    if (actions & AGN_DIWSTOP_1) setDIWSTOP(diwstopNew);
 
     // BPL1MOD
-    if (actions & AGS_BPL1MOD_1) setBPL1MOD(bpl1modNew);
+    if (actions & AGN_BPL1MOD_1) setBPL1MOD(bpl1modNew);
 
     // BPL2MOD
-    if (actions & AGS_BPL2MOD_1) setBPL2MOD(bpl2modNew);
+    if (actions & AGN_BPL2MOD_1) setBPL2MOD(bpl2modNew);
 
     // BPLxPT
-    if (actions & (AGS_BPLxPTH_1 | AGS_BPLxPTL_1)) {
+    if (actions & (AGN_BPLxPTH_1 | AGN_BPLxPTL_1)) {
 
-        if (actions & AGS_BPL1PTH_1) setBPLxPTH(1, bplpthNew[0]);
-        if (actions & AGS_BPL1PTL_1) setBPLxPTL(1, bplptlNew[0]);
-        if (actions & AGS_BPL2PTH_1) setBPLxPTH(2, bplpthNew[1]);
-        if (actions & AGS_BPL2PTL_1) setBPLxPTL(2, bplptlNew[1]);
-        if (actions & AGS_BPL3PTH_1) setBPLxPTH(3, bplpthNew[2]);
-        if (actions & AGS_BPL3PTL_1) setBPLxPTL(3, bplptlNew[2]);
-        if (actions & AGS_BPL4PTH_1) setBPLxPTH(4, bplpthNew[3]);
-        if (actions & AGS_BPL4PTL_1) setBPLxPTL(4, bplptlNew[3]);
-        if (actions & AGS_BPL5PTH_1) setBPLxPTH(5, bplpthNew[4]);
-        if (actions & AGS_BPL5PTL_1) setBPLxPTL(5, bplptlNew[4]);
-        if (actions & AGS_BPL6PTH_1) setBPLxPTH(6, bplpthNew[5]);
-        if (actions & AGS_BPL6PTL_1) setBPLxPTL(6, bplptlNew[5]);
+        if (actions & AGN_BPL1PTH_1) setBPLxPTH(1, bplpthNew[0]);
+        if (actions & AGN_BPL1PTL_1) setBPLxPTL(1, bplptlNew[0]);
+        if (actions & AGN_BPL2PTH_1) setBPLxPTH(2, bplpthNew[1]);
+        if (actions & AGN_BPL2PTL_1) setBPLxPTL(2, bplptlNew[1]);
+        if (actions & AGN_BPL3PTH_1) setBPLxPTH(3, bplpthNew[2]);
+        if (actions & AGN_BPL3PTL_1) setBPLxPTL(3, bplptlNew[2]);
+        if (actions & AGN_BPL4PTH_1) setBPLxPTH(4, bplpthNew[3]);
+        if (actions & AGN_BPL4PTL_1) setBPLxPTL(4, bplptlNew[3]);
+        if (actions & AGN_BPL5PTH_1) setBPLxPTH(5, bplpthNew[4]);
+        if (actions & AGN_BPL5PTL_1) setBPLxPTL(5, bplptlNew[4]);
+        if (actions & AGN_BPL6PTH_1) setBPLxPTH(6, bplpthNew[5]);
+        if (actions & AGN_BPL6PTL_1) setBPLxPTL(6, bplptlNew[5]);
     }
 }
 
