@@ -880,7 +880,6 @@ Agnus::setDMACON(uint16_t oldValue, uint16_t newValue)
 
                 allocateBplSlots(newValue, bplcon0, pos.h + 2);
                 updateBplEvent();
-                // scheduleNextBplEvent();
             }
 
         } else {
@@ -888,7 +887,6 @@ Agnus::setDMACON(uint16_t oldValue, uint16_t newValue)
             // Bitplane DMA is switched off
             allocateBplSlots(newValue, bplcon0, pos.h + 2);
             updateBplEvent();
-            // scheduleNextBplEvent();
         }
 
         // Let Denise know about the change
@@ -1540,13 +1538,22 @@ void
 Agnus::execute()
 {
     // Process pending events
-    if (clock >= nextTrigger) executeEventsUntil(clock);
+    if (nextTrigger <= clock) {
+        executeEventsUntil(clock);
+    } else {
+        assert(pos.h < 0xE2);
+    }
+
 
     // Advance the internal clock and the horizontal counter
     clock += DMA_CYCLES(1);
     pos.h++;
 
     // If this assertion hits, the HSYNC event hasn't been served
+    if (pos.h > HPOS_CNT) {
+        dump();
+        dumpBplEventTable();
+    }
     assert(pos.h <= HPOS_CNT);
 }
 
@@ -1585,6 +1592,9 @@ Agnus::executeUntil(Cycle targetClock)
         // Advance directly to the target clock
         clock = targetClock;
         pos.h += dmaCycles;
+
+        // If this assertion hits, the HSYNC event hasn't been served
+        assert(pos.h <= HPOS_CNT);
 
     } else {
 
