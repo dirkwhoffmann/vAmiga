@@ -197,8 +197,11 @@ void scheduleNextBplEvent(int16_t hpos);
 // Schedules the next BPL event relative to the currently emulated DMA cycle.
 void scheduleNextBplEvent() { scheduleNextBplEvent(pos.h); }
 
-// Schedules the earliest BPL event that occurs at or after a given DMA cycle.
+// Schedules the earliest BPL event that occurs at or after the given DMA cycle.
 void scheduleBplEventForCycle(int16_t hpos);
+
+// Updates the scheduled BPL event according to the current event table.
+void updateBplEvent() { scheduleBplEventForCycle(pos.h); }
 
 
 //

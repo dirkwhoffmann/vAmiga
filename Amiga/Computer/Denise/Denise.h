@@ -393,7 +393,7 @@ public:
 
     // OCS register 0x100 (w)
     void pokeBPLCON0(uint16_t value);
-    void pokeBPLCON0(uint16_t oldValue, uint16_t newValue);
+    void setBPLCON0(uint16_t oldValue, uint16_t newValue);
 
     static bool hires(uint16_t v) { return !!GET_BIT(v, 15); }
     bool hires() { return hires(bplcon0); }

@@ -770,7 +770,7 @@ Agnus::dumpBplEventTable()
 
     dumpBplEventTable(0x00, 0x4F);
     dumpBplEventTable(0x50, 0x9F);
-    dumpBplEventTable(0xA0, 0xE3);
+    dumpBplEventTable(0xA0, 0xE2);
 
     // Dump the jump table
     plainmsg("\nJump table:\n\n");
@@ -778,7 +778,7 @@ Agnus::dumpBplEventTable()
     plainmsg("0 -> %X", i);
     while (i) {
         assert(i < HPOS_CNT);
-        assert(nextDmaEvent[i] > i);
+        assert(nextDmaEvent[i] == 0 || nextDmaEvent[i] > i);
         i = nextDmaEvent[i];
         plainmsg(" -> %X", i);
     }
@@ -879,14 +879,16 @@ Agnus::setDMACON(uint16_t oldValue, uint16_t newValue)
             if (pos.h + 2 < ddfstrtReached || bplDMA(dmaconAtDDFStrt)) {
 
                 allocateBplSlots(newValue, bplcon0, pos.h + 2);
-                scheduleNextBplEvent();
+                updateBplEvent();
+                // scheduleNextBplEvent();
             }
 
         } else {
 
             // Bitplane DMA is switched off
             allocateBplSlots(newValue, bplcon0, pos.h + 2);
-            scheduleNextBplEvent();
+            updateBplEvent();
+            // scheduleNextBplEvent();
         }
 
         // Let Denise know about the change
@@ -1469,7 +1471,7 @@ Agnus::pokeBPLCON0(uint16_t value)
 }
 
 void
-Agnus::pokeBPLCON0(uint16_t oldValue, uint16_t newValue)
+Agnus::setBPLCON0(uint16_t oldValue, uint16_t newValue)
 {
     assert(oldValue != newValue);
 
@@ -1677,10 +1679,10 @@ void
 Agnus::updateRegisters()
 {
     // BPLCON0 (Agnus view)
-    if (delay & AGS_BPLCON0_3) pokeBPLCON0(bplcon0, bplcon0New);
+    if (delay & AGS_BPLCON0_3) setBPLCON0(bplcon0, bplcon0New);
 
     // BPLCON0 (Denise view)
-    if (delay & AGS_BPLCON0_DENISE_0) denise->pokeBPLCON0(denise->bplcon0, denise->bplcon0New);
+    if (delay & AGS_BPLCON0_DENISE_0) denise->setBPLCON0(denise->bplcon0, denise->bplcon0New);
 
     // BPLCON1
     if (delay & AGS_BPLCON1_1) denise->setBPLCON1(denise->bplcon1New);

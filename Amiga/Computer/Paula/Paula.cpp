@@ -162,7 +162,8 @@ Paula::scheduleIrq(IrqSource src, Cycle trigger, bool set)
     if (set) {
 
         // Don't set an interrupt that is already scheduled to be set
-        assert(setIntreq[src] == NEVER);
+        // assert(setIntreq[src] == NEVER);
+        if (setIntreq[src] != NEVER) return;
 
         // Record the request
         setIntreq[src] = trigger;
