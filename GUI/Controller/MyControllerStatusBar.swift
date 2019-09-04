@@ -31,9 +31,11 @@ extension MyController {
         warpIcon.image = hourglassIcon
 
         // Speed and frame rate
+        /*
         let x = userWarp ? warpLockIcon.frame.origin.x : warpIcon.frame.origin.x
         let w = clockSpeed.frame.width
         clockSpeed.frame.origin.x = x - w
+        */
 
         // Animation
         df0spinning ? df0DMA.startAnimation(self) : df0DMA.stopAnimation(self)
@@ -64,7 +66,6 @@ extension MyController {
             clockSpeed: true,
             clockSpeedBar: true,
             warpIcon: true,
-            warpLockIcon: userWarp
         ]
         
         for (item, visible) in items {
