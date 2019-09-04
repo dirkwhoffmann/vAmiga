@@ -172,18 +172,4 @@ extension Inspector {
         audioDat3.intValue = Int32(audInfo.channel.3.auddatLatch)
         audioLoc3.intValue = Int32(audInfo.channel.3.audlcLatch)
     }
-
-    @IBAction func paulaINTENAAction(_ sender: NSButton!) {
-
-        let value = sender.state == .on
-        amigaProxy?.paula.setINTENA(sender.tag, value: value)
-        refreshPaula(everything: false)
-    }
-
-    @IBAction func paulaINTREQAction(_ sender: NSButton!) {
-
-        let value = sender.state == .on
-        amigaProxy?.paula.setINTREQ(sender.tag, value: value)
-        refreshPaula(everything: false)
-    }
 }

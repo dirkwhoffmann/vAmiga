@@ -1173,7 +1173,7 @@
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="CIA" identifier="" id="Zr1-zQ-1rt">
-                                <view key="view" ambiguous="YES" id="kdT-8z-eJ6">
+                                <view key="view" id="kdT-8z-eJ6">
                                     <rect key="frame" x="10" y="33" width="822" height="406"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -3143,32 +3143,32 @@
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Denise" identifier="" id="kn4-b1-ULt">
-                                <view key="view" id="iv0-wC-hpe">
-                                    <rect key="frame" x="10" y="33" width="1013" height="406"/>
+                                <view key="view" ambiguous="YES" id="iv0-wC-hpe">
+                                    <rect key="frame" x="10" y="33" width="822" height="406"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <box fixedFrame="YES" title="Sprites" translatesAutoresizingMaskIntoConstraints="NO" id="YbJ-Tn-afd">
-                                            <rect key="frame" x="538" y="44" width="450" height="346"/>
+                                            <rect key="frame" x="538" y="44" width="269" height="346"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES"/>
                                             <view key="contentView" id="D0U-G6-2Dh">
-                                                <rect key="frame" x="3" y="3" width="444" height="328"/>
+                                                <rect key="frame" x="3" y="3" width="263" height="328"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="17" horizontalPageScroll="10" verticalLineScroll="17" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mg0-zY-cjI">
-                                                        <rect key="frame" x="16" y="34" width="412" height="189"/>
+                                                        <rect key="frame" x="16" y="34" width="231" height="189"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <clipView key="contentView" ambiguous="YES" drawsBackground="NO" copiesOnScroll="NO" id="1aG-KS-uL3">
-                                                            <rect key="frame" x="1" y="1" width="410" height="187"/>
-                                                            <autoresizingMask key="autoresizingMask"/>
+                                                            <rect key="frame" x="1" y="1" width="229" height="187"/>
+                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" tag="2" allowsExpansionToolTips="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" id="s6H-id-bwp" customClass="SpriteTableView" customModule="vAmiga" customModuleProvider="target">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="410" height="187"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="229" height="187"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                     <size key="intercellSpacing" width="3" height="2"/>
                                                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                                     <tableColumns>
-                                                                        <tableColumn identifier="0" width="23" minWidth="10" maxWidth="64" id="FHs-9Z-UoK">
+                                                                        <tableColumn identifier="0" width="11.5" minWidth="10" maxWidth="64" id="FHs-9Z-UoK">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
                                                                                 <font key="font" metaFont="smallSystem"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -3181,7 +3181,7 @@
                                                                             </textFieldCell>
                                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         </tableColumn>
-                                                                        <tableColumn identifier="1" width="23" minWidth="10" maxWidth="64" id="0lZ-IH-edO">
+                                                                        <tableColumn identifier="1" width="11.5" minWidth="10" maxWidth="64" id="0lZ-IH-edO">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
                                                                                 <font key="font" metaFont="smallSystem"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -3194,7 +3194,7 @@
                                                                             </textFieldCell>
                                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         </tableColumn>
-                                                                        <tableColumn identifier="2" width="23" minWidth="10" maxWidth="64" id="Y4l-4x-04V">
+                                                                        <tableColumn identifier="2" width="11.5" minWidth="10" maxWidth="64" id="Y4l-4x-04V">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
                                                                                 <font key="font" metaFont="smallSystem"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -3207,7 +3207,7 @@
                                                                             </textFieldCell>
                                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         </tableColumn>
-                                                                        <tableColumn identifier="3" width="23" minWidth="10" maxWidth="64" id="Mpy-sv-7F4">
+                                                                        <tableColumn identifier="3" width="11.5" minWidth="10" maxWidth="64" id="Mpy-sv-7F4">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
                                                                                 <font key="font" metaFont="smallSystem"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -3220,7 +3220,7 @@
                                                                             </textFieldCell>
                                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         </tableColumn>
-                                                                        <tableColumn identifier="4" width="22.5" minWidth="10" maxWidth="64" id="ccv-ER-i26">
+                                                                        <tableColumn identifier="4" width="11" minWidth="10" maxWidth="64" id="ccv-ER-i26">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
                                                                                 <font key="font" metaFont="smallSystem"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -3233,7 +3233,7 @@
                                                                             </textFieldCell>
                                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         </tableColumn>
-                                                                        <tableColumn identifier="5" width="22.5" minWidth="10" maxWidth="64" id="z4Q-Dp-rvb">
+                                                                        <tableColumn identifier="5" width="11" minWidth="10" maxWidth="64" id="z4Q-Dp-rvb">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
                                                                                 <font key="font" metaFont="smallSystem"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -3246,7 +3246,7 @@
                                                                             </textFieldCell>
                                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         </tableColumn>
-                                                                        <tableColumn identifier="6" width="22.5" minWidth="10" maxWidth="64" id="Ahe-fx-42V">
+                                                                        <tableColumn identifier="6" width="11" minWidth="10" maxWidth="64" id="Ahe-fx-42V">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
                                                                                 <font key="font" metaFont="smallSystem"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -3259,7 +3259,7 @@
                                                                             </textFieldCell>
                                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         </tableColumn>
-                                                                        <tableColumn identifier="7" width="22.5" minWidth="10" maxWidth="64" id="WaI-iI-b08">
+                                                                        <tableColumn identifier="7" width="11" minWidth="10" maxWidth="64" id="WaI-iI-b08">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
                                                                                 <font key="font" metaFont="smallSystem"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -3272,7 +3272,7 @@
                                                                             </textFieldCell>
                                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         </tableColumn>
-                                                                        <tableColumn identifier="8" width="22.5" minWidth="10" maxWidth="64" id="ZQz-UV-Iec">
+                                                                        <tableColumn identifier="8" width="11" minWidth="10" maxWidth="64" id="ZQz-UV-Iec">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
                                                                                 <font key="font" metaFont="smallSystem"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -3285,7 +3285,7 @@
                                                                             </textFieldCell>
                                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         </tableColumn>
-                                                                        <tableColumn identifier="9" width="22.5" minWidth="10" maxWidth="64" id="SEo-Ac-x32">
+                                                                        <tableColumn identifier="9" width="11" minWidth="10" maxWidth="64" id="SEo-Ac-x32">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
                                                                                 <font key="font" metaFont="smallSystem"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -3298,7 +3298,7 @@
                                                                             </textFieldCell>
                                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         </tableColumn>
-                                                                        <tableColumn identifier="10" width="22.5" minWidth="10" maxWidth="64" id="mrK-Xn-WSp">
+                                                                        <tableColumn identifier="10" width="11" minWidth="10" maxWidth="64" id="mrK-Xn-WSp">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
                                                                                 <font key="font" metaFont="smallSystem"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -3311,7 +3311,7 @@
                                                                             </textFieldCell>
                                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         </tableColumn>
-                                                                        <tableColumn identifier="11" width="22.5" minWidth="10" maxWidth="64" id="Y61-8Z-o8Q">
+                                                                        <tableColumn identifier="11" width="11" minWidth="10" maxWidth="64" id="Y61-8Z-o8Q">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
                                                                                 <font key="font" metaFont="smallSystem"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -3324,7 +3324,7 @@
                                                                             </textFieldCell>
                                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         </tableColumn>
-                                                                        <tableColumn identifier="12" width="22.5" minWidth="10" maxWidth="64" id="hvv-qI-8Wq">
+                                                                        <tableColumn identifier="12" width="11" minWidth="10" maxWidth="64" id="hvv-qI-8Wq">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
                                                                                 <font key="font" metaFont="smallSystem"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -3337,7 +3337,7 @@
                                                                             </textFieldCell>
                                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         </tableColumn>
-                                                                        <tableColumn identifier="13" width="22.5" minWidth="10" maxWidth="64" id="cPh-Ds-mmw">
+                                                                        <tableColumn identifier="13" width="11" minWidth="10" maxWidth="64" id="cPh-Ds-mmw">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
                                                                                 <font key="font" metaFont="smallSystem"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -3350,7 +3350,7 @@
                                                                             </textFieldCell>
                                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         </tableColumn>
-                                                                        <tableColumn identifier="14" width="22.5" minWidth="10" maxWidth="64" id="ZRR-rR-oBK">
+                                                                        <tableColumn identifier="14" width="11" minWidth="10" maxWidth="64" id="ZRR-rR-oBK">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
                                                                                 <font key="font" metaFont="smallSystem"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -3363,7 +3363,7 @@
                                                                             </textFieldCell>
                                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         </tableColumn>
-                                                                        <tableColumn identifier="15" width="22.5" minWidth="10" maxWidth="64" id="Bld-Ji-Igu">
+                                                                        <tableColumn identifier="15" width="14" minWidth="10" maxWidth="64" id="Bld-Ji-Igu">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
                                                                                 <font key="font" metaFont="smallSystem"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -3385,7 +3385,7 @@
                                                             <nil key="backgroundColor"/>
                                                         </clipView>
                                                         <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="tSf-4U-qnV">
-                                                            <rect key="frame" x="1" y="167" width="400" height="16"/>
+                                                            <rect key="frame" x="1" y="172" width="229" height="16"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                         </scroller>
                                                         <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="6cC-PJ-wMr">
@@ -3778,68 +3778,44 @@
                                             </view>
                                         </box>
                                         <colorWell fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qkw-HN-dLL">
-                                            <rect key="frame" x="16" y="9" width="23" height="23"/>
+                                            <rect key="frame" x="13" y="9" width="23" height="23"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <connections>
-                                                <action selector="deniseColorAction:" target="-2" id="5E1-Di-xsR"/>
-                                            </connections>
                                         </colorWell>
                                         <colorWell fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="hsn-xg-ZHy">
-                                            <rect key="frame" x="46" y="9" width="23" height="23"/>
+                                            <rect key="frame" x="37" y="9" width="23" height="23"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <connections>
-                                                <action selector="deniseColorAction:" target="-2" id="cUS-iz-2uG"/>
-                                            </connections>
                                         </colorWell>
                                         <colorWell fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="eMl-oM-YHf">
-                                            <rect key="frame" x="77" y="9" width="23" height="23"/>
+                                            <rect key="frame" x="62" y="9" width="23" height="23"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <connections>
-                                                <action selector="deniseColorAction:" target="-2" id="ZNs-yp-JMc"/>
-                                            </connections>
                                         </colorWell>
                                         <colorWell fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="JZl-HP-9ke">
-                                            <rect key="frame" x="109" y="9" width="23" height="23"/>
+                                            <rect key="frame" x="87" y="9" width="23" height="23"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <connections>
-                                                <action selector="deniseColorAction:" target="-2" id="9GL-Ve-Hp7"/>
-                                            </connections>
                                         </colorWell>
                                         <colorWell fixedFrame="YES" tag="4" translatesAutoresizingMaskIntoConstraints="NO" id="aJg-3S-E1Q">
-                                            <rect key="frame" x="139" y="9" width="23" height="23"/>
+                                            <rect key="frame" x="112" y="9" width="23" height="23"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <connections>
-                                                <action selector="deniseColorAction:" target="-2" id="17B-Ay-QWg"/>
-                                            </connections>
                                         </colorWell>
                                         <colorWell fixedFrame="YES" tag="5" translatesAutoresizingMaskIntoConstraints="NO" id="moI-TQ-UgE">
-                                            <rect key="frame" x="171" y="9" width="23" height="23"/>
+                                            <rect key="frame" x="138" y="9" width="23" height="23"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <connections>
-                                                <action selector="deniseColorAction:" target="-2" id="gon-LX-c9Z"/>
-                                            </connections>
                                         </colorWell>
                                         <colorWell fixedFrame="YES" tag="6" translatesAutoresizingMaskIntoConstraints="NO" id="fHG-L6-ir9">
-                                            <rect key="frame" x="201" y="9" width="23" height="23"/>
+                                            <rect key="frame" x="162" y="9" width="23" height="23"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <connections>
-                                                <action selector="deniseColorAction:" target="-2" id="ygb-ho-EBE"/>
-                                            </connections>
                                         </colorWell>
                                         <colorWell fixedFrame="YES" tag="7" translatesAutoresizingMaskIntoConstraints="NO" id="m8w-8B-86W">
-                                            <rect key="frame" x="232" y="9" width="23" height="23"/>
+                                            <rect key="frame" x="187" y="9" width="23" height="23"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <connections>
-                                                <action selector="deniseColorAction:" target="-2" id="q3l-ph-vHQ"/>
-                                            </connections>
                                         </colorWell>
                                         <box fixedFrame="YES" title="Auxiliary registers" translatesAutoresizingMaskIntoConstraints="NO" id="Ze1-gj-DvQ">
                                             <rect key="frame" x="260" y="44" width="269" height="123"/>
@@ -3906,196 +3882,124 @@
                                             </view>
                                         </box>
                                         <colorWell fixedFrame="YES" tag="24" translatesAutoresizingMaskIntoConstraints="NO" id="FK2-c8-aun">
-                                            <rect key="frame" x="757" y="9" width="23" height="23"/>
+                                            <rect key="frame" x="611" y="9" width="23" height="23"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <connections>
-                                                <action selector="deniseColorAction:" target="-2" id="aG7-vh-nQi"/>
-                                            </connections>
                                         </colorWell>
                                         <colorWell fixedFrame="YES" tag="25" translatesAutoresizingMaskIntoConstraints="NO" id="Nz7-X4-HDE">
-                                            <rect key="frame" x="788" y="9" width="23" height="23"/>
+                                            <rect key="frame" x="635" y="9" width="23" height="23"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <connections>
-                                                <action selector="deniseColorAction:" target="-2" id="jQT-Wi-mgi"/>
-                                            </connections>
                                         </colorWell>
                                         <colorWell fixedFrame="YES" tag="26" translatesAutoresizingMaskIntoConstraints="NO" id="O42-Mm-UJB">
-                                            <rect key="frame" x="819" y="9" width="23" height="23"/>
+                                            <rect key="frame" x="660" y="9" width="23" height="23"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <connections>
-                                                <action selector="deniseColorAction:" target="-2" id="KIx-P8-KtI"/>
-                                            </connections>
                                         </colorWell>
                                         <colorWell fixedFrame="YES" tag="27" translatesAutoresizingMaskIntoConstraints="NO" id="Xwb-ar-tZp">
-                                            <rect key="frame" x="850" y="9" width="23" height="23"/>
+                                            <rect key="frame" x="686" y="9" width="23" height="23"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <connections>
-                                                <action selector="deniseColorAction:" target="-2" id="F0j-bE-6I0"/>
-                                            </connections>
                                         </colorWell>
                                         <colorWell fixedFrame="YES" tag="28" translatesAutoresizingMaskIntoConstraints="NO" id="G9W-5T-z7S">
-                                            <rect key="frame" x="881" y="9" width="23" height="23"/>
+                                            <rect key="frame" x="711" y="9" width="23" height="23"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <connections>
-                                                <action selector="deniseColorAction:" target="-2" id="QVc-rl-hMj"/>
-                                            </connections>
                                         </colorWell>
                                         <colorWell fixedFrame="YES" tag="29" translatesAutoresizingMaskIntoConstraints="NO" id="xws-WY-96M">
-                                            <rect key="frame" x="912" y="9" width="23" height="23"/>
+                                            <rect key="frame" x="736" y="9" width="23" height="23"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <connections>
-                                                <action selector="deniseColorAction:" target="-2" id="asT-IH-SfJ"/>
-                                            </connections>
                                         </colorWell>
                                         <colorWell fixedFrame="YES" tag="30" translatesAutoresizingMaskIntoConstraints="NO" id="656-FY-qnx">
-                                            <rect key="frame" x="943" y="9" width="23" height="23"/>
+                                            <rect key="frame" x="761" y="9" width="23" height="23"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <connections>
-                                                <action selector="deniseColorAction:" target="-2" id="IvM-6h-uUh"/>
-                                            </connections>
                                         </colorWell>
                                         <colorWell fixedFrame="YES" tag="31" translatesAutoresizingMaskIntoConstraints="NO" id="Y3k-rp-yXc">
-                                            <rect key="frame" x="974" y="9" width="23" height="23"/>
+                                            <rect key="frame" x="786" y="9" width="23" height="23"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <connections>
-                                                <action selector="deniseColorAction:" target="-2" id="5hT-is-sKs"/>
-                                            </connections>
                                         </colorWell>
                                         <colorWell fixedFrame="YES" tag="16" translatesAutoresizingMaskIntoConstraints="NO" id="kEi-tB-lVj">
-                                            <rect key="frame" x="510" y="9" width="23" height="23"/>
+                                            <rect key="frame" x="411" y="9" width="23" height="23"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <connections>
-                                                <action selector="deniseColorAction:" target="-2" id="E8t-Tb-jnT"/>
-                                            </connections>
                                         </colorWell>
                                         <colorWell fixedFrame="YES" tag="17" translatesAutoresizingMaskIntoConstraints="NO" id="19W-DO-QUy">
-                                            <rect key="frame" x="541" y="9" width="23" height="23"/>
+                                            <rect key="frame" x="436" y="9" width="23" height="23"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <connections>
-                                                <action selector="deniseColorAction:" target="-2" id="K4P-Tw-ghl"/>
-                                            </connections>
                                         </colorWell>
                                         <colorWell fixedFrame="YES" tag="18" translatesAutoresizingMaskIntoConstraints="NO" id="9FY-Az-Td7">
-                                            <rect key="frame" x="572" y="9" width="23" height="23"/>
+                                            <rect key="frame" x="462" y="9" width="23" height="23"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <connections>
-                                                <action selector="deniseColorAction:" target="-2" id="giQ-Ek-yCr"/>
-                                            </connections>
                                         </colorWell>
                                         <colorWell fixedFrame="YES" tag="19" translatesAutoresizingMaskIntoConstraints="NO" id="I4A-Ml-cpp">
-                                            <rect key="frame" x="603" y="9" width="23" height="23"/>
+                                            <rect key="frame" x="487" y="9" width="23" height="23"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <connections>
-                                                <action selector="deniseColorAction:" target="-2" id="Q4f-LC-GuN"/>
-                                            </connections>
                                         </colorWell>
                                         <colorWell fixedFrame="YES" tag="20" translatesAutoresizingMaskIntoConstraints="NO" id="vE9-qd-VjJ">
-                                            <rect key="frame" x="634" y="9" width="23" height="23"/>
+                                            <rect key="frame" x="512" y="9" width="23" height="23"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <connections>
-                                                <action selector="deniseColorAction:" target="-2" id="vAz-YP-gFc"/>
-                                            </connections>
                                         </colorWell>
                                         <colorWell fixedFrame="YES" tag="21" translatesAutoresizingMaskIntoConstraints="NO" id="hcL-jC-zPK">
-                                            <rect key="frame" x="665" y="9" width="23" height="23"/>
+                                            <rect key="frame" x="536" y="9" width="23" height="23"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <connections>
-                                                <action selector="deniseColorAction:" target="-2" id="ECN-FE-wpA"/>
-                                            </connections>
                                         </colorWell>
                                         <colorWell fixedFrame="YES" tag="22" translatesAutoresizingMaskIntoConstraints="NO" id="txo-5M-WNm">
-                                            <rect key="frame" x="696" y="9" width="23" height="23"/>
+                                            <rect key="frame" x="561" y="9" width="23" height="23"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <connections>
-                                                <action selector="deniseColorAction:" target="-2" id="TWs-yh-BVe"/>
-                                            </connections>
                                         </colorWell>
                                         <colorWell fixedFrame="YES" tag="23" translatesAutoresizingMaskIntoConstraints="NO" id="ncA-bP-JdH">
-                                            <rect key="frame" x="726" y="9" width="23" height="23"/>
+                                            <rect key="frame" x="586" y="9" width="23" height="23"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <connections>
-                                                <action selector="deniseColorAction:" target="-2" id="BnP-Ui-3M6"/>
-                                            </connections>
                                         </colorWell>
                                         <colorWell fixedFrame="YES" tag="8" translatesAutoresizingMaskIntoConstraints="NO" id="LO4-7f-fNk">
-                                            <rect key="frame" x="263" y="9" width="23" height="23"/>
+                                            <rect key="frame" x="212" y="9" width="23" height="23"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <connections>
-                                                <action selector="deniseColorAction:" target="-2" id="zWN-If-0Zo"/>
-                                            </connections>
                                         </colorWell>
                                         <colorWell fixedFrame="YES" tag="9" translatesAutoresizingMaskIntoConstraints="NO" id="RuT-38-xCh">
-                                            <rect key="frame" x="294" y="9" width="23" height="23"/>
+                                            <rect key="frame" x="237" y="9" width="23" height="23"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <connections>
-                                                <action selector="deniseColorAction:" target="-2" id="ewn-1e-7a8"/>
-                                            </connections>
                                         </colorWell>
                                         <colorWell fixedFrame="YES" tag="10" translatesAutoresizingMaskIntoConstraints="NO" id="qb0-9u-5Oa">
-                                            <rect key="frame" x="325" y="9" width="23" height="23"/>
+                                            <rect key="frame" x="262" y="9" width="23" height="23"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <connections>
-                                                <action selector="deniseColorAction:" target="-2" id="Krm-Nc-azZ"/>
-                                            </connections>
                                         </colorWell>
                                         <colorWell fixedFrame="YES" tag="11" translatesAutoresizingMaskIntoConstraints="NO" id="dvL-Rq-qaR">
-                                            <rect key="frame" x="355" y="9" width="23" height="23"/>
+                                            <rect key="frame" x="287" y="9" width="23" height="23"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <connections>
-                                                <action selector="deniseColorAction:" target="-2" id="n6R-AE-BpR"/>
-                                            </connections>
                                         </colorWell>
                                         <colorWell fixedFrame="YES" tag="12" translatesAutoresizingMaskIntoConstraints="NO" id="lFU-PF-72k">
+                                            <rect key="frame" x="312" y="9" width="23" height="23"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </colorWell>
+                                        <colorWell fixedFrame="YES" tag="13" translatesAutoresizingMaskIntoConstraints="NO" id="oAq-6N-sXW">
+                                            <rect key="frame" x="336" y="9" width="23" height="23"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </colorWell>
+                                        <colorWell fixedFrame="YES" tag="14" translatesAutoresizingMaskIntoConstraints="NO" id="xBN-Dc-z9Y">
+                                            <rect key="frame" x="362" y="9" width="23" height="23"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </colorWell>
+                                        <colorWell fixedFrame="YES" tag="15" translatesAutoresizingMaskIntoConstraints="NO" id="gRn-TH-TB4">
                                             <rect key="frame" x="387" y="9" width="23" height="23"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <connections>
-                                                <action selector="deniseColorAction:" target="-2" id="eER-fb-2TF"/>
-                                            </connections>
-                                        </colorWell>
-                                        <colorWell fixedFrame="YES" tag="13" translatesAutoresizingMaskIntoConstraints="NO" id="oAq-6N-sXW">
-                                            <rect key="frame" x="417" y="9" width="23" height="23"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <connections>
-                                                <action selector="deniseColorAction:" target="-2" id="6Gh-xt-XHR"/>
-                                            </connections>
-                                        </colorWell>
-                                        <colorWell fixedFrame="YES" tag="14" translatesAutoresizingMaskIntoConstraints="NO" id="xBN-Dc-z9Y">
-                                            <rect key="frame" x="448" y="9" width="23" height="23"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <connections>
-                                                <action selector="deniseColorAction:" target="-2" id="CFL-W3-N38"/>
-                                            </connections>
-                                        </colorWell>
-                                        <colorWell fixedFrame="YES" tag="15" translatesAutoresizingMaskIntoConstraints="NO" id="gRn-TH-TB4">
-                                            <rect key="frame" x="480" y="9" width="23" height="23"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <connections>
-                                                <action selector="deniseColorAction:" target="-2" id="O3q-7G-FUQ"/>
-                                            </connections>
                                         </colorWell>
                                         <box fixedFrame="YES" title="Display window" translatesAutoresizingMaskIntoConstraints="NO" id="ZI6-1F-iah">
                                             <rect key="frame" x="16" y="44" width="237" height="123"/>
@@ -4243,9 +4147,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="paulaINTREQAction:" target="-2" id="OtH-KJ-U3N"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="13" translatesAutoresizingMaskIntoConstraints="NO" id="wtW-iN-dmb">
                                                         <rect key="frame" x="132" y="276" width="64" height="20"/>
@@ -4254,9 +4155,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="paulaINTREQAction:" target="-2" id="5eN-NN-3ui"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="12" translatesAutoresizingMaskIntoConstraints="NO" id="zy8-GY-wLO">
                                                         <rect key="frame" x="132" y="256" width="75" height="20"/>
@@ -4265,9 +4163,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="paulaINTREQAction:" target="-2" id="lGS-Y5-oLJ"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="11" translatesAutoresizingMaskIntoConstraints="NO" id="Pc6-Bl-EAj">
                                                         <rect key="frame" x="132" y="236" width="48" height="20"/>
@@ -4276,9 +4171,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="paulaINTREQAction:" target="-2" id="GwJ-zF-o2b"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="10" translatesAutoresizingMaskIntoConstraints="NO" id="Xr8-yV-kOy">
                                                         <rect key="frame" x="132" y="216" width="59" height="20"/>
@@ -4287,9 +4179,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="paulaINTREQAction:" target="-2" id="kHw-Ss-Prw"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="9" translatesAutoresizingMaskIntoConstraints="NO" id="BbS-ht-wSo">
                                                         <rect key="frame" x="132" y="196" width="59" height="20"/>
@@ -4298,9 +4187,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="paulaINTREQAction:" target="-2" id="bjb-zU-93T"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="8" translatesAutoresizingMaskIntoConstraints="NO" id="Ysn-M6-ZOT">
                                                         <rect key="frame" x="132" y="176" width="57" height="20"/>
@@ -4309,9 +4195,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="paulaINTREQAction:" target="-2" id="Dp6-PB-AD5"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="7" translatesAutoresizingMaskIntoConstraints="NO" id="yBL-47-Jwz">
                                                         <rect key="frame" x="132" y="156" width="59" height="20"/>
@@ -4320,9 +4203,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="paulaINTREQAction:" target="-2" id="gld-6o-70l"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="6" translatesAutoresizingMaskIntoConstraints="NO" id="e4s-ij-STz">
                                                         <rect key="frame" x="132" y="136" width="51" height="20"/>
@@ -4331,9 +4211,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="paulaINTREQAction:" target="-2" id="kxS-Dp-kMa"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="5" translatesAutoresizingMaskIntoConstraints="NO" id="OZA-1f-yTa">
                                                         <rect key="frame" x="132" y="116" width="65" height="20"/>
@@ -4342,9 +4219,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="paulaINTREQAction:" target="-2" id="Pev-US-MEW"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="4" translatesAutoresizingMaskIntoConstraints="NO" id="oEA-u4-uVE">
                                                         <rect key="frame" x="132" y="96" width="67" height="20"/>
@@ -4353,9 +4227,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="paulaINTREQAction:" target="-2" id="BDz-1w-5rh"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="HD3-R3-9yP">
                                                         <rect key="frame" x="132" y="76" width="66" height="20"/>
@@ -4364,9 +4235,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="paulaINTREQAction:" target="-2" id="jrA-2N-QO4"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="OXP-le-HxH">
                                                         <rect key="frame" x="132" y="56" width="57" height="20"/>
@@ -4375,9 +4243,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="paulaINTREQAction:" target="-2" id="vlQ-EN-Ag8"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="F91-q8-P1m">
                                                         <rect key="frame" x="132" y="36" width="74" height="20"/>
@@ -4386,9 +4251,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="paulaINTREQAction:" target="-2" id="tRT-zc-Y0U"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="M8M-D2-4G8">
                                                         <rect key="frame" x="132" y="16" width="48" height="20"/>
@@ -4397,9 +4259,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="paulaINTREQAction:" target="-2" id="GL0-RS-M0x"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="14" translatesAutoresizingMaskIntoConstraints="NO" id="JTa-qW-Eke">
                                                         <rect key="frame" x="43" y="296" width="62" height="20"/>
@@ -4408,9 +4267,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="paulaINTENAAction:" target="-2" id="4JR-BU-9cA"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="13" translatesAutoresizingMaskIntoConstraints="NO" id="ZnY-pH-jqI">
                                                         <rect key="frame" x="41" y="276" width="64" height="20"/>
@@ -4419,9 +4275,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="paulaINTENAAction:" target="-2" id="E9F-gq-Vj9"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="12" translatesAutoresizingMaskIntoConstraints="NO" id="J1H-Vy-1r5">
                                                         <rect key="frame" x="30" y="256" width="75" height="20"/>
@@ -4430,9 +4283,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="paulaINTENAAction:" target="-2" id="vHW-lk-3ON"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="11" translatesAutoresizingMaskIntoConstraints="NO" id="ASa-gY-n2Z">
                                                         <rect key="frame" x="57" y="236" width="48" height="20"/>
@@ -4441,9 +4291,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="paulaINTENAAction:" target="-2" id="37D-sh-xFK"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="10" translatesAutoresizingMaskIntoConstraints="NO" id="MHB-0V-Htu">
                                                         <rect key="frame" x="46" y="216" width="59" height="20"/>
@@ -4452,9 +4299,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="paulaINTENAAction:" target="-2" id="Ych-Zm-9HW"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="9" translatesAutoresizingMaskIntoConstraints="NO" id="Yah-Gw-lon">
                                                         <rect key="frame" x="46" y="196" width="59" height="20"/>
@@ -4463,9 +4307,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="paulaINTENAAction:" target="-2" id="lnF-ku-rMD"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="8" translatesAutoresizingMaskIntoConstraints="NO" id="Ke3-tV-Yte">
                                                         <rect key="frame" x="48" y="176" width="57" height="20"/>
@@ -4474,9 +4315,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="paulaINTENAAction:" target="-2" id="xxL-0P-9ZE"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="7" translatesAutoresizingMaskIntoConstraints="NO" id="Wne-bO-9pi">
                                                         <rect key="frame" x="46" y="156" width="59" height="20"/>
@@ -4485,9 +4323,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="paulaINTENAAction:" target="-2" id="ibC-Iz-mel"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="6" translatesAutoresizingMaskIntoConstraints="NO" id="whS-zb-3tz">
                                                         <rect key="frame" x="54" y="136" width="51" height="20"/>
@@ -4496,9 +4331,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="paulaINTENAAction:" target="-2" id="xoq-4y-u7U"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="5" translatesAutoresizingMaskIntoConstraints="NO" id="yC2-xt-DYy">
                                                         <rect key="frame" x="40" y="116" width="65" height="20"/>
@@ -4507,9 +4339,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="paulaINTENAAction:" target="-2" id="Afb-hO-7TK"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="4" translatesAutoresizingMaskIntoConstraints="NO" id="Dq3-4y-0Wi">
                                                         <rect key="frame" x="38" y="96" width="67" height="20"/>
@@ -4518,9 +4347,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="paulaINTENAAction:" target="-2" id="iY0-Lw-aWP"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="7G9-lx-UQU">
                                                         <rect key="frame" x="39" y="76" width="66" height="20"/>
@@ -4529,9 +4355,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="paulaINTENAAction:" target="-2" id="Noy-lI-mG4"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="tCq-Ec-iWn">
                                                         <rect key="frame" x="48" y="56" width="57" height="20"/>
@@ -4540,9 +4363,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="paulaINTENAAction:" target="-2" id="KYi-6P-sbV"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="Djg-WO-eFj">
                                                         <rect key="frame" x="31" y="36" width="74" height="20"/>
@@ -4551,9 +4371,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="paulaINTENAAction:" target="-2" id="y5M-Nz-Jme"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="x74-iy-AEc">
                                                         <rect key="frame" x="57" y="16" width="48" height="20"/>
@@ -4562,9 +4379,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="paulaINTENAAction:" target="-2" id="n0d-uC-rob"/>
-                                                        </connections>
                                                     </button>
                                                 </subviews>
                                             </view>

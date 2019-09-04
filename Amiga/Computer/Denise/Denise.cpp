@@ -190,7 +190,7 @@ Denise::pokeBPLCON0(uint16_t value)
 }
 
 void
-Denise::pokeBPLCON0(uint16_t oldValue, uint16_t newValue)
+Denise::setBPLCON0(uint16_t oldValue, uint16_t newValue)
 {
     debug(BPLREG_DEBUG, "pokeBPLCON0(%X,%X)\n", oldValue, newValue);
 
@@ -392,7 +392,8 @@ Denise::updateSpritePriorities(uint16_t bplcon2)
 
         default:
             // TODO: Check the effect of illegal values
-            assert(false);
+            // warn("Illegal sprite priority value: $%X\n", bplcon2 & 0b111);
+            // assert(false);
             break;
     }
 

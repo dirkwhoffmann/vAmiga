@@ -783,7 +783,7 @@ public:
 
     // Updates the DMA time slot allocation's jump table.
     void updateJumpTable(int16_t to);
-    void updateJumpTable() { updateJumpTable(HPOS_MAX + 1); }
+    void updateJumpTable() { updateJumpTable(HPOS_MAX); }
 
     // Returns true if the event in the specified slot is the Lx event.
     bool isLastLx(int16_t dmaCycle);
@@ -855,7 +855,7 @@ public:
 
     // BPLCON0
     void pokeBPLCON0(uint16_t value);
-    void pokeBPLCON0(uint16_t oldValue, uint16_t newValue);
+    void setBPLCON0(uint16_t oldValue, uint16_t newValue);
 
     // BPLxPTL, BPLxPTH
     template <int x, PokeSource s> void pokeBPLxPTH(uint16_t value);

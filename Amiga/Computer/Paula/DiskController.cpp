@@ -176,7 +176,7 @@ DiskController::insertDisk(class Disk *disk, int nr, Cycle delay)
         df[nr]->ejectDisk();
 
         // Make sure there is enough time between ejecting and inserting
-        delay = MAX(MSEC(1000), delay);
+        delay = MAX(MSEC(1500), delay);
     }
 
     diskToInsert = disk;
