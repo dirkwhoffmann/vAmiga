@@ -812,7 +812,7 @@ Agnus::pokeDMACON(uint16_t value)
     }
 
     // Schedule the value to be updated
-    if (dmaconNew != dmacon) delay |= AGS_DMACON_0;
+    if (dmaconNew != dmacon) setActionFlag(AGN_DMACON_0);
 
     /*
     // Compute the real value (Bit 15 determines if bits are set or cleared)
@@ -1084,7 +1084,7 @@ Agnus::pokeDIWSTRT(uint16_t value)
 {
     debug(DIW_DEBUG, "pokeDIWSTRT<%s>(%X)\n", pokeSourceName(s), value);
     diwstrtNew = value;
-    delay |= AGS_DIWSTRT_0;
+    setActionFlag(AGN_DIWSTRT_0);
 }
 
 template <PokeSource s> void
@@ -1092,7 +1092,7 @@ Agnus::pokeDIWSTOP(uint16_t value)
 {
     debug(DIW_DEBUG, "pokeDIWSTOP<%s>(%X)\n", pokeSourceName(s), value);
     diwstopNew = value;
-    delay |= AGS_DIWSTOP_0;
+    setActionFlag(AGN_DIWSTOP_0);
 }
 
 void
@@ -1321,12 +1321,12 @@ Agnus::pokeBPLxPTH(uint16_t value)
 
     // Schedule the register updated
     switch (x) {
-        case 1: delay |= AGS_BPL1PTH_0; break;
-        case 2: delay |= AGS_BPL2PTH_0; break;
-        case 3: delay |= AGS_BPL3PTH_0; break;
-        case 4: delay |= AGS_BPL4PTH_0; break;
-        case 5: delay |= AGS_BPL5PTH_0; break;
-        case 6: delay |= AGS_BPL6PTH_0; break;
+        case 1: setActionFlag(AGN_BPL1PTH_0); break;
+        case 2: setActionFlag(AGN_BPL2PTH_0); break;
+        case 3: setActionFlag(AGN_BPL3PTH_0); break;
+        case 4: setActionFlag(AGN_BPL4PTH_0); break;
+        case 5: setActionFlag(AGN_BPL5PTH_0); break;
+        case 6: setActionFlag(AGN_BPL6PTH_0); break;
     }
 }
 
@@ -1343,12 +1343,12 @@ Agnus::pokeBPLxPTL(uint16_t value)
 
     // Schedule the register updated
     switch (x) {
-        case 1: delay |= AGS_BPL1PTL_0; break;
-        case 2: delay |= AGS_BPL2PTL_0; break;
-        case 3: delay |= AGS_BPL3PTL_0; break;
-        case 4: delay |= AGS_BPL4PTL_0; break;
-        case 5: delay |= AGS_BPL5PTL_0; break;
-        case 6: delay |= AGS_BPL6PTL_0; break;
+        case 1: setActionFlag(AGN_BPL1PTL_0); break;
+        case 2: setActionFlag(AGN_BPL2PTL_0); break;
+        case 3: setActionFlag(AGN_BPL3PTL_0); break;
+        case 4: setActionFlag(AGN_BPL4PTL_0); break;
+        case 5: setActionFlag(AGN_BPL5PTL_0); break;
+        case 6: setActionFlag(AGN_BPL6PTL_0); break;
     }
 }
 
@@ -1413,7 +1413,7 @@ Agnus::pokeBPL1MOD(uint16_t value)
     bpl1modNew = int16_t(value & 0xFFFE);
 
     // Schedule the register updated
-    if (bpl1modNew != bpl1mod) delay |= AGS_BPL1MOD_0;
+    if (bpl1modNew != bpl1mod) setActionFlag(AGN_BPL1MOD_0);
 }
 
 void
@@ -1432,7 +1432,7 @@ Agnus::pokeBPL2MOD(uint16_t value)
     bpl2modNew = int16_t(value & 0xFFFE);
 
     // Schedule the register updated
-    if (bpl2modNew != bpl2mod) delay |= AGS_BPL2MOD_0;
+    if (bpl2modNew != bpl2mod) setActionFlag(AGN_BPL2MOD_0);
 }
 
 void
@@ -1466,7 +1466,7 @@ Agnus::pokeBPLCON0(uint16_t value)
     if (bplcon0 != value) {
 
         bplcon0New = value;
-        delay |= AGS_BPLCON0_0;
+        setActionFlag(AGN_BPLCON0_0);
     }
 }
 
@@ -1511,13 +1511,6 @@ Agnus::setBPLCON0(uint16_t oldValue, uint16_t newValue)
         // Update the DMA allocation table
         allocateBplSlots(dmacon, newValue, pos.h);
 
-        // EXPERIMENTAL
-        /*
-        int posh = pos.h + 2;
-        allocateBplSlots(dmacon, newBplcon0, posh);
-        dumpBplEventTable();
-        */
-
         // Since the table has changed, we also need to update the event slot
         scheduleBplEventForCycle(pos.h);
 
@@ -1544,96 +1537,62 @@ Agnus::setBPLCON0(uint16_t oldValue, uint16_t newValue)
 }
 
 void
-Agnus::execute(DMACycle cycles)
+Agnus::execute()
 {
-    for (DMACycle i = 0; i < cycles; i++) {
+    // Process pending events
+    if (clock >= nextTrigger) executeEventsUntil(clock);
 
-        // Check if there is additional work to do in this cycle
-        if (delay) {
+    // Advance the internal clock and the horizontal counter
+    clock += DMA_CYCLES(1);
+    pos.h++;
 
-            // Check for horizontal sync
-            if (delay & AGS_HSYNC) hsyncHandler();
-
-            // Handle all pending register changes
-            if (delay & AGS_REG_CHANGE) updateRegisters();
-
-            // Move action flags one bit to the left
-            delay = (delay << 1) & AGS_DELAY_MASK;
-        }
-
-        // Process all pending events
-        if (clock >= nextTrigger) executeEventsUntil(clock);
-
-        // Advance the internal counters
-        pos.h++;
-
-        // If this assertion hits, the HSYNC event hasn't been served
-        assert(pos.h <= HPOS_CNT);
-
-        clock += DMA_CYCLES(1);
-    }
+    // If this assertion hits, the HSYNC event hasn't been served
+    assert(pos.h <= HPOS_CNT);
 }
 
-/*
+#ifdef AGNUS_EXEC_DEBUG
+
 void
 Agnus::executeUntil(Cycle targetClock)
 {
-    execute((targetClock - clock) / DMA_CYCLES(1));
+    assert(targetClock >= clock);
+
+    // Align to DMA cycle raster
+    targetClock &= ~0b111;
+
+    // Compute the number of DMA cycles to execute
+    DMACycle  dmaCycles = (targetClock - clock) / DMA_CYCLES(1);
+
+    // Execute DMA cycles one after another
+    for (DMACycle i = 0; i < dmaCycles; i++) execute();
 }
-*/
 
-/*
- Optimization:
- - Move action flags to AGN_SLOT
- - After that, try those alternative implementations:
- */
+#else
 
-/*
 void
 Agnus::executeUntil(Cycle targetClock)
 {
-    targetClock = AS_DMA_CYCLES(targetClock); // MOVE TO CALLEE
-    assert(isDMACycle(targetClock));
+    assert(targetClock >= clock);
 
-    Cycle dmaCycles = AS_DMA_CYCLES(targetClock - clock);
+    // Align to DMA cycle raster
+    targetClock &= ~0b111;
 
-    if (nextTrigger > targetClock) {
+    // Compute the number of DMA cycles to execute
+    DMACycle  dmaCycles = (targetClock - clock) / DMA_CYCLES(1);
 
-        pos.h += dmaCycles;
+    if (targetClock < nextTrigger) {
+
+        // Advance directly to the target clock
         clock = targetClock;
-        return;
+        pos.h += dmaCycles;
 
     } else {
 
-        execute(dmaCycles);
+        // Execute DMA cycles one after another
+        for (DMACycle i = 0; i < dmaCycles; i++) execute();
     }
 }
-*/
-/*
-void
-Agnus::executeUntil(Cycle targetClock)
-{
-    targetClock = AS_DMA_CYCLES(targetClock); // MOVE TO CALLEE
-    assert(isDMACycle(targetClock));
-
-    while (clock <= targetClock) {
-
-        if (nextTrigger > targetClock) {
-
-            pos.h += AS_DMA_CYCLES(targetClock - clock);
-            clock = targetClock;
-            return;
-
-        } else {
-
-            pos.h += AS_DMA_CYCLES(nextTrigger - clock);
-            clock = nextTrigger;
-
-            executeEventsUntil(nextTrigger);
-        }
-    }
-}
-*/
+#endif
 
 #ifdef SLOW_BLT_DEBUG
 
@@ -1676,50 +1635,57 @@ Agnus::executeUntilBusIsFree()
 #endif
 
 void
+Agnus::setActionFlag(uint64_t flag)
+{
+    actions |= flag;
+    scheduleImm<AGN_SLOT>(AGN_ACTIONS);
+}
+
+void
 Agnus::updateRegisters()
 {
     // BPLCON0 (Agnus view)
-    if (delay & AGS_BPLCON0_3) setBPLCON0(bplcon0, bplcon0New);
+    if (actions & AGN_BPLCON0_3) setBPLCON0(bplcon0, bplcon0New);
 
     // BPLCON0 (Denise view)
-    if (delay & AGS_BPLCON0_DENISE_0) denise->setBPLCON0(denise->bplcon0, denise->bplcon0New);
+    if (actions & AGN_BPLCON0_DENISE_0) denise->setBPLCON0(denise->bplcon0, denise->bplcon0New);
 
     // BPLCON1
-    if (delay & AGS_BPLCON1_1) denise->setBPLCON1(denise->bplcon1New);
+    if (actions & AGN_BPLCON1_1) denise->setBPLCON1(denise->bplcon1New);
 
     // BPLCON1
-    if (delay & AGS_BPLCON2_1) denise->setBPLCON2(denise->bplcon2New);
+    if (actions & AGN_BPLCON2_1) denise->setBPLCON2(denise->bplcon2New);
 
     // DMACON
-    if (delay & AGS_DMACON_1) setDMACON(dmacon, dmaconNew);
+    if (actions & AGN_DMACON_1) setDMACON(dmacon, dmaconNew);
 
     // DIWSTRT
-    if (delay & AGS_DIWSTRT_1) setDIWSTRT(diwstrtNew);
+    if (actions & AGN_DIWSTRT_1) setDIWSTRT(diwstrtNew);
 
     // DIWSTOP
-    if (delay & AGS_DIWSTOP_1) setDIWSTOP(diwstopNew);
+    if (actions & AGN_DIWSTOP_1) setDIWSTOP(diwstopNew);
 
     // BPL1MOD
-    if (delay & AGS_BPL1MOD_1) setBPL1MOD(bpl1modNew);
+    if (actions & AGN_BPL1MOD_1) setBPL1MOD(bpl1modNew);
 
     // BPL2MOD
-    if (delay & AGS_BPL2MOD_1) setBPL2MOD(bpl2modNew);
+    if (actions & AGN_BPL2MOD_1) setBPL2MOD(bpl2modNew);
 
     // BPLxPT
-    if (delay & (AGS_BPLxPTH_1 | AGS_BPLxPTL_1)) {
+    if (actions & (AGN_BPLxPTH_1 | AGN_BPLxPTL_1)) {
 
-        if (delay & AGS_BPL1PTH_1) setBPLxPTH(1, bplpthNew[0]);
-        if (delay & AGS_BPL1PTL_1) setBPLxPTL(1, bplptlNew[0]);
-        if (delay & AGS_BPL2PTH_1) setBPLxPTH(2, bplpthNew[1]);
-        if (delay & AGS_BPL2PTL_1) setBPLxPTL(2, bplptlNew[1]);
-        if (delay & AGS_BPL3PTH_1) setBPLxPTH(3, bplpthNew[2]);
-        if (delay & AGS_BPL3PTL_1) setBPLxPTL(3, bplptlNew[2]);
-        if (delay & AGS_BPL4PTH_1) setBPLxPTH(4, bplpthNew[3]);
-        if (delay & AGS_BPL4PTL_1) setBPLxPTL(4, bplptlNew[3]);
-        if (delay & AGS_BPL5PTH_1) setBPLxPTH(5, bplpthNew[4]);
-        if (delay & AGS_BPL5PTL_1) setBPLxPTL(5, bplptlNew[4]);
-        if (delay & AGS_BPL6PTH_1) setBPLxPTH(6, bplpthNew[5]);
-        if (delay & AGS_BPL6PTL_1) setBPLxPTL(6, bplptlNew[5]);
+        if (actions & AGN_BPL1PTH_1) setBPLxPTH(1, bplpthNew[0]);
+        if (actions & AGN_BPL1PTL_1) setBPLxPTL(1, bplptlNew[0]);
+        if (actions & AGN_BPL2PTH_1) setBPLxPTH(2, bplpthNew[1]);
+        if (actions & AGN_BPL2PTL_1) setBPLxPTL(2, bplptlNew[1]);
+        if (actions & AGN_BPL3PTH_1) setBPLxPTH(3, bplpthNew[2]);
+        if (actions & AGN_BPL3PTL_1) setBPLxPTL(3, bplptlNew[2]);
+        if (actions & AGN_BPL4PTH_1) setBPLxPTH(4, bplpthNew[3]);
+        if (actions & AGN_BPL4PTL_1) setBPLxPTL(4, bplptlNew[3]);
+        if (actions & AGN_BPL5PTH_1) setBPLxPTH(5, bplpthNew[4]);
+        if (actions & AGN_BPL5PTL_1) setBPLxPTL(5, bplptlNew[4]);
+        if (actions & AGN_BPL6PTH_1) setBPLxPTH(6, bplpthNew[5]);
+        if (actions & AGN_BPL6PTL_1) setBPLxPTL(6, bplptlNew[5]);
     }
 }
 

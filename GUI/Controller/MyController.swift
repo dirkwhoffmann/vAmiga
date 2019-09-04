@@ -353,19 +353,18 @@ class MyController: NSWindowController, MessageReceiver {
     }
     
     // Returns the icon of the sand clock in the bottom bar
-    /*
     var hourglassIcon: NSImage? {
-        if amiga.warp() {
-            if alwaysWarp {
-                return NSImage.init(named: "hourglass3Template")
-            } else {
-                return NSImage.init(named: "hourglass2Template")
-            }
-        } else {
-            return NSImage.init(named: "hourglass1Template")
+        switch warpMode {
+        case .auto:
+            return NSImage.init(named: amiga.warp() ? "hourglass3Template" : "hourglass1Template")
+        case .on:
+            return NSImage.init(named: "warpLockOnTemplate")
+        case .off:
+            return NSImage.init(named: "warpLockOffTemplate")
         }
     }
-    */
+
+    /*
     var hourglassIcon: NSImage? {
         if amiga.warp() {
             if warpMode == .auto {
@@ -377,6 +376,7 @@ class MyController: NSWindowController, MessageReceiver {
             return NSImage.init(named: "hourglass1Template")
         }
     }
+    */
 
     //
     // Outlets
@@ -888,25 +888,16 @@ extension MyController {
     // Action methods (status bar)
     //
     
-    @IBAction func userWarpAction(_ sender: Any!) {
+    @IBAction func warpAction(_ sender: Any!) {
 
         track()
 
-        // Disable auto mode and toggle between on and off
         switch warpMode {
-
-        case .auto: warpMode = amiga.warp() ? .off : .on
+        case .auto: warpMode = .on
         case .on: warpMode = .off
-        case .off: warpMode = .on
+        case .off: warpMode = .auto
         }
 
-        refreshStatusBar()
-    }
-
-    @IBAction func autoWarpAction(_ sender: Any!) {
-
-        track()
-        warpMode = .auto
         refreshStatusBar()
     }
 

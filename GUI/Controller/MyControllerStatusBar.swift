@@ -21,7 +21,6 @@ extension MyController {
         let df1spinning = amiga.diskController.spinning(1)
         let df2spinning = amiga.diskController.spinning(2)
         let df3spinning = amiga.diskController.spinning(3)
-        let userWarp = warpMode != .auto
 
         // Icons
         df0Disk.image = amiga.df0.icon
@@ -29,11 +28,6 @@ extension MyController {
         df2Disk.image = amiga.df2.icon
         df3Disk.image = amiga.df3.icon
         warpIcon.image = hourglassIcon
-
-        // Speed and frame rate
-        let x = userWarp ? warpLockIcon.frame.origin.x : warpIcon.frame.origin.x
-        let w = clockSpeed.frame.width
-        clockSpeed.frame.origin.x = x - w
 
         // Animation
         df0spinning ? df0DMA.startAnimation(self) : df0DMA.stopAnimation(self)
@@ -63,8 +57,7 @@ extension MyController {
             
             clockSpeed: true,
             clockSpeedBar: true,
-            warpIcon: true,
-            warpLockIcon: userWarp
+            warpIcon: true
         ]
         
         for (item, visible) in items {

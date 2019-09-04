@@ -13,78 +13,85 @@
 #define _AGNUS_T_INC
 
 // Action flags
-#define AGS_HSYNC            (1ULL << 0)
-#define AGS_BPLCON0_0        (1ULL << 1)  // BPLCON0 change (Agnus view)
-#define AGS_BPLCON0_1        (1ULL << 2)
-#define AGS_BPLCON0_2        (1ULL << 3)
-#define AGS_BPLCON0_3        (1ULL << 4)
-#define AGS_BPLCON0_DENISE_0 (1ULL << 5)  // BPLCON0 change (Denise view)
-#define AGS_BPLCON0_DENISE_1 (1ULL << 6)
-#define AGS_BPLCON1_0        (1ULL << 7)  // BPLCON1
-#define AGS_BPLCON1_1        (1ULL << 8)
-#define AGS_BPLCON2_0        (1ULL << 9)  // BPLCON2
-#define AGS_BPLCON2_1        (1ULL << 10)
-#define AGS_DMACON_0         (1ULL << 11) // DMACON
-#define AGS_DMACON_1         (1ULL << 12)
-#define AGS_DIWSTRT_0        (1ULL << 13) // DIWSTRT
-#define AGS_DIWSTRT_1        (1ULL << 14)
-#define AGS_DIWSTOP_0        (1ULL << 15) // AGS_DIWSTOP
-#define AGS_DIWSTOP_1        (1ULL << 16)
-#define AGS_BPL1MOD_0        (1ULL << 17)
-#define AGS_BPL1MOD_1        (1ULL << 18)
-#define AGS_BPL2MOD_0        (1ULL << 19)
-#define AGS_BPL2MOD_1        (1ULL << 20)
-#define AGS_BPL1PTH_0        (1ULL << 21)
-#define AGS_BPL1PTH_1        (1ULL << 22)
-#define AGS_BPL1PTL_0        (1ULL << 23)
-#define AGS_BPL1PTL_1        (1ULL << 24)
-#define AGS_BPL2PTH_0        (1ULL << 25)
-#define AGS_BPL2PTH_1        (1ULL << 26)
-#define AGS_BPL2PTL_0        (1ULL << 27)
-#define AGS_BPL2PTL_1        (1ULL << 28)
-#define AGS_BPL3PTH_0        (1ULL << 29)
-#define AGS_BPL3PTH_1        (1ULL << 30)
-#define AGS_BPL3PTL_0        (1ULL << 31)
-#define AGS_BPL3PTL_1        (1ULL << 32)
-#define AGS_BPL4PTH_0        (1ULL << 33)
-#define AGS_BPL4PTH_1        (1ULL << 34)
-#define AGS_BPL4PTL_0        (1ULL << 35)
-#define AGS_BPL4PTL_1        (1ULL << 36)
-#define AGS_BPL5PTH_0        (1ULL << 37)
-#define AGS_BPL5PTH_1        (1ULL << 38)
-#define AGS_BPL5PTL_0        (1ULL << 39)
-#define AGS_BPL5PTL_1        (1ULL << 40)
-#define AGS_BPL6PTH_0        (1ULL << 41)
-#define AGS_BPL6PTH_1        (1ULL << 42)
-#define AGS_BPL6PTL_0        (1ULL << 43)
-#define AGS_BPL6PTL_1        (1ULL << 44)
+#define AGN_HSYNC            (1ULL << 0)
+#define AGN_BPLCON0_0        (1ULL << 1)  // BPLCON0 change (Agnus view)
+#define AGN_BPLCON0_1        (1ULL << 2)
+#define AGN_BPLCON0_2        (1ULL << 3)
+#define AGN_BPLCON0_3        (1ULL << 4)
+#define AGN_BPLCON0_DENISE_0 (1ULL << 5)  // BPLCON0 change (Denise view)
+#define AGN_BPLCON0_DENISE_1 (1ULL << 6)
+#define AGN_BPLCON1_0        (1ULL << 7)  // BPLCON1
+#define AGN_BPLCON1_1        (1ULL << 8)
+#define AGN_BPLCON2_0        (1ULL << 9)  // BPLCON2
+#define AGN_BPLCON2_1        (1ULL << 10)
+#define AGN_DMACON_0         (1ULL << 11) // DMACON
+#define AGN_DMACON_1         (1ULL << 12)
+#define AGN_DIWSTRT_0        (1ULL << 13) // DIWSTRT
+#define AGN_DIWSTRT_1        (1ULL << 14)
+#define AGN_DIWSTOP_0        (1ULL << 15) // DIWSTOP
+#define AGN_DIWSTOP_1        (1ULL << 16)
+#define AGN_BPL1MOD_0        (1ULL << 17) // BPL1MOD
+#define AGN_BPL1MOD_1        (1ULL << 18)
+#define AGN_BPL2MOD_0        (1ULL << 19) // BPL2MOD
+#define AGN_BPL2MOD_1        (1ULL << 20)
+#define AGN_BPL1PTH_0        (1ULL << 21) // BPL1PTH
+#define AGN_BPL1PTH_1        (1ULL << 22)
+#define AGN_BPL1PTL_0        (1ULL << 23) // BPL1PTL
+#define AGN_BPL1PTL_1        (1ULL << 24)
+#define AGN_BPL2PTH_0        (1ULL << 25) // BPL2PTH
+#define AGN_BPL2PTH_1        (1ULL << 26)
+#define AGN_BPL2PTL_0        (1ULL << 27) // BPL2PTL
+#define AGN_BPL2PTL_1        (1ULL << 28)
+#define AGN_BPL3PTH_0        (1ULL << 29) // BPL3PTH
+#define AGN_BPL3PTH_1        (1ULL << 30)
+#define AGN_BPL3PTL_0        (1ULL << 31) // BPL3PTL
+#define AGN_BPL3PTL_1        (1ULL << 32)
+#define AGN_BPL4PTH_0        (1ULL << 33) // BPL4PTH
+#define AGN_BPL4PTH_1        (1ULL << 34)
+#define AGN_BPL4PTL_0        (1ULL << 35) // BPL4PTL
+#define AGN_BPL4PTL_1        (1ULL << 36)
+#define AGN_BPL5PTH_0        (1ULL << 37) // BPL5PTH
+#define AGN_BPL5PTH_1        (1ULL << 38)
+#define AGN_BPL5PTL_0        (1ULL << 39) // BPL5PTL
+#define AGN_BPL5PTL_1        (1ULL << 40)
+#define AGN_BPL6PTH_0        (1ULL << 41) // BPL6PTH
+#define AGN_BPL6PTH_1        (1ULL << 42)
+#define AGN_BPL6PTL_0        (1ULL << 43) // BPL6PTL
+#define AGN_BPL6PTL_1        (1ULL << 44)
 
-#define AGS_COUNT            (1ULL << 45)
+#define AGN_COUNT            (1ULL << 45)
 
-#define AGS_BPLxPTH_0 \
-AGS_BPL1PTH_0 | AGS_BPL2PTH_0 | AGS_BPL3PTH_0 | \
-AGS_BPL4PTH_0 | AGS_BPL5PTH_0 | AGS_BPL6PTH_0
+#define AGN_BPLxPTH_0 \
+AGN_BPL1PTH_0 | AGN_BPL2PTH_0 | AGN_BPL3PTH_0 | \
+AGN_BPL4PTH_0 | AGN_BPL5PTH_0 | AGN_BPL6PTH_0
 
-#define AGS_BPLxPTH_1 \
-AGS_BPL1PTH_1 | AGS_BPL2PTH_1 | AGS_BPL3PTH_1 | \
-AGS_BPL4PTH_1 | AGS_BPL5PTH_1 | AGS_BPL6PTH_1
+#define AGN_BPLxPTH_1 \
+AGN_BPL1PTH_1 | AGN_BPL2PTH_1 | AGN_BPL3PTH_1 | \
+AGN_BPL4PTH_1 | AGN_BPL5PTH_1 | AGN_BPL6PTH_1
 
-#define AGS_BPLxPTL_0 \
-AGS_BPL1PTL_0 | AGS_BPL2PTL_0 | AGS_BPL3PTL_0 | \
-AGS_BPL4PTL_0 | AGS_BPL5PTL_0 | AGS_BPL6PTL_0
+#define AGN_BPLxPTL_0 \
+AGN_BPL1PTL_0 | AGN_BPL2PTL_0 | AGN_BPL3PTL_0 | \
+AGN_BPL4PTL_0 | AGN_BPL5PTL_0 | AGN_BPL6PTL_0
 
-#define AGS_BPLxPTL_1 \
-AGS_BPL1PTL_1 | AGS_BPL2PTL_1 | AGS_BPL3PTL_1 | \
-AGS_BPL4PTL_1 | AGS_BPL5PTL_1 | AGS_BPL6PTL_1
+#define AGN_BPLxPTL_1 \
+AGN_BPL1PTL_1 | AGN_BPL2PTL_1 | AGN_BPL3PTL_1 | \
+AGN_BPL4PTL_1 | AGN_BPL5PTL_1 | AGN_BPL6PTL_1
 
-#define AGS_DELAY_MASK ~( AGS_COUNT | \
-AGS_BPLCON0_0 | AGS_BPLCON0_DENISE_0 | AGS_BPLCON1_0  | AGS_BPLCON2_0 | \
-AGS_DMACON_0 | \
-AGS_DIWSTRT_0 | AGS_DIWSTOP_0 | \
-AGS_BPL1MOD_0 | AGS_BPL2MOD_0 | \
-AGS_BPLxPTH_0 | AGS_BPLxPTL_0 )
+#define AGN_DELAY_MASK ~( AGN_COUNT | \
+AGN_BPLCON0_0 | AGN_BPLCON0_DENISE_0 | AGN_BPLCON1_0  | AGN_BPLCON2_0 | \
+AGN_DMACON_0 | \
+AGN_DIWSTRT_0 | AGN_DIWSTOP_0 | \
+AGN_BPL1MOD_0 | AGN_BPL2MOD_0 | \
+AGN_BPLxPTH_0 | AGN_BPLxPTL_0 )
 
-#define AGS_REG_CHANGE UINT64_MAX // TODO: USE PROPER MASK AFTER DEBUGGING
+// #define AGN_REG_CHANGE_MASK UINT64_MAX // TODO: USE PROPER MASK AFTER DEBUGGING
+
+#define AGN_REG_CHANGE_MASK ( \
+AGN_BPLCON0_3 | AGN_BPLCON0_DENISE_0 | AGN_BPLCON1_1 | AGN_BPLCON2_1 | \
+AGN_DMACON_1 | \
+AGN_DIWSTRT_1 | AGN_DIWSTOP_1 | \
+AGN_BPL1MOD_1 | AGN_BPL2MOD_1 | \
+AGN_BPLxPTH_1 | AGN_BPLxPTL_1 )
 
 typedef enum : int8_t
 {

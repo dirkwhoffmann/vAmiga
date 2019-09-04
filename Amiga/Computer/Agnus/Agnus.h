@@ -159,7 +159,7 @@ public:
     //
 
     // Action flags checked in every cycle
-    uint64_t delay;
+    uint64_t actions;
 
     // Action flags checked in the HSYNC handler
     uint64_t hsyncActions;
@@ -507,7 +507,7 @@ public:
         & slot
         & nextTrigger
 
-        & delay
+        & actions
         & hsyncActions
         & clock
         & frame
@@ -888,14 +888,17 @@ public:
     
 public:
 
-    // Executes the device for a certain number of DMA cycles
-    void execute(DMACycle cycles = 1);
+    // Executes the device for a single cycle
+    void execute();
 
     // Executes the device until the target clock is reached
-    void executeUntil(Cycle targetClock) { execute((targetClock - clock) / DMA_CYCLES(1)); }
+    void executeUntil(Cycle targetClock);
 
     // Executes the device until the CPU can acquire the bus
     void executeUntilBusIsFree();
+
+    // Sets an action flag
+    void setActionFlag(uint64_t flag);
 
 private:
 
