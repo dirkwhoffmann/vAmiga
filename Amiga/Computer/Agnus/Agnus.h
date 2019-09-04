@@ -888,11 +888,11 @@ public:
     
 public:
 
-    // Executes the device for a certain number of DMA cycles
-    void execute(DMACycle cycles = 1);
+    // Executes the device for a single cycle
+    void execute();
 
     // Executes the device until the target clock is reached
-    void executeUntil(Cycle targetClock) { execute((targetClock - clock) / DMA_CYCLES(1)); }
+    void executeUntil(Cycle targetClock);
 
     // Executes the device until the CPU can acquire the bus
     void executeUntilBusIsFree();

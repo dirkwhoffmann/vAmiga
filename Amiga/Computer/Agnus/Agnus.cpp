@@ -1537,98 +1537,42 @@ Agnus::setBPLCON0(uint16_t oldValue, uint16_t newValue)
 }
 
 void
-Agnus::execute(DMACycle cycles)
+Agnus::execute()
 {
-    for (DMACycle i = 0; i < cycles; i++) {
+    // Process pending events
+    if (clock >= nextTrigger) executeEventsUntil(clock);
 
-        // Check if there is additional work to do in this cycle
-        /*
-        if (actions) {
+    // Advance the internal clock and the horizontal counter
+    clock += DMA_CYCLES(1);
+    pos.h++;
 
-            // Check for horizontal sync
-            if (actions & AGS_HSYNC) hsyncHandler();
-
-            // Handle all pending register changes
-            if (actions & AGS_REG_CHANGE) updateRegisters();
-
-            // Move action flags one bit to the left
-            actions = (actions << 1) & AGS_DELAY_MASK;
-        }
-        */
-
-        // Process all pending events
-        if (clock >= nextTrigger) executeEventsUntil(clock);
-
-        // Advance the internal counters
-        pos.h++;
-
-        // If this assertion hits, the HSYNC event hasn't been served
-        assert(pos.h <= HPOS_CNT);
-
-        clock += DMA_CYCLES(1);
-    }
+    // If this assertion hits, the HSYNC event hasn't been served
+    assert(pos.h <= HPOS_CNT);
 }
 
-/*
 void
 Agnus::executeUntil(Cycle targetClock)
 {
-    execute((targetClock - clock) / DMA_CYCLES(1));
-}
-*/
+    assert(targetClock >= clock);
 
-/*
- Optimization:
- - Move action flags to AGN_SLOT
- - After that, try those alternative implementations:
- */
+    // Align to DMA cycle raster
+    targetClock &= ~0b111;
 
-/*
-void
-Agnus::executeUntil(Cycle targetClock)
-{
-    targetClock = AS_DMA_CYCLES(targetClock); // MOVE TO CALLEE
-    assert(isDMACycle(targetClock));
+    // Compute the number of DMA cycles to execute
+    DMACycle  dmaCycles = (targetClock - clock) / DMA_CYCLES(1);
 
-    Cycle dmaCycles = AS_DMA_CYCLES(targetClock - clock);
+    if (targetClock < nextTrigger) {
 
-    if (nextTrigger > targetClock) {
-
-        pos.h += dmaCycles;
+        // Advance directly to the target clock
         clock = targetClock;
-        return;
+        pos.h += dmaCycles;
 
     } else {
 
-        execute(dmaCycles);
+        // Execute DMA cycles one after another
+        for (DMACycle i = 0; i < dmaCycles; i++) execute();
     }
 }
-*/
-/*
-void
-Agnus::executeUntil(Cycle targetClock)
-{
-    targetClock = AS_DMA_CYCLES(targetClock); // MOVE TO CALLEE
-    assert(isDMACycle(targetClock));
-
-    while (clock <= targetClock) {
-
-        if (nextTrigger > targetClock) {
-
-            pos.h += AS_DMA_CYCLES(targetClock - clock);
-            clock = targetClock;
-            return;
-
-        } else {
-
-            pos.h += AS_DMA_CYCLES(nextTrigger - clock);
-            clock = nextTrigger;
-
-            executeEventsUntil(nextTrigger);
-        }
-    }
-}
-*/
 
 #ifdef SLOW_BLT_DEBUG
 
