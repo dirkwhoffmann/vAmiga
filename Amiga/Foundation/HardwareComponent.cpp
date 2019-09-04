@@ -185,7 +185,7 @@ HardwareComponent::inspect()
 void
 HardwareComponent::dump()
 {
-    plainmsg("%s (memory location: %p)\n\n", getDescription(), this);
+    msg("%s (memory location: %p)\n\n", getDescription(), this);
     _dump();
 }
 
