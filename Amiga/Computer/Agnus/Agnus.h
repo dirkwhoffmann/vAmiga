@@ -159,7 +159,7 @@ public:
     //
 
     // Action flags checked in every cycle
-    uint64_t delay;
+    uint64_t actions;
 
     // Action flags checked in the HSYNC handler
     uint64_t hsyncActions;
@@ -507,7 +507,7 @@ public:
         & slot
         & nextTrigger
 
-        & delay
+        & actions
         & hsyncActions
         & clock
         & frame
@@ -896,6 +896,9 @@ public:
 
     // Executes the device until the CPU can acquire the bus
     void executeUntilBusIsFree();
+
+    // Sets an action flag
+    void setActionFlag(uint64_t flag);
 
 private:
 

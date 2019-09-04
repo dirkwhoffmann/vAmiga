@@ -76,15 +76,18 @@ template<EventSlot s> bool isDue(Cycle cycle) {
  *   Absolute (Abs):
  *   The trigger cycle is specified as an absolute value.
  *
+ *   Immediate (Imm):
+ *   The trigger cycle is the next DMA cycle.
+ *
  *   Relative (Rel):
- *   The time stamp is relative to the current DMA clock.
+ *   The trigger cycle is specified relative to the current DMA clock.
  *
  *   Incremental (Inc):
  *   The trigger cycle is specified relative to the current slot value.
  *
  *   Positional (Pos):
- *   The time stamp is specified as a beam position in the current frame.
- *
+ *   The trigger cycle is specified in form of a beam position.
+*
  * Events can also be rescheduled or canceled:
  *
  *   Rescheduling means that the event ID in the selected event slot
@@ -104,17 +107,26 @@ template<EventSlot s> void scheduleAbs(Cycle cycle, EventID id)
     if (cycle < nextTrigger) nextTrigger = cycle;
 
     // Perform special actions for secondary events
-    if (isSecondarySlot(s)) {
+    if (isSecondarySlot(s) && cycle < slot[SEC_SLOT].triggerCycle)
+        slot[SEC_SLOT].triggerCycle = cycle;
 
-        if (cycle < slot[SEC_SLOT].triggerCycle) slot[SEC_SLOT].triggerCycle = cycle;
-    } else {
-        checkScheduledEvent(s);
-    }
+    assert(checkScheduledEvent(s));
 }
 
 template<EventSlot s> void scheduleAbs(Cycle cycle, EventID id, int64_t data)
 {
     scheduleAbs<s>(cycle, id);
+    slot[s].data = data;
+}
+
+template<EventSlot s> void scheduleImm(EventID id)
+{
+   scheduleAbs<s>(clock + 1, id);
+}
+
+template<EventSlot s> void scheduleImm(EventID id, int64_t data)
+{
+    scheduleAbs<s>(clock + 1, id);
     slot[s].data = data;
 }
 
@@ -215,13 +227,9 @@ private:
  */
 void executeEventsUntil(Cycle cycle);
 
-/* Event handlers
- *
- *    serviceBplEvent: Handler for the BPL slot
- *    serviceDASEvent: Handles for the DAS slot
- *    serviceINSEvent: Handler for the INS slot
- */
-void serviceBplEvent(EventID id);
+// Event handlers for specific slots
+void serviceAGNEvent();
+void serviceBPLEvent(EventID id);
 void serviceDASEvent(EventID id);
 void serviceREGEvent(EventSlot slot);
 void serviceINSEvent();

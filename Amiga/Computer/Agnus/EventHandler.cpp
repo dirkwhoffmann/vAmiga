@@ -60,6 +60,15 @@ Agnus::inspectEventSlot(EventSlot nr)
 
     switch ((EventSlot)nr) {
 
+        case AGN_SLOT:
+            switch (slot[nr].id) {
+
+                case 0:             i->eventName = "none"; break;
+                case AGN_ACTIONS:   i->eventName = "AGN_ACTIONS"; break;
+                default:            i->eventName = "*** INVALID ***"; break;
+            }
+            break;
+
         case CIAA_SLOT:
         case CIAB_SLOT:
 
@@ -345,6 +354,11 @@ Agnus::executeEventsUntil(Cycle cycle) {
     // Check all primary slots
     //
 
+    if (isDue<AGN_SLOT>(cycle)) {
+        assert(checkTriggeredEvent(AGN_SLOT));
+        serviceAGNEvent();
+    }
+
     if (isDue<CIAA_SLOT>(cycle)) {
 
         assert(checkTriggeredEvent(CIAA_SLOT));
@@ -385,7 +399,7 @@ Agnus::executeEventsUntil(Cycle cycle) {
 
     if (isDue<BPL_SLOT>(cycle)) {
         assert(checkTriggeredEvent(BPL_SLOT));
-        serviceBplEvent(slot[BPL_SLOT].id);
+        serviceBPLEvent(slot[BPL_SLOT].id);
     }
 
     if (isDue<DAS_SLOT>(cycle)) {
@@ -452,7 +466,14 @@ Agnus::executeEventsUntil(Cycle cycle) {
 }
 
 void
-Agnus::serviceBplEvent(EventID id)
+Agnus::serviceAGNEvent()
+{
+    assert(slot[AGN_SLOT].id == AGN_ACTIONS);
+
+}
+
+void
+Agnus::serviceBPLEvent(EventID id)
 {
     switch (id) {
 
@@ -573,7 +594,7 @@ Agnus::serviceBplEvent(EventID id)
             // This is the last event in the current rasterline. We tell Agnus
             // to call the hsync handler at the beginning of the next cycle and
             // return without scheduling a new BPL event.
-            delay |= AGS_HSYNC;
+            setActionFlag(AGS_HSYNC);
             return;
 
         default:
@@ -768,8 +789,6 @@ Agnus::serviceINSEvent()
 bool
 Agnus::checkScheduledEvent(EventSlot s)
 {
-    assert(isPrimarySlot(s));
-    
     if (slot[s].triggerCycle < 0) {
         _dump();
         panic("Scheduled event has a too small trigger cycle.");
@@ -785,6 +804,14 @@ Agnus::checkScheduledEvent(EventSlot s)
     }
     
     switch (s) {
+        case AGN_SLOT:
+            if (!isAgnEvent(id)) {
+                _dump();
+                panic("Invalid AGN event ID.");
+                return false;
+            }
+            break;
+
         case CIAA_SLOT:
         case CIAB_SLOT:
             if (!isCiaEvent(id)) {
@@ -834,17 +861,16 @@ Agnus::checkScheduledEvent(EventSlot s)
         default:
             break;
     }
+    
     return true;
 }
 
 bool
 Agnus::checkTriggeredEvent(EventSlot s)
 {
-    assert(isPrimarySlot(s));
-    
     // Note: This function has to be called at the trigger cycle
     if (clock != slot[s].triggerCycle) {
-        return true;
+        return true; // TODO: CHANGE TO false ASAP
     }
     
     return true;

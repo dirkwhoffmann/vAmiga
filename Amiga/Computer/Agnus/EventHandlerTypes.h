@@ -25,13 +25,14 @@ typedef enum : long
     //
     // Primary slot table
     //
-    
-    CIAA_SLOT = 0,                  // CIA A execution
+
+    AGN_SLOT = 0,                   // Agnus
+    CIAA_SLOT,                      // CIA A execution
     CIAB_SLOT,                      // CIA B execution
     BPL_SLOT,                       // Bitplane DMA
     DAS_SLOT,                       // Disk, Audio, and Sprite DMA
-    COP_SLOT,                       // Copper DMA
-    BLT_SLOT,                       // Blitter DMA
+    COP_SLOT,                       // Copper
+    BLT_SLOT,                       // Blitter
     SEC_SLOT,                       // Secondary events
 
     LAST_PRIM_SLOT = SEC_SLOT,
@@ -58,6 +59,7 @@ static inline bool isSecondarySlot(int32_t s) { return s >= FIRST_SEC_SLOT && s 
 inline const char *slotName(EventSlot nr)
 {
     switch (nr) {
+        case AGN_SLOT:           return "Agnus";
         case CIAA_SLOT:          return "CIA A"; 
         case CIAB_SLOT:          return "CIA B";
         case BPL_SLOT:           return "Bitplane DMA";
@@ -88,7 +90,11 @@ typedef enum : long
     //
     // Events in the primary event table
     //
-    
+
+    // AGN slot
+    AGN_ACTIONS = 1,
+    AGN_EVENT_COUNT,
+
     // CIA slots
     CIA_EXECUTE = 1,
     CIA_WAKEUP,
@@ -226,6 +232,7 @@ typedef enum : long
 
 } EventID;
 
+static inline bool isAgnEvent(EventID id) { return id < AGN_EVENT_COUNT; }
 static inline bool isCiaEvent(EventID id) { return id < CIA_EVENT_COUNT; }
 static inline bool isBplEvent(EventID id) { return id < BPL_EVENT_COUNT; }
 static inline bool isDasEvent(EventID id) { return id < DAS_EVENT_COUNT; }
