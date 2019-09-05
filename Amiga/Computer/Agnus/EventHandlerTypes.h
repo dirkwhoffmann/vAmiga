@@ -45,9 +45,9 @@ typedef enum : long
     TXD_SLOT,                       // Serial data out (UART)
     RXD_SLOT,                       // Serial data in (UART)
     POT_SLOT,                       // Potentiometer
-    INSPECTOR_SLOT,                 // Handles periodic calls to inspect()
+    INS_SLOT,                       // Handles periodic calls to inspect()
 
-    LAST_SEC_SLOT = INSPECTOR_SLOT,
+    LAST_SEC_SLOT = INS_SLOT,
     SLOT_COUNT
 
 } EventSlot;
@@ -59,23 +59,23 @@ static inline bool isSecondarySlot(int32_t s) { return s >= FIRST_SEC_SLOT && s 
 inline const char *slotName(EventSlot nr)
 {
     switch (nr) {
-        case AGN_SLOT:           return "Agnus";
-        case CIAA_SLOT:          return "CIA A"; 
-        case CIAB_SLOT:          return "CIA B";
-        case BPL_SLOT:           return "Bitplane DMA";
-        case DAS_SLOT:           return "Other DMA";
-        case COP_SLOT:           return "Copper";
-        case BLT_SLOT:           return "Blitter";
-        case SEC_SLOT:           return "Secondary";
+        case AGN_SLOT:  return "Agnus";
+        case CIAA_SLOT: return "CIA A";
+        case CIAB_SLOT: return "CIA B";
+        case BPL_SLOT:  return "Bitplane DMA";
+        case DAS_SLOT:  return "Other DMA";
+        case COP_SLOT:  return "Copper";
+        case BLT_SLOT:  return "Blitter";
+        case SEC_SLOT:  return "Secondary";
 
-        case DSK_SLOT:           return "Disk Controller";
-        case DCH_SLOT:           return "Disk Change";
-        case IRQ_SLOT:           return "Interrupts";
-        case KBD_SLOT:           return "Keyboard";
-        case TXD_SLOT:           return "UART out";
-        case RXD_SLOT:           return "UART in";
-        case POT_SLOT:           return "Potentiometer";
-        case INSPECTOR_SLOT:     return "Debugger";
+        case DSK_SLOT:  return "Disk Controller";
+        case DCH_SLOT:  return "Disk Change";
+        case IRQ_SLOT:  return "Interrupts";
+        case KBD_SLOT:  return "Keyboard";
+        case TXD_SLOT:  return "UART out";
+        case RXD_SLOT:  return "UART in";
+        case POT_SLOT:  return "Potentiometer";
+        case INS_SLOT:  return "Inspector";
 
         default:
             assert(false);

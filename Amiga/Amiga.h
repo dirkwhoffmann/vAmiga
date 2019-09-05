@@ -68,9 +68,9 @@ public:
 
     /* Inspection target
      * To update the GUI periodically, the emulator schedules this event in the
-     * INSPECTOR_SLOT (secondary table) on a periodic basis. If the event is
-     * EVENT_NONE, no action is taken. If an INS_xxx event is scheduled,
-     * inspect() is called on a certain Amiga component.
+     * inspector slot (INS_SLOT in the secondary table) on a periodic basis.
+     * If the event is EVENT_NONE, no action is taken. If an INS_xxx event is
+     * scheduled, inspect() is called on a certain Amiga component.
      */
     static EventID inspectionTarget;
     

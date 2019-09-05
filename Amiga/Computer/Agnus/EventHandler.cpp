@@ -248,7 +248,7 @@ Agnus::inspectEventSlot(EventSlot nr)
             }
             break;
 
-        case INSPECTOR_SLOT:
+        case INS_SLOT:
 
             switch (slot[nr].id) {
 
@@ -351,71 +351,16 @@ void
 Agnus::executeEventsUntil(Cycle cycle) {
 
     //
-    // Check all primary slots
+    // Check primary slots
     //
 
-    if (isDue<AGN_SLOT>(cycle)) {
-        assert(checkTriggeredEvent(AGN_SLOT));
-        serviceAGNEvent();
-    }
-
-    if (isDue<CIAA_SLOT>(cycle)) {
-
-        assert(checkTriggeredEvent(CIAA_SLOT));
-
-        switch(slot[CIAA_SLOT].id) {
-
-            case CIA_EXECUTE:
-                ciaA->executeOneCycle();
-                break;
-
-            case CIA_WAKEUP:
-                ciaA->wakeUp();
-                break;
-
-            default:
-                assert(false);
-        }
-    }
-
-    if (isDue<CIAB_SLOT>(cycle)) {
-
-        assert(checkTriggeredEvent(CIAB_SLOT));
-
-        switch(slot[CIAB_SLOT].id) {
-
-            case CIA_EXECUTE:
-                ciaB->executeOneCycle();
-                break;
-
-            case CIA_WAKEUP:
-                ciaB->wakeUp();
-                break;
-
-            default:
-                assert(false);
-        }
-    }
-
-    if (isDue<BPL_SLOT>(cycle)) {
-        assert(checkTriggeredEvent(BPL_SLOT));
-        serviceBPLEvent(slot[BPL_SLOT].id);
-    }
-
-    if (isDue<DAS_SLOT>(cycle)) {
-        assert(checkTriggeredEvent(DAS_SLOT));
-        serviceDASEvent(slot[DAS_SLOT].id);
-    }
-
-    if (isDue<COP_SLOT>(cycle)) {
-        assert(checkTriggeredEvent(COP_SLOT));
-        copper.serviceEvent(slot[COP_SLOT].id);
-    }
-
-    if (isDue<BLT_SLOT>(cycle)) {
-        assert(checkTriggeredEvent(BLT_SLOT));
-        blitter.serviceEvent(slot[BLT_SLOT].id);
-    }
+    if (isDue<AGN_SLOT>(cycle)) serviceAGNEvent();
+    if (isDue<CIAA_SLOT>(cycle)) serviceCIAEvent<0>();
+    if (isDue<CIAB_SLOT>(cycle)) serviceCIAEvent<1>();
+    if (isDue<BPL_SLOT>(cycle)) serviceBPLEvent(slot[BPL_SLOT].id);
+    if (isDue<DAS_SLOT>(cycle)) serviceDASEvent(slot[DAS_SLOT].id);
+    if (isDue<COP_SLOT>(cycle)) copper.serviceEvent(slot[COP_SLOT].id);
+    if (isDue<BLT_SLOT>(cycle)) blitter.serviceEvent(slot[BLT_SLOT].id);
 
     //
     // Check all secondary events that need to be proceeded late
@@ -444,7 +389,7 @@ Agnus::executeEventsUntil(Cycle cycle) {
         if (isDue<POT_SLOT>(cycle)) {
             paula->servePotEvent(slot[POT_SLOT].id);
         }
-        if (isDue<INSPECTOR_SLOT>(cycle)) {
+        if (isDue<INS_SLOT>(cycle)) {
             serviceINSEvent();
         }
 
@@ -465,10 +410,32 @@ Agnus::executeEventsUntil(Cycle cycle) {
             nextTrigger = slot[i].triggerCycle;
 }
 
+template <int nr> void
+Agnus::serviceCIAEvent()
+{
+    EventSlot slotNr = (nr == 0) ? CIAA_SLOT : CIAB_SLOT;
+
+    assert(checkTriggeredEvent(slotNr));
+
+    switch(slot[slotNr].id) {
+
+        case CIA_EXECUTE:
+            nr ? ciaB->executeOneCycle() : ciaA->executeOneCycle();
+            break;
+
+        case CIA_WAKEUP:
+            nr ? ciaB->wakeUp() : ciaA->wakeUp();
+            break;
+
+        default:
+            assert(false);
+    }
+}
+
 void
 Agnus::serviceAGNEvent()
 {
-    assert(slot[AGN_SLOT].id == AGN_ACTIONS);
+    assert(checkTriggeredEvent(AGN_SLOT));
 
     // The event should only fire if at least one action flag is set
     assert(actions);
@@ -489,6 +456,8 @@ Agnus::serviceAGNEvent()
 void
 Agnus::serviceBPLEvent(EventID id)
 {
+    assert(checkTriggeredEvent(BPL_SLOT));
+
     switch (id) {
 
         case BPL_H1:
@@ -624,7 +593,7 @@ Agnus::serviceBPLEvent(EventID id)
 void
 Agnus::serviceDASEvent(EventID id)
 {
-    // debug("serviceDASEvent(%d)\n", id);
+    assert(checkTriggeredEvent(DAS_SLOT));
 
     assert(pos.h == DASEventCycle(id));
 
@@ -730,54 +699,11 @@ Agnus::serviceDASEvent(EventID id)
 }
 
 void
-Agnus::serviceREGEvent(EventSlot nr)
-{
-    EventID id = slot[nr].id;
-    int64_t data = slot[nr].data;
-
-    // debug("serveRegEvent(%d)\n", slot);
-
-    switch (id) {
-
-        case REG_DMACON:
-            pokeDMACON((uint16_t)data);
-            break;
-        case REG_DIWSTRT:
-            setDIWSTRT((uint16_t)data);
-            break;
-        case REG_DIWSTOP:
-            setDIWSTOP((uint16_t)data);
-            break;
-        case REG_BPLCON1:
-            denise->pokeBPLCON1((uint16_t)data);
-            break;
-        case REG_BPLCON2:
-            denise->pokeBPLCON2((uint16_t)data);
-            break;
-        case REG_BPL1MOD:
-            pokeBPL1MOD((uint16_t)data);
-            break;
-        case REG_BPL2MOD:
-            pokeBPL2MOD((uint16_t)data);
-            break;
-        case REG_BPLxPTH:
-            setBPLxPTH(HI_WORD(data), LO_WORD(data));
-            break;
-        case REG_BPLxPTL:
-            setBPLxPTL(HI_WORD(data), LO_WORD(data));
-            break;
-
-        default: assert(false);
-    }
-
-    // Remove event
-    cancel(nr);
-}
-
-void
 Agnus::serviceINSEvent()
 {
-    switch (slot[INSPECTOR_SLOT].id) {
+    assert(checkTriggeredEvent(INS_SLOT));
+
+    switch (slot[INS_SLOT].id) {
 
         case INS_NONE:   break;
         case INS_AMIGA:  amiga->inspect(); break;
@@ -798,7 +724,7 @@ Agnus::serviceINSEvent()
     }
 
     // Reschedule event
-    rescheduleRel<INSPECTOR_SLOT>((Cycle)(inspectionInterval * 28000000));
+    rescheduleRel<INS_SLOT>((Cycle)(inspectionInterval * 28000000));
 }
 
 bool
@@ -883,9 +809,20 @@ Agnus::checkScheduledEvent(EventSlot s)
 bool
 Agnus::checkTriggeredEvent(EventSlot s)
 {
-    // Note: This function has to be called at the trigger cycle
-    if (clock != slot[s].triggerCycle) {
-        return true; // TODO: CHANGE TO false ASAP
+    switch (s) {
+
+        case AGN_SLOT:
+            if (slot[s].id != AGN_ACTIONS) {
+                assert(false); return false;
+            }
+            break;
+
+        default:
+            break;
+    }
+
+    if (clock < slot[s].triggerCycle) {
+        assert(false); return false;
     }
     
     return true;
