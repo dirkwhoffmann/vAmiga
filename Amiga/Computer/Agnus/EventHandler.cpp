@@ -354,19 +354,33 @@ Agnus::executeEventsUntil(Cycle cycle) {
     // Check primary slots
     //
 
-    if (isDue<AGN_SLOT>(cycle)) serviceAGNEvent();
-    if (isDue<CIAA_SLOT>(cycle)) serviceCIAEvent<0>();
-    if (isDue<CIAB_SLOT>(cycle)) serviceCIAEvent<1>();
-    if (isDue<BPL_SLOT>(cycle)) serviceBPLEvent(slot[BPL_SLOT].id);
-    if (isDue<DAS_SLOT>(cycle)) serviceDASEvent(slot[DAS_SLOT].id);
-    if (isDue<COP_SLOT>(cycle)) copper.serviceEvent(slot[COP_SLOT].id);
-    if (isDue<BLT_SLOT>(cycle)) blitter.serviceEvent(slot[BLT_SLOT].id);
-
-    //
-    // Check all secondary events that need to be proceeded late
-    //
+    if (isDue<AGN_SLOT>(cycle)) {
+        serviceAGNEvent();
+    }
+    if (isDue<CIAA_SLOT>(cycle)) {
+        serviceCIAEvent<0>();
+    }
+    if (isDue<CIAB_SLOT>(cycle)) {
+        serviceCIAEvent<1>();
+    }
+    if (isDue<BPL_SLOT>(cycle)) {
+        serviceBPLEvent();
+    }
+    if (isDue<DAS_SLOT>(cycle)) {
+        serviceDASEvent();
+    }
+    if (isDue<COP_SLOT>(cycle)) {
+        copper.serviceEvent(slot[COP_SLOT].id);
+    }
+    if (isDue<BLT_SLOT>(cycle)) {
+        blitter.serviceEvent(slot[BLT_SLOT].id);
+    }
 
     if (isDue<SEC_SLOT>(cycle)) {
+
+        //
+        // Check primary slots
+        //
 
         if (isDue<DSK_SLOT>(cycle)) {
             paula->diskController.serviceDiskEvent();
@@ -454,11 +468,11 @@ Agnus::serviceAGNEvent()
 }
 
 void
-Agnus::serviceBPLEvent(EventID id)
+Agnus::serviceBPLEvent()
 {
     assert(checkTriggeredEvent(BPL_SLOT));
 
-    switch (id) {
+    switch (slot[BPL_SLOT].id) {
 
         case BPL_H1:
             if (!bplHwStop()) {
@@ -591,10 +605,11 @@ Agnus::serviceBPLEvent(EventID id)
 }
 
 void
-Agnus::serviceDASEvent(EventID id)
+Agnus::serviceDASEvent()
 {
-    assert(checkTriggeredEvent(DAS_SLOT));
+    EventID id = slot[DAS_SLOT].id;
 
+    assert(checkTriggeredEvent(DAS_SLOT));
     assert(pos.h == DASEventCycle(id));
 
     switch (id) {

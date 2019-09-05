@@ -230,8 +230,8 @@ void executeEventsUntil(Cycle cycle);
 // Event handlers for specific slots
 template <int nr> void serviceCIAEvent();
 void serviceAGNEvent();
-void serviceBPLEvent(EventID id);
-void serviceDASEvent(EventID id);
+void serviceBPLEvent();
+void serviceDASEvent();
 void serviceINSEvent();
 
 

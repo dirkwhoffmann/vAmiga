@@ -571,13 +571,6 @@ Copper::serviceEvent(EventID id)
 
     servicing = true;
 
-    // Copper can only get the evenly numbered slots
-    /*
-    if (agnus->pos.h % 2) {
-        debug("Copper blocked at odd cycle\n");
-        reschedule(1); return; }
-    */
-
     switch (id) {
             
         case COP_REQ_DMA:
