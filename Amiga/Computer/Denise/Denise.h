@@ -391,13 +391,28 @@ public:
     // OCS register 0x036 (w)
     void pokeJOYTEST(uint16_t value);
 
-    // OCS register 0x100 (w)
+    //
+    // BPLCON0
+    //
+
+    /*      15 : HIRES         High-resolution enable
+     * 14 - 12 : BPU2 - BPU0   Number of bit-planes used
+     *      11 : HOMOD         Hold-and-modify enable
+     *      10 : DBPLF         Dual-playfield enable
+     *       9 : COLOR         Color enable
+     *       8 : GAUD          Genlock audio enable
+     *   7 - 4 : ---
+     *       3 : LPEN          Light pen enable
+     *       2 : LACE          Interlace enable
+     *       1 : ERSY          External synchronization enable
+     *       0 : ---
+     */
     void pokeBPLCON0(uint16_t value);
     void setBPLCON0(uint16_t oldValue, uint16_t newValue);
 
-    static bool hires(uint16_t v) { return !!GET_BIT(v, 15); }
+    static bool hires(uint16_t v) { return GET_BIT(v, 15); }
     bool hires() { return hires(bplcon0); }
-    static bool lores(uint16_t v) { return !GET_BIT(v, 15); }
+    static bool lores(uint16_t v) { return !hires(v); }
     bool lores() { return lores(bplcon0); }
     static bool dbplf(uint16_t v) { return GET_BIT(v, 10); }
     bool dbplf() { return dbplf(bplcon0); }
@@ -405,10 +420,24 @@ public:
     bool lace() { return lace(bplcon0); }
     static int bpu(uint16_t v) { return (v >> 12) & 0b111; }
     int bpu() { return bpu(bplcon0); }
-    static int planes(uint16_t v) { return bpu(v) <= 6 ? bpu(v) : 0; }
-    int planes() { return planes(bplcon0); }
     static bool ham(uint16_t v) { return (v & 0x8C00) == 0x0800 && (bpu(v) == 5 || bpu(v) == 6); }
     bool ham() { return ham(bplcon0); }
+
+    /* Values derived from the BPU bits:
+     *
+     *   enabledChannels : This value determines the number of BPLxDAT
+     *                     registers filled by DMA.
+     *
+     *     enabledPlanes : This value determines the number of BPLxDAT
+     *                     registers transfered to the shift registers at the
+     *                     end of a fetch unit.
+     */
+    static int enabledChannels(uint16_t v);
+    int enabledChannels() { return enabledChannels(bplcon0); }
+
+    static int enabledPlanes(uint16_t v);
+    int enabledPlanes() { return enabledPlanes(bplcon0); }
+
 
     // OCS register 0x102 (w)
     void pokeBPLCON1(uint16_t value);
@@ -465,7 +494,7 @@ public:
     //
 
     // Transfers the bitplane registers to the shift registers
-    void fillShiftRegisters(int numPlanes);
+    void fillShiftRegisters();
 
     
     //

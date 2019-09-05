@@ -421,9 +421,6 @@ public:
     // Bookkeeping
     //
 
-    // The number of currently active bitplanes
-    uint8_t activeBitplanes;
-
     // The current value of the data bus
     uint16_t dataBus;
 
@@ -564,7 +561,6 @@ public:
         & bpl2modNew
         & sprpt
         
-        & activeBitplanes
         & dataBus
         & busValue
         & busOwner
@@ -770,7 +766,7 @@ public:
 public:
 
     // Removes all events from the DMA time slot allocation table.
-    void clearDMAEventTable();
+    void clearBplEventTable();
 
     // Allocates the bitplane DMA slots
     void allocateBplSlots(uint16_t dmacon, uint16_t bplcon0, int first, int last = HPOS_MAX-1);
