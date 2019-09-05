@@ -22,10 +22,7 @@
 
 typedef enum : long
 {
-    //
-    // Primary slot table
-    //
-
+    // Primary slots
     AGN_SLOT = 0,                   // Agnus
     CIAA_SLOT,                      // CIA A execution
     CIAB_SLOT,                      // CIA B execution
@@ -33,12 +30,10 @@ typedef enum : long
     DAS_SLOT,                       // Disk, Audio, and Sprite DMA
     COP_SLOT,                       // Copper
     BLT_SLOT,                       // Blitter
-    SEC_SLOT,                       // Secondary events
+    SEC_SLOT,                       // Enables secondary slots
 
-    LAST_PRIM_SLOT = SEC_SLOT,
-    FIRST_SEC_SLOT,
-
-    DSK_SLOT = FIRST_SEC_SLOT,      // Disk controller
+    // Secondary slots
+    DSK_SLOT,                       // Disk controller
     DCH_SLOT,                       // Disk changes (insert, eject)
     IRQ_SLOT,                       // Interrupts
     KBD_SLOT,                       // Keyboard
@@ -47,14 +42,13 @@ typedef enum : long
     POT_SLOT,                       // Potentiometer
     INS_SLOT,                       // Handles periodic calls to inspect()
 
-    LAST_SEC_SLOT = INS_SLOT,
     SLOT_COUNT
 
 } EventSlot;
 
-static inline bool isEventSlot(int32_t s) { return s < SLOT_COUNT; }
-static inline bool isPrimarySlot(int32_t s) { return s <= LAST_PRIM_SLOT; }
-static inline bool isSecondarySlot(int32_t s) { return s >= FIRST_SEC_SLOT && s <= LAST_SEC_SLOT; }
+static inline bool isEventSlot(long s) { return s < SLOT_COUNT; }
+static inline bool isPrimarySlot(long s) { return s <= SEC_SLOT; }
+static inline bool isSecondarySlot(long s) { return s > SEC_SLOT && s < SLOT_COUNT; }
 
 inline const char *slotName(EventSlot nr)
 {

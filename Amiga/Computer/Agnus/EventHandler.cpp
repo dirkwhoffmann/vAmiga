@@ -408,8 +408,8 @@ Agnus::executeEventsUntil(Cycle cycle) {
         }
 
         // Determine the next trigger cycle for all secondary slots
-        Cycle nextSecTrigger = slot[FIRST_SEC_SLOT].triggerCycle;
-        for (unsigned i = FIRST_SEC_SLOT + 1; i <= LAST_SEC_SLOT; i++)
+        Cycle nextSecTrigger = slot[SEC_SLOT + 1].triggerCycle;
+        for (unsigned i = SEC_SLOT + 2; i < SLOT_COUNT; i++)
             if (slot[i].triggerCycle < nextSecTrigger)
                 nextSecTrigger = slot[i].triggerCycle;
 
@@ -419,7 +419,7 @@ Agnus::executeEventsUntil(Cycle cycle) {
 
     // Determine the next trigger cycle for all primary slots
     nextTrigger = slot[0].triggerCycle;
-    for (unsigned i = 1; i <= LAST_PRIM_SLOT; i++)
+    for (unsigned i = 1; i <= SEC_SLOT; i++)
         if (slot[i].triggerCycle < nextTrigger)
             nextTrigger = slot[i].triggerCycle;
 }
