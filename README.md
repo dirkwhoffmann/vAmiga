@@ -4,11 +4,11 @@
 
 ## About
 
-vAmiga is a user-friendly Amiga emulator for macOS. 
+vAmiga is a user-friendly Amiga emulator for macOS.
 
 ## Status
 
-The development of vAmiga started in January 2019. All basic functionality is now implemented and the focus is currently shifting to improve compatibility. Due to the early development phase there are no official releases yet. Pre-releases can be downloaded in the Releases section. 
+The development of vAmiga started in January 2019. By now all basic functions have been implemented and the focus is shifting to compatibility improvement. Due to the early development phase there are no official releases yet. Pre-releases can be downloaded in the Releases section. 
    
 ## Where to go from here?
 
