@@ -187,7 +187,7 @@ void Agnus::_reset()
     frameInfo.numLines = 313;
 
     // Initialize lookup tables
-    clearDMAEventTable();
+    clearBplEventTable();
 
     // Initialize the event slots
     for (unsigned i = 0; i < SLOT_COUNT; i++) {
@@ -219,7 +219,7 @@ Agnus::_inspect()
     
     info.bpl1mod = bpl1mod;
     info.bpl2mod = bpl2mod;
-    info.numBpls = activeBitplanes;
+    info.numBpls = denise->enabledChannels();
     
     info.dskpt   = dskpt;
     for (unsigned i = 0; i < 4; i++) info.audlc[i] = audlc[i];
@@ -302,9 +302,9 @@ bool
 Agnus::inBplDmaLine(uint16_t dmacon, uint16_t bplcon0) {
 
     return
-    ddfVFlop                           // Outside VBLANK, inside DIW
-    && Denise::planes(bplcon0)         // At least one bitplane enabled
-    && bplDMA(dmacon);                 // Bitplane DMA enabled
+    ddfVFlop                            // Outside VBLANK, inside DIW
+    && Denise::enabledChannels(bplcon0) // At least one bitplane enabled
+    && bplDMA(dmacon);                  // Bitplane DMA enabled
 }
 
 Cycle
@@ -437,14 +437,14 @@ Agnus::allocateBus()
 uint16_t
 Agnus::doDiskDMA()
 {
-    dataBus = mem->peekChip16(dskpt);
+    uint16_t result = mem->peekChip16(dskpt);
     INC_DMAPTR(dskpt);
 
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_DISK;
-    busValue[pos.h] = dataBus;
+    busValue[pos.h] = result;
 
-    return dataBus;
+    return result;
 }
 
 void
@@ -453,7 +453,6 @@ Agnus::doDiskDMA(uint16_t value)
     mem->pokeChip16(dskpt, value);
     INC_DMAPTR(dskpt);
 
-    dataBus = value;
     busOwner[pos.h] = BUS_DISK;
     busValue[pos.h] = value;
 }
@@ -461,7 +460,7 @@ Agnus::doDiskDMA(uint16_t value)
 uint16_t
 Agnus::doAudioDMA(int channel)
 {
-    dataBus = mem->peekChip16(audlc[channel]);
+    uint16_t result = mem->peekChip16(audlc[channel]);
     INC_DMAPTR(audlc[channel]);
 
     // We have to fake the horizontal position here, because this function
@@ -469,60 +468,60 @@ Agnus::doAudioDMA(int channel)
     int hpos = 0xD + (2 * channel);
 
     busOwner[hpos] = BUS_AUDIO;
-    busValue[hpos] = dataBus;
+    busValue[hpos] = result;
 
-    return dataBus;
+    return result;
 }
 
 template <int channel> uint16_t
 Agnus::doSpriteDMA()
 {
-    dataBus = mem->peekChip16(sprpt[channel]);
+    uint16_t result = mem->peekChip16(sprpt[channel]);
     INC_DMAPTR(sprpt[channel]);
 
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_SPRITE;
-    busValue[pos.h] = dataBus;
+    busValue[pos.h] = result;
 
-    return dataBus;
+    return result;
 }
 
 uint16_t
 Agnus::doSpriteDMA(int channel)
 {
-    dataBus = mem->peekChip16(sprpt[channel]);
+    uint16_t result = mem->peekChip16(sprpt[channel]);
     INC_DMAPTR(sprpt[channel]);
 
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_SPRITE;
-    busValue[pos.h] = dataBus;
+    busValue[pos.h] = result;
 
-    return dataBus;
+    return result;
 }
 
 template <int bitplane> uint16_t
 Agnus::doBitplaneDMA()
 {
-    dataBus = mem->peekChip16(bplpt[bitplane]);
+    uint16_t result = mem->peekChip16(bplpt[bitplane]);
     INC_DMAPTR(bplpt[bitplane]);
 
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_BITPLANE;
-    busValue[pos.h] = dataBus;
+    busValue[pos.h] = result;
 
-    return dataBus;
+    return result;
 }
 
 uint16_t
 Agnus::copperRead(uint32_t addr)
 {
-    dataBus = mem->peek16<BUS_COPPER>(addr);
+    uint16_t result = mem->peek16<BUS_COPPER>(addr);
 
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_COPPER;
-    busValue[pos.h] = dataBus;
+    busValue[pos.h] = result;
 
-    return dataBus;
+    return result;
 }
 
 void
@@ -531,7 +530,6 @@ Agnus::copperWrite(uint32_t addr, uint16_t value)
     mem->pokeCustom16<POKE_COPPER>(addr, value);
 
     assert(pos.h < HPOS_CNT);
-    dataBus = value;
     busOwner[pos.h] = BUS_COPPER;
     busValue[pos.h] = value;
 }
@@ -543,11 +541,12 @@ Agnus::blitterRead(uint32_t addr)
     assert(pos.h < HPOS_CNT);
     assert(busOwner[pos.h] == BUS_BLITTER);
 
-    dataBus = mem->peek16<BUS_BLITTER>(addr);
-    busOwner[pos.h] = BUS_BLITTER;
-    busValue[pos.h] = dataBus;
+    uint16_t result = mem->peek16<BUS_BLITTER>(addr);
 
-    return dataBus;
+    busOwner[pos.h] = BUS_BLITTER;
+    busValue[pos.h] = result;
+
+    return result;
 }
 
 void
@@ -559,13 +558,12 @@ Agnus::blitterWrite(uint32_t addr, uint16_t value)
 
     mem->poke16<BUS_BLITTER>(addr, value);
 
-    dataBus = value;
     busOwner[pos.h] = BUS_BLITTER;
     busValue[pos.h] = value;
 }
 
 void
-Agnus::clearDMAEventTable()
+Agnus::clearBplEventTable()
 {
     memset(dmaEvent, 0, sizeof(dmaEvent));
     dmaEvent[HPOS_MAX] = BPL_EOL;
@@ -577,21 +575,21 @@ Agnus::allocateBplSlots(uint16_t dmacon, uint16_t bplcon0, int first, int last)
 {
     assert(first >= 0 && last < HPOS_MAX);
 
-    int planes = Denise::planes(bplcon0);
+    int channels = Denise::enabledChannels(bplcon0);
     bool hires = Denise::hires(bplcon0);
 
     // Set number of bitplanes to 0 if we are not in a bitplane DMA line
-    if (!inBplDmaLine(dmacon, bplcon0)) planes = 0;
-    assert(planes <= 6);
+    if (!inBplDmaLine(dmacon, bplcon0)) channels = 0;
+    assert(channels <= 6);
 
     // Allocate slots
     if (hires) {
         for (int i = first; i <= last; i++) {
-            dmaEvent[i] = inHiresDmaArea(i) ? bitplaneDMA[1][planes][i] : EVENT_NONE;
+            dmaEvent[i] = inHiresDmaArea(i) ? bitplaneDMA[1][channels][i] : EVENT_NONE;
         }
     } else {
         for (int i = first; i <= last; i++) {
-            dmaEvent[i] = inLoresDmaArea(i) ? bitplaneDMA[0][planes][i] : EVENT_NONE;
+            dmaEvent[i] = inLoresDmaArea(i) ? bitplaneDMA[0][channels][i] : EVENT_NONE;
         }
     }
 
@@ -611,6 +609,7 @@ Agnus::switchBitplaneDmaOn()
     int16_t stop;
 
     bool hires = denise->hires();
+    int activeBitplanes = denise->enabledChannels();
 
     // Determine the range that is covered by fetch units
     if (hires) {
@@ -657,7 +656,7 @@ Agnus::switchBitplaneDmaOff()
         return;
     }
 
-    clearDMAEventTable();
+    clearBplEventTable();
     scheduleNextBplEvent();
 }
 
@@ -1228,18 +1227,6 @@ Agnus::pokeDDFSTRT(uint16_t value)
             scheduleNextBplEvent();
         }
     }
-
-    // int16_t oldStrt = denise->hires() ? dmaStrtHires : dmaStrtLores;
-    // if (pos.h <= oldStrt - 2) {
-    /*
-    if (pos.h < ddfstrt - 2) {
-
-        debug("Recomputing allocation table: %d\n", ddfstrt);
-        computeDDFStrt();
-        updateBitplaneDma();
-        scheduleNextBplEvent();
-    }
-    */
 }
 
 void
@@ -1254,17 +1241,6 @@ Agnus::pokeDDFSTOP(uint16_t value)
 
     // Let the hsync handler recompute the data fetch window
     hsyncActions |= HSYNC_COMPUTE_DDF_WINDOW;
-
-    // Check if the modification also affects the current rasterline
-    /*
-    int16_t oldStop = denise->hires() ? dmaStopHires : dmaStopLores;
-    if (pos.h <= oldStop - 2) {
-
-        computeDDFStop();
-        updateBitplaneDma();
-        scheduleNextBplEvent();
-    }
-    */
 }
 
 void
@@ -1490,16 +1466,6 @@ Agnus::setBPLCON0(uint16_t oldValue, uint16_t newValue)
         debug("oldBplcon0 = %X newBplcon0 = %X\n", oldBplcon0, newBplcon0);
         dumpBplEventTable();
          */
-
-        /* Determine the number of enabled bitplanes.
-         *
-         *     - In hires mode, at most 4 bitplanes are possible.
-         *     - In lores mode, at most 6 bitplanes are possible.
-         *     - Invalid numbers disable bitplane DMA.
-         */
-        bool hires = (newValue & 0x8000);
-        activeBitplanes = (newValue & 0x7000) >> 12;
-        if (activeBitplanes > (hires ? 4 : 6)) activeBitplanes = 0;
 
         /* TODO:
          * BPLCON0 is usually written in each frame.

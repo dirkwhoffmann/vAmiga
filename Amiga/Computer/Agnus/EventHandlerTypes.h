@@ -22,10 +22,7 @@
 
 typedef enum : long
 {
-    //
-    // Primary slot table
-    //
-
+    // Primary slots
     AGN_SLOT = 0,                   // Agnus
     CIAA_SLOT,                      // CIA A execution
     CIAB_SLOT,                      // CIA B execution
@@ -33,49 +30,46 @@ typedef enum : long
     DAS_SLOT,                       // Disk, Audio, and Sprite DMA
     COP_SLOT,                       // Copper
     BLT_SLOT,                       // Blitter
-    SEC_SLOT,                       // Secondary events
+    SEC_SLOT,                       // Enables secondary slots
 
-    LAST_PRIM_SLOT = SEC_SLOT,
-    FIRST_SEC_SLOT,
-
-    DSK_SLOT = FIRST_SEC_SLOT,      // Disk controller
+    // Secondary slots
+    DSK_SLOT,                       // Disk controller
     DCH_SLOT,                       // Disk changes (insert, eject)
     IRQ_SLOT,                       // Interrupts
     KBD_SLOT,                       // Keyboard
     TXD_SLOT,                       // Serial data out (UART)
     RXD_SLOT,                       // Serial data in (UART)
     POT_SLOT,                       // Potentiometer
-    INSPECTOR_SLOT,                 // Handles periodic calls to inspect()
+    INS_SLOT,                       // Handles periodic calls to inspect()
 
-    LAST_SEC_SLOT = INSPECTOR_SLOT,
     SLOT_COUNT
 
 } EventSlot;
 
-static inline bool isEventSlot(int32_t s) { return s < SLOT_COUNT; }
-static inline bool isPrimarySlot(int32_t s) { return s <= LAST_PRIM_SLOT; }
-static inline bool isSecondarySlot(int32_t s) { return s >= FIRST_SEC_SLOT && s <= LAST_SEC_SLOT; }
+static inline bool isEventSlot(long s) { return s < SLOT_COUNT; }
+static inline bool isPrimarySlot(long s) { return s <= SEC_SLOT; }
+static inline bool isSecondarySlot(long s) { return s > SEC_SLOT && s < SLOT_COUNT; }
 
 inline const char *slotName(EventSlot nr)
 {
     switch (nr) {
-        case AGN_SLOT:           return "Agnus";
-        case CIAA_SLOT:          return "CIA A"; 
-        case CIAB_SLOT:          return "CIA B";
-        case BPL_SLOT:           return "Bitplane DMA";
-        case DAS_SLOT:           return "Other DMA";
-        case COP_SLOT:           return "Copper";
-        case BLT_SLOT:           return "Blitter";
-        case SEC_SLOT:           return "Secondary";
+        case AGN_SLOT:  return "Agnus";
+        case CIAA_SLOT: return "CIA A";
+        case CIAB_SLOT: return "CIA B";
+        case BPL_SLOT:  return "Bitplane DMA";
+        case DAS_SLOT:  return "Other DMA";
+        case COP_SLOT:  return "Copper";
+        case BLT_SLOT:  return "Blitter";
+        case SEC_SLOT:  return "Secondary";
 
-        case DSK_SLOT:           return "Disk Controller";
-        case DCH_SLOT:           return "Disk Change";
-        case IRQ_SLOT:           return "Interrupts";
-        case KBD_SLOT:           return "Keyboard";
-        case TXD_SLOT:           return "UART out";
-        case RXD_SLOT:           return "UART in";
-        case POT_SLOT:           return "Potentiometer";
-        case INSPECTOR_SLOT:     return "Debugger";
+        case DSK_SLOT:  return "Disk Controller";
+        case DCH_SLOT:  return "Disk Change";
+        case IRQ_SLOT:  return "Interrupts";
+        case KBD_SLOT:  return "Keyboard";
+        case TXD_SLOT:  return "UART out";
+        case RXD_SLOT:  return "UART in";
+        case POT_SLOT:  return "Potentiometer";
+        case INS_SLOT:  return "Inspector";
 
         default:
             assert(false);

@@ -172,7 +172,10 @@ public:
      * See also: updateMemSrcTable()
      */
     MemorySource memSrc[256];
-    
+
+    // The last value on the data bus
+    uint16_t dataBus;
+
     // Buffer for returning string values
     char str[256];
     
@@ -205,7 +208,8 @@ public:
         worker
 
         & kickIsWritable
-        & memSrc;
+        & memSrc
+        & dataBus;
     }
 
 
