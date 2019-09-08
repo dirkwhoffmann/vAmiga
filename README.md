@@ -1,14 +1,14 @@
 [![Build Status](https://travis-ci.org/dirkwhoffmann/vAmiga.svg?branch=master)](https://travis-ci.org/dirkwhoffmann/vAmiga)
 
-![alt Objective](http://www.dirkwhoffmann.de/vAMIGA/pics/objective7.jpg)
+![alt Objective](http://www.dirkwhoffmann.de/vAMIGA/pics/objective8.png)
 
 ## About
 
-vAmiga is a user-friendly Amiga emulator for macOS. 
+vAmiga emulates a Commodore Amiga 500, 1000, or 2000 on your Mac.
 
 ## Status
 
-The development of vAmiga started in January 2019. All basic functionality is now implemented and the focus is currently shifting to improve compatibility. Due to the early development phase there are no official releases yet. Pre-releases can be downloaded in the Releases section. 
+Development has started in January 2019. By now all basic functionshave been implemented and the focus is shifting towards compatibility improvements. Due to the early development phase	there are no official releases yet. Pre-releases can be downloaded in the Releases section.
    
 ## Where to go from here?
 
