@@ -437,14 +437,14 @@ Agnus::allocateBus()
 uint16_t
 Agnus::doDiskDMA()
 {
-    dataBus = mem->peekChip16(dskpt);
+    uint16_t result = mem->peekChip16(dskpt);
     INC_DMAPTR(dskpt);
 
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_DISK;
-    busValue[pos.h] = dataBus;
+    busValue[pos.h] = result;
 
-    return dataBus;
+    return result;
 }
 
 void
@@ -453,7 +453,6 @@ Agnus::doDiskDMA(uint16_t value)
     mem->pokeChip16(dskpt, value);
     INC_DMAPTR(dskpt);
 
-    dataBus = value;
     busOwner[pos.h] = BUS_DISK;
     busValue[pos.h] = value;
 }
@@ -461,7 +460,7 @@ Agnus::doDiskDMA(uint16_t value)
 uint16_t
 Agnus::doAudioDMA(int channel)
 {
-    dataBus = mem->peekChip16(audlc[channel]);
+    uint16_t result = mem->peekChip16(audlc[channel]);
     INC_DMAPTR(audlc[channel]);
 
     // We have to fake the horizontal position here, because this function
@@ -469,60 +468,60 @@ Agnus::doAudioDMA(int channel)
     int hpos = 0xD + (2 * channel);
 
     busOwner[hpos] = BUS_AUDIO;
-    busValue[hpos] = dataBus;
+    busValue[hpos] = result;
 
-    return dataBus;
+    return result;
 }
 
 template <int channel> uint16_t
 Agnus::doSpriteDMA()
 {
-    dataBus = mem->peekChip16(sprpt[channel]);
+    uint16_t result = mem->peekChip16(sprpt[channel]);
     INC_DMAPTR(sprpt[channel]);
 
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_SPRITE;
-    busValue[pos.h] = dataBus;
+    busValue[pos.h] = result;
 
-    return dataBus;
+    return result;
 }
 
 uint16_t
 Agnus::doSpriteDMA(int channel)
 {
-    dataBus = mem->peekChip16(sprpt[channel]);
+    uint16_t result = mem->peekChip16(sprpt[channel]);
     INC_DMAPTR(sprpt[channel]);
 
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_SPRITE;
-    busValue[pos.h] = dataBus;
+    busValue[pos.h] = result;
 
-    return dataBus;
+    return result;
 }
 
 template <int bitplane> uint16_t
 Agnus::doBitplaneDMA()
 {
-    dataBus = mem->peekChip16(bplpt[bitplane]);
+    uint16_t result = mem->peekChip16(bplpt[bitplane]);
     INC_DMAPTR(bplpt[bitplane]);
 
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_BITPLANE;
-    busValue[pos.h] = dataBus;
+    busValue[pos.h] = result;
 
-    return dataBus;
+    return result;
 }
 
 uint16_t
 Agnus::copperRead(uint32_t addr)
 {
-    dataBus = mem->peek16<BUS_COPPER>(addr);
+    uint16_t result = mem->peek16<BUS_COPPER>(addr);
 
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_COPPER;
-    busValue[pos.h] = dataBus;
+    busValue[pos.h] = result;
 
-    return dataBus;
+    return result;
 }
 
 void
@@ -531,7 +530,6 @@ Agnus::copperWrite(uint32_t addr, uint16_t value)
     mem->pokeCustom16<POKE_COPPER>(addr, value);
 
     assert(pos.h < HPOS_CNT);
-    dataBus = value;
     busOwner[pos.h] = BUS_COPPER;
     busValue[pos.h] = value;
 }
@@ -543,11 +541,12 @@ Agnus::blitterRead(uint32_t addr)
     assert(pos.h < HPOS_CNT);
     assert(busOwner[pos.h] == BUS_BLITTER);
 
-    dataBus = mem->peek16<BUS_BLITTER>(addr);
-    busOwner[pos.h] = BUS_BLITTER;
-    busValue[pos.h] = dataBus;
+    uint16_t result = mem->peek16<BUS_BLITTER>(addr);
 
-    return dataBus;
+    busOwner[pos.h] = BUS_BLITTER;
+    busValue[pos.h] = result;
+
+    return result;
 }
 
 void
@@ -559,7 +558,6 @@ Agnus::blitterWrite(uint32_t addr, uint16_t value)
 
     mem->poke16<BUS_BLITTER>(addr, value);
 
-    dataBus = value;
     busOwner[pos.h] = BUS_BLITTER;
     busValue[pos.h] = value;
 }

@@ -421,9 +421,6 @@ public:
     // Bookkeeping
     //
 
-    // The current value of the data bus
-    uint16_t dataBus;
-
     // Recorded DMA values for all cycles in the current rasterline
     uint16_t busValue[HPOS_CNT];
 
@@ -560,8 +557,7 @@ public:
         & bpl2mod
         & bpl2modNew
         & sprpt
-        
-        & dataBus
+
         & busValue
         & busOwner
         & oldBplDmaLine

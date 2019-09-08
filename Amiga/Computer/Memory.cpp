@@ -471,18 +471,6 @@ Memory::updateMemSrcTable()
     if (amiga) amiga->putMessage(MSG_MEM_LAYOUT);
 }
 
-/*
-uint32_t extromcheck =
-fnv_1a_it32
- (fnv_1a_it32
-  (fnv_1a_it32
-   (fnv_1a_it32
-    (fnv_1a_it32
-     (fnv_1a_init32(), 0x1114), 0x1114), 0x4EF9), 0xF8), 0x2);
-long extcheckcnt = 5;
-long checkverbose = 6;
-*/
-
 uint8_t
 Memory::peek8(uint32_t addr)
 {
@@ -494,48 +482,56 @@ Memory::peek8(uint32_t addr)
         case MEM_UNMAPPED:
 
             agnus->executeUntilBusIsFree();
-            return 0;
+            dataBus = 0;
+            return dataBus;
 
         case MEM_CHIP:
 
-            agnus->executeUntilBusIsFree();
             ASSERT_CHIP_ADDR(addr);
-            return READ_CHIP_8(addr);
+            agnus->executeUntilBusIsFree();
+            dataBus = READ_CHIP_8(addr);
+            return dataBus;
 
         case MEM_FAST:
 
             ASSERT_FAST_ADDR(addr);
-            return READ_FAST_8(addr);
+            dataBus = READ_FAST_8(addr);
+            return dataBus;
 
         case MEM_CIA:
 
-            agnus->executeUntilBusIsFree();
             ASSERT_CIA_ADDR(addr);
-            return peekCIA8(addr);
+            agnus->executeUntilBusIsFree();
+            dataBus = peekCIA8(addr);
+            return dataBus;
 
         case MEM_SLOW:
 
-            agnus->executeUntilBusIsFree();
             ASSERT_SLOW_ADDR(addr);
-            return READ_SLOW_8(addr);
+            agnus->executeUntilBusIsFree();
+            dataBus = READ_SLOW_8(addr);
+            return dataBus;
 
         case MEM_RTC:
 
-            agnus->executeUntilBusIsFree();
             ASSERT_RTC_ADDR(addr);
-            return peekRTC8(addr);
+            agnus->executeUntilBusIsFree();
+            dataBus = peekRTC8(addr);
+            return dataBus;
 
         case MEM_OCS:
 
-            agnus->executeUntilBusIsFree();
             ASSERT_OCS_ADDR(addr);
-            return peekCustom8(addr);
+            agnus->executeUntilBusIsFree();
+            dataBus = peekCustom8(addr);
+            return dataBus;
 
         case MEM_AUTOCONF:
 
-            agnus->executeUntilBusIsFree();
             ASSERT_AUTO_ADDR(addr);
-            return peekAutoConf8(addr);
+            agnus->executeUntilBusIsFree();
+            dataBus = peekAutoConf8(addr);
+            return dataBus;
 
         case MEM_BOOT:
 
@@ -572,12 +568,14 @@ Memory::peek16(uint32_t addr)
         case BUS_COPPER:
 
             ASSERT_CHIP_ADDR(addr);
-            return (memSrc[addr >> 16] == MEM_UNMAPPED) ? 0 : READ_CHIP_16(addr);
+            dataBus = (memSrc[addr >> 16] == MEM_UNMAPPED) ? 0 : READ_CHIP_16(addr);
+            return dataBus;
 
         case BUS_BLITTER:
 
             ASSERT_CHIP_ADDR(addr);
-            return (memSrc[addr >> 16] == MEM_UNMAPPED) ? 0 : READ_CHIP_16(addr);
+            dataBus = (memSrc[addr >> 16] == MEM_UNMAPPED) ? 0 : READ_CHIP_16(addr);
+            return dataBus;
 
         case BUS_CPU:
 
@@ -586,13 +584,15 @@ Memory::peek16(uint32_t addr)
                 case MEM_UNMAPPED:
 
                     agnus->executeUntilBusIsFree();
-                    return 0;
+                    dataBus = 0;
+                    return dataBus;
 
                 case MEM_CHIP:
 
                     ASSERT_CHIP_ADDR(addr);
                     agnus->executeUntilBusIsFree();
-                    return READ_CHIP_16(addr);
+                    dataBus = READ_CHIP_16(addr);
+                    return dataBus;
 
                 case MEM_FAST:
 
@@ -603,31 +603,36 @@ Memory::peek16(uint32_t addr)
 
                     ASSERT_CIA_ADDR(addr);
                     agnus->executeUntilBusIsFree();
-                    return peekCIA16(addr);
+                    dataBus = peekCIA16(addr);
+                    return dataBus;
 
                 case MEM_SLOW:
 
                     ASSERT_SLOW_ADDR(addr);
                     agnus->executeUntilBusIsFree();
-                    return READ_SLOW_16(addr);
+                    dataBus = READ_SLOW_16(addr);
+                    return dataBus;
 
                 case MEM_RTC:
 
                     ASSERT_RTC_ADDR(addr);
                     agnus->executeUntilBusIsFree();
-                    return peekRTC16(addr);
+                    dataBus = peekRTC16(addr);
+                    return dataBus;
 
                 case MEM_OCS:
 
                     ASSERT_OCS_ADDR(addr);
                     agnus->executeUntilBusIsFree();
-                    return peekCustom16(addr);
+                    dataBus = peekCustom16(addr);
+                    return dataBus;
 
                 case MEM_AUTOCONF:
 
                     ASSERT_AUTO_ADDR(addr);
                     agnus->executeUntilBusIsFree();
-                    return peekAutoConf16(addr);
+                    dataBus = peekAutoConf16(addr);
+                    return dataBus;
 
                 case MEM_BOOT:
 
@@ -641,20 +646,6 @@ Memory::peek16(uint32_t addr)
 
                 case MEM_EXTROM:
 
-                    // debug("MEM EXTROM addr = %X\n", addr);
-                    /*
-                    extromcheck = fnv_1a_it32(extromcheck, READ_EXT_16(addr));
-                    extcheckcnt++;
-
-                    if (checkverbose < 16) {
-                        checkverbose++;
-                        debug("    %d: (%X) = %X\n", checkverbose, addr, READ_EXT_16(addr));
-                    }
-                    if (extcheckcnt % 1024 == 0) {
-                        debug("MEM_EXTROM %d: %x (extromsize = %X)\n", extcheckcnt, extromcheck, extRomSize);
-                    }
-                    */
-                    
                     ASSERT_EXT_ADDR(addr);
                     return READ_EXT_16(addr);
             }
@@ -667,11 +658,6 @@ Memory::peek16(uint32_t addr)
 uint32_t
 Memory::peek32(uint32_t addr)
 {
-    /*
-    if (memSrc[addr >> 16] == MEM_EXTROM) {
-        debug("PC: %X peek32(%X)\n", amiga->cpu.getPC(), addr);
-    }
-    */
     return HI_W_LO_W(peek16<BUS_CPU>(addr), peek16<BUS_CPU>(addr + 2));
 }
 
@@ -756,7 +742,7 @@ template <BusOwner owner> void
 Memory::poke16(uint32_t addr, uint16_t value)
 {
     if (!IS_EVEN(addr)) {
-        warn("peek16(%X): Address violation error (reading odd address)\n", addr);
+        warn("poke16(%X,%X): Address violation error (writing odd address)\n",addr, value);
     }
 
     addr &= 0xFFFFFF;
@@ -782,12 +768,14 @@ Memory::poke16(uint32_t addr, uint16_t value)
                 case MEM_UNMAPPED:
 
                     agnus->executeUntilBusIsFree();
+                    dataBus = value;
                     return;
 
                 case MEM_CHIP:
 
                     ASSERT_CHIP_ADDR(addr);
                     agnus->executeUntilBusIsFree();
+                    dataBus = value;
                     WRITE_CHIP_16(addr, value);
                     return;
 
@@ -801,6 +789,7 @@ Memory::poke16(uint32_t addr, uint16_t value)
 
                     ASSERT_CIA_ADDR(addr);
                     agnus->executeUntilBusIsFree();
+                    dataBus = value;
                     pokeCIA16(addr, value);
                     return;
 
@@ -808,6 +797,7 @@ Memory::poke16(uint32_t addr, uint16_t value)
 
                     ASSERT_SLOW_ADDR(addr);
                     agnus->executeUntilBusIsFree();
+                    dataBus = value;
                     WRITE_SLOW_16(addr, value);
                     return;
 
@@ -815,6 +805,7 @@ Memory::poke16(uint32_t addr, uint16_t value)
 
                     ASSERT_RTC_ADDR(addr);
                     agnus->executeUntilBusIsFree();
+                    dataBus = value;
                     pokeRTC16(addr, value);
                     return;
 
@@ -822,6 +813,7 @@ Memory::poke16(uint32_t addr, uint16_t value)
 
                     ASSERT_OCS_ADDR(addr);
                     agnus->executeUntilBusIsFree();
+                    dataBus = value;
                     pokeCustom16<POKE_CPU>(addr, value);
                     return;
 
@@ -829,6 +821,7 @@ Memory::poke16(uint32_t addr, uint16_t value)
 
                     ASSERT_AUTO_ADDR(addr);
                     agnus->executeUntilBusIsFree();
+                    dataBus = value;
                     pokeAutoConf16(addr, value);
                     return;
 
@@ -1136,7 +1129,7 @@ Memory::peekCustom16(uint32_t addr)
 
             // TODO: Remember the last data bus value
             // In the meantime, we write 0, because SAE is doing this.
-            pokeCustom16<POKE_CPU>(addr, 0);
+            pokeCustom16<POKE_CPU>(addr, dataBus);
 
             if (agnus->busOwner[agnus->pos.h] != BUS_NONE) {
                 result = agnus->busValue[agnus->pos.h];
@@ -1148,6 +1141,7 @@ Memory::peekCustom16(uint32_t addr)
     debug(OCSREG_DEBUG, "peekCustom16(%X [%s]) = %X\n",
           addr, customReg[(addr >> 1) & 0xFF], result);
 
+    dataBus = result;
     return result;
 }
 
@@ -1209,6 +1203,8 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
     }
 
     assert(IS_EVEN(addr));
+
+    dataBus = value;
 
     switch ((addr >> 1) & 0xFF) {
 
