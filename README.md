@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/dirkwhoffmann/vAmiga.svg?branch=master)](https://travis-ci.org/dirkwhoffmann/vAmiga)
 
-![alt Objective](http://www.dirkwhoffmann.de/vAMIGA/pics/objective7.jpg)
+![alt Objective](http://www.dirkwhoffmann.de/vAMIGA/pics/objective8.jpg)
 
 ## About
 
