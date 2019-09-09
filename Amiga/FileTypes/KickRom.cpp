@@ -9,18 +9,25 @@
 
 #include "KickRom.h"
 
-// AROS Kickstart replacement
-const uint8_t KickRom::magicBytes1[] = { 0x11, 0x14, 0x4E, 0xF9, 0x00, 0xF8, 0x00 };
-const uint8_t KickRom::magicBytes1a[] = { 0x11, 0x11, 0x4E, 0xF9, 0x00, 0xF8, 0x00 };
+const uint8_t KickRom::magicBytes[KickRom::signatureCnt][7] = {
 
-// Kickstart 1.2 and 1.3
-const uint8_t KickRom::magicBytes2[] = { 0x11, 0x11, 0x4E, 0xF9, 0x00, 0xFC, 0x00 };
+    // AROS Kickstart replacement
+    { 0x11, 0x14, 0x4E, 0xF9, 0x00, 0xF8, 0x00 },
+    { 0x11, 0x11, 0x4E, 0xF9, 0x00, 0xF8, 0x00 },
 
-// Kickstart 2.04
-const uint8_t KickRom::magicBytes3[] = { 0x11, 0x14, 0x4E, 0xF9, 0x00, 0xF8, 0x00 };
+    // Kickstart 1.2 and 1.3
+    { 0x11, 0x11, 0x4E, 0xF9, 0x00, 0xFC, 0x00 },
 
-// Diagnostic v2.0 (Logica)
-const uint8_t KickRom::magicBytes4[] = { 0x11, 0x11, 0x4E, 0xF9, 0x00, 0xF8, 0x04 };
+    // Kickstart 2.04
+    { 0x11, 0x14, 0x4E, 0xF9, 0x00, 0xF8, 0x00 },
+
+    // Kickstart 3.1
+    { 0x11, 0x14, 0x4E, 0xF9, 0x00, 0xF8, 0x00 },
+    // { 0x11, 0x16, 0x4E, 0xF9, 0x00, 0x20, 0x00 }, not working
+    
+    // Diagnostic v2.0 (Logica)
+    { 0x11, 0x11, 0x4E, 0xF9, 0x00, 0xF8, 0x04 }
+};
 
 KickRom::KickRom()
 {
@@ -31,13 +38,13 @@ bool
 KickRom::isKickRomBuffer(const uint8_t *buffer, size_t length)
 {
     if (length != KB(256) && length != KB(512)) return false;
-    
-    return
-    matchingBufferHeader(buffer, magicBytes1, sizeof(magicBytes1)) ||
-    matchingBufferHeader(buffer, magicBytes1a, sizeof(magicBytes1a)) ||
-    matchingBufferHeader(buffer, magicBytes2, sizeof(magicBytes2)) ||
-    matchingBufferHeader(buffer, magicBytes3, sizeof(magicBytes3)) ||
-    matchingBufferHeader(buffer, magicBytes4, sizeof(magicBytes4));
+
+    for (int i = 0; i < signatureCnt; i++) {
+        if (matchingBufferHeader(buffer, magicBytes[i], sizeof(magicBytes[i])))
+            return true;
+    }
+
+    return false;
 }
 
 bool
@@ -45,13 +52,13 @@ KickRom::isKickRomFile(const char *path)
 {
     if (!checkFileSize(path, KB(256)) &&
         !checkFileSize(path, KB(512))) return false;
-    
-    return
-    matchingFileHeader(path, magicBytes1, sizeof(magicBytes1)) ||
-    matchingFileHeader(path, magicBytes1a, sizeof(magicBytes1a)) ||
-    matchingFileHeader(path, magicBytes2, sizeof(magicBytes2)) ||
-    matchingFileHeader(path, magicBytes3, sizeof(magicBytes3)) ||
-    matchingFileHeader(path, magicBytes4, sizeof(magicBytes4));
+
+    for (int i = 0; i < signatureCnt; i++) {
+        if (matchingFileHeader(path, magicBytes[i], sizeof(magicBytes[i])))
+            return true;
+    }
+
+    return false;
 }
 
 KickRom *
