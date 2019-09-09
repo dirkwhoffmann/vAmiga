@@ -13,6 +13,7 @@ extension MyController {
         
         guard let amiga = amigaProxy else { return }
 
+        let isRunning = amiga.isRunning()
         let df0IsConnected = amiga.diskController.isConnected(0)
         let df1IsConnected = amiga.diskController.isConnected(1)
         let df2IsConnected = amiga.diskController.isConnected(2)
@@ -55,9 +56,9 @@ extension MyController {
 
             cmdLock: mapCommandKeys,
             
-            clockSpeed: true,
-            clockSpeedBar: true,
-            warpIcon: true
+            clockSpeed: isRunning,
+            clockSpeedBar: isRunning,
+            warpIcon: isRunning
         ]
         
         for (item, visible) in items {
