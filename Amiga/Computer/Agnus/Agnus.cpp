@@ -250,10 +250,10 @@ Agnus::_dump()
     dumpBplEventTable();
 }
 
-DMAInfo
+AgnusInfo
 Agnus::getInfo()
 {
-    DMAInfo result;
+    AgnusInfo result;
     
     pthread_mutex_lock(&lock);
     result = info;

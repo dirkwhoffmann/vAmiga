@@ -358,7 +358,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->agnus->blitter.dump();
 }
-- (DMAInfo) getInfo
+- (AgnusInfo) getInfo
 {
     return wrapper->agnus->getInfo();
 }

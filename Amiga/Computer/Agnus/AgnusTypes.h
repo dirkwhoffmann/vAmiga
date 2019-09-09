@@ -160,7 +160,7 @@ typedef struct
     uint32_t bplpt[6];
     uint32_t sprpt[8];
 }
-DMAInfo;
+AgnusInfo;
 
 typedef struct
 {

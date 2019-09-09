@@ -63,7 +63,7 @@ class Agnus : public HardwareComponent
     class Paula *paula;
 
     // Information shown in the GUI inspector panel
-    DMAInfo info;
+    AgnusInfo info;
     EventInfo eventInfo;
 
     
@@ -604,7 +604,7 @@ public:
 public:
     
     // Returns the latest recorded internal state
-    DMAInfo getInfo();
+    AgnusInfo getInfo();
     EventInfo getEventInfo();
     EventSlotInfo getEventSlotInfo(int nr);
 
