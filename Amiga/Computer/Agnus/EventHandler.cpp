@@ -60,6 +60,16 @@ Agnus::inspectEventSlot(EventSlot nr)
 
     switch ((EventSlot)nr) {
 
+        case REG_SLOT:
+            switch (slot[nr].id) {
+
+                case 0:             i->eventName = "none"; break;
+                case REG_CHANGE:    i->eventName = "REG_CHANGE"; break;
+                case REG_HSYNC:     i->eventName = "REG_HSYNC"; break;
+                default:            i->eventName = "*** INVALID ***"; break;
+            }
+            break;
+
         case AGN_SLOT:
             switch (slot[nr].id) {
 
@@ -354,6 +364,9 @@ Agnus::executeEventsUntil(Cycle cycle) {
     // Check primary slots
     //
 
+    if (isDue<REG_SLOT>(cycle)) {
+        serviceREGEvent();
+    }
     if (isDue<AGN_SLOT>(cycle)) {
         serviceAGNEvent();
     }
@@ -444,6 +457,14 @@ Agnus::serviceCIAEvent()
         default:
             assert(false);
     }
+}
+
+void
+Agnus::serviceREGEvent()
+{
+    assert(checkTriggeredEvent(REG_SLOT));
+
+    // Schedule next event
 }
 
 void
@@ -760,6 +781,14 @@ Agnus::checkScheduledEvent(EventSlot s)
     }
     
     switch (s) {
+        case REG_SLOT:
+            if (!isRegEvent(id)) {
+                _dump();
+                panic("Invalid REG event ID.");
+                return false;
+            }
+            break;
+
         case AGN_SLOT:
             if (!isAgnEvent(id)) {
                 _dump();
@@ -825,6 +854,12 @@ bool
 Agnus::checkTriggeredEvent(EventSlot s)
 {
     switch (s) {
+
+        case REG_SLOT:
+            if (slot[s].id != REG_HSYNC) {
+                assert(pos.h == 0xE3); return false;
+            }
+            break;
 
         case AGN_SLOT:
             if (slot[s].id != AGN_ACTIONS) {

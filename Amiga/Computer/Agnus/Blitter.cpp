@@ -741,7 +741,6 @@ Blitter::terminate()
     bbusy = false;
 
     // Trigger the Blitter interrupt
-    // agnus->scheduleRel<IRQ_BLIT_SLOT>(0, IRQ_SET);
     paula->raiseIrq(INT_BLIT);
 
     // Clear the Blitter slot

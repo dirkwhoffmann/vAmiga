@@ -23,7 +23,8 @@
 typedef enum : long
 {
     // Primary slots
-    AGN_SLOT = 0,                   // Agnus
+    REG_SLOT = 0,                   // Register changes and HSYNC
+    AGN_SLOT,                       // Agnus (DEPRECATED, WILL BE REPLACED BY REG_SLOT)
     CIAA_SLOT,                      // CIA A execution
     CIAB_SLOT,                      // CIA B execution
     BPL_SLOT,                       // Bitplane DMA
@@ -53,6 +54,7 @@ static inline bool isSecondarySlot(long s) { return s > SEC_SLOT && s < SLOT_COU
 inline const char *slotName(EventSlot nr)
 {
     switch (nr) {
+        case REG_SLOT:  return "Registers";
         case AGN_SLOT:  return "Agnus";
         case CIAA_SLOT: return "CIA A";
         case CIAB_SLOT: return "CIA B";
@@ -84,6 +86,11 @@ typedef enum : long
     //
     // Events in the primary event table
     //
+
+    // REG slot
+    REG_CHANGE = 1,
+    REG_HSYNC,
+    REG_EVENT_COUNT,
 
     // AGN slot
     AGN_ACTIONS = 1,
@@ -173,21 +180,7 @@ typedef enum : long
 
     // IRQ slots
     IRQ_CHECK = 1,
-    IRQ_SET, // DEPRECATED
-    IRQ_CLEAR, // DEPRECATED
     IRQ_EVENT_COUNT,
-
-    // REG slots
-    REG_DMACON = 1,
-    REG_DIWSTRT,
-    REG_DIWSTOP,
-    REG_BPLCON1,
-    REG_BPLCON2,
-    REG_BPL1MOD,
-    REG_BPL2MOD,
-    REG_BPLxPTH,
-    REG_BPLxPTL,
-    REG_EVENT_COUNT,
 
     // Keyboard
     KBD_SELFTEST = 1,
@@ -226,6 +219,7 @@ typedef enum : long
 
 } EventID;
 
+static inline bool isRegEvent(EventID id) { return id < REG_EVENT_COUNT; }
 static inline bool isAgnEvent(EventID id) { return id < AGN_EVENT_COUNT; }
 static inline bool isCiaEvent(EventID id) { return id < CIA_EVENT_COUNT; }
 static inline bool isBplEvent(EventID id) { return id < BPL_EVENT_COUNT; }
