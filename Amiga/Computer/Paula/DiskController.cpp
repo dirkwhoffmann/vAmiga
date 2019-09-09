@@ -168,6 +168,15 @@ DiskController::insertDisk(class Disk *disk, int nr, Cycle delay)
 
     debug(DSK_DEBUG, "insertDisk(%p, %d, %d)\n", disk, nr, delay);
 
+    // The easy case: The emulator is not running
+    if (!amiga->isRunning()) {
+
+        df[nr]->ejectDisk();
+        df[nr]->insertDisk(disk);
+        return;
+    }
+
+    // The not so easy case: The emulator is running
     amiga->suspend();
 
     if (df[nr]->hasDisk()) {
@@ -175,7 +184,8 @@ DiskController::insertDisk(class Disk *disk, int nr, Cycle delay)
         // Eject the old disk first
         df[nr]->ejectDisk();
 
-        // Make sure there is enough time between ejecting and inserting
+        // Make sure there is enough time between ejecting and inserting.
+        // Otherwise, the Amiga might not detect the change.
         delay = MAX(SEC(1.5), delay);
     }
 
