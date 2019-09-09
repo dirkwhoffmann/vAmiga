@@ -10,7 +10,10 @@
 #ifndef _SERIALIZATION_INC
 #define _SERIALIZATION_INC
 
+#include "Event.h"
+#include "Beam.h"
 #include "RegisterChange.h"
+#include "ChangeRecorder.h"
 
 //
 // Basic memory buffer I/O
@@ -73,9 +76,16 @@ inline void write64(uint8_t *& buffer, uint64_t value)
 //
 
 #define COUNT(type) \
-SerCounter& operator&(type& v) \
+auto& operator&(type& v) \
 { \
 count += sizeof(type); \
+return *this; \
+}
+
+#define STRUCT(type) \
+auto& operator&(type& v) \
+{ \
+v.applyToItems(*this); \
 return *this; \
 }
 
@@ -101,6 +111,7 @@ public:
     COUNT(const unsigned long long)
     COUNT(const float)
     COUNT(const double)
+
     COUNT(const AmigaModel)
     COUNT(const MemorySource)
     COUNT(const EventID)
@@ -114,23 +125,12 @@ public:
     COUNT(const DrawingMode)
     COUNT(const DiskType)
 
-    SerCounter& operator&(Event &v)
-    {
-        *this & v.triggerCycle & v.id & v.data;
-        return *this;
-    }
-
-    SerCounter& operator&(RegisterChange &v)
-    {
-        v.applyToItems(*this);
-        return *this;
-    }
-
-    SerCounter& operator&(ChangeHistory &v)
-    {
-        v.applyToItems(*this);
-        return *this;
-    }
+    STRUCT(Event)
+    STRUCT(Beam)
+    STRUCT(Change)
+    template <uint16_t capacity> STRUCT(ChangeRecorder<capacity>)
+    STRUCT(RegisterChange)
+    STRUCT(ChangeHistory)
 
     template <class T, size_t N>
     SerCounter& operator&(T (&v)[N])
@@ -196,23 +196,12 @@ public:
     DESERIALIZE32(DrawingMode)
     DESERIALIZE64(DiskType)
 
-    SerReader& operator&(Event &v)
-    {
-        *this & v.triggerCycle & v.id & v.data;
-        return *this;
-    }
-
-    SerReader& operator&(RegisterChange &v)
-    {
-        v.applyToItems(*this);
-        return *this;
-    }
-
-    SerReader& operator&(ChangeHistory &v)
-    {
-        v.applyToItems(*this);
-        return *this;
-    }
+    STRUCT(Event)
+    STRUCT(Beam)
+    STRUCT(Change)
+    template <uint16_t capacity> STRUCT(ChangeRecorder<capacity>)
+    STRUCT(RegisterChange)
+    STRUCT(ChangeHistory)
 
     template <class T, size_t N>
     SerReader& operator&(T (&v)[N])
@@ -228,7 +217,6 @@ public:
         memcpy(dst, (void *)ptr, n);
         ptr += n;
     }
-
 };
 
 
@@ -285,23 +273,12 @@ public:
     SERIALIZE32(const DrawingMode)
     SERIALIZE64(const DiskType)
 
-    SerWriter& operator&(Event &v)
-    {
-        *this & v.triggerCycle & v.id & v.data;
-        return *this;
-    }
-
-    SerWriter& operator&(RegisterChange &v)
-    {
-        v.applyToItems(*this);
-        return *this;
-    }
-
-    SerWriter& operator&(ChangeHistory &v)
-    {
-        v.applyToItems(*this);
-        return *this;
-    }
+    STRUCT(Event)
+    STRUCT(Beam)
+    STRUCT(Change)
+    template <uint16_t capacity> STRUCT(ChangeRecorder<capacity>)
+    STRUCT(RegisterChange)
+    STRUCT(ChangeHistory)
 
     template <class T, size_t N>
     SerWriter& operator&(T (&v)[N])
@@ -366,23 +343,12 @@ public:
     RESET(KeyboardState)
     RESET(DrawingMode)
 
-    SerResetter& operator&(Event &v)
-    {
-        *this & v.triggerCycle & v.id & v.data;
-        return *this;
-    }
-
-    SerResetter& operator&(RegisterChange &v)
-    {
-        v.applyToItems(*this);
-        return *this;
-    }
-
-    SerResetter& operator&(ChangeHistory &v)
-    {
-        v.applyToItems(*this);
-        return *this;
-    }
+    STRUCT(Event)
+    STRUCT(Beam)
+    STRUCT(Change)
+    template <uint16_t capacity> STRUCT(ChangeRecorder<capacity>)
+    STRUCT(RegisterChange)
+    STRUCT(ChangeHistory)
 
     template <class T, size_t N>
     SerResetter& operator&(T (&v)[N])

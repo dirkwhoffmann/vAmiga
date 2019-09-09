@@ -418,26 +418,19 @@ public:
     bool dbplf() { return dbplf(bplcon0); }
     static bool lace(uint16_t v) { return GET_BIT(v, 2); }
     bool lace() { return lace(bplcon0); }
-    static int bpu(uint16_t v) { return (v >> 12) & 0b111; }
-    int bpu() { return bpu(bplcon0); }
     static bool ham(uint16_t v) { return (v & 0x8C00) == 0x0800 && (bpu(v) == 5 || bpu(v) == 6); }
     bool ham() { return ham(bplcon0); }
 
-    /* Values derived from the BPU bits:
-     *
-     *   enabledChannels : This value determines the number of BPLxDAT
-     *                     registers filled by DMA.
-     *
-     *     enabledPlanes : This value determines the number of BPLxDAT
-     *                     registers transfered to the shift registers at the
-     *                     end of a fetch unit.
+    /* Returns the Denise view of the BPU bits.
+     * The value determines how many shift registers are loaded with the values
+     * of their corresponding BPLxDAT registers at the end of a fetch unit.
+     * It is computed out of the three BPU bits stored in BPLCON0, but not
+     * identical with them. The value differs if the BPU bits reflect an invalid
+     * bit pattern.
+     * Compare with Agnus::bpu() which returns the Agnus view of the BPU bits.
      */
-    static int enabledChannels(uint16_t v);
-    int enabledChannels() { return enabledChannels(bplcon0); }
-
-    static int enabledPlanes(uint16_t v);
-    int enabledPlanes() { return enabledPlanes(bplcon0); }
-
+    static int bpu(uint16_t v);
+    int bpu() { return bpu(bplcon0); }
 
     // OCS register 0x102 (w)
     void pokeBPLCON1(uint16_t value);

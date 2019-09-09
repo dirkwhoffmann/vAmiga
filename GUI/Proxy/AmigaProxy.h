@@ -307,7 +307,7 @@ struct AmigaFileWrapper;
 - (void) dumpCopper;
 - (void) dumpBlitter;
 
-- (DMAInfo) getInfo;
+- (AgnusInfo) getInfo;
 - (DMADebuggerInfo) getDebuggerInfo;
 - (EventSlotInfo) getEventSlotInfo:(NSInteger)slot;
 - (EventInfo) getEventInfo;

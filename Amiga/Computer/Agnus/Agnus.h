@@ -15,6 +15,7 @@
 #include "Blitter.h"
 #include "DmaDebugger.h"
 #include "Beam.h"
+#include "Event.h"
 
 // Bit plane indices
 #define PLANE1 0
@@ -51,7 +52,6 @@
 #define VPOS(x) ((x) >> 8)
 #define HPOS(x) ((x) & 0xFF)
 
-
 class Agnus : public HardwareComponent
 {
     // Quick-access references
@@ -63,7 +63,7 @@ class Agnus : public HardwareComponent
     class Paula *paula;
 
     // Information shown in the GUI inspector panel
-    DMAInfo info;
+    AgnusInfo info;
     EventInfo eventInfo;
 
     
@@ -366,6 +366,9 @@ public:
     // Registers
     //
 
+    // Ringbuffer for managing register change delays
+    ChangeRecorder<8> changeRecorder;
+
     // A copy of BPLCON0 (Denise has another copy)
     uint16_t bplcon0;
     uint16_t bplcon0New;
@@ -505,8 +508,7 @@ public:
         & hsyncActions
         & clock
         & frame
-        & pos.v
-        & pos.h
+        & pos
         & frameInfo.nr
         & frameInfo.interlaced
         & frameInfo.numLines
@@ -539,6 +541,7 @@ public:
         & dmaStopHires
         & dmaStrtLoresShift
 
+        & changeRecorder
         & bplcon0
         & bplcon0New
         & bplcon0AtDDFStrt
@@ -601,7 +604,7 @@ public:
 public:
     
     // Returns the latest recorded internal state
-    DMAInfo getInfo();
+    AgnusInfo getInfo();
     EventInfo getEventInfo();
     EventSlotInfo getEventSlotInfo(int nr);
 
@@ -611,10 +614,6 @@ public:
     //
 
 public:
-
-    // Returns the current position of the video beam
-    // int16_t vpos() { return pos.v; }
-    // int16_t hpos() { return pos.h; }
 
     // Indicates if the current frame is a long or a short frame
     bool isLongFrame() { return frameInfo.numLines == 313; }
@@ -848,6 +847,15 @@ public:
     // BPLCON0
     void pokeBPLCON0(uint16_t value);
     void setBPLCON0(uint16_t oldValue, uint16_t newValue);
+
+    /* Returns the Agnus view of the BPU bits.
+     * The value determines the number of enabled DMA channels. It is computed
+     * out of the three BPU bits stored in BPLCON0, but not identical with them.
+     * The value differs if the BPU bits reflect an invalid bit pattern.
+     * Compare with Denise::bpu() which returns the Denise view of the BPU bits.
+     */
+    static int bpu(uint16_t v);
+    int bpu() { return bpu(bplcon0); }
 
     // BPLxPTL, BPLxPTH
     template <int x, PokeSource s> void pokeBPLxPTH(uint16_t value);

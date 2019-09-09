@@ -234,6 +234,8 @@
 		507D7768228BE3EF001E97A9 /* StateMachine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StateMachine.h; sourceTree = "<group>"; };
 		507FD925221CBFCD00B34DA7 /* CopperPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopperPanel.swift; sourceTree = "<group>"; };
 		5082D83A21EF891200CF7692 /* va_constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = va_constants.h; sourceTree = "<group>"; };
+		5085830423262E8B004F942F /* ChangeRecorder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChangeRecorder.h; sourceTree = "<group>"; };
+		5085830523265B3D004F942F /* Event.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
 		5085FE5521FB3BAE009753EF /* EventHandler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EventHandler.cpp; sourceTree = "<group>"; };
 		5085FE5621FB3BAE009753EF /* EventHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventHandler.h; sourceTree = "<group>"; };
 		5085FE5821FB6856009753EF /* ProxyExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProxyExtensions.swift; sourceTree = "<group>"; };
@@ -831,8 +833,10 @@
 				503990C522D8CCB600035783 /* Beam.h */,
 				50B14C0621EB218E002E32A6 /* AmigaObject.h */,
 				50B14C0521EB218E002E32A6 /* AmigaObject.cpp */,
-				50EFC7DF22E840870036A3DF /* Serialization.h */,
+				5085830523265B3D004F942F /* Event.h */,
 				5003C4E022F222A200732B11 /* RegisterChange.h */,
+				5085830423262E8B004F942F /* ChangeRecorder.h */,
+				50EFC7DF22E840870036A3DF /* Serialization.h */,
 				50B14C0C21EB3708002E32A6 /* HardwareComponent.h */,
 				50B14C0B21EB3708002E32A6 /* HardwareComponent.cpp */,
 			);

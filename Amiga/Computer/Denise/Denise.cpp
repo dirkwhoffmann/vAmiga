@@ -202,32 +202,16 @@ Denise::setBPLCON0(uint16_t oldValue, uint16_t newValue)
 }
 
 int
-Denise::enabledChannels(uint16_t v)
+Denise::bpu(uint16_t v)
 {
-    if (lores(v)) {
+    // Extract the three BPU bits and check for hires mode
+    int bpu = (v >> 12) & 0b111;
+    bool hires = GET_BIT(v, 15);
 
-        // In lores mode, the invalid value 7 enables 4 channels
-        return bpu(v) < 7 ? bpu(v) : 4;
-
+    if (hires) {
+        return bpu < 5 ? bpu : 0; // Disable all bitplanes if value is invalid
     } else {
-
-        // In hires mode, the invalid values 5,6,7 disable all channels
-        return bpu(v) < 5 ? bpu(v) : 0;
-    }
-}
-
-int
-Denise::enabledPlanes(uint16_t v)
-{
-    if (lores(v)) {
-
-        // In lores mode, the invalid value 7 enables 6 bitplanes
-        return bpu(v) < 7 ? bpu(v) : 6;
-
-    } else {
-
-        // In hires mode, the invalid values 5,6,7 disable all bitplanes
-        return bpu(v) < 5 ? bpu(v) : 0;
+        return bpu < 7 ? bpu : 6; // Enable six bitplanes if value is invalid
     }
 }
 
@@ -448,7 +432,7 @@ Denise::updateSpritePriorities(uint16_t bplcon2)
 void
 Denise::fillShiftRegisters()
 {
-    switch (enabledPlanes()) {
+    switch (bpu()) {
         case 6: shiftReg[5] = REPLACE_LO_WORD(shiftReg[5], bpldat[5]);
         case 5: shiftReg[4] = REPLACE_LO_WORD(shiftReg[4], bpldat[4]);
         case 4: shiftReg[3] = REPLACE_LO_WORD(shiftReg[3], bpldat[3]);

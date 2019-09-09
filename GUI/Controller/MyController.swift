@@ -628,11 +628,13 @@ extension MyController {
             needsSaving = true
             toolbar.validateVisibleItems()
             myAppDelegate.inspector?.refresh(everything: true)
+            refreshStatusBar()
     
         case MSG_PAUSE:
             
             toolbar.validateVisibleItems()
             myAppDelegate.inspector?.refresh(everything: true)
+            refreshStatusBar()
     
         case MSG_POWER_ON:
 

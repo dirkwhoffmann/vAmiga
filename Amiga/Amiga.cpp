@@ -534,6 +534,10 @@ Amiga::reset()
 void
 Amiga::_initialize()
 {
+    /*
+    ChangeRecorder<16> r;
+    r.test();
+    */
 }
 
 void
@@ -1009,9 +1013,10 @@ Amiga::runLoop()
                 cpu.recordInstruction();
             }
             
-            // Are we requestes to check for breakpoints?
+            // Are we requested to check for breakpoints?
             if (runLoopCtrl & RL_ENABLE_BREAKPOINTS) {
                 if (cpu.bpManager.shouldStop()) {
+                    inspect();
                     putMessage(MSG_BREAKPOINT_REACHED);
                     debug(RUNLOOP_DEBUG, "BREAKPOINT_REACHED\n");
                     break;

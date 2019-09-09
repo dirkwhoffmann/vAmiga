@@ -15,6 +15,15 @@ struct Beam
     int16_t v;
     int16_t h;
 
+    template <class T>
+    void applyToItems(T& worker)
+    {
+        worker
+
+        & v
+        & h;
+    }
+
     Beam(int16_t v, int16_t h) : v(v), h(h) { }
     Beam(uint32_t cycle = 0) : Beam(cycle / HPOS_CNT, cycle % HPOS_CNT) { }
 
@@ -78,13 +87,6 @@ struct Beam
         if (--h < 0) { v--; h = HPOS_MAX; }
         return *this;
     }
-
-    /*
-    uint16_t bitFormat()
-    {
-        return (v << 8) | h;
-    }
-    */
 };
 
 #endif
