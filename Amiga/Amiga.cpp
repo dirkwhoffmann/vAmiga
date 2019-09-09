@@ -534,6 +534,10 @@ Amiga::reset()
 void
 Amiga::_initialize()
 {
+    /*
+    ChangeRecorder<16> r;
+    r.test();
+    */
 }
 
 void

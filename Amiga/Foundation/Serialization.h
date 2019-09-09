@@ -11,6 +11,8 @@
 #define _SERIALIZATION_INC
 
 #include "RegisterChange.h"
+#include "ChangeRecorder.h"
+#include "Beam.h"
 
 //
 // Basic memory buffer I/O

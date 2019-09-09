@@ -10,6 +10,10 @@
 #ifndef _REGISTER_INC
 #define _REGISTER_INC
 
+//
+// DEPRECATED. EVENTUALLY REPLACE BY MORE GENERIC ChangeRecorder
+//
+
 struct RegisterChange
 {
     uint32_t addr;

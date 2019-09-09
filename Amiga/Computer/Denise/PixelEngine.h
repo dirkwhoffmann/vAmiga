@@ -12,6 +12,7 @@
 
 #include "HardwareComponent.h"
 #include "RegisterChange.h"
+#include "ChangeRecorder.h"
 
 class PixelEngine : public HardwareComponent {
 
