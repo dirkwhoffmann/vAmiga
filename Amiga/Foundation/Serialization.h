@@ -10,9 +10,10 @@
 #ifndef _SERIALIZATION_INC
 #define _SERIALIZATION_INC
 
+#include "Event.h"
+#include "Beam.h"
 #include "RegisterChange.h"
 #include "ChangeRecorder.h"
-#include "Beam.h"
 
 //
 // Basic memory buffer I/O
@@ -118,7 +119,7 @@ public:
 
     SerCounter& operator&(Event &v)
     {
-        *this & v.triggerCycle & v.id & v.data;
+        v.applyToItems(*this);
         return *this;
     }
 
@@ -218,7 +219,7 @@ public:
 
     SerReader& operator&(Event &v)
     {
-        *this & v.triggerCycle & v.id & v.data;
+        v.applyToItems(*this);
         return *this;
     }
 
@@ -325,7 +326,7 @@ public:
 
     SerWriter& operator&(Event &v)
     {
-        *this & v.triggerCycle & v.id & v.data;
+        v.applyToItems(*this);
         return *this;
     }
 
@@ -424,7 +425,7 @@ public:
 
     SerResetter& operator&(Event &v)
     {
-        *this & v.triggerCycle & v.id & v.data;
+        v.applyToItems(*this);
         return *this;
     }
 

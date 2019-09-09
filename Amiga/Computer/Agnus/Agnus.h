@@ -15,6 +15,7 @@
 #include "Blitter.h"
 #include "DmaDebugger.h"
 #include "Beam.h"
+#include "Event.h"
 
 // Bit plane indices
 #define PLANE1 0
@@ -50,7 +51,6 @@
 // Extracts the vertical or the horizontal component out of a beam position
 #define VPOS(x) ((x) >> 8)
 #define HPOS(x) ((x) & 0xFF)
-
 
 class Agnus : public HardwareComponent
 {
