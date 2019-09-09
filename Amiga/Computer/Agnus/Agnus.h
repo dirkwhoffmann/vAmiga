@@ -366,6 +366,9 @@ public:
     // Registers
     //
 
+    // Ringbuffer for managing register change delays
+    ChangeRecorder<8> changeRecorder;
+
     // A copy of BPLCON0 (Denise has another copy)
     uint16_t bplcon0;
     uint16_t bplcon0New;
@@ -505,8 +508,7 @@ public:
         & hsyncActions
         & clock
         & frame
-        & pos.v
-        & pos.h
+        & pos
         & frameInfo.nr
         & frameInfo.interlaced
         & frameInfo.numLines
@@ -539,6 +541,7 @@ public:
         & dmaStopHires
         & dmaStrtLoresShift
 
+        & changeRecorder
         & bplcon0
         & bplcon0New
         & bplcon0AtDDFStrt

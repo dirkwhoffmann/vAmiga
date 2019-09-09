@@ -122,6 +122,24 @@ public:
         return *this;
     }
 
+    SerCounter& operator&(Beam &v)
+    {
+        v.applyToItems(*this);
+        return *this;
+    }
+
+    SerCounter& operator&(Change &v)
+    {
+        v.applyToItems(*this);
+        return *this;
+    }
+
+    template <uint16_t capacity> SerCounter& operator&(ChangeRecorder<capacity> &v)
+    {
+        v.applyToItems(*this);
+        return *this;
+    }
+
     SerCounter& operator&(RegisterChange &v)
     {
         v.applyToItems(*this);
@@ -201,6 +219,24 @@ public:
     SerReader& operator&(Event &v)
     {
         *this & v.triggerCycle & v.id & v.data;
+        return *this;
+    }
+
+    SerReader& operator&(Beam &v)
+    {
+        v.applyToItems(*this);
+        return *this;
+    }
+
+    SerReader& operator&(Change &v)
+    {
+        v.applyToItems(*this);
+        return *this;
+    }
+
+    template <uint16_t capacity> SerReader& operator&(ChangeRecorder<capacity> &v)
+    {
+        v.applyToItems(*this);
         return *this;
     }
 
@@ -293,6 +329,24 @@ public:
         return *this;
     }
 
+    SerWriter& operator&(Beam &v)
+    {
+        v.applyToItems(*this);
+        return *this;
+    }
+
+    SerWriter& operator&(Change &v)
+    {
+        v.applyToItems(*this);
+        return *this;
+    }
+
+    template <uint16_t capacity> SerWriter& operator&(ChangeRecorder<capacity> &v)
+    {
+        v.applyToItems(*this);
+        return *this;
+    }
+
     SerWriter& operator&(RegisterChange &v)
     {
         v.applyToItems(*this);
@@ -371,6 +425,24 @@ public:
     SerResetter& operator&(Event &v)
     {
         *this & v.triggerCycle & v.id & v.data;
+        return *this;
+    }
+
+    SerResetter& operator&(Beam &v)
+    {
+        v.applyToItems(*this);
+        return *this;
+    }
+
+    SerResetter& operator&(Change &v)
+    {
+        v.applyToItems(*this);
+        return *this;
+    }
+
+    template <uint16_t capacity> SerResetter& operator&(ChangeRecorder<capacity> &v)
+    {
+        v.applyToItems(*this);
         return *this;
     }
 
