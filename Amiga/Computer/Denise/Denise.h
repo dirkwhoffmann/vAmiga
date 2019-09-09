@@ -432,8 +432,8 @@ public:
      *                     registers transfered to the shift registers at the
      *                     end of a fetch unit.
      */
-    static int enabledChannels(uint16_t v);
-    int enabledChannels() { return enabledChannels(bplcon0); }
+    // static int enabledChannels(uint16_t v);
+    // int enabledChannels() { return enabledChannels(bplcon0); }
 
     static int enabledPlanes(uint16_t v);
     int enabledPlanes() { return enabledPlanes(bplcon0); }

@@ -220,7 +220,7 @@ Agnus::_inspect()
     
     info.bpl1mod = bpl1mod;
     info.bpl2mod = bpl2mod;
-    info.bpu = denise->enabledChannels();
+    info.bpu = bpu();
     
     info.dskpt   = dskpt;
     for (unsigned i = 0; i < 4; i++) info.audlc[i] = audlc[i];
@@ -303,9 +303,9 @@ bool
 Agnus::inBplDmaLine(uint16_t dmacon, uint16_t bplcon0) {
 
     return
-    ddfVFlop                            // Outside VBLANK, inside DIW
-    && Denise::enabledChannels(bplcon0) // At least one bitplane enabled
-    && bplDMA(dmacon);                  // Bitplane DMA enabled
+    ddfVFlop            // Outside VBLANK, inside DIW
+    && bpu(bplcon0)     // At least one bitplane enabled
+    && bplDMA(dmacon);  // Bitplane DMA enabled
 }
 
 Cycle
@@ -576,7 +576,7 @@ Agnus::allocateBplSlots(uint16_t dmacon, uint16_t bplcon0, int first, int last)
 {
     assert(first >= 0 && last < HPOS_MAX);
 
-    int channels = Denise::enabledChannels(bplcon0);
+    int channels = bpu(bplcon0);
     bool hires = Denise::hires(bplcon0);
 
     // Set number of bitplanes to 0 if we are not in a bitplane DMA line
@@ -610,7 +610,7 @@ Agnus::switchBitplaneDmaOn()
     int16_t stop;
 
     bool hires = denise->hires();
-    int activeBitplanes = denise->enabledChannels();
+    int activeBitplanes = bpu();
 
     // Determine the range that is covered by fetch units
     if (hires) {
@@ -1501,6 +1501,20 @@ Agnus::setBPLCON0(uint16_t oldValue, uint16_t newValue)
     }
 
     bplcon0 = newValue;
+}
+
+int
+Agnus::bpu(uint16_t bplcon0)
+{
+    // Extract the three BPU bits and check for hires mode
+    int bpu = (bplcon0 >> 12) & 0b111;
+    bool hires = GET_BIT(bplcon0, 15);
+
+    if (hires) {
+        return bpu < 5 ? bpu : 0; // Disable all channels if value is invalid
+    } else {
+        return bpu < 7 ? bpu : 4; // Enable four channels if value is invalid
+    }
 }
 
 void

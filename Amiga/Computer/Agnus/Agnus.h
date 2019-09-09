@@ -615,10 +615,6 @@ public:
 
 public:
 
-    // Returns the current position of the video beam
-    // int16_t vpos() { return pos.v; }
-    // int16_t hpos() { return pos.h; }
-
     // Indicates if the current frame is a long or a short frame
     bool isLongFrame() { return frameInfo.numLines == 313; }
     bool isShortFrame() { return frameInfo.numLines == 312; }
@@ -851,6 +847,15 @@ public:
     // BPLCON0
     void pokeBPLCON0(uint16_t value);
     void setBPLCON0(uint16_t oldValue, uint16_t newValue);
+
+    /* Returns the Agnus view of the BPU bits.
+     * The value determines the number of enabled DMA channels. It is computed
+     * out of the three BPU bits stored in BPLCON0, but not identical with them.
+     * The value differes if the BPU bits reflect an invalid bit pattern.
+     * See also Denise::bpu() which returns the Denise view of the BPU bits.
+     */
+    static int bpu(uint16_t bplcon0);
+    int bpu() { return bpu(bplcon0); }
 
     // BPLxPTL, BPLxPTH
     template <int x, PokeSource s> void pokeBPLxPTH(uint16_t value);

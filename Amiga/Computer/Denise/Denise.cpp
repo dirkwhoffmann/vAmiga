@@ -201,6 +201,7 @@ Denise::setBPLCON0(uint16_t oldValue, uint16_t newValue)
     bplcon0 = newValue;
 }
 
+/*
 int
 Denise::enabledChannels(uint16_t v)
 {
@@ -215,6 +216,7 @@ Denise::enabledChannels(uint16_t v)
         return bpu(v) < 5 ? bpu(v) : 0;
     }
 }
+*/
 
 int
 Denise::enabledPlanes(uint16_t v)
