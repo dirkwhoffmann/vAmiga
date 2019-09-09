@@ -1504,11 +1504,11 @@ Agnus::setBPLCON0(uint16_t oldValue, uint16_t newValue)
 }
 
 int
-Agnus::bpu(uint16_t bplcon0)
+Agnus::bpu(uint16_t v)
 {
     // Extract the three BPU bits and check for hires mode
-    int bpu = (bplcon0 >> 12) & 0b111;
-    bool hires = GET_BIT(bplcon0, 15);
+    int bpu = (v >> 12) & 0b111;
+    bool hires = GET_BIT(v, 15);
 
     if (hires) {
         return bpu < 5 ? bpu : 0; // Disable all channels if value is invalid

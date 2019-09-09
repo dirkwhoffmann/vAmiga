@@ -851,10 +851,10 @@ public:
     /* Returns the Agnus view of the BPU bits.
      * The value determines the number of enabled DMA channels. It is computed
      * out of the three BPU bits stored in BPLCON0, but not identical with them.
-     * The value differes if the BPU bits reflect an invalid bit pattern.
-     * See also Denise::bpu() which returns the Denise view of the BPU bits.
+     * The value differs if the BPU bits reflect an invalid bit pattern.
+     * Compare with Denise::bpu() which returns the Denise view of the BPU bits.
      */
-    static int bpu(uint16_t bplcon0);
+    static int bpu(uint16_t v);
     int bpu() { return bpu(bplcon0); }
 
     // BPLxPTL, BPLxPTH
