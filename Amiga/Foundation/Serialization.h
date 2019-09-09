@@ -76,14 +76,14 @@ inline void write64(uint8_t *& buffer, uint64_t value)
 //
 
 #define COUNT(type) \
-SerCounter& operator&(type& v) \
+auto& operator&(type& v) \
 { \
 count += sizeof(type); \
 return *this; \
 }
 
-#define COUNT_STRUCT(type) \
-SerCounter& operator&(type& v) \
+#define STRUCT(type) \
+auto& operator&(type& v) \
 { \
 v.applyToItems(*this); \
 return *this; \
@@ -125,12 +125,12 @@ public:
     COUNT(const DrawingMode)
     COUNT(const DiskType)
 
-    COUNT_STRUCT(Event)
-    COUNT_STRUCT(Beam)
-    COUNT_STRUCT(Change)
-    template <uint16_t capacity> COUNT_STRUCT(ChangeRecorder<capacity>)
-    COUNT_STRUCT(RegisterChange)
-    COUNT_STRUCT(ChangeHistory)
+    STRUCT(Event)
+    STRUCT(Beam)
+    STRUCT(Change)
+    template <uint16_t capacity> STRUCT(ChangeRecorder<capacity>)
+    STRUCT(RegisterChange)
+    STRUCT(ChangeHistory)
 
     template <class T, size_t N>
     SerCounter& operator&(T (&v)[N])
@@ -158,13 +158,6 @@ return *this; \
 #define DESERIALIZE16(type) static_assert(sizeof(type) == 2); DESERIALIZE(type,read16)
 #define DESERIALIZE32(type) static_assert(sizeof(type) == 4); DESERIALIZE(type,read32)
 #define DESERIALIZE64(type) static_assert(sizeof(type) == 8); DESERIALIZE(type,read64)
-
-#define DESERIALIZE_STRUCT(type) \
-SerReader& operator&(type& v) \
-{ \
-v.applyToItems(*this); \
-return *this; \
-}
 
 class SerReader
 {
@@ -203,12 +196,12 @@ public:
     DESERIALIZE32(DrawingMode)
     DESERIALIZE64(DiskType)
 
-    DESERIALIZE_STRUCT(Event)
-    DESERIALIZE_STRUCT(Beam)
-    DESERIALIZE_STRUCT(Change)
-    template <uint16_t capacity> DESERIALIZE_STRUCT(ChangeRecorder<capacity>)
-    DESERIALIZE_STRUCT(RegisterChange)
-    DESERIALIZE_STRUCT(ChangeHistory)
+    STRUCT(Event)
+    STRUCT(Beam)
+    STRUCT(Change)
+    template <uint16_t capacity> STRUCT(ChangeRecorder<capacity>)
+    STRUCT(RegisterChange)
+    STRUCT(ChangeHistory)
 
     template <class T, size_t N>
     SerReader& operator&(T (&v)[N])
@@ -242,13 +235,6 @@ return *this; \
 #define SERIALIZE16(type) static_assert(sizeof(type) == 2); SERIALIZE(type,write16,uint16_t)
 #define SERIALIZE32(type) static_assert(sizeof(type) == 4); SERIALIZE(type,write32,uint32_t)
 #define SERIALIZE64(type) static_assert(sizeof(type) == 8); SERIALIZE(type,write64,uint64_t)
-
-#define SERIALIZE_STRUCT(type) \
-SerWriter& operator&(type& v) \
-{ \
-v.applyToItems(*this); \
-return *this; \
-}
 
 class SerWriter
 {
@@ -287,12 +273,12 @@ public:
     SERIALIZE32(const DrawingMode)
     SERIALIZE64(const DiskType)
 
-    SERIALIZE_STRUCT(Event)
-    SERIALIZE_STRUCT(Beam)
-    SERIALIZE_STRUCT(Change)
-    template <uint16_t capacity> SERIALIZE_STRUCT(ChangeRecorder<capacity>)
-    SERIALIZE_STRUCT(RegisterChange)
-    SERIALIZE_STRUCT(ChangeHistory)
+    STRUCT(Event)
+    STRUCT(Beam)
+    STRUCT(Change)
+    template <uint16_t capacity> STRUCT(ChangeRecorder<capacity>)
+    STRUCT(RegisterChange)
+    STRUCT(ChangeHistory)
 
     template <class T, size_t N>
     SerWriter& operator&(T (&v)[N])
@@ -320,13 +306,6 @@ public:
 SerResetter& operator&(type& v) \
 { \
 v = (type)0; \
-return *this; \
-}
-
-#define RESET_STRUCT(type) \
-SerResetter& operator&(type& v) \
-{ \
-v.applyToItems(*this); \
 return *this; \
 }
 
@@ -364,12 +343,12 @@ public:
     RESET(KeyboardState)
     RESET(DrawingMode)
 
-    RESET_STRUCT(Event)
-    RESET_STRUCT(Beam)
-    RESET_STRUCT(Change)
-    template <uint16_t capacity> RESET_STRUCT(ChangeRecorder<capacity>)
-    RESET_STRUCT(RegisterChange)
-    RESET_STRUCT(ChangeHistory)
+    STRUCT(Event)
+    STRUCT(Beam)
+    STRUCT(Change)
+    template <uint16_t capacity> STRUCT(ChangeRecorder<capacity>)
+    STRUCT(RegisterChange)
+    STRUCT(ChangeHistory)
 
     template <class T, size_t N>
     SerResetter& operator&(T (&v)[N])
