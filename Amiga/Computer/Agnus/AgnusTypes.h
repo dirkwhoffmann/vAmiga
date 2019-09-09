@@ -145,6 +145,7 @@ DMADebuggerInfo;
 
 typedef struct
 {
+    uint16_t bplcon0;
     uint16_t dmacon;
     uint16_t diwstrt;
     uint16_t diwstop;
@@ -153,7 +154,7 @@ typedef struct
 
     int16_t bpl1mod;
     int16_t bpl2mod;
-    uint8_t  numBpls;
+    uint8_t bpu;
 
     uint32_t dskpt;
     uint32_t audlc[4];

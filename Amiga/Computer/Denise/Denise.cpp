@@ -57,7 +57,7 @@ Denise::_inspect()
     info.bplcon0 = bplcon0;
     info.bplcon1 = bplcon1;
     info.bplcon2 = bplcon2;
-    info.bpu = bpu();
+    info.bpu = enabledPlanes();
 
     info.diwstrt = agnus->diwstrt;
     info.diwstop = agnus->diwstop;

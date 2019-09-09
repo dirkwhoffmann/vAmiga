@@ -210,7 +210,8 @@ Agnus::_inspect()
 {
     // Prevent external access to variable 'info'
     pthread_mutex_lock(&lock);
-    
+
+    info.bplcon0 = bplcon0;
     info.dmacon  = dmacon;
     info.diwstrt = diwstrt;
     info.diwstop = diwstop;
@@ -219,7 +220,7 @@ Agnus::_inspect()
     
     info.bpl1mod = bpl1mod;
     info.bpl2mod = bpl2mod;
-    info.numBpls = denise->enabledChannels();
+    info.bpu = denise->enabledChannels();
     
     info.dskpt   = dskpt;
     for (unsigned i = 0; i < 4; i++) info.audlc[i] = audlc[i];
