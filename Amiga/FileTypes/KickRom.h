@@ -13,15 +13,12 @@
 #include "AmigaFile.h"
 
 class KickRom : public AmigaFile {
-    
-private:
-    
+
+    // Number of known header signatures
+    static const size_t signatureCnt = 6;
+
     // Accepted header signatures
-    static const uint8_t magicBytes1[];
-    static const uint8_t magicBytes1a[];
-    static const uint8_t magicBytes2[];
-    static const uint8_t magicBytes3[];
-    static const uint8_t magicBytes4[];
+    static const uint8_t magicBytes[signatureCnt][7];
 
 public:
     

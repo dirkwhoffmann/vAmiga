@@ -32,6 +32,10 @@ struct Rom {
 
     static let kick204_37_175      = 0x845588ccf58fce86 as UInt64
 
+    static let kick31_40_63        = 0xd059a4095ef1d70d as UInt64
+    static let kick31_40_63_a      = 0xd87e84eeacc77dcd as UInt64
+    static let kick31_40_63_b      = 0xd87e84eeacc77aaa as UInt64
+
     static let diag11              = 0x3caee2ad138eb229 as UInt64
     static let logica20            = 0x110c854766f14cd8 as UInt64
 }
@@ -56,6 +60,10 @@ let knownRoms: [UInt64: String] = [
     Rom.kick13_35_5_o:       "Kickstart 1.3 (revision 34.5)",
     
     Rom.kick204_37_175:      "Kickstart 2.04 (revision 37.175)",
+
+    Rom.kick31_40_63:        "Kickstart 3.1 (revision 40.63)",
+    Rom.kick31_40_63_a:      "Kickstart 3.1 (revision 40.63)",
+    Rom.kick31_40_63_b:      "Kickstart 3.1 (revision 40.63)",
 
     Rom.diag11:              "DiagROM 1.1",
     Rom.logica20:            "The Diagnostic V2.0 (Logica)"
@@ -194,10 +202,8 @@ extension PreferencesController {
         
         // Revert to the AROS Kickstart replacement
         amigaProxy?.mem.loadKickRom(fromBuffer: NSDataAsset(name: "aros-amiga-m68k-rom")?.data)
-        // amigaProxy?.mem.loadKickRom(fromBuffer: NSDataAsset(name: "aros-rom")?.data)
         myController?.kickRomURL = URL(fileURLWithPath: "")
         amigaProxy?.mem.loadExtRom(fromBuffer: NSDataAsset(name: "aros-amiga-m68k-ext")?.data)
-        // amigaProxy?.mem.loadExtRom(fromBuffer: NSDataAsset(name: "aros-ext")?.data)
         myController?.extRomURL = URL(fileURLWithPath: "")
         refresh()
     }
