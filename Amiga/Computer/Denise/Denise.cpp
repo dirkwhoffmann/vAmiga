@@ -216,11 +216,7 @@ Denise::pokeBPLCON1(uint16_t value)
 {
     debug(BPLREG_DEBUG, "pokeBPLCON1(%X)\n", value);
 
-    // Retain the new value
-    bplcon1New = value;
-
-    // Schedule the register updated
-    agnus->setActionFlag(AGN_BPLCON1_0);
+    // Record the register change
     agnus->recordRegisterChange(DMA_CYCLES(2), REG_BPLCON1, value);
 }
 

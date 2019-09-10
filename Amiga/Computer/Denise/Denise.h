@@ -70,7 +70,6 @@ public:
     // The bitplane control registers
     uint16_t bplcon0;
     uint16_t bplcon1;
-    uint16_t bplcon1New;
     uint16_t bplcon2;
     uint16_t bplcon2New;
 
@@ -310,7 +309,6 @@ public:
 
         & bplcon0
         & bplcon1
-        & bplcon1New
         & bplcon2
         & bplcon2New
         & initialBplcon0

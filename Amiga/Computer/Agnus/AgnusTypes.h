@@ -14,14 +14,6 @@
 
 // Action flags
 #define AGN_HSYNC            (1ULL << 0)
-#define AGN_BPLCON0_0        (1ULL << 1)  // BPLCON0 change (Agnus view)
-#define AGN_BPLCON0_1        (1ULL << 2)
-#define AGN_BPLCON0_2        (1ULL << 3)
-#define AGN_BPLCON0_3        (1ULL << 4)
-#define AGN_BPLCON0_DENISE_0 (1ULL << 5)  // BPLCON0 change (Denise view)
-#define AGN_BPLCON0_DENISE_1 (1ULL << 6)
-#define AGN_BPLCON1_0        (1ULL << 7)  // BPLCON1
-#define AGN_BPLCON1_1        (1ULL << 8)
 #define AGN_BPLCON2_0        (1ULL << 9)  // BPLCON2
 #define AGN_BPLCON2_1        (1ULL << 10)
 #define AGN_DMACON_0         (1ULL << 11) // DMACON
@@ -79,7 +71,7 @@ AGN_BPL4PTL_1 | AGN_BPL5PTL_1 | AGN_BPL6PTL_1
 
 #define AGN_DELAY_MASK ~( \
 AGN_HSYNC | \
-AGN_BPLCON0_0 | AGN_BPLCON0_DENISE_0 | AGN_BPLCON1_0  | AGN_BPLCON2_0 | \
+AGN_BPLCON2_0 | \
 AGN_DMACON_0 | \
 AGN_DIWSTRT_0 | AGN_DIWSTOP_0 | \
 AGN_BPL1MOD_0 | AGN_BPL2MOD_0 | \

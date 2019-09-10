@@ -1675,10 +1675,7 @@ Agnus::recordRegisterChange(Cycle delay, uint32_t addr, uint16_t value)
 void
 Agnus::updateRegisters()
 {
-    // BPLCON1
-    if (actions & AGN_BPLCON1_1) denise->setBPLCON1(denise->bplcon1New);
-
-    // BPLCON1
+    // BPLCON2
     if (actions & AGN_BPLCON2_1) denise->setBPLCON2(denise->bplcon2New);
 
     // DMACON
