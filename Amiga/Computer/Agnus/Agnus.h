@@ -250,9 +250,7 @@ public:
 
     // Register values as they have been written by pokeDIWSTRT/STOP()
     uint16_t diwstrt;
-    uint16_t diwstrtNew;
     uint16_t diwstop;
-    uint16_t diwstopNew;
 
     /* Extracted display window coordinates
      *
@@ -512,9 +510,7 @@ public:
         & sprDmaState
 
         & diwstrt
-        & diwstrtNew
         & diwstop
-        & diwstopNew
         & diwHstrt
         & diwHstop
         & diwVstrt

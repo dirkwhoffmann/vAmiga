@@ -536,22 +536,7 @@ Agnus::serviceREGEvent(Cycle until)
 void
 Agnus::serviceAGNEvent()
 {
-    assert(checkTriggeredEvent(AGN_SLOT));
-
-    // The event should only fire if at least one action flag is set
-    assert(actions);
-
-    // Check for horizontal sync
-    // if (actions & AGN_HSYNC) hsyncHandlerOld();
-
-    // Handle all pending register changes
-    if (actions & AGN_REG_CHANGE_MASK) updateRegisters();
-
-    // Move action flags one bit to the left
-    actions = (actions << 1) & AGN_DELAY_MASK;
-
-    // Cancel the event if there is no more work to do
-    if (!actions) cancel<AGN_SLOT>();
+    cancel<AGN_SLOT>();
 }
 
 void
@@ -676,10 +661,6 @@ Agnus::serviceBPLEvent()
         case BPL_EOL:
             // This is the last event in the current rasterline.
             assert(pos.h == 0xE2);
-
-            // We tell Agnus to call the hsync handler at the beginning of the
-            // next cycle and return without scheduling a new BPL event.
-            setActionFlag(AGN_HSYNC);
             return;
 
         default:

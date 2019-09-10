@@ -1073,8 +1073,6 @@ template <PokeSource s> void
 Agnus::pokeDIWSTRT(uint16_t value)
 {
     debug(DIW_DEBUG, "pokeDIWSTRT<%s>(%X)\n", pokeSourceName(s), value);
-    diwstrtNew = value;
-    setActionFlag(AGN_DIWSTRT_0);
     recordRegisterChange(DMA_CYCLES(2), REG_DIWSTRT, value);
 }
 
@@ -1082,8 +1080,6 @@ template <PokeSource s> void
 Agnus::pokeDIWSTOP(uint16_t value)
 {
     debug(DIW_DEBUG, "pokeDIWSTOP<%s>(%X)\n", pokeSourceName(s), value);
-    diwstopNew = value;
-    setActionFlag(AGN_DIWSTOP_0);
     recordRegisterChange(DMA_CYCLES(2), REG_DIWSTOP, value);
 }
 
