@@ -1532,10 +1532,12 @@ Agnus::execute()
     pos.h++;
 
     // If this assertion hits, the HSYNC event hasn't been served
+    /*
     if (pos.h > HPOS_CNT) {
         dump();
         dumpBplEventTable();
     }
+    */
     assert(pos.h <= HPOS_CNT);
 }
 
@@ -1544,13 +1546,11 @@ Agnus::execute()
 void
 Agnus::executeUntil(Cycle targetClock)
 {
-    assert(targetClock >= clock);
-
     // Align to DMA cycle raster
     targetClock &= ~0b111;
 
     // Compute the number of DMA cycles to execute
-    DMACycle  dmaCycles = (targetClock - clock) / DMA_CYCLES(1);
+    DMACycle dmaCycles = (targetClock - clock) / DMA_CYCLES(1);
 
     // Execute DMA cycles one after another
     for (DMACycle i = 0; i < dmaCycles; i++) execute();
@@ -1561,15 +1561,13 @@ Agnus::executeUntil(Cycle targetClock)
 void
 Agnus::executeUntil(Cycle targetClock)
 {
-    assert(targetClock >= clock);
-
     // Align to DMA cycle raster
     targetClock &= ~0b111;
 
     // Compute the number of DMA cycles to execute
-    DMACycle  dmaCycles = (targetClock - clock) / DMA_CYCLES(1);
+    DMACycle dmaCycles = (targetClock - clock) / DMA_CYCLES(1);
 
-    if (targetClock < nextTrigger) {
+    if (targetClock < nextTrigger && dmaCycles > 0) {
 
         // Advance directly to the target clock
         clock = targetClock;
