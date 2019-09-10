@@ -501,9 +501,9 @@ Agnus::serviceREGEvent(Cycle until)
 
             case REG_BPLCON0_AGNUS: setBPLCON0(bplcon0, value); break;
             case REG_BPLCON0_DENISE: denise->setBPLCON0(denise->bplcon0, value); break;
-                /*
             case REG_BPLCON1: denise->setBPLCON1(value); break;
             case REG_BPLCON2: denise->setBPLCON2(value); break;
+            /*
             case REG_DMACON: setDMACON(dmacon, value); break;
             case REG_DIWSTRT: setDIWSTRT(value); break;
             case REG_DIWSTOP: setDIWSTOP(value); break;
@@ -525,7 +525,7 @@ Agnus::serviceREGEvent(Cycle until)
             default:
                 warn("Register change ID %d is invalid.\n", addr);
                 assert(false);
-                 */
+            */
         }
 
         changeRecorder.remove();
