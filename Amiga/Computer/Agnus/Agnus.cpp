@@ -196,6 +196,7 @@ void Agnus::_reset()
         slot[i].data = 0;
     }
 
+    // Schedule initial events
     scheduleAbs<CIAA_SLOT>(CIA_CYCLES(1), CIA_EXECUTE);
     scheduleAbs<CIAB_SLOT>(CIA_CYCLES(1), CIA_EXECUTE);
     scheduleAbs<DAS_SLOT>(DMA_CYCLES(1), DAS_REFRESH);
@@ -1632,7 +1633,17 @@ Agnus::setActionFlag(uint64_t flag)
 }
 
 void
-Agnus::updateRegisters()
+Agnus::scheduleRegisterChange(Cycle delay, uint32_t addr, uint16_t value)
+{
+    // Record the new register value
+    changeRecorder.add(clock + delay, addr, value);
+
+    // Schedule the register change
+    scheduleNextREGEvent();
+}
+
+void
+Agnus::updateRegistersOld()
 {
     // BPLCON0 (Agnus view)
     if (actions & AGN_BPLCON0_3) setBPLCON0(bplcon0, bplcon0New);

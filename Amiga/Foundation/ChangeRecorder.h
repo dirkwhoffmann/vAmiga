@@ -78,6 +78,11 @@ template <uint16_t capacity> struct ChangeRecorder
     bool isEmpty() { return r == w; }
     bool isFull() { return count() == capacity - 1; }
 
+    // Queries the next element to read
+    Cycle trigger() { return isEmpty() ? NEVER : change[r].trigger; }
+    uint32_t addr() { assert(!isEmpty()); return change[r].addr; }
+    uint16_t value() { assert(!isEmpty()); return change[r].value; }
+
     // Adds an element
     void add(int64_t trigger, uint32_t addr, uint16_t value)
     {
@@ -104,7 +109,7 @@ template <uint16_t capacity> struct ChangeRecorder
         }
     }
 
-    // Removes an element
+    // Removes an element 
     void remove() { assert(!isEmpty()); r = next(r); }
 
     // Deletes all elements

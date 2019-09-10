@@ -97,6 +97,34 @@ AGN_BPL1MOD_1 | AGN_BPL2MOD_1 | \
 AGN_BPLxPTH_1 | AGN_BPLxPTL_1 )
 */
 
+// Register change identifiers
+typedef enum : int32_t
+{
+    REG_HPOS = 0,
+    REG_BPLCON0_AGNUS,
+    REG_BPLCON0_DENISE,
+    REG_BPLCON1,
+    REG_BPLCON2,
+    REG_DMACON,
+    REG_DIWSTRT,
+    REG_DIWSTOP,
+    REG_BPL1MOD,
+    REG_BPL2MOD,
+    REG_BPL1PTH,
+    REG_BPL1PTL,
+    REG_BPL2PTH,
+    REG_BPL2PTL,
+    REG_BPL3PTH,
+    REG_BPL3PTL,
+    REG_BPL4PTH,
+    REG_BPL4PTL,
+    REG_BPL5PTH,
+    REG_BPL5PTL,
+    REG_BPL6PTH,
+    REG_BPL6PTL
+}
+RegChangeID;
+
 typedef enum : int8_t
 {
     BUS_NONE,

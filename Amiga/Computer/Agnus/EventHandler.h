@@ -191,12 +191,14 @@ template<EventSlot s> void cancel()
 }
 
 // DEPRECATED. REMOVE ONCE IRQ SLOTS HAVE BEEN MERGED INTO 1
+/*
 void cancel(EventSlot s)
 {
     slot[s].id = (EventID)0;
     slot[s].data = 0;
     slot[s].triggerCycle = NEVER;
 }
+*/
 
 
 //
@@ -215,6 +217,9 @@ void scheduleBplEventForCycle(int16_t hpos);
 // Updates the scheduled BPL event according to the current event table.
 void updateBplEvent() { scheduleBplEventForCycle(pos.h); }
 
+// Schedules the next register change event
+void scheduleNextREGEvent();
+
 
 //
 // Processing events
@@ -229,7 +234,7 @@ void executeEventsUntil(Cycle cycle);
 
 // Event handlers for specific slots
 template <int nr> void serviceCIAEvent();
-void serviceREGEvent();
+void serviceREGEvent(Cycle until);
 void serviceAGNEvent();
 void serviceBPLEvent();
 void serviceDASEvent();

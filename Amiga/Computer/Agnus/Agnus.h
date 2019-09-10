@@ -902,8 +902,11 @@ public:
 
 private:
 
+    // Schedules a register to change
+    void scheduleRegisterChange(Cycle delay, uint32_t addr, uint16_t value);
+
     // Performs all pending register changes
-    void updateRegisters();
+    void updateRegistersOld();
 
     // Executes the first sprite DMA cycle
     template <int nr> void executeFirstSpriteCycle();
