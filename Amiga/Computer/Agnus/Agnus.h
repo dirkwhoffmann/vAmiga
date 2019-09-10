@@ -845,8 +845,8 @@ public:
     template <int x, PokeSource s> void pokeBPLxPTH(uint16_t value);
     template <int x, PokeSource s> void pokeBPLxPTL(uint16_t value);
     bool skipBPLxPT(int x);
-    void setBPLxPTH(int x, uint16_t value);
-    void setBPLxPTL(int x, uint16_t value);
+    template <int x> void setBPLxPTH(uint16_t value);
+    template <int x> void setBPLxPTL(uint16_t value);
 
     // BPL1MOD, BPL2MOD
     void pokeBPL1MOD(uint16_t value);
@@ -880,9 +880,6 @@ public:
 
     // Executes the device until the CPU can acquire the bus
     void executeUntilBusIsFree();
-
-    // Sets an action flag
-    void setActionFlag(uint64_t flag);
 
     // Schedules a register to change
     void recordRegisterChange(Cycle delay, uint32_t addr, uint16_t value);

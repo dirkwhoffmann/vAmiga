@@ -1345,8 +1345,8 @@ Agnus::skipBPLxPT(int x)
     return false;
 }
 
-void
-Agnus::setBPLxPTH(int x, uint16_t value)
+template <int x> void
+Agnus::setBPLxPTH(uint16_t value)
 {
     debug(BPLREG_DEBUG, "setBPLxPTH(%d, %X)\n", x, value);
     assert(1 <= x && x <= 6);
@@ -1354,8 +1354,8 @@ Agnus::setBPLxPTH(int x, uint16_t value)
     bplpt[x - 1] = REPLACE_HI_WORD(bplpt[x - 1], value & 0x7);
 }
 
-void
-Agnus::setBPLxPTL(int x, uint16_t value)
+template <int x> void
+Agnus::setBPLxPTL(uint16_t value)
 {
     debug(BPLREG_DEBUG, "pokeBPLxPTL(%d, %X)\n", x, value);
     assert(1 <= x && x <= 6);
@@ -1593,13 +1593,6 @@ Agnus::executeUntilBusIsFree()
 }
 
 #endif
-
-void
-Agnus::setActionFlag(uint64_t flag)
-{
-    actions |= flag;
-    scheduleImm<AGN_SLOT>(AGN_ACTIONS);
-}
 
 void
 Agnus::recordRegisterChange(Cycle delay, uint32_t addr, uint16_t value)
@@ -1904,6 +1897,12 @@ template void Agnus::pokeBPLxPTH<5, POKE_CPU>(uint16_t value);
 template void Agnus::pokeBPLxPTH<5, POKE_COPPER>(uint16_t value);
 template void Agnus::pokeBPLxPTH<6, POKE_CPU>(uint16_t value);
 template void Agnus::pokeBPLxPTH<6, POKE_COPPER>(uint16_t value);
+template void Agnus::setBPLxPTH<1>(uint16_t value);
+template void Agnus::setBPLxPTH<2>(uint16_t value);
+template void Agnus::setBPLxPTH<3>(uint16_t value);
+template void Agnus::setBPLxPTH<4>(uint16_t value);
+template void Agnus::setBPLxPTH<5>(uint16_t value);
+template void Agnus::setBPLxPTH<6>(uint16_t value);
 
 template void Agnus::pokeBPLxPTL<1, POKE_CPU>(uint16_t value);
 template void Agnus::pokeBPLxPTL<1, POKE_COPPER>(uint16_t value);
@@ -1917,6 +1916,12 @@ template void Agnus::pokeBPLxPTL<5, POKE_CPU>(uint16_t value);
 template void Agnus::pokeBPLxPTL<5, POKE_COPPER>(uint16_t value);
 template void Agnus::pokeBPLxPTL<6, POKE_CPU>(uint16_t value);
 template void Agnus::pokeBPLxPTL<6, POKE_COPPER>(uint16_t value);
+template void Agnus::setBPLxPTL<1>(uint16_t value);
+template void Agnus::setBPLxPTL<2>(uint16_t value);
+template void Agnus::setBPLxPTL<3>(uint16_t value);
+template void Agnus::setBPLxPTL<4>(uint16_t value);
+template void Agnus::setBPLxPTL<5>(uint16_t value);
+template void Agnus::setBPLxPTL<6>(uint16_t value);
 
 template void Agnus::pokeSPRxPTH<0>(uint16_t value);
 template void Agnus::pokeSPRxPTH<1>(uint16_t value);

@@ -80,15 +80,6 @@ Agnus::inspectEventSlot(EventSlot nr)
             }
             break;
 
-        case AGN_SLOT:
-            switch (slot[nr].id) {
-
-                case 0:             i->eventName = "none"; break;
-                case AGN_ACTIONS:   i->eventName = "AGN_ACTIONS"; break;
-                default:            i->eventName = "*** INVALID ***"; break;
-            }
-            break;
-
         case CIAA_SLOT:
         case CIAB_SLOT:
 
@@ -390,9 +381,6 @@ Agnus::executeEventsUntil(Cycle cycle) {
     if (isDue<RAS_SLOT>(cycle)) {
         serviceRASEvent();
     }
-    if (isDue<AGN_SLOT>(cycle)) {
-        serviceAGNEvent();
-    }
     if (isDue<CIAA_SLOT>(cycle)) {
         serviceCIAEvent<0>();
     }
@@ -508,18 +496,18 @@ Agnus::serviceREGEvent(Cycle until)
             case REG_DIWSTOP: setDIWSTOP(value); break;
             case REG_BPL1MOD: setBPL1MOD(value); break;
             case REG_BPL2MOD: setBPL2MOD(value); break;
-            case REG_BPL1PTH: setBPLxPTH(1, value); break;
-            case REG_BPL1PTL: setBPLxPTL(1, value); break;
-            case REG_BPL2PTH: setBPLxPTH(2, value); break;
-            case REG_BPL2PTL: setBPLxPTL(2, value); break;
-            case REG_BPL3PTH: setBPLxPTH(3, value); break;
-            case REG_BPL3PTL: setBPLxPTL(3, value); break;
-            case REG_BPL4PTH: setBPLxPTH(4, value); break;
-            case REG_BPL4PTL: setBPLxPTL(4, value); break;
-            case REG_BPL5PTH: setBPLxPTH(5, value); break;
-            case REG_BPL5PTL: setBPLxPTL(5, value); break;
-            case REG_BPL6PTH: setBPLxPTH(6, value); break;
-            case REG_BPL6PTL: setBPLxPTL(6, value); break;
+            case REG_BPL1PTH: setBPLxPTH<1>(value); break;
+            case REG_BPL1PTL: setBPLxPTL<1>(value); break;
+            case REG_BPL2PTH: setBPLxPTH<2>(value); break;
+            case REG_BPL2PTL: setBPLxPTL<2>(value); break;
+            case REG_BPL3PTH: setBPLxPTH<3>(value); break;
+            case REG_BPL3PTL: setBPLxPTL<3>(value); break;
+            case REG_BPL4PTH: setBPLxPTH<4>(value); break;
+            case REG_BPL4PTL: setBPLxPTL<4>(value); break;
+            case REG_BPL5PTH: setBPLxPTH<5>(value); break;
+            case REG_BPL5PTL: setBPLxPTL<5>(value); break;
+            case REG_BPL6PTH: setBPLxPTH<6>(value); break;
+            case REG_BPL6PTL: setBPLxPTL<6>(value); break;
 
             default:
                 warn("Register change ID %d is invalid.\n", addr);
@@ -531,12 +519,6 @@ Agnus::serviceREGEvent(Cycle until)
 
     // Schedule the next register change event
     scheduleNextREGEvent();
-}
-
-void
-Agnus::serviceAGNEvent()
-{
-    cancel<AGN_SLOT>();
 }
 
 void
@@ -854,14 +836,6 @@ Agnus::checkScheduledEvent(EventSlot s)
             }
             break;
 
-        case AGN_SLOT:
-            if (!isAgnEvent(id)) {
-                _dump();
-                panic("Invalid AGN event ID.");
-                return false;
-            }
-            break;
-
         case CIAA_SLOT:
         case CIAB_SLOT:
             if (!isCiaEvent(id)) {
@@ -919,12 +893,6 @@ bool
 Agnus::checkTriggeredEvent(EventSlot s)
 {
     switch (s) {
-
-        case AGN_SLOT:
-            if (slot[s].id != AGN_ACTIONS) {
-                assert(false); return false;
-            }
-            break;
 
         default:
             break;
