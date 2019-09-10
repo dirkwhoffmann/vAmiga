@@ -1273,7 +1273,7 @@ Agnus::computeDDFStop()
     */
 }
 
-template <int x, PokeSource s> void
+template <int x> void
 Agnus::pokeBPLxPTH(uint16_t value)
 {
     debug(BPLREG_DEBUG, "pokeBPL%dPTH($%d) (%X)\n", x, value, value);
@@ -1292,7 +1292,7 @@ Agnus::pokeBPLxPTH(uint16_t value)
     }
 }
 
-template <int x, PokeSource s> void
+template <int x> void
 Agnus::pokeBPLxPTL(uint16_t value)
 {
     debug(BPLREG_DEBUG, "pokeBPL%dPTL(%d) ($%X)\n", x, value, value);
@@ -1885,18 +1885,12 @@ template void Agnus::executeSecondSpriteCycle<5>();
 template void Agnus::executeSecondSpriteCycle<6>();
 template void Agnus::executeSecondSpriteCycle<7>();
 
-template void Agnus::pokeBPLxPTH<1, POKE_CPU>(uint16_t value);
-template void Agnus::pokeBPLxPTH<1, POKE_COPPER>(uint16_t value);
-template void Agnus::pokeBPLxPTH<2, POKE_CPU>(uint16_t value);
-template void Agnus::pokeBPLxPTH<2, POKE_COPPER>(uint16_t value);
-template void Agnus::pokeBPLxPTH<3, POKE_CPU>(uint16_t value);
-template void Agnus::pokeBPLxPTH<3, POKE_COPPER>(uint16_t value);
-template void Agnus::pokeBPLxPTH<4, POKE_CPU>(uint16_t value);
-template void Agnus::pokeBPLxPTH<4, POKE_COPPER>(uint16_t value);
-template void Agnus::pokeBPLxPTH<5, POKE_CPU>(uint16_t value);
-template void Agnus::pokeBPLxPTH<5, POKE_COPPER>(uint16_t value);
-template void Agnus::pokeBPLxPTH<6, POKE_CPU>(uint16_t value);
-template void Agnus::pokeBPLxPTH<6, POKE_COPPER>(uint16_t value);
+template void Agnus::pokeBPLxPTH<1>(uint16_t value);
+template void Agnus::pokeBPLxPTH<2>(uint16_t value);
+template void Agnus::pokeBPLxPTH<3>(uint16_t value);
+template void Agnus::pokeBPLxPTH<4>(uint16_t value);
+template void Agnus::pokeBPLxPTH<5>(uint16_t value);
+template void Agnus::pokeBPLxPTH<6>(uint16_t value);
 template void Agnus::setBPLxPTH<1>(uint16_t value);
 template void Agnus::setBPLxPTH<2>(uint16_t value);
 template void Agnus::setBPLxPTH<3>(uint16_t value);
@@ -1904,18 +1898,12 @@ template void Agnus::setBPLxPTH<4>(uint16_t value);
 template void Agnus::setBPLxPTH<5>(uint16_t value);
 template void Agnus::setBPLxPTH<6>(uint16_t value);
 
-template void Agnus::pokeBPLxPTL<1, POKE_CPU>(uint16_t value);
-template void Agnus::pokeBPLxPTL<1, POKE_COPPER>(uint16_t value);
-template void Agnus::pokeBPLxPTL<2, POKE_CPU>(uint16_t value);
-template void Agnus::pokeBPLxPTL<2, POKE_COPPER>(uint16_t value);
-template void Agnus::pokeBPLxPTL<3, POKE_CPU>(uint16_t value);
-template void Agnus::pokeBPLxPTL<3, POKE_COPPER>(uint16_t value);
-template void Agnus::pokeBPLxPTL<4, POKE_CPU>(uint16_t value);
-template void Agnus::pokeBPLxPTL<4, POKE_COPPER>(uint16_t value);
-template void Agnus::pokeBPLxPTL<5, POKE_CPU>(uint16_t value);
-template void Agnus::pokeBPLxPTL<5, POKE_COPPER>(uint16_t value);
-template void Agnus::pokeBPLxPTL<6, POKE_CPU>(uint16_t value);
-template void Agnus::pokeBPLxPTL<6, POKE_COPPER>(uint16_t value);
+template void Agnus::pokeBPLxPTL<1>(uint16_t value);
+template void Agnus::pokeBPLxPTL<2>(uint16_t value);
+template void Agnus::pokeBPLxPTL<3>(uint16_t value);
+template void Agnus::pokeBPLxPTL<4>(uint16_t value);
+template void Agnus::pokeBPLxPTL<5>(uint16_t value);
+template void Agnus::pokeBPLxPTL<6>(uint16_t value);
 template void Agnus::setBPLxPTL<1>(uint16_t value);
 template void Agnus::setBPLxPTL<2>(uint16_t value);
 template void Agnus::setBPLxPTL<3>(uint16_t value);

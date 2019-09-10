@@ -842,8 +842,8 @@ public:
     int bpu() { return bpu(bplcon0); }
 
     // BPLxPTL, BPLxPTH
-    template <int x, PokeSource s> void pokeBPLxPTH(uint16_t value);
-    template <int x, PokeSource s> void pokeBPLxPTL(uint16_t value);
+    template <int x> void pokeBPLxPTH(uint16_t value);
+    template <int x> void pokeBPLxPTL(uint16_t value);
     bool skipBPLxPT(int x);
     template <int x> void setBPLxPTH(uint16_t value);
     template <int x> void setBPLxPTL(uint16_t value);
