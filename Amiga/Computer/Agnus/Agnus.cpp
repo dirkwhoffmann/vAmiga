@@ -1285,35 +1285,14 @@ Agnus::pokeBPLxPTH(uint16_t value)
     // Check if the written value gets lost
     if (skipBPLxPT(x)) return;
 
-    // Retain the new value
-    bplpthNew[x - 1] = value;
-
     // Schedule the register updated
     switch (x) {
-        case 1:
-            setActionFlag(AGN_BPL1PTH_0);
-            recordRegisterChange(DMA_CYCLES(2), REG_BPL1PTH, value);
-            break;
-        case 2:
-            setActionFlag(AGN_BPL2PTH_0);
-            recordRegisterChange(DMA_CYCLES(2), REG_BPL2PTH, value);
-            break;
-        case 3:
-            setActionFlag(AGN_BPL3PTH_0);
-            recordRegisterChange(DMA_CYCLES(2), REG_BPL3PTH, value);
-            break;
-        case 4:
-            setActionFlag(AGN_BPL4PTH_0);
-            recordRegisterChange(DMA_CYCLES(2), REG_BPL4PTH, value);
-            break;
-        case 5:
-            setActionFlag(AGN_BPL5PTH_0);
-            recordRegisterChange(DMA_CYCLES(2), REG_BPL5PTH, value);
-            break;
-        case 6:
-            setActionFlag(AGN_BPL6PTH_0);
-            recordRegisterChange(DMA_CYCLES(2), REG_BPL6PTH, value);
-            break;
+        case 1: recordRegisterChange(DMA_CYCLES(2), REG_BPL1PTH, value); break;
+        case 2: recordRegisterChange(DMA_CYCLES(2), REG_BPL2PTH, value); break;
+        case 3: recordRegisterChange(DMA_CYCLES(2), REG_BPL3PTH, value); break;
+        case 4: recordRegisterChange(DMA_CYCLES(2), REG_BPL4PTH, value); break;
+        case 5: recordRegisterChange(DMA_CYCLES(2), REG_BPL5PTH, value); break;
+        case 6: recordRegisterChange(DMA_CYCLES(2), REG_BPL6PTH, value); break;
     }
 }
 
@@ -1325,35 +1304,14 @@ Agnus::pokeBPLxPTL(uint16_t value)
     // Check if the written value gets lost
     if (skipBPLxPT(x)) return;
 
-    // Retain the new value
-    bplptlNew[x - 1] = value;
-
     // Schedule the register updated
     switch (x) {
-        case 1:
-            setActionFlag(AGN_BPL1PTL_0);
-            recordRegisterChange(DMA_CYCLES(2), REG_BPL1PTL, value);
-            break;
-        case 2:
-            setActionFlag(AGN_BPL2PTL_0);
-            recordRegisterChange(DMA_CYCLES(2), REG_BPL2PTL, value);
-            break;
-        case 3:
-            setActionFlag(AGN_BPL3PTL_0);
-            recordRegisterChange(DMA_CYCLES(2), REG_BPL3PTL, value);
-            break;
-        case 4:
-            setActionFlag(AGN_BPL4PTL_0);
-            recordRegisterChange(DMA_CYCLES(2), REG_BPL4PTL, value);
-            break;
-        case 5:
-            setActionFlag(AGN_BPL5PTL_0);
-            recordRegisterChange(DMA_CYCLES(2), REG_BPL5PTL, value);
-            break;
-        case 6:
-            setActionFlag(AGN_BPL6PTL_0);
-            recordRegisterChange(DMA_CYCLES(2), REG_BPL6PTL, value);
-            break;
+        case 1: recordRegisterChange(DMA_CYCLES(2), REG_BPL1PTL, value); break;
+        case 2: recordRegisterChange(DMA_CYCLES(2), REG_BPL2PTL, value); break;
+        case 3: recordRegisterChange(DMA_CYCLES(2), REG_BPL3PTL, value); break;
+        case 4: recordRegisterChange(DMA_CYCLES(2), REG_BPL4PTL, value); break;
+        case 5: recordRegisterChange(DMA_CYCLES(2), REG_BPL5PTL, value); break;
+        case 6: recordRegisterChange(DMA_CYCLES(2), REG_BPL6PTL, value); break;
     }
 }
 
@@ -1413,12 +1371,6 @@ void
 Agnus::pokeBPL1MOD(uint16_t value)
 {
     debug(BPLREG_DEBUG, "pokeBPL1MOD(%X)\n", value);
-
-    // Retain the new value
-    bpl1modNew = (int16_t)(value & 0xFFFE);
-
-    // Schedule the register updated
-    if (bpl1modNew != bpl1mod) setActionFlag(AGN_BPL1MOD_0);
     recordRegisterChange(DMA_CYCLES(2), REG_BPL1MOD, value);
 }
 
@@ -1433,14 +1385,7 @@ void
 Agnus::pokeBPL2MOD(uint16_t value)
 {
     debug(BPLREG_DEBUG, "pokeBPL2MOD(%X)\n", value);
-
-    // Retain the new value
-    bpl2modNew = (int16_t)(value & 0xFFFE);
-
-    // Schedule the register updated
-    if (bpl2modNew != bpl2mod) setActionFlag(AGN_BPL2MOD_0);
     recordRegisterChange(DMA_CYCLES(2), REG_BPL2MOD, value);
-
 }
 
 void
@@ -1673,34 +1618,6 @@ Agnus::recordRegisterChange(Cycle delay, uint32_t addr, uint16_t value)
 void
 Agnus::updateRegisters()
 {
-    // DIWSTRT
-    if (actions & AGN_DIWSTRT_1) setDIWSTRT(diwstrtNew);
-
-    // DIWSTOP
-    if (actions & AGN_DIWSTOP_1) setDIWSTOP(diwstopNew);
-
-    // BPL1MOD
-    if (actions & AGN_BPL1MOD_1) setBPL1MOD(bpl1modNew);
-
-    // BPL2MOD
-    if (actions & AGN_BPL2MOD_1) setBPL2MOD(bpl2modNew);
-
-    // BPLxPT
-    if (actions & (AGN_BPLxPTH_1 | AGN_BPLxPTL_1)) {
-
-        if (actions & AGN_BPL1PTH_1) setBPLxPTH(1, bplpthNew[0]);
-        if (actions & AGN_BPL1PTL_1) setBPLxPTL(1, bplptlNew[0]);
-        if (actions & AGN_BPL2PTH_1) setBPLxPTH(2, bplpthNew[1]);
-        if (actions & AGN_BPL2PTL_1) setBPLxPTL(2, bplptlNew[1]);
-        if (actions & AGN_BPL3PTH_1) setBPLxPTH(3, bplpthNew[2]);
-        if (actions & AGN_BPL3PTL_1) setBPLxPTL(3, bplptlNew[2]);
-        if (actions & AGN_BPL4PTH_1) setBPLxPTH(4, bplpthNew[3]);
-        if (actions & AGN_BPL4PTL_1) setBPLxPTL(4, bplptlNew[3]);
-        if (actions & AGN_BPL5PTH_1) setBPLxPTH(5, bplpthNew[4]);
-        if (actions & AGN_BPL5PTL_1) setBPLxPTL(5, bplptlNew[4]);
-        if (actions & AGN_BPL6PTH_1) setBPLxPTH(6, bplpthNew[5]);
-        if (actions & AGN_BPL6PTL_1) setBPLxPTL(6, bplptlNew[5]);
-    }
 }
 
 template <int nr> void

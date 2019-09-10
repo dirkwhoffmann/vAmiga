@@ -403,17 +403,13 @@ public:
 
     // The bitplane DMA pointers
     uint32_t bplpt[6];
-    uint32_t bplptlNew[6];
-    uint32_t bplpthNew[6];
 
     // The bitplane modulo registers for odd bitplanes
     int16_t bpl1mod;
-    int16_t bpl1modNew;
-    
+
     // The bitplane modulo registers for even bitplanes
     int16_t bpl2mod;
-    int16_t bpl2modNew;
-    
+
     // The sprite DMA pointers
     uint32_t sprpt[8];
     
@@ -549,12 +545,8 @@ public:
         & audlc
         & audlcold
         & bplpt
-        & bplptlNew
-        & bplpthNew
         & bpl1mod
-        & bpl1modNew
         & bpl2mod
-        & bpl2modNew
         & sprpt
 
         & busValue
