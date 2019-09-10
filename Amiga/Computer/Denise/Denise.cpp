@@ -239,11 +239,6 @@ Denise::pokeBPLCON2(uint16_t value)
 {
     debug(BPLREG_DEBUG, "pokeBPLCON2(%X)\n", value);
 
-    // Retain the new value
-    bplcon2New = value;
-
-    // Schedule the register updated
-    if (bplcon2New != bplcon2) agnus->setActionFlag(AGN_BPLCON2_0);
     agnus->recordRegisterChange(DMA_CYCLES(2), REG_BPLCON2, value);
 }
 

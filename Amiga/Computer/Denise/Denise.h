@@ -71,7 +71,6 @@ public:
     uint16_t bplcon0;
     uint16_t bplcon1;
     uint16_t bplcon2;
-    uint16_t bplcon2New;
 
     // The bitplane control registers at cycle 0 in the current rasterline
     uint16_t initialBplcon0;
@@ -310,7 +309,6 @@ public:
         & bplcon0
         & bplcon1
         & bplcon2
-        & bplcon2New
         & initialBplcon0
         & initialBplcon1
         & initialBplcon2
