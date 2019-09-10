@@ -23,7 +23,8 @@
 typedef enum : long
 {
     // Primary slots
-    REG_SLOT = 0,                   // Register changes and HSYNC
+    REG_SLOT = 0,                   // Register changes
+    RAS_SLOT,                       // Rasterline
     AGN_SLOT,                       // Agnus (DEPRECATED, WILL BE REPLACED BY REG_SLOT)
     CIAA_SLOT,                      // CIA A execution
     CIAB_SLOT,                      // CIA B execution
@@ -42,7 +43,6 @@ typedef enum : long
     RXD_SLOT,                       // Serial data in (UART)
     POT_SLOT,                       // Potentiometer
     INS_SLOT,                       // Handles periodic calls to inspect()
-
     SLOT_COUNT
 
 } EventSlot;
@@ -55,6 +55,7 @@ inline const char *slotName(EventSlot nr)
 {
     switch (nr) {
         case REG_SLOT:  return "Registers";
+        case RAS_SLOT:  return "Rasterline";
         case AGN_SLOT:  return "Agnus";
         case CIAA_SLOT: return "CIA A";
         case CIAB_SLOT: return "CIA B";
@@ -215,7 +216,11 @@ typedef enum : long
     INS_DENISE,
     INS_PORTS,
     INS_EVENTS,
-    INS_EVENT_COUNT
+    INS_EVENT_COUNT,
+
+    // Rasterline slot
+    RAS_HSYNC = 1,
+    RAS_EVENT_COUNT
 
 } EventID;
 

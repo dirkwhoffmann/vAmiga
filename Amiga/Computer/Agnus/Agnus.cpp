@@ -197,6 +197,7 @@ void Agnus::_reset()
     }
 
     // Schedule initial events
+    scheduleAbs<RAS_SLOT>(DMA_CYCLES(HPOS_CNT), RAS_HSYNC);
     scheduleAbs<CIAA_SLOT>(CIA_CYCLES(1), CIA_EXECUTE);
     scheduleAbs<CIAB_SLOT>(CIA_CYCLES(1), CIA_EXECUTE);
     scheduleAbs<DAS_SLOT>(DMA_CYCLES(1), DAS_REFRESH);
@@ -1763,7 +1764,6 @@ Agnus::hsyncHandler()
 
     // Advance the vertical counter
     if (++pos.v >= frameInfo.numLines) vsyncHandler();
-
 
     // Switch sprite DMA off if the last rasterline has been reached
     if (pos.v == frameInfo.numLines - 1) {

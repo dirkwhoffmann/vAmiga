@@ -70,6 +70,16 @@ Agnus::inspectEventSlot(EventSlot nr)
             }
             break;
 
+        case RAS_SLOT:
+
+            switch (slot[nr].id) {
+
+                case 0:             i->eventName = "none"; break;
+                case RAS_HSYNC:     i->eventName = "RAS_HSYNC"; break;
+                default:            i->eventName = "*** INVALID ***"; break;
+            }
+            break;
+
         case AGN_SLOT:
             switch (slot[nr].id) {
 
@@ -377,6 +387,9 @@ Agnus::executeEventsUntil(Cycle cycle) {
     if (isDue<REG_SLOT>(cycle)) {
         serviceREGEvent(cycle);
     }
+    if (isDue<RAS_SLOT>(cycle)) {
+        serviceRASEvent();
+    }
     if (isDue<AGN_SLOT>(cycle)) {
         serviceAGNEvent();
     }
@@ -402,7 +415,7 @@ Agnus::executeEventsUntil(Cycle cycle) {
     if (isDue<SEC_SLOT>(cycle)) {
 
         //
-        // Check primary slots
+        // Check secondary slots
         //
 
         if (isDue<DSK_SLOT>(cycle)) {
@@ -529,7 +542,7 @@ Agnus::serviceAGNEvent()
     assert(actions);
 
     // Check for horizontal sync
-    if (actions & AGN_HSYNC) hsyncHandler();
+    // if (actions & AGN_HSYNC) hsyncHandlerOld();
 
     // Handle all pending register changes
     if (actions & AGN_REG_CHANGE_MASK) updateRegistersOld();
@@ -814,6 +827,24 @@ Agnus::serviceINSEvent()
 
     // Reschedule event
     rescheduleRel<INS_SLOT>((Cycle)(inspectionInterval * 28000000));
+}
+
+void
+Agnus::serviceRASEvent()
+{
+    switch (slot[RAS_SLOT].id) {
+
+        case RAS_HSYNC:
+            hsyncHandler();
+            break;
+
+        default:
+            assert(false);
+            break;
+    }
+
+    // Reschedule event
+    rescheduleRel<RAS_SLOT>(DMA_CYCLES(HPOS_CNT));
 }
 
 bool
