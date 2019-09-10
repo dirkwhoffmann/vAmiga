@@ -497,6 +497,8 @@ Agnus::serviceREGEvent(Cycle until)
         uint32_t addr = changeRecorder.addr();
         uint16_t value = changeRecorder.value();
 
+#ifdef USE_REG_CHANGE_SLOT
+
         switch (addr) {
 
             case REG_BPLCON0_AGNUS: setBPLCON0(bplcon0, value); break;
@@ -526,6 +528,8 @@ Agnus::serviceREGEvent(Cycle until)
                 assert(false);
         }
 
+#endif
+
         changeRecorder.remove();
     }
 
@@ -545,7 +549,9 @@ Agnus::serviceAGNEvent()
     // if (actions & AGN_HSYNC) hsyncHandlerOld();
 
     // Handle all pending register changes
-    if (actions & AGN_REG_CHANGE_MASK) updateRegistersOld();
+#ifndef USE_REG_CHANGE_SLOT
+    if (actions & AGN_REG_CHANGE_MASK) updateRegisters();
+#endif
 
     // Move action flags one bit to the left
     actions = (actions << 1) & AGN_DELAY_MASK;

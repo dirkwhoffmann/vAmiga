@@ -900,13 +900,13 @@ public:
     // Sets an action flag
     void setActionFlag(uint64_t flag);
 
+    // Schedules a register to change
+    void recordRegisterChange(Cycle delay, uint32_t addr, uint16_t value);
+
 private:
 
-    // Schedules a register to change
-    void scheduleRegisterChange(Cycle delay, uint32_t addr, uint16_t value);
-
     // Performs all pending register changes
-    void updateRegistersOld();
+    void updateRegisters();
 
     // Executes the first sprite DMA cycle
     template <int nr> void executeFirstSpriteCycle();

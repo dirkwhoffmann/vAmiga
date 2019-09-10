@@ -806,32 +806,22 @@ Agnus::peekDMACONR()
 void
 Agnus::pokeDMACON(uint16_t value)
 {
+    uint16_t newValue;
+
     debug(DMA_DEBUG, "pokeDMACON(%X)\n", value);
 
     // Compute new value
     if (value & 0x8000) {
-        dmaconNew = (dmacon | value) & 0x07FF;
+        newValue = (dmacon | value) & 0x07FF;
     } else {
-        dmaconNew = (dmacon & ~value) & 0x07FF;
+        newValue = (dmacon & ~value) & 0x07FF;
     }
 
     // Schedule the value to be updated
-    if (dmaconNew != dmacon) setActionFlag(AGN_DMACON_0);
+    dmaconNew = newValue;
+    if (dmaconNew != dmacon) setActionFlag(AGN_DMACON_0); // DEPRECATED
+    recordRegisterChange(DMA_CYCLES(2), REG_DMACON, newValue);
 
-    /*
-    // Compute the real value (Bit 15 determines if bits are set or cleared)
-    if (value & 0x8000) {
-        value = (dmacon | value) & 0x07FF;
-    } else {
-        value = (dmacon & ~value) & 0x07FF;
-    }
-
-    if (dmacon != value) {
-
-        setDMACON(dmacon, value);
-        dmacon = value;
-    }
-    */
 }
 
 void
@@ -1087,6 +1077,7 @@ Agnus::pokeDIWSTRT(uint16_t value)
     debug(DIW_DEBUG, "pokeDIWSTRT<%s>(%X)\n", pokeSourceName(s), value);
     diwstrtNew = value;
     setActionFlag(AGN_DIWSTRT_0);
+    recordRegisterChange(DMA_CYCLES(2), REG_DIWSTRT, value);
 }
 
 template <PokeSource s> void
@@ -1095,6 +1086,7 @@ Agnus::pokeDIWSTOP(uint16_t value)
     debug(DIW_DEBUG, "pokeDIWSTOP<%s>(%X)\n", pokeSourceName(s), value);
     diwstopNew = value;
     setActionFlag(AGN_DIWSTOP_0);
+    recordRegisterChange(DMA_CYCLES(2), REG_DIWSTOP, value);
 }
 
 void
@@ -1300,12 +1292,30 @@ Agnus::pokeBPLxPTH(uint16_t value)
 
     // Schedule the register updated
     switch (x) {
-        case 1: setActionFlag(AGN_BPL1PTH_0); break;
-        case 2: setActionFlag(AGN_BPL2PTH_0); break;
-        case 3: setActionFlag(AGN_BPL3PTH_0); break;
-        case 4: setActionFlag(AGN_BPL4PTH_0); break;
-        case 5: setActionFlag(AGN_BPL5PTH_0); break;
-        case 6: setActionFlag(AGN_BPL6PTH_0); break;
+        case 1:
+            setActionFlag(AGN_BPL1PTH_0);
+            recordRegisterChange(DMA_CYCLES(2), REG_BPL1PTH, value);
+            break;
+        case 2:
+            setActionFlag(AGN_BPL2PTH_0);
+            recordRegisterChange(DMA_CYCLES(2), REG_BPL2PTH, value);
+            break;
+        case 3:
+            setActionFlag(AGN_BPL3PTH_0);
+            recordRegisterChange(DMA_CYCLES(2), REG_BPL3PTH, value);
+            break;
+        case 4:
+            setActionFlag(AGN_BPL4PTH_0);
+            recordRegisterChange(DMA_CYCLES(2), REG_BPL4PTH, value);
+            break;
+        case 5:
+            setActionFlag(AGN_BPL5PTH_0);
+            recordRegisterChange(DMA_CYCLES(2), REG_BPL5PTH, value);
+            break;
+        case 6:
+            setActionFlag(AGN_BPL6PTH_0);
+            recordRegisterChange(DMA_CYCLES(2), REG_BPL6PTH, value);
+            break;
     }
 }
 
@@ -1322,12 +1332,30 @@ Agnus::pokeBPLxPTL(uint16_t value)
 
     // Schedule the register updated
     switch (x) {
-        case 1: setActionFlag(AGN_BPL1PTL_0); break;
-        case 2: setActionFlag(AGN_BPL2PTL_0); break;
-        case 3: setActionFlag(AGN_BPL3PTL_0); break;
-        case 4: setActionFlag(AGN_BPL4PTL_0); break;
-        case 5: setActionFlag(AGN_BPL5PTL_0); break;
-        case 6: setActionFlag(AGN_BPL6PTL_0); break;
+        case 1:
+            setActionFlag(AGN_BPL1PTL_0);
+            recordRegisterChange(DMA_CYCLES(2), REG_BPL1PTL, value);
+            break;
+        case 2:
+            setActionFlag(AGN_BPL2PTL_0);
+            recordRegisterChange(DMA_CYCLES(2), REG_BPL2PTL, value);
+            break;
+        case 3:
+            setActionFlag(AGN_BPL3PTL_0);
+            recordRegisterChange(DMA_CYCLES(2), REG_BPL3PTL, value);
+            break;
+        case 4:
+            setActionFlag(AGN_BPL4PTL_0);
+            recordRegisterChange(DMA_CYCLES(2), REG_BPL4PTL, value);
+            break;
+        case 5:
+            setActionFlag(AGN_BPL5PTL_0);
+            recordRegisterChange(DMA_CYCLES(2), REG_BPL5PTL, value);
+            break;
+        case 6:
+            setActionFlag(AGN_BPL6PTL_0);
+            recordRegisterChange(DMA_CYCLES(2), REG_BPL6PTL, value);
+            break;
     }
 }
 
@@ -1389,17 +1417,18 @@ Agnus::pokeBPL1MOD(uint16_t value)
     debug(BPLREG_DEBUG, "pokeBPL1MOD(%X)\n", value);
 
     // Retain the new value
-    bpl1modNew = int16_t(value & 0xFFFE);
+    bpl1modNew = (int16_t)(value & 0xFFFE);
 
     // Schedule the register updated
     if (bpl1modNew != bpl1mod) setActionFlag(AGN_BPL1MOD_0);
+    recordRegisterChange(DMA_CYCLES(2), REG_BPL1MOD, value);
 }
 
 void
 Agnus::setBPL1MOD(uint16_t value)
 {
     debug(BPLREG_DEBUG, "setBPL1MOD(%X)\n", value);
-    bpl1mod = bpl1modNew;
+    bpl1mod = (int16_t)(value & 0xFFFE);
 }
 
 void
@@ -1408,17 +1437,19 @@ Agnus::pokeBPL2MOD(uint16_t value)
     debug(BPLREG_DEBUG, "pokeBPL2MOD(%X)\n", value);
 
     // Retain the new value
-    bpl2modNew = int16_t(value & 0xFFFE);
+    bpl2modNew = (int16_t)(value & 0xFFFE);
 
     // Schedule the register updated
     if (bpl2modNew != bpl2mod) setActionFlag(AGN_BPL2MOD_0);
+    recordRegisterChange(DMA_CYCLES(2), REG_BPL2MOD, value);
+
 }
 
 void
 Agnus::setBPL2MOD(uint16_t value)
 {
     debug(BPLREG_DEBUG, "setBPL2MOD(%X)\n", value);
-    bpl2mod = bpl2modNew;
+    bpl2mod = (int16_t)(value & 0xFFFE);
 }
 
 template <int x> void
@@ -1446,6 +1477,7 @@ Agnus::pokeBPLCON0(uint16_t value)
 
         bplcon0New = value;
         setActionFlag(AGN_BPLCON0_0);
+        recordRegisterChange(DMA_CYCLES(4), REG_BPLCON0_AGNUS, value);
     }
 }
 
@@ -1634,7 +1666,7 @@ Agnus::setActionFlag(uint64_t flag)
 }
 
 void
-Agnus::scheduleRegisterChange(Cycle delay, uint32_t addr, uint16_t value)
+Agnus::recordRegisterChange(Cycle delay, uint32_t addr, uint16_t value)
 {
     // Record the new register value
     changeRecorder.add(clock + delay, addr, value);
@@ -1644,7 +1676,7 @@ Agnus::scheduleRegisterChange(Cycle delay, uint32_t addr, uint16_t value)
 }
 
 void
-Agnus::updateRegistersOld()
+Agnus::updateRegisters()
 {
     // BPLCON0 (Agnus view)
     if (actions & AGN_BPLCON0_3) setBPLCON0(bplcon0, bplcon0New);
