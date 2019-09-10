@@ -371,7 +371,6 @@ public:
 
     // A copy of BPLCON0 (Denise has another copy)
     uint16_t bplcon0;
-    uint16_t bplcon0New;
 
     /* Value of bplcon0 at the DDFSTRT trigger cycle.
      * This variable is set at the beginning of each rasterline and updated
@@ -543,7 +542,6 @@ public:
 
         & changeRecorder
         & bplcon0
-        & bplcon0New
         & bplcon0AtDDFStrt
         & dmacon
         & dmaconNew

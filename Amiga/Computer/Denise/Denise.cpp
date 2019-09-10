@@ -182,12 +182,7 @@ Denise::pokeBPLCON0(uint16_t value)
 {
     debug(BPLREG_DEBUG, "pokeBPLCON0(%X)\n", value);
 
-    if (bplcon0 != value) {
-
-        bplcon0New = value;
-        agnus->setActionFlag(AGN_BPLCON0_DENISE_0);
-        agnus->recordRegisterChange(DMA_CYCLES(1), REG_BPLCON0_DENISE, value);
-    }
+    agnus->recordRegisterChange(DMA_CYCLES(1), REG_BPLCON0_DENISE, value);
 }
 
 void

@@ -1474,9 +1474,6 @@ Agnus::pokeBPLCON0(uint16_t value)
     debug(DMA_DEBUG, "pokeBPLCON0(%X)\n", value);
 
     if (bplcon0 != value) {
-
-        bplcon0New = value;
-        setActionFlag(AGN_BPLCON0_0);
         recordRegisterChange(DMA_CYCLES(4), REG_BPLCON0_AGNUS, value);
     }
 }
@@ -1678,12 +1675,6 @@ Agnus::recordRegisterChange(Cycle delay, uint32_t addr, uint16_t value)
 void
 Agnus::updateRegisters()
 {
-    // BPLCON0 (Agnus view)
-    if (actions & AGN_BPLCON0_3) setBPLCON0(bplcon0, bplcon0New);
-
-    // BPLCON0 (Denise view)
-    if (actions & AGN_BPLCON0_DENISE_0) denise->setBPLCON0(denise->bplcon0, denise->bplcon0New);
-
     // BPLCON1
     if (actions & AGN_BPLCON1_1) denise->setBPLCON1(denise->bplcon1New);
 
