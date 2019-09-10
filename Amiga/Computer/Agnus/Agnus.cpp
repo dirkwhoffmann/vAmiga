@@ -817,10 +817,8 @@ Agnus::pokeDMACON(uint16_t value)
         newValue = (dmacon & ~value) & 0x07FF;
     }
 
-    // Schedule the value to be updated
-    dmaconNew = newValue;
-    if (dmaconNew != dmacon) setActionFlag(AGN_DMACON_0); // DEPRECATED
-    recordRegisterChange(DMA_CYCLES(2), REG_DMACON, newValue);
+    // Record the change
+    if (newValue != dmacon) recordRegisterChange(DMA_CYCLES(2), REG_DMACON, newValue);
 
 }
 
@@ -1675,9 +1673,6 @@ Agnus::recordRegisterChange(Cycle delay, uint32_t addr, uint16_t value)
 void
 Agnus::updateRegisters()
 {
-    // DMACON
-    if (actions & AGN_DMACON_1) setDMACON(dmacon, dmaconNew);
-
     // DIWSTRT
     if (actions & AGN_DIWSTRT_1) setDIWSTRT(diwstrtNew);
 

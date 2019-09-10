@@ -503,10 +503,10 @@ Agnus::serviceREGEvent(Cycle until)
             case REG_BPLCON0_DENISE: denise->setBPLCON0(denise->bplcon0, value); break;
             case REG_BPLCON1: denise->setBPLCON1(value); break;
             case REG_BPLCON2: denise->setBPLCON2(value); break;
-            /*
             case REG_DMACON: setDMACON(dmacon, value); break;
             case REG_DIWSTRT: setDIWSTRT(value); break;
             case REG_DIWSTOP: setDIWSTOP(value); break;
+            /*
             case REG_BPL1MOD: setBPL1MOD(value); break;
             case REG_BPL2MOD: setBPL2MOD(value); break;
             case REG_BPL1PTH: setBPLxPTH(1, value); break;

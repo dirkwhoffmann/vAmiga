@@ -381,7 +381,6 @@ public:
 
     // The DMA control register
     uint16_t dmacon;
-    uint16_t dmaconNew;
 
     /* Value of dmacon at the DDFSTRT trigger cycle.
      * This variable is set at the beginning of each rasterline and updated
@@ -544,7 +543,6 @@ public:
         & bplcon0
         & bplcon0AtDDFStrt
         & dmacon
-        & dmaconNew
         & dmaconAtDDFStrt
         & dmaDAS
         & dskpt
