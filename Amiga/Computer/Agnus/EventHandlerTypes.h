@@ -23,8 +23,8 @@
 typedef enum : long
 {
     // Primary slots
-    REG_SLOT = 0,                   // Register changes and HSYNC
-    AGN_SLOT,                       // Agnus (DEPRECATED, WILL BE REPLACED BY REG_SLOT)
+    REG_SLOT = 0,                   // Register changes
+    RAS_SLOT,                       // Rasterline
     CIAA_SLOT,                      // CIA A execution
     CIAB_SLOT,                      // CIA B execution
     BPL_SLOT,                       // Bitplane DMA
@@ -42,7 +42,6 @@ typedef enum : long
     RXD_SLOT,                       // Serial data in (UART)
     POT_SLOT,                       // Potentiometer
     INS_SLOT,                       // Handles periodic calls to inspect()
-
     SLOT_COUNT
 
 } EventSlot;
@@ -55,7 +54,7 @@ inline const char *slotName(EventSlot nr)
 {
     switch (nr) {
         case REG_SLOT:  return "Registers";
-        case AGN_SLOT:  return "Agnus";
+        case RAS_SLOT:  return "Rasterline";
         case CIAA_SLOT: return "CIA A";
         case CIAB_SLOT: return "CIA B";
         case BPL_SLOT:  return "Bitplane DMA";
@@ -91,10 +90,6 @@ typedef enum : long
     REG_CHANGE = 1,
     REG_HSYNC,
     REG_EVENT_COUNT,
-
-    // AGN slot
-    AGN_ACTIONS = 1,
-    AGN_EVENT_COUNT,
 
     // CIA slots
     CIA_EXECUTE = 1,
@@ -215,12 +210,15 @@ typedef enum : long
     INS_DENISE,
     INS_PORTS,
     INS_EVENTS,
-    INS_EVENT_COUNT
+    INS_EVENT_COUNT,
+
+    // Rasterline slot
+    RAS_HSYNC = 1,
+    RAS_EVENT_COUNT
 
 } EventID;
 
 static inline bool isRegEvent(EventID id) { return id < REG_EVENT_COUNT; }
-static inline bool isAgnEvent(EventID id) { return id < AGN_EVENT_COUNT; }
 static inline bool isCiaEvent(EventID id) { return id < CIA_EVENT_COUNT; }
 static inline bool isBplEvent(EventID id) { return id < BPL_EVENT_COUNT; }
 static inline bool isDasEvent(EventID id) { return id < DAS_EVENT_COUNT; }

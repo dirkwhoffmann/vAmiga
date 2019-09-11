@@ -409,7 +409,7 @@ DiskController::serviceDiskChangeEvent(EventID id, int driveNr)
             assert(false);
     }
 
-    agnus->cancel(DCH_SLOT);
+    agnus->cancel<DCH_SLOT>();
 }
 
 void

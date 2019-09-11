@@ -70,11 +70,12 @@ Agnus::inspectEventSlot(EventSlot nr)
             }
             break;
 
-        case AGN_SLOT:
+        case RAS_SLOT:
+
             switch (slot[nr].id) {
 
                 case 0:             i->eventName = "none"; break;
-                case AGN_ACTIONS:   i->eventName = "AGN_ACTIONS"; break;
+                case RAS_HSYNC:     i->eventName = "RAS_HSYNC"; break;
                 default:            i->eventName = "*** INVALID ***"; break;
             }
             break;
@@ -358,6 +359,16 @@ Agnus::scheduleBplEventForCycle(int16_t hpos)
 }
 
 void
+Agnus::scheduleNextREGEvent()
+{
+    // Determine when the next register change happens
+    Cycle nextTrigger = changeRecorder.trigger();
+
+    // Schedule a register change event for that cycle
+    scheduleAbs<REG_SLOT>(nextTrigger, REG_CHANGE);
+}
+
+void
 Agnus::executeEventsUntil(Cycle cycle) {
 
     //
@@ -365,10 +376,10 @@ Agnus::executeEventsUntil(Cycle cycle) {
     //
 
     if (isDue<REG_SLOT>(cycle)) {
-        serviceREGEvent();
+        serviceREGEvent(cycle);
     }
-    if (isDue<AGN_SLOT>(cycle)) {
-        serviceAGNEvent();
+    if (isDue<RAS_SLOT>(cycle)) {
+        serviceRASEvent();
     }
     if (isDue<CIAA_SLOT>(cycle)) {
         serviceCIAEvent<0>();
@@ -392,7 +403,7 @@ Agnus::executeEventsUntil(Cycle cycle) {
     if (isDue<SEC_SLOT>(cycle)) {
 
         //
-        // Check primary slots
+        // Check secondary slots
         //
 
         if (isDue<DSK_SLOT>(cycle)) {
@@ -460,32 +471,54 @@ Agnus::serviceCIAEvent()
 }
 
 void
-Agnus::serviceREGEvent()
+Agnus::serviceREGEvent(Cycle until)
 {
     assert(checkTriggeredEvent(REG_SLOT));
 
-    // Schedule next event
-}
+    // Iterate through all recorded register changes
+    while (!changeRecorder.isEmpty()) {
 
-void
-Agnus::serviceAGNEvent()
-{
-    assert(checkTriggeredEvent(AGN_SLOT));
+        // We're done once the trigger cycle exceeds the target cycle
+        if (changeRecorder.trigger() > until) return;
 
-    // The event should only fire if at least one action flag is set
-    assert(actions);
+        // Apply the register change
+        uint32_t addr = changeRecorder.addr();
+        uint16_t value = changeRecorder.value();
 
-    // Check for horizontal sync
-    if (actions & AGN_HSYNC) hsyncHandler();
+        switch (addr) {
 
-    // Handle all pending register changes
-    if (actions & AGN_REG_CHANGE_MASK) updateRegisters();
+            case REG_BPLCON0_AGNUS: setBPLCON0(bplcon0, value); break;
+            case REG_BPLCON0_DENISE: denise->setBPLCON0(denise->bplcon0, value); break;
+            case REG_BPLCON1: denise->setBPLCON1(value); break;
+            case REG_BPLCON2: denise->setBPLCON2(value); break;
+            case REG_DMACON: setDMACON(dmacon, value); break;
+            case REG_DIWSTRT: setDIWSTRT(value); break;
+            case REG_DIWSTOP: setDIWSTOP(value); break;
+            case REG_BPL1MOD: setBPL1MOD(value); break;
+            case REG_BPL2MOD: setBPL2MOD(value); break;
+            case REG_BPL1PTH: setBPLxPTH<1>(value); break;
+            case REG_BPL1PTL: setBPLxPTL<1>(value); break;
+            case REG_BPL2PTH: setBPLxPTH<2>(value); break;
+            case REG_BPL2PTL: setBPLxPTL<2>(value); break;
+            case REG_BPL3PTH: setBPLxPTH<3>(value); break;
+            case REG_BPL3PTL: setBPLxPTL<3>(value); break;
+            case REG_BPL4PTH: setBPLxPTH<4>(value); break;
+            case REG_BPL4PTL: setBPLxPTL<4>(value); break;
+            case REG_BPL5PTH: setBPLxPTH<5>(value); break;
+            case REG_BPL5PTL: setBPLxPTL<5>(value); break;
+            case REG_BPL6PTH: setBPLxPTH<6>(value); break;
+            case REG_BPL6PTL: setBPLxPTL<6>(value); break;
 
-    // Move action flags one bit to the left
-    actions = (actions << 1) & AGN_DELAY_MASK;
+            default:
+                warn("Register change ID %d is invalid.\n", addr);
+                assert(false);
+        }
 
-    // Cancel the event if there is no more work to do
-    if (!actions) cancel(AGN_SLOT);
+        changeRecorder.remove();
+    }
+
+    // Schedule the next register change event
+    scheduleNextREGEvent();
 }
 
 void
@@ -610,10 +643,6 @@ Agnus::serviceBPLEvent()
         case BPL_EOL:
             // This is the last event in the current rasterline.
             assert(pos.h == 0xE2);
-
-            // We tell Agnus to call the hsync handler at the beginning of the
-            // next cycle and return without scheduling a new BPL event.
-            setActionFlag(AGN_HSYNC);
             return;
 
         default:
@@ -763,6 +792,24 @@ Agnus::serviceINSEvent()
     rescheduleRel<INS_SLOT>((Cycle)(inspectionInterval * 28000000));
 }
 
+void
+Agnus::serviceRASEvent()
+{
+    switch (slot[RAS_SLOT].id) {
+
+        case RAS_HSYNC:
+            hsyncHandler();
+            break;
+
+        default:
+            assert(false);
+            break;
+    }
+
+    // Reschedule event
+    rescheduleRel<RAS_SLOT>(DMA_CYCLES(HPOS_CNT));
+}
+
 bool
 Agnus::checkScheduledEvent(EventSlot s)
 {
@@ -785,14 +832,6 @@ Agnus::checkScheduledEvent(EventSlot s)
             if (!isRegEvent(id)) {
                 _dump();
                 panic("Invalid REG event ID.");
-                return false;
-            }
-            break;
-
-        case AGN_SLOT:
-            if (!isAgnEvent(id)) {
-                _dump();
-                panic("Invalid AGN event ID.");
                 return false;
             }
             break;
@@ -854,18 +893,6 @@ bool
 Agnus::checkTriggeredEvent(EventSlot s)
 {
     switch (s) {
-
-        case REG_SLOT:
-            if (slot[s].id != REG_HSYNC) {
-                assert(pos.h == 0xE3); return false;
-            }
-            break;
-
-        case AGN_SLOT:
-            if (slot[s].id != AGN_ACTIONS) {
-                assert(false); return false;
-            }
-            break;
 
         default:
             break;

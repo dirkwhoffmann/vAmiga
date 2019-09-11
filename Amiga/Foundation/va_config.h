@@ -81,4 +81,5 @@ static const int BLT_CHECKSUM  = 2;  // Blitter checksums
 // #define ALIGN_DRIVE_HEAD // Makes drive operations deterministic
 // #define SLOW_BLT_DEBUG   // Execute all slow Blitter instructions in one chunk
 // #define AGNUS_EXEC_DEBUG // Falls back to a simpler Agnus execution function
+
 #endif

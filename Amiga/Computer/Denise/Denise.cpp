@@ -182,11 +182,7 @@ Denise::pokeBPLCON0(uint16_t value)
 {
     debug(BPLREG_DEBUG, "pokeBPLCON0(%X)\n", value);
 
-    if (bplcon0 != value) {
-
-        bplcon0New = value;
-        agnus->setActionFlag(AGN_BPLCON0_DENISE_0);
-    }
+    agnus->recordRegisterChange(DMA_CYCLES(1), REG_BPLCON0_DENISE, value);
 }
 
 void
@@ -220,11 +216,8 @@ Denise::pokeBPLCON1(uint16_t value)
 {
     debug(BPLREG_DEBUG, "pokeBPLCON1(%X)\n", value);
 
-    // Retain the new value
-    bplcon1New = value & 0xFF;
-
-    // Schedule the register updated
-    if (bplcon1New != bplcon1) agnus->setActionFlag(AGN_BPLCON1_0);
+    // Record the register change
+    agnus->recordRegisterChange(DMA_CYCLES(2), REG_BPLCON1, value);
 }
 
 void
@@ -232,7 +225,7 @@ Denise::setBPLCON1(uint16_t value)
 {
     debug(BPLREG_DEBUG, "setBPLCON1(%X)\n", value);
 
-    bplcon1 = value;
+    bplcon1 = value & 0xFF;
 
     // Compute scroll values
     scrollLoresOdd  = (bplcon1 & 0b00001111);
@@ -246,11 +239,7 @@ Denise::pokeBPLCON2(uint16_t value)
 {
     debug(BPLREG_DEBUG, "pokeBPLCON2(%X)\n", value);
 
-    // Retain the new value
-    bplcon2New = value;
-
-    // Schedule the register updated
-    if (bplcon2New != bplcon2) agnus->setActionFlag(AGN_BPLCON2_0);
+    agnus->recordRegisterChange(DMA_CYCLES(2), REG_BPLCON2, value);
 }
 
 void

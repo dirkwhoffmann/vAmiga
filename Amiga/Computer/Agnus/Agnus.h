@@ -250,9 +250,7 @@ public:
 
     // Register values as they have been written by pokeDIWSTRT/STOP()
     uint16_t diwstrt;
-    uint16_t diwstrtNew;
     uint16_t diwstop;
-    uint16_t diwstopNew;
 
     /* Extracted display window coordinates
      *
@@ -371,7 +369,6 @@ public:
 
     // A copy of BPLCON0 (Denise has another copy)
     uint16_t bplcon0;
-    uint16_t bplcon0New;
 
     /* Value of bplcon0 at the DDFSTRT trigger cycle.
      * This variable is set at the beginning of each rasterline and updated
@@ -382,7 +379,6 @@ public:
 
     // The DMA control register
     uint16_t dmacon;
-    uint16_t dmaconNew;
 
     /* Value of dmacon at the DDFSTRT trigger cycle.
      * This variable is set at the beginning of each rasterline and updated
@@ -405,17 +401,13 @@ public:
 
     // The bitplane DMA pointers
     uint32_t bplpt[6];
-    uint32_t bplptlNew[6];
-    uint32_t bplpthNew[6];
 
     // The bitplane modulo registers for odd bitplanes
     int16_t bpl1mod;
-    int16_t bpl1modNew;
-    
+
     // The bitplane modulo registers for even bitplanes
     int16_t bpl2mod;
-    int16_t bpl2modNew;
-    
+
     // The sprite DMA pointers
     uint32_t sprpt[8];
     
@@ -518,9 +510,7 @@ public:
         & sprDmaState
 
         & diwstrt
-        & diwstrtNew
         & diwstop
-        & diwstopNew
         & diwHstrt
         & diwHstop
         & diwVstrt
@@ -543,22 +533,16 @@ public:
 
         & changeRecorder
         & bplcon0
-        & bplcon0New
         & bplcon0AtDDFStrt
         & dmacon
-        & dmaconNew
         & dmaconAtDDFStrt
         & dmaDAS
         & dskpt
         & audlc
         & audlcold
         & bplpt
-        & bplptlNew
-        & bplpthNew
         & bpl1mod
-        & bpl1modNew
         & bpl2mod
-        & bpl2modNew
         & sprpt
 
         & busValue
@@ -858,11 +842,11 @@ public:
     int bpu() { return bpu(bplcon0); }
 
     // BPLxPTL, BPLxPTH
-    template <int x, PokeSource s> void pokeBPLxPTH(uint16_t value);
-    template <int x, PokeSource s> void pokeBPLxPTL(uint16_t value);
+    template <int x> void pokeBPLxPTH(uint16_t value);
+    template <int x> void pokeBPLxPTL(uint16_t value);
     bool skipBPLxPT(int x);
-    void setBPLxPTH(int x, uint16_t value);
-    void setBPLxPTL(int x, uint16_t value);
+    template <int x> void setBPLxPTH(uint16_t value);
+    template <int x> void setBPLxPTL(uint16_t value);
 
     // BPL1MOD, BPL2MOD
     void pokeBPL1MOD(uint16_t value);
@@ -897,8 +881,8 @@ public:
     // Executes the device until the CPU can acquire the bus
     void executeUntilBusIsFree();
 
-    // Sets an action flag
-    void setActionFlag(uint64_t flag);
+    // Schedules a register to change
+    void recordRegisterChange(Cycle delay, uint32_t addr, uint16_t value);
 
 private:
 
