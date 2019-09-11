@@ -32,10 +32,10 @@ class Speedometer {
     private var latchedTimestamp: Double
     
     /// Value of the master clock in the previous update
-    private var latchedCycle: UInt64 = UInt64.max
+    private var latchedCycle: Int64 = Int64.max
     
     /// Frame count in the previous update
-    private var latchedFrame: UInt64 = UInt64.max
+    private var latchedFrame: Int64 = Int64.max
     
     init() {
 
@@ -48,7 +48,7 @@ class Speedometer {
      *   - cycles  Elapsed CPU cycles since power up
      *   - frames  Drawn frames since power up
      */
-    func updateWith(cycle: UInt64, frame: UInt64) {
+    func updateWith(cycle: Int64, frame: Int64) {
         
         let timestamp = Date().timeIntervalSince1970
         

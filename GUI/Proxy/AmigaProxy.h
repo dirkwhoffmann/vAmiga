@@ -103,7 +103,7 @@ struct AmigaFileWrapper;
 
 - (BOOL) releaseBuild;
 
-- (uint64_t) masterClock;
+// - (uint64_t) masterClock;
 
 - (void) setInspectionTarget:(EventID)id;
 - (void) clearInspectionTarget;
@@ -206,6 +206,9 @@ struct AmigaFileWrapper;
 - (CPUInfo) getInfo;
 - (DisassembledInstruction) getInstrInfo:(NSInteger)index;
 - (DisassembledInstruction) getTracedInstrInfo:(NSInteger)index;
+
+- (int64_t) clock;
+- (int64_t) cycles;
 
 - (BOOL) hasBreakpointAt:(uint32_t)addr;
 - (BOOL) hasDisabledBreakpointAt:(uint32_t)addr;

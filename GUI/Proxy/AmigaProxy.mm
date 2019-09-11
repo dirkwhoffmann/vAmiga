@@ -61,6 +61,14 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->cpu->getTracedInstrInfo(index);
 }
+- (int64_t) clock
+{
+    return wrapper->cpu->clock; 
+}
+- (int64_t) cycles
+{
+    return wrapper->cpu->cycles();
+}
 - (BOOL) hasBreakpointAt:(uint32_t)addr
 {
     return wrapper->cpu->bpManager.hasBreakpointAt(addr);
@@ -1237,10 +1245,12 @@ struct ADFFileWrapper { ADFFile *adf; };
     return releaseBuild(); // see vastd.h
 }
 
+/*
 - (uint64_t) masterClock
 {
     return wrapper->amiga->getMasterClock();
 }
+*/
 - (void) setInspectionTarget:(EventID)id
 {
     wrapper->amiga->setInspectionTarget(id);

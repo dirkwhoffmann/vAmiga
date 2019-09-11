@@ -534,7 +534,7 @@ public:
     bool isAwake() { return !sleeping; }
     
     // Returns true if the CIA has been executed up to the master clock.
-    bool isUpToDate();
+    // bool isUpToDate();
     
     // The CIA is idle since this number of cycles.
     CIACycle idle();

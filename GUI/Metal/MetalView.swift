@@ -23,7 +23,7 @@ public class MetalView: MTKView {
     /* Number of drawn frames since power up
      * Used to determine the fps value shown in the emulator's bottom bar.
      */
-    var frames: UInt64 = 0
+    var frames: Int64 = 0
     
     /* Synchronization semaphore
      * The semaphore is locked in function draw() and released in function
