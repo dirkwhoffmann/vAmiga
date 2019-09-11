@@ -198,8 +198,8 @@ private:
      * are recorded in these variables. They are used in sychronizeTiming()
      * to determine how long the thread has to sleep.
      */
-    uint64_t clockBase = 0;
-    uint64_t timeBase = 0;
+    Cycle clockBase = 0;
+    Cycle timeBase = 0;
     
     /* Inside sychronizeTiming(), the current time and master clock cycle
      * are stored in these variables. They are used in combination with

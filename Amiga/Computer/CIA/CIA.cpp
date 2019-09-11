@@ -686,7 +686,6 @@ CIA::poke(uint16_t addr, uint8_t value)
 void
 CIA::incrementTOD()
 {
-    // wakeUp();
     tod.increment();
 }
 
@@ -788,30 +787,6 @@ CIA::getInfo()
     
     return result;
 }
-
-/*
-void
-CIA::executeUntil(Cycle targetMasterCycle)
-{
-    CIACycle targetCycle = AS_CIA_CYCLES(targetMasterCycle);
-
-    // Check if we need to wake up the CIA
-    if (isSleeping()) {
-        if (targetCycle < wakeUpCycle) {
-            currentCycle = targetCycle;
-            return;
-        } else {
-            wakeUp();
-        }
-    }
-    
-    // The CIA is awake. Let's execute the remaining cycles
-    while (currentCycle < targetCycle) {
-            executeOneCycle();
-    }
-    assert(currentCycle == targetCycle);
-}
-*/
 
 void
 CIA::executeOneCycle()
@@ -1163,29 +1138,14 @@ CIA::wakeUp()
     
     Cycle targetCycle = CIA_CYCLES(AS_CIA_CYCLES(agnus->clock));
     wakeUp(targetCycle);
-    
-    /*
-    // Align master clock to CIA raster
-    Cycle targetCycle = CIA_CYCLES(AS_CIA_CYCLES(amiga->masterClock));
-    
-    // Emulate the CIA until 'targetCycle' or, if it is lower, the currently
-    // set wake up cycle.
-    if (wakeUpCycle < targetCycle) {
-        wakeUp(wakeUpCycle);
-    } else {
-        wakeUp(targetCycle);
-        assert(isUpToDate());
-    }
-    */
+
 }
 
 void
 CIA::wakeUp(Cycle targetCycle)
 {
     assert(clock == sleepCycle);
-    
-    // debug("wakeup(%lld): master = %lld wakeUpCycle = %lld\n", targetCycle, amiga->masterClock, wakeUpCycle);
-    
+
     // Calculate the number of missed cycles
     Cycle missedCycles = targetCycle - sleepCycle;
     assert(missedCycles % CIA_CYCLES(1) == 0);

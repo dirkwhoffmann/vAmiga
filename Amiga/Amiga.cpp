@@ -792,10 +792,10 @@ Amiga::restartTimer()
 void
 Amiga::synchronizeTiming()
 {
-    uint64_t now         = time_in_nanos();
-    uint64_t clockDelta  = masterClock - clockBase;
-    uint64_t elapsedTime = (clockDelta * 1000) / masterClockFrequency;
-    uint64_t targetTime  = timeBase + elapsedTime;
+    uint64_t now        = time_in_nanos();
+    Cycle clockDelta    = masterClock - clockBase;
+    int64_t elapsedTime = (clockDelta * 1000) / masterClockFrequency;
+    int64_t targetTime  = timeBase + elapsedTime;
     
     /*
      debug("now         = %lld\n", now);
