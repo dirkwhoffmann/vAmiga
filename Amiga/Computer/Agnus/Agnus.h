@@ -169,9 +169,7 @@ public:
     // Counters
     //
 
-    /* The DMA controller has been executed up to this clock cycle.
-     * Measured in master clock units.
-     */
+    // Agnus has been emulated up to this clock cycle.
     Cycle clock;
     
     /* The frame counter.

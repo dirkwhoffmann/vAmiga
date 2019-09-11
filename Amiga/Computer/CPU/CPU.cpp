@@ -533,6 +533,9 @@ CPU::executeInstruction()
     }
 
     cycles += m68k_execute(1);
+
+    advance(cycles);
+
     return cycles;
 }
 

@@ -48,11 +48,29 @@ extern "C" uint32_t read_pc_on_reset(void);
 //
 
 class CPU : public HardwareComponent {
-    
-private:
-    
+
     // Information shown in the GUI inspector panel
     CPUInfo info;
+
+
+    //
+    // Configuration
+    //
+
+    // Bit shift value used for converting CPU cycles to master cycles
+    int scale = 2;
+
+
+    //
+    // Internal state
+    //
+
+public:
+
+    // The CPU has been emulated up to this clock cycle
+    Cycle clock;
+
+private:
 
     // Action flags
     uint8_t actions;
@@ -118,6 +136,7 @@ public:
     {
         worker
 
+        & clock
         & actions
         & irqLevel
         & waitStates;
@@ -169,6 +188,17 @@ public:
     
     // Restores the current CPU context
     void restoreContext();
+
+
+    //
+    // Working with the clock
+    //
+
+    // Advances the clock by a certain number of CPU cycles
+    void advance(CPUCycle cycles) { clock += cycles << scale; }
+
+    // Returns the clock in CPU cycles
+    CPUCycle cycles() { return clock >> scale; }
 
 
     //

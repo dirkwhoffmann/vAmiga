@@ -15,7 +15,8 @@ Agnus::inspectEvents()
     // Prevent external access to variable 'info'
     pthread_mutex_lock(&lock);
     
-    eventInfo.masterClock = amiga->getMasterClock();
+    eventInfo.cpuClock = cpu->clock;
+    eventInfo.cpuCycles = cpu->cycles();
     eventInfo.dmaClock = clock;
     eventInfo.ciaAClock = ciaA->clock;
     eventInfo.ciaBClock  = ciaB->clock;

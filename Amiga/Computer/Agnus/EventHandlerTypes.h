@@ -312,7 +312,8 @@ EventSlotInfo;
 
 typedef struct
 {
-    Cycle masterClock;
+    Cycle cpuClock;
+    Cycle cpuCycles;
     Cycle dmaClock;
     Cycle ciaAClock;
     Cycle ciaBClock;

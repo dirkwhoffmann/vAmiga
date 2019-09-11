@@ -124,7 +124,7 @@ AmigaMemConfiguration;
 
 typedef struct
 {
-    Cycle masterClock;
+    Cycle cpuClock;
     Cycle dmaClock;
     Cycle ciaAClock;
     Cycle ciaBClock;

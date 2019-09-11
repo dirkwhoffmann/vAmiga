@@ -657,7 +657,7 @@ Amiga::_inspect()
     // Prevent external access to variable 'info'
     pthread_mutex_lock(&lock);
     
-    info.masterClock = masterClock;
+    info.cpuClock = cpu.clock;
     info.dmaClock = agnus.clock;
     info.ciaAClock = ciaA.clock;
     info.ciaBClock = ciaB.clock;
@@ -989,6 +989,7 @@ Amiga::runLoop()
         
         // Advance the masterclock and add additional wait states
         masterClock += CPU_CYCLES(cpuCycles);
+        assert(masterClock == cpu.clock);
         
         // Emulate DMA (Agnus is responsible for that)
         agnus.executeUntil(masterClock);

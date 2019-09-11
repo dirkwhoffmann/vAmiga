@@ -391,11 +391,6 @@ class Inspector: NSWindowController {
     @IBOutlet weak var poSerialOut: NSTextView!
 
     // Debug Panel (Events)
-    @IBOutlet weak var evMasterClock: NSTextField!
-    @IBOutlet weak var evInCpuCycles: NSTextField!
-    @IBOutlet weak var evInDmaCycles: NSTextField!
-    @IBOutlet weak var evInCiaCycles: NSTextField!
-
     @IBOutlet weak var evCpuProgress: NSTextField!
     @IBOutlet weak var evCpuProgress2: NSTextField!
     @IBOutlet weak var evDmaProgress: NSTextField!
@@ -404,9 +399,6 @@ class Inspector: NSWindowController {
     @IBOutlet weak var evCiaAProgress2: NSTextField!
     @IBOutlet weak var evCiaBProgress: NSTextField!
     @IBOutlet weak var evCiaBProgress2: NSTextField!
-
-    @IBOutlet weak var evFrame: NSTextField!
-    @IBOutlet weak var evPos: NSTextField!
 
     @IBOutlet weak var evTableView: EventTableView!
 
