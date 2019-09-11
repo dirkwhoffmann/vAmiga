@@ -495,7 +495,7 @@ CPU::recordInstruction()
     RecordedInstruction instr;
     
     // Setup record
-    instr.cycle = amiga->getMasterClock();
+    instr.cycle = clock;
     instr.pc = getPC();
     instr.sp = getSP();
 

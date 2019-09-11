@@ -1244,13 +1244,6 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return releaseBuild(); // see vastd.h
 }
-
-/*
-- (uint64_t) masterClock
-{
-    return wrapper->amiga->getMasterClock();
-}
-*/
 - (void) setInspectionTarget:(EventID)id
 {
     wrapper->amiga->setInspectionTarget(id);

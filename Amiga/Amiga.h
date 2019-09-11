@@ -395,9 +395,6 @@ public:
     // Returns the latest internal state recorded by inspect()
     AmigaInfo getInfo();
 
-    // Returns the master clock
-    Cycle getMasterClock() { return masterClock; }
-
     
     //
     // Controlling the emulation thread

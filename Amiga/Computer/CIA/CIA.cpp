@@ -1172,15 +1172,6 @@ CIA::wakeUp(Cycle targetCycle)
     scheduleNextExecution();
 }
 
-/*
-bool
-CIA::isUpToDate()
-{
-    assert(clock <= amiga->getMasterClock());
-    return (amiga->getMasterClock() - clock < CIA_CYCLES(1));
-}
-*/
-
 Cycle
 CIA::idle()
 {
