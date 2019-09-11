@@ -780,20 +780,17 @@ void
 Amiga::restartTimer()
 {
     timeBase = time_in_nanos();
-    clockBase = masterClock;
+    clockBase = agnus.clock;
     
-    uint64_t kernelNow = mach_absolute_time();
-    uint64_t nanoNow = abs_to_nanos(kernelNow);
-    
-    // DEPRECATED
-    nanoTargetTime = nanoNow + frameDelay();
+    // uint64_t kernelNow = mach_absolute_time();
+    // uint64_t nanoNow = abs_to_nanos(kernelNow);
 }
 
 void
 Amiga::synchronizeTiming()
 {
     uint64_t now        = time_in_nanos();
-    Cycle clockDelta    = masterClock - clockBase;
+    Cycle clockDelta    = agnus.clock - clockBase;
     int64_t elapsedTime = (clockDelta * 1000) / masterClockFrequency;
     int64_t targetTime  = timeBase + elapsedTime;
     

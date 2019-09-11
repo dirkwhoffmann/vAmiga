@@ -194,25 +194,13 @@ private:
      */
     mach_timebase_info_data_t tb;
     
-    /* Inside restartTimer(), the current time and the master clock cylce
+    /* Inside restartTimer(), the current time and the DMA clock cylce
      * are recorded in these variables. They are used in sychronizeTiming()
      * to determine how long the thread has to sleep.
      */
     Cycle clockBase = 0;
-    Cycle timeBase = 0;
-    
-    /* Inside sychronizeTiming(), the current time and master clock cycle
-     * are stored in these variables. They are used in combination with
-     * clockBase and timeBase to determine how long the thread has to sleep.
-     */
-    //
-    
-    /* Wake-up time of the synchronization timer in nanoseconds.
-     * This value is recomputed each time the emulator thread is put to sleep.
-     * DEPRECATED
-     */
-    uint64_t nanoTargetTime = 0;
-    
+    uint64_t timeBase = 0;
+
     
     //
     // Message queue
@@ -538,10 +526,7 @@ private:
     
 public:
     
-    /* Puts the emulator thread to sleep.
-     * This function makes the emulator thread wait until nanoTargetTime has
-     * been reached. It also assigns a new target value to nanoTargetTime.
-     */
+    // Puts the emulator thread to sleep.
     void synchronizeTiming();
     
     
