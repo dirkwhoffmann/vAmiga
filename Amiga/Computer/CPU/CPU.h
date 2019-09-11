@@ -270,8 +270,8 @@ public:
     
 public:
 
-    // Executes the next instruction
-    uint64_t executeInstruction();
+    // Executes the next instruction and returns the new CPU clock value
+    Cycle executeInstruction();
 
     // Changes the interrupt level
     void setIrqLevel(int level);

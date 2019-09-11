@@ -510,7 +510,7 @@ CPU::recordInstruction()
     // plainmsg("%X: %s\n", diss.addr, diss.instr);
 }
 
-uint64_t
+Cycle
 CPU::executeInstruction()
 {
     int cycles = 0;
@@ -536,7 +536,7 @@ CPU::executeInstruction()
 
     advance(cycles);
 
-    return cycles;
+    return clock;
 }
 
 void

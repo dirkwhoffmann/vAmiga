@@ -146,19 +146,7 @@ public:
     // Shortcuts to all four drives
     Drive *df[4] = { &df0, &df1, &df2, &df3 };
     
-    
-    //
-    // Counters
-    //
-    
-private:
-    
-    /* The Amiga's master clock
-     * This clock runs at 28 MHz and is used to derive all other clock signals.
-     */
-    Cycle masterClock;
-    
-    
+
     //
     // Emulator thread
     //
@@ -274,7 +262,6 @@ public:
     {
         worker
 
-        & masterClock
         & clockBase;
     }
 

@@ -552,7 +552,6 @@ Amiga::_powerOn()
 
 #endif
 
-    masterClock = 0;
     runLoopCtrl = 0;
     
     // Make this emulator instance the active one
@@ -981,15 +980,11 @@ Amiga::runLoop()
     // Enter the loop
     do {
         
-        // Emulate CPU instruction
-        CPUCycle cpuCycles = cpu.executeInstruction();
-        
-        // Advance the masterclock and add additional wait states
-        masterClock += CPU_CYCLES(cpuCycles);
-        assert(masterClock == cpu.clock);
-        
-        // Emulate DMA (Agnus is responsible for that)
-        agnus.executeUntil(masterClock);
+        // Emulate the next CPU instruction
+        Cycle newClock = cpu.executeInstruction();
+
+        // Emulate Agnus up to the same cycle
+        agnus.executeUntil(newClock);
         
         // Check if special action needs to be taken ...
         if (runLoopCtrl) {
