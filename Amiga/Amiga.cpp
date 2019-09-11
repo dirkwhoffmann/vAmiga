@@ -1036,11 +1036,11 @@ void
 Amiga::dumpClock()
 {
     plainmsg("               Master cycles     CPU cycles    DMA cycles    CIA cycles\n");
-    plainmsg(" Master clock: %13lld  %13lld %13lld %13lld\n",
-             masterClock,
-             AS_CPU_CYCLES(masterClock),
-             AS_DMA_CYCLES(masterClock),
-             AS_CIA_CYCLES(masterClock));
+    plainmsg("    CPU clock: %13lld  %13lld %13lld %13lld\n",
+             cpu.clock,
+             AS_CPU_CYCLES(cpu.clock),
+             AS_DMA_CYCLES(cpu.clock),
+             AS_CIA_CYCLES(cpu.clock));
     plainmsg("    DMA clock: %13lld  %13lld %13lld %13lld\n",
              agnus.clock,
              AS_CPU_CYCLES(agnus.clock),

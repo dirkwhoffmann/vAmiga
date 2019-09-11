@@ -103,8 +103,6 @@ struct AmigaFileWrapper;
 
 - (BOOL) releaseBuild;
 
-// - (uint64_t) masterClock;
-
 - (void) setInspectionTarget:(EventID)id;
 - (void) clearInspectionTarget;
 - (BOOL) debugMode;
