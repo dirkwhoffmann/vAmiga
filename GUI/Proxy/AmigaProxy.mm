@@ -1373,20 +1373,22 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 - (BOOL) configureDrive:(NSInteger)nr connected:(BOOL)value
 {
-    return wrapper->amiga->configureDrive((unsigned)nr, value);
+    return wrapper->amiga->configureDrive(nr, VA_DRIVE_CONNECT, value);
 }
 - (BOOL) configureDrive:(NSInteger)nr type:(NSInteger)type
 {
-    return wrapper->amiga->configureDriveType((unsigned)nr, (DriveType)type);
+    return wrapper->amiga->configureDrive(nr, VA_DRIVE_TYPE, type);
 }
 - (BOOL) configureDrive:(NSInteger)nr speed:(NSInteger)value
 {
-    return wrapper->amiga->configureDriveSpeed((unsigned)nr, value);
+    return wrapper->amiga->configureDrive(nr, VA_DRIVE_SPEED, value);
 }
+/*
 - (void) configureFifoBuffering:(BOOL)value
 {
     wrapper->amiga->configureFifoBuffering(value);
 }
+*/
 - (void) addListener:(const void *)sender function:(Callback *)func
 {
     wrapper->amiga->addListener(sender, func);

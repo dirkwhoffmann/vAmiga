@@ -402,6 +402,14 @@ Amiga::configure(ConfigOption option, long value)
             serialPort.connectDevice((SerialPortDevice)value);
             break;
 
+        case VA_DRIVE_SPEED:
+
+            configureDrive(0, VA_DRIVE_SPEED, value);
+            configureDrive(1, VA_DRIVE_SPEED, value);
+            configureDrive(2, VA_DRIVE_SPEED, value);
+            configureDrive(3, VA_DRIVE_SPEED, value);
+            break;
+
         default: assert(false);
     }
     
@@ -504,38 +512,6 @@ void
 Amiga::configureRealTimeClock(bool value)
 {
     configure(VA_RT_CLOCK, value);
-}
-
-bool
-Amiga::configureDrive(unsigned driveNr, bool connected)
-{
-    return configureDrive(driveNr, VA_DRIVE_CONNECT, connected);
-}
-
-bool
-Amiga::configureDriveType(unsigned driveNr, DriveType type)
-{
-    return configureDrive(driveNr, VA_DRIVE_TYPE, type);
-}
-
-bool
-Amiga::configureDriveSpeed(unsigned driveNr, uint16_t value)
-{
-    return configureDrive(driveNr, VA_DRIVE_SPEED, value);
-}
-
-void
-Amiga::configureExactBlitter(bool value)
-{
-    debug("configureExactBlitter(%d)\n", value);
-    configure(VA_BLITTER_ACCURACY, value);
-}
-
-void
-Amiga::configureFifoBuffering(bool value)
-{
-    debug("configureFifoBuffering(%d)\n", value);
-    configure(VA_FIFO_BUFFERING, value);
 }
 
 void

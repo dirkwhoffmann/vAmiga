@@ -38,10 +38,6 @@ extension PreferencesController {
         hwDf1Type.selectItem(withTag: config.df1.type.rawValue)
         hwDf2Type.selectItem(withTag: config.df2.type.rawValue)
         hwDf3Type.selectItem(withTag: config.df3.type.rawValue)
-        hwDf0Speed.selectItem(withTag: Int(config.df0.speed))
-        hwDf1Speed.selectItem(withTag: Int(config.df1.speed))
-        hwDf2Speed.selectItem(withTag: Int(config.df2.speed))
-        hwDf3Speed.selectItem(withTag: Int(config.df3.speed))
 
         // Ports
         hwSerialDevice.selectItem(withTag: Int(config.serialDevice))
@@ -59,9 +55,6 @@ extension PreferencesController {
         hwDf1Type.isEnabled = poweredOff && config.df1.connected
         hwDf2Type.isEnabled = poweredOff && config.df2.connected
         hwDf3Type.isEnabled = poweredOff && config.df3.connected
-        hwDf1Speed.isEnabled = config.df1.connected
-        hwDf2Speed.isEnabled = config.df2.connected
-        hwDf3Speed.isEnabled = config.df3.connected
 
         // Label the OK button
         hwOKButton.title = okLabel
@@ -150,16 +143,12 @@ extension PreferencesController {
             
             amigaProxy?.configureDrive(0, connected: Defaults.A500.df0Connect)
             amigaProxy?.configureDrive(0, type:      Defaults.A500.df0Type.rawValue)
-            amigaProxy?.configureDrive(0, speed:     Defaults.A500.df0Speed)
             amigaProxy?.configureDrive(1, connected: Defaults.A500.df1Connect)
             amigaProxy?.configureDrive(1, type:      Defaults.A500.df1Type.rawValue)
-            amigaProxy?.configureDrive(1, speed:     Defaults.A500.df1Speed)
             amigaProxy?.configureDrive(2, connected: Defaults.A500.df2Connect)
             amigaProxy?.configureDrive(2, type:      Defaults.A500.df2Type.rawValue)
-            amigaProxy?.configureDrive(2, speed:     Defaults.A500.df2Speed)
             amigaProxy?.configureDrive(3, connected: Defaults.A500.df3Connect)
             amigaProxy?.configureDrive(3, type:      Defaults.A500.df3Type.rawValue)
-            amigaProxy?.configureDrive(3, speed:     Defaults.A500.df3Speed)
 
         case AMIGA_1000.rawValue:
             
@@ -170,19 +159,15 @@ extension PreferencesController {
             amigaProxy?.configureChipMemory(Defaults.A1000.chipRam)
             amigaProxy?.configureSlowMemory(Defaults.A1000.slowRam)
             amigaProxy?.configureFastMemory(Defaults.A1000.fastRam)
-            
+
             amigaProxy?.configureDrive(0, connected: Defaults.A1000.df0Connect)
             amigaProxy?.configureDrive(0, type:      Defaults.A1000.df0Type.rawValue)
-            amigaProxy?.configureDrive(0, speed:     Defaults.A1000.df0Speed)
             amigaProxy?.configureDrive(1, connected: Defaults.A1000.df1Connect)
             amigaProxy?.configureDrive(1, type:      Defaults.A1000.df1Type.rawValue)
-            amigaProxy?.configureDrive(1, speed:     Defaults.A1000.df1Speed)
             amigaProxy?.configureDrive(2, connected: Defaults.A1000.df2Connect)
             amigaProxy?.configureDrive(2, type:      Defaults.A1000.df2Type.rawValue)
-            amigaProxy?.configureDrive(2, speed:     Defaults.A1000.df2Speed)
             amigaProxy?.configureDrive(3, connected: Defaults.A1000.df3Connect)
             amigaProxy?.configureDrive(3, type:      Defaults.A1000.df3Type.rawValue)
-            amigaProxy?.configureDrive(3, speed:     Defaults.A1000.df3Speed)
 
         case AMIGA_2000.rawValue:
             
@@ -192,19 +177,15 @@ extension PreferencesController {
             amigaProxy?.configureChipMemory(Defaults.A2000.chipRam)
             amigaProxy?.configureSlowMemory(Defaults.A2000.slowRam)
             amigaProxy?.configureFastMemory(Defaults.A2000.fastRam)
-            
+
             amigaProxy?.configureDrive(0, connected: Defaults.A2000.df0Connect)
             amigaProxy?.configureDrive(0, type:      Defaults.A2000.df0Type.rawValue)
-            amigaProxy?.configureDrive(0, speed:     Defaults.A2000.df0Speed)
             amigaProxy?.configureDrive(1, connected: Defaults.A2000.df1Connect)
             amigaProxy?.configureDrive(1, type:      Defaults.A2000.df1Type.rawValue)
-            amigaProxy?.configureDrive(1, speed:     Defaults.A2000.df1Speed)
             amigaProxy?.configureDrive(2, connected: Defaults.A2000.df2Connect)
             amigaProxy?.configureDrive(2, type:      Defaults.A2000.df2Type.rawValue)
-            amigaProxy?.configureDrive(2, speed:     Defaults.A2000.df2Speed)
             amigaProxy?.configureDrive(3, connected: Defaults.A2000.df3Connect)
             amigaProxy?.configureDrive(3, type:      Defaults.A2000.df3Type.rawValue)
-            amigaProxy?.configureDrive(3, speed:     Defaults.A2000.df3Speed)
 
         default:
             track("Cannot restore factory defaults (unknown Amiga model).")

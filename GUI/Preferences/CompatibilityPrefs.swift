@@ -36,7 +36,12 @@ extension PreferencesController {
         // Audio
         compFilterActivation.selectItem(withTag: config.filterActivation.rawValue)
 
-        // Disk controller
+        // Floppy drives
+        assert(config.df0.speed == config.df1.speed)
+        assert(config.df1.speed == config.df2.speed)
+        assert(config.df2.speed == config.df3.speed)
+        compDriveSpeed.selectItem(withTag: Int(config.df0.speed))
+        compFifoBuffering.isHidden = Int(config.df0.speed) > 256
         compFifoBuffering.state = config.fifoBuffering ? .on : .off
 
         // Lock controls if emulator is powered on
@@ -89,9 +94,17 @@ extension PreferencesController {
         refresh()
     }
 
+    @IBAction func compDriveSpeedAction(_ sender: NSPopUpButton!) {
+
+        for nr in 0...3 {
+            amigaProxy?.configureDrive(nr, speed: sender.selectedTag())
+        }
+        refresh()
+    }
+
     @IBAction func compFifoBufferingAction(_ sender: NSButton!) {
 
-        amigaProxy?.configureFifoBuffering(sender.state == .on)
+        amigaProxy?.configure(VA_FIFO_BUFFERING, enable: sender.state == .on)
         refresh()
     }
 

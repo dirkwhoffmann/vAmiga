@@ -755,16 +755,12 @@ extension Keys {
     // Drives
     static let df0Connect         = "VAMIGADF0ConnectKey"
     static let df0Type            = "VAMIGADF0TypeKey"
-    static let df0Speed           = "VAMIGADF0SpeedKey"
     static let df1Connect         = "VAMIGADF1ConnectKey"
     static let df1Type            = "VAMIGADF1TypeKey"
-    static let df1Speed           = "VAMIGADF1SpeedKey"
     static let df2Connect         = "VAMIGADF2ConnectKey"
     static let df2Type            = "VAMIGADF2TypeKey"
-    static let df2Speed           = "VAMIGADF2SpeedKey"
     static let df3Connect         = "VAMIGADF3ConnectKey"
     static let df3Type            = "VAMIGADF3TypeKey"
-    static let df3Speed           = "VAMIGADF3SpeedKey"
 
     // Extensions
     static let realTimeClock      = "VAMIGARealTimeClockKey"
@@ -786,16 +782,12 @@ extension Defaults {
 
         static let df0Connect        = true
         static let df0Type           = DRIVE_35_DD
-        static let df0Speed          = 1
         static let df1Connect        = false
         static let df1Type           = DRIVE_35_DD
-        static let df1Speed          = 1
         static let df2Connect        = false
         static let df2Type           = DRIVE_35_DD
-        static let df2Speed          = 1
         static let df3Connect        = false
         static let df3Type           = DRIVE_35_DD
-        static let df3Speed          = 1
 
         static let realTimeClock     = false
 
@@ -810,19 +802,15 @@ extension Defaults {
         static let chipRam           = 256
         static let slowRam           = 0
         static let fastRam           = 0
-        
+
         static let df0Connect        = true
         static let df0Type           = DRIVE_35_DD
-        static let df0Speed          = 1
         static let df1Connect        = false
         static let df1Type           = DRIVE_35_DD
-        static let df1Speed          = 1
         static let df2Connect        = false
         static let df2Type           = DRIVE_35_DD
-        static let df2Speed          = 1
         static let df3Connect        = false
         static let df3Type           = DRIVE_35_DD
-        static let df3Speed          = 1
 
         static let realTimeClock     = false
 
@@ -837,19 +825,15 @@ extension Defaults {
         static let chipRam           = 512
         static let slowRam           = 512
         static let fastRam           = 0
-        
+
         static let df0Connect        = true
         static let df0Type           = DRIVE_35_DD
-        static let df0Speed          = 1
         static let df1Connect        = true
         static let df1Type           = DRIVE_35_DD
-        static let df1Speed          = 1
         static let df2Connect        = false
         static let df2Type           = DRIVE_35_DD
-        static let df2Speed          = 1
         static let df3Connect        = false
         static let df3Type           = DRIVE_35_DD
-        static let df3Speed          = 1
 
         static let realTimeClock     = true
 
@@ -871,19 +855,15 @@ extension MyController {
             Keys.chipRam: defaultModel.chipRam,
             Keys.slowRam: defaultModel.slowRam,
             Keys.fastRam: defaultModel.fastRam,
-            
+
             Keys.df0Connect: defaultModel.df0Connect,
             Keys.df0Type: defaultModel.df0Type.rawValue,
-            Keys.df0Speed: defaultModel.df0Speed,
             Keys.df1Connect: defaultModel.df1Connect,
             Keys.df1Type: defaultModel.df1Type.rawValue,
-            Keys.df1Speed: defaultModel.df1Speed,
             Keys.df2Connect: defaultModel.df2Connect,
             Keys.df2Type: defaultModel.df2Type.rawValue,
-            Keys.df2Speed: defaultModel.df2Speed,
             Keys.df3Connect: defaultModel.df3Connect,
             Keys.df3Type: defaultModel.df3Type.rawValue,
-            Keys.df3Speed: defaultModel.df3Speed,
 
             Keys.realTimeClock: defaultModel.realTimeClock,
 
@@ -905,18 +885,15 @@ extension MyController {
                     Keys.slowRam,
                     Keys.fastRam,
 
+                    Keys.driveSpeed,
                     Keys.df0Connect,
                     Keys.df0Type,
-                    Keys.df0Speed,
                     Keys.df1Connect,
                     Keys.df1Type,
-                    Keys.df1Speed,
                     Keys.df2Connect,
                     Keys.df2Type,
-                    Keys.df2Speed,
                     Keys.df3Connect,
                     Keys.df3Type,
-                    Keys.df3Speed,
 
                     Keys.realTimeClock,
 
@@ -940,18 +917,15 @@ extension MyController {
         amiga.configureSlowMemory(defaults.integer(forKey: Keys.slowRam))
         amiga.configureFastMemory(defaults.integer(forKey: Keys.fastRam))
 
+        amiga.configure(VA_DRIVE_SPEED, value: defaults.integer(forKey: Keys.driveSpeed))
         amiga.configureDrive(0, connected: defaults.bool(forKey: Keys.df0Connect))
         amiga.configureDrive(0, type: defaults.integer(forKey: Keys.df0Type))
-        amiga.configureDrive(0, speed: defaults.integer(forKey: Keys.df0Speed))
         amiga.configureDrive(1, connected: defaults.bool(forKey: Keys.df1Connect))
         amiga.configureDrive(1, type: defaults.integer(forKey: Keys.df1Type))
-        amiga.configureDrive(1, speed: defaults.integer(forKey: Keys.df1Speed))
         amiga.configureDrive(2, connected: defaults.bool(forKey: Keys.df2Connect))
         amiga.configureDrive(2, type: defaults.integer(forKey: Keys.df2Type))
-        amiga.configureDrive(2, speed: defaults.integer(forKey: Keys.df2Speed))
         amiga.configureDrive(3, connected: defaults.bool(forKey: Keys.df3Connect))
         amiga.configureDrive(3, type: defaults.integer(forKey: Keys.df3Type))
-        amiga.configureDrive(3, speed: defaults.integer(forKey: Keys.df3Speed))
 
         amiga.configureRealTimeClock(defaults.bool(forKey: Keys.realTimeClock))
         track("VA_SERIAL_DEVICE")
@@ -972,18 +946,15 @@ extension MyController {
         defaults.set(memConfig.slowRamSize, forKey: Keys.slowRam)
         defaults.set(memConfig.fastRamSize, forKey: Keys.fastRam)
 
+        defaults.set(config.df0.speed, forKey: Keys.driveSpeed)
         defaults.set(config.df0.connected, forKey: Keys.df0Connect)
         defaults.set(config.df0.type.rawValue, forKey: Keys.df0Type)
-        defaults.set(config.df0.speed, forKey: Keys.df0Speed)
         defaults.set(config.df1.connected, forKey: Keys.df1Connect)
         defaults.set(config.df1.type.rawValue, forKey: Keys.df1Type)
-        defaults.set(config.df1.speed, forKey: Keys.df1Speed)
         defaults.set(config.df2.connected, forKey: Keys.df2Connect)
         defaults.set(config.df2.type.rawValue, forKey: Keys.df2Type)
-        defaults.set(config.df2.speed, forKey: Keys.df2Speed)
         defaults.set(config.df3.connected, forKey: Keys.df3Connect)
         defaults.set(config.df3.type.rawValue, forKey: Keys.df3Type)
-        defaults.set(config.df3.speed, forKey: Keys.df3Speed)
 
         defaults.set(config.realTimeClock, forKey: Keys.realTimeClock)
         defaults.set(config.serialDevice, forKey: Keys.serialDevice)
@@ -1012,7 +983,8 @@ extension Keys {
     // Blitter
     static let blitterAccuracy   = "VAMIGABlitterAccuracy"
 
-    // Disk controller
+    // Floppy drives
+    static let driveSpeed        = "VAMIGADriveSpeedKey"
     static let fifoBuffering     = "VAMIGAFifoBufferingKey"
 }
 
@@ -1034,7 +1006,8 @@ extension Defaults {
     // Blitter
     static let blitterAccuracy   = 0
 
-    // Disk controller
+    // Floppy drives
+    static let driveSpeed        = 1
     static let fifoBuffering     = true
 }
 
@@ -1052,6 +1025,7 @@ extension MyController {
             Keys.filterActivation: Defaults.filterActivation.rawValue,
             Keys.filterType: Defaults.filterType.rawValue,
             Keys.blitterAccuracy: Defaults.blitterAccuracy,
+            Keys.driveSpeed: Defaults.driveSpeed,
             Keys.fifoBuffering: Defaults.fifoBuffering
         ]
 
@@ -1071,6 +1045,7 @@ extension MyController {
                      Keys.filterActivation,
                      Keys.filterType,
                      Keys.blitterAccuracy,
+                     Keys.driveSpeed,
                      Keys.fifoBuffering ]
 
         for key in keys { defaults.removeObject(forKey: key) }
@@ -1092,7 +1067,8 @@ extension MyController {
         amiga.configure(VA_FILTER_ACTIVATION, value: defaults.integer(forKey: Keys.filterActivation))
         amiga.configure(VA_FILTER_TYPE, value: defaults.integer(forKey: Keys.filterType))
         amiga.configure(VA_BLITTER_ACCURACY, value: defaults.integer(forKey: Keys.blitterAccuracy))
-        amiga.configureFifoBuffering(defaults.bool(forKey: Keys.fifoBuffering))
+        amiga.configure(VA_DRIVE_SPEED, value: defaults.integer(forKey: Keys.driveSpeed))
+        amiga.configure(VA_FIFO_BUFFERING, enable: defaults.bool(forKey: Keys.fifoBuffering))
 
         amiga.resume()
     }

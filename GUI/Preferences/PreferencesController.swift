@@ -54,16 +54,12 @@ class PreferencesController: DialogController {
 
     // Drive
     @IBOutlet weak var hwDf0Type: NSPopUpButton!
-    @IBOutlet weak var hwDf0Speed: NSPopUpButton!
     @IBOutlet weak var hwDf1Connect: NSButton!
     @IBOutlet weak var hwDf1Type: NSPopUpButton!
-    @IBOutlet weak var hwDf1Speed: NSPopUpButton!
     @IBOutlet weak var hwDf2Connect: NSButton!
     @IBOutlet weak var hwDf2Type: NSPopUpButton!
-    @IBOutlet weak var hwDf2Speed: NSPopUpButton!
     @IBOutlet weak var hwDf3Connect: NSButton!
     @IBOutlet weak var hwDf3Type: NSPopUpButton!
-    @IBOutlet weak var hwDf3Speed: NSPopUpButton!
 
     // Ports
     @IBOutlet weak var hwSerialDevice: NSPopUpButton!
@@ -97,6 +93,7 @@ class PreferencesController: DialogController {
     @IBOutlet weak var compFilterActivation: NSPopUpButton!
 
     // Disk controller
+    @IBOutlet weak var compDriveSpeed: NSPopUpButton!
     @IBOutlet weak var compFifoBuffering: NSButton!
 
     // Lock
@@ -231,17 +228,17 @@ class PreferencesController: DialogController {
     // Button
     @IBOutlet weak var devOKButton: NSButton!
 
-    // Indicates if the user manually shut down the emulator
-    var manuallyPoweredOff = false
+    // Indicates if the user has manually shut down the emulator
+    var lockClicked = false
 
     // Indicates if we should automatically boot when the window closes
-    var autoPowerUp: Bool { return manuallyPoweredOff && amigaProxy?.readyToPowerUp() == true; }
+    var autoPowerUp: Bool { return lockClicked && amigaProxy?.readyToPowerUp() == true; }
 
     // Rerturns the label of the OK button
     var okLabel: String { return autoPowerUp ? "Power" : "OK"; }
 
     override func awakeFromNib() {
-    
+
         awakeVideoPrefsFromNib()
         refresh()
     }
@@ -276,29 +273,32 @@ class PreferencesController: DialogController {
     @IBAction func unlockAction(_ sender: Any!) {
 
         amigaProxy?.powerOff()
-        manuallyPoweredOff = true
+        lockClicked = true
         refresh()
     }
 
     @IBAction override func cancelAction(_ sender: Any!) {
         
         track()
-        
+
         myController?.loadUserDefaults()
         refresh()
-        
+
         hideSheet()
+        lockClicked = false
     }
     
     @IBAction override func okAction(_ sender: Any!) {
         
         track()
-        
+
         hideSheet()
         myController?.saveUserDefaults()
 
         // Automatically power up if flag is set
         if autoPowerUp { amigaProxy?.run() }
+
+        lockClicked = false
     }
 }
 

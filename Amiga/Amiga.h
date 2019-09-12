@@ -350,17 +350,8 @@ public:
     
     // Configures the real-time clock (DEPRECATED)
     void configureRealTimeClock(bool value);
+
     
-    // Configures the attached drives (DEPRECATED)
-    bool configureDrive(unsigned driveNr, bool connected);
-    bool configureDriveType(unsigned driveNr, DriveType type);
-    bool configureDriveSpeed(unsigned driveNr, uint16_t value);
-
-    // Configures the compatibility settings (DEPRECATED)
-    void configureExactBlitter(bool value);
-    void configureFifoBuffering(bool value);
-
-
     //
     // Reading the internal state
     //

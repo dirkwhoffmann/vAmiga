@@ -142,7 +142,7 @@ struct AmigaFileWrapper;
 - (BOOL) configureDrive:(NSInteger)nr connected:(BOOL)value;
 - (BOOL) configureDrive:(NSInteger)nr type:(NSInteger)value;
 - (BOOL) configureDrive:(NSInteger)nr speed:(NSInteger)value;
-- (void) configureFifoBuffering:(BOOL)value;
+// - (void) configureFifoBuffering:(BOOL)value;
 
 // Message queue
 - (void) addListener:(const void *)sender function:(Callback *)func;
