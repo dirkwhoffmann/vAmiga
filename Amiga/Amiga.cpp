@@ -199,7 +199,7 @@ Amiga::getConfig()
     config.filterType = paula.audioUnit.getFilterType();
     config.cpuEngine = CPU_MUSASHI;
     config.cpuSpeed = cpu.getSpeed();
-    config.blitterAccuracy = agnus.blitter.getAccuracy();
+    // config.blitterAccuracy = agnus.blitter.getAccuracy();
     config.useFifo = paula.diskController.getUseFifo();
     config.serialDevice = serialPort.getDevice();
 
@@ -218,6 +218,8 @@ Amiga::getConfig()
     config.df3.connected = paula.diskController.isConnected(3);
     config.df3.type = df3.getType();
     config.df3.speed = df3.getSpeed();
+
+    config.blitter = agnus.blitter.getConfig(); 
 
     return config;
 }
@@ -381,7 +383,7 @@ Amiga::configure(ConfigOption option, long value)
 
         case VA_BLITTER_ACCURACY:
             
-            if (current.blitterAccuracy == value) return true;
+            if (current.blitter.accuracy == value) return true;
             agnus.blitter.setAccuracy(value);
             break;
             

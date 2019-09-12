@@ -28,7 +28,7 @@ extension PreferencesController {
         compCpuSpeed.selectItem(withTag: Int(config.cpuSpeed))
 
         // Blitter
-        let a = config.blitterAccuracy
+        let a = config.blitter.accuracy
         compBltAccuracy.intValue = a
         compBltLevel1.textColor = (a >= 1) ? .labelColor : .tertiaryLabelColor
         compBltLevel2.textColor = (a >= 2) ? .labelColor : .tertiaryLabelColor

@@ -10,6 +10,20 @@
 #ifndef _BLITTER_INC
 #define _BLITTER_INC
 
+/* The Blitter supports three accuracy levels:
+ *
+ * Level 0: Moves data in a single chunk.
+ *          Terminates immediately without using up any bus cycles.
+ *
+ * Level 1: Moves data in a single chunk.
+ *          Uses up bus cycles like the real Blitter does.
+ *
+ * Level 2: Moves data word by word like the real Blitter does.
+ *          Uses up bus cycles like the real Blitter does.
+ *
+ * Level 0 and 1 invoke the FastBlitter. Level 2 invokes the SlowBlitter.
+ */
+
 class Blitter : public HardwareComponent {
 
     // Quick-access references
@@ -18,37 +32,17 @@ class Blitter : public HardwareComponent {
     class Paula *paula;
 
 private:
-    
+
+    // The current configuration
+    BlitterConfig config;
+
     // Information shown in the GUI inspector panel
     BlitterInfo info;
     
     // The fill pattern lookup tables
     uint8_t fillPattern[2][2][256];     // [inclusive/exclusive][carry in][data]
     uint8_t nextCarryIn[2][256];        // [carry in][data]
-    
-    
-    //
-    // Configuration items
-    //
-    
-    /* Blitter emulation accuracy.
-     *
-     * The following accuracy levels are implemented:
-     *
-     * Level 0: Moves data in a single chunk.
-     *          Terminates immediately without using up any bus cycles.
-     *
-     * Level 1: Moves data in a single chunk.
-     *          Uses up bus cycles like the real Blitter does.
-     *
-     * Level 2: Moves data word by word like the real Blitter does.
-     *          Uses up bus cycles like the real Blitter does.
-     *
-     * Level 0 and 1 invoke the FastBlitter. Level 2 invokes the SlowBlitter.
-     */
-    int accuracy = 0;
-    
-    
+
     //
     // Blitter registers
     //
@@ -163,15 +157,6 @@ private:
 
 
     //
-    // Constructing and destructing
-    //
-    
-public:
-    
-    Blitter();
-    
-
-    //
     // Iterating over snapshot items
     //
 
@@ -180,7 +165,7 @@ public:
     {
         worker
 
-        & accuracy;
+        & config.accuracy;
     }
 
     template <class T>
@@ -244,11 +229,32 @@ public:
 
         & bbusy
         & bzero
-        
+
         & remaining;
     }
 
+
+    //
+    // Constructing and destructing
+    //
     
+public:
+    
+    Blitter();
+    
+
+    //
+    // Configuring
+    //
+
+public:
+
+    BlitterConfig getConfig() { return config; }
+
+    int getAccuracy() { return config.accuracy; }
+    void setAccuracy(int level) { config.accuracy = level; }
+
+
     //
     // Methods from HardwareComponent
     //
@@ -273,7 +279,7 @@ private:
     //
     
 public:
-    
+
     // Returns the latest internal state recorded by inspect()
     BlitterInfo getInfo();
 
@@ -284,14 +290,6 @@ public:
     bool isZero() { return bzero; }
 
 
-    //
-    // Configuring the device
-    //
-
-    int getAccuracy() { return accuracy; }
-    void setAccuracy(int level) { accuracy = level; debug("accuracy = %d\n", accuracy); }
-    
-    
     //
     // Accessing registers
     //

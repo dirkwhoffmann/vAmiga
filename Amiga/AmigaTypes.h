@@ -14,6 +14,7 @@
 
 #include "PaulaTypes.h"
 #include "CPUTypes.h"
+#include "AgnusTypes.h"
 
 //
 // Enumeration types
@@ -108,7 +109,8 @@ typedef struct
     FilterType filterType;
     CPUEngine cpuEngine;
     int cpuSpeed;
-    int blitterAccuracy;
+    // int blitterAccuracy;
+    BlitterConfig blitter;
     bool useFifo;
     long serialDevice;
     DriveConfiguration df0;

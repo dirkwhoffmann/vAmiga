@@ -122,6 +122,12 @@ CopperInfo;
 
 typedef struct
 {
+    int accuracy;
+}
+BlitterConfig;
+
+typedef struct
+{
     bool active;
     uint16_t bltcon0;
     uint16_t bltcon1;

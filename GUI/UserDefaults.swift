@@ -1085,7 +1085,7 @@ extension MyController {
         defaults.set(config.clxPlfPlf, forKey: Keys.clxPlfPlf)
         defaults.set(config.filterActivation.rawValue, forKey: Keys.filterActivation)
         defaults.set(config.filterType.rawValue, forKey: Keys.filterType)
-        defaults.set(config.blitterAccuracy, forKey: Keys.blitterAccuracy)
+        defaults.set(config.blitter.accuracy, forKey: Keys.blitterAccuracy)
         defaults.set(config.useFifo, forKey: Keys.fifoBuffering)
     }
 }

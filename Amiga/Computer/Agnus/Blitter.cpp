@@ -98,7 +98,7 @@ Blitter::_inspect()
 void
 Blitter::_dump()
 {
-    plainmsg("  Accuracy: %d\n", accuracy);
+    plainmsg("  Accuracy: %d\n", config.accuracy);
     plainmsg("\n");
     plainmsg("   bltcon0: %X\n", bltcon0);
     plainmsg("\n");
@@ -697,7 +697,7 @@ Blitter::startBlit()
     iteration = 0;
 
     // Based on the accuracy level, we run the slow or the fast Blitter
-    bool useSlowBlitter = accuracy >= 2;
+    bool useSlowBlitter = config.accuracy >= 2;
 
     check1 = fnv_1a_init32();
     check2 = fnv_1a_init32();

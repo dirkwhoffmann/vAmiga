@@ -65,7 +65,7 @@ Blitter::beginFastCopyBlit()
 
     // Depending on the accuracy level, either terminate immediately or start
     // fake-executing the micro-program to emulate proper timing.
-    switch (accuracy) {
+    switch (config.accuracy) {
 
         case 0:
             if (verbose) { verbose = false; debug("Immediate termination\n"); }
