@@ -109,7 +109,7 @@ typedef struct
     CPUEngine cpuEngine;
     int cpuSpeed;
     int blitterAccuracy;
-    bool fifoBuffering;
+    bool useFifo;
     long serialDevice;
     DriveConfiguration df0;
     DriveConfiguration df1;

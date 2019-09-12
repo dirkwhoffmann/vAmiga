@@ -1086,6 +1086,6 @@ extension MyController {
         defaults.set(config.filterActivation.rawValue, forKey: Keys.filterActivation)
         defaults.set(config.filterType.rawValue, forKey: Keys.filterType)
         defaults.set(config.blitterAccuracy, forKey: Keys.blitterAccuracy)
-        defaults.set(config.fifoBuffering, forKey: Keys.fifoBuffering)
+        defaults.set(config.useFifo, forKey: Keys.fifoBuffering)
     }
 }

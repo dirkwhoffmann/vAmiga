@@ -36,6 +36,8 @@ struct Rom {
     static let kick31_40_63_a      = 0xd87e84eeacc77dcd as UInt64
     static let kick31_40_63_b      = 0xd87e84eeacc77aaa as UInt64
 
+    static let kick314_46_143      = 0x2005bba6e9c6c6ac as UInt64
+
     static let diag11              = 0x3caee2ad138eb229 as UInt64
     static let logica20            = 0x110c854766f14cd8 as UInt64
 }
@@ -65,6 +67,8 @@ let knownRoms: [UInt64: String] = [
     Rom.kick31_40_63_a:      "Kickstart 3.1 (revision 40.63)",
     Rom.kick31_40_63_b:      "Kickstart 3.1 (revision 40.63)",
 
+    Rom.kick314_46_143:      "Kickstart 3.1.4 (revision 46.143)",
+    
     Rom.diag11:              "DiagROM 1.1",
     Rom.logica20:            "The Diagnostic V2.0 (Logica)"
 ]

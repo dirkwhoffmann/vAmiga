@@ -34,8 +34,14 @@ class DiskController : public HardwareComponent {
     bool connected[4] = { true, false, false, false };
     
     // Indicates if a FIFO buffer should be emulated.
-    bool fifoBuffering = true;
-    
+    bool useFifo = true;
+
+    /* At the beginning of each disk operation, variable useFifo is latched.
+     * This let's the user change the useFifo setting safely even if the
+     * emulator is runnig.
+     */
+    bool useFifoLatched;
+
     
     //
     // Bookkeeping
@@ -124,7 +130,7 @@ public:
         worker
 
         & connected
-        & fifoBuffering;
+        & useFifo;
     }
 
     template <class T>
@@ -132,6 +138,7 @@ public:
     {
         worker
 
+        & useFifoLatched
         & selected
         & acceleration
         & state
@@ -201,8 +208,9 @@ public:
     void toggleConnected(int df) { setConnected(df, !isConnected(df)); }
     
     // FIFO emulation
-    bool getFifoBuffering() { return fifoBuffering; }
-    void setFifoBuffering(bool value) { fifoBuffering = value; }
+    bool getUseFifo() { return useFifo; }
+    bool getUseFifoLatched() { return useFifoLatched; }
+    void setUseFifo(bool value) { useFifo = value; }
     
     // Returns the currently selected drive or NULL if no drive is selected.
     class Drive *getSelectedDrive();

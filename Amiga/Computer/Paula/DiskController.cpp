@@ -80,7 +80,7 @@ DiskController::_dump()
 {
     plainmsg("    connected : %d,%d,%d,%d\n",
              connected[0], connected[1], connected[2], connected[3]);
-    plainmsg("fifoBuffering : %s\n", fifoBuffering ? "yes" : "no");
+    plainmsg("fifoBuffering : %s\n", useFifo ? "yes" : "no");
     plainmsg("     selected : %d\n", selected);
     plainmsg(" acceleration : %d\n", acceleration);
     plainmsg("        state : %s\n", driveStateName(state));
@@ -231,6 +231,9 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
 
     // Remember the new value
     dsklen = newDskLen;
+
+    // Determine if we should use the FIFO for this operation
+    useFifoLatched = useFifo;
     
     // Disable DMA if the DMAEN bit (15) is zero
     if (!(newDskLen & 0x8000)) {
@@ -372,7 +375,7 @@ DiskController::PRBdidChange(uint8_t oldValue, uint8_t newValue)
 void
 DiskController::serviceDiskEvent()
 {
-    if (fifoBuffering) {
+    if (useFifoLatched) {
         
         // Receive next byte from the selected drive.
         executeFifo();

@@ -16,7 +16,7 @@ extension PreferencesController {
         guard let amiga = amigaProxy else { return }
 
         let config = amiga.config()
-        let poweredOff = amiga.isPoweredOff()
+        // let poweredOff = amiga.isPoweredOff()
 
         // Graphics
         compClxSprSpr.state = config.clxSprSpr ? .on : .off
@@ -42,11 +42,10 @@ extension PreferencesController {
         assert(config.df2.speed == config.df3.speed)
         compDriveSpeed.selectItem(withTag: Int(config.df0.speed))
         compFifoBuffering.isHidden = Int(config.df0.speed) > 256
-        compFifoBuffering.state = config.fifoBuffering ? .on : .off
+        compFifoBuffering.state = config.useFifo ? .on : .off
 
         // Lock controls if emulator is powered on
-        // compBltAccuracy.isEnabled = poweredOff
-        compFifoBuffering.isEnabled = poweredOff
+        // Nothing to do here at the moment
 
         // Label the OK button
         compOKButton.title = okLabel

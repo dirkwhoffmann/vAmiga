@@ -200,7 +200,7 @@ Amiga::getConfig()
     config.cpuEngine = CPU_MUSASHI;
     config.cpuSpeed = cpu.getSpeed();
     config.blitterAccuracy = agnus.blitter.getAccuracy();
-    config.fifoBuffering = paula.diskController.getFifoBuffering();
+    config.useFifo = paula.diskController.getUseFifo();
     config.serialDevice = serialPort.getDevice();
 
     config.df0.connected = paula.diskController.isConnected(0);
@@ -387,8 +387,8 @@ Amiga::configure(ConfigOption option, long value)
             
         case VA_FIFO_BUFFERING:
 
-            if (current.fifoBuffering == value) return true;
-            paula.diskController.setFifoBuffering(value);
+            if (current.useFifo == value) return true;
+            paula.diskController.setUseFifo(value);
             break;
 
         case VA_SERIAL_DEVICE:
