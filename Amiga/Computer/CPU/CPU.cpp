@@ -374,6 +374,31 @@ CPU::didSaveToBuffer(uint8_t *buffer) const
     return writer.ptr - buffer;
 }
 
+int
+CPU::getSpeed()
+{
+    switch (speedShift) {
+        case 0: return 4;
+        case 1: return 2;
+        case 2: return 1;
+    }
+
+    assert(false);
+    return 1;
+}
+
+void
+CPU::setSpeed(int factor)
+{
+    switch (factor) {
+        case 1: speedShift = 2; return;
+        case 2: speedShift = 1; return;
+        case 4: speedShift = 0; return;
+    }
+
+    assert(false);
+}
+
 void
 CPU::recordContext()
 {

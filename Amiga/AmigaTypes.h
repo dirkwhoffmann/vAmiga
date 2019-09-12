@@ -13,7 +13,7 @@
 #define _AMIGA_T_INC
 
 #include "PaulaTypes.h"
-
+#include "CPUTypes.h"
 
 //
 // Enumeration types
@@ -57,6 +57,8 @@ typedef enum : long
     VA_CLX_PLF_PLF,
     VA_FILTER_ACTIVATION,
     VA_FILTER_TYPE,
+    VA_CPU_ENGINE,
+    VA_CPU_SPEED,
     VA_BLITTER_ACCURACY,
     VA_FIFO_BUFFERING,
     VA_SERIAL_DEVICE
@@ -104,6 +106,8 @@ typedef struct
     bool clxPlfPlf;
     FilterActivation filterActivation;
     FilterType filterType;
+    CPUEngine cpuEngine;
+    int cpuSpeed;
     int blitterAccuracy;
     bool fifoBuffering;
     long serialDevice;

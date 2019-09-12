@@ -197,6 +197,8 @@ Amiga::getConfig()
     config.clxPlfPlf = denise.getClxPlfPlf();
     config.filterActivation = paula.audioUnit.getFilterActivation();
     config.filterType = paula.audioUnit.getFilterType();
+    config.cpuEngine = CPU_MUSASHI;
+    config.cpuSpeed = cpu.getSpeed();
     config.blitterAccuracy = agnus.blitter.getAccuracy();
     config.fifoBuffering = paula.diskController.getFifoBuffering();
     config.serialDevice = serialPort.getDevice();
@@ -351,6 +353,30 @@ Amiga::configure(ConfigOption option, long value)
 
             if (current.filterType == value) return true;
             paula.audioUnit.setFilterType((FilterType)value);
+            break;
+
+        case VA_CPU_ENGINE:
+
+            if (!isCPUEngine(value)) {
+                warn("Invalid CPU engine: %d\n", value);
+                warn("      Valid values: %d\n", CPU_MUSASHI);
+                return false;
+            }
+
+            if (current.cpuEngine == value) return true;
+            // Nothing to do yet, only one engine is supported
+            break;
+
+        case VA_CPU_SPEED:
+
+            if (value != 1 && value != 2 && value != 4) {
+                warn("Unsupported CPU speed: %d\n", value);
+                warn("         Valid values: 1, 2, 4\n");
+                return false;
+            }
+
+            if (current.cpuSpeed == value) return true;
+            cpu.setSpeed(value);
             break;
 
         case VA_BLITTER_ACCURACY:

@@ -996,6 +996,10 @@ extension MyController {
 
 extension Keys {
 
+    // CPU
+    static let cpuEngine         = "VAMIGACpuEngine"
+    static let cpuSpeed          = "VAMIGACpuSpeed"
+
     // Graphics
     static let clxSprSpr         = "VAMIGAClxSprSpr"
     static let clxSprPlf         = "VAMIGAClxSprPlf"
@@ -1013,6 +1017,10 @@ extension Keys {
 }
 
 extension Defaults {
+
+    // CPU
+    static let cpuEngine         = CPU_MUSASHI
+    static let cpuSpeed          = 1
 
     // Graphics
     static let clxSprSpr         = false
@@ -1036,6 +1044,8 @@ extension MyController {
 
         let dictionary: [String: Any] = [
 
+            Keys.cpuEngine: Defaults.cpuEngine.rawValue,
+            Keys.cpuSpeed: Defaults.cpuSpeed,
             Keys.clxSprSpr: Defaults.clxSprSpr,
             Keys.clxSprPlf: Defaults.clxSprPlf,
             Keys.clxPlfPlf: Defaults.clxPlfPlf,
@@ -1053,7 +1063,9 @@ extension MyController {
 
         let defaults = UserDefaults.standard
 
-        let keys = [ Keys.clxSprSpr,
+        let keys = [ Keys.cpuEngine,
+                     Keys.cpuSpeed,
+                     Keys.clxSprSpr,
                      Keys.clxSprPlf,
                      Keys.clxPlfPlf,
                      Keys.filterActivation,
@@ -1072,6 +1084,8 @@ extension MyController {
 
         amiga.suspend()
 
+        amiga.configure(VA_CPU_ENGINE, value: defaults.integer(forKey: Keys.cpuEngine))
+        amiga.configure(VA_CPU_SPEED, value: defaults.integer(forKey: Keys.cpuSpeed))
         amiga.configure(VA_CLX_SPR_SPR, enable: defaults.bool(forKey: Keys.clxSprSpr))
         amiga.configure(VA_CLX_SPR_PLF, enable: defaults.bool(forKey: Keys.clxSprPlf))
         amiga.configure(VA_CLX_PLF_PLF, enable: defaults.bool(forKey: Keys.clxPlfPlf))
@@ -1088,6 +1102,8 @@ extension MyController {
         let defaults = UserDefaults.standard
         let config = amiga.config()
 
+        defaults.set(config.cpuEngine.rawValue, forKey: Keys.cpuEngine)
+        defaults.set(config.cpuSpeed, forKey: Keys.cpuSpeed)
         defaults.set(config.clxSprSpr, forKey: Keys.clxSprSpr)
         defaults.set(config.clxSprPlf, forKey: Keys.clxSprPlf)
         defaults.set(config.clxPlfPlf, forKey: Keys.clxPlfPlf)

@@ -58,7 +58,7 @@ class CPU : public HardwareComponent {
     //
 
     // Bit shift value used for converting CPU cycles to master cycles
-    int scale = 2;
+    int speedShift = 2;
 
 
     //
@@ -175,6 +175,17 @@ public:
 
 
     //
+    // Configuring
+    //
+
+    // Returns the speed acceration factor (1, 2, or 4)
+    int getSpeed();
+
+    // Sets the speed acceration factor (1, 2, or 4)
+    void setSpeed(int factor);
+
+
+    //
     // Recording and restoring the CPU context
     //
     
@@ -195,10 +206,10 @@ public:
     //
 
     // Advances the clock by a certain number of CPU cycles
-    void advance(CPUCycle cycles) { clock += cycles << scale; }
+    void advance(CPUCycle cycles) { clock += cycles << speedShift; }
 
     // Returns the clock in CPU cycles
-    CPUCycle cycles() { return clock >> scale; }
+    CPUCycle cycles() { return clock >> speedShift; }
 
 
     //

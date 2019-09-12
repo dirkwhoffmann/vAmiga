@@ -16,6 +16,17 @@
 #define CPU_SET_IRQ_LEVEL   0b01
 #define CPU_ADD_WAIT_STATES 0b10
 
+// CPU engine
+typedef enum : long
+{
+    CPU_MUSASHI
+}
+CPUEngine;
+
+inline bool isCPUEngine(long value)
+{
+    return value == CPU_MUSASHI;
+}
 
 /* Recorded instruction
  * This data structure is used inside the trace ringbuffer. In trace mode,

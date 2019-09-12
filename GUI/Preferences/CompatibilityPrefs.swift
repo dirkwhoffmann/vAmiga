@@ -23,6 +23,10 @@ extension PreferencesController {
         compClxSprPlf.state = config.clxSprPlf ? .on : .off
         compClxPlfPlf.state = config.clxPlfPlf ? .on : .off
 
+        // CPU
+        compCpuEngine.selectItem(withTag: config.cpuEngine.rawValue)
+        compCpuSpeed.selectItem(withTag: Int(config.cpuSpeed))
+
         // Blitter
         let a = config.blitterAccuracy
         compBltAccuracy.intValue = a
@@ -41,6 +45,18 @@ extension PreferencesController {
 
         // Label the OK button
         compOKButton.title = okLabel
+    }
+
+    @IBAction func compCpuEngineAction(_ sender: NSPopUpButton!) {
+
+        amigaProxy?.configure(VA_CPU_ENGINE, value: sender.selectedTag())
+        refresh()
+    }
+
+    @IBAction func compCpuSpeedAction(_ sender: NSPopUpButton!) {
+
+        amigaProxy?.configure(VA_CPU_SPEED, value: sender.selectedTag())
+        refresh()
     }
 
     @IBAction func compClxSprSprAction(_ sender: NSButton!) {
