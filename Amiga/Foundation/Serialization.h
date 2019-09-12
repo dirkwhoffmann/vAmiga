@@ -14,6 +14,8 @@
 #include "Beam.h"
 #include "RegisterChange.h"
 #include "ChangeRecorder.h"
+#include "va_types.h"
+
 
 //
 // Basic memory buffer I/O
@@ -124,6 +126,7 @@ public:
     COUNT(const KeyboardState)
     COUNT(const DrawingMode)
     COUNT(const DiskType)
+    COUNT(const CIAType)
 
     STRUCT(Event)
     STRUCT(Beam)
@@ -195,6 +198,7 @@ public:
     DESERIALIZE32(KeyboardState)
     DESERIALIZE32(DrawingMode)
     DESERIALIZE64(DiskType)
+    DESERIALIZE64(CIAType)
 
     STRUCT(Event)
     STRUCT(Beam)
@@ -272,6 +276,7 @@ public:
     SERIALIZE32(const KeyboardState)
     SERIALIZE32(const DrawingMode)
     SERIALIZE64(const DiskType)
+    SERIALIZE64(const CIAType)
 
     STRUCT(Event)
     STRUCT(Beam)

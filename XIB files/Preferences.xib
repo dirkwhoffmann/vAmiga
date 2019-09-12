@@ -1042,9 +1042,9 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Klz-l3-bRD">
-                                            <rect key="frame" x="398" y="336" width="109" height="18"/>
+                                            <rect key="frame" x="398" y="336" width="143" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="check" title="FIFO-buffered" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="PZl-DT-hFY">
+                                            <buttonCell key="cell" type="check" title="Emulate FIFO buffer" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="PZl-DT-hFY">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>

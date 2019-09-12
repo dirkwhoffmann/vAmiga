@@ -62,6 +62,12 @@ CounterInfo;
 
 typedef struct
 {
+    CIAType type;
+}
+CIAConfig;
+
+typedef struct
+{
     struct {
         uint8_t port;
         uint8_t reg;

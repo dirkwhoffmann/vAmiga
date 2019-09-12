@@ -15,6 +15,8 @@ CIA::CIA()
 
     subComponents = vector<HardwareComponent *> { &tod };
 
+    config.type = CIA_8520_DIP;
+
     PA = 0xFF;
     PB = 0xFF;
 }
@@ -1283,7 +1285,7 @@ CIAA::updatePA()
      * in the data direction register. If a PLCC model is emulated, the data
      * direction register bits take full effect.
      */
-    switch (type) {
+    switch (config.type) {
 
         case CIA_8520_DIP:  mask &= 0b11000011; break;
         default:            break;
@@ -1514,7 +1516,7 @@ CIAB::updatePB()
      * in the data direction register. If a PLCC model is emulated, the data
      * direction register bits take full effect.
      */
-    switch (type) {
+    switch (config.type) {
 
         case CIA_8520_DIP:  mask |= 0b11111111; break;
         default:            break;

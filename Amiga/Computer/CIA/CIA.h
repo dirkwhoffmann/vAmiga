@@ -81,16 +81,19 @@ class CIA : public HardwareComponent {
 
 protected:
 
+    // Identification (0 = CIA A, 1 = CIA B)
+    int nr;
+
     // Quick-access references
     class Agnus *agnus;
     class Paula *paula;
     class SerialPort *serialPort;
 
+    // The current configuration
+    CIAConfig config;
+
     // Information shown in the GUI inspector panel
     CIAInfo info;
-
-    // Identification (0 = CIA A, 1 = CIA B)
-    int nr;
 
 
     //
@@ -106,7 +109,7 @@ protected:
     //
 
     // The type of this CIA
-    CIAType type = CIA_8520_DIP;
+    // CIAType type = CIA_8520_DIP;
 
 
     //
@@ -297,6 +300,7 @@ private:
     template <class T>
     void applyToPersistentItems(T& worker)
     {
+        worker & config.type; 
     }
 
     template <class T>
@@ -363,7 +367,10 @@ protected:
     //
     
 public:
-    
+
+    // Returns the current configuration
+    CIAConfig getConfig() { return config; }
+
     // Returns the latest internal state recorded by inspect()
     CIAInfo getInfo();
     
