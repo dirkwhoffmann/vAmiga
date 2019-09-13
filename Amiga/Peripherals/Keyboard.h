@@ -14,7 +14,7 @@
 
 class Keyboard : public HardwareComponent {
 
-    // Quick-access references
+    // References to other components
     class Agnus *agnus;
     
 public:

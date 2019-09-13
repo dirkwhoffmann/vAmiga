@@ -14,7 +14,7 @@
 
 class DiskController : public HardwareComponent {
 
-    // Quick-access references
+    // References to other components
     class Memory *mem; 
     class Agnus *agnus;
     class Paula *paula;

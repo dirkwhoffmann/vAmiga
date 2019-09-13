@@ -19,6 +19,11 @@ Denise::Denise()
         
         &pixelEngine,
     };
+
+    config.emulateSprites = true;
+    config.clxSprSpr = true;
+    config.clxSprPlf = true;
+    config.clxPlfPlf = true;
 }
 
 Denise::~Denise()
@@ -104,12 +109,17 @@ Denise::_inspect()
 }
 
 void
+Denise::_dumpConfig()
+{
+    plainmsg(" emulateSprites: %d\n", config.emulateSprites);
+    plainmsg("      clxSprSpr: %d\n", config.clxSprSpr);
+    plainmsg("      clxSprPlf: %d\n", config.clxSprPlf);
+    plainmsg("      clxPlfPlf: %d\n", config.clxPlfPlf);
+}
+
+void
 Denise::_dump()
 {
-    plainmsg(" emulateSprites: %d\n", emulateSprites);
-    plainmsg("      clxSprSpr: %d\n", clxSprSpr);
-    plainmsg("      clxSprPlf: %d\n", clxSprPlf);
-    plainmsg("      clxPlfPlf: %d\n", clxPlfPlf);
 }
 
 DeniseInfo
@@ -632,7 +642,7 @@ Denise::translateDPF(int from, int to)
 void
 Denise::drawSprites()
 {
-    if (emulateSprites) {
+    if (config.emulateSprites) {
 
         // Sprites 6 and 7
         if (armed & 0b11000000) {
@@ -725,8 +735,8 @@ Denise::drawSprite()
     }
 
     // Perform collision checks (if enabled)
-    if (clxSprSpr) checkS2SCollisions<x>(start, end);
-    if (clxSprPlf) checkS2PCollisions<x>(start, end);
+    if (config.clxSprSpr) checkS2SCollisions<x>(start, end);
+    if (config.clxSprPlf) checkS2PCollisions<x>(start, end);
 }
 
 template <int x> void
@@ -768,8 +778,8 @@ Denise::drawSpritePair()
     }
 
     // Perform collision checks (if enabled)
-    if (clxSprSpr) checkS2SCollisions<x>(start, end);
-    if (clxSprPlf) checkS2PCollisions<x>(start, end);
+    if (config.clxSprSpr) checkS2SCollisions<x>(start, end);
+    if (config.clxSprPlf) checkS2PCollisions<x>(start, end);
 }
 
 void
@@ -998,7 +1008,7 @@ Denise::endOfLine(int vpos)
         drawBorder();
 
         // Perform playfield-playfield collision check (if enabled)
-        if (clxPlfPlf) checkP2PCollisions();
+        if (config.clxPlfPlf) checkP2PCollisions();
 
         // Synthesize RGBA values and write the result into the frame buffer
         pixelEngine.colorize(iBuffer, vpos);

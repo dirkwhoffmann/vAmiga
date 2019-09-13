@@ -84,7 +84,7 @@ protected:
     // Identification (0 = CIA A, 1 = CIA B)
     int nr;
 
-    // Quick-access references
+    // References to other components
     class Agnus *agnus;
     class Paula *paula;
     class SerialPort *serialPort;
@@ -92,7 +92,7 @@ protected:
     // The current configuration
     CIAConfig config;
 
-    // Information shown in the GUI inspector panel
+    // The information shown in the GUI inspector panel
     CIAInfo info;
 
 
@@ -329,7 +329,7 @@ private:
     }
 
     //
-    // Constructing and destructing
+    // Constructing and configuring
     //
 
 public:
@@ -337,11 +337,7 @@ public:
     CIA();
     ~CIA();
 
-
-    //
-    // Configuring
-    //
-
+    // Returns the current configuration
     CIAConfig getConfig() { return config; }
 
 

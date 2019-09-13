@@ -16,14 +16,13 @@
 
 class Denise : public HardwareComponent {
 
-public:
-
-    // Quick-access references
+    // References to other components
     class Agnus *agnus;
-    
-private:
-    
-    // Information shown in the GUI inspector panel
+
+    // The current configuration
+    DeniseConfig config;
+
+    // The information shown in the GUI inspector panel
     DeniseInfo info;
     
     
@@ -35,24 +34,6 @@ public:
     
     // A color synthesizer for computing RGBA values
     PixelEngine pixelEngine;
-    
-
-    //
-    // Configuration
-    //
-
-    // Turns sprite emulation on or off
-    bool emulateSprites = true;
-
-    // Check for sprite-sprite collisions
-    bool clxSprSpr;
-
-    // Check for sprite-playfield collisions
-    bool clxSprPlf;
-
-    // Check for playfield-playfield collisions
-    bool clxPlfPlf;
-
 
 
     //
@@ -249,42 +230,6 @@ private:
 
     
     //
-    // Drawing parameters
-    //
-
-public:
-
- 
-
-
-    //
-    // Constructing and destructing
-    //
-    
-public:
-    
-    Denise();
-    ~Denise();
-
-
-    //
-    // Configuring device properties
-    //
-
-    bool getEmulateSprites() { return emulateSprites; }
-    void setEmulateSprites(bool value) { emulateSprites = value; }
-    
-    bool getClxSprSpr() { return clxSprSpr; }
-    void setClxSprSpr(bool value) { clxSprSpr = value; }
-
-    bool getClxSprPlf() { return clxSprPlf; }
-    void setClxSprPlf(bool value) { clxSprPlf = value; }
-
-    bool getClxPlfPlf() { return clxPlfPlf; }
-    void setClxPlfPlf(bool value) { clxPlfPlf = value; }
-
-
-    //
     // Iterating over snapshot items
     //
 
@@ -293,12 +238,12 @@ public:
     {
         worker
 
-        & emulateSprites
-        & clxSprSpr
-        & clxSprPlf
-        & clxPlfPlf;
+        & config.emulateSprites
+        & config.clxSprSpr
+        & config.clxSprPlf
+        & config.clxPlfPlf;
     }
-    
+
     template <class T>
     void applyToResetItems(T& worker)
     {
@@ -336,7 +281,32 @@ public:
         & prio12;
     }
 
+
+    //
+    // Constructing and configuring
+    //
     
+public:
+
+    Denise();
+    ~Denise();
+
+    // Returns the current configuration
+    DeniseConfig getConfig() { return config; }
+
+    bool getEmulateSprites() { return config.emulateSprites; }
+    void setEmulateSprites(bool value) { config.emulateSprites = value; }
+    
+    bool getClxSprSpr() { return config.clxSprSpr; }
+    void setClxSprSpr(bool value) { config.clxSprSpr = value; }
+
+    bool getClxSprPlf() { return config.clxSprPlf; }
+    void setClxSprPlf(bool value) { config.clxSprPlf = value; }
+
+    bool getClxPlfPlf() { return config.clxPlfPlf; }
+    void setClxPlfPlf(bool value) { config.clxPlfPlf = value; }
+
+
     //
     // Methods from HardwareComponent
     //
@@ -347,6 +317,7 @@ private:
     void _powerOn() override;
     void _reset() override;
     void _inspect() override;
+    void _dumpConfig() override;
     void _dump() override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
     size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS }

@@ -1080,9 +1080,9 @@ extension MyController {
 
         defaults.set(config.cpuEngine.rawValue, forKey: Keys.cpuEngine)
         defaults.set(config.cpuSpeed, forKey: Keys.cpuSpeed)
-        defaults.set(config.clxSprSpr, forKey: Keys.clxSprSpr)
-        defaults.set(config.clxSprPlf, forKey: Keys.clxSprPlf)
-        defaults.set(config.clxPlfPlf, forKey: Keys.clxPlfPlf)
+        defaults.set(config.denise.clxSprSpr, forKey: Keys.clxSprSpr)
+        defaults.set(config.denise.clxSprPlf, forKey: Keys.clxSprPlf)
+        defaults.set(config.denise.clxPlfPlf, forKey: Keys.clxPlfPlf)
         defaults.set(config.filterActivation.rawValue, forKey: Keys.filterActivation)
         defaults.set(config.filterType.rawValue, forKey: Keys.filterType)
         defaults.set(config.blitter.accuracy, forKey: Keys.blitterAccuracy)

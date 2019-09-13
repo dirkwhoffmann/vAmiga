@@ -26,12 +26,10 @@
 
 class Blitter : public HardwareComponent {
 
-    // Quick-access references
+    // References to other components
     class Memory *mem;
     class Agnus *agnus;
     class Paula *paula;
-
-private:
 
     // The current configuration
     BlitterConfig config;
@@ -235,22 +233,17 @@ private:
 
 
     //
-    // Constructing and destructing
+    // Constructing and configuring
     //
     
 public:
     
     Blitter();
-    
 
-    //
-    // Configuring
-    //
-
-public:
-
+    // Returns the current configuration
     BlitterConfig getConfig() { return config; }
 
+    // Configures the emulation accuracy level
     int getAccuracy() { return config.accuracy; }
     void setAccuracy(int level) { config.accuracy = level; }
 

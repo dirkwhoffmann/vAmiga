@@ -191,18 +191,14 @@ Amiga::getConfig()
     config.model = model;
     config.realTimeClock = realTimeClock;
     config.layout = keyboard.layout;
-    config.emulateSprites = denise.getEmulateSprites();
-    config.clxSprSpr = denise.getClxSprSpr();
-    config.clxSprPlf = denise.getClxSprPlf();
-    config.clxPlfPlf = denise.getClxPlfPlf();
     config.filterActivation = paula.audioUnit.getFilterActivation();
     config.filterType = paula.audioUnit.getFilterType();
     config.cpuEngine = CPU_MUSASHI;
     config.cpuSpeed = cpu.getSpeed();
     config.cpu = cpu.getConfig();
     config.mem = mem.getConfig();
+    config.denise = denise.getConfig();
     config.serialDevice = serialPort.getDevice();
-
     config.blitter = agnus.blitter.getConfig(); 
     config.diskController = paula.diskController.getConfig();
     config.df0 = df0.getConfig();
@@ -284,25 +280,25 @@ Amiga::configure(ConfigOption option, long value)
 
         case VA_EMULATE_SPRITES:
 
-            if (current.emulateSprites == value) return true;
+            if (current.denise.emulateSprites == value) return true;
             denise.setEmulateSprites(value);
             break;
 
         case VA_CLX_SPR_SPR:
 
-            if (current.clxSprSpr == value) return true;
+            if (current.denise.clxSprSpr == value) return true;
             denise.setClxSprSpr(value);
             break;
 
         case VA_CLX_SPR_PLF:
 
-            if (current.clxSprPlf == value) return true;
+            if (current.denise.clxSprPlf == value) return true;
             denise.setClxSprPlf(value);
             break;
 
         case VA_CLX_PLF_PLF:
 
-            if (current.clxPlfPlf == value) return true;
+            if (current.denise.clxPlfPlf == value) return true;
             denise.setClxPlfPlf(value);
             break;
 

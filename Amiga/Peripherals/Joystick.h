@@ -14,7 +14,7 @@
 
 class Joystick : public HardwareComponent {
 
-    // Quick-access references
+    // References to other components
     class Agnus *agnus;
 
     // The control port this joystick is connected to (1 or 2)

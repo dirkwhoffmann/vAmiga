@@ -113,7 +113,7 @@ class Memory : public HardwareComponent {
     friend class Copper;
     friend class ZorroManager;
     
-    // Quick-access references
+    // References to other components
     class CPU *cpu;
     class CIAA *ciaA;
     class CIAB *ciaB;

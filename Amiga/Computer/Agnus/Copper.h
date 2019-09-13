@@ -16,7 +16,7 @@ class Copper : public HardwareComponent
 {
     friend class Agnus;
 
-    // Quick-access references
+    // References to other components
     class Memory *mem;
     class Agnus *agnus;
     class PixelEngine *colorizer;

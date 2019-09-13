@@ -17,7 +17,7 @@ class StateMachine : public HardwareComponent {
 
     friend class AudioUnit;
 
-    // Quick-access references
+    // References to other components
     class Agnus *agnus;
     class Paula *paula; 
 

@@ -19,7 +19,7 @@
 // Manager for plugged in Zorro II devices
 class ZorroManager : public HardwareComponent {
 
-    // Quick-access references
+    // References to other components
     class Memory *mem;
 
     // The value returned when peeking into the auto-config space.

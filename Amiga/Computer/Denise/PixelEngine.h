@@ -24,7 +24,7 @@ public:
     static const int32_t rgbaHBlank = 0x00444444;
     static const int32_t rgbaVBlank = 0x00444444;
 
-    // Quick-access references
+    // References to other components
     class Agnus *agnus;
     class Denise *denise;
 

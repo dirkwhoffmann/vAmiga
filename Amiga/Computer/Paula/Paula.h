@@ -18,7 +18,7 @@ class Paula : public HardwareComponent {
     
 private:
 
-    // Quick-access references
+    // References to other components
     class CPU *cpu;
     class Agnus *agnus;
 

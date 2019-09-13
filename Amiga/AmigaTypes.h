@@ -16,6 +16,8 @@
 #include "CPUTypes.h"
 #include "MemoryTypes.h"
 #include "AgnusTypes.h"
+#include "DeniseTypes.h"
+
 
 //
 // Enumeration types
@@ -94,16 +96,13 @@ typedef struct
     AmigaModel model;
     bool realTimeClock;
     long layout;
-    bool emulateSprites;
-    bool clxSprSpr;
-    bool clxSprPlf;
-    bool clxPlfPlf;
     FilterActivation filterActivation;
     FilterType filterType;
     CPUEngine cpuEngine;
     int cpuSpeed;
     CPUConfig cpu;
     MemoryConfig mem;
+    DeniseConfig denise;
     BlitterConfig blitter;
     DiskControllerConfig diskController; 
     long serialDevice;

@@ -70,6 +70,22 @@ SpriteInfo;
 
 typedef struct
 {
+    // Turns sprite emulation on or off
+    bool emulateSprites;
+
+    // Checks for sprite-sprite collisions
+    bool clxSprSpr;
+
+    // Checks for sprite-playfield collisions
+    bool clxSprPlf;
+
+    // Checks for playfield-playfield collisions
+    bool clxPlfPlf;
+}
+DeniseConfig;
+
+typedef struct
+{
     uint16_t bplcon0;
     uint16_t bplcon1;
     uint16_t bplcon2;

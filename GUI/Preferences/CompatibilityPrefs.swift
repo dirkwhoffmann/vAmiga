@@ -18,9 +18,9 @@ extension PreferencesController {
         let config = amiga.config()
 
         // Graphics
-        compClxSprSpr.state = config.clxSprSpr ? .on : .off
-        compClxSprPlf.state = config.clxSprPlf ? .on : .off
-        compClxPlfPlf.state = config.clxPlfPlf ? .on : .off
+        compClxSprSpr.state = config.denise.clxSprSpr ? .on : .off
+        compClxSprPlf.state = config.denise.clxSprPlf ? .on : .off
+        compClxPlfPlf.state = config.denise.clxPlfPlf ? .on : .off
 
         // CPU
         compCpuEngine.selectItem(withTag: config.cpuEngine.rawValue)
