@@ -38,6 +38,9 @@ extension PreferencesController {
 
         // Floppy drives
         let speed = config.df0.speed
+
+        track("Speed = \(speed)")
+        
         assert(speed == config.df1.speed)
         assert(speed == config.df2.speed)
         assert(speed == config.df3.speed)

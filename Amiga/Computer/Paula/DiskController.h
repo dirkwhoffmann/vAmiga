@@ -43,9 +43,6 @@ class DiskController : public HardwareComponent {
     // Indicates if the current disk operation used FIFO buffering
     bool useFifo;
 
-    // The number of words transferred during a single DMA cycle.
-    // int16_t acceleration = 1;
-
     // Set to true if the currently read disk word matches the sync word.
     // NOT USED AT THE MOMENT
     bool syncFlag = false;
@@ -116,7 +113,6 @@ class DiskController : public HardwareComponent {
         & selected
         & state
         & useFifo
-        // & acceleration
         & syncFlag
         & incoming
         & incomingCycle
@@ -144,7 +140,7 @@ public:
     void connect(int df) { setConnected(df, true); }
     void disconnect(int df) { setConnected(df, false); }
 
-    // Sets the acceleration factor for all connected drives
+    // Sets the speed acceleration factor for all connected drives
     void setSpeed(int32_t value);
 
     // Enables or disables the emulation of a FIFO buffer

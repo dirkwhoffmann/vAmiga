@@ -38,6 +38,8 @@ Drive::_dumpConfig()
 {
     plainmsg("           Type: %s\n", driveTypeName(config.type));
     plainmsg("          Speed: %d\n", config.speed);
+    plainmsg(" Original drive: %s\n", isOriginalDrive() ? "yes" : "no");
+    plainmsg("    Turbo drive: %s\n", isTurboDrive() ? "yes" : "no");
 }
 
 void
@@ -147,10 +149,12 @@ Drive::setSpeed(int16_t value)
     assert(isValidDriveSpeed(value));
 
     amiga->suspend();
-    config.speed = isValidDriveSpeed(value);
+    config.speed = value;
     amiga->resume();
 
     debug("Setting acceleration factor to %d\n", config.speed);
+
+    // _dumpConfig();
 }
 
 uint32_t

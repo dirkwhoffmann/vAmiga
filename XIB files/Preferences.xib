@@ -1073,7 +1073,7 @@ DQ
                                                         <menuItem title="Accelerated (2x)" tag="2" id="VGO-kB-R8q"/>
                                                         <menuItem title="Accelerated (4x)" tag="4" id="FPj-ps-qXz"/>
                                                         <menuItem title="Accelerated (8x)" tag="8" id="xui-te-XwI"/>
-                                                        <menuItem title="Infinite" tag="65535" id="Jk9-xq-4iy"/>
+                                                        <menuItem title="Infinite" tag="-1" id="Jk9-xq-4iy"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>

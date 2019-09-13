@@ -96,7 +96,6 @@ void
 DiskController::_dump()
 {
     plainmsg("     selected : %d\n", selected);
-    // plainmsg(" acceleration : %d\n", acceleration);
     plainmsg("        state : %s\n", driveStateName(state));
     plainmsg("     syncFlag : %s\n", syncFlag ? "true" : "false");
     plainmsg("     incoming : %X (cylcle = %lld)\n", incoming, incomingCycle);
@@ -390,14 +389,12 @@ DiskController::PRBdidChange(uint8_t oldValue, uint8_t newValue)
     selected = -1;
     
     // Iterate over all connected drives
-    for (unsigned i = 0; i < 4; i++) { if (!config.connected[i]) continue;
+    for (unsigned i = 0; i < 4; i++) {
+        if (!config.connected[i]) continue;
         
         // Inform the drive and determine the selected one
         df[i]->PRBdidChange(oldValue, newValue);
-        if (df[i]->isSelected()) {
-            selected = i;
-            // acceleration = df[i]->getSpeed();
-        }
+        if (df[i]->isSelected()) selected = i;
     }
     
     // Schedule the first rotation event if at least one drive is spinning.
