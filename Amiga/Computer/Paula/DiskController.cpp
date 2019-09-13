@@ -315,7 +315,7 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
     }
     
     // If the selected drive is a turbo drive, perform DMA immediately
-    if (drive && drive->isTurboDrive()) performTurboDMA(drive);
+    if (drive && drive->isTurbo()) performTurboDMA(drive);
 }
 
 void
@@ -506,7 +506,7 @@ DiskController::executeFifo()
     if (drive == NULL) return;
 
     // Only proceed if the selected drive is not a turbo drive
-    // if (drive->isTurboDrive()) return;
+    // if (drive->isTurbo()) return;
     
     switch (state) {
             

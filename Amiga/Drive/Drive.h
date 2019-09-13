@@ -104,20 +104,6 @@ public:
     // The currently inserted disk (NULL if the drive is empty)
     Disk *disk = NULL;
     
-    
-    //
-    // Constructing and configuring
-    //
-    
-public:
-    
-    Drive(unsigned nr);
-
-    // Returns the current configuration
-    DriveConfig getConfig() { return config; }
-
-    // TODO: MOVE CONFIG METHODS HERE
-
 
     //
     // Iterating over snapshot items
@@ -150,8 +136,31 @@ public:
         & head.offset
         & cylinderHistory;
     }
+
+
+    //
+    // Constructing and configuring
+    //
     
+public:
     
+    Drive(unsigned nr);
+
+    // Returns the current configuration
+    DriveConfig getConfig() { return config; }
+
+    // Configures the drive type
+    DriveType getType() { return config.type; }
+    void setType(DriveType t);
+
+    bool isOriginal() { return config.speed == 1; }
+    bool isTurbo() { return config.speed < 0; }
+
+    // Configures the speed acceleration factor
+    uint16_t getSpeed() { return config.speed; }
+    void setSpeed(int16_t value);
+
+
     //
     // Methods from HardwareComponent
     //
@@ -175,24 +184,6 @@ public:
     
     // Returns the device number (0 = df0, 1 = df1, 2 = df2, 3 = df3).
     long getNr() { return nr; }
-    
-    // Returns the drive type.
-    DriveType getType() { return config.type; }
-
-    // Sets the drive type.
-    void setType(DriveType t);
-    
-    // Returns the accleration factor.
-    uint16_t getSpeed() { return config.speed; }
-
-    // Sets the accleration factor.
-    void setSpeed(int16_t value);
-
-    // Indicates whether this drive is an original Amiga drive.
-    bool isOriginalDrive() { return config.speed == 1; }
-
-    // Indicates whether this drive is a turbo drive.
-    bool isTurboDrive() { return config.speed < 0; }
 
     // Indicates whether identification mode is enabled.
     bool idMode() { return !motor; }

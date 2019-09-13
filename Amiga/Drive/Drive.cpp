@@ -38,8 +38,8 @@ Drive::_dumpConfig()
 {
     plainmsg("           Type: %s\n", driveTypeName(config.type));
     plainmsg("          Speed: %d\n", config.speed);
-    plainmsg(" Original drive: %s\n", isOriginalDrive() ? "yes" : "no");
-    plainmsg("    Turbo drive: %s\n", isTurboDrive() ? "yes" : "no");
+    plainmsg(" Original drive: %s\n", isOriginal() ? "yes" : "no");
+    plainmsg("    Turbo drive: %s\n", isTurbo() ? "yes" : "no");
 }
 
 void
@@ -268,14 +268,14 @@ bool
 Drive::motorAtFullSpeed()
 {
     Cycle delay = 380 * 28000; // 380 msec
-    return isOriginalDrive() ? (motorOnTime() > delay) : motor;
+    return isOriginal() ? (motorOnTime() > delay) : motor;
 }
 
 bool
 Drive::motorStopped()
 {
     Cycle delay = 0;
-    return isOriginalDrive() ? (motorOffTime() > delay) : !motor;
+    return isOriginal() ? (motorOffTime() > delay) : !motor;
 }
 
 void
