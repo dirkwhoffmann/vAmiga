@@ -186,13 +186,13 @@ public:
     uint16_t getSpeed() { return config.speed; }
 
     // Sets the accleration factor.
-    void setSpeed(uint16_t value);
+    void setSpeed(int16_t value);
 
     // Indicates whether this drive is an original Amiga drive.
     bool isOriginalDrive() { return config.speed == 1; }
 
     // Indicates whether this drive is a turbo drive.
-    bool isTurboDrive() { return config.speed > 128; }
+    bool isTurboDrive() { return config.speed < 0; }
 
     // Indicates whether identification mode is enabled.
     bool idMode() { return !motor; }

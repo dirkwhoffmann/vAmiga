@@ -90,4 +90,12 @@ typedef struct
 }
 DriveConfig;
 
+inline bool isValidDriveSpeed(int16_t speed)
+{
+    switch (speed) {
+        case -1: case 1: case 2: case 4: case 8: return true;
+    }
+    return false;
+}
+
 #endif

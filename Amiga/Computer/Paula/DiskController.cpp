@@ -96,7 +96,7 @@ void
 DiskController::_dump()
 {
     plainmsg("     selected : %d\n", selected);
-    plainmsg(" acceleration : %d\n", acceleration);
+    // plainmsg(" acceleration : %d\n", acceleration);
     plainmsg("        state : %s\n", driveStateName(state));
     plainmsg("     syncFlag : %s\n", syncFlag ? "true" : "false");
     plainmsg("     incoming : %X (cylcle = %lld)\n", incoming, incomingCycle);
@@ -264,14 +264,14 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
     Drive *drive = getSelectedDrive(); 
     uint16_t oldDsklen = dsklen;
 
+    // Remember the new value
+    dsklen = newDskLen;
+
     // Initialize checksum (for debugging only)
     checksum = fnv_1a_init32();
     checkcnt = 0;
 
-    // Remember the new value
-    dsklen = newDskLen;
-
-    // Determine if we should use the FIFO for this operation
+    // Determine if a FIFO buffer should be emulated
     useFifo = config.useFifo;
     
     // Disable DMA if the DMAEN bit (15) is zero
@@ -396,7 +396,7 @@ DiskController::PRBdidChange(uint8_t oldValue, uint8_t newValue)
         df[i]->PRBdidChange(oldValue, newValue);
         if (df[i]->isSelected()) {
             selected = i;
-            acceleration = df[i]->getSpeed();
+            // acceleration = df[i]->getSpeed();
         }
     }
     
@@ -596,11 +596,13 @@ DiskController::performDMA()
 void
 DiskController::performDMARead(Drive *drive)
 {
+    assert(drive != NULL);
+
     // Only proceed if the FIFO contains enough data.
     if (!fifoHasWord()) { return; }
 
     // Determine how many words we are supposed to transfer.
-    uint32_t remaining = acceleration;
+    uint32_t remaining = drive->config.speed;
     
     do {
         // Read next word from the FIFO buffer.
@@ -636,11 +638,13 @@ DiskController::performDMARead(Drive *drive)
 void
 DiskController::performDMAWrite(Drive *drive)
 {
+    assert(drive != NULL);
+
     // Only proceed if the FIFO has enough free space.
     if (!fifoCanStoreWord()) return;
     
     // Determine how many words we are supposed to transfer.
-    uint32_t remaining = acceleration;
+    uint32_t remaining = drive->config.speed;
     
     do {
         // Read next word from memory.
@@ -722,7 +726,12 @@ DiskController::performSimpleDMA()
 void
 DiskController::performSimpleDMARead(Drive *drive)
 {
-    for (unsigned i = 0; i < acceleration; i++) {
+    assert(drive != NULL);
+
+    // Determine how many words we are supposed to transfer.
+    uint32_t remaining = drive->config.speed;
+
+    for (unsigned i = 0; i < remaining; i++) {
         
         // Read word from disk.
         uint16_t word = drive->readHead16();
@@ -747,9 +756,13 @@ DiskController::performSimpleDMARead(Drive *drive)
 void
 DiskController::performSimpleDMAWrite(Drive *drive)
 {
+    assert(drive != NULL);
     // debug("Writing %d words to disk\n", dsklen & 0x3FFF);
-    
-    for (unsigned i = 0; i < acceleration; i++) {
+
+    // Determine how many words we are supposed to transfer.
+    uint32_t remaining = drive->config.speed;
+
+    for (unsigned i = 0; i < remaining; i++) {
         
         // Read word from memory
         uint16_t word = agnus->doDiskDMA();

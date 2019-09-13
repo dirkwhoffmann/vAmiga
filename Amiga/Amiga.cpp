@@ -393,7 +393,7 @@ Amiga::configure(ConfigOption option, long value)
 
         case VA_DRIVE_SPEED:
 
-            if (value <= 0) {
+            if (!isValidDriveSpeed(value)) {
                 warn("Invalid drive speed: %d\n", value);
                 return false;
             }

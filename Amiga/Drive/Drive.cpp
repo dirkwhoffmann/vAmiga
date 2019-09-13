@@ -142,10 +142,12 @@ Drive::setType(DriveType t)
 }
 
 void
-Drive::setSpeed(uint16_t value)
+Drive::setSpeed(int16_t value)
 {
+    assert(isValidDriveSpeed(value));
+
     amiga->suspend();
-    config.speed = value;
+    config.speed = isValidDriveSpeed(value);
     amiga->resume();
 
     debug("Setting acceleration factor to %d\n", config.speed);
