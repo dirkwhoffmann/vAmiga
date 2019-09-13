@@ -130,7 +130,6 @@ struct AmigaFileWrapper;
 - (void) resume;
 
 - (AmigaConfiguration) config;
-- (AmigaMemConfiguration) memConfig;
 - (BOOL) configure:(ConfigOption)option value:(NSInteger)value;
 - (BOOL) configure:(ConfigOption)option enable:(BOOL)value;
 - (BOOL) configureModel:(NSInteger)model;

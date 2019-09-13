@@ -305,6 +305,7 @@ class MyController: NSWindowController, MessageReceiver {
         get { return amiga.config().layout }
         set { amiga.configureLayout(newValue); }
     }
+    /*
     var chipMemory: Int {
         get { return amiga.memConfig().chipRamSize }
         set { amiga.configureChipMemory(newValue); }
@@ -317,6 +318,7 @@ class MyController: NSWindowController, MessageReceiver {
         get { return amiga.memConfig().fastRamSize }
         set { amiga.configureFastMemory(newValue); }
     }
+    */
     /*
     var df0connected: Bool {
         get { return amiga.config().diskController.connected.0 }

@@ -55,12 +55,6 @@ class CPU : public HardwareComponent {
     // Information shown in the GUI inspector panel
     CPUInfo info;
 
-    //
-    // Configuration
-    //
-
- 
-
 
     //
     // Internal state
@@ -135,7 +129,7 @@ public:
 
 
     //
-    // Constructing and destructing
+    // Constructing and configuring
     //
     
 public:

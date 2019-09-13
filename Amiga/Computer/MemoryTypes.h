@@ -54,4 +54,15 @@ inline const char *pokeSourceName(PokeSource source)
     source == POKE_COPPER ? "Copper" : "???";
 }
 
+typedef struct
+{
+    size_t bootRomSize;
+    size_t kickRomSize;
+    size_t extRomSize;
+    size_t chipRamSize;
+    size_t slowRamSize;
+    size_t fastRamSize;
+}
+MemoryConfig;
+
 #endif

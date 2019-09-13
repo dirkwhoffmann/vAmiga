@@ -14,6 +14,7 @@
 
 #include "PaulaTypes.h"
 #include "CPUTypes.h"
+#include "MemoryTypes.h"
 #include "AgnusTypes.h"
 
 //
@@ -102,6 +103,7 @@ typedef struct
     CPUEngine cpuEngine;
     int cpuSpeed;
     CPUConfig cpu;
+    MemoryConfig mem;
     BlitterConfig blitter;
     DiskControllerConfig diskController; 
     long serialDevice;
@@ -111,14 +113,6 @@ typedef struct
     DriveConfig df3;
 }
 AmigaConfiguration;
-
-typedef struct
-{
-    long chipRamSize; // size in KB
-    long slowRamSize; // size in KB
-    long fastRamSize; // size in KB
-}
-AmigaMemConfiguration;
 
 typedef struct
 {

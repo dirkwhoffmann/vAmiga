@@ -200,6 +200,7 @@ Amiga::getConfig()
     config.cpuEngine = CPU_MUSASHI;
     config.cpuSpeed = cpu.getSpeed();
     config.cpu = cpu.getConfig();
+    config.mem = mem.getConfig();
     config.serialDevice = serialPort.getDevice();
 
     config.blitter = agnus.blitter.getConfig(); 
@@ -209,22 +210,6 @@ Amiga::getConfig()
     config.df2 = df2.getConfig();
     config.df3 = df3.getConfig();
 
-    return config;
-}
-
-AmigaMemConfiguration
-Amiga::getMemConfig()
-{
-    AmigaMemConfiguration config;
-    
-    assert(mem.chipRamSize % 1024 == 0);
-    assert(mem.slowRamSize % 1024 == 0);
-    assert(mem.fastRamSize % 1024 == 0);
-    
-    config.chipRamSize = mem.chipRamSize / 1024;
-    config.slowRamSize = mem.slowRamSize / 1024;
-    config.fastRamSize = mem.fastRamSize / 1024;
-    
     return config;
 }
 

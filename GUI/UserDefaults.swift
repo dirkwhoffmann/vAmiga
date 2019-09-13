@@ -937,15 +937,14 @@ extension MyController {
         
         let defaults = UserDefaults.standard
         let config = amiga.config()
-        let memConfig = amiga.memConfig()
         let dc = config.diskController
 
         defaults.set(config.model.rawValue, forKey: Keys.amigaModel)
         defaults.set(config.layout, forKey: Keys.layout)
 
-        defaults.set(memConfig.chipRamSize, forKey: Keys.chipRam)
-        defaults.set(memConfig.slowRamSize, forKey: Keys.slowRam)
-        defaults.set(memConfig.fastRamSize, forKey: Keys.fastRam)
+        defaults.set(config.mem.chipRamSize / 1024, forKey: Keys.chipRam)
+        defaults.set(config.mem.slowRamSize / 1024, forKey: Keys.slowRam)
+        defaults.set(config.mem.fastRamSize / 1024, forKey: Keys.fastRam)
 
         defaults.set(config.df0.speed, forKey: Keys.driveSpeed)
         defaults.set(dc.connected.0, forKey: Keys.df0Connect)

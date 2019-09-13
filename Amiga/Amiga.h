@@ -331,10 +331,7 @@ public:
     
     // Returns the currently set configuration.
     AmigaConfiguration getConfig();
-    
-    // Returns the currently set memory configuration.
-    AmigaMemConfiguration getMemConfig();
-    
+        
     // Changes the configuration
     bool configure(ConfigOption option, long value);
     bool configureDrive(unsigned drive, ConfigOption option, long value);

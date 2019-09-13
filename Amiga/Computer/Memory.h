@@ -23,11 +23,11 @@ const uint32_t EXT_ROM_MASK  = 0x07FFFF; // 512 KB
 
 // Verifies the range of an address
 #define ASSERT_CHIP_ADDR(x) assert(chipRam != NULL);
-#define ASSERT_FAST_ADDR(x) assert(fastRam != NULL); assert(((x) - FAST_RAM_STRT) < fastRamSize);
-#define ASSERT_SLOW_ADDR(x) assert(slowRam != NULL); assert(((x) & SLOW_RAM_MASK) < slowRamSize);
-#define ASSERT_BOOT_ADDR(x) assert(bootRom != NULL); assert(((x) & BOOT_ROM_MASK) < bootRomSize);
+#define ASSERT_FAST_ADDR(x) assert(fastRam != NULL); assert(((x) - FAST_RAM_STRT) < config.fastRamSize);
+#define ASSERT_SLOW_ADDR(x) assert(slowRam != NULL); assert(((x) & SLOW_RAM_MASK) < config.slowRamSize);
+#define ASSERT_BOOT_ADDR(x) assert(bootRom != NULL); assert(((x) & BOOT_ROM_MASK) < config.bootRomSize);
 #define ASSERT_KICK_ADDR(x) assert(kickRom != NULL); 
-#define ASSERT_EXT_ADDR(x)  assert(extRom  != NULL); assert(((x) & EXT_ROM_MASK) < extRomSize);
+#define ASSERT_EXT_ADDR(x)  assert(extRom  != NULL); assert(((x) & EXT_ROM_MASK) < config.extRomSize);
 #define ASSERT_CIA_ADDR(x)  assert((x) >= 0xA00000 && (x) <= 0xBFFFFF);
 #define ASSERT_RTC_ADDR(x)  assert((x) >= 0xDC0000 && (x) <= 0xDEFFFF);
 #define ASSERT_OCS_ADDR(x)  assert((x) >= 0xC00000 && (x) <= 0xDFFFFF);
@@ -39,9 +39,9 @@ const uint32_t EXT_ROM_MASK  = 0x07FFFF; // 512 KB
 #define READ_32(x) (ntohl(*(uint32_t *)(x)))
 
 // Reads a value from Chip RAM in big endian format
-#define READ_CHIP_8(x)  READ_8(chipRam + ((x) % chipRamSize))
-#define READ_CHIP_16(x) READ_16(chipRam + ((x) % chipRamSize))
-#define READ_CHIP_32(x) READ_32(chipRam + ((x) % chipRamSize))
+#define READ_CHIP_8(x)  READ_8(chipRam + ((x) % config.chipRamSize))
+#define READ_CHIP_16(x) READ_16(chipRam + ((x) % config.chipRamSize))
+#define READ_CHIP_32(x) READ_32(chipRam + ((x) % config.chipRamSize))
 
 // Reads a value from Fast RAM in big endian format
 #define READ_FAST_8(x)  READ_8(fastRam + ((x) - FAST_RAM_STRT))
@@ -59,9 +59,9 @@ const uint32_t EXT_ROM_MASK  = 0x07FFFF; // 512 KB
 #define READ_BOOT_32(x) READ_32(bootRom + ((x) & BOOT_ROM_MASK))
 
 // Reads a value from Kickstart ROM in big endian format
-#define READ_KICK_8(x)  READ_8(kickRom + ((x) % kickRomSize))
-#define READ_KICK_16(x) READ_16(kickRom + ((x) % kickRomSize))
-#define READ_KICK_32(x) READ_32(kickRom + ((x) % kickRomSize))
+#define READ_KICK_8(x)  READ_8(kickRom + ((x) % config.kickRomSize))
+#define READ_KICK_16(x) READ_16(kickRom + ((x) % config.kickRomSize))
+#define READ_KICK_32(x) READ_32(kickRom + ((x) % config.kickRomSize))
 
 // Reads a value from Extended ROM in big endian format
 // #define READ_EXT_8(x)  READ_8(extRom + ((x) % extRomSize))
@@ -78,9 +78,9 @@ const uint32_t EXT_ROM_MASK  = 0x07FFFF; // 512 KB
 #define WRITE_32(x,y) (*(uint32_t *)(x) = htonl(y))
 
 // Writes a value into Chip RAM in big endian format
-#define WRITE_CHIP_8(x,y)  WRITE_8(chipRam + ((x) % chipRamSize), (y))
-#define WRITE_CHIP_16(x,y) WRITE_16(chipRam + ((x) % chipRamSize), (y))
-#define WRITE_CHIP_32(x,y) WRITE_32(chipRam + ((x) % chipRamSize), (y))
+#define WRITE_CHIP_8(x,y)  WRITE_8(chipRam + ((x) % config.chipRamSize), (y))
+#define WRITE_CHIP_16(x,y) WRITE_16(chipRam + ((x) % config.chipRamSize), (y))
+#define WRITE_CHIP_32(x,y) WRITE_32(chipRam + ((x) % config.chipRamSize), (y))
 
 // Writes a value into Fast RAM in big endian format
 #define WRITE_FAST_8(x,y)  WRITE_8(fastRam + ((x) - FAST_RAM_STRT), (y))
@@ -98,9 +98,9 @@ const uint32_t EXT_ROM_MASK  = 0x07FFFF; // 512 KB
 #define WRITE_BOOT_32(x,y) WRITE_32(bootRom + ((x) & BOOT_ROM_MASK), (y))
 
 // Writes a value into Kickstart ROM in big endian format
-#define WRITE_KICK_8(x,y)  WRITE_8(kickRom + ((x) % kickRomSize), (y))
-#define WRITE_KICK_16(x,y) WRITE_16(kickRom + ((x) % kickRomSize), (y))
-#define WRITE_KICK_32(x,y) WRITE_32(kickRom + ((x) % kickRomSize), (y))
+#define WRITE_KICK_8(x,y)  WRITE_8(kickRom + ((x) % config.kickRomSize), (y))
+#define WRITE_KICK_16(x,y) WRITE_16(kickRom + ((x) % config.kickRomSize), (y))
+#define WRITE_KICK_32(x,y) WRITE_32(kickRom + ((x) % config.kickRomSize), (y))
 
 // Writes a value into Extended ROM in big endian format
 #define WRITE_EXT_8(x,y)  WRITE_8(extRom + ((x) & EXT_ROM_MASK), (y))
@@ -111,7 +111,8 @@ const uint32_t EXT_ROM_MASK  = 0x07FFFF; // 512 KB
 class Memory : public HardwareComponent {
     
     friend class Copper;
-
+    friend class ZorroManager;
+    
     // Quick-access references
     class CPU *cpu;
     class CIAA *ciaA;
@@ -121,42 +122,27 @@ class Memory : public HardwareComponent {
     class Denise *denise;
     class Paula *paula;
     class ZorroManager *zorro;
-    
+
+    // The current configuration
+    MemoryConfig config;
+
 public:
     
     /* Each memory area is represented by three variables:
      *
      *   A pointer to the allocates memory.
-     *   A variable storing the memory size in bytes.
+     *   A variable storing the memory size in bytes (in MemoryConfig).
      *
      * The following invariant holds:
      *
-     *   pointer == NULL <=> size == 0
+     *   pointer == NULL <=> config.size == 0
      */
-    
-    // Boot Rom and size (Amiga 1000 only)
     uint8_t *bootRom = NULL;
-    size_t bootRomSize = 0;
-    
-    // Kickstart Rom and size
     uint8_t *kickRom = NULL;
-    size_t kickRomSize = 0;
-
-    // Extended Rom and size
     uint8_t *extRom = NULL;
-    size_t extRomSize = 0;
-
-    // Chip Ram and size
     uint8_t *chipRam = NULL;
-    size_t chipRamSize = 0;
-    
-    // Slow Ram and size
     uint8_t *slowRam = NULL;
-    size_t slowRamSize = 0;
-    
-    // Fast Ram and size
     uint8_t *fastRam = NULL;
-    size_t fastRamSize = 0;
     
     /* Indicates if the Kickstart Rom is writable
      * If an A500 or A2000 is emulated, this variable is always false. If an
@@ -179,19 +165,6 @@ public:
     // Buffer for returning string values
     char str[256];
     
-    
-    //
-    // Constructing and destructing
-    //
-    
-public:
-    
-    Memory();
-    ~Memory();
-    
-    // Frees the allocated memory
-    void dealloc();
-
 
     //
     // Iterating over snapshot items
@@ -211,6 +184,23 @@ public:
         & memSrc
         & dataBus;
     }
+
+
+    //
+    // Constructing and configuring
+    //
+    
+public:
+    
+    Memory();
+    ~Memory();
+    
+    // Frees the allocated memory
+    void dealloc();
+
+    // Returns the current configuration
+    MemoryConfig getConfig() { return config; }
+
 
 
     //
@@ -251,13 +241,13 @@ private:
 public:
     
     bool hasChipRam() { return chipRam != NULL; }
-    bool allocateChipRam(size_t size) { return alloc(size, chipRam, chipRamSize); }
+    bool allocateChipRam(size_t size) { return alloc(size, chipRam, config.chipRamSize); }
     
     bool hasSlowRam() { return slowRam != NULL; }
-    bool allocateSlowRam(size_t size) { return alloc(size, slowRam, slowRamSize); }
+    bool allocateSlowRam(size_t size) { return alloc(size, slowRam, config.slowRamSize); }
     
     bool hasFastRam() { return fastRam != NULL; }
-    bool allocateFastRam(size_t size) { return alloc(size, fastRam, fastRamSize); }
+    bool allocateFastRam(size_t size) { return alloc(size, fastRam, config.fastRamSize); }
 
     void initializeRam();
 
@@ -279,14 +269,14 @@ public:
     bool hasExtRom() { return extRom != NULL; }
 
     // Returns a fingerprint for a certain ROM
-    uint64_t bootRomFingerprint() { return fnv_1a_64(bootRom, bootRomSize); }
-    uint64_t kickRomFingerprint() { return fnv_1a_64(kickRom, kickRomSize); }
-    uint64_t extRomFingerprint() { return fnv_1a_64(extRom,  extRomSize); }
+    uint64_t bootRomFingerprint() { return fnv_1a_64(bootRom, config.bootRomSize); }
+    uint64_t kickRomFingerprint() { return fnv_1a_64(kickRom, config.kickRomSize); }
+    uint64_t extRomFingerprint() { return fnv_1a_64(extRom,  config.extRomSize); }
 
     // Deletes a previously installed ROM
-    void deleteBootRom() { alloc(0, bootRom, bootRomSize); }
-    void deleteKickRom() { alloc(0, kickRom, kickRomSize); }
-    void deleteExtRom() { alloc(0, extRom, extRomSize); }
+    void deleteBootRom() { alloc(0, bootRom, config.bootRomSize); }
+    void deleteKickRom() { alloc(0, kickRom, config.kickRomSize); }
+    void deleteExtRom() { alloc(0, extRom, config.extRomSize); }
 
     // Installs a new ROM
     bool loadBootRom(BootRom *rom);

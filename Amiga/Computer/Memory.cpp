@@ -13,6 +13,13 @@
 Memory::Memory()
 {
     setDescription("Memory");
+
+    config.bootRomSize = 0;
+    config.kickRomSize = 0;
+    config.extRomSize = 0;
+    config.chipRamSize = 0;
+    config.slowRamSize = 0;
+    config.fastRamSize = 0;
 }
 
 Memory::~Memory()
@@ -82,12 +89,12 @@ void
 Memory::_dump()
 {
     struct { uint8_t *addr; size_t size; const char *desc; } mem[6] = {
-        { bootRom, bootRomSize, "Boot Rom" },
-        { kickRom, kickRomSize, "Kick Rom" },
-        { extRom,  extRomSize,  "Ext  Rom" },
-        { chipRam, chipRamSize, "Chip Ram" },
-        { slowRam, slowRamSize, "Slow Ram" },
-        { fastRam, fastRamSize, "Fast Ram" }
+        { bootRom, config.bootRomSize, "Boot Rom" },
+        { kickRom, config.kickRomSize, "Kick Rom" },
+        { extRom,  config.extRomSize,  "Ext  Rom" },
+        { chipRam, config.chipRamSize, "Chip Ram" },
+        { slowRam, config.slowRamSize, "Slow Ram" },
+        { fastRam, config.fastRamSize, "Fast Ram" }
     };
 
     // Print a summary of the installed memory
@@ -117,12 +124,12 @@ Memory::_size()
     applyToPersistentItems(counter);
     applyToResetItems(counter);
 
-    counter.count += sizeof(bootRomSize) + bootRomSize;
-    counter.count += sizeof(kickRomSize) + kickRomSize;
-    counter.count += sizeof(extRomSize) + extRomSize;
-    counter.count += sizeof(chipRamSize) + chipRamSize;
-    counter.count += sizeof(slowRamSize) + slowRamSize;
-    counter.count += sizeof(fastRamSize) + fastRamSize;
+    counter.count += sizeof(config.bootRomSize) + config.bootRomSize;
+    counter.count += sizeof(config.kickRomSize) + config.kickRomSize;
+    counter.count += sizeof(config.extRomSize) + config.extRomSize;
+    counter.count += sizeof(config.chipRamSize) + config.chipRamSize;
+    counter.count += sizeof(config.slowRamSize) + config.slowRamSize;
+    counter.count += sizeof(config.fastRamSize) + config.fastRamSize;
 
     return counter.count;
 }
@@ -134,41 +141,41 @@ Memory::didLoadFromBuffer(uint8_t *buffer)
 
     // Load memory size information
     reader
-    & bootRomSize
-    & kickRomSize
-    & extRomSize
-    & chipRamSize
-    & slowRamSize
-    & fastRamSize;
+    & config.bootRomSize
+    & config.kickRomSize
+    & config.extRomSize
+    & config.chipRamSize
+    & config.slowRamSize
+    & config.fastRamSize;
 
     // Do some consistency checks
     // Note: We should do this a little less agressive, e.g., by returning
     // false. Furthermore, the real maximum size limits should be used.
-    assert(bootRomSize < 0xFFFFFF);
-    assert(kickRomSize < 0xFFFFFF);
-    assert(extRomSize < 0xFFFFFF);
-    assert(chipRamSize < 0xFFFFFF);
-    assert(slowRamSize < 0xFFFFFF);
-    assert(fastRamSize < 0xFFFFFF);
+    assert(config.bootRomSize < 0xFFFFFF);
+    assert(config.kickRomSize < 0xFFFFFF);
+    assert(config.extRomSize < 0xFFFFFF);
+    assert(config.chipRamSize < 0xFFFFFF);
+    assert(config.slowRamSize < 0xFFFFFF);
+    assert(config.fastRamSize < 0xFFFFFF);
     
     // Free previously allocated memory
     dealloc();
 
     // Allocate new memory
-    if (bootRomSize) bootRom = new (std::nothrow) uint8_t[bootRomSize + 3];
-    if (kickRomSize) kickRom = new (std::nothrow) uint8_t[kickRomSize + 3];
-    if (extRomSize) extRom = new (std::nothrow) uint8_t[extRomSize + 3];
-    if (chipRamSize) chipRam = new (std::nothrow) uint8_t[chipRamSize + 3];
-    if (slowRamSize) slowRam = new (std::nothrow) uint8_t[slowRamSize + 3];
-    if (fastRamSize) fastRam = new (std::nothrow) uint8_t[fastRamSize + 3];
+    if (config.bootRomSize) bootRom = new (std::nothrow) uint8_t[config.bootRomSize + 3];
+    if (config.kickRomSize) kickRom = new (std::nothrow) uint8_t[config.kickRomSize + 3];
+    if (config.extRomSize) extRom = new (std::nothrow) uint8_t[config.extRomSize + 3];
+    if (config.chipRamSize) chipRam = new (std::nothrow) uint8_t[config.chipRamSize + 3];
+    if (config.slowRamSize) slowRam = new (std::nothrow) uint8_t[config.slowRamSize + 3];
+    if (config.fastRamSize) fastRam = new (std::nothrow) uint8_t[config.fastRamSize + 3];
 
     // Load memory contents from buffer
-    reader.copy(bootRom, bootRomSize);
-    reader.copy(kickRom, kickRomSize);
-    reader.copy(extRom, extRomSize);
-    reader.copy(chipRam, chipRamSize);
-    reader.copy(slowRam, slowRamSize);
-    reader.copy(fastRam, fastRamSize);
+    reader.copy(bootRom, config.bootRomSize);
+    reader.copy(kickRom, config.kickRomSize);
+    reader.copy(extRom, config.extRomSize);
+    reader.copy(chipRam, config.chipRamSize);
+    reader.copy(slowRam, config.slowRamSize);
+    reader.copy(fastRam, config.fastRamSize);
 
     return reader.ptr - buffer;
 }
@@ -179,29 +186,20 @@ Memory::didSaveToBuffer(uint8_t *buffer) const
     // Save memory size information
     SerWriter writer(buffer);
     writer
-    & bootRomSize
-    & kickRomSize
-    & extRomSize
-    & chipRamSize
-    & slowRamSize
-    & fastRamSize;
+    & config.bootRomSize
+    & config.kickRomSize
+    & config.extRomSize
+    & config.chipRamSize
+    & config.slowRamSize
+    & config.fastRamSize;
 
     // Save memory contents
-    writer.copy(bootRom, bootRomSize);
-    writer.copy(kickRom, kickRomSize);
-    writer.copy(extRom, extRomSize);
-    writer.copy(chipRam, chipRamSize);
-    writer.copy(slowRam, slowRamSize);
-    writer.copy(fastRam, fastRamSize);
-
-    /*
-    debug("bootRomSize = %d\n", bootRomSize);
-    debug("kickRomSize = %d\n", kickRomSize);
-    debug("extRomSize = %d\n", extRomSize);
-    debug("chipRamSize = %d\n", chipRamSize);
-    debug("slowRamSize = %d\n", slowRamSize);
-    debug("fastRamSize = %d\n", fastRamSize);
-    */
+    writer.copy(bootRom, config.bootRomSize);
+    writer.copy(kickRom, config.kickRomSize);
+    writer.copy(extRom, config.extRomSize);
+    writer.copy(chipRam, config.chipRamSize);
+    writer.copy(slowRam, config.slowRamSize);
+    writer.copy(fastRam, config.fastRamSize);
 
     return writer.ptr - buffer;
 }
@@ -250,9 +248,9 @@ Memory::initializeRam()
     // Until we know more about the proper startup pattern, we erase the
     // Ram by writing zeroes.
 
-    if (chipRam) memset(chipRam, 0, chipRamSize);
-    if (slowRam) memset(slowRam, 0, slowRamSize);
-    if (fastRam) memset(fastRam, 0, fastRamSize);
+    if (chipRam) memset(chipRam, 0, config.chipRamSize);
+    if (slowRam) memset(slowRam, 0, config.slowRamSize);
+    if (fastRam) memset(fastRam, 0, config.fastRamSize);
 }
 
 void
@@ -278,10 +276,10 @@ Memory::loadBootRom(BootRom *rom)
 {
     assert(rom != NULL);
     
-    if (!alloc(rom->getSize(), bootRom, bootRomSize))
+    if (!alloc(rom->getSize(), bootRom, config.bootRomSize))
         return false;
     
-    loadRom(rom, bootRom, bootRomSize);
+    loadRom(rom, bootRom, config.bootRomSize);
     return true;
 }
 
@@ -320,10 +318,10 @@ Memory::loadKickRom(KickRom *rom)
 {
     assert(rom != NULL);
     
-    if (!alloc(rom->getSize(), kickRom, kickRomSize))
+    if (!alloc(rom->getSize(), kickRom, config.kickRomSize))
         return false;
     
-    loadRom(rom, kickRom, kickRomSize);
+    loadRom(rom, kickRom, config.kickRomSize);
     return true;
 }
 
@@ -362,10 +360,10 @@ Memory::loadExtRom(ExtRom *rom)
 {
     assert(rom != NULL);
 
-    if (!alloc(rom->getSize(), extRom, extRomSize))
+    if (!alloc(rom->getSize(), extRom, config.extRomSize))
         return false;
 
-    loadRom(rom, extRom, extRomSize);
+    loadRom(rom, extRom, config.extRomSize);
     return true;
 }
 
@@ -406,16 +404,15 @@ Memory::loadExtRomFromFile(const char *path)
 void
 Memory::updateMemSrcTable()
 {
-    AmigaConfiguration config = amiga->getConfig();
     MemorySource mem_boot = bootRom ? MEM_BOOT : MEM_UNMAPPED;
     MemorySource mem_kick = kickRom ? MEM_KICK : MEM_UNMAPPED;
     MemorySource mem_ext = extRom ? MEM_EXTROM : MEM_UNMAPPED;
 
-    assert(chipRamSize % 0x10000 == 0);
-    assert(slowRamSize % 0x10000 == 0);
-    assert(fastRamSize % 0x10000 == 0);
+    assert(config.chipRamSize % 0x10000 == 0);
+    assert(config.slowRamSize % 0x10000 == 0);
+    assert(config.fastRamSize % 0x10000 == 0);
 
-    bool rtc = amiga ? config.realTimeClock : false;
+    bool rtc = amiga ? amiga->getConfig().realTimeClock : false;
     bool ovl = amiga ? (ciaA->getPA() & 1) : false;
     
     // debug("updateMemSrcTable: rtc = %d ovl = %d\n", rtc, ovl);
@@ -429,7 +426,7 @@ Memory::updateMemSrcTable()
         memSrc[i] = MEM_CHIP;
     
     // Fast Ram
-    for (unsigned i = 0; i < fastRamSize / 0x10000; i++)
+    for (unsigned i = 0; i < config.fastRamSize / 0x10000; i++)
         memSrc[0x20 + i] = MEM_FAST;
 
     // CIA range
@@ -441,7 +438,7 @@ Memory::updateMemSrcTable()
         memSrc[i] = MEM_OCS;
     
     // Slow Ram
-    for (unsigned i = 0; i < slowRamSize / 0x10000; i++)
+    for (unsigned i = 0; i < config.slowRamSize / 0x10000; i++)
         memSrc[0xC0 + i] = MEM_SLOW;
 
     // Real-time clock (RTC)

@@ -1337,10 +1337,6 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->amiga->getConfig();
 }
-- (AmigaMemConfiguration) memConfig
-{
-    return wrapper->amiga->getMemConfig();
-}
 - (BOOL) configure:(ConfigOption)option value:(NSInteger)value
 {
     return wrapper->amiga->configure(option, value);
