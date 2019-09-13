@@ -84,13 +84,19 @@ DiskController::_inspect()
 }
 
 void
-DiskController::_dump()
+DiskController::_dumpConfig()
 {
     plainmsg("          df0 : %s\n", config.connected[0] ? "connected" : "not connected");
     plainmsg("          df1 : %s\n", config.connected[1] ? "connected" : "not connected");
     plainmsg("          df2 : %s\n", config.connected[2] ? "connected" : "not connected");
     plainmsg("          df3 : %s\n", config.connected[3] ? "connected" : "not connected");
+    plainmsg("        speed : %s\n", config.speed);
     plainmsg("fifoBuffering : %s\n", config.useFifo ? "yes" : "no");
+}
+
+void
+DiskController::_dump()
+{
     plainmsg("     selected : %d\n", selected);
     plainmsg(" acceleration : %d\n", acceleration);
     plainmsg("        state : %s\n", driveStateName(state));

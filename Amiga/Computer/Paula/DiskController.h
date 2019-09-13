@@ -136,17 +136,18 @@ public:
     
     DiskController();
 
+    // Returns the current configuration
     DiskControllerConfig getConfig() { return config; }
 
-    // bool isConnected(int df) { assert(df < 4); return config.connected[df]; }
+    // Connects or disconnect an external drive
     void setConnected(int df, bool value);
     void connect(int df) { setConnected(df, true); }
     void disconnect(int df) { setConnected(df, false); }
 
-    int32_t getSpeed() { return config.speed; }
+    // Sets the acceleration factor for all connected drives
     void setSpeed(int32_t value);
 
-    bool getUseFifo() { return config.useFifo; }
+    // Enables or disables the emulation of a FIFO buffer
     void setUseFifo(bool value);
 
     
@@ -161,6 +162,7 @@ private:
     void _reset() override;
     void _ping() override;
     void _inspect() override;
+    void _dumpConfig() override;
     void _dump() override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
     size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS }

@@ -183,6 +183,14 @@ HardwareComponent::inspect()
 }
 
 void
+HardwareComponent::dumpConfig()
+{
+    msg("%s (memory location: %p)\n\n", getDescription(), this);
+    msg("Configuration:\n\n");
+    _dumpConfig();
+}
+
+void
 HardwareComponent::dump()
 {
     msg("%s (memory location: %p)\n\n", getDescription(), this);

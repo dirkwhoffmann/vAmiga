@@ -221,8 +221,12 @@ public:
      */
     void inspect();
     virtual void _inspect() { }
-    
-    // Dumps some debug information about the internal state to the console.
+
+    // Dumps debug information about the current configuration to the console
+    void dumpConfig();
+    virtual void _dumpConfig() { }
+
+    // Dumps debug information about the internal state to the console
     void dump();
     virtual void _dump() { }
     
