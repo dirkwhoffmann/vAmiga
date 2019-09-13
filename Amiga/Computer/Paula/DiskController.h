@@ -17,51 +17,35 @@ class DiskController : public HardwareComponent {
     // Quick-access references
     class Memory *mem; 
     class Agnus *agnus;
-    class Paula *paula; 
+    class Paula *paula;
+    class Drive *df[4] = { NULL, NULL, NULL, NULL };
+
+    // The current configuration
+    DiskControllerConfig config;
+
+    // Information shown in the GUI inspector panel
+    DiskControllerInfo info;
 
     // Temorary storage for a disk waiting to be inserted
     class Disk *diskToInsert = NULL;
 
-    
-    //
-    // Configuration items
-    //
-    
-    /* Connection status of all four drives.
-     * Note: connected[0] is always true, because the internal drive cannot be
-     * disconnected.
-     */
-    bool connected[4] = { true, false, false, false };
-    
-    // Indicates if a FIFO buffer should be emulated.
-    bool useFifo = true;
 
-    /* At the beginning of each disk operation, variable useFifo is latched.
-     * This let's the user change the useFifo setting safely even if the
-     * emulator is runnig.
-     */
-    bool useFifoLatched;
-
-    
     //
     // Bookkeeping
     //
-    
-    // Information shown in the GUI inspector panel
-    DiskControllerInfo info;
-    
-    // Quick-references to the disk drives
-    class Drive *df[4] = { NULL, NULL, NULL, NULL };
-    
+
     // The currently selected drive (-1 if no drive is selected)
     int8_t selected = -1;
-    
-    // The number of words transferred during a single DMA cycle.
-    int32_t acceleration = 1;
-    
+
     // The current drive state (off, read, or write)
     DriveState state;
-    
+
+    // Indicates if the current disk operation used FIFO buffering
+    bool useFifo;
+
+    // The number of words transferred during a single DMA cycle.
+    int32_t acceleration = 1;
+
     // Set to true if the currently read disk word matches the sync word.
     // NOT USED AT THE MOMENT
     bool syncFlag = false;
@@ -110,15 +94,6 @@ class DiskController : public HardwareComponent {
     uint32_t checksum = fnv_1a_init32();
     uint64_t checkcnt = 0;
 
-    
-    //
-    // Constructing and destructing
-    //
-    
-public:
-    
-    DiskController();
-    
 
     //
     // Iterating over snapshot items
@@ -129,8 +104,8 @@ public:
     {
         worker
 
-        & connected
-        & useFifo;
+        & config.connected
+        & config.useFifo;
     }
 
     template <class T>
@@ -138,10 +113,10 @@ public:
     {
         worker
 
-        & useFifoLatched
         & selected
-        & acceleration
         & state
+        & useFifo
+        & acceleration
         & syncFlag
         & incoming
         & incomingCycle
@@ -151,6 +126,31 @@ public:
         & dsksync
         & prb;
     }
+
+    
+    //
+    // Constructing and destructing
+    //
+    
+public:
+    
+    DiskController();
+
+
+    //
+    // Configuring
+    //
+
+    DiskControllerConfig getConfig() { return config; }
+
+    bool isConnected(int df) { assert(df < 4); return config.connected[df]; }
+    void setConnected(int df, bool value);
+    void connect(int df) { setConnected(df, true); }
+    void disconnect(int df) { setConnected(df, false); }
+    void toggleConnected(int df) { setConnected(df, !isConnected(df)); }
+
+    bool getUseFifo() { return config.useFifo; }
+    void setUseFifo(bool value) { config.useFifo = value; }
 
     
     //
@@ -200,17 +200,7 @@ private:
 public:
     
     // Connection status
-    bool isConnected(int df) { assert(df < 4); return connected[df]; }
-    void setConnected(int df, bool value);
-    
-    void connect(int df) { setConnected(df, true); }
-    void disconnect(int df) { setConnected(df, false); }
-    void toggleConnected(int df) { setConnected(df, !isConnected(df)); }
-    
-    // FIFO emulation
-    bool getUseFifo() { return useFifo; }
-    bool getUseFifoLatched() { return useFifoLatched; }
-    void setUseFifo(bool value) { useFifo = value; }
+    bool getUseFifoLatched() { return useFifo; }
     
     // Returns the currently selected drive or NULL if no drive is selected.
     class Drive *getSelectedDrive();

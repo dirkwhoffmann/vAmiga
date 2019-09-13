@@ -105,14 +105,6 @@ protected:
 
 
     //
-    // Configuration
-    //
-
-    // The type of this CIA
-    // CIAType type = CIA_8520_DIP;
-
-
-    //
     // Internal state
     //
 
@@ -284,11 +276,6 @@ public:
      * The variable is set in sleep()
      */
     Cycle wakeUpCycle;
-    
-public:
-    
-    CIA();
-    ~CIA();
 
 
     //
@@ -300,7 +287,7 @@ private:
     template <class T>
     void applyToPersistentItems(T& worker)
     {
-        worker & config.type; 
+        worker & config.type;
     }
 
     template <class T>
@@ -341,7 +328,23 @@ private:
         & wakeUpCycle;
     }
 
+    //
+    // Constructing and destructing
+    //
+
+public:
     
+    CIA();
+    ~CIA();
+
+
+    //
+    // Configuring
+    //
+
+    CIAConfig getConfig() { return config; }
+
+
     //
     // Methods from HardwareComponent
     //
@@ -367,9 +370,6 @@ protected:
     //
     
 public:
-
-    // Returns the current configuration
-    CIAConfig getConfig() { return config; }
 
     // Returns the latest internal state recorded by inspect()
     CIAInfo getInfo();

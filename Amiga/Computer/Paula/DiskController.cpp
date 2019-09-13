@@ -12,6 +12,13 @@
 DiskController::DiskController()
 {
     setDescription("DiskController");
+
+    // Setup initial configuration
+    config.connected[0] = true;
+    config.connected[1] = false;
+    config.connected[2] = false;
+    config.connected[3] = false;
+    config.useFifo = true;
 }
 
 void
@@ -52,7 +59,7 @@ void
 DiskController::_ping()
 {
     for (int df = 0; df < 4; df++) {
-        amiga->putMessage(connected[df] ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, df);
+        amiga->putMessage(config.connected[df] ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, df);
     }
 }
 
@@ -78,9 +85,11 @@ DiskController::_inspect()
 void
 DiskController::_dump()
 {
-    plainmsg("    connected : %d,%d,%d,%d\n",
-             connected[0], connected[1], connected[2], connected[3]);
-    plainmsg("fifoBuffering : %s\n", useFifo ? "yes" : "no");
+    plainmsg("          df0 : %s\n", config.connected[0] ? "connected" : "not connected");
+    plainmsg("          df1 : %s\n", config.connected[1] ? "connected" : "not connected");
+    plainmsg("          df2 : %s\n", config.connected[2] ? "connected" : "not connected");
+    plainmsg("          df3 : %s\n", config.connected[3] ? "connected" : "not connected");
+    plainmsg("fifoBuffering : %s\n", config.useFifo ? "yes" : "no");
     plainmsg("     selected : %d\n", selected);
     plainmsg(" acceleration : %d\n", acceleration);
     plainmsg("        state : %s\n", driveStateName(state));
@@ -136,7 +145,7 @@ DiskController::setConnected(int df, bool value)
     if (df == 0 && value == false) { return; }
     
     // Plug the drive in our out and inform the GUI
-    connected[df] = value;
+    config.connected[df] = value;
     amiga->putMessage(value ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, df);
     amiga->putMessage(MSG_CONFIG);
 }
@@ -233,7 +242,7 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
     dsklen = newDskLen;
 
     // Determine if we should use the FIFO for this operation
-    useFifoLatched = useFifo;
+    useFifo = config.useFifo;
     
     // Disable DMA if the DMAEN bit (15) is zero
     if (!(newDskLen & 0x8000)) {
@@ -332,10 +341,10 @@ DiskController::driveStatusFlags()
 {
     uint8_t result = 0xFF;
     
-    if (connected[0]) result &= df[0]->driveStatusFlags();
-    if (connected[1]) result &= df[1]->driveStatusFlags();
-    if (connected[2]) result &= df[2]->driveStatusFlags();
-    if (connected[3]) result &= df[3]->driveStatusFlags();
+    if (config.connected[0]) result &= df[0]->driveStatusFlags();
+    if (config.connected[1]) result &= df[1]->driveStatusFlags();
+    if (config.connected[2]) result &= df[2]->driveStatusFlags();
+    if (config.connected[3]) result &= df[3]->driveStatusFlags();
     
     return result;
 }
@@ -351,7 +360,7 @@ DiskController::PRBdidChange(uint8_t oldValue, uint8_t newValue)
     selected = -1;
     
     // Iterate over all connected drives
-    for (unsigned i = 0; i < 4; i++) { if (!connected[i]) continue;
+    for (unsigned i = 0; i < 4; i++) { if (!config.connected[i]) continue;
         
         // Inform the drive and determine the selected one
         df[i]->PRBdidChange(oldValue, newValue);
@@ -375,7 +384,7 @@ DiskController::PRBdidChange(uint8_t oldValue, uint8_t newValue)
 void
 DiskController::serviceDiskEvent()
 {
-    if (useFifoLatched) {
+    if (useFifo) {
         
         // Receive next byte from the selected drive.
         executeFifo();

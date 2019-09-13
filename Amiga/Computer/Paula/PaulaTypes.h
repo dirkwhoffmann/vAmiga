@@ -85,6 +85,13 @@ UARTInfo;
 
 typedef struct
 {
+    bool connected[4];
+    bool useFifo;
+}
+DiskControllerConfig;
+
+typedef struct
+{
     int8_t selectedDrive;
     DriveState state;
     int32_t fifo[6];
