@@ -947,7 +947,7 @@ extension MyController {
         defaults.set(memConfig.slowRamSize, forKey: Keys.slowRam)
         defaults.set(memConfig.fastRamSize, forKey: Keys.fastRam)
 
-        defaults.set(dc.speed, forKey: Keys.driveSpeed)
+        defaults.set(config.df0.speed, forKey: Keys.driveSpeed)
         defaults.set(dc.connected.0, forKey: Keys.df0Connect)
         defaults.set(dc.connected.1, forKey: Keys.df1Connect)
         defaults.set(dc.connected.2, forKey: Keys.df2Connect)

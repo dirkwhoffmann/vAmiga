@@ -72,4 +72,22 @@ inline const char *driveStateName(DriveState state)
     }
 }
 
+typedef struct
+{
+    /* Drive type.
+     * At the moment, we only support standard 3.5" DD drives.
+     */
+     DriveType type;
+
+    /* Acceleration factor.
+     * This value equals the number of words that get transfered into memory
+     * during a single disk DMA cycle. This value must be 1 to emulate a real
+     * Amiga. If it set to, e.g., 2, the drive loads twice as fast.
+     * A negative value indicates a turbo drive for which the exact value of
+     * the acceleration factor has no meaning.
+     */
+    int16_t speed;
+}
+DriveConfig;
+
 #endif

@@ -86,7 +86,6 @@ UARTInfo;
 typedef struct
 {
     bool connected[4];
-    int32_t speed;
     bool useFifo;
 }
 DiskControllerConfig;

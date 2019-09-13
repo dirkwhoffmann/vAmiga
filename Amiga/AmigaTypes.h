@@ -90,14 +90,6 @@ RunLoopControlFlag;
 
 typedef struct
 {
-    // bool connected;
-    DriveType type;
-    // uint16_t speed;
-}
-DriveConfiguration;
-
-typedef struct
-{
     AmigaModel model;
     bool realTimeClock;
     long layout;
@@ -113,10 +105,10 @@ typedef struct
     DiskControllerConfig diskController; 
     // bool useFifo;
     long serialDevice;
-    DriveConfiguration df0;
-    DriveConfiguration df1;
-    DriveConfiguration df2;
-    DriveConfiguration df3;
+    DriveConfig df0;
+    DriveConfig df1;
+    DriveConfig df2;
+    DriveConfig df3;
 }
 AmigaConfiguration;
 

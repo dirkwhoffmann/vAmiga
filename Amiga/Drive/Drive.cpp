@@ -17,6 +17,9 @@ Drive::Drive(unsigned nr)
     setDescription(nr == 0 ? "Df0" :
                    nr == 1 ? "Df1" :
                    nr == 2 ? "Df2" : "Df3");
+
+    config.type = DRIVE_35_DD;
+    config.speed = 1; 
 }
 
 void
@@ -31,11 +34,16 @@ Drive::_ping()
 }
 
 void
+Drive::_dumpConfig()
+{
+    plainmsg("           Type: %s\n", driveTypeName(config.type));
+    plainmsg("          Speed: %d\n", config.speed);
+}
+
+void
 Drive::_dump()
 {
     plainmsg("             Nr: %d\n", nr);
-    plainmsg("           Type: %s\n", driveTypeName(type));
-    plainmsg("          Speed: %d\n", speed);
     plainmsg("       Id count: %d\n", idCount);
     plainmsg("         Id bit: %d\n", idBit);
     plainmsg("          Motor: %s\n", motor ? "on" : "off");
@@ -128,24 +136,19 @@ Drive::setType(DriveType t)
 {
     assert(isDriveType(t));
     
-    type = t;
+    config.type = t;
  
-    debug("Setting drive type to %s\n", driveTypeName(type));
+    debug("Setting drive type to %s\n", driveTypeName(config.type));
 }
 
 void
 Drive::setSpeed(uint16_t value)
 {
-    assert(speed == 1 ||
-           speed == 2 ||
-           speed == 4 ||
-           speed == 8 ||
-           speed >= INT16_MAX);
-    
-    speed = value;
-    
-    debug("Setting acceleration factor to %d\n", value);
+    amiga->suspend();
+    config.speed = value;
+    amiga->resume();
 
+    debug("Setting acceleration factor to %d\n", config.speed);
 }
 
 uint32_t
@@ -162,7 +165,7 @@ Drive::getDriveId()
      * does not identify itself. It's ID is also read as 0x00000000.
      */
     
-    assert(type == DRIVE_35_DD);
+    assert(config.type == DRIVE_35_DD);
 
     if (nr == 0) {
         return 0x00000000;

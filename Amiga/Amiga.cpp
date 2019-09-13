@@ -199,17 +199,14 @@ Amiga::getConfig()
     config.filterType = paula.audioUnit.getFilterType();
     config.cpuEngine = CPU_MUSASHI;
     config.cpuSpeed = cpu.getSpeed();
-    // config.blitterAccuracy = agnus.blitter.getAccuracy();
-    // config.useFifo = paula.diskController.getUseFifo();
     config.serialDevice = serialPort.getDevice();
-
-    config.df0.type = df0.getType();
-    config.df1.type = df1.getType();
-    config.df2.type = df2.getType();
-    config.df3.type = df3.getType();
 
     config.blitter = agnus.blitter.getConfig(); 
     config.diskController = paula.diskController.getConfig();
+    config.df0 = df0.getConfig();
+    config.df1 = df1.getConfig();
+    config.df2 = df2.getConfig();
+    config.df3 = df3.getConfig();
 
     return config;
 }
@@ -401,7 +398,6 @@ Amiga::configure(ConfigOption option, long value)
                 return false;
             }
 
-            if (current.diskController.speed == value) return true;
             paula.diskController.setSpeed(value);
             break;
 
@@ -420,7 +416,7 @@ Amiga::configureDrive(unsigned drive, ConfigOption option, long value)
         return false;
     }
     
-    DriveConfiguration current =
+    DriveConfig current =
     drive == 0 ? getConfig().df0 :
     drive == 1 ? getConfig().df1 :
     drive == 2 ? getConfig().df2 : getConfig().df3;

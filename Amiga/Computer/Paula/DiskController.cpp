@@ -18,7 +18,6 @@ DiskController::DiskController()
     config.connected[1] = false;
     config.connected[2] = false;
     config.connected[3] = false;
-    config.speed = 1;
     config.useFifo = true;
 }
 
@@ -90,8 +89,7 @@ DiskController::_dumpConfig()
     plainmsg("          df1 : %s\n", config.connected[1] ? "connected" : "not connected");
     plainmsg("          df2 : %s\n", config.connected[2] ? "connected" : "not connected");
     plainmsg("          df3 : %s\n", config.connected[3] ? "connected" : "not connected");
-    plainmsg("        speed : %s\n", config.speed);
-    plainmsg("fifoBuffering : %s\n", config.useFifo ? "yes" : "no");
+    plainmsg("      useFifo : %s\n", config.useFifo ? "yes" : "no");
 }
 
 void
@@ -163,9 +161,14 @@ DiskController::setConnected(int df, bool value)
 void
 DiskController::setSpeed(int32_t value)
 {
-    pthread_mutex_lock(&lock);
-    config.speed = value;
-    pthread_mutex_unlock(&lock);
+    amiga->suspend();
+
+    df[0]->setSpeed(value);
+    df[1]->setSpeed(value);
+    df[2]->setSpeed(value);
+    df[3]->setSpeed(value);
+
+    amiga->resume();
 }
 
 void
