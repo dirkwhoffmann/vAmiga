@@ -18,6 +18,7 @@ DiskController::DiskController()
     config.connected[1] = false;
     config.connected[2] = false;
     config.connected[3] = false;
+    config.speed = 1;
     config.useFifo = true;
 }
 
@@ -145,10 +146,30 @@ DiskController::setConnected(int df, bool value)
     if (df == 0 && value == false) { return; }
     
     // Plug the drive in our out and inform the GUI
+    pthread_mutex_lock(&lock);
     config.connected[df] = value;
+    pthread_mutex_unlock(&lock);
+
     amiga->putMessage(value ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, df);
     amiga->putMessage(MSG_CONFIG);
 }
+
+void
+DiskController::setSpeed(int32_t value)
+{
+    pthread_mutex_lock(&lock);
+    config.speed = value;
+    pthread_mutex_unlock(&lock);
+}
+
+void
+DiskController::setUseFifo(bool value)
+{
+    pthread_mutex_lock(&lock);
+    config.useFifo = value;
+    pthread_mutex_unlock(&lock);
+}
+
 
 Drive *
 DiskController::getSelectedDrive()

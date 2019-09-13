@@ -149,8 +149,11 @@ public:
     void disconnect(int df) { setConnected(df, false); }
     void toggleConnected(int df) { setConnected(df, !isConnected(df)); }
 
+    int32_t getSpeed() { return config.speed; }
+    void setSpeed(int32_t value);
+
     bool getUseFifo() { return config.useFifo; }
-    void setUseFifo(bool value) { config.useFifo = value; }
+    void setUseFifo(bool value);
 
     
     //
