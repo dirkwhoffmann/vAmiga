@@ -140,7 +140,7 @@ Drive::setSpeed(uint16_t value)
            speed == 2 ||
            speed == 4 ||
            speed == 8 ||
-           speed == 65535);
+           speed >= INT16_MAX);
     
     speed = value;
     

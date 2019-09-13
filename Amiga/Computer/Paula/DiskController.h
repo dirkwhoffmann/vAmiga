@@ -44,7 +44,7 @@ class DiskController : public HardwareComponent {
     bool useFifo;
 
     // The number of words transferred during a single DMA cycle.
-    // int32_t acceleration = 1;
+    int32_t acceleration = 1;
 
     // Set to true if the currently read disk word matches the sync word.
     // NOT USED AT THE MOMENT
@@ -116,6 +116,7 @@ class DiskController : public HardwareComponent {
         & selected
         & state
         & useFifo
+        & acceleration
         & syncFlag
         & incoming
         & incomingCycle
