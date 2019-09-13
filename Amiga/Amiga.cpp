@@ -199,6 +199,7 @@ Amiga::getConfig()
     config.filterType = paula.audioUnit.getFilterType();
     config.cpuEngine = CPU_MUSASHI;
     config.cpuSpeed = cpu.getSpeed();
+    config.cpu = cpu.getConfig();
     config.serialDevice = serialPort.getDevice();
 
     config.blitter = agnus.blitter.getConfig(); 

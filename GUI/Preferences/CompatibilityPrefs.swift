@@ -16,7 +16,6 @@ extension PreferencesController {
         guard let amiga = amigaProxy else { return }
 
         let config = amiga.config()
-        // let poweredOff = amiga.isPoweredOff()
 
         // Graphics
         compClxSprSpr.state = config.clxSprSpr ? .on : .off

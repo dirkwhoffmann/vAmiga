@@ -101,9 +101,9 @@ typedef struct
     FilterType filterType;
     CPUEngine cpuEngine;
     int cpuSpeed;
+    CPUConfig cpu;
     BlitterConfig blitter;
     DiskControllerConfig diskController; 
-    // bool useFifo;
     long serialDevice;
     DriveConfig df0;
     DriveConfig df1;

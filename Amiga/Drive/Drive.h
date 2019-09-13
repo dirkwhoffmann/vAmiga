@@ -13,33 +13,16 @@
 #include "HardwareComponent.h"
 #include "Disk.h"
 
-class ADFFile;
-
 class Drive : public HardwareComponent {
     
     friend class DiskController;
-    
-private:
-    
+        
     // Drive number (0 = df0, 1 = df1, 2 = df2, 3 = df3)
     long nr = 0;
 
     // The current configuration
     DriveConfig config;
 
-
-    // The type of this drive
-    // DriveType type = DRIVE_35_DD;
-    
-    /* Acceleration factor of this drive
-     * This value equals the number of words that get transfered into memory
-     * during a single disk DMA cycle. This value must be 1 to emulate a real
-     * Amiga. If it set to, e.g., 2, the drive loads twice as fast.
-     * A negative value indicates a turbo drive for which the exect value of
-     * the acceleration factor has no meaning.
-     */
-    // uint16_t speed = 1;
-    
     // Position of the currently transmitted identification bit
     uint8_t idCount;
 

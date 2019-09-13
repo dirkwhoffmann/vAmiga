@@ -49,16 +49,17 @@ extern "C" uint32_t read_pc_on_reset(void);
 
 class CPU : public HardwareComponent {
 
+    // The current configuration
+    CPUConfig config;
+
     // Information shown in the GUI inspector panel
     CPUInfo info;
-
 
     //
     // Configuration
     //
 
-    // Bit shift value used for converting CPU cycles to master cycles
-    int speedShift = 2;
+ 
 
 
     //
@@ -111,16 +112,6 @@ public:
     // The trace buffer write pointer
     int writePtr = 0;
     
-    
-    //
-    // Constructing and destructing
-    //
-    
-public:
-    
-    CPU();
-    ~CPU();
-    
 
     //
     // Iterating over snapshot items
@@ -142,6 +133,23 @@ public:
         & waitStates;
     }
 
+
+    //
+    // Constructing and destructing
+    //
+    
+public:
+    
+    CPU();
+    ~CPU();
+
+    // Returns the current configuration
+    CPUConfig getConfig() { return config; }
+
+    // Configures the speed acceleration factor (1, 2, or 4)
+    int getSpeed();
+    void setSpeed(int factor);
+
     
     //
     // Methods from HardwareComponent
@@ -153,6 +161,7 @@ private:
     void _powerOn() override;
     void _reset() override;
     void _inspect() override;
+    void _dumpConfig() override;
     void _dump() override;
     void _dumpMusashi();
     size_t _size() override;
@@ -172,17 +181,6 @@ public:
     CPUInfo getInfo();
     DisassembledInstruction getInstrInfo(long nr);
     DisassembledInstruction getTracedInstrInfo(long nr);
-
-
-    //
-    // Configuring
-    //
-
-    // Returns the speed acceration factor (1, 2, or 4)
-    int getSpeed();
-
-    // Sets the speed acceration factor (1, 2, or 4)
-    void setSpeed(int factor);
 
 
     //
@@ -206,10 +204,10 @@ public:
     //
 
     // Advances the clock by a certain number of CPU cycles
-    void advance(CPUCycle cycles) { clock += cycles << speedShift; }
+    void advance(CPUCycle cycles) { clock += cycles << config.shift; }
 
     // Returns the clock in CPU cycles
-    CPUCycle cycles() { return clock >> speedShift; }
+    CPUCycle cycles() { return clock >> config.shift; }
 
 
     //
