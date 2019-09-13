@@ -1381,16 +1381,6 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->amiga->configureDrive(nr, VA_DRIVE_TYPE, type);
 }
-- (BOOL) configureDrive:(NSInteger)nr speed:(NSInteger)value
-{
-    return wrapper->amiga->configureDrive(nr, VA_DRIVE_SPEED, value);
-}
-/*
-- (void) configureFifoBuffering:(BOOL)value
-{
-    wrapper->amiga->configureFifoBuffering(value);
-}
-*/
 - (void) addListener:(const void *)sender function:(Callback *)func
 {
     wrapper->amiga->addListener(sender, func);

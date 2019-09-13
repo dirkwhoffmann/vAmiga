@@ -112,13 +112,6 @@ extension PreferencesController {
         refresh()
     }
  
-    @IBAction func hwDriveSpeedAction(_ sender: NSPopUpButton!) {
-        
-        let nr = sender.tag
-        amigaProxy?.configureDrive(nr, speed: sender.selectedTag())
-        refresh()
-    }
-
     @IBAction func hwSerialDeviceAction(_ sender: NSPopUpButton!) {
 
         amigaProxy?.configure(VA_SERIAL_DEVICE, value: sender.selectedTag())

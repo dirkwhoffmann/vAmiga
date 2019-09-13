@@ -92,9 +92,7 @@ extension PreferencesController {
 
     @IBAction func compDriveSpeedAction(_ sender: NSPopUpButton!) {
 
-        for nr in 0...3 {
-            amigaProxy?.configureDrive(nr, speed: sender.selectedTag())
-        }
+        amigaProxy?.configure(VA_DRIVE_SPEED, value: sender.selectedTag())
         refresh()
     }
 
