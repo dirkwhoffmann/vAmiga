@@ -31,9 +31,9 @@ extension PreferencesController {
         hwFastRamPopup.selectItem(withTag: memConfig.fastRamSize)
 
         // Drive
-        hwDf1Connect.state = config.df1.connected ? .on : .off
-        hwDf2Connect.state = config.df2.connected ? .on : .off
-        hwDf3Connect.state = config.df3.connected ? .on : .off
+        hwDf1Connect.state = config.diskController.connected.1 ? .on : .off
+        hwDf2Connect.state = config.diskController.connected.2 ? .on : .off
+        hwDf3Connect.state = config.diskController.connected.3 ? .on : .off
         hwDf0Type.selectItem(withTag: config.df0.type.rawValue)
         hwDf1Type.selectItem(withTag: config.df1.type.rawValue)
         hwDf2Type.selectItem(withTag: config.df2.type.rawValue)
@@ -52,9 +52,9 @@ extension PreferencesController {
         hwDf2Connect.isEnabled = poweredOff
         hwDf3Connect.isEnabled = poweredOff
         hwDf0Type.isEnabled = poweredOff
-        hwDf1Type.isEnabled = poweredOff && config.df1.connected
-        hwDf2Type.isEnabled = poweredOff && config.df2.connected
-        hwDf3Type.isEnabled = poweredOff && config.df3.connected
+        hwDf1Type.isEnabled = poweredOff && config.diskController.connected.1
+        hwDf2Type.isEnabled = poweredOff && config.diskController.connected.2
+        hwDf3Type.isEnabled = poweredOff && config.diskController.connected.3
 
         // Label the OK button
         hwOKButton.title = okLabel

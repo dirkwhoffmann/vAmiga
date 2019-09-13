@@ -129,25 +129,19 @@ class DiskController : public HardwareComponent {
 
     
     //
-    // Constructing and destructing
+    // Constructing and configuring
     //
     
 public:
     
     DiskController();
 
-
-    //
-    // Configuring
-    //
-
     DiskControllerConfig getConfig() { return config; }
 
-    bool isConnected(int df) { assert(df < 4); return config.connected[df]; }
+    // bool isConnected(int df) { assert(df < 4); return config.connected[df]; }
     void setConnected(int df, bool value);
     void connect(int df) { setConnected(df, true); }
     void disconnect(int df) { setConnected(df, false); }
-    void toggleConnected(int df) { setConnected(df, !isConnected(df)); }
 
     int32_t getSpeed() { return config.speed; }
     void setSpeed(int32_t value);

@@ -560,6 +560,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->paula->audioUnit.getInfo();
 }
+- (DiskControllerConfig) getDiskControllerConfig
+{
+    return wrapper->paula->diskController.getConfig();
+}
 - (DiskControllerInfo) getDiskControllerInfo
 {
     return wrapper->paula->diskController.getInfo();
@@ -868,17 +872,15 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->controller->spinning();
 }
+/*
 - (BOOL) isConnected:(NSInteger)nr
 {
     return wrapper->controller->isConnected(nr);
 }
+*/
 - (void) setConnected:(NSInteger)nr value:(BOOL)value;
 {
     wrapper->controller->setConnected(nr, value);
-}
-- (void) toggleConnected:(NSInteger)nr
-{
-    wrapper->controller->toggleConnected(nr);
 }
 - (void) eject:(NSInteger)nr
 {

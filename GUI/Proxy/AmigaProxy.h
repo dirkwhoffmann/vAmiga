@@ -381,6 +381,7 @@ struct AmigaFileWrapper;
 - (void) dump;
 - (PaulaInfo) getInfo;
 - (AudioInfo) getAudioInfo;
+- (DiskControllerConfig) getDiskControllerConfig;
 - (DiskControllerInfo) getDiskControllerInfo;
 - (UARTInfo) getUARTInfo;
 
@@ -511,9 +512,8 @@ struct AmigaFileWrapper;
 - (BOOL) spinning:(NSInteger)nr;
 - (BOOL) spinning;
 
-- (BOOL) isConnected:(NSInteger)nr;
+// - (BOOL) isConnected:(NSInteger)nr;
 - (void) setConnected:(NSInteger)nr value:(BOOL)value;
-- (void) toggleConnected:(NSInteger)nr;
 
 - (void) eject:(NSInteger)nr;
 - (void) insert:(NSInteger)nr adf:(ADFFileProxy *)fileProxy;

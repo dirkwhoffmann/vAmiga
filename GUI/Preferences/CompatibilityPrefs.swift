@@ -37,12 +37,9 @@ extension PreferencesController {
         compFilterActivation.selectItem(withTag: config.filterActivation.rawValue)
 
         // Floppy drives
-        assert(config.df0.speed == config.df1.speed)
-        assert(config.df1.speed == config.df2.speed)
-        assert(config.df2.speed == config.df3.speed)
-        compDriveSpeed.selectItem(withTag: Int(config.df0.speed))
-        compFifoBuffering.isHidden = Int(config.df0.speed) > 256
-        compFifoBuffering.state = config.useFifo ? .on : .off
+        compDriveSpeed.selectItem(withTag: Int(config.diskController.speed))
+        compFifoBuffering.isHidden = config.diskController.speed > 256
+        compFifoBuffering.state = config.diskController.useFifo ? .on : .off
 
         // Lock controls if emulator is powered on
         // Nothing to do here at the moment

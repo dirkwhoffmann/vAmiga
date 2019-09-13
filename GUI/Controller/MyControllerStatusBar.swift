@@ -13,11 +13,13 @@ extension MyController {
         
         guard let amiga = amigaProxy else { return }
 
+        let dc = amiga.paula.getDiskControllerConfig()
+
         let isRunning = amiga.isRunning()
-        let df0IsConnected = amiga.diskController.isConnected(0)
-        let df1IsConnected = amiga.diskController.isConnected(1)
-        let df2IsConnected = amiga.diskController.isConnected(2)
-        let df3IsConnected = amiga.diskController.isConnected(3)
+        let df0IsConnected = dc.connected.0
+        let df1IsConnected = dc.connected.1
+        let df2IsConnected = dc.connected.2
+        let df3IsConnected = dc.connected.3
         let df0spinning = amiga.diskController.spinning(0)
         let df1spinning = amiga.diskController.spinning(1)
         let df2spinning = amiga.diskController.spinning(2)

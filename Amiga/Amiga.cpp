@@ -200,26 +200,16 @@ Amiga::getConfig()
     config.cpuEngine = CPU_MUSASHI;
     config.cpuSpeed = cpu.getSpeed();
     // config.blitterAccuracy = agnus.blitter.getAccuracy();
-    config.useFifo = paula.diskController.getUseFifo();
+    // config.useFifo = paula.diskController.getUseFifo();
     config.serialDevice = serialPort.getDevice();
 
-    config.df0.connected = paula.diskController.isConnected(0);
     config.df0.type = df0.getType();
-    config.df0.speed = df0.getSpeed();
-    
-    config.df1.connected = paula.diskController.isConnected(1);
     config.df1.type = df1.getType();
-    config.df1.speed = df1.getSpeed();
-
-    config.df2.connected = paula.diskController.isConnected(2);
     config.df2.type = df2.getType();
-    config.df2.speed = df2.getSpeed();
-
-    config.df3.connected = paula.diskController.isConnected(3);
     config.df3.type = df3.getType();
-    config.df3.speed = df3.getSpeed();
 
     config.blitter = agnus.blitter.getConfig(); 
+    config.diskController = paula.diskController.getConfig();
 
     return config;
 }
@@ -389,7 +379,7 @@ Amiga::configure(ConfigOption option, long value)
             
         case VA_FIFO_BUFFERING:
 
-            if (current.useFifo == value) return true;
+            if (current.diskController.useFifo == value) return true;
             paula.diskController.setUseFifo(value);
             break;
 
@@ -406,10 +396,13 @@ Amiga::configure(ConfigOption option, long value)
 
         case VA_DRIVE_SPEED:
 
-            configureDrive(0, VA_DRIVE_SPEED, value);
-            configureDrive(1, VA_DRIVE_SPEED, value);
-            configureDrive(2, VA_DRIVE_SPEED, value);
-            configureDrive(3, VA_DRIVE_SPEED, value);
+            if (value <= 0) {
+                warn("Invalid drive speed: %d\n", value);
+                return false;
+            }
+
+            if (current.diskController.speed == value) return true;
+            paula.diskController.setSpeed(value);
             break;
 
         default: assert(false);
@@ -441,7 +434,7 @@ Amiga::configureDrive(unsigned drive, ConfigOption option, long value)
                 return false;
             }
 
-            if (current.connected == value) return true;
+            if (getConfig().diskController.connected[drive] == value) return true;
             paula.diskController.setConnected(drive, value);
             break;
             
@@ -460,18 +453,7 @@ Amiga::configureDrive(unsigned drive, ConfigOption option, long value)
             if (current.type == value) return true;
             df[drive]->setType((DriveType)value);
             break;
-            
-        case VA_DRIVE_SPEED:
-            
-            if (value <= 0) {
-                warn("Invalid drive speed: %d\n", value);
-                return false;
-            }
-            
-            if (current.speed == value) return true;
-            df[drive]->setSpeed(value);
-            break;
-            
+
         default: assert(false);
     }
     
@@ -675,7 +657,8 @@ void
 Amiga::_dump()
 {
     AmigaConfiguration config = getConfig();
-    
+    DiskControllerConfig dc = config.diskController;
+
     dumpClock();
     plainmsg("    poweredOn: %s\n", isPoweredOn() ? "yes" : "no");
     plainmsg("   poweredOff: %s\n", isPoweredOff() ? "yes" : "no");
@@ -686,16 +669,16 @@ Amiga::_dump()
     plainmsg("   AmigaModel: %s\n", modelName(config.model));
     plainmsg("realTimeClock: %s\n", config.realTimeClock ? "yes" : "no");
     plainmsg("          df0: %s %s\n",
-             config.df0.connected ? "yes" : "no", driveTypeName(config.df0.type));
+             dc.connected[0] ? "yes" : "no", driveTypeName(config.df0.type));
     plainmsg("          df1: %s %s\n",
-             config.df1.connected ? "yes" : "no", driveTypeName(config.df1.type));
+             dc.connected[1] ? "yes" : "no", driveTypeName(config.df1.type));
     plainmsg("          df2: %s %s\n",
-             config.df2.connected ? "yes" : "no", driveTypeName(config.df2.type));
+             dc.connected[2] ? "yes" : "no", driveTypeName(config.df2.type));
     plainmsg("          df3: %s %s\n",
-             config.df3.connected ? "yes" : "no", driveTypeName(config.df3.type));
+             dc.connected[3] ? "yes" : "no", driveTypeName(config.df3.type));
 
     plainmsg("\n");
-    plainmsg("         warp: %d (%d) (%d)", warp);
+    plainmsg("         warp: %d", warp);
     plainmsg("\n");
 }
 

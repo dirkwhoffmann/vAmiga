@@ -938,6 +938,7 @@ extension MyController {
         let defaults = UserDefaults.standard
         let config = amiga.config()
         let memConfig = amiga.memConfig()
+        let dc = config.diskController
 
         defaults.set(config.model.rawValue, forKey: Keys.amigaModel)
         defaults.set(config.layout, forKey: Keys.layout)
@@ -946,14 +947,14 @@ extension MyController {
         defaults.set(memConfig.slowRamSize, forKey: Keys.slowRam)
         defaults.set(memConfig.fastRamSize, forKey: Keys.fastRam)
 
-        defaults.set(config.df0.speed, forKey: Keys.driveSpeed)
-        defaults.set(config.df0.connected, forKey: Keys.df0Connect)
+        defaults.set(dc.speed, forKey: Keys.driveSpeed)
+        defaults.set(dc.connected.0, forKey: Keys.df0Connect)
+        defaults.set(dc.connected.1, forKey: Keys.df1Connect)
+        defaults.set(dc.connected.2, forKey: Keys.df2Connect)
+        defaults.set(dc.connected.3, forKey: Keys.df3Connect)
         defaults.set(config.df0.type.rawValue, forKey: Keys.df0Type)
-        defaults.set(config.df1.connected, forKey: Keys.df1Connect)
         defaults.set(config.df1.type.rawValue, forKey: Keys.df1Type)
-        defaults.set(config.df2.connected, forKey: Keys.df2Connect)
         defaults.set(config.df2.type.rawValue, forKey: Keys.df2Type)
-        defaults.set(config.df3.connected, forKey: Keys.df3Connect)
         defaults.set(config.df3.type.rawValue, forKey: Keys.df3Type)
 
         defaults.set(config.realTimeClock, forKey: Keys.realTimeClock)
@@ -1086,6 +1087,6 @@ extension MyController {
         defaults.set(config.filterActivation.rawValue, forKey: Keys.filterActivation)
         defaults.set(config.filterType.rawValue, forKey: Keys.filterType)
         defaults.set(config.blitter.accuracy, forKey: Keys.blitterAccuracy)
-        defaults.set(config.useFifo, forKey: Keys.fifoBuffering)
+        defaults.set(config.diskController.useFifo, forKey: Keys.fifoBuffering)
     }
 }

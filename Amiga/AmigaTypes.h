@@ -90,9 +90,9 @@ RunLoopControlFlag;
 
 typedef struct
 {
-    bool connected;
+    // bool connected;
     DriveType type;
-    uint16_t speed;
+    // uint16_t speed;
 }
 DriveConfiguration;
 
@@ -109,9 +109,9 @@ typedef struct
     FilterType filterType;
     CPUEngine cpuEngine;
     int cpuSpeed;
-    // int blitterAccuracy;
     BlitterConfig blitter;
-    bool useFifo;
+    DiskControllerConfig diskController; 
+    // bool useFifo;
     long serialDevice;
     DriveConfiguration df0;
     DriveConfiguration df1;

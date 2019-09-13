@@ -317,8 +317,9 @@ class MyController: NSWindowController, MessageReceiver {
         get { return amiga.memConfig().fastRamSize }
         set { amiga.configureFastMemory(newValue); }
     }
+    /*
     var df0connected: Bool {
-        get { return amiga.config().df0.connected }
+        get { return amiga.config().diskController.connected.0 }
         set { amiga.configureDrive(0, connected: newValue); }
     }
     var df0type: Int {
@@ -326,13 +327,14 @@ class MyController: NSWindowController, MessageReceiver {
         set { amiga.configureDrive(0, type: newValue); }
     }
     var df1connected: Bool {
-        get { return amiga.config().df0.connected }
+        get { return amiga.config().diskController.connected.1 }
         set { amiga.configureDrive(0, connected: newValue); }
     }
     var df1type: Int {
-        get { return amiga.config().df0.type.rawValue }
+        get { return amiga.config().df1.type.rawValue }
         set { amiga.configureDrive(0, type: newValue); }
     }
+    */
     var realTimeClock: Bool {
         get { return amiga.config().realTimeClock }
         set { amiga.configureRealTimeClock(newValue); }
