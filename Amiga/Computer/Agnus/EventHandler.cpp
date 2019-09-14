@@ -288,7 +288,7 @@ Agnus::dumpEvents()
 {
     inspectEvents();
     
-    amiga->dumpClock();
+    amiga.dumpClock();
     
     plainmsg("Events:\n");
     for (unsigned i = 0; i < SLOT_COUNT; i++) {
@@ -417,7 +417,7 @@ Agnus::executeEventsUntil(Cycle cycle) {
             paula->serviceIrqEvent();
         }
         if (isDue<KBD_SLOT>(cycle)) {
-            amiga->keyboard.serviceKeyboardEvent(slot[KBD_SLOT].id);
+            amiga.keyboard.serviceKeyboardEvent(slot[KBD_SLOT].id);
         }
         if (isDue<TXD_SLOT>(cycle)) {
             paula->uart.serveTxdEvent(slot[TXD_SLOT].id);
@@ -772,18 +772,18 @@ Agnus::serviceINSEvent()
     switch (slot[INS_SLOT].id) {
 
         case INS_NONE:   break;
-        case INS_AMIGA:  amiga->inspect(); break;
-        case INS_CPU:    amiga->cpu.inspect(); break;
+        case INS_AMIGA:  amiga.inspect(); break;
+        case INS_CPU:    amiga.cpu.inspect(); break;
         case INS_MEM:    mem->inspect(); break;
         case INS_CIA:    ciaA->inspect(); ciaB->inspect(); break;
         case INS_AGNUS:  inspect(); break;
         case INS_PAULA:  paula->inspect(); break;
         case INS_DENISE: denise->inspect(); break;
         case INS_PORTS:
-            amiga->serialPort.inspect();
-            amiga->paula.uart.inspect();
-            amiga->controlPort1.inspect();
-            amiga->controlPort2.inspect();
+            amiga.serialPort.inspect();
+            amiga.paula.uart.inspect();
+            amiga.controlPort1.inspect();
+            amiga.controlPort2.inspect();
             break;
         case INS_EVENTS: inspectEvents(); break;
         default:         assert(false);

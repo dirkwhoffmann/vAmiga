@@ -74,7 +74,7 @@ class Agnus : public SubComponent
 public:
     
     // Every Amiga fan knows what the Copper is.
-    Copper copper = Copper(a);
+    Copper copper = Copper(amiga);
     
     // Every Amiga fan knows what the Blitter is.
     Blitter blitter;

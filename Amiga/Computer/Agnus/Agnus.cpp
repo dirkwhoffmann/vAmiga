@@ -165,12 +165,12 @@ Agnus::initDASTables()
 void
 Agnus::_initialize()
 {
-    cpu = &amiga->cpu;
-    ciaA = &amiga->ciaA;
-    ciaB = &amiga->ciaB;
-    mem = &amiga->mem;
-    denise = &amiga->denise;
-    paula = &amiga->paula;
+    cpu = &amiga.cpu;
+    ciaA = &amiga.ciaA;
+    ciaB = &amiga.ciaB;
+    mem = &amiga.mem;
+    denise = &amiga.denise;
+    paula = &amiga.paula;
 }
 
 void
@@ -1675,7 +1675,7 @@ Agnus::hsyncHandler()
     paula->audioUnit.executeUntil(clock);
 
     // Let CIA B count the HSYNCs
-    amiga->ciaB.incrementTOD();
+    amiga.ciaB.incrementTOD();
 
     // Reset the horizontal counter
     pos.h = 0;
@@ -1842,7 +1842,7 @@ Agnus::vsyncHandler()
     diwHFlop = true; 
     
     // CIA A counts VSYNCs
-    amiga->ciaA.incrementTOD();
+    amiga.ciaA.incrementTOD();
     
     // Trigger VSYNC interrupt
     paula->raiseIrq(INT_VERTB);
@@ -1850,15 +1850,15 @@ Agnus::vsyncHandler()
     // Let the subcomponents do their own VSYNC stuff
     copper.vsyncAction();
     denise->beginOfFrame(frameInfo.interlaced);
-    amiga->joystick1.execute();
-    amiga->joystick2.execute();
+    amiga.joystick1.execute();
+    amiga.joystick2.execute();
 
     // Prepare to take a snapshot once in a while
-    if (amiga->snapshotIsDue()) amiga->signalSnapshot();
+    if (amiga.snapshotIsDue()) amiga.signalSnapshot();
         
     // Count some sheep (zzzzzz) ...
-    if (!amiga->getWarp()) {
-        amiga->synchronizeTiming();
+    if (!amiga.getWarp()) {
+        amiga.synchronizeTiming();
     }
 }
 

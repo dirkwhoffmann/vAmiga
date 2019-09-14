@@ -43,7 +43,7 @@ time_t
 RTC::getTime()
 {
     Cycle result;
-    Cycle master = amiga->cpu.clock;
+    Cycle master = amiga.cpu.clock;
 
     long timeBetweenCalls = (master - lastCall) / 28000000;
     // debug(2, "timeBetweenCalls = %d\n", timeBetweenCalls);

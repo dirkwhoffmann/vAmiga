@@ -12,20 +12,7 @@
 
 #include "AmigaObject.h"
 
-//
-// Forward declarations
-//
-
 class Amiga;
-class Memory;
-class CPU;
-class CIAA;
-class CIAB;
-class Agnus;
-class Denise;
-class Paula;
-class ZorroManager;
-class ControlPort;
 
 /* Base class for all hardware components
  * This class defines the base functionality of all hardware components.
@@ -303,20 +290,5 @@ applyToPersistentItems(writer); \
 applyToResetItems(writer); \
 debug(SNAP_DEBUG, "Serialized to %d bytes\n", writer.ptr - buffer); \
 return writer.ptr - buffer;
-
-/* Base class for all sub components
- * This class provides references to all Amiga components
- */
-class SubComponent : public HardwareComponent {
-
-protected:
-
-    Amiga& a;
-    Agnus& ag;
-
-public:
-
-    SubComponent(Amiga& ref);
-};
 
 #endif
