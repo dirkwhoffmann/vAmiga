@@ -12,7 +12,7 @@
 
 #include "HardwareComponent.h"
 
-class RTC : public HardwareComponent {
+class RTC : public SubComponent {
  
     private:
     
@@ -46,7 +46,7 @@ class RTC : public HardwareComponent {
     
     public:
     
-    RTC();
+    RTC(Amiga& ref);
 
 
     //

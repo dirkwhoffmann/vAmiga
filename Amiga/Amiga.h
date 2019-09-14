@@ -101,13 +101,13 @@ public:
     CIAB ciaB;
     
     // Real-time clock
-    RTC rtc;
+    RTC rtc = RTC(*this);
     
     // Memory
     Memory mem;
     
     // The DMA controller (part of Agnus)
-    Agnus agnus;
+    Agnus agnus = Agnus(*this);
     
     // Denise (Video)
     Denise denise;

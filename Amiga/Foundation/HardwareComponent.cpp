@@ -9,6 +9,11 @@
 
 #include "Amiga.h"
 
+SubComponent::SubComponent(Amiga& ref) : a(ref), ag(ref.agnus)
+{
+
+};
+
 HardwareComponent::HardwareComponent()
 {
     pthread_mutex_init(&lock, NULL);

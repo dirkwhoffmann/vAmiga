@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-RTC::RTC()
+RTC::RTC(Amiga& ref) : SubComponent(ref)
 {
     setDescription("RTC");
 }

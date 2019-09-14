@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-Agnus::Agnus()
+Agnus::Agnus(Amiga& ref) : SubComponent(ref)
 {
     setDescription("Agnus");
     

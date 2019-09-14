@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-Copper::Copper()
+Copper::Copper(Amiga& ref) : SubComponent(ref)
 {
     setDescription("Copper");
 }
@@ -18,7 +18,6 @@ void
 Copper::_initialize()
 {
     mem = &amiga->mem;
-    agnus = &amiga->agnus;
     colorizer = &amiga->denise.pixelEngine;
 }
 
@@ -29,7 +28,7 @@ Copper::_inspect()
     pthread_mutex_lock(&lock);
     
     info.cdang   = cdang;
-    info.active  = agnus->isPending<COP_SLOT>();
+    info.active  = ag.isPending<COP_SLOT>();
     info.coppc   = coppc; // coppcBase;
     info.cop1ins = cop1ins;
     info.cop2ins = cop2ins;
@@ -44,10 +43,10 @@ Copper::_inspect()
 void
 Copper::_dump()
 {
-    bool active = agnus->isPending<COP_SLOT>();
+    bool active = ag.isPending<COP_SLOT>();
     plainmsg("    cdang: %d\n", cdang);
     plainmsg("   active: %s\n", active ? "yes" : "no");
-    if (active) plainmsg("    state: %d\n", agnus->slot[COP_SLOT].id);
+    if (active) plainmsg("    state: %d\n", ag.slot[COP_SLOT].id);
     plainmsg("    coppc: %X\n", coppc);
     plainmsg("  copins1: %X\n", cop1ins);
     plainmsg("  copins2: %X\n", cop2ins);
@@ -127,7 +126,7 @@ Copper::pokeCOP1LCH(uint16_t value)
     /* THIS IS NOT 100% CORRECT. IN WINFELLOW, THE PC IS ONLY WRITTEN TO IF
      * DMA WAS OFF SINCE THE LAST VSYNC EVENT (?!). NEED A TEST CASE FOR THIS.
      */
-    if (!agnus->copDMA()) switchToCopperList(1);
+    if (!ag.copDMA()) switchToCopperList(1);
 }
 
 void
@@ -143,7 +142,7 @@ Copper::pokeCOP1LCL(uint16_t value)
     /* THIS IS NOT 100% CORRECT. IN WINFELLOW, THE PC IS ONLY WRITTEN TO IF
      * DMA WAS OFF SINCE THE LAST VSYNC EVENT (?!). NEED A TEST CASE FOR THIS.
      */
-    if (!agnus->copDMA()) switchToCopperList(1);
+    if (!ag.copDMA()) switchToCopperList(1);
 }
 
 void
@@ -190,7 +189,7 @@ Copper::findMatch(Beam &result)
     int16_t vMatch, hMatch;
 
     // Get the current beam position
-    Beam b = agnus->pos;
+    Beam b = ag.pos;
 
     // Set up the comparison positions
     int16_t vComp = getVP();
@@ -236,7 +235,7 @@ Copper::findMatch(Beam &result)
 bool
 Copper::findVerticalMatch(int16_t vStrt, int16_t vComp, int16_t vMask, int16_t &result)
 {
-    int16_t vStop = agnus->frameInfo.numLines;
+    int16_t vStop = ag.frameInfo.numLines;
 
     // Iterate through all vertical positions
     for (int v = vStrt; v < vStop; v++) {
@@ -273,14 +272,14 @@ bool
 Copper::findMatchNew(Beam &match)
 {
     // Start searching at the current beam position
-    uint32_t beam = (agnus->pos.v << 8) | agnus->pos.h;
+    uint32_t beam = (ag.pos.v << 8) | ag.pos.h;
 
     // Get the comparison position and the comparison mask
     uint32_t comp = getVPHP();
     uint32_t mask = getVMHM();
 
     // Iterate through all lines starting from the current position
-    while ((beam >> 8) < agnus->frameInfo.numLines) {
+    while ((beam >> 8) < ag.frameInfo.numLines) {
 
         // Check if the vertical components are equal
         if ((beam & mask & ~0xFF) == (comp & mask & ~0xFF)) {
@@ -346,12 +345,12 @@ Copper::move(int addr, uint16_t value)
     if (addr >= 0x180 && addr <= 0x1BE) {
 
          // Color registers
-        colorizer->colRegHistory.recordChange(addr, value, 4 * agnus->pos.h);
+        colorizer->colRegHistory.recordChange(addr, value, 4 * ag.pos.h);
         return;
     }
 
     // Write the value
-    agnus->copperWrite(addr, value);
+    ag.copperWrite(addr, value);
 }
 
 #if 0
@@ -445,7 +444,7 @@ Copper::comparator(Beam beam)
 bool
 Copper::comparator()
 {
-    return comparator(agnus->pos);
+    return comparator(ag.pos);
 }
 
 bool
@@ -578,10 +577,10 @@ Copper::serviceEvent(EventID id)
             if (verbose) debug("COP_REQ_DMA\n");
 
             // Wait for the next free cycle suitable for DMA
-            if (!agnus->copperCanDoDMA()) { reschedule(); break; }
+            if (!ag.copperCanDoDMA()) { reschedule(); break; }
 
             // Don't wake up in an odd cycle
-            if (agnus->pos.h % 2) { reschedule(); break; }
+            if (ag.pos.h % 2) { reschedule(); break; }
 
             // Continue with fetching the first instruction word
             schedule(COP_FETCH);
@@ -592,10 +591,10 @@ Copper::serviceEvent(EventID id)
             if (verbose) debug("COP_FETCH\n");
 
             // Wait for the next free cycle suitable for DMA
-            if (!agnus->copperCanDoDMA()) { reschedule(); break; }
+            if (!ag.copperCanDoDMA()) { reschedule(); break; }
 
             // Load the first instruction word
-            cop1ins = agnus->copperRead(coppc);
+            cop1ins = ag.copperRead(coppc);
             // coppcBase = coppc;
             advancePC();
 
@@ -615,17 +614,17 @@ Copper::serviceEvent(EventID id)
             if (verbose) debug("COP_MOVE\n");
 
             // Wait for the next free cycle suitable for DMA
-            if (!agnus->copperCanDoDMA()) { reschedule(); break; }
+            if (!ag.copperCanDoDMA()) { reschedule(); break; }
 
             // Load the second instruction word
-            cop2ins = agnus->copperRead(coppc);
+            cop2ins = ag.copperRead(coppc);
             advancePC();
 
             // Extract register number from the first instruction word
             reg = (cop1ins & 0x1FE);
 
             // Stop the Copper if address is illegal
-            if (isIllegalAddress(reg)) { agnus->cancel<COP_SLOT>(); break; }
+            if (isIllegalAddress(reg)) { ag.cancel<COP_SLOT>(); break; }
 
             // Write into the custom register
             if (!skip) move(reg, cop2ins);
@@ -640,10 +639,10 @@ Copper::serviceEvent(EventID id)
             if (verbose) debug("COP_WAIT_OR_SKIP\n");
 
             // Wait for the next free cycle suitable for DMA
-            if (!agnus->copperCanDoDMA()) { reschedule(); break; }
+            if (!ag.copperCanDoDMA()) { reschedule(); break; }
 
             // Load the second instruction word
-            cop2ins = agnus->copperRead(coppc);
+            cop2ins = ag.copperRead(coppc);
             advancePC();
 
             // Fork execution depending on the instruction type
@@ -657,14 +656,14 @@ Copper::serviceEvent(EventID id)
 
             // Check the Blitte Finish Disable bit
             if (getBFD() == 0) {
-                if (agnus->blitter.isBusy()) {
+                if (ag.blitter.isBusy()) {
                     reschedule();
                     break;
                 }
             }
 
             // Wait for the next free cycle
-            if (!agnus->copperCanRun()) { reschedule(); break; }
+            if (!ag.copperCanRun()) { reschedule(); break; }
 
             // Schedule next state
             schedule(COP_WAIT2);
@@ -675,7 +674,7 @@ Copper::serviceEvent(EventID id)
             if (verbose) debug("COP_WAIT2\n");
 
             // Wait for the next free cycle
-            if (!agnus->copperCanRun()) { reschedule(); break; }
+            if (!ag.copperCanRun()) { reschedule(); break; }
             
             // Clear the skip flag
             skip = false;
@@ -684,19 +683,19 @@ Copper::serviceEvent(EventID id)
             if (findMatchNew(trigger)) {
 
                 // In how many cycles do we get there?
-                int delay = trigger - agnus->pos;
+                int delay = trigger - ag.pos;
 
                 if (verbose) debug("(%d,%d) matches in %d cycles\n", trigger.v, trigger.h, delay);
 
                 if (delay == 0) {
 
                     // Copper does not stop
-                    agnus->scheduleRel<COP_SLOT>(DMA_CYCLES(2), COP_FETCH);
+                    ag.scheduleRel<COP_SLOT>(DMA_CYCLES(2), COP_FETCH);
 
                 } else if (delay == 2) {
 
                     // Copper does not stop
-                    agnus->scheduleRel<COP_SLOT>(DMA_CYCLES(2), COP_FETCH);
+                    ag.scheduleRel<COP_SLOT>(DMA_CYCLES(2), COP_FETCH);
 
                 } else {
 
@@ -704,13 +703,13 @@ Copper::serviceEvent(EventID id)
                     delay -= 2;
 
                     // ... with a COP_REQ_DMA event.
-                    agnus->scheduleRel<COP_SLOT>(DMA_CYCLES(delay), COP_REQ_DMA);
+                    ag.scheduleRel<COP_SLOT>(DMA_CYCLES(delay), COP_REQ_DMA);
                 }
 
             } else {
 
                 if (verbose) debug("(%d,%d) does not match in this frame\n", trigger.v, trigger.h);
-                agnus->cancel<COP_SLOT>();
+                ag.cancel<COP_SLOT>();
             }
             break;
 
@@ -719,7 +718,7 @@ Copper::serviceEvent(EventID id)
             if (verbose) debug("COP_SKIP1\n");
 
             // Wait for the next free cycle
-            if (!agnus->copperCanRun()) { reschedule(); break; }
+            if (!ag.copperCanRun()) { reschedule(); break; }
 
             // Schedule next state
             schedule(COP_SKIP2);
@@ -730,13 +729,13 @@ Copper::serviceEvent(EventID id)
             if (verbose) debug("COP_SKIP2\n");
 
             // Wait for the next free DMA cycle
-            if (!agnus->copperCanRun()) { reschedule(); break; }
+            if (!ag.copperCanRun()) { reschedule(); break; }
 
             // vAmigaTS::copskip2 indicates that this state already blocks at 0xE0
-            if (agnus->pos.h == 0xE0) { reschedule(); break; }
+            if (ag.pos.h == 0xE0) { reschedule(); break; }
 
             // Compute the beam position that needs to be compared
-            beam = agnus->addToBeam(agnus->pos, 2);
+            beam = ag.addToBeam(ag.pos, 2);
 
             // Run the comparator to see if the next command is skipped
             if (verbose) debug("Running comparator with (%d,%d)\n", beam.v, beam.h);
@@ -780,13 +779,13 @@ Copper::serviceEvent(EventID id)
 void
 Copper::schedule(EventID next, int delay)
 {
-    agnus->scheduleRel<COP_SLOT>(DMA_CYCLES(delay), next);
+    ag.scheduleRel<COP_SLOT>(DMA_CYCLES(delay), next);
 }
 
 void
 Copper::reschedule(int delay)
 {
-    agnus->rescheduleRel<COP_SLOT>(DMA_CYCLES(delay));
+    ag.rescheduleRel<COP_SLOT>(DMA_CYCLES(delay));
 }
 
 void
@@ -801,10 +800,10 @@ Copper::vsyncAction()
 
     // TODO: What is the exact timing here?
     switchToCopperList(1);
-    if (agnus->copDMA()) {
-        agnus->scheduleRel<COP_SLOT>(DMA_CYCLES(0), COP_REQ_DMA);
+    if (ag.copDMA()) {
+        ag.scheduleRel<COP_SLOT>(DMA_CYCLES(0), COP_REQ_DMA);
     } else {
-        agnus->cancel<COP_SLOT>();
+        ag.cancel<COP_SLOT>();
     }
 }
 

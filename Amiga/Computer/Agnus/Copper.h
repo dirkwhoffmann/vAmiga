@@ -12,13 +12,12 @@
 
 #include "Beam.h"
 
-class Copper : public HardwareComponent
+class Copper : public SubComponent
 {
     friend class Agnus;
 
     // References to other components
     class Memory *mem;
-    class Agnus *agnus;
     class PixelEngine *colorizer;
     
     // Information shown in the GUI inspector panel
@@ -76,8 +75,7 @@ public:
     
 public:
     
-    Copper();
-
+    Copper(Amiga& ref);
 
     //
     // Iterating over snapshot items

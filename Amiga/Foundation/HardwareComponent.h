@@ -304,4 +304,19 @@ applyToResetItems(writer); \
 debug(SNAP_DEBUG, "Serialized to %d bytes\n", writer.ptr - buffer); \
 return writer.ptr - buffer;
 
+/* Base class for all sub components
+ * This class provides references to all Amiga components
+ */
+class SubComponent : public HardwareComponent {
+
+protected:
+
+    Amiga& a;
+    Agnus& ag;
+
+public:
+
+    SubComponent(Amiga& ref);
+};
+
 #endif

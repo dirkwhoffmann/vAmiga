@@ -52,7 +52,7 @@
 #define VPOS(x) ((x) >> 8)
 #define HPOS(x) ((x) & 0xFF)
 
-class Agnus : public HardwareComponent
+class Agnus : public SubComponent
 {
     // References to other components
     class CPU *cpu;
@@ -74,7 +74,7 @@ class Agnus : public HardwareComponent
 public:
     
     // Every Amiga fan knows what the Copper is.
-    Copper copper;
+    Copper copper = Copper(a);
     
     // Every Amiga fan knows what the Blitter is.
     Blitter blitter;
@@ -468,7 +468,7 @@ private:
     
 public:
     
-    Agnus();
+    Agnus(Amiga& ref);
 
     // Initializes the lookup tables
     void initLookupTables();
