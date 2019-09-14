@@ -16,15 +16,22 @@
 // Forward declarations of all sub components
 //
 
-class Memory;
 class CPU;
 class CIAA;
 class CIAB;
+class RTC;
+class Memory;
 class Agnus;
 class Denise;
 class Paula;
 class ZorroManager;
 class ControlPort;
+class SerialPort;
+class Mouse;
+class Joystick;
+class Keyboard;
+class Drive;
+
 
 /* Base class for all sub components
  * This class provides references to all Amiga components
