@@ -211,7 +211,7 @@ public:
 public:
     
     // Getter and setter for the program counter.
-    uint32_t getPC();
+    uint32_t getPC() const;
     void setPC(uint32_t value); 
 
     // Returns the current value of the status register.

@@ -87,15 +87,6 @@ public:
     
     
     //
-    // Methods from AmigaObject
-    //
-    
-private:
-    
-    void prefix() const override;
-    
-    
-    //
     // Initializing the component
     //
     

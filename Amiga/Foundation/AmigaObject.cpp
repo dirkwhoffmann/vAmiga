@@ -22,7 +22,7 @@ fprintf(stderr, "%s%s", trailer, buf);
 
 #define VAPRINT(trailer) \
 prefix(); \
-fprintf(stderr, "%s%s", trailer, buf);
+fprintf(stderr, "%s: %s%s", getDescription(), trailer, buf);
 
 void
 AmigaObject::prefix() const

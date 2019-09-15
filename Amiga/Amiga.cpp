@@ -477,6 +477,36 @@ Amiga::configureRealTimeClock(bool value)
 }
 
 void
+Amiga::prefix() const
+{
+    fprintf(stderr, "[%lld] (%3d,%3d) ",
+            agnus.frame, agnus.pos.v, agnus.pos.h);
+
+    fprintf(stderr, " %06X ", cpu.getPC());
+
+    uint16_t dmacon = agnus.dmacon;
+    bool dmaen = dmacon & DMAEN;
+    fprintf(stderr, "%c%c%c%c%c%c ",
+            (dmacon & BPLEN) ? (dmaen ? 'B' : 'B') : '-',
+            (dmacon & COPEN) ? (dmaen ? 'C' : 'c') : '-',
+            (dmacon & BLTEN) ? (dmaen ? 'B' : 'b') : '-',
+            (dmacon & SPREN) ? (dmaen ? 'S' : 's') : '-',
+            (dmacon & DSKEN) ? (dmaen ? 'D' : 'd') : '-',
+            (dmacon & AUDEN) ? (dmaen ? 'A' : 'a') : '-');
+
+    fprintf(stderr, "%04X %04X ", paula.intena, paula.intreq);
+
+    if (agnus.copper.servicing) {
+        fprintf(stderr, "[%06X] ", agnus.copper.getCopPC());
+    }
+
+    /*
+    if (getDescription())
+        fprintf(stderr, "%s: ", getDescription());
+    */
+}
+
+void
 Amiga::reset()
 {
     suspend();

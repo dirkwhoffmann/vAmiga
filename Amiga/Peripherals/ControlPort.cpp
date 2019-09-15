@@ -87,7 +87,6 @@ ControlPort::joydat()
 
             mouseCounterX += mouse.getDeltaX();
             mouseCounterY += mouse.getDeltaY();
-            // assert(HI_LO(mouseCounterY & 0xFF, mouseCounterX & 0xFF) == amiga->mouse.getXY());
             return HI_LO(mouseCounterY & 0xFF, mouseCounterX & 0xFF);
 
         case CPD_JOYSTICK:

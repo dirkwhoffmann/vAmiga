@@ -124,7 +124,7 @@ private:
     CopperInfo getInfo();
     
     // Returns the program counter
-    uint32_t getCopPC() { return coppc; }
+    uint32_t getCopPC() const { return coppc; }
 
     
     //

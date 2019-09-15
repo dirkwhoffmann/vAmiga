@@ -82,6 +82,10 @@ protected:
 public:
 
     SubComponent(Amiga& ref);
+
+private:
+
+    void prefix() const override;
 };
 
 #endif

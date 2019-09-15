@@ -361,7 +361,7 @@ Paula::interruptLevel()
 
         mask &= intena;
 
-        // debug("INT: %d intena: %x intreq: %x mask: %x\n", amiga->ciaA.irqPin(), intena, intreq, mask);
+        // debug("INT: %d intena: %x intreq: %x mask: %x\n", ciaa.irqPin(), intena, intreq, mask);
 
         if (mask & 0b0110000000000000) return 6;
         if (mask & 0b0001100000000000) return 5;

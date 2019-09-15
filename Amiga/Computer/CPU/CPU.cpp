@@ -436,7 +436,7 @@ CPU::restoreContext()
 }
 
 uint32_t
-CPU::getPC()
+CPU::getPC() const
 {
     return m68k_get_reg(NULL, M68K_REG_PC);
 }

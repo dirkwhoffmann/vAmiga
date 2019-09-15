@@ -41,3 +41,5 @@ df3(ref.df3)
 {
 
 };
+
+void SubComponent::prefix() const { amiga.prefix(); }

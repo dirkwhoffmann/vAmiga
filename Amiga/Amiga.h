@@ -265,11 +265,17 @@ public:
         & clockBase;
     }
 
+    //
+    // Methods from AmigaObject
+    //
+
+    void prefix() const override;
+
 
     //
     // Methods from HardwareComponent
     //
-
+    
     void reset() override;
 
 private:

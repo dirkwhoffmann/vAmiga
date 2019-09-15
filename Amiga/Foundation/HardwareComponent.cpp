@@ -21,34 +21,6 @@ HardwareComponent::~HardwareComponent()
 }
 
 void
-HardwareComponent::prefix() const
-{
-    fprintf(stderr, "[%lld] (%3d,%3d) ",
-            amiga->agnus.frame, amiga->agnus.pos.v, amiga->agnus.pos.h);
-
-    fprintf(stderr, " %06X ", amiga->cpu.getPC());
-
-    uint16_t dmacon = amiga->agnus.dmacon;
-    bool dmaen = dmacon & DMAEN;
-    fprintf(stderr, "%c%c%c%c%c%c ",
-            (dmacon & BPLEN) ? (dmaen ? 'B' : 'B') : '-',
-            (dmacon & COPEN) ? (dmaen ? 'C' : 'c') : '-',
-            (dmacon & BLTEN) ? (dmaen ? 'B' : 'b') : '-',
-            (dmacon & SPREN) ? (dmaen ? 'S' : 's') : '-',
-            (dmacon & DSKEN) ? (dmaen ? 'D' : 'd') : '-',
-            (dmacon & AUDEN) ? (dmaen ? 'A' : 'a') : '-');
-
-    fprintf(stderr, "%04X %04X ", amiga->paula.intena, amiga->paula.intreq);
-
-    if (amiga->agnus.copper.servicing) {
-        fprintf(stderr, "[%06X] ", amiga->agnus.copper.getCopPC());
-    }
-
-    if (getDescription())
-        fprintf(stderr, "%s: ", getDescription());
-}
-
-void
 HardwareComponent::initialize(Amiga *amiga)
 {
     assert(this->amiga == NULL);

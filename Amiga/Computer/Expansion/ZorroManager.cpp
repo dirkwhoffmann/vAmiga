@@ -179,7 +179,7 @@ ZorroManager::pokeFastRamDevice(uint32_t addr, uint8_t value)
 {
     if (mem.config.fastRamSize == 0) return;
     
-    debug("    pokeFastRamDevice(%X, %X)\n", addr, value);
+    debug("pokeFastRamDevice(%X, %X)\n", addr, value);
     
     switch (addr & 0xFFFF) {
             
