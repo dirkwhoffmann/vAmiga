@@ -10,7 +10,7 @@
 #ifndef _AMIGA_MEMORY_INC
 #define _AMIGA_MEMORY_INC
 
-#include "HardwareComponent.h"
+#include "SubComponent.h"
 #include "BootRom.h"
 #include "KickRom.h"
 #include "ExtRom.h"
@@ -108,20 +108,10 @@ const uint32_t EXT_ROM_MASK  = 0x07FFFF; // 512 KB
 #define WRITE_EXT_32(x,y) WRITE_32(extRom + ((x) & EXT_ROM_MASK), (y))
 
 
-class Memory : public HardwareComponent {
+class Memory : public SubComponent {
     
     friend class Copper;
     friend class ZorroManager;
-    
-    // References to other components
-    class CPU *cpu;
-    class CIAA *ciaA;
-    class CIAB *ciaB;
-    class Agnus *agnus;
-    class Copper *copper;
-    class Denise *denise;
-    class Paula *paula;
-    class ZorroManager *zorro;
 
     // The current configuration
     MemoryConfig config;
@@ -192,7 +182,7 @@ public:
     
 public:
     
-    Memory();
+    Memory(Amiga& ref);
     ~Memory();
     
     // Frees the allocated memory

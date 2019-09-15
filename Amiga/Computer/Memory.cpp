@@ -10,7 +10,7 @@
 #include "Amiga.h"
 #include <new>
 
-Memory::Memory()
+Memory::Memory(Amiga& ref) : SubComponent(ref)
 {
     setDescription("Memory");
 
@@ -41,24 +41,16 @@ Memory::dealloc()
 void
 Memory::_initialize()
 {
-    cpu = &amiga->cpu;
-    ciaA = &amiga->ciaA;
-    ciaB = &amiga->ciaB;
-    agnus = &amiga->agnus;
-    copper = &amiga->agnus.copper;
-    denise = &amiga->denise;
-    paula = &amiga->paula;
-    zorro = &amiga->zorro;
 }
 
 void
 Memory::_powerOn()
 {
     // Make Rom writable if an A1000 is emulated
-    kickIsWritable = amiga->getConfig().model == AMIGA_1000;
+    kickIsWritable = amiga.getConfig().model == AMIGA_1000;
 
     // Remove Extended Rom if an A1000 is emulated.
-    if (hasExtRom() && amiga->getConfig().model == AMIGA_1000) {
+    if (hasExtRom() && amiga.getConfig().model == AMIGA_1000) {
         deleteExtRom();
     }
 
@@ -412,8 +404,8 @@ Memory::updateMemSrcTable()
     assert(config.slowRamSize % 0x10000 == 0);
     assert(config.fastRamSize % 0x10000 == 0);
 
-    bool rtc = amiga ? amiga->getConfig().realTimeClock : false;
-    bool ovl = amiga ? (ciaA->getPA() & 1) : false;
+    bool rtc = amiga.getConfig().realTimeClock;
+    bool ovl = ciaa.getPA() & 1;
     
     // debug("updateMemSrcTable: rtc = %d ovl = %d\n", rtc, ovl);
     
@@ -465,7 +457,7 @@ Memory::updateMemSrcTable()
     for (unsigned i = 0; ovl && i < 8 && memSrc[0xF8 + i] != MEM_UNMAPPED; i++)
         memSrc[i] = memSrc[(extRom ? 0xE0 : 0xF8) + i];
     
-    if (amiga) amiga->putMessage(MSG_MEM_LAYOUT);
+    amiga.putMessage(MSG_MEM_LAYOUT);
 }
 
 uint8_t
@@ -478,14 +470,14 @@ Memory::peek8(uint32_t addr)
             
         case MEM_UNMAPPED:
 
-            agnus->executeUntilBusIsFree();
+            agnus.executeUntilBusIsFree();
             dataBus = 0;
             return dataBus;
 
         case MEM_CHIP:
 
             ASSERT_CHIP_ADDR(addr);
-            agnus->executeUntilBusIsFree();
+            agnus.executeUntilBusIsFree();
             dataBus = READ_CHIP_8(addr);
             return dataBus;
 
@@ -498,35 +490,35 @@ Memory::peek8(uint32_t addr)
         case MEM_CIA:
 
             ASSERT_CIA_ADDR(addr);
-            agnus->executeUntilBusIsFree();
+            agnus.executeUntilBusIsFree();
             dataBus = peekCIA8(addr);
             return dataBus;
 
         case MEM_SLOW:
 
             ASSERT_SLOW_ADDR(addr);
-            agnus->executeUntilBusIsFree();
+            agnus.executeUntilBusIsFree();
             dataBus = READ_SLOW_8(addr);
             return dataBus;
 
         case MEM_RTC:
 
             ASSERT_RTC_ADDR(addr);
-            agnus->executeUntilBusIsFree();
+            agnus.executeUntilBusIsFree();
             dataBus = peekRTC8(addr);
             return dataBus;
 
         case MEM_OCS:
 
             ASSERT_OCS_ADDR(addr);
-            agnus->executeUntilBusIsFree();
+            agnus.executeUntilBusIsFree();
             dataBus = peekCustom8(addr);
             return dataBus;
 
         case MEM_AUTOCONF:
 
             ASSERT_AUTO_ADDR(addr);
-            agnus->executeUntilBusIsFree();
+            agnus.executeUntilBusIsFree();
             dataBus = peekAutoConf8(addr);
             return dataBus;
 
@@ -580,14 +572,14 @@ Memory::peek16(uint32_t addr)
 
                 case MEM_UNMAPPED:
 
-                    agnus->executeUntilBusIsFree();
+                    agnus.executeUntilBusIsFree();
                     dataBus = 0;
                     return dataBus;
 
                 case MEM_CHIP:
 
                     ASSERT_CHIP_ADDR(addr);
-                    agnus->executeUntilBusIsFree();
+                    agnus.executeUntilBusIsFree();
                     dataBus = READ_CHIP_16(addr);
                     return dataBus;
 
@@ -599,35 +591,35 @@ Memory::peek16(uint32_t addr)
                 case MEM_CIA:
 
                     ASSERT_CIA_ADDR(addr);
-                    agnus->executeUntilBusIsFree();
+                    agnus.executeUntilBusIsFree();
                     dataBus = peekCIA16(addr);
                     return dataBus;
 
                 case MEM_SLOW:
 
                     ASSERT_SLOW_ADDR(addr);
-                    agnus->executeUntilBusIsFree();
+                    agnus.executeUntilBusIsFree();
                     dataBus = READ_SLOW_16(addr);
                     return dataBus;
 
                 case MEM_RTC:
 
                     ASSERT_RTC_ADDR(addr);
-                    agnus->executeUntilBusIsFree();
+                    agnus.executeUntilBusIsFree();
                     dataBus = peekRTC16(addr);
                     return dataBus;
 
                 case MEM_OCS:
 
                     ASSERT_OCS_ADDR(addr);
-                    agnus->executeUntilBusIsFree();
+                    agnus.executeUntilBusIsFree();
                     dataBus = peekCustom16(addr);
                     return dataBus;
 
                 case MEM_AUTOCONF:
 
                     ASSERT_AUTO_ADDR(addr);
-                    agnus->executeUntilBusIsFree();
+                    agnus.executeUntilBusIsFree();
                     dataBus = peekAutoConf16(addr);
                     return dataBus;
 
@@ -764,14 +756,14 @@ Memory::poke16(uint32_t addr, uint16_t value)
 
                 case MEM_UNMAPPED:
 
-                    agnus->executeUntilBusIsFree();
+                    agnus.executeUntilBusIsFree();
                     dataBus = value;
                     return;
 
                 case MEM_CHIP:
 
                     ASSERT_CHIP_ADDR(addr);
-                    agnus->executeUntilBusIsFree();
+                    agnus.executeUntilBusIsFree();
                     dataBus = value;
                     WRITE_CHIP_16(addr, value);
                     return;
@@ -785,7 +777,7 @@ Memory::poke16(uint32_t addr, uint16_t value)
                 case MEM_CIA:
 
                     ASSERT_CIA_ADDR(addr);
-                    agnus->executeUntilBusIsFree();
+                    agnus.executeUntilBusIsFree();
                     dataBus = value;
                     pokeCIA16(addr, value);
                     return;
@@ -793,7 +785,7 @@ Memory::poke16(uint32_t addr, uint16_t value)
                 case MEM_SLOW:
 
                     ASSERT_SLOW_ADDR(addr);
-                    agnus->executeUntilBusIsFree();
+                    agnus.executeUntilBusIsFree();
                     dataBus = value;
                     WRITE_SLOW_16(addr, value);
                     return;
@@ -801,7 +793,7 @@ Memory::poke16(uint32_t addr, uint16_t value)
                 case MEM_RTC:
 
                     ASSERT_RTC_ADDR(addr);
-                    agnus->executeUntilBusIsFree();
+                    agnus.executeUntilBusIsFree();
                     dataBus = value;
                     pokeRTC16(addr, value);
                     return;
@@ -809,7 +801,7 @@ Memory::poke16(uint32_t addr, uint16_t value)
                 case MEM_OCS:
 
                     ASSERT_OCS_ADDR(addr);
-                    agnus->executeUntilBusIsFree();
+                    agnus.executeUntilBusIsFree();
                     dataBus = value;
                     pokeCustom16<POKE_CPU>(addr, value);
                     return;
@@ -817,7 +809,7 @@ Memory::poke16(uint32_t addr, uint16_t value)
                 case MEM_AUTOCONF:
 
                     ASSERT_AUTO_ADDR(addr);
-                    agnus->executeUntilBusIsFree();
+                    agnus.executeUntilBusIsFree();
                     dataBus = value;
                     pokeAutoConf16(addr, value);
                     return;
@@ -865,16 +857,16 @@ Memory::peekCIA8(uint32_t addr)
     switch (sel) {
             
         case 0b00:
-            return a0 ? ciaA->peek(reg) : ciaB->peek(reg);
+            return a0 ? ciaa.peek(reg) : ciab.peek(reg);
             
         case 0b01:
-            return a0 ? LO_BYTE(cpu->getIR()) : ciaB->peek(reg);
+            return a0 ? LO_BYTE(cpu.getIR()) : ciab.peek(reg);
             
         case 0b10:
-            return a0 ? ciaA->peek(reg) : HI_BYTE(cpu->getIR());
+            return a0 ? ciaa.peek(reg) : HI_BYTE(cpu.getIR());
             
         case 0b11:
-            return a0 ? LO_BYTE(cpu->getIR()) : HI_BYTE(cpu->getIR());
+            return a0 ? LO_BYTE(cpu.getIR()) : HI_BYTE(cpu.getIR());
     }
     assert(false);
     return 0;
@@ -892,16 +884,16 @@ Memory::peekCIA16(uint32_t addr)
     switch (sel) {
             
         case 0b00:
-            return HI_LO(ciaB->peek(reg), ciaA->peek(reg));
+            return HI_LO(ciab.peek(reg), ciaa.peek(reg));
             
         case 0b01:
-            return HI_LO(ciaB->peek(reg), 0xFF);
+            return HI_LO(ciab.peek(reg), 0xFF);
             
         case 0b10:
-            return HI_LO(0xFF, ciaA->peek(reg));
+            return HI_LO(0xFF, ciaa.peek(reg));
             
         case 0b11:
-            return cpu->getIR();
+            return cpu.getIR();
             
     }
     assert(false);
@@ -927,16 +919,16 @@ Memory::spypeekCIA8(uint32_t addr)
     switch (sel) {
             
         case 0b00:
-            return a0 ? ciaA->spypeek(reg) : ciaB->spypeek(reg);
+            return a0 ? ciaa.spypeek(reg) : ciab.spypeek(reg);
             
         case 0b01:
-            return a0 ? LO_BYTE(cpu->getIR()) : ciaB->spypeek(reg);
+            return a0 ? LO_BYTE(cpu.getIR()) : ciab.spypeek(reg);
             
         case 0b10:
-            return a0 ? ciaA->spypeek(reg) : HI_BYTE(cpu->getIR());
+            return a0 ? ciaa.spypeek(reg) : HI_BYTE(cpu.getIR());
             
         case 0b11:
-            return a0 ? LO_BYTE(cpu->getIR()) : HI_BYTE(cpu->getIR());
+            return a0 ? LO_BYTE(cpu.getIR()) : HI_BYTE(cpu.getIR());
     }
     assert(false);
     return 0;
@@ -951,16 +943,16 @@ Memory::spypeekCIA16(uint32_t addr)
     switch (sel) {
             
         case 0b00:
-            return HI_LO(ciaB->spypeek(reg), ciaA->spypeek(reg));
+            return HI_LO(ciab.spypeek(reg), ciaa.spypeek(reg));
             
         case 0b01:
-            return HI_LO(ciaB->spypeek(reg), 0xFF);
+            return HI_LO(ciab.spypeek(reg), 0xFF);
             
         case 0b10:
-            return HI_LO(0xFF, ciaA->spypeek(reg));
+            return HI_LO(0xFF, ciaa.spypeek(reg));
             
         case 0b11:
-            return cpu->getIR();
+            return cpu.getIR();
             
     }
     assert(false);
@@ -982,8 +974,8 @@ Memory::pokeCIA8(uint32_t addr, uint8_t value)
     uint32_t selA = (addr & 0x1000) == 0;
     uint32_t selB = (addr & 0x2000) == 0;
 
-    if (selA) ciaA->poke(reg, value);
-    if (selB) ciaB->poke(reg, value);
+    if (selA) ciaa.poke(reg, value);
+    if (selB) ciab.poke(reg, value);
 }
 
 void
@@ -998,8 +990,8 @@ Memory::pokeCIA16(uint32_t addr, uint16_t value)
     uint32_t selA = (addr & 0x1000) == 0;
     uint32_t selB = (addr & 0x2000) == 0;
     
-    if (selA) ciaA->poke(reg, LO_BYTE(value));
-    if (selB) ciaB->poke(reg, HI_BYTE(value));
+    if (selA) ciaa.poke(reg, LO_BYTE(value));
+    if (selB) ciab.poke(reg, HI_BYTE(value));
 }
 
 void
@@ -1023,7 +1015,7 @@ Memory::peekRTC8(uint32_t addr)
     /* Addr: 0001 0011 0101 0111 1001 1011
      * Reg:   -0   -0   -1   -1   -2   -2
      */
-    return amiga->rtc.peek((addr >> 2) & 0b1111);
+    return rtc.peek((addr >> 2) & 0b1111);
 }
 
 uint16_t
@@ -1043,7 +1035,7 @@ Memory::pokeRTC8(uint32_t addr, uint8_t value)
     /* Addr: 0001 0011 0101 0111 1001 1011
      * Reg:   -0   -0   -1   -1   -2   -2
      */
-    amiga->rtc.poke((addr >> 2) & 0b1111, value);
+    rtc.poke((addr >> 2) & 0b1111, value);
 }
 
 void
@@ -1075,35 +1067,35 @@ Memory::peekCustom16(uint32_t addr)
         case 0x000 >> 1: // BLTDDAT
             result = 0x00; break;
         case 0x002 >> 1: // DMACONR
-            result = agnus->peekDMACONR(); break;
+            result = agnus.peekDMACONR(); break;
         case 0x004 >> 1: // VPOSR
-            result = agnus->peekVPOSR(); break;
+            result = agnus.peekVPOSR(); break;
         case 0x006 >> 1: // VHPOSR
-            result = agnus->peekVHPOSR(); break;
+            result = agnus.peekVHPOSR(); break;
         case 0x008 >> 1: // DSKDATR
-            result = paula->diskController.peekDSKDATR(); break;
+            result = paula.diskController.peekDSKDATR(); break;
         case 0x00A >> 1: // JOY0DAT
-            result = denise->peekJOY0DATR(); break;
+            result = denise.peekJOY0DATR(); break;
         case 0x00C >> 1: // JOY1DAT
-            result = denise->peekJOY1DATR(); break;
+            result = denise.peekJOY1DATR(); break;
         case 0x00E >> 1: // CLXDAT
-            result = denise->peekCLXDAT(); break;
+            result = denise.peekCLXDAT(); break;
         case 0x010 >> 1: // ADKCONR
-            result = paula->peekADKCONR(); break;
+            result = paula.peekADKCONR(); break;
         case 0x012 >> 1: // POT0DAT
-            result = paula->peekPOTxDAT(0); break;
+            result = paula.peekPOTxDAT(0); break;
         case 0x014 >> 1: // POT1DAT
-            result = paula->peekPOTxDAT(1); break;
+            result = paula.peekPOTxDAT(1); break;
         case 0x016 >> 1: // POTGOR
-            result = paula->peekPOTGOR(); break;
+            result = paula.peekPOTGOR(); break;
         case 0x018 >> 1: // SERDATR
-            result = paula->uart.peekSERDATR(); break;
+            result = uart.peekSERDATR(); break;
         case 0x01A >> 1: // DSKBYTR
-            result = paula->diskController.peekDSKBYTR(); break;
+            result = diskController.peekDSKBYTR(); break;
         case 0x01C >> 1: // INTENAR
-            result = paula->peekINTENAR(); break;
+            result = paula.peekINTENAR(); break;
         case 0x01E >> 1: // INTREQR
-            result = paula->peekINTREQR(); break;
+            result = paula.peekINTREQR(); break;
 
         default:
 
@@ -1128,8 +1120,8 @@ Memory::peekCustom16(uint32_t addr)
             // In the meantime, we write 0, because SAE is doing this.
             pokeCustom16<POKE_CPU>(addr, dataBus);
 
-            if (agnus->busOwner[agnus->pos.h] != BUS_NONE) {
-                result = agnus->busValue[agnus->pos.h];
+            if (agnus.busOwner[agnus.pos.h] != BUS_NONE) {
+                result = agnus.busValue[agnus.pos.h];
             } else {
                 result = 0xFFFF;
             }
@@ -1206,343 +1198,343 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
     switch ((addr >> 1) & 0xFF) {
 
         case 0x020 >> 1: // DSKPTH
-            agnus->pokeDSKPTH(value); return;
+            agnus.pokeDSKPTH(value); return;
         case 0x022 >> 1: // DSKPTL
-            agnus->pokeDSKPTL(value); return;
+            agnus.pokeDSKPTL(value); return;
         case 0x024 >> 1: // DSKLEN
-            paula->diskController.pokeDSKLEN(value); return;
+            diskController.pokeDSKLEN(value); return;
         case 0x026 >> 1: // DSKDAT
-            paula->diskController.pokeDSKDAT(value); return;
+            diskController.pokeDSKDAT(value); return;
         case 0x028 >> 1: // REFPTR
             return;
         case 0x02A >> 1: // VPOSW
-            agnus->pokeVPOS(value); return;
+            agnus.pokeVPOS(value); return;
         case 0x02C >> 1: // VHPOSW
-            agnus->pokeVHPOS(value); return;
+            agnus.pokeVHPOS(value); return;
         case 0x02E >> 1: // COPCON
-            copper->pokeCOPCON(value); return;
+            copper.pokeCOPCON(value); return;
         case 0x030 >> 1: // SERDAT
-            paula->uart.pokeSERDAT(value); return;
+            uart.pokeSERDAT(value); return;
         case 0x032 >> 1: // SERPER
-            paula->uart.pokeSERPER(value); return;
+            uart.pokeSERPER(value); return;
         case 0x034 >> 1: // POTGO
-            paula->pokePOTGO(value); return;
+            paula.pokePOTGO(value); return;
         case 0x036 >> 1: // JOYTEST
-            denise->pokeJOYTEST(value); return;
+            denise.pokeJOYTEST(value); return;
         case 0x038 >> 1: // STREQU
         case 0x03A >> 1: // STRVBL
         case 0x03C >> 1: // STRHOR
         case 0x03E >> 1: // STRLONG
             return; // ignore
         case 0x040 >> 1: // BLTCON0
-            agnus->blitter.pokeBLTCON0(value); return;
+            blitter.pokeBLTCON0(value); return;
         case 0x042 >> 1: // BLTCON1
-            agnus->blitter.pokeBLTCON1(value); return;
+            blitter.pokeBLTCON1(value); return;
         case 0x044 >> 1: // BLTAFWM
-            agnus->blitter.pokeBLTAFWM(value); return;
+            blitter.pokeBLTAFWM(value); return;
         case 0x046 >> 1: // BLTALWM
-            agnus->blitter.pokeBLTALWM(value); return;
+            blitter.pokeBLTALWM(value); return;
         case 0x048 >> 1: // BLTCPTH
-            agnus->blitter.pokeBLTCPTH(value); return;
+            blitter.pokeBLTCPTH(value); return;
         case 0x04A >> 1: // BLTCPTL
-            agnus->blitter.pokeBLTCPTL(value); return;
+            blitter.pokeBLTCPTL(value); return;
         case 0x04C >> 1: // BLTBPTH
-            agnus->blitter.pokeBLTBPTH(value); return;
+            blitter.pokeBLTBPTH(value); return;
         case 0x04E >> 1: // BLTBPTL
-            agnus->blitter.pokeBLTBPTL(value); return;
+            blitter.pokeBLTBPTL(value); return;
         case 0x050 >> 1: // BLTAPTH
-            agnus->blitter.pokeBLTAPTH(value); return;
+            blitter.pokeBLTAPTH(value); return;
         case 0x052 >> 1: // BLTAPTL
-            agnus->blitter.pokeBLTAPTL(value); return;
+            blitter.pokeBLTAPTL(value); return;
         case 0x054 >> 1: // BLTDPTH
-            agnus->blitter.pokeBLTDPTH(value); return;
+            blitter.pokeBLTDPTH(value); return;
         case 0x056 >> 1: // BLTDPTL
-            agnus->blitter.pokeBLTDPTL(value); return;
+            blitter.pokeBLTDPTL(value); return;
         case 0x058 >> 1: // BLTSIZE
-            agnus->blitter.pokeBLTSIZE(value); return;
+            blitter.pokeBLTSIZE(value); return;
         case 0x05A >> 1: // unused
         case 0x05C >> 1: // unused
         case 0x05E >> 1: // unused
             break;
         case 0x060 >> 1: // BLTCMOD
-            agnus->blitter.pokeBLTCMOD(value); return;
+            blitter.pokeBLTCMOD(value); return;
         case 0x062 >> 1: // BLTBMOD
-            agnus->blitter.pokeBLTBMOD(value); return;
+            blitter.pokeBLTBMOD(value); return;
         case 0x064 >> 1: // BLTAMOD
-            agnus->blitter.pokeBLTAMOD(value); return;
+            blitter.pokeBLTAMOD(value); return;
         case 0x066 >> 1: // BLTDMOD
-            agnus->blitter.pokeBLTDMOD(value); return;
+            blitter.pokeBLTDMOD(value); return;
         case 0x068 >> 1: // unused
         case 0x06A >> 1: // unused
         case 0x06C >> 1: // unused
         case 0x06E >> 1: // unused
             break;
         case 0x070 >> 1: // BLTCDAT
-            agnus->blitter.pokeBLTCDAT(value); return;
+            blitter.pokeBLTCDAT(value); return;
         case 0x072 >> 1: // BLTBDAT
-            agnus->blitter.pokeBLTBDAT(value); return;
+            blitter.pokeBLTBDAT(value); return;
         case 0x074 >> 1: // BLTADAT
-            agnus->blitter.pokeBLTADAT(value); return;
+            blitter.pokeBLTADAT(value); return;
         case 0x076 >> 1: // unused
         case 0x078 >> 1: // unused
         case 0x07A >> 1: // unused
         case 0x07C >> 1: // unused
             break;
         case 0x07E >> 1: // DSKSYNC
-            paula->diskController.pokeDSKSYNC(value); return;
+            diskController.pokeDSKSYNC(value); return;
         case 0x080 >> 1: // COP1LCH
-            copper->pokeCOP1LCH(value); return;
+            copper.pokeCOP1LCH(value); return;
         case 0x082 >> 1: // COP1LCL
-            copper->pokeCOP1LCL(value); return;
+            copper.pokeCOP1LCL(value); return;
         case 0x084 >> 1: // COP2LCH
-            copper->pokeCOP2LCH(value); return;
+            copper.pokeCOP2LCH(value); return;
         case 0x086 >> 1: // COP2LCL
-            copper->pokeCOP2LCL(value); return;
+            copper.pokeCOP2LCL(value); return;
         case 0x088 >> 1: // COPJMP1
-            copper->pokeCOPJMP1(); return;
+            copper.pokeCOPJMP1(); return;
         case 0x08A >> 1: // COPJMP2
-            copper->pokeCOPJMP2(); return;
+            copper.pokeCOPJMP2(); return;
         case 0x08C >> 1: // COPINS
-            copper->pokeCOPINS(value); return;
+            copper.pokeCOPINS(value); return;
         case 0x08E >> 1: // DIWSTRT
-            agnus->pokeDIWSTRT<s>(value); return;
+            agnus.pokeDIWSTRT<s>(value); return;
         case 0x090 >> 1: // DIWSTOP
-            agnus->pokeDIWSTOP<s>(value); return;
+            agnus.pokeDIWSTOP<s>(value); return;
         case 0x092 >> 1: // DDFSTRT
-            agnus->pokeDDFSTRT(value); return;
+            agnus.pokeDDFSTRT(value); return;
         case 0x094 >> 1: // DDFSTOP
-            agnus->pokeDDFSTOP(value); return;
+            agnus.pokeDDFSTOP(value); return;
         case 0x096 >> 1: // DMACON
-            agnus->pokeDMACON(value); return;
+            agnus.pokeDMACON(value); return;
         case 0x098 >> 1:  // CLXCON
-            denise->pokeCLXCON(value); return;
+            denise.pokeCLXCON(value); return;
         case 0x09A >> 1: // INTENA
-            paula->pokeINTENA(value); return;
+            paula.pokeINTENA(value); return;
         case 0x09C >> 1: // INTREQ
-            paula->pokeINTREQ(value); return;
+            paula.pokeINTREQ(value); return;
         case 0x09E >> 1: // ADKCON
-            paula->pokeADKCON(value); return;
+            paula.pokeADKCON(value); return;
         case 0x0A0 >> 1: // AUD0LCH
-            paula->audioUnit.channel0.pokeAUDxLCH(value); return;
+            audioUnit.channel0.pokeAUDxLCH(value); return;
         case 0x0A2 >> 1: // AUD0LCL
-            paula->audioUnit.channel0.pokeAUDxLCL(value); return;
+            audioUnit.channel0.pokeAUDxLCL(value); return;
         case 0x0A4 >> 1: // AUD0LEN
-            paula->audioUnit.channel0.pokeAUDxLEN(value); return;
+            audioUnit.channel0.pokeAUDxLEN(value); return;
         case 0x0A6 >> 1: // AUD0PER
-            paula->audioUnit.channel0.pokeAUDxPER(value); return;
+            audioUnit.channel0.pokeAUDxPER(value); return;
         case 0x0A8 >> 1: // AUD0VOL
-            paula->audioUnit.channel0.pokeAUDxVOL(value); return;
+            audioUnit.channel0.pokeAUDxVOL(value); return;
         case 0x0AA >> 1: // AUD0DAT
-            paula->audioUnit.channel0.pokeAUDxDAT(value); return;
+            audioUnit.channel0.pokeAUDxDAT(value); return;
         case 0x0AC >> 1: // Unused
         case 0x0AE >> 1: // Unused
             break;
         case 0x0B0 >> 1: // AUD1LCH
-            paula->audioUnit.channel1.pokeAUDxLCH(value); return;
+            audioUnit.channel1.pokeAUDxLCH(value); return;
         case 0x0B2 >> 1: // AUD1LCL
-            paula->audioUnit.channel1.pokeAUDxLCL(value); return;
+            audioUnit.channel1.pokeAUDxLCL(value); return;
         case 0x0B4 >> 1: // AUD1LEN
-            paula->audioUnit.channel1.pokeAUDxLEN(value); return;
+            audioUnit.channel1.pokeAUDxLEN(value); return;
         case 0x0B6 >> 1: // AUD1PER
-            paula->audioUnit.channel1.pokeAUDxPER(value); return;
+            audioUnit.channel1.pokeAUDxPER(value); return;
         case 0x0B8 >> 1: // AUD1VOL
-            paula->audioUnit.channel1.pokeAUDxVOL(value); return;
+            audioUnit.channel1.pokeAUDxVOL(value); return;
         case 0x0BA >> 1: // AUD1DAT
-            paula->audioUnit.channel1.pokeAUDxDAT(value); return;
+            audioUnit.channel1.pokeAUDxDAT(value); return;
         case 0x0BC >> 1: // Unused
         case 0x0BE >> 1: // Unused
             break;
         case 0x0C0 >> 1: // AUD2LCH
-            paula->audioUnit.channel2.pokeAUDxLCH(value); return;
+            audioUnit.channel2.pokeAUDxLCH(value); return;
         case 0x0C2 >> 1: // AUD2LCL
-            paula->audioUnit.channel2.pokeAUDxLCL(value); return;
+            audioUnit.channel2.pokeAUDxLCL(value); return;
         case 0x0C4 >> 1: // AUD2LEN
-            paula->audioUnit.channel2.pokeAUDxLEN(value); return;
+            audioUnit.channel2.pokeAUDxLEN(value); return;
         case 0x0C6 >> 1: // AUD2PER
-            paula->audioUnit.channel2.pokeAUDxPER(value); return;
+            audioUnit.channel2.pokeAUDxPER(value); return;
         case 0x0C8 >> 1: // AUD2VOL
-            paula->audioUnit.channel2.pokeAUDxVOL(value); return;
+            audioUnit.channel2.pokeAUDxVOL(value); return;
         case 0x0CA >> 1: // AUD2DAT
-            paula->audioUnit.channel2.pokeAUDxDAT(value); return;
+            audioUnit.channel2.pokeAUDxDAT(value); return;
         case 0x0CC >> 1: // Unused
         case 0x0CE >> 1: // Unused
             break;
         case 0x0D0 >> 1: // AUD3LCH
-            paula->audioUnit.channel3.pokeAUDxLCH(value); return;
+            audioUnit.channel3.pokeAUDxLCH(value); return;
         case 0x0D2 >> 1: // AUD3LCL
-            paula->audioUnit.channel3.pokeAUDxLCL(value); return;
+            audioUnit.channel3.pokeAUDxLCL(value); return;
         case 0x0D4 >> 1: // AUD3LEN
-            paula->audioUnit.channel3.pokeAUDxLEN(value); return;
+            audioUnit.channel3.pokeAUDxLEN(value); return;
         case 0x0D6 >> 1: // AUD3PER
-            paula->audioUnit.channel3.pokeAUDxPER(value); return;
+            audioUnit.channel3.pokeAUDxPER(value); return;
         case 0x0D8 >> 1: // AUD3VOL
-            paula->audioUnit.channel3.pokeAUDxVOL(value); return;
+            audioUnit.channel3.pokeAUDxVOL(value); return;
         case 0x0DA >> 1: // AUD3DAT
-            paula->audioUnit.channel3.pokeAUDxDAT(value); return;
+            audioUnit.channel3.pokeAUDxDAT(value); return;
         case 0x0DC >> 1: // Unused
         case 0x0DE >> 1: // Unused
             break;
         case 0x0E0 >> 1: // BPL1PTH
-            agnus->pokeBPLxPTH<1>(value); return;
+            agnus.pokeBPLxPTH<1>(value); return;
         case 0x0E2 >> 1: // BPL1PTL
-            agnus->pokeBPLxPTL<1>(value); return;
+            agnus.pokeBPLxPTL<1>(value); return;
         case 0x0E4 >> 1: // BPL2PTH
-            agnus->pokeBPLxPTH<2>(value); return;
+            agnus.pokeBPLxPTH<2>(value); return;
         case 0x0E6 >> 1: // BPL2PTL
-            agnus->pokeBPLxPTL<2>(value); return;
+            agnus.pokeBPLxPTL<2>(value); return;
         case 0x0E8 >> 1: // BPL3PTH
-            agnus->pokeBPLxPTH<3>(value); return;
+            agnus.pokeBPLxPTH<3>(value); return;
         case 0x0EA >> 1: // BPL3PTL
-            agnus->pokeBPLxPTL<3>(value); return;
+            agnus.pokeBPLxPTL<3>(value); return;
         case 0x0EC >> 1: // BPL4PTH
-            agnus->pokeBPLxPTH<4>(value); return;
+            agnus.pokeBPLxPTH<4>(value); return;
         case 0x0EE >> 1: // BPL4PTL
-            agnus->pokeBPLxPTL<4>(value); return;
+            agnus.pokeBPLxPTL<4>(value); return;
         case 0x0F0 >> 1: // BPL5PTH
-            agnus->pokeBPLxPTH<5>(value); return;
+            agnus.pokeBPLxPTH<5>(value); return;
         case 0x0F2 >> 1: // BPL5PTL
-            agnus->pokeBPLxPTL<5>(value); return;
+            agnus.pokeBPLxPTL<5>(value); return;
         case 0x0F4 >> 1: // BPL6PTH
-            agnus->pokeBPLxPTH<6>(value); return;
+            agnus.pokeBPLxPTH<6>(value); return;
         case 0x0F6 >> 1: // BPL6PTL
-            agnus->pokeBPLxPTL<6>(value); return;
+            agnus.pokeBPLxPTL<6>(value); return;
         case 0x0F8 >> 1: // Unused
         case 0x0FA >> 1: // Unused
         case 0x0FC >> 1: // Unused
         case 0x0FE >> 1: // Unused
             break;
         case 0x100 >> 1: // BPLCON0
-            agnus->pokeBPLCON0(value);
-            denise->pokeBPLCON0(value);
+            agnus.pokeBPLCON0(value);
+            denise.pokeBPLCON0(value);
             return;
         case 0x102 >> 1: // BPLCON1
-            denise->pokeBPLCON1(value); return;
+            denise.pokeBPLCON1(value); return;
             return;
         case 0x104 >> 1: // BPLCON2
-            denise->pokeBPLCON2(value); return;
+            denise.pokeBPLCON2(value); return;
             return;
         case 0x106 >> 1: // Unused
             break;
         case 0x108 >> 1: // BPL1MOD
-            agnus->pokeBPL1MOD(value); return;
+            agnus.pokeBPL1MOD(value); return;
             return;
         case 0x10A >> 1: // BPL2MOD
-            agnus->pokeBPL2MOD(value); return;
+            agnus.pokeBPL2MOD(value); return;
             return;
         case 0x10C >> 1: // Unused
         case 0x10E >> 1: // Unused
             break;
         case 0x110 >> 1: // BPL1DAT
-            denise->pokeBPLxDAT<0>(value); return;
+            denise.pokeBPLxDAT<0>(value); return;
         case 0x112 >> 1: // BPL2DAT
-            denise->pokeBPLxDAT<1>(value); return;
+            denise.pokeBPLxDAT<1>(value); return;
         case 0x114 >> 1: // BPL3DAT
-            denise->pokeBPLxDAT<2>(value); return;
+            denise.pokeBPLxDAT<2>(value); return;
         case 0x116 >> 1: // BPL4DAT
-            denise->pokeBPLxDAT<3>(value); return;
+            denise.pokeBPLxDAT<3>(value); return;
         case 0x118 >> 1: // BPL5DAT
-            denise->pokeBPLxDAT<4>(value); return;
+            denise.pokeBPLxDAT<4>(value); return;
         case 0x11A >> 1: // BPL6DAT
-            denise->pokeBPLxDAT<5>(value); return;
+            denise.pokeBPLxDAT<5>(value); return;
         case 0x11C >> 1: // Unused
         case 0x11E >> 1: // Unused
             break;
         case 0x120 >> 1: // SPR0PTH
-            agnus->pokeSPRxPTH<0>(value); return;
+            agnus.pokeSPRxPTH<0>(value); return;
         case 0x122 >> 1: // SPR0PTL
-            agnus->pokeSPRxPTL<0>(value); return;
+            agnus.pokeSPRxPTL<0>(value); return;
         case 0x124 >> 1: // SPR1PTH
-            agnus->pokeSPRxPTH<1>(value); return;
+            agnus.pokeSPRxPTH<1>(value); return;
         case 0x126 >> 1: // SPR1PTL
-            agnus->pokeSPRxPTL<1>(value); return;
+            agnus.pokeSPRxPTL<1>(value); return;
         case 0x128 >> 1: // SPR2PTH
-            agnus->pokeSPRxPTH<2>(value); return;
+            agnus.pokeSPRxPTH<2>(value); return;
         case 0x12A >> 1: // SPR2PTL
-            agnus->pokeSPRxPTL<2>(value); return;
+            agnus.pokeSPRxPTL<2>(value); return;
         case 0x12C >> 1: // SPR3PTH
-            agnus->pokeSPRxPTH<3>(value); return;
+            agnus.pokeSPRxPTH<3>(value); return;
         case 0x12E >> 1: // SPR3PTL
-            agnus->pokeSPRxPTL<3>(value); return;
+            agnus.pokeSPRxPTL<3>(value); return;
         case 0x130 >> 1: // SPR4PTH
-            agnus->pokeSPRxPTH<4>(value); return;
+            agnus.pokeSPRxPTH<4>(value); return;
         case 0x132 >> 1: // SPR4PTL
-            agnus->pokeSPRxPTL<4>(value); return;
+            agnus.pokeSPRxPTL<4>(value); return;
         case 0x134 >> 1: // SPR5PTH
-            agnus->pokeSPRxPTH<5>(value); return;
+            agnus.pokeSPRxPTH<5>(value); return;
         case 0x136 >> 1: // SPR5PTL
-            agnus->pokeSPRxPTL<5>(value); return;
+            agnus.pokeSPRxPTL<5>(value); return;
         case 0x138 >> 1: // SPR6PTH
-            agnus->pokeSPRxPTH<6>(value); return;
+            agnus.pokeSPRxPTH<6>(value); return;
         case 0x13A >> 1: // SPR6PTL
-            agnus->pokeSPRxPTL<6>(value); return;
+            agnus.pokeSPRxPTL<6>(value); return;
         case 0x13C >> 1: // SPR7PTH
-            agnus->pokeSPRxPTH<7>(value); return;
+            agnus.pokeSPRxPTH<7>(value); return;
         case 0x13E >> 1: // SPR7PTL
-            agnus->pokeSPRxPTL<7>(value); return;
+            agnus.pokeSPRxPTL<7>(value); return;
         case 0x140 >> 1: // SPR0POS
-            denise->pokeSPRxPOS<0>(value); return;
+            denise.pokeSPRxPOS<0>(value); return;
         case 0x142 >> 1: // SPR0CTL
-            denise->pokeSPRxCTL<0>(value); return;
+            denise.pokeSPRxCTL<0>(value); return;
         case 0x144 >> 1: // SPR0DATA
-            denise->pokeSPRxDATA<0>(value); return;
+            denise.pokeSPRxDATA<0>(value); return;
         case 0x146 >> 1: // SPR0DATB
-            denise->pokeSPRxDATB<0>(value); return;
+            denise.pokeSPRxDATB<0>(value); return;
         case 0x148 >> 1: // SPR1POS
-            denise->pokeSPRxPOS<1>(value); return;
+            denise.pokeSPRxPOS<1>(value); return;
         case 0x14A >> 1: // SPR1CTL
-            denise->pokeSPRxCTL<1>(value); return;
+            denise.pokeSPRxCTL<1>(value); return;
         case 0x14C >> 1: // SPR1DATA
-            denise->pokeSPRxDATA<1>(value); return;
+            denise.pokeSPRxDATA<1>(value); return;
         case 0x14E >> 1: // SPR1DATB
-            denise->pokeSPRxDATB<1>(value); return;
+            denise.pokeSPRxDATB<1>(value); return;
         case 0x150 >> 1: // SPR2POS
-            denise->pokeSPRxPOS<2>(value); return;
+            denise.pokeSPRxPOS<2>(value); return;
         case 0x152 >> 1: // SPR2CTL
-            denise->pokeSPRxCTL<2>(value); return;
+            denise.pokeSPRxCTL<2>(value); return;
         case 0x154 >> 1: // SPR2DATA
-            denise->pokeSPRxDATA<2>(value); return;
+            denise.pokeSPRxDATA<2>(value); return;
         case 0x156 >> 1: // SPR2DATB
-            denise->pokeSPRxDATB<2>(value); return;
+            denise.pokeSPRxDATB<2>(value); return;
         case 0x158 >> 1: // SPR3POS
-            denise->pokeSPRxPOS<3>(value); return;
+            denise.pokeSPRxPOS<3>(value); return;
         case 0x15A >> 1: // SPR3CTL
-            denise->pokeSPRxCTL<3>(value); return;
+            denise.pokeSPRxCTL<3>(value); return;
         case 0x15C >> 1: // SPR3DATA
-            denise->pokeSPRxDATA<3>(value); return;
+            denise.pokeSPRxDATA<3>(value); return;
         case 0x15E >> 1: // SPR3DATB
-            denise->pokeSPRxDATB<3>(value); return;
+            denise.pokeSPRxDATB<3>(value); return;
         case 0x160 >> 1: // SPR4POS
-            denise->pokeSPRxPOS<4>(value); return;
+            denise.pokeSPRxPOS<4>(value); return;
         case 0x162 >> 1: // SPR4CTL
-            denise->pokeSPRxCTL<4>(value); return;
+            denise.pokeSPRxCTL<4>(value); return;
         case 0x164 >> 1: // SPR4DATA
-            denise->pokeSPRxDATA<4>(value); return;
+            denise.pokeSPRxDATA<4>(value); return;
         case 0x166 >> 1: // SPR4DATB
-            denise->pokeSPRxDATB<4>(value); return;
+            denise.pokeSPRxDATB<4>(value); return;
         case 0x168 >> 1: // SPR5POS
-            denise->pokeSPRxPOS<5>(value); return;
+            denise.pokeSPRxPOS<5>(value); return;
         case 0x16A >> 1: // SPR5CTL
-            denise->pokeSPRxCTL<5>(value); return;
+            denise.pokeSPRxCTL<5>(value); return;
         case 0x16C >> 1: // SPR5DATA
-            denise->pokeSPRxDATA<5>(value); return;
+            denise.pokeSPRxDATA<5>(value); return;
         case 0x16E >> 1: // SPR5DATB
-            denise->pokeSPRxDATB<5>(value); return;
+            denise.pokeSPRxDATB<5>(value); return;
         case 0x170 >> 1: // SPR6POS
-            denise->pokeSPRxPOS<6>(value); return;
+            denise.pokeSPRxPOS<6>(value); return;
         case 0x172 >> 1: // SPR6CTL
-            denise->pokeSPRxCTL<6>(value); return;
+            denise.pokeSPRxCTL<6>(value); return;
         case 0x174 >> 1: // SPR6DATA
-            denise->pokeSPRxDATA<6>(value); return;
+            denise.pokeSPRxDATA<6>(value); return;
         case 0x176 >> 1: // SPR6DATB
-            denise->pokeSPRxDATB<6>(value); return;
+            denise.pokeSPRxDATB<6>(value); return;
         case 0x178 >> 1: // SPR7POS
-            denise->pokeSPRxPOS<7>(value); return;
+            denise.pokeSPRxPOS<7>(value); return;
         case 0x17A >> 1: // SPR7CTL
-            denise->pokeSPRxCTL<7>(value); return;
+            denise.pokeSPRxCTL<7>(value); return;
         case 0x17C >> 1: // SPR7DATA
-            denise->pokeSPRxDATA<7>(value); return;
+            denise.pokeSPRxDATA<7>(value); return;
         case 0x17E >> 1: // SPR7DATB
-            denise->pokeSPRxDATB<7>(value); return;
+            denise.pokeSPRxDATB<7>(value); return;
         case 0x180 >> 1: // COLOR00
         case 0x182 >> 1: // COLOR01
         case 0x184 >> 1: // COLOR02
@@ -1575,9 +1567,9 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x1BA >> 1: // COLOR29
         case 0x1BC >> 1: // COLOR30
         case 0x1BE >> 1: // COLOR31
-            denise->pokeColorReg(addr & 0x1FF, value); return;
+            denise.pokeColorReg(addr & 0x1FF, value); return;
         case 0x1FE >> 1: // NO-OP (NULL)
-            copper->pokeNOOP(value); return;
+            copper.pokeNOOP(value); return;
     }
     
     if (addr <= 0x1E) {
@@ -1600,7 +1592,7 @@ Memory::pokeCustom32(uint32_t addr, uint32_t value)
 uint8_t
 Memory::peekAutoConf8(uint32_t addr)
 {
-    uint8_t result = zorro->peekFastRamDevice(addr) << 4;
+    uint8_t result = zorro.peekFastRamDevice(addr) << 4;
     
     // debug("peekAutoConf8(%X) = %X\n", addr, result);
     return result;
@@ -1619,15 +1611,15 @@ void
 Memory::pokeAutoConf8(uint32_t addr, uint8_t value)
 {
     // debug("pokeAutoConf8(%X, %X)\n", addr, value);
-    zorro->pokeFastRamDevice(addr, value);
+    zorro.pokeFastRamDevice(addr, value);
 }
 
 void
 Memory::pokeAutoConf16(uint32_t addr, uint16_t value)
 {
     // debug("pokeAutoConf16(%X, %X)\n", addr, value);
-    zorro->pokeFastRamDevice(addr, HI_BYTE(value));
-    zorro->pokeFastRamDevice(addr + 1, LO_BYTE(value));
+    zorro.pokeFastRamDevice(addr, HI_BYTE(value));
+    zorro.pokeFastRamDevice(addr + 1, LO_BYTE(value));
 }
 
 void
@@ -1664,7 +1656,7 @@ Memory::pokeKick16(uint32_t addr, uint16_t value)
     if (kickIsWritable) {
 
         // Make sure we're emulating an A1000
-        assert(amiga->getConfig().model == AMIGA_1000);
+        assert(amiga.getConfig().model == AMIGA_1000);
 
         WRITE_KICK_16(addr, value);
     }

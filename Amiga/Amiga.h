@@ -104,7 +104,7 @@ public:
     RTC rtc = RTC(*this);
     
     // Memory
-    Memory mem;
+    Memory mem = Memory(*this);
     
     // The DMA controller (part of Agnus)
     Agnus agnus = Agnus(*this);
