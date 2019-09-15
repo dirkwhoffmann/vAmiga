@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-Blitter::Blitter()
+Blitter::Blitter(Amiga& ref) : SubComponent(ref)
 {
     setDescription("Blitter");
     
@@ -40,11 +40,7 @@ Blitter::Blitter()
 
 void
 Blitter::_initialize()
-{
-    mem = &amiga->mem;
-    agnus = &amiga->agnus;
-    paula = &amiga->paula;
-    
+{    
     initFastBlitter();
     initSlowBlitter();
 }
@@ -69,7 +65,7 @@ Blitter::_inspect()
     // Prevent external access to variable 'info'
     pthread_mutex_lock(&lock);
     
-    info.active  = agnus->isPending<BLT_SLOT>();
+    info.active  = agnus.isPending<BLT_SLOT>();
     info.bltcon0 = bltcon0;
     info.bltcon1 = bltcon1;
     info.bltapt  = bltapt;
@@ -266,10 +262,10 @@ Blitter::pokeBLTSIZE(uint16_t value)
     // bbusy = true;
 
     // Schedule the blit operation
-    if (agnus->bltDMA()) {
-        agnus->scheduleRel<BLT_SLOT>(DMA_CYCLES(0), BLT_START);
+    if (agnus.bltDMA()) {
+        agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(0), BLT_START);
     } else {
-        agnus->scheduleAbs<BLT_SLOT>(NEVER, BLT_START);
+        agnus.scheduleAbs<BLT_SLOT>(NEVER, BLT_START);
     }
 }
 
@@ -348,8 +344,8 @@ Blitter::pokeDMACON(uint16_t oldValue, uint16_t newValue)
     if (!oldBltDma && newBltDma) {
 
         // Perform pending blit operation (if any)
-        if (agnus->hasEvent<BLT_SLOT>(BLT_START)) {
-            agnus->scheduleRel<BLT_SLOT>(DMA_CYCLES(0), BLT_START);
+        if (agnus.hasEvent<BLT_SLOT>(BLT_START)) {
+            agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(0), BLT_START);
         }
     }
 }
@@ -741,10 +737,10 @@ Blitter::terminate()
     bbusy = false;
 
     // Trigger the Blitter interrupt
-    paula->raiseIrq(INT_BLIT);
+    paula.raiseIrq(INT_BLIT);
 
     // Clear the Blitter slot
-    agnus->cancel<BLT_SLOT>();
+    agnus.cancel<BLT_SLOT>();
 
     // Dump checksums if requested
     if (bltsizeW != 1 || bltsizeH != 4) {
@@ -762,5 +758,5 @@ Blitter::kill()
     bbusy = false;
 
     // Clear the Blitter slot
-    agnus->cancel<BLT_SLOT>();
+    agnus.cancel<BLT_SLOT>();
 }

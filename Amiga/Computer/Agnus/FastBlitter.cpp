@@ -74,7 +74,7 @@ Blitter::beginFastCopyBlit()
 
         case 1:
             if (verbose) { verbose = false; debug("Fake micro-code execution\n"); }
-            agnus->scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_EXEC_FAST);
+            agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_EXEC_FAST);
             return;
 
         default:
@@ -119,21 +119,21 @@ void Blitter::doFastCopyBlit()
 
             // Fetch A
             if (useA) {
-                anew = mem->peek16<BUS_BLITTER>(apt);
+                anew = mem.peek16<BUS_BLITTER>(apt);
                 debug(BLT_DEBUG, "    A = peek(%X) = %X\n", apt, anew);
                 INC_OCS_PTR(apt, incr);
             }
 
             // Fetch B
             if (useB) {
-                bnew = mem->peek16<BUS_BLITTER>(bpt);
+                bnew = mem.peek16<BUS_BLITTER>(bpt);
                 debug(BLT_DEBUG, "    B = peek(%X) = %X\n", bpt, bnew);
                 INC_OCS_PTR(bpt, incr);
             }
 
             // Fetch C
             if (useC) {
-                chold = mem->peek16<BUS_BLITTER>(cpt);
+                chold = mem.peek16<BUS_BLITTER>(cpt);
                 debug(BLT_DEBUG, "    C = peek(%X) = %X\n", cpt, chold);
                 INC_OCS_PTR(cpt, incr);
             }
@@ -167,7 +167,7 @@ void Blitter::doFastCopyBlit()
 
             // Write D
             if (useD) {
-                mem->poke16<BUS_BLITTER>(dpt, dhold);
+                mem.poke16<BUS_BLITTER>(dpt, dhold);
                 check1 = fnv_1a_it32(check1, dhold);
                 check2 = fnv_1a_it32(check2, dpt);
                 debug(BLT_DEBUG, "D: poke(%X), %X  (check: %X %X)\n", dpt, dhold, check1, check2);
@@ -268,7 +268,7 @@ Blitter::doFastLineBlit()
     {
         // Read C-data from memory if the C-channel is enabled
         if (c_enabled) {
-            bltcdat_local = mem->peek16<BUS_BLITTER>(bltcpt_local);
+            bltcdat_local = mem.peek16<BUS_BLITTER>(bltcpt_local);
         }
         
         // Calculate data for the A-channel
@@ -293,7 +293,7 @@ Blitter::doFastLineBlit()
         
         // Save result to D-channel, same as the C ptr after first pixel.
         if (c_enabled) { // C-channel must be enabled
-            mem->poke16<BUS_BLITTER>(bltdpt_local, bltddat_local);
+            mem.poke16<BUS_BLITTER>(bltdpt_local, bltddat_local);
             check1 = fnv_1a_it32(check1, bltddat_local);
             check2 = fnv_1a_it32(check2, bltdpt_local);
         }

@@ -54,14 +54,6 @@
 
 class Agnus : public SubComponent
 {
-    // References to other components
-    class CPU *cpu;
-    class CIAA *ciaA;
-    class CIAB *ciaB;
-    class Memory *mem;
-    class Denise *denise;
-    class Paula *paula;
-
     // Information shown in the GUI inspector panel
     AgnusInfo info;
     EventInfo eventInfo;
@@ -77,7 +69,7 @@ public:
     Copper copper = Copper(amiga);
     
     // Every Amiga fan knows what the Blitter is.
-    Blitter blitter;
+    Blitter blitter = Blitter(amiga);
     
     // A graphics engine for visualizing DMA accesses
     DmaDebugger dmaDebugger;

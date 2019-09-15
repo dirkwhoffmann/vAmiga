@@ -165,12 +165,6 @@ Agnus::initDASTables()
 void
 Agnus::_initialize()
 {
-    cpu = &amiga.cpu;
-    ciaA = &amiga.ciaA;
-    ciaB = &amiga.ciaB;
-    mem = &amiga.mem;
-    denise = &amiga.denise;
-    paula = &amiga.paula;
 }
 
 void
@@ -440,7 +434,7 @@ Agnus::allocateBus()
 uint16_t
 Agnus::doDiskDMA()
 {
-    uint16_t result = mem->peekChip16(dskpt);
+    uint16_t result = mem.peekChip16(dskpt);
     INC_DMAPTR(dskpt);
 
     assert(pos.h < HPOS_CNT);
@@ -453,7 +447,7 @@ Agnus::doDiskDMA()
 void
 Agnus::doDiskDMA(uint16_t value)
 {
-    mem->pokeChip16(dskpt, value);
+    mem.pokeChip16(dskpt, value);
     INC_DMAPTR(dskpt);
 
     busOwner[pos.h] = BUS_DISK;
@@ -463,7 +457,7 @@ Agnus::doDiskDMA(uint16_t value)
 uint16_t
 Agnus::doAudioDMA(int channel)
 {
-    uint16_t result = mem->peekChip16(audlc[channel]);
+    uint16_t result = mem.peekChip16(audlc[channel]);
     INC_DMAPTR(audlc[channel]);
 
     // We have to fake the horizontal position here, because this function
@@ -479,7 +473,7 @@ Agnus::doAudioDMA(int channel)
 template <int channel> uint16_t
 Agnus::doSpriteDMA()
 {
-    uint16_t result = mem->peekChip16(sprpt[channel]);
+    uint16_t result = mem.peekChip16(sprpt[channel]);
     INC_DMAPTR(sprpt[channel]);
 
     assert(pos.h < HPOS_CNT);
@@ -492,7 +486,7 @@ Agnus::doSpriteDMA()
 uint16_t
 Agnus::doSpriteDMA(int channel)
 {
-    uint16_t result = mem->peekChip16(sprpt[channel]);
+    uint16_t result = mem.peekChip16(sprpt[channel]);
     INC_DMAPTR(sprpt[channel]);
 
     assert(pos.h < HPOS_CNT);
@@ -505,7 +499,7 @@ Agnus::doSpriteDMA(int channel)
 template <int bitplane> uint16_t
 Agnus::doBitplaneDMA()
 {
-    uint16_t result = mem->peekChip16(bplpt[bitplane]);
+    uint16_t result = mem.peekChip16(bplpt[bitplane]);
     INC_DMAPTR(bplpt[bitplane]);
 
     assert(pos.h < HPOS_CNT);
@@ -518,7 +512,7 @@ Agnus::doBitplaneDMA()
 uint16_t
 Agnus::copperRead(uint32_t addr)
 {
-    uint16_t result = mem->peek16<BUS_COPPER>(addr);
+    uint16_t result = mem.peek16<BUS_COPPER>(addr);
 
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_COPPER;
@@ -530,7 +524,7 @@ Agnus::copperRead(uint32_t addr)
 void
 Agnus::copperWrite(uint32_t addr, uint16_t value)
 {
-    mem->pokeCustom16<POKE_COPPER>(addr, value);
+    mem.pokeCustom16<POKE_COPPER>(addr, value);
 
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_COPPER;
@@ -544,7 +538,7 @@ Agnus::blitterRead(uint32_t addr)
     assert(pos.h < HPOS_CNT);
     assert(busOwner[pos.h] == BUS_BLITTER);
 
-    uint16_t result = mem->peek16<BUS_BLITTER>(addr);
+    uint16_t result = mem.peek16<BUS_BLITTER>(addr);
 
     busOwner[pos.h] = BUS_BLITTER;
     busValue[pos.h] = result;
@@ -559,7 +553,7 @@ Agnus::blitterWrite(uint32_t addr, uint16_t value)
     assert(pos.h < HPOS_CNT);
     assert(busOwner[pos.h] == BUS_BLITTER);
 
-    mem->poke16<BUS_BLITTER>(addr, value);
+    mem.poke16<BUS_BLITTER>(addr, value);
 
     busOwner[pos.h] = BUS_BLITTER;
     busValue[pos.h] = value;
@@ -611,7 +605,7 @@ Agnus::switchBitplaneDmaOn()
     int16_t start;
     int16_t stop;
 
-    bool hires = denise->hires();
+    bool hires = denise.hires();
     int activeBitplanes = bpu();
 
     // Determine the range that is covered by fetch units
@@ -719,7 +713,7 @@ Agnus::isLastHx(int16_t dmaCycle)
 bool
 Agnus::inLastFetchUnit(int16_t dmaCycle)
 {
-    return denise->hires() ? isLastHx(dmaCycle) : isLastLx(dmaCycle);
+    return denise.hires() ? isLastHx(dmaCycle) : isLastLx(dmaCycle);
 }
 
 
@@ -882,7 +876,7 @@ Agnus::setDMACON(uint16_t oldValue, uint16_t newValue)
         }
 
         // Let Denise know about the change
-        denise->pokeDMACON(oldValue, newValue);
+        denise.pokeDMACON(oldValue, newValue);
     }
     
     // Copper DMA
@@ -963,12 +957,12 @@ Agnus::setDMACON(uint16_t oldValue, uint16_t newValue)
         if (newAU0EN) {
             
             // debug("Audio 0 DMA switched on\n");
-            paula->audioUnit.enableDMA(0);
+            paula.audioUnit.enableDMA(0);
             
         } else {
             
             // debug("Audio 0 DMA switched off\n");
-            paula->audioUnit.disableDMA(0);
+            paula.audioUnit.disableDMA(0);
         }
     }
     
@@ -977,12 +971,12 @@ Agnus::setDMACON(uint16_t oldValue, uint16_t newValue)
         if (newAU1EN) {
             
             // debug("Audio 1 DMA switched on\n");
-            paula->audioUnit.enableDMA(1);
+            paula.audioUnit.enableDMA(1);
             
         } else {
             
             // debug("Audio 1 DMA switched off\n");
-            paula->audioUnit.disableDMA(1);
+            paula.audioUnit.disableDMA(1);
         }
     }
     
@@ -991,12 +985,12 @@ Agnus::setDMACON(uint16_t oldValue, uint16_t newValue)
         if (newAU2EN) {
             
             // debug("Audio 2 DMA switched on\n");
-            paula->audioUnit.enableDMA(2);
+            paula.audioUnit.enableDMA(2);
             
         } else {
             
             // debug("Audio 2 DMA switched off\n");
-            paula->audioUnit.disableDMA(2);
+            paula.audioUnit.disableDMA(2);
         }
     }
     
@@ -1005,12 +999,12 @@ Agnus::setDMACON(uint16_t oldValue, uint16_t newValue)
         if (newAU3EN) {
             
             // debug("Audio 3 DMA switched on\n");
-            paula->audioUnit.enableDMA(3);
+            paula.audioUnit.enableDMA(3);
             
         } else {
             
             // debug("Audio 3 DMA switched off\n");
-            paula->audioUnit.disableDMA(3);
+            paula.audioUnit.disableDMA(3);
         }
     }
 }
@@ -1459,13 +1453,13 @@ Agnus::setBPLCON0(uint16_t oldValue, uint16_t newValue)
 
             // Enable sprite drawing
             int16_t begin = MAX(4 * pos.h, 4 * ddfstrtReached + 32);
-            denise->enlargeSpriteClippingRange(begin, HPIXELS);
+            denise.enlargeSpriteClippingRange(begin, HPIXELS);
 
         } else {
 
             // Disable sprite drawing if DDFSTRT hasn't been reached yet
             if (pos.h <= ddfstrtReached + 6) {
-                denise->setSpriteClippingRange(HPIXELS, HPIXELS);
+                denise.setSpriteClippingRange(HPIXELS, HPIXELS);
             }
         }
     }
@@ -1588,7 +1582,7 @@ Agnus::executeUntilBusIsFree()
         blockedCycles++;
     };
 
-    cpu->addWaitStates(blockedCycles * DMA_CYCLES(1));
+    cpu.addWaitStates(blockedCycles * DMA_CYCLES(1));
     cpuRequestsBus = false;
 }
 
@@ -1626,14 +1620,14 @@ Agnus::executeFirstSpriteCycle()
 
         // Extract vertical trigger coordinate bits from POS
         sprVStrt[nr] = ((pos & 0xFF00) >> 8) | (sprVStrt[nr] & 0x0100);
-        denise->pokeSPRxPOS<nr>(pos);
+        denise.pokeSPRxPOS<nr>(pos);
     }
 
     // Read sprite data if data DMA is activated
     if (sprDmaState[nr] == SPR_DMA_DATA) {
 
         // Read DATA
-        denise->pokeSPRxDATB<nr>(doSpriteDMA(nr));
+        denise.pokeSPRxDATB<nr>(doSpriteDMA(nr));
     }
 }
 
@@ -1652,14 +1646,14 @@ Agnus::executeSecondSpriteCycle()
         // Extract vertical trigger coordinate bits from CTL
         sprVStrt[nr] = ((ctl & 0b100) << 6) | (sprVStrt[nr] & 0x00FF);
         sprVStop[nr] = ((ctl & 0b010) << 7) | (ctl >> 8);
-        denise->pokeSPRxCTL<nr>(ctl);
+        denise.pokeSPRxCTL<nr>(ctl);
     }
     
     // Read sprite data if data DMA is activated
     if (sprDmaState[nr] == SPR_DMA_DATA) {
         
         // Read DATB
-        denise->pokeSPRxDATA<nr>(doSpriteDMA(nr));
+        denise.pokeSPRxDATA<nr>(doSpriteDMA(nr));
     }
 }
 
@@ -1669,10 +1663,10 @@ Agnus::hsyncHandler()
     assert(pos.h == HPOS_MAX + 1);
 
     // Let Denise draw the current line
-    denise->endOfLine(pos.v);
+    denise.endOfLine(pos.v);
 
     // Let Paula synthesize new sound samples
-    paula->audioUnit.executeUntil(clock);
+    paula.audioUnit.executeUntil(clock);
 
     // Let CIA B count the HSYNCs
     amiga.ciaB.incrementTOD();
@@ -1742,9 +1736,9 @@ Agnus::hsyncHandler()
     bool bplDmaLine = inBplDmaLine();
 
     if (bplDmaLine) {
-        denise->setSpriteClippingRange(4 * ddfstrt + 6, HPIXELS);
+        denise.setSpriteClippingRange(4 * ddfstrt + 6, HPIXELS);
     } else {
-        denise->setSpriteClippingRange(HPIXELS, HPIXELS);
+        denise.setSpriteClippingRange(HPIXELS, HPIXELS);
     }
 
     //
@@ -1810,7 +1804,7 @@ Agnus::hsyncHandler()
     // Let other components prepare for the next line
     //
 
-    denise->beginOfLine(pos.v);
+    denise.beginOfLine(pos.v);
 }
 
 void
@@ -1822,7 +1816,7 @@ Agnus::vsyncHandler()
     frameInfo.nr++;
 
     // Check if we the next frame is drawn in interlace mode
-    frameInfo.interlaced = denise->lace();
+    frameInfo.interlaced = denise.lace();
 
     // If yes, toggle the the long frame flipflop
     lof = (frameInfo.interlaced) ? !lof : true;
@@ -1845,11 +1839,11 @@ Agnus::vsyncHandler()
     amiga.ciaA.incrementTOD();
     
     // Trigger VSYNC interrupt
-    paula->raiseIrq(INT_VERTB);
+    paula.raiseIrq(INT_VERTB);
     
     // Let the subcomponents do their own VSYNC stuff
     copper.vsyncAction();
-    denise->beginOfFrame(frameInfo.interlaced);
+    denise.beginOfFrame(frameInfo.interlaced);
     amiga.joystick1.execute();
     amiga.joystick2.execute();
 

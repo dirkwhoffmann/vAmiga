@@ -23,7 +23,9 @@ class RTC;
 class Memory;
 class Agnus;
 class Denise;
+class PixelEngine;
 class Paula;
+class UART;
 class ZorroManager;
 class ControlPort;
 class SerialPort;
@@ -33,15 +35,38 @@ class Keyboard;
 class Drive;
 
 
-/* Base class for all sub components
- * This class provides references to all Amiga components
+/* Base class for all sub components.
+ * It enriches class HardwareComponent by references to all other components.
  */
 class SubComponent : public HardwareComponent {
 
 protected:
 
-    Amiga& amiga;
-    Agnus& agnus;
+    Amiga &amiga;
+    CPU &cpu;
+    CIAA &ciaa;
+    CIAB &ciab;
+    RTC &rtc;
+    Memory &mem;
+    Agnus &agnus;
+    Denise &denise;
+    PixelEngine &pixelEngine;
+    Paula &paula;
+    UART &uart;
+    ZorroManager &zorro;
+    ControlPort &controlPort1;
+    ControlPort &controlPort2;
+    SerialPort &serialPort;
+    Mouse &mouse;
+    Joystick &joystick1;
+    Joystick &joystick2;
+    Keyboard &keyboard;
+    Drive &df0;
+    Drive &df1;
+    Drive &df2;
+    Drive &df3;
+
+    Drive *df[4] = { &df0, &df1, &df2, &df3 };
 
 public:
 

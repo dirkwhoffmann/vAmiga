@@ -15,11 +15,11 @@ Agnus::inspectEvents()
     // Prevent external access to variable 'info'
     pthread_mutex_lock(&lock);
     
-    eventInfo.cpuClock = cpu->clock;
-    eventInfo.cpuCycles = cpu->cycles();
+    eventInfo.cpuClock = cpu.clock;
+    eventInfo.cpuCycles = cpu.cycles();
     eventInfo.dmaClock = clock;
-    eventInfo.ciaAClock = ciaA->clock;
-    eventInfo.ciaBClock  = ciaB->clock;
+    eventInfo.ciaAClock = ciaa.clock;
+    eventInfo.ciaBClock  = ciab.clock;
     eventInfo.frame = frame;
     eventInfo.vpos = pos.v;
     eventInfo.hpos = pos.h;
@@ -408,25 +408,25 @@ Agnus::executeEventsUntil(Cycle cycle) {
         //
 
         if (isDue<DSK_SLOT>(cycle)) {
-            paula->diskController.serviceDiskEvent();
+            paula.diskController.serviceDiskEvent();
         }
         if (isDue<DCH_SLOT>(cycle)) {
-            paula->diskController.serviceDiskChangeEvent(slot[DCH_SLOT].id, (int)slot[DCH_SLOT].data);
+            paula.diskController.serviceDiskChangeEvent(slot[DCH_SLOT].id, (int)slot[DCH_SLOT].data);
         }
         if (isDue<IRQ_SLOT>(cycle)) {
-            paula->serviceIrqEvent();
+            paula.serviceIrqEvent();
         }
         if (isDue<KBD_SLOT>(cycle)) {
             amiga.keyboard.serviceKeyboardEvent(slot[KBD_SLOT].id);
         }
         if (isDue<TXD_SLOT>(cycle)) {
-            paula->uart.serveTxdEvent(slot[TXD_SLOT].id);
+            uart.serveTxdEvent(slot[TXD_SLOT].id);
         }
         if (isDue<RXD_SLOT>(cycle)) {
-            paula->uart.serveRxdEvent(slot[RXD_SLOT].id);
+            uart.serveRxdEvent(slot[RXD_SLOT].id);
         }
         if (isDue<POT_SLOT>(cycle)) {
-            paula->servePotEvent(slot[POT_SLOT].id);
+            paula.servePotEvent(slot[POT_SLOT].id);
         }
         if (isDue<INS_SLOT>(cycle)) {
             serviceINSEvent();
@@ -459,11 +459,11 @@ Agnus::serviceCIAEvent()
     switch(slot[slotNr].id) {
 
         case CIA_EXECUTE:
-            nr ? ciaB->executeOneCycle() : ciaA->executeOneCycle();
+            nr ? ciab.executeOneCycle() : ciaa.executeOneCycle();
             break;
 
         case CIA_WAKEUP:
-            nr ? ciaB->wakeUp() : ciaA->wakeUp();
+            nr ? ciab.wakeUp() : ciaa.wakeUp();
             break;
 
         default:
@@ -489,9 +489,9 @@ Agnus::serviceREGEvent(Cycle until)
         switch (addr) {
 
             case REG_BPLCON0_AGNUS: setBPLCON0(bplcon0, value); break;
-            case REG_BPLCON0_DENISE: denise->setBPLCON0(denise->bplcon0, value); break;
-            case REG_BPLCON1: denise->setBPLCON1(value); break;
-            case REG_BPLCON2: denise->setBPLCON2(value); break;
+            case REG_BPLCON0_DENISE: denise.setBPLCON0(denise.bplcon0, value); break;
+            case REG_BPLCON1: denise.setBPLCON1(value); break;
+            case REG_BPLCON2: denise.setBPLCON2(value); break;
             case REG_DMACON: setDMACON(dmacon, value); break;
             case REG_DIWSTRT: setDIWSTRT(value); break;
             case REG_DIWSTOP: setDIWSTOP(value); break;
@@ -531,39 +531,39 @@ Agnus::serviceBPLEvent()
 
         case BPL_H1:
             if (!bplHwStop()) {
-                denise->bpldat[PLANE1] = doBitplaneDMA<0>();
-                denise->fillShiftRegisters();
+                denise.bpldat[PLANE1] = doBitplaneDMA<0>();
+                denise.fillShiftRegisters();
             } else {
                 INC_DMAPTR(bplpt[PLANE1]);
             }
 
             if(unlikely(isLastHx(pos.h))) {
-                denise->drawHires(16 + denise->scrollHiresOdd);
+                denise.drawHires(16 + denise.scrollHiresOdd);
                 addBPLMOD<0>();
             } else {
-                denise->drawHires(16);
+                denise.drawHires(16);
             }
             break;
 
         case BPL_L1:
             if (!bplHwStop()) {
-                denise->bpldat[PLANE1] = doBitplaneDMA<0>();
-                denise->fillShiftRegisters();
+                denise.bpldat[PLANE1] = doBitplaneDMA<0>();
+                denise.fillShiftRegisters();
             } else {
                 INC_DMAPTR(bplpt[PLANE1]);
             }
 
             if(unlikely(isLastLx(pos.h))) {
-                denise->drawLores(16 + denise->scrollLoresOdd);
+                denise.drawLores(16 + denise.scrollLoresOdd);
                 addBPLMOD<0>();
             } else {
-                denise->drawLores(16);
+                denise.drawLores(16);
             }
             break;
 
         case BPL_H2:
             if (!bplHwStop()) {
-                denise->bpldat[PLANE2] = doBitplaneDMA<1>();
+                denise.bpldat[PLANE2] = doBitplaneDMA<1>();
             } else {
                 INC_DMAPTR(bplpt[PLANE2]);
             }
@@ -573,7 +573,7 @@ Agnus::serviceBPLEvent()
 
         case BPL_L2:
             if (!bplHwStop()) {
-                denise->bpldat[PLANE2] = doBitplaneDMA<1>();
+                denise.bpldat[PLANE2] = doBitplaneDMA<1>();
             } else {
                 INC_DMAPTR(bplpt[PLANE2]);
             }
@@ -583,7 +583,7 @@ Agnus::serviceBPLEvent()
 
         case BPL_H3:
             if (!bplHwStop()) {
-                denise->bpldat[PLANE3] = doBitplaneDMA<2>();
+                denise.bpldat[PLANE3] = doBitplaneDMA<2>();
             } else {
                 INC_DMAPTR(bplpt[PLANE3]);
             }
@@ -593,7 +593,7 @@ Agnus::serviceBPLEvent()
 
         case BPL_L3:
             if (!bplHwStop()) {
-                denise->bpldat[PLANE3] = doBitplaneDMA<2>();
+                denise.bpldat[PLANE3] = doBitplaneDMA<2>();
             } else {
                 INC_DMAPTR(bplpt[PLANE3]);
             }
@@ -603,7 +603,7 @@ Agnus::serviceBPLEvent()
 
         case BPL_H4:
             if (!bplHwStop()) {
-                denise->bpldat[PLANE4] = doBitplaneDMA<3>();
+                denise.bpldat[PLANE4] = doBitplaneDMA<3>();
             } else {
                 INC_DMAPTR(bplpt[PLANE4]);
             }
@@ -613,7 +613,7 @@ Agnus::serviceBPLEvent()
 
         case BPL_L4:
             if (!bplHwStop()) {
-                denise->bpldat[PLANE4] = doBitplaneDMA<3>();
+                denise.bpldat[PLANE4] = doBitplaneDMA<3>();
             } else {
                 INC_DMAPTR(bplpt[PLANE4]);
             }
@@ -623,7 +623,7 @@ Agnus::serviceBPLEvent()
 
         case BPL_L5:
             if (!bplHwStop()) {
-                denise->bpldat[PLANE5] = doBitplaneDMA<4>();
+                denise.bpldat[PLANE5] = doBitplaneDMA<4>();
             } else {
                 INC_DMAPTR(bplpt[PLANE5]);
             }
@@ -633,7 +633,7 @@ Agnus::serviceBPLEvent()
 
         case BPL_L6:
             if (!bplHwStop()) {
-                denise->bpldat[PLANE6] = doBitplaneDMA<5>();
+                denise.bpldat[PLANE6] = doBitplaneDMA<5>();
             } else {
                 INC_DMAPTR(bplpt[PLANE6]);
             }
@@ -678,10 +678,10 @@ Agnus::serviceDASEvent()
         case DAS_D1:
         case DAS_D2:
 
-            if (paula->diskController.getUseFifoLatched())
-                paula->diskController.performDMA();
+            if (paula.diskController.getUseFifoLatched())
+                paula.diskController.performDMA();
             else
-                paula->diskController.performSimpleDMA();
+                paula.diskController.performSimpleDMA();
             break;
 
         case DAS_A0:
@@ -774,11 +774,11 @@ Agnus::serviceINSEvent()
         case INS_NONE:   break;
         case INS_AMIGA:  amiga.inspect(); break;
         case INS_CPU:    amiga.cpu.inspect(); break;
-        case INS_MEM:    mem->inspect(); break;
-        case INS_CIA:    ciaA->inspect(); ciaB->inspect(); break;
+        case INS_MEM:    mem.inspect(); break;
+        case INS_CIA:    ciaa.inspect(); ciab.inspect(); break;
         case INS_AGNUS:  inspect(); break;
-        case INS_PAULA:  paula->inspect(); break;
-        case INS_DENISE: denise->inspect(); break;
+        case INS_PAULA:  paula.inspect(); break;
+        case INS_DENISE: denise.inspect(); break;
         case INS_PORTS:
             amiga.serialPort.inspect();
             amiga.paula.uart.inspect();

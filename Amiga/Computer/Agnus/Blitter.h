@@ -24,12 +24,7 @@
  * Level 0 and 1 invoke the FastBlitter. Level 2 invokes the SlowBlitter.
  */
 
-class Blitter : public HardwareComponent {
-
-    // References to other components
-    class Memory *mem;
-    class Agnus *agnus;
-    class Paula *paula;
+class Blitter : public SubComponent {
 
     // The current configuration
     BlitterConfig config;
@@ -238,7 +233,7 @@ private:
     
 public:
     
-    Blitter();
+    Blitter(Amiga& ref);
 
     // Returns the current configuration
     BlitterConfig getConfig() { return config; }

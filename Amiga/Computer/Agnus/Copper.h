@@ -15,10 +15,6 @@
 class Copper : public SubComponent
 {
     friend class Agnus;
-
-    // References to other components
-    class Memory *mem;
-    class PixelEngine *colorizer;
     
     // Information shown in the GUI inspector panel
     CopperInfo info;

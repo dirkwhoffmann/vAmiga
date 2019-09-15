@@ -9,7 +9,30 @@
 
 #include "Amiga.h"  
 
-SubComponent::SubComponent(Amiga& ref) : amiga(ref), agnus(ref.agnus)
+SubComponent::SubComponent(Amiga& ref) :
+amiga(ref),
+cpu(ref.cpu),
+ciaa(ref.ciaA),
+ciab(ref.ciaB),
+rtc(ref.rtc),
+mem(ref.mem),
+agnus(ref.agnus),
+denise(ref.denise),
+pixelEngine(ref.denise.pixelEngine),
+paula(ref.paula),
+uart(ref.paula.uart),
+zorro(ref.zorro),
+controlPort1(ref.controlPort1),
+controlPort2(ref.controlPort2),
+serialPort(ref.serialPort),
+mouse(ref.mouse),
+joystick1(ref.joystick1),
+joystick2(ref.joystick2),
+keyboard(ref.keyboard),
+df0(ref.df0),
+df1(ref.df1),
+df2(ref.df2),
+df3(ref.df3)
 {
 
 };

@@ -451,7 +451,7 @@ Blitter::beginSlowCopyBlit()
     lockD = true;
 
     // Schedule the first execution event
-    agnus->scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_EXEC_SLOW);
+    agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_EXEC_SLOW);
 
 #ifdef SLOW_BLT_DEBUG
 
@@ -478,7 +478,7 @@ Blitter::exec()
     
     // Check if this instruction needs the bus
     if (instr & BUS) {
-        if (!agnus->allocateBus<BUS_BLITTER>()) return;
+        if (!agnus.allocateBus<BUS_BLITTER>()) return;
     }
 
     bltpc++;
@@ -497,7 +497,7 @@ Blitter::exec()
 
         } else {
 
-            agnus->blitterWrite(bltdpt, dhold);
+            agnus.blitterWrite(bltdpt, dhold);
             check1 = fnv_1a_it32(check1, dhold);
             check2 = fnv_1a_it32(check2, bltdpt);
             debug(BLT_DEBUG, "D: poke(%X), %X (check: %X %X)\n", bltdpt, dhold, check1, check2);
@@ -516,15 +516,15 @@ Blitter::exec()
 
         // This instruction is only used in fake-execution mode. We simply
         // record some fake data to make the DMA debugger happy.
-        assert(agnus->pos.h < HPOS_CNT);
-        agnus->busValue[agnus->pos.h] = 0x8888;
+        assert(agnus.pos.h < HPOS_CNT);
+        agnus.busValue[agnus.pos.h] = 0x8888;
     }
 
     if (instr & FETCH_A) {
 
         debug(BLT_DEBUG, "FETCH_A\n");
 
-        anew = agnus->blitterRead(bltapt);
+        anew = agnus.blitterRead(bltapt);
         debug(BLT_DEBUG, "    A = peek(%X) = %X\n", bltapt, anew);
         debug(BLT_DEBUG, "    After fetch: A = %X\n", anew);
         INC_OCS_PTR(bltapt, incr);
@@ -538,7 +538,7 @@ Blitter::exec()
 
         debug(BLT_DEBUG, "FETCH_B\n");
 
-        bnew = agnus->blitterRead(bltbpt);
+        bnew = agnus.blitterRead(bltbpt);
         debug(BLT_DEBUG, "    B = peek(%X) = %X\n", bltbpt, bnew);
         debug(BLT_DEBUG, "    After fetch: B = %X\n", bnew);
         INC_OCS_PTR(bltbpt, incr);
@@ -552,7 +552,7 @@ Blitter::exec()
 
         debug(BLT_DEBUG, "FETCH_C\n");
 
-        chold = agnus->blitterRead(bltcpt);
+        chold = agnus.blitterRead(bltcpt);
         debug(BLT_DEBUG, "    C = peek(%X) = %X\n", bltcpt, chold);
         debug(BLT_DEBUG, "    After fetch: C = %X\n", chold);
         INC_OCS_PTR(bltcpt, incr);
