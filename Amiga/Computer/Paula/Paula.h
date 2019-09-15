@@ -14,13 +14,9 @@
 #include "DiskController.h"
 #include "UART.h"
 
-class Paula : public HardwareComponent {
+class Paula : public SubComponent {
     
 private:
-
-    // References to other components
-    class CPU *cpu;
-    class Agnus *agnus;
 
     // Information shown in the GUI inspector panel
     PaulaInfo info;
@@ -85,7 +81,7 @@ public:
     
 public:
     
-    Paula();
+    Paula(Amiga& ref);
 
 
     //

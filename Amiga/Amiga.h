@@ -113,7 +113,7 @@ public:
     Denise denise = Denise(*this);
     
     // Paula (Interrupts, Disk Controller, Audio)
-    Paula paula;
+    Paula paula = Paula(*this);
     
     // Zorro II device manager
     ZorroManager zorro;

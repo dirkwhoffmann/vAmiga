@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-Paula::Paula()
+Paula::Paula(Amiga& ref) : SubComponent(ref)
 {
     setDescription("Paula");
 
@@ -24,8 +24,6 @@ Paula::Paula()
 void
 Paula::_initialize()
 {
-    cpu = &amiga->cpu;
-    agnus = &amiga->agnus;
 }
 
 void
@@ -92,8 +90,8 @@ Paula::peekINTREQR()
 {
     uint16_t result = intreq;
 
-    if (amiga->ciaA.irqPin() == 0) SET_BIT(result, 3);
-    if (amiga->ciaB.irqPin() == 0) SET_BIT(result, 13);
+    if (ciaa.irqPin() == 0) SET_BIT(result, 3);
+    if (ciab.irqPin() == 0) SET_BIT(result, 13);
 
     debug(INT_DEBUG, "peekINTREQR(): %x\n", result);
 
@@ -149,7 +147,7 @@ void
 Paula::scheduleIrq(IrqSource src, Cycle trigger, bool set)
 {
     assert(isIrqSource(src));
-    assert(agnus->slot[IRQ_SLOT].id == IRQ_CHECK);
+    assert(agnus.slot[IRQ_SLOT].id == IRQ_CHECK);
 
     debug(INT_DEBUG, "scheduleIrq(%d, %d, %d)\n", src, trigger, set); 
 
@@ -178,17 +176,17 @@ Paula::scheduleIrq(IrqSource src, Cycle trigger, bool set)
     }
 
     // Service the request with the proper delay
-    if (trigger < agnus->slot[IRQ_SLOT].triggerCycle) {
-        agnus->scheduleRel<IRQ_SLOT>(trigger, IRQ_CHECK);
+    if (trigger < agnus.slot[IRQ_SLOT].triggerCycle) {
+        agnus.scheduleRel<IRQ_SLOT>(trigger, IRQ_CHECK);
     }
 }
 
 void
 Paula::serviceIrqEvent()
 {
-    assert(agnus->slot[IRQ_SLOT].id == IRQ_CHECK);
+    assert(agnus.slot[IRQ_SLOT].id == IRQ_CHECK);
 
-    Cycle clock = agnus->clock;
+    Cycle clock = agnus.clock;
     Cycle next = NEVER;
 
     // Check all 16 interrupt sources
@@ -212,7 +210,7 @@ Paula::serviceIrqEvent()
     }
 
     // Schedule next event
-    agnus->scheduleAbs<IRQ_SLOT>(next, IRQ_CHECK);
+    agnus.scheduleAbs<IRQ_SLOT>(next, IRQ_CHECK);
 }
 
 uint16_t
@@ -260,10 +258,10 @@ Paula::peekPOTGOR()
     bool outlx = GET_BIT(potgo,  9);
     bool datlx = GET_BIT(potgo,  8);
 
-    bool poty0 = amiga->controlPort1.getPotY() & 0x80;
-    bool potx0 = amiga->controlPort1.getPotX() & 0x80;
-    bool poty1 = amiga->controlPort2.getPotY() & 0x80;
-    bool potx1 = amiga->controlPort2.getPotX() & 0x80;
+    bool poty0 = controlPort1.getPotY() & 0x80;
+    bool potx0 = controlPort1.getPotX() & 0x80;
+    bool poty1 = controlPort2.getPotY() & 0x80;
+    bool potx1 = controlPort2.getPotX() & 0x80;
 
     WRITE_BIT(result, 14, outry ? datry : poty0);
     WRITE_BIT(result, 12, outrx ? datrx : potx0);
@@ -272,8 +270,8 @@ Paula::peekPOTGOR()
 
     // Connected devices can pull down lines even if they are configured
     // as outputs
-    result &= amiga->controlPort1.potgor();
-    result &= amiga->controlPort2.potgor();
+    result &= controlPort1.potgor();
+    result &= controlPort2.potgor();
 
     debug(POT_DEBUG, "peekPOTGOR = %X\n", result);
     return result;
@@ -297,8 +295,8 @@ Paula::pokePOTGO(uint16_t value)
         debug(POT_DEBUG, "Starting potentiometer scan procedure\n");
 
         // Schedule the first DISCHARGE event
-        agnus->schedulePos<POT_SLOT>(agnus->pos.v, HPOS_MAX, POT_DISCHARGE);
-        agnus->slot[POT_SLOT].data = 8;
+        agnus.schedulePos<POT_SLOT>(agnus.pos.v, HPOS_MAX, POT_DISCHARGE);
+        agnus.slot[POT_SLOT].data = 8;
     }
 }
 
@@ -313,15 +311,15 @@ Paula::servePotEvent(EventID id)
 
         case POT_DISCHARGE:
 
-            agnus->slot[POT_SLOT].data--;
-            if (agnus->slot[POT_SLOT].data) {
+            agnus.slot[POT_SLOT].data--;
+            if (agnus.slot[POT_SLOT].data) {
 
                 // Schedule another DISCHARGE event
                 potCntX0++;
                 potCntY0++;
                 potCntX1++;
                 potCntY1++;
-                agnus->scheduleRel<POT_SLOT>(DMA_CYCLES(HPOS_MAX), POT_DISCHARGE);
+                agnus.scheduleRel<POT_SLOT>(DMA_CYCLES(HPOS_MAX), POT_DISCHARGE);
 
             } else {
 
@@ -330,7 +328,7 @@ Paula::servePotEvent(EventID id)
                 potCntY0 = 0;
                 potCntX1 = 0;
                 potCntY1 = 0;
-                agnus->scheduleRel<POT_SLOT>(DMA_CYCLES(HPOS_MAX), POT_CHARGE);
+                agnus.scheduleRel<POT_SLOT>(DMA_CYCLES(HPOS_MAX), POT_CHARGE);
             }
             break;
 
@@ -338,16 +336,16 @@ Paula::servePotEvent(EventID id)
 
             // Increment pot counters if target value hasn't been reached yet
             cont = false;
-            if (potCntX0 < amiga->controlPort1.getPotX()) { potCntX0++; cont = true; }
-            if (potCntY0 < amiga->controlPort1.getPotY()) { potCntY0++; cont = true; }
-            if (potCntX1 < amiga->controlPort2.getPotX()) { potCntX1++; cont = true; }
-            if (potCntY1 < amiga->controlPort2.getPotY()) { potCntY1++; cont = true; }
+            if (potCntX0 < controlPort1.getPotX()) { potCntX0++; cont = true; }
+            if (potCntY0 < controlPort1.getPotY()) { potCntY0++; cont = true; }
+            if (potCntX1 < controlPort2.getPotX()) { potCntX1++; cont = true; }
+            if (potCntY1 < controlPort2.getPotY()) { potCntY1++; cont = true; }
 
             // Schedule next pot event if at least counter is still running
             if (cont) {
-                agnus->scheduleRel<POT_SLOT>(DMA_CYCLES(HPOS_CNT), POT_CHARGE);
+                agnus.scheduleRel<POT_SLOT>(DMA_CYCLES(HPOS_CNT), POT_CHARGE);
             } else {
-                agnus->cancel<POT_SLOT>();
+                agnus.cancel<POT_SLOT>();
             }
             break;
 
@@ -363,8 +361,8 @@ Paula::interruptLevel()
 
         uint16_t mask = intreq;
 
-        if (amiga->ciaA.irqPin() == 0) SET_BIT(mask, 3);
-        if (amiga->ciaB.irqPin() == 0) SET_BIT(mask, 13);
+        if (ciaa.irqPin() == 0) SET_BIT(mask, 3);
+        if (ciab.irqPin() == 0) SET_BIT(mask, 13);
 
         mask &= intena;
 
@@ -384,5 +382,5 @@ Paula::interruptLevel()
 void
 Paula::checkInterrupt()
 {
-    cpu->setIrqLevel(interruptLevel());
+    cpu.setIrqLevel(interruptLevel());
 }
