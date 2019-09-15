@@ -240,9 +240,9 @@ struct AmigaFileWrapper;
     struct CIAWrapper *wrapper;
 }
 
+- (void) dumpConfig;
 - (void) dump;
 - (CIAInfo) getInfo;
-- (void) poke:(uint16_t)addr value:(uint8_t)value;
 
 @end
 

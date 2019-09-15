@@ -183,14 +183,13 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->cia->getInfo();
 }
+- (void) dumpConfig
+{
+    wrapper->cia->dumpConfig();
+}
 - (void) dump
 {
     wrapper->cia->dump();
-}
-- (void) poke:(uint16_t)addr value:(uint8_t)value {
-    wrapper->cia->amiga->suspend();
-    wrapper->cia->poke(addr, value);
-    wrapper->cia->amiga->resume();
 }
 
 @end

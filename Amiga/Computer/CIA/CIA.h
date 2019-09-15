@@ -74,7 +74,7 @@ class Joystick;
 
 
 // Virtual complex interface adapter (CIA)
-class CIA : public HardwareComponent {
+class CIA : public SubComponent {
 
     friend TOD;
     friend Amiga;
@@ -83,11 +83,6 @@ protected:
 
     // Identification (0 = CIA A, 1 = CIA B)
     int nr;
-
-    // References to other components
-    class Agnus *agnus;
-    class Paula *paula;
-    class SerialPort *serialPort;
 
     // The current configuration
     CIAConfig config;
@@ -334,8 +329,7 @@ private:
 
 public:
     
-    CIA();
-    ~CIA();
+    CIA(Amiga& ref);
 
     // Returns the current configuration
     CIAConfig getConfig() { return config; }
@@ -553,7 +547,7 @@ class CIAA : public CIA {
     
 public:
     
-    CIAA();
+    CIAA(Amiga& ref);
     void _powerOn() override;
     void _powerOff() override;
     void _dump() override;
@@ -588,7 +582,7 @@ class CIAB : public CIA {
     
 public:
     
-    CIAB();
+    CIAB(Amiga& ref);
     void _dump() override;
     
 private:

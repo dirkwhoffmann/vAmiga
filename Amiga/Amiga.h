@@ -95,10 +95,10 @@ public:
     CPU cpu;
     
     // CIA A (odd CIA)
-    CIAA ciaA;
+    CIAA ciaA = CIAA(*this);
     
     // CIA B (even CIA)
-    CIAB ciaB;
+    CIAB ciaB = CIAB(*this);
     
     // Real-time clock
     RTC rtc = RTC(*this);

@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-CIA::CIA()
+CIA::CIA(Amiga& ref) : SubComponent(ref)
 {
 	setDescription("CIA");
 
@@ -21,16 +21,9 @@ CIA::CIA()
     PB = 0xFF;
 }
 
-CIA::~CIA()
-{
-}
-
 void
 CIA::_initialize()
 {
-    agnus = &amiga->agnus;
-    paula = &amiga->paula;
-    serialPort = &amiga->serialPort;
 }
 
 void
@@ -65,7 +58,7 @@ CIA::_reset()
     updatePB();
 
     // The OVL bit influences the memory layout. Hence, we need to update it.
-    amiga->mem.updateMemSrcTable();
+    mem.updateMemSrcTable();
 }
 
 void
@@ -588,13 +581,8 @@ CIA::poke(uint16_t addr, uint8_t value)
             // -0------ : Serial shift register in input mode (read)
             // -1------ : Serial shift register in output mode (write)
             if ((nr == 0) && ((CRA & 0x40) ^ (value & 0x40))) { // CIA A only
-                amiga->keyboard.setSPLine(!(value & 0x40), clock);
+                keyboard.setSPLine(!(value & 0x40), clock);
             }
-            /*
-            if (nr == 0 && !(CRA & 0x40) && (value & 0x40)) { // CIA A only
-                amiga->keyboard.setHandshake();
-            }
-            */
 
             if ((value ^ CRA) & 0x40)
             {
@@ -1138,7 +1126,7 @@ CIA::wakeUp()
     if (!sleeping) return;
     sleeping = false;
     
-    Cycle targetCycle = CIA_CYCLES(AS_CIA_CYCLES(agnus->clock));
+    Cycle targetCycle = CIA_CYCLES(AS_CIA_CYCLES(agnus.clock));
     wakeUp(targetCycle);
 
 }
@@ -1177,7 +1165,7 @@ CIA::wakeUp(Cycle targetCycle)
 Cycle
 CIA::idle()
 {
-    return isAwake() ? 0 : agnus->clock - sleepCycle;
+    return isAwake() ? 0 : agnus.clock - sleepCycle;
 }
 
 
@@ -1185,7 +1173,7 @@ CIA::idle()
 // Complex Interface Adapter A
 // -----------------------------------------------------------------------------
 
-CIAA::CIAA()
+CIAA::CIAA(Amiga& ref) : CIA(ref)
 {
     setDescription("CIAA");
     nr = 0;
@@ -1201,32 +1189,32 @@ void
 CIAA::_powerOn()
 {
     CIA::_powerOn();
-    amiga->putMessage(MSG_POWER_LED_DIM);
+    amiga.putMessage(MSG_POWER_LED_DIM);
 }
 
 void
 CIAA::_powerOff()
 {
-    amiga->putMessage(MSG_POWER_LED_OFF);
+    amiga.putMessage(MSG_POWER_LED_OFF);
 }
 
 void
 CIAA::scheduleNextExecution()
 {
-    agnus->scheduleAbs<CIAA_SLOT>(clock + CIA_CYCLES(1), CIA_EXECUTE);
+    agnus.scheduleAbs<CIAA_SLOT>(clock + CIA_CYCLES(1), CIA_EXECUTE);
 }
 
 void
 CIAA::scheduleWakeUp()
 {
-    agnus->scheduleAbs<CIAA_SLOT>(wakeUpCycle, CIA_WAKEUP);
+    agnus.scheduleAbs<CIAA_SLOT>(wakeUpCycle, CIA_WAKEUP);
 }
 
 void 
 CIAA::pullDownInterruptLine()
 {
     debug(CIA_DEBUG, "Pulling down IRQ line\n");
-    paula->raiseIrq(INT_PORTS);
+    paula.raiseIrq(INT_PORTS);
     // paula->setINTREQ(0x8000 | (1 << 3));
 }
 
@@ -1234,7 +1222,7 @@ void
 CIAA::releaseInterruptLine()
 {
     debug(CIA_DEBUG, "Releasing IRQ line\n");
-    paula->checkInterrupt();
+    paula.checkInterrupt();
 }
 
 //              -------
@@ -1260,11 +1248,11 @@ CIAA::portAexternal()
     uint8_t result;
     
     // Set drive status bits
-    result = paula->diskController.driveStatusFlags();
+    result = diskController.driveStatusFlags();
 
     // Set control port bits
-    result &= amiga->controlPort1.ciapa();
-    result &= amiga->controlPort2.ciapa();
+    result &= controlPort1.ciapa();
+    result &= controlPort2.ciapa();
 
     // The OVL bit must be 1
     assert(result & 1);
@@ -1300,12 +1288,12 @@ CIAA::updatePA()
     
     // Check the LED bit
     if ((oldPA ^ PA) & 0b00000010) {
-        amiga->putMessage((PA & 0b00000010) ? MSG_POWER_LED_DIM : MSG_POWER_LED_ON);
+        amiga.putMessage((PA & 0b00000010) ? MSG_POWER_LED_DIM : MSG_POWER_LED_ON);
     }
 
     // Check the OVL bot (Kickstart overlay)
     if ((oldPA ^ PA) & 0b00000001) {
-        amiga->mem.updateMemSrcTable();
+        mem.updateMemSrcTable();
     }
     
     /*
@@ -1374,7 +1362,7 @@ CIAA::setKeyCode(uint8_t keyCode)
 // Complex Interface Adapter B
 // -----------------------------------------------------------------------------
 
-CIAB::CIAB()
+CIAB::CIAB(Amiga& ref) : CIA(ref)
 {
     setDescription("CIAB");
     nr = 1;
@@ -1389,28 +1377,27 @@ CIAB::_dump()
 void
 CIAB::scheduleNextExecution()
 {
-    agnus->scheduleAbs<CIAB_SLOT>(clock + CIA_CYCLES(1), CIA_EXECUTE);
+    agnus.scheduleAbs<CIAB_SLOT>(clock + CIA_CYCLES(1), CIA_EXECUTE);
 }
 
 void
 CIAB::scheduleWakeUp()
 {
-    agnus->scheduleAbs<CIAB_SLOT>(wakeUpCycle, CIA_WAKEUP);
+    agnus.scheduleAbs<CIAB_SLOT>(wakeUpCycle, CIA_WAKEUP);
 }
 
 void 
 CIAB::pullDownInterruptLine()
 {
     debug(CIA_DEBUG, "Pulling down IRQ line\n");
-    paula->raiseIrq(INT_EXTER);
-    // paula->setINTREQ(0x8000 | (1 << 13));
+    paula.raiseIrq(INT_EXTER);
 }
 
 void 
 CIAB::releaseInterruptLine()
 {
     debug(CIA_DEBUG, "Releasing IRQ line\n");
-    paula->checkInterrupt();
+    paula.checkInterrupt();
 }
 
 //                                 -------
@@ -1439,14 +1426,14 @@ CIAB::portAexternal()
     // NOT IMPLEMENTED
 
     // Shared between parallel and serial port
-    if (serialPort->getRI()) CLR_BIT(result, 2); 
+    if (serialPort.getRI()) CLR_BIT(result, 2);
 
     // Serial port
-    if (serialPort->getDSR()) CLR_BIT(result, 3);
-    if (serialPort->getCTS()) CLR_BIT(result, 4);
-    if (serialPort->getCD())  CLR_BIT(result, 5);
-    if (serialPort->getRTS()) CLR_BIT(result, 6);
-    if (serialPort->getDTR()) CLR_BIT(result, 7);
+    if (serialPort.getDSR()) CLR_BIT(result, 3);
+    if (serialPort.getCTS()) CLR_BIT(result, 4);
+    if (serialPort.getCD())  CLR_BIT(result, 5);
+    if (serialPort.getRTS()) CLR_BIT(result, 6);
+    if (serialPort.getDTR()) CLR_BIT(result, 7);
 
     return result;
 }
@@ -1459,8 +1446,8 @@ CIAB::updatePA()
     uint8_t internal = portAinternal() & DDRA;
 
     // Check drive bits that are configured as output
-    if (GET_BIT(DDRA, 6)) serialPort->setRTS(!GET_BIT(internal, 6));
-    if (GET_BIT(DDRA, 7)) serialPort->setDTR(!GET_BIT(internal, 7));
+    if (GET_BIT(DDRA, 6)) serialPort.setRTS(!GET_BIT(internal, 6));
+    if (GET_BIT(DDRA, 7)) serialPort.setDTR(!GET_BIT(internal, 7));
 
     uint8_t external = portAexternal() & ~DDRA;
     
@@ -1531,6 +1518,6 @@ CIAB::updatePB()
               !!(PB & 0x80), !!(PB & 0x40), !!(PB & 0x20), !!(PB & 0x10),
               !!(PB & 0x08), !!(PB & 0x04), !!(PB & 0x02), !!(PB & 0x01));
         */
-        paula->diskController.PRBdidChange(oldPB, PB);
+        diskController.PRBdidChange(oldPB, PB);
     }
 }

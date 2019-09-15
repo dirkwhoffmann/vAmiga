@@ -26,6 +26,7 @@ class DmaDebugger;
 class Denise;
 class PixelEngine;
 class Paula;
+class DiskController;
 class UART;
 class ZorroManager;
 class ControlPort;
@@ -37,7 +38,7 @@ class Drive;
 
 
 /* Base class for all sub components.
- * It enriches class HardwareComponent by references to all other components.
+ * Exhibits references to all Amiga components.
  */
 class SubComponent : public HardwareComponent {
 
@@ -54,6 +55,7 @@ protected:
     Denise &denise;
     PixelEngine &pixelEngine;
     Paula &paula;
+    DiskController &diskController;
     UART &uart;
     ZorroManager &zorro;
     ControlPort &controlPort1;

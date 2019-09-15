@@ -10,7 +10,7 @@
 #ifndef _TOD_INC
 #define _TOD_INC
 
-#include "HardwareComponent.h"
+#include "SubComponent.h"
 
 class CIA;
 
