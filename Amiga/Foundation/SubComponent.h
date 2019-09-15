@@ -13,9 +13,10 @@
 #include "HardwareComponent.h"
 
 //
-// Forward declarations of all sub components
+// Forward declarations of all components
 //
 
+class Amiga;
 class CPU;
 class CIA;
 class CIAA;

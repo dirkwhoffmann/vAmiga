@@ -12,8 +12,6 @@
 
 #include "AmigaObject.h"
 
-class Amiga;
-
 /* Base class for all hardware components
  * This class defines the base functionality of all hardware components.
  * it comprises functions for powering up and down, resetting, suspending and
@@ -41,9 +39,6 @@ protected:
     };
 
 public:
-    
-    // Reference to the Amiga top-level object
-    Amiga *amiga = NULL;
 
     // Sub components of this component
     vector<HardwareComponent *> subComponents;
@@ -100,7 +95,7 @@ public:
      * by setting up referecens that do not exist at the time they are
      * constructed.
      */
-    void initialize(Amiga *amiga);
+    void initialize();
     virtual void _initialize() { };
     
     /* There are several functions for querying and changing state:

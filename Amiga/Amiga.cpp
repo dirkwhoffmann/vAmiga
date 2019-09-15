@@ -100,7 +100,7 @@ Amiga::Amiga()
     };
 
     // Set up initial state
-    initialize(this);
+    initialize();
     reset();
 
     // Initialize the mach timer info
@@ -520,7 +520,7 @@ Amiga::reset()
     HardwareComponent::reset();
 
     // Inform the GUI
-    amiga->putMessage(MSG_RESET);
+    putMessage(MSG_RESET);
 
     resume();
 }
@@ -616,7 +616,7 @@ Amiga::_run()
     pthread_create(&p, NULL, threadMain, (void *)this);
     
     // Inform the GUI.
-    amiga->putMessage(MSG_RUN);
+    putMessage(MSG_RUN);
 }
 
 void
@@ -632,7 +632,7 @@ Amiga::_pause()
     inspect();
 
     // Inform the GUI
-    amiga->putMessage(MSG_PAUSE);
+    putMessage(MSG_PAUSE);
 }
 
 void
@@ -833,10 +833,10 @@ Amiga::snapshotIsDue()
 {
     unsigned fps = 50; // PAL frames per second
     
-    if (!getTakeAutoSnapshots() || amiga->getSnapshotInterval() <= 0)
+    if (!getTakeAutoSnapshots() || getSnapshotInterval() <= 0)
     return false;
     
-    return agnus.frame % (fps * amiga->getSnapshotInterval()) == 0;
+    return agnus.frame % (fps * getSnapshotInterval()) == 0;
 }
 
 void
@@ -963,7 +963,7 @@ Amiga::runLoop()
     debug(RUNLOOP_DEBUG, "runLoop()\n");
 
     // Prepare to run
-    amiga->restartTimer();
+    restartTimer();
     
     // Enable or disable debugging features
     debugMode ? setControlFlags(RL_DEBUG) : clearControlFlags(RL_DEBUG);

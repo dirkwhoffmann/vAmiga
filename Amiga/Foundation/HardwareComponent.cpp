@@ -21,16 +21,11 @@ HardwareComponent::~HardwareComponent()
 }
 
 void
-HardwareComponent::initialize(Amiga *amiga)
+HardwareComponent::initialize()
 {
-    assert(this->amiga == NULL);
-    assert(amiga != NULL);
-
-    this->amiga = amiga;
-
     // Initialize all subcomponents
     for (HardwareComponent *c : subComponents) {
-        c->initialize(amiga);
+        c->initialize();
     }
 
     // Initialize this component
