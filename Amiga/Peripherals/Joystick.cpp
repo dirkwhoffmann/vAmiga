@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-Joystick::Joystick(int nr)
+Joystick::Joystick(int nr, Amiga& ref) : SubComponent(ref)
 {
     assert(nr == 1 || nr == 2);
     
@@ -20,13 +20,11 @@ Joystick::Joystick(int nr)
 void
 Joystick::_initialize()
 {
-    agnus = &amiga->agnus; 
 }
 
 void
 Joystick::_powerOn()
 {
-
 }
 
 void
@@ -79,7 +77,7 @@ Joystick::setAutofireBullets(int value)
 void
 Joystick::scheduleNextShot()
 {
-    nextAutofireFrame = agnus->frame + (int)(50.0 / (2 * autofireFrequency));
+    nextAutofireFrame = agnus.frame + (int)(50.0 / (2 * autofireFrequency));
 }
 
 uint16_t
@@ -167,7 +165,7 @@ Joystick::execute()
         return;
     
     // Wait until it's time to push or release fire
-    if (agnus->frame != nextAutofireFrame)
+    if (agnus.frame != nextAutofireFrame)
         return;
     
     // Are there any bullets left?

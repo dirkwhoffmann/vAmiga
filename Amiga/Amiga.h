@@ -126,11 +126,11 @@ public:
     SerialPort serialPort = SerialPort(*this);
 
     // Mouse
-    Mouse mouse;
+    Mouse mouse = Mouse(*this);
     
     // Joysticks
-    Joystick joystick1 = Joystick(1);
-    Joystick joystick2 = Joystick(2);
+    Joystick joystick1 = Joystick(1, *this);
+    Joystick joystick2 = Joystick(2, *this);
     
     // Keyboard
     Keyboard keyboard;

@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-Mouse::Mouse()
+Mouse::Mouse(Amiga& ref) : SubComponent(ref)
 {
     setDescription("Mouse");
 }
@@ -17,7 +17,6 @@ Mouse::Mouse()
 void
 Mouse::_powerOn()
 {
-
 }
 
 void Mouse::_reset()

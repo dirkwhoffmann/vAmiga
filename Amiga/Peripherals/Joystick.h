@@ -10,12 +10,9 @@
 #ifndef _JOYSTICK_INC
 #define _JOYSTICK_INC
 
-#include "HardwareComponent.h"
+#include "SubComponent.h"
 
-class Joystick : public HardwareComponent {
-
-    // References to other components
-    class Agnus *agnus;
+class Joystick : public SubComponent {
 
     // The control port this joystick is connected to (1 or 2)
     int nr;
@@ -51,7 +48,7 @@ class Joystick : public HardwareComponent {
     
 public:
     
-    Joystick(int nr);
+    Joystick(int nr, Amiga& ref);
     
 
     //

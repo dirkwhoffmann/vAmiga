@@ -10,9 +10,9 @@
 #ifndef _MOUSE_INC
 #define _MOUSE_INC
 
-#include "HardwareComponent.h"
+#include "SubComponent.h"
 
-class Mouse : public HardwareComponent {
+class Mouse : public SubComponent {
     
 public:
     
@@ -54,7 +54,7 @@ private:
     
 public:
     
-    Mouse();
+    Mouse(Amiga& ref);
 
     
     //
