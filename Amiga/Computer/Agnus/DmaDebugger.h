@@ -10,10 +10,10 @@
 #ifndef _DMA_DEBUGGER_INC
 #define _DMA_DEBUGGER_INC
 
-#include "HardwareComponent.h"
+#include "SubComponent.h"
 #include "Colors.h"
 
-class DmaDebugger : public HardwareComponent {
+class DmaDebugger : public SubComponent {
 
 private:
 
@@ -39,7 +39,7 @@ private:
 
 public:
 
-    DmaDebugger();
+    DmaDebugger(Amiga &ref);
 
     // Returns the current settings
     DMADebuggerInfo getInfo();

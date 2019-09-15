@@ -72,7 +72,7 @@ public:
     Blitter blitter = Blitter(amiga);
     
     // A graphics engine for visualizing DMA accesses
-    DmaDebugger dmaDebugger;
+    DmaDebugger dmaDebugger = DmaDebugger(amiga);
 
 
     //

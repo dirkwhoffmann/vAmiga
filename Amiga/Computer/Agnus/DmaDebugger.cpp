@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-DmaDebugger::DmaDebugger()
+DmaDebugger::DmaDebugger(Amiga &ref) : SubComponent(ref)
 {
     setDescription("DmaDebugger");
 
@@ -60,11 +60,11 @@ DmaDebugger::setEnabled(bool value)
 {
     if (!enabled && value) {
         enabled = true;
-        amiga->putMessage(MSG_DMA_DEBUG_ON);
+        amiga.putMessage(MSG_DMA_DEBUG_ON);
     }
     if (enabled && !value) {
         enabled = false;
-        amiga->putMessage(MSG_DMA_DEBUG_OFF);
+        amiga.putMessage(MSG_DMA_DEBUG_OFF);
     }
 }
 
@@ -129,9 +129,9 @@ DmaDebugger::computeOverlay()
     // Only proceed if DMA debugging has been turned on
     if (!enabled) return;
 
-    BusOwner *owners = amiga->agnus.busOwner;
-    uint16_t *values = amiga->agnus.busValue;
-    int *ptr = amiga->denise.pixelEngine.pixelAddr(0);
+    BusOwner *owners = agnus.busOwner;
+    uint16_t *values = agnus.busValue;
+    int *ptr = denise.pixelEngine.pixelAddr(0);
 
     double bgWeight, fgWeight;
 
@@ -202,7 +202,7 @@ DmaDebugger::vSyncHandler()
     if (!enabled) return;
 
     // Clear old data in the next frame's VBLANK area
-    int *ptr = amiga->denise.pixelEngine.frameBuffer->data;
+    int *ptr = denise.pixelEngine.frameBuffer->data;
     for (int row = 0; row < VBLANK_CNT; row++) {
         for (int col = 0; col <= LAST_PIXEL; col++) {
             ptr[row * HPIXELS + col] = PixelEngine::rgbaVBlank;
