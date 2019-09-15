@@ -10,9 +10,9 @@
 #ifndef _CONTROL_PORT_INC
 #define _CONTROL_PORT_INC
 
-#include "HardwareComponent.h"
+#include "SubComponent.h"
 
-class ControlPort : public HardwareComponent {
+class ControlPort : public SubComponent {
 
     // Information shown in the GUI inspector panel
     ControlPortInfo info;
@@ -38,7 +38,7 @@ class ControlPort : public HardwareComponent {
     
 public:
     
-    ControlPort(int nr);
+    ControlPort(int nr, Amiga& ref);
 
 
     //

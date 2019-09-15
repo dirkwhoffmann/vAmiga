@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-ControlPort::ControlPort(int nr)
+ControlPort::ControlPort(int nr, Amiga& ref) : SubComponent(ref)
 {
     assert(nr == 1 || nr == 2);
     
@@ -66,7 +66,7 @@ uint16_t
 ControlPort::potgor()
 {
     if (device == CPD_MOUSE)
-        if (amiga->mouse.rightButton)
+        if (mouse.rightButton)
             return (nr == 1) ? 0xFBFF : 0xBFFF;
 
     return 0xFFFF;
@@ -85,13 +85,13 @@ ControlPort::joydat()
 
         case CPD_MOUSE:
 
-            mouseCounterX += amiga->mouse.getDeltaX();
-            mouseCounterY += amiga->mouse.getDeltaY();
+            mouseCounterX += mouse.getDeltaX();
+            mouseCounterY += mouse.getDeltaY();
             // assert(HI_LO(mouseCounterY & 0xFF, mouseCounterX & 0xFF) == amiga->mouse.getXY());
             return HI_LO(mouseCounterY & 0xFF, mouseCounterX & 0xFF);
 
         case CPD_JOYSTICK:
-            return nr == 1 ? amiga->joystick1.joydat() : amiga->joystick2.joydat();
+            return nr == 1 ? joystick1.joydat() : joystick2.joydat();
     }
 }
 
@@ -106,7 +106,7 @@ ControlPort::ciapa()
 
         case CPD_MOUSE:
 
-            if (amiga->mouse.leftButton) {
+            if (mouse.leftButton) {
                 return (nr == 1) ? 0xBF : 0x7F;
             } else {
                 return 0xFF;
@@ -114,7 +114,7 @@ ControlPort::ciapa()
 
         case CPD_JOYSTICK:
 
-            return nr == 1 ? amiga->joystick1.ciapa() : amiga->joystick2.ciapa();
+            return nr == 1 ? joystick1.ciapa() : joystick2.ciapa();
     }
 }
 

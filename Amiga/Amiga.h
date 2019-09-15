@@ -119,8 +119,8 @@ public:
     ZorroManager zorro = ZorroManager(*this);
     
     // Control ports
-    ControlPort controlPort1 = ControlPort(1);
-    ControlPort controlPort2 = ControlPort(2);
+    ControlPort controlPort1 = ControlPort(1, *this);
+    ControlPort controlPort2 = ControlPort(2, *this);
 
     // Serial port
     SerialPort serialPort;
