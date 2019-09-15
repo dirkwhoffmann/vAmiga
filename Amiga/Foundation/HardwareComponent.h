@@ -18,29 +18,10 @@
  * resuming, as well as functions for loading and saving snapshots.
  */
 class HardwareComponent : public AmigaObject {
-    
-protected:
-    
-    /* Type and behavior of a snapshot item
-     * The format flags are important when big chunks of data are specified.
-     * They are needed in functions loadBuffer and saveBuffer to correctly
-     * convert little endian to big endian format.
-     * If the PERSISTANT flag is set, the snapshot won't be zeroed out in
-     * powerOn().
-     */
-    enum {
-        BYTE_ARRAY       = 0x01, // Data chunk is an array of bytes
-        WORD_ARRAY       = 0x02, // Data chunk is an array of words
-        DWORD_ARRAY      = 0x04, // Data chunk is an array of double words
-        QWORD_ARRAY      = 0x08, // Data chunk is an array of quad words
-        
-        PERSISTANT       = 0x10, // Don't zero out in powerOn()
-        
-    };
 
 public:
 
-    // Sub components of this component
+    // The sub components of this component
     vector<HardwareComponent *> subComponents;
 
 protected:
@@ -50,12 +31,6 @@ protected:
      * variables that are accessed by both the emulator thread and the GUI.
      */
     pthread_mutex_t lock;
-
-    // Snapshot items of this component
-    // vector<SnapshotItem> snapshotItems;
-    
-    // Snapshot size on disk in bytes (DEPRECATED)
-    // unsigned snapshotSize = 0;
 
     /* State model:
      * The virtual hardware components can be in three different states,
@@ -74,7 +49,12 @@ protected:
     
     // Indicates if this component should run in warp mode
     bool warp = false;
-    
+
+
+    //
+    // Constructing and destructing
+    //
+
 public:
     
     HardwareComponent();
@@ -214,13 +194,13 @@ public:
     void warpOff();
     virtual void _warpOff() { }
 
-    
-public:
-    
+
     //
     // Loading and saving snapshots
     //
-    
+
+public:
+
     // Returns the size of the internal state in bytes.
     size_t size();
     virtual size_t _size() = 0;
