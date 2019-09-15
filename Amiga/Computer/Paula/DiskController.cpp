@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-DiskController::DiskController()
+DiskController::DiskController(Amiga& ref) : SubComponent(ref)
 {
     setDescription("DiskController");
 
@@ -24,20 +24,11 @@ DiskController::DiskController()
 void
 DiskController::_initialize()
 {
-    mem = &amiga->mem;
-    agnus = &amiga->agnus;
-    paula  = &amiga->paula;
-    
-    df[0] = &amiga->df0;
-    df[1] = &amiga->df1;
-    df[2] = &amiga->df2;
-    df[3] = &amiga->df3;
 }
 
 void
 DiskController::_powerOn()
 {
-
 }
 
 void
@@ -59,7 +50,7 @@ void
 DiskController::_ping()
 {
     for (int df = 0; df < 4; df++) {
-        amiga->putMessage(config.connected[df] ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, df);
+        amiga.putMessage(config.connected[df] ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, df);
     }
 }
 
@@ -72,7 +63,7 @@ DiskController::_inspect()
     info.state = state;
     info.fifoCount = fifoCount;
     info.dsklen = dsklen;
-    info.dskbytr = mem->spypeekChip16(DSKBYTR);
+    info.dskbytr = mem.spypeekChip16(DSKBYTR);
     info.dsksync = dsksync;
     info.prb = prb;
  
@@ -153,21 +144,21 @@ DiskController::setConnected(int df, bool value)
     config.connected[df] = value;
     pthread_mutex_unlock(&lock);
 
-    amiga->putMessage(value ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, df);
-    amiga->putMessage(MSG_CONFIG);
+    amiga.putMessage(value ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, df);
+    amiga.putMessage(MSG_CONFIG);
 }
 
 void
 DiskController::setSpeed(int32_t value)
 {
-    amiga->suspend();
+    amiga.suspend();
 
     df[0]->setSpeed(value);
     df[1]->setSpeed(value);
     df[2]->setSpeed(value);
     df[3]->setSpeed(value);
 
-    amiga->resume();
+    amiga.resume();
 }
 
 void
@@ -193,9 +184,9 @@ DiskController::ejectDisk(int nr, Cycle delay)
 
     debug("ejectDisk(%d, %d)\n", nr, delay);
 
-    amiga->suspend();
-    agnus->scheduleRel<DCH_SLOT>(delay, DCH_EJECT, nr);
-    amiga->resume();
+    amiga.suspend();
+    agnus.scheduleRel<DCH_SLOT>(delay, DCH_EJECT, nr);
+    amiga.resume();
 }
 
 void
@@ -207,7 +198,7 @@ DiskController::insertDisk(class Disk *disk, int nr, Cycle delay)
     debug(DSK_DEBUG, "insertDisk(%p, %d, %d)\n", disk, nr, delay);
 
     // The easy case: The emulator is not running
-    if (!amiga->isRunning()) {
+    if (!amiga.isRunning()) {
 
         df[nr]->ejectDisk();
         df[nr]->insertDisk(disk);
@@ -215,7 +206,7 @@ DiskController::insertDisk(class Disk *disk, int nr, Cycle delay)
     }
 
     // The not so easy case: The emulator is running
-    amiga->suspend();
+    amiga.suspend();
 
     if (df[nr]->hasDisk()) {
 
@@ -228,9 +219,9 @@ DiskController::insertDisk(class Disk *disk, int nr, Cycle delay)
     }
 
     diskToInsert = disk;
-    agnus->scheduleRel<DCH_SLOT>(delay, DCH_INSERT, nr);
+    agnus.scheduleRel<DCH_SLOT>(delay, DCH_INSERT, nr);
     
-    amiga->resume();
+    amiga.resume();
 }
 
 void
@@ -297,7 +288,7 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
         } else {
             
             // Check the WORDSYNC bit in the ADKCON register
-            if (GET_BIT(paula->adkcon, 10)) {
+            if (GET_BIT(paula.adkcon, 10)) {
                 
                 // Wait with reading until a sync mark has been found
                 debug(DSK_DEBUG, "dma = DRIVE_DMA_READ_SYNC\n");
@@ -341,11 +332,11 @@ DiskController::peekDSKBYTR()
     uint16_t result = incoming;
     
     // DSKBYT
-    assert(agnus->clock >= incomingCycle);
-    if (agnus->clock - incomingCycle <= 7) SET_BIT(result, 15);
+    assert(agnus.clock >= incomingCycle);
+    if (agnus.clock - incomingCycle <= 7) SET_BIT(result, 15);
     
     // DMAON
-    if (agnus->dskDMA() && state != DRIVE_DMA_OFF) SET_BIT(result, 14);
+    if (agnus.dskDMA() && state != DRIVE_DMA_OFF) SET_BIT(result, 14);
 
     // DSKWRITE
     if (dsklen & 0x4000) SET_BIT(result, 13);
@@ -400,11 +391,11 @@ DiskController::PRBdidChange(uint8_t oldValue, uint8_t newValue)
     // Schedule the first rotation event if at least one drive is spinning.
     if (!spinning()) {
         // debug("Cancelling DSK_SLOT events\n");
-        agnus->cancel<DSK_SLOT>();
+        agnus.cancel<DSK_SLOT>();
     }
-    else if (!agnus->hasEvent<DSK_SLOT>()) {
+    else if (!agnus.hasEvent<DSK_SLOT>()) {
         // debug("Activating DSK_SLOT events\n");
-        agnus->scheduleRel<DSK_SLOT>(DMA_CYCLES(56), DSK_ROTATE);
+        agnus.scheduleRel<DSK_SLOT>(DMA_CYCLES(56), DSK_ROTATE);
     }
 }
 
@@ -417,7 +408,7 @@ DiskController::serviceDiskEvent()
         executeFifo();
     
         // Schedule next event.
-        agnus->scheduleRel<DSK_SLOT>(DMA_CYCLES(56), DSK_ROTATE);
+        agnus.scheduleRel<DSK_SLOT>(DMA_CYCLES(56), DSK_ROTATE);
     }
 }
 
@@ -448,7 +439,7 @@ DiskController::serviceDiskChangeEvent(EventID id, int driveNr)
             assert(false);
     }
 
-    agnus->cancel<DCH_SLOT>();
+    agnus.cancel<DCH_SLOT>();
 }
 
 void
@@ -519,7 +510,7 @@ DiskController::executeFifo()
             
             // Read a byte from the drive and store a time stamp
             incoming = drive->readHead();
-            incomingCycle = agnus->clock;
+            incomingCycle = agnus.clock;
             
             // Write byte into the FIFO buffer.
             writeFifo(incoming);
@@ -530,7 +521,7 @@ DiskController::executeFifo()
                 
                 // Trigger a word SYNC interrupt.
                 debug(DSK_DEBUG, "SYNC IRQ (dsklen = %d)\n", dsklen);
-                paula->raiseIrq(INT_DSKSYN);
+                paula.raiseIrq(INT_DSKSYN);
 
                 // Enable DMA if the controller was waiting for it.
                 if (state == DRIVE_DMA_WAIT) {
@@ -606,7 +597,7 @@ DiskController::performDMARead(Drive *drive)
         uint16_t word = readFifo16();
         
         // Write word into memory.
-        agnus->doDiskDMA(word);
+        agnus.doDiskDMA(word);
         // if (dsksync) { plainmsg("word = %x pos = %d dsklen = %d checkcnt = %d checksum = %x\n", word, drive->head.offset, dsklen & 0x3FFF, checkcnt, checksum); }
 
         // Compute checksum (for debugging).
@@ -616,7 +607,7 @@ DiskController::performDMARead(Drive *drive)
         // Finish up if this was the last word to transfer.
         if ((--dsklen & 0x3FFF) == 0) {
 
-            paula->raiseIrq(INT_DSKBLK);
+            paula.raiseIrq(INT_DSKBLK);
             state = DRIVE_DMA_OFF;
             plaindebug(DSK_CHECKSUM, "performRead: checkcnt = %d checksum = %X\n", checkcnt, checksum);
             return;
@@ -645,7 +636,7 @@ DiskController::performDMAWrite(Drive *drive)
     
     do {
         // Read next word from memory.
-        uint16_t word = agnus->doDiskDMA(); // dmaRead();
+        uint16_t word = agnus.doDiskDMA(); // dmaRead();
         checksum = fnv_1a_it32(checksum, word);
         checkcnt++;
         // plaindebug("%d: %X (%X)\n", dsklen & 0x3FFF, word, dcheck);
@@ -658,7 +649,7 @@ DiskController::performDMAWrite(Drive *drive)
         // Finish up if this was the last word to transfer.
         if ((--dsklen & 0x3FFF) == 0) {
 
-            paula->raiseIrq(INT_DSKBLK);
+            paula.raiseIrq(INT_DSKBLK);
 
             /* The timing-accurate approach: Set state to DRIVE_DMA_FLUSH.
              * The event handler recognises this state and switched to
@@ -734,7 +725,7 @@ DiskController::performSimpleDMARead(Drive *drive)
         uint16_t word = drive->readHead16();
         
         // Write word into memory.
-        agnus->doDiskDMA(word);
+        agnus.doDiskDMA(word);
 
         // Compute checksum (for debugging).
         checksum = fnv_1a_it32(checksum, word);
@@ -742,7 +733,7 @@ DiskController::performSimpleDMARead(Drive *drive)
 
         if ((--dsklen & 0x3FFF) == 0) {
 
-            paula->raiseIrq(INT_DSKBLK);
+            paula.raiseIrq(INT_DSKBLK);
             state = DRIVE_DMA_OFF;
             debug(DSK_DEBUG, "doSimpleDMARead: checkcnt = %d checksum = %X\n", checkcnt, checksum);
             return;
@@ -762,7 +753,7 @@ DiskController::performSimpleDMAWrite(Drive *drive)
     for (unsigned i = 0; i < remaining; i++) {
         
         // Read word from memory
-        uint16_t word = agnus->doDiskDMA();
+        uint16_t word = agnus.doDiskDMA();
         
         // Compute checksum (for debugging)
         checksum = fnv_1a_it32(checksum, word);
@@ -773,7 +764,7 @@ DiskController::performSimpleDMAWrite(Drive *drive)
         
         if ((--dsklen & 0x3FFF) == 0) {
             
-            paula->raiseIrq(INT_DSKBLK);
+            paula.raiseIrq(INT_DSKBLK);
             state = DRIVE_DMA_OFF;
             debug(DSK_DEBUG, "doSimpleDMAWrite: checkcnt = %d checksum = %X\n", checkcnt, checksum);
             return;
@@ -810,7 +801,7 @@ DiskController::performTurboDMA(Drive *drive)
     }
     
     // Trigger disk interrupt with some delay
-    paula->raiseIrq(INT_DSKBLK, DMA_CYCLES(512));
+    paula.raiseIrq(INT_DSKBLK, DMA_CYCLES(512));
     state = DRIVE_DMA_OFF;
 }
 
@@ -825,8 +816,8 @@ DiskController::performTurboRead(Drive *drive)
         uint16_t word = drive->readHead16();
         
         // Write word into memory.
-        mem->pokeChip16(agnus->dskpt, word);
-        INC_DMAPTR(agnus->dskpt);
+        mem.pokeChip16(agnus.dskpt, word);
+        INC_DMAPTR(agnus.dskpt);
         
         // Compute checksum (for debugging)
         checksum = fnv_1a_it32(checksum, word);
@@ -844,8 +835,8 @@ DiskController::performTurboWrite(Drive *drive)
     for (unsigned i = 0; i < (dsklen & 0x3FFF); i++) {
         
         // Read word from memory
-        uint16_t word = mem->peekChip16(agnus->dskpt);
-        INC_DMAPTR(agnus->dskpt);
+        uint16_t word = mem.peekChip16(agnus.dskpt);
+        INC_DMAPTR(agnus.dskpt);
         
         // Compute checksum (for debugging)
         checksum = fnv_1a_it32(checksum, word);

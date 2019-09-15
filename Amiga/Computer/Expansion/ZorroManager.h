@@ -10,6 +10,8 @@
 #ifndef _ZORRO_MANAGER_INC
 #define _ZORRO_MANAGER_INC
 
+#include "SubComponent.h"
+
 /* Additional information:
  *
  *   Fast Ram emulation (Zorro II) is based on:
@@ -17,10 +19,7 @@
  */
 
 // Manager for plugged in Zorro II devices
-class ZorroManager : public HardwareComponent {
-
-    // References to other components
-    class Memory *mem;
+class ZorroManager : public SubComponent {
 
     // The value returned when peeking into the auto-config space.
     uint8_t autoConfData;
@@ -38,7 +37,7 @@ class ZorroManager : public HardwareComponent {
     
 public:
     
-    ZorroManager();
+    ZorroManager(Amiga& ref);
 
     
     //

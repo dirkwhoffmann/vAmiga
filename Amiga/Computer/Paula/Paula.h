@@ -28,9 +28,14 @@ private:
     
 public:
 
+    // Sound
     AudioUnit audioUnit;
-    DiskController diskController;
-    UART uart;
+
+    // Disk controller
+    DiskController diskController = DiskController(amiga);
+
+    // Universal Asynchronous Receiver Transmitter
+    UART uart = UART(amiga);
     
     
     //

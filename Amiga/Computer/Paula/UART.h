@@ -10,14 +10,9 @@
 #ifndef _UART_INC
 #define _UART_INC
 
-#include "HardwareComponent.h"
+#include "SubComponent.h"
 
-class UART : public HardwareComponent {
-
-    // References (for quickly accessing other components)
-    class Agnus *agnus;
-    class Paula *paula;
-    class SerialPort *serialPort;
+class UART : public SubComponent {
 
     // Information shown in the GUI inspector panel
     UARTInfo info;
@@ -52,7 +47,7 @@ class UART : public HardwareComponent {
 
 public:
 
-    UART();
+    UART(Amiga& ref);
 
     //
     // Iterating over snapshot items

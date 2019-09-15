@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-ZorroManager::ZorroManager()
+ZorroManager::ZorroManager(Amiga& ref) : SubComponent(ref)
 {
     setDescription("ZorroManager");
 }
@@ -17,7 +17,6 @@ ZorroManager::ZorroManager()
 void
 ZorroManager::_initialize()
 {
-    mem = &amiga->mem;
 }
 
 void
@@ -47,7 +46,7 @@ ZorroManager::_dump()
 uint8_t
 ZorroManager::peekFastRamDevice(uint32_t addr)
 {
-    size_t fastRamSize = mem->config.fastRamSize;
+    size_t fastRamSize = mem.config.fastRamSize;
     
     debug(2, "    peekFastRamDevice(%X)\n", addr & 0xFFFF);
     debug(2, "    fastRamSize = %d\n", fastRamSize);
@@ -189,7 +188,7 @@ ZorroManager::peekFastRamDevice(uint32_t addr)
 void
 ZorroManager::pokeFastRamDevice(uint32_t addr, uint8_t value)
 {
-    if (mem->config.fastRamSize == 0) return;
+    if (mem.config.fastRamSize == 0) return;
     
     debug("    pokeFastRamDevice(%X, %X)\n", addr, value);
     

@@ -116,7 +116,7 @@ public:
     Paula paula = Paula(*this);
     
     // Zorro II device manager
-    ZorroManager zorro;
+    ZorroManager zorro = ZorroManager(*this);
     
     // Control ports
     ControlPort controlPort1 = ControlPort(1);

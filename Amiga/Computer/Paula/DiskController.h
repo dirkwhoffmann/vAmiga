@@ -10,15 +10,9 @@
 #ifndef _DISK_CONTROLLER_INC
 #define _DISK_CONTROLLER_INC
 
-#include "HardwareComponent.h"
+#include "SubComponent.h"
 
-class DiskController : public HardwareComponent {
-
-    // References to other components
-    class Memory *mem; 
-    class Agnus *agnus;
-    class Paula *paula;
-    class Drive *df[4] = { NULL, NULL, NULL, NULL };
+class DiskController : public SubComponent {
 
     // The current configuration
     DiskControllerConfig config;
@@ -130,7 +124,7 @@ class DiskController : public HardwareComponent {
     
 public:
     
-    DiskController();
+    DiskController(Amiga& ref);
 
     // Returns the current configuration
     DiskControllerConfig getConfig() { return config; }

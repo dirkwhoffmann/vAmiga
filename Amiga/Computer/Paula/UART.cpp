@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-UART::UART()
+UART::UART(Amiga& ref) : SubComponent(ref)
 {
     setDescription("UART");
 }
@@ -17,9 +17,6 @@ UART::UART()
 void
 UART::_initialize()
 {
-    agnus = &amiga->agnus;
-    paula = &amiga->paula;
-    serialPort = &amiga->serialPort;
 }
 
 void
@@ -70,7 +67,7 @@ uint16_t
 UART::peekSERDATR()
 {
     // Get the RBF bit from INTREQ
-    bool rbf = GET_BIT(paula->intreq, 11);
+    bool rbf = GET_BIT(paula.intreq, 11);
 
     // Clear the overrun bit if the interrupt has been acknowledged
     if (!rbf) ovrun = false;
@@ -90,7 +87,7 @@ UART::peekSERDATR()
     WRITE_BIT(result, 14, rbf);
     WRITE_BIT(result, 13, transmitBuffer == 0);
     WRITE_BIT(result, 12, transmitShiftReg == 0);
-    WRITE_BIT(result, 11, serialPort->getRXD());
+    WRITE_BIT(result, 11, serialPort.getRXD());
 
     // debug(SER_DEBUG, "peekSERDATR() = %X\n", result);
     debug(2, "peekSERDATR() = %X\n", result);
@@ -127,7 +124,7 @@ UART::copyToTransmitShiftRegister()
     assert(transmitBuffer != 0);
 
     // Inform the GUI about the outgoing data
-    amiga->putMessage(MSG_SER_OUT, transmitBuffer);
+    amiga.putMessage(MSG_SER_OUT, transmitBuffer);
     debug(POT_DEBUG, "transmitBuffer: %X ('%c')\n", transmitBuffer & 0xFF, transmitBuffer & 0xFF);
 
     // Move the contents of the transmit buffer into the shift register
@@ -139,10 +136,10 @@ UART::copyToTransmitShiftRegister()
 
     // Trigger a TBE interrupt
     debug(SER_DEBUG, "Triggering TBE interrupt\n");
-    paula->raiseIrq(INT_TBE);
+    paula.raiseIrq(INT_TBE);
 
     // Schedule the transmission of the first bit
-    agnus->scheduleRel<TXD_SLOT>(0, TXD_BIT);
+    agnus.scheduleRel<TXD_SLOT>(0, TXD_BIT);
 }
 
 void
@@ -156,7 +153,7 @@ UART::copyFromReceiveShiftRegister()
     receiveShiftReg = 0;
 
     // Inform the GUI about the incoming data
-    amiga->putMessage(MSG_SER_IN, receiveBuffer);
+    amiga.putMessage(MSG_SER_IN, receiveBuffer);
 
     // plainmsg("receiveBuffer: %X ('%c')\n", receiveBuffer & 0xFF, receiveBuffer & 0xFF);
 
@@ -164,26 +161,26 @@ UART::copyFromReceiveShiftRegister()
 
     // Update the overrun bit
     // Bit will be 1 if the RBF interrupt hasn't been acknowledged yet
-    ovrun = GET_BIT(paula->intreq, 11);
+    ovrun = GET_BIT(paula.intreq, 11);
     if (ovrun) debug(SER_DEBUG, "OVERRUN BIT IS 1\n");
 
     // Trigger the RBF interrupt (Read Buffer Full)
     debug(SER_DEBUG, "Triggering RBF interrupt\n");
-    paula->raiseIrq(INT_RBF);
+    paula.raiseIrq(INT_RBF);
 }
 
 void
 UART::updateTXD()
 {
     // If the UARTBRK bit is set, the TXD line is forced to 0
-    serialPort->setTXD(outBit && !paula->UARTBRK());
+    serialPort.setTXD(outBit && !paula.UARTBRK());
 }
 
 void
 UART::rxdHasChanged(bool value)
 {
     // Schedule the first reception event if transmission has not yet started
-    if (value == 0 && !agnus->hasEvent<RXD_SLOT>()) {
+    if (value == 0 && !agnus.hasEvent<RXD_SLOT>()) {
 
         // Reset the bit counter
         recCnt = 0;
@@ -192,7 +189,7 @@ UART::rxdHasChanged(bool value)
         Cycle delay = rate() * 3 / 2;
 
         // Schedule the event
-        agnus->scheduleRel<RXD_SLOT>(delay, RXD_BIT);
+        agnus.scheduleRel<RXD_SLOT>(delay, RXD_BIT);
     }
 }
 
@@ -229,13 +226,13 @@ UART::serveTxdEvent(EventID id)
 
                     // Abort the transmission
                     debug(SER_DEBUG, "End of transmission\n");
-                    agnus->cancel<TXD_SLOT>();
+                    agnus.cancel<TXD_SLOT>();
                     break;
                 }
             }
 
             // Schedule the next event
-            agnus->scheduleRel<TXD_SLOT>(rate(), TXD_BIT);
+            agnus.scheduleRel<TXD_SLOT>(rate(), TXD_BIT);
             break;
 
         default:
@@ -248,7 +245,7 @@ UART::serveRxdEvent(EventID id)
 {
     debug(2, "serveRxdEvent(%d)\n", id);
 
-    bool rxd = serialPort->getRXD();
+    bool rxd = serialPort.getRXD();
     debug(2, "Receiving bit %d: %d\n", recCnt, rxd);
 
     // Shift in bit from RXD line
@@ -263,7 +260,7 @@ UART::serveRxdEvent(EventID id)
 
         // Stop receiving if the last bit was a stop bit
         if (rxd) {
-            agnus->cancel<RXD_SLOT>();
+            agnus.cancel<RXD_SLOT>();
             return;
         } else {
             // Prepare for the next packet
@@ -272,5 +269,5 @@ UART::serveRxdEvent(EventID id)
     }
 
     // Schedule the next reception event
-    agnus->scheduleRel<RXD_SLOT>(rate(), RXD_BIT);
+    agnus.scheduleRel<RXD_SLOT>(rate(), RXD_BIT);
 }
