@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-SerialPort::SerialPort()
+SerialPort::SerialPort(Amiga& ref) : SubComponent(ref)
 {
     setDescription("SerialPort");
 }
@@ -17,13 +17,11 @@ SerialPort::SerialPort()
 void
 SerialPort::_initialize()
 {
-    uart = &amiga->paula.uart;
 }
 
 void
 SerialPort::_powerOn()
 {
-
 }
 
  void
@@ -173,6 +171,6 @@ SerialPort::setPort(uint32_t mask, bool value)
     if (value) port |= mask; else port &= ~mask;
 
     // Let the UART know if RXD has changed
-    if ((oldPort ^ port) & RXD_MASK) uart->rxdHasChanged(value);
+    if ((oldPort ^ port) & RXD_MASK) uart.rxdHasChanged(value);
 }
 

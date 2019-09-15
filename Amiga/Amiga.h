@@ -123,7 +123,7 @@ public:
     ControlPort controlPort2 = ControlPort(2, *this);
 
     // Serial port
-    SerialPort serialPort;
+    SerialPort serialPort = SerialPort(*this);
 
     // Mouse
     Mouse mouse;
