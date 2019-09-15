@@ -20,12 +20,12 @@ class TOD : public SubComponent {
     
     friend CIA;
     
-    private:
+private:
     
     // Information shown in the GUI inspector panel
     CounterInfo info;
     
-    private:
+private:
     
     // Reference to the connected CIA
     CIA *cia;
@@ -59,18 +59,13 @@ class TOD : public SubComponent {
      */
     bool matching;
     
-    public:
+public:
     
     //
     // Creating and destructing
     //
     
     TOD(CIA *cia, Amiga& ref);
-
-
-    //
-    // Iterating over snapshot items
-    //
 
     template <class T>
     void applyToPersistentItems(T& worker)
@@ -103,22 +98,58 @@ class TOD : public SubComponent {
     size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
-    
-    //
-    // Reading the internal state
-    //
-    
-    public:
-    
-    // Returns the latest internal state recorded by inspect()
+public:
+
+    // Returns the result of the most recent call to inspect()
     CounterInfo getInfo();
-    
-    
+
+
+    //
+    // Accessing properties
+    //
+
+    // Returns the counter's high byte (bits 16 - 23).
+    uint8_t getCounterHi() { return frozen ? latch.hi : tod.hi; }
+
+    // Returns the counter's intermediate byte (bits 8 - 15).
+    uint8_t getCounterMid() { return frozen ? latch.mid : tod.mid; }
+
+    // Returns the counter's low byte (bits 0 - 7).
+    uint8_t getCounterLo() { return frozen ? latch.lo : tod.lo; }
+
+    //! Returns the alarm value's high byte (bits 16 - 23).
+    uint8_t getAlarmHi() { return alarm.hi; }
+
+    // Returns the alarm value's intermediate byte (bits 8 - 15).
+    uint8_t getAlarmMid() { return alarm.mid; }
+
+    // Returns the alarm value's low byte (bits 0 - 7).
+    uint8_t getAlarmLo() { return alarm.lo; }
+
+    // Sets the counter's high byte (bits 16 - 23).
+    void setCounterHi(uint8_t value) { tod.hi = value; checkForInterrupt(); }
+
+    // Sets the counter's intermediate byte (bits 8 - 15).
+    void setCounterMid(uint8_t value) { tod.mid = value; checkForInterrupt(); }
+
+    //! Sets the counter's low byte (bits 0 - 7).
+    void setCounterLo(uint8_t value) { tod.lo = value; checkForInterrupt(); }
+
+    // Sets the alarm value's high byte (bits 16 - 23).
+    void setAlarmHi(uint8_t value) { alarm.hi = value; checkForInterrupt(); }
+
+    // Sets the alarm value's intermediate byte (bits 8 - 15).
+    void setAlarmMid(uint8_t value) { alarm.mid = value; checkForInterrupt(); }
+
+    // Sets the alarm value's low byte (bits 0 - 7).
+    void setAlarmLo(uint8_t value) { alarm.lo = value; checkForInterrupt(); }
+
+
     //
     // Running the component
     //
     
-    private:
+private:
     
     // Freezes the counter.
     void freeze() { if (!frozen) { latch.value = tod.value; frozen = true; } }
@@ -131,44 +162,8 @@ class TOD : public SubComponent {
     
     // Starts the counter.
     void cont() { stopped = false; }
-    
-    // Returns the counter's high byte (bits 16 - 23).
-    uint8_t getCounterHi() { return frozen ? latch.hi : tod.hi; }
-    
-    // Returns the counter's intermediate byte (bits 8 - 15).
-    uint8_t getCounterMid() { return frozen ? latch.mid : tod.mid; }
-    
-    // Returns the counter's low byte (bits 0 - 7).
-    uint8_t getCounterLo() { return frozen ? latch.lo : tod.lo; }
-    
-    //! Returns the alarm value's high byte (bits 16 - 23).
-    uint8_t getAlarmHi() { return alarm.hi; }
-    
-    // Returns the alarm value's intermediate byte (bits 8 - 15).
-    uint8_t getAlarmMid() { return alarm.mid; }
-    
-    // Returns the alarm value's low byte (bits 0 - 7).
-    uint8_t getAlarmLo() { return alarm.lo; }
-    
-    // Sets the counter's high byte (bits 16 - 23).
-    void setCounterHi(uint8_t value) { tod.hi = value; checkForInterrupt(); }
-    
-    // Sets the counter's intermediate byte (bits 8 - 15).
-    void setCounterMid(uint8_t value) { tod.mid = value; checkForInterrupt(); }
-    
-    //! Sets the counter's low byte (bits 0 - 7).
-    void setCounterLo(uint8_t value) { tod.lo = value; checkForInterrupt(); }
-    
-    // Sets the alarm value's high byte (bits 16 - 23).
-    void setAlarmHi(uint8_t value) { alarm.hi = value; checkForInterrupt(); }
-    
-    // Sets the alarm value's intermediate byte (bits 8 - 15).
-    void setAlarmMid(uint8_t value) { alarm.mid = value; checkForInterrupt(); }
-    
-    // Sets the alarm value's low byte (bits 0 - 7).
-    void setAlarmLo(uint8_t value) { alarm.lo = value; checkForInterrupt(); }
-    
-    // Increment the counter
+
+    // Increments the counter.
     void increment();
     
     /* Updates variable 'matching'

@@ -41,24 +41,9 @@ public:
 
     DmaDebugger(Amiga &ref);
 
-    // Returns the current settings
-    DMADebuggerInfo getInfo();
-
 
     //
-    // Methods from HardwareComponent
-    //
-
-private:
-
-    void _reset() override { }
-    size_t _size() override { return 0; }
-    size_t _load(uint8_t *buffer) override {return 0; }
-    size_t _save(uint8_t *buffer) override { return 0; }
-    
-
-    //
-    // Configuring the device
+    // Configuring
     //
 
 public:
@@ -83,6 +68,23 @@ public:
     // Gets or sets the display mode
     DmaDebuggerDisplayMode getDisplayMode() { return displayMode; }
     void setDisplayMode(DmaDebuggerDisplayMode mode) { displayMode = mode; }
+
+
+    //
+    // Methods from HardwareComponent
+    //
+
+private:
+
+    void _reset() override { }
+    size_t _size() override { return 0; }
+    size_t _load(uint8_t *buffer) override {return 0; }
+    size_t _save(uint8_t *buffer) override { return 0; }
+    
+public:
+
+    // Returns the result of the most recent call to inspect()
+    DMADebuggerInfo getInfo();
 
 
     //

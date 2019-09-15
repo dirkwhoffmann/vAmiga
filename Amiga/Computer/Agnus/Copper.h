@@ -73,10 +73,6 @@ public:
     
     Copper(Amiga& ref);
 
-    //
-    // Iterating over snapshot items
-    //
-
     template <class T>
     void applyToPersistentItems(T& worker)
     {
@@ -113,26 +109,24 @@ private:
     size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
-    
-    //
-    // Reading the internal state
-    //
-    
-    public:
-    
-    // Returns the latest internal state recorded by inspect()
+public:
+
+    // Returns the result of the most recent call to inspect()
     CopperInfo getInfo();
-    
-    // Returns the program counter
+
+
+    //
+    // Accessing properties
+    //
+
+    // Returns the Copper program counter
     uint32_t getCopPC() const { return coppc; }
 
-    
+
     //
     // Accessing registers
     //
-    
-public:
-    
+
     void pokeCOPCON(uint16_t value);
     void pokeCOPJMP1();
     void pokeCOPJMP2();
@@ -181,20 +175,11 @@ private:
     void move(int addr, uint16_t value);
 
     // Runs the comparator circuit.
-    // bool comparator(uint32_t beam, uint32_t waitpos, uint32_t mask); // DEPRECATED
-    // bool comparator(uint32_t waitpos); // DEPRECATED
-
     bool comparator(Beam beam, uint16_t waitpos, uint16_t mask);
     bool comparator(Beam beam);
     bool comparator();
     
-    /* Computes the beam position where the Copper needs to wake up.
-     * This functions is invoked when a WAIT command is processed.
-     */
-    // DEPRECATED
-    // uint32_t nextTriggerPosition();
-    
-    
+
     //
     // Analyzing Copper instructions
     //

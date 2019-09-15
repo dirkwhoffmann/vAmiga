@@ -49,12 +49,8 @@ extern "C" uint32_t read_pc_on_reset(void);
 
 class CPU : public SubComponent {
 
-    // The current configuration
     CPUConfig config;
-
-    // Information shown in the GUI inspector panel
     CPUInfo info;
-
 
     //
     // Internal state
@@ -89,13 +85,14 @@ private:
      * user switches back, the previously saved state is restored.
      */
     uint8_t *context = NULL;
-    
-public:
-    
+
+
     //
     // Debuging tools
     //
-    
+
+public:
+
     // A breakpoint manager for handling forced interruptions
     BreakpointManager bpManager = BreakpointManager(amiga);
     
@@ -105,11 +102,16 @@ public:
     
     // The trace buffer write pointer
     int writePtr = 0;
-    
+
 
     //
-    // Iterating over snapshot items
+    // Constructing and destructing
     //
+    
+public:
+    
+    CPU(Amiga& ref);
+    ~CPU();
 
     template <class T>
     void applyToPersistentItems(T& worker)
@@ -129,13 +131,8 @@ public:
 
 
     //
-    // Constructing and configuring
+    // Configuring
     //
-    
-public:
-    
-    CPU(Amiga& ref);
-    ~CPU();
 
     // Returns the current configuration
     CPUConfig getConfig() { return config; }
@@ -144,7 +141,7 @@ public:
     int getSpeed();
     void setSpeed(int factor);
 
-    
+
     //
     // Methods from HardwareComponent
     //
@@ -164,14 +161,9 @@ private:
     size_t didLoadFromBuffer(uint8_t *buffer) override;
     size_t didSaveToBuffer(uint8_t *buffer) const override;
 
-    
-    //
-    // Reading the internal state
-    //
-    
 public:
-    
-    // Returns the latest internal state recorded by inspect()
+
+    // Returns the result of the most recent call to inspect()
     CPUInfo getInfo();
     DisassembledInstruction getInstrInfo(long nr);
     DisassembledInstruction getTracedInstrInfo(long nr);
@@ -205,7 +197,7 @@ public:
 
 
     //
-    // Querying registers
+    // Querying registers and instructions
     //
     
 public:
@@ -223,11 +215,6 @@ public:
     // Returns the start address of the following instruction.
     uint32_t getNextPC() { return getPC() + lengthOInstruction(); }
 
-
-    //
-    // Querying instructions
-    //
-    
     /* Returns the length of the instruction at the provided address in bytes.
      * Note: This function is slow, because it calls the disassembler
      * internally.
@@ -248,7 +235,7 @@ public:
 
 
     //
-    // Tracing program execution
+    // Tracing the program execution
     //
     
     // Removes all elements from the trace buffer except the 'count' most recent ones.

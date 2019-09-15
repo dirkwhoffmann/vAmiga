@@ -274,10 +274,12 @@ public:
 
 
     //
-    // Iterating over snapshot items
+    // Constructing and configuring
     //
 
-private:
+public:
+    
+    CIA(Amiga& ref);
 
     template <class T>
     void applyToPersistentItems(T& worker)
@@ -324,14 +326,9 @@ private:
     }
 
     //
-    // Constructing and configuring
+    // Configuring
     //
 
-public:
-    
-    CIA(Amiga& ref);
-
-    // Returns the current configuration
     CIAConfig getConfig() { return config; }
 
 
@@ -350,22 +347,14 @@ protected:
     size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
-    // Dump trace line
-    void dumpTrace();
-
-    
-    //
-    // Reading the internal state
-    //
-    
 public:
 
-    // Returns the latest internal state recorded by inspect()
+    // Returns the result of the most recent call to inspect()
     CIAInfo getInfo();
-    
+
     
     //
-    // Accessing device properties
+    // Accessing properties
     //
     
     // Getter for peripheral port A

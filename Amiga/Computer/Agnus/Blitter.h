@@ -150,8 +150,15 @@ private:
 
 
     //
-    // Iterating over snapshot items
+    // Constructing and destructiong
     //
+    
+public:
+    
+    Blitter(Amiga& ref);
+
+    void initFastBlitter();
+    void initSlowBlitter();
 
     template <class T>
     void applyToPersistentItems(T& worker)
@@ -226,14 +233,10 @@ private:
         & remaining;
     }
 
-
-    //
-    // Constructing and configuring
-    //
     
-public:
-    
-    Blitter(Amiga& ref);
+    //
+    // Configuring
+    //
 
     // Returns the current configuration
     BlitterConfig getConfig() { return config; }
@@ -258,18 +261,17 @@ private:
     size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
-    void initFastBlitter();
-    void initSlowBlitter();
+public:
+
+    // Returns the result of the most recent call to inspect()
+    BlitterInfo getInfo();
 
 
     //
-    // Reading the internal state
+    // Accessing properties
     //
     
 public:
-
-    // Returns the latest internal state recorded by inspect()
-    BlitterInfo getInfo();
 
     // Returns true if the Blitter is busy
     bool isBusy() { return bbusy; }

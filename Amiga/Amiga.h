@@ -243,11 +243,6 @@ public:
     Amiga();
     ~Amiga();
 
-
-    //
-    // Iterating over snapshot items
-    //
-
     template <class T>
     void applyToPersistentItems(T& worker)
     {
@@ -265,17 +260,36 @@ public:
         & clockBase;
     }
 
+
     //
-    // Methods from AmigaObject
+    // Configuring
+    //
+
+    // Returns the currently set configuration.
+    AmigaConfiguration getConfig();
+
+    // Changes the configuration
+    bool configure(ConfigOption option, long value);
+    bool configureDrive(unsigned drive, ConfigOption option, long value);
+
+    // Configures the Amiga model to emulate (DEPRECATED)
+    bool configureModel(AmigaModel model);
+    bool configureLayout(long value);
+
+    // Configures the attached memory (DEPRECATED)
+    bool configureChipMemory(long size);
+    bool configureSlowMemory(long size);
+    bool configureFastMemory(long size);
+
+    // Configures the real-time clock (DEPRECATED)
+    void configureRealTimeClock(bool value);
+
+
+    //
+    // Methods from AmigaObject and HardwareComponent
     //
 
     void prefix() const override;
-
-
-    //
-    // Methods from HardwareComponent
-    //
-    
     void reset() override;
 
 private:
@@ -295,7 +309,16 @@ private:
     size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
-    
+public:
+
+    // Returns the result of the most recent call to inspect()
+    AmigaInfo getInfo();
+
+
+    //
+    // Accessing properties
+    //
+
 public:
 
     /* Makes this Amiga the active emulator instance.
@@ -328,43 +351,7 @@ public:
     // Removed the currently set inspection target
     void clearInspectionTarget();
     
-    
-    //
-    // Configuring the emulated machine
-    //
-    
-public:
-    
-    // Returns the currently set configuration.
-    AmigaConfiguration getConfig();
-        
-    // Changes the configuration
-    bool configure(ConfigOption option, long value);
-    bool configureDrive(unsigned drive, ConfigOption option, long value);
 
-    // Configures the Amiga model to emulate (DEPRECATED)
-    bool configureModel(AmigaModel model);
-    bool configureLayout(long value);
-    
-    // Configures the attached memory (DEPRECATED)
-    bool configureChipMemory(long size);
-    bool configureSlowMemory(long size);
-    bool configureFastMemory(long size);
-    
-    // Configures the real-time clock (DEPRECATED)
-    void configureRealTimeClock(bool value);
-
-    
-    //
-    // Reading the internal state
-    //
-
-public:
-
-    // Returns the latest internal state recorded by inspect()
-    AmigaInfo getInfo();
-
-    
     //
     // Controlling the emulation thread
     //

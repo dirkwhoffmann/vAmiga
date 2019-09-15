@@ -139,7 +139,7 @@ private:
     
 public:
     
-    // Returns the latest internal state recorded by inspect()
+    // Returns the result of the most recent call to inspect()
     PaulaInfo getInfo();
     
     

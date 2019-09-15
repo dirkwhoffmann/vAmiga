@@ -184,14 +184,9 @@ private:
     size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS }
     size_t didLoadFromBuffer(uint8_t *buffer) override;
 
-
-    //
-    // Accessing properties
-    //
-
 public:
 
-    // Returns the latest internal state recorded by inspect()
+    // Returns the result of the most recent call to inspect()
     AudioInfo getInfo();
 
     

@@ -225,10 +225,14 @@ private:
     const uint16_t Z_SP0246 = Z_SP0|Z_SP2|Z_SP4|Z_SP6;
     const uint16_t Z_SP1357 = Z_SP1|Z_SP3|Z_SP5|Z_SP7;
 
+
+    //
+    // Constructing and destructing
+    //
     
-    //
-    // Iterating over snapshot items
-    //
+public:
+
+    Denise(Amiga& ref);
 
     template <class T>
     void applyToPersistentItems(T& worker)
@@ -278,16 +282,10 @@ private:
         & prio12;
     }
 
-
     //
-    // Constructing and configuring
+    // Configuring
     //
-    
-public:
 
-    Denise(Amiga& ref);
-
-    // Returns the current configuration
     DeniseConfig getConfig() { return config; }
 
     bool getEmulateSprites() { return config.emulateSprites; }
@@ -318,14 +316,9 @@ private:
     size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
-
-    //
-    // Reading the internal state
-    //
-    
 public:
-    
-    // Returns the latest internal state recorded by inspect()
+
+    // Returns the result of the most recent call to inspect()
     DeniseInfo getInfo();
     SpriteInfo getSprInfo(int nr);
 

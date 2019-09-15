@@ -52,13 +52,11 @@
 #define VPOS(x) ((x) >> 8)
 #define HPOS(x) ((x) & 0xFF)
 
-class Agnus : public SubComponent
-{
-    // Information shown in the GUI inspector panel
+class Agnus : public SubComponent {
+
     AgnusInfo info;
     EventInfo eventInfo;
 
-    
     //
     // Sub components
     //
@@ -462,16 +460,10 @@ public:
     
     Agnus(Amiga& ref);
 
-    // Initializes the lookup tables
     void initLookupTables();
     void initLoresBplEventTable();
     void initHiresBplEventTable();
     void initDASTables();
-
-
-    //
-    // Iterating over snapshot items
-    //
 
     template <class T>
     void applyToPersistentItems(T& worker)
@@ -560,8 +552,6 @@ private:
     size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
-private:
-    
     void inspectEvents();
     void inspectEventSlot(EventSlot nr);
 
@@ -569,14 +559,7 @@ public:
 
     void dumpEvents();
 
-
-    //
-    // Reading the internal state
-    //
-    
-public:
-    
-    // Returns the latest recorded internal state
+    // Returns the result of the most recent call to inspect()
     AgnusInfo getInfo();
     EventInfo getEventInfo();
     EventSlotInfo getEventSlotInfo(int nr);
