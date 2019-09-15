@@ -16,6 +16,8 @@
 typedef enum : int32_t
 {
     REG_HPOS = 0,
+    REG_INTREQ,
+    REG_INTENA,
     REG_BPLCON0_AGNUS,
     REG_BPLCON0_DENISE,
     REG_BPLCON1,

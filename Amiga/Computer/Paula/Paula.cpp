@@ -97,14 +97,18 @@ void
 Paula::pokeINTREQ(uint16_t value)
 {
     debug(INT_DEBUG, "pokeINTREQ(%X)\n", value);
-    setINTREQ(value);
+
+    agnus.recordRegisterChange(DMA_CYCLES(2), REG_INTREQ, value);
+    // setINTREQ(value);
 }
 
 void
 Paula::pokeINTENA(uint16_t value)
 {
-    // debug("pokeINTENA(%X)\n", value);
-    setINTENA(value);
+    debug(INT_DEBUG, "pokeINTENA(%X)\n", value);
+
+    agnus.recordRegisterChange(DMA_CYCLES(2), REG_INTENA, value);
+    // setINTENA(value);
 }
 
 void
