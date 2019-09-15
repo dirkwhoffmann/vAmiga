@@ -110,7 +110,7 @@ public:
     Agnus agnus = Agnus(*this);
     
     // Denise (Video)
-    Denise denise;
+    Denise denise = Denise(*this);
     
     // Paula (Interrupts, Disk Controller, Audio)
     Paula paula;

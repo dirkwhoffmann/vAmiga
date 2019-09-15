@@ -390,6 +390,18 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->agnus->blitter.getInfo();
 }
+- (BOOL) interlaceMode
+{
+    return wrapper->agnus->frameInfo.interlaced;
+}
+- (BOOL) isLongFrame
+{
+    return wrapper->agnus->isLongFrame();
+}
+- (BOOL) isShortFrame
+{
+    return wrapper->agnus->isShortFrame();
+}
 - (NSInteger) instrCount:(NSInteger)list
 {
     return wrapper->agnus->copper.instrCount(list);
@@ -521,18 +533,6 @@ struct ADFFileWrapper { ADFFile *adf; };
 - (ScreenBuffer) stableShortFrame
 {
     return wrapper->denise->pixelEngine.getStableShortFrame();
-}
-- (BOOL) interlaceMode
-{
-    return wrapper->denise->amiga->agnus.frameInfo.interlaced;
-}
-- (BOOL) isLongFrame
-{
-    return wrapper->denise->amiga->agnus.isLongFrame();
-}
-- (BOOL) isShortFrame
-{
-    return wrapper->denise->amiga->agnus.isShortFrame();
 }
 
 @end

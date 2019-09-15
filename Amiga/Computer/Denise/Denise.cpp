@@ -11,7 +11,7 @@
 
 int dirk = 0;
 
-Denise::Denise()
+Denise::Denise(Amiga& ref) : SubComponent(ref)
 {
     setDescription("Denise");
     
@@ -26,15 +26,9 @@ Denise::Denise()
     config.clxPlfPlf = true;
 }
 
-Denise::~Denise()
-{
-    debug(2, "Destroying Denise[%p]\n", this);
-}
-
 void
 Denise::_initialize()
 {
-    agnus = &amiga->agnus;
 }
 
 void
@@ -64,15 +58,15 @@ Denise::_inspect()
     info.bplcon2 = bplcon2;
     info.bpu = bpu();
 
-    info.diwstrt = agnus->diwstrt;
-    info.diwstop = agnus->diwstop;
-    info.diwHstrt = agnus->diwHstrt;
-    info.diwHstop = agnus->diwHstop;
-    info.diwVstrt = agnus->diwVstrt;
-    info.diwVstop = agnus->diwVstop;
+    info.diwstrt = agnus.diwstrt;
+    info.diwstop = agnus.diwstop;
+    info.diwHstrt = agnus.diwHstrt;
+    info.diwHstop = agnus.diwHstop;
+    info.diwVstrt = agnus.diwVstrt;
+    info.diwVstop = agnus.diwVstop;
 
-    info.joydat[0] = amiga->controlPort1.joydat();
-    info.joydat[1] = amiga->controlPort2.joydat();
+    info.joydat[0] = amiga.controlPort1.joydat();
+    info.joydat[1] = amiga.controlPort2.joydat();
     info.clxdat = 0;
 
     for (unsigned i = 0; i < 6; i++) {
@@ -96,7 +90,7 @@ Denise::_inspect()
          */
         uint16_t pos = info.sprite[i].pos;
         uint16_t ctl = info.sprite[i].ctl;
-        info.sprite[i].ptr = agnus->sprpt[i]; 
+        info.sprite[i].ptr = agnus.sprpt[i];
         info.sprite[i].hstrt = ((pos & 0x00FF) << 1) | (ctl & 0b001);
         info.sprite[i].vstrt = ((pos & 0xFF00) >> 8) | ((ctl & 0b100) << 6);
         info.sprite[i].vstop = ((ctl & 0xFF00) >> 8) | ((ctl & 0b010) << 7);
@@ -149,7 +143,7 @@ Denise::getSprInfo(int nr)
 uint16_t
 Denise::peekJOY0DATR()
 {
-    uint16_t result = amiga->controlPort1.joydat();
+    uint16_t result = amiga.controlPort1.joydat();
     debug(2, "peekJOY0DATR() = $%04X (%d)\n", result, result);
 
     return result;
@@ -158,7 +152,7 @@ Denise::peekJOY0DATR()
 uint16_t
 Denise::peekJOY1DATR()
 {
-    uint16_t result = amiga->controlPort2.joydat();
+    uint16_t result = amiga.controlPort2.joydat();
     debug(2, "peekJOY1DATR() = $%04X (%d)\n", result, result);
 
     return result;
@@ -169,8 +163,8 @@ Denise::pokeJOYTEST(uint16_t value)
 {
     debug(2, "pokeJOYTEST(%04X)\n", value);
 
-    amiga->controlPort1.pokeJOYTEST(value);
-    amiga->controlPort2.pokeJOYTEST(value);
+    amiga.controlPort1.pokeJOYTEST(value);
+    amiga.controlPort2.pokeJOYTEST(value);
 }
 
 /*
@@ -192,7 +186,7 @@ Denise::pokeBPLCON0(uint16_t value)
 {
     debug(BPLREG_DEBUG, "pokeBPLCON0(%X)\n", value);
 
-    agnus->recordRegisterChange(DMA_CYCLES(1), REG_BPLCON0_DENISE, value);
+    agnus.recordRegisterChange(DMA_CYCLES(1), REG_BPLCON0_DENISE, value);
 }
 
 void
@@ -201,7 +195,7 @@ Denise::setBPLCON0(uint16_t oldValue, uint16_t newValue)
     debug(BPLREG_DEBUG, "pokeBPLCON0(%X,%X)\n", oldValue, newValue);
 
     // Record the register change
-    conRegHistory.recordChange(BPLCON0, newValue, 4 * agnus->pos.h - 4);
+    conRegHistory.recordChange(BPLCON0, newValue, 4 * agnus.pos.h - 4);
 
     // Update value
     bplcon0 = newValue;
@@ -227,7 +221,7 @@ Denise::pokeBPLCON1(uint16_t value)
     debug(BPLREG_DEBUG, "pokeBPLCON1(%X)\n", value);
 
     // Record the register change
-    agnus->recordRegisterChange(DMA_CYCLES(2), REG_BPLCON1, value);
+    agnus.recordRegisterChange(DMA_CYCLES(2), REG_BPLCON1, value);
 }
 
 void
@@ -249,7 +243,7 @@ Denise::pokeBPLCON2(uint16_t value)
 {
     debug(BPLREG_DEBUG, "pokeBPLCON2(%X)\n", value);
 
-    agnus->recordRegisterChange(DMA_CYCLES(2), REG_BPLCON2, value);
+    agnus.recordRegisterChange(DMA_CYCLES(2), REG_BPLCON2, value);
 }
 
 void
@@ -260,7 +254,7 @@ Denise::setBPLCON2(uint16_t value)
     bplcon2 = value;
 
     // Record the pixel coordinate where the change takes place
-    conRegHistory.recordChange(BPLCON2, value, 4 * agnus->pos.h + 4);
+    conRegHistory.recordChange(BPLCON2, value, 4 * agnus.pos.h + 4);
 }
 
 uint16_t
@@ -301,7 +295,7 @@ Denise::pokeSPRxPOS(uint16_t value)
     sprhstrt[x] = ((value & 0xFF) << 1) | (sprhstrt[x] & 0x01);
     
     // Update debugger info
-    if (agnus->pos.v == 26) {
+    if (agnus.pos.v == 26) {
         info.sprite[x].pos = value;
     }
 }
@@ -322,9 +316,9 @@ Denise::pokeSPRxCTL(uint16_t value)
     WRITE_BIT(attach, x, GET_BIT(value, 7));
     
     // Update debugger info
-    if (agnus->pos.v == 26) {
+    if (agnus.pos.v == 26) {
         info.sprite[x].ctl = value;
-        info.sprite[x].ptr = agnus->sprpt[x];
+        info.sprite[x].ptr = agnus.sprpt[x];
         assert(IS_EVEN(info.sprite[x].ptr));
     }
 }
@@ -357,7 +351,7 @@ Denise::pokeColorReg(uint32_t addr, uint16_t value)
     assert(addr >= 0x180 && addr <= 0x1BE && IS_EVEN(addr));
     debug(COL_DEBUG, "pokeColorReg(%X, %X)\n", addr, value);
 
-    pixelEngine.colRegHistory.recordChange(addr, value, 4 * agnus->pos.h);
+    pixelEngine.colRegHistory.recordChange(addr, value, 4 * agnus.pos.h);
 }
 
 bool
@@ -446,7 +440,7 @@ Denise::draw(int pixels)
 {
     uint8_t index;
 
-    int16_t currentPixel = ppos(agnus->pos.h);
+    int16_t currentPixel = ppos(agnus.pos.h);
 
     uint32_t maskOdd = 0x8000 << scrollLoresOdd * (HIRES ? 2 : 1);
     uint32_t maskEven = 0x8000 << scrollLoresEven * (HIRES ? 2 : 1);
@@ -796,10 +790,10 @@ Denise::drawBorder()
 #endif
 
     // Check if the horizontal flipflop was set somewhere in this rasterline
-    bool hFlopWasSet = agnus->diwHFlop || agnus->diwHFlopOn != -1;
+    bool hFlopWasSet = agnus.diwHFlop || agnus.diwHFlopOn != -1;
 
     // Check if the whole line is blank (drawn in background color)
-    bool lineIsBlank = !agnus->diwVFlop || !hFlopWasSet;
+    bool lineIsBlank = !agnus.diwVFlop || !hFlopWasSet;
 
     // Draw the border
     if (lineIsBlank) {
@@ -811,16 +805,16 @@ Denise::drawBorder()
     } else {
 
         // Draw left border
-        if (!agnus->diwHFlop && agnus->diwHFlopOn != -1) {
-            for (int i = 0; i < 2 * agnus->diwHFlopOn; i++) {
+        if (!agnus.diwHFlop && agnus.diwHFlopOn != -1) {
+            for (int i = 0; i < 2 * agnus.diwHFlopOn; i++) {
                 assert(i < sizeof(iBuffer));
                 iBuffer[i] = borderL;
             }
         }
 
         // Draw right border
-        if (agnus->diwHFlopOff != -1) {
-            for (int i = 2 * agnus->diwHFlopOff; i <= LAST_PIXEL; i++) {
+        if (agnus.diwHFlopOff != -1) {
+            for (int i = 2 * agnus.diwHFlopOff; i <= LAST_PIXEL; i++) {
                 assert(i < sizeof(iBuffer));
                 iBuffer[i] = borderR;
             }
@@ -1018,7 +1012,7 @@ Denise::endOfLine(int vpos)
     }
 
     // Invoke the DMA debugger
-    agnus->dmaDebugger.computeOverlay();
+    dmaDebugger.computeOverlay();
 }
 
 void
@@ -1042,12 +1036,12 @@ Denise::debugSetBPU(int count)
     if (count < 0) count = 0;
     if (count > 6) count = 6;
 
-    amiga->suspend();
+    amiga.suspend();
     
     uint16_t value = bplcon0 & 0b1000111111111111;
     pokeBPLCON0(value | (count << 12));
     
-    amiga->resume();
+    amiga.resume();
 }
 
 void
@@ -1055,7 +1049,7 @@ Denise::debugSetBPLCONx(unsigned x, uint16_t value)
 {
     assert(x <= 2);
 
-    amiga->suspend();
+    amiga.suspend();
 
     switch (x) {
         case 0:
@@ -1069,7 +1063,7 @@ Denise::debugSetBPLCONx(unsigned x, uint16_t value)
             break;
     }
 
-    amiga->resume();
+    amiga.resume();
 }
 
 void
@@ -1080,7 +1074,7 @@ Denise::debugSetBPLCONxBit(unsigned x, unsigned bit, bool value)
 
     uint16_t mask = 1 << bit;
 
-    amiga->suspend();
+    amiga.suspend();
 
     switch (x) {
         case 0:
@@ -1094,7 +1088,7 @@ Denise::debugSetBPLCONxBit(unsigned x, unsigned bit, bool value)
             break;
     }
     
-    amiga->resume();
+    amiga.resume();
 }
 
 void
@@ -1106,7 +1100,7 @@ Denise::debugSetBPLCONxNibble(unsigned x, unsigned nibble, uint8_t value)
     uint16_t mask = 0b1111 << (4 * nibble);
     uint16_t bits = (value & 0b1111) << (4 * nibble);
 
-    amiga->suspend();
+    amiga.suspend();
 
     switch (x) {
         case 0:
@@ -1120,7 +1114,7 @@ Denise::debugSetBPLCONxNibble(unsigned x, unsigned nibble, uint8_t value)
             break;
     }
 
-    amiga->resume();
+    amiga.resume();
 }
 
 void

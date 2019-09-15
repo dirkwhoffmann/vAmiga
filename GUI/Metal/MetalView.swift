@@ -336,7 +336,7 @@ public class MetalView: MTKView {
             updateTexture(bytes: buffer.data, longFrame: true)
 
             // If interlace mode is on, the next frame will be a short frame
-            if controller.amiga.denise.interlaceMode() { requestLongFrame = false }
+            if controller.amiga.agnus.interlaceMode() { requestLongFrame = false }
 
         } else {
 
@@ -397,7 +397,7 @@ public class MetalView: MTKView {
         fragmentUniforms.scanlineDistance = Int32(layerHeight / 256)
 
         // Set uniforms for the merge shader
-         if controller.amiga.denise.interlaceMode() {
+         if controller.amiga.agnus.interlaceMode() {
 
             let weight = shaderOptions.flicker > 0 ? (1.0 - shaderOptions.flickerWeight) : Float(1.0)
             mergeUniforms.interlace = 1

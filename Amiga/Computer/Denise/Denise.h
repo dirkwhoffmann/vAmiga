@@ -10,14 +10,11 @@
 #ifndef _DENISE_INC
 #define _DENISE_INC
 
-#include "HardwareComponent.h"
+#include "SubComponent.h"
 #include "Colors.h"
 #include "PixelEngine.h"
 
-class Denise : public HardwareComponent {
-
-    // References to other components
-    class Agnus *agnus;
+class Denise : public SubComponent {
 
     // The current configuration
     DeniseConfig config;
@@ -288,8 +285,7 @@ private:
     
 public:
 
-    Denise();
-    ~Denise();
+    Denise(Amiga& ref);
 
     // Returns the current configuration
     DeniseConfig getConfig() { return config; }

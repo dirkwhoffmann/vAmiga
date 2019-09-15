@@ -22,6 +22,7 @@ class CIAB;
 class RTC;
 class Memory;
 class Agnus;
+class DmaDebugger;
 class Denise;
 class PixelEngine;
 class Paula;
@@ -49,6 +50,7 @@ protected:
     RTC &rtc;
     Memory &mem;
     Agnus &agnus;
+    DmaDebugger &dmaDebugger;
     Denise &denise;
     PixelEngine &pixelEngine;
     Paula &paula;
