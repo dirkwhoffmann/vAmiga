@@ -28,8 +28,8 @@ private:
     
 public:
 
-    // Sound
-    AudioUnit audioUnit;
+    // Sound chip
+    AudioUnit audioUnit = AudioUnit(amiga);
 
     // Disk controller
     DiskController diskController = DiskController(amiga);

@@ -10,10 +10,11 @@
 #ifndef _AUDIO_UNIT_INC
 #define _AUDIO_UNIT_INC
 
+#include "SubComponent.h"
 #include "StateMachine.h"
 #include "AudioFilter.h"
 
-class AudioUnit : public HardwareComponent {
+class AudioUnit : public SubComponent {
 
     //
     // Configuration
@@ -144,7 +145,7 @@ private:
     
 public:
     
-    AudioUnit();
+    AudioUnit(Amiga& ref);
     
 
     //

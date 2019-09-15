@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-AudioUnit::AudioUnit()
+AudioUnit::AudioUnit(Amiga& ref) : SubComponent(ref)
 {
     setDescription("AudioUnit");
     
@@ -334,7 +334,7 @@ AudioUnit::writeData(short left, short right)
     float fr = float(right) * scale;
 
     // Apply audio filter if applicable
-    if ((filterActivation == FILTACT_POWER_LED && amiga->ciaA.powerLED()) ||
+    if ((filterActivation == FILTACT_POWER_LED && ciaa.powerLED()) ||
         (filterActivation == FILTACT_ALWAYS)) {
         fl = filterL.apply(fl);
         fr = filterR.apply(fr);
