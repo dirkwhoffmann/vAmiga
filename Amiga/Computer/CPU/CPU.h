@@ -150,6 +150,8 @@ private:
 
     void _initialize() override;
     void _powerOn() override;
+    void _powerOff() override; 
+    void _run() override;
     void _reset() override;
     void _inspect() override;
     void _dumpConfig() override;
@@ -183,6 +185,19 @@ public:
     
     // Restores the current CPU context
     void restoreContext();
+
+    /* Assign the Musashi core to this CPU.
+     * Background: Because we only have one CPU core available, we need to
+     * share this core among all emulator instances. This means that only one
+     * emulator instance can run at a time and the other instances need to
+     * be powered off or paused. When an emulator instance needs to acces the
+     * CPU core, it has to make itself the 'active emulator instance' by
+     * calling this function. It will bind the CPU to this emulator instance
+     * by rerouting all memory accesses to this instance.
+     * If another instance is currently active, it is put into pause mode
+     * automatically.
+     */
+    void makeActiveInstance();
 
 
     //

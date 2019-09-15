@@ -111,34 +111,6 @@ Amiga::~Amiga()
 {
     debug("Destroying Amiga[%p]\n", this);
     powerOff();
-    
-    if (this == activeAmiga) {
-        debug("Stop being the active emulator instance\n");
-        activeAmiga = NULL;
-    }
-}
-
-void
-Amiga::makeActiveInstance()
-{
-    // Return immediately if this emulator instance is the active instance
-    if (activeAmiga == this) return;
-    
-    /* Pause the currently active emulator instance (if any)
-     * Because we're going to use the CPU core, we need to save the active
-     * instance's CPU context. It will be restored when the other instance
-     * becomes the active again (by calling this function).
-     */
-    if (activeAmiga != NULL) {
-        activeAmiga->pause();
-        activeAmiga->cpu.recordContext();
-    }
-    
-    // Restore the previously recorded CPU state (if any)
-    cpu.restoreContext();
-    
-    // Bind the CPU core to this emulator instance
-    activeAmiga = this;
 }
 
 void
@@ -513,9 +485,6 @@ Amiga::reset()
 
     assert(!isRunning());
     
-    // Make this machine the active one
-    makeActiveInstance();
-
     // Execute the standard reset routine
     HardwareComponent::reset();
 
@@ -545,9 +514,6 @@ Amiga::_powerOn()
 
     runLoopCtrl = 0;
     
-    // Make this emulator instance the active one
-    makeActiveInstance();
-
     // For debugging, we start in debug mode and set a breakpoint
     debugMode = true;
 
@@ -598,9 +564,6 @@ Amiga::_run()
         return;
     }
     
-    // Make this Amiga the active emulator instance
-    makeActiveInstance();
-
     // REMOVE ASAP
     if (SNAP_DEBUG == 1) {
         debug("Creating snapshot\n");

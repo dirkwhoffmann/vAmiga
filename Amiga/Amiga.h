@@ -42,9 +42,6 @@
 #include "Snapshot.h"
 #include "ADFFile.h"
 
-
-extern Amiga *activeAmiga;
-
 /* A complete virtual Amiga
  * This class is the most prominent one of all. To run the emulator, it is
  * sufficient to create a single object of this type. All subcomponents are
@@ -320,19 +317,6 @@ public:
     //
 
 public:
-
-    /* Makes this Amiga the active emulator instance.
-     * Background: Because we only have one CPU core available, we need to
-     * share this core among all emulator instances. This means that only one
-     * emulator instance can run at a time and the other instances need to
-     * be powered off or paused. When an emulator instance needs to acces the
-     * CPU core, it has to make itself the 'active emulator instance' by
-     * calling this function. It will bind the CPU to this emulator instance
-     * by rerouting all memory accesses to this instance.
-     * If another instance is currently active, it is put into pause mode
-     * automatically.
-     */
-    void makeActiveInstance();
     
     // Indicates if debug mode is enabled.
     bool getDebugMode() { return debugMode; }
