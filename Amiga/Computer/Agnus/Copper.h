@@ -106,7 +106,6 @@ public:
     
 private:
 
-    void _initialize() override;
     void _reset() override { RESET_SNAPSHOT_ITEMS }
     void _inspect() override; 
     void _dump() override;

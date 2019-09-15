@@ -15,17 +15,6 @@ ZorroManager::ZorroManager(Amiga& ref) : SubComponent(ref)
 }
 
 void
-ZorroManager::_initialize()
-{
-}
-
-void
-ZorroManager::_powerOn()
-{
-    
-}
-
-void
 ZorroManager::_powerOff()
 {
     

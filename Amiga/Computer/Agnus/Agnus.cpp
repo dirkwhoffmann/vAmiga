@@ -163,11 +163,6 @@ Agnus::initDASTables()
 }
 
 void
-Agnus::_initialize()
-{
-}
-
-void
 Agnus::_powerOn()
 {
 }

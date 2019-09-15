@@ -39,11 +39,6 @@ Memory::dealloc()
 }
 
 void
-Memory::_initialize()
-{
-}
-
-void
 Memory::_powerOn()
 {
     // Make Rom writable if an A1000 is emulated
@@ -463,7 +458,7 @@ Memory::updateMemSrcTable()
 uint8_t
 Memory::peek8(uint32_t addr)
 {
-    // debug("PC: %X peek8(%X)\n", amiga->cpu.getPC(), addr);
+    // debug("PC: %X peek8(%X)\n", cpu.getPC(), addr);
 
     addr &= 0xFFFFFF;
     switch (memSrc[addr >> 16]) {

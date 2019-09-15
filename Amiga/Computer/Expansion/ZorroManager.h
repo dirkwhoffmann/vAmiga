@@ -66,8 +66,6 @@ public:
     
 private:
 
-    void _initialize() override;
-    void _powerOn() override;
     void _powerOff() override;
     void _ping() override;
     void _dump() override;

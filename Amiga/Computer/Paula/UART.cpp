@@ -15,17 +15,6 @@ UART::UART(Amiga& ref) : SubComponent(ref)
 }
 
 void
-UART::_initialize()
-{
-}
-
-void
-UART::_powerOn()
-{
-
-}
-
-void
 UART::_reset()
 {
     RESET_SNAPSHOT_ITEMS

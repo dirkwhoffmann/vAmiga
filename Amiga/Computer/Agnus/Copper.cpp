@@ -15,11 +15,6 @@ Copper::Copper(Amiga& ref) : SubComponent(ref)
 }
 
 void
-Copper::_initialize()
-{
-}
-
-void
 Copper::_inspect()
 {
     // Prevent external access to variable 'info'

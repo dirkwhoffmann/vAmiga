@@ -22,11 +22,6 @@ CIA::CIA(Amiga& ref) : SubComponent(ref)
 }
 
 void
-CIA::_initialize()
-{
-}
-
-void
 CIA::_powerOn()
 {
 

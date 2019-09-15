@@ -18,14 +18,14 @@ class GamePadManager: NSObject {
     // Such a thing is used here: TODO: Check if we need this
     // https://github.com/joekarl/swift_handmade_hero/blob/master/Handmade%20Hero%20OSX/Handmade%20Hero%20OSX/InputManager.swift
     
-    //! @brief   Reference to the the controller
+    // Reference to the the controller
     private var controller: MyController!
     
-    //! @brief   Reference to the HID manager
+    // Reference to the HID manager
     private var hidManager: IOHIDManager
 
-    //! @brief   References to all registered game pads
-    /*! @details Each device ist referenced by a slot number
+    /* References to all registered game pads
+     * Each device ist referenced by a slot number
      */
     var gamePads: [Int: GamePad] = [:]
 

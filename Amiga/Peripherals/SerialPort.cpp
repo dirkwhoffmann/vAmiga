@@ -15,16 +15,6 @@ SerialPort::SerialPort(Amiga& ref) : SubComponent(ref)
 }
 
 void
-SerialPort::_initialize()
-{
-}
-
-void
-SerialPort::_powerOn()
-{
-}
-
- void
 SerialPort::_reset()
 {
    RESET_SNAPSHOT_ITEMS

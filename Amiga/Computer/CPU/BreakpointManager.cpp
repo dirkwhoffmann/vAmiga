@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-BreakpointManager::BreakpointManager()
+BreakpointManager::BreakpointManager(Amiga &ref) : SubComponent(ref)
 {
     setDescription("BreakpointManager");
     
@@ -66,11 +66,11 @@ BreakpointManager::hasConditionalBreakpointAt(uint32_t addr)
 void
 BreakpointManager::setBreakpointAt(uint32_t addr)
 {
-    amiga->suspend();
+    amiga.suspend();
 
     _setBreakpointAt(addr);
 
-    amiga->resume();
+    amiga.resume();
 }
 
 void
@@ -84,7 +84,7 @@ BreakpointManager::_setBreakpointAt(uint32_t addr)
         breakpoints[numBreakpoints] = new Breakpoint();
         breakpoints[numBreakpoints++]->addr = addr;
         
-        amiga->putMessage(MSG_BREAKPOINT_CONFIG);
+        amiga.putMessage(MSG_BREAKPOINT_CONFIG);
     }
 }
 
@@ -101,7 +101,7 @@ BreakpointManager::deleteBreakpoint(long nr)
 void
 BreakpointManager::deleteBreakpointAt(uint32_t addr)
 {
-    amiga->suspend();
+    amiga.suspend();
     
     for (int i = 0; i < numBreakpoints; i++) {
         
@@ -118,9 +118,9 @@ BreakpointManager::deleteBreakpointAt(uint32_t addr)
             breakpoints[numBreakpoints] = NULL;
         }
     }
-    amiga->putMessage(MSG_BREAKPOINT_CONFIG);
+    amiga.putMessage(MSG_BREAKPOINT_CONFIG);
     
-    amiga->resume();
+    amiga.resume();
 }
 
 void
@@ -148,12 +148,12 @@ BreakpointManager::setEnableAt(uint32_t addr, bool value)
     Breakpoint *bp = breakpointAtAddr(addr);
     if (!bp) return;
     
-    amiga->suspend();
+    amiga.suspend();
     
     value ? bp->enable() : bp->disable();
-    amiga->putMessage(MSG_BREAKPOINT_CONFIG);
+    amiga.putMessage(MSG_BREAKPOINT_CONFIG);
     
-    amiga->resume();
+    amiga.resume();
 }
 
 uint32_t
@@ -169,12 +169,12 @@ BreakpointManager::setAddr(long nr, uint32_t addr)
     Breakpoint *bp = breakpointWithNr(nr);
     if (!bp) return false;
     
-    amiga->suspend();
+    amiga.suspend();
     
     bp->addr = addr;
-    amiga->putMessage(MSG_BREAKPOINT_CONFIG);
+    amiga.putMessage(MSG_BREAKPOINT_CONFIG);
     
-    amiga->resume();
+    amiga.resume();
     
     return true;
 }
@@ -206,12 +206,12 @@ BreakpointManager::setCondition(long nr, const char *str)
     Breakpoint *bp = breakpointWithNr(nr);
     if (!bp) return false;
     
-    amiga->suspend();
+    amiga.suspend();
     
     bp->setCondition(str);
-    amiga->putMessage(MSG_BREAKPOINT_CONFIG);
+    amiga.putMessage(MSG_BREAKPOINT_CONFIG);
 
-    amiga->resume();
+    amiga.resume();
     
     return true;
 }
@@ -222,12 +222,12 @@ BreakpointManager::deleteCondition(long nr)
     Breakpoint *bp = breakpointWithNr(nr);
     if (!bp) return false;
     
-    amiga->suspend();
+    amiga.suspend();
     
     bp->removeCondition();
-    amiga->putMessage(MSG_BREAKPOINT_CONFIG);
+    amiga.putMessage(MSG_BREAKPOINT_CONFIG);
 
-    amiga->resume();
+    amiga.resume();
     
     return true;
 }
@@ -235,7 +235,7 @@ BreakpointManager::deleteCondition(long nr)
 bool
 BreakpointManager::shouldStop()
 {
-    uint32_t addr = amiga->cpu.getPC();
+    uint32_t addr = amiga.cpu.getPC();
     
     // Check if a soft breakpoint has been reached.
     if (addr == softStop || softStop == UINT32_MAX) {

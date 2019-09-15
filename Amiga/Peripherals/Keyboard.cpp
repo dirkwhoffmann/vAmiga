@@ -15,16 +15,6 @@ Keyboard::Keyboard(Amiga& ref) : SubComponent(ref)
 }
 
 void
-Keyboard::_initialize()
-{
-}
-
-void
-Keyboard::_powerOn()
-{
-}
-
-void
 Keyboard::_reset()
 {
     RESET_SNAPSHOT_ITEMS

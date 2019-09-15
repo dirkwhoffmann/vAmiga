@@ -147,8 +147,6 @@ public:
     
 private:
     
-    void _initialize() override;
-    void _powerOn() override;
     void _reset() override;
     void _ping() override;
     void _inspect() override;

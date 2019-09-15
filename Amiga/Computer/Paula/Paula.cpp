@@ -22,11 +22,6 @@ Paula::Paula(Amiga& ref) : SubComponent(ref)
 }
 
 void
-Paula::_initialize()
-{
-}
-
-void
 Paula::_reset()
 {
     RESET_SNAPSHOT_ITEMS

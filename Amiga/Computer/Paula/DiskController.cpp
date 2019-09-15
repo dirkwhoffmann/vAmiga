@@ -22,16 +22,6 @@ DiskController::DiskController(Amiga& ref) : SubComponent(ref)
 }
 
 void
-DiskController::_initialize()
-{
-}
-
-void
-DiskController::_powerOn()
-{
-}
-
-void
 DiskController::_reset()
 {
     RESET_SNAPSHOT_ITEMS

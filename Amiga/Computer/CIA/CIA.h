@@ -341,7 +341,6 @@ public:
 
 protected:
 
-    void _initialize() override;
     void _powerOn() override;
     void _run() override;
     void _reset() override;

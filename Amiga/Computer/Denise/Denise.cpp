@@ -27,11 +27,6 @@ Denise::Denise(Amiga& ref) : SubComponent(ref)
 }
 
 void
-Denise::_initialize()
-{
-}
-
-void
 Denise::_powerOn()
 {
 }

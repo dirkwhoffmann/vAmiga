@@ -97,7 +97,7 @@ public:
     //
     
     // A breakpoint manager for handling forced interruptions
-    BreakpointManager bpManager;
+    BreakpointManager bpManager = BreakpointManager(amiga);
     
     // A buffer recording all recently executed instructions
     static const size_t traceBufferCapacity = 256;

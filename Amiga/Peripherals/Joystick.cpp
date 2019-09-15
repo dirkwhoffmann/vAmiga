@@ -18,16 +18,6 @@ Joystick::Joystick(int nr, Amiga& ref) : SubComponent(ref)
 }
 
 void
-Joystick::_initialize()
-{
-}
-
-void
-Joystick::_powerOn()
-{
-}
-
-void
 Joystick::_reset()
 {
     RESET_SNAPSHOT_ITEMS
