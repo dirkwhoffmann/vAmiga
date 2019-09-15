@@ -133,15 +133,15 @@ public:
     Joystick joystick2 = Joystick(2, *this);
     
     // Keyboard
-    Keyboard keyboard;
+    Keyboard keyboard = Keyboard(*this);
     
     // Internal floppy drive
-    Drive df0 = Drive(0);
+    Drive df0 = Drive(0, *this);
     
     // External floppy drives
-    Drive df1 = Drive(1);
-    Drive df2 = Drive(2);
-    Drive df3 = Drive(3);
+    Drive df1 = Drive(1, *this);
+    Drive df2 = Drive(2, *this);
+    Drive df3 = Drive(3, *this);
     
     // Shortcuts to all four drives
     Drive *df[4] = { &df0, &df1, &df2, &df3 };

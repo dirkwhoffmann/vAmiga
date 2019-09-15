@@ -10,11 +10,11 @@
 #ifndef _COLORIZER_INC
 #define _COLORIZER_INC
 
-#include "HardwareComponent.h"
+#include "SubComponent.h"
 #include "RegisterChange.h"
 #include "ChangeRecorder.h"
 
-class PixelEngine : public HardwareComponent {
+class PixelEngine : public SubComponent {
 
     friend class DmaDebugger;
     
@@ -23,10 +23,6 @@ public:
     // RGBA colors used to visualize the HBLANK and VBLANK area in the debugger
     static const int32_t rgbaHBlank = 0x00444444;
     static const int32_t rgbaVBlank = 0x00444444;
-
-    // References to other components
-    class Agnus *agnus;
-    class Denise *denise;
 
 private:
 
@@ -103,7 +99,7 @@ public:
     
 public:
     
-    PixelEngine();
+    PixelEngine(Amiga& ref);
 
 
     //
@@ -132,7 +128,6 @@ public:
     
 private:
 
-    void _initialize() override;
     void _powerOn() override;
     void _reset() override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }

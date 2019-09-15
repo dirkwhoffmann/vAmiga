@@ -30,7 +30,7 @@ class Denise : public SubComponent {
 public:
     
     // A color synthesizer for computing RGBA values
-    PixelEngine pixelEngine;
+    PixelEngine pixelEngine = PixelEngine(amiga);
 
 
     //

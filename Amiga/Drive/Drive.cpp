@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-Drive::Drive(unsigned nr)
+Drive::Drive(unsigned nr, Amiga& ref) : SubComponent(ref)
 {
     assert(nr < 4); // df0 - df3
     
@@ -25,12 +25,12 @@ Drive::Drive(unsigned nr)
 void
 Drive::_ping()
 {
-    amiga->putMessage(hasDisk() ?
-                       MSG_DRIVE_DISK_INSERT : MSG_DRIVE_DISK_EJECT, nr);
-    amiga->putMessage(hasWriteProtectedDisk() ?
-                       MSG_DRIVE_DISK_PROTECTED : MSG_DRIVE_DISK_UNPROTECTED, nr);
-    amiga->putMessage(hasModifiedDisk() ?
-                       MSG_DRIVE_DISK_UNSAVED : MSG_DRIVE_DISK_SAVED, nr);
+    amiga.putMessage(hasDisk() ?
+                     MSG_DRIVE_DISK_INSERT : MSG_DRIVE_DISK_EJECT, nr);
+    amiga.putMessage(hasWriteProtectedDisk() ?
+                     MSG_DRIVE_DISK_PROTECTED : MSG_DRIVE_DISK_UNPROTECTED, nr);
+    amiga.putMessage(hasModifiedDisk() ?
+                     MSG_DRIVE_DISK_UNSAVED : MSG_DRIVE_DISK_SAVED, nr);
 }
 
 void
@@ -148,9 +148,9 @@ Drive::setSpeed(int16_t value)
 {
     assert(isValidDriveSpeed(value));
 
-    amiga->suspend();
+    amiga.suspend();
     config.speed = value;
-    amiga->resume();
+    amiga.resume();
 
     debug("Setting acceleration factor to %d\n", config.speed);
 
@@ -229,24 +229,24 @@ Drive::setMotor(bool value)
 {
     if (!motor && value) {
         
-        motorOnCycle = amiga->cpu.clock;
+        motorOnCycle = cpu.clock;
 
         debug(DSK_DEBUG, "Motor on (Cycle: %d)\n", motorOnCycle);
 
-        amiga->putMessage(MSG_DRIVE_LED_ON, nr);
-        amiga->putMessage(MSG_DRIVE_MOTOR_ON, nr);
+        amiga.putMessage(MSG_DRIVE_LED_ON, nr);
+        amiga.putMessage(MSG_DRIVE_MOTOR_ON, nr);
     }
     
     else if (motor && !value) {
 
 
         idCount = 0; // Reset identification shift register counter
-        motorOffCycle =  amiga->cpu.clock;
+        motorOffCycle =  cpu.clock;
 
         debug(DSK_DEBUG, "Motor off (Cycle: %d)\n", motorOffCycle);
 
-        amiga->putMessage(MSG_DRIVE_LED_OFF, nr);
-        amiga->putMessage(MSG_DRIVE_MOTOR_OFF, nr);
+        amiga.putMessage(MSG_DRIVE_LED_OFF, nr);
+        amiga.putMessage(MSG_DRIVE_MOTOR_OFF, nr);
     }
     
     motor = value;
@@ -255,13 +255,13 @@ Drive::setMotor(bool value)
 Cycle
 Drive::motorOnTime()
 {
-    return motor ? amiga->cpu.clock - motorOnCycle : 0;
+    return motor ? cpu.clock - motorOnCycle : 0;
 }
 
 Cycle
 Drive::motorOffTime()
 {
-    return motor ? 0 : (amiga->cpu.clock - motorOffCycle);
+    return motor ? 0 : (cpu.clock - motorOffCycle);
 }
 
 bool
@@ -339,7 +339,7 @@ Drive::rotate()
          */
         if (isSelected()) {
             // debug("emulateFallingEdgeOnFlagPin()\n"); 
-            amiga->ciaB.emulateFallingEdgeOnFlagPin();
+            ciab.emulateFallingEdgeOnFlagPin();
         }
     }
 
@@ -389,7 +389,7 @@ Drive::moveHead(int dir)
 #endif
     
     // Inform the GUI
-    amiga->putMessage(pollsForDisk() ? MSG_DRIVE_HEAD_POLL : MSG_DRIVE_HEAD);
+    amiga.putMessage(pollsForDisk() ? MSG_DRIVE_HEAD_POLL : MSG_DRIVE_HEAD);
 }
 
 void
@@ -448,12 +448,12 @@ Drive::setWriteProtection(bool value)
         if (value && !disk->isWriteProtected()) {
             
             disk->setWriteProtection(true);
-            amiga->putMessage(MSG_DRIVE_DISK_PROTECTED);
+            amiga.putMessage(MSG_DRIVE_DISK_PROTECTED);
         }
         if (!value && disk->isWriteProtected()) {
             
             disk->setWriteProtection(false);
-            amiga->putMessage(MSG_DRIVE_DISK_UNPROTECTED);
+            amiga.putMessage(MSG_DRIVE_DISK_UNPROTECTED);
         }
     }
 }
@@ -480,7 +480,7 @@ Drive::ejectDisk()
         disk = NULL;
         
         // Notify the GUI
-        amiga->putMessage(MSG_DRIVE_DISK_EJECT, nr);
+        amiga.putMessage(MSG_DRIVE_DISK_EJECT, nr);
     }
 }
 
@@ -495,7 +495,7 @@ Drive::insertDisk(Disk *disk)
         assert(!hasDisk());
 
         this->disk = disk;
-        amiga->putMessage(MSG_DRIVE_DISK_INSERT, nr);
+        amiga.putMessage(MSG_DRIVE_DISK_INSERT, nr);
     }
 }
 

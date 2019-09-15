@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-PixelEngine::PixelEngine()
+PixelEngine::PixelEngine(Amiga& ref) : SubComponent(ref)
 {
     setDescription("PixelEngine");
 
@@ -42,13 +42,6 @@ PixelEngine::PixelEngine()
     colors[70] = 0x00AA;
     colors[71] = 0x0099;
     */
-}
-
-void
-PixelEngine::_initialize()
-{
-    agnus = &amiga->agnus;
-    denise = &amiga->denise;
 }
 
 void
@@ -270,7 +263,7 @@ PixelEngine::getStableShortFrame()
 int *
 PixelEngine::pixelAddr(int pixel)
 {
-    int offset = pixel + agnus->pos.v * HPIXELS;
+    int offset = pixel + agnus.pos.v * HPIXELS;
 
     assert(pixel < HPIXELS);
     assert(offset < PIXELS);
@@ -314,7 +307,7 @@ PixelEngine::beginOfFrame(bool interlace)
     
     pthread_mutex_unlock(&lock);
 
-    agnus->dmaDebugger.vSyncHandler();
+    dmaDebugger.vSyncHandler();
 }
 
 void
@@ -354,7 +347,7 @@ PixelEngine::colorize(uint8_t *src, int line)
     int pixel = 0;
 
     // Check for HAM mode
-    bool ham = denise->ham();
+    bool ham = denise.ham();
 
     // Initialize the HAM mode hold register with the current background color
     uint16_t hold = colreg[0];

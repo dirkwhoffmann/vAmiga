@@ -10,10 +10,10 @@
 #ifndef _AMIGA_DRIVE_INC
 #define _AMIGA_DRIVE_INC
 
-#include "HardwareComponent.h"
+#include "SubComponent.h"
 #include "Disk.h"
 
-class Drive : public HardwareComponent {
+class Drive : public SubComponent {
     
     friend class DiskController;
         
@@ -127,7 +127,7 @@ public:
     
 public:
     
-    Drive(unsigned nr);
+    Drive(unsigned nr, Amiga& ref);
 
     // Returns the current configuration
     DriveConfig getConfig() { return config; }

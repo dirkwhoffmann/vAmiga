@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-Keyboard::Keyboard()
+Keyboard::Keyboard(Amiga& ref) : SubComponent(ref)
 {
     setDescription("Keyboard");
 }
@@ -17,13 +17,11 @@ Keyboard::Keyboard()
 void
 Keyboard::_initialize()
 {
-    agnus = &amiga->agnus;
 }
 
 void
 Keyboard::_powerOn()
 {
-
 }
 
 void
@@ -111,9 +109,9 @@ Keyboard::writeToBuffer(uint8_t keycode)
     bufferIndex++;
 
     // Wake up the keyboard if it has gone idle
-    if (!agnus->isPending<KBD_SLOT>()) {
+    if (!agnus.isPending<KBD_SLOT>()) {
         debug(KBD_DEBUG, "Wake up\n");
-        agnus->rescheduleRel<KBD_SLOT>(0);
+        agnus.rescheduleRel<KBD_SLOT>(0);
 
     }
 }
@@ -146,9 +144,9 @@ Keyboard::setSPLine(bool value, Cycle cycle)
     if (accept) {
 
         debug(KBD_DEBUG, "Accepting handshake (SP low for %d usec)\n", diff);
-        if (agnus->hasEvent<KBD_SLOT>(KBD_TIMEOUT)) {
+        if (agnus.hasEvent<KBD_SLOT>(KBD_TIMEOUT)) {
             // Note: Watchdog events store the next event in their data field
-            agnus->scheduleRel<KBD_SLOT>(0, (EventID)agnus->slot[KBD_SLOT].data);
+            agnus.scheduleRel<KBD_SLOT>(0, (EventID)agnus.slot[KBD_SLOT].data);
         }
     }
 
@@ -169,7 +167,7 @@ Keyboard::serviceKeyboardEvent(EventID id)
             debug(KBD_DEBUG, "KBD_SELFTEST\n");
 
             // Continue with KBD_STRM_ON after receiving a handshake
-            agnus->scheduleInc<KBD_SLOT>(SEC(1), KBD_TIMEOUT, KBD_STRM_ON);
+            agnus.scheduleInc<KBD_SLOT>(SEC(1), KBD_TIMEOUT, KBD_STRM_ON);
             break;
 
         case KBD_SYNC:
@@ -180,7 +178,7 @@ Keyboard::serviceKeyboardEvent(EventID id)
             sendKeyCode(0xFF);
 
             // Continue with KBD_STRM_ON after receiving a handshake
-            agnus->scheduleInc<KBD_SLOT>(8 * MSEC(145), KBD_TIMEOUT, KBD_STRM_ON);
+            agnus.scheduleInc<KBD_SLOT>(8 * MSEC(145), KBD_TIMEOUT, KBD_STRM_ON);
             break;
 
         case KBD_STRM_ON:
@@ -191,7 +189,7 @@ Keyboard::serviceKeyboardEvent(EventID id)
             sendKeyCode(0xFD);
 
             // Continue with KBD_STRM_OFF after receiving a handshake
-            agnus->scheduleInc<KBD_SLOT>(MSEC(145), KBD_TIMEOUT, KBD_STRM_OFF);
+            agnus.scheduleInc<KBD_SLOT>(MSEC(145), KBD_TIMEOUT, KBD_STRM_OFF);
             break;
 
         case KBD_STRM_OFF:
@@ -202,7 +200,7 @@ Keyboard::serviceKeyboardEvent(EventID id)
             sendKeyCode(0xFE);
 
             // Continue with KBD_STRM_OFF after receiving a handshake
-            agnus->scheduleInc<KBD_SLOT>(MSEC(145), KBD_TIMEOUT, KBD_SEND);
+            agnus.scheduleInc<KBD_SLOT>(MSEC(145), KBD_TIMEOUT, KBD_SEND);
             break;
 
         case KBD_SEND:
@@ -216,12 +214,12 @@ Keyboard::serviceKeyboardEvent(EventID id)
             if (!bufferIsEmpty()) {
 
                 // Continue in this state after receiving a handshake
-                agnus->scheduleRel<KBD_SLOT>(9*MSEC(145), KBD_TIMEOUT, KBD_SEND);
+                agnus.scheduleRel<KBD_SLOT>(9*MSEC(145), KBD_TIMEOUT, KBD_SEND);
 
             } else {
 
                 // Go idle
-                agnus->rescheduleAbs<KBD_SLOT>(NEVER);
+                agnus.rescheduleAbs<KBD_SLOT>(NEVER);
 
             }
             break;
@@ -231,7 +229,7 @@ Keyboard::serviceKeyboardEvent(EventID id)
             debug(KBD_DEBUG, "KBD_TIMEOUT\n");
 
             // We've received a time-out. Reinitiate the SYNC sequence
-            amiga->agnus.scheduleInc<KBD_SLOT>(DMA_CYCLES(1), KBD_SYNC);
+            agnus.scheduleInc<KBD_SLOT>(DMA_CYCLES(1), KBD_SYNC);
             break;
 
         default:
@@ -248,5 +246,5 @@ Keyboard::sendKeyCode(uint8_t keyCode)
     keyCode  = ~((keyCode << 1) | (keyCode >> 7)) & 0xFF;
 
     // Send it over to CIA A
-    amiga->ciaA.setKeyCode(keyCode);
+    ciaa.setKeyCode(keyCode);
 }

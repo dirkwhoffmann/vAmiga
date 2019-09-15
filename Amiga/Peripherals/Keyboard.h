@@ -10,13 +10,10 @@
 #ifndef _KEYBOARD_INC
 #define _KEYBOARD_INC
 
-#include "HardwareComponent.h"
+#include "SubComponent.h"
 
-class Keyboard : public HardwareComponent {
+class Keyboard : public SubComponent {
 
-    // References to other components
-    class Agnus *agnus;
-    
 public:
     
     /* The keybord layout identifier.
@@ -49,7 +46,7 @@ private:
     
 public:
     
-    Keyboard();
+    Keyboard(Amiga& ref);
     
 
     //
