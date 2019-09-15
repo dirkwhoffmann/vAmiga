@@ -17,6 +17,7 @@
 //
 
 class CPU;
+class CIA;
 class CIAA;
 class CIAB;
 class RTC;

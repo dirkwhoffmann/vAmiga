@@ -96,7 +96,7 @@ protected:
     //
 
     // 24-bit counter
-    TOD tod = TOD(this);
+    TOD tod = TOD(this, amiga);
 
 
     //

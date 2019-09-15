@@ -12,13 +12,11 @@
 
 #include "SubComponent.h"
 
-class CIA;
-
 /* 24-bit counter
  * Each CIA chip contains a 24-bit counter with an alarm. When the alarm value
  * is reached, an interrupt is initiated.
  */
-class TOD : public HardwareComponent {
+class TOD : public SubComponent {
     
     friend CIA;
     
@@ -67,7 +65,7 @@ class TOD : public HardwareComponent {
     // Creating and destructing
     //
     
-    TOD(CIA *cia);
+    TOD(CIA *cia, Amiga& ref);
 
 
     //
