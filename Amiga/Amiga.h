@@ -92,7 +92,7 @@ private:
 public:
     
     // A Motorola 68000 CPU
-    CPU cpu;
+    CPU cpu = CPU(*this);
     
     // CIA A (odd CIA)
     CIAA ciaA = CIAA(*this);

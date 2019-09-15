@@ -101,7 +101,7 @@ extern "C" uint32_t read_pc_on_reset(void) { return read_on_reset(0); }
 // CPU class
 //
 
-CPU::CPU()
+CPU::CPU(Amiga& ref) : SubComponent(ref)
 {
     setDescription("CPU");
     
@@ -474,7 +474,7 @@ CPU::disassemble(uint32_t addr)
     if (addr <= 0xFFFFFF) {
         
         result.bytes = m68k_disassemble(result.instr, addr, M68K_CPU_TYPE_68000);
-        amiga->mem.hex(result.data, addr, result.bytes, sizeof(result.data));
+        mem.hex(result.data, addr, result.bytes, sizeof(result.data));
         sprint24x(result.addr, addr);
         
     } else {

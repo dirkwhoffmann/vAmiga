@@ -10,7 +10,7 @@
 #ifndef _CPU_INC
 #define _CPU_INC
 
-#include "HardwareComponent.h"
+#include "SubComponent.h"
 #include "BreakpointManager.h"
 
 /* vAmiga utilizes the Musashi CPU core for emulating the Amiga CPU.
@@ -47,7 +47,7 @@ extern "C" uint32_t read_pc_on_reset(void);
 // CPU wrapper class
 //
 
-class CPU : public HardwareComponent {
+class CPU : public SubComponent {
 
     // The current configuration
     CPUConfig config;
@@ -134,7 +134,7 @@ public:
     
 public:
     
-    CPU();
+    CPU(Amiga& ref);
     ~CPU();
 
     // Returns the current configuration
