@@ -10,16 +10,12 @@
 #ifndef _STATE_MACHINE_INC
 #define _STATE_MACHINE_INC
 
-#include "HardwareComponent.h"
+#include "SubComponent.h"
 
 template <int nr>
-class StateMachine : public HardwareComponent {
+class StateMachine : public SubComponent {
 
     friend class AudioUnit;
-
-    // References to other components
-    class Agnus *agnus;
-    class Paula *paula; 
 
     //
     // Bookkeeping
@@ -59,7 +55,7 @@ public:
 
 public:
 
-    StateMachine();
+    StateMachine(Amiga& ref);
 
 
     //
@@ -95,7 +91,6 @@ public:
 
 private:
 
-    void _initialize() override;
     void _reset() override { RESET_SNAPSHOT_ITEMS }
     void _inspect() override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }

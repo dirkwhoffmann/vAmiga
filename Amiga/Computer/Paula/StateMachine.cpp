@@ -10,7 +10,7 @@
 #include "Amiga.h"
 
 template <int nr>
-StateMachine<nr>::StateMachine()
+StateMachine<nr>::StateMachine(Amiga& ref) : SubComponent(ref)
 {
     // Set description
     switch (nr) {
@@ -20,13 +20,6 @@ StateMachine<nr>::StateMachine()
         case 3: setDescription("StateMachine 3"); break;
         default: assert(false);
     }
-}
-
-template <int nr> void
-StateMachine<nr>::_initialize()
-{
-    agnus = &amiga->agnus;
-    paula = &amiga->paula;
 }
 
 template <int nr> void
@@ -126,21 +119,21 @@ StateMachine<nr>::pokeAUDxLCL(uint16_t value)
 template <int nr> bool
 StateMachine<nr>::dmaMode()
 {
-    return amiga->agnus.audDMA<nr>();
+    return agnus.audDMA<nr>();
 }
 
 template <int nr> void
 StateMachine<nr>::triggerIrq()
 {
-    paula->raiseIrq(nr == 0 ? INT_AUD0 :
-                    nr == 1 ? INT_AUD1 :
-                    nr == 2 ? INT_AUD2 : INT_AUD3);
+    paula.raiseIrq(nr == 0 ? INT_AUD0 :
+                   nr == 1 ? INT_AUD1 :
+                   nr == 2 ? INT_AUD2 : INT_AUD3);
 }
 
 template <int nr> bool
 StateMachine<nr>::irqIsPending()
 {
-    return GET_BIT(amiga->paula.intreq, 7 + nr);
+    return GET_BIT(paula.intreq, 7 + nr);
 }
 
 template <int nr> int16_t
@@ -151,7 +144,7 @@ StateMachine<nr>::execute(DMACycle cycles)
         case 0b000: // State 0 (Idle)
 
             audlen = audlenLatch;
-            agnus->audlc[nr] = audlcLatch;
+            agnus.audlc[nr] = audlcLatch;
             audper = 0;
             state = 0b001;
             break;
@@ -201,7 +194,7 @@ StateMachine<nr>::execute(DMACycle cycles)
             auddat = LO_BYTE(auddatLatch);
 
             // Read the next two samples from memory
-            auddatLatch = agnus->doAudioDMA(nr);
+            auddatLatch = agnus.doAudioDMA(nr);
 
             // Switch to next state
             state = 0b010;
@@ -214,7 +207,7 @@ StateMachine<nr>::execute(DMACycle cycles)
                     audlen--;
                 } else {
                     audlen = audlenLatch;
-                    agnus->audlc[nr] = audlcLatch;
+                    agnus.audlc[nr] = audlcLatch;
 
                     // Trigger Audio interrupt
                     triggerIrq();
@@ -240,13 +233,13 @@ StateMachine<nr>::execute(DMACycle cycles)
             audper = 0; // ???? SHOULD BE: audper += audperLatch;
 
             // Read the next two samples from memory
-            auddatLatch = agnus->doAudioDMA(nr);
+            auddatLatch = agnus.doAudioDMA(nr);
 
             if (audlen > 1) {
                 audlen--;
             } else {
                 audlen = audlenLatch;
-                agnus->audlc[nr] = audlcLatch;
+                agnus.audlc[nr] = audlcLatch;
 
                 // Trigger Audio interrupt
                 triggerIrq();
@@ -265,15 +258,10 @@ StateMachine<nr>::execute(DMACycle cycles)
     return (int8_t)auddat * audvolLatch;
 }
 
-template StateMachine<0>::StateMachine();
-template StateMachine<1>::StateMachine();
-template StateMachine<2>::StateMachine();
-template StateMachine<3>::StateMachine();
-
-template void StateMachine<0>::_initialize();
-template void StateMachine<1>::_initialize();
-template void StateMachine<2>::_initialize();
-template void StateMachine<3>::_initialize();
+template StateMachine<0>::StateMachine(Amiga &ref);
+template StateMachine<1>::StateMachine(Amiga &ref);
+template StateMachine<2>::StateMachine(Amiga &ref);
+template StateMachine<3>::StateMachine(Amiga &ref);
 
 template AudioChannelInfo StateMachine<0>::getInfo();
 template AudioChannelInfo StateMachine<1>::getInfo();

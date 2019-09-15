@@ -38,10 +38,10 @@ class AudioUnit : public SubComponent {
 public:
 
     // State machines
-    StateMachine<0> channel0;
-    StateMachine<1> channel1;
-    StateMachine<2> channel2;
-    StateMachine<3> channel3;
+    StateMachine<0> channel0 = StateMachine<0>(amiga);
+    StateMachine<1> channel1 = StateMachine<1>(amiga);
+    StateMachine<2> channel2 = StateMachine<2>(amiga);
+    StateMachine<3> channel3 = StateMachine<3>(amiga);
 
     // Audio filters
     AudioFilter filterL;
