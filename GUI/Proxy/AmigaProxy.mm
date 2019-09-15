@@ -63,7 +63,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 - (int64_t) clock
 {
-    return wrapper->cpu->clock; 
+    return wrapper->cpu->getClock(); 
 }
 - (int64_t) cycles
 {

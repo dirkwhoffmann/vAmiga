@@ -610,7 +610,7 @@ Amiga::_inspect()
     // Prevent external access to variable 'info'
     pthread_mutex_lock(&lock);
     
-    info.cpuClock = cpu.clock;
+    info.cpuClock = cpu.getClock();
     info.dmaClock = agnus.clock;
     info.ciaAClock = ciaA.clock;
     info.ciaBClock = ciaB.clock;
@@ -987,10 +987,10 @@ Amiga::dumpClock()
 {
     plainmsg("               Master cycles     CPU cycles    DMA cycles    CIA cycles\n");
     plainmsg("    CPU clock: %13lld  %13lld %13lld %13lld\n",
-             cpu.clock,
-             AS_CPU_CYCLES(cpu.clock),
-             AS_DMA_CYCLES(cpu.clock),
-             AS_CIA_CYCLES(cpu.clock));
+             cpu.getClock(),
+             AS_CPU_CYCLES(cpu.getClock()),
+             AS_DMA_CYCLES(cpu.getClock()),
+             AS_CIA_CYCLES(cpu.getClock()));
     plainmsg("    DMA clock: %13lld  %13lld %13lld %13lld\n",
              agnus.clock,
              AS_CPU_CYCLES(agnus.clock),

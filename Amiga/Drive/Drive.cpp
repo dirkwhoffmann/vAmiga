@@ -229,7 +229,7 @@ Drive::setMotor(bool value)
 {
     if (!motor && value) {
         
-        motorOnCycle = cpu.clock;
+        motorOnCycle = cpu.getClock();
 
         debug(DSK_DEBUG, "Motor on (Cycle: %d)\n", motorOnCycle);
 
@@ -241,7 +241,7 @@ Drive::setMotor(bool value)
 
 
         idCount = 0; // Reset identification shift register counter
-        motorOffCycle =  cpu.clock;
+        motorOffCycle =  cpu.getClock();
 
         debug(DSK_DEBUG, "Motor off (Cycle: %d)\n", motorOffCycle);
 
@@ -255,13 +255,13 @@ Drive::setMotor(bool value)
 Cycle
 Drive::motorOnTime()
 {
-    return motor ? cpu.clock - motorOnCycle : 0;
+    return motor ? cpu.getClock() - motorOnCycle : 0;
 }
 
 Cycle
 Drive::motorOffTime()
 {
-    return motor ? 0 : (cpu.clock - motorOffCycle);
+    return motor ? 0 : (cpu.getClock() - motorOffCycle);
 }
 
 bool

@@ -56,12 +56,8 @@ class CPU : public SubComponent {
     // Internal state
     //
 
-public:
-
-    // The CPU has been emulated up to this clock cycle
+    // The CPU has been emulated up to this cycle
     Cycle clock;
-
-private:
 
     // Action flags
     uint8_t actions;
@@ -203,6 +199,9 @@ public:
     //
     // Working with the clock
     //
+
+    // The CPU has been emulated up to this cycle
+    Cycle getClock() { return clock; }
 
     // Advances the clock by a certain number of CPU cycles
     void advance(CPUCycle cycles) { clock += cycles << config.shift; }
