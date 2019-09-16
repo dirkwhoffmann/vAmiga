@@ -314,20 +314,17 @@ void
 PixelEngine::endOfVBlankLine()
 {
     // Apply all color register changes that happened in this line
-    int j = colRegChanges.begin();
-    for (int i = 0; i < colRegHistory.count; i++, j = colRegChanges.next(j)) {
-        assert(j != colRegChanges.end());
-        applyRegisterChange(colRegHistory.change[i]);
+    for (int i = colRegChanges.begin(); i != colRegChanges.end(); i = colRegChanges.next(i)) {
+        applyRegisterChange(colRegChanges.change[i]);
     }
-    assert(j == colRegChanges.end());
 }
 
 void
-PixelEngine::applyRegisterChange(const RegisterChange &change)
+PixelEngine::applyRegisterChange(const Change &change)
 {
     switch (change.addr) {
 
-        case 0:
+        case REG_NONE:
             break;
 
         default:
@@ -355,28 +352,24 @@ PixelEngine::colorize(uint8_t *src, int line)
     uint16_t hold = colreg[0];
 
     // Add a dummy register change to ensure we draw until the line end
-    colRegHistory.recordChange(0, 0, HPIXELS);
     colRegChanges.add(HPIXELS, REG_NONE, 0);
 
     // Iterate over all recorded register changes
-    int j = colRegChanges.begin();
-    for (int i = 0; i < colRegHistory.count; i++, j = colRegChanges.next(j)) {
-        assert(j != colRegChanges.end());
+    for (int i = colRegChanges.begin(); i != colRegChanges.end(); i = colRegChanges.next(i)) {
 
-        RegisterChange &change = colRegHistory.change[i];
+        Change &change = colRegChanges.change[i];
 
         // Colorize a chunk of pixels
         if (ham) {
-            colorizeHAM(src, dst, pixel, change.pixel, hold);
+            colorizeHAM(src, dst, pixel, change.trigger, hold);
         } else {
-            colorize(src, dst, pixel, change.pixel);
+            colorize(src, dst, pixel, change.trigger);
         }
-        pixel = change.pixel;
+        pixel = change.trigger;
 
         // Perform the register change
         applyRegisterChange(change);
     }
-    assert(j == colRegChanges.end());
 
     // Wipe out the HBLANK area
     for (int pixel = 4 * 0x0F; pixel <= 4 * 0x35; pixel++) {
@@ -384,7 +377,6 @@ PixelEngine::colorize(uint8_t *src, int line)
     }
 
     // Clear the history cache
-    colRegHistory.init();
     colRegChanges.clear(); 
 }
 

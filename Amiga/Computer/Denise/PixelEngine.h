@@ -90,7 +90,6 @@ private:
 public:
 
     // Color register history
-    ChangeHistory colRegHistory;
     ChangeRecorder<128> colRegChanges; 
 
     //
@@ -116,7 +115,6 @@ public:
     {
         worker
 
-        & colRegHistory
         & colRegChanges
         & colreg
         & mode;
@@ -226,8 +224,7 @@ public:
 public:
 
     // Applies a register change
-    void applyRegisterChange(const RegisterChange &change);
-    // void applyRegisterChangeOld(const RegisterChange &change);
+    void applyRegisterChange(const Change &change);
 
 
     //

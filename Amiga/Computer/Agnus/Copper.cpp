@@ -337,8 +337,7 @@ Copper::move(int addr, uint16_t value)
 
     if (addr >= 0x180 && addr <= 0x1BE) {
 
-         // Color registers
-        pixelEngine.colRegHistory.recordChange(addr, value, 4 * agnus.pos.h);
+        // Color registers
         pixelEngine.colRegChanges.add(4 * agnus.pos.h, addr, value);
         return;
     }
