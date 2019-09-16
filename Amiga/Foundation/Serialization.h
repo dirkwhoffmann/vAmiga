@@ -12,7 +12,6 @@
 
 #include "Event.h"
 #include "Beam.h"
-#include "RegisterChange.h"
 #include "ChangeRecorder.h"
 #include "va_types.h"
 
@@ -132,8 +131,6 @@ public:
     STRUCT(Beam)
     STRUCT(Change)
     template <uint16_t capacity> STRUCT(ChangeRecorder<capacity>)
-    STRUCT(RegisterChange)
-    STRUCT(ChangeHistory)
 
     template <class T, size_t N>
     SerCounter& operator&(T (&v)[N])
@@ -204,8 +201,6 @@ public:
     STRUCT(Beam)
     STRUCT(Change)
     template <uint16_t capacity> STRUCT(ChangeRecorder<capacity>)
-    STRUCT(RegisterChange)
-    STRUCT(ChangeHistory)
 
     template <class T, size_t N>
     SerReader& operator&(T (&v)[N])
@@ -282,8 +277,6 @@ public:
     STRUCT(Beam)
     STRUCT(Change)
     template <uint16_t capacity> STRUCT(ChangeRecorder<capacity>)
-    STRUCT(RegisterChange)
-    STRUCT(ChangeHistory)
 
     template <class T, size_t N>
     SerWriter& operator&(T (&v)[N])
@@ -352,8 +345,6 @@ public:
     STRUCT(Beam)
     STRUCT(Change)
     template <uint16_t capacity> STRUCT(ChangeRecorder<capacity>)
-    STRUCT(RegisterChange)
-    STRUCT(ChangeHistory)
 
     template <class T, size_t N>
     SerResetter& operator&(T (&v)[N])

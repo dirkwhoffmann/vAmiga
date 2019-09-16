@@ -11,7 +11,6 @@
 #define _COLORIZER_INC
 
 #include "SubComponent.h"
-#include "RegisterChange.h"
 #include "ChangeRecorder.h"
 
 class PixelEngine : public SubComponent {

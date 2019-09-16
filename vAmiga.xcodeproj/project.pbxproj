@@ -179,7 +179,6 @@
 
 /* Begin PBXFileReference section */
 		5001A6692289775000E614B8 /* VAmigaUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VAmigaUITests.swift; sourceTree = "<group>"; };
-		5003C4E022F222A200732B11 /* RegisterChange.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RegisterChange.h; sourceTree = "<group>"; };
 		500770C1227C9FF3003A5F76 /* DriveTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DriveTypes.h; sourceTree = "<group>"; };
 		500C0A542259402D000121CD /* DiskController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiskController.cpp; sourceTree = "<group>"; };
 		500C0A552259402D000121CD /* DiskController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskController.h; sourceTree = "<group>"; };
@@ -835,7 +834,6 @@
 				505A3A3821F4996400132020 /* sse_utils.cpp */,
 				503990C522D8CCB600035783 /* Beam.h */,
 				5085830523265B3D004F942F /* Event.h */,
-				5003C4E022F222A200732B11 /* RegisterChange.h */,
 				5085830423262E8B004F942F /* ChangeRecorder.h */,
 				50EFC7DF22E840870036A3DF /* Serialization.h */,
 				50B14C0621EB218E002E32A6 /* AmigaObject.h */,
