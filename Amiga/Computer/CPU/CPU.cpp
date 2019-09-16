@@ -593,20 +593,26 @@ CPU::recordInstruction()
 Cycle
 CPU::executeInstruction()
 {
-    if (actions & CPU_SET_IRQ_LEVEL) {
-        debug(CPU_DEBUG, "Changing IRQ level to %d\n", irqLevel);
-        m68k_set_irq(irqLevel);
-        actions &= ~CPU_SET_IRQ_LEVEL;
+    if (actions) {
+        if (actions & CPU_SET_IRQ_LEVEL) {
+            debug(CPU_DEBUG, "Changing IRQ level to %d\n", irqLevel);
+            m68k_set_irq(irqLevel);
+            actions &= ~CPU_SET_IRQ_LEVEL;
+        }
     }
 
     advance(m68k_execute(1));
+    clock += waitStates;
+    waitStates = 0;
 
+    /*
     if (actions & CPU_ADD_WAIT_STATES) {
         debug(CPU_DEBUG, "Adding %d wait states\n", waitStates);
         clock += waitStates;
         waitStates = 0;
         actions &= ~CPU_ADD_WAIT_STATES;
     }
+    */
 
     return clock;
 }
@@ -626,10 +632,13 @@ CPU::setIrqLevel(int level)
 void
 CPU::addWaitStates(Cycle number)
 {
+    waitStates += number;
+    /*
     if (number) {
         waitStates += number;
         actions |= CPU_ADD_WAIT_STATES;
     }
+    */
 }
 
 unsigned int

@@ -65,8 +65,8 @@ class CPU : public SubComponent {
     // The new interrupt level
     int irqLevel;
 
-    // Number of wait states if the CPU can't access the bus
-    CPUCycle waitStates;
+    // Additional delay in master cycles if the CPU can't access the bus
+    Cycle waitStates;
 
 
     //

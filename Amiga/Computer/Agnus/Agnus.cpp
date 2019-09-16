@@ -1556,7 +1556,7 @@ Agnus::executeUntilBusIsFree()
     // Quick-exit if CPU runs at full speed during blit operations
     if (blitter.getAccuracy() == 0) return;
 
-    DMACycle blockedCycles = 0;
+    // DMACycle blockedCycles = 0;
 
     // Tell the Blitter that the CPU wants the bus
     cpuRequestsBus = true;
@@ -1574,10 +1574,11 @@ Agnus::executeUntilBusIsFree()
         if (busOwner[pos.h - 1] == BUS_NONE) break;
 
         // The CPU is blocked. Add a wait state and try again
-        blockedCycles++;
+        // blockedCycles++;
+        cpu.addWaitStates(DMA_CYCLES(1));
     };
 
-    cpu.addWaitStates(blockedCycles * DMA_CYCLES(1));
+    // cpu.addWaitStates(blockedCycles * DMA_CYCLES(1));
     cpuRequestsBus = false;
 }
 
