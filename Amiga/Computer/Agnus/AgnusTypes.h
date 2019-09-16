@@ -15,7 +15,7 @@
 // Register change identifiers
 typedef enum : int32_t
 {
-    REG_HPOS = 0,
+    REG_NONE = 0,
     REG_INTREQ,
     REG_INTENA,
     REG_BPLCON0_AGNUS,

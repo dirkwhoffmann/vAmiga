@@ -191,7 +191,8 @@ Denise::setBPLCON0(uint16_t oldValue, uint16_t newValue)
 
     // Record the register change
     conRegHistory.recordChange(BPLCON0, newValue, 4 * agnus.pos.h - 4);
-
+    conRegChanges.add(4 * agnus.pos.h - 4, REG_BPLCON0_DENISE, newValue);
+    
     // Update value
     bplcon0 = newValue;
 }
@@ -250,6 +251,7 @@ Denise::setBPLCON2(uint16_t value)
 
     // Record the pixel coordinate where the change takes place
     conRegHistory.recordChange(BPLCON2, value, 4 * agnus.pos.h + 4);
+    conRegChanges.add(4 * agnus.pos.h + 4, REG_BPLCON2, value);
 }
 
 uint16_t
@@ -490,11 +492,19 @@ Denise::translate()
 
     // Add a dummy register change to ensure we draw until the line ends
     conRegHistory.recordChange(0, 0, sizeof(bBuffer));
+    conRegChanges.add(sizeof(bBuffer), REG_NONE, 0);
+    assert(conRegHistory.count == conRegChanges.count());
 
+    int j = conRegChanges.begin(); 
     // Iterate over all recorded register changes
-    for (int i = 0; i < conRegHistory.count; i++) {
+    for (int i = 0; i < conRegHistory.count; i++, j = conRegChanges.next(j)) {
+
+        assert(j != conRegChanges.end());
 
         RegisterChange &change = conRegHistory.change[i];
+        Change &c = conRegChanges.change[j];
+        assert(c.trigger == change.pixel);
+        assert(c.value == change.value);
 
         // Translate a chunk of bitplane data
         if (dual) {
@@ -508,23 +518,29 @@ Denise::translate()
         switch (change.addr) {
 
             case BPLCON0:
+                assert(c.addr = REG_BPLCON0_DENISE);
                 bplcon0 = change.value;
                 dual = dbplf(bplcon0);
                 break;
 
             case BPLCON2:
+                assert(c.addr = REG_BPLCON2);
                 bplcon2 = change.value;
                 updateSpritePriorities(bplcon2);
                 break;
 
             default:
+                assert(c.addr == REG_NONE);
                 assert(change.addr == 0);
                 break;
         }
     }
 
+    assert(j == conRegChanges.end());
+
     // Clear the history cache
     conRegHistory.init();
+    conRegChanges.clear();
 }
 
 void
@@ -968,6 +984,7 @@ Denise::beginOfLine(int vpos)
 {
     // Reset the register history buffers
     conRegHistory.init();
+    conRegChanges.clear();
     pixelEngine.colRegHistory.init();
 
     // Save the current values of the bitplane control registers

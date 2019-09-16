@@ -26,7 +26,7 @@ struct Change
         & value;
     }
 
-    // Constructor
+    // Constructors
     Change() : trigger(0), addr(0), value(0) { }
     Change(int64_t t, uint32_t a, uint16_t v) : trigger(t), addr(a), value(v) { }
 

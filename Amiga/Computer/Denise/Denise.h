@@ -86,9 +86,11 @@ public:
 
 public:
 
-    // Control register histroy
+    // Control register history (DEPRECATED)
     ChangeHistory conRegHistory;
 
+    // Ringbuffer for managing register change delays
+    ChangeRecorder<128> conRegChanges;
 
     //
     // Sprites
@@ -269,6 +271,7 @@ public:
         & scrollHiresOdd
         & scrollHiresEven
         & conRegHistory
+        & conRegChanges
 
         & sprhstrt
         & sprShiftReg
