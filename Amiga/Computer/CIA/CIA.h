@@ -79,10 +79,10 @@ class CIA : public SubComponent {
     friend TOD;
     friend Amiga;
 
-protected:
-
-    // Identification (0 = CIA A, 1 = CIA B)
+    // Identification number (0 = CIA A, 1 = CIA B)
     int nr;
+
+protected:
 
     // The current configuration
     CIAConfig config;
@@ -274,12 +274,15 @@ public:
 
 
     //
-    // Constructing and configuring
+    // Constructing and destructing
     //
 
 public:
     
-    CIA(Amiga& ref);
+    CIA(int n, Amiga& ref);
+
+    bool isCIAA() { return nr == 0; }
+    bool isCIAB() { return nr == 1; }
 
     template <class T>
     void applyToPersistentItems(T& worker)
@@ -482,10 +485,10 @@ public:
     void executeOneCycle();
     
     // Schedules the next execution event
-    virtual void scheduleNextExecution() = 0;
+    void scheduleNextExecution();
     
     // Schedules the next wakeup event
-    virtual void scheduleWakeUp() = 0;
+    void scheduleWakeUp();
     
 private:
     
@@ -541,10 +544,7 @@ public:
     void _dump() override;
     
 private:
-    
-    void scheduleNextExecution() override;
-    void scheduleWakeUp() override;
-    
+
     void pullDownInterruptLine() override;
     void releaseInterruptLine() override;
     
@@ -574,10 +574,7 @@ public:
     void _dump() override;
     
 private:
-    
-    void scheduleNextExecution() override;
-    void scheduleWakeUp() override;
-    
+        
     void pullDownInterruptLine() override;
     void releaseInterruptLine() override;
     

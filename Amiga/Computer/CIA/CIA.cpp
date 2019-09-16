@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-CIA::CIA(Amiga& ref) : SubComponent(ref)
+CIA::CIA(int n, Amiga& ref) : nr(n), SubComponent(ref)
 {
 	setDescription("CIA");
 
@@ -575,7 +575,7 @@ CIA::poke(uint16_t addr, uint8_t value)
     
             // -0------ : Serial shift register in input mode (read)
             // -1------ : Serial shift register in output mode (write)
-            if ((nr == 0) && ((CRA & 0x40) ^ (value & 0x40))) { // CIA A only
+            if (isCIAA() && ((CRA & 0x40) ^ (value & 0x40))) {
                 keyboard.setSPLine(!(value & 0x40), clock);
             }
 
@@ -1052,6 +1052,26 @@ CIA::executeOneCycle()
 }
 
 void
+CIA::scheduleNextExecution()
+{
+    if (isCIAA()) {
+        agnus.scheduleAbs<CIAA_SLOT>(clock + CIA_CYCLES(1), CIA_EXECUTE);
+    } else {
+        agnus.scheduleAbs<CIAB_SLOT>(clock + CIA_CYCLES(1), CIA_EXECUTE);
+    }
+}
+
+void
+CIA::scheduleWakeUp()
+{
+    if (isCIAA()) {
+        agnus.scheduleAbs<CIAA_SLOT>(wakeUpCycle, CIA_WAKEUP);
+    } else {
+        agnus.scheduleAbs<CIAB_SLOT>(wakeUpCycle, CIA_WAKEUP);
+    }
+}
+
+void
 CIA::sleep()
 {
     // Don't call this method on a sleeping CIA
@@ -1127,10 +1147,9 @@ CIA::idle()
 // Complex Interface Adapter A
 // -----------------------------------------------------------------------------
 
-CIAA::CIAA(Amiga& ref) : CIA(ref)
+CIAA::CIAA(Amiga& ref) : CIA(0, ref)
 {
     setDescription("CIAA");
-    nr = 0;
 }
 
 void 
@@ -1150,18 +1169,6 @@ void
 CIAA::_powerOff()
 {
     amiga.putMessage(MSG_POWER_LED_OFF);
-}
-
-void
-CIAA::scheduleNextExecution()
-{
-    agnus.scheduleAbs<CIAA_SLOT>(clock + CIA_CYCLES(1), CIA_EXECUTE);
-}
-
-void
-CIAA::scheduleWakeUp()
-{
-    agnus.scheduleAbs<CIAA_SLOT>(wakeUpCycle, CIA_WAKEUP);
 }
 
 void 
@@ -1316,28 +1323,15 @@ CIAA::setKeyCode(uint8_t keyCode)
 // Complex Interface Adapter B
 // -----------------------------------------------------------------------------
 
-CIAB::CIAB(Amiga& ref) : CIA(ref)
+CIAB::CIAB(Amiga& ref) : CIA(1, ref)
 {
     setDescription("CIAB");
-    nr = 1;
 }
 
 void 
 CIAB::_dump()
 {
     CIA::_dump();
-}
-
-void
-CIAB::scheduleNextExecution()
-{
-    agnus.scheduleAbs<CIAB_SLOT>(clock + CIA_CYCLES(1), CIA_EXECUTE);
-}
-
-void
-CIAB::scheduleWakeUp()
-{
-    agnus.scheduleAbs<CIAB_SLOT>(wakeUpCycle, CIA_WAKEUP);
 }
 
 void 
