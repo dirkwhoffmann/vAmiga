@@ -190,7 +190,6 @@ Denise::setBPLCON0(uint16_t oldValue, uint16_t newValue)
     debug(BPLREG_DEBUG, "pokeBPLCON0(%X,%X)\n", oldValue, newValue);
 
     // Record the register change
-    conRegHistory.recordChange(BPLCON0, newValue, 4 * agnus.pos.h - 4);
     conRegChanges.add(4 * agnus.pos.h - 4, REG_BPLCON0_DENISE, newValue);
     
     // Update value
@@ -250,7 +249,6 @@ Denise::setBPLCON2(uint16_t value)
     bplcon2 = value;
 
     // Record the pixel coordinate where the change takes place
-    conRegHistory.recordChange(BPLCON2, value, 4 * agnus.pos.h + 4);
     conRegChanges.add(4 * agnus.pos.h + 4, REG_BPLCON2, value);
 }
 
@@ -491,55 +489,41 @@ Denise::translate()
     updateSpritePriorities(bplcon2);
 
     // Add a dummy register change to ensure we draw until the line ends
-    conRegHistory.recordChange(0, 0, sizeof(bBuffer));
     conRegChanges.add(sizeof(bBuffer), REG_NONE, 0);
-    assert(conRegHistory.count == conRegChanges.count());
 
-    int j = conRegChanges.begin(); 
     // Iterate over all recorded register changes
-    for (int i = 0; i < conRegHistory.count; i++, j = conRegChanges.next(j)) {
+    for (int i = conRegChanges.begin(); i != conRegChanges.end(); i = conRegChanges.next(i)) {
 
-        assert(j != conRegChanges.end());
-
-        RegisterChange &change = conRegHistory.change[i];
-        Change &c = conRegChanges.change[j];
-        assert(c.trigger == change.pixel);
-        assert(c.value == change.value);
+        Change &change = conRegChanges.change[i];
 
         // Translate a chunk of bitplane data
         if (dual) {
-            translateDPF(pixel, change.pixel);
+            translateDPF(pixel, change.trigger);
         } else {
-            translateSPF(pixel, change.pixel);
+            translateSPF(pixel, change.trigger);
         }
-        pixel = change.pixel;
+        pixel = change.trigger;
 
         // Apply the register change
         switch (change.addr) {
 
-            case BPLCON0:
-                assert(c.addr = REG_BPLCON0_DENISE);
+            case REG_BPLCON0_DENISE:
                 bplcon0 = change.value;
                 dual = dbplf(bplcon0);
                 break;
 
-            case BPLCON2:
-                assert(c.addr = REG_BPLCON2);
+            case REG_BPLCON2:
                 bplcon2 = change.value;
                 updateSpritePriorities(bplcon2);
                 break;
 
             default:
-                assert(c.addr == REG_NONE);
-                assert(change.addr == 0);
+                assert(change.addr == REG_NONE);
                 break;
         }
     }
 
-    assert(j == conRegChanges.end());
-
     // Clear the history cache
-    conRegHistory.init();
     conRegChanges.clear();
 }
 
@@ -983,7 +967,6 @@ void
 Denise::beginOfLine(int vpos)
 {
     // Reset the register history buffers
-    conRegHistory.init();
     conRegChanges.clear();
     pixelEngine.colRegHistory.init();
 
