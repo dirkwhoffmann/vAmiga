@@ -314,10 +314,12 @@ void
 PixelEngine::endOfVBlankLine()
 {
     // Apply all color register changes that happened in this line
-    for (int i = 0; i < colRegHistory.count; i++) {
+    int j = colRegChanges.begin();
+    for (int i = 0; i < colRegHistory.count; i++, j = colRegChanges.next(j)) {
+        assert(j != colRegChanges.end());
         applyRegisterChange(colRegHistory.change[i]);
     }
-
+    assert(j == colRegChanges.end());
 }
 
 void
@@ -354,9 +356,12 @@ PixelEngine::colorize(uint8_t *src, int line)
 
     // Add a dummy register change to ensure we draw until the line end
     colRegHistory.recordChange(0, 0, HPIXELS);
+    colRegChanges.add(HPIXELS, REG_NONE, 0);
 
     // Iterate over all recorded register changes
-    for (int i = 0; i < colRegHistory.count; i++) {
+    int j = colRegChanges.begin();
+    for (int i = 0; i < colRegHistory.count; i++, j = colRegChanges.next(j)) {
+        assert(j != colRegChanges.end());
 
         RegisterChange &change = colRegHistory.change[i];
 
@@ -371,6 +376,7 @@ PixelEngine::colorize(uint8_t *src, int line)
         // Perform the register change
         applyRegisterChange(change);
     }
+    assert(j == colRegChanges.end());
 
     // Wipe out the HBLANK area
     for (int pixel = 4 * 0x0F; pixel <= 4 * 0x35; pixel++) {
@@ -379,6 +385,7 @@ PixelEngine::colorize(uint8_t *src, int line)
 
     // Clear the history cache
     colRegHistory.init();
+    colRegChanges.clear(); 
 }
 
 void

@@ -339,6 +339,7 @@ Copper::move(int addr, uint16_t value)
 
          // Color registers
         pixelEngine.colRegHistory.recordChange(addr, value, 4 * agnus.pos.h);
+        pixelEngine.colRegChanges.add(4 * agnus.pos.h, addr, value);
         return;
     }
 

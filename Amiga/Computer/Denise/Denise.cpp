@@ -347,6 +347,7 @@ Denise::pokeColorReg(uint32_t addr, uint16_t value)
     debug(COL_DEBUG, "pokeColorReg(%X, %X)\n", addr, value);
 
     pixelEngine.colRegHistory.recordChange(addr, value, 4 * agnus.pos.h);
+    pixelEngine.colRegChanges.add(4 * agnus.pos.h, addr, value);
 }
 
 bool
@@ -968,6 +969,7 @@ Denise::beginOfLine(int vpos)
 {
     // Reset the register history buffers
     conRegChanges.clear();
+    pixelEngine.colRegChanges.clear();
     pixelEngine.colRegHistory.init();
 
     // Save the current values of the bitplane control registers

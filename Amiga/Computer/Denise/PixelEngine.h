@@ -91,7 +91,7 @@ public:
 
     // Color register history
     ChangeHistory colRegHistory;
-
+    ChangeRecorder<128> colRegChanges; 
 
     //
     // Constructing and destructing
@@ -117,6 +117,7 @@ public:
         worker
 
         & colRegHistory
+        & colRegChanges
         & colreg
         & mode;
     }
