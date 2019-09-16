@@ -78,6 +78,11 @@ Copper::pokeCOPJMP1()
 {
     debug(COPREG_DEBUG, "pokeCOPJMP1(): Jumping to %X\n", cop1lc);
     switchToCopperList(1);
+
+    // Continue Copper execution if it was waiting
+    if (agnus.hasEvent<COP_SLOT>(COP_REQ_DMA)) {
+        agnus.scheduleImm<COP_SLOT>(COP_REQ_DMA);
+    }
 }
 
 void
@@ -85,6 +90,10 @@ Copper::pokeCOPJMP2()
 {
     debug(COPREG_DEBUG, "pokeCOPJMP2(): Jumping to %X\n", cop2lc);
     switchToCopperList(2);
+
+    if (agnus.hasEvent<COP_SLOT>(COP_REQ_DMA)) {
+        agnus.scheduleImm<COP_SLOT>(COP_REQ_DMA);
+    }
 }
 
 void
