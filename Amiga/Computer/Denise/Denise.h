@@ -34,12 +34,16 @@ public:
 
 
     //
-    // Variables
+    // Internal state
     //
     
     // Denise has been executed up to this clock cycle.
     Cycle clock = 0;
-    
+
+    // Remembers the pixel position of the first and the last drawn bitplane pixel
+    PixelPos firstDrawnPixel;
+    PixelPos lastDrawnPixel;
+
 
     //
     // Registers
@@ -250,6 +254,8 @@ public:
         worker
 
         & clock
+        & firstDrawnPixel
+        & lastDrawnPixel
 
         & bplcon0
         & bplcon1

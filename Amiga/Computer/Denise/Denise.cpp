@@ -437,6 +437,8 @@ Denise::draw(int pixels)
 
     int16_t currentPixel = ppos(agnus.pos.h);
 
+    if (firstDrawnPixel == 0) firstDrawnPixel = currentPixel;
+
     uint32_t maskOdd = 0x8000 << scrollLoresOdd * (HIRES ? 2 : 1);
     uint32_t maskEven = 0x8000 << scrollLoresEven * (HIRES ? 2 : 1);
 
@@ -471,6 +473,8 @@ Denise::draw(int pixels)
 
     // Shift out drawn bits
     for (int i = 0; i < 6; i++) shiftReg[i] <<= pixels;
+
+    lastDrawnPixel = currentPixel;
 
 #ifdef PIXEL_DEBUG
     rasterline[currentPixel - 2 * pixels] = 64;
@@ -631,6 +635,10 @@ Denise::translateDPF(int from, int to)
 void
 Denise::drawSprites()
 {
+    // Compute final clipping area
+    spriteClipBegin = MAX(spriteClipBegin, firstDrawnPixel - 2);
+    spriteClipEnd = MIN(spriteClipEnd, lastDrawnPixel);
+
     if (config.emulateSprites) {
 
         // Sprites 6 and 7
@@ -977,6 +985,9 @@ Denise::beginOfLine(int vpos)
 
     // Clear the bBuffer
     memset(bBuffer, 0, sizeof(bBuffer));
+
+    firstDrawnPixel = 0;
+    lastDrawnPixel = 0;
 }
 
 void
