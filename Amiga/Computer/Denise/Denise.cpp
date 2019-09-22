@@ -365,23 +365,6 @@ Denise::armSprite(int x)
 }
 
 void
-Denise::setSpriteClippingRange(PixelPos begin, PixelPos end)
-{
-    assert(begin >= 0 && begin <= HPIXELS);
-    assert(end >= 0 && end <= HPIXELS);
-
-    spriteClipBegin = begin;
-    spriteClipEnd = end;
-}
-
-void
-Denise::enlargeSpriteClippingRange(PixelPos begin, PixelPos end)
-{
-    setSpriteClippingRange(MIN(spriteClipBegin, begin),
-                           MAX(spriteClipEnd, end));
-}
-
-void
 Denise::updateSpritePriorities(uint16_t bplcon2)
 {
     switch (bplcon2 & 0b111) {
@@ -992,6 +975,10 @@ Denise::beginOfLine(int vpos)
 
     firstDrawnPixel = 0;
     lastDrawnPixel = 0;
+
+    // Reset sprite clipping range
+    spriteClipBegin = HPIXELS;
+    spriteClipEnd = HPIXELS;
 }
 
 void

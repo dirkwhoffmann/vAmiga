@@ -432,10 +432,6 @@ public:
     // Copy data from SPRDATA and SPRDATB into the serial shift registers
     void armSprite(int x);
 
-    // Sets the sprite clipping range (begin and end are DMA cycle numbers)
-    void setSpriteClippingRange(PixelPos begin, PixelPos end);
-    void enlargeSpriteClippingRange(PixelPos begin, PixelPos end);
-
     // Extracts the sprite priorities from BPLCON2
     void updateSpritePriorities(uint16_t bplcon2);
 
