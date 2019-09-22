@@ -375,10 +375,8 @@ Denise::updateSpritePriorities(uint16_t bplcon2)
         case 3: prio1 = Z_3; break;
         case 4: prio1 = Z_4; break;
 
-        default:
-            // TODO: Check the effect of illegal values
-            // warn("Illegal sprite priority value: $%X\n", bplcon2 & 0b111);
-            // assert(false);
+        default: // Illegal value
+            prio1 = 0;
             break;
     }
 
@@ -390,9 +388,8 @@ Denise::updateSpritePriorities(uint16_t bplcon2)
         case 3: prio2 = Z_3; break;
         case 4: prio2 = Z_4; break;
 
-        default:
-            // TODO: Check the effect of illegal values
-            assert(false);
+        default: // Illegal value
+            prio2 = 0;
             break;
     }
 
@@ -543,13 +540,19 @@ Denise::translateDPF(int from, int to)
 template <bool pf2pri> void
 Denise::translateDPF(int from, int to)
 {
+    /* If the priority of a playfield is set to an illegal value (prio1 or
+     * prio2 will be 0 in that case), all pixels are drawn transparent.
+     */
+    uint8_t mask1 = prio1 ? 0b111 : 0b000;
+    uint8_t mask2 = prio2 ? 0b111 : 0b000;
+
     for (int i = from; i < to; i++) {
 
         uint8_t s = bBuffer[i];
 
         // Determine color indices for both playfields
-        uint8_t index1 = ((s & 1) >> 0) | ((s & 4) >> 1) | ((s & 16) >> 2);
-        uint8_t index2 = ((s & 2) >> 1) | ((s & 8) >> 2) | ((s & 32) >> 3);
+        uint8_t index1 = (((s & 1) >> 0) | ((s & 4) >> 1) | ((s & 16) >> 2)) & mask1;
+        uint8_t index2 = (((s & 2) >> 1) | ((s & 8) >> 2) | ((s & 32) >> 3)) & mask2;
 
         /*
         if (pf2pri) {
