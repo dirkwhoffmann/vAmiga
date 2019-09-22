@@ -437,7 +437,10 @@ Denise::draw(int pixels)
 
     int16_t currentPixel = ppos(agnus.pos.h);
 
-    if (firstDrawnPixel == 0) firstDrawnPixel = currentPixel;
+    if (firstDrawnPixel == 0) {
+        firstDrawnPixel = currentPixel;
+        spriteClipBegin = currentPixel - 2;
+    }
 
     uint32_t maskOdd = 0x8000 << scrollLoresOdd * (HIRES ? 2 : 1);
     uint32_t maskEven = 0x8000 << scrollLoresEven * (HIRES ? 2 : 1);
@@ -636,8 +639,8 @@ void
 Denise::drawSprites()
 {
     // Compute final clipping area
-    spriteClipBegin = MAX(spriteClipBegin, firstDrawnPixel - 2);
-    spriteClipEnd = MIN(spriteClipEnd, lastDrawnPixel);
+    // spriteClipBegin = MAX(spriteClipBegin, firstDrawnPixel - 2);
+    // spriteClipEnd = MIN(spriteClipEnd, lastDrawnPixel);
 
     if (config.emulateSprites) {
 
@@ -705,19 +708,20 @@ Denise::drawSprite()
     int end = start + 31;
 
     // Adjust the end position if it lies outside the valid range
+    /*
     if (end > LAST_PIXEL) {
         int overshoot = (1 + end - LAST_PIXEL) / 2;
         d1 >>= overshoot;
         d0 >>= overshoot;
         end -= overshoot;
     }
+    */
 
     for (int pos = end; pos >= start; pos -= 2) {
 
-        int col = (d1 & 0b0010) | (d0 & 0b0001);
-
-        // TODO: This is inefficient. Get this check out of the loop
         if (pos >= spriteClipBegin && pos < spriteClipEnd) {
+
+            int col = (d1 & 0b0010) | (d0 & 0b0001);
 
             if (col) {
                 if (z > zBuffer[pos]) iBuffer[pos] = baseCol | col;

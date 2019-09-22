@@ -1447,14 +1447,14 @@ Agnus::setBPLCON0(uint16_t oldValue, uint16_t newValue)
         if (inBplDmaLine(dmacon, newValue)) {
 
             // Enable sprite drawing
-            int16_t begin = MAX(4 * pos.h, 4 * ddfstrtReached + 32);
-            denise.enlargeSpriteClippingRange(begin, HPIXELS);
+            // int16_t begin = MAX(4 * pos.h, 4 * ddfstrtReached + 32);
+            // denise.enlargeSpriteClippingRange(begin, HPIXELS);
 
         } else {
 
             // Disable sprite drawing if DDFSTRT hasn't been reached yet
             if (pos.h <= ddfstrtReached + 6) {
-                denise.setSpriteClippingRange(HPIXELS, HPIXELS);
+                // denise.setSpriteClippingRange(HPIXELS, HPIXELS);
             }
         }
     }
@@ -1731,11 +1731,14 @@ Agnus::hsyncHandler()
 
     bool bplDmaLine = inBplDmaLine();
 
+    /*
     if (bplDmaLine) {
         denise.setSpriteClippingRange(4 * ddfstrt + 6, HPIXELS);
     } else {
         denise.setSpriteClippingRange(HPIXELS, HPIXELS);
     }
+    */
+    denise.setSpriteClippingRange(HPIXELS, HPIXELS);
 
     //
     // Determine the bitplane DMA status for the line to come
