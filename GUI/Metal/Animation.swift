@@ -68,41 +68,6 @@ extension MetalView {
             || alpha.animates()
     }
 
-    /*
-    func getEyeX() -> Float {
-        
-        return shiftX.current
-    }
-    
-    func setEyeX(_ newX: Float) {
-
-        shiftX.set(newX)
-        self.buildMatrices3D()
-    }
-    
-    func getEyeY() -> Float {
-        
-        return shiftY.current
-    }
-    
-    func setEyeY(_ newY: Float) {
-
-        shiftY.set(newY)
-        self.buildMatrices3D()
-    }
-    
-    func getEyeZ() -> Float {
-        
-        return shiftZ.current
-    }
-    
-    func setEyeZ(_ newZ: Float) {
-
-        shiftZ.set(newZ)
-        self.buildMatrices3D()
-    }
-    */
-
     func performAnimationStep() {
 
         assert(animates != 0)
@@ -172,7 +137,7 @@ extension MetalView {
     // Texture animations
     //
 
-    func zoomTextureIn(cycles: Int = 30) {
+    func zoomTextureIn(steps: Int = 30) {
 
         track("Zooming texture in...")
 
@@ -181,15 +146,15 @@ extension MetalView {
         cutoutX2.target = MetalView.cutoutX2default
         cutoutY2.target = MetalView.cutoutY2default
 
-        cutoutX1.steps = cycles
-        cutoutY1.steps = cycles
-        cutoutX2.steps = cycles
-        cutoutY2.steps = cycles
+        cutoutX1.steps = steps
+        cutoutY1.steps = steps
+        cutoutX2.steps = steps
+        cutoutY2.steps = steps
 
         animates |= AnimationType.texture
     }
 
-    func zoomTextureOut(cycles: Int = 30) {
+    func zoomTextureOut(steps: Int = 30) {
 
         track("Zooming texture out...")
 
@@ -198,10 +163,10 @@ extension MetalView {
         cutoutX2.target = 1.0
         cutoutY2.target = 1.0
 
-        cutoutX1.steps = cycles
-        cutoutY1.steps = cycles
-        cutoutX2.steps = cycles
-        cutoutY2.steps = cycles
+        cutoutX1.steps = steps
+        cutoutY1.steps = steps
+        cutoutX2.steps = steps
+        cutoutY2.steps = steps
 
         animates |= AnimationType.texture
     }
@@ -210,7 +175,7 @@ extension MetalView {
     // Geometry animations
     //
 
-    func zoom() {
+    func zoomIn(steps: Int = 60) {
     
         track("Zooming in...")
 
@@ -219,14 +184,34 @@ extension MetalView {
         angleX.target = 0.0
         angleY.target = 0.0
         angleZ.target = 0.0
+        alpha.current = 0.0
         alpha.target = 1.0
 
-        let steps = 120
         shiftZ.steps = steps
         angleX.steps = steps
         angleY.steps = steps
         angleZ.steps = steps
-        alpha.steps = 1
+        alpha.steps = steps
+
+        animates |= AnimationType.geometry + AnimationType.alpha
+    }
+
+    func zoomOut(steps: Int = 40) {
+
+        track("Zooming out...")
+
+        shiftZ.current = 0.0
+        shiftZ.target = 6.0
+        angleX.target = 0.0
+        angleY.target = 0.0
+        angleZ.target = 0.0
+        alpha.target = 0.0
+
+        shiftZ.steps = steps
+        angleX.steps = steps
+        angleY.steps = steps
+        angleZ.steps = steps
+        alpha.steps = steps
 
         animates |= AnimationType.geometry + AnimationType.alpha
     }
@@ -252,7 +237,7 @@ extension MetalView {
     func rotateDown() { rotate(x: 90) }
     func rotateUp() { rotate(x: -90) }
 
-    func scroll() {
+    func scroll(steps: Int = 120) {
         
         track("Scrolling...")
 
@@ -261,14 +246,15 @@ extension MetalView {
         angleX.target = 0.0
         angleY.target = 0.0
         angleZ.target = 0.0
+        alpha.target = 1.0
 
-        let steps = 120
         shiftY.steps = steps
         angleX.steps = steps
         angleY.steps = steps
         angleZ.steps = steps
+        alpha.steps = 1
 
-        animates |= AnimationType.geometry
+        animates |= AnimationType.geometry + AnimationType.alpha
     }
 
     func snapToFront() {
@@ -286,16 +272,16 @@ extension MetalView {
     // Alpha channel animations
     //
 
-    func blendIn() {
-        
-        track("Blending in...")
+    func blend(from: Float, to: Float, steps: Int) {
+
+        track("Blending...")
 
         angleX.target = 0
         angleY.target = 0
         angleZ.target = 0
-        alpha.target = 1.0
+        alpha.current = from
+        alpha.target = to
 
-        let steps = 10
         angleX.steps = steps
         angleY.steps = steps
         angleZ.steps = steps
@@ -304,22 +290,14 @@ extension MetalView {
         animates |= AnimationType.alpha
     }
 
-    func blendOut() {
+    func blendIn(steps: Int = 40) {
+
+        blend(from: 0.0, to: 1.0, steps: steps)
+    }
+
+    func blendOut(steps: Int = 40) {
         
-        track("Blending out...")
-
-        angleX.target = 0.0
-        angleY.target = 0.0
-        angleZ.target = 0.0
-        alpha.target = 0.0
-
-        let steps = 40
-        angleX.steps = steps
-        angleY.steps = steps
-        angleZ.steps = steps
-        alpha.steps = steps
-
-        animates |= AnimationType.alpha
+        blend(from: 1.0, to: 0.0, steps: steps)
     }
 
     //

@@ -296,7 +296,7 @@ extension MyController: NSMenuItemValidation {
     @IBAction func resetAction(_ sender: Any!) {
 
         track()
-
+        metal.blendIn(steps: 20)
         amiga.reset()
     }
     

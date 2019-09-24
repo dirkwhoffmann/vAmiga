@@ -644,13 +644,13 @@ extension MyController {
 
             serialIn = ""
             serialOut = ""
-            metal.zoom()
+            metal.zoomIn() //  blendIn()
             toolbar.validateVisibleItems()
             myAppDelegate.inspector?.refresh(everything: true)
             
         case MSG_POWER_OFF:
 
-            metal.blendOut()
+            metal.zoomOut(steps: 20) // blendOut()
             toolbar.validateVisibleItems()
             myAppDelegate.inspector?.refresh(everything: true)
             
