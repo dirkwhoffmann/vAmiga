@@ -533,6 +533,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->denise->pixelEngine.getStableShortFrame();
 }
+- (int32_t *) noise
+{
+    return wrapper->denise->pixelEngine.getNoise(); 
+}
 
 @end
 

@@ -273,6 +273,7 @@ public extension MetalView {
     
     func createBackgroundTexture() -> MTLTexture? {
 
+        /*
         // Grab the current wallpaper as an NSImage
         let opt = CGWindowListOption.optionOnScreenOnly
         let id = CGWindowID(0)
@@ -336,5 +337,11 @@ public extension MetalView {
         
         // Return image as texture
         return wallpaper?.toTexture(device: device!)
+    }
+    */
+
+        let size = NSSize(width: 256, height: 256)
+        let wallpaper = NSImage(color: .lightGray, size: size)
+        return wallpaper.toTexture(device: device!)
     }
 }

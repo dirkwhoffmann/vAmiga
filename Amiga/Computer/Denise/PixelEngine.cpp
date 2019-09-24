@@ -23,6 +23,13 @@ PixelEngine::PixelEngine(Amiga& ref) : SubComponent(ref)
         shortFrame[i].longFrame = false;
     }
 
+    // Create random background noise pattern
+    const size_t noiseSize = 2 * 512 * 512;
+    noise = new int[noiseSize];
+    for (int i = 0; i < noiseSize; i++) {
+        noise[i] = rand() % 2 ? 0x00000000 : 0x00FFFFFF;
+    }
+
     // Setup some debug colors
     indexedRgba[64] = GpuColor(0xFF, 0x00, 0x00).rawValue;
     indexedRgba[65] = GpuColor(0xD0, 0x00, 0x00).rawValue;
@@ -42,6 +49,17 @@ PixelEngine::PixelEngine(Amiga& ref) : SubComponent(ref)
     colors[70] = 0x00AA;
     colors[71] = 0x0099;
     */
+}
+
+PixelEngine::~PixelEngine()
+{
+    for (int i = 0; i < 2; i++) {
+
+        delete[] longFrame[i].data;
+        delete[] shortFrame[i].data;
+    }
+
+    delete[] noise;
 }
 
 void
@@ -258,6 +276,13 @@ PixelEngine::getStableShortFrame()
     pthread_mutex_unlock(&lock);
 
     return result;
+}
+
+int32_t *
+PixelEngine::getNoise()
+{
+    int offset = rand() % (512 * 512);
+    return noise + offset;
 }
 
 int *

@@ -51,6 +51,8 @@ private:
     // Pointer to the frame buffer Denise is currently working on
     ScreenBuffer *frameBuffer = &longFrame[0];
 
+    // Buffer storing background noise (random black and white pixels)
+    int32_t *noise;
 
     //
     // Color management
@@ -98,6 +100,7 @@ public:
 public:
     
     PixelEngine(Amiga& ref);
+    ~PixelEngine();
 
 
     //
@@ -205,6 +208,9 @@ public:
 
     // Returns the stable frame buffer for short frames
     ScreenBuffer getStableShortFrame();
+
+    // Returns a pointer to randon noise
+    int32_t *getNoise();
 
     // Returns the frame buffer address of a certain pixel in the current line
     int *pixelAddr(int pixel);

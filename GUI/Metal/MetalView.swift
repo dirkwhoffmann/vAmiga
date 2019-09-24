@@ -307,23 +307,34 @@ public class MetalView: MTKView {
     // Expand view vertically by the height of the status bar
     public func expand() { adjustHeight(24.0) }
 
+    func updateBgTexture(bytes: UnsafeMutablePointer<Int32>) {
+
+        let w = 512
+        let h = 512
+        let region = MTLRegionMake2D(0, 0, w, h)
+
+        bgTexture.replace(region: region,
+                          mipmapLevel: 0,
+                          withBytes: bytes,
+                          bytesPerRow: 4 * w)
+    }
+
     func updateTexture(bytes: UnsafeMutablePointer<Int32>, longFrame: Bool) {
 
-        let w = Int(HPIXELS) //    longFrameTexture.width
+        let w = Int(HPIXELS)
         let h = longFrameTexture.height
-        // let region = MTLRegionMake3D(0, 0, 0, w, h, 1)
         let region = MTLRegionMake2D(0, 0, w, h)
 
         if longFrame {
             longFrameTexture.replace(region: region,
                                      mipmapLevel: 0,
                                      withBytes: bytes + (15 * 4),
-                                     bytesPerRow: 4 * Int(HPIXELS))
+                                     bytesPerRow: 4 * w)
         } else {
             shortFrameTexture.replace(region: region,
                                      mipmapLevel: 0,
                                      withBytes: bytes + (15 * 4),
-                                     bytesPerRow: 4 * Int(HPIXELS))
+                                     bytesPerRow: 4 * w)
         }
     }
 
@@ -332,7 +343,6 @@ public class MetalView: MTKView {
         if requestLongFrame {
 
             let buffer = controller.amiga.denise.stableLongFrame()
-            // track("Long frame \(buffer)")
             updateTexture(bytes: buffer.data, longFrame: true)
 
             // If interlace mode is on, the next frame will be a short frame
@@ -341,7 +351,6 @@ public class MetalView: MTKView {
         } else {
 
             let buffer = controller.amiga.denise.stableShortFrame()
-            // track("Short frame \(buffer)")
             updateTexture(bytes: buffer.data, longFrame: false)
 
             // The next frame will be a long frame
@@ -527,12 +536,14 @@ public class MetalView: MTKView {
         if animates != 0 { performAnimationStep() }
 
         startFrame()
-        
-        // #if false
-        
+
         // Render background
         if renderBackground {
-            
+
+            // Update background texture
+            let buffer = controller.amiga.denise.noise()
+            updateBgTexture(bytes: buffer!)
+
             // Configure vertex shader
             // commandEncoder.setVertexBuffer(uniformBufferBg, offset: 0, index: 1)
             commandEncoder.setVertexBytes(&vertexUniformsBg,
@@ -553,8 +564,7 @@ public class MetalView: MTKView {
                                           vertexCount: 6,
                                           instanceCount: 1)
         }
-        // #endif
-        
+
         // Render emulator texture
         if renderForeground {
             
