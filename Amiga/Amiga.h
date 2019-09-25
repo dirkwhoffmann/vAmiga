@@ -523,8 +523,8 @@ public:
     
     // Restores a certain snapshot from the snapshot storage
     bool restoreSnapshot(vector<Snapshot *> &storage, unsigned nr);
-    bool restoreAutoSnapshot(unsigned nr) { return restoreSnapshot(autoSnapshots, nr); }
-    bool restoreUserSnapshot(unsigned nr) { return restoreSnapshot(userSnapshots, nr); }
+    bool restoreAutoSnapshot(unsigned nr);
+    bool restoreUserSnapshot(unsigned nr);
     
     // Restores the latest snapshot from the snapshot storage
     bool restoreLatestAutoSnapshot() { return restoreAutoSnapshot(0); }
@@ -546,10 +546,10 @@ public:
      * sure to call the 'Safe' version outside the emulator thread.
      */
     void takeSnapshot(vector<Snapshot *> &storage);
-    void takeAutoSnapshot() { takeSnapshot(autoSnapshots); }
-    void takeUserSnapshot() { takeSnapshot(userSnapshots); }
-    void takeAutoSnapshotSafe() { suspend(); takeSnapshot(autoSnapshots); resume(); }
-    void takeUserSnapshotSafe() { suspend(); takeSnapshot(userSnapshots); resume(); }
+    void takeAutoSnapshot();
+    void takeUserSnapshot();
+    void takeAutoSnapshotSafe() { suspend(); takeAutoSnapshot(); resume(); }
+    void takeUserSnapshotSafe() { suspend(); takeUserSnapshot(); resume(); }
     
     // Deletes a snapshot from the snapshot storage
     void deleteSnapshot(vector<Snapshot *> &storage, unsigned nr);

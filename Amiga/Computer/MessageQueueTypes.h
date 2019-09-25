@@ -71,8 +71,11 @@ typedef enum
     // DEPRECATED C64 related messages ...
     //
     
-    // ROM and snapshot handling
-    MSG_SNAPSHOT_TAKEN,
+    // Snapshot handling
+    MSG_AUTOSNAPSHOT_LOADED,
+    MSG_AUTOSNAPSHOT_SAVED,
+    MSG_USERSNAPSHOT_LOADED,
+    MSG_USERSNAPSHOT_SAVED,
     
     // CPU related messages
     MSG_CPU_OK,

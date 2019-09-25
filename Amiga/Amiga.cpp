@@ -809,7 +809,6 @@ Amiga::loadFromSnapshotUnsafe(Snapshot *snapshot)
     
     if (snapshot && (ptr = snapshot->getData())) {
         load(ptr);
-        // deserializeFromBuffer(*this, ptr);
         ping();
     }
 }
@@ -837,6 +836,26 @@ Amiga::restoreSnapshot(vector<Snapshot *> &storage, unsigned nr)
     return false;
 }
 
+bool
+Amiga::restoreAutoSnapshot(unsigned nr)
+{
+    if (restoreSnapshot(autoSnapshots, nr)) {
+        putMessage(MSG_AUTOSNAPSHOT_LOADED);
+        return true;
+    }
+    return false;
+}
+
+bool
+Amiga::restoreUserSnapshot(unsigned nr)
+{
+    if (restoreSnapshot(userSnapshots, nr)) {
+        putMessage(MSG_USERSNAPSHOT_LOADED);
+        return true;
+    }
+    return false;
+}
+
 size_t
 Amiga::numSnapshots(vector<Snapshot *> &storage)
 {
@@ -860,7 +879,21 @@ Amiga::takeSnapshot(vector<Snapshot *> &storage)
     
     Snapshot *snapshot = Snapshot::makeWithAmiga(this);
     storage.insert(storage.begin(), snapshot);
-    putMessage(MSG_SNAPSHOT_TAKEN);
+}
+
+void
+Amiga::takeAutoSnapshot()
+{
+    takeSnapshot(autoSnapshots);
+    putMessage(MSG_AUTOSNAPSHOT_SAVED);
+}
+
+void
+Amiga::takeUserSnapshot()
+{
+    debug("takeUserSnapshot");
+    takeSnapshot(userSnapshots);
+    putMessage(MSG_USERSNAPSHOT_SAVED);
 }
 
 void

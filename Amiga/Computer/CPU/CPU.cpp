@@ -396,10 +396,6 @@ CPU::didSaveToBuffer(uint8_t *buffer) const
     m68k_get_context(context);
     writer.copy(context, m68k_context_size());
 
-    debug("(actions) = %d\n",  (actions));
-    debug("(irqLevel) = %d\n",  (irqLevel));
-    debug("(waitStates) = %d\n",  (waitStates));
-
     debug(SNAP_DEBUG, "CPU state checksum: %x (%d bytes)\n",
           fnv_1a_64(buffer, writer.ptr - buffer), writer.ptr - buffer);
 

@@ -765,6 +765,14 @@ extension MyController {
             // myAppDelegate.inspector?.poSerialOut.append(serdat: msg.data)
             serialOut += String(UnicodeScalar.init(msg.data & 0xFF)!)
 
+        case MSG_AUTOSNAPSHOT_LOADED,
+             MSG_USERSNAPSHOT_LOADED,
+             MSG_USERSNAPSHOT_SAVED:
+            metal.blendIn(steps: 20)
+
+        case MSG_AUTOSNAPSHOT_SAVED:
+            break
+
         // DEPRECATED MESSAGES BELOW...
             
         case MSG_ROM_MISSING:
@@ -778,10 +786,7 @@ extension MyController {
                 romDialogController!.showSheet(withParent: self)
             }
              */
-            
-        case MSG_SNAPSHOT_TAKEN:
-            metal.blendIn(steps: 20)
-    
+
         case MSG_CPU_OK,
              MSG_CPU_SOFT_BREAKPOINT_REACHED:
             break

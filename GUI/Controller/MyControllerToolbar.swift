@@ -100,8 +100,8 @@ extension MyController {
         case 0: // Rewind
 
             track("Rewind")
-            if amiga.restoreLatestAutoSnapshot() {
-                metal.snapToFront()
+            if !amiga.restoreLatestAutoSnapshot() {
+                NSSound.beep()
             }
         
         case 1: // Take
@@ -112,9 +112,7 @@ extension MyController {
         case 2: // Restore
             
             track("Restore")
-            if amiga.restoreLatestUserSnapshot() {
-                metal.snapToFront()
-            } else {
+            if !amiga.restoreLatestUserSnapshot() {
                 NSSound.beep()
             }
 
