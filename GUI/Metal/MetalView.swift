@@ -210,6 +210,7 @@ public class MetalView: MTKView {
     var shiftZ = AnimatedFloat(Defaults.eyeZ)
 
     var alpha = AnimatedFloat(0.0)
+    var noise = AnimatedFloat(0.0)
 
     // Screen parameters mimicing SAE
     static let cutoutX1default = Float(4 * HBLANK_CNT) / Float(EmulatorTexture.width)
@@ -476,7 +477,7 @@ public class MetalView: MTKView {
         // Create a render pass descriptor
         let descriptor = MTLRenderPassDescriptor.init()
         descriptor.colorAttachments[0].texture = drawable.texture
-        descriptor.colorAttachments[0].clearColor = MTLClearColorMake(0, 0, 0, 1)
+        descriptor.colorAttachments[0].clearColor = MTLClearColorMake(0.95, 0.95, 0.95, 1)
         descriptor.colorAttachments[0].loadAction = MTLLoadAction.clear
         descriptor.colorAttachments[0].storeAction = MTLStoreAction.store
         
@@ -551,7 +552,7 @@ public class MetalView: MTKView {
                                           index: 1)
             
             // Configure fragment shader
-            fragmentUniforms.alpha = 1
+            fragmentUniforms.alpha = noise.current
             commandEncoder.setFragmentTexture(bgTexture, index: 0)
             commandEncoder.setFragmentTexture(bgTexture, index: 1)
             commandEncoder.setFragmentBytes(&fragmentUniforms,

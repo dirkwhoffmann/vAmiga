@@ -644,7 +644,7 @@ extension MyController {
 
             serialIn = ""
             serialOut = ""
-            metal.zoomIn() //  blendIn()
+            metal.zoomIn()
             toolbar.validateVisibleItems()
             myAppDelegate.inspector?.refresh(everything: true)
             
@@ -780,7 +780,7 @@ extension MyController {
              */
             
         case MSG_SNAPSHOT_TAKEN:
-            break
+            metal.blendIn(steps: 20)
     
         case MSG_CPU_OK,
              MSG_CPU_SOFT_BREAKPOINT_REACHED:
