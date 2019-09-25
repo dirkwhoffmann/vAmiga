@@ -162,8 +162,8 @@ Snapshot::takeScreenshot(Amiga *amiga)
     // Texture cutout and scaling factors
     unsigned dx = 4;
     unsigned dy = 2;
-    unsigned xStart = 0, xEnd = HPIXELS;
-    unsigned yStart = 0, yEnd = VPIXELS;
+    unsigned xStart = 4 * HBLANK_MAX, xEnd = HPIXELS + 4 * HBLANK_MIN;
+    unsigned yStart = VBLANK_CNT, yEnd = VPIXELS;
     unsigned width  = (xEnd - xStart) / dx;
     unsigned height = (yEnd - yStart) / dy;
 
