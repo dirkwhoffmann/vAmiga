@@ -362,7 +362,7 @@ public extension MetalView {
         let capacity = 16 * 3 * 8
         let pos = UnsafeMutablePointer<Float>.allocate(capacity: capacity)
         
-        func setVertex(_ i: Int, _ position: float3, _ texture: float2) {
+        func setVertex(_ i: Int, _ position: SIMD3<Float>, _ texture: SIMD2<Float>) {
             
             let first = i * 8
             pos[first + 0] = position.x
@@ -382,82 +382,82 @@ public extension MetalView {
         let bgy = Float(4.8)
         let bgz = Float(-6.8)
 
-        let upperLeft = float2(Float(textureRect.minX), Float(textureRect.minY))
-        let upperRight = float2(Float(textureRect.maxX), Float(textureRect.minY))
-        let lowerLeft = float2(Float(textureRect.minX), Float(textureRect.maxY))
-        let lowerRight = float2(Float(textureRect.maxX), Float(textureRect.maxY))
+        let upperLeft = SIMD2<Float>(Float(textureRect.minX), Float(textureRect.minY))
+        let upperRight = SIMD2<Float>(Float(textureRect.maxX), Float(textureRect.minY))
+        let lowerLeft = SIMD2<Float>(Float(textureRect.minX), Float(textureRect.maxY))
+        let lowerRight = SIMD2<Float>(Float(textureRect.maxX), Float(textureRect.maxY))
 
         // Background
-        setVertex(0, float3(-bgx, +bgy, -bgz), float2(0.0, 0.0))
-        setVertex(1, float3(-bgx, -bgy, -bgz), float2(0.0, 1.0))
-        setVertex(2, float3(+bgx, -bgy, -bgz), float2(1.0, 1.0))
+        setVertex(0, SIMD3<Float>(-bgx, +bgy, -bgz), SIMD2<Float>(0.0, 0.0))
+        setVertex(1, SIMD3<Float>(-bgx, -bgy, -bgz), SIMD2<Float>(0.0, 1.0))
+        setVertex(2, SIMD3<Float>(+bgx, -bgy, -bgz), SIMD2<Float>(1.0, 1.0))
     
-        setVertex(3, float3(-bgx, +bgy, -bgz), float2(0.0, 0.0))
-        setVertex(4, float3(+bgx, +bgy, -bgz), float2(1.0, 0.0))
-        setVertex(5, float3(+bgx, -bgy, -bgz), float2(1.0, 1.0))
+        setVertex(3, SIMD3<Float>(-bgx, +bgy, -bgz), SIMD2<Float>(0.0, 0.0))
+        setVertex(4, SIMD3<Float>(+bgx, +bgy, -bgz), SIMD2<Float>(1.0, 0.0))
+        setVertex(5, SIMD3<Float>(+bgx, -bgy, -bgz), SIMD2<Float>(1.0, 1.0))
     
         // -Z
-        setVertex(6, float3(-dx, +dy, -dz), upperLeft)
-        setVertex(7, float3(-dx, -dy, -dz), lowerLeft)
-        setVertex(8, float3(+dx, -dy, -dz), lowerRight)
+        setVertex(6, SIMD3<Float>(-dx, +dy, -dz), upperLeft)
+        setVertex(7, SIMD3<Float>(-dx, -dy, -dz), lowerLeft)
+        setVertex(8, SIMD3<Float>(+dx, -dy, -dz), lowerRight)
     
-        setVertex(9, float3(-dx, +dy, -dz), upperLeft)
-        setVertex(10, float3(+dx, +dy, -dz), upperRight)
-        setVertex(11, float3(+dx, -dy, -dz), lowerRight)
+        setVertex(9, SIMD3<Float>(-dx, +dy, -dz), upperLeft)
+        setVertex(10, SIMD3<Float>(+dx, +dy, -dz), upperRight)
+        setVertex(11, SIMD3<Float>(+dx, -dy, -dz), lowerRight)
     
         // +Z
-        setVertex(12, float3(-dx, +dy, +dz), upperRight)
-        setVertex(13, float3(-dx, -dy, +dz), lowerRight)
-        setVertex(14, float3(+dx, -dy, +dz), lowerLeft)
+        setVertex(12, SIMD3<Float>(-dx, +dy, +dz), upperRight)
+        setVertex(13, SIMD3<Float>(-dx, -dy, +dz), lowerRight)
+        setVertex(14, SIMD3<Float>(+dx, -dy, +dz), lowerLeft)
     
-        setVertex(15, float3(-dx, +dy, +dz), upperRight)
-        setVertex(16, float3(+dx, +dy, +dz), upperLeft)
-        setVertex(17, float3(+dx, -dy, +dz), lowerLeft)
+        setVertex(15, SIMD3<Float>(-dx, +dy, +dz), upperRight)
+        setVertex(16, SIMD3<Float>(+dx, +dy, +dz), upperLeft)
+        setVertex(17, SIMD3<Float>(+dx, -dy, +dz), lowerLeft)
     
         // -X
-        setVertex(18, float3(-dx, +dy, -dz), upperRight)
-        setVertex(19, float3(-dx, -dy, -dz), lowerRight)
-        setVertex(20, float3(-dx, -dy, +dz), lowerLeft)
+        setVertex(18, SIMD3<Float>(-dx, +dy, -dz), upperRight)
+        setVertex(19, SIMD3<Float>(-dx, -dy, -dz), lowerRight)
+        setVertex(20, SIMD3<Float>(-dx, -dy, +dz), lowerLeft)
     
-        setVertex(21, float3(-dx, +dy, -dz), upperRight)
-        setVertex(22, float3(-dx, +dy, +dz), upperLeft)
-        setVertex(23, float3(-dx, -dy, +dz), lowerLeft)
+        setVertex(21, SIMD3<Float>(-dx, +dy, -dz), upperRight)
+        setVertex(22, SIMD3<Float>(-dx, +dy, +dz), upperLeft)
+        setVertex(23, SIMD3<Float>(-dx, -dy, +dz), lowerLeft)
     
         // +X
-        setVertex(24, float3(+dx, +dy, -dz), upperLeft)
-        setVertex(25, float3(+dx, -dy, -dz), lowerLeft)
-        setVertex(26, float3(+dx, -dy, +dz), lowerRight)
+        setVertex(24, SIMD3<Float>(+dx, +dy, -dz), upperLeft)
+        setVertex(25, SIMD3<Float>(+dx, -dy, -dz), lowerLeft)
+        setVertex(26, SIMD3<Float>(+dx, -dy, +dz), lowerRight)
     
-        setVertex(27, float3(+dx, +dy, -dz), upperLeft)
-        setVertex(28, float3(+dx, +dy, +dz), upperRight)
-        setVertex(29, float3(+dx, -dy, +dz), lowerRight)
+        setVertex(27, SIMD3<Float>(+dx, +dy, -dz), upperLeft)
+        setVertex(28, SIMD3<Float>(+dx, +dy, +dz), upperRight)
+        setVertex(29, SIMD3<Float>(+dx, -dy, +dz), lowerRight)
     
         // -Y
-        setVertex(30, float3(+dx, -dy, -dz), upperRight)
-        setVertex(31, float3(-dx, -dy, -dz), upperLeft)
-        setVertex(32, float3(-dx, -dy, -dz + 2*dy), lowerLeft)
+        setVertex(30, SIMD3<Float>(+dx, -dy, -dz), upperRight)
+        setVertex(31, SIMD3<Float>(-dx, -dy, -dz), upperLeft)
+        setVertex(32, SIMD3<Float>(-dx, -dy, -dz + 2*dy), lowerLeft)
     
-        setVertex(33, float3(+dx, -dy, -dz), upperRight)
-        setVertex(34, float3(+dx, -dy, -dz + 2*dy), lowerRight)
-        setVertex(35, float3(-dx, -dy, -dz + 2*dy), lowerLeft)
+        setVertex(33, SIMD3<Float>(+dx, -dy, -dz), upperRight)
+        setVertex(34, SIMD3<Float>(+dx, -dy, -dz + 2*dy), lowerRight)
+        setVertex(35, SIMD3<Float>(-dx, -dy, -dz + 2*dy), lowerLeft)
     
         // +Y
-        setVertex(36, float3(+dx, +dy, -dz), lowerRight)
-        setVertex(37, float3(-dx, +dy, -dz), lowerLeft)
-        setVertex(38, float3(-dx, +dy, -dz + 2*dy), upperLeft)
+        setVertex(36, SIMD3<Float>(+dx, +dy, -dz), lowerRight)
+        setVertex(37, SIMD3<Float>(-dx, +dy, -dz), lowerLeft)
+        setVertex(38, SIMD3<Float>(-dx, +dy, -dz + 2*dy), upperLeft)
     
-        setVertex(39, float3(+dx, +dy, -dz), lowerRight)
-        setVertex(40, float3(-dx, +dy, -dz + 2*dy), upperLeft)
-        setVertex(41, float3(+dx, +dy, -dz + 2*dy), upperRight)
+        setVertex(39, SIMD3<Float>(+dx, +dy, -dz), lowerRight)
+        setVertex(40, SIMD3<Float>(-dx, +dy, -dz + 2*dy), upperLeft)
+        setVertex(41, SIMD3<Float>(+dx, +dy, -dz + 2*dy), upperRight)
     
         // 2D drawing quad
-        setVertex(42, float3(-1, 1, 0), upperLeft)
-        setVertex(43, float3(-1, -1, 0), lowerLeft)
-        setVertex(44, float3( 1, -1, 0), lowerRight)
+        setVertex(42, SIMD3<Float>(-1, 1, 0), upperLeft)
+        setVertex(43, SIMD3<Float>(-1, -1, 0), lowerLeft)
+        setVertex(44, SIMD3<Float>( 1, -1, 0), lowerRight)
     
-        setVertex(45, float3(-1, 1, 0), upperLeft)
-        setVertex(46, float3( 1, 1, 0), upperRight)
-        setVertex(47, float3( 1, -1, 0), lowerRight)
+        setVertex(45, SIMD3<Float>(-1, 1, 0), upperLeft)
+        setVertex(46, SIMD3<Float>( 1, 1, 0), upperRight)
+        setVertex(47, SIMD3<Float>( 1, -1, 0), lowerRight)
     
         let opt = MTLResourceOptions.cpuCacheModeWriteCombined
         let len = capacity * 4
