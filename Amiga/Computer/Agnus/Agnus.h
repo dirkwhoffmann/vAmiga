@@ -795,6 +795,8 @@ public:
     // DDFSTRT, DDFSTOP
     void pokeDDFSTRT(uint16_t value);
     void pokeDDFSTOP(uint16_t value);
+    void setDDFSTRT(uint16_t old, uint16_t value);
+    void setDDFSTOP(uint16_t old, uint16_t value);
 
     // Computes the data fetch window's start and stop position
     void computeDDFStrt();

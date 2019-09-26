@@ -1180,8 +1180,29 @@ Agnus::pokeDDFSTRT(uint16_t value)
 
     // 15 13 12 11 10 09 08 07 06 05 04 03 02 01 00
     // -- -- -- -- -- -- -- H8 H7 H6 H5 H4 H3 -- --
+    value &= 0xFC;
 
-    ddfstrt = value & 0xFC;
+    recordRegisterChange(DMA_CYCLES(2), REG_DDFSTRT, value);
+}
+
+void
+Agnus::pokeDDFSTOP(uint16_t value)
+{
+    debug(DDF_DEBUG, "pokeDDFSTOP(%X)\n", value);
+
+    // 15 13 12 11 10 09 08 07 06 05 04 03 02 01 00
+    // -- -- -- -- -- -- -- H8 H7 H6 H5 H4 H3 -- --
+    value &= 0xFC;
+
+    recordRegisterChange(DMA_CYCLES(2), REG_DDFSTOP, value);
+}
+
+void
+Agnus::setDDFSTRT(uint16_t old, uint16_t value)
+{
+    debug(DDF_DEBUG, "setDDFSTRT(%X, %X)\n", old, value);
+
+    ddfstrt = value;
 
     // Let the hsync handler recompute the data fetch window
     hsyncActions |= HSYNC_COMPUTE_DDF_WINDOW;
@@ -1208,14 +1229,11 @@ Agnus::pokeDDFSTRT(uint16_t value)
 }
 
 void
-Agnus::pokeDDFSTOP(uint16_t value)
+Agnus::setDDFSTOP(uint16_t old, uint16_t value)
 {
-    debug(DDF_DEBUG, "pokeDDFSTOP(%X)\n", value);
+    debug(DDF_DEBUG, "setDDFSTOP(%X, %X)\n", old, value);
 
-    // 15 13 12 11 10 09 08 07 06 05 04 03 02 01 00
-    // -- -- -- -- -- -- -- H8 H7 H6 H5 H4 H3 -- --
-
-    ddfstop = value & 0xFC;
+    ddfstop = value;
 
     // Let the hsync handler recompute the data fetch window
     hsyncActions |= HSYNC_COMPUTE_DDF_WINDOW;

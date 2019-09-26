@@ -497,6 +497,8 @@ Agnus::serviceREGEvent(Cycle until)
             case REG_DMACON: setDMACON(dmacon, value); break;
             case REG_DIWSTRT: setDIWSTRT(value); break;
             case REG_DIWSTOP: setDIWSTOP(value); break;
+            case REG_DDFSTRT: setDDFSTRT(ddfstrt, value); break;
+            case REG_DDFSTOP: setDDFSTOP(ddfstop, value); break;
             case REG_BPL1MOD: setBPL1MOD(value); break;
             case REG_BPL2MOD: setBPL2MOD(value); break;
             case REG_BPL1PTH: setBPLxPTH<1>(value); break;

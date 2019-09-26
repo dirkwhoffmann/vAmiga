@@ -25,6 +25,8 @@ typedef enum : int32_t
     REG_DMACON,
     REG_DIWSTRT,
     REG_DIWSTOP,
+    REG_DDFSTRT,
+    REG_DDFSTOP,
     REG_BPL1MOD,
     REG_BPL2MOD,
     REG_BPL1PTH,

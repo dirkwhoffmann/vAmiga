@@ -187,7 +187,7 @@ extension MetalView {
         angleZ.target = 0.0
         alpha.current = 0.0
         alpha.target = 1.0
-        noise.current = 1.0
+        noise.current = 0.0
         noise.target = 0.0
 
         shiftZ.steps = steps
