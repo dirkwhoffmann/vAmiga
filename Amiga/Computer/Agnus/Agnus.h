@@ -341,8 +341,9 @@ public:
     int16_t dmaStopLores;      // Last lores bitplane DMA cycle + 1
     int16_t dmaStopHires;      // Last hires bitplane DMA cycle + 1
 
-    // Difference between dmaStrtLores and ddfstrt (either 0 or 4)
+    // Difference between dmaStrt and the start of the corresponding fetch unit
     int16_t dmaStrtLoresShift;
+    int16_t dmaStrtHiresShift;
 
     bool inLoresDmaArea(int16_t pos) { return pos >= dmaStrtLores && pos < dmaStopLores; }
     bool inHiresDmaArea(int16_t pos) { return pos >= dmaStrtHires && pos < dmaStopHires; }
@@ -512,6 +513,7 @@ public:
         & dmaStopLores
         & dmaStopHires
         & dmaStrtLoresShift
+        & dmaStrtHiresShift
 
         & changeRecorder
         & bplcon0

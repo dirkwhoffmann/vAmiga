@@ -1179,7 +1179,7 @@ Agnus::pokeDDFSTRT(uint16_t value)
     debug(DDF_DEBUG, "pokeDDFSTRT(%X)\n", value);
 
     // 15 13 12 11 10 09 08 07 06 05 04 03 02 01 00
-    // -- -- -- -- -- -- -- H8 H7 H6 H5 H4 H3 -- --  ????
+    // -- -- -- -- -- -- -- H8 H7 H6 H5 H4 H3 H2 --
     value &= 0xFE;
 
     recordRegisterChange(DMA_CYCLES(2), REG_DDFSTRT, value);
@@ -1191,7 +1191,7 @@ Agnus::pokeDDFSTOP(uint16_t value)
     debug(DDF_DEBUG, "pokeDDFSTOP(%X)\n", value);
 
     // 15 13 12 11 10 09 08 07 06 05 04 03 02 01 00
-    // -- -- -- -- -- -- -- H8 H7 H6 H5 H4 H3 -- --  ????
+    // -- -- -- -- -- -- -- H8 H7 H6 H5 H4 H3 H2 --
     value &= 0xFE;
 
     recordRegisterChange(DMA_CYCLES(2), REG_DDFSTOP, value);
@@ -1241,8 +1241,6 @@ Agnus::setDDFSTOP(uint16_t old, uint16_t value)
     // Take action if we haven't reached the old DDFSTRT cycle yet
      if (pos.h < ddfstrtReached) {
 
-         debug("DDFSTOP: pos.h < ddfstrtReached (%d)\n", ddfstrtReached);
-
          // Check if the new position has already been passed
          if (ddfstrt <= pos.h + 2) {
 
@@ -1270,13 +1268,15 @@ Agnus::computeDDFStrt()
     int16_t strt = ddfstrt;
 
     // Align ddfstrt to the next possible fetch unit start
-    dmaStrtHires = strt; // ??? TODO: WRITE TEST CASES
-
+    dmaStrtHiresShift = (4 - (strt & 0b11)) & 0b11;
     dmaStrtLoresShift = (8 - (strt & 0b111)) & 0b111;
+    dmaStrtHires = MAX(strt + dmaStrtHiresShift, 0x18);
     dmaStrtLores = MAX(strt + dmaStrtLoresShift, 0x18);
 
-    debug(DDF_DEBUG, "computeDDFStrt: %d %d\n", dmaStrtLores, dmaStrtHires);
+    assert(dmaStrtHiresShift % 2 == 0);
     assert(dmaStrtLoresShift % 2 == 0);
+
+    debug(DDF_DEBUG, "computeDDFStrt: %d %d\n", dmaStrtLores, dmaStrtHires);
 }
 
 void
