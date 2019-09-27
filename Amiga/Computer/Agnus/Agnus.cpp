@@ -1179,8 +1179,8 @@ Agnus::pokeDDFSTRT(uint16_t value)
     debug(DDF_DEBUG, "pokeDDFSTRT(%X)\n", value);
 
     // 15 13 12 11 10 09 08 07 06 05 04 03 02 01 00
-    // -- -- -- -- -- -- -- H8 H7 H6 H5 H4 H3 -- --
-    value &= 0xFC;
+    // -- -- -- -- -- -- -- H8 H7 H6 H5 H4 H3 -- --  ????
+    value &= 0xFE;
 
     recordRegisterChange(DMA_CYCLES(2), REG_DDFSTRT, value);
 }
@@ -1191,8 +1191,8 @@ Agnus::pokeDDFSTOP(uint16_t value)
     debug(DDF_DEBUG, "pokeDDFSTOP(%X)\n", value);
 
     // 15 13 12 11 10 09 08 07 06 05 04 03 02 01 00
-    // -- -- -- -- -- -- -- H8 H7 H6 H5 H4 H3 -- --
-    value &= 0xFC;
+    // -- -- -- -- -- -- -- H8 H7 H6 H5 H4 H3 -- --  ????
+    value &= 0xFE;
 
     recordRegisterChange(DMA_CYCLES(2), REG_DDFSTOP, value);
 }
@@ -1245,18 +1245,20 @@ Agnus::computeDDFStrt()
     int16_t strt = ddfstrt;
 
     // Align ddfstrt to the next possible fetch unit start
-    dmaStrtHires = strt;
-    dmaStrtLoresShift = strt & 0b100;
-    dmaStrtLores = strt + dmaStrtLoresShift;
+    dmaStrtHires = strt; // ??? TODO: WRITE TEST CASES
+
+    dmaStrtLoresShift = (8 - (strt & 0b111)) & 0b111;
+    dmaStrtLores = MAX(strt + dmaStrtLoresShift, 0x18);
 
     debug(DDF_DEBUG, "computeDDFStrt: %d %d\n", dmaStrtLores, dmaStrtHires);
-    assert(dmaStrtLoresShift == 0 || dmaStrtLoresShift == 4);
+    assert(dmaStrtLoresShift % 2 == 0);
 }
 
 void
 Agnus::computeDDFStop()
 {
-    int16_t strt = dmaStrtLores - dmaStrtLoresShift;
+    // int16_t strt = dmaStrtLores - dmaStrtLoresShift;
+    int16_t strt = MAX(ddfstrt, 0x18);
     int16_t stop = MIN(ddfstop, 0xD8);
 
     // Compute the number of fetch units
