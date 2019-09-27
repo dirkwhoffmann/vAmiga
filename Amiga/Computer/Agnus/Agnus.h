@@ -801,6 +801,7 @@ public:
     // Computes the data fetch window's start and stop position
     void computeDDFStrt();
     void computeDDFStop();
+    void computeDDFWindow() { computeDDFStrt(); computeDDFStop(); }
 
     // BPLCON0
     void pokeBPLCON0(uint16_t value);

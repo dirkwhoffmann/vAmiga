@@ -1219,9 +1219,9 @@ Agnus::setDDFSTRT(uint16_t old, uint16_t value)
 
         } else {
 
-            // Update the matching position and recalculute the DMA table
+            // Update the matching position and recalculate the DMA table
             ddfstrtReached = ddfstrt;
-            computeDDFStrt();
+            computeDDFWindow();
             updateBitplaneDma();
             scheduleNextBplEvent();
         }
@@ -1237,6 +1237,31 @@ Agnus::setDDFSTOP(uint16_t old, uint16_t value)
 
     // Let the hsync handler recompute the data fetch window
     hsyncActions |= HSYNC_COMPUTE_DDF_WINDOW;
+
+    // Take action if we haven't reached the old DDFSTRT cycle yet
+     if (pos.h < ddfstrtReached) {
+
+         debug("DDFSTOP: pos.h < ddfstrtReached (%d)\n", ddfstrtReached);
+
+         // Check if the new position has already been passed
+         if (ddfstrt <= pos.h + 2) {
+
+             // DDFSTRT never matches in the current rasterline. Disable DMA
+             /*
+             debug("DDFSTRT never matches\n");
+             ddfstrtReached = -1;
+             switchBitplaneDmaOff();
+             */
+
+         } else {
+
+             // Update the matching position and recalculate the DMA table
+             ddfstopReached = ddfstop;
+             computeDDFWindow();
+             updateBitplaneDma();
+             scheduleNextBplEvent();
+         }
+     }
 }
 
 void
@@ -1766,8 +1791,7 @@ Agnus::hsyncHandler()
         if (hsyncActions & HSYNC_COMPUTE_DDF_WINDOW) {
 
             // Update the display data fetch window
-            computeDDFStrt();
-            computeDDFStop();
+            computeDDFWindow();
             hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
         }
 
