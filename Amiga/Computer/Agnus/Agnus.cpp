@@ -1251,9 +1251,11 @@ Agnus::setDDFSTOP(uint16_t old, uint16_t value)
 
              // Update the matching position and recalculate the DMA table
              ddfstopReached = ddfstop;
-             computeDDFWindow();
-             updateBitplaneDma();
-             scheduleNextBplEvent();
+             if (ddfstrtReached >= 0) {
+                 computeDDFWindow();
+                 updateBitplaneDma();
+                 scheduleNextBplEvent();
+             }
          }
      }
 }
@@ -1261,7 +1263,7 @@ Agnus::setDDFSTOP(uint16_t old, uint16_t value)
 void
 Agnus::computeDDFStrt()
 {
-    int16_t strt = ddfstrt;
+    int16_t strt = ddfstrtReached;
 
     // Align ddfstrt to the next possible fetch unit start
     dmaStrtHiresShift = (4 - (strt & 0b11)) & 0b11;
@@ -1279,8 +1281,8 @@ void
 Agnus::computeDDFStop()
 {
     // int16_t strt = dmaStrtLores - dmaStrtLoresShift;
-    int16_t strt = MAX(ddfstrt, 0x18);
-    int16_t stop = MIN(ddfstop, 0xD8);
+    int16_t strt = MAX(ddfstrtReached, 0x18);
+    int16_t stop = MIN(ddfstopReached, 0xD8);
 
     // Compute the number of fetch units
     int fetchUnits = ((stop - strt) + 15) >> 3;
