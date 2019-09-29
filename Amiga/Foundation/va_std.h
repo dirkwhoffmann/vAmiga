@@ -142,6 +142,16 @@
 #define UP_TO_NEXT_ODD(x) ((x) | 1)
 #define DOWN_TO_NEXT_ODD(x) ((x) - !((x) & 1))
 
+// Rounds a number up to the next number dividable by 2, 4 or 8
+#define CEIL2(x) (((x) + 0b1) & ~0b1)
+#define CEIL4(x) (((x) + 0b11) & ~0b11)
+#define CEIL8(x) (((x) + 0b111) & ~0b111)
+
+// Rounds a number down to the next number dividable by 2, 4 or 8
+#define FLOOR2(x) ((x) & ~0b1)
+#define FLOOR4(x) ((x) & ~0b11)
+#define FLOOR8(x) ((x) & ~0b111)
+
 
 //
 // Performing Amiga specific bit manipulations
