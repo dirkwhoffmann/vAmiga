@@ -1238,18 +1238,14 @@ Agnus::setDDFSTOP(uint16_t old, uint16_t value)
     // Let the hsync handler recompute the data fetch window
     hsyncActions |= HSYNC_COMPUTE_DDF_WINDOW;
 
-    // Take action if we haven't reached the old DDFSTRT cycle yet
-     if (pos.h < ddfstrtReached) {
+    // Take action if we haven't reached the old DDFSTOP cycle yet
+     if (pos.h < ddfstopReached || ddfstopReached == -1) {
 
          // Check if the new position has already been passed
-         if (ddfstrt <= pos.h + 2) {
+         if (ddfstop <= pos.h + 2) {
 
-             // DDFSTRT never matches in the current rasterline. Disable DMA
-             /*
-             debug("DDFSTRT never matches\n");
-             ddfstrtReached = -1;
-             switchBitplaneDmaOff();
-             */
+             // DDFSTOP never matches in the current rasterline
+             ddfstopReached = -1;
 
          } else {
 
