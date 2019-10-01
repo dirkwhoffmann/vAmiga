@@ -151,7 +151,7 @@ private:
     // Priority of playfield 2 (derived from bit PF2P2 - PF2P0 in BPLCON2)
     uint16_t prio2;
 
-    // Minimum of pf1pri and pf2pri
+    // Minimum of prio1 and prio2
     uint16_t prio12;
 
     
@@ -397,7 +397,8 @@ public:
     // OCS register 0x104 (w)
     void pokeBPLCON2(uint16_t value);
     void setBPLCON2(uint16_t value);
-    bool PF2PRI() { return GET_BIT(bplcon2, 6); }
+    static int PF2PRI(uint16_t v) { return GET_BIT(v, 6); }
+    bool PF2PRI() { return PF2PRI(bplcon2); }
 
     // OCS register 0x00E (r) and 0x098 (w)
     uint16_t peekCLXDAT();
@@ -464,7 +465,7 @@ private:
     void translateSPF(int from, int to);
 
     // Called by translate() in dual-playfield mode
-    void translateDPF(int from, int to);
+    void translateDPF(bool pf2pri, int from, int to);
     template <bool pf2pri> void translateDPF(int from, int to);
 
 

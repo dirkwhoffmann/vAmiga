@@ -394,6 +394,7 @@ Denise::updateSpritePriorities(uint16_t bplcon2)
     }
 
     prio12 = MAX(prio1, prio2);
+
     // debug("bplcon2 = %X prio1 = %d prio2 = %d prio12 = %d\n", bplcon2, prio1, prio2, prio12);
 }
 
@@ -473,6 +474,7 @@ Denise::translate()
     bool dual = dbplf(bplcon0);
 
     uint16_t bplcon2 = initialBplcon2;
+    bool pri = PF2PRI(bplcon2);
     updateSpritePriorities(bplcon2);
 
     // Add a dummy register change to ensure we draw until the line ends
@@ -485,7 +487,7 @@ Denise::translate()
 
         // Translate a chunk of bitplane data
         if (dual) {
-            translateDPF(pixel, change.trigger);
+            translateDPF(pri, pixel, change.trigger);
         } else {
             translateSPF(pixel, change.trigger);
         }
@@ -501,6 +503,7 @@ Denise::translate()
 
             case REG_BPLCON2:
                 bplcon2 = change.value;
+                pri = PF2PRI(bplcon2);
                 updateSpritePriorities(bplcon2);
                 break;
 
@@ -528,9 +531,9 @@ Denise::translateSPF(int from, int to)
 }
 
 void
-Denise::translateDPF(int from, int to)
+Denise::translateDPF(bool pf2pri, int from, int to)
 {
-    if (PF2PRI()) {
+    if (pf2pri) {
         translateDPF<true>(from, to);
     } else {
         translateDPF<false>(from, to);
