@@ -533,11 +533,7 @@ Denise::translateSPF(int from, int to)
 void
 Denise::translateDPF(bool pf2pri, int from, int to)
 {
-    if (pf2pri) {
-        translateDPF<true>(from, to);
-    } else {
-        translateDPF<false>(from, to);
-    }
+    pf2pri ? translateDPF<true>(from, to) : translateDPF<false>(from, to);
 }
 
 template <bool pf2pri> void
@@ -546,16 +542,16 @@ Denise::translateDPF(int from, int to)
     /* If the priority of a playfield is set to an illegal value (prio1 or
      * prio2 will be 0 in that case), all pixels are drawn transparent.
      */
-    uint8_t mask1 = prio1 ? 0b111 : 0b000;
-    uint8_t mask2 = prio2 ? 0b111 : 0b000;
+    uint8_t mask1 = prio1 ? 0b1111 : 0b0000;
+    uint8_t mask2 = prio2 ? 0b1111 : 0b0000;
 
     for (int i = from; i < to; i++) {
 
         uint8_t s = bBuffer[i];
 
         // Determine color indices for both playfields
-        uint8_t index1 = (((s & 1) >> 0) | ((s & 4) >> 1) | ((s & 16) >> 2)) & mask1;
-        uint8_t index2 = (((s & 2) >> 1) | ((s & 8) >> 2) | ((s & 32) >> 3)) & mask2;
+        uint8_t index1 = (((s & 1) >> 0) | ((s & 4) >> 1) | ((s & 16) >> 2));
+        uint8_t index2 = (((s & 2) >> 1) | ((s & 8) >> 2) | ((s & 32) >> 3));
 
         /*
         if (pf2pri) {
@@ -587,23 +583,23 @@ Denise::translateDPF(int from, int to)
             }
         }
         */
-
+        
         if (index1) {
             if (index2) {
 
                 // PF1 is solid, PF2 is solid
                 if (pf2pri) {
-                    iBuffer[i] = index2 | 0b1000;
+                    iBuffer[i] = (index2 | 0b1000) & mask2;
                     zBuffer[i] = prio2 | Z_DPF | Z_PF1 | Z_PF2;
                 } else {
-                    iBuffer[i] = index1;
+                    iBuffer[i] = index1 & mask1;
                     zBuffer[i] = prio1 | Z_DPF | Z_PF1 | Z_PF2;
                 }
 
             } else {
 
                 // PF1 is solid, PF2 is transparent
-                iBuffer[i] = index1;
+                iBuffer[i] = index1 & mask1;
                 zBuffer[i] = prio1 | Z_DPF | Z_PF1;
             }
 
@@ -611,7 +607,7 @@ Denise::translateDPF(int from, int to)
             if (index2) {
 
                 // PF1 is transparent, PF2 is solid
-                iBuffer[i] = index2 | 0b1000;
+                iBuffer[i] = (index2 | 0b1000) & mask2;
                 zBuffer[i] = prio2 | Z_DPF | Z_PF2;
 
             } else {
