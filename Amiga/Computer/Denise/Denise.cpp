@@ -364,7 +364,6 @@ Denise::armSprite(int x)
     SET_BIT(armed, x);
 }
 
-/*
 void
 Denise::updateSpritePriorities(uint16_t bplcon2)
 {
@@ -394,39 +393,9 @@ Denise::updateSpritePriorities(uint16_t bplcon2)
             break;
     }
 
-    // debug("bplcon2 = %X prio1 = %d prio2 = %d\n", bplcon2, prio1, prio2);
-}
-*/
+    prio12 = MAX(prio1, prio2);
 
-uint16_t
-Denise::pf1Prio(uint16_t bplcon2)
-{
-    switch (bplcon2 & 0b111) {
-
-         case 0: return Z_0;
-         case 1: return Z_1;
-         case 2: return Z_2;
-         case 3: return Z_3;
-         case 4: return Z_4;
-    }
-
-    // BPLCON2 contains an illegal value
-    return 0;
-}
-
-uint16_t
-Denise::pf2Prio(uint16_t bplcon2)
-{
-    switch ((bplcon2 >> 3) & 0b111) {
-
-        case 0: return Z_0;
-        case 1: return Z_1;
-        case 2: return Z_2;
-        case 3: return Z_3;
-        case 4: return Z_4;
-    }
-    // BPLCON2 contains an illegal value
-    return 0;
+    // debug("bplcon2 = %X prio1 = %d prio2 = %d prio12 = %d\n", bplcon2, prio1, prio2, prio12);
 }
 
 void
@@ -501,14 +470,12 @@ Denise::translate()
 {
     int pixel = 0;
 
-    /*
     uint16_t bplcon0 = initialBplcon0;
     bool dual = dbplf(bplcon0);
 
     uint16_t bplcon2 = initialBplcon2;
     bool pri = PF2PRI(bplcon2);
     updateSpritePriorities(bplcon2);
-    */
 
     // Add a dummy register change to ensure we draw until the line ends
     conRegChanges.add(sizeof(bBuffer), REG_NONE, 0);
@@ -519,8 +486,8 @@ Denise::translate()
         Change &change = conRegChanges.change[i];
 
         // Translate a chunk of bitplane data
-        if (transl.dual) {
-            translateDPF(transl.pf2pri, pixel, change.trigger);
+        if (dual) {
+            translateDPF(pri, pixel, change.trigger);
         } else {
             translateSPF(pixel, change.trigger);
         }
@@ -530,15 +497,14 @@ Denise::translate()
         switch (change.addr) {
 
             case REG_BPLCON0_DENISE:
-                transl.bplcon0 = change.value;
-                transl.dual = dbplf(change.value);
+                bplcon0 = change.value;
+                dual = dbplf(bplcon0);
                 break;
 
             case REG_BPLCON2:
-                transl.bplcon2 = change.value;
-                transl.pf2pri = PF2PRI(change.value);
-                transl.prio1 = pf1Prio(change.value);
-                transl.prio2 = pf2Prio(change.value);
+                bplcon2 = change.value;
+                pri = PF2PRI(bplcon2);
+                updateSpritePriorities(bplcon2);
                 break;
 
             default:
@@ -560,7 +526,7 @@ Denise::translateSPF(int from, int to)
 
         assert(PixelEngine::isRgbaIndex(s));
         iBuffer[i] = s;
-        zBuffer[i] = s ? transl.prio2 : 0;
+        zBuffer[i] = s ? prio2 : 0;
     }
 }
 
@@ -573,9 +539,6 @@ Denise::translateDPF(bool pf2pri, int from, int to)
 template <bool pf2pri> void
 Denise::translateDPF(int from, int to)
 {
-    uint16_t prio1 = transl.prio1;
-    uint16_t prio2 = transl.prio2;
-
     /* If the priority of a playfield is set to an illegal value (prio1 or
      * prio2 will be 0 in that case), all pixels are drawn transparent.
      */
@@ -620,7 +583,7 @@ Denise::translateDPF(int from, int to)
             }
         }
         */
-
+        
         if (index1) {
             if (index2) {
 

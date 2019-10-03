@@ -93,17 +93,6 @@ public:
     // Ringbuffer recording control register changes
     ChangeRecorder<128> conRegChanges;
 
-    // Persistant internal state of function translate()
-    struct {
-        uint16_t bplcon0;
-        bool dual;
-        uint16_t bplcon2;
-        bool pf2pri;
-        uint16_t prio1;
-        uint16_t prio2;
-    } transl;
-
-
     //
     // Sprites
     //
@@ -157,10 +146,13 @@ public:
 private:
 
     // Priority of playfield 1 (derived from bit PF1P2 - PF1P0 in BPLCON2)
-    // uint16_t prio1;
+    uint16_t prio1;
 
     // Priority of playfield 2 (derived from bit PF2P2 - PF2P0 in BPLCON2)
-    // uint16_t prio2;
+    uint16_t prio2;
+
+    // Minimum of prio1 and prio2
+    uint16_t prio12;
 
     
     //
@@ -281,14 +273,7 @@ public:
         & scrollLoresEven
         & scrollHiresOdd
         & scrollHiresEven
-
         & conRegChanges
-        & transl.bplcon0
-        & transl.dual
-        & transl.bplcon2
-        & transl.pf2pri
-        & transl.prio1
-        & transl.prio2
 
         & sprhstrt
         & sprShiftReg
@@ -296,9 +281,10 @@ public:
         & attach
         & armed
         & spriteClipBegin
-        & spriteClipEnd;
-        // & prio1
-        // & prio2;
+        & spriteClipEnd
+        & prio1
+        & prio2
+        & prio12;
     }
 
     //
@@ -447,12 +433,8 @@ public:
     // Copy data from SPRDATA and SPRDATB into the serial shift registers
     void armSprite(int x);
 
-    // Extracts the sprite priorities from BPLCON2 (DEPRECATED)
-    // void updateSpritePriorities(uint16_t bplcon2);
-
-    // Computes the z buffer depth for playfield 1 or 2
-    uint16_t pf1Prio(uint16_t bplcon2);
-    uint16_t pf2Prio(uint16_t bplcon2);
+    // Extracts the sprite priorities from BPLCON2
+    void updateSpritePriorities(uint16_t bplcon2);
 
 
     //
