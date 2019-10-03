@@ -206,27 +206,27 @@ private:
     uint8_t iBuffer[HPIXELS + (4 * 16) + 6];
     uint16_t zBuffer[HPIXELS + (4 * 16) + 6];
 
-    const uint16_t Z_0   = 0b10000000'00000000;
-    const uint16_t Z_SP0 = 0b01000000'00000000;
-    const uint16_t Z_SP1 = 0b00100000'00000000;
-    const uint16_t Z_1   = 0b00010000'00000000;
-    const uint16_t Z_SP2 = 0b00001000'00000000;
-    const uint16_t Z_SP3 = 0b00000100'00000000;
-    const uint16_t Z_2   = 0b00000010'00000000;
-    const uint16_t Z_SP4 = 0b00000001'00000000;
-    const uint16_t Z_SP5 = 0b00000000'10000000;
-    const uint16_t Z_3   = 0b00000000'01000000;
-    const uint16_t Z_SP6 = 0b00000000'00100000;
-    const uint16_t Z_SP7 = 0b00000000'00010000;
-    const uint16_t Z_4   = 0b00000000'00001000;
-    const uint16_t Z_PF1 = 0b00000000'00000100;
-    const uint16_t Z_PF2 = 0b00000000'00000010;
-    const uint16_t Z_DPF = 0b00000000'00000001;
+    static const uint16_t Z_0   = 0b10000000'00000000;
+    static const uint16_t Z_SP0 = 0b01000000'00000000;
+    static const uint16_t Z_SP1 = 0b00100000'00000000;
+    static const uint16_t Z_1   = 0b00010000'00000000;
+    static const uint16_t Z_SP2 = 0b00001000'00000000;
+    static const uint16_t Z_SP3 = 0b00000100'00000000;
+    static const uint16_t Z_2   = 0b00000010'00000000;
+    static const uint16_t Z_SP4 = 0b00000001'00000000;
+    static const uint16_t Z_SP5 = 0b00000000'10000000;
+    static const uint16_t Z_3   = 0b00000000'01000000;
+    static const uint16_t Z_SP6 = 0b00000000'00100000;
+    static const uint16_t Z_SP7 = 0b00000000'00010000;
+    static const uint16_t Z_4   = 0b00000000'00001000;
+    static const uint16_t Z_PF1 = 0b00000000'00000100;
+    static const uint16_t Z_PF2 = 0b00000000'00000010;
+    static const uint16_t Z_DPF = 0b00000000'00000001;
 
-    const uint16_t Z_SP[8] = { Z_SP0, Z_SP1, Z_SP2, Z_SP3, Z_SP4, Z_SP5, Z_SP6, Z_SP7 };
-    const uint16_t Z_SP01234567 = Z_SP0|Z_SP1|Z_SP2|Z_SP3|Z_SP4|Z_SP5|Z_SP6|Z_SP7;
-    const uint16_t Z_SP0246 = Z_SP0|Z_SP2|Z_SP4|Z_SP6;
-    const uint16_t Z_SP1357 = Z_SP1|Z_SP3|Z_SP5|Z_SP7;
+    constexpr static const uint16_t Z_SP[8] = { Z_SP0, Z_SP1, Z_SP2, Z_SP3, Z_SP4, Z_SP5, Z_SP6, Z_SP7 };
+    static const uint16_t Z_SP01234567 = Z_SP0|Z_SP1|Z_SP2|Z_SP3|Z_SP4|Z_SP5|Z_SP6|Z_SP7;
+    static const uint16_t Z_SP0246 = Z_SP0|Z_SP2|Z_SP4|Z_SP6;
+    static const uint16_t Z_SP1357 = Z_SP1|Z_SP3|Z_SP5|Z_SP7;
 
 
     //
@@ -400,6 +400,11 @@ public:
     static int PF2PRI(uint16_t v) { return GET_BIT(v, 6); }
     bool PF2PRI() { return PF2PRI(bplcon2); }
 
+    // Computes the z buffer depth for playfield 1 or 2
+    static uint16_t zPF(uint16_t priorityBits);
+    static uint16_t zPF1(uint16_t bplcon2) { return zPF(bplcon2 & 7); }
+    static uint16_t zPF2(uint16_t bplcon2) { return zPF((bplcon2 >> 3) & 7); }
+
     // OCS register 0x00E (r) and 0x098 (w)
     uint16_t peekCLXDAT();
     void pokeCLXCON(uint16_t value);
@@ -433,7 +438,7 @@ public:
     // Copy data from SPRDATA and SPRDATB into the serial shift registers
     void armSprite(int x);
 
-    // Extracts the sprite priorities from BPLCON2
+    // Extracts the sprite priorities from BPLCON2 (DEPRECATED)
     void updateSpritePriorities(uint16_t bplcon2);
 
 

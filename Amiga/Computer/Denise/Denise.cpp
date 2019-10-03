@@ -253,6 +253,21 @@ Denise::setBPLCON2(uint16_t value)
 }
 
 uint16_t
+Denise::zPF(uint16_t priorityBits)
+{
+    switch (priorityBits) {
+
+        case 0: return Z_0;
+        case 1: return Z_1;
+        case 2: return Z_2;
+        case 3: return Z_3;
+        case 4: return Z_4;
+    }
+
+    return 0;
+}
+
+uint16_t
 Denise::peekCLXDAT()
 {
     uint16_t result = clxdat | 0x8000;
@@ -475,7 +490,9 @@ Denise::translate()
 
     uint16_t bplcon2 = initialBplcon2;
     bool pri = PF2PRI(bplcon2);
-    updateSpritePriorities(bplcon2);
+    prio1 = zPF1(bplcon2);
+    prio2 = zPF2(bplcon2);
+    // updateSpritePriorities(bplcon2);
 
     // Add a dummy register change to ensure we draw until the line ends
     conRegChanges.add(sizeof(bBuffer), REG_NONE, 0);
@@ -504,7 +521,9 @@ Denise::translate()
             case REG_BPLCON2:
                 bplcon2 = change.value;
                 pri = PF2PRI(bplcon2);
-                updateSpritePriorities(bplcon2);
+                // updateSpritePriorities(bplcon2);
+                prio1 = zPF1(bplcon2);
+                prio2 = zPF2(bplcon2);
                 break;
 
             default:
@@ -520,13 +539,28 @@ Denise::translate()
 void
 Denise::translateSPF(int from, int to)
 {
-    for (int i = from; i < to; i++) {
+    // The usual case: prio2 is a valid value
+    if (prio2) {
+        for (int i = from; i < to; i++) {
 
-        uint8_t s = bBuffer[i];
+            uint8_t s = bBuffer[i];
 
-        assert(PixelEngine::isRgbaIndex(s));
-        iBuffer[i] = s;
-        zBuffer[i] = s ? prio2 : 0;
+            assert(PixelEngine::isRgbaIndex(s));
+            iBuffer[i] = s;
+            zBuffer[i] = s ? prio2 : 0;
+        }
+
+    // The unusual case: prio2 is ivalid
+    } else {
+
+        for (int i = from; i < to; i++) {
+
+             uint8_t s = bBuffer[i];
+
+             assert(PixelEngine::isRgbaIndex(s));
+             iBuffer[i] = (s > 16) ? 16 : s;
+             zBuffer[i] = 0;
+         }
     }
 }
 
