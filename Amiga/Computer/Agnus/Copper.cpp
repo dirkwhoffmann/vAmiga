@@ -836,7 +836,7 @@ Copper::disassemble(uint32_t addr)
     }
     
     const char *mnemonic = isWaitCmd(addr) ? "WAIT" : "SKIP";
-    const char *suffix = getBFD(addr) ? "*" : "";
+    const char *suffix = getBFD(addr) ? "" : "b";
     
     sprintf(pos, "($%02X,$%02X)", getVP(addr), getHP(addr));
     

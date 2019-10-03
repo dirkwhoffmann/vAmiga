@@ -472,10 +472,7 @@ Blitter::beginSlowCopyBlit()
 
 template <uint16_t instr> void
 Blitter::exec()
-{
-    assert(config.accuracy == 2 ||
-           (instr & (WRITE_D|FETCH_A|FETCH_B|FETCH_C|HOLD_A|HOLD_B|HOLD_D)) == 0);
-    
+{    
     // Check if this instruction needs the bus
     if (instr & BUS) {
         if (!agnus.allocateBus<BUS_BLITTER>()) return;
