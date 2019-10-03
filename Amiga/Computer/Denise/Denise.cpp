@@ -558,7 +558,7 @@ Denise::translateSPF(int from, int to)
              uint8_t s = bBuffer[i];
 
              assert(PixelEngine::isRgbaIndex(s));
-             iBuffer[i] = (s > 16) ? 16 : s;
+             iBuffer[i] = (s & 16) ? 16 : s;
              zBuffer[i] = 0;
          }
     }
