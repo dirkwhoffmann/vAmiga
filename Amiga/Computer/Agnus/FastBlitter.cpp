@@ -188,10 +188,12 @@ void Blitter::doFastCopyBlit()
     }
 
     // Do some consistency checks
+    /*
     assert(apt == useA ? bltapt + (incr * bltsizeW + amod) * bltsizeH : bltapt);
     assert(bpt == useB ? bltbpt + (incr * bltsizeW + bmod) * bltsizeH : bltbpt);
     assert(cpt == useC ? bltcpt + (incr * bltsizeW + cmod) * bltsizeH : bltcpt);
     assert(dpt == useD ? bltdpt + (incr * bltsizeW + dmod) * bltsizeH : bltdpt);
+    */
 
     // Write back pointer registers
     bltapt = apt;
