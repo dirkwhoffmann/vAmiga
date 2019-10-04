@@ -54,6 +54,10 @@
 
 class Agnus : public SubComponent {
 
+    // The current configuration
+    AgnusConfig config;
+
+    // The information shown in the GUI inspector panel
     AgnusInfo info;
     EventInfo eventInfo;
 
@@ -538,7 +542,15 @@ public:
         & cpuRequestsBus
         & cpuDenials;
     }
-    
+
+
+    //
+    // Configuring
+    //
+
+    AgnusConfig getConfig() { return config; }
+    void setType(AgnusType type);
+
 
     //
     // Methods from HardwareComponent

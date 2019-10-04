@@ -200,7 +200,19 @@ Amiga::configure(ConfigOption option, long value)
             model = (AmigaModel)value;
             
             // Apply model specific config changes
-            if (model == AMIGA_2000) realTimeClock = true;
+            switch(model) {
+                case AMIGA_1000:
+                    agnus.setType(AGNUS_8367);
+                    break;
+                case AMIGA_500:
+                    agnus.setType(AGNUS_8372);
+                    break;
+                case AMIGA_2000:
+                    agnus.setType(AGNUS_8372);
+                    realTimeClock = true;
+                    break;
+            }
+
             mem.updateMemSrcTable();
             break;
         

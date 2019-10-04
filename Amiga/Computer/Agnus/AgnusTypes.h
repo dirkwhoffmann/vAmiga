@@ -12,6 +12,36 @@
 #ifndef _AGNUS_T_INC
 #define _AGNUS_T_INC
 
+// Emulated model
+typedef enum : long
+{
+    AGNUS_8367, // Used if an A1000 is emulated
+    AGNUS_8372  // Used if an A500 or A2000 is emulated
+}
+AgnusType;
+
+inline bool isAgnusType(long value)
+{
+    return value >= AGNUS_8367 && value <= AGNUS_8372;
+}
+
+inline const char *AgnusTypeName(AgnusType type)
+{
+    assert(isAgnusType(type));
+
+    switch (type) {
+        case AGNUS_8367: return "AGNUS_8367";
+        case AGNUS_8372: return "AGNUS_8372";
+        default:         return "???";
+    }
+}
+
+typedef struct
+{
+    AgnusType type;
+}
+AgnusConfig;
+
 // Register change identifiers
 typedef enum : int32_t
 {

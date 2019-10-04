@@ -19,7 +19,9 @@ Agnus::Agnus(Amiga& ref) : SubComponent(ref)
         &blitter,
         &dmaDebugger
     };
-    
+
+    config.type = AGNUS_8372;
+
     initLookupTables();
 }
 
@@ -160,6 +162,13 @@ Agnus::initDASTables()
         }
     }
     */
+}
+
+void
+Agnus::setType(AgnusType type)
+{
+    assert(isAgnusType(type));
+    config.type = type;
 }
 
 void
@@ -1042,14 +1051,24 @@ Agnus::pokeVHPOS(uint16_t value)
 uint16_t
 Agnus::peekVPOSR()
 {
+    uint16_t id;
+
     // 15 14 13 12 11 10 09 08 07 06 05 04 03 02 01 00
-    // LF -- -- -- -- -- -- -- -- -- -- -- -- -- -- V8
+    // LF I6 I5 I4 I3 I2 I1 I0 -- -- -- -- -- -- -- V8
     uint16_t result = (pos.v >> 8) | (isLongFrame() ? 0x8000 : 0);
     assert((result & 0x7FFE) == 0);
 
+    // Add indentification bits
+    switch (config.type) {
+
+        case AGNUS_8367: id = 0x00; break;
+        case AGNUS_8372: id = 0x20; break;
+        default: assert(false);
+    }
+    result |= (id << 8);
+
     debug(2, "peekVPOSR() = %X\n", result);
     return result;
-
 }
 
 void
