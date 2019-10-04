@@ -88,7 +88,7 @@ Paula::peekINTREQR()
     if (ciaa.irqPin() == 0) SET_BIT(result, 3);
     if (ciab.irqPin() == 0) SET_BIT(result, 13);
 
-    debug(INT_DEBUG, "peekINTREQR(): %x\n", result);
+    debug(INTREG_DEBUG, "peekINTREQR(): %x\n", result);
 
     return result;
 }
@@ -96,7 +96,7 @@ Paula::peekINTREQR()
 void
 Paula::pokeINTREQ(uint16_t value)
 {
-    debug(INT_DEBUG, "pokeINTREQ(%X)\n", value);
+    debug(INTREG_DEBUG, "pokeINTREQ(%X)\n", value);
 
     agnus.recordRegisterChange(DMA_CYCLES(2), REG_INTREQ, value);
     // setINTREQ(value);
@@ -105,7 +105,7 @@ Paula::pokeINTREQ(uint16_t value)
 void
 Paula::pokeINTENA(uint16_t value)
 {
-    debug(INT_DEBUG, "pokeINTENA(%X)\n", value);
+    debug(INTREG_DEBUG, "pokeINTENA(%X)\n", value);
 
     agnus.recordRegisterChange(DMA_CYCLES(2), REG_INTENA, value);
     // setINTENA(value);

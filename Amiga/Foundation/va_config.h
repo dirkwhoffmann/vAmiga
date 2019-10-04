@@ -30,6 +30,7 @@
 
 static const int OCSREG_DEBUG  = 2;  // General OCS register debugging
 static const int BLTREG_DEBUG  = 2;  // Blitter registers
+static const int INTREG_DEBUG  = 2;  // Interrupt registers
 static const int DSKREG_DEBUG  = 2;  // Disk controller registers
 static const int CIAREG_DEBUG  = 2;  // CIA registers
 static const int BPLREG_DEBUG  = 2;  // Bitplane registers
@@ -80,6 +81,6 @@ static const int BLT_CHECKSUM  = 2;  // Blitter checksums
 // #define LINE_DEBUG       // Colorizes certain rasterlines
 // #define ALIGN_DRIVE_HEAD // Makes drive operations deterministic
 // #define SLOW_BLT_DEBUG   // Execute all slow Blitter instructions in one chunk
-// #define AGNUS_EXEC_DEBUG // Falls back to a simpler Agnus execution function
+#define AGNUS_EXEC_DEBUG // Falls back to a simpler Agnus execution function
 
 #endif
