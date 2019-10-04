@@ -1513,7 +1513,7 @@ Agnus::execute()
 
     // Advance the internal clock and the horizontal counter
     clock += DMA_CYCLES(1);
-    pos.h++;
+    pos.h = (pos.h + 1) % HPOS_CNT;
 
     // If this assertion hits, the HSYNC event hasn't been served
     /*
@@ -1587,16 +1587,17 @@ Agnus::executeUntilBusIsFree()
     cpuRequestsBus = true;
 
     // The CPU usually accesses memory in even cyles. Advance to such a cycle
+    int16_t oldpos = pos.h;
     if (IS_ODD(pos.h)) execute();
 
     // We have reached an even cycle now. Emulate that cycle...
     while (1) {
 
+        oldpos = pos.h;
         execute();
 
         // Break the loop if the CPU can have the bus at that cycle
-        assert(pos.h > 0);
-        if (busOwner[pos.h - 1] == BUS_NONE) break;
+        if (busOwner[oldpos] == BUS_NONE) break;
 
         // The CPU is blocked. Add a wait state and try again
         // blockedCycles++;
@@ -1681,7 +1682,7 @@ Agnus::executeSecondSpriteCycle()
 void
 Agnus::hsyncHandler()
 {
-    assert(pos.h == HPOS_MAX + 1);
+    assert(pos.h == 0); // HPOS_MAX + 1);
 
     // Let Denise draw the current line
     denise.endOfLine(pos.v);
