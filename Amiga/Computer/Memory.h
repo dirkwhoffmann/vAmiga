@@ -262,10 +262,15 @@ public:
     uint64_t kickRomFingerprint() { return fnv_1a_64(kickRom, config.kickRomSize); }
     uint64_t extRomFingerprint() { return fnv_1a_64(extRom,  config.extRomSize); }
 
-    // Deletes a previously installed ROM
+    // Removes a previously installed ROM
     void deleteBootRom() { alloc(0, bootRom, config.bootRomSize); }
     void deleteKickRom() { alloc(0, kickRom, config.kickRomSize); }
     void deleteExtRom() { alloc(0, extRom, config.extRomSize); }
+
+    // Erases an installed ROM
+    void eraseBootRom() { assert(bootRom); memset(bootRom, 0, config.bootRomSize); }
+    void eraseKickRom() { assert(kickRom); memset(kickRom, 0, config.kickRomSize); }
+    void eraseExtRom() { assert(extRom); memset(extRom, 0, config.extRomSize); }
 
     // Installs a new ROM
     bool loadBootRom(BootRom *rom);

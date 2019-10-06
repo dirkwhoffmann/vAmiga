@@ -41,6 +41,28 @@ Memory::dealloc()
 void
 Memory::_powerOn()
 {
+    switch (amiga.getConfig().model) {
+
+        case AMIGA_1000:
+
+            // Emulate a WOM (Write Once Memory)
+            eraseKickRom();
+            kickIsWritable = true;
+
+            // Remove any Extended ROM if present
+            deleteExtRom();
+
+            break;
+
+        case AMIGA_500:
+        case AMIGA_2000:
+
+            // Emulate a ROM (Read Only Memory)
+            kickIsWritable = false;
+
+            break;
+    }
+    /*
     // Make Rom writable if an A1000 is emulated
     kickIsWritable = amiga.getConfig().model == AMIGA_1000;
 
@@ -48,6 +70,7 @@ Memory::_powerOn()
     if (hasExtRom() && amiga.getConfig().model == AMIGA_1000) {
         deleteExtRom();
     }
+    */
 
     // Fill the RAM with the proper startup pattern
     initializeRam();
@@ -402,7 +425,9 @@ Memory::updateMemSrcTable()
     bool rtc = amiga.getConfig().realTimeClock;
     bool ovl = ciaa.getPA() & 1;
     
-    // debug("updateMemSrcTable: rtc = %d ovl = %d\n", rtc, ovl);
+    debug("updateMemSrcTable: rtc = %d ovl = %d\n", rtc, ovl);
+    debug("bootRom: %p kickRom: %p extRom: %p\n", bootRom, kickRom, extRom);
+    dump();
     
     // Start from scratch
     for (unsigned i = 0x00; i <= 0xFF; i++)
@@ -445,13 +470,17 @@ Memory::updateMemSrcTable()
         memSrc[i] = kickIsWritable ? mem_boot : mem_kick;
 
     // Kickstart
-    for (unsigned i = 0xFC; i <= 0xFF; i++)
+    for (unsigned i = 0xFC; i <= 0xFF; i++) {
         memSrc[i] = mem_kick;
+        // memSrc[i] = kickIsWritable ? mem_boot : mem_kick;
+    }
 
     // Overlay Rom with lower memory area if the OVL line is high
-    for (unsigned i = 0; ovl && i < 8 && memSrc[0xF8 + i] != MEM_UNMAPPED; i++)
-        memSrc[i] = memSrc[(extRom ? 0xE0 : 0xF8) + i];
-    
+    for (unsigned i = 0; ovl && i < 8 && memSrc[0xF8 + i] != MEM_UNMAPPED; i++) {
+        // memSrc[i] = memSrc[(extRom ? 0xE0 : 0xF8) + i];
+        memSrc[i] = memSrc[0xF8 + i];
+    }
+
     amiga.putMessage(MSG_MEM_LAYOUT);
 }
 
