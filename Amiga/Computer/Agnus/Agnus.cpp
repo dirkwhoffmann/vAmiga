@@ -1445,7 +1445,7 @@ Agnus::setBPL2MOD(uint16_t value)
 template <int x> void
 Agnus::pokeSPRxPTH(uint16_t value)
 {
-    debug(SPR_DEBUG, "pokeSPR%dPTH(%X)\n", x, value);
+    debug(SPRREG_DEBUG, "pokeSPR%dPTH(%X)\n", x, value);
     
     sprpt[x] = REPLACE_HI_WORD(sprpt[x], value & 0x7);
 }
@@ -1453,7 +1453,7 @@ Agnus::pokeSPRxPTH(uint16_t value)
 template <int x> void
 Agnus::pokeSPRxPTL(uint16_t value)
 {
-    debug(SPR_DEBUG, "pokeSPR%dPTL(%X)\n", x, value);
+    debug(SPRREG_DEBUG, "pokeSPR%dPTL(%X)\n", x, value);
     
     sprpt[x] = REPLACE_LO_WORD(sprpt[x], value & 0xFFFE);
 }
@@ -1682,11 +1682,18 @@ Agnus::updateRegisters()
 template <int nr> void
 Agnus::executeFirstSpriteCycle()
 {
+    if (nr != 0) debug(SPR_DEBUG, "executeFirstSpriteCycle<%d>\n", nr);
+
     // Activate sprite data DMA if the first sprite line has been reached
-    if (pos.v == sprVStrt[nr]) { sprDmaState[nr] = SPR_DMA_DATA; }
+    if (pos.v == sprVStrt[nr]) {
+        sprDmaState[nr] = SPR_DMA_DATA;
+        if (nr != 0) debug(SPR_DEBUG, "pos.v == sprVStrt[%d]\n", nr);
+    }
 
     // Deactivate sprite data DMA if the last sprite line has been reached
     if (pos.v == sprVStop[nr]) {
+
+        if (nr != 0) debug(SPR_DEBUG, "pos.v == sprVStop[%d]\n", nr);
 
         // Deactivate sprite data DMA
         sprDmaState[nr] = SPR_DMA_IDLE;
@@ -1710,6 +1717,8 @@ Agnus::executeFirstSpriteCycle()
 template <int nr> void
 Agnus::executeSecondSpriteCycle()
 {
+    if (nr != 0) debug(SPR_DEBUG, "executeSecondSpriteCycle<%d>\n", nr);
+
     // Deactivate sprite data DMA if the last sprite line has been reached
     if (pos.v == sprVStop[nr]) {
         
@@ -1736,7 +1745,7 @@ Agnus::executeSecondSpriteCycle()
 void
 Agnus::hsyncHandler()
 {
-    assert(pos.h == 0); // HPOS_MAX + 1);
+    assert(pos.h == 0);
 
     // Let Denise draw the current line
     denise.endOfLine(pos.v);
@@ -1767,10 +1776,12 @@ Agnus::hsyncHandler()
     // Check if we have reached line 25 (sprite DMA starts here)
     if (pos.v == 25) {
         if ((dmacon & DMAEN) && (dmacon & SPREN)) {
-
+            assert(sprDMA());
             // Reset vertical sprite trigger coordinates which forces the sprite
             // logic to read in the control words for all sprites in this line.
             for (unsigned i = 0; i < 8; i++) { sprVStop[i] = 25; }
+        } else {
+            assert(!sprDMA());
         }
     }
 

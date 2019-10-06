@@ -294,7 +294,7 @@ template <int x> void
 Denise::pokeSPRxPOS(uint16_t value)
 {
     assert(x < 8);
-    debug(SPR_DEBUG, "pokeSPR%dPOS(%X)\n", x, value);
+    debug(SPRREG_DEBUG, "pokeSPR%dPOS(%X)\n", x, value);
 
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0  (Ex = VSTART)
     // E7 E6 E5 E4 E3 E2 E1 E0 H8 H7 H6 H5 H4 H3 H2 H1  (Hx = HSTART)
@@ -314,7 +314,7 @@ template <int x> void
 Denise::pokeSPRxCTL(uint16_t value)
 {
     assert(x < 8);
-    debug(SPR_DEBUG, "pokeSPR%dCTL(%X)\n", x, value);
+    debug(SPRREG_DEBUG, "pokeSPR%dCTL(%X)\n", x, value);
     
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // L7 L6 L5 L4 L3 L2 L1 L0 AT  -  -  -  - E8 L8 H0  (Lx = VSTOP)
@@ -337,7 +337,7 @@ template <int x> void
 Denise::pokeSPRxDATA(uint16_t value)
 {
     assert(x < 8);
-    debug(SPR_DEBUG, "pokeSPR%dDATA(%X)\n", x, value);
+    debug(SPRREG_DEBUG, "pokeSPR%dDATA(%X)\n", x, value);
     
     sprdata[x] = value;
     armSprite(x);
@@ -347,7 +347,7 @@ template <int x> void
 Denise::pokeSPRxDATB(uint16_t value)
 {
     assert(x < 8);
-    debug(SPR_DEBUG, "pokeSPR%dDATB(%X)\n", x, value);
+    debug(SPRREG_DEBUG, "pokeSPR%dDATB(%X)\n", x, value);
     
     sprdatb[x] = value;
 }
