@@ -324,7 +324,10 @@ Denise::pokeSPRxCTL(uint16_t value)
     
     sprhstrt[x] = (sprhstrt[x] & 0x1FE) | (value & 0x01);
     WRITE_BIT(attach, x, GET_BIT(value, 7));
-    
+
+    // Disarm the sprite (stop drawing)
+    CLR_BIT(armed, x);
+
     // Update debugger info
     if (agnus.pos.v == 26) {
         info.sprite[x].ctl = value;
@@ -704,7 +707,7 @@ Denise::drawSprites()
         }
     }
 
-    armed = 0;
+    // armed = 0;
 }
 
 template <int x> void
@@ -718,8 +721,8 @@ Denise::drawSprite()
     const uint16_t depth[8] = { Z_SP0, Z_SP1, Z_SP2, Z_SP3, Z_SP4, Z_SP5, Z_SP6, Z_SP7 };
     uint16_t z = depth[x];
 
-    uint32_t d1 = (uint32_t)sprdata[x] << 1;
-    uint32_t d0 = (uint32_t)sprdatb[x] << 0;
+    uint32_t d1 = (uint32_t)sprdatb[x] << 1;
+    uint32_t d0 = (uint32_t)sprdata[x] << 0;
 
     int baseCol = 16 + 2 * (x & 6);
 

@@ -1710,7 +1710,7 @@ Agnus::executeFirstSpriteCycle()
     if (sprDmaState[nr] == SPR_DMA_DATA) {
 
         // Read DATA
-        denise.pokeSPRxDATB<nr>(doSpriteDMA(nr));
+        denise.pokeSPRxDATA<nr>(doSpriteDMA(nr));
     }
 }
 
@@ -1738,7 +1738,7 @@ Agnus::executeSecondSpriteCycle()
     if (sprDmaState[nr] == SPR_DMA_DATA) {
         
         // Read DATB
-        denise.pokeSPRxDATA<nr>(doSpriteDMA(nr));
+        denise.pokeSPRxDATB<nr>(doSpriteDMA(nr));
     }
 }
 
