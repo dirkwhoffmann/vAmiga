@@ -1706,10 +1706,9 @@ Agnus::executeFirstSpriteCycle()
         denise.pokeSPRxPOS<nr>(pos);
     }
 
-    // Read sprite data if data DMA is activated
+    // Read sprite data if DMA is on
     if (sprDmaState[nr] == SPR_DMA_DATA) {
 
-        // Read DATA
         denise.pokeSPRxDATA<nr>(doSpriteDMA(nr));
     }
 }
@@ -1734,10 +1733,9 @@ Agnus::executeSecondSpriteCycle()
         denise.pokeSPRxCTL<nr>(ctl);
     }
     
-    // Read sprite data if data DMA is activated
+    // Read sprite data if DMA is on
     if (sprDmaState[nr] == SPR_DMA_DATA) {
-        
-        // Read DATB
+
         denise.pokeSPRxDATB<nr>(doSpriteDMA(nr));
     }
 }

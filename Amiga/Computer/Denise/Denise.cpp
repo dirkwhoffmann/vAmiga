@@ -720,6 +720,7 @@ Denise::drawSprite()
 
     const uint16_t depth[8] = { Z_SP0, Z_SP1, Z_SP2, Z_SP3, Z_SP4, Z_SP5, Z_SP6, Z_SP7 };
     uint16_t z = depth[x];
+    assert(z == Z_SP[x]);
 
     uint32_t d1 = (uint32_t)sprdatb[x] << 1;
     uint32_t d0 = (uint32_t)sprdata[x] << 0;
@@ -728,16 +729,6 @@ Denise::drawSprite()
 
     int start = 2 + 2 * sprhstrt[x];
     int end = start + 31;
-
-    // Adjust the end position if it lies outside the valid range
-    /*
-    if (end > LAST_PIXEL) {
-        int overshoot = (1 + end - LAST_PIXEL) / 2;
-        d1 >>= overshoot;
-        d0 >>= overshoot;
-        end -= overshoot;
-    }
-    */
 
     for (int pos = end; pos >= start; pos -= 2) {
 
@@ -768,13 +759,12 @@ Denise::drawSpritePair()
     assert(x >= 1 && x <= 7);
     assert(IS_ODD(x));
 
-    // const uint16_t depth[8] = { Z_SP0, Z_SP1, Z_SP2, Z_SP3, Z_SP4, Z_SP5, Z_SP6, Z_SP7 };
     uint16_t z = Z_SP[x];
 
-    uint32_t d3 = (uint32_t)sprdata[x]   << 3;
-    uint32_t d2 = (uint32_t)sprdatb[x]   << 2;
-    uint32_t d1 = (uint32_t)sprdata[x-1] << 1;
-    uint32_t d0 = (uint32_t)sprdatb[x-1] << 0;
+    uint32_t d3 = (uint32_t)sprdatb[x]   << 3;
+    uint32_t d2 = (uint32_t)sprdata[x]   << 2;
+    uint32_t d1 = (uint32_t)sprdatb[x-1] << 1;
+    uint32_t d0 = (uint32_t)sprdata[x-1] << 0;
 
     int start = 2 + 2 * sprhstrt[x];
     int end = MIN(start + 31, LAST_PIXEL);
