@@ -104,8 +104,9 @@ public:
     int16_t sprhstrt[8];
     
     // The serial shift registers of all 8 sprites.
-    uint32_t sprShiftReg[8];
-    
+    uint16_t ssra[8];
+    uint16_t ssrb[8];
+
     // The current DMA states aof all 8 sprites.
     // DEPRECATED. IS HELD BY AGNUS
     SprDMAState sprDmaState[8];
@@ -276,7 +277,8 @@ public:
         & conRegChanges
 
         & sprhstrt
-        & sprShiftReg
+        & ssra
+        & ssrb
         & sprDmaState
         & attach
         & armed
@@ -487,8 +489,8 @@ public:
     template <int x> void drawSpritePairNew();
 
     // Draws a single sprite pixel
-    template <int x> void drawSpritePixel(int pixel, int hpos);
-    template <int x> void drawSpritePixelPair(uint32_t sra1, uint32_t srb1, uint32_t sra2, uint32_t srb2, int hpos);
+    template <int x> void drawSpritePixel(int hpos);
+    template <int x> void drawAttachedSpritePixel(int hpos);
 
     /* Draws the left and the right border.
      * This method is called at the end of each rasterline.

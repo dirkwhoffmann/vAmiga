@@ -792,15 +792,14 @@ Denise::drawSpritePair()
 }
 
 template <int x> void
-Denise::drawSpritePixel(int pixel, int hpos)
+Denise::drawSpritePixel(int hpos)
 {
-    assert(pixel >= 0 && pixel <= 15);
     assert(hpos >= spriteClipBegin);
     assert(hpos < spriteClipEnd);
 
-    uint8_t a = !!GET_BIT(sprdata[x], pixel);
-    uint8_t b = !!GET_BIT(sprdatb[x], pixel);
-    uint8_t col = (b << 1) | a;
+    uint8_t a = (ssra[x] >> 15);
+    uint8_t b = (ssrb[x] >> 14) & 2;
+    uint8_t col = a | b;
 
     if (col) {
 
@@ -815,15 +814,21 @@ Denise::drawSpritePixel(int pixel, int hpos)
 }
 
 template <int x> void
-Denise::drawSpritePixelPair(uint32_t sra1, uint32_t srb1, uint32_t sra2, uint32_t srb2, int hpos)
+Denise::drawAttachedSpritePixel(int hpos)
 {
+    assert(IS_ODD(x));
     assert(hpos >= spriteClipBegin);
     assert(hpos < spriteClipEnd);
 
-    uint8_t a1 = !!GET_BIT(sra1, 15);
-    uint8_t b1 = !!GET_BIT(srb1, 15) << 1;
-    uint8_t a2 = !!GET_BIT(sra2, 15) << 2;
-    uint8_t b2 = !!GET_BIT(srb2, 15) << 3;
+    uint8_t a1 = !!GET_BIT(ssra[x-1], 15);
+    uint8_t b1 = !!GET_BIT(ssrb[x-1], 15) << 1;
+    uint8_t a2 = !!GET_BIT(ssra[x], 15) << 2;
+    uint8_t b2 = !!GET_BIT(ssrb[x], 15) << 3;
+    assert(a1 == ((ssra[x-1] >> 15)));
+    assert(b1 == ((ssrb[x-1] >> 14) & 0b0010));
+    assert(a2 == ((ssra[x] >> 13) & 0b0100));
+    assert(b2 == ((ssrb[x] >> 12) & 0b1000));
+
     uint8_t col = a1 | b1 | a2 | b2;
 
     if (col) {
@@ -851,16 +856,20 @@ Denise::drawSpriteNew()
 
     int start = 2 + 2 * sprhstrt[x];
     int end = start + 31;
-    int cnt = 0;
 
     for (int hpos = 0; hpos < sizeof(iBuffer) - 1; hpos += 2) {
 
-        if (hpos == start) cnt = 16;
+        if (hpos == start) {
+            ssra[x] = sprdata[x];
+            ssrb[x] = sprdatb[x];
+        }
 
-        if (cnt) {
+        if (ssra[x] | ssrb[x]) {
             if (hpos >= spriteClipBegin && hpos < spriteClipEnd) {
-                drawSpritePixel<x>(--cnt, hpos);
+                drawSpritePixel<x>(hpos);
             }
+            ssra[x] <<= 1;
+            ssrb[x] <<= 1;
         }
     }
 
@@ -881,36 +890,33 @@ Denise::drawSpritePairNew()
     int start2 = 2 + 2 * sprhstrt[x];
     int start1 = 2 + 2 * sprhstrt[x-1];
     // int end2 = start2 + 31;
-    // int end1 = start1 + 31;
-
-    // Shift registers
-    uint16_t sra2 = 0, srb2 = 0, sra1 = 0, srb1 = 0;
+    int end1 = start1 + 31;
 
     for (int hpos = 0; hpos < sizeof(iBuffer) - 1; hpos += 2) {
 
-        if (hpos == start2) {
-            sra2 = sprdata[x];
-            srb2 = sprdatb[x];
-        }
         if (hpos == start1) {
-            sra1 = sprdata[x-1];
-            srb1 = sprdatb[x-1];
+            ssra[x-1] = sprdata[x-1];
+            ssrb[x-1] = sprdatb[x-1];
+        }
+        if (hpos == start2) {
+            ssra[x] = sprdata[x];
+            ssrb[x] = sprdatb[x];
         }
 
-        if (sra1 | srb1 | sra2 | srb2) {
+        if (ssra[x-1] | ssrb[x-1] | ssra[x] | ssrb[x]) {
             if (hpos >= spriteClipBegin && hpos < spriteClipEnd) {
-                drawSpritePixelPair<x>(sra1, srb1, sra2, srb2, hpos);
+                drawAttachedSpritePixel<x>(hpos);
             }
-            sra1 <<= 1;
-            srb1 <<= 1;
-            sra2 <<= 1;
-            srb2 <<= 1;
+            ssra[x-1] <<= 1;
+            ssrb[x-1] <<= 1;
+            ssra[x] <<= 1;
+            ssrb[x] <<= 1;
         }
     }
 
     // Perform collision checks (if enabled)
-    // if (config.clxSprSpr) checkS2SCollisions<x>(start1, end1);
-    // if (config.clxSprPlf) checkS2PCollisions<x>(start, end);
+    if (config.clxSprSpr) checkS2SCollisions<x>(start1, end1);
+    if (config.clxSprPlf) checkS2PCollisions<x>(start1, end1);
 }
 
 void
