@@ -70,7 +70,16 @@ typedef enum : int32_t
     REG_BPL5PTH,
     REG_BPL5PTL,
     REG_BPL6PTH,
-    REG_BPL6PTL
+    REG_BPL6PTL,
+
+    SPR_HPOS0,
+    SPR_HPOS1,
+    SPR_HPOS2,
+    SPR_HPOS3,
+    SPR_HPOS4,
+    SPR_HPOS5,
+    SPR_HPOS6,
+    SPR_HPOS7
 }
 RegChangeID;
 

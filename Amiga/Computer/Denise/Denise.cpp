@@ -296,14 +296,28 @@ Denise::pokeSPRxPOS(uint16_t value)
     assert(x < 8);
     debug(SPRREG_DEBUG, "pokeSPR%dPOS(%X)\n", x, value);
 
+    int tag =
+    x == 0 ? SPR_HPOS0 :
+    x == 1 ? SPR_HPOS1 :
+    x == 2 ? SPR_HPOS2 :
+    x == 3 ? SPR_HPOS3 :
+    x == 4 ? SPR_HPOS4 :
+    x == 5 ? SPR_HPOS5 :
+    x == 6 ? SPR_HPOS6 : SPR_HPOS7;
+
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0  (Ex = VSTART)
     // E7 E6 E5 E4 E3 E2 E1 E0 H8 H7 H6 H5 H4 H3 H2 H1  (Hx = HSTART)
 
     // Note: Denise only picks up the horizontal coordinate. Only Agnus knows
     // about the vertical coordinate.
 
+    int16_t oldValue = sprhstrt[x];
     sprhstrt[x] = ((value & 0xFF) << 1) | (sprhstrt[x] & 0x01);
-    
+
+    // Record the register change
+    if (sprRegChanges.isEmpty()) sprRegChanges.add(0, tag, oldValue);
+    sprRegChanges.add(4 * agnus.pos.h, tag, sprhstrt[x]);
+
     // Update debugger info
     if (agnus.pos.v == 26) {
         info.sprite[x].pos = value;
@@ -315,18 +329,32 @@ Denise::pokeSPRxCTL(uint16_t value)
 {
     assert(x < 8);
     debug(SPRREG_DEBUG, "pokeSPR%dCTL(%X)\n", x, value);
-    
+
+    int tag =
+     x == 0 ? SPR_HPOS0 :
+     x == 1 ? SPR_HPOS1 :
+     x == 2 ? SPR_HPOS2 :
+     x == 3 ? SPR_HPOS3 :
+     x == 4 ? SPR_HPOS4 :
+     x == 5 ? SPR_HPOS5 :
+     x == 6 ? SPR_HPOS6 : SPR_HPOS7;
+
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // L7 L6 L5 L4 L3 L2 L1 L0 AT  -  -  -  - E8 L8 H0  (Lx = VSTOP)
 
     // Note: Denise only picks up the horizontal coordinate. Only Agnus knows
     // about the vertical coordinate.
-    
+
+    int16_t oldValue = sprhstrt[x];
     sprhstrt[x] = (sprhstrt[x] & 0x1FE) | (value & 0x01);
     WRITE_BIT(attach, x, GET_BIT(value, 7));
 
     // Disarm the sprite (stop drawing)
     CLR_BIT(armed, x);
+
+    // Record the register change
+    if (sprRegChanges.isEmpty()) sprRegChanges.add(0, tag, oldValue);
+    sprRegChanges.add(4 * agnus.pos.h, tag, sprhstrt[x]);
 
     // Update debugger info
     if (agnus.pos.v == 26) {
@@ -657,59 +685,123 @@ Denise::translateDPF(int from, int to)
     }
 }
 
+/*
 void
 Denise::drawSprites()
 {
-    // Compute final clipping area
-    // spriteClipBegin = MAX(spriteClipBegin, firstDrawnPixel - 2);
-    // spriteClipEnd = MIN(spriteClipEnd, lastDrawnPixel);
-
     if (config.emulateSprites) {
 
         // Sprites 6 and 7
         if (armed & 0b11000000) {
             if (attached(7)) {
-                drawSpritePairNew<7>();
+                drawAttachedSpritePair<7>();
             } else {
-                if (armed & 0b10000000) drawSpriteNew<7>();
-                if (armed & 0b01000000) drawSpriteNew<6>();
+                if (armed & 0b10000000) drawSprite<7>();
+                if (armed & 0b01000000) drawSprite<6>();
             }
         }
 
         // Sprites 4 and 5
         if (armed & 0b00110000) {
             if (attached(5)) {
-                drawSpritePairNew<5>();
+                drawAttachedSpritePair<5>();
             } else {
-                if (armed & 0b00100000) drawSpriteNew<5>();
-                if (armed & 0b00010000) drawSpriteNew<4>();
+                if (armed & 0b00100000) drawSprite<5>();
+                if (armed & 0b00010000) drawSprite<4>();
             }
         }
 
         // Sprites 2 and 3
         if (armed & 0b00001100) {
             if (attached(3)) {
-                drawSpritePairNew<3>();
+                drawAttachedSpritePair<3>();
             } else {
-                if (armed & 0b00001000) drawSpriteNew<3>();
-                if (armed & 0b00000100) drawSpriteNew<2>();
+                if (armed & 0b00001000) drawSprite<3>();
+                if (armed & 0b00000100) drawSprite<2>();
             }
         }
 
         // Sprites 1 and 0
         if (armed & 0b00000011) {
             if (attached(1)) {
-                drawSpritePairNew<1>();
+                drawAttachedSpritePair<1>();
             } else {
-                if (armed & 0b00000010) drawSpriteNew<1>();
-                if (armed & 0b00000001) drawSpriteNew<0>();
+                if (armed & 0b00000010) drawSprite<1>();
+                if (armed & 0b00000001) drawSprite<0>();
             }
         }
     }
+
+    sprRegChanges.clear();
+}
+*/
+
+void
+Denise::drawSprites()
+{
+    if (config.emulateSprites) {
+
+        if (armed & 0b11000000) drawSpritePair<7>();
+        if (armed & 0b00110000) drawSpritePair<5>();
+        if (armed & 0b00001100) drawSpritePair<3>();
+        if (armed & 0b00000011) drawSpritePair<1>();
+    }
+
+    sprRegChanges.clear();
 }
 
 template <int x> void
-Denise::drawSprite()
+Denise::drawSpritePair()
+{
+    assert(x >= 0 && x <= 7);
+    assert(IS_ODD(x));
+
+    // Check for quick exit
+    if (spriteClipBegin == HPIXELS) return;
+
+    int start1 = 2 + 2 * sprhstrt[x-1];
+    int start2 = 2 + 2 * sprhstrt[x];
+    bool armed1 = GET_BIT(armed,x-1);
+    bool armed2 = GET_BIT(armed,x);
+    bool at = attached(x);
+    assert(armed1 || armed2);
+
+    for (int hpos = 0; hpos < sizeof(iBuffer) - 1; hpos += 2) {
+
+        if (hpos == start1 && armed1) {
+            ssra[x-1] = sprdata[x-1];
+            ssrb[x-1] = sprdatb[x-1];
+        }
+        if (hpos == start2 && armed2) {
+            ssra[x] = sprdata[x];
+            ssrb[x] = sprdatb[x];
+        }
+
+        if (ssra[x-1] | ssrb[x-1] | ssra[x] | ssrb[x]) {
+            if (hpos >= spriteClipBegin && hpos < spriteClipEnd) {
+                if (at) {
+                    drawAttachedSpritePixelPair<x>(hpos);
+                } else {
+                    drawSpritePixel<x-1>(hpos);
+                    drawSpritePixel<x>(hpos);
+                }
+            }
+            ssra[x-1] <<= 1;
+            ssrb[x-1] <<= 1;
+            ssra[x] <<= 1;
+            ssrb[x] <<= 1;
+        }
+    }
+
+    // Perform collision checks (if enabled)
+    if (config.clxSprSpr) checkS2SCollisions<x>(start1, start1 + 31);
+    if (config.clxSprPlf) checkS2PCollisions<x>(start1, start1 + 31);
+}
+
+
+/*
+template <int x> void
+Denise::drawSpriteOld()
 {
     assert(x >= 0 && x <= 7);
 
@@ -748,9 +840,11 @@ Denise::drawSprite()
     if (config.clxSprSpr) checkS2SCollisions<x>(start, end);
     if (config.clxSprPlf) checkS2PCollisions<x>(start, end);
 }
+*/
 
+/*
 template <int x> void
-Denise::drawSpritePair()
+Denise::drawSpritePairOld()
 {
     assert(x >= 1 && x <= 7);
     assert(IS_ODD(x));
@@ -790,6 +884,7 @@ Denise::drawSpritePair()
     if (config.clxSprSpr) checkS2SCollisions<x>(start, end);
     if (config.clxSprPlf) checkS2PCollisions<x>(start, end);
 }
+*/
 
 template <int x> void
 Denise::drawSpritePixel(int hpos)
@@ -814,7 +909,7 @@ Denise::drawSpritePixel(int hpos)
 }
 
 template <int x> void
-Denise::drawAttachedSpritePixel(int hpos)
+Denise::drawAttachedSpritePixelPair(int hpos)
 {
     assert(IS_ODD(x));
     assert(hpos >= spriteClipBegin);
@@ -847,7 +942,7 @@ Denise::drawAttachedSpritePixel(int hpos)
 }
 
 template <int x> void
-Denise::drawSpriteNew()
+Denise::drawSprite()
 {
     assert(x >= 0 && x <= 7);
 
@@ -879,7 +974,7 @@ Denise::drawSpriteNew()
 }
 
 template <int x> void
-Denise::drawSpritePairNew()
+Denise::drawAttachedSpritePair()
 {
     assert(x >= 0 && x <= 7);
     assert(IS_ODD(x));
@@ -905,7 +1000,7 @@ Denise::drawSpritePairNew()
 
         if (ssra[x-1] | ssrb[x-1] | ssra[x] | ssrb[x]) {
             if (hpos >= spriteClipBegin && hpos < spriteClipEnd) {
-                drawAttachedSpritePixel<x>(hpos);
+                drawAttachedSpritePixelPair<x>(hpos);
             }
             ssra[x-1] <<= 1;
             ssrb[x-1] <<= 1;

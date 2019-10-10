@@ -93,6 +93,10 @@ public:
     // Ringbuffer recording control register changes
     ChangeRecorder<128> conRegChanges;
 
+    // Ringbuffer recording sprite register changes
+    ChangeRecorder<128> sprRegChanges;
+
+
     //
     // Sprites
     //
@@ -275,6 +279,7 @@ public:
         & scrollHiresOdd
         & scrollHiresEven
         & conRegChanges
+        & sprRegChanges
 
         & sprhstrt
         & ssra
@@ -482,15 +487,16 @@ public:
      * This method is called at the end of each rasterline.
      */
     void drawSprites();
-    template <int x> void drawSprite();
     template <int x> void drawSpritePair();
+    // template <int x> void drawSpriteOld();
+    // template <int x> void drawSpritePairOld();
 
-    template <int x> void drawSpriteNew();
-    template <int x> void drawSpritePairNew();
+    template <int x> void drawSprite();
+    template <int x> void drawAttachedSpritePair();
 
     // Draws a single sprite pixel
     template <int x> void drawSpritePixel(int hpos);
-    template <int x> void drawAttachedSpritePixel(int hpos);
+    template <int x> void drawAttachedSpritePixelPair(int hpos);
 
     /* Draws the left and the right border.
      * This method is called at the end of each rasterline.
