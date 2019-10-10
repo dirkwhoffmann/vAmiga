@@ -794,12 +794,12 @@ Denise::drawSpritePair()
 template <int x> void
 Denise::drawSpritePixel(int pixel, int hpos)
 {
-    assert(pixel >= 0 && pixel < 16);
+    assert(pixel >= 0 && pixel <= 15);
     assert(hpos >= spriteClipBegin);
     assert(hpos < spriteClipEnd);
 
-    uint8_t a = !!GET_BIT(sprdata[x], 15 - pixel);
-    uint8_t b = !!GET_BIT(sprdatb[x], 15 - pixel);
+    uint8_t a = !!GET_BIT(sprdata[x], pixel);
+    uint8_t b = !!GET_BIT(sprdatb[x], pixel);
     uint8_t col = (b << 1) | a;
 
     if (col) {
@@ -824,10 +824,16 @@ Denise::drawSpriteNew()
 
     int start = 2 + 2 * sprhstrt[x];
     int end = start + 31;
+    int cnt = 0;
 
-    for (int i = 0, hpos = start; i < 16; i++, hpos += 2) {
-        if (hpos >= spriteClipBegin && hpos < spriteClipEnd) {
-            drawSpritePixel<x>(i, hpos);
+    for (int hpos = 0; hpos < sizeof(iBuffer) - 1; hpos += 2) {
+
+        if (hpos == start) cnt = 16;
+
+        if (cnt) {
+            if (hpos >= spriteClipBegin && hpos < spriteClipEnd) {
+                drawSpritePixel<x>(--cnt, hpos);
+            }
         }
     }
 
