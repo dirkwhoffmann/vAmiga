@@ -1532,7 +1532,8 @@ Agnus::execute()
 
     // Advance the internal clock and the horizontal counter
     clock += DMA_CYCLES(1);
-    pos.h = (pos.h + 1) % HPOS_CNT;
+    pos.h++;
+    // pos.h = pos.h < HPOS_MAX ? pos.h + 1 : 0; // (pos.h + 1) % HPOS_CNT;
 
     // If this assertion hits, the HSYNC event hasn't been served
     /*
@@ -1743,7 +1744,7 @@ Agnus::executeSecondSpriteCycle()
 void
 Agnus::hsyncHandler()
 {
-    assert(pos.h == 0);
+    assert(pos.h == 0 || pos.h == HPOS_MAX + 1);
 
     // Let Denise draw the current line
     denise.endOfLine(pos.v);
