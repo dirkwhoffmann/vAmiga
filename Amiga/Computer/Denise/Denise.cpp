@@ -671,8 +671,8 @@ Denise::drawSprites()
             if (attached(7)) {
                 drawSpritePair<7>();
             } else {
-                if (armed & 0b10000000) drawSprite<7>();
-                if (armed & 0b01000000) drawSprite<6>();
+                if (armed & 0b10000000) drawSpriteNew<7>();
+                if (armed & 0b01000000) drawSpriteNew<6>();
             }
         }
 
@@ -681,8 +681,8 @@ Denise::drawSprites()
             if (attached(5)) {
                 drawSpritePair<5>();
             } else {
-                if (armed & 0b00100000) drawSprite<5>();
-                if (armed & 0b00010000) drawSprite<4>();
+                if (armed & 0b00100000) drawSpriteNew<5>();
+                if (armed & 0b00010000) drawSpriteNew<4>();
             }
         }
 
@@ -691,8 +691,8 @@ Denise::drawSprites()
             if (attached(3)) {
                 drawSpritePair<3>();
             } else {
-                if (armed & 0b00001000) drawSprite<3>();
-                if (armed & 0b00000100) drawSprite<2>();
+                if (armed & 0b00001000) drawSpriteNew<3>();
+                if (armed & 0b00000100) drawSpriteNew<2>();
             }
         }
 
@@ -701,13 +701,11 @@ Denise::drawSprites()
             if (attached(1)) {
                 drawSpritePair<1>();
             } else {
-                if (armed & 0b00000010) drawSprite<1>();
-                if (armed & 0b00000001) drawSprite<0>();
+                if (armed & 0b00000010) drawSpriteNew<1>();
+                if (armed & 0b00000001) drawSpriteNew<0>();
             }
         }
     }
-
-    // armed = 0;
 }
 
 template <int x> void
@@ -718,9 +716,7 @@ Denise::drawSprite()
     // Check for a quick-exit
     if (spriteClipBegin == HPIXELS) return;
 
-    const uint16_t depth[8] = { Z_SP0, Z_SP1, Z_SP2, Z_SP3, Z_SP4, Z_SP5, Z_SP6, Z_SP7 };
-    uint16_t z = depth[x];
-    assert(z == Z_SP[x]);
+    uint16_t z = Z_SP[x];
 
     uint32_t d1 = (uint32_t)sprdatb[x] << 1;
     uint32_t d0 = (uint32_t)sprdata[x] << 0;
@@ -788,6 +784,51 @@ Denise::drawSpritePair()
         d2 >>= 1;
         d1 >>= 1;
         d0 >>= 1;
+    }
+
+    // Perform collision checks (if enabled)
+    if (config.clxSprSpr) checkS2SCollisions<x>(start, end);
+    if (config.clxSprPlf) checkS2PCollisions<x>(start, end);
+}
+
+template <int x> void
+Denise::drawSpritePixel(int pixel, int hpos)
+{
+    assert(pixel >= 0 && pixel < 16);
+    assert(hpos >= spriteClipBegin);
+    assert(hpos < spriteClipEnd);
+
+    uint8_t a = !!GET_BIT(sprdata[x], 15 - pixel);
+    uint8_t b = !!GET_BIT(sprdatb[x], 15 - pixel);
+    uint8_t col = (b << 1) | a;
+
+    if (col) {
+
+        uint16_t z = Z_SP[x];
+        int base = 16 + 2 * (x & 6);
+
+        if (z > zBuffer[hpos]) iBuffer[hpos] = base | col;
+        if (z > zBuffer[hpos + 1]) iBuffer[hpos + 1] = base | col;
+        zBuffer[hpos] |= z;
+        zBuffer[hpos + 1] |= z;
+    }
+}
+
+template <int x> void
+Denise::drawSpriteNew()
+{
+    assert(x >= 0 && x <= 7);
+
+    // Check for a quick-exit
+    if (spriteClipBegin == HPIXELS) return;
+
+    int start = 2 + 2 * sprhstrt[x];
+    int end = start + 31;
+
+    for (int i = 0, hpos = start; i < 16; i++, hpos += 2) {
+        if (hpos >= spriteClipBegin && hpos < spriteClipEnd) {
+            drawSpritePixel<x>(i, hpos);
+        }
     }
 
     // Perform collision checks (if enabled)

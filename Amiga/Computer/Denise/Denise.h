@@ -483,6 +483,11 @@ public:
     template <int x> void drawSprite();
     template <int x> void drawSpritePair();
 
+    template <int x> void drawSpriteNew();
+
+    // Draws a single sprite pixel
+    template <int x> void drawSpritePixel(int pixel, int hpos);
+
     /* Draws the left and the right border.
      * This method is called at the end of each rasterline.
      */
