@@ -806,17 +806,7 @@ Agnus::pokeDMACON(uint16_t value)
 {
     debug(DMA_DEBUG, "pokeDMACON(%X)\n", value);
 
-    // Compute new value
-    /*
-    if (value & 0x8000) {
-        newValue = (dmacon | value) & 0x07FF;
-    } else {
-        newValue = (dmacon & ~value) & 0x07FF;
-    }
-    */
-
     // Record the change
-    // debug("REG_DMACON %X\n", value);
     recordRegisterChange(DMA_CYCLES(2), REG_DMACON, value);
 
 }
@@ -824,6 +814,8 @@ Agnus::pokeDMACON(uint16_t value)
 void
 Agnus::setDMACON(uint16_t oldValue, uint16_t value)
 {
+    debug(DMA_DEBUG, "setDMACON(%x, %x)\n", oldValue, value);
+
     // Compute new value
     uint16_t newValue;
     if (value & 0x8000) {
@@ -831,6 +823,8 @@ Agnus::setDMACON(uint16_t oldValue, uint16_t value)
     } else {
         newValue = (dmacon & ~value) & 0x07FF;
     }
+
+    if (oldValue == newValue) return;
 
     dmacon = newValue;
 
