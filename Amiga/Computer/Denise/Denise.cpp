@@ -316,6 +316,7 @@ Denise::pokeSPRxPOS(uint16_t value)
 
     // Record the register change
     if (sprRegChanges.isEmpty()) sprRegChanges.add(0, tag, oldValue);
+    // debug("Adding x = %d trigger = %d tag = %d value = %d\n", x, 4 * agnus.pos.h, tag, sprhstrt[x]);
     sprRegChanges.add(4 * agnus.pos.h, tag, sprhstrt[x]);
 
     // Update debugger info
@@ -739,7 +740,7 @@ Denise::drawSprites()
 void
 Denise::drawSprites()
 {
-    if (config.emulateSprites) {
+    if (armed && config.emulateSprites) {
 
         if (armed & 0b11000000) drawSpritePair<7>();
         if (armed & 0b00110000) drawSpritePair<5>();
@@ -759,20 +760,67 @@ Denise::drawSpritePair()
     // Check for quick exit
     if (spriteClipBegin == HPIXELS) return;
 
-    int start1 = 2 + 2 * sprhstrt[x-1];
-    int start2 = 2 + 2 * sprhstrt[x];
+    int strt1 = 2 + 2 * sprhstrt[x-1];
+    int strt2 = 2 + 2 * sprhstrt[x];
     bool armed1 = GET_BIT(armed,x-1);
     bool armed2 = GET_BIT(armed,x);
     bool at = attached(x);
-    assert(armed1 || armed2);
+    int strt = 0;
 
-    for (int hpos = 0; hpos < sizeof(iBuffer) - 1; hpos += 2) {
+    // Iterate over all recorded register changes
+    if (!sprRegChanges.isEmpty()) {
 
-        if (hpos == start1 && armed1) {
+        // sprRegChanges.dump();
+
+        for (int i = sprRegChanges.begin(); i != sprRegChanges.end(); i = sprRegChanges.next(i)) {
+
+            Change &change = sprRegChanges.change[i];
+
+            // Draw a chunk of pixels
+            drawSpritePair<x>(strt, change.trigger, strt1, strt2, armed1, armed2, at);
+            strt = change.trigger;
+
+            // Apply the recorded change
+            switch (change.addr) {
+
+                case SPR_HPOS0: sprhstrt[0] = change.value; break;
+                case SPR_HPOS1: sprhstrt[1] = change.value; break;
+                case SPR_HPOS2: sprhstrt[2] = change.value; break;
+                case SPR_HPOS3: sprhstrt[3] = change.value; break;
+                case SPR_HPOS4: sprhstrt[4] = change.value; break;
+                case SPR_HPOS5: sprhstrt[5] = change.value; break;
+                case SPR_HPOS6: sprhstrt[6] = change.value; break;
+                case SPR_HPOS7: sprhstrt[7] = change.value; break;
+
+                default:
+                    assert(false);
+                    break;
+            }
+
+            strt1 = 2 + 2 * sprhstrt[x-1];
+            strt2 = 2 + 2 * sprhstrt[x];
+        }
+    }
+
+    // Draw until the end of the line
+    drawSpritePair<x>(strt, sizeof(iBuffer) - 1, strt1, strt2, armed1, armed2, at);
+}
+
+template <int x> void
+Denise::drawSpritePair(int hstrt, int hstop,
+                       int strt1, int strt2,
+                       bool armed1, bool armed2, bool at)
+{
+    assert(hstrt >= 0 && hstrt <= sizeof(iBuffer));
+    assert(hstop >= 0 && hstop <= sizeof(iBuffer));
+
+    for (int hpos = hstrt; hpos < hstop; hpos += 2) {
+
+        if (hpos == strt1 && armed1) {
             ssra[x-1] = sprdata[x-1];
             ssrb[x-1] = sprdatb[x-1];
         }
-        if (hpos == start2 && armed2) {
+        if (hpos == strt2 && armed2) {
             ssra[x] = sprdata[x];
             ssrb[x] = sprdatb[x];
         }
@@ -794,97 +842,9 @@ Denise::drawSpritePair()
     }
 
     // Perform collision checks (if enabled)
-    if (config.clxSprSpr) checkS2SCollisions<x>(start1, start1 + 31);
-    if (config.clxSprPlf) checkS2PCollisions<x>(start1, start1 + 31);
+    if (config.clxSprSpr) checkS2SCollisions<x>(strt1, strt1 + 31);
+    if (config.clxSprPlf) checkS2PCollisions<x>(strt1, strt1 + 31);
 }
-
-
-/*
-template <int x> void
-Denise::drawSpriteOld()
-{
-    assert(x >= 0 && x <= 7);
-
-    // Check for a quick-exit
-    if (spriteClipBegin == HPIXELS) return;
-
-    uint16_t z = Z_SP[x];
-
-    uint32_t d1 = (uint32_t)sprdatb[x] << 1;
-    uint32_t d0 = (uint32_t)sprdata[x] << 0;
-
-    int baseCol = 16 + 2 * (x & 6);
-
-    int start = 2 + 2 * sprhstrt[x];
-    int end = start + 31;
-
-    for (int pos = end; pos >= start; pos -= 2) {
-
-        if (pos >= spriteClipBegin && pos < spriteClipEnd) {
-
-            int col = (d1 & 0b0010) | (d0 & 0b0001);
-
-            if (col) {
-                if (z > zBuffer[pos]) iBuffer[pos] = baseCol | col;
-                if (z > zBuffer[pos-1]) iBuffer[pos-1] = baseCol | col;
-                zBuffer[pos] |= z;
-                zBuffer[pos-1] |= z;
-            }
-        }
-
-        d1 >>= 1;
-        d0 >>= 1;
-    }
-
-    // Perform collision checks (if enabled)
-    if (config.clxSprSpr) checkS2SCollisions<x>(start, end);
-    if (config.clxSprPlf) checkS2PCollisions<x>(start, end);
-}
-*/
-
-/*
-template <int x> void
-Denise::drawSpritePairOld()
-{
-    assert(x >= 1 && x <= 7);
-    assert(IS_ODD(x));
-
-    uint16_t z = Z_SP[x];
-
-    uint32_t d3 = (uint32_t)sprdatb[x]   << 3;
-    uint32_t d2 = (uint32_t)sprdata[x]   << 2;
-    uint32_t d1 = (uint32_t)sprdatb[x-1] << 1;
-    uint32_t d0 = (uint32_t)sprdata[x-1] << 0;
-
-    int start = 2 + 2 * sprhstrt[x];
-    int end = MIN(start + 31, LAST_PIXEL);
-
-    for (int pos = end; pos >= start; pos -= 2) {
-
-        int col = (d3 & 0b1000) | (d2 & 0b0100) | (d1 & 0b0010) | (d0 & 0b0001);
-
-        if (col) {
-            if (z > zBuffer[pos]) {
-                iBuffer[pos] = 0b10000 | col;
-                zBuffer[pos] |= z;
-            }
-            if (z > zBuffer[pos-1]) {
-                iBuffer[pos-1] = 0b10000 | col;
-                zBuffer[pos-1] |= z;
-            }
-        }
-
-        d3 >>= 1;
-        d2 >>= 1;
-        d1 >>= 1;
-        d0 >>= 1;
-    }
-
-    // Perform collision checks (if enabled)
-    if (config.clxSprSpr) checkS2SCollisions<x>(start, end);
-    if (config.clxSprPlf) checkS2PCollisions<x>(start, end);
-}
-*/
 
 template <int x> void
 Denise::drawSpritePixel(int hpos)
@@ -1241,7 +1201,7 @@ Denise::endOfLine(int vpos)
         translate();
 
         // Draw sprites if at least one is armed
-        if (armed) drawSprites();
+        drawSprites();
 
         // Draw border pixels
         drawBorder();

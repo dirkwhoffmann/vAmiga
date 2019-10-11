@@ -488,6 +488,11 @@ public:
      */
     void drawSprites();
     template <int x> void drawSpritePair();
+
+    template <int x> void drawSpritePair(int hstrt, int hstop,
+                                         int strt1, int strt2,
+                                         bool armed1, bool armed2, bool at);
+    
     // template <int x> void drawSpriteOld();
     // template <int x> void drawSpritePairOld();
 
