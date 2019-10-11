@@ -808,7 +808,6 @@ Agnus::pokeDMACON(uint16_t value)
 
     // Record the change
     recordRegisterChange(DMA_CYCLES(2), REG_DMACON, value);
-
 }
 
 void
@@ -925,7 +924,6 @@ Agnus::setDMACON(uint16_t oldValue, uint16_t value)
     // Sprite DMA
     if (oldSPREN ^ newSPREN) {
 
-        /*
         if (newSPREN) {
             // Sprite DMA on
             debug(DMA_DEBUG, "Sprite DMA switched on\n");
@@ -934,8 +932,8 @@ Agnus::setDMACON(uint16_t oldValue, uint16_t value)
             
             // Sprite DMA off
             debug(DMA_DEBUG, "Sprite DMA switched off\n");
+            for (int i = 0; i < 8; i++) sprDmaState[i] = SPR_DMA_IDLE;
         }
-        */
     }
     
     // Disk DMA (only the master bit is checked)

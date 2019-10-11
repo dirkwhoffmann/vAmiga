@@ -103,11 +103,7 @@ static inline bool isBusOwner(long value) { return value >= 0 && value < BUS_OWN
 typedef enum
 {
     SPR_DMA_IDLE,
-    SPR_DMA_DATA, 
-    
-    SPR_FETCH_CONFIG, // DEPRECATED
-    SPR_WAIT_VSTART, // DEPRECATED
-    SPR_FETCH_DATA // DEPRECATED
+    SPR_DMA_DATA
 }
 SprDMAState;
 
