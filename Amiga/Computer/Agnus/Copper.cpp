@@ -80,9 +80,11 @@ Copper::pokeCOPJMP1()
     switchToCopperList(1);
 
     // Continue Copper execution if it was waiting
+    /*
     if (agnus.hasEvent<COP_SLOT>(COP_REQ_DMA)) {
         agnus.scheduleImm<COP_SLOT>(COP_REQ_DMA);
     }
+    */
 }
 
 void
@@ -91,9 +93,12 @@ Copper::pokeCOPJMP2()
     debug(COPREG_DEBUG, "pokeCOPJMP2(): Jumping to %X\n", cop2lc);
     switchToCopperList(2);
 
+    // Continue Copper execution if it was waiting
+    /*
     if (agnus.hasEvent<COP_SLOT>(COP_REQ_DMA)) {
         agnus.scheduleImm<COP_SLOT>(COP_REQ_DMA);
     }
+    */
 }
 
 void
@@ -123,17 +128,6 @@ Copper::pokeCOP1LCH(uint16_t value)
     if (HI_WORD(cop1lc) != value) {
         cop1lc = REPLACE_HI_WORD(cop1lc, value);
     }
-
-    // Update program counter if DMA is off
-    /* THIS IS NOT 100% CORRECT. IN WINFELLOW, THE PC IS ONLY WRITTEN TO IF
-     * DMA WAS OFF SINCE THE LAST VSYNC EVENT (?!). NEED A TEST CASE FOR THIS.
-     */
-    /*
-    if (!agnus.copDMA()) {
-        debug("pokeCOP1LCH(%x) Copper DMA is off\n", value);
-        switchToCopperList(1);
-    }
-    */
 }
 
 void
@@ -144,17 +138,6 @@ Copper::pokeCOP1LCL(uint16_t value)
     if (LO_WORD(cop1lc) != value) {
         cop1lc = REPLACE_LO_WORD(cop1lc, value & 0xFFFE);
     }
-
-    // Update program counter if DMA is off
-    /* THIS IS NOT 100% CORRECT. IN WINFELLOW, THE PC IS ONLY WRITTEN TO IF
-     * DMA WAS OFF SINCE THE LAST VSYNC EVENT (?!). NEED A TEST CASE FOR THIS.
-     */
-    /*
-    if (!agnus.copDMA()) {
-        debug("pokeCOP1LCL(%x) Copper DMA is off\n", value);
-        switchToCopperList(1);
-    }
-    */
 }
 
 void
@@ -181,9 +164,6 @@ void
 Copper::pokeNOOP(uint16_t value)
 {
     debug(COPREG_DEBUG, "pokeNOOP(%04X)\n", value);
-
-    // REMOVE ASAP
-    // verbose = !verbose;
 }
 
 void
@@ -193,7 +173,7 @@ Copper::switchToCopperList(int nr)
 
     coppc = (nr == 1) ? cop1lc : cop2lc;
     copList = nr;
-    agnus.scheduleRel<COP_SLOT>(0, COP_FETCH);
+    agnus.scheduleRel<COP_SLOT>(0, COP_REQ_DMA);
 }
 
 bool
