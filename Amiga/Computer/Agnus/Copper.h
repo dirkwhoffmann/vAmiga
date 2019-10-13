@@ -284,6 +284,9 @@ public:
     // Disassembles a single Copper command
     char *disassemble(uint32_t addr);
     char *disassemble(unsigned list, uint32_t offset);
+
+    // Dumps a Copper list
+    void dumpCopperList(unsigned list, unsigned length); 
 };
 
 #endif 

@@ -171,9 +171,16 @@ Copper::switchToCopperList(int nr)
 {
     assert(nr == 1 || nr == 2);
 
+    // debug("switchToCopperList(%d) coppc: %x -> %x\n", nr, coppc, (nr == 1) ? cop1lc : cop2lc);
     coppc = (nr == 1) ? cop1lc : cop2lc;
     copList = nr;
     agnus.scheduleRel<COP_SLOT>(0, COP_REQ_DMA);
+
+    /*
+    if (cop1lc == 0x15e00) {
+        dumpCopperList(1, 140);
+    }
+    */
 }
 
 bool
@@ -850,4 +857,12 @@ Copper::disassemble(unsigned list, uint32_t offset)
     addr = (addr + 2 * offset) & 0x7FFFF;
 
     return disassemble(addr);
+}
+
+void
+Copper::dumpCopperList(unsigned list, unsigned length)
+{
+    for (unsigned i = 0; i < length; i++) {
+        printf("%s\n", disassemble(list, 2*i));
+    }
 }

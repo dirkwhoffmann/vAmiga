@@ -48,7 +48,7 @@ template <uint16_t capacity> struct ChangeRecorder
     uint16_t w;
 
     // Constructor
-    ChangeRecorder() : r(0), w(0) { printf("Constructor\n"); dumpAll(); }
+    ChangeRecorder() : r(0), w(0) { }
 
     // Moves a pointer back or forth
     static uint16_t advance(uint16_t p, int offset) { return (capacity + p + offset) % capacity; }
