@@ -128,7 +128,12 @@ Copper::pokeCOP1LCH(uint16_t value)
     /* THIS IS NOT 100% CORRECT. IN WINFELLOW, THE PC IS ONLY WRITTEN TO IF
      * DMA WAS OFF SINCE THE LAST VSYNC EVENT (?!). NEED A TEST CASE FOR THIS.
      */
-    if (!agnus.copDMA()) switchToCopperList(1);
+    /*
+    if (!agnus.copDMA()) {
+        debug("pokeCOP1LCH(%x) Copper DMA is off\n", value);
+        switchToCopperList(1);
+    }
+    */
 }
 
 void
@@ -144,7 +149,12 @@ Copper::pokeCOP1LCL(uint16_t value)
     /* THIS IS NOT 100% CORRECT. IN WINFELLOW, THE PC IS ONLY WRITTEN TO IF
      * DMA WAS OFF SINCE THE LAST VSYNC EVENT (?!). NEED A TEST CASE FOR THIS.
      */
-    if (!agnus.copDMA()) switchToCopperList(1);
+    /*
+    if (!agnus.copDMA()) {
+        debug("pokeCOP1LCL(%x) Copper DMA is off\n", value);
+        switchToCopperList(1);
+    }
+    */
 }
 
 void
@@ -183,6 +193,7 @@ Copper::switchToCopperList(int nr)
 
     coppc = (nr == 1) ? cop1lc : cop2lc;
     copList = nr;
+    agnus.scheduleRel<COP_SLOT>(0, COP_FETCH);
 }
 
 bool
