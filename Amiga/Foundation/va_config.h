@@ -75,12 +75,12 @@ static const int BLT_CHECKSUM  = 2;  // Blitter checksums
 
 // Additional debugging aids (uncomment to enable)
 
-// #define BOOT_DISK "/Users/hoff/Dropbox/Amiga/Diagnose/AmigaTestKit.adf"
+// #define BOOT_DISK "/Users/hoff/Dropbox/Amiga/Demos/kyrios.adf"
 #define HARD_RESET       // Restore the initial power up state in reset()
 // #define BORDER_DEBUG     // Draws the border in debug colors
 // #define PIXEL_DEBUG      // Highlight first pixel in each 16-bit pixel chunk
 // #define LINE_DEBUG       // Colorizes certain rasterlines
-// #define ALIGN_DRIVE_HEAD // Makes drive operations deterministic
+#define ALIGN_DRIVE_HEAD // Makes drive operations deterministic
 // #define SLOW_BLT_DEBUG   // Execute all slow Blitter instructions in one chunk
 #define AGNUS_EXEC_DEBUG // Falls back to a simpler Agnus execution function
 

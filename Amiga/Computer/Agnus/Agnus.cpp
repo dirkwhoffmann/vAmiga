@@ -1328,10 +1328,14 @@ Agnus::computeDDFStop()
 template <int x> void
 Agnus::pokeBPLxPTH(uint16_t value)
 {
-    debug(BPLREG_DEBUG, "pokeBPL%dPTH($%d) (%X)\n", x, value, value);
+    // debug(BPLREG_DEBUG, "pokeBPL%dPTH($%d) (%X)\n", x, value, value);
+    // if (x == 1) plaindebug("pokeBPL%dPTH(%x)\n", x, value);
 
     // Check if the written value gets lost
-    if (skipBPLxPT(x)) return;
+    if (skipBPLxPT(x)) {
+        debug("BPLxPTH gets lost\n");
+        return;
+    }
 
     // Schedule the register updated
     switch (x) {
@@ -1347,10 +1351,14 @@ Agnus::pokeBPLxPTH(uint16_t value)
 template <int x> void
 Agnus::pokeBPLxPTL(uint16_t value)
 {
-    debug(BPLREG_DEBUG, "pokeBPL%dPTL(%d) ($%X)\n", x, value, value);
+    // debug(BPLREG_DEBUG, "pokeBPL%dPTL(%d) ($%X)\n", x, value, value);
+    // if (x == 1) plaindebug("pokeBPL%dPTL(%x)\n", x, value);
 
     // Check if the written value gets lost
-    if (skipBPLxPT(x)) return;
+    if (skipBPLxPT(x)) {
+        debug("BPLxPTL gets lost\n");
+        return;
+    }
 
     // Schedule the register updated
     switch (x) {

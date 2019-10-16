@@ -520,7 +520,10 @@ Amiga::_powerOn()
 #ifdef BOOT_DISK
 
     ADFFile *adf = ADFFile::makeWithFile(BOOT_DISK);
-    if (adf) df0.insertDisk(adf);
+    if (adf) {
+        Disk *disk = Disk::makeWithFile(adf);
+        df0.insertDisk(disk);
+    }
 
 #endif
 

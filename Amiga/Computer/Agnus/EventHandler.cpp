@@ -546,7 +546,7 @@ Agnus::serviceBPLEvent()
             }
 
             if(unlikely(isLastHx(pos.h))) {
-                denise.drawHires(16 + denise.scrollHiresOdd);
+                denise.drawHires(16 + denise.scrollHiresMax);
                 addBPLMOD<0>();
             } else {
                 denise.drawHires(16);
@@ -562,7 +562,7 @@ Agnus::serviceBPLEvent()
             }
 
             if(unlikely(isLastLx(pos.h))) {
-                denise.drawLores(16 + denise.scrollLoresOdd);
+                denise.drawLores(16 + denise.scrollLoresMax);
                 addBPLMOD<0>();
             } else {
                 denise.drawLores(16);

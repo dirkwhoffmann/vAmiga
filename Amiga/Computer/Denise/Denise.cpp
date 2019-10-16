@@ -227,10 +227,12 @@ Denise::setBPLCON1(uint16_t value)
     bplcon1 = value & 0xFF;
 
     // Compute scroll values
-    scrollLoresOdd  = (bplcon1 & 0b00001111);
+    scrollLoresOdd  = bplcon1 & 0b00001111;
     scrollLoresEven = (bplcon1 & 0b11110000) >> 4;
-    scrollHiresEven = (bplcon1 & 0b00000111) << 1;
-    scrollHiresOdd  = (bplcon1 & 0b01110000) >> 3;
+    scrollLoresMax = MAX(scrollLoresOdd, scrollLoresEven);
+    scrollHiresOdd = (scrollLoresOdd << 1) & 0xF;
+    scrollHiresEven = (scrollLoresEven << 1) & 0xF;
+    scrollHiresMax = MAX(scrollHiresOdd, scrollHiresEven);
 }
 
 void
@@ -470,8 +472,15 @@ Denise::draw(int pixels)
         spriteClipBegin = currentPixel - 2;
     }
 
-    uint32_t maskOdd = 0x8000 << scrollLoresOdd * (HIRES ? 2 : 1);
-    uint32_t maskEven = 0x8000 << scrollLoresEven * (HIRES ? 2 : 1);
+    uint32_t maskOdd, maskEven;
+
+    if (HIRES) {
+        maskOdd = 0x8000 << scrollHiresOdd;
+        maskEven = 0x8000 << scrollHiresEven;
+    } else {
+        maskOdd = 0x8000 << scrollLoresOdd;
+        maskEven = 0x8000 << scrollLoresEven;
+    }
 
     for (int i = 0; i < pixels; i++) {
 
@@ -1177,6 +1186,9 @@ Denise::beginOfLine(int vpos)
     initialBplcon0 = bplcon0;
     initialBplcon1 = bplcon1;
     initialBplcon2 = bplcon2;
+
+    // Prepare the biplane shift registers
+    for (int i = 0; i < 6; i++) shiftReg[i] &= 0xFFFF;
 
     // Clear the bBuffer
     memset(bBuffer, 0, sizeof(bBuffer));

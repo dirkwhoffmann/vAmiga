@@ -80,8 +80,10 @@ public:
     // Scroll values (set in pokeBPLCON1())
     int8_t scrollLoresOdd;
     int8_t scrollLoresEven;
+    int8_t scrollLoresMax;
     int8_t scrollHiresOdd;
     int8_t scrollHiresEven;
+    int8_t scrollHiresMax;
 
 
     //
@@ -276,8 +278,10 @@ public:
         & shiftReg
         & scrollLoresOdd
         & scrollLoresEven
+        & scrollLoresMax
         & scrollHiresOdd
         & scrollHiresEven
+        & scrollHiresMax
         & conRegChanges
         & sprRegChanges
 

@@ -715,13 +715,14 @@ Blitter::startBlit()
     } else {
 
         copycount++;
-        if (bltsizeW != 1 || bltsizeH != 4) {
-        debug(BLT_CHECKSUM, "BLITTER Blit %d (%d,%d) (%d%d%d%d) (%d %d %d %d) %x %x %x %x %s%s\n",
-                   copycount, bltsizeW, bltsizeH,
-                   bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
-                   bltamod, bltbmod, bltcmod, bltdmod,
-                   bltapt, bltbpt, bltcpt, bltdpt,
-                   bltconDESC() ? "D" : "", bltconFE() ? "F" : "");
+        // if (bltsizeW != 1 || bltsizeH != 4)
+        {
+            plaindebug(BLT_CHECKSUM, "BLITTER Blit %d (%d,%d) (%d%d%d%d) (%d %d %d %d) %x %x %x %x %s%s\n",
+                       copycount, bltsizeW, bltsizeH,
+                       bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
+                       bltamod, bltbmod, bltcmod, bltdmod,
+                       bltapt, bltbpt, bltcpt, bltdpt,
+                       bltconDESC() ? "D" : "", bltconFE() ? "F" : "");
         }
         //REMOVE ASAP
         debugLevel = 1; // (copycount == 15) ? 2 : 1;
@@ -743,8 +744,9 @@ Blitter::terminate()
     agnus.cancel<BLT_SLOT>();
 
     // Dump checksums if requested
-    if (bltsizeW != 1 || bltsizeH != 4) {
-    debug(BLT_CHECKSUM, "BLITTER check1: %x check2: %x ABCD: %x %x %x %x\n", check1, check2, bltapt, bltbpt, bltcpt, bltdpt);
+    // if (bltsizeW != 1 || bltsizeH != 4)
+    {
+        plaindebug(BLT_CHECKSUM, "BLITTER check1: %x check2: %x ABCD: %x %x %x %x\n", check1, check2, bltapt, bltbpt, bltcpt, bltdpt);
     }
 }
 
