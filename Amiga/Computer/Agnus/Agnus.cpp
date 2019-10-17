@@ -1025,7 +1025,6 @@ Agnus::pokeDSKPTH(uint16_t value)
 void
 Agnus::pokeDSKPTL(uint16_t value)
 {
-    assert(IS_EVEN(value));
     dskpt = REPLACE_LO_WORD(dskpt, value & 0xFFFE);
 
     debug(DSKREG_DEBUG, "pokeDSKPTL(%X): dskpt = %X\n", value, dskpt);

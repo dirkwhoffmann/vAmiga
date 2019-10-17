@@ -338,9 +338,10 @@ Agnus::scheduleNextBplEvent(int16_t hpos)
 {
     assert(isHPos(hpos));
 
-    uint8_t next = nextDmaEvent[hpos];
-    scheduleRel<BPL_SLOT>(DMA_CYCLES(next - pos.h), dmaEvent[next]);
-
+    if ((dmaEvent[hpos]) != BPL_EOL) {
+        uint8_t next = nextDmaEvent[hpos];
+        scheduleRel<BPL_SLOT>(DMA_CYCLES(next - pos.h), dmaEvent[next]);
+    }
     assert(hasEvent<BPL_SLOT>());
 }
 

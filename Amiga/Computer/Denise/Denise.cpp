@@ -187,10 +187,11 @@ Denise::pokeBPLCON0(uint16_t value)
 void
 Denise::setBPLCON0(uint16_t oldValue, uint16_t newValue)
 {
-    debug(BPLREG_DEBUG, "pokeBPLCON0(%X,%X)\n", oldValue, newValue);
+    debug(BPLREG_DEBUG, "setBPLCON0(%X,%X)\n", oldValue, newValue);
 
     // Record the register change
-    conRegChanges.add(4 * agnus.pos.h - 4, REG_BPLCON0_DENISE, newValue);
+    int64_t pixel = MAX(4 * agnus.pos.h - 4, 0);
+    conRegChanges.add(pixel, REG_BPLCON0_DENISE, newValue);
     
     // Update value
     bplcon0 = newValue;
@@ -550,6 +551,10 @@ Denise::translate()
             translateSPF(pixel, change.trigger);
         }
         pixel = change.trigger;
+        if (pixel < 0) {
+            conRegChanges.dump();
+            assert(false);
+        }
 
         // Apply the register change
         switch (change.addr) {
