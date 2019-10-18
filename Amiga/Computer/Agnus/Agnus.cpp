@@ -1781,16 +1781,23 @@ Agnus::hsyncHandler()
     // Advance the vertical counter
     if (++pos.v >= frameInfo.numLines) vsyncHandler();
 
+    // Check sprite triggers
+    for (unsigned i = 0; i < 8; i++) {
+        if (pos.v == sprVStrt[i]) {
+            sprActive[i] = true;
+        }
+        if (pos.v == sprVStop[i] + 1) {
+            sprActive[i] = false;
+        }
+    }
+
     // Switch sprite DMA off if the last rasterline has been reached
     if (pos.v == frameInfo.numLines - 1) {
         for (unsigned i = 0; i < 8; i++) {
             sprDmaState[i] = SPR_DMA_IDLE;
+            sprActive[i] = false;
         }
     }
-
-    // Initialize variables which keep values for certain trigger positions
-    dmaconAtDDFStrt = dmacon;
-    bplcon0AtDDFStrt = bplcon0;
 
     // Check if we have reached line 25 (sprite DMA starts here)
     if (pos.v == 25) {
@@ -1800,6 +1807,10 @@ Agnus::hsyncHandler()
             for (unsigned i = 0; i < 8; i++) { sprVStop[i] = 25; }
         }
     }
+
+    // Initialize variables which keep values for certain trigger positions
+    dmaconAtDDFStrt = dmacon;
+    bplcon0AtDDFStrt = bplcon0;
 
 
     //

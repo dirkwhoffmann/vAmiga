@@ -208,6 +208,9 @@ public:
     // The current DMA states of all 8 sprites.
     SprDMAState sprDmaState[8];
 
+    // Indicates if a sprite is active in the current rasterline.
+    bool sprActive[8];
+
 
     //
     // Display Window (DIW)
@@ -495,6 +498,7 @@ public:
         & sprVStrt
         & sprVStop
         & sprDmaState
+        & sprActive
 
         & diwstrt
         & diwstop

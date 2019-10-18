@@ -112,10 +112,6 @@ public:
     // The serial shift registers of all 8 sprites.
     uint16_t ssra[8];
     uint16_t ssrb[8];
-
-    // The current DMA states aof all 8 sprites.
-    // DEPRECATED. IS HELD BY AGNUS
-    SprDMAState sprDmaState[8];
     
     // Attach control bits of all 8 sprites.
     uint8_t attach;
@@ -288,7 +284,6 @@ public:
         & sprhstrt
         & ssra
         & ssrb
-        & sprDmaState
         & attach
         & armed
         & spriteClipBegin
