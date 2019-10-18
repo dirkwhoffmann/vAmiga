@@ -929,14 +929,12 @@ Agnus::setDMACON(uint16_t oldValue, uint16_t value)
         if (newSPREN) {
             // Sprite DMA on
             debug(DMA_DEBUG, "Sprite DMA switched on\n");
-            hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
             
         } else {
             
             // Sprite DMA off
             debug(DMA_DEBUG, "Sprite DMA switched off\n");
-            // for (int i = 0; i < 8; i++) sprDmaState[i] = SPR_DMA_IDLE;
-            hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
+            for (int i = 0; i < 8; i++) sprDmaState[i] = SPR_DMA_IDLE;
         }
     }
     
@@ -1728,9 +1726,6 @@ Agnus::executeFirstSpriteCycle()
 
         // Read the next control word (POS part)
         uint16_t pos = doSpriteDMA<nr>();
-
-        // Extract vertical trigger coordinate bits from POS
-        // sprVStrt[nr] = ((pos & 0xFF00) >> 8) | (sprVStrt[nr] & 0x0100);
         agnus.pokeSPRxPOS<nr>(pos);
         denise.pokeSPRxPOS<nr>(pos);
     }
@@ -1755,10 +1750,6 @@ Agnus::executeSecondSpriteCycle()
         
         // Read the next control word (CTL part)
         uint16_t ctl = doSpriteDMA(nr);
-        
-        // Extract vertical trigger coordinate bits from CTL
-        // sprVStrt[nr] = ((ctl & 0b100) << 6) | (sprVStrt[nr] & 0x00FF);
-        // sprVStop[nr] = ((ctl & 0b010) << 7) | (ctl >> 8);
         agnus.pokeSPRxCTL<nr>(ctl);
         denise.pokeSPRxCTL<nr>(ctl);
     }
