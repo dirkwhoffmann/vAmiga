@@ -1496,65 +1496,97 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x13E >> 1: // SPR7PTL
             agnus.pokeSPRxPTL<7>(value); return;
         case 0x140 >> 1: // SPR0POS
-            denise.pokeSPRxPOS<0>(value); return;
+            agnus.pokeSPRxPOS<0>(value);
+            denise.pokeSPRxPOS<0>(value);
+            return;
         case 0x142 >> 1: // SPR0CTL
-            denise.pokeSPRxCTL<0>(value); return;
+            agnus.pokeSPRxCTL<0>(value);
+            denise.pokeSPRxCTL<0>(value);
+            return;
         case 0x144 >> 1: // SPR0DATA
             denise.pokeSPRxDATA<0>(value); return;
         case 0x146 >> 1: // SPR0DATB
             denise.pokeSPRxDATB<0>(value); return;
         case 0x148 >> 1: // SPR1POS
-            denise.pokeSPRxPOS<1>(value); return;
+            agnus.pokeSPRxPOS<1>(value);
+            denise.pokeSPRxPOS<1>(value);
+            return;
         case 0x14A >> 1: // SPR1CTL
-            denise.pokeSPRxCTL<1>(value); return;
+            agnus.pokeSPRxCTL<1>(value);
+            denise.pokeSPRxCTL<1>(value);
+            return;
         case 0x14C >> 1: // SPR1DATA
             denise.pokeSPRxDATA<1>(value); return;
         case 0x14E >> 1: // SPR1DATB
             denise.pokeSPRxDATB<1>(value); return;
         case 0x150 >> 1: // SPR2POS
-            denise.pokeSPRxPOS<2>(value); return;
+            agnus.pokeSPRxPOS<2>(value);
+            denise.pokeSPRxPOS<2>(value);
+            return;
         case 0x152 >> 1: // SPR2CTL
-            denise.pokeSPRxCTL<2>(value); return;
+            agnus.pokeSPRxCTL<2>(value);
+            denise.pokeSPRxCTL<2>(value);
+            return;
         case 0x154 >> 1: // SPR2DATA
             denise.pokeSPRxDATA<2>(value); return;
         case 0x156 >> 1: // SPR2DATB
             denise.pokeSPRxDATB<2>(value); return;
         case 0x158 >> 1: // SPR3POS
-            denise.pokeSPRxPOS<3>(value); return;
+            agnus.pokeSPRxPOS<3>(value);
+            denise.pokeSPRxPOS<3>(value);
+            return;
         case 0x15A >> 1: // SPR3CTL
-            denise.pokeSPRxCTL<3>(value); return;
+            agnus.pokeSPRxCTL<3>(value);
+            denise.pokeSPRxCTL<3>(value);
+            return;
         case 0x15C >> 1: // SPR3DATA
             denise.pokeSPRxDATA<3>(value); return;
         case 0x15E >> 1: // SPR3DATB
             denise.pokeSPRxDATB<3>(value); return;
         case 0x160 >> 1: // SPR4POS
-            denise.pokeSPRxPOS<4>(value); return;
+            agnus.pokeSPRxPOS<4>(value);
+            denise.pokeSPRxPOS<4>(value);
+            return;
         case 0x162 >> 1: // SPR4CTL
-            denise.pokeSPRxCTL<4>(value); return;
+            agnus.pokeSPRxCTL<4>(value);
+            denise.pokeSPRxCTL<4>(value);
+            return;
         case 0x164 >> 1: // SPR4DATA
             denise.pokeSPRxDATA<4>(value); return;
         case 0x166 >> 1: // SPR4DATB
             denise.pokeSPRxDATB<4>(value); return;
         case 0x168 >> 1: // SPR5POS
-            denise.pokeSPRxPOS<5>(value); return;
+            agnus.pokeSPRxPOS<5>(value);
+            denise.pokeSPRxPOS<5>(value);
+            return;
         case 0x16A >> 1: // SPR5CTL
-            denise.pokeSPRxCTL<5>(value); return;
+            agnus.pokeSPRxCTL<5>(value);
+            denise.pokeSPRxCTL<5>(value);
+            return;
         case 0x16C >> 1: // SPR5DATA
             denise.pokeSPRxDATA<5>(value); return;
         case 0x16E >> 1: // SPR5DATB
             denise.pokeSPRxDATB<5>(value); return;
         case 0x170 >> 1: // SPR6POS
-            denise.pokeSPRxPOS<6>(value); return;
+            agnus.pokeSPRxPOS<6>(value);
+            denise.pokeSPRxPOS<6>(value);
+            return;
         case 0x172 >> 1: // SPR6CTL
-            denise.pokeSPRxCTL<6>(value); return;
+            agnus.pokeSPRxCTL<6>(value);
+            denise.pokeSPRxCTL<6>(value);
+            return;
         case 0x174 >> 1: // SPR6DATA
             denise.pokeSPRxDATA<6>(value); return;
         case 0x176 >> 1: // SPR6DATB
             denise.pokeSPRxDATB<6>(value); return;
         case 0x178 >> 1: // SPR7POS
-            denise.pokeSPRxPOS<7>(value); return;
+            agnus.pokeSPRxPOS<7>(value);
+            denise.pokeSPRxPOS<7>(value);
+            return;
         case 0x17A >> 1: // SPR7CTL
-            denise.pokeSPRxCTL<7>(value); return;
+            agnus.pokeSPRxCTL<7>(value);
+            denise.pokeSPRxCTL<7>(value);
+            return;
         case 0x17C >> 1: // SPR7DATA
             denise.pokeSPRxDATA<7>(value); return;
         case 0x17E >> 1: // SPR7DATB

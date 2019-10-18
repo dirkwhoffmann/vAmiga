@@ -929,12 +929,14 @@ Agnus::setDMACON(uint16_t oldValue, uint16_t value)
         if (newSPREN) {
             // Sprite DMA on
             debug(DMA_DEBUG, "Sprite DMA switched on\n");
+            hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
             
         } else {
             
             // Sprite DMA off
             debug(DMA_DEBUG, "Sprite DMA switched off\n");
-            for (int i = 0; i < 8; i++) sprDmaState[i] = SPR_DMA_IDLE;
+            // for (int i = 0; i < 8; i++) sprDmaState[i] = SPR_DMA_IDLE;
+            hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
         }
     }
     
@@ -1466,6 +1468,23 @@ Agnus::pokeSPRxPTL(uint16_t value)
     sprpt[x] = REPLACE_LO_WORD(sprpt[x], value & 0xFFFE);
 }
 
+template <int x> void
+Agnus::pokeSPRxPOS(uint16_t value)
+{
+    debug(SPRREG_DEBUG, "pokeSPR%dPOS(%X)\n", x, value);
+
+    sprVStrt[x] = ((value & 0xFF00) >> 8) | (sprVStrt[x] & 0x0100);
+}
+
+template <int x> void
+Agnus::pokeSPRxCTL(uint16_t value)
+{
+    debug(SPRREG_DEBUG, "pokeSPR%dCTL(%X)\n", x, value);
+
+    sprVStrt[x] = ((value & 0b100) << 6) | (sprVStrt[x] & 0x00FF);
+    sprVStop[x] = ((value & 0b010) << 7) | (value >> 8);
+}
+
 void
 Agnus::pokeBPLCON0(uint16_t value)
 {
@@ -1691,18 +1710,18 @@ Agnus::updateRegisters()
 template <int nr> void
 Agnus::executeFirstSpriteCycle()
 {
-    if (nr != 0) debug(SPR_DEBUG, "executeFirstSpriteCycle<%d>\n", nr);
+    if (nr == 6) debug(SPR_DEBUG, "executeFirstSpriteCycle<%d> (%d,%d)\n", nr, sprVStrt[nr], sprVStop[nr]);
 
     // Activate sprite data DMA if the first sprite line has been reached
     if (pos.v == sprVStrt[nr]) {
         sprDmaState[nr] = SPR_DMA_DATA;
-        if (nr != 0) debug(SPR_DEBUG, "pos.v == sprVStrt[%d]\n", nr);
+        if (nr == 6) debug(SPR_DEBUG, "pos.v == sprVStrt[%d]\n", nr);
     }
 
     // Deactivate sprite data DMA if the last sprite line has been reached
     if (pos.v == sprVStop[nr]) {
 
-        if (nr != 0) debug(SPR_DEBUG, "pos.v == sprVStop[%d]\n", nr);
+        if (nr == 6) debug(SPR_DEBUG, "pos.v == sprVStop[%d]\n", nr);
 
         // Deactivate sprite data DMA
         sprDmaState[nr] = SPR_DMA_IDLE;
@@ -1711,7 +1730,8 @@ Agnus::executeFirstSpriteCycle()
         uint16_t pos = doSpriteDMA<nr>();
 
         // Extract vertical trigger coordinate bits from POS
-        sprVStrt[nr] = ((pos & 0xFF00) >> 8) | (sprVStrt[nr] & 0x0100);
+        // sprVStrt[nr] = ((pos & 0xFF00) >> 8) | (sprVStrt[nr] & 0x0100);
+        agnus.pokeSPRxPOS<nr>(pos);
         denise.pokeSPRxPOS<nr>(pos);
     }
 
@@ -1725,7 +1745,7 @@ Agnus::executeFirstSpriteCycle()
 template <int nr> void
 Agnus::executeSecondSpriteCycle()
 {
-    if (nr != 0) debug(SPR_DEBUG, "executeSecondSpriteCycle<%d>\n", nr);
+    if (nr == 6) debug(SPR_DEBUG, "executeSecondSpriteCycle<%d>\n", nr);
 
     // Deactivate sprite data DMA if the last sprite line has been reached
     if (pos.v == sprVStop[nr]) {
@@ -1737,8 +1757,9 @@ Agnus::executeSecondSpriteCycle()
         uint16_t ctl = doSpriteDMA(nr);
         
         // Extract vertical trigger coordinate bits from CTL
-        sprVStrt[nr] = ((ctl & 0b100) << 6) | (sprVStrt[nr] & 0x00FF);
-        sprVStop[nr] = ((ctl & 0b010) << 7) | (ctl >> 8);
+        // sprVStrt[nr] = ((ctl & 0b100) << 6) | (sprVStrt[nr] & 0x00FF);
+        // sprVStop[nr] = ((ctl & 0b010) << 7) | (ctl >> 8);
+        agnus.pokeSPRxCTL<nr>(ctl);
         denise.pokeSPRxCTL<nr>(ctl);
     }
     
@@ -1782,13 +1803,10 @@ Agnus::hsyncHandler()
 
     // Check if we have reached line 25 (sprite DMA starts here)
     if (pos.v == 25) {
-        if ((dmacon & DMAEN) && (dmacon & SPREN)) {
-            assert(sprDMA());
+        if (sprDMA()) {
             // Reset vertical sprite trigger coordinates which forces the sprite
             // logic to read in the control words for all sprites in this line.
             for (unsigned i = 0; i < 8; i++) { sprVStop[i] = 25; }
-        } else {
-            assert(!sprDMA());
         }
     }
 

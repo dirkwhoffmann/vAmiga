@@ -843,9 +843,11 @@ public:
     void pokeBPL2MOD(uint16_t value);
     void setBPL2MOD(uint16_t value);
 
-    // SPRxPTL, SPRxPTH
+    // Sprite registers
     template <int x> void pokeSPRxPTH(uint16_t value);
     template <int x> void pokeSPRxPTL(uint16_t value);
+    template <int x> void pokeSPRxPOS(uint16_t value);
+    template <int x> void pokeSPRxCTL(uint16_t value);
 
     // Adds the modulo register to a bitplane pointer
     template <int x> void addBPLMOD() {
