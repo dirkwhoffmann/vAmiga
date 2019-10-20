@@ -615,37 +615,6 @@ Denise::translateDPF(int from, int to)
         uint8_t index1 = (((s & 1) >> 0) | ((s & 4) >> 1) | ((s & 16) >> 2));
         uint8_t index2 = (((s & 2) >> 1) | ((s & 8) >> 2) | ((s & 32) >> 3));
 
-        /*
-        if (pf2pri) {
-
-            // Playfield 2 appears in front
-            if (index2) {
-                iBuffer[i] = index2 | 0b1000;
-                zBuffer[i] = prio2 | Z_DPF;
-            } else if (index1) {
-                iBuffer[i] = index1;
-                zBuffer[i] = prio1 | Z_DPF;
-            } else {
-                iBuffer[i] = 0;
-                zBuffer[i] = Z_DPF;
-            }
-
-        } else {
-
-            // Playfield 1 appears in front
-            if (index1) {
-                iBuffer[i] = index1;
-                zBuffer[i] = prio1 | Z_DPF;
-            } else if (index2) {
-                iBuffer[i] = index2 | 0b1000;
-                zBuffer[i] = prio2 | Z_DPF;
-            } else {
-                iBuffer[i] = 0;
-                zBuffer[i] = Z_DPF;
-            }
-        }
-        */
-        
         if (index1) {
             if (index2) {
 
@@ -715,9 +684,12 @@ Denise::drawSpritePair()
     int sprctl2 = initialSprctl[x];
     int strt1 = 2 + 2 * sprhpos(sprpos1, sprctl1);
     int strt2 = 2 + 2 * sprhpos(sprpos2, sprctl2);
+    if (x == 7) {
+        debug("initialSprctl = %x pos = %x strt1 = %d\n", initialSprctl[x-1], initialSprpos[x-1], strt1);
+    }
     uint8_t arm = initialArmed;
-    bool armed1 = GET_BIT(armed, x-1);
-    bool armed2 = GET_BIT(armed, x);
+    bool armed1 = GET_BIT(arm, x-1);
+    bool armed2 = GET_BIT(arm, x);
     bool at = attached(x);
     int strt = 0;
 
@@ -728,6 +700,7 @@ Denise::drawSpritePair()
 
         for (int i = sprRegChanges.begin(); i != sprRegChanges.end(); i = sprRegChanges.next(i)) {
 
+            debug("strt1 = %d\n", strt1);
             Change &change = sprRegChanges.change[i];
 
             // Draw a chunk of pixels
@@ -737,73 +710,42 @@ Denise::drawSpritePair()
                               armed1,armed2, at);
             strt = change.trigger;
 
-            // Apply the recorded change
+            // Apply the recorded register change
             switch (change.addr) {
 
-                case REG_SPR0DATA: sprdata[0] = change.value; break;
-                case REG_SPR1DATA: sprdata[1] = change.value; break;
-                case REG_SPR2DATA: sprdata[2] = change.value; break;
-                case REG_SPR3DATA: sprdata[3] = change.value; break;
-                case REG_SPR4DATA: sprdata[4] = change.value; break;
-                case REG_SPR5DATA: sprdata[5] = change.value; break;
-                case REG_SPR6DATA: sprdata[6] = change.value; break;
-                case REG_SPR7DATA: sprdata[7] = change.value; break;
-
-                case REG_SPR0DATB: sprdatb[0] = change.value; break;
-                case REG_SPR1DATB: sprdatb[1] = change.value; break;
-                case REG_SPR2DATB: sprdatb[2] = change.value; break;
-                case REG_SPR3DATB: sprdatb[3] = change.value; break;
-                case REG_SPR4DATB: sprdatb[4] = change.value; break;
-                case REG_SPR5DATB: sprdatb[5] = change.value; break;
-                case REG_SPR6DATB: sprdatb[6] = change.value; break;
-                case REG_SPR7DATB: sprdatb[7] = change.value; break;
-
-                case REG_SPR0POS: sprpos[0] = change.value; break;
-                case REG_SPR1POS: sprpos[1] = change.value; break;
-                case REG_SPR2POS: sprpos[2] = change.value; break;
-                case REG_SPR3POS: sprpos[3] = change.value; break;
-                case REG_SPR4POS: sprpos[4] = change.value; break;
-                case REG_SPR5POS: sprpos[5] = change.value; break;
-                case REG_SPR6POS: sprpos[6] = change.value; break;
-                case REG_SPR7POS: sprpos[7] = change.value; break;
-
-                case REG_SPR0CTL: sprctl[0] = change.value; CLR_BIT(arm, 0); break;
-                case REG_SPR1CTL: sprctl[1] = change.value; CLR_BIT(arm, 1); break;
-                case REG_SPR2CTL: sprctl[2] = change.value; CLR_BIT(arm, 2); break;
-                case REG_SPR3CTL: sprctl[3] = change.value; CLR_BIT(arm, 3); break;
-                case REG_SPR4CTL: sprctl[4] = change.value; CLR_BIT(arm, 4); break;
-                case REG_SPR5CTL: sprctl[5] = change.value; CLR_BIT(arm, 5); break;
-                case REG_SPR6CTL: sprctl[6] = change.value; CLR_BIT(arm, 6); break;
-                case REG_SPR7CTL: sprctl[7] = change.value; CLR_BIT(arm, 7); break;
-
-                // DEPRECATED
-                    /*
-                case SPR_HPOS0: sprhstrt[0] = change.value; break;
-                case SPR_HPOS1: sprhstrt[1] = change.value; break;
-                case SPR_HPOS2: sprhstrt[2] = change.value; break;
-                case SPR_HPOS3: sprhstrt[3] = change.value; break;
-                case SPR_HPOS4: sprhstrt[4] = change.value; break;
-                case SPR_HPOS5: sprhstrt[5] = change.value; break;
-                case SPR_HPOS6: sprhstrt[6] = change.value; break;
-                case SPR_HPOS7: sprhstrt[7] = change.value; break;
-                    */
-
-                default:
-                    assert(false);
+                case REG_SPR0DATA+x-1:
+                    data1 = change.value;
+                    armed1 = true;
+                    break;
+                case REG_SPR0DATA+x:
+                    data2 = change.value;
+                    armed2 = true;
+                    break;
+                case REG_SPR0DATB+x-1:
+                    datb1 = change.value;
+                    break;
+                case REG_SPR0DATB+x:
+                    datb2 = change.value;
+                    break;
+                case REG_SPR0POS+x-1:
+                    sprpos1 = change.value;
+                    strt1 = 2 + 2 * sprhpos(sprpos1, sprctl1);
+                    break;
+                case REG_SPR0POS+x:
+                    sprpos2 = change.value;
+                    strt2 = 2 + 2 * sprhpos(sprpos2, sprctl2);
+                    break;
+                case REG_SPR0CTL+x-1:
+                    sprctl1 = change.value;
+                    strt1 = 2 + 2 * sprhpos(sprpos1, sprctl1);
+                    armed1 = false;
+                    break;
+                case REG_SPR0CTL+x:
+                    sprctl2 = change.value;
+                    strt2 = 2 + 2 * sprhpos(sprpos2, sprctl2);
+                    armed2 = false;
                     break;
             }
-
-            // Recompute values according to the new register contents
-            data1 = sprdata[x-1];
-            data2 = sprdata[x];
-            datb1 = sprdatb[x-1];
-            datb2 = sprdatb[x];
-            sprpos1 = sprpos[x-1];
-            sprpos2 = sprpos[x];
-            sprctl1 = sprctl[x-1];
-            sprctl2 = sprctl[x];
-            strt1 = 2 + 2 * sprhpos(sprpos1, sprctl1);
-            strt2 = 2 + 2 * sprhpos(sprpos2, sprctl2);
         }
     }
 
