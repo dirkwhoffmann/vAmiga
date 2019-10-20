@@ -929,12 +929,13 @@ Agnus::setDMACON(uint16_t oldValue, uint16_t value)
         if (newSPREN) {
             // Sprite DMA on
             debug(DMA_DEBUG, "Sprite DMA switched on\n");
-            
+            dmaDAS |= 0x20;
+
         } else {
             
             // Sprite DMA off
             debug(DMA_DEBUG, "Sprite DMA switched off\n");
-            for (int i = 0; i < 8; i++) sprDmaStateOld[i] = SPR_DMA_IDLE;
+            dmaDAS &= ~0x20;
         }
     }
     

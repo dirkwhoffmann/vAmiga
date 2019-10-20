@@ -684,9 +684,11 @@ Denise::drawSpritePair()
     int sprctl2 = initialSprctl[x];
     int strt1 = 2 + 2 * sprhpos(sprpos1, sprctl1);
     int strt2 = 2 + 2 * sprhpos(sprpos2, sprctl2);
+    /*
     if (x == 7) {
         debug("initialSprctl = %x pos = %x strt1 = %d\n", initialSprctl[x-1], initialSprpos[x-1], strt1);
     }
+    */
     uint8_t arm = initialArmed;
     bool armed1 = GET_BIT(arm, x-1);
     bool armed2 = GET_BIT(arm, x);
@@ -700,7 +702,6 @@ Denise::drawSpritePair()
 
         for (int i = sprRegChanges.begin(); i != sprRegChanges.end(); i = sprRegChanges.next(i)) {
 
-            debug("strt1 = %d\n", strt1);
             Change &change = sprRegChanges.change[i];
 
             // Draw a chunk of pixels
