@@ -299,32 +299,13 @@ Denise::pokeSPRxPOS(uint16_t value)
     assert(x < 8);
     debug(SPRREG_DEBUG, "pokeSPR%dPOS(%X)\n", x, value);
 
-    int tag =
-    x == 0 ? SPR_HPOS0 :
-    x == 1 ? SPR_HPOS1 :
-    x == 2 ? SPR_HPOS2 :
-    x == 3 ? SPR_HPOS3 :
-    x == 4 ? SPR_HPOS4 :
-    x == 5 ? SPR_HPOS5 :
-    x == 6 ? SPR_HPOS6 : SPR_HPOS7;
-
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0  (Ex = VSTART)
     // E7 E6 E5 E4 E3 E2 E1 E0 H8 H7 H6 H5 H4 H3 H2 H1  (Hx = HSTART)
 
-    // Note: Denise only picks up the horizontal coordinate. Only Agnus knows
-    // about the vertical coordinate.
-
-    int16_t oldValue = sprhstrt[x];
-    sprhstrt[x] = ((value & 0xFF) << 1) | (sprhstrt[x] & 0x01);
+    sprpos[x] = value;
 
     // Record the register change
-    if (sprRegChanges.isEmpty()) sprRegChanges.add(0, tag, oldValue); // DEPRECATED
-    sprRegChanges.add(4 * agnus.pos.h, tag, sprhstrt[x]); // DEPRECATED
-
     sprRegChanges.add(4 * agnus.pos.h, REG_SPR0POS + x, value);
-
-    // Update the current value
-    sprpos[x] = value;
 
     // Update debugger info
     if (agnus.pos.v == 26) {
@@ -338,36 +319,19 @@ Denise::pokeSPRxCTL(uint16_t value)
     assert(x < 8);
     debug(SPRREG_DEBUG, "pokeSPR%dCTL(%X)\n", x, value);
 
-    int tag =
-     x == 0 ? SPR_HPOS0 :
-     x == 1 ? SPR_HPOS1 :
-     x == 2 ? SPR_HPOS2 :
-     x == 3 ? SPR_HPOS3 :
-     x == 4 ? SPR_HPOS4 :
-     x == 5 ? SPR_HPOS5 :
-     x == 6 ? SPR_HPOS6 : SPR_HPOS7;
-
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // L7 L6 L5 L4 L3 L2 L1 L0 AT  -  -  -  - E8 L8 H0  (Lx = VSTOP)
 
-    // Note: Denise only picks up the horizontal coordinate. Only Agnus knows
-    // about the vertical coordinate.
+    sprctl[x] = value;
 
-    int16_t oldValue = sprhstrt[x];
-    sprhstrt[x] = (sprhstrt[x] & 0x1FE) | (value & 0x01);
+    // Save the attach bit
     WRITE_BIT(attach, x, GET_BIT(value, 7));
 
-    // Disarm the sprite (stop drawing)
+    // Disarm the sprite
     CLR_BIT(armed, x);
 
     // Record the register change
-    if (sprRegChanges.isEmpty()) sprRegChanges.add(0, tag, oldValue); // DEPRECATED
-    sprRegChanges.add(4 * agnus.pos.h, tag, sprhstrt[x]); // DEPRECATED
-
     sprRegChanges.add(4 * agnus.pos.h, REG_SPR0CTL + x, value);
-
-    // Update the current value
-    sprctl[x] = value;
 
     // Update debugger info
     if (agnus.pos.v == 26) {
@@ -751,16 +715,11 @@ Denise::drawSpritePair()
     int sprctl2 = initialSprctl[x];
     int strt1 = 2 + 2 * sprhpos(sprpos1, sprctl1);
     int strt2 = 2 + 2 * sprhpos(sprpos2, sprctl2);
-    int oldstrt1 = 2 + 2 * sprhstrt[x-1];
-    int oldstrt2 = 2 + 2 * sprhstrt[x];
     uint8_t arm = initialArmed;
     bool armed1 = GET_BIT(armed, x-1);
     bool armed2 = GET_BIT(armed, x);
     bool at = attached(x);
     int strt = 0;
-
-    oldstrt1 = strt1;
-    oldstrt2 = strt2;
 
     // Iterate over all recorded register changes
     if (!sprRegChanges.isEmpty()) {
@@ -818,6 +777,7 @@ Denise::drawSpritePair()
                 case REG_SPR7CTL: sprctl[7] = change.value; CLR_BIT(arm, 7); break;
 
                 // DEPRECATED
+                    /*
                 case SPR_HPOS0: sprhstrt[0] = change.value; break;
                 case SPR_HPOS1: sprhstrt[1] = change.value; break;
                 case SPR_HPOS2: sprhstrt[2] = change.value; break;
@@ -826,6 +786,7 @@ Denise::drawSpritePair()
                 case SPR_HPOS5: sprhstrt[5] = change.value; break;
                 case SPR_HPOS6: sprhstrt[6] = change.value; break;
                 case SPR_HPOS7: sprhstrt[7] = change.value; break;
+                    */
 
                 default:
                     assert(false);
@@ -843,8 +804,6 @@ Denise::drawSpritePair()
             sprctl2 = sprctl[x];
             strt1 = 2 + 2 * sprhpos(sprpos1, sprctl1);
             strt2 = 2 + 2 * sprhpos(sprpos2, sprctl2);
-            oldstrt1 = 2 + 2 * sprhstrt[x-1];
-            oldstrt2 = 2 + 2 * sprhstrt[x];
         }
     }
 

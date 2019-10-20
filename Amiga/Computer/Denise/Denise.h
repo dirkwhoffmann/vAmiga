@@ -115,12 +115,6 @@ public:
     uint16_t initialSprpos[8];
     uint16_t initialSprctl[8];
 
-    /* Horizontal trigger positions of all 8 sprites.
-     * Note: The vertical trigger positions are stored inside Agnus. Denise
-     * knows nothing about them.
-     */
-    int16_t sprhstrt[8];
-    
     // The serial shift registers of all 8 sprites.
     uint16_t ssra[8];
     uint16_t ssrb[8];
@@ -309,7 +303,6 @@ public:
         & sprctl
         & initialSprpos
         & initialSprctl
-        & sprhstrt
         & ssra
         & ssrb
         & attach
