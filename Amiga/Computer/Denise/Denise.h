@@ -516,23 +516,16 @@ private:
 
 public:
 
-    /* Draws the sprite pixels.
-     * This method is called at the end of each rasterline.
-     */
+    // Draws all armed sprites. Called at the end of a rasterline
     void drawSprites();
-    template <int x> void drawSpritePair();
 
+    // Draws an armed sprite pair. Called by drawSprites()
+    template <int x> void drawSpritePair();
     template <int x> void drawSpritePair(int hstrt, int hstop,
                                          int strt1, int strt2,
                                          uint16_t data1, uint16_t data2,
                                          uint16_t datb1, uint16_t datb2,
                                          bool armed1, bool armed2, bool at);
-    
-    // template <int x> void drawSpriteOld();
-    // template <int x> void drawSpritePairOld();
-
-    template <int x> void drawSprite();
-    template <int x> void drawAttachedSpritePair();
 
     // Draws a single sprite pixel
     template <int x> void drawSpritePixel(int hpos);
