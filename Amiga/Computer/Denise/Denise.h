@@ -102,7 +102,15 @@ public:
     //
     // Sprites
     //
-    
+
+    // The position and control registers of all 8 sprites
+    uint16_t sprpos[8];
+    uint16_t sprctl[8];
+
+    // The position and control registers at cycle 0 in the current rasterline
+    uint16_t initialSprpos[8];
+    uint16_t initialSprctl[8];
+
     /* Horizontal trigger positions of all 8 sprites.
      * Note: The vertical trigger positions are stored inside Agnus. Denise
      * knows nothing about them.
@@ -116,10 +124,20 @@ public:
     // Attach control bits of all 8 sprites.
     uint8_t attach;
 
-    /* Indicates which sprites are armed in the current rasterline.
+    /* Indicates which sprites are curently armed.
      * An armed sprite is a sprite that will be drawn in this line.
      */
     uint8_t armed;
+
+    /* Indicates which sprites had been armed at least once in the current
+     * rasterline.
+     * Note that a sprite can be armed and disarmed multiple times in a
+     * rasterline by manually modifying SPRxDATA and SPRxCTL, respectively.
+     */
+    uint8_t wasArmed;
+
+    // Value of variable 'armed' at cycle 0 in the current rasterline
+    uint8_t initialArmed;
 
     /* Sprite clipping window
      *
@@ -281,11 +299,17 @@ public:
         & conRegChanges
         & sprRegChanges
 
+        & sprpos
+        & sprctl
+        & initialSprpos
+        & initialSprctl
         & sprhstrt
         & ssra
         & ssrb
         & attach
         & armed
+        & wasArmed
+        & initialArmed
         & spriteClipBegin
         & spriteClipEnd
         & prio1
@@ -419,10 +443,14 @@ public:
     template <int x> void pokeBPLxDAT(uint16_t value);
     
     // OCS registers 0x140, 0x148, ..., 0x170, 0x178 (w)
-    template <int x> void pokeSPRxPOS(uint16_t value);
-
     // OCS registers 0x142, 0x14A, ..., 0x172, 0x17A (w)
+    template <int x> void pokeSPRxPOS(uint16_t value);
     template <int x> void pokeSPRxCTL(uint16_t value);
+
+    static int16_t sprhpos(uint16_t sprpos, uint16_t sprctl) {
+        return ((sprpos & 0xFF) << 1) | (sprctl & 0x01);
+    }
+    template <int x> int16_t sprhpos() { return sprhpos(sprpos[x], sprctl[x]); }
 
     // OCS registers 0x144, 0x14C, ..., 0x174, 0x17C (w)
     template <int x> void pokeSPRxDATA(uint16_t value);

@@ -72,6 +72,25 @@ typedef enum : int32_t
     REG_BPL6PTH,
     REG_BPL6PTL,
 
+    REG_SPR0POS,
+    REG_SPR1POS,
+    REG_SPR2POS,
+    REG_SPR3POS,
+    REG_SPR4POS,
+    REG_SPR5POS,
+    REG_SPR6POS,
+    REG_SPR7POS,
+
+    REG_SPR0CTL,
+    REG_SPR1CTL,
+    REG_SPR2CTL,
+    REG_SPR3CTL,
+    REG_SPR4CTL,
+    REG_SPR5CTL,
+    REG_SPR6CTL,
+    REG_SPR7CTL,
+
+    // DEPRECATED
     SPR_HPOS0,
     SPR_HPOS1,
     SPR_HPOS2,
@@ -103,6 +122,7 @@ static inline bool isBusOwner(long value) { return value >= 0 && value < BUS_OWN
 typedef enum
 {
     SPR_DMA_IDLE,
+    SPR_DMA_CTRL,
     SPR_DMA_DATA
 }
 SprDMAState;

@@ -318,9 +318,13 @@ Denise::pokeSPRxPOS(uint16_t value)
     sprhstrt[x] = ((value & 0xFF) << 1) | (sprhstrt[x] & 0x01);
 
     // Record the register change
-    if (sprRegChanges.isEmpty()) sprRegChanges.add(0, tag, oldValue);
-    // debug("Adding x = %d trigger = %d tag = %d value = %d\n", x, 4 * agnus.pos.h, tag, sprhstrt[x]);
-    sprRegChanges.add(4 * agnus.pos.h, tag, sprhstrt[x]);
+    if (sprRegChanges.isEmpty()) sprRegChanges.add(0, tag, oldValue); // DEPRECATED
+    sprRegChanges.add(4 * agnus.pos.h, tag, sprhstrt[x]); // DEPRECATED
+
+    sprRegChanges.add(4 * agnus.pos.h, REG_SPR0POS + x, value);
+
+    // Update the current value
+    sprpos[x] = value;
 
     // Update debugger info
     if (agnus.pos.v == 26) {
@@ -357,8 +361,13 @@ Denise::pokeSPRxCTL(uint16_t value)
     CLR_BIT(armed, x);
 
     // Record the register change
-    if (sprRegChanges.isEmpty()) sprRegChanges.add(0, tag, oldValue);
-    sprRegChanges.add(4 * agnus.pos.h, tag, sprhstrt[x]);
+    if (sprRegChanges.isEmpty()) sprRegChanges.add(0, tag, oldValue); // DEPRECATED
+    sprRegChanges.add(4 * agnus.pos.h, tag, sprhstrt[x]); // DEPRECATED
+
+    sprRegChanges.add(4 * agnus.pos.h, REG_SPR0CTL + x, value);
+
+    // Update the current value
+    sprctl[x] = value;
 
     // Update debugger info
     if (agnus.pos.v == 26) {
@@ -376,6 +385,7 @@ Denise::pokeSPRxDATA(uint16_t value)
     
     sprdata[x] = value;
     armSprite(x);
+    SET_BIT(wasArmed, x);
 }
 
 template <int x> void
@@ -700,66 +710,15 @@ Denise::translateDPF(int from, int to)
     }
 }
 
-/*
 void
 Denise::drawSprites()
 {
-    if (config.emulateSprites) {
+    if (wasArmed && config.emulateSprites) {
 
-        // Sprites 6 and 7
-        if (armed & 0b11000000) {
-            if (attached(7)) {
-                drawAttachedSpritePair<7>();
-            } else {
-                if (armed & 0b10000000) drawSprite<7>();
-                if (armed & 0b01000000) drawSprite<6>();
-            }
-        }
-
-        // Sprites 4 and 5
-        if (armed & 0b00110000) {
-            if (attached(5)) {
-                drawAttachedSpritePair<5>();
-            } else {
-                if (armed & 0b00100000) drawSprite<5>();
-                if (armed & 0b00010000) drawSprite<4>();
-            }
-        }
-
-        // Sprites 2 and 3
-        if (armed & 0b00001100) {
-            if (attached(3)) {
-                drawAttachedSpritePair<3>();
-            } else {
-                if (armed & 0b00001000) drawSprite<3>();
-                if (armed & 0b00000100) drawSprite<2>();
-            }
-        }
-
-        // Sprites 1 and 0
-        if (armed & 0b00000011) {
-            if (attached(1)) {
-                drawAttachedSpritePair<1>();
-            } else {
-                if (armed & 0b00000010) drawSprite<1>();
-                if (armed & 0b00000001) drawSprite<0>();
-            }
-        }
-    }
-
-    sprRegChanges.clear();
-}
-*/
-
-void
-Denise::drawSprites()
-{
-    if (armed && config.emulateSprites) {
-
-        if (armed & 0b11000000) drawSpritePair<7>();
-        if (armed & 0b00110000) drawSpritePair<5>();
-        if (armed & 0b00001100) drawSpritePair<3>();
-        if (armed & 0b00000011) drawSpritePair<1>();
+        if (wasArmed & 0b11000000) drawSpritePair<7>();
+        if (wasArmed & 0b00110000) drawSpritePair<5>();
+        if (wasArmed & 0b00001100) drawSpritePair<3>();
+        if (wasArmed & 0b00000011) drawSpritePair<1>();
     }
 
     sprRegChanges.clear();
@@ -774,12 +733,25 @@ Denise::drawSpritePair()
     // Check for quick exit
     if (spriteClipBegin == HPIXELS) return;
 
-    int strt1 = 2 + 2 * sprhstrt[x-1];
-    int strt2 = 2 + 2 * sprhstrt[x];
-    bool armed1 = GET_BIT(armed,x-1);
-    bool armed2 = GET_BIT(armed,x);
+    int sprpos1 = initialSprpos[x-1];
+    int sprpos2 = initialSprpos[x];
+    int sprctl1 = initialSprctl[x-1];
+    int sprctl2 = initialSprctl[x];
+    int strt1 = 2 + 2 * sprhpos(sprpos1, sprctl1);
+    int strt2 = 2 + 2 * sprhpos(sprpos2, sprctl2);
+    int oldstrt1 = 2 + 2 * sprhstrt[x-1];
+    int oldstrt2 = 2 + 2 * sprhstrt[x];
+    uint8_t arm = initialArmed;
+    bool armed1 = GET_BIT(armed, x-1);
+    bool armed2 = GET_BIT(armed, x);
     bool at = attached(x);
     int strt = 0;
+
+    debug("strt1 = %d strt2 = %d\n", strt1, strt2);
+    debug("oldstrt1 = %d oldstrt2 = %d\n", oldstrt1, oldstrt2);
+
+    oldstrt1 = strt1;
+    oldstrt2 = strt2;
 
     // Iterate over all recorded register changes
     if (!sprRegChanges.isEmpty()) {
@@ -797,6 +769,25 @@ Denise::drawSpritePair()
             // Apply the recorded change
             switch (change.addr) {
 
+                case REG_SPR0POS: sprpos[0] = change.value; break;
+                case REG_SPR1POS: sprpos[1] = change.value; break;
+                case REG_SPR2POS: sprpos[2] = change.value; break;
+                case REG_SPR3POS: sprpos[3] = change.value; break;
+                case REG_SPR4POS: sprpos[4] = change.value; break;
+                case REG_SPR5POS: sprpos[5] = change.value; break;
+                case REG_SPR6POS: sprpos[6] = change.value; break;
+                case REG_SPR7POS: sprpos[7] = change.value; break;
+
+                case REG_SPR0CTL: sprctl[0] = change.value; CLR_BIT(arm, 0); break;
+                case REG_SPR1CTL: sprctl[1] = change.value; CLR_BIT(arm, 1); break;
+                case REG_SPR2CTL: sprctl[2] = change.value; CLR_BIT(arm, 2); break;
+                case REG_SPR3CTL: sprctl[3] = change.value; CLR_BIT(arm, 3); break;
+                case REG_SPR4CTL: sprctl[4] = change.value; CLR_BIT(arm, 4); break;
+                case REG_SPR5CTL: sprctl[5] = change.value; CLR_BIT(arm, 5); break;
+                case REG_SPR6CTL: sprctl[6] = change.value; CLR_BIT(arm, 6); break;
+                case REG_SPR7CTL: sprctl[7] = change.value; CLR_BIT(arm, 7); break;
+
+                // DEPRECATED
                 case SPR_HPOS0: sprhstrt[0] = change.value; break;
                 case SPR_HPOS1: sprhstrt[1] = change.value; break;
                 case SPR_HPOS2: sprhstrt[2] = change.value; break;
@@ -811,13 +802,20 @@ Denise::drawSpritePair()
                     break;
             }
 
-            strt1 = 2 + 2 * sprhstrt[x-1];
-            strt2 = 2 + 2 * sprhstrt[x];
+            // Recompute horizontal start position
+            sprpos1 = sprpos[x-1];
+            sprpos2 = sprpos[x];
+            sprctl1 = sprctl[x-1];
+            sprctl2 = sprctl[x];
+            strt1 = 2 + 2 * sprhpos(sprpos1, sprctl1);
+            strt2 = 2 + 2 * sprhpos(sprpos2, sprctl2);
+            oldstrt1 = 2 + 2 * sprhstrt[x-1];
+            oldstrt2 = 2 + 2 * sprhstrt[x];
         }
     }
 
     // Draw until the end of the line
-    drawSpritePair<x>(strt, sizeof(iBuffer) - 1, strt1, strt2, armed1, armed2, at);
+    drawSpritePair<x>(strt, sizeof(iBuffer) - 1, oldstrt1, oldstrt2, armed1, armed2, at);
 }
 
 template <int x> void
@@ -1187,10 +1185,16 @@ Denise::beginOfLine(int vpos)
     conRegChanges.clear();
     pixelEngine.colRegChanges.clear();
 
-    // Save the current values of the bitplane control registers
+    // Save the current values of various Denise register
     initialBplcon0 = bplcon0;
     initialBplcon1 = bplcon1;
     initialBplcon2 = bplcon2;
+    for (int i = 0; i < 8; i++) {
+        initialSprpos[i] = sprpos[i];
+        initialSprctl[i] = sprctl[i];
+    }
+    initialArmed = armed;
+    wasArmed = 0;
 
     // Prepare the biplane shift registers
     for (int i = 0; i < 6; i++) shiftReg[i] &= 0xFFFF;
