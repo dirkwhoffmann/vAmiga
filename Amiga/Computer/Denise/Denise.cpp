@@ -384,8 +384,13 @@ Denise::pokeSPRxDATA(uint16_t value)
     debug(SPRREG_DEBUG, "pokeSPR%dDATA(%X)\n", x, value);
     
     sprdata[x] = value;
-    armSprite(x);
+
+    // Arm the sprite
+    SET_BIT(armed, x);
     SET_BIT(wasArmed, x);
+
+    // Record the register change
+    sprRegChanges.add(4 * agnus.pos.h, REG_SPR0DATA + x, value);
 }
 
 template <int x> void
@@ -395,6 +400,9 @@ Denise::pokeSPRxDATB(uint16_t value)
     debug(SPRREG_DEBUG, "pokeSPR%dDATB(%X)\n", x, value);
     
     sprdatb[x] = value;
+
+    // Record the register change
+    sprRegChanges.add(4 * agnus.pos.h, REG_SPR0DATB + x, value);
 }
 
 void
@@ -733,6 +741,10 @@ Denise::drawSpritePair()
     // Check for quick exit
     if (spriteClipBegin == HPIXELS) return;
 
+    uint16_t data1 = initialSprdata[x-1];
+    uint16_t data2 = initialSprdata[x];
+    uint16_t datb1 = initialSprdatb[x-1];
+    uint16_t datb2 = initialSprdatb[x];
     int sprpos1 = initialSprpos[x-1];
     int sprpos2 = initialSprpos[x];
     int sprctl1 = initialSprctl[x-1];
@@ -747,9 +759,6 @@ Denise::drawSpritePair()
     bool at = attached(x);
     int strt = 0;
 
-    debug("strt1 = %d strt2 = %d\n", strt1, strt2);
-    debug("oldstrt1 = %d oldstrt2 = %d\n", oldstrt1, oldstrt2);
-
     oldstrt1 = strt1;
     oldstrt2 = strt2;
 
@@ -763,11 +772,32 @@ Denise::drawSpritePair()
             Change &change = sprRegChanges.change[i];
 
             // Draw a chunk of pixels
-            drawSpritePair<x>(strt, change.trigger, strt1, strt2, armed1, armed2, at);
+            drawSpritePair<x>(strt, change.trigger,
+                              strt1, strt2,
+                              data1, data2, datb1, datb2,
+                              armed1,armed2, at);
             strt = change.trigger;
 
             // Apply the recorded change
             switch (change.addr) {
+
+                case REG_SPR0DATA: sprdata[0] = change.value; break;
+                case REG_SPR1DATA: sprdata[1] = change.value; break;
+                case REG_SPR2DATA: sprdata[2] = change.value; break;
+                case REG_SPR3DATA: sprdata[3] = change.value; break;
+                case REG_SPR4DATA: sprdata[4] = change.value; break;
+                case REG_SPR5DATA: sprdata[5] = change.value; break;
+                case REG_SPR6DATA: sprdata[6] = change.value; break;
+                case REG_SPR7DATA: sprdata[7] = change.value; break;
+
+                case REG_SPR0DATB: sprdatb[0] = change.value; break;
+                case REG_SPR1DATB: sprdatb[1] = change.value; break;
+                case REG_SPR2DATB: sprdatb[2] = change.value; break;
+                case REG_SPR3DATB: sprdatb[3] = change.value; break;
+                case REG_SPR4DATB: sprdatb[4] = change.value; break;
+                case REG_SPR5DATB: sprdatb[5] = change.value; break;
+                case REG_SPR6DATB: sprdatb[6] = change.value; break;
+                case REG_SPR7DATB: sprdatb[7] = change.value; break;
 
                 case REG_SPR0POS: sprpos[0] = change.value; break;
                 case REG_SPR1POS: sprpos[1] = change.value; break;
@@ -802,7 +832,11 @@ Denise::drawSpritePair()
                     break;
             }
 
-            // Recompute horizontal start position
+            // Recompute values according to the new register contents
+            data1 = sprdata[x-1];
+            data2 = sprdata[x];
+            datb1 = sprdatb[x-1];
+            datb2 = sprdatb[x];
             sprpos1 = sprpos[x-1];
             sprpos2 = sprpos[x];
             sprctl1 = sprctl[x-1];
@@ -815,12 +849,17 @@ Denise::drawSpritePair()
     }
 
     // Draw until the end of the line
-    drawSpritePair<x>(strt, sizeof(iBuffer) - 1, oldstrt1, oldstrt2, armed1, armed2, at);
+    drawSpritePair<x>(strt, sizeof(iBuffer) - 1,
+                      strt1, strt2,
+                      data1, data2, datb1, datb2,
+                      armed1, armed2, at);
 }
 
 template <int x> void
 Denise::drawSpritePair(int hstrt, int hstop,
                        int strt1, int strt2,
+                       uint16_t data1, uint16_t data2,
+                       uint16_t datb1, uint16_t datb2,
                        bool armed1, bool armed2, bool at)
 {
     assert(hstrt >= 0 && hstrt <= sizeof(iBuffer));
@@ -829,12 +868,12 @@ Denise::drawSpritePair(int hstrt, int hstop,
     for (int hpos = hstrt; hpos < hstop; hpos += 2) {
 
         if (hpos == strt1 && armed1) {
-            ssra[x-1] = sprdata[x-1];
-            ssrb[x-1] = sprdatb[x-1];
+            ssra[x-1] = data1; // sprdata[x-1];
+            ssrb[x-1] = datb1; // sprdatb[x-1];
         }
         if (hpos == strt2 && armed2) {
-            ssra[x] = sprdata[x];
-            ssrb[x] = sprdatb[x];
+            ssra[x] = data2; // sprdata[x];
+            ssrb[x] = datb2; // sprdatb[x];
         }
 
         if (ssra[x-1] | ssrb[x-1] | ssra[x] | ssrb[x]) {
@@ -1192,9 +1231,11 @@ Denise::beginOfLine(int vpos)
     for (int i = 0; i < 8; i++) {
         initialSprpos[i] = sprpos[i];
         initialSprctl[i] = sprctl[i];
+        initialSprdata[i] = sprdata[i];
+        initialSprdatb[i] = sprdatb[i];
     }
     initialArmed = armed;
-    wasArmed = 0;
+    wasArmed = armed;
 
     // Prepare the biplane shift registers
     for (int i = 0; i < 6; i++) shiftReg[i] &= 0xFFFF;

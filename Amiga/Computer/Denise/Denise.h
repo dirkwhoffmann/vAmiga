@@ -66,6 +66,10 @@ public:
     uint16_t sprdata[8];
     uint16_t sprdatb[8];
 
+    // Initial values of sprite data registers at cycle 0 in the current rasterline
+     uint16_t initialSprdata[8];
+     uint16_t initialSprdatb[8];
+
     // Sprite collision registers
     uint16_t clxdat;
     uint16_t clxcon;
@@ -287,6 +291,8 @@ public:
         & bpldat
         & sprdata
         & sprdatb
+        & initialSprdata
+        & initialSprdatb
         & clxdat
         & clxcon
         & shiftReg
@@ -518,6 +524,8 @@ public:
 
     template <int x> void drawSpritePair(int hstrt, int hstop,
                                          int strt1, int strt2,
+                                         uint16_t data1, uint16_t data2,
+                                         uint16_t datb1, uint16_t datb2,
                                          bool armed1, bool armed2, bool at);
     
     // template <int x> void drawSpriteOld();
