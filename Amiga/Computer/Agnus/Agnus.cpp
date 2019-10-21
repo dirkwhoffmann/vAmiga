@@ -107,8 +107,8 @@ Agnus::initDasEventTable()
         EventID *p = dasDMA[dmacon];
 
         p[0x01] = DAS_REFRESH;
-        p[0x03] = DAS_REFRESH;
-        p[0x05] = DAS_REFRESH;
+        // p[0x03] = DAS_REFRESH;
+        // p[0x05] = DAS_REFRESH;
 
         if (dmacon) {
             p[0x07] = DAS_D0;
@@ -140,7 +140,7 @@ Agnus::initDasEventTable()
             p[0x33] = DAS_S7_2;
         }
 
-        p[0xE2] = DAS_REFRESH;
+        // p[0xE2] = DAS_REFRESH;
     }
 }
 
@@ -796,12 +796,14 @@ Agnus::updateDasJumpTable(int16_t end)
     updateJumpTable(dasEvent, nextDasEvent, end);
 
     // Make sure the table ends with a DAS_REFRESH event
+    /*
     if (dasEvent[HPOS_MAX] != DAS_REFRESH) {
         dumpBplEventTable();
         dumpDasEventTable();
     }
     assert(dasEvent[HPOS_MAX] == DAS_REFRESH);
     assert(nextDasEvent[HPOS_MAX - 1] == HPOS_MAX);
+    */
 }
 
 bool
