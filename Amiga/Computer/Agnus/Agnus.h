@@ -826,17 +826,17 @@ public:
     inline bool bltpri() { return bltpri(dmacon); }
     static bool doBplDMA(uint16_t v) { return (v & (DMAEN | BPLEN)) == (DMAEN | BPLEN); }
     inline bool doBplDMA() { return doBplDMA(dmacon); }
-    static bool copDMA(uint16_t v) { return (v & (DMAEN | COPEN)) == (DMAEN | COPEN); }
-    inline bool copDMA() { return copDMA(dmacon); }
-    static bool bltDMA(uint16_t v) { return (v & (DMAEN | BLTEN)) == (DMAEN | BLTEN); }
-    inline bool bltDMA() { return bltDMA(dmacon); }
-    static bool sprDMA(uint16_t v) { return (v & (DMAEN | SPREN)) == (DMAEN | SPREN); }
-    inline bool sprDMA() { return sprDMA(dmacon); }
-    static bool dskDMA(uint16_t v) { return (v & (DMAEN | DSKEN)) == (DMAEN | DSKEN); }
-    inline bool dskDMA() { return dskDMA(dmacon); }
-    template <int x> static bool audDMA(uint16_t v) {
+    static bool doCopDMA(uint16_t v) { return (v & (DMAEN | COPEN)) == (DMAEN | COPEN); }
+    inline bool doCopDMA() { return doCopDMA(dmacon); }
+    static bool doBltDMA(uint16_t v) { return (v & (DMAEN | BLTEN)) == (DMAEN | BLTEN); }
+    inline bool doBltDMA() { return doBltDMA(dmacon); }
+    static bool doSprDMA(uint16_t v) { return (v & (DMAEN | SPREN)) == (DMAEN | SPREN); }
+    inline bool doSprDMA() { return doSprDMA(dmacon); }
+    static bool doDskDMA(uint16_t v) { return (v & (DMAEN | DSKEN)) == (DMAEN | DSKEN); }
+    inline bool doDskDMA() { return doDskDMA(dmacon); }
+    template <int x> static bool doAudDMA(uint16_t v) {
         return (v & (DMAEN | (AU0EN << x))) == (DMAEN | (AU0EN << x)); }
-    template <int x> inline bool audDMA() { return audDMA<x>(dmacon); }
+    template <int x> inline bool doAudDMA() { return doAudDMA<x>(dmacon); }
 
     // DSKPTH, DSKPTL
     void pokeDSKPTH(uint16_t value);

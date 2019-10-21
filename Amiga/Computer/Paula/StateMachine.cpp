@@ -119,7 +119,7 @@ StateMachine<nr>::pokeAUDxLCL(uint16_t value)
 template <int nr> bool
 StateMachine<nr>::dmaMode()
 {
-    return agnus.audDMA<nr>();
+    return agnus.doAudDMA<nr>();
 }
 
 template <int nr> void

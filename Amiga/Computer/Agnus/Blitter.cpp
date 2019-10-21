@@ -262,7 +262,7 @@ Blitter::pokeBLTSIZE(uint16_t value)
     // bbusy = true;
 
     // Schedule the blit operation
-    if (agnus.bltDMA()) {
+    if (agnus.doBltDMA()) {
         agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(0), BLT_START);
     } else {
         agnus.scheduleAbs<BLT_SLOT>(NEVER, BLT_START);

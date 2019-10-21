@@ -361,7 +361,7 @@ bool
 Agnus::copperCanRun()
 {
     // Deny access if Copper DMA is disabled
-    if (!copDMA()) return false;
+    if (!doCopDMA()) return false;
 
     // Deny access if the bus is already in use
     if (busOwner[pos.h] != BUS_NONE) {
@@ -1785,7 +1785,7 @@ Agnus::hsyncHandler()
     if (++pos.v >= frameInfo.numLines) vsyncHandler();
 
     // Check if we have reached line 25 (sprite DMA starts here)
-    if (pos.v == 25 && sprDMA()) {
+    if (pos.v == 25 && doSprDMA()) {
         // Reset vertical sprite trigger coordinates which forces the sprite
         // logic to read in the control words for all sprites in this line.
         for (unsigned i = 0; i < 8; i++) { sprVStop[i] = 25; }

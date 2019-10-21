@@ -800,7 +800,7 @@ Copper::vsyncAction()
 
     // TODO: What is the exact timing here?
     switchToCopperList(1);
-    if (agnus.copDMA()) {
+    if (agnus.doCopDMA()) {
         agnus.scheduleRel<COP_SLOT>(DMA_CYCLES(0), COP_REQ_DMA);
     } else {
         agnus.cancel<COP_SLOT>();
