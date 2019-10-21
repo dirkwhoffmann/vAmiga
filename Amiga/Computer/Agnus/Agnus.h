@@ -61,6 +61,7 @@ class Agnus : public SubComponent {
     AgnusInfo info;
     EventInfo eventInfo;
 
+
     //
     // Sub components
     //
@@ -81,6 +82,7 @@ public:
     // Lookup tables
     //
 
+    // DEPRECATED:
     /* DAS lookup tables (Disk, Audio, Sprite DMA)
      *
      * nextDASEvent[DAS Event ID][DMA enable bits]:
@@ -115,11 +117,11 @@ public:
      *              Bitplanes : 0 .. 6        (Bitplanes in use, BPU)
      *                  Cycle : 0 .. HPOS_MAX (DMA cycle)
      *
-     * The lookup table is used to quickly update the DMA event table.
+     * The lookup table is used to quickly update the bplEvent table.
      * Depending on the current resoution and BPU value, a segment of this
-     * lookup table is copied into the DMA event table.
+     * lookup table is copied into the event table.
      */
-    EventID bitplaneDMA[2][7][HPOS_CNT];
+    EventID bplDMA[2][7][HPOS_CNT];
 
     /* Fetch unit cycle numbers.
      *
@@ -133,6 +135,18 @@ public:
      * 0, the second cycle is numbered 1 and so on.
      */
     uint8_t fetchUnitNr[2][HPOS_CNT];
+
+    /* Disk, Audio, Sprite DMA events as they appear in a single rasterline.
+     *
+     * Parameters: dasDMA[dmacon]
+     *
+     *             dmacon : Bits 0 .. 5 of register DMACON
+     *
+     * The lookup table is used to quickly update the dasEvent table.
+     * Depending on the current resoution and BPU value, a segment of this
+     * lookup table is copied into the event table.
+     */
+    EventID dasDMA[64];
 
 
     //
@@ -810,8 +824,8 @@ public:
     // Returns true if DMA access of a certain type is enabled
     static bool bltpri(uint16_t v) { return GET_BIT(v, 10); }
     inline bool bltpri() { return bltpri(dmacon); }
-    static bool bplDMA(uint16_t v) { return (v & (DMAEN | BPLEN)) == (DMAEN | BPLEN); }
-    inline bool bplDMA() { return bplDMA(dmacon); }
+    static bool doBplDMA(uint16_t v) { return (v & (DMAEN | BPLEN)) == (DMAEN | BPLEN); }
+    inline bool doBplDMA() { return doBplDMA(dmacon); }
     static bool copDMA(uint16_t v) { return (v & (DMAEN | COPEN)) == (DMAEN | COPEN); }
     inline bool copDMA() { return copDMA(dmacon); }
     static bool bltDMA(uint16_t v) { return (v & (DMAEN | BLTEN)) == (DMAEN | BLTEN); }

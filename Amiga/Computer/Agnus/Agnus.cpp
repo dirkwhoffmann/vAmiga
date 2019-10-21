@@ -36,12 +36,12 @@ Agnus::initLookupTables()
 void
 Agnus::initLoresBplEventTable()
 {
-    memset(bitplaneDMA[0], 0, sizeof(bitplaneDMA[0]));
+    memset(bplDMA[0], 0, sizeof(bplDMA[0]));
     memset(fetchUnitNr[0], 0, sizeof(fetchUnitNr[0]));
 
     for (int bpu = 0; bpu < 7; bpu++) {
 
-        EventID *p = &bitplaneDMA[0][bpu][0];
+        EventID *p = &bplDMA[0][bpu][0];
 
         // Iterate through all 22 fetch units
         for (int i = 0; i <= 0xD8; i += 8, p += 8) {
@@ -56,8 +56,8 @@ Agnus::initLoresBplEventTable()
             }
         }
 
-        assert(bitplaneDMA[0][bpu][HPOS_MAX] == EVENT_NONE);
-        bitplaneDMA[0][bpu][HPOS_MAX] = BPL_EOL;
+        assert(bplDMA[0][bpu][HPOS_MAX] == EVENT_NONE);
+        bplDMA[0][bpu][HPOS_MAX] = BPL_EOL;
     }
 
     for (int i = 0; i <= 0xD8; i++) {
@@ -68,12 +68,12 @@ Agnus::initLoresBplEventTable()
 void
 Agnus::initHiresBplEventTable()
 {
-    memset(bitplaneDMA[1], 0, sizeof(bitplaneDMA[1]));
+    memset(bplDMA[1], 0, sizeof(bplDMA[1]));
     memset(fetchUnitNr[1], 0, sizeof(fetchUnitNr[1]));
 
     for (int bpu = 0; bpu < 7; bpu++) {
 
-        EventID *p = &bitplaneDMA[1][bpu][0];
+        EventID *p = &bplDMA[1][bpu][0];
 
         for (int i = 0; i <= 0xD8; i += 8, p += 8) {
 
@@ -87,8 +87,8 @@ Agnus::initHiresBplEventTable()
             }
         }
 
-        assert(bitplaneDMA[1][bpu][HPOS_MAX] == EVENT_NONE);
-        bitplaneDMA[1][bpu][HPOS_MAX] = BPL_EOL;
+        assert(bplDMA[1][bpu][HPOS_MAX] == EVENT_NONE);
+        bplDMA[1][bpu][HPOS_MAX] = BPL_EOL;
     }
 
     for (int i = 0; i <= 0xD8; i++) {
@@ -305,7 +305,7 @@ Agnus::inBplDmaLine(uint16_t dmacon, uint16_t bplcon0) {
     return
     ddfVFlop            // Outside VBLANK, inside DIW
     && bpu(bplcon0)     // At least one bitplane enabled
-    && bplDMA(dmacon);  // Bitplane DMA enabled
+    && doBplDMA(dmacon);  // Bitplane DMA enabled
 }
 
 Cycle
@@ -586,11 +586,11 @@ Agnus::allocateBplSlots(uint16_t dmacon, uint16_t bplcon0, int first, int last)
     // Allocate slots
     if (hires) {
         for (int i = first; i <= last; i++) {
-            bplEvent[i] = inHiresDmaArea(i) ? bitplaneDMA[1][channels][i] : EVENT_NONE;
+            bplEvent[i] = inHiresDmaArea(i) ? bplDMA[1][channels][i] : EVENT_NONE;
         }
     } else {
         for (int i = first; i <= last; i++) {
-            bplEvent[i] = inLoresDmaArea(i) ? bitplaneDMA[0][channels][i] : EVENT_NONE;
+            bplEvent[i] = inLoresDmaArea(i) ? bplDMA[0][channels][i] : EVENT_NONE;
         }
     }
 
@@ -638,7 +638,7 @@ Agnus::switchBitplaneDmaOn()
 
     // Copy events from the proper lookup table
     for (int i = start; i < stop; i++) {
-        bplEvent[i] = bitplaneDMA[hires][activeBitplanes][i];
+        bplEvent[i] = bplDMA[hires][activeBitplanes][i];
     }
 
     // Link everything together
@@ -866,7 +866,7 @@ Agnus::setDMACON(uint16_t oldValue, uint16_t value)
             // Bitplane DMA is switched on
 
             // Check if the current line is affected by the change
-            if (pos.h + 2 < ddfstrtReached || bplDMA(dmaconAtDDFStrt)) {
+            if (pos.h + 2 < ddfstrtReached || doBplDMA(dmaconAtDDFStrt)) {
 
                 allocateBplSlots(newValue, bplcon0, pos.h + 2);
                 updateBplEvent();
