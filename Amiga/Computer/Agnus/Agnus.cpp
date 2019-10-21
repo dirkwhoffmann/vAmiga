@@ -28,13 +28,13 @@ Agnus::Agnus(Amiga& ref) : SubComponent(ref)
 void
 Agnus::initLookupTables()
 {
-    initLoresBplEventTable();
-    initHiresBplEventTable();
+    initBplEventTableLores();
+    initBplEventTableHires();
     initDASTables();
 }
 
 void
-Agnus::initLoresBplEventTable()
+Agnus::initBplEventTableLores()
 {
     memset(bplDMA[0], 0, sizeof(bplDMA[0]));
     memset(fetchUnitNr[0], 0, sizeof(fetchUnitNr[0]));
@@ -66,7 +66,7 @@ Agnus::initLoresBplEventTable()
 }
 
 void
-Agnus::initHiresBplEventTable()
+Agnus::initBplEventTableHires()
 {
     memset(bplDMA[1], 0, sizeof(bplDMA[1]));
     memset(fetchUnitNr[1], 0, sizeof(fetchUnitNr[1]));
@@ -93,6 +93,53 @@ Agnus::initHiresBplEventTable()
 
     for (int i = 0; i <= 0xD8; i++) {
         fetchUnitNr[0][i] = i % 4;
+    }
+}
+
+void
+Agnus::initDasEventTable()
+{
+    memset(dasDMA, 0, sizeof(dasDMA));
+
+    for (int dmacon = 0; dmacon < 64; dmacon++) {
+
+        EventID *p = dasDMA[0];
+
+        p[0x01] = DAS_REFRESH;
+        p[0x03] = DAS_REFRESH;
+        p[0x05] = DAS_REFRESH;
+
+        if (dmacon) {
+            p[0x07] = DAS_D0;
+            p[0x09] = DAS_D1;
+            p[0x0B] = DAS_D2;
+        }
+
+        p[0x0D] = (dmacon & AU0EN) ? DAS_A0 : EVENT_NONE;
+        p[0x0F] = (dmacon & AU1EN) ? DAS_A1 : EVENT_NONE;
+        p[0x11] = (dmacon & AU2EN) ? DAS_A2 : EVENT_NONE;
+        p[0x13] = (dmacon & AU3EN) ? DAS_A3 : EVENT_NONE;
+
+        if (dmacon & SPREN) {
+            p[0x15] = DAS_S0_1;
+            p[0x17] = DAS_S0_2;
+            p[0x19] = DAS_S1_1;
+            p[0x1B] = DAS_S1_2;
+            p[0x1D] = DAS_S2_1;
+            p[0x1F] = DAS_S2_2;
+            p[0x21] = DAS_S3_1;
+            p[0x23] = DAS_S3_2;
+            p[0x25] = DAS_S4_1;
+            p[0x27] = DAS_S4_2;
+            p[0x29] = DAS_S5_1;
+            p[0x2B] = DAS_S5_2;
+            p[0x2D] = DAS_S6_1;
+            p[0x2F] = DAS_S6_2;
+            p[0x31] = DAS_S7_1;
+            p[0x33] = DAS_S7_2;
+        }
+
+        p[0xE2] = DAS_REFRESH;
     }
 }
 
@@ -568,7 +615,7 @@ Agnus::clearBplEventTable()
 {
     memset(bplEvent, 0, sizeof(bplEvent));
     bplEvent[HPOS_MAX] = BPL_EOL;
-    updateJumpTable();
+    updateBplJumpTable();
 }
 
 void
@@ -594,7 +641,7 @@ Agnus::allocateBplSlots(uint16_t dmacon, uint16_t bplcon0, int first, int last)
         }
     }
 
-    updateJumpTable();
+    updateBplJumpTable();
 }
 
 void
@@ -642,7 +689,7 @@ Agnus::switchBitplaneDmaOn()
     }
 
     // Link everything together
-    updateJumpTable();
+    updateBplJumpTable();
 }
 
 
@@ -683,23 +730,44 @@ Agnus::computeBplVstrtVstop()
 */
 
 void
-Agnus::updateJumpTable(int16_t to)
+Agnus::updateJumpTable(EventID *eventTable, uint8_t *jumpTable, int end)
 {
-    assert(to <= HPOS_MAX + 1);
+    assert(end <= HPOS_MAX);
 
+     uint8_t next = jumpTable[end];
+     for (int i = end; i >= 0; i--) {
+         jumpTable[i] = next;
+         if (eventTable[i]) next = i;
+     }
+}
+
+void
+Agnus::updateBplJumpTable(int16_t end)
+{
     // Build the jump table
-    uint8_t next = nextBplEvent[to];
-    for (int i = to; i >= 0; i--) {
+    updateJumpTable(bplEvent, nextBplEvent, end);
+    /*
+    uint8_t next = nextBplEvent[end];
+    for (int i = end; i >= 0; i--) {
         nextBplEvent[i] = next;
         if (bplEvent[i]) next = i;
     }
+    */
 
-    // Make sure the table ends with an HSYNC event
-    if (nextBplEvent[HPOS_MAX - 1] != HPOS_MAX) {
-        dumpBplEventTable();
-    }
-    assert(nextBplEvent[HPOS_MAX - 1] == HPOS_MAX);
+    // Make sure the table ends with an BPL_EOL event
     assert(bplEvent[HPOS_MAX] == BPL_EOL);
+    assert(nextBplEvent[HPOS_MAX - 1] == HPOS_MAX);
+}
+
+void
+Agnus::updateDasJumpTable(int16_t end)
+{
+    // Build the jump table
+    updateJumpTable(dasEvent, nextDasEvent, end);
+
+    // Make sure the table ends with a DAS_REFRESH event
+    assert(dasEvent[HPOS_MAX] == DAS_REFRESH);
+    assert(nextDasEvent[HPOS_MAX - 1] == HPOS_MAX);
 }
 
 bool

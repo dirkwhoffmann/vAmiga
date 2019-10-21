@@ -146,7 +146,7 @@ public:
      * Depending on the current resoution and BPU value, a segment of this
      * lookup table is copied into the event table.
      */
-    EventID dasDMA[64];
+    EventID dasDMA[64][HPOS_CNT];
 
 
     //
@@ -511,9 +511,11 @@ public:
     Agnus(Amiga& ref);
 
     void initLookupTables();
-    void initLoresBplEventTable();
-    void initHiresBplEventTable();
-    void initDASTables();
+    void initBplEventTableLores();
+    void initBplEventTableHires();
+    void initDasEventTable();
+
+    void initDASTables(); // DEPRECATED
 
     template <class T>
     void applyToPersistentItems(T& worker)
@@ -790,9 +792,14 @@ public:
     void switchBitplaneDmaOff();
     void updateBitplaneDma();
 
-    // Updates the DMA time slot allocation's jump table.
-    void updateJumpTable(int16_t to);
-    void updateJumpTable() { updateJumpTable(HPOS_MAX); }
+    // Updates the jump table for a given event table
+    void updateJumpTable(EventID *eventTable, uint8_t *jumpTable, int end);
+
+    // Updates the jump table for the bplEvent table
+    void updateBplJumpTable(int16_t end = HPOS_MAX);
+
+    // Updates the jump table for the dasEvent table
+    void updateDasJumpTable(int16_t end = HPOS_MAX);
 
     // Returns true if the event in the specified slot is the Lx event.
     bool isLastLx(int16_t dmaCycle);
