@@ -149,6 +149,59 @@ public:
 
 
     //
+    // Event tables
+    //
+
+    /* Agnus utilizes two event tables to schedule DMA events in the DAS_SLOT
+     * and BPL_SLOT. Together, both tables resembles Fig. 6-9 im the HRM (3rd
+     * rev.). Assuming that sprite DMA is enabled and Denise draws 6 bitplanes
+     * in lores mode starting at 0x28, the tables would look like this:
+     *
+     *     bplEvent[0x00] = EVENT_NONE   dasEvent[0x00] = EVENT_NONE
+     *     bplEvent[0x01] = EVENT_NONE   dasEvent[0x01] = BUS_REFRESH
+     *         ...                           ...
+     *     bplEvent[0x28] = EVENT_NONE   dasEvent[0x28] = EVENT_NONE
+     *     bplEvent[0x29] = BPL_L4       dasEvent[0x29] = DAS_S5_1
+     *     bplEvent[0x2A] = BPL_L6       dasEvent[0x2A] = EVENT_NONE
+     *     bplEvent[0x2B] = BPL_L2       dasEvent[0x2B] = DAS_S5_2
+     *     bplEvent[0x2C] = EVENT_NONE   dasEvent[0x2C] = EVENT_NONE
+     *     bplEvent[0x2D] = BPL_L3       dasEvent[0x2D] = DAS_S6_1
+     *     bplEvent[0x2E] = BPL_L5       dasEvent[0x2E] = EVENT_NONE
+     *     bplEvent[0x2F] = BPL_L1       dasEvent[0x2F] = DAS_S6_2
+     *         ...                           ...
+     *     bplEvent[0xE2] = BPL_EOL      dasEvent[0xE2] = BUS_REFRESH
+     *
+     * The BPL_EOL event doesn't perform DMA. It concludes the current line.
+     */
+    EventID bplEvent[HPOS_CNT];
+    EventID dasEvent[HPOS_CNT];
+
+    /* Each event table is accompanied by a jump table that points to the
+     * next event. Given the example tables above, the jump tables would look
+     * like this:
+     *
+     *     nextBplEvent[0x00] = 0x29     nextDasEvent[0x00] = 0x01
+     *     nextBplEvent[0x01] = 0x29     nextDasEvent[0x01] = 0x03
+     *           ...                           ...
+     *     nextBplEvent[0x28] = 0x29     nextDasEvent[0x28] = 0x29
+     *     nextBplEvent[0x29] = 0x2A     nextDasEvent[0x29] = 0x2B
+     *     nextBplEvent[0x2A] = 0x2B     nextDasEvent[0x2A] = 0x2B
+     *     nextBplEvent[0x2B] = 0x2D     nextDasEvent[0x2B] = 0x2D
+     *     nextBplEvent[0x2C] = 0x2D     nextDasEvent[0x2C] = 0x2D
+     *     nextBplEvent[0x2D] = 0x2E     nextDasEvent[0x2D] = 0x2F
+     *     nextBplEvent[0x2E] = 0x2F     nextDasEvent[0x2E] = 0x2F
+     *     nextBplEvent[0x2F] = 0x31     nextDasEvent[0x2F] = 0x31
+     *           ...                           ...
+     *     nextBplEvent[0xE2] = 0x00     nextDasEvent[0xE2] = 0x00
+     *
+     * Whenever one the DMA tables is modified, the corresponding jump table
+     * has to be updated.
+     */
+    uint8_t nextBplEvent[HPOS_CNT];
+    uint8_t nextDasEvent[HPOS_CNT];
+
+
+    //
     // Operation control
     //
 
@@ -418,37 +471,6 @@ public:
     // Unsed in the hsyncHandler to remember the result of inBplDmaLine
     bool oldBplDmaLine;
 
-    
-    //
-    // DMA event tables
-    //
-
-    /* Agnus utilizes two DMA event tables to schedule DAS_SLOT and BPL_SLOT
-     * events. Together, both tables resembles Fig. 6-9 im the HRM (3rd rev.).
-     * Assuming that sprite DMA is enabled and Denise draws 6 bitplanes in
-     * lores mode, the tables would look like this:
-     *
-     *     bplEvent[0x00] = EVENT_NONE   dasEvent[0x00] = EVENT_NONE
-     *     bplEvent[0x00] = EVENT_NONE   dasEvent[0x01] = BUS_REFRESH
-     *         ...                           ...
-     *     bplEvent[0x28] = EVENT_NONE   dasEvent[0x28] = EVENT_NONE
-     *     bplEvent[0x29] = BPL_L4       dasEvent[0x29] = DAS_S5_1
-     *     bplEvent[0x2A] = BPL_L6       dasEvent[0x2A] = EVENT_NONE
-     *     bplEvent[0x2B] = BPL_L2       dasEvent[0x2B] = DAS_S5_2
-     *     bplEvent[0x2C] = EVENT_NONE   dasEvent[0x2C] = EVENT_NONE
-     *     bplEvent[0x2D] = BPL_L3       dasEvent[0x2D] = DAS_S6_1
-     *     bplEvent[0x2E] = BPL_L5       dasEvent[0x2E] = EVENT_NONE
-     *     bplEvent[0x2F] = BPL_L1       dasEvent[0x2F] = DAS_S6_2
-     *         ...                           ...
-     *     bplEvent[0xE2] = BPL_EOL      bplEvent[0xE2] = BUS_REFRESH
-     */
-    EventID bplEvent[HPOS_CNT];
-    
-    /* Jump table for quick handling the DMA time slot allocation table.
-     * For a given horizontal position hpos, nextBplEvent[hpos] points to the
-     * next horizontal position where a DMA event happens.
-     */
-    uint8_t nextBplEvent[HPOS_CNT];
 
     /*
      * Priority logic (CPU versus Blitter)
@@ -491,6 +513,11 @@ public:
 
         & slot
         & nextTrigger
+
+        & bplEvent
+        & dasEvent
+        & nextBplEvent
+        & nextDasEvent
 
         & actions
         & hsyncActions
@@ -546,8 +573,6 @@ public:
         & busOwner
         & oldBplDmaLine
 
-        & bplEvent
-        & nextBplEvent
         & cpuRequestsBus
         & cpuDenials;
     }
