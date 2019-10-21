@@ -927,6 +927,7 @@ Agnus::setDMACON(uint16_t oldValue, uint16_t value)
     // Update variable dmaconAtDDFStrt if DDFSTRT has not been reached yet
     if (pos.h + 2 < ddfstrtReached) dmaconAtDDFStrt = newValue;
 
+    // Check the lowest 5 bits
     bool oldDMAEN = (oldValue & DMAEN);
     bool oldBPLEN = (oldValue & BPLEN) && oldDMAEN;
     bool oldCOPEN = (oldValue & COPEN) && oldDMAEN;
@@ -979,7 +980,26 @@ Agnus::setDMACON(uint16_t oldValue, uint16_t value)
         // Let Denise know about the change
         denise.pokeDMACON(oldValue, newValue);
     }
-    
+
+    // Check DAS DMA (Disk, Audio, Sprites)
+    uint16_t oldDAS = oldDMAEN ? (oldValue & 0x3F) : 0;
+    uint16_t newDAS = newDMAEN ? (newValue & 0x3F) : 0;
+
+    if (oldDAS != newDAS) {
+
+        // Schedule the DAS DMA tabel to rebuild
+        hsyncActions |= HSYNC_UPDATE_DAS_TABLE;
+
+        // Make the effect visible in the current rasterline as well
+        for (int i = pos.h; i < HPOS_CNT; i++) {
+            dasEvent[i] = dasDMA[newDAS][i];
+        }
+        updateDasJumpTable();
+
+        // Rectify the currently scheduled DAS event
+        scheduleDasEventForCycle(pos.h);
+    }
+
     // Copper DMA
     if (oldCOPEN ^ newCOPEN) {
         
@@ -1026,15 +1046,11 @@ Agnus::setDMACON(uint16_t oldValue, uint16_t value)
         if (newSPREN) {
             // Sprite DMA on
             debug(DMA_DEBUG, "Sprite DMA switched on\n");
-            // dmaDAS |= 0x20;
-            // updateDasDma(dmaDAS);
 
         } else {
             
             // Sprite DMA off
             debug(DMA_DEBUG, "Sprite DMA switched off\n");
-            // dmaDAS &= ~0x20;
-            // updateDasDma(dmaDAS);
         }
     }
     

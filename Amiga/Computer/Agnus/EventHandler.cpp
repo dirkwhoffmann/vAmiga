@@ -383,8 +383,6 @@ Agnus::scheduleDasEventForCycle(int16_t hpos)
     } else {
         scheduleNextDasEvent(hpos);
     }
-
-    assert(hasEvent<DAS_SLOT>());
 }
 
 void
