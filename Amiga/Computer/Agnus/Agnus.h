@@ -420,26 +420,35 @@ public:
 
     
     //
-    // DMA
+    // DMA event tables
     //
-    
-    /* The DMA time slot allocation table for a complete horizontal line.
-     * The array resembles Fig. 6-9 im the HRM (3rd rev.). It's semantics is
-     * as follows:
-     * If, e.g., audio DMA for channel 1 and 2 is activated, elements
-     * dmaEvent[7] and dmaEvent[9] equal AUDEN. If no DMA event takes place at
-     * a specific cycle, the array element is 0.
-     * The event at position HPOS_CNT is outside the DMA cycle range and
-     * triggers the HSYNC handler.
+
+    /* Agnus utilizes two DMA event tables to schedule DAS_SLOT and BPL_SLOT
+     * events. Together, both tables resembles Fig. 6-9 im the HRM (3rd rev.).
+     * Assuming that sprite DMA is enabled and Denise draws 6 bitplanes in
+     * lores mode, the tables would look like this:
      *
+     *     bplEvent[0x00] = EVENT_NONE   dasEvent[0x00] = EVENT_NONE
+     *     bplEvent[0x00] = EVENT_NONE   dasEvent[0x01] = BUS_REFRESH
+     *         ...                           ...
+     *     bplEvent[0x28] = EVENT_NONE   dasEvent[0x28] = EVENT_NONE
+     *     bplEvent[0x29] = BPL_L4       dasEvent[0x29] = DAS_S5_1
+     *     bplEvent[0x2A] = BPL_L6       dasEvent[0x2A] = EVENT_NONE
+     *     bplEvent[0x2B] = BPL_L2       dasEvent[0x2B] = DAS_S5_2
+     *     bplEvent[0x2C] = EVENT_NONE   dasEvent[0x2C] = EVENT_NONE
+     *     bplEvent[0x2D] = BPL_L3       dasEvent[0x2D] = DAS_S6_1
+     *     bplEvent[0x2E] = BPL_L5       dasEvent[0x2E] = EVENT_NONE
+     *     bplEvent[0x2F] = BPL_L1       dasEvent[0x2F] = DAS_S6_2
+     *         ...                           ...
+     *     bplEvent[0xE2] = BPL_EOL      bplEvent[0xE2] = BUS_REFRESH
      */
-    EventID dmaEvent[HPOS_CNT];
+    EventID bplEvent[HPOS_CNT];
     
     /* Jump table for quick handling the DMA time slot allocation table.
-     * For a given horizontal position hpos, nextDmaEvent[hpos] points to the
+     * For a given horizontal position hpos, nextBplEvent[hpos] points to the
      * next horizontal position where a DMA event happens.
      */
-    uint8_t nextDmaEvent[HPOS_CNT];
+    uint8_t nextBplEvent[HPOS_CNT];
 
     /*
      * Priority logic (CPU versus Blitter)
@@ -537,8 +546,8 @@ public:
         & busOwner
         & oldBplDmaLine
 
-        & dmaEvent
-        & nextDmaEvent
+        & bplEvent
+        & nextBplEvent
         & cpuRequestsBus
         & cpuDenials;
     }

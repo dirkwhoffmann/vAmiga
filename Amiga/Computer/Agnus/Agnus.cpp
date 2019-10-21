@@ -566,8 +566,8 @@ Agnus::blitterWrite(uint32_t addr, uint16_t value)
 void
 Agnus::clearBplEventTable()
 {
-    memset(dmaEvent, 0, sizeof(dmaEvent));
-    dmaEvent[HPOS_MAX] = BPL_EOL;
+    memset(bplEvent, 0, sizeof(bplEvent));
+    bplEvent[HPOS_MAX] = BPL_EOL;
     updateJumpTable();
 }
 
@@ -586,11 +586,11 @@ Agnus::allocateBplSlots(uint16_t dmacon, uint16_t bplcon0, int first, int last)
     // Allocate slots
     if (hires) {
         for (int i = first; i <= last; i++) {
-            dmaEvent[i] = inHiresDmaArea(i) ? bitplaneDMA[1][channels][i] : EVENT_NONE;
+            bplEvent[i] = inHiresDmaArea(i) ? bitplaneDMA[1][channels][i] : EVENT_NONE;
         }
     } else {
         for (int i = first; i <= last; i++) {
-            dmaEvent[i] = inLoresDmaArea(i) ? bitplaneDMA[0][channels][i] : EVENT_NONE;
+            bplEvent[i] = inLoresDmaArea(i) ? bitplaneDMA[0][channels][i] : EVENT_NONE;
         }
     }
 
@@ -633,12 +633,12 @@ Agnus::switchBitplaneDmaOn()
     assert(stop >= 0 && stop <= HPOS_MAX);
 
     // Wipe out all events outside the fetch unit window
-    for (int i = 0; i < start; i++) dmaEvent[i] = EVENT_NONE;
-    for (int i = stop; i < HPOS_MAX; i++) dmaEvent[i] = EVENT_NONE;
+    for (int i = 0; i < start; i++) bplEvent[i] = EVENT_NONE;
+    for (int i = stop; i < HPOS_MAX; i++) bplEvent[i] = EVENT_NONE;
 
     // Copy events from the proper lookup table
     for (int i = start; i < stop; i++) {
-        dmaEvent[i] = bitplaneDMA[hires][activeBitplanes][i];
+        bplEvent[i] = bitplaneDMA[hires][activeBitplanes][i];
     }
 
     // Link everything together
@@ -652,8 +652,8 @@ Agnus::switchBitplaneDmaOff()
     debug(BPL_DEBUG, "switchBitplaneDmaOff: \n");
 
     // Quick-exit if nothing happens at regular DMA cycle positions
-    if (nextDmaEvent[0] == HPOS_MAX) {
-        assert(dmaEvent[nextDmaEvent[0]] == BPL_EOL);
+    if (nextBplEvent[0] == HPOS_MAX) {
+        assert(bplEvent[nextBplEvent[0]] == BPL_EOL);
         return;
     }
 
@@ -688,18 +688,18 @@ Agnus::updateJumpTable(int16_t to)
     assert(to <= HPOS_MAX + 1);
 
     // Build the jump table
-    uint8_t next = nextDmaEvent[to];
+    uint8_t next = nextBplEvent[to];
     for (int i = to; i >= 0; i--) {
-        nextDmaEvent[i] = next;
-        if (dmaEvent[i]) next = i;
+        nextBplEvent[i] = next;
+        if (bplEvent[i]) next = i;
     }
 
     // Make sure the table ends with an HSYNC event
-    if (nextDmaEvent[HPOS_MAX - 1] != HPOS_MAX) {
+    if (nextBplEvent[HPOS_MAX - 1] != HPOS_MAX) {
         dumpBplEventTable();
     }
-    assert(nextDmaEvent[HPOS_MAX - 1] == HPOS_MAX);
-    assert(dmaEvent[HPOS_MAX] == BPL_EOL);
+    assert(nextBplEvent[HPOS_MAX - 1] == HPOS_MAX);
+    assert(bplEvent[HPOS_MAX] == BPL_EOL);
 }
 
 bool
@@ -735,7 +735,7 @@ Agnus::dumpBplEventTable(int from, int to)
         r1[i] = (digit1 < 10) ? digit1 + '0' : (digit1 - 10) + 'A';
         r2[i] = (digit2 < 10) ? digit2 + '0' : (digit2 - 10) + 'A';
         
-        switch(dmaEvent[i + from]) {
+        switch(bplEvent[i + from]) {
             case EVENT_NONE:   r3[i] = '.'; r4[i] = '.'; break;
             case BPL_L1:       r3[i] = 'L'; r4[i] = '1'; break;
             case BPL_L2:       r3[i] = 'L'; r4[i] = '2'; break;
@@ -776,12 +776,12 @@ Agnus::dumpBplEventTable()
 
     // Dump the jump table
     plainmsg("\nJump table:\n\n");
-    int i = nextDmaEvent[0];
+    int i = nextBplEvent[0];
     plainmsg("0 -> %X", i);
     while (i) {
         assert(i < HPOS_CNT);
-        assert(nextDmaEvent[i] == 0 || nextDmaEvent[i] > i);
-        i = nextDmaEvent[i];
+        assert(nextBplEvent[i] == 0 || nextBplEvent[i] > i);
+        i = nextBplEvent[i];
         plainmsg(" -> %X", i);
     }
     plainmsg("\n");
@@ -1392,9 +1392,9 @@ Agnus::skipBPLxPT(int x)
      *     (2) There is no DMA going on when the write would happen.
      */
 
-    if (isBplxEvent(dmaEvent[pos.h + 1], x)) { // (1)
+    if (isBplxEvent(bplEvent[pos.h + 1], x)) { // (1)
 
-        if (dmaEvent[pos.h + 2] == EVENT_NONE) { // (2)
+        if (bplEvent[pos.h + 2] == EVENT_NONE) { // (2)
 
             // debug("skipBPLxPT: Value gets lost\n");
             // dumpBplEventTable();

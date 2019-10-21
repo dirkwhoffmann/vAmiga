@@ -338,8 +338,8 @@ Agnus::scheduleNextBplEvent(int16_t hpos)
 {
     assert(isHPos(hpos));
 
-    if (uint8_t next = nextDmaEvent[hpos]) {
-        scheduleRel<BPL_SLOT>(DMA_CYCLES(next - pos.h), dmaEvent[next]);
+    if (uint8_t next = nextBplEvent[hpos]) {
+        scheduleRel<BPL_SLOT>(DMA_CYCLES(next - pos.h), bplEvent[next]);
     }
     assert(hasEvent<BPL_SLOT>());
 }
@@ -350,8 +350,8 @@ Agnus::scheduleBplEventForCycle(int16_t hpos)
     assert(isHPos(hpos));
     assert(hpos >= pos.h);
 
-    if (dmaEvent[hpos] != EVENT_NONE) {
-        scheduleRel<BPL_SLOT>(DMA_CYCLES(hpos - pos.h), dmaEvent[hpos]);
+    if (bplEvent[hpos] != EVENT_NONE) {
+        scheduleRel<BPL_SLOT>(DMA_CYCLES(hpos - pos.h), bplEvent[hpos]);
     } else {
         scheduleNextBplEvent(hpos);
     }
