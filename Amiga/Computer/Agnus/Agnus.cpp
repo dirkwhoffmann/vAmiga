@@ -104,7 +104,7 @@ Agnus::initDasEventTable()
 
     for (int dmacon = 0; dmacon < 64; dmacon++) {
 
-        EventID *p = dasDMA[0];
+        EventID *p = dasDMA[dmacon];
 
         p[0x01] = DAS_REFRESH;
         p[0x03] = DAS_REFRESH;
@@ -1119,13 +1119,15 @@ Agnus::setDMACON(uint16_t oldValue, uint16_t value)
         if (newSPREN) {
             // Sprite DMA on
             debug(DMA_DEBUG, "Sprite DMA switched on\n");
-            dmaDAS |= 0x20;
+            // dmaDAS |= 0x20;
+            // updateDasDma(dmaDAS);
 
         } else {
             
             // Sprite DMA off
             debug(DMA_DEBUG, "Sprite DMA switched off\n");
-            dmaDAS &= ~0x20;
+            // dmaDAS &= ~0x20;
+            // updateDasDma(dmaDAS);
         }
     }
     
@@ -1415,7 +1417,7 @@ Agnus::setDDFSTRT(uint16_t old, uint16_t value)
     ddfstrt = value;
 
     // Let the hsync handler recompute the data fetch window
-    hsyncActions |= HSYNC_COMPUTE_DDF_WINDOW;
+    hsyncActions |= HSYNC_COMPUTE_DDF_WINDOW | HSYNC_UPDATE_BPL_TABLE;
 
     // Take action if we haven't reached the old DDFSTRT cycle yet
     if (pos.h < ddfstrtReached) {
@@ -1446,7 +1448,7 @@ Agnus::setDDFSTOP(uint16_t old, uint16_t value)
     ddfstop = value;
 
     // Let the hsync handler recompute the data fetch window
-    hsyncActions |= HSYNC_COMPUTE_DDF_WINDOW;
+    hsyncActions |= HSYNC_COMPUTE_DDF_WINDOW | HSYNC_UPDATE_BPL_TABLE;
 
     // Take action if we haven't reached the old DDFSTOP cycle yet
      if (pos.h < ddfstopReached || ddfstopReached == -1) {
@@ -2056,18 +2058,23 @@ Agnus::hsyncHandler()
     // Determine the disk, audio and sprite DMA status for the line to come
     //
 
+    uint16_t newDmaDAS;
+
     if (dmacon & DMAEN) {
 
         // Copy DMA enable bits from dmacon
-        dmaDAS = dmacon & 0b111111;
+        newDmaDAS = dmacon & 0b111111;
 
         // Disable sprites outside the sprite DMA area
-        if (pos.v < 25 || pos.v >= frameInfo.numLines - 1) dmaDAS &= 0b011111;
+        if (pos.v < 25 || pos.v >= frameInfo.numLines - 1) newDmaDAS &= 0b011111;
 
     } else {
 
-        dmaDAS = 0;
+        newDmaDAS = 0;
     }
+
+    if (dmaDAS != newDmaDAS) hsyncActions |= HSYNC_UPDATE_DAS_TABLE;
+    dmaDAS = newDmaDAS;
 
     //
     // Process pending work items
@@ -2077,17 +2084,13 @@ Agnus::hsyncHandler()
 
         if (hsyncActions & HSYNC_COMPUTE_DDF_WINDOW) {
             computeDDFWindow();
-            hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
         }
-
         if (hsyncActions & HSYNC_UPDATE_BPL_TABLE) {
             updateBplDma();
         }
-
-         if (hsyncActions & HSYNC_UPDATE_DAS_TABLE) {
-             // TODO
-         }
-
+        if (hsyncActions & HSYNC_UPDATE_DAS_TABLE) {
+            updateDasDma(dmaDAS);
+        }
 
         hsyncActions = 0;
     }

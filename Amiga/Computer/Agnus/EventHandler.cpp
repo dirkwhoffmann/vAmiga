@@ -694,6 +694,8 @@ Agnus::serviceDASEvent()
 {
     EventID id = slot[DAS_SLOT].id;
 
+    assert(id == dasEvent[pos.h]);
+    
     assert(checkTriggeredEvent(DAS_SLOT));
     assert(pos.h == DASEventCycle(id));
 
