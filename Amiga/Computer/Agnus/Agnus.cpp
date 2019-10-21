@@ -1706,68 +1706,10 @@ Agnus::updateRegisters()
 {
 }
 
-/*
 template <int nr> void
 Agnus::executeFirstSpriteCycle()
 {
-    if (nr == 6) debug(SPR_DEBUG, "executeFirstSpriteCycle<%d> (%d,%d)\n", nr, sprVStrt[nr], sprVStop[nr]);
-
-    // Activate sprite data DMA if the first sprite line has been reached
-    if (pos.v == sprVStrt[nr]) {
-        sprDmaStateOld[nr] = SPR_DMA_DATA;
-        if (nr == 6) debug(SPR_DEBUG, "pos.v == sprVStrt[%d]\n", nr);
-    }
-
-    // Deactivate sprite data DMA if the last sprite line has been reached
-    if (pos.v == sprVStop[nr]) {
-
-        if (nr == 6) debug(SPR_DEBUG, "pos.v == sprVStop[%d]\n", nr);
-
-        // Deactivate sprite data DMA
-        sprDmaStateOld[nr] = SPR_DMA_IDLE;
-
-        // Read the next control word (POS part)
-        uint16_t pos = doSpriteDMA<nr>();
-        agnus.pokeSPRxPOS<nr>(pos);
-        denise.pokeSPRxPOS<nr>(pos);
-    }
-
-    // Read sprite data if DMA is on
-    if (sprDmaStateOld[nr] == SPR_DMA_DATA) {
-
-        denise.pokeSPRxDATA<nr>(doSpriteDMA(nr));
-    }
-}
-
-template <int nr> void
-Agnus::executeSecondSpriteCycle()
-{
-    if (nr == 6) debug(SPR_DEBUG, "executeSecondSpriteCycle<%d>\n", nr);
-
-    // Deactivate sprite data DMA if the last sprite line has been reached
-    if (pos.v == sprVStop[nr]) {
-        
-        // Sprite DMA should already be inactive in the second DMA cycle
-        assert(sprDmaStateOld[nr] == SPR_DMA_IDLE);
-        
-        // Read the next control word (CTL part)
-        uint16_t ctl = doSpriteDMA(nr);
-        agnus.pokeSPRxCTL<nr>(ctl);
-        denise.pokeSPRxCTL<nr>(ctl);
-    }
-    
-    // Read sprite data if DMA is on
-    if (sprDmaStateOld[nr] == SPR_DMA_DATA) {
-
-        denise.pokeSPRxDATB<nr>(doSpriteDMA(nr));
-    }
-}
-*/
-
-template <int nr> void
-Agnus::executeFirstSpriteCycle()
-{
-    if (nr == 6) debug(SPR_DEBUG, "executeFirstSpriteCycle<%d> (%d,%d)\n", nr, sprVStrt[nr], sprVStop[nr]);
+    debug(SPR_DEBUG, "executeFirstSpriteCycle<%d> (%d,%d)\n", nr, sprVStrt[nr], sprVStop[nr]);
 
     uint16_t value;
 
@@ -1777,6 +1719,10 @@ Agnus::executeFirstSpriteCycle()
             break;
 
         case SPR_DMA_CTRL:
+
+            // Skip if vpos doesn't match any more
+            if (pos.v != sprVStop[nr]) break;
+
             value = doSpriteDMA<nr>();
             agnus.pokeSPRxPOS<nr>(value);
             denise.pokeSPRxPOS<nr>(value);
@@ -1792,7 +1738,7 @@ Agnus::executeFirstSpriteCycle()
 template <int nr> void
 Agnus::executeSecondSpriteCycle()
 {
-    if (nr == 6) debug(SPR_DEBUG, "executeSecondSpriteCycle<%d>\n", nr);
+    debug(SPR_DEBUG, "executeSecondSpriteCycle<%d>\n", nr);
 
     uint16_t value;
 
@@ -1802,10 +1748,13 @@ Agnus::executeSecondSpriteCycle()
             break;
 
         case SPR_DMA_CTRL:
+
+            // Skip if vpos doesn't match any more
+            if (pos.v != sprVStop[nr]) break;
+
             value = doSpriteDMA<nr>();
             agnus.pokeSPRxCTL<nr>(value);
             denise.pokeSPRxCTL<nr>(value);
-            sprDmaState[nr] = SPR_DMA_IDLE;
             break;
 
         case SPR_DMA_DATA:
@@ -1835,16 +1784,6 @@ Agnus::hsyncHandler()
     // Advance the vertical counter
     if (++pos.v >= frameInfo.numLines) vsyncHandler();
 
-    // Check sprite triggers
-    for (unsigned i = 0; i < 8; i++) {
-        if (pos.v == sprVStrt[i]) {
-            sprActive[i] = true;
-        }
-        if (pos.v == sprVStop[i] + 1) {
-            sprActive[i] = false;
-        }
-    }
-
     // Check if we have reached line 25 (sprite DMA starts here)
     if (pos.v == 25 && sprDMA()) {
         // Reset vertical sprite trigger coordinates which forces the sprite
@@ -1858,24 +1797,20 @@ Agnus::hsyncHandler()
             sprDmaState[i] = SPR_DMA_IDLE;
         }
     } else {
+        // debug("sprVStrt[0] = %d stop = %d\n", sprVStrt[0], sprVStop[0]);
         for (unsigned i = 0; i < 8; i++) {
             if (pos.v == sprVStrt[i]) {
+                debug(SPR_DEBUG, "Sprite %d: SPR_DMA_DATA\n", i);
                 sprDmaState[i] = SPR_DMA_DATA;
             }
             if (pos.v == sprVStop[i]) {
+                debug(SPR_DEBUG, "Sprite %d: SPR_DMA_CTRL\n", i);
                 sprDmaState[i] = SPR_DMA_CTRL;
             }
             if (pos.v == sprVStop[i] + 1) {
+                debug(SPR_DEBUG, "Sprite %d: SPR_DMA_IDLE\n", i);
                 sprDmaState[i] = SPR_DMA_IDLE;
             }
-        }
-    }
-
-    // Switch sprite DMA off if the last rasterline has been reached
-    if (pos.v == frameInfo.numLines - 1) {
-        for (unsigned i = 0; i < 8; i++) {
-            sprDmaStateOld[i] = SPR_DMA_IDLE;
-            sprActive[i] = false;
         }
     }
 
