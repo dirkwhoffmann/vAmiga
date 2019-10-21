@@ -750,15 +750,6 @@ Agnus::updateDasDma(uint16_t dmacon)
     updateDasJumpTable();
 }
 
-/*
-void
-Agnus::computeBplVstrtVstop()
-{
-    bplVstrt = MAX(diwVstrt, 26); // 0 .. 25 is VBLANK area
-    bplVstop = MIN(diwVstop, frameInfo.numLines - 1);
-}
-*/
-
 void
 Agnus::updateJumpTable(EventID *eventTable, uint8_t *jumpTable, int end)
 {
@@ -776,13 +767,6 @@ Agnus::updateBplJumpTable(int16_t end)
 {
     // Build the jump table
     updateJumpTable(bplEvent, nextBplEvent, end);
-    /*
-    uint8_t next = nextBplEvent[end];
-    for (int i = end; i >= 0; i--) {
-        nextBplEvent[i] = next;
-        if (bplEvent[i]) next = i;
-    }
-    */
 
     // Make sure the table ends with an BPL_EOL event
     assert(bplEvent[HPOS_MAX] == BPL_EOL);
@@ -794,16 +778,6 @@ Agnus::updateDasJumpTable(int16_t end)
 {
     // Build the jump table
     updateJumpTable(dasEvent, nextDasEvent, end);
-
-    // Make sure the table ends with a DAS_REFRESH event
-    /*
-    if (dasEvent[HPOS_MAX] != DAS_REFRESH) {
-        dumpBplEventTable();
-        dumpDasEventTable();
-    }
-    assert(dasEvent[HPOS_MAX] == DAS_REFRESH);
-    assert(nextDasEvent[HPOS_MAX - 1] == HPOS_MAX);
-    */
 }
 
 bool
@@ -2100,8 +2074,9 @@ Agnus::hsyncHandler()
     // Clear the bus usage table
     for (int i = 0; i < HPOS_CNT; i++) busOwner[i] = BUS_NONE;
 
-    // Schedule the first BPL event
+    // Schedule the first BPL and DAS events
     scheduleNextBplEvent();
+    scheduleNextDasEvent();
 
 
     //
