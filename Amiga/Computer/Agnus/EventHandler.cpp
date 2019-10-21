@@ -360,6 +360,32 @@ Agnus::scheduleBplEventForCycle(int16_t hpos)
 }
 
 void
+Agnus::scheduleNextDasEvent(int16_t hpos)
+{
+    assert(isHPos(hpos));
+
+    if (uint8_t next = nextDasEvent[hpos]) {
+        scheduleRel<DAS_SLOT>(DMA_CYCLES(next - pos.h), dasEvent[next]);
+    }
+    assert(hasEvent<DAS_SLOT>());
+}
+
+void
+Agnus::scheduleDasEventForCycle(int16_t hpos)
+{
+    assert(isHPos(hpos));
+    assert(hpos >= pos.h);
+
+    if (dasEvent[hpos] != EVENT_NONE) {
+        scheduleRel<DAS_SLOT>(DMA_CYCLES(hpos - pos.h), dasEvent[hpos]);
+    } else {
+        scheduleNextDasEvent(hpos);
+    }
+
+    assert(hasEvent<DAS_SLOT>());
+}
+
+void
 Agnus::scheduleNextREGEvent()
 {
     // Determine when the next register change happens

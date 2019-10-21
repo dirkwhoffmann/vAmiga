@@ -39,8 +39,9 @@
 #define AUDEN 0b0000001111
 
 // Hsync action bits
-#define HSYNC_COMPUTE_DDF_WINDOW 0x01
-#define HSYNC_UPDATE_EVENT_TABLE 0x02
+#define HSYNC_COMPUTE_DDF_WINDOW 0b001
+#define HSYNC_UPDATE_BPL_TABLE   0b010
+#define HSYNC_UPDATE_DAS_TABLE   0b100
 
 // Increments a DMA pointer register by 2
 #define INC_DMAPTR(x) (x) = ((x) + 2) & 0x7FFFE;
@@ -780,17 +781,24 @@ public:
     
 public:
 
-    // Removes all events from the DMA time slot allocation table.
+    // Removes all events from the BPL event table except BPL_EOL
     void clearBplEventTable();
+
+    // Removes all events from the DAS event table except BUS_REFRESH
+    void clearDasEventTable();
 
     // Allocates the bitplane DMA slots
     void allocateBplSlots(uint16_t dmacon, uint16_t bplcon0, int first, int last = HPOS_MAX-1);
     void allocateBplSlots(int first, int last = HPOS_MAX-1);
 
-    // Adds or removes the bitplane DMA events to the DMA event table.
-    void switchBitplaneDmaOn();
-    void switchBitplaneDmaOff();
-    void updateBitplaneDma();
+    // Adds or removes bitplane DMA events to the DMA event table
+    void switchBplDmaOn();
+    void switchBplDmaOff();
+    void updateBplDma();
+
+    // Adds or removes disk, audio, sprites event to the DAS event table
+    void updateDasDma(uint16_t dmacon);
+    void updateDasDma() { updateDasDma(dmacon & 0x3F); }
 
     // Updates the jump table for a given event table
     void updateJumpTable(EventID *eventTable, uint8_t *jumpTable, int end);
@@ -810,9 +818,14 @@ public:
     // Returns true if the specified position belongs to the last fetch unit.
     bool inLastFetchUnit(int16_t dmaCycle);
 
-    // Dumps the DMA time slot allocation table to the console for debugging.
+    // Dumps an event table for debugging
+    void dumpEventTable(EventID *table, char str[256][2], int from, int to);
+
+    // Dumps the BPL or DAS event table for debugging
     void dumpBplEventTable(int from, int to);
     void dumpBplEventTable();
+    void dumpDasEventTable(int from, int to);
+    void dumpDasEventTable();
 
     
     //

@@ -217,6 +217,18 @@ void scheduleBplEventForCycle(int16_t hpos);
 // Updates the scheduled BPL event according to the current event table.
 void updateBplEvent() { scheduleBplEventForCycle(pos.h); }
 
+// Schedules the next DAS event relative to a given DMA cycle.
+void scheduleNextDasEvent(int16_t hpos);
+
+// Schedules the next DAS event relative to the currently emulated DMA cycle.
+void scheduleNextDasEvent() { scheduleNextDasEvent(pos.h); }
+
+// Schedules the earliest DAS event that occurs at or after the given DMA cycle.
+void scheduleDasEventForCycle(int16_t hpos);
+
+// Updates the scheduled DAS event according to the current event table.
+void updateDasEvent() { scheduleDasEventForCycle(pos.h); }
+
 // Schedules the next register change event
 void scheduleNextREGEvent();
 

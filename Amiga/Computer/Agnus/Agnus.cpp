@@ -30,7 +30,8 @@ Agnus::initLookupTables()
 {
     initBplEventTableLores();
     initBplEventTableHires();
-    initDASTables();
+    initDasEventTable();
+    initDASTables(); // DEPRECATED
 }
 
 void
@@ -231,8 +232,9 @@ void Agnus::_reset()
     lof = 1;
     frameInfo.numLines = 313;
 
-    // Initialize lookup tables
+    // Initialize event tables
     clearBplEventTable();
+    clearDasEventTable();
 
     // Initialize the event slots
     for (unsigned i = 0; i < SLOT_COUNT; i++) {
@@ -245,11 +247,12 @@ void Agnus::_reset()
     scheduleAbs<RAS_SLOT>(DMA_CYCLES(HPOS_CNT), RAS_HSYNC);
     scheduleAbs<CIAA_SLOT>(CIA_CYCLES(1), CIA_EXECUTE);
     scheduleAbs<CIAB_SLOT>(CIA_CYCLES(1), CIA_EXECUTE);
-    scheduleAbs<DAS_SLOT>(DMA_CYCLES(1), DAS_REFRESH);
+    // scheduleAbs<DAS_SLOT>(DMA_CYCLES(1), DAS_REFRESH);
     scheduleAbs<SEC_SLOT>(NEVER, SEC_TRIGGER);
     scheduleAbs<KBD_SLOT>(DMA_CYCLES(1), KBD_SELFTEST);
     scheduleAbs<IRQ_SLOT>(NEVER, IRQ_CHECK);
     scheduleNextBplEvent();
+    scheduleNextDasEvent();
 }
 
 void
@@ -292,10 +295,14 @@ Agnus::_dump()
     plainmsg("   vstrt : %d\n", diwVstrt);
     plainmsg("   vstop : %d\n", diwVstop);
 
-    plainmsg("\nDMA time slot allocation:\n\n");
-
+    plainmsg("\nEvents:\n\n");
     dumpEvents();
+
+    plainmsg("\nBPL DMA table:\n\n");
     dumpBplEventTable();
+
+    plainmsg("\nDAS DMA table:\n\n");
+    dumpDasEventTable();
 }
 
 AgnusInfo
@@ -619,6 +626,14 @@ Agnus::clearBplEventTable()
 }
 
 void
+Agnus::clearDasEventTable()
+{
+    memset(dasEvent, 0, sizeof(dasEvent));
+    updateDasDma(0);
+    updateDasJumpTable();
+}
+
+void
 Agnus::allocateBplSlots(uint16_t dmacon, uint16_t bplcon0, int first, int last)
 {
     assert(first >= 0 && last < HPOS_MAX);
@@ -651,7 +666,7 @@ Agnus::allocateBplSlots(int first, int last)
 }
 
 void
-Agnus::switchBitplaneDmaOn()
+Agnus::switchBplDmaOn()
 {
     int16_t start;
     int16_t stop;
@@ -688,13 +703,13 @@ Agnus::switchBitplaneDmaOn()
         bplEvent[i] = bplDMA[hires][activeBitplanes][i];
     }
 
-    // Link everything together
+    // Setup the jump table
     updateBplJumpTable();
 }
 
 
 void
-Agnus::switchBitplaneDmaOff()
+Agnus::switchBplDmaOff()
 {
     debug(BPL_DEBUG, "switchBitplaneDmaOff: \n");
 
@@ -709,7 +724,7 @@ Agnus::switchBitplaneDmaOff()
 }
 
 void
-Agnus::updateBitplaneDma()
+Agnus::updateBplDma()
 {
     debug(BPL_DEBUG, "updateBitplaneDma()\n");
 
@@ -717,7 +732,22 @@ Agnus::updateBitplaneDma()
     bool bplDma = inBplDmaLine();
 
     // Update the event table accordingly
-    bplDma ? switchBitplaneDmaOn() : switchBitplaneDmaOff();
+    bplDma ? switchBplDmaOn() : switchBplDmaOff();
+}
+
+void
+Agnus::updateDasDma(uint16_t dmacon)
+{
+    assert(dmacon < 64);
+
+    // Copy events from the proper lookup table
+    for (int i = 0; i < 0x38; i++) {
+        dasEvent[i] = dasDMA[dmacon][i];
+    }
+    dasEvent[0xE2] = dasDMA[dmacon][0xE2];
+
+    // Setup the jump table
+    updateDasJumpTable();
 }
 
 /*
@@ -766,6 +796,10 @@ Agnus::updateDasJumpTable(int16_t end)
     updateJumpTable(dasEvent, nextDasEvent, end);
 
     // Make sure the table ends with a DAS_REFRESH event
+    if (dasEvent[HPOS_MAX] != DAS_REFRESH) {
+        dumpBplEventTable();
+        dumpDasEventTable();
+    }
     assert(dasEvent[HPOS_MAX] == DAS_REFRESH);
     assert(nextDasEvent[HPOS_MAX - 1] == HPOS_MAX);
 }
@@ -788,10 +822,53 @@ Agnus::inLastFetchUnit(int16_t dmaCycle)
     return denise.hires() ? isLastHx(dmaCycle) : isLastLx(dmaCycle);
 }
 
+void
+Agnus::dumpEventTable(EventID *table, char str[256][2], int from, int to)
+{
+    char r1[256], r2[256], r3[256], r4[256];
+    int i;
+
+    for (i = 0; i <= to - from; i++) {
+
+        int digit1 = (from + i) / 16;
+        int digit2 = (from + i) % 16;
+
+        r1[i] = (digit1 < 10) ? digit1 + '0' : (digit1 - 10) + 'A';
+        r2[i] = (digit2 < 10) ? digit2 + '0' : (digit2 - 10) + 'A';
+        r3[i] = str[table[from + i]][0];
+        r4[i] = str[table[from + i]][1];
+    }
+    r1[i] = r2[i] = r3[i] = r4[i] = 0;
+
+    plainmsg("%s\n", r1);
+    plainmsg("%s\n", r2);
+    plainmsg("%s\n", r3);
+    plainmsg("%s\n", r4);
+}
+
 
 void
 Agnus::dumpBplEventTable(int from, int to)
 {
+    char str[256][2];
+
+    memset(str, '?', sizeof(str));
+    str[(int)EVENT_NONE][0] = '.'; str[(int)EVENT_NONE][1] = '.';
+    str[(int)BPL_L1][0]     = 'L'; str[(int)BPL_L1][1]     = '1';
+    str[(int)BPL_L2][0]     = 'L'; str[(int)BPL_L2][1]     = '2';
+    str[(int)BPL_L3][0]     = 'L'; str[(int)BPL_L3][1]     = '3';
+    str[(int)BPL_L4][0]     = 'L'; str[(int)BPL_L4][1]     = '4';
+    str[(int)BPL_L5][0]     = 'L'; str[(int)BPL_L5][1]     = '5';
+    str[(int)BPL_L6][0]     = 'L'; str[(int)BPL_L6][1]     = '6';
+    str[(int)BPL_H1][0]     = 'H'; str[(int)BPL_H1][1]     = '1';
+    str[(int)BPL_H2][0]     = 'H'; str[(int)BPL_H2][1]     = '2';
+    str[(int)BPL_H3][0]     = 'H'; str[(int)BPL_H3][1]     = '3';
+    str[(int)BPL_H4][0]     = 'H'; str[(int)BPL_H4][1]     = '4';
+    str[(int)BPL_EOL][0]    = 'E'; str[(int)BPL_EOL][1]    = 'O';
+
+    dumpEventTable(bplEvent, str, from, to);
+
+    /*
     char r1[256], r2[256], r3[256], r4[256];
     int i;
 
@@ -824,6 +901,7 @@ Agnus::dumpBplEventTable(int from, int to)
     plainmsg("%s\n", r2);
     plainmsg("%s\n", r3);
     plainmsg("%s\n", r4);
+    */
 }
 
 void
@@ -853,6 +931,50 @@ Agnus::dumpBplEventTable()
         plainmsg(" -> %X", i);
     }
     plainmsg("\n");
+}
+
+void
+Agnus::dumpDasEventTable(int from, int to)
+{
+    char str[256][2];
+
+    memset(str, '?', sizeof(str));
+    str[(int)EVENT_NONE][0]  = '.'; str[(int)EVENT_NONE][1]  = '.';
+    str[(int)DAS_REFRESH][0] = 'R'; str[(int)DAS_REFRESH][1] = 'E';
+    str[(int)DAS_D0][0]      = 'D'; str[(int)DAS_D0][1]      = '0';
+    str[(int)DAS_D1][0]      = 'D'; str[(int)DAS_D1][1]      = '1';
+    str[(int)DAS_D2][0]      = 'D'; str[(int)DAS_D2][1]      = '2';
+    str[(int)DAS_A0][0]      = 'A'; str[(int)DAS_A0][1]      = '0';
+    str[(int)DAS_A1][0]      = 'A'; str[(int)DAS_A1][1]      = '1';
+    str[(int)DAS_A2][0]      = 'A'; str[(int)DAS_A2][1]      = '2';
+    str[(int)DAS_A3][0]      = 'A'; str[(int)DAS_A3][1]      = '3';
+    str[(int)DAS_S0_1][0]    = '0'; str[(int)DAS_S0_1][1]    = '1';
+    str[(int)DAS_S0_2][0]    = '0'; str[(int)DAS_S0_2][1]    = '2';
+    str[(int)DAS_S1_1][0]    = '1'; str[(int)DAS_S1_1][1]    = '1';
+    str[(int)DAS_S1_2][0]    = '1'; str[(int)DAS_S1_2][1]    = '2';
+    str[(int)DAS_S2_1][0]    = '2'; str[(int)DAS_S2_1][1]    = '1';
+    str[(int)DAS_S2_2][0]    = '2'; str[(int)DAS_S2_2][1]    = '2';
+    str[(int)DAS_S3_1][0]    = '3'; str[(int)DAS_S3_1][1]    = '1';
+    str[(int)DAS_S3_2][0]    = '3'; str[(int)DAS_S3_2][1]    = '2';
+    str[(int)DAS_S4_1][0]    = '4'; str[(int)DAS_S4_1][1]    = '1';
+    str[(int)DAS_S4_2][0]    = '4'; str[(int)DAS_S4_2][1]    = '2';
+    str[(int)DAS_S5_1][0]    = '5'; str[(int)DAS_S5_1][1]    = '1';
+    str[(int)DAS_S5_2][0]    = '5'; str[(int)DAS_S5_2][1]    = '2';
+    str[(int)DAS_S6_1][0]    = '6'; str[(int)DAS_S6_1][1]    = '1';
+    str[(int)DAS_S6_2][0]    = '6'; str[(int)DAS_S6_2][1]    = '2';
+    str[(int)DAS_S7_1][0]    = '7'; str[(int)DAS_S7_1][1]    = '1';
+    str[(int)DAS_S7_2][0]    = '7'; str[(int)DAS_S7_2][1]    = '2';
+
+    dumpEventTable(dasEvent, str, from, to);
+}
+
+void
+Agnus::dumpDasEventTable()
+{
+    // Dump the event table
+    dumpDasEventTable(0x00, 0x4F);
+    dumpDasEventTable(0x50, 0x9F);
+    dumpDasEventTable(0xA0, 0xE2);
 }
 
 uint16_t
@@ -926,8 +1048,8 @@ Agnus::setDMACON(uint16_t oldValue, uint16_t value)
     // Bitplane DMA
     if (oldBPLEN ^ newBPLEN) {
 
-        // Update the DMA allocation table in the next rasterline
-        hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
+        // Update the bpl event table in the next rasterline
+        hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
 
         if (newBPLEN) {
 
@@ -1303,14 +1425,14 @@ Agnus::setDDFSTRT(uint16_t old, uint16_t value)
 
             // DDFSTRT never matches in the current rasterline. Disable DMA
             ddfstrtReached = -1;
-            switchBitplaneDmaOff();
+            switchBplDmaOff();
 
         } else {
 
             // Update the matching position and recalculate the DMA table
             ddfstrtReached = ddfstrt;
             computeDDFWindow();
-            updateBitplaneDma();
+            updateBplDma();
             scheduleNextBplEvent();
         }
     }
@@ -1341,7 +1463,7 @@ Agnus::setDDFSTOP(uint16_t old, uint16_t value)
              ddfstopReached = ddfstop;
              if (ddfstrtReached >= 0) {
                  computeDDFWindow();
-                 updateBitplaneDma();
+                 updateBplDma();
                  scheduleNextBplEvent();
              }
          }
@@ -1572,8 +1694,8 @@ Agnus::setBPLCON0(uint16_t oldValue, uint16_t newValue)
     // Update variable bplcon0AtDDFStrt if DDFSTRT has not been reached yet
     if (pos.h < ddfstrtReached) bplcon0AtDDFStrt = newValue;
 
-    // Update the DMA allocation table in the next rasterline
-    hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
+    // Update the bpl event table in the next rasterline
+    hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
 
     // Check if the hires bit or one of the BPU bits have been modified
     if ((oldValue ^ newValue) & 0xF000) {
@@ -1587,7 +1709,7 @@ Agnus::setBPLCON0(uint16_t oldValue, uint16_t newValue)
          * BPLCON0 is usually written in each frame.
          * To speed up, just check the hpos. If it is smaller than the start
          * of the DMA window, a standard update() is enough and the scheduled
-         * update in hsyncActions (HSYNC_UPDATE_EVENT_TABLE) can be omitted.
+         * update in hsyncActions (HSYNC_UPDATE_BPL_TABLE) can be omitted.
          */
 
         // Update the DMA allocation table
@@ -1893,11 +2015,11 @@ Agnus::hsyncHandler()
 
     if (pos.v == diwVstrt && !diwVFlop) {
         diwVFlop = true;
-        updateBitplaneDma();
+        updateBplDma();
     }
     if (pos.v == diwVstop && diwVFlop) {
         diwVFlop = false;
-        updateBitplaneDma();
+        updateBplDma();
     }
 
     // Horizontal DIW flipflop
@@ -1923,9 +2045,9 @@ Agnus::hsyncHandler()
 
     bool bplDmaLine = inBplDmaLine();
 
-    // Update the event table if the value has changed
+    // Update the bpl event table if the value has changed
     if (bplDmaLine ^ oldBplDmaLine) {
-        hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
+        hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
         oldBplDmaLine = bplDmaLine;
     }
 
@@ -1954,17 +2076,17 @@ Agnus::hsyncHandler()
     if (hsyncActions) {
 
         if (hsyncActions & HSYNC_COMPUTE_DDF_WINDOW) {
-
-            // Update the display data fetch window
             computeDDFWindow();
-            hsyncActions |= HSYNC_UPDATE_EVENT_TABLE;
+            hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
         }
 
-        if (hsyncActions & HSYNC_UPDATE_EVENT_TABLE) {
-
-            // Update the bitplane DMA allocation table
-            updateBitplaneDma();
+        if (hsyncActions & HSYNC_UPDATE_BPL_TABLE) {
+            updateBplDma();
         }
+
+         if (hsyncActions & HSYNC_UPDATE_DAS_TABLE) {
+             // TODO
+         }
 
 
         hsyncActions = 0;
