@@ -31,7 +31,6 @@ Agnus::initLookupTables()
     initBplEventTableLores();
     initBplEventTableHires();
     initDasEventTable();
-    initDASTables(); // DEPRECATED
 }
 
 void
@@ -142,74 +141,6 @@ Agnus::initDasEventTable()
 
         // p[0xE2] = DAS_REFRESH;
     }
-}
-
-void
-Agnus::initDASTables()
-{
-    EventID table[0x34];
-
-    // Start from scratch
-    memset(table, EVENT_NONE, sizeof(table));
-    memset(nextDASEvent, 0, sizeof(nextDASEvent));
-    memset(nextDASDelay, 0, sizeof(nextDASDelay));
-
-    // Iterate through all possible DMA enable / disable combinations
-    for (unsigned dma = 0; dma < 64; dma++) {
-
-        // Setup the time slot allocation table for this combination
-        table[0x01] = DAS_REFRESH;
-        table[0x07] = dma ? DAS_D0 : EVENT_NONE; // enable if master bit is set
-        table[0x09] = dma ? DAS_D1 : EVENT_NONE; // enable if master bit is set
-        table[0x0B] = dma ? DAS_D2 : EVENT_NONE; // enable if master bit is set
-        table[0x0D] = (dma & AU0EN) ? DAS_A0 : EVENT_NONE;
-        table[0x0F] = (dma & AU1EN) ? DAS_A1 : EVENT_NONE;
-        table[0x11] = (dma & AU2EN) ? DAS_A2 : EVENT_NONE;
-        table[0x13] = (dma & AU3EN) ? DAS_A3 : EVENT_NONE;
-        table[0x15] = (dma & SPREN) ? DAS_S0_1 : EVENT_NONE;
-        table[0x17] = (dma & SPREN) ? DAS_S0_2 : EVENT_NONE;
-        table[0x19] = (dma & SPREN) ? DAS_S1_1 : EVENT_NONE;
-        table[0x1B] = (dma & SPREN) ? DAS_S1_2 : EVENT_NONE;
-        table[0x1D] = (dma & SPREN) ? DAS_S2_1 : EVENT_NONE;
-        table[0x1F] = (dma & SPREN) ? DAS_S2_2 : EVENT_NONE;
-        table[0x21] = (dma & SPREN) ? DAS_S3_1 : EVENT_NONE;
-        table[0x23] = (dma & SPREN) ? DAS_S3_2 : EVENT_NONE;
-        table[0x25] = (dma & SPREN) ? DAS_S4_1 : EVENT_NONE;
-        table[0x27] = (dma & SPREN) ? DAS_S4_2 : EVENT_NONE;
-        table[0x29] = (dma & SPREN) ? DAS_S5_1 : EVENT_NONE;
-        table[0x2B] = (dma & SPREN) ? DAS_S5_2 : EVENT_NONE;
-        table[0x2D] = (dma & SPREN) ? DAS_S6_1 : EVENT_NONE;
-        table[0x2F] = (dma & SPREN) ? DAS_S6_2 : EVENT_NONE;
-        table[0x31] = (dma & SPREN) ? DAS_S7_1 : EVENT_NONE;
-        table[0x33] = (dma & SPREN) ? DAS_S7_2 : EVENT_NONE;
-
-        // Determine the successor event for any RAS event
-        for (unsigned id = 1; id < DAS_EVENT_COUNT; id++) {
-
-            // Determine the DMA cycle of this event
-            int16_t cycle = DASEventCycle((EventID)id);
-            int16_t next = cycle;
-
-            // Find the next event starting from that position
-            do { next = (next + 1) % 0x34; } while (table[next] == EVENT_NONE);
-
-            // Setup the table entries
-            nextDASEvent[id][dma] = table[next];
-            nextDASDelay[id][dma] = next - cycle;
-            if (next <= cycle) nextDASDelay[id][dma] += HPOS_CNT;
-        }
-    }
-
-    // Dump the table (for debugging)
-    /*
-    unsigned dma = 0b010000;
-    for (unsigned id = 0; id < DAS_EVENT_CNT; id++) {
-        if (nextDASEvent[id][dma] != EVENT_NONE) {
-            plainmsg("Event %d -> Event %d in %d DMA cycles\n",
-                     id, nextDASEvent[id][dma], nextDASDelay[id][dma]);
-        }
-    }
-    */
 }
 
 void

@@ -366,8 +366,10 @@ Agnus::scheduleNextDasEvent(int16_t hpos)
 
     if (uint8_t next = nextDasEvent[hpos]) {
         scheduleRel<DAS_SLOT>(DMA_CYCLES(next - pos.h), dasEvent[next]);
+        assert(hasEvent<DAS_SLOT>());
+    } else {
+        cancel<DAS_SLOT>();
     }
-    assert(hasEvent<DAS_SLOT>());
 }
 
 void
@@ -695,9 +697,7 @@ Agnus::serviceDASEvent()
     EventID id = slot[DAS_SLOT].id;
 
     assert(id == dasEvent[pos.h]);
-    
     assert(checkTriggeredEvent(DAS_SLOT));
-    assert(pos.h == DASEventCycle(id));
 
     switch (id) {
 
@@ -795,19 +795,7 @@ Agnus::serviceDASEvent()
     }
 
     // Schedule next event
-    int16_t oldDelay = nextDASDelay[id][dmaDAS];
-    EventID oldEvent = nextDASEvent[id][dmaDAS];
-
-    if (uint8_t next = nextDasEvent[pos.h]) {
-        int16_t delay = DMA_CYCLES(next - pos.h);
-        EventID event = dasEvent[next];
-        assert(DMA_CYCLES(oldDelay) == delay);
-        assert(oldEvent == event);
-        scheduleRel<DAS_SLOT>(DMA_CYCLES(oldDelay), oldEvent);
-    } else {
-        cancel<DAS_SLOT>(); 
-    }
-
+    scheduleNextDasEvent();
 }
 
 void

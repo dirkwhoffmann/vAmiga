@@ -107,8 +107,8 @@ public:
      * In this case: nextDASEvent[DMA_A0][0b111111] = DMA_A1
      *               nextDASDelay[DMA_A0][0b111111] = 2
      */
-    EventID nextDASEvent[DAS_EVENT_COUNT][64];
-    int16_t nextDASDelay[DAS_EVENT_COUNT][64];
+    // EventID nextDASEvent[DAS_EVENT_COUNT][64];
+    // int16_t nextDASDelay[DAS_EVENT_COUNT][64];
 
     /* Bitplane DMA events as they appear in a single rasterline.
      *
@@ -515,8 +515,6 @@ public:
     void initBplEventTableLores();
     void initBplEventTableHires();
     void initDasEventTable();
-
-    void initDASTables(); // DEPRECATED
 
     template <class T>
     void applyToPersistentItems(T& worker)
