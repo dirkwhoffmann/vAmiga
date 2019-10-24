@@ -654,9 +654,11 @@ Copper::serviceEvent(EventID id)
             switch (reg) {
                 case 0x88:
                     schedule(COP_JMP1);
+                    agnus.slot[COP_SLOT].data = 1;
                     break;
                 case 0x8A:
-                    schedule(COP_JMP2);
+                    schedule(COP_JMP1);
+                    agnus.slot[COP_SLOT].data = 2;
                     break;
                 default:
                     move(reg, cop2ins);
@@ -778,21 +780,33 @@ Copper::serviceEvent(EventID id)
 
             if (verbose) debug("COP_JMP1\n");
 
-            // Perform the jump
-            switchToCopperList(1);
+            // Wait for the next free DMA cycle
+            if (!agnus.copperCanDoDMA()) {
+                // debug("COP_JMP1: No DMA possible\n");
+                reschedule();
+                break;
+            }
 
-            schedule(COP_FETCH); // COP_REQ_DMA);
+            // In cycle $E1, Copper jumps immediately
+            if (agnus.pos.h == 0xE1) {
+                // debug("COP_JMP1: Quick jump\n");
+                switchToCopperList(agnus.slot[COP_SLOT].data);
+                schedule(COP_FETCH);
+                break;
+            }
+
+            schedule(COP_JMP2);
             break;
 
         case COP_JMP2:
 
             if (verbose) debug("COP_JMP2\n");
 
-            // Perform the jump
-            switchToCopperList(2);
+            // The bus is not needed in this cycle, but still allocated
+            (void)agnus.allocateBus<BUS_COPPER>();
 
-            // Request a free bus slot
-            schedule(COP_FETCH); // COP_REQ_DMA);
+            switchToCopperList(agnus.slot[COP_SLOT].data);
+            schedule(COP_FETCH);
             break;
 
         default:

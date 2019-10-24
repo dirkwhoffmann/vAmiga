@@ -378,18 +378,18 @@ Agnus::requestBus(bool value)
 template <BusOwner owner> bool
 Agnus::allocateBus()
 {
+    // Deny if the bus has been allocated already
+    if (busOwner[pos.h] != BUS_NONE) return false;
+
     switch (owner) {
 
         case BUS_COPPER:
-
-            // IMPLEMENTATION MISSING
-            assert(false);
-            return false;
+            
+            // Assign bus to the Copper
+            busOwner[pos.h] = BUS_COPPER;
+            return true;
 
         case BUS_BLITTER:
-
-            // Deny if the bus has been allocated already
-            if (busOwner[pos.h] != BUS_NONE) return false;
 
             // Check if the CPU has precedence
             if (!bltpri() && cpuRequestsBus) {
