@@ -1077,12 +1077,12 @@ Agnus::setDMACON(uint16_t oldValue, uint16_t value)
         
         if (newAU0EN) {
             
-            // debug("Audio 0 DMA switched on\n");
+            debug(AUDREG_DEBUG, "DMACON: Audio 0 DMA switched on\n");
             paula.audioUnit.enableDMA(0);
             
         } else {
             
-            // debug("Audio 0 DMA switched off\n");
+            debug(AUDREG_DEBUG, "DMACON: Audio 0 DMA switched off\n");
             paula.audioUnit.disableDMA(0);
         }
     }
@@ -1091,12 +1091,12 @@ Agnus::setDMACON(uint16_t oldValue, uint16_t value)
         
         if (newAU1EN) {
             
-            // debug("Audio 1 DMA switched on\n");
+            debug(AUDREG_DEBUG, "DMACON: Audio 1 DMA switched on\n");
             paula.audioUnit.enableDMA(1);
             
         } else {
             
-            // debug("Audio 1 DMA switched off\n");
+            debug(AUDREG_DEBUG, "DMACON: Audio 1 DMA switched off\n");
             paula.audioUnit.disableDMA(1);
         }
     }
@@ -1105,12 +1105,12 @@ Agnus::setDMACON(uint16_t oldValue, uint16_t value)
         
         if (newAU2EN) {
             
-            // debug("Audio 2 DMA switched on\n");
+            debug(AUDREG_DEBUG, "DMACON: Audio 2 DMA switched on\n");
             paula.audioUnit.enableDMA(2);
             
         } else {
             
-            // debug("Audio 2 DMA switched off\n");
+            debug(AUDREG_DEBUG, "DMACON: Audio 2 DMA switched off\n");
             paula.audioUnit.disableDMA(2);
         }
     }
@@ -1119,12 +1119,12 @@ Agnus::setDMACON(uint16_t oldValue, uint16_t value)
         
         if (newAU3EN) {
             
-            // debug("Audio 3 DMA switched on\n");
+            debug(AUDREG_DEBUG, "DMACON: Audio 3 DMA switched on\n");
             paula.audioUnit.enableDMA(3);
             
         } else {
             
-            // debug("Audio 3 DMA switched off\n");
+            debug(AUDREG_DEBUG, "DMACON: Audio 3 DMA switched off\n");
             paula.audioUnit.disableDMA(3);
         }
     }

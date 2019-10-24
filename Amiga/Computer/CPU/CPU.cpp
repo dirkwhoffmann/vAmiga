@@ -591,7 +591,7 @@ CPU::executeInstruction()
 {
     if (actions) {
         if (actions & CPU_SET_IRQ_LEVEL) {
-            debug(CPU_DEBUG, "Changing IRQ level to %d\n", irqLevel);
+            debug(INT_DEBUG, "Changing IRQ level to %d\n", irqLevel);
             m68k_set_irq(irqLevel);
             actions &= ~CPU_SET_IRQ_LEVEL;
         }

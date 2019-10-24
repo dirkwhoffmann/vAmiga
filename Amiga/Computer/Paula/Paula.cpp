@@ -129,7 +129,10 @@ Paula::setINTREQ(bool setclr, uint16_t value)
 {
     assert(!(value & 0x8000));
 
+    debug(INTREG_DEBUG, "setINTREQ(%d,%x)\n", setclr, value);
+
     if (setclr) intreq |= value; else intreq &= ~value;
+    // debug("new intreq : %x\n",intreq);
     checkInterrupt();
 }
 
@@ -137,6 +140,8 @@ void
 Paula::setINTENA(bool setclr, uint16_t value)
 {
     assert(!(value & 0x8000));
+
+    debug(INTREG_DEBUG, "setINTENA(%d,%x)\n", setclr, value);
 
     if (setclr) intena |= value; else intena &= ~value;
     checkInterrupt();

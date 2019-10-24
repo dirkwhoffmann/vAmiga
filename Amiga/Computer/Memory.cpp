@@ -1315,9 +1315,9 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x086 >> 1: // COP2LCL
             copper.pokeCOP2LCL(value); return;
         case 0x088 >> 1: // COPJMP1
-            copper.pokeCOPJMP1(); return;
+            copper.pokeCOPJMP1<s>(); return;
         case 0x08A >> 1: // COPJMP2
-            copper.pokeCOPJMP2(); return;
+            copper.pokeCOPJMP2<s>(); return;
         case 0x08C >> 1: // COPINS
             copper.pokeCOPINS(value); return;
         case 0x08E >> 1: // DIWSTRT

@@ -73,32 +73,50 @@ Copper::pokeCOPCON(uint16_t value)
     cdang = (value & 0b10) != 0;
 }
 
-void
+template <PokeSource s> void
 Copper::pokeCOPJMP1()
 {
     debug(COPREG_DEBUG, "pokeCOPJMP1(): Jumping to %X\n", cop1lc);
-    switchToCopperList(1);
 
-    // Continue Copper execution if it was waiting
-    /*
-    if (agnus.hasEvent<COP_SLOT>(COP_REQ_DMA)) {
-        agnus.scheduleImm<COP_SLOT>(COP_REQ_DMA);
+    if (s == POKE_COPPER) {
+
+        switchToCopperList(1);
+
     }
-    */
+    if (s == POKE_CPU) {
+
+        switchToCopperList(1);
+
+        // Continue Copper execution if it was waiting
+        /*
+         if (agnus.hasEvent<COP_SLOT>(COP_REQ_DMA)) {
+         agnus.scheduleImm<COP_SLOT>(COP_REQ_DMA);
+         }
+         */
+    }
 }
 
-void
+template <PokeSource s> void
 Copper::pokeCOPJMP2()
 {
     debug(COPREG_DEBUG, "pokeCOPJMP2(): Jumping to %X\n", cop2lc);
-    switchToCopperList(2);
 
-    // Continue Copper execution if it was waiting
-    /*
-    if (agnus.hasEvent<COP_SLOT>(COP_REQ_DMA)) {
-        agnus.scheduleImm<COP_SLOT>(COP_REQ_DMA);
+    if (s == POKE_COPPER) {
+
+        switchToCopperList(2);
+
     }
-    */
+    if (s == POKE_CPU) {
+
+        switchToCopperList(2);
+
+        // Continue Copper execution if it was waiting
+        /*
+         if (agnus.hasEvent<COP_SLOT>(COP_REQ_DMA)) {
+         agnus.scheduleImm<COP_SLOT>(COP_REQ_DMA);
+         }
+         */
+    }
 }
 
 void
@@ -626,12 +644,23 @@ Copper::serviceEvent(EventID id)
             // Stop the Copper if address is illegal
             if (isIllegalAddress(reg)) { agnus.cancel<COP_SLOT>(); break; }
 
-            // Write into the custom register
-            if (!skip) move(reg, cop2ins);
-            skip = false;
-
-            // Schedule next event
+            // Continue with fetching the new command
             schedule(COP_FETCH);
+
+            // Only proceed if the skip flag is not set
+            if (skip) { skip = false; break; }
+
+            // Write value into custom register
+            switch (reg) {
+                case 0x88:
+                    schedule(COP_JMP1);
+                    break;
+                case 0x8A:
+                    schedule(COP_JMP2);
+                    break;
+                default:
+                    move(reg, cop2ins);
+            }
             break;
             
         case COP_WAIT_OR_SKIP:
@@ -752,8 +781,7 @@ Copper::serviceEvent(EventID id)
             // Perform the jump
             switchToCopperList(1);
 
-            // Request a free bus slot
-            schedule(COP_REQ_DMA);
+            schedule(COP_FETCH); // COP_REQ_DMA);
             break;
 
         case COP_JMP2:
@@ -764,7 +792,7 @@ Copper::serviceEvent(EventID id)
             switchToCopperList(2);
 
             // Request a free bus slot
-            schedule(COP_REQ_DMA);
+            schedule(COP_FETCH); // COP_REQ_DMA);
             break;
 
         default:
@@ -866,3 +894,8 @@ Copper::dumpCopperList(unsigned list, unsigned length)
         printf("%s\n", disassemble(list, 2*i));
     }
 }
+
+template void Copper::pokeCOPJMP1<POKE_CPU>();
+template void Copper::pokeCOPJMP1<POKE_COPPER>();
+template void Copper::pokeCOPJMP2<POKE_CPU>();
+template void Copper::pokeCOPJMP2<POKE_COPPER>();

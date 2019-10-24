@@ -128,8 +128,8 @@ public:
     //
 
     void pokeCOPCON(uint16_t value);
-    void pokeCOPJMP1();
-    void pokeCOPJMP2();
+    template <PokeSource s> void pokeCOPJMP1();
+    template <PokeSource s> void pokeCOPJMP2();
     void pokeCOPINS(uint16_t value);
     void pokeCOP1LCH(uint16_t value);
     void pokeCOP1LCL(uint16_t value);
