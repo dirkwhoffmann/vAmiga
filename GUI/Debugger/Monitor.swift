@@ -33,12 +33,15 @@ class Monitor: NSWindowController {
     @IBOutlet weak var dmaDebugOpacity: NSSlider!
     @IBOutlet weak var dmaDebugDisplayMode: NSPopUpButton!
 
-    // Audio out
+    // Audio
     @IBOutlet weak var audioWaveformView: WaveformView!
     @IBOutlet weak var audioBufferLevel: NSLevelIndicator!
     @IBOutlet weak var audioBufferLevelText: NSTextField!
     @IBOutlet weak var audioBufferUnderflows: NSTextField!
     @IBOutlet weak var audioBufferOverflows: NSTextField!
+
+    // Blitter
+    @IBOutlet weak var blitterActivityView: ActivityView!
 
     var timer: Timer?
 
@@ -71,13 +74,14 @@ class Monitor: NSWindowController {
     func refresh(everything: Bool) {
 
         if window?.isVisible == false { return }
-        // refreshCounter += 1
 
         if everything {
 
         }
 
-        refreshWaveformDisplay()
+        refreshWaveformView()
+        refreshBlitterView()
+
         refreshDmaDebugger()
     }
 }
@@ -92,12 +96,12 @@ extension Monitor: NSWindowDelegate {
 }
 
 //
-// Audio waveform
+//  Waveform view
 //
 
 extension Monitor {
 
-    func refreshWaveformDisplay() {
+    func refreshWaveformView() {
 
         guard let paula = amigaProxy?.paula else { return }
         let fillLevel = Int32(paula.fillLevel() * 100)
@@ -111,7 +115,28 @@ extension Monitor {
 }
 
 //
-// DMA debugger
+// Activity views
+//
+
+extension Monitor {
+
+    func refreshBlitterView() {
+
+        // guard let paula = amigaProxy?.paula else { return }
+        // let fillLevel = Int32(paula.fillLevel() * 100)
+
+        if let stats = amigaProxy?.getStats() {
+
+            // let blitActivity = stats.blitterActivity
+            let blitActivity = drand48()
+
+            blitterActivityView.add(value: blitActivity)
+        }
+    }
+}
+
+//
+// DMA Debugger
 //
 
 extension Monitor {

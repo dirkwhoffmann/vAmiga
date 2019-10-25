@@ -125,5 +125,16 @@ typedef struct
 }
 AmigaInfo;
 
+typedef struct
+{
+    double blitterActivity;
+    double copperActivity;
+    double spriteActivity;
+    double ciaAActivity;
+    double ciaBActivity;
+    double driveActivity[4];
+}
+AmigaStats;
+
 #endif
 

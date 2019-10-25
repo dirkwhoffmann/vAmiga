@@ -60,7 +60,10 @@ class Amiga : public HardwareComponent {
     
     // Information shown in the GUI inspector panel
     AmigaInfo info;
-    
+
+    // Information shown in the GUI monitor panel
+    AmigaStats stats;
+
 public:
 
     /* Inspection target
@@ -311,6 +314,12 @@ public:
     // Returns the result of the most recent call to inspect()
     AmigaInfo getInfo();
 
+    // Returns the statistics information for the most recently finished frame
+    AmigaStats getStats();
+
+    // Called each frame to update the statistics information
+    void computeStats();
+
 
     //
     // Accessing properties
@@ -444,8 +453,7 @@ public:
      * should be your starting point.
      */
     void runLoop();
-    
-    
+
     
     //
     // Managing emulation speed

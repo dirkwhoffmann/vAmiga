@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14868" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14868"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -12,6 +13,7 @@
                 <outlet property="audioBufferOverflows" destination="uga-2T-g9R" id="9mO-cU-mt8"/>
                 <outlet property="audioBufferUnderflows" destination="Tz4-5N-gwt" id="cgM-dS-rdn"/>
                 <outlet property="audioWaveformView" destination="Jyd-gZ-RoN" id="6yl-Wi-AfZ"/>
+                <outlet property="blitterActivityView" destination="w9s-g3-eBi" id="jz8-7h-Tjq"/>
                 <outlet property="dmaDebugAudio" destination="a5Q-fy-DlR" id="UZs-gn-tUE"/>
                 <outlet property="dmaDebugAudioCol" destination="GXn-M5-5ZM" id="e69-Qp-h5B"/>
                 <outlet property="dmaDebugBitplane" destination="UQl-2N-4kg" id="4pP-7B-yTJ"/>
@@ -39,14 +41,14 @@
         <window title="Activity Monitor" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="196" y="240" width="558" height="358"/>
+            <rect key="contentRect" x="196" y="240" width="558" height="434"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
-                <rect key="frame" x="0.0" y="0.0" width="558" height="358"/>
+                <rect key="frame" x="0.0" y="0.0" width="558" height="434"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <box fixedFrame="YES" title="DMA Debugger" translatesAutoresizingMaskIntoConstraints="NO" id="qP3-Kq-ghb">
-                        <rect key="frame" x="309" y="16" width="232" height="322"/>
+                        <rect key="frame" x="309" y="92" width="232" height="322"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="JO5-2X-rfo">
                             <rect key="frame" x="3" y="3" width="226" height="304"/>
@@ -317,7 +319,7 @@
                         </view>
                     </box>
                     <box autoresizesSubviews="NO" fixedFrame="YES" borderType="line" title="Audio" translatesAutoresizingMaskIntoConstraints="NO" id="0zY-uE-yde" userLabel="Voice parameters">
-                        <rect key="frame" x="17" y="169" width="282" height="169"/>
+                        <rect key="frame" x="17" y="245" width="282" height="169"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="Wvw-ju-H0Q">
                             <rect key="frame" x="3" y="3" width="276" height="151"/>
@@ -391,16 +393,30 @@
                         </view>
                     </box>
                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OEK-uJ-gbS">
-                        <rect key="frame" x="99" y="62" width="118" height="103"/>
+                        <rect key="frame" x="373" y="0.0" width="118" height="103"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="baustelle" id="7BL-Ve-93c"/>
                     </imageView>
+                    <box autoresizesSubviews="NO" fixedFrame="YES" borderType="line" title="Blitter" translatesAutoresizingMaskIntoConstraints="NO" id="uvu-LH-194" userLabel="Voice parameters">
+                        <rect key="frame" x="17" y="112" width="282" height="123"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <view key="contentView" id="NaA-F2-gxU">
+                            <rect key="frame" x="3" y="3" width="276" height="105"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="w9s-g3-eBi" customClass="ActivityView" customModule="vAmiga" customModuleProvider="target">
+                                    <rect key="frame" x="10" y="10" width="256" height="95"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                </customView>
+                            </subviews>
+                        </view>
+                    </box>
                 </subviews>
             </view>
             <connections>
                 <outlet property="delegate" destination="-2" id="WuC-xr-fiS"/>
             </connections>
-            <point key="canvasLocation" x="178" y="191"/>
+            <point key="canvasLocation" x="178" y="229"/>
         </window>
     </objects>
     <resources>

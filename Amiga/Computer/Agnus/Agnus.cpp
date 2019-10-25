@@ -2105,9 +2105,12 @@ Agnus::vsyncHandler()
     amiga.joystick1.execute();
     amiga.joystick2.execute();
 
+    // Update the statistics information
+    amiga.computeStats();
+    
     // Prepare to take a snapshot once in a while
     if (amiga.snapshotIsDue()) amiga.signalSnapshot();
-        
+
     // Count some sheep (zzzzzz) ...
     if (!amiga.getWarp()) {
         amiga.synchronizeTiming();

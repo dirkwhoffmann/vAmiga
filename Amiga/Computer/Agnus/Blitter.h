@@ -31,7 +31,11 @@ class Blitter : public SubComponent {
 
     // Information shown in the GUI inspector panel
     BlitterInfo info;
-    
+
+    // Statistics shown in the GUI monitor panel
+    long blitCycles; 
+
+
     // The fill pattern lookup tables
     uint8_t fillPattern[2][2][256];     // [inclusive/exclusive][carry in][data]
     uint8_t nextCarryIn[2][256];        // [carry in][data]

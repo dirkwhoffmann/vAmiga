@@ -181,6 +181,37 @@ Amiga::getConfig()
     return config;
 }
 
+AmigaStats
+Amiga::getStats()
+{
+    AmigaStats result;
+
+     pthread_mutex_lock(&lock);
+     result = stats;
+     pthread_mutex_unlock(&lock);
+
+     return result;
+}
+
+void
+Amiga::computeStats()
+{
+    // Prevent external access to variable 'stats'
+    pthread_mutex_lock(&lock);
+
+    stats.blitterActivity = 0.5;
+    stats.copperActivity = 0.0;
+    stats.spriteActivity = 0.0;
+    stats.ciaAActivity = 0.0;
+    stats.ciaBActivity = 0.0;
+    stats.driveActivity[0] = 0.0;
+    stats.driveActivity[1] = 0.0;
+    stats.driveActivity[2] = 0.0;
+    stats.driveActivity[3] = 0.0;
+
+    pthread_mutex_unlock(&lock);
+}
+
 bool
 Amiga::configure(ConfigOption option, long value)
 {
