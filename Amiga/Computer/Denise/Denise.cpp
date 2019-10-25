@@ -901,7 +901,7 @@ Denise::drawBorder()
 
 #ifdef LINE_DEBUG
     int16_t vpos = agnus.pos.v;
-    bool lines = vpos == 99 || vpos == 200; // || vpos == 0x50 || vpos == 276 || vpos == 255;
+    bool lines = vpos == 104; // || vpos == 0x50 || vpos == 276 || vpos == 255;
     if (lines) {
         // printf("Line\n");
         for (int i = 0; i <= LAST_PIXEL / 2; iBuffer[i++] = 64);

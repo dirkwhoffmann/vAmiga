@@ -597,18 +597,13 @@ CPU::executeInstruction()
         }
     }
 
+    if (waitStates) {
+        debug(CPU_DEBUG, "Adding %d wait states\n", waitStates);
+    }
+
     advance(m68k_execute(1));
     clock += waitStates;
     waitStates = 0;
-
-    /*
-    if (actions & CPU_ADD_WAIT_STATES) {
-        debug(CPU_DEBUG, "Adding %d wait states\n", waitStates);
-        clock += waitStates;
-        waitStates = 0;
-        actions &= ~CPU_ADD_WAIT_STATES;
-    }
-    */
 
     return clock;
 }

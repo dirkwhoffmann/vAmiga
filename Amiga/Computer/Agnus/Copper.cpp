@@ -80,7 +80,7 @@ Copper::pokeCOPJMP1()
 
     if (s == POKE_COPPER) {
 
-        switchToCopperList(1);
+        assert(false);
 
     }
     if (s == POKE_CPU) {
@@ -103,7 +103,7 @@ Copper::pokeCOPJMP2()
 
     if (s == POKE_COPPER) {
 
-        switchToCopperList(2);
+        assert(false);
 
     }
     if (s == POKE_CPU) {
