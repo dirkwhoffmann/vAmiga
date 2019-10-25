@@ -363,7 +363,7 @@
                                     <color key="fillColor" name="keyboardFocusIndicatorColor" catalog="System" colorSpace="catalog"/>
                                 </levelIndicator>
                                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Jyd-gZ-RoN" customClass="WaveformView" customModule="vAmiga" customModuleProvider="target">
-                                    <rect key="frame" x="10" y="56" width="256" height="95"/>
+                                    <rect key="frame" x="10" y="56" width="256" height="86"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 </customView>
                                 <textField verticalHuggingPriority="750" fixedFrame="YES" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tz4-5N-gwt">

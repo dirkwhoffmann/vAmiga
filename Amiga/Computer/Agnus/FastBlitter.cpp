@@ -49,8 +49,10 @@ Blitter::beginFastLineBlit()
 }
 
 void
-Blitter::beginFastCopyBlit()
+Blitter::beginFastCopyBlit(int level)
 {
+    assert(level == 0 || level == 1);
+
     // Only call this function in copy blit mode
     assert(!bltconLINE());
 
@@ -65,7 +67,7 @@ Blitter::beginFastCopyBlit()
 
     // Depending on the accuracy level, either terminate immediately or start
     // fake-executing the micro-program to emulate proper timing.
-    switch (config.accuracy) {
+    switch (level) {
 
         case 0:
             if (verbose) { verbose = false; debug("Immediate termination\n"); }

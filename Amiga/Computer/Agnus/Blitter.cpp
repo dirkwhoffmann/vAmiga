@@ -701,7 +701,8 @@ Blitter::startBlit()
     iteration = 0;
 
     // Based on the accuracy level, we run the slow or the fast Blitter
-    bool useSlowBlitter = config.accuracy >= 2;
+    int level = config.accuracy;
+    bool useSlowBlitter = level >= 2;
 
     check1 = fnv_1a_init32();
     check2 = fnv_1a_init32();
@@ -735,7 +736,7 @@ Blitter::startBlit()
         //REMOVE ASAP
         debugLevel = 1; // (copycount == 15) ? 2 : 1;
 
-        useSlowBlitter ? beginSlowCopyBlit() : beginFastCopyBlit();
+        useSlowBlitter ? beginSlowCopyBlit() : beginFastCopyBlit(level);
     }
 }
 

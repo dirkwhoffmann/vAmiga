@@ -421,7 +421,7 @@ private:
     void beginFastLineBlit();
 
     // Starts a fast copy blit
-    void beginFastCopyBlit();
+    void beginFastCopyBlit(int level);
 
     // Performs a copy blit operation via the FastBlitter
     template <bool useA, bool useB, bool useC, bool useD, bool desc>
