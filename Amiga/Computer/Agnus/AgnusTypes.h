@@ -199,6 +199,12 @@ CopperInfo;
 
 typedef struct
 {
+    long wordCount;
+}
+CopperStats;
+
+typedef struct
+{
     int accuracy;
 }
 BlitterConfig;
@@ -229,5 +235,11 @@ typedef struct
     bool bzero;
 }
 BlitterInfo;
+
+typedef struct
+{
+    long wordCount;
+}
+BlitterStats;
 
 #endif

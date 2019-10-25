@@ -106,6 +106,12 @@ DiskControllerInfo;
 
 typedef struct
 {
+    long wordCount[4];
+}
+DiskControllerStats;
+
+typedef struct
+{
     int8_t state;
 
     uint16_t audlenLatch;

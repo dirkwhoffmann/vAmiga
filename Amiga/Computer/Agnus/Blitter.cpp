@@ -379,6 +379,14 @@ Blitter::serviceEvent(EventID id)
     }
 }
 
+void
+Blitter::vsyncHandler()
+{
+    // Update activity statistics
+    stats.wordCount = wordCount;
+    wordCount = 0; 
+}
+
 uint16_t
 Blitter::doMintermLogic(uint16_t a, uint16_t b, uint16_t c, uint8_t minterm)
 {

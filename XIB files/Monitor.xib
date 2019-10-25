@@ -13,7 +13,18 @@
                 <outlet property="audioBufferOverflows" destination="uga-2T-g9R" id="9mO-cU-mt8"/>
                 <outlet property="audioBufferUnderflows" destination="Tz4-5N-gwt" id="cgM-dS-rdn"/>
                 <outlet property="audioWaveformView" destination="Jyd-gZ-RoN" id="6yl-Wi-AfZ"/>
+                <outlet property="blitterActivityLevel" destination="4na-T5-jGv" id="hHT-Db-UUC"/>
                 <outlet property="blitterActivityView" destination="w9s-g3-eBi" id="jz8-7h-Tjq"/>
+                <outlet property="copperActivityLevel" destination="cED-4G-BxE" id="F76-cS-KBi"/>
+                <outlet property="copperActivityView" destination="hyu-bT-OyK" id="JzG-G0-TpO"/>
+                <outlet property="df0ActivityLevel" destination="SEu-L8-eVg" id="iQc-St-nhv"/>
+                <outlet property="df0ActivityView" destination="HcV-tH-qDG" id="mG4-lP-g74"/>
+                <outlet property="df1ActivityLevel" destination="cDy-Ig-gSR" id="qVx-MG-BjZ"/>
+                <outlet property="df1ActivityView" destination="edN-7l-AGA" id="R30-7F-Ze5"/>
+                <outlet property="df2ActivityLevel" destination="WTN-bW-Ctc" id="Un2-55-bp4"/>
+                <outlet property="df2ActivityView" destination="kc0-pA-Xr2" id="32l-Ss-qXb"/>
+                <outlet property="df3ActivityLevel" destination="Q2l-mT-LM9" id="utM-7g-mwc"/>
+                <outlet property="df3ActivityView" destination="wcH-aJ-s8L" id="NFF-h9-BT4"/>
                 <outlet property="dmaDebugAudio" destination="a5Q-fy-DlR" id="UZs-gn-tUE"/>
                 <outlet property="dmaDebugAudioCol" destination="GXn-M5-5ZM" id="e69-Qp-h5B"/>
                 <outlet property="dmaDebugBitplane" destination="UQl-2N-4kg" id="4pP-7B-yTJ"/>
@@ -33,6 +44,8 @@
                 <outlet property="dmaDebugRefreshCol" destination="rHy-Ul-22o" id="qUW-Pv-uln"/>
                 <outlet property="dmaDebugSprites" destination="cm6-f8-Zgo" id="4UA-K3-dGL"/>
                 <outlet property="dmaDebugSpritesCol" destination="cPJ-6l-GII" id="sMB-i7-RVP"/>
+                <outlet property="spriteActivityLevel" destination="JZc-Pb-O5Z" id="pZl-6G-jdA"/>
+                <outlet property="spriteActivityView" destination="pR6-mR-288" id="SFI-dS-wPc"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="YTk-tV-xni"/>
             </connections>
         </customObject>
@@ -41,17 +54,17 @@
         <window title="Activity Monitor" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="196" y="240" width="558" height="434"/>
+            <rect key="contentRect" x="196" y="240" width="608" height="537"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
-                <rect key="frame" x="0.0" y="0.0" width="558" height="434"/>
+                <rect key="frame" x="0.0" y="0.0" width="608" height="537"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <box fixedFrame="YES" title="DMA Debugger" translatesAutoresizingMaskIntoConstraints="NO" id="qP3-Kq-ghb">
-                        <rect key="frame" x="309" y="92" width="232" height="322"/>
+                        <rect key="frame" x="309" y="195" width="282" height="322"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="JO5-2X-rfo">
-                            <rect key="frame" x="3" y="3" width="226" height="304"/>
+                            <rect key="frame" x="3" y="3" width="276" height="304"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SUi-rD-Y7B">
@@ -319,7 +332,7 @@
                         </view>
                     </box>
                     <box autoresizesSubviews="NO" fixedFrame="YES" borderType="line" title="Audio" translatesAutoresizingMaskIntoConstraints="NO" id="0zY-uE-yde" userLabel="Voice parameters">
-                        <rect key="frame" x="17" y="245" width="282" height="169"/>
+                        <rect key="frame" x="309" y="16" width="282" height="169"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="Wvw-ju-H0Q">
                             <rect key="frame" x="3" y="3" width="276" height="151"/>
@@ -344,7 +357,7 @@
                                     </textFieldCell>
                                 </textField>
                                 <levelIndicator verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hOM-UE-xrQ">
-                                    <rect key="frame" x="11" y="10" width="122" height="16"/>
+                                    <rect key="frame" x="11" y="9" width="122" height="18"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <levelIndicatorCell key="cell" alignment="left" doubleValue="50" maxValue="100" levelIndicatorStyle="continuousCapacity" id="2Ys-hv-mx8"/>
                                     <color key="fillColor" name="keyboardFocusIndicatorColor" catalog="System" colorSpace="catalog"/>
@@ -392,22 +405,146 @@
                             </subviews>
                         </view>
                     </box>
-                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OEK-uJ-gbS">
-                        <rect key="frame" x="373" y="0.0" width="118" height="103"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="baustelle" id="7BL-Ve-93c"/>
-                    </imageView>
-                    <box autoresizesSubviews="NO" fixedFrame="YES" borderType="line" title="Blitter" translatesAutoresizingMaskIntoConstraints="NO" id="uvu-LH-194" userLabel="Voice parameters">
-                        <rect key="frame" x="17" y="112" width="282" height="123"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <box autoresizesSubviews="NO" fixedFrame="YES" borderType="line" title="Activity" translatesAutoresizingMaskIntoConstraints="NO" id="uvu-LH-194" userLabel="Voice parameters">
+                        <rect key="frame" x="17" y="16" width="282" height="501"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="NaA-F2-gxU">
-                            <rect key="frame" x="3" y="3" width="276" height="105"/>
+                            <rect key="frame" x="3" y="3" width="276" height="483"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="w9s-g3-eBi" customClass="ActivityView" customModule="vAmiga" customModuleProvider="target">
-                                    <rect key="frame" x="10" y="10" width="256" height="95"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <rect key="frame" x="10" y="421" width="256" height="28"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 </customView>
+                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hyu-bT-OyK" customClass="ActivityView" customModule="vAmiga" customModuleProvider="target">
+                                    <rect key="frame" x="10" y="354" width="256" height="28"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                </customView>
+                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Zmy-b2-jvF">
+                                    <rect key="frame" x="10" y="457" width="41" height="14"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Blitter" id="cgZ-Gd-sON">
+                                        <font key="font" metaFont="smallSystem"/>
+                                        <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                </textField>
+                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8qN-nd-Ji2">
+                                    <rect key="frame" x="12" y="390" width="43" height="14"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Copper" id="6YB-Kn-Z63">
+                                        <font key="font" metaFont="smallSystem"/>
+                                        <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                </textField>
+                                <levelIndicator verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4na-T5-jGv">
+                                    <rect key="frame" x="135" y="454" width="131" height="18"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                    <levelIndicatorCell key="cell" alignment="left" doubleValue="0.5" maxValue="1" warningValue="1" criticalValue="1" levelIndicatorStyle="continuousCapacity" id="WEa-6I-fYH"/>
+                                    <color key="fillColor" name="keyboardFocusIndicatorColor" catalog="System" colorSpace="catalog"/>
+                                </levelIndicator>
+                                <levelIndicator verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cED-4G-BxE">
+                                    <rect key="frame" x="135" y="387" width="131" height="18"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                    <levelIndicatorCell key="cell" alignment="left" doubleValue="0.5" maxValue="1" warningValue="1" criticalValue="1" levelIndicatorStyle="continuousCapacity" id="vKz-ZW-UmN"/>
+                                    <color key="fillColor" name="keyboardFocusIndicatorColor" catalog="System" colorSpace="catalog"/>
+                                </levelIndicator>
+                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pR6-mR-288" customClass="ActivityView" customModule="vAmiga" customModuleProvider="target">
+                                    <rect key="frame" x="10" y="285" width="256" height="28"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                </customView>
+                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tli-07-Q0d">
+                                    <rect key="frame" x="14" y="321" width="42" height="14"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Sprites" id="Y6W-Wj-wWD">
+                                        <font key="font" metaFont="smallSystem"/>
+                                        <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                </textField>
+                                <levelIndicator verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JZc-Pb-O5Z">
+                                    <rect key="frame" x="135" y="319" width="131" height="18"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                    <levelIndicatorCell key="cell" alignment="left" doubleValue="0.5" maxValue="1" warningValue="1" criticalValue="1" levelIndicatorStyle="continuousCapacity" id="L63-9T-V2q"/>
+                                    <color key="fillColor" name="keyboardFocusIndicatorColor" catalog="System" colorSpace="catalog"/>
+                                </levelIndicator>
+                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="edN-7l-AGA" customClass="ActivityView" customModule="vAmiga" customModuleProvider="target">
+                                    <rect key="frame" x="10" y="146" width="256" height="28"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                </customView>
+                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uBe-Pf-7Rx">
+                                    <rect key="frame" x="16" y="182" width="38" height="14"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Df1" id="elB-6D-QCb">
+                                        <font key="font" metaFont="smallSystem"/>
+                                        <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                </textField>
+                                <levelIndicator verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cDy-Ig-gSR">
+                                    <rect key="frame" x="135" y="181" width="131" height="18"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                    <levelIndicatorCell key="cell" alignment="left" doubleValue="0.5" maxValue="1" warningValue="1" criticalValue="1" levelIndicatorStyle="continuousCapacity" id="n1g-44-ATQ"/>
+                                    <color key="fillColor" name="keyboardFocusIndicatorColor" catalog="System" colorSpace="catalog"/>
+                                </levelIndicator>
+                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kc0-pA-Xr2" customClass="ActivityView" customModule="vAmiga" customModuleProvider="target">
+                                    <rect key="frame" x="10" y="78" width="256" height="28"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                </customView>
+                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Cwb-MC-DWX">
+                                    <rect key="frame" x="18" y="114" width="34" height="14"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Df2" id="zNp-3f-SMW">
+                                        <font key="font" metaFont="smallSystem"/>
+                                        <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                </textField>
+                                <levelIndicator verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WTN-bW-Ctc">
+                                    <rect key="frame" x="135" y="114" width="131" height="18"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                    <levelIndicatorCell key="cell" alignment="left" doubleValue="0.5" maxValue="1" warningValue="1" criticalValue="1" levelIndicatorStyle="continuousCapacity" id="5Dt-re-egg"/>
+                                    <color key="fillColor" name="keyboardFocusIndicatorColor" catalog="System" colorSpace="catalog"/>
+                                </levelIndicator>
+                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wcH-aJ-s8L" customClass="ActivityView" customModule="vAmiga" customModuleProvider="target">
+                                    <rect key="frame" x="10" y="10" width="256" height="28"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                </customView>
+                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JKk-Ds-k4V">
+                                    <rect key="frame" x="18" y="46" width="34" height="14"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Df3" id="ch1-Ij-pcb">
+                                        <font key="font" metaFont="smallSystem"/>
+                                        <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                </textField>
+                                <levelIndicator verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Q2l-mT-LM9">
+                                    <rect key="frame" x="135" y="46" width="131" height="18"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                    <levelIndicatorCell key="cell" alignment="left" doubleValue="0.5" maxValue="1" warningValue="1" criticalValue="1" levelIndicatorStyle="continuousCapacity" id="7Ui-wY-e5V"/>
+                                    <color key="fillColor" name="keyboardFocusIndicatorColor" catalog="System" colorSpace="catalog"/>
+                                </levelIndicator>
+                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HcV-tH-qDG" customClass="ActivityView" customModule="vAmiga" customModuleProvider="target">
+                                    <rect key="frame" x="10" y="215" width="256" height="28"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                </customView>
+                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IGq-NT-jaj">
+                                    <rect key="frame" x="16" y="251" width="38" height="14"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Df0" id="blP-dw-PGh">
+                                        <font key="font" metaFont="smallSystem"/>
+                                        <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                </textField>
+                                <levelIndicator verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SEu-L8-eVg">
+                                    <rect key="frame" x="135" y="250" width="131" height="18"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                    <levelIndicatorCell key="cell" alignment="left" doubleValue="0.5" maxValue="1" warningValue="1" criticalValue="1" levelIndicatorStyle="continuousCapacity" id="cYp-ro-n8e"/>
+                                    <color key="fillColor" name="keyboardFocusIndicatorColor" catalog="System" colorSpace="catalog"/>
+                                </levelIndicator>
                             </subviews>
                         </view>
                     </box>
@@ -416,10 +553,7 @@
             <connections>
                 <outlet property="delegate" destination="-2" id="WuC-xr-fiS"/>
             </connections>
-            <point key="canvasLocation" x="178" y="229"/>
+            <point key="canvasLocation" x="-12" y="263.5"/>
         </window>
     </objects>
-    <resources>
-        <image name="baustelle" width="274" height="240"/>
-    </resources>
 </document>

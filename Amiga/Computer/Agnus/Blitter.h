@@ -33,12 +33,21 @@ class Blitter : public SubComponent {
     BlitterInfo info;
 
     // Statistics shown in the GUI monitor panel
-    long blitCycles; 
+    BlitterStats stats;
 
 
     // The fill pattern lookup tables
     uint8_t fillPattern[2][2][256];     // [inclusive/exclusive][carry in][data]
     uint8_t nextCarryIn[2][256];        // [carry in][data]
+
+
+    //
+    // Statistics
+    //
+    
+    // Number of words that have been moved by the Blitter
+    long wordCount = 0;
+
 
     //
     // Blitter registers
@@ -270,6 +279,9 @@ public:
     // Returns the result of the most recent call to inspect()
     BlitterInfo getInfo();
 
+    // Returns statistical information about the current activiy
+    BlitterStats getStats() { return stats; }
+
 
     //
     // Accessing properties
@@ -365,6 +377,10 @@ public:
     
     // Processes a Blitter event
     void serviceEvent(EventID id);
+
+    // Performs periodic per-frame actions
+    void vsyncHandler();
+
 
     //
     // Auxiliary functions

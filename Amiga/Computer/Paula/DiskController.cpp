@@ -19,6 +19,9 @@ DiskController::DiskController(Amiga& ref) : SubComponent(ref)
     config.connected[2] = false;
     config.connected[3] = false;
     config.useFifo = true;
+
+    // Initialize variables
+    memset(&stats, 0, sizeof(stats));
 }
 
 void
@@ -433,6 +436,16 @@ DiskController::serviceDiskChangeEvent(EventID id, int driveNr)
 }
 
 void
+DiskController::vsyncHandler()
+{
+    // Update activity statistics
+    for (int i = 0; i < 4; i++) {
+         stats.wordCount[i] = wordCount[i];
+         wordCount[i] = 0;
+     }
+}
+
+void
 DiskController::clearFifo()
 {
     fifo = 0;
@@ -555,16 +568,22 @@ DiskController::performDMA()
     
     // Only proceed if DMA is enabled.
     if (state != DRIVE_DMA_READ && state != DRIVE_DMA_WRITE) return;
-    
+
+    // How many word shall we read in?
+    uint32_t count = drive->config.speed;
+
+    // Gather some statistical information
+    wordCount[drive->nr] += count;
+
     // Perform DMA
     switch (state) {
         
         case DRIVE_DMA_READ:
-        performDMARead(drive);
+        performDMARead(drive, count);
         break;
         
         case DRIVE_DMA_WRITE:
-        performDMAWrite(drive);
+        performDMAWrite(drive, count);
         break;
         
         default: assert(false);
@@ -572,16 +591,13 @@ DiskController::performDMA()
 }
 
 void
-DiskController::performDMARead(Drive *drive)
+DiskController::performDMARead(Drive *drive, uint32_t remaining)
 {
     assert(drive != NULL);
 
     // Only proceed if the FIFO contains enough data.
     if (!fifoHasWord()) { return; }
 
-    // Determine how many words we are supposed to transfer.
-    uint32_t remaining = drive->config.speed;
-    
     do {
         // Read next word from the FIFO buffer.
         uint16_t word = readFifo16();
@@ -614,16 +630,13 @@ DiskController::performDMARead(Drive *drive)
 }
 
 void
-DiskController::performDMAWrite(Drive *drive)
+DiskController::performDMAWrite(Drive *drive, uint32_t remaining)
 {
     assert(drive != NULL);
 
     // Only proceed if the FIFO has enough free space.
     if (!fifoCanStoreWord()) return;
-    
-    // Determine how many words we are supposed to transfer.
-    uint32_t remaining = drive->config.speed;
-    
+
     do {
         // Read next word from memory.
         uint16_t word = agnus.doDiskDMA(); // dmaRead();
@@ -677,11 +690,17 @@ DiskController::performSimpleDMA()
 {
     Drive *drive = getSelectedDrive();
     
-    // Only proceed if a drive is selected.
+    // Only proceed if a drive is selected
     if (drive == NULL) return;
-    
-    // Only proceed if there are remaining bytes to read.
+
+    // Only proceed if there are remaining bytes to read
     if (!(dsklen & 0x3FFF)) return;
+
+    // How many word shall we read in?
+    uint32_t count = drive->config.speed;
+
+    // Gather some statistical information
+    wordCount[drive->nr] += count;
 
     // Only proceed if DMA is enabled.
     if (state != DRIVE_DMA_READ && state != DRIVE_DMA_WRITE) return;
@@ -690,11 +709,11 @@ DiskController::performSimpleDMA()
     switch (state) {
 
         case DRIVE_DMA_READ:
-        performSimpleDMARead(drive);
+        performSimpleDMARead(drive, count);
         break;
 
         case DRIVE_DMA_WRITE:
-        performSimpleDMAWrite(drive);
+        performSimpleDMAWrite(drive, count);
         break;
         
         default: assert(false);
@@ -702,12 +721,9 @@ DiskController::performSimpleDMA()
 }
 
 void
-DiskController::performSimpleDMARead(Drive *drive)
+DiskController::performSimpleDMARead(Drive *drive, uint32_t remaining)
 {
     assert(drive != NULL);
-
-    // Determine how many words we are supposed to transfer.
-    uint32_t remaining = drive->config.speed;
 
     for (unsigned i = 0; i < remaining; i++) {
         
@@ -732,13 +748,10 @@ DiskController::performSimpleDMARead(Drive *drive)
 }
 
 void
-DiskController::performSimpleDMAWrite(Drive *drive)
+DiskController::performSimpleDMAWrite(Drive *drive, uint32_t remaining)
 {
     assert(drive != NULL);
     // debug("Writing %d words to disk\n", dsklen & 0x3FFF);
-
-    // Determine how many words we are supposed to transfer.
-    uint32_t remaining = drive->config.speed;
 
     for (unsigned i = 0; i < remaining; i++) {
         
@@ -765,9 +778,14 @@ DiskController::performSimpleDMAWrite(Drive *drive)
 void
 DiskController::performTurboDMA(Drive *drive)
 {
-    // Only proceed if there are remaining bytes to read.
+    assert(drive != NULL);
+
+    // Only proceed if there is anything to read
     if ((dsklen & 0x3FFF) == 0) return;
-    
+
+    // Gather some statistical information
+     wordCount[drive->nr] += (dsklen & 0x3FFF);
+
     // Perform action depending on DMA state
     switch (state) {
 

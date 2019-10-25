@@ -20,8 +20,18 @@ class DiskController : public SubComponent {
     // Information shown in the GUI inspector panel
     DiskControllerInfo info;
 
+    // Statistics shown in the GUI monitor panel
+    DiskControllerStats stats;
+
     // Temorary storage for a disk waiting to be inserted
     class Disk *diskToInsert = NULL;
+
+    //
+    // Statistics
+    //
+
+    // Number of transfered words
+    long wordCount[4] = {0,0,0,0};
 
 
     //
@@ -163,13 +173,16 @@ private:
     
 public:
     
-    // Returns the latest internal state recorded by inspect().
+    // Returns the latest internal state recorded by inspect()
     DiskControllerInfo getInfo();
 
-    // Indicates if the motor of the specified drive is switched on.
+    // Returns statistical information about disk activity
+    DiskControllerStats getStats() { return stats; }
+
+    // Indicates if the motor of the specified drive is switched on
     bool spinning(unsigned driveNr);
 
-    // Indicates if the motor of at least one drive is switched on.
+    // Indicates if the motor of at least one drive is switched on
     bool spinning();
     
     // Returns the current drive state
@@ -237,18 +250,21 @@ public:
     
     
     //
-    // Processing events
+    // Event handlers
     //
     
 public:
     
-    // Services an event in the disk controller slot.
+    // Services an event in the disk controller slot
     void serviceDiskEvent();
 
-    // Services an event in the disk change slot.
+    // Services an event in the disk change slot
     void serviceDiskChangeEvent(EventID id, int driveNr);
 
-    
+    // Performs periodic actions for each frame
+    void vsyncHandler();
+
+
     //
     // Working with the FIFO buffer
     //
@@ -316,13 +332,13 @@ public:
   
     // 1. Standard DMA mode
     void performDMA();
-    void performDMARead(Drive *drive);
-    void performDMAWrite(Drive *drive);
+    void performDMARead(Drive *drive, uint32_t count);
+    void performDMAWrite(Drive *drive, uint32_t count);
  
     // 2. Simple DMA mode
     void performSimpleDMA();
-    void performSimpleDMARead(Drive *drive);
-    void performSimpleDMAWrite(Drive *drive);
+    void performSimpleDMARead(Drive *drive, uint32_t count);
+    void performSimpleDMAWrite(Drive *drive, uint32_t count);
 
     // 3. Turbo DMA mode
     void performTurboDMA(Drive *d);

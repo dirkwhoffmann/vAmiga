@@ -33,19 +33,31 @@ class Monitor: NSWindowController {
     @IBOutlet weak var dmaDebugOpacity: NSSlider!
     @IBOutlet weak var dmaDebugDisplayMode: NSPopUpButton!
 
-    // Audio
+    // Waveform view
     @IBOutlet weak var audioWaveformView: WaveformView!
     @IBOutlet weak var audioBufferLevel: NSLevelIndicator!
     @IBOutlet weak var audioBufferLevelText: NSTextField!
     @IBOutlet weak var audioBufferUnderflows: NSTextField!
     @IBOutlet weak var audioBufferOverflows: NSTextField!
 
-    // Blitter
+    // Activity views
     @IBOutlet weak var blitterActivityView: ActivityView!
+    @IBOutlet weak var blitterActivityLevel: NSLevelIndicator!
+    @IBOutlet weak var copperActivityView: ActivityView!
+    @IBOutlet weak var copperActivityLevel: NSLevelIndicator!
+    @IBOutlet weak var spriteActivityView: ActivityView!
+    @IBOutlet weak var spriteActivityLevel: NSLevelIndicator!
+    @IBOutlet weak var df0ActivityView: ActivityView!
+    @IBOutlet weak var df0ActivityLevel: NSLevelIndicator!
+    @IBOutlet weak var df1ActivityView: ActivityView!
+    @IBOutlet weak var df1ActivityLevel: NSLevelIndicator!
+    @IBOutlet weak var df2ActivityView: ActivityView!
+    @IBOutlet weak var df2ActivityLevel: NSLevelIndicator!
+    @IBOutlet weak var df3ActivityView: ActivityView!
+    @IBOutlet weak var df3ActivityLevel: NSLevelIndicator!
 
     var timer: Timer?
-
-    // var refreshCounter = 0
+    var refreshCounter = 0
 
     // Factory method
     static func make() -> Monitor? {
@@ -80,9 +92,12 @@ class Monitor: NSWindowController {
         }
 
         refreshWaveformView()
-        refreshBlitterView()
+        refreshActivityViews()
 
-        refreshDmaDebugger()
+        refreshCounter += 1
+        if refreshCounter % 8 == 0 {
+            refreshDmaDebugger()
+        }
     }
 }
 
@@ -120,17 +135,32 @@ extension Monitor {
 
 extension Monitor {
 
-    func refreshBlitterView() {
-
-        // guard let paula = amigaProxy?.paula else { return }
-        // let fillLevel = Int32(paula.fillLevel() * 100)
+    func refreshActivityViews() {
 
         if let stats = amigaProxy?.getStats() {
 
-            // let blitActivity = stats.blitterActivity
-            let blitActivity = drand48()
+            let blitActivity = Double(stats.blitter.wordCount) / 12000.0
+            let copperActivity = Double(stats.copper.wordCount) / 1400.0
+            let spriteActivity = Double(stats.denise.spriteLines) / 313.0
+            let df0Activity = Double(stats.disk.wordCount.0) / (313.0 * 3)
+            let df1Activity = Double(stats.disk.wordCount.1) / (313.0 * 3)
+            let df2Activity = Double(stats.disk.wordCount.2) / (313.0 * 3)
+            let df3Activity = Double(stats.disk.wordCount.3) / (313.0 * 3)
 
             blitterActivityView.add(value: blitActivity)
+            blitterActivityLevel.doubleValue = blitterActivityView.current
+            copperActivityView.add(value: copperActivity)
+            copperActivityLevel.doubleValue = copperActivityView.current
+            spriteActivityView.add(value: spriteActivity)
+            spriteActivityLevel.doubleValue = spriteActivityView.current
+            df0ActivityView.add(value: df0Activity)
+            df0ActivityLevel.doubleValue = df0ActivityView.current
+            df1ActivityView.add(value: df1Activity)
+            df1ActivityLevel.doubleValue = df1ActivityView.current
+            df2ActivityView.add(value: df2Activity)
+            df2ActivityLevel.doubleValue = df2ActivityView.current
+            df3ActivityView.add(value: df3Activity)
+            df3ActivityLevel.doubleValue = df3ActivityView.current
         }
     }
 }

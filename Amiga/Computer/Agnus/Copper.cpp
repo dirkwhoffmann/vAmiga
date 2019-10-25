@@ -587,6 +587,7 @@ Copper::serviceEvent(EventID id)
     Beam trigger;
 
     servicing = true;
+    wordCount++;
 
     switch (id) {
             
@@ -831,7 +832,7 @@ Copper::reschedule(int delay)
 }
 
 void
-Copper::vsyncAction()
+Copper::vsyncHandler()
 {
     /* "At the start of each vertical blanking interval, COP1LC is automatically
      *  used to start the program counter. That is, no matter what the Copper is
@@ -847,6 +848,10 @@ Copper::vsyncAction()
     } else {
         agnus.cancel<COP_SLOT>();
     }
+
+    // Update activity statistics
+     stats.wordCount = wordCount;
+     wordCount = 0; 
 }
 
 int

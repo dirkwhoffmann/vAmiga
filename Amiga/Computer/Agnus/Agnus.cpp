@@ -2099,14 +2099,13 @@ Agnus::vsyncHandler()
     // Trigger VSYNC interrupt
     paula.raiseIrq(INT_VERTB);
     
-    // Let the subcomponents do their own VSYNC stuff
-    copper.vsyncAction();
+    // Let other subcomponents do their own VSYNC stuff
+    blitter.vsyncHandler();
+    copper.vsyncHandler();
     denise.beginOfFrame(frameInfo.interlaced);
-    amiga.joystick1.execute();
-    amiga.joystick2.execute();
-
-    // Update the statistics information
-    amiga.computeStats();
+    diskController.vsyncHandler();
+    joystick1.execute();
+    joystick2.execute();
     
     // Prepare to take a snapshot once in a while
     if (amiga.snapshotIsDue()) amiga.signalSnapshot();

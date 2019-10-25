@@ -472,7 +472,9 @@ Blitter::beginSlowCopyBlit()
 
 template <uint16_t instr> void
 Blitter::exec()
-{    
+{
+    wordCount++;
+
     // Check if this instruction needs the bus
     if (instr & BUS) {
         if (!agnus.allocateBus<BUS_BLITTER>()) return;

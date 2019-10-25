@@ -127,12 +127,10 @@ AmigaInfo;
 
 typedef struct
 {
-    double blitterActivity;
-    double copperActivity;
-    double spriteActivity;
-    double ciaAActivity;
-    double ciaBActivity;
-    double driveActivity[4];
+    BlitterStats blitter;
+    CopperStats copper;
+    DeniseStats denise;
+    DiskControllerStats disk;
 }
 AmigaStats;
 

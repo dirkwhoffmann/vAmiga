@@ -317,9 +317,6 @@ public:
     // Returns the statistics information for the most recently finished frame
     AmigaStats getStats();
 
-    // Called each frame to update the statistics information
-    void computeStats();
-
 
     //
     // Accessing properties

@@ -10,6 +10,7 @@
 class ActivityView: NSView {
 
     var values = Array(repeating: 0.0, count: 128)
+    var current: Double { return values[127] }
 
     // Modulo counter to trigger image rendering
     // var delayCounter = 0
@@ -32,7 +33,7 @@ class ActivityView: NSView {
         for i in 0 ..< values.count - 1 {
             values[i] = values[i+1]
         }
-        values[127] = val
+        values[127] = 0.6 * values[126] + 0.4 * val
 
         update()
     }
@@ -52,7 +53,7 @@ class ActivityView: NSView {
         for x in 0...Int(w) {
 
             let val = values[Int(Double(x) * 127.0 / w )]
-            let scaled = min(Int(val * h), 1)
+            let scaled = max(Int(val * h), 1)
 
             let from = CGPoint(x: x, y: 0)
             let to = CGPoint(x: x, y: scaled)
