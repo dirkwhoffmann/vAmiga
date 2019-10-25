@@ -42,7 +42,7 @@ static const int INVREG_DEBUG  = 2;  // Ivalid register accesses
 // Component debugging (set to 1 to generate debug output)
 
 static const int RUNLOOP_DEBUG = 2;  // Run loop of the emulator thread
-static const int CPU_DEBUG     = 1;  // CPU
+static const int CPU_DEBUG     = 2;  // CPU
 static const int INT_DEBUG     = 2;  // Interrupts
 static const int CIA_DEBUG     = 2;  // CIAs
 static const int TOD_DEBUG     = 2;  // TODs (CIA 24-bit counters)
@@ -75,7 +75,7 @@ static const int BLT_CHECKSUM  = 2;  // Blitter checksums
 
 // Additional debugging aids (uncomment to enable)
 
-#define BOOT_DISK "/Users/hoff/Dropbox/Amiga/Demos/CoolDemos17.adf"
+// #define BOOT_DISK "/Users/hoff/Dropbox/Amiga/Demos/CoolDemos17.adf"
 // #define BOOT_DISK "/Users/hoff/Dropbox/Amiga/Demos/Abnormal-DemoPack04.adf"
 #define HARD_RESET       // Restore the initial power up state in reset()
 // #define BORDER_DEBUG     // Draws the border in debug colors
@@ -83,6 +83,6 @@ static const int BLT_CHECKSUM  = 2;  // Blitter checksums
 // #define LINE_DEBUG       // Colorizes certain rasterlines
 // #define ALIGN_DRIVE_HEAD // Makes drive operations deterministic
 // #define SLOW_BLT_DEBUG   // Execute all slow Blitter instructions in one chunk
-#define AGNUS_EXEC_DEBUG // Falls back to a simpler Agnus execution function
+// #define AGNUS_EXEC_DEBUG // Falls back to a simpler Agnus execution function
 
 #endif
