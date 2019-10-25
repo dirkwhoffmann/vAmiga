@@ -2183,6 +2183,24 @@ template void Agnus::pokeSPRxPTL<5>(uint16_t value);
 template void Agnus::pokeSPRxPTL<6>(uint16_t value);
 template void Agnus::pokeSPRxPTL<7>(uint16_t value);
 
+template void Agnus::pokeSPRxPOS<0>(uint16_t value);
+template void Agnus::pokeSPRxPOS<1>(uint16_t value);
+template void Agnus::pokeSPRxPOS<2>(uint16_t value);
+template void Agnus::pokeSPRxPOS<3>(uint16_t value);
+template void Agnus::pokeSPRxPOS<4>(uint16_t value);
+template void Agnus::pokeSPRxPOS<5>(uint16_t value);
+template void Agnus::pokeSPRxPOS<6>(uint16_t value);
+template void Agnus::pokeSPRxPOS<7>(uint16_t value);
+
+template void Agnus::pokeSPRxCTL<0>(uint16_t value);
+template void Agnus::pokeSPRxCTL<1>(uint16_t value);
+template void Agnus::pokeSPRxCTL<2>(uint16_t value);
+template void Agnus::pokeSPRxCTL<3>(uint16_t value);
+template void Agnus::pokeSPRxCTL<4>(uint16_t value);
+template void Agnus::pokeSPRxCTL<5>(uint16_t value);
+template void Agnus::pokeSPRxCTL<6>(uint16_t value);
+template void Agnus::pokeSPRxCTL<7>(uint16_t value);
+
 template uint16_t Agnus::doBitplaneDMA<0>();
 template uint16_t Agnus::doBitplaneDMA<1>();
 template uint16_t Agnus::doBitplaneDMA<2>();
