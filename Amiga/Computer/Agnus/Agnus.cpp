@@ -1937,17 +1937,22 @@ Agnus::updateSpriteDMA()
     // vertical position counter.
     int16_t v = pos.v + 1;
 
-    // Determine DMA status for all sprites
+    // Reset the vertical trigger coordinates in line 25
+    if (v == 25 && doSprDMA()) {
+        for (int i = 0; i < 8; i++) sprVStop[i] = 25;
+        return;
+     }
+
+    // Disable DMA in the last rasterline
     if (v == frameInfo.numLines - 1) {
-
         for (int i = 0; i < 8; i++) sprDmaState[i] = SPR_DMA_IDLE;
+        return;
+    }
 
-    } else {
-
-        for (int i = 0; i < 8; i++) {
-            if (v == sprVStrt[i]) sprDmaState[i] = SPR_DMA_ACTIVE;
-            if (v == sprVStop[i]) sprDmaState[i] = SPR_DMA_IDLE;
-        }
+    // Update the DMA status for all sprites
+    for (int i = 0; i < 8; i++) {
+        if (v == sprVStrt[i]) sprDmaState[i] = SPR_DMA_ACTIVE;
+        if (v == sprVStop[i]) sprDmaState[i] = SPR_DMA_IDLE;
     }
 }
 
@@ -1970,30 +1975,6 @@ Agnus::hsyncHandler()
 
     // Advance the vertical counter
     if (++pos.v >= frameInfo.numLines) vsyncHandler();
-
-    // Check if we have reached line 25 (sprite DMA starts here)
-    if (pos.v == 25 && doSprDMA()) {
-        // Reset vertical sprite trigger coordinates which forces the sprite
-        // logic to read in the control words for all sprites in this line.
-        for (unsigned i = 0; i < 8; i++) {
-            // sprDmaState[i] = SPR_DMA_IDLE;
-            sprVStop[i] = 25;
-        }
-    }
-
-    // Determine DMA state for all sprites
-    // MOVED TO updateSpriteDMA()
-    /*
-    if (pos.v == frameInfo.numLines - 1) {
-        for (unsigned i = 0; i < 8; i++) {
-            sprDmaState[i] = SPR_DMA_IDLE;
-        }
-    } else {
-        for (unsigned i = 0; i < 8; i++) {
-            if (sprVStrt[i] == pos.v) sprDmaState[i] = SPR_DMA_ACTIVE;
-        }
-    }
-    */
 
     // Initialize variables which keep values for certain trigger positions
     dmaconAtDDFStrt = dmacon;
