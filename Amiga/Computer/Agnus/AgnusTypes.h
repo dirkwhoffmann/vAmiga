@@ -140,8 +140,7 @@ static inline bool isBusOwner(long value) { return value >= 0 && value < BUS_OWN
 typedef enum
 {
     SPR_DMA_IDLE,
-    SPR_DMA_CTRL,
-    SPR_DMA_DATA
+    SPR_DMA_ACTIVE
 }
 SprDMAState;
 

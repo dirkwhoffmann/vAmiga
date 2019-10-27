@@ -952,6 +952,9 @@ private:
     // Executes the second sprite DMA cycle
     template <int nr> void executeSecondSpriteCycle();
 
+    // Updates the sprite DMA status in cycle 0xDF
+    void updateSpriteDMA();
+
     // Finishes up the current rasterline
     void hsyncHandler();
 

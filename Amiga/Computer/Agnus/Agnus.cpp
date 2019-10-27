@@ -139,6 +139,7 @@ Agnus::initDasEventTable()
             p[0x33] = DAS_S7_2;
         }
 
+        p[0xDF] = DAS_SDMA;
         // p[0xE2] = DAS_REFRESH;
     }
 }
@@ -871,6 +872,7 @@ Agnus::dumpDasEventTable(int from, int to)
     str[(int)DAS_S6_2][0]    = '6'; str[(int)DAS_S6_2][1]    = '2';
     str[(int)DAS_S7_1][0]    = '7'; str[(int)DAS_S7_1][1]    = '1';
     str[(int)DAS_S7_2][0]    = '7'; str[(int)DAS_S7_2][1]    = '2';
+    str[(int)DAS_SDMA][0]    = 'S'; str[(int)DAS_SDMA][1]    = 'D';
 
     dumpEventTable(dasEvent, str, from, to);
 }
@@ -1587,7 +1589,14 @@ Agnus::pokeSPRxPOS(uint16_t value)
 {
     debug(SPRREG_DEBUG, "pokeSPR%dPOS(%X)\n", x, value);
 
+    // Compute the value of the vertical counter that is seen here
+    int16_t v = (pos.h < 0xDF) ? pos.v : (pos.v + 1);
+
+    // Compute the new vertical start position
     sprVStrt[x] = ((value & 0xFF00) >> 8) | (sprVStrt[x] & 0x0100);
+
+    // Check if sprite DMA should be enabled
+    if (sprVStrt[x] == v) sprDmaState[x] = SPR_DMA_ACTIVE;
 }
 
 template <int x> void
@@ -1595,8 +1604,27 @@ Agnus::pokeSPRxCTL(uint16_t value)
 {
     debug(SPRREG_DEBUG, "pokeSPR%dCTL(%X)\n", x, value);
 
+    // Compute the value of the vertical counter that is seen here
+    int16_t v = (pos.h < 0xDF) ? pos.v : (pos.v + 1);
+
+    bool match = (sprVStop[x] == v);
+    // debug("v = %d match = %d\n", v, match);
+
+    // Compute the new vertical start and stop position
     sprVStrt[x] = ((value & 0b100) << 6) | (sprVStrt[x] & 0x00FF);
     sprVStop[x] = ((value & 0b010) << 7) | (value >> 8);
+
+    // Check if sprite DMA should be enabled
+    if (sprVStrt[x] == v || sprVStop[x] == v) {
+        sprDmaState[x] = SPR_DMA_ACTIVE;
+        // debug("Enabling DMA\n");
+    }
+
+    // Check if sprite DMA should be disabled
+    if (match && sprVStop[x] != v) {
+        sprDmaState[x] = SPR_DMA_IDLE;
+        // debug("Going IDLE\n");
+    }
 }
 
 void
@@ -1856,29 +1884,23 @@ Agnus::updateRegisters()
 template <int nr> void
 Agnus::executeFirstSpriteCycle()
 {
-    debug(SPR_DEBUG, "executeFirstSpriteCycle<%d> (%d,%d)\n", nr, sprVStrt[nr], sprVStop[nr]);
+    debug(SPR_DEBUG, "executeFirstSpriteCycle<%d>\n", nr);
 
-    uint16_t value;
+    if (sprDmaState[nr] != SPR_DMA_IDLE) {
 
-    switch (sprDmaState[nr]) {
+        if (pos.v == sprVStop[nr]) {
 
-        case SPR_DMA_IDLE:
-            break;
-
-        case SPR_DMA_CTRL:
-
-            // Skip if vpos doesn't match any more
-            if (pos.v != sprVStop[nr]) break;
-
-            value = doSpriteDMA<nr>();
+            // Read in the next control word (POS part)
+            uint16_t value = doSpriteDMA<nr>();
             agnus.pokeSPRxPOS<nr>(value);
             denise.pokeSPRxPOS<nr>(value);
-            break;
 
-        case SPR_DMA_DATA:
-            value = doSpriteDMA<nr>();
+        } else {
+
+            // Read in the next data word (part A)
+            uint16_t value = doSpriteDMA<nr>();
             denise.pokeSPRxDATA<nr>(value);
-            break;
+        }
     }
 }
 
@@ -1887,27 +1909,46 @@ Agnus::executeSecondSpriteCycle()
 {
     debug(SPR_DEBUG, "executeSecondSpriteCycle<%d>\n", nr);
 
-    uint16_t value;
+    if (sprDmaState[nr] != SPR_DMA_IDLE) {
 
-    switch (sprDmaState[nr]) {
+        if (pos.v == sprVStop[nr]) {
 
-        case SPR_DMA_IDLE:
-            break;
-
-        case SPR_DMA_CTRL:
-
-            // Skip if vpos doesn't match any more
-            if (pos.v != sprVStop[nr]) break;
-
-            value = doSpriteDMA<nr>();
+            // Read in the next control word (CTL part)
+            uint16_t value = doSpriteDMA<nr>();
             agnus.pokeSPRxCTL<nr>(value);
             denise.pokeSPRxCTL<nr>(value);
-            break;
 
-        case SPR_DMA_DATA:
-            value = doSpriteDMA<nr>();
+        } else {
+
+            // Read in the next data word (part B)
+            uint16_t value = doSpriteDMA<nr>();
             denise.pokeSPRxDATB<nr>(value);
-            break;
+        }
+    }
+}
+
+void
+Agnus::updateSpriteDMA()
+{
+    // debug("updateSpriteDMA()\n");
+
+    // When this function is called, the sprite logic already sees an inremented
+    // vertical position counter.
+    int16_t v = pos.v + 1;
+
+    // Disable DMA in the last rasterline
+    if (v == frameInfo.numLines - 1) {
+         for (unsigned i = 0; i < 8; i++) {
+             sprDmaState[i] = SPR_DMA_IDLE;
+         }
+        return;
+    }
+
+    // Compare start and stop coordinates for all sprites
+    for (unsigned i = 0; i < 8; i++) {
+        if (v == sprVStrt[i] || v == sprVStop[i]) {
+            sprDmaState[i] = SPR_DMA_ACTIVE;
+        }
     }
 }
 
@@ -1935,31 +1976,25 @@ Agnus::hsyncHandler()
     if (pos.v == 25 && doSprDMA()) {
         // Reset vertical sprite trigger coordinates which forces the sprite
         // logic to read in the control words for all sprites in this line.
-        for (unsigned i = 0; i < 8; i++) { sprVStop[i] = 25; }
+        for (unsigned i = 0; i < 8; i++) {
+            sprDmaState[i] = SPR_DMA_ACTIVE;
+            sprVStop[i] = 25;
+        }
     }
 
     // Determine DMA state for all sprites
+    // MOVED TO updateSpriteDMA()
+    /*
     if (pos.v == frameInfo.numLines - 1) {
         for (unsigned i = 0; i < 8; i++) {
             sprDmaState[i] = SPR_DMA_IDLE;
         }
     } else {
-        // debug("sprVStrt[0] = %d stop = %d\n", sprVStrt[0], sprVStop[0]);
         for (unsigned i = 0; i < 8; i++) {
-            if (pos.v == sprVStrt[i]) {
-                debug(SPR_DEBUG, "Sprite %d: SPR_DMA_DATA\n", i);
-                sprDmaState[i] = SPR_DMA_DATA;
-            }
-            if (pos.v == sprVStop[i]) {
-                debug(SPR_DEBUG, "Sprite %d: SPR_DMA_CTRL\n", i);
-                sprDmaState[i] = SPR_DMA_CTRL;
-            }
-            if (pos.v == sprVStop[i] + 1) {
-                debug(SPR_DEBUG, "Sprite %d: SPR_DMA_IDLE\n", i);
-                sprDmaState[i] = SPR_DMA_IDLE;
-            }
+            if (sprVStrt[i] == pos.v) sprDmaState[i] = SPR_DMA_ACTIVE;
         }
     }
+    */
 
     // Initialize variables which keep values for certain trigger positions
     dmaconAtDDFStrt = dmacon;

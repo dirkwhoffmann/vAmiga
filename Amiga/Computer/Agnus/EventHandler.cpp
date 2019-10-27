@@ -138,6 +138,7 @@ Agnus::inspectEventSlot(EventSlot nr)
                 case DAS_S6_2:      i->eventName = "DAS_S6_2"; break;
                 case DAS_S7_1:      i->eventName = "DAS_S7_1"; break;
                 case DAS_S7_2:      i->eventName = "DAS_S7_2"; break;
+                case DAS_SDMA:      i->eventName = "DAS_SDMA"; break;
                 default:            i->eventName = "*** INVALID ***"; break;
             }
             break;
@@ -786,6 +787,10 @@ Agnus::serviceDASEvent()
 
         case DAS_S7_2:
             executeSecondSpriteCycle<7>();
+            break;
+
+        case DAS_SDMA:
+            updateSpriteDMA();
             break;
 
         default:
