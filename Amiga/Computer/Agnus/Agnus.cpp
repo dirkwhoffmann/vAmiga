@@ -1615,7 +1615,7 @@ Agnus::pokeSPRxCTL(uint16_t value)
     sprVStop[x] = ((value & 0b010) << 7) | (value >> 8);
 
     // Check if sprite DMA should be enabled
-    if (sprVStrt[x] == v || sprVStop[x] == v) {
+    if (sprVStrt[x] == v) {
         sprDmaState[x] = SPR_DMA_ACTIVE;
         // debug("Enabling DMA\n");
     }
@@ -1886,21 +1886,20 @@ Agnus::executeFirstSpriteCycle()
 {
     debug(SPR_DEBUG, "executeFirstSpriteCycle<%d>\n", nr);
 
-    if (sprDmaState[nr] != SPR_DMA_IDLE) {
+    if (pos.v == sprVStop[nr]) {
 
-        if (pos.v == sprVStop[nr]) {
+        sprDmaState[nr] = SPR_DMA_ACTIVE;
 
-            // Read in the next control word (POS part)
-            uint16_t value = doSpriteDMA<nr>();
-            agnus.pokeSPRxPOS<nr>(value);
-            denise.pokeSPRxPOS<nr>(value);
+        // Read in the next control word (POS part)
+        uint16_t value = doSpriteDMA<nr>();
+        agnus.pokeSPRxPOS<nr>(value);
+        denise.pokeSPRxPOS<nr>(value);
 
-        } else {
+    } else if (sprDmaState[nr] != SPR_DMA_IDLE) {
 
-            // Read in the next data word (part A)
-            uint16_t value = doSpriteDMA<nr>();
-            denise.pokeSPRxDATA<nr>(value);
-        }
+        // Read in the next data word (part A)
+        uint16_t value = doSpriteDMA<nr>();
+        denise.pokeSPRxDATA<nr>(value);
     }
 }
 
@@ -1909,21 +1908,20 @@ Agnus::executeSecondSpriteCycle()
 {
     debug(SPR_DEBUG, "executeSecondSpriteCycle<%d>\n", nr);
 
-    if (sprDmaState[nr] != SPR_DMA_IDLE) {
+    if (pos.v == sprVStop[nr]) {
 
-        if (pos.v == sprVStop[nr]) {
+        sprDmaState[nr] = SPR_DMA_ACTIVE;
 
-            // Read in the next control word (CTL part)
-            uint16_t value = doSpriteDMA<nr>();
-            agnus.pokeSPRxCTL<nr>(value);
-            denise.pokeSPRxCTL<nr>(value);
+        // Read in the next control word (CTL part)
+        uint16_t value = doSpriteDMA<nr>();
+        agnus.pokeSPRxCTL<nr>(value);
+        denise.pokeSPRxCTL<nr>(value);
 
-        } else {
+    } else if (sprDmaState[nr] != SPR_DMA_IDLE) {
 
-            // Read in the next data word (part B)
-            uint16_t value = doSpriteDMA<nr>();
-            denise.pokeSPRxDATB<nr>(value);
-        }
+        // Read in the next data word (part B)
+        uint16_t value = doSpriteDMA<nr>();
+        denise.pokeSPRxDATB<nr>(value);
     }
 }
 
