@@ -58,9 +58,20 @@ class Agnus : public SubComponent {
     // The current configuration
     AgnusConfig config;
 
-    // The information shown in the GUI inspector panel
+    // Information shown in the GUI inspector panel
     AgnusInfo info;
     EventInfo eventInfo;
+
+    // Statistics shown in the GUI monitor panel
+    AgnusStats stats;
+
+
+    //
+    // Statistics
+    //
+
+    // Bus usage counters
+    long busCount[BUS_OWNER_COUNT];
 
 
     //
@@ -626,6 +637,9 @@ public:
     AgnusInfo getInfo();
     EventInfo getEventInfo();
     EventSlotInfo getEventSlotInfo(int nr);
+
+    // Returns statistical information about the current activiy
+    AgnusStats getStats() { return stats; }
 
 
     //

@@ -164,6 +164,9 @@ void Agnus::_reset()
     lof = 1;
     frameInfo.numLines = 313;
 
+    // Initialize statistical counters
+    memset(busCount, 0, sizeof(busCount));
+
     // Initialize event tables
     clearBplEventTable();
     clearDasEventTable();
@@ -430,6 +433,7 @@ Agnus::doDiskDMA()
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_DISK;
     busValue[pos.h] = result;
+    busCount[BUS_DISK]++;
 
     return result;
 }
@@ -442,6 +446,7 @@ Agnus::doDiskDMA(uint16_t value)
 
     busOwner[pos.h] = BUS_DISK;
     busValue[pos.h] = value;
+    busCount[BUS_DISK]++;
 }
 
 uint16_t
@@ -456,6 +461,7 @@ Agnus::doAudioDMA(int channel)
 
     busOwner[hpos] = BUS_AUDIO;
     busValue[hpos] = result;
+    busCount[BUS_AUDIO]++;
 
     return result;
 }
@@ -469,6 +475,7 @@ Agnus::doSpriteDMA()
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_SPRITE;
     busValue[pos.h] = result;
+    busCount[BUS_SPRITE]++;
 
     return result;
 }
@@ -482,6 +489,7 @@ Agnus::doSpriteDMA(int channel)
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_SPRITE;
     busValue[pos.h] = result;
+    busCount[BUS_SPRITE]++;
 
     return result;
 }
@@ -495,6 +503,7 @@ Agnus::doBitplaneDMA()
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_BITPLANE;
     busValue[pos.h] = result;
+    busCount[BUS_BITPLANE]++;
 
     return result;
 }
@@ -507,6 +516,7 @@ Agnus::copperRead(uint32_t addr)
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_COPPER;
     busValue[pos.h] = result;
+    busCount[BUS_COPPER]++;
 
     return result;
 }
@@ -519,6 +529,7 @@ Agnus::copperWrite(uint32_t addr, uint16_t value)
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_COPPER;
     busValue[pos.h] = value;
+    busCount[BUS_COPPER]++;
 }
 
 uint16_t
@@ -532,6 +543,7 @@ Agnus::blitterRead(uint32_t addr)
 
     busOwner[pos.h] = BUS_BLITTER;
     busValue[pos.h] = result;
+    busCount[BUS_BLITTER]++;
 
     return result;
 }
@@ -547,6 +559,7 @@ Agnus::blitterWrite(uint32_t addr, uint16_t value)
 
     busOwner[pos.h] = BUS_BLITTER;
     busValue[pos.h] = value;
+    busCount[BUS_BLITTER]++;
 }
 
 void
@@ -2121,6 +2134,15 @@ Agnus::vsyncHandler()
     diskController.vsyncHandler();
     joystick1.execute();
     joystick2.execute();
+
+    // Update statistics
+    pthread_mutex_lock(&lock);
+    for (int i = 0; i < BUS_OWNER_COUNT; i++) {
+        stats.count[i] += busCount[i];
+        busCount[i] = 0;
+    }
+    stats.frames++;
+    pthread_mutex_unlock(&lock);
     
     // Prepare to take a snapshot once in a while
     if (amiga.snapshotIsDue()) amiga.signalSnapshot();

@@ -129,6 +129,7 @@ typedef struct
 {
     BlitterStats blitter;
     CopperStats copper;
+    AgnusStats agnus;
     DeniseStats denise;
     DiskControllerStats disk;
 }

@@ -189,6 +189,7 @@ Amiga::getStats()
     pthread_mutex_lock(&lock);
     result.blitter = agnus.blitter.getStats();
     result.copper = agnus.copper.getStats();
+    result.agnus = agnus.getStats();
     result.denise = denise.getStats();
     result.disk = paula.diskController.getStats();
     pthread_mutex_unlock(&lock);

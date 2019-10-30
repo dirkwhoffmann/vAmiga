@@ -184,6 +184,13 @@ AgnusInfo;
 
 typedef struct
 {
+    long count[BUS_OWNER_COUNT];
+    long frames;
+}
+AgnusStats;
+
+typedef struct
+{
     bool active;
     bool cdang;
     uint32_t coppc;
@@ -196,7 +203,7 @@ typedef struct
 }
 CopperInfo;
 
-typedef struct
+typedef struct // DEPRECATED
 {
     long wordCount;
 }

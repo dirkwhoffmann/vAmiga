@@ -41,20 +41,11 @@ class Monitor: NSWindowController {
     @IBOutlet weak var audioBufferOverflows: NSTextField!
 
     // Activity views
-    @IBOutlet weak var blitterActivityView: ActivityView!
-    @IBOutlet weak var blitterActivityLevel: NSLevelIndicator!
-    @IBOutlet weak var copperActivityView: ActivityView!
-    @IBOutlet weak var copperActivityLevel: NSLevelIndicator!
-    @IBOutlet weak var spriteActivityView: ActivityView!
-    @IBOutlet weak var spriteActivityLevel: NSLevelIndicator!
+    @IBOutlet weak var busUsageView: BusUsageView!
     @IBOutlet weak var df0ActivityView: ActivityView!
-    @IBOutlet weak var df0ActivityLevel: NSLevelIndicator!
     @IBOutlet weak var df1ActivityView: ActivityView!
-    @IBOutlet weak var df1ActivityLevel: NSLevelIndicator!
     @IBOutlet weak var df2ActivityView: ActivityView!
-    @IBOutlet weak var df2ActivityLevel: NSLevelIndicator!
     @IBOutlet weak var df3ActivityView: ActivityView!
-    @IBOutlet weak var df3ActivityLevel: NSLevelIndicator!
 
     var timer: Timer?
     var refreshCounter = 0
@@ -139,28 +130,26 @@ extension Monitor {
 
         if let stats = amigaProxy?.getStats() {
 
-            let blitActivity = Double(stats.blitter.wordCount) / 12000.0
-            let copperActivity = Double(stats.copper.wordCount) / 1400.0
-            let spriteActivity = Double(stats.denise.spriteLines) / 313.0
             let df0Activity = Double(stats.disk.wordCount.0) / (313.0 * 3)
             let df1Activity = Double(stats.disk.wordCount.1) / (313.0 * 3)
             let df2Activity = Double(stats.disk.wordCount.2) / (313.0 * 3)
             let df3Activity = Double(stats.disk.wordCount.3) / (313.0 * 3)
 
-            blitterActivityView.add(value: blitActivity)
-            blitterActivityLevel.doubleValue = blitterActivityView.current
-            copperActivityView.add(value: copperActivity)
-            copperActivityLevel.doubleValue = copperActivityView.current
-            spriteActivityView.add(value: spriteActivity)
-            spriteActivityLevel.doubleValue = spriteActivityView.current
+            busUsageView.add(value: stats.agnus.count.0, busOwner: 0)
+            busUsageView.add(value: stats.agnus.count.1, busOwner: 1)
+            busUsageView.add(value: stats.agnus.count.2, busOwner: 2)
+            busUsageView.add(value: stats.agnus.count.3, busOwner: 3)
+            busUsageView.add(value: stats.agnus.count.4, busOwner: 4)
+            busUsageView.add(value: stats.agnus.count.5, busOwner: 5)
+            busUsageView.add(value: stats.agnus.count.6, busOwner: 6)
+            busUsageView.add(value: stats.agnus.count.7, busOwner: 7)
+            busUsageView.add(value: stats.agnus.count.8, busOwner: 8)
+            busUsageView.update()
+
             df0ActivityView.add(value: df0Activity)
-            df0ActivityLevel.doubleValue = df0ActivityView.current
             df1ActivityView.add(value: df1Activity)
-            df1ActivityLevel.doubleValue = df1ActivityView.current
             df2ActivityView.add(value: df2Activity)
-            df2ActivityLevel.doubleValue = df2ActivityView.current
             df3ActivityView.add(value: df3Activity)
-            df3ActivityLevel.doubleValue = df3ActivityView.current
         }
     }
 }
