@@ -41,7 +41,9 @@ class Monitor: NSWindowController {
     @IBOutlet weak var audioBufferOverflows: NSTextField!
 
     // Activity views
-    @IBOutlet weak var busUsageView: BusUsageView!
+    @IBOutlet weak var blitterView: ActivityView!
+    @IBOutlet weak var copperView: ActivityView!
+    @IBOutlet weak var spriteView: ActivityView!
     @IBOutlet weak var df0ActivityView: ActivityView!
     @IBOutlet weak var df1ActivityView: ActivityView!
     @IBOutlet weak var df2ActivityView: ActivityView!
@@ -135,17 +137,29 @@ extension Monitor {
             let df2Activity = Double(stats.disk.wordCount.2) / (313.0 * 3)
             let df3Activity = Double(stats.disk.wordCount.3) / (313.0 * 3)
 
-            busUsageView.add(value: stats.agnus.count.0, busOwner: 0)
-            busUsageView.add(value: stats.agnus.count.1, busOwner: 1)
-            busUsageView.add(value: stats.agnus.count.2, busOwner: 2)
-            busUsageView.add(value: stats.agnus.count.3, busOwner: 3)
-            busUsageView.add(value: stats.agnus.count.4, busOwner: 4)
-            busUsageView.add(value: stats.agnus.count.5, busOwner: 5)
-            busUsageView.add(value: stats.agnus.count.6, busOwner: 6)
-            busUsageView.add(value: stats.agnus.count.7, busOwner: 7)
-            busUsageView.add(value: stats.agnus.count.8, busOwner: 8)
-            busUsageView.update()
+            var f = stats.agnus.frames
+            if f == 0 { f = 1 }
 
+/*
+            busUsageView.shiftValues()
+            busUsageView.add(value: stats.agnus.count.0 / f, busOwner: 0)
+            busUsageView.add(value: stats.agnus.count.1 / f, busOwner: 1)
+            busUsageView.add(value: stats.agnus.count.2 / f, busOwner: 2)
+            busUsageView.add(value: stats.agnus.count.3 / f, busOwner: 3)
+            busUsageView.add(value: stats.agnus.count.4 / f, busOwner: 4)
+            busUsageView.add(value: stats.agnus.count.5 / f, busOwner: 5)
+            busUsageView.add(value: stats.agnus.count.6 / f, busOwner: 6)
+            busUsageView.add(value: stats.agnus.count.7 / f, busOwner: 7)
+            busUsageView.add(value: stats.agnus.count.8 / f, busOwner: 8)
+            busUsageView.update()
+*/
+            copperView.logscale = true
+            copperView.negative = false
+            blitterView.logscale = true
+            blitterView.negative = false
+            copperView.add(value: Double(stats.agnus.count.7) / Double(f) / (313*113))
+            blitterView.add(value: Double(stats.agnus.count.8) / Double(f) / (313*226))
+            spriteView.add(value: Double(stats.denise.spriteLines) / 313.0)
             df0ActivityView.add(value: df0Activity)
             df1ActivityView.add(value: df1Activity)
             df2ActivityView.add(value: df2Activity)
@@ -185,6 +199,11 @@ extension Monitor {
         dmaDebugSpritesCol.color = NSColor.init(r: rgb.6.0, g: rgb.6.1, b: rgb.6.2)
         dmaDebugCopperCol.color = NSColor.init(r: rgb.7.0, g: rgb.7.1, b: rgb.7.2)
         dmaDebugBlitterCol.color = NSColor.init(r: rgb.8.0, g: rgb.8.1, b: rgb.8.2)
+
+        copperView.setPosColor(r: rgb.7.0, g: rgb.7.1, b: rgb.7.2)
+        copperView.setNegColor(r: rgb.7.0, g: rgb.7.1, b: rgb.7.2)
+        blitterView.setPosColor(r: rgb.8.0, g: rgb.8.1, b: rgb.8.2)
+        blitterView.setNegColor(r: rgb.8.0, g: rgb.8.1, b: rgb.8.2)
 
         dmaDebugOpacity.doubleValue = info.opacity * 100.0
         dmaDebugDisplayMode.selectItem(withTag: info.displayMode.rawValue)

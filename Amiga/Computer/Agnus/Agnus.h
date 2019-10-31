@@ -640,7 +640,7 @@ public:
 
     // Returns statistical information about the current activiy
     AgnusStats getStats() { return stats; }
-
+    void clearStats() { memset(&stats, 0, sizeof(stats)); }
 
     //
     // Examining the current frame

@@ -13,7 +13,8 @@
                 <outlet property="audioBufferOverflows" destination="uga-2T-g9R" id="9mO-cU-mt8"/>
                 <outlet property="audioBufferUnderflows" destination="Tz4-5N-gwt" id="cgM-dS-rdn"/>
                 <outlet property="audioWaveformView" destination="Jyd-gZ-RoN" id="6yl-Wi-AfZ"/>
-                <outlet property="busUsageView" destination="0j2-18-PRg" id="Tmo-84-7p7"/>
+                <outlet property="blitterView" destination="c6L-Kh-fOC" id="RgR-h8-hBH"/>
+                <outlet property="copperView" destination="hU1-A8-7Np" id="yaa-RQ-yu7"/>
                 <outlet property="df0ActivityView" destination="HcV-tH-qDG" id="mG4-lP-g74"/>
                 <outlet property="df1ActivityView" destination="edN-7l-AGA" id="R30-7F-Ze5"/>
                 <outlet property="df2ActivityView" destination="kc0-pA-Xr2" id="32l-Ss-qXb"/>
@@ -37,6 +38,7 @@
                 <outlet property="dmaDebugRefreshCol" destination="rHy-Ul-22o" id="qUW-Pv-uln"/>
                 <outlet property="dmaDebugSprites" destination="cm6-f8-Zgo" id="4UA-K3-dGL"/>
                 <outlet property="dmaDebugSpritesCol" destination="cPJ-6l-GII" id="sMB-i7-RVP"/>
+                <outlet property="spriteView" destination="ywd-Lf-uzH" id="Dfj-KO-USd"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="YTk-tV-xni"/>
             </connections>
         </customObject>
@@ -45,14 +47,14 @@
         <window title="Activity Monitor" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="196" y="240" width="608" height="596"/>
+            <rect key="contentRect" x="196" y="240" width="608" height="695"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
-                <rect key="frame" x="0.0" y="0.0" width="608" height="596"/>
+                <rect key="frame" x="0.0" y="0.0" width="608" height="695"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <box fixedFrame="YES" title="DMA Debugger" translatesAutoresizingMaskIntoConstraints="NO" id="qP3-Kq-ghb">
-                        <rect key="frame" x="309" y="254" width="282" height="322"/>
+                        <rect key="frame" x="309" y="353" width="282" height="322"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="JO5-2X-rfo">
                             <rect key="frame" x="3" y="3" width="276" height="304"/>
@@ -323,7 +325,7 @@
                         </view>
                     </box>
                     <box autoresizesSubviews="NO" fixedFrame="YES" borderType="line" title="Audio" translatesAutoresizingMaskIntoConstraints="NO" id="0zY-uE-yde" userLabel="Voice parameters">
-                        <rect key="frame" x="309" y="75" width="282" height="169"/>
+                        <rect key="frame" x="309" y="174" width="282" height="169"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="Wvw-ju-H0Q">
                             <rect key="frame" x="3" y="3" width="276" height="151"/>
@@ -396,19 +398,47 @@
                             </subviews>
                         </view>
                     </box>
+                    <box fixedFrame="YES" title="Copper" translatesAutoresizingMaskIntoConstraints="NO" id="EIl-OK-Z3o">
+                        <rect key="frame" x="17" y="583" width="290" height="92"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <view key="contentView" id="9Us-HG-Th1">
+                            <rect key="frame" x="3" y="3" width="284" height="74"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hU1-A8-7Np" customClass="ActivityView" customModule="vAmiga" customModuleProvider="target">
+                                    <rect key="frame" x="7" y="7" width="271" height="62"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                </customView>
+                            </subviews>
+                        </view>
+                    </box>
+                    <box fixedFrame="YES" title="Blitter" translatesAutoresizingMaskIntoConstraints="NO" id="gyJ-rR-tSD">
+                        <rect key="frame" x="17" y="491" width="286" height="88"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <view key="contentView" id="uTZ-Xu-zcz">
+                            <rect key="frame" x="3" y="3" width="280" height="70"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="c6L-Kh-fOC" customClass="ActivityView" customModule="vAmiga" customModuleProvider="target">
+                                    <rect key="frame" x="8" y="6" width="267" height="59"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                </customView>
+                            </subviews>
+                        </view>
+                    </box>
                     <box autoresizesSubviews="NO" fixedFrame="YES" borderType="line" title="Activity" translatesAutoresizingMaskIntoConstraints="NO" id="uvu-LH-194" userLabel="Voice parameters">
-                        <rect key="frame" x="17" y="16" width="282" height="560"/>
+                        <rect key="frame" x="19" y="39" width="282" height="317"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="NaA-F2-gxU">
-                            <rect key="frame" x="3" y="3" width="276" height="542"/>
+                            <rect key="frame" x="3" y="3" width="276" height="299"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="edN-7l-AGA" customClass="ActivityView" customModule="vAmiga" customModuleProvider="target">
-                                    <rect key="frame" x="10" y="150" width="256" height="28"/>
+                                    <rect key="frame" x="89" y="50" width="71" height="28"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 </customView>
                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uBe-Pf-7Rx">
-                                    <rect key="frame" x="16" y="186" width="38" height="14"/>
+                                    <rect key="frame" x="87" y="86" width="38" height="14"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Df1" id="elB-6D-QCb">
                                         <font key="font" metaFont="smallSystem"/>
@@ -417,11 +447,11 @@
                                     </textFieldCell>
                                 </textField>
                                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kc0-pA-Xr2" customClass="ActivityView" customModule="vAmiga" customModuleProvider="target">
-                                    <rect key="frame" x="10" y="82" width="256" height="28"/>
+                                    <rect key="frame" x="168" y="50" width="71" height="28"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 </customView>
                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Cwb-MC-DWX">
-                                    <rect key="frame" x="18" y="118" width="34" height="14"/>
+                                    <rect key="frame" x="166" y="86" width="34" height="14"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Df2" id="zNp-3f-SMW">
                                         <font key="font" metaFont="smallSystem"/>
@@ -430,11 +460,11 @@
                                     </textFieldCell>
                                 </textField>
                                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wcH-aJ-s8L" customClass="ActivityView" customModule="vAmiga" customModuleProvider="target">
-                                    <rect key="frame" x="10" y="14" width="256" height="28"/>
+                                    <rect key="frame" x="168" y="14" width="71" height="28"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 </customView>
                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JKk-Ds-k4V">
-                                    <rect key="frame" x="18" y="50" width="34" height="14"/>
+                                    <rect key="frame" x="207" y="86" width="34" height="14"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Df3" id="ch1-Ij-pcb">
                                         <font key="font" metaFont="smallSystem"/>
@@ -443,11 +473,11 @@
                                     </textFieldCell>
                                 </textField>
                                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HcV-tH-qDG" customClass="ActivityView" customModule="vAmiga" customModuleProvider="target">
-                                    <rect key="frame" x="10" y="219" width="256" height="28"/>
+                                    <rect key="frame" x="10" y="115" width="256" height="50"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 </customView>
                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IGq-NT-jaj">
-                                    <rect key="frame" x="16" y="255" width="38" height="14"/>
+                                    <rect key="frame" x="16" y="173" width="38" height="14"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Df0" id="blP-dw-PGh">
                                         <font key="font" metaFont="smallSystem"/>
@@ -455,10 +485,19 @@
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0j2-18-PRg" customClass="BusUsageView" customModule="vAmiga" customModuleProvider="target">
-                                    <rect key="frame" x="10" y="324" width="256" height="198"/>
+                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ywd-Lf-uzH" customClass="ActivityView" customModule="vAmiga" customModuleProvider="target">
+                                    <rect key="frame" x="10" y="212" width="256" height="53"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 </customView>
+                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jzJ-tC-a8Z">
+                                    <rect key="frame" x="20" y="273" width="63" height="14"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Sprite lines" id="wPY-bu-qho">
+                                        <font key="font" metaFont="smallSystem"/>
+                                        <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                </textField>
                             </subviews>
                         </view>
                     </box>
@@ -467,7 +506,7 @@
             <connections>
                 <outlet property="delegate" destination="-2" id="WuC-xr-fiS"/>
             </connections>
-            <point key="canvasLocation" x="-12" y="293"/>
+            <point key="canvasLocation" x="-12" y="342.5"/>
         </window>
     </objects>
 </document>
