@@ -19,18 +19,6 @@ class Copper : public SubComponent
     // Information shown in the GUI inspector panel
     CopperInfo info;
 
-    // Statistics shown in the GUI monitor panel
-    CopperStats stats;
-
-
-    //
-    // Statistics
-    //
-
-    // Number of words that have been moved by the Copper
-    long wordCount = 0;
-
-
     // The currently executed Copper list (1 or 2)
     uint8_t copList = 1;
 
@@ -126,10 +114,7 @@ public:
     // Returns the result of the most recent call to inspect()
     CopperInfo getInfo();
 
-    // Returns statistical information about the current activiy
-    CopperStats getStats() { return stats; }
-
-
+    
     //
     // Accessing properties
     //

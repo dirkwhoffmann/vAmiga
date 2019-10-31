@@ -82,4 +82,13 @@ typedef struct
 }
 CPUInfo;
 
+typedef struct
+{
+    long chipReads;
+    long chipWrites;
+    long fastReads;
+    long fastWrites;
+}
+CPUStats;
+
 #endif

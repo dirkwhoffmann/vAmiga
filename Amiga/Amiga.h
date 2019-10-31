@@ -320,6 +320,8 @@ public:
     // Updates the statistical information returned by getStats()
     void updateStats();
 
+    // Clears all previously recorded statistical information
+    void resetStats();
 
     //
     // Accessing properties

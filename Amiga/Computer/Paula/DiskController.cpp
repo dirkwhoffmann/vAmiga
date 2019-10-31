@@ -19,9 +19,6 @@ DiskController::DiskController(Amiga& ref) : SubComponent(ref)
     config.connected[2] = false;
     config.connected[3] = false;
     config.useFifo = true;
-
-    // Initialize variables
-    memset(&stats, 0, sizeof(stats));
 }
 
 void
@@ -438,11 +435,7 @@ DiskController::serviceDiskChangeEvent(EventID id, int driveNr)
 void
 DiskController::vsyncHandler()
 {
-    // Update activity statistics
-    for (int i = 0; i < 4; i++) {
-         stats.wordCount[i] = wordCount[i];
-         wordCount[i] = 0;
-     }
+ 
 }
 
 void

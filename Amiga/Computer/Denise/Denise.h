@@ -22,9 +22,6 @@ class Denise : public SubComponent {
     // Information shown in the GUI inspector panel
     DeniseInfo info;
 
-    // Statistics shown in the GUI monitor panel
-    DeniseStats stats;
-    
     
     //
     // Sub components
@@ -366,9 +363,6 @@ public:
     // Returns the result of the most recent call to inspect()
     DeniseInfo getInfo();
     SpriteInfo getSprInfo(int nr);
-
-    // Returns statistical information about the current activiy
-    DeniseStats getStats() { return stats; }
 
 
     //

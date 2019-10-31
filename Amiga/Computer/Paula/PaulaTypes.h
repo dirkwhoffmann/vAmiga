@@ -107,9 +107,15 @@ DiskControllerInfo;
 typedef struct
 {
     long wordCount[4];
-    long frames;
 }
 DiskControllerStats;
+
+typedef struct
+{
+    long reads;
+    long writes;
+}
+UartStats;
 
 typedef struct
 {

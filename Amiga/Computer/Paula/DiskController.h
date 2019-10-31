@@ -14,17 +14,17 @@
 
 class DiskController : public SubComponent {
 
+    friend class Amiga;
+
     // The current configuration
     DiskControllerConfig config;
 
     // Information shown in the GUI inspector panel
     DiskControllerInfo info;
 
-    // Statistics shown in the GUI monitor panel
-    DiskControllerStats stats;
-
     // Temorary storage for a disk waiting to be inserted
     class Disk *diskToInsert = NULL;
+
 
     //
     // Statistics
@@ -175,10 +175,6 @@ public:
     
     // Returns the latest internal state recorded by inspect()
     DiskControllerInfo getInfo();
-
-    // Returns statistical information about disk activity
-    DiskControllerStats getStats() { return stats; }
-    void clearStats() { memset(&stats, 0, sizeof(stats)); }
 
     // Indicates if the motor of the specified drive is switched on
     bool spinning(unsigned driveNr);

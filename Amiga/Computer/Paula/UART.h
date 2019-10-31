@@ -14,8 +14,18 @@
 
 class UART : public SubComponent {
 
+    friend class Amiga;
+    
     // Information shown in the GUI inspector panel
     UARTInfo info;
+
+    //
+    // Statistical information
+    //
+
+    long reads;
+    long writes;
+
     
     //
     // Variables

@@ -52,9 +52,12 @@ class CPU : public SubComponent {
     CPUConfig config;
     CPUInfo info;
 
+
     //
     // Internal state
     //
+
+private:
 
     // The CPU has been emulated up to this cycle
     Cycle clock;

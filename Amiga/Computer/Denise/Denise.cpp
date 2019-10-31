@@ -1046,10 +1046,6 @@ void
 Denise::beginOfFrame(bool interlace)
 {
     pixelEngine.beginOfFrame(interlace);
-
-    // Update statistics
-    stats.spriteLines = spriteLines;
-    spriteLines = 0;
 }
 
 void

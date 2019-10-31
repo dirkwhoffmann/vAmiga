@@ -127,10 +127,12 @@ AmigaInfo;
 
 typedef struct
 {
-    CopperStats copper;
+    CPUStats cpu;
     AgnusStats agnus;
     DeniseStats denise;
+    UartStats uart;
     DiskControllerStats disk;
+    long frames;
 }
 AmigaStats;
 

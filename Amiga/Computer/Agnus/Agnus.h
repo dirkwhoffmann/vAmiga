@@ -55,15 +55,14 @@
 
 class Agnus : public SubComponent {
 
+    friend class Amiga;
+    
     // The current configuration
     AgnusConfig config;
 
     // Information shown in the GUI inspector panel
     AgnusInfo info;
     EventInfo eventInfo;
-
-    // Statistics shown in the GUI monitor panel
-    AgnusStats stats;
 
 
     //
@@ -638,9 +637,6 @@ public:
     EventInfo getEventInfo();
     EventSlotInfo getEventSlotInfo(int nr);
 
-    // Returns statistical information about the current activiy
-    AgnusStats getStats() { return stats; }
-    void clearStats() { memset(&stats, 0, sizeof(stats)); }
 
     //
     // Examining the current frame

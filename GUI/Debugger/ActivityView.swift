@@ -138,6 +138,15 @@ class ActivityView: NSView {
 
         let context = NSGraphicsContext.current?.cgContext
 
+        // Create gradient
+        let v = 255
+        let c1 = NSColor.init(r: 0, g: v, b: 0, a: 128).cgColor
+        let c2 = NSColor.init(r: v, g: v, b: 0, a: 128).cgColor
+        let c3 = NSColor.init(r: v, g: 0, b: 0, a: 128).cgColor
+        let grad = CGGradient(colorsSpace: CGColorSpaceCreateDeviceRGB(),
+                              colors: [c1, c1, c2, c3] as CFArray,
+                              locations: [0.0, 0.4, 0.6, 1.0] as [CGFloat])!
+        
         context?.saveGState()
 
         // Convert data points to a graph
@@ -159,17 +168,18 @@ class ActivityView: NSView {
         clippingPath!.addClip()
 
         // Draw gradient
-        /*
         context?.drawLinearGradient(grad,
                                     start: CGPoint(x: 0, y: 0),
                                     end: CGPoint(x: 0, y: bounds.height),
                                     options: [])
-        */
+
         // Fill area
+        /*
         let fillColor = upper ? posColAlpha : negColAlpha
         let rect = CGRect(x: 0, y: 0, width: Int(frame.width), height: Int(frame.height))
         fillColor?.setFill()
         context?.fill(rect)
+        */
 
         // Draw graph
         let lineColor = upper ? posCol : negCol
@@ -187,15 +197,6 @@ class ActivityView: NSView {
         // Store width and height
         w = Double(frame.width)
         h = Double(frame.height - 1)
-
-        // Create gradient
-        let v = 255
-        let c1 = NSColor.init(r: 0, g: v, b: 0, a: 128).cgColor
-        let c2 = NSColor.init(r: v, g: v, b: 0, a: 128).cgColor
-        let c3 = NSColor.init(r: v, g: 0, b: 0, a: 128).cgColor
-        let grad = CGGradient(colorsSpace: CGColorSpaceCreateDeviceRGB(),
-                              colors: [c1, c1, c2, c3] as CFArray,
-                              locations: [0.0, 0.4, 0.6, 1.0] as [CGFloat])!
 
         // Clear the view
         NSColor.clear.set()

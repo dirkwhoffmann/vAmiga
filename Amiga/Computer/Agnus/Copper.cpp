@@ -587,7 +587,6 @@ Copper::serviceEvent(EventID id)
     Beam trigger;
 
     servicing = true;
-    wordCount++;
 
     switch (id) {
             
@@ -848,10 +847,6 @@ Copper::vsyncHandler()
     } else {
         agnus.cancel<COP_SLOT>();
     }
-
-    // Update activity statistics
-     stats.wordCount = wordCount;
-     wordCount = 0; 
 }
 
 int

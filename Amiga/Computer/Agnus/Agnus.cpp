@@ -2136,14 +2136,8 @@ Agnus::vsyncHandler()
     joystick2.execute();
 
     // Update statistics
-    pthread_mutex_lock(&lock);
-    for (int i = 0; i < BUS_OWNER_COUNT; i++) {
-        stats.count[i] += busCount[i];
-        busCount[i] = 0;
-    }
-    stats.frames++;
-    pthread_mutex_unlock(&lock);
-    
+    amiga.updateStats();
+
     // Prepare to take a snapshot once in a while
     if (amiga.snapshotIsDue()) amiga.signalSnapshot();
 

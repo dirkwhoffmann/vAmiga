@@ -109,12 +109,23 @@ const uint32_t EXT_ROM_MASK  = 0x07FFFF; // 512 KB
 
 
 class Memory : public SubComponent {
-    
+
+    friend class Amiga;
     friend class Copper;
     friend class ZorroManager;
 
     // The current configuration
     MemoryConfig config;
+
+
+    //
+    // Statistical information
+    //
+
+    long chipReads;
+    long chipWrites;
+    long fastReads;
+    long fastWrites;
 
 public:
     

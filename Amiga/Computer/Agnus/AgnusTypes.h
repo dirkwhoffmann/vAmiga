@@ -185,7 +185,6 @@ AgnusInfo;
 typedef struct
 {
     long count[BUS_OWNER_COUNT];
-    long frames;
 }
 AgnusStats;
 
@@ -202,12 +201,6 @@ typedef struct
     int16_t length2;
 }
 CopperInfo;
-
-typedef struct // DEPRECATED
-{
-    long wordCount;
-}
-CopperStats;
 
 typedef struct
 {
