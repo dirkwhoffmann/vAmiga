@@ -165,7 +165,7 @@ void Agnus::_reset()
     frameInfo.numLines = 313;
 
     // Initialize statistical counters
-    memset(busCount, 0, sizeof(busCount));
+    clearStats();
 
     // Initialize event tables
     clearBplEventTable();
@@ -433,7 +433,7 @@ Agnus::doDiskDMA()
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_DISK;
     busValue[pos.h] = result;
-    busCount[BUS_DISK]++;
+    stats.count[BUS_DISK]++;
 
     return result;
 }
@@ -446,7 +446,7 @@ Agnus::doDiskDMA(uint16_t value)
 
     busOwner[pos.h] = BUS_DISK;
     busValue[pos.h] = value;
-    busCount[BUS_DISK]++;
+    stats.count[BUS_DISK]++;
 }
 
 uint16_t
@@ -461,7 +461,7 @@ Agnus::doAudioDMA(int channel)
 
     busOwner[hpos] = BUS_AUDIO;
     busValue[hpos] = result;
-    busCount[BUS_AUDIO]++;
+    stats.count[BUS_AUDIO]++;
 
     return result;
 }
@@ -475,7 +475,7 @@ Agnus::doSpriteDMA()
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_SPRITE;
     busValue[pos.h] = result;
-    busCount[BUS_SPRITE]++;
+    stats.count[BUS_SPRITE]++;
 
     return result;
 }
@@ -489,7 +489,7 @@ Agnus::doSpriteDMA(int channel)
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_SPRITE;
     busValue[pos.h] = result;
-    busCount[BUS_SPRITE]++;
+    stats.count[BUS_SPRITE]++;
 
     return result;
 }
@@ -503,7 +503,7 @@ Agnus::doBitplaneDMA()
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_BITPLANE;
     busValue[pos.h] = result;
-    busCount[BUS_BITPLANE]++;
+    stats.count[BUS_BITPLANE]++;
 
     return result;
 }
@@ -516,7 +516,7 @@ Agnus::copperRead(uint32_t addr)
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_COPPER;
     busValue[pos.h] = result;
-    busCount[BUS_COPPER]++;
+    stats.count[BUS_COPPER]++;
 
     return result;
 }
@@ -529,7 +529,7 @@ Agnus::copperWrite(uint32_t addr, uint16_t value)
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_COPPER;
     busValue[pos.h] = value;
-    busCount[BUS_COPPER]++;
+    stats.count[BUS_COPPER]++;
 }
 
 uint16_t
@@ -543,7 +543,7 @@ Agnus::blitterRead(uint32_t addr)
 
     busOwner[pos.h] = BUS_BLITTER;
     busValue[pos.h] = result;
-    busCount[BUS_BLITTER]++;
+    stats.count[BUS_BLITTER]++;
 
     return result;
 }
@@ -559,7 +559,7 @@ Agnus::blitterWrite(uint32_t addr, uint16_t value)
 
     busOwner[pos.h] = BUS_BLITTER;
     busValue[pos.h] = value;
-    busCount[BUS_BLITTER]++;
+    stats.count[BUS_BLITTER]++;
 }
 
 void

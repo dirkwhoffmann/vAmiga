@@ -54,8 +54,6 @@
 #define HPOS(x) ((x) & 0xFF)
 
 class Agnus : public SubComponent {
-
-    friend class Amiga;
     
     // The current configuration
     AgnusConfig config;
@@ -64,13 +62,8 @@ class Agnus : public SubComponent {
     AgnusInfo info;
     EventInfo eventInfo;
 
-
-    //
-    // Statistics
-    //
-
-    // Bus usage counters
-    long busCount[BUS_OWNER_COUNT];
+    // Statistics shown in the GUI monitor panel
+     AgnusStats stats;
 
 
     //
@@ -636,6 +629,12 @@ public:
     AgnusInfo getInfo();
     EventInfo getEventInfo();
     EventSlotInfo getEventSlotInfo(int nr);
+
+    // Returns statistical information about the current activiy
+    AgnusStats getStats() { return stats; }
+
+    // Resets the collected statistical information
+    void clearStats() { memset(&stats, 0, sizeof(stats)); }
 
 
     //

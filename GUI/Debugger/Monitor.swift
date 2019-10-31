@@ -26,8 +26,9 @@ class Monitor: NSWindowController {
     @IBOutlet weak var blitterView: ActivityView!
     @IBOutlet weak var copperView: ActivityView!
     @IBOutlet weak var spriteView: ActivityView!
-    @IBOutlet weak var chipRamView: ActivityView!
-    @IBOutlet weak var fastRamView: ActivityView!
+    @IBOutlet weak var chipView: ActivityView!
+    @IBOutlet weak var fastView: ActivityView!
+    @IBOutlet weak var romView: ActivityView!
     @IBOutlet weak var diskView: ActivityView!
     @IBOutlet weak var serialView: ActivityView!
 
@@ -135,10 +136,12 @@ extension Monitor {
         blitterView.negative = false
         spriteView.logscale = false
         spriteView.negative = false
-        chipRamView.logscale = true
-        chipRamView.negative = false
-        fastRamView.logscale = true
-        fastRamView.negative = false
+        chipView.logscale = true
+        chipView.negative = false
+        fastView.logscale = true
+        fastView.negative = false
+        romView.logscale = true
+        romView.negative = false
         diskView.logscale = false
         diskView.negative = false
         serialView.logscale = false
@@ -150,12 +153,15 @@ extension Monitor {
             let blitterActivity = Double(stats.agnus.count.8) / (313*226)
             let spriteActivity = Double(stats.denise.spriteLines) / 313
 
-            let chipReads = Double(stats.cpu.chipReads) / (313*226)
-            let chipWrites = Double(stats.cpu.chipWrites) / (313*226)
-            let fastReads = Double(stats.cpu.fastReads) / (313*226)
-            let fastWrites = Double(stats.cpu.fastWrites) / (313*226)
+            let chipReads = Double(stats.mem.chipReads) / (313*226)
+            let chipWrites = Double(stats.mem.chipWrites) / (313*226)
+            let fastReads = Double(stats.mem.fastReads) / (313*226)
+            let fastWrites = Double(stats.mem.fastWrites) / (313*226)
+            let romReads = Double(stats.mem.romReads) / (313*226)
+            let romWrites = Double(stats.mem.romWrites) / (313*226)
             let chipActivity = chipReads + chipWrites
             let fastActivity = fastReads + fastWrites
+            let romActivity = romReads + romWrites
 
             let wc0 = stats.disk.wordCount.0
             let wc1 = stats.disk.wordCount.1
@@ -171,8 +177,9 @@ extension Monitor {
             copperView.add(value: copperActivity / frames)
             blitterView.add(value: blitterActivity / frames)
             spriteView.add(value: spriteActivity / frames)
-            chipRamView.add(value: chipActivity / frames)
-            fastRamView.add(value: fastActivity / frames)
+            chipView.add(value: chipActivity / frames)
+            fastView.add(value: fastActivity / frames)
+            romView.add(value: romActivity / frames)
             diskView.add(value: diskActivity / frames)
             serialView.add(value: serialActivity / frames)
         }

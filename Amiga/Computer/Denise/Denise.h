@@ -22,6 +22,9 @@ class Denise : public SubComponent {
     // Information shown in the GUI inspector panel
     DeniseInfo info;
 
+    // Statistics shown in the GUI monitor panel
+    DeniseStats stats;
+
     
     //
     // Sub components
@@ -31,14 +34,6 @@ public:
     
     // A color synthesizer for computing RGBA values
     PixelEngine pixelEngine = PixelEngine(amiga);
-
-
-    //
-    // Statistics
-    //
-
-    // Number of lines with drawn sprites
-    long spriteLines = 0;
 
 
     //
@@ -363,6 +358,12 @@ public:
     // Returns the result of the most recent call to inspect()
     DeniseInfo getInfo();
     SpriteInfo getSprInfo(int nr);
+
+    // Returns statistical information about the current activiy
+    DeniseStats getStats() { return stats; }
+
+    // Resets the collected statistical information
+    void clearStats() { memset(&stats, 0, sizeof(stats)); }
 
 
     //

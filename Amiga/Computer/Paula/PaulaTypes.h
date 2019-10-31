@@ -115,7 +115,7 @@ typedef struct
     long reads;
     long writes;
 }
-UartStats;
+UARTStats;
 
 typedef struct
 {

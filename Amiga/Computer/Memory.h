@@ -110,22 +110,14 @@ const uint32_t EXT_ROM_MASK  = 0x07FFFF; // 512 KB
 
 class Memory : public SubComponent {
 
-    friend class Amiga;
     friend class Copper;
     friend class ZorroManager;
 
     // The current configuration
     MemoryConfig config;
 
-
-    //
-    // Statistical information
-    //
-
-    long chipReads;
-    long chipWrites;
-    long fastReads;
-    long fastWrites;
+    // Statistics shown in the GUI monitor panel
+    MemoryStats stats;
 
 public:
     
@@ -219,6 +211,19 @@ private:
     size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS }
     size_t didLoadFromBuffer(uint8_t *buffer) override;
     size_t didSaveToBuffer(uint8_t *buffer) const override;
+
+
+    //
+    // Statistics
+    //
+
+public:
+    
+    // Returns statistical information about the current activiy
+    MemoryStats getStats() { return stats; }
+
+    // Resets the collected statistical information
+    void clearStats() { memset(&stats, 0, sizeof(stats)); }
 
     
     //

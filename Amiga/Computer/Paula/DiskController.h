@@ -22,16 +22,11 @@ class DiskController : public SubComponent {
     // Information shown in the GUI inspector panel
     DiskControllerInfo info;
 
+    // Statistics shown in the GUI monitor panel
+    DiskControllerStats stats;
+
     // Temorary storage for a disk waiting to be inserted
     class Disk *diskToInsert = NULL;
-
-
-    //
-    // Statistics
-    //
-
-    // Number of transfered words
-    long wordCount[4] = {0,0,0,0};
 
 
     //
@@ -175,6 +170,13 @@ public:
     
     // Returns the latest internal state recorded by inspect()
     DiskControllerInfo getInfo();
+
+    // Returns statistical information about the current activiy
+    DiskControllerStats getStats() { return stats; }
+
+    // Resets the collected statistical information
+    void clearStats() { memset(&stats, 0, sizeof(stats)); }
+
 
     // Indicates if the motor of the specified drive is switched on
     bool spinning(unsigned driveNr);

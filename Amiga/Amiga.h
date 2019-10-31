@@ -321,7 +321,7 @@ public:
     void updateStats();
 
     // Clears all previously recorded statistical information
-    void resetStats();
+    void clearStats();
 
     //
     // Accessing properties

@@ -65,4 +65,15 @@ typedef struct
 }
 MemoryConfig;
 
+typedef struct
+{
+    long chipReads;
+    long chipWrites;
+    long fastReads;
+    long fastWrites;
+    long romReads;
+    long romWrites;
+}
+MemoryStats;
+
 #endif

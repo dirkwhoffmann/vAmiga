@@ -189,7 +189,7 @@ Amiga::getStats()
     pthread_mutex_lock(&lock);
 
     result = stats;
-    resetStats();
+    clearStats();
 
     pthread_mutex_unlock(&lock);
 
@@ -201,41 +201,26 @@ Amiga::updateStats()
 {
     pthread_mutex_lock(&lock);
 
-    stats.cpu.chipReads = mem.chipReads;
-    stats.cpu.chipWrites = mem.chipWrites;
-    stats.cpu.fastReads = mem.fastReads;
-    stats.cpu.fastWrites = mem.fastWrites;
-    stats.denise.spriteLines = denise.spriteLines;
-    stats.uart.reads = paula.uart.reads;
-    stats.uart.writes = paula.uart.writes;
-    for (int i = 0; i < BUS_OWNER_COUNT; i++) {
-        stats.agnus.count[i] = agnus.busCount[i];
-    }
-    for (int i = 0; i < 4; i++) {
-        stats.disk.wordCount[i] = paula.diskController.wordCount[i];
-    }
+    stats.mem = mem.getStats();
+    stats.agnus = agnus.getStats();
+    stats.denise = denise.getStats();
+    stats.uart = paula.uart.getStats();
+    stats.disk = paula.diskController.getStats();
     stats.frames++;
 
     pthread_mutex_unlock(&lock);
 }
 
 void
-Amiga::resetStats()
+Amiga::clearStats()
 {
     memset(&stats, 0, sizeof(stats));
-    mem.chipReads = 0;
-    mem.chipWrites = 0;
-    mem.fastReads = 0;
-    mem.fastWrites = 0;
-    denise.spriteLines = 0;
-    paula.uart.reads = 0;
-    paula.uart.writes = 0;
-     for (int i = 0; i < BUS_OWNER_COUNT; i++) {
-         agnus.busCount[i] = 0;
-     }
-     for (int i = 0; i < 4; i++) {
-         paula.diskController.wordCount[i] = 0;
-     }
+    
+    mem.clearStats();
+    agnus.clearStats();
+    denise.clearStats();
+    paula.uart.clearStats();
+    paula.diskController.clearStats();
 }
 
 bool

@@ -566,7 +566,7 @@ DiskController::performDMA()
     uint32_t count = drive->config.speed;
 
     // Gather some statistical information
-    wordCount[drive->nr] += count;
+    stats.wordCount[drive->nr] += count;
 
     // Perform DMA
     switch (state) {
@@ -693,7 +693,7 @@ DiskController::performSimpleDMA()
     uint32_t count = drive->config.speed;
 
     // Gather some statistical information
-    wordCount[drive->nr] += count;
+    stats.wordCount[drive->nr] += count;
 
     // Only proceed if DMA is enabled.
     if (state != DRIVE_DMA_READ && state != DRIVE_DMA_WRITE) return;
@@ -777,7 +777,7 @@ DiskController::performTurboDMA(Drive *drive)
     if ((dsklen & 0x3FFF) == 0) return;
 
     // Gather some statistical information
-     wordCount[drive->nr] += (dsklen & 0x3FFF);
+    stats.wordCount[drive->nr] += (dsklen & 0x3FFF);
 
     // Perform action depending on DMA state
     switch (state) {

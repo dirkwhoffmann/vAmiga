@@ -19,12 +19,8 @@ class UART : public SubComponent {
     // Information shown in the GUI inspector panel
     UARTInfo info;
 
-    //
-    // Statistical information
-    //
-
-    long reads;
-    long writes;
+    // Statistics shown in the GUI monitor panel
+    UARTStats stats;
 
     
     //
@@ -106,6 +102,12 @@ public:
 
     // Returns the latest internal state recorded by inspect()
     UARTInfo getInfo();
+
+    // Returns statistical information about the current activiy
+    UARTStats getStats() { return stats; }
+
+    // Resets the collected statistical information
+    void clearStats() { memset(&stats, 0, sizeof(stats)); }
 
 
     //
