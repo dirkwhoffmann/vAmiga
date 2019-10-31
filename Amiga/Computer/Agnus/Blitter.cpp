@@ -382,9 +382,7 @@ Blitter::serviceEvent(EventID id)
 void
 Blitter::vsyncHandler()
 {
-    // Update activity statistics
-    stats.wordCount = wordCount;
-    wordCount = 0; 
+
 }
 
 uint16_t

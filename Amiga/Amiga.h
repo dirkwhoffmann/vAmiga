@@ -314,8 +314,11 @@ public:
     // Returns the result of the most recent call to inspect()
     AmigaInfo getInfo();
 
-    // Returns the statistics information for the most recently finished frame
+    // Returns the statistical information for the most recently finished frame
     AmigaStats getStats();
+
+    // Updates the statistical information returned by getStats()
+    void updateStats();
 
 
     //

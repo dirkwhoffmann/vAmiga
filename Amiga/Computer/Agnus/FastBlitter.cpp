@@ -87,8 +87,6 @@ Blitter::beginFastCopyBlit(int level)
 template <bool useA, bool useB, bool useC, bool useD, bool desc>
 void Blitter::doFastCopyBlit()
 {
-    wordCount += bltsizeH * bltsizeW;
-
     uint32_t apt = bltapt;
     uint32_t bpt = bltbpt;
     uint32_t cpt = bltcpt;
@@ -233,8 +231,6 @@ INC_OCS_PTR(cpt, -cmod);
 void
 Blitter::doFastLineBlit()
 {
-    wordCount += bltsizeH;
-
     //
     // Adapted from WinFellow
     //

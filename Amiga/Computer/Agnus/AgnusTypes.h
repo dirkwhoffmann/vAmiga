@@ -242,10 +242,4 @@ typedef struct
 }
 BlitterInfo;
 
-typedef struct
-{
-    long wordCount;
-}
-BlitterStats;
-
 #endif

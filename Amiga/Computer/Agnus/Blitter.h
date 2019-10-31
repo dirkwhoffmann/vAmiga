@@ -32,21 +32,9 @@ class Blitter : public SubComponent {
     // Information shown in the GUI inspector panel
     BlitterInfo info;
 
-    // Statistics shown in the GUI monitor panel
-    BlitterStats stats;
-
-
     // The fill pattern lookup tables
     uint8_t fillPattern[2][2][256];     // [inclusive/exclusive][carry in][data]
     uint8_t nextCarryIn[2][256];        // [carry in][data]
-
-
-    //
-    // Statistics
-    //
-    
-    // Number of words that have been moved by the Blitter
-    long wordCount = 0;
 
 
     //
@@ -278,9 +266,6 @@ public:
 
     // Returns the result of the most recent call to inspect()
     BlitterInfo getInfo();
-
-    // Returns statistical information about the current activiy
-    BlitterStats getStats() { return stats; }
 
 
     //

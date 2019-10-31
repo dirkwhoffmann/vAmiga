@@ -187,7 +187,6 @@ Amiga::getStats()
     AmigaStats result;
 
     pthread_mutex_lock(&lock);
-    result.blitter = agnus.blitter.getStats();
     result.copper = agnus.copper.getStats();
     result.agnus = agnus.getStats();
     result.denise = denise.getStats();
@@ -196,6 +195,12 @@ Amiga::getStats()
     pthread_mutex_unlock(&lock);
 
     return result;
+}
+
+void
+Amiga::updateStats()
+{
+
 }
 
 bool

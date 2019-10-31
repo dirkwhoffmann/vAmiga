@@ -178,6 +178,7 @@ public:
 
     // Returns statistical information about disk activity
     DiskControllerStats getStats() { return stats; }
+    void clearStats() { memset(&stats, 0, sizeof(stats)); }
 
     // Indicates if the motor of the specified drive is switched on
     bool spinning(unsigned driveNr);
