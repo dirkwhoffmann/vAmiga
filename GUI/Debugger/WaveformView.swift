@@ -10,7 +10,7 @@
 class WaveformView: NSView {
     
     // Remembers the highest amplitude (used for auto scaling)
-    var highestAmplitude: Float = 0.001
+    var highestAmplitude = 0.001
     
     // Modulo counter to trigger image rendering
     var delayCounter = 0
@@ -25,17 +25,12 @@ class WaveformView: NSView {
   
     // Restarts the auto scaling mechanism
     func initAutoScaler() {
-        // track()
+
         highestAmplitude = 0.001
     }
     
     func update() {
-        /*
-        delayCounter += 1
-        if delayCounter % 2 == 0 {
-            return
-        }
-        */
+
         needsDisplay = true
     }
     
@@ -50,20 +45,31 @@ class WaveformView: NSView {
         context?.fill(dirtyRect)
         
         let w = Int(frame.width)
-        let baseline = Float(frame.height / 2)
+        let baseline = Double(frame.height / 2)
         let normalizer = highestAmplitude
         highestAmplitude = 0.001
         
         for x in 0...w {
-            let sample = paula.ringbufferData(40 * x)
-            let absvalue = abs(sample)
-            highestAmplitude = (absvalue > highestAmplitude) ? absvalue : highestAmplitude
-            var scaledSample = absvalue / normalizer * baseline
-            if scaledSample == 0 { // just for effect
-                scaledSample = drand48() > 0.5 ? 0.0 : 1.0
+
+            // Read samples from ringbuffer
+            let sampleL = abs(paula.ringbufferDataL(40 * x))
+            let sampleR = abs(paula.ringbufferDataR(40 * x))
+
+            // Remember the highest amplitude
+            highestAmplitude = max(highestAmplitude, max(sampleL, sampleR))
+
+            // Scale the samples
+            var scaledL = sampleL / normalizer * baseline
+            var scaledR = sampleR / normalizer * baseline
+
+            // Add some noise to make it look sexy
+            if scaledL == 0 && scaledR == 0 {
+                if drand48() > 0.5 { scaledL = 1.0 } else { scaledR = 1.0 }
             }
-            let from = CGPoint(x: x, y: Int(baseline + scaledSample + 1))
-            let to = CGPoint(x: x, y: Int(baseline - scaledSample))
+
+            // Draw lines
+            let from = CGPoint(x: x, y: Int(baseline + scaledL))
+            let to = CGPoint(x: x, y: Int(baseline - scaledR))
             context?.move(to: from)
             context?.addLine(to: to)
         }

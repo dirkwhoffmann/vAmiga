@@ -613,18 +613,20 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->paula->audioUnit.ringbufferSize();
 }
-- (float) ringbufferDataL:(NSInteger)offset
+- (double) ringbufferDataL:(NSInteger)offset
 {
-    return wrapper->paula->audioUnit.ringbufferDataL(offset);
+    return (double)wrapper->paula->audioUnit.ringbufferDataL(offset);
 }
-- (float) ringbufferDataR:(NSInteger)offset
+- (double) ringbufferDataR:(NSInteger)offset
 {
     return wrapper->paula->audioUnit.ringbufferDataR(offset);
 }
-- (float) ringbufferData:(NSInteger)offset
+/*
+- (double) ringbufferData:(NSInteger)offset
 {
     return wrapper->paula->audioUnit.ringbufferData(offset);
 }
+*/
 - (double) fillLevel
 {
     return wrapper->paula->audioUnit.fillLevel();

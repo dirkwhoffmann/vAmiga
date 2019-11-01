@@ -390,9 +390,9 @@ struct AmigaFileWrapper;
 - (void) setSampleRate:(double)rate;
 
 - (NSInteger) ringbufferSize;
-- (float) ringbufferDataL:(NSInteger)offset;
-- (float) ringbufferDataR:(NSInteger)offset;
-- (float) ringbufferData:(NSInteger)offset;
+- (double) ringbufferDataL:(NSInteger)offset;
+- (double) ringbufferDataR:(NSInteger)offset;
+// - (double) ringbufferData:(NSInteger)offset;
 - (double) fillLevel;
 - (NSInteger) bufferUnderflows;
 - (NSInteger) bufferOverflows;
