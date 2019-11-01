@@ -780,18 +780,12 @@ Copper::serviceEvent(EventID id)
 
             if (verbose) debug("COP_JMP1\n");
 
-            // Wait for the next free DMA cycle
-            if (!agnus.copperCanDoDMA()) {
-                // debug("COP_JMP1: No DMA possible\n");
-                reschedule();
-                break;
-            }
+            // The bus is not needed in this cycle, but still allocated
+            (void)agnus.allocateBus<BUS_COPPER>();
 
-            // In cycle $E1, Copper jumps immediately
-            if (agnus.pos.h == 0xE1) {
-                // debug("COP_JMP1: Quick jump\n");
-                switchToCopperList(agnus.slot[COP_SLOT].data);
-                schedule(COP_FETCH);
+            // In cycle $E0, Copper continues with the next state in $E1 (?!)
+            if (agnus.pos.h == 0xE0) {
+                schedule(COP_JMP2, 1);
                 break;
             }
 
@@ -802,8 +796,11 @@ Copper::serviceEvent(EventID id)
 
             if (verbose) debug("COP_JMP2\n");
 
-            // The bus is not needed in this cycle, but still allocated
-            (void)agnus.allocateBus<BUS_COPPER>();
+            // Wait for the next free DMA cycle
+             if (!agnus.copperCanDoDMA()) {
+                 reschedule();
+                 break;
+             }
 
             switchToCopperList(agnus.slot[COP_SLOT].data);
             schedule(COP_FETCH);
