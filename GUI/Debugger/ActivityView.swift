@@ -9,33 +9,40 @@
 
 class ActivityView: NSView {
 
-    var n = 0
-
-    // Value storage
-    var values = Array(repeating: 0.0, count: 128)
-    // var current: Double { return values[values.count - 1] }
-
-    // Scaling factor and vertical zero point
-    var scale = 0.0
-    var zero = 0.0
+    // Values of the upper graph
+    var values = [Array(repeating: 0.0, count: 128),
+                  Array(repeating: 0.0, count: 128)]
 
     //
     // Configuring the view
     //
 
     // Number of horizontal help lines
-    var numlines = 5
+    var numlines = 8
 
     // Set to true to use a logarithmic scale
     var logscale = true
 
-    // Set to true if the view should cover negative values, too
-    var negative: Bool {
-        didSet {
-            scale = negative ? Double(frame.height) / 2.0 : Double(frame.height)
-            zero = negative ? Double(frame.height) / 2.0 : 0.0
-        }
-    }
+    // Set to true if the view should cover an upper and a lower part
+    var splitview = false
+
+    // Colors for drawing both graphs
+    // var color1: NSColor?
+    // var color2: NSColor?
+    var color1 = NSColor.init(r: 0, g: 128, b: 255, a: 255)
+    var alpha1 = NSColor.init(r: 0, g: 128, b: 255, a: 100)
+    var color2 = NSColor.init(r: 0, g: 128, b: 255, a: 255)
+    var alpha2 = NSColor.init(r: 0, g: 128, b: 255, a: 100)
+
+    //
+    // Computed properties
+    //
+
+    // Scale factor
+    var scale: Double { return Double(frame.height - 2) / (splitview ? 2.0 : 1.0) }
+
+    // Vertical location of the zero point
+    var zero: Double { return splitview ? Double(frame.height - 2) / 2.0 : 0.0 }
 
     // Colors for positive and negative values
     var posCol: NSColor?
@@ -62,12 +69,12 @@ class ActivityView: NSView {
     var w = 0.0, h = 0.0
 
     required init?(coder decoder: NSCoder) {
-        negative = true
+        splitview = true
         super.init(coder: decoder)
     }
 
     required override init(frame frameRect: NSRect) {
-        negative = true
+        splitview = true
         super.init(frame: frameRect)
     }
 
@@ -76,118 +83,177 @@ class ActivityView: NSView {
         needsDisplay = true
     }
 
-    func add(value: Double) {
+    func add(value: Double, storage: Int) {
 
-        var v = value
-        if logscale {
-            v *= 1024.0
-            v = (v < 1.0) ? 0.0 : (log2(v) / 10.0)
+        assert(storage == 0 || storage == 1)
+        assert(value >= 0.0)
+
+        let v = logscale ? log10(1.0 + 10.0 * value) : value
+        let max = values[storage].count
+
+        for i in 0 ..< max-1 {
+            values[storage][i] = values[storage][i+1]
+            values[storage][max-1] = 0.4 * values[storage][max-2] + 0.6 * v
         }
+    }
 
-        n += 1
-        if n > 20 { n = 0 }
+    /*
+    func add(val1: Double, val2: Double = 0.0) {
 
-        for i in 0 ..< values.count - 1 { values[i] = values[i+1] }
+        add(value: val1, storage: 0)
+        if splitview { add(value: val2, storage: 1) }
 
-        values[127] = 0.6 * values[126] + 0.4 * v * (n > 10 ? 1.0 : 1.0)
+        needsDisplay = true
+    }
+    */
+
+    func add(val1: Double, val2: Double = 0.0) {
+
+        add(value: 1.0, storage: 0)
+        if splitview { add(value: 1.0, storage: 1) }
+
         needsDisplay = true
     }
 
-    func sample(x: Int) -> Double {
+    func sample(x: Int, storage: Int) -> Double {
+
+        assert(storage == 0 || storage == 1)
 
         let pos = Double(x) / Double(w)
-        let val = values[Int(pos * Double(values.count - 1))]
-        return val
+        let val = values[storage][Int(pos * Double(values[storage].count - 1))]
+
+        return storage == 0 ? val : -val
     }
 
     func drawGrid() {
 
-        let context = NSGraphicsContext.current?.cgContext
-
-        NSColor.lightGray.setStroke()
-        context?.setLineWidth(0.5)
         let delta = 1.0 / Double(numlines)
+        let c = scale, z = Int(zero)
 
-        for i in 1..<numlines {
-            var y = Double(i) * delta
-            if logscale { y = log2(1.0 + y) }
-            context?.move(to: CGPoint(x: 0, y: Int(y * h)))
-            context?.addLine(to: CGPoint(x: Int(w), y: Int(y * h)))
-            context?.strokePath()
+        if let context = NSGraphicsContext.current?.cgContext {
+
+            NSColor.lightGray.setStroke()
+            context.setLineWidth(0.5)
+
+            for i in 1..<numlines {
+                var y = Double(i) * delta
+                if logscale { y = log10(1.0 + 9*y) }
+                context.move(to: CGPoint(x: 0, y: z + Int(c * y)))
+                context.addLine(to: CGPoint(x: Int(w), y: z + Int(c * y)))
+                context.strokePath()
+            }
+
+            if splitview {
+                for i in 1..<numlines {
+                     var y = Double(i) * delta
+                     if logscale { y = log10(1.0 + 9*y) }
+                     context.move(to: CGPoint(x: 0, y: z - Int(c * y)))
+                     context.addLine(to: CGPoint(x: Int(w), y: z - Int(c * y)))
+                     context.strokePath()
+                 }
+            }
+        }
+    }
+
+    func drawZeroLine() {
+
+        if let context = NSGraphicsContext.current?.cgContext {
+
+            context.setLineWidth(1)
+            NSColor.textColor.setStroke()
+            context.move(to: CGPoint(x: 0, y: Int(zero)))
+            context.addLine(to: CGPoint(x: Int(w), y: Int(zero)))
+            context.strokePath()
+        }
+    }
+
+    func createGraph(storage s: Int) -> NSBezierPath {
+
+        let graph = NSBezierPath()
+        let c = scale, z = zero
+
+        var y = sample(x: 0, storage: s)
+        graph.move(to: CGPoint(x: 0, y: Int(z + y * c)))
+        for x in 0...Int(w) {
+            y = sample(x: x, storage: s)
+            graph.line(to: CGPoint(x: x, y: Int(z + y * c)))
         }
 
-        // Lower line
-        context?.move(to: CGPoint(x: 0, y: 1))
-        context?.addLine(to: CGPoint(x: Int(frame.width), y: 1))
-        context?.strokePath()
-
-        // Upper line
-        // context?.move(to: CGPoint(x: 0, y: Int(frame.height) - 1))
-        // context?.addLine(to: CGPoint(x: Int(frame.width), y: Int(frame.height) - 1))
-        // context?.strokePath()
-
-        // Zero line
-        context?.setLineWidth(1)
-        NSColor.darkGray.setStroke()
-        context?.move(to: CGPoint(x: 0, y: Int(zero)))
-        context?.addLine(to: CGPoint(x: Int(frame.width), y: Int(zero)))
-        context?.strokePath()
+        return graph
     }
 
     func draw(upper: Bool) {
 
         let context = NSGraphicsContext.current?.cgContext
+        var graph1, graph2, clip1, clip2: NSBezierPath?
 
         // Create gradient
-        let v = 255
-        let c1 = NSColor.init(r: 0, g: v, b: 0, a: 128).cgColor
-        let c2 = NSColor.init(r: v, g: v, b: 0, a: 128).cgColor
-        let c3 = NSColor.init(r: v, g: 0, b: 0, a: 128).cgColor
-        let grad = CGGradient(colorsSpace: CGColorSpaceCreateDeviceRGB(),
-                              colors: [c1, c1, c2, c3] as CFArray,
-                              locations: [0.0, 0.4, 0.6, 1.0] as [CGFloat])!
-        
-        context?.saveGState()
+        // let c1 = NSColor.init(r: 0, g: 192, b: 0, a: 128).cgColor
+        let c2 = NSColor.init(r: 255, g: 255, b: 0, a: 128).cgColor
+        let c3 = NSColor.init(r: 255, g: 0, b: 0, a: 128).cgColor
+        let grad1 = CGGradient(colorsSpace: CGColorSpaceCreateDeviceRGB(),
+                               colors: [alpha1.cgColor, alpha1.cgColor, c2, c3] as CFArray,
+                               locations: [0.5, 0.8, 0.9, 1.0] as [CGFloat])!
 
-        // Convert data points to a graph
-        let graphPath = NSBezierPath()
-        var y = sample(x: 0)
-        y = y > 0 ? (upper ? y : 0) : (upper ? 0 : y)
-        graphPath.move(to: CGPoint(x: 0, y: Int(zero + y * scale)))
-        for x in 0...Int(w) {
-            y = sample(x: x)
-            y = y > 0 ? (upper ? y : 0) : (upper ? 0 : y)
-            graphPath.line(to: CGPoint(x: x, y: Int(zero + y * scale)))
+        // Create graph lines
+        graph1 = createGraph(storage: 0)
+        if splitview { graph2 = createGraph(storage: 1) }
+
+        // Create clipping areas
+        clip1 = graph1?.copy() as? NSBezierPath
+        clip1?.line(to: CGPoint(x: Int(w), y: Int(zero)))
+        clip1?.line(to: CGPoint(x: 0, y: Int(zero)))
+        clip1?.close()
+
+        if splitview {
+            clip2 = graph2?.copy() as? NSBezierPath
+            clip2?.line(to: CGPoint(x: Int(w), y: Int(zero)))
+            clip2?.line(to: CGPoint(x: 0, y: Int(zero)))
+            clip2?.close()
         }
-
-        // Create clipping path
-        let clippingPath = graphPath.copy() as? NSBezierPath
-        clippingPath!.line(to: CGPoint(x: Int(w), y: Int(zero)))
-        clippingPath!.line(to: CGPoint(x: 0, y: Int(zero)))
-        clippingPath!.close()
-        clippingPath!.addClip()
-
-        // Draw gradient
-        context?.drawLinearGradient(grad,
-                                    start: CGPoint(x: 0, y: 0),
-                                    end: CGPoint(x: 0, y: bounds.height),
-                                    options: [])
 
         // Fill area
         /*
-        let fillColor = upper ? posColAlpha : negColAlpha
-        let rect = CGRect(x: 0, y: 0, width: Int(frame.width), height: Int(frame.height))
-        fillColor?.setFill()
-        context?.fill(rect)
-        */
+         context?.saveGState()
+         clip1?.addClip()
+         let fillColor = color1.transparent(alpha: 0.4)
+         let rect = CGRect(x: 0, y: Int(zero), width: Int(frame.width), height: Int(frame.height))
+         fillColor.setFill()
+         context?.fill(rect)
+         context?.restoreGState()
+         */
 
-        // Draw graph
-        let lineColor = upper ? posCol : negCol
-        lineColor?.setStroke()
-        graphPath.lineWidth = 3.0
-        graphPath.stroke()
-
+        // Apply a gradient fill
+        context?.saveGState()
+        clip1?.addClip()
+        context?.drawLinearGradient(grad1,
+                                    start: CGPoint(x: 0, y: zero),
+                                    end: CGPoint(x: 0, y: bounds.height),
+                                    options: [])
         context?.restoreGState()
+
+        // Draw graph line
+        color1.setStroke()
+        graph1?.lineWidth = 2.0
+        graph1?.stroke()
+
+        // Draw lower graph
+        if splitview {
+
+            // Apply a gradient fill
+            context?.saveGState()
+            clip2?.addClip()
+            context?.drawLinearGradient(grad1,
+                                        start: CGPoint(x: 0, y: zero),
+                                        end: CGPoint(x: 0, y: 0),
+                                        options: [])
+            context?.restoreGState()
+
+            // Draw graph line
+            color2.setStroke()
+            graph2?.lineWidth = 2.0
+            graph2?.stroke()
+        }
     }
 
     override func draw(_ dirtyRect: NSRect) {
@@ -208,6 +274,9 @@ class ActivityView: NSView {
         // Draw positive values
         draw(upper: true)
         draw(upper: false)
+
+        // track("h = \(h) \(Int(h / 2))")
+        drawZeroLine()
     }
 }
 
@@ -228,5 +297,11 @@ extension NSColor {
                        green: min(green + percentage/100, 1.0),
                        blue: min(blue + percentage/100, 1.0),
                        alpha: alpha)
+    }
+
+    func transparent(alpha: CGFloat = 0.3) -> NSColor {
+        var r: CGFloat = 0, g: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
+        getRed(&r, green: &g, blue: &b, alpha: &a)
+        return NSColor(red: r, green: g, blue: b, alpha: alpha)
     }
 }

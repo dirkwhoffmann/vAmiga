@@ -130,38 +130,41 @@ extension Monitor {
 
     func refreshActivityViews() {
 
+        // let col1 = NSColor.init(r: 0, g: 204, b: 102, a: 255)
+        // let col2 = NSColor.init(r: 0, g: 128, b: 255, a: 255)
+
         copperView.logscale = true
-        copperView.negative = false
+        copperView.splitview = false
         blitterView.logscale = true
-        blitterView.negative = false
+        blitterView.splitview = false
         spriteView.logscale = false
-        spriteView.negative = false
+        spriteView.splitview = false
         chipView.logscale = true
-        chipView.negative = false
+        chipView.splitview = true
+        // chipView.color1 = col1
+        // chipView.color2 = col2
         fastView.logscale = true
-        fastView.negative = false
+        fastView.splitview = true
         romView.logscale = true
-        romView.negative = false
+        romView.splitview = true
+        // romView.color1 = col1
+        // romView.color2 = col2
         diskView.logscale = false
-        diskView.negative = false
+        diskView.splitview = true
         serialView.logscale = false
-        serialView.negative = false
+        serialView.splitview = true
 
         if let stats = amigaProxy?.getStats() {
 
             let copperActivity = Double(stats.agnus.count.7) / (313*113)
             let blitterActivity = Double(stats.agnus.count.8) / (313*226)
             let spriteActivity = Double(stats.denise.spriteLines) / 313
-
             let chipReads = Double(stats.mem.chipReads) / (313*226)
             let chipWrites = Double(stats.mem.chipWrites) / (313*226)
             let fastReads = Double(stats.mem.fastReads) / (313*226)
             let fastWrites = Double(stats.mem.fastWrites) / (313*226)
             let romReads = Double(stats.mem.romReads) / (313*226)
             let romWrites = Double(stats.mem.romWrites) / (313*226)
-            let chipActivity = chipReads + chipWrites
-            let fastActivity = fastReads + fastWrites
-            let romActivity = romReads + romWrites
 
             let wc0 = stats.disk.wordCount.0
             let wc1 = stats.disk.wordCount.1
@@ -170,18 +173,17 @@ extension Monitor {
             let diskActivity = Double(wc0 + wc1 + wc2 + wc3) / (313.0 * 3)
             let serialReads = Double(stats.uart.reads) / 500
             let serialWrites = Double(stats.uart.writes) / 500
-            let serialActivity = serialReads + serialWrites
 
             let frames = Double(max(stats.frames, 1))
 
-            copperView.add(value: copperActivity / frames)
-            blitterView.add(value: blitterActivity / frames)
-            spriteView.add(value: spriteActivity / frames)
-            chipView.add(value: chipActivity / frames)
-            fastView.add(value: fastActivity / frames)
-            romView.add(value: romActivity / frames)
-            diskView.add(value: diskActivity / frames)
-            serialView.add(value: serialActivity / frames)
+            copperView.add(val1: copperActivity / frames)
+            blitterView.add(val1: blitterActivity / frames)
+            spriteView.add(val1: spriteActivity / frames)
+            chipView.add(val1: chipReads / frames, val2: chipWrites / frames)
+            fastView.add(val1: fastReads / frames, val2: fastWrites / frames)
+            romView.add(val1: romReads / frames, val2: romWrites / frames)
+            diskView.add(val1: diskActivity / frames)
+            serialView.add(val1: serialReads / frames, val2: serialWrites / frames)
         }
     }
 }

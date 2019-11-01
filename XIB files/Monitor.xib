@@ -210,21 +210,21 @@
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qnj-W8-RqV" customClass="ActivityView" customModule="vAmiga" customModuleProvider="target">
-                                    <rect key="frame" x="8" y="7" width="142" height="48"/>
+                                    <rect key="frame" x="8" y="7" width="141" height="48"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 </customView>
                             </subviews>
                         </view>
                     </box>
                     <box fixedFrame="YES" title="Disk controller" translatesAutoresizingMaskIntoConstraints="NO" id="jcy-DG-dTE">
-                        <rect key="frame" x="16" y="199" width="155" height="80"/>
+                        <rect key="frame" x="16" y="199" width="160" height="80"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="9da-h5-Orw">
-                            <rect key="frame" x="3" y="3" width="149" height="62"/>
+                            <rect key="frame" x="3" y="3" width="154" height="62"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="H5n-aN-ooV" customClass="ActivityView" customModule="vAmiga" customModuleProvider="target">
-                                    <rect key="frame" x="8" y="9" width="136" height="48"/>
+                                    <rect key="frame" x="8" y="9" width="141" height="48"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 </customView>
                             </subviews>

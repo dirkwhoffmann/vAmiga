@@ -214,8 +214,9 @@ Amiga::updateStats()
 void
 Amiga::clearStats()
 {
+    // debug("Amiga::clearStats\n");
+
     memset(&stats, 0, sizeof(stats));
-    
     mem.clearStats();
     agnus.clearStats();
     denise.clearStats();
@@ -541,6 +542,9 @@ Amiga::reset()
     
     // Execute the standard reset routine
     HardwareComponent::reset();
+
+    // Discard all previously recorded stastical information
+    clearStats();
 
     // Inform the GUI
     putMessage(MSG_RESET);
