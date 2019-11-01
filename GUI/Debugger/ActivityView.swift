@@ -18,31 +18,32 @@ class ActivityView: NSView {
     //
 
     // Number of horizontal help lines
-    var numlines = 8
+    @IBInspectable var numlines: Int = 4
 
     // Set to true to use a logarithmic scale
-    var logscale = true
+    @IBInspectable var logscale: Bool = true
 
     // Set to true if the view should cover an upper and a lower part
-    var splitview = false
+    @IBInspectable var splitview: Bool = false
 
     // Colors for drawing both graphs
-    // var color1: NSColor?
-    // var color2: NSColor?
     var color1 = NSColor.init(r: 0, g: 128, b: 255, a: 255)
-    var alpha1 = NSColor.init(r: 0, g: 128, b: 255, a: 100)
-    var color2 = NSColor.init(r: 0, g: 128, b: 255, a: 255)
-    var alpha2 = NSColor.init(r: 0, g: 128, b: 255, a: 100)
+    var alpha1a = NSColor.init(r: 0, g: 128, b: 255, a: 50).cgColor
+    var alpha1b = NSColor.init(r: 0, g: 128, b: 255, a: 255).cgColor
+
+    var color2 = NSColor.init(r: 255, g: 153, b: 153, a: 255)
+    var alpha2a = NSColor.init(r: 255, g: 153, b: 153, a: 50).cgColor
+    var alpha2b = NSColor.init(r: 255, g: 153, b: 153, a: 255).cgColor
 
     //
     // Computed properties
     //
 
     // Scale factor
-    var scale: Double { return Double(frame.height - 2) / (splitview ? 2.0 : 1.0) }
+    var scale: Double { return Double(frame.height) / (splitview ? 2.0 : 1.0) }
 
     // Vertical location of the zero point
-    var zero: Double { return splitview ? Double(frame.height - 2) / 2.0 : 0.0 }
+    var zero: Double { return splitview ? Double(frame.height) / 2.0 : 0.0 }
 
     // Colors for positive and negative values
     var posCol: NSColor?
@@ -88,7 +89,8 @@ class ActivityView: NSView {
         assert(storage == 0 || storage == 1)
         assert(value >= 0.0)
 
-        let v = logscale ? log10(1.0 + 10.0 * value) : value
+        // let v = logscale ? log10(1.0 + 9.0 * value) : value
+        let v = logscale ? log2(1.0 + 1.0 * value) : value
         let max = values[storage].count
 
         for i in 0 ..< max-1 {
@@ -97,7 +99,6 @@ class ActivityView: NSView {
         }
     }
 
-    /*
     func add(val1: Double, val2: Double = 0.0) {
 
         add(value: val1, storage: 0)
@@ -105,8 +106,8 @@ class ActivityView: NSView {
 
         needsDisplay = true
     }
-    */
 
+    /*
     func add(val1: Double, val2: Double = 0.0) {
 
         add(value: 1.0, storage: 0)
@@ -114,6 +115,7 @@ class ActivityView: NSView {
 
         needsDisplay = true
     }
+    */
 
     func sample(x: Int, storage: Int) -> Double {
 
@@ -132,10 +134,10 @@ class ActivityView: NSView {
 
         if let context = NSGraphicsContext.current?.cgContext {
 
-            NSColor.lightGray.setStroke()
+            NSColor.tertiaryLabelColor.setStroke()
             context.setLineWidth(0.5)
 
-            for i in 1..<numlines {
+            for i in 0...numlines {
                 var y = Double(i) * delta
                 if logscale { y = log10(1.0 + 9*y) }
                 context.move(to: CGPoint(x: 0, y: z + Int(c * y)))
@@ -160,7 +162,7 @@ class ActivityView: NSView {
         if let context = NSGraphicsContext.current?.cgContext {
 
             context.setLineWidth(1)
-            NSColor.textColor.setStroke()
+            NSColor.secondaryLabelColor.setStroke()
             context.move(to: CGPoint(x: 0, y: Int(zero)))
             context.addLine(to: CGPoint(x: Int(w), y: Int(zero)))
             context.strokePath()
@@ -192,8 +194,12 @@ class ActivityView: NSView {
         let c2 = NSColor.init(r: 255, g: 255, b: 0, a: 128).cgColor
         let c3 = NSColor.init(r: 255, g: 0, b: 0, a: 128).cgColor
         let grad1 = CGGradient(colorsSpace: CGColorSpaceCreateDeviceRGB(),
-                               colors: [alpha1.cgColor, alpha1.cgColor, c2, c3] as CFArray,
-                               locations: [0.5, 0.8, 0.9, 1.0] as [CGFloat])!
+                               colors: [alpha1a, alpha1b, c2, c3] as CFArray,
+                               locations: nil)!
+                               // locations: [0.4, 0.6, 0.8, 1.0] as [CGFloat])!
+        let grad2 = CGGradient(colorsSpace: CGColorSpaceCreateDeviceRGB(),
+                               colors: [alpha2a, alpha2b, c2, c3] as CFArray,
+                               locations: nil)!
 
         // Create graph lines
         graph1 = createGraph(storage: 0)
@@ -212,17 +218,6 @@ class ActivityView: NSView {
             clip2?.close()
         }
 
-        // Fill area
-        /*
-         context?.saveGState()
-         clip1?.addClip()
-         let fillColor = color1.transparent(alpha: 0.4)
-         let rect = CGRect(x: 0, y: Int(zero), width: Int(frame.width), height: Int(frame.height))
-         fillColor.setFill()
-         context?.fill(rect)
-         context?.restoreGState()
-         */
-
         // Apply a gradient fill
         context?.saveGState()
         clip1?.addClip()
@@ -233,9 +228,11 @@ class ActivityView: NSView {
         context?.restoreGState()
 
         // Draw graph line
+        /*
         color1.setStroke()
         graph1?.lineWidth = 2.0
         graph1?.stroke()
+        */
 
         // Draw lower graph
         if splitview {
@@ -243,16 +240,18 @@ class ActivityView: NSView {
             // Apply a gradient fill
             context?.saveGState()
             clip2?.addClip()
-            context?.drawLinearGradient(grad1,
+            context?.drawLinearGradient(grad2,
                                         start: CGPoint(x: 0, y: zero),
                                         end: CGPoint(x: 0, y: 0),
                                         options: [])
             context?.restoreGState()
 
             // Draw graph line
+            /*
             color2.setStroke()
             graph2?.lineWidth = 2.0
             graph2?.stroke()
+            */
         }
     }
 
@@ -275,7 +274,6 @@ class ActivityView: NSView {
         draw(upper: true)
         draw(upper: false)
 
-        // track("h = \(h) \(Int(h / 2))")
         drawZeroLine()
     }
 }

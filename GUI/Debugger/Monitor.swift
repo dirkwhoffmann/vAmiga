@@ -130,34 +130,10 @@ extension Monitor {
 
     func refreshActivityViews() {
 
-        // let col1 = NSColor.init(r: 0, g: 204, b: 102, a: 255)
-        // let col2 = NSColor.init(r: 0, g: 128, b: 255, a: 255)
-
-        copperView.logscale = true
-        copperView.splitview = false
-        blitterView.logscale = true
-        blitterView.splitview = false
-        spriteView.logscale = false
-        spriteView.splitview = false
-        chipView.logscale = true
-        chipView.splitview = true
-        // chipView.color1 = col1
-        // chipView.color2 = col2
-        fastView.logscale = true
-        fastView.splitview = true
-        romView.logscale = true
-        romView.splitview = true
-        // romView.color1 = col1
-        // romView.color2 = col2
-        diskView.logscale = false
-        diskView.splitview = true
-        serialView.logscale = false
-        serialView.splitview = true
-
         if let stats = amigaProxy?.getStats() {
 
-            let copperActivity = Double(stats.agnus.count.7) / (313*113)
-            let blitterActivity = Double(stats.agnus.count.8) / (313*226)
+            let copperActivity = Double(stats.agnus.count.7) / (313*100)
+            let blitterActivity = Double(stats.agnus.count.8) / (313*120)
             let spriteActivity = Double(stats.denise.spriteLines) / 313
             let chipReads = Double(stats.mem.chipReads) / (313*226)
             let chipWrites = Double(stats.mem.chipWrites) / (313*226)

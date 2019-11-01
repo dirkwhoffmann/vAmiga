@@ -120,6 +120,12 @@
                                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hU1-A8-7Np" customClass="ActivityView" customModule="vAmiga" customModuleProvider="target">
                                     <rect key="frame" x="7" y="7" width="141" height="48"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="numlines">
+                                            <integer key="value" value="5"/>
+                                        </userDefinedRuntimeAttribute>
+                                        <userDefinedRuntimeAttribute type="boolean" keyPath="logscale" value="YES"/>
+                                    </userDefinedRuntimeAttributes>
                                 </customView>
                             </subviews>
                         </view>
@@ -134,6 +140,12 @@
                                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="c6L-Kh-fOC" customClass="ActivityView" customModule="vAmiga" customModuleProvider="target">
                                     <rect key="frame" x="8" y="8" width="141" height="48"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="numlines">
+                                            <integer key="value" value="4"/>
+                                        </userDefinedRuntimeAttribute>
+                                        <userDefinedRuntimeAttribute type="boolean" keyPath="logscale" value="YES"/>
+                                    </userDefinedRuntimeAttributes>
                                 </customView>
                             </subviews>
                         </view>
@@ -170,6 +182,12 @@
                                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2cI-PF-Zka" customClass="ActivityView" customModule="vAmiga" customModuleProvider="target">
                                     <rect key="frame" x="8" y="7" width="141" height="48"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="numlines">
+                                            <integer key="value" value="4"/>
+                                        </userDefinedRuntimeAttribute>
+                                        <userDefinedRuntimeAttribute type="boolean" keyPath="logscale" value="YES"/>
+                                    </userDefinedRuntimeAttributes>
                                 </customView>
                             </subviews>
                         </view>
@@ -184,6 +202,12 @@
                                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tBZ-AA-L6k" customClass="ActivityView" customModule="vAmiga" customModuleProvider="target">
                                     <rect key="frame" x="8" y="7" width="142" height="48"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="numlines">
+                                            <integer key="value" value="5"/>
+                                        </userDefinedRuntimeAttribute>
+                                        <userDefinedRuntimeAttribute type="boolean" keyPath="logscale" value="YES"/>
+                                    </userDefinedRuntimeAttributes>
                                 </customView>
                             </subviews>
                         </view>
@@ -198,6 +222,12 @@
                                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mwk-ru-smG" customClass="ActivityView" customModule="vAmiga" customModuleProvider="target">
                                     <rect key="frame" x="8" y="7" width="141" height="48"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="numlines">
+                                            <integer key="value" value="4"/>
+                                        </userDefinedRuntimeAttribute>
+                                        <userDefinedRuntimeAttribute type="boolean" keyPath="logscale" value="YES"/>
+                                    </userDefinedRuntimeAttributes>
                                 </customView>
                             </subviews>
                         </view>
@@ -212,6 +242,12 @@
                                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qnj-W8-RqV" customClass="ActivityView" customModule="vAmiga" customModuleProvider="target">
                                     <rect key="frame" x="8" y="7" width="141" height="48"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="numlines">
+                                            <integer key="value" value="4"/>
+                                        </userDefinedRuntimeAttribute>
+                                        <userDefinedRuntimeAttribute type="boolean" keyPath="logscale" value="YES"/>
+                                    </userDefinedRuntimeAttributes>
                                 </customView>
                             </subviews>
                         </view>
@@ -226,6 +262,12 @@
                                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="H5n-aN-ooV" customClass="ActivityView" customModule="vAmiga" customModuleProvider="target">
                                     <rect key="frame" x="8" y="9" width="141" height="48"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="numlines">
+                                            <integer key="value" value="4"/>
+                                        </userDefinedRuntimeAttribute>
+                                        <userDefinedRuntimeAttribute type="boolean" keyPath="logscale" value="YES"/>
+                                    </userDefinedRuntimeAttributes>
                                 </customView>
                             </subviews>
                         </view>
@@ -240,6 +282,12 @@
                                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jjV-dy-cT8" customClass="ActivityView" customModule="vAmiga" customModuleProvider="target">
                                     <rect key="frame" x="8" y="9" width="141" height="48"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="numlines">
+                                            <integer key="value" value="4"/>
+                                        </userDefinedRuntimeAttribute>
+                                        <userDefinedRuntimeAttribute type="boolean" keyPath="logscale" value="YES"/>
+                                    </userDefinedRuntimeAttributes>
                                 </customView>
                             </subviews>
                         </view>
