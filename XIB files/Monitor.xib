@@ -125,6 +125,7 @@
                                             <integer key="value" value="5"/>
                                         </userDefinedRuntimeAttribute>
                                         <userDefinedRuntimeAttribute type="boolean" keyPath="logscale" value="YES"/>
+                                        <userDefinedRuntimeAttribute type="boolean" keyPath="splitview" value="NO"/>
                                     </userDefinedRuntimeAttributes>
                                 </customView>
                             </subviews>
@@ -156,6 +157,7 @@
                                             <integer key="value" value="5"/>
                                         </userDefinedRuntimeAttribute>
                                         <userDefinedRuntimeAttribute type="boolean" keyPath="logscale" value="YES"/>
+                                        <userDefinedRuntimeAttribute type="boolean" keyPath="splitview" value="NO"/>
                                     </userDefinedRuntimeAttributes>
                                 </customView>
                             </subviews>
@@ -176,6 +178,7 @@
                                             <integer key="value" value="5"/>
                                         </userDefinedRuntimeAttribute>
                                         <userDefinedRuntimeAttribute type="boolean" keyPath="logscale" value="YES"/>
+                                        <userDefinedRuntimeAttribute type="boolean" keyPath="splitview" value="YES"/>
                                     </userDefinedRuntimeAttributes>
                                 </customView>
                             </subviews>
@@ -196,6 +199,7 @@
                                             <integer key="value" value="5"/>
                                         </userDefinedRuntimeAttribute>
                                         <userDefinedRuntimeAttribute type="boolean" keyPath="logscale" value="YES"/>
+                                        <userDefinedRuntimeAttribute type="boolean" keyPath="splitview" value="YES"/>
                                     </userDefinedRuntimeAttributes>
                                 </customView>
                             </subviews>
@@ -216,6 +220,7 @@
                                             <integer key="value" value="5"/>
                                         </userDefinedRuntimeAttribute>
                                         <userDefinedRuntimeAttribute type="boolean" keyPath="logscale" value="YES"/>
+                                        <userDefinedRuntimeAttribute type="boolean" keyPath="splitview" value="YES"/>
                                     </userDefinedRuntimeAttributes>
                                 </customView>
                             </subviews>
@@ -236,6 +241,7 @@
                                             <integer key="value" value="5"/>
                                         </userDefinedRuntimeAttribute>
                                         <userDefinedRuntimeAttribute type="boolean" keyPath="logscale" value="YES"/>
+                                        <userDefinedRuntimeAttribute type="boolean" keyPath="splitview" value="NO"/>
                                     </userDefinedRuntimeAttributes>
                                 </customView>
                             </subviews>
@@ -256,6 +262,7 @@
                                             <integer key="value" value="5"/>
                                         </userDefinedRuntimeAttribute>
                                         <userDefinedRuntimeAttribute type="boolean" keyPath="logscale" value="YES"/>
+                                        <userDefinedRuntimeAttribute type="boolean" keyPath="splitview" value="YES"/>
                                     </userDefinedRuntimeAttributes>
                                 </customView>
                             </subviews>
@@ -276,6 +283,7 @@
                                             <integer key="value" value="5"/>
                                         </userDefinedRuntimeAttribute>
                                         <userDefinedRuntimeAttribute type="boolean" keyPath="logscale" value="YES"/>
+                                        <userDefinedRuntimeAttribute type="boolean" keyPath="splitview" value="YES"/>
                                     </userDefinedRuntimeAttributes>
                                 </customView>
                             </subviews>

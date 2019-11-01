@@ -27,13 +27,8 @@ class ActivityView: NSView {
     @IBInspectable var splitview: Bool = false
 
     // Colors for drawing both graphs
-    var color1 = NSColor.init(r: 0, g: 128, b: 255, a: 255)
-    var alpha1a = NSColor.init(r: 0, g: 128, b: 255, a: 50).cgColor
-    var alpha1b = NSColor.init(r: 0, g: 128, b: 255, a: 255).cgColor
-
-    var color2 = NSColor.init(r: 255, g: 153, b: 153, a: 255)
-    var alpha2a = NSColor.init(r: 255, g: 153, b: 153, a: 50).cgColor
-    var alpha2b = NSColor.init(r: 255, g: 153, b: 153, a: 255).cgColor
+    var color1, alpha1a, alpha1b: NSColor!
+    var color2, alpha2a, alpha2b: NSColor!
 
     //
     // Computed properties
@@ -43,40 +38,49 @@ class ActivityView: NSView {
     var scale: Double { return Double(frame.height) / (splitview ? 2.0 : 1.0) }
 
     // Vertical location of the zero point
-    var zero: Double { return splitview ? Double(frame.height) / 2.0 : 0.0 }
-
-    // Colors for positive and negative values
-    var posCol: NSColor?
-    var posColAlpha: NSColor?
-    var negCol: NSColor?
-    var negColAlpha: NSColor?
-
-    func setPosColor(r: Int, g: Int, b: Int) {
-        posCol = NSColor.init(r: r, g: g, b: b, a: 255)
-        posColAlpha = NSColor.init(r: r, g: g, b: b, a: 128)
-    }
-    func setPosColor(r: Double, g: Double, b: Double) {
-        setPosColor(r: Int(r * 255.0), g: Int(g * 255.0), b: Int(b * 255.0))
-     }
-    func setNegColor(r: Int, g: Int, b: Int) {
-        negCol = NSColor.init(r: r, g: g, b: b, a: 255)
-        negColAlpha = NSColor.init(r: r, g: g, b: b, a: 128)
-    }
-    func setNegColor(r: Double, g: Double, b: Double) {
-        setNegColor(r: Int(r * 255.0), g: Int(g * 255.0), b: Int(b * 255.0))
-     }
+    var zero: Double { return splitview ? Double(frame.height) / 2.0 : 1.0 }
 
     // MAKE LOCAL
     var w = 0.0, h = 0.0
 
     required init?(coder decoder: NSCoder) {
-        splitview = true
         super.init(coder: decoder)
+        setupColors()
     }
 
     required override init(frame frameRect: NSRect) {
-        splitview = true
         super.init(frame: frameRect)
+        setupColors()
+    }
+
+    func setupColors() {
+
+        // Check for dark mode
+        var darkMode = false
+        if #available(OSX 10.14, *) {
+            darkMode = NSApp.effectiveAppearance.name == NSAppearance.Name.darkAqua
+        }
+
+        if darkMode {
+
+            color1 = NSColor.init(r: 102, g: 178, b: 255, a: 255)
+            alpha1a = NSColor.init(r: 102, g: 178, b: 255, a: 50)
+            alpha1b = NSColor.init(r: 102, g: 178, b: 255, a: 150)
+
+            color2 = NSColor.init(r: 255, g: 102, b: 178, a: 255)
+            alpha2a = NSColor.init(r: 255, g: 102, b: 178, a: 50)
+            alpha2b = NSColor.init(r: 255, g: 102, b: 178, a: 150)
+
+        } else {
+
+            color1 = NSColor.init(r: 0, g: 102, b: 204, a: 255)
+            alpha1a = NSColor.init(r: 0, g: 102, b: 204, a: 50)
+            alpha1b = NSColor.init(r: 0, g: 102, b: 204, a: 150)
+
+            color2 = NSColor.init(r: 204, g: 0, b: 204, a: 255)
+            alpha2a = NSColor.init(r: 204, g: 0, b: 204, a: 50)
+            alpha2b = NSColor.init(r: 204, g: 0, b: 204, a: 150)
+        }
     }
 
     func update() {
@@ -190,16 +194,14 @@ class ActivityView: NSView {
         var graph1, graph2, clip1, clip2: NSBezierPath?
 
         // Create gradient
-        // let c1 = NSColor.init(r: 0, g: 192, b: 0, a: 128).cgColor
         let c2 = NSColor.init(r: 255, g: 255, b: 0, a: 128).cgColor
         let c3 = NSColor.init(r: 255, g: 0, b: 0, a: 128).cgColor
         let grad1 = CGGradient(colorsSpace: CGColorSpaceCreateDeviceRGB(),
-                               colors: [alpha1a, alpha1b, c2, c3] as CFArray,
-                               locations: nil)!
-                               // locations: [0.4, 0.6, 0.8, 1.0] as [CGFloat])!
+                               colors: [alpha1a.cgColor, alpha1b.cgColor, c2, c3] as CFArray,
+                               locations: [0.0, 0.6, 0.8, 1.0] as [CGFloat])!
         let grad2 = CGGradient(colorsSpace: CGColorSpaceCreateDeviceRGB(),
-                               colors: [alpha2a, alpha2b, c2, c3] as CFArray,
-                               locations: nil)!
+                               colors: [alpha2a.cgColor, alpha2b.cgColor, c2, c3] as CFArray,
+                               locations: [0.0, 0.6, 0.8, 1.0] as [CGFloat])!
 
         // Create graph lines
         graph1 = createGraph(storage: 0)
