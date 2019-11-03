@@ -12,9 +12,14 @@
 #ifndef _CPU_T_INC
 #define _CPU_T_INC
 
-// CPU actions
-#define CPU_SET_IRQ_LEVEL   0b01
-#define CPU_ADD_WAIT_STATES 0b10
+// Action flags
+#define CPU_SET_IRQ_LEVEL0   0b0001
+#define CPU_SET_IRQ_LEVEL1   0b0010
+#define CPU_ADD_WAIT_STATES0 0b0100
+
+#define CPU_DELAY_MASK ~(0b1000 \
+| CPU_ADD_WAIT_STATES0 \
+| CPU_SET_IRQ_LEVEL0)
 
 // CPU engine
 typedef enum : long
