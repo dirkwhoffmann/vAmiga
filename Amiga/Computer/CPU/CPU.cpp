@@ -290,7 +290,7 @@ CPU::_dumpMusashi()
     plainmsg("                    c_flag : %d\n", m68ki_cpu.c_flag);
     plainmsg("                  int_mask : %d\n", m68ki_cpu.int_mask);
     plainmsg("                 int_level : %d\n", m68ki_cpu.int_level);
-    plainmsg("                int_cycles : %d\n", m68ki_cpu.int_cycles);
+    // plainmsg("                int_cycles : %d\n", m68ki_cpu.int_cycles);
     plainmsg("                   stopped : %d\n", m68ki_cpu.stopped);
     plainmsg("                 pref_addr : %d\n", m68ki_cpu.pref_addr);
     plainmsg("                 pref_data : %d\n", m68ki_cpu.pref_data);

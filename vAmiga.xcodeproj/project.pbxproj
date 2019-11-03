@@ -108,6 +108,12 @@
 		508FE06521EA318D0043D0E9 /* AmigaFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FE06321EA318D0043D0E9 /* AmigaFile.cpp */; };
 		509047B6230575E6009CEC1C /* SlowBlitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509047B5230575E6009CEC1C /* SlowBlitter.cpp */; };
 		50950ED822881B7A0073F755 /* ZorroManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50950ED622881B7A0073F755 /* ZorroManager.cpp */; };
+		50991036236EC94C00DF7064 /* m68kfpu.c in Sources */ = {isa = PBXBuildFile; fileRef = 5099102C236EC94A00DF7064 /* m68kfpu.c */; };
+		50991037236EC94C00DF7064 /* readme.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5099102D236EC94A00DF7064 /* readme.txt */; };
+		50991038236EC94C00DF7064 /* m68kdasm.c in Sources */ = {isa = PBXBuildFile; fileRef = 5099102E236EC94A00DF7064 /* m68kdasm.c */; };
+		5099103A236EC94C00DF7064 /* m68kcpu.c in Sources */ = {isa = PBXBuildFile; fileRef = 50991033236EC94B00DF7064 /* m68kcpu.c */; };
+		5099103B236EC94C00DF7064 /* history.txt in Resources */ = {isa = PBXBuildFile; fileRef = 50991034236EC94B00DF7064 /* history.txt */; };
+		50991041236ECD7500DF7064 /* m68kops.c in Sources */ = {isa = PBXBuildFile; fileRef = 50991040236ECD7500DF7064 /* m68kops.c */; };
 		509CF4CD22083F9800C500F0 /* CPUPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509CF4CC22083F9800C500F0 /* CPUPanel.swift */; };
 		509CF4CF220847C600C500F0 /* InstrTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509CF4CE220847C600C500F0 /* InstrTableView.swift */; };
 		509CF4D12208487900C500F0 /* TraceTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509CF4D02208487900C500F0 /* TraceTableView.swift */; };
@@ -136,14 +142,6 @@
 		50C50B86220479E000D796DA /* BankTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C50B85220479E000D796DA /* BankTableView.swift */; };
 		50D263CC21F6377700FA167F /* A500ANSI.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50D263CB21F6377600FA167F /* A500ANSI.xib */; };
 		50D263CE21F6378100FA167F /* A1000ISO.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50D263CD21F6378000FA167F /* A1000ISO.xib */; };
-		50D2ADBA2207547500E32AB0 /* m68kcpu.c in Sources */ = {isa = PBXBuildFile; fileRef = 50D2ADB12207547300E32AB0 /* m68kcpu.c */; };
-		50D2ADBC2207547500E32AB0 /* history.txt in Resources */ = {isa = PBXBuildFile; fileRef = 50D2ADB32207547400E32AB0 /* history.txt */; };
-		50D2ADBD2207547500E32AB0 /* m68kdasm.c in Sources */ = {isa = PBXBuildFile; fileRef = 50D2ADB42207547400E32AB0 /* m68kdasm.c */; };
-		50D2ADBE2207547500E32AB0 /* readme.txt in Resources */ = {isa = PBXBuildFile; fileRef = 50D2ADB62207547400E32AB0 /* readme.txt */; };
-		50D2ADC6220754A100E32AB0 /* m68kopnz.c in Sources */ = {isa = PBXBuildFile; fileRef = 50D2ADC0220754A000E32AB0 /* m68kopnz.c */; };
-		50D2ADC7220754A100E32AB0 /* m68kopdm.c in Sources */ = {isa = PBXBuildFile; fileRef = 50D2ADC1220754A000E32AB0 /* m68kopdm.c */; };
-		50D2ADC9220754A100E32AB0 /* m68kopac.c in Sources */ = {isa = PBXBuildFile; fileRef = 50D2ADC3220754A000E32AB0 /* m68kopac.c */; };
-		50D2ADCA220754A100E32AB0 /* m68kops.c in Sources */ = {isa = PBXBuildFile; fileRef = 50D2ADC4220754A000E32AB0 /* m68kops.c */; };
 		50D375DF222C7C6B0040987C /* Blitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50D375DD222C7C6B0040987C /* Blitter.cpp */; };
 		50D7CDC42286E968002689F0 /* Joystick.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50D7CDC22286E968002689F0 /* Joystick.cpp */; };
 		50D9CD99236AF75800503B4D /* DMADebugController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50D9CD98236AF75800503B4D /* DMADebugController.swift */; };
@@ -326,6 +324,16 @@
 		509047B5230575E6009CEC1C /* SlowBlitter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SlowBlitter.cpp; sourceTree = "<group>"; };
 		50950ED622881B7A0073F755 /* ZorroManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ZorroManager.cpp; sourceTree = "<group>"; };
 		50950ED722881B7A0073F755 /* ZorroManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZorroManager.h; sourceTree = "<group>"; };
+		5099102C236EC94A00DF7064 /* m68kfpu.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = m68kfpu.c; sourceTree = "<group>"; };
+		5099102D236EC94A00DF7064 /* readme.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = readme.txt; sourceTree = "<group>"; };
+		5099102E236EC94A00DF7064 /* m68kdasm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = m68kdasm.c; sourceTree = "<group>"; };
+		50991030236EC94B00DF7064 /* m68kconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = m68kconf.h; sourceTree = "<group>"; };
+		50991031236EC94B00DF7064 /* m68k.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = m68k.h; sourceTree = "<group>"; };
+		50991032236EC94B00DF7064 /* m68kops.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = m68kops.h; sourceTree = "<group>"; };
+		50991033236EC94B00DF7064 /* m68kcpu.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = m68kcpu.c; sourceTree = "<group>"; };
+		50991034236EC94B00DF7064 /* history.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = history.txt; sourceTree = "<group>"; };
+		50991035236EC94B00DF7064 /* m68kcpu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = m68kcpu.h; sourceTree = "<group>"; };
+		50991040236ECD7500DF7064 /* m68kops.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = m68kops.c; sourceTree = "<group>"; };
 		509CF4CC22083F9800C500F0 /* CPUPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPUPanel.swift; sourceTree = "<group>"; };
 		509CF4CE220847C600C500F0 /* InstrTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstrTableView.swift; sourceTree = "<group>"; };
 		509CF4D02208487900C500F0 /* TraceTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceTableView.swift; sourceTree = "<group>"; };
@@ -367,18 +375,6 @@
 		50C50B85220479E000D796DA /* BankTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankTableView.swift; sourceTree = "<group>"; };
 		50D263CB21F6377600FA167F /* A500ANSI.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = A500ANSI.xib; sourceTree = "<group>"; };
 		50D263CD21F6378000FA167F /* A1000ISO.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = A1000ISO.xib; sourceTree = "<group>"; };
-		50D2ADB12207547300E32AB0 /* m68kcpu.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = m68kcpu.c; sourceTree = "<group>"; };
-		50D2ADB32207547400E32AB0 /* history.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = history.txt; sourceTree = "<group>"; };
-		50D2ADB42207547400E32AB0 /* m68kdasm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = m68kdasm.c; sourceTree = "<group>"; };
-		50D2ADB52207547400E32AB0 /* m68k.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = m68k.h; sourceTree = "<group>"; };
-		50D2ADB62207547400E32AB0 /* readme.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = readme.txt; sourceTree = "<group>"; };
-		50D2ADB72207547400E32AB0 /* m68kconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = m68kconf.h; sourceTree = "<group>"; };
-		50D2ADB82207547500E32AB0 /* m68kcpu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = m68kcpu.h; sourceTree = "<group>"; };
-		50D2ADC0220754A000E32AB0 /* m68kopnz.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = m68kopnz.c; sourceTree = "<group>"; };
-		50D2ADC1220754A000E32AB0 /* m68kopdm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = m68kopdm.c; sourceTree = "<group>"; };
-		50D2ADC3220754A000E32AB0 /* m68kopac.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = m68kopac.c; sourceTree = "<group>"; };
-		50D2ADC4220754A000E32AB0 /* m68kops.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = m68kops.c; sourceTree = "<group>"; };
-		50D2ADC5220754A100E32AB0 /* m68kops.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = m68kops.h; sourceTree = "<group>"; };
 		50D375DD222C7C6B0040987C /* Blitter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Blitter.cpp; sourceTree = "<group>"; };
 		50D375DE222C7C6B0040987C /* Blitter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Blitter.h; sourceTree = "<group>"; };
 		50D52442227878E900F8959D /* DiskTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskTypes.h; sourceTree = "<group>"; };
@@ -884,18 +880,16 @@
 		50D2ADBF2207547E00E32AB0 /* Musashi */ = {
 			isa = PBXGroup;
 			children = (
-				50D2ADC3220754A000E32AB0 /* m68kopac.c */,
-				50D2ADC1220754A000E32AB0 /* m68kopdm.c */,
-				50D2ADC0220754A000E32AB0 /* m68kopnz.c */,
-				50D2ADC4220754A000E32AB0 /* m68kops.c */,
-				50D2ADC5220754A100E32AB0 /* m68kops.h */,
-				50D2ADB32207547400E32AB0 /* history.txt */,
-				50D2ADB52207547400E32AB0 /* m68k.h */,
-				50D2ADB72207547400E32AB0 /* m68kconf.h */,
-				50D2ADB12207547300E32AB0 /* m68kcpu.c */,
-				50D2ADB82207547500E32AB0 /* m68kcpu.h */,
-				50D2ADB42207547400E32AB0 /* m68kdasm.c */,
-				50D2ADB62207547400E32AB0 /* readme.txt */,
+				50991040236ECD7500DF7064 /* m68kops.c */,
+				50991034236EC94B00DF7064 /* history.txt */,
+				50991031236EC94B00DF7064 /* m68k.h */,
+				50991030236EC94B00DF7064 /* m68kconf.h */,
+				50991033236EC94B00DF7064 /* m68kcpu.c */,
+				50991035236EC94B00DF7064 /* m68kcpu.h */,
+				5099102E236EC94A00DF7064 /* m68kdasm.c */,
+				5099102C236EC94A00DF7064 /* m68kfpu.c */,
+				50991032236EC94B00DF7064 /* m68kops.h */,
+				5099102D236EC94A00DF7064 /* readme.txt */,
 			);
 			path = Musashi;
 			sourceTree = "<group>";
@@ -1031,19 +1025,19 @@
 				50BBE08B21F5EB9B0099BBBB /* A1000ANSI.xib in Resources */,
 				508FDFC821EA1FF10043D0E9 /* Preferences.xib in Resources */,
 				50DED6AF2202EBA200B8195F /* Inspector.xib in Resources */,
-				50D2ADBC2207547500E32AB0 /* history.txt in Resources */,
 				508FDFC421EA1FF10043D0E9 /* ExportDiskDialog.xib in Resources */,
+				50991037236EC94C00DF7064 /* readme.txt in Resources */,
 				50B14C1F21EB8445002E32A6 /* drive_click.aiff in Resources */,
 				5019605B231257270051B669 /* Monitor.xib in Resources */,
 				50D263CC21F6377700FA167F /* A500ANSI.xib in Resources */,
 				50B14C1C21EB8445002E32A6 /* 1541_door_closed_2.aiff in Resources */,
 				508FDFC721EA1FF10043D0E9 /* DiskMountDialog.xib in Resources */,
 				50B14C2321EB8445002E32A6 /* 1541_door_open_1.aiff in Resources */,
-				50D2ADBE2207547500E32AB0 /* readme.txt in Resources */,
 				508FDFBE21EA1FF10043D0E9 /* MyDocument.xib in Resources */,
 				508FDFC521EA1FF10043D0E9 /* A500ISO.xib in Resources */,
 				50D9CD9B236AF89A00503B4D /* DMADebugDialog.xib in Resources */,
 				50D263CE21F6378100FA167F /* A1000ISO.xib in Resources */,
+				5099103B236EC94C00DF7064 /* history.txt in Resources */,
 				50B14C2021EB8445002E32A6 /* 1541_track_change_0.aiff in Resources */,
 				508FDFC021EA1FF10043D0E9 /* SnapshotDialog.xib in Resources */,
 				50B14C1D21EB8445002E32A6 /* 1541_power_on_0.aiff in Resources */,
@@ -1121,7 +1115,6 @@
 				505A3A3A21F4996400132020 /* sse_utils.cpp in Sources */,
 				502BB09E229C00C800A8DFCD /* CompatibilityPrefs.swift in Sources */,
 				50C50B86220479E000D796DA /* BankTableView.swift in Sources */,
-				50D2ADC6220754A100E32AB0 /* m68kopnz.c in Sources */,
 				508FE05A21EA22CC0043D0E9 /* DialogController.swift in Sources */,
 				504F9658220B2CEE005F8AB7 /* BreakTableView.swift in Sources */,
 				5027418F2297CACF0038E5AF /* Colors.cpp in Sources */,
@@ -1138,19 +1131,18 @@
 				50B35B6222B2382E001A9C17 /* SerialPort.cpp in Sources */,
 				507FD926221CBFCD00B34DA7 /* CopperPanel.swift in Sources */,
 				50C2DE4421F756900043FD1B /* MyControllerStatusBar.swift in Sources */,
+				50991036236EC94C00DF7064 /* m68kfpu.c in Sources */,
 				509CF4CD22083F9800C500F0 /* CPUPanel.swift in Sources */,
 				508FDFD921EA20510043D0E9 /* MetalViewEvents.swift in Sources */,
 				50D375DF222C7C6B0040987C /* Blitter.cpp in Sources */,
 				508FDFAC21EA1FBC0043D0E9 /* TOD.cpp in Sources */,
 				50B14C0D21EB3708002E32A6 /* HardwareComponent.cpp in Sources */,
-				50D2ADBA2207547500E32AB0 /* m68kcpu.c in Sources */,
 				5043F6C5221972F90047CC30 /* MyToolbar.swift in Sources */,
 				50384C8621FC6B66006E7748 /* Snapshot.cpp in Sources */,
 				502F7DCE2221706000AEEC65 /* Copper.cpp in Sources */,
 				508FE02D21EA227B0043D0E9 /* MyAppDelegate.swift in Sources */,
 				508FE02E21EA227B0043D0E9 /* Alerts.swift in Sources */,
 				508FE02921EA227B0043D0E9 /* MyControllerTouchBar.swift in Sources */,
-				50D2ADBD2207547500E32AB0 /* m68kdasm.c in Sources */,
 				508FE01121EA227B0043D0E9 /* MyControllerToolbar.swift in Sources */,
 				508FE05821EA22CC0043D0E9 /* SnapshotController.swift in Sources */,
 				508FE05221EA22CC0043D0E9 /* RomDropView.swift in Sources */,
@@ -1167,13 +1159,12 @@
 				50DED6B12202EC3100B8195F /* Inspector.swift in Sources */,
 				509F7F1A21EDDF4F00A530E4 /* BootRom.cpp in Sources */,
 				508FE05121EA22CC0043D0E9 /* HardwarePrefs.swift in Sources */,
-				50D2ADCA220754A100E32AB0 /* m68kops.c in Sources */,
 				508FE03821EA22C30043D0E9 /* Notifications.swift in Sources */,
 				508FE02421EA227B0043D0E9 /* GamePadManager.swift in Sources */,
-				50D2ADC9220754A100E32AB0 /* m68kopac.c in Sources */,
 				50B14C0721EB218E002E32A6 /* AmigaObject.cpp in Sources */,
 				508E7F952206CDBD00F7D88C /* CPU.cpp in Sources */,
 				50F0BD2622AF883C001F4616 /* UART.cpp in Sources */,
+				50991041236ECD7500DF7064 /* m68kops.c in Sources */,
 				508FE02F21EA227B0043D0E9 /* AudioEngine.swift in Sources */,
 				50E79BE9232D123000D296FB /* SubComponent.cpp in Sources */,
 				50E204EA2295A3F20082B63D /* DmaDebugger.cpp in Sources */,
@@ -1182,11 +1173,13 @@
 				50950ED822881B7A0073F755 /* ZorroManager.cpp in Sources */,
 				508FE04F21EA22CC0043D0E9 /* EmulatorPrefs.swift in Sources */,
 				50F5A84E2214112F00AD5611 /* PaulaPanel.swift in Sources */,
+				5099103A236EC94C00DF7064 /* m68kcpu.c in Sources */,
 				502EFD0A2248EC0200F0E118 /* EventPanel.swift in Sources */,
 				5064851121EC7A1700FC4AC3 /* Memory.cpp in Sources */,
 				508FE01B21EA227B0043D0E9 /* MyDocument.swift in Sources */,
 				508FDFDB21EA20510043D0E9 /* Shaders.swift in Sources */,
 				508FE01D21EA227B0043D0E9 /* UserDefaults.swift in Sources */,
+				50991038236EC94C00DF7064 /* m68kdasm.c in Sources */,
 				509CF4CF220847C600C500F0 /* InstrTableView.swift in Sources */,
 				508FE04E21EA22CC0043D0E9 /* RomPrefs.swift in Sources */,
 				507653CB2216F91E001D26E9 /* AgnusPanel.swift in Sources */,
@@ -1194,7 +1187,6 @@
 				50ECF98622B153FB007B3DE7 /* ExtRom.cpp in Sources */,
 				508FE05621EA22CC0043D0E9 /* PreferencesController.swift in Sources */,
 				505A215022869FF10016EA21 /* AudioFilter.cpp in Sources */,
-				50D2ADC7220754A100E32AB0 /* m68kopdm.c in Sources */,
 				508FE05321EA22CC0043D0E9 /* VideoPrefs.swift in Sources */,
 				508833EE21F0D21B009890EA /* ADFFile.cpp in Sources */,
 				508FE02321EA227B0043D0E9 /* KeyboardController.swift in Sources */,

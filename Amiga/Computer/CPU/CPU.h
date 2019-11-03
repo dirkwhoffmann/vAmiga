@@ -35,6 +35,7 @@
 extern "C" {
 #include "m68k.h"
 #include "m68kcpu.h"
+#include "m68kops.h"
 }
 
 extern "C" int interrupt_handler(int irqLevel);
