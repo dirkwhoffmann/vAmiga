@@ -99,7 +99,6 @@ Paula::pokeINTREQ(uint16_t value)
     debug(INTREG_DEBUG, "pokeINTREQ(%X)\n", value);
 
     agnus.recordRegisterChange(DMA_CYCLES(2), REG_INTREQ, value);
-    // setINTREQ(value);
 }
 
 void
@@ -108,7 +107,6 @@ Paula::pokeINTENA(uint16_t value)
     debug(INTREG_DEBUG, "pokeINTENA(%X)\n", value);
 
     agnus.recordRegisterChange(DMA_CYCLES(2), REG_INTENA, value);
-    // setINTENA(value);
 }
 
 void
@@ -133,6 +131,7 @@ Paula::setINTREQ(bool setclr, uint16_t value)
 
     if (setclr) intreq |= value; else intreq &= ~value;
     // debug("new intreq : %x\n",intreq);
+
     checkInterrupt();
 }
 
@@ -386,5 +385,6 @@ Paula::interruptLevel()
 void
 Paula::checkInterrupt()
 {
+    // agnus.recordRegisterChange(DMA_CYCLES(25), REG_IRQLEVEL, interruptLevel());
     cpu.setIrqLevel(interruptLevel());
 }

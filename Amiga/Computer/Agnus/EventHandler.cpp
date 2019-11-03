@@ -521,6 +521,7 @@ Agnus::serviceREGEvent(Cycle until)
 
             case REG_INTREQ: paula.setINTREQ(value); break;
             case REG_INTENA: paula.setINTENA(value); break;
+            case REG_IRQLEVEL: cpu.setIrqLevel(value); break;
             case REG_BPLCON0_AGNUS: setBPLCON0(bplcon0, value); break;
             case REG_BPLCON0_DENISE: denise.setBPLCON0(denise.bplcon0, value); break;
             case REG_BPLCON1: denise.setBPLCON1(value); break;
