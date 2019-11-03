@@ -30,6 +30,10 @@
 #ifndef M68K__HEADER
 #define M68K__HEADER
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef ARRAY_LENGTH
 #define ARRAY_LENGTH(x)         (sizeof(x) / sizeof(x[0]))
 #endif
@@ -45,6 +49,7 @@
 
 /* Import the configuration for this build */
 #include "m68kconf.h"
+
 
 
 /* ======================================================================== */
@@ -387,5 +392,9 @@ unsigned int m68k_disassemble_raw(char* str_buff, unsigned int pc, const unsigne
 /* ======================================================================== */
 /* ============================== END OF FILE ============================= */
 /* ======================================================================== */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* M68K__HEADER */

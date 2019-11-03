@@ -1,7 +1,7 @@
 #include <math.h>
 #include <stdarg.h>
 #include <stdio.h>
-// #include "m68kcpu.h"
+#include "m68kcpu.h"
 
 extern void exit(int);
 
@@ -51,7 +51,7 @@ INLINE void SET_CONDITION_CODES(fp_reg reg)
 	}
 }
 
-static INLINE int TEST_CONDITION(int condition)
+INLINE int TEST_CONDITION(int condition)
 {
 	int n = (REG_FPSR & FPCC_N) != 0;
 	int z = (REG_FPSR & FPCC_Z) != 0;

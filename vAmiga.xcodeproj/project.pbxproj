@@ -113,7 +113,7 @@
 		50991038236EC94C00DF7064 /* m68kdasm.c in Sources */ = {isa = PBXBuildFile; fileRef = 5099102E236EC94A00DF7064 /* m68kdasm.c */; };
 		5099103A236EC94C00DF7064 /* m68kcpu.c in Sources */ = {isa = PBXBuildFile; fileRef = 50991033236EC94B00DF7064 /* m68kcpu.c */; };
 		5099103B236EC94C00DF7064 /* history.txt in Resources */ = {isa = PBXBuildFile; fileRef = 50991034236EC94B00DF7064 /* history.txt */; };
-		50991041236ECD7500DF7064 /* m68kops.c in Sources */ = {isa = PBXBuildFile; fileRef = 50991040236ECD7500DF7064 /* m68kops.c */; };
+		50991044236F0BC600DF7064 /* m68kops.c in Sources */ = {isa = PBXBuildFile; fileRef = 50991043236F0BC600DF7064 /* m68kops.c */; };
 		509CF4CD22083F9800C500F0 /* CPUPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509CF4CC22083F9800C500F0 /* CPUPanel.swift */; };
 		509CF4CF220847C600C500F0 /* InstrTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509CF4CE220847C600C500F0 /* InstrTableView.swift */; };
 		509CF4D12208487900C500F0 /* TraceTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509CF4D02208487900C500F0 /* TraceTableView.swift */; };
@@ -329,11 +329,11 @@
 		5099102E236EC94A00DF7064 /* m68kdasm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = m68kdasm.c; sourceTree = "<group>"; };
 		50991030236EC94B00DF7064 /* m68kconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = m68kconf.h; sourceTree = "<group>"; };
 		50991031236EC94B00DF7064 /* m68k.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = m68k.h; sourceTree = "<group>"; };
-		50991032236EC94B00DF7064 /* m68kops.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = m68kops.h; sourceTree = "<group>"; };
 		50991033236EC94B00DF7064 /* m68kcpu.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = m68kcpu.c; sourceTree = "<group>"; };
 		50991034236EC94B00DF7064 /* history.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = history.txt; sourceTree = "<group>"; };
 		50991035236EC94B00DF7064 /* m68kcpu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = m68kcpu.h; sourceTree = "<group>"; };
-		50991040236ECD7500DF7064 /* m68kops.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = m68kops.c; sourceTree = "<group>"; };
+		50991042236F0BBE00DF7064 /* m68kops.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = m68kops.h; sourceTree = "<group>"; };
+		50991043236F0BC600DF7064 /* m68kops.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = m68kops.c; sourceTree = "<group>"; };
 		509CF4CC22083F9800C500F0 /* CPUPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPUPanel.swift; sourceTree = "<group>"; };
 		509CF4CE220847C600C500F0 /* InstrTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstrTableView.swift; sourceTree = "<group>"; };
 		509CF4D02208487900C500F0 /* TraceTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceTableView.swift; sourceTree = "<group>"; };
@@ -880,7 +880,8 @@
 		50D2ADBF2207547E00E32AB0 /* Musashi */ = {
 			isa = PBXGroup;
 			children = (
-				50991040236ECD7500DF7064 /* m68kops.c */,
+				50991042236F0BBE00DF7064 /* m68kops.h */,
+				50991043236F0BC600DF7064 /* m68kops.c */,
 				50991034236EC94B00DF7064 /* history.txt */,
 				50991031236EC94B00DF7064 /* m68k.h */,
 				50991030236EC94B00DF7064 /* m68kconf.h */,
@@ -888,7 +889,6 @@
 				50991035236EC94B00DF7064 /* m68kcpu.h */,
 				5099102E236EC94A00DF7064 /* m68kdasm.c */,
 				5099102C236EC94A00DF7064 /* m68kfpu.c */,
-				50991032236EC94B00DF7064 /* m68kops.h */,
 				5099102D236EC94A00DF7064 /* readme.txt */,
 			);
 			path = Musashi;
@@ -1164,7 +1164,7 @@
 				50B14C0721EB218E002E32A6 /* AmigaObject.cpp in Sources */,
 				508E7F952206CDBD00F7D88C /* CPU.cpp in Sources */,
 				50F0BD2622AF883C001F4616 /* UART.cpp in Sources */,
-				50991041236ECD7500DF7064 /* m68kops.c in Sources */,
+				50991044236F0BC600DF7064 /* m68kops.c in Sources */,
 				508FE02F21EA227B0043D0E9 /* AudioEngine.swift in Sources */,
 				50E79BE9232D123000D296FB /* SubComponent.cpp in Sources */,
 				50E204EA2295A3F20082B63D /* DmaDebugger.cpp in Sources */,

@@ -204,7 +204,7 @@
  */
 #ifndef INLINE
 // #define INLINE static __inline__
-#define INLINE inline
+#define INLINE static inline
 #endif /* INLINE */
 
 #endif /* M68K_COMPILE_FOR_MAME */

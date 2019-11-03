@@ -30,6 +30,10 @@
 #ifndef M68KCPU__HEADER
 #define M68KCPU__HEADER
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "m68k.h"
 #include <limits.h>
 
@@ -971,6 +975,7 @@ INLINE uint m68ki_get_ea_pcix(void);
 INLINE uint m68ki_get_ea_ix(uint An);
 
 /* Operand fetching */
+/*
 INLINE uint OPER_AY_AI_8(void);
 INLINE uint OPER_AY_AI_16(void);
 INLINE uint OPER_AY_AI_32(void);
@@ -1018,6 +1023,7 @@ INLINE uint OPER_PCDI_32(void);
 INLINE uint OPER_PCIX_8(void);
 INLINE uint OPER_PCIX_16(void);
 INLINE uint OPER_PCIX_32(void);
+*/
 
 /* Stack operations */
 INLINE void m68ki_push_16(uint value);
@@ -2078,5 +2084,9 @@ INLINE void m68ki_check_interrupts(void)
 /* ======================================================================== */
 /* ============================== END OF FILE ============================= */
 /* ======================================================================== */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* M68KCPU__HEADER */
