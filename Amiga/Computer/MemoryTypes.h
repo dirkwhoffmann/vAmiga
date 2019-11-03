@@ -34,6 +34,42 @@ MemorySource;
 
 static inline bool isMemorySource(long value) { return value >= 0 && value <= MEM_EXTROM; }
 
+// Known Roms
+typedef enum
+{
+    ROM_UNKNOWN,
+
+    // Boot Roms
+    ROM_BOOT_A1000_1985_8K,
+    ROM_BOOT_A1000_1985_64K,
+
+    // Kickstart Roms
+    ROM_AROS,
+
+    ROM_KICK12_33_180,
+    ROM_KICK12_33_180_O,
+
+    ROM_KICK13_35_5,
+    ROM_KICK13_35_5_B,
+    ROM_KICK13_35_5_B2,
+    ROM_KICK13_35_5_B3,
+    ROM_KICK13_35_5_H,
+    ROM_KICK13_35_5_O,
+
+    ROM_KICK204_37_175,
+    ROM_KICK31_40_63,
+    ROM_KICK31_40_63_A,
+    ROM_KICK31_40_63_B,
+
+    ROM_KICK314_46_143,
+
+    ROM_DIAG11,
+    ROM_LOGICA20
+}
+RomRevision;
+
+static inline bool isRomRevision(long value) { return value >= 0 && value <= ROM_LOGICA20; }
+
 /* Poke source.
  * Some poke methods need to know who called them.
  */
