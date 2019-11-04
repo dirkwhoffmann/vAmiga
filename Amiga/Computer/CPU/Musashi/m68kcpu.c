@@ -46,7 +46,6 @@ extern void m68ki_build_opcode_table(void);
 
 #include "m68kops.h"
 #include "m68kcpu.h"
-// #include "m68kfpu.c"
 
 /* ======================================================================== */
 /* ================================= DATA ================================= */
@@ -473,6 +472,8 @@ static void default_reset_instr_callback(void)
 /* Called when a cmpi.l #v, dn instruction is executed */
 static void default_cmpild_instr_callback(unsigned int val, int reg)
 {
+	(void)val;
+	(void)reg;
 }
 
 /* Called when a rte instruction is executed */
@@ -489,6 +490,7 @@ static int default_tas_instr_callback(void)
 /* Called when an illegal instruction is encountered */
 static int default_illg_instr_callback(int opcode)
 {
+	(void)opcode;
 	return 0; // not handled : exception will occur
 }
 
@@ -509,6 +511,7 @@ static void default_set_fc_callback(unsigned int new_fc)
 /* Called every instruction cycle prior to execution */
 static void default_instr_hook_callback(unsigned int pc)
 {
+	(void)pc;
 }
 
 
@@ -910,6 +913,9 @@ void m68k_init(void)
 	m68k_set_instr_hook_callback(NULL);
 }
 
+extern uint32_t read_sp_on_reset(void);
+extern uint32_t read_pc_on_reset(void);
+
 /* Pulse the RESET line on the CPU */
 void m68k_pulse_reset(void)
 {
@@ -940,8 +946,10 @@ void m68k_pulse_reset(void)
 
 	/* Read the initial stack pointer and program counter */
 	m68ki_jump(0);
-	REG_SP = m68ki_read_imm_32();
-	REG_PC = m68ki_read_imm_32();
+	// REG_SP = m68ki_read_imm_32();
+	// REG_PC = m68ki_read_imm_32();
+    REG_SP = read_sp_on_reset();
+    REG_PC = read_pc_on_reset();
 	m68ki_jump(REG_PC);
 
 	CPU_RUN_MODE = RUN_MODE_NORMAL;

@@ -51,7 +51,6 @@ extern "C" {
 #include "m68kconf.h"
 
 
-
 /* ======================================================================== */
 /* ============================ GENERAL DEFINES =========================== */
 
@@ -396,5 +395,6 @@ unsigned int m68k_disassemble_raw(char* str_buff, unsigned int pc, const unsigne
 #ifdef __cplusplus
 }
 #endif
+
 
 #endif /* M68K__HEADER */
