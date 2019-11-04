@@ -20,7 +20,7 @@ Agnus::Agnus(Amiga& ref) : SubComponent(ref)
         &dmaDebugger
     };
 
-    config.type = AGNUS_8372;
+    config.revision = AGNUS_8372;
 
     initLookupTables();
 }
@@ -145,10 +145,12 @@ Agnus::initDasEventTable()
 }
 
 void
-Agnus::setType(AgnusType type)
+Agnus::setRevision(AgnusRevision revision)
 {
-    assert(isAgnusType(type));
-    config.type = type;
+    debug("setRevision(%d)\n", revision);
+
+    assert(isAgnusRevision(revision));
+    config.revision = revision;
 }
 
 void
@@ -1191,10 +1193,11 @@ Agnus::peekVPOSR()
     assert((result & 0x7FFE) == 0);
 
     // Add indentification bits
-    switch (config.type) {
+    switch (config.revision) {
 
         case AGNUS_8367: id = 0x00; break;
         case AGNUS_8372: id = 0x20; break;
+        case AGNUS_8375: id = 0x20; break; // ??? CHECK ON REAL MACHINE
         default: assert(false);
     }
     result |= (id << 8);

@@ -47,6 +47,8 @@ inline const char *modelName(AmigaModel model)
 typedef enum : long
 {
     VA_AMIGA_MODEL,
+    VA_AGNUS_REVISION,
+    VA_DENISE_REVISION,
     VA_KB_LAYOUT,
     VA_CHIP_RAM,
     VA_SLOW_RAM,
@@ -95,6 +97,8 @@ typedef struct
 {
     AmigaModel model;
     bool realTimeClock;
+    AgnusRevision agnusRevision;
+    DeniseRevision deniseRevision;
     long layout;
     FilterActivation filterActivation;
     FilterType filterType;

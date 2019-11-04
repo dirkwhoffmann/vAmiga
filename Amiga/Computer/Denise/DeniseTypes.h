@@ -18,6 +18,27 @@
 
 typedef enum : long
 {
+    DENISE_8362R8 // OCS Denise
+}
+DeniseRevision;
+
+inline bool isDeniseRevision(long value)
+{
+    return value == DENISE_8362R8;
+}
+
+inline const char *DeniseRevisionName(DeniseRevision type)
+{
+    assert(isDeniseRevision(type));
+
+    switch (type) {
+        case DENISE_8362R8: return "DENISE_8362R8";
+        default:            return "???";
+    }
+}
+
+typedef enum : long
+{
     COLOR_PALETTE = 0,
     BLACK_WHITE_PALETTE,
     PAPER_WHITE_PALETTE,
@@ -70,6 +91,9 @@ SpriteInfo;
 
 typedef struct
 {
+    // Emulated chip model
+    DeniseRevision revision;
+
     // Turns sprite emulation on or off
     bool emulateSprites;
 

@@ -21,6 +21,8 @@ extension PreferencesController {
 
         // Machine
         hwAmigaModelPopup.selectItem(withTag: config.model.rawValue)
+        hwAgnusRevisionPopup.selectItem(withTag: config.agnusRevision.rawValue)
+        hwDeniseRevisionPopup.selectItem(withTag: config.deniseRevision.rawValue)
         hwLayoutPopup.selectItem(withTag: config.layout)
         hwRealTimeClock.state = config.realTimeClock ? .on : .off
         
@@ -64,7 +66,19 @@ extension PreferencesController {
         amigaProxy?.configureModel(sender.selectedTag())
         refresh()
     }
-    
+
+    @IBAction func hwAgnusRevAction(_ sender: NSPopUpButton!) {
+
+        amigaProxy?.configure(VA_AGNUS_REVISION, value: sender.selectedTag())
+        refresh()
+    }
+
+    @IBAction func hwDeniseRevAction(_ sender: NSPopUpButton!) {
+
+        amigaProxy?.configure(VA_DENISE_REVISION, value: sender.selectedTag())
+        refresh()
+    }
+
     @IBAction func hwLayoutAction(_ sender: NSPopUpButton!) {
         
         amigaProxy?.configureLayout(sender.selectedTag())

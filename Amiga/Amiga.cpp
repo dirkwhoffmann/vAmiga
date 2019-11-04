@@ -162,6 +162,8 @@ Amiga::getConfig()
     
     config.model = model;
     config.realTimeClock = realTimeClock;
+    config.agnusRevision = agnus.getRevision();
+    config.deniseRevision = denise.getRevision();
     config.layout = keyboard.layout;
     config.filterActivation = paula.audioUnit.getFilterActivation();
     config.filterType = paula.audioUnit.getFilterType();
@@ -242,23 +244,33 @@ Amiga::configure(ConfigOption option, long value)
             if (current.model == value) return true;
             model = (AmigaModel)value;
             
-            // Apply model specific config changes
-            switch(model) {
-                case AMIGA_1000:
-                    agnus.setType(AGNUS_8367);
-                    break;
-                case AMIGA_500:
-                    agnus.setType(AGNUS_8372);
-                    break;
-                case AMIGA_2000:
-                    agnus.setType(AGNUS_8372);
-                    realTimeClock = true;
-                    break;
-            }
-
             mem.updateMemSrcTable();
             break;
-        
+
+        case VA_AGNUS_REVISION:
+
+            if (!isAgnusRevision(value)) {
+                 warn("Invalid Agnus revision: %d\n", value);
+                warn("       Valid values: %d, %d, %d\n", AGNUS_8367, AGNUS_8372, AGNUS_8375);
+                 return false;
+             }
+
+            if (current.agnusRevision == value) return true;
+            agnus.setRevision((AgnusRevision)value);
+            break;
+
+        case VA_DENISE_REVISION:
+
+            if (!isDeniseRevision(value)) {
+                warn("Invalid Denise revision: %d\n", value);
+                warn("       Valid values: %d, %d, %d\n", DENISE_8362R8);
+                return false;
+            }
+
+            if (current.deniseRevision == value) return true;
+            denise.setRevision((DeniseRevision)value);
+            break;
+
         case VA_KB_LAYOUT:
             
             if (current.layout == value) return true;

@@ -601,7 +601,9 @@ public:
     //
 
     AgnusConfig getConfig() { return config; }
-    void setType(AgnusType type);
+
+    AgnusRevision getRevision() { return config.revision; }
+    void setRevision(AgnusRevision type);
 
 
     //

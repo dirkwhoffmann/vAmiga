@@ -745,8 +745,10 @@ extension Keys {
     
     // Machine
     static let amigaModel         = "VAMIGAAmigaModelKey"
+    static let agnusRev           = "VAMIGAAgnusRevKey"
+    static let deniseRev          = "VAMIGADeniseRevKey"
     static let layout             = "VAMIGAKeyboardLayoutKey"
-    
+
     // Memory
     static let chipRam            = "VAMIGAChipRamKey"
     static let slowRam            = "VAMIGASlowRamKey"
@@ -774,6 +776,8 @@ extension Defaults {
     struct A500 {
         
         static let amigaModel        = AMIGA_500
+        static let agnusRevision     = AGNUS_8372
+        static let deniseRevision    = DENISE_8362R8
         static let layout            = Layout.us
         
         static let chipRam           = 512
@@ -797,6 +801,8 @@ extension Defaults {
     struct A1000 {
         
         static let amigaModel        = AMIGA_1000
+        static let agnusRevision     = AGNUS_8367
+        static let deniseRevision    = DENISE_8362R8
         static let layout            = Layout.us
         
         static let chipRam           = 256
@@ -820,6 +826,8 @@ extension Defaults {
     struct A2000 {
         
         static let amigaModel        = AMIGA_2000
+        static let agnusRevision     = AGNUS_8375
+        static let deniseRevision    = DENISE_8362R8
         static let layout            = Layout.us
         
         static let chipRam           = 512
@@ -850,6 +858,8 @@ extension MyController {
         let dictionary: [String: Any] = [
             
             Keys.amigaModel: defaultModel.amigaModel.rawValue,
+            Keys.agnusRev: defaultModel.agnusRevision.rawValue,
+            Keys.deniseRev: defaultModel.deniseRevision.rawValue,
             Keys.layout: defaultModel.layout.rawValue,
             
             Keys.chipRam: defaultModel.chipRam,
@@ -879,6 +889,8 @@ extension MyController {
         let defaults = UserDefaults.standard
 
         let keys = [Keys.amigaModel,
+                    Keys.agnusRev,
+                    Keys.deniseRev,
                     Keys.layout,
                     
                     Keys.chipRam,
@@ -911,6 +923,8 @@ extension MyController {
         amiga.suspend()
         
         amiga.configureModel(defaults.integer(forKey: Keys.amigaModel))
+        amiga.configure(VA_AGNUS_REVISION, value: defaults.integer(forKey: Keys.agnusRev))
+        amiga.configure(VA_DENISE_REVISION, value: defaults.integer(forKey: Keys.deniseRev))
         amiga.configureLayout(defaults.integer(forKey: Keys.layout))
     
         amiga.configureChipMemory(defaults.integer(forKey: Keys.chipRam))
@@ -940,6 +954,8 @@ extension MyController {
         let dc = config.diskController
 
         defaults.set(config.model.rawValue, forKey: Keys.amigaModel)
+        defaults.set(config.agnusRevision.rawValue, forKey: Keys.agnusRev)
+        defaults.set(config.deniseRevision.rawValue, forKey: Keys.deniseRev)
         defaults.set(config.layout, forKey: Keys.layout)
 
         defaults.set(config.mem.chipRamSize / 1024, forKey: Keys.chipRam)

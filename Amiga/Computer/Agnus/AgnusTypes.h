@@ -15,30 +15,33 @@
 // Emulated model
 typedef enum : long
 {
-    AGNUS_8367, // Used if an A1000 is emulated
-    AGNUS_8372  // Used if an A500 or A2000 is emulated
+    AGNUS_8367, // OCS Agnus
+    AGNUS_8372, // ECS Agnus (up to 1MB Chip Ram)
+    AGNUS_8375  // ECS Agnus (up to 2MB Chip Ram)
 }
-AgnusType;
+AgnusRevision;
 
-inline bool isAgnusType(long value)
+inline bool isAgnusRevision(long value)
 {
-    return value >= AGNUS_8367 && value <= AGNUS_8372;
+    return value >= AGNUS_8367 && value <= AGNUS_8375;
 }
 
-inline const char *AgnusTypeName(AgnusType type)
+inline const char *AgnusRevisionName(AgnusRevision type)
 {
-    assert(isAgnusType(type));
+    assert(isAgnusRevision(type));
 
     switch (type) {
         case AGNUS_8367: return "AGNUS_8367";
         case AGNUS_8372: return "AGNUS_8372";
+        case AGNUS_8375: return "AGNUS_8375";
         default:         return "???";
     }
 }
 
 typedef struct
 {
-    AgnusType type;
+    // Emulated chip model
+    AgnusRevision revision;
 }
 AgnusConfig;
 

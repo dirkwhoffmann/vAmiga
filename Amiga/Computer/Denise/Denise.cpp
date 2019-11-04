@@ -27,6 +27,15 @@ Denise::Denise(Amiga& ref) : SubComponent(ref)
 }
 
 void
+Denise::setRevision(DeniseRevision revision)
+{
+    debug("setRevision(%d)\n", revision);
+
+    assert(isDeniseRevision(revision));
+    config.revision = revision;
+}
+
+void
 Denise::_powerOn()
 {
 }

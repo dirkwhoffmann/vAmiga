@@ -44,6 +44,8 @@ class PreferencesController: DialogController {
     
     // Machine
     @IBOutlet weak var hwAmigaModelPopup: NSPopUpButton!
+    @IBOutlet weak var hwAgnusRevisionPopup: NSPopUpButton!
+    @IBOutlet weak var hwDeniseRevisionPopup: NSPopUpButton!
     @IBOutlet weak var hwLayoutPopup: NSPopUpButton!
     @IBOutlet weak var hwRealTimeClock: NSButton!
 

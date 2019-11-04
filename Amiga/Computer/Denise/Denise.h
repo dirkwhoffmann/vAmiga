@@ -325,6 +325,9 @@ public:
 
     DeniseConfig getConfig() { return config; }
 
+    DeniseRevision getRevision() { return config.revision; }
+    void setRevision(DeniseRevision type);
+
     bool getEmulateSprites() { return config.emulateSprites; }
     void setEmulateSprites(bool value) { config.emulateSprites = value; }
     
