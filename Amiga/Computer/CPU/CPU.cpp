@@ -590,11 +590,15 @@ Cycle
 CPU::executeInstruction()
 {
     if (actions) {
-        if (actions & CPU_SET_IRQ_LEVEL) {
+
+        // Check action flags
+        if (actions & CPU_SET_IRQ_LEVEL1) {
             debug(INT_DEBUG, "Changing IRQ level to %d\n", irqLevel);
             m68k_set_irq(irqLevel);
-            actions &= ~CPU_SET_IRQ_LEVEL;
         }
+
+        // Shift action flags
+        actions = (actions << 1) & CPU_DELAY_MASK;
     }
 
     if (waitStates) {
@@ -616,7 +620,7 @@ CPU::setIrqLevel(int level)
         debug(INT_DEBUG, "IRQ level changed from %d to %d\n", irqLevel, level);
 
         irqLevel = level;
-        actions |= CPU_SET_IRQ_LEVEL;
+        actions |= CPU_SET_IRQ_LEVEL0;
     }
 }
 
