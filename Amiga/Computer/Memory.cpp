@@ -41,38 +41,26 @@ Memory::dealloc()
 void
 Memory::_powerOn()
 {
-    switch (amiga.getConfig().model) {
+    // Check if a Boot Rom or a Kickstart Rom is present
+    if (hasKickRom()) {
 
-        case AMIGA_1000:
+         // Lock the Rom
+         kickIsWritable = false;
 
-            // Emulate a WOM (Write Once Memory)
-            eraseKickRom();
-            kickIsWritable = true;
+    } else {
 
-            // Remove any Extended ROM if present
-            deleteExtRom();
+        // There must be a Boot Rom then
+        assert(hasBootRom());
 
-            break;
+        // Make the ROM a WOM (Write Once Memory)
+        eraseKickRom();
+        kickIsWritable = true;
 
-        case AMIGA_500:
-        case AMIGA_2000:
-
-            // Emulate a ROM (Read Only Memory)
-            kickIsWritable = false;
-
-            break;
-    }
-    /*
-    // Make Rom writable if an A1000 is emulated
-    kickIsWritable = amiga.getConfig().model == AMIGA_1000;
-
-    // Remove Extended Rom if an A1000 is emulated.
-    if (hasExtRom() && amiga.getConfig().model == AMIGA_1000) {
+        // Remove any Extended ROM if present
         deleteExtRom();
     }
-    */
 
-    // Fill the RAM with the proper startup pattern
+    // Fill RAM with the proper startup pattern
     initializeRam();
 
     // Set up the memory lookup table
@@ -1806,10 +1794,6 @@ Memory::pokeKick16(uint32_t addr, uint16_t value)
     // debug("pokeKick16(%X, %X)\n", addr, value);
 
     if (kickIsWritable) {
-
-        // Make sure we're emulating an A1000
-        assert(amiga.getConfig().model == AMIGA_1000);
-
         WRITE_KICK_16(addr, value);
     }
 }
