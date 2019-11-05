@@ -134,17 +134,8 @@ struct AmigaFileWrapper;
 - (BOOL) configure:(ConfigOption)option value:(NSInteger)value;
 - (BOOL) configure:(ConfigOption)option enable:(BOOL)value;
 - (BOOL) configureModel:(NSInteger)model;
-/*
-- (BOOL) configureLayout:(NSInteger)value;
-- (BOOL) configureChipMemory:(NSInteger)size;
-- (BOOL) configureSlowMemory:(NSInteger)size;
-- (BOOL) configureFastMemory:(NSInteger)size;
-- (void) configureRealTimeClock:(BOOL)value;
- */
 - (BOOL) configureDrive:(NSInteger)nr connected:(BOOL)value;
 - (BOOL) configureDrive:(NSInteger)nr type:(NSInteger)value;
-// - (BOOL) configureDrive:(NSInteger)nr speed:(NSInteger)value;
-// - (void) configureFifoBuffering:(BOOL)value;
 
 // Message queue
 - (void) addListener:(const void *)sender function:(Callback *)func;

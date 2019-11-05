@@ -79,6 +79,7 @@
                 <outlet property="hwDf2Type" destination="Ere-QU-ANT" id="2a9-Rs-kug"/>
                 <outlet property="hwDf3Connect" destination="71G-4V-fGW" id="v7t-o6-10B"/>
                 <outlet property="hwDf3Type" destination="bHc-hk-LLX" id="Fan-AS-nyp"/>
+                <outlet property="hwFactorySettingsPopup" destination="G7A-Sb-Z0Q" id="1aF-VP-yUY"/>
                 <outlet property="hwFastRamPopup" destination="BTz-kT-JtT" id="oec-CI-f3J"/>
                 <outlet property="hwLayoutPopup" destination="EWH-Iz-zuX" id="cWR-LH-Ffq"/>
                 <outlet property="hwLockSubText" destination="M4r-6P-yfY" id="wxV-Tm-80C"/>
@@ -368,7 +369,7 @@ Gw
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="OCS 8367" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="ohI-59-jcc" id="9Rv-5Z-jci" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system"/>
+                                                <font key="font" metaFont="menu"/>
                                                 <menu key="menu" id="4CO-B1-8Rh">
                                                     <items>
                                                         <menuItem title="OCS 8367" state="on" id="ohI-59-jcc"/>
@@ -390,7 +391,7 @@ Gw
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="OCS 8362 R8" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="EcI-3q-CCJ" id="vuQ-UT-0Qd" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system"/>
+                                                <font key="font" metaFont="menu"/>
                                                 <menu key="menu" id="9AY-BO-0xm">
                                                     <items>
                                                         <menuItem title="OCS 8362 R8" state="on" id="EcI-3q-CCJ"/>

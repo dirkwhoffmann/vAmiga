@@ -1358,28 +1358,6 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->amiga->configureModel((AmigaModel)model);
 }
-/*
-- (BOOL) configureLayout:(NSInteger)value
-{
-    return wrapper->amiga->configureLayout(value);
-}
-- (BOOL) configureChipMemory:(NSInteger)size
-{
-    return wrapper->amiga->configureChipMemory((unsigned)size);
-}
-- (BOOL) configureSlowMemory:(NSInteger)size
-{
-    return wrapper->amiga->configureSlowMemory((unsigned)size);
-}
-- (BOOL) configureFastMemory:(NSInteger)size
-{
-    return wrapper->amiga->configureFastMemory((unsigned)size);
-}
-- (void) configureRealTimeClock:(BOOL)value
-{
-    wrapper->amiga->configureRealTimeClock(value);
-}
-*/
 - (BOOL) configureDrive:(NSInteger)nr connected:(BOOL)value
 {
     return wrapper->amiga->configureDrive(nr, VA_DRIVE_CONNECT, value);

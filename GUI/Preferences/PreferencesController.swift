@@ -70,7 +70,8 @@ class PreferencesController: DialogController {
     @IBOutlet weak var hwLockText: NSTextField!
     @IBOutlet weak var hwLockSubText: NSTextField!
 
-    // Button
+    // Buttons
+    @IBOutlet weak var hwFactorySettingsPopup: NSPopUpButton!
     @IBOutlet weak var hwOKButton: NSButton!
 
     //

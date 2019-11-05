@@ -485,38 +485,6 @@ Amiga::configureModel(AmigaModel m)
     return configure(VA_AMIGA_MODEL, m);
 }
 
-/*
-bool
-Amiga::configureLayout(long layout)
-{
-    return configure(VA_KB_LAYOUT, layout);
-}
-
-bool
-Amiga::configureChipMemory(long size)
-{
-    return configure(VA_CHIP_RAM, size);
-}
-
-bool
-Amiga::configureSlowMemory(long size)
-{
-    return configure(VA_SLOW_RAM, size);
-}
-
-bool
-Amiga::configureFastMemory(long size)
-{
-    return configure(VA_FAST_RAM, size);
-}
-
-void
-Amiga::configureRealTimeClock(bool value)
-{
-    configure(VA_RT_CLOCK, value);
-}
-*/
-
 void
 Amiga::prefix() const
 {

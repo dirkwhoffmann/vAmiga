@@ -45,6 +45,8 @@ extension PreferencesController {
 
         // Lock controls if emulator is powered on
         hwAmigaModelPopup.isEnabled = poweredOff
+        hwAgnusRevisionPopup.isEnabled = poweredOff
+        hwDeniseRevisionPopup.isEnabled = poweredOff
         hwRealTimeClock.isEnabled = poweredOff && config.model != AMIGA_2000
         hwChipRamPopup.isEnabled = poweredOff
         hwSlowRamPopup.isEnabled = poweredOff
@@ -56,6 +58,7 @@ extension PreferencesController {
         hwDf1Type.isEnabled = poweredOff && config.diskController.connected.1
         hwDf2Type.isEnabled = poweredOff && config.diskController.connected.2
         hwDf3Type.isEnabled = poweredOff && config.diskController.connected.3
+        hwFactorySettingsPopup.isEnabled = poweredOff
 
         // Label the OK button
         hwOKButton.title = okLabel
