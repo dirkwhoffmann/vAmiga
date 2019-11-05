@@ -1358,6 +1358,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->amiga->configureModel((AmigaModel)model);
 }
+/*
 - (BOOL) configureLayout:(NSInteger)value
 {
     return wrapper->amiga->configureLayout(value);
@@ -1378,6 +1379,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->amiga->configureRealTimeClock(value);
 }
+*/
 - (BOOL) configureDrive:(NSInteger)nr connected:(BOOL)value
 {
     return wrapper->amiga->configureDrive(nr, VA_DRIVE_CONNECT, value);

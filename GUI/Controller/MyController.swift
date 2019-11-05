@@ -303,7 +303,7 @@ class MyController: NSWindowController, MessageReceiver {
     }
     var layout: Int {
         get { return amiga.config().layout }
-        set { amiga.configureLayout(newValue); }
+        set { amiga.configure(VA_KB_LAYOUT, value: newValue); }
     }
     /*
     var chipMemory: Int {
@@ -339,7 +339,7 @@ class MyController: NSWindowController, MessageReceiver {
     */
     var realTimeClock: Bool {
         get { return amiga.config().realTimeClock }
-        set { amiga.configureRealTimeClock(newValue); }
+        set { amiga.configure(VA_RT_CLOCK, enable: newValue); }
     }
 
     // Updates the warp status

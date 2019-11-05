@@ -772,88 +772,74 @@ extension Keys {
 }
 
 extension Defaults {
-    
-    struct A500 {
-        
-        static let amigaModel        = AMIGA_500
-        static let agnusRevision     = AGNUS_8372
-        static let deniseRevision    = DENISE_8362R8
-        static let layout            = Layout.us
-        
-        static let chipRam           = 512
-        static let slowRam           = 0
-        static let fastRam           = 0
 
-        static let df0Connect        = true
-        static let df0Type           = DRIVE_35_DD
-        static let df1Connect        = false
-        static let df1Type           = DRIVE_35_DD
-        static let df2Connect        = false
-        static let df2Type           = DRIVE_35_DD
-        static let df3Connect        = false
-        static let df3Type           = DRIVE_35_DD
+    struct ModelDefaults {
 
-        static let realTimeClock     = false
+        let amigaModel: AmigaModel
+        let agnusRevision: AgnusRevision
+        let deniseRevision: DeniseRevision
+        let layout: Layout
 
-        static let serialDevice      = SPD_NONE
+        let chipRam: Int
+        let slowRam: Int
+        let fastRam: Int
+
+        let driveConnect: [Bool]
+        let driveType: [DriveType]
+
+        let realTimeClock: Bool
+
+        let serialDevice: SerialPortDevice
     }
-    
-    struct A1000 {
+
+    static let A500 = ModelDefaults.init(
+
+        amigaModel: AMIGA_500,
+        agnusRevision: AGNUS_8372,
+        deniseRevision: DENISE_8362R8,
+        layout: Layout.us,
+        chipRam: 512,
+        slowRam: 0,
+        fastRam: 0,
+        driveConnect: [true, false, false, false],
+        driveType: [DRIVE_35_DD, DRIVE_35_DD, DRIVE_35_DD, DRIVE_35_DD],
+        realTimeClock: false,
+        serialDevice: SPD_NONE)
+
+    static let A1000 = ModelDefaults.init(
+
+        amigaModel: AMIGA_1000,
+        agnusRevision: AGNUS_8367,
+        deniseRevision: DENISE_8362R8,
+        layout: Layout.us,
+        chipRam: 256,
+        slowRam: 0,
+        fastRam: 0,
+        driveConnect: [true, false, false, false],
+        driveType: [DRIVE_35_DD, DRIVE_35_DD, DRIVE_35_DD, DRIVE_35_DD],
+        realTimeClock: false,
+        serialDevice: SPD_NONE)
+
+    static let A2000 = ModelDefaults.init(
         
-        static let amigaModel        = AMIGA_1000
-        static let agnusRevision     = AGNUS_8367
-        static let deniseRevision    = DENISE_8362R8
-        static let layout            = Layout.us
-        
-        static let chipRam           = 256
-        static let slowRam           = 0
-        static let fastRam           = 0
-
-        static let df0Connect        = true
-        static let df0Type           = DRIVE_35_DD
-        static let df1Connect        = false
-        static let df1Type           = DRIVE_35_DD
-        static let df2Connect        = false
-        static let df2Type           = DRIVE_35_DD
-        static let df3Connect        = false
-        static let df3Type           = DRIVE_35_DD
-
-        static let realTimeClock     = false
-
-        static let serialDevice      = SPD_NONE
-    }
-    
-    struct A2000 {
-        
-        static let amigaModel        = AMIGA_2000
-        static let agnusRevision     = AGNUS_8375
-        static let deniseRevision    = DENISE_8362R8
-        static let layout            = Layout.us
-        
-        static let chipRam           = 512
-        static let slowRam           = 512
-        static let fastRam           = 0
-
-        static let df0Connect        = true
-        static let df0Type           = DRIVE_35_DD
-        static let df1Connect        = true
-        static let df1Type           = DRIVE_35_DD
-        static let df2Connect        = false
-        static let df2Type           = DRIVE_35_DD
-        static let df3Connect        = false
-        static let df3Type           = DRIVE_35_DD
-
-        static let realTimeClock     = true
-
-        static let serialDevice      = SPD_NONE
-    }
+        amigaModel: AMIGA_2000,
+        agnusRevision: AGNUS_8375,
+        deniseRevision: DENISE_8362R8,
+        layout: Layout.us,
+        chipRam: 512,
+        slowRam: 512,
+        fastRam: 0,
+        driveConnect: [true, false, false, false],
+        driveType: [DRIVE_35_DD, DRIVE_35_DD, DRIVE_35_DD, DRIVE_35_DD],
+        realTimeClock: true,
+        serialDevice: SPD_NONE)
 }
 
 extension MyController {
     
     static func registerHardwareUserDefaults() {
         
-        let defaultModel = Defaults.A500.self
+        let defaultModel = Defaults.A500
         
         let dictionary: [String: Any] = [
             
@@ -866,14 +852,14 @@ extension MyController {
             Keys.slowRam: defaultModel.slowRam,
             Keys.fastRam: defaultModel.fastRam,
 
-            Keys.df0Connect: defaultModel.df0Connect,
-            Keys.df0Type: defaultModel.df0Type.rawValue,
-            Keys.df1Connect: defaultModel.df1Connect,
-            Keys.df1Type: defaultModel.df1Type.rawValue,
-            Keys.df2Connect: defaultModel.df2Connect,
-            Keys.df2Type: defaultModel.df2Type.rawValue,
-            Keys.df3Connect: defaultModel.df3Connect,
-            Keys.df3Type: defaultModel.df3Type.rawValue,
+            Keys.df0Connect: defaultModel.driveConnect[0],
+            Keys.df0Type: defaultModel.driveType[0].rawValue,
+            Keys.df1Connect: defaultModel.driveConnect[1],
+            Keys.df1Type: defaultModel.driveType[1].rawValue,
+            Keys.df2Connect: defaultModel.driveConnect[2],
+            Keys.df2Type: defaultModel.driveType[2].rawValue,
+            Keys.df3Connect: defaultModel.driveConnect[3],
+            Keys.df3Type: defaultModel.driveType[3].rawValue,
 
             Keys.realTimeClock: defaultModel.realTimeClock,
 
@@ -925,11 +911,11 @@ extension MyController {
         amiga.configureModel(defaults.integer(forKey: Keys.amigaModel))
         amiga.configure(VA_AGNUS_REVISION, value: defaults.integer(forKey: Keys.agnusRev))
         amiga.configure(VA_DENISE_REVISION, value: defaults.integer(forKey: Keys.deniseRev))
-        amiga.configureLayout(defaults.integer(forKey: Keys.layout))
+        amiga.configure(VA_KB_LAYOUT, value: defaults.integer(forKey: Keys.layout))
     
-        amiga.configureChipMemory(defaults.integer(forKey: Keys.chipRam))
-        amiga.configureSlowMemory(defaults.integer(forKey: Keys.slowRam))
-        amiga.configureFastMemory(defaults.integer(forKey: Keys.fastRam))
+        amiga.configure(VA_CHIP_RAM, value: defaults.integer(forKey: Keys.chipRam))
+        amiga.configure(VA_SLOW_RAM, value: defaults.integer(forKey: Keys.slowRam))
+        amiga.configure(VA_FAST_RAM, value: defaults.integer(forKey: Keys.fastRam))
 
         amiga.configure(VA_DRIVE_SPEED, value: defaults.integer(forKey: Keys.driveSpeed))
         amiga.configureDrive(0, connected: defaults.bool(forKey: Keys.df0Connect))
@@ -941,8 +927,7 @@ extension MyController {
         amiga.configureDrive(3, connected: defaults.bool(forKey: Keys.df3Connect))
         amiga.configureDrive(3, type: defaults.integer(forKey: Keys.df3Type))
 
-        amiga.configureRealTimeClock(defaults.bool(forKey: Keys.realTimeClock))
-        track("VA_SERIAL_DEVICE")
+        amiga.configure(VA_RT_CLOCK, enable: defaults.bool(forKey: Keys.realTimeClock))
         amiga.configure(VA_SERIAL_DEVICE, value: defaults.integer(forKey: Keys.serialDevice))
         amiga.resume()
     }

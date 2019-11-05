@@ -180,6 +180,7 @@
 
 /* Begin PBXFileReference section */
 		5001A6692289775000E614B8 /* VAmigaUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VAmigaUITests.swift; sourceTree = "<group>"; };
+		50045A5C2371D1A8008A2AB0 /* KeyboardTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyboardTypes.h; sourceTree = "<group>"; };
 		500770C1227C9FF3003A5F76 /* DriveTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DriveTypes.h; sourceTree = "<group>"; };
 		500C0A542259402D000121CD /* DiskController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiskController.cpp; sourceTree = "<group>"; };
 		500C0A552259402D000121CD /* DiskController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskController.h; sourceTree = "<group>"; };
@@ -820,6 +821,7 @@
 				505554AA2264C47600CB07E0 /* Mouse.cpp */,
 				50D7CDC32286E968002689F0 /* Joystick.h */,
 				50D7CDC22286E968002689F0 /* Joystick.cpp */,
+				50045A5C2371D1A8008A2AB0 /* KeyboardTypes.h */,
 				5014DD1421F3625200BC14BA /* Keyboard.h */,
 				5014DD1321F3625200BC14BA /* Keyboard.cpp */,
 			);

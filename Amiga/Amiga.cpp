@@ -485,6 +485,7 @@ Amiga::configureModel(AmigaModel m)
     return configure(VA_AMIGA_MODEL, m);
 }
 
+/*
 bool
 Amiga::configureLayout(long layout)
 {
@@ -514,6 +515,7 @@ Amiga::configureRealTimeClock(bool value)
 {
     configure(VA_RT_CLOCK, value);
 }
+*/
 
 void
 Amiga::prefix() const

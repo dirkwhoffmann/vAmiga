@@ -80,32 +80,32 @@ extension PreferencesController {
     }
 
     @IBAction func hwLayoutAction(_ sender: NSPopUpButton!) {
-        
-        amigaProxy?.configureLayout(sender.selectedTag())
+
+        amigaProxy?.configure(VA_KB_LAYOUT, value: sender.selectedTag())
         refresh()
     }
     
     @IBAction func hwRealTimeClocktAction(_ sender: NSButton!) {
         
-        amigaProxy?.configureRealTimeClock(sender.state == .on)
+        amigaProxy?.configure(VA_RT_CLOCK, enable: sender.state == .on)
         refresh()
     }
     
     @IBAction func hwChipRamAction(_ sender: NSPopUpButton!) {
         
-        amigaProxy?.configureChipMemory(sender.selectedTag())
+        amigaProxy?.configure(VA_CHIP_RAM, value: sender.selectedTag())
         refresh()
     }
 
     @IBAction func hwSlowRamAction(_ sender: NSPopUpButton!) {
         
-        amigaProxy?.configureSlowMemory(sender.selectedTag())
+        amigaProxy?.configure(VA_SLOW_RAM, value: sender.selectedTag())
         refresh()
     }
 
     @IBAction func hwFastRamAction(_ sender: NSPopUpButton!) {
         
-        amigaProxy?.configureFastMemory(sender.selectedTag())
+        amigaProxy?.configure(VA_FAST_RAM, value: sender.selectedTag())
         refresh()
     }
 
@@ -130,73 +130,35 @@ extension PreferencesController {
         amigaProxy?.configure(VA_SERIAL_DEVICE, value: sender.selectedTag())
         refresh()
     }
-    
+
     @IBAction func hwFactorySettingsAction(_ sender: NSPopUpButton!) {
         
         track("\(sender.selectedTag())")
-        
+
         switch sender.selectedTag() {
-            
-        case AMIGA_500.rawValue:
-            
-            amigaProxy?.configureModel(Defaults.A500.amigaModel.rawValue)
-            amigaProxy?.configureLayout(Layout.us.rawValue)
-            amigaProxy?.configureRealTimeClock(Defaults.A500.realTimeClock)
-            
-            amigaProxy?.configureChipMemory(Defaults.A500.chipRam)
-            amigaProxy?.configureSlowMemory(Defaults.A500.slowRam)
-            amigaProxy?.configureFastMemory(Defaults.A500.fastRam)
-            
-            amigaProxy?.configureDrive(0, connected: Defaults.A500.df0Connect)
-            amigaProxy?.configureDrive(0, type:      Defaults.A500.df0Type.rawValue)
-            amigaProxy?.configureDrive(1, connected: Defaults.A500.df1Connect)
-            amigaProxy?.configureDrive(1, type:      Defaults.A500.df1Type.rawValue)
-            amigaProxy?.configureDrive(2, connected: Defaults.A500.df2Connect)
-            amigaProxy?.configureDrive(2, type:      Defaults.A500.df2Type.rawValue)
-            amigaProxy?.configureDrive(3, connected: Defaults.A500.df3Connect)
-            amigaProxy?.configureDrive(3, type:      Defaults.A500.df3Type.rawValue)
 
-        case AMIGA_1000.rawValue:
-            
-            amigaProxy?.configureModel(Defaults.A1000.amigaModel.rawValue)
-            amigaProxy?.configureLayout(Layout.us.rawValue)
-            amigaProxy?.configureRealTimeClock(Defaults.A1000.realTimeClock)
-            
-            amigaProxy?.configureChipMemory(Defaults.A1000.chipRam)
-            amigaProxy?.configureSlowMemory(Defaults.A1000.slowRam)
-            amigaProxy?.configureFastMemory(Defaults.A1000.fastRam)
+        case 0: hwFactorySettingsAction(Defaults.A500)
+        case 1: hwFactorySettingsAction(Defaults.A1000)
+        case 2: hwFactorySettingsAction(Defaults.A2000)
+        default: track("Cannot restore factory defaults (unknown Amiga model).")
+         }
+    }
 
-            amigaProxy?.configureDrive(0, connected: Defaults.A1000.df0Connect)
-            amigaProxy?.configureDrive(0, type:      Defaults.A1000.df0Type.rawValue)
-            amigaProxy?.configureDrive(1, connected: Defaults.A1000.df1Connect)
-            amigaProxy?.configureDrive(1, type:      Defaults.A1000.df1Type.rawValue)
-            amigaProxy?.configureDrive(2, connected: Defaults.A1000.df2Connect)
-            amigaProxy?.configureDrive(2, type:      Defaults.A1000.df2Type.rawValue)
-            amigaProxy?.configureDrive(3, connected: Defaults.A1000.df3Connect)
-            amigaProxy?.configureDrive(3, type:      Defaults.A1000.df3Type.rawValue)
+    func hwFactorySettingsAction(_ defaults: Defaults.ModelDefaults) {
 
-        case AMIGA_2000.rawValue:
-            
-            amigaProxy?.configureModel(Defaults.A2000.amigaModel.rawValue)
-            amigaProxy?.configureRealTimeClock(Defaults.A2000.realTimeClock)
-            
-            amigaProxy?.configureChipMemory(Defaults.A2000.chipRam)
-            amigaProxy?.configureSlowMemory(Defaults.A2000.slowRam)
-            amigaProxy?.configureFastMemory(Defaults.A2000.fastRam)
+        amigaProxy?.configureModel(defaults.amigaModel.rawValue)
+        amigaProxy?.configure(VA_KB_LAYOUT, value: defaults.layout.rawValue)
+        amigaProxy?.configure(VA_RT_CLOCK, enable: defaults.realTimeClock)
 
-            amigaProxy?.configureDrive(0, connected: Defaults.A2000.df0Connect)
-            amigaProxy?.configureDrive(0, type:      Defaults.A2000.df0Type.rawValue)
-            amigaProxy?.configureDrive(1, connected: Defaults.A2000.df1Connect)
-            amigaProxy?.configureDrive(1, type:      Defaults.A2000.df1Type.rawValue)
-            amigaProxy?.configureDrive(2, connected: Defaults.A2000.df2Connect)
-            amigaProxy?.configureDrive(2, type:      Defaults.A2000.df2Type.rawValue)
-            amigaProxy?.configureDrive(3, connected: Defaults.A2000.df3Connect)
-            amigaProxy?.configureDrive(3, type:      Defaults.A2000.df3Type.rawValue)
+        amigaProxy?.configure(VA_CHIP_RAM, value: defaults.chipRam)
+        amigaProxy?.configure(VA_SLOW_RAM, value: defaults.slowRam)
+        amigaProxy?.configure(VA_FAST_RAM, value: defaults.fastRam)
 
-        default:
-            track("Cannot restore factory defaults (unknown Amiga model).")
+        for i in 0...3 {
+            amigaProxy?.configureDrive(i, connected: defaults.driveConnect[i])
+            amigaProxy?.configureDrive(i, type:      defaults.driveType[i].rawValue)
         }
-        
+
         refresh()
     }
 }

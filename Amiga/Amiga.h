@@ -274,6 +274,8 @@ public:
 
     // Configures the Amiga model to emulate (DEPRECATED)
     bool configureModel(AmigaModel model);
+
+    /*
     bool configureLayout(long value);
 
     // Configures the attached memory (DEPRECATED)
@@ -283,7 +285,7 @@ public:
 
     // Configures the real-time clock (DEPRECATED)
     void configureRealTimeClock(bool value);
-
+    */
 
     //
     // Methods from AmigaObject and HardwareComponent
