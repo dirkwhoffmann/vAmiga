@@ -28,6 +28,7 @@ typedef enum
     MEM_AUTOCONF,
     MEM_BOOT,
     MEM_KICK,
+    MEM_WOM,
     MEM_EXTROM
 }
 MemorySource;
@@ -94,6 +95,7 @@ typedef struct
 {
     size_t bootRomSize;
     size_t kickRomSize;
+    size_t womSize;
     size_t extRomSize;
     size_t chipRamSize;
     size_t slowRamSize;

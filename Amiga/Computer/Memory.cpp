@@ -16,6 +16,7 @@ Memory::Memory(Amiga& ref) : SubComponent(ref)
 
     config.bootRomSize = 0;
     config.kickRomSize = 0;
+    config.womSize = 0;
     config.extRomSize = 0;
     config.chipRamSize = 0;
     config.slowRamSize = 0;
@@ -32,6 +33,7 @@ Memory::dealloc()
 {
     if (bootRom) { delete[] bootRom; bootRom = NULL; }
     if (kickRom) { delete[] kickRom; kickRom = NULL; }
+    if (wom) { delete[] wom; wom = NULL; }
     if (extRom) { delete[] extRom; extRom = NULL; }
     if (chipRam) { delete[] chipRam; chipRam = NULL; }
     if (slowRam) { delete[] slowRam; slowRam = NULL; }
@@ -86,9 +88,10 @@ Memory::_reset()
 void
 Memory::_dump()
 {
-    struct { uint8_t *addr; size_t size; const char *desc; } mem[6] = {
+    struct { uint8_t *addr; size_t size; const char *desc; } mem[7] = {
         { bootRom, config.bootRomSize, "Boot Rom" },
         { kickRom, config.kickRomSize, "Kick Rom" },
+        { wom,     config.womSize,     "Wom" },
         { extRom,  config.extRomSize,  "Ext  Rom" },
         { chipRam, config.chipRamSize, "Chip Ram" },
         { slowRam, config.slowRamSize, "Slow Ram" },
@@ -124,6 +127,7 @@ Memory::_size()
 
     counter.count += sizeof(config.bootRomSize) + config.bootRomSize;
     counter.count += sizeof(config.kickRomSize) + config.kickRomSize;
+    counter.count += sizeof(config.womSize) + config.womSize;
     counter.count += sizeof(config.extRomSize) + config.extRomSize;
     counter.count += sizeof(config.chipRamSize) + config.chipRamSize;
     counter.count += sizeof(config.slowRamSize) + config.slowRamSize;
@@ -141,6 +145,7 @@ Memory::didLoadFromBuffer(uint8_t *buffer)
     reader
     & config.bootRomSize
     & config.kickRomSize
+    & config.womSize
     & config.extRomSize
     & config.chipRamSize
     & config.slowRamSize
@@ -151,7 +156,8 @@ Memory::didLoadFromBuffer(uint8_t *buffer)
     // false. Furthermore, the real maximum size limits should be used.
     assert(config.bootRomSize < 0xFFFFFF);
     assert(config.kickRomSize < 0xFFFFFF);
-    assert(config.extRomSize < 0xFFFFFF);
+    assert(config.kickRomSize < 0xFFFFFF);
+    assert(config.womSize  < 0xFFFFFF);
     assert(config.chipRamSize < 0xFFFFFF);
     assert(config.slowRamSize < 0xFFFFFF);
     assert(config.fastRamSize < 0xFFFFFF);
@@ -162,6 +168,7 @@ Memory::didLoadFromBuffer(uint8_t *buffer)
     // Allocate new memory
     if (config.bootRomSize) bootRom = new (std::nothrow) uint8_t[config.bootRomSize + 3];
     if (config.kickRomSize) kickRom = new (std::nothrow) uint8_t[config.kickRomSize + 3];
+    if (config.womSize) wom = new (std::nothrow) uint8_t[config.womSize + 3];
     if (config.extRomSize) extRom = new (std::nothrow) uint8_t[config.extRomSize + 3];
     if (config.chipRamSize) chipRam = new (std::nothrow) uint8_t[config.chipRamSize + 3];
     if (config.slowRamSize) slowRam = new (std::nothrow) uint8_t[config.slowRamSize + 3];
@@ -170,6 +177,7 @@ Memory::didLoadFromBuffer(uint8_t *buffer)
     // Load memory contents from buffer
     reader.copy(bootRom, config.bootRomSize);
     reader.copy(kickRom, config.kickRomSize);
+    reader.copy(wom, config.womSize);
     reader.copy(extRom, config.extRomSize);
     reader.copy(chipRam, config.chipRamSize);
     reader.copy(slowRam, config.slowRamSize);
@@ -186,6 +194,7 @@ Memory::didSaveToBuffer(uint8_t *buffer) const
     writer
     & config.bootRomSize
     & config.kickRomSize
+    & config.womSize
     & config.extRomSize
     & config.chipRamSize
     & config.slowRamSize
@@ -194,6 +203,7 @@ Memory::didSaveToBuffer(uint8_t *buffer) const
     // Save memory contents
     writer.copy(bootRom, config.bootRomSize);
     writer.copy(kickRom, config.kickRomSize);
+    writer.copy(wom, config.womSize);
     writer.copy(extRom, config.extRomSize);
     writer.copy(chipRam, config.chipRamSize);
     writer.copy(slowRam, config.slowRamSize);
@@ -553,6 +563,12 @@ Memory::peek8(uint32_t addr)
             stats.romReads++;
             return READ_KICK_8(addr);
 
+        case MEM_WOM:
+
+            ASSERT_WOM_ADDR(addr);
+            stats.romReads++;
+            return READ_WOM_8(addr);
+
         case MEM_EXTROM:
 
             ASSERT_EXT_ADDR(addr);
@@ -665,6 +681,12 @@ Memory::peek16(uint32_t addr)
                     stats.romReads++;
                     return READ_KICK_16(addr);
 
+                case MEM_WOM:
+
+                    ASSERT_WOM_ADDR(addr);
+                    stats.romReads++;
+                    return READ_WOM_16(addr);
+
                 case MEM_EXTROM:
 
                     ASSERT_EXT_ADDR(addr);
@@ -699,6 +721,7 @@ Memory::spypeek8(uint32_t addr)
         case MEM_AUTOCONF: ASSERT_AUTO_ADDR(addr); return spypeekAutoConf8(addr);
         case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); return READ_BOOT_8(addr);
         case MEM_KICK:     ASSERT_KICK_ADDR(addr); return READ_KICK_8(addr);
+        case MEM_WOM:      ASSERT_WOM_ADDR(addr); return READ_WOM_8(addr);
         case MEM_EXTROM:   ASSERT_EXT_ADDR(addr);  return READ_EXT_8(addr);
         default:           assert(false);
     }
@@ -725,6 +748,7 @@ Memory::spypeek16(uint32_t addr)
         case MEM_AUTOCONF: ASSERT_AUTO_ADDR(addr); return spypeekAutoConf16(addr);
         case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); return READ_BOOT_16(addr);
         case MEM_KICK:     ASSERT_KICK_ADDR(addr); return READ_KICK_16(addr);
+        case MEM_WOM:      ASSERT_WOM_ADDR(addr); return READ_WOM_16(addr);
         case MEM_EXTROM:   ASSERT_EXT_ADDR(addr);  return READ_EXT_16(addr);
         default:           assert(false);
     }
@@ -810,7 +834,14 @@ Memory::poke8(uint32_t addr, uint8_t value)
 
             ASSERT_KICK_ADDR(addr);
             stats.romWrites++;
-            pokeKick16(addr, value);
+            pokeKick8(addr, value);
+            break;
+
+        case MEM_WOM:
+
+            ASSERT_WOM_ADDR(addr);
+            stats.romWrites++;
+            pokeWom8(addr, value);
             break;
 
         case MEM_EXTROM:
@@ -931,6 +962,13 @@ Memory::poke16(uint32_t addr, uint16_t value)
                     ASSERT_KICK_ADDR(addr);
                     stats.romWrites++;
                     pokeKick16(addr, value);
+                    return;
+
+                case MEM_WOM:
+
+                    ASSERT_WOM_ADDR(addr);
+                    stats.romWrites++;
+                    pokeWom16(addr, value);
                     return;
 
                 case MEM_EXTROM:
@@ -1795,6 +1833,27 @@ Memory::pokeKick16(uint32_t addr, uint16_t value)
 
     if (kickIsWritable) {
         WRITE_KICK_16(addr, value);
+    }
+}
+
+void
+Memory::pokeWom8(uint32_t addr, uint8_t value)
+{
+    // debug("pokeWom8(%X, %X)\n", addr, value);
+
+    if (kickIsWritable) {
+        WRITE_WOM_8(addr, value);
+    }
+
+}
+
+void
+Memory::pokeWom16(uint32_t addr, uint16_t value)
+{
+    // debug("pokeKick16(%X, %X)\n", addr, value);
+
+    if (kickIsWritable) {
+        WRITE_WOM_16(addr, value);
     }
 }
 

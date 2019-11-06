@@ -70,7 +70,9 @@ extension BankTableView: NSTableViewDataSource {
             case MEM_BOOT.rawValue:
                 return "Boot Rom"
             case MEM_KICK.rawValue:
-                return "Kickstart"
+                return "Rom"
+            case MEM_WOM.rawValue:
+                return "Wom"
             case MEM_EXTROM.rawValue:
                 return "Extended Rom"
             default:

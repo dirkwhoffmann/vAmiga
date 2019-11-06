@@ -78,9 +78,8 @@ extern "C" uint32_t read_on_reset(uint32_t defaultValue)
 
         Memory *mem = &activeAmiga->mem;
 
-        /* When we reach here, we expect that memory has been initialised
-         * already. If that's the case, the first memory page is mapped to
-         * either Boot Rom or Kickstart Rom.
+        /* When we reach here, we expect memory to be initialised already.
+         * If that's the case, the first memory page is mapped to Rom.
          */
         assert(mem->memSrc[0x0] == MEM_BOOT ||
                mem->memSrc[0x0] == MEM_KICK ||

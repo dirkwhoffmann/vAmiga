@@ -99,6 +99,7 @@ extension Inspector {
             case MEM_AUTOCONF.rawValue: color = MemColors.autoConf
             case MEM_BOOT.rawValue:     color = MemColors.rom
             case MEM_KICK.rawValue:     color = MemColors.rom
+            case MEM_WOM.rawValue:      color = MemColors.rom
             case MEM_EXTROM.rawValue:   color = MemColors.extRom
             default:                    fatalError()
             }
