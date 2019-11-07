@@ -733,23 +733,17 @@ Amiga::resume()
 bool
 Amiga::readyToPowerUp()
 {
-    AmigaConfiguration config = getConfig();
+    // AmigaConfiguration config = getConfig();
     
-    // Check for Chip Ram
+    // Check if Chip Ram is present
     if (!mem.hasChipRam()) {
         msg("NOT READY YET: Chip Ram is missing.\n");
         return false;
     }
     
-    // Check for a Boot Rom (A1000 only)
-    if (config.model == AMIGA_1000 && !mem.hasBootRom()) {
-        msg("NOT READY YET: Boot Rom is missing.\n");
-        return false;
-    }
-    
-    // Check for a Kickstart Rom (A500, A2000)
-    if (config.model != AMIGA_1000 && !mem.hasKickRom()) {
-        msg("NOT READY YET: Kickstart Rom is missing.\n");
+    // Check if a Boot Rom or a Kickstart Rom is present
+    if (!mem.hasKickRom()) {
+        msg("NOT READY YET: Rom is missing.\n");
         return false;
     }
 

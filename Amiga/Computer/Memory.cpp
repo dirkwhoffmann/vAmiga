@@ -31,7 +31,6 @@ Memory::~Memory()
 void
 Memory::dealloc()
 {
-    if (bootRom) { delete[] bootRom; bootRom = NULL; }
     if (kickRom) { delete[] kickRom; kickRom = NULL; }
     if (wom) { delete[] wom; wom = NULL; }
     if (extRom) { delete[] extRom; extRom = NULL; }
@@ -44,22 +43,22 @@ void
 Memory::_powerOn()
 {
     // Check if a Boot Rom or a Kickstart Rom is present
-    if (hasKickRom()) {
+    if (hasBootRom()) {
 
-         // Lock the Rom
-         kickIsWritable = false;
+        // Allocate a WOM
+        alloc(KB(256), wom, config.womSize);
+        eraseWom();
 
-    } else {
-
-        // There must be a Boot Rom then
-        assert(hasBootRom());
-
-        // Make the ROM a WOM (Write Once Memory)
-        eraseKickRom();
+        // Make the WOM writable
         kickIsWritable = true;
 
         // Remove any Extended ROM if present
         deleteExtRom();
+    }
+
+    if (hasKickRom()) {
+
+        kickIsWritable = false;
     }
 
     // Fill RAM with the proper startup pattern
@@ -89,7 +88,6 @@ void
 Memory::_dump()
 {
     struct { uint8_t *addr; size_t size; const char *desc; } mem[7] = {
-        { bootRom, config.bootRomSize, "Boot Rom" },
         { kickRom, config.kickRomSize, "Kick Rom" },
         { wom,     config.womSize,     "Wom" },
         { extRom,  config.extRomSize,  "Ext  Rom" },
@@ -166,7 +164,6 @@ Memory::didLoadFromBuffer(uint8_t *buffer)
     dealloc();
 
     // Allocate new memory
-    if (config.bootRomSize) bootRom = new (std::nothrow) uint8_t[config.bootRomSize + 3];
     if (config.kickRomSize) kickRom = new (std::nothrow) uint8_t[config.kickRomSize + 3];
     if (config.womSize) wom = new (std::nothrow) uint8_t[config.womSize + 3];
     if (config.extRomSize) extRom = new (std::nothrow) uint8_t[config.extRomSize + 3];
@@ -175,7 +172,6 @@ Memory::didLoadFromBuffer(uint8_t *buffer)
     if (config.fastRamSize) fastRam = new (std::nothrow) uint8_t[config.fastRamSize + 3];
 
     // Load memory contents from buffer
-    reader.copy(bootRom, config.bootRomSize);
     reader.copy(kickRom, config.kickRomSize);
     reader.copy(wom, config.womSize);
     reader.copy(extRom, config.extRomSize);
@@ -201,7 +197,6 @@ Memory::didSaveToBuffer(uint8_t *buffer) const
     & config.fastRamSize;
 
     // Save memory contents
-    writer.copy(bootRom, config.bootRomSize);
     writer.copy(kickRom, config.kickRomSize);
     writer.copy(wom, config.womSize);
     writer.copy(extRom, config.extRomSize);
@@ -262,116 +257,74 @@ Memory::initializeRam()
 }
 
 void
-Memory::loadRom(AmigaFile *rom, uint8_t *target, size_t length)
+Memory::loadRom(AmigaFile *file, uint8_t *target, size_t length)
 {
-    if (rom) {
+    if (file) {
 
         assert(target != NULL);
         memset(target, 0, length);
         
-        rom->seek(0);
+        file->seek(0);
         
         int c;
         for (size_t i = 0; i < length; i++) {
-            if ((c = rom->read()) == EOF) break;
+            if ((c = file->read()) == EOF) break;
             *(target++) = c;
         }
     }
 }
 
 bool
-Memory::loadBootRom(BootRom *rom)
+Memory::loadRom(RomFile *file)
 {
-    assert(rom != NULL);
+    assert(file != NULL);
     
-    if (!alloc(rom->getSize(), bootRom, config.bootRomSize))
+    if (!alloc(file->getSize(), kickRom, config.kickRomSize))
         return false;
     
-    loadRom(rom, bootRom, config.bootRomSize);
+    loadRom(file, kickRom, config.kickRomSize);
     return true;
 }
 
 bool
-Memory::loadBootRomFromBuffer(const uint8_t *buffer, size_t length)
+Memory::loadRomFromBuffer(const uint8_t *buffer, size_t length)
 {
     assert(buffer != NULL);
     
-    BootRom *rom = BootRom::makeWithBuffer(buffer, length);
+    RomFile *file = RomFile::makeWithBuffer(buffer, length);
     
-    if (!rom) {
-        msg("Failed to read Boot Rom from buffer at %p\n", buffer);
-        return false;
-    }
-    
-    return loadBootRom(rom);
-}
-
-bool
-Memory::loadBootRomFromFile(const char *path)
-{
-    assert(path != NULL);
-    
-    BootRom *rom = BootRom::makeWithFile(path);
-    
-    if (!rom) {
-        msg("Failed to read Boot Rom from file %s\n", path);
-        return false;
-    }
-    
-    return loadBootRom(rom);
-}
-
-bool
-Memory::loadKickRom(KickRom *rom)
-{
-    assert(rom != NULL);
-    
-    if (!alloc(rom->getSize(), kickRom, config.kickRomSize))
-        return false;
-    
-    loadRom(rom, kickRom, config.kickRomSize);
-    return true;
-}
-
-bool
-Memory::loadKickRomFromBuffer(const uint8_t *buffer, size_t length)
-{
-    assert(buffer != NULL);
-    
-    KickRom *rom = KickRom::makeWithBuffer(buffer, length);
-    
-    if (!rom) {
+    if (!file) {
         msg("Failed to read Kick Rom from buffer at %p\n", buffer);
         return false;
     }
     
-    return loadKickRom(rom);
+    return loadRom(file);
 }
 
 bool
-Memory::loadKickRomFromFile(const char *path)
+Memory::loadRomFromFile(const char *path)
 {
     assert(path != NULL);
     
-    KickRom *rom = KickRom::makeWithFile(path);
+    RomFile *file = RomFile::makeWithFile(path);
     
-    if (!rom) {
+    if (!file) {
         msg("Failed to read Kick Rom from file %s\n", path);
         return false;
     }
     
-    return loadKickRom(rom);
+    return loadRom(file);
 }
 
 bool
-Memory::loadExtRom(ExtRom *rom)
+Memory::loadExtRom(ExtFile *file)
 {
-    assert(rom != NULL);
+    assert(file != NULL);
 
-    if (!alloc(rom->getSize(), extRom, config.extRomSize))
+    if (!alloc(file->getSize(), extRom, config.extRomSize))
         return false;
 
-    loadRom(rom, extRom, config.extRomSize);
+    loadRom(file, extRom, config.extRomSize);
     return true;
 }
 
@@ -382,14 +335,14 @@ Memory::loadExtRomFromBuffer(const uint8_t *buffer, size_t length)
 
     debug("loadExtRomFromBuffer\n");
 
-    ExtRom *rom = ExtRom::makeWithBuffer(buffer, length);
+    ExtFile *file = ExtFile::makeWithBuffer(buffer, length);
 
-    if (!rom) {
+    if (!file) {
         msg("Failed to read Extended Rom from buffer at %p\n", buffer);
         return false;
     }
 
-    return loadExtRom(rom);
+    return loadExtRom(file);
 }
 
 bool
@@ -399,20 +352,20 @@ Memory::loadExtRomFromFile(const char *path)
 
     debug("loadExtRomFromFile\n");
 
-    ExtRom *rom = ExtRom::makeWithFile(path);
+    ExtFile *file = ExtFile::makeWithFile(path);
 
-    if (!rom) {
+    if (!file) {
         msg("Failed to read Extended Rom from file %s\n", path);
         return false;
     }
 
-    return loadExtRom(rom);
+    return loadExtRom(file);
 }
 
 void
 Memory::updateMemSrcTable()
 {
-    MemorySource mem_boot = bootRom ? MEM_BOOT : MEM_UNMAPPED;
+    // MemorySource mem_boot = bootRom ? MEM_BOOT : MEM_UNMAPPED;
     MemorySource mem_kick = kickRom ? MEM_KICK : MEM_UNMAPPED;
     MemorySource mem_ext = extRom ? MEM_EXTROM : MEM_UNMAPPED;
 
@@ -424,7 +377,7 @@ Memory::updateMemSrcTable()
     bool ovl = ciaa.getPA() & 1;
     
     debug("updateMemSrcTable: rtc = %d ovl = %d\n", rtc, ovl);
-    debug("bootRom: %p kickRom: %p extRom: %p\n", bootRom, kickRom, extRom);
+    debug("kickRom: %p extRom: %p\n", kickRom, extRom);
     dump();
     
     // Start from scratch
@@ -465,12 +418,12 @@ Memory::updateMemSrcTable()
 
     // Boot Rom or Kickstart mirror
     for (unsigned i = 0xF8; i <= 0xFB; i++)
-        memSrc[i] = kickIsWritable ? mem_boot : mem_kick;
+        // memSrc[i] = kickIsWritable ? mem_boot : mem_kick;
+        memSrc[i] = mem_kick;
 
     // Kickstart
     for (unsigned i = 0xFC; i <= 0xFF; i++) {
         memSrc[i] = mem_kick;
-        // memSrc[i] = kickIsWritable ? mem_boot : mem_kick;
     }
 
     // Overlay Rom with lower memory area if the OVL line is high
@@ -550,12 +503,6 @@ Memory::peek8(uint32_t addr)
             stats.chipReads++;
             dataBus = peekAutoConf8(addr);
             return dataBus;
-
-        case MEM_BOOT:
-
-            ASSERT_BOOT_ADDR(addr);
-            stats.romReads++;
-            return READ_BOOT_8(addr);
 
         case MEM_KICK:
 
@@ -669,12 +616,6 @@ Memory::peek16(uint32_t addr)
                     dataBus = peekAutoConf16(addr);
                     return dataBus;
 
-                case MEM_BOOT:
-
-                    ASSERT_BOOT_ADDR(addr);
-                    stats.romReads++;
-                    return READ_BOOT_16(addr);
-
                 case MEM_KICK:
 
                     ASSERT_KICK_ADDR(addr);
@@ -719,7 +660,6 @@ Memory::spypeek8(uint32_t addr)
         case MEM_RTC:      ASSERT_RTC_ADDR(addr);  return spypeekRTC8(addr);
         case MEM_OCS:      ASSERT_OCS_ADDR(addr);  return spypeekCustom8(addr);
         case MEM_AUTOCONF: ASSERT_AUTO_ADDR(addr); return spypeekAutoConf8(addr);
-        case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); return READ_BOOT_8(addr);
         case MEM_KICK:     ASSERT_KICK_ADDR(addr); return READ_KICK_8(addr);
         case MEM_WOM:      ASSERT_WOM_ADDR(addr); return READ_WOM_8(addr);
         case MEM_EXTROM:   ASSERT_EXT_ADDR(addr);  return READ_EXT_8(addr);
@@ -746,7 +686,6 @@ Memory::spypeek16(uint32_t addr)
         case MEM_RTC:      ASSERT_RTC_ADDR(addr);  return spypeekRTC8(addr);
         case MEM_OCS:      ASSERT_OCS_ADDR(addr);  return spypeekCustom16(addr);
         case MEM_AUTOCONF: ASSERT_AUTO_ADDR(addr); return spypeekAutoConf16(addr);
-        case MEM_BOOT:     ASSERT_BOOT_ADDR(addr); return READ_BOOT_16(addr);
         case MEM_KICK:     ASSERT_KICK_ADDR(addr); return READ_KICK_16(addr);
         case MEM_WOM:      ASSERT_WOM_ADDR(addr); return READ_WOM_16(addr);
         case MEM_EXTROM:   ASSERT_EXT_ADDR(addr);  return READ_EXT_16(addr);
@@ -821,13 +760,6 @@ Memory::poke8(uint32_t addr, uint8_t value)
             ASSERT_AUTO_ADDR(addr);
             stats.chipWrites++;
             pokeAutoConf8(addr, value);
-            break;
-
-        case MEM_BOOT:
-
-            ASSERT_BOOT_ADDR(addr);
-            stats.romWrites++;
-            pokeBoot8(addr, value);
             break;
 
         case MEM_KICK:
@@ -948,13 +880,6 @@ Memory::poke16(uint32_t addr, uint16_t value)
                     stats.chipWrites++;
                     dataBus = value;
                     pokeAutoConf16(addr, value);
-                    return;
-
-                case MEM_BOOT:
-
-                    ASSERT_BOOT_ADDR(addr);
-                    stats.romWrites++;
-                    pokeBoot16(addr, value);
                     return;
 
                 case MEM_KICK:

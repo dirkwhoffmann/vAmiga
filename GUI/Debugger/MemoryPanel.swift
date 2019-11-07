@@ -36,7 +36,7 @@ extension Inspector {
     
     func refreshMemory(everything: Bool) {
         
-        track("Refreshing memory inspector tab")
+        // track("Refreshing memory inspector tab")
         
         if everything {
             refreshMemoryLayout()
@@ -97,7 +97,6 @@ extension Inspector {
             case MEM_RTC.rawValue:      color = MemColors.rtc
             case MEM_OCS.rawValue:      color = MemColors.ocs
             case MEM_AUTOCONF.rawValue: color = MemColors.autoConf
-            case MEM_BOOT.rawValue:     color = MemColors.rom
             case MEM_KICK.rawValue:     color = MemColors.rom
             case MEM_WOM.rawValue:      color = MemColors.rom
             case MEM_EXTROM.rawValue:   color = MemColors.extRom

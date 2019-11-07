@@ -213,55 +213,29 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->mem->dump();
 }
-- (BOOL) hasBootRom
-{
-    return wrapper->mem->hasBootRom();
-}
-- (void) deleteBootRom
-{
-    wrapper->mem->deleteBootRom();
-}
-- (BOOL) isBootRom:(NSURL *)url
-{
-    return BootRom::isBootRomFile([[url path] UTF8String]);
-}
-- (BOOL) loadBootRomFromBuffer:(NSData *)data
-{
-    if (data == NULL) return NO;
-    const uint8_t *bytes = (const uint8_t *)[data bytes];
-    return wrapper->mem->loadBootRomFromBuffer(bytes, [data length]);
-}
-- (BOOL) loadBootRomFromFile:(NSURL *)url
-{
-    return wrapper->mem->loadBootRomFromFile([[url path] UTF8String]);
-}
-- (uint64_t) bootRomFingerprint
-{
-    return wrapper->mem->bootRomFingerprint();
-}
-- (BOOL) hasKickRom
+- (BOOL) hasRom
 {
     return wrapper->mem->hasKickRom();
 }
-- (void) deleteKickRom
+- (void) deleteRom
 {
     wrapper->mem->deleteKickRom();
 }
-- (BOOL) isKickRom:(NSURL *)url
+- (BOOL) isRom:(NSURL *)url
 {
-    return KickRom::isKickRomFile([[url path] UTF8String]);
+    return RomFile::isRomFile([[url path] UTF8String]);
 }
-- (BOOL) loadKickRomFromBuffer:(NSData *)data
+- (BOOL) loadRomFromBuffer:(NSData *)data
 {
     if (data == NULL) return NO;
     const uint8_t *bytes = (const uint8_t *)[data bytes];
-    return wrapper->mem->loadKickRomFromBuffer(bytes, [data length]);
+    return wrapper->mem->loadRomFromBuffer(bytes, [data length]);
 }
-- (BOOL) loadKickRomFromFile:(NSURL *)url
+- (BOOL) loadRomFromFile:(NSURL *)url
 {
-    return wrapper->mem->loadKickRomFromFile([[url path] UTF8String]);
+    return wrapper->mem->loadRomFromFile([[url path] UTF8String]);
 }
-- (uint64_t) kickRomFingerprint
+- (uint64_t) romFingerprint
 {
     return wrapper->mem->kickRomFingerprint();
 }
@@ -275,7 +249,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 - (BOOL) isExtRom:(NSURL *)url
 {
-    return ExtRom::isExtRomFile([[url path] UTF8String]);
+    return ExtFile::isExtRomFile([[url path] UTF8String]);
 }
 - (BOOL) loadExtRomFromBuffer:(NSData *)data
 {

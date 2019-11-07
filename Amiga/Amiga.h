@@ -36,9 +36,8 @@
 #include "Disk.h"
 
 // File types
-#include "BootRom.h"
-#include "KickRom.h"
-#include "ExtRom.h"
+#include "RomFile.h"
+#include "ExtFile.h"
 #include "Snapshot.h"
 #include "ADFFile.h"
 

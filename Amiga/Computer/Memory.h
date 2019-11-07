@@ -11,9 +11,8 @@
 #define _AMIGA_MEMORY_INC
 
 #include "SubComponent.h"
-#include "BootRom.h"
-#include "KickRom.h"
-#include "ExtRom.h"
+#include "RomFile.h"
+#include "ExtFile.h"
 
 const uint32_t FAST_RAM_STRT = 0x200000;
 const uint32_t SLOW_RAM_MASK = 0x07FFFF; // 512 KB
@@ -25,8 +24,7 @@ const uint32_t EXT_ROM_MASK  = 0x07FFFF; // 512 KB
 #define ASSERT_CHIP_ADDR(x) assert(chipRam != NULL);
 #define ASSERT_FAST_ADDR(x) assert(fastRam != NULL); assert(((x) - FAST_RAM_STRT) < config.fastRamSize);
 #define ASSERT_SLOW_ADDR(x) assert(slowRam != NULL); assert(((x) & SLOW_RAM_MASK) < config.slowRamSize);
-#define ASSERT_BOOT_ADDR(x) assert(bootRom != NULL); assert(((x) & BOOT_ROM_MASK) < config.bootRomSize);
-#define ASSERT_KICK_ADDR(x) assert(kickRom != NULL); 
+#define ASSERT_KICK_ADDR(x) assert(kickRom != NULL);
 #define ASSERT_WOM_ADDR(x) assert(wom != NULL);
 #define ASSERT_EXT_ADDR(x)  assert(extRom  != NULL); assert(((x) & EXT_ROM_MASK) < config.extRomSize);
 #define ASSERT_CIA_ADDR(x)  assert((x) >= 0xA00000 && (x) <= 0xBFFFFF);
@@ -53,11 +51,6 @@ const uint32_t EXT_ROM_MASK  = 0x07FFFF; // 512 KB
 #define READ_SLOW_8(x)  READ_8(slowRam + ((x) & SLOW_RAM_MASK))
 #define READ_SLOW_16(x) READ_16(slowRam + ((x) & SLOW_RAM_MASK))
 #define READ_SLOW_32(x) READ_32(slowRam + ((x) & SLOW_RAM_MASK))
-
-// Reads a value from Boot ROM in big endian format
-#define READ_BOOT_8(x)  READ_8(bootRom + ((x) & BOOT_ROM_MASK))
-#define READ_BOOT_16(x) READ_16(bootRom + ((x) & BOOT_ROM_MASK))
-#define READ_BOOT_32(x) READ_32(bootRom + ((x) & BOOT_ROM_MASK))
 
 // Reads a value from Kickstart ROM in big endian format
 #define READ_KICK_8(x)  READ_8(kickRom + ((x) % config.kickRomSize))
@@ -98,11 +91,6 @@ const uint32_t EXT_ROM_MASK  = 0x07FFFF; // 512 KB
 #define WRITE_SLOW_16(x,y) WRITE_16(slowRam + ((x) & SLOW_RAM_MASK), (y))
 #define WRITE_SLOW_32(x,y) WRITE_32(slowRam + ((x) & SLOW_RAM_MASK), (y))
 
-// Writes a value into Boot ROM in big endian format
-#define WRITE_BOOT_8(x,y)  WRITE_8(bootRom + ((x) & BOOT_ROM_MASK), (y))
-#define WRITE_BOOT_16(x,y) WRITE_16(bootRom + ((x) & BOOT_ROM_MASK), (y))
-#define WRITE_BOOT_32(x,y) WRITE_32(bootRom + ((x) & BOOT_ROM_MASK), (y))
-
 // Writes a value into Kickstart ROM in big endian format
 #define WRITE_KICK_8(x,y)  WRITE_8(kickRom + ((x) % config.kickRomSize), (y))
 #define WRITE_KICK_16(x,y) WRITE_16(kickRom + ((x) % config.kickRomSize), (y))
@@ -141,7 +129,6 @@ public:
      *
      *   pointer == NULL <=> config.size == 0
      */
-    uint8_t *bootRom = NULL;
     uint8_t *kickRom = NULL;
     uint8_t *wom = NULL;
     uint8_t *extRom = NULL;
@@ -281,38 +268,31 @@ private:
 public:
     
     // Checks if a certain ROM is present
-    bool hasBootRom() { return bootRom != NULL; }
-    bool hasKickRom() { return kickRom != NULL; }
+    bool hasBootRom() { return config.kickRomSize > 0 && config.kickRomSize <= KB(16); }
+    bool hasKickRom() { return config.kickRomSize >= KB(256); }
     bool hasWom() { return wom != NULL; }
     bool hasExtRom() { return extRom != NULL; }
 
     // Returns a fingerprint for a certain ROM
-    uint64_t bootRomFingerprint() { return fnv_1a_64(bootRom, config.bootRomSize); }
     uint64_t kickRomFingerprint() { return fnv_1a_64(kickRom, config.kickRomSize); }
     uint64_t extRomFingerprint() { return fnv_1a_64(extRom,  config.extRomSize); }
 
     // Removes a previously installed ROM
-    void deleteBootRom() { alloc(0, bootRom, config.bootRomSize); }
     void deleteKickRom() { alloc(0, kickRom, config.kickRomSize); }
     void deleteWom() { alloc(0, wom, config.womSize); }
     void deleteExtRom() { alloc(0, extRom, config.extRomSize); }
 
     // Erases an installed ROM
-    void eraseBootRom() { assert(bootRom); memset(bootRom, 0, config.bootRomSize); }
     void eraseKickRom() { assert(kickRom); memset(kickRom, 0, config.kickRomSize); }
     void eraseWom() { assert(wom); memset(wom, 0, config.womSize); }
     void eraseExtRom() { assert(extRom); memset(extRom, 0, config.extRomSize); }
 
-    // Installs a new ROM
-    bool loadBootRom(BootRom *rom);
-    bool loadBootRomFromBuffer(const uint8_t *buffer, size_t length);
-    bool loadBootRomFromFile(const char *path);
+    // Installs a new Boot Rom or Kickstart Rom
+    bool loadRom(RomFile *rom);
+    bool loadRomFromBuffer(const uint8_t *buffer, size_t length);
+    bool loadRomFromFile(const char *path);
 
-    bool loadKickRom(KickRom *rom);
-    bool loadKickRomFromBuffer(const uint8_t *buffer, size_t length);
-    bool loadKickRomFromFile(const char *path);
-
-    bool loadExtRom(ExtRom *rom);
+    bool loadExtRom(ExtFile *rom);
     bool loadExtRomFromBuffer(const uint8_t *buffer, size_t length);
     bool loadExtRomFromFile(const char *path);
 

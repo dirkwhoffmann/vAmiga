@@ -7,12 +7,12 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _EXTROM_INC
-#define _EXTROM_INC
+#ifndef _EXTFILE_INC
+#define _EXTFILE_INC
 
 #include "AmigaFile.h"
 
-class ExtRom : public AmigaFile {
+class ExtFile : public AmigaFile {
 
 private:
 
@@ -37,11 +37,11 @@ public:
     // Creating and destructing
     //
 
-    ExtRom();
+    ExtFile();
 
     // Factory methods
-    static ExtRom *makeWithBuffer(const uint8_t *buffer, size_t length);
-    static ExtRom *makeWithFile(const char *path);
+    static ExtFile *makeWithBuffer(const uint8_t *buffer, size_t length);
+    static ExtFile *makeWithFile(const char *path);
 
 
     //

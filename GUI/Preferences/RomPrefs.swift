@@ -88,15 +88,11 @@ extension PreferencesController {
                 config.model == AMIGA_500 ? "500" : "2000"
         
         let poweredOff   = amiga.isPoweredOff()
-        let bootHash     = amiga.mem.bootRomFingerprint()
-        let kickHash     = amiga.mem.kickRomFingerprint()
+        let hash         = amiga.mem.romFingerprint()
         let extHash      = amiga.mem.extRomFingerprint()
-        let hash         = config.model == AMIGA_1000 ? bootHash : kickHash
 
-        track("bootHash = \(bootHash)")
-        track("kickHash = \(kickHash)")
+        track("romHash = \(hash)")
         track("extHash = \(extHash)")
-        track("hash = \(hash)")
 
         let hasRom        = hash != 0
         let hasArosRom    = hash == Rom.aros
@@ -105,10 +101,8 @@ extension PreferencesController {
         let hasUnknownRom = hasRom && !hasKnownRom
         let hasOrigRom    = hasKnownRom && !hasArosRom && !hasDiagRom
 
-        let bootRomURL    = controller.bootRomURL
-        let kickRomURL    = controller.kickRomURL
-        let url           = config.model == AMIGA_1000 ? bootRomURL : kickRomURL
-        
+        let romURL        = controller.romURL
+
         let romMissing    = NSImage.init(named: "rom_light")
         let romOriginal   = NSImage.init(named: "rom_original")
         let romAros       = NSImage.init(named: "rom_aros")
@@ -146,7 +140,7 @@ extension PreferencesController {
         default:
             
             text = knownRoms[hash] ?? "An unknown or unsupported Rom."
-            subText = hasArosRom ? "Use original Amiga Roms for higher compatibility." : url.relativePath
+            subText = hasArosRom ? "Use original Amiga Roms for higher compatibility." : romURL.relativePath
         }
         
         romText.stringValue = text
@@ -184,31 +178,20 @@ extension PreferencesController {
     //
 
     @IBAction func romDeleteAction(_ sender: Any!) {
-        
-        if amigaProxy?.config().model == AMIGA_1000 {
-            
-            myController?.bootRomURL = URL(fileURLWithPath: "/")
-            amigaProxy?.mem.deleteBootRom()
-            
-        } else {
-            
-            myController?.kickRomURL = URL(fileURLWithPath: "/")
-            amigaProxy?.mem.deleteKickRom()
-        }
+
+        myController?.romURL = URL(fileURLWithPath: "/")
+        amigaProxy?.mem.deleteRom()
         
         refresh()
     }
     
     @IBAction func romFactorySettingsAction(_ sender: NSButton!) {
-        
-        // Remove Boot Rom
-        amigaProxy?.mem.deleteBootRom()
-        
+
         // Revert to the AROS Kickstart replacement
-        amigaProxy?.mem.loadKickRom(fromBuffer: NSDataAsset(name: "aros-amiga-m68k-rom")?.data)
-        myController?.kickRomURL = URL(fileURLWithPath: "")
+        amigaProxy?.mem.loadRom(fromBuffer: NSDataAsset(name: "aros-amiga-m68k-rom")?.data)
+        myController?.romURL = URL(fileURLWithPath: "")
         amigaProxy?.mem.loadExtRom(fromBuffer: NSDataAsset(name: "aros-amiga-m68k-ext")?.data)
-        myController?.extRomURL = URL(fileURLWithPath: "")
+        myController?.extURL = URL(fileURLWithPath: "")
         refresh()
     }
 }

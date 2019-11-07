@@ -117,8 +117,7 @@
 		509CF4CD22083F9800C500F0 /* CPUPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509CF4CC22083F9800C500F0 /* CPUPanel.swift */; };
 		509CF4CF220847C600C500F0 /* InstrTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509CF4CE220847C600C500F0 /* InstrTableView.swift */; };
 		509CF4D12208487900C500F0 /* TraceTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509CF4D02208487900C500F0 /* TraceTableView.swift */; };
-		509F7F1A21EDDF4F00A530E4 /* BootRom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509F7F1821EDDF4F00A530E4 /* BootRom.cpp */; };
-		509F7F1D21EDEA0200A530E4 /* KickRom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509F7F1B21EDEA0200A530E4 /* KickRom.cpp */; };
+		509F7F1D21EDEA0200A530E4 /* RomFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509F7F1B21EDEA0200A530E4 /* RomFile.cpp */; };
 		50A2953F21FF12EF0046BAA0 /* ControlPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A2953D21FF12EF0046BAA0 /* ControlPort.cpp */; };
 		50B0AF93222531C500EE3689 /* CopperTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B0AF92222531C500EE3689 /* CopperTableView.swift */; };
 		50B0DD1E220B5CEF00D6618A /* BreakpointManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B0DD1C220B5CEF00D6618A /* BreakpointManager.cpp */; };
@@ -152,7 +151,7 @@
 		50E1E5D22242B9DA008EF4B0 /* FastBlitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E1E5D12242B9DA008EF4B0 /* FastBlitter.cpp */; };
 		50E204EA2295A3F20082B63D /* DmaDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E204E82295A3F20082B63D /* DmaDebugger.cpp */; };
 		50E79BE9232D123000D296FB /* SubComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E79BE7232D123000D296FB /* SubComponent.cpp */; };
-		50ECF98622B153FB007B3DE7 /* ExtRom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50ECF98422B153FB007B3DE7 /* ExtRom.cpp */; };
+		50ECF98622B153FB007B3DE7 /* ExtFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50ECF98422B153FB007B3DE7 /* ExtFile.cpp */; };
 		50EE994021FF4D8E003BD74B /* AudioUnit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EE993E21FF4D8E003BD74B /* AudioUnit.cpp */; };
 		50F0BD2622AF883C001F4616 /* UART.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F0BD2422AF883C001F4616 /* UART.cpp */; };
 		50F5A84E2214112F00AD5611 /* PaulaPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F5A84D2214112F00AD5611 /* PaulaPanel.swift */; };
@@ -339,10 +338,8 @@
 		509CF4CE220847C600C500F0 /* InstrTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstrTableView.swift; sourceTree = "<group>"; };
 		509CF4D02208487900C500F0 /* TraceTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceTableView.swift; sourceTree = "<group>"; };
 		509D4EF4228596A900E2C252 /* PaulaTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PaulaTypes.h; sourceTree = "<group>"; };
-		509F7F1821EDDF4F00A530E4 /* BootRom.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BootRom.cpp; sourceTree = "<group>"; };
-		509F7F1921EDDF4F00A530E4 /* BootRom.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BootRom.h; sourceTree = "<group>"; };
-		509F7F1B21EDEA0200A530E4 /* KickRom.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = KickRom.cpp; sourceTree = "<group>"; };
-		509F7F1C21EDEA0200A530E4 /* KickRom.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KickRom.h; sourceTree = "<group>"; };
+		509F7F1B21EDEA0200A530E4 /* RomFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RomFile.cpp; sourceTree = "<group>"; };
+		509F7F1C21EDEA0200A530E4 /* RomFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RomFile.h; sourceTree = "<group>"; };
 		50A2953D21FF12EF0046BAA0 /* ControlPort.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ControlPort.cpp; sourceTree = "<group>"; };
 		50A2953E21FF12EF0046BAA0 /* ControlPort.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ControlPort.h; sourceTree = "<group>"; };
 		50B0AF92222531C500EE3689 /* CopperTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopperTableView.swift; sourceTree = "<group>"; };
@@ -395,8 +392,8 @@
 		50E204E92295A3F20082B63D /* DmaDebugger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DmaDebugger.h; sourceTree = "<group>"; };
 		50E79BE7232D123000D296FB /* SubComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SubComponent.cpp; sourceTree = "<group>"; };
 		50E79BE8232D123000D296FB /* SubComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SubComponent.h; sourceTree = "<group>"; };
-		50ECF98422B153FB007B3DE7 /* ExtRom.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ExtRom.cpp; sourceTree = "<group>"; };
-		50ECF98522B153FB007B3DE7 /* ExtRom.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExtRom.h; sourceTree = "<group>"; };
+		50ECF98422B153FB007B3DE7 /* ExtFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ExtFile.cpp; sourceTree = "<group>"; };
+		50ECF98522B153FB007B3DE7 /* ExtFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExtFile.h; sourceTree = "<group>"; };
 		50EE993E21FF4D8E003BD74B /* AudioUnit.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AudioUnit.cpp; sourceTree = "<group>"; };
 		50EE993F21FF4D8E003BD74B /* AudioUnit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioUnit.h; sourceTree = "<group>"; };
 		50EFC7DF22E840870036A3DF /* Serialization.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Serialization.h; sourceTree = "<group>"; };
@@ -689,12 +686,10 @@
 				5051922722B61C1B0012C4BB /* FileTypes.h */,
 				508FE06421EA318D0043D0E9 /* AmigaFile.h */,
 				508FE06321EA318D0043D0E9 /* AmigaFile.cpp */,
-				509F7F1921EDDF4F00A530E4 /* BootRom.h */,
-				509F7F1821EDDF4F00A530E4 /* BootRom.cpp */,
-				509F7F1C21EDEA0200A530E4 /* KickRom.h */,
-				509F7F1B21EDEA0200A530E4 /* KickRom.cpp */,
-				50ECF98522B153FB007B3DE7 /* ExtRom.h */,
-				50ECF98422B153FB007B3DE7 /* ExtRom.cpp */,
+				509F7F1C21EDEA0200A530E4 /* RomFile.h */,
+				509F7F1B21EDEA0200A530E4 /* RomFile.cpp */,
+				50ECF98522B153FB007B3DE7 /* ExtFile.h */,
+				50ECF98422B153FB007B3DE7 /* ExtFile.cpp */,
 				50384C8521FC6B66006E7748 /* Snapshot.h */,
 				50384C8421FC6B66006E7748 /* Snapshot.cpp */,
 				508833ED21F0D21B009890EA /* ADFFile.h */,
@@ -1159,7 +1154,6 @@
 				508FE02B21EA227B0043D0E9 /* WindowDelegate.swift in Sources */,
 				50B14C2821EB97EC002E32A6 /* AmigaProxy.mm in Sources */,
 				50DED6B12202EC3100B8195F /* Inspector.swift in Sources */,
-				509F7F1A21EDDF4F00A530E4 /* BootRom.cpp in Sources */,
 				508FE05121EA22CC0043D0E9 /* HardwarePrefs.swift in Sources */,
 				508FE03821EA22C30043D0E9 /* Notifications.swift in Sources */,
 				50991051236F58F000DF7064 /* m68kdasm.c in Sources */,
@@ -1186,7 +1180,7 @@
 				508FE04E21EA22CC0043D0E9 /* RomPrefs.swift in Sources */,
 				507653CB2216F91E001D26E9 /* AgnusPanel.swift in Sources */,
 				508FE06521EA318D0043D0E9 /* AmigaFile.cpp in Sources */,
-				50ECF98622B153FB007B3DE7 /* ExtRom.cpp in Sources */,
+				50ECF98622B153FB007B3DE7 /* ExtFile.cpp in Sources */,
 				508FE05621EA22CC0043D0E9 /* PreferencesController.swift in Sources */,
 				505A215022869FF10016EA21 /* AudioFilter.cpp in Sources */,
 				508FE05321EA22CC0043D0E9 /* VideoPrefs.swift in Sources */,
@@ -1209,7 +1203,7 @@
 				500C0A562259402D000121CD /* DiskController.cpp in Sources */,
 				5010A78222B50B690041388B /* PortPanel.swift in Sources */,
 				50B0DD1E220B5CEF00D6618A /* BreakpointManager.cpp in Sources */,
-				509F7F1D21EDEA0200A530E4 /* KickRom.cpp in Sources */,
+				509F7F1D21EDEA0200A530E4 /* RomFile.cpp in Sources */,
 				508FE05C21EA22CC0043D0E9 /* DiskMountController.swift in Sources */,
 				50B0AF93222531C500EE3689 /* CopperTableView.swift in Sources */,
 				5085FE5721FB3BAE009753EF /* EventHandler.cpp in Sources */,

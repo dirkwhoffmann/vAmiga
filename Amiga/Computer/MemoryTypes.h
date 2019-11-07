@@ -26,7 +26,6 @@ typedef enum
     MEM_RTC,
     MEM_OCS,
     MEM_AUTOCONF,
-    MEM_BOOT,
     MEM_KICK,
     MEM_WOM,
     MEM_EXTROM

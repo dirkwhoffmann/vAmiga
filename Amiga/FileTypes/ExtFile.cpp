@@ -7,19 +7,19 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "ExtRom.h"
+#include "ExtFile.h"
 
 // AROS Extended ROM
-const uint8_t ExtRom::magicBytes1[] = { 0x11, 0x14, 0x4E, 0xF9, 0x00, 0xF8, 0x00, 0x02 };
-const uint8_t ExtRom::magicBytes2[] = { 0x4E, 0x71, 0x4E, 0xF9, 0x00, 0xF8, 0x00, 0x02 };
+const uint8_t ExtFile::magicBytes1[] = { 0x11, 0x14, 0x4E, 0xF9, 0x00, 0xF8, 0x00, 0x02 };
+const uint8_t ExtFile::magicBytes2[] = { 0x4E, 0x71, 0x4E, 0xF9, 0x00, 0xF8, 0x00, 0x02 };
 
-ExtRom::ExtRom()
+ExtFile::ExtFile()
 {
     setDescription("ExtRom");
 }
 
 bool
-ExtRom::isExtRomBuffer(const uint8_t *buffer, size_t length)
+ExtFile::isExtRomBuffer(const uint8_t *buffer, size_t length)
 {
     printf("length = %zu %d\n", length, KB(512));
 
@@ -33,7 +33,7 @@ ExtRom::isExtRomBuffer(const uint8_t *buffer, size_t length)
 }
 
 bool
-ExtRom::isExtRomFile(const char *path)
+ExtFile::isExtRomFile(const char *path)
 {
     if (!checkFileSize(path, KB(512))) return false;
 
@@ -42,10 +42,10 @@ ExtRom::isExtRomFile(const char *path)
     matchingFileHeader(path, magicBytes2, sizeof(magicBytes2));
 }
 
-ExtRom *
-ExtRom::makeWithBuffer(const uint8_t *buffer, size_t length)
+ExtFile *
+ExtFile::makeWithBuffer(const uint8_t *buffer, size_t length)
 {
-    ExtRom *rom = new ExtRom();
+    ExtFile *rom = new ExtFile();
 
     if (!rom->readFromBuffer(buffer, length)) {
         delete rom;
@@ -55,10 +55,10 @@ ExtRom::makeWithBuffer(const uint8_t *buffer, size_t length)
     return rom;
 }
 
-ExtRom *
-ExtRom::makeWithFile(const char *path)
+ExtFile *
+ExtFile::makeWithFile(const char *path)
 {
-    ExtRom *rom = new ExtRom();
+    ExtFile *rom = new ExtFile();
 
     if (!rom->readFromFile(path)) {
         delete rom;
@@ -69,7 +69,7 @@ ExtRom::makeWithFile(const char *path)
 }
 
 bool
-ExtRom::readFromBuffer(const uint8_t *buffer, size_t length)
+ExtFile::readFromBuffer(const uint8_t *buffer, size_t length)
 {
     if (!AmigaFile::readFromBuffer(buffer, length))
         return false;

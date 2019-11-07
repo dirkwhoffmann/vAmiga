@@ -26,12 +26,7 @@ class RomDropView: NSImageView {
     func acceptDragSource(url: URL) -> Bool {
         
         guard let amiga = amigaProxy else { return false }
-
-        if amiga.config().model == AMIGA_1000 {
-            return amiga.mem.isBootRom(url) && amiga.isPoweredOff()
-        } else {
-            return amiga.mem.isKickRom(url) && amiga.isPoweredOff()
-        }
+        return amiga.mem.isRom(url) && amiga.isPoweredOff()
     }
     
     override func awakeFromNib() {
@@ -66,13 +61,8 @@ class RomDropView: NSImageView {
         guard let controller = myController else { return false }
         guard let amiga = amigaProxy else { return false }
         
-        if amiga.config().model == AMIGA_1000 {
-            controller.bootRomURL = url
-            return amiga.mem.loadBootRom(fromFile: url)
-        } else {
-            controller.kickRomURL = url
-            return amiga.mem.loadKickRom(fromFile: url)
-        }
+        controller.romURL = url
+        return amiga.mem.loadRom(fromFile: url)
     }
     
     override func concludeDragOperation(_ sender: NSDraggingInfo?) {

@@ -213,16 +213,14 @@ extension MyController {
 
 extension Keys {
     
-    static let bootRom           = "VAMIGABootRomFileKey"
-    static let kickRom           = "VAMIGAKickRomFileKey"
-    static let extRom            = "VAMIGAExtRomFileKey"
+    static let rom               = "VAMIGARomFileKey"
+    static let ext               = "VAMIGAExtFileKey"
 }
 
 extension Defaults {
     
-    static let bootRom = URL(fileURLWithPath: "")
-    static let kickRom = URL(fileURLWithPath: "")
-    static let extRom = URL(fileURLWithPath: "")
+    static let rom = URL(fileURLWithPath: "")
+    static let ext = URL(fileURLWithPath: "")
 }
 
 extension MyController {
@@ -231,9 +229,8 @@ extension MyController {
         
         let dictionary: [String: Any] = [
             
-            Keys.bootRom: Defaults.bootRom,
-            Keys.kickRom: Defaults.kickRom,
-            Keys.extRom: Defaults.extRom
+            Keys.rom: Defaults.rom,
+            Keys.ext: Defaults.ext
             ]
         
         let defaults = UserDefaults.standard
@@ -244,9 +241,8 @@ extension MyController {
         
         let defaults = UserDefaults.standard
 
-        let keys = [ Keys.bootRom,
-                     Keys.kickRom,
-                     Keys.extRom ]
+        let keys = [ Keys.rom,
+                     Keys.ext ]
 
         for key in keys { defaults.removeObject(forKey: key) }
         
@@ -259,18 +255,13 @@ extension MyController {
         
         amiga.suspend()
         
-        if let url = defaults.url(forKey: Keys.bootRom) {
-            bootRomURL = url
-            amiga.mem.loadBootRom(fromFile: bootRomURL)
+        if let url = defaults.url(forKey: Keys.rom) {
+            romURL = url
+            amiga.mem.loadRom(fromFile: romURL)
         }
-        if let url = defaults.url(forKey: Keys.kickRom) {
-            kickRomURL = url
-            amiga.mem.loadKickRom(fromFile: kickRomURL)
-        }
-        if let url = defaults.url(forKey: Keys.extRom) {
-            track("url = \(url)")
-            extRomURL = url
-            amiga.mem.loadExtRom(fromFile: extRomURL)
+        if let url = defaults.url(forKey: Keys.ext) {
+            extURL = url
+            amiga.mem.loadExtRom(fromFile: extURL)
         }
         amiga.resume()
     }
@@ -279,9 +270,8 @@ extension MyController {
         
         let defaults = UserDefaults.standard
         
-        defaults.set(bootRomURL, forKey: Keys.bootRom)
-        defaults.set(kickRomURL, forKey: Keys.kickRom)
-        defaults.set(extRomURL, forKey: Keys.extRom)
+        defaults.set(romURL, forKey: Keys.rom)
+        defaults.set(extURL, forKey: Keys.ext)
     }
 }
 

@@ -252,19 +252,12 @@ struct AmigaFileWrapper;
 
 - (void) dump;
 
-- (BOOL) hasBootRom;
-- (void) deleteBootRom;
-- (BOOL) isBootRom:(NSURL *)url;
-- (BOOL) loadBootRomFromBuffer:(NSData *)buffer;
-- (BOOL) loadBootRomFromFile:(NSURL *)url;
-- (uint64_t) bootRomFingerprint;
-
-- (BOOL) hasKickRom;
-- (void) deleteKickRom;
-- (BOOL) isKickRom:(NSURL *)url;
-- (BOOL) loadKickRomFromBuffer:(NSData *)buffer;
-- (BOOL) loadKickRomFromFile:(NSURL *)url;
-- (uint64_t) kickRomFingerprint;
+- (BOOL) hasRom;
+- (void) deleteRom;
+- (BOOL) isRom:(NSURL *)url;
+- (BOOL) loadRomFromBuffer:(NSData *)buffer;
+- (BOOL) loadRomFromFile:(NSURL *)url;
+- (uint64_t) romFingerprint;
 
 - (BOOL) hasExtRom;
 - (void) deleteExtRom;
