@@ -733,10 +733,14 @@ extension MyController {
 
 extension Keys {
     
-    // Machine
+    // Chipset
     static let agnusRev           = "VAMIGAAgnusRevKey"
     static let deniseRev          = "VAMIGADeniseRevKey"
-    static let layout             = "VAMIGAKeyboardLayoutKey"
+    static let realTimeClock      = "VAMIGARealTimeClockKey"
+
+    // Keyboard
+    static let kbModel            = "VAMIGAKbModelKey"
+    static let kbLang             = "VAMIGAKbLangKey"
 
     // Memory
     static let chipRam            = "VAMIGAChipRamKey"
@@ -753,9 +757,6 @@ extension Keys {
     static let df3Connect         = "VAMIGADF3ConnectKey"
     static let df3Type            = "VAMIGADF3TypeKey"
 
-    // Extensions
-    static let realTimeClock      = "VAMIGARealTimeClockKey"
-
     // Ports
     static let serialDevice       = "VAMIGASerialDeviceKey"
 }
@@ -766,7 +767,10 @@ extension Defaults {
 
         let agnusRevision: AgnusRevision
         let deniseRevision: DeniseRevision
-        let layout: Layout
+        let realTimeClock: RTCModel
+
+        let kbModel: KeyboardModel
+        let kbLang: KeyboardLanguage
 
         let chipRam: Int
         let slowRam: Int
@@ -775,8 +779,6 @@ extension Defaults {
         let driveConnect: [Bool]
         let driveType: [DriveType]
 
-        let realTimeClock: Bool
-
         let serialDevice: SerialPortDevice
     }
 
@@ -784,39 +786,42 @@ extension Defaults {
 
         agnusRevision: AGNUS_8372,
         deniseRevision: DENISE_8362R8,
-        layout: Layout.us,
+        realTimeClock: RTC_NONE,
+        kbModel: KB_A500,
+        kbLang: KB_US,
         chipRam: 512,
         slowRam: 0,
         fastRam: 0,
         driveConnect: [true, false, false, false],
         driveType: [DRIVE_35_DD, DRIVE_35_DD, DRIVE_35_DD, DRIVE_35_DD],
-        realTimeClock: false,
         serialDevice: SPD_NONE)
 
     static let A1000 = ModelDefaults.init(
 
         agnusRevision: AGNUS_8367,
         deniseRevision: DENISE_8362R8,
-        layout: Layout.us,
+        realTimeClock: RTC_NONE,
+        kbModel: KB_A1000,
+        kbLang: KB_US,
         chipRam: 256,
         slowRam: 0,
         fastRam: 0,
         driveConnect: [true, false, false, false],
         driveType: [DRIVE_35_DD, DRIVE_35_DD, DRIVE_35_DD, DRIVE_35_DD],
-        realTimeClock: false,
         serialDevice: SPD_NONE)
 
     static let A2000 = ModelDefaults.init(
         
         agnusRevision: AGNUS_8375,
         deniseRevision: DENISE_8362R8,
-        layout: Layout.us,
+        realTimeClock: RTC_M6242B,
+        kbModel: KB_A2000,
+        kbLang: KB_US,
         chipRam: 512,
         slowRam: 512,
         fastRam: 0,
         driveConnect: [true, false, false, false],
         driveType: [DRIVE_35_DD, DRIVE_35_DD, DRIVE_35_DD, DRIVE_35_DD],
-        realTimeClock: true,
         serialDevice: SPD_NONE)
 }
 
@@ -830,8 +835,11 @@ extension MyController {
             
             Keys.agnusRev: defaultModel.agnusRevision.rawValue,
             Keys.deniseRev: defaultModel.deniseRevision.rawValue,
-            Keys.layout: defaultModel.layout.rawValue,
-            
+            Keys.realTimeClock: defaultModel.realTimeClock.rawValue,
+
+            Keys.kbModel: defaultModel.kbModel.rawValue,
+            Keys.kbLang: defaultModel.kbLang.rawValue,
+
             Keys.chipRam: defaultModel.chipRam,
             Keys.slowRam: defaultModel.slowRam,
             Keys.fastRam: defaultModel.fastRam,
@@ -844,8 +852,6 @@ extension MyController {
             Keys.df2Type: defaultModel.driveType[2].rawValue,
             Keys.df3Connect: defaultModel.driveConnect[3],
             Keys.df3Type: defaultModel.driveType[3].rawValue,
-
-            Keys.realTimeClock: defaultModel.realTimeClock,
 
             Keys.serialDevice: defaultModel.serialDevice.rawValue
         ]
@@ -860,7 +866,10 @@ extension MyController {
 
         let keys = [Keys.agnusRev,
                     Keys.deniseRev,
-                    Keys.layout,
+                    Keys.realTimeClock,
+
+                    Keys.kbModel,
+                    Keys.kbLang,
                     
                     Keys.chipRam,
                     Keys.slowRam,
@@ -875,8 +884,6 @@ extension MyController {
                     Keys.df2Type,
                     Keys.df3Connect,
                     Keys.df3Type,
-
-                    Keys.realTimeClock,
 
                     Keys.serialDevice ]
 
@@ -893,8 +900,11 @@ extension MyController {
         
         amiga.configure(VA_AGNUS_REVISION, value: defaults.integer(forKey: Keys.agnusRev))
         amiga.configure(VA_DENISE_REVISION, value: defaults.integer(forKey: Keys.deniseRev))
-        amiga.configure(VA_KB_LAYOUT, value: defaults.integer(forKey: Keys.layout))
-    
+        amiga.configure(VA_RT_CLOCK, enable: defaults.bool(forKey: Keys.realTimeClock))
+
+        amiga.configure(VA_KB_MODEL, value: defaults.integer(forKey: Keys.kbModel))
+        amiga.configure(VA_KB_LANG, value: defaults.integer(forKey: Keys.kbLang))
+
         amiga.configure(VA_CHIP_RAM, value: defaults.integer(forKey: Keys.chipRam))
         amiga.configure(VA_SLOW_RAM, value: defaults.integer(forKey: Keys.slowRam))
         amiga.configure(VA_FAST_RAM, value: defaults.integer(forKey: Keys.fastRam))
@@ -909,7 +919,6 @@ extension MyController {
         amiga.configureDrive(3, connected: defaults.bool(forKey: Keys.df3Connect))
         amiga.configureDrive(3, type: defaults.integer(forKey: Keys.df3Type))
 
-        amiga.configure(VA_RT_CLOCK, enable: defaults.bool(forKey: Keys.realTimeClock))
         amiga.configure(VA_SERIAL_DEVICE, value: defaults.integer(forKey: Keys.serialDevice))
         amiga.resume()
     }
@@ -922,7 +931,10 @@ extension MyController {
 
         defaults.set(config.agnusRevision.rawValue, forKey: Keys.agnusRev)
         defaults.set(config.deniseRevision.rawValue, forKey: Keys.deniseRev)
-        defaults.set(config.layout, forKey: Keys.layout)
+        defaults.set(config.rtc.model.rawValue, forKey: Keys.realTimeClock)
+
+        defaults.set(config.keyboard.model.rawValue, forKey: Keys.kbModel)
+        defaults.set(config.keyboard.language.rawValue, forKey: Keys.kbLang)
 
         defaults.set(config.mem.chipRamSize / 1024, forKey: Keys.chipRam)
         defaults.set(config.mem.slowRamSize / 1024, forKey: Keys.slowRam)
@@ -938,7 +950,6 @@ extension MyController {
         defaults.set(config.df2.type.rawValue, forKey: Keys.df2Type)
         defaults.set(config.df3.type.rawValue, forKey: Keys.df3Type)
 
-        defaults.set(config.rtc.model.rawValue, forKey: Keys.realTimeClock)
         defaults.set(config.serialDevice, forKey: Keys.serialDevice)
     }
 }

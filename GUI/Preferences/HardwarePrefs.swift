@@ -25,7 +25,8 @@ extension PreferencesController {
         hwRealTimeClock.selectItem(withTag: config.rtc.model.rawValue)
 
         // Keyboard
-        hwKbLanguagePopup.selectItem(withTag: config.layout)
+        hwKbModelPopup.selectItem(withTag: config.keyboard.model.rawValue)
+        hwKbLanguagePopup.selectItem(withTag: config.keyboard.language.rawValue)
 
         // Ports
         hwSerialDevice.selectItem(withTag: Int(config.serialDevice))
@@ -76,12 +77,18 @@ extension PreferencesController {
         refresh()
     }
 
-    @IBAction func hwLayoutAction(_ sender: NSPopUpButton!) {
+    @IBAction func hwKeyboardModelAction(_ sender: NSPopUpButton!) {
 
-        amigaProxy?.configure(VA_KB_LAYOUT, value: sender.selectedTag())
+        amigaProxy?.configure(VA_KB_MODEL, value: sender.selectedTag())
         refresh()
     }
-    
+
+    @IBAction func hwKeyboardLanguageAction(_ sender: NSPopUpButton!) {
+
+        amigaProxy?.configure(VA_KB_LANG, value: sender.selectedTag())
+        refresh()
+    }
+
     @IBAction func hwRealTimeClockAction(_ sender: NSPopUpButton!) {
         
         amigaProxy?.configure(VA_RT_CLOCK, value: sender.selectedTag())
@@ -143,8 +150,8 @@ extension PreferencesController {
 
     func hwFactorySettingsAction(_ defaults: Defaults.ModelDefaults) {
 
-        amigaProxy?.configure(VA_KB_LAYOUT, value: defaults.layout.rawValue)
-        amigaProxy?.configure(VA_RT_CLOCK, enable: defaults.realTimeClock)
+        amigaProxy?.configure(VA_KB_MODEL, value: defaults.kbModel.rawValue)
+        amigaProxy?.configure(VA_KB_LANG, value: defaults.kbLang.rawValue)
 
         amigaProxy?.configure(VA_CHIP_RAM, value: defaults.chipRam)
         amigaProxy?.configure(VA_SLOW_RAM, value: defaults.slowRam)

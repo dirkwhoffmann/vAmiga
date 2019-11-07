@@ -18,6 +18,7 @@
 #include "AgnusTypes.h"
 #include "DeniseTypes.h"
 #include "RTCTypes.h"
+#include "KeyboardTypes.h"
 
 
 //
@@ -26,37 +27,17 @@
 
 typedef enum : long
 {
-    AMIGA_500,
-    AMIGA_1000,
-    AMIGA_2000
-}
-AmigaModel;
-
-inline bool isAmigaModel(long model)
-{
-    return model >= AMIGA_500 && model <= AMIGA_2000;
-}
-
-inline const char *modelName(AmigaModel model)
-{
-    return
-    model == AMIGA_500 ? "Amiga 500" :
-    model == AMIGA_1000 ? "Amiga 1000" :
-    model == AMIGA_2000 ? "Amiga 2000" : "???";
-}
-
-typedef enum : long
-{
     VA_AGNUS_REVISION,
     VA_DENISE_REVISION,
-    VA_KB_LAYOUT,
+    VA_RT_CLOCK,
+    VA_KB_MODEL,
+    VA_KB_LANG,
     VA_CHIP_RAM,
     VA_SLOW_RAM,
     VA_FAST_RAM,
     VA_DRIVE_CONNECT,
     VA_DRIVE_TYPE,
     VA_DRIVE_SPEED,
-    VA_RT_CLOCK,
     VA_EMULATE_SPRITES,
     VA_CLX_SPR_SPR,
     VA_CLX_SPR_PLF,
@@ -95,11 +76,9 @@ RunLoopControlFlag;
 
 typedef struct
 {
-    AmigaModel model;
     RTCConfig rtc;
     AgnusRevision agnusRevision; // DEPRECATED. Replace by AgnusConfig
     DeniseRevision deniseRevision; // DEPRECATED.
-    long layout;
     FilterActivation filterActivation;
     FilterType filterType;
     CPUEngine cpuEngine;
@@ -108,7 +87,8 @@ typedef struct
     MemoryConfig mem;
     DeniseConfig denise;
     BlitterConfig blitter;
-    DiskControllerConfig diskController; 
+    DiskControllerConfig diskController;
+    KeyboardConfig keyboard;
     long serialDevice;
     DriveConfig df0;
     DriveConfig df1;

@@ -293,15 +293,6 @@ class MyController: NSWindowController, MessageReceiver {
         set { amiga.setSnapshotInterval(newValue) }
     }
   
-    //
-    // Hardware
-    //
-
-    var layout: Int { // DEPRECATED
-        get { return amiga.config().layout }
-        set { amiga.configure(VA_KB_LAYOUT, value: newValue); }
-    }
-
     // Updates the warp status
     func updateWarp() {
 

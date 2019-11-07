@@ -48,7 +48,7 @@ class PreferencesController: DialogController {
     @IBOutlet weak var hwRealTimeClock: NSPopUpButton!
 
     // Keyboard
-    @IBOutlet weak var hwKbTypePopup: NSPopUpButton!
+    @IBOutlet weak var hwKbModelPopup: NSPopUpButton!
     @IBOutlet weak var hwKbLanguagePopup: NSPopUpButton!
 
     // Ports

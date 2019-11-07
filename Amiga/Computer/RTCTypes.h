@@ -41,7 +41,6 @@ inline const char *RTCModelName(RTCModel model)
 
 typedef struct
 {
-    // Emulated clock model
     RTCModel model;
 }
 RTCConfig;

@@ -15,6 +15,24 @@ Keyboard::Keyboard(Amiga& ref) : SubComponent(ref)
 }
 
 void
+Keyboard::setModel(KeyboardModel model)
+{
+    debug("setModel(%d)\n", model);
+
+    assert(isKeyboardModel(model));
+    config.model = model;
+}
+
+void
+Keyboard::setLanguage(KeyboardLanguage lang)
+{
+    debug("setLanguage(%d)\n", lang);
+
+    assert(isKeyboardLanguage(lang));
+    config.language = lang;
+}
+
+void
 Keyboard::_reset()
 {
     RESET_SNAPSHOT_ITEMS

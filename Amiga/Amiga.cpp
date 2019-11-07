@@ -159,12 +159,10 @@ AmigaConfiguration
 Amiga::getConfig()
 {
     AmigaConfiguration config;
-    
-    config.model = model;
+
     config.rtc = rtc.getConfig();
     config.agnusRevision = agnus.getRevision();
     config.deniseRevision = denise.getRevision();
-    config.layout = keyboard.layout;
     config.filterActivation = paula.audioUnit.getFilterActivation();
     config.filterType = paula.audioUnit.getFilterType();
     config.cpuEngine = CPU_MUSASHI;
@@ -175,6 +173,7 @@ Amiga::getConfig()
     config.serialDevice = serialPort.getDevice();
     config.blitter = agnus.blitter.getConfig(); 
     config.diskController = paula.diskController.getConfig();
+    config.keyboard = keyboard.getConfig();
     config.df0 = df0.getConfig();
     config.df1 = df1.getConfig();
     config.df2 = df2.getConfig();
@@ -237,7 +236,7 @@ Amiga::configure(ConfigOption option, long value)
 
             if (!isAgnusRevision(value)) {
                  warn("Invalid Agnus revision: %d\n", value);
-                warn("       Valid values: %d, %d, %d\n", AGNUS_8367, AGNUS_8372, AGNUS_8375);
+                warn("       Valid values: %d - %d\n", AGNUS_8367, AGNUS_8375);
                  return false;
              }
 
@@ -249,7 +248,7 @@ Amiga::configure(ConfigOption option, long value)
 
             if (!isDeniseRevision(value)) {
                 warn("Invalid Denise revision: %d\n", value);
-                warn("       Valid values: %d, %d, %d\n", DENISE_8362R8);
+                warn("       Valid values: %d\n", DENISE_8362R8);
                 return false;
             }
 
@@ -257,17 +256,46 @@ Amiga::configure(ConfigOption option, long value)
             denise.setRevision((DeniseRevision)value);
             break;
 
-        case VA_KB_LAYOUT:
-            
-            if (current.layout == value) return true;
-            keyboard.layout = value;
+        case VA_RT_CLOCK:
+
+            if (!isRTCModel(value)) {
+                warn("Invalid RTC model: %d\n", value);
+                warn("     Valid values: %d, %d\n", RTC_NONE, RTC_M6242B);
+                return false;
+            }
+
+            if (current.rtc.model == value) return true;
+            rtc.setModel((RTCModel)value);
+            mem.updateMemSrcTable();
+            break;
+
+        case VA_KB_MODEL:
+
+            if (!isKeyboardModel(value)) {
+                warn("Invalid keyboard model: %d\n", value);
+                return false;
+            }
+
+            if (current.keyboard.model == value) return true;
+            keyboard.setModel((KeyboardModel)value);
+            break;
+
+        case VA_KB_LANG:
+
+            if (!isKeyboardLanguage(value)) {
+                warn("Invalid keyboard language: %d\n", value);
+                return false;
+            }
+
+            if (current.keyboard.language == value) return true;
+            keyboard.setLanguage((KeyboardLanguage)value);
             break;
             
         case VA_CHIP_RAM:
             
-            if (value != 256 && value != 512) {
+            if (value != 256 && value != 512 && value != 1024 && value != 2048) {
                 warn("Invalid Chip Ram size: %d\n", value);
-                warn("         Valid values: 256KB, 512KB\n");
+                warn("         Valid values: 256KB, 512KB, 1024KB, 2048KB\n");
                 return false;
             }
             
@@ -294,19 +322,6 @@ Amiga::configure(ConfigOption option, long value)
             }
             
             mem.allocateFastRam(KB(value));
-            break;
-  
-        case VA_RT_CLOCK:
-
-            if (!isRTCModel(value)) {
-                warn("Invalid RTC model: %d\n", value);
-                warn("     Valid values: %d, %d\n", RTC_NONE, RTC_M6242B);
-                return false;
-            }
-
-            if (current.rtc.model == value) return true;
-            rtc.setModel((RTCModel)value);
-            mem.updateMemSrcTable();
             break;
 
         case VA_EMULATE_SPRITES:

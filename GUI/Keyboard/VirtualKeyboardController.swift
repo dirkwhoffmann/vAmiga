@@ -32,17 +32,21 @@ class VirtualKeyboardController: DialogController, NSWindowDelegate {
 
         guard let config = myController?.amiga.config() else { return nil }
 
-        let layout = Layout(rawValue: config.layout) ?? .us
+        let model  = config.keyboard.model
+        let lang   = config.keyboard.language
+        let layout = Layout(rawValue: lang.rawValue) ?? .us
         let ansi   = (layout == .us)
-        
+
         var xibName = ""
         
-        if config.model == AMIGA_1000 {
+        if model == KB_A1000 {
             xibName = ansi ? "A1000ANSI" : "A1000ISO"
         } else {
             xibName = ansi ? "A500ANSI" : "A500ISO"
         }
-      
+
+        track("xibName = \(xibName) layout = \(layout)")
+
         return VirtualKeyboardController.init(windowNibName: xibName)
     }
     
@@ -91,13 +95,17 @@ class VirtualKeyboardController: DialogController, NSWindowDelegate {
     }
     
     func updateImageCache() {
-        
+
         guard let config = amigaProxy?.config() else { return }
-        guard let layout = Layout(rawValue: config.layout) else { return }
+
+        let lang = config.keyboard.language
+        let layout = Layout(rawValue: lang.rawValue) ?? .us
+
+        track("layout = \(layout)")
         
         for keycode in 0 ... 127 {
             let key = AmigaKey.init(keyCode: keycode)
-            if let image = key.image(model: config.model, layout: layout) {
+            if let image = key.image(model: config.keyboard.model, layout: layout) {
                 keyImage[keycode] = image
                 pressedKeyImage[keycode] = image.copy() as? NSImage
                 pressedKeyImage[keycode]?.pressed()

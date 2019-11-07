@@ -81,7 +81,7 @@
                 <outlet property="hwFactorySettingsPopup" destination="G7A-Sb-Z0Q" id="1aF-VP-yUY"/>
                 <outlet property="hwFastRamPopup" destination="BTz-kT-JtT" id="oec-CI-f3J"/>
                 <outlet property="hwKbLanguagePopup" destination="EWH-Iz-zuX" id="zdJ-Vg-G4e"/>
-                <outlet property="hwKbTypePopup" destination="3Wu-Hm-GrD" id="5yj-zd-mfm"/>
+                <outlet property="hwKbModelPopup" destination="3Wu-Hm-GrD" id="FkK-1p-pB3"/>
                 <outlet property="hwLockSubText" destination="M4r-6P-yfY" id="wxV-Tm-80C"/>
                 <outlet property="hwLockText" destination="3ER-DN-63K" id="aH1-Iu-24q"/>
                 <outlet property="hwOKButton" destination="cMh-0b-Yb2" id="hqp-3Y-hPC"/>
@@ -323,7 +323,7 @@ Gw
                                                 </menu>
                                             </popUpButtonCell>
                                             <connections>
-                                                <action selector="hwLayoutAction:" target="-2" id="kc8-i1-JbH"/>
+                                                <action selector="hwKeyboardLanguageAction:" target="-2" id="YFa-SV-ACY"/>
                                             </connections>
                                         </popUpButton>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uN5-LF-WyI">
@@ -338,20 +338,23 @@ Gw
                                         <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3Wu-Hm-GrD" userLabel="System">
                                             <rect key="frame" x="95" y="237" width="181" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Amiga 500" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="9IW-Kd-OiJ" id="lNm-qC-ddI" userLabel="System">
+                                            <popUpButtonCell key="cell" type="push" title="Amiga 500" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="9IW-Kd-OiJ" id="lNm-qC-ddI" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system"/>
+                                                <font key="font" metaFont="menu"/>
                                                 <menu key="menu" id="v0Y-dq-eAh">
                                                     <items>
-                                                        <menuItem title="Amiga 500" state="on" tag="-1" id="9IW-Kd-OiJ"/>
+                                                        <menuItem title="Amiga 500" state="on" id="9IW-Kd-OiJ"/>
                                                         <menuItem title="Amiga 1000" tag="1" id="lg1-SX-ELH">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="Amiga 2000" tag="2" id="Kus-pg-gRU">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
                                             <connections>
-                                                <action selector="hwLayoutAction:" target="-2" id="qXB-e1-9NM"/>
+                                                <action selector="hwKeyboardModelAction:" target="-2" id="Gyl-Tq-Ndp"/>
                                             </connections>
                                         </popUpButton>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RB4-Iz-1ch">
@@ -811,7 +814,7 @@ DQ
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="None" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="cv2-pK-dGx" id="oC1-2m-VYJ" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system"/>
+                                                <font key="font" metaFont="menu"/>
                                                 <menu key="menu" id="oEx-tD-xql">
                                                     <items>
                                                         <menuItem title="None" state="on" id="cv2-pK-dGx"/>

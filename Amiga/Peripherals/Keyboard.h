@@ -14,6 +14,9 @@
 
 class Keyboard : public SubComponent {
 
+    // The current configuration
+     KeyboardConfig config;
+
 public:
     
     /* The keybord layout identifier.
@@ -71,8 +74,21 @@ public:
         & typeAheadBuffer
         & bufferIndex;
     }
-    
-    
+
+
+    //
+    // Configuring
+    //
+
+    KeyboardConfig getConfig() { return config; }
+
+    KeyboardModel getModel() { return config.model; }
+    void setModel(KeyboardModel model);
+
+    KeyboardLanguage getLanguage() { return config.language; }
+    void setLanguage(KeyboardLanguage model);
+
+
     //
     // Methods from HardwareComponent
     //
