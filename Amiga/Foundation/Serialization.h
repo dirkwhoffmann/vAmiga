@@ -124,6 +124,7 @@ public:
     COUNT(const DriveState)
     COUNT(const KeyboardState)
     COUNT(const DrawingMode)
+    COUNT(const RTCModel)
     COUNT(const DiskType)
     COUNT(const CIAType)
 
@@ -194,6 +195,7 @@ public:
     DESERIALIZE32(DriveState)
     DESERIALIZE32(KeyboardState)
     DESERIALIZE32(DrawingMode)
+    DESERIALIZE64(RTCModel)
     DESERIALIZE64(DiskType)
     DESERIALIZE64(CIAType)
 
@@ -270,6 +272,7 @@ public:
     SERIALIZE32(const DriveState)
     SERIALIZE32(const KeyboardState)
     SERIALIZE32(const DrawingMode)
+    SERIALIZE64(const RTCModel)
     SERIALIZE64(const DiskType)
     SERIALIZE64(const CIAType)
 
@@ -340,6 +343,7 @@ public:
     RESET(DriveState)
     RESET(KeyboardState)
     RESET(DrawingMode)
+    RESET(RTCModel)
 
     STRUCT(Event)
     STRUCT(Beam)

@@ -17,24 +17,6 @@ func resetScriptCmd(arguments: [AnyHashable: Any]?) -> Bool {
     return true
 }
 
-func configureScriptCmd(arguments: [AnyHashable: Any]?) -> Bool {
-    
-    // Hardware model
-    if let argument = arguments?["VAMModel"] as? String {
-        
-        switch argument {
-            
-        case "A1000": amigaProxy?.configureModel(AMIGA_1000.rawValue)
-        case "A500": amigaProxy?.configureModel(AMIGA_500.rawValue)
-        case "A2000": amigaProxy?.configureModel(AMIGA_2000.rawValue)
-            
-        default: return false
-        }
-        return true
-    }
-    return false
-}
-
 func mountScriptCmd(arguments: [AnyHashable: Any]?) -> Bool {
     
     if let argument = arguments?["VAMPath"] as? String {

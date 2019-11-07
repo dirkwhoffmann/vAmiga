@@ -342,6 +342,7 @@
 		509F7F1C21EDEA0200A530E4 /* RomFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RomFile.h; sourceTree = "<group>"; };
 		50A2953D21FF12EF0046BAA0 /* ControlPort.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ControlPort.cpp; sourceTree = "<group>"; };
 		50A2953E21FF12EF0046BAA0 /* ControlPort.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ControlPort.h; sourceTree = "<group>"; };
+		50A493832374560D003ECD2C /* RTCTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RTCTypes.h; sourceTree = "<group>"; };
 		50B0AF92222531C500EE3689 /* CopperTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopperTableView.swift; sourceTree = "<group>"; };
 		50B0DD1C220B5CEF00D6618A /* BreakpointManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BreakpointManager.cpp; sourceTree = "<group>"; };
 		50B0DD1D220B5CEF00D6618A /* BreakpointManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BreakpointManager.h; sourceTree = "<group>"; };
@@ -779,6 +780,7 @@
 				5051922A22B61DAA0012C4BB /* MemoryTypes.h */,
 				5064851021EC7A1700FC4AC3 /* Memory.h */,
 				5064850F21EC7A1700FC4AC3 /* Memory.cpp */,
+				50A493832374560D003ECD2C /* RTCTypes.h */,
 				501B821C2262FFB200042871 /* RTC.h */,
 				501B821B2262FFB200042871 /* RTC.cpp */,
 				508E7F962206CDC600F7D88C /* CPU */,

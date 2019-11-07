@@ -296,49 +296,10 @@ class MyController: NSWindowController, MessageReceiver {
     //
     // Hardware
     //
-    var model: Int {
-        get { return amiga.config().model.rawValue }
-        set { amiga.configureModel(newValue); }
-    }
-    var layout: Int {
+
+    var layout: Int { // DEPRECATED
         get { return amiga.config().layout }
         set { amiga.configure(VA_KB_LAYOUT, value: newValue); }
-    }
-    /*
-    var chipMemory: Int {
-        get { return amiga.memConfig().chipRamSize }
-        set { amiga.configureChipMemory(newValue); }
-    }
-    var slowMemory: Int {
-        get { return amiga.memConfig().slowRamSize }
-        set { amiga.configureChipMemory(newValue); }
-    }
-    var fastMemory: Int {
-        get { return amiga.memConfig().fastRamSize }
-        set { amiga.configureFastMemory(newValue); }
-    }
-    */
-    /*
-    var df0connected: Bool {
-        get { return amiga.config().diskController.connected.0 }
-        set { amiga.configureDrive(0, connected: newValue); }
-    }
-    var df0type: Int {
-        get { return amiga.config().df0.type.rawValue }
-        set { amiga.configureDrive(0, type: newValue); }
-    }
-    var df1connected: Bool {
-        get { return amiga.config().diskController.connected.1 }
-        set { amiga.configureDrive(0, connected: newValue); }
-    }
-    var df1type: Int {
-        get { return amiga.config().df1.type.rawValue }
-        set { amiga.configureDrive(0, type: newValue); }
-    }
-    */
-    var realTimeClock: Bool {
-        get { return amiga.config().realTimeClock }
-        set { amiga.configure(VA_RT_CLOCK, enable: newValue); }
     }
 
     // Updates the warp status

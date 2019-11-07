@@ -71,9 +71,9 @@ void
 Memory::_dump()
 {
     struct { uint8_t *addr; size_t size; const char *desc; } mem[7] = {
-        { rom, config.romSize, "Kick Rom" },
-        { wom,     config.womSize,     "Wom" },
-        { ext,  config.extSize,  "Ext  Rom" },
+        { rom, config.romSize, "Rom" },
+        { wom, config.womSize, "Wom" },
+        { ext, config.extSize, "Ext" },
         { chipRam, config.chipRamSize, "Chip Ram" },
         { slowRam, config.slowRamSize, "Slow Ram" },
         { fastRam, config.fastRamSize, "Fast Ram" }
@@ -356,18 +356,15 @@ Memory::updateMemSrcTable()
 {
     // MemorySource mem_boot = bootRom ? MEM_BOOT : MEM_UNMAPPED;
     MemorySource mem_rom = rom ? MEM_ROM : MEM_UNMAPPED;
-    MemorySource mem_wom = wom ? MEM_WOM : mem_rom ? MEM_ROM : MEM_UNMAPPED;
+    MemorySource mem_wom = wom ? MEM_WOM : mem_rom;
     MemorySource mem_ext = ext ? MEM_EXT : MEM_UNMAPPED;
 
     assert(config.chipRamSize % 0x10000 == 0);
     assert(config.slowRamSize % 0x10000 == 0);
     assert(config.fastRamSize % 0x10000 == 0);
 
-    bool rtc = amiga.getConfig().realTimeClock;
     bool ovl = ciaa.getPA() & 1;
     
-    debug("updateMemSrcTable: rtc = %d ovl = %d\n", rtc, ovl);
-    debug("kickRom: %p extRom: %p\n", rom, ext);
     dump();
     
     // Start from scratch
@@ -395,8 +392,10 @@ Memory::updateMemSrcTable()
         memSrc[0xC0 + i] = MEM_SLOW;
 
     // Real-time clock (RTC)
-    for (unsigned i = 0xDC; rtc && i <= 0xDE; i++)
-        memSrc[i] = MEM_RTC;
+    if (rtc.getModel() != RTC_NONE) {
+        for (unsigned i = 0xDC; i <= 0xDE; i++)
+            memSrc[i] = MEM_RTC;
+    }
 
     // Auto-config (Zorro II)
     for (unsigned i = 0xE8; i <= 0xEF; i++)
@@ -406,22 +405,11 @@ Memory::updateMemSrcTable()
     for (unsigned i = 0xE0; i <= 0xE7; i++)
         memSrc[i] = mem_ext;
 
-    /*
-    // Boot Rom or Kickstart mirror
-    for (unsigned i = 0xF8; i <= 0xFB; i++)
-        // memSrc[i] = kickIsWritable ? mem_boot : mem_kick;
-        memSrc[i] = mem_rom;
-
-    // Kickstart WOM or Kickstart ROM
-    for (unsigned i = 0xFC; i <= 0xFF; i++) {
-        memSrc[i] = mem_wom;
-    }
-    */
-    // Kickstart WOM or Kickstart ROM
+    // Kickstart Wom or Kickstart Rom
     for (unsigned i = 0xF8; i <= 0xFF; i++)
         memSrc[i] = mem_wom;
 
-    // Blend in Boot Rom if a writeable WOM is present
+    // Blend in Boot Rom if a writeable Wom is present
     if (hasWom() && !womIsLocked) {
         for (unsigned i = 0xF8; i <= 0xFB; i++)
             memSrc[i] = mem_rom;
@@ -430,7 +418,6 @@ Memory::updateMemSrcTable()
     // Overlay Rom with lower memory area if the OVL line is high
     if (ovl) {
         for (unsigned i = 0; i < 8 && memSrc[0xF8 + i] != MEM_UNMAPPED; i++)
-            // memSrc[i] = memSrc[(ext ? 0xE0 : 0xF8) + i];
             memSrc[i] = memSrc[0xF8 + i];
     }
 

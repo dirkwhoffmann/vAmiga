@@ -19,13 +19,17 @@ extension PreferencesController {
         let config = amiga.config()
         let poweredOff = amiga.isPoweredOff()
 
-        // Machine
-        hwAmigaModelPopup.selectItem(withTag: config.model.rawValue)
+        // Chipset
         hwAgnusRevisionPopup.selectItem(withTag: config.agnusRevision.rawValue)
         hwDeniseRevisionPopup.selectItem(withTag: config.deniseRevision.rawValue)
-        hwLayoutPopup.selectItem(withTag: config.layout)
-        hwRealTimeClock.state = config.realTimeClock ? .on : .off
-        
+        hwRealTimeClock.selectItem(withTag: config.rtc.model.rawValue)
+
+        // Keyboard
+        hwKbLanguagePopup.selectItem(withTag: config.layout)
+
+        // Ports
+        hwSerialDevice.selectItem(withTag: Int(config.serialDevice))
+
         // Memory
         hwChipRamPopup.selectItem(withTag: config.mem.chipRamSize / 1024)
         hwSlowRamPopup.selectItem(withTag: config.mem.slowRamSize / 1024)
@@ -40,14 +44,10 @@ extension PreferencesController {
         hwDf2Type.selectItem(withTag: config.df2.type.rawValue)
         hwDf3Type.selectItem(withTag: config.df3.type.rawValue)
 
-        // Ports
-        hwSerialDevice.selectItem(withTag: Int(config.serialDevice))
-
         // Lock controls if emulator is powered on
-        hwAmigaModelPopup.isEnabled = poweredOff
         hwAgnusRevisionPopup.isEnabled = poweredOff
         hwDeniseRevisionPopup.isEnabled = poweredOff
-        hwRealTimeClock.isEnabled = poweredOff && config.model != AMIGA_2000
+        hwRealTimeClock.isEnabled = poweredOff
         hwChipRamPopup.isEnabled = poweredOff
         hwSlowRamPopup.isEnabled = poweredOff
         hwFastRamPopup.isEnabled = poweredOff
@@ -62,12 +62,6 @@ extension PreferencesController {
 
         // Label the OK button
         hwOKButton.title = okLabel
-    }
-    
-    @IBAction func hwAmigaModelAction(_ sender: NSPopUpButton!) {
-        
-        amigaProxy?.configureModel(sender.selectedTag())
-        refresh()
     }
 
     @IBAction func hwAgnusRevAction(_ sender: NSPopUpButton!) {
@@ -88,9 +82,9 @@ extension PreferencesController {
         refresh()
     }
     
-    @IBAction func hwRealTimeClocktAction(_ sender: NSButton!) {
+    @IBAction func hwRealTimeClockAction(_ sender: NSPopUpButton!) {
         
-        amigaProxy?.configure(VA_RT_CLOCK, enable: sender.state == .on)
+        amigaProxy?.configure(VA_RT_CLOCK, value: sender.selectedTag())
         refresh()
     }
     
@@ -149,7 +143,6 @@ extension PreferencesController {
 
     func hwFactorySettingsAction(_ defaults: Defaults.ModelDefaults) {
 
-        amigaProxy?.configureModel(defaults.amigaModel.rawValue)
         amigaProxy?.configure(VA_KB_LAYOUT, value: defaults.layout.rawValue)
         amigaProxy?.configure(VA_RT_CLOCK, enable: defaults.realTimeClock)
 

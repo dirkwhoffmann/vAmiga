@@ -15,14 +15,7 @@ extension MyAppDelegate {
             track("Failed to execute 'reset' command.")
         }
     }
- 
-    @objc func vamConfigureCommand(_ notification: Notification) {
-        
-        if !configureScriptCmd(arguments: notification.userInfo) {
-            track("Failed to execute 'configure' command.")
-        }
-    }
-    
+     
     @objc func vamMountCommand(_ notification: Notification) {
         
         if !mountScriptCmd(arguments: notification.userInfo) {

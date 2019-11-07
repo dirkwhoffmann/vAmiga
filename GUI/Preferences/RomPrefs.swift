@@ -81,12 +81,8 @@ extension PreferencesController {
         guard let amiga = amigaProxy else { return }
         
         track()
-        let config = amiga.config()
-        
-        let model =
-            config.model == AMIGA_1000 ? "1000" :
-                config.model == AMIGA_500 ? "500" : "2000"
-        
+        // let config = amiga.config()
+
         let poweredOff   = amiga.isPoweredOff()
         let hash         = amiga.mem.romFingerprint()
         let extHash      = amiga.mem.extRomFingerprint()
@@ -125,23 +121,8 @@ extension PreferencesController {
         var text = ""
         var subText = ""
         
-        switch config.model {
-
-        case AMIGA_1000 where !hasRom:
-            
-            text = "The Amiga 1000 requires a Boot Rom to launch."
-            subText = "Use drag and drop to add a Rom image."
-            
-        case AMIGA_500 where !hasRom, AMIGA_2000 where !hasRom:
-
-            text = "The Amiga \(model) requires a Kickstart Rom to run."
-            subText = "Use drag and drop to add a Rom image."
-
-        default:
-            
-            text = knownRoms[hash] ?? "An unknown or unsupported Rom."
-            subText = hasArosRom ? "Use original Amiga Roms for higher compatibility." : romURL.relativePath
-        }
+        text = knownRoms[hash] ?? "An unknown or unsupported Rom."
+        subText = hasArosRom ? "Use original Amiga Roms for higher compatibility." : romURL.relativePath
         
         romText.stringValue = text
         romText.textColor = hasRom ? .textColor : .systemRed

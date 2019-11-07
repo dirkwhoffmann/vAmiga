@@ -42,12 +42,17 @@ class PreferencesController: DialogController {
     // Hardware preferences
     //
     
-    // Machine
-    @IBOutlet weak var hwAmigaModelPopup: NSPopUpButton!
+    // Chipset
     @IBOutlet weak var hwAgnusRevisionPopup: NSPopUpButton!
     @IBOutlet weak var hwDeniseRevisionPopup: NSPopUpButton!
-    @IBOutlet weak var hwLayoutPopup: NSPopUpButton!
-    @IBOutlet weak var hwRealTimeClock: NSButton!
+    @IBOutlet weak var hwRealTimeClock: NSPopUpButton!
+
+    // Keyboard
+    @IBOutlet weak var hwKbTypePopup: NSPopUpButton!
+    @IBOutlet weak var hwKbLanguagePopup: NSPopUpButton!
+
+    // Ports
+    @IBOutlet weak var hwSerialDevice: NSPopUpButton!
 
     // Memory
     @IBOutlet weak var hwChipRamPopup: NSPopUpButton!
@@ -62,9 +67,6 @@ class PreferencesController: DialogController {
     @IBOutlet weak var hwDf2Type: NSPopUpButton!
     @IBOutlet weak var hwDf3Connect: NSButton!
     @IBOutlet weak var hwDf3Type: NSPopUpButton!
-
-    // Ports
-    @IBOutlet weak var hwSerialDevice: NSPopUpButton!
 
     // Lock
     @IBOutlet weak var hwLockText: NSTextField!

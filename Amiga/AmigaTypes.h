@@ -17,6 +17,7 @@
 #include "MemoryTypes.h"
 #include "AgnusTypes.h"
 #include "DeniseTypes.h"
+#include "RTCTypes.h"
 
 
 //
@@ -46,7 +47,6 @@ inline const char *modelName(AmigaModel model)
 
 typedef enum : long
 {
-    VA_AMIGA_MODEL,
     VA_AGNUS_REVISION,
     VA_DENISE_REVISION,
     VA_KB_LAYOUT,
@@ -73,7 +73,7 @@ ConfigOption;
 
 inline bool isConfigOption(long value)
 {
-    return value >= VA_AMIGA_MODEL && value <= VA_SERIAL_DEVICE;
+    return value >= VA_AGNUS_REVISION && value <= VA_SERIAL_DEVICE;
 }
 
 typedef enum
@@ -96,9 +96,9 @@ RunLoopControlFlag;
 typedef struct
 {
     AmigaModel model;
-    bool realTimeClock;
-    AgnusRevision agnusRevision;
-    DeniseRevision deniseRevision;
+    RTCConfig rtc;
+    AgnusRevision agnusRevision; // DEPRECATED. Replace by AgnusConfig
+    DeniseRevision deniseRevision; // DEPRECATED.
     long layout;
     FilterActivation filterActivation;
     FilterType filterType;

@@ -13,9 +13,10 @@
 #include "HardwareComponent.h"
 
 class RTC : public SubComponent {
- 
-    private:
-    
+
+    // The current configuration
+    RTCConfig config;
+
     /* The currently stored time
      * The RTC stores the time in form of the time difference relative to the
      * the current time that is provided by the host machine. I.e.:
@@ -44,18 +45,16 @@ class RTC : public SubComponent {
     // Constructing and destructing
     //
     
-    public:
+public:
     
     RTC(Amiga& ref);
-
-
-    //
-    // Iterating over snapshot items
-    //
 
     template <class T>
     void applyToPersistentItems(T& worker)
     {
+        worker
+
+        & config.model;
     }
 
     template <class T>
@@ -70,12 +69,22 @@ class RTC : public SubComponent {
         & lastMeasuredValue;
     }
 
-    
+
+    //
+    // Configuring
+    //
+
+    RTCConfig getConfig() { return config; }
+
+    RTCModel getModel() { return config.model; }
+    void setModel(RTCModel model);
+
+
     //
     // Methods from HardwareComponent
     //
     
-    private:
+private:
     
     void _powerOn() override;
     void _reset() override;
@@ -100,7 +109,7 @@ class RTC : public SubComponent {
     // Accessing register
     //
     
-    public:
+public:
     
     // Reads one of the 16 RTC registers
     uint8_t peek(unsigned nr);
@@ -108,7 +117,7 @@ class RTC : public SubComponent {
     // Writes one of the 16 RTC registers
     void poke(unsigned nr, uint8_t value);
     
-    private:
+private:
     
     /* Converts the register value to the internally stored time-stamp.
      * This function has to be called *before* a RTC register is *read*.

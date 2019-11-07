@@ -161,7 +161,7 @@ Amiga::getConfig()
     AmigaConfiguration config;
     
     config.model = model;
-    config.realTimeClock = realTimeClock;
+    config.rtc = rtc.getConfig();
     config.agnusRevision = agnus.getRevision();
     config.deniseRevision = denise.getRevision();
     config.layout = keyboard.layout;
@@ -233,20 +233,6 @@ Amiga::configure(ConfigOption option, long value)
     
     switch (option) {
 
-        case VA_AMIGA_MODEL:
-            
-            if (!isAmigaModel(value)) {
-                warn("Invalid Amiga model: %d\n", value);
-                warn("       Valid values: %d, %d, %d\n", AMIGA_500, AMIGA_1000, AMIGA_2000);
-                return false;
-            }
-            
-            if (current.model == value) return true;
-            model = (AmigaModel)value;
-            
-            mem.updateMemSrcTable();
-            break;
-
         case VA_AGNUS_REVISION:
 
             if (!isAgnusRevision(value)) {
@@ -311,9 +297,15 @@ Amiga::configure(ConfigOption option, long value)
             break;
   
         case VA_RT_CLOCK:
-            
-            if (current.realTimeClock == value) return true;
-            realTimeClock = value;
+
+            if (!isRTCModel(value)) {
+                warn("Invalid RTC model: %d\n", value);
+                warn("     Valid values: %d, %d\n", RTC_NONE, RTC_M6242B);
+                return false;
+            }
+
+            if (current.rtc.model == value) return true;
+            rtc.setModel((RTCModel)value);
             mem.updateMemSrcTable();
             break;
 
@@ -476,13 +468,6 @@ Amiga::configureDrive(unsigned drive, ConfigOption option, long value)
     
     putMessage(MSG_CONFIG);
     return true;
-}
-
-
-bool
-Amiga::configureModel(AmigaModel m)
-{
-    return configure(VA_AMIGA_MODEL, m);
 }
 
 void
@@ -677,8 +662,6 @@ Amiga::_dump()
     plainmsg("      running: %s\n", isRunning() ? "yes" : "no");
     plainmsg("\n");
     plainmsg("Current configuration:\n\n");
-    plainmsg("   AmigaModel: %s\n", modelName(config.model));
-    plainmsg("realTimeClock: %s\n", config.realTimeClock ? "yes" : "no");
     plainmsg("          df0: %s %s\n",
              dc.connected[0] ? "yes" : "no", driveTypeName(config.df0.type));
     plainmsg("          df1: %s %s\n",

@@ -69,7 +69,6 @@
                 <outlet property="emuSnapshotInterval" destination="EjE-IB-Rz1" id="6l8-rh-ye9"/>
                 <outlet property="emuWarpLoad" destination="jQ0-jt-CGq" id="m2W-9e-r5B"/>
                 <outlet property="hwAgnusRevisionPopup" destination="Kzc-cM-Vdv" id="2Cr-LM-QvY"/>
-                <outlet property="hwAmigaModelPopup" destination="ZQk-5s-Q3i" id="KW3-9z-ZQs"/>
                 <outlet property="hwChipRamPopup" destination="Htk-aA-fCu" id="6Mo-Ea-f4z"/>
                 <outlet property="hwDeniseRevisionPopup" destination="j6o-s1-NVF" id="STy-xE-zmK"/>
                 <outlet property="hwDf0Type" destination="kgt-j5-t6P" id="I7j-Yw-MrC"/>
@@ -81,11 +80,12 @@
                 <outlet property="hwDf3Type" destination="bHc-hk-LLX" id="Fan-AS-nyp"/>
                 <outlet property="hwFactorySettingsPopup" destination="G7A-Sb-Z0Q" id="1aF-VP-yUY"/>
                 <outlet property="hwFastRamPopup" destination="BTz-kT-JtT" id="oec-CI-f3J"/>
-                <outlet property="hwLayoutPopup" destination="EWH-Iz-zuX" id="cWR-LH-Ffq"/>
+                <outlet property="hwKbLanguagePopup" destination="EWH-Iz-zuX" id="zdJ-Vg-G4e"/>
+                <outlet property="hwKbTypePopup" destination="3Wu-Hm-GrD" id="5yj-zd-mfm"/>
                 <outlet property="hwLockSubText" destination="M4r-6P-yfY" id="wxV-Tm-80C"/>
                 <outlet property="hwLockText" destination="3ER-DN-63K" id="aH1-Iu-24q"/>
                 <outlet property="hwOKButton" destination="cMh-0b-Yb2" id="hqp-3Y-hPC"/>
-                <outlet property="hwRealTimeClock" destination="T70-4F-bOm" id="eAd-aV-2Nk"/>
+                <outlet property="hwRealTimeClock" destination="lCL-bj-wri" id="p0P-ms-4MD"/>
                 <outlet property="hwSerialDevice" destination="rtO-bR-8WM" id="cgA-jC-NxC"/>
                 <outlet property="hwSlowRamPopup" destination="W0y-DM-pGD" id="bNq-71-Or8"/>
                 <outlet property="prefTabView" destination="baz-eW-A74" id="fgy-dU-alU"/>
@@ -148,7 +148,7 @@
                         <font key="font" metaFont="system"/>
                         <tabViewItems>
                             <tabViewItem label="Roms" identifier="Roms" id="VwS-fe-RFZ">
-                                <view key="view" ambiguous="YES" id="4If-78-eR2">
+                                <view key="view" id="4If-78-eR2">
                                     <rect key="frame" x="10" y="33" width="600" height="424"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -293,50 +293,21 @@ Gw
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Hardware" identifier="Hardware" id="vMg-zr-Ex1">
-                                <view key="view" id="yrH-J2-nFc">
+                                <view key="view" ambiguous="YES" id="yrH-J2-nFc">
                                     <rect key="frame" x="10" y="33" width="600" height="424"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OsI-DD-TfG">
-                                            <rect key="frame" x="7" y="365" width="83" height="20"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Model:" id="gf2-0n-bLs">
-                                                <font key="font" metaFont="system"/>
-                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
-                                        <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZQk-5s-Q3i" userLabel="System">
-                                            <rect key="frame" x="94" y="362" width="182" height="25"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Amiga 500" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="X5T-vd-adB" id="3A2-Za-Kyn" userLabel="System">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="menu"/>
-                                                <menu key="menu" id="iEf-S6-IbN">
-                                                    <items>
-                                                        <menuItem title="Amiga 500" state="on" id="X5T-vd-adB"/>
-                                                        <menuItem title="Amiga 1000" tag="1" id="PRe-f4-iSB">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="Amiga 2000" tag="2" id="6cl-4h-IcH"/>
-                                                    </items>
-                                                </menu>
-                                            </popUpButtonCell>
-                                            <connections>
-                                                <action selector="hwAmigaModelAction:" target="-2" id="fFh-ck-w4T"/>
-                                            </connections>
-                                        </popUpButton>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6y4-Ff-lVS">
-                                            <rect key="frame" x="7" y="306" width="83" height="20"/>
+                                            <rect key="frame" x="8" y="210" width="83" height="20"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Keyboard:" id="no1-b7-oXa">
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Language:" id="no1-b7-oXa">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
                                         <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EWH-Iz-zuX" userLabel="System">
-                                            <rect key="frame" x="94" y="303" width="182" height="25"/>
+                                            <rect key="frame" x="94" y="207" width="182" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="US" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="1" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="MlE-xO-Cna" id="G04-yN-GzX" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -355,8 +326,36 @@ Gw
                                                 <action selector="hwLayoutAction:" target="-2" id="kc8-i1-JbH"/>
                                             </connections>
                                         </popUpButton>
+                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uN5-LF-WyI">
+                                            <rect key="frame" x="12" y="240" width="79" height="20"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Model:" id="JeN-ib-TCB">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3Wu-Hm-GrD" userLabel="System">
+                                            <rect key="frame" x="95" y="237" width="181" height="25"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="Amiga 500" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="9IW-Kd-OiJ" id="lNm-qC-ddI" userLabel="System">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                                <menu key="menu" id="v0Y-dq-eAh">
+                                                    <items>
+                                                        <menuItem title="Amiga 500" state="on" tag="-1" id="9IW-Kd-OiJ"/>
+                                                        <menuItem title="Amiga 1000" tag="1" id="lg1-SX-ELH">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <action selector="hwLayoutAction:" target="-2" id="qXB-e1-9NM"/>
+                                            </connections>
+                                        </popUpButton>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RB4-Iz-1ch">
-                                            <rect key="frame" x="12" y="237" width="79" height="20"/>
+                                            <rect key="frame" x="11" y="364" width="79" height="20"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Agnus:" id="2Ze-Os-rY3">
                                                 <font key="font" metaFont="system"/>
@@ -365,18 +364,18 @@ Gw
                                             </textFieldCell>
                                         </textField>
                                         <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Kzc-cM-Vdv" userLabel="System">
-                                            <rect key="frame" x="94" y="238" width="182" height="25"/>
+                                            <rect key="frame" x="94" y="362" width="182" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="OCS 8367" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="ohI-59-jcc" id="9Rv-5Z-jci" userLabel="System">
+                                            <popUpButtonCell key="cell" type="push" title="OCS (8367)" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="ohI-59-jcc" id="9Rv-5Z-jci" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="menu"/>
                                                 <menu key="menu" id="4CO-B1-8Rh">
                                                     <items>
-                                                        <menuItem title="OCS 8367" state="on" id="ohI-59-jcc"/>
-                                                        <menuItem title="ECS 8372A" tag="1" id="eMJ-3y-ujb">
+                                                        <menuItem title="OCS (8367)" state="on" id="ohI-59-jcc"/>
+                                                        <menuItem title="ECS (8372A)" tag="1" id="eMJ-3y-ujb">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="ECS 8375" tag="2" id="q5Q-7Z-cZd">
+                                                        <menuItem title="ECS (8375)" tag="2" id="q5Q-7Z-cZd">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                     </items>
@@ -387,14 +386,14 @@ Gw
                                             </connections>
                                         </popUpButton>
                                         <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="j6o-s1-NVF" userLabel="System">
-                                            <rect key="frame" x="94" y="207" width="182" height="25"/>
+                                            <rect key="frame" x="94" y="331" width="182" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="OCS 8362 R8" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="EcI-3q-CCJ" id="vuQ-UT-0Qd" userLabel="System">
+                                            <popUpButtonCell key="cell" type="push" title="OCS (8362 R8)" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="EcI-3q-CCJ" id="vuQ-UT-0Qd" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="menu"/>
                                                 <menu key="menu" id="9AY-BO-0xm">
                                                     <items>
-                                                        <menuItem title="OCS 8362 R8" state="on" id="EcI-3q-CCJ"/>
+                                                        <menuItem title="OCS (8362 R8)" state="on" id="EcI-3q-CCJ"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
@@ -529,7 +528,7 @@ DQ
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yJQ-q7-Eh4">
                                             <rect key="frame" x="6" y="394" width="114" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Computer" id="szk-nC-zqh">
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Chipset" id="szk-nC-zqh">
                                                 <font key="font" metaFont="systemBold"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -762,23 +761,12 @@ DQ
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Iy1-d6-oEu">
                                             <rect key="frame" x="6" y="270" width="110" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Chipset" id="9rR-oZ-oPD">
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Keyboard" id="9rR-oZ-oPD">
                                                 <font key="font" metaFont="systemBold"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="T70-4F-bOm">
-                                            <rect key="frame" x="97" y="337" width="168" height="18"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="check" title="Real-time clock" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="6v7-Uo-FaI">
-                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <connections>
-                                                <action selector="hwRealTimeClocktAction:" target="-2" id="SbQ-bw-vhJ"/>
-                                            </connections>
-                                        </button>
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rtO-bR-8WM">
                                             <rect key="frame" x="93" y="151" width="182" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
@@ -810,9 +798,35 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="O81-kf-Gbe">
-                                            <rect key="frame" x="16" y="211" width="75" height="20"/>
+                                            <rect key="frame" x="16" y="334" width="75" height="20"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Denise:" id="esH-eQ-7z3">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lCL-bj-wri" userLabel="System">
+                                            <rect key="frame" x="95" y="302" width="181" height="25"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="None" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="cv2-pK-dGx" id="oC1-2m-VYJ" userLabel="System">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                                <menu key="menu" id="oEx-tD-xql">
+                                                    <items>
+                                                        <menuItem title="None" state="on" id="cv2-pK-dGx"/>
+                                                        <menuItem title="OKI (6242B)" tag="1" id="Oy0-UH-2oL"/>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <action selector="hwRealTimeClockAction:" target="-2" id="hiy-Ku-XgA"/>
+                                            </connections>
+                                        </popUpButton>
+                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="O42-0w-LPM">
+                                            <rect key="frame" x="19" y="302" width="71" height="20"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="RT Clock:" id="BD5-C6-Iyg">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>

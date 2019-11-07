@@ -15,6 +15,15 @@ RTC::RTC(Amiga& ref) : SubComponent(ref)
 }
 
 void
+RTC::setModel(RTCModel model)
+{
+    debug("setModel(%d)\n", model);
+
+    assert(isRTCModel(model));
+    config.model = model;
+}
+
+void
 RTC::_powerOn()
 {
 
@@ -33,9 +42,8 @@ RTC::_reset()
 void
 RTC::_dump()
 {
-    for (unsigned i = 0; i < 16; i++) {
-        plainmsg("i: %X ", reg[i]);
-    }
+    plainmsg("Model: %s\n", RTCModelName(config.model));
+    for (unsigned i = 0; i < 16; i++) plainmsg("i: %X ", reg[i]);
     plainmsg("\n");
 }
 

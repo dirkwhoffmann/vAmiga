@@ -734,7 +734,6 @@ extension MyController {
 extension Keys {
     
     // Machine
-    static let amigaModel         = "VAMIGAAmigaModelKey"
     static let agnusRev           = "VAMIGAAgnusRevKey"
     static let deniseRev          = "VAMIGADeniseRevKey"
     static let layout             = "VAMIGAKeyboardLayoutKey"
@@ -765,7 +764,6 @@ extension Defaults {
 
     struct ModelDefaults {
 
-        let amigaModel: AmigaModel
         let agnusRevision: AgnusRevision
         let deniseRevision: DeniseRevision
         let layout: Layout
@@ -784,7 +782,6 @@ extension Defaults {
 
     static let A500 = ModelDefaults.init(
 
-        amigaModel: AMIGA_500,
         agnusRevision: AGNUS_8372,
         deniseRevision: DENISE_8362R8,
         layout: Layout.us,
@@ -798,7 +795,6 @@ extension Defaults {
 
     static let A1000 = ModelDefaults.init(
 
-        amigaModel: AMIGA_1000,
         agnusRevision: AGNUS_8367,
         deniseRevision: DENISE_8362R8,
         layout: Layout.us,
@@ -812,7 +808,6 @@ extension Defaults {
 
     static let A2000 = ModelDefaults.init(
         
-        amigaModel: AMIGA_2000,
         agnusRevision: AGNUS_8375,
         deniseRevision: DENISE_8362R8,
         layout: Layout.us,
@@ -833,7 +828,6 @@ extension MyController {
         
         let dictionary: [String: Any] = [
             
-            Keys.amigaModel: defaultModel.amigaModel.rawValue,
             Keys.agnusRev: defaultModel.agnusRevision.rawValue,
             Keys.deniseRev: defaultModel.deniseRevision.rawValue,
             Keys.layout: defaultModel.layout.rawValue,
@@ -864,8 +858,7 @@ extension MyController {
         
         let defaults = UserDefaults.standard
 
-        let keys = [Keys.amigaModel,
-                    Keys.agnusRev,
+        let keys = [Keys.agnusRev,
                     Keys.deniseRev,
                     Keys.layout,
                     
@@ -898,7 +891,6 @@ extension MyController {
         
         amiga.suspend()
         
-        amiga.configureModel(defaults.integer(forKey: Keys.amigaModel))
         amiga.configure(VA_AGNUS_REVISION, value: defaults.integer(forKey: Keys.agnusRev))
         amiga.configure(VA_DENISE_REVISION, value: defaults.integer(forKey: Keys.deniseRev))
         amiga.configure(VA_KB_LAYOUT, value: defaults.integer(forKey: Keys.layout))
@@ -928,7 +920,6 @@ extension MyController {
         let config = amiga.config()
         let dc = config.diskController
 
-        defaults.set(config.model.rawValue, forKey: Keys.amigaModel)
         defaults.set(config.agnusRevision.rawValue, forKey: Keys.agnusRev)
         defaults.set(config.deniseRevision.rawValue, forKey: Keys.deniseRev)
         defaults.set(config.layout, forKey: Keys.layout)
@@ -947,7 +938,7 @@ extension MyController {
         defaults.set(config.df2.type.rawValue, forKey: Keys.df2Type)
         defaults.set(config.df3.type.rawValue, forKey: Keys.df3Type)
 
-        defaults.set(config.realTimeClock, forKey: Keys.realTimeClock)
+        defaults.set(config.rtc.model.rawValue, forKey: Keys.realTimeClock)
         defaults.set(config.serialDevice, forKey: Keys.serialDevice)
     }
 }

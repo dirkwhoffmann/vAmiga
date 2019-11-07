@@ -133,7 +133,6 @@ struct AmigaFileWrapper;
 - (AmigaConfiguration) config;
 - (BOOL) configure:(ConfigOption)option value:(NSInteger)value;
 - (BOOL) configure:(ConfigOption)option enable:(BOOL)value;
-- (BOOL) configureModel:(NSInteger)model;
 - (BOOL) configureDrive:(NSInteger)nr connected:(BOOL)value;
 - (BOOL) configureDrive:(NSInteger)nr type:(NSInteger)value;
 

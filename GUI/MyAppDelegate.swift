@@ -184,9 +184,6 @@ func cgEventCallback(proxy: CGEventTapProxy,
         dc.addObserver(self, selector: #selector(vamResetCommand(_:)),
                        name: Notification.Name("VAMReset"),
                        object: nil)
-        dc.addObserver(self, selector: #selector(vamConfigureCommand(_:)),
-                       name: Notification.Name("VAMConfigure"),
-                       object: nil)
         dc.addObserver(self, selector: #selector(vamMountCommand(_:)),
                        name: Notification.Name("VAMMount"),
                        object: nil)
