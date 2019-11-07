@@ -603,7 +603,7 @@
 				508FE03921EA22CC0043D0E9 /* Dialogs */,
 				508FE03021EA22C30043D0E9 /* Automation */,
 				50B14C2421EB8F25002E32A6 /* Proxy */,
-				509F7F1521ED141F00A530E4 /* Debugger */,
+				509F7F1521ED141F00A530E4 /* Inspector */,
 				509F7F1721ED157C00A530E4 /* Gamepads */,
 				509F7F1621ED156100A530E4 /* Keyboard */,
 				509F7F1421ED13F300A530E4 /* Controller */,
@@ -721,7 +721,7 @@
 			path = Controller;
 			sourceTree = "<group>";
 		};
-		509F7F1521ED141F00A530E4 /* Debugger */ = {
+		509F7F1521ED141F00A530E4 /* Inspector */ = {
 			isa = PBXGroup;
 			children = (
 				50DED6B02202EC3100B8195F /* Inspector.swift */,
@@ -747,7 +747,7 @@
 				508FDFF021EA22780043D0E9 /* WaveformView.swift */,
 				505945F72363008800ACE819 /* ActivityView.swift */,
 			);
-			path = Debugger;
+			path = Inspector;
 			sourceTree = "<group>";
 		};
 		509F7F1621ED156100A530E4 /* Keyboard */ = {
