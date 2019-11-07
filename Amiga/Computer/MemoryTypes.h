@@ -26,13 +26,13 @@ typedef enum
     MEM_RTC,
     MEM_OCS,
     MEM_AUTOCONF,
-    MEM_KICK,
+    MEM_ROM,
     MEM_WOM,
-    MEM_EXTROM
+    MEM_EXT
 }
 MemorySource;
 
-static inline bool isMemorySource(long value) { return value >= 0 && value <= MEM_EXTROM; }
+static inline bool isMemorySource(long value) { return value >= 0 && value <= MEM_EXT; }
 
 // Known Roms
 typedef enum

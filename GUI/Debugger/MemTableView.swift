@@ -56,7 +56,6 @@ class MemTableView: NSTableView {
     
     func refresh() {
         
-        track()
         memory = amigaProxy?.mem
         reloadData()
     }

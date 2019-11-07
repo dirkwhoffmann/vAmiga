@@ -81,8 +81,8 @@ extern "C" uint32_t read_on_reset(uint32_t defaultValue)
         /* When we reach here, we expect memory to be initialised already.
          * If that's the case, the first memory page is mapped to Rom.
          */
-        assert(mem->memSrc[0x0] == MEM_KICK ||
-               mem->memSrc[0x0] == MEM_EXTROM);
+        assert(mem->memSrc[0x0] == MEM_ROM ||
+               mem->memSrc[0x0] == MEM_EXT);
 
         result = activeAmiga->mem.spypeek32(ADDRESS_68K(REG_PC));
     }

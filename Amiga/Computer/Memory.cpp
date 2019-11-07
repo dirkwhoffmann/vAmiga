@@ -366,8 +366,8 @@ void
 Memory::updateMemSrcTable()
 {
     // MemorySource mem_boot = bootRom ? MEM_BOOT : MEM_UNMAPPED;
-    MemorySource mem_kick = kickRom ? MEM_KICK : MEM_UNMAPPED;
-    MemorySource mem_ext = extRom ? MEM_EXTROM : MEM_UNMAPPED;
+    MemorySource mem_kick = kickRom ? MEM_ROM : MEM_UNMAPPED;
+    MemorySource mem_ext = extRom ? MEM_EXT : MEM_UNMAPPED;
 
     assert(config.chipRamSize % 0x10000 == 0);
     assert(config.slowRamSize % 0x10000 == 0);
@@ -504,7 +504,7 @@ Memory::peek8(uint32_t addr)
             dataBus = peekAutoConf8(addr);
             return dataBus;
 
-        case MEM_KICK:
+        case MEM_ROM:
 
             ASSERT_KICK_ADDR(addr);
             stats.romReads++;
@@ -516,7 +516,7 @@ Memory::peek8(uint32_t addr)
             stats.romReads++;
             return READ_WOM_8(addr);
 
-        case MEM_EXTROM:
+        case MEM_EXT:
 
             ASSERT_EXT_ADDR(addr);
             stats.romReads++;
@@ -616,7 +616,7 @@ Memory::peek16(uint32_t addr)
                     dataBus = peekAutoConf16(addr);
                     return dataBus;
 
-                case MEM_KICK:
+                case MEM_ROM:
 
                     ASSERT_KICK_ADDR(addr);
                     stats.romReads++;
@@ -628,7 +628,7 @@ Memory::peek16(uint32_t addr)
                     stats.romReads++;
                     return READ_WOM_16(addr);
 
-                case MEM_EXTROM:
+                case MEM_EXT:
 
                     ASSERT_EXT_ADDR(addr);
                     stats.romReads++;
@@ -660,9 +660,9 @@ Memory::spypeek8(uint32_t addr)
         case MEM_RTC:      ASSERT_RTC_ADDR(addr);  return spypeekRTC8(addr);
         case MEM_OCS:      ASSERT_OCS_ADDR(addr);  return spypeekCustom8(addr);
         case MEM_AUTOCONF: ASSERT_AUTO_ADDR(addr); return spypeekAutoConf8(addr);
-        case MEM_KICK:     ASSERT_KICK_ADDR(addr); return READ_KICK_8(addr);
+        case MEM_ROM:     ASSERT_KICK_ADDR(addr); return READ_KICK_8(addr);
         case MEM_WOM:      ASSERT_WOM_ADDR(addr); return READ_WOM_8(addr);
-        case MEM_EXTROM:   ASSERT_EXT_ADDR(addr);  return READ_EXT_8(addr);
+        case MEM_EXT:   ASSERT_EXT_ADDR(addr);  return READ_EXT_8(addr);
         default:           assert(false);
     }
     return 0;
@@ -686,9 +686,9 @@ Memory::spypeek16(uint32_t addr)
         case MEM_RTC:      ASSERT_RTC_ADDR(addr);  return spypeekRTC8(addr);
         case MEM_OCS:      ASSERT_OCS_ADDR(addr);  return spypeekCustom16(addr);
         case MEM_AUTOCONF: ASSERT_AUTO_ADDR(addr); return spypeekAutoConf16(addr);
-        case MEM_KICK:     ASSERT_KICK_ADDR(addr); return READ_KICK_16(addr);
+        case MEM_ROM:     ASSERT_KICK_ADDR(addr); return READ_KICK_16(addr);
         case MEM_WOM:      ASSERT_WOM_ADDR(addr); return READ_WOM_16(addr);
-        case MEM_EXTROM:   ASSERT_EXT_ADDR(addr);  return READ_EXT_16(addr);
+        case MEM_EXT:   ASSERT_EXT_ADDR(addr);  return READ_EXT_16(addr);
         default:           assert(false);
     }
     return 0;
@@ -762,7 +762,7 @@ Memory::poke8(uint32_t addr, uint8_t value)
             pokeAutoConf8(addr, value);
             break;
 
-        case MEM_KICK:
+        case MEM_ROM:
 
             ASSERT_KICK_ADDR(addr);
             stats.romWrites++;
@@ -776,7 +776,7 @@ Memory::poke8(uint32_t addr, uint8_t value)
             pokeWom8(addr, value);
             break;
 
-        case MEM_EXTROM:
+        case MEM_EXT:
 
             ASSERT_EXT_ADDR(addr);
             stats.romWrites++;
@@ -882,7 +882,7 @@ Memory::poke16(uint32_t addr, uint16_t value)
                     pokeAutoConf16(addr, value);
                     return;
 
-                case MEM_KICK:
+                case MEM_ROM:
 
                     ASSERT_KICK_ADDR(addr);
                     stats.romWrites++;
@@ -896,7 +896,7 @@ Memory::poke16(uint32_t addr, uint16_t value)
                     pokeWom16(addr, value);
                     return;
 
-                case MEM_EXTROM:
+                case MEM_EXT:
 
                     ASSERT_EXT_ADDR(addr);
                     stats.romWrites++;

@@ -71,12 +71,16 @@ class Inspector: NSWindowController {
     @IBOutlet weak var memSlowRamText: NSTextField!
     @IBOutlet weak var memFastRamButton: NSButton!
     @IBOutlet weak var memFastRamText: NSTextField!
+    @IBOutlet weak var memRomButton: NSButton!
+    @IBOutlet weak var memRomText: NSTextField!
+    @IBOutlet weak var memWomButton: NSButton!
+    @IBOutlet weak var memWomText: NSTextField!
+    @IBOutlet weak var memExtButton: NSButton!
+    @IBOutlet weak var memExtText: NSTextField!
     @IBOutlet weak var memCIAButton: NSButton!
     @IBOutlet weak var memRTCButton: NSButton!
     @IBOutlet weak var memOCSButton: NSButton!
     @IBOutlet weak var memAutoConfButton: NSButton!
-    @IBOutlet weak var memRomButton: NSButton!
-    @IBOutlet weak var memExtRomButton: NSButton!
 
     var bank = 0
     var memSrc = MEM_CHIP

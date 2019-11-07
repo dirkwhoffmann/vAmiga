@@ -21,15 +21,19 @@ extension NSColor {
 struct MemColors {
 
     static let unmapped = NSColor.gray
+
     static let chipRam = NSColor.init(r: 0x80, g: 0xFF, b: 0x00, a: 0xFF)
-    static let fastRam = NSColor.init(r: 0x00, g: 0xCC, b: 0x00, a: 0xFF)
-    static let slowRam = NSColor.init(r: 0x00, g: 0x99, b: 0x4C, a: 0xFF)
-    static let cia = NSColor.init(r: 0xFF, g: 0x66, b: 0xFF, a: 0xFF)
-    static let rtc = NSColor.init(r: 0xFF, g: 0x66, b: 0xB2, a: 0xFF)
+    static let slowRam = NSColor.init(r: 0x66, g: 0xCC, b: 0x00, a: 0xFF)
+    static let fastRam = NSColor.init(r: 0x4C, g: 0x99, b: 0x00, a: 0xFF)
+
+    static let rom = NSColor.init(r: 0xFF, g: 0x00, b: 0x00, a: 0xFF)
+    static let wom = NSColor.init(r: 0xCC, g: 0x00, b: 0x00, a: 0xFF)
+    static let ext = NSColor.init(r: 0x99, g: 0x00, b: 0x00, a: 0xFF)
+
+    static let cia = NSColor.init(r: 0x66, g: 0xB2, b: 0xFF, a: 0xFF)
+    static let rtc = NSColor.init(r: 0xB2, g: 0x66, b: 0xFF, a: 0xFF)
     static let ocs = NSColor.init(r: 0xFF, g: 0xFF, b: 0x66, a: 0xFF)
-    static let autoConf = NSColor.init(r: 0xFF, g: 0x66, b: 0x66, a: 0xFF)
-    static let rom = NSColor.init(r: 0x66, g: 0xB2, b: 0xFF, a: 0xFF)
-    static let extRom = NSColor.init(r: 0x33, g: 0x59, b: 0x7F, a: 0xFF)
+    static let autoConf = NSColor.init(r: 0xFF, g: 0x66, b: 0xB2, a: 0xFF)
 }
 
 extension Inspector {
@@ -55,19 +59,26 @@ extension Inspector {
         memChipRamButton.image  = NSImage.init(color: MemColors.chipRam, size: size)
         memFastRamButton.image  = NSImage.init(color: MemColors.fastRam, size: size)
         memSlowRamButton.image  = NSImage.init(color: MemColors.slowRam, size: size)
+        memRomButton.image      = NSImage.init(color: MemColors.rom, size: size)
+        memWomButton.image      = NSImage.init(color: MemColors.wom, size: size)
+        memExtButton.image      = NSImage.init(color: MemColors.ext, size: size)
         memCIAButton.image      = NSImage.init(color: MemColors.cia, size: size)
         memRTCButton.image      = NSImage.init(color: MemColors.rtc, size: size)
         memOCSButton.image      = NSImage.init(color: MemColors.ocs, size: size)
         memAutoConfButton.image = NSImage.init(color: MemColors.autoConf, size: size)
-        memRomButton.image      = NSImage.init(color: MemColors.rom, size: size)
-        memExtRomButton.image   = NSImage.init(color: MemColors.extRom, size: size)
 
         let chipRamKB = config.mem.chipRamSize / 1024
         let fastRamKB = config.mem.fastRamSize / 1024
         let slowRamKB = config.mem.slowRamSize / 1024
+        let romKB = config.mem.kickRomSize / 1024
+        let womKB = config.mem.womSize / 1024
+        let extKB = config.mem.extRomSize / 1024
         memChipRamText.stringValue = String.init(format: "%d KB", chipRamKB)
         memFastRamText.stringValue = String.init(format: "%d KB", fastRamKB)
         memSlowRamText.stringValue = String.init(format: "%d KB", slowRamKB)
+        memRomText.stringValue = String.init(format: "%d KB", romKB)
+        memWomText.stringValue = String.init(format: "%d KB", womKB)
+        memExtText.stringValue = String.init(format: "%d KB", extKB)
     }
     
     var memLayoutImage: NSImage? {
@@ -92,14 +103,14 @@ extension Inspector {
             case MEM_UNMAPPED.rawValue: color = MemColors.unmapped
             case MEM_CHIP.rawValue:     color = MemColors.chipRam
             case MEM_FAST.rawValue:     color = MemColors.fastRam
-            case MEM_CIA.rawValue:      color = MemColors.cia
             case MEM_SLOW.rawValue:     color = MemColors.slowRam
+            case MEM_ROM.rawValue:      color = MemColors.rom
+            case MEM_WOM.rawValue:      color = MemColors.wom
+            case MEM_EXT.rawValue:      color = MemColors.ext
+            case MEM_CIA.rawValue:      color = MemColors.cia
             case MEM_RTC.rawValue:      color = MemColors.rtc
             case MEM_OCS.rawValue:      color = MemColors.ocs
             case MEM_AUTOCONF.rawValue: color = MemColors.autoConf
-            case MEM_KICK.rawValue:     color = MemColors.rom
-            case MEM_WOM.rawValue:      color = MemColors.rom
-            case MEM_EXTROM.rawValue:   color = MemColors.extRom
             default:                    fatalError()
             }
             let ciColor: CIColor = CIColor(color: color)!
@@ -122,7 +133,18 @@ extension Inspector {
         // return resizedImage?.roundCorners(withRadius: 4)
         return resizedImage
     }
-    
+
+    func setBank(src: MemorySource) {
+
+        for bank in 0...255 {
+
+            if amigaProxy?.mem.memSrc(bank << 16) == src {
+                setBank(bank)
+                return
+            }
+        }
+    }
+
     func setBank(_ value: Int) {
         
         if value >= 0 && value <= 0xFF {
@@ -156,42 +178,47 @@ extension Inspector {
         let value = sender.integerValue
         setBank(value)
     }
- 
-    @IBAction func memChipRamAction(_ sender: NSButton!) {
-        
-        setBank(0x00)
+
+    @IBAction func memChipAction(_ sender: NSButton!) {
+        setBank(src: MEM_CHIP)
     }
-    
+
     @IBAction func memFastRamAction(_ sender: NSButton!) {
-        
-        setBank(0x20)
+        setBank(src: MEM_FAST)
     }
     
     @IBAction func memSlowRamAction(_ sender: NSButton!) {
-        
-        setBank(0xC0)
+        setBank(src: MEM_SLOW)
+    }
+
+    @IBAction func memRomAction(_ sender: NSButton!) {
+        setBank(src: MEM_ROM)
+    }
+
+    @IBAction func memWomAction(_ sender: NSButton!) {
+        setBank(src: MEM_WOM)
+    }
+
+    @IBAction func memExtAction(_ sender: NSButton!) {
+        setBank(src: MEM_EXT)
     }
 
     @IBAction func memCIAAction(_ sender: NSButton!) {
-        
-        setBank(0xA0)
+        setBank(src: MEM_CIA)
     }
  
     @IBAction func memRTCAction(_ sender: NSButton!) {
-        
-        setBank(0xDC)
+        setBank(src: MEM_RTC)
     }
 
     @IBAction func memOCSAction(_ sender: NSButton!) {
-        
-        setBank(0xDF)
+        setBank(src: MEM_OCS)
     }
 
-    @IBAction func memKickAction(_ sender: NSButton!) {
-        
-        setBank(0xFC)
+    @IBAction func memAutoConfAction(_ sender: NSButton!) {
+        setBank(src: MEM_AUTOCONF)
     }
-    
+
     @IBAction func memSearchAction(_ sender: NSTextField!) {
         
         let input = sender.stringValue
