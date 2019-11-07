@@ -92,10 +92,9 @@ inline const char *pokeSourceName(PokeSource source)
 
 typedef struct
 {
-    size_t bootRomSize;
-    size_t kickRomSize;
+    size_t romSize;
     size_t womSize;
-    size_t extRomSize;
+    size_t extSize;
     size_t chipRamSize;
     size_t slowRamSize;
     size_t fastRamSize;

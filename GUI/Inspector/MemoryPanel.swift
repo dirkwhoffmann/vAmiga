@@ -70,9 +70,9 @@ extension Inspector {
         let chipRamKB = config.mem.chipRamSize / 1024
         let fastRamKB = config.mem.fastRamSize / 1024
         let slowRamKB = config.mem.slowRamSize / 1024
-        let romKB = config.mem.kickRomSize / 1024
+        let romKB = config.mem.romSize / 1024
         let womKB = config.mem.womSize / 1024
-        let extKB = config.mem.extRomSize / 1024
+        let extKB = config.mem.extSize / 1024
         memChipRamText.stringValue = String.init(format: "%d KB", chipRamKB)
         memFastRamText.stringValue = String.init(format: "%d KB", fastRamKB)
         memSlowRamText.stringValue = String.init(format: "%d KB", slowRamKB)

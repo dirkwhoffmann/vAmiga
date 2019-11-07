@@ -24,9 +24,9 @@ const uint32_t EXT_ROM_MASK  = 0x07FFFF; // 512 KB
 #define ASSERT_CHIP_ADDR(x) assert(chipRam != NULL);
 #define ASSERT_FAST_ADDR(x) assert(fastRam != NULL); assert(((x) - FAST_RAM_STRT) < config.fastRamSize);
 #define ASSERT_SLOW_ADDR(x) assert(slowRam != NULL); assert(((x) & SLOW_RAM_MASK) < config.slowRamSize);
-#define ASSERT_KICK_ADDR(x) assert(kickRom != NULL);
+#define ASSERT_ROM_ADDR(x) assert(kickRom != NULL);
 #define ASSERT_WOM_ADDR(x) assert(wom != NULL);
-#define ASSERT_EXT_ADDR(x)  assert(extRom  != NULL); assert(((x) & EXT_ROM_MASK) < config.extRomSize);
+#define ASSERT_EXT_ADDR(x)  assert(extRom  != NULL); assert(((x) & EXT_ROM_MASK) < config.extSize);
 #define ASSERT_CIA_ADDR(x)  assert((x) >= 0xA00000 && (x) <= 0xBFFFFF);
 #define ASSERT_RTC_ADDR(x)  assert((x) >= 0xDC0000 && (x) <= 0xDEFFFF);
 #define ASSERT_OCS_ADDR(x)  assert((x) >= 0xC00000 && (x) <= 0xDFFFFF);
@@ -53,9 +53,9 @@ const uint32_t EXT_ROM_MASK  = 0x07FFFF; // 512 KB
 #define READ_SLOW_32(x) READ_32(slowRam + ((x) & SLOW_RAM_MASK))
 
 // Reads a value from Kickstart ROM in big endian format
-#define READ_KICK_8(x)  READ_8(kickRom + ((x) % config.kickRomSize))
-#define READ_KICK_16(x) READ_16(kickRom + ((x) % config.kickRomSize))
-#define READ_KICK_32(x) READ_32(kickRom + ((x) % config.kickRomSize))
+#define READ_ROM_8(x)  READ_8(kickRom + ((x) % config.romSize))
+#define READ_ROM_16(x) READ_16(kickRom + ((x) % config.romSize))
+#define READ_ROM_32(x) READ_32(kickRom + ((x) % config.romSize))
 
 // Reads a value from Kickstart WOM in big endian format
 #define READ_WOM_8(x)  READ_8(wom + ((x) % config.womSize))
@@ -63,9 +63,9 @@ const uint32_t EXT_ROM_MASK  = 0x07FFFF; // 512 KB
 #define READ_WOM_32(x) READ_32(wom + ((x) % config.womSize))
 
 // Reads a value from Extended ROM in big endian format
-// #define READ_EXT_8(x)  READ_8(extRom + ((x) % extRomSize))
-// #define READ_EXT_16(x) READ_16(extRom + ((x) % extRomSize))
-// #define READ_EXT_32(x) READ_32(extRom + ((x) % extRomSize))
+// #define READ_EXT_8(x)  READ_8(extRom + ((x) % config.extSize))
+// #define READ_EXT_16(x) READ_16(extRom + ((x) % config.extSize))
+// #define READ_EXT_32(x) READ_32(extRom + ((x) % config.extSize))
 
 #define READ_EXT_8(x)  READ_8(extRom + ((x) & 0x7FFFF))
 #define READ_EXT_16(x) READ_16(extRom + ((x) & 0x7FFFF))
@@ -92,9 +92,9 @@ const uint32_t EXT_ROM_MASK  = 0x07FFFF; // 512 KB
 #define WRITE_SLOW_32(x,y) WRITE_32(slowRam + ((x) & SLOW_RAM_MASK), (y))
 
 // Writes a value into Kickstart ROM in big endian format
-#define WRITE_KICK_8(x,y)  WRITE_8(kickRom + ((x) % config.kickRomSize), (y))
-#define WRITE_KICK_16(x,y) WRITE_16(kickRom + ((x) % config.kickRomSize), (y))
-#define WRITE_KICK_32(x,y) WRITE_32(kickRom + ((x) % config.kickRomSize), (y))
+#define WRITE_ROM_8(x,y)  WRITE_8(kickRom + ((x) % config.romSize), (y))
+#define WRITE_ROM_16(x,y) WRITE_16(kickRom + ((x) % config.romSize), (y))
+#define WRITE_ROM_32(x,y) WRITE_32(kickRom + ((x) % config.romSize), (y))
 
 // Writes a value into Kickstart WOM in big endian format
 #define WRITE_WOM_8(x,y)  WRITE_8(wom + ((x) % config.womSize), (y))
@@ -268,24 +268,24 @@ private:
 public:
     
     // Checks if a certain ROM is present
-    bool hasBootRom() { return config.kickRomSize > 0 && config.kickRomSize <= KB(16); }
-    bool hasKickRom() { return config.kickRomSize >= KB(256); }
+    bool hasBootRom() { return config.romSize > 0 && config.romSize <= KB(16); }
+    bool hasKickRom() { return config.romSize >= KB(256); }
     bool hasWom() { return wom != NULL; }
     bool hasExtRom() { return extRom != NULL; }
 
     // Returns a fingerprint for a certain ROM
-    uint64_t kickRomFingerprint() { return fnv_1a_64(kickRom, config.kickRomSize); }
-    uint64_t extRomFingerprint() { return fnv_1a_64(extRom,  config.extRomSize); }
+    uint64_t kickRomFingerprint() { return fnv_1a_64(kickRom, config.romSize); }
+    uint64_t extRomFingerprint() { return fnv_1a_64(extRom,  config.extSize); }
 
     // Removes a previously installed ROM
-    void deleteKickRom() { alloc(0, kickRom, config.kickRomSize); }
+    void deleteKickRom() { alloc(0, kickRom, config.romSize); }
     void deleteWom() { alloc(0, wom, config.womSize); }
-    void deleteExtRom() { alloc(0, extRom, config.extRomSize); }
+    void deleteExtRom() { alloc(0, extRom, config.extSize); }
 
     // Erases an installed ROM
-    void eraseKickRom() { assert(kickRom); memset(kickRom, 0, config.kickRomSize); }
+    void eraseKickRom() { assert(kickRom); memset(kickRom, 0, config.romSize); }
     void eraseWom() { assert(wom); memset(wom, 0, config.womSize); }
-    void eraseExtRom() { assert(extRom); memset(extRom, 0, config.extRomSize); }
+    void eraseExtRom() { assert(extRom); memset(extRom, 0, config.extSize); }
 
     // Installs a new Boot Rom or Kickstart Rom
     bool loadRom(RomFile *rom);
