@@ -30,9 +30,9 @@ Memory::~Memory()
 void
 Memory::dealloc()
 {
-    if (kickRom) { delete[] kickRom; kickRom = NULL; }
+    if (rom) { delete[] rom; rom = NULL; }
     if (wom) { delete[] wom; wom = NULL; }
-    if (extRom) { delete[] extRom; extRom = NULL; }
+    if (ext) { delete[] ext; ext = NULL; }
     if (chipRam) { delete[] chipRam; chipRam = NULL; }
     if (slowRam) { delete[] slowRam; slowRam = NULL; }
     if (fastRam) { delete[] fastRam; fastRam = NULL; }
@@ -87,9 +87,9 @@ void
 Memory::_dump()
 {
     struct { uint8_t *addr; size_t size; const char *desc; } mem[7] = {
-        { kickRom, config.romSize, "Kick Rom" },
+        { rom, config.romSize, "Kick Rom" },
         { wom,     config.womSize,     "Wom" },
-        { extRom,  config.extSize,  "Ext  Rom" },
+        { ext,  config.extSize,  "Ext  Rom" },
         { chipRam, config.chipRamSize, "Chip Ram" },
         { slowRam, config.slowRamSize, "Slow Ram" },
         { fastRam, config.fastRamSize, "Fast Ram" }
@@ -160,17 +160,17 @@ Memory::didLoadFromBuffer(uint8_t *buffer)
     dealloc();
 
     // Allocate new memory
-    if (config.romSize) kickRom = new (std::nothrow) uint8_t[config.romSize + 3];
+    if (config.romSize) rom = new (std::nothrow) uint8_t[config.romSize + 3];
     if (config.womSize) wom = new (std::nothrow) uint8_t[config.womSize + 3];
-    if (config.extSize) extRom = new (std::nothrow) uint8_t[config.extSize + 3];
+    if (config.extSize) ext = new (std::nothrow) uint8_t[config.extSize + 3];
     if (config.chipRamSize) chipRam = new (std::nothrow) uint8_t[config.chipRamSize + 3];
     if (config.slowRamSize) slowRam = new (std::nothrow) uint8_t[config.slowRamSize + 3];
     if (config.fastRamSize) fastRam = new (std::nothrow) uint8_t[config.fastRamSize + 3];
 
     // Load memory contents from buffer
-    reader.copy(kickRom, config.romSize);
+    reader.copy(rom, config.romSize);
     reader.copy(wom, config.womSize);
-    reader.copy(extRom, config.extSize);
+    reader.copy(ext, config.extSize);
     reader.copy(chipRam, config.chipRamSize);
     reader.copy(slowRam, config.slowRamSize);
     reader.copy(fastRam, config.fastRamSize);
@@ -192,9 +192,9 @@ Memory::didSaveToBuffer(uint8_t *buffer) const
     & config.fastRamSize;
 
     // Save memory contents
-    writer.copy(kickRom, config.romSize);
+    writer.copy(rom, config.romSize);
     writer.copy(wom, config.womSize);
-    writer.copy(extRom, config.extSize);
+    writer.copy(ext, config.extSize);
     writer.copy(chipRam, config.chipRamSize);
     writer.copy(slowRam, config.slowRamSize);
     writer.copy(fastRam, config.fastRamSize);
@@ -274,10 +274,10 @@ Memory::loadRom(RomFile *file)
 {
     assert(file != NULL);
     
-    if (!alloc(file->getSize(), kickRom, config.romSize))
+    if (!alloc(file->getSize(), rom, config.romSize))
         return false;
     
-    loadRom(file, kickRom, config.romSize);
+    loadRom(file, rom, config.romSize);
     return true;
 }
 
@@ -316,10 +316,10 @@ Memory::loadExtRom(ExtFile *file)
 {
     assert(file != NULL);
 
-    if (!alloc(file->getSize(), extRom, config.extSize))
+    if (!alloc(file->getSize(), ext, config.extSize))
         return false;
 
-    loadRom(file, extRom, config.extSize);
+    loadRom(file, ext, config.extSize);
     return true;
 }
 
@@ -361,8 +361,8 @@ void
 Memory::updateMemSrcTable()
 {
     // MemorySource mem_boot = bootRom ? MEM_BOOT : MEM_UNMAPPED;
-    MemorySource mem_kick = kickRom ? MEM_ROM : MEM_UNMAPPED;
-    MemorySource mem_ext = extRom ? MEM_EXT : MEM_UNMAPPED;
+    MemorySource mem_kick = rom ? MEM_ROM : MEM_UNMAPPED;
+    MemorySource mem_ext = ext ? MEM_EXT : MEM_UNMAPPED;
 
     assert(config.chipRamSize % 0x10000 == 0);
     assert(config.slowRamSize % 0x10000 == 0);
@@ -372,7 +372,7 @@ Memory::updateMemSrcTable()
     bool ovl = ciaa.getPA() & 1;
     
     debug("updateMemSrcTable: rtc = %d ovl = %d\n", rtc, ovl);
-    debug("kickRom: %p extRom: %p\n", kickRom, extRom);
+    debug("kickRom: %p extRom: %p\n", rom, ext);
     dump();
     
     // Start from scratch
@@ -423,7 +423,7 @@ Memory::updateMemSrcTable()
 
     // Overlay Rom with lower memory area if the OVL line is high
     for (unsigned i = 0; ovl && i < 8 && memSrc[0xF8 + i] != MEM_UNMAPPED; i++) {
-        // memSrc[i] = memSrc[(extRom ? 0xE0 : 0xF8) + i];
+        // memSrc[i] = memSrc[(ext ? 0xE0 : 0xF8) + i];
         memSrc[i] = memSrc[0xF8 + i];
     }
 
