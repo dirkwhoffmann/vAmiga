@@ -41,24 +41,8 @@ Memory::dealloc()
 void
 Memory::_powerOn()
 {
-    // Check if a Boot Rom or a Kickstart Rom is present
-    if (hasBootRom()) {
-
-        // Allocate a WOM
-        alloc(KB(256), wom, config.womSize);
-        eraseWom();
-
-        // Make the WOM writable
-        kickIsWritable = true;
-
-        // Remove any Extended ROM if present
-        deleteExtRom();
-    }
-
-    if (hasKickRom()) {
-
-        kickIsWritable = false;
-    }
+    // Erase WOM (if any)
+    if (hasWom()) eraseWom();
 
     // Fill RAM with the proper startup pattern
     initializeRam();
@@ -278,6 +262,16 @@ Memory::loadRom(RomFile *file)
         return false;
     
     loadRom(file, rom, config.romSize);
+
+    // Emulate a WOM if a Boot ROM is installed instead of a Kickstart ROM
+    if (hasBootRom()) {
+        debug("Creating WOM\n");
+        alloc(KB(256), wom, config.womSize);
+    } else {
+        debug("Deleting WOM\n");
+        alloc(0, wom, config.womSize);
+    }
+
     return true;
 }
 
@@ -361,7 +355,8 @@ void
 Memory::updateMemSrcTable()
 {
     // MemorySource mem_boot = bootRom ? MEM_BOOT : MEM_UNMAPPED;
-    MemorySource mem_kick = rom ? MEM_ROM : MEM_UNMAPPED;
+    MemorySource mem_rom = rom ? MEM_ROM : MEM_UNMAPPED;
+    MemorySource mem_wom = wom ? MEM_WOM : mem_rom ? MEM_ROM : MEM_UNMAPPED;
     MemorySource mem_ext = ext ? MEM_EXT : MEM_UNMAPPED;
 
     assert(config.chipRamSize % 0x10000 == 0);
@@ -411,20 +406,32 @@ Memory::updateMemSrcTable()
     for (unsigned i = 0xE0; i <= 0xE7; i++)
         memSrc[i] = mem_ext;
 
+    /*
     // Boot Rom or Kickstart mirror
     for (unsigned i = 0xF8; i <= 0xFB; i++)
         // memSrc[i] = kickIsWritable ? mem_boot : mem_kick;
-        memSrc[i] = mem_kick;
+        memSrc[i] = mem_rom;
 
-    // Kickstart
+    // Kickstart WOM or Kickstart ROM
     for (unsigned i = 0xFC; i <= 0xFF; i++) {
-        memSrc[i] = mem_kick;
+        memSrc[i] = mem_wom;
+    }
+    */
+    // Kickstart WOM or Kickstart ROM
+    for (unsigned i = 0xF8; i <= 0xFF; i++)
+        memSrc[i] = mem_wom;
+
+    // Blend in Boot Rom if a writeable WOM is present
+    if (hasWom() && !womIsLocked) {
+        for (unsigned i = 0xF8; i <= 0xFB; i++)
+            memSrc[i] = mem_rom;
     }
 
     // Overlay Rom with lower memory area if the OVL line is high
-    for (unsigned i = 0; ovl && i < 8 && memSrc[0xF8 + i] != MEM_UNMAPPED; i++) {
-        // memSrc[i] = memSrc[(ext ? 0xE0 : 0xF8) + i];
-        memSrc[i] = memSrc[0xF8 + i];
+    if (ovl) {
+        for (unsigned i = 0; i < 8 && memSrc[0xF8 + i] != MEM_UNMAPPED; i++)
+            // memSrc[i] = memSrc[(ext ? 0xE0 : 0xF8) + i];
+            memSrc[i] = memSrc[0xF8 + i];
     }
 
     amiga.putMessage(MSG_MEM_LAYOUT);
@@ -761,7 +768,7 @@ Memory::poke8(uint32_t addr, uint8_t value)
 
             ASSERT_ROM_ADDR(addr);
             stats.romWrites++;
-            pokeKick8(addr, value);
+            pokeRom8(addr, value);
             break;
 
         case MEM_WOM:
@@ -881,7 +888,7 @@ Memory::poke16(uint32_t addr, uint16_t value)
 
                     ASSERT_ROM_ADDR(addr);
                     stats.romWrites++;
-                    pokeKick16(addr, value);
+                    pokeRom16(addr, value);
                     return;
 
                 case MEM_WOM:
@@ -1721,38 +1728,28 @@ Memory::pokeAutoConf16(uint32_t addr, uint16_t value)
 }
 
 void
-Memory::pokeBoot8(uint32_t addr, uint8_t value)
+Memory::pokeRom8(uint32_t addr, uint8_t value)
 {
-    debug("pokeBoot8(%X, %X)\n", addr, value);
-    reportSuspiciousBehavior();
+    // debug("pokeRom8(%X, %X)\n", addr, value);
+
+    // Lock the WOM (if any)
+    if (hasWom()) {
+        if (!womIsLocked) debug("Locking WOM\n");
+        womIsLocked = true;
+        updateMemSrcTable();
+    }
 }
 
 void
-Memory::pokeBoot16(uint32_t addr, uint16_t value)
+Memory::pokeRom16(uint32_t addr, uint16_t value)
 {
-    debug("pokeBoot16(%X, %X)\n", addr, value);
+    // debug("pokeRom16(%X, %X)\n", addr, value);
 
-    // Turn the WOM into a ROM
-    debug("Locking WOM\n");
-    kickIsWritable = false;
-}
-
-void
-Memory::pokeKick8(uint32_t addr, uint8_t value)
-{
-    debug("pokeKick8(%X, %X)\n", addr, value);
-
-    // It's suspicious if a program is doing that, so we better investigate...
-    assert(false);
-}
-
-void
-Memory::pokeKick16(uint32_t addr, uint16_t value)
-{
-    // debug("pokeKick16(%X, %X)\n", addr, value);
-
-    if (kickIsWritable) {
-        WRITE_ROM_16(addr, value);
+     // Lock the WOM (if any)
+    if (hasWom()) {
+        if (!womIsLocked) debug("Locking WOM\n");
+        womIsLocked = true;
+        updateMemSrcTable();
     }
 }
 
@@ -1761,7 +1758,7 @@ Memory::pokeWom8(uint32_t addr, uint8_t value)
 {
     // debug("pokeWom8(%X, %X)\n", addr, value);
 
-    if (kickIsWritable) {
+    if (!womIsLocked) {
         WRITE_WOM_8(addr, value);
     }
 
@@ -1770,9 +1767,9 @@ Memory::pokeWom8(uint32_t addr, uint8_t value)
 void
 Memory::pokeWom16(uint32_t addr, uint16_t value)
 {
-    // debug("pokeKick16(%X, %X)\n", addr, value);
+    // debug("pokeWom16(%X, %X)\n", addr, value);
 
-    if (kickIsWritable) {
+    if (!womIsLocked) {
         WRITE_WOM_16(addr, value);
     }
 }

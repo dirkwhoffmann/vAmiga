@@ -737,13 +737,13 @@ Amiga::readyToPowerUp()
     
     // Check if Chip Ram is present
     if (!mem.hasChipRam()) {
-        msg("NOT READY YET: Chip Ram is missing.\n");
+        msg("NOT READY: Can't power up without Chip RAM.\n");
         return false;
     }
     
     // Check if a Boot Rom or a Kickstart Rom is present
-    if (!mem.hasKickRom()) {
-        msg("NOT READY YET: Rom is missing.\n");
+    if (!mem.hasRom()) {
+        msg("NOT READY: Can't power up without a ROM.\n");
         return false;
     }
 

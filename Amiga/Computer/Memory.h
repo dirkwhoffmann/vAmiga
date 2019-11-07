@@ -134,12 +134,14 @@ public:
     uint8_t *slowRam = NULL;
     uint8_t *fastRam = NULL;
     
-    /* Indicates if the Kickstart Rom is writable
-     * If an A500 or A2000 is emulated, this variable is always false. If an
-     * A1000 is emulated, it is true on startup to emulate a WOM (Write Once
-     * Memory).
+    /* Indicates if the Kickstart Wom is writable
+     * If an Amiga 1000 Boot Rom is installed, a Kickstart WOM (Write Once
+     * Memory) is added automatically. On startup, the WOM is unlocked which
+     * means that it is writable. During the boot process, the WOM will
+     * be locked.
      */
-    bool kickIsWritable = false;
+    bool womIsLocked = false;
+    // bool kickIsWritable = false;
     
     /* We divide the memory into banks of size 64KB.
      * The Amiga has 24 address lines. Hence, the accessible memory is divided
@@ -170,7 +172,7 @@ public:
     {
         worker
 
-        & kickIsWritable
+        & womIsLocked
         & memSrc
         & dataBus;
     }
@@ -266,8 +268,9 @@ private:
 public:
     
     // Checks if a certain ROM is present
-    bool hasBootRom() { return config.romSize > 0 && config.romSize <= KB(16); }
-    bool hasKickRom() { return config.romSize >= KB(256); }
+    bool hasRom() { return rom != NULL; }
+    bool hasBootRom() { return hasRom() && config.romSize <= KB(16); }
+    bool hasKickRom() { return hasRom() && config.romSize >= KB(256); }
     bool hasWom() { return wom != NULL; }
     bool hasExtRom() { return ext != NULL; }
 
@@ -425,24 +428,17 @@ public:
     void pokeAutoConf8(uint32_t addr, uint8_t value);
     void pokeAutoConf16(uint32_t addr, uint16_t value);
 
-    //
-    // Boot Rom
-    //
-
-    void pokeBoot8(uint32_t addr, uint8_t value);
-    void pokeBoot16(uint32_t addr, uint16_t value);
-
 
     //
-    // Kickstart Rom
+    // Boot ROM or Kickstart ROM
     //
 
-    void pokeKick8(uint32_t addr, uint8_t value);
-    void pokeKick16(uint32_t addr, uint16_t value);
+    void pokeRom8(uint32_t addr, uint8_t value);
+    void pokeRom16(uint32_t addr, uint16_t value);
 
 
     //
-    // Kickstart Wom (Amiga 1000)
+    // Kickstart WOM (Amiga 1000)
     //
 
     void pokeWom8(uint32_t addr, uint8_t value);
