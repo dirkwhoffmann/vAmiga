@@ -386,26 +386,31 @@ extension MyController: NSMenuItemValidation {
     @IBAction func kbWideAction(_ sender: Any!) {
 
         kbStyle = .wide
+        UserDefaults.standard.set(kbStyle.rawValue, forKey: Keys.kbStyle)
     }
 
     @IBAction func kbNarrowAction(_ sender: Any!) {
 
         kbStyle = .narrow
+        UserDefaults.standard.set(kbStyle.rawValue, forKey: Keys.kbStyle)
     }
 
     @IBAction func kbUSAction(_ sender: Any!) {
 
         kbLayout = .us
+        UserDefaults.standard.set(kbLayout.rawValue, forKey: Keys.kbLayout)
     }
 
     @IBAction func kbGermanAction(_ sender: Any!) {
 
         kbLayout = .german
+        UserDefaults.standard.set(kbLayout.rawValue, forKey: Keys.kbLayout)
     }
 
     @IBAction func kbItalianAction(_ sender: Any!) {
 
         kbLayout = .italian
+        UserDefaults.standard.set(kbLayout.rawValue, forKey: Keys.kbLayout)
     }
 
     @IBAction func mapCmdKeysAction(_ sender: Any!) {

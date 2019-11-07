@@ -139,7 +139,6 @@ extension MyController {
         let nsDict = NSDictionary.init(dictionary: filteredDict)
         nsDict.write(to: url, atomically: true)
     }
-    
 }
 
 //
@@ -149,8 +148,12 @@ extension MyController {
 struct Keys {
     
     // Control ports
-    static let inputDevice1      = "VAMIGAInputDevice1"
-    static let inputDevice2      = "VAMIGAInputDevice2"
+    static let inputDevice1      = "VAMIGAInputDevice1Key"
+    static let inputDevice2      = "VAMIGAInputDevice2Key"
+
+    // Keyboard
+    static let kbStyle           = "VAMIGAKeyboardStyleKey"
+    static let kbLayout          = "VAMIGAKeyboardLayoutKey"
 }
 
 struct Defaults {
@@ -158,6 +161,10 @@ struct Defaults {
     // Control ports
     static let inputDevice1 = -1
     static let inputDevice2 = -1
+
+    // Keyboard
+    static let kbStyle = KBStyle.wide
+    static let kbLayout = KBLayout.us
 }
 
 extension MyController {
@@ -167,7 +174,10 @@ extension MyController {
         let dictionary: [String: Any] = [
             
             Keys.inputDevice1: Defaults.inputDevice1,
-            Keys.inputDevice2: Defaults.inputDevice2
+            Keys.inputDevice2: Defaults.inputDevice2,
+
+            Keys.kbStyle: Defaults.kbStyle.rawValue,
+            Keys.kbLayout: Defaults.kbLayout.rawValue
         ]
         
         let defaults = UserDefaults.standard
@@ -179,7 +189,11 @@ extension MyController {
         let defaults = UserDefaults.standard
 
         let keys = [ Keys.inputDevice1,
-                     Keys.inputDevice2 ]
+                     Keys.inputDevice2,
+
+                     Keys.kbStyle,
+                     Keys.kbLayout
+        ]
 
          for key in keys { defaults.removeObject(forKey: key) }
         
@@ -195,6 +209,11 @@ extension MyController {
         setPort1(defaults.integer(forKey: Keys.inputDevice1))
         setPort2(defaults.integer(forKey: Keys.inputDevice2))
 
+        let style = defaults.integer(forKey: Keys.kbStyle)
+        let layout = defaults.integer(forKey: Keys.kbLayout)
+        kbStyle = KBStyle(rawValue: style) ?? kbStyle
+        kbLayout = KBLayout(rawValue: layout) ?? kbLayout
+
         amiga.resume()
     }
     
@@ -204,6 +223,9 @@ extension MyController {
         
         defaults.set(inputDevice1, forKey: Keys.inputDevice1)
         defaults.set(inputDevice2, forKey: Keys.inputDevice2)
+
+        defaults.set(kbStyle.rawValue, forKey: Keys.kbStyle)
+        defaults.set(kbLayout.rawValue, forKey: Keys.kbLayout)
     }
 }
 
@@ -738,10 +760,6 @@ extension Keys {
     static let deniseRev          = "VAMIGADeniseRevKey"
     static let realTimeClock      = "VAMIGARealTimeClockKey"
 
-    // Keyboard
-    static let kbModel            = "VAMIGAKbModelKey"
-    static let kbLang             = "VAMIGAKbLangKey"
-
     // Memory
     static let chipRam            = "VAMIGAChipRamKey"
     static let slowRam            = "VAMIGASlowRamKey"
@@ -837,9 +855,6 @@ extension MyController {
             Keys.deniseRev: defaultModel.deniseRevision.rawValue,
             Keys.realTimeClock: defaultModel.realTimeClock.rawValue,
 
-            Keys.kbModel: defaultModel.kbModel.rawValue,
-            Keys.kbLang: defaultModel.kbLang.rawValue,
-
             Keys.chipRam: defaultModel.chipRam,
             Keys.slowRam: defaultModel.slowRam,
             Keys.fastRam: defaultModel.fastRam,
@@ -868,9 +883,6 @@ extension MyController {
                     Keys.deniseRev,
                     Keys.realTimeClock,
 
-                    Keys.kbModel,
-                    Keys.kbLang,
-                    
                     Keys.chipRam,
                     Keys.slowRam,
                     Keys.fastRam,
@@ -902,9 +914,6 @@ extension MyController {
         amiga.configure(VA_DENISE_REVISION, value: defaults.integer(forKey: Keys.deniseRev))
         amiga.configure(VA_RT_CLOCK, enable: defaults.bool(forKey: Keys.realTimeClock))
 
-        amiga.configure(VA_KB_MODEL, value: defaults.integer(forKey: Keys.kbModel))
-        amiga.configure(VA_KB_LANG, value: defaults.integer(forKey: Keys.kbLang))
-
         amiga.configure(VA_CHIP_RAM, value: defaults.integer(forKey: Keys.chipRam))
         amiga.configure(VA_SLOW_RAM, value: defaults.integer(forKey: Keys.slowRam))
         amiga.configure(VA_FAST_RAM, value: defaults.integer(forKey: Keys.fastRam))
@@ -932,9 +941,6 @@ extension MyController {
         defaults.set(config.agnusRevision.rawValue, forKey: Keys.agnusRev)
         defaults.set(config.deniseRevision.rawValue, forKey: Keys.deniseRev)
         defaults.set(config.rtc.model.rawValue, forKey: Keys.realTimeClock)
-
-        defaults.set(config.keyboard.model.rawValue, forKey: Keys.kbModel)
-        defaults.set(config.keyboard.language.rawValue, forKey: Keys.kbLang)
 
         defaults.set(config.mem.chipRamSize / 1024, forKey: Keys.chipRam)
         defaults.set(config.mem.slowRamSize / 1024, forKey: Keys.slowRam)
