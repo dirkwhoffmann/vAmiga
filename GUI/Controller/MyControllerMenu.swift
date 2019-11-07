@@ -63,7 +63,7 @@ extension MyController: NSMenuItemValidation {
         case #selector(MyController.hideMouseAction(_:)):
             item.title = hideMouse ? "Show Mouse Cursor" : "Hide Mouse Cursor"
             return true
-        
+
             //
             // Keyboard menu
             //
@@ -71,7 +71,27 @@ extension MyController: NSMenuItemValidation {
         case #selector(MyController.mapCmdKeysAction(_:)):
             item.state = (eventTap != nil) ? .on : .off
             return true
-            
+
+        case #selector(MyController.kbWideAction(_:)):
+            item.state = (kbStyle == .wide) ? .on : .off
+            return true
+
+        case #selector(MyController.kbNarrowAction(_:)):
+            item.state = (kbStyle == .narrow) ? .on : .off
+            return true
+
+        case #selector(MyController.kbUSAction(_:)):
+            item.state = (kbLayout == .us) ? .on : .off
+            return true
+
+        case #selector(MyController.kbGermanAction(_:)):
+            item.state = (kbLayout == .german) ? .on : .off
+            return true
+
+        case #selector(MyController.kbItalianAction(_:)):
+            item.state = (kbLayout == .italian) ? .on : .off
+            return true
+
             //
             // Drive menu
             //
@@ -79,7 +99,7 @@ extension MyController: NSMenuItemValidation {
         case #selector(MyController.insertRecentDiskAction(_:)):
             
             return validateURLlist(myAppDelegate.recentlyInsertedDiskURLs, image: smallDisk)
-        
+
         case  #selector(MyController.ejectDiskAction(_:)),
               #selector(MyController.exportDiskAction(_:)):
             
@@ -109,7 +129,7 @@ extension MyController: NSMenuItemValidation {
         case #selector(MyController.writeProtectAction(_:)):
             item.state = dfn.hasWriteProtectedDisk() ? .on : .off
             return dfn.hasDisk()
-        
+
         case #selector(MyController.dragAndDropTargetAction(_:)):
             item.state = dfn === dragAndDropDrive ? .on : .off
             return true
@@ -151,7 +171,7 @@ extension MyController: NSMenuItemValidation {
             }
         })
     }
-   
+
     @IBAction func exportPrefsAction(_ sender: Any!) {
         
         track()
@@ -362,7 +382,32 @@ extension MyController: NSMenuItemValidation {
         myAppDelegate.virtualKeyboard = kb
         myAppDelegate.virtualKeyboard?.showWindow()
     }
-    
+
+    @IBAction func kbWideAction(_ sender: Any!) {
+
+        kbStyle = .wide
+    }
+
+    @IBAction func kbNarrowAction(_ sender: Any!) {
+
+        kbStyle = .narrow
+    }
+
+    @IBAction func kbUSAction(_ sender: Any!) {
+
+        kbLayout = .us
+    }
+
+    @IBAction func kbGermanAction(_ sender: Any!) {
+
+        kbLayout = .german
+    }
+
+    @IBAction func kbItalianAction(_ sender: Any!) {
+
+        kbLayout = .italian
+    }
+
     @IBAction func mapCmdKeysAction(_ sender: Any!) {
         
         mapCommandKeys = !mapCommandKeys
@@ -380,7 +425,7 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func newDiskAction(_ sender: NSMenuItem!) {
         
-         track()
+        track()
         
         let drive = amiga.df(sender)
         let model = drive.type()
@@ -496,7 +541,7 @@ extension MyController: NSMenuItemValidation {
     }
     
     @IBAction func clearRecentlyInsertedDisksAction(_ sender: NSMenuItem!) {
-      
+
         myAppDelegate.recentlyInsertedDiskURLs = []
     }
 
@@ -532,15 +577,15 @@ extension MyController: NSMenuItemValidation {
     //
 
     /*
-    @IBAction func debugLevelAction(_ sender: Any!) {
-        // Dummy target to make menu item validatable
-    }
-    @IBAction func setDebugLevelAction(_ sender: NSMenuItem!) {
-        amiga.suspend()
-        amiga.setDebugLevel(sender.tag)
-        amiga.resume()
-    }
-    */
+     @IBAction func debugLevelAction(_ sender: Any!) {
+     // Dummy target to make menu item validatable
+     }
+     @IBAction func setDebugLevelAction(_ sender: NSMenuItem!) {
+     amiga.suspend()
+     amiga.setDebugLevel(sender.tag)
+     amiga.resume()
+     }
+     */
     @IBAction func emulateSpritesAction(_ sender: NSMenuItem!) {
         amiga.suspend()
         amiga.configure(VA_EMULATE_SPRITES, enable: sender.state == .off)

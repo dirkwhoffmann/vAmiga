@@ -12,8 +12,6 @@ enum WarpMode {
     case auto
     case on
     case off
-
-    // func userOverride() -> Bool { return self != .auto }
 }
 
 protocol MessageReceiver {
@@ -28,6 +26,9 @@ class MyController: NSWindowController, MessageReceiver {
     // the proxy is written in Objective-C.
     var amiga: AmigaProxy!
 
+    // Preferences controller
+    var preferencesController: PreferencesController?
+
     // Audio Engine
     var audioEngine: AudioEngine!
     
@@ -36,12 +37,13 @@ class MyController: NSWindowController, MessageReceiver {
     
     // Keyboard controller
     var keyboardcontroller: KeyboardController!
-    
-    // Virtual C64 keyboard (opened as a sheet)
+
+    // Virtual keyboard (opened as a sheet) and it's visual appearance
     var virtualKeyboardSheet: VirtualKeyboardController?
     
-    // Preferences controller
-    var preferencesController: PreferencesController?
+    // Visual appearance of the virtual keyboard
+    var kbStyle = KBStyle.wide
+    var kbLayout = KBLayout.us
 
     // Loop timer
     // The timer fires 60 times a second and executes all tasks that need to be

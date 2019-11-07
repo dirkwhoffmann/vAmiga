@@ -9,18 +9,6 @@
 
 import Carbon.HIToolbox
 
-/* Layout of the emulated keyboard
- * The keyboard layout defines the number of keys on the keyboard, the visual
- * appearance of their key caps and their physical shape.
- */
-enum Layout: Int, Codable {
-
-    case generic // Used as a fallback if no matching layout is found
-    case us
-    case german
-    case italian
-}
-
 // Keyboard event handler
 class KeyboardController: NSObject {
     

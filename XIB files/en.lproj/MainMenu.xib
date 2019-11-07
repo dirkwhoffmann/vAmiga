@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14868" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14868"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication"/>
@@ -447,6 +448,51 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="9ee-jY-6ug"/>
+                            <menuItem title="Style" id="p1F-7f-FFc">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Style" id="8oK-pv-1OC">
+                                    <items>
+                                        <menuItem title="Wide" id="A6B-v6-Kr2">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="kbWideAction:" target="-1" id="Oxu-9t-SAP"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Narrow" id="B8O-lX-i7K">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="kbNarrowAction:" target="-1" id="8mw-NH-Uxy"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
+                            <menuItem title="Layout" id="f5L-b4-iaa">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Layout" id="jwr-fZ-518">
+                                    <items>
+                                        <menuItem title="US" id="fkQ-3c-dUZ">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="kbUSAction:" target="-1" id="w1q-8Y-lAf"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="German" id="aSS-HZ-DZ8">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="kbGermanAction:" target="-1" id="kq8-Lz-3uu"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Italian" id="qdX-Ny-jwb">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="kbItalianAction:" target="-1" id="du1-1Y-t4U"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="xZS-xj-NKJ"/>
                             <menuItem title="Map ⌘ to Amiga keys" id="510">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
@@ -1043,6 +1089,10 @@
                     </menu>
                 </menuItem>
             </items>
+            <point key="canvasLocation" x="139" y="154"/>
         </menu>
+        <menuItem title="Narrow style" id="hwU-hm-b10">
+            <modifierMask key="keyEquivalentModifierMask"/>
+        </menuItem>
     </objects>
 </document>

@@ -7,6 +7,29 @@
 // See https://www.gnu.org for license information
 //
 
+/* Emulated keyboard model
+ * The keyboard style defines the overall appearance of the virtual keyboard.
+ * The user can choose between a narrow style (as uses for the Amiga 1000) and
+ * a wide style (as used for the Amiga 500 and Amiga 2000).
+ */
+enum KBStyle: Int, Codable {
+
+    case narrow
+    case wide
+}
+
+/* Language of the emulated keyboard
+ * The keyboard layout defines the number of keys on the keyboard, the visual
+ * appearance of their key caps and their physical shape.
+ */
+enum KBLayout: Int, Codable {
+
+    case generic // Used as a fallback if no matching layout is found
+    case us
+    case german
+    case italian
+}
+
 class VirtualKeyboardWindow: DialogWindow {
  
 }
@@ -34,7 +57,7 @@ class VirtualKeyboardController: DialogController, NSWindowDelegate {
 
         let model  = config.keyboard.model
         let lang   = config.keyboard.language
-        let layout = Layout(rawValue: lang.rawValue) ?? .us
+        let layout = KBLayout(rawValue: lang.rawValue) ?? .us
         let ansi   = (layout == .us)
 
         var xibName = ""
@@ -99,7 +122,7 @@ class VirtualKeyboardController: DialogController, NSWindowDelegate {
         guard let config = amigaProxy?.config() else { return }
 
         let lang = config.keyboard.language
-        let layout = Layout(rawValue: lang.rawValue) ?? .us
+        let layout = KBLayout(rawValue: lang.rawValue) ?? .us
 
         track("layout = \(layout)")
         

@@ -140,7 +140,7 @@ struct AmigaKeycode {
 }
 
 // Country specific keycaps
-let keycaps: [Int: [Layout: String]] = [
+let keycaps: [Int: [KBLayout: String]] = [
     
     AmigaKeycode.Ansi.grave:        [.generic: "~ `"],
     AmigaKeycode.Ansi.digit1:       [.generic: "! 1"],
@@ -258,7 +258,7 @@ struct AmigaKey: Codable {
     var keyCode: Int = 0
     
     // The keycap label (country specific)
-    var label: [Layout: String] = [:]
+    var label: [KBLayout: String] = [:]
     
     // Initializers
     init(keyCode: Int) {
@@ -393,7 +393,7 @@ extension AmigaKey {
     ]
     
     // Returns an unlabeled background image of the right shape
-    private func backgroundImage(model: KeyboardModel, layout: Layout) -> NSImage? {
+    private func backgroundImage(model: KeyboardModel, layout: KBLayout) -> NSImage? {
         
         var (shape, tint) = ("100x100", "white")
         
@@ -433,7 +433,7 @@ extension AmigaKey {
         return image
     }
     
-    func image(model: KeyboardModel, layout: Layout) -> NSImage? {
+    func image(model: KeyboardModel, layout: KBLayout) -> NSImage? {
         
         // Key label font sizes
         let large = CGFloat(15)
