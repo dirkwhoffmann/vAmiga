@@ -84,18 +84,25 @@ extension PreferencesController {
         // let config = amiga.config()
 
         let poweredOff   = amiga.isPoweredOff()
-        let hash         = amiga.mem.romFingerprint()
+        let romHash      = amiga.mem.romFingerprint()
         let extHash      = amiga.mem.extRomFingerprint()
 
         track("romHash = \(hash)")
         track("extHash = \(extHash)")
 
-        let hasRom        = hash != 0
-        let hasArosRom    = hash == Rom.aros
+        let hasRom        = romHash != 0
+        let hasArosRom    = romHash == Rom.aros
         let hasDiagRom    = hash == Rom.diag11 || hash == Rom.logica20
-        let hasKnownRom   = knownRoms[hash] != nil
+        let hasKnownRom   = knownRoms[romHash] != nil
         let hasUnknownRom = hasRom && !hasKnownRom
         let hasOrigRom    = hasKnownRom && !hasArosRom && !hasDiagRom
+
+        let hasExt        = extHash != 0
+        let hasArosExt    = false // extHash == TODO
+        let hasKnownExt   = knownRoms[extHash] != nil
+        let hasDiagExt    = false
+        // let hasUnknownExt = hasExt && !hasKnownExt
+        let hasOrigExt    = hasKnownExt && !hasArosRom
 
         let romURL        = controller.romURL
 
@@ -108,6 +115,8 @@ extension PreferencesController {
         // Lock controls if emulator is powered on
         romDropView.isEnabled = poweredOff
         romDeleteButton.isEnabled = poweredOff
+        extDropView.isEnabled = poweredOff
+        extDeleteButton.isEnabled = poweredOff
         romFactoryButton.isEnabled = poweredOff
         
         // Rom icon
@@ -117,7 +126,15 @@ extension PreferencesController {
             hasOrigRom ? romOriginal :
             hasRom     ? romUnknown : romMissing
 
+        // Rom extension icon
+        extDropView.image =
+            hasArosExt ? romAros :
+            hasDiagExt ? romDiag :
+            hasOrigExt ? romOriginal :
+            hasExt     ? romUnknown : romMissing
+
         // Rom description
+        /*
         var text = ""
         var subText = ""
         
@@ -130,18 +147,27 @@ extension PreferencesController {
             
         romHash.isHidden = !hasUnknownRom
         romHash.stringValue = String(format: "Hash: %llx", hash)
-        
+        */
+
+        // Hide some controls
         romDeleteButton.isHidden = !hasRom
-        
+        extDeleteButton.isHidden = !hasExt
+
         // Warning message
-        if hasOrigRom {
+        if hasOrigRom || hasOrigExt {
             
             romWarning.isHidden = false
             romWarning.stringValue = "Please obey legal regulations. Original Amiga Roms are copyrighted."
             romWarning.textColor = .textColor
 
+        } else if hasUnknownRom {
+
+            romWarning.isHidden = false
+            romWarning.stringValue = "Use original Amiga Roms for higher compatibility."
+            romWarning.textColor = .textColor
+
         } else {
-            
+
             romWarning.isHidden = true
         }
         
@@ -158,14 +184,30 @@ extension PreferencesController {
     // Action methods
     //
 
-    @IBAction func romDeleteAction(_ sender: Any!) {
+    @IBAction func romDeleteAction(_ sender: NSButton!) {
 
         myController?.romURL = URL(fileURLWithPath: "/")
         amigaProxy?.mem.deleteRom()
         
         refresh()
     }
-    
+
+    @IBAction func extDeleteAction(_ sender: NSButton!) {
+
+        track()
+        /*
+         myController?.romURL = URL(fileURLWithPath: "/")
+         amigaProxy?.mem.deleteRom()
+         */
+        refresh()
+    }
+
+    @IBAction func extMapAddrAction(_ sender: NSPopUpButton!) {
+
+        track()
+        refresh()
+    }
+
     @IBAction func romFactorySettingsAction(_ sender: NSButton!) {
 
         // Revert to the AROS Kickstart replacement

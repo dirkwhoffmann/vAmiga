@@ -19,21 +19,17 @@ extension NSDraggingInfo {
     }
 }
 
-class RomDropView: NSImageView {
+class DropView: NSImageView {
     
     @IBOutlet var dialogController: DialogController!
 
-    func acceptDragSource(url: URL) -> Bool {
-        
-        guard let amiga = amigaProxy else { return false }
-        return amiga.mem.isRom(url) && amiga.isPoweredOff()
-    }
-    
     override func awakeFromNib() {
 
         registerForDraggedTypes([NSPasteboard.PasteboardType.compatibleFileURL])
     }
-    
+
+    func acceptDragSource(url: URL) -> Bool { return false }
+
     override func draggingEntered(_ sender: NSDraggingInfo) -> NSDragOperation {
 
         if let url = sender.url {
@@ -68,5 +64,23 @@ class RomDropView: NSImageView {
     override func concludeDragOperation(_ sender: NSDraggingInfo?) {
 
         dialogController.refresh()
+    }
+}
+
+class RomDropView: DropView {
+
+    override func acceptDragSource(url: URL) -> Bool {
+
+        guard let amiga = amigaProxy else { return false }
+        return amiga.mem.isRom(url) && amiga.isPoweredOff()
+    }
+}
+
+class ExtRomDropView: DropView {
+
+    override func acceptDragSource(url: URL) -> Bool {
+
+        guard let amiga = amigaProxy else { return false }
+        return amiga.mem.isExtRom(url) && amiga.isPoweredOff()
     }
 }
