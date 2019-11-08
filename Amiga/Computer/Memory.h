@@ -133,7 +133,7 @@ public:
     uint8_t *chipRam = NULL;
     uint8_t *slowRam = NULL;
     uint8_t *fastRam = NULL;
-    
+
     /* Indicates if the Kickstart Wom is writable
      * If an Amiga 1000 Boot Rom is installed, a Kickstart WOM (Write Once
      * Memory) is added automatically. On startup, the WOM is unlocked which
@@ -141,7 +141,6 @@ public:
      * be locked.
      */
     bool womIsLocked = false;
-    // bool kickIsWritable = false;
     
     /* We divide the memory into banks of size 64KB.
      * The Amiga has 24 address lines. Hence, the accessible memory is divided
@@ -165,6 +164,9 @@ public:
     template <class T>
     void applyToPersistentItems(T& worker)
     {
+        worker
+
+        & config.extStart;
     }
 
     template <class T>
@@ -193,6 +195,8 @@ public:
     // Returns the current configuration
     MemoryConfig getConfig() { return config; }
 
+    uint32_t getExtStart() { return config.extStart; }
+    void setExtStart(uint32_t page);
 
 
     //
@@ -291,10 +295,10 @@ public:
     const char *version(RomRevision rev);
     const char *released(RomRevision rev);
     const char *romTitle() { return title(romRevision()); }
-    const char *romVersion()  { return version(romRevision()); }
+    const char *romVersion();
     const char *romReleased()  { return released(romRevision()); }
     const char *extTitle() { return title(extRevision()); }
-    const char *extVersion()  { return version(extRevision()); }
+    const char *extVersion();
     const char *extReleased()  { return released(extRevision()); }
 
     // Removes a previously installed ROM

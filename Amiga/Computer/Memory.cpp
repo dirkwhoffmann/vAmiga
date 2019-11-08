@@ -14,12 +14,8 @@ Memory::Memory(Amiga& ref) : SubComponent(ref)
 {
     setDescription("Memory");
 
-    config.romSize = 0;
-    config.womSize = 0;
-    config.extSize = 0;
-    config.chipRamSize = 0;
-    config.slowRamSize = 0;
-    config.fastRamSize = 0;
+    memset(&config, 0, sizeof(config));
+    config.extStart = 0xE0;
 }
 
 Memory::~Memory()
@@ -36,6 +32,15 @@ Memory::dealloc()
     if (chipRam) { delete[] chipRam; chipRam = NULL; }
     if (slowRam) { delete[] slowRam; slowRam = NULL; }
     if (fastRam) { delete[] fastRam; fastRam = NULL; }
+}
+
+void
+Memory::setExtStart(uint32_t page)
+{
+    assert(page == 0xE0 || page == 0xF0);
+
+    config.extStart = page;
+    updateMemSrcTable();
 }
 
 void
@@ -344,6 +349,8 @@ Memory::title(RomRevision rev)
 {
     switch (rev) {
 
+        case ROM_UNKNOWN:        return "Unknown or patched Rom";
+
         case ROM_BOOT_A1000_8K:
         case ROM_BOOT_A1000_64K: return "Amiga 1000 Boot Rom";
 
@@ -382,28 +389,28 @@ Memory::version(RomRevision rev)
         case ROM_BOOT_A1000_8K:  return "8KB";
         case ROM_BOOT_A1000_64K: return "64KB";
 
-        case ROM_KICK11_31_034:  return "31.034";
-        case ROM_KICK12_33_166:  return "31.034";
-        case ROM_KICK12_33_180:  return "33.180";
-        case ROM_KICK121_34_004: return "34.004";
-        case ROM_KICK13_34_005:  return "34.005";
+        case ROM_KICK11_31_034:  return "Rev 31.034";
+        case ROM_KICK12_33_166:  return "Rev 31.034";
+        case ROM_KICK12_33_180:  return "Rev 33.180";
+        case ROM_KICK121_34_004: return "Rev 34.004";
+        case ROM_KICK13_34_005:  return "Rev 34.005";
 
-        case ROM_KICK20_36_028:  return "36.028";
-        case ROM_KICK202_36_207: return "36.207";
-        case ROM_KICK204_37_175: return "37.175";
-        case ROM_KICK205_37_299: return "37.299";
-        case ROM_KICK205_37_300: return "37.300";
-        case ROM_KICK205_37_350: return "37.350";
+        case ROM_KICK20_36_028:  return "Rev 36.028";
+        case ROM_KICK202_36_207: return "Rev 36.207";
+        case ROM_KICK204_37_175: return "Rev 37.175";
+        case ROM_KICK205_37_299: return "Rev 37.299";
+        case ROM_KICK205_37_300: return "Rev 37.300";
+        case ROM_KICK205_37_350: return "Rev 37.350";
 
-        case ROM_KICK30_39_106:  return "39.106";
-        case ROM_KICK31_40_063:  return "40.063";
+        case ROM_KICK30_39_106:  return "Rev 39.106";
+        case ROM_KICK31_40_063:  return "Rev 40.063";
 
-        case ROM_AROS_55696:     return "55696";
-        case ROM_AROS_55696_EXT: return "55696";
+        case ROM_AROS_55696:     return "SVN 5696";
+        case ROM_AROS_55696_EXT: return "SVN 55696";
 
-        case ROM_DIAG11:         return "1.1";
-        case ROM_DIAG12:         return "1.2";
-        case ROM_LOGICA20:       return "2.0";
+        case ROM_DIAG11:         return "Version 1.1";
+        case ROM_DIAG12:         return "Version 1.2";
+        case ROM_LOGICA20:       return "Version 2.0";
 
         default:                 return "";
     }
@@ -444,6 +451,32 @@ Memory::released(RomRevision rev)
     }
 }
 
+const char *
+Memory::romVersion()
+{
+    static char str[32];
+
+    if (romRevision() == ROM_UNKNOWN) {
+        sprintf(str, "CRC %x", romFingerprint());
+        return str;
+    }
+
+    return version(romRevision());
+}
+
+const char *
+Memory::extVersion()
+{
+    static char str[32];
+
+    if (extRevision() == ROM_UNKNOWN) {
+        sprintf(str, "CRC %x", extFingerprint());
+        return str;
+    }
+
+    return version(extRevision());
+}
+
 bool
 Memory::loadRom(RomFile *file)
 {
@@ -463,6 +496,9 @@ Memory::loadRom(RomFile *file)
         alloc(0, wom, config.womSize);
     }
 
+    // Remove the extended ROM if present (has to be loaded afterwards)
+    deleteExt();
+    
     return true;
 }
 
@@ -563,10 +599,9 @@ Memory::loadRom(AmigaFile *file, uint8_t *target, size_t length)
 void
 Memory::updateMemSrcTable()
 {
-    // MemorySource mem_boot = bootRom ? MEM_BOOT : MEM_UNMAPPED;
     MemorySource mem_rom = rom ? MEM_ROM : MEM_UNMAPPED;
     MemorySource mem_wom = wom ? MEM_WOM : mem_rom;
-    MemorySource mem_ext = ext ? MEM_EXT : MEM_UNMAPPED;
+    // MemorySource mem_ext = ext ? MEM_EXT : MEM_UNMAPPED;
 
     assert(config.chipRamSize % 0x10000 == 0);
     assert(config.slowRamSize % 0x10000 == 0);
@@ -611,8 +646,10 @@ Memory::updateMemSrcTable()
         memSrc[i] = MEM_AUTOCONF;
     
     // Extended Rom
-    for (unsigned i = 0xE0; i <= 0xE7; i++)
-        memSrc[i] = mem_ext;
+    if (hasExt()) {
+        for (unsigned i = config.extStart; i < config.extStart + 8; i++)
+            memSrc[i] = MEM_EXT;
+    }
 
     // Kickstart Wom or Kickstart Rom
     for (unsigned i = 0xF8; i <= 0xFF; i++)

@@ -219,12 +219,14 @@ extension Keys {
     
     static let rom               = "VAMIGARomFileKey"
     static let ext               = "VAMIGAExtFileKey"
+    static let extStart          = "VAMIGAExtStartKey"
 }
 
 extension Defaults {
     
-    static let rom = URL(fileURLWithPath: "")
-    static let ext = URL(fileURLWithPath: "")
+    static let rom               = URL(fileURLWithPath: "")
+    static let ext               = URL(fileURLWithPath: "")
+    static let extStart          = 0xE0
 }
 
 extension MyController {
@@ -234,7 +236,8 @@ extension MyController {
         let dictionary: [String: Any] = [
             
             Keys.rom: Defaults.rom,
-            Keys.ext: Defaults.ext
+            Keys.ext: Defaults.ext,
+            Keys.extStart: Defaults.extStart
             ]
         
         let defaults = UserDefaults.standard
@@ -246,7 +249,8 @@ extension MyController {
         let defaults = UserDefaults.standard
 
         let keys = [ Keys.rom,
-                     Keys.ext ]
+                     Keys.ext,
+                     Keys.extStart ]
 
         for key in keys { defaults.removeObject(forKey: key) }
         
@@ -267,15 +271,19 @@ extension MyController {
             extURL = url
             amiga.mem.loadExt(fromFile: extURL)
         }
+        amiga.configure(VA_EXT_START, value: defaults.integer(forKey: Keys.extStart))
+
         amiga.resume()
     }
     
     func saveRomUserDefaults() {
         
+        let config = amiga.config()
         let defaults = UserDefaults.standard
-        
+
         defaults.set(romURL, forKey: Keys.rom)
         defaults.set(extURL, forKey: Keys.ext)
+        defaults.set(config.mem.extStart, forKey: Keys.extStart)
     }
 }
 

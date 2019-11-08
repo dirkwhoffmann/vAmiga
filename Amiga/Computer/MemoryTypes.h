@@ -100,12 +100,18 @@ inline const char *pokeSourceName(PokeSource source)
 
 typedef struct
 {
-    size_t romSize;
-    size_t womSize;
-    size_t extSize;
+    // RAM size in bytes
     size_t chipRamSize;
     size_t slowRamSize;
     size_t fastRamSize;
+
+    // ROM size in bytes
+    size_t romSize;
+    size_t womSize;
+    size_t extSize;
+
+    // First memory page where the extended ROM is blended it
+    uint32_t extStart;
 }
 MemoryConfig;
 

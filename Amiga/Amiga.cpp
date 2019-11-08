@@ -290,11 +290,22 @@ Amiga::configure(ConfigOption option, long value)
             
             if ((value % 64) != 0 || value > 8192) {
                 warn("Invalid Fast Ram size: %d\n", value);
-                warn("         Valid values: 0KB, 64KB, 128KB, ..., 8192KB (8MB)\n");
+                warn("Valid values: 0KB, 64KB, 128KB, ..., 8192KB (8MB)\n");
                 return false;
             }
             
             mem.allocateFastRam(KB(value));
+            break;
+
+        case VA_EXT_START:
+
+            if (value != 0xE0 && value != 0xF0) {
+                warn("Invalid Extended ROM start page: %x\n", value);
+                warn("Valid values: 0xE0, 0xF0\n");
+                return false;
+            }
+
+            mem.setExtStart(value);
             break;
 
         case VA_EMULATE_SPRITES:

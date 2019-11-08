@@ -279,6 +279,7 @@ struct AmigaFileWrapper;
 - (NSString *) extTitle;
 - (NSString *) extVersion;
 - (NSString *) extReleased;
+- (NSInteger) extStart;
 
 - (MemorySource *) getMemSrcTable; 
 - (MemorySource) memSrc:(NSInteger)addr;

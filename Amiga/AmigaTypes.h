@@ -33,6 +33,7 @@ typedef enum : long
     VA_CHIP_RAM,
     VA_SLOW_RAM,
     VA_FAST_RAM,
+    VA_EXT_START,
     VA_DRIVE_CONNECT,
     VA_DRIVE_TYPE,
     VA_DRIVE_SPEED,

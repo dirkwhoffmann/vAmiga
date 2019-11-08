@@ -327,6 +327,10 @@ struct ADFFileWrapper { ADFFile *adf; };
     const char *str = wrapper->mem->extReleased();
     return str ? [NSString stringWithUTF8String:str] : NULL;
 }
+- (NSInteger) extStart
+{
+    return wrapper->mem->getExtStart(); 
+}
 - (MemorySource *) getMemSrcTable
 {
     return wrapper->mem->getMemSrcTable();
