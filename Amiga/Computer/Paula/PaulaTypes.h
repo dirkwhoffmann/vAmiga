@@ -119,6 +119,19 @@ UARTStats;
 
 typedef struct
 {
+    // The sample rate in Hz
+    double sampleRate;
+
+    // Determines when the audio filter is active
+    FilterActivation filterActivation;
+
+    // Selected audio filter type
+    FilterType filterType;
+}
+AudioConfig;
+
+typedef struct
+{
     int8_t state;
 
     uint16_t audlenLatch;

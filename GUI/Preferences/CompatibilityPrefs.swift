@@ -33,7 +33,7 @@ extension PreferencesController {
         compBltLevel2.textColor = (a >= 2) ? .labelColor : .tertiaryLabelColor
 
         // Audio
-        compFilterActivation.selectItem(withTag: config.filterActivation.rawValue)
+        compFilterActivation.selectItem(withTag: config.audio.filterActivation.rawValue)
 
         // Floppy drives
         let speed = config.df0.speed

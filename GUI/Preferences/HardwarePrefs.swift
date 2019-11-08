@@ -20,8 +20,8 @@ extension PreferencesController {
         let poweredOff = amiga.isPoweredOff()
 
         // Chipset
-        hwAgnusRevisionPopup.selectItem(withTag: config.agnusRevision.rawValue)
-        hwDeniseRevisionPopup.selectItem(withTag: config.deniseRevision.rawValue)
+        hwAgnusRevisionPopup.selectItem(withTag: config.agnus.revision.rawValue)
+        hwDeniseRevisionPopup.selectItem(withTag: config.denise.revision.rawValue)
         hwRealTimeClock.selectItem(withTag: config.rtc.model.rawValue)
 
         // Keyboard

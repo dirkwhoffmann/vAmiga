@@ -938,8 +938,8 @@ extension MyController {
         let config = amiga.config()
         let dc = config.diskController
 
-        defaults.set(config.agnusRevision.rawValue, forKey: Keys.agnusRev)
-        defaults.set(config.deniseRevision.rawValue, forKey: Keys.deniseRev)
+        defaults.set(config.agnus.revision.rawValue, forKey: Keys.agnusRev)
+        defaults.set(config.denise.revision.rawValue, forKey: Keys.deniseRev)
         defaults.set(config.rtc.model.rawValue, forKey: Keys.realTimeClock)
 
         defaults.set(config.mem.chipRamSize / 1024, forKey: Keys.chipRam)
@@ -1082,8 +1082,8 @@ extension MyController {
         defaults.set(config.denise.clxSprSpr, forKey: Keys.clxSprSpr)
         defaults.set(config.denise.clxSprPlf, forKey: Keys.clxSprPlf)
         defaults.set(config.denise.clxPlfPlf, forKey: Keys.clxPlfPlf)
-        defaults.set(config.filterActivation.rawValue, forKey: Keys.filterActivation)
-        defaults.set(config.filterType.rawValue, forKey: Keys.filterType)
+        defaults.set(config.audio.filterActivation.rawValue, forKey: Keys.filterActivation)
+        defaults.set(config.audio.filterType.rawValue, forKey: Keys.filterType)
         defaults.set(config.blitter.accuracy, forKey: Keys.blitterAccuracy)
         defaults.set(config.diskController.useFifo, forKey: Keys.fifoBuffering)
     }

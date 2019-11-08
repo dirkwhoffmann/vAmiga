@@ -18,13 +18,14 @@
 
 typedef enum : long
 {
-    DENISE_8362R8 // OCS Denise
+    DENISE_8362R8, // OCS Denise
+    DENISE_CNT
 }
 DeniseRevision;
 
 inline bool isDeniseRevision(long value)
 {
-    return value == DENISE_8362R8;
+    return value >= 0 && value < DENISE_CNT;
 }
 
 inline const char *DeniseRevisionName(DeniseRevision type)

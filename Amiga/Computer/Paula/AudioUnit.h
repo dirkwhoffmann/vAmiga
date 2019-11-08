@@ -16,17 +16,8 @@
 
 class AudioUnit : public SubComponent {
 
-    //
-    // Configuration
-    //
-
-    // The currently set filter activation method
-    FilterActivation filterActivation;
-
-    
-    //
-    // Bookkeeping
-    //
+    // The current configuration
+    AudioConfig config;
 
     // Information shown in the GUI inspector panel
     AudioInfo info;
@@ -57,18 +48,15 @@ private:
     // The component has been executed up to this clock cycle.
     Cycle clock = 0;
 
-    // The sample rate in Hz
-    double sampleRate;
-
     // Time stamp of the last write pointer alignment
     Cycle lastAlignment = 0;
     
 public:
     
-    // Number of buffer underflows since power up
+    // Number of buffer underflows since power up (TODO: MOVE TO AudioStats)
     int64_t bufferUnderflows;
     
-    // Number of buffer overflows since power up
+    // Number of buffer overflows since power up (TODO: MOVE TO AudioStats)
     int64_t bufferOverflows;
     
 private:
@@ -155,6 +143,10 @@ public:
     template <class T>
     void applyToPersistentItems(T& worker)
     {
+        worker
+
+        & config.filterActivation
+        & config.filterType;
     }
 
     template <class T>
@@ -166,7 +158,22 @@ public:
         & dmaEnabled;
     }
 
-    
+
+    //
+    // Configuring
+    //
+
+    AudioConfig getConfig() { return config; }
+
+    double getSampleRate() { return config.sampleRate; }
+    void setSampleRate(double hz);
+
+    FilterActivation getFilterActivation() { return config.filterActivation; }
+    void setFilterActivation(FilterActivation activation);
+
+    FilterType getFilterType();
+    void setFilterType(FilterType type);
+
     //
     // Methods from HardwareComponent
     //
@@ -188,31 +195,6 @@ public:
 
     // Returns the result of the most recent call to inspect()
     AudioInfo getInfo();
-
-    
-    //
-    // Configuring the device
-    //
-    
-public:
-    
-    // Returns the current sample rate in Hz
-    double getSampleRate();
-    
-    // Sets the sample rate in Hz
-    void setSampleRate(double hz);
-
-    // Returns the filter activation method
-    FilterActivation getFilterActivation() { return filterActivation; }
-
-    // Sets the filter activation method
-    void setFilterActivation(FilterActivation activation);
-
-    // Returns the filter type
-    FilterType getFilterType();
-
-    // Sets the filter type
-    void setFilterType(FilterType type);
 
 
     //

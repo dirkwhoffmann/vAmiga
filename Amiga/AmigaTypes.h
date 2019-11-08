@@ -77,14 +77,12 @@ RunLoopControlFlag;
 typedef struct
 {
     RTCConfig rtc;
-    AgnusRevision agnusRevision; // DEPRECATED. Replace by AgnusConfig
-    DeniseRevision deniseRevision; // DEPRECATED.
-    FilterActivation filterActivation;
-    FilterType filterType;
+    AudioConfig audio;
     CPUEngine cpuEngine;
     int cpuSpeed;
     CPUConfig cpu;
     MemoryConfig mem;
+    AgnusConfig agnus;
     DeniseConfig denise;
     BlitterConfig blitter;
     DiskControllerConfig diskController;

@@ -25,6 +25,45 @@ AudioUnit::AudioUnit(Amiga& ref) : SubComponent(ref)
 }
 
 void
+AudioUnit::setSampleRate(double hz)
+{
+    debug(AUD_DEBUG, "setSampleRate(%f)\n", hz);
+
+    config.sampleRate = hz;
+    filterL.setSampleRate(hz);
+    filterR.setSampleRate(hz);
+}
+
+void
+AudioUnit::setFilterActivation(FilterActivation activation)
+{
+    debug(AUD_DEBUG, "setFilterActivation(%d)\n", activation);
+    assert(isFilterActivation(activation));
+
+    config.filterActivation = activation;
+}
+
+FilterType
+AudioUnit::getFilterType()
+{
+    assert(filterL.getFilterType() == config.filterType);
+    assert(filterR.getFilterType() == config.filterType);
+
+    return config.filterType;
+}
+
+void
+AudioUnit::setFilterType(FilterType type)
+{
+    debug(AUD_DEBUG, "setFilterType(%d)\n", type);
+    assert(isFilterType(type));
+
+    config.filterType = type;
+    filterL.setFilterType(type);
+    filterR.setFilterType(type);
+}
+
+void
 AudioUnit::_powerOn()
 {
 }
@@ -110,7 +149,7 @@ AudioUnit::disableDMA(int nr)
 void
 AudioUnit::executeUntil(Cycle targetClock)
 {
-    double dmaCyclesPerSample = MHz(dmaClockFrequency) / sampleRate;
+    double dmaCyclesPerSample = MHz(dmaClockFrequency) / config.sampleRate;
 
     dmaCycleCounter1 += AS_DMA_CYCLES(targetClock - clock);
     dmaCycleCounter2 += AS_DMA_CYCLES(targetClock - clock);
@@ -165,45 +204,6 @@ AudioUnit::getInfo()
     pthread_mutex_unlock(&lock);
 
     return result;
-}
-
-double
-AudioUnit::getSampleRate()
-{
-    return sampleRate;
-}
-
-void
-AudioUnit::setSampleRate(double hz)
-{
-    debug(AUD_DEBUG, "setSampleRate(%f)\n", hz);
-
-    sampleRate = hz;
-    filterL.setSampleRate(hz);
-    filterR.setSampleRate(hz);
-}
-
-void
-AudioUnit::setFilterActivation(FilterActivation activation)
-{
-    debug(AUD_DEBUG, "setFilterActivation(%d)\n", activation);
-
-    assert(isFilterActivation(activation));
-    filterActivation = activation;
-}
-
-FilterType
-AudioUnit::getFilterType()
-{
-    assert(filterL.getFilterType() == filterR.getFilterType());
-    return filterL.getFilterType();
-}
-
-void
-AudioUnit::setFilterType(FilterType type)
-{
-    filterL.setFilterType(type);
-    filterR.setFilterType(type);
 }
 
 void
@@ -334,8 +334,8 @@ AudioUnit::writeData(short left, short right)
     float fr = float(right) * scale;
 
     // Apply audio filter if applicable
-    if ((filterActivation == FILTACT_POWER_LED && ciaa.powerLED()) ||
-        (filterActivation == FILTACT_ALWAYS)) {
+    if ((config.filterActivation == FILTACT_POWER_LED && ciaa.powerLED()) ||
+        (config.filterActivation == FILTACT_ALWAYS)) {
         fl = filterL.apply(fl);
         fr = filterR.apply(fr);
     }

@@ -161,14 +161,12 @@ Amiga::getConfig()
     AmigaConfiguration config;
 
     config.rtc = rtc.getConfig();
-    config.agnusRevision = agnus.getRevision();
-    config.deniseRevision = denise.getRevision();
-    config.filterActivation = paula.audioUnit.getFilterActivation();
-    config.filterType = paula.audioUnit.getFilterType();
+    config.audio = paula.audioUnit.getConfig();
     config.cpuEngine = CPU_MUSASHI;
     config.cpuSpeed = cpu.getSpeed();
     config.cpu = cpu.getConfig();
     config.mem = mem.getConfig();
+    config.agnus = agnus.getConfig();
     config.denise = denise.getConfig();
     config.serialDevice = serialPort.getDevice();
     config.blitter = agnus.blitter.getConfig(); 
@@ -235,12 +233,11 @@ Amiga::configure(ConfigOption option, long value)
         case VA_AGNUS_REVISION:
 
             if (!isAgnusRevision(value)) {
-                 warn("Invalid Agnus revision: %d\n", value);
-                warn("       Valid values: %d - %d\n", AGNUS_8367, AGNUS_8375);
-                 return false;
+                warn("Invalid Agnus revision: %d\n", value);
+                return false;
              }
 
-            if (current.agnusRevision == value) return true;
+            if (current.agnus.revision == value) return true;
             agnus.setRevision((AgnusRevision)value);
             break;
 
@@ -248,11 +245,10 @@ Amiga::configure(ConfigOption option, long value)
 
             if (!isDeniseRevision(value)) {
                 warn("Invalid Denise revision: %d\n", value);
-                warn("       Valid values: %d\n", DENISE_8362R8);
                 return false;
             }
 
-            if (current.deniseRevision == value) return true;
+            if (current.denise.revision == value) return true;
             denise.setRevision((DeniseRevision)value);
             break;
 
@@ -260,7 +256,6 @@ Amiga::configure(ConfigOption option, long value)
 
             if (!isRTCModel(value)) {
                 warn("Invalid RTC model: %d\n", value);
-                warn("     Valid values: %d, %d\n", RTC_NONE, RTC_M6242B);
                 return false;
             }
 
@@ -356,7 +351,7 @@ Amiga::configure(ConfigOption option, long value)
                 return false;
             }
 
-            if (current.filterActivation == value) return true;
+            if (current.audio.filterActivation == value) return true;
             paula.audioUnit.setFilterActivation((FilterActivation)value);
             break;
 
@@ -368,7 +363,7 @@ Amiga::configure(ConfigOption option, long value)
                 return false;
             }
 
-            if (current.filterType == value) return true;
+            if (current.audio.filterType == value) return true;
             paula.audioUnit.setFilterType((FilterType)value);
             break;
 

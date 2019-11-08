@@ -17,13 +17,14 @@ typedef enum : long
 {
     AGNUS_8367, // OCS Agnus
     AGNUS_8372, // ECS Agnus (up to 1MB Chip Ram)
-    AGNUS_8375  // ECS Agnus (up to 2MB Chip Ram)
+    AGNUS_8375, // ECS Agnus (up to 2MB Chip Ram)
+    AGNUS_CNT
 }
 AgnusRevision;
 
 inline bool isAgnusRevision(long value)
 {
-    return value >= AGNUS_8367 && value <= AGNUS_8375;
+    return value >= 0 && value < AGNUS_CNT;
 }
 
 inline const char *AgnusRevisionName(AgnusRevision type)
