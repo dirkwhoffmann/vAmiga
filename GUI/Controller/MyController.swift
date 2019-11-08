@@ -41,10 +41,6 @@ class MyController: NSWindowController, MessageReceiver {
     // Virtual keyboard (opened as a sheet) and it's visual appearance
     var virtualKeyboardSheet: VirtualKeyboardController?
     
-    // Visual appearance of the virtual keyboard
-    var kbStyle = KBStyle.wide
-    var kbLayout = KBLayout.us
-
     // Loop timer
     // The timer fires 60 times a second and executes all tasks that need to be
     //  done perdiodically (e.g., updating the speedometer and the debug panels)

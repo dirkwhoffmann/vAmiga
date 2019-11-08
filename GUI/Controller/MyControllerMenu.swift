@@ -72,26 +72,6 @@ extension MyController: NSMenuItemValidation {
             item.state = (eventTap != nil) ? .on : .off
             return true
 
-        case #selector(MyController.kbWideAction(_:)):
-            item.state = (kbStyle == .wide) ? .on : .off
-            return true
-
-        case #selector(MyController.kbNarrowAction(_:)):
-            item.state = (kbStyle == .narrow) ? .on : .off
-            return true
-
-        case #selector(MyController.kbUSAction(_:)):
-            item.state = (kbLayout == .us) ? .on : .off
-            return true
-
-        case #selector(MyController.kbGermanAction(_:)):
-            item.state = (kbLayout == .german) ? .on : .off
-            return true
-
-        case #selector(MyController.kbItalianAction(_:)):
-            item.state = (kbLayout == .italian) ? .on : .off
-            return true
-
             //
             // Drive menu
             //
@@ -381,36 +361,6 @@ extension MyController: NSMenuItemValidation {
         let kb = VirtualKeyboardController.make()
         myAppDelegate.virtualKeyboard = kb
         myAppDelegate.virtualKeyboard?.showWindow()
-    }
-
-    @IBAction func kbWideAction(_ sender: Any!) {
-
-        kbStyle = .wide
-        UserDefaults.standard.set(kbStyle.rawValue, forKey: Keys.kbStyle)
-    }
-
-    @IBAction func kbNarrowAction(_ sender: Any!) {
-
-        kbStyle = .narrow
-        UserDefaults.standard.set(kbStyle.rawValue, forKey: Keys.kbStyle)
-    }
-
-    @IBAction func kbUSAction(_ sender: Any!) {
-
-        kbLayout = .us
-        UserDefaults.standard.set(kbLayout.rawValue, forKey: Keys.kbLayout)
-    }
-
-    @IBAction func kbGermanAction(_ sender: Any!) {
-
-        kbLayout = .german
-        UserDefaults.standard.set(kbLayout.rawValue, forKey: Keys.kbLayout)
-    }
-
-    @IBAction func kbItalianAction(_ sender: Any!) {
-
-        kbLayout = .italian
-        UserDefaults.standard.set(kbLayout.rawValue, forKey: Keys.kbLayout)
     }
 
     @IBAction func mapCmdKeysAction(_ sender: Any!) {

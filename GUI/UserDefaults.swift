@@ -150,10 +150,6 @@ struct Keys {
     // Control ports
     static let inputDevice1      = "VAMIGAInputDevice1Key"
     static let inputDevice2      = "VAMIGAInputDevice2Key"
-
-    // Keyboard
-    static let kbStyle           = "VAMIGAKeyboardStyleKey"
-    static let kbLayout          = "VAMIGAKeyboardLayoutKey"
 }
 
 struct Defaults {
@@ -174,10 +170,7 @@ extension MyController {
         let dictionary: [String: Any] = [
             
             Keys.inputDevice1: Defaults.inputDevice1,
-            Keys.inputDevice2: Defaults.inputDevice2,
-
-            Keys.kbStyle: Defaults.kbStyle.rawValue,
-            Keys.kbLayout: Defaults.kbLayout.rawValue
+            Keys.inputDevice2: Defaults.inputDevice2
         ]
         
         let defaults = UserDefaults.standard
@@ -189,10 +182,7 @@ extension MyController {
         let defaults = UserDefaults.standard
 
         let keys = [ Keys.inputDevice1,
-                     Keys.inputDevice2,
-
-                     Keys.kbStyle,
-                     Keys.kbLayout
+                     Keys.inputDevice2
         ]
 
          for key in keys { defaults.removeObject(forKey: key) }
@@ -209,11 +199,6 @@ extension MyController {
         setPort1(defaults.integer(forKey: Keys.inputDevice1))
         setPort2(defaults.integer(forKey: Keys.inputDevice2))
 
-        let style = defaults.integer(forKey: Keys.kbStyle)
-        let layout = defaults.integer(forKey: Keys.kbLayout)
-        kbStyle = KBStyle(rawValue: style) ?? kbStyle
-        kbLayout = KBLayout(rawValue: layout) ?? kbLayout
-
         amiga.resume()
     }
     
@@ -223,9 +208,6 @@ extension MyController {
         
         defaults.set(inputDevice1, forKey: Keys.inputDevice1)
         defaults.set(inputDevice2, forKey: Keys.inputDevice2)
-
-        defaults.set(kbStyle.rawValue, forKey: Keys.kbStyle)
-        defaults.set(kbLayout.rawValue, forKey: Keys.kbLayout)
     }
 }
 
