@@ -252,6 +252,8 @@ struct AmigaFileWrapper;
 - (void) dump;
 
 - (BOOL) hasRom;
+- (BOOL) hasBootRom;
+- (BOOL) hasKickRom;
 - (void) deleteRom;
 - (BOOL) isRom:(NSURL *)url;
 - (BOOL) loadRomFromBuffer:(NSData *)buffer;

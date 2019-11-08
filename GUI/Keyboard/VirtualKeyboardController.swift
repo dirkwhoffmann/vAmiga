@@ -50,25 +50,19 @@ class VirtualKeyboardController: DialogController, NSWindowDelegate {
      * true. If it is opened as a seperate window, it is set to false.
      */
     var autoClose = true
-    
+
     static func make() -> VirtualKeyboardController? {
 
-        guard let config = myController?.amiga.config() else { return nil }
-
-        let model  = config.keyboard.model
-        let lang   = config.keyboard.language
-        let layout = KBLayout(rawValue: lang.rawValue) ?? .us
-        let ansi   = (layout == .us)
+        track("Virtual keyboard (style: \(kbStyle) layout: \(kbLayout))")
 
         var xibName = ""
-        
-        if model == KB_A1000 {
+        let ansi = (kbLayout == .us)
+
+        if kbStyle == .narrow {
             xibName = ansi ? "A1000ANSI" : "A1000ISO"
         } else {
             xibName = ansi ? "A500ANSI" : "A500ISO"
         }
-
-        track("xibName = \(xibName) layout = \(layout)")
 
         return VirtualKeyboardController.init(windowNibName: xibName)
     }
@@ -119,16 +113,12 @@ class VirtualKeyboardController: DialogController, NSWindowDelegate {
     
     func updateImageCache() {
 
-        guard let config = amigaProxy?.config() else { return }
+        let style = VirtualKeyboardController.kbStyle
+        let layout = VirtualKeyboardController.kbLayout
 
-        let lang = config.keyboard.language
-        let layout = KBLayout(rawValue: lang.rawValue) ?? .us
-
-        track("layout = \(layout)")
-        
         for keycode in 0 ... 127 {
             let key = AmigaKey.init(keyCode: keycode)
-            if let image = key.image(model: config.keyboard.model, layout: layout) {
+            if let image = key.image(style: style, layout: layout) {
                 keyImage[keycode] = image
                 pressedKeyImage[keycode] = image.copy() as? NSImage
                 pressedKeyImage[keycode]?.pressed()
@@ -197,4 +187,30 @@ class Keycap: NSButton {
             controller.holdKey(keyCode: self.tag)
         }
     }
+}
+
+extension VirtualKeyboardController {
+
+    static var kbStyle: KBStyle {
+
+        // Determine if an A1000 is emulated
+        let a1000 = amigaProxy?.mem.hasBootRom() ?? false
+
+        // Use a narrow keyboard for the A1000 and a wide keyboard otherwise
+        return a1000 ? .narrow : .wide
+    }
+
+    static var kbLayout: KBLayout {
+
+         // Get the first two characters of the ISO-639-1 language code
+         let lang = Locale.preferredLanguages[0].prefix(2)
+
+         // Translate language into a keyboard layout identifier
+         switch lang {
+
+         case "de": return .german
+         case "it": return .italian
+         default: return .us
+         }
+     }
 }

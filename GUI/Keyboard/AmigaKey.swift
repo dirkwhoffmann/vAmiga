@@ -393,16 +393,16 @@ extension AmigaKey {
     ]
     
     // Returns an unlabeled background image of the right shape
-    private func backgroundImage(model: KeyboardModel, layout: KBLayout) -> NSImage? {
+    private func bgImage(style: KBStyle, layout: KBLayout) -> NSImage? {
         
         var (shape, tint) = ("100x100", "white")
         
         // Determine physical keyboard layout (ignoring key labels)
-        let a1000     = model == KB_A1000
+        let a1000     = style == .narrow
         let a1000ansi = a1000 && layout == .us
         let a1000iso  = a1000 && layout != .us
 
-        let a500     = model != KB_A1000
+        let a500     = style != .narrow
         let a500ansi = a500 && layout == .us
         let a500iso  = a500 && layout != .us
         
@@ -433,7 +433,7 @@ extension AmigaKey {
         return image
     }
     
-    func image(model: KeyboardModel, layout: KBLayout) -> NSImage? {
+    func image(style: KBStyle, layout: KBLayout) -> NSImage? {
         
         // Key label font sizes
         let large = CGFloat(15)
@@ -441,7 +441,7 @@ extension AmigaKey {
         let tiny  = CGFloat(9) 
 
         // Get a background image
-        guard let image = backgroundImage(model: model, layout: layout) else {
+        guard let image = bgImage(style: style, layout: layout) else {
             return nil
         }
         

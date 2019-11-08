@@ -217,6 +217,14 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->mem->hasKickRom();
 }
+- (BOOL) hasBootRom
+{
+    return wrapper->mem->hasBootRom();
+}
+- (BOOL) hasKickRom
+{
+    return wrapper->mem->hasKickRom();
+}
 - (void) deleteRom
 {
     wrapper->mem->deleteKickRom();
