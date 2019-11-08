@@ -240,7 +240,7 @@ sleepUntil(uint64_t kernelTargetTime, uint64_t kernelEarlyWakeup)
 }
 
 uint32_t
-fnv_1a_32(uint8_t *addr, size_t size)
+fnv_1a_32(const uint8_t *addr, size_t size)
 {
     if (addr == NULL || size == 0) return 0;
 
@@ -254,7 +254,7 @@ fnv_1a_32(uint8_t *addr, size_t size)
 }
 
 uint64_t
-fnv_1a_64(uint8_t *addr, size_t size)
+fnv_1a_64(const uint8_t *addr, size_t size)
 {
     if (addr == NULL || size == 0) return 0;
     
@@ -264,7 +264,31 @@ fnv_1a_64(uint8_t *addr, size_t size)
         hash = fnv_1a_it64(hash, (uint64_t)addr[i]);
     }
 
+    printf("crc-32: %x\n", crc32(addr, size));
+    
     return hash;
+}
+
+uint32_t crc32(const uint8_t *addr, size_t size)
+{
+    uint32_t result = 0;
+
+    // Setup lookup table
+    uint32_t table[256];
+    for(int i = 0; i < 256; i++) table[i] = crc32forByte(i);
+
+    // Compute CRC-32 checksum
+     for(int i = 0; i < size; i++)
+       result = table[(uint8_t)result ^ addr[i]] ^ result >> 8;
+
+    return result;
+}
+
+uint32_t crc32forByte(uint32_t r)
+{
+    for(int j = 0; j < 8; ++j)
+        r = (r & 1? 0: (uint32_t)0xEDB88320L) ^ r >> 1;
+    return r ^ (uint32_t)0xFF000000L;
 }
 
 bool releaseBuild()

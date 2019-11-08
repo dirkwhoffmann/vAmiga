@@ -57,6 +57,11 @@ extension PreferencesController {
         hwDf3Type.isEnabled = poweredOff && config.diskController.connected.3
         hwFactorySettingsPopup.isEnabled = poweredOff
 
+        // Lock symbol and explanation
+        hwLockImage.isHidden = poweredOff
+        hwLockText.isHidden = poweredOff
+        hwLockSubText.isHidden = poweredOff
+
         // Label the OK button
         hwOKButton.title = okLabel
     }

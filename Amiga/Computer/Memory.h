@@ -259,12 +259,7 @@ public:
     //
     // Managing ROM
     //
-    
-private:
-    
-    // Loads Rom data from a file.
-    void loadRom(AmigaFile *rom, uint8_t *target, size_t length);
-    
+
 public:
     
     // Checks if a certain ROM is present
@@ -275,8 +270,21 @@ public:
     bool hasExtRom() { return ext != NULL; }
 
     // Returns a fingerprint for a certain ROM
-    uint64_t kickRomFingerprint() { return fnv_1a_64(rom, config.romSize); }
-    uint64_t extRomFingerprint() { return fnv_1a_64(ext,  config.extSize); }
+    uint64_t romFingerprint() { return fnv_1a_64(rom, config.romSize); }
+    uint64_t extFingerprint() { return fnv_1a_64(ext, config.extSize); }
+
+    // Translates a fingerprint into a unique ROM identifier
+    RomRevision revision(uint64_t fingerprint);
+    RomRevision romRevision() { return revision(romFingerprint()); }
+    RomRevision extRevision() { return revision(extFingerprint()); }
+
+    // Translates a ROM indentifier into a textual description
+    const char *title(RomRevision rev);
+    const char *subtitle(RomRevision rev);
+    const char *romTitle() { return title(romRevision()); }
+    const char *romSubtitle()  { return subtitle(romRevision()); }
+    const char *extTitle() { return title(extRevision()); }
+    const char *extSubtitle()  { return subtitle(extRevision()); }
 
     // Removes a previously installed ROM
     void deleteKickRom() { alloc(0, rom, config.romSize); }
@@ -296,6 +304,11 @@ public:
     bool loadExtRom(ExtFile *rom);
     bool loadExtRomFromBuffer(const uint8_t *buffer, size_t length);
     bool loadExtRomFromFile(const char *path);
+
+private:
+
+    // Loads Rom data from a file.
+    void loadRom(AmigaFile *rom, uint8_t *target, size_t length);
 
     
     //

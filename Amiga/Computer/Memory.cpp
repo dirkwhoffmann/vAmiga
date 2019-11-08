@@ -235,21 +235,88 @@ Memory::initializeRam()
     if (fastRam) memset(fastRam, 0, config.fastRamSize);
 }
 
-void
-Memory::loadRom(AmigaFile *file, uint8_t *target, size_t length)
+RomRevision
+Memory::revision(uint64_t fingerprint)
 {
-    if (file) {
+    switch(fingerprint) {
 
-        assert(target != NULL);
-        memset(target, 0, length);
-        
-        file->seek(0);
-        
-        int c;
-        for (size_t i = 0; i < length; i++) {
-            if ((c = file->read()) == EOF) break;
-            *(target++) = c;
-        }
+        case 0x0000000000000000: return ROM_MISSING;
+        case 0xe923584a55d5c10c: return ROM_BOOT_A1000_1985_8K;
+        case 0x83b3ec51d394e10c: return ROM_BOOT_A1000_1985_64K;
+        case 0x23de891c17754732: return ROM_AROS;
+        case 0xe5cb7ee5200c4f0f: return ROM_KICK12_33_180;
+        case 0xe3ff65d2c3a9b9e5: return ROM_KICK12_33_180_O;
+        case 0x047fb93fb8e383bc: return ROM_KICK13_35_5;
+        case 0x42b199abf0febb13: return ROM_KICK13_35_5_B;
+        case 0x482fa0f04538677b: return ROM_KICK13_35_5_B2;
+        case 0xc9f1352946125739: return ROM_KICK13_35_5_B3;
+        case 0x36890544db15eb40: return ROM_KICK13_35_5_H;
+        case 0x08a1122c7dec695d: return ROM_KICK13_35_5_O;
+        case 0x845588ccf58fce86: return ROM_KICK204_37_175;
+        case 0xd059a4095ef1d70d: return ROM_KICK31_40_63;
+        case 0xd87e84eeacc77dcd: return ROM_KICK31_40_63_A;
+        case 0xd87e84eeacc77aaa: return ROM_KICK31_40_63_B;
+        case 0x2005bba6e9c6c6ac: return ROM_KICK314_46_143;
+        case 0x3caee2ad138eb229: return ROM_DIAG11;
+        case 0x110c854766f14cd8: return ROM_LOGICA20;
+
+        default: return ROM_UNKNOWN;
+    }
+}
+
+const char *
+Memory::title(RomRevision rev)
+{
+    switch (rev) {
+        case ROM_MISSING:             return "";
+        case ROM_BOOT_A1000_1985_8K:
+        case ROM_BOOT_A1000_1985_64K: return "Amiga 1000 Boot Rom";
+        case ROM_AROS:                return "AROS Kickstart replacement";
+        case ROM_KICK12_33_180:
+        case ROM_KICK12_33_180_O:     return "Kickstart 1.2";
+        case ROM_KICK13_35_5:
+        case ROM_KICK13_35_5_B:
+        case ROM_KICK13_35_5_B2:
+        case ROM_KICK13_35_5_B3:
+        case ROM_KICK13_35_5_H:
+        case ROM_KICK13_35_5_O:       return "Kickstart 1.2";
+        case ROM_KICK204_37_175:      return "Kickstart 2.04";
+        case ROM_KICK31_40_63:
+        case ROM_KICK31_40_63_A:
+        case ROM_KICK31_40_63_B:      return "Kickstart 3.1";
+        case ROM_KICK314_46_143:      return "Kickstart 3.14";
+        case ROM_DIAG11:              return "Amiga DiagROM";
+        case ROM_LOGICA20:            return "Logica Diagnostic";
+
+        default:                      return "";
+    }
+}
+
+const char *
+Memory::subtitle(RomRevision rev)
+{
+    switch (rev) {
+        case ROM_MISSING:             return "";
+        case ROM_BOOT_A1000_1985_8K:  return "1985 (8KB)";
+        case ROM_BOOT_A1000_1985_64K: return "1985 (164KB)";
+        case ROM_AROS:                return "v?.?";
+        case ROM_KICK12_33_180:       return "rev 33.180";
+        case ROM_KICK12_33_180_O:     return "rev 33.180 (O)";
+        case ROM_KICK13_35_5:         return "rev 35.5";
+        case ROM_KICK13_35_5_B:       return "rev 35.5 (B)";
+        case ROM_KICK13_35_5_B2:      return "rev 35.5 (B2)";
+        case ROM_KICK13_35_5_B3:      return "rev 35.5 (B3)";
+        case ROM_KICK13_35_5_H:       return "rev 35.5 (H)";
+        case ROM_KICK13_35_5_O:       return "rev 35.5 (O)";
+        case ROM_KICK204_37_175:      return "rev 37.175";
+        case ROM_KICK31_40_63:        return "rev 40.63";
+        case ROM_KICK31_40_63_A:      return "rev 40.63 (A)";
+        case ROM_KICK31_40_63_B:      return "rev 40.63 (B)";
+        case ROM_KICK314_46_143:      return "rev 46.143";
+        case ROM_DIAG11:              return "v1.1";
+        case ROM_LOGICA20:            return "v2.0";
+
+        default:                      return "";
     }
 }
 
@@ -349,6 +416,24 @@ Memory::loadExtRomFromFile(const char *path)
     }
 
     return loadExtRom(file);
+}
+
+void
+Memory::loadRom(AmigaFile *file, uint8_t *target, size_t length)
+{
+    if (file) {
+
+        assert(target != NULL);
+        memset(target, 0, length);
+
+        file->seek(0);
+
+        int c;
+        for (size_t i = 0; i < length; i++) {
+            if ((c = file->read()) == EOF) break;
+            *(target++) = c;
+        }
+    }
 }
 
 void

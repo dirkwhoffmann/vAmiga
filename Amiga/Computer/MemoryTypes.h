@@ -37,6 +37,7 @@ static inline bool isMemorySource(long value) { return value >= 0 && value <= ME
 // Known Roms
 typedef enum
 {
+    ROM_MISSING,
     ROM_UNKNOWN,
 
     // Boot Roms
@@ -64,11 +65,13 @@ typedef enum
     ROM_KICK314_46_143,
 
     ROM_DIAG11,
-    ROM_LOGICA20
+    ROM_LOGICA20,
+
+    ROM_CNT
 }
 RomRevision;
 
-static inline bool isRomRevision(long value) { return value >= 0 && value <= ROM_LOGICA20; }
+static inline bool isRomRevision(long value) { return value >= 0 && value <= ROM_CNT; }
 
 /* Poke source.
  * Some poke methods need to know who called them.

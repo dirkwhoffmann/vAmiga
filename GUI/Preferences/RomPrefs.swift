@@ -133,7 +133,13 @@ extension PreferencesController {
             hasOrigExt ? romOriginal :
             hasExt     ? romUnknown : romMissing
 
-        // Rom description
+        // Titles and subtitles
+        var title: String = amiga.mem.romTitle()
+        var subtitle: String = amiga.mem.romSubtitle()
+
+        romTitle.stringValue = title
+        romSubtitle.stringValue = subtitle
+
         /*
         var text = ""
         var subText = ""
@@ -154,6 +160,7 @@ extension PreferencesController {
         extDeleteButton.isHidden = !hasExt
 
         // Warning message
+        /*
         if hasOrigRom || hasOrigExt {
             
             romWarning.isHidden = false
@@ -170,6 +177,7 @@ extension PreferencesController {
 
             romWarning.isHidden = true
         }
+        */
         
         // Lock symbol and explanation
         romLockImage.isHidden = poweredOff

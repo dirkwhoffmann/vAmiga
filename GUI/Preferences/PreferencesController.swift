@@ -23,12 +23,12 @@ class PreferencesController: DialogController {
     // Rom info
     @IBOutlet weak var romDropView: RomDropView!
     @IBOutlet weak var romTitle: NSTextField!
-    @IBOutlet weak var romRevision: NSTextField!
+    @IBOutlet weak var romSubtitle: NSTextField!
     @IBOutlet weak var romDeleteButton: NSButton!
 
     @IBOutlet weak var extDropView: ExtRomDropView!
     @IBOutlet weak var extTitle: NSTextField!
-    @IBOutlet weak var extRevision: NSTextField!
+    @IBOutlet weak var extSubtitle: NSTextField!
     @IBOutlet weak var extDeleteButton: NSButton!
     @IBOutlet weak var extMapAddr: NSPopUpButton!
 
@@ -71,6 +71,7 @@ class PreferencesController: DialogController {
     @IBOutlet weak var hwDf3Type: NSPopUpButton!
 
     // Lock
+    @IBOutlet weak var hwLockImage: NSButton!
     @IBOutlet weak var hwLockText: NSTextField!
     @IBOutlet weak var hwLockSubText: NSTextField!
 

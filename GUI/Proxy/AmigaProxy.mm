@@ -245,7 +245,17 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 - (uint64_t) romFingerprint
 {
-    return wrapper->mem->kickRomFingerprint();
+    return wrapper->mem->romFingerprint();
+}
+- (NSString *) romTitle
+{
+    const char *str = wrapper->mem->romTitle();
+    return str ? [NSString stringWithUTF8String:str] : NULL;
+}
+- (NSString *) romSubtitle
+{
+    const char *str = wrapper->mem->romSubtitle();
+    return str ? [NSString stringWithUTF8String:str] : NULL;
 }
 - (BOOL) hasExtRom
 {
@@ -271,7 +281,17 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 - (uint64_t) extRomFingerprint
 {
-    return wrapper->mem->extRomFingerprint();
+    return wrapper->mem->extFingerprint();
+}
+- (NSString *) extTitle
+{
+    const char *str = wrapper->mem->extTitle();
+    return str ? [NSString stringWithUTF8String:str] : NULL;
+}
+- (NSString *) extSubtitle
+{
+    const char *str = wrapper->mem->extSubtitle();
+    return str ? [NSString stringWithUTF8String:str] : NULL;
 }
 - (MemorySource *) getMemSrcTable
 {
@@ -289,20 +309,6 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->mem->spypeek16((uint32_t)addr);
 }
-/*
-- (void) poke8:(NSInteger)addr value:(NSInteger)value
-{
-    wrapper->mem->poke8((uint32_t)addr, value);
-}
-- (void) poke16:(NSInteger)addr value:(NSInteger)value
-{
-    wrapper->mem->poke16((uint32_t)addr, value);
-}
-- (void) pokeCustom16:(NSInteger)addr value:(NSInteger)value
-{
-    wrapper->mem->pokeCustom16<POKE_CPU>((uint32_t)addr, value);
-}
-*/
 - (NSString *) ascii:(NSInteger)addr
 {
     const char *str = wrapper->mem->ascii((uint32_t)addr);

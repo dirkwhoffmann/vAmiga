@@ -259,6 +259,8 @@ struct AmigaFileWrapper;
 - (BOOL) loadRomFromBuffer:(NSData *)buffer;
 - (BOOL) loadRomFromFile:(NSURL *)url;
 - (uint64_t) romFingerprint;
+- (NSString *) romTitle;
+- (NSString *) romSubtitle;
 
 - (BOOL) hasExtRom;
 - (void) deleteExtRom;
@@ -266,6 +268,9 @@ struct AmigaFileWrapper;
 - (BOOL) loadExtRomFromBuffer:(NSData *)buffer;
 - (BOOL) loadExtRomFromFile:(NSURL *)url;
 - (uint64_t) extRomFingerprint;
+- (NSString *) extTitle;
+- (NSString *) extSubtitle;
+
 
 - (MemorySource *) getMemSrcTable; 
 - (MemorySource) memSrc:(NSInteger)addr;
