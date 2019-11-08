@@ -81,6 +81,6 @@ class ExtRomDropView: DropView {
     override func acceptDragSource(url: URL) -> Bool {
 
         guard let amiga = amigaProxy else { return false }
-        return amiga.mem.isExtRom(url) && amiga.isPoweredOff()
+        return amiga.mem.isExt(url) && amiga.isPoweredOff()
     }
 }

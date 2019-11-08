@@ -40,31 +40,36 @@ typedef enum
     ROM_MISSING,
     ROM_UNKNOWN,
 
-    // Boot Roms
-    ROM_BOOT_A1000_1985_8K,
-    ROM_BOOT_A1000_1985_64K,
+    // Boot Roms (A1000)
+    ROM_BOOT_A1000_8K,
+    ROM_BOOT_A1000_64K,
 
-    // Kickstart Roms
-    ROM_AROS,
-
+    // Kickstart V1.x
+    ROM_KICK11_31_034,
+    ROM_KICK12_33_166,
     ROM_KICK12_33_180,
-    ROM_KICK12_33_180_O,
+    ROM_KICK121_34_004,
+    ROM_KICK13_34_005,
 
-    ROM_KICK13_35_5,
-    ROM_KICK13_35_5_B,
-    ROM_KICK13_35_5_B2,
-    ROM_KICK13_35_5_B3,
-    ROM_KICK13_35_5_H,
-    ROM_KICK13_35_5_O,
-
+    // Kickstart V2.x
+    ROM_KICK20_36_028,
+    ROM_KICK202_36_207,
     ROM_KICK204_37_175,
-    ROM_KICK31_40_63,
-    ROM_KICK31_40_63_A,
-    ROM_KICK31_40_63_B,
+    ROM_KICK205_37_299,
+    ROM_KICK205_37_300,
+    ROM_KICK205_37_350,
 
-    ROM_KICK314_46_143,
+    // Kickstart V3.x
+    ROM_KICK30_39_106,
+    ROM_KICK31_40_063,
 
+    // Free Kickstart Rom replacements
+    ROM_AROS_55696,
+    ROM_AROS_55696_EXT,
+
+    // Diagnostic cartridges
     ROM_DIAG11,
+    ROM_DIAG12,
     ROM_LOGICA20,
 
     ROM_CNT

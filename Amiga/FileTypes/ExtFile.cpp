@@ -19,7 +19,7 @@ ExtFile::ExtFile()
 }
 
 bool
-ExtFile::isExtRomBuffer(const uint8_t *buffer, size_t length)
+ExtFile::isExtBuffer(const uint8_t *buffer, size_t length)
 {
     printf("length = %zu %d\n", length, KB(512));
 
@@ -33,7 +33,7 @@ ExtFile::isExtRomBuffer(const uint8_t *buffer, size_t length)
 }
 
 bool
-ExtFile::isExtRomFile(const char *path)
+ExtFile::isExtFile(const char *path)
 {
     if (!checkFileSize(path, KB(512))) return false;
 
@@ -74,5 +74,5 @@ ExtFile::readFromBuffer(const uint8_t *buffer, size_t length)
     if (!AmigaFile::readFromBuffer(buffer, length))
         return false;
 
-    return isExtRomBuffer(buffer, length);
+    return isExtBuffer(buffer, length);
 }

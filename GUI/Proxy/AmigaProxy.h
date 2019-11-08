@@ -251,6 +251,11 @@ struct AmigaFileWrapper;
 
 - (void) dump;
 
+- (BOOL) isBootRom:(RomRevision)rev;
+- (BOOL) isArosRom:(RomRevision)rev;
+- (BOOL) isDiagRom:(RomRevision)rev;
+- (BOOL) isOrigRom:(RomRevision)rev;
+
 - (BOOL) hasRom;
 - (BOOL) hasBootRom;
 - (BOOL) hasKickRom;
@@ -259,26 +264,26 @@ struct AmigaFileWrapper;
 - (BOOL) loadRomFromBuffer:(NSData *)buffer;
 - (BOOL) loadRomFromFile:(NSURL *)url;
 - (uint64_t) romFingerprint;
+- (RomRevision) romRevision;
 - (NSString *) romTitle;
-- (NSString *) romSubtitle;
+- (NSString *) romVersion;
+- (NSString *) romReleased;
 
-- (BOOL) hasExtRom;
-- (void) deleteExtRom;
-- (BOOL) isExtRom:(NSURL *)url;
-- (BOOL) loadExtRomFromBuffer:(NSData *)buffer;
-- (BOOL) loadExtRomFromFile:(NSURL *)url;
-- (uint64_t) extRomFingerprint;
+- (BOOL) hasExt;
+- (void) deleteExt;
+- (BOOL) isExt:(NSURL *)url;
+- (BOOL) loadExtFromBuffer:(NSData *)buffer;
+- (BOOL) loadExtFromFile:(NSURL *)url;
+- (uint64_t) extFingerprint;
+- (RomRevision) extRevision;
 - (NSString *) extTitle;
-- (NSString *) extSubtitle;
-
+- (NSString *) extVersion;
+- (NSString *) extReleased;
 
 - (MemorySource *) getMemSrcTable; 
 - (MemorySource) memSrc:(NSInteger)addr;
 - (NSInteger) spypeek8:(NSInteger)addr;
 - (NSInteger) spypeek16:(NSInteger)addr;
-// - (void) poke8:(NSInteger)addr value:(NSInteger)value;
-// - (void) poke16:(NSInteger)addr value:(NSInteger)value;
-// - (void) pokeCustom16:(NSInteger)addr value:(NSInteger)value;
 
 - (NSString *) ascii:(NSInteger)addr;
 - (NSString *) hex:(NSInteger)addr bytes:(NSInteger)bytes;

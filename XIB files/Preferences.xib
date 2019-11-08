@@ -149,7 +149,7 @@
                         <font key="font" metaFont="system"/>
                         <tabViewItems>
                             <tabViewItem label="Roms" identifier="Roms" id="VwS-fe-RFZ">
-                                <view key="view" id="4If-78-eR2">
+                                <view key="view" ambiguous="YES" id="4If-78-eR2">
                                     <rect key="frame" x="10" y="33" width="600" height="424"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -244,7 +244,7 @@ Gw
                                             </connections>
                                         </button>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="f8r-Uk-VgT">
-                                            <rect key="frame" x="171" y="377" width="192" height="17"/>
+                                            <rect key="frame" x="171" y="377" width="414" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Kickstart Rom or Boot Rom" id="RsN-Hk-g9w">
                                                 <font key="font" metaFont="systemBold"/>
@@ -307,7 +307,7 @@ Gw
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="romDeleteAction:" target="-2" id="UyI-M4-eoj"/>
+                                                <action selector="extDeleteAction:" target="-2" id="1NQ-J4-8AK"/>
                                             </connections>
                                         </button>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FIA-jz-aAc">
@@ -341,7 +341,7 @@ Gw
                                             </connections>
                                         </popUpButton>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fYw-pu-77R">
-                                            <rect key="frame" x="171" y="241" width="188" height="17"/>
+                                            <rect key="frame" x="171" y="241" width="414" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Kickstart Rom Extension" id="gix-rx-RWb">
                                                 <font key="font" metaFont="systemBold"/>
@@ -371,7 +371,7 @@ Gw
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Hardware" identifier="Hardware" id="vMg-zr-Ex1">
-                                <view key="view" ambiguous="YES" id="yrH-J2-nFc">
+                                <view key="view" id="yrH-J2-nFc">
                                     <rect key="frame" x="10" y="33" width="600" height="424"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>

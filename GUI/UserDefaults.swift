@@ -265,7 +265,7 @@ extension MyController {
         }
         if let url = defaults.url(forKey: Keys.ext) {
             extURL = url
-            amiga.mem.loadExtRom(fromFile: extURL)
+            amiga.mem.loadExt(fromFile: extURL)
         }
         amiga.resume()
     }

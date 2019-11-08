@@ -213,6 +213,22 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->mem->dump();
 }
+- (BOOL) isBootRom:(RomRevision)rev
+{
+    return wrapper->mem->isBootRom(rev);
+}
+- (BOOL) isArosRom:(RomRevision)rev
+{
+    return wrapper->mem->isArosRom(rev);
+}
+- (BOOL) isDiagRom:(RomRevision)rev
+{
+    return wrapper->mem->isDiagRom(rev);
+}
+- (BOOL) isOrigRom:(RomRevision)rev
+{
+    return wrapper->mem->isOrigRom(rev);
+}
 - (BOOL) hasRom
 {
     return wrapper->mem->hasKickRom();
@@ -227,7 +243,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 - (void) deleteRom
 {
-    wrapper->mem->deleteKickRom();
+    wrapper->mem->deleteRom();
 }
 - (BOOL) isRom:(NSURL *)url
 {
@@ -247,50 +263,68 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->mem->romFingerprint();
 }
+- (RomRevision) romRevision
+{
+    return wrapper->mem->romRevision();
+}
 - (NSString *) romTitle
 {
     const char *str = wrapper->mem->romTitle();
     return str ? [NSString stringWithUTF8String:str] : NULL;
 }
-- (NSString *) romSubtitle
+- (NSString *) romVersion
 {
-    const char *str = wrapper->mem->romSubtitle();
+    const char *str = wrapper->mem->romVersion();
     return str ? [NSString stringWithUTF8String:str] : NULL;
 }
-- (BOOL) hasExtRom
+- (NSString *) romReleased
 {
-    return wrapper->mem->hasExtRom();
+    const char *str = wrapper->mem->romReleased();
+    return str ? [NSString stringWithUTF8String:str] : NULL;
 }
-- (void) deleteExtRom
+- (BOOL) hasExt
 {
-    wrapper->mem->deleteExtRom();
+    return wrapper->mem->hasExt();
 }
-- (BOOL) isExtRom:(NSURL *)url
+- (void) deleteExt
 {
-    return ExtFile::isExtRomFile([[url path] UTF8String]);
+    wrapper->mem->deleteExt();
 }
-- (BOOL) loadExtRomFromBuffer:(NSData *)data
+- (BOOL) isExt:(NSURL *)url
+{
+    return ExtFile::isExtFile([[url path] UTF8String]);
+}
+- (BOOL) loadExtFromBuffer:(NSData *)data
 {
     if (data == NULL) return NO;
     const uint8_t *bytes = (const uint8_t *)[data bytes];
-    return wrapper->mem->loadExtRomFromBuffer(bytes, [data length]);
+    return wrapper->mem->loadExtFromBuffer(bytes, [data length]);
 }
-- (BOOL) loadExtRomFromFile:(NSURL *)url
+- (BOOL) loadExtFromFile:(NSURL *)url
 {
-    return wrapper->mem->loadExtRomFromFile([[url path] UTF8String]);
+    return wrapper->mem->loadExtFromFile([[url path] UTF8String]);
 }
-- (uint64_t) extRomFingerprint
+- (uint64_t) extFingerprint
 {
     return wrapper->mem->extFingerprint();
+}
+- (RomRevision) extRevision
+{
+    return wrapper->mem->extRevision();
 }
 - (NSString *) extTitle
 {
     const char *str = wrapper->mem->extTitle();
     return str ? [NSString stringWithUTF8String:str] : NULL;
 }
-- (NSString *) extSubtitle
+- (NSString *) extVersion
 {
-    const char *str = wrapper->mem->extSubtitle();
+    const char *str = wrapper->mem->extVersion();
+    return str ? [NSString stringWithUTF8String:str] : NULL;
+}
+- (NSString *) extReleased
+{
+    const char *str = wrapper->mem->extReleased();
     return str ? [NSString stringWithUTF8String:str] : NULL;
 }
 - (MemorySource *) getMemSrcTable

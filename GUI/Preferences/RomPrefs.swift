@@ -85,29 +85,31 @@ extension PreferencesController {
 
         let poweredOff   = amiga.isPoweredOff()
         let romHash      = amiga.mem.romFingerprint()
-        let extHash      = amiga.mem.extRomFingerprint()
+        let extHash      = amiga.mem.extFingerprint()
+        let romRev       = amiga.mem.romRevision()
+        let extRev       = amiga.mem.extRevision()
 
         track("romHash = \(hash)")
         track("extHash = \(extHash)")
 
-        let hasRom        = romHash != 0
-        let hasArosRom    = romHash == Rom.aros
-        let hasDiagRom    = hash == Rom.diag11 || hash == Rom.logica20
-        let hasKnownRom   = knownRoms[romHash] != nil
-        let hasUnknownRom = hasRom && !hasKnownRom
-        let hasOrigRom    = hasKnownRom && !hasArosRom && !hasDiagRom
+        let hasRom        = romRev != ROM_MISSING
+        let hasArosRom    = amiga.mem.isArosRom(romRev)
+        let hasDiagRom    = amiga.mem.isDiagRom(romRev)
+        let hasOrigRom    = amiga.mem.isOrigRom(romRev)
+        let hasUnknownRom = romRev == ROM_UNKNOWN
+        let hasKnownRom   = hasRom && !hasUnknownRom
 
-        let hasExt        = extHash != 0
-        let hasArosExt    = false // extHash == TODO
-        let hasKnownExt   = knownRoms[extHash] != nil
-        let hasDiagExt    = false
-        // let hasUnknownExt = hasExt && !hasKnownExt
-        let hasOrigExt    = hasKnownExt && !hasArosRom
+        let hasExt        = extRev != ROM_MISSING
+        let hasArosExt    = amiga.mem.isArosRom(extRev)
+        let hasDiagExt    = amiga.mem.isDiagRom(extRev)
+        let hasOrigExt    = amiga.mem.isOrigRom(extRev)
+        let hasUnknownExt = extRev == ROM_UNKNOWN
+        let hasKnownExt   = hasExt && !hasUnknownExt
 
-        let romURL        = controller.romURL
+        // let romURL        = controller.romURL
 
         let romMissing    = NSImage.init(named: "rom_light")
-        let romOriginal   = NSImage.init(named: "rom_original")
+        let romOrig       = NSImage.init(named: "rom_original")
         let romAros       = NSImage.init(named: "rom_aros")
         let romDiag       = NSImage.init(named: "rom_diag")
         let romUnknown    = NSImage.init(named: "rom_unknown")
@@ -123,22 +125,47 @@ extension PreferencesController {
         romDropView.image =
             hasArosRom ? romAros :
             hasDiagRom ? romDiag :
-            hasOrigRom ? romOriginal :
+            hasOrigRom ? romOrig :
             hasRom     ? romUnknown : romMissing
 
         // Rom extension icon
         extDropView.image =
             hasArosExt ? romAros :
             hasDiagExt ? romDiag :
-            hasOrigExt ? romOriginal :
+            hasOrigExt ? romOrig :
             hasExt     ? romUnknown : romMissing
 
         // Titles and subtitles
-        var title: String = amiga.mem.romTitle()
-        var subtitle: String = amiga.mem.romSubtitle()
+        var title: String    = amiga.mem.romTitle()
+        var version: String  = amiga.mem.romVersion()
+        var released: String = amiga.mem.romReleased()
 
-        romTitle.stringValue = title
-        romSubtitle.stringValue = subtitle
+        if hasKnownRom {
+            romTitle.stringValue = title + " (" + version + ")"
+            romSubtitle.stringValue = released
+        } else if hasRom {
+            romTitle.stringValue = "An uknown or patched Rom"
+            romSubtitle.stringValue = "CRC " + String(Int(romHash), radix: 16)
+        } else {
+            romTitle.stringValue = "Kickstart Rom or Boot Rom"
+            romSubtitle.stringValue = "(required)"
+        }
+
+        title = amiga.mem.extTitle()
+        version = amiga.mem.extVersion()
+        released = amiga.mem.extReleased()
+
+        if hasKnownExt {
+              extTitle.stringValue = title + " (" + version + ")"
+              extSubtitle.stringValue = released
+          } else if hasExt {
+              extTitle.stringValue = "An uknown or patched Rom"
+              extSubtitle.stringValue = "CRC " + String(Int(extHash), radix: 16)
+          } else {
+              extTitle.stringValue = "Kickstart Rom extension"
+              extSubtitle.stringValue = "(optional)"
+          }
+
 
         /*
         var text = ""
@@ -178,7 +205,7 @@ extension PreferencesController {
             romWarning.isHidden = true
         }
         */
-        
+
         // Lock symbol and explanation
         romLockImage.isHidden = poweredOff
         romLockText.isHidden = poweredOff
@@ -203,10 +230,10 @@ extension PreferencesController {
     @IBAction func extDeleteAction(_ sender: NSButton!) {
 
         track()
-        /*
-         myController?.romURL = URL(fileURLWithPath: "/")
-         amigaProxy?.mem.deleteRom()
-         */
+
+        myController?.extURL = URL(fileURLWithPath: "/")
+        amigaProxy?.mem.deleteExt()
+
         refresh()
     }
 
@@ -221,7 +248,7 @@ extension PreferencesController {
         // Revert to the AROS Kickstart replacement
         amigaProxy?.mem.loadRom(fromBuffer: NSDataAsset(name: "aros-amiga-m68k-rom")?.data)
         myController?.romURL = URL(fileURLWithPath: "")
-        amigaProxy?.mem.loadExtRom(fromBuffer: NSDataAsset(name: "aros-amiga-m68k-ext")?.data)
+        amigaProxy?.mem.loadExt(fromBuffer: NSDataAsset(name: "aros-amiga-m68k-ext")?.data)
         myController?.extURL = URL(fileURLWithPath: "")
         refresh()
     }

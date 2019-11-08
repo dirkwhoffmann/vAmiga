@@ -27,10 +27,10 @@ public:
     //
 
     // Returns true iff buffer contains an Extended Rom image
-    static bool isExtRomBuffer(const uint8_t *buffer, size_t length);
+    static bool isExtBuffer(const uint8_t *buffer, size_t length);
 
     // Returns true iff path points to a Extended Rom file
-    static bool isExtRomFile(const char *path);
+    static bool isExtFile(const char *path);
 
 
     //
@@ -51,8 +51,8 @@ public:
     AmigaFileType fileType() override { return FILETYPE_KICK_ROM; }
     const char *typeAsString() override { return "Extended Rom"; }
     bool bufferHasSameType(const uint8_t *buffer, size_t length) override {
-        return isExtRomBuffer(buffer, length); }
-    bool fileHasSameType(const char *path) override { return isExtRomFile(path); }
+        return isExtBuffer(buffer, length); }
+    bool fileHasSameType(const char *path) override { return isExtFile(path); }
     bool readFromBuffer(const uint8_t *buffer, size_t length) override;
 
 };

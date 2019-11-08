@@ -267,43 +267,54 @@ public:
     bool hasBootRom() { return hasRom() && config.romSize <= KB(16); }
     bool hasKickRom() { return hasRom() && config.romSize >= KB(256); }
     bool hasWom() { return wom != NULL; }
-    bool hasExtRom() { return ext != NULL; }
+    bool hasExt() { return ext != NULL; }
 
-    // Returns a fingerprint for a certain ROM
-    uint64_t romFingerprint() { return fnv_1a_64(rom, config.romSize); }
-    uint64_t extFingerprint() { return fnv_1a_64(ext, config.extSize); }
+    // Returns a CRC-32 checksum for a certain ROM
+    // uint64_t romFingerprint() { return fnv_1a_64(rom, config.romSize); }
+    // uint64_t extFingerprint() { return fnv_1a_64(ext, config.extSize); }
+    uint32_t romFingerprint() { return crc32(rom, config.romSize); }
+    uint32_t extFingerprint() { return crc32(ext, config.extSize); }
 
-    // Translates a fingerprint into a unique ROM identifier
-    RomRevision revision(uint64_t fingerprint);
+    // Translates a CRC-32 checksum into a ROM identifier
+    RomRevision revision(uint32_t fingerprint);
     RomRevision romRevision() { return revision(romFingerprint()); }
     RomRevision extRevision() { return revision(extFingerprint()); }
 
-    // Translates a ROM indentifier into a textual description
+    // Analyzes a ROM identifier by ROM type
+    bool isBootRom(RomRevision rev);
+    bool isArosRom(RomRevision rev);
+    bool isDiagRom(RomRevision rev);
+    bool isOrigRom(RomRevision rev);
+
+    // Translates a ROM indentifier into textual descriptions
     const char *title(RomRevision rev);
-    const char *subtitle(RomRevision rev);
+    const char *version(RomRevision rev);
+    const char *released(RomRevision rev);
     const char *romTitle() { return title(romRevision()); }
-    const char *romSubtitle()  { return subtitle(romRevision()); }
+    const char *romVersion()  { return version(romRevision()); }
+    const char *romReleased()  { return released(romRevision()); }
     const char *extTitle() { return title(extRevision()); }
-    const char *extSubtitle()  { return subtitle(extRevision()); }
+    const char *extVersion()  { return version(extRevision()); }
+    const char *extReleased()  { return released(extRevision()); }
 
     // Removes a previously installed ROM
-    void deleteKickRom() { alloc(0, rom, config.romSize); }
+    void deleteRom() { alloc(0, rom, config.romSize); }
     void deleteWom() { alloc(0, wom, config.womSize); }
-    void deleteExtRom() { alloc(0, ext, config.extSize); }
+    void deleteExt() { alloc(0, ext, config.extSize); }
 
     // Erases an installed ROM
-    void eraseKickRom() { assert(rom); memset(rom, 0, config.romSize); }
+    void eraseRom() { assert(rom); memset(rom, 0, config.romSize); }
     void eraseWom() { assert(wom); memset(wom, 0, config.womSize); }
-    void eraseExtRom() { assert(ext); memset(ext, 0, config.extSize); }
+    void eraseExt() { assert(ext); memset(ext, 0, config.extSize); }
 
     // Installs a new Boot Rom or Kickstart Rom
     bool loadRom(RomFile *rom);
     bool loadRomFromBuffer(const uint8_t *buffer, size_t length);
     bool loadRomFromFile(const char *path);
 
-    bool loadExtRom(ExtFile *rom);
-    bool loadExtRomFromBuffer(const uint8_t *buffer, size_t length);
-    bool loadExtRomFromFile(const char *path);
+    bool loadExt(ExtFile *rom);
+    bool loadExtFromBuffer(const uint8_t *buffer, size_t length);
+    bool loadExtFromFile(const char *path);
 
 private:
 

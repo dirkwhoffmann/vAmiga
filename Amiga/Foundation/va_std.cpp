@@ -264,13 +264,15 @@ fnv_1a_64(const uint8_t *addr, size_t size)
         hash = fnv_1a_it64(hash, (uint64_t)addr[i]);
     }
 
-    printf("crc-32: %x\n", crc32(addr, size));
+    // printf("crc-32: %x\n", crc32(addr, size));
     
     return hash;
 }
 
 uint32_t crc32(const uint8_t *addr, size_t size)
 {
+    if (addr == NULL || size == 0) return 0;
+
     uint32_t result = 0;
 
     // Setup lookup table

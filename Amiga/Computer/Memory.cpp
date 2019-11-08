@@ -236,31 +236,106 @@ Memory::initializeRam()
 }
 
 RomRevision
-Memory::revision(uint64_t fingerprint)
+Memory::revision(uint32_t fingerprint)
 {
     switch(fingerprint) {
 
-        case 0x0000000000000000: return ROM_MISSING;
-        case 0xe923584a55d5c10c: return ROM_BOOT_A1000_1985_8K;
-        case 0x83b3ec51d394e10c: return ROM_BOOT_A1000_1985_64K;
-        case 0x23de891c17754732: return ROM_AROS;
-        case 0xe5cb7ee5200c4f0f: return ROM_KICK12_33_180;
-        case 0xe3ff65d2c3a9b9e5: return ROM_KICK12_33_180_O;
-        case 0x047fb93fb8e383bc: return ROM_KICK13_35_5;
-        case 0x42b199abf0febb13: return ROM_KICK13_35_5_B;
-        case 0x482fa0f04538677b: return ROM_KICK13_35_5_B2;
-        case 0xc9f1352946125739: return ROM_KICK13_35_5_B3;
-        case 0x36890544db15eb40: return ROM_KICK13_35_5_H;
-        case 0x08a1122c7dec695d: return ROM_KICK13_35_5_O;
-        case 0x845588ccf58fce86: return ROM_KICK204_37_175;
-        case 0xd059a4095ef1d70d: return ROM_KICK31_40_63;
-        case 0xd87e84eeacc77dcd: return ROM_KICK31_40_63_A;
-        case 0xd87e84eeacc77aaa: return ROM_KICK31_40_63_B;
-        case 0x2005bba6e9c6c6ac: return ROM_KICK314_46_143;
-        case 0x3caee2ad138eb229: return ROM_DIAG11;
-        case 0x110c854766f14cd8: return ROM_LOGICA20;
+        case 0x00000000: return ROM_MISSING;
+        case 0x62F11C04: return ROM_BOOT_A1000_8K;
+        case 0x0B1AD2D0: return ROM_BOOT_A1000_64K;
+
+        case 0xEC86DAE2: return ROM_KICK11_31_034;
+        case 0x9ED783D0: return ROM_KICK12_33_166;
+        case 0xA6CE1636: return ROM_KICK12_33_180;
+        case 0xDB4C8033: return ROM_KICK121_34_004;
+        case 0xC4F0F55F: return ROM_KICK13_34_005;
+
+        case 0xB4113910: return ROM_KICK20_36_028;
+
+        case 0x9A15519D: return ROM_KICK202_36_207;
+        case 0xC3BDB240: return ROM_KICK204_37_175;
+        case 0x83028FB5: return ROM_KICK205_37_299;
+        case 0x64466C2A: return ROM_KICK205_37_300;
+        case 0x43B0DF7B: return ROM_KICK205_37_350;
+
+        case 0x6C9B07D2: return ROM_KICK30_39_106;
+        case 0xFC24AE0D: return ROM_KICK31_40_063;
+
+        case 0x3F4FCC0A: return ROM_AROS_55696;
+        case 0xF2E52B07: return ROM_AROS_55696_EXT;
+
+        case 0x4C4B5C05: return ROM_DIAG11;
+        case 0x771CD0EA: return ROM_DIAG12;
+        case 0x8484F426: return ROM_LOGICA20;
 
         default: return ROM_UNKNOWN;
+    }
+}
+
+bool
+Memory::isBootRom(RomRevision rev)
+{
+    switch (rev) {
+
+        case ROM_BOOT_A1000_8K:
+        case ROM_BOOT_A1000_64K: return true;
+
+        default: return false;
+    }
+}
+
+bool
+Memory::isArosRom(RomRevision rev)
+{
+    switch (rev) {
+
+        case 0x00000000: return ROM_MISSING;
+
+        case ROM_AROS_55696:
+        case ROM_AROS_55696_EXT: return true;
+
+        default: return false;
+    }
+}
+
+bool
+Memory::isDiagRom(RomRevision rev)
+{
+    switch (rev) {
+
+        case ROM_DIAG11:
+        case ROM_DIAG12:
+        case ROM_LOGICA20: return true;
+
+        default: return false;
+    }
+}
+
+bool
+Memory::isOrigRom(RomRevision rev)
+{
+    switch (rev) {
+
+        case ROM_BOOT_A1000_8K:
+        case ROM_BOOT_A1000_64K:
+
+        case ROM_KICK11_31_034:
+        case ROM_KICK12_33_166:
+        case ROM_KICK12_33_180:
+        case ROM_KICK121_34_004:
+        case ROM_KICK13_34_005:
+
+        case ROM_KICK20_36_028:
+        case ROM_KICK202_36_207:
+        case ROM_KICK204_37_175:
+        case ROM_KICK205_37_299:
+        case ROM_KICK205_37_300:
+        case ROM_KICK205_37_350:
+
+        case ROM_KICK30_39_106:
+        case ROM_KICK31_40_063: return true;
+
+        default: return false;
     }
 }
 
@@ -268,55 +343,104 @@ const char *
 Memory::title(RomRevision rev)
 {
     switch (rev) {
-        case ROM_MISSING:             return "";
-        case ROM_BOOT_A1000_1985_8K:
-        case ROM_BOOT_A1000_1985_64K: return "Amiga 1000 Boot Rom";
-        case ROM_AROS:                return "AROS Kickstart replacement";
-        case ROM_KICK12_33_180:
-        case ROM_KICK12_33_180_O:     return "Kickstart 1.2";
-        case ROM_KICK13_35_5:
-        case ROM_KICK13_35_5_B:
-        case ROM_KICK13_35_5_B2:
-        case ROM_KICK13_35_5_B3:
-        case ROM_KICK13_35_5_H:
-        case ROM_KICK13_35_5_O:       return "Kickstart 1.2";
-        case ROM_KICK204_37_175:      return "Kickstart 2.04";
-        case ROM_KICK31_40_63:
-        case ROM_KICK31_40_63_A:
-        case ROM_KICK31_40_63_B:      return "Kickstart 3.1";
-        case ROM_KICK314_46_143:      return "Kickstart 3.14";
-        case ROM_DIAG11:              return "Amiga DiagROM";
-        case ROM_LOGICA20:            return "Logica Diagnostic";
 
-        default:                      return "";
+        case ROM_BOOT_A1000_8K:
+        case ROM_BOOT_A1000_64K: return "Amiga 1000 Boot Rom";
+
+        case ROM_KICK11_31_034:
+        case ROM_KICK12_33_166:
+        case ROM_KICK12_33_180:  return "Kickstart 1.2";
+        case ROM_KICK121_34_004: return "Kickstart 1.21";
+        case ROM_KICK13_34_005:  return "Kickstart 1.3";
+
+        case ROM_KICK20_36_028:  return "Kickstart 2.0";
+        case ROM_KICK202_36_207: return "Kickstart 2.02";
+        case ROM_KICK204_37_175: return "Kickstart 2.04";
+        case ROM_KICK205_37_299:
+        case ROM_KICK205_37_300:
+        case ROM_KICK205_37_350: return "Kickstart 2.05";
+
+        case ROM_KICK30_39_106:  return "Kickstart 3.0";
+        case ROM_KICK31_40_063:  return "Kickstart 3.1";
+
+        case ROM_AROS_55696:     return "AROS Kickstart replacement";
+        case ROM_AROS_55696_EXT: return "AROS Kickstart extension";
+
+        case ROM_DIAG11:
+        case ROM_DIAG12:         return "Amiga DiagROM";
+        case ROM_LOGICA20:       return "Logica Diagnostic";
+
+        default:                 return "";
     }
 }
 
 const char *
-Memory::subtitle(RomRevision rev)
+Memory::version(RomRevision rev)
 {
     switch (rev) {
-        case ROM_MISSING:             return "";
-        case ROM_BOOT_A1000_1985_8K:  return "1985 (8KB)";
-        case ROM_BOOT_A1000_1985_64K: return "1985 (164KB)";
-        case ROM_AROS:                return "v?.?";
-        case ROM_KICK12_33_180:       return "rev 33.180";
-        case ROM_KICK12_33_180_O:     return "rev 33.180 (O)";
-        case ROM_KICK13_35_5:         return "rev 35.5";
-        case ROM_KICK13_35_5_B:       return "rev 35.5 (B)";
-        case ROM_KICK13_35_5_B2:      return "rev 35.5 (B2)";
-        case ROM_KICK13_35_5_B3:      return "rev 35.5 (B3)";
-        case ROM_KICK13_35_5_H:       return "rev 35.5 (H)";
-        case ROM_KICK13_35_5_O:       return "rev 35.5 (O)";
-        case ROM_KICK204_37_175:      return "rev 37.175";
-        case ROM_KICK31_40_63:        return "rev 40.63";
-        case ROM_KICK31_40_63_A:      return "rev 40.63 (A)";
-        case ROM_KICK31_40_63_B:      return "rev 40.63 (B)";
-        case ROM_KICK314_46_143:      return "rev 46.143";
-        case ROM_DIAG11:              return "v1.1";
-        case ROM_LOGICA20:            return "v2.0";
+            
+        case ROM_BOOT_A1000_8K:  return "8KB";
+        case ROM_BOOT_A1000_64K: return "64KB";
 
-        default:                      return "";
+        case ROM_KICK11_31_034:  return "31.034";
+        case ROM_KICK12_33_166:  return "31.034";
+        case ROM_KICK12_33_180:  return "33.180";
+        case ROM_KICK121_34_004: return "34.004";
+        case ROM_KICK13_34_005:  return "34.005";
+
+        case ROM_KICK20_36_028:  return "36.028";
+        case ROM_KICK202_36_207: return "36.207";
+        case ROM_KICK204_37_175: return "37.175";
+        case ROM_KICK205_37_299: return "37.299";
+        case ROM_KICK205_37_300: return "37.300";
+        case ROM_KICK205_37_350: return "37.350";
+
+        case ROM_KICK30_39_106:  return "39.106";
+        case ROM_KICK31_40_063:  return "40.063";
+
+        case ROM_AROS_55696:     return "55696";
+        case ROM_AROS_55696_EXT: return "55696";
+
+        case ROM_DIAG11:         return "1.1";
+        case ROM_DIAG12:         return "1.2";
+        case ROM_LOGICA20:       return "2.0";
+
+        default:                 return "";
+    }
+}
+
+const char *
+Memory::released(RomRevision rev)
+{
+    switch (rev) {
+
+        case ROM_BOOT_A1000_8K:  return "1985";
+        case ROM_BOOT_A1000_64K: return "1985";
+
+        case ROM_KICK11_31_034:  return "February 1986";
+        case ROM_KICK12_33_166:  return "September 1986";
+        case ROM_KICK12_33_180:  return "October 1986";
+        case ROM_KICK121_34_004: return "November 1987";
+        case ROM_KICK13_34_005:  return "December 1987";
+
+        case ROM_KICK20_36_028:  return "March 1990)";
+        case ROM_KICK202_36_207: return "October 1990";
+        case ROM_KICK204_37_175: return "May 1991";
+        case ROM_KICK205_37_299: return "November 1991";
+        case ROM_KICK205_37_300: return "November 1991";
+        case ROM_KICK205_37_350: return "April 1992";
+
+        case ROM_KICK30_39_106:  return "September 1992";
+        case ROM_KICK31_40_063:  return "July 1993";
+
+        case ROM_AROS_55696:     return "February 2019";
+        case ROM_AROS_55696_EXT: return "February 2019";
+
+        case ROM_DIAG11:         return "October 2018";
+        case ROM_DIAG12:         return "August 2019";
+        case ROM_LOGICA20:       return "";
+
+        default:                 return "";
     }
 }
 
@@ -373,7 +497,7 @@ Memory::loadRomFromFile(const char *path)
 }
 
 bool
-Memory::loadExtRom(ExtFile *file)
+Memory::loadExt(ExtFile *file)
 {
     assert(file != NULL);
 
@@ -385,11 +509,11 @@ Memory::loadExtRom(ExtFile *file)
 }
 
 bool
-Memory::loadExtRomFromBuffer(const uint8_t *buffer, size_t length)
+Memory::loadExtFromBuffer(const uint8_t *buffer, size_t length)
 {
     assert(buffer != NULL);
 
-    debug("loadExtRomFromBuffer\n");
+    debug("loadExtFromBuffer\n");
 
     ExtFile *file = ExtFile::makeWithBuffer(buffer, length);
 
@@ -398,15 +522,15 @@ Memory::loadExtRomFromBuffer(const uint8_t *buffer, size_t length)
         return false;
     }
 
-    return loadExtRom(file);
+    return loadExt(file);
 }
 
 bool
-Memory::loadExtRomFromFile(const char *path)
+Memory::loadExtFromFile(const char *path)
 {
     assert(path != NULL);
 
-    debug("loadExtRomFromFile\n");
+    debug("loadExtFromFile\n");
 
     ExtFile *file = ExtFile::makeWithFile(path);
 
@@ -415,7 +539,7 @@ Memory::loadExtRomFromFile(const char *path)
         return false;
     }
 
-    return loadExtRom(file);
+    return loadExt(file);
 }
 
 void
@@ -484,7 +608,7 @@ Memory::updateMemSrcTable()
 
     // Auto-config (Zorro II)
     for (unsigned i = 0xE8; i <= 0xEF; i++)
-    memSrc[i] = MEM_AUTOCONF;
+        memSrc[i] = MEM_AUTOCONF;
     
     // Extended Rom
     for (unsigned i = 0xE0; i <= 0xE7; i++)
@@ -1751,7 +1875,7 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
     
     if (addr <= 0x1E) {
         debug(INVREG_DEBUG, "pokeCustom16(%X [%s]): READ-ONLY-REGISTER\n",
-             addr, customReg[(addr >> 1) & 0xFF]);
+              addr, customReg[(addr >> 1) & 0xFF]);
     } else {
         debug(INVREG_DEBUG, "pokeCustom16(%X [%s]): NO OCS REGISTER\n",
               addr, customReg[(addr >> 1) & 0xFF]);
@@ -1817,7 +1941,7 @@ Memory::pokeRom16(uint32_t addr, uint16_t value)
 {
     // debug("pokeRom16(%X, %X)\n", addr, value);
 
-     // Lock the WOM (if any)
+    // Lock the WOM (if any)
     if (hasWom()) {
         if (!womIsLocked) debug("Locking WOM\n");
         womIsLocked = true;
