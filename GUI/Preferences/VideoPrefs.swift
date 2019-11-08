@@ -90,9 +90,6 @@ extension PreferencesController {
         vidEyeXSlider.floatValue = controller.eyeX
         vidEyeYSlider.floatValue = controller.eyeY
         vidEyeZSlider.floatValue = controller.eyeZ
-
-        // Label the OK button
-        vidOKButton.title = okLabel
     }
 
     //

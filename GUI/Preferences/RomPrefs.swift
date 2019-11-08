@@ -79,9 +79,6 @@ extension PreferencesController {
         romLockImage.isHidden = poweredOff
         romLockText.isHidden = poweredOff
         romLockSubText.isHidden = poweredOff
-
-        // Label the OK button
-        romOKButton.title = okLabel
     }
 
     //

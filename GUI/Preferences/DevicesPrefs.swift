@@ -56,9 +56,6 @@ extension PreferencesController {
         devReleaseMouseKeyComb.isEnabled = metal.releaseMouseWithKeys
         devReleaseMouseWithKeys.state = metal.releaseMouseWithKeys ? .on : .off
         devReleaseMouseByShaking.state = metal.releaseMouseByShaking ? .on : .off
-
-        // Label the OK button
-        devOKButton.title = okLabel
     }
     
     func updateJoyKeyMap(_ nr: Int, dir: JoystickDirection, button: NSButton, txt: NSTextField) {

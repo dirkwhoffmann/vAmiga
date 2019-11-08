@@ -49,9 +49,6 @@ extension PreferencesController {
 
         // Lock controls if emulator is powered on
         // Nothing to do here at the moment
-
-        // Label the OK button
-        compOKButton.title = okLabel
     }
 
     @IBAction func compCpuEngineAction(_ sender: NSPopUpButton!) {

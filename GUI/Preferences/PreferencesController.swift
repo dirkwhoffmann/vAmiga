@@ -240,13 +240,10 @@ class PreferencesController: DialogController {
     @IBOutlet weak var devOKButton: NSButton!
 
     // Indicates if the user has manually shut down the emulator
-    var lockClicked = false
-
-    // Indicates if we should automatically boot when the window closes
-    var autoPowerUp: Bool { return lockClicked && amigaProxy?.readyToPowerUp() == true; }
+    // var lockClicked = false
 
     // Rerturns the label of the OK button
-    var okLabel: String { return autoPowerUp ? "Power" : "OK"; }
+    // var okLabel: String { return autoPowerUp ? "Power" : "OK"; }
 
     override func awakeFromNib() {
 
@@ -284,7 +281,6 @@ class PreferencesController: DialogController {
     @IBAction func unlockAction(_ sender: Any!) {
 
         amigaProxy?.powerOff()
-        lockClicked = true
         refresh()
     }
 
@@ -294,9 +290,7 @@ class PreferencesController: DialogController {
 
         myController?.loadUserDefaults()
         refresh()
-
         hideSheet()
-        lockClicked = false
     }
     
     @IBAction override func okAction(_ sender: Any!) {
@@ -305,11 +299,6 @@ class PreferencesController: DialogController {
 
         hideSheet()
         myController?.saveUserDefaults()
-
-        // Automatically power up if flag is set
-        if autoPowerUp { amigaProxy?.run() }
-
-        lockClicked = false
     }
 }
 

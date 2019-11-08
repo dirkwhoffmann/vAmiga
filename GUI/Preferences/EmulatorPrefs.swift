@@ -43,9 +43,6 @@ extension PreferencesController {
         emuAutoSnapshots.state = amiga.takeAutoSnapshots() ? .on : .off
         emuSnapshotInterval.integerValue = amiga.snapshotInterval()
         emuSnapshotInterval.isEnabled = amiga.takeAutoSnapshots()
-
-        // Label the OK button
-        emuOKButton.title = okLabel
     }
 
     //

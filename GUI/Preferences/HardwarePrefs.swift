@@ -61,9 +61,6 @@ extension PreferencesController {
         hwLockImage.isHidden = poweredOff
         hwLockText.isHidden = poweredOff
         hwLockSubText.isHidden = poweredOff
-
-        // Label the OK button
-        hwOKButton.title = okLabel
     }
 
     @IBAction func hwAgnusRevAction(_ sender: NSPopUpButton!) {
