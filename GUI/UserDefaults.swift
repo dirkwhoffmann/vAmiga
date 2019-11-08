@@ -769,9 +769,6 @@ extension Defaults {
         let deniseRevision: DeniseRevision
         let realTimeClock: RTCModel
 
-        let kbModel: KeyboardModel
-        let kbLang: KeyboardLanguage
-
         let chipRam: Int
         let slowRam: Int
         let fastRam: Int
@@ -787,8 +784,6 @@ extension Defaults {
         agnusRevision: AGNUS_8372,
         deniseRevision: DENISE_8362R8,
         realTimeClock: RTC_NONE,
-        kbModel: KB_A500,
-        kbLang: KB_US,
         chipRam: 512,
         slowRam: 0,
         fastRam: 0,
@@ -801,8 +796,6 @@ extension Defaults {
         agnusRevision: AGNUS_8367,
         deniseRevision: DENISE_8362R8,
         realTimeClock: RTC_NONE,
-        kbModel: KB_A1000,
-        kbLang: KB_US,
         chipRam: 256,
         slowRam: 0,
         fastRam: 0,
@@ -815,8 +808,6 @@ extension Defaults {
         agnusRevision: AGNUS_8375,
         deniseRevision: DENISE_8362R8,
         realTimeClock: RTC_M6242B,
-        kbModel: KB_A2000,
-        kbLang: KB_US,
         chipRam: 512,
         slowRam: 512,
         fastRam: 0,

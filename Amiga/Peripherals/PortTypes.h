@@ -16,15 +16,6 @@
 // Enumerations
 //
 
-typedef enum // DEPRECATED
-{
-    KB_SEND_SYNC,
-    KB_INITIATE_POWER_UP_KEY_STREAM,
-    KB_TERMINATE_KEY_STREAM,
-    KB_NORMAL_OPERATION
-}
-KeyboardState;
-
 typedef enum : long
 {
     SPD_NONE,

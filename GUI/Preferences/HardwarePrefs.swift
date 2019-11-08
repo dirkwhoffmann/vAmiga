@@ -24,10 +24,6 @@ extension PreferencesController {
         hwDeniseRevisionPopup.selectItem(withTag: config.denise.revision.rawValue)
         hwRealTimeClock.selectItem(withTag: config.rtc.model.rawValue)
 
-        // Keyboard
-        hwKbModelPopup.selectItem(withTag: config.keyboard.model.rawValue)
-        hwKbLanguagePopup.selectItem(withTag: config.keyboard.language.rawValue)
-
         // Ports
         hwSerialDevice.selectItem(withTag: Int(config.serialDevice))
 
@@ -74,18 +70,6 @@ extension PreferencesController {
     @IBAction func hwDeniseRevAction(_ sender: NSPopUpButton!) {
 
         amigaProxy?.configure(VA_DENISE_REVISION, value: sender.selectedTag())
-        refresh()
-    }
-
-    @IBAction func hwKeyboardModelAction(_ sender: NSPopUpButton!) {
-
-        amigaProxy?.configure(VA_KB_MODEL, value: sender.selectedTag())
-        refresh()
-    }
-
-    @IBAction func hwKeyboardLanguageAction(_ sender: NSPopUpButton!) {
-
-        amigaProxy?.configure(VA_KB_LANG, value: sender.selectedTag())
         refresh()
     }
 
@@ -149,9 +133,6 @@ extension PreferencesController {
     }
 
     func hwFactorySettingsAction(_ defaults: Defaults.ModelDefaults) {
-
-        amigaProxy?.configure(VA_KB_MODEL, value: defaults.kbModel.rawValue)
-        amigaProxy?.configure(VA_KB_LANG, value: defaults.kbLang.rawValue)
 
         amigaProxy?.configure(VA_CHIP_RAM, value: defaults.chipRam)
         amigaProxy?.configure(VA_SLOW_RAM, value: defaults.slowRam)

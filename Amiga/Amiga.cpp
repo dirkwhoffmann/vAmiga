@@ -264,28 +264,6 @@ Amiga::configure(ConfigOption option, long value)
             mem.updateMemSrcTable();
             break;
 
-        case VA_KB_MODEL:
-
-            if (!isKeyboardModel(value)) {
-                warn("Invalid keyboard model: %d\n", value);
-                return false;
-            }
-
-            if (current.keyboard.model == value) return true;
-            keyboard.setModel((KeyboardModel)value);
-            break;
-
-        case VA_KB_LANG:
-
-            if (!isKeyboardLanguage(value)) {
-                warn("Invalid keyboard language: %d\n", value);
-                return false;
-            }
-
-            if (current.keyboard.language == value) return true;
-            keyboard.setLanguage((KeyboardLanguage)value);
-            break;
-            
         case VA_CHIP_RAM:
             
             if (value != 256 && value != 512 && value != 1024 && value != 2048) {

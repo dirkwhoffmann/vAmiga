@@ -30,8 +30,6 @@ typedef enum : long
     VA_AGNUS_REVISION,
     VA_DENISE_REVISION,
     VA_RT_CLOCK,
-    VA_KB_MODEL,
-    VA_KB_LANG,
     VA_CHIP_RAM,
     VA_SLOW_RAM,
     VA_FAST_RAM,
