@@ -82,8 +82,15 @@ extension PreferencesController {
     }
     
     @IBAction func hwChipRamAction(_ sender: NSPopUpButton!) {
-        
-        amigaProxy?.configure(VA_CHIP_RAM, value: sender.selectedTag())
+
+        let chipRamWanted = sender.selectedTag()
+        let chipRamLimit = amigaProxy?.agnus.chipRamLimit() ?? 0
+
+        if chipRamWanted > chipRamLimit {
+            myDocument?.showConfigurationAltert(MSG_CHIP_RAM_LIMIT.rawValue)
+        } else {
+            amigaProxy?.configure(VA_CHIP_RAM, value: sender.selectedTag())
+        }
         refresh()
     }
 

@@ -14,12 +14,7 @@ class PreferencesController: DialogController {
     //
     // Rom preferences
     //
-    
-    // Warning message
-    @IBOutlet weak var romCautionImage: NSButton!
-    @IBOutlet weak var romCautionText: NSTextField!
-    @IBOutlet weak var romCautionSubText: NSTextField!
-    
+        
     // Rom info
     @IBOutlet weak var romDropView: RomDropView!
     @IBOutlet weak var romTitle: NSTextField!
@@ -239,11 +234,11 @@ class PreferencesController: DialogController {
     // Button
     @IBOutlet weak var devOKButton: NSButton!
 
-    // Indicates if the user has manually shut down the emulator
-    // var lockClicked = false
+    func showSheet(tab: String) {
 
-    // Rerturns the label of the OK button
-    // var okLabel: String { return autoPowerUp ? "Power" : "OK"; }
+        if tab != "" { prefTabView.selectTabViewItem(withIdentifier: tab) }
+        showSheet()
+    }
 
     override func awakeFromNib() {
 

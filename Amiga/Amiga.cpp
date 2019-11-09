@@ -525,6 +525,12 @@ Amiga::_initialize()
 }
 
 void
+Amiga::powerOn()
+{
+    if (readyToPowerUp()) { HardwareComponent::powerOn(); }
+}
+
+void
 Amiga::_powerOn()
 {
     debug(1, "Power on\n");
@@ -543,27 +549,8 @@ Amiga::_powerOn()
     
     // For debugging, we start in debug mode and set a breakpoint
     debugMode = true;
-
-    // cpu.bpManager.setBreakpointAt(0xFD7962); // AROS ERROR
-    // cpu.bpManager.setBreakpointAt(0xF890C6); //
-    // cpu.bpManager.setBreakpointAt(0xFD822E); // Jumps to error output routine
-
-    // cpu.bpManager.setBreakpointAt(0xFD818C); // BEFORE AUD registers
-    // cpu.bpManager.setBreakpointAt(0xFA93E6); // FIRST FMODE non-OCS access
-    // cpu.bpManager.setBreakpointAt(0xFD7982); // WRITE TO BPLCON3
-    // cpu.bpManager.setBreakpointAt(0xFD81C8); // Coming back from resetsprite()
-    // cpu.bpManager.setBreakpointAt(0xF8AB64); // Jump to FindResident in TaggedOpenLibrary
-
-    // Hunting Boot Rom bug
-    // cpu.bpManager.setBreakpointAt(0xF8008C); // Boot Rom start
-    // cpu.bpManager.setBreakpointAt(0xF800B4); // Setting bg color to grey
-    // cpu.bpManager.setBreakpointAt(0xF8011E); //
-    // cpu.bpManager.setBreakpointAt(0xF80082); // Setting bg color to cyan (error)
-    // cpu.bpManager.setBreakpointAt(0xF802E0); // Tests if mem can be written to
-
     // cpu.bpManager.setBreakpointAt(0x034434); // Shadow of the beast, DSKLEN POKE
     // cpu.bpManager.setBreakpointAt(0xFC54FC);
-
 
     // Update the recorded debug information
     inspect();
@@ -583,29 +570,20 @@ Amiga::_powerOff()
 }
 
 void
+Amiga::run()
+{
+    if (readyToPowerUp()) { HardwareComponent::run(); }
+}
+
+void
 Amiga::_run()
 {
-    // Check for missing Roms
-    if (!readyToPowerUp()) {
-        putMessage(MSG_ROM_MISSING);
-        return;
-    }
-    
-    // REMOVE ASAP
-    if (SNAP_DEBUG == 1) {
-        debug("Creating snapshot\n");
-        Snapshot *snap = Snapshot::makeWithAmiga(this);
-        debug("Snap at %p created\n");
-        delete snap;
-    }
+    debug(RUNLOOP_DEBUG, "Starting emulation thread (PC = %X)\n", cpu.getPC());
 
-    debug(RUNLOOP_DEBUG, "Starting emulation thread (PC = %X, irq_handler = %p)\n", cpu.getPC(), cpu.getIrqHandler());
-
-
-    // Start the emulator thread.
+    // Start the emulator thread
     pthread_create(&p, NULL, threadMain, (void *)this);
     
-    // Inform the GUI.
+    // Inform the GUI
     putMessage(MSG_RUN);
 }
 
@@ -715,21 +693,25 @@ Amiga::resume()
 bool
 Amiga::readyToPowerUp()
 {
-    // AmigaConfiguration config = getConfig();
-    
-    // Check if Chip Ram is present
+    //
+    // Perform checks that should never fail
+    //
+
     if (!mem.hasChipRam()) {
-        msg("NOT READY: Can't power up without Chip RAM.\n");
-        return false;
-    }
-    
-    // Check if a Boot Rom or a Kickstart Rom is present
-    if (!mem.hasRom()) {
-        msg("NOT READY: Can't power up without a ROM.\n");
+        panic("readyToPowerUp: No Chip RAM found.\n");
         return false;
     }
 
-    // msg("Ready to power up\n");
+    //
+    // Perform checks that are likely to fail
+    //
+
+    if (!mem.hasRom()) {
+        msg("readyToPowerUp: No Boot Rom or Kickstart Rom found.\n");
+        putMessage(MSG_ROM_MISSING);
+        return false;
+    }
+
     return true;
 }
 

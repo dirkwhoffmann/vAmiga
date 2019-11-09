@@ -16,12 +16,6 @@ class MyDocument: NSDocument {
     var amiga: AmigaProxy!
 
     /*
-     Emulator proxy object. This object is an Objective-C bridge between
-     the GUI (written in Swift) an the core emulator (written in C++).
-     */
-    // var c64: C64Proxy!
-    
-    /*
      An otional media object attached to this document.
      This variable is checked by the GUI, e.g., when the READY_TO_RUN message
      is received. If an attachment is present, e.g., a T64 archive,
@@ -85,7 +79,7 @@ class MyDocument: NSDocument {
         // Try to create a file wrapper
         let fileWrapper = try FileWrapper.init(url: url)
         guard let data = fileWrapper.regularFileContents else {
-            throw NSError(domain: "VirtualC64", code: 0, userInfo: nil)
+            throw NSError(domain: "vAmiga", code: 0, userInfo: nil)
         }
         
         // Try to create ADF file proxy

@@ -273,8 +273,13 @@ public:
     // Methods from AmigaObject and HardwareComponent
     //
 
+public:
+
     void prefix() const override;
     void reset() override;
+
+    void powerOn() override;
+    void run() override;
 
 private:
 

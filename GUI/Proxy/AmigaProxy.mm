@@ -375,6 +375,10 @@ struct ADFFileWrapper { ADFFile *adf; };
     }
     return self;
 }
+- (NSInteger) chipRamLimit
+{
+    return wrapper->agnus->chipRamLimit();
+}
 - (void) dump
 {
     wrapper->agnus->dump();
@@ -1331,10 +1335,12 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
    return wrapper->amiga->getStats();
 }
+/*
 - (BOOL) readyToPowerUp
 {
     return wrapper->amiga->readyToPowerUp();
 }
+*/
 - (BOOL) isPoweredOn
 {
     return wrapper->amiga->isPoweredOn();

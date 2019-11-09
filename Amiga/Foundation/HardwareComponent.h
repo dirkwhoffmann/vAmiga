@@ -110,7 +110,7 @@ public:
      * paused    | paused    | none
      * running   | running   | none
      */
-    void powerOn();
+    virtual void powerOn();
     virtual void _powerOn() { }
     
     /* powerOff() powers the component off.
@@ -132,7 +132,7 @@ public:
      * paused    | running   | _run() on each subcomponent
      * running   | running   | none
      */
-    void run();
+    virtual void run();
     virtual void _run() { }
     
     /* pause() puts the component in 'paused' state.

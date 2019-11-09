@@ -1,36 +1,30 @@
-//
-// This file is part of VirtualC64 - A cycle accurate Commodore 64 emulator
+// -----------------------------------------------------------------------------
+// This file is part of vAmiga
 //
 // Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
 // Licensed under the GNU General Public License v3
 //
 // See https://www.gnu.org for license information
-//
+// -----------------------------------------------------------------------------
 
 extension NSError {
 
     static func snapshotVersionError(filename: String) -> NSError {
-        return NSError(domain: "VirtualC64", code: 0, userInfo:
+        return NSError(domain: "vAmiga", code: 0, userInfo:
             [NSLocalizedDescriptionKey: "The document \"\(filename)\" could not be opened.",
-                NSLocalizedRecoverySuggestionErrorKey: "The snapshot was created with a different version of VirtualC64."])
+                NSLocalizedRecoverySuggestionErrorKey: "The snapshot was created with a different version of vAmiga."])
     }
 
     static func unsupportedFormatError(filename: String) -> NSError {
-        return NSError(domain: "VirtualC64", code: 0, userInfo:
+        return NSError(domain: "vAmiga", code: 0, userInfo:
             [NSLocalizedDescriptionKey: "The document \"\(filename)\" could not be opened.",
                 NSLocalizedRecoverySuggestionErrorKey: "The format of this file is not supported."])
     }
 
     static func corruptedFileError(filename: String) -> NSError {        
-        return NSError(domain: "VirtualC64", code: 0, userInfo:
+        return NSError(domain: "vAmiga", code: 0, userInfo:
             [NSLocalizedDescriptionKey: "The document \"\(filename)\" could not be opened.",
                 NSLocalizedRecoverySuggestionErrorKey: "The file appears to be corrupt. It's contents does not match the purported format."])
-    }
-    
-    static func unsupportedCartridgeError(filename: String, type: String) -> NSError {
-        return NSError(domain: "VirtualC64", code: 0, userInfo:
-            [NSLocalizedDescriptionKey: "The document \"\(filename)\" could not be opened.",
-                NSLocalizedRecoverySuggestionErrorKey: "Cartridges of type \"\(type)\" are not supported by the emulator, yet."])
     }
 }
 
@@ -42,7 +36,7 @@ public extension MetalView {
         alert.alertStyle = .critical
         alert.icon = NSImage.init(named: "metal")
         alert.messageText = "No suitable GPU hardware found"
-        alert.informativeText = "VirtualC64 can only run on machines supporting the Metal graphics technology (2012 models and above)."
+        alert.informativeText = "vAmiga can only run on machines supporting the Metal graphics technology (2012 models and above)."
         alert.addButton(withTitle: "Exit")
         alert.runModal()
     }
@@ -100,29 +94,7 @@ extension MyDocument {
                                                    amiga.df2,
                                                    amiga.df3 ])
     }
-    
-    func showDiskIsEmptyAlert(format: String) {
-        
-        let alert = NSAlert()
-        alert.alertStyle = .critical
-        alert.icon = NSImage.init(named: "diskette")
-        alert.messageText = "Cannot export an empty disk."
-        alert.informativeText = "The \(format) format is designed to store a single file."
-        alert.addButton(withTitle: "OK")
-        alert.runModal()
-    }
-    
-    func showDiskHasMultipleFilesAlert(format: String) {
-        
-        let alert = NSAlert()
-        alert.alertStyle = .informational
-        alert.icon = NSImage.init(named: "diskette")
-        alert.messageText = "Only the first file will be exported."
-        alert.informativeText = "The \(format) format is designed to store a single file."
-        alert.addButton(withTitle: "OK")
-        alert.runModal()
-    }
-    
+
     func showExportErrorAlert(url: URL) {
         
         let path = url.path
@@ -131,6 +103,28 @@ extension MyDocument {
         alert.icon = NSImage.init(named: "diskette")
         alert.messageText = "Failed to export disk to file"
         alert.informativeText = "\(path)."
+        alert.addButton(withTitle: "OK")
+        alert.runModal()
+    }
+
+    func showConfigurationAltert(_ error: UInt32) {
+
+        var msg: String
+
+        switch error {
+        case MSG_ROM_MISSING.rawValue:
+            msg = "A Kickstart Rom or Boot Rom is required to power up."
+        case MSG_CHIP_RAM_LIMIT.rawValue:
+            msg = "The selected Agnus revision does not support the selected amout of Chip Ram."
+        default:
+            msg = ""
+        }
+
+        let alert = NSAlert()
+        alert.alertStyle = .informational
+        alert.icon = NSImage.init(named: "pref_transparent")
+        alert.messageText = "Configuration error"
+        alert.informativeText = msg
         alert.addButton(withTitle: "OK")
         alert.runModal()
     }

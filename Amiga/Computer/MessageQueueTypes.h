@@ -26,6 +26,8 @@ typedef enum
     MSG_PAUSE,
     MSG_RESET,
     MSG_ROM_MISSING,
+    MSG_CHIP_RAM_LIMIT,
+    MSG_2MB_AGNUS_NEEDED,
     MSG_WARP_ON,
     MSG_WARP_OFF,
     MSG_POWER_LED_ON,
@@ -67,41 +69,11 @@ typedef enum
     MSG_SER_IN,
     MSG_SER_OUT,
 
-    //
-    // DEPRECATED C64 related messages ...
-    //
-    
     // Snapshot handling
     MSG_AUTOSNAPSHOT_LOADED,
     MSG_AUTOSNAPSHOT_SAVED,
     MSG_USERSNAPSHOT_LOADED,
     MSG_USERSNAPSHOT_SAVED,
-    
-    // CPU related messages
-    MSG_CPU_OK,
-    MSG_CPU_SOFT_BREAKPOINT_REACHED,
-    MSG_CPU_HARD_BREAKPOINT_REACHED,
-    MSG_CPU_ILLEGAL_INSTRUCTION,
-    
-    // Keyboard
-    MSG_KEYMATRIX,
-    MSG_CHARSET,
-    
-    // Peripherals (Disk drive)
-    MSG_VC1541_ATTACHED,
-    MSG_VC1541_ATTACHED_SOUND,
-    MSG_VC1541_DETACHED,
-    MSG_VC1541_DETACHED_SOUND,
-    MSG_VC1541_DISK,
-    MSG_VC1541_DISK_SOUND,
-    MSG_VC1541_NO_DISK,
-    MSG_VC1541_NO_DISK_SOUND,
-    MSG_VC1541_MOTOR_ON,
-    MSG_VC1541_MOTOR_OFF,
-    
-    // Peripherals (Disk)
-    MSG_DISK_SAVED,
-    MSG_DISK_UNSAVED,
 }
 MessageType;
 

@@ -119,7 +119,7 @@ struct AmigaFileWrapper;
 - (AmigaInfo) getInfo;
 - (AmigaStats) getStats;
 
-- (BOOL) readyToPowerUp;
+// - (BOOL) readyToPowerUp;
 - (BOOL) isPoweredOn;
 - (BOOL) isPoweredOff;
 - (BOOL) isRunning;
@@ -300,6 +300,8 @@ struct AmigaFileWrapper;
     
     struct AgnusWrapper *wrapper;
 }
+
+- (NSInteger) chipRamLimit;
 
 - (void) dump;
 - (void) dumpEvents;

@@ -605,6 +605,9 @@ public:
     AgnusRevision getRevision() { return config.revision; }
     void setRevision(AgnusRevision type);
 
+    // Returns the maximum amout of Chip Ram in KB this Agnus can handle
+    long chipRamLimit();
+
 
     //
     // Methods from HardwareComponent

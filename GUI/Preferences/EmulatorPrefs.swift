@@ -19,7 +19,7 @@ extension PreferencesController {
             let metal      = controller.metal
             else { return }
         
-        // VC1541
+        // Drive
         emuWarpLoad.state = controller.warpLoad ? .on : .off
         emuDriveSounds.state = controller.driveNoise ? .on : .off
         emuDriveSoundsNoPoll.state = controller.driveNoiseNoPoll ? .on : .off
@@ -46,7 +46,7 @@ extension PreferencesController {
     }
 
     //
-    // Action methods (VC1541)
+    // Action methods (Drive)
     //
     
     @IBAction func emuWarpLoadAction(_ sender: NSButton!) {

@@ -461,7 +461,7 @@ extension MyController {
         // Adjust size and enable auto-save for window coordinates
         adjustWindowSize()
         window?.windowController?.shouldCascadeWindows = false // true ?!
-        let name = NSWindow.FrameAutosaveName("dirkwhoffmann.de.virtualC64.window")
+        let name = NSWindow.FrameAutosaveName("dirkwhoffmann.de.vAmiga.window")
         window?.setFrameAutosaveName(name)
         
         // Enable fullscreen mode
@@ -707,11 +707,9 @@ extension MyController {
             }
 
         case MSG_SER_IN:
-            //myAppDelegate.inspector?.poSerialIn.append(serdat: msg.data)
             serialIn += String(UnicodeScalar(msg.data & 0xFF)!)
 
         case MSG_SER_OUT:
-            // myAppDelegate.inspector?.poSerialOut.append(serdat: msg.data)
             serialOut += String(UnicodeScalar.init(msg.data & 0xFF)!)
 
         case MSG_AUTOSNAPSHOT_LOADED,
@@ -722,78 +720,15 @@ extension MyController {
         case MSG_AUTOSNAPSHOT_SAVED:
             break
 
-        // DEPRECATED MESSAGES BELOW...
-            
         case MSG_ROM_MISSING:
-            openPreferences()
-            
-            /*
-            if (romDialogController == nil) {
-                track("MSG_ROM_MISSING")
-                let nibName = NSNib.Name("RomPrefs")
-                romDialogController = RomPrefsController.init(windowNibName: nibName)
-                romDialogController!.showSheet(withParent: self)
-            }
-             */
+            track("MSG_ROM_MISSING")
+            openPreferences(tab: "Roms")
+            myDocument?.showConfigurationAltert(msg.type.rawValue)
 
-        case MSG_CPU_OK,
-             MSG_CPU_SOFT_BREAKPOINT_REACHED:
-            break
-            
-        case MSG_CPU_HARD_BREAKPOINT_REACHED,
-             MSG_CPU_ILLEGAL_INSTRUCTION:
-            myAppDelegate.inspector?.refresh(everything: true)
-
-        case MSG_KEYMATRIX,
-             MSG_CHARSET:
-            
-            let appDelegate = NSApp.delegate as? MyAppDelegate
-            appDelegate?.virtualKeyboard?.refresh()
-
-            /*
-            if appDelegate?.virtualKeyboard != nil {
-                appDelegate?.virtualKeyboard?.refresh()
-            }
-            */
-
-            // virtualKeyboard?.refresh()
-            virtualKeyboardSheet?.refresh()
-
-        case MSG_VC1541_ATTACHED,
-             MSG_VC1541_DETACHED:
-            break
-            
-        case MSG_VC1541_ATTACHED_SOUND:
-            
-            // Not sure about the copyright of the following sound:
-            // playSound:@"1541_power_on_0" volume:0.2];
-            // Sound from Commodore 64 (C64) Preservation Project (c64preservation.com):
-            playSound(name: "drive_click", volume: 1.0)
-        
-        case MSG_VC1541_DETACHED_SOUND:
-            
-            // Not sure about the copyright of the following sound:
-            // playSound:@"1541_track_change_0" volume:0.6];
-            // Sound from Commodore 64 (C64) Preservation Project (c64preservation.com):
-            playSound(name: "drive_click", volume: 1.0)
-    
-        case MSG_VC1541_DISK_SOUND:
-            
-            // playSound:@"1541_door_closed_2" volume:0.2];
-            playSound(name: "drive_snatch_uae", volume: 0.1)
-            
-        case MSG_VC1541_NO_DISK_SOUND:
-            
-            // playSound:@"1541_door_open_1" volume:0.2];
-            playSound(name: "drive_snatch_uae", volume: 0.1)
-
-        case MSG_VC1541_DISK,
-             MSG_VC1541_NO_DISK,
-             MSG_DISK_SAVED,
-             MSG_DISK_UNSAVED,
-             MSG_VC1541_MOTOR_ON,
-             MSG_VC1541_MOTOR_OFF:
-            break
+        case MSG_CHIP_RAM_LIMIT:
+            track("MSG_CHIP_RAM_LIMIT")
+            openPreferences(tab: "Hardware")
+            myDocument?.showConfigurationAltert(msg.type.rawValue)
 
         default:
             
@@ -806,13 +741,14 @@ extension MyController {
     // Dialogs
     //
     
-    func openPreferences() {
+    func openPreferences(tab: String = "") {
         
         if preferencesController == nil {
             let nibName = NSNib.Name("Preferences")
             preferencesController = PreferencesController.init(windowNibName: nibName)
         }
-        preferencesController!.showSheet()
+
+        preferencesController!.showSheet(tab: tab)
     }
     
     //

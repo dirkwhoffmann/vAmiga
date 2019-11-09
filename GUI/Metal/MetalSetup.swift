@@ -526,7 +526,7 @@ public extension MetalView {
     
         // Render pipeline
         let pipelineDescriptor = MTLRenderPipelineDescriptor.init()
-        pipelineDescriptor.label = "VirtualC64 Metal pipeline"
+        pipelineDescriptor.label = "vAmiga Metal pipeline"
         pipelineDescriptor.depthAttachmentPixelFormat = MTLPixelFormat.depth32Float
         pipelineDescriptor.vertexFunction = vertexFunc
         pipelineDescriptor.fragmentFunction = fragmentFunc
