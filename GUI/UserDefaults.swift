@@ -819,7 +819,7 @@ extension Defaults {
         chipRam: 512,
         slowRam: 512,
         fastRam: 0,
-        driveConnect: [true, false, false, false],
+        driveConnect: [true, true, false, false],
         driveType: [DRIVE_35_DD, DRIVE_35_DD, DRIVE_35_DD, DRIVE_35_DD],
         serialDevice: SPD_NONE)
 }

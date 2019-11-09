@@ -85,7 +85,6 @@ typedef struct
     DeniseConfig denise;
     BlitterConfig blitter;
     SerialPortConfig serialPort;
-    KeyboardConfig keyboard;
     DiskControllerConfig diskController;
     DriveConfig df0;
     DriveConfig df1;

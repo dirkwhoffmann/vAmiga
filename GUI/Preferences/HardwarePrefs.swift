@@ -143,9 +143,15 @@ extension PreferencesController {
 
     func hwFactorySettingsAction(_ defaults: Defaults.ModelDefaults) {
 
+        amigaProxy?.configure(VA_AGNUS_REVISION, value: defaults.agnusRevision.rawValue)
+        amigaProxy?.configure(VA_DENISE_REVISION, value: defaults.deniseRevision.rawValue)
+        amigaProxy?.configure(VA_RT_CLOCK, value: defaults.realTimeClock.rawValue)
+
         amigaProxy?.configure(VA_CHIP_RAM, value: defaults.chipRam)
         amigaProxy?.configure(VA_SLOW_RAM, value: defaults.slowRam)
         amigaProxy?.configure(VA_FAST_RAM, value: defaults.fastRam)
+
+        amigaProxy?.configure(VA_SERIAL_DEVICE, value: defaults.serialDevice.rawValue)
 
         for i in 0...3 {
             amigaProxy?.configureDrive(i, connected: defaults.driveConnect[i])

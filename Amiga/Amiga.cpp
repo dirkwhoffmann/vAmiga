@@ -171,7 +171,6 @@ Amiga::getConfig()
     config.serialPort = serialPort.getConfig();
     config.blitter = agnus.blitter.getConfig(); 
     config.diskController = paula.diskController.getConfig();
-    config.keyboard = keyboard.getConfig();
     config.df0 = df0.getConfig();
     config.df1 = df1.getConfig();
     config.df2 = df2.getConfig();
