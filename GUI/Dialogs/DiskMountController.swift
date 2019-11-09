@@ -143,7 +143,7 @@ class DiskMountController: DialogController {
         let hide = size.height < 300
         
         // Update disk icon
-        diskIcon.image = NSImage.init(named: writeProtect ? "adfdisk_protected" : "adfdisk")
+        diskIcon.image = NSImage.init(named: writeProtect ? "adf_protected" : "adf")
         
         // Update text fields
         let typeName = [
