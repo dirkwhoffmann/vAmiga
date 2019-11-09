@@ -937,7 +937,7 @@ extension MyController {
         defaults.set(config.df2.type.rawValue, forKey: Keys.df2Type)
         defaults.set(config.df3.type.rawValue, forKey: Keys.df3Type)
 
-        defaults.set(config.serialDevice, forKey: Keys.serialDevice)
+        defaults.set(config.serialPort.device.rawValue, forKey: Keys.serialDevice)
     }
 }
 

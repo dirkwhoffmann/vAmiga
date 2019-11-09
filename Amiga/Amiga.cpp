@@ -168,7 +168,7 @@ Amiga::getConfig()
     config.mem = mem.getConfig();
     config.agnus = agnus.getConfig();
     config.denise = denise.getConfig();
-    config.serialDevice = serialPort.getDevice();
+    config.serialPort = serialPort.getConfig();
     config.blitter = agnus.blitter.getConfig(); 
     config.diskController = paula.diskController.getConfig();
     config.keyboard = keyboard.getConfig();
@@ -399,8 +399,8 @@ Amiga::configure(ConfigOption option, long value)
                 return false;
             }
 
-            if (current.serialDevice == value) return true;
-            serialPort.connectDevice((SerialPortDevice)value);
+            if (current.serialPort.device == value) return true;
+            serialPort.setDevice((SerialPortDevice)value);
             break;
 
         case VA_DRIVE_SPEED:

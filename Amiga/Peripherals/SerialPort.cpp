@@ -12,6 +12,16 @@
 SerialPort::SerialPort(Amiga& ref) : SubComponent(ref)
 {
     setDescription("SerialPort");
+
+    config.device = SPD_LOOPBACK;
+}
+
+void
+SerialPort::setDevice(SerialPortDevice device)
+{
+    assert(isSerialPortDevice(device));
+
+    config.device = device;
 }
 
 void
@@ -41,7 +51,7 @@ SerialPort::_inspect()
 void
 SerialPort::_dump()
 {
-    plainmsg("    device: %d\n", device);
+    plainmsg("    device: %d\n", config.device);
     plainmsg("      port: %X\n", port);
 }
 
@@ -55,18 +65,6 @@ SerialPort::getInfo()
     pthread_mutex_unlock(&lock);
 
     return result;
-}
-
-void
-SerialPort::connectDevice(SerialPortDevice device)
-{
-    if (isSerialPortDevice(device)) {
-        debug("connectDevice(%d)\n");
-        this->device = device;
-    } else {
-        assert(false);
-    }
-
 }
 
 bool
@@ -140,13 +138,13 @@ SerialPort::setPort(uint32_t mask, bool value)
 {
     uint32_t oldPort = port;
 
-    /* Emulate a loopback cable if connected
+    /* Emulate the loopback cable (if connected)
      *
      *     Connected pins: A: 2 - 3       (TXD - RXD)
      *                     B: 4 - 5 - 6   (RTS - CTS - DSR)
      *                     C: 8 - 20 - 22 (CD - DTR - RI)
      */
-    if (device == SPD_LOOPBACK) {
+    if (config.device == SPD_LOOPBACK) {
 
         uint32_t maskA = TXD_MASK | RXD_MASK;
         uint32_t maskB = RTS_MASK | CTS_MASK | DSR_MASK;

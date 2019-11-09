@@ -19,7 +19,7 @@
 #include "DeniseTypes.h"
 #include "RTCTypes.h"
 #include "KeyboardTypes.h"
-
+#include "PortTypes.h"
 
 //
 // Enumeration types
@@ -75,18 +75,18 @@ RunLoopControlFlag;
 
 typedef struct
 {
+    CPUEngine cpuEngine;
+    CPUConfig cpu;
+    int cpuSpeed;
     RTCConfig rtc;
     AudioConfig audio;
-    CPUEngine cpuEngine;
-    int cpuSpeed;
-    CPUConfig cpu;
     MemoryConfig mem;
     AgnusConfig agnus;
     DeniseConfig denise;
     BlitterConfig blitter;
-    DiskControllerConfig diskController;
+    SerialPortConfig serialPort;
     KeyboardConfig keyboard;
-    long serialDevice;
+    DiskControllerConfig diskController;
     DriveConfig df0;
     DriveConfig df1;
     DriveConfig df2;

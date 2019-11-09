@@ -135,16 +135,14 @@ Memory::didLoadFromBuffer(uint8_t *buffer)
     & config.slowRamSize
     & config.fastRamSize;
 
-    // Do some consistency checks
-    // Note: We should do this a little less agressive, e.g., by returning
-    // false. Furthermore, the real maximum size limits should be used.
-    assert(config.romSize < 0xFFFFFF);
-    assert(config.romSize < 0xFFFFFF);
-    assert(config.womSize  < 0xFFFFFF);
-    assert(config.chipRamSize < 0xFFFFFF);
-    assert(config.slowRamSize < 0xFFFFFF);
-    assert(config.fastRamSize < 0xFFFFFF);
-    
+    // Make sure that corrupted values do not cause any damage
+    if (config.romSize > KB(512)) { config.romSize = 0; assert(false); }
+    if (config.womSize > KB(256)) { config.womSize = 0; assert(false); }
+    if (config.extSize > KB(512)) { config.extSize = 0; assert(false); }
+    if (config.chipRamSize > MB(2)) { config.chipRamSize = 0; assert(false); }
+    if (config.slowRamSize > KB(512)) { config.slowRamSize = 0; assert(false); }
+    if (config.fastRamSize > MB(8)) { config.fastRamSize = 0; assert(false); }
+
     // Free previously allocated memory
     dealloc();
 

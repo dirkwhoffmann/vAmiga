@@ -751,9 +751,9 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->port->getInfo();
 }
-- (void) connectDevice:(SerialPortDevice)value
+- (void) setDevice:(SerialPortDevice)value
 {
-    wrapper->port->connectDevice(value);
+    wrapper->port->setDevice(value);
 }
 
 @end

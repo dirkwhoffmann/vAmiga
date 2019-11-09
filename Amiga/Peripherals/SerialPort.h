@@ -23,6 +23,9 @@
 
 class SerialPort : public SubComponent {
 
+    // The current configuration
+    SerialPortConfig config;
+
     // Information shown in the GUI inspector panel
     SerialPortInfo info;
 
@@ -30,9 +33,6 @@ class SerialPort : public SubComponent {
     //
     // Variables
     //
-
-    // The connected device
-    SerialPortDevice device = SPD_LOOPBACK;
 
     // The current values of the port pins
     uint32_t port;
@@ -56,7 +56,7 @@ public:
     {
         worker
 
-        & device;
+        & config.device;
     }
 
     template <class T>
@@ -66,6 +66,15 @@ public:
 
         & port;
     }
+
+    //
+    // Configuring
+    //
+
+    SerialPortConfig getConfig() { return config; }
+
+    SerialPortDevice getDevice() { return config.device; }
+    void setDevice(SerialPortDevice device);
 
 
     //
@@ -90,19 +99,6 @@ public:
 
     // Returns the latest internal state recorded by inspect()
     SerialPortInfo getInfo();
-
-
-    //
-    // Connecting peripherals
-    //
-
-public:
-
-    // Returns the currently connected device
-    SerialPortDevice getDevice() { return device; }
-    
-    // Connects or disconnects a device
-    void connectDevice(SerialPortDevice device);
 
 
     //

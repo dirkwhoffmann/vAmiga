@@ -435,7 +435,7 @@ struct AmigaFileWrapper;
 
 - (void) dump;
 - (SerialPortInfo) getInfo;
-- (void) connectDevice:(SerialPortDevice)value;
+- (void) setDevice:(SerialPortDevice)value;
 
 @end
 

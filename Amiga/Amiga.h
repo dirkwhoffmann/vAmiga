@@ -51,12 +51,6 @@
  */
 class Amiga : public HardwareComponent {
 
-    // The Amiga model we're going to emulate
-    // AmigaModel model = AMIGA_500;
-    
-    // Indicates wether this machine has a real-time clock
-    // bool realTimeClock = false;
-    
     // Information shown in the GUI inspector panel
     AmigaInfo info;
 

@@ -105,6 +105,8 @@ Joystick::ciapa()
 void
 Joystick::trigger(JoystickEvent event)
 {
+    assert(isJoystickEvent(event));
+
     debug(PORT_DEBUG, "trigger(%d)\n", event);
      
     switch (event) {

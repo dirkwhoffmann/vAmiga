@@ -24,7 +24,7 @@ typedef enum : long
 SerialPortDevice;
 
 inline bool isSerialPortDevice(long value) {
-    return value >= SPD_NONE && value <= SPD_LOOPBACK;
+    return value >= 0 && value <= SPD_LOOPBACK;
 }
 
 typedef enum : long
@@ -36,7 +36,7 @@ typedef enum : long
 ControlPortDevice;
 
 inline bool isControlPortDevice(long value) {
-    return value >= CPD_NONE && value <= CPD_JOYSTICK;
+    return value >= 0 && value <= CPD_JOYSTICK;
 }
 
 typedef enum
@@ -48,6 +48,10 @@ typedef enum
     JOYSTICK_FIRE
 }
 JoystickDirection;
+
+inline bool isJoystickDirection(long value) {
+    return value >= 0 && value <= JOYSTICK_FIRE;
+}
 
 typedef enum
 {
@@ -63,6 +67,10 @@ typedef enum
 }
 JoystickEvent;
 
+inline bool isJoystickEvent(long value) {
+    return value >= 0 && value <= RELEASE_FIRE;
+}
+
 //
 // Structures
 //
@@ -77,6 +85,12 @@ typedef struct
     uint16_t poty;
 }
 ControlPortInfo;
+
+typedef struct
+{
+    SerialPortDevice device;
+}
+SerialPortConfig;
 
 typedef struct
 {

@@ -25,7 +25,7 @@ extension PreferencesController {
         hwRealTimeClock.selectItem(withTag: config.rtc.model.rawValue)
 
         // Ports
-        hwSerialDevice.selectItem(withTag: Int(config.serialDevice))
+        hwSerialDevice.selectItem(withTag: Int(config.serialPort.device.rawValue))
 
         // Memory
         hwChipRamPopup.selectItem(withTag: config.mem.chipRamSize / 1024)
