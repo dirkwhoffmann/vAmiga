@@ -601,26 +601,31 @@ Memory::updateMemSrcTable()
 {
     MemorySource mem_rom = rom ? MEM_ROM : MEM_UNMAPPED;
     MemorySource mem_wom = wom ? MEM_WOM : mem_rom;
-    // MemorySource mem_ext = ext ? MEM_EXT : MEM_UNMAPPED;
+
+    int chipRamPages = hasChipRam() ? 32 : 0;
+    int slowRamPages = config.slowRamSize / 0x10000;
+    int fastRamPages = config.fastRamSize / 0x10000;
+    int extRomPages  = hasExt() ? 8 : 0;
+
+    // Mirror Chip Ram if only a 256KB Rom is present
+    if (chipRamPages == 4) chipRamPages = 8;
 
     assert(config.chipRamSize % 0x10000 == 0);
     assert(config.slowRamSize % 0x10000 == 0);
     assert(config.fastRamSize % 0x10000 == 0);
 
     bool ovl = ciaa.getPA() & 1;
-    
-    dump();
-    
+        
     // Start from scratch
     for (unsigned i = 0x00; i <= 0xFF; i++)
         memSrc[i] = MEM_UNMAPPED;
     
-    // Chip Ram and Chip Ram mirror
-    for (unsigned i = 0; i < 32; i++)
+    // Chip Ram
+    for (unsigned i = 0; i < chipRamPages; i++)
         memSrc[i] = MEM_CHIP;
     
     // Fast Ram
-    for (unsigned i = 0; i < config.fastRamSize / 0x10000; i++)
+    for (unsigned i = 0; i < fastRamPages; i++)
         memSrc[0x20 + i] = MEM_FAST;
 
     // CIA range
@@ -632,7 +637,7 @@ Memory::updateMemSrcTable()
         memSrc[i] = MEM_OCS;
     
     // Slow Ram
-    for (unsigned i = 0; i < config.slowRamSize / 0x10000; i++)
+    for (unsigned i = 0; i < slowRamPages; i++)
         memSrc[0xC0 + i] = MEM_SLOW;
 
     // Real-time clock (RTC)
@@ -646,10 +651,14 @@ Memory::updateMemSrcTable()
         memSrc[i] = MEM_AUTOCONF;
     
     // Extended Rom
+    for (unsigned i = 0; i < extRomPages; i++)
+        memSrc[config.extStart + i] = MEM_EXT;
+    /*
     if (hasExt()) {
         for (unsigned i = config.extStart; i < config.extStart + 8; i++)
             memSrc[i] = MEM_EXT;
     }
+    */
 
     // Kickstart Wom or Kickstart Rom
     for (unsigned i = 0xF8; i <= 0xFF; i++)

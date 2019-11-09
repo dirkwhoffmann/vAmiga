@@ -158,8 +158,8 @@ Agnus::chipRamLimit()
 {
     switch (config.revision) {
 
-        AGNUS_8375: return 2048;
-        AGNUS_8372: return 1024;
+        case AGNUS_8375: return 2048;
+        case AGNUS_8372: return 1024;
         default:    return 512;
     }
 }
