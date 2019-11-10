@@ -234,17 +234,33 @@ class PreferencesController: DialogController {
     // Button
     @IBOutlet weak var devOKButton: NSButton!
 
+    // The tab to open first
+     var firstTab = ""
+
     func showSheet(tab: String) {
 
-        if tab != "" { prefTabView.selectTabViewItem(withIdentifier: tab) }
+        firstTab = tab
         showSheet()
     }
 
     override func awakeFromNib() {
 
+        if firstTab != "" { prefTabView?.selectTabViewItem(withIdentifier: firstTab) }
         awakeVideoPrefsFromNib()
         refresh()
     }
+
+    override func sheetDidShow() {
+
+        track("sheetDidShow")
+        if firstTab != "" { prefTabView?.selectTabViewItem(withIdentifier: firstTab) }
+    }
+    /*
+    override func windowDidLoad() {
+
+        track("windowDidLoad")
+    }
+    */
 
     override func refresh() {
         

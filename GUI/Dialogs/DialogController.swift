@@ -37,7 +37,9 @@ class DialogWindow: NSWindow {
 }
 
 class DialogController: NSWindowController {
-    
+
+    func sheetDidShow() { }
+
     func showSheet(completionHandler handler:(() -> Void)? = nil) {
         
         track()
@@ -49,7 +51,8 @@ class DialogController: NSWindowController {
                 handler?()
             }
         })
-        
+
+        sheetDidShow()
         refresh()
     }
         

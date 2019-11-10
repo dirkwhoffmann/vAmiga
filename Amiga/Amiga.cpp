@@ -692,6 +692,8 @@ Amiga::resume()
 bool
 Amiga::readyToPowerUp()
 {
+    MemoryConfig memconf = mem.getConfig();
+
     //
     // Perform checks that should never fail
     //
@@ -708,6 +710,12 @@ Amiga::readyToPowerUp()
     if (!mem.hasRom()) {
         msg("readyToPowerUp: No Boot Rom or Kickstart Rom found.\n");
         putMessage(MSG_ROM_MISSING);
+        return false;
+    }
+
+    if (memconf.chipSize + memconf.slowSize < MB(1)) {
+        msg("readyToPowerUp: Aros requires at least 1 MB of memory.\n");
+        putMessage(MSG_AROS_RAM_LIMIT);
         return false;
     }
 

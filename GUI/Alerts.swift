@@ -116,6 +116,8 @@ extension MyDocument {
             msg = "A Kickstart Rom or Boot Rom is required to power up."
         case MSG_CHIP_RAM_LIMIT.rawValue:
             msg = "The selected Agnus revision does not support the selected amout of Chip Ram."
+        case MSG_AROS_RAM_LIMIT.rawValue:
+            msg = "The Aros Kickstart replacement requires at least 1 MB of memory to boot."
         default:
             msg = ""
         }

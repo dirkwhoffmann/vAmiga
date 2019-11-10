@@ -721,14 +721,13 @@ extension MyController {
             break
 
         case MSG_ROM_MISSING:
-            track("MSG_ROM_MISSING")
+            myDocument?.showConfigurationAltert(msg.type.rawValue)
             openPreferences(tab: "Roms")
-            myDocument?.showConfigurationAltert(msg.type.rawValue)
 
-        case MSG_CHIP_RAM_LIMIT:
-            track("MSG_CHIP_RAM_LIMIT")
-            openPreferences(tab: "Hardware")
+        case MSG_CHIP_RAM_LIMIT,
+             MSG_AROS_RAM_LIMIT:
             myDocument?.showConfigurationAltert(msg.type.rawValue)
+            openPreferences(tab: "Hardware")
 
         default:
             
