@@ -144,7 +144,7 @@ Copper::pokeCOP1LCH(uint16_t value)
     debug(COPREG_DEBUG, "pokeCOP1LCH(%04X)\n", value);
 
     if (HI_WORD(cop1lc) != value) {
-        cop1lc = REPLACE_HI_WORD(cop1lc, value);
+        cop1lc = CHIP_PTR(REPLACE_HI_WORD(cop1lc, value));
     }
 }
 
@@ -164,7 +164,7 @@ Copper::pokeCOP2LCH(uint16_t value)
     debug(COPREG_DEBUG, "pokeCOP2LCH(%04X)\n", value);
 
     if (HI_WORD(cop2lc) != value) {
-        cop2lc = REPLACE_HI_WORD(cop2lc, value);
+        cop2lc = CHIP_PTR(REPLACE_HI_WORD(cop2lc, value));
     }
 }
 

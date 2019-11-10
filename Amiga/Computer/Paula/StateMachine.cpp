@@ -105,7 +105,7 @@ StateMachine<nr>::pokeAUDxLCH(uint16_t value)
 {
     debug(AUDREG_DEBUG, "pokeAUD%dLCH(%X)\n", nr, value);
 
-    audlcLatch = REPLACE_HI_WORD(audlcLatch, value & 0x7);
+    audlcLatch = CHIP_PTR(REPLACE_HI_WORD(audlcLatch, value));
 }
 
 template <int nr> void

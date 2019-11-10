@@ -171,7 +171,7 @@ Blitter::pokeBLTAPTH(uint16_t value)
 {
     debug(BLTREG_DEBUG, "pokeBLTAPTH(%X)\n", value);
     if (bbusy) debug(BLTREG_DEBUG, "Blitter is running");
-    bltapt = REPLACE_HI_WORD(bltapt, value & 0x0007);
+    bltapt = CHIP_PTR(REPLACE_HI_WORD(bltapt, value));
 }
 
 void
@@ -187,7 +187,7 @@ Blitter::pokeBLTBPTH(uint16_t value)
 {
     debug(BLTREG_DEBUG, "pokeBLTBPTH(%X)\n", value);
     if (bbusy) debug(BLTREG_DEBUG, "Blitter is running");
-    bltbpt = REPLACE_HI_WORD(bltbpt, value & 0x0007);
+    bltbpt = CHIP_PTR(REPLACE_HI_WORD(bltbpt, value));
 }
 
 void
@@ -203,7 +203,7 @@ Blitter::pokeBLTCPTH(uint16_t value)
 {
     debug(BLTREG_DEBUG, "pokeBLTCPTH(%X)\n", value);
     if (bbusy) debug(BLTREG_DEBUG, "Blitter is running");
-    bltcpt = REPLACE_HI_WORD(bltcpt, value & 0x0007);
+    bltcpt = CHIP_PTR(REPLACE_HI_WORD(bltcpt, value));
 }
 
 void
@@ -219,7 +219,7 @@ Blitter::pokeBLTDPTH(uint16_t value)
 {
     debug(BLTREG_DEBUG, "pokeBLTDPTH(%X)\n", value);
     if (bbusy) debug(BLTREG_DEBUG, "Blitter is running");
-    bltdpt = REPLACE_HI_WORD(bltdpt, value & 0x0007);
+    bltdpt = CHIP_PTR(REPLACE_HI_WORD(bltdpt, value));
 }
 
 void
