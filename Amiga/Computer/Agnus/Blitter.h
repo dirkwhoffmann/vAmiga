@@ -288,24 +288,24 @@ public:
     // OCS register 0x040 (w)
     void pokeBLTCON0(uint16_t value);
     
-    inline uint16_t bltconASH() { return bltcon0 >> 12; }
-    inline uint16_t bltconUSE() { return (bltcon0 >> 8) & 0xF; }
-    inline bool bltconUSEA()    { return bltcon0 & (1 << 11); }
-    inline bool bltconUSEB()    { return bltcon0 & (1 << 10); }
-    inline bool bltconUSEC()    { return bltcon0 & (1 << 9); }
-    inline bool bltconUSED()    { return bltcon0 & (1 << 8); }
+    uint16_t bltconASH() { return bltcon0 >> 12; }
+    uint16_t bltconUSE() { return (bltcon0 >> 8) & 0xF; }
+    bool bltconUSEA()    { return bltcon0 & (1 << 11); }
+    bool bltconUSEB()    { return bltcon0 & (1 << 10); }
+    bool bltconUSEC()    { return bltcon0 & (1 << 9); }
+    bool bltconUSED()    { return bltcon0 & (1 << 8); }
     void setBltconASH(uint16_t ash) { assert(ash <= 0xF); bltcon0 = (bltcon0 & 0x0FFF) | (ash << 12); }
 
     // OCS register 0x042 (w)
     void pokeBLTCON1(uint16_t value);
 
-    inline uint16_t bltconBSH() { return bltcon1 >> 12; }
-    inline bool bltconEFE()     { return bltcon1 & (1 << 4); }
-    inline bool bltconIFE()     { return bltcon1 & (1 << 3); }
-    inline bool bltconFE()      { return bltconEFE() || bltconIFE(); }
-    inline bool bltconFCI()     { return bltcon1 & (1 << 2); }
-    inline bool bltconDESC()    { return bltcon1 & (1 << 1); }
-    inline bool bltconLINE()    { return bltcon1 & (1 << 0); }
+    uint16_t bltconBSH() { return bltcon1 >> 12; }
+    bool bltconEFE()     { return bltcon1 & (1 << 4); }
+    bool bltconIFE()     { return bltcon1 & (1 << 3); }
+    bool bltconFE()      { return bltconEFE() || bltconIFE(); }
+    bool bltconFCI()     { return bltcon1 & (1 << 2); }
+    bool bltconDESC()    { return bltcon1 & (1 << 1); }
+    bool bltconLINE()    { return bltcon1 & (1 << 0); }
     void setBltcon1BSH(uint16_t bsh) { assert(bsh <= 0xF); bltcon1 = (bltcon1 & 0x0FFF) | (bsh << 12); }
 
     // OCS registers 0x044 and 0x046 (w)
@@ -329,6 +329,12 @@ public:
 
     // ECS register 0x05A (w)
     void pokeBLTCON0L(uint16_t value);
+
+    // ECS register 0x05C (w)
+    void pokeBLTSIZV(uint16_t value);
+
+    // ECS register 0x05E (w)
+    void pokeBLTSIZH(uint16_t value);
 
     // OCS registers 0x060 and 0x066 (w)
     void pokeBLTAMOD(uint16_t value);
@@ -389,6 +395,9 @@ public:
     //
 
 private:
+
+    // Main entry point (invoked when BLTSIZE or BLTSIZH is written)
+    void scheduleBlit();
 
     // Initiates a blit
     void startBlit();

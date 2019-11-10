@@ -247,18 +247,17 @@ void
 Blitter::pokeBLTSIZE(uint16_t value)
 {
     debug(BLTREG_DEBUG, "pokeBLTSIZE(%X)\n", value);
-    
-    bltsizeW = (value & 0x3F) ? (value & 0x3F) : 64;
-    bltsizeH = (value >> 6) ? (value >> 6) : 1024;
-    remaining = bltsizeW * bltsizeH;
-    cntA = cntB = cntC = cntD = bltsizeW;
 
-    // Schedule the blit operation
-    if (agnus.doBltDMA()) {
-        agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(0), BLT_START);
-    } else {
-        agnus.scheduleAbs<BLT_SLOT>(NEVER, BLT_START);
-    }
+    // 15 14 13 12 11 10 09 08 07 06 05 04 03 02 01 00
+    // h9 h8 h7 h6 h5 h4 h3 h2 h1 h0 w5 w4 w3 w2 w1 w0
+    bltsizeH = value >> 6;
+    bltsizeW = value & 0x3F;
+
+    // Overwrite with default values if zero
+    if (!bltsizeH) bltsizeH = 0x0400;
+    if (!bltsizeW) bltsizeW = 0x0040;
+
+    scheduleBlit();
 }
 
 void
@@ -266,7 +265,42 @@ Blitter::pokeBLTCON0L(uint16_t value)
 {
     debug(BLTREG_DEBUG, "pokeBLTCON0L(%X)\n", value);
 
-    if (agnus.isECS()) REPLACE_LO(bltcon0, LO_BYTE(value));
+    // This is an ECS only register
+    if (agnus.isECS()) return;
+
+    REPLACE_LO(bltcon0, LO_BYTE(value));
+}
+
+void
+Blitter::pokeBLTSIZV(uint16_t value)
+{
+    debug(BLTREG_DEBUG, "pokeBLTSIZV(%X)\n", value);
+
+    // This is an ECS only register
+    if (agnus.isECS()) return;
+
+    // 15  14  13  12  11  10 09 08 07 06 05 04 03 02 01 00
+    //  0 h14 h13 h12 h11 h10 h9 h8 h7 h6 h5 h4 h3 h2 h1 h0
+    bltsizeH = value & 0x7FFF;
+}
+
+void
+Blitter::pokeBLTSIZH(uint16_t value)
+{
+    debug(BLTREG_DEBUG, "pokeBLTSIZH(%X)\n", value);
+
+    // This is an ECS only register
+    if (agnus.isECS()) return;
+
+    // 15  14  13  12  11  10 09 08 07 06 05 04 03 02 01 00
+    //  0   0   0   0   0 w10 w9 w8 w7 w6 w5 w4 w3 w2 w1 w0
+    bltsizeW = value & 0x07FF;
+
+    // Overwrite with default values if zero
+    if (!bltsizeH) bltsizeH = 0x8000;
+    if (!bltsizeW) bltsizeW = 0x0800;
+
+    scheduleBlit();
 }
 
 void
@@ -686,15 +720,25 @@ Blitter::doFill(uint16_t &data, bool &carry)
 }
 
 void
+Blitter::scheduleBlit()
+{
+    if (agnus.doBltDMA()) {
+        agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(0), BLT_START);
+    } else {
+        agnus.scheduleAbs<BLT_SLOT>(NEVER, BLT_START);
+    }
+}
+
+void
 Blitter::startBlit()
 {
-    // assert(!bbusy);
+    // Initialize
+    remaining = bltsizeW * bltsizeH;
+    cntA = cntB = cntC = cntD = bltsizeW;
 
-    // Reset the Blitter flags
     bzero = true;
     bbusy = true;
 
-    // Reset program and iteration counter
     bltpc = 0;
     iteration = 0;
 

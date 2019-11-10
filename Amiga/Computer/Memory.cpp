@@ -1554,10 +1554,12 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
             blitter.pokeBLTDPTL(value); return;
         case 0x058 >> 1: // BLTSIZE
             blitter.pokeBLTSIZE(value); return;
-        case 0x05A >> 1: // unused
-        case 0x05C >> 1: // unused
-        case 0x05E >> 1: // unused
-            break;
+        case 0x05A >> 1: // BLTCON0L (ECS)
+            blitter.pokeBLTCON0L(value); return;
+        case 0x05C >> 1: // BLTSIZV (ECS)
+            blitter.pokeBLTSIZV(value); return;
+        case 0x05E >> 1: // BLTSIZH (ECS)
+            blitter.pokeBLTSIZH(value); return;
         case 0x060 >> 1: // BLTCMOD
             blitter.pokeBLTCMOD(value); return;
         case 0x062 >> 1: // BLTBMOD
