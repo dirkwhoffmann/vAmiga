@@ -29,9 +29,9 @@ Memory::dealloc()
     if (rom) { delete[] rom; rom = NULL; }
     if (wom) { delete[] wom; wom = NULL; }
     if (ext) { delete[] ext; ext = NULL; }
-    if (chipRam) { delete[] chipRam; chipRam = NULL; }
-    if (slowRam) { delete[] slowRam; slowRam = NULL; }
-    if (fastRam) { delete[] fastRam; fastRam = NULL; }
+    if (chip) { delete[] chip; chip = NULL; }
+    if (slow) { delete[] slow; slow = NULL; }
+    if (fast) { delete[] fast; fast = NULL; }
 }
 
 void
@@ -79,9 +79,9 @@ Memory::_dump()
         { rom, config.romSize, "Rom" },
         { wom, config.womSize, "Wom" },
         { ext, config.extSize, "Ext" },
-        { chipRam, config.chipRamSize, "Chip Ram" },
-        { slowRam, config.slowRamSize, "Slow Ram" },
-        { fastRam, config.fastRamSize, "Fast Ram" }
+        { chip, config.chipSize, "Chip Ram" },
+        { slow, config.slowSize, "Slow Ram" },
+        { fast, config.fastSize, "Fast Ram" }
     };
 
     // Print a summary of the installed memory
@@ -114,9 +114,9 @@ Memory::_size()
     counter.count += sizeof(config.romSize) + config.romSize;
     counter.count += sizeof(config.womSize) + config.womSize;
     counter.count += sizeof(config.extSize) + config.extSize;
-    counter.count += sizeof(config.chipRamSize) + config.chipRamSize;
-    counter.count += sizeof(config.slowRamSize) + config.slowRamSize;
-    counter.count += sizeof(config.fastRamSize) + config.fastRamSize;
+    counter.count += sizeof(config.chipSize) + config.chipSize;
+    counter.count += sizeof(config.slowSize) + config.slowSize;
+    counter.count += sizeof(config.fastSize) + config.fastSize;
 
     return counter.count;
 }
@@ -131,17 +131,17 @@ Memory::didLoadFromBuffer(uint8_t *buffer)
     & config.romSize
     & config.womSize
     & config.extSize
-    & config.chipRamSize
-    & config.slowRamSize
-    & config.fastRamSize;
+    & config.chipSize
+    & config.slowSize
+    & config.fastSize;
 
     // Make sure that corrupted values do not cause any damage
     if (config.romSize > KB(512)) { config.romSize = 0; assert(false); }
     if (config.womSize > KB(256)) { config.womSize = 0; assert(false); }
     if (config.extSize > KB(512)) { config.extSize = 0; assert(false); }
-    if (config.chipRamSize > MB(2)) { config.chipRamSize = 0; assert(false); }
-    if (config.slowRamSize > KB(512)) { config.slowRamSize = 0; assert(false); }
-    if (config.fastRamSize > MB(8)) { config.fastRamSize = 0; assert(false); }
+    if (config.chipSize > MB(2)) { config.chipSize = 0; assert(false); }
+    if (config.slowSize > KB(512)) { config.slowSize = 0; assert(false); }
+    if (config.fastSize > MB(8)) { config.fastSize = 0; assert(false); }
 
     // Free previously allocated memory
     dealloc();
@@ -150,17 +150,17 @@ Memory::didLoadFromBuffer(uint8_t *buffer)
     if (config.romSize) rom = new (std::nothrow) uint8_t[config.romSize + 3];
     if (config.womSize) wom = new (std::nothrow) uint8_t[config.womSize + 3];
     if (config.extSize) ext = new (std::nothrow) uint8_t[config.extSize + 3];
-    if (config.chipRamSize) chipRam = new (std::nothrow) uint8_t[config.chipRamSize + 3];
-    if (config.slowRamSize) slowRam = new (std::nothrow) uint8_t[config.slowRamSize + 3];
-    if (config.fastRamSize) fastRam = new (std::nothrow) uint8_t[config.fastRamSize + 3];
+    if (config.chipSize) chip = new (std::nothrow) uint8_t[config.chipSize + 3];
+    if (config.slowSize) slow = new (std::nothrow) uint8_t[config.slowSize + 3];
+    if (config.fastSize) fast = new (std::nothrow) uint8_t[config.fastSize + 3];
 
     // Load memory contents from buffer
     reader.copy(rom, config.romSize);
     reader.copy(wom, config.womSize);
     reader.copy(ext, config.extSize);
-    reader.copy(chipRam, config.chipRamSize);
-    reader.copy(slowRam, config.slowRamSize);
-    reader.copy(fastRam, config.fastRamSize);
+    reader.copy(chip, config.chipSize);
+    reader.copy(slow, config.slowSize);
+    reader.copy(fast, config.fastSize);
 
     return reader.ptr - buffer;
 }
@@ -174,17 +174,17 @@ Memory::didSaveToBuffer(uint8_t *buffer) const
     & config.romSize
     & config.womSize
     & config.extSize
-    & config.chipRamSize
-    & config.slowRamSize
-    & config.fastRamSize;
+    & config.chipSize
+    & config.slowSize
+    & config.fastSize;
 
     // Save memory contents
     writer.copy(rom, config.romSize);
     writer.copy(wom, config.womSize);
     writer.copy(ext, config.extSize);
-    writer.copy(chipRam, config.chipRamSize);
-    writer.copy(slowRam, config.slowRamSize);
-    writer.copy(fastRam, config.fastRamSize);
+    writer.copy(chip, config.chipSize);
+    writer.copy(slow, config.slowSize);
+    writer.copy(fast, config.fastSize);
 
     return writer.ptr - buffer;
 }
@@ -233,9 +233,9 @@ Memory::initializeRam()
     // Until we know more about the proper startup pattern, we erase the
     // Ram by writing zeroes.
 
-    if (chipRam) memset(chipRam, 0, config.chipRamSize);
-    if (slowRam) memset(slowRam, 0, config.slowRamSize);
-    if (fastRam) memset(fastRam, 0, config.fastRamSize);
+    if (chip) memset(chip, 0, config.chipSize);
+    if (slow) memset(slow, 0, config.slowSize);
+    if (fast) memset(fast, 0, config.fastSize);
 }
 
 RomRevision
@@ -601,16 +601,16 @@ Memory::updateMemSrcTable()
     MemorySource mem_wom = wom ? MEM_WOM : mem_rom;
 
     int chipRamPages = hasChipRam() ? 32 : 0;
-    int slowRamPages = config.slowRamSize / 0x10000;
-    int fastRamPages = config.fastRamSize / 0x10000;
+    int slowRamPages = config.slowSize / 0x10000;
+    int fastRamPages = config.fastSize / 0x10000;
     int extRomPages  = hasExt() ? 8 : 0;
 
     // Mirror Chip Ram if only a 256KB Rom is present
     if (chipRamPages == 4) chipRamPages = 8;
 
-    assert(config.chipRamSize % 0x10000 == 0);
-    assert(config.slowRamSize % 0x10000 == 0);
-    assert(config.fastRamSize % 0x10000 == 0);
+    assert(config.chipSize % 0x10000 == 0);
+    assert(config.slowSize % 0x10000 == 0);
+    assert(config.fastSize % 0x10000 == 0);
 
     bool ovl = ciaa.getPA() & 1;
         

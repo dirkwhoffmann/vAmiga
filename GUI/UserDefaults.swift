@@ -923,9 +923,9 @@ extension MyController {
         defaults.set(config.denise.revision.rawValue, forKey: Keys.deniseRev)
         defaults.set(config.rtc.model.rawValue, forKey: Keys.realTimeClock)
 
-        defaults.set(config.mem.chipRamSize / 1024, forKey: Keys.chipRam)
-        defaults.set(config.mem.slowRamSize / 1024, forKey: Keys.slowRam)
-        defaults.set(config.mem.fastRamSize / 1024, forKey: Keys.fastRam)
+        defaults.set(config.mem.chipSize / 1024, forKey: Keys.chipRam)
+        defaults.set(config.mem.slowSize / 1024, forKey: Keys.slowRam)
+        defaults.set(config.mem.fastSize / 1024, forKey: Keys.fastRam)
 
         defaults.set(config.df0.speed, forKey: Keys.driveSpeed)
         defaults.set(dc.connected.0, forKey: Keys.df0Connect)

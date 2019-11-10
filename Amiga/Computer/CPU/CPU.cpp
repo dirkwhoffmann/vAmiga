@@ -74,7 +74,7 @@ extern "C" uint32_t read_on_reset(uint32_t defaultValue)
     uint32_t result = defaultValue;
 
     // Check for attached memory
-    if (activeAmiga && activeAmiga->mem.chipRam) {
+    if (activeAmiga && activeAmiga->mem.chip) {
 
         Memory *mem = &activeAmiga->mem;
 

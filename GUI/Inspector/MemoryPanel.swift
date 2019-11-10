@@ -22,9 +22,9 @@ struct MemColors {
 
     static let unmapped = NSColor.gray
 
-    static let chipRam = NSColor.init(r: 0x80, g: 0xFF, b: 0x00, a: 0xFF)
-    static let slowRam = NSColor.init(r: 0x66, g: 0xCC, b: 0x00, a: 0xFF)
-    static let fastRam = NSColor.init(r: 0x4C, g: 0x99, b: 0x00, a: 0xFF)
+    static let chip = NSColor.init(r: 0x80, g: 0xFF, b: 0x00, a: 0xFF)
+    static let slow = NSColor.init(r: 0x66, g: 0xCC, b: 0x00, a: 0xFF)
+    static let fast = NSColor.init(r: 0x4C, g: 0x99, b: 0x00, a: 0xFF)
 
     static let rom = NSColor.init(r: 0xFF, g: 0x00, b: 0x00, a: 0xFF)
     static let wom = NSColor.init(r: 0xCC, g: 0x00, b: 0x00, a: 0xFF)
@@ -33,7 +33,7 @@ struct MemColors {
     static let cia = NSColor.init(r: 0x66, g: 0xB2, b: 0xFF, a: 0xFF)
     static let rtc = NSColor.init(r: 0xB2, g: 0x66, b: 0xFF, a: 0xFF)
     static let ocs = NSColor.init(r: 0xFF, g: 0xFF, b: 0x66, a: 0xFF)
-    static let autoConf = NSColor.init(r: 0xFF, g: 0x66, b: 0xB2, a: 0xFF)
+    static let auto = NSColor.init(r: 0xFF, g: 0x66, b: 0xB2, a: 0xFF)
 }
 
 extension Inspector {
@@ -56,26 +56,26 @@ extension Inspector {
 
         let size = NSSize(width: 16, height: 16)
         memLayoutButton.image   = memLayoutImage
-        memChipRamButton.image  = NSImage.init(color: MemColors.chipRam, size: size)
-        memFastRamButton.image  = NSImage.init(color: MemColors.fastRam, size: size)
-        memSlowRamButton.image  = NSImage.init(color: MemColors.slowRam, size: size)
+        memChipRamButton.image  = NSImage.init(color: MemColors.chip, size: size)
+        memFastRamButton.image  = NSImage.init(color: MemColors.fast, size: size)
+        memSlowRamButton.image  = NSImage.init(color: MemColors.slow, size: size)
         memRomButton.image      = NSImage.init(color: MemColors.rom, size: size)
         memWomButton.image      = NSImage.init(color: MemColors.wom, size: size)
         memExtButton.image      = NSImage.init(color: MemColors.ext, size: size)
         memCIAButton.image      = NSImage.init(color: MemColors.cia, size: size)
         memRTCButton.image      = NSImage.init(color: MemColors.rtc, size: size)
         memOCSButton.image      = NSImage.init(color: MemColors.ocs, size: size)
-        memAutoConfButton.image = NSImage.init(color: MemColors.autoConf, size: size)
+        memAutoConfButton.image = NSImage.init(color: MemColors.auto, size: size)
 
-        let chipRamKB = config.mem.chipRamSize / 1024
-        let fastRamKB = config.mem.fastRamSize / 1024
-        let slowRamKB = config.mem.slowRamSize / 1024
+        let chipKB = config.mem.chipSize / 1024
+        let fastKB = config.mem.fastSize / 1024
+        let slowKB = config.mem.slowSize / 1024
         let romKB = config.mem.romSize / 1024
         let womKB = config.mem.womSize / 1024
         let extKB = config.mem.extSize / 1024
-        memChipRamText.stringValue = String.init(format: "%d KB", chipRamKB)
-        memFastRamText.stringValue = String.init(format: "%d KB", fastRamKB)
-        memSlowRamText.stringValue = String.init(format: "%d KB", slowRamKB)
+        memChipRamText.stringValue = String.init(format: "%d KB", chipKB)
+        memFastRamText.stringValue = String.init(format: "%d KB", fastKB)
+        memSlowRamText.stringValue = String.init(format: "%d KB", slowKB)
         memRomText.stringValue = String.init(format: "%d KB", romKB)
         memWomText.stringValue = String.init(format: "%d KB", womKB)
         memExtText.stringValue = String.init(format: "%d KB", extKB)
@@ -101,16 +101,16 @@ extension Inspector {
 
             switch src {
             case MEM_UNMAPPED.rawValue: color = MemColors.unmapped
-            case MEM_CHIP.rawValue:     color = MemColors.chipRam
-            case MEM_FAST.rawValue:     color = MemColors.fastRam
-            case MEM_SLOW.rawValue:     color = MemColors.slowRam
+            case MEM_CHIP.rawValue:     color = MemColors.chip
+            case MEM_FAST.rawValue:     color = MemColors.fast
+            case MEM_SLOW.rawValue:     color = MemColors.slow
             case MEM_ROM.rawValue:      color = MemColors.rom
             case MEM_WOM.rawValue:      color = MemColors.wom
             case MEM_EXT.rawValue:      color = MemColors.ext
             case MEM_CIA.rawValue:      color = MemColors.cia
             case MEM_RTC.rawValue:      color = MemColors.rtc
             case MEM_OCS.rawValue:      color = MemColors.ocs
-            case MEM_AUTOCONF.rawValue: color = MemColors.autoConf
+            case MEM_AUTOCONF.rawValue: color = MemColors.auto
             default:                    fatalError()
             }
             let ciColor: CIColor = CIColor(color: color)!

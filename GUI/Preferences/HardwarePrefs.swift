@@ -28,9 +28,9 @@ extension PreferencesController {
         hwSerialDevice.selectItem(withTag: Int(config.serialPort.device.rawValue))
 
         // Memory
-        hwChipRamPopup.selectItem(withTag: config.mem.chipRamSize / 1024)
-        hwSlowRamPopup.selectItem(withTag: config.mem.slowRamSize / 1024)
-        hwFastRamPopup.selectItem(withTag: config.mem.fastRamSize / 1024)
+        hwChipRamPopup.selectItem(withTag: config.mem.chipSize / 1024)
+        hwSlowRamPopup.selectItem(withTag: config.mem.slowSize / 1024)
+        hwFastRamPopup.selectItem(withTag: config.mem.fastSize / 1024)
 
         // Drive
         hwDf1Connect.state = config.diskController.connected.1 ? .on : .off

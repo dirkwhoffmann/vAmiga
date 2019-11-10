@@ -19,9 +19,9 @@ const uint32_t SLOW_RAM_MASK = 0x07FFFF; // 512 KB
 const uint32_t EXT_ROM_MASK  = 0x07FFFF; // 512 KB
 
 // Verifies the range of an address
-#define ASSERT_CHIP_ADDR(x) assert(chipRam != NULL);
-#define ASSERT_FAST_ADDR(x) assert(fastRam != NULL); assert(((x) - FAST_RAM_STRT) < config.fastRamSize);
-#define ASSERT_SLOW_ADDR(x) assert(slowRam != NULL); assert(((x) & SLOW_RAM_MASK) < config.slowRamSize);
+#define ASSERT_CHIP_ADDR(x) assert(chip != NULL);
+#define ASSERT_FAST_ADDR(x) assert(fast != NULL); assert(((x) - FAST_RAM_STRT) < config.fastSize);
+#define ASSERT_SLOW_ADDR(x) assert(slow != NULL); assert(((x) & SLOW_RAM_MASK) < config.slowSize);
 #define ASSERT_ROM_ADDR(x) assert(rom != NULL);
 #define ASSERT_WOM_ADDR(x) assert(wom != NULL);
 #define ASSERT_EXT_ADDR(x)  assert(ext  != NULL); assert(((x) & EXT_ROM_MASK) < config.extSize);
@@ -36,19 +36,19 @@ const uint32_t EXT_ROM_MASK  = 0x07FFFF; // 512 KB
 #define READ_32(x) (ntohl(*(uint32_t *)(x)))
 
 // Reads a value from Chip RAM in big endian format
-#define READ_CHIP_8(x)  READ_8(chipRam + ((x) % config.chipRamSize))
-#define READ_CHIP_16(x) READ_16(chipRam + ((x) % config.chipRamSize))
-#define READ_CHIP_32(x) READ_32(chipRam + ((x) % config.chipRamSize))
+#define READ_CHIP_8(x)  READ_8(chip + ((x) % config.chipSize))
+#define READ_CHIP_16(x) READ_16(chip + ((x) % config.chipSize))
+#define READ_CHIP_32(x) READ_32(chip + ((x) % config.chipSize))
 
 // Reads a value from Fast RAM in big endian format
-#define READ_FAST_8(x)  READ_8(fastRam + ((x) - FAST_RAM_STRT))
-#define READ_FAST_16(x) READ_16(fastRam + ((x) - FAST_RAM_STRT))
-#define READ_FAST_32(x) READ_32(fastRam + ((x) - FAST_RAM_STRT))
+#define READ_FAST_8(x)  READ_8(fast + ((x) - FAST_RAM_STRT))
+#define READ_FAST_16(x) READ_16(fast + ((x) - FAST_RAM_STRT))
+#define READ_FAST_32(x) READ_32(fast + ((x) - FAST_RAM_STRT))
 
 // Reads a value from Slow RAM in big endian format
-#define READ_SLOW_8(x)  READ_8(slowRam + ((x) & SLOW_RAM_MASK))
-#define READ_SLOW_16(x) READ_16(slowRam + ((x) & SLOW_RAM_MASK))
-#define READ_SLOW_32(x) READ_32(slowRam + ((x) & SLOW_RAM_MASK))
+#define READ_SLOW_8(x)  READ_8(slow + ((x) & SLOW_RAM_MASK))
+#define READ_SLOW_16(x) READ_16(slow + ((x) & SLOW_RAM_MASK))
+#define READ_SLOW_32(x) READ_32(slow + ((x) & SLOW_RAM_MASK))
 
 // Reads a value from Boot ROM or Kickstart ROM in big endian format
 #define READ_ROM_8(x)  READ_8(rom + ((x) % config.romSize))
@@ -75,32 +75,32 @@ const uint32_t EXT_ROM_MASK  = 0x07FFFF; // 512 KB
 #define WRITE_32(x,y) (*(uint32_t *)(x) = htonl(y))
 
 // Writes a value into Chip RAM in big endian format
-#define WRITE_CHIP_8(x,y)  WRITE_8(chipRam + ((x) % config.chipRamSize), (y))
-#define WRITE_CHIP_16(x,y) WRITE_16(chipRam + ((x) % config.chipRamSize), (y))
-#define WRITE_CHIP_32(x,y) WRITE_32(chipRam + ((x) % config.chipRamSize), (y))
+#define WRITE_CHIP_8(x,y)  WRITE_8 (chip + ((x) % config.chipSize), (y))
+#define WRITE_CHIP_16(x,y) WRITE_16(chip + ((x) % config.chipSize), (y))
+#define WRITE_CHIP_32(x,y) WRITE_32(chip + ((x) % config.chipSize), (y))
 
 // Writes a value into Fast RAM in big endian format
-#define WRITE_FAST_8(x,y)  WRITE_8(fastRam + ((x) - FAST_RAM_STRT), (y))
-#define WRITE_FAST_16(x,y) WRITE_16(fastRam + ((x) - FAST_RAM_STRT), (y))
-#define WRITE_FAST_32(x,y) WRITE_32(fastRam + ((x) - FAST_RAM_STRT), (y))
+#define WRITE_FAST_8(x,y)  WRITE_8 (fast + ((x) - FAST_RAM_STRT), (y))
+#define WRITE_FAST_16(x,y) WRITE_16(fast + ((x) - FAST_RAM_STRT), (y))
+#define WRITE_FAST_32(x,y) WRITE_32(fast + ((x) - FAST_RAM_STRT), (y))
 
 // Writes a value into Slow RAM in big endian format
-#define WRITE_SLOW_8(x,y)  WRITE_8(slowRam + ((x) & SLOW_RAM_MASK), (y))
-#define WRITE_SLOW_16(x,y) WRITE_16(slowRam + ((x) & SLOW_RAM_MASK), (y))
-#define WRITE_SLOW_32(x,y) WRITE_32(slowRam + ((x) & SLOW_RAM_MASK), (y))
+#define WRITE_SLOW_8(x,y)  WRITE_8 (slow + ((x) & SLOW_RAM_MASK), (y))
+#define WRITE_SLOW_16(x,y) WRITE_16(slow + ((x) & SLOW_RAM_MASK), (y))
+#define WRITE_SLOW_32(x,y) WRITE_32(slow + ((x) & SLOW_RAM_MASK), (y))
 
 // Writes a value into Kickstart ROM in big endian format (DEPRECATED)
-#define WRITE_ROM_8(x,y)  WRITE_8(rom + ((x) % config.romSize), (y))
+#define WRITE_ROM_8(x,y)  WRITE_8 (rom + ((x) % config.romSize), (y))
 #define WRITE_ROM_16(x,y) WRITE_16(rom + ((x) % config.romSize), (y))
 #define WRITE_ROM_32(x,y) WRITE_32(rom + ((x) % config.romSize), (y))
 
 // Writes a value into Kickstart WOM in big endian format
-#define WRITE_WOM_8(x,y)  WRITE_8(wom + ((x) % config.womSize), (y))
+#define WRITE_WOM_8(x,y)  WRITE_8 (wom + ((x) % config.womSize), (y))
 #define WRITE_WOM_16(x,y) WRITE_16(wom + ((x) % config.womSize), (y))
 #define WRITE_WOM_32(x,y) WRITE_32(wom + ((x) % config.womSize), (y))
 
 // Writes a value into Extended ROM in big endian format
-#define WRITE_EXT_8(x,y)  WRITE_8(ext + ((x) & EXT_ROM_MASK), (y))
+#define WRITE_EXT_8(x,y)  WRITE_8 (ext + ((x) & EXT_ROM_MASK), (y))
 #define WRITE_EXT_16(x,y) WRITE_16(ext + ((x) & EXT_ROM_MASK), (y))
 #define WRITE_EXT_32(x,y) WRITE_32(ext + ((x) & EXT_ROM_MASK), (y))
 
@@ -130,9 +130,9 @@ public:
     uint8_t *rom = NULL;
     uint8_t *wom = NULL;
     uint8_t *ext = NULL;
-    uint8_t *chipRam = NULL;
-    uint8_t *slowRam = NULL;
-    uint8_t *fastRam = NULL;
+    uint8_t *chip = NULL;
+    uint8_t *slow = NULL;
+    uint8_t *fast = NULL;
 
     /* Indicates if the Kickstart Wom is writable
      * If an Amiga 1000 Boot Rom is installed, a Kickstart WOM (Write Once
@@ -248,14 +248,14 @@ private:
     
 public:
     
-    bool hasChipRam() { return chipRam != NULL; }
-    bool allocateChipRam(size_t size) { return alloc(size, chipRam, config.chipRamSize); }
+    bool hasChipRam() { return chip != NULL; }
+    bool allocateChipRam(size_t size) { return alloc(size, chip, config.chipSize); }
     
-    bool hasSlowRam() { return slowRam != NULL; }
-    bool allocateSlowRam(size_t size) { return alloc(size, slowRam, config.slowRamSize); }
+    bool hasSlowRam() { return slow != NULL; }
+    bool allocateSlowRam(size_t size) { return alloc(size, slow, config.slowSize); }
     
-    bool hasFastRam() { return fastRam != NULL; }
-    bool allocateFastRam(size_t size) { return alloc(size, fastRam, config.fastRamSize); }
+    bool hasFastRam() { return fast != NULL; }
+    bool allocateFastRam(size_t size) { return alloc(size, fast, config.fastSize); }
 
     void initializeRam();
 
