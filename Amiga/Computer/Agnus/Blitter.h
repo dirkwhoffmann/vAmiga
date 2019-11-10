@@ -56,7 +56,6 @@ class Blitter : public SubComponent {
     uint16_t bltalwm;
     
     // The Blitter size register
-    uint16_t bltsize;
     uint16_t bltsizeW;
     uint16_t bltsizeH;
 
@@ -185,7 +184,6 @@ public:
         & bltafwm
         & bltalwm
 
-        & bltsize
         & bltsizeW
         & bltsizeH
 
@@ -327,10 +325,11 @@ public:
     // OCS register 0x058 (w)
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // H9 H8 H7 H6 H5 H4 H3 H2 H1 H0 W5 W4 W3 W2 W1 W0
-    // inline uint16_t bltsizeH() { return (bltsize >> 6) ? (bltsize >> 6) : 1024; }
-    // inline uint16_t bltsizeW() { return (bltsize & 0x3F) ? (bltsize & 0x3F) : 64; }
     void pokeBLTSIZE(uint16_t value);
-    
+
+    // ECS register 0x05A (w)
+    void pokeBLTCON0L(uint16_t value);
+
     // OCS registers 0x060 and 0x066 (w)
     void pokeBLTAMOD(uint16_t value);
     void pokeBLTBMOD(uint16_t value);

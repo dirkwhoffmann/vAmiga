@@ -224,7 +224,7 @@ typedef struct
     uint16_t bltdpt;
     uint16_t bltafwm;
     uint16_t bltalwm;
-    uint16_t bltsize;
+    // uint16_t bltsize;
     int16_t bltamod;
     int16_t bltbmod;
     int16_t bltcmod;

@@ -43,29 +43,13 @@
 #define HSYNC_UPDATE_BPL_TABLE   0b010
 #define HSYNC_UPDATE_DAS_TABLE   0b100
 
-
-// DEPRECATED
-// Casts a value into the pointer format used by the Original Chip Set (OCS)
-/*
-#define CHIP_PTR(x) ((x) & 0x7FFFE)
-
-// Increases or decreases a pointer given in the OCS format by a certain value
-#define INC_CHIP_PTR_BY(x,y) ((x) = ((x)+(y)) & 0x7FFFE)
-#define SUB_FROM_CHIP_PTR(x,y) ((x) = ((x)-(y)) & 0x7FFFE)
-
-// Increments a DMA pointer register by 2
-#define INC_CHIP_PTR(x) (x) = ((x) + 2) & 0x7FFFE;
-*/
-
 // Casts an address into the Chip Ram range
 #define CHIP_PTR(x) ((x) & mem.chipMask & ~1)
 
-// Increments a Chip Ram pointer by a single word
+// Increments a Chip Ram pointer
 #define INC_CHIP_PTR(x) ((x) = ((x) + 2) & mem.chipMask & ~1);
-
-// Increases or decreases a Chip Ram pointer by a certain amount
 #define INC_CHIP_PTR_BY(x,y) ((x) = ((x)+(y)) & mem.chipMask & ~1)
-// #define DEC_CHIP_PTR_BY(x,y) ((x) = ((x)-(y)) & mem.chipMask & ~1)
+
 
 
 // Assembles a beam position out of two components
@@ -626,6 +610,9 @@ public:
 
     AgnusRevision getRevision() { return config.revision; }
     void setRevision(AgnusRevision type);
+
+    bool isOCS() { return config.revision = AGNUS_8367; }
+    bool isECS() { return config.revision != AGNUS_8367; }
 
     // Returns the maximum amout of Chip Ram in KB this Agnus can handle
     long chipRamLimit();
