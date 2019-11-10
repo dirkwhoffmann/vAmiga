@@ -50,7 +50,7 @@ Memory::_powerOn()
     if (hasWom()) eraseWom();
 
     // Fill RAM with the proper startup pattern
-    initializeRam();
+    fillRamWithStartupPattern();
 
     // Set up the memory lookup table
     updateMemSrcTable();
@@ -66,7 +66,7 @@ Memory::_reset()
 
 #ifdef HARD_RESET
     // In hard-reset mode, we also initialize Ram
-    initializeRam();
+    fillRamWithStartupPattern();
 #endif
 
     dump();
@@ -190,45 +190,41 @@ Memory::didSaveToBuffer(uint8_t *buffer) const
 }
 
 bool
-Memory::alloc(size_t size, uint8_t *&ptrref, size_t &sizeref)
+Memory::alloc(size_t bytes, uint8_t *&ptr, size_t &size, uint32_t &mask)
 {
-    // Do some consistency checking
-    assert((ptrref == NULL) == (sizeref == 0));
+    // Check the invariants
+    assert((ptr == NULL) == (size == 0));
+    assert((ptr == NULL) == (mask == 0));
+    assert((ptr != NULL) == (mask == size - 1));
 
     // Only proceed if memory layout changes
-    if (size == sizeref)
-        return true;
+    if (bytes == size) return true;
     
     // Delete previous allocation
-    if (ptrref) {
-        delete[] ptrref;
-        ptrref = NULL;
-        sizeref = 0;
-    }
+    if (ptr) { delete[] ptr; ptr = NULL; size = 0; mask = 0; }
     
     // Allocate memory
-    if (size) {
+    if (bytes) {
         
-        // Note: We allocate three bytes more than we need to handle the case
+        // We allocate three bytes more than we need to handle the case
         // that a long word access is performed on the last memory address.
-        size_t allocSize = size + 3;
+        size_t allocSize = bytes + 3;
         
-        if (!(ptrref = new (std::nothrow) uint8_t[allocSize])) {
-            warn("Cannot allocate %d KB of memory\n", size);
+        if (!(ptr = new (std::nothrow) uint8_t[allocSize])) {
+            warn("Cannot allocate %d KB of memory\n", bytes);
             return false;
         }
-        memset(ptrref, 0, allocSize);
-        sizeref = size;
+        size = bytes;
+        mask = bytes - 1;
+        memset(ptr, 0, allocSize);
     }
-    
-    // Update the memory lookup table
+
     updateMemSrcTable();
-    
     return true;
 }
 
 void
-Memory::initializeRam()
+Memory::fillRamWithStartupPattern()
 {
     // Until we know more about the proper startup pattern, we erase the
     // Ram by writing zeroes.
@@ -479,22 +475,15 @@ bool
 Memory::loadRom(RomFile *file)
 {
     assert(file != NULL);
-    
-    if (!alloc(file->getSize(), rom, config.romSize))
-        return false;
-    
+
+    // Allocate memory and load file
+    if (!allocRom(file->getSize())) return false;
     loadRom(file, rom, config.romSize);
 
-    // Emulate a WOM if a Boot ROM is installed instead of a Kickstart ROM
-    if (hasBootRom()) {
-        debug("Creating WOM\n");
-        alloc(KB(256), wom, config.womSize);
-    } else {
-        debug("Deleting WOM\n");
-        alloc(0, wom, config.womSize);
-    }
+    // Add a Wom if a Boot Rom is installed instead of a Kickstart Rom
+    hasBootRom() ? (void)allocWom(KB(256)) : deleteWom();
 
-    // Remove the extended ROM if present (has to be loaded afterwards)
+    // Remove extended Rom (if any)
     deleteExt();
     
     return true;
@@ -535,10 +524,10 @@ Memory::loadExt(ExtFile *file)
 {
     assert(file != NULL);
 
-    if (!alloc(file->getSize(), ext, config.extSize))
-        return false;
-
+    // Allocate memory and load file
+    if (!allocExt(file->getSize())) return false;
     loadRom(file, ext, config.extSize);
+
     return true;
 }
 

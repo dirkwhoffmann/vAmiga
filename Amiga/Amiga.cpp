@@ -271,7 +271,7 @@ Amiga::configure(ConfigOption option, long value)
                 return false;
             }
             
-            mem.allocateChipRam(KB(value));
+            mem.allocChip(KB(value));
             break;
     
         case VA_SLOW_RAM:
@@ -282,7 +282,7 @@ Amiga::configure(ConfigOption option, long value)
                 return false;
             }
             
-            mem.allocateSlowRam(KB(value));
+            mem.allocSlow(KB(value));
             break;
         
         case VA_FAST_RAM:
@@ -293,7 +293,7 @@ Amiga::configure(ConfigOption option, long value)
                 return false;
             }
             
-            mem.allocateFastRam(KB(value));
+            mem.allocFast(KB(value));
             break;
 
         case VA_EXT_START:

@@ -14,9 +14,9 @@
 #include "RomFile.h"
 #include "ExtFile.h"
 
-const uint32_t FAST_RAM_STRT = 0x200000;
-const uint32_t SLOW_RAM_MASK = 0x07FFFF; // 512 KB
-const uint32_t EXT_ROM_MASK  = 0x07FFFF; // 512 KB
+const uint32_t FAST_RAM_STRT = 0x200000; // DEPRECATED
+const uint32_t SLOW_RAM_MASK = 0x07FFFF; // DEPRECATED
+const uint32_t EXT_ROM_MASK  = 0x07FFFF; // DEPRECATED
 
 // Verifies the range of an address
 #define ASSERT_CHIP_ADDR(x) assert(chip != NULL);
@@ -117,15 +117,49 @@ class Memory : public SubComponent {
     MemoryStats stats;
 
 public:
-    
-    /* Each memory area is represented by three variables:
+
+    /* About memory
      *
-     *   A pointer to the allocates memory.
-     *   A variable storing the memory size in bytes (in MemoryConfig).
+     * There are 6 types of dynamically allocated memory:
      *
-     * The following invariant holds:
+     *     rom: Read-only memory
+     *          Holds a Kickstart Rom or a Boot Rom (A1000)
+
+     *     wom: Write-once Memory
+     *          If rom holds a Boot Rom, a wom is automatically created. It
+     *          it the place where the A1000 stores the Kickstart that it
+     *          loads from disk.
      *
-     *   pointer == NULL <=> config.size == 0
+     *     ext: Extended Rom
+     *          Such a Rom was added to newer Amiga models when the 512 KB
+     *          Kickstart Rom became too small. It is emulated to support
+     *          the Aros Kickstart replacement.
+     *
+     *    chip: Chip Ram
+     *          Holds the memory which is shared by the CPU and the Amiga Chip
+     *          set. The original Agnus chip was able to address 512 KB Chip
+     *          memory. Newer models were able to address up to 2 MB.
+     *
+     *    slow: Slow Ram (aka Bogo Ram)
+     *          This Ram is addressed by the same bus as Chip Ram, but it can
+     *          used by the CPU only.
+     *
+     *    fast: Fast Ram
+     *          This Ram can be used by the CPU only. It is connected via a
+     *          seperate bus and won't slow down the Chip set when the CPU
+     *          addressed it.
+     *
+     * Each memory type is represented by three variables:
+     *
+     *    A pointer to the allocates memory
+     *    A variable storing the memory size in bytes (in MemoryConfig)
+     *    A bit mask to emulate address mirroring
+     *
+     * The following invariants hold:
+     *
+     *    pointer == NULL <=> config.size == 0 <=> mask == 0
+     *    pointer != NULL <=> mask == config.size - 1
+     *
      */
     uint8_t *rom = NULL;
     uint8_t *wom = NULL;
@@ -133,6 +167,13 @@ public:
     uint8_t *chip = NULL;
     uint8_t *slow = NULL;
     uint8_t *fast = NULL;
+
+    uint32_t romMask = 0;
+    uint32_t womMask = 0;
+    uint32_t extMask = 0;
+    uint32_t chipMask = 0;
+    uint32_t slowMask = 0;
+    uint32_t fastMask = 0;
 
     /* Indicates if the Kickstart Wom is writable
      * If an Amiga 1000 Boot Rom is installed, a Kickstart WOM (Write Once
@@ -165,6 +206,13 @@ public:
     void applyToPersistentItems(T& worker)
     {
         worker
+
+        & romMask
+        & womMask
+        & extMask
+        & chipMask
+        & slowMask
+        & fastMask
 
         & config.extStart;
     }
@@ -235,29 +283,45 @@ public:
     
 private:
     
-    /* Allocates 'size' bytes of memory.
-     * As side effects, the memory lookup table is updated and a memory
-     * layout message is sent to the GUI.
+    /* Dynamically allocates Ram or Rom.
+     *
+     * Side effects:
+     *    - Updates the memory lookup table
+     *    - Sends a memory layout messageto the GUI
      */
-    bool alloc(size_t size, uint8_t *&ptrref, size_t &sizeref);
-    
-    
+    bool alloc(size_t bytes, uint8_t *&ptr, size_t &size, uint32_t &mask);
+
+public:
+
+    bool allocChip(size_t bytes) { return alloc(bytes, chip, config.chipSize, chipMask); }
+    bool allocSlow(size_t bytes) { return alloc(bytes, slow, config.slowSize, slowMask); }
+    bool allocFast(size_t bytes) { return alloc(bytes, fast, config.fastSize, fastMask); }
+
+    void deleteChip() { allocChip(0); }
+    void deleteSlow() { allocSlow(0); }
+    void deleteFast() { allocFast(0); }
+
+    bool allocRom(size_t bytes) { return alloc(bytes, rom, config.romSize, romMask); }
+    bool allocWom(size_t bytes) { return alloc(bytes, wom, config.womSize, womMask); }
+    bool allocExt(size_t bytes) { return alloc(bytes, ext, config.extSize, extMask); }
+
+    void deleteRom() { allocRom(0); }
+    void deleteWom() { allocWom(0); }
+    void deleteExt() { allocExt(0); }
+
+
     //
     // Managing RAM
     //
     
 public:
-    
-    bool hasChipRam() { return chip != NULL; }
-    bool allocateChipRam(size_t size) { return alloc(size, chip, config.chipSize); }
-    
-    bool hasSlowRam() { return slow != NULL; }
-    bool allocateSlowRam(size_t size) { return alloc(size, slow, config.slowSize); }
-    
-    bool hasFastRam() { return fast != NULL; }
-    bool allocateFastRam(size_t size) { return alloc(size, fast, config.fastSize); }
 
-    void initializeRam();
+    // Check if a certain Ram is present
+    bool hasChipRam() { return chip != NULL; }
+    bool hasSlowRam() { return slow != NULL; }
+    bool hasFastRam() { return fast != NULL; }
+
+    void fillRamWithStartupPattern();
 
     
     //
@@ -265,17 +329,15 @@ public:
     //
 
 public:
-    
-    // Checks if a certain ROM is present
+
+    // Check if a certain Rom is present
     bool hasRom() { return rom != NULL; }
     bool hasBootRom() { return hasRom() && config.romSize <= KB(16); }
     bool hasKickRom() { return hasRom() && config.romSize >= KB(256); }
     bool hasWom() { return wom != NULL; }
     bool hasExt() { return ext != NULL; }
 
-    // Returns a CRC-32 checksum for a certain ROM
-    // uint64_t romFingerprint() { return fnv_1a_64(rom, config.romSize); }
-    // uint64_t extFingerprint() { return fnv_1a_64(ext, config.extSize); }
+    // Computes a CRC-32 checksum
     uint32_t romFingerprint() { return crc32(rom, config.romSize); }
     uint32_t extFingerprint() { return crc32(ext, config.extSize); }
 
@@ -284,27 +346,24 @@ public:
     RomRevision romRevision() { return revision(romFingerprint()); }
     RomRevision extRevision() { return revision(extFingerprint()); }
 
-    // Analyzes a ROM identifier by ROM type
+    // Analyzes a ROM identifier by type
     bool isBootRom(RomRevision rev);
     bool isArosRom(RomRevision rev);
     bool isDiagRom(RomRevision rev);
     bool isOrigRom(RomRevision rev);
 
-    // Translates a ROM indentifier into textual descriptions
+    // Translates a ROM indentifier into a textual description
     const char *title(RomRevision rev);
     const char *version(RomRevision rev);
     const char *released(RomRevision rev);
+
     const char *romTitle() { return title(romRevision()); }
     const char *romVersion();
     const char *romReleased()  { return released(romRevision()); }
+
     const char *extTitle() { return title(extRevision()); }
     const char *extVersion();
     const char *extReleased()  { return released(extRevision()); }
-
-    // Removes a previously installed ROM
-    void deleteRom() { alloc(0, rom, config.romSize); }
-    void deleteWom() { alloc(0, wom, config.womSize); }
-    void deleteExt() { alloc(0, ext, config.extSize); }
 
     // Erases an installed ROM
     void eraseRom() { assert(rom); memset(rom, 0, config.romSize); }
