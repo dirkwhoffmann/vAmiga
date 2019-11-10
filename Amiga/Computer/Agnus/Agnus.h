@@ -43,8 +43,30 @@
 #define HSYNC_UPDATE_BPL_TABLE   0b010
 #define HSYNC_UPDATE_DAS_TABLE   0b100
 
+
+// DEPRECATED
+// Casts a value into the pointer format used by the Original Chip Set (OCS)
+#define OCS_PTR(x) ((x) & 0x7FFFE)
+
+// Increases or decreases a pointer given in the OCS format by a certain value
+#define INC_OCS_PTR(x,y) ((x) = ((x)+(y)) & 0x7FFFE)
+#define DEC_OCS_PTR(x,y) ((x) = ((x)-(y)) & 0x7FFFE)
+
 // Increments a DMA pointer register by 2
 #define INC_DMAPTR(x) (x) = ((x) + 2) & 0x7FFFE;
+
+/*
+// Casts a value into the pointer format used by the Original Chip Set (OCS)
+#define OCS_PTR(x) ((x) & mem.chipMask & ~1)
+
+// Increases or decreases a pointer given in the OCS format by a certain value
+#define INC_OCS_PTR(x,y) ((x) = ((x)+(y)) & mem.chipMask & ~1)
+#define DEC_OCS_PTR(x,y) ((x) = ((x)-(y)) & mem.chipMask & ~1)
+
+// Increments a DMA pointer register by 2
+#define INC_DMAPTR(x) ((x) = ((x) + 2) & mem.chipMask & ~1);
+*/
+
 
 // Assembles a beam position out of two components
 #define BEAM(y,x) (((y) << 8) | (x))

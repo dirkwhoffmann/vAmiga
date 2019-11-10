@@ -185,6 +185,12 @@ Copper::pokeNOOP(uint16_t value)
 }
 
 void
+Copper::advancePC()
+{
+    INC_OCS_PTR(coppc, 2);
+}
+
+void
 Copper::switchToCopperList(int nr)
 {
     assert(nr == 1 || nr == 2);
@@ -893,7 +899,7 @@ Copper::disassemble(unsigned list, uint32_t offset)
     assert(list == 1 || list == 2);
     
     uint32_t addr = (list == 1) ? cop1lc : cop2lc;
-    addr = (addr + 2 * offset) & 0x7FFFF;
+    addr = OCS_PTR(addr + 2 * offset);
 
     return disassemble(addr);
 }

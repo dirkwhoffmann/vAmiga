@@ -145,7 +145,7 @@ public:
 private:
  
     // Advances the program counter.
-    void advancePC() { INC_OCS_PTR(coppc, 2); }
+    void advancePC();
 
     // Switches the Copper list.
     void switchToCopperList(int nr);

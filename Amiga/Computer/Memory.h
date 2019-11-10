@@ -36,32 +36,32 @@ const uint32_t EXT_ROM_MASK  = 0x07FFFF; // DEPRECATED
 #define READ_32(x) (ntohl(*(uint32_t *)(x)))
 
 // Reads a value from Chip RAM in big endian format
-#define READ_CHIP_8(x)  READ_8(chip + ((x) & chipMask))
+#define READ_CHIP_8(x)  READ_8 (chip + ((x) & chipMask))
 #define READ_CHIP_16(x) READ_16(chip + ((x) & chipMask))
 #define READ_CHIP_32(x) READ_32(chip + ((x) & chipMask))
 
 // Reads a value from Fast RAM in big endian format
-#define READ_FAST_8(x)  READ_8(fast + ((x) - FAST_RAM_STRT))
+#define READ_FAST_8(x)  READ_8 (fast + ((x) - FAST_RAM_STRT))
 #define READ_FAST_16(x) READ_16(fast + ((x) - FAST_RAM_STRT))
 #define READ_FAST_32(x) READ_32(fast + ((x) - FAST_RAM_STRT))
 
 // Reads a value from Slow RAM in big endian format
-#define READ_SLOW_8(x)  READ_8(slow + ((x) & slowMask))
+#define READ_SLOW_8(x)  READ_8 (slow + ((x) & slowMask))
 #define READ_SLOW_16(x) READ_16(slow + ((x) & slowMask))
 #define READ_SLOW_32(x) READ_32(slow + ((x) & slowMask))
 
 // Reads a value from Boot ROM or Kickstart ROM in big endian format
-#define READ_ROM_8(x)  READ_8(rom + ((x) & romMask))
+#define READ_ROM_8(x)  READ_8 (rom + ((x) & romMask))
 #define READ_ROM_16(x) READ_16(rom + ((x) & romMask))
 #define READ_ROM_32(x) READ_32(rom + ((x) & romMask))
 
 // Reads a value from Kickstart WOM in big endian format
-#define READ_WOM_8(x)  READ_8(wom + ((x) & womMask))
+#define READ_WOM_8(x)  READ_8 (wom + ((x) & womMask))
 #define READ_WOM_16(x) READ_16(wom + ((x) & womMask))
 #define READ_WOM_32(x) READ_32(wom + ((x) & womMask))
 
 // Reads a value from Extended ROM in big endian format
-#define READ_EXT_8(x)  READ_8(ext + ((x) & extMask))
+#define READ_EXT_8(x)  READ_8 (ext + ((x) & extMask))
 #define READ_EXT_16(x) READ_16(ext + ((x) & extMask))
 #define READ_EXT_32(x) READ_32(ext + ((x) & extMask))
 
@@ -71,9 +71,9 @@ const uint32_t EXT_ROM_MASK  = 0x07FFFF; // DEPRECATED
 #define WRITE_32(x,y) (*(uint32_t *)(x) = htonl(y))
 
 // Writes a value into Chip RAM in big endian format
-#define WRITE_CHIP_8(x,y)  WRITE_8 (chip + ((x) % config.chipSize), (y))
-#define WRITE_CHIP_16(x,y) WRITE_16(chip + ((x) % config.chipSize), (y))
-#define WRITE_CHIP_32(x,y) WRITE_32(chip + ((x) % config.chipSize), (y))
+#define WRITE_CHIP_8(x,y)  WRITE_8 (chip + ((x) & chipMask), (y))
+#define WRITE_CHIP_16(x,y) WRITE_16(chip + ((x) & chipMask), (y))
+#define WRITE_CHIP_32(x,y) WRITE_32(chip + ((x) & chipMask), (y))
 
 // Writes a value into Fast RAM in big endian format
 #define WRITE_FAST_8(x,y)  WRITE_8 (fast + ((x) - FAST_RAM_STRT), (y))
@@ -81,24 +81,19 @@ const uint32_t EXT_ROM_MASK  = 0x07FFFF; // DEPRECATED
 #define WRITE_FAST_32(x,y) WRITE_32(fast + ((x) - FAST_RAM_STRT), (y))
 
 // Writes a value into Slow RAM in big endian format
-#define WRITE_SLOW_8(x,y)  WRITE_8 (slow + ((x) & SLOW_RAM_MASK), (y))
-#define WRITE_SLOW_16(x,y) WRITE_16(slow + ((x) & SLOW_RAM_MASK), (y))
-#define WRITE_SLOW_32(x,y) WRITE_32(slow + ((x) & SLOW_RAM_MASK), (y))
-
-// Writes a value into Kickstart ROM in big endian format (DEPRECATED)
-#define WRITE_ROM_8(x,y)  WRITE_8 (rom + ((x) % config.romSize), (y))
-#define WRITE_ROM_16(x,y) WRITE_16(rom + ((x) % config.romSize), (y))
-#define WRITE_ROM_32(x,y) WRITE_32(rom + ((x) % config.romSize), (y))
+#define WRITE_SLOW_8(x,y)  WRITE_8 (slow + ((x) & slowMask), (y))
+#define WRITE_SLOW_16(x,y) WRITE_16(slow + ((x) & slowMask), (y))
+#define WRITE_SLOW_32(x,y) WRITE_32(slow + ((x) & slowMask), (y))
 
 // Writes a value into Kickstart WOM in big endian format
-#define WRITE_WOM_8(x,y)  WRITE_8 (wom + ((x) % config.womSize), (y))
-#define WRITE_WOM_16(x,y) WRITE_16(wom + ((x) % config.womSize), (y))
-#define WRITE_WOM_32(x,y) WRITE_32(wom + ((x) % config.womSize), (y))
+#define WRITE_WOM_8(x,y)  WRITE_8 (wom + ((x) & womMask), (y))
+#define WRITE_WOM_16(x,y) WRITE_16(wom + ((x) & womMask), (y))
+#define WRITE_WOM_32(x,y) WRITE_32(wom + ((x) & womMask), (y))
 
 // Writes a value into Extended ROM in big endian format
-#define WRITE_EXT_8(x,y)  WRITE_8 (ext + ((x) & EXT_ROM_MASK), (y))
-#define WRITE_EXT_16(x,y) WRITE_16(ext + ((x) & EXT_ROM_MASK), (y))
-#define WRITE_EXT_32(x,y) WRITE_32(ext + ((x) & EXT_ROM_MASK), (y))
+#define WRITE_EXT_8(x,y)  WRITE_8 (ext + ((x) & extMask), (y))
+#define WRITE_EXT_16(x,y) WRITE_16(ext + ((x) & extMask), (y))
+#define WRITE_EXT_32(x,y) WRITE_32(ext + ((x) & extMask), (y))
 
 
 class Memory : public SubComponent {
