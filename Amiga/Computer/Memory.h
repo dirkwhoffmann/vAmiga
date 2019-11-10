@@ -19,12 +19,12 @@ const uint32_t SLOW_RAM_MASK = 0x07FFFF; // DEPRECATED
 const uint32_t EXT_ROM_MASK  = 0x07FFFF; // DEPRECATED
 
 // Verifies the range of an address
-#define ASSERT_CHIP_ADDR(x) assert(chip != NULL);
+#define ASSERT_CHIP_ADDR(x) assert(chip != NULL); assert(((x) % config.chipSize) == ((x) & chipMask));
 #define ASSERT_FAST_ADDR(x) assert(fast != NULL); assert(((x) - FAST_RAM_STRT) < config.fastSize);
-#define ASSERT_SLOW_ADDR(x) assert(slow != NULL); assert(((x) & SLOW_RAM_MASK) < config.slowSize);
-#define ASSERT_ROM_ADDR(x) assert(rom != NULL);
-#define ASSERT_WOM_ADDR(x) assert(wom != NULL);
-#define ASSERT_EXT_ADDR(x)  assert(ext  != NULL); assert(((x) & EXT_ROM_MASK) < config.extSize);
+#define ASSERT_SLOW_ADDR(x) assert(slow != NULL); assert(((x) & SLOW_RAM_MASK) < config.slowSize); assert(((x) & SLOW_RAM_MASK) == (x & slowMask));
+#define ASSERT_ROM_ADDR(x) assert(rom != NULL); assert(((x) % config.romSize) == ((x) & romMask));
+#define ASSERT_WOM_ADDR(x) assert(wom != NULL); assert(((x) % config.womSize) == ((x) & womMask));
+#define ASSERT_EXT_ADDR(x)  assert(ext != NULL); assert(((x) & EXT_ROM_MASK) < config.extSize); assert(((x) & 0x7FFFF) == ((x) & extMask));
 #define ASSERT_CIA_ADDR(x)  assert((x) >= 0xA00000 && (x) <= 0xBFFFFF);
 #define ASSERT_RTC_ADDR(x)  assert((x) >= 0xDC0000 && (x) <= 0xDEFFFF);
 #define ASSERT_OCS_ADDR(x)  assert((x) >= 0xC00000 && (x) <= 0xDFFFFF);
@@ -36,9 +36,9 @@ const uint32_t EXT_ROM_MASK  = 0x07FFFF; // DEPRECATED
 #define READ_32(x) (ntohl(*(uint32_t *)(x)))
 
 // Reads a value from Chip RAM in big endian format
-#define READ_CHIP_8(x)  READ_8(chip + ((x) % config.chipSize))
-#define READ_CHIP_16(x) READ_16(chip + ((x) % config.chipSize))
-#define READ_CHIP_32(x) READ_32(chip + ((x) % config.chipSize))
+#define READ_CHIP_8(x)  READ_8(chip + ((x) & chipMask))
+#define READ_CHIP_16(x) READ_16(chip + ((x) & chipMask))
+#define READ_CHIP_32(x) READ_32(chip + ((x) & chipMask))
 
 // Reads a value from Fast RAM in big endian format
 #define READ_FAST_8(x)  READ_8(fast + ((x) - FAST_RAM_STRT))
@@ -46,28 +46,24 @@ const uint32_t EXT_ROM_MASK  = 0x07FFFF; // DEPRECATED
 #define READ_FAST_32(x) READ_32(fast + ((x) - FAST_RAM_STRT))
 
 // Reads a value from Slow RAM in big endian format
-#define READ_SLOW_8(x)  READ_8(slow + ((x) & SLOW_RAM_MASK))
-#define READ_SLOW_16(x) READ_16(slow + ((x) & SLOW_RAM_MASK))
-#define READ_SLOW_32(x) READ_32(slow + ((x) & SLOW_RAM_MASK))
+#define READ_SLOW_8(x)  READ_8(slow + ((x) & slowMask))
+#define READ_SLOW_16(x) READ_16(slow + ((x) & slowMask))
+#define READ_SLOW_32(x) READ_32(slow + ((x) & slowMask))
 
 // Reads a value from Boot ROM or Kickstart ROM in big endian format
-#define READ_ROM_8(x)  READ_8(rom + ((x) % config.romSize))
-#define READ_ROM_16(x) READ_16(rom + ((x) % config.romSize))
-#define READ_ROM_32(x) READ_32(rom + ((x) % config.romSize))
+#define READ_ROM_8(x)  READ_8(rom + ((x) & romMask))
+#define READ_ROM_16(x) READ_16(rom + ((x) & romMask))
+#define READ_ROM_32(x) READ_32(rom + ((x) & romMask))
 
 // Reads a value from Kickstart WOM in big endian format
-#define READ_WOM_8(x)  READ_8(wom + ((x) % config.womSize))
-#define READ_WOM_16(x) READ_16(wom + ((x) % config.womSize))
-#define READ_WOM_32(x) READ_32(wom + ((x) % config.womSize))
+#define READ_WOM_8(x)  READ_8(wom + ((x) & womMask))
+#define READ_WOM_16(x) READ_16(wom + ((x) & womMask))
+#define READ_WOM_32(x) READ_32(wom + ((x) & womMask))
 
 // Reads a value from Extended ROM in big endian format
-// #define READ_EXT_8(x)  READ_8(ext + ((x) % config.extSize))
-// #define READ_EXT_16(x) READ_16(ext + ((x) % config.extSize))
-// #define READ_EXT_32(x) READ_32(ext + ((x) % config.extSize))
-
-#define READ_EXT_8(x)  READ_8(ext + ((x) & 0x7FFFF))
-#define READ_EXT_16(x) READ_16(ext + ((x) & 0x7FFFF))
-#define READ_EXT_32(x) READ_32(ext + ((x) & 0x7FFFF))
+#define READ_EXT_8(x)  READ_8(ext + ((x) & extMask))
+#define READ_EXT_16(x) READ_16(ext + ((x) & extMask))
+#define READ_EXT_32(x) READ_32(ext + ((x) & extMask))
 
 // Writes a value into memory in big endian format
 #define WRITE_8(x,y)  (*(uint8_t *)(x) = y)
