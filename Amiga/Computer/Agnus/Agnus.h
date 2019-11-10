@@ -46,26 +46,26 @@
 
 // DEPRECATED
 // Casts a value into the pointer format used by the Original Chip Set (OCS)
-#define OCS_PTR(x) ((x) & 0x7FFFE)
-
-// Increases or decreases a pointer given in the OCS format by a certain value
-#define INC_OCS_PTR(x,y) ((x) = ((x)+(y)) & 0x7FFFE)
-#define DEC_OCS_PTR(x,y) ((x) = ((x)-(y)) & 0x7FFFE)
-
-// Increments a DMA pointer register by 2
-#define INC_DMAPTR(x) (x) = ((x) + 2) & 0x7FFFE;
-
 /*
-// Casts a value into the pointer format used by the Original Chip Set (OCS)
-#define OCS_PTR(x) ((x) & mem.chipMask & ~1)
+#define CHIP_PTR(x) ((x) & 0x7FFFE)
 
 // Increases or decreases a pointer given in the OCS format by a certain value
-#define INC_OCS_PTR(x,y) ((x) = ((x)+(y)) & mem.chipMask & ~1)
-#define DEC_OCS_PTR(x,y) ((x) = ((x)-(y)) & mem.chipMask & ~1)
+#define INC_CHIP_PTR_BY(x,y) ((x) = ((x)+(y)) & 0x7FFFE)
+#define SUB_FROM_CHIP_PTR(x,y) ((x) = ((x)-(y)) & 0x7FFFE)
 
 // Increments a DMA pointer register by 2
-#define INC_DMAPTR(x) ((x) = ((x) + 2) & mem.chipMask & ~1);
+#define INC_CHIP_PTR(x) (x) = ((x) + 2) & 0x7FFFE;
 */
+
+// Casts an address into the Chip Ram range
+#define CHIP_PTR(x) ((x) & mem.chipMask & ~1)
+
+// Increments a Chip Ram pointer by a single word
+#define INC_CHIP_PTR(x) ((x) = ((x) + 2) & mem.chipMask & ~1);
+
+// Increases or decreases a Chip Ram pointer by a certain amount
+#define INC_CHIP_PTR_BY(x,y) ((x) = ((x)+(y)) & mem.chipMask & ~1)
+// #define DEC_CHIP_PTR_BY(x,y) ((x) = ((x)-(y)) & mem.chipMask & ~1)
 
 
 // Assembles a beam position out of two components
@@ -954,7 +954,7 @@ public:
     // Adds the modulo register to a bitplane pointer
     template <int x> void addBPLMOD() {
         assert(x < 6);
-        INC_OCS_PTR(bplpt[x], (x % 2) ? bpl2mod : bpl1mod);
+        INC_CHIP_PTR_BY(bplpt[x], (x % 2) ? bpl2mod : bpl1mod);
         // debug("addBPLMOD%d +%d = %d ($%X)\n", x, (x % 2) ? bpl2mod : bpl1mod, bplpt[x], bplpt[x]);
     }
 

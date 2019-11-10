@@ -123,21 +123,21 @@ void Blitter::doFastCopyBlit()
             if (useA) {
                 anew = mem.peek16<BUS_BLITTER>(apt);
                 debug(BLT_DEBUG, "    A = peek(%X) = %X\n", apt, anew);
-                INC_OCS_PTR(apt, incr);
+                INC_CHIP_PTR_BY(apt, incr);
             }
 
             // Fetch B
             if (useB) {
                 bnew = mem.peek16<BUS_BLITTER>(bpt);
                 debug(BLT_DEBUG, "    B = peek(%X) = %X\n", bpt, bnew);
-                INC_OCS_PTR(bpt, incr);
+                INC_CHIP_PTR_BY(bpt, incr);
             }
 
             // Fetch C
             if (useC) {
                 chold = mem.peek16<BUS_BLITTER>(cpt);
                 debug(BLT_DEBUG, "    C = peek(%X) = %X\n", cpt, chold);
-                INC_OCS_PTR(cpt, incr);
+                INC_CHIP_PTR_BY(cpt, incr);
             }
             debug(BLT_DEBUG, "    After fetch: A = %x B = %x C = %x\n", anew, bnew, chold);
 
@@ -175,7 +175,7 @@ void Blitter::doFastCopyBlit()
                 debug(BLT_DEBUG, "D: poke(%X), %X  (check: %X %X)\n", dpt, dhold, check1, check2);
                 // plainmsg("    check1 = %X check2 = %X\n", check1, check2);
 
-                INC_OCS_PTR(dpt, incr);
+                INC_CHIP_PTR_BY(dpt, incr);
             }
 
             // Clear the word mask
@@ -183,10 +183,10 @@ void Blitter::doFastCopyBlit()
         }
 
         // Add modulo values
-        if (useA) INC_OCS_PTR(apt, amod);
-        if (useB) INC_OCS_PTR(bpt, bmod);
-        if (useC) INC_OCS_PTR(cpt, cmod);
-        if (useD) INC_OCS_PTR(dpt, dmod);
+        if (useA) INC_CHIP_PTR_BY(apt, amod);
+        if (useB) INC_CHIP_PTR_BY(bpt, bmod);
+        if (useC) INC_CHIP_PTR_BY(cpt, cmod);
+        if (useD) INC_CHIP_PTR_BY(dpt, dmod);
     }
 
     // Do some consistency checks
@@ -209,7 +209,7 @@ if (a_shift < 15) a_shift++; \
 else \
 { \
 a_shift = 0; \
-INC_OCS_PTR(cpt, 2); \
+INC_CHIP_PTR_BY(cpt, 2); \
 }
 
 #define blitterLineDecreaseX(a_shift, cpt) \
@@ -217,16 +217,16 @@ INC_OCS_PTR(cpt, 2); \
 if (a_shift == 0) \
 { \
 a_shift = 16; \
-INC_OCS_PTR(cpt, -2); \
+INC_CHIP_PTR_BY(cpt, -2); \
 } \
 a_shift--; \
 }
 
 #define blitterLineIncreaseY(cpt, cmod) \
-INC_OCS_PTR(cpt, cmod);
+INC_CHIP_PTR_BY(cpt, cmod);
 
 #define blitterLineDecreaseY(cpt, cmod) \
-INC_OCS_PTR(cpt, -cmod);
+INC_CHIP_PTR_BY(cpt, -cmod);
 
 void
 Blitter::doFastLineBlit()
@@ -363,9 +363,9 @@ Blitter::doFastLineBlit()
     
     setBltconASH(blit_a_shift_local);
     bnew   = bltbdat_local;
-    bltapt = OCS_PTR(decision_variable);
-    bltcpt = OCS_PTR(bltcpt_local);
-    bltdpt = OCS_PTR(bltdpt_local);
+    bltapt = CHIP_PTR(decision_variable);
+    bltcpt = CHIP_PTR(bltcpt_local);
+    bltdpt = CHIP_PTR(bltdpt_local);
     bzero  = bltzero_local;
 }
     /*

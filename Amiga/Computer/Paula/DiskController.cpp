@@ -818,7 +818,7 @@ DiskController::performTurboRead(Drive *drive)
         
         // Write word into memory.
         mem.pokeChip16(agnus.dskpt, word);
-        INC_DMAPTR(agnus.dskpt);
+        INC_CHIP_PTR(agnus.dskpt);
         
         // Compute checksum (for debugging)
         checksum = fnv_1a_it32(checksum, word);
@@ -837,7 +837,7 @@ DiskController::performTurboWrite(Drive *drive)
         
         // Read word from memory
         uint16_t word = mem.peekChip16(agnus.dskpt);
-        INC_DMAPTR(agnus.dskpt);
+        INC_CHIP_PTR(agnus.dskpt);
         
         // Compute checksum (for debugging)
         checksum = fnv_1a_it32(checksum, word);

@@ -441,7 +441,7 @@ uint16_t
 Agnus::doDiskDMA()
 {
     uint16_t result = mem.peekChip16(dskpt);
-    INC_DMAPTR(dskpt);
+    INC_CHIP_PTR(dskpt);
 
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_DISK;
@@ -455,7 +455,7 @@ void
 Agnus::doDiskDMA(uint16_t value)
 {
     mem.pokeChip16(dskpt, value);
-    INC_DMAPTR(dskpt);
+    INC_CHIP_PTR(dskpt);
 
     busOwner[pos.h] = BUS_DISK;
     busValue[pos.h] = value;
@@ -466,7 +466,7 @@ uint16_t
 Agnus::doAudioDMA(int channel)
 {
     uint16_t result = mem.peekChip16(audlc[channel]);
-    INC_DMAPTR(audlc[channel]);
+    INC_CHIP_PTR(audlc[channel]);
 
     // We have to fake the horizontal position here, because this function
     // is not executed at the correct DMA cycle yet.
@@ -483,7 +483,7 @@ template <int channel> uint16_t
 Agnus::doSpriteDMA()
 {
     uint16_t result = mem.peekChip16(sprpt[channel]);
-    INC_DMAPTR(sprpt[channel]);
+    INC_CHIP_PTR(sprpt[channel]);
 
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_SPRITE;
@@ -497,7 +497,7 @@ uint16_t
 Agnus::doSpriteDMA(int channel)
 {
     uint16_t result = mem.peekChip16(sprpt[channel]);
-    INC_DMAPTR(sprpt[channel]);
+    INC_CHIP_PTR(sprpt[channel]);
 
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_SPRITE;
@@ -511,7 +511,7 @@ template <int bitplane> uint16_t
 Agnus::doBitplaneDMA()
 {
     uint16_t result = mem.peekChip16(bplpt[bitplane]);
-    INC_DMAPTR(bplpt[bitplane]);
+    INC_CHIP_PTR(bplpt[bitplane]);
 
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_BITPLANE;

@@ -570,7 +570,7 @@ Agnus::serviceBPLEvent()
                 denise.bpldat[PLANE1] = doBitplaneDMA<0>();
                 denise.fillShiftRegisters();
             } else {
-                INC_DMAPTR(bplpt[PLANE1]);
+                INC_CHIP_PTR(bplpt[PLANE1]);
             }
 
             if(unlikely(isLastHx(pos.h))) {
@@ -586,7 +586,7 @@ Agnus::serviceBPLEvent()
                 denise.bpldat[PLANE1] = doBitplaneDMA<0>();
                 denise.fillShiftRegisters();
             } else {
-                INC_DMAPTR(bplpt[PLANE1]);
+                INC_CHIP_PTR(bplpt[PLANE1]);
             }
 
             if(unlikely(isLastLx(pos.h))) {
@@ -601,7 +601,7 @@ Agnus::serviceBPLEvent()
             if (!bplHwStop()) {
                 denise.bpldat[PLANE2] = doBitplaneDMA<1>();
             } else {
-                INC_DMAPTR(bplpt[PLANE2]);
+                INC_CHIP_PTR(bplpt[PLANE2]);
             }
 
             if(unlikely(isLastHx(pos.h))) addBPLMOD<1>();
@@ -611,7 +611,7 @@ Agnus::serviceBPLEvent()
             if (!bplHwStop()) {
                 denise.bpldat[PLANE2] = doBitplaneDMA<1>();
             } else {
-                INC_DMAPTR(bplpt[PLANE2]);
+                INC_CHIP_PTR(bplpt[PLANE2]);
             }
 
             if(unlikely(isLastLx(pos.h))) addBPLMOD<1>();
@@ -621,7 +621,7 @@ Agnus::serviceBPLEvent()
             if (!bplHwStop()) {
                 denise.bpldat[PLANE3] = doBitplaneDMA<2>();
             } else {
-                INC_DMAPTR(bplpt[PLANE3]);
+                INC_CHIP_PTR(bplpt[PLANE3]);
             }
 
             if(unlikely(isLastHx(pos.h))) addBPLMOD<2>();
@@ -631,7 +631,7 @@ Agnus::serviceBPLEvent()
             if (!bplHwStop()) {
                 denise.bpldat[PLANE3] = doBitplaneDMA<2>();
             } else {
-                INC_DMAPTR(bplpt[PLANE3]);
+                INC_CHIP_PTR(bplpt[PLANE3]);
             }
 
             if(unlikely(isLastLx(pos.h))) addBPLMOD<2>();
@@ -641,7 +641,7 @@ Agnus::serviceBPLEvent()
             if (!bplHwStop()) {
                 denise.bpldat[PLANE4] = doBitplaneDMA<3>();
             } else {
-                INC_DMAPTR(bplpt[PLANE4]);
+                INC_CHIP_PTR(bplpt[PLANE4]);
             }
 
             if(unlikely(isLastHx(pos.h))) addBPLMOD<3>();
@@ -651,7 +651,7 @@ Agnus::serviceBPLEvent()
             if (!bplHwStop()) {
                 denise.bpldat[PLANE4] = doBitplaneDMA<3>();
             } else {
-                INC_DMAPTR(bplpt[PLANE4]);
+                INC_CHIP_PTR(bplpt[PLANE4]);
             }
 
             if(unlikely(isLastLx(pos.h))) addBPLMOD<3>();
@@ -661,7 +661,7 @@ Agnus::serviceBPLEvent()
             if (!bplHwStop()) {
                 denise.bpldat[PLANE5] = doBitplaneDMA<4>();
             } else {
-                INC_DMAPTR(bplpt[PLANE5]);
+                INC_CHIP_PTR(bplpt[PLANE5]);
             }
 
             if(unlikely(isLastLx(pos.h))) addBPLMOD<4>();
@@ -671,7 +671,7 @@ Agnus::serviceBPLEvent()
             if (!bplHwStop()) {
                 denise.bpldat[PLANE6] = doBitplaneDMA<5>();
             } else {
-                INC_DMAPTR(bplpt[PLANE6]);
+                INC_CHIP_PTR(bplpt[PLANE6]);
             }
 
             if(unlikely(isLastLx(pos.h))) addBPLMOD<5>();
