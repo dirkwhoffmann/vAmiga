@@ -506,7 +506,8 @@ public:
      *     - The CPU request must have been denied for three consecutive cycles
      */
 
-private:
+// private:
+public: // REMOVE
 
     bool cpuRequestsBus;
     int cpuDenials;

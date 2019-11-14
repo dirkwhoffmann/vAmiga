@@ -69,6 +69,8 @@ private:
     // The new interrupt level
     int irqLevel;
 
+public: // REMOVE
+    
     // Additional delay in master cycles if the CPU can't access the bus
     Cycle waitStates;
 

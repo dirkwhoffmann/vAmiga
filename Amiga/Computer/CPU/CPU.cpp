@@ -599,11 +599,9 @@ CPU::executeInstruction()
         actions = (actions << 1) & CPU_DELAY_MASK;
     }
 
-    if (waitStates) {
-        debug(CPU_DEBUG, "Adding %d wait states\n", waitStates);
-    }
-
     advance(m68k_execute(1));
+
+    if (waitStates) debug(CPU_DEBUG, "Adding %d wait states\n", waitStates);
     clock += waitStates;
     waitStates = 0;
 

@@ -411,7 +411,7 @@ Agnus::allocateBus()
             // Check if the CPU has precedence
             if (!bltpri() && cpuRequestsBus) {
 
-                if (cpuDenials > 2) {
+                if (cpuDenials >= 3) {
 
                     // debug("Blitter leaves bus to the CPU\n");
 
@@ -1796,6 +1796,7 @@ Agnus::executeUntilBusIsFree() { }
 
 #else
 
+/*
 void
 Agnus::executeUntilBusIsFree()
 {
@@ -1812,18 +1813,58 @@ Agnus::executeUntilBusIsFree()
     if (IS_EVEN(pos.h)) execute();
 
     // Wait until the bus is free
-    if (oldpos == 0xE3) { debug("OLDPOS == %d **** pos.h = %d\n", oldpos, pos.h); }
     while (busOwner[oldpos] != BUS_NONE) {
 
+        // debug("CPU is blocked (%d) (ws: %d) (CPU: %lld Agnus: %lld)\n", cpuDenials, cpu.waitStates, cpu.getClock(), clock);
         // Add a wait state
          cpu.addWaitStates(DMA_CYCLES(1));
 
          // Emulate another Agnus cycle
          oldpos = pos.h;
          execute();
-    };
+    }
 
     cpuRequestsBus = false;
+    cpuDenials = 0;
+}
+*/
+
+void
+Agnus::executeUntilBusIsFree()
+{
+    int16_t oldpos;
+
+    // Quick-exit if CPU runs at full speed during blit operations
+    if (blitter.getAccuracy() == 0) return;
+
+    // Tell the Blitter that the CPU wants the bus
+    cpuRequestsBus = true;
+
+    // oldpos = pos.h != 0 ? pos.h - 1 : HPOS_MAX;
+    // Execute Agnus for one cycle
+    oldpos = pos.h;
+    execute();
+
+    // The CPU usually accesses memory in even cyles. Advance to such a cycle
+    if (IS_EVEN(pos.h)) {
+        oldpos = pos.h;
+        execute();
+    }
+
+    // Wait until the bus is free
+    while (busOwner[oldpos] != BUS_NONE) {
+
+        // debug("CPU is blocked (%d) (ws: %d) (CPU: %lld Agnus: %lld)\n", cpuDenials, cpu.waitStates, cpu.getClock(), clock);
+        // Add a wait state
+         cpu.addWaitStates(DMA_CYCLES(1));
+
+         // Emulate another Agnus cycle
+         oldpos = pos.h;
+         execute();
+    }
+
+    cpuRequestsBus = false;
+    cpuDenials = 0;
 }
 
 /*

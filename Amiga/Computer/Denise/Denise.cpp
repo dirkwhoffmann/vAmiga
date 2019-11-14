@@ -382,8 +382,10 @@ void
 Denise::pokeColorReg(uint32_t addr, uint16_t value)
 {
 
-    // if (addr == 0x182) value = 0; //REMOVE ASAP
-
+    /*
+    if (addr == 0x180) debug("COLOR00 = %x (CPU: %lld Agnus: %lld req: %d)\n", value, cpu.getClock(), agnus.clock, agnus.cpuRequestsBus); //REMOVE ASAP
+     */
+    
     assert(addr >= 0x180 && addr <= 0x1BE && IS_EVEN(addr));
     debug(COL_DEBUG, "pokeColorReg(%X, %X)\n", addr, value);
 
