@@ -504,8 +504,10 @@ Agnus::serviceREGEvent(Cycle until)
     assert(checkTriggeredEvent(REG_SLOT));
 
     // Fix hpos counter (it hasn't wrapped over yet)
-    assert(pos.h <= HPOS_MAX + 1);
+    /* assert(pos.h <= HPOS_MAX + 1);
     if (pos.h == HPOS_MAX + 1) pos.h = 0;
+    */
+    assert(pos.h <= HPOS_MAX);
 
     // Iterate through all recorded register changes
     while (!changeRecorder.isEmpty()) {

@@ -1731,8 +1731,10 @@ Agnus::execute()
 
     // Advance the internal clock and the horizontal counter
     clock += DMA_CYCLES(1);
-    pos.h++;
-    // pos.h = pos.h < HPOS_MAX ? pos.h + 1 : 0; // (pos.h + 1) % HPOS_CNT;
+
+    // pos.h++;
+    assert(pos.h <= HPOS_MAX);
+    pos.h = pos.h < HPOS_MAX ? pos.h + 1 : 0; // (pos.h + 1) % HPOS_CNT;
 
     // If this assertion hits, the HSYNC event hasn't been served
     /*
@@ -1794,41 +1796,6 @@ Agnus::executeUntilBusIsFree() { }
 
 #else
 
-/*
-void
-Agnus::executeUntilBusIsFree()
-{
-    // Quick-exit if CPU runs at full speed during blit operations
-    if (blitter.getAccuracy() == 0) return;
-
-    // DMACycle blockedCycles = 0;
-
-    // Tell the Blitter that the CPU wants the bus
-    cpuRequestsBus = true;
-
-    // The CPU usually accesses memory in even cyles. Advance to such a cycle
-    int16_t oldpos = pos.h;
-    if (IS_ODD(pos.h)) execute();
-
-    // We have reached an even cycle now. Emulate that cycle...
-    while (1) {
-
-        oldpos = pos.h;
-        execute();
-
-        // Break the loop if the CPU can have the bus at that cycle
-        if (busOwner[oldpos] == BUS_NONE) break;
-
-        // The CPU is blocked. Add a wait state and try again
-        // blockedCycles++;
-        cpu.addWaitStates(DMA_CYCLES(1));
-    };
-
-    // cpu.addWaitStates(blockedCycles * DMA_CYCLES(1));
-    cpuRequestsBus = false;
-}
-*/
-
 void
 Agnus::executeUntilBusIsFree()
 {
@@ -1845,6 +1812,7 @@ Agnus::executeUntilBusIsFree()
     if (IS_EVEN(pos.h)) execute();
 
     // Wait until the bus is free
+    if (oldpos == 0xE3) { debug("OLDPOS == %d **** pos.h = %d\n", oldpos, pos.h); }
     while (busOwner[oldpos] != BUS_NONE) {
 
         // Add a wait state

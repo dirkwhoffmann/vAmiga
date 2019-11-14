@@ -722,6 +722,12 @@ Blitter::doFill(uint16_t &data, bool &carry)
 void
 Blitter::scheduleBlit()
 {
+    /*
+    if (agnus.bltpri() == 0) {
+        debug("*** BLTPRI = %d\n", agnus.bltpri());
+    }
+    */
+
     if (agnus.doBltDMA()) {
         agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(0), BLT_START);
     } else {
