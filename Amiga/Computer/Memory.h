@@ -321,32 +321,25 @@ public:
 
 public:
 
-    // Check if a certain Rom is present
-    bool hasRom() { return rom != NULL; }
-    bool hasBootRom() { return hasRom() && config.romSize <= KB(16); }
-    bool hasKickRom() { return hasRom() && config.romSize >= KB(256); }
-    bool hasWom() { return wom != NULL; }
-    bool hasExt() { return ext != NULL; }
-
     // Computes a CRC-32 checksum
     uint32_t romFingerprint() { return crc32(rom, config.romSize); }
     uint32_t extFingerprint() { return crc32(ext, config.extSize); }
 
     // Translates a CRC-32 checksum into a ROM identifier
-    RomRevision revision(uint32_t fingerprint);
+    static RomRevision revision(uint32_t fingerprint);
     RomRevision romRevision() { return revision(romFingerprint()); }
     RomRevision extRevision() { return revision(extFingerprint()); }
 
     // Analyzes a ROM identifier by type
-    bool isBootRom(RomRevision rev);
-    bool isArosRom(RomRevision rev);
-    bool isDiagRom(RomRevision rev);
-    bool isOrigRom(RomRevision rev);
+    static bool isBootRom(RomRevision rev);
+    static bool isArosRom(RomRevision rev);
+    static bool isDiagRom(RomRevision rev);
+    static bool isOrigRom(RomRevision rev);
 
     // Translates a ROM indentifier into a textual description
-    const char *title(RomRevision rev);
-    const char *version(RomRevision rev);
-    const char *released(RomRevision rev);
+    static const char *title(RomRevision rev);
+    static const char *version(RomRevision rev);
+    static const char *released(RomRevision rev);
 
     const char *romTitle() { return title(romRevision()); }
     const char *romVersion();
@@ -355,6 +348,14 @@ public:
     const char *extTitle() { return title(extRevision()); }
     const char *extVersion();
     const char *extReleased()  { return released(extRevision()); }
+
+    // Check if a certain Rom is present
+    bool hasRom() { return rom != NULL; }
+    bool hasBootRom() { return hasRom() && config.romSize <= KB(16); }
+    bool hasKickRom() { return hasRom() && config.romSize >= KB(256); }
+    bool hasArosRom() { return isArosRom(romRevision()); }
+    bool hasWom() { return wom != NULL; }
+    bool hasExt() { return ext != NULL; }
 
     // Erases an installed ROM
     void eraseRom() { assert(rom); memset(rom, 0, config.romSize); }

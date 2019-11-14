@@ -713,7 +713,7 @@ Amiga::readyToPowerUp()
         return false;
     }
 
-    if (memconf.chipSize + memconf.slowSize < MB(1)) {
+    if (mem.hasArosRom() && memconf.chipSize + memconf.slowSize < MB(1)) {
         msg("readyToPowerUp: Aros requires at least 1 MB of memory.\n");
         putMessage(MSG_AROS_RAM_LIMIT);
         return false;
