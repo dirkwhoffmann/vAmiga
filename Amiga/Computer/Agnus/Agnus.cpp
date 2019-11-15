@@ -393,6 +393,15 @@ Agnus::requestBus(bool value)
 }
 
 template <BusOwner owner> bool
+Agnus::busIsFree()
+{
+    // Deny if the bus has been allocated already
+    if (busOwner[pos.h] != BUS_NONE) return false;
+
+    return true;
+}
+
+template <BusOwner owner> bool
 Agnus::allocateBus()
 {
     // Deny if the bus has been allocated already
@@ -401,7 +410,7 @@ Agnus::allocateBus()
     switch (owner) {
 
         case BUS_COPPER:
-            
+
             // Assign bus to the Copper
             busOwner[pos.h] = BUS_COPPER;
             return true;
@@ -2270,3 +2279,6 @@ template void Agnus::pokeDIWSTOP<POKE_COPPER>(uint16_t value);
 
 template bool Agnus::allocateBus<BUS_COPPER>();
 template bool Agnus::allocateBus<BUS_BLITTER>();
+
+template bool Agnus::busIsFree<BUS_COPPER>();
+template bool Agnus::busIsFree<BUS_BLITTER>();

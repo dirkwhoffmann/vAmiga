@@ -770,6 +770,10 @@ public:
     //Called by the CPU when it wants to use the bus or no longer needs it.
     void requestBus(bool value);
 
+    /* Checks if the bus is currently available for the specified resource.
+     */
+    template <BusOwner owner> bool busIsFree();
+
     /* Attempts to allocate the bus for the specified resource.
      * Returns true if the bus was successfully allocated.
      * On success, the bus owner is recorded in the busOwner array.

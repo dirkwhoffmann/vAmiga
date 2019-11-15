@@ -409,13 +409,19 @@ Blitter::serviceEvent(EventID id)
                 break;
             }
 
-            // TODO: Test for free bus
+            // Only proceed if the bus is a free
+            if (!agnus.busIsFree<BUS_BLITTER>()) break;
 
+            // Proceed to the next state
             agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_STRT2);
+            break;
 
         case BLT_STRT2:
 
-            // TODO: Test for free bus
+            // Only proceed if the bus is a free
+            if (!agnus.busIsFree<BUS_BLITTER>()) break;
+
+            // Proceed to the next state
             startBlit();
             break;
 
