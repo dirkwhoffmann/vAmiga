@@ -747,8 +747,8 @@ Copper::serviceEvent(EventID id)
             if (!getBFD()) {
                 // TODO: DON'T CHECK THE BBUSY FLAG, CHECK FOR 'RUNNING' STATE
                 if (agnus.blitter.isBusy()) {
-                    reschedule();
-                    // agnus.scheduleAbs<COP_SLOT>(NEVER, COP_BLITTER_BUSY);
+                    // reschedule();
+                    agnus.scheduleAbs<COP_SLOT>(NEVER, COP_BLITTER_BUSY);
                     break;
                 }
             }
