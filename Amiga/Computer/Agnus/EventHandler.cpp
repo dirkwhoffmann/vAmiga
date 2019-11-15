@@ -167,7 +167,9 @@ Agnus::inspectEventSlot(EventSlot nr)
             switch (slot[nr].id) {
 
                 case 0:             i->eventName = "none"; break;
-                case BLT_START:     i->eventName = "BLT_START"; break;
+                case BLT_START0:    i->eventName = "BLT_START0"; break;
+                case BLT_START1:    i->eventName = "BLT_START1"; break;
+                case BLT_START2:    i->eventName = "BLT_START2"; break;
                 case BLT_EXEC_SLOW: i->eventName = "BLT_EXEC_SLOW"; break;
                 case BLT_EXEC_FAST: i->eventName = "BLT_EXEC_FAST"; break;
                 default:            i->eventName = "*** INVALID ***"; break;

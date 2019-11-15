@@ -634,7 +634,7 @@ Blitter::exec()
 
             // The remaining micro-instructions flush the pipeline.
             // The Blitter busy flag gets cleared at this point.
-            // bbusy = false;
+            bbusy = false;
         }
     }
 

@@ -152,7 +152,9 @@ typedef enum : long
     COP_EVENT_COUNT,
     
     // Blitter slot
-    BLT_START = 1,
+    BLT_START0 = 1,
+    BLT_START1,
+    BLT_START2,
     BLT_EXEC_SLOW,
     BLT_EXEC_FAST,
     BLT_EVENT_COUNT,

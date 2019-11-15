@@ -416,7 +416,7 @@ Agnus::allocateBus()
                     // debug("Blitter leaves bus to the CPU\n");
 
                     // The CPU gets the bus
-                    cpuDenials = 0;
+                    // cpuDenials = 0;
                     return false;
 
                 } else {
@@ -1796,7 +1796,7 @@ Agnus::executeUntilBusIsFree() { }
 
 #else
 
-/*
+/* OLD VERSION (v0.46)
 void
 Agnus::executeUntilBusIsFree()
 {
@@ -1897,11 +1897,12 @@ Agnus::executeUntilBusIsFree()
          // Emulate another Agnus cycle
          oldpos = pos.h;
          execute();
-     };
+    }
 
-     cpuRequestsBus = false;
- }
- */
+    cpuRequestsBus = false;
+    cpuDenials = 0;
+}
+*/
 
 #endif
 

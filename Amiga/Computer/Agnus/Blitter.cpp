@@ -378,8 +378,9 @@ Blitter::pokeDMACON(uint16_t oldValue, uint16_t newValue)
     if (!oldBltDma && newBltDma) {
 
         // Perform pending blit operation (if any)
-        if (agnus.hasEvent<BLT_SLOT>(BLT_START)) {
-            agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(0), BLT_START);
+        EventID id = agnus.slot[BLT_SLOT].id;
+        if (id >= BLT_START0 && id <= BLT_START2) {
+            agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(0), id);
         }
     }
 }
@@ -389,8 +390,19 @@ Blitter::serviceEvent(EventID id)
 {
     switch (id) {
 
-        case BLT_START:
+        case BLT_START0:
 
+            agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_START1);
+            break;
+
+        case BLT_START1:
+
+            // TODO: Test for free bus
+            agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_START2);
+
+        case BLT_START2:
+
+            // TODO: Test for free bus
             startBlit();
             break;
 
@@ -729,9 +741,9 @@ Blitter::scheduleBlit()
     */
 
     if (agnus.doBltDMA()) {
-        agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(0), BLT_START);
+        agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(0), BLT_START1);
     } else {
-        agnus.scheduleAbs<BLT_SLOT>(NEVER, BLT_START);
+        agnus.scheduleAbs<BLT_SLOT>(NEVER, BLT_START1);
     }
 }
 
