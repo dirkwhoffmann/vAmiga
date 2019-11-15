@@ -323,9 +323,8 @@ public:
     void pokeBLTDPTL(uint16_t value);
     
     // OCS register 0x058 (w)
-    // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
-    // H9 H8 H7 H6 H5 H4 H3 H2 H1 H0 W5 W4 W3 W2 W1 W0
-    void pokeBLTSIZE(uint16_t value);
+    template <PokeSource s> void pokeBLTSIZE(uint16_t value);
+    void setBLTSIZE(uint16_t value);
 
     // ECS register 0x05A (w)
     void pokeBLTCON0L(uint16_t value);
@@ -395,9 +394,6 @@ public:
     //
 
 private:
-
-    // Main entry point (invoked when BLTSIZE or BLTSIZH is written)
-    void scheduleBlit();
 
     // Initiates a blit
     void startBlit();

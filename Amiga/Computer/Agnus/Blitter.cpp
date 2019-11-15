@@ -243,10 +243,22 @@ Blitter::pokeBLTALWM(uint16_t value)
     bltalwm = value;
 }
 
-void
+template <PokeSource s> void
 Blitter::pokeBLTSIZE(uint16_t value)
 {
     debug(BLTREG_DEBUG, "pokeBLTSIZE(%X)\n", value);
+
+    if (s == POKE_COPPER) {
+        agnus.recordRegisterChange(DMA_CYCLES(1), REG_BLTSIZE, value);
+    } else {
+        setBLTSIZE(value);
+    }
+}
+
+void
+Blitter::setBLTSIZE(uint16_t value)
+{
+    debug(BLTREG_DEBUG, "setBLTSIZE(%X)\n", value);
 
     // 15 14 13 12 11 10 09 08 07 06 05 04 03 02 01 00
     // h9 h8 h7 h6 h5 h4 h3 h2 h1 h0 w5 w4 w3 w2 w1 w0
@@ -257,7 +269,7 @@ Blitter::pokeBLTSIZE(uint16_t value)
     if (!bltsizeH) bltsizeH = 0x0400;
     if (!bltsizeW) bltsizeW = 0x0040;
 
-    scheduleBlit();
+    agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_STRT1);
 }
 
 void
@@ -300,7 +312,7 @@ Blitter::pokeBLTSIZH(uint16_t value)
     if (!bltsizeH) bltsizeH = 0x8000;
     if (!bltsizeW) bltsizeW = 0x0800;
 
-    scheduleBlit();
+    agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_STRT1);
 }
 
 void
@@ -378,9 +390,8 @@ Blitter::pokeDMACON(uint16_t oldValue, uint16_t newValue)
     if (!oldBltDma && newBltDma) {
 
         // Perform pending blit operation (if any)
-        EventID id = agnus.slot[BLT_SLOT].id;
-        if (id >= BLT_START0 && id <= BLT_START2) {
-            agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(0), id);
+        if (agnus.hasEvent<BLT_SLOT>(BLT_STRT1)) {
+            agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(0), BLT_STRT1);
         }
     }
 }
@@ -390,17 +401,19 @@ Blitter::serviceEvent(EventID id)
 {
     switch (id) {
 
-        case BLT_START0:
+        case BLT_STRT1:
 
-            agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_START1);
-            break;
-
-        case BLT_START1:
+            // Postpone the operation if Blitter DMA is disabled
+            if (!agnus.doBltDMA()) {
+                agnus.scheduleAbs<BLT_SLOT>(NEVER, BLT_STRT1);
+                break;
+            }
 
             // TODO: Test for free bus
-            agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_START2);
 
-        case BLT_START2:
+            agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_STRT2);
+
+        case BLT_STRT2:
 
             // TODO: Test for free bus
             startBlit();
@@ -732,22 +745,6 @@ Blitter::doFill(uint16_t &data, bool &carry)
 }
 
 void
-Blitter::scheduleBlit()
-{
-    /*
-    if (agnus.bltpri() == 0) {
-        debug("*** BLTPRI = %d\n", agnus.bltpri());
-    }
-    */
-
-    if (agnus.doBltDMA()) {
-        agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(0), BLT_START1);
-    } else {
-        agnus.scheduleAbs<BLT_SLOT>(NEVER, BLT_START1);
-    }
-}
-
-void
 Blitter::startBlit()
 {
     // Initialize
@@ -831,3 +828,6 @@ Blitter::kill()
     // Clear the Blitter slot
     agnus.cancel<BLT_SLOT>();
 }
+
+template void Blitter::pokeBLTSIZE<POKE_CPU>(uint16_t value);
+template void Blitter::pokeBLTSIZE<POKE_COPPER>(uint16_t value);

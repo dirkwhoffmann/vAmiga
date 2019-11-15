@@ -88,7 +88,7 @@ typedef enum : long
 
     // REG slot
     REG_CHANGE = 1,
-    REG_HSYNC,
+    // REG_HSYNC,
     REG_EVENT_COUNT,
 
     // CIA slots
@@ -152,9 +152,8 @@ typedef enum : long
     COP_EVENT_COUNT,
     
     // Blitter slot
-    BLT_START0 = 1,
-    BLT_START1,
-    BLT_START2,
+    BLT_STRT1 = 1,
+    BLT_STRT2,
     BLT_EXEC_SLOW,
     BLT_EXEC_FAST,
     BLT_EVENT_COUNT,

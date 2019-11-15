@@ -66,7 +66,7 @@ Agnus::inspectEventSlot(EventSlot nr)
 
                 case 0:             i->eventName = "none"; break;
                 case REG_CHANGE:    i->eventName = "REG_CHANGE"; break;
-                case REG_HSYNC:     i->eventName = "REG_HSYNC"; break;
+                // case REG_HSYNC:     i->eventName = "REG_HSYNC"; break;
                 default:            i->eventName = "*** INVALID ***"; break;
             }
             break;
@@ -167,9 +167,8 @@ Agnus::inspectEventSlot(EventSlot nr)
             switch (slot[nr].id) {
 
                 case 0:             i->eventName = "none"; break;
-                case BLT_START0:    i->eventName = "BLT_START0"; break;
-                case BLT_START1:    i->eventName = "BLT_START1"; break;
-                case BLT_START2:    i->eventName = "BLT_START2"; break;
+                case BLT_STRT1:     i->eventName = "BLT_STRT1"; break;
+                case BLT_STRT2:     i->eventName = "BLT_STRT2"; break;
                 case BLT_EXEC_SLOW: i->eventName = "BLT_EXEC_SLOW"; break;
                 case BLT_EXEC_FAST: i->eventName = "BLT_EXEC_FAST"; break;
                 default:            i->eventName = "*** INVALID ***"; break;
@@ -504,11 +503,6 @@ void
 Agnus::serviceREGEvent(Cycle until)
 {
     assert(checkTriggeredEvent(REG_SLOT));
-
-    // Fix hpos counter (it hasn't wrapped over yet)
-    /* assert(pos.h <= HPOS_MAX + 1);
-    if (pos.h == HPOS_MAX + 1) pos.h = 0;
-    */
     assert(pos.h <= HPOS_MAX);
 
     // Iterate through all recorded register changes
@@ -523,6 +517,7 @@ Agnus::serviceREGEvent(Cycle until)
 
         switch (addr) {
 
+            case REG_BLTSIZE: blitter.setBLTSIZE(value); break;
             case REG_INTREQ: paula.setINTREQ(value); break;
             case REG_INTENA: paula.setINTENA(value); break;
             case REG_IRQLEVEL: cpu.setIrqLevel(value); break;
