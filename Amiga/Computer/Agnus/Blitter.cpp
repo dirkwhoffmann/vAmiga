@@ -249,7 +249,9 @@ Blitter::pokeBLTSIZE(uint16_t value)
     debug(BLTREG_DEBUG, "pokeBLTSIZE(%X)\n", value);
 
     if (s == POKE_COPPER) {
-        agnus.recordRegisterChange(DMA_CYCLES(1), REG_BLTSIZE, value);
+        setBLTSIZE(value);
+        // The Copper delay only applies if the Blitter is running?!
+        // agnus.recordRegisterChange(DMA_CYCLES(1), REG_BLTSIZE, value);
     } else {
         setBLTSIZE(value);
     }
@@ -412,8 +414,11 @@ Blitter::serviceEvent(EventID id)
             // Initialize internal Blitter variables
             prepareBlit();
 
-            // Only proceed if the bus is a free
-            if (!agnus.busIsFree<BUS_BLITTER>()) break;
+            // Only proceed if the bus is free
+            if (!agnus.busIsFree<BUS_BLITTER>()) {
+                // debug("Blitter blocked in BLT_STRT1 by %d\n", agnus.busOwner[agnus.pos.h]);
+                break;
+            }
 
             // Proceed to the next state
             agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_STRT2);
@@ -422,7 +427,10 @@ Blitter::serviceEvent(EventID id)
         case BLT_STRT2:
 
             // Only proceed if the bus is a free
-            if (!agnus.busIsFree<BUS_BLITTER>()) break;
+            if (!agnus.busIsFree<BUS_BLITTER>()) {
+                // debug("Blitter blocked in BLT_STRT2 by %d\n", agnus.busOwner[agnus.pos.h]);
+                break;
+            }
 
             // Proceed to the next state
             startBlit();
@@ -810,14 +818,18 @@ Blitter::startBlit()
 }
 
 void
-Blitter::terminate()
+Blitter::signalEnd()
 {
     // Clear the Blitter busy flag
     bbusy = false;
 
     // Trigger the Blitter interrupt
     paula.raiseIrq(INT_BLIT);
+}
 
+void
+Blitter::endBlit()
+{
     // Clear the Blitter slot
     agnus.cancel<BLT_SLOT>();
 
@@ -826,6 +838,9 @@ Blitter::terminate()
     {
         plaindebug(BLT_CHECKSUM, "BLITTER check1: %x check2: %x ABCD: %x %x %x %x\n", check1, check2, bltapt, bltbpt, bltcpt, bltdpt);
     }
+
+    // Let the Copper know about the termination
+    copper.blitterDidTerminate();
 }
 
 void

@@ -37,6 +37,7 @@ static const int BPLREG_DEBUG  = 2;  // Bitplane registers
 static const int SPRREG_DEBUG  = 2;  // Sprite registers
 static const int AUDREG_DEBUG  = 2;  // Audio registers
 static const int COPREG_DEBUG  = 2;  // Copper registers
+static const int COLREG_DEBUG  = 2;  // Color registers
 static const int INVREG_DEBUG  = 2;  // Ivalid register accesses
 
 // Component debugging (set to 1 to generate debug output)
@@ -51,7 +52,6 @@ static const int DMA_DEBUG     = 2;  // DMA registers
 static const int BPL_DEBUG     = 2;  // Bitplane DMA
 static const int DIW_DEBUG     = 2;  // Display window logic
 static const int DDF_DEBUG     = 2;  // Display data fetch logic
-static const int COL_DEBUG     = 2;  // Color registers
 static const int SPR_DEBUG     = 2;  // Sprites
 static const int CLX_DEBUG     = 2;  // Collision detection (CLXDAT, CLXCON)
 static const int DSK_DEBUG     = 2;  // Disk controller

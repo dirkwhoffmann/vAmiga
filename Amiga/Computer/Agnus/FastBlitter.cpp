@@ -45,7 +45,8 @@ Blitter::beginFastLineBlit()
     if (verbose) { verbose = false; debug("Using the fast line Blitter\n"); }
 
     doFastLineBlit();
-    terminate();
+    signalEnd();
+    endBlit();
 }
 
 void
@@ -71,7 +72,8 @@ Blitter::beginFastCopyBlit(int level)
 
         case 0:
             if (verbose) { verbose = false; debug("Immediate termination\n"); }
-            terminate();
+            signalEnd();
+            endBlit();
             return;
 
         case 1:

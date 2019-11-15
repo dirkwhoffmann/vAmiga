@@ -144,10 +144,10 @@ public:
     
 private:
  
-    // Advances the program counter.
+    // Advances the program counter
     void advancePC();
 
-    // Switches the Copper list.
+    // Switches the Copper list
     void switchToCopperList(int nr);
 
     /* Searches for the next matching beam position.
@@ -174,11 +174,14 @@ private:
     // Emulates the Copper writing a value into one of the custom registers
     void move(int addr, uint16_t value);
 
-    // Runs the comparator circuit.
+    // Runs the comparator circuit
     bool comparator(Beam beam, uint16_t waitpos, uint16_t mask);
     bool comparator(Beam beam);
     bool comparator();
-    
+
+    // Emulates a WAIT command
+    void scheduleWaitWakeup();
+
 
     //
     // Analyzing Copper instructions
@@ -271,7 +274,16 @@ private:
     // Executed after each frame
     void vsyncHandler();
     
- 
+
+    //
+    // Handling delegation calls
+    //
+
+public:
+
+    void blitterDidTerminate();
+
+
     //
     // Debugging
     //

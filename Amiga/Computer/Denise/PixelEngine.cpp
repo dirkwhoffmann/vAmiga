@@ -126,16 +126,11 @@ PixelEngine::setColor(int reg, uint16_t value)
 {
     assert(reg < 32);
 
-    debug(COL_DEBUG, "setColor%02d(%X)\n", reg, value);
-
     colreg[reg] = value & 0xFFF;
 
     uint8_t r = (value & 0xF00) >> 8;
     uint8_t g = (value & 0x0F0) >> 4;
     uint8_t b = (value & 0x00F);
-
-    // colors[reg] = value & 0xFFF; // DEPRECATED
-    // colors[reg + 32] = ((r / 2) << 8) | ((g / 2) << 4) | (b / 2); // DEPRECATED
 
     indexedRgba[reg] = rgba[value & 0xFFF];
     indexedRgba[reg + 32] = rgba[((r / 2) << 8) | ((g / 2) << 4) | (b / 2)];

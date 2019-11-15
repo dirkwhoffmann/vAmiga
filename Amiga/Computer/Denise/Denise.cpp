@@ -386,7 +386,7 @@ Denise::pokeColorReg(uint32_t addr, uint16_t value)
     */
 
     assert(addr >= 0x180 && addr <= 0x1BE && IS_EVEN(addr));
-    debug(COL_DEBUG, "pokeColorReg(%X, %X)\n", addr, value);
+    debug(COLREG_DEBUG, "pokeColorReg(%X, %X)\n", addr, value);
 
     pixelEngine.colRegChanges.add(4 * agnus.pos.h, addr, value);
 }

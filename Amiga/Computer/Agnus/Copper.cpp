@@ -368,6 +368,8 @@ Copper::move(int addr, uint16_t value)
 
     if (addr >= 0x180 && addr <= 0x1BE) {
 
+        debug(COLREG_DEBUG, "Copper -> COLREG(%x,%x)\n", addr, value);
+
         // Color registers
         pixelEngine.colRegChanges.add(4 * agnus.pos.h, addr, value);
         return;
@@ -469,6 +471,43 @@ bool
 Copper::comparator()
 {
     return comparator(agnus.pos);
+}
+
+void
+Copper::scheduleWaitWakeup()
+{
+    Beam trigger;
+
+    // Find the trigger position for this WAIT command
+    if (findMatchNew(trigger)) {
+
+        // In how many cycles do we get there?
+        int delay = trigger - agnus.pos;
+
+        if (verbose) debug("(%d,%d) matches in %d cycles\n", trigger.v, trigger.h, delay);
+
+        if (delay == 0) {
+
+            // Copper does not stop
+            agnus.scheduleRel<COP_SLOT>(DMA_CYCLES(2), COP_FETCH);
+
+        } else if (delay == 2) {
+
+            // Copper does not stop
+            agnus.scheduleRel<COP_SLOT>(DMA_CYCLES(2), COP_FETCH);
+
+        } else {
+
+            // Wake up 2 cycles earlier with a COP_REQ_DMA event
+            delay -= 2;
+            agnus.scheduleRel<COP_SLOT>(DMA_CYCLES(delay), COP_REQ_DMA);
+        }
+
+    } else {
+
+        if (verbose) debug("(%d,%d) does not match in this frame\n", trigger.v, trigger.h);
+        agnus.cancel<COP_SLOT>();
+    }
 }
 
 bool
@@ -590,7 +629,6 @@ Copper::serviceEvent(EventID id)
 {
     uint16_t reg;
     Beam beam;
-    Beam trigger;
 
     servicing = true;
 
@@ -691,14 +729,6 @@ Copper::serviceEvent(EventID id)
             // verbose = true;
             if (verbose) debug("COP_WAIT1\n");
 
-            // Check the Blitte Finish Disable bit
-            if (getBFD() == 0) {
-                if (agnus.blitter.isBusy()) {
-                    reschedule();
-                    break;
-                }
-            }
-
             // Wait for the next free cycle
             if (!agnus.copperCanRun()) { reschedule(); break; }
 
@@ -710,44 +740,24 @@ Copper::serviceEvent(EventID id)
 
             if (verbose) debug("COP_WAIT2\n");
 
-            // Wait for the next free cycle
-            if (!agnus.copperCanRun()) { reschedule(); break; }
-            
             // Clear the skip flag
             skip = false;
 
-            // Find the trigger position for this WAIT command
-            if (findMatchNew(trigger)) {
-
-                // In how many cycles do we get there?
-                int delay = trigger - agnus.pos;
-
-                if (verbose) debug("(%d,%d) matches in %d cycles\n", trigger.v, trigger.h, delay);
-
-                if (delay == 0) {
-
-                    // Copper does not stop
-                    agnus.scheduleRel<COP_SLOT>(DMA_CYCLES(2), COP_FETCH);
-
-                } else if (delay == 2) {
-
-                    // Copper does not stop
-                    agnus.scheduleRel<COP_SLOT>(DMA_CYCLES(2), COP_FETCH);
-
-                } else {
-
-                    // Copper wakes up 2 cycles earlier ...
-                    delay -= 2;
-
-                    // ... with a COP_REQ_DMA event.
-                    agnus.scheduleRel<COP_SLOT>(DMA_CYCLES(delay), COP_REQ_DMA);
+            // Check the Blitte Finish Disable bit
+            if (!getBFD()) {
+                // TODO: DON'T CHECK THE BBUSY FLAG, CHECK FOR 'RUNNING' STATE
+                if (agnus.blitter.isBusy()) {
+                    reschedule();
+                    // agnus.scheduleAbs<COP_SLOT>(NEVER, COP_BLITTER_BUSY);
+                    break;
                 }
-
-            } else {
-
-                if (verbose) debug("(%d,%d) does not match in this frame\n", trigger.v, trigger.h);
-                agnus.cancel<COP_SLOT>();
             }
+
+            // Wait for the next free cycle
+            if (!agnus.copperCanRun()) { reschedule(); break; }
+
+            // Schedule a wakeup event at the target position
+            scheduleWaitWakeup();
             break;
 
         case COP_SKIP1:
@@ -812,6 +822,12 @@ Copper::serviceEvent(EventID id)
             schedule(COP_FETCH);
             break;
 
+        case COP_BLITTER_BUSY:
+
+            // Should never be serviced
+            assert(false);
+            break;
+
         default:
             
             assert(false);
@@ -849,6 +865,16 @@ Copper::vsyncHandler()
         agnus.scheduleRel<COP_SLOT>(DMA_CYCLES(0), COP_REQ_DMA);
     } else {
         agnus.cancel<COP_SLOT>();
+    }
+}
+
+void
+Copper::blitterDidTerminate()
+{
+    if (agnus.hasEvent<COP_SLOT>(COP_BLITTER_BUSY)) {
+
+        debug(BLT_DEBUG, "Blitter did terminate\n");
+        scheduleWaitWakeup();
     }
 }
 

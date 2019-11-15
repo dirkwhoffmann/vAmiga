@@ -382,9 +382,6 @@ public:
     // Emulates the fill logic circuit
     void doFill(uint16_t &data, bool &carry);
 
-    // Clears the busy flag, triggeres an IRQ, and cancels the Blitter slot
-    void terminate();
-
     // Clears the busy flag and cancels the Blitter slot
     void kill();
 
@@ -395,8 +392,16 @@ public:
 
 private:
 
+    // Prepares for a new Blitter operation
     void prepareBlit();
+
+    // Starts a Blitter operation
     void startBlit();
+
+    // Clears the BBUSY flag and triggers the Blitter interrupt
+    void signalEnd();
+
+    // Concludes the current Blitter operation
     void endBlit();
 
 
