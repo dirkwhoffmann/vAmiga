@@ -395,10 +395,8 @@ public:
 
 private:
 
-    // Initiates a blit
+    void prepareBlit();
     void startBlit();
-
-    //  Concluded a blit
     void endBlit();
 
 

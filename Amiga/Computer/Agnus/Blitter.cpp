@@ -409,6 +409,9 @@ Blitter::serviceEvent(EventID id)
                 break;
             }
 
+            // Initialize internal Blitter variables
+            prepareBlit();
+
             // Only proceed if the bus is a free
             if (!agnus.busIsFree<BUS_BLITTER>()) break;
 
@@ -751,18 +754,21 @@ Blitter::doFill(uint16_t &data, bool &carry)
 }
 
 void
+Blitter::prepareBlit()
+{
+     remaining = bltsizeW * bltsizeH;
+     cntA = cntB = cntC = cntD = bltsizeW;
+
+     bzero = true;
+     bbusy = true;
+
+     bltpc = 0;
+     iteration = 0;
+}
+
+void
 Blitter::startBlit()
 {
-    // Initialize
-    remaining = bltsizeW * bltsizeH;
-    cntA = cntB = cntC = cntD = bltsizeW;
-
-    bzero = true;
-    bbusy = true;
-
-    bltpc = 0;
-    iteration = 0;
-
     // Based on the accuracy level, we run the slow or the fast Blitter
     int level = config.accuracy;
     bool useSlowBlitter = level >= 2;
