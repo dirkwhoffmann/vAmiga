@@ -484,8 +484,9 @@ public:
     
     uint8_t peekCustom8(uint32_t addr);
     uint16_t peekCustom16(uint32_t addr); 
+    uint16_t peekCustomFaulty16(uint32_t addr);
     uint32_t peekCustom32(uint32_t addr);
-    
+
     uint8_t spypeekCustom8(uint32_t addr);
     uint16_t spypeekCustom16(uint32_t addr);
     uint32_t spypeekCustom32(uint32_t addr);

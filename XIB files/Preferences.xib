@@ -484,6 +484,7 @@ Gw
                                                 <menu key="menu" id="9AY-BO-0xm">
                                                     <items>
                                                         <menuItem title="OCS (8362 R8)" state="on" id="EcI-3q-CCJ"/>
+                                                        <menuItem title="ECS (8373)" tag="1" hidden="YES" id="iM7-v8-ulI"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>

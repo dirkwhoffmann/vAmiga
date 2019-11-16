@@ -382,17 +382,20 @@ public:
     //
     
 public:
-    
-    // OCS register 0x00A and 0x00C (r)
+
+    // JOY0DATR:  $00A (r)
+    // JOY1DATR:  $00C (r)
+    // JOYTEST:   $036 (w)
+    //
+
     uint16_t peekJOY0DATR();
     uint16_t peekJOY1DATR();
-
-    // OCS register 0x036 (w)
     void pokeJOYTEST(uint16_t value);
 
-    //
-    // BPLCON0
-    //
+    // DENISEID: $07C (r) (ECS)
+    uint16_t peekDENISEID();
+
+    // BPLCON0:  $100 (w)
 
     /*      15 : HIRES         High-resolution enable
      * 14 - 12 : BPU2 - BPU0   Number of bit-planes used
@@ -431,11 +434,11 @@ public:
     static int bpu(uint16_t v);
     int bpu() { return bpu(bplcon0); }
 
-    // OCS register 0x102 (w)
+    // BPLCON1:  $102 (w)
     void pokeBPLCON1(uint16_t value);
     void setBPLCON1(uint16_t value);
 
-    // OCS register 0x104 (w)
+    // BPLCON2:  $104 (w)
     void pokeBPLCON2(uint16_t value);
     void setBPLCON2(uint16_t value);
     static int PF2PRI(uint16_t v) { return GET_BIT(v, 6); }
@@ -446,15 +449,16 @@ public:
     static uint16_t zPF1(uint16_t bplcon2) { return zPF(bplcon2 & 7); }
     static uint16_t zPF2(uint16_t bplcon2) { return zPF((bplcon2 >> 3) & 7); }
 
-    // OCS register 0x00E (r) and 0x098 (w)
+    // CLXDAT:   $00E (r)
+    // CLXCON:   $098 (w)
     uint16_t peekCLXDAT();
     void pokeCLXCON(uint16_t value);
 
-    // OCS registers 0x110, ..., 0x11A (w)
+    // BPLxDAT:  $110 - $11A (w)
     template <int x> void pokeBPLxDAT(uint16_t value);
-    
-    // OCS registers 0x140, 0x148, ..., 0x170, 0x178 (w)
-    // OCS registers 0x142, 0x14A, ..., 0x172, 0x17A (w)
+
+    // SPRxPOS:  $140, $148 ... $170, $178 (w)
+    // SPRxCTL:  $142, $14A ... $172, $17A (w)
     template <int x> void pokeSPRxPOS(uint16_t value);
     template <int x> void pokeSPRxCTL(uint16_t value);
 
@@ -463,14 +467,14 @@ public:
     }
     template <int x> int16_t sprhpos() { return sprhpos(sprpos[x], sprctl[x]); }
 
-    // OCS registers 0x144, 0x14C, ..., 0x174, 0x17C (w)
+    // SPRxDATA: $144, $14C ... $174, $17C (w)
+    // SPRxDATB: $146, $14E ... $176, $17E (w)
     template <int x> void pokeSPRxDATA(uint16_t value);
-    
-    // OCS registers 0x146, 0x14E, ..., 0x176, 0x17E (w)
     template <int x> void pokeSPRxDATB(uint16_t value);
 
-    // OCS registers 0x180, 0x181, ..., 0x1BC, 0x1BE (w)
-    void pokeColorReg(uint32_t addr, uint16_t value);
+    // COLORxx:  $180, $181 ... $1BC, $1BE (w)
+    template <int xx> void pokeCOLORxx(uint16_t value);
+    // void pokeCOLORxx(uint32_t addr, uint16_t value); // DEPRECATED
 
     
     //

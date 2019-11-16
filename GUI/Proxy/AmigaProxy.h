@@ -347,8 +347,9 @@ struct AmigaFileWrapper;
 - (SpriteInfo) getSpriteInfo:(NSInteger)nr;
 - (void) inspect;
 
+/*
 - (void) pokeColorReg:(NSInteger)reg value:(UInt16)value;
-
+*/
 - (double) palette;
 - (void) setPalette:(Palette)p;
 - (double) brightness;

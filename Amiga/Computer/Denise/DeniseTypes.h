@@ -18,14 +18,14 @@
 
 typedef enum : long
 {
-    DENISE_8362R8, // OCS Denise
-    DENISE_CNT
+    DENISE_8362R8, // OCS
+    DENISE_8373    // ECS (not supported yet)
 }
 DeniseRevision;
 
 inline bool isDeniseRevision(long value)
 {
-    return value >= 0 && value < DENISE_CNT;
+    return value >= 0 && value <= DENISE_8373;
 }
 
 inline const char *DeniseRevisionName(DeniseRevision type)
@@ -34,6 +34,7 @@ inline const char *DeniseRevisionName(DeniseRevision type)
 
     switch (type) {
         case DENISE_8362R8: return "DENISE_8362R8";
+        case DENISE_8373:   return "DENISE_8373";
         default:            return "???";
     }
 }

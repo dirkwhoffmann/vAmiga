@@ -503,10 +503,12 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->denise->getSprInfo(nr);
 }
+/*
 - (void) pokeColorReg:(NSInteger)reg value:(UInt16)value
 {
-    wrapper->denise->pokeColorReg(0x180 + 2*reg, value);
+    wrapper->denise->pokeCOLORxx(0x180 + 2*reg, value);
 }
+*/
 - (double) palette
 {
    return wrapper->denise->pixelEngine.getPalette();

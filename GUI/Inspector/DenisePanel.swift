@@ -193,12 +193,14 @@ extension Inspector {
         refreshDenise(everything: false, inspect: true)
     }
 
+    /*
     @IBAction func deniseColorAction(_ sender: NSColorWell!) {
 
         let color = sender.color.amigaRGB()
         amigaProxy?.denise.pokeColorReg(sender.tag, value: color)
         refreshDenise(everything: false, inspect: true)
     }
+    */
 
     @IBAction func selectSpriteAction(_ sender: Any!) {
         

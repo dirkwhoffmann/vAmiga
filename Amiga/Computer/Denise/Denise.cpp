@@ -171,19 +171,20 @@ Denise::pokeJOYTEST(uint16_t value)
     amiga.controlPort2.pokeJOYTEST(value);
 }
 
-/*
-void
-Denise::pokeBPLCON0(uint16_t value)
+uint16_t
+Denise::peekDENISEID()
 {
-    debug(BPLREG_DEBUG, "pokeBPLCON0(%X)\n", value);
+    uint16_t result;
 
-    if (bplcon0 != value) {
-
-        pokeBPLCON0(bplcon0, value);
-        bplcon0 = value;
+    if (config.revision == DENISE_8373) {
+        result = 0xFFFC;                           // ECS
+    } else {
+        result = mem.peekCustomFaulty16(0xDFF07C); // OCS
     }
+
+    debug(2, "peekDENISEID() = $%04X (%d)\n", result, result);
+    return result;
 }
-*/
 
 void
 Denise::pokeBPLCON0(uint16_t value)
@@ -378,18 +379,24 @@ Denise::pokeSPRxDATB(uint16_t value)
     sprRegChanges.add(4 * agnus.pos.h, REG_SPR0DATB + x, value);
 }
 
-void
-Denise::pokeColorReg(uint32_t addr, uint16_t value)
+template <int xx> void
+Denise::pokeCOLORxx(uint16_t value)
 {
-    /*
-    if (addr == 0x180) debug("COLOR00 = %x (CPU: %lld Agnus: %lld req: %d)\n", value, cpu.getClock(), agnus.clock, agnus.cpuRequestsBus); //REMOVE ASAP
-    */
+     debug(COLREG_DEBUG, "pokeCOLOR%02d(%X)\n", xx, value);
 
+     pixelEngine.colRegChanges.add(4 * agnus.pos.h, 0x180 + 2*xx, value);
+}
+
+/*
+void
+Denise::pokeCOLORxx(uint32_t addr, uint16_t value)
+{
     assert(addr >= 0x180 && addr <= 0x1BE && IS_EVEN(addr));
-    debug(COLREG_DEBUG, "pokeColorReg(%X, %X)\n", addr, value);
+    debug(COLREG_DEBUG, "pokeCOLORxx(%X, %X)\n", addr, value);
 
     pixelEngine.colRegChanges.add(4 * agnus.pos.h, addr, value);
 }
+*/
 
 bool
 Denise::attached(int x) {
@@ -1278,6 +1285,39 @@ template void Denise::pokeSPRxDATB<4>(uint16_t value);
 template void Denise::pokeSPRxDATB<5>(uint16_t value);
 template void Denise::pokeSPRxDATB<6>(uint16_t value);
 template void Denise::pokeSPRxDATB<7>(uint16_t value);
+
+template void Denise::pokeCOLORxx<0>(uint16_t value);
+template void Denise::pokeCOLORxx<1>(uint16_t value);
+template void Denise::pokeCOLORxx<2>(uint16_t value);
+template void Denise::pokeCOLORxx<3>(uint16_t value);
+template void Denise::pokeCOLORxx<4>(uint16_t value);
+template void Denise::pokeCOLORxx<5>(uint16_t value);
+template void Denise::pokeCOLORxx<6>(uint16_t value);
+template void Denise::pokeCOLORxx<7>(uint16_t value);
+template void Denise::pokeCOLORxx<8>(uint16_t value);
+template void Denise::pokeCOLORxx<9>(uint16_t value);
+template void Denise::pokeCOLORxx<10>(uint16_t value);
+template void Denise::pokeCOLORxx<11>(uint16_t value);
+template void Denise::pokeCOLORxx<12>(uint16_t value);
+template void Denise::pokeCOLORxx<13>(uint16_t value);
+template void Denise::pokeCOLORxx<14>(uint16_t value);
+template void Denise::pokeCOLORxx<15>(uint16_t value);
+template void Denise::pokeCOLORxx<16>(uint16_t value);
+template void Denise::pokeCOLORxx<17>(uint16_t value);
+template void Denise::pokeCOLORxx<18>(uint16_t value);
+template void Denise::pokeCOLORxx<19>(uint16_t value);
+template void Denise::pokeCOLORxx<20>(uint16_t value);
+template void Denise::pokeCOLORxx<21>(uint16_t value);
+template void Denise::pokeCOLORxx<22>(uint16_t value);
+template void Denise::pokeCOLORxx<23>(uint16_t value);
+template void Denise::pokeCOLORxx<24>(uint16_t value);
+template void Denise::pokeCOLORxx<25>(uint16_t value);
+template void Denise::pokeCOLORxx<26>(uint16_t value);
+template void Denise::pokeCOLORxx<27>(uint16_t value);
+template void Denise::pokeCOLORxx<28>(uint16_t value);
+template void Denise::pokeCOLORxx<29>(uint16_t value);
+template void Denise::pokeCOLORxx<30>(uint16_t value);
+template void Denise::pokeCOLORxx<31>(uint16_t value);
 
 template void Denise::draw<0>(int pixels);
 template void Denise::draw<1>(int pixels);
