@@ -28,6 +28,9 @@
 
 // Register debugging (set to 1 to generate debug output)
 
+static const int TMP_DEBUG = 2; // REMOVE ASAP
+static const int TMP_DEBUG2 = 2; // REMOVE ASAP
+
 static const int OCSREG_DEBUG  = 2;  // General OCS register debugging
 static const int BLTREG_DEBUG  = 2;  // Blitter registers
 static const int INTREG_DEBUG  = 2;  // Interrupt registers

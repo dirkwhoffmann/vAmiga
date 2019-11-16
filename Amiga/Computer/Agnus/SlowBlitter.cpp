@@ -85,7 +85,7 @@ Blitter::initSlowBlitter()
      *    0                -- -- -- --
      */
 
-    void (Blitter::*instruction[16][2][5])(void) = {
+    void (Blitter::*instruction[16][2][6])(void) = {
 
         // 0: -- -- -- --
         {
@@ -374,6 +374,7 @@ Blitter::initSlowBlitter()
                 &Blitter::exec <FETCH_C | HOLD_B | BUS>,
                 &Blitter::exec <WRITE_D | HOLD_D | BUS | REPEAT>,
 
+                &Blitter::exec <NOTHING>,
                 &Blitter::exec <WRITE_D | BUS | BLTDONE>
             },
 
@@ -383,6 +384,7 @@ Blitter::initSlowBlitter()
                 &Blitter::exec <BUS>,
                 &Blitter::exec <FAKEWRITE | BUS | REPEAT>,
 
+                &Blitter::exec <NOTHING>,
                 &Blitter::exec <FAKEWRITE | BUS | BLTDONE>
             }
         }

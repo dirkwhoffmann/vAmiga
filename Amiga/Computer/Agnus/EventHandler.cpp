@@ -154,11 +154,11 @@ Agnus::inspectEventSlot(EventSlot nr)
                 case COP_WAIT_OR_SKIP: i->eventName = "WAIT_OR_SKIP"; break;
                 case COP_WAIT1:        i->eventName = "COP_WAIT1"; break;
                 case COP_WAIT2:        i->eventName = "COP_WAIT2"; break;
+                case COP_WAIT_BLIT:    i->eventName = "COP_WAIT_BLIT"; break;
                 case COP_SKIP1:        i->eventName = "COP_SKIP1"; break;
                 case COP_SKIP2:        i->eventName = "COP_SKIP1"; break;
                 case COP_JMP1:         i->eventName = "COP_JMP1"; break;
                 case COP_JMP2:         i->eventName = "COP_JMP2"; break;
-                case COP_BLITTER_BUSY: i->eventName = "COP_BLITTER_BUSY"; break;
                 default:               i->eventName = "*** INVALID ***"; break;
             }
             break;

@@ -90,7 +90,7 @@ class Blitter : public SubComponent {
     //
 
     // The Slow Blitter's micro programs
-    void (Blitter::*instruction[16][2][5])(void);
+    void (Blitter::*instruction[16][2][6])(void);
 
     // The micro program to execute (DEPRECATED)
     uint16_t microInstr[32];

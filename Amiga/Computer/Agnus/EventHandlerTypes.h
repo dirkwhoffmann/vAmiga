@@ -145,11 +145,11 @@ typedef enum : long
     COP_WAIT_OR_SKIP,
     COP_WAIT1,
     COP_WAIT2,
+    COP_WAIT_BLIT,
     COP_SKIP1,
     COP_SKIP2,
     COP_JMP1,
     COP_JMP2,
-    COP_BLITTER_BUSY,
     COP_EVENT_COUNT,
     
     // Blitter slot

@@ -246,12 +246,13 @@ Blitter::pokeBLTALWM(uint16_t value)
 template <PokeSource s> void
 Blitter::pokeBLTSIZE(uint16_t value)
 {
+    plaindebug(TMP_DEBUG, "(%d,%d) BLTSIZE(%x)\n", agnus.pos.v, agnus.pos.h, value);
     debug(BLTREG_DEBUG, "pokeBLTSIZE(%X)\n", value);
 
     if (s == POKE_COPPER) {
-        setBLTSIZE(value);
-        // The Copper delay only applies if the Blitter is running?!
-        // agnus.recordRegisterChange(DMA_CYCLES(1), REG_BLTSIZE, value);
+        // setBLTSIZE(value);
+        // The Copper delay only applies if the Blitter is running?! False
+        agnus.recordRegisterChange(DMA_CYCLES(1), REG_BLTSIZE, value);
     } else {
         setBLTSIZE(value);
     }
@@ -405,7 +406,7 @@ Blitter::serviceEvent(EventID id)
 
         case BLT_STRT1:
 
-            // Postpone the operation if Blitter DMA is disabled
+            // Postpone the operation if the Blitter DMA is disabled
             if (!agnus.doBltDMA()) {
                 agnus.scheduleAbs<BLT_SLOT>(NEVER, BLT_STRT1);
                 break;
@@ -416,7 +417,7 @@ Blitter::serviceEvent(EventID id)
 
             // Only proceed if the bus is free
             if (!agnus.busIsFree<BUS_BLITTER>()) {
-                // debug("Blitter blocked in BLT_STRT1 by %d\n", agnus.busOwner[agnus.pos.h]);
+                debug(TMP_DEBUG2, "Blitter blocked in BLT_STRT1 by %d\n", agnus.busOwner[agnus.pos.h]);
                 break;
             }
 
@@ -428,7 +429,7 @@ Blitter::serviceEvent(EventID id)
 
             // Only proceed if the bus is a free
             if (!agnus.busIsFree<BUS_BLITTER>()) {
-                // debug("Blitter blocked in BLT_STRT2 by %d\n", agnus.busOwner[agnus.pos.h]);
+                debug(TMP_DEBUG2, "Blitter blocked in BLT_STRT2 by %d\n", agnus.busOwner[agnus.pos.h]);
                 break;
             }
 
@@ -820,6 +821,8 @@ Blitter::startBlit()
 void
 Blitter::signalEnd()
 {
+    plaindebug(TMP_DEBUG, "(%d,%d) Blitter interrupts\n", agnus.pos.v, agnus.pos.h);
+
     // Clear the Blitter busy flag
     bbusy = false;
 
@@ -830,6 +833,8 @@ Blitter::signalEnd()
 void
 Blitter::endBlit()
 {
+   plaindebug(TMP_DEBUG, "(%d,%d) Blitter terminates\n", agnus.pos.v, agnus.pos.h);
+
     // Clear the Blitter slot
     agnus.cancel<BLT_SLOT>();
 

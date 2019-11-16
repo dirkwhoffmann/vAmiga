@@ -368,7 +368,7 @@ Copper::move(int addr, uint16_t value)
 
     if (addr >= 0x180 && addr <= 0x1BE) {
 
-        debug(COLREG_DEBUG, "Copper -> COLREG(%x,%x)\n", addr, value);
+        plaindebug(TMP_DEBUG, "(%d,%d) COLOR%02d\n", agnus.pos.v, agnus.pos.h, addr - 0x180);
 
         // Color registers
         pixelEngine.colRegChanges.add(4 * agnus.pos.h, addr, value);
@@ -747,14 +747,22 @@ Copper::serviceEvent(EventID id)
             if (!getBFD()) {
                 // TODO: DON'T CHECK THE BBUSY FLAG, CHECK FOR 'RUNNING' STATE
                 if (agnus.blitter.isBusy()) {
-                    // reschedule();
-                    agnus.scheduleAbs<COP_SLOT>(NEVER, COP_BLITTER_BUSY);
+                    agnus.scheduleAbs<COP_SLOT>(NEVER, COP_WAIT_BLIT);
                     break;
                 }
             }
 
             // Wait for the next free cycle
             if (!agnus.copperCanRun()) { reschedule(); break; }
+
+            // Schedule a wakeup event at the target position
+            scheduleWaitWakeup();
+            break;
+
+        case COP_WAIT_BLIT:
+
+            // Wait for the next free cycle
+            // if (!agnus.copperCanRun()) { reschedule(); break; }
 
             // Schedule a wakeup event at the target position
             scheduleWaitWakeup();
@@ -822,12 +830,6 @@ Copper::serviceEvent(EventID id)
             schedule(COP_FETCH);
             break;
 
-        case COP_BLITTER_BUSY:
-
-            // Should never be serviced
-            assert(false);
-            break;
-
         default:
             
             assert(false);
@@ -871,10 +873,16 @@ Copper::vsyncHandler()
 void
 Copper::blitterDidTerminate()
 {
-    if (agnus.hasEvent<COP_SLOT>(COP_BLITTER_BUSY)) {
+    if (agnus.hasEvent<COP_SLOT>(COP_WAIT_BLIT)) {
 
         debug(BLT_DEBUG, "Blitter did terminate\n");
-        scheduleWaitWakeup();
+
+        // Wake up the Copper in the next even cycle
+        if (IS_EVEN(agnus.pos.h)) {
+            serviceEvent(COP_WAIT_BLIT);
+        } else {
+            agnus.scheduleRel<COP_SLOT>(DMA_CYCLES(1), COP_WAIT_BLIT);
+        }
     }
 }
 
