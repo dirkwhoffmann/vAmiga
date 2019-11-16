@@ -28,9 +28,6 @@
 
 // Register debugging (set to 1 to generate debug output)
 
-static const int TMP_DEBUG = 2; // REMOVE ASAP
-static const int TMP_DEBUG2 = 2; // REMOVE ASAP
-
 static const int OCSREG_DEBUG  = 2;  // General OCS register debugging
 static const int BLTREG_DEBUG  = 2;  // Blitter registers
 static const int INTREG_DEBUG  = 2;  // Interrupt registers
@@ -64,6 +61,7 @@ static const int PORT_DEBUG    = 2;  // Control ports and connected devices
 static const int COP_DEBUG     = 2;  // Copper
 
 static const int BLT_DEBUG     = 2;  // Blitter
+static const int BLTTIM_DEBUG  = 2;  // Blitter Timing
 static const int SER_DEBUG     = 2;  // Serial interface
 static const int POT_DEBUG     = 2;  // Potentiometer inputs
 static const int KBD_DEBUG     = 2;  // Keyboard

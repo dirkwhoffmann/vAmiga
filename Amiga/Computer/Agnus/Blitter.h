@@ -127,7 +127,20 @@ class Blitter : public SubComponent {
     // Flags
     //
 
+    /* Indicates if the Blitter is currently running.
+     * The flag is set to true when a Blitter operation starts and set to false
+     * when the operation ends.
+     */
+    bool running;
+
+    /* The Blitter busy flag
+     * This flag shows up in DMACON and has a similar meaning as variable
+     * 'running'. The only difference is that the busy flag is cleared a few
+     * cycles before the Blitter actually terminates.
+     */
     bool bbusy;
+
+    // The Blitter zero flag
     bool bzero;
 
 
@@ -226,6 +239,7 @@ public:
         & mask
         & lockD
 
+        & running
         & bbusy
         & bzero
 
@@ -272,7 +286,10 @@ public:
     
 public:
 
-    // Returns true if the Blitter is busy
+    // Returns true if the Blitter is processing a blit
+    bool isRunning() { return running; }
+
+    // Returns the value of the Blitter Busy Flag
     bool isBusy() { return bbusy; }
 
     // Returns the value of the zero flag

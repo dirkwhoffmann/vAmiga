@@ -368,7 +368,7 @@ Copper::move(int addr, uint16_t value)
 
     if (addr >= 0x180 && addr <= 0x1BE) {
 
-        plaindebug(TMP_DEBUG, "(%d,%d) COLOR%02d\n", agnus.pos.v, agnus.pos.h, addr - 0x180);
+        plaindebug(BLTTIM_DEBUG, "(%d,%d) COLOR%02d\n", agnus.pos.v, agnus.pos.h, addr - 0x180);
 
         // Color registers
         pixelEngine.colRegChanges.add(4 * agnus.pos.h, addr, value);
@@ -745,8 +745,7 @@ Copper::serviceEvent(EventID id)
 
             // Check the Blitte Finish Disable bit
             if (!getBFD()) {
-                // TODO: DON'T CHECK THE BBUSY FLAG, CHECK FOR 'RUNNING' STATE
-                if (agnus.blitter.isBusy()) {
+                if (agnus.blitter.isRunning()) {
                     agnus.scheduleAbs<COP_SLOT>(NEVER, COP_WAIT_BLIT);
                     break;
                 }
@@ -761,8 +760,14 @@ Copper::serviceEvent(EventID id)
 
         case COP_WAIT_BLIT:
 
+            // debug("COP_WAIT_BLIT\n");
+
             // Wait for the next free cycle
-            // if (!agnus.copperCanRun()) { reschedule(); break; }
+            if (agnus.busOwner[agnus.pos.h] != BUS_NONE &&
+                agnus.busOwner[agnus.pos.h] != BUS_BLITTER) {
+                // debug("COP_WAIT_BLIT delay\n");
+                reschedule(); break;
+            }
 
             // Schedule a wakeup event at the target position
             scheduleWaitWakeup();
@@ -875,7 +880,7 @@ Copper::blitterDidTerminate()
 {
     if (agnus.hasEvent<COP_SLOT>(COP_WAIT_BLIT)) {
 
-        debug(BLT_DEBUG, "Blitter did terminate\n");
+        // debug("Blitter did terminate\n");
 
         // Wake up the Copper in the next even cycle
         if (IS_EVEN(agnus.pos.h)) {

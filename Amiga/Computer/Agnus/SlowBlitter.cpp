@@ -63,7 +63,9 @@ Blitter::initSlowBlitter()
      *
      * In accuracy level 0, no micro-program is executed.
      *
-     * The micro programs below are inspired by Table 6.2 of the HRM:
+     * The micro programs below are inspired by Table 6.2 of the HRM.
+     * The published table doesn't seem to be 100% accurate. See the
+     * microprograms below for corrections.
      *
      *           Active
      * BLTCON0  Channels            Cycle sequence
@@ -87,12 +89,13 @@ Blitter::initSlowBlitter()
 
     void (Blitter::*instruction[16][2][6])(void) = {
 
-        // 0: -- -- -- --
+        // 0: -- -- | -- --
         {
             {
                 &Blitter::exec <BUSIDLE>,
                 &Blitter::exec <BUSIDLE | REPEAT>,
 
+                &Blitter::exec <NOTHING>,
                 &Blitter::exec <BLTDONE>
             },
 
@@ -100,16 +103,18 @@ Blitter::initSlowBlitter()
                 &Blitter::exec <BUSIDLE>,
                 &Blitter::exec <BUSIDLE | REPEAT>,
 
+                &Blitter::exec <NOTHING>,
                 &Blitter::exec <BLTDONE>
             },
         },
 
-        // 1: D0 -- D1 -- D2
+        // 1: D0 -- D1 -- | -- D2
         {
             {
                 &Blitter::exec <WRITE_D | HOLD_A | HOLD_B | BUS>,
                 &Blitter::exec <HOLD_D | BUSIDLE | REPEAT>,
 
+                &Blitter::exec <NOTHING>,
                 &Blitter::exec <WRITE_D | BUS | BLTDONE>
             },
 
@@ -117,16 +122,18 @@ Blitter::initSlowBlitter()
                 &Blitter::exec <FAKEWRITE | BUS>,
                 &Blitter::exec <BUSIDLE | REPEAT>,
 
+                &Blitter::exec <NOTHING>,
                 &Blitter::exec <FAKEWRITE | BUS | BLTDONE>
             }
         },
 
-        // 2: C0 -- C1 -- C2
+        // 2: C0 -- C1 -- | -- C2
         {
             {
                 &Blitter::exec <FETCH_C | HOLD_A | HOLD_B | BUS>,
                 &Blitter::exec <HOLD_D | BUSIDLE | REPEAT>,
 
+                &Blitter::exec <NOTHING>,
                 &Blitter::exec <BLTDONE>
             },
 
@@ -134,17 +141,19 @@ Blitter::initSlowBlitter()
                 &Blitter::exec <BUS>,
                 &Blitter::exec <BUSIDLE | REPEAT>,
 
+                &Blitter::exec <NOTHING>,
                 &Blitter::exec <BLTDONE>
             }
         },
 
-        // 3: C0 -- -- C1 D0 -- C2 D1 -- D2
+        // 3: C0 -- -- C1 D0 -- C2 D1 -- | -- D2
         {
             {
                 &Blitter::exec <FETCH_C | HOLD_A | HOLD_B | BUS>,
                 &Blitter::exec <WRITE_D | BUS>,
                 &Blitter::exec <HOLD_D | BUSIDLE | REPEAT>,
 
+                &Blitter::exec <NOTHING>,
                 &Blitter::exec <WRITE_D | BUS | BLTDONE>
             },
 
@@ -153,17 +162,19 @@ Blitter::initSlowBlitter()
                 &Blitter::exec <FAKEWRITE | BUS>,
                 &Blitter::exec <BUSIDLE | REPEAT>,
 
+                &Blitter::exec <NOTHING>,
                 &Blitter::exec <FAKEWRITE | BUS | BLTDONE>
             }
         },
 
-        // 4: B0 -- -- B1 -- -- B2
+        // 4: B0 -- -- B1 -- -- | -- B2
         {
             {
                 &Blitter::exec <FETCH_B | BUS>,
                 &Blitter::exec <HOLD_A | HOLD_B | BUSIDLE>,
                 &Blitter::exec <HOLD_D | BUSIDLE | REPEAT>,
 
+                &Blitter::exec <NOTHING>,
                 &Blitter::exec <BLTDONE>
             },
 
@@ -172,17 +183,19 @@ Blitter::initSlowBlitter()
                 &Blitter::exec <BUSIDLE>,
                 &Blitter::exec <BUSIDLE | REPEAT>,
 
+                &Blitter::exec <NOTHING>,
                 &Blitter::exec <BLTDONE>
             }
         },
 
-        // 5: B0 -- -- B1 D0 -- B2 D1 -- D2
+        // 5: B0 -- -- B1 D0 -- B2 D1 -- | -- D2
         {
             {
                 &Blitter::exec <FETCH_B | BUS>,
                 &Blitter::exec <WRITE_D | HOLD_A | HOLD_B | BUS>,
                 &Blitter::exec <HOLD_D | BUSIDLE | REPEAT>,
 
+                &Blitter::exec <NOTHING>,
                 &Blitter::exec <WRITE_D | BUS | BLTDONE>
             },
 
@@ -191,28 +204,33 @@ Blitter::initSlowBlitter()
                 &Blitter::exec <FAKEWRITE | BUS>,
                 &Blitter::exec <BUSIDLE | REPEAT>,
 
+                &Blitter::exec <NOTHING>,
                 &Blitter::exec <FAKEWRITE | BUS | BLTDONE>
             }
         },
 
-        // 6: B0 C0 -- B1 C1 -- B2 C2
+        // 6: B0 C0 -- B1 C1 -- | -- --
         {
             {
                 &Blitter::exec <FETCH_B | HOLD_D | BUS>,
-                &Blitter::exec <FETCH_C | HOLD_A | HOLD_B | BUS | REPEAT>,
+                &Blitter::exec <FETCH_C | HOLD_A | HOLD_B | BUS>,
+                &Blitter::exec <BUSIDLE | REPEAT>,
 
-                &Blitter::exec <HOLD_D | BLTDONE>
+                &Blitter::exec <HOLD_D>,
+                &Blitter::exec <BLTDONE>
             },
 
             {
                 &Blitter::exec <BUS>,
-                &Blitter::exec <BUS | REPEAT>,
+                &Blitter::exec <BUS>,
+                &Blitter::exec <BUSIDLE | REPEAT>,
 
+                &Blitter::exec <NOTHING>,
                 &Blitter::exec <BLTDONE>
             }
         },
 
-        // 7: B0 C0 -- -- B1 C1 D0 -- B2 C2 D1 -- D2
+        // 7: B0 C0 -- -- B1 C1 D0 -- B2 C2 D1 -- | -- D2
         {
             {
                 &Blitter::exec <FETCH_B | HOLD_A | BUS>,
@@ -220,6 +238,7 @@ Blitter::initSlowBlitter()
                 &Blitter::exec <WRITE_D | HOLD_D | BUS>,
                 &Blitter::exec <BUSIDLE | REPEAT>,
 
+                &Blitter::exec <NOTHING>,
                 &Blitter::exec <WRITE_D | BUS | BLTDONE>
             },
 
@@ -229,28 +248,31 @@ Blitter::initSlowBlitter()
                 &Blitter::exec <FAKEWRITE | BUS>,
                 &Blitter::exec <BUSIDLE | REPEAT>,
 
+                &Blitter::exec <NOTHING>,
                 &Blitter::exec <FAKEWRITE | BUS | BLTDONE>
             }
         },
 
-        // 8: A0 -- A1 -- A2
+        // 8: A0 -- A1 -- | -- --
         {
             {
                 &Blitter::exec <FETCH_A | HOLD_D | BUS>,
                 &Blitter::exec <HOLD_A | HOLD_B | BUSIDLE | REPEAT>,
 
-                &Blitter::exec <HOLD_D | BLTDONE>
+                &Blitter::exec <HOLD_D>,
+                &Blitter::exec <BLTDONE>
             },
 
             {
                 &Blitter::exec <BUS>,
                 &Blitter::exec <BUSIDLE | REPEAT>,
 
+                &Blitter::exec <NOTHING>,
                 &Blitter::exec <BLTDONE>
             }
         },
 
-        // 9: A0 -- A1 D0 A2 D1 -- D2
+        // 9: A0 -- A1 D0 A2 D1 | -- D2
         {
             {
                 &Blitter::exec <FETCH_A | HOLD_D | BUS>,
@@ -269,24 +291,26 @@ Blitter::initSlowBlitter()
             }
         },
 
-        // A: A0 C0 A1 C1 A2 C2
+        // A: A0 C0 A1 C1 A2 C2 | -- --
         {
             {
                 &Blitter::exec <FETCH_A | HOLD_D | BUS>,
                 &Blitter::exec <FETCH_C | HOLD_A | HOLD_B | BUS | REPEAT>,
 
-                &Blitter::exec <HOLD_D | BLTDONE>
+                &Blitter::exec <HOLD_D>,
+                &Blitter::exec <BLTDONE>
             },
 
             {
                 &Blitter::exec <BUS>,
                 &Blitter::exec <BUS | REPEAT>,
 
+                &Blitter::exec <NOTHING>,
                 &Blitter::exec <BLTDONE>
             }
         },
 
-        // B: A0 C0 -- A1 C1 D0 A2 C2 D1 -- D2
+        // B: A0 C0 -- A1 C1 D0 A2 C2 D1 | -- D2
         {
             {
                 &Blitter::exec <FETCH_A | HOLD_D | BUS>,
@@ -307,14 +331,15 @@ Blitter::initSlowBlitter()
             }
         },
 
-        // C: A0 B0 -- A1 B1 -- A2 B2
+        // C: A0 B0 -- A1 B1 -- A2 B2 -- | -- --
         {
             {
                 &Blitter::exec <FETCH_A | HOLD_D | BUS>,
                 &Blitter::exec <FETCH_B | HOLD_A | BUS>,
                 &Blitter::exec <HOLD_B  | BUSIDLE | REPEAT>,
 
-                &Blitter::exec <HOLD_D | BLTDONE>
+                &Blitter::exec <HOLD_D>,
+                &Blitter::exec <BLTDONE>
             },
 
             {
@@ -322,11 +347,12 @@ Blitter::initSlowBlitter()
                 &Blitter::exec <BUS>,
                 &Blitter::exec <BUSIDLE | REPEAT>,
 
+                &Blitter::exec <NOTHING>,
                 &Blitter::exec <BLTDONE>
             }
         },
 
-        // D: A0 B0 -- A1 B1 D0 A2 B2 D1 -- D2
+        // D: A0 B0 -- A1 B1 D0 A2 B2 D1 | -- D2
         {
             {
                 &Blitter::exec <FETCH_A | HOLD_D | BUS>,
@@ -347,14 +373,15 @@ Blitter::initSlowBlitter()
             }
         },
 
-        // E: A0 B0 C0 A1 B1 C1 A2 B2 C2
+        // E: A0 B0 C0 A1 B1 C1 A2 B2 C2 | -- --
         {
             {
                 &Blitter::exec <FETCH_A | HOLD_D | BUS>,
                 &Blitter::exec <FETCH_B | HOLD_A | BUS>,
                 &Blitter::exec <FETCH_C | HOLD_B | BUS | REPEAT>,
 
-                &Blitter::exec <HOLD_D | BLTDONE>
+                &Blitter::exec <HOLD_D>,
+                &Blitter::exec <BLTDONE>
             },
 
             {
@@ -362,11 +389,12 @@ Blitter::initSlowBlitter()
                 &Blitter::exec <BUS>,
                 &Blitter::exec <BUS | REPEAT>,
 
+                &Blitter::exec <NOTHING>,
                 &Blitter::exec <BLTDONE>
             }
         },
 
-        // F: A0 B0 C0 -- A1 B1 C1 D0 A2 B2 C2 D1 D2
+        // F: A0 B0 C0 -- A1 B1 C1 D0 A2 B2 C2 D1 | -- D2
         {
             {
                 &Blitter::exec <FETCH_A | BUS>,

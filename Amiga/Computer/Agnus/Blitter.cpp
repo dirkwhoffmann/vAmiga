@@ -246,7 +246,7 @@ Blitter::pokeBLTALWM(uint16_t value)
 template <PokeSource s> void
 Blitter::pokeBLTSIZE(uint16_t value)
 {
-    plaindebug(TMP_DEBUG, "(%d,%d) BLTSIZE(%x)\n", agnus.pos.v, agnus.pos.h, value);
+    plaindebug(BLTTIM_DEBUG, "(%d,%d) BLTSIZE(%x)\n", agnus.pos.v, agnus.pos.h, value);
     debug(BLTREG_DEBUG, "pokeBLTSIZE(%X)\n", value);
 
     if (s == POKE_COPPER) {
@@ -417,7 +417,7 @@ Blitter::serviceEvent(EventID id)
 
             // Only proceed if the bus is free
             if (!agnus.busIsFree<BUS_BLITTER>()) {
-                debug(TMP_DEBUG2, "Blitter blocked in BLT_STRT1 by %d\n", agnus.busOwner[agnus.pos.h]);
+                debug(BLTTIM_DEBUG, "Blitter blocked in BLT_STRT1 by %d\n", agnus.busOwner[agnus.pos.h]);
                 break;
             }
 
@@ -429,7 +429,7 @@ Blitter::serviceEvent(EventID id)
 
             // Only proceed if the bus is a free
             if (!agnus.busIsFree<BUS_BLITTER>()) {
-                debug(TMP_DEBUG2, "Blitter blocked in BLT_STRT2 by %d\n", agnus.busOwner[agnus.pos.h]);
+                debug(BLTTIM_DEBUG, "Blitter blocked in BLT_STRT2 by %d\n", agnus.busOwner[agnus.pos.h]);
                 break;
             }
 
@@ -765,14 +765,15 @@ Blitter::doFill(uint16_t &data, bool &carry)
 void
 Blitter::prepareBlit()
 {
-     remaining = bltsizeW * bltsizeH;
-     cntA = cntB = cntC = cntD = bltsizeW;
+    remaining = bltsizeW * bltsizeH;
+    cntA = cntB = cntC = cntD = bltsizeW;
 
-     bzero = true;
-     bbusy = true;
+    running = true;
+    bzero = true;
+    bbusy = true;
 
-     bltpc = 0;
-     iteration = 0;
+    bltpc = 0;
+    iteration = 0;
 }
 
 void
@@ -821,7 +822,7 @@ Blitter::startBlit()
 void
 Blitter::signalEnd()
 {
-    plaindebug(TMP_DEBUG, "(%d,%d) Blitter interrupts\n", agnus.pos.v, agnus.pos.h);
+    plaindebug(BLTTIM_DEBUG, "(%d,%d) Blitter interrupts\n", agnus.pos.v, agnus.pos.h);
 
     // Clear the Blitter busy flag
     bbusy = false;
@@ -833,7 +834,9 @@ Blitter::signalEnd()
 void
 Blitter::endBlit()
 {
-   plaindebug(TMP_DEBUG, "(%d,%d) Blitter terminates\n", agnus.pos.v, agnus.pos.h);
+    plaindebug(BLTTIM_DEBUG, "(%d,%d) Blitter terminates\n", agnus.pos.v, agnus.pos.h);
+
+    running = false;
 
     // Clear the Blitter slot
     agnus.cancel<BLT_SLOT>();
