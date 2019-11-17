@@ -89,13 +89,13 @@ class Blitter : public SubComponent {
     // Slow Blitter
     //
 
-    // The Slow Blitter's micro programs
-    void (Blitter::*instruction[16][2][6])(void);
+    // Micro-programs for copy blits (fill logic disabled)
+    void (Blitter::*copyBlitInstr[16][2][6])(void);
 
-    // The micro program to execute (DEPRECATED)
-    uint16_t microInstr[32];
+    // Micro-programs for copy blits (fill logic enabled)
+    void (Blitter::*fillBlitInstr[16][2][6])(void);
 
-    // The program counter indexing the microInstr array
+    // The program counter indexing the micro instruction to execute
     uint16_t bltpc;
 
     int iteration;
@@ -216,7 +216,6 @@ public:
         & ashift
         & bshift
 
-        & microInstr
         & bltpc
 
         & iteration

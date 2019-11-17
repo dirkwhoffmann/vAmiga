@@ -51,21 +51,23 @@ static const uint16_t FAKEWRITE = 0b0001'0000'0000'0000;
 void
 Blitter::initSlowBlitter()
 {
-    /* Micro programs:
+    /* Micro programs
      *
      * There are two versions of each microprogram:
      *
-     * 1. A full version that operates the bus and all Blitter components.
-     *    This version is used by the SlowBlitter (accuracy level 2).
+     *   1. A full version that operates the bus and all Blitter components.
+     *   2. A stripped down version that operates the bus only.
      *
-     * 2. A stripped down version that operates the bus only.
-     *    This version is used in fake-execution mode (accuracy level 1).
+     *   In accuracy level 0, no micro-program is executed.
+     *   In accuracy level 1, the stripped down version is executed.
+     *   In accuracy level 2, the full version is executed.
+     */
+
+    /* Micro programs for the Copy Blitter (with disabled fill logic)
      *
-     * In accuracy level 0, no micro-program is executed.
-     *
-     * The micro programs below are inspired by Table 6.2 of the HRM.
+     * The programs below have been derived from Table 6.2 of the HRM.
      * The published table doesn't seem to be 100% accurate. See the
-     * microprograms below for corrections.
+     * microprograms below for applied modifications.
      *
      *           Active
      * BLTCON0  Channels            Cycle sequence
@@ -86,8 +88,7 @@ Blitter::initSlowBlitter()
      *    1           D    D0 -- D1 -- D2
      *    0                -- -- -- --
      */
-
-    void (Blitter::*instruction[16][2][6])(void) = {
+    void (Blitter::*copyBlitInstr[16][2][6])(void) = {
 
         // 0: -- -- | -- --
         {
@@ -418,8 +419,135 @@ Blitter::initSlowBlitter()
         }
     };
 
-    assert(sizeof(this->instruction) == sizeof(instruction));
-    memcpy(this->instruction, instruction, sizeof(instruction));
+    /* Micro programs for the Copy Blitter (with enabled fill logic)
+     *
+     * The programs below have been derived from the "Errata for the Amiga
+     * Hardware Manual" (October 17, 1985).
+     * The published table doesn't seem to be 100% accurate. See the
+     * microprograms below for applied modifications.
+     *
+     *           Active
+     * BLTCON0  Channels            Cycle sequence
+     *    D     A B   D    A0 B0 -- -- A1 B1 D0 -- A2 B2 D1 -- D2
+     *    9     A     D    A0 -- -- A1 D0 A2 D1 -- D2
+     *    5       B   D    B0 -- -- -- B1 D0 -- -- B2 D1 -- D2
+     *    1           D    -- -- -- D0 -- -- D1 -- -- D2
+     *
+     * For all other BLTCON0 combinations, the fill bit has no effect on timing.
+     */
+    void (Blitter::*fillBlitInstr1[2][6])(void) = {
+
+        // 1: D0 -- -- D1 -- -- | -- D2
+        {
+            &Blitter::exec <WRITE_D | HOLD_A | HOLD_B | BUS>,
+            &Blitter::exec <HOLD_D | BUSIDLE>,
+            &Blitter::exec <REPEAT>,
+
+            &Blitter::exec <NOTHING>,
+            &Blitter::exec <WRITE_D | BUS | BLTDONE>
+        },
+
+        {
+            &Blitter::exec <FAKEWRITE | BUS>,
+            &Blitter::exec <BUSIDLE>,
+            &Blitter::exec <REPEAT>,
+
+            &Blitter::exec <NOTHING>,
+            &Blitter::exec <FAKEWRITE | BUS | BLTDONE>
+        }
+    };
+
+    void (Blitter::*fillBlitInstr5[2][6])(void) = {
+
+        // 5: B0 -- -- B1 D0 -- B2 D1 -- | -- D2
+        {
+            &Blitter::exec <FETCH_B | BUS>,
+            &Blitter::exec <WRITE_D | HOLD_A | HOLD_B | BUS>,
+            &Blitter::exec <HOLD_D | BUSIDLE>,
+            &Blitter::exec <REPEAT>,
+
+            &Blitter::exec <NOTHING>,
+            &Blitter::exec <WRITE_D | BUS | BLTDONE>
+        },
+
+        {
+            &Blitter::exec <BUS>,
+            &Blitter::exec <FAKEWRITE | BUS>,
+            &Blitter::exec <BUSIDLE>,
+            &Blitter::exec <REPEAT>,
+
+            &Blitter::exec <NOTHING>,
+            &Blitter::exec <FAKEWRITE | BUS | BLTDONE>
+        }
+    };
+
+    void (Blitter::*fillBlitInstr9[2][6])(void) = {
+
+        // 9: A0 -- -- A1 D0 -- A2 D1 -- | -- D2
+        {
+            &Blitter::exec <FETCH_A | HOLD_D | BUS>,
+            &Blitter::exec <WRITE_D | HOLD_A | BUS>,
+            &Blitter::exec <REPEAT>,
+
+            &Blitter::exec <HOLD_D>,
+            &Blitter::exec <WRITE_D | BUS | BLTDONE>
+        },
+
+        {
+            &Blitter::exec <BUS>,
+            &Blitter::exec <FAKEWRITE | BUS>,
+            &Blitter::exec <REPEAT>,
+
+            &Blitter::exec <NOTHING>,
+            &Blitter::exec <FAKEWRITE | BUS | BLTDONE>
+        }
+    };
+
+    void (Blitter::*fillBlitInstr13[2][6])(void) = {
+
+        // D: A0 B0 -- -- A1 B1 D0 -- A2 B2 D1 -- | -- D2
+        {
+            &Blitter::exec <FETCH_A | HOLD_D | BUS>,
+            &Blitter::exec <FETCH_B | HOLD_A | BUS>,
+            &Blitter::exec <WRITE_D | HOLD_B | BUS>,
+            &Blitter::exec <REPEAT>,
+
+            &Blitter::exec <HOLD_D>,
+            &Blitter::exec <WRITE_D | BUS | BLTDONE>
+        },
+
+        {
+             &Blitter::exec <BUS>,
+             &Blitter::exec <BUS>,
+             &Blitter::exec <FAKEWRITE | BUS>,
+             &Blitter::exec <REPEAT>,
+
+             &Blitter::exec <NOTHING>,
+             &Blitter::exec <FAKEWRITE | BUS | BLTDONE>
+        },
+    };
+
+    // Setup the Copy Blitter programs
+    assert(sizeof(this->copyBlitInstr) == sizeof(copyBlitInstr));
+    memcpy(this->copyBlitInstr, copyBlitInstr, sizeof(copyBlitInstr));
+
+    // Setup the Fill Blitter programs
+    assert(sizeof(this->fillBlitInstr) == sizeof(copyBlitInstr));
+    memcpy(this->fillBlitInstr, copyBlitInstr, sizeof(copyBlitInstr));
+    assert(sizeof(this->fillBlitInstr[1]) == sizeof(fillBlitInstr1));
+    memcpy(this->fillBlitInstr[1], fillBlitInstr1, sizeof(fillBlitInstr1));
+
+    assert(sizeof(this->fillBlitInstr[5]) == sizeof(fillBlitInstr5));
+    memcpy(this->fillBlitInstr[5], fillBlitInstr5, sizeof(fillBlitInstr5));
+
+    assert(sizeof(this->fillBlitInstr[9]) == sizeof(fillBlitInstr9));
+    memcpy(this->fillBlitInstr[9], fillBlitInstr9, sizeof(fillBlitInstr9));
+
+    assert(sizeof(this->fillBlitInstr[13]) == sizeof(fillBlitInstr13));
+    memcpy(this->fillBlitInstr[13], fillBlitInstr13, sizeof(fillBlitInstr13));
+
+    // Setup the Line Blitter programs
+    // TODO
 
     dump();
 }
@@ -645,6 +773,7 @@ Blitter::exec()
             assert(dhold == doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF));
 
             // Run the fill logic circuit
+            // TODO: Use a seperate FILL instruction (FILL_HOLD_D)
             if (bltconFE()) doFill(dhold, fillCarry);
 
             // Update the zero flag

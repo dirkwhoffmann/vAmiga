@@ -440,13 +440,23 @@ Blitter::serviceEvent(EventID id)
         case BLT_EXEC_SLOW:
 
             debug(BLT_DEBUG, "Instruction %d:%d\n", bltconUSE(), bltpc);
-            (this->*instruction[bltconUSE()][0][bltpc])();
+            // TODO: Use BLT_COPY, BLT_FILL
+            if (!bltconFE()) {
+                (this->*copyBlitInstr[bltconUSE()][0][bltpc])();
+            } else {
+                (this->*fillBlitInstr[bltconUSE()][0][bltpc])();
+            }
             break;
 
         case BLT_EXEC_FAST:
 
             debug(BLT_DEBUG, "Faked instruction %d:%d\n", bltconUSE(), bltpc);
-            (this->*instruction[bltconUSE()][1][bltpc])();
+            // TODO: Use BLT_FAKE_COPY, BLT_FAKE_FILL
+            if (!bltconFE()) {
+                (this->*copyBlitInstr[bltconUSE()][1][bltpc])();
+            } else {
+                (this->*fillBlitInstr[bltconUSE()][1][bltpc])();
+            }
             break;
 
         default:
