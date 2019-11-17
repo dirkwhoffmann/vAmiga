@@ -1854,6 +1854,11 @@ Agnus::executeUntilBusIsFree()
     oldpos = pos.h;
     execute();
 
+    // If Agnus is ahead, add wait statements to the CPU
+    if (clock - cpu.getClock() > 0) {
+        cpu.addWaitStates(clock - cpu.getClock());
+    }
+
     // The CPU usually accesses memory in even cyles. Advance to such a cycle
     if (IS_EVEN(pos.h)) {
         oldpos = pos.h;

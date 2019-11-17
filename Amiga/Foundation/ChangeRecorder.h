@@ -86,6 +86,7 @@ template <uint16_t capacity> struct ChangeRecorder
     // Adds an element
     void add(int64_t trigger, uint32_t addr, uint16_t value)
     {
+        // if (isFull()) { dump(); } // REMOVE ASAP
         assert(!isFull());
 
         // Remember where the new element will be added

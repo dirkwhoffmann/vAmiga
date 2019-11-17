@@ -36,10 +36,7 @@ extension PreferencesController {
         compFilterActivation.selectItem(withTag: config.audio.filterActivation.rawValue)
 
         // Floppy drives
-        let speed = config.df0.speed
-
-        track("Speed = \(speed)")
-        
+        let speed = config.df0.speed        
         assert(speed == config.df1.speed)
         assert(speed == config.df2.speed)
         assert(speed == config.df3.speed)
