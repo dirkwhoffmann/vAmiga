@@ -50,7 +50,7 @@ struct ShaderOptions: Codable {
 }
 
 // Default settings for TFT monitor emulation (retro effects off)
-var ShaderDefaultsTFT = ShaderOptions(blur: 1,
+let ShaderDefaultsTFT = ShaderOptions(blur: 1,
                                       blurRadius: 0,
                                       bloom: 0,
                                       bloomRadius: 1.0,
@@ -68,7 +68,7 @@ var ShaderDefaultsTFT = ShaderOptions(blur: 1,
                                       disalignmentV: 0.001)
 
 // Default settings for CRT monitor emulation (retro effects on)
-var ShaderDefaultsCRT = ShaderOptions(blur: 1,
+let ShaderDefaultsCRT = ShaderOptions(blur: 1,
                                       blurRadius: 1.5,
                                       bloom: 1,
                                       bloomRadius: 1.0,
