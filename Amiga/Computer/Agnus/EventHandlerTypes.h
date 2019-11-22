@@ -155,8 +155,9 @@ typedef enum : long
     // Blitter slot
     BLT_STRT1 = 1,
     BLT_STRT2,
-    BLT_EXEC_SLOW,
-    BLT_EXEC_FAST,
+    BLT_COPY_SLOW,
+    BLT_COPY_FAKE,
+    BLT_LINE_FAKE,
     BLT_EVENT_COUNT,
         
     // SEC slot
