@@ -255,6 +255,7 @@ struct AmigaFileWrapper;
 - (BOOL) isArosRom:(RomRevision)rev;
 - (BOOL) isDiagRom:(RomRevision)rev;
 - (BOOL) isOrigRom:(RomRevision)rev;
+- (BOOL) isHyperionRom:(RomRevision)rev;
 
 - (BOOL) hasRom;
 - (BOOL) hasBootRom;

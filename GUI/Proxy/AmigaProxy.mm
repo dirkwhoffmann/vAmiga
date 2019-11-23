@@ -229,6 +229,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->mem->isOrigRom(rev);
 }
+- (BOOL) isHyperionRom:(RomRevision)rev
+{
+    return wrapper->mem->isHyperionRom(rev);
+}
 - (BOOL) hasRom
 {
     return wrapper->mem->hasKickRom();
