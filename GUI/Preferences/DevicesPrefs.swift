@@ -58,7 +58,7 @@ extension PreferencesController {
         devReleaseMouseByShaking.state = metal.releaseMouseByShaking ? .on : .off
     }
     
-    func updateJoyKeyMap(_ nr: Int, dir: JoystickDirection, button: NSButton, txt: NSTextField) {
+    func updateJoyKeyMap(_ nr: Int, dir: JoystickState, button: NSButton, txt: NSTextField) {
         
         assert(nr == 0 || nr == 1)
         
@@ -130,11 +130,11 @@ extension PreferencesController {
         let tag = UInt32(sender.tag)
         
         if tag >= 0 && tag <= 5 {
-            devRecordKey1 = JoystickDirection(rawValue: tag)
+            devRecordKey1 = JoystickState(rawValue: tag)
             devRecordKey2 = nil
         } else if tag >= 10 && tag <= 15 {
             devRecordKey1 = nil
-            devRecordKey2 = JoystickDirection(rawValue: (tag - 10))
+            devRecordKey2 = JoystickState(rawValue: (tag - 10))
         } else {
             assert(false)
         }

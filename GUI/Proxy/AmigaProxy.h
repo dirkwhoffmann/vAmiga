@@ -471,7 +471,7 @@ struct AmigaFileWrapper;
 
 - (void) dump;
 
-- (void) trigger:(JoystickEvent)event;
+- (void) trigger:(JoystickAction)event;
 - (BOOL) autofire;
 - (void) setAutofire:(BOOL)value;
 - (NSInteger) autofireBullets;

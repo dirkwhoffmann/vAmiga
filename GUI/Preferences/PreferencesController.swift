@@ -188,10 +188,10 @@ class PreferencesController: DialogController {
     //
     
     /// Indicates if a keycode should be recorded for keyset 1
-    var devRecordKey1: JoystickDirection?
+    var devRecordKey1: JoystickState?
     
     /// Indicates if a keycode should be recorded for keyset 1
-    var devRecordKey2: JoystickDirection?
+    var devRecordKey2: JoystickState?
     
     /// Joystick emulation keys
     @IBOutlet weak var devLeft1: NSTextField!

@@ -817,7 +817,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->joystick->dump();
 }
-- (void) trigger:(JoystickEvent)event
+- (void) trigger:(JoystickAction)event
 {
     wrapper->joystick->trigger(event);
 }

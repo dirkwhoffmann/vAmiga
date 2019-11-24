@@ -117,7 +117,7 @@ public:
     uint8_t ciapa();
     
     // Triggers a joystick event
-    void trigger(JoystickEvent event);
+    void trigger(JoystickAction event);
 
     /* Execution function for this control port
      * This method needs to be invoked at the end of each frame to make the

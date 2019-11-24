@@ -47,9 +47,9 @@ typedef enum
     JOYSTICK_RIGHT,
     JOYSTICK_FIRE
 }
-JoystickDirection;
+JoystickState;
 
-inline bool isJoystickDirection(long value) {
+inline bool isJoystickState(long value) {
     return value >= 0 && value <= JOYSTICK_FIRE;
 }
 
@@ -65,9 +65,9 @@ typedef enum
     RELEASE_XY,
     RELEASE_FIRE
 }
-JoystickEvent;
+JoystickAction;
 
-inline bool isJoystickEvent(long value) {
+inline bool isJoystickAction(long value) {
     return value >= 0 && value <= RELEASE_FIRE;
 }
 

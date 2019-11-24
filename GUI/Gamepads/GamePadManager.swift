@@ -277,13 +277,13 @@ class GamePadManager: NSObject {
     /*! @returns true, iff a joystick event has been triggered on port A or port B
      */
     @discardableResult
-    func joystickEvent(_ sender: GamePad!, events: [JoystickEvent]) -> Bool {
+    func joystickAction(_ sender: GamePad!, events: [JoystickAction]) -> Bool {
     
         // Find slot of connected GamePad
         let slot = lookupGamePad(sender)
         
         // Pass joystick event to the main controller
-        return controller.joystickEvent(slot: slot, events: events)
+        return controller.joystickAction(slot: slot, events: events)
     }
  
     func listDevices() {

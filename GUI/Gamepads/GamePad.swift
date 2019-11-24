@@ -51,7 +51,7 @@ class GamePad {
     /* Rescued information from the last invocation of the action function
      * Used to determine if a joystick event needs to be triggered.
      */
-    var oldEvents: [Int: [JoystickEvent]] = [:]
+    var oldEvents: [Int: [JoystickAction]] = [:]
     
     // Cotroller dependent usage IDs for left and right gamepad joysticks
     var lThumbXUsageID = kHIDUsage_GD_X
@@ -126,7 +126,7 @@ class GamePad {
 extension GamePad {
     
     /// Assigns a keyboard emulation key
-    func assign(key: MacKey, direction: JoystickDirection) {
+    func assign(key: MacKey, direction: JoystickState) {
         
         assert(keyMap != nil)
         
@@ -146,9 +146,9 @@ extension GamePad {
         
         if let direction = keyMap?[macKey] {
 
-            var events: [JoystickEvent]
+            var events: [JoystickAction]
             
-            switch JoystickDirection(direction) {
+            switch JoystickState(direction) {
                 
             case JOYSTICK_UP:
                 keyUp = true
@@ -173,7 +173,7 @@ extension GamePad {
                 fatalError()
             }
             
-            return manager.joystickEvent(self, events: events)
+            return manager.joystickAction(self, events: events)
         }
         
         return false
@@ -188,9 +188,9 @@ extension GamePad {
 
         if let direction = keyMap?[macKey] {
             
-            var events: [JoystickEvent]
+            var events: [JoystickAction]
             
-            switch JoystickDirection(direction) {
+            switch JoystickState(direction) {
             
             case JOYSTICK_UP:
                 keyUp = false
@@ -215,7 +215,7 @@ extension GamePad {
                 fatalError()
             }
             
-            return manager.joystickEvent(self, events: events)
+            return manager.joystickAction(self, events: events)
         }
     
         return false
@@ -263,14 +263,14 @@ extension GamePad {
         // Buttons
         if usagePage == kHIDPage_Button {
             // track("BUTTON")
-            manager.joystickEvent(self, events: (intValue != 0) ? [PRESS_FIRE] : [RELEASE_FIRE])
+            manager.joystickAction(self, events: (intValue != 0) ? [PRESS_FIRE] : [RELEASE_FIRE])
             return
         }
         
         // Stick
         if usagePage == kHIDPage_GenericDesktop {
             
-            var events: [JoystickEvent]?
+            var events: [JoystickAction]?
             
             switch usage {
                 
@@ -317,7 +317,7 @@ extension GamePad {
             }
             
             // Trigger event
-            manager.joystickEvent(self, events: events!)
+            manager.joystickAction(self, events: events!)
         }
     }
 }

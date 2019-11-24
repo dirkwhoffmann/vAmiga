@@ -764,7 +764,7 @@ extension MyController {
     // GamePadManager delegation method
     // Returns true, iff a joystick event has been triggered on port A or B
     @discardableResult
-    func joystickEvent(slot: Int, events: [JoystickEvent]) -> Bool {
+    func joystickAction(slot: Int, events: [JoystickAction]) -> Bool {
         
         if slot == inputDevice1 {
             for event in events { amiga.joystick1.trigger(event) }
