@@ -795,6 +795,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->mouse->setRightButton(value);
 }
+- (void) trigger:(JoystickAction)event
+{
+    wrapper->mouse->trigger(event);
+}
 
 @end
 

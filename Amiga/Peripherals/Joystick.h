@@ -116,7 +116,7 @@ public:
     // Callback handler for function ControlPort::ciapa()
     uint8_t ciapa();
     
-    // Triggers a joystick event
+    // Triggers a gamepad event
     void trigger(JoystickAction event);
 
     /* Execution function for this control port

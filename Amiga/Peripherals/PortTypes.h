@@ -45,12 +45,14 @@ typedef enum
     JOYSTICK_DOWN,
     JOYSTICK_LEFT,
     JOYSTICK_RIGHT,
-    JOYSTICK_FIRE
+    JOYSTICK_FIRE,
+    MOUSE_BUTTON_LEFT,
+    MOUSE_BUTTON_RIGHT,
 }
 JoystickState;
 
 inline bool isJoystickState(long value) {
-    return value >= 0 && value <= JOYSTICK_FIRE;
+    return value >= 0 && value <= MOUSE_BUTTON_RIGHT;
 }
 
 typedef enum
@@ -63,12 +65,16 @@ typedef enum
     RELEASE_X,
     RELEASE_Y,
     RELEASE_XY,
-    RELEASE_FIRE
+    RELEASE_FIRE,
+    PRESS_MOUSE_LEFT,
+    PRESS_MOUSE_RIGHT,
+    RELEASE_MOUSE_LEFT,
+    RELEASE_MOUSE_RIGHT
 }
 JoystickAction;
 
 inline bool isJoystickAction(long value) {
-    return value >= 0 && value <= RELEASE_FIRE;
+    return value >= 0 && value <= RELEASE_MOUSE_RIGHT;
 }
 
 //

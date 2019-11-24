@@ -456,6 +456,7 @@ struct AmigaFileWrapper;
 - (void) setXY:(NSPoint)pos;
 - (void) setLeftButton:(BOOL)value;
 - (void) setRightButton:(BOOL)value;
+- (void) trigger:(JoystickAction)event;
 
 @end
 

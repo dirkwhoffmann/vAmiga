@@ -169,6 +169,12 @@ extension GamePad {
             case JOYSTICK_FIRE:
                 events = [PRESS_FIRE]
 
+            case MOUSE_BUTTON_LEFT:
+                events = [PRESS_MOUSE_LEFT]
+
+            case MOUSE_BUTTON_RIGHT:
+                events = [PRESS_MOUSE_RIGHT]
+
             default:
                 fatalError()
             }
@@ -210,7 +216,13 @@ extension GamePad {
                 
             case JOYSTICK_FIRE:
                 events = [RELEASE_FIRE]
-                
+
+            case MOUSE_BUTTON_LEFT:
+                events = [RELEASE_MOUSE_LEFT]
+
+            case MOUSE_BUTTON_RIGHT:
+                events = [RELEASE_MOUSE_RIGHT]
+
             default:
                 fatalError()
             }

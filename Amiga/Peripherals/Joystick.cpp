@@ -146,7 +146,7 @@ Joystick::trigger(JoystickAction event)
             break;
             
         default:
-            assert(0);
+            break;
     }
 }
 

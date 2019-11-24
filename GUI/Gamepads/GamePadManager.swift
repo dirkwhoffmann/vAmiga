@@ -305,5 +305,6 @@ class GamePadManager: NSObject {
     
         gamePads[0]!.keyMap = Defaults.joyKeyMap1
         gamePads[1]!.keyMap = Defaults.joyKeyMap2
+        gamePads[2]!.keyMap = Defaults.mouseKeyMap
     }
 }

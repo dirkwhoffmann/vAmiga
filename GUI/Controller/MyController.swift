@@ -767,12 +767,18 @@ extension MyController {
     func joystickAction(slot: Int, events: [JoystickAction]) -> Bool {
         
         if slot == inputDevice1 {
-            for event in events { amiga.joystick1.trigger(event) }
+            for event in events {
+                amiga.joystick1.trigger(event)
+                amiga.mouse.trigger(event)
+            }
             return true
         }
 
         if slot == inputDevice2 {
-            for event in events { amiga.joystick2.trigger(event) }
+            for event in events {
+                amiga.joystick2.trigger(event)
+                amiga.mouse.trigger(event)
+            }
             return true
         }
         
