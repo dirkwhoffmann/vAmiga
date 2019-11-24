@@ -416,7 +416,7 @@ Memory::version(RomRevision rev)
 
         case ROM_HYP314_46_143:  return "Rev 46.143";
 
-        case ROM_AROS_55696:     return "SVN 5696";
+        case ROM_AROS_55696:     return "SVN 55696";
         case ROM_AROS_55696_EXT: return "SVN 55696";
 
         case ROM_DIAG11:         return "Version 1.1";
