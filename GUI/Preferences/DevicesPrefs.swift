@@ -97,6 +97,17 @@ extension PreferencesController {
         devReleaseMouseByShaking.state = metal.releaseMouseByShaking ? .on : .off
     }
 
+    // Translates a button tag back to the related slot and gamepad action
+    func gamePadAction(for tag: Int) -> (Int, GamePadAction) {
+
+        switch tag {
+        case 0...4:   return (0, GamePadAction(UInt32(tag)))
+        case 10...14: return (1, GamePadAction(UInt32(tag - 10)))
+        case 5...6:   return (2, GamePadAction(UInt32(tag)))
+        default: fatalError()
+        }
+    }
+
     //
     // Keyboard events
     //
@@ -113,19 +124,8 @@ extension PreferencesController {
         }
 
         if let rec = devRecordedKey {
-
-            var slot: Int
-            var action: GamePadAction
-
-            switch rec {
-            case 0...4:   slot = 0; action = GamePadAction(UInt32(rec))
-            case 10...14: slot = 1; action = GamePadAction(UInt32(rec - 10))
-            case 5...6:   slot = 2; action = GamePadAction(UInt32(rec))
-            default: fatalError()
-            }
-
-            // track("Assigning slot \(slot) action \(action)")
-            manager.gamePads[slot]?.assign(key: macKey, direction: action)
+            let (slot, action) = gamePadAction(for: rec)
+            manager.gamePads[slot]?.bind(key: macKey, action: action)
             devRecordedKey = nil
         }
 
@@ -148,7 +148,29 @@ extension PreferencesController {
         
         refresh()
     }
-    
+
+    /*
+    @IBAction func devDeleteKeyAction(_ sender: NSButton!) {
+        
+        guard let manager = myController?.gamePadManager else { return }
+        track()
+
+        let (slot, action) = gamePadAction(for: sender.tag)
+        manager.gamePads[slot]?.unbind(action: action)
+        devRecordedKey = nil
+    }
+    */
+
+    @IBAction func devDeleteKeysetAction(_ sender: NSButton!) {
+
+        assert(sender.tag >= 0 && sender.tag <= 2)
+
+        track()
+        guard let manager = myController?.gamePadManager else { return }
+        manager.gamePads[sender.tag]?.keyMap = [:]
+        refresh()
+    }
+
     @IBAction func devAutofireAction(_ sender: NSButton!) {
         
         amigaProxy?.joystick1.setAutofire(sender.state == .on)

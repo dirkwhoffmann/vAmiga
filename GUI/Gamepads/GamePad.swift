@@ -124,19 +124,24 @@ class GamePad {
 //
 
 extension GamePad {
-    
-    /// Assigns a keyboard emulation key
-    func assign(key: MacKey, direction: GamePadAction) {
-        
-        assert(keyMap != nil)
-        
+
+    // Binds a key to a gamepad action
+    func bind(key: MacKey, action: GamePadAction) {
+
         // Avoid double mappings
-        for (k, dir) in keyMap! where dir == direction.rawValue {
-            keyMap![k] = nil
-        }
-        keyMap![key] = direction.rawValue
+        unbind(action: action)
+
+        keyMap![key] = action.rawValue
     }
-    
+
+    // Removes any existing key binding to the specified gampad action
+     func unbind(action: GamePadAction) {
+
+         for (k, dir) in keyMap! where dir == action.rawValue {
+             keyMap![k] = nil
+         }
+     }
+
     /* Handles a keyboard down event
      * Checks if the provided keycode matches a joystick emulation key and
      * triggeres an event if a match has been found.
