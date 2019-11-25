@@ -456,7 +456,7 @@ struct AmigaFileWrapper;
 - (void) setXY:(NSPoint)pos;
 - (void) setLeftButton:(BOOL)value;
 - (void) setRightButton:(BOOL)value;
-- (void) trigger:(JoystickAction)event;
+- (void) trigger:(GamePadAction)event;
 
 @end
 
@@ -472,7 +472,7 @@ struct AmigaFileWrapper;
 
 - (void) dump;
 
-- (void) trigger:(JoystickAction)event;
+- (void) trigger:(GamePadAction)event;
 - (BOOL) autofire;
 - (void) setAutofire:(BOOL)value;
 - (NSInteger) autofireBullets;

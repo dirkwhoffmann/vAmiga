@@ -316,24 +316,24 @@ extension Defaults {
     
     // Emulation keys
     static let joyKeyMap1 = [
-        MacKey.init(keyCode: kVK_LeftArrow): JOYSTICK_LEFT.rawValue,
-        MacKey.init(keyCode: kVK_RightArrow): JOYSTICK_RIGHT.rawValue,
-        MacKey.init(keyCode: kVK_UpArrow): JOYSTICK_UP.rawValue,
-        MacKey.init(keyCode: kVK_DownArrow): JOYSTICK_DOWN.rawValue,
-        MacKey.init(keyCode: kVK_Space): JOYSTICK_FIRE.rawValue
+        MacKey.init(keyCode: kVK_LeftArrow): PULL_LEFT.rawValue,
+        MacKey.init(keyCode: kVK_RightArrow): PULL_RIGHT.rawValue,
+        MacKey.init(keyCode: kVK_UpArrow): PULL_UP.rawValue,
+        MacKey.init(keyCode: kVK_DownArrow): PULL_DOWN.rawValue,
+        MacKey.init(keyCode: kVK_Space): PRESS_FIRE.rawValue
     ]
     static let joyKeyMap2 = [
-        MacKey.init(keyCode: kVK_ANSI_S): JOYSTICK_LEFT.rawValue,
-        MacKey.init(keyCode: kVK_ANSI_D): JOYSTICK_RIGHT.rawValue,
-        MacKey.init(keyCode: kVK_ANSI_E): JOYSTICK_UP.rawValue,
-        MacKey.init(keyCode: kVK_ANSI_X): JOYSTICK_DOWN.rawValue,
-        MacKey.init(keyCode: kVK_ANSI_C): JOYSTICK_FIRE.rawValue
+        MacKey.init(keyCode: kVK_ANSI_S): PULL_LEFT.rawValue,
+        MacKey.init(keyCode: kVK_ANSI_D): PULL_RIGHT.rawValue,
+        MacKey.init(keyCode: kVK_ANSI_E): PULL_UP.rawValue,
+        MacKey.init(keyCode: kVK_ANSI_X): PULL_DOWN.rawValue,
+        MacKey.init(keyCode: kVK_ANSI_C): PRESS_FIRE.rawValue
     ]
     static let mouseKeyMap: [MacKey: UInt32] = [:]
     /* FOR TESTING
     static let mouseKeyMap = [
-        MacKey.init(keyCode: kVK_Shift): MOUSE_BUTTON_LEFT.rawValue,
-        MacKey.init(keyCode: kVK_RightShift): MOUSE_BUTTON_RIGHT.rawValue
+        MacKey.init(keyCode: kVK_Shift): PRESS_LEFT.rawValue,
+        MacKey.init(keyCode: kVK_RightShift): PRESS_RIGHT.rawValue
     ]
     */
     static let disconnectJoyKeys = true

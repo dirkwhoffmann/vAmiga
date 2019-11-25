@@ -764,7 +764,7 @@ extension MyController {
     // GamePadManager delegation method
     // Returns true, iff a joystick event has been triggered on port A or B
     @discardableResult
-    func joystickAction(slot: Int, events: [JoystickAction]) -> Bool {
+    func joystickAction(slot: Int, events: [GamePadAction]) -> Bool {
         
         if slot == inputDevice1 {
             for event in events {

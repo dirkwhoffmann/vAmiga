@@ -39,6 +39,8 @@ inline bool isControlPortDevice(long value) {
     return value >= 0 && value <= CPD_JOYSTICK;
 }
 
+// DEPRECATED: Use GamepadAction instead
+/*
 typedef enum
 {
     JOYSTICK_UP,
@@ -54,27 +56,28 @@ JoystickState;
 inline bool isJoystickState(long value) {
     return value >= 0 && value <= MOUSE_BUTTON_RIGHT;
 }
+*/
 
 typedef enum
 {
-    PULL_UP,
-    PULL_DOWN,
-    PULL_LEFT,
-    PULL_RIGHT,
-    PRESS_FIRE,
-    RELEASE_X,
-    RELEASE_Y,
-    RELEASE_XY,
-    RELEASE_FIRE,
-    PRESS_MOUSE_LEFT,
-    PRESS_MOUSE_RIGHT,
-    RELEASE_MOUSE_LEFT,
-    RELEASE_MOUSE_RIGHT
+    PULL_UP = 0,   // Pull the joystick up
+    PULL_DOWN,     // Pull the joystick down
+    PULL_LEFT,     // Pull the joystick left
+    PULL_RIGHT,    // Pull the joystick right
+    PRESS_FIRE,    // Press the joystick button
+    PRESS_LEFT,    // Press the left mouse button
+    PRESS_RIGHT,   // Press the right mouse button
+    RELEASE_X,     // Move back to neutral horizontally
+    RELEASE_Y,     // Move back to neutral vertically
+    RELEASE_XY,    // Move back to neutral
+    RELEASE_FIRE,  // Release the joystick button
+    RELEASE_LEFT,  // Release the left mouse button
+    RELEASE_RIGHT  // Release the right mouse button
 }
-JoystickAction;
+GamePadAction;
 
-inline bool isJoystickAction(long value) {
-    return value >= 0 && value <= RELEASE_MOUSE_RIGHT;
+inline bool isGamePadAction(long value) {
+    return value >= 0 && value <= RELEASE_RIGHT;
 }
 
 //

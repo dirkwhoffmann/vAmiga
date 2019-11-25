@@ -795,7 +795,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->mouse->setRightButton(value);
 }
-- (void) trigger:(JoystickAction)event
+- (void) trigger:(GamePadAction)event
 {
     wrapper->mouse->trigger(event);
 }
@@ -821,7 +821,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->joystick->dump();
 }
-- (void) trigger:(JoystickAction)event
+- (void) trigger:(GamePadAction)event
 {
     wrapper->joystick->trigger(event);
 }

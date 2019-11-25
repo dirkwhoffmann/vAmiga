@@ -108,7 +108,7 @@ public:
     void setRightButton(bool value);
 
     // Triggers a gamepad event
-    void trigger(JoystickAction event);
+    void trigger(GamePadAction event);
 
     // Performs periodic actions for this device
     void execute();

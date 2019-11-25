@@ -51,7 +51,7 @@ class GamePad {
     /* Rescued information from the last invocation of the action function
      * Used to determine if a joystick event needs to be triggered.
      */
-    var oldEvents: [Int: [JoystickAction]] = [:]
+    var oldEvents: [Int: [GamePadAction]] = [:]
     
     // Cotroller dependent usage IDs for left and right gamepad joysticks
     var lThumbXUsageID = kHIDUsage_GD_X
@@ -126,7 +126,7 @@ class GamePad {
 extension GamePad {
     
     /// Assigns a keyboard emulation key
-    func assign(key: MacKey, direction: JoystickState) {
+    func assign(key: MacKey, direction: GamePadAction) {
         
         assert(keyMap != nil)
         
@@ -146,34 +146,34 @@ extension GamePad {
         
         if let direction = keyMap?[macKey] {
 
-            var events: [JoystickAction]
+            var events: [GamePadAction]
             
-            switch JoystickState(direction) {
+            switch GamePadAction(direction) {
                 
-            case JOYSTICK_UP:
+            case PULL_UP:
                 keyUp = true
                 events = [PULL_UP]
                 
-            case  JOYSTICK_DOWN:
+            case PULL_DOWN:
                 keyDown = true
                 events = [PULL_DOWN]
                 
-            case JOYSTICK_LEFT:
+            case PULL_LEFT:
                 keyLeft = true
                 events = [PULL_LEFT]
                 
-            case JOYSTICK_RIGHT:
+            case PULL_RIGHT:
                 keyRight = true
                 events = [PULL_RIGHT]
                 
-            case JOYSTICK_FIRE:
+            case PRESS_FIRE:
                 events = [PRESS_FIRE]
 
-            case MOUSE_BUTTON_LEFT:
-                events = [PRESS_MOUSE_LEFT]
+            case PRESS_LEFT:
+                events = [PRESS_LEFT]
 
-            case MOUSE_BUTTON_RIGHT:
-                events = [PRESS_MOUSE_RIGHT]
+            case PRESS_RIGHT:
+                events = [PRESS_RIGHT]
 
             default:
                 fatalError()
@@ -185,43 +185,43 @@ extension GamePad {
         return false
     }
     
-    //! @brief   Handles a keyboard up event
-    /*! @details Checks if the provided keycode matches a joystick emulation key
-     *           and triggeres an event if a match has been found.
-     *  @result  Returns true if a joystick event has been triggered.
+    /* Handles a keyboard up event
+     * Checks if the provided keycode matches a joystick emulation key
+     * and triggeres an event if a match has been found.
+     * Returns true if a joystick event has been triggered.
      */
     func keyUp(_ macKey: MacKey) -> Bool {
 
         if let direction = keyMap?[macKey] {
             
-            var events: [JoystickAction]
+            var events: [GamePadAction]
             
-            switch JoystickState(direction) {
+            switch GamePadAction(direction) {
             
-            case JOYSTICK_UP:
+            case PULL_UP:
                 keyUp = false
                 events = keyDown ? [PULL_DOWN] : [RELEASE_Y]
                 
-            case JOYSTICK_DOWN:
+            case PULL_DOWN:
                 keyDown = false
                 events = keyUp ? [PULL_UP] : [RELEASE_Y]
                 
-            case JOYSTICK_LEFT:
+            case PULL_LEFT:
                 keyLeft = false
                 events = keyRight ? [PULL_RIGHT] : [RELEASE_X]
                 
-            case JOYSTICK_RIGHT:
+            case PULL_RIGHT:
                 keyRight = false
                 events = keyLeft ? [PULL_LEFT] : [RELEASE_X]
                 
-            case JOYSTICK_FIRE:
+            case PRESS_FIRE:
                 events = [RELEASE_FIRE]
 
-            case MOUSE_BUTTON_LEFT:
-                events = [RELEASE_MOUSE_LEFT]
+            case PRESS_LEFT:
+                events = [RELEASE_LEFT]
 
-            case MOUSE_BUTTON_RIGHT:
-                events = [RELEASE_MOUSE_RIGHT]
+            case PRESS_RIGHT:
+                events = [RELEASE_RIGHT]
 
             default:
                 fatalError()
@@ -282,7 +282,7 @@ extension GamePad {
         // Stick
         if usagePage == kHIDPage_GenericDesktop {
             
-            var events: [JoystickAction]?
+            var events: [GamePadAction]?
             
             switch usage {
                 

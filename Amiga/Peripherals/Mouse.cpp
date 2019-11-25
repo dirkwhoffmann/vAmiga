@@ -108,18 +108,18 @@ Mouse::setRightButton(bool value)
 }
 
 void
-Mouse::trigger(JoystickAction event)
+Mouse::trigger(GamePadAction event)
 {
-    assert(isJoystickAction(event));
+    assert(isGamePadAction(event));
 
     debug(PORT_DEBUG, "trigger(%d)\n", event);
 
     switch (event) {
 
-        case PRESS_MOUSE_LEFT: setLeftButton(true); break;
-        case RELEASE_MOUSE_LEFT: setLeftButton(false); break;
-        case PRESS_MOUSE_RIGHT: setRightButton(true); break;
-        case RELEASE_MOUSE_RIGHT: setRightButton(false); break;
+        case PRESS_LEFT: setLeftButton(true); break;
+        case RELEASE_LEFT: setLeftButton(false); break;
+        case PRESS_RIGHT: setRightButton(true); break;
+        case RELEASE_RIGHT: setRightButton(false); break;
         default: break;
     }
 }

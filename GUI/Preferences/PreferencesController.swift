@@ -186,14 +186,19 @@ class PreferencesController: DialogController {
     //
     // Devices preferences
     //
-    
-    /// Indicates if a keycode should be recorded for keyset 1
-    var devRecordKey1: JoystickState?
-    
-    /// Indicates if a keycode should be recorded for keyset 1
-    var devRecordKey2: JoystickState?
-    
-    /// Joystick emulation keys
+
+    // Tag of the button that is currently being recorded
+    var devRecordedKey: Int?
+
+    // Indicates if a keycode should be recorded for the first joystick keyset
+    // DEPRECATED
+    // var devRecordKey1: GamePadAction?
+
+    // Indicates if a keycode should be recorded for the second joystick keyset
+    // DEPRECATED
+    // var devRecordKey2: GamePadAction?
+
+    // Joystick emulation keys
     @IBOutlet weak var devLeft1: NSTextField!
     @IBOutlet weak var devLeft1button: NSButton!
     @IBOutlet weak var devRight1: NSTextField!
@@ -214,6 +219,10 @@ class PreferencesController: DialogController {
     @IBOutlet weak var devDown2button: NSButton!
     @IBOutlet weak var devFire2: NSTextField!
     @IBOutlet weak var devFire2button: NSButton!
+    @IBOutlet weak var devMouseLeft: NSTextField!
+    @IBOutlet weak var devMouseLeftButton: NSButton!
+    @IBOutlet weak var devMouseRight: NSTextField!
+    @IBOutlet weak var devMouseRightButton: NSButton!
     @IBOutlet weak var devDisconnectKeys: NSButton!
 
     @IBOutlet weak var devRetainMouseKeyComb: NSPopUpButton!

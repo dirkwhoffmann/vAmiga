@@ -38,6 +38,10 @@
                 <outlet property="devLeft1button" destination="DYo-fh-MRZ" id="Zk8-cu-HpA"/>
                 <outlet property="devLeft2" destination="c0g-Vp-X6r" id="9l1-XA-avh"/>
                 <outlet property="devLeft2button" destination="xQv-LS-FDA" id="bBQ-ZL-VUd"/>
+                <outlet property="devMouseLeft" destination="VXE-BE-GbZ" id="Qwe-IP-TTD"/>
+                <outlet property="devMouseLeftButton" destination="Fo5-vg-hot" id="I5a-In-OQu"/>
+                <outlet property="devMouseRight" destination="DVW-cF-OIo" id="qZd-ML-eub"/>
+                <outlet property="devMouseRightButton" destination="qHd-Lq-Hnh" id="01W-ve-cJx"/>
                 <outlet property="devOKButton" destination="Qq8-DB-XvV" id="R91-b1-ndB"/>
                 <outlet property="devReleaseMouseByShaking" destination="HME-Qi-t5z" id="ILi-ej-rOR"/>
                 <outlet property="devReleaseMouseKeyComb" destination="dnS-il-6DA" id="8yK-Ks-Q1Y"/>
@@ -2769,7 +2773,7 @@ DQ
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyUpOrDown" image="mouse" id="93o-8O-NvX"/>
                                         </imageView>
-                                        <button verticalHuggingPriority="750" fixedFrame="YES" tag="14" translatesAutoresizingMaskIntoConstraints="NO" id="Fo5-vg-hot">
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" tag="5" translatesAutoresizingMaskIntoConstraints="NO" id="Fo5-vg-hot">
                                             <rect key="frame" x="404" y="111" width="32" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="vfj-dH-bYH">
@@ -2798,7 +2802,7 @@ DQ
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <button verticalHuggingPriority="750" fixedFrame="YES" tag="14" translatesAutoresizingMaskIntoConstraints="NO" id="qHd-Lq-Hnh">
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" tag="6" translatesAutoresizingMaskIntoConstraints="NO" id="qHd-Lq-Hnh">
                                             <rect key="frame" x="477" y="111" width="32" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="bK9-nq-gaR">

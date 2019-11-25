@@ -117,7 +117,7 @@ public:
     uint8_t ciapa();
     
     // Triggers a gamepad event
-    void trigger(JoystickAction event);
+    void trigger(GamePadAction event);
 
     /* Execution function for this control port
      * This method needs to be invoked at the end of each frame to make the

@@ -11,32 +11,71 @@ extension PreferencesController {
     
     func refreshDevicesTab() {
 
+        var map: [MacKey: UInt32]
+
         guard
             let controller = myController,
+            let manager    = controller.gamePadManager,
             let amiga      = amigaProxy,
             let joystick1  = amiga.joystick1,
             let joystick2  = amiga.joystick2,
             let metal      = controller.metal
             else { return }
-       
-        // Joystick emulation keys
-        updateJoyKeyMap(0, dir: JOYSTICK_UP, button: devUp1button, txt: devUp1)
-        updateJoyKeyMap(0, dir: JOYSTICK_DOWN, button: devDown1button, txt: devDown1)
-        updateJoyKeyMap(0, dir: JOYSTICK_LEFT, button: devLeft1button, txt: devLeft1)
-        updateJoyKeyMap(0, dir: JOYSTICK_RIGHT, button: devRight1button, txt: devRight1)
-        updateJoyKeyMap(0, dir: JOYSTICK_FIRE, button: devFire1button, txt: devFire1)
-        updateJoyKeyMap(1, dir: JOYSTICK_UP, button: devUp2button, txt: devUp2)
-        updateJoyKeyMap(1, dir: JOYSTICK_DOWN, button: devDown2button, txt: devDown2)
-        updateJoyKeyMap(1, dir: JOYSTICK_LEFT, button: devLeft2button, txt: devLeft2)
-        updateJoyKeyMap(1, dir: JOYSTICK_RIGHT, button: devRight2button, txt: devRight2)
-        updateJoyKeyMap(1, dir: JOYSTICK_FIRE, button: devFire2button, txt: devFire2)
+
+        func refreshKey(dir: GamePadAction, button: NSButton, txt: NSTextField) {
+
+            var macKeyCode: NSAttributedString = NSAttributedString.init()
+            var macKeyDesc: String = ""
+
+            // Which MacKey is assigned to this joystick action?
+            for (key, direction) in map where direction == dir.rawValue {
+                let attr = [NSAttributedString.Key.foregroundColor: NSColor.black]
+                let myStr = NSString(format: "%02X", key.keyCode) as String
+                macKeyCode = NSAttributedString(string: myStr, attributes: attr)
+                macKeyDesc = key.stringValue
+                break
+            }
+
+            // Update text and button image
+            if button.tag == devRecordedKey {
+                button.title = ""
+                button.image = NSImage(named: "key_red")
+                button.imageScaling = .scaleAxesIndependently
+            } else {
+                button.image = NSImage(named: "key")
+                button.imageScaling = .scaleAxesIndependently
+            }
+            button.attributedTitle = macKeyCode
+            txt.stringValue = macKeyDesc
+        }
+
+        // First joystick keyset
+        map = manager.gamePads[0]?.keyMap ?? [:]
+        refreshKey(dir: PULL_UP, button: devUp1button, txt: devUp1)
+        refreshKey(dir: PULL_DOWN, button: devDown1button, txt: devDown1)
+        refreshKey(dir: PULL_LEFT, button: devLeft1button, txt: devLeft1)
+        refreshKey(dir: PULL_RIGHT, button: devRight1button, txt: devRight1)
+        refreshKey(dir: PRESS_FIRE, button: devFire1button, txt: devFire1)
+
+        // Second joystick keyset
+        map =  manager.gamePads[1]?.keyMap ?? [:]
+        refreshKey(dir: PULL_UP, button: devUp2button, txt: devUp2)
+        refreshKey(dir: PULL_DOWN, button: devDown2button, txt: devDown2)
+        refreshKey(dir: PULL_LEFT, button: devLeft2button, txt: devLeft2)
+        refreshKey(dir: PULL_RIGHT, button: devRight2button, txt: devRight2)
+        refreshKey(dir: PRESS_FIRE, button: devFire2button, txt: devFire2)
+
+        // Mouse button keyset
+        map = manager.gamePads[2]?.keyMap ?? [:]
+        refreshKey(dir: PRESS_LEFT, button: devMouseLeftButton, txt: devMouseLeft)
+        refreshKey(dir: PRESS_RIGHT, button: devMouseRightButton, txt: devMouseRight)
+
         devDisconnectKeys.state = controller.keyboardcontroller.disconnectJoyKeys ? .on : .off
-        
+
+        // Joystick buttons
         assert(joystick1.autofire() == joystick2.autofire())
         assert(joystick1.autofireBullets() == joystick2.autofireBullets())
         assert(joystick1.autofireFrequency() == joystick2.autofireFrequency())
-        
-        // Joystick buttons
         devAutofire.state = joystick1.autofire() ? .on : .off
         devAutofireCease.state = joystick1.autofireBullets() > 0 ? .on : .off
         devAutofireBullets.integerValue = Int(joystick1.autofireBullets().magnitude)
@@ -57,41 +96,7 @@ extension PreferencesController {
         devReleaseMouseWithKeys.state = metal.releaseMouseWithKeys ? .on : .off
         devReleaseMouseByShaking.state = metal.releaseMouseByShaking ? .on : .off
     }
-    
-    func updateJoyKeyMap(_ nr: Int, dir: JoystickState, button: NSButton, txt: NSTextField) {
-        
-        assert(nr == 0 || nr == 1)
-        
-        guard let manager = myController?.gamePadManager else { return }
-        guard let keyMap = manager.gamePads[nr]?.keyMap else { return }
-        
-        // Which MacKey is assigned to this joystick action?
-        var macKey: MacKey?
-        var macKeyCode: NSAttributedString = NSAttributedString.init()
-        var macKeyDesc: String = ""
-        for (key, direction) in keyMap where direction == dir.rawValue {
-            let attr = [NSAttributedString.Key.foregroundColor: NSColor.black]
-            macKey = key
-            let myStr = NSString(format: "%02X", macKey!.keyCode) as String
-            macKeyCode = NSAttributedString(string: myStr, attributes: attr)
-            macKeyDesc = macKey?.stringValue ?? ""
-            break
-        }
-        
-        // Update text and button image
-        let recordKey = (nr == 0) ? devRecordKey1 : devRecordKey2
-        if recordKey == dir {
-            button.title = ""
-            button.image = NSImage(named: "key_red")
-            button.imageScaling = .scaleAxesIndependently
-        } else {
-            button.image = NSImage(named: "key")
-            button.imageScaling = .scaleAxesIndependently
-        }
-        button.attributedTitle = macKeyCode
-        txt.stringValue = macKeyDesc
-    }
-    
+
     //
     // Keyboard events
     //
@@ -106,18 +111,24 @@ extension PreferencesController {
             cancelAction(self)
             return
         }
-        
-        if devRecordKey1 != nil {
-            
-            manager.gamePads[0]?.assign(key: macKey, direction: devRecordKey1!)
-            devRecordKey1 = nil
+
+        if let rec = devRecordedKey {
+
+            var slot: Int
+            var action: GamePadAction
+
+            switch rec {
+            case 0...4:   slot = 0; action = GamePadAction(UInt32(rec))
+            case 10...14: slot = 1; action = GamePadAction(UInt32(rec - 10))
+            case 5...6:   slot = 2; action = GamePadAction(UInt32(rec))
+            default: fatalError()
+            }
+
+            // track("Assigning slot \(slot) action \(action)")
+            manager.gamePads[slot]?.assign(key: macKey, direction: action)
+            devRecordedKey = nil
         }
-        if devRecordKey2 != nil {
-            
-            manager.gamePads[1]?.assign(key: macKey, direction: devRecordKey2!)
-            devRecordKey2 = nil
-        }
-        
+
         refresh()
     }
     
@@ -126,19 +137,8 @@ extension PreferencesController {
     //
     
     @IBAction func devRecordKeyAction(_ sender: NSButton!) {
-        
-        let tag = UInt32(sender.tag)
-        
-        if tag >= 0 && tag <= 5 {
-            devRecordKey1 = JoystickState(rawValue: tag)
-            devRecordKey2 = nil
-        } else if tag >= 10 && tag <= 15 {
-            devRecordKey1 = nil
-            devRecordKey2 = JoystickState(rawValue: (tag - 10))
-        } else {
-            assert(false)
-        }
-        
+
+        devRecordedKey = sender.tag
         refresh()
     }
     
