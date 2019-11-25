@@ -32,14 +32,18 @@ class PixelEngine;
 class Paula;
 class AudioUnit;
 class DiskController;
+namespace vamiga {
 class UART;
 class ZorroManager;
 class ControlPort;
+}
 class SerialPort;
 class Mouse;
 class Joystick;
 class Keyboard;
 class Drive;
+
+using namespace vamiga;
 
 
 /* Base class for all sub components.

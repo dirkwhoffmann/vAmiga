@@ -12,6 +12,8 @@
 
 #include "SubComponent.h"
 
+namespace vamiga {
+
 class UART : public SubComponent {
 
     friend class Amiga;
@@ -170,4 +172,5 @@ public:
 
 };
 
+}
 #endif

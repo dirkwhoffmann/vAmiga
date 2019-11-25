@@ -9,6 +9,8 @@
 
 #include "Amiga.h"
 
+using namespace vamiga;
+
 UART::UART(Amiga& ref) : SubComponent(ref)
 {
     setDescription("UART");
