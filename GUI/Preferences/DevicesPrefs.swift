@@ -117,10 +117,14 @@ extension PreferencesController {
         guard let manager = myController?.gamePadManager else { return }
         track()
         
-        // Check for ESC key
+        // Check for the ESC key
         if macKey == MacKey.escape {
-            cancelAction(self)
-            return
+
+            // Close sheet if no key is being recorded at the moment
+            if devRecordedKey == nil { cancelAction(self); return }
+
+            // Abort the recording sessing
+            devRecordedKey = nil
         }
 
         if let rec = devRecordedKey {

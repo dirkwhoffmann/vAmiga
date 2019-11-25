@@ -263,12 +263,6 @@ class PreferencesController: DialogController {
         track("sheetDidShow")
         if firstTab != "" { prefTabView?.selectTabViewItem(withIdentifier: firstTab) }
     }
-    /*
-    override func windowDidLoad() {
-
-        track("windowDidLoad")
-    }
-    */
 
     override func refresh() {
         
