@@ -35,7 +35,14 @@ class MyDocument: NSDocument {
         
         track()
         super.init()
-        
+
+        // Check for Metal support
+        if MTLCreateSystemDefaultDevice() == nil {
+            showNoMetalSupportAlert()
+            NSApp.terminate(self)
+            return
+        }
+
         // Register standard user defaults
         MyController.registerUserDefaults()
         

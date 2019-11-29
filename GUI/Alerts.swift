@@ -28,7 +28,7 @@ extension NSError {
     }
 }
 
-public extension MetalView {
+extension MyDocument {
     
     func showNoMetalSupportAlert() {
         

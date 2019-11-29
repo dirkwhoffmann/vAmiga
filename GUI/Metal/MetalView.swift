@@ -286,12 +286,6 @@ public class MetalView: MTKView {
 
         track()
         
-        // Create semaphore
-        // semaphore = DispatchSemaphore(value: 1)
-        
-        // Check if machine is capable to run the Metal graphics interface
-        checkForMetal()
-    
         // Register for drag and drop
         setupDragAndDrop()
     }

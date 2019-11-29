@@ -435,8 +435,7 @@ extension MyController {
         // Setup window
         configureWindow()
         
-        // Get metal running
-        metal.setupMetal()
+        // Setup renderer
         renderer.setupMetal()
 
         // Load user defaults

@@ -56,7 +56,6 @@
 		508FDFC721EA1FF10043D0E9 /* DiskMountDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 508FDFBA21EA1FF10043D0E9 /* DiskMountDialog.xib */; };
 		508FDFC821EA1FF10043D0E9 /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 508FDFBB21EA1FF10043D0E9 /* Preferences.xib */; };
 		508FDFC921EA1FF10043D0E9 /* ExportScreenshotDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 508FDFBC21EA1FF10043D0E9 /* ExportScreenshotDialog.xib */; };
-		508FDFD421EA20510043D0E9 /* MetalSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFCC21EA20510043D0E9 /* MetalSetup.swift */; };
 		508FDFD521EA20510043D0E9 /* Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFCD21EA20510043D0E9 /* Animation.swift */; };
 		508FDFD621EA20510043D0E9 /* DragAndDrop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFCE21EA20510043D0E9 /* DragAndDrop.swift */; };
 		508FDFD721EA20510043D0E9 /* MetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFCF21EA20510043D0E9 /* MetalView.swift */; };
@@ -271,7 +270,6 @@
 		508FDFBA21EA1FF10043D0E9 /* DiskMountDialog.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DiskMountDialog.xib; sourceTree = "<group>"; };
 		508FDFBB21EA1FF10043D0E9 /* Preferences.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Preferences.xib; sourceTree = "<group>"; };
 		508FDFBC21EA1FF10043D0E9 /* ExportScreenshotDialog.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ExportScreenshotDialog.xib; sourceTree = "<group>"; };
-		508FDFCC21EA20510043D0E9 /* MetalSetup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalSetup.swift; sourceTree = "<group>"; };
 		508FDFCD21EA20510043D0E9 /* Animation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Animation.swift; sourceTree = "<group>"; };
 		508FDFCE21EA20510043D0E9 /* DragAndDrop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DragAndDrop.swift; sourceTree = "<group>"; };
 		508FDFCF21EA20510043D0E9 /* MetalView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalView.swift; sourceTree = "<group>"; };
@@ -584,16 +582,15 @@
 		508FDFCB21EA20510043D0E9 /* Metal */ = {
 			isa = PBXGroup;
 			children = (
-				508FDFCC21EA20510043D0E9 /* MetalSetup.swift */,
-				508FDFCD21EA20510043D0E9 /* Animation.swift */,
-				508FDFCE21EA20510043D0E9 /* DragAndDrop.swift */,
 				508FDFCF21EA20510043D0E9 /* MetalView.swift */,
+				508FDFCE21EA20510043D0E9 /* DragAndDrop.swift */,
 				50357BB5239123B2007E7563 /* Renderer.swift */,
 				50357BB723912929007E7563 /* RendererSetup.swift */,
-				508FDFD021EA20510043D0E9 /* Shaders.metal */,
+				508FDFCD21EA20510043D0E9 /* Animation.swift */,
 				508FDFD121EA20510043D0E9 /* MetalViewEvents.swift */,
 				508FDFD221EA20510043D0E9 /* ImageUtilities.swift */,
 				508FDFD321EA20510043D0E9 /* Shaders.swift */,
+				508FDFD021EA20510043D0E9 /* Shaders.metal */,
 			);
 			path = Metal;
 			sourceTree = "<group>";
@@ -1207,7 +1204,6 @@
 				50F5F27221F1B6DF000627D1 /* AmigaKey.swift in Sources */,
 				508FDFD721EA20510043D0E9 /* MetalView.swift in Sources */,
 				508FDF8721EA1FBC0043D0E9 /* MessageQueue.cpp in Sources */,
-				508FDFD421EA20510043D0E9 /* MetalSetup.swift in Sources */,
 				508FE01421EA227B0043D0E9 /* WaveformView.swift in Sources */,
 				507653CD2216F938001D26E9 /* DenisePanel.swift in Sources */,
 				500C0A562259402D000121CD /* DiskController.cpp in Sources */,
