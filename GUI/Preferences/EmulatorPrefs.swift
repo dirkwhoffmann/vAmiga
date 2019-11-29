@@ -16,7 +16,7 @@ extension PreferencesController {
         guard
             let amiga      = amigaProxy,
             let controller = myController,
-            let metal      = controller.metal
+            let renderer   = controller.renderer
             else { return }
         
         // Drive
@@ -27,7 +27,7 @@ extension PreferencesController {
         emuDriveBlankDiskFormat.selectItem(withTag: controller.driveBlankDiskFormatIntValue)
 
         // Fullscreen
-        emuAspectRatioButton.state = metal.keepAspectRatio ? .on : .off
+        emuAspectRatioButton.state = renderer.keepAspectRatio ? .on : .off
         emuExitOnEscButton.state = controller.keyboardcontroller.exitOnEsc ? .on : .off
         
         // Screenshots
@@ -81,8 +81,8 @@ extension PreferencesController {
     
     @IBAction func emuAspectRatioAction(_ sender: NSButton!) {
         
-        if let metal = myController?.metal {
-            metal.keepAspectRatio = (sender.state == .on)
+        if let renderer = myController?.renderer {
+            renderer.keepAspectRatio = (sender.state == .on)
             refresh()
         }
     }

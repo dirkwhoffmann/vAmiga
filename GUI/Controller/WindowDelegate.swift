@@ -60,13 +60,13 @@ extension MyController: NSWindowDelegate {
         amiga.removeListener(myself)
 
         // Stop metal view
-        metal.cleanup()
+        // renderer.cleanup()
     }
     
     public func windowWillEnterFullScreen(_ notification: Notification) {
 
         track()
-        metal.fullscreen = true
+        renderer.fullscreen = true
         showStatusBar(false)
     }
     
@@ -78,7 +78,7 @@ extension MyController: NSWindowDelegate {
     public func windowWillExitFullScreen(_ notification: Notification) {
 
         track()
-        metal.fullscreen = false
+        renderer.fullscreen = false
         showStatusBar(true)
     }
     

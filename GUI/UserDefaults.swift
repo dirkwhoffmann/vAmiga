@@ -540,8 +540,8 @@ extension MyController {
         
         amiga.suspend()
         
-        metal.enhancer = defaults.integer(forKey: Keys.enhancer)
-        metal.upscaler = defaults.integer(forKey: Keys.upscaler)
+        renderer.enhancer = defaults.integer(forKey: Keys.enhancer)
+        renderer.upscaler = defaults.integer(forKey: Keys.upscaler)
         palette = defaults.integer(forKey: Keys.palette)
         brightness = defaults.double(forKey: Keys.brightness)
         contrast = defaults.double(forKey: Keys.contrast)
@@ -550,8 +550,8 @@ extension MyController {
         eyeY = defaults.float(forKey: Keys.eyeY)
         eyeZ = defaults.float(forKey: Keys.eyeZ)
         
-        defaults.decode(&metal.shaderOptions, forKey: Keys.shaderOptions)
-        metal.buildDotMasks()
+        defaults.decode(&renderer.shaderOptions, forKey: Keys.shaderOptions)
+        renderer.buildDotMasks()
  
         amiga.resume()
     }
@@ -560,8 +560,8 @@ extension MyController {
         
         let defaults = UserDefaults.standard
         
-        defaults.set(metal.enhancer, forKey: Keys.enhancer)
-        defaults.set(metal.upscaler, forKey: Keys.upscaler)
+        defaults.set(renderer.enhancer, forKey: Keys.enhancer)
+        defaults.set(renderer.upscaler, forKey: Keys.upscaler)
         defaults.set(palette, forKey: Keys.palette)
         defaults.set(brightness, forKey: Keys.brightness)
         defaults.set(contrast, forKey: Keys.contrast)
@@ -571,7 +571,7 @@ extension MyController {
         defaults.set(eyeY, forKey: Keys.eyeY)
         defaults.set(eyeZ, forKey: Keys.eyeZ)
   
-        defaults.encode(metal.shaderOptions, forKey: Keys.shaderOptions)
+        defaults.encode(renderer.shaderOptions, forKey: Keys.shaderOptions)
     }
 }
 
@@ -702,7 +702,7 @@ extension MyController {
         screenshotSource = defaults.integer(forKey: Keys.screenshotSource)
         screenshotTargetIntValue = defaults.integer(forKey: Keys.screenshotTarget)
     
-        metal.keepAspectRatio = defaults.bool(forKey: Keys.keepAspectRatio)
+        renderer.keepAspectRatio = defaults.bool(forKey: Keys.keepAspectRatio)
         keyboardcontroller.exitOnEsc = defaults.bool(forKey: Keys.exitOnEsc)
         
         closeWithoutAsking = defaults.bool(forKey: Keys.closeWithoutAsking)
@@ -727,7 +727,7 @@ extension MyController {
         defaults.set(screenshotSource, forKey: Keys.screenshotSource)
         defaults.set(screenshotTargetIntValue, forKey: Keys.screenshotTarget)
         
-        defaults.set(metal.keepAspectRatio, forKey: Keys.keepAspectRatio)
+        defaults.set(renderer.keepAspectRatio, forKey: Keys.keepAspectRatio)
         defaults.set(keyboardcontroller.exitOnEsc, forKey: Keys.exitOnEsc)
         
         defaults.set(closeWithoutAsking, forKey: Keys.closeWithoutAsking)

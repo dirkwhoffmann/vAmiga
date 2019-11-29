@@ -246,7 +246,7 @@ extension MyController: NSMenuItemValidation {
     func saveScreenshot(url: URL) throws {
         
         // Take screenshot
-        let image = metal.screenshot(afterUpscaling: screenshotSource > 0)
+        let image = renderer.screenshot(afterUpscaling: screenshotSource > 0)
         
         // Convert to target format
         let data = image?.representation(using: screenshotTarget)
@@ -296,7 +296,7 @@ extension MyController: NSMenuItemValidation {
     @IBAction func resetAction(_ sender: Any!) {
 
         track()
-        metal.blendIn(steps: 20)
+        renderer.blendIn(steps: 20)
         amiga.reset()
     }
     

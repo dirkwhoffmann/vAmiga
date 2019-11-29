@@ -58,7 +58,7 @@ class KeyboardController: NSObject {
         }
 
         // Exit fullscreen mode if escape key is pressed
-        if event.keyCode == kVK_Escape && controller.metal.fullscreen && exitOnEsc {
+        if event.keyCode == kVK_Escape && controller.renderer.fullscreen && exitOnEsc {
             myController?.window!.toggleFullScreen(nil)
         }
         

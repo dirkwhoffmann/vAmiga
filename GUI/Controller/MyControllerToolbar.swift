@@ -146,14 +146,14 @@ extension MyController {
         
         if amiga.restoreLatestAutoSnapshot() {
             amiga.deleteAutoSnapshot(0)
-            metal.snapToFront()
+            renderer.snapToFront()
         }
     }
 
     @IBAction func restoreLatestUserSnapshotAction(_ sender: Any!) {
         
         if amiga.restoreLatestUserSnapshot() {
-            metal.snapToFront()
+            renderer.snapToFront()
         }
     }
     
@@ -175,7 +175,7 @@ extension MyController {
 
         // Image view
         let paper = printInfo.paperSize
-        let image = metal.screenshot()
+        let image = renderer.screenshot()
         let printRect = NSRect.init(x: 0, y: 0, width: paper.width, height: paper.height)
         let imageView = NSImageView.init(frame: printRect)
         imageView.image = image

@@ -54,8 +54,8 @@ class AnimatedFloat {
     }
 }
 
-extension MetalView {
- 
+extension Renderer {
+
     // Returns true iff an animation is in progress
     func animatesDeprecated() -> Bool {
 
@@ -142,10 +142,10 @@ extension MetalView {
 
         track("Zooming texture in...")
 
-        cutoutX1.target = MetalView.cutoutX1default
-        cutoutY1.target = MetalView.cutoutY1default
-        cutoutX2.target = MetalView.cutoutX2default
-        cutoutY2.target = MetalView.cutoutY2default
+        cutoutX1.target = Renderer.cutoutX1default
+        cutoutY1.target = Renderer.cutoutY1default
+        cutoutX2.target = Renderer.cutoutX2default
+        cutoutY2.target = Renderer.cutoutY2default
 
         cutoutX1.steps = steps
         cutoutY1.steps = steps
@@ -177,7 +177,7 @@ extension MetalView {
     //
 
     func zoomIn(steps: Int = 60) {
-    
+
         track("Zooming in...")
 
         shiftZ.current = 6.0
@@ -243,7 +243,7 @@ extension MetalView {
     func rotateUp() { rotate(x: -90) }
 
     func scroll(steps: Int = 120) {
-        
+
         track("Scrolling...")
 
         shiftY.current = -1.5
@@ -312,41 +312,41 @@ extension MetalView {
     //
     // Matrix utilities
     //
-    
+
     func perspectiveMatrix(fovY: Float,
                            aspect: Float,
                            nearZ: Float,
                            farZ: Float) -> matrix_float4x4 {
-        
+
         // Variant 1: Keeps correct aspect ratio independent of window size
         let yscale = 1.0 / tanf(fovY * 0.5) // 1 / tan == cot
         let xscale = yscale / aspect
         let q = farZ / (farZ - nearZ)
-    
+
         // Alternative: Adjust to window size
         // float yscale = 1.0f / tanf(fovY * 0.5f);
         // float xscale = 0.75 * yscale;
         // float q = farZ / (farZ - nearZ);
-        
+
         var m = matrix_float4x4()
         m.columns.0 = SIMD4<Float>(xscale, 0.0, 0.0, 0.0)
         m.columns.1 = SIMD4<Float>(0.0, yscale, 0.0, 0.0)
         m.columns.2 = SIMD4<Float>(0.0, 0.0, q, 1.0)
         m.columns.3 = SIMD4<Float>(0.0, 0.0, q * -nearZ, 0.0)
-    
+
         return m
     }
-    
+
     func translationMatrix(x: Float,
                            y: Float,
                            z: Float) -> matrix_float4x4 {
 
         var m = matrix_identity_float4x4
         m.columns.3 = SIMD4<Float>(x, y, z, 1.0)
-    
+
         return m
     }
-    
+
     func rotationMatrix(radians: Float,
                         x: Float,
                         y: Float,
@@ -357,7 +357,7 @@ extension MetalView {
         let cos = cosf(radians)
         let cosp = 1.0 - cos
         let sin = sinf(radians)
-    
+
         var m = matrix_float4x4()
         m.columns.0 = SIMD4<Float>(cos + cosp * v.x * v.x,
                                    cosp * v.x * v.y + v.z * sin,

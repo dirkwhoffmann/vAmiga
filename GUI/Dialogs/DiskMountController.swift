@@ -263,7 +263,7 @@ class DiskMountController: DialogController {
         amigaProxy?.diskController.insert(sender.tag, adf: disk)
         amigaProxy?.diskController.setWriteProtection(sender.tag, value: writeProtect)
 
-        myController?.metal.rotateDown()
+        myController?.renderer.rotateDown()
         hideSheet()
     }
     

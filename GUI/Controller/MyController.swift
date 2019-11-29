@@ -135,12 +135,12 @@ class MyController: NSWindowController, MessageReceiver {
     // Video preferences
  
     var enhancer: Int {
-        get { return metal.enhancer }
-        set { metal.enhancer = newValue }
+        get { return renderer.enhancer }
+        set { renderer.enhancer = newValue }
     }
     var upscaler: Int {
-        get { return metal.upscaler }
-        set { metal.upscaler = newValue }
+        get { return renderer.upscaler }
+        set { renderer.upscaler = newValue }
     }
     var palette: Int {
         get { return Int(amiga.denise.palette()) }
@@ -159,13 +159,13 @@ class MyController: NSWindowController, MessageReceiver {
         set { amiga.denise.setSaturation(newValue) }
     }
     var eyeX: Float = 0.0 {
-        didSet { metal.buildMatrices3D() }
+        didSet { renderer.buildMatrices3D() }
     }
     var eyeY: Float = 0.0 {
-        didSet { metal.buildMatrices3D() }
+        didSet { renderer.buildMatrices3D() }
     }
     var eyeZ: Float = 0.0 {
-        didSet { metal.buildMatrices3D() }
+        didSet { renderer.buildMatrices3D() }
     }
     /*
     var eyeX: Float {
@@ -182,68 +182,68 @@ class MyController: NSWindowController, MessageReceiver {
     }
     */
     var blur: Int32 {
-        get { return metal.shaderOptions.blur }
-        set { metal.shaderOptions.blur = newValue }
+        get { return renderer.shaderOptions.blur }
+        set { renderer.shaderOptions.blur = newValue }
     }
     var blurRadius: Float {
-        get { return metal.shaderOptions.blurRadius }
-        set { metal.shaderOptions.blurRadius = newValue }
+        get { return renderer.shaderOptions.blurRadius }
+        set { renderer.shaderOptions.blurRadius = newValue }
     }
     var bloom: Int32 {
-        get { return metal.shaderOptions.bloom }
-        set { metal.shaderOptions.bloom = newValue }
+        get { return renderer.shaderOptions.bloom }
+        set { renderer.shaderOptions.bloom = newValue }
     }
     var bloomRadius: Float {
-        get { return metal.shaderOptions.bloomRadius }
-        set { metal.shaderOptions.bloomRadius = newValue }
+        get { return renderer.shaderOptions.bloomRadius }
+        set { renderer.shaderOptions.bloomRadius = newValue }
     }
     var bloomBrightness: Float {
-        get { return metal.shaderOptions.bloomBrightness }
-        set { metal.shaderOptions.bloomBrightness = newValue }
+        get { return renderer.shaderOptions.bloomBrightness }
+        set { renderer.shaderOptions.bloomBrightness = newValue }
     }
     var bloomWeight: Float {
-        get { return metal.shaderOptions.bloomWeight }
-        set { metal.shaderOptions.bloomWeight = newValue }
+        get { return renderer.shaderOptions.bloomWeight }
+        set { renderer.shaderOptions.bloomWeight = newValue }
     }
     var flicker: Int32 {
-        get { return metal.shaderOptions.flicker }
-        set { metal.shaderOptions.flicker = newValue }
+        get { return renderer.shaderOptions.flicker }
+        set { renderer.shaderOptions.flicker = newValue }
     }
     var flickerWeight: Float {
-        get { return metal.shaderOptions.flickerWeight }
-        set { metal.shaderOptions.flickerWeight = newValue }
+        get { return renderer.shaderOptions.flickerWeight }
+        set { renderer.shaderOptions.flickerWeight = newValue }
     }
     var dotMask: Int32 {
-        get { return metal.shaderOptions.dotMask }
-        set { metal.shaderOptions.dotMask = newValue }
+        get { return renderer.shaderOptions.dotMask }
+        set { renderer.shaderOptions.dotMask = newValue }
     }
     var dotMaskBrightness: Float {
-        get { return metal.shaderOptions.dotMaskBrightness }
-        set { metal.shaderOptions.dotMaskBrightness = newValue }
+        get { return renderer.shaderOptions.dotMaskBrightness }
+        set { renderer.shaderOptions.dotMaskBrightness = newValue }
     }
     var scanlines: Int32 {
-        get { return metal.shaderOptions.scanlines }
-        set { metal.shaderOptions.scanlines = newValue }
+        get { return renderer.shaderOptions.scanlines }
+        set { renderer.shaderOptions.scanlines = newValue }
     }
     var scanlineBrightness: Float {
-        get { return metal.shaderOptions.scanlineBrightness }
-        set { metal.shaderOptions.scanlineBrightness = newValue }
+        get { return renderer.shaderOptions.scanlineBrightness }
+        set { renderer.shaderOptions.scanlineBrightness = newValue }
     }
     var scanlineWeight: Float {
-        get { return metal.shaderOptions.scanlineWeight }
-        set { metal.shaderOptions.scanlineWeight = newValue }
+        get { return renderer.shaderOptions.scanlineWeight }
+        set { renderer.shaderOptions.scanlineWeight = newValue }
     }
     var disalignment: Int32 {
-        get { return metal.shaderOptions.disalignment }
-        set { metal.shaderOptions.disalignment = newValue }
+        get { return renderer.shaderOptions.disalignment }
+        set { renderer.shaderOptions.disalignment = newValue }
     }
     var disalignmentH: Float {
-        get { return metal.shaderOptions.disalignmentH }
-        set { metal.shaderOptions.disalignmentH = newValue }
+        get { return renderer.shaderOptions.disalignmentH }
+        set { renderer.shaderOptions.disalignmentH = newValue }
     }
     var disalignmentV: Float {
-        get { return metal.shaderOptions.disalignmentV }
-        set { metal.shaderOptions.disalignmentV = newValue }
+        get { return renderer.shaderOptions.disalignmentV }
+        set { renderer.shaderOptions.disalignmentV = newValue }
     }
     
     //
@@ -267,8 +267,8 @@ class MyController: NSWindowController, MessageReceiver {
         set { screenshotTarget = NSBitmapImageRep.FileType(rawValue: UInt(newValue))! }
     }
     var keepAspectRatio: Bool {
-        get { return metal.keepAspectRatio }
-        set { metal.keepAspectRatio = newValue }
+        get { return renderer.keepAspectRatio }
+        set { renderer.keepAspectRatio = newValue }
     }
     var exitOnEsc: Bool {
         get { return keyboardcontroller.exitOnEsc }
@@ -337,7 +337,9 @@ class MyController: NSWindowController, MessageReceiver {
     
     // Main screen
     @IBOutlet weak var metal: MetalView!
-    
+
+    var renderer: Renderer!
+
     // Bottom bar
     @IBOutlet weak var powerLED: NSButton!
 
@@ -401,6 +403,11 @@ extension MyController {
                 
         // Create audio engine
         audioEngine = AudioEngine.init(withPaula: amiga.paula)
+
+        // Create renderer
+        renderer = Renderer(view: metal,
+                            device: MTLCreateSystemDefaultDevice()!,
+                            controller: self)
     }
 
     override open func windowDidLoad() {
@@ -430,7 +437,8 @@ extension MyController {
         
         // Get metal running
         metal.setupMetal()
-    
+        renderer.setupMetal()
+
         // Load user defaults
         loadUserDefaults()
         
@@ -537,14 +545,14 @@ extension MyController {
         
         // Do 3 times a second ...
         if (animationCounter % 4) == 0 {
-            speedometer.updateWith(cycle: amiga.cpu.cycles(), frame: metal.frames)
+            speedometer.updateWith(cycle: amiga.cpu.cycles(), frame: renderer.frames)
             let mhz = speedometer.mhz
             let fps = speedometer.fps
             clockSpeed.stringValue = String(format: "%.2f MHz %.0f fps", mhz, fps)
             clockSpeedBar.doubleValue = 10 * mhz
         
             // Let the cursor disappear in fullscreen mode
-            if metal.fullscreen &&
+            if renderer.fullscreen &&
                 CGEventSource.secondsSinceLastEventType(.combinedSessionState,
                                                         eventType: .mouseMoved) > 1.0 {
                 NSCursor.setHiddenUntilMouseMoves(true)
@@ -593,13 +601,13 @@ extension MyController {
 
             serialIn = ""
             serialOut = ""
-            metal.zoomIn()
+            renderer.zoomIn()
             toolbar.validateVisibleItems()
             myAppDelegate.inspector?.refresh(everything: true)
             
         case MSG_POWER_OFF:
 
-            metal.zoomOut(steps: 20) // blendOut()
+            renderer.zoomOut(steps: 20) // blendOut()
             toolbar.validateVisibleItems()
             myAppDelegate.inspector?.refresh(everything: true)
             
@@ -622,10 +630,10 @@ extension MyController {
             powerLED.image = NSImage.init(named: "powerLedOff")
 
         case MSG_DMA_DEBUG_ON:
-            metal.zoomTextureOut()
+            renderer.zoomTextureOut()
 
         case MSG_DMA_DEBUG_OFF:
-            metal.zoomTextureIn()
+            renderer.zoomTextureIn()
 
         case MSG_DRIVE_CONNECT:
             
@@ -715,7 +723,7 @@ extension MyController {
         case MSG_AUTOSNAPSHOT_LOADED,
              MSG_USERSNAPSHOT_LOADED,
              MSG_USERSNAPSHOT_SAVED:
-            metal.blendIn(steps: 20)
+            renderer.blendIn(steps: 20)
 
         case MSG_AUTOSNAPSHOT_SAVED:
             break
