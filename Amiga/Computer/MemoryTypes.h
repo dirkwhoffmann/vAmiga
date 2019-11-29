@@ -63,6 +63,9 @@ typedef enum
     ROM_KICK30_39_106,
     ROM_KICK31_40_063,
 
+    // Hyperion
+    ROM_HYP314_46_143,
+
     // Free Kickstart Rom replacements
     ROM_AROS_55696,
     ROM_AROS_55696_EXT,

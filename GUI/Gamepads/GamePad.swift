@@ -51,7 +51,7 @@ class GamePad {
     /* Rescued information from the last invocation of the action function
      * Used to determine if a joystick event needs to be triggered.
      */
-    var oldEvents: [Int: [JoystickEvent]] = [:]
+    var oldEvents: [Int: [GamePadAction]] = [:]
     
     // Cotroller dependent usage IDs for left and right gamepad joysticks
     var lThumbXUsageID = kHIDUsage_GD_X
@@ -124,19 +124,24 @@ class GamePad {
 //
 
 extension GamePad {
-    
-    /// Assigns a keyboard emulation key
-    func assign(key: MacKey, direction: JoystickDirection) {
-        
-        assert(keyMap != nil)
-        
+
+    // Binds a key to a gamepad action
+    func bind(key: MacKey, action: GamePadAction) {
+
         // Avoid double mappings
-        for (k, dir) in keyMap! where dir == direction.rawValue {
-            keyMap![k] = nil
-        }
-        keyMap![key] = direction.rawValue
+        unbind(action: action)
+
+        keyMap![key] = action.rawValue
     }
-    
+
+    // Removes any existing key binding to the specified gampad action
+     func unbind(action: GamePadAction) {
+
+         for (k, dir) in keyMap! where dir == action.rawValue {
+             keyMap![k] = nil
+         }
+     }
+
     /* Handles a keyboard down event
      * Checks if the provided keycode matches a joystick emulation key and
      * triggeres an event if a match has been found.
@@ -146,76 +151,88 @@ extension GamePad {
         
         if let direction = keyMap?[macKey] {
 
-            var events: [JoystickEvent]
+            var events: [GamePadAction]
             
-            switch JoystickDirection(direction) {
+            switch GamePadAction(direction) {
                 
-            case JOYSTICK_UP:
+            case PULL_UP:
                 keyUp = true
                 events = [PULL_UP]
                 
-            case  JOYSTICK_DOWN:
+            case PULL_DOWN:
                 keyDown = true
                 events = [PULL_DOWN]
                 
-            case JOYSTICK_LEFT:
+            case PULL_LEFT:
                 keyLeft = true
                 events = [PULL_LEFT]
                 
-            case JOYSTICK_RIGHT:
+            case PULL_RIGHT:
                 keyRight = true
                 events = [PULL_RIGHT]
                 
-            case JOYSTICK_FIRE:
+            case PRESS_FIRE:
                 events = [PRESS_FIRE]
+
+            case PRESS_LEFT:
+                events = [PRESS_LEFT]
+
+            case PRESS_RIGHT:
+                events = [PRESS_RIGHT]
 
             default:
                 fatalError()
             }
             
-            return manager.joystickEvent(self, events: events)
+            return manager.joystickAction(self, events: events)
         }
         
         return false
     }
     
-    //! @brief   Handles a keyboard up event
-    /*! @details Checks if the provided keycode matches a joystick emulation key
-     *           and triggeres an event if a match has been found.
-     *  @result  Returns true if a joystick event has been triggered.
+    /* Handles a keyboard up event
+     * Checks if the provided keycode matches a joystick emulation key
+     * and triggeres an event if a match has been found.
+     * Returns true if a joystick event has been triggered.
      */
     func keyUp(_ macKey: MacKey) -> Bool {
 
         if let direction = keyMap?[macKey] {
             
-            var events: [JoystickEvent]
+            var events: [GamePadAction]
             
-            switch JoystickDirection(direction) {
+            switch GamePadAction(direction) {
             
-            case JOYSTICK_UP:
+            case PULL_UP:
                 keyUp = false
                 events = keyDown ? [PULL_DOWN] : [RELEASE_Y]
                 
-            case JOYSTICK_DOWN:
+            case PULL_DOWN:
                 keyDown = false
                 events = keyUp ? [PULL_UP] : [RELEASE_Y]
                 
-            case JOYSTICK_LEFT:
+            case PULL_LEFT:
                 keyLeft = false
                 events = keyRight ? [PULL_RIGHT] : [RELEASE_X]
                 
-            case JOYSTICK_RIGHT:
+            case PULL_RIGHT:
                 keyRight = false
                 events = keyLeft ? [PULL_LEFT] : [RELEASE_X]
                 
-            case JOYSTICK_FIRE:
+            case PRESS_FIRE:
                 events = [RELEASE_FIRE]
-                
+
+            case PRESS_LEFT:
+                events = [RELEASE_LEFT]
+
+            case PRESS_RIGHT:
+                events = [RELEASE_RIGHT]
+
             default:
                 fatalError()
             }
             
-            return manager.joystickEvent(self, events: events)
+            return manager.joystickAction(self, events: events)
         }
     
         return false
@@ -263,14 +280,14 @@ extension GamePad {
         // Buttons
         if usagePage == kHIDPage_Button {
             // track("BUTTON")
-            manager.joystickEvent(self, events: (intValue != 0) ? [PRESS_FIRE] : [RELEASE_FIRE])
+            manager.joystickAction(self, events: (intValue != 0) ? [PRESS_FIRE] : [RELEASE_FIRE])
             return
         }
         
         // Stick
         if usagePage == kHIDPage_GenericDesktop {
             
-            var events: [JoystickEvent]?
+            var events: [GamePadAction]?
             
             switch usage {
                 
@@ -317,7 +334,7 @@ extension GamePad {
             }
             
             // Trigger event
-            manager.joystickEvent(self, events: events!)
+            manager.joystickAction(self, events: events!)
         }
     }
 }

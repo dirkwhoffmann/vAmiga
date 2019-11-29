@@ -36,17 +36,37 @@ Blitter::initFastBlitter()
 }
 
 void
-Blitter::beginFastLineBlit()
+Blitter::beginFastLineBlit(int level)
 {
-    // Only call this function is line blit mode
+    assert(level == 0 || level == 1);
+
+    // Only call this function in line blit mode
     assert(bltconLINE());
 
     static bool verbose = true;
     if (verbose) { verbose = false; debug("Using the fast line Blitter\n"); }
 
+    // Do the blit
     doFastLineBlit();
-    signalEnd();
-    endBlit();
+
+    // Depending on the current accuracy level, either terminate immediately or
+    // start fake-executing the micro-program to emulate proper timing.
+    switch (level) {
+
+        case 0:
+            if (verbose) { verbose = false; debug("Immediate termination\n"); }
+            signalEnd();
+            endBlit();
+            return;
+
+        case 1:
+            if (verbose) { verbose = false; debug("Fake execution\n"); }
+            agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_LINE_FAKE);
+            return;
+
+        default:
+            assert(false);
+    }
 }
 
 void
@@ -66,8 +86,8 @@ Blitter::beginFastCopyBlit(int level)
     // Do the blit
     (this->*blitfunc[nr])();
 
-    // Depending on the accuracy level, either terminate immediately or start
-    // fake-executing the micro-program to emulate proper timing.
+    // Depending on the current accuracy level, either terminate immediately or
+    // start fake-executing the micro-program to emulate proper timing.
     switch (level) {
 
         case 0:
@@ -77,8 +97,8 @@ Blitter::beginFastCopyBlit(int level)
             return;
 
         case 1:
-            if (verbose) { verbose = false; debug("Fake micro-code execution\n"); }
-            agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_EXEC_FAST);
+            if (verbose) { verbose = false; debug("Fake execution\n"); }
+            agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_COPY_FAKE);
             return;
 
         default:

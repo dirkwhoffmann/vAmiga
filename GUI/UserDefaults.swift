@@ -296,6 +296,7 @@ extension Keys {
     // Joysticks
     static let joyKeyMap1            = "VAMIGAJoyKeyMap1"
     static let joyKeyMap2            = "VAMIGAJoyKeyMap2"
+    static let mouseKeyMap           = "VAMIGAMouseKeyMap"
     static let disconnectJoyKeys     = "VAMIGADisconnectKeys"
     static let autofire              = "VAMIGAAutofire"
     static let autofireBullets       = "VAMIGAAutofireBullets"
@@ -313,23 +314,31 @@ extension Keys {
 
 extension Defaults {
     
-    // Joysticks
+    // Emulation keys
     static let joyKeyMap1 = [
-        MacKey.init(keyCode: kVK_LeftArrow): JOYSTICK_LEFT.rawValue,
-        MacKey.init(keyCode: kVK_RightArrow): JOYSTICK_RIGHT.rawValue,
-        MacKey.init(keyCode: kVK_UpArrow): JOYSTICK_UP.rawValue,
-        MacKey.init(keyCode: kVK_DownArrow): JOYSTICK_DOWN.rawValue,
-        MacKey.init(keyCode: kVK_Space): JOYSTICK_FIRE.rawValue
+        MacKey.init(keyCode: kVK_LeftArrow): PULL_LEFT.rawValue,
+        MacKey.init(keyCode: kVK_RightArrow): PULL_RIGHT.rawValue,
+        MacKey.init(keyCode: kVK_UpArrow): PULL_UP.rawValue,
+        MacKey.init(keyCode: kVK_DownArrow): PULL_DOWN.rawValue,
+        MacKey.init(keyCode: kVK_Space): PRESS_FIRE.rawValue
     ]
     static let joyKeyMap2 = [
-        MacKey.init(keyCode: kVK_ANSI_S): JOYSTICK_LEFT.rawValue,
-        MacKey.init(keyCode: kVK_ANSI_D): JOYSTICK_RIGHT.rawValue,
-        MacKey.init(keyCode: kVK_ANSI_E): JOYSTICK_UP.rawValue,
-        MacKey.init(keyCode: kVK_ANSI_X): JOYSTICK_DOWN.rawValue,
-        MacKey.init(keyCode: kVK_ANSI_C): JOYSTICK_FIRE.rawValue
+        MacKey.init(keyCode: kVK_ANSI_S): PULL_LEFT.rawValue,
+        MacKey.init(keyCode: kVK_ANSI_D): PULL_RIGHT.rawValue,
+        MacKey.init(keyCode: kVK_ANSI_E): PULL_UP.rawValue,
+        MacKey.init(keyCode: kVK_ANSI_X): PULL_DOWN.rawValue,
+        MacKey.init(keyCode: kVK_ANSI_C): PRESS_FIRE.rawValue
     ]
-    
+    static let mouseKeyMap: [MacKey: UInt32] = [:]
+    /* FOR TESTING
+    static let mouseKeyMap = [
+        MacKey.init(keyCode: kVK_Shift): PRESS_LEFT.rawValue,
+        MacKey.init(keyCode: kVK_RightShift): PRESS_RIGHT.rawValue
+    ]
+    */
     static let disconnectJoyKeys = true
+
+    // Joysticks
     static let autofire          = false
     static let autofireBullets   = -3
     static let autofireFrequency = Float(2.5)
@@ -350,8 +359,10 @@ extension MyController {
         
         let dictionary: [String: Any] = [
 
-            // Joysticks
+            // Emulation keys
             Keys.disconnectJoyKeys: Defaults.disconnectJoyKeys,
+
+            // Joysticks
             Keys.autofire: Defaults.autofire,
             Keys.autofireBullets: Defaults.autofireBullets,
             Keys.autofireFrequency: Defaults.autofireFrequency,
@@ -370,6 +381,7 @@ extension MyController {
         defaults.register(defaults: dictionary)
         defaults.register(encodableItem: Defaults.joyKeyMap1, forKey: Keys.joyKeyMap1)
         defaults.register(encodableItem: Defaults.joyKeyMap2, forKey: Keys.joyKeyMap2)
+        defaults.register(encodableItem: Defaults.mouseKeyMap, forKey: Keys.mouseKeyMap)
     }
 
     func resetDevicesUserDefaults() {
@@ -378,6 +390,7 @@ extension MyController {
 
         let keys = [ Keys.joyKeyMap1,
                      Keys.joyKeyMap2,
+                     Keys.mouseKeyMap,
                      
                      Keys.disconnectJoyKeys,
                      Keys.autofire,
@@ -402,11 +415,14 @@ extension MyController {
         let defaults = UserDefaults.standard
     
         amiga.suspend()
-        
-        // Joysticks
+
+        // Emulation keys
         defaults.decode(&gamePadManager.gamePads[0]!.keyMap, forKey: Keys.joyKeyMap1)
         defaults.decode(&gamePadManager.gamePads[1]!.keyMap, forKey: Keys.joyKeyMap2)
+        defaults.decode(&gamePadManager.gamePads[2]!.keyMap, forKey: Keys.mouseKeyMap)
         keyboardcontroller.disconnectJoyKeys = defaults.bool(forKey: Keys.disconnectJoyKeys)
+
+        // Joysticks
         amiga.joystick1.setAutofire(defaults.bool(forKey: Keys.autofire))
         amiga.joystick2.setAutofire(defaults.bool(forKey: Keys.autofire))
         amiga.joystick1.setAutofireBullets(defaults.integer(forKey: Keys.autofireBullets))
@@ -429,11 +445,14 @@ extension MyController {
     func saveDevicesUserDefaults() {
         
         let defaults = UserDefaults.standard
-        
-        // Joysticks
+
+        // Emulation keys
         defaults.encode(gamePadManager.gamePads[0]!.keyMap, forKey: Keys.joyKeyMap1)
         defaults.encode(gamePadManager.gamePads[1]!.keyMap, forKey: Keys.joyKeyMap2)
+        defaults.encode(gamePadManager.gamePads[2]!.keyMap, forKey: Keys.mouseKeyMap)
         defaults.set(keyboardcontroller.disconnectJoyKeys, forKey: Keys.disconnectJoyKeys)
+
+        // Joysticks
         defaults.set(amiga.joystick1.autofire(), forKey: Keys.autofire)
         defaults.set(amiga.joystick1.autofireBullets(), forKey: Keys.autofireBullets)
         defaults.set(amiga.joystick1.autofireFrequency(), forKey: Keys.autofireFrequency)

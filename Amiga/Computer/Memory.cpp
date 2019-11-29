@@ -260,6 +260,8 @@ Memory::revision(uint32_t fingerprint)
         case 0x6C9B07D2: return ROM_KICK30_39_106;
         case 0xFC24AE0D: return ROM_KICK31_40_063;
 
+        case 0xD52B52FD: return ROM_HYP314_46_143;
+
         case 0x3F4FCC0A: return ROM_AROS_55696;
         case 0xF2E52B07: return ROM_AROS_55696_EXT;
 
@@ -338,6 +340,17 @@ Memory::isOrigRom(RomRevision rev)
     }
 }
 
+bool
+Memory::isHyperionRom(RomRevision rev)
+{
+    switch (rev) {
+
+        case ROM_HYP314_46_143: return true;
+
+        default: return false;
+    }
+}
+
 const char *
 Memory::title(RomRevision rev)
 {
@@ -363,6 +376,8 @@ Memory::title(RomRevision rev)
 
         case ROM_KICK30_39_106:  return "Kickstart 3.0";
         case ROM_KICK31_40_063:  return "Kickstart 3.1";
+
+        case ROM_HYP314_46_143:  return "Kickstart 3.14 (Hyperion)";
 
         case ROM_AROS_55696:     return "AROS Kickstart replacement";
         case ROM_AROS_55696_EXT: return "AROS Kickstart extension";
@@ -399,7 +414,9 @@ Memory::version(RomRevision rev)
         case ROM_KICK30_39_106:  return "Rev 39.106";
         case ROM_KICK31_40_063:  return "Rev 40.063";
 
-        case ROM_AROS_55696:     return "SVN 5696";
+        case ROM_HYP314_46_143:  return "Rev 46.143";
+
+        case ROM_AROS_55696:     return "SVN 55696";
         case ROM_AROS_55696_EXT: return "SVN 55696";
 
         case ROM_DIAG11:         return "Version 1.1";
@@ -433,6 +450,8 @@ Memory::released(RomRevision rev)
 
         case ROM_KICK30_39_106:  return "September 1992";
         case ROM_KICK31_40_063:  return "July 1993";
+
+        case ROM_HYP314_46_143:  return "2018";
 
         case ROM_AROS_55696:     return "February 2019";
         case ROM_AROS_55696_EXT: return "February 2019";

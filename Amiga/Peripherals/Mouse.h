@@ -97,17 +97,20 @@ public:
     int64_t getDeltaX();
     int64_t getDeltaY();
 
-    // Returns the mouse coordinates as they appear in the JOYDAT register.
+    // Returns the mouse coordinates as they appear in the JOYDAT register
     uint16_t getXY();
     
-    // Emulates a mouse movement event.
+    // Emulates a mouse movement
     void setXY(int64_t x, int64_t y);
     
-    // Emulates a mouse button event.
+    // Presses or releases a mouse button
     void setLeftButton(bool value);
     void setRightButton(bool value);
-    
-    // Performs periodic actions for this device.
+
+    // Triggers a gamepad event
+    void trigger(GamePadAction event);
+
+    // Performs periodic actions for this device
     void execute();
 };
 

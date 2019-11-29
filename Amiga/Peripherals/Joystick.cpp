@@ -103,9 +103,9 @@ Joystick::ciapa()
 }
 
 void
-Joystick::trigger(JoystickEvent event)
+Joystick::trigger(GamePadAction event)
 {
-    assert(isJoystickEvent(event));
+    assert(isGamePadAction(event));
 
     debug(PORT_DEBUG, "trigger(%d)\n", event);
      
@@ -146,7 +146,7 @@ Joystick::trigger(JoystickEvent event)
             break;
             
         default:
-            assert(0);
+            break;
     }
 }
 

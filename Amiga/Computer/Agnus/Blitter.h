@@ -93,7 +93,7 @@ class Blitter : public SubComponent {
     void (Blitter::*copyBlitInstr[16][2][2][6])(void);
 
     // Micro-program for line blits
-    // TODO
+    void (Blitter::*lineBlitInstr[6])(void);
 
     // The program counter indexing the micro instruction to execute
     uint16_t bltpc;
@@ -426,7 +426,7 @@ private:
     //
 
     // Starts a fast line blit
-    void beginFastLineBlit();
+    void beginFastLineBlit(int level);
 
     // Starts a fast copy blit
     void beginFastCopyBlit(int level);

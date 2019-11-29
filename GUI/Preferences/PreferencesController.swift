@@ -186,14 +186,11 @@ class PreferencesController: DialogController {
     //
     // Devices preferences
     //
-    
-    /// Indicates if a keycode should be recorded for keyset 1
-    var devRecordKey1: JoystickDirection?
-    
-    /// Indicates if a keycode should be recorded for keyset 1
-    var devRecordKey2: JoystickDirection?
-    
-    /// Joystick emulation keys
+
+    // Tag of the button that is currently being recorded
+    var devRecordedKey: Int?
+
+    // Joystick emulation keys
     @IBOutlet weak var devLeft1: NSTextField!
     @IBOutlet weak var devLeft1button: NSButton!
     @IBOutlet weak var devRight1: NSTextField!
@@ -214,8 +211,19 @@ class PreferencesController: DialogController {
     @IBOutlet weak var devDown2button: NSButton!
     @IBOutlet weak var devFire2: NSTextField!
     @IBOutlet weak var devFire2button: NSButton!
+
+    // Mouse emulation keys
+    @IBOutlet weak var devMouseLeft: NSTextField!
+    @IBOutlet weak var devMouseLeftButton: NSButton!
+    @IBOutlet weak var devMouseRight: NSTextField!
+    @IBOutlet weak var devMouseRightButton: NSButton!
     @IBOutlet weak var devDisconnectKeys: NSButton!
 
+    @IBOutlet weak var devJoy1KeysDelButton: NSButton!
+    @IBOutlet weak var devJoy2KeysDelButton: NSButton!
+    @IBOutlet weak var devMouseKeysDelButton: NSButton!
+
+    // Mouse control
     @IBOutlet weak var devRetainMouseKeyComb: NSPopUpButton!
     @IBOutlet weak var devRetainMouseWithKeys: NSButton!
     @IBOutlet weak var devRetainMouseByClick: NSButton!
@@ -255,12 +263,6 @@ class PreferencesController: DialogController {
         track("sheetDidShow")
         if firstTab != "" { prefTabView?.selectTabViewItem(withIdentifier: firstTab) }
     }
-    /*
-    override func windowDidLoad() {
-
-        track("windowDidLoad")
-    }
-    */
 
     override func refresh() {
         

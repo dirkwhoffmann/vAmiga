@@ -170,8 +170,9 @@ Agnus::inspectEventSlot(EventSlot nr)
                 case 0:             i->eventName = "none"; break;
                 case BLT_STRT1:     i->eventName = "BLT_STRT1"; break;
                 case BLT_STRT2:     i->eventName = "BLT_STRT2"; break;
-                case BLT_EXEC_SLOW: i->eventName = "BLT_EXEC_SLOW"; break;
-                case BLT_EXEC_FAST: i->eventName = "BLT_EXEC_FAST"; break;
+                case BLT_COPY_SLOW: i->eventName = "BLT_COPY_SLOW"; break;
+                case BLT_COPY_FAKE: i->eventName = "BLT_COPY_FAKE"; break;
+                case BLT_LINE_FAKE: i->eventName = "BLT_LINE_FAKE"; break;
                 default:            i->eventName = "*** INVALID ***"; break;
             }
             break;

@@ -229,6 +229,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->mem->isOrigRom(rev);
 }
+- (BOOL) isHyperionRom:(RomRevision)rev
+{
+    return wrapper->mem->isHyperionRom(rev);
+}
 - (BOOL) hasRom
 {
     return wrapper->mem->hasKickRom();
@@ -791,6 +795,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->mouse->setRightButton(value);
 }
+- (void) trigger:(GamePadAction)event
+{
+    wrapper->mouse->trigger(event);
+}
 
 @end
 
@@ -813,7 +821,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->joystick->dump();
 }
-- (void) trigger:(JoystickEvent)event
+- (void) trigger:(GamePadAction)event
 {
     wrapper->joystick->trigger(event);
 }

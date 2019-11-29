@@ -437,16 +437,20 @@ Blitter::serviceEvent(EventID id)
             startBlit();
             break;
 
-        case BLT_EXEC_SLOW:
+        case BLT_COPY_SLOW:
 
             debug(BLT_DEBUG, "Instruction %d:%d\n", bltconUSE(), bltpc);
             (this->*copyBlitInstr[bltconUSE()][0][bltconFE()][bltpc])();
             break;
 
-        case BLT_EXEC_FAST:
+        case BLT_COPY_FAKE:
 
             debug(BLT_DEBUG, "Faked instruction %d:%d\n", bltconUSE(), bltpc);
             (this->*copyBlitInstr[bltconUSE()][1][bltconFE()][bltpc])();
+            break;
+
+        case BLT_LINE_FAKE:
+            (this->*lineBlitInstr[bltpc])();
             break;
 
         default:
@@ -795,10 +799,7 @@ Blitter::startBlit()
                    bltamod, bltbmod, bltcmod, bltdmod,
                    bltapt, bltbpt, bltcpt, bltdpt);
 
-        //REMOVE ASAP
-        debugLevel = 1;
-        
-        useSlowBlitter ? beginSlowLineBlit() : beginFastLineBlit();
+        useSlowBlitter ? beginSlowLineBlit() : beginFastLineBlit(level);
 
     } else {
 
@@ -812,8 +813,6 @@ Blitter::startBlit()
                        bltapt, bltbpt, bltcpt, bltdpt,
                        bltconDESC() ? "D" : "", bltconFE() ? "F" : "");
         }
-        //REMOVE ASAP
-        debugLevel = 1; // (copycount == 15) ? 2 : 1;
 
         useSlowBlitter ? beginSlowCopyBlit() : beginFastCopyBlit(level);
     }

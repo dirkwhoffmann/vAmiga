@@ -58,7 +58,7 @@ Blitter::initSlowBlitter()
      *
      * The Copy Blitter micro programs are stored in array
      *
-     *     copyBlitInstr[16][2][2][6]
+     *   copyBlitInstr[16][2][2][6]
      *
      * For each program, four different versions are stored:
      *
@@ -749,12 +749,28 @@ Blitter::initSlowBlitter()
         }
     };
 
+    /* The Line Blitter uses the same micro program in all situations.
+     *
+     * -- C0 -- -- -- C1 -- D0 -- C2 -- D1 | -- D2   (???)
+    */
+    void (Blitter::*lineBlitInstr[6])(void) = {
+
+        // Fake execution
+        &Blitter::exec <BUSIDLE>,
+        &Blitter::exec <BUS>,
+        &Blitter::exec <BUSIDLE>,
+        &Blitter::exec <FAKEWRITE | BUS | REPEAT>,
+
+        &Blitter::exec <NOTHING>,
+        &Blitter::exec <FAKEWRITE | BUS | BLTDONE>
+    };
+
     // Copy all programs over
     assert(sizeof(this->copyBlitInstr) == sizeof(copyBlitInstr));
     memcpy(this->copyBlitInstr, copyBlitInstr, sizeof(copyBlitInstr));
 
-
-    // TODO: Line Blitter program
+    assert(sizeof(this->lineBlitInstr) == sizeof(lineBlitInstr));
+    memcpy(this->lineBlitInstr, lineBlitInstr, sizeof(lineBlitInstr));
 
     dump();
 }
@@ -772,7 +788,8 @@ Blitter::beginSlowLineBlit()
     static bool verbose = true;
     if (verbose) { verbose = false; debug("Fall back to the the fast line Blitter\n"); }
 
-    beginFastLineBlit();
+    // Run in accuracy level 1 instead
+    beginFastLineBlit(1);
 }
 
 void
@@ -818,7 +835,7 @@ Blitter::beginSlowCopyBlit()
     lockD = true;
 
     // Schedule the first execution event
-    agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_EXEC_SLOW);
+    agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_COPY_SLOW);
 
 #ifdef SLOW_BLT_DEBUG
 

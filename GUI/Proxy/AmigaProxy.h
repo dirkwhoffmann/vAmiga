@@ -255,6 +255,7 @@ struct AmigaFileWrapper;
 - (BOOL) isArosRom:(RomRevision)rev;
 - (BOOL) isDiagRom:(RomRevision)rev;
 - (BOOL) isOrigRom:(RomRevision)rev;
+- (BOOL) isHyperionRom:(RomRevision)rev;
 
 - (BOOL) hasRom;
 - (BOOL) hasBootRom;
@@ -455,6 +456,7 @@ struct AmigaFileWrapper;
 - (void) setXY:(NSPoint)pos;
 - (void) setLeftButton:(BOOL)value;
 - (void) setRightButton:(BOOL)value;
+- (void) trigger:(GamePadAction)event;
 
 @end
 
@@ -470,7 +472,7 @@ struct AmigaFileWrapper;
 
 - (void) dump;
 
-- (void) trigger:(JoystickEvent)event;
+- (void) trigger:(GamePadAction)event;
 - (BOOL) autofire;
 - (void) setAutofire:(BOOL)value;
 - (NSInteger) autofireBullets;

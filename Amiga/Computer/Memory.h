@@ -335,6 +335,7 @@ public:
     static bool isArosRom(RomRevision rev);
     static bool isDiagRom(RomRevision rev);
     static bool isOrigRom(RomRevision rev);
+    static bool isHyperionRom(RomRevision rev);
 
     // Translates a ROM indentifier into a textual description
     static const char *title(RomRevision rev);
