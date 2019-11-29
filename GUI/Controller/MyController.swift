@@ -432,12 +432,12 @@ extension MyController {
             return
         }
         
-        // Setup window
-        configureWindow()
-        
         // Setup renderer
         renderer.setupMetal()
 
+        // Setup window
+        configureWindow()
+        
         // Load user defaults
         loadUserDefaults()
         

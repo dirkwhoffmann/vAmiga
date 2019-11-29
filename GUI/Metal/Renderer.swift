@@ -46,10 +46,10 @@ class Renderer: NSObject, MTKViewDelegate {
     //
     
     var metalLayer: CAMetalLayer! = nil
-    var layerWidth = CGFloat(0.0)
-    var layerHeight = CGFloat(0.0)
-    var layerIsDirty = true
-    
+
+    // Current size of the metal canvas
+    var size = CGSize()
+
     //
     // Metal buffers and uniforms
     //
@@ -304,35 +304,6 @@ class Renderer: NSObject, MTKViewDelegate {
     }
 
     //
-    // Managing layout
-    //
-
-    func reshape(withFrame frame: CGRect) {
-        
-        reshape()
-    }
-    
-    func reshape() {
-        
-        let drawableSize = metalLayer.drawableSize
-        
-        if layerWidth == drawableSize.width && layerHeight == drawableSize.height {
-            return
-        }
-        
-        layerWidth = drawableSize.width
-        layerHeight = drawableSize.height
-        
-        // Rebuild matrices
-        buildMatricesBg()
-        buildMatrices2D()
-        buildMatrices3D()
-        
-        // Rebuild depth buffer
-        buildDepthBuffer()
-    }
-
-    //
     // Managing kernels
     //
 
@@ -385,7 +356,7 @@ class Renderer: NSObject, MTKViewDelegate {
         fragmentUniforms.alpha = 1.0
         fragmentUniforms.dotMaskHeight = Int32(dotMaskTexture.height)
         fragmentUniforms.dotMaskWidth = Int32(dotMaskTexture.width)
-        fragmentUniforms.scanlineDistance = Int32(layerHeight / 256)
+        fragmentUniforms.scanlineDistance = Int32(size.height / 256)
 
         // Set uniforms for the merge shader
         if controller.amiga.agnus.interlaceMode() {
@@ -591,24 +562,53 @@ class Renderer: NSObject, MTKViewDelegate {
     }
 
     //
+    // Managing layout
+    //
+
+    func reshape(withSize size: CGSize) {
+
+        if self.size != size && size.width != 0 && size.height != 0 {
+
+            self.size = size
+
+            // Rebuild matrices
+            buildMatricesBg()
+            buildMatrices2D()
+            buildMatrices3D()
+
+            // Rebuild depth buffer
+            buildDepthBuffer()
+        }
+    }
+
+    /*
+    func reshape(withFrame frame: CGRect) {
+        reshape(withSize: frame.size)
+    }
+
+    func reshape() {
+
+        let size = mtkView.frame.size
+        let scale = mtkView.layer?.contentsScale ?? 1
+
+        reshape(withSize: CGSize(width: size.width * scale,
+                                 height: size.height * scale))
+    }
+    */
+
+    //
     // Methods from MTKViewDelegate
     //
 
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-        track()
+
+        reshape(withSize: size)
     }
     
     func draw(in view: MTKView) {
         
         semaphore.wait()
 
-        // Refresh size dependent items if needed
-        if layerIsDirty {
-            reshape(withFrame: mtkView.frame)
-            layerIsDirty = false
-        }
-        
-        // Draw scene
         drawable = metalLayer.nextDrawable()
         if drawable != nil {
             updateTexture()
@@ -617,8 +617,6 @@ class Renderer: NSObject, MTKViewDelegate {
             } else {
                 drawScene3D()
             }
-        } else {
-            track("DRAWABLE == NIL")
-        }
+        } 
     }
 }

@@ -49,8 +49,6 @@ extension Renderer {
         buildDotMasks()
         buildPipeline()
         buildVertexBuffer()
-
-        self.reshape(withFrame: mtkView.frame)
     }
 
     internal func buildMetal() {
@@ -65,8 +63,6 @@ extension Renderer {
         metalLayer.pixelFormat = MTLPixelFormat.bgra8Unorm
         metalLayer.framebufferOnly = true
         metalLayer.frame = metalLayer.frame
-        layerWidth = metalLayer.drawableSize.width
-        layerHeight = metalLayer.drawableSize.height
 
         // Command queue
         queue = device.makeCommandQueue()
@@ -447,7 +443,7 @@ extension Renderer {
 
         let model  = matrix_identity_float4x4
         let view   = matrix_identity_float4x4
-        let aspect = Float(layerWidth) / Float(layerHeight)
+        let aspect = Float(size.width) / Float(size.height)
         let proj   = perspectiveMatrix(fovY: (Float(65.0 * (.pi / 180.0))),
                                        aspect: aspect,
                                        nearZ: 0.1,
@@ -475,7 +471,7 @@ extension Renderer {
         let yShift = -shiftY.current - controller.eyeY
         let zShift = shiftZ.current + controller.eyeZ
 
-        let aspect = Float(layerWidth) / Float(layerHeight)
+        let aspect = Float(size.width) / Float(size.height)
 
         let view = matrix_identity_float4x4
         let proj = perspectiveMatrix(fovY: Float(65.0 * (.pi / 180.0)),
@@ -503,8 +499,8 @@ extension Renderer {
 
     func buildDepthBuffer() {
 
-        let width = Int(layerWidth)
-        let height = Int(layerHeight)
+        let width = Int(size.width)
+        let height = Int(size.height)
 
         let descriptor = MTLTextureDescriptor.texture2DDescriptor(
             pixelFormat: MTLPixelFormat.depth32Float,
