@@ -472,14 +472,14 @@ Blitter::initSlowBlitter()
             {
                 {   // Full execution, no fill
                     &Blitter::exec <FETCH_A | HOLD_D | BUS>,
-                    &Blitter::exec <WRITE_D | HOLD_A | BUS | REPEAT>,
+                    &Blitter::exec <WRITE_D | HOLD_A | HOLD_B | BUS | REPEAT>,
 
                     &Blitter::exec <HOLD_D>,
                     &Blitter::exec <WRITE_D | BUS | BLTDONE>
                 },
                 {   // Full execution, fill
                     &Blitter::exec <FETCH_A | FILL | HOLD_D | BUS>,
-                    &Blitter::exec <WRITE_D | HOLD_A | BUS>,
+                    &Blitter::exec <WRITE_D | HOLD_A | HOLD_B | BUS>,
                     &Blitter::exec <REPEAT>,
 
                     &Blitter::exec <FILL | HOLD_D>,
@@ -880,7 +880,7 @@ Blitter::exec()
         if (lockD) {
 
             debug(BLT_DEBUG, "WRITE_D (skipped)\n");
-            lockD = false;
+            // lockD = false;
 
         } else {
 
@@ -983,11 +983,14 @@ Blitter::exec()
 
     if (instr & HOLD_D) {
 
+        /*
         if (lockD) {
 
             debug(BLT_DEBUG, "HOLD_D (skipped)\n");
-
-        } else {
+            
+        } else
+        */
+        {
 
             debug(BLT_DEBUG, "HOLD_D\n");
 
@@ -1010,6 +1013,7 @@ Blitter::exec()
 
         debug(BLT_DEBUG, "REPEAT\n");
         iteration++;
+        lockD = false;
 
         if (xCounter > 1) {
 
