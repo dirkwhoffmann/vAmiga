@@ -161,7 +161,7 @@ Blitter::initSlowBlitter()
                 {   // Full execution, fill
                     &Blitter::exec <WRITE_D | HOLD_A | HOLD_B | BUS>,
                     &Blitter::exec <FILL | HOLD_D | BUSIDLE>,
-                    &Blitter::exec <REPEAT>,
+                    &Blitter::exec <BUSIDLE | REPEAT>,
 
                     &Blitter::exec <NOTHING>,
                     &Blitter::exec <WRITE_D | BUS | BLTDONE>
@@ -178,7 +178,7 @@ Blitter::initSlowBlitter()
                 {   // Fake execution, fill
                     &Blitter::exec <FAKEWRITE | BUS>,
                     &Blitter::exec <BUSIDLE>,
-                    &Blitter::exec <REPEAT>,
+                    &Blitter::exec <BUSIDLE | REPEAT>,
 
                     &Blitter::exec <NOTHING>,
                     &Blitter::exec <FAKEWRITE | BUS | BLTDONE>
@@ -318,7 +318,7 @@ Blitter::initSlowBlitter()
                     &Blitter::exec <FETCH_B | BUS>,
                     &Blitter::exec <WRITE_D | HOLD_A | HOLD_B | BUS>,
                     &Blitter::exec <FILL | HOLD_D | BUSIDLE>,
-                    &Blitter::exec <REPEAT>,
+                    &Blitter::exec <BUSIDLE | REPEAT>,
 
                     &Blitter::exec <NOTHING>,
                     &Blitter::exec <WRITE_D | BUS | BLTDONE>
@@ -337,7 +337,7 @@ Blitter::initSlowBlitter()
                     &Blitter::exec <BUS>,
                     &Blitter::exec <FAKEWRITE | BUS>,
                     &Blitter::exec <BUSIDLE>,
-                    &Blitter::exec <REPEAT>,
+                    &Blitter::exec <BUSIDLE | REPEAT>,
 
                     &Blitter::exec <NOTHING>,
                     &Blitter::exec <FAKEWRITE | BUS | BLTDONE>
@@ -480,7 +480,7 @@ Blitter::initSlowBlitter()
                 {   // Full execution, fill
                     &Blitter::exec <FETCH_A | FILL | HOLD_D | BUS>,
                     &Blitter::exec <WRITE_D | HOLD_A | HOLD_B | BUS>,
-                    &Blitter::exec <REPEAT>,
+                    &Blitter::exec <BUSIDLE | REPEAT>,
 
                     &Blitter::exec <FILL | HOLD_D>,
                     &Blitter::exec <WRITE_D | BUS | BLTDONE>
@@ -497,7 +497,7 @@ Blitter::initSlowBlitter()
                 {   // Fake execution, fill
                     &Blitter::exec <BUS>,
                     &Blitter::exec <FAKEWRITE | BUS>,
-                    &Blitter::exec <REPEAT>,
+                    &Blitter::exec <BUSIDLE | REPEAT>,
 
                     &Blitter::exec <NOTHING>,
                     &Blitter::exec <FAKEWRITE | BUS | BLTDONE>
@@ -637,7 +637,7 @@ Blitter::initSlowBlitter()
                     &Blitter::exec <FETCH_A | FILL | HOLD_D | BUS>,
                     &Blitter::exec <FETCH_B | HOLD_A | BUS>,
                     &Blitter::exec <WRITE_D | HOLD_B | BUS>,
-                    &Blitter::exec <REPEAT>,
+                    &Blitter::exec <BUSIDLE | REPEAT>,
 
                     &Blitter::exec <FILL | HOLD_D>,
                     &Blitter::exec <WRITE_D | BUS | BLTDONE>
@@ -656,7 +656,7 @@ Blitter::initSlowBlitter()
                     &Blitter::exec <BUS>,
                     &Blitter::exec <BUS>,
                     &Blitter::exec <FAKEWRITE | BUS>,
-                    &Blitter::exec <REPEAT>,
+                    &Blitter::exec <BUSIDLE | REPEAT>,
 
                     &Blitter::exec <NOTHING>,
                     &Blitter::exec <FAKEWRITE | BUS | BLTDONE>
