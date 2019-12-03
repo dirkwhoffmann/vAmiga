@@ -784,7 +784,12 @@ Blitter::beginFakeLineBlit()
     // Do the blit
     doFastLineBlit();
 
-    // Start to emulate bus timing
+    // Prepare the slow Blitter
+    bltsizeW = 1;
+    resetXCounter();
+    resetYCounter();
+
+    // Schedule the first slow Blitter execution event
     agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_LINE_FAKE);
 }
 
