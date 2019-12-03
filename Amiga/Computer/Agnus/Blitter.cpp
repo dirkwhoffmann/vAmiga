@@ -783,9 +783,7 @@ Blitter::prepareBlit()
 void
 Blitter::startBlit()
 {
-    // Based on the accuracy level, we run the slow or the fast Blitter
     int level = config.accuracy;
-    bool useSlowBlitter = level >= 2;
 
     check1 = fnv_1a_init32();
     check2 = fnv_1a_init32();
@@ -799,7 +797,7 @@ Blitter::startBlit()
                    bltamod, bltbmod, bltcmod, bltdmod,
                    bltapt, bltbpt, bltcpt, bltdpt);
 
-        useSlowBlitter ? beginSlowLineBlit() : beginFastLineBlit(level);
+        beginLineBlit(level);
 
     } else {
 
@@ -814,7 +812,7 @@ Blitter::startBlit()
                        bltconDESC() ? "D" : "", bltconFE() ? "F" : "");
         }
 
-        useSlowBlitter ? beginSlowCopyBlit() : beginFastCopyBlit(level);
+        beginCopyBlit(level);
     }
 }
 
@@ -853,9 +851,6 @@ Blitter::endBlit()
 void
 Blitter::kill()
 {
-    // assert(!bbusy);
-    // assert(!agnus->isPending<BLT_SLOT>());
-
     // Clear the Blitter busy flag
     bbusy = false;
 
@@ -865,3 +860,39 @@ Blitter::kill()
 
 template void Blitter::pokeBLTSIZE<POKE_CPU>(uint16_t value);
 template void Blitter::pokeBLTSIZE<POKE_COPPER>(uint16_t value);
+
+void
+Blitter::beginLineBlit(int level)
+{
+    static bool verbose = true;
+
+    if (verbose) {
+        verbose = false;
+        debug("Performing level %d line blits.\n", level);
+    }
+
+    switch (level) {
+        case 0: beginFastLineBlit(); break;
+        case 1: beginFakeLineBlit(); break;
+        case 2: beginSlowLineBlit(); break;
+        defaut: assert(false);
+    }
+}
+
+void
+Blitter::beginCopyBlit(int level)
+{
+    static bool verbose = true;
+
+    if (verbose) {
+        verbose = false;
+        debug("Performing level %d copy blits.\n", level);
+    }
+
+    switch (level) {
+        case 0: beginFastCopyBlit(); break;
+        case 1: beginFakeCopyBlit(); break;
+        case 2: beginSlowCopyBlit(); break;
+        defaut: assert(false);
+    }
+}

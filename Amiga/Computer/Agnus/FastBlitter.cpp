@@ -36,74 +36,32 @@ Blitter::initFastBlitter()
 }
 
 void
-Blitter::beginFastLineBlit(int level)
+Blitter::beginFastLineBlit()
 {
-    assert(level == 0 || level == 1);
-
     // Only call this function in line blit mode
     assert(bltconLINE());
 
-    static bool verbose = true;
-    if (verbose) { verbose = false; debug("Using the fast line Blitter\n"); }
-
-    // Do the blit
+    // Run the fast line Blitter
     doFastLineBlit();
 
-    // Depending on the current accuracy level, either terminate immediately or
-    // start fake-executing the micro-program to emulate proper timing.
-    switch (level) {
-
-        case 0:
-            if (verbose) { verbose = false; debug("Immediate termination\n"); }
-            signalEnd();
-            endBlit();
-            return;
-
-        case 1:
-            if (verbose) { verbose = false; debug("Fake execution\n"); }
-            agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_LINE_FAKE);
-            return;
-
-        default:
-            assert(false);
-    }
+    // Terminate immediately
+    signalEnd();
+    endBlit();
 }
 
 void
-Blitter::beginFastCopyBlit(int level)
+Blitter::beginFastCopyBlit()
 {
-    assert(level == 0 || level == 1);
-
     // Only call this function in copy blit mode
     assert(!bltconLINE());
 
-    static bool verbose = true;
-    if (verbose) { debug("Using the fast copy Blitter\n"); }
-
-    // Select the proper Blitter function
+    // Run the fast copy Bliter
     int nr = ((bltcon0 >> 7) & 0b11110) | !!bltconDESC();
-
-    // Do the blit
     (this->*blitfunc[nr])();
 
-    // Depending on the current accuracy level, either terminate immediately or
-    // start fake-executing the micro-program to emulate proper timing.
-    switch (level) {
-
-        case 0:
-            if (verbose) { verbose = false; debug("Immediate termination\n"); }
-            signalEnd();
-            endBlit();
-            return;
-
-        case 1:
-            if (verbose) { verbose = false; debug("Fake execution\n"); }
-            agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_COPY_FAKE);
-            return;
-
-        default:
-            assert(false);
-    }
+    // Terminate immediately
+    signalEnd();
+    endBlit();
 }
 
 template <bool useA, bool useB, bool useC, bool useD, bool desc>

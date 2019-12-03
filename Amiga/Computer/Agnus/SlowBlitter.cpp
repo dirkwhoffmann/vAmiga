@@ -776,20 +776,48 @@ Blitter::initSlowBlitter()
 }
 
 void
+Blitter::beginFakeLineBlit()
+{
+    // Only call this function in line blit mode
+    assert(bltconLINE());
+
+    // Do the blit
+    doFastLineBlit();
+
+    // Start to emulate bus timing
+    agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_LINE_FAKE);
+}
+
+void
 Blitter::beginSlowLineBlit()
 {
+    // Only call this function is line blit mode
+    assert(bltconLINE());
+
     /* Note: There is no such thing as a slow line Blitter yet. Until such a
      * thing has been implemented, we call the fast Blitter instead.
      */
 
-    // Only call this function is line blit mode
-    assert(bltconLINE());
+    beginFakeLineBlit();
+}
 
-    static bool verbose = true;
-    if (verbose) { verbose = false; debug("Fall back to the the fast line Blitter\n"); }
+void
+Blitter::beginFakeCopyBlit()
+{
+    // Only call this function in copy blit mode
+    assert(!bltconLINE());
 
-    // Run in accuracy level 1 instead
-    beginFastLineBlit(1);
+    // Run the fast Blitter
+    int nr = ((bltcon0 >> 7) & 0b11110) | !!bltconDESC();
+    (this->*blitfunc[nr])();
+
+    // Prepare the slow Blitter
+    resetXCounter();
+    resetYCounter();
+    lockD = true;
+
+    // Schedule the first slow Blitter execution event
+    agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_COPY_FAKE);
 }
 
 void
@@ -834,7 +862,7 @@ Blitter::beginSlowCopyBlit()
     // Lock pipeline stage D
     lockD = true;
 
-    // Schedule the first execution event
+    // Schedule the first slow Blitter execution event
     agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_COPY_SLOW);
 
 #ifdef SLOW_BLT_DEBUG

@@ -422,14 +422,20 @@ private:
 
 
     //
+    //  Executing the Blitter
+    //
+
+    void beginLineBlit(int level);
+    void beginCopyBlit(int level);
+
+
+    //
     //  Executing the Fast Blitter (Called for lower accuracy levels)
     //
 
-    // Starts a fast line blit
-    void beginFastLineBlit(int level);
-
-    // Starts a fast copy blit
-    void beginFastCopyBlit(int level);
+    // Starts a level 0 blit
+    void beginFastLineBlit();
+    void beginFastCopyBlit();
 
     // Performs a copy blit operation via the FastBlitter
     template <bool useA, bool useB, bool useC, bool useD, bool desc>
@@ -443,10 +449,10 @@ private:
     //  Executing the Slow Blitter (Called for higher accuracy levels)
     //
 
-    // Starts a slow line blit
+    // Starts a level 1 or level 2 blit
+    void beginFakeLineBlit();
     void beginSlowLineBlit();
-
-    // Starts a slow copy blit
+    void beginFakeCopyBlit();
     void beginSlowCopyBlit();
 
     // Emulates a Blitter micro-instruction
