@@ -47,8 +47,16 @@ class Renderer: NSObject, MTKViewDelegate {
     
     var metalLayer: CAMetalLayer! = nil
 
-    // Current size of the metal canvas
-    var size = CGSize()
+    // Current canvas size
+    // var size = CGSize()
+    var size: CGSize {
+
+        let frameSize = mtkView.frame.size
+        let scale = mtkView.layer?.contentsScale ?? 1
+
+        return CGSize(width: frameSize.width * scale,
+                      height: frameSize.height * scale)
+    }
 
     //
     // Metal buffers and uniforms
@@ -243,7 +251,9 @@ class Renderer: NSObject, MTKViewDelegate {
         self.device = device
         self.controller = controller
         super.init()
-        
+
+        setupMetal()
+
         mtkView.delegate = self
         mtkView.device = device
     }
@@ -567,34 +577,19 @@ class Renderer: NSObject, MTKViewDelegate {
 
     func reshape(withSize size: CGSize) {
 
-        if self.size != size && size.width != 0 && size.height != 0 {
+        // Rebuild matrices
+        buildMatricesBg()
+        buildMatrices2D()
+        buildMatrices3D()
 
-            self.size = size
-
-            // Rebuild matrices
-            buildMatricesBg()
-            buildMatrices2D()
-            buildMatrices3D()
-
-            // Rebuild depth buffer
-            buildDepthBuffer()
-        }
-    }
-
-    /*
-    func reshape(withFrame frame: CGRect) {
-        reshape(withSize: frame.size)
+        // Rebuild depth buffer
+        buildDepthBuffer()
     }
 
     func reshape() {
 
-        let size = mtkView.frame.size
-        let scale = mtkView.layer?.contentsScale ?? 1
-
-        reshape(withSize: CGSize(width: size.width * scale,
-                                 height: size.height * scale))
+        reshape(withSize: size)
     }
-    */
 
     //
     // Methods from MTKViewDelegate
@@ -602,6 +597,7 @@ class Renderer: NSObject, MTKViewDelegate {
 
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
 
+        // track("drawableSizeWillChange \(size)")
         reshape(withSize: size)
     }
     

@@ -49,6 +49,8 @@ extension Renderer {
         buildDotMasks()
         buildPipeline()
         buildVertexBuffer()
+
+        reshape()
     }
 
     internal func buildMetal() {
@@ -501,6 +503,9 @@ extension Renderer {
 
         let width = Int(size.width)
         let height = Int(size.height)
+
+        precondition(width != 0)
+        precondition(height != 0)
 
         let descriptor = MTLTextureDescriptor.texture2DDescriptor(
             pixelFormat: MTLPixelFormat.depth32Float,

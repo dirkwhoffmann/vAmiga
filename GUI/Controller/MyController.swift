@@ -403,11 +403,6 @@ extension MyController {
                 
         // Create audio engine
         audioEngine = AudioEngine.init(withPaula: amiga.paula)
-
-        // Create renderer
-        renderer = Renderer(view: metal,
-                            device: MTLCreateSystemDefaultDevice()!,
-                            controller: self)
     }
 
     override open func windowDidLoad() {
@@ -431,9 +426,11 @@ extension MyController {
             track("Failed to create game pad manager")
             return
         }
-        
+
         // Setup renderer
-        renderer.setupMetal()
+         renderer = Renderer(view: metal,
+                             device: MTLCreateSystemDefaultDevice()!,
+                             controller: self)
 
         // Setup window
         configureWindow()
