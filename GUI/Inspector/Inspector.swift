@@ -438,7 +438,7 @@ class Inspector: NSWindowController {
         track()
         super.showWindow(self)
         amigaProxy?.enableDebugging()
-        amigaProxy?.setInspectionTarget(INS_CPU)
+        updateInspectionTarget()
         refresh(everything: true)
         
         timer = Timer.scheduledTimer(withTimeInterval: inspectionInterval, repeats: true) { _ in
@@ -455,14 +455,27 @@ class Inspector: NSWindowController {
         control.formatter = formatter
         control.needsDisplay = true
     }
-    /*
-    func assignFormatter(_ formatter: Formatter, _ controls: [NSControl]) {
-        for control in controls {
-            assignFormatter(formatter, control)
+
+    func updateInspectionTarget() {
+
+        if let id = debugPanel.selectedTabViewItem?.label {
+
+            switch id {
+
+            case "CPU":    amigaProxy?.setInspectionTarget(INS_CPU)
+            case "CIA":    amigaProxy?.setInspectionTarget(INS_CIA)
+            case "Memory": amigaProxy?.setInspectionTarget(INS_MEM)
+            case "Agnus":  amigaProxy?.setInspectionTarget(INS_AGNUS)
+            case "Copper": amigaProxy?.setInspectionTarget(INS_AGNUS)
+            case "Denise": amigaProxy?.setInspectionTarget(INS_DENISE)
+            case "Paula":  amigaProxy?.setInspectionTarget(INS_PAULA)
+            case "Ports":  amigaProxy?.setInspectionTarget(INS_PORTS)
+            case "Events": amigaProxy?.setInspectionTarget(INS_EVENTS)
+            default:       break
+            }
         }
     }
-    */
-    
+
     // Updates the currently shown panel
     func refresh(everything: Bool) {
         
@@ -505,7 +518,9 @@ extension Inspector: NSTabViewDelegate {
     func tabView(_ tabView: NSTabView, didSelect tabViewItem: NSTabViewItem?) {
         
         track()
-        
+        updateInspectionTarget()
+
+        /*
         switch tabViewItem?.label {
             
         case "CPU":    amigaProxy?.setInspectionTarget(INS_CPU)
@@ -519,7 +534,8 @@ extension Inspector: NSTabViewDelegate {
         case "Events": amigaProxy?.setInspectionTarget(INS_EVENTS)
         default:       break
         }
-        
+        */
+
         refresh(everything: true)
     }
 }

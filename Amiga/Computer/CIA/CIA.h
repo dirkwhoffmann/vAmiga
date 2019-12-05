@@ -79,10 +79,10 @@ class CIA : public SubComponent {
     friend TOD;
     friend Amiga;
 
+protected:
+
     // Identification number (0 = CIA A, 1 = CIA B)
     int nr;
-
-protected:
 
     // The current configuration
     CIAConfig config;

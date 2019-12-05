@@ -61,11 +61,13 @@ CIA::_inspect()
 {
     // Prevent external access to variable 'info'
     pthread_mutex_lock(&lock);
-    
+
+    updatePA();
     info.portA.port = PA;
     info.portA.reg = PRA;
     info.portA.dir = DDRA;
-    
+
+    updatePB();
     info.portB.port = PB;
     info.portB.reg = PRB;
     info.portB.dir = DDRB;
@@ -94,7 +96,7 @@ CIA::_inspect()
     info.cntIntEnable = icr & 0x04;
     
     info.idleCycles = idle();
-    info.idlePercentage = (double)idleCycles / (double)clock;
+    info.idlePercentage = clock ? (double)idleCycles / (double)clock : 100.0;
     
     pthread_mutex_unlock(&lock);
 }
@@ -1246,7 +1248,8 @@ CIAA::updatePA()
     PA &= external | 0b00111111;
 
     // plaindebug("CIAA: Peek(0) = %X (PC = %X DDRA = %X)\n", PA, amiga->cpu.getPC(), DDRA);
-    
+
+    // if (nr == 0) debug("int / ext = %x %x mask = %x PA = %x\n", internal, external, mask, PA);
     // Check the LED bit
     if ((oldPA ^ PA) & 0b00000010) {
         amiga.putMessage((PA & 0b00000010) ? MSG_POWER_LED_DIM : MSG_POWER_LED_ON);
