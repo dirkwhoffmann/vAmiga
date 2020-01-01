@@ -247,43 +247,62 @@ CPU::_reset()
 void
 CPU::_inspect()
 {
+    uint32_t pc;
+
     // Prevent external access to variable 'info'
     pthread_mutex_lock(&lock);
-    
-    uint32_t pc = getPC();
-    
-    // Registers
-    info.pc = pc;
-    
-    info.d[0] = m68k_get_reg(NULL, M68K_REG_D0);
-    info.d[1] = m68k_get_reg(NULL, M68K_REG_D1);
-    info.d[2] = m68k_get_reg(NULL, M68K_REG_D2);
-    info.d[3] = m68k_get_reg(NULL, M68K_REG_D3);
-    info.d[4] = m68k_get_reg(NULL, M68K_REG_D4);
-    info.d[5] = m68k_get_reg(NULL, M68K_REG_D5);
-    info.d[6] = m68k_get_reg(NULL, M68K_REG_D6);
-    info.d[7] = m68k_get_reg(NULL, M68K_REG_D7);
-    
-    info.a[0] = m68k_get_reg(NULL, M68K_REG_A0);
-    info.a[1] = m68k_get_reg(NULL, M68K_REG_A1);
-    info.a[2] = m68k_get_reg(NULL, M68K_REG_A2);
-    info.a[3] = m68k_get_reg(NULL, M68K_REG_A3);
-    info.a[4] = m68k_get_reg(NULL, M68K_REG_A4);
-    info.a[5] = m68k_get_reg(NULL, M68K_REG_A5);
-    info.a[6] = m68k_get_reg(NULL, M68K_REG_A6);
-    info.a[7] = m68k_get_reg(NULL, M68K_REG_A7);
-    
-    info.ssp = m68k_get_reg(NULL, M68K_REG_ISP);
-    info.flags = m68k_get_reg(NULL, M68K_REG_SR);
-    
+
+    if (MUSASHI) {
+
+        pc = getPC();
+
+        // Registers
+        info.pc = pc;
+
+        info.d[0] = m68k_get_reg(NULL, M68K_REG_D0);
+        info.d[1] = m68k_get_reg(NULL, M68K_REG_D1);
+        info.d[2] = m68k_get_reg(NULL, M68K_REG_D2);
+        info.d[3] = m68k_get_reg(NULL, M68K_REG_D3);
+        info.d[4] = m68k_get_reg(NULL, M68K_REG_D4);
+        info.d[5] = m68k_get_reg(NULL, M68K_REG_D5);
+        info.d[6] = m68k_get_reg(NULL, M68K_REG_D6);
+        info.d[7] = m68k_get_reg(NULL, M68K_REG_D7);
+
+        info.a[0] = m68k_get_reg(NULL, M68K_REG_A0);
+        info.a[1] = m68k_get_reg(NULL, M68K_REG_A1);
+        info.a[2] = m68k_get_reg(NULL, M68K_REG_A2);
+        info.a[3] = m68k_get_reg(NULL, M68K_REG_A3);
+        info.a[4] = m68k_get_reg(NULL, M68K_REG_A4);
+        info.a[5] = m68k_get_reg(NULL, M68K_REG_A5);
+        info.a[6] = m68k_get_reg(NULL, M68K_REG_A6);
+        info.a[7] = m68k_get_reg(NULL, M68K_REG_A7);
+
+        info.ssp = m68k_get_reg(NULL, M68K_REG_ISP);
+        info.flags = m68k_get_reg(NULL, M68K_REG_SR);
+
+    } else {
+
+        pc = getPC();
+
+        // Registers
+        info.pc = pc;
+
+        for (int i = 0; i < 8; i++) {
+            info.d[i] = moiracpu.getD(i);
+            info.a[i] = moiracpu.getA(i);
+        }
+        info.ssp = moiracpu.getSSP();
+        info.flags = moiracpu.getSR();
+    }
+
     // Disassemble the program starting at the program counter
     for (unsigned i = 0; i < CPUINFO_INSTR_COUNT; i++) {
         info.instr[i] = disassemble(pc);
         pc += info.instr[i].bytes;
     }
-    
+
     // Disassemble the most recent entries in the trace buffer
-    
+
     /* The last element in the trace buffer is the instruction that will be
      * be executed next. Because we don't want to show this element yet, we
      * don't dissassemble it.
@@ -293,7 +312,7 @@ CPU::_inspect()
         RecordedInstruction instr = traceBuffer[offset];
         info.traceInstr[CPUINFO_INSTR_COUNT - i] = disassemble(instr.pc, instr.sp);
     }
-    
+
     pthread_mutex_unlock(&lock);
 }
 
@@ -584,7 +603,12 @@ uint32_t
 CPU::lengthOfInstruction(uint32_t addr)
 {
     char tmp[128];
-    return m68k_disassemble(tmp, addr, M68K_CPU_TYPE_68000);
+
+    if (MUSASHI) {
+        return m68k_disassemble(tmp, addr, M68K_CPU_TYPE_68000);
+    } else {
+        return moiracpu.disassemble(addr, tmp);
+    }
 }
 
 DisassembledInstruction
@@ -593,8 +617,13 @@ CPU::disassemble(uint32_t addr)
     DisassembledInstruction result;
     
     if (addr <= 0xFFFFFF) {
-        
-        result.bytes = m68k_disassemble(result.instr, addr, M68K_CPU_TYPE_68000);
+
+        if (MUSASHI) {
+            result.bytes = m68k_disassemble(result.instr, addr, M68K_CPU_TYPE_68000);
+        } else {
+            moiracpu.configDasm(true, true);
+            result.bytes = moiracpu.disassemble(addr, result.instr);
+        }
         mem.hex(result.data, addr, result.bytes, sizeof(result.data));
         sprint24x(result.addr, addr);
         
@@ -602,8 +631,6 @@ CPU::disassemble(uint32_t addr)
         
         result.bytes = result.instr[0] = result.data[0] = result.addr[0] = 0;
     }
-
-    // Flags ("" by default)
     result.flags[0] = 0;
 
     return result;
@@ -688,6 +715,7 @@ CPU::executeInstruction()
 
     } else {
         moiracpu.execute();
+        clock = moiracpu.getClock() << config.shift;
     }
 
     return clock;
