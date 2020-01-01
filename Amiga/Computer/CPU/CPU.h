@@ -12,6 +12,7 @@
 
 #include "SubComponent.h"
 #include "BreakpointManager.h"
+#include "Moira.h"
 
 /* vAmiga utilizes the Musashi CPU core for emulating the Amiga CPU.
  *
@@ -53,6 +54,7 @@ class CPU : public SubComponent {
     CPUConfig config;
     CPUInfo info;
 
+    moira::Moira moiracpu;
 
     //
     // Internal state
@@ -163,7 +165,7 @@ private:
     size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS }
     size_t didLoadFromBuffer(uint8_t *buffer) override;
-    size_t didSaveToBuffer(uint8_t *buffer) const override;
+    size_t didSaveToBuffer(uint8_t *buffer) override;
 
 public:
 
@@ -207,14 +209,21 @@ public:
     //
 
     // The CPU has been emulated up to this cycle
-    Cycle getClock() { return clock; }
+    Cycle getClock() {
+        if (MUSASHI) return clock; else return moiracpu.getClock();
+    }
 
     // Advances the clock by a certain number of CPU cycles
     void advance(CPUCycle cycles) { clock += cycles << config.shift; }
 
     // Returns the clock in CPU cycles
-    CPUCycle cycles() { return clock >> config.shift; }
-
+    CPUCycle cycles() {
+        if (MUSASHI) {
+            return clock >> config.shift;
+        } else {
+            return moiracpu.getClock() >> config.shift;
+        }
+    }
 
     //
     // Querying registers and instructions
@@ -223,7 +232,7 @@ public:
 public:
     
     // Getter and setter for the program counter.
-    uint32_t getPC() const;
+    uint32_t getPC();
     void setPC(uint32_t value); 
 
     // Returns the current value of the status register.

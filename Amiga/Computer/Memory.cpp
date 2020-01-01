@@ -166,7 +166,7 @@ Memory::didLoadFromBuffer(uint8_t *buffer)
 }
 
 size_t
-Memory::didSaveToBuffer(uint8_t *buffer) const
+Memory::didSaveToBuffer(uint8_t *buffer)
 {
     // Save memory size information
     SerWriter writer(buffer);

@@ -12,6 +12,10 @@ extern "C" {
 #include "m68k.h"
 }
 
+//
+// Interface to Musashi
+//
+
 // Reference to the active Amiga instance
 Amiga *activeAmiga = NULL;
 
@@ -94,6 +98,65 @@ extern "C" uint32_t read_on_reset(uint32_t defaultValue)
 extern "C" uint32_t read_sp_on_reset(void) { return read_on_reset(0); }
 extern "C" uint32_t read_pc_on_reset(void) { return read_on_reset(0); }
 
+//
+// Interface to Moira
+//
+
+namespace moira {
+
+void
+Moira::sync(int cycles)
+{
+    clock += cycles;
+}
+
+u8
+Moira::read8(u32 addr)
+{
+    assert(activeAmiga != NULL);
+    return activeAmiga->mem.peek8(addr);
+}
+
+u16
+Moira::read16(u32 addr)
+{
+     assert(activeAmiga != NULL);
+     return activeAmiga->mem.peek16<BUS_CPU>(addr);
+}
+
+u16
+Moira::read16Dasm(u32 addr)
+{
+    assert(activeAmiga != NULL);
+    return activeAmiga->mem.spypeek16(addr);
+}
+
+u16
+Moira::read16OnReset(u32 addr)
+{
+    u16 result = 0;
+
+    if (activeAmiga && activeAmiga->mem.chip) result = read16(addr);
+
+    printf("read16OnReset(%x) = %x\n", addr, result);
+    return result;
+}
+
+void
+Moira::write8(u32 addr, u8 val)
+{
+    assert(activeAmiga != NULL);
+    activeAmiga->mem.poke8(addr, val);
+}
+
+void
+Moira::write16 (u32 addr, u16 val)
+{
+    assert(activeAmiga != NULL);
+    activeAmiga->mem.poke16<BUS_CPU>(addr, val);
+}
+}
+
 
 //
 // CPU class
@@ -173,6 +236,7 @@ CPU::_reset()
     m68k_set_int_ack_callback(interrupt_handler);
 #endif
     m68k_pulse_reset();
+    moiracpu.reset();
 
     // Remove all previously recorded instructions
     clearTraceBuffer();
@@ -386,7 +450,7 @@ CPU::didLoadFromBuffer(uint8_t *buffer)
 }
 
 size_t
-CPU::didSaveToBuffer(uint8_t *buffer) const
+CPU::didSaveToBuffer(uint8_t *buffer)
 {
     SerWriter writer(buffer);
 
@@ -477,27 +541,43 @@ CPU::makeActiveInstance()
 }
 
 uint32_t
-CPU::getPC() const
+CPU::getPC()
 {
-    return m68k_get_reg(NULL, M68K_REG_PC);
+    if (MUSASHI) {
+        return m68k_get_reg(NULL, M68K_REG_PC);
+    } else {
+        return moiracpu.getPC();
+    }
 }
 
 void
 CPU::setPC(uint32_t value)
 {
-    m68k_set_reg(M68K_REG_PC, value);
+    if (MUSASHI) {
+        m68k_set_reg(M68K_REG_PC, value);
+    } else {
+        moiracpu.setPC(value);
+    }
 }
 
 uint32_t
 CPU::getSP()
 {
-    return m68k_get_reg(NULL, M68K_REG_SP);
+    if (MUSASHI) {
+        return m68k_get_reg(NULL, M68K_REG_SP);
+    } else {
+        return moiracpu.getSP();
+    }
 }
 
 uint32_t
 CPU::getIR()
 {
-    return m68k_get_reg(NULL, M68K_REG_IR);
+    if (MUSASHI) {
+        return m68k_get_reg(NULL, M68K_REG_IR);
+    } else {
+        return moiracpu.getIRD();
+    }
 }
 
 uint32_t
@@ -592,18 +672,23 @@ CPU::executeInstruction()
         // Check action flags
         if (actions & CPU_SET_IRQ_LEVEL1) {
             debug(INT_DEBUG, "Changing IRQ level to %d\n", irqLevel);
-            m68k_set_irq(irqLevel);
+            if (MUSASHI) { m68k_set_irq(irqLevel); }
         }
 
         // Shift action flags
         actions = (actions << 1) & CPU_DELAY_MASK;
     }
 
-    advance(m68k_execute(1));
+    if (MUSASHI) {
+        advance(m68k_execute(1));
 
-    if (waitStates) debug(CPU_DEBUG, "Adding %d wait states\n", waitStates);
-    clock += waitStates;
-    waitStates = 0;
+        if (waitStates) debug(CPU_DEBUG, "Adding %d wait states\n", waitStates);
+        clock += waitStates;
+        waitStates = 0;
+
+    } else {
+        moiracpu.execute();
+    }
 
     return clock;
 }
@@ -611,12 +696,16 @@ CPU::executeInstruction()
 void
 CPU::setIrqLevel(int level)
 {
+    assert(level < 8);
+
     if (irqLevel != level)
     {
         debug(INT_DEBUG, "IRQ level changed from %d to %d\n", irqLevel, level);
 
         irqLevel = level;
         actions |= CPU_SET_IRQ_LEVEL0;
+
+        moiracpu.setIPL(level);
     }
 }
 

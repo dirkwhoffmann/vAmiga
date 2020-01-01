@@ -224,8 +224,8 @@ public:
      * A component can override this method to add custom behavior if not all
      * elements can be processed by the default implementation.
      */
-    virtual size_t willSaveToBuffer(uint8_t *buffer) const {return 0; }
-    virtual size_t didSaveToBuffer(uint8_t *buffer) const { return 0; }
+    virtual size_t willSaveToBuffer(uint8_t *buffer) {return 0; }
+    virtual size_t didSaveToBuffer(uint8_t *buffer) { return 0; }
 };
 
 //

@@ -90,7 +90,7 @@ public:
 
 private:
 
-    void prefix() const override;
+    void prefix() override;
 };
 
 #endif

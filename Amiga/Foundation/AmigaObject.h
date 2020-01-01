@@ -69,24 +69,24 @@ class AmigaObject {
      * plaindebug(...) instead. Some Amiga objects overwrite prefix() to
      * provide addition standard debug information when a message is printed.
      */
-    virtual void prefix() const;
+    virtual void prefix();
     
-    void msg(const char *fmt, ...) const;
-    void plainmsg(const char *fmt, ...) const;
+    void msg(const char *fmt, ...);
+    void plainmsg(const char *fmt, ...);
     
-    void debug(const char *fmt, ...) const;
-    void debug(int level, const char *fmt, ...) const;
-    void plaindebug(const char *fmt, ...) const;
-    void plaindebug(int level, const char *fmt, ...) const;
+    void debug(const char *fmt, ...);
+    void debug(int level, const char *fmt, ...);
+    void plaindebug(const char *fmt, ...);
+    void plaindebug(int level, const char *fmt, ...);
     
-    void warn(const char *fmt, ...) const;
-    void panic(const char *fmt, ...) const;
+    void warn(const char *fmt, ...);
+    void panic(const char *fmt, ...);
 
     //
     // Convenience wrappers
     //
     
-    void reportSuspiciousBehavior() const;
+    void reportSuspiciousBehavior();
 };
 
 #endif

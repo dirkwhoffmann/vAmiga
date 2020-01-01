@@ -469,7 +469,7 @@ Amiga::configureDrive(unsigned drive, ConfigOption option, long value)
 }
 
 void
-Amiga::prefix() const
+Amiga::prefix()
 {
     fprintf(stderr, "[%lld] (%3d,%3d) ",
             agnus.frame, agnus.pos.v, agnus.pos.h);

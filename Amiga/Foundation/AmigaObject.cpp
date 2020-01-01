@@ -25,28 +25,28 @@ prefix(); \
 fprintf(stderr, "%s: %s%s", getDescription(), trailer, buf);
 
 void
-AmigaObject::prefix() const
+AmigaObject::prefix()
 {
     if (description)
         fprintf(stderr, "%s: ", description);
 }
 
 void
-AmigaObject::msg(const char *fmt, ...) const
+AmigaObject::msg(const char *fmt, ...)
 {
     VAOBJ_PARSE
     VAPRINT("")
 }
 
 void
-AmigaObject::plainmsg(const char *fmt, ...) const
+AmigaObject::plainmsg(const char *fmt, ...)
 {
     VAOBJ_PARSE
     VAPRINTPLAIN("")
 }
 
 void
-AmigaObject::debug(const char *fmt, ...) const
+AmigaObject::debug(const char *fmt, ...)
 {
 #ifndef NDEBUG
     VAOBJ_PARSE
@@ -55,7 +55,7 @@ AmigaObject::debug(const char *fmt, ...) const
 }
 
 void
-AmigaObject::debug(int level, const char *fmt, ...) const
+AmigaObject::debug(int level, const char *fmt, ...)
 {
 #ifndef NDEBUG
     if (level <= debugLevel) {
@@ -66,7 +66,7 @@ AmigaObject::debug(int level, const char *fmt, ...) const
 }
 
 void
-AmigaObject::plaindebug(const char *fmt, ...) const
+AmigaObject::plaindebug(const char *fmt, ...)
 {
 #ifndef NDEBUG
     VAOBJ_PARSE
@@ -75,7 +75,7 @@ AmigaObject::plaindebug(const char *fmt, ...) const
 }
 
 void
-AmigaObject::plaindebug(int level, const char *fmt, ...) const
+AmigaObject::plaindebug(int level, const char *fmt, ...)
 {
 #ifndef NDEBUG
     if (level <= debugLevel) {
@@ -86,14 +86,14 @@ AmigaObject::plaindebug(int level, const char *fmt, ...) const
 }
 
 void
-AmigaObject::warn(const char *fmt, ...) const
+AmigaObject::warn(const char *fmt, ...)
 {
     VAOBJ_PARSE;
     VAPRINT("WARNING: ")
 }
 
 void
-AmigaObject::panic(const char *fmt, ...) const
+AmigaObject::panic(const char *fmt, ...)
 {
     VAOBJ_PARSE;
     VAPRINT("PANIC: ")
@@ -101,7 +101,7 @@ AmigaObject::panic(const char *fmt, ...) const
 }
 
 void
-AmigaObject::reportSuspiciousBehavior() const
+AmigaObject::reportSuspiciousBehavior()
 {
     plainmsg("\n");
     plainmsg("Execution has been aborted, because a suspicous program operation has been\n");

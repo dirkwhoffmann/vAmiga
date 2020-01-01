@@ -17,6 +17,7 @@
 
 // Sub components
 #include "CPU.h"
+#include "Moira.h"
 #include "BreakpointManager.h"
 #include "CIA.h"
 #include "RTC.h"
@@ -269,7 +270,7 @@ public:
 
 public:
 
-    void prefix() const override;
+    void prefix() override;
     void reset() override;
 
     void powerOn() override;
