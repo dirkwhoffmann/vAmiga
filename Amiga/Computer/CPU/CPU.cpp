@@ -627,7 +627,7 @@ CPU::disassemble(uint32_t addr)
         if (MUSASHI) {
             result.bytes = m68k_disassemble(result.instr, addr, M68K_CPU_TYPE_68000);
         } else {
-            moiracpu.configDasm(true, true);
+            // moiracpu.configDasm(true, true);
             result.bytes = moiracpu.disassemble(addr, result.instr);
         }
         mem.hex(result.data, addr, result.bytes, sizeof(result.data));
@@ -697,9 +697,16 @@ CPU::recordInstruction()
     // plainmsg("%X: %s\n", diss.addr, diss.instr);
 }
 
+int trace = 0;
+long traceCnt = 0;
+long instrCount = 0;
+
 Cycle
 CPU::executeInstruction()
 {
+    char str[64];
+    instrCount++;
+
     if (actions) {
 
         // Check action flags
@@ -712,14 +719,31 @@ CPU::executeInstruction()
         actions = (actions << 1) & CPU_DELAY_MASK;
     }
 
-    if (MUSASHI) {
-        advance(m68k_execute(1));
+    uint32_t pc = getPC();
+    if (instrCount ==  1611000) {
+        printf("Tracing %s\n", MUSASHI ? "Musashi" : "Moira");
+        trace = 1;
+    }
+    if (pc == 0xFC30C2) trace = 0;
+    if (trace && traceCnt++ > 1000) trace = 0;
 
-        if (waitStates) debug(CPU_DEBUG, "Adding %d wait states\n", waitStates);
-        clock += waitStates;
+    if (MUSASHI) {
+
+        if (trace) {
+            m68k_disassemble(str, pc, M68K_CPU_TYPE_68000);
+            printf("%ld [%lld] %x: %s\n", instrCount, getClock(), pc, str);
+        }
+        advance(m68k_execute(1));
+        // if (waitStates) debug(CPU_DEBUG, "Adding %d wait states\n", waitStates);
+        // clock += waitStates;
         waitStates = 0;
 
     } else {
+
+        if (trace) {
+            moiracpu.disassemble(pc, str);
+            printf("%ld [%lld] %x: %s\n", instrCount, getClock(), pc, str);
+        }
         moiracpu.execute();
         clock = moiracpu.getClock() << config.shift;
     }

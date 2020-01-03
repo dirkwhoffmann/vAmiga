@@ -1977,7 +1977,7 @@ static inline void m68ki_check_interrupts(void)
 		m68ki_exception_interrupt(7);
 	}
     else if(CPU_INT_LEVEL > FLAG_INT_MASK) {
-        printf("Trigger Musashi IRQ (%d)\n", CPU_INT_LEVEL>>8);
+        // printf("Trigger Musashi IRQ (%d)\n", CPU_INT_LEVEL>>8);
 		m68ki_exception_interrupt(CPU_INT_LEVEL>>8);
     }
 }

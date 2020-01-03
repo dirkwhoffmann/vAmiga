@@ -29,6 +29,8 @@ Moira::Moira()
 void
 Moira::reset()
 {
+    flags = 0;
+    
     clock = -40; // REMOVE ASAP
 
     for(int i = 0; i < 8; i++) reg.d[i] = reg.a[i] = 0;
@@ -71,8 +73,17 @@ Moira::execute()
         if (reg.ipl > sr.ipl || reg.ipl == 7) {
 
             assert(reg.ipl < 7);
-            printf("%lld: Trigger IRQ (%d)\n", clock, reg.ipl);
             execIrqException(reg.ipl);
+        }
+    }
+
+    // Check if the CPU is stopped or halted
+    if (flags) {
+
+        if (flags & FLAG_STOP) {
+            pollIrq();
+            sync(MIMIC_MUSASHI ? 1 : 2);
+            return;
         }
     }
 

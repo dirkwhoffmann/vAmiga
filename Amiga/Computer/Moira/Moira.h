@@ -85,6 +85,11 @@ class Moira {
     // Internals
     //
 
+    // State flags
+    int flags;
+    static const int FLAG_HALT = 1;
+    static const int FLAG_STOP = 2;
+
     // Number of elapsed cycles since powerup
     i64 clock;
 

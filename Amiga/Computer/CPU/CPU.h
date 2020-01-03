@@ -210,7 +210,8 @@ public:
 
     // The CPU has been emulated up to this cycle
     Cycle getClock() {
-        if (MUSASHI) return clock; else return moiracpu.getClock();
+        return clock;
+        // if (MUSASHI) return clock; else return moiracpu.getClock();
     }
 
     // Advances the clock by a certain number of CPU cycles
