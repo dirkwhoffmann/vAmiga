@@ -222,7 +222,7 @@ public:
         if (MUSASHI) {
             return clock >> config.shift;
         } else {
-            return moiracpu.getClock() >> config.shift;
+            return moiracpu.getClock();
         }
     }
 
