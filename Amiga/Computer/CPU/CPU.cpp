@@ -155,6 +155,12 @@ Moira::write16 (u32 addr, u16 val)
     assert(activeAmiga != NULL);
     activeAmiga->mem.poke16<BUS_CPU>(addr, val);
 }
+
+void
+Moira::willPollIrq()
+{
+}
+
 }
 
 

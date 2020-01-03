@@ -31,6 +31,7 @@
 		504F9658220B2CEE005F8AB7 /* BreakTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504F9657220B2CEE005F8AB7 /* BreakTableView.swift */; };
 		505554AC2264C47600CB07E0 /* Mouse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505554AA2264C47600CB07E0 /* Mouse.cpp */; };
 		505945F82363008800ACE819 /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505945F72363008800ACE819 /* ActivityView.swift */; };
+		505A12E023BF671D000BAC76 /* Moira.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505A12D223BF671C000BAC76 /* Moira.cpp */; };
 		505A215022869FF10016EA21 /* AudioFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505A214E22869FF10016EA21 /* AudioFilter.cpp */; };
 		505A3A3A21F4996400132020 /* sse_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505A3A3821F4996400132020 /* sse_utils.cpp */; };
 		5064851121EC7A1700FC4AC3 /* Memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5064850F21EC7A1700FC4AC3 /* Memory.cpp */; };
@@ -224,6 +225,22 @@
 		505554AA2264C47600CB07E0 /* Mouse.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Mouse.cpp; sourceTree = "<group>"; };
 		505554AB2264C47600CB07E0 /* Mouse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Mouse.h; sourceTree = "<group>"; };
 		505945F72363008800ACE819 /* ActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityView.swift; sourceTree = "<group>"; };
+		505A12D023BF671C000BAC76 /* MoiraDataflow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraDataflow.h; sourceTree = "<group>"; };
+		505A12D123BF671C000BAC76 /* MoiraALU.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraALU.h; sourceTree = "<group>"; };
+		505A12D223BF671C000BAC76 /* Moira.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Moira.cpp; sourceTree = "<group>"; };
+		505A12D323BF671C000BAC76 /* StrWriter_cpp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StrWriter_cpp.h; sourceTree = "<group>"; };
+		505A12D423BF671C000BAC76 /* MoiraDataflow_cpp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraDataflow_cpp.h; sourceTree = "<group>"; };
+		505A12D523BF671C000BAC76 /* MoiraExec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraExec.h; sourceTree = "<group>"; };
+		505A12D623BF671C000BAC76 /* MoiraInit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraInit.h; sourceTree = "<group>"; };
+		505A12D723BF671C000BAC76 /* MoiraTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraTypes.h; sourceTree = "<group>"; };
+		505A12D823BF671C000BAC76 /* Moira.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Moira.h; sourceTree = "<group>"; };
+		505A12D923BF671C000BAC76 /* MoiraInit_cpp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraInit_cpp.h; sourceTree = "<group>"; };
+		505A12DA23BF671C000BAC76 /* MoiraDasm_cpp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraDasm_cpp.h; sourceTree = "<group>"; };
+		505A12DB23BF671C000BAC76 /* MoiraExec_cpp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraExec_cpp.h; sourceTree = "<group>"; };
+		505A12DC23BF671C000BAC76 /* MoiraALU_cpp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraALU_cpp.h; sourceTree = "<group>"; };
+		505A12DD23BF671C000BAC76 /* MoiraDasm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraDasm.h; sourceTree = "<group>"; };
+		505A12DE23BF671C000BAC76 /* StrWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StrWriter.h; sourceTree = "<group>"; };
+		505A12DF23BF671C000BAC76 /* MoiraConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraConfig.h; sourceTree = "<group>"; };
 		505A214E22869FF10016EA21 /* AudioFilter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AudioFilter.cpp; sourceTree = "<group>"; };
 		505A214F22869FF10016EA21 /* AudioFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioFilter.h; sourceTree = "<group>"; };
 		505A3A3821F4996400132020 /* sse_utils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = sse_utils.cpp; sourceTree = "<group>"; };
@@ -476,9 +493,34 @@
 			path = Agnus;
 			sourceTree = "<group>";
 		};
+		505A12CF23BF671C000BAC76 /* Moira */ = {
+			isa = PBXGroup;
+			children = (
+				505A12D023BF671C000BAC76 /* MoiraDataflow.h */,
+				505A12D123BF671C000BAC76 /* MoiraALU.h */,
+				505A12D223BF671C000BAC76 /* Moira.cpp */,
+				505A12D323BF671C000BAC76 /* StrWriter_cpp.h */,
+				505A12D423BF671C000BAC76 /* MoiraDataflow_cpp.h */,
+				505A12D523BF671C000BAC76 /* MoiraExec.h */,
+				505A12D623BF671C000BAC76 /* MoiraInit.h */,
+				505A12D723BF671C000BAC76 /* MoiraTypes.h */,
+				505A12D823BF671C000BAC76 /* Moira.h */,
+				505A12D923BF671C000BAC76 /* MoiraInit_cpp.h */,
+				505A12DA23BF671C000BAC76 /* MoiraDasm_cpp.h */,
+				505A12DB23BF671C000BAC76 /* MoiraExec_cpp.h */,
+				505A12DC23BF671C000BAC76 /* MoiraALU_cpp.h */,
+				505A12DD23BF671C000BAC76 /* MoiraDasm.h */,
+				505A12DE23BF671C000BAC76 /* StrWriter.h */,
+				505A12DF23BF671C000BAC76 /* MoiraConfig.h */,
+			);
+			name = Moira;
+			path = Amiga/Computer/Moira;
+			sourceTree = SOURCE_ROOT;
+		};
 		508E7F962206CDC600F7D88C /* CPU */ = {
 			isa = PBXGroup;
 			children = (
+				505A12CF23BF671C000BAC76 /* Moira */,
 				5051922822B61C8A0012C4BB /* CPUTypes.h */,
 				508E7F942206CDBD00F7D88C /* CPU.h */,
 				508E7F932206CDBD00F7D88C /* CPU.cpp */,
@@ -1104,6 +1146,7 @@
 				509047B6230575E6009CEC1C /* SlowBlitter.cpp in Sources */,
 				50D9CD99236AF75800503B4D /* DMADebugController.swift in Sources */,
 				508FE01221EA227B0043D0E9 /* CIAPanel.swift in Sources */,
+				505A12E023BF671D000BAC76 /* Moira.cpp in Sources */,
 				504F9656220ACFE0005F8AB7 /* Breakpoint.cpp in Sources */,
 				5030891121EFA74600FEAD12 /* Paula.cpp in Sources */,
 				508FE05921EA22CC0043D0E9 /* VirtualKeyboardController.swift in Sources */,
