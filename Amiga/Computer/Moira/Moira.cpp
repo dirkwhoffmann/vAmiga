@@ -30,7 +30,7 @@ void
 Moira::reset()
 {
     flags = 0;
-    
+
     clock = -40; // REMOVE ASAP
 
     for(int i = 0; i < 8; i++) reg.d[i] = reg.a[i] = 0;
@@ -219,3 +219,5 @@ template void Moira::writeD <Long> (int n, u32 v);
 template void Moira::writeA <Long> (int n, u32 v);
 
 }
+
+

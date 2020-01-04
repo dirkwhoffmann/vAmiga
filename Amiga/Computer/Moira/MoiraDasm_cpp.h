@@ -309,6 +309,11 @@ Moira::dasmAndisr(StrWriter &str, u32 &addr, u16 op)
 template<Instr I, Mode M, Size S> void
 Moira::dasmBsr(StrWriter &str, u32 &addr, u16 op)
 {
+    if (MIMIC_MUSASHI && S == Byte && (u8)op == 0xFF) {
+        dasmIllegal(str, addr, op);
+        return;
+    }
+
     u32 dst = addr + 2;
     dst += (S == Byte) ? (i8)op : (i16)dasmRead<S>(addr);
 
@@ -380,6 +385,11 @@ Moira::dasmCmpm(StrWriter &str, u32 &addr, u16 op)
 template<Instr I, Mode M, Size S> void
 Moira::dasmBcc(StrWriter &str, u32 &addr, u16 op)
 {
+    if (MIMIC_MUSASHI && S == Byte && (u8)op == 0xFF) {
+        dasmIllegal(str, addr, op);
+        return;
+    }
+
     u32 dst = addr + 2;
     dst += (S == Byte) ? (i8)op : (i16)dasmRead<S>(addr);
 
@@ -816,4 +826,5 @@ Moira::dasmUnlk(StrWriter &str, u32 &addr, u16 op)
 
     str << Ins<I>{} << tab << reg;
 }
+
 

@@ -360,7 +360,7 @@ Moira::createJumpTables()
     register(opcode | 0xE00, Bcc, BGT, MODE_IP, Word);
     register(opcode | 0xF00, Bcc, BLE, MODE_IP, Word);
 
-    for (int i = 1; i < 255; i++) {
+    for (int i = 1; i <= 0xFF; i++) {
         register(opcode | 0x000 | i, Bcc, BRA, MODE_IP, Byte);
         register(opcode | 0x200 | i, Bcc, BHI, MODE_IP, Byte);
         register(opcode | 0x300 | i, Bcc, BLS, MODE_IP, Byte);
@@ -436,7 +436,7 @@ Moira::createJumpTables()
 
     opcode = parse("0110 0001 ---- ----");
     register(opcode, Bsr, BSR, MODE_IP, Word);
-    for (int i = 1; i < 255; i++) {
+    for (int i = 1; i <= 0xFF; i++) {
         register(opcode | i, Bsr, BSR, MODE_IP, Byte);
     }
 

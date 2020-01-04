@@ -114,7 +114,7 @@ class Moira {
     // Table holding instruction infos
     InstrInfo info[65536];
 
-    
+
     //
     // Constructing and configuring
     //
@@ -145,7 +145,7 @@ public:
 
     // Return an info struct for a certain opcode
     InstrInfo getInfo(u16 op) { return info[op]; }
-    
+
 
     //
     // Interfacing with other components
@@ -248,7 +248,7 @@ private:
 
     // Polls the IPL pins
     void pollIrq() { willPollIrq(); reg.ipl = ipl; }
-    
+
     // Selects the IRQ vector to branch to
     int getIrqVector(int level);
 
@@ -264,3 +264,5 @@ private:
 
 }
 #endif
+
+

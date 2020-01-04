@@ -37,7 +37,7 @@ Moira::saveToStackDetailed(u16 sr, u32 addr, u16 code)
     // Push SR and IRD
     push<Word>(sr);
     push<Word>(queue.ird);
-    
+
     // Push address
     push<Word>((u16)addr);
     push<Word>(addr >> 16);
@@ -47,19 +47,19 @@ Moira::saveToStackDetailed(u16 sr, u32 addr, u16 code)
 }
 
 void
-Moira::saveToStackBrief(u16 sr)
+Moira::saveToStackBrief(u16 sr, u32 pc)
 {
     if (MIMIC_MUSASHI) {
 
-        push<Long>(reg.pc);
+        push<Long>(pc);
         push<Word>(sr);
 
     } else {
 
         reg.sp -= 6;
-        writeM<Word>(reg.sp + 4, reg.pc & 0xFFFF);
+        writeM<Word>(reg.sp + 4, pc & 0xFFFF);
         writeM<Word>(reg.sp + 0, sr);
-        writeM<Word>(reg.sp + 2, reg.pc >> 16);
+        writeM<Word>(reg.sp + 2, pc >> 16);
     }
 }
 
@@ -79,7 +79,7 @@ Moira::execAddressError(u32 addr)
     sync(8);
     saveToStackDetailed(getSR(), addr, code);
     sync(2);
-    
+
     jumpToVector(3);
 }
 
@@ -92,11 +92,8 @@ Moira::execUnimplemented(int nr)
     setSupervisorMode(true);
     sr.t = 0;
 
-    saveToStackBrief(status);
-
-    // Update the prefetch queue
-    readExt();
-    prefetch();
+    sync(4);
+    saveToStackBrief(status, reg.pc - 2);
 
     jumpToVector(nr);
 }
@@ -124,7 +121,7 @@ Moira::execIllegal(u16 opcode)
 
     // Write exception information to stack
     sync(4);
-    saveToStackBrief(status);
+    saveToStackBrief(status, reg.pc - 2);
 
     jumpToVector(4);
 }
@@ -316,7 +313,6 @@ Moira::execAdda(u16 opcode)
 
     sync(2);
     if (S == Word || isRegMode(M) || isImmMode(M)) sync(2);
-    // if (S == Word || !isMemMode(M)) sync(2); 
     writeA(dst, result);
 }
 
@@ -469,7 +465,7 @@ Moira::execAndiRg(u16 opcode)
 {
     u32 src = readI<S>();
     int dst = _____________xxx(opcode);
-    
+
     u32 result = logic<I,S>(src, readD<S>(dst));
     prefetch<LAST_BUS_CYCLE>();
 
@@ -486,7 +482,7 @@ Moira::execAndiEa(u16 opcode)
     int dst = _____________xxx(opcode);
 
     if (!readOp<M,S>(dst, ea, data)) return;
-    
+
     result = logic<I,S>(src, data);
     prefetch();
 
@@ -517,7 +513,7 @@ Moira::execAndisr(u16 opcode)
     u16 dst = getSR();
 
     sync(8);
-    
+
     u32 result = logic<I,S>(src, dst);
     setSR(result);
 
@@ -928,7 +924,7 @@ Moira::execMove0(u16 opcode)
     sr.c = 0;
 
     if (!writeOp<MODE_DN,S>(dst, data)) return;
-    
+
     prefetch<LAST_BUS_CYCLE>();
 }
 
@@ -1721,4 +1717,3 @@ Moira::execUnlk(u16 opcode)
     if (an != 7) reg.sp += 4;
     prefetch<LAST_BUS_CYCLE>();
 }
-
