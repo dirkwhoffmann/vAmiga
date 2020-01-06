@@ -901,7 +901,6 @@ Moira::execLink(u16 opcode)
     int ax   = _____________xxx(opcode);
     i16 disp = (i16)readI<S>();
 
-    // push<Long>(readA(ax) - (ax == 7 ? 4 : 0));
     push<Long>(readA(ax));
 
     writeA(ax, reg.sp);
@@ -1407,15 +1406,28 @@ Moira::execDiv(u16 opcode)
     u32 ea, divisor, result;
     if (!readOp<M, Word>(src, ea, divisor)) return;
 
+    u32 dividend = readD(dst);
+
     // Check for division by zero
     if (divisor == 0) {
-        if (!MIMIC_MUSASHI) sr.n = sr.z = sr.v = sr.c = 0;
+
+        if (I == DIVU) {
+            sr.n = NBIT<Long>(dividend);
+            sr.z = (dividend & 0xFFFF0000) == 0;
+            sr.v = 0;
+            sr.c = 0;
+        } else {
+            sr.n = 0;
+            sr.z = 1;
+            sr.v = 0;
+            sr.c = 0;
+        }
+
         sync(8);
         execTrapException(5);
         return;
     }
 
-    u32 dividend = readD(dst);
     result = div<I>(dividend, divisor);
 
     writeD(dst, result);
