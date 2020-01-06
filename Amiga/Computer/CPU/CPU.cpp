@@ -721,8 +721,8 @@ CPU::executeInstruction()
 
     uint32_t pc = getPC();
     if (instrCount ==  1611000) {
-        printf("Tracing %s\n", MUSASHI ? "Musashi" : "Moira");
-        trace = 1;
+        // printf("Tracing %s\n", MUSASHI ? "Musashi" : "Moira");
+        // trace = 1;
     }
     if (pc == 0xFC30C2) trace = 0;
     if (trace && traceCnt++ > 1000) trace = 0;

@@ -16,7 +16,7 @@
 
 /* Set to true to run Moira in a special Musashi compatibility mode
  */
-#define MIMIC_MUSASHI true
+#define MIMIC_MUSASHI false
 
 
 #endif
