@@ -18,13 +18,15 @@ extension Inspector {
 
             let elements = [ cpuPC: fmt32,
 
-                             cpuD0: fmt32, cpuD1: fmt32, cpuD2: fmt32, cpuD3: fmt32,
-                             cpuD4: fmt32, cpuD5: fmt32, cpuD6: fmt32, cpuD7: fmt32,
+                             cpuD0: fmt32, cpuD1: fmt32, cpuD2: fmt32,
+                             cpuD3: fmt32, cpuD4: fmt32, cpuD5: fmt32,
+                             cpuD6: fmt32, cpuD7: fmt32,
 
-                             cpuA0: fmt32, cpuA1: fmt32, cpuA2: fmt32, cpuA3: fmt32,
-                             cpuA4: fmt32, cpuA5: fmt32, cpuA6: fmt32, cpuA7: fmt32,
+                             cpuA0: fmt32, cpuA1: fmt32, cpuA2: fmt32,
+                             cpuA3: fmt32, cpuA4: fmt32, cpuA5: fmt32,
+                             cpuA6: fmt32, cpuA7: fmt32,
 
-                             cpuSSP: fmt32 ]
+                             cpuUSP: fmt32, cpuSSP: fmt32 ]
 
              for (c, f) in elements { assignFormatter(f, c!) }
             
@@ -65,6 +67,7 @@ extension Inspector {
         cpuA6.integerValue = Int(info.a.6)
         cpuA7.integerValue = Int(info.a.7)
         
+        cpuSSP.integerValue = Int(info.usp)
         cpuSSP.integerValue = Int(info.ssp)
 
         let flags = Int(info.flags)

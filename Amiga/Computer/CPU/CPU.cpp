@@ -163,6 +163,7 @@ CPU::_inspect()
         info.d[i] = moiracpu.getD(i);
         info.a[i] = moiracpu.getA(i);
     }
+    info.usp = moiracpu.getUSP();
     info.ssp = moiracpu.getSSP();
     info.flags = moiracpu.getSR();
 

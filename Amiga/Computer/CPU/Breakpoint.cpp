@@ -166,14 +166,7 @@ vector<pair<Token, string>> tokenize(string input) {
             }
         }
     } while (hit);
-    
-    /*
-     cout << "Result:\n";
-     for (auto match : result) {
-     cout << match.first << ": " << match.second << endl;
-     }
-     */
-    
+
     // Check for syntax error
     if (input != "") {
         result.clear();

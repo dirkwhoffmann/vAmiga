@@ -71,9 +71,6 @@ public:
     
     // Returns the breakpoint at the specified address or NULL.
     Breakpoint *breakpointAtAddr(uint32_t addr);
-
-    // Returns an iterator pointing to the nth element. (DEPRECATED)
-    // map<uint32_t, Breakpoint>::iterator breakpoint(long nr);
     
     
     //

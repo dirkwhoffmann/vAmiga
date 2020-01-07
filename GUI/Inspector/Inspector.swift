@@ -38,6 +38,7 @@ class Inspector: NSWindowController {
     @IBOutlet weak var cpuA5: NSTextField!
     @IBOutlet weak var cpuA6: NSTextField!
     @IBOutlet weak var cpuA7: NSTextField!
+    @IBOutlet weak var cpuUSP: NSTextField!
     @IBOutlet weak var cpuSSP: NSTextField!
 
     @IBOutlet weak var cpuT: NSButton!
