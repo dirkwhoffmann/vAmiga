@@ -41,7 +41,7 @@ typedef struct
     uint32_t pc;
     uint32_t sr;
 }
-RecordedInstruction;
+RecInstr;
 
 // A disassembled instruction
 typedef struct
@@ -52,7 +52,7 @@ typedef struct
     char flags[17]; // Textual representation of the status register (optional)
     char instr[65]; // Textual representation of the instruction
 }
-DisassembledInstruction;
+DisInstr;
 
 #define CPUINFO_INSTR_COUNT 255
 
@@ -73,10 +73,10 @@ typedef struct
     uint16_t flags;
 
     // Disassembled instructions starting at pc
-    DisassembledInstruction instr[CPUINFO_INSTR_COUNT];
+    DisInstr instr[CPUINFO_INSTR_COUNT];
 
     // Disassembled instructions from the trace buffer
-    DisassembledInstruction traceInstr[CPUINFO_INSTR_COUNT];
+    DisInstr traceInstr[CPUINFO_INSTR_COUNT];
 }
 CPUInfo;
 

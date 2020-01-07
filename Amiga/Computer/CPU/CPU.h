@@ -102,7 +102,7 @@ public:
     
     // A buffer recording all recently executed instructions
     static const size_t traceBufferCapacity = 256;
-    RecordedInstruction traceBuffer[traceBufferCapacity];
+    RecInstr traceBuffer[traceBufferCapacity];
     
     // The trace buffer write pointer
     int writePtr = 0;
@@ -171,8 +171,8 @@ public:
 
     // Returns the result of the most recent call to inspect()
     CPUInfo getInfo();
-    DisassembledInstruction getInstrInfo(long nr);
-    DisassembledInstruction getTracedInstrInfo(long nr);
+    DisInstr getInstrInfo(long nr);
+    DisInstr getTracedInstrInfo(long nr);
 
 
     //
@@ -260,9 +260,13 @@ public:
     //
     
     // Disassembles the instruction at the specified address
-    DisassembledInstruction disassemble(uint32_t addr);
-    DisassembledInstruction disassemble(uint32_t addr, uint16_t sp);
+    // DisInstr disassemble(uint32_t addr); // DEPRECATED
+    // DisInstr disassemble(uint32_t addr, uint16_t sr); // DEPRECATED
 
+    int disassemble(uint32_t addr, char *str);
+    void disassemble(uint32_t addr, DisInstr &result);
+    void disassemble(uint32_t addr, uint16_t sr, DisInstr &result);
+    void disassemble(RecInstr instr, DisInstr &result);
 
     //
     // Tracing the program execution
@@ -281,7 +285,7 @@ public:
     void recordInstruction();
     
     // Reads a recorded instruction from the trace buffer.
-    // RecordedInstruction readRecordedInstruction(long offset);
+    // RecInstr readRecordedInstruction(long offset);
     
     
     //

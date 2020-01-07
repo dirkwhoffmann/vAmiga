@@ -194,8 +194,8 @@ struct AmigaFileWrapper;
 
 - (void) dump;
 - (CPUInfo) getInfo;
-- (DisassembledInstruction) getInstrInfo:(NSInteger)index;
-- (DisassembledInstruction) getTracedInstrInfo:(NSInteger)index;
+- (DisInstr) getInstrInfo:(NSInteger)index;
+- (DisInstr) getTracedInstrInfo:(NSInteger)index;
 
 - (int64_t) clock;
 - (int64_t) cycles;

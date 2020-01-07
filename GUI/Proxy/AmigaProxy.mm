@@ -53,11 +53,11 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->cpu->getInfo();
 }
-- (DisassembledInstruction) getInstrInfo:(NSInteger)index
+- (DisInstr) getInstrInfo:(NSInteger)index
 {
     return wrapper->cpu->getInstrInfo(index);
 }
-- (DisassembledInstruction) getTracedInstrInfo:(NSInteger)index
+- (DisInstr) getTracedInstrInfo:(NSInteger)index
 {
     return wrapper->cpu->getTracedInstrInfo(index);
 }
@@ -145,7 +145,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 */
 /*
-- (RecordedInstruction) readRecordedInstruction:(NSInteger)nr
+- (RecInstr) readRecordedInstruction:(NSInteger)nr
 {
     return wrapper->cpu->readRecordedInstruction(nr);
 }

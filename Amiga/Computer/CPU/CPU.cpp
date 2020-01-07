@@ -303,7 +303,8 @@ CPU::_inspect()
 
     // Disassemble the program starting at the program counter
     for (unsigned i = 0; i < CPUINFO_INSTR_COUNT; i++) {
-        info.instr[i] = disassemble(pc);
+        // info.instr[i] = disassemble(pc);
+        disassemble(pc, info.instr[i]);
         pc += info.instr[i].bytes;
     }
 
@@ -315,8 +316,8 @@ CPU::_inspect()
      */
     for (unsigned i = 1; i <= CPUINFO_INSTR_COUNT; i++) {
         unsigned offset = (writePtr + traceBufferCapacity - 1 - i) % traceBufferCapacity;
-        RecordedInstruction instr = traceBuffer[offset];
-        info.traceInstr[CPUINFO_INSTR_COUNT - i] = disassemble(instr.pc, instr.sr);
+        RecInstr recInstr = traceBuffer[offset];
+        disassemble(recInstr, info.traceInstr[CPUINFO_INSTR_COUNT - i]);
     }
 
     pthread_mutex_unlock(&lock);
@@ -418,12 +419,12 @@ CPU::getInfo()
     return result;
 }
 
-DisassembledInstruction
+DisInstr
 CPU::getInstrInfo(long index)
 {
     assert(index < CPUINFO_INSTR_COUNT);
     
-    DisassembledInstruction result;
+    DisInstr result;
     
     pthread_mutex_lock(&lock);
     result = info.instr[index];
@@ -432,12 +433,12 @@ CPU::getInstrInfo(long index)
     return result;
 }
 
-DisassembledInstruction
+DisInstr
 CPU::getTracedInstrInfo(long index)
 {
     assert(index < CPUINFO_INSTR_COUNT);
     
-    DisassembledInstruction result;
+    DisInstr result;
     
     pthread_mutex_lock(&lock);
     result = info.traceInstr[index];
@@ -617,55 +618,42 @@ CPU::lengthOfInstruction(uint32_t addr)
     }
 }
 
-DisassembledInstruction
-CPU::disassemble(uint32_t addr)
+void
+CPU::disassemble(uint32_t addr, DisInstr &result)
 {
-    DisassembledInstruction result;
-    
-    if (addr <= 0xFFFFFF) {
+    result.bytes = moiracpu.disassemble(addr, result.instr);
 
-        if (MUSASHI) {
-            result.bytes = m68k_disassemble(result.instr, addr, M68K_CPU_TYPE_68000);
-        } else {
-            // moiracpu.configDasm(true, true);
-            result.bytes = moiracpu.disassemble(addr, result.instr);
-        }
-        mem.hex(result.data, addr, result.bytes, sizeof(result.data));
-        sprint24x(result.addr, addr);
-        
-    } else {
-        
-        result.bytes = result.instr[0] = result.data[0] = result.addr[0] = 0;
-    }
+    mem.hex(result.data, addr, result.bytes, sizeof(result.data));
+    sprint24x(result.addr, addr);
+
     result.flags[0] = 0;
-
-    return result;
 }
 
-DisassembledInstruction
-CPU::disassemble(uint32_t addr, uint16_t sp)
+void
+CPU::disassemble(RecInstr recInstr, DisInstr &result)
 {
-    DisassembledInstruction result = disassemble(addr);
+    uint32_t pc = recInstr.pc;
+    uint16_t sr = recInstr.sr;
+
+    disassemble(pc, result);
     
-    result.flags[0]  = (sp & 0b1000000000000000) ? 'T' : 't';
+    result.flags[0]  = (sr & 0b1000000000000000) ? 'T' : 't';
     result.flags[1]  = '-';
-    result.flags[2]  = (sp & 0b0010000000000000) ? 'S' : 's';
+    result.flags[2]  = (sr & 0b0010000000000000) ? 'S' : 's';
     result.flags[3]  = '-';
     result.flags[4]  = '-';
-    result.flags[5]  = (sp & 0b0000010000000000) ? '1' : '0';
-    result.flags[6]  = (sp & 0b0000001000000000) ? '1' : '0';
-    result.flags[7]  = (sp & 0b0000000100000000) ? '1' : '0';
+    result.flags[5]  = (sr & 0b0000010000000000) ? '1' : '0';
+    result.flags[6]  = (sr & 0b0000001000000000) ? '1' : '0';
+    result.flags[7]  = (sr & 0b0000000100000000) ? '1' : '0';
     result.flags[8]  = '-';
     result.flags[9]  = '-';
     result.flags[10] = '-';
-    result.flags[11] = (sp & 0b0000000000010000) ? 'X' : 'x';
-    result.flags[12] = (sp & 0b0000000000001000) ? 'N' : 'n';
-    result.flags[13] = (sp & 0b0000000000000100) ? 'Z' : 'z';
-    result.flags[14] = (sp & 0b0000000000000010) ? 'V' : 'v';
-    result.flags[15] = (sp & 0b0000000000000001) ? 'C' : 'c';
+    result.flags[11] = (sr & 0b0000000000010000) ? 'X' : 'x';
+    result.flags[12] = (sr & 0b0000000000001000) ? 'N' : 'n';
+    result.flags[13] = (sr & 0b0000000000000100) ? 'Z' : 'z';
+    result.flags[14] = (sr & 0b0000000000000010) ? 'V' : 'v';
+    result.flags[15] = (sr & 0b0000000000000001) ? 'C' : 'c';
     result.flags[16] = 0;
-
-    return result;
 }
 
 void
@@ -679,7 +667,7 @@ CPU::truncateTraceBuffer(unsigned count)
 void
 CPU::recordInstruction()
 {
-    RecordedInstruction instr;
+    RecInstr instr;
     
     // Setup record
     instr.pc = getPC();

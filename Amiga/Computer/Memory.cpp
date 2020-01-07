@@ -2078,10 +2078,11 @@ void
 Memory::hex(char *buffer, uint32_t addr, size_t bytes, size_t bufferSize)
 {
     assert(buffer != NULL);
-    assert(is_uint24_t(addr));
+    // assert(is_uint24_t(addr));
     assert(bytes % 2 == 0);
     assert(bufferSize != 0);
-    
+
+    addr &= 0xFFFFFF;
     unsigned maxWords = (bufferSize - 1) / 5;
     unsigned words = MIN(maxWords, bytes / 2);
 
