@@ -84,7 +84,7 @@ private:
      * emulator instance, it is used to store the current context. When the
      * user switches back, the previously saved state is restored.
      */
-    uint8_t *context = NULL;
+    // uint8_t *context = NULL;
 
 
     //
@@ -143,7 +143,6 @@ private:
     void _inspect() override;
     void _dumpConfig() override;
     void _dump() override;
-    void _dumpMusashi();
     size_t _size() override;
     size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS }
@@ -165,13 +164,13 @@ public:
 public:
     
     // Returns true if a CPU context has been saved previously
-    bool hasSavedContext() { return context != NULL; }
+    // bool hasSavedContext() { return context != NULL; }
     
     // Records the current CPU context
-    void recordContext();
+    // void recordContext();
     
     // Restores the current CPU context
-    void restoreContext();
+    // void restoreContext();
 
     /* Assign the Musashi core to this CPU.
      * Background: Because we only have one CPU core available, we need to
@@ -183,6 +182,7 @@ public:
      * by rerouting all memory accesses to this instance.
      * If another instance is currently active, it is put into pause mode
      * automatically.
+     * DEPRECATED
      */
     void makeActiveInstance();
 
@@ -192,22 +192,10 @@ public:
     //
 
     // The CPU has been emulated up to this cycle
-    Cycle getClock() {
-        return clock;
-        // if (MUSASHI) return clock; else return moiracpu.getClock();
-    }
-
-    // Advances the clock by a certain number of CPU cycles
-    // void advance(CPUCycle cycles) { clock += cycles << config.shift; }
+    Cycle getClock() { return clock; }
 
     // Returns the clock in CPU cycles
-    CPUCycle cycles() {
-        if (MUSASHI) {
-            return clock >> 2;
-        } else {
-            return moiracpu.getClock();
-        }
-    }
+    CPUCycle cycles() { return moiracpu.getClock(); }
 
     //
     // Querying registers and instructions

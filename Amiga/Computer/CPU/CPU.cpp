@@ -226,26 +226,15 @@ CPU::_reset()
 {
     debug(CPU_DEBUG, "CPU::_reset()\n");
 
-    // Grab the Musashi core
+    // REMOVE ASAP
     makeActiveInstance();
 
     RESET_SNAPSHOT_ITEMS
-    // irqLevel = -1;
 
-    // Reset the Musashi CPU core
-#ifdef HARD_RESET
-    memset(&m68ki_cpu, 0, sizeof(m68ki_cpu));
-    m68k_init();
-    m68k_set_cpu_type(M68K_CPU_TYPE_68000);
-    m68k_set_int_ack_callback(interrupt_handler);
-#endif
-    m68k_pulse_reset();
     moiracpu.reset();
 
     // Remove all previously recorded instructions
     clearTraceBuffer();
-
-    // _dumpMusashi(); 
 }
 
 void
@@ -256,52 +245,20 @@ CPU::_inspect()
     // Prevent external access to variable 'info'
     pthread_mutex_lock(&lock);
 
-    if (MUSASHI) {
+    pc = getPC();
 
-        pc = getPC();
+    // Registers
+    info.pc = pc;
 
-        // Registers
-        info.pc = pc;
-
-        info.d[0] = m68k_get_reg(NULL, M68K_REG_D0);
-        info.d[1] = m68k_get_reg(NULL, M68K_REG_D1);
-        info.d[2] = m68k_get_reg(NULL, M68K_REG_D2);
-        info.d[3] = m68k_get_reg(NULL, M68K_REG_D3);
-        info.d[4] = m68k_get_reg(NULL, M68K_REG_D4);
-        info.d[5] = m68k_get_reg(NULL, M68K_REG_D5);
-        info.d[6] = m68k_get_reg(NULL, M68K_REG_D6);
-        info.d[7] = m68k_get_reg(NULL, M68K_REG_D7);
-
-        info.a[0] = m68k_get_reg(NULL, M68K_REG_A0);
-        info.a[1] = m68k_get_reg(NULL, M68K_REG_A1);
-        info.a[2] = m68k_get_reg(NULL, M68K_REG_A2);
-        info.a[3] = m68k_get_reg(NULL, M68K_REG_A3);
-        info.a[4] = m68k_get_reg(NULL, M68K_REG_A4);
-        info.a[5] = m68k_get_reg(NULL, M68K_REG_A5);
-        info.a[6] = m68k_get_reg(NULL, M68K_REG_A6);
-        info.a[7] = m68k_get_reg(NULL, M68K_REG_A7);
-
-        info.ssp = m68k_get_reg(NULL, M68K_REG_ISP);
-        info.flags = m68k_get_reg(NULL, M68K_REG_SR);
-
-    } else {
-
-        pc = getPC();
-
-        // Registers
-        info.pc = pc;
-
-        for (int i = 0; i < 8; i++) {
-            info.d[i] = moiracpu.getD(i);
-            info.a[i] = moiracpu.getA(i);
-        }
-        info.ssp = moiracpu.getSSP();
-        info.flags = moiracpu.getSR();
+    for (int i = 0; i < 8; i++) {
+        info.d[i] = moiracpu.getD(i);
+        info.a[i] = moiracpu.getA(i);
     }
+    info.ssp = moiracpu.getSSP();
+    info.flags = moiracpu.getSR();
 
     // Disassemble the program starting at the program counter
     for (unsigned i = 0; i < CPUINFO_INSTR_COUNT; i++) {
-        // info.instr[i] = disassemble(pc);
         disassemble(pc, info.instr[i]);
         pc += info.instr[i].bytes;
     }
@@ -346,62 +303,6 @@ CPU::_dump()
     plainmsg("\n");
     plainmsg("     SSP: %X\n", info.ssp);
     plainmsg("   Flags: %X\n", info.flags);
-}
-
-void
-CPU::_dumpMusashi()
-{
-    plainmsg("Musashi CPU:\n\n");
-
-    plainmsg("                  cpu_type : %d\n", m68ki_cpu.cpu_type);
-    plainmsg("                       dar : %d %d ...\n", m68ki_cpu.dar[0], m68ki_cpu.dar[1]);
-    plainmsg("                       ppc : %d\n", m68ki_cpu.ppc);
-    plainmsg("                        pc : %d\n", m68ki_cpu.pc);
-    plainmsg("                        sp : %d %d ...\n", m68ki_cpu.sp[0], m68ki_cpu.sp[1]);
-    plainmsg("                       vbr : %d\n", m68ki_cpu.vbr);
-    plainmsg("                       sfc : %d\n", m68ki_cpu.sfc);
-    plainmsg("                       dfc : %d\n", m68ki_cpu.dfc);
-    plainmsg("                      cacr : %d\n", m68ki_cpu.cacr);
-    plainmsg("                      caar : %d\n", m68ki_cpu.caar);
-    plainmsg("                        ir : %d\n", m68ki_cpu.ir);
-    plainmsg("                   t1_flag : %d\n", m68ki_cpu.t1_flag);
-    plainmsg("                   t0_flag : %d\n", m68ki_cpu.t0_flag);
-    plainmsg("                    s_flag : %d\n", m68ki_cpu.s_flag);
-    plainmsg("                    m_flag : %d\n", m68ki_cpu.m_flag);
-    plainmsg("                    x_flag : %d\n", m68ki_cpu.x_flag);
-    plainmsg("                    n_flag : %d\n", m68ki_cpu.n_flag);
-    plainmsg("                not_z_flag : %d\n", m68ki_cpu.not_z_flag);
-    plainmsg("                    v_flag : %d\n", m68ki_cpu.v_flag);
-    plainmsg("                    c_flag : %d\n", m68ki_cpu.c_flag);
-    plainmsg("                  int_mask : %d\n", m68ki_cpu.int_mask);
-    plainmsg("                 int_level : %d\n", m68ki_cpu.int_level);
-    // plainmsg("                int_cycles : %d\n", m68ki_cpu.int_cycles);
-    plainmsg("                   stopped : %d\n", m68ki_cpu.stopped);
-    plainmsg("                 pref_addr : %d\n", m68ki_cpu.pref_addr);
-    plainmsg("                 pref_data : %d\n", m68ki_cpu.pref_data);
-    plainmsg("              address_mask : %d\n", m68ki_cpu.address_mask);
-    plainmsg("                   sr_mask : %d\n", m68ki_cpu.sr_mask);
-    plainmsg("                instr_mode : %d\n", m68ki_cpu.instr_mode);
-    plainmsg("                  run_mode : %d\n", m68ki_cpu.run_mode);
-    plainmsg("          cyc_bcc_notake_b : %d\n", m68ki_cpu.cyc_bcc_notake_b);
-    plainmsg("          cyc_bcc_notake_w : %d\n", m68ki_cpu.cyc_bcc_notake_w);
-    plainmsg("          cyc_dbcc_f_noexp : %d\n", m68ki_cpu.cyc_dbcc_f_noexp);
-    plainmsg("            cyc_dbcc_f_exp : %d\n", m68ki_cpu.cyc_dbcc_f_exp);
-    plainmsg("            cyc_scc_r_true : %d\n", m68ki_cpu.cyc_scc_r_true);
-    plainmsg("               cyc_movem_w : %d\n", m68ki_cpu.cyc_movem_w);
-    plainmsg("               cyc_movem_l : %d\n", m68ki_cpu.cyc_movem_l);
-    plainmsg("                 cyc_shift : %d\n", m68ki_cpu.cyc_shift);
-    plainmsg("                 cyc_reset : %d\n", m68ki_cpu.cyc_reset);
-    plainmsg("           cyc_instruction : %p\n", m68ki_cpu.cyc_instruction);
-    plainmsg("             cyc_exception : %p\n", m68ki_cpu.cyc_exception);
-    plainmsg("\n");
-    plainmsg("          int_ack_callback : %p\n", m68ki_cpu.int_ack_callback);
-    plainmsg("         bkpt_ack_callback : %p\n", m68ki_cpu.bkpt_ack_callback);
-    plainmsg("      reset_instr_callback : %p\n", m68ki_cpu.reset_instr_callback);
-    plainmsg("       pc_changed_callback : %p\n", m68ki_cpu.pc_changed_callback);
-    plainmsg("           set_fc_callback : %p\n", m68ki_cpu.set_fc_callback);
-    plainmsg("       instr_hook_callback : %p\n", m68ki_cpu.instr_hook_callback);
-    plainmsg("\n");
 }
 
 CPUInfo
@@ -452,8 +353,6 @@ CPU::_size()
     applyToPersistentItems(counter);
     applyToResetItems(counter);
 
-    counter.count += m68k_context_size();
-
     return counter.count;
 }
 
@@ -461,10 +360,6 @@ size_t
 CPU::didLoadFromBuffer(uint8_t *buffer)
 {
     SerReader reader(buffer);
-
-    uint8_t context[m68k_context_size()];
-    reader.copy(context, m68k_context_size());
-    m68k_set_context(context);
 
     debug(SNAP_DEBUG, "CPU state checksum: %x (%d bytes)\n",
           fnv_1a_64(buffer, reader.ptr - buffer), reader.ptr - buffer);
@@ -477,42 +372,10 @@ CPU::didSaveToBuffer(uint8_t *buffer)
 {
     SerWriter writer(buffer);
 
-    uint8_t context[m68k_context_size()];
-    m68k_get_context(context);
-    writer.copy(context, m68k_context_size());
-
     debug(SNAP_DEBUG, "CPU state checksum: %x (%d bytes)\n",
           fnv_1a_64(buffer, writer.ptr - buffer), writer.ptr - buffer);
 
     return writer.ptr - buffer;
-}
-
-void
-CPU::recordContext()
-{
-    debug(CPU_DEBUG, "recordContext: context = %p\n", context);
-    assert(context == NULL);
-    
-    // Allocate memory
-    context = new (std::nothrow) uint8_t[m68k_context_size()];
-    
-    // Save the current CPU context
-    if (context) m68k_get_context(context);
-}
-
-void
-CPU::restoreContext()
-{
-    debug(CPU_DEBUG, "restoreContext: context = %p\n", context);
-    if (context) {
-        
-        // Load the recorded context into the CPU
-        m68k_set_context(context);
-        
-        // Delete the recorded context
-        delete[] context;
-        context = NULL;
-    }
 }
 
 void
@@ -528,66 +391,33 @@ CPU::makeActiveInstance()
      */
     if (activeAmiga != NULL) {
         activeAmiga->pause();
-        activeAmiga->cpu.recordContext();
+        // activeAmiga->cpu.recordContext();
     }
 
     // Restore the previously recorded CPU state (if any)
-    restoreContext();
+    // restoreContext();
 
     // Bind the CPU core to this emulator instance
     activeAmiga = &amiga;
 }
 
 uint32_t
-CPU::getPC()
-{
-    if (MUSASHI) {
-        return m68k_get_reg(NULL, M68K_REG_PC);
-    } else {
-        return moiracpu.getPC();
-    }
-}
+CPU::getPC() { return moiracpu.getPC(); }
 
 void
-CPU::setPC(uint32_t value)
-{
-    if (MUSASHI) {
-        m68k_set_reg(M68K_REG_PC, value);
-    } else {
-        moiracpu.setPC(value);
-    }
-}
+CPU::setPC(uint32_t value) { moiracpu.setPC(value); }
 
 uint16_t
-CPU::getSR()
-{
-    if (MUSASHI) {
-        return m68k_get_reg(NULL, M68K_REG_SR);
-    } else {
-        return moiracpu.getSR();
-    }
-}
+CPU::getSR() { return moiracpu.getSR(); }
 
 uint32_t
-CPU::getIR()
-{
-    if (MUSASHI) {
-        return m68k_get_reg(NULL, M68K_REG_IR);
-    } else {
-        return moiracpu.getIRD();
-    }
-}
+CPU::getIR() { return moiracpu.getIRD(); }
 
 uint32_t
 CPU::lengthOfInstruction(uint32_t addr)
 {
     char tmp[128];
-
-    if (MUSASHI) {
-        return m68k_disassemble(tmp, addr, M68K_CPU_TYPE_68000);
-    } else {
-        return moiracpu.disassemble(addr, tmp);
-    }
+    return moiracpu.disassemble(addr, tmp);
 }
 
 void
