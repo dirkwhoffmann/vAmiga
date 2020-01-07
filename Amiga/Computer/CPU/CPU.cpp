@@ -666,48 +666,17 @@ CPU::executeInstruction()
     char str[64];
     instrCount++;
 
-    if (actions) {
-
-        // Check action flags
-        if (actions & CPU_SET_IRQ_LEVEL1) {
-            debug(INT_DEBUG, "Changing IRQ level to %d\n", irqLevel);
-            if (MUSASHI) { m68k_set_irq(irqLevel); }
-        }
-
-        // Shift action flags
-        actions = (actions << 1) & CPU_DELAY_MASK;
-    }
-
     uint32_t pc = getPC();
-    if (instrCount ==  1611000) {
-        // printf("Tracing %s\n", MUSASHI ? "Musashi" : "Moira");
-        // trace = 1;
-    }
+
     if (pc == 0xFC30C2) trace = 0;
     if (trace && traceCnt++ > 1000) trace = 0;
 
-    if (MUSASHI) {
-
-        if (trace) {
-            m68k_disassemble(str, pc, M68K_CPU_TYPE_68000);
-            printf("%ld [%lld] %x: %s\n", instrCount, getClock(), pc, str);
-        }
-
-        clock += m68k_execute(1) << 2;
-        // advance(m68k_execute(1));
-        // if (waitStates) debug(CPU_DEBUG, "Adding %d wait states\n", waitStates);
-        // clock += waitStates;
-        waitStates = 0;
-
-    } else {
-
-        if (trace) {
-            moiracpu.disassemble(pc, str);
-            printf("%ld [%lld] %x: %s\n", instrCount, getClock(), pc, str);
-        }
-        moiracpu.execute();
-        clock = CPU_CYCLES(moiracpu.getClock());
+    if (trace) {
+        moiracpu.disassemble(pc, str);
+        printf("%ld [%lld] %x: %s\n", instrCount, getClock(), pc, str);
     }
+    moiracpu.execute();
+    clock = CPU_CYCLES(moiracpu.getClock());
 
     return clock;
 }
@@ -722,8 +691,6 @@ CPU::setIrqLevel(int level)
         debug(INT_DEBUG, "IRQ level changed from %d to %d\n", irqLevel, level);
 
         irqLevel = level;
-        actions |= CPU_SET_IRQ_LEVEL0;
-
         moiracpu.setIPL(level);
     }
 }

@@ -64,9 +64,6 @@ private:
     // The CPU has been emulated up to this cycle
     Cycle clock;
 
-    // Action flags
-    uint8_t actions;
-
     // The new interrupt level
     int irqLevel;
 
@@ -127,7 +124,6 @@ public:
         worker
 
         & clock
-        & actions
         & irqLevel
         & waitStates;
     }
