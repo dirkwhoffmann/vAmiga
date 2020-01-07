@@ -433,9 +433,3 @@ CPU::setIrqLevel(int level)
         moiracpu.setIPL(level);
     }
 }
-
-void
-CPU::addWaitStates(Cycle number)
-{
-    waitStates += number;
-}
