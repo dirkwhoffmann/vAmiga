@@ -14,7 +14,6 @@
 #include "BreakpointManager.h"
 #include "Moira.h"
 
-
 //
 // CPU wrapper class
 //
@@ -24,29 +23,6 @@ class CPU : public SubComponent {
     CPUInfo info;
 
     moira::Moira moiracpu;
-
-    //
-    // Internal state
-    //
-
-private:
-
-    // The CPU has been emulated up to this cycle
-    Cycle clock;
-
-
-    //
-    // CPU state switching
-    //
-    
-private:
-    
-    /* CPU context
-     * This variable is usually NULL. When the user switches to another
-     * emulator instance, it is used to store the current context. When the
-     * user switches back, the previously saved state is restored.
-     */
-    // uint8_t *context = NULL;
 
 
     //
@@ -83,9 +59,11 @@ public:
     template <class T>
     void applyToResetItems(T& worker)
     {
+        /*
         worker
 
         & clock;
+        */
     }
 
 
@@ -122,15 +100,6 @@ public:
     //
     
 public:
-    
-    // Returns true if a CPU context has been saved previously
-    // bool hasSavedContext() { return context != NULL; }
-    
-    // Records the current CPU context
-    // void recordContext();
-    
-    // Restores the current CPU context
-    // void restoreContext();
 
     /* Assign the Musashi core to this CPU.
      * Background: Because we only have one CPU core available, we need to
@@ -152,7 +121,7 @@ public:
     //
 
     // The CPU has been emulated up to this cycle
-    Cycle getClock() { return clock; }
+    Cycle getClock() { return CPU_CYCLES(moiracpu.getClock()); }
 
     // Returns the clock in CPU cycles
     CPUCycle cycles() { return moiracpu.getClock(); }
@@ -164,35 +133,34 @@ public:
 public:
     
     // Getter and setter for the program counter.
-    uint32_t getPC();
-    void setPC(uint32_t value); 
+    uint32_t getPC() { return moiracpu.getPC(); }
+    void setPC(uint32_t value) { moiracpu.setPC(value); } 
 
     // Returns the current value of the status register.
-    uint16_t getSR();
+    uint16_t getSR() { return moiracpu.getSR(); }
     
     // Returns the current value of the instruction register.
-    uint32_t getIR();
+    uint32_t getIR() { return moiracpu.getIRD(); }
     
     // Returns the start address of the following instruction.
+    // DEPRECATED
     uint32_t getNextPC() { return getPC() + lengthOInstruction(); }
 
     /* Returns the length of the instruction at the provided address in bytes.
      * Note: This function is slow, because it calls the disassembler
      * internally.
      */
+    // DEPRECATED
     uint32_t lengthOfInstruction(uint32_t addr);
     
     // Returns the length of the currently executed instruction.
+    // DEPRECATED
     uint32_t lengthOInstruction() { return lengthOfInstruction(getPC()); }
 
 
     //
     // Running the disassembler
     //
-    
-    // Disassembles the instruction at the specified address
-    // DisInstr disassemble(uint32_t addr); // DEPRECATED
-    // DisInstr disassemble(uint32_t addr, uint16_t sr); // DEPRECATED
 
     int disassemble(uint32_t addr, char *str);
     void disassemble(uint32_t addr, DisInstr &result);
@@ -209,16 +177,10 @@ public:
     // Clears the trace buffer.
     void clearTraceBuffer() { truncateTraceBuffer(0); }
 
-    // Returns the number of recorded instructions.
-    // unsigned recordedInstructions();
-    
     // Records an instruction.
     void recordInstruction();
     
-    // Reads a recorded instruction from the trace buffer.
-    // RecInstr readRecordedInstruction(long offset);
-    
-    
+
     //
     // Running the device
     //
@@ -229,10 +191,7 @@ public:
     Cycle executeInstruction();
 
     // Changes the interrupt level
-    void setIrqLevel(int level);
-
-    // Adds wait states to the CPU
-    void addWaitStates(CPUCycle number);
+    void setIrqLevel(int level) { moiracpu.setIPL(level); }
 };
 
 #endif

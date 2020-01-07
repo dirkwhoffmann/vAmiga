@@ -311,18 +311,6 @@ CPU::makeActiveInstance()
 }
 
 uint32_t
-CPU::getPC() { return moiracpu.getPC(); }
-
-void
-CPU::setPC(uint32_t value) { moiracpu.setPC(value); }
-
-uint16_t
-CPU::getSR() { return moiracpu.getSR(); }
-
-uint32_t
-CPU::getIR() { return moiracpu.getIRD(); }
-
-uint32_t
 CPU::lengthOfInstruction(uint32_t addr)
 {
     char tmp[128];
@@ -390,38 +378,11 @@ CPU::recordInstruction()
 
     // Advance write pointer
     writePtr = (writePtr + 1) % traceBufferCapacity;
-
-    // DisassembledInstruction diss = disassemble(instr.pc);
-    // plainmsg("%X: %s\n", diss.addr, diss.instr);
 }
-
-int trace = 0;
-long traceCnt = 0;
-long instrCount = 0;
 
 Cycle
 CPU::executeInstruction()
 {
-    char str[64];
-    instrCount++;
-
-    uint32_t pc = getPC();
-
-    if (pc == 0xFC30C2) trace = 0;
-    if (trace && traceCnt++ > 1000) trace = 0;
-
-    if (trace) {
-        moiracpu.disassemble(pc, str);
-        printf("%ld [%lld] %x: %s\n", instrCount, getClock(), pc, str);
-    }
     moiracpu.execute();
-    clock = CPU_CYCLES(moiracpu.getClock());
-
-    return clock;
-}
-
-void
-CPU::setIrqLevel(int level)
-{
-    moiracpu.setIPL(level);
+    return CPU_CYCLES(moiracpu.getClock());
 }
